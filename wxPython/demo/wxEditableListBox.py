@@ -40,3 +40,12 @@ overview = """\
 This class provides a composite control that lets the
 user easily enter and edit a list of strings.
 """
+
+
+
+
+if __name__ == '__main__':
+    import sys,os
+    import run
+    run.main(['', os.path.basename(sys.argv[0])])
+

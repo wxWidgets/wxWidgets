@@ -46,7 +46,7 @@ class wxDividedShape: public wxRectangleShape
   void MakeMandatoryControlPoints();
   void ResetMandatoryControlPoints();
 
-#ifdef PROLOGIO
+#if wxUSE_PROLOGIO
   void WriteAttributes(wxExpr *clause);
   void ReadAttributes(wxExpr *clause);
 #endif

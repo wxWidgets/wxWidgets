@@ -1071,6 +1071,26 @@ for this to have any effect.
 
 Sets the minimal width for the specified column. This should normally be called when creating the grid
 because it will not resize a column that is already narrower than the minimal width.
+The width argument must be higher than the minimimal acceptable column width, see
+\helpref{wxGrid::GetColMinimalAcceptableWidth}{wxgridgetcolminimalacceptablewidth}.
+
+\membersection{wxGrid::SetColMinimalAcceptableWidth}\label{wxgridsetcolminimalacceptablewidth}
+
+\func{void}{SetColMinimalAcceptableWidth}{\param{int }{width}}
+
+This modifies the minimum column width that can be handled correctly. Specifying a low value here
+allows smaller grid cells to be dealt with correctly. Specifying a value here which is much smaller
+than the actual minimum size will incur a performance penalty in the functions which perform
+grid cell index lookup on the basis of screen coordinates.
+This should normally be called when creating the grid because it will not resize existing columns
+with sizes smaller than the value specified here. 
+
+\membersection{wxGrid::GetColMinimalAcceptableWidth}\label{wxgridgetcolminimalacceptablewidth}
+
+\func{int}{GetColMinimalAcceptableWidth}{}
+
+This returns the value of the lowest column width that can be handled correctly. See
+member \helpref{SetColMinimalAcceptableWidth}{wxgridsetcolminimalacceptablewidth} for details.
 
 \membersection{wxGrid::SetColSize}\label{wxgridsetcolsize}
 
@@ -1214,10 +1234,30 @@ for this to have any effect.
 
 \membersection{wxGrid::SetRowMinimalHeight}\label{wxgridsetrowminimalheight}
 
-\func{void}{SetRowMinimalHeight}{\param{int }{row}, \param{int }{width}}
+\func{void}{SetRowMinimalHeight}{\param{int }{row}, \param{int }{height}}
 
 Sets the minimal height for the specified row. This should normally be called when creating the grid
 because it will not resize a row that is already shorter than the minimal height.
+The height argument must be higher than the minimimal acceptable row height, see
+\helpref{wxGrid::GetRowMinimalAcceptableHeight}{wxgridgetrowminimalacceptableheight}.
+
+\membersection{wxGrid::SetRowMinimalAcceptableHeight}\label{wxgridsetrowminimalacceptableheight}
+
+\func{void}{SetRowMinimalAcceptableHeight}{\param{int }{height}}
+
+This modifies the minimum row width that can be handled correctly. Specifying a low value here
+allows smaller grid cells to be dealt with correctly. Specifying a value here which is much smaller
+than the actual minimum size will incur a performance penalty in the functions which perform
+grid cell index lookup on the basis of screen coordinates.
+This should normally be called when creating the grid because it will not resize existing rows
+with sizes smaller than the value specified here. 
+
+\membersection{wxGrid::GetRowMinimalAcceptableHeight}\label{wxgridgetrowminimalacceptableheight}
+
+\func{int}{GetRowMinimalAcceptableHeight}{}
+
+This returns the value of the lowest row width that can be handled correctly. See
+member \helpref{SetRowMinimalAcceptableHeight}{wxgridsetrowminimalacceptableheight} for details.
 
 \membersection{wxGrid::SetRowSize}\label{wxgridsetrowsize}
 

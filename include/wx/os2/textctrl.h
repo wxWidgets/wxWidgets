@@ -22,14 +22,13 @@ public:
                ,const wxPoint&     rPos = wxDefaultPosition
                ,const wxSize&      rSize = wxDefaultSize
                ,long               lStyle = 0
-#if wxUSE_VALIDATORS
                ,const wxValidator& rValidator = wxDefaultValidator
-#endif
                ,const wxString&    rsName = wxTextCtrlNameStr
               )
     {
         Create(pParent, vId, rsValue, rPos, rSize, lStyle, rValidator, rsName);
     }
+    ~wxTextCtrl();
 
     bool Create( wxWindow*          pParent
                 ,wxWindowID         vId
@@ -37,9 +36,7 @@ public:
                 ,const wxPoint&     rPos = wxDefaultPosition
                 ,const wxSize&      rSize = wxDefaultSize
                 ,long               lStyle = 0
-#if wxUSE_VALIDATORS
                 ,const wxValidator& rValidator = wxDefaultValidator
-#endif
                 ,const wxString&    rsName = wxTextCtrlNameStr
                );
 
@@ -154,12 +151,16 @@ public:
     void OnPaste(wxCommandEvent& rEvent);
     void OnUndo(wxCommandEvent& rEvent);
     void OnRedo(wxCommandEvent& rEvent);
+    void OnDelete(wxCommandEvent& rEvent);
+    void OnSelectAll(wxCommandEvent& rEvent);
 
     void OnUpdateCut(wxUpdateUIEvent& rEvent);
     void OnUpdateCopy(wxUpdateUIEvent& rEvent);
     void OnUpdatePaste(wxUpdateUIEvent& rEvent);
     void OnUpdateUndo(wxUpdateUIEvent& rEvent);
     void OnUpdateRedo(wxUpdateUIEvent& rEvent);
+    void OnUpdateDelete(wxUpdateUIEvent& rEvent);
+    void OnUpdateSelectAll(wxUpdateUIEvent& rEvent);
 
     inline bool IsMLE(void) {return m_bIsMLE;}
     inline void SetMLE(bool bIsMLE) {m_bIsMLE = bIsMLE;}

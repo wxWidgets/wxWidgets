@@ -1,6 +1,6 @@
 libpng.txt - A description on how to use and modify libpng
 
- libpng version 1.2.4 - July 8, 2002
+ libpng version 1.2.5rc3 - September 18, 2002
  Updated and distributed by Glenn Randers-Pehrson
  <randeg@alum.rpi.edu>
  Copyright (c) 1998-2002 Glenn Randers-Pehrson
@@ -983,7 +983,7 @@ histogram, it may not do as good a job.
       if (png_get_valid(png_ptr, info_ptr,
          PNG_INFO_PLTE))
       {
-         png_uint_16p histogram;
+         png_uint_16p histogram = NULL;
 
          png_get_hIST(png_ptr, info_ptr,
             &histogram);
@@ -2850,13 +2850,13 @@ application:
 
 IX. Y2K Compliance in libpng
 
-July 8, 2002
+September 18, 2002
 
 Since the PNG Development group is an ad-hoc body, we can't make
 an official declaration.
 
 This is your unofficial assurance that libpng from version 0.71 and
-upward through 1.2.4 are Y2K compliant.  It is my belief that earlier
+upward through 1.2.5rc3 are Y2K compliant.  It is my belief that earlier
 versions were also Y2K compliant.
 
 Libpng only has three year fields.  One is a 2-byte unsigned integer that

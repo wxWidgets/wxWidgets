@@ -19,6 +19,8 @@
 /* Implementation : PYTHON */
 
 #define SWIGPYTHON
+#include "Python.h"
+
 #include <string.h>
 #include <stdlib.h>
 /* Definitions for Windows/Unix exporting */
@@ -36,12 +38,9 @@
 #   define SWIGEXPORT(a) a
 #endif
 
-#include "Python.h"
-
 #ifdef __cplusplus
 extern "C" {
 #endif
-
 extern void SWIG_MakePtr(char *, void *, char *);
 extern void SWIG_RegisterMapping(char *, char *, void *(*)(void *));
 extern char *SWIG_GetPtr(char *, void **, char *);
@@ -130,8 +129,7 @@ static PyObject *_wrap_new_wxCalendarDateAttr(PyObject *self, PyObject *args, Py
         return NULL;
 }
     if (_argo3) {
-        if (_argo3 == Py_None) { _arg3 = NULL; }
-        else if (SWIG_GetPtrObj(_argo3,(void **) &_arg3,"_wxFont_p")) {
+        if (SWIG_GetPtrObj(_argo3,(void **) &_arg3,"_wxFont_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 4 of new_wxCalendarDateAttr. Expected _wxFont_p.");
         return NULL;
         }
@@ -316,8 +314,7 @@ static PyObject *_wrap_wxCalendarDateAttr_SetFont(PyObject *self, PyObject *args
         }
     }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxFont_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxFont_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxCalendarDateAttr_SetFont. Expected _wxFont_p.");
         return NULL;
         }
@@ -897,8 +894,7 @@ static PyObject *_wrap_new_wxCalendarCtrl(PyObject *self, PyObject *args, PyObje
         }
     }
     if (_argo2) {
-        if (_argo2 == Py_None) { _arg2 = NULL; }
-        else if (SWIG_GetPtrObj(_argo2,(void **) &_arg2,"_wxDateTime_p")) {
+        if (SWIG_GetPtrObj(_argo2,(void **) &_arg2,"_wxDateTime_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 3 of new_wxCalendarCtrl. Expected _wxDateTime_p.");
         return NULL;
         }
@@ -1007,8 +1003,7 @@ static PyObject *_wrap_wxCalendarCtrl_Create(PyObject *self, PyObject *args, PyO
         }
     }
     if (_argo3) {
-        if (_argo3 == Py_None) { _arg3 = NULL; }
-        else if (SWIG_GetPtrObj(_argo3,(void **) &_arg3,"_wxDateTime_p")) {
+        if (SWIG_GetPtrObj(_argo3,(void **) &_arg3,"_wxDateTime_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 4 of wxCalendarCtrl_Create. Expected _wxDateTime_p.");
         return NULL;
         }
@@ -1065,8 +1060,7 @@ static PyObject *_wrap_wxCalendarCtrl_SetDate(PyObject *self, PyObject *args, Py
         }
     }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxDateTime_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxDateTime_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxCalendarCtrl_SetDate. Expected _wxDateTime_p.");
         return NULL;
         }
@@ -1139,8 +1133,7 @@ static PyObject *_wrap_wxCalendarCtrl_SetLowerDateLimit(PyObject *self, PyObject
         }
     }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxDateTime_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxDateTime_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxCalendarCtrl_SetLowerDateLimit. Expected _wxDateTime_p.");
         return NULL;
         }
@@ -1212,8 +1205,7 @@ static PyObject *_wrap_wxCalendarCtrl_SetUpperDateLimit(PyObject *self, PyObject
         }
     }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxDateTime_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxDateTime_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxCalendarCtrl_SetUpperDateLimit. Expected _wxDateTime_p.");
         return NULL;
         }
@@ -1287,15 +1279,13 @@ static PyObject *_wrap_wxCalendarCtrl_SetDateRange(PyObject *self, PyObject *arg
         }
     }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxDateTime_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxDateTime_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxCalendarCtrl_SetDateRange. Expected _wxDateTime_p.");
         return NULL;
         }
     }
     if (_argo2) {
-        if (_argo2 == Py_None) { _arg2 = NULL; }
-        else if (SWIG_GetPtrObj(_argo2,(void **) &_arg2,"_wxDateTime_p")) {
+        if (SWIG_GetPtrObj(_argo2,(void **) &_arg2,"_wxDateTime_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 3 of wxCalendarCtrl_SetDateRange. Expected _wxDateTime_p.");
         return NULL;
         }

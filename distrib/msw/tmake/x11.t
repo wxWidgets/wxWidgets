@@ -13,8 +13,6 @@
     IncludeTemplate("filelist.t");
 
     #! find all our sources
-    $project{"COMMONOBJS"} .= "parser.o ";
-
     foreach $file (sort keys %wxX11) {
         ($fileobj = $file) =~ s/cp?p?$/\o/;
 

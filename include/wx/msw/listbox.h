@@ -95,7 +95,7 @@ public:
     bool MSWOnDraw(WXDRAWITEMSTRUCT *item);
 
     // plug-in for derived classes
-    virtual wxOwnerDrawn *CreateItem(size_t n);
+    virtual wxOwnerDrawn *CreateLboxItem(size_t n);
 
     // allows to get the item and use SetXXX functions to set it's appearance
     wxOwnerDrawn *GetItem(size_t n) const { return m_aItems[n]; }

@@ -29,7 +29,7 @@ History:
 __version__ ="$Revision$"
 # $RCSfile$
 
-import sys, string, code, traceback
+import sys, code, traceback
 from wxPython.wx import *
 from wxPython.html import *
 
@@ -58,11 +58,11 @@ class PyShellInput(wxPanel):
         tid =wxNewId()
         self.entry =wxTextCtrl(self, tid, style = wxTE_MULTILINE)
         EVT_CHAR(self.entry, self.OnChar)
-        self.entry.SetFont(wxFont(9, wxMODERN, wxNORMAL, wxNORMAL, false))
+        self.entry.SetFont(wxFont(9, wxMODERN, wxNORMAL, wxNORMAL, False))
         sizer =wxBoxSizer(wxVERTICAL)
         sizer.AddMany([(self.label, 0, wxEXPAND), (self.entry, 1, wxEXPAND)])
         self.SetSizer(sizer)
-        self.SetAutoLayout(true)
+        self.SetAutoLayout(True)
         EVT_SET_FOCUS(self, self.OnSetFocus)
         # when in "continuation" mode,
         # two consecutive newlines are required
@@ -90,7 +90,7 @@ class PyShellInput(wxPanel):
             return
         text =self.entry.GetValue()
         # weird CRLF thingy
-        text =string.replace(text, "\r\n", "\n")
+        text = text.replace("\r\n", "\n")
         # see if we've finished
         if (not (self.first_line or text[-1] =="\n")  # in continuation mode
             or (text[-1] =="\\")  # escaped newline
@@ -153,7 +153,7 @@ class PyShellOutput(wxPanel):
             self.client =self.html  # used in OnSize()
         self.text =self.intro
         self.html.SetPage(self.text)
-        self.html.SetAutoLayout(TRUE)
+        self.html.SetAutoLayout(True)
         self.line_buffer =""
         # refreshes are annoying
         self.in_batch =0
@@ -193,9 +193,9 @@ class PyShellOutput(wxPanel):
         if 0 and __debug__: sys.__stdout__.write(text)
         # handle entities
         for (symbol, eref) in self.erefs:
-            text =string.replace(text, symbol, eref)
+            text = text.replace(symbol, eref)
         # replace newlines
-        text =string.replace(text, "\n", style[2])
+        text = text.replace("\n", style[2])
         # add to contents
         self.text =self.text +style[0] +text +style[1]
         if not self.in_batch: self.UpdWindow()
@@ -302,14 +302,14 @@ class PyShell(wxPanel):
         (etype, value, tb) =sys.exc_info()
         # remove myself from traceback
         tblist =traceback.extract_tb(tb)[1:]
-        msg =string.join(traceback.format_exception_only(etype, value)
+        msg = ' '.join(traceback.format_exception_only(etype, value)
                         +traceback.format_list(tblist))
         self.output.write_exc(msg)
 
     def ShowSyntaxError(self):
         """display message about syntax error (no traceback here)"""
         (etype, value, tb) =sys.exc_info()
-        msg =string.join(traceback.format_exception_only(etype, value))
+        msg = ' '.join(traceback.format_exception_only(etype, value))
         self.output.write_exc(msg)
 
     def OnSize(self, event):
@@ -328,7 +328,7 @@ if __name__ == '__main__':
         """Demonstrates usage of both default and customized shells"""
         def OnInit(self):
             frame = MyFrame()
-            frame.Show(TRUE)
+            frame.Show(True)
             self.SetTopWindow(frame)
 ##             PyShellInput.PS1 =" let's get some work done..."
 ##             PyShellInput.PS2 =" ok, what do you really mean?"
@@ -344,8 +344,8 @@ if __name__ == '__main__':
 ##                 "<br>&lt;-- move this sash to see html debug output</I><br>\n"
 ##             PyShellOutput.html_debug =1
 ##             frame = MyFrame(title="Customized wxPython Shell")
-##             frame.Show(TRUE)
-            return TRUE
+##             frame.Show(True)
+            return True
 
     app = MyApp(0)
     app.MainLoop()

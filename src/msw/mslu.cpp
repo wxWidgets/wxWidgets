@@ -46,10 +46,6 @@
 #include <io.h>
 #include <sys/stat.h>
 
-#ifdef __GNUWIN32__
-    #include <wchar.h>
-#endif
-
 #ifdef __VISUALC__
     #include <direct.h>
 #endif
@@ -76,7 +72,7 @@ WXDLLEXPORT int  wxMSLU_DrawStateW(WXHDC dc, WXHBRUSH br, WXFARPROC outputFunc,
 
     if ( wxUsingUnicowsDll() )
     {
-		return DrawStateA((HDC)dc, (HBRUSH)br, (DRAWSTATEPROC)outputFunc,
+        return DrawStateA((HDC)dc, (HBRUSH)br, (DRAWSTATEPROC)outputFunc,
                           (LPARAM)(const char*)
                                 wxConvLocal.cWX2MB((const wxChar*)lData),
                           wData, x, y, cx, cy, flags);

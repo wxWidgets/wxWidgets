@@ -220,7 +220,7 @@ private:
 class DnDFrame : public wxFrame
 {
 public:
-    DnDFrame(wxFrame *frame, char *title, int x, int y, int w, int h);
+    DnDFrame(wxFrame *frame, wxChar *title, int x, int y, int w, int h);
     virtual ~DnDFrame();
 
     void OnPaint(wxPaintEvent& event);
@@ -748,9 +748,9 @@ public:
 
     // override base class (pure) virtuals
     virtual wxDragResult OnEnter(wxCoord x, wxCoord y, wxDragResult def)
-        { m_frame->SetStatusText("Mouse entered the frame"); return OnDragOver(x, y, def); }
+        { m_frame->SetStatusText(_T("Mouse entered the frame")); return OnDragOver(x, y, def); }
     virtual void OnLeave()
-        { m_frame->SetStatusText("Mouse left the frame"); }
+        { m_frame->SetStatusText(_T("Mouse left the frame")); }
     virtual wxDragResult OnData(wxCoord x, wxCoord y, wxDragResult def)
     {
         if ( !GetData() )
@@ -877,13 +877,13 @@ bool DnDApp::OnInit()
 #if USE_RESOURCES
     // load our ressources
     wxPathList pathList;
-    pathList.Add(".");
+    pathList.Add(_T("."));
 #ifdef __WXMSW__
-    pathList.Add("./Debug");
-    pathList.Add("./Release");
+    pathList.Add(_T("./Debug"));
+    pathList.Add(_T("./Release"));
 #endif // wxMSW
 
-    wxString path = pathList.FindValidPath("dnd.wxr");
+    wxString path = pathList.FindValidPath(_T("dnd.wxr"));
     if ( !path )
     {
         wxLogError(wxT("Can't find the resource file dnd.wxr in the current ")
@@ -912,7 +912,7 @@ bool DnDApp::OnInit()
 
     // create the main frame window
     DnDFrame *frame = new DnDFrame((wxFrame  *) NULL,
-                                   "Drag-and-Drop/Clipboard wxWindows Sample",
+                                   _T("Drag-and-Drop/Clipboard wxWindows Sample"),
                                    10, 100, 650, 340);
 
     // activate it
@@ -923,9 +923,9 @@ bool DnDApp::OnInit()
     return TRUE;
 }
 
-DnDFrame::DnDFrame(wxFrame *frame, char *title, int x, int y, int w, int h)
+DnDFrame::DnDFrame(wxFrame *frame, wxChar *title, int x, int y, int w, int h)
         : wxFrame(frame, -1, title, wxPoint(x, y), wxSize(w, h)),
-          m_strText("wxWindows drag & drop works :-)")
+          m_strText(_T("wxWindows drag & drop works :-)"))
 
 {
     // frame icon and status bar
@@ -935,40 +935,40 @@ DnDFrame::DnDFrame(wxFrame *frame, char *title, int x, int y, int w, int h)
 
     // construct menu
     wxMenu *file_menu = new wxMenu;
-    file_menu->Append(Menu_Drag, "&Test drag...");
-    file_menu->AppendCheckItem(Menu_DragMoveDef, "&Move by default");
-    file_menu->AppendCheckItem(Menu_DragMoveAllow, "&Allow moving");
+    file_menu->Append(Menu_Drag, _T("&Test drag..."));
+    file_menu->AppendCheckItem(Menu_DragMoveDef, _T("&Move by default"));
+    file_menu->AppendCheckItem(Menu_DragMoveAllow, _T("&Allow moving"));
     file_menu->AppendSeparator();
-    file_menu->Append(Menu_NewFrame, "&New frame\tCtrl-N");
+    file_menu->Append(Menu_NewFrame, _T("&New frame\tCtrl-N"));
     file_menu->AppendSeparator();
-    file_menu->Append(Menu_Quit, "E&xit\tCtrl-Q");
+    file_menu->Append(Menu_Quit, _T("E&xit\tCtrl-Q"));
 
     wxMenu *log_menu = new wxMenu;
-    log_menu->Append(Menu_Clear, "Clear\tCtrl-L");
+    log_menu->Append(Menu_Clear, _T("Clear\tCtrl-L"));
 
     wxMenu *help_menu = new wxMenu;
-    help_menu->Append(Menu_Help, "&Help...");
+    help_menu->Append(Menu_Help, _T("&Help..."));
     help_menu->AppendSeparator();
-    help_menu->Append(Menu_About, "&About");
+    help_menu->Append(Menu_About, _T("&About"));
 
     wxMenu *clip_menu = new wxMenu;
-    clip_menu->Append(Menu_Copy, "&Copy text\tCtrl-C");
-    clip_menu->Append(Menu_Paste, "&Paste text\tCtrl-V");
+    clip_menu->Append(Menu_Copy, _T("&Copy text\tCtrl-C"));
+    clip_menu->Append(Menu_Paste, _T("&Paste text\tCtrl-V"));
     clip_menu->AppendSeparator();
-    clip_menu->Append(Menu_CopyBitmap, "Copy &bitmap\tCtrl-Shift-C");
-    clip_menu->Append(Menu_PasteBitmap, "Paste b&itmap\tCtrl-Shift-V");
+    clip_menu->Append(Menu_CopyBitmap, _T("Copy &bitmap\tCtrl-Shift-C"));
+    clip_menu->Append(Menu_PasteBitmap, _T("Paste b&itmap\tCtrl-Shift-V"));
 #ifdef USE_METAFILES
     clip_menu->AppendSeparator();
-    clip_menu->Append(Menu_PasteMFile, "Paste &metafile\tCtrl-M");
+    clip_menu->Append(Menu_PasteMFile, _T("Paste &metafile\tCtrl-M"));
 #endif // USE_METAFILES
     clip_menu->AppendSeparator();
-    clip_menu->Append(Menu_CopyFiles, "Copy &files\tCtrl-F");
+    clip_menu->Append(Menu_CopyFiles, _T("Copy &files\tCtrl-F"));
 
     wxMenuBar *menu_bar = new wxMenuBar;
-    menu_bar->Append(file_menu, "&File");
-    menu_bar->Append(log_menu,  "&Log");
-    menu_bar->Append(clip_menu, "&Clipboard");
-    menu_bar->Append(help_menu, "&Help");
+    menu_bar->Append(file_menu, _T("&File"));
+    menu_bar->Append(log_menu,  _T("&Log"));
+    menu_bar->Append(clip_menu, _T("&Clipboard"));
+    menu_bar->Append(help_menu, _T("&Help"));
 
     SetMenuBar(menu_bar);
 
@@ -976,14 +976,14 @@ DnDFrame::DnDFrame(wxFrame *frame, char *title, int x, int y, int w, int h)
     wxPoint pos(0, 0);
     wxSize  size(400, 200);
 
-    wxString strFile("Drop files here!"), strText("Drop text on me");
+    wxString strFile(_T("Drop files here!")), strText(_T("Drop text on me"));
 
     m_ctrlFile  = new wxListBox(this, -1, pos, size, 1, &strFile,
                                 wxLB_HSCROLL | wxLB_ALWAYS_SB );
     m_ctrlText  = new wxListBox(this, -1, pos, size, 1, &strText,
                                 wxLB_HSCROLL | wxLB_ALWAYS_SB );
 
-    m_ctrlLog   = new wxTextCtrl(this, -1, "", pos, size,
+    m_ctrlLog   = new wxTextCtrl(this, -1, _T(""), pos, size,
                                  wxTE_MULTILINE | wxTE_READONLY |
                                  wxSUNKEN_BORDER );
 
@@ -1050,8 +1050,8 @@ void DnDFrame::OnPaint(wxPaintEvent& WXUNUSED(event))
 
     wxPaintDC dc(this);
     // dc.Clear(); -- this kills wxGTK
-    dc.SetFont( wxFont( 24, wxDECORATIVE, wxNORMAL, wxNORMAL, FALSE, "charter" ) );
-    dc.DrawText( "Drag text from here!", 100, h-50 );
+    dc.SetFont( wxFont( 24, wxDECORATIVE, wxNORMAL, wxNORMAL, FALSE, _T("charter") ) );
+    dc.DrawText( _T("Drag text from here!"), 100, h-50 );
 }
 
 void DnDFrame::OnUpdateUIMoveByDefault(wxUpdateUIEvent& event)
@@ -1093,11 +1093,11 @@ void DnDFrame::OnDrag(wxCommandEvent& WXUNUSED(event))
 {
     wxString strText = wxGetTextFromUser
         (
-         "After you enter text in this dialog, press any mouse\n"
-         "button in the bottom (empty) part of the frame and \n"
-         "drag it anywhere - you will be in fact dragging the\n"
-         "text object containing this text",
-         "Please enter some text", m_strText, this
+            _T("After you enter text in this dialog, press any mouse\n")
+            _T("button in the bottom (empty) part of the frame and \n")
+            _T("drag it anywhere - you will be in fact dragging the\n")
+         _T("text object containing this text"),
+         _T("Please enter some text"), m_strText, this
         );
 
     m_strText = strText;
@@ -1115,10 +1115,10 @@ void DnDFrame::OnDragMoveAllow(wxCommandEvent& event)
 
 void DnDFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
 {
-    wxMessageBox("Drag-&-Drop Demo\n"
-                 "Please see \"Help|Help...\" for details\n"
-                 "Copyright (c) 1998 Vadim Zeitlin",
-                 "About wxDnD",
+    wxMessageBox(_T("Drag-&-Drop Demo\n")
+                 _T("Please see \"Help|Help...\" for details\n")
+                 _T("Copyright (c) 1998 Vadim Zeitlin"),
+                 _T("About wxDnD"),
                  wxICON_INFORMATION | wxOK,
                  this);
 }
@@ -1126,27 +1126,27 @@ void DnDFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
 void DnDFrame::OnHelp(wxCommandEvent& /* event */)
 {
     wxMessageDialog dialog(this,
-            "This small program demonstrates drag & drop support in wxWindows. The program window\n"
-            "consists of 3 parts: the bottom pane is for debug messages, so that you can see what's\n"
-            "going on inside. The top part is split into 2 listboxes, the left one accepts files\n"
-            "and the right one accepts text.\n"
-            "\n"
-            "To test wxDropTarget: open wordpad (write.exe), select some text in it and drag it to\n"
-            "the right listbox (you'll notice the usual visual feedback, i.e. the cursor will change).\n"
-            "Also, try dragging some files (you can select several at once) from Windows Explorer (or \n"
-            "File Manager) to the left pane. Hold down Ctrl/Shift keys when you drop text (doesn't \n"
-            "work with files) and see what changes.\n"
-            "\n"
-            "To test wxDropSource: just press any mouse button on the empty zone of the window and drag\n"
-            "it to wordpad or any other droptarget accepting text (and of course you can just drag it\n"
-            "to the right pane). Due to a lot of trace messages, the cursor might take some time to \n"
-            "change, don't release the mouse button until it does. You can change the string being\n"
-            "dragged in in \"File|Test drag...\" dialog.\n"
-            "\n"
-            "\n"
-            "Please send all questions/bug reports/suggestions &c to \n"
-            "Vadim Zeitlin <zeitlin@dptmaths.ens-cachan.fr>",
-            "wxDnD Help");
+                           _T("This small program demonstrates drag & drop support in wxWindows. The program window\n")
+                           _T("consists of 3 parts: the bottom pane is for debug messages, so that you can see what's\n")
+                           _T("going on inside. The top part is split into 2 listboxes, the left one accepts files\n")
+                           _T("and the right one accepts text.\n")
+                           _T("\n")
+                           _T("To test wxDropTarget: open wordpad (write.exe), select some text in it and drag it to\n")
+                           _T("the right listbox (you'll notice the usual visual feedback, i.e. the cursor will change).\n")
+                           _T("Also, try dragging some files (you can select several at once) from Windows Explorer (or \n")
+                           _T("File Manager) to the left pane. Hold down Ctrl/Shift keys when you drop text (doesn't \n")
+                           _T("work with files) and see what changes.\n")
+                           _T("\n")
+                           _T("To test wxDropSource: just press any mouse button on the empty zone of the window and drag\n")
+                           _T("it to wordpad or any other droptarget accepting text (and of course you can just drag it\n")
+                           _T("to the right pane). Due to a lot of trace messages, the cursor might take some time to \n")
+                           _T("change, don't release the mouse button until it does. You can change the string being\n")
+                           _T("dragged in in \"File|Test drag...\" dialog.\n")
+                           _T("\n")
+                           _T("\n")
+                           _T("Please send all questions/bug reports/suggestions &c to \n")
+                           _T("Vadim Zeitlin <zeitlin@dptmaths.ens-cachan.fr>"),
+                           _T("wxDnD Help"));
 
     dialog.ShowModal();
 }
@@ -1180,28 +1180,28 @@ void DnDFrame::OnLeftDown(wxMouseEvent &WXUNUSED(event) )
         else if ( m_moveAllow )
             flags |= wxDrag_AllowMove;
 
-        const char *pc;
+        const wxChar *pc;
         switch ( source.DoDragDrop(flags) )
         {
-            case wxDragError:   pc = "Error!";    break;
-            case wxDragNone:    pc = "Nothing";   break;
-            case wxDragCopy:    pc = "Copied";    break;
-            case wxDragMove:    pc = "Moved";     break;
-            case wxDragCancel:  pc = "Cancelled"; break;
-            default:            pc = "Huh?";      break;
+            case wxDragError:   pc = _T("Error!");    break;
+            case wxDragNone:    pc = _T("Nothing");   break;
+            case wxDragCopy:    pc = _T("Copied");    break;
+            case wxDragMove:    pc = _T("Moved");     break;
+            case wxDragCancel:  pc = _T("Cancelled"); break;
+            default:            pc = _T("Huh?");      break;
         }
 
-        SetStatusText(wxString("Drag result: ") + pc);
+        SetStatusText(wxString(_T("Drag result: ")) + pc);
     }
 }
 
 void DnDFrame::OnRightDown(wxMouseEvent &event )
 {
-    wxMenu menu("Dnd sample menu");
+    wxMenu menu(_T("Dnd sample menu"));
 
-    menu.Append(Menu_Drag, "&Test drag...");
+    menu.Append(Menu_Drag, _T("&Test drag..."));
     menu.AppendSeparator();
-    menu.Append(Menu_About, "&About");
+    menu.Append(Menu_About, _T("&About"));
 
     PopupMenu( &menu, event.GetX(), event.GetY() );
 }
@@ -1222,9 +1222,9 @@ void DnDFrame::OnCopyBitmap(wxCommandEvent& WXUNUSED(event))
 {
     // PNG support is not always compiled in under Windows, so use BMP there
 #ifdef __WXMSW__
-    wxFileDialog dialog(this, "Open a BMP file", "", "", "BMP files (*.bmp)|*.bmp", 0);
+    wxFileDialog dialog(this, _T("Open a BMP file"), _T(""), _T(""), _T("BMP files (*.bmp)|*.bmp"), 0);
 #else
-    wxFileDialog dialog(this, "Open a PNG file", "", "", "PNG files (*.png)|*.png", 0);
+    wxFileDialog dialog(this, _T("Open a PNG file"), _T(""), _T(""), _T("PNG files (*.png)|*.png"), 0);
 #endif
 
     if (dialog.ShowModal() != wxID_OK)
@@ -1366,8 +1366,8 @@ void DnDFrame::OnPasteMetafile(wxCommandEvent& WXUNUSED(event))
 void DnDFrame::OnCopyFiles(wxCommandEvent& WXUNUSED(event))
 {
 #ifdef __WXMSW__
-    wxFileDialog dialog(this, "Select a file to copy", "", "",
-                         "All files (*.*)|*.*", 0);
+    wxFileDialog dialog(this, _T("Select a file to copy"), _T(""), _T(""),
+                         _T("All files (*.*)|*.*"), 0);
 
     wxArrayString filenames;
     while ( dialog.ShowModal() == wxID_OK )
@@ -1504,14 +1504,14 @@ DnDShapeDialog::DnDShapeDialog(wxFrame *parent, DnDShape *shape)
 {
     m_shape = shape;
 #if USE_RESOURCES
-    LoadFromResource(parent, "dialogShape");
+    LoadFromResource(parent, _T("dialogShape"));
 
-    m_textX = (wxTextCtrl *)wxFindWindowByName("textX", this);
-    m_textY = (wxTextCtrl *)wxFindWindowByName("textY", this);
-    m_textW = (wxTextCtrl *)wxFindWindowByName("textW", this);
-    m_textH = (wxTextCtrl *)wxFindWindowByName("textH", this);
+    m_textX = (wxTextCtrl *)wxFindWindowByName(_T("textX"), this);
+    m_textY = (wxTextCtrl *)wxFindWindowByName(_T("textY"), this);
+    m_textW = (wxTextCtrl *)wxFindWindowByName(_T("textW"), this);
+    m_textH = (wxTextCtrl *)wxFindWindowByName(_T("textH"), this);
 
-    m_radio = (wxRadioBox *)wxFindWindowByName("radio", this);
+    m_radio = (wxRadioBox *)wxFindWindowByName(_T("radio"), this);
 #else
     wxBoxSizer* topSizer = new wxBoxSizer( wxVERTICAL );
 
@@ -1625,8 +1625,8 @@ bool DnDShapeDialog::TransferDataFromWindow()
 
     if ( !m_pos.x || !m_pos.y || !m_size.x || !m_size.y )
     {
-        wxMessageBox("All sizes and positions should be non null!",
-                     "Invalid shape", wxICON_HAND | wxOK, this);
+        wxMessageBox(_T("All sizes and positions should be non null!"),
+                     _T("Invalid shape"), wxICON_HAND | wxOK, this);
 
         return FALSE;
     }
@@ -1658,28 +1658,28 @@ void DnDShapeDialog::OnColour(wxCommandEvent& WXUNUSED(event))
 DnDShapeFrame *DnDShapeFrame::ms_lastDropTarget = NULL;
 
 DnDShapeFrame::DnDShapeFrame(wxFrame *parent)
-             : wxFrame(parent, -1, "Shape Frame",
+             : wxFrame(parent, -1, _T("Shape Frame"),
                        wxDefaultPosition, wxSize(250, 150))
 {
     CreateStatusBar();
 
     wxMenu *menuShape = new wxMenu;
-    menuShape->Append(Menu_Shape_New, "&New default shape\tCtrl-S");
-    menuShape->Append(Menu_Shape_Edit, "&Edit shape\tCtrl-E");
+    menuShape->Append(Menu_Shape_New, _T("&New default shape\tCtrl-S"));
+    menuShape->Append(Menu_Shape_Edit, _T("&Edit shape\tCtrl-E"));
     menuShape->AppendSeparator();
-    menuShape->Append(Menu_Shape_Clear, "&Clear shape\tCtrl-L");
+    menuShape->Append(Menu_Shape_Clear, _T("&Clear shape\tCtrl-L"));
 
     wxMenu *menuClipboard = new wxMenu;
-    menuClipboard->Append(Menu_ShapeClipboard_Copy, "&Copy\tCtrl-C");
-    menuClipboard->Append(Menu_ShapeClipboard_Paste, "&Paste\tCtrl-V");
+    menuClipboard->Append(Menu_ShapeClipboard_Copy, _T("&Copy\tCtrl-C"));
+    menuClipboard->Append(Menu_ShapeClipboard_Paste, _T("&Paste\tCtrl-V"));
 
     wxMenuBar *menubar = new wxMenuBar;
-    menubar->Append(menuShape, "&Shape");
-    menubar->Append(menuClipboard, "&Clipboard");
+    menubar->Append(menuShape, _T("&Shape"));
+    menubar->Append(menuClipboard, _T("&Clipboard"));
 
     SetMenuBar(menubar);
 
-    SetStatusText("Press Ctrl-S to create a new shape");
+    SetStatusText(_T("Press Ctrl-S to create a new shape"));
 
     SetDropTarget(new DnDShapeDropTarget(this));
 
@@ -1716,7 +1716,7 @@ void DnDShapeFrame::OnDrag(wxMouseEvent& event)
     DnDShapeDataObject shapeData(m_shape);
     wxDropSource source(shapeData, this);
 
-    const char *pc = NULL;
+    const wxChar *pc = NULL;
     switch ( source.DoDragDrop(TRUE) )
     {
         default:
@@ -1725,15 +1725,15 @@ void DnDShapeFrame::OnDrag(wxMouseEvent& event)
             break;
 
         case wxDragNone:
-            SetStatusText("Nothing happened");
+            SetStatusText(_T("Nothing happened"));
             break;
 
         case wxDragCopy:
-            pc = "copied";
+            pc = _T("copied");
             break;
 
         case wxDragMove:
-            pc = "moved";
+            pc = _T("moved");
             if ( ms_lastDropTarget != this )
             {
                 // don't delete the shape if we dropped it on ourselves!
@@ -1742,13 +1742,13 @@ void DnDShapeFrame::OnDrag(wxMouseEvent& event)
             break;
 
         case wxDragCancel:
-            SetStatusText("Drag and drop operation cancelled");
+            SetStatusText(_T("Drag and drop operation cancelled"));
             break;
     }
 
     if ( pc )
     {
-        SetStatusText(wxString("Shape successfully ") + pc);
+        SetStatusText(wxString(_T("Shape successfully ")) + pc);
     }
     //else: status text already set
 }
@@ -1776,7 +1776,7 @@ void DnDShapeFrame::OnEditShape(wxCommandEvent& event)
 
         if ( m_shape )
         {
-            SetStatusText("You can now drag the shape to another frame");
+            SetStatusText(_T("You can now drag the shape to another frame"));
         }
     }
 }
@@ -1785,7 +1785,7 @@ void DnDShapeFrame::OnNewShape(wxCommandEvent& event)
 {
     SetShape(new DnDEllipticShape(wxPoint(10, 10), wxSize(80, 60), *wxRED));
 
-    SetStatusText("You can now drag the shape to another frame");
+    SetStatusText(_T("You can now drag the shape to another frame"));
 }
 
 void DnDShapeFrame::OnClearShape(wxCommandEvent& event)

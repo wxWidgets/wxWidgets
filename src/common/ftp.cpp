@@ -507,7 +507,7 @@ public:
     {
         delete m_i_socket;
 
-        if ( LastError() == wxStream_NOERROR )
+        if ( IsOk() )
         {
             // wait for "226 transfer completed"
             m_ftp->CheckResult('2');

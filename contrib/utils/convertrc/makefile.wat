@@ -4,10 +4,16 @@
 #
 
 WXDIR = $(%WXWIN)
+EXTRACPPFLAGS = -I$(WXDIR)\contrib\include
+THISDIR = $(WXDIR)\contrib\utils\convertrc
 
 PROGRAM = wxconvert
-EXTRALIBS = $(WXDIR)\lib\wxxrc.lib
-OBJECTS=convert.obj rc2xml.obj rc2wxr.obj wxr2xml.obj
+EXTRALIBS = $(WXDIR)\lib\wxxrc_w.lib
+OBJECTS=&
+    $(OUTPUTDIR)\convert.obj &
+    $(OUTPUTDIR)\rc2xml.obj &
+    $(OUTPUTDIR)\rc2wxr.obj &
+    $(OUTPUTDIR)\wxr2xml.obj
 
 !include $(WXDIR)\src\makeprog.wat
 

@@ -66,7 +66,7 @@ public:
 protected:
     static wxProtoInfo *ms_protocols;
 
-#if wxUSE_SOCKETS
+#if wxUSE_SOCKETS && wxUSE_PROTOCOL_HTTP
     static wxHTTP *ms_proxyDefault;
     static bool ms_useDefaultProxy;
     wxHTTP *m_proxy;

@@ -1,0 +1,179 @@
+body
+{
+  padding: 0px 0px 0px 0px;
+  background: #ffffff; 
+  color: #000000;
+  font-family: Verdana, Arial, Helvetica, sans-serif;
+}
+
+div
+{
+  width: 90%;
+  border: 2px solid #999999;
+  padding: 4px 8px;
+  background: #cccccc;
+}
+  
+h1, h2, h3, h4
+{
+  font-family: Verdana, Arial, Helvetica, sans-serif;
+}
+  
+h1
+{
+  font-size: 200%;
+  margin-top: 1em;
+  margin-bottom: .6em; 
+}
+  
+h2
+{
+  font-size: 150%;
+  margin-top: 1em;
+  margin-bottom: .6em; 
+}
+  
+h3
+{
+  font-size: 120%;
+  margin-left: 0px;
+  margin-bottom: 0.2em;
+  margin-top: 1.5em;
+}
+  
+h4
+{
+  margin-top: 1em;
+  margin-bottom: .6em; 
+}
+
+h5
+{
+  margin-bottom: 1em;
+  margin-top: 1.5em;
+}
+
+
+ul p, ol p, dl p
+{
+  margin-left: 0em;
+}
+
+p
+{
+  margin-top: .6em;
+  margin-bottom: .6em;
+}
+
+dl
+{
+  margin-top: 0em; 
+}
+
+dd
+{
+  margin-bottom: 0em;  
+  margin-left: 1.5em; 
+}
+
+dt
+{
+  margin-top: .6em; 
+}
+
+ul, ol
+{
+  margin-top: .6em;   
+  margin-bottom: 0em;
+}
+  
+ol
+{
+  margin-left: 3.6em; 
+} 
+  
+ul
+{
+  list-style-type: disc; 
+  margin-left: 1.9em; 
+}
+
+li
+{
+  margin-bottom: .6em;
+}
+
+tt
+{
+  font-family: Andale Mono, Courier New, Courier, mono;
+}
+
+pre
+{
+  margin-top: .6em;
+  margin-bottom: .6em;
+  margin-left: 2em;
+  margin-right: 2em;
+  font-family: Andale Mono, Courier New, Courier, mono;
+  color: #550000;
+  background: #eeeeee;
+}
+
+table
+{
+  width: 90%;
+  background: #999999;
+  margin-top: 0em;
+  margin-bottom: .3em;
+  background: #ffffff;
+}
+    
+th
+{ 
+  padding: 2px 4px;
+  background: #dddddd;
+  text-align: left;
+  vertical-align: top;
+  margin: .25em;
+}
+    
+td
+{ 
+  margin: .25em;
+  padding: 2px 4px;
+  background: #eeeeee;
+  vertical-align: top;
+}
+
+tr
+{ 
+  margin: .25em;
+  vertical-align: top;
+}
+
+a:link
+{
+  color: #0066ff;
+}
+  
+a:visited
+{
+  color: #996600; 
+}
+
+a:hover
+{
+  color: #cc9900;
+}
+
+
+
+body, td, pre, tt
+{
+  font-size: 100%;
+}
+
+h4, th
+{
+  font-size: 120%;
+}

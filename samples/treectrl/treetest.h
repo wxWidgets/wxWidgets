@@ -112,7 +112,7 @@ protected:
     bool IsTestItem(const wxTreeItemId& item)
     {
         // the test item is the first child folder
-        return GetParent(item) == GetRootItem() && !GetPrevSibling(item);
+        return GetItemParent(item) == GetRootItem() && !GetPrevSibling(item);
     }
 
 private:

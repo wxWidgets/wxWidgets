@@ -11,7 +11,7 @@ class JoystickTestPanel(wxPanel):
         style = wxTAB_TRAVERSAL ):
         wxPanel.__init__(self, parent, id, pos, size, style)
 
-        MakeJoystickTestPanel( self, true )
+        MakeJoystickTestPanel( self, True )
 
         try:
             self.stick = wxJoystick()
@@ -195,3 +195,12 @@ def runTest(frame, nb, log):
 
 overview = """\
 """
+
+
+
+
+if __name__ == '__main__':
+    import sys,os
+    import run
+    run.main(['', os.path.basename(sys.argv[0])])
+

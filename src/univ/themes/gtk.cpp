@@ -2810,7 +2810,7 @@ int wxGTKRenderer::HitTestFrame(const wxRect& rect, const wxPoint& pt, int flags
 // standard icons
 // ----------------------------------------------------------------------------
 
-static char *error_xpm[] = {
+static const char *error_xpm[] = {
 /* columns rows colors chars-per-pixel */
 "48 48 537 2",
 "   c Gray0",
@@ -3401,7 +3401,7 @@ static char *error_xpm[] = {
 "W+W+W+W+W+W+W+W+W+W+W+W+W+W+W+W+W+W+W+W+W+W+W+W+W+W+W+W+W+W+W+W+W+W+W+W+W+W+W+W+W+W+W+W+W+W+W+W+"
 };
 
-static char *info_xpm[] = {
+static const char *info_xpm[] = {
 /* columns rows colors chars-per-pixel */
 "48 48 478 2",
 "   c Gray0",
@@ -3934,7 +3934,7 @@ static char *info_xpm[] = {
 };
 
 /* XPM */
-static char *warning_xpm[] = {
+static const char *warning_xpm[] = {
 /* columns rows colors chars-per-pixel */
 "48 48 270 2",
 "   c Gray0",
@@ -4259,7 +4259,7 @@ static char *warning_xpm[] = {
 };
 
 /* XPM */
-static char *question_xpm[] = {
+static const char *question_xpm[] = {
 /* columns rows colors chars-per-pixel */
 "48 48 101 2",
 "   c Gray0",

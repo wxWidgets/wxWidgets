@@ -676,26 +676,26 @@ wxDialUpManagerImpl::CheckIfconfig()
         wxASSERT_MSG( m_IfconfigPath.length(),
                       _T("can't use ifconfig if it wasn't found") );
 
-        wxString tmpfile = wxGetTempFileName("_wxdialuptest");
-        wxString cmd = "/bin/sh -c \'";
+        wxString tmpfile = wxGetTempFileName( wxT("_wxdialuptest") );
+        wxString cmd = wxT("/bin/sh -c \'");
         cmd << m_IfconfigPath;
 #if defined(__SOLARIS__) || defined (__SUNOS__)
         // need to add -a flag
-        cmd << " -a";
+        cmd << wxT(" -a");
 #elif defined(__LINUX__) || defined(__SGI__)
         // nothing to be added to ifconfig
 #elif defined(__FREEBSD__) || defined(__DARWIN__)
         // add -l flag
-        cmd << " -l";
+        cmd << wxT(" -l");
 #elif defined(__HPUX__)
         // VZ: a wild guess (but without it, ifconfig fails completely)
-        cmd << _T(" ppp0");
+        cmd << wxT(" ppp0");
 #else
 # pragma warning "No ifconfig information for this OS."
        m_CanUseIfconfig = 0;
         return -1;
 #endif
-       cmd << " >" << tmpfile <<  '\'';
+       cmd << wxT(" >") << tmpfile <<  wxT('\'');
         /* I tried to add an option to wxExecute() to not close stdout,
            so we could let ifconfig write directly to the tmpfile, but
            this does not work. That should be faster, as it doesn´t call
@@ -754,41 +754,41 @@ wxDialUpManagerImpl::CheckIfconfig()
 
 wxDialUpManagerImpl::NetConnection wxDialUpManagerImpl::CheckPing()
 {
-   // First time check for ping location. We only use the variant
-   // which does not take arguments, a la GNU.
-   if(m_CanUsePing == -1) // unknown
-   {
+    // First time check for ping location. We only use the variant
+    // which does not take arguments, a la GNU.
+    if(m_CanUsePing == -1) // unknown
+    {
 #ifdef __VMS
-      if(wxFileExists("SYS$SYSTEM:TCPIP$PING.EXE"))
-         m_PingPath = "$SYS$SYSTEM:TCPIP$PING";
+        if (wxFileExists( wxT("SYS$SYSTEM:TCPIP$PING.EXE") ))
+            m_PingPath = wxT("$SYS$SYSTEM:TCPIP$PING");
 #else
-      if(wxFileExists("/bin/ping"))
-         m_PingPath = "/bin/ping";
-      else if(wxFileExists("/usr/sbin/ping"))
-         m_PingPath = "/usr/sbin/ping";
+        if (wxFileExists( wxT("/bin/ping") ))
+            m_PingPath = wxT("/bin/ping");
+        else if (wxFileExists( wxT("/usr/sbin/ping") ))
+            m_PingPath = wxT("/usr/sbin/ping");
 #endif
-      if(! m_PingPath)
-      {
-         m_CanUsePing = 0;
-      }
-   }
+        if (!m_PingPath)
+        {
+            m_CanUsePing = 0;
+        }
+    }
 
-   if(! m_CanUsePing)
-   {
+    if(! m_CanUsePing)
+    {
        // we didn't find ping
        return Net_Unknown;
-   }
+    }
 
    wxLogNull ln; // suppress all error messages
    wxASSERT(m_PingPath.length());
    wxString cmd;
-   cmd << m_PingPath << ' ';
+   cmd << m_PingPath << wxT(' ');
 #if defined(__SOLARIS__) || defined (__SUNOS__)
    // nothing to add to ping command
-#elif defined(__LINUX__) || defined ( __FREEBSD__) || defined(__DARWIN__) || defined( __VMS )
-   cmd << "-c 1 "; // only ping once
+#elif defined(__LINUX__) || defined (__BSD__) || defined( __VMS )
+   cmd << wxT("-c 1 "); // only ping once
 #elif defined(__HPUX__)
-   cmd << "64 1 "; // only ping once (need also specify the packet size)
+   cmd << wxT("64 1 "); // only ping once (need also specify the packet size)
 #else
 #   pragma warning "No Ping information for this OS."
    m_CanUsePing = 0;

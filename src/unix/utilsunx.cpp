@@ -28,26 +28,32 @@
 
 #include "wx/wfstream.h"
 
+// not only the statfs syscall is called differently depending on platform, but
+// one of its incarnations, statvfs(), takes different arguments under
+// different platforms and even different versions of the same system (Solaris
+// 7 and 8): if you want to test for this, don't forget that the problems only
+// appear if the large files support is enabled
 #ifdef HAVE_STATFS
-#  ifdef __BSD__
-#    include <sys/param.h>
-#    include <sys/mount.h>
-#  else
-#    include <sys/vfs.h>
-#  endif
+    #ifdef __BSD__
+        #include <sys/param.h>
+        #include <sys/mount.h>
+    #else // !__BSD__
+        #include <sys/vfs.h>
+    #endif // __BSD__/!__BSD__
+
+    #define wxStatfs statfs
 #endif // HAVE_STATFS
 
-// not only the statfs syscall is called differently depending on platform, but
-// we also can't use "struct statvfs" under Solaris because it breaks down if
-// HAVE_LARGEFILE_SUPPORT == 1 and we must use statvfs_t instead
 #ifdef HAVE_STATVFS
     #include <sys/statvfs.h>
 
-    #define statfs statvfs
-    #define wxStatFs statvfs_t
-#elif HAVE_STATFS
-    #define wxStatFs struct statfs
-#endif // HAVE_STAT[V]FS
+    #define wxStatfs statvfs
+#endif // HAVE_STATVFS
+
+#if defined(HAVE_STATFS) || defined(HAVE_STATVFS)
+    // WX_STATFS_T is detected by configure
+    #define wxStatfs_t WX_STATFS_T
+#endif
 
 #if wxUSE_GUI
     #include "wx/unix/execute.h"
@@ -362,10 +368,10 @@ public:
     bool IsOpened() const { return !Eof(); }
 
     // return TRUE if we have anything to read, don't block
-    bool IsAvailable() const;
+    virtual bool CanRead() const;
 };
 
-bool wxPipeInputStream::IsAvailable() const
+bool wxPipeInputStream::CanRead() const
 {
     if ( m_lasterror == wxSTREAM_EOF )
         return FALSE;
@@ -528,7 +534,7 @@ long wxExecute(wxChar **argv,
     wxChar **mb_argv = argv;
 #endif // Unicode/ANSI
 
-#if wxUSE_GUI
+#if wxUSE_GUI && !defined(__DARWIN__)
     // create pipes
     wxPipe pipeEndProcDetect;
     if ( !pipeEndProcDetect.Create() )
@@ -539,7 +545,7 @@ long wxExecute(wxChar **argv,
 
         return ERROR_RETURN_CODE;
     }
-#endif // wxUSE_GUI
+#endif // wxUSE_GUI && !defined(__DARWIN__)
 
     // pipes for inter process communication
     wxPipe pipeIn,      // stdin
@@ -590,9 +596,9 @@ long wxExecute(wxChar **argv,
                 if ( fd == pipeIn[wxPipe::Read]
                         || fd == pipeOut[wxPipe::Write]
                         || fd == pipeErr[wxPipe::Write]
-#if wxUSE_GUI
+#if wxUSE_GUI && !defined(__DARWIN__)
                         || fd == pipeEndProcDetect[wxPipe::Write]
-#endif // wxUSE_GUI
+#endif // wxUSE_GUI && !defined(__DARWIN__)
                    )
                 {
                     // don't close this one, we still need it
@@ -614,12 +620,12 @@ long wxExecute(wxChar **argv,
         }
 #endif // !__VMS
 
-#if wxUSE_GUI
+#if wxUSE_GUI && !defined(__DARWIN__)
         // reading side can be safely closed but we should keep the write one
         // opened
         pipeEndProcDetect.Detach(wxPipe::Write);
         pipeEndProcDetect.Close();
-#endif // wxUSE_GUI
+#endif // wxUSE_GUI && !defined(__DARWIN__)
 
         // redirect stdin, stdout and stderr
         if ( pipeIn.IsOk() )
@@ -693,14 +699,9 @@ long wxExecute(wxChar **argv,
 #if wxUSE_GUI && !defined(__WXMICROWIN__)
         wxEndProcessData *data = new wxEndProcessData;
 
-        data->tag = wxAddProcessCallback
-                    (
-                        data,
-                        pipeEndProcDetect.Detach(wxPipe::Read)
-                    );
-
-        pipeEndProcDetect.Close();
-
+        // wxAddProcessCallback is now (with DARWIN) allowed to call the
+        // callback function directly if the process terminates before
+        // the callback can be added to the run loop. Set up the data.
         if ( flags & wxEXEC_SYNC )
         {
             // we may have process for capturing the program output, but it's
@@ -709,7 +710,31 @@ long wxExecute(wxChar **argv,
 
             // sync execution: indicate it by negating the pid
             data->pid = -pid;
+        }
+        else
+        {
+            // async execution, nothing special to do - caller will be
+            // notified about the process termination if process != NULL, data
+            // will be deleted in GTK_EndProcessDetector
+            data->process  = process;
+            data->pid      = pid;
+        }
 
+
+#if defined(__DARWIN__)
+        data->tag = wxAddProcessCallbackForPid(data,pid);
+#else
+        data->tag = wxAddProcessCallback
+                    (
+                        data,
+                        pipeEndProcDetect.Detach(wxPipe::Read)
+                    );
+
+        pipeEndProcDetect.Close();
+#endif // defined(__DARWIN__)
+
+        if ( flags & wxEXEC_SYNC )
+        {
             wxBusyCursor bc;
             wxWindowDisabler wd;
 
@@ -735,12 +760,6 @@ long wxExecute(wxChar **argv,
         }
         else // async execution
         {
-            // async execution, nothing special to do - caller will be
-            // notified about the process termination if process != NULL, data
-            // will be deleted in GTK_EndProcessDetector
-            data->process  = process;
-            data->pid      = pid;
-
             return pid;
         }
 #else // !wxUSE_GUI
@@ -800,7 +819,12 @@ char *wxGetUserHome( const wxString &user )
 
         if ((ptr = wxGetenv(wxT("HOME"))) != NULL)
         {
+#if wxUSE_UNICODE
+            wxWCharBuffer buffer( ptr );
+            return buffer;
+#else
             return ptr;
+#endif
         }
         if ((ptr = wxGetenv(wxT("USER"))) != NULL || (ptr = wxGetenv(wxT("LOGNAME"))) != NULL)
         {
@@ -947,7 +971,7 @@ wxString wxGetOsDescription()
 #ifndef WXWIN_OS_DESCRIPTION
     #error WXWIN_OS_DESCRIPTION should be defined in config.h by configure
 #else
-    return WXWIN_OS_DESCRIPTION;
+    return wxString::FromAscii( WXWIN_OS_DESCRIPTION );
 #endif
 }
 #endif
@@ -1015,8 +1039,8 @@ bool wxGetDiskSpace(const wxString& path, wxLongLong *pTotal, wxLongLong *pFree)
 {
 #if defined(HAVE_STATFS) || defined(HAVE_STATVFS)
     // the case to "char *" is needed for AIX 4.3
-    wxStatFs fs;
-    if ( statfs((char *)(const char*)path.fn_str(), &fs) != 0 )
+    wxStatfs_t fs;
+    if ( wxStatfs((char *)(const char*)path.fn_str(), &fs) != 0 )
     {
         wxLogSysError( wxT("Failed to get file system statistics") );
 

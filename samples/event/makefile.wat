@@ -1,11 +1,12 @@
-# Purpose: makefile for event example (Watcom)
-# Created: 2001-01-31
-
-WXDIR = $(%WXWIN)
-
-PROGRAM = event
-OBJECTS = $(PROGRAM).obj
-
-!include $(WXDIR)\src\makeprog.wat
-
-
+# 
+# Makefile for WATCOM 
+# 
+# Created by Julian Smart, January 1999 
+#  
+# 
+# 
+# 
+PROGRAM = event 
+OBJECTS = $(OUTPUTDIR)\$(PROGRAM).obj 
+# 
+!include $(%WXWIN)\src\makeprog.wat 

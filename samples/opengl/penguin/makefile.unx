@@ -11,22 +11,22 @@ OPENGL_LIBS=-lGL -lGLU
 #if you have old Mesa, try this:
 #OPENGL_LIBS=-lMesaGL -lMesaGLU
 
-CPP = g++
+CC = $(shell wx-config --cc)
 CXX = $(shell wx-config --cxx)
 
 Penguin: penguin.o trackball.o lw.o
-	$(CPP) -o Penguin \
+	$(CXX) -o Penguin \
 	penguin.o trackball.o lw.o \
 	`wx-config --libs` -lwx_gtk_gl $(OPENGL_LIBS)
 
 penguin.o: penguin.cpp
-	$(CPP) `wx-config --cxxflags` -I../../gtk -c penguin.cpp
+	$(CXX) `wx-config --cxxflags` -I../../gtk -c penguin.cpp
 
 lw.o: lw.cpp
-	$(CPP) `wx-config --cxxflags` -I../../gtk -c lw.cpp
+	$(CXX) `wx-config --cxxflags` -I../../gtk -c lw.cpp
 
 trackball.o: trackball.c
-	$(CXX) `wx-config --cxxflags` -I../../gtk -c trackball.c
+	$(CC) `wx-config --cflags` -I../../gtk -c trackball.c
 
 clean: 
 	rm -f *.o Penguin

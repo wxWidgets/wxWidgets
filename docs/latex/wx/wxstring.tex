@@ -638,6 +638,8 @@ Returns a reference to the character at position {\it n}.
 \func{char*}{GetWriteBuf}{\param{size\_t}{ len}}
 
 Returns a writable buffer of at least {\it len} bytes.
+It returns a pointer to a new memory block, and the
+existing data will not be copied.
 
 Call \helpref{wxString::UngetWriteBuf}{wxstringungetwritebuf} as soon as possible
 to put the string back into a reasonable state.
@@ -660,7 +662,7 @@ If {\it fromEnd} is TRUE, reverse search direction.
 
 If {\bf caseSensitive}, comparison is case sensitive (the default).
 
-Returns the index of the first item matched, or NOT\_FOUND.
+Returns the index of the first item matched, or wxNOT\_FOUND.
 
 % TODO
 %\membersection{wxString::insert}\label{wxstringinsert}
@@ -764,15 +766,15 @@ Same as MakeLower.
 
 \membersection{wxString::MakeLower}\label{wxstringmakelower}
 
-\func{void}{MakeLower}{\void}
+\func{wxString\&}{MakeLower}{\void}
 
-Converts all characters to lower case.
+Converts all characters to lower case and returns the result.
 
 \membersection{wxString::MakeUpper}\label{wxstringmakeupper}
 
-\func{void}{MakeUpper}{\void}
+\func{wxString\&}{MakeUpper}{\void}
 
-Converts all characters to upper case.
+Converts all characters to upper case and returns the result.
 
 \membersection{wxString::Matches}\label{wxstringmatches}
 
@@ -969,6 +971,8 @@ Truncate the string to the given length.
 \membersection{wxString::UngetWriteBuf}\label{wxstringungetwritebuf}
 
 \func{void}{UngetWriteBuf}{\void}
+
+\func{void}{UngetWriteBuf}{\param{size_t}{ len}}
 
 Puts the string back into a reasonable state, after
 \rtfsp\helpref{wxString::GetWriteBuf}{wxstringgetwritebuf} was called.

@@ -315,7 +315,7 @@ wxTreeItemId wxTreeCtrl::GetSelection() const {
   return p;
 }
 
-wxTreeItemId wxTreeCtrl::GetParent(const wxTreeItemId& item) const {
+wxTreeItemId wxTreeCtrl::GetItemParent(const wxTreeItemId& item) const {
   if (item.IsOk())
     return (GtkTreeItem *)gtk_object_get_data(GTK_OBJECT((GtkTreeItem *)item), "parent");
 

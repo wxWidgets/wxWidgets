@@ -1,8 +1,6 @@
 
 from wxPython.wx import *
 
-import string
-
 #---------------------------------------------------------------------------
 
 class wxFindPrefixListBox(wxListBox):
@@ -10,18 +8,22 @@ class wxFindPrefixListBox(wxListBox):
                  choices=[], style=0, validator=wxDefaultValidator):
         wxListBox.__init__(self, parent, id, pos, size, choices, style, validator)
         self.typedText = ''
-        EVT_KEY_UP(self, self.OnKey)
+        self.log = parent.log
+        EVT_KEY_DOWN(self, self.OnKey)
 
 
     def FindPrefix(self, prefix):
+        self.log.WriteText('Looking for prefix: %s\n' % prefix)
         if prefix:
-            prefix = string.lower(prefix)
+            prefix = prefix.lower()
             length = len(prefix)
             for x in range(self.Number()):
                 text = self.GetString(x)
-                text = string.lower(text)
+                text = text.lower()
                 if text[:length] == prefix:
+                    self.log.WriteText('Prefix %s is found.\n' % prefix)
                     return x
+        self.log.WriteText('Prefix %s is not found.\n' % prefix)
         return -1
 
 
@@ -43,7 +45,11 @@ class wxFindPrefixListBox(wxListBox):
                     self.SetSelection(item)
 
         else:
+            self.typedText = ''
             evt.Skip()
+
+    def OnKeyDown(self, evt):
+        pass
 
 
 #---------------------------------------------------------------------------
@@ -90,7 +96,9 @@ class TestListBox(wxPanel):
 
 
     def EvtListBox(self, event):
-        self.log.WriteText('EvtListBox: %s\n' % event.GetString())
+        self.log.WriteText('EvtListBox: %s, %s, %s\n' %
+                           (event.GetString(), event.IsSelection(), event.GetSelection()))
+
         lb = event.GetEventObject()
         data = lb.GetClientData(lb.GetSelection())
         if data is not None:
@@ -127,14 +135,19 @@ def runTest(frame, nb, log):
 
 
 
-
-
-
-
-
-
-
-overview = """\
-A listbox is used to select one or more of a list of strings. The strings are displayed in a scrolling box, with the selected string(s) marked in reverse video. A listbox can be single selection (if an item is selected, the previous selection is removed) or multiple selection (clicking an item toggles the item on or off independently of other selections).
-
+overview = """<html><body>
+A listbox is used to select one or more of a list of
+strings. The strings are displayed in a scrolling box, with the
+selected string(s) marked in reverse video. A listbox can be single
+selection (if an item is selected, the previous selection is removed)
+or multiple selection (clicking an item toggles the item on or off
+independently of other selections).
+</body></html>
 """
+
+
+if __name__ == '__main__':
+    import sys,os
+    import run
+    run.main(['', os.path.basename(sys.argv[0])])
+

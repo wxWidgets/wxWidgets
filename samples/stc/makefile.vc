@@ -6,7 +6,7 @@
 WXDIR = $(WXWIN)
 PROGRAM = stctest
 
-OBJECTS = $(PROGRAM).obj
+OBJECTS = $(PROGRAM).obj edit.obj prefs.obj
 EXTRALIBS = $(WXDIR)\lib\stc$(LIBEXT).lib
 EXTRAINC = -I$(WXDIR)\contrib\include
 

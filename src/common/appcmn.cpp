@@ -446,8 +446,23 @@ bool wxAppBase::CheckBuildOptions(const wxBuildOptions& opts)
 
     if ( !(wxCMP(isDebug) && wxCMP(verMaj) && wxCMP(verMin)) )
     {
-        wxLogFatalError(_T("Mismatch between the program and library build ")
-                        _T("versions detected."));
+        wxString msg;
+        wxString libDebug, progDebug;
+
+        if (isDebug)
+            libDebug = wxT("debug");
+        else
+            libDebug = wxT("no debug");
+
+        if (opts.m_isDebug)
+            progDebug = wxT("debug");
+        else
+            progDebug = wxT("no debug");
+        
+        msg.Printf(_T("Mismatch between the program and library build versions detected.\nThe library used %d.%d (%s), and your program used %d.%d (%s)."),
+                   verMaj, verMin, libDebug.c_str(), opts.m_verMaj, opts.m_verMin, progDebug.c_str());
+        
+        wxLogFatalError(msg);
 
         // normally wxLogFatalError doesn't return
         return FALSE;
@@ -533,6 +548,24 @@ void ShowAssertDialog(const wxChar *szFile,
     {
         wxStrcat(szBuf, wxT("."));
     }
+
+#if wxUSE_THREADS
+    // if we are not in the main thread,
+    // output the assert directly and trap since dialogs cannot be displayed
+    if (!wxThread::IsMain()) {
+        wxStrcat(szBuf, wxT(" [in child thread]"));
+#if defined(__WXMSW__) && !defined(__WXMICROWIN__)
+        wxStrcat(szBuf, wxT("\r\n"));
+        OutputDebugString(szBuf);
+#else
+        // send to stderr
+        wxFprintf(stderr, wxT("%s\n"), szBuf);
+        fflush(stderr); 
+#endif
+        // He-e-e-e-elp!! we're asserting in a child thread
+        wxTrap();
+    }
+#endif // wxUSE_THREADS
 
     if ( !s_bNoAsserts )
     {

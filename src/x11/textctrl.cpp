@@ -52,7 +52,7 @@ wxSourceUndoStep::wxSourceUndoStep( wxSourceUndo type, int y1, int y2, wxTextCtr
         for (int i = m_y1; i < m_y2+2; i++)
         {
             if (i >= (int)m_owner->m_lines.GetCount())
-                m_lines.Add( "" );
+                m_lines.Add( wxT("") );
             else
                 m_lines.Add( m_owner->m_lines[i].m_text );
         }
@@ -469,184 +469,6 @@ void wxTextCtrl::SetLanguage( wxSourceLanguage lang )
     m_lang = lang;
     
     m_keywords.Clear();
-
-    if (m_lang == wxSOURCE_LANG_PYTHON)
-    {
-        m_keywords.Add( "class" );
-        m_keywords.Add( "__init__" );
-        m_keywords.Add( "return" );
-        m_keywords.Add( "def" );
-        m_keywords.Add( "try" );
-        m_keywords.Add( "except" );
-        m_keywords.Add( "if" );
-        m_keywords.Add( "else" );
-        m_keywords.Add( "finally" );
-        m_keywords.Add( "for" );
-        m_keywords.Add( "if" );
-        m_keywords.Add( "elif" );
-        m_keywords.Add( "in" );
-        m_keywords.Add( "and" );
-        m_keywords.Add( "del" );
-        m_keywords.Add( "is" );
-        m_keywords.Add( "raise" );
-        m_keywords.Add( "assert" );
-        m_keywords.Add( "lambda" );
-        m_keywords.Add( "break" );
-        m_keywords.Add( "global" );
-        m_keywords.Add( "not" );
-        m_keywords.Add( "or" );
-        m_keywords.Add( "while" );
-        m_keywords.Add( "continue" );
-        m_keywords.Add( "exec" );
-        m_keywords.Add( "pass" );
-        m_keywords.Add( "print" );
-    } else
-    if (m_lang == wxSOURCE_LANG_PERL)
-    {
-        m_keywords.Add( "main" );
-        m_keywords.Add( "sub" );
-        m_keywords.Add( "shift" );
-        m_keywords.Add( "push" );
-        m_keywords.Add( "split" );
-        m_keywords.Add( "join" );
-        m_keywords.Add( "chop" );
-        m_keywords.Add( "grep" );
-        m_keywords.Add( "open" );
-        m_keywords.Add( "print" );
-        m_keywords.Add( "sprint" );
-        m_keywords.Add( "printf" );
-        m_keywords.Add( "sprintf" );
-        m_keywords.Add( "my" );
-        m_keywords.Add( "local" );
-        m_keywords.Add( "exit" );
-        m_keywords.Add( "die" );
-        m_keywords.Add( "return" );
-        m_keywords.Add( "for" );
-        m_keywords.Add( "foreach" );
-        m_keywords.Add( "while" );
-        m_keywords.Add( "unless" );
-        m_keywords.Add( "if" );
-        m_keywords.Add( "next" );
-        m_keywords.Add( "last" );
-        m_keywords.Add( "else" );
-        m_keywords.Add( "elsif" );
-        m_keywords.Add( "ne" );
-        m_keywords.Add( "qe" );
-    }
-    else
-    if (m_lang == wxSOURCE_LANG_CPP)
-    {
-        m_keywords.Add( "class" );
-        m_keywords.Add( "return" );
-        m_keywords.Add( "if" );
-        m_keywords.Add( "then" );
-        m_keywords.Add( "else" );
-        m_keywords.Add( "struct" );
-        m_keywords.Add( "enum" );
-        m_keywords.Add( "while" );
-        m_keywords.Add( "do" );
-        m_keywords.Add( "for" );
-        m_keywords.Add( "continue" );
-        m_keywords.Add( "break" );
-        m_keywords.Add( "switch" );
-        m_keywords.Add( "case" );
-        m_keywords.Add( "goto" );
-        m_keywords.Add( "label" );
-        m_keywords.Add( "inline" );
-        m_keywords.Add( "operator" );
-        m_keywords.Add( "virtual" );
-        m_keywords.Add( "private" );
-        m_keywords.Add( "public" );
-        m_keywords.Add( "protected" );
-        m_keywords.Add( "friend" );
-        m_keywords.Add( "exception" );
-        m_keywords.Add( "throw" );
-        m_keywords.Add( "catch" );
-        m_keywords.Add( "delete" );
-        m_keywords.Add( "new" );
-        m_keywords.Add( "default" );
-        m_keywords.Add( "overload" );
-        m_keywords.Add( "using" );
-        m_keywords.Add( "template" );
-        m_keywords.Add( "try" );
-        m_keywords.Add( "typedef" );
-        m_keywords.Add( "union" );
-        m_keywords.Add( "volatile" );
-        m_keywords.Add( "asm" );
-    }
-    
-    m_defines.Clear();
-
-    if (m_lang == wxSOURCE_LANG_PYTHON)
-    {
-        m_defines.Add( "from" );
-        m_defines.Add( "import" );
-    } else
-    if (m_lang == wxSOURCE_LANG_PERL)
-    {
-        m_defines.Add( "use" );
-        m_defines.Add( "do" );
-        m_defines.Add( "package" );
-        m_defines.Add( "defined" );
-    } else
-    if (m_lang == wxSOURCE_LANG_CPP)
-    {
-        m_defines.Add( "#define" );
-        m_defines.Add( "#if" );
-        m_defines.Add( "#ifndef" );
-        m_defines.Add( "#ifdef" );
-        m_defines.Add( "#else" );
-        m_defines.Add( "#elif" );
-        m_defines.Add( "#endif" );
-        m_defines.Add( "#pragma" );
-        m_defines.Add( "#include" );
-    }
-
-    m_variables.Clear();
-    
-    if (m_lang == wxSOURCE_LANG_PYTHON)
-    {
-        m_variables.Add( "nil" );
-        m_variables.Add( "None" );
-        m_variables.Add( "self" );
-        m_variables.Add( "false" );
-        m_variables.Add( "true" );
-    } else
-    if (m_lang == wxSOURCE_LANG_PERL)
-    {
-        m_variables.Add( "undef" );
-        m_variables.Add( "class" );
-        m_variables.Add( "this" );
-        m_variables.Add( "IN" );
-        m_variables.Add( "OUT" );
-        m_variables.Add( "STDIN" );
-        m_variables.Add( "STDOUT" );
-        m_variables.Add( "STDERR" );
-    } else
-    if (m_lang == wxSOURCE_LANG_CPP)
-    {
-        m_variables.Add( "int" );
-        m_variables.Add( "bool" );
-        m_variables.Add( "void" );
-        m_variables.Add( "long" );
-        m_variables.Add( "short" );
-        m_variables.Add( "const" );
-        m_variables.Add( "signed" );
-        m_variables.Add( "unsigned" );
-        m_variables.Add( "char" );
-        m_variables.Add( "size_t" );
-        m_variables.Add( "wchar_t" );
-        m_variables.Add( "NULL" );
-        m_variables.Add( "this" );
-        m_variables.Add( "TRUE" );
-        m_variables.Add( "FALSE" );
-        m_variables.Add( "float" );
-        m_variables.Add( "double" );
-        m_variables.Add( "register" );
-        m_variables.Add( "extern" );
-        m_variables.Add( "static" );
-        m_variables.Add( "sizeof" );
-    }
 }
 
 void wxTextCtrl::WriteText(const wxString& text2)
@@ -862,12 +684,12 @@ void wxTextCtrl::Copy()
         {
             tmp.Remove( 0, selStartX );
             sel = tmp;
-            sel.Append( "\n" );
+            sel.Append( wxT("\n") );
         }
         for (int i = selStartY+1; i < selEndY; i++)
         {
             sel.Append( m_lines[i].m_text );
-            sel.Append( "\n" );
+            sel.Append( wxT("\n") );
         }
         tmp = m_lines[selEndY].m_text;
         if (selEndX > (int)tmp.Len())
@@ -2169,7 +1991,7 @@ void wxTextCtrl::Indent()
     
     for (int i = startY; i <= endY; i++)
     {
-        m_lines[i].m_text.insert( 0u, "    " );
+        m_lines[i].m_text.insert( 0u, wxT("    ") );
         RefreshLine( i );
     }
 }
@@ -2196,7 +2018,7 @@ void wxTextCtrl::Unindent()
     {
         for (int n = 0; n < 4; n++)
         {
-            if (m_lines[i].m_text[0u] == ' ')
+            if (m_lines[i].m_text[0u] == wxT(' '))
                 m_lines[i].m_text.erase(0u,1u);
         }
         RefreshLine( i );

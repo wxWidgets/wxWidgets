@@ -25,7 +25,7 @@
 
 #include "resource.h"
 
-#if !defined(__GNUWIN32__)
+#if !defined(__GNUWIN32__) && !defined(__BORLANDC__)
 #include <commctrl.h>
 #endif
 

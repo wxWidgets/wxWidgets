@@ -93,7 +93,7 @@
 class wxListBoxItem : public wxOwnerDrawn
 {
 public:
-    wxListBoxItem(const wxString& str = "");
+    wxListBoxItem(const wxString& str = wxEmptyString);
 };
 
 wxListBoxItem::wxListBoxItem(const wxString& str) : wxOwnerDrawn(str, FALSE)
@@ -102,7 +102,7 @@ wxListBoxItem::wxListBoxItem(const wxString& str) : wxOwnerDrawn(str, FALSE)
     SetMarginWidth(0);
 }
 
-wxOwnerDrawn *wxListBox::CreateItem(size_t WXUNUSED(n))
+wxOwnerDrawn *wxListBox::CreateLboxItem(size_t WXUNUSED(n))
 {
     return new wxListBoxItem();
 }
@@ -161,6 +161,10 @@ bool wxListBox::Create(wxWindow *parent,
 
     wxASSERT_MSG( !(style & wxLB_MULTIPLE) || !(style & wxLB_EXTENDED),
                   _T("only one of listbox selection modes can be specified") );
+
+    if ( (m_windowStyle & wxBORDER_MASK) == wxBORDER_DEFAULT )
+        m_windowStyle |= wxBORDER_SUNKEN;
+
     if ( m_windowStyle & wxCLIP_SIBLINGS )
         wstyle |= WS_CLIPSIBLINGS;
 
@@ -187,15 +191,8 @@ bool wxListBox::Create(wxWindow *parent,
     // doesn't work properly
     wstyle |= LBS_NOINTEGRALHEIGHT;
 
-    bool want3D;
-    WXDWORD exStyle = Determine3DEffects(WS_EX_CLIENTEDGE, &want3D);
-
-    // Even with extended styles, need to combine with WS_BORDER for them to
-    // look right.
-    if ( want3D || wxStyleHasBorder(m_windowStyle) )
-    {
-        wstyle |= WS_BORDER;
-    }
+    WXDWORD exStyle = 0;
+    (void) MSWGetStyle(m_windowStyle, & exStyle) ;
 
     m_hWnd = (WXHWND)::CreateWindowEx(exStyle, wxT("LISTBOX"), NULL,
             wstyle | WS_CHILD,
@@ -204,14 +201,6 @@ bool wxListBox::Create(wxWindow *parent,
             wxGetInstance(), NULL);
 
     wxCHECK_MSG( m_hWnd, FALSE, wxT("Failed to create listbox") );
-
-#if wxUSE_CTL3D
-    if (want3D)
-    {
-        Ctl3dSubclassCtl(GetHwnd());
-        m_useCtl3D = TRUE;
-    }
-#endif
 
     // Subclass again to catch messages
     SubclassWin(m_hWnd);
@@ -272,7 +261,7 @@ void wxListBox::Delete(int N)
     SendMessage(GetHwnd(), LB_DELETESTRING, N, 0);
     m_noItems--;
 
-    SetHorizontalExtent("");
+    SetHorizontalExtent(wxEmptyString);
 }
 
 int wxListBox::DoAppend(const wxString& item)
@@ -282,7 +271,7 @@ int wxListBox::DoAppend(const wxString& item)
 
 #if wxUSE_OWNER_DRAWN
     if ( m_windowStyle & wxLB_OWNERDRAW ) {
-        wxOwnerDrawn *pNewItem = CreateItem(index); // dummy argument
+        wxOwnerDrawn *pNewItem = CreateLboxItem(index); // dummy argument
         pNewItem->SetName(item);
         m_aItems.Insert(pNewItem, index);
         ListBox_SetItemData(GetHwnd(), index, pNewItem);
@@ -313,16 +302,7 @@ void wxListBox::DoSetItems(const wxArrayString& choices, void** clientData)
         ListBox_AddString(GetHwnd(), choices[i]);
         if ( clientData )
         {
-#if wxUSE_OWNER_DRAWN
-            if ( m_windowStyle & wxLB_OWNERDRAW )
-            {
-                wxASSERT_MSG(clientData[i] == NULL,
-                             wxT("Can't use client data with owner-drawn listboxes"));
-            }
-            ListBox_SetItemData(GetHwnd(), i, clientData[i]);
-#else // !wxUSE_OWNER_DRAWN
-            ListBox_SetItemData(GetHwnd(), i, clientData[i]);
-#endif // wxUSE_OWNER_DRAWN/!wxUSE_OWNER_DRAWN
+            SetClientData(i, clientData[i]);
         }
     }
 
@@ -333,7 +313,7 @@ void wxListBox::DoSetItems(const wxArrayString& choices, void** clientData)
 
         // then create new ones
         for ( size_t ui = 0; ui < (size_t)m_noItems; ui++ ) {
-            wxOwnerDrawn *pNewItem = CreateItem(ui);
+            wxOwnerDrawn *pNewItem = CreateLboxItem(ui);
             pNewItem->SetName(choices[ui]);
             m_aItems.Add(pNewItem);
             ListBox_SetItemData(GetHwnd(), ui, pNewItem);
@@ -502,7 +482,7 @@ int wxListBox::GetSelection() const
 // Find string for position
 wxString wxListBox::GetString(int N) const
 {
-    wxCHECK_MSG( N >= 0 && N < m_noItems, "",
+    wxCHECK_MSG( N >= 0 && N < m_noItems, wxEmptyString,
                  wxT("invalid index in wxListBox::GetClientData") );
 
     int len = ListBox_GetTextLen(GetHwnd(), N);
@@ -529,7 +509,7 @@ wxListBox::DoInsertItems(const wxArrayString& items, int pos)
 #if wxUSE_OWNER_DRAWN
         if ( m_windowStyle & wxLB_OWNERDRAW )
         {
-            wxOwnerDrawn *pNewItem = CreateItem(idx);
+            wxOwnerDrawn *pNewItem = CreateLboxItem(idx);
             pNewItem->SetName(items[i]);
             pNewItem->SetFont(GetFont());
             m_aItems.Insert(pNewItem, idx);

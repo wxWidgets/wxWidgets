@@ -15,6 +15,7 @@
 
 %{
 #include "wxPython.h"
+
 #ifdef __WXMSW__
 #include "myglcanvas.h"
 #else
@@ -69,7 +70,7 @@ public:
     ~wxGLContext();
 
     void SetCurrent();
-    void SetColour(const char *colour);
+    void SetColour(const wxString& colour);
     void SwapBuffers();
 
 #ifdef __WXGTK__
@@ -151,7 +152,7 @@ public:
     %pragma(python) addtomethod = "wxGLCanvasWithContext:val._setOORInfo(self)"
 
     void SetCurrent();
-    void SetColour(const char *colour);
+    void SetColour(const wxString& colour);
     void SwapBuffers();
 
     wxGLContext* GetContext();

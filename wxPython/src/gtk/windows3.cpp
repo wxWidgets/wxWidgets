@@ -19,6 +19,8 @@
 /* Implementation : PYTHON */
 
 #define SWIGPYTHON
+#include "Python.h"
+
 #include <string.h>
 #include <stdlib.h>
 /* Definitions for Windows/Unix exporting */
@@ -36,12 +38,9 @@
 #   define SWIGEXPORT(a) a
 #endif
 
-#include "Python.h"
-
 #ifdef __cplusplus
 extern "C" {
 #endif
-
 extern void SWIG_MakePtr(char *, void *, char *);
 extern void SWIG_RegisterMapping(char *, char *, void *(*)(void *));
 extern char *SWIG_GetPtr(char *, void **, char *);
@@ -58,10 +57,8 @@ extern PyObject *SWIG_newvarlink(void);
 #include "helpers.h"
 #include <wx/sashwin.h>
 #include <wx/laywin.h>
-#ifndef __WXMAC__
 #include <wx/popupwin.h>
 #include <wx/tipwin.h>
-#endif
 
 
 static PyObject* t_output_helper(PyObject* target, PyObject* o) {

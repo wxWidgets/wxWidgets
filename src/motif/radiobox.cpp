@@ -119,6 +119,8 @@ bool wxRadioBox::Create(wxWindow *parent, wxWindowID id, const wxString& title,
 // TODO: check this still looks OK for Motif 1.2.
 #if (XmVersion > 1200)
                                              XmNframeChildType, XmFRAME_TITLE_CHILD,
+#else
+                                             XmNchildType, XmFRAME_TITLE_CHILD,
 #endif
                                              XmNchildVerticalAlignment, XmALIGNMENT_CENTER,
                                              NULL);

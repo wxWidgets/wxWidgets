@@ -179,7 +179,7 @@ public:
     // to be used with function above: transparent windows get
     // their background from parents that return TRUE here,
     // so this is mostly for wxPanel, wxTopLevelWindow etc.
-    virtual bool ProvidesBackground() { return FALSE; }
+    virtual bool ProvidesBackground() const { return FALSE; }
 
     // return TRUE if this control can be highlighted when the mouse is over
     // it (the theme decides itself whether it is really highlighted or not)

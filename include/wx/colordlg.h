@@ -14,9 +14,9 @@
 
 #if wxUSE_COLOURDLG
 
-#if defined(__WXMSW__)
+#if defined(__WXMSW__) && !defined(__WXUNIVERSAL__)
     #include "wx/msw/colordlg.h"
-#elif defined(__WXMAC__)
+#elif defined(__WXMAC__) && !defined(__WXUNIVERSAL__)
     #include "wx/mac/colordlg.h"
 #else
     #include "wx/generic/colrdlgg.h"

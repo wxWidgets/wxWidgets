@@ -22,7 +22,7 @@ class wxShapeTextLine: public wxObject
 {
  DECLARE_DYNAMIC_CLASS(wxShapeTextLine)
 public:
-   wxShapeTextLine(double the_x = 0.0, double the_y = 0.0, const wxString& the_line = "");
+   wxShapeTextLine(double the_x = 0.0, double the_y = 0.0, const wxString& the_line = wxEmptyString);
    ~wxShapeTextLine();
 
    inline double GetX() const { return m_x; }
@@ -136,7 +136,8 @@ class wxShapeRegion: public wxObject
   ~wxShapeRegion();
 
   // Accessors
-  inline void SetText(const wxString& s) { m_regionText = s; }
+  inline void SetText(const wxString& s)
+    { m_regionText = s; m_formattedText.Append(new wxShapeTextLine(0,0,s));}
   void SetFont(wxFont *f);
   void SetMinSize(double w, double h);
   void SetSize(double w, double h);

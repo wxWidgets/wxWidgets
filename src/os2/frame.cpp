@@ -311,7 +311,7 @@ void wxFrame::PositionStatusBar()
         {
             vError = ::WinGetLastError(vHabmain);
             sError = wxPMErrorToStr(vError);
-            wxLogError("Error setting parent for StautsBar. Error: %s\n", sError);
+            wxLogError("Error setting parent for StautsBar. Error: %s\n", sError.c_str());
             return;
         }
     }
@@ -454,14 +454,14 @@ void wxFrame::InternalSetMenuBar()
     {
         vError = ::WinGetLastError(vHabmain);
         sError = wxPMErrorToStr(vError);
-        wxLogError("Error setting parent for submenu. Error: %s\n", sError);
+        wxLogError("Error setting parent for submenu. Error: %s\n", sError.c_str());
     }
 
     if (!::WinSetOwner(m_hMenu, m_hFrame))
     {
         vError = ::WinGetLastError(vHabmain);
         sError = wxPMErrorToStr(vError);
-        wxLogError("Error setting parent for submenu. Error: %s\n", sError);
+        wxLogError("Error setting parent for submenu. Error: %s\n", sError.c_str());
     }
     ::WinSendMsg(m_hFrame, WM_UPDATEFRAME, (MPARAM)FCF_MENU, (MPARAM)0);
 } // end of wxFrame::InternalSetMenuBar

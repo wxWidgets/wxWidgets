@@ -57,7 +57,7 @@ wxCursorRefData::~wxCursorRefData()
 
 //-----------------------------------------------------------------------------
 
-WX_DECLARE_HASH_MAP(int, wxCursor, wxIntegerHash, wxIntegerEqual, wxCursorsHash)
+WX_DECLARE_HASH_MAP(int, wxCursor, wxIntegerHash, wxIntegerEqual, wxCursorsHash);
 
 static wxCursorsHash *gs_cursorsHash = NULL;
 

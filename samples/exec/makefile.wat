@@ -1,11 +1,12 @@
-# Purpose: makefile for exec example (Watcom)
-# Created: 2000-03-14
-
-WXDIR = $(%WXWIN)
-
-PROGRAM = exec
-OBJECTS = $(PROGRAM).obj
-
-!include $(WXDIR)\src\makeprog.wat
-
-
+# 
+# Makefile for WATCOM 
+# 
+# Created by Julian Smart, January 1999 
+#  
+# 
+# 
+# 
+PROGRAM = exec 
+OBJECTS = $(OUTPUTDIR)\$(PROGRAM).obj 
+# 
+!include $(%WXWIN)\src\makeprog.wat 

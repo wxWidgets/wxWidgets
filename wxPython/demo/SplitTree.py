@@ -76,23 +76,26 @@ class TestPanel(wxPanel):
                                               wxNO_BORDER )
         valueWindow = TestValueWindow(splitter, -1, style=wxNO_BORDER)
 
-        splitter.SplitVertically(tree, valueWindow)
-        splitter.SetSashPosition(150)
+        splitter.SplitVertically(tree, valueWindow, 150)
         scroller.SetTargetWindow(tree)
-        scroller.EnableScrolling(FALSE, FALSE)
+        scroller.EnableScrolling(False, False)
 
         valueWindow.SetTreeCtrl(tree)
         tree.SetCompanionWindow(valueWindow)
 
         sizer = wxBoxSizer(wxVERTICAL)
         sizer.Add(scroller, 1, wxEXPAND|wxALL, 25)
-        self.SetAutoLayout(true)
+        self.SetAutoLayout(True)
         self.SetSizer(sizer)
 
 
 #----------------------------------------------------------------------
 
 def runTest(frame, nb, log):
+    if wxPlatform == "__WXMAC__":
+        wxMessageBox("This demo currently fails on the Mac. The problem is being looked into...", "Sorry")
+        return
+
     win = TestPanel(nb, log)
     return win
 

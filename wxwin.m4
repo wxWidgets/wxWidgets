@@ -7,7 +7,7 @@ dnl	...
 dnl	AM_OPTIONS_WXCONFIG
 dnl	...
 dnl	...
-dnl	AM_PATH_WXCONFIG(2.3.3, wxWin=1)
+dnl	AM_PATH_WXCONFIG(2.3.4, wxWin=1)
 dnl     if test "$wxWin" != 1; then
 dnl        AC_MSG_ERROR([
 dnl     	   wxWindows must be installed on your system
@@ -16,7 +16,7 @@ dnl
 dnl     	   Please check that wx-config is in path, the directory
 dnl     	   where wxWindows libraries are installed (returned by
 dnl     	   'wx-config --libs' command) is in LD_LIBRARY_PATH or
-dnl     	   equivalent variable and wxWindows version is 2.3.3 or above.
+dnl     	   equivalent variable and wxWindows version is 2.3.4 or above.
 dnl        ])
 dnl     fi
 dnl     CPPFLAGS="$CPPFLAGS $WX_CPPFLAGS"

@@ -19,6 +19,8 @@
 /* Implementation : PYTHON */
 
 #define SWIGPYTHON
+#include "Python.h"
+
 #include <string.h>
 #include <stdlib.h>
 /* Definitions for Windows/Unix exporting */
@@ -36,12 +38,9 @@
 #   define SWIGEXPORT(a) a
 #endif
 
-#include "Python.h"
-
 #ifdef __cplusplus
 extern "C" {
 #endif
-
 extern void SWIG_MakePtr(char *, void *, char *);
 extern void SWIG_RegisterMapping(char *, char *, void *(*)(void *));
 extern char *SWIG_GetPtr(char *, void **, char *);
@@ -177,7 +176,7 @@ static PyObject *_wrap_wxMSHTMLEvent_GetText1(PyObject *self, PyObject *args, Py
     if (PyErr_Occurred()) return NULL;
 }{
 #if wxUSE_UNICODE
-    _resultobj = PyUnicode_FromUnicode(_result->c_str(), _result->Len());
+    _resultobj = PyUnicode_FromWideChar(_result->c_str(), _result->Len());
 #else
     _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
 #endif
@@ -589,7 +588,7 @@ static PyObject *_wrap_wxIEHtmlWin_GetStringSelection(PyObject *self, PyObject *
     if (PyErr_Occurred()) return NULL;
 }{
 #if wxUSE_UNICODE
-    _resultobj = PyUnicode_FromUnicode(_result->c_str(), _result->Len());
+    _resultobj = PyUnicode_FromWideChar(_result->c_str(), _result->Len());
 #else
     _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
 #endif
@@ -629,7 +628,7 @@ static PyObject *_wrap_wxIEHtmlWin_GetText(PyObject *self, PyObject *args, PyObj
     if (PyErr_Occurred()) return NULL;
 }{
 #if wxUSE_UNICODE
-    _resultobj = PyUnicode_FromUnicode(_result->c_str(), _result->Len());
+    _resultobj = PyUnicode_FromWideChar(_result->c_str(), _result->Len());
 #else
     _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
 #endif
@@ -752,8 +751,8 @@ static PyObject *_wrap_wxIEHtmlWin_GoSearch(PyObject *self, PyObject *args, PyOb
     return _resultobj;
 }
 
-#define wxIEHtmlWin_Refresh(_swigobj,_swigarg0)  (_swigobj->Refresh(_swigarg0))
-static PyObject *_wrap_wxIEHtmlWin_Refresh(PyObject *self, PyObject *args, PyObject *kwargs) {
+#define wxIEHtmlWin_RefreshPage(_swigobj,_swigarg0)  (_swigobj->Refresh(_swigarg0))
+static PyObject *_wrap_wxIEHtmlWin_RefreshPage(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     bool  _result;
     wxIEHtmlWin * _arg0;
@@ -762,18 +761,18 @@ static PyObject *_wrap_wxIEHtmlWin_Refresh(PyObject *self, PyObject *args, PyObj
     char *_kwnames[] = { "self","level", NULL };
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxIEHtmlWin_Refresh",_kwnames,&_argo0,&_arg1)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxIEHtmlWin_RefreshPage",_kwnames,&_argo0,&_arg1)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
         else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxIEHtmlWin_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxIEHtmlWin_Refresh. Expected _wxIEHtmlWin_p.");
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxIEHtmlWin_RefreshPage. Expected _wxIEHtmlWin_p.");
         return NULL;
         }
     }
 {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-    _result = (bool )wxIEHtmlWin_Refresh(_arg0,_arg1);
+    _result = (bool )wxIEHtmlWin_RefreshPage(_arg0,_arg1);
 
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
@@ -811,7 +810,7 @@ static PyObject *_wrap_wxIEHtmlWin_Stop(PyObject *self, PyObject *args, PyObject
 
 static PyMethodDef iewincMethods[] = {
 	 { "wxIEHtmlWin_Stop", (PyCFunction) _wrap_wxIEHtmlWin_Stop, METH_VARARGS | METH_KEYWORDS },
-	 { "wxIEHtmlWin_Refresh", (PyCFunction) _wrap_wxIEHtmlWin_Refresh, METH_VARARGS | METH_KEYWORDS },
+	 { "wxIEHtmlWin_RefreshPage", (PyCFunction) _wrap_wxIEHtmlWin_RefreshPage, METH_VARARGS | METH_KEYWORDS },
 	 { "wxIEHtmlWin_GoSearch", (PyCFunction) _wrap_wxIEHtmlWin_GoSearch, METH_VARARGS | METH_KEYWORDS },
 	 { "wxIEHtmlWin_GoHome", (PyCFunction) _wrap_wxIEHtmlWin_GoHome, METH_VARARGS | METH_KEYWORDS },
 	 { "wxIEHtmlWin_GoForward", (PyCFunction) _wrap_wxIEHtmlWin_GoForward, METH_VARARGS | METH_KEYWORDS },

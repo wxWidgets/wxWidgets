@@ -10,6 +10,7 @@ set files=%3
 echo s/%keyword/%repl/g > script.tmp
 
 call %wxwin\distrib\msw\expdwild.bat %3 list.tmp
+Rem goto end
 
 set len=%@LINES[%files]
 do i = 0 to %len by 1

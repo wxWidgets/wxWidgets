@@ -2,9 +2,11 @@
 from wxPython.wx import *
 from wxPython.stc import *
 
+import images
+
 #----------------------------------------------------------------------
 
-debug = 1
+debug = 0
 
 
 demoText = """\
@@ -14,7 +16,7 @@ the name suggests, you can define styles that can be applied to
 sections of text.  This will typically be used for things like
 syntax highlighting code editors, but I'm sure that there are other
 applications as well.  A style is a combination of font, point size,
-forground and background colours.  The editor can handle
+foreground and background colours.  The editor can handle
 proportional fonts just as easily as monospaced fonts, and various
 styles can use different sized fonts.
 
@@ -74,7 +76,7 @@ class MySTC(wxStyledTextCtrl):
                        % (evt.GetDragAllowMove(), evt.GetDragText()))
 
         if debug and evt.GetPosition() < 250:
-            evt.SetDragAllowMove(false)     # you can prevent moving of text (only copy)
+            evt.SetDragAllowMove(False)     # you can prevent moving of text (only copy)
             evt.SetDragText("DRAGGED TEXT") # you can change what is dragged
             #evt.SetDragText("")             # or prevent the drag with empty text
 
@@ -84,7 +86,7 @@ class MySTC(wxStyledTextCtrl):
                        % (evt.GetX(), evt.GetY(), evt.GetPosition(), evt.GetDragResult()))
 
         if debug and evt.GetPosition() < 250:
-            evt.SetDragResult(wxDragNone)   # prevent dropping at the begining of the buffer
+            evt.SetDragResult(wxDragNone)   # prevent dropping at the beginning of the buffer
 
 
     def OnDoDrop(self, evt):
@@ -159,13 +161,13 @@ def runTest(frame, nb, log):
         s = wxBoxSizer(wxHORIZONTAL)
         s.Add(ed, 1, wxEXPAND)
         p.SetSizer(s)
-        p.SetAutoLayout(true)
+        p.SetAutoLayout(True)
 
 
-    #ed.SetBufferedDraw(false)
+    #ed.SetBufferedDraw(False)
     #ed.StyleClearAll()
     #ed.SetScrollWidth(800)
-    #ed.SetWrapMode(true)
+    #ed.SetWrapMode(wxSTC_WRAP_WORD)
 
     ed.SetText(demoText)
     if wxUSE_UNICODE:
@@ -212,7 +214,8 @@ def runTest(frame, nb, log):
     # setup some markers
     ed.SetMarginType(1, wxSTC_MARGIN_SYMBOL)
     ed.MarkerDefine(0, wxSTC_MARK_ROUNDRECT, "#CCFF00", "RED")
-    ed.MarkerDefine(1, wxSTC_MARK_CIRCLE, "FOREST GREEN", "SIENNA")
+    #ed.MarkerDefine(1, wxSTC_MARK_CIRCLE, "FOREST GREEN", "SIENNA")
+    ed.MarkerDefineBitmap(1, images.getFolder1Bitmap())
     ed.MarkerDefine(2, wxSTC_MARK_SHORTARROW, "blue", "blue")
     ed.MarkerDefine(3, wxSTC_MARK_ARROW, "#00FF00", "#00FF00")
 

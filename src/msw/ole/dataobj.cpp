@@ -443,7 +443,7 @@ STDMETHODIMP wxIDataObject::SetData(FORMATETC *pformatetc,
                 // as we can't fix this bug in explorer (it's a bug because it
                 // should only use formats returned by EnumFormatEtc), do the
                 // check here
-                if ( !m_pDataObject->IsSupportedFormat(format) ) {
+                if ( !m_pDataObject->IsSupported(format, wxDataObject::Set) ) {
                     // go away!
                     return DV_E_FORMATETC;
                 }
@@ -474,7 +474,7 @@ STDMETHODIMP wxIDataObject::SetData(FORMATETC *pformatetc,
     || ( defined(__MWERKS__) && defined(__WXMSW__) )
                         size = std::wcslen((const wchar_t *)pBuf) * sizeof(wchar_t);
 #else
-                        size = ::wcslen((const wchar_t *)pBuf) * sizeof(wchar_t);
+                        size = ::wxWcslen((const wchar_t *)pBuf) * sizeof(wchar_t);
 #endif
                         break;
 #endif
@@ -1098,7 +1098,7 @@ protected:
         // CFSTR_SHELLURL is _always_ ANSI!
         wxCharBuffer char_buffer( GetDataSize() );
         wxCustomDataObject::GetDataHere( (void*)char_buffer.data() );
-        wxString unicode_buffer( char_buffer );
+        wxString unicode_buffer( char_buffer, wxConvLibc );
         memcpy( buffer, unicode_buffer.c_str(),
                 ( unicode_buffer.length() + 1 ) * sizeof(wxChar) );
 

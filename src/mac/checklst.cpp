@@ -271,7 +271,7 @@ bool wxCheckListBox::Create(wxWindow *parent,
     }
     else
     {
-        options = lOnlyOne ;
+        options = (OptionBits) lOnlyOne ;
     }
     SetListSelectionFlags((ListHandle)m_macList, options);
     

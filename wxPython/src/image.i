@@ -179,6 +179,21 @@ public:
             return PyString_FromStringAndSize((char*)data, len);
         }
 
+        void SetDataBuffer(PyObject* data) {
+            unsigned char* buffer;
+            int size;
+
+            if (!PyArg_Parse(data, "w#", &buffer, &size))
+                return;
+
+            if (size != self->GetWidth() * self->GetHeight() * 3) {
+                PyErr_SetString(PyExc_TypeError, "Incorrect buffer size");
+                return;
+            }
+
+            self->SetData(buffer);
+        }
+
         void SetData(PyObject* data) {
             unsigned char* dataPtr;
 
@@ -241,6 +256,8 @@ public:
             return bitmap;
         }
     }
+
+    %pragma(python) addtoclass = "def __nonzero__(self): return self.Ok()"
 };
 
 

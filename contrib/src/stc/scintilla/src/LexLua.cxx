@@ -23,10 +23,8 @@
 #include "Scintilla.h"
 #include "SciLexer.h"
 
-#define SCE_LUA_LAST_STYLE	SCE_LUA_WORD6
-
 static inline bool IsAWordChar(const int ch) {
-	return (ch < 0x80) && (isalnum(ch) || ch == '.' || ch == '_');
+	return (ch < 0x80) && (isalnum(ch) || ch == '_' || ch == '.');
 }
 
 inline bool IsAWordStart(const int ch) {
@@ -60,15 +58,19 @@ static void ColouriseLuaDoc(
 	WordList &keywords4 = *keywordlists[3];
 	WordList &keywords5 = *keywordlists[4];
 	WordList &keywords6 = *keywordlists[5];
+	WordList &keywords7 = *keywordlists[6];
+	WordList &keywords8 = *keywordlists[7];
 
-	// Must initialize the literal string nesting level, if we are inside such a string.
+	int currentLine = styler.GetLine(startPos);
+	// Initialize the literal string [[ ... ]] nesting level, if we are inside such a string.
 	int literalStringLevel = 0;
 	if (initStyle == SCE_LUA_LITERALSTRING) {
-		literalStringLevel = 1;
+		literalStringLevel = styler.GetLineState(currentLine - 1);
 	}
-	// We use states above the last one to indicate nesting level of literal strings
-	if (initStyle > SCE_LUA_LAST_STYLE) {
-		literalStringLevel = initStyle - SCE_LUA_LAST_STYLE + 1;
+	// Initialize the block comment --[[ ... ]] nesting level, if we are inside such a comment
+	int blockCommentLevel = 0;
+	if (initStyle == SCE_LUA_COMMENT) {
+		blockCommentLevel = styler.GetLineState(currentLine - 1);
 	}
 
 	// Do not leak onto next line
@@ -78,9 +80,28 @@ static void ColouriseLuaDoc(
 
 	StyleContext sc(startPos, length, initStyle, styler);
 	if (startPos == 0 && sc.ch == '#') {
+		// shbang line: # is a comment only if first char of the script
 		sc.SetState(SCE_LUA_COMMENTLINE);
 	}
 	for (; sc.More(); sc.Forward()) {
+		if (sc.atLineEnd) {
+			// Update the line state, so it can be seen by next line
+			currentLine = styler.GetLine(sc.currentPos);
+			switch (sc.state) {
+			case SCE_LUA_LITERALSTRING:
+				// Inside a literal string, we set the line state
+				styler.SetLineState(currentLine, literalStringLevel);
+				break;
+			case SCE_LUA_COMMENT: 	// Block comment
+				// Inside a block comment, we set the line state
+				styler.SetLineState(currentLine, blockCommentLevel);
+				break;
+			default:
+				// Reset the line state
+				styler.SetLineState(currentLine, 0);
+				break;
+			}
+		}
 		if (sc.atLineStart && (sc.state == SCE_LUA_STRING)) {
 			// Prevent SCE_LUA_STRINGEOL from leaking back to previous line
 			sc.SetState(SCE_LUA_STRING);
@@ -88,7 +109,7 @@ static void ColouriseLuaDoc(
 
 		// Handle string line continuation
 		if ((sc.state == SCE_LUA_STRING || sc.state == SCE_LUA_CHARACTER) &&
-				sc.ch == '\\') {
+		        sc.ch == '\\') {
 			if (sc.chNext == '\n' || sc.chNext == '\r') {
 				sc.Forward();
 				if (sc.ch == '\r' && sc.chNext == '\n') {
@@ -102,11 +123,15 @@ static void ColouriseLuaDoc(
 		if (sc.state == SCE_LUA_OPERATOR) {
 			sc.SetState(SCE_LUA_DEFAULT);
 		} else if (sc.state == SCE_LUA_NUMBER) {
-			if (!IsAWordChar(sc.ch)) {
-				sc.SetState(SCE_LUA_DEFAULT);
+			// We stop the number definition on non-numerical non-dot non-eE non-sign char
+			if (!(isdigit(sc.ch) || sc.ch == '.' ||
+				  toupper(sc.ch) == 'E' || sc.ch == '-' || sc.ch == '+')) {
+					// Not exactly following number definition (several dots are seen as OK, etc.)
+					// but probably enough in most cases.
+					sc.SetState(SCE_LUA_DEFAULT);
 			}
 		} else if (sc.state == SCE_LUA_IDENTIFIER) {
-			if (!IsAWordChar(sc.ch) || (sc.ch == '.')) {
+			if (!IsAWordChar(sc.ch)) {
 				char s[100];
 				sc.GetCurrent(s, sizeof(s));
 				if (keywords.InList(s)) {
@@ -121,6 +146,12 @@ static void ColouriseLuaDoc(
 					sc.ChangeState(SCE_LUA_WORD5);
 				} else if (keywords6.InList(s)) {
 					sc.ChangeState(SCE_LUA_WORD6);
+				} else if (keywords6.InList(s)) {
+					sc.ChangeState(SCE_LUA_WORD6);
+				} else if (keywords7.InList(s)) {
+					sc.ChangeState(SCE_LUA_WORD7);
+				} else if (keywords8.InList(s)) {
+					sc.ChangeState(SCE_LUA_WORD8);
 				}
 				sc.SetState(SCE_LUA_DEFAULT);
 			}
@@ -154,22 +185,31 @@ static void ColouriseLuaDoc(
 				sc.ChangeState(SCE_LUA_STRINGEOL);
 				sc.ForwardSetState(SCE_LUA_DEFAULT);
 			}
-		} else if (sc.state == SCE_LUA_LITERALSTRING || sc.state > SCE_LUA_LAST_STYLE) {
+		} else if (sc.state == SCE_LUA_LITERALSTRING) {
 			if (sc.Match('[', '[')) {
 				literalStringLevel++;
-				sc.SetState(SCE_LUA_LAST_STYLE + literalStringLevel - 1);
+				sc.Forward();
+				sc.SetState(SCE_LUA_LITERALSTRING);
 			} else if (sc.Match(']', ']') && literalStringLevel > 0) {
 				literalStringLevel--;
 				sc.Forward();
 				if (literalStringLevel == 0) {
 					sc.ForwardSetState(SCE_LUA_DEFAULT);
-				} else if (literalStringLevel == 1) {
-					sc.ForwardSetState(SCE_LUA_LITERALSTRING);
-				} else {
-					sc.ForwardSetState(SCE_LUA_LAST_STYLE + literalStringLevel - 1);
+				}
+			}
+		} else if (sc.state == SCE_LUA_COMMENT) {	// Lua 5.0's block comment
+			if (sc.Match('[', '[')) {
+				blockCommentLevel++;
+				sc.Forward();
+			} else if (sc.Match(']', ']') && blockCommentLevel > 0) {
+				blockCommentLevel--;
+				sc.Forward();
+				if (blockCommentLevel == 0) {
+					sc.ForwardSetState(SCE_LUA_DEFAULT);
 				}
 			}
 		}
+
 		// Determine if a new state should be entered.
 		if (sc.state == SCE_LUA_DEFAULT) {
 			if (IsADigit(sc.ch) || (sc.ch == '.' && IsADigit(sc.chNext))) {
@@ -184,19 +224,22 @@ static void ColouriseLuaDoc(
 				literalStringLevel = 1;
 				sc.SetState(SCE_LUA_LITERALSTRING);
 				sc.Forward();
+			} else if (sc.Match("--[[")) {	// Lua 5.0's block comment
+				blockCommentLevel = 1;
+				sc.SetState(SCE_LUA_COMMENT);
+				sc.Forward(3);
 			} else if (sc.Match('-', '-')) {
 				sc.SetState(SCE_LUA_COMMENTLINE);
 				sc.Forward();
-			} else if (sc.Match('$') && sc.atLineStart) {
+			} else if (sc.atLineStart && sc.Match('$')) {
 				sc.SetState(SCE_LUA_PREPROCESSOR);	// Obsolete since Lua 4.0, but still in old code
-			}  else if (isLuaOperator(static_cast<char>(sc.ch))) {
+			} else if (isLuaOperator(static_cast<char>(sc.ch))) {
 				sc.SetState(SCE_LUA_OPERATOR);
 			}
 		}
 	}
 	sc.Complete();
 }
-
 
 static void FoldLuaDoc(unsigned int startPos, int length, int /* initStyle */, WordList *[],
                        Accessor &styler) {
@@ -266,4 +309,14 @@ static void FoldLuaDoc(unsigned int startPos, int length, int /* initStyle */, W
 	styler.SetLevel(lineCurrent, levelPrev | flagsNext);
 }
 
-LexerModule lmLua(SCLEX_LUA, ColouriseLuaDoc, "lua", FoldLuaDoc);
+static const char * const luaWordListDesc[] = {
+	"Keywords",
+	"Basic functions",
+	"String, (table) & math functions",
+	"(coroutines), I/O & system facilities",
+	"XXX",
+	"XXX",
+	0
+};
+
+LexerModule lmLua(SCLEX_LUA, ColouriseLuaDoc, "lua", FoldLuaDoc, luaWordListDesc);

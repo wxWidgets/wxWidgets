@@ -410,10 +410,18 @@ void wxTopLevelWindowX11::SetTitle(const wxString& title)
     
     if (GetMainWindow())
     {
+#if wxUSE_UNICODE
+        //  I wonder of e.g. Metacity takes UTF-8 here
+        XStoreName(wxGlobalDisplay(), (Window) GetMainWindow(),
+            (const char*) title.ToAscii() );
+        XSetIconName(wxGlobalDisplay(), (Window) GetMainWindow(),
+            (const char*) title.ToAscii() );
+#else
         XStoreName(wxGlobalDisplay(), (Window) GetMainWindow(),
             (const char*) title);
         XSetIconName(wxGlobalDisplay(), (Window) GetMainWindow(),
             (const char*) title);
+#endif
     }
 }
 
@@ -660,18 +668,12 @@ bool wxSetWMDecorations(Window w, long style)
 #if wxUSE_NANOX
     GR_WM_PROPERTIES wmProp;
 
-    wmProp.flags = 0;
-    wmProp.props = 0;
+    wmProp.props = GR_WM_PROPS_CLOSEBOX ;
+    wmProp.flags = GR_WM_FLAGS_PROPS ;
 
     if (style & wxRESIZE_BORDER)
     {
         wmProp.props |= GR_WM_PROPS_APPFRAME ;
-        wmProp.flags |= GR_WM_FLAGS_PROPS ;
-    }
-
-    if (style & wxSYSTEM_MENU)
-    {
-        wmProp.props |= GR_WM_PROPS_CLOSEBOX ;
         wmProp.flags |= GR_WM_FLAGS_PROPS ;
     }
 
@@ -737,14 +739,13 @@ bool wxSetWMDecorations(Window w, long style)
     else
     {
         hints.decorations = MWM_DECOR_BORDER;
-        hints.functions = MWM_FUNC_MOVE;
+        hints.functions = MWM_FUNC_MOVE | MWM_FUNC_CLOSE;
 
         if ((style & wxCAPTION) != 0)
             hints.decorations |= MWM_DECOR_TITLE;
             
         if ((style & wxSYSTEM_MENU) != 0)
         {
-            hints.functions |= MWM_FUNC_CLOSE;
             hints.decorations |= MWM_DECOR_MENU;
         }
         

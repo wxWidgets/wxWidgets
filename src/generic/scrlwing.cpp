@@ -340,16 +340,40 @@ void wxScrollHelper::SetScrollbars(int pixelsPerUnitX,
     m_xScrollPosition = xPos;
     m_yScrollPosition = yPos;
 
-    m_targetWindow->SetVirtualSizeHints( noUnitsX * pixelsPerUnitX, noUnitsY * pixelsPerUnitY );
+    // For better backward compatibility we set persisting limits
+    // here not just the size.  It makes SetScrollbars 'sticky'
+    // emulating the old non-autoscroll behaviour.
 
-    AdjustScrollbars();
+    int w = noUnitsX * pixelsPerUnitX;
+    int h = noUnitsY * pixelsPerUnitY;
+     
+    m_targetWindow->SetVirtualSizeHints( w, h );
+
+    // The above should arguably be deprecated, this however we still need.
+
+    m_targetWindow->SetVirtualSize( w, h );
 
     if (do_refresh && !noRefresh)
         m_targetWindow->Refresh(TRUE, GetRect());
 
+#ifndef __WXUNIVERSAL__
+    // If the target is not the same as the window with the scrollbars,
+    // then we need to update the scrollbars here, since they won't have
+    // been updated by SetVirtualSize().
+    if ( m_targetWindow != m_win )
+#endif // !__WXUNIVERSAL__
+    {
+        AdjustScrollbars();
+    }
+#ifndef __WXUNIVERSAL__
+    else
+    {
+        // otherwise this has been done by AdjustScrollbars, above
 #ifdef __WXMAC__
-    m_targetWindow->MacUpdateImmediately() ;
+        m_targetWindow->MacUpdateImmediately() ;
 #endif
+    }
+#endif // !__WXUNIVERSAL__
 }
 
 // ----------------------------------------------------------------------------
@@ -579,6 +603,20 @@ int wxScrollHelper::CalcScrollInc(wxScrollWinEvent& event)
 // Adjust the scrollbars - new version.
 void wxScrollHelper::AdjustScrollbars()
 {
+    static bool s_isInside = false;
+    if ( s_isInside )
+    {
+        // don't reenter AdjustScrollbars() while another call to
+        // AdjustScrollbars() is in progress because this may lead to calling
+        // ScrollWindow() twice and this can really happen under MSW if
+        // SetScrollbar() call below adds or removes the scrollbar which
+        // changes the window size and hence results in another
+        // AdjustScrollbars() call
+        return;
+    }
+
+    s_isInside = true;
+
 #ifdef __WXMAC__
     m_targetWindow->MacUpdateImmediately();
 #endif
@@ -654,7 +692,7 @@ void wxScrollHelper::AdjustScrollbars()
         oldh = h;
 
         GetTargetSize( &w, &h );
-    } while ( w != oldw && h != oldh );
+    } while ( w != oldw || h != oldh );
 
 #ifdef __WXMOTIF__
     // Sorry, some Motif-specific code to implement a backing pixmap
@@ -710,6 +748,8 @@ void wxScrollHelper::AdjustScrollbars()
 #ifdef __WXMAC__
     m_targetWindow->MacUpdateImmediately();
 #endif
+
+    s_isInside = false;
 }
 
 void wxScrollHelper::DoPrepareDC(wxDC& dc)
@@ -867,17 +907,22 @@ void wxScrollHelper::DoCalcUnscrolledPosition(int x, int y, int *xx, int *yy) co
 // Default OnSize resets scrollbars, if any
 void wxScrollHelper::HandleOnSize(wxSizeEvent& WXUNUSED(event))
 {
-    if ( m_targetWindow != m_win )
-        m_targetWindow->SetVirtualSize( m_targetWindow->GetClientSize() );
+    if( m_win->GetAutoLayout() || m_targetWindow->GetAutoLayout() )
+    {
+        if ( m_targetWindow != m_win )
+            m_targetWindow->FitInside();
 
-    m_win->SetVirtualSize( m_win->GetClientSize() );
+        m_win->FitInside();
 
-    AdjustScrollbars();
-
-#if wxUSE_CONSTRAINTS
-    if (m_win->GetAutoLayout())
-        m_win->Layout();
-#endif
+        // FIXME:  Something is really weird here...  This should be
+        // called by FitInside above (and apparently is), yet the
+        // scrollsub sample will get the scrollbar wrong if resized
+        // quickly.  This masks the bug, but is surely not the right
+        // answer at all.
+        AdjustScrollbars();
+    }
+    else
+        AdjustScrollbars();
 }
 
 // This calls OnDraw, having adjusted the origin according to the current
@@ -1169,6 +1214,17 @@ bool wxGenericScrolledWindow::Layout()
 
     // fall back to default for LayoutConstraints
     return wxPanel::Layout();
+}
+
+void wxGenericScrolledWindow::DoSetVirtualSize(int x, int y)
+{
+    wxPanel::DoSetVirtualSize( x, y );
+    AdjustScrollbars();
+
+#if wxUSE_CONSTRAINTS
+    if (GetAutoLayout())
+        Layout();
+#endif
 }
 
 void wxGenericScrolledWindow::OnPaint(wxPaintEvent& event)

@@ -25,10 +25,16 @@ also has operators for implicit construction from and conversion to the native
 
 You would usually use this type in exactly the same manner as any other
 (built-in) arithmetic type. Note that wxLongLong is a signed type, if you
-want unsigned values use wxULongLong.
+want unsigned values use wxULongLong which has exactly the same API as
+wxLongLong except when explicitly mentioned otherwise.
 
 If a native (i.e. supported directly by the compiler) 64 bit integer type was
-found a typedef {\it wxLongLong\_t} will be defined to correspond it.
+found to exist, {\it wxLongLong\_t} macro will be defined to correspond to it.
+Also, in this case only, two additional macros will be defined: 
+\helpref{wxLongLongFmtSpec}{wxlonglongfmtspec} for printing 64 bit integers
+using the standard {\tt printf()} function (but see also 
+\helpref{ToString()}{wxlonglongtostring} for a more portable solution) and
+\helpref{wxLL}{wxll} for defining 64 bit integer compile-time constants.
 
 \wxheading{Derived from}
 

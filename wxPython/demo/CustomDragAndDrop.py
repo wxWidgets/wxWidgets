@@ -124,7 +124,8 @@ class DoodleDropTarget(wxPyDropTarget):
         self.dv = window
 
         # specify the type of data we will accept
-        self.data = wxCustomDataObject(wxCustomDataFormat("DoodleLines"))
+        self.df = wxCustomDataFormat("DoodleLines")
+        self.data = wxCustomDataObject(self.df)
         self.SetDataObject(self.data)
 
 
@@ -138,7 +139,7 @@ class DoodleDropTarget(wxPyDropTarget):
 
     def OnDrop(self, x, y):
         self.log.WriteText("OnDrop: %d %d\n" % (x, y))
-        return true
+        return True
 
     def OnDragOver(self, x, y, d):
         #self.log.WriteText("OnDragOver: %d, %d, %d\n" % (x, y, d))
@@ -153,7 +154,7 @@ class DoodleDropTarget(wxPyDropTarget):
 
 
 
-    # Called when OnDrop returns true.  We need to get the data and
+    # Called when OnDrop returns True.  We need to get the data and
     # do something with it.
     def OnData(self, x, y, d):
         self.log.WriteText("OnData: %d, %d, %d\n" % (x, y, d))
@@ -205,7 +206,7 @@ class CustomDnDPanel(wxPanel):
     def __init__(self, parent, log):
         wxPanel.__init__(self, parent, -1)
 
-        self.SetFont(wxFont(10, wxSWISS, wxNORMAL, wxBOLD, false))
+        self.SetFont(wxFont(10, wxSWISS, wxNORMAL, wxBOLD, False))
 
         # Make the controls
         text1 = wxStaticText(self, -1,
@@ -217,9 +218,9 @@ class CustomDnDPanel(wxPanel):
                             )
 
         rb1 = wxRadioButton(self, -1, "Draw", style=wxRB_GROUP)
-        rb1.SetValue(true)
+        rb1.SetValue(True)
         rb2 = wxRadioButton(self, -1, "Drag")
-        rb2.SetValue(false)
+        rb2.SetValue(False)
 
         text2 = wxStaticText(self, -1,
                              "The lower window is accepting a\n"
@@ -249,7 +250,7 @@ class CustomDnDPanel(wxPanel):
 
         sizer.Add(dndsizer, 1, wxEXPAND)
 
-        self.SetAutoLayout(true)
+        self.SetAutoLayout(True)
         self.SetSizer(sizer)
 
         # Events
@@ -269,12 +270,12 @@ class TestPanel(wxPanel):
     def __init__(self, parent, log):
         wxPanel.__init__(self, parent, -1)
 
-        self.SetAutoLayout(true)
+        self.SetAutoLayout(True)
         sizer = wxBoxSizer(wxVERTICAL)
 
         msg = "Custom Drag-And-Drop"
         text = wxStaticText(self, -1, "", style=wxALIGN_CENTRE)
-        text.SetFont(wxFont(24, wxSWISS, wxNORMAL, wxBOLD, false))
+        text.SetFont(wxFont(24, wxSWISS, wxNORMAL, wxBOLD, False))
         text.SetLabel(msg)
         w,h = text.GetTextExtent(msg)
         text.SetSize(wxSize(w,h+1))
@@ -303,8 +304,9 @@ if __name__ == '__main__':
 
     class TestApp(wxApp):
         def OnInit(self):
+            wxInitAllImageHandlers()
             self.MakeFrame()
-            return true
+            return True
 
         def MakeFrame(self, event=None):
             frame = wxFrame(None, -1, "Custom Drag and Drop", size=(550,400))
@@ -315,7 +317,7 @@ if __name__ == '__main__':
             frame.SetMenuBar(mb)
             EVT_MENU(frame, 6543, self.MakeFrame)
             panel = TestPanel(frame, DummyLog())
-            frame.Show(true)
+            frame.Show(True)
             self.SetTopWindow(frame)
 
 
@@ -326,21 +328,20 @@ if __name__ == '__main__':
 #----------------------------------------------------------------------
 
 
+overview = """<html><body>
+This demo shows Drag and Drop using a custom data type and a custom
+data object.  A type called "DoodleLines" is created and a Python
+Pickle of a list is actually transfered in the drag and drop
+opperation.
 
+A second data object is also created containing a bitmap of the image
+and is made available to any drop target that accepts bitmaps, such as
+MS Word.
 
-
-
-
-
-
-
-
-
-overview = """\
-This demo shows Drag and Drop using a custom data type and a custom data object.  A type called "DoodleLines" is created and a Python Pickle of a list is actually transfered in the drag and drop opperation.
-
-A second data object is also created containing a bitmap of the image and is made available to any drop target that accepts bitmaps, such as MS Word.
-
-The two data objects are combined in a wxDataObjectComposite and the rest is handled by the framework.
+The two data objects are combined in a wxDataObjectComposite and the
+rest is handled by the framework.
+</body></html>
 """
+
+
 

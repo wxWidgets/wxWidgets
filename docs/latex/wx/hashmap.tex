@@ -1,7 +1,9 @@
 \section{\class{wxHashMap}}\label{wxhashmap}
 
 This is a simple, type-safe, and reasonably efficient hash map class,
-whose interface is a subset of the interface of STL containers. 
+whose interface is a subset of the interface of STL containers. In
+particular, the interface is modelled after std::map, and the various,
+non standard, std::hash_map.
 
 \wxheading{Example}
 
@@ -27,7 +29,7 @@ whose interface is a subset of the interface of STL containers.
     h2["Bill"] = "ABC";
     wxString tmp = h2["Bill"];
     // since element with key "Joe" is not present, this will return
-    // the default value, that is an empty string in the case of wxString
+    // the default value, which is an empty string in the case of wxString
     MyClass tmp2 = h2["Joe"];
 
     // iterate over all the elements in the class
@@ -84,6 +86,38 @@ to {\tt wxString} like this:
                          wxIntegerHash,
                          wxIntegerEqual,
                          MyHash );
+
+    // using an user-defined class for keys
+    class MyKey { /* ... */ };
+
+    // hashing function
+    class MyKeyHash
+    {
+    public:
+        MyKeyHash() { }
+
+        unsigned long operator()( const MyKey& k ) const
+            { /* compute the hash */ }
+
+        MyKeyHash& operator=(const MyKeyHash&) { return *this; }
+    };
+
+    // comparison operator
+    class MyKeyEqual
+    {
+    public:
+        MyKeyEqual() { }
+        bool operator()( const MyKey& a, const MyKey& b ) const
+            { /* compare for equality */ }
+
+        MyKeyEqual& operator=(const MyKeyEqual&) { return *this; }
+    };
+
+    WX_DECLARE_HASH_MAP( MyKey,      // type of the keys
+                         SOME_TYPE,  // any type you like
+                         MyKeyHash,  // hasher
+                         MyKeyEqual, // key equality predicate
+                         CLASSNAME); // name of the class
 \end{verbatim}
 
 \latexignore{\rtfignore{\wxheading{Types}}}

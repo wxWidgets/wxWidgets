@@ -1,31 +1,31 @@
-.TH wx-config 1 "15 Feb 2000" "Debian GNU/Linux" "wxWindows 2.2"
+.TH wx\-config 1 "15 Feb 2000" "Debian GNU/Linux" "wxWindows"
 .SH NAME
-wx-config - generate compile time info for wxWindows
+wx-config \- generate compile time info for wxWindows
 .SH SYNOPSIS
 .nh
-.B wxbase-config
+.B wxbase\-config
 .br
-.B wxgtk-config
+.B wxgtk\-config
 .HP
-.B wx-config
+.B wx\-config
 [\-\-version] [\-\-libs] [\-\-cflags] [\-\-cc] [\-\-cxx] [\-\-ld]
 [\-\-prefix\fI[=DIR]\fP] [\-\-exec\-prefix\fI[=DIR]\fP]
 .SH DESCRIPTION
-\fIwx-config\fP is a tool to determine the compiler and linker
+\fIwx\-config\fP is a tool to determine the compiler and linker
 flags required for applications using the \fIwxWindows\fP toolkit(s).
 .PP
-\fIwx-config\fP is normally a symlink to one of the port-specific
-versions like \fIwxbase-config\fP or \fIwxgtk-config\fP which
+\fIwx\-config\fP is normally a symlink to one of the port\-specific
+versions like \fIwxbase\-config\fP or \fIwxgtk\-config\fP which
 designates the default port to compile applications with.
 You can override this default either by using one of the specific
 versions directly, or by changing which version the symlink points to.
 On Debian systems this can be done using the
-.BR update-alternatives (8)
+.BR update\-alternatives (8)
 mechanism.
 .hy
 .SH OPTIONS
 .l
-\fIwx-config\fP accepts the following options:
+\fIwx\-config\fP accepts the following options:
 .TP 8
 .B  \-\-version
 What to
@@ -58,7 +58,7 @@ before any \-\-libs or \-\-cflags options.
 .br
 .nh
 .HP
-(Translation:  this is the root path to the \fIwxWindows\fP headers -- [Ron])
+(Translation:  this is the root path to the \fIwxWindows\fP headers \-\- [Ron])
 .hy
 .TP 8
 .B  \-\-exec\-prefix=PREFIX
@@ -69,18 +69,18 @@ and \-\-libs options.  This option must be specified before any
 .br
 .nh
 .HP
-(Translation:  this is the root path to the \fIwxWindows\fP library -- [Ron])
+(Translation:  this is the root path to the \fIwxWindows\fP library \-\- [Ron])
 .hy
 .SH SEE ALSO
-.BR gtk-config (1),
-.BR update-alternatives (8)
+.BR gtk\-config (1),
+.BR update\-alternatives (8)
 .SH COPYRIGHT
-This manpage was copied whole-heartedly from the \fBgtk-config\fP(1) manpage
+This manpage was copied whole\-heartedly from the \fBgtk\-config\fP(1) manpage
 by Brian Bassett <brianb@debian.org> for the Debian GNU/Linux distribution of
 wxGTK.  It was then updated to include new options and otherwise bastardised
 generally by Ron Lee <ron@debian.org>
 
-The original gtk-config manpage copyright:
+The original gtk\-config manpage copyright:
 
 Copyright \(co  1995 Spencer Kimball and Peter Mattis
 

@@ -45,9 +45,9 @@ public:
     MyConnection();
     ~MyConnection();
 
-    bool OnExecute(const wxString& topic, char *data, int size, wxIPCFormat format);
-    char *OnRequest(const wxString& topic, const wxString& item, int *size, wxIPCFormat format);
-    bool OnPoke(const wxString& topic, const wxString& item, char *data, int size, wxIPCFormat format);
+    bool OnExecute(const wxString& topic, wxChar *data, int size, wxIPCFormat format);
+    wxChar *OnRequest(const wxString& topic, const wxString& item, int *size, wxIPCFormat format);
+    bool OnPoke(const wxString& topic, const wxString& item, wxChar *data, int size, wxIPCFormat format);
     bool OnStartAdvise(const wxString& topic, const wxString& item);
 
     IPCDialogBox *dialog;

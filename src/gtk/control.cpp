@@ -83,5 +83,49 @@ wxSize wxControl::DoGetBestSize() const
     return wxSize(req.width, req.height);
 }
 
+#ifdef __WXGTK20__
+wxString wxControl::PrepareLabelMnemonics( const wxString &label ) const
+{
+    //Format mnemonics properly for GTK2. This can be called from GTK1.x, but
+    //it's not very useful because mnemonics don't exist prior to GTK2.
+    wxString label2;
+    for (size_t i = 0; i < label.Len(); i++)
+    {
+        if (label.GetChar(i) == wxT('&'))
+        {
+            //Mnemonic escape sequence "&&" is a literal "&" in the output.
+            if (label.GetChar(i + 1) == wxT('&'))
+            {
+                label2 << wxT('&');
+                i++;
+            }
+            //Handle special case of "&_" (i.e. "_" is the mnemonic).
+            //FIXME - Is it possible to use "_" as a GTK mnemonic? Just use a
+            //dash for now.
+            else if (label.GetChar(i + 1) == wxT('_'))
+            {
+                label2 << wxT("_-");
+                i++;
+            }
+            //Replace WX mnemonic indicator "&" with GTK indicator "_".
+            else
+            {
+                label2 << wxT('_');
+            }
+        }
+        else if (label.GetChar(i) == wxT('_'))
+        {
+            //Escape any underlines in the string so GTK doesn't use them.
+            label2 << wxT("__");
+        }
+        else
+        {
+            label2 << label.GetChar(i);
+        }
+    }
+    return label2;
+}
+#endif
+
 #endif // wxUSE_CONTROLS
 

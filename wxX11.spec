@@ -1,6 +1,6 @@
 %define pref /usr
-%define ver 2.3.3
-%define ver2 2.3
+%define ver 2.4.2
+%define ver2 2.4
 %define rel 1
 
 Summary: The X11 port of the wxWindows library

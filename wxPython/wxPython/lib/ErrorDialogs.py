@@ -191,7 +191,7 @@ class wxPyNonWindowingErrorHandler:
         self.file = file
     def write(self,s):
         import sys
-        if string.find(s,"Warning") <> 0\
+        if s.find("Warning") <> 0\
            and  self.this_exception is not sys.last_traceback:
             wxPyNonWindowingError("The Python interpreter encountered an error "
                               "not handled by any\nexception handler--this "
@@ -276,10 +276,10 @@ class wxPythonRExec (rexec.RExec):
 class wxPyNonFatalErrorDialogWithTraceback(wxDialog):
     this_exception = 0
     populate_function = populate_wxPyNonFatalErrorDialogWithTraceback
-    no_continue_button = false
-    fatal = false
-    modal = true
-    exitjustreturns = false # really only for testing!
+    no_continue_button = False
+    fatal = False
+    modal = True
+    exitjustreturns = False # really only for testing!
 
     def __init__(self, parent, id,
                  pos=wxPyDefaultPosition,
@@ -293,7 +293,7 @@ class wxPyNonFatalErrorDialogWithTraceback(wxDialog):
                  caption="Python error!",
                  versionname=None,
                  errorname=None,
-                 disable_exit_button=false):
+                 disable_exit_button=False):
 
         if self.fatal:
             whetherNF = ""
@@ -309,7 +309,7 @@ class wxPyNonFatalErrorDialogWithTraceback(wxDialog):
 
         wxDialog.__init__(self, parent, id, title, pos, size, style)
 
-        self.topsizer = self.populate_function( false,true )
+        self.topsizer = self.populate_function( False,True )
 
         self.SetProgramName(programname)
         self.SetVersion(version)
@@ -332,10 +332,10 @@ class wxPyNonFatalErrorDialogWithTraceback(wxDialog):
         if not disable_mail_button:
             EVT_BUTTON(self, wxPyError_ID_MAIL, self.OnMail)
         else:
-            self.GetMailButton().Enable(false)
+            self.GetMailButton().Enable(False)
         # disable the entry box for an e-mail address by default (NOT PROPERLY DOCUMENTED)
         if not hasattr(self,"enable_mail_address_box"):
-            self.FindWindowById(wxPyError_ID_ADDRESS).Enable(false)
+            self.FindWindowById(wxPyError_ID_ADDRESS).Enable(False)
         if not disable_exit_button:
             EVT_BUTTON(self, wxPyError_ID_EXIT, self.OnExit)
 
@@ -380,7 +380,7 @@ class wxPyNonFatalErrorDialogWithTraceback(wxDialog):
                 value = value[:-1]
             if _debug:
                 print "%s.SetTraceback(): ...SetValue('%s' (^M=\\r; ^J=\\n))"\
-                      % (self,string.replace(value,'\n',"^J"))
+                      % (self,value.replace('\n',"^J"))
             c.SetValue(value)
 
             # Despite using the wxADJUST_MINSIZE flag in the
@@ -399,7 +399,7 @@ class wxPyNonFatalErrorDialogWithTraceback(wxDialog):
                 print "%s.SetTraceback(): %s.GetBestSize() = (%s,%s)"\
                       % (self,c,size.width,size.height)
             w,h = 0,0
-            for v in string.split(value,"\n"):
+            for v in value.split("\n"):
                 pw,ph,d,e = t = c.GetFullTextExtent(v)
                 if _debug:
                     print v, t
@@ -415,7 +415,7 @@ class wxPyNonFatalErrorDialogWithTraceback(wxDialog):
             self.sizerAroundText.SetItemMinSize (c,w,h)
             c.SetSize ((w,h))
             c.SetSizeHints (w,h,w,h)
-            c.Refresh()#.SetAutoLayout(FALSE)
+            c.Refresh()#.SetAutoLayout(False)
 
             #^ the reason we need the above seems to be to replace the
             #faulty GetBestSize of wxTextCtrl...
@@ -503,7 +503,7 @@ class wxPyNonFatalErrorDialogWithTraceback(wxDialog):
             if self.modal:
                 self.ShowModal()
             else:
-                self.Show(true)
+                self.Show(True)
 
           except:
               if not locals().has_key("c"):
@@ -654,8 +654,8 @@ class wxPyNonFatalErrorDialogWithTraceback(wxDialog):
 
 class wxPyFatalErrorDialogWithTraceback(wxPyNonFatalErrorDialogWithTraceback):
     populate_function = populate_wxPyFatalErrorDialogWithTraceback
-    no_continue_button = true
-    fatal = true
+    no_continue_button = True
+    fatal = True
 
 class wxPyNonFatalErrorDialog(wxPyNonFatalErrorDialogWithTraceback):
     populate_function = populate_wxPyNonFatalErrorDialog
@@ -669,7 +669,7 @@ def _startmailerwithhtml(mailto,subject,html,text=None,mailfrom=None):
         s = 'mailto:%s?subject=%s&body=%s' % (mailto,
                                                urllib.quote(subject),
                                                urllib.quote(
-            string.replace(text,'\n','\r\n'),
+            text.replace('\n','\r\n'),
             ""))
 
         # Note that RFC 2368 requires that line breaks in the body of
@@ -719,7 +719,7 @@ def _writehtmlmessage(mailto,subject,html,text=None,parent=None,mailfrom=None):
 
 def _createhtmlmail (html, text, subject, to=None, mailfrom=None):
     """Create a mime-message that will render HTML in popular
-       MUAs, text in better ones (if indeed text is not untrue (e.g. None)
+       MUAs, text in better ones (if indeed text is not unTrue (e.g. None)
        """
     import MimeWriter, mimetools, cStringIO
 
@@ -797,7 +797,7 @@ def wxPyResizeHTMLWindowToDispelScrollbar(window,
     # Will go no further than specified fraction of display size.
     w = 200
     if type(fraction) == type(''):
-        fraction = string.atoi(fraction[:-1]) / 100.
+        fraction = int(fraction[:-1]) / 100.
     ds = wxDisplaySize ()
     c = window.GetInternalRepresentation ()
     while w < ds[0] * fraction:
@@ -812,7 +812,7 @@ def wxPyResizeHTMLWindowToDispelScrollbar(window,
         w = w + 20
     else:
         if type(defaultfraction) == type(''):
-            defaultfraction = string.atoi(defaultfraction[:-1]) / 100.
+            defaultfraction = int(defaultfraction[:-1]) / 100.
         defaultsize = (defaultfraction * ds[0], defaultfraction * ds[1])
         if _debug:
             print 'defaultsize =',defaultsize
@@ -849,7 +849,7 @@ def wxPyFatalOrNonFatalError(parent,
     else:
         populate_function = populate_wxPyNonFatalError
 
-    sizer = populate_function(dlg,false,true)
+    sizer = populate_function(dlg,False,True)
 
     window = dlg.FindWindowById(wxPyError_ID_HTML)
     window.SetPage(msg)
@@ -875,5 +875,5 @@ def wxPyFatalOrNonFatalError(parent,
         dlg.Destroy()
         return v
     else:
-        dlg.Show(true)
+        dlg.Show(True)
 

@@ -115,6 +115,7 @@ protected:
     //
     void OnSpinChange(wxSpinEvent& rEvent);
     void OnChar(wxKeyEvent& rEvent);
+    void OnSetFocus(wxFocusEvent& rEvent);
 
     WXHWND                          m_hWndBuddy;
     static wxArraySpins             m_svAllSpins;

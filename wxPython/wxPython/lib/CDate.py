@@ -11,11 +11,11 @@
 import time
 
 Month = {2: 'February', 3: 'March', None: 0, 'July': 7, 11:
-	 'November', 'December': 12, 'June': 6, 'January': 1, 'September': 9,
-	 'August': 8, 'March': 3, 'November': 11, 'April': 4, 12: 'December',
-	 'May': 5, 10: 'October', 9: 'September', 8: 'August', 7: 'July', 6:
-	 'June', 5: 'May', 4: 'April', 'October': 10, 'February': 2, 1:
-	 'January', 0: None}
+         'November', 'December': 12, 'June': 6, 'January': 1, 'September': 9,
+         'August': 8, 'March': 3, 'November': 11, 'April': 4, 12: 'December',
+         'May': 5, 10: 'October', 9: 'September', 8: 'August', 7: 'July', 6:
+         'June', 5: 'May', 4: 'April', 'October': 10, 'February': 2, 1:
+         'January', 0: None}
 
 # Number of days per month (except for February in leap years)
 mdays = [0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]

@@ -8,7 +8,7 @@ class WXDLLEXPORT wxMemoryDC;
 class WXDLLEXPORT wxDC;
 
 #if defined(__WXMSW__)
-#ifdef __WIN16__
+#if defined(__WIN16__)  || defined(__WXUNIVERSAL__)
 #include "wx/generic/dragimgg.h"
 #define wxDragImage wxGenericDragImage
 #define sm_classwxDragImage sm_classwxGenericDragImage

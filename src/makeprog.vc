@@ -13,7 +13,9 @@
 # Set WXDIR for your system
 WXDIR = $(WXWIN)
 
+!ifndef WXUSINGDLL
 WXUSINGDLL=0
+!endif
 
 !include $(WXDIR)\src\makevc.env
 
@@ -69,7 +71,7 @@ $(LIBS)
 
 
 clean:
-        -$(RM) $(OBJECTS)
+        -$(RM) *.obj
         -$(RM) *.exe
         -$(RM) *.res
         -$(RM) *.map

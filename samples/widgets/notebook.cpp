@@ -134,6 +134,10 @@ protected:
     // get the numeric value of text ctrl
     int GetTextValue(wxTextCtrl *text) const;
 
+    // is the value in range?
+    bool IsValidValue(int val) const
+        { return (val >= 0) && (val < m_notebook->GetPageCount()); }
+
     // the controls
     // ------------
 
@@ -380,18 +384,17 @@ void NotebookWidgetsPage::CreateNotebook()
 
     if ( notebook )
     {
-        int sel = notebook->GetSelection();
+        const int sel = notebook->GetSelection();
 
-        int count = notebook->GetPageCount();
+        const int count = notebook->GetPageCount();
+
+        // recreate the pages
         for ( int n = 0; n < count; n++ )
         {
-            wxNotebookPage *page = notebook->GetPage(0);
-            page->Reparent(m_notebook);
-
-            m_notebook->AddPage(page, notebook->GetPageText(0), FALSE,
-                                notebook->GetPageImage(0));
-
-            notebook->RemovePage(0);
+            m_notebook->AddPage(CreateNewPage(),
+                                notebook->GetPageText(n),
+                                FALSE,
+                                notebook->GetPageImage(n));
         }
 
         m_sizerNotebook->Remove(notebook);
@@ -459,7 +462,7 @@ void NotebookWidgetsPage::OnButtonDeleteAll(wxCommandEvent& WXUNUSED(event))
 void NotebookWidgetsPage::OnButtonSelectPage(wxCommandEvent& event)
 {
     int pos = GetTextValue(m_textSelect);
-    wxCHECK_RET( pos >= 0, _T("button should be disabled") );
+    wxCHECK_RET( IsValidValue(pos), _T("button should be disabled") );
 
     m_notebook->SetSelection(pos);
 }
@@ -473,7 +476,7 @@ void NotebookWidgetsPage::OnButtonAddPage(wxCommandEvent& WXUNUSED(event))
 void NotebookWidgetsPage::OnButtonInsertPage(wxCommandEvent& WXUNUSED(event))
 {
     int pos = GetTextValue(m_textInsert);
-    wxCHECK_RET( pos >= 0, _T("button should be disabled") );
+    wxCHECK_RET( IsValidValue(pos), _T("button should be disabled") );
 
     m_notebook->InsertPage(pos, CreateNewPage(), _T("Inserted page"), FALSE,
                            GetIconIndex());
@@ -482,24 +485,24 @@ void NotebookWidgetsPage::OnButtonInsertPage(wxCommandEvent& WXUNUSED(event))
 void NotebookWidgetsPage::OnButtonRemovePage(wxCommandEvent& WXUNUSED(event))
 {
     int pos = GetTextValue(m_textRemove);
-    wxCHECK_RET( pos >= 0, _T("button should be disabled") );
+    wxCHECK_RET( IsValidValue(pos), _T("button should be disabled") );
 
     m_notebook->DeletePage(pos);
 }
 
 void NotebookWidgetsPage::OnUpdateUISelectButton(wxUpdateUIEvent& event)
 {
-    event.Enable( GetTextValue(m_textSelect) >= 0 );
+    event.Enable( IsValidValue(GetTextValue(m_textSelect)) );
 }
 
 void NotebookWidgetsPage::OnUpdateUIInsertButton(wxUpdateUIEvent& event)
 {
-    event.Enable( GetTextValue(m_textInsert) >= 0 );
+    event.Enable( IsValidValue(GetTextValue(m_textInsert)) );
 }
 
 void NotebookWidgetsPage::OnUpdateUIRemoveButton(wxUpdateUIEvent& event)
 {
-    event.Enable( GetTextValue(m_textRemove) >= 0 );
+    event.Enable( IsValidValue(GetTextValue(m_textRemove)) );
 }
 
 void NotebookWidgetsPage::OnUpdateUIResetButton(wxUpdateUIEvent& event)

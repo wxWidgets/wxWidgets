@@ -1,5 +1,6 @@
 
 from wxPython.wx import *
+from wxPython.lib import newevent
 
 import thread
 import time
@@ -7,18 +8,8 @@ from   whrandom import random
 
 #----------------------------------------------------------------------
 
-wxEVT_UPDATE_BARGRAPH = wxNewEventType()
-
-def EVT_UPDATE_BARGRAPH(win, func):
-    win.Connect(-1, -1, wxEVT_UPDATE_BARGRAPH, func)
-
-
-class UpdateBarEvent(wxPyEvent):
-    def __init__(self, barNum, value):
-        wxPyEvent.__init__(self)
-        self.SetEventType(wxEVT_UPDATE_BARGRAPH)
-        self.barNum = barNum
-        self.value = value
+# This creates a new Event class and a EVT binder function
+UpdateBarEvent, EVT_UPDATE_BARGRAPH = newevent.NewEvent()
 
 
 #----------------------------------------------------------------------
@@ -30,18 +21,18 @@ class CalcBarThread:
         self.val = val
 
     def Start(self):
-        self.keepGoing = self.running = true
+        self.keepGoing = self.running = True
         thread.start_new_thread(self.Run, ())
 
     def Stop(self):
-        self.keepGoing = false
+        self.keepGoing = False
 
     def IsRunning(self):
         return self.running
 
     def Run(self):
         while self.keepGoing:
-            evt = UpdateBarEvent(self.barNum, int(self.val))
+            evt = UpdateBarEvent(barNum = self.barNum, value = int(self.val))
             wxPostEvent(self.win, evt)
             #del evt
 
@@ -57,7 +48,7 @@ class CalcBarThread:
             if self.val < 0: self.val = 0
             if self.val > 300: self.val = 300
 
-        self.running = false
+        self.running = False
 
 #----------------------------------------------------------------------
 
@@ -172,7 +163,7 @@ class TestFrame(wxFrame):
         sizer.Add(self.graph, 1, wxEXPAND)
 
         self.SetSizer(sizer)
-        self.SetAutoLayout(true)
+        self.SetAutoLayout(True)
         sizer.Fit(self)
 
         EVT_UPDATE_BARGRAPH(self, self.OnUpdate)
@@ -194,7 +185,7 @@ class TestFrame(wxFrame):
 
     def OnUpdate(self, evt):
         self.graph.SetValue(evt.barNum, evt.value)
-        self.graph.Refresh(false)
+        self.graph.Refresh(False)
 
 
     def OnCloseWindow(self, evt):
@@ -217,7 +208,7 @@ class TestFrame(wxFrame):
 def runTest(frame, nb, log):
     win = TestFrame(frame, log)
     frame.otherWin = win
-    win.Show(true)
+    win.Show(True)
     return None
 
 #----------------------------------------------------------------------
@@ -232,7 +223,7 @@ so any cross platform GUI Toolkit and applications written with it
 need to take that into account.
 
 The solution is to only allow interaction with the GUI from a single
-thread, but this often severly limits what can be done in an
+thread, but this often severely limits what can be done in an
 application and makes it difficult to use additional threads at all.
 
 Since wxPython already makes extensive use of event handlers, it is a
@@ -244,3 +235,11 @@ ProcessEvent does, it processes it later from the context of the GUI
 thread.
 
 """
+
+
+
+if __name__ == '__main__':
+    import sys,os
+    import run
+    run.main(['', os.path.basename(sys.argv[0])])
+

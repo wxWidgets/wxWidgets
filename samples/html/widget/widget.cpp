@@ -153,7 +153,7 @@ IMPLEMENT_APP(MyApp)
 bool MyApp::OnInit()
 {
     // Create the main application window
-    MyFrame *frame = new MyFrame( "wxHtmlWindow testing application",
+    MyFrame *frame = new MyFrame( _("wxHtmlWindow testing application"),
         wxPoint(50, 50), wxSize(640, 480) );
 
     // Show it and tell the application that it's our main window
@@ -181,14 +181,14 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
     wxMenu *menuFile = new wxMenu;
     wxMenu *menuNav = new wxMenu;
 
-    menuFile->Append(Minimal_Quit, "E&xit");
-    menuNav->Append(Minimal_Back, "Go &BACK");
-    menuNav->Append(Minimal_Forward, "Go &FORWARD");
+    menuFile->Append(Minimal_Quit, _("E&xit"));
+    menuNav->Append(Minimal_Back, _("Go &BACK"));
+    menuNav->Append(Minimal_Forward, _("Go &FORWARD"));
 
     // now append the freshly created menu to the menu bar...
     wxMenuBar *menuBar = new wxMenuBar;
-    menuBar->Append(menuFile, "&File");
-    menuBar->Append(menuNav, "&Navigate");
+    menuBar->Append(menuFile, _("&File"));
+    menuBar->Append(menuNav, _("&Navigate"));
 
     // ... and attach this menu bar to the frame
     SetMenuBar(menuBar);
@@ -196,9 +196,9 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
     CreateStatusBar(2);
 
     html = new wxHtmlWindow(this);
-    html -> SetRelatedFrame(this, "VFS Demo: '%s'");
+    html -> SetRelatedFrame(this, _("VFS Demo: '%s'"));
     html -> SetRelatedStatusBar(1);
-    html -> LoadPage("start.htm");
+    html -> LoadPage(wxT("start.htm"));
 }
 
 
@@ -212,11 +212,11 @@ void MyFrame::OnQuit(wxCommandEvent& WXUNUSED(event))
 
 void MyFrame::OnBack(wxCommandEvent& WXUNUSED(event))
 {
-    if (!html -> HistoryBack()) wxMessageBox("You reached prehistory era!");
+    if (!html -> HistoryBack()) wxMessageBox(_("You reached prehistory era!"));
 }
 
 
 void MyFrame::OnForward(wxCommandEvent& WXUNUSED(event))
 {
-    if (!html -> HistoryForward()) wxMessageBox("No more items in history!");
+    if (!html -> HistoryForward()) wxMessageBox(_("No more items in history!"));
 }

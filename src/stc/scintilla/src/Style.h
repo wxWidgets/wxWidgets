@@ -26,6 +26,7 @@ public:
 	ecaseForced caseForce;
 	bool visible;
 	bool changeable;
+	bool hotspot;
 
 	Font font;
 	int sizeZoomed;
@@ -45,11 +46,11 @@ public:
 	           const char *fontName_, int characterSet_,
 	           bool bold_, bool italic_, bool eolFilled_, 
 	           bool underline_, ecaseForced caseForce_, 
-		   bool visible_, bool changeable_);
+		   bool visible_, bool changeable_, bool hotspot_);
 	void ClearTo(const Style &source);
 	bool EquivalentFontTo(const Style *other) const;
 	void Realise(Surface &surface, int zoomLevel, Style *defaultStyle = 0);
-	bool IsProtected() { return !(changeable && visible);} ;
+	bool IsProtected() const { return !(changeable && visible);};
 };
 
 #endif

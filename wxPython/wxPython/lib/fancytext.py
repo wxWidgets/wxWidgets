@@ -13,7 +13,7 @@ encoding, and color. See the example on the bottom for a better idea
 of how this works.
 
 Note that start and end tags for the string are provided if enclose is
-true, so for instance, renderToBitmap("X<sub>1</sub>") will work.
+True, so for instance, renderToBitmap("X<sub>1</sub>") will work.
 
 """
 # Copyright 2001 Timothy Hochberg

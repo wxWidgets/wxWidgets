@@ -100,6 +100,7 @@ protected:
 
     // Handle processing of special keys
     void OnChar(wxKeyEvent& event);
+    void OnSetFocus(wxFocusEvent& event);
 
     // the data for the "buddy" text ctrl
     WXHWND     m_hwndBuddy;

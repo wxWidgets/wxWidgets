@@ -364,7 +364,8 @@ wxColour *wxColourDatabase::FindColour(const wxString& colour)
 #ifdef __WXGTK__
   wxColour *col = new wxColour( colour );
 
-  if (!(col->Ok())) {
+  if (!(col->Ok()))
+  {
       delete col;
       return (wxColour *) NULL;
   }
@@ -382,7 +383,7 @@ wxColour *wxColourDatabase::FindColour(const wxString& colour)
     Display* display = (Display*) wxGetDisplay();
 #endif
     /* MATTHEW: [4] Use wxGetMainColormap */
-    if (!XParseColor(display, (Colormap) wxTheApp->GetMainColormap((WXDisplay*) display), colour,&xcolour))
+    if (!XParseColor(display, (Colormap) wxTheApp->GetMainColormap((WXDisplay*) display), colour.ToAscii() ,&xcolour))
       return NULL;
 
 #if wxUSE_NANOX

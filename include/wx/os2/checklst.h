@@ -35,9 +35,7 @@ public:
                    ,int                nStrings = 0
                    ,const wxString     asChoices[] = NULL
                    ,long               lStyle = 0
-#if wxUSE_VALIDATORS
                    ,const wxValidator& rValidator = wxDefaultValidator
-#endif
                    ,const wxString&    rsName = wxListBoxNameStr
                   );
 

@@ -23,7 +23,7 @@ with a choice of OK, Yes, No and Cancel buttons.
 \membersection{wxMessageDialog::wxMessageDialog}\label{wxmessagedialogconstr}
 
 \func{}{wxMessageDialog}{\param{wxWindow* }{parent}, \param{const wxString\& }{message},\rtfsp
-\param{const wxString\& }{caption = "Message box"}, \param{long }{style = wxOK \pipe wxCANCEL \pipe wxCENTRE},\rtfsp
+\param{const wxString\& }{caption = "Message box"}, \param{long }{style = wxOK \pipe wxCANCEL},\rtfsp
 \param{const wxPoint\& }{pos = wxDefaultPosition}}
 
 Constructor. Use \helpref{wxMessageDialog::ShowModal}{wxmessagedialogshowmodal} to show the dialog.
@@ -45,7 +45,6 @@ Constructor. Use \helpref{wxMessageDialog::ShowModal}{wxmessagedialogshowmodal} 
 \twocolitem{{\bf wxYES\_NO}}{Show Yes and No buttons.}
 \twocolitem{{\bf wxYES\_DEFAULT}}{Used with {\bf wxYES\_NO}, makes {\bf Yes} button the default - which is the default behaviour.}
 \twocolitem{{\bf wxNO\_DEFAULT}}{Used with {\bf wxYES\_NO}, makes {\bf No} button the default.}
-\twocolitem{{\bf wxCENTRE}}{Centre the message. Not Windows.}
 \twocolitem{{\bf wxICON\_EXCLAMATION}}{Shows an exclamation mark icon.}
 \twocolitem{{\bf wxICON\_HAND}}{Shows an error icon.}
 \twocolitem{{\bf wxICON\_ERROR}}{Shows an error icon - the same as wxICON\_HAND.}

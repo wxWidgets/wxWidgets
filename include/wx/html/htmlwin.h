@@ -26,6 +26,7 @@
 #include "wx/html/htmlcell.h"
 #include "wx/filesys.h"
 #include "wx/html/htmlfilt.h"
+#include "wx/filename.h"
 
 class wxHtmlProcessor;
 class wxHtmlWinModule;
@@ -100,6 +101,9 @@ public:
     // Return value : same as SetPage
     virtual bool LoadPage(const wxString& location);
 
+    // Loads HTML page from file
+    bool LoadFile(const wxFileName& filename);
+
     // Returns full location of opened page
     wxString GetOpenedPage() const {return m_OpenedPage;}
     // Returns anchor within opened page
@@ -117,7 +121,8 @@ public:
     void SetRelatedStatusBar(int bar);
 
     // Sets fonts to be used when displaying HTML page.
-    void SetFonts(wxString normal_face, wxString fixed_face, const int *sizes);
+    void SetFonts(wxString normal_face, wxString fixed_face,
+                  const int *sizes = NULL);
 
     // Sets space between text and window borders.
     void SetBorders(int b) {m_Borders = b;}

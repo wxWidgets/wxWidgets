@@ -95,8 +95,8 @@ bool MyApp::OnInit()
   // of the config file/registry key and must be set before the first call
   // to Get() if you want to override the default values (the application
   // name is the name of the executable and the vendor name is the same)
-  SetVendorName("wxWindows");
-  SetAppName("conftest"); // not needed, it's the default value
+  SetVendorName(_T("wxWindows"));
+  SetAppName(_T("conftest")); // not needed, it's the default value
 
   wxConfigBase *pConfig = wxConfigBase::Get();
 
@@ -118,11 +118,11 @@ bool MyApp::OnInit()
   SetTopWindow(frame);
 
   // use our config object...
-  if ( pConfig->Read("/Controls/Check", 1l) != 0 ) {
-    wxMessageBox("You can disable this message box by unchecking\n"
-                 "the checkbox in the main window (of course, a real\n"
-                 "program would have a checkbox right here but we\n"
-                 "keep it simple)", "Welcome to wxConfig demo",
+  if ( pConfig->Read(_T("/Controls/Check"), 1l) != 0 ) {
+      wxMessageBox(_T("You can disable this message box by unchecking\n")
+                   _T("the checkbox in the main window (of course, a real\n")
+                   _T("program would have a checkbox right here but we\n")
+                 _T("keep it simple)"), _T("Welcome to wxConfig demo"),
                  wxICON_INFORMATION | wxOK);
   }
 
@@ -145,28 +145,28 @@ int MyApp::OnExit()
 
 // main frame ctor
 MyFrame::MyFrame()
-       : wxFrame((wxFrame *) NULL, -1, "wxConfig Demo")
+       : wxFrame((wxFrame *) NULL, -1, _T("wxConfig Demo"))
 {
   // menu
   wxMenu *file_menu = new wxMenu;
 
-  file_menu->Append(ConfTest_Delete, "&Delete", "Delete config file");
+  file_menu->Append(ConfTest_Delete, _T("&Delete"), _T("Delete config file"));
   file_menu->AppendSeparator();
-  file_menu->Append(ConfTest_About, "&About\tF1", "About this sample");
+  file_menu->Append(ConfTest_About, _T("&About\tF1"), _T("About this sample"));
   file_menu->AppendSeparator();
-  file_menu->Append(ConfTest_Quit, "E&xit\tAlt-X", "Exit the program");
+  file_menu->Append(ConfTest_Quit, _T("E&xit\tAlt-X"), _T("Exit the program"));
   wxMenuBar *menu_bar = new wxMenuBar;
-  menu_bar->Append(file_menu, "&File");
+  menu_bar->Append(file_menu, _T("&File"));
   SetMenuBar(menu_bar);
 
   CreateStatusBar();
 
   // child controls
   wxPanel *panel = new wxPanel(this);
-  (void)new wxStaticText(panel, -1, "These controls remember their values!",
+  (void)new wxStaticText(panel, -1, _T("These controls remember their values!"),
                          wxPoint(10, 10), wxSize(300, 20));
-  m_text = new wxTextCtrl(panel, -1, "", wxPoint(10, 40), wxSize(300, 20));
-  m_check = new wxCheckBox(panel, -1, "show welcome message box at startup",
+  m_text = new wxTextCtrl(panel, -1, _T(""), wxPoint(10, 40), wxSize(300, 20));
+  m_check = new wxCheckBox(panel, -1, _T("show welcome message box at startup"),
                            wxPoint(10, 70), wxSize(300, 20));
 
   // restore the control's values from the config
@@ -179,25 +179,25 @@ MyFrame::MyFrame()
   wxConfigBase *pConfig = wxConfigBase::Get();
 
   // we could write Read("/Controls/Text") as well, it's just to show SetPath()
-  pConfig->SetPath("/Controls");
+  pConfig->SetPath(_T("/Controls"));
 
-  m_text->SetValue(pConfig->Read("Text", ""));
-  m_check->SetValue(pConfig->Read("Check", 1l) != 0);
+  m_text->SetValue(pConfig->Read(_T("Text"), _T("")));
+  m_check->SetValue(pConfig->Read(_T("Check"), 1l) != 0);
 
   // SetPath() understands ".."
-  pConfig->SetPath("../MainFrame");
+  pConfig->SetPath(_T("../MainFrame"));
 
   // restore frame position and size
-  int x = pConfig->Read("x", 50),
-      y = pConfig->Read("y", 50),
-      w = pConfig->Read("w", 350),
-      h = pConfig->Read("h", 200);
+  int x = pConfig->Read(_T("x"), 50),
+      y = pConfig->Read(_T("y"), 50),
+      w = pConfig->Read(_T("w"), 350),
+      h = pConfig->Read(_T("h"), 200);
   Move(x, y);
   SetClientSize(w, h);
 
-  pConfig->SetPath("/");
+  pConfig->SetPath(_T("/"));
   wxString s;
-  if ( pConfig->Read("TestValue", &s) )
+  if ( pConfig->Read(_T("TestValue"), &s) )
   {
       wxLogStatus(this, wxT("TestValue from config is '%s'"), s.c_str());
   }
@@ -247,18 +247,18 @@ MyFrame::~MyFrame()
     return;
 
   // save the control's values to the config
-  pConfig->Write("/Controls/Text", m_text->GetValue());
-  pConfig->Write("/Controls/Check", m_check->GetValue());
+  pConfig->Write(_T("/Controls/Text"), m_text->GetValue());
+  pConfig->Write(_T("/Controls/Check"), m_check->GetValue());
 
   // save the frame position
   int x, y, w, h;
   GetClientSize(&w, &h);
   GetPosition(&x, &y);
-  pConfig->Write("/MainFrame/x", (long) x);
-  pConfig->Write("/MainFrame/y", (long) y);
-  pConfig->Write("/MainFrame/w", (long) w);
-  pConfig->Write("/MainFrame/h", (long) h);
+  pConfig->Write(_T("/MainFrame/x"), (long) x);
+  pConfig->Write(_T("/MainFrame/y"), (long) y);
+  pConfig->Write(_T("/MainFrame/w"), (long) w);
+  pConfig->Write(_T("/MainFrame/h"), (long) h);
 
-  pConfig->Write("/TestValue", wxT("A test value"));
+  pConfig->Write(_T("/TestValue"), wxT("A test value"));
 }
 

@@ -17,10 +17,10 @@ pushd %changeto%
 if direxist %dirname% erase /sxyz %dirname%
 mkdir %dirname%
 cd %dirname%
-unzip32 ..\%archive%
+unzip ..\%archive%
 cd ..
 erase %archive%
-zip32 -r %archive% %dirname%/*
+zip -r %archive% %dirname%/*
 
 popd
 

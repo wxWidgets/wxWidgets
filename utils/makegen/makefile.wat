@@ -4,7 +4,7 @@
 WXDIR = $(%WXWIN)
 
 PROGRAM = makegen
-OBJECTS = $(PROGRAM).obj
+OBJECTS = $(OUTPUTDIR)\$(PROGRAM).obj
 
 !include $(WXDIR)\src\makeprog.wat
 

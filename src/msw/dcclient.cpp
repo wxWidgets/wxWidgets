@@ -276,9 +276,10 @@ wxPaintDCInfo *wxPaintDC::FindInCache(size_t *index) const
     size_t nCache = ms_cache.GetCount();
     for ( size_t n = 0; n < nCache; n++ )
     {
-        info = &ms_cache[n];
-        if ( info->hwnd == m_canvas->GetHWND() )
+        wxPaintDCInfo *info1 = &ms_cache[n];
+        if ( info1->hwnd == m_canvas->GetHWND() )
         {
+            info = info1;
             if ( index )
                 *index = n;
             break;

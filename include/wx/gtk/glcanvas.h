@@ -6,7 +6,7 @@
 // Created:     17/8/98
 // RCS-ID:      $Id$
 // Copyright:   (c) Robert Roebling
-// Licence:   	wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #if defined(__GNUG__) && !defined(__APPLE__)
@@ -65,15 +65,15 @@ class WXDLLEXPORT wxGLContext: public wxObject
 {
 public:
     wxGLContext( bool isRGB, wxWindow *win, const wxPalette& palette = wxNullPalette );
-    wxGLContext( 
-               bool WXUNUSED(isRGB), wxWindow *win, 
+    wxGLContext(
+               bool WXUNUSED(isRGB), wxWindow *win,
                const wxPalette& WXUNUSED(palette),
                const wxGLContext *other        /* for sharing display lists */
     );
     ~wxGLContext();
 
     void SetCurrent();
-    void SetColour(const char *colour);
+    void SetColour(const wxChar *colour);
     void SwapBuffers();
 
     void SetupPixelFormat();
@@ -91,7 +91,7 @@ public:
    GtkWidget       *m_widget;
    wxPalette        m_palette;
    wxWindow*        m_window;
-   
+
 private:
   DECLARE_CLASS(wxGLContext)
 };
@@ -110,51 +110,52 @@ public:
       m_vi = (void*) NULL;
       m_exposed = FALSE;
    }
-   wxGLCanvas( wxWindow *parent, wxWindowID id = -1, 
+   wxGLCanvas( wxWindow *parent, wxWindowID id = -1,
         const wxPoint& pos = wxDefaultPosition,
-        const wxSize& size = wxDefaultSize, 
-        long style = 0, const wxString& name = "GLCanvas", 
-        int *attribList = (int*) NULL, 
+        const wxSize& size = wxDefaultSize,
+        long style = 0, const wxString& name = wxGLCanvasName,
+        int *attribList = (int*) NULL,
         const wxPalette& palette = wxNullPalette );
    wxGLCanvas( wxWindow *parent, const wxGLContext *shared = (wxGLContext *)NULL,
-        wxWindowID id = -1, 
+        wxWindowID id = -1,
         const wxPoint& pos = wxDefaultPosition,
-        const wxSize& size = wxDefaultSize, 
-        long style = 0, const wxString& name = "GLCanvas", 
-        int *attribList = (int*) NULL, 
+        const wxSize& size = wxDefaultSize,
+        long style = 0, const wxString& name = wxGLCanvasName,
+        int *attribList = (int*) NULL,
         const wxPalette& palette = wxNullPalette );
    wxGLCanvas( wxWindow *parent, const wxGLCanvas *shared = (wxGLCanvas *)NULL,
-        wxWindowID id = -1, 
+        wxWindowID id = -1,
         const wxPoint& pos = wxDefaultPosition,
-        const wxSize& size = wxDefaultSize, 
-        long style = 0, const wxString& name = "GLCanvas", 
-        int *attribList = (int*) NULL, 
+        const wxSize& size = wxDefaultSize,
+        long style = 0, const wxString& name = wxGLCanvasName,
+        int *attribList = (int*) NULL,
         const wxPalette& palette = wxNullPalette );
 
-   bool Create( wxWindow *parent, 
-	const wxGLContext *shared = (wxGLContext*)NULL,
-	const wxGLCanvas *shared_context_of = (wxGLCanvas*)NULL,
-        wxWindowID id = -1, 
-        const wxPoint& pos = wxDefaultPosition,
-        const wxSize& size = wxDefaultSize, 
-	long style = 0, const wxString& name = "GLCanvas", 
-	int *attribList = (int*) NULL,
-	const wxPalette& palette = wxNullPalette );
-	
+   bool Create( wxWindow *parent,
+                const wxGLContext *shared = (wxGLContext*)NULL,
+                const wxGLCanvas *shared_context_of = (wxGLCanvas*)NULL,
+                wxWindowID id = -1,
+                const wxPoint& pos = wxDefaultPosition,
+                const wxSize& size = wxDefaultSize,
+                long style = 0,
+                const wxString& name = wxGLCanvasName,
+                int *attribList = (int*) NULL,
+                const wxPalette& palette = wxNullPalette );
+
    ~wxGLCanvas();
 
    void SetCurrent();
-   void SetColour(const char *colour);
+   void SetColour(const wxChar *colour);
    void SwapBuffers();
 
    void OnSize(wxSizeEvent& event);
-   
+
    void OnInternalIdle();
 
-   inline wxGLContext* GetContext() const { return m_glContext; } 
+   inline wxGLContext* GetContext() const { return m_glContext; }
 
  // implementation
-  
+
     wxGLContext      *m_glContext,
                      *m_sharedContext;
     wxGLCanvas       *m_sharedContextOf;
@@ -162,10 +163,10 @@ public:
     bool              m_canFreeVi;
     GtkWidget        *m_glWidget;
     bool              m_exposed;
-    
+
     // returns an XVisualInfo* based on desired GL attributes;
     // returns NULL if an appropriate visual is not found. The
-    // caller is reponsible for using XFree() to deallocate 
+    // caller is reponsible for using XFree() to deallocate
     // the returned structure.
     static void* ChooseGLVisual(int *attribList);
 

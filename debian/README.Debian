@@ -27,12 +27,12 @@ wxwin-i18n		message catalogs for native language support
 	The following three can be built from the source package
 	with the mingw32 cross compiler, but are not currently
 	distributed by Debian.  If you feel that should change,
-	please file a bug against the wxwindows2.2 package, or
+	please file a bug against the wxwindows2.4 package, or
 	append your views to a report already there if you're not
 	the first to do so.
 
 	[ you can check the current state of affairs at:
-	  http://bugs.debian.org/cgi-bin/pkgreport.cgi?pkg=wxwindows2.2 ]
+	  http://bugs.debian.org/cgi-bin/pkgreport.cgi?pkg=wxwindows2.4 ]
 
 	Oh and, please do *not* file bug reports for these packages
 	to the Debian bts.  But do feel free to email me personally
@@ -44,7 +44,9 @@ libwxbase-msw-dev	mingw32-cross wxBase libs.
 libwxbase-msw-dbg	mingw32-cross wxBase (debug) libs.
 wxwin-headers-msw	extra headers needed for wxMSW.
 
-libwxgtk-univ		wxUniversal for Gtk.
+libwxgtk-univ		wxUniversal for Gtk.  NOTE this package is obsolete
+			and will be replaced by wxX11 and wxX11-univ at
+			some future time.
 
 
  -- Ron Lee <ron@debian.org>, Sun, 13 Feb 2000 18:40:00 +1030

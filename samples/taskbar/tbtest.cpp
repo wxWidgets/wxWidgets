@@ -76,14 +76,14 @@ void MyDialog::OnCloseWindow(wxCloseEvent& event)
 
 void MyDialog::Init(void)
 {
-  (void)new wxStaticText(this, -1, "Press OK to hide me, Exit to quit.",
+  (void)new wxStaticText(this, -1, _T("Press OK to hide me, Exit to quit."),
                          wxPoint(10, 20));
 
-  (void)new wxStaticText(this, -1, "Double-click on the taskbar icon to show me again.",
+  (void)new wxStaticText(this, -1, _T("Double-click on the taskbar icon to show me again."),
                          wxPoint(10, 40));
 
-  (void)new wxButton(this, wxID_EXIT, "Exit", wxPoint(185, 230), wxSize(80, 25));
-  (new wxButton(this, wxID_OK, "OK", wxPoint(100, 230), wxSize(80, 25)))->SetDefault();
+  (void)new wxButton(this, wxID_EXIT, _T("Exit"), wxPoint(185, 230), wxSize(80, 25));
+  (new wxButton(this, wxID_OK, _T("OK"), wxPoint(100, 230), wxSize(80, 25)))->SetDefault();
   Centre(wxBOTH);
 }
 
@@ -147,11 +147,11 @@ void MyTaskBarIcon::OnRButtonUp(wxEvent&)
 {
     wxMenu      menu;
 
-    menu.Append(PU_RESTORE, "&Restore TBTest");
+    menu.Append(PU_RESTORE, _T("&Restore TBTest"));
 #ifdef __WXMSW__
-    menu.Append(PU_NEW_ICON,"&Set New Icon");
+    menu.Append(PU_NEW_ICON,_T("&Set New Icon"));
 #endif
-    menu.Append(PU_EXIT,    "E&xit");
+    menu.Append(PU_EXIT,    _T("E&xit"));
 
     PopupMenu(&menu);
 }

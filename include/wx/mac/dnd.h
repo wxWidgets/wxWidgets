@@ -43,7 +43,7 @@ class WXDLLEXPORT wxDropSource;
 // the icon 'name' from an XPM file under GTK, but will expand to something
 // else under MSW. If you don't use it, you will have to use #ifdef in the
 // application code.
-#define wxDROP_ICON(name)   wxICON(name)
+#define wxDROP_ICON(X)   wxCursor( (const char**) X##_xpm )
 
 //-------------------------------------------------------------------------
 // wxDropTarget
@@ -74,19 +74,32 @@ class WXDLLEXPORT wxDropTarget: public wxDropTargetBase
 class WXDLLEXPORT wxDropSource: public wxDropSourceBase
 {
 public:
+    // only left in for binary compatibility
     /* constructor. set data later with SetData() */
+    wxDropSource( wxWindow *win ,
+                  const wxIcon &copy ,
+                  const wxIcon &move ,
+                  const wxIcon &none );
+
+    // only left in for binary compatibility
+    /* constructor for setting one data object */
+    wxDropSource( wxDataObject& data,
+                  wxWindow *win,
+                  const wxIcon &copy ,
+                  const wxIcon &move ,
+                  const wxIcon &none );
+
     wxDropSource( wxWindow *win = (wxWindow *)NULL,
-                  const wxIcon &copy = wxNullIcon,
-                  const wxIcon &move = wxNullIcon,
-                  const wxIcon &none = wxNullIcon);
+                 const wxCursor &cursorCopy = wxNullCursor,
+                 const wxCursor &cursorMove = wxNullCursor,
+                 const wxCursor &cursorStop = wxNullCursor);
 
     /* constructor for setting one data object */
     wxDropSource( wxDataObject& data,
                   wxWindow *win,
-                  const wxIcon &copy = wxNullIcon,
-                  const wxIcon &move = wxNullIcon,
-                  const wxIcon &none = wxNullIcon);
-
+                 const wxCursor &cursorCopy = wxNullCursor,
+                 const wxCursor &cursorMove = wxNullCursor,
+                 const wxCursor &cursorStop = wxNullCursor);
 
     ~wxDropSource();
 
@@ -96,6 +109,7 @@ public:
     wxWindow*     GetWindow() { return m_window ; }
     void SetCurrentDrag( void* drag ) { m_currentDrag = drag ; }
     void* GetCurrentDrag() { return m_currentDrag ; }
+	bool			MacInstallDefaultCursor(wxDragResult effect) ;
   protected :
     wxWindow        *m_window;
     void* m_currentDrag ;

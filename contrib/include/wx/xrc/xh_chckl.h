@@ -17,10 +17,10 @@
 
 #include "wx/xrc/xmlres.h"
 
-class WXXMLDLLEXPORT wxCheckListXmlHandler : public wxXmlResourceHandler
+class WXXMLDLLEXPORT wxCheckListBoxXmlHandler : public wxXmlResourceHandler
 {
 public:
-    wxCheckListXmlHandler();
+    wxCheckListBoxXmlHandler();
     virtual wxObject *DoCreateResource();
     virtual bool CanHandle(wxXmlNode *node);
 private:

@@ -153,7 +153,7 @@ public:
     void OnMouseUp( wxMouseEvent& event );
     void OnPaint( wxPaintEvent& event );
     
-    DECLARE_EVENT_TABLE();
+    DECLARE_EVENT_TABLE()
 };
 
 #endif

@@ -12,10 +12,24 @@ WXDIR = ..\..\..\..
 TARGET = fl_demo2
 
 EXTRAINC = -DBMP_DIR=\"../bitmaps/\"
+
+!if "$(WXUSING_FL_DLL)" == "1"
+# Define WXUSING_FL_DLL so the compiler knows it is set.
+EXTRAINC = $(EXTRAINC) -DWXUSING_FL_DLL
+# Set to use wxWin in DLL format...
+WXUSINGDLL = 1
+
+!if "$(FINAL)" == "1"
+EXTRALIBS = $(WXDIR)\lib\fldll.lib
+!else
+EXTRALIBS = $(WXDIR)\lib\fldlld.lib
+!endif
+!else
 !if "$(FINAL)" == "1"
 EXTRALIBS = $(WXDIR)\lib\fl.lib
 !else
 EXTRALIBS = $(WXDIR)\lib\fld.lib
+!endif
 !endif
 
 PROGRAM = $(TARGET)

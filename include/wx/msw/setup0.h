@@ -44,12 +44,12 @@
 // Recommended setting: 0 (please update your code instead!)
 #define WXWIN_COMPATIBILITY_2 0
 
-// This setting determines the compatibility with 2.0 API: set it to 1 to
-// enable it
+// This setting determines the compatibility with 2.2 API: set it to 0 to
+// flag all cases of using deprecated functions.
 //
-// Default is 1.
+// Default is 1 but please try building your code with 0.
 //
-// Recommended setting: 0 (please update your code instead!)
+// Recommended setting: 0 (please update your code)
 #define WXWIN_COMPATIBILITY_2_2 1
 
 // in wxMSW version 2.1.11 and earlier, wxIcon always derives from wxBitmap,
@@ -161,29 +161,31 @@
 // defined as wchar_t, wxString will use Unicode internally. If you set this
 // to 1, you must use wxT() macro for all literal strings in the program.
 //
-// Unicode is currently only fully supported under Windows NT/2000/XP (Windows 9x
-// doesn't support it and the programs compiled in Unicode mode will not run
-// under 9x).
+// Unicode is currently only fully supported under Windows NT/2000/XP
+// (Windows 9x doesn't support it and the programs compiled in Unicode mode
+// will not run under 9x -- but see wxUSE_UNICODE_MSLU bellow).
 //
 // Default is 0
 //
 // Recommended setting: 0 (unless you only plan to use Windows NT/2000/XP)
-#define wxUSE_UNICODE 0
+#ifndef wxUSE_UNICODE
+    #define wxUSE_UNICODE 0
+#endif
 
 // Set wxUSE_UNICODE_MSLU to 1 if you want to compile wxWindows in Unicode mode
-// and be able to run compiled apps under Windows 9x as well as NT/2000/XP. This
-// setting enables use of unicows.dll from MSLU (MS Layer for Unicode, see
-// http://www.microsoft.com/globaldev/Articles/mslu_announce.asp). Note that you
-// will have to modify the makefiles to include unicows.lib import library as the first
-// library (if you use MSVC, you can run the makefile with "nmake MSLU=1 UNICODE=1"
-// command).
+// and be able to run compiled apps under Windows 9x as well as NT/2000/XP.
+// This setting enables use of unicows.dll from MSLU (MS Layer for Unicode, see
+// http://www.microsoft.com/globaldev/handson/dev/mslu_announce.mspx). Note that
+// you will have to modify the makefiles to include unicows.lib import library
+// as the first library (if you use MSVC, you can run the makefile with "nmake
+// MSLU=1 UNICODE=1" command).
 //
 // If your compiler doesn't have unicows.lib, you can get a version of it at
 // http://libunicows.sourceforge.net
 //
 // Default is 0
 //
-// Recommended setting: 0
+// Recommended setting: 0 (1 if you want to deploy Unicode apps on 9x systems)
 #define wxUSE_UNICODE_MSLU 0
 
 // Setting wxUSE_WCHAR_T to 1 gives you some degree of Unicode support without
@@ -209,13 +211,6 @@
 // Recommended setting: 1 (always)
 #define wxUSE_LOG 1
 
-// Support for command line parsing using wxCmdLineParser class.
-//
-// Default is 1
-//
-// Recommended setting: 1 (can be set to 0 if you don't use the cmd line)
-#define wxUSE_CMDLINE_PARSER 1
-
 // Recommended setting: 1
 #define wxUSE_LOGWINDOW 1
 
@@ -224,6 +219,13 @@
 
 // Recommended setting: 1
 #define wxUSE_LOG_DIALOG 1
+
+// Support for command line parsing using wxCmdLineParser class.
+//
+// Default is 1
+//
+// Recommended setting: 1 (can be set to 0 if you don't use the cmd line)
+#define wxUSE_CMDLINE_PARSER 1
 
 // Support for multithreaded applications: if 1, compile in thread classes
 // (thread.h) and make the library a bit more thread safe. Although thread
@@ -768,7 +770,15 @@
 // smaller library.
 #define wxUSE_HTML          1
 
-// OpenGL canvas
+// Setting wxUSE_GLCANVAS to 1 enables OpenGL support. You need to have OpenGL
+// headers and libraries to be able to compile the library with wxUSE_GLCANVAS
+// set to 1. Note that for some compilers (notably Microsoft Visual C++) you
+// will need to manually add opengl32.lib and glu32.lib to the list of
+// libraries linked with your program if you use OpenGL.
+//
+// Default is 0.
+//
+// Recommended setting: 1 if you intend to use OpenGL, 0 otherwise
 #define wxUSE_GLCANVAS       0
 
 // wxTreeLayout class
@@ -846,8 +856,12 @@
 #define wxUSE_RESOURCE_LOADING_IN_MSW     1
                                 // Use dynamic icon/cursor loading/saving code
                                 // under MSW.
-#define wxUSE_WX_RESOURCES        1
-                                // Use .wxr resource mechanism (requires PrologIO library)
+
+// use wxExpr (a.k.a. PrologIO)
+#define wxUSE_PROLOGIO          0
+
+// Use .wxr resource mechanism (requires PrologIO library)
+#define wxUSE_WX_RESOURCES      0
 
 #define wxUSE_MOUSEWHEEL        1
                                 // Include mouse wheel support
@@ -1028,6 +1042,13 @@
 // Recommended setting: 1, set to 0 for a small library size reduction
 #define wxUSE_OWNER_DRAWN 1
 
+// Set to 1 to compile MS Windows XP theme engine support
+#define wxUSE_UXTHEME           1
+
+// Set to 1 to auto-adapt to MS Windows XP themes where possible
+// (notably, wxNotebook pages)
+#define wxUSE_UXTHEME_AUTO      1
+
 // ----------------------------------------------------------------------------
 // obsolete settings
 // ----------------------------------------------------------------------------
@@ -1050,7 +1071,7 @@
 // ----------------------------------------------------------------------------
 
 #ifndef wxUSE_NORLANDER_HEADERS
-#if (defined(__MINGW32__) || defined(__CYGWIN__)) && ((__GNUC__>2) ||((__GNUC__==2) && (__GNUC_MINOR__>=95)))
+#if (defined(__WATCOMC__) && (__WATCOMC__ >= 1200)) || ((defined(__MINGW32__) || defined(__CYGWIN__)) && ((__GNUC__>2) ||((__GNUC__==2) && (__GNUC_MINOR__>=95))))
 #   define wxUSE_NORLANDER_HEADERS 1
 #else
 #   define wxUSE_NORLANDER_HEADERS 0
@@ -1164,7 +1185,7 @@
 #define wxUSE_DEBUG_NEW_ALWAYS 0
 #endif
 
-#if defined(__WXMSW__) && defined(__WATCOMC__)
+#if defined(__WXMSW__) && (defined(__WATCOMC__) && __WATCOMC__ < 1200)
 /*
 #undef  wxUSE_GLCANVAS
 #define wxUSE_GLCANVAS 0

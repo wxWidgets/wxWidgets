@@ -16,6 +16,7 @@
 
 void UMAInitToolbox( UInt16 inMoreMastersCalls) ;
 void UMACleanupToolbox() ;
+long UMAGetSystemVersion() ;
 bool UMAHasAppearance() ;
 long UMAGetAppearanceVersion() ;
 bool UMAHasWindowManager() ;
@@ -212,6 +213,10 @@ OSStatus UMAGetHelpMenu(
 // Appearance Drawing
 
 OSStatus UMADrawThemePlacard( const Rect *inRect , ThemeDrawState inState ) ;
+
+// clipboard
+
+OSStatus UMAPutScrap( Size size , OSType type , void *data ) ;
 
 // accessor helpers
 

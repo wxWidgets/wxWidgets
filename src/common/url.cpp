@@ -41,11 +41,16 @@ wxProtoInfo *wxURL::ms_protocols = NULL;
 USE_PROTOCOL(wxFileProto)
 
 #if wxUSE_SOCKETS
+#if wxUSE_PROTOCOL_HTTP
 USE_PROTOCOL(wxHTTP)
+#endif
+#if wxUSE_PROTOCOL_FTP
 USE_PROTOCOL(wxFTP)
-
+#endif
+#if wxUSE_PROTOCOL_HTTP
     wxHTTP *wxURL::ms_proxyDefault = NULL;
     bool wxURL::ms_useDefaultProxy = FALSE;
+#endif
 #endif
 
 // --------------------------------------------------------------
@@ -62,10 +67,10 @@ wxURL::wxURL(const wxString& url)
     m_error = wxURL_NOERR;
     m_url = url;
 
-#if wxUSE_SOCKETS
+#if wxUSE_SOCKETS && wxUSE_PROTOCOL_HTTP
     if ( ms_useDefaultProxy && !ms_proxyDefault )
     {
-        SetDefaultProxy(getenv("HTTP_PROXY"));
+        SetDefaultProxy( wxGetenv(wxT("HTTP_PROXY")) );
 
         if ( !ms_proxyDefault )
         {
@@ -125,7 +130,7 @@ bool wxURL::ParseURL()
   }
   // URL parse finished.
 
-#if wxUSE_SOCKETS
+#if wxUSE_SOCKETS && wxUSE_PROTOCOL_HTTP
   if (m_useProxy)
   {
     // We destroy the newly created protocol.
@@ -149,7 +154,7 @@ bool wxURL::ParseURL()
 
 void wxURL::CleanData()
 {
-#if wxUSE_SOCKETS
+#if wxUSE_SOCKETS && wxUSE_PROTOCOL_HTTP
   if (!m_useProxy)
 #endif
     delete m_protocol;
@@ -158,7 +163,7 @@ void wxURL::CleanData()
 wxURL::~wxURL()
 {
   CleanData();
-#if wxUSE_SOCKETS
+#if wxUSE_SOCKETS && wxUSE_PROTOCOL_HTTP
   if (m_proxy && m_proxy != ms_proxyDefault)
     delete m_proxy;
 #endif
@@ -287,7 +292,7 @@ wxInputStream *wxURL::GetInputStream()
     m_protocol->SetPassword(m_password);
   }
 
-#if wxUSE_SOCKETS
+#if wxUSE_SOCKETS && wxUSE_PROTOCOL_HTTP
     wxIPV4address addr;
 
   // m_protoinfo is NULL when we use a proxy
@@ -324,7 +329,7 @@ wxInputStream *wxURL::GetInputStream()
   return the_i_stream;
 }
 
-#if wxUSE_SOCKETS
+#if wxUSE_SOCKETS && wxUSE_PROTOCOL_HTTP
 void wxURL::SetDefaultProxy(const wxString& url_proxy)
 {
   if ( !url_proxy )
@@ -487,7 +492,7 @@ wxString wxURL::ConvertFromURI(const wxString& uri)
 // A module which deletes the default proxy if we created it
 // ----------------------------------------------------------------------
 
-#if wxUSE_SOCKETS
+#if wxUSE_SOCKETS && wxUSE_PROTOCOL_HTTP
 
 class wxURLModule : public wxModule
 {

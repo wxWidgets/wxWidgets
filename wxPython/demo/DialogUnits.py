@@ -88,13 +88,13 @@ if __name__ == "__main__":
 
             # Create an instance of our customized Frame class
             frame = MyFrame(None, -1, "This is a test")
-            frame.Show(true)
+            frame.Show(True)
 
             # Tell wxWindows that this is our main window
             self.SetTopWindow(frame)
 
             # Return a success flag
-            return true
+            return True
 
 
     app = MyApp(0)     # Create an instance of the application class
@@ -107,7 +107,7 @@ if __name__ == "__main__":
 def runTest(frame, nb, log):
     win = MyFrame(frame, -1, "This is a test")
     frame.otherWin = win
-    win.Show(true)
+    win.Show(True)
 
 
 overview = """\

@@ -48,6 +48,9 @@
     static const wxString wxPyIconString(wxT("icon"));
     static const wxString wxPyFontString(wxT("font"));
 %}
+
+class wxPyXmlSubclassFactory;
+
 //---------------------------------------------------------------------------
 
 enum wxXmlResourceFlags
@@ -128,6 +131,12 @@ public:
     // Removes all handlers
     void ClearHandlers();
 
+    // Registers subclasses factory for use in XRC. This function is not meant
+    // for public use, please see the comment above wxXmlSubclassFactory
+    // definition.
+    static void AddSubclassFactory(wxPyXmlSubclassFactory *factory);
+
+
     // Loads menu from resource. Returns NULL on failure.
     wxMenu *LoadMenu(const wxString& name);
 
@@ -199,6 +208,9 @@ public:
     // Returns flags, which may be a bitlist of wxXRC_USE_LOCALE and wxXRC_NO_SUBCLASSING.
     int GetFlags();
 
+    // Set flags after construction.
+    void SetFlags(int flags) { m_flags = flags; }
+
 };
 
 //----------------------------------------------------------------------
@@ -215,6 +227,31 @@ XMLCTRL = XRCCTRL
 "
 
 //----------------------------------------------------------------------
+// wxXmlSubclassFactory
+
+
+%{
+class wxPyXmlSubclassFactory : public wxXmlSubclassFactory
+{
+public:
+    wxPyXmlSubclassFactory() {}
+    DEC_PYCALLBACK_OBJECT_STRING_pure(Create);
+    PYPRIVATE;
+};
+
+IMP_PYCALLBACK_OBJECT_STRING_pure(wxPyXmlSubclassFactory, wxXmlSubclassFactory, Create);
+%}
+
+
+%name(wxXmlSubclassFactory)class wxPyXmlSubclassFactory {
+public:
+    wxPyXmlSubclassFactory();
+
+    void _setCallbackInfo(PyObject* self, PyObject* _class);
+    %pragma(python) addtomethod = "__init__:self._setCallbackInfo(self, wxXmlSubclassFactory)"
+};
+
+
 //----------------------------------------------------------------------
 // In order to provide wrappers for wxXmlResourceHandler we need to also
 // provide the classes for representing and parsing XML.
@@ -374,6 +411,13 @@ public:
             return self->GetEncoding();
         #endif
         }
+        void SetEncoding(const wxString& enc) {
+        #if wxUSE_UNICODE
+            // do nothing
+        #else
+            self->SetEncoding(enc);
+        #endif
+        }
     }
 };
 
@@ -395,34 +439,6 @@ public:
 
     DEC_PYCALLBACK_OBJECT__pure(DoCreateResource);
     DEC_PYCALLBACK_BOOL_NODE_pure(CanHandle);
-
-//     wxObject* DoCreateResource() {
-//         wxObject* rv = NULL;
-//         wxPyBeginBlockThreads();
-//         if (wxPyCBH_findCallback(m_myInst, "DoCreateResource")) {
-//             PyObject* ro;
-//             ro = wxPyCBH_callCallbackObj(m_myInst, Py_BuildValue("()"));
-//             if (ro) {
-//                 SWIG_GetPtrObj(ro, (void **)&rv, "_wxObject_p");
-//                 Py_DECREF(ro);
-//             }
-//         }
-//         wxPyEndBlockThreads();
-//         return rv;
-//     }
-
-//     bool CanHandle(wxXmlNode* a) {
-//         bool rv=FALSE;
-//         wxPyBeginBlockThreads();
-//         if (wxPyCBH_findCallback(m_myInst, "CanHandle")) {
-//             PyObject* obj = wxPyConstructObject((void*)a, "wxXmlNode", 0);
-//             rv = wxPyCBH_callCallback(m_myInst, Py_BuildValue("(O)", obj));
-//             Py_DECREF(obj);
-//         }
-//         wxPyEndBlockThreads();
-//         return rv;
-//     }
-
 
 
     // accessors for protected members

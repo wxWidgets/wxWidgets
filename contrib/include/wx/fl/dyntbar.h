@@ -18,12 +18,13 @@
 
 #include "wx/tbarbase.h"
 #include "wx/dynarray.h"
+#include "wx/fl/fldefs.h"
 
 /*
 Tool layout item.
 */
 
-class wxToolLayoutItem : public wxObject
+class WXFL_DECLSPEC wxToolLayoutItem : public wxObject
 {
     DECLARE_DYNAMIC_CLASS(wxToolLayoutItem)
 
@@ -32,19 +33,19 @@ public:
     bool      mIsSeparator;
 };
 
-class wxDynToolInfo;
+class WXFL_DECLSPEC wxDynToolInfo;
 
 typedef wxToolLayoutItem* wxToolLayoutItemPtrT;
 typedef wxDynToolInfo*    wxDynToolInfoPtrT;
 
-WX_DEFINE_ARRAY( wxToolLayoutItemPtrT, wxLayoutItemArrayT  );
-WX_DEFINE_ARRAY( wxDynToolInfoPtrT,    wxDynToolInfoArrayT );
+WXFL_DEFINE_ARRAY( wxToolLayoutItemPtrT, wxLayoutItemArrayT  );
+WXFL_DEFINE_ARRAY( wxDynToolInfoPtrT,    wxDynToolInfoArrayT );
 
 /*
 This is a base class for layout algorithm implementations.
 */
 
-class LayoutManagerBase
+class WXFL_DECLSPEC LayoutManagerBase
 {
 public:
         // Constructor.
@@ -63,7 +64,7 @@ BagLayout lays out items in left-to-right order from
 top to bottom.
 */
 
-class BagLayout : public LayoutManagerBase
+class WXFL_DECLSPEC BagLayout : public LayoutManagerBase
 {
 public:
         // Constructor.
@@ -78,7 +79,7 @@ public:
 This class holds dynamic toolbar item information.
 */
 
-class wxDynToolInfo : public wxToolLayoutItem
+class WXFL_DECLSPEC wxDynToolInfo : public wxToolLayoutItem
 {
     DECLARE_DYNAMIC_CLASS(wxDynToolInfo)
 
@@ -98,7 +99,7 @@ public:
 wxDynamicToolBar manages containment and layout of tool windows.
 */
 
-class wxDynamicToolBar : public wxToolBarBase
+class WXFL_DECLSPEC wxDynamicToolBar : public wxToolBarBase
 {
 protected:
     friend class wxDynamicToolBarSerializer;
@@ -147,12 +148,12 @@ public:
     virtual void AddTool( int toolIndex,
                               const wxString& imageFileName,
                               wxBitmapType imageFileType = wxBITMAP_TYPE_BMP,
-                              const wxString& labelText = "", bool alignTextRight = FALSE,
+                              const wxString& labelText = wxT(""), bool alignTextRight = FALSE,
                               bool isFlat = TRUE );
         // Adds a tool. See the documentation for wxToolBar for details.
 
     virtual void AddTool( int toolIndex, wxBitmap labelBmp,
-                              const wxString& labelText = "", bool alignTextRight = FALSE,
+                              const wxString& labelText = wxT(""), bool alignTextRight = FALSE,
                               bool isFlat = TRUE );
 
     // Method from wxToolBarBase (for compatibility), only
@@ -161,7 +162,7 @@ public:
 
     virtual wxToolBarToolBase *AddTool(const int toolIndex, const wxBitmap& bitmap, const wxBitmap& pushedBitmap = wxNullBitmap,
                const bool toggle = FALSE, const long xPos = -1, const long yPos = -1, wxObject *clientData = NULL,
-               const wxString& helpString1 = "", const wxString& helpString2 = "");
+               const wxString& helpString1 = wxT(""), const wxString& helpString2 = wxT(""));
 
         // Adds a separator. See the documentation for wxToolBar for details.
 

@@ -26,6 +26,7 @@
 #include "wx/intl.h"
 #include "wx/evtloop.h"
 #include "wx/timer.h"
+#include "wx/filename.h"
 
 #include "wx/univ/theme.h"
 #include "wx/univ/renderer.h"
@@ -57,8 +58,6 @@ wxApp *wxTheApp = NULL;
 
 // This is set within wxEntryStart -- too early on
 // to put these in wxTheApp
-static int g_newArgc = 0;
-static wxChar** g_newArgv = NULL;
 static bool g_showIconic = FALSE;
 static wxSize g_initialSize = wxDefaultSize;
 
@@ -136,10 +135,6 @@ bool wxApp::Initialize()
 
 void wxApp::CleanUp()
 {
-    if (g_newArgv)
-        delete[] g_newArgv;
-    g_newArgv = NULL;
-
     delete wxWidgetHashTable;
     wxWidgetHashTable = NULL;
     delete wxClientWidgetHashTable;
@@ -197,20 +192,13 @@ int wxEntryStart( int& argc, char *argv[] )
 #endif
 #endif // __WXDEBUG__
 
-    wxString displayName;
+    char *displayName = NULL;
     bool syncDisplay = FALSE;
 
-    // Parse the arguments.
-    // We can't use wxCmdLineParser or OnInitCmdLine and friends because
-    // we have to create the Display earlier. If we can find a way to
-    // use the wxAppBase API then I'll be quite happy to change it.
-    g_newArgv = new wxChar*[argc + 1];
-    g_newArgc = 0;
     int i;
     for (i = 0; i < argc; i++)
     {
-        wxString arg(argv[i]);
-        if (arg == wxT("-display"))
+        if (strcmp( argv[i], "-display") == 0)
         {
             if (i < (argc - 1))
             {
@@ -219,16 +207,15 @@ int wxEntryStart( int& argc, char *argv[] )
                 continue;
             }
         }
-        else if (arg == wxT("-geometry"))
+        else if (strcmp( argv[i], "-geometry") == 0)
         {
             if (i < (argc - 1))
             {
                 i ++;
-                wxString windowGeometry = argv[i];
                 int w, h;
-                if (wxSscanf(windowGeometry.c_str(), _T("%dx%d"), &w, &h) != 2)
+                if (sscanf(argv[i], "%dx%d", &w, &h) != 2)
                 {
-                    wxLogError(_("Invalid geometry specification '%s'"), windowGeometry.c_str());
+                    wxLogError( _("Invalid geometry specification '%s'"), wxString::FromAscii(argv[i]).c_str() );
                 }
                 else
                 {
@@ -237,30 +224,22 @@ int wxEntryStart( int& argc, char *argv[] )
                 continue;
             }
         }
-        else if (arg == wxT("-sync"))
+        else if (strcmp( argv[i], "-sync") == 0)
         {
             syncDisplay = TRUE;
             continue;
         }
-        else if (arg == wxT("-iconic"))
+        else if (strcmp( argv[i], "-iconic") == 0)
         {
             g_showIconic = TRUE;
 
             continue;
         }
 
-        // Not eaten by wxWindows, so pass through
-        g_newArgv[g_newArgc] = argv[i];
-        g_newArgc ++;
     }
-    g_newArgv[g_newArgc] = NULL;
-    
-    Display* xdisplay = NULL;
-    if (displayName.IsEmpty())
-        xdisplay = XOpenDisplay(NULL);
-    else
-        xdisplay = XOpenDisplay((char*) displayName.c_str());
 
+    // X11 display stuff    
+    Display* xdisplay = XOpenDisplay( displayName );
     if (!xdisplay)
     {
         wxLogError( _("wxWindows could not open display. Exiting.") );
@@ -268,15 +247,19 @@ int wxEntryStart( int& argc, char *argv[] )
     }
 
     if (syncDisplay)
-    {
         XSynchronize(xdisplay, True);
-    }
 
     wxApp::ms_display = (WXDisplay*) xdisplay;
-
+    
     XSelectInput( xdisplay, XDefaultRootWindow(xdisplay), PropertyChangeMask);
 
+    // Misc.
     wxSetDetectableAutoRepeat( TRUE );
+
+#if wxUSE_UNICODE
+    // Glib's type system required by Pango
+    g_type_init();
+#endif    
 
     if (!wxApp::Initialize())
         return -1;
@@ -316,32 +299,39 @@ int wxEntry( int argc, char *argv[] )
         {
             printf( "wxWindows error: No initializer - use IMPLEMENT_APP macro.\n" );
             return 0;
-        };
+        }
 
         wxTheApp = (wxApp*) (* wxApp::GetInitializerFunction()) ();
-    };
+    }
 
     if (!wxTheApp)
     {
         printf( "wxWindows error: wxTheApp == NULL\n" );
         return 0;
-    };
-
-    wxTheApp->SetClassName(wxFileNameFromPath(argv[0]));
-    wxTheApp->SetAppName(wxFileNameFromPath(argv[0]));
-
-    // The command line may have been changed
-    // by stripping out -display etc.
-    if (g_newArgc > 0)
-    {
-        wxTheApp->argc = g_newArgc;
-        wxTheApp->argv = g_newArgv;
     }
-    else
+
+    // Command line argument stuff
+    wxTheApp->argc = argc;
+#if wxUSE_UNICODE
+    wxTheApp->argv = new wxChar*[argc+1];
+    int mb_argc = 0;
+    while (mb_argc < argc)
     {
-        wxTheApp->argc = argc;
-        wxTheApp->argv = argv;
+        wxString tmp = wxString::FromAscii( argv[mb_argc] );
+        wxTheApp->argv[mb_argc] = wxStrdup( tmp.c_str() );
+        mb_argc++;
     }
+    wxTheApp->argv[mb_argc] = (wxChar *)NULL;
+#else
+    wxTheApp->argv = argv;
+#endif
+
+    if (wxTheApp->argc > 0)
+    {
+        wxFileName fname( wxTheApp->argv[0] );
+        wxTheApp->SetAppName( fname.GetName() );
+    }
+
     wxTheApp->m_showIconic = g_showIconic;
     wxTheApp->m_initialSize = g_initialSize;
 
@@ -603,6 +593,9 @@ bool wxApp::ProcessXEvent(WXEvent* _event)
                 return TRUE;
 
             keyEvent.SetEventType(wxEVT_CHAR);
+            // Do the translation again, retaining the ASCII
+            // code.
+            wxTranslateKeyEvent(keyEvent, win, window, event, TRUE);
             if (win->GetEventHandler()->ProcessEvent( keyEvent ))
                 return TRUE;
 
@@ -1112,6 +1105,42 @@ bool wxApp::OnInitGui()
     return TRUE;
 }
 
+#if wxUSE_UNICODE
+
+#include <pango/pango.h>
+#include <pango/pangox.h>
+#include <pango/pangoxft.h>
+
+PangoContext* wxApp::GetPangoContext()
+{
+    static PangoContext *ret = NULL;
+    if (ret)
+        return ret;
+    
+    Display *xdisplay = (Display*) wxApp::GetDisplay();
+    
+#if 1
+    int xscreen = DefaultScreen(xdisplay);
+    static int use_xft = -1;
+    if (use_xft == -1)
+    {
+        wxString val = wxGetenv( L"GDK_USE_XFT" );
+        use_xft = (val == L"1");
+    }
+  
+    if (use_xft)
+        ret = pango_xft_get_context( xdisplay, xscreen );
+    else
+#endif
+        ret = pango_x_get_context( xdisplay );
+        
+    if (!PANGO_IS_CONTEXT(ret))
+        wxLogError( wxT("No pango context.") );
+        
+    return ret;
+}
+#endif
+
 WXColormap wxApp::GetMainColormap(WXDisplay* display)
 {
     if (!display) /* Must be called first with non-NULL display */
@@ -1205,6 +1234,10 @@ bool wxApp::Yield(bool onlyIfNeeded)
             wxEventLoop::SetActive(newEventLoop);
         }
 
+        // Call dispatch at least once so that sockets
+        // can be tested
+        wxTheApp->Dispatch();
+        
         while (wxTheApp && wxTheApp->Pending())
             wxTheApp->Dispatch();
 

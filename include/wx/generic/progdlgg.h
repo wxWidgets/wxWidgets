@@ -63,6 +63,8 @@ public:
    */
    void Resume();
 
+   bool Show( bool show = TRUE );
+
 protected:
    // callback for optional abort button
    void OnCancel(wxCommandEvent& event);

@@ -45,14 +45,15 @@ class TestVirtualList(wxListCtrl):
 
     def OnItemActivated(self, event):
         self.currentItem = event.m_itemIndex
-        self.log.WriteText("OnItemActivated: %s\n" % self.GetItemText(self.currentItem))
+        self.log.WriteText("OnItemActivated: %s\nTopItem: %s\n" %
+                           (self.GetItemText(self.currentItem), self.GetTopItem()))
 
     def getColumnText(self, index, col):
         item = self.GetItem(index, col)
         return item.GetText()
 
     def OnItemDeselected(self, evt):
-        print evt.m_itemIndex
+        self.log.WriteText("OnItemDeselected: %s" % evt.m_itemIndex)
 
 
     #---------------------------------------------------
@@ -60,7 +61,7 @@ class TestVirtualList(wxListCtrl):
     # "virtualness" of the list...  Normally you would
     # determine the text, attributes and/or image based
     # on values from some external data source, but for
-    # this demo we'll just calcualte them
+    # this demo we'll just calculate them
     def OnGetItemText(self, item, col):
         return "Item %d, column %d" % (item, col)
 

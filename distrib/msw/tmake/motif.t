@@ -13,7 +13,6 @@
     IncludeTemplate("filelist.t");
 
     #! find all our sources
-    $project{"COMMONOBJS"} .= "parser.o ";
     $project{"GUIOBJS"} .= "xmcombo.o ";
 
     foreach $file (sort keys %wxGeneric) {

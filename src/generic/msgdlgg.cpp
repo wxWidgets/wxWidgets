@@ -40,6 +40,7 @@
 
 #include "wx/generic/msgdlgg.h"
 #include "wx/artprov.h"
+#include "wx/settings.h"
 
 #if wxUSE_STATLINE
   #include "wx/statline.h"
@@ -65,6 +66,8 @@ wxGenericMessageDialog::wxGenericMessageDialog( wxWindow *parent,
                       : wxDialog( parent, -1, caption, pos, wxDefaultSize, wxDEFAULT_DIALOG_STYLE )
 {
     m_dialogStyle = style;
+
+    bool is_pda = (wxSystemSettings::GetScreenType() <= wxSYS_SCREEN_PDA);
 
     wxBoxSizer *topsizer = new wxBoxSizer( wxVERTICAL );
 
@@ -97,13 +100,16 @@ wxGenericMessageDialog::wxGenericMessageDialog( wxWindow *parent,
                 break;
         }
         wxStaticBitmap *icon = new wxStaticBitmap(this, -1, bitmap);
-        icon_text->Add( icon, 0, wxCENTER );
+        if (is_pda)
+            topsizer->Add( icon, 0, wxTOP|wxLEFT|wxRIGHT | wxALIGN_LEFT, 10 );
+        else
+            icon_text->Add( icon, 0, wxCENTER );
     }
 
     // 2) text
     icon_text->Add( CreateTextSizer( message ), 0, wxCENTER | wxLEFT, 10 );
 
-    topsizer->Add( icon_text, 0, wxCENTER | wxLEFT|wxRIGHT|wxTOP, 10 );
+    topsizer->Add( icon_text, 1, wxCENTER | wxLEFT|wxRIGHT|wxTOP, 10 );
 
 #if wxUSE_STATLINE
     // 3) static line
@@ -140,8 +146,8 @@ void wxGenericMessageDialog::OnNo(wxCommandEvent& WXUNUSED(event))
 
 void wxGenericMessageDialog::OnCancel(wxCommandEvent& WXUNUSED(event))
 {
-    /* Allow cancellation via ESC/Close button except if
-       only YES and NO are specified. */
+    // Allow cancellation via ESC/Close button except if
+    // only YES and NO are specified.
     if ( (m_dialogStyle & wxYES_NO) != wxYES_NO || (m_dialogStyle & wxCANCEL) )
     {
         EndModal( wxID_CANCEL );

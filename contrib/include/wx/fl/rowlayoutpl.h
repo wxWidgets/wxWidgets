@@ -23,7 +23,7 @@ Simple implementation of a plugin which handles row layout
 requests sent from a frame layout.
 */
 
-class cbRowLayoutPlugin : public cbPluginBase
+class WXFL_DECLSPEC cbRowLayoutPlugin : public cbPluginBase
 {
     DECLARE_DYNAMIC_CLASS( cbRowLayoutPlugin )
 protected:

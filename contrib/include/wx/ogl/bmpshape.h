@@ -27,7 +27,7 @@ class wxBitmapShape: public wxRectangleShape
 
   void OnDraw(wxDC& dc);
 
-#ifdef PROLOGIO
+#if wxUSE_PROLOGIO
   // I/O
   void WriteAttributes(wxExpr *clause);
   void ReadAttributes(wxExpr *clause);

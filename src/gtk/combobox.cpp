@@ -36,34 +36,25 @@ extern bool g_isIdle;
 extern bool   g_blockEventsOnDrag;
 
 //-----------------------------------------------------------------------------
-// "select"
+// "select-child" - click/cursor get select-child, changed, select-child
 //-----------------------------------------------------------------------------
 
 static void
-gtk_combo_clicked_callback( GtkWidget *WXUNUSED(widget), wxComboBox *combo )
+gtk_combo_select_child_callback( GtkList *WXUNUSED(list), GtkWidget *WXUNUSED(widget), wxComboBox *combo )
 {
     if (g_isIdle) wxapp_install_idle_handler();
 
     if (!combo->m_hasVMT) return;
-
+    
     if (g_blockEventsOnDrag) return;
 
-    if (combo->m_alreadySent)
-    {
-        combo->m_alreadySent = FALSE;
-        return;
-    }
-
-    combo->m_alreadySent = TRUE;
-
     int curSelection = combo->GetSelection();
-
+    
     if (combo->m_prevSelection != curSelection)
     {
         GtkWidget *list = GTK_COMBO(combo->m_widget)->list;
         gtk_list_unselect_item( GTK_LIST(list), combo->m_prevSelection );
     }
-
     combo->m_prevSelection = curSelection;
 
     wxCommandEvent event( wxEVT_COMMAND_COMBOBOX_SELECTED, combo->GetId() );
@@ -75,7 +66,8 @@ gtk_combo_clicked_callback( GtkWidget *WXUNUSED(widget), wxComboBox *combo )
 }
 
 //-----------------------------------------------------------------------------
-//  "changed"
+//  "changed" - typing and list item matches get changed, select-child
+//              if it doesn't match an item then just get a single changed
 //-----------------------------------------------------------------------------
 
 static void
@@ -90,6 +82,12 @@ gtk_text_changed_callback( GtkWidget *WXUNUSED(widget), wxComboBox *combo )
     event.SetEventObject( combo );
     combo->GetEventHandler()->ProcessEvent( event );
 }
+
+static void
+gtk_dummy_callback(GtkEntry *WXUNUSED(entry), GtkCombo *WXUNUSED(combo))
+{
+}
+
 
 //-----------------------------------------------------------------------------
 // wxComboBox
@@ -121,13 +119,19 @@ bool wxComboBox::Create( wxWindow *parent, wxWindowID id, const wxString& value,
     }
 
     m_widget = gtk_combo_new();
+    GtkCombo *combo = GTK_COMBO(m_widget);
+    
+    // Disable GTK's broken events ...
+    gtk_signal_disconnect( GTK_OBJECT(combo->entry), combo->entry_change_id );
+    // ... and add surogate handler.
+    combo->entry_change_id = gtk_signal_connect (GTK_OBJECT (combo->entry), "changed",
+			      (GtkSignalFunc) gtk_dummy_callback, combo);
 
     // make it more useable
     gtk_combo_set_use_arrows_always( GTK_COMBO(m_widget), TRUE );
     
     // and case-sensitive
     gtk_combo_set_case_sensitive( GTK_COMBO(m_widget), TRUE );
-
 
     GtkWidget *list = GTK_COMBO(m_widget)->list;
 
@@ -137,10 +141,6 @@ bool wxComboBox::Create( wxWindow *parent, wxWindowID id, const wxString& value,
 
     for (int i = 0; i < n; i++)
     {
-        /* don't send first event, which GTK sends aways when
-           inserting the first item */
-        m_alreadySent = TRUE;
-
         GtkWidget *list_item = gtk_list_item_new_with_label( wxGTK_CONV( choices[i] ) );
 
         m_clientDataList.Append( (wxObject*)NULL );
@@ -148,27 +148,29 @@ bool wxComboBox::Create( wxWindow *parent, wxWindowID id, const wxString& value,
 
         gtk_container_add( GTK_CONTAINER(list), list_item );
 
-        gtk_signal_connect( GTK_OBJECT(list_item), "select",
-           GTK_SIGNAL_FUNC(gtk_combo_clicked_callback), (gpointer)this );
-
         gtk_widget_show( list_item );
     }
 
     m_parent->DoAddChild( this );
     
-    m_focusWidget = GTK_COMBO(m_widget)->entry;
+    m_focusWidget = combo->entry;
 
     PostCreation();
 
-    ConnectWidget( GTK_COMBO(m_widget)->button );
+    ConnectWidget( combo->button );
 
-    if (!value.IsNull()) SetValue( value );
+    // MSW's combo box shows the value and the selection is -1
+    gtk_entry_set_text( GTK_ENTRY(combo->entry), wxGTK_CONV(value) );
+    gtk_list_unselect_all( GTK_LIST(combo->list) );
 
     if (style & wxCB_READONLY)
-        gtk_entry_set_editable( GTK_ENTRY( GTK_COMBO(m_widget)->entry ), FALSE );
+        gtk_entry_set_editable( GTK_ENTRY( combo->entry ), FALSE );
 
-    gtk_signal_connect( GTK_OBJECT(GTK_COMBO(m_widget)->entry), "changed",
-      GTK_SIGNAL_FUNC(gtk_text_changed_callback), (gpointer)this);
+    gtk_signal_connect( GTK_OBJECT(combo->entry), "changed",
+      GTK_SIGNAL_FUNC(gtk_text_changed_callback), (gpointer)this );
+
+    gtk_signal_connect( GTK_OBJECT(combo->list), "select-child",
+      GTK_SIGNAL_FUNC(gtk_combo_select_child_callback), (gpointer)this );
 
     wxSize size_best( DoGetBestSize() );
     wxSize new_size( size );
@@ -185,7 +187,6 @@ bool wxComboBox::Create( wxWindow *parent, wxWindowID id, const wxString& value,
         // This is required for tool bar support
         gtk_widget_set_usize( m_widget, new_size.x, new_size.y );
     }
-
 
     SetBackgroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_WINDOW ) );
     SetForegroundColour( parent->GetForegroundColour() );
@@ -209,18 +210,28 @@ wxComboBox::~wxComboBox()
     m_clientDataList.Clear();
 }
 
+void wxComboBox::SetFocus()
+{
+    if ( m_hasFocus )
+    {
+        // don't do anything if we already have focus
+        return;
+    }
+
+    gtk_widget_grab_focus( m_focusWidget );
+}
+
 void wxComboBox::AppendCommon( const wxString &item )
 {
     wxCHECK_RET( m_widget != NULL, wxT("invalid combobox") );
 
+    DisableEvents();
+    
     GtkWidget *list = GTK_COMBO(m_widget)->list;
 
     GtkWidget *list_item = gtk_list_item_new_with_label( wxGTK_CONV( item ) );
 
     gtk_container_add( GTK_CONTAINER(list), list_item );
-
-    gtk_signal_connect( GTK_OBJECT(list_item), "select",
-      GTK_SIGNAL_FUNC(gtk_combo_clicked_callback), (gpointer)this );
 
     if (GTK_WIDGET_REALIZED(m_widget))
     {
@@ -231,6 +242,8 @@ void wxComboBox::AppendCommon( const wxString &item )
     }
 
     gtk_widget_show( list_item );
+    
+    EnableEvents();
 }
 
 void wxComboBox::Append( const wxString &item )
@@ -304,6 +317,8 @@ void wxComboBox::Clear()
 {
     wxCHECK_RET( m_widget != NULL, wxT("invalid combobox") );
 
+    DisableEvents();
+    
     GtkWidget *list = GTK_COMBO(m_widget)->list;
     gtk_list_clear_items( GTK_LIST(list), 0, Number() );
 
@@ -317,6 +332,8 @@ void wxComboBox::Clear()
     m_clientObjectList.Clear();
 
     m_clientDataList.Clear();
+    
+    EnableEvents();
 }
 
 void wxComboBox::Delete( int n )
@@ -333,6 +350,8 @@ void wxComboBox::Delete( int n )
         return;
     }
 
+    DisableEvents();
+    
     GList *list = g_list_append( (GList*) NULL, child->data );
     gtk_list_remove_items( listbox, list );
     g_list_free( list );
@@ -347,9 +366,9 @@ void wxComboBox::Delete( int n )
 
     node = m_clientDataList.Nth( n );
     if (node)
-    {
         m_clientDataList.DeleteNode( node );
-    }
+    
+    EnableEvents();
 }
 
 int wxComboBox::FindString( const wxString &item )
@@ -364,8 +383,14 @@ int wxComboBox::FindString( const wxString &item )
     {
         GtkBin *bin = GTK_BIN( child->data );
         GtkLabel *label = GTK_LABEL( bin->child );
-        if (item == wxString(label->label,*wxConvCurrent))
+#ifdef __WXGTK20__
+        wxString str( wxGTK_CONV_BACK( gtk_label_get_text(label) ) );
+#else
+        wxString str( label->label );
+#endif
+        if (item == str)
             return count;
+            
         count++;
         child = child->next;
     }
@@ -408,7 +433,7 @@ wxString wxComboBox::GetString( int n ) const
         GtkBin *bin = GTK_BIN( child->data );
         GtkLabel *label = GTK_LABEL( bin->child );
 #ifdef __WXGTK20__
-        str = wxGTK_CONV_BACK( gtk_label_get_text( label) );
+        str = wxGTK_CONV_BACK( gtk_label_get_text(label) );
 #else
         str = wxString( label->label );
 #endif
@@ -431,7 +456,12 @@ wxString wxComboBox::GetStringSelection() const
     if (selection)
     {
         GtkBin *bin = GTK_BIN( selection->data );
-        wxString tmp = wxString(GTK_LABEL( bin->child )->label,*wxConvCurrent);
+        GtkLabel *label = GTK_LABEL( bin->child );
+#ifdef __WXGTK20__
+        wxString tmp( wxGTK_CONV_BACK( gtk_label_get_text(label) ) );
+#else
+        wxString tmp( label->label );
+#endif
         return tmp;
     }
 
@@ -594,55 +624,33 @@ void wxComboBox::OnChar( wxKeyEvent &event )
 {
     if ( event.KeyCode() == WXK_RETURN )
     {
-        wxString value = GetValue();
-
-        if ( Number() == 0 )
+        // GTK automatically selects an item if its in the list
+        wxCommandEvent event(wxEVT_COMMAND_TEXT_ENTER, GetId());
+        event.SetString( GetValue() );
+        event.SetInt( GetSelection() );
+        event.SetEventObject( this );
+        
+        if (!GetEventHandler()->ProcessEvent( event ))
         {
-            // make Enter generate "selected" event if there is only one item
-            // in the combobox - without it, it's impossible to select it at
-            // all!
-            wxCommandEvent event( wxEVT_COMMAND_COMBOBOX_SELECTED, GetId() );
-            event.SetInt( 0 );
-            event.SetString( value );
-            event.SetEventObject( this );
-            GetEventHandler()->ProcessEvent( event );
-        }
-        else
-        {
-            // add the item to the list if it's not there yet
-            if ( FindString(value) == wxNOT_FOUND )
-            {
-                Append(value);
-                SetStringSelection(value);
-
-                // and generate the selected event for it
-                wxCommandEvent event( wxEVT_COMMAND_COMBOBOX_SELECTED, GetId() );
-                event.SetInt( Number() - 1 );
-                event.SetString( value );
-                event.SetEventObject( this );
-                GetEventHandler()->ProcessEvent( event );
-            }
-
             // This will invoke the dialog default action, such
             // as the clicking the default button.
 
             wxWindow *top_frame = m_parent;
             while (top_frame->GetParent() && !(top_frame->IsTopLevel()))
-            top_frame = top_frame->GetParent();
-    
+                top_frame = top_frame->GetParent();
+
             if (top_frame && GTK_IS_WINDOW(top_frame->m_widget))
             {
                 GtkWindow *window = GTK_WINDOW(top_frame->m_widget);
 
                 if (window->default_widget)
-                {
                     gtk_widget_activate (window->default_widget);
-                    return;
-                }
             }
-            
-            return;
         }
+            
+        // Catch GTK event so that GTK doesn't open the drop
+        // down list upon RETURN.
+        return;
     }
     
     event.Skip();
@@ -650,28 +658,18 @@ void wxComboBox::OnChar( wxKeyEvent &event )
 
 void wxComboBox::DisableEvents()
 {
-    GtkList *list = GTK_LIST( GTK_COMBO(m_widget)->list );
-    GList *child = list->children;
-    while (child)
-    {
-        gtk_signal_disconnect_by_func( GTK_OBJECT(child->data),
-          GTK_SIGNAL_FUNC(gtk_combo_clicked_callback), (gpointer)this );
-
-        child = child->next;
-    }
+    gtk_signal_disconnect_by_func( GTK_OBJECT(GTK_COMBO(m_widget)->list),
+      GTK_SIGNAL_FUNC(gtk_combo_select_child_callback), (gpointer)this );
+    gtk_signal_disconnect_by_func( GTK_OBJECT(GTK_COMBO(m_widget)->entry),
+      GTK_SIGNAL_FUNC(gtk_text_changed_callback), (gpointer)this );
 }
 
 void wxComboBox::EnableEvents()
 {
-    GtkList *list = GTK_LIST( GTK_COMBO(m_widget)->list );
-    GList *child = list->children;
-    while (child)
-    {
-        gtk_signal_connect( GTK_OBJECT(child->data), "select",
-          GTK_SIGNAL_FUNC(gtk_combo_clicked_callback), (gpointer)this );
-
-        child = child->next;
-    }
+    gtk_signal_connect( GTK_OBJECT(GTK_COMBO(m_widget)->list), "select-child",
+      GTK_SIGNAL_FUNC(gtk_combo_select_child_callback), (gpointer)this );
+    gtk_signal_connect( GTK_OBJECT(GTK_COMBO(m_widget)->entry), "changed",
+      GTK_SIGNAL_FUNC(gtk_text_changed_callback), (gpointer)this );
 }
 
 void wxComboBox::OnSize( wxSizeEvent &event )
@@ -728,13 +726,11 @@ wxSize wxComboBox::DoGetBestSize() const
     ret.x = 0;
     if ( m_widget )
     {
-        GdkFont *font = m_font.GetInternalFont();
-
-        wxCoord width;
-        size_t count = Number();
+        int width;
+        size_t count = GetCount();
         for ( size_t n = 0; n < count; n++ )
         {
-            width = (wxCoord)gdk_string_width(font, wxGTK_CONV( GetString(n) ) );
+            GetTextExtent( GetString(n), &width, NULL, NULL, NULL, &m_font );
             if ( width > ret.x )
                 ret.x = width;
         }
@@ -747,3 +743,4 @@ wxSize wxComboBox::DoGetBestSize() const
 }
 
 #endif
+

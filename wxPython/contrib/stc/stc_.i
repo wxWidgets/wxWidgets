@@ -114,6 +114,14 @@ def EVT_STC_DO_DROP(win, id, func):
 def EVT_STC_ZOOM(win, id, func):
     win.Connect(id, -1, wxEVT_STC_ZOOM, func)
 
+def EVT_STC_HOTSPOT_CLICK(win, id, func):
+    win.Connect(id, -1, wxEVT_STC_HOTSPOT_CLICK, func)
+
+def EVT_STC_HOTSPOT_DCLICK(win, id, func):
+    win.Connect(id, -1, wxEVT_STC_HOTSPOT_DCLICK, func)
+
+def EVT_STC_CALLTIP_CLICK(win, id, func):
+    win.Connect(id, -1, wxEVT_STC_CALLTIP_CLICK, func)
 "
 
 //----------------------------------------------------------------------

@@ -47,9 +47,9 @@ class MVCTreeNode:
         if self.kids is None:
             self.kids = []
         self.data = data
-        self.expanded = false
-        self.selected = false
-        self.built = false
+        self.expanded = False
+        self.selected = False
+        self.built = False
         self.scale = 0
 
     def GetChildren(self):
@@ -136,7 +136,7 @@ class Painter:
         self.bgcolor = wxNamedColour("WHITE")
         self.fgcolor = wxNamedColour("BLUE")
         self.linecolor = wxNamedColour("GREY")
-        self.font = wxFont(9, wxDEFAULT, wxNORMAL, wxNORMAL, false)
+        self.font = wxFont(9, wxDEFAULT, wxNORMAL, wxNORMAL, False)
         self.bmp = None
 
     def GetFont(self):
@@ -239,10 +239,10 @@ class wxTreeModel:
         raise NotImplementedError
 
     def IsEditable(self, node):
-        return false
+        return False
 
     def SetEditable(self, node):
-        return false
+        return False
 
 class NodePainter:
     """
@@ -330,10 +330,10 @@ class BasicTreeModel(wxTreeModel):
         return not self.children.has_key(node)
 
     def IsEditable(self, node):
-        return false
+        return False
 
     def SetEditable(self, node, bool):
-        return false
+        return False
 
 
 class FileEditor(Editor):
@@ -374,9 +374,9 @@ class FileEditor(Editor):
 
     def _key(self, evt):
         if evt.KeyCode() == WXK_RETURN:
-            self.EndEdit(true)
+            self.EndEdit(True)
         elif evt.KeyCode() == WXK_ESCAPE:
-            self.EndEdit(false)
+            self.EndEdit(False)
         else:
             evt.Skip()
 
@@ -385,7 +385,7 @@ class FileEditor(Editor):
             pos = evt.GetPosition()
             edsize = self.editcomp.GetSize()
             if pos.x < 0 or pos.y < 0 or pos.x > edsize.width or pos.y > edsize.height:
-                self.EndEdit(false)
+                self.EndEdit(False)
 
 
 class FileWrapper:
@@ -405,11 +405,10 @@ class FSTreeModel(BasicTreeModel):
     """
     def __init__(self, path):
         BasicTreeModel.__init__(self)
-        import string
-        fw = FileWrapper(path, string.split(path, os.sep)[-1])
+        fw = FileWrapper(path, path.split(os.sep)[-1])
         self._Build(path, fw)
         self.SetRoot(fw)
-        self._editable = true
+        self._editable = True
     def _Build(self, path, fileWrapper):
         for name in os.listdir(path):
             fw = FileWrapper(path, name)
@@ -431,13 +430,12 @@ class LateFSTreeModel(FSTreeModel):
     """
     def __init__(self, path):
         BasicTreeModel.__init__(self)
-        import string
-        name = string.split(path, os.sep)[-1]
+        name = path.split(os.sep)[-1]
         pathpart = path[:-len(name)]
         fw = FileWrapper(pathpart, name)
         self._Build(path, fw)
         self.SetRoot(fw)
-        self._editable = true
+        self._editable = True
         self.children = {}
         self.parents = {}
     def _Build(self, path, parent):
@@ -496,8 +494,8 @@ class Rect:
             if other.y >= self.y:
                 if other.width + other.x <= self.width + self.x:
                     if other.height + other.y  <= self.height + self.y:
-                        return true
-        return false
+                        return True
+        return False
 
     def __str__(self):
         return "Rect: " + str([self.x, self.y, self.width, self.height])
@@ -616,7 +614,7 @@ class TreePainter(Painter):
         if node.expanded:
             for kid in node.kids:
                 if not self.paintWalk(kid, dc, paintRects):
-                    return false
+                    return False
             for kid in node.kids:
                 px = (kid.projx - self.tree.layout.NODE_STEP) + 5
                 py = kid.projy + kid.height/2
@@ -640,7 +638,7 @@ class TreePainter(Painter):
             if not node.expanded:
                 dc.DrawLine(px, py -2, px, py + 3)
             dc.DrawLine(px -2, py, px + 3, py)
-        return true
+        return True
 
     def OnMouse(self, evt):
         Painter.OnMouse(self, evt)
@@ -752,12 +750,12 @@ class wxMVCTree(wxScrolledWindow):
                  painter = None, *args, **kwargs):
         apply(wxScrolledWindow.__init__, (self, parent, id), kwargs)
         self.nodemap = {}
-        self._multiselect = false
+        self._multiselect = False
         self._selections = []
-        self._assumeChildren = false
-        self._scrollx = false
-        self._scrolly = false
-        self.doubleBuffered = false
+        self._assumeChildren = False
+        self._scrollx = False
+        self._scrolly = False
+        self.doubleBuffered = False
         self._lastPhysicalSize = self.GetSize()
         self._editors = []
         if not model:
@@ -773,10 +771,10 @@ class wxMVCTree(wxScrolledWindow):
         if not painter:
             painter = TreePainter(self)
         self.painter = painter
-        self.SetFont(wxFont(9, wxDEFAULT, wxNORMAL, wxNORMAL, false))
+        self.SetFont(wxFont(9, wxDEFAULT, wxNORMAL, wxNORMAL, False))
         EVT_MOUSE_EVENTS(self, self.OnMouse)
         EVT_KEY_DOWN(self, self.OnKeyDown)
-        self.doubleBuffered = true
+        self.doubleBuffered = True
         EVT_SIZE(self, self.OnSize)
         EVT_ERASE_BACKGROUND(self, self.OnEraseBackground)
         EVT_PAINT(self, self.OnPaint)
@@ -785,7 +783,7 @@ class wxMVCTree(wxScrolledWindow):
     def Refresh(self):
         if self.doubleBuffered:
             self.painter.ClearBuffer()
-        wxScrolledWindow.Refresh(self, false)
+        wxScrolledWindow.Refresh(self, False)
 
     def GetPainter(self):
         return self.painter
@@ -876,7 +874,7 @@ class wxMVCTree(wxScrolledWindow):
         self._selections = []
         self.layoutRoot = MVCTreeNode()
         self.layoutRoot.data = self.model.GetRoot()
-        self.layoutRoot.expanded = true
+        self.layoutRoot.expanded = True
         self.LoadChildren(self.layoutRoot)
         self.currentRoot = self.layoutRoot
         self.offset = [0,0]
@@ -897,7 +895,7 @@ class wxMVCTree(wxScrolledWindow):
                 layoutNode.Add(p)
                 p.data = self.GetModel().GetChildAt(layoutNode.data, i)
                 self.nodemap[p.data]=p
-            layoutNode.built = true
+            layoutNode.built = True
             if not self._assumeChildren:
                 for kid in layoutNode.kids:
                     self.LoadChildren(kid)
@@ -925,10 +923,10 @@ class wxMVCTree(wxScrolledWindow):
             return
         for node in nodeTuple:
             treenode = self.nodemap[node]
-            treenode.selected = true
+            treenode.selected = True
         for node in self._selections:
             treenode = self.nodemap[node]
-            node.selected = false
+            node.selected = False
         self._selections = list(nodeTuple)
         e = wxMVCTreeEvent(wxEVT_MVCTREE_SEL_CHANGED, self.GetId(), nodeTuple[0], nodes = nodeTuple)
         self.GetEventHandler().ProcessEvent(e)
@@ -964,9 +962,9 @@ class wxMVCTree(wxScrolledWindow):
         e = wxMVCTreeNotifyEvent(wxEVT_MVCTREE_END_EDIT, self.GetId(), node)
         self.GetEventHandler().ProcessEvent(e)
         if not e.notify.IsAllowed():
-            return false
+            return False
         self._currentEditor = None
-        return true
+        return True
 
 
     def SetExpanded(self, node, bool):
@@ -997,7 +995,7 @@ class wxMVCTree(wxScrolledWindow):
     def IsExpanded(self, node):
         return self.nodemap[node].expanded
 
-    def AddToSelection(self, nodeOrTuple, enableMulti = true, shiftMulti = false):
+    def AddToSelection(self, nodeOrTuple, enableMulti = True, shiftMulti = False):
         nodeTuple = nodeOrTuple
         if type(nodeOrTuple)!= type(()):
             nodeTuple = (nodeOrTuple,)
@@ -1009,13 +1007,13 @@ class wxMVCTree(wxScrolledWindow):
         if not (self.IsMultiSelect() and (enableMulti or shiftMulti)):
             for node in self._selections:
                 treenode = self.nodemap[node]
-                treenode.selected = false
+                treenode.selected = False
                 changeparents.append(treenode)
             node = nodeTuple[0]
             self._selections = [node]
             treenode = self.nodemap[node]
             changeparents.append(treenode)
-            treenode.selected = true
+            treenode.selected = True
         else:
             if shiftMulti:
                 for node in nodeTuple:
@@ -1026,11 +1024,11 @@ class wxMVCTree(wxScrolledWindow):
                         for kid in oldtreenode.parent.kids:
                             if kid == treenode or kid == oldtreenode:
                                 found = not found
-                                kid.selected = true
+                                kid.selected = True
                                 self._selections.append(kid.data)
                                 changeparents.append(kid)
                             elif found:
-                                kid.selected = true
+                                kid.selected = True
                                 self._selections.append(kid.data)
                                 changeparents.append(kid)
             else:
@@ -1040,7 +1038,7 @@ class wxMVCTree(wxScrolledWindow):
                     except ValueError:
                         self._selections.append(node)
                         treenode = self.nodemap[node]
-                        treenode.selected = true
+                        treenode.selected = True
                         changeparents.append(treenode)
         e = wxMVCTreeEvent(wxEVT_MVCTREE_SEL_CHANGED, self.GetId(), nodeTuple[0], nodes = nodeTuple)
         self.GetEventHandler().ProcessEvent(e)
@@ -1059,7 +1057,7 @@ class wxMVCTree(wxScrolledWindow):
             self._selections.remove(node)
             treenode = self.nodemap[node]
             changeparents.append(treenode)
-            treenode.selected = false
+            treenode.selected = False
         e = wxMVCTreeEvent(wxEVT_MVCTREE_SEL_CHANGED, self.GetId(), node, nodes = nodeTuple)
         self.GetEventHandler().ProcessEvent(e)
         dc = wxClientDC(self)
@@ -1103,14 +1101,14 @@ class wxMVCTree(wxScrolledWindow):
         to paint the control.
         """
         try:
-            self.EnableScrolling(false, false)
+            self.EnableScrolling(False, False)
             if not self.laidOut:
                 self.layout.Layout(self.currentRoot)
-                self.laidOut = true
-                self.transformed = false
+                self.laidOut = True
+                self.transformed = False
             if not self.transformed:
                 self.transform.Transform(self.currentRoot, self.offset, self.rotation)
-                self.transformed = true
+                self.transformed = True
             tsize = None
             tsize = list(self.transform.GetSize())
             tsize[0] = tsize[0] + 50

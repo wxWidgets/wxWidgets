@@ -206,7 +206,7 @@ void MainWindow::ScanBuffer(wxDC *dc, bool DrawIt, int *max_x, int *max_y)
     dc->SetFont(* NormalFont);
     long xx;
     long yy;
-    dc->GetTextExtent("X", &xx, &yy);
+    dc->GetTextExtent(_T("X"), &xx, &yy);
     char_height = (int)yy;
 
     if (current_page == 0)
@@ -844,9 +844,11 @@ int GetIndex()
 // Read preferences
 void ReadPreferences()
 {
+#if wxUSE_RESOURCES
   wxGetResource("wxPoem", "FontSize", &pointSize);
   wxGetResource("wxPoem", "X", &XPos);
   wxGetResource("wxPoem", "Y", &YPos);
+#endif
 }
 
 // Write preferences to disk
@@ -854,9 +856,11 @@ void WritePreferences()
 {
 #ifdef __WXMSW__
   TheMainWindow->GetPosition(&XPos, &YPos);
+#if wxUSE_RESOURCES
   wxWriteResource("wxPoem", "FontSize", pointSize);
   wxWriteResource("wxPoem", "X", XPos);
   wxWriteResource("wxPoem", "Y", YPos);
+#endif
 #endif
 }
 

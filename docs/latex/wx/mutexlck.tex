@@ -23,10 +23,10 @@ None.
 
 \membersection{wxMutexLocker::wxMutexLocker}\label{wxmutexlockerctor}
 
-\func{}{wxMutexLocker}{\param{wxMutex *}{mutex}}
+\func{}{wxMutexLocker}{\param{wxMutex\&}{ mutex}}
 
-Constructs a wxMutexLocker object associated with mutex which must be non-NULL
-and locks it. Call \helpref{IsLocked}{wxmutexlockerisok} to check if the mutex was
+Constructs a wxMutexLocker object associated with mutex and locks it.
+Call \helpref{IsLocked}{wxmutexlockerisok} to check if the mutex was
 successfully locked.
 
 \membersection{wxMutexLocker::\destruct{wxMutexLocker}}\label{wxmutexlockerdtor}

@@ -59,6 +59,9 @@ bool wxSlider95::Create(wxWindow *parent, wxWindowID id,
            const wxValidator& validator,
            const wxString& name)
 {
+    if ( (style & wxBORDER_MASK) == wxBORDER_DEFAULT )
+        style |= wxBORDER_NONE;
+
     SetName(name);
 #if wxUSE_VALIDATORS
     SetValidator(validator);
@@ -69,9 +72,9 @@ bool wxSlider95::Create(wxWindow *parent, wxWindowID id,
     SetBackgroundColour(parent->GetBackgroundColour()) ;
     SetForegroundColour(parent->GetForegroundColour()) ;
 
-    m_staticValue = (WXHWND) NULL;;
-    m_staticMin = (WXHWND) NULL;;
-    m_staticMax = (WXHWND) NULL;;
+    m_staticValue = (WXHWND) NULL;
+    m_staticMin = (WXHWND) NULL;
+    m_staticMax = (WXHWND) NULL;
     m_pageSize = 1;
     m_lineSize = 1;
     m_windowStyle = style;
@@ -90,15 +93,14 @@ bool wxSlider95::Create(wxWindow *parent, wxWindowID id,
     long msStyle = 0;
     long wstyle = 0;
 
-    if ( m_windowStyle & wxCLIP_SIBLINGS )
-        msStyle |= WS_CLIPSIBLINGS;
-
     if ( m_windowStyle & wxSL_LABELS )
     {
-        msStyle |= WS_CHILD | WS_VISIBLE | WS_BORDER | SS_CENTER;
+        msStyle |= SS_CENTER;
 
-        bool want3D;
-        WXDWORD exStyle = Determine3DEffects(WS_EX_CLIENTEDGE, &want3D) ;
+        WXDWORD exStyle = 0;
+        long valueStyle = m_windowStyle & ~wxBORDER_MASK;
+        valueStyle |= wxBORDER_SUNKEN;
+        msStyle |= MSWGetStyle(valueStyle, & exStyle) ;
 
         m_staticValue = (WXHWND) CreateWindowEx
             (
@@ -109,20 +111,23 @@ bool wxSlider95::Create(wxWindow *parent, wxWindowID id,
             );
 
         // Now create min static control
-        wxSprintf(wxBuffer, wxT("%d"), minValue);
+        wxString minLabel;
+        minLabel.Printf(wxT("%d"), minValue);
         wstyle = STATIC_FLAGS;
         if ( m_windowStyle & wxCLIP_SIBLINGS )
             msStyle |= WS_CLIPSIBLINGS;
         m_staticMin = (WXHWND) CreateWindowEx
             (
-                0, wxT("STATIC"), wxBuffer,
+                0, wxT("STATIC"), minLabel,
                 wstyle,
                 0, 0, 0, 0, (HWND) parent->GetHWND(), (HMENU)NewControlId(),
                 wxGetInstance(), NULL
             );
     }
 
-    msStyle = 0;
+    WXDWORD exStyle = 0;
+
+    msStyle = MSWGetStyle(GetWindowStyle(), & exStyle) ;    
 
     if ( m_windowStyle & wxCLIP_SIBLINGS )
         msStyle |= WS_CLIPSIBLINGS;
@@ -153,7 +158,7 @@ bool wxSlider95::Create(wxWindow *parent, wxWindowID id,
 
     HWND scroll_bar = CreateWindowEx
         (
-            MakeExtendedStyle(m_windowStyle), TRACKBAR_CLASS, wxBuffer,
+            exStyle, TRACKBAR_CLASS, wxT(""),
             msStyle,
             0, 0, 0, 0, (HWND) parent->GetHWND(), (HMENU)m_windowId,
             wxGetInstance(), NULL
@@ -179,7 +184,8 @@ bool wxSlider95::Create(wxWindow *parent, wxWindowID id,
     if ( m_windowStyle & wxSL_LABELS )
     {
         // Finally, create max value static item
-        wxSprintf(wxBuffer, wxT("%d"), maxValue);
+        wxString maxLabel;
+        maxLabel.Printf(wxT("%d"), maxValue);
         wstyle = STATIC_FLAGS;
 
         if ( m_windowStyle & wxCLIP_SIBLINGS )
@@ -187,7 +193,7 @@ bool wxSlider95::Create(wxWindow *parent, wxWindowID id,
 
         m_staticMax = (WXHWND) CreateWindowEx
             (
-                0, wxT("STATIC"), wxBuffer,
+                0, wxT("STATIC"), maxLabel,
                 wstyle,
                 0, 0, 0, 0, (HWND) parent->GetHWND(), (HMENU)NewControlId(),
                 wxGetInstance(), NULL
@@ -319,8 +325,9 @@ void wxSlider95::SetValue(int value)
 
     if (m_staticValue)
     {
-        wxSprintf(wxBuffer, wxT("%d"), value);
-        ::SetWindowText((HWND) m_staticValue, wxBuffer);
+        wxString str;
+        str.Printf(wxT("%d"), value);
+        ::SetWindowText((HWND) m_staticValue, str);
     }
 }
 

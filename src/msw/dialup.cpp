@@ -50,7 +50,7 @@ DEFINE_EVENT_TYPE(wxEVT_DIALUP_DISCONNECTED)
 
 // Doesn't yet compile under VC++ 4, BC++, Watcom C++,
 // Wine: no wininet.h
-#if !defined(__BORLANDC__) && \
+#if (!defined(__BORLANDC__) || (__BORLANDC__>=0x550)) && \
     (!defined(__GNUWIN32__) || wxCHECK_W32API_VERSION(0, 5)) && \
     !defined(__GNUWIN32_OLD__) && \
     !defined(__WATCOMC__) && \

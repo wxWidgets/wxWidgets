@@ -49,7 +49,7 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LIB32=link.exe -lib
 # ADD BASE LIB32 /nologo
-# ADD LIB32 /nologo
+# ADD LIB32 /nologo /out:"..\lib\wxuniv.lib"
 
 !ELSEIF  "$(CFG)" == "wxUniv - Win32 Debug"
 
@@ -218,11 +218,6 @@ SOURCE=.\common\encconv.cpp
 # Begin Source File
 
 SOURCE=.\common\event.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\common\extended.c
-# SUBTRACT CPP /YX /Yc /Yu
 # End Source File
 # Begin Source File
 
@@ -470,6 +465,10 @@ SOURCE=.\common\resource.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\common\rgncmn.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\common\sckaddr.cpp
 # End Source File
 # Begin Source File
@@ -554,11 +553,6 @@ SOURCE=.\common\txtstrm.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\common\unzip.c
-# SUBTRACT CPP /YX /Yc /Yu
-# End Source File
-# Begin Source File
-
 SOURCE=.\common\url.cpp
 # End Source File
 # Begin Source File
@@ -609,6 +603,18 @@ SOURCE=.\common\zipstrm.cpp
 
 SOURCE=.\common\zstream.cpp
 # End Source File
+
+# Begin Source File
+
+SOURCE=.\common\extended.c
+# SUBTRACT CPP /YX /Yc /Yu
+# End Source File
+# Begin Source File
+
+SOURCE=.\common\unzip.c
+# SUBTRACT CPP /YX /Yc /Yu
+# End Source File
+
 # End Group
 # Begin Group "Generic Files"
 
@@ -644,10 +650,6 @@ SOURCE=.\generic\dcpsg.cpp
 # Begin Source File
 
 SOURCE=.\generic\dirctrlg.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\generic\dirdlgg.cpp
 # End Source File
 # Begin Source File
 
@@ -793,6 +795,7 @@ SOURCE=.\generic\treelay.cpp
 
 SOURCE=.\generic\wizard.cpp
 # End Source File
+
 # End Group
 # Begin Group "wxHTML Files"
 
@@ -863,10 +866,6 @@ SOURCE=.\html\m_list.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\html\m_meta.cpp
-# End Source File
-# Begin Source File
-
 SOURCE=.\html\m_pre.cpp
 # End Source File
 # Begin Source File
@@ -881,13 +880,23 @@ SOURCE=.\html\m_tables.cpp
 
 SOURCE=.\html\winpars.cpp
 # End Source File
+
 # End Group
 # Begin Group "MSW Files"
 
 # PROP Default_Filter ""
 # Begin Source File
 
+SOURCE=.\msw\dummy.cpp
+# ADD CPP /Yc"wx/wxprec.h"
+# End Source File
+# Begin Source File
+
 SOURCE=.\msw\app.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\msw\ole\automtn.cpp
 # End Source File
 # Begin Source File
 
@@ -919,6 +928,10 @@ SOURCE=.\msw\data.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\msw\ole\dataobj.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\msw\dc.cpp
 # End Source File
 # Begin Source File
@@ -943,6 +956,10 @@ SOURCE=.\msw\dde.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\msw\dialup.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\msw\dib.cpp
 # End Source File
 # Begin Source File
@@ -951,8 +968,19 @@ SOURCE=.\msw\dir.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\msw\dummy.cpp
-# ADD CPP /Yc"wx/wxprec.h"
+SOURCE=.\msw\dirdlg.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\msw\ole\dropsrc.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\msw\ole\droptgt.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\msw\enhmeta.cpp
 # End Source File
 # Begin Source File
 
@@ -980,17 +1008,27 @@ SOURCE=.\msw\gdiobj.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\msw\gsocket.c
-# SUBTRACT CPP /YX /Yc /Yu
+SOURCE=.\msw\glcanvas.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\msw\gsockmsw.c
-# SUBTRACT CPP /YX /Yc /Yu
+SOURCE=.\msw\helpbest.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\msw\helpchm.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\msw\helpwin.cpp
 # End Source File
 # Begin Source File
 
 SOURCE=.\msw\icon.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\msw\joystick.cpp
 # End Source File
 # Begin Source File
 
@@ -999,6 +1037,10 @@ SOURCE=.\msw\main.cpp
 # Begin Source File
 
 SOURCE=.\msw\mimetype.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\msw\ole\oleutils.cpp
 # End Source File
 # Begin Source File
 
@@ -1034,11 +1076,19 @@ SOURCE=.\msw\snglinst.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\msw\taskbar.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\msw\thread.cpp
 # End Source File
 # Begin Source File
 
 SOURCE=.\msw\timer.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\msw\tooltip.cpp
 # End Source File
 # Begin Source File
 
@@ -1054,32 +1104,36 @@ SOURCE=.\msw\utilsexc.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\msw\ole\uuid.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\msw\volume.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\msw\wave.cpp
 # End Source File
 # Begin Source File
 
 SOURCE=.\msw\window.cpp
 # End Source File
+
+# Begin Source File
+
+SOURCE=.\msw\gsocket.c
+# SUBTRACT CPP /YX /Yc /Yu
+# End Source File
+# Begin Source File
+
+SOURCE=.\msw\gsockmsw.c
+# SUBTRACT CPP /YX /Yc /Yu
+# End Source File
+
 # End Group
 # Begin Group "Universal Files"
 
 # PROP Default_Filter ""
-# Begin Group "Theme Files"
-
-# PROP Default_Filter ""
-# Begin Source File
-
-SOURCE=.\univ\themes\gtk.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\univ\themes\metal.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\univ\themes\win32.cpp
-# End Source File
-# End Group
 # Begin Source File
 
 SOURCE=.\univ\bmpbuttn.cpp
@@ -1216,6 +1270,24 @@ SOURCE=.\univ\topluniv.cpp
 
 SOURCE=.\univ\winuniv.cpp
 # End Source File
+
+# Begin Group "Theme Files"
+
+# PROP Default_Filter ""
+# Begin Source File
+
+SOURCE=.\univ\themes\gtk.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\univ\themes\metal.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\univ\themes\win32.cpp
+# End Source File
+
+# End Group
 # End Group
 # Begin Group "Headers"
 
@@ -1226,9 +1298,7 @@ SOURCE=.\univ\winuniv.cpp
 # Begin Source File
 
 SOURCE=..\include\wx\univ\setup.h
-
 !IF  "$(CFG)" == "wxUniv - Win32 Release"
-
 # Begin Custom Build - Creating lib\univ\wx\setup.h from $(InputPath)
 InputPath=..\include\wx\univ\setup.h
 
@@ -1236,9 +1306,7 @@ InputPath=..\include\wx\univ\setup.h
 	copy "$(InputPath)" ..\lib\univ\wx\setup.h
 
 # End Custom Build
-
 !ELSEIF  "$(CFG)" == "wxUniv - Win32 Debug"
-
 # Begin Custom Build - Creating lib\univd\wx\setup.h from $(InputPath)
 InputPath=..\include\wx\univ\setup.h
 
@@ -1246,9 +1314,7 @@ InputPath=..\include\wx\univ\setup.h
 	copy "$(InputPath)" ..\lib\univd\wx\setup.h
 
 # End Custom Build
-
 !ENDIF 
-
 # End Source File
 # End Group
 # Begin Group "Common"
@@ -1896,6 +1962,10 @@ SOURCE=..\include\wx\proplist.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\include\wx\quantize.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\include\wx\radiobox.h
 # End Source File
 # Begin Source File
@@ -2202,6 +2272,7 @@ SOURCE=..\include\wx\zipstrm.h
 
 SOURCE=..\include\wx\zstream.h
 # End Source File
+
 # End Group
 # Begin Group "MSW"
 
@@ -2292,6 +2363,10 @@ SOURCE=..\include\wx\generic\listctrl.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\include\wx\generic\mdig.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\include\wx\generic\msgdlgg.h
 # End Source File
 # Begin Source File
@@ -2366,6 +2441,7 @@ SOURCE=..\include\wx\generic\treectlg.h
 
 SOURCE=..\include\wx\generic\wizard.h
 # End Source File
+
 # End Group
 # Begin Group "HTML"
 
@@ -2422,6 +2498,7 @@ SOURCE=..\include\wx\html\m_templ.h
 
 SOURCE=..\include\wx\html\winpars.h
 # End Source File
+
 # End Group
 # Begin Group "Universal"
 

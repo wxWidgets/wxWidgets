@@ -1,0 +1,63 @@
+#!/bin/bash
+
+#----------------------------------------------------------------------
+
+if [ -z $1 ]; then
+    echo "Please specify a version number on the command line."
+    exit 1
+fi
+
+if [ ! -d wxPython ]; then  # TODO: make this test more robust
+    echo "Please run this script from the root wxPython directory."
+    exit 1
+fi
+
+
+# **** Make a directory to build up a distribution tree
+
+DEST=wxPython-$1/docs
+
+mkdir -p _build_docs/$DEST
+cd _build_docs
+mkdir $DEST/wx
+mkdir $DEST/ogl
+
+WXDIR=../..
+
+# **** Build the docs using tex2rtf
+cp $WXDIR/docs/latex/wx/*.gif $DEST/wx
+$WXDIR/utils/tex2rtf/src/tex2rtf $WXDIR/docs/latex/wx/manual.tex $DEST/wx/wx.htm -twice -html
+cp $DEST/wx/wx.htm $DEST/wx/index.htm
+
+cp $WXDIR/contrib/docs/latex/ogl/*.gif $DEST/ogl
+cp $WXDIR/contrib/docs/latex/ogl/*.bmp $DEST/ogl
+$WXDIR/utils/tex2rtf/src/tex2rtf $WXDIR/contrib/docs/latex/ogl/ogl.tex $DEST/ogl/ogl.htm -twice -html
+cp $DEST/ogl/ogl.htm $DEST/ogl/index.htm
+
+
+# **** zip the docs into "books"
+pushd $DEST
+pushd wx
+zip ../wx.zip *
+popd
+rm -r wx
+
+pushd ogl
+zip ../ogl.zip *
+popd
+rm -r ogl
+
+popd
+cp ../distrib/viewdocs.py $DEST
+cp ../distrib/README.viewdocs.txt $DEST/README.txt
+
+rm -f ../dist/wxPythonDocs-$1.tar.gz
+tar cvf ../dist/wxPythonDocs-$1.tar $DEST
+gzip -9 ../dist/wxPythonDocs-$1.tar
+
+
+# **** Cleanup
+cd ..
+rm -r _build_docs
+
+

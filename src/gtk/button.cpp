@@ -175,7 +175,12 @@ void wxButton::SetLabel( const wxString &label )
 
     wxControl::SetLabel( label );
 
+#ifdef __WXGTK20__
+    wxString label2 = PrepareLabelMnemonics( label );
+    gtk_label_set_text_with_mnemonic( GTK_LABEL( BUTTON_CHILD(m_widget) ), wxGTK_CONV( label2 ) );
+#else
     gtk_label_set( GTK_LABEL( BUTTON_CHILD(m_widget) ), wxGTK_CONV( GetLabel() ) );
+#endif
 }
 
 bool wxButton::Enable( bool enable )
@@ -186,6 +191,15 @@ bool wxButton::Enable( bool enable )
     gtk_widget_set_sensitive( BUTTON_CHILD(m_widget), enable );
 
     return TRUE;
+}
+
+bool wxButton::IsOwnGtkWindow( GdkWindow *window )
+{
+#ifdef __WXGTK20__
+    return GTK_BUTTON(m_widget)->event_window;
+#else
+    return (window == m_widget->window);
+#endif
 }
 
 void wxButton::ApplyWidgetStyle()

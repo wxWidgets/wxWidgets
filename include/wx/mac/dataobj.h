@@ -20,7 +20,7 @@
 // wxDataObject is the same as wxDataObjectBase under wxGTK
 // ----------------------------------------------------------------------------
 
-class wxDataObject : public wxDataObjectBase
+class WXDLLEXPORT wxDataObject : public wxDataObjectBase
 {
 public:
     wxDataObject();

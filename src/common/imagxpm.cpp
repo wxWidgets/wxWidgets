@@ -107,6 +107,19 @@ bool wxXPMHandler::LoadFile(wxImage *image,
     return TRUE;
 }
 
+
+static char hexArray[] = "0123456789ABCDEF";
+
+static void DecToHex(int dec, char *buf)
+{
+    int firstDigit = (int)(dec/16.0);
+    int secondDigit = (int)(dec - (firstDigit*16.0));
+    buf[0] = hexArray[firstDigit];
+    buf[1] = hexArray[secondDigit];
+    buf[2] = 0;
+}
+
+
 bool wxXPMHandler::SaveFile(wxImage * image,
                             wxOutputStream& stream, bool WXUNUSED(verbose))
 {
@@ -140,7 +153,7 @@ bool wxXPMHandler::SaveFile(wxImage * image,
         sName = wxString(wxT("/* XPM */\nstatic char *")) + sName;
     else 
         sName = wxT("/* XPM */\nstatic char *xpm_data");
-    stream.Write(sName.c_str(), sName.Len());
+    stream.Write( (const char*) sName.ToAscii(), sName.Len() );
 
     char tmpbuf[200];
     // VS: 200b is safe upper bound for anything produced by sprintf below
@@ -185,19 +198,24 @@ bool wxXPMHandler::SaveFile(wxImage * image,
         unsigned long key = entry->first;
 
         if (key == 0)
-            tmp.Printf(wxT("\"%s c Black\",\n"), sym);
+            sprintf( tmpbuf, "\"%s c Black\",\n", sym);
         else if (key == mask_key)
-            tmp.Printf(wxT("\"%s c None\",\n"), sym);
+            sprintf( tmpbuf, "\"%s c None\",\n", sym);
         else
-            tmp.Printf(wxT("\"%s c #%s%s%s\",\n"), sym,
-                       wxDecToHex((unsigned char)(key >> 16)).c_str(),
-                       wxDecToHex((unsigned char)(key >> 8)).c_str(),
-                       wxDecToHex((unsigned char)(key)).c_str());
-        stream.Write(tmp.mb_str(), tmp.Length());
+        {
+            char rbuf[3];
+            DecToHex( (unsigned char)(key >> 16), rbuf );
+            char gbuf[3];
+            DecToHex( (unsigned char)(key >> 8), gbuf );
+            char bbuf[3];
+            DecToHex( (unsigned char)(key), bbuf );
+            sprintf( tmpbuf, "\"%s c #%s%s%s\",\n", sym, rbuf, gbuf, bbuf );
+        }
+        stream.Write( tmpbuf, strlen(tmpbuf) );
     }
 
     tmp = wxT("/* pixels */\n");
-    stream.Write(tmp.mb_str(), tmp.Length());
+    stream.Write( (const char*) tmp.ToAscii(), tmp.Length() );
 
     unsigned char *data = image->GetData();
     for (j = 0; j < image->GetHeight(); j++)
@@ -216,7 +234,7 @@ bool wxXPMHandler::SaveFile(wxImage * image,
         tmp_c = '\n'; stream.Write(&tmp_c, 1);
     }
     tmp = wxT("};\n");
-    stream.Write(tmp.mb_str(), 3);
+    stream.Write( (const char*) tmp.ToAscii(), 3 );
 
     // Clean up:
     delete[] symbols;

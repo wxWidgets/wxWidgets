@@ -193,9 +193,31 @@ int wxChoice::FindString(const wxString& s) const
 
 void wxChoice::SetString(int n, const wxString& s)
 {
-    wxCHECK_RET( (n>=0)&&(n<GetCount()), wxT("invalid item index in wxChoice::SetString") );
-    SendMessage(GetHwnd(), CB_DELETESTRING, n, 0);
-    SendMessage(GetHwnd(), CB_INSERTSTRING, n, (LONG)s.c_str() );
+    wxCHECK_RET( n >= 0 && n < GetCount(),
+                 wxT("invalid item index in wxChoice::SetString") );
+
+    // we have to delete and add back the string as there is no way to change a
+    // string in place
+
+    // we need to preserve the client data
+    void *data;
+    if ( m_clientDataItemsType != wxClientData_None )
+    {
+        data = DoGetItemClientData(n);
+    }
+    else // no client data
+    {
+        data = NULL;
+    }
+
+    ::SendMessage(GetHwnd(), CB_DELETESTRING, n, 0);
+    ::SendMessage(GetHwnd(), CB_INSERTSTRING, n, (LPARAM)s.c_str() );
+
+    if ( data )
+    {
+        DoSetItemClientData(n, data);
+    }
+    //else: it's already NULL by default
 }
 
 wxString wxChoice::GetString(int n) const
@@ -228,7 +250,8 @@ wxString wxChoice::GetString(int n) const
 
 void wxChoice::DoSetItemClientData( int n, void* clientData )
 {
-    if ( SendMessage(GetHwnd(), CB_SETITEMDATA, n, (LPARAM)clientData) == CB_ERR )
+    if ( ::SendMessage(GetHwnd(), CB_SETITEMDATA,
+                       n, (LPARAM)clientData) == CB_ERR )
     {
         wxLogLastError(wxT("CB_SETITEMDATA"));
     }

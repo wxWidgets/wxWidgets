@@ -60,7 +60,7 @@ MicroWindows:
 
 wxMicroWindows:
 
-- Download wxMSW 2.3.3 or greater, or get it from CVS
+- Download wxMSW 2.3.4 or greater, or get it from CVS
 
 - Copy include/wx/msw/setup_microwin.h to include/wx/setup.h if
   include/wx/setup.h doesn't exist

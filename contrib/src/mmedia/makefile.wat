@@ -6,15 +6,33 @@
 #
 # Makefile : Builds MMedia library for Watcom C++, WIN32
 
-WXDIR = $(%WXWIN)
+!error This will not work - there is no digitalv.h in Open Watcom as of 26 Feb 03 
 
-LIBTARGET=$(WXDIR)\contrib\lib\mmedia.lib
+WXDIR = ..\..\..
+EXTRACPPFLAGS = -I$(WXDIR)\contrib\include
 
-OBJECTS = cdbase.obj cdwin.obj g711.obj g721.obj g723_24.obj &
-  g723_40.obj g72x.obj sndaiff.obj sndbase.obj sndcodec.obj &
-  sndcpcm.obj sndfile.obj sndg72x.obj sndpcm.obj sndulaw.obj &
-  sndwav.obj sndwin.obj vidbase.obj vidwin.obj
+LIBTARGET=$(WXDIR)\lib\mmedia_w.lib
+
+OBJECTS = &
+    $(OUTPUTDIR)\cdbase.obj &
+    $(OUTPUTDIR)\cdwin.obj &
+    $(OUTPUTDIR)\g711.obj &
+    $(OUTPUTDIR)\g721.obj &
+    $(OUTPUTDIR)\g723_24.obj &
+    $(OUTPUTDIR)\g723_40.obj &
+    $(OUTPUTDIR)\g72x.obj &
+    $(OUTPUTDIR)\sndaiff.obj &
+    $(OUTPUTDIR)\sndbase.obj &
+    $(OUTPUTDIR)\sndcodec.obj &
+    $(OUTPUTDIR)\sndcpcm.obj &
+    $(OUTPUTDIR)\sndfile.obj &
+    $(OUTPUTDIR)\sndg72x.obj &
+    $(OUTPUTDIR)\sndpcm.obj &
+    $(OUTPUTDIR)\sndulaw.obj &
+    $(OUTPUTDIR)\sndwav.obj &
+    $(OUTPUTDIR)\sndwin.obj &
+    $(OUTPUTDIR)\vidbase.obj &
+    $(OUTPUTDIR)\vidwin.obj
 
 !include $(WXDIR)\src\makelib.wat
-
 

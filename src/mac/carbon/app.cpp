@@ -73,6 +73,8 @@ extern wxList wxPendingDelete;
 extern wxList *wxWinMacWindowList;
 extern wxList *wxWinMacControlList;
 
+static long sleepTime = 0 ;
+
 wxApp *wxTheApp = NULL;
 
 #if !USE_SHARED_LIBRARY
@@ -99,14 +101,17 @@ long      wxApp::s_lastModifiers = 0 ;
 
 
 bool      wxApp::s_macDefaultEncodingIsPC = true ;
-bool      wxApp::s_macSupportPCMenuShortcuts = true ;
+bool      wxApp::s_macSupportPCMenuShortcuts = false ;
 long      wxApp::s_macAboutMenuItemId = wxID_ABOUT ;
+long      wxApp::s_macPreferencesMenuItemId = 0 ;
+long      wxApp::s_macExitMenuItemId = wxID_EXIT ;
 wxString  wxApp::s_macHelpMenuTitleName = "&Help" ;
 
 pascal OSErr AEHandleODoc( const AppleEvent *event , AppleEvent *reply , long refcon ) ;
 pascal OSErr AEHandleOApp( const AppleEvent *event , AppleEvent *reply , long refcon ) ;
 pascal OSErr AEHandlePDoc( const AppleEvent *event , AppleEvent *reply , long refcon ) ;
 pascal OSErr AEHandleQuit( const AppleEvent *event , AppleEvent *reply , long refcon ) ;
+pascal OSErr AEHandlePreferences( const AppleEvent *event , AppleEvent *reply , long refcon ) ;
 
 
 pascal OSErr AEHandleODoc( const AppleEvent *event , AppleEvent *reply , long WXUNUSED(refcon) )
@@ -131,6 +136,22 @@ pascal OSErr AEHandleQuit( const AppleEvent *event , AppleEvent *reply , long WX
 {
     // GD: UNUSED wxApp* app = (wxApp*) refcon ;
     return wxTheApp->MacHandleAEQuit( (AppleEvent*) event , reply) ;
+}
+
+pascal OSErr AEHandlePreferences( const AppleEvent *event , AppleEvent *reply , long WXUNUSED(refcon) )
+{
+    // GD: UNUSED wxApp* app = (wxApp*) refcon ;
+
+    wxMenuBar* mbar = wxMenuBar::MacGetInstalledMenuBar() ;
+    wxMenu* menu = NULL ;
+    wxMenuItem* item = NULL ;
+    if ( mbar )
+    {
+        item = mbar->FindItem( wxApp::s_macPreferencesMenuItemId , &menu ) ;
+    }
+    if ( item != NULL && menu != NULL && mbar != NULL )
+		menu->SendEvent( wxApp::s_macPreferencesMenuItemId ,  -1 ) ;
+	return noErr ;
 }
 
 // new virtual public method in wxApp
@@ -161,16 +182,16 @@ short wxApp::MacHandleAEODoc(const WXEVENTREF event, WXEVENTREF WXUNUSED(reply))
     err = AEGetParamDesc((AppleEvent *)event, keyDirectObject, typeAEList,&docList);
     if (err != noErr)
         return err;
-    
+
     err = AECountItems(&docList, &itemsInList);
     if (err != noErr)
         return err;
-    
+
     ProcessSerialNumber PSN ;
     PSN.highLongOfPSN = 0 ;
     PSN.lowLongOfPSN = kCurrentProcess ;
     SetFrontProcess( &PSN ) ;
-    
+
     for (i = 1; i <= itemsInList; i++) {
         AEGetNthPtr(&docList, i, typeFSS, &keywd, &returnedType,
         (Ptr) & theSpec, sizeof(theSpec), &actualSize);
@@ -193,16 +214,16 @@ short wxApp::MacHandleAEPDoc(const WXEVENTREF event , WXEVENTREF WXUNUSED(reply)
     err = AEGetParamDesc((AppleEvent *)event, keyDirectObject, typeAEList,&docList);
     if (err != noErr)
         return err;
-    
+
     err = AECountItems(&docList, &itemsInList);
     if (err != noErr)
         return err;
-    
+
     ProcessSerialNumber PSN ;
     PSN.highLongOfPSN = 0 ;
     PSN.lowLongOfPSN = kCurrentProcess ;
     SetFrontProcess( &PSN ) ;
-    
+
     for (i = 1; i <= itemsInList; i++) {
         AEGetNthPtr(&docList, i, typeFSS, &keywd, &returnedType,
         (Ptr) & theSpec, sizeof(theSpec), &actualSize);
@@ -253,10 +274,21 @@ void wxMacConvertFromPC( const char *from , char *to , int len )
     {
         for( int i = 0 ; i < len ; ++ i )
         {
-            c = strchr( StringANSI , *from ) ;
-            if ( c != NULL )
+            if ( *from & 0x80 )
             {
-                *to = StringMac[ c - StringANSI] ;
+                c = strchr( StringANSI , *from ) ;
+                if ( c != NULL )
+                {
+                    *to = StringMac[ c - StringANSI] ;
+                }
+            }
+            else if ( *from == 0x0a )
+            {
+                *to = 0x0d ;
+            }
+            else
+            {
+                *to = *from ;
             }
             ++to ;
             ++from ;
@@ -266,10 +298,21 @@ void wxMacConvertFromPC( const char *from , char *to , int len )
     {
         for( int i = 0 ; i < len ; ++ i )
         {
-            c = strchr( StringANSI , *from ) ;
-            if ( c != NULL )
+            if ( *from & 0x80 )
             {
-                *to = StringMac[ c - StringANSI] ;
+                c = strchr( StringANSI , *from ) ;
+                if ( c != NULL )
+                {
+                    *to = StringMac[ c - StringANSI] ;
+                }
+                else
+                {
+                    *to = *from ;
+                }
+            }
+            else if ( *from == 0x0a )
+            {
+                *to = 0x0d ;
             }
             else
             {
@@ -657,9 +700,12 @@ void wxApp::CleanUp()
         delete wxWinMacControlList ;
     }
     delete wxPendingEvents;
+    wxPendingEvents = NULL;
 
 #if wxUSE_THREADS
     delete wxPendingEventsLocker;
+    // There is still more cleanup code that will try to use this if not NULL.
+    wxPendingEventsLocker = NULL;
     // If we don't do the following, we get an apparent memory leak.
     ((wxEvtHandler&) wxDefaultValidator).ClearEventLocker();
 #endif
@@ -788,6 +834,9 @@ void wxStAppResource::OpenSharedLibraryResource(const void *initBlock)
             theModule = NSModuleForSymbol(theSymbol);
             theLibPath = NSLibraryNameForModule(theModule);
 
+            wxLogDebug( wxT("wxMac library installation name is '%s'"),
+                        theLibPath );
+
             // allocate copy to replace .dylib.* extension with .rsrc
             theResPath = strdup(theLibPath);
             if (theResPath != NULL) {
@@ -801,7 +850,8 @@ void wxStAppResource::OpenSharedLibraryResource(const void *initBlock)
                 // overwrite extension with ".rsrc"
                 strcpy(theExt, ".rsrc");
 
-                wxLogDebug( theResPath );
+                wxLogDebug( wxT("wxMac resources file name is '%s'"),
+                            theResPath );
 
                 theErr = FSPathMakeRef((UInt8 *) theResPath, &theResRef, false);
                 if (theErr != noErr) {
@@ -809,14 +859,18 @@ void wxStAppResource::OpenSharedLibraryResource(const void *initBlock)
                     theErr = FSPathMakeRef((UInt8 *) theName, &theResRef, false);
                 }
 
-                // free duplicated resource file path
-                free(theResPath);
-
                 // open the resource file
                 if (theErr == noErr) {
                     theErr = FSOpenResourceFile( &theResRef, 0, NULL, fsRdPerm,
                                                  &gSharedLibraryResource);
                 }
+                if (theErr != noErr) {
+                    wxLogDebug( wxT("unable to open wxMac resource file '%s'"),
+                                theResPath );
+                }
+
+                // free duplicated resource file path
+                free(theResPath);
             }
         }
 #endif /* __DARWIN__ */
@@ -923,10 +977,7 @@ int wxEntry( int argc, char *argv[] , bool enterLoop )
     // application (otherwise applications would need to handle it)
 
     if (argc > 1) {
-        char theArg[6] = "";
-        strncpy(theArg, argv[1], 5);
-
-        if (strcmp(theArg, "-psn_") == 0) {
+        if (strncmp(argv[1], "-psn_", 5) == 0) {
             // assume the argument is always the only one and remove it
             --argc;
         }
@@ -1147,6 +1198,18 @@ int wxApp::MainLoop()
 {
   m_keepGoing = TRUE;
 
+#if TARGET_CARBON
+	if ( UMAGetSystemVersion() >= 0x1000 )
+	{
+		if ( s_macPreferencesMenuItemId )
+		{
+			EnableMenuCommand( NULL , kHICommandPreferences ) ;
+		    AEInstallEventHandler( kCoreEventClass , kAEShowPreferences ,
+		                           NewAEEventHandlerUPP(AEHandlePreferences) ,
+		                           (long) wxTheApp , FALSE ) ;
+		}
+	}
+#endif
   while (m_keepGoing)
   {
         MacDoOneEvent() ;
@@ -1334,16 +1397,19 @@ bool wxApp::Yield(bool onlyIfNeeded)
 #endif
     EventRecord event ;
 
-    long sleepTime = 1 ; //::GetCaretTime();
+	// having a larger value here leads to large performance slowdowns
+	// so we cannot give background apps more processor time here
+	// we do so however having a large sleep value in the main event loop
+    sleepTime = 0 ;
 
-    while ( !wxTheApp->IsExiting() && WaitNextEvent(everyEvent, &event,sleepTime, (RgnHandle) wxApp::s_macCursorRgn))
+    while ( !IsExiting() && WaitNextEvent(everyEvent, &event,sleepTime, (RgnHandle) wxApp::s_macCursorRgn))
     {
-        wxTheApp->MacHandleModifierEvents( &event ) ;
-        wxTheApp->MacHandleOneEvent( &event );
+        MacHandleModifierEvents( &event ) ;
+        MacHandleOneEvent( &event );
         if ( event.what != kHighLevelEvent )
             SetRectRgn( (RgnHandle) wxApp::s_macCursorRgn , event.where.h , event.where.v ,  event.where.h + 1 , event.where.v + 1 ) ;
     }
-    wxTheApp->MacHandleModifierEvents( &event ) ;
+   MacHandleModifierEvents( &event ) ;
 
     wxMacProcessNotifierAndPendingEvents() ;
 
@@ -1362,7 +1428,12 @@ void wxApp::MacSuspend( bool convertClipboard )
     while (node)
     {
         wxTopLevelWindow* win = (wxTopLevelWindow*) node->Data();
-        win->MacActivate( MacGetCurrentEvent() , false ) ;
+#if TARGET_CARBON
+#if 0 // we've got some problem with that style right now
+        if (!win->HasFlag(wxSTAY_ON_TOP))
+#endif
+#endif
+            win->MacActivate( MacGetCurrentEvent() , false ) ;
 
         node = node->Next();
     }
@@ -1412,12 +1483,11 @@ void wxApp::MacDoOneEvent()
 {
   EventRecord event ;
 
-    long sleepTime = 1; // GetCaretTime() / 4 ;
-
     if (WaitNextEvent(everyEvent, &event, sleepTime, (RgnHandle) s_macCursorRgn))
     {
         MacHandleModifierEvents( &event ) ;
         MacHandleOneEvent( &event );
+        sleepTime = 0 ;
     }
     else
     {
@@ -1427,7 +1497,10 @@ void wxApp::MacDoOneEvent()
         if ( window )
             ::IdleControls( window ) ;
 
-        wxTheApp->ProcessIdle() ;
+        if ( wxTheApp->ProcessIdle() )
+        	sleepTime = 0 ;
+        else
+        	sleepTime = GetCaretTime() / 2 ;
     }
     if ( event.what != kHighLevelEvent )
         SetRectRgn( (RgnHandle) s_macCursorRgn , event.where.h , event.where.v ,  event.where.h + 1 , event.where.v + 1 ) ;
@@ -1443,7 +1516,9 @@ void wxApp::MacHandleModifierEvents( WXEVENTREF evr )
     EventRecord* ev = (EventRecord*) evr ;
 #if TARGET_CARBON
     if ( ev->what == mouseDown || ev->what == mouseUp || ev->what == activateEvt ||
-        ev->what == keyDown || ev->what == autoKey || ev->what == keyUp || ev->what == nullEvent )
+        ev->what == keyDown || ev->what == autoKey || ev->what == keyUp || ev->what == kHighLevelEvent ||
+        ev->what == nullEvent
+        )
     {
         // in these cases the modifiers are already correctly setup by carbon
     }
@@ -1453,7 +1528,7 @@ void wxApp::MacHandleModifierEvents( WXEVENTREF evr )
         WaitNextEvent( 0 , &nev , 0 , NULL ) ;
         ev->modifiers = nev.modifiers ;
         // KeyModifiers unfortunately don't include btnState...
-//        ev->modifiers = GetCurrentKeyModifiers() ; 
+//        ev->modifiers = GetCurrentKeyModifiers() ;
     }
 #endif
     if ( ev->modifiers != s_lastModifiers && wxWindow::FindFocus() != NULL )
@@ -1628,23 +1703,28 @@ void wxApp::MacHandleMouseDownEvent( WXEVENTREF evr )
             break;
         case inGrow:
           {
-                int growResult = GrowWindow(window , ev->where, &screenBits.bounds);
-                if (growResult != 0)
+                Rect newContentRect ;
+                Rect constraintRect ;
+                constraintRect.top = win->GetMinHeight() ;
+                if ( constraintRect.top == -1 )
+                    constraintRect.top  = 0 ;
+                constraintRect.left = win->GetMinWidth() ;
+                if ( constraintRect.left == -1 )
+                    constraintRect.left  = 0 ;
+                constraintRect.right = win->GetMaxWidth() ;
+                if ( constraintRect.right == -1 )
+                    constraintRect.right  = 32000 ;
+                constraintRect.bottom = win->GetMaxHeight() ;
+                if ( constraintRect.bottom == -1 )
+                    constraintRect.bottom = 32000 ;
+
+                Boolean growResult = ResizeWindow( window , ev->where ,
+                    &constraintRect , &newContentRect ) ;
+                if ( growResult )
                 {
-                    int newWidth = LoWord(growResult);
-                    int newHeight = HiWord(growResult);
-                    int oldWidth, oldHeight;
-
-
-                    if (win)
-                    {
-                        win->GetSize(&oldWidth, &oldHeight);
-                        if (newWidth == 0)
-                            newWidth = oldWidth;
-                        if (newHeight == 0)
-                            newHeight = oldHeight;
-                        win->SetSize( -1, -1 , newWidth, newHeight, wxSIZE_USE_EXISTING);
-                    }
+                    win->SetSize( newContentRect.left , newContentRect.top ,
+                        newContentRect.right - newContentRect.left ,
+                        newContentRect.bottom - newContentRect.top, wxSIZE_USE_EXISTING);
                 }
                 s_lastMouseDown = 0;
           }
@@ -1682,30 +1762,31 @@ void wxApp::MacHandleMouseDownEvent( WXEVENTREF evr )
                     GrafPtr port ;
                     GetPort( &port ) ;
                     SetPortWindowPort(window) ;
+
+	                if ( window != frontWindow && wxTheApp->s_captureWindow == NULL )
+	                {
+	                    if ( s_macIsInModalLoop )
+	                    {
+	                        SysBeep ( 30 ) ;
+	                    }
+	                    else if ( UMAIsWindowFloating( window ) )
+	                    {
+	                        if ( win )
+	                            win->MacMouseDown( ev , windowPart ) ;
+	                    }
+	                    else
+	                    {
+	                        if ( win )
+	                            win->MacMouseDown( ev , windowPart ) ;
+	                        ::SelectWindow( window ) ;
+	                    }
+	                }
+	                else
+	                {
+	                    if ( win )
+	                        win->MacMouseDown( ev , windowPart ) ;
+	                }
                     SetPort( port ) ;
-                }
-                if ( window != frontWindow && wxTheApp->s_captureWindow == NULL )
-                {
-                    if ( s_macIsInModalLoop )
-                    {
-                        SysBeep ( 30 ) ;
-                    }
-                    else if ( UMAIsWindowFloating( window ) )
-                    {
-                        if ( win )
-                            win->MacMouseDown( ev , windowPart ) ;
-                    }
-                    else
-                    {
-                        if ( win )
-                            win->MacMouseDown( ev , windowPart ) ;
-                        ::SelectWindow( window ) ;
-                    }
-                }
-                else
-                {
-                    if ( win )
-                        win->MacMouseDown( ev , windowPart ) ;
                 }
             break ;
 
@@ -1869,7 +1950,7 @@ void wxApp::MacHandleKeyDownEvent( WXEVENTREF evr )
     else
     {
          wxWindow* focus = wxWindow::FindFocus() ;
- 
+
         if ( MacSendKeyDownEvent( focus , ev->message , ev->modifiers , ev->when , ev->where.h , ev->where.v ) == false )
         {
             // has not been handled -> perform default
@@ -1890,12 +1971,12 @@ bool wxApp::MacSendKeyDownEvent( wxWindow* focus , long keymessage , long modifi
 {
     if ( !focus )
         return false ;
-        
+
     short keycode ;
     short keychar ;
     keychar = short(keymessage & charCodeMask);
     keycode = short(keymessage & keyCodeMask) >> 8 ;
-    
+
     if ( modifiers & ( controlKey|shiftKey|optionKey ) )
     {
         // control interferes with some built-in keys like pgdown, return etc. therefore we remove the controlKey modifier
@@ -1913,7 +1994,7 @@ bool wxApp::MacSendKeyDownEvent( wxWindow* focus , long keymessage , long modifi
 		realkeyval = short(keymessage & charCodeMask) ;
 		keyval = wxToupper( keyval ) ;
 	}
-	
+
     wxKeyEvent event(wxEVT_KEY_DOWN);
     bool handled = false ;
     event.m_shiftDown = modifiers & shiftKey;
@@ -2054,7 +2135,7 @@ bool wxApp::MacSendKeyUpEvent( wxWindow* focus , long keymessage , long modifier
 
 	if ( keyval == keychar )
 	{
-		keyval = wxToupper( keyval ) ;	
+		keyval = wxToupper( keyval ) ;
 	}
     bool handled = false ;
 
@@ -2254,9 +2335,9 @@ void wxApp::MacHandleOSEvent( WXEVENTREF evr )
 				}
 				else
 				{
-					windowPart = ::FindWindow(ev->where, &window); 
+					windowPart = ::FindWindow(ev->where, &window);
 				}
-				
+
                 switch (windowPart)
                 {
                     case inContent :
@@ -2309,35 +2390,15 @@ void wxApp::MacHandleMenuSelect( int macMenuId , int macMenuItemNum )
     }
     else
     {
-        wxWindow* frontwindow = wxFindWinFromMacWindow( ::FrontWindow() )  ;
-        if ( frontwindow && wxMenuBar::MacGetInstalledMenuBar() )
-            wxMenuBar::MacGetInstalledMenuBar()->MacMenuSelect( frontwindow->GetEventHandler() , 0 , macMenuId , macMenuItemNum ) ;
+        MenuCommand id ;
+        GetMenuItemCommandID( GetMenuHandle(macMenuId) , macMenuItemNum , &id ) ;
+        wxMenuBar* mbar = wxMenuBar::MacGetInstalledMenuBar() ;
+        wxFrame* frame = mbar->GetFrame();
+        wxCHECK_RET( mbar != NULL && frame != NULL, wxT("error in menu item callback") );
+        if ( frame )
+        {
+            frame->ProcessCommand(id);
+        }
     }
     HiliteMenu(0);
 }
-
-/*
-long wxApp::MacTranslateKey(char key, int mods)
-{
-}
-
-void wxApp::MacAdjustCursor()
-{
-}
-
-*/
-/*
-void
-wxApp::macAdjustCursor()
-{
-  if (ev->what != kHighLevelEvent)
-  {
-    wxWindow* theMacWxFrame = wxFrame::MacFindFrameOrDialog(::FrontWindow());
-    if (theMacWxFrame)
-    {
-        if (!theMacWxFrame->MacAdjustCursor(ev->where))
-        ::SetCursor(&(qd.arrow));
-      }
-  }
-}
-*/

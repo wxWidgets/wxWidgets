@@ -111,10 +111,13 @@ public:
 
     wxDataFormat GetPreferredFormat(Direction dir = wxDataObject::Get);
     size_t GetFormatCount(Direction dir = wxDataObject::Get);
+
+    // TODO:  Fix these two to be usable from wxPython.
     void GetAllFormats(wxDataFormat *formats,
                        Direction dir = wxDataObject::Get);
-    size_t GetDataSize(const wxDataFormat& format);
     bool GetDataHere(const wxDataFormat& format, void *buf);
+
+    size_t GetDataSize(const wxDataFormat& format);
     bool SetData(const wxDataFormat& format,
                  size_t len, const void * buf);
     bool IsSupportedFormat(const wxDataFormat& format);
@@ -288,7 +291,7 @@ wxBitmap wxPyBitmapDataObject::GetBitmap() {
 void wxPyBitmapDataObject::SetBitmap(const wxBitmap& bitmap) {
     wxPyBeginBlockThreads();
     if (m_myInst.findCallback("SetBitmap")) {
-        PyObject* bo = wxPyConstructObject((void*)&bitmap, "wxBitmap");
+        PyObject* bo = wxPyConstructObject((void*)&bitmap, wxT("wxBitmap"));
         m_myInst.callCallback(Py_BuildValue("(O)", bo));
         Py_DECREF(bo);
     }
@@ -452,15 +455,17 @@ bool wxIsDragResultOk(wxDragResult res);
 class wxPyDropSource : public wxDropSource {
 public:
 #ifdef __WXMSW__
-    wxPyDropSource(wxWindow *win = NULL,
-                   const wxCursor &cursorCopy = wxNullCursor,
-                   const wxCursor &cursorMove = wxNullCursor,
-                   const wxCursor &cursorStop = wxNullCursor)
-        : wxDropSource(win, cursorCopy, cursorMove, cursorStop) {}
+     wxPyDropSource(wxWindow *win = NULL,
+                    const wxCursor &copy = wxNullCursor,
+                    const wxCursor &move = wxNullCursor,
+                    const wxCursor &none = wxNullCursor)
+         : wxDropSource(win, copy, move, none) {}
 #else
     wxPyDropSource(wxWindow *win = NULL,
-                   const wxIcon &go = wxNullIcon)
-        : wxDropSource(win, go) {}
+                   const wxIcon& copy = wxNullIcon,
+                   const wxIcon& move = wxNullIcon,
+                   const wxIcon& none = wxNullIcon)
+        : wxDropSource(win, copy, move, none) {}
 #endif
     ~wxPyDropSource() { }
 
@@ -476,13 +481,15 @@ IMP_PYCALLBACK_BOOL_DR(wxPyDropSource, wxDropSource, GiveFeedback);
 %name(wxDropSource) class wxPyDropSource {
 public:
 #ifdef __WXMSW__
-    wxPyDropSource(wxWindow *win = NULL,
-                 const wxCursor &cursorCopy = wxNullCursor,
-                 const wxCursor &cursorMove = wxNullCursor,
-                 const wxCursor &cursorStop = wxNullCursor);
+     wxPyDropSource(wxWindow *win = NULL,
+                    const wxCursor &copy = wxNullCursor,
+                    const wxCursor &move = wxNullCursor,
+                    const wxCursor &none = wxNullCursor);
 #else
     wxPyDropSource(wxWindow *win = NULL,
-                   const wxIcon &go = wxNullIcon);
+                   const wxIcon& copy = wxNullIcon,
+                   const wxIcon& move = wxNullIcon,
+                   const wxIcon& none = wxNullIcon);
 #endif
 
     void _setCallbackInfo(PyObject* self, PyObject* _class, int incref);

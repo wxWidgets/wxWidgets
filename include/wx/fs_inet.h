@@ -6,18 +6,6 @@
 // Licence:     wxWindows Licence
 /////////////////////////////////////////////////////////////////////////////
 
-/*
-
-REMARKS :
-
-This FS creates local cache (in /tmp directory). The cache is freed
-on program exit.
-
-Size of cache is limited to cca 1000 items (due to GetTempFileName
-limitation)
-
-
-*/
 #ifndef _WX_FS_INET_H_
 #define _WX_FS_INET_H_
 

@@ -221,7 +221,7 @@ static void ColouriseRbDoc(unsigned int startPos, int length, int initStyle,
 			} else if (isoperator(ch)) {
 				styler.ColourTo(i - 1, state);
 				styler.ColourTo(i, SCE_P_OPERATOR);
-			} 
+			}
 			} else if (state == SCE_P_WORD) {
 			if (!iswordchar(ch)) {
 				ClassifyWordRb(styler.GetStartSegment(), i - 1, keywords, styler, prevWord);
@@ -351,5 +351,10 @@ static void FoldRbDoc(unsigned int startPos, int length, int initStyle,
 		}
 	}
 }
-						   
-LexerModule lmRuby(SCLEX_RUBY, ColouriseRbDoc, "ruby", FoldRbDoc);
+
+static const char * const rubyWordListDesc[] = {
+	"Keywords",
+	0
+};
+
+LexerModule lmRuby(SCLEX_RUBY, ColouriseRbDoc, "ruby", FoldRbDoc, rubyWordListDesc);

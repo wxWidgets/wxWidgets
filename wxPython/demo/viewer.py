@@ -35,9 +35,9 @@
         When using wxPython, the call to app.Mainloop() takes over
         the thread from which it is called.  This presents a
         problem for applications that want to use the standard
-        Python command line user interface, while occasionaly
+        Python command line user interface, while occasionally
         creating a GUI window for viewing an image, plot, etc.
-        One soultion is to mangage the GUI in a second thread.
+        One solution is to manage the GUI in a second thread.
 
         wxPython does not behave well if windows are created in
         a thread other than the one where wxPython was originally

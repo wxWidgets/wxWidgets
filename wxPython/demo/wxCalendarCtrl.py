@@ -11,13 +11,21 @@ class TestPanel(wxPanel):
         self.log = log
 
         cal = wxCalendarCtrl(self, -1, wxDateTime_Now(), pos = (25,50),
-                             style = wxCAL_SHOW_HOLIDAYS | wxCAL_SUNDAY_FIRST)
+                             style = wxCAL_SHOW_HOLIDAYS
+                             | wxCAL_SUNDAY_FIRST
+                             | wxCAL_SEQUENTIAL_MONTH_SELECTION
+                             )
 
         EVT_CALENDAR(self, cal.GetId(), self.OnCalSelected)
 
         b = wxButton(self, -1, "Destroy the Calendar", pos = (250, 50))
         EVT_BUTTON(self, b.GetId(), self.OnButton)
         self.cal = cal
+
+        # Set up control to display a set of holidays:
+        EVT_CALENDAR_MONTH(self, cal.GetId(), self.OnChangeMonth)
+        self.holidays = [(1,1), (10,31), (12,25) ]    # (these don't move around)
+        self.OnChangeMonth()
 
     def OnButton(self, evt):
         self.cal.Destroy()
@@ -26,6 +34,11 @@ class TestPanel(wxPanel):
     def OnCalSelected(self, evt):
         self.log.write('OnCalSelected: %s\n' % evt.GetDate())
 
+    def OnChangeMonth(self, evt=None):
+        cur_month = self.cal.GetDate().GetMonth() + 1   # convert wxDateTime 0-11 => 1-12
+        for month, day in self.holidays:
+            if month == cur_month:
+                self.cal.SetHoliday(day)
 
 #----------------------------------------------------------------------
 
@@ -45,3 +58,12 @@ version described in the docs.  This one will probably be a bit more efficient
 than the one in wxPython.lib.calendar, but I like a few things about it better,
 so I think both will stay in wxPython.
 """
+
+
+
+
+if __name__ == '__main__':
+    import sys,os
+    import run
+    run.main(['', os.path.basename(sys.argv[0])])
+

@@ -247,6 +247,12 @@ void wxDialog::DoShowModal()
 
     m_windowDisabler = new wxWindowDisabler(this);
 
+    // before entering the modal loop, reset the "is in OnIdle()" flag (see
+    // comment in app.cpp)
+    extern bool wxIsInOnIdleFlag;
+    bool wasInOnIdle = wxIsInOnIdleFlag;
+    wxIsInOnIdleFlag = FALSE;
+
     // enter the modal loop
     while ( IsModalShowing() )
     {
@@ -260,6 +266,8 @@ void wxDialog::DoShowModal()
         // a message came or no more idle processing to do
         wxTheApp->DoMessage();
     }
+
+    wxIsInOnIdleFlag = wasInOnIdle;
 
     // and restore focus
     // Note that this code MUST NOT access the dialog object's data
@@ -296,6 +304,14 @@ bool wxDialog::Show(bool show)
 
     if ( show )
     {
+        // dialogs don't get WM_SIZE message after creation unlike most (all?)
+        // other windows and so could start their life non laid out correctly
+        // if we didn't call Layout() from here
+        //
+        // NB: normally we should call it just the first time but doing it
+        //     every time is simpler than keeping a flag
+        Layout();
+
         // usually will result in TransferDataToWindow() being called
         InitDialog();
     }

@@ -27,7 +27,7 @@ INC = /I$(WXDIR)\include /I$(WXDIR)\contrib\include
 # to disable PROLOGIO-dependent code
 OPTIONS = -DPROLOGIO
 
-OBJECTS = basic.obj basic2.obj canvas.obj ogldiag.obj lines.obj misc.obj divided.obj constrnt.obj\
+OBJECTS = basic.obj basic2.obj canvas.obj ogldiag.obj lines.obj oglmisc.obj divided.obj constrnt.obj\
  composit.obj drawn.obj bitmap.obj mfutils.obj
 
 all:    $(GRAPHICSLIB)

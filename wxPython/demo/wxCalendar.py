@@ -61,7 +61,7 @@ class TestPanel(wxPanel):
 
         monthlist = GetMonthList()
 
-        mID = NewId()
+        mID = wxNewId()
         self.date = wxComboBox(self, mID, "",
                                wxPoint(100, 20), wxSize(90, -1),
                                monthlist, wxCB_DROPDOWN)
@@ -75,7 +75,7 @@ class TestPanel(wxPanel):
 
 # set attributes of calendar
 
-        self.calend.hide_title = TRUE
+        self.calend.hide_title = True
         self.calend.HideGrid()
         self.calend.SetWeekColor('WHITE', 'BLACK')
 
@@ -89,9 +89,9 @@ class TestPanel(wxPanel):
 
 # scroll bar for month selection
 
-        mID = NewId()
+        mID = wxNewId()
         self.scroll = wxScrollBar(self, mID, wxPoint(100, 240), wxSize(200, 20), wxSB_HORIZONTAL)
-        self.scroll.SetScrollbar(start_month-1, 1, 12, 1, TRUE)
+        self.scroll.SetScrollbar(start_month-1, 1, 12, 1, True)
         EVT_COMMAND_SCROLL(self, mID, self.Scroll)
 
 # spin control for year selection
@@ -99,7 +99,7 @@ class TestPanel(wxPanel):
         self.dtext = wxTextCtrl(self, -1, str(start_year), wxPoint(200, 20), wxSize(60, -1))
         h = self.dtext.GetSize().height
 
-        mID = NewId()
+        mID = wxNewId()
         self.spin = wxSpinButton(self, mID, wxPoint(270, 20), wxSize(h*2, h))
         self.spin.SetRange(1980, 2010)
         self.spin.SetValue(start_year)
@@ -109,7 +109,7 @@ class TestPanel(wxPanel):
 
         wxStaticText(self, -1, "Test Calendar Dialog", wxPoint(350, 50), wxSize(150, -1))
 
-        mID = NewId()
+        mID = wxNewId()
         bmp = images.getCalendarBitmap()
         self.but = wxBitmapButton(self, mID, bmp, wxPoint(380, 80))#, wxSize(30, 30))
         EVT_BUTTON(self, mID, self.TestDlg)
@@ -118,13 +118,13 @@ class TestPanel(wxPanel):
 
         wxStaticText(self, -1, "Test Calendar Window", wxPoint(350, 150), wxSize(150, -1))
 
-        mID = NewId()
+        mID = wxNewId()
         self.but = wxBitmapButton(self, mID, bmp, wxPoint(380, 180))#, wxSize(30, 30))
         EVT_BUTTON(self, mID, self.TestFrame)
 
         wxStaticText(self, -1, "Test Calendar Print", wxPoint(350, 250), wxSize(150, -1))
 
-        mID = NewId()
+        mID = wxNewId()
         self.but = wxBitmapButton(self, mID, bmp, wxPoint(380, 280))#, wxSize(30, 30))
         EVT_BUTTON(self, mID, self.OnPreview)
 
@@ -147,8 +147,8 @@ class TestPanel(wxPanel):
 
     def TestFrame(self, event):
         frame = CalendFrame(self, -1, "Test Calendar", self.log)
-        frame.Show(true)
-        return true
+        frame.Show(True)
+        return True
 
 # calendar print preview
 
@@ -171,7 +171,7 @@ class TestPanel(wxPanel):
         name = event.GetString()
         self.log.WriteText('EvtComboBox: %s\n' % name)
         monthval = self.date.FindString(name)
-        self.scroll.SetScrollbar(monthval, 1, 12, 1, TRUE)
+        self.scroll.SetScrollbar(monthval, 1, 12, 1, True)
 
         self.calend.SetMonth(monthval+1)
         self.ResetDisplay()
@@ -299,17 +299,17 @@ class CalendFrame(wxFrame):
     def MakeFileMenu(self):
         menu = wxMenu()
 
-        mID = NewId()
+        mID = wxNewId()
         menu.Append(mID, 'Decrement', 'Next')
         EVT_MENU(self, mID, self.OnDecMonth)
 
-        mID = NewId()
+        mID = wxNewId()
         menu.Append(mID, 'Increment', 'Dec')
         EVT_MENU(self, mID, self.OnIncMonth)
 
         menu.AppendSeparator()
 
-        mID = NewId()
+        mID = wxNewId()
         menu.Append(mID, 'E&xit', 'Exit')
         EVT_MENU(self, mID, self.OnCloseWindow)
 
@@ -318,23 +318,23 @@ class CalendFrame(wxFrame):
     def MakeToolMenu(self):
         tb = self.CreateToolBar(wxTB_HORIZONTAL|wxNO_BORDER)
 
-        mID = NewId()
+        mID = wxNewId()
         SetToolPath(self, tb, mID, images.getDbDecBitmap(), 'Dec Year')
         EVT_TOOL(self, mID, self.OnDecYear)
 
-        mID = NewId()
+        mID = wxNewId()
         SetToolPath(self, tb, mID, images.getDecBitmap(), 'Dec Month')
         EVT_TOOL(self, mID, self.OnDecMonth)
 
-        mID = NewId()
+        mID = wxNewId()
         SetToolPath(self, tb, mID, images.getPtBitmap(), 'Current Month')
         EVT_TOOL(self, mID, self.OnCurrent)
 
-        mID = NewId()
+        mID = wxNewId()
         SetToolPath(self, tb, mID, images.getIncBitmap(), 'Inc Month')
         EVT_TOOL(self, mID, self.OnIncMonth)
 
-        mID = NewId()
+        mID = wxNewId()
         SetToolPath(self, tb, mID, images.getDbIncBitmap(), 'Inc Year')
         EVT_TOOL(self, mID, self.OnIncYear)
 
@@ -366,8 +366,8 @@ class PrintCalend:
         self.sel_lst = []        # highlighted selected days
 
         self.size = None
-        self.hide_title = FALSE
-        self.hide_grid = FALSE
+        self.hide_title = False
+        self.hide_grid = False
         self.set_day = None
 
     def SetParms(self):
@@ -416,7 +416,7 @@ class PrintCalend:
         frame.Initialize()
         frame.SetPosition(self.frame.GetPosition())
         frame.SetSize(self.frame.GetSize())
-        frame.Show(true)
+        frame.Show(True)
 
     def Print(self):
         pdd = wxPrintDialogData()
@@ -438,7 +438,7 @@ class PrintCalend:
 
         if self.preview is None:
             cal.SetPSize(size[0]/self.pagew, size[1]/self.pageh)
-            cal.SetPreview(FALSE)
+            cal.SetPreview(False)
 
         else:
             if self.preview == 1:
@@ -454,7 +454,7 @@ class PrintCalend:
         cal.grid_color = self.grid_color
         cal.high_color = self.high_color
         cal.back_color = self.back_color
-        cal.outer_border = FALSE
+        cal.outer_border = False
         cal.font = self.font
         cal.bold = self.bold
 
@@ -481,7 +481,7 @@ class PrintCalend:
 
                 year, month = self.IncMonth(year, month)
                 y = y + 3.5
-            x = x + 4.0     # next colum
+            x = x + 4.0     # next column
 
         DC.EndDrawing()
 
@@ -534,9 +534,9 @@ class SetPrintout(wxPrintout):
 
     def HasPage(self, page):
         if page <= self.end_pg:
-            return true
+            return True
         else:
-            return false
+            return False
 
     def GetPageInfo(self):
         self.end_pg = self.canvas.GetTotalPages()
@@ -594,14 +594,14 @@ class SetPrintout(wxPrintout):
         self.canvas.SetPageSize(self.psizew, self.psizeh)
 
         self.canvas.DoDrawing(dc)
-        return true
+        return True
 
 class MyApp(wxApp):
     def OnInit(self):
         frame = CalendFrame(None, -1, "Test Calendar")
-        frame.Show(true)
+        frame.Show(True)
         self.SetTopWindow(frame)
-        return true
+        return True
 
 #---------------------------------------------------------------------------
 

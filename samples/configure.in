@@ -63,15 +63,21 @@ AC_OUTPUT([
             mobile/Makefile
             mobile/wxedit/Makefile
             mobile/styles/Makefile
+            multimon/Makefile
+            nativdlg/Makefile
             newgrid/Makefile
             notebook/Makefile
+            oleauto/Makefile
+            ownerdrw/Makefile
             png/Makefile
             printing/Makefile
             proplist/Makefile
             propsize/Makefile
+            regtest/Makefile
             resource/Makefile
             rotate/Makefile
             sashtest/Makefile
+	    shaped/Makefile
             scroll/Makefile
             scrollsub/Makefile
             sockets/Makefile

@@ -98,7 +98,7 @@ wxMetaRecord::~wxMetaRecord(void)
   if (stringParam) delete[] stringParam;
 }
 
-wxXMetaFile::wxXMetaFile(char *file)
+wxXMetaFile::wxXMetaFile(const wxChar *file)
 {
   ok = FALSE;
   top = 0.0;
@@ -162,11 +162,11 @@ int AddMetaRecordHandle(wxMetaRecord *record)
   return (HandleTableSize - 1);
 }
 
-bool wxXMetaFile::ReadFile(char *file)
+bool wxXMetaFile::ReadFile(const wxChar *file)
 {
   HandleTableSize = 0;
 
-  FILE *handle = fopen(file, "rb");
+  FILE *handle = wxFopen(file, wxT("rb"));
   if (!handle) return FALSE;
 
   // Read placeable metafile header, if any

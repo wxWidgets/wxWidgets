@@ -18,7 +18,6 @@
 
 from wxPython.wx import *
 from wxPython.lib.colourselect import *
-import string
 
 #----------------------------------------------------------------------------
 
@@ -26,7 +25,7 @@ class TestColourSelect(wxPanel):
     def __init__(self, parent, log):
         self.log = log
         wxPanel.__init__(self, parent, -1)
-        self.SetAutoLayout(true)
+        self.SetAutoLayout(True)
         mainSizer = wxBoxSizer(wxVERTICAL)
         self.SetSizer(mainSizer)
         t = wxStaticText(self, -1,
@@ -86,7 +85,7 @@ class TestColourSelect(wxPanel):
             colour = button.GetColour() # get the colour selection button result
             result.append(name + ": " + str(colour))  # create string list for easy viewing of results
 
-        out_result = string.joinfields(result, ',  ')
+        out_result = ',  '.join(result)
         self.log.WriteText("Colour Results: " + out_result + "\n")
 
 #---------------------------------------------------------------------------

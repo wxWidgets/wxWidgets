@@ -8,6 +8,9 @@
 #include <wx/ffile.h>
 #include "wx/resource.h"
 
+#if !wxUSE_WX_RESOURCES
+#error  "convertc requires wxUSE_WX_RESOURCES"
+#endif  // wxUSE_WX_RESOURCES
 
 class wxr2xml : public wxObject  
 {

@@ -397,8 +397,7 @@ wxCursor::wxCursor(int cursor_type)
   }
 
   // no need to destroy the stock cursors
-  // TODO: check this
-  //m_refData->m_destroyCursor = FALSE;
+  ((wxCursorRefData *)m_refData)->m_destroyCursor = FALSE;
 #endif
 }
 

@@ -195,15 +195,15 @@ wxHTMLHelpControllerBase::LoadFile(const wxString& ifile)
             break; // error
          for(i=0; isdigit(buffer[i])||isspace(buffer[i])||buffer[i]=='-'; i++)
             ; // find begin of URL
-         url = "";
+         url = wxT("");
          while(buffer[i] && ! isspace(buffer[i]) && buffer[i] !=
                WXEXTHELP_COMMENTCHAR)
-            url << buffer[i++];
+            url << (wxChar) buffer[i++];
          while(buffer[i] && buffer[i] != WXEXTHELP_COMMENTCHAR)
             i++;
-         doc = "";
+         doc = wxT("");
          if(buffer[i])
-            doc = (buffer + i + 1); // skip the comment character
+            doc = wxString::FromAscii( (buffer + i + 1) ); // skip the comment character
          m_MapList->Append(new wxExtHelpMapEntry(id,url,doc));
          m_NumOfEntries++;
       }
@@ -312,7 +312,7 @@ wxHTMLHelpControllerBase::KeywordSearch(const wxString& k)
             // choices[idx] = (**i).doc.Contains((**i).doc.Before(WXEXTHELP_COMMENTCHAR));
             //if(choices[idx].IsEmpty()) // didn't contain the ';'
             //   choices[idx] = (**i).doc;
-            choices[idx] = "";
+            choices[idx] = wxT("");
             for(j=0;entry->doc.c_str()[j]
                    && entry->doc.c_str()[j] != WXEXTHELP_COMMENTCHAR; j++)
                choices[idx] << entry->doc.c_str()[j];

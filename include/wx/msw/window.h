@@ -213,10 +213,12 @@ public:
     wxWindow *FindItemByHWND(WXHWND hWnd, bool controlOnly = FALSE) const;
 
     // Make a Windows extended style from the given wxWindows window style
+    // OBSOLETE: do not use. Use MSWGetStyle instead.
     static WXDWORD MakeExtendedStyle(long style,
                                      bool eliminateBorders = FALSE);
 
     // Determine whether 3D effects are wanted
+    // OBSOLETE: do not use. Use MSWGetStyle instead.
     WXDWORD Determine3DEffects(WXDWORD defaultBorderStyle, bool *want3D) const;
 
     // MSW only: TRUE if this control is part of the main control

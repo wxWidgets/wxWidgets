@@ -134,7 +134,7 @@ IMPLEMENT_APP(MyApp)
 bool MyApp::OnInit()
 {
     // Create the main application window
-    MyFrame *frame = new MyFrame("OleAuto wxWindows App",
+    MyFrame *frame = new MyFrame(_T("OleAuto wxWindows App"),
                                  wxPoint(50, 50), wxSize(450, 340));
 
     // Show it and tell the application that it's our main window
@@ -162,21 +162,21 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
     // create a menu bar
     wxMenu *menuFile = new wxMenu;
 
-    menuFile->Append(OleAuto_Test, "&Test Excel Automation...");
-    menuFile->Append(OleAuto_About, "&About...");
+    menuFile->Append(OleAuto_Test, _T("&Test Excel Automation..."));
+    menuFile->Append(OleAuto_About, _T("&About..."));
     menuFile->AppendSeparator();
-    menuFile->Append(OleAuto_Quit, "E&xit");
+    menuFile->Append(OleAuto_Quit, _T("E&xit"));
 
     // now append the freshly created menu to the menu bar...
     wxMenuBar *menuBar = new wxMenuBar;
-    menuBar->Append(menuFile, "&File");
+    menuBar->Append(menuFile, _T("&File"));
 
     // ... and attach this menu bar to the frame
     SetMenuBar(menuBar);
 
     // create a status bar just for fun (by default with 1 pane only)
     CreateStatusBar(2);
-    SetStatusText("Welcome to wxWindows!");
+    SetStatusText(_T("Welcome to wxWindows!"));
 }
 
 
@@ -190,8 +190,8 @@ void MyFrame::OnQuit(wxCommandEvent& WXUNUSED(event))
 
 void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
 {
-    wxMessageBox("This is an OLE Automation sample",
-                 "About OleAuto", wxOK | wxICON_INFORMATION, this);
+    wxMessageBox(_T("This is an OLE Automation sample"),
+                 _T("About OleAuto"), wxOK | wxICON_INFORMATION, this);
 }
 
 /* Tests OLE automation by making the active Excel cell bold,
@@ -199,26 +199,26 @@ void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
  */
 void MyFrame::OnTest(wxCommandEvent& WXUNUSED(event))
 {
-    wxMessageBox("Please ensure Excel is running, then press OK.\nThe active cell should then say 'wxWindows automation test!' in bold.");
+    wxMessageBox(_T("Please ensure Excel is running, then press OK.\nThe active cell should then say 'wxWindows automation test!' in bold."));
 
     wxAutomationObject excelObject, rangeObject;
-    if (!excelObject.GetInstance("Excel.Application"))
+    if (!excelObject.GetInstance(_T("Excel.Application")))
     {
-        if (!excelObject.CreateInstance("Excel.Application"))
+        if (!excelObject.CreateInstance(_T("Excel.Application")))
         {
-            wxMessageBox("Could not create Excel object.");
+            wxMessageBox(_T("Could not create Excel object."));
             return;
         }
     }
-    if (!excelObject.PutProperty("ActiveCell.Value", "wxWindows automation test!"))
+    if (!excelObject.PutProperty(_T("ActiveCell.Value"), _T("wxWindows automation test!")))
     {
-        wxMessageBox("Could not set active cell value.");
+        wxMessageBox(_T("Could not set active cell value."));
         return;
     }
 #ifdef HAVE_BOOL
-    if (!excelObject.PutProperty("ActiveCell.Font.Bold", wxVariant((bool) TRUE)) )
+    if (!excelObject.PutProperty(_T("ActiveCell.Font.Bold"), wxVariant((bool) TRUE)) )
     {
-        wxMessageBox("Could not put Bold property to active cell.");
+        wxMessageBox(_T("Could not put Bold property to active cell."));
         return;
     }
 #endif

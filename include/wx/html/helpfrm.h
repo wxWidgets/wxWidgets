@@ -33,7 +33,9 @@
 #include "wx/stattext.h"
 #include "wx/html/htmlwin.h"
 #include "wx/html/htmprint.h"
+
 class WXDLLEXPORT wxButton;
+class WXDLLEXPORT wxTextCtrl;
 
 
 // style flags for the Help Frame

@@ -189,9 +189,6 @@ protected:
     //
     // Helper functions
     //
-            void            ChangePage( int nOldSel
-                                       ,int nSel
-                                      ); // change pages
 
     int                     m_nSelection; // The current selection (-1 if none)
 

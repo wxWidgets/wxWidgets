@@ -93,16 +93,48 @@ void wxHtmlDCRenderer::SetHtmlText(const wxString& html, const wxString& basepat
 }
 
 
-
+void wxHtmlDCRenderer::SetFonts(wxString normal_face, wxString fixed_face,
+                                const int *sizes)
+{
+    m_Parser->SetFonts(normal_face, fixed_face, sizes);
+    if (m_DC == NULL && m_Cells != NULL) m_Cells->Layout(m_Width);
+}
+// Backport note: this signature will be replaced in wx 2.5.
+// It just forwards to the new function for backward binary compatibility.
 int wxHtmlDCRenderer::Render(int x, int y, int from, int dont_render)
+{
+    return Render(x, y, from, dont_render, INT_MAX, NULL, 0);
+}
+
+int wxHtmlDCRenderer::Render(int x, int y, int from, int dont_render, int to, int *known_pagebreaks, int number_of_pages)
 {
     int pbreak, hght;
 
     if (m_Cells == NULL || m_DC == NULL) return 0;
 
     pbreak = (int)(from + m_Height);
-    while (m_Cells->AdjustPagebreak(&pbreak)) {}
+
+    // Temporary kludge for backporting html pagebreaks to 2.4.0;
+    // remove in 2.4.1 .
+    wxHtmlKludge kludge;
+    kludge.pbreak = pbreak;
+    kludge.known_pagebreaks = known_pagebreaks;
+    kludge.number_of_pages = number_of_pages;
+
+    while (m_Cells->AdjustPagebreak((int*)&kludge)) {}
+// wx 2.5 will use this:
+//    while (m_Cells->AdjustPagebreak(&pbreak, known_pagebreaks, number_of_pages)) {}
+
+    pbreak = kludge.pbreak;
+    // We don't need to copy back
+    //    kludge.number_of_pages or
+    //    kludge.known_pagebreaks
+    // because their values aren't changed by AdjustPagebreak().
+    // Thus, known_pagebreaks probably ought to be const.
+
     hght = pbreak - from;
+    if(to < hght)
+        hght = to;
 
     if (!dont_render)
     {
@@ -269,9 +301,6 @@ void wxHtmlPrintout::SetHtmlText(const wxString& html, const wxString &basepath,
     m_BasePathIsDir = isdir;
 }
 
-// defined in htmlfilt.cpp
-void wxPrivate_ReadString(wxString& str, wxInputStream* s);
-
 void wxHtmlPrintout::SetHtmlFile(const wxString& htmlfile)
 {
     wxFileSystem fs;
@@ -283,13 +312,11 @@ void wxHtmlPrintout::SetHtmlFile(const wxString& htmlfile)
         return;
     }
 
-    wxInputStream *st = ff->GetStream();
-    wxString doc;
-    wxPrivate_ReadString(doc, st);
-
-    delete ff;
-
+    wxHtmlFilterHTML filter;
+    wxString doc = filter.ReadFile(*ff);
+    
     SetHtmlText(doc, htmlfile, FALSE);
+    delete ff;
 }
 
 
@@ -334,7 +361,7 @@ void wxHtmlPrintout::CountPages()
     {
         pos = m_Renderer->Render((int)( ppmm_h * m_MarginLeft),
                                    (int) (ppmm_v * (m_MarginTop + (m_HeaderHeight == 0 ? 0 : m_MarginSpace)) + m_HeaderHeight),
-                                   pos, TRUE);
+                                   pos, TRUE, INT_MAX, m_PageBreaks, m_NumPages);
         m_PageBreaks[++m_NumPages] = pos;
     } while (pos < m_Renderer->GetTotalHeight());
 }
@@ -368,7 +395,11 @@ void wxHtmlPrintout::RenderPage(wxDC *dc, int page)
 
     m_Renderer->Render((int) (ppmm_h * m_MarginLeft),
                          (int) (ppmm_v * (m_MarginTop + (m_HeaderHeight == 0 ? 0 : m_MarginSpace)) + m_HeaderHeight),
-                         m_PageBreaks[page-1]);
+                         m_PageBreaks[page-1], FALSE, m_PageBreaks[page]-m_PageBreaks[page-1]
+// Backporting note: we need to specify every argument for backporting (see
+// include/wx/htmprint.h), but wx 2.5 will be able to default the
+// last two arguments here.
+                         ,NULL, 0);
 
     m_RendererHdr->SetDC(dc, (double)ppiPrinterY / (double)ppiScreenY);
     if (m_Headers[page % 2] != wxEmptyString)
@@ -413,11 +444,18 @@ void wxHtmlPrintout::SetMargins(float top, float bottom, float left, float right
 
 
 
+void wxHtmlPrintout::SetFonts(wxString normal_face, wxString fixed_face,
+                              const int *sizes)
+{
+    m_Renderer->SetFonts(normal_face, fixed_face, sizes);
+    m_RendererHdr->SetFonts(normal_face, fixed_face, sizes);
+}
 
 
-//--------------------------------------------------------------------------------
+
+//----------------------------------------------------------------------------
 // wxHtmlEasyPrinting
-//--------------------------------------------------------------------------------
+//----------------------------------------------------------------------------
 
 
 wxHtmlEasyPrinting::wxHtmlEasyPrinting(const wxString& name, wxFrame *parent_frame)

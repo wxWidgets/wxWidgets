@@ -24,17 +24,17 @@
 
 class ScoreFile {
 public:
-	ScoreFile(const char* appName);
+	ScoreFile(const wxString& appName);
 	virtual ~ScoreFile();
 
 	void GetPlayerList( wxArrayString &list );
 	wxString GetPreviousPlayer() const;
 
-	void ReadPlayersScore(const char* player, int& wins, int& games, int &score);
-	void WritePlayersScore(const char* player, int wins, int games, int score);
+	void ReadPlayersScore(const wxString& player, int& wins, int& games, int &score);
+	void WritePlayersScore(const wxString& player, int wins, int games, int score);
 
 private:
-	long CalcCheck(const char* name, int p1, int p2, int p3);
+	long CalcCheck(const wxString& name, int p1, int p2, int p3);
 	wxString	    m_configFilename;
 	wxConfig*	    m_config;
 };

@@ -70,7 +70,7 @@ DECLARE_EVENT_TABLE()
 class MyPrintout: public wxPrintout
 {
  public:
-  MyPrintout(char *title = "My printout"):wxPrintout(title) {}
+  MyPrintout(wxChar *title = _T("My printout")):wxPrintout(title) {}
   bool OnPrintPage(int page);
   bool HasPage(int page);
   bool OnBeginDocument(int startPage, int endPage);

@@ -276,7 +276,7 @@ void wxMacPrintPreview::DetermineScaling(void)
 	
 	m_previewPrintout->SetPPIScreen( 72 , 72 ) ;
 	m_previewPrintout->SetPPIPrinter( 72 , 72 ) ;
-	m_previewPrintout->SetPageSizeMM( 8 * 25.6 , 11 * 25.6 ) ;
+	m_previewPrintout->SetPageSizeMM( (int) (8.0 * 25.6), (int) (11.0 * 25.6) );
 	m_previewPrintout->SetPageSizePixels( 8 * 72 , 11 * 72 ) ;
     m_pageWidth = 8 * 72 ;
     m_pageHeight = 11 * 72 ;
@@ -295,7 +295,10 @@ void wxMacPrintPreview::DetermineScaling(void)
 		m_pageWidth = x ;
 		m_pageHeight =  y ;
 		m_isOk = true ;
-
+	}
+	else
+	{
+	  m_isOk = false ;
 	}
     // At 100%, the page should look about page-size on the screen.
     // m_previewScale = (float)((float)screenWidth/(float)printerWidth);

@@ -23,91 +23,95 @@
 // of new/delete
 // ----------------------------------------------------------------------------
 
-class wxCharBuffer
-{
-public:
-    wxCharBuffer(const char *str)
-        : m_str(str ? strdup(str) : NULL)
-    {
-    }
+#define DEFINE_BUFFER(classname, chartype, strdupfunc)                      \
+class classname                                                             \
+{                                                                           \
+public:                                                                     \
+    classname(const chartype *str)                                          \
+        : m_str(str ? strdupfunc(str) : NULL)                               \
+    {                                                                       \
+    }                                                                       \
+                                                                            \
+    classname(size_t len)                                                   \
+        : m_str((chartype *)malloc((len + 1)*sizeof(chartype)))             \
+    {                                                                       \
+        m_str[len] = (chartype)0;                                           \
+    }                                                                       \
+                                                                            \
+    /* no need to check for NULL, free() does it */                         \
+    ~classname() { free(m_str); }                                           \
+                                                                            \
+    /*                                                                      \
+        WARNING:                                                            \
+                                                                            \
+        the copy ctor and assignment operators change the passed in object  \
+        even although it is declared as "const", so:                        \
+                                                                            \
+        a) it shouldn't be really const                                     \
+        b) you shouldn't use it afterwards (or know that it was reset)      \
+                                                                            \
+        This is very ugly but is unfortunately needed to make the normal use\
+        of classname buffer objects possible and is very similar to what    \
+        std::auto_ptr<> does (as if it were an excuse...)                   \
+    */                                                                      \
+                                                                            \
+    /*                                                                      \
+       because of the remark above, release() is declared const even if it  \
+       isn't really const                                                   \
+     */                                                                     \
+    chartype *release() const                                               \
+    {                                                                       \
+        chartype *p = m_str;                                                \
+        ((classname *)this)->m_str = NULL;                                  \
+        return p;                                                           \
+    }                                                                       \
+                                                                            \
+    classname(const classname& src)                                         \
+        : m_str(src.release())                                              \
+    {                                                                       \
+    }                                                                       \
+                                                                            \
+    classname& operator=(const chartype *str)                               \
+    {                                                                       \
+        free(m_str);                                                        \
+        m_str = str ? strdupfunc(str) : NULL;                               \
+        return *this;                                                       \
+    }                                                                       \
+                                                                            \
+    classname& operator=(const classname& src)                              \
+    {                                                                       \
+        free(m_str);                                                        \
+        m_str = src.release();                                              \
+                                                                            \
+        return *this;                                                       \
+    }                                                                       \
+                                                                            \
+    chartype *data() { return m_str; }                                      \
+    const chartype *data() const { return m_str; }                          \
+    operator const chartype *() const { return m_str; }                     \
+    chartype operator[](size_t n) const { return m_str[n]; }                \
+                                                                            \
+private:                                                                    \
+    chartype *m_str;                                                        \
+}
 
-    wxCharBuffer(size_t len)
-        : m_str((char *)malloc((len + 1)*sizeof(char)))
-    {
-        m_str[len] = '\0';
-    }
-
-    // no need to check for NULL, free() does it
-    ~wxCharBuffer() { free(m_str); }
-
-    wxCharBuffer(const wxCharBuffer& src)
-        : m_str(src.m_str)
-    {
-        // no reference count yet...
-        ((wxCharBuffer*)&src)->m_str = (char *)NULL;
-    }
-    wxCharBuffer& operator=(const wxCharBuffer& src)
-    {
-        m_str = src.m_str;
-        // no reference count yet...
-        ((wxCharBuffer*)&src)->m_str = (char *)NULL;
-        return *this;
-    }
-
-    const char *data() const { return m_str; }
-    operator const char *() const { return m_str; }
-    char operator[](size_t n) const { return m_str[n]; }
-
-private:
-    char *m_str;
-};
+DEFINE_BUFFER(wxCharBuffer, char, strdup);
 
 #if wxUSE_WCHAR_T
 
-class wxWCharBuffer
+inline wchar_t *wxWcsdupReplacement(const wchar_t *wcs)
 {
-public:
-    wxWCharBuffer(const wchar_t *wcs)
-        : m_wcs((wchar_t *)NULL)
-    {
-        if (wcs) {
-          size_t siz = (wxWcslen(wcs) + 1)*sizeof(wchar_t);
-          m_wcs = (wchar_t *)malloc(siz);
-          memcpy(m_wcs, wcs, siz);
-        }
-    }
-    wxWCharBuffer(size_t len)
-        : m_wcs((wchar_t *)malloc((len + 1)*sizeof(wchar_t)))
-    {
-        m_wcs[len] = L'\0';
-    }
+    const size_t siz = (wxWcslen(wcs) + 1)*sizeof(wchar_t);
+    wchar_t *wcsCopy = (wchar_t *)malloc(siz);
+    memcpy(wcsCopy, wcs, siz);
+    return wcsCopy;
+}
 
-    // no need to check for NULL, free() does it
-    ~wxWCharBuffer() { free(m_wcs); }
-
-    wxWCharBuffer(const wxWCharBuffer& src)
-        : m_wcs(src.m_wcs)
-    {
-       // no reference count yet...
-       ((wxWCharBuffer*)&src)->m_wcs = (wchar_t *)NULL;
-    }
-    wxWCharBuffer& operator=(const wxWCharBuffer& src)
-    {
-        m_wcs = src.m_wcs;
-        // no reference count yet...
-        ((wxWCharBuffer*)&src)->m_wcs = (wchar_t *)NULL;
-        return *this;
-    }
-
-    const wchar_t *data() const { return m_wcs; }
-    operator const wchar_t *() const { return m_wcs; }
-    wchar_t operator[](size_t n) const { return m_wcs[n]; }
-
-private:
-    wchar_t *m_wcs;
-};
+DEFINE_BUFFER(wxWCharBuffer, wchar_t, wxWcsdupReplacement);
 
 #endif // wxUSE_WCHAR_T
+
+#undef DEFINE_BUFFER
 
 #if wxUSE_UNICODE
     #define wxMB2WXbuf wxWCharBuffer
@@ -125,101 +129,146 @@ private:
 // A class for holding growable data buffers (not necessarily strings)
 // ----------------------------------------------------------------------------
 
+// This class manages the actual data buffer pointer and is ref-counted.
+class wxMemoryBufferData
+{
+public:
+    // the initial size and also the size added by ResizeIfNeeded()
+    enum { BLOCK_SIZE = 1024 };
+
+    friend class wxMemoryBuffer;
+
+    // everyting is private as it can only be used by wxMemoryBuffer
+private:
+    wxMemoryBufferData(size_t size = wxMemoryBufferData::BLOCK_SIZE)
+        : m_data(size ? malloc(size) : NULL), m_size(size), m_len(0), m_ref(0)
+    {
+    }
+    ~wxMemoryBufferData() { free(m_data); }
+
+
+    void ResizeIfNeeded(size_t newSize)
+    {
+        if (newSize > m_size)
+        {
+            void *dataOld = m_data;
+            m_data = realloc(m_data, newSize + wxMemoryBufferData::BLOCK_SIZE);
+            if ( !m_data )
+            {
+                free(dataOld);
+            }
+
+            m_size = newSize + wxMemoryBufferData::BLOCK_SIZE;
+        }
+    }
+
+    void IncRef() { m_ref += 1; }
+    void DecRef()
+    {
+        m_ref -= 1;
+        if (m_ref == 0)  // are there no more references?
+            delete this;
+    }
+
+
+    // the buffer containing the data
+    void  *m_data;
+
+    // the size of the buffer
+    size_t m_size;
+
+    // the amount of data currently in the buffer
+    size_t m_len;
+
+    // the reference count
+    size_t m_ref;
+};
+
+
 class wxMemoryBuffer
 {
 public:
-    enum { BLOCK_SIZE = 1024 };
-    wxMemoryBuffer(size_t size = wxMemoryBuffer::BLOCK_SIZE)
-        : m_data(malloc(size)), m_size(size), m_len(0)
+    // ctor and dtor
+    wxMemoryBuffer(size_t size = wxMemoryBufferData::BLOCK_SIZE)
     {
+        m_bufdata = new wxMemoryBufferData(size);
+        m_bufdata->IncRef();
     }
 
-    ~wxMemoryBuffer() { free(m_data); }
+    ~wxMemoryBuffer() { m_bufdata->DecRef(); }
+
+
+    // copy and assignment
+    wxMemoryBuffer(const wxMemoryBuffer& src)
+        : m_bufdata(src.m_bufdata)
+    {
+        m_bufdata->IncRef();
+    }
+
+    wxMemoryBuffer& operator=(const wxMemoryBuffer& src)
+    {
+        m_bufdata->DecRef();
+        m_bufdata = src.m_bufdata;
+        m_bufdata->IncRef();
+        return *this;
+    }
+
 
     // Accessors
-    void*  GetData() const    { return m_data; }
-    size_t GetBufSize() const { return m_size; }
-    size_t GetDataLen() const { return m_len; }
+    void  *GetData() const    { return m_bufdata->m_data; }
+    size_t GetBufSize() const { return m_bufdata->m_size; }
+    size_t GetDataLen() const { return m_bufdata->m_len; }
 
-    void   SetBufSize(size_t size) { ResizeIfNeeded(size); }
+    void   SetBufSize(size_t size) { m_bufdata->ResizeIfNeeded(size); }
     void   SetDataLen(size_t len)
     {
-        wxASSERT(len <= m_size);
-        m_len = len;
+        wxASSERT(len <= m_bufdata->m_size);
+        m_bufdata->m_len = len;
     }
 
     // Ensure the buffer is big enough and return a pointer to it
-    void* GetWriteBuf(size_t sizeNeeded)
+    void *GetWriteBuf(size_t sizeNeeded)
     {
-        ResizeIfNeeded(sizeNeeded);
-        return m_data;
+        m_bufdata->ResizeIfNeeded(sizeNeeded);
+        return m_bufdata->m_data;
     }
+
     // Update the length after the write
     void  UngetWriteBuf(size_t sizeUsed) { SetDataLen(sizeUsed); }
 
     // Like the above, but appends to the buffer
-    void* GetAppendBuf(size_t sizeNeeded)
+    void *GetAppendBuf(size_t sizeNeeded)
     {
-        ResizeIfNeeded(m_len + sizeNeeded);
-        return (char*)m_data + m_len;
+        m_bufdata->ResizeIfNeeded(m_bufdata->m_len + sizeNeeded);
+        return (char*)m_bufdata->m_data + m_bufdata->m_len;
     }
-    void  UngetAppendBuf(size_t sizeUsed) { SetDataLen(m_len + sizeUsed); }
+
+    // Update the length after the append
+    void  UngetAppendBuf(size_t sizeUsed)
+    {
+        SetDataLen(m_bufdata->m_len + sizeUsed);
+    }
 
     // Other ways to append to the buffer
-    void  AppendByte(char data) {
-        ResizeIfNeeded(m_len + 1);
-        *(((char*)m_data)+m_len) = data;
-        m_len += 1;
+    void  AppendByte(char data)
+    {
+        wxCHECK_RET( m_bufdata->m_data, _T("invalid wxMemoryBuffer") );
+
+        m_bufdata->ResizeIfNeeded(m_bufdata->m_len + 1);
+        *(((char*)m_bufdata->m_data) + m_bufdata->m_len) = data;
+        m_bufdata->m_len += 1;
     }
+
     void  AppendData(void* data, size_t len)
     {
         memcpy(GetAppendBuf(len), data, len);
         UngetAppendBuf(len);
     }
 
-    operator const char *() const { return (const char*)m_data; }
-
-
-    // Copy and assignment
-    wxMemoryBuffer(const wxMemoryBuffer& src)
-        : m_data(src.m_data), m_size(src.m_size), m_len(src.m_len)
-    {
-        // no reference count yet...
-        ((wxMemoryBuffer*)&src)->m_data = NULL;
-        ((wxMemoryBuffer*)&src)->m_size = 0;
-        ((wxMemoryBuffer*)&src)->m_len  = 0;
-    }
-
-    wxMemoryBuffer& operator=(const wxMemoryBuffer& src)
-    {
-        m_data = src.m_data;
-        m_size = src.m_size;
-        m_len  = src.m_len;
-
-        // no reference count yet...
-        ((wxMemoryBuffer*)&src)->m_data = NULL;
-        ((wxMemoryBuffer*)&src)->m_size = 0;
-        ((wxMemoryBuffer*)&src)->m_len  = 0;
-
-        return *this;
-   }
-
-
-protected:
-    void ResizeIfNeeded(size_t newSize)
-    {
-        if (newSize > m_size)
-        {
-            m_data = realloc(m_data, newSize + wxMemoryBuffer::BLOCK_SIZE);
-            wxASSERT(m_data != NULL);
-            m_size = newSize + wxMemoryBuffer::BLOCK_SIZE;
-        }
-    }
+    operator const char *() const { return (const char*)GetData(); }
 
 private:
-    void*       m_data;
-    size_t      m_size;
-    size_t      m_len;
+    wxMemoryBufferData*  m_bufdata;
 };
 
 // ----------------------------------------------------------------------------

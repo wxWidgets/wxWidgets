@@ -76,18 +76,18 @@ wxString wxBestHelpController::GetValidFilename( const wxString& filename ) cons
     switch( m_helpControllerType )
     {
         case wxUseChmHelp:
-            if( ::wxFileExists( tmp + ".chm" ) )
-                return tmp + ".chm";
+            if( ::wxFileExists( tmp + wxT(".chm") ) )
+                return tmp + wxT(".chm");
 
             return filename;
 
         case wxUseHtmlHelp:
-            if( ::wxFileExists( tmp + ".htb" ) )
-                return tmp + ".htb";
-            if( ::wxFileExists( tmp + ".zip" ) )
-                return tmp + ".zip";
-            if( ::wxFileExists( tmp + ".hhp" ) )
-                return tmp + ".hhp";
+            if( ::wxFileExists( tmp + wxT(".htb") ) )
+                return tmp + wxT(".htb");
+            if( ::wxFileExists( tmp + wxT(".zip") ) )
+                return tmp + wxT(".zip");
+            if( ::wxFileExists( tmp + wxT(".hhp") ) )
+                return tmp + wxT(".hhp");
 
             return filename;
 

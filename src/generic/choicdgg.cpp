@@ -53,17 +53,6 @@
 
 #define wxID_LISTBOX 3000
 
-#if defined(__WXMSW__) || defined(__WXMAC__)
-#define wxCHOICEDLG_DIALOG_STYLE (wxDEFAULT_DIALOG_STYLE | \
-                                  wxDIALOG_MODAL |         \
-                                  wxTAB_TRAVERSAL)
-#else
-#define wxCHOICEDLG_DIALOG_STYLE (wxDEFAULT_DIALOG_STYLE | \
-                                  wxDIALOG_MODAL |         \
-                                  wxRESIZE_BORDER |        \
-                                  wxTAB_TRAVERSAL)
-#endif
-
 // ----------------------------------------------------------------------------
 // private functions
 // ----------------------------------------------------------------------------
@@ -133,7 +122,7 @@ wxString wxGetSingleChoice( const wxString& message,
 // Overloaded for backward compatibility
 wxString wxGetSingleChoice( const wxString& message,
                             const wxString& caption,
-                            int n, char *choices[],
+                            int n, wxChar *choices[],
                             wxWindow *parent,
                             int x, int y, bool centre,
                             int width, int height )
@@ -321,8 +310,7 @@ bool wxAnyChoiceDialog::Create(wxWindow *parent,
                                const wxPoint& pos,
                                long styleLbox)
 {
-    if ( !wxDialog::Create(parent, -1, caption, pos, wxDefaultSize,
-                           wxCHOICEDLG_DIALOG_STYLE) )
+    if ( !wxDialog::Create(parent, -1, caption, pos, wxDefaultSize, styleDlg) )
         return FALSE;
 
     wxBoxSizer *topsizer = new wxBoxSizer( wxVERTICAL );
@@ -409,7 +397,7 @@ bool wxSingleChoiceDialog::Create(wxWindow *parent,
     int i;
     for ( i = 0; i < choices.Number(); i++)
     {
-        strings[i] = (char *)choices.Nth(i)->Data();
+        strings[i] = (wxChar *)choices.Nth(i)->Data();
     }
     bool ans = Create(parent, message, caption, choices.Number(), strings, clientData, style, pos);
     delete[] strings;
@@ -454,10 +442,7 @@ void wxSingleChoiceDialog::OnOK(wxCommandEvent& WXUNUSED(event))
 {
     m_selection = m_listbox->GetSelection();
     m_stringSelection = m_listbox->GetStringSelection();
-    // TODO!
-#ifndef __WXMOTIF__
     if ( m_listbox->HasClientUntypedData() )
-#endif
         SetClientData(m_listbox->GetClientData(m_selection));
     EndModal(wxID_OK);
 }
@@ -467,10 +452,7 @@ void wxSingleChoiceDialog::OnListBoxDClick(wxCommandEvent& WXUNUSED(event))
     m_selection = m_listbox->GetSelection();
     m_stringSelection = m_listbox->GetStringSelection();
 
-    // TODO!
-#ifndef __WXMOTIF__
     if ( m_listbox->HasClientUntypedData() )
-#endif
         SetClientData(m_listbox->GetClientData(m_selection));
 
     EndModal(wxID_OK);
@@ -510,11 +492,6 @@ void wxMultiChoiceDialog::SetSelections(const wxArrayInt& selections)
 
 bool wxMultiChoiceDialog::TransferDataFromWindow()
 {
-    // VZ: I hate to do it but I can't fix wxMotif right now (FIXME)
-#ifdef __WXMOTIF__
-    #define IsSelected Selected
-#endif
-
     m_selections.Empty();
     size_t count = m_listbox->GetCount();
     for ( size_t n = 0; n < count; n++ )

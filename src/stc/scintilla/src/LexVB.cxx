@@ -37,7 +37,7 @@ static inline bool IsAWordStart(const int ch) {
 }
 
 static inline bool IsADateCharacter(const int ch) {
-	return (ch < 0x80) && 
+	return (ch < 0x80) &&
 		(isalnum(ch) || ch == '|' || ch == '-' || ch == '/' || ch == ':' || ch == ' ' || ch == '\t');
 }
 
@@ -49,7 +49,7 @@ static void ColouriseVBDoc(unsigned int startPos, int length, int initStyle,
 	styler.StartAt(startPos);
 
 	int visibleChars = 0;
-				   
+
 	StyleContext sc(startPos, length, initStyle, styler);
 
 	for (; sc.More(); sc.Forward()) {
@@ -83,7 +83,7 @@ static void ColouriseVBDoc(unsigned int startPos, int length, int initStyle,
 				sc.SetState(SCE_B_DEFAULT);
 			}
 		} else if (sc.state == SCE_B_STRING) {
-			// VB doubles quotes to preserve them, so just end this string 
+			// VB doubles quotes to preserve them, so just end this string
 			// state now as a following quote will start again
 			if (sc.ch == '\"') {
 				if (tolower(sc.chNext) == 'c') {
@@ -104,7 +104,7 @@ static void ColouriseVBDoc(unsigned int startPos, int length, int initStyle,
 				sc.ForwardSetState(SCE_B_DEFAULT);
 			}
 		}
-		
+
 		if (sc.state == SCE_B_DEFAULT) {
 			if (sc.ch == '\'') {
 				sc.SetState(SCE_B_COMMENT);
@@ -116,7 +116,7 @@ static void ColouriseVBDoc(unsigned int startPos, int length, int initStyle,
 			} else if (sc.ch == '#') {
 				int n = 1;
 				int chSeek = ' ';
-				while (chSeek == ' ' || chSeek == '\t') {
+				while ((n < 100) && (chSeek == ' ' || chSeek == '\t')) {
 					chSeek = sc.GetRelative(n);
 					n++;
 				}
@@ -137,7 +137,7 @@ static void ColouriseVBDoc(unsigned int startPos, int length, int initStyle,
 				sc.SetState(SCE_B_OPERATOR);
 			}
 		}
-		
+
 		if (sc.atLineEnd) {
 			visibleChars = 0;
 		}
@@ -200,6 +200,11 @@ static void ColouriseVBScriptDoc(unsigned int startPos, int length, int initStyl
 	ColouriseVBDoc(startPos, length, initStyle, keywordlists, styler, true);
 }
 
-LexerModule lmVB(SCLEX_VB, ColouriseVBNetDoc, "vb", FoldVBDoc);
-LexerModule lmVBScript(SCLEX_VBSCRIPT, ColouriseVBScriptDoc, "vbscript", FoldVBDoc);
+static const char * const vbWordListDesc[] = {
+	"Keywords",
+	0
+};
+
+LexerModule lmVB(SCLEX_VB, ColouriseVBNetDoc, "vb", FoldVBDoc, vbWordListDesc);
+LexerModule lmVBScript(SCLEX_VBSCRIPT, ColouriseVBScriptDoc, "vbscript", FoldVBDoc, vbWordListDesc);
 

@@ -23,6 +23,8 @@
 #include "wx/frame.h"
 #include "wx/toolbar.h"
 
+#if wxUSE_MDI_ARCHITECTURE
+
 //-----------------------------------------------------------------------------
 // classes
 //-----------------------------------------------------------------------------
@@ -211,6 +213,8 @@ public:
 private:
     DECLARE_DYNAMIC_CLASS(wxMDIClientWindow)
 };
+
+#endif // if USE_MDI...
 
 #endif // __MDIH__
 

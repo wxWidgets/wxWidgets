@@ -69,6 +69,7 @@ public:
   wxString Hostname();
   wxString OrigHostname() { return m_origHostname; }
   unsigned short Service();
+  wxString IPAddress() const;
 
   virtual int Type() { return wxSockAddress::IPV4; }
   virtual wxSockAddress *Clone() const;

@@ -19,7 +19,7 @@ or you can write your own.
 Here is an example of wxTextValidator usage.
 
 \begin{verbatim}
-  wxTextCtrl *txt1 = new wxTextCtrl(this, VALIDATE_TEXT, "",
+  wxTextCtrl *txt1 = new wxTextCtrl(this, -1, wxT(""),
     wxPoint(10, 10), wxSize(100, 80), 0,
     wxTextValidator(wxFILTER_ALPHA, &g_data.m_string));
 \end{verbatim}

@@ -158,6 +158,11 @@ wxDataObject::wxDataObject()
 {
 }
 
+wxDataObject::~wxDataObject()
+{
+    // dtor is empty but needed for Darwin and AIX -- otherwise it doesn't link
+}
+
 bool wxDataObject::IsSupportedFormat(const wxDataFormat& format, Direction dir) const
 {
     size_t nFormatCount = GetFormatCount(dir);
@@ -194,8 +199,9 @@ bool wxFileDataObject::GetDataHere(void *buf) const
 
     for (size_t i = 0; i < m_filenames.GetCount(); i++)
     {
+        filenames += wxT("file:");
         filenames += m_filenames[i];
-        filenames += (wxChar) 0;
+        filenames += wxT("\r\n");
     }
 
     memcpy( buf, filenames.mbc_str(), filenames.Len() + 1 );
@@ -209,8 +215,9 @@ size_t wxFileDataObject::GetDataSize() const
 
     for (size_t i = 0; i < m_filenames.GetCount(); i++)
     {
+        // This is junk in UTF-8
         res += m_filenames[i].Len();
-        res += 1;
+        res += 5 + 2; // "file:" (5) + "\r\n" (2)
     }
 
     return res + 1;

@@ -459,10 +459,8 @@ void SliderWidgetsPage::OnUpdateUIOtherSide(wxUpdateUIEvent& event)
 
 void SliderWidgetsPage::OnSlider(wxScrollEvent& event)
 {
-    long value = event.GetInt();
-
-    wxASSERT_MSG( value == m_slider->GetValue(),
-        wxT("slider value should be the same") );
+    wxASSERT_MSG( event.GetInt() == m_slider->GetValue(),
+                  wxT("slider value should be the same") );
 
     wxEventType eventType = event.GetEventType();
 

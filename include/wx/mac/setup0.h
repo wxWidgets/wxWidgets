@@ -36,6 +36,22 @@
 // so there is little advantage to setting it to 1.
 #define WXWIN_COMPATIBILITY  0
 
+// This setting determines the compatibility with 2.0 API: set it to 1 to
+// enable it
+//
+// Default is 0.
+//
+// Recommended setting: 0 (please update your code instead!)
+#define WXWIN_COMPATIBILITY_2 0
+
+// This setting determines the compatibility with 2.0 API: set it to 1 to
+// enable it
+//
+// Default is 1.
+//
+// Recommended setting: 0 (please update your code instead!)
+#define WXWIN_COMPATIBILITY_2_2 1
+
 // in wxMSW version 2.1.11 and earlier, wxIcon always derives from wxBitmap,
 // but this is very dangerous because you can mistakenly pass an icon instead
 // of a bitmap to a function taking "const wxBitmap&" - which will *not* work
@@ -106,23 +122,25 @@
 #define wxUSE_MEMORY_TRACING 1
 
 // In debug mode, cause new and delete to be redefined globally.
-// If this causes problems (e.g. link errors), set this to 0.
+// If this causes problems (e.g. link errors which is a common problem
+// especially if you use another library which also redefines the global new
+// and delete), set this to 0.
 // This switch is currently ignored for mingw / cygwin
 //
-// Default is 1
+// Default is 0
 //
-// Recommended setting: 1 but see comment in the beginning of this section
+// Recommended setting: 0
 #define wxUSE_GLOBAL_MEMORY_OPERATORS 0
 
 // In debug mode, causes new to be defined to be WXDEBUG_NEW (see object.h). If
 // this causes problems (e.g. link errors), set this to 0. You may need to set
 // this to 0 if using templates (at least for VC++). This switch is currently
-// ignored for mingw / cygwin
+// ignored for mingw / cygwin 
 //
-// Default is 1
+// Default is 0
 //
-// Recommended setting: 1 but see comment in the beginning of this section
-#define wxUSE_DEBUG_NEW_ALWAYS 1
+// Recommended setting: 0
+#define wxUSE_DEBUG_NEW_ALWAYS 0
 
 // wxHandleFatalExceptions() may be used to catch the program faults at run
 // time and, instead of terminating the program with a usual GPF message box,
@@ -190,6 +208,13 @@
 // Recommended setting: 1 (always)
 #define wxUSE_LOG_DIALOG 1
 
+// Support for command line parsing using wxCmdLineParser class.
+//
+// Default is 1
+//
+// Recommended setting: 1 (can be set to 0 if you don't use the cmd line)
+#define wxUSE_CMDLINE_PARSER 1
+
 // Support for multithreaded applications: if 1, compile in thread classes
 // (thread.h) and make the library a bit more thread safe. Although thread
 // support is quite stable by now, you may still consider recompiling the
@@ -246,7 +271,8 @@
 // use wxTextBuffer class: required by wxTextFile
 #define wxUSE_TEXTBUFFER    1
 
-// use wxTextFile class: requires wxFile, required by wxFileConfig
+// use wxTextFile class: requires wxFile and wxTextBuffer, required by
+// wxFileConfig
 #define wxUSE_TEXTFILE      1
 
 // i18n support: _() macro, wxLocale class. Requires wxTextFile.
@@ -317,14 +343,14 @@
 
 // If wxUSE_DIALUP_MANAGER is 1, compile in wxDialUpManager class which allows
 // to connect/disconnect from the network and be notified whenever the dial-up
-// network connection is established/terminated. Requires wxUSE_DYNLIB_CLASS.
+// network connection is established/terminated. Requires wxUSE_DYNAMIC_LOADER.
 //
 // Default is 1.
 //
 // Recommended setting: 1
 #define wxUSE_DIALUP_MANAGER   1
 
-// Compile in wxLibrary class for run-time DLL loading and function calling.
+// Compile in classes for run-time DLL loading and function calling.
 // Required by wxUSE_DIALUP_MANAGER.
 //
 // This setting is for Win32 only
@@ -374,9 +400,6 @@
 // wxMimeTypesManager class
 #define wxUSE_MIMETYPE 1
 
-// wxSystemOptions class
-#define wxUSE_SYSTEM_OPTIONS 1
-
 // wxProtocol and related classes: if you want to use either of wxFTP, wxHTTP
 // or wxURL you need to set this to 1.
 //
@@ -401,7 +424,13 @@
 //
 // Recommended setting: 1 if your compiler supports it, if it doesn't please
 // contribute us a makefile for src/regex for it
-#define wxUSE_REGEX       0
+#define wxUSE_REGEX       1
+
+// wxSystemOptions class
+#define wxUSE_SYSTEM_OPTIONS 1
+
+// wxWave class
+#define wxUSE_WAVE      1
 
 // ----------------------------------------------------------------------------
 // Individual GUI controls
@@ -450,7 +479,6 @@
 #define wxUSE_GAUGE        1    // wxGauge
 #define wxUSE_LISTBOX      1    // wxListBox
 #define wxUSE_LISTCTRL     1    // wxListCtrl
-#define wxUSE_PROPSHEET    1    // wxProperty
 #define wxUSE_RADIOBOX     1    // wxRadioBox
 #define wxUSE_RADIOBTN     1    // wxRadioButton
 #define wxUSE_SCROLLBAR    1    // wxScrollBar
@@ -531,6 +559,9 @@
 // WIN16/BC++ resets wxUSE_NEW_GRID to 0 because it exceeds the data limit.
 #define wxUSE_GRID         1
 #define wxUSE_NEW_GRID     1
+
+// wxProperty[Value/Form/List] classes, used by Dialog Editor
+#define wxUSE_PROPSHEET    0
 
 // ----------------------------------------------------------------------------
 // Miscellaneous GUI stuff
@@ -617,6 +648,13 @@
 // Recommended setting: 1 (used in the library itself)
 #define wxUSE_CHOICEDLG     1
 
+// Use colour picker dialog
+//
+// Default is 1
+//
+// Recommended setting: 1
+#define wxUSE_COLOURDLG     1
+
 // wxDirDlg class for getting a directory name from user
 #define wxUSE_DIRDLG 1
 
@@ -628,6 +666,13 @@
 //
 // Recommended setting: 1 (used in many places in the library itself)
 #define wxUSE_FILEDLG       1
+
+// Use find/replace dialogs.
+//
+// Default is 1
+//
+// Recommended setting: 1 (but may be safely set to 0)
+#define wxUSE_FINDREPLDLG       1
 
 // Use font picker dialog
 //
@@ -654,9 +699,6 @@
 
 // number entry dialog
 #define wxUSE_NUMBERDLG 1
-
-// color chooser dialog
-#define wxUSE_COLOURDLG 1
 
 // splash screen class
 #define wxUSE_SPLASH 1
@@ -770,8 +812,11 @@
 #define wxUSE_SPLINES     1
                                 // 0 for no splines
 
-#define wxUSE_WX_RESOURCES        1
-                                // Use .wxr resource mechanism (requires PrologIO library)
+// use wxExpr (a.k.a. PrologIO)
+#define wxUSE_PROLOGIO          0
+
+// Use .wxr resource mechanism (requires PrologIO library)
+#define wxUSE_WX_RESOURCES        0
 
 #define wxUSE_MOUSEWHEEL        1
                                 // Include mouse wheel support

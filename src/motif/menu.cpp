@@ -139,10 +139,10 @@ wxMenuItem *wxMenu::DoRemove(wxMenuItem *item)
 
 bool wxMenu::DoInsert(size_t pos, wxMenuItem *item)
 {
-    if ( !wxMenuBase::DoInsert(pos, item) )
-        return FALSE;
+    if ( wxMenuBase::DoInsert(pos, item) )
+        return TRUE;
 
-    wxFAIL_MSG(wxT("not implemented"));
+    wxFAIL_MSG(wxT("DoInsert not implemented; or error in wxMenuBase::DoInsert"));
 
     return FALSE;
 }

@@ -6,6 +6,8 @@
 #-------------------------------------------------------------------
 
 from wxPython.wx import *
+import images
+import time
 
 #-------------------------------------------------------------------
 
@@ -30,11 +32,11 @@ check the source for this sample to see how to implement them.
 
         # 1st menu from left
         menu1 = wxMenu()
-        menu1.Append(101, "Mercury", "This the text in the Statusbar")
-        menu1.Append(102, "Venus", "")
-        menu1.Append(103, "Earth", "You may select Earth too")
+        menu1.Append(101, "&Mercury", "This the text in the Statusbar")
+        menu1.Append(102, "&Venus", "")
+        menu1.Append(103, "&Earth", "You may select Earth too")
         menu1.AppendSeparator()
-        menu1.Append(104, "Close", "Close this frame")
+        menu1.Append(104, "&Close", "Close this frame")
         # Add menu to the menu bar
         menuBar.Append(menu1, "&Planets")
 
@@ -67,15 +69,30 @@ check the source for this sample to see how to implement them.
         menuBar.Append(menu4, "Chec&k")
 
         menu5 = wxMenu()
-        menu5.Append(501, "Interesting thing\tCtrl+A", "Note the shortcut!")
+        # Show how to put an icon in the menu
+        item = wxMenuItem(menu5, 500, "&Smile!\tCtrl+S", "This one has an icon")
+        item.SetBitmap(images.getSmilesBitmap())
+        menu5.AppendItem(item)
 
+        menu5.Append(501, "Interesting thing\tCtrl+A", "Note the shortcut!")
         menu5.AppendSeparator()
         menu5.Append(502, "Hello\tShift+H")
+        menu5.AppendSeparator()
+        menu5.Append(503, "remove the submenu")
+        menu6 = wxMenu()
+        menu6.Append(601, "Submenu Item")
+        menu5.AppendMenu(504, "submenu", menu6)
+        menu5.Append(505, "remove this menu")
+        menu5.Append(506, "this is updated")
+        menu5.Append(507, "insert after this...")
+        menu5.Append(508, "...and before this")
         menuBar.Append(menu5, "&Fun")
 
         self.SetMenuBar(menuBar)
 
         # Menu events
+        EVT_MENU_HIGHLIGHT_ALL(self, self.OnMenuHighlight)
+
         EVT_MENU(self, 101, self.Menu101)
         EVT_MENU(self, 102, self.Menu102)
         EVT_MENU(self, 103, self.Menu103)
@@ -95,10 +112,27 @@ check the source for this sample to see how to implement them.
 
         EVT_MENU_RANGE(self, 401, 403, self.Menu401To403)
 
+        EVT_MENU(self, 500, self.Menu500)
         EVT_MENU(self, 501, self.Menu501)
         EVT_MENU(self, 502, self.Menu502)
+        EVT_MENU(self, 503, self.TestRemove)
+        EVT_MENU(self, 505, self.TestRemove2)
+        EVT_MENU(self, 507, self.TestInsert)
+        EVT_MENU(self, 508, self.TestInsert)
+
+        EVT_UPDATE_UI(wxGetApp(), 506, self.TestUpdateUI)
 
     # Methods
+
+    def OnMenuHighlight(self, event):
+        # Show how to get menu item imfo from this event handler
+        id = event.GetMenuId()
+        item = self.GetMenuBar().FindItemById(id)
+        text = item.GetText()
+        help = item.GetHelp()
+        #print text, help
+        event.Skip() # but in this case just call Skip so the default is done
+
 
     def Menu101(self, event):
         self.log.write('Welcome to Mercury\n')
@@ -140,18 +174,62 @@ check the source for this sample to see how to implement them.
     def Menu401To403(self, event):
         self.log.write('From a EVT_MENU_RANGE event\n')
 
+    def Menu500(self, event):
+        self.log.write('Have a happy day!\n')
+
     def Menu501(self, event):
         self.log.write('Look in the code how the shortcut has been realized\n')
 
     def Menu502(self, event):
         self.log.write('Hello from Jean-Michel\n')
 
+
+    def TestRemove(self, evt):
+        mb = self.GetMenuBar()
+        submenuItem = mb.FindItemById(601)
+        if not submenuItem:
+            return
+        submenu = submenuItem.GetMenu()
+        menu = submenu.GetParent()
+
+        #menu.Remove(504)               # works
+        menu.RemoveItem(mb.FindItemById(504))  # this also works
+        #menu.RemoveItem(submenuItem)   # doesn't work, as expected since submenuItem is not on menu
+
+
+    def TestRemove2(self, evt):
+        mb = self.GetMenuBar()
+        mb.Remove(4)
+
+
+    def TestUpdateUI(self, evt):
+        text = time.ctime()
+        evt.SetText(text)
+
+
+    def TestInsert(self, evt):
+        # get the menu
+        mb = self.GetMenuBar()
+        menuItem = mb.FindItemById(507)
+        menu = menuItem.GetMenu()
+
+        ID = wxNewId()
+        ##menu.Insert(9, ID, "NewItem " + str(ID))
+        item = wxMenuItem(menu)
+        item.SetId(ID)
+        item.SetText("NewItem " + str(ID))
+        menu.InsertItem(9, item)
+
+
+
 #-------------------------------------------------------------------
+
+wxRegisterId(10000)
 
 def runTest(frame, nb, log):
     win = MyFrame(frame, -1, log)
     frame.otherWin = win
-    win.Show(true)
+    win.Show(True)
 
 
 #-------------------------------------------------------------------

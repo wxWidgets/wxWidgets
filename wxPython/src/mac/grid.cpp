@@ -19,6 +19,8 @@
 /* Implementation : PYTHON */
 
 #define SWIGPYTHON
+#include "Python.h"
+
 #include <string.h>
 #include <stdlib.h>
 /* Definitions for Windows/Unix exporting */
@@ -36,12 +38,9 @@
 #   define SWIGEXPORT(a) a
 #endif
 
-#include "Python.h"
-
 #ifdef __cplusplus
 extern "C" {
 #endif
-
 extern void SWIG_MakePtr(char *, void *, char *);
 extern void SWIG_RegisterMapping(char *, char *, void *(*)(void *));
 extern char *SWIG_GetPtr(char *, void **, char *);
@@ -106,7 +105,7 @@ PyObject* wxPyMake_##TYPE(TYPE* source) { \
         /* Otherwise make a new wrapper for it the old fashioned way and \
            give it the OOR treatment */ \
         if (! target) { \
-            target = wxPyConstructObject(source, #TYPE, FALSE); \
+            target = wxPyConstructObject(source, wxT(#TYPE), FALSE); \
             if (target) \
                 source->SetClientObject(new wxPyOORClientData(target)); \
         } \
@@ -541,7 +540,7 @@ public:
             PyObject* go = wxPyMake_wxObject(&grid);
             PyObject* dco = wxPyMake_wxObject(&dc);
             PyObject* ao = wxPyMake_wxGridCellAttr(&attr);
-            PyObject* ro = wxPyConstructObject((void*)&rect, "wxRect", 0);
+            PyObject* ro = wxPyConstructObject((void*)&rect, wxT("wxRect"), 0);
 
             wxPyCBH_callCallback(m_myInst, Py_BuildValue("(OOOOiii)", go, ao, dco, ro,
                                                          row, col, isSelected));
@@ -705,7 +704,7 @@ public:
         wxPyBeginBlockThreads();
         if ((found = wxPyCBH_findCallback(m_myInst, "PaintBackground)"))) {
             PyObject* ao = wxPyMake_wxGridCellAttr(attr);
-            PyObject* ro = wxPyConstructObject((void*)&rectCell, "wxRect", 0);
+            PyObject* ro = wxPyConstructObject((void*)&rectCell, wxT("wxRect"), 0);
 
             wxPyCBH_callCallback(m_myInst, Py_BuildValue("(OO)", ro, ao));
 
@@ -905,6 +904,21 @@ bool wxGridCellCoords_helper(PyObject* source, wxGridCellCoords** obj) {
     return FALSE;
 }
 
+PyObject* wxGridCellCoordsArray_helper(const wxGridCellCoordsArray* source)
+{
+    PyObject* list = PyList_New(0);
+    size_t idx;
+    for (idx = 0; idx < source->GetCount(); idx += 1) {
+        wxGridCellCoords& coord = source->Item(idx);
+        PyObject* tup = PyTuple_New(2);
+        PyTuple_SET_ITEM(tup, 0, PyInt_FromLong(coord.GetRow()));
+        PyTuple_SET_ITEM(tup, 1, PyInt_FromLong(coord.GetCol()));
+        PyList_Append(list, tup);
+        Py_DECREF(tup);
+    }
+    return list;
+}
+
 typedef wxGrid::wxGridSelectionModes WXGRIDSELECTIONMODES;
 #ifdef __cplusplus
 extern "C" {
@@ -1100,22 +1114,19 @@ static PyObject *_wrap_wxGridCellRenderer_Draw(PyObject *self, PyObject *args, P
         }
     }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxGrid_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxGrid_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxGridCellRenderer_Draw. Expected _wxGrid_p.");
         return NULL;
         }
     }
     if (_argo2) {
-        if (_argo2 == Py_None) { _arg2 = NULL; }
-        else if (SWIG_GetPtrObj(_argo2,(void **) &_arg2,"_wxGridCellAttr_p")) {
+        if (SWIG_GetPtrObj(_argo2,(void **) &_arg2,"_wxGridCellAttr_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 3 of wxGridCellRenderer_Draw. Expected _wxGridCellAttr_p.");
         return NULL;
         }
     }
     if (_argo3) {
-        if (_argo3 == Py_None) { _arg3 = NULL; }
-        else if (SWIG_GetPtrObj(_argo3,(void **) &_arg3,"_wxDC_p")) {
+        if (SWIG_GetPtrObj(_argo3,(void **) &_arg3,"_wxDC_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 4 of wxGridCellRenderer_Draw. Expected _wxDC_p.");
         return NULL;
         }
@@ -1165,22 +1176,19 @@ static PyObject *_wrap_wxGridCellRenderer_GetBestSize(PyObject *self, PyObject *
         }
     }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxGrid_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxGrid_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxGridCellRenderer_GetBestSize. Expected _wxGrid_p.");
         return NULL;
         }
     }
     if (_argo2) {
-        if (_argo2 == Py_None) { _arg2 = NULL; }
-        else if (SWIG_GetPtrObj(_argo2,(void **) &_arg2,"_wxGridCellAttr_p")) {
+        if (SWIG_GetPtrObj(_argo2,(void **) &_arg2,"_wxGridCellAttr_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 3 of wxGridCellRenderer_GetBestSize. Expected _wxGridCellAttr_p.");
         return NULL;
         }
     }
     if (_argo3) {
-        if (_argo3 == Py_None) { _arg3 = NULL; }
-        else if (SWIG_GetPtrObj(_argo3,(void **) &_arg3,"_wxDC_p")) {
+        if (SWIG_GetPtrObj(_argo3,(void **) &_arg3,"_wxDC_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 4 of wxGridCellRenderer_GetBestSize. Expected _wxDC_p.");
         return NULL;
         }
@@ -1893,6 +1901,71 @@ static PyObject *_wrap_wxGridCellEditor_SetControl(PyObject *self, PyObject *arg
     return _resultobj;
 }
 
+#define wxGridCellEditor_GetCellAttr(_swigobj)  (_swigobj->GetCellAttr())
+static PyObject *_wrap_wxGridCellEditor_GetCellAttr(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxGridCellAttr * _result;
+    wxGridCellEditor * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxGridCellEditor_GetCellAttr",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxGridCellEditor_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxGridCellEditor_GetCellAttr. Expected _wxGridCellEditor_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    _result = (wxGridCellAttr *)wxGridCellEditor_GetCellAttr(_arg0);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}{ _resultobj = wxPyMake_wxGridCellAttr(_result); }
+    return _resultobj;
+}
+
+#define wxGridCellEditor_SetCellAttr(_swigobj,_swigarg0)  (_swigobj->SetCellAttr(_swigarg0))
+static PyObject *_wrap_wxGridCellEditor_SetCellAttr(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxGridCellEditor * _arg0;
+    wxGridCellAttr * _arg1;
+    PyObject * _argo0 = 0;
+    PyObject * _argo1 = 0;
+    char *_kwnames[] = { "self","attr", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxGridCellEditor_SetCellAttr",_kwnames,&_argo0,&_argo1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxGridCellEditor_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxGridCellEditor_SetCellAttr. Expected _wxGridCellEditor_p.");
+        return NULL;
+        }
+    }
+    if (_argo1) {
+        if (_argo1 == Py_None) { _arg1 = NULL; }
+        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxGridCellAttr_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxGridCellEditor_SetCellAttr. Expected _wxGridCellAttr_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    wxGridCellEditor_SetCellAttr(_arg0,_arg1);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
 #define wxGridCellEditor_SetParameters(_swigobj,_swigarg0)  (_swigobj->SetParameters(_swigarg0))
 static PyObject *_wrap_wxGridCellEditor_SetParameters(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
@@ -2311,8 +2384,7 @@ static PyObject *_wrap_wxGridCellEditor_IsAcceptedKey(PyObject *self, PyObject *
         }
     }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxKeyEvent_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxKeyEvent_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxGridCellEditor_IsAcceptedKey. Expected _wxKeyEvent_p.");
         return NULL;
         }
@@ -2347,8 +2419,7 @@ static PyObject *_wrap_wxGridCellEditor_StartingKey(PyObject *self, PyObject *ar
         }
     }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxKeyEvent_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxKeyEvent_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxGridCellEditor_StartingKey. Expected _wxKeyEvent_p.");
         return NULL;
         }
@@ -2412,8 +2483,7 @@ static PyObject *_wrap_wxGridCellEditor_HandleReturn(PyObject *self, PyObject *a
         }
     }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxKeyEvent_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxKeyEvent_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxGridCellEditor_HandleReturn. Expected _wxKeyEvent_p.");
         return NULL;
         }
@@ -2653,6 +2723,7 @@ static PyObject *_wrap_wxPyGridCellEditor_base_PaintBackground(PyObject *self, P
 #define wxPyGridCellEditor_base_IsAcceptedKey(_swigobj,_swigarg0)  (_swigobj->base_IsAcceptedKey(_swigarg0))
 static PyObject *_wrap_wxPyGridCellEditor_base_IsAcceptedKey(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
+    bool  _result;
     wxPyGridCellEditor * _arg0;
     wxKeyEvent * _arg1;
     PyObject * _argo0 = 0;
@@ -2670,20 +2741,18 @@ static PyObject *_wrap_wxPyGridCellEditor_base_IsAcceptedKey(PyObject *self, PyO
         }
     }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxKeyEvent_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxKeyEvent_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxPyGridCellEditor_base_IsAcceptedKey. Expected _wxKeyEvent_p.");
         return NULL;
         }
     }
 {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-    wxPyGridCellEditor_base_IsAcceptedKey(_arg0,*_arg1);
+    _result = (bool )wxPyGridCellEditor_base_IsAcceptedKey(_arg0,*_arg1);
 
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
-}    Py_INCREF(Py_None);
-    _resultobj = Py_None;
+}    _resultobj = Py_BuildValue("i",_result);
     return _resultobj;
 }
 
@@ -2707,8 +2776,7 @@ static PyObject *_wrap_wxPyGridCellEditor_base_StartingKey(PyObject *self, PyObj
         }
     }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxKeyEvent_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxKeyEvent_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxPyGridCellEditor_base_StartingKey. Expected _wxKeyEvent_p.");
         return NULL;
         }
@@ -2772,8 +2840,7 @@ static PyObject *_wrap_wxPyGridCellEditor_base_HandleReturn(PyObject *self, PyOb
         }
     }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxKeyEvent_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxKeyEvent_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxPyGridCellEditor_base_HandleReturn. Expected _wxKeyEvent_p.");
         return NULL;
         }
@@ -3447,8 +3514,7 @@ static PyObject *_wrap_wxGridCellAttr_SetFont(PyObject *self, PyObject *args, Py
         }
     }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxFont_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxFont_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxGridCellAttr_SetFont. Expected _wxFont_p.");
         return NULL;
         }
@@ -4028,33 +4094,25 @@ static PyObject *_wrap_wxGridCellAttr_GetSize(PyObject *self, PyObject *args, Py
     PyObject * _resultobj;
     wxGridCellAttr * _arg0;
     int * _arg1;
+    int  temp;
     int * _arg2;
+    int  temp0;
     PyObject * _argo0 = 0;
-    PyObject * _argo1 = 0;
-    PyObject * _argo2 = 0;
-    char *_kwnames[] = { "self","num_rows","num_cols", NULL };
+    char *_kwnames[] = { "self", NULL };
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OOO:wxGridCellAttr_GetSize",_kwnames,&_argo0,&_argo1,&_argo2)) 
+{
+  _arg1 = &temp;
+}
+{
+  _arg2 = &temp0;
+}
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxGridCellAttr_GetSize",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
         else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxGridCellAttr_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxGridCellAttr_GetSize. Expected _wxGridCellAttr_p.");
-        return NULL;
-        }
-    }
-    if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_int_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxGridCellAttr_GetSize. Expected _int_p.");
-        return NULL;
-        }
-    }
-    if (_argo2) {
-        if (_argo2 == Py_None) { _arg2 = NULL; }
-        else if (SWIG_GetPtrObj(_argo2,(void **) &_arg2,"_int_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 3 of wxGridCellAttr_GetSize. Expected _int_p.");
         return NULL;
         }
     }
@@ -4066,6 +4124,16 @@ static PyObject *_wrap_wxGridCellAttr_GetSize(PyObject *self, PyObject *args, Py
     if (PyErr_Occurred()) return NULL;
 }    Py_INCREF(Py_None);
     _resultobj = Py_None;
+{
+    PyObject *o;
+    o = PyInt_FromLong((long) (*_arg1));
+    _resultobj = t_output_helper(_resultobj, o);
+}
+{
+    PyObject *o;
+    o = PyInt_FromLong((long) (*_arg2));
+    _resultobj = t_output_helper(_resultobj, o);
+}
     return _resultobj;
 }
 
@@ -5012,7 +5080,7 @@ static PyObject *_wrap_wxGridTableBase_GetValue(PyObject *self, PyObject *args, 
     if (PyErr_Occurred()) return NULL;
 }{
 #if wxUSE_UNICODE
-    _resultobj = PyUnicode_FromUnicode(_result->c_str(), _result->Len());
+    _resultobj = PyUnicode_FromWideChar(_result->c_str(), _result->Len());
 #else
     _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
 #endif
@@ -5092,7 +5160,7 @@ static PyObject *_wrap_wxGridTableBase_GetTypeName(PyObject *self, PyObject *arg
     if (PyErr_Occurred()) return NULL;
 }{
 #if wxUSE_UNICODE
-    _resultobj = PyUnicode_FromUnicode(_result->c_str(), _result->Len());
+    _resultobj = PyUnicode_FromWideChar(_result->c_str(), _result->Len());
 #else
     _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
 #endif
@@ -5603,7 +5671,7 @@ static PyObject *_wrap_wxGridTableBase_GetRowLabelValue(PyObject *self, PyObject
     if (PyErr_Occurred()) return NULL;
 }{
 #if wxUSE_UNICODE
-    _resultobj = PyUnicode_FromUnicode(_result->c_str(), _result->Len());
+    _resultobj = PyUnicode_FromWideChar(_result->c_str(), _result->Len());
 #else
     _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
 #endif
@@ -5641,7 +5709,7 @@ static PyObject *_wrap_wxGridTableBase_GetColLabelValue(PyObject *self, PyObject
     if (PyErr_Occurred()) return NULL;
 }{
 #if wxUSE_UNICODE
-    _resultobj = PyUnicode_FromUnicode(_result->c_str(), _result->Len());
+    _resultobj = PyUnicode_FromWideChar(_result->c_str(), _result->Len());
 #else
     _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
 #endif
@@ -6042,7 +6110,7 @@ static PyObject *_wrap_wxPyGridTableBase_base_GetTypeName(PyObject *self, PyObje
     if (PyErr_Occurred()) return NULL;
 }{
 #if wxUSE_UNICODE
-    _resultobj = PyUnicode_FromUnicode(_result->c_str(), _result->Len());
+    _resultobj = PyUnicode_FromWideChar(_result->c_str(), _result->Len());
 #else
     _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
 #endif
@@ -6368,7 +6436,7 @@ static PyObject *_wrap_wxPyGridTableBase_base_GetRowLabelValue(PyObject *self, P
     if (PyErr_Occurred()) return NULL;
 }{
 #if wxUSE_UNICODE
-    _resultobj = PyUnicode_FromUnicode(_result->c_str(), _result->Len());
+    _resultobj = PyUnicode_FromWideChar(_result->c_str(), _result->Len());
 #else
     _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
 #endif
@@ -6406,7 +6474,7 @@ static PyObject *_wrap_wxPyGridTableBase_base_GetColLabelValue(PyObject *self, P
     if (PyErr_Occurred()) return NULL;
 }{
 #if wxUSE_UNICODE
-    _resultobj = PyUnicode_FromUnicode(_result->c_str(), _result->Len());
+    _resultobj = PyUnicode_FromWideChar(_result->c_str(), _result->Len());
 #else
     _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
 #endif
@@ -7275,8 +7343,7 @@ static PyObject *_wrap_wxGridCellCoords___cmp__(PyObject *self, PyObject *args, 
         }
     }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxGridCellCoords_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxGridCellCoords_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxGridCellCoords___cmp__. Expected _wxGridCellCoords_p.");
         return NULL;
         }
@@ -7563,8 +7630,7 @@ static PyObject *_wrap_wxGrid_ProcessTableMessage(PyObject *self, PyObject *args
         }
     }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxGridTableMessage_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxGridTableMessage_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxGrid_ProcessTableMessage. Expected _wxGridTableMessage_p.");
         return NULL;
         }
@@ -7894,8 +7960,7 @@ static PyObject *_wrap_wxGrid_DrawCellHighlight(PyObject *self, PyObject *args, 
         }
     }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxDC_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxDC_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxGrid_DrawCellHighlight. Expected _wxDC_p.");
         return NULL;
         }
@@ -7945,8 +8010,7 @@ static PyObject *_wrap_wxGrid_DrawTextRectangle(PyObject *self, PyObject *args, 
         }
     }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxDC_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxDC_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxGrid_DrawTextRectangle. Expected _wxDC_p.");
         return NULL;
         }
@@ -8008,8 +8072,7 @@ static PyObject *_wrap_wxGrid_GetTextBoxSize(PyObject *self, PyObject *args, PyO
         }
     }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxDC_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxDC_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxGrid_GetTextBoxSize. Expected _wxDC_p.");
         return NULL;
         }
@@ -8025,11 +8088,10 @@ static PyObject *_wrap_wxGrid_GetTextBoxSize(PyObject *self, PyObject *args, PyO
         PyObject* item = PySequence_GetItem(_obj2, i);
 #if wxUSE_UNICODE
         PyObject* str  = PyObject_Unicode(item);
-        _arg2->Add(PyUnicode_AsUnicode(str));
 #else
         PyObject* str  = PyObject_Str(item);
-        _arg2->Add(PyString_AsString(str));
 #endif
+        _arg2->Add(Py2wxString(str));
         Py_DECREF(item);
         Py_DECREF(str);
     }
@@ -9492,7 +9554,7 @@ static PyObject *_wrap_wxGrid_GetRowLabelValue(PyObject *self, PyObject *args, P
     if (PyErr_Occurred()) return NULL;
 }{
 #if wxUSE_UNICODE
-    _resultobj = PyUnicode_FromUnicode(_result->c_str(), _result->Len());
+    _resultobj = PyUnicode_FromWideChar(_result->c_str(), _result->Len());
 #else
     _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
 #endif
@@ -9530,7 +9592,7 @@ static PyObject *_wrap_wxGrid_GetColLabelValue(PyObject *self, PyObject *args, P
     if (PyErr_Occurred()) return NULL;
 }{
 #if wxUSE_UNICODE
-    _resultobj = PyUnicode_FromUnicode(_result->c_str(), _result->Len());
+    _resultobj = PyUnicode_FromWideChar(_result->c_str(), _result->Len());
 #else
     _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
 #endif
@@ -9807,8 +9869,7 @@ static PyObject *_wrap_wxGrid_SetLabelFont(PyObject *self, PyObject *args, PyObj
         }
     }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxFont_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxFont_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxGrid_SetLabelFont. Expected _wxFont_p.");
         return NULL;
         }
@@ -10963,33 +11024,25 @@ static PyObject *_wrap_wxGrid_GetDefaultCellAlignment(PyObject *self, PyObject *
     PyObject * _resultobj;
     wxGrid * _arg0;
     int * _arg1;
+    int  temp;
     int * _arg2;
+    int  temp0;
     PyObject * _argo0 = 0;
-    PyObject * _argo1 = 0;
-    PyObject * _argo2 = 0;
-    char *_kwnames[] = { "self","horiz","vert", NULL };
+    char *_kwnames[] = { "self", NULL };
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OOO:wxGrid_GetDefaultCellAlignment",_kwnames,&_argo0,&_argo1,&_argo2)) 
+{
+  _arg1 = &temp;
+}
+{
+  _arg2 = &temp0;
+}
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxGrid_GetDefaultCellAlignment",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
         else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxGrid_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxGrid_GetDefaultCellAlignment. Expected _wxGrid_p.");
-        return NULL;
-        }
-    }
-    if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_int_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxGrid_GetDefaultCellAlignment. Expected _int_p.");
-        return NULL;
-        }
-    }
-    if (_argo2) {
-        if (_argo2 == Py_None) { _arg2 = NULL; }
-        else if (SWIG_GetPtrObj(_argo2,(void **) &_arg2,"_int_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 3 of wxGrid_GetDefaultCellAlignment. Expected _int_p.");
         return NULL;
         }
     }
@@ -11001,6 +11054,16 @@ static PyObject *_wrap_wxGrid_GetDefaultCellAlignment(PyObject *self, PyObject *
     if (PyErr_Occurred()) return NULL;
 }    Py_INCREF(Py_None);
     _resultobj = Py_None;
+{
+    PyObject *o;
+    o = PyInt_FromLong((long) (*_arg1));
+    _resultobj = t_output_helper(_resultobj, o);
+}
+{
+    PyObject *o;
+    o = PyInt_FromLong((long) (*_arg2));
+    _resultobj = t_output_helper(_resultobj, o);
+}
     return _resultobj;
 }
 
@@ -11011,33 +11074,25 @@ static PyObject *_wrap_wxGrid_GetCellAlignment(PyObject *self, PyObject *args, P
     int  _arg1;
     int  _arg2;
     int * _arg3;
+    int  temp;
     int * _arg4;
+    int  temp0;
     PyObject * _argo0 = 0;
-    PyObject * _argo3 = 0;
-    PyObject * _argo4 = 0;
-    char *_kwnames[] = { "self","row","col","horiz","vert", NULL };
+    char *_kwnames[] = { "self","row","col", NULL };
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OiiOO:wxGrid_GetCellAlignment",_kwnames,&_argo0,&_arg1,&_arg2,&_argo3,&_argo4)) 
+{
+  _arg3 = &temp;
+}
+{
+  _arg4 = &temp0;
+}
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oii:wxGrid_GetCellAlignment",_kwnames,&_argo0,&_arg1,&_arg2)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
         else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxGrid_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxGrid_GetCellAlignment. Expected _wxGrid_p.");
-        return NULL;
-        }
-    }
-    if (_argo3) {
-        if (_argo3 == Py_None) { _arg3 = NULL; }
-        else if (SWIG_GetPtrObj(_argo3,(void **) &_arg3,"_int_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 4 of wxGrid_GetCellAlignment. Expected _int_p.");
-        return NULL;
-        }
-    }
-    if (_argo4) {
-        if (_argo4 == Py_None) { _arg4 = NULL; }
-        else if (SWIG_GetPtrObj(_argo4,(void **) &_arg4,"_int_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 5 of wxGrid_GetCellAlignment. Expected _int_p.");
         return NULL;
         }
     }
@@ -11049,6 +11104,16 @@ static PyObject *_wrap_wxGrid_GetCellAlignment(PyObject *self, PyObject *args, P
     if (PyErr_Occurred()) return NULL;
 }    Py_INCREF(Py_None);
     _resultobj = Py_None;
+{
+    PyObject *o;
+    o = PyInt_FromLong((long) (*_arg3));
+    _resultobj = t_output_helper(_resultobj, o);
+}
+{
+    PyObject *o;
+    o = PyInt_FromLong((long) (*_arg4));
+    _resultobj = t_output_helper(_resultobj, o);
+}
     return _resultobj;
 }
 
@@ -11498,6 +11563,120 @@ static PyObject *_wrap_wxGrid_SetRowMinimalHeight(PyObject *self, PyObject *args
     return _resultobj;
 }
 
+#define wxGrid_SetColMinimalAcceptableWidth(_swigobj,_swigarg0)  (_swigobj->SetColMinimalAcceptableWidth(_swigarg0))
+static PyObject *_wrap_wxGrid_SetColMinimalAcceptableWidth(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxGrid * _arg0;
+    int  _arg1;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self","width", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxGrid_SetColMinimalAcceptableWidth",_kwnames,&_argo0,&_arg1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxGrid_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxGrid_SetColMinimalAcceptableWidth. Expected _wxGrid_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    wxGrid_SetColMinimalAcceptableWidth(_arg0,_arg1);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxGrid_SetRowMinimalAcceptableHeight(_swigobj,_swigarg0)  (_swigobj->SetRowMinimalAcceptableHeight(_swigarg0))
+static PyObject *_wrap_wxGrid_SetRowMinimalAcceptableHeight(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxGrid * _arg0;
+    int  _arg1;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self","width", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxGrid_SetRowMinimalAcceptableHeight",_kwnames,&_argo0,&_arg1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxGrid_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxGrid_SetRowMinimalAcceptableHeight. Expected _wxGrid_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    wxGrid_SetRowMinimalAcceptableHeight(_arg0,_arg1);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxGrid_GetColMinimalAcceptableWidth(_swigobj)  (_swigobj->GetColMinimalAcceptableWidth())
+static PyObject *_wrap_wxGrid_GetColMinimalAcceptableWidth(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    int  _result;
+    wxGrid * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxGrid_GetColMinimalAcceptableWidth",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxGrid_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxGrid_GetColMinimalAcceptableWidth. Expected _wxGrid_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    _result = (int )wxGrid_GetColMinimalAcceptableWidth(_arg0);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxGrid_GetRowMinimalAcceptableHeight(_swigobj)  (_swigobj->GetRowMinimalAcceptableHeight())
+static PyObject *_wrap_wxGrid_GetRowMinimalAcceptableHeight(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    int  _result;
+    wxGrid * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxGrid_GetRowMinimalAcceptableHeight",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxGrid_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxGrid_GetRowMinimalAcceptableHeight. Expected _wxGrid_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    _result = (int )wxGrid_GetRowMinimalAcceptableHeight(_arg0);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
 #define wxGrid_SetDefaultCellBackgroundColour(_swigobj,_swigarg0)  (_swigobj->SetDefaultCellBackgroundColour(_swigarg0))
 static PyObject *_wrap_wxGrid_SetDefaultCellBackgroundColour(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
@@ -11666,8 +11845,7 @@ static PyObject *_wrap_wxGrid_SetDefaultCellFont(PyObject *self, PyObject *args,
         }
     }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxFont_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxFont_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxGrid_SetDefaultCellFont. Expected _wxFont_p.");
         return NULL;
         }
@@ -11705,8 +11883,7 @@ static PyObject *_wrap_wxGrid_SetCellFont(PyObject *self, PyObject *args, PyObje
         }
     }
     if (_argo3) {
-        if (_argo3 == Py_None) { _arg3 = NULL; }
-        else if (SWIG_GetPtrObj(_argo3,(void **) &_arg3,"_wxFont_p")) {
+        if (SWIG_GetPtrObj(_argo3,(void **) &_arg3,"_wxFont_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 4 of wxGrid_SetCellFont. Expected _wxFont_p.");
         return NULL;
         }
@@ -12176,7 +12353,7 @@ static PyObject *_wrap_wxGrid_GetCellValue(PyObject *self, PyObject *args, PyObj
     if (PyErr_Occurred()) return NULL;
 }{
 #if wxUSE_UNICODE
-    _resultobj = PyUnicode_FromUnicode(_result->c_str(), _result->Len());
+    _resultobj = PyUnicode_FromWideChar(_result->c_str(), _result->Len());
 #else
     _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
 #endif
@@ -12501,6 +12678,267 @@ static PyObject *_wrap_wxGrid_IsInSelection(PyObject *self, PyObject *args, PyOb
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxGrid_GetSelectedCells(_swigobj)  (_swigobj->GetSelectedCells())
+static PyObject *_wrap_wxGrid_GetSelectedCells(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxGridCellCoordsArray * _result;
+    wxGrid * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxGrid_GetSelectedCells",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxGrid_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxGrid_GetSelectedCells. Expected _wxGrid_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    _result = new wxGridCellCoordsArray (wxGrid_GetSelectedCells(_arg0));
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}{
+    _resultobj = wxGridCellCoordsArray_helper(_result);
+}
+{
+    delete _result;
+}
+    return _resultobj;
+}
+
+#define wxGrid_GetSelectionBlockTopLeft(_swigobj)  (_swigobj->GetSelectionBlockTopLeft())
+static PyObject *_wrap_wxGrid_GetSelectionBlockTopLeft(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxGridCellCoordsArray * _result;
+    wxGrid * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxGrid_GetSelectionBlockTopLeft",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxGrid_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxGrid_GetSelectionBlockTopLeft. Expected _wxGrid_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    _result = new wxGridCellCoordsArray (wxGrid_GetSelectionBlockTopLeft(_arg0));
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}{
+    _resultobj = wxGridCellCoordsArray_helper(_result);
+}
+{
+    delete _result;
+}
+    return _resultobj;
+}
+
+#define wxGrid_GetSelectionBlockBottomRight(_swigobj)  (_swigobj->GetSelectionBlockBottomRight())
+static PyObject *_wrap_wxGrid_GetSelectionBlockBottomRight(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxGridCellCoordsArray * _result;
+    wxGrid * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxGrid_GetSelectionBlockBottomRight",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxGrid_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxGrid_GetSelectionBlockBottomRight. Expected _wxGrid_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    _result = new wxGridCellCoordsArray (wxGrid_GetSelectionBlockBottomRight(_arg0));
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}{
+    _resultobj = wxGridCellCoordsArray_helper(_result);
+}
+{
+    delete _result;
+}
+    return _resultobj;
+}
+
+#define wxGrid_GetSelectedRows(_swigobj)  (_swigobj->GetSelectedRows())
+static PyObject *_wrap_wxGrid_GetSelectedRows(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxArrayInt * _result;
+    wxGrid * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxGrid_GetSelectedRows",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxGrid_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxGrid_GetSelectedRows. Expected _wxGrid_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    _result = new wxArrayInt (wxGrid_GetSelectedRows(_arg0));
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}{
+    _resultobj = PyList_New(0);
+    size_t idx;
+    for (idx = 0; idx < _result->GetCount(); idx += 1) {
+        PyObject* val = PyInt_FromLong(_result->Item(idx));
+        PyList_Append(_resultobj, val);
+        Py_DECREF(val);
+    }
+    delete _result;
+}
+    return _resultobj;
+}
+
+#define wxGrid_GetSelectedCols(_swigobj)  (_swigobj->GetSelectedCols())
+static PyObject *_wrap_wxGrid_GetSelectedCols(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxArrayInt * _result;
+    wxGrid * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxGrid_GetSelectedCols",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxGrid_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxGrid_GetSelectedCols. Expected _wxGrid_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    _result = new wxArrayInt (wxGrid_GetSelectedCols(_arg0));
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}{
+    _resultobj = PyList_New(0);
+    size_t idx;
+    for (idx = 0; idx < _result->GetCount(); idx += 1) {
+        PyObject* val = PyInt_FromLong(_result->Item(idx));
+        PyList_Append(_resultobj, val);
+        Py_DECREF(val);
+    }
+    delete _result;
+}
+    return _resultobj;
+}
+
+#define wxGrid_DeselectRow(_swigobj,_swigarg0)  (_swigobj->DeselectRow(_swigarg0))
+static PyObject *_wrap_wxGrid_DeselectRow(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxGrid * _arg0;
+    int  _arg1;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self","row", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxGrid_DeselectRow",_kwnames,&_argo0,&_arg1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxGrid_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxGrid_DeselectRow. Expected _wxGrid_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    wxGrid_DeselectRow(_arg0,_arg1);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxGrid_DeselectCol(_swigobj,_swigarg0)  (_swigobj->DeselectCol(_swigarg0))
+static PyObject *_wrap_wxGrid_DeselectCol(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxGrid * _arg0;
+    int  _arg1;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self","col", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxGrid_DeselectCol",_kwnames,&_argo0,&_arg1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxGrid_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxGrid_DeselectCol. Expected _wxGrid_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    wxGrid_DeselectCol(_arg0,_arg1);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxGrid_DeselectCell(_swigobj,_swigarg0,_swigarg1)  (_swigobj->DeselectCell(_swigarg0,_swigarg1))
+static PyObject *_wrap_wxGrid_DeselectCell(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxGrid * _arg0;
+    int  _arg1;
+    int  _arg2;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self","row","col", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oii:wxGrid_DeselectCell",_kwnames,&_argo0,&_arg1,&_arg2)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxGrid_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxGrid_DeselectCell. Expected _wxGrid_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    wxGrid_DeselectCell(_arg0,_arg1,_arg2);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
     return _resultobj;
 }
 
@@ -14301,6 +14739,14 @@ static PyMethodDef gridcMethods[] = {
 	 { "wxGrid_GetSelectionForeground", (PyCFunction) _wrap_wxGrid_GetSelectionForeground, METH_VARARGS | METH_KEYWORDS },
 	 { "wxGrid_GetSelectionBackground", (PyCFunction) _wrap_wxGrid_GetSelectionBackground, METH_VARARGS | METH_KEYWORDS },
 	 { "wxGrid_BlockToDeviceRect", (PyCFunction) _wrap_wxGrid_BlockToDeviceRect, METH_VARARGS | METH_KEYWORDS },
+	 { "wxGrid_DeselectCell", (PyCFunction) _wrap_wxGrid_DeselectCell, METH_VARARGS | METH_KEYWORDS },
+	 { "wxGrid_DeselectCol", (PyCFunction) _wrap_wxGrid_DeselectCol, METH_VARARGS | METH_KEYWORDS },
+	 { "wxGrid_DeselectRow", (PyCFunction) _wrap_wxGrid_DeselectRow, METH_VARARGS | METH_KEYWORDS },
+	 { "wxGrid_GetSelectedCols", (PyCFunction) _wrap_wxGrid_GetSelectedCols, METH_VARARGS | METH_KEYWORDS },
+	 { "wxGrid_GetSelectedRows", (PyCFunction) _wrap_wxGrid_GetSelectedRows, METH_VARARGS | METH_KEYWORDS },
+	 { "wxGrid_GetSelectionBlockBottomRight", (PyCFunction) _wrap_wxGrid_GetSelectionBlockBottomRight, METH_VARARGS | METH_KEYWORDS },
+	 { "wxGrid_GetSelectionBlockTopLeft", (PyCFunction) _wrap_wxGrid_GetSelectionBlockTopLeft, METH_VARARGS | METH_KEYWORDS },
+	 { "wxGrid_GetSelectedCells", (PyCFunction) _wrap_wxGrid_GetSelectedCells, METH_VARARGS | METH_KEYWORDS },
 	 { "wxGrid_IsInSelection", (PyCFunction) _wrap_wxGrid_IsInSelection, METH_VARARGS | METH_KEYWORDS },
 	 { "wxGrid_ClearSelection", (PyCFunction) _wrap_wxGrid_ClearSelection, METH_VARARGS | METH_KEYWORDS },
 	 { "wxGrid_IsSelection", (PyCFunction) _wrap_wxGrid_IsSelection, METH_VARARGS | METH_KEYWORDS },
@@ -14331,6 +14777,10 @@ static PyMethodDef gridcMethods[] = {
 	 { "wxGrid_SetDefaultCellTextColour", (PyCFunction) _wrap_wxGrid_SetDefaultCellTextColour, METH_VARARGS | METH_KEYWORDS },
 	 { "wxGrid_SetCellBackgroundColour", (PyCFunction) _wrap_wxGrid_SetCellBackgroundColour, METH_VARARGS | METH_KEYWORDS },
 	 { "wxGrid_SetDefaultCellBackgroundColour", (PyCFunction) _wrap_wxGrid_SetDefaultCellBackgroundColour, METH_VARARGS | METH_KEYWORDS },
+	 { "wxGrid_GetRowMinimalAcceptableHeight", (PyCFunction) _wrap_wxGrid_GetRowMinimalAcceptableHeight, METH_VARARGS | METH_KEYWORDS },
+	 { "wxGrid_GetColMinimalAcceptableWidth", (PyCFunction) _wrap_wxGrid_GetColMinimalAcceptableWidth, METH_VARARGS | METH_KEYWORDS },
+	 { "wxGrid_SetRowMinimalAcceptableHeight", (PyCFunction) _wrap_wxGrid_SetRowMinimalAcceptableHeight, METH_VARARGS | METH_KEYWORDS },
+	 { "wxGrid_SetColMinimalAcceptableWidth", (PyCFunction) _wrap_wxGrid_SetColMinimalAcceptableWidth, METH_VARARGS | METH_KEYWORDS },
 	 { "wxGrid_SetRowMinimalHeight", (PyCFunction) _wrap_wxGrid_SetRowMinimalHeight, METH_VARARGS | METH_KEYWORDS },
 	 { "wxGrid_SetColMinimalWidth", (PyCFunction) _wrap_wxGrid_SetColMinimalWidth, METH_VARARGS | METH_KEYWORDS },
 	 { "wxGrid_AutoSize", (PyCFunction) _wrap_wxGrid_AutoSize, METH_VARARGS | METH_KEYWORDS },
@@ -14617,6 +15067,8 @@ static PyMethodDef gridcMethods[] = {
 	 { "wxGridCellEditor_DecRef", (PyCFunction) _wrap_wxGridCellEditor_DecRef, METH_VARARGS | METH_KEYWORDS },
 	 { "wxGridCellEditor_IncRef", (PyCFunction) _wrap_wxGridCellEditor_IncRef, METH_VARARGS | METH_KEYWORDS },
 	 { "wxGridCellEditor_SetParameters", (PyCFunction) _wrap_wxGridCellEditor_SetParameters, METH_VARARGS | METH_KEYWORDS },
+	 { "wxGridCellEditor_SetCellAttr", (PyCFunction) _wrap_wxGridCellEditor_SetCellAttr, METH_VARARGS | METH_KEYWORDS },
+	 { "wxGridCellEditor_GetCellAttr", (PyCFunction) _wrap_wxGridCellEditor_GetCellAttr, METH_VARARGS | METH_KEYWORDS },
 	 { "wxGridCellEditor_SetControl", (PyCFunction) _wrap_wxGridCellEditor_SetControl, METH_VARARGS | METH_KEYWORDS },
 	 { "wxGridCellEditor_GetControl", (PyCFunction) _wrap_wxGridCellEditor_GetControl, METH_VARARGS | METH_KEYWORDS },
 	 { "wxGridCellEditor_IsCreated", (PyCFunction) _wrap_wxGridCellEditor_IsCreated, METH_VARARGS | METH_KEYWORDS },

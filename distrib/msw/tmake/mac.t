@@ -13,7 +13,6 @@
     IncludeTemplate("filelist.t");
 
     #! find all our sources
-    $project{"COMMONOBJS"} .= "parser.o ";
     #! MoreFiles sources
     $project{"GUIOBJS"} .= "DirectoryCopy.o ";
     $project{"GUIOBJS"} .= "FSpCompat.o ";

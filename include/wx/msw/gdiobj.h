@@ -49,7 +49,7 @@ public:
     bool IsNull() const { return (m_refData == 0); }
 
     // Returns handle.
-    virtual WXHANDLE GetResourceHandle() { return 0; }
+    virtual WXHANDLE GetResourceHandle() const { return 0; }
 
     virtual bool GetVisible() { return m_visible; }
     virtual void SetVisible(bool v) { m_visible = v; }

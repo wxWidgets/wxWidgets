@@ -22,10 +22,8 @@ class wxDataObject : public wxDataObjectBase
 {
 public:
     wxDataObject();
-#ifdef __DARWIN__
-    virtual ~wxDataObject() { }
-#endif
-    
+    virtual ~wxDataObject();
+
     virtual bool IsSupportedFormat( const wxDataFormat& format, Direction dir = Get ) const;
 };
 

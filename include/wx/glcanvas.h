@@ -5,6 +5,8 @@
 
 #if wxUSE_GLCANVAS
 
+#define wxGLCanvasName _T("GLCanvas")
+
 #if defined(__WXMSW__)
 #include "wx/msw/glcanvas.h"
 #elif defined(__WXMOTIF__)

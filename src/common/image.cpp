@@ -204,6 +204,110 @@ wxImage wxImage::Copy() const
 
     memcpy( data, GetData(), M_IMGDATA->m_width*M_IMGDATA->m_height*3 );
 
+    // also copy the image options
+    wxImageRefData *imgData = (wxImageRefData *)image.m_refData;
+    imgData->m_optionNames = M_IMGDATA->m_optionNames;
+    imgData->m_optionValues = M_IMGDATA->m_optionValues;
+
+    return image;
+}
+
+wxImage wxImage::ShrinkBy( int xFactor , int yFactor ) const
+{
+    if( xFactor == 1 && yFactor == 1 )
+        return Copy() ;
+        
+    wxImage image;
+
+    wxCHECK_MSG( Ok(), image, wxT("invalid image") );
+
+    // can't scale to/from 0 size
+    wxCHECK_MSG( (xFactor > 0) && (yFactor > 0), image,
+                 wxT("invalid new image size") );
+
+    long old_height = M_IMGDATA->m_height,
+         old_width  = M_IMGDATA->m_width;
+         
+    wxCHECK_MSG( (old_height > 0) && (old_width > 0), image,
+                 wxT("invalid old image size") );
+
+    long width = old_width / xFactor ;
+    long height = old_height / yFactor ;
+
+    image.Create( width , height );
+
+    char unsigned *data = image.GetData();
+
+    wxCHECK_MSG( data, image, wxT("unable to create image") );
+
+    bool hasMask = false ;
+    unsigned char maskRed = 0;
+    unsigned char maskGreen = 0;
+    unsigned char maskBlue =0 ;
+    if (M_IMGDATA->m_hasMask)
+    {
+        hasMask = true ;
+        maskRed = M_IMGDATA->m_maskRed;
+        maskGreen = M_IMGDATA->m_maskGreen;
+        maskBlue =M_IMGDATA->m_maskBlue ;
+      
+        image.SetMaskColour( M_IMGDATA->m_maskRed,
+                             M_IMGDATA->m_maskGreen,
+                             M_IMGDATA->m_maskBlue );
+    }
+    char unsigned *source_data = M_IMGDATA->m_data;
+    char unsigned *target_data = data;
+    
+    for (long y = 0; y < height; y++)
+    {
+        for (long x = 0; x < width; x++)
+        {
+            unsigned long avgRed = 0 ;
+            unsigned long avgGreen = 0;
+            unsigned long avgBlue = 0;
+            unsigned long counter = 0 ;
+            // determine average
+            for ( int y1 = 0 ; y1 < yFactor ; ++y1 )
+            {
+                long y_offset = (y * yFactor + y1) * old_width;
+                for ( int x1 = 0 ; x1 < xFactor ; ++x1 )
+                {
+                    unsigned char *pixel = source_data + 3 * ( y_offset + x * xFactor + x1 ) ;
+                    unsigned char red = pixel[0] ;
+                    unsigned char green = pixel[1] ;
+                    unsigned char blue = pixel[2] ;
+                    if ( !hasMask || red != maskRed || green != maskGreen || blue != maskBlue )
+                    {
+                        avgRed += red ;
+                        avgGreen += green ;
+                        avgBlue += blue ;
+                        counter++ ;
+                    }
+                }
+            }
+            if ( counter == 0 )
+            {
+                *(target_data++) = M_IMGDATA->m_maskRed ;
+                *(target_data++) = M_IMGDATA->m_maskGreen ;
+                *(target_data++) = M_IMGDATA->m_maskBlue ;
+            }
+            else
+            {
+                *(target_data++) = avgRed / counter ;
+                *(target_data++) = avgGreen / counter ;
+                *(target_data++) = avgBlue / counter ;
+            }
+        }
+    }
+
+    // In case this is a cursor, make sure the hotspot is scalled accordingly:
+    if ( HasOption(wxIMAGE_OPTION_CUR_HOTSPOT_X) )
+        image.SetOption(wxIMAGE_OPTION_CUR_HOTSPOT_X,
+                (GetOptionInt(wxIMAGE_OPTION_CUR_HOTSPOT_X))/xFactor);
+    if ( HasOption(wxIMAGE_OPTION_CUR_HOTSPOT_Y) )
+        image.SetOption(wxIMAGE_OPTION_CUR_HOTSPOT_Y,
+                (GetOptionInt(wxIMAGE_OPTION_CUR_HOTSPOT_Y))/yFactor);
+
     return image;
 }
 
@@ -222,6 +326,11 @@ wxImage wxImage::Scale( int width, int height ) const
     wxCHECK_MSG( (old_height > 0) && (old_width > 0), image,
                  wxT("invalid old image size") );
 
+    if ( old_width % width == 0 && old_width >= width &&
+        old_height % height == 0 && old_height >= height )
+    {
+        return ShrinkBy( old_width / width , old_height / height ) ;
+    }
     image.Create( width, height );
 
     char unsigned *data = image.GetData();
@@ -964,7 +1073,7 @@ bool wxImage::SaveFile( const wxString& filename, int type ) const
 
     wxFileOutputStream stream(filename);
 
-    if ( stream.LastError() == wxStream_NOERROR )
+    if ( stream.IsOk() )
     {
         wxBufferedOutputStream bstream( stream );
         return SaveFile(bstream, type);
@@ -981,7 +1090,7 @@ bool wxImage::SaveFile( const wxString& filename, const wxString& mimetype ) con
 
     wxFileOutputStream stream(filename);
 
-    if ( stream.LastError() == wxStream_NOERROR )
+    if ( stream.IsOk() )
     {
         wxBufferedOutputStream bstream( stream );
         return SaveFile(bstream, mimetype);
@@ -1005,10 +1114,10 @@ int wxImage::GetImageCount( const wxString &name, long type )
 {
 #if wxUSE_STREAMS
   wxFileInputStream stream(name);
-  return GetImageCount(stream, type);
-#else
-  return 0;
+  if (stream.Ok())
+    return GetImageCount(stream, type);
 #endif
+  return 0;
 }
 
 #if wxUSE_STREAMS
@@ -1092,7 +1201,7 @@ bool wxImage::LoadFile( wxInputStream& stream, long type, int index )
 
     handler = FindHandler(type);
 
-    if (handler == NULL)
+    if (handler == 0)
     {
         wxLogWarning( _("No image handler for type %d defined."), type );
 
@@ -1110,7 +1219,7 @@ bool wxImage::LoadFile( wxInputStream& stream, const wxString& mimetype, int ind
 
     wxImageHandler *handler = FindHandlerMime(mimetype);
 
-    if (handler == NULL)
+    if (handler == 0)
     {
         wxLogWarning( _("No image handler for type %s defined."), mimetype.GetData() );
 
@@ -1126,7 +1235,7 @@ bool wxImage::SaveFile( wxOutputStream& stream, int type ) const
 
     wxImageHandler *handler = FindHandler(type);
 
-    if (handler == NULL)
+    if (handler == 0)
     {
         wxLogWarning( _("No image handler for type %d defined."), type );
 
@@ -1142,7 +1251,7 @@ bool wxImage::SaveFile( wxOutputStream& stream, const wxString& mimetype ) const
 
     wxImageHandler *handler = FindHandlerMime(mimetype);
 
-    if (handler == NULL)
+    if (handler == 0)
     {
         wxLogWarning( _("No image handler for type %s defined."), mimetype.GetData() );
 
@@ -1158,7 +1267,23 @@ void wxImage::AddHandler( wxImageHandler *handler )
     // make sure that the memory will be freed at the program end
     sm_handlers.DeleteContents(TRUE);
 
-    sm_handlers.Append( handler );
+    // Check for an existing handler of the type being added.
+    if (FindHandler( handler->GetType() ) == 0)
+    {
+        sm_handlers.Append( handler );
+    }
+    else
+    {
+        // This is not documented behaviour, merely the simplest 'fix'
+        // for preventing duplicate additions.  If someone ever has
+        // a good reason to add and remove duplicate handlers (and they
+        // may) we should probably refcount the duplicates.
+        //   also an issue in InsertHandler below.
+
+        wxLogDebug( _T("Adding duplicate image handler for '%s'"),
+                    handler->GetName().c_str() );
+        delete handler;
+    }
 }
 
 void wxImage::InsertHandler( wxImageHandler *handler )
@@ -1166,7 +1291,18 @@ void wxImage::InsertHandler( wxImageHandler *handler )
     // make sure that the memory will be freed at the program end
     sm_handlers.DeleteContents(TRUE);
 
-    sm_handlers.Insert( handler );
+    // Check for an existing handler of the type being added.
+    if (FindHandler( handler->GetType() ) == 0)
+    {
+        sm_handlers.Insert( handler );
+    }
+    else
+    {
+        // see AddHandler for additional comments.
+        wxLogDebug( _T("Inserting duplicate image handler for '%s'"),
+                    handler->GetName().c_str() );
+        delete handler;
+    }
 }
 
 bool wxImage::RemoveHandler( const wxString& name )
@@ -1191,7 +1327,7 @@ wxImageHandler *wxImage::FindHandler( const wxString& name )
 
         node = node->Next();
     }
-    return (wxImageHandler *)NULL;
+    return 0;
 }
 
 wxImageHandler *wxImage::FindHandler( const wxString& extension, long bitmapType )
@@ -1205,7 +1341,7 @@ wxImageHandler *wxImage::FindHandler( const wxString& extension, long bitmapType
             return handler;
         node = node->Next();
     }
-    return (wxImageHandler*)NULL;
+    return 0;
 }
 
 wxImageHandler *wxImage::FindHandler( long bitmapType )
@@ -1217,7 +1353,7 @@ wxImageHandler *wxImage::FindHandler( long bitmapType )
         if (handler->GetType() == bitmapType) return handler;
         node = node->Next();
     }
-    return NULL;
+    return 0;
 }
 
 wxImageHandler *wxImage::FindHandlerMime( const wxString& mimetype )
@@ -1229,7 +1365,7 @@ wxImageHandler *wxImage::FindHandlerMime( const wxString& mimetype )
         if (handler->GetMimeType().IsSameAs(mimetype, FALSE)) return handler;
         node = node->Next();
     }
-    return NULL;
+    return 0;
 }
 
 void wxImage::InitStandardHandlers()
@@ -1319,7 +1455,7 @@ bool wxImageHandler::CallDoCanRead(wxInputStream& stream)
 
 
 //-----------------------------------------------------------------------------
-// Deprecated wxBitmap convertion routines
+// Deprecated wxBitmap conversion routines
 //-----------------------------------------------------------------------------
 
 #if WXWIN_COMPATIBILITY_2_2 && wxUSE_GUI

@@ -18,7 +18,7 @@
 #include "wx/defs.h"
 #if wxUSE_HTML && wxUSE_STREAMS
 
-#ifdef __BORDLANDC__
+#ifdef __BORLANDC__
 #pragma hdrstop
 #endif
 
@@ -345,6 +345,12 @@ bool wxHtmlWindow::LoadPage(const wxString& location)
 }
 
 
+bool wxHtmlWindow::LoadFile(const wxFileName& filename)
+{
+    wxString url = wxFileSystem::FileNameToURL(filename);
+    return LoadPage(url);
+}
+
 
 bool wxHtmlWindow::ScrollToAnchor(const wxString& anchor)
 {
@@ -592,14 +598,12 @@ wxHtmlProcessorList *wxHtmlWindow::m_GlobalProcessors = NULL;
 
 void wxHtmlWindow::CleanUpStatics()
 {
-    delete m_DefaultFilter;
-    m_DefaultFilter = NULL;
+    wxDELETE(m_DefaultFilter);
     m_Filters.DeleteContents(TRUE);
     m_Filters.Clear();
-    delete m_GlobalProcessors;
-    m_GlobalProcessors = NULL;
-    delete s_cur_hand;
-    delete s_cur_arrow;
+    wxDELETE(m_GlobalProcessors);
+    wxDELETE(s_cur_hand);
+    wxDELETE(s_cur_arrow);
 }
 
 

@@ -99,16 +99,17 @@ void wxHTTP::SetHeader(const wxString& header, const wxString& h_data)
 
 wxString wxHTTP::GetHeader(const wxString& header)
 {
-  wxNode *node;
-  wxString upper_header;
-
-  upper_header = header.Upper();
-
-  node = m_headers.Find(upper_header);
-  if (!node)
-    return wxEmptyString;
-
-  return *((wxString *)node->Data());
+  // not using m_headers::Find as can't control case-sensitivity
+  // in comparison
+  wxNode *head = m_headers.GetFirst();
+  while(head)
+  {
+    wxString key = head->GetKeyString();
+    if(header.Upper() == key.Upper())
+        return *((wxString *)head->GetData());
+    head = head->GetNext();
+  }
+  return wxEmptyString;
 }
 
 void wxHTTP::SendHeaders()
@@ -153,7 +154,6 @@ bool wxHTTP::ParseHeaders()
 
     wxString left_str = line.BeforeFirst(':');
     wxString *str = new wxString(line.AfterFirst(':').Strip(wxString::both));
-    left_str.MakeUpper();
 
     m_headers.Append(left_str, (wxObject *) str);
   }
@@ -291,15 +291,16 @@ protected:
 
 size_t wxHTTPStream::OnSysRead(void *buffer, size_t bufsize)
 {
-  size_t ret;
+    if (m_httpsize > 0 && m_read_bytes >= m_httpsize)
+    {
+        m_lasterror = wxSTREAM_EOF;
+        return 0;
+    }
 
-  if (m_httpsize > 0 && m_read_bytes >= m_httpsize)
-    return 0;
+    size_t ret = wxSocketInputStream::OnSysRead(buffer, bufsize);
+    m_read_bytes += ret;
 
-  ret = wxSocketInputStream::OnSysRead(buffer, bufsize);
-  m_read_bytes += ret;
-
-  return ret;
+    return ret;
 }
 
 bool wxHTTP::Abort(void)

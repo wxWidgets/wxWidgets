@@ -62,7 +62,7 @@ class WXDLLEXPORT wxEncodingConverter : public wxObject
             wxEncodingConverter();
             ~wxEncodingConverter() { if (m_Table) delete[] m_Table; }
 
-            // Initialize convertion. Both output or input encoding may
+            // Initialize conversion. Both output or input encoding may
             // be wxFONTENCODING_UNICODE, but only if wxUSE_WCHAR_T is set to 1.
             //
             // All subsequent calls to Convert() will interpret it's argument

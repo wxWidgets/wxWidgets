@@ -20,6 +20,8 @@
 
 WXDLLEXPORT_DATA(extern const wxChar*) wxDialogNameStr;
 
+class WXDLLEXPORT wxWindowDisabler;
+
 // Dialog boxes
 class WXDLLEXPORT wxDialog : public wxDialogBase
 {
@@ -115,7 +117,7 @@ private:
 
     // while we are showing a modal dialog we disable the other windows using
     // this object
-    class wxWindowDisabler *m_windowDisabler;
+    wxWindowDisabler *m_windowDisabler;
 
     DECLARE_DYNAMIC_CLASS(wxDialog)
     DECLARE_EVENT_TABLE()

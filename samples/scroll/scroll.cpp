@@ -4,6 +4,7 @@
  * Author: Robert Roebling
  *
  * Copyright: (C) 1998, Robert Roebling
+ *                2002, Ron Lee
  *
  */
 
@@ -51,6 +52,30 @@ public:
     DECLARE_EVENT_TABLE()
 };
 
+
+// ----------------------------------------------------------------------------
+// Autoscrolling example.
+// ----------------------------------------------------------------------------
+
+// this class uses the 'virtual' size attribute along with an internal
+// sizer to automatically set up scrollbars as needed
+
+class MyAutoScrollWindow : public wxScrolledWindow
+{
+private:
+
+    wxButton    *m_button;
+
+public:
+
+    MyAutoScrollWindow( wxWindow *parent );
+
+    void OnResizeClick( wxCommandEvent &WXUNUSED( event ) );
+
+    DECLARE_EVENT_TABLE()
+};
+
+
 // ----------------------------------------------------------------------------
 // MyScrolledWindow classes: examples of wxScrolledWindow usage
 // ----------------------------------------------------------------------------
@@ -59,17 +84,15 @@ public:
 class MyScrolledWindowBase : public wxScrolledWindow
 {
 public:
-    MyScrolledWindowBase(wxWindow *parent) : wxScrolledWindow(parent)
+    MyScrolledWindowBase(wxWindow *parent)
+        : wxScrolledWindow(parent)
+        , m_nLines( 100 )
     {
-        m_nLines = 100;
-
-        InitScrollbars();
+        wxClientDC dc(this);
+        dc.GetTextExtent(_T("Line 17"), NULL, &m_hLine);
     }
 
 protected:
-    // set the scrollbar params
-    void InitScrollbars();
-
     // the height of one line on screen
     wxCoord m_hLine;
 
@@ -78,23 +101,39 @@ protected:
 };
 
 // this class does "stupid" redrawing - it redraws everything each time
+// and sets the scrollbar extent directly.
+
 class MyScrolledWindowDumb : public MyScrolledWindowBase
 {
 public:
-    MyScrolledWindowDumb(wxWindow *parent) : MyScrolledWindowBase(parent) { }
+    MyScrolledWindowDumb(wxWindow *parent) : MyScrolledWindowBase(parent)
+    {
+        // no horz scrolling
+        SetScrollbars(0, m_hLine, 0, m_nLines + 1, 0, 0, TRUE /* no refresh */);
+    }
 
     virtual void OnDraw(wxDC& dc);
 };
 
 // this class does "smart" redrawing - only redraws the lines which must be
-// redrawn
+// redrawn and sets the scroll rate and virtual size to affect the
+// scrollbars.
+//
+// Note that this class should produce identical results to the one above.
+
 class MyScrolledWindowSmart : public MyScrolledWindowBase
 {
 public:
-    MyScrolledWindowSmart(wxWindow *parent) : MyScrolledWindowBase(parent) { }
+    MyScrolledWindowSmart(wxWindow *parent) : MyScrolledWindowBase(parent)
+    {
+        // no horz scrolling
+        SetScrollRate( 0, m_hLine );
+        SetVirtualSize( -1, ( m_nLines + 1 ) * m_hLine );
+    }
 
     virtual void OnDraw(wxDC& dc);
 };
+
 
 // ----------------------------------------------------------------------------
 // MyFrame
@@ -131,13 +170,13 @@ IMPLEMENT_APP(MyApp)
 
 // ids
 
-#define   ID_ADDBUTTON    1
-#define   ID_DELBUTTON    2
-#define   ID_MOVEBUTTON   3
-#define   ID_SCROLLWIN    4
-#define   ID_QUERYPOS     5
+const long   ID_ADDBUTTON   = wxNewId();
+const long   ID_DELBUTTON   = wxNewId();
+const long   ID_MOVEBUTTON  = wxNewId();
+const long   ID_SCROLLWIN   = wxNewId();
+const long   ID_QUERYPOS    = wxNewId();
 
-#define   ID_NEWBUTTON    10
+const long   ID_NEWBUTTON   = wxNewId();
 
 // MyCanvas
 
@@ -145,7 +184,7 @@ IMPLEMENT_DYNAMIC_CLASS(MyCanvas, wxScrolledWindow)
 
 BEGIN_EVENT_TABLE(MyCanvas, wxScrolledWindow)
   EVT_PAINT(                  MyCanvas::OnPaint)
-  EVT_MOUSE_EVENTS(                  MyCanvas::OnMouseDown)
+  EVT_MOUSE_EVENTS(           MyCanvas::OnMouseDown)
   EVT_BUTTON( ID_QUERYPOS,    MyCanvas::OnQueryPosition)
   EVT_BUTTON( ID_ADDBUTTON,   MyCanvas::OnAddButton)
   EVT_BUTTON( ID_DELBUTTON,   MyCanvas::OnDeleteButton)
@@ -155,12 +194,15 @@ END_EVENT_TABLE()
 
 MyCanvas::MyCanvas( wxWindow *parent, wxWindowID id,
                     const wxPoint &pos, const wxSize &size )
-        : wxScrolledWindow( parent, id, pos, size, wxSUNKEN_BORDER | wxTAB_TRAVERSAL, "test canvas" )
+    : wxScrolledWindow( parent, id, pos, size, wxSUNKEN_BORDER | wxTAB_TRAVERSAL, _T("test canvas") )
 {
-    (void) new wxButton( this, ID_ADDBUTTON, "add button", wxPoint(10,10) );
-    (void) new wxButton( this, ID_DELBUTTON, "del button", wxPoint(10,40) );
-    (void) new wxButton( this, ID_MOVEBUTTON, "move button", wxPoint(150,10) );
-    (void) new wxButton( this, ID_SCROLLWIN, "scroll win", wxPoint(250,10) );
+    SetScrollRate( 10, 10 );
+    SetVirtualSize( 500, 1000 );
+
+    (void) new wxButton( this, ID_ADDBUTTON,  _T("add button"), wxPoint(10,10) );
+    (void) new wxButton( this, ID_DELBUTTON,  _T("del button"), wxPoint(10,40) );
+    (void) new wxButton( this, ID_MOVEBUTTON, _T("move button"), wxPoint(150,10) );
+    (void) new wxButton( this, ID_SCROLLWIN,  _T("scroll win"), wxPoint(250,10) );
 
 #if 0
 
@@ -253,9 +295,9 @@ void MyCanvas::OnPaint( wxPaintEvent &WXUNUSED(event) )
     wxPaintDC dc( this );
     PrepareDC( dc );
 
-    dc.DrawText( "Press mouse button to test calculations!", 160, 50 );
+    dc.DrawText( _T("Press mouse button to test calculations!"), 160, 50 );
 
-    dc.DrawText( "Some text", 140, 140 );
+    dc.DrawText( _T("Some text"), 140, 140 );
 
     dc.DrawRectangle( 100, 160, 200, 200 );
 }
@@ -271,7 +313,7 @@ void MyCanvas::OnQueryPosition( wxCommandEvent &WXUNUSED(event) )
 void MyCanvas::OnAddButton( wxCommandEvent &WXUNUSED(event) )
 {
     wxLogMessage( wxT("Inserting button at position 10,70...") );
-    wxButton *button = new wxButton( this, ID_NEWBUTTON, "new button", wxPoint(10,70), wxSize(80,25) );
+    wxButton *button = new wxButton( this, ID_NEWBUTTON, wxT("new button"), wxPoint(10,70), wxSize(80,25) );
     wxPoint pt( button->GetPosition() );
     wxLogMessage( wxT("-> Position after inserting %d %d"), pt.x, pt.y );
 }
@@ -305,12 +347,87 @@ void MyCanvas::OnScrollWin( wxCommandEvent &WXUNUSED(event) )
     Scroll( -1, y+2 );
 }
 
+// MyAutoScrollWindow
+
+const long   ID_RESIZEBUTTON = wxNewId();
+const wxSize SMALL_BUTTON( 100, 50 );
+const wxSize LARGE_BUTTON( 300, 100 );
+
+BEGIN_EVENT_TABLE( MyAutoScrollWindow, wxScrolledWindow)
+  EVT_BUTTON( ID_RESIZEBUTTON,    MyAutoScrollWindow::OnResizeClick)
+END_EVENT_TABLE()
+
+MyAutoScrollWindow::MyAutoScrollWindow( wxWindow *parent )
+    : wxScrolledWindow( parent )
+{
+    SetBackgroundColour( wxT("GREEN") );
+
+    // Set the rate we'd like for scrolling.
+
+    SetScrollRate( 5, 5 );
+
+    // Populate a sizer with a 'resizing' button and some
+    // other static decoration
+
+    wxFlexGridSizer  *innersizer = new wxFlexGridSizer( 2, 2 );
+
+    m_button = new wxButton( this,
+                             ID_RESIZEBUTTON,
+                             _T("Press me"),
+                             wxDefaultPosition,
+                             SMALL_BUTTON );
+
+    // We need to do this here, because wxADJUST_MINSIZE below
+    // will cause the initial size to be ignored for Best/Min size.
+    // It would be nice to fix the sizers to handle this a little
+    // more cleanly.
+
+    m_button->SetSizeHints( SMALL_BUTTON.GetWidth(), SMALL_BUTTON.GetHeight() );
+
+    innersizer->Add( m_button,
+                     0,
+                     wxALIGN_CENTER | wxALL | wxADJUST_MINSIZE,
+                     20 );
+
+    innersizer->Add( new wxStaticText( this, -1, _T("This is just") ),
+                    0,
+                    wxALIGN_CENTER );
+
+    innersizer->Add( new wxStaticText( this, -1, _T("some decoration") ),
+                    0,
+                    wxALIGN_CENTER );
+
+    innersizer->Add( new wxStaticText( this, -1, _T("for you to scroll...") ),
+                    0,
+                    wxALIGN_CENTER );
+
+    // Then use the sizer to set the scrolled region size.
+
+    SetSizer( innersizer );
+}
+
+void MyAutoScrollWindow::OnResizeClick( wxCommandEvent &WXUNUSED( event ) )
+{
+    // Arbitrarily resize the button to change the minimum size of
+    // the (scrolled) sizer.
+
+    if( m_button->GetSize() == SMALL_BUTTON )
+        m_button->SetSizeHints( LARGE_BUTTON.GetWidth(), LARGE_BUTTON.GetHeight() );
+    else
+        m_button->SetSizeHints( SMALL_BUTTON.GetWidth(), SMALL_BUTTON.GetHeight() );
+
+    // Force update layout and scrollbars, since nothing we do here
+    // necessarily generates a size event which would do it for us.
+
+    FitInside();
+}
+
 // MyFrame
 
-const int ID_QUIT  = 108;
-const int ID_ABOUT = 109;
-const int ID_DELETE_ALL = 110;
-const int ID_INSERT_NEW = 111;
+const long ID_QUIT       = wxNewId();
+const long ID_ABOUT      = wxNewId();
+const long ID_DELETE_ALL = wxNewId();
+const long ID_INSERT_NEW = wxNewId();
 
 IMPLEMENT_DYNAMIC_CLASS( MyFrame, wxFrame )
 
@@ -322,17 +439,17 @@ BEGIN_EVENT_TABLE(MyFrame,wxFrame)
 END_EVENT_TABLE()
 
 MyFrame::MyFrame()
-       : wxFrame( (wxFrame *)NULL, -1, "wxScrolledWindow sample",
+       : wxFrame( (wxFrame *)NULL, -1, _T("wxScrolledWindow sample"),
                   wxPoint(20,20), wxSize(470,500) )
 {
     wxMenu *file_menu = new wxMenu();
-    file_menu->Append( ID_DELETE_ALL, "Delete all");
-    file_menu->Append( ID_INSERT_NEW, "Insert new");
-    file_menu->Append( ID_ABOUT, "&About..");
-    file_menu->Append( ID_QUIT, "E&xit\tAlt-X");
+    file_menu->Append( ID_DELETE_ALL, _T("Delete all"));
+    file_menu->Append( ID_INSERT_NEW, _T("Insert new"));
+    file_menu->Append( ID_ABOUT,      _T("&About.."));
+    file_menu->Append( ID_QUIT,       _T("E&xit\tAlt-X"));
 
     wxMenuBar *menu_bar = new wxMenuBar();
-    menu_bar->Append(file_menu, "&File");
+    menu_bar->Append(file_menu, _T("&File"));
 
     SetMenuBar( menu_bar );
 
@@ -340,19 +457,24 @@ MyFrame::MyFrame()
     int widths[] = { -1, 100 };
     SetStatusWidths( 2, widths );
 
-    m_canvas = new MyCanvas( this, -1, wxPoint(0,0), wxSize(100,100) );
-    m_canvas->SetScrollbars( 10, 10, 50, 100 );
-
     wxBoxSizer *topsizer = new wxBoxSizer( wxVERTICAL );
 
+    // Setting an explicit size here is superfluous, it will be overridden
+    // by the sizer in any case.
+    m_canvas = new MyCanvas( this, -1, wxPoint(0,0), wxSize(100,100) );
+
+    // This is done with ScrollRate/VirtualSize in MyCanvas ctor now,
+    // both should produce identical results.
+    //m_canvas->SetScrollbars( 10, 10, 50, 100 );
+
     topsizer->Add( m_canvas, 1, wxEXPAND );
+    topsizer->Add( new MyAutoScrollWindow( this ), 1, wxEXPAND );
 
     wxSizer *sizerBtm = new wxBoxSizer(wxHORIZONTAL);
     sizerBtm->Add( new MyScrolledWindowDumb(this), 1, wxEXPAND );
     sizerBtm->Add( new MyScrolledWindowSmart(this), 1, wxEXPAND );
     topsizer->Add( sizerBtm, 1, wxEXPAND );
 
-    SetAutoLayout( TRUE );
     SetSizer( topsizer );
 }
 
@@ -363,7 +485,7 @@ void MyFrame::OnDeleteAll( wxCommandEvent &WXUNUSED(event) )
 
 void MyFrame::OnInsertNew( wxCommandEvent &WXUNUSED(event) )
 {
-    (void)new wxButton( m_canvas, -1, "Hello", wxPoint(100,100) );
+    (void)new wxButton( m_canvas, -1, _T("Hello"), wxPoint(100,100) );
 }
 
 void MyFrame::OnQuit( wxCommandEvent &WXUNUSED(event) )
@@ -373,9 +495,12 @@ void MyFrame::OnQuit( wxCommandEvent &WXUNUSED(event) )
 
 void MyFrame::OnAbout( wxCommandEvent &WXUNUSED(event) )
 {
-  (void)wxMessageBox( "wxScroll demo\n"
-                      "Robert Roebling (c) 1998",
-                      "About wxScroll Demo", wxICON_INFORMATION | wxOK );
+  (void)wxMessageBox( _T("wxScroll demo\n"
+                         "Robert Roebling (c) 1998\n"
+                         "Autoscrolling examples\n"
+                         "Ron Lee (c) 2002"),
+                      _T("About wxScroll Demo"),
+                      wxICON_INFORMATION | wxOK );
 }
 
 //-----------------------------------------------------------------------------
@@ -393,15 +518,6 @@ bool MyApp::OnInit()
 // ----------------------------------------------------------------------------
 // MyScrolledWindowXXX
 // ----------------------------------------------------------------------------
-
-void MyScrolledWindowBase::InitScrollbars()
-{
-    wxClientDC dc(this);
-    dc.GetTextExtent(_T("Line 17"), NULL, &m_hLine);
-
-    // no horz scrolling
-    SetScrollbars(0, m_hLine, 0, m_nLines + 1, 0, 0, TRUE /* no refresh */);
-}
 
 void MyScrolledWindowDumb::OnDraw(wxDC& dc)
 {

@@ -79,6 +79,20 @@ call \helpref{wxThread::Wait}{wxthreadwait} on it, but this example does
 illustrate the importance of properly locking the mutex when using
 wxCondition.
 
+\wxheading{Constants}
+
+The following return codes are returned by wxCondition member functions:
+
+\begin{verbatim}
+enum wxCondError
+{
+    wxCOND_NO_ERROR = 0,    // successful completion
+    wxCOND_INVALID,         // object hasn't been initialized successfully
+    wxCOND_TIMEOUT,         // WaitTimeout() has timed out
+    wxCOND_MISC_ERROR       // some other error
+};
+\end{verbatim}
+
 \wxheading{Derived from}
 
 None.
@@ -100,6 +114,9 @@ None.
 Default and only constructor. The {\it mutex} must be locked by the caller
 before calling \helpref{Wait}{wxconditionwait} function.
 
+Use \helpref{IsOk}{wxconditionisok} to check if the object was successfully
+intiialized.
+
 \membersection{wxCondition::\destruct{wxCondition}}
 
 \func{}{\destruct{wxCondition}}{\void}
@@ -119,6 +136,13 @@ not.
 
 \helpref{wxCondition::Signal}{wxconditionsignal}
 
+\membersection{wxCondition::IsOk}\label{wxconditionisok}
+
+\constfunc{bool}{IsOk}{\void}
+
+Returns {\tt TRUE} if the object had been initialized successfully, {\tt FALSE} 
+if an error occured.
+
 \membersection{wxCondition::Signal}\label{wxconditionsignal}
 
 \func{void}{Signal}{\void}
@@ -137,26 +161,46 @@ condition is locked or not.
 
 \membersection{wxCondition::Wait}\label{wxconditionwait}
 
-\func{void}{Wait}{\void}
+\func{wxCondError}{Wait}{\void}
 
 Waits until the condition is signalled.
 
-\func{bool}{Wait}{\param{unsigned long}{ sec}, \param{unsigned long}{ nsec}}
+This method atomically releases the lock on the mutex associated with this
+condition (this is why it must be locked prior to calling Wait) and puts the
+thread to sleep until \helpref{Signal}{wxconditionsignal} or 
+\helpref{Broadcast}{wxconditionbroadcast} is called.
 
-Waits until the condition is signalled or the timeout has elapsed.
-
-Note that the mutex associated with this condition {\bf must} be acquired by
-the thread before calling this method.
-
-\wxheading{Parameters}
-
-\docparam{sec}{Timeout in seconds}
-
-\docparam{nsec}{Timeout nanoseconds component (added to {\it sec}).}
+Note that even if \helpref{Signal}{wxconditionsignal} had been called before
+Wait without waking up any thread, the thread would still wait for another one
+and so it is important to ensure that the condition will be signalled after
+Wait or the thread may sleep forever.
 
 \wxheading{Return value}
 
-The second form returns {\tt TRUE} if the condition has been signalled, or
-{\tt FALSE} if it returned because the timeout has elapsed.
+Returns {\tt wxCOND\_NO\_ERROR} on success, another value if an error occured.
 
+\wxheading{See also}
+
+\helpref{WaitTimeout}{wxconditionwaittimeout}
+
+
+\membersection{wxCondition::WaitTimeout}\label{wxconditionwaittimeout}
+
+\func{wxCondError}{Wait}{\param{unsigned long}{ milliseconds}}
+
+Waits until the condition is signalled or the timeout has elapsed.
+
+This method is identical to \helpref{Wait}{wxconditionwait} except that it
+returns, with the return code of {\tt wxCOND\_TIMEOUT} as soon as the given
+timeout expires.
+
+\wxheading{Parameters}
+
+\docparam{milliseconds}{Timeout in milliseconds}
+
+\wxheading{Return value}
+
+Returns {\tt wxCOND\_NO\_ERROR} if the condition was signalled, 
+{\tt wxCOND\_TIMEOUT} if the timeout elapsed ebfore this happened or another
+error code from wxCondError enum.
 

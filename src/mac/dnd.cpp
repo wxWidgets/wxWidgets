@@ -173,6 +173,7 @@ bool wxDropTarget::GetData()
     {
       UInt16 items ;
       OSErr result;
+      bool firstFileAdded = false ;
       CountDragItems((DragReference)m_currentDrag, &items);
       for (UInt16 index = 1; index <= items; ++index) 
       {
@@ -195,7 +196,11 @@ bool wxDropTarget::GetData()
                   Ptr theData ;
                   GetFlavorDataSize((DragReference)m_currentDrag, theItem, theType, &dataSize);
           			  if ( theType == 'TEXT' )
+      			  {
+      			  	// this increment is only valid for allocating, on the next GetFlavorData
+      			  	// call it is reset again to the original value
           			    dataSize++ ;
+      			  }
                   theData = new char[dataSize];
                   GetFlavorData((DragReference)m_currentDrag, theItem, theType, (void*) theData, &dataSize, 0L); 
                   if( theType == 'TEXT' )
@@ -203,7 +208,7 @@ bool wxDropTarget::GetData()
                     theData[dataSize]=0 ;       
                     if ( wxApp::s_macDefaultEncodingIsPC )
                     {
-                      wxMacConvertToPC((char*)theData) ;
+                      wxMacConvertToPC((char*)theData,(char*)theData,dataSize) ;
                     }
                     m_dataObject->SetData( format, dataSize, theData );
                   }
@@ -211,7 +216,13 @@ bool wxDropTarget::GetData()
                   {
                     HFSFlavor* theFile = (HFSFlavor*) theData ;
                     wxString name = wxMacFSSpec2MacFilename( &theFile->fileSpec ) ;
-                    ((wxFileDataObject*)m_dataObject)->AddFile( name ) ;
+                    if (  firstFileAdded )
+                    	((wxFileDataObject*)m_dataObject)->AddFile( name ) ;
+                    else
+                    {
+                    	((wxFileDataObject*)m_dataObject)->SetData( 0 , name.c_str() ) ;
+                    	firstFileAdded = true ;	
+                    }
                   }
                   else
                   {
@@ -233,6 +244,28 @@ bool wxDropTarget::GetData()
 
 //-----------------------------------------------------------------------------
 // drag request
+
+wxDropSource::wxDropSource(wxWindow *win,
+                           const wxCursor &cursorCopy,
+                           const wxCursor &cursorMove,
+                           const wxCursor &cursorStop)
+            : wxDropSourceBase(cursorCopy, cursorMove, cursorStop)
+{
+    wxMacEnsureTrackingHandlersInstalled() ;
+    m_window = win;
+}
+
+wxDropSource::wxDropSource(wxDataObject& data,
+                           wxWindow *win,
+                           const wxCursor &cursorCopy,
+                           const wxCursor &cursorMove,
+                           const wxCursor &cursorStop)
+            : wxDropSourceBase(cursorCopy, cursorMove, cursorStop)
+{
+    wxMacEnsureTrackingHandlersInstalled() ;
+    SetData( data );
+    m_window = win;
+}
 
 wxDropSource::wxDropSource(wxWindow *win,
                            const wxIcon &iconCopy,
@@ -365,6 +398,21 @@ wxDragResult wxDropSource::DoDragDrop(int WXUNUSED(flags))
     return wxDragCopy ;
 }
 
+bool wxDropSource::MacInstallDefaultCursor(wxDragResult effect)
+{
+    const wxCursor& cursor = GetCursor(effect);
+    if ( cursor.Ok() )
+    {
+        cursor.MacInstall() ;
+
+        return TRUE;
+    }
+    else
+    {
+        return FALSE;
+    }
+}
+
 bool gTrackingGlobalsInstalled = false ;
 
 // passing the globals via refcon is not needed by the CFM and later architectures anymore
@@ -446,11 +494,46 @@ pascal OSErr wxMacWindowDragTrackingHandler(DragTrackingMessage theMessage, Wind
                         // this window is entered
                         trackingGlobals->m_currentTargetWindow = win ;
                         trackingGlobals->m_currentTarget = win->GetDropTarget() ;
-                        if ( trackingGlobals->m_currentTarget )
                         {
-                          trackingGlobals->m_currentTarget->SetCurrentDrag( theDrag ) ;
-                           if ( trackingGlobals->m_currentTarget->OnEnter(
-                                localx , localy , wxDragCopy ) != wxDragNone )
+                        	wxDragResult result = wxDragNone ;
+                        	if ( trackingGlobals->m_currentTarget )
+                        	{
+                            	trackingGlobals->m_currentTarget->SetCurrentDrag( theDrag ) ;
+                            	result = trackingGlobals->m_currentTarget->OnEnter(
+                                	localx , localy , wxDragCopy ) ;
+                            }
+                                
+                            if ( trackingGlobals->m_currentSource && trackingGlobals->m_currentSource->GiveFeedback( result ) == FALSE )
+                            {
+                            	if ( trackingGlobals->m_currentSource->MacInstallDefaultCursor( result ) == FALSE )
+                            	{
+                            		switch( result )
+                            		{
+                            			case wxDragCopy :
+                            			{
+                            				wxCursor cursor(wxCURSOR_COPY_ARROW) ;
+                            				cursor.MacInstall() ;
+                            			}
+                            			break ;
+                            			case wxDragMove :
+                            			{
+                             				wxCursor cursor(wxCURSOR_ARROW) ;
+                            				cursor.MacInstall() ;
+                           			    }
+                            			break ;
+                            			case wxDragNone :
+                            			{
+                            				wxCursor cursor(wxCURSOR_NO_ENTRY) ;
+                            				cursor.MacInstall() ;
+                            			}
+                            			break ;
+                            			default :
+                            			break ;
+                            		}
+                            	}
+                            }
+                           
+                            if ( result != wxDragNone )
                             {
                               int x , y ;
                               x = y = 0 ;

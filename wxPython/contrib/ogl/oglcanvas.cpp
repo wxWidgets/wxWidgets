@@ -19,6 +19,8 @@
 /* Implementation : PYTHON */
 
 #define SWIGPYTHON
+#include "Python.h"
+
 #include <string.h>
 #include <stdlib.h>
 /* Definitions for Windows/Unix exporting */
@@ -36,12 +38,9 @@
 #   define SWIGEXPORT(a) a
 #endif
 
-#include "Python.h"
-
 #ifdef __cplusplus
 extern "C" {
 #endif
-
 extern void SWIG_MakePtr(char *, void *, char *);
 extern void SWIG_RegisterMapping(char *, char *, void *(*)(void *));
 extern char *SWIG_GetPtr(char *, void **, char *);
@@ -199,8 +198,7 @@ static PyObject *_wrap_wxDiagram_Clear(PyObject *self, PyObject *args, PyObject 
         }
     }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxDC_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxDC_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxDiagram_Clear. Expected _wxDC_p.");
         return NULL;
         }
@@ -268,8 +266,7 @@ static PyObject *_wrap_wxDiagram_DrawOutline(PyObject *self, PyObject *args, PyO
         }
     }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxDC_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxDC_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxDiagram_DrawOutline. Expected _wxDC_p.");
         return NULL;
         }
@@ -552,156 +549,6 @@ static PyObject *_wrap_wxDiagram_InsertShape(PyObject *self, PyObject *args, PyO
     return _resultobj;
 }
 
-#define wxDiagram_LoadFile(_swigobj,_swigarg0)  (_swigobj->LoadFile(_swigarg0))
-static PyObject *_wrap_wxDiagram_LoadFile(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    bool  _result;
-    wxDiagram * _arg0;
-    wxString * _arg1;
-    PyObject * _argo0 = 0;
-    PyObject * _obj1 = 0;
-    char *_kwnames[] = { "self","filename", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxDiagram_LoadFile",_kwnames,&_argo0,&_obj1)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxDiagram_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxDiagram_LoadFile. Expected _wxDiagram_p.");
-        return NULL;
-        }
-    }
-{
-    _arg1 = wxString_in_helper(_obj1);
-    if (_arg1 == NULL)
-        return NULL;
-}
-{
-    PyThreadState* __tstate = wxPyBeginAllowThreads();
-    _result = (bool )wxDiagram_LoadFile(_arg0,*_arg1);
-
-    wxPyEndAllowThreads(__tstate);
-    if (PyErr_Occurred()) return NULL;
-}    _resultobj = Py_BuildValue("i",_result);
-{
-    if (_obj1)
-        delete _arg1;
-}
-    return _resultobj;
-}
-
-#define wxDiagram_ReadContainerGeometry(_swigobj,_swigarg0)  (_swigobj->ReadContainerGeometry(_swigarg0))
-static PyObject *_wrap_wxDiagram_ReadContainerGeometry(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    wxDiagram * _arg0;
-    wxExprDatabase * _arg1;
-    PyObject * _argo0 = 0;
-    PyObject * _argo1 = 0;
-    char *_kwnames[] = { "self","database", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxDiagram_ReadContainerGeometry",_kwnames,&_argo0,&_argo1)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxDiagram_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxDiagram_ReadContainerGeometry. Expected _wxDiagram_p.");
-        return NULL;
-        }
-    }
-    if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxExprDatabase_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxDiagram_ReadContainerGeometry. Expected _wxExprDatabase_p.");
-        return NULL;
-        }
-    }
-{
-    PyThreadState* __tstate = wxPyBeginAllowThreads();
-    wxDiagram_ReadContainerGeometry(_arg0,*_arg1);
-
-    wxPyEndAllowThreads(__tstate);
-    if (PyErr_Occurred()) return NULL;
-}    Py_INCREF(Py_None);
-    _resultobj = Py_None;
-    return _resultobj;
-}
-
-#define wxDiagram_ReadLines(_swigobj,_swigarg0)  (_swigobj->ReadLines(_swigarg0))
-static PyObject *_wrap_wxDiagram_ReadLines(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    wxDiagram * _arg0;
-    wxExprDatabase * _arg1;
-    PyObject * _argo0 = 0;
-    PyObject * _argo1 = 0;
-    char *_kwnames[] = { "self","database", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxDiagram_ReadLines",_kwnames,&_argo0,&_argo1)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxDiagram_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxDiagram_ReadLines. Expected _wxDiagram_p.");
-        return NULL;
-        }
-    }
-    if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxExprDatabase_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxDiagram_ReadLines. Expected _wxExprDatabase_p.");
-        return NULL;
-        }
-    }
-{
-    PyThreadState* __tstate = wxPyBeginAllowThreads();
-    wxDiagram_ReadLines(_arg0,*_arg1);
-
-    wxPyEndAllowThreads(__tstate);
-    if (PyErr_Occurred()) return NULL;
-}    Py_INCREF(Py_None);
-    _resultobj = Py_None;
-    return _resultobj;
-}
-
-#define wxDiagram_ReadNodes(_swigobj,_swigarg0)  (_swigobj->ReadNodes(_swigarg0))
-static PyObject *_wrap_wxDiagram_ReadNodes(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    wxDiagram * _arg0;
-    wxExprDatabase * _arg1;
-    PyObject * _argo0 = 0;
-    PyObject * _argo1 = 0;
-    char *_kwnames[] = { "self","database", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxDiagram_ReadNodes",_kwnames,&_argo0,&_argo1)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxDiagram_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxDiagram_ReadNodes. Expected _wxDiagram_p.");
-        return NULL;
-        }
-    }
-    if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxExprDatabase_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxDiagram_ReadNodes. Expected _wxExprDatabase_p.");
-        return NULL;
-        }
-    }
-{
-    PyThreadState* __tstate = wxPyBeginAllowThreads();
-    wxDiagram_ReadNodes(_arg0,*_arg1);
-
-    wxPyEndAllowThreads(__tstate);
-    if (PyErr_Occurred()) return NULL;
-}    Py_INCREF(Py_None);
-    _resultobj = Py_None;
-    return _resultobj;
-}
-
 #define wxDiagram_RecentreAll(_swigobj,_swigarg0)  (_swigobj->RecentreAll(_swigarg0))
 static PyObject *_wrap_wxDiagram_RecentreAll(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
@@ -722,8 +569,7 @@ static PyObject *_wrap_wxDiagram_RecentreAll(PyObject *self, PyObject *args, PyO
         }
     }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxDC_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxDC_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxDiagram_RecentreAll. Expected _wxDC_p.");
         return NULL;
         }
@@ -759,8 +605,7 @@ static PyObject *_wrap_wxDiagram_Redraw(PyObject *self, PyObject *args, PyObject
         }
     }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxDC_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxDC_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxDiagram_Redraw. Expected _wxDC_p.");
         return NULL;
         }
@@ -838,45 +683,6 @@ static PyObject *_wrap_wxDiagram_RemoveShape(PyObject *self, PyObject *args, PyO
     if (PyErr_Occurred()) return NULL;
 }    Py_INCREF(Py_None);
     _resultobj = Py_None;
-    return _resultobj;
-}
-
-#define wxDiagram_SaveFile(_swigobj,_swigarg0)  (_swigobj->SaveFile(_swigarg0))
-static PyObject *_wrap_wxDiagram_SaveFile(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    bool  _result;
-    wxDiagram * _arg0;
-    wxString * _arg1;
-    PyObject * _argo0 = 0;
-    PyObject * _obj1 = 0;
-    char *_kwnames[] = { "self","filename", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxDiagram_SaveFile",_kwnames,&_argo0,&_obj1)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxDiagram_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxDiagram_SaveFile. Expected _wxDiagram_p.");
-        return NULL;
-        }
-    }
-{
-    _arg1 = wxString_in_helper(_obj1);
-    if (_arg1 == NULL)
-        return NULL;
-}
-{
-    PyThreadState* __tstate = wxPyBeginAllowThreads();
-    _result = (bool )wxDiagram_SaveFile(_arg0,*_arg1);
-
-    wxPyEndAllowThreads(__tstate);
-    if (PyErr_Occurred()) return NULL;
-}    _resultobj = Py_BuildValue("i",_result);
-{
-    if (_obj1)
-        delete _arg1;
-}
     return _resultobj;
 }
 
@@ -1777,8 +1583,7 @@ static PyObject *_wrap_wxPyShapeCanvas_Redraw(PyObject *self, PyObject *args, Py
         }
     }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxDC_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxDC_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxPyShapeCanvas_Redraw. Expected _wxDC_p.");
         return NULL;
         }
@@ -1948,15 +1753,10 @@ static PyMethodDef oglcanvascMethods[] = {
 	 { "wxDiagram_SetMouseTolerance", (PyCFunction) _wrap_wxDiagram_SetMouseTolerance, METH_VARARGS | METH_KEYWORDS },
 	 { "wxDiagram_SetGridSpacing", (PyCFunction) _wrap_wxDiagram_SetGridSpacing, METH_VARARGS | METH_KEYWORDS },
 	 { "wxDiagram_SetCanvas", (PyCFunction) _wrap_wxDiagram_SetCanvas, METH_VARARGS | METH_KEYWORDS },
-	 { "wxDiagram_SaveFile", (PyCFunction) _wrap_wxDiagram_SaveFile, METH_VARARGS | METH_KEYWORDS },
 	 { "wxDiagram_RemoveShape", (PyCFunction) _wrap_wxDiagram_RemoveShape, METH_VARARGS | METH_KEYWORDS },
 	 { "wxDiagram_RemoveAllShapes", (PyCFunction) _wrap_wxDiagram_RemoveAllShapes, METH_VARARGS | METH_KEYWORDS },
 	 { "wxDiagram_Redraw", (PyCFunction) _wrap_wxDiagram_Redraw, METH_VARARGS | METH_KEYWORDS },
 	 { "wxDiagram_RecentreAll", (PyCFunction) _wrap_wxDiagram_RecentreAll, METH_VARARGS | METH_KEYWORDS },
-	 { "wxDiagram_ReadNodes", (PyCFunction) _wrap_wxDiagram_ReadNodes, METH_VARARGS | METH_KEYWORDS },
-	 { "wxDiagram_ReadLines", (PyCFunction) _wrap_wxDiagram_ReadLines, METH_VARARGS | METH_KEYWORDS },
-	 { "wxDiagram_ReadContainerGeometry", (PyCFunction) _wrap_wxDiagram_ReadContainerGeometry, METH_VARARGS | METH_KEYWORDS },
-	 { "wxDiagram_LoadFile", (PyCFunction) _wrap_wxDiagram_LoadFile, METH_VARARGS | METH_KEYWORDS },
 	 { "wxDiagram_InsertShape", (PyCFunction) _wrap_wxDiagram_InsertShape, METH_VARARGS | METH_KEYWORDS },
 	 { "wxDiagram_GetSnapToGrid", (PyCFunction) _wrap_wxDiagram_GetSnapToGrid, METH_VARARGS | METH_KEYWORDS },
 	 { "wxDiagram_GetQuickEditMode", (PyCFunction) _wrap_wxDiagram_GetQuickEditMode, METH_VARARGS | METH_KEYWORDS },

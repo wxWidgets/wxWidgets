@@ -242,7 +242,7 @@ public:
     virtual void         Update() ;
     // for compatibility
     void                 MacUpdateImmediately() { Update() ; }
-    bool                 MacSetupCursor( const wxPoint& pt ) ;
+    virtual bool         MacSetupCursor( const wxPoint& pt ) ;
         
 //    virtual bool         MacSetPortDrawingParams( const Point & localOrigin, const Rect & clipRect, WindowRef window , wxWindowMac* rootwin )  ;
 //    virtual void         MacGetPortParams(Point* localOrigin, Rect* clipRect, WindowRef *window , wxWindowMac** rootwin ) ;

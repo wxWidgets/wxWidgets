@@ -47,19 +47,19 @@ class wxDllWidgetPtr(wxPanelPtr):
         self.this = this
         self.thisown = 0
     def Ok(self, *_args, **_kwargs):
-        val = apply(dllwidget_c.wxDllWidget_Ok,(self,) + _args, _kwargs)
+        val = dllwidget_c.wxDllWidget_Ok(self, *_args, **_kwargs)
         return val
     def SendCommand(self, *_args, **_kwargs):
-        val = apply(dllwidget_c.wxDllWidget_SendCommand,(self,) + _args, _kwargs)
+        val = dllwidget_c.wxDllWidget_SendCommand(self, *_args, **_kwargs)
         return val
     def GetWidgetWindow(self, *_args, **_kwargs):
-        val = apply(dllwidget_c.wxDllWidget_GetWidgetWindow,(self,) + _args, _kwargs)
+        val = dllwidget_c.wxDllWidget_GetWidgetWindow(self, *_args, **_kwargs)
         return val
     def __repr__(self):
-        return "<C wxDllWidget instance at %s>" % (self.this,)
+        return "<%s.%s instance; proxy of C++ wxDllWidget instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this)
 class wxDllWidget(wxDllWidgetPtr):
     def __init__(self,*_args,**_kwargs):
-        self.this = apply(dllwidget_c.new_wxDllWidget,_args,_kwargs)
+        self.this = dllwidget_c.new_wxDllWidget(*_args,**_kwargs)
         self.thisown = 1
         self._setOORInfo(self)
 

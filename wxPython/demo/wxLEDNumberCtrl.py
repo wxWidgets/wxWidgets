@@ -17,7 +17,7 @@ class TestPanel(wxPanel):
         led = wxLEDNumberCtrl(self, -1, (25,100), (280, 50))
         led.SetValue("56789")
         led.SetAlignment(wxLED_ALIGN_RIGHT)
-        led.SetDrawFaded(false)
+        led.SetDrawFaded(False)
 
         led = wxLEDNumberCtrl(self, -1, (25,175), (280, 50),
                               wxLED_ALIGN_CENTER)# | wxLED_DRAW_FADED)
@@ -46,3 +46,11 @@ def runTest(frame, nb, log):
 
 overview = """\
 """
+
+
+
+if __name__ == '__main__':
+    import sys,os
+    import run
+    run.main(['', os.path.basename(sys.argv[0])])
+

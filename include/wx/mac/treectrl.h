@@ -162,7 +162,7 @@ public:
     long GetNextItem(long item, int code) const;
     bool ItemHasChildren(long item) const;
     long GetChild(long item) const;
-    long GetParent(long item) const;
+    long GetItemParent(long item) const;
     long GetFirstVisibleItem() const;
     long GetNextVisibleItem(long item) const;
     long GetSelection() const;

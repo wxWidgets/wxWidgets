@@ -151,13 +151,16 @@ wxFont wxSystemSettingsNative::GetFont(wxSystemFont index)
 // Get a system metric, e.g. scrollbar size
 int wxSystemSettingsNative::GetMetric(wxSystemMetric index)
 {
+    int value;
+
     switch ( index)
     {
         case wxSYS_MOUSE_BUTTONS:
-                    return 2; // we emulate a two button mouse (ctrl + click = right button )
+            // we emulate a two button mouse (ctrl + click = right button )
+            return 2;
         case wxSYS_BORDER_X:
             // TODO
-                    return 0;
+            return 0;
         case wxSYS_BORDER_Y:
             // TODO
             return 0;
@@ -210,11 +213,11 @@ int wxSystemSettingsNative::GetMetric(wxSystemMetric index)
             // TODO
             return 0;
         case wxSYS_SCREEN_X:
-            // TODO
-            return 0;
+            wxDisplaySize(&value, NULL);
+            return value;
         case wxSYS_SCREEN_Y:
-            // TODO
-            return 0;
+            wxDisplaySize(NULL, &value);
+            return value;
         case wxSYS_FRAMESIZE_X:
             // TODO
             return 0;

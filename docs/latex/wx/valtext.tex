@@ -43,20 +43,24 @@ Constructor, taking a style and optional pointer to a wxString variable.
 \twocolitem{{\bf wxFILTER\_ALPHANUMERIC}}{Non-alphanumeric characters are filtered out.}
 \twocolitem{{\bf wxFILTER\_NUMERIC}}{Non-numeric characters are filtered out.}
 \twocolitem{{\bf wxFILTER\_INCLUDE\_LIST}}{Use an include list. The validator
-checks if the user input is on the list, complaining if not.}
+checks if the user input is on the list, complaining if not. See 
+\helpref{wxTextValidator::SetIncludeList}{wxtextvalidatorsetincludelist}.}
 \twocolitem{{\bf wxFILTER\_EXCLUDE\_LIST}}{Use an exclude list. The validator
-checks if the user input is on the list, complaining if it is.}
+checks if the user input is on the list, complaining if it is. See 
+\helpref{wxTextValidator::SetExcludeList}{wxtextvalidatorsetexcludelist}.}
 \twocolitem{{\bf wxFILTER\_INCLUDE\_CHAR\_LIST}}{Use an include list. The validator
-checks if each input character is in the list (one character per list element), complaining if not.}
+checks if each input character is in the list (one character per list element), complaining if not.
+See \helpref{wxTextValidator::SetIncludeList}{wxtextvalidatorsetincludelist}.}
 \twocolitem{{\bf wxFILTER\_EXCLUDE\_CHAR\_LIST}}{Use an include list. The validator
-checks if each input character is in the list (one character per list element), complaining if it is.}
+checks if each input character is in the list (one character per list element), complaining if it is.
+See \helpref{wxTextValidator::SetExcludeList}{wxtextvalidatorsetexcludelist}.}
 \end{twocollist}
 }
 
 \docparam{valPtr}{A pointer to a wxString variable that contains the value. This variable
 should have a lifetime equal to or longer than the validator lifetime (which is usually
-determined by the lifetime of the window). If NULL, the validator uses its own internal
-storage for the value.}
+determined by the lifetime of the window). % If NULL, the validator uses its own internal storage for the value. NOT TRUE
+}
 
 \membersection{wxTextValidator::\destruct{wxTextValidator}}
 
@@ -117,13 +121,13 @@ Sets the validator style.
 
 \func{virtual bool}{TransferFromWindow}{}
 
-Transfers the string value to the window.
+Transfers the value in the text control to the string.
 
 \membersection{wxTextValidator::TransferToWindow}\label{wxtextvalidatortransfertowindow}
 
 \func{virtual bool}{TransferToWindow}{}
 
-Transfers the window value to the string.
+Transfers the string value to the text control.
 
 \membersection{wxTextValidator::Validate}\label{wxtextvalidatorvalidate}
 

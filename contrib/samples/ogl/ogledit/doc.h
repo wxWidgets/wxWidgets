@@ -35,8 +35,10 @@ class MyDiagram: public wxDiagram
 {
  public:
   MyDiagram(void) {}
+#if wxUSE_PROLOGIO
   bool OnShapeSave(wxExprDatabase& db, wxShape& shape, wxExpr& expr);
   bool OnShapeLoad(wxExprDatabase& db, wxShape& shape, wxExpr& expr);
+#endif
 };
 
 /*

@@ -18,6 +18,7 @@
 
 #include "wx/button.h"
 #include "wx/string.h"
+#include "wx/fl/fldefs.h"
 
 // defaults
 #define NB_DEFAULT_MARGIN 2
@@ -31,8 +32,8 @@
 
 // classes declared in this header file
 
-class wxNewBitmapButton;
-class wxBorderLessBitmapButton;
+class WXFL_DECLSPEC wxNewBitmapButton;
+class WXFL_DECLSPEC wxBorderLessBitmapButton;
 
 /*
 This is an alternative class to wxBitmapButton. It is used
@@ -109,7 +110,7 @@ public:
 
         // Constructor.
     wxNewBitmapButton( const wxBitmap& labelBitmap = wxNullBitmap,
-                       const wxString& labelText   = "",
+                       const wxString& labelText   = wxT(""),
                        int   alignText             = NB_ALIGN_TEXT_BOTTOM,
                        bool  isFlat                = TRUE,
                        // this is the default type of fired events
@@ -123,7 +124,7 @@ public:
         // Use this constructor if buttons have to be persistant
     wxNewBitmapButton( const wxString& bitmapFileName,
                            const wxBitmapType     bitmapFileType = wxBITMAP_TYPE_BMP,
-                           const wxString& labelText      = "",
+                           const wxString& labelText      = wxT(""),
                            int alignText                  = NB_ALIGN_TEXT_BOTTOM,
                            bool  isFlat                   = TRUE,
                            // this is the default type of fired events
@@ -142,7 +143,7 @@ public:
     virtual void Reshape();
 
         // Sets the label and optionally label text.
-    virtual void SetLabel(const wxBitmap& labelBitmap, const wxString& labelText = "" );
+    virtual void SetLabel(const wxBitmap& labelBitmap, const wxString& labelText = wxT("") );
 
         // Sets the text alignment and margins.
     virtual void SetAlignments( int alignText = NB_ALIGN_TEXT_BOTTOM,
@@ -193,11 +194,6 @@ public:
 
         // Responds to a kill focus event.
     void OnKillFocus( wxFocusEvent& event );
-
-        // Maps bitmap to current system colours on Windows
-#ifdef __WXMSW__
-    WXHBITMAP MapBitmap(WXHBITMAP bitmap, int width, int height);
-#endif
 
     DECLARE_EVENT_TABLE()
 };

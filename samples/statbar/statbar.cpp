@@ -238,7 +238,7 @@ IMPLEMENT_APP(MyApp)
 bool MyApp::OnInit()
 {
     // create the main application window
-    MyFrame *frame = new MyFrame("wxStatusBar sample",
+    MyFrame *frame = new MyFrame(_T("wxStatusBar sample"),
                                  wxPoint(50, 50), wxSize(450, 340));
 
     // and show it (the frames, unlike simple controls, are not shown when
@@ -274,24 +274,24 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
 
     // create a menu bar
     wxMenu *menuFile = new wxMenu;
-    menuFile->Append(StatusBar_Quit, "E&xit\tAlt-X", "Quit this program");
+    menuFile->Append(StatusBar_Quit, _T("E&xit\tAlt-X"), _T("Quit this program"));
 
     wxMenu *statbarMenu = new wxMenu;
-    statbarMenu->Append(StatusBar_SetFields, "&Set field count\tCtrl-C",
-                        "Set the number of status bar fields");
-    statbarMenu->Append(StatusBar_Toggle, "&Toggle Status Bar",
-                        "Toggle the status bar display", true);
-    statbarMenu->Append(StatusBar_Recreate, "&Recreate\tCtrl-R",
-                        "Toggle status bar format");
+    statbarMenu->Append(StatusBar_SetFields, _T("&Set field count\tCtrl-C"),
+                        _T("Set the number of status bar fields"));
+    statbarMenu->Append(StatusBar_Toggle, _T("&Toggle Status Bar"),
+                        _T("Toggle the status bar display"), true);
+    statbarMenu->Append(StatusBar_Recreate, _T("&Recreate\tCtrl-R"),
+                        _T("Toggle status bar format"));
 
     wxMenu *helpMenu = new wxMenu;
-    helpMenu->Append(StatusBar_About, "&About...\tCtrl-A", "Show about dialog");
+    helpMenu->Append(StatusBar_About, _T("&About...\tCtrl-A"), _T("Show about dialog"));
 
     // now append the freshly created menu to the menu bar...
     wxMenuBar *menuBar = new wxMenuBar();
-    menuBar->Append(menuFile, "&File");
-    menuBar->Append(statbarMenu, "&Status bar");
-    menuBar->Append(helpMenu, "&Help");
+    menuBar->Append(menuFile, _T("&File"));
+    menuBar->Append(statbarMenu, _T("&Status bar"));
+    menuBar->Append(helpMenu, _T("&Help"));
 
     // ... and attach this menu bar to the frame
     SetMenuBar(menuBar);
@@ -299,7 +299,7 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
     // create default status bar to start with
     CreateStatusBar(2);
     m_statbarKind = StatBar_Default;
-    SetStatusText("Welcome to wxWindows!");
+    SetStatusText(_T("Welcome to wxWindows!"));
 
     m_statbarDefault = GetStatusBar();
 }
@@ -459,28 +459,28 @@ void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
 // ----------------------------------------------------------------------------
 
 MyAboutDialog::MyAboutDialog(wxWindow *parent)
-             : wxDialog(parent, -1, wxString("About statbar"),
+             : wxDialog(parent, -1, wxString(_T("About statbar")),
                         wxDefaultPosition, wxDefaultSize,
                         wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER)
 {
     wxStaticText *text = new wxStaticText(this, -1,
-                                          "wxStatusBar sample\n"
-                                          "(c) 2000 Vadim Zeitlin");
+                                          _T("wxStatusBar sample\n")
+                                          _T("(c) 2000 Vadim Zeitlin"));
 
-    wxButton *btn = new wxButton(this, wxID_OK, "&Close");
+    wxButton *btn = new wxButton(this, wxID_OK, _T("&Close"));
 
     // create the top status bar without the size grip (default style),
     // otherwise it looks weird
     wxStatusBar *statbarTop = new wxStatusBar(this, -1, 0);
     statbarTop->SetFieldsCount(3);
-    statbarTop->SetStatusText("This is a top status bar", 0);
-    statbarTop->SetStatusText("in a dialog", 1);
-    statbarTop->SetStatusText("Great, isn't it?", 2);
+    statbarTop->SetStatusText(_T("This is a top status bar"), 0);
+    statbarTop->SetStatusText(_T("in a dialog"), 1);
+    statbarTop->SetStatusText(_T("Great, isn't it?"), 2);
 
     wxStatusBar *statbarBottom = new wxStatusBar(this, -1);
     statbarBottom->SetFieldsCount(2);
-    statbarBottom->SetStatusText("This is a bottom status bar", 0);
-    statbarBottom->SetStatusText("in a dialog", 1);
+    statbarBottom->SetStatusText(_T("This is a bottom status bar"), 0);
+    statbarBottom->SetStatusText(_T("in a dialog"), 1);
 
     wxBoxSizer *sizerTop = new wxBoxSizer(wxVERTICAL);
     sizerTop->Add(statbarTop, 0, wxGROW);
@@ -619,7 +619,7 @@ void MyStatusBar::DoToggle()
         m_statbmp->Refresh();
 #endif
 
-        SetStatusText("", Field_Clock);
+        SetStatusText(_T(""), Field_Clock);
     }
 }
 

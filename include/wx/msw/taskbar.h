@@ -33,7 +33,7 @@ public:
     inline bool IsIconInstalled() const { return m_iconAdded; }
 
 // Operations
-    bool SetIcon(const wxIcon& icon, const wxString& tooltip = "");
+    bool SetIcon(const wxIcon& icon, const wxString& tooltip = wxEmptyString);
     bool RemoveIcon(void);
     bool PopupMenu(wxMenu *menu); //, int x, int y);
 

@@ -251,7 +251,7 @@ public:
     wxTreeItemId GetSelection() const;
 
         // get the parent of this item (may return NULL if root)
-    wxTreeItemId GetParent(const wxTreeItemId& item) const;
+    wxTreeItemId GetItemParent(const wxTreeItemId& item) const;
 
         // for this enumeration function you must pass in a "cookie" parameter
         // which is opaque for the application but is necessary for the library

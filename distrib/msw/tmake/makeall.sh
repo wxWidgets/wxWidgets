@@ -22,7 +22,6 @@ do
 	b32.t)
 	    echo "Generating $mswdir/makefile.b32 for Borland C++ (32 bits)..."
 	    ./tmake -t b32 wxwin.pro -o $mswdir/makefile.b32
-	    ./tmake -t b32univ wxwin.pro -o $mswdir/makeuniv.b32
 	    ./tmake -t b32base wxwin.pro -o $mswdir/makebase.b32 ;;
 
 	bcc.t)

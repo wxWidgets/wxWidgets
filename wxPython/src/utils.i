@@ -35,7 +35,7 @@
 // Import some definitions of other classes, etc.
 %import _defs.i
 
-%pragma(python) code = "import string"
+%pragma(python) code = "import wx"
 
 
 //---------------------------------------------------------------------------
@@ -46,7 +46,7 @@
         if (ret) {
             PyTuple_SET_ITEM(ret, 0, PyInt_FromLong(flag));
 #if wxUSE_UNICODE
-	    PyTuple_SET_ITEM(ret, 1, PyUnicode_FromUnicode(str.c_str(), str.Len()));
+	    PyTuple_SET_ITEM(ret, 1, PyUnicode_FromWideChar(str.c_str(), str.Len()));
 #else
             PyTuple_SET_ITEM(ret, 1, PyString_FromStringAndSize(str.c_str(), str.Len()));
 #endif
@@ -449,6 +449,10 @@ public:
         // return the wxDateTime object for the current time
     static inline wxDateTime Now();
 
+        // return the wxDateTime object for the current time with millisecond
+        // precision (if available on this platform)
+    static wxDateTime UNow();
+
         // return the wxDateTime object for today midnight: i.e. as Now() but
         // with time set to 0
     static inline wxDateTime Today();
@@ -528,8 +532,8 @@ public:
     // calendar calculations
 
         // set to the given week day in the same week as this one
-    wxDateTime& SetToWeekDayInSameWeek(WeekDay weekday);
-    wxDateTime GetWeekDayInSameWeek(WeekDay weekday);
+    wxDateTime& SetToWeekDayInSameWeek(WeekDay weekday, WeekFlags flags = Monday_First);
+    wxDateTime GetWeekDayInSameWeek(WeekDay weekday, WeekFlags flags = Monday_First);
 
         // set to the next week day following this one
     wxDateTime& SetToNextWeekDay(WeekDay weekday);
@@ -563,8 +567,8 @@ public:
         // sets the date to the given day of the given week in the year,
         // returns TRUE on success and FALSE if given date doesn't exist (e.g.
         // numWeek is > 53)
-    bool SetToTheWeek(wxDateTime_t numWeek, WeekDay weekday = Mon);
-    wxDateTime GetWeek(wxDateTime_t numWeek, WeekDay weekday = Mon);
+    bool SetToTheWeek(wxDateTime_t numWeek, WeekDay weekday = Mon, WeekFlags flags = Monday_First);
+    wxDateTime GetWeek(wxDateTime_t numWeek, WeekDay weekday = Mon, WeekFlags flags = Monday_First);
 
         // sets the date to the last day of the given (or current) month or the
         // given (or current) year
@@ -758,17 +762,17 @@ public:
 
     %pragma(python) addtoclass = "
     def __add__(self, other):
-        if string.find(other.this, 'wxTimeSpan') != -1:
+        if isinstance(other, wxTimeSpanPtr):
             return self.__add__TS(other)
-        if string.find(other.this, 'wxDateSpan') != -1:
+        if isinstance(other, wxDateSpanPtr):
             return self.__add__DS(other)
         raise TypeError, 'Invalid r.h.s. type for __add__'
     def __sub__(self, other):
-        if string.find(other.this, 'wxDateTime') != -1:
+        if isinstance(other, wxDateTimePtr):
             return self.__sub__DT(other)
-        if string.find(other.this, 'wxTimeSpan') != -1:
+        if isinstance(other, wxTimeSpanPtr):
             return self.__sub__TS(other)
-        if string.find(other.this, 'wxDateSpan') != -1:
+        if isinstance(other, wxDateSpanPtr):
             return self.__sub__DS(other)
         raise TypeError, 'Invalid r.h.s. type for __sub__'
 "

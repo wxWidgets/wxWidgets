@@ -23,7 +23,8 @@ functions that take a wxMenuEvent argument.
 
 \twocolwidtha{7cm}
 \begin{twocollist}\itemsep=0pt
-\twocolitem{{\bf EVT\_MENU\_OPEN(func)}}{A menu is about to be opened.}
+\twocolitem{{\bf EVT\_MENU\_OPEN(func)}}{A menu is about to be opened. On Windows,
+this is only sent once for each navigation of the menubar (up until all menus have closed).}
 \twocolitem{{\bf EVT\_MENU\_CLOSE(func)}}{A menu has been just closed.}
 \twocolitem{{\bf EVT\_MENU\_HIGHLIGHT(id, func)}}{The menu item with the
 specified id has been highlighted: used to show help prompts in the status bar

@@ -109,7 +109,7 @@ void wxWindow::Init()
     m_isCurrent = FALSE;
 
     m_renderer = wxTheme::Get()->GetRenderer();
-    
+
     m_oldSize.x = -1;
     m_oldSize.y = -1;
 }
@@ -240,7 +240,7 @@ void wxWindow::OnErase(wxEraseEvent& event)
 
         return;
     }
-    
+
     DoDrawBackground(*event.GetDC());
 
     // if we have both scrollbars, we also have a square in the corner between
@@ -267,41 +267,45 @@ void wxWindow::OnErase(wxEraseEvent& event)
 bool wxWindow::DoDrawBackground(wxDC& dc)
 {
     wxRect rect;
-    
+
     wxSize size = GetSize();  // Why not GetClientSize() ?
     rect.x = 0;
     rect.y = 0;
     rect.width = size.x;
     rect.height = size.y;
-    
-    if (HasTransparentBackground() && GetParent() && GetParent()->ProvidesBackground())
+
+    wxWindow * const parent = GetParent();
+    if ( HasTransparentBackground() && parent && parent->ProvidesBackground() )
     {
         wxASSERT( !IsTopLevel() );
-    
+
         wxPoint pos = GetPosition();
-        
+
         AdjustForParentClientOrigin( pos.x, pos.y, 0 );
-        
+
         // Adjust DC logical origin
-        wxCoord x,y;
-        dc.GetLogicalOrigin( &x, &y );
-        x += pos.x;
-        y += pos.y;
+        wxCoord org_x, org_y, x, y;
+        dc.GetLogicalOrigin( &org_x, &org_y );
+        x = org_x + pos.x;
+        y = org_y + pos.y;
         dc.SetLogicalOrigin( x, y );
-        
+
         // Adjust draw rect
         rect.x = pos.x;
         rect.y = pos.y;
-        
+
         // Let parent draw the background
-        GetParent()->EraseBackground( dc, rect );
+        parent->EraseBackground( dc, rect );
+
+        // Restore DC logical origin
+        dc.SetLogicalOrigin( org_x, org_y );
     }
     else
     {
         // Draw background ouselves
-         EraseBackground( dc, rect );
+        EraseBackground( dc, rect );
     }
-    
+
     return TRUE;
 }
 
@@ -315,10 +319,10 @@ void wxWindow::EraseBackground(wxDC& dc, const wxRect& rect)
         wxBitmap bmp = GetBackgroundBitmap(&alignment, &stretch);
         wxControlRenderer::DrawBitmap(dc, bmp, rect, alignment, stretch);
     }
-    else 
+    else
     {
         // Just fill it with bg colour if no bitmap
-    
+
         m_renderer->DrawBackground(dc, wxTHEME_BG_COLOUR(this),
                                    rect, GetStateFlags());
     }
@@ -387,6 +391,19 @@ void wxWindow::Refresh(bool eraseBackground, const wxRect *rectClient)
 #endif // WXDEBUG_REFRESH
 
     wxWindowNative::Refresh(eraseBackground, &rectWin);
+
+    // Refresh all sub controls if any.
+    wxWindowList::Node *node = GetChildren().GetFirst();
+    while ( node )
+    {
+        wxWindow *win = node->GetData();
+        // Only refresh sub controls when it is visible 
+        // and when it is in the update region.
+        if(!win->IsKindOf(CLASSINFO(wxTopLevelWindow)) && win->IsShown() && wxRegion(rectWin).Contains(win->GetRect()) != wxOutRegion)
+            win->Refresh(eraseBackground, &rectWin);
+            
+        node = node->GetNext();
+    }
 }
 
 // ----------------------------------------------------------------------------
@@ -478,28 +495,28 @@ int wxWindow::GetStateFlags() const
 void wxWindow::OnSize(wxSizeEvent& event)
 {
     event.Skip();
-    
+
     if ( m_scrollbarVert || m_scrollbarHorz )
     {
         PositionScrollbars();
     }
-    
+
 #if 0   // ndef __WXMSW__
     // Refresh the area (strip) previously occupied by the border
-    
+
     if (HasFlag( wxNO_FULL_REPAINT_ON_RESIZE ) && IsShown())
     {
         // This code assumes that wxSizeEvent.GetSize() returns
         // the area of the entire window, not just the client
         // area.
         wxSize newSize = event.GetSize();
-        
+
         if (m_oldSize.x == -1 && m_oldSize.y == -1)
         {
             m_oldSize = newSize;
             return;
         }
-        
+
         if (HasFlag( wxSIMPLE_BORDER ))
         {
             if (newSize.y > m_oldSize.y)
@@ -520,7 +537,7 @@ void wxWindow::OnSize(wxSizeEvent& event)
                 rect.width = newSize.x;
                 wxWindowNative::Refresh( TRUE, &rect );
             }
-            
+
             if (newSize.x > m_oldSize.x)
             {
                 wxRect rect;
@@ -561,7 +578,7 @@ void wxWindow::OnSize(wxSizeEvent& event)
                 rect.width = newSize.x;
                 wxWindowNative::Refresh( TRUE, &rect );
             }
-            
+
             if (newSize.x > m_oldSize.x)
             {
                 wxRect rect;
@@ -581,7 +598,7 @@ void wxWindow::OnSize(wxSizeEvent& event)
                 wxWindowNative::Refresh( TRUE, &rect );
             }
         }
-        
+
         m_oldSize = newSize;
     }
 #endif
@@ -915,7 +932,7 @@ void wxWindow::ScrollWindow(int dx, int dy, const wxRect *rect)
 
     wxWindowNative::ScrollWindow(dx, dy, rect);
 
-#else
+#else // !wxX11
 
     // before scrolling it, ensure that we don't have any unpainted areas
     Update();
@@ -933,11 +950,11 @@ void wxWindow::ScrollWindow(int dx, int dy, const wxRect *rect)
         r = ScrollNoRefresh(0, dy, rect);
         Refresh(TRUE /* erase bkgnd */, &r);
     }
-    
-    // scroll children accordingly:    
+
+    // scroll children accordingly:
     wxPoint offset(dx, dy);
-    
-    for (wxWindowList::Node *node = GetChildren().GetFirst(); 
+
+    for (wxWindowList::Node *node = GetChildren().GetFirst();
          node; node = node->GetNext())
     {
         wxWindow *child = node->GetData();
@@ -945,13 +962,13 @@ void wxWindow::ScrollWindow(int dx, int dy, const wxRect *rect)
             continue;
 
         // VS: Scrolling children has non-trivial semantics. If rect=NULL then
-        //     it is easy: we scroll all children. Otherwise it gets 
+        //     it is easy: we scroll all children. Otherwise it gets
         //     complicated:
         //       1. if scrolling in one direction only, scroll only
         //          those children that intersect shaft defined by the rectangle
         //          and scrolling direction
         //       2. if scrolling in both axes, scroll all children
-        
+
         if ( rect && (dx * dy == 0 /* moving in only one of x, y axis */) )
         {
             wxRect childRect = child->GetRect();
@@ -970,8 +987,8 @@ void wxWindow::ScrollWindow(int dx, int dy, const wxRect *rect)
         {
             child->Move(child->GetPosition() + offset);
         }
-    }    
-#endif
+    }
+#endif // wxX11/!wxX11
 }
 
 wxRect wxWindow::ScrollNoRefresh(int dx, int dy, const wxRect *rectTotal)

@@ -110,7 +110,7 @@ name& name::operator=(const name& src)                                      \
 void name::Grow(size_t nIncrement)                                          \
 {                                                                           \
   /* only do it if no more place */                                         \
-  if( m_nCount == m_nSize ) {                                               \
+  if( (m_nCount == m_nSize) || ((m_nSize - m_nCount) < nIncrement) ) {      \
     if( m_nSize == 0 ) {                                                    \
       /* was empty, determine initial size */                               \
       size_t size = WX_ARRAY_DEFAULT_INITIAL_SIZE;                          \
@@ -189,6 +189,7 @@ void name::Shrink()                                                         \
         memcpy(pNew, m_pItems, m_nCount*sizeof(T));                         \
         delete [] m_pItems;                                                 \
         m_pItems = pNew;                                                    \
+        m_nSize = m_nCount;                                                 \
     }                                                                       \
   }                                                                         \
 }                                                                           \
@@ -247,12 +248,17 @@ int name::Index(T lItem, CMPFUNC fnCompare) const                           \
 {                                                                           \
     size_t n = IndexForInsert(lItem, fnCompare);                            \
                                                                             \
-    return n < m_nCount && m_pItems[n] == lItem ? (int)n : wxNOT_FOUND;     \
+    return (n >= m_nCount ||                                                \
+           (*fnCompare)((const void *)(long)lItem,                          \
+                        ((const void *)(long)m_pItems[n]))) ? wxNOT_FOUND   \
+                                                            : (int)n;       \
 }                                                                           \
                                                                             \
 /* add item at the end */                                                   \
 void name::Add(T lItem, size_t nInsert)                                     \
 {                                                                           \
+  if (nInsert == 0)                                                         \
+      return;                                                               \
   Grow(nInsert);                                                            \
   for (size_t i = 0; i < nInsert; i++)                                      \
       m_pItems[m_nCount++] = lItem;                                         \
@@ -271,6 +277,8 @@ void name::Insert(T lItem, size_t nIndex, size_t nInsert)                   \
   wxCHECK_RET( m_nCount <= m_nCount + nInsert,                              \
                wxT("array size overflow in wxArray::Insert") );             \
                                                                             \
+  if (nInsert == 0)                                                         \
+      return;                                                               \
   Grow(nInsert);                                                            \
                                                                             \
   memmove(&m_pItems[nIndex + nInsert], &m_pItems[nIndex],                   \

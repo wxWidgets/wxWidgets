@@ -23,7 +23,7 @@
 Plugin class implementing bar dragging.
 */
 
-class cbBarDragPlugin : public cbPluginBase
+class WXFL_DECLSPEC cbBarDragPlugin : public cbPluginBase
 {
     DECLARE_DYNAMIC_CLASS( cbBarDragPlugin )
 protected:

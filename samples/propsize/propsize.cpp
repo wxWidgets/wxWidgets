@@ -119,7 +119,7 @@ IMPLEMENT_APP(MyApp)
 bool MyApp::OnInit()
 {
     // Create the main application window
-    MyFrame *frame = new MyFrame("Proportional resize",
+    MyFrame *frame = new MyFrame(_T("Proportional resize"),
                                  wxPoint(50, 50), wxSize(450, 340));
 
     // Show it and tell the application that it's our main window
@@ -145,15 +145,15 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
     SetIcon(wxICON(mondrian));
 
     // create a menu bar
-    wxMenu *menuFile = new wxMenu("", wxMENU_TEAROFF);
+    wxMenu *menuFile = new wxMenu(_T(""), wxMENU_TEAROFF);
 
-    menuFile->Append(wxID_ABOUT, "&About...\tCtrl-A", "Show about dialog");
+    menuFile->Append(wxID_ABOUT, _T("&About...\tCtrl-A"), _T("Show about dialog"));
     menuFile->AppendSeparator();
-    menuFile->Append(Minimal_Quit, "E&xit\tAlt-X", "Quit this program");
+    menuFile->Append(Minimal_Quit, _T("E&xit\tAlt-X"), _T("Quit this program"));
 
     // now append the freshly created menu to the menu bar...
     wxMenuBar *menuBar = new wxMenuBar();
-    menuBar->Append(menuFile, "&File");
+    menuBar->Append(menuFile, _T("&File"));
 
     // ... and attach this menu bar to the frame
     SetMenuBar(menuBar);
@@ -161,7 +161,7 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
 #if wxUSE_STATUSBAR
     // create a status bar just for fun (by default with 1 pane only)
     CreateStatusBar(1);
-    SetStatusText("Resize the frame to see how controls react");
+    SetStatusText(_T("Resize the frame to see how controls react"));
 #endif // wxUSE_STATUSBAR
 
 #define AddLine(orient) \
@@ -175,42 +175,42 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
     wxBoxSizer *topsizer = new wxBoxSizer( wxVERTICAL );
     // top row -- top-aligned
     wxBoxSizer *hsizer1 = new wxBoxSizer( wxHORIZONTAL );
-    hsizer1->AddButton( "one", wxALIGN_LEFT | wxALIGN_TOP);
+    hsizer1->AddButton( _T("one"), wxALIGN_LEFT | wxALIGN_TOP);
     hsizer1->AddLine(wxVERTICAL);
-    hsizer1->AddButton( "two", wxALIGN_CENTER_HORIZONTAL | wxALIGN_TOP);
+    hsizer1->AddButton( _T("two"), wxALIGN_CENTER_HORIZONTAL | wxALIGN_TOP);
     hsizer1->AddLine(wxVERTICAL);
-    hsizer1->AddButton( "three", wxALIGN_RIGHT | wxALIGN_TOP);
+    hsizer1->AddButton( _T("three"), wxALIGN_RIGHT | wxALIGN_TOP);
 
     topsizer->Add(hsizer1, 1, wxEXPAND);
     topsizer->AddLine(wxHORIZONTAL);
 
     wxBoxSizer *hsizer2 = new wxBoxSizer( wxHORIZONTAL );
-    hsizer2->AddButton( "four", wxALIGN_LEFT | wxALIGN_CENTER_VERTICAL);
+    hsizer2->AddButton( _T("four"), wxALIGN_LEFT | wxALIGN_CENTER_VERTICAL);
     hsizer2->AddLine(wxVERTICAL);
     // sizer that preserves it's shape
     wxBoxSizer *vsizer = new wxBoxSizer( wxVERTICAL );
     vsizer->Add(
-        new wxButton( this, -1, "up", wxDefaultPosition, wxSize(100,25) ),
+        new wxButton( this, -1, _T("up"), wxDefaultPosition, wxSize(100,25) ),
         1, wxEXPAND);
 
     vsizer->Add(
-        new wxButton( this, -1, "down", wxDefaultPosition, wxSize(100,25) ),
+        new wxButton( this, -1, _T("down"), wxDefaultPosition, wxSize(100,25) ),
         1, wxEXPAND);
 
     hsizer2->Add(vsizer, 1, wxSHAPED | wxALIGN_CENTER);
     hsizer2->AddLine(wxVERTICAL);
-    hsizer2->AddButton( "six", wxALIGN_RIGHT | wxALIGN_CENTER_VERTICAL);
+    hsizer2->AddButton( _T("six"), wxALIGN_RIGHT | wxALIGN_CENTER_VERTICAL);
 
     topsizer->Add(hsizer2, 1, wxEXPAND);
     topsizer->AddLine(wxHORIZONTAL);
 
     wxBoxSizer *hsizer3 = new wxBoxSizer( wxHORIZONTAL );
-    hsizer3->AddButton( "seven", wxALIGN_LEFT | wxALIGN_BOTTOM);
+    hsizer3->AddButton( _T("seven"), wxALIGN_LEFT | wxALIGN_BOTTOM);
     hsizer3->AddLine(wxVERTICAL);
-    hsizer3->AddButton( "eight", wxALIGN_CENTER_HORIZONTAL | wxALIGN_BOTTOM);
+    hsizer3->AddButton( _T("eight"), wxALIGN_CENTER_HORIZONTAL | wxALIGN_BOTTOM);
     hsizer3->AddLine(wxVERTICAL);
     // wxEXPAND should have no effect
-    hsizer3->AddButton( "nine", wxEXPAND | wxALIGN_RIGHT | wxALIGN_BOTTOM);
+    hsizer3->AddButton( _T("nine"), wxEXPAND | wxALIGN_RIGHT | wxALIGN_BOTTOM);
 
     topsizer->Add(hsizer3, 1, wxEXPAND);
 
@@ -246,5 +246,5 @@ void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
 #endif // wxBETA_NUMBER
               );
 
-    wxMessageBox(msg, "About Shaped Sizer", wxOK | wxICON_INFORMATION, this);
+    wxMessageBox(msg, _T("About Shaped Sizer"), wxOK | wxICON_INFORMATION, this);
 }

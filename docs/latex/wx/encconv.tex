@@ -5,9 +5,20 @@
 
 \section{\class{wxEncodingConverter}}\label{wxencodingconverter}
 
-This class is capable of converting strings between any two
+This class is capable of converting strings between two
 8-bit encodings/charsets. It can also convert from/to Unicode (but only
-if you compiled wxWindows with wxUSE\_WCHAR\_T set to 1).
+if you compiled wxWindows with wxUSE\_WCHAR\_T set to 1). Only limited subset
+of encodings in supported by wxEncodingConverter:
+{\tt wxFONTENCODING\_ISO8859\_1..15}, {\tt wxFONTENCODING\_CP1250..1257} and 
+{\tt wxFONTENCODING\_KOI8}.
+
+\wxheading{Note}
+
+Please use \helpref{wxMBConv classes}{mbconvclasses} instead
+if possible. \helpref{wxCSConv}{wxcsconv} has much better support for various
+encodings than wxEncodingConverter. wxEncodingConverter is useful only
+if you rely on {\tt wxCONVERT\_SUBSTITUTE} mode of operation (see 
+\helpref{Init}{wxencodingconverterinit}).
 
 \wxheading{Derived from}
 

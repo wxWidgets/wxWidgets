@@ -1,0 +1,29 @@
+TODO for XRCed
+==============
+
+- better help
+
++ undo/redo
+
++ tree icons
+
+- replace object with another, keeping children
+
++ write tmp file for current dialog/panel/etc.
+
++ XML indents
+
++ select same notebook pages after update
+
+- put some default values in tree ctrl etc.
+
+- special (fast) update for some values: pos/size, value/content, sizeritem
+  stuff (?), well, as much as possible
+
+- highlighting with better method
+
+- import XRC/WXR files
+
++ disable some window creation when it's not valid
+
+- selecting object by clicking in test window

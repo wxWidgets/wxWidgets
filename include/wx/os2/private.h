@@ -245,7 +245,7 @@ extern HBITMAP wxInvertMask(HBITMAP hbmpMask, int w = 0, int h = 0);
 // ---------------------------------------------------------------------------
 
 // The MakeProcInstance version of the function wxSubclassedGenericControlProc
-WXDLLEXPORT_DATA(extern) wxGenericControlSubClassProc;
+WXDLLEXPORT_DATA(extern int) wxGenericControlSubClassProc;
 WXDLLEXPORT_DATA(extern wxChar*) wxBuffer;
 WXDLLEXPORT_DATA(extern HINSTANCE) wxhInstance;
 
@@ -262,6 +262,20 @@ WXDLLEXPORT void wxDrawBorder( HPS     hPS
                               ,RECTL&  rRect
                               ,WXDWORD dwStyle
                              );
+
+#include "wx/thread.h"
+static inline MRESULT MySendMsg(HWND hwnd, ULONG ulMsgid,
+                                MPARAM mpParam1, MPARAM mpParam2)
+{
+    MRESULT vRes;
+    vRes = ::WinSendMsg(hwnd, ulMsgid, mpParam1, mpParam2);
+#if wxUSE_THREADS
+    if (!wxThread::IsMain())
+        ::WinPostMsg(hwnd, ulMsgid, mpParam1, mpParam2);
+#endif
+    return vRes;
+}
+#define WinSendMsg MySendMsg
 
 WXDLLEXPORT void wxSetInstance(HINSTANCE hInst);
 

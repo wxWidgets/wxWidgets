@@ -19,6 +19,8 @@
 /* Implementation : PYTHON */
 
 #define SWIGPYTHON
+#include "Python.h"
+
 #include <string.h>
 #include <stdlib.h>
 /* Definitions for Windows/Unix exporting */
@@ -36,12 +38,9 @@
 #   define SWIGEXPORT(a) a
 #endif
 
-#include "Python.h"
-
 #ifdef __cplusplus
 extern "C" {
 #endif
-
 extern void SWIG_MakePtr(char *, void *, char *);
 extern void SWIG_RegisterMapping(char *, char *, void *(*)(void *));
 extern char *SWIG_GetPtr(char *, void **, char *);
@@ -92,6 +91,32 @@ static PyObject* t_output_helper(PyObject* target, PyObject* o) {
 
     // Put some wx default wxChar* values into wxStrings.
     static const wxString wxPyEmptyString(wxT(""));
+
+// Fix some link errors...  Remove this when these methods get real implementations...
+#if defined(__WXGTK__) || defined(__WXX11__)
+#if wxUSE_PANGO
+void wxNativeFontInfo::SetPointSize(int pointsize)
+    { wxFAIL_MSG( _T("not implemented") ); }
+
+void wxNativeFontInfo::SetStyle(wxFontStyle style)
+    { wxFAIL_MSG( _T("not implemented") ); }
+
+void wxNativeFontInfo::SetWeight(wxFontWeight weight)
+    { wxFAIL_MSG( _T("not implemented") ); }
+
+void wxNativeFontInfo::SetUnderlined(bool WXUNUSED(underlined))
+    { wxFAIL_MSG( _T("not implemented") ); }
+
+void wxNativeFontInfo::SetFaceName(wxString facename)
+    { wxFAIL_MSG( _T("not implemented") ); }
+
+void wxNativeFontInfo::SetFamily(wxFontFamily family)
+    { wxFAIL_MSG( _T("not implemented") ); }
+
+void wxNativeFontInfo::SetEncoding(wxFontEncoding encoding)
+    { wxFAIL_MSG( _T("not implemented") ); }
+#endif
+#endif
 
 class wxPyFontEnumerator : public wxFontEnumerator {
 public:
@@ -158,7 +183,7 @@ static PyObject *_wrap_wxGetTranslation(PyObject *self, PyObject *args, PyObject
     if (PyErr_Occurred()) return NULL;
 }{
 #if wxUSE_UNICODE
-    _resultobj = PyUnicode_FromUnicode(_result->c_str(), _result->Len());
+    _resultobj = PyUnicode_FromWideChar(_result->c_str(), _result->Len());
 #else
     _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
 #endif
@@ -365,7 +390,7 @@ static PyObject *_wrap_wxNativeFontInfo_GetFaceName(PyObject *self, PyObject *ar
     if (PyErr_Occurred()) return NULL;
 }{
 #if wxUSE_UNICODE
-    _resultobj = PyUnicode_FromUnicode(_result->c_str(), _result->Len());
+    _resultobj = PyUnicode_FromWideChar(_result->c_str(), _result->Len());
 #else
     _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
 #endif
@@ -712,7 +737,7 @@ static PyObject *_wrap_wxNativeFontInfo_ToString(PyObject *self, PyObject *args,
     if (PyErr_Occurred()) return NULL;
 }{
 #if wxUSE_UNICODE
-    _resultobj = PyUnicode_FromUnicode(_result->c_str(), _result->Len());
+    _resultobj = PyUnicode_FromWideChar(_result->c_str(), _result->Len());
 #else
     _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
 #endif
@@ -751,7 +776,7 @@ static PyObject *_wrap_wxNativeFontInfo___str__(PyObject *self, PyObject *args, 
     if (PyErr_Occurred()) return NULL;
 }{
 #if wxUSE_UNICODE
-    _resultobj = PyUnicode_FromUnicode(_result->c_str(), _result->Len());
+    _resultobj = PyUnicode_FromWideChar(_result->c_str(), _result->Len());
 #else
     _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
 #endif
@@ -827,7 +852,7 @@ static PyObject *_wrap_wxNativeFontInfo_ToUserString(PyObject *self, PyObject *a
     if (PyErr_Occurred()) return NULL;
 }{
 #if wxUSE_UNICODE
-    _resultobj = PyUnicode_FromUnicode(_result->c_str(), _result->Len());
+    _resultobj = PyUnicode_FromWideChar(_result->c_str(), _result->Len());
 #else
     _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
 #endif
@@ -1105,7 +1130,7 @@ static PyObject *_wrap_wxFontMapper_GetEncodingName(PyObject *self, PyObject *ar
     if (PyErr_Occurred()) return NULL;
 }{
 #if wxUSE_UNICODE
-    _resultobj = PyUnicode_FromUnicode(_result->c_str(), _result->Len());
+    _resultobj = PyUnicode_FromWideChar(_result->c_str(), _result->Len());
 #else
     _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
 #endif
@@ -1133,7 +1158,7 @@ static PyObject *_wrap_wxFontMapper_GetEncodingDescription(PyObject *self, PyObj
     if (PyErr_Occurred()) return NULL;
 }{
 #if wxUSE_UNICODE
-    _resultobj = PyUnicode_FromUnicode(_result->c_str(), _result->Len());
+    _resultobj = PyUnicode_FromWideChar(_result->c_str(), _result->Len());
 #else
     _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
 #endif
@@ -1312,7 +1337,7 @@ static PyObject *_wrap_wxFontMapper_GetDefaultConfigPath(PyObject *self, PyObjec
     if (PyErr_Occurred()) return NULL;
 }{
 #if wxUSE_UNICODE
-    _resultobj = PyUnicode_FromUnicode(_result->c_str(), _result->Len());
+    _resultobj = PyUnicode_FromWideChar(_result->c_str(), _result->Len());
 #else
     _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
 #endif
@@ -1388,8 +1413,7 @@ static PyObject *_wrap_new_wxFontFromNativeInfo(PyObject *self, PyObject *args, 
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:new_wxFontFromNativeInfo",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxNativeFontInfo_p")) {
+        if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxNativeFontInfo_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of new_wxFontFromNativeInfo. Expected _wxNativeFontInfo_p.");
         return NULL;
         }
@@ -1407,6 +1431,56 @@ static PyObject *_wrap_new_wxFontFromNativeInfo(PyObject *self, PyObject *args, 
         Py_INCREF(Py_None);
         _resultobj = Py_None;
     }
+    return _resultobj;
+}
+
+static wxFont * wxFont_wxFontFromNativeInfoString(wxFont *self,const wxString & info) {
+            wxNativeFontInfo nfi;
+            nfi.FromString(info);
+            return new wxFont(nfi);
+        }
+static PyObject *_wrap_wxFont_wxFontFromNativeInfoString(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxFont * _result;
+    wxFont * _arg0;
+    wxString * _arg1;
+    PyObject * _argo0 = 0;
+    PyObject * _obj1 = 0;
+    char *_kwnames[] = { "self","info", NULL };
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxFont_wxFontFromNativeInfoString",_kwnames,&_argo0,&_obj1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxFont_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxFont_wxFontFromNativeInfoString. Expected _wxFont_p.");
+        return NULL;
+        }
+    }
+{
+    _arg1 = wxString_in_helper(_obj1);
+    if (_arg1 == NULL)
+        return NULL;
+}
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    _result = (wxFont *)wxFont_wxFontFromNativeInfoString(_arg0,*_arg1);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    if (_result) {
+        SWIG_MakePtr(_ptemp, (char *) _result,"_wxFont_p");
+        _resultobj = Py_BuildValue("s",_ptemp);
+    } else {
+        Py_INCREF(Py_None);
+        _resultobj = Py_None;
+    }
+{
+    if (_obj1)
+        delete _arg1;
+}
     return _resultobj;
 }
 
@@ -1632,7 +1706,7 @@ static PyObject *_wrap_wxFont_GetFaceName(PyObject *self, PyObject *args, PyObje
     if (PyErr_Occurred()) return NULL;
 }{
 #if wxUSE_UNICODE
-    _resultobj = PyUnicode_FromUnicode(_result->c_str(), _result->Len());
+    _resultobj = PyUnicode_FromWideChar(_result->c_str(), _result->Len());
 #else
     _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
 #endif
@@ -1760,7 +1834,7 @@ static PyObject *_wrap_wxFont_GetNativeFontInfoDesc(PyObject *self, PyObject *ar
     if (PyErr_Occurred()) return NULL;
 }{
 #if wxUSE_UNICODE
-    _resultobj = PyUnicode_FromUnicode(_result->c_str(), _result->Len());
+    _resultobj = PyUnicode_FromWideChar(_result->c_str(), _result->Len());
 #else
     _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
 #endif
@@ -1797,7 +1871,7 @@ static PyObject *_wrap_wxFont_GetNativeFontInfoUserDesc(PyObject *self, PyObject
     if (PyErr_Occurred()) return NULL;
 }{
 #if wxUSE_UNICODE
-    _resultobj = PyUnicode_FromUnicode(_result->c_str(), _result->Len());
+    _resultobj = PyUnicode_FromWideChar(_result->c_str(), _result->Len());
 #else
     _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
 #endif
@@ -2043,8 +2117,7 @@ static PyObject *_wrap_wxFont_SetNativeFontInfo(PyObject *self, PyObject *args, 
         }
     }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxNativeFontInfo_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxNativeFontInfo_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxFont_SetNativeFontInfo. Expected _wxNativeFontInfo_p.");
         return NULL;
         }
@@ -2125,7 +2198,7 @@ static PyObject *_wrap_wxFont_GetFamilyString(PyObject *self, PyObject *args, Py
     if (PyErr_Occurred()) return NULL;
 }{
 #if wxUSE_UNICODE
-    _resultobj = PyUnicode_FromUnicode(_result->c_str(), _result->Len());
+    _resultobj = PyUnicode_FromWideChar(_result->c_str(), _result->Len());
 #else
     _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
 #endif
@@ -2162,7 +2235,7 @@ static PyObject *_wrap_wxFont_GetStyleString(PyObject *self, PyObject *args, PyO
     if (PyErr_Occurred()) return NULL;
 }{
 #if wxUSE_UNICODE
-    _resultobj = PyUnicode_FromUnicode(_result->c_str(), _result->Len());
+    _resultobj = PyUnicode_FromWideChar(_result->c_str(), _result->Len());
 #else
     _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
 #endif
@@ -2199,7 +2272,7 @@ static PyObject *_wrap_wxFont_GetWeightString(PyObject *self, PyObject *args, Py
     if (PyErr_Occurred()) return NULL;
 }{
 #if wxUSE_UNICODE
-    _resultobj = PyUnicode_FromUnicode(_result->c_str(), _result->Len());
+    _resultobj = PyUnicode_FromWideChar(_result->c_str(), _result->Len());
 #else
     _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
 #endif
@@ -2207,6 +2280,65 @@ static PyObject *_wrap_wxFont_GetWeightString(PyObject *self, PyObject *args, Py
 {
     delete _result;
 }
+    return _resultobj;
+}
+
+#define wxFont_SetNoAntiAliasing(_swigobj,_swigarg0)  (_swigobj->SetNoAntiAliasing(_swigarg0))
+static PyObject *_wrap_wxFont_SetNoAntiAliasing(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxFont * _arg0;
+    bool  _arg1 = (bool ) TRUE;
+    PyObject * _argo0 = 0;
+    int tempbool1 = (int) TRUE;
+    char *_kwnames[] = { "self","no", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O|i:wxFont_SetNoAntiAliasing",_kwnames,&_argo0,&tempbool1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxFont_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxFont_SetNoAntiAliasing. Expected _wxFont_p.");
+        return NULL;
+        }
+    }
+    _arg1 = (bool ) tempbool1;
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    wxFont_SetNoAntiAliasing(_arg0,_arg1);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxFont_GetNoAntiAliasing(_swigobj)  (_swigobj->GetNoAntiAliasing())
+static PyObject *_wrap_wxFont_GetNoAntiAliasing(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    bool  _result;
+    wxFont * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxFont_GetNoAntiAliasing",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxFont_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxFont_GetNoAntiAliasing. Expected _wxFont_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    _result = (bool )wxFont_GetNoAntiAliasing(_arg0);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    _resultobj = Py_BuildValue("i",_result);
     return _resultobj;
 }
 
@@ -2735,7 +2867,7 @@ static PyObject *_wrap_wxLanguageInfo_CanonicalName_set(PyObject *self, PyObject
     if (PyErr_Occurred()) return NULL;
 }{
 #if wxUSE_UNICODE
-    _resultobj = PyUnicode_FromUnicode(_result->c_str(), _result->Len());
+    _resultobj = PyUnicode_FromWideChar(_result->c_str(), _result->Len());
 #else
     _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
 #endif
@@ -2773,7 +2905,7 @@ static PyObject *_wrap_wxLanguageInfo_CanonicalName_get(PyObject *self, PyObject
     if (PyErr_Occurred()) return NULL;
 }{
 #if wxUSE_UNICODE
-    _resultobj = PyUnicode_FromUnicode(_result->c_str(), _result->Len());
+    _resultobj = PyUnicode_FromWideChar(_result->c_str(), _result->Len());
 #else
     _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
 #endif
@@ -2814,7 +2946,7 @@ static PyObject *_wrap_wxLanguageInfo_Description_set(PyObject *self, PyObject *
     if (PyErr_Occurred()) return NULL;
 }{
 #if wxUSE_UNICODE
-    _resultobj = PyUnicode_FromUnicode(_result->c_str(), _result->Len());
+    _resultobj = PyUnicode_FromWideChar(_result->c_str(), _result->Len());
 #else
     _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
 #endif
@@ -2852,7 +2984,7 @@ static PyObject *_wrap_wxLanguageInfo_Description_get(PyObject *self, PyObject *
     if (PyErr_Occurred()) return NULL;
 }{
 #if wxUSE_UNICODE
-    _resultobj = PyUnicode_FromUnicode(_result->c_str(), _result->Len());
+    _resultobj = PyUnicode_FromWideChar(_result->c_str(), _result->Len());
 #else
     _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
 #endif
@@ -2888,75 +3020,6 @@ static PyObject *_wrap_new_wxLocale(PyObject *self, PyObject *args, PyObject *kw
     return _resultobj;
 }
 
-#define wxLocale_Init(_swigobj,_swigarg0,_swigarg1,_swigarg2,_swigarg3,_swigarg4)  (_swigobj->Init(_swigarg0,_swigarg1,_swigarg2,_swigarg3,_swigarg4))
-static PyObject *_wrap_wxLocale_Init(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    bool  _result;
-    wxLocale * _arg0;
-    wxString * _arg1;
-    wxString * _arg2 = (wxString *) &wxPyEmptyString;
-    wxString * _arg3 = (wxString *) &wxPyEmptyString;
-    bool  _arg4 = (bool ) TRUE;
-    bool  _arg5 = (bool ) FALSE;
-    PyObject * _argo0 = 0;
-    PyObject * _obj1 = 0;
-    PyObject * _obj2 = 0;
-    PyObject * _obj3 = 0;
-    int tempbool4 = (int) TRUE;
-    int tempbool5 = (int) FALSE;
-    char *_kwnames[] = { "self","szName","szShort","szLocale","bLoadDefault","bConvertEncoding", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO|OOii:wxLocale_Init",_kwnames,&_argo0,&_obj1,&_obj2,&_obj3,&tempbool4,&tempbool5)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxLocale_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxLocale_Init. Expected _wxLocale_p.");
-        return NULL;
-        }
-    }
-{
-    _arg1 = wxString_in_helper(_obj1);
-    if (_arg1 == NULL)
-        return NULL;
-}
-    if (_obj2)
-{
-    _arg2 = wxString_in_helper(_obj2);
-    if (_arg2 == NULL)
-        return NULL;
-}
-    if (_obj3)
-{
-    _arg3 = wxString_in_helper(_obj3);
-    if (_arg3 == NULL)
-        return NULL;
-}
-    _arg4 = (bool ) tempbool4;
-    _arg5 = (bool ) tempbool5;
-{
-    PyThreadState* __tstate = wxPyBeginAllowThreads();
-    _result = (bool )wxLocale_Init(_arg0,*_arg1,*_arg2,*_arg3,_arg4,_arg5);
-
-    wxPyEndAllowThreads(__tstate);
-    if (PyErr_Occurred()) return NULL;
-}    _resultobj = Py_BuildValue("i",_result);
-{
-    if (_obj1)
-        delete _arg1;
-}
-{
-    if (_obj2)
-        delete _arg2;
-}
-{
-    if (_obj3)
-        delete _arg3;
-}
-    return _resultobj;
-}
-
 #define delete_wxLocale(_swigobj) (delete _swigobj)
 static PyObject *_wrap_delete_wxLocale(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
@@ -2982,6 +3045,105 @@ static PyObject *_wrap_delete_wxLocale(PyObject *self, PyObject *args, PyObject 
     if (PyErr_Occurred()) return NULL;
 }    Py_INCREF(Py_None);
     _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxLocale_Init1(_swigobj,_swigarg0,_swigarg1,_swigarg2,_swigarg3,_swigarg4)  (_swigobj->Init(_swigarg0,_swigarg1,_swigarg2,_swigarg3,_swigarg4))
+static PyObject *_wrap_wxLocale_Init1(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    bool  _result;
+    wxLocale * _arg0;
+    wxString * _arg1;
+    wxString * _arg2 = (wxString *) &wxPyEmptyString;
+    wxString * _arg3 = (wxString *) &wxPyEmptyString;
+    bool  _arg4 = (bool ) TRUE;
+    bool  _arg5 = (bool ) FALSE;
+    PyObject * _argo0 = 0;
+    PyObject * _obj1 = 0;
+    PyObject * _obj2 = 0;
+    PyObject * _obj3 = 0;
+    int tempbool4 = (int) TRUE;
+    int tempbool5 = (int) FALSE;
+    char *_kwnames[] = { "self","szName","szShort","szLocale","bLoadDefault","bConvertEncoding", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO|OOii:wxLocale_Init1",_kwnames,&_argo0,&_obj1,&_obj2,&_obj3,&tempbool4,&tempbool5)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxLocale_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxLocale_Init1. Expected _wxLocale_p.");
+        return NULL;
+        }
+    }
+{
+    _arg1 = wxString_in_helper(_obj1);
+    if (_arg1 == NULL)
+        return NULL;
+}
+    if (_obj2)
+{
+    _arg2 = wxString_in_helper(_obj2);
+    if (_arg2 == NULL)
+        return NULL;
+}
+    if (_obj3)
+{
+    _arg3 = wxString_in_helper(_obj3);
+    if (_arg3 == NULL)
+        return NULL;
+}
+    _arg4 = (bool ) tempbool4;
+    _arg5 = (bool ) tempbool5;
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    _result = (bool )wxLocale_Init1(_arg0,*_arg1,*_arg2,*_arg3,_arg4,_arg5);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    _resultobj = Py_BuildValue("i",_result);
+{
+    if (_obj1)
+        delete _arg1;
+}
+{
+    if (_obj2)
+        delete _arg2;
+}
+{
+    if (_obj3)
+        delete _arg3;
+}
+    return _resultobj;
+}
+
+#define wxLocale_Init2(_swigobj,_swigarg0,_swigarg1)  (_swigobj->Init(_swigarg0,_swigarg1))
+static PyObject *_wrap_wxLocale_Init2(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    bool  _result;
+    wxLocale * _arg0;
+    int  _arg1 = (int ) (wxLANGUAGE_DEFAULT);
+    int  _arg2 = (int ) (wxLOCALE_LOAD_DEFAULT)|(wxLOCALE_CONV_ENCODING);
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self","language","flags", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O|ii:wxLocale_Init2",_kwnames,&_argo0,&_arg1,&_arg2)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxLocale_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxLocale_Init2. Expected _wxLocale_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    _result = (bool )wxLocale_Init2(_arg0,_arg1,_arg2);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    _resultobj = Py_BuildValue("i",_result);
     return _resultobj;
 }
 
@@ -3037,7 +3199,7 @@ static PyObject *_wrap_wxLocale_GetSystemEncodingName(PyObject *self, PyObject *
     if (PyErr_Occurred()) return NULL;
 }{
 #if wxUSE_UNICODE
-    _resultobj = PyUnicode_FromUnicode(_result->c_str(), _result->Len());
+    _resultobj = PyUnicode_FromWideChar(_result->c_str(), _result->Len());
 #else
     _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
 #endif
@@ -3102,7 +3264,7 @@ static PyObject *_wrap_wxLocale_GetLocale(PyObject *self, PyObject *args, PyObje
     if (PyErr_Occurred()) return NULL;
 }{
 #if wxUSE_UNICODE
-    _resultobj = PyUnicode_FromUnicode(_result->c_str(), _result->Len());
+    _resultobj = PyUnicode_FromWideChar(_result->c_str(), _result->Len());
 #else
     _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
 #endif
@@ -3167,7 +3329,7 @@ static PyObject *_wrap_wxLocale_GetSysName(PyObject *self, PyObject *args, PyObj
     if (PyErr_Occurred()) return NULL;
 }{
 #if wxUSE_UNICODE
-    _resultobj = PyUnicode_FromUnicode(_result->c_str(), _result->Len());
+    _resultobj = PyUnicode_FromWideChar(_result->c_str(), _result->Len());
 #else
     _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
 #endif
@@ -3204,7 +3366,7 @@ static PyObject *_wrap_wxLocale_GetCanonicalName(PyObject *self, PyObject *args,
     if (PyErr_Occurred()) return NULL;
 }{
 #if wxUSE_UNICODE
-    _resultobj = PyUnicode_FromUnicode(_result->c_str(), _result->Len());
+    _resultobj = PyUnicode_FromWideChar(_result->c_str(), _result->Len());
 #else
     _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
 #endif
@@ -3358,8 +3520,7 @@ static PyObject *_wrap_wxLocale_AddLanguage(PyObject *self, PyObject *args, PyOb
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxLocale_AddLanguage",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxLanguageInfo_p")) {
+        if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxLanguageInfo_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxLocale_AddLanguage. Expected _wxLanguageInfo_p.");
         return NULL;
         }
@@ -3416,7 +3577,7 @@ static PyObject *_wrap_wxLocale_GetString(PyObject *self, PyObject *args, PyObje
     if (PyErr_Occurred()) return NULL;
 }{
 #if wxUSE_UNICODE
-    _resultobj = PyUnicode_FromUnicode(_result->c_str(), _result->Len());
+    _resultobj = PyUnicode_FromWideChar(_result->c_str(), _result->Len());
 #else
     _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
 #endif
@@ -3462,7 +3623,7 @@ static PyObject *_wrap_wxLocale_GetName(PyObject *self, PyObject *args, PyObject
     if (PyErr_Occurred()) return NULL;
 }{
 #if wxUSE_UNICODE
-    _resultobj = PyUnicode_FromUnicode(_result->c_str(), _result->Len());
+    _resultobj = PyUnicode_FromWideChar(_result->c_str(), _result->Len());
 #else
     _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
 #endif
@@ -3596,7 +3757,7 @@ static PyObject *_wrap_wxEncodingConverter_Convert(PyObject *self, PyObject *arg
     if (PyErr_Occurred()) return NULL;
 }{
 #if wxUSE_UNICODE
-    _resultobj = PyUnicode_FromUnicode(_result->c_str(), _result->Len());
+    _resultobj = PyUnicode_FromWideChar(_result->c_str(), _result->Len());
 #else
     _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
 #endif
@@ -3686,8 +3847,9 @@ static PyMethodDef fontscMethods[] = {
 	 { "wxLocale_GetSystemEncodingName", (PyCFunction) _wrap_wxLocale_GetSystemEncodingName, METH_VARARGS | METH_KEYWORDS },
 	 { "wxLocale_GetSystemEncoding", (PyCFunction) _wrap_wxLocale_GetSystemEncoding, METH_VARARGS | METH_KEYWORDS },
 	 { "wxLocale_GetSystemLanguage", (PyCFunction) _wrap_wxLocale_GetSystemLanguage, METH_VARARGS | METH_KEYWORDS },
+	 { "wxLocale_Init2", (PyCFunction) _wrap_wxLocale_Init2, METH_VARARGS | METH_KEYWORDS },
+	 { "wxLocale_Init1", (PyCFunction) _wrap_wxLocale_Init1, METH_VARARGS | METH_KEYWORDS },
 	 { "delete_wxLocale", (PyCFunction) _wrap_delete_wxLocale, METH_VARARGS | METH_KEYWORDS },
-	 { "wxLocale_Init", (PyCFunction) _wrap_wxLocale_Init, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxLocale", (PyCFunction) _wrap_new_wxLocale, METH_VARARGS | METH_KEYWORDS },
 	 { "wxLanguageInfo_Description_get", (PyCFunction) _wrap_wxLanguageInfo_Description_get, METH_VARARGS | METH_KEYWORDS },
 	 { "wxLanguageInfo_Description_set", (PyCFunction) _wrap_wxLanguageInfo_Description_set, METH_VARARGS | METH_KEYWORDS },
@@ -3708,6 +3870,8 @@ static PyMethodDef fontscMethods[] = {
 	 { "wxFontList_AddFont", (PyCFunction) _wrap_wxFontList_AddFont, METH_VARARGS | METH_KEYWORDS },
 	 { "wxFont_SetDefaultEncoding", (PyCFunction) _wrap_wxFont_SetDefaultEncoding, METH_VARARGS | METH_KEYWORDS },
 	 { "wxFont_GetDefaultEncoding", (PyCFunction) _wrap_wxFont_GetDefaultEncoding, METH_VARARGS | METH_KEYWORDS },
+	 { "wxFont_GetNoAntiAliasing", (PyCFunction) _wrap_wxFont_GetNoAntiAliasing, METH_VARARGS | METH_KEYWORDS },
+	 { "wxFont_SetNoAntiAliasing", (PyCFunction) _wrap_wxFont_SetNoAntiAliasing, METH_VARARGS | METH_KEYWORDS },
 	 { "wxFont_GetWeightString", (PyCFunction) _wrap_wxFont_GetWeightString, METH_VARARGS | METH_KEYWORDS },
 	 { "wxFont_GetStyleString", (PyCFunction) _wrap_wxFont_GetStyleString, METH_VARARGS | METH_KEYWORDS },
 	 { "wxFont_GetFamilyString", (PyCFunction) _wrap_wxFont_GetFamilyString, METH_VARARGS | METH_KEYWORDS },
@@ -3733,6 +3897,7 @@ static PyMethodDef fontscMethods[] = {
 	 { "wxFont_GetPointSize", (PyCFunction) _wrap_wxFont_GetPointSize, METH_VARARGS | METH_KEYWORDS },
 	 { "wxFont_Ok", (PyCFunction) _wrap_wxFont_Ok, METH_VARARGS | METH_KEYWORDS },
 	 { "delete_wxFont", (PyCFunction) _wrap_delete_wxFont, METH_VARARGS | METH_KEYWORDS },
+	 { "wxFont_wxFontFromNativeInfoString", (PyCFunction) _wrap_wxFont_wxFontFromNativeInfoString, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxFontFromNativeInfo", (PyCFunction) _wrap_new_wxFontFromNativeInfo, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxFont", (PyCFunction) _wrap_new_wxFont, METH_VARARGS | METH_KEYWORDS },
 	 { "wxFontMapper_GetDefaultConfigPath", (PyCFunction) _wrap_wxFontMapper_GetDefaultConfigPath, METH_VARARGS | METH_KEYWORDS },
@@ -3948,6 +4113,10 @@ SWIGEXPORT(void) initfontsc() {
 	 PyDict_SetItemString(d,"wxFONTENCODING_CP12_MAX", PyInt_FromLong((long) wxFONTENCODING_CP12_MAX));
 	 PyDict_SetItemString(d,"wxFONTENCODING_UTF7", PyInt_FromLong((long) wxFONTENCODING_UTF7));
 	 PyDict_SetItemString(d,"wxFONTENCODING_UTF8", PyInt_FromLong((long) wxFONTENCODING_UTF8));
+	 PyDict_SetItemString(d,"wxFONTENCODING_GB2312", PyInt_FromLong((long) wxFONTENCODING_GB2312));
+	 PyDict_SetItemString(d,"wxFONTENCODING_BIG5", PyInt_FromLong((long) wxFONTENCODING_BIG5));
+	 PyDict_SetItemString(d,"wxFONTENCODING_SHIFT_JIS", PyInt_FromLong((long) wxFONTENCODING_SHIFT_JIS));
+	 PyDict_SetItemString(d,"wxFONTENCODING_EUC_JP", PyInt_FromLong((long) wxFONTENCODING_EUC_JP));
 	 PyDict_SetItemString(d,"wxFONTENCODING_UNICODE", PyInt_FromLong((long) wxFONTENCODING_UNICODE));
 	 PyDict_SetItemString(d,"wxFONTENCODING_MAX", PyInt_FromLong((long) wxFONTENCODING_MAX));
 	 PyDict_SetItemString(d,"wxLANGUAGE_DEFAULT", PyInt_FromLong((long) wxLANGUAGE_DEFAULT));

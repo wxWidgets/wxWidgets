@@ -81,7 +81,7 @@ wxToolWindow::wxToolWindow()
 	  mTitleFont( 8, wxSWISS,  wxNORMAL, wxNORMAL ),
 #else
 	  // just to simulate MS-Dev style
-	  mTitleFont( 8, wxSWISS,  wxNORMAL, wxNORMAL, FALSE, "MS Sans Serif" ),
+	  mTitleFont( 8, wxSWISS,  wxNORMAL, wxNORMAL, FALSE, wxT("MS Sans Serif") ),
 #endif
 
       mTitleHeight  ( 16 ),
@@ -572,7 +572,7 @@ void wxToolWindow::OnMotion( wxMouseEvent& event )
 			DrawHintRect( mPrevHintRect );
 			DrawHintRect( finalRect );
 
-            ::wxLogTrace("%d,%d / %d,%d\n", finalRect.x, finalRect.y, finalRect.width, finalRect.height);
+            ::wxLogTrace(wxT("%d,%d / %d,%d\n"), finalRect.x, finalRect.y, finalRect.width, finalRect.height);
 		}
 
 		mPrevHintRect = finalRect;

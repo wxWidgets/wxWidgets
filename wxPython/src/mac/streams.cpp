@@ -19,6 +19,8 @@
 /* Implementation : PYTHON */
 
 #define SWIGPYTHON
+#include "Python.h"
+
 #include <string.h>
 #include <stdlib.h>
 /* Definitions for Windows/Unix exporting */
@@ -36,12 +38,9 @@
 #   define SWIGEXPORT(a) a
 #endif
 
-#include "Python.h"
-
 #ifdef __cplusplus
 extern "C" {
 #endif
-
 extern void SWIG_MakePtr(char *, void *, char *);
 extern void SWIG_RegisterMapping(char *, char *, void *(*)(void *));
 extern char *SWIG_GetPtr(char *, void **, char *);
@@ -362,6 +361,233 @@ static PyObject *_wrap_wxInputStream_tell(PyObject *self, PyObject *args, PyObje
     return _resultobj;
 }
 
+#define wxInputStream_Peek(_swigobj)  (_swigobj->Peek())
+static PyObject *_wrap_wxInputStream_Peek(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    char  _result;
+    wxPyInputStream * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxInputStream_Peek",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPyInputStream_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxInputStream_Peek. Expected _wxPyInputStream_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    _result = (char )wxInputStream_Peek(_arg0);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    _resultobj = Py_BuildValue("c",_result);
+    return _resultobj;
+}
+
+#define wxInputStream_GetC(_swigobj)  (_swigobj->GetC())
+static PyObject *_wrap_wxInputStream_GetC(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    char  _result;
+    wxPyInputStream * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxInputStream_GetC",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPyInputStream_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxInputStream_GetC. Expected _wxPyInputStream_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    _result = (char )wxInputStream_GetC(_arg0);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    _resultobj = Py_BuildValue("c",_result);
+    return _resultobj;
+}
+
+#define wxInputStream_LastRead(_swigobj)  (_swigobj->LastRead())
+static PyObject *_wrap_wxInputStream_LastRead(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    size_t  _result;
+    wxPyInputStream * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxInputStream_LastRead",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPyInputStream_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxInputStream_LastRead. Expected _wxPyInputStream_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    _result = (size_t )wxInputStream_LastRead(_arg0);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxInputStream_CanRead(_swigobj)  (_swigobj->CanRead())
+static PyObject *_wrap_wxInputStream_CanRead(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    bool  _result;
+    wxPyInputStream * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxInputStream_CanRead",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPyInputStream_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxInputStream_CanRead. Expected _wxPyInputStream_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    _result = (bool )wxInputStream_CanRead(_arg0);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxInputStream_Eof(_swigobj)  (_swigobj->Eof())
+static PyObject *_wrap_wxInputStream_Eof(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    bool  _result;
+    wxPyInputStream * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxInputStream_Eof",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPyInputStream_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxInputStream_Eof. Expected _wxPyInputStream_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    _result = (bool )wxInputStream_Eof(_arg0);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxInputStream_Ungetch(_swigobj,_swigarg0)  (_swigobj->Ungetch(_swigarg0))
+static PyObject *_wrap_wxInputStream_Ungetch(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    bool  _result;
+    wxPyInputStream * _arg0;
+    char  _arg1;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self","c", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oc:wxInputStream_Ungetch",_kwnames,&_argo0,&_arg1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPyInputStream_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxInputStream_Ungetch. Expected _wxPyInputStream_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    _result = (bool )wxInputStream_Ungetch(_arg0,_arg1);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxInputStream_SeekI(_swigobj,_swigarg0,_swigarg1)  (_swigobj->SeekI(_swigarg0,_swigarg1))
+static PyObject *_wrap_wxInputStream_SeekI(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    long  _result;
+    wxPyInputStream * _arg0;
+    long  _arg1;
+    wxSeekMode  _arg2 = (wxSeekMode ) (wxFromStart);
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self","pos","mode", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Ol|i:wxInputStream_SeekI",_kwnames,&_argo0,&_arg1,&_arg2)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPyInputStream_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxInputStream_SeekI. Expected _wxPyInputStream_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    _result = (long )wxInputStream_SeekI(_arg0,_arg1,_arg2);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    _resultobj = Py_BuildValue("l",_result);
+    return _resultobj;
+}
+
+#define wxInputStream_TellI(_swigobj)  (_swigobj->TellI())
+static PyObject *_wrap_wxInputStream_TellI(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    long  _result;
+    wxPyInputStream * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxInputStream_TellI",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPyInputStream_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxInputStream_TellI. Expected _wxPyInputStream_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    _result = (long )wxInputStream_TellI(_arg0);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    _resultobj = Py_BuildValue("l",_result);
+    return _resultobj;
+}
+
 static void  wxOutputStream_write(wxOutputStream *self,PyObject * obj) {
             // We use only strings for the streams, not unicode
             PyObject* str = PyObject_Str(obj);
@@ -407,6 +633,14 @@ static PyObject *_wrap_wxOutputStream_write(PyObject *self, PyObject *args, PyOb
 
 static PyMethodDef streamscMethods[] = {
 	 { "wxOutputStream_write", (PyCFunction) _wrap_wxOutputStream_write, METH_VARARGS | METH_KEYWORDS },
+	 { "wxInputStream_TellI", (PyCFunction) _wrap_wxInputStream_TellI, METH_VARARGS | METH_KEYWORDS },
+	 { "wxInputStream_SeekI", (PyCFunction) _wrap_wxInputStream_SeekI, METH_VARARGS | METH_KEYWORDS },
+	 { "wxInputStream_Ungetch", (PyCFunction) _wrap_wxInputStream_Ungetch, METH_VARARGS | METH_KEYWORDS },
+	 { "wxInputStream_Eof", (PyCFunction) _wrap_wxInputStream_Eof, METH_VARARGS | METH_KEYWORDS },
+	 { "wxInputStream_CanRead", (PyCFunction) _wrap_wxInputStream_CanRead, METH_VARARGS | METH_KEYWORDS },
+	 { "wxInputStream_LastRead", (PyCFunction) _wrap_wxInputStream_LastRead, METH_VARARGS | METH_KEYWORDS },
+	 { "wxInputStream_GetC", (PyCFunction) _wrap_wxInputStream_GetC, METH_VARARGS | METH_KEYWORDS },
+	 { "wxInputStream_Peek", (PyCFunction) _wrap_wxInputStream_Peek, METH_VARARGS | METH_KEYWORDS },
 	 { "wxInputStream_tell", (PyCFunction) _wrap_wxInputStream_tell, METH_VARARGS | METH_KEYWORDS },
 	 { "wxInputStream_seek", (PyCFunction) _wrap_wxInputStream_seek, METH_VARARGS | METH_KEYWORDS },
 	 { "wxInputStream_readlines", (PyCFunction) _wrap_wxInputStream_readlines, METH_VARARGS | METH_KEYWORDS },
@@ -528,6 +762,9 @@ SWIGEXPORT(void) initstreamsc() {
 	 SWIG_globals = SWIG_newvarlink();
 	 m = Py_InitModule("streamsc", streamscMethods);
 	 d = PyModule_GetDict(m);
+	 PyDict_SetItemString(d,"wxFromStart", PyInt_FromLong((long) wxFromStart));
+	 PyDict_SetItemString(d,"wxFromCurrent", PyInt_FromLong((long) wxFromCurrent));
+	 PyDict_SetItemString(d,"wxFromEnd", PyInt_FromLong((long) wxFromEnd));
 
     wxPyPtrTypeMap_Add("wxInputStream", "wxPyInputStream");
 {

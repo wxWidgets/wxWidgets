@@ -50,8 +50,8 @@ wxObject *wxNotebookXmlHandler::DoCreateResource()
         {
             bool old_ins = m_isInside;
             m_isInside = FALSE;
-            m_isInside = old_ins;
             wxObject *item = CreateResFromNode(n, m_notebook, NULL);
+            m_isInside = old_ins;
             wxWindow *wnd = wxDynamicCast(item, wxWindow);
 
             if (wnd)

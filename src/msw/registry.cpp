@@ -299,11 +299,11 @@ bool wxRegKey::Exists() const
 // returns the full name of the key (prefix is abbreviated if bShortPrefix)
 wxString wxRegKey::GetName(bool bShortPrefix) const
 {
-  StdKey key = GetStdKeyFromHkey((StdKey) m_hRootKey);
+  StdKey key = GetStdKeyFromHkey((WXHKEY) m_hRootKey);
   wxString str = bShortPrefix ? aStdKeys[key].szShortName
                               : aStdKeys[key].szName;
   if ( !m_strKey.IsEmpty() )
-    str << "\\" << m_strKey;
+    str << _T("\\") << m_strKey;
 
   return str;
 }

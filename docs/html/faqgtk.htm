@@ -1,3 +1,4 @@
+
 <HTML>
 
 <HEAD>
@@ -25,12 +26,13 @@ See also <a href="faq.htm">top-level FAQ page</a>.
 <h3>List of questions in this category</h3>
 
 <ul>
-<li><a href="#wxgtk">What is wxWindows 2 for GTK?</a></li>
+<li><a href="#wxgtk">What is wxWindows 2 for GTK+?</a></li>
 <li><a href="#locale">Why doesn&#39;t reading floating point numbers work when using wxWindows?</a></li>
 <li><a href="#gnome">Does wxGTK have GNOME support?</a></li>
 <li><a href="#redhat">Warning about GTK libraries supplied with RedHat</a></li>
-<li><a href="#wxgtk">What is wxWindows 2 for GTK?</a></li>
 <li><a href="#bincompat">What range of Intel Linux platforms will a given application binary be usable on?</a></li>
+<li><a href="#static">Can I statically link the GTK+ library?</a></li>
+<li><a href="#charinframe">Why does my simple program using <tt>EVT_CHAR</tt> doesn't work?</a></li>
 </ul>
 
 <hr>
@@ -69,9 +71,9 @@ so may be added without dependence on libraries. Other features may be supported
 future, probably as a separate library.
 <P>
 
-<h3><a name="redhat">Warning about GTK libraries supplied with RedHat</a></h3>
+<h3><a name="redhat">Warning about GTK+ libraries supplied with RedHat</a></h3>
 
-It seems that some versions of RedHat include a badly patched version of GTK (not wxGTK)
+It seems that some versions of RedHat include a badly patched version of GTK+ (not wxGTK)
 which causes some trouble with wxWindows&#39; socket code. Common symptoms are that when
 a client tries to establish a connection to an existing server which refuses the request,
 the client will get notified twice, first getting a LOST event and then a CONNECT event.
@@ -89,6 +91,23 @@ and programs linked against it will not run with version
 on a 2.1.X system. It will then run on practically all
 Linux distros (if you link you app statically against
 the image libraries and std C++ lib)."
+<P>
+
+<h3><a name="#static">Can I statically link the GTK+ library?</a></h3>
+
+No, this is not possible. It leads to crashes in GTK+.
+<P>
+
+<h3><a name="#charinframe">Why does my simple program using
+<tt>EVT_CHAR</tt> doesn't work?</a></h3>
+
+In wxGTK, the frames never get focus and so can never receive <tt>CHAR</tt>
+nor <tt>KEY</tt> events so an <tt>EVT_CHAR</tt> handler for a frame will be
+never called. To receive these events, you should create a <tt>wxPanel</tt>
+inside the frame and register the key event handlers for the panel, not the
+frame.
+
+<p>
 
 </font>
 

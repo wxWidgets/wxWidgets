@@ -1,4 +1,14 @@
-#!/usr/bin/env python
+#----------------------------------------------------------------------
+# Name:        wxPython.tools.img2png
+# Purpose:     Convert an image to PNG format
+#
+# Author:      Robin Dunn
+#
+# RCS-ID:      $Id$
+# Copyright:   (c) 2002 by Total Control Software
+# Licence:     wxWindows license
+#----------------------------------------------------------------------
+
 """
 img2png.py  -- convert several image formats to PNG format
 
@@ -27,6 +37,9 @@ import img2img
 from wxPython import wx
 
 def main():
+    # some bitmap related things need to have a wxApp initialized...
+    if wx.wxGetApp() is None:
+        app = wx.wxPySimpleApp()
     img2img.main(sys.argv[1:], wx.wxBITMAP_TYPE_PNG, ".png", __doc__)
 
 if __name__ == '__main__':

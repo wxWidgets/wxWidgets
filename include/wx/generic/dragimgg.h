@@ -1,4 +1,4 @@
-/////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////
 // Name:        wx/generic/dragimgg.h
 // Purpose:     wxDragImage class: a kind of a cursor, that can cope
 //              with more sophisticated images
@@ -22,6 +22,7 @@
 #include "wx/cursor.h"
 #include "wx/treectrl.h"
 #include "wx/listctrl.h"
+#include "wx/log.h"
 
 /*
   To use this class, create a wxDragImage when you start dragging, for example:

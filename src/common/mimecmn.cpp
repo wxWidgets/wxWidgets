@@ -426,7 +426,7 @@ bool wxFileType::SetDefaultIcon(const wxString& cmd, int index)
     // VZ: should we do this?
     // chris elliott : only makes sense in MS windows
     if ( sTmp.empty() )
-        GetOpenCommand(&sTmp, wxFileType::MessageParameters("", ""));
+        GetOpenCommand(&sTmp, wxFileType::MessageParameters(wxT(""), wxT("")));
 #endif
     wxCHECK_MSG( !sTmp.empty(), FALSE, _T("need the icon file") );
 
@@ -537,7 +537,7 @@ wxMimeTypesManager::GetFileTypeFromMimeType(const wxString& mimeType)
     EnsureImpl();
     wxFileType *ft = m_impl->GetFileTypeFromMimeType(mimeType);
 
-    if ( ft ) {
+    if ( !ft ) {
         // check the fallbacks
         //
         // TODO linear search is potentially slow, perhaps we should use a sorted

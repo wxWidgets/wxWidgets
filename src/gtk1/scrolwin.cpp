@@ -313,7 +313,7 @@ bool wxScrolledWindow::Create(wxWindow *parent,
     PostCreation();
 
     Show( TRUE );
-
+    
     return TRUE;
 }
 
@@ -340,8 +340,11 @@ void wxScrolledWindow::SetScrollbars( int pixelsPerUnitX, int pixelsPerUnitY,
                                       int noUnitsX, int noUnitsY,
                                       int xPos, int yPos, bool noRefresh )
 {
-    int old_x = m_xScrollPixelsPerLine * m_xScrollPosition;
-    int old_y = m_yScrollPixelsPerLine * m_yScrollPosition;
+    int xs, ys;
+    GetViewStart (& xs, & ys);
+    
+    int old_x = m_xScrollPixelsPerLine * xs;
+    int old_y = m_yScrollPixelsPerLine * ys;
 
     m_xScrollPixelsPerLine = pixelsPerUnitX;
     m_yScrollPixelsPerLine = pixelsPerUnitY;
@@ -349,7 +352,11 @@ void wxScrolledWindow::SetScrollbars( int pixelsPerUnitX, int pixelsPerUnitY,
     m_hAdjust->value = m_xScrollPosition = xPos;
     m_vAdjust->value = m_yScrollPosition = yPos;
 
+    // Setting hints here should arguably be deprecated, but without it
+    // a sizer might override this manual scrollbar setting in old code.
     m_targetWindow->SetVirtualSizeHints( noUnitsX * pixelsPerUnitX, noUnitsY * pixelsPerUnitY );
+
+    m_targetWindow->SetVirtualSize( noUnitsX * pixelsPerUnitX, noUnitsY * pixelsPerUnitY );
 
     if (!noRefresh)
     {
@@ -381,13 +388,16 @@ void wxScrolledWindow::AdjustScrollbars()
         // If the scrollbar hits the right side, move the window
         // right to keep it from over extending.
 
-        if( m_hAdjust->value + m_hAdjust->page_size > m_hAdjust->upper )
+        if ((m_hAdjust->value != 0.0) && (m_hAdjust->value + m_hAdjust->page_size > m_hAdjust->upper))
         {
+            m_hAdjust->value = m_hAdjust->upper - m_hAdjust->page_size;
+            if (m_hAdjust->value < 0.0)
+                m_hAdjust->value = 0.0;
+                
             if (GetChildren().GetCount() == 0)
-            {
-                m_hAdjust->value = m_hAdjust->upper - m_hAdjust->page_size;
-                m_xScrollPosition = (int)m_hAdjust->value;
-            }
+                m_xScrollPosition = (int)m_hAdjust->value; // This is enough without child windows
+            else
+                gtk_signal_emit_by_name( GTK_OBJECT(m_hAdjust), "value_changed" ); // Actually scroll window
         }
     }
 
@@ -401,13 +411,16 @@ void wxScrolledWindow::AdjustScrollbars()
         m_vAdjust->upper = vh / m_yScrollPixelsPerLine;
         m_vAdjust->page_size = (h / m_yScrollPixelsPerLine);
 
-        if( m_vAdjust->value + m_vAdjust->page_size > m_vAdjust->upper )
+        if ((m_vAdjust->value != 0.0) && (m_vAdjust->value + m_vAdjust->page_size > m_vAdjust->upper))
         {
+            m_vAdjust->value = m_vAdjust->upper - m_vAdjust->page_size;
+            if (m_vAdjust->value < 0.0)
+                m_vAdjust->value = 0.0;
+                
             if (GetChildren().GetCount() == 0)
-            {
-                m_vAdjust->value = m_vAdjust->upper - m_vAdjust->page_size;
-                m_yScrollPosition = (int)m_vAdjust->value;
-            }
+                m_yScrollPosition = (int)m_vAdjust->value;  
+            else
+                gtk_signal_emit_by_name( GTK_OBJECT(m_vAdjust), "value_changed" );
         }
     }
 
@@ -628,18 +641,24 @@ void wxScrolledWindow::GetViewStart (int *x, int *y) const
 
 void wxScrolledWindow::DoCalcScrolledPosition(int x, int y, int *xx, int *yy) const
 {
+    int xs, ys;
+    GetViewStart (& xs, & ys);
+    
     if ( xx )
-        *xx = x - m_xScrollPosition * m_xScrollPixelsPerLine;
+        *xx = x - xs * m_xScrollPixelsPerLine;
     if ( yy )
-        *yy = y - m_yScrollPosition * m_yScrollPixelsPerLine;
+        *yy = y - ys * m_yScrollPixelsPerLine;
 }
 
 void wxScrolledWindow::DoCalcUnscrolledPosition(int x, int y, int *xx, int *yy) const
 {
+    int xs, ys;
+    GetViewStart (& xs, & ys);
+    
     if ( xx )
-        *xx = x + m_xScrollPosition * m_xScrollPixelsPerLine;
+        *xx = x + xs * m_xScrollPixelsPerLine;
     if ( yy )
-        *yy = y + m_yScrollPosition * m_yScrollPixelsPerLine;
+        *yy = y + ys * m_yScrollPixelsPerLine;
 }
 
 int wxScrolledWindow::CalcScrollInc(wxScrollWinEvent& event)
@@ -823,10 +842,24 @@ bool wxScrolledWindow::Layout()
 // Default OnSize resets scrollbars, if any
 void wxScrolledWindow::OnSize(wxSizeEvent& WXUNUSED(event))
 {
-    if( m_targetWindow != this )
-        m_targetWindow->SetVirtualSize( m_targetWindow->GetClientSize() );
+    if( GetAutoLayout() || m_targetWindow->GetAutoLayout() )
+    {
+        if( m_targetWindow != this )
+            m_targetWindow->FitInside();
 
-    SetVirtualSize( GetClientSize() );
+        FitInside();
+
+        // FIXME:  Something is really weird here...  This should be
+        // called by FitInside above (and apparently is), yet the
+        // scrollsub sample will get the scrollbar wrong if resized
+        // quickly.  This masks the bug, but is surely not the right
+        // answer at all.
+        AdjustScrollbars();
+    }
+    else
+    {
+        AdjustScrollbars();
+    }
 }
 
 // This calls OnDraw, having adjusted the origin according to the current
@@ -849,7 +882,7 @@ void wxScrolledWindow::OnChar(wxKeyEvent& event)
         szx, szy,       // view size (total)
         clix, cliy;     // view size (on screen)
 
-    ViewStart(&stx, &sty);
+    GetViewStart(&stx, &sty);
     GetClientSize(&clix, &cliy);
     GetVirtualSize(&szx, &szy);
 

@@ -393,7 +393,7 @@ bool wxMenu::DoInsertOrAppend(
     {
         vError = ::WinGetLastError(vHabmain);
         sError = wxPMErrorToStr(vError);
-        wxLogError("Error inserting or appending a menuitem. Error: %s\n", sError);
+        wxLogError("Error inserting or appending a menuitem. Error: %s\n", sError.c_str());
         wxLogLastError("Insert or AppendMenu");
         return FALSE;
     }
@@ -750,6 +750,15 @@ wxMenuBar::wxMenuBar(
 
 wxMenuBar::~wxMenuBar()
 {
+    //
+    // We should free PM's resources only if PM doesn't do it for us
+    // which happens if we're attached to a frame
+    //
+    if (m_hMenu && !IsAttached())
+    {
+        ::WinDestroyWindow((HMENU)m_hMenu);
+        m_hMenu = (WXHMENU)NULL;
+    }
 } // end of wxMenuBar::~wxMenuBar
 
 // ---------------------------------------------------------------------------
@@ -819,7 +828,7 @@ WXHMENU wxMenuBar::Create()
             {
                 vError = ::WinGetLastError(vHabmain);
                 sError = wxPMErrorToStr(vError);
-                wxLogError("Error setting parent for submenu. Error: %s\n", sError);
+                wxLogError("Error setting parent for submenu. Error: %s\n", sError.c_str());
                 return NULLHANDLE;
             }
 
@@ -827,7 +836,7 @@ WXHMENU wxMenuBar::Create()
             {
                 vError = ::WinGetLastError(vHabmain);
                 sError = wxPMErrorToStr(vError);
-                wxLogError("Error setting parent for submenu. Error: %s\n", sError);
+                wxLogError("Error setting parent for submenu. Error: %s\n", sError.c_str());
                 return NULLHANDLE;
             }
 
@@ -838,7 +847,7 @@ WXHMENU wxMenuBar::Create()
             {
                 vError = ::WinGetLastError(vHabmain);
                 sError = wxPMErrorToStr(vError);
-                wxLogError("Error inserting or appending a menuitem. Error: %s\n", sError);
+                wxLogError("Error inserting or appending a menuitem. Error: %s\n", sError.c_str());
                 return NULLHANDLE;
             }
         }

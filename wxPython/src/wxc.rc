@@ -1,5 +1,5 @@
 aa_wxpicon ICON "wxp.ico"
 #include "wx/msw/wx.rc"
 
-CREATEPROCESS_MANIFEST_RESOURCE_ID RT_MANIFEST "wxc.pyd.manifest"
+
 

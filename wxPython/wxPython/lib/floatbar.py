@@ -50,8 +50,8 @@ else:
         wxToolBar subclass which can be dragged off its frame and later
         replaced there.  Drag on the toolbar to release it, close it like
         a normal window to make it return to its original
-        position. Programmatically, call SetFloatable(true) and then
-        Float(true) to float, Float(false) to dock.
+        position. Programmatically, call SetFloatable(True) and then
+        Float(True) to float, Float(False) to dock.
         """
 
         def __init__(self,*_args,**_kwargs):
@@ -175,7 +175,7 @@ else:
                 newpos = self.parentframe.GetPosition()
                 newpos.y = newpos.y + _DOCKTHRESHOLD * 2
                 self.floatframe.SetPosition(newpos)
-                self.floatframe.Show(true)
+                self.floatframe.Show(True)
 
                 EVT_CLOSE(self.floatframe, self.OnDock)
                 #EVT_MOVE(self.floatframe, self.OnMove)
@@ -208,9 +208,9 @@ else:
             #homepos = homepos[0], homepos[1] + self.titleheight
             #floatpos = self.floatframe.GetPositionTuple()
             #if abs(homepos[0] - floatpos[0]) < 35 and abs(homepos[1] - floatpos[1]) < 35:
-            #    self._SetFauxBarVisible(true)
+            #    self._SetFauxBarVisible(True)
             #else:
-            #    self._SetFauxBarVisible(false)
+            #    self._SetFauxBarVisible(False)
 
 
         def OnMouse(self, e):
@@ -240,7 +240,7 @@ else:
 
             if e.Dragging():
                 if not self.IsFloating():
-                    self.Float(true)
+                    self.Float(True)
                     self.oldpos = (e.GetX(), e.GetY())
                 else:
                     if hasattr(self, 'oldpos'):

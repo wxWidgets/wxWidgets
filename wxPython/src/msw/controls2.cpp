@@ -19,6 +19,8 @@
 /* Implementation : PYTHON */
 
 #define SWIGPYTHON
+#include "Python.h"
+
 #include <string.h>
 #include <stdlib.h>
 /* Definitions for Windows/Unix exporting */
@@ -36,12 +38,9 @@
 #   define SWIGEXPORT(a) a
 #endif
 
-#include "Python.h"
-
 #ifdef __cplusplus
 extern "C" {
 #endif
-
 extern void SWIG_MakePtr(char *, void *, char *);
 extern void SWIG_RegisterMapping(char *, char *, void *(*)(void *));
 extern char *SWIG_GetPtr(char *, void **, char *);
@@ -63,6 +62,8 @@ extern PyObject *SWIG_newvarlink(void);
 #include <wx/treectrl.h>
 #include <wx/imaglist.h>
 #include <wx/dirctrl.h>
+
+#include "pytree.h"
 
 
 static PyObject* t_output_helper(PyObject* target, PyObject* o) {
@@ -154,37 +155,6 @@ IMP_PYCALLBACK_LISTATTR_LONG(wxPyListCtrl, wxListCtrl, OnGetItemAttr);
         return retval;
     }
 
-
-class wxPyTreeItemData : public wxTreeItemData {
-public:
-    wxPyTreeItemData(PyObject* obj = NULL) {
-        if (obj == NULL)
-            obj = Py_None;
-        Py_INCREF(obj);
-        m_obj = obj;
-    }
-
-    ~wxPyTreeItemData() {
-        wxPyBeginBlockThreads();
-        Py_DECREF(m_obj);
-        wxPyEndBlockThreads();
-    }
-
-    PyObject* GetData() {
-        Py_INCREF(m_obj);
-        return m_obj;
-    }
-
-    void SetData(PyObject* obj) {
-        wxPyBeginBlockThreads();
-        Py_DECREF(m_obj);
-        wxPyEndBlockThreads();
-        m_obj = obj;
-        Py_INCREF(obj);
-    }
-
-    PyObject* m_obj;
-};
  // C++ version of Python aware wxTreeCtrl
 class wxPyTreeCtrl : public wxTreeCtrl {
     DECLARE_ABSTRACT_CLASS(wxPyTreeCtrl);
@@ -214,8 +184,8 @@ public:
         bool found;
         wxPyBeginBlockThreads();
         if ((found = m_myInst.findCallback("OnCompareItems"))) {
-            PyObject *o1 = wxPyConstructObject((void*)&item1, "wxTreeItemId");
-            PyObject *o2 = wxPyConstructObject((void*)&item2, "wxTreeItemId");
+            PyObject *o1 = wxPyConstructObject((void*)&item1, wxT("wxTreeItemId"));
+            PyObject *o2 = wxPyConstructObject((void*)&item2, wxT("wxTreeItemId"));
             rval = m_myInst.callCallback(Py_BuildValue("(OO)",o1,o2));
             Py_DECREF(o1);
             Py_DECREF(o2);
@@ -264,8 +234,7 @@ static PyObject *_wrap_new_wxListItemAttr(PyObject *self, PyObject *args, PyObje
         return NULL;
 }
     if (_argo2) {
-        if (_argo2 == Py_None) { _arg2 = NULL; }
-        else if (SWIG_GetPtrObj(_argo2,(void **) &_arg2,"_wxFont_p")) {
+        if (SWIG_GetPtrObj(_argo2,(void **) &_arg2,"_wxFont_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 3 of new_wxListItemAttr. Expected _wxFont_p.");
         return NULL;
         }
@@ -378,8 +347,7 @@ static PyObject *_wrap_wxListItemAttr_SetFont(PyObject *self, PyObject *args, Py
         }
     }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxFont_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxFont_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxListItemAttr_SetFont. Expected _wxFont_p.");
         return NULL;
         }
@@ -1079,8 +1047,7 @@ static PyObject *_wrap_wxListItem_SetFont(PyObject *self, PyObject *args, PyObje
         }
     }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxFont_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxFont_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxListItem_SetFont. Expected _wxFont_p.");
         return NULL;
         }
@@ -1235,7 +1202,7 @@ static PyObject *_wrap_wxListItem_GetText(PyObject *self, PyObject *args, PyObje
     if (PyErr_Occurred()) return NULL;
 }{
 #if wxUSE_UNICODE
-    _resultobj = PyUnicode_FromUnicode(_result->c_str(), _result->Len());
+    _resultobj = PyUnicode_FromWideChar(_result->c_str(), _result->Len());
 #else
     _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
 #endif
@@ -1826,7 +1793,7 @@ static PyObject *_wrap_wxListItem_m_text_set(PyObject *self, PyObject *args, PyO
     if (PyErr_Occurred()) return NULL;
 }{
 #if wxUSE_UNICODE
-    _resultobj = PyUnicode_FromUnicode(_result->c_str(), _result->Len());
+    _resultobj = PyUnicode_FromWideChar(_result->c_str(), _result->Len());
 #else
     _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
 #endif
@@ -1864,7 +1831,7 @@ static PyObject *_wrap_wxListItem_m_text_get(PyObject *self, PyObject *args, PyO
     if (PyErr_Occurred()) return NULL;
 }{
 #if wxUSE_UNICODE
-    _resultobj = PyUnicode_FromUnicode(_result->c_str(), _result->Len());
+    _resultobj = PyUnicode_FromWideChar(_result->c_str(), _result->Len());
 #else
     _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
 #endif
@@ -2476,7 +2443,7 @@ static PyObject *_wrap_wxListEvent_GetLabel(PyObject *self, PyObject *args, PyOb
     if (PyErr_Occurred()) return NULL;
 }{
 #if wxUSE_UNICODE
-    _resultobj = PyUnicode_FromUnicode(_result->c_str(), _result->Len());
+    _resultobj = PyUnicode_FromWideChar(_result->c_str(), _result->Len());
 #else
     _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
 #endif
@@ -2511,7 +2478,7 @@ static PyObject *_wrap_wxListEvent_GetText(PyObject *self, PyObject *args, PyObj
     if (PyErr_Occurred()) return NULL;
 }{
 #if wxUSE_UNICODE
-    _resultobj = PyUnicode_FromUnicode(_result->c_str(), _result->Len());
+    _resultobj = PyUnicode_FromWideChar(_result->c_str(), _result->Len());
 #else
     _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
 #endif
@@ -2764,8 +2731,7 @@ static PyObject *_wrap_new_wxListCtrl(PyObject *self, PyObject *args, PyObject *
         return NULL;
 }
     if (_argo5) {
-        if (_argo5 == Py_None) { _arg5 = NULL; }
-        else if (SWIG_GetPtrObj(_argo5,(void **) &_arg5,"_wxValidator_p")) {
+        if (SWIG_GetPtrObj(_argo5,(void **) &_arg5,"_wxValidator_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 6 of new_wxListCtrl. Expected _wxValidator_p.");
         return NULL;
         }
@@ -2874,8 +2840,7 @@ static PyObject *_wrap_wxListCtrl_Create(PyObject *self, PyObject *args, PyObjec
         return NULL;
 }
     if (_argo6) {
-        if (_argo6 == Py_None) { _arg6 = NULL; }
-        else if (SWIG_GetPtrObj(_argo6,(void **) &_arg6,"_wxValidator_p")) {
+        if (SWIG_GetPtrObj(_argo6,(void **) &_arg6,"_wxValidator_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 7 of wxListCtrl_Create. Expected _wxValidator_p.");
         return NULL;
         }
@@ -3068,8 +3033,7 @@ static PyObject *_wrap_wxListCtrl_SetColumn(PyObject *self, PyObject *args, PyOb
         }
     }
     if (_argo2) {
-        if (_argo2 == Py_None) { _arg2 = NULL; }
-        else if (SWIG_GetPtrObj(_argo2,(void **) &_arg2,"_wxListItem_p")) {
+        if (SWIG_GetPtrObj(_argo2,(void **) &_arg2,"_wxListItem_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 3 of wxListCtrl_SetColumn. Expected _wxListItem_p.");
         return NULL;
         }
@@ -3257,8 +3221,7 @@ static PyObject *_wrap_wxListCtrl_SetItem(PyObject *self, PyObject *args, PyObje
         }
     }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxListItem_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxListItem_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxListCtrl_SetItem. Expected _wxListItem_p.");
         return NULL;
         }
@@ -3434,7 +3397,7 @@ static PyObject *_wrap_wxListCtrl_GetItemText(PyObject *self, PyObject *args, Py
     if (PyErr_Occurred()) return NULL;
 }{
 #if wxUSE_UNICODE
-    _resultobj = PyUnicode_FromUnicode(_result->c_str(), _result->Len());
+    _resultobj = PyUnicode_FromWideChar(_result->c_str(), _result->Len());
 #else
     _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
 #endif
@@ -4593,8 +4556,7 @@ static PyObject *_wrap_wxListCtrl_InsertItem(PyObject *self, PyObject *args, PyO
         }
     }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxListItem_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxListItem_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxListCtrl_InsertItem. Expected _wxListItem_p.");
         return NULL;
         }
@@ -4742,8 +4704,7 @@ static PyObject *_wrap_wxListCtrl_InsertColumnInfo(PyObject *self, PyObject *arg
         }
     }
     if (_argo2) {
-        if (_argo2 == Py_None) { _arg2 = NULL; }
-        else if (SWIG_GetPtrObj(_argo2,(void **) &_arg2,"_wxListItem_p")) {
+        if (SWIG_GetPtrObj(_argo2,(void **) &_arg2,"_wxListItem_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 3 of wxListCtrl_InsertColumnInfo. Expected _wxListItem_p.");
         return NULL;
         }
@@ -5150,8 +5111,7 @@ static PyObject *_wrap_new_wxListView(PyObject *self, PyObject *args, PyObject *
         return NULL;
 }
     if (_argo5) {
-        if (_argo5 == Py_None) { _arg5 = NULL; }
-        else if (SWIG_GetPtrObj(_argo5,(void **) &_arg5,"_wxValidator_p")) {
+        if (SWIG_GetPtrObj(_argo5,(void **) &_arg5,"_wxValidator_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 6 of new_wxListView. Expected _wxValidator_p.");
         return NULL;
         }
@@ -5260,8 +5220,7 @@ static PyObject *_wrap_wxListView_Create(PyObject *self, PyObject *args, PyObjec
         return NULL;
 }
     if (_argo6) {
-        if (_argo6 == Py_None) { _arg6 = NULL; }
-        else if (SWIG_GetPtrObj(_argo6,(void **) &_arg6,"_wxValidator_p")) {
+        if (SWIG_GetPtrObj(_argo6,(void **) &_arg6,"_wxValidator_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 7 of wxListView_Create. Expected _wxValidator_p.");
         return NULL;
         }
@@ -5551,8 +5510,7 @@ static PyObject *_wrap_new_wxTreeItemAttr(PyObject *self, PyObject *args, PyObje
         return NULL;
 }
     if (_argo2) {
-        if (_argo2 == Py_None) { _arg2 = NULL; }
-        else if (SWIG_GetPtrObj(_argo2,(void **) &_arg2,"_wxFont_p")) {
+        if (SWIG_GetPtrObj(_argo2,(void **) &_arg2,"_wxFont_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 3 of new_wxTreeItemAttr. Expected _wxFont_p.");
         return NULL;
         }
@@ -5665,8 +5623,7 @@ static PyObject *_wrap_wxTreeItemAttr_SetFont(PyObject *self, PyObject *args, Py
         }
     }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxFont_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxFont_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxTreeItemAttr_SetFont. Expected _wxFont_p.");
         return NULL;
         }
@@ -6137,8 +6094,7 @@ static PyObject *_wrap_wxTreeItemData_SetId(PyObject *self, PyObject *args, PyOb
         }
     }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxTreeItemId_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxTreeItemId_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxTreeItemData_SetId. Expected _wxTreeItemId_p.");
         return NULL;
         }
@@ -6395,7 +6351,7 @@ static PyObject *_wrap_wxTreeEvent_GetLabel(PyObject *self, PyObject *args, PyOb
     if (PyErr_Occurred()) return NULL;
 }{
 #if wxUSE_UNICODE
-    _resultobj = PyUnicode_FromUnicode(_result->c_str(), _result->Len());
+    _resultobj = PyUnicode_FromWideChar(_result->c_str(), _result->Len());
 #else
     _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
 #endif
@@ -6428,6 +6384,220 @@ static PyObject *_wrap_wxTreeEvent_IsEditCancelled(PyObject *self, PyObject *arg
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxTreeEvent_SetItem(_swigobj,_swigarg0)  (_swigobj->SetItem(_swigarg0))
+static PyObject *_wrap_wxTreeEvent_SetItem(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxTreeEvent * _arg0;
+    wxTreeItemId * _arg1;
+    PyObject * _argo0 = 0;
+    PyObject * _argo1 = 0;
+    char *_kwnames[] = { "self","item", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxTreeEvent_SetItem",_kwnames,&_argo0,&_argo1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxTreeEvent_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxTreeEvent_SetItem. Expected _wxTreeEvent_p.");
+        return NULL;
+        }
+    }
+    if (_argo1) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxTreeItemId_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxTreeEvent_SetItem. Expected _wxTreeItemId_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    wxTreeEvent_SetItem(_arg0,*_arg1);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxTreeEvent_SetOldItem(_swigobj,_swigarg0)  (_swigobj->SetOldItem(_swigarg0))
+static PyObject *_wrap_wxTreeEvent_SetOldItem(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxTreeEvent * _arg0;
+    wxTreeItemId * _arg1;
+    PyObject * _argo0 = 0;
+    PyObject * _argo1 = 0;
+    char *_kwnames[] = { "self","item", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxTreeEvent_SetOldItem",_kwnames,&_argo0,&_argo1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxTreeEvent_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxTreeEvent_SetOldItem. Expected _wxTreeEvent_p.");
+        return NULL;
+        }
+    }
+    if (_argo1) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxTreeItemId_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxTreeEvent_SetOldItem. Expected _wxTreeItemId_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    wxTreeEvent_SetOldItem(_arg0,*_arg1);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxTreeEvent_SetPoint(_swigobj,_swigarg0)  (_swigobj->SetPoint(_swigarg0))
+static PyObject *_wrap_wxTreeEvent_SetPoint(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxTreeEvent * _arg0;
+    wxPoint * _arg1;
+    PyObject * _argo0 = 0;
+    wxPoint  temp;
+    PyObject * _obj1 = 0;
+    char *_kwnames[] = { "self","pt", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxTreeEvent_SetPoint",_kwnames,&_argo0,&_obj1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxTreeEvent_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxTreeEvent_SetPoint. Expected _wxTreeEvent_p.");
+        return NULL;
+        }
+    }
+{
+    _arg1 = &temp;
+    if (! wxPoint_helper(_obj1, &_arg1))
+        return NULL;
+}
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    wxTreeEvent_SetPoint(_arg0,*_arg1);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxTreeEvent_SetKeyEvent(_swigobj,_swigarg0)  (_swigobj->SetKeyEvent(_swigarg0))
+static PyObject *_wrap_wxTreeEvent_SetKeyEvent(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxTreeEvent * _arg0;
+    wxKeyEvent * _arg1;
+    PyObject * _argo0 = 0;
+    PyObject * _argo1 = 0;
+    char *_kwnames[] = { "self","evt", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxTreeEvent_SetKeyEvent",_kwnames,&_argo0,&_argo1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxTreeEvent_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxTreeEvent_SetKeyEvent. Expected _wxTreeEvent_p.");
+        return NULL;
+        }
+    }
+    if (_argo1) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxKeyEvent_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxTreeEvent_SetKeyEvent. Expected _wxKeyEvent_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    wxTreeEvent_SetKeyEvent(_arg0,*_arg1);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxTreeEvent_SetLabel(_swigobj,_swigarg0)  (_swigobj->SetLabel(_swigarg0))
+static PyObject *_wrap_wxTreeEvent_SetLabel(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxTreeEvent * _arg0;
+    wxString * _arg1;
+    PyObject * _argo0 = 0;
+    PyObject * _obj1 = 0;
+    char *_kwnames[] = { "self","label", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxTreeEvent_SetLabel",_kwnames,&_argo0,&_obj1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxTreeEvent_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxTreeEvent_SetLabel. Expected _wxTreeEvent_p.");
+        return NULL;
+        }
+    }
+{
+    _arg1 = wxString_in_helper(_obj1);
+    if (_arg1 == NULL)
+        return NULL;
+}
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    wxTreeEvent_SetLabel(_arg0,*_arg1);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+{
+    if (_obj1)
+        delete _arg1;
+}
+    return _resultobj;
+}
+
+#define wxTreeEvent_SetEditCanceled(_swigobj,_swigarg0)  (_swigobj->SetEditCanceled(_swigarg0))
+static PyObject *_wrap_wxTreeEvent_SetEditCanceled(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxTreeEvent * _arg0;
+    bool  _arg1;
+    PyObject * _argo0 = 0;
+    int tempbool1;
+    char *_kwnames[] = { "self","editCancelled", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxTreeEvent_SetEditCanceled",_kwnames,&_argo0,&tempbool1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxTreeEvent_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxTreeEvent_SetEditCanceled. Expected _wxTreeEvent_p.");
+        return NULL;
+        }
+    }
+    _arg1 = (bool ) tempbool1;
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    wxTreeEvent_SetEditCanceled(_arg0,_arg1);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
     return _resultobj;
 }
 
@@ -6471,7 +6641,7 @@ static PyObject *_wrap_new_wxTreeCtrl(PyObject *self, PyObject *args, PyObject *
     wxWindowID  _arg1 = (wxWindowID ) -1;
     wxPoint * _arg2 = (wxPoint *) &wxDefaultPosition;
     wxSize * _arg3 = (wxSize *) &wxDefaultSize;
-    long  _arg4 = (long ) (wxTR_HAS_BUTTONS)|(wxTR_LINES_AT_ROOT);
+    long  _arg4 = (long ) (wxTR_DEFAULT_STYLE);
     wxValidator * _arg5 = (wxValidator *) &wxDefaultValidator;
     wxString * _arg6 = (wxString *) &wxPy_TreeCtrlNameStr;
     PyObject * _argo0 = 0;
@@ -6507,8 +6677,7 @@ static PyObject *_wrap_new_wxTreeCtrl(PyObject *self, PyObject *args, PyObject *
         return NULL;
 }
     if (_argo5) {
-        if (_argo5 == Py_None) { _arg5 = NULL; }
-        else if (SWIG_GetPtrObj(_argo5,(void **) &_arg5,"_wxValidator_p")) {
+        if (SWIG_GetPtrObj(_argo5,(void **) &_arg5,"_wxValidator_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 6 of new_wxTreeCtrl. Expected _wxValidator_p.");
         return NULL;
         }
@@ -6574,7 +6743,7 @@ static PyObject *_wrap_wxTreeCtrl_Create(PyObject *self, PyObject *args, PyObjec
     wxWindowID  _arg2 = (wxWindowID ) -1;
     wxPoint * _arg3 = (wxPoint *) &wxDefaultPosition;
     wxSize * _arg4 = (wxSize *) &wxDefaultSize;
-    long  _arg5 = (long ) (wxTR_HAS_BUTTONS)|(wxTR_LINES_AT_ROOT);
+    long  _arg5 = (long ) (wxTR_DEFAULT_STYLE);
     wxValidator * _arg6 = (wxValidator *) &wxDefaultValidator;
     wxString * _arg7 = (wxString *) &wxPy_TreeCtrlNameStr;
     PyObject * _argo0 = 0;
@@ -6617,8 +6786,7 @@ static PyObject *_wrap_wxTreeCtrl_Create(PyObject *self, PyObject *args, PyObjec
         return NULL;
 }
     if (_argo6) {
-        if (_argo6 == Py_None) { _arg6 = NULL; }
-        else if (SWIG_GetPtrObj(_argo6,(void **) &_arg6,"_wxValidator_p")) {
+        if (SWIG_GetPtrObj(_argo6,(void **) &_arg6,"_wxValidator_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 7 of wxTreeCtrl_Create. Expected _wxValidator_p.");
         return NULL;
         }
@@ -7048,8 +7216,7 @@ static PyObject *_wrap_wxTreeCtrl_GetItemText(PyObject *self, PyObject *args, Py
         }
     }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxTreeItemId_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxTreeItemId_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxTreeCtrl_GetItemText. Expected _wxTreeItemId_p.");
         return NULL;
         }
@@ -7062,7 +7229,7 @@ static PyObject *_wrap_wxTreeCtrl_GetItemText(PyObject *self, PyObject *args, Py
     if (PyErr_Occurred()) return NULL;
 }{
 #if wxUSE_UNICODE
-    _resultobj = PyUnicode_FromUnicode(_result->c_str(), _result->Len());
+    _resultobj = PyUnicode_FromWideChar(_result->c_str(), _result->Len());
 #else
     _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
 #endif
@@ -7095,8 +7262,7 @@ static PyObject *_wrap_wxTreeCtrl_GetItemImage(PyObject *self, PyObject *args, P
         }
     }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxTreeItemId_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxTreeItemId_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxTreeCtrl_GetItemImage. Expected _wxTreeItemId_p.");
         return NULL;
         }
@@ -7132,8 +7298,7 @@ static PyObject *_wrap_wxTreeCtrl_GetItemSelectedImage(PyObject *self, PyObject 
         }
     }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxTreeItemId_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxTreeItemId_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxTreeCtrl_GetItemSelectedImage. Expected _wxTreeItemId_p.");
         return NULL;
         }
@@ -7170,8 +7335,7 @@ static PyObject *_wrap_wxTreeCtrl_SetItemText(PyObject *self, PyObject *args, Py
         }
     }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxTreeItemId_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxTreeItemId_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxTreeCtrl_SetItemText. Expected _wxTreeItemId_p.");
         return NULL;
         }
@@ -7218,8 +7382,7 @@ static PyObject *_wrap_wxTreeCtrl_SetItemImage(PyObject *self, PyObject *args, P
         }
     }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxTreeItemId_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxTreeItemId_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxTreeCtrl_SetItemImage. Expected _wxTreeItemId_p.");
         return NULL;
         }
@@ -7256,8 +7419,7 @@ static PyObject *_wrap_wxTreeCtrl_SetItemSelectedImage(PyObject *self, PyObject 
         }
     }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxTreeItemId_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxTreeItemId_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxTreeCtrl_SetItemSelectedImage. Expected _wxTreeItemId_p.");
         return NULL;
         }
@@ -7295,8 +7457,7 @@ static PyObject *_wrap_wxTreeCtrl_SetItemHasChildren(PyObject *self, PyObject *a
         }
     }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxTreeItemId_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxTreeItemId_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxTreeCtrl_SetItemHasChildren. Expected _wxTreeItemId_p.");
         return NULL;
         }
@@ -7343,8 +7504,7 @@ static PyObject *_wrap_wxTreeCtrl_GetItemData(PyObject *self, PyObject *args, Py
         }
     }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxTreeItemId_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxTreeItemId_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxTreeCtrl_GetItemData. Expected _wxTreeItemId_p.");
         return NULL;
         }
@@ -7390,8 +7550,7 @@ static PyObject *_wrap_wxTreeCtrl_SetItemData(PyObject *self, PyObject *args, Py
         }
     }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxTreeItemId_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxTreeItemId_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxTreeCtrl_SetItemData. Expected _wxTreeItemId_p.");
         return NULL;
         }
@@ -7443,8 +7602,7 @@ static PyObject *_wrap_wxTreeCtrl_GetPyData(PyObject *self, PyObject *args, PyOb
         }
     }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxTreeItemId_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxTreeItemId_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxTreeCtrl_GetPyData. Expected _wxTreeItemId_p.");
         return NULL;
         }
@@ -7491,8 +7649,7 @@ static PyObject *_wrap_wxTreeCtrl_SetPyData(PyObject *self, PyObject *args, PyOb
         }
     }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxTreeItemId_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxTreeItemId_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxTreeCtrl_SetPyData. Expected _wxTreeItemId_p.");
         return NULL;
         }
@@ -7508,6 +7665,120 @@ static PyObject *_wrap_wxTreeCtrl_SetPyData(PyObject *self, PyObject *args, PyOb
     if (PyErr_Occurred()) return NULL;
 }    Py_INCREF(Py_None);
     _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxTreeCtrl_GetItemTextColour(_swigobj,_swigarg0)  (_swigobj->GetItemTextColour(_swigarg0))
+static PyObject *_wrap_wxTreeCtrl_GetItemTextColour(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxColour * _result;
+    wxPyTreeCtrl * _arg0;
+    wxTreeItemId * _arg1;
+    PyObject * _argo0 = 0;
+    PyObject * _argo1 = 0;
+    char *_kwnames[] = { "self","item", NULL };
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxTreeCtrl_GetItemTextColour",_kwnames,&_argo0,&_argo1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPyTreeCtrl_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxTreeCtrl_GetItemTextColour. Expected _wxPyTreeCtrl_p.");
+        return NULL;
+        }
+    }
+    if (_argo1) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxTreeItemId_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxTreeCtrl_GetItemTextColour. Expected _wxTreeItemId_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    _result = new wxColour (wxTreeCtrl_GetItemTextColour(_arg0,*_arg1));
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    SWIG_MakePtr(_ptemp, (void *) _result,"_wxColour_p");
+    _resultobj = Py_BuildValue("s",_ptemp);
+    return _resultobj;
+}
+
+#define wxTreeCtrl_GetItemBackgroundColour(_swigobj,_swigarg0)  (_swigobj->GetItemBackgroundColour(_swigarg0))
+static PyObject *_wrap_wxTreeCtrl_GetItemBackgroundColour(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxColour * _result;
+    wxPyTreeCtrl * _arg0;
+    wxTreeItemId * _arg1;
+    PyObject * _argo0 = 0;
+    PyObject * _argo1 = 0;
+    char *_kwnames[] = { "self","item", NULL };
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxTreeCtrl_GetItemBackgroundColour",_kwnames,&_argo0,&_argo1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPyTreeCtrl_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxTreeCtrl_GetItemBackgroundColour. Expected _wxPyTreeCtrl_p.");
+        return NULL;
+        }
+    }
+    if (_argo1) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxTreeItemId_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxTreeCtrl_GetItemBackgroundColour. Expected _wxTreeItemId_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    _result = new wxColour (wxTreeCtrl_GetItemBackgroundColour(_arg0,*_arg1));
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    SWIG_MakePtr(_ptemp, (void *) _result,"_wxColour_p");
+    _resultobj = Py_BuildValue("s",_ptemp);
+    return _resultobj;
+}
+
+#define wxTreeCtrl_GetItemFont(_swigobj,_swigarg0)  (_swigobj->GetItemFont(_swigarg0))
+static PyObject *_wrap_wxTreeCtrl_GetItemFont(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxFont * _result;
+    wxPyTreeCtrl * _arg0;
+    wxTreeItemId * _arg1;
+    PyObject * _argo0 = 0;
+    PyObject * _argo1 = 0;
+    char *_kwnames[] = { "self","item", NULL };
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxTreeCtrl_GetItemFont",_kwnames,&_argo0,&_argo1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPyTreeCtrl_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxTreeCtrl_GetItemFont. Expected _wxPyTreeCtrl_p.");
+        return NULL;
+        }
+    }
+    if (_argo1) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxTreeItemId_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxTreeCtrl_GetItemFont. Expected _wxTreeItemId_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    _result = new wxFont (wxTreeCtrl_GetItemFont(_arg0,*_arg1));
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    SWIG_MakePtr(_ptemp, (void *) _result,"_wxFont_p");
+    _resultobj = Py_BuildValue("s",_ptemp);
     return _resultobj;
 }
 
@@ -7532,8 +7803,7 @@ static PyObject *_wrap_wxTreeCtrl_IsVisible(PyObject *self, PyObject *args, PyOb
         }
     }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxTreeItemId_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxTreeItemId_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxTreeCtrl_IsVisible. Expected _wxTreeItemId_p.");
         return NULL;
         }
@@ -7569,8 +7839,7 @@ static PyObject *_wrap_wxTreeCtrl_ItemHasChildren(PyObject *self, PyObject *args
         }
     }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxTreeItemId_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxTreeItemId_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxTreeCtrl_ItemHasChildren. Expected _wxTreeItemId_p.");
         return NULL;
         }
@@ -7606,8 +7875,7 @@ static PyObject *_wrap_wxTreeCtrl_IsExpanded(PyObject *self, PyObject *args, PyO
         }
     }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxTreeItemId_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxTreeItemId_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxTreeCtrl_IsExpanded. Expected _wxTreeItemId_p.");
         return NULL;
         }
@@ -7643,8 +7911,7 @@ static PyObject *_wrap_wxTreeCtrl_IsSelected(PyObject *self, PyObject *args, PyO
         }
     }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxTreeItemId_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxTreeItemId_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxTreeCtrl_IsSelected. Expected _wxTreeItemId_p.");
         return NULL;
         }
@@ -7719,7 +7986,7 @@ static PyObject *_wrap_wxTreeCtrl_GetSelection(PyObject *self, PyObject *args, P
     return _resultobj;
 }
 
-#define wxTreeCtrl_GetItemParent(_swigobj,_swigarg0)  (_swigobj->GetParent(_swigarg0))
+#define wxTreeCtrl_GetItemParent(_swigobj,_swigarg0)  (_swigobj->GetItemParent(_swigarg0))
 static PyObject *_wrap_wxTreeCtrl_GetItemParent(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxTreeItemId * _result;
@@ -7741,8 +8008,7 @@ static PyObject *_wrap_wxTreeCtrl_GetItemParent(PyObject *self, PyObject *args, 
         }
     }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxTreeItemId_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxTreeItemId_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxTreeCtrl_GetItemParent. Expected _wxTreeItemId_p.");
         return NULL;
         }
@@ -7766,7 +8032,7 @@ static PyObject * wxPyTreeCtrl_GetSelections(wxPyTreeCtrl *self) {
             num = self->GetSelections(array);
             for (x=0; x < num; x++) {
                 wxTreeItemId *tii = new wxTreeItemId(array.Item(x));
-                PyObject* item = wxPyConstructObject((void*)tii, "wxTreeItemId", TRUE);
+                PyObject* item = wxPyConstructObject((void*)tii, wxT("wxTreeItemId"), TRUE);
                 PyList_Append(rval, item);
             }
             wxPyEndBlockThreads();
@@ -7824,8 +8090,7 @@ static PyObject *_wrap_wxTreeCtrl_GetChildrenCount(PyObject *self, PyObject *arg
         }
     }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxTreeItemId_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxTreeItemId_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxTreeCtrl_GetChildrenCount. Expected _wxTreeItemId_p.");
         return NULL;
         }
@@ -7866,8 +8131,7 @@ static PyObject *_wrap_wxTreeCtrl_GetFirstChild(PyObject *self, PyObject *args, 
         }
     }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxTreeItemId_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxTreeItemId_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxTreeCtrl_GetFirstChild. Expected _wxTreeItemId_p.");
         return NULL;
         }
@@ -7918,8 +8182,7 @@ static PyObject *_wrap_wxTreeCtrl_GetNextChild(PyObject *self, PyObject *args, P
         }
     }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxTreeItemId_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxTreeItemId_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxTreeCtrl_GetNextChild. Expected _wxTreeItemId_p.");
         return NULL;
         }
@@ -7966,8 +8229,7 @@ static PyObject *_wrap_wxTreeCtrl_GetNextSibling(PyObject *self, PyObject *args,
         }
     }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxTreeItemId_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxTreeItemId_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxTreeCtrl_GetNextSibling. Expected _wxTreeItemId_p.");
         return NULL;
         }
@@ -8005,8 +8267,7 @@ static PyObject *_wrap_wxTreeCtrl_GetPrevSibling(PyObject *self, PyObject *args,
         }
     }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxTreeItemId_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxTreeItemId_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxTreeCtrl_GetPrevSibling. Expected _wxTreeItemId_p.");
         return NULL;
         }
@@ -8074,8 +8335,7 @@ static PyObject *_wrap_wxTreeCtrl_GetNextVisible(PyObject *self, PyObject *args,
         }
     }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxTreeItemId_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxTreeItemId_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxTreeCtrl_GetNextVisible. Expected _wxTreeItemId_p.");
         return NULL;
         }
@@ -8113,8 +8373,7 @@ static PyObject *_wrap_wxTreeCtrl_GetPrevVisible(PyObject *self, PyObject *args,
         }
     }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxTreeItemId_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxTreeItemId_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxTreeCtrl_GetPrevVisible. Expected _wxTreeItemId_p.");
         return NULL;
         }
@@ -8152,8 +8411,7 @@ static PyObject *_wrap_wxTreeCtrl_GetLastChild(PyObject *self, PyObject *args, P
         }
     }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxTreeItemId_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxTreeItemId_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxTreeCtrl_GetLastChild. Expected _wxTreeItemId_p.");
         return NULL;
         }
@@ -8249,8 +8507,7 @@ static PyObject *_wrap_wxTreeCtrl_PrependItem(PyObject *self, PyObject *args, Py
         }
     }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxTreeItemId_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxTreeItemId_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxTreeCtrl_PrependItem. Expected _wxTreeItemId_p.");
         return NULL;
         }
@@ -8312,15 +8569,13 @@ static PyObject *_wrap_wxTreeCtrl_InsertItem(PyObject *self, PyObject *args, PyO
         }
     }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxTreeItemId_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxTreeItemId_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxTreeCtrl_InsertItem. Expected _wxTreeItemId_p.");
         return NULL;
         }
     }
     if (_argo2) {
-        if (_argo2 == Py_None) { _arg2 = NULL; }
-        else if (SWIG_GetPtrObj(_argo2,(void **) &_arg2,"_wxTreeItemId_p")) {
+        if (SWIG_GetPtrObj(_argo2,(void **) &_arg2,"_wxTreeItemId_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 3 of wxTreeCtrl_InsertItem. Expected _wxTreeItemId_p.");
         return NULL;
         }
@@ -8381,8 +8636,7 @@ static PyObject *_wrap_wxTreeCtrl_InsertItemBefore(PyObject *self, PyObject *arg
         }
     }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxTreeItemId_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxTreeItemId_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxTreeCtrl_InsertItemBefore. Expected _wxTreeItemId_p.");
         return NULL;
         }
@@ -8442,8 +8696,7 @@ static PyObject *_wrap_wxTreeCtrl_AppendItem(PyObject *self, PyObject *args, PyO
         }
     }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxTreeItemId_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxTreeItemId_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxTreeCtrl_AppendItem. Expected _wxTreeItemId_p.");
         return NULL;
         }
@@ -8495,8 +8748,7 @@ static PyObject *_wrap_wxTreeCtrl_Delete(PyObject *self, PyObject *args, PyObjec
         }
     }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxTreeItemId_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxTreeItemId_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxTreeCtrl_Delete. Expected _wxTreeItemId_p.");
         return NULL;
         }
@@ -8532,8 +8784,7 @@ static PyObject *_wrap_wxTreeCtrl_DeleteChildren(PyObject *self, PyObject *args,
         }
     }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxTreeItemId_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxTreeItemId_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxTreeCtrl_DeleteChildren. Expected _wxTreeItemId_p.");
         return NULL;
         }
@@ -8597,8 +8848,7 @@ static PyObject *_wrap_wxTreeCtrl_Expand(PyObject *self, PyObject *args, PyObjec
         }
     }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxTreeItemId_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxTreeItemId_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxTreeCtrl_Expand. Expected _wxTreeItemId_p.");
         return NULL;
         }
@@ -8634,8 +8884,7 @@ static PyObject *_wrap_wxTreeCtrl_Collapse(PyObject *self, PyObject *args, PyObj
         }
     }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxTreeItemId_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxTreeItemId_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxTreeCtrl_Collapse. Expected _wxTreeItemId_p.");
         return NULL;
         }
@@ -8671,8 +8920,7 @@ static PyObject *_wrap_wxTreeCtrl_CollapseAndReset(PyObject *self, PyObject *arg
         }
     }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxTreeItemId_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxTreeItemId_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxTreeCtrl_CollapseAndReset. Expected _wxTreeItemId_p.");
         return NULL;
         }
@@ -8708,8 +8956,7 @@ static PyObject *_wrap_wxTreeCtrl_Toggle(PyObject *self, PyObject *args, PyObjec
         }
     }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxTreeItemId_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxTreeItemId_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxTreeCtrl_Toggle. Expected _wxTreeItemId_p.");
         return NULL;
         }
@@ -8801,8 +9048,7 @@ static PyObject *_wrap_wxTreeCtrl_SelectItem(PyObject *self, PyObject *args, PyO
         }
     }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxTreeItemId_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxTreeItemId_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxTreeCtrl_SelectItem. Expected _wxTreeItemId_p.");
         return NULL;
         }
@@ -8838,8 +9084,7 @@ static PyObject *_wrap_wxTreeCtrl_EnsureVisible(PyObject *self, PyObject *args, 
         }
     }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxTreeItemId_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxTreeItemId_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxTreeCtrl_EnsureVisible. Expected _wxTreeItemId_p.");
         return NULL;
         }
@@ -8875,8 +9120,7 @@ static PyObject *_wrap_wxTreeCtrl_ScrollTo(PyObject *self, PyObject *args, PyObj
         }
     }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxTreeItemId_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxTreeItemId_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxTreeCtrl_ScrollTo. Expected _wxTreeItemId_p.");
         return NULL;
         }
@@ -8889,43 +9133,6 @@ static PyObject *_wrap_wxTreeCtrl_ScrollTo(PyObject *self, PyObject *args, PyObj
     if (PyErr_Occurred()) return NULL;
 }    Py_INCREF(Py_None);
     _resultobj = Py_None;
-    return _resultobj;
-}
-
-#define wxTreeCtrl_EditLabel(_swigobj,_swigarg0)  (_swigobj->EditLabel(_swigarg0))
-static PyObject *_wrap_wxTreeCtrl_EditLabel(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    wxTextCtrl * _result;
-    wxPyTreeCtrl * _arg0;
-    wxTreeItemId * _arg1;
-    PyObject * _argo0 = 0;
-    PyObject * _argo1 = 0;
-    char *_kwnames[] = { "self","item", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxTreeCtrl_EditLabel",_kwnames,&_argo0,&_argo1)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPyTreeCtrl_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxTreeCtrl_EditLabel. Expected _wxPyTreeCtrl_p.");
-        return NULL;
-        }
-    }
-    if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxTreeItemId_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxTreeCtrl_EditLabel. Expected _wxTreeItemId_p.");
-        return NULL;
-        }
-    }
-{
-    PyThreadState* __tstate = wxPyBeginAllowThreads();
-    _result = (wxTextCtrl *)wxTreeCtrl_EditLabel(_arg0,*_arg1);
-
-    wxPyEndAllowThreads(__tstate);
-    if (PyErr_Occurred()) return NULL;
-}{ _resultobj = wxPyMake_wxObject(_result); }
     return _resultobj;
 }
 
@@ -8957,6 +9164,42 @@ static PyObject *_wrap_wxTreeCtrl_GetEditControl(PyObject *self, PyObject *args,
     return _resultobj;
 }
 
+#define wxTreeCtrl_EditLabel(_swigobj,_swigarg0)  (_swigobj->EditLabel(_swigarg0))
+static PyObject *_wrap_wxTreeCtrl_EditLabel(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxPyTreeCtrl * _arg0;
+    wxTreeItemId * _arg1;
+    PyObject * _argo0 = 0;
+    PyObject * _argo1 = 0;
+    char *_kwnames[] = { "self","item", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxTreeCtrl_EditLabel",_kwnames,&_argo0,&_argo1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPyTreeCtrl_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxTreeCtrl_EditLabel. Expected _wxPyTreeCtrl_p.");
+        return NULL;
+        }
+    }
+    if (_argo1) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxTreeItemId_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxTreeCtrl_EditLabel. Expected _wxTreeItemId_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    wxTreeCtrl_EditLabel(_arg0,*_arg1);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
 #define wxTreeCtrl_EndEditLabel(_swigobj,_swigarg0,_swigarg1)  (_swigobj->EndEditLabel(_swigarg0,_swigarg1))
 static PyObject *_wrap_wxTreeCtrl_EndEditLabel(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
@@ -8978,8 +9221,7 @@ static PyObject *_wrap_wxTreeCtrl_EndEditLabel(PyObject *self, PyObject *args, P
         }
     }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxTreeItemId_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxTreeItemId_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxTreeCtrl_EndEditLabel. Expected _wxTreeItemId_p.");
         return NULL;
         }
@@ -9015,8 +9257,7 @@ static PyObject *_wrap_wxTreeCtrl_SortChildren(PyObject *self, PyObject *args, P
         }
     }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxTreeItemId_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxTreeItemId_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxTreeCtrl_SortChildren. Expected _wxTreeItemId_p.");
         return NULL;
         }
@@ -9053,8 +9294,7 @@ static PyObject *_wrap_wxTreeCtrl_SetItemBold(PyObject *self, PyObject *args, Py
         }
     }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxTreeItemId_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxTreeItemId_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxTreeCtrl_SetItemBold. Expected _wxTreeItemId_p.");
         return NULL;
         }
@@ -9091,8 +9331,7 @@ static PyObject *_wrap_wxTreeCtrl_IsBold(PyObject *self, PyObject *args, PyObjec
         }
     }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxTreeItemId_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxTreeItemId_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxTreeCtrl_IsBold. Expected _wxTreeItemId_p.");
         return NULL;
         }
@@ -9178,8 +9417,7 @@ static PyObject *_wrap_wxTreeCtrl_SetItemTextColour(PyObject *self, PyObject *ar
         }
     }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxTreeItemId_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxTreeItemId_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxTreeCtrl_SetItemTextColour. Expected _wxTreeItemId_p.");
         return NULL;
         }
@@ -9223,8 +9461,7 @@ static PyObject *_wrap_wxTreeCtrl_SetItemBackgroundColour(PyObject *self, PyObje
         }
     }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxTreeItemId_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxTreeItemId_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxTreeCtrl_SetItemBackgroundColour. Expected _wxTreeItemId_p.");
         return NULL;
         }
@@ -9267,15 +9504,13 @@ static PyObject *_wrap_wxTreeCtrl_SetItemFont(PyObject *self, PyObject *args, Py
         }
     }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxTreeItemId_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxTreeItemId_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxTreeCtrl_SetItemFont. Expected _wxTreeItemId_p.");
         return NULL;
         }
     }
     if (_argo2) {
-        if (_argo2 == Py_None) { _arg2 = NULL; }
-        else if (SWIG_GetPtrObj(_argo2,(void **) &_arg2,"_wxFont_p")) {
+        if (SWIG_GetPtrObj(_argo2,(void **) &_arg2,"_wxFont_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 3 of wxTreeCtrl_SetItemFont. Expected _wxFont_p.");
         return NULL;
         }
@@ -9312,8 +9547,7 @@ static PyObject *_wrap_wxTreeCtrl_SetItemDropHighlight(PyObject *self, PyObject 
         }
     }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxTreeItemId_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxTreeItemId_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxTreeCtrl_SetItemDropHighlight. Expected _wxTreeItemId_p.");
         return NULL;
         }
@@ -9334,7 +9568,7 @@ static PyObject * wxPyTreeCtrl_GetBoundingRect(wxPyTreeCtrl *self,const wxTreeIt
             if (self->GetBoundingRect(item, rect, textOnly)) {
                 wxPyBeginBlockThreads();
                 wxRect* r = new wxRect(rect);
-                PyObject* val = wxPyConstructObject((void*)r, "wxRect");
+                PyObject* val = wxPyConstructObject((void*)r, wxT("wxRect"), 1);
                 wxPyEndBlockThreads();
                 return val;
             }
@@ -9364,8 +9598,7 @@ static PyObject *_wrap_wxTreeCtrl_GetBoundingRect(PyObject *self, PyObject *args
         }
     }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxTreeItemId_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxTreeItemId_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxTreeCtrl_GetBoundingRect. Expected _wxTreeItemId_p.");
         return NULL;
         }
@@ -9513,7 +9746,7 @@ static PyObject *_wrap_wxDirItemData_m_path_set(PyObject *self, PyObject *args, 
     if (PyErr_Occurred()) return NULL;
 }{
 #if wxUSE_UNICODE
-    _resultobj = PyUnicode_FromUnicode(_result->c_str(), _result->Len());
+    _resultobj = PyUnicode_FromWideChar(_result->c_str(), _result->Len());
 #else
     _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
 #endif
@@ -9551,7 +9784,7 @@ static PyObject *_wrap_wxDirItemData_m_path_get(PyObject *self, PyObject *args, 
     if (PyErr_Occurred()) return NULL;
 }{
 #if wxUSE_UNICODE
-    _resultobj = PyUnicode_FromUnicode(_result->c_str(), _result->Len());
+    _resultobj = PyUnicode_FromWideChar(_result->c_str(), _result->Len());
 #else
     _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
 #endif
@@ -9592,7 +9825,7 @@ static PyObject *_wrap_wxDirItemData_m_name_set(PyObject *self, PyObject *args, 
     if (PyErr_Occurred()) return NULL;
 }{
 #if wxUSE_UNICODE
-    _resultobj = PyUnicode_FromUnicode(_result->c_str(), _result->Len());
+    _resultobj = PyUnicode_FromWideChar(_result->c_str(), _result->Len());
 #else
     _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
 #endif
@@ -9630,7 +9863,7 @@ static PyObject *_wrap_wxDirItemData_m_name_get(PyObject *self, PyObject *args, 
     if (PyErr_Occurred()) return NULL;
 }{
 #if wxUSE_UNICODE
-    _resultobj = PyUnicode_FromUnicode(_result->c_str(), _result->Len());
+    _resultobj = PyUnicode_FromWideChar(_result->c_str(), _result->Len());
 #else
     _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
 #endif
@@ -10124,7 +10357,7 @@ static PyObject *_wrap_wxGenericDirCtrl_GetDefaultPath(PyObject *self, PyObject 
     if (PyErr_Occurred()) return NULL;
 }{
 #if wxUSE_UNICODE
-    _resultobj = PyUnicode_FromUnicode(_result->c_str(), _result->Len());
+    _resultobj = PyUnicode_FromWideChar(_result->c_str(), _result->Len());
 #else
     _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
 #endif
@@ -10200,7 +10433,7 @@ static PyObject *_wrap_wxGenericDirCtrl_GetPath(PyObject *self, PyObject *args, 
     if (PyErr_Occurred()) return NULL;
 }{
 #if wxUSE_UNICODE
-    _resultobj = PyUnicode_FromUnicode(_result->c_str(), _result->Len());
+    _resultobj = PyUnicode_FromWideChar(_result->c_str(), _result->Len());
 #else
     _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
 #endif
@@ -10237,7 +10470,7 @@ static PyObject *_wrap_wxGenericDirCtrl_GetFilePath(PyObject *self, PyObject *ar
     if (PyErr_Occurred()) return NULL;
 }{
 #if wxUSE_UNICODE
-    _resultobj = PyUnicode_FromUnicode(_result->c_str(), _result->Len());
+    _resultobj = PyUnicode_FromWideChar(_result->c_str(), _result->Len());
 #else
     _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
 #endif
@@ -10372,7 +10605,7 @@ static PyObject *_wrap_wxGenericDirCtrl_GetFilter(PyObject *self, PyObject *args
     if (PyErr_Occurred()) return NULL;
 }{
 #if wxUSE_UNICODE
-    _resultobj = PyUnicode_FromUnicode(_result->c_str(), _result->Len());
+    _resultobj = PyUnicode_FromWideChar(_result->c_str(), _result->Len());
 #else
     _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
 #endif
@@ -10569,6 +10802,34 @@ static PyObject *_wrap_wxGenericDirCtrl_GetFilterListCtrl(PyObject *self, PyObje
         Py_INCREF(Py_None);
         _resultobj = Py_None;
     }
+    return _resultobj;
+}
+
+#define wxGenericDirCtrl_ReCreateTree(_swigobj)  (_swigobj->ReCreateTree())
+static PyObject *_wrap_wxGenericDirCtrl_ReCreateTree(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxGenericDirCtrl * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxGenericDirCtrl_ReCreateTree",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxGenericDirCtrl_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxGenericDirCtrl_ReCreateTree. Expected _wxGenericDirCtrl_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    wxGenericDirCtrl_ReCreateTree(_arg0);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
     return _resultobj;
 }
 
@@ -10803,6 +11064,7 @@ static PyMethodDef controls2cMethods[] = {
 	 { "wxDirFilterListCtrl_Create", (PyCFunction) _wrap_wxDirFilterListCtrl_Create, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxPreDirFilterListCtrl", (PyCFunction) _wrap_new_wxPreDirFilterListCtrl, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxDirFilterListCtrl", (PyCFunction) _wrap_new_wxDirFilterListCtrl, METH_VARARGS | METH_KEYWORDS },
+	 { "wxGenericDirCtrl_ReCreateTree", (PyCFunction) _wrap_wxGenericDirCtrl_ReCreateTree, METH_VARARGS | METH_KEYWORDS },
 	 { "wxGenericDirCtrl_GetFilterListCtrl", (PyCFunction) _wrap_wxGenericDirCtrl_GetFilterListCtrl, METH_VARARGS | METH_KEYWORDS },
 	 { "wxGenericDirCtrl_GetTreeCtrl", (PyCFunction) _wrap_wxGenericDirCtrl_GetTreeCtrl, METH_VARARGS | METH_KEYWORDS },
 	 { "wxGenericDirCtrl_GetRootId", (PyCFunction) _wrap_wxGenericDirCtrl_GetRootId, METH_VARARGS | METH_KEYWORDS },
@@ -10843,8 +11105,8 @@ static PyMethodDef controls2cMethods[] = {
 	 { "wxTreeCtrl_SetItemBold", (PyCFunction) _wrap_wxTreeCtrl_SetItemBold, METH_VARARGS | METH_KEYWORDS },
 	 { "wxTreeCtrl_SortChildren", (PyCFunction) _wrap_wxTreeCtrl_SortChildren, METH_VARARGS | METH_KEYWORDS },
 	 { "wxTreeCtrl_EndEditLabel", (PyCFunction) _wrap_wxTreeCtrl_EndEditLabel, METH_VARARGS | METH_KEYWORDS },
-	 { "wxTreeCtrl_GetEditControl", (PyCFunction) _wrap_wxTreeCtrl_GetEditControl, METH_VARARGS | METH_KEYWORDS },
 	 { "wxTreeCtrl_EditLabel", (PyCFunction) _wrap_wxTreeCtrl_EditLabel, METH_VARARGS | METH_KEYWORDS },
+	 { "wxTreeCtrl_GetEditControl", (PyCFunction) _wrap_wxTreeCtrl_GetEditControl, METH_VARARGS | METH_KEYWORDS },
 	 { "wxTreeCtrl_ScrollTo", (PyCFunction) _wrap_wxTreeCtrl_ScrollTo, METH_VARARGS | METH_KEYWORDS },
 	 { "wxTreeCtrl_EnsureVisible", (PyCFunction) _wrap_wxTreeCtrl_EnsureVisible, METH_VARARGS | METH_KEYWORDS },
 	 { "wxTreeCtrl_SelectItem", (PyCFunction) _wrap_wxTreeCtrl_SelectItem, METH_VARARGS | METH_KEYWORDS },
@@ -10879,6 +11141,9 @@ static PyMethodDef controls2cMethods[] = {
 	 { "wxTreeCtrl_IsExpanded", (PyCFunction) _wrap_wxTreeCtrl_IsExpanded, METH_VARARGS | METH_KEYWORDS },
 	 { "wxTreeCtrl_ItemHasChildren", (PyCFunction) _wrap_wxTreeCtrl_ItemHasChildren, METH_VARARGS | METH_KEYWORDS },
 	 { "wxTreeCtrl_IsVisible", (PyCFunction) _wrap_wxTreeCtrl_IsVisible, METH_VARARGS | METH_KEYWORDS },
+	 { "wxTreeCtrl_GetItemFont", (PyCFunction) _wrap_wxTreeCtrl_GetItemFont, METH_VARARGS | METH_KEYWORDS },
+	 { "wxTreeCtrl_GetItemBackgroundColour", (PyCFunction) _wrap_wxTreeCtrl_GetItemBackgroundColour, METH_VARARGS | METH_KEYWORDS },
+	 { "wxTreeCtrl_GetItemTextColour", (PyCFunction) _wrap_wxTreeCtrl_GetItemTextColour, METH_VARARGS | METH_KEYWORDS },
 	 { "wxTreeCtrl_SetPyData", (PyCFunction) _wrap_wxTreeCtrl_SetPyData, METH_VARARGS | METH_KEYWORDS },
 	 { "wxTreeCtrl_GetPyData", (PyCFunction) _wrap_wxTreeCtrl_GetPyData, METH_VARARGS | METH_KEYWORDS },
 	 { "wxTreeCtrl_SetItemData", (PyCFunction) _wrap_wxTreeCtrl_SetItemData, METH_VARARGS | METH_KEYWORDS },
@@ -10905,6 +11170,12 @@ static PyMethodDef controls2cMethods[] = {
 	 { "wxTreeCtrl_Create", (PyCFunction) _wrap_wxTreeCtrl_Create, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxPreTreeCtrl", (PyCFunction) _wrap_new_wxPreTreeCtrl, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxTreeCtrl", (PyCFunction) _wrap_new_wxTreeCtrl, METH_VARARGS | METH_KEYWORDS },
+	 { "wxTreeEvent_SetEditCanceled", (PyCFunction) _wrap_wxTreeEvent_SetEditCanceled, METH_VARARGS | METH_KEYWORDS },
+	 { "wxTreeEvent_SetLabel", (PyCFunction) _wrap_wxTreeEvent_SetLabel, METH_VARARGS | METH_KEYWORDS },
+	 { "wxTreeEvent_SetKeyEvent", (PyCFunction) _wrap_wxTreeEvent_SetKeyEvent, METH_VARARGS | METH_KEYWORDS },
+	 { "wxTreeEvent_SetPoint", (PyCFunction) _wrap_wxTreeEvent_SetPoint, METH_VARARGS | METH_KEYWORDS },
+	 { "wxTreeEvent_SetOldItem", (PyCFunction) _wrap_wxTreeEvent_SetOldItem, METH_VARARGS | METH_KEYWORDS },
+	 { "wxTreeEvent_SetItem", (PyCFunction) _wrap_wxTreeEvent_SetItem, METH_VARARGS | METH_KEYWORDS },
 	 { "wxTreeEvent_IsEditCancelled", (PyCFunction) _wrap_wxTreeEvent_IsEditCancelled, METH_VARARGS | METH_KEYWORDS },
 	 { "wxTreeEvent_GetLabel", (PyCFunction) _wrap_wxTreeEvent_GetLabel, METH_VARARGS | METH_KEYWORDS },
 	 { "wxTreeEvent_GetKeyCode", (PyCFunction) _wrap_wxTreeEvent_GetKeyCode, METH_VARARGS | METH_KEYWORDS },

@@ -3,5 +3,5 @@
 wx.wxStyledTextEventPtr       = wxStyledTextEventPtr
 wx.wxStyledTextCtrlPtr        = wxStyledTextCtrlPtr
 
-
-wxSTC_CARET_CENTER = wxSTC_CARET_STRICT
+# This constant no longer exists in Scintilla, but I'll put it here for a while to avoid disrupting user code...
+wxSTC_CARET_CENTER = 0

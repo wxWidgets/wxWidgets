@@ -97,7 +97,7 @@ Rem Euch, this is the only way I can think of right now
 Rem to copy them to the same directory. Daft but...
 erase %TEMP%\temp.zip
 zip16 -r %TEMP%\temp.zip *.exe
-unzip32 -o %TEMP%\temp.zip -d %BUILDDEST%\VC6Release
+unzip -o %TEMP%\temp.zip -d %BUILDDEST%\VC6Release
 nmake -f makefile.vc clean FINAL=1
 
 cd %WXDIR%\demos
@@ -106,7 +106,7 @@ nmake -f makefile.vc FINAL=1
 Rem Copy all executables to VC6Release
 erase %TEMP%\temp.zip
 zip16 -r %TEMP%\temp.zip *.exe
-unzip32 -o %TEMP%\temp.zip -d %BUILDDEST%\VC6Release
+unzip -o %TEMP%\temp.zip -d %BUILDDEST%\VC6Release
 nmake -f makefile.vc clean FINAL=1
 
 Rem Compile OGL
@@ -247,7 +247,7 @@ make -f makefile.b32 FINAL=1
 Rem Copy all executables to BC55Release
 erase %TEMP%\temp.zip
 zip16 -r %TEMP%\temp.zip *.exe
-unzip32 -o %TEMP%\temp.zip -d %BUILDDEST%\BC55Release
+unzip -o %TEMP%\temp.zip -d %BUILDDEST%\BC55Release
 make -f makefile.b32 clean FINAL=1
 
 cd %WXDIR%\demos
@@ -256,7 +256,7 @@ make -f makefile.b32 FINAL=1
 Rem Copy all executables to BC55Release
 erase %TEMP%\temp.zip
 zip16 -r %TEMP%\temp.zip *.exe
-unzip32 -o %TEMP%\temp.zip -d %BUILDDEST%\BC55Release
+unzip -o %TEMP%\temp.zip -d %BUILDDEST%\BC55Release
 make -f makefile.b32 clean FINAL=1
 
 Rem Compile OGL
@@ -379,7 +379,7 @@ make -f makefile.g95 FINAL=1
 Rem Copy all executables to Cygwin11Release
 erase %TEMP%\temp.zip
 zip16 -r %TEMP%\temp.zip *.exe
-unzip32 -o %TEMP%\temp.zip -d %BUILDDEST%\Cygwin11Release
+unzip -o %TEMP%\temp.zip -d %BUILDDEST%\Cygwin11Release
 make -f makefile.g95 clean FINAL=1
 
 cd %WXDIR%\demos
@@ -388,7 +388,7 @@ make -f makefile.g95 FINAL=1
 Rem Copy all executables to Cygwin11Release
 erase %TEMP%\temp.zip
 zip16 -r %TEMP%\temp.zip *.exe
-unzip32 -o %TEMP%\temp.zip -d %BUILDDEST%\Cygwin11Release
+unzip -o %TEMP%\temp.zip -d %BUILDDEST%\Cygwin11Release
 make -f makefile.g95 clean FINAL=1
 
 Rem Compile OGL
@@ -459,7 +459,7 @@ make -f makefile.g95 FINAL=1
 Rem Copy all executables to Ming2952Release
 erase %TEMP%\temp.zip
 zip16 -r %TEMP%\temp.zip *.exe
-unzip32 -o %TEMP%\temp.zip -d %BUILDDEST%\Ming2952Release
+unzip -o %TEMP%\temp.zip -d %BUILDDEST%\Ming2952Release
 make -f makefile.g95 clean FINAL=1
 
 cd %WXDIR%\demos
@@ -468,7 +468,7 @@ make -f makefile.g95 FINAL=1
 Rem Copy all executables to Ming2952Release
 erase %TEMP%\temp.zip
 zip16 -r %TEMP%\temp.zip *.exe
-unzip32 -o %TEMP%\temp.zip -d %BUILDDEST%\Ming2952Release
+unzip -o %TEMP%\temp.zip -d %BUILDDEST%\Ming2952Release
 make -f makefile.g95 clean FINAL=1
 
 Rem Compile OGL

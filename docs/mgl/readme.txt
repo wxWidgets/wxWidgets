@@ -1,7 +1,7 @@
 
-  Welcome to wxWindows/MGL 2.3
+  Welcome to wxWindows/MGL 2.4
 
-You have downloaded version 2.3 of the MGL port of
+You have downloaded version 2.4 of the MGL port of
 the wxWindows GUI library. This runs on top of SciTech MGL library
 (http://www.scitechsoft.com) that is available for variety of 
 operating systems and comes with support for embedded devices.

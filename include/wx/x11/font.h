@@ -48,11 +48,15 @@ public:
         bool underlined = FALSE,
         const wxString& face = wxEmptyString,
         wxFontEncoding encoding = wxFONTENCODING_DEFAULT);
-    
-    // wxMOTIF-specific
+
+    // FIXME: I added the ! to make it compile;
+    // is this right? - JACS
+#if !wxUSE_UNICODE    
     bool Create(const wxString& fontname,
         wxFontEncoding fontenc = wxFONTENCODING_DEFAULT);
-    bool Create(const wxNativeFontInfo& fontinfo);
+#endif
+    // DELETEME: no longer seems to be implemented.
+    // bool Create(const wxNativeFontInfo& fontinfo);
     
     virtual ~wxFont();
     
@@ -69,6 +73,8 @@ public:
     virtual wxFontEncoding GetEncoding() const;
     virtual wxNativeFontInfo *GetNativeFontInfo() const;
     
+    virtual bool IsFixedWidth() const;
+    
     virtual void SetPointSize(int pointSize);
     virtual void SetFamily(int family);
     virtual void SetStyle(int style);
@@ -78,8 +84,13 @@ public:
     virtual void SetEncoding(wxFontEncoding encoding);
     virtual void SetNativeFontInfo( const wxNativeFontInfo& info );
     
-    // Implementation
+    virtual void SetNoAntiAliasing( bool no = TRUE );
+    virtual bool GetNoAntiAliasing();
     
+    // Implementation
+
+#if wxUSE_PANGO
+#else
     // Find an existing, or create a new, XFontStruct
     // based on this wxFont and the given scale. Append the
     // font to list in the private data for future reference.
@@ -98,13 +109,12 @@ public:
     // Helper function for convenient access of the above.
     WXFontStructPtr GetFontStruct(double scale = 1.0,
         WXDisplay* display = NULL) const;
+#endif
     
 protected:
     // common part of all ctors
     void Init();
     
-    // VZ: IMHO, we don't need it at all...
-    bool RealizeResource() { return TRUE; }
     void Unshare();
     
 private:

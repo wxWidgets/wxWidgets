@@ -124,11 +124,11 @@ SOURCE=.\mfutils.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\misc.cpp
+SOURCE=.\ogldiag.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\ogldiag.cpp
+SOURCE=.\oglmisc.cpp
 # End Source File
 # End Target
 # End Project

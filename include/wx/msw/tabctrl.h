@@ -40,7 +40,7 @@ class WXDLLEXPORT wxTabCtrl: public wxControl
     wxTabCtrl();
 
     inline wxTabCtrl(wxWindow *parent, wxWindowID id, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize,
-            long style = 0, const wxString& name = "tabCtrl")
+            long style = 0, const wxString& name = wxT("tabCtrl"))
     {
         Create(parent, id, pos, size, style, name);
     }
@@ -99,7 +99,7 @@ class WXDLLEXPORT wxTabCtrl: public wxControl
 // Operations
 
     bool Create(wxWindow *parent, wxWindowID id, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize,
-                long style = 0, const wxString& name = "tabCtrl");
+                long style = 0, const wxString& name = wxT("tabCtrl"));
 
     // Delete all items
     bool DeleteAllItems();
@@ -126,12 +126,30 @@ protected:
 DECLARE_EVENT_TABLE()
 };
 
-class WXDLLEXPORT wxTabEvent: public wxCommandEvent
+class WXDLLEXPORT wxTabEvent : public wxNotifyEvent
 {
-  DECLARE_DYNAMIC_CLASS(wxTabEvent)
+public:
+    wxTabEvent(wxEventType commandType = wxEVT_NULL, int id = 0,
+                    int nSel = -1, int nOldSel = -1)
+        : wxNotifyEvent(commandType, id)
+        {
+            m_nSel = nSel;
+            m_nOldSel = nOldSel;
+        }
 
- public:
-  wxTabEvent(wxEventType commandType = wxEVT_NULL, int id = 0);
+    // accessors
+        // the currently selected page (-1 if none)
+    int GetSelection() const { return m_nSel; }
+    void SetSelection(int nSel) { m_nSel = nSel; }
+        // the page that was selected before the change (-1 if none)
+    int GetOldSelection() const { return m_nOldSel; }
+    void SetOldSelection(int nOldSel) { m_nOldSel = nOldSel; }
+
+private:
+    int m_nSel,     // currently selected page
+        m_nOldSel;  // previously selected page
+
+    DECLARE_DYNAMIC_CLASS(wxTabEvent)
 };
 
 typedef void (wxEvtHandler::*wxTabEventFunction)(wxTabEvent&);

@@ -8,7 +8,7 @@
 WXDIR = $(%WXWIN)
 
 PROGRAM = server
-OBJECTS = $(PROGRAM).obj
+OBJECTS = $(OUTPUTDIR)\$(PROGRAM).obj
 
 !include $(WXDIR)\src\makeprog.wat
 

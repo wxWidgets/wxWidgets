@@ -1,11 +1,12 @@
-# Purpose: makefile for grid example (Watcom)
-# Created: 2000-03-15
-
-WXDIR = $(%WXWIN)
-
-PROGRAM = grid
-OBJECTS = $(PROGRAM).obj
-
-!include $(WXDIR)\src\makeprog.wat
-
-
+# 
+# Makefile for WATCOM 
+# 
+# Created by Julian Smart, January 1999 
+#  
+# 
+# 
+# 
+PROGRAM = grid 
+OBJECTS = $(OUTPUTDIR)\$(PROGRAM).obj 
+# 
+!include $(%WXWIN)\src\makeprog.wat 

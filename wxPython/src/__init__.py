@@ -12,13 +12,12 @@
 #----------------------------------------------------------------------------
 
 import __version__
-__version__ = __version__.ver
+__version__ = __version__.wxVERSION_STRING
 
 
 # Ensure the main extension module is loaded, in case the add-on modules
 # (such as utils,) are used standalone.
 import wxc
-wxc.__version__ = __version__
 
 #----------------------------------------------------------------------------
 

@@ -113,7 +113,10 @@ void wxRemotelyScrolledTreeCtrl::SetScrollbars(int pixelsPerUnitX, int pixelsPer
     if (IsKindOf(CLASSINFO(wxGenericTreeCtrl)))
     {
         wxGenericTreeCtrl* win = (wxGenericTreeCtrl*) this;
-        win->wxGenericTreeCtrl::SetScrollbars(pixelsPerUnitX, 0, noUnitsX, 0, xPos, 0, noRefresh);
+//        win->wxGenericTreeCtrl::SetScrollbars(pixelsPerUnitX, 0, noUnitsX, 0, xPos, 0, noRefresh);
+        // Don't refresh, or on wxGTK a portion of the window will be redrawn as if
+        // Y scrolling is at zero
+        win->wxGenericTreeCtrl::SetScrollbars(pixelsPerUnitX, pixelsPerUnitY, noUnitsX, 0, xPos, 0, /* noRefresh */ TRUE);
 
         wxScrolledWindow* scrolledWindow = GetScrolledWindow();
         if (scrolledWindow)
@@ -311,7 +314,7 @@ void wxRemotelyScrolledTreeCtrl::AdjustRemoteScrollbars()
         if (scrolledWindow)
         {
             wxRect itemRect;
-            if (GetBoundingRect(GetRootItem(), itemRect))
+            if (GetBoundingRect(GetFirstVisibleItem(), itemRect))
             {
                 // Actually, the real height seems to be 1 less than reported
                 // (e.g. 16 instead of 16)

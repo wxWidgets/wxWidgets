@@ -1,6 +1,6 @@
 //Microsoft App Studio generated resource script.
 //
-#include "wx/msw/wx.rc"
+//#include "wx/msw/wx.rc"
 #include "resource.h"
 
 #define APSTUDIO_READONLY_SYMBOLS

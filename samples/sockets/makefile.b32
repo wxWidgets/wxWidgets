@@ -7,9 +7,17 @@
 #
 # Makefile : Builds sample for 32-bit BC++
 
+!if "$(WXUSINGDLL)" == ""
+WXUSINGDLL=0
+!endif
+
+!if "$(FINAL)" == ""
+FINAL=0
+!endif
+
 all:
-    make -f server.b32 all
-    make -f client.b32 all
+    make -f server.b32 FINAL=$(FINAL) WXUSINGDLL=$(WXUSINGDLL)
+    make -f client.b32 FINAL=$(FINAL) WXUSINGDLL=$(WXUSINGDLL)
 
 clean:
     make -f server.b32 clean

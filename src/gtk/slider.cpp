@@ -255,14 +255,15 @@ int wxSlider::GetLineSize() const
 bool wxSlider::IsOwnGtkWindow( GdkWindow *window )
 {
     GtkRange *range = GTK_RANGE(m_widget);
+#ifdef __WXGTK20__
+    return (range->event_window == window);
+#else
     return ( (window == GTK_WIDGET(range)->window)
-#ifndef __WXGTK20__
                 || (window == range->trough)
                 || (window == range->slider)
                 || (window == range->step_forw)
-                || (window == range->step_back)
-#endif // GTK+ 1.x
-           );
+                || (window == range->step_back) );
+#endif
 }
 
 void wxSlider::ApplyWidgetStyle()

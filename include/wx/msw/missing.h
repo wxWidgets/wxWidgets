@@ -43,6 +43,10 @@
     #define LVCFMT_JUSTIFYMASK 0x0003
 #endif
 
+#ifndef LVSICF_NOSCROLL
+    #define LVSICF_NOSCROLL 0x0002
+#endif
+
 // mingw32/cygwin don't have declarations for comctl32.dll 4.70+ stuff
 #ifndef NM_CACHEHINT
     typedef struct tagNMLVCACHEHINT
@@ -159,6 +163,27 @@ typedef struct tagNMLVDISPINFOW {
 #endif
 #endif
 
+#if ((defined(__WATCOMC__) && __WATCOMC__ >= 1200) || defined(__GNUWIN32__) || defined (__MINGW32__) || defined(__DIGITALMARS__) || defined (__BORLANDC__)) && !defined(HDN_GETDISPINFOW)
+#define HDN_GETDISPINFOW (HDN_FIRST-29)
+#if !wxCHECK_W32API_VERSION(2, 2)
+typedef struct {
+        NMHDR hdr;
+        int iItem;
+        UINT mask;
+        LPWSTR pszText;
+        int cchTextMax;
+        int iImage;
+        LPARAM lParam;
+} NMHDDISPINFOW, *LPNMHDDISPINFOW;
+#endif
+#endif
+
+// ----------------------------------------------------------------------------
+// Toolbar define value missing 
+// ----------------------------------------------------------------------------
+#if !defined(CCS_VERT)
+#define CCS_VERT                0x00000080L
+#endif
 
 // ----------------------------------------------------------------------------
 // MS HTML Help

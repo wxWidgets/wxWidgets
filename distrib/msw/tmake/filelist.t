@@ -97,6 +97,8 @@
             $wxGTKINCLUDE{$filename} = $fileflags;
         } elsif ( $filetype eq "OS2H" ) {
             $wxOS2PMINCLUDE{$filename} = $fileflags;
+        } elsif ( $filetype eq "MGLH" ) {
+            $wxMGLINCLUDE{$filename} = $fileflags;
         } elsif ( $filetype eq "X11H" ) {
             $wxX11INCLUDE{$filename} = $fileflags;
         } elsif ( $filetype eq "UnivH" ) {

@@ -71,8 +71,13 @@ public:
     bool GetQuickEditMode();
     bool GetSnapToGrid();
     void InsertShape(wxPyShape *shape);
-    bool LoadFile(const wxString& filename);
 
+#ifdef wxUSE_PROLOGIO
+    bool LoadFile(const wxString& filename);
+    bool SaveFile(const wxString& filename);
+#endif
+
+#ifdef wxUSE_PROLOGIO
     // **** Have to deal with wxExpr and wxExprDatabase first...
     //void OnDatabaseLoad(wxExprDatabase& database);
     //void OnDatabaseSave(wxExprDatabase& database);
@@ -80,16 +85,18 @@ public:
     //bool OnHeaderSave(wxExprDatabase& database, wxExpr& expr);
     //bool OnShapeLoad(wxExprDatabase& database, wxPyShape& shape, wxExpr& expr);
     //bool OnShapeSave(wxExprDatabase& database, wxPyShape& shape, wxExpr& expr);
+#endif
 
-
+#ifdef wxUSE_PROLOGIO
     void ReadContainerGeometry(wxExprDatabase& database);
     void ReadLines(wxExprDatabase& database);
     void ReadNodes(wxExprDatabase& database);
+#endif
+
     void RecentreAll(wxDC& dc);
     void Redraw(wxDC& dc);
     void RemoveAllShapes();
     void RemoveShape(wxPyShape* shape);
-    bool SaveFile(const wxString& filename);
     void SetCanvas(wxPyShapeCanvas* canvas);
     void SetGridSpacing(double spacing);
     void SetMouseTolerance(int tolerance);

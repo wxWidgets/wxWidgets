@@ -17,7 +17,7 @@ TARGET = fl_demo2
 program_dir = contrib/samples/fl/$(TARGET)
 
 APPEXTRADEFS = -I$(top_srcdir)/contrib/include -DBMP_DIR=\"../bitmaps/\"
-APPEXTRALIBS = $(top_builddir)/lib/libfl.@WX_TARGET_LIBRARY_TYPE@
+APPEXTRALIBS = $(top_builddir)/lib/lib@WX_LIBRARY_BASENAME@_fl-@WX_RELEASE@.@WX_TARGET_LIBRARY_TYPE@
 
 PROGRAM = $(TARGET)
 OBJECTS = $(TARGET).o

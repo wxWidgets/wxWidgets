@@ -107,22 +107,20 @@ void wxPanel::OnSize(wxSizeEvent& event)
 #if wxUSE_CONSTRAINTS
     if (GetAutoLayout())
         Layout();
-#endif // wxUSE_CONSTRAINTS
-
-    //
-    // Need to properly move child windows under OS/2
-    //
 #if defined(__WXPM__)
     else
     {
+        // Need to properly move child windows under OS/2
+
         PSWP                        pWinSwp = GetSwp();
 
         if (pWinSwp->cx == 0 && pWinSwp->cy == 0 && pWinSwp->fl == 0)
-            //
+        {
             // Uninitialized
-            //
+
             ::WinQueryWindowPos(GetHWND(), pWinSwp);
-        else
+	}
+	else
         {
             SWP                     vSwp;
             int                     nYDiff;
@@ -135,6 +133,8 @@ void wxPanel::OnSize(wxSizeEvent& event)
         }
     }
 #endif
+#endif // wxUSE_CONSTRAINTS
+
     event.Skip();
 }
 

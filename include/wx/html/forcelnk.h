@@ -67,7 +67,6 @@ See mod_*.cpp and htmlwin.cpp for example :-)
     FORCE_LINK(m_hline) \
     FORCE_LINK(m_links) \
     FORCE_LINK(m_tables) \
-    FORCE_LINK(m_meta) \
     FORCE_LINK(m_style)
 
 

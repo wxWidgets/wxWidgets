@@ -296,8 +296,11 @@ bool wxNativeFontInfo::FromString(const wxString& s)
     underlined = l != 0;
 
     faceName = tokenizer.GetNextToken();
+
+#ifndef __WXMAC__
     if( !faceName )
         return FALSE;
+#endif
 
     token = tokenizer.GetNextToken();
     if ( !token.ToLong(&l) )
