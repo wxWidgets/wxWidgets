@@ -878,6 +878,8 @@ void wxFileCtrl::GoToParentDir()
             SetItemState( id, wxLIST_STATE_SELECTED, wxLIST_STATE_SELECTED );
             EnsureVisible( id );
         }
+
+        m_labelDir->SetLabel(dir);
     }
 }
 
