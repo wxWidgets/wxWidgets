@@ -375,7 +375,7 @@ bool DrawBitmapUsingStretchDIBits(HDC hdc,
 
         return FALSE;
     }
-    else
+
     return TRUE;
 #else
     return FALSE;
