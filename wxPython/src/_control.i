@@ -38,11 +38,11 @@ public:
 
     DocCtorStr(
         wxControl(wxWindow *parent,
-              wxWindowID id=-1,
-              const wxPoint& pos=wxDefaultPosition,
-              const wxSize& size=wxDefaultSize,
-              long style=0,
-              const wxValidator& validator=wxDefaultValidator,
+                  wxWindowID id=-1,
+                  const wxPoint& pos=wxDefaultPosition,
+                  const wxSize& size=wxDefaultSize,
+                  long style=0,
+                  const wxValidator& validator=wxDefaultValidator,
                   const wxString& name=wxPyControlNameStr),
         "Create a Control.  Normally you should only call this from a subclass'
 __init__ as a plain old wx.Control is not very useful.", "");
