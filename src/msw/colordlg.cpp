@@ -42,7 +42,7 @@
     #include "wx/msgdlg.h"
 #endif
 
-#if wxUSE_COLOURDLG && !wxUSE_SMARTPHONE
+#if wxUSE_COLOURDLG && !defined(__SMARTPHONE__)
 
 #include "wx/msw/private.h"
 #include "wx/colordlg.h"

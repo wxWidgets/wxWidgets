@@ -31,7 +31,7 @@
 // Only use this for MS SmartPhone. Use standard file dialog
 // for Pocket PC.
 
-#if wxUSE_FILEDLG && wxUSE_SMARTPHONE
+#if wxUSE_FILEDLG && defined(__SMARTPHONE__)
 
 #ifndef WX_PRECOMP
     #include "wx/utils.h"

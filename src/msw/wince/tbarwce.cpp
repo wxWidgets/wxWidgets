@@ -256,7 +256,7 @@ bool wxToolBar::MSWCreateToolbar(const wxPoint& pos, const wxSize& size, wxMenuB
     memset (&mbi, 0, sizeof (SHMENUBARINFO));
     mbi.cbSize     = sizeof (SHMENUBARINFO);
     mbi.hwndParent = (HWND) GetParent()->GetHWND();
-#if defined(WIN32_PLATFORM_WFSP)
+#ifdef __SMARTPHONE__
     mbi.nToolBarId = 5002;
 #else
     mbi.nToolBarId = 5000;
