@@ -17,8 +17,25 @@
 # Licence:     wxWindows licence
 ############################################################################
 
+# We expect a posix shell, so if this is a Bourne shell,
+# and apparently a few still exist, try for bash or ksh.
 
-# Start with some basic stuff, like the ability to die gracefully,
+if [ ~ = '~' ]
+then
+    if (bash -c echo) >/dev/null 2>&1
+    then
+        exec bash "$0" "$@"
+    fi
+    if (ksh -c echo) >/dev/null 2>&1
+    then
+        exec ksh "$0" "$@"
+    fi
+    echo "$0: this script requires bash or ksh"
+    exit 1
+fi
+ 
+
+# On with some basic stuff, like the ability to die gracefully,
 # and to tell people what we are about.
 # ------------------------------------------------------------------
 
