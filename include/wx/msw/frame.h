@@ -138,6 +138,9 @@ public:
 
   virtual bool IsIconized(void) const ;
 
+  // Is it maximized?
+  virtual bool IsMaximized(void) const ;
+
   // Compatibility
   inline bool Iconized(void) const { return IsIconized(); }
 

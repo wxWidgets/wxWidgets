@@ -572,6 +572,13 @@ bool wxMDIChildFrame::IsIconized() const
     return FALSE;
 }
 
+// Is it maximized? Always maximized under Motif, using the
+// tabbed MDI implementation.
+bool wxMDIChildFrame::IsMaximized(void) const
+{
+    return TRUE;
+}
+
 void wxMDIChildFrame::Restore()
 {
     // TODO

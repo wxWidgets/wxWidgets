@@ -534,6 +534,13 @@ bool wxFrame::IsIconized() const
   return iconic;
 }
 
+// Is it maximized?
+bool wxFrame::IsMaximized(void) const
+{
+    // No maximizing in Motif (?)
+    return FALSE;
+}
+
 void wxFrame::SetTitle(const wxString& title)
 {
   if (title == m_title)

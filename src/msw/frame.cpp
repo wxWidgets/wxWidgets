@@ -331,6 +331,12 @@ bool wxFrame::IsIconized(void) const
   return m_iconized;
 }
 
+// Is it maximized?
+bool wxFrame::IsMaximized(void) const
+{
+    return (::IsZoomed((HWND) GetHWND()) != 0) ;
+}
+
 void wxFrame::SetTitle(const wxString& title)
 {
   SetWindowText((HWND) GetHWND(), (const char *)title);

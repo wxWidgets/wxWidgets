@@ -163,6 +163,13 @@ bool wxFrame::IsIconized() const
     return FALSE;
 }
 
+// Is the frame maximized?
+bool wxFrame::IsMaximized(void) const
+{
+    // TODO
+    return FALSE;
+}
+
 void wxFrame::SetTitle(const wxString& title)
 {
     // TODO

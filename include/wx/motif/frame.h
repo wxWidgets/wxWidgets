@@ -143,6 +143,10 @@ public:
   // Compatibility
   inline bool Iconized() const { return IsIconized(); }
 
+  // Is the frame maximized? Returns FALSE under Motif (but TRUE for
+  // wxMDIChildFrame due to the tabbed implementation).
+  virtual bool IsMaximized(void) const ;
+
   virtual void Maximize(bool maximize);
 
   // Responds to colour changes

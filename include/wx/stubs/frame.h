@@ -128,6 +128,9 @@ public:
   // Compatibility
   inline bool Iconized() const { return IsIconized(); }
 
+  // Is the frame maximized?
+  virtual bool IsMaximized(void) const ;
+
   virtual void Maximize(bool maximize);
 
   // Responds to colour changes

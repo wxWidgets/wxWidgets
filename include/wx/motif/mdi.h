@@ -180,6 +180,10 @@ public:
   virtual void Activate();
   virtual bool IsIconized() const ;
 
+  // Is the frame maximized? Returns TRUE for
+  // wxMDIChildFrame due to the tabbed implementation.
+  virtual bool IsMaximized(void) const ;
+
   bool Show(bool show);
 
   inline WXWidget GetMainWidget() const { return m_mainWidget; };
