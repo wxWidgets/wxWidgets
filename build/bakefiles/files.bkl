@@ -2200,6 +2200,14 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/mac/carbon/taskbarosx.h
 </set>
 
+<set var="ADVANCED_COCOA_SRC" hints="files">
+    src/cocoa/taskbar.mm
+    src/common/taskbarcmn.cpp
+</set>
+<set var="ADVANCED_COCOA_HDR" hints="files">
+    include/wx/cocoa/taskbar.h
+</set>
+
 <set var="ADVANCED_OS2_SRC" hints="files">
     src/os2/joystick.cpp
     src/os2/sound.cpp
@@ -2580,6 +2588,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
         <if cond="TOOLKIT=='MSW'">$(ADVANCED_MSW_SRC) $(ADVANCED_MSW_ONLY_SRC)</if>
         <if cond="TOOLKIT=='WINCE'">$(ADVANCED_MSW_SRC)</if>
         <if cond="TOOLKIT=='MAC'">$(ADVANCED_MAC_SRC)</if>
+        <if cond="TOOLKIT=='COCOA'">$(ADVANCED_COCOA_SRC)</if>
         <if cond="TOOLKIT=='MOTIF'">$(ADVANCED_UNIX_SRC)</if>
         <if cond="TOOLKIT=='GTK'">$(ADVANCED_UNIX_SRC) $(ADVANCED_GTK_SRC)</if>
         <if cond="TOOLKIT=='X11'">$(ADVANCED_UNIX_SRC)</if>
@@ -2589,6 +2598,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
         <if cond="TOOLKIT=='MSW'">$(ADVANCED_MSW_HDR) $(ADVANCED_MSW_ONLY_HDR)</if>
         <if cond="TOOLKIT=='WINCE'">$(ADVANCED_MSW_HDR)</if>
         <if cond="TOOLKIT=='MAC'">$(ADVANCED_MAC_HDR)</if>
+        <if cond="TOOLKIT=='COCOA'">$(ADVANCED_COCOA_HDR)</if>
         <if cond="TOOLKIT=='MOTIF'">$(ADVANCED_UNIX_HDR)</if>
         <if cond="TOOLKIT=='GTK'">$(ADVANCED_GTK_HDR) $(ADVANCED_UNIX_HDR)</if>
         <if cond="TOOLKIT=='X11'">$(ADVANCED_UNIX_HDR)</if>

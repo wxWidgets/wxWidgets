@@ -5610,7 +5610,7 @@ fi
 if test "$wxUSE_SYSTEM_OPTIONS" = "yes"; then
     AC_DEFINE(wxUSE_SYSTEM_OPTIONS)
     if test "$TOOLKIT" = "MSW" -o "$TOOLKIT" = "GTK" -o "$TOOLKIT" = "X11" -o \
-        "$TOOLKIT" = "MOTIF"; then
+        "$TOOLKIT" = "MOTIF" -o "$TOOLKIT" = "COCOA"; then
         SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS taskbar"
     fi
 fi
