@@ -120,4 +120,6 @@ size.cur \
 std.ico \
 tip.ico \
 warning.ico \
-watch1.cur 
+watch1.cur \
+wx.rc
+
