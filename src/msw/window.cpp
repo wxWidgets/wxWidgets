@@ -711,7 +711,9 @@ void wxWindow::DoSetClientSize(int width, int height)
 {
     wxWindow *parent = GetParent();
     HWND hWnd = (HWND) GetHWND();
-    HWND hParentWnd = (HWND) (HWND) parent->GetHWND();
+    HWND hParentWnd = (HWND) 0;
+    if (parent)
+        hParentWnd = (HWND) parent->GetHWND();
 
     RECT rect;
     ::GetClientRect(hWnd, &rect);

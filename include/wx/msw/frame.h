@@ -60,8 +60,12 @@ public:
     void GetSize(int *width, int *height) const ;
     void GetPosition(int *x, int *y) const ;
 
-    virtual void ClientToScreen(int *x, int *y) const;
+    wxSize GetSize() const { return wxWindow::GetSize(); }
+    wxPoint GetPosition() const { return wxWindow::GetPosition(); }
+    wxSize GetClientSize() const { return wxWindow::GetClientSize(); }
+    wxRect GetClientRect() const { return wxWindow::GetClientRect(); }
 
+    virtual void ClientToScreen(int *x, int *y) const;
     virtual void ScreenToClient(int *x, int *y) const;
 
     void OnSize(wxSizeEvent& event);

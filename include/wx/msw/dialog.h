@@ -62,7 +62,7 @@ public:
 
     virtual bool Destroy();
 
-    virtual void SetClientSize(int width, int height);
+    virtual void DoSetClientSize(int width, int height);
 
     virtual void GetPosition(int *x, int *y) const;
 

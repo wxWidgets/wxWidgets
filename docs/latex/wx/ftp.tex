@@ -85,6 +85,7 @@ Delete the file specified by \it{path}. Returns TRUE if successful.
 % ----------------------------------------------------------------------------
 
 \membersection{wxFTP::SetUser}
+
 \func{void}{SetUser}{\param{const wxString\&}{ user}}
 
 Sets the user name to be sent to the FTP server to be allowed to log in.
@@ -100,6 +101,7 @@ For example, you can use: "ftp://a_user:a_password@a.host:service/a_directory/a_
 to specify a user and a password.
 
 \membersection{wxFTP::SetPassword}
+
 \func{void}{SetPassword}{\param{const wxString\&}{ passwd}}
 
 Sets the password to be sent to the FTP server to be allowed to log in.
@@ -113,12 +115,12 @@ user name and the host name of the local machine from the system.
 \wxheading{Remark}
 
 This parameter can be included in a URL if you want to use the URL manager.
-For example, you can use: "ftp://a_user:a_password@a.host:service/a_directory/a_
-file"
+For example, you can use: "ftp://a\_user:a\_password@a.host:service/a_directory/a\_file"
 to specify a user and a password.
 
 % ----------------------------------------------------------------------------
 \membersection{wxFTP::GetList}
+
 \func{wxList *}{GetList}{\param{const wxString\&}{ wildcard}}
 
 The GetList function is quite low-level. It returns the list of the files in
@@ -210,3 +212,4 @@ can send new commands without reconnecting.
 \wxheading{See also}
 
 \helpref{wxInputStream}{wxinputstream}
+
