@@ -29,7 +29,6 @@
 
 #include "wx/dcscreen.h"
 
-
 IMPLEMENT_DYNAMIC_CLASS(wxScreenDC, wxWindowDC)
 
 // Create a DC representing the whole screen
@@ -40,5 +39,12 @@ wxScreenDC::wxScreenDC()
     // the background mode is only used for text background and is set in
     // DrawText() to OPAQUE as required, otherwise always TRANSPARENT
     ::SetBkMode( GetHdc(), TRANSPARENT );
+}
+
+void wxScreenDC::DoGetSize(int *width, int *height) const
+{
+    // skip wxWindowDC version because it doesn't work without a valid m_canvas
+    // (which we don't have)
+    wxDC::DoGetSize(width, height);
 }
 

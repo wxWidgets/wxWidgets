@@ -27,7 +27,10 @@ public:
     // Compatibility with X's requirements for drawing on top of all windows
     static bool StartDrawingOnTop(wxWindow* WXUNUSED(window)) { return TRUE; }
     static bool StartDrawingOnTop(wxRect* WXUNUSED(rect) = NULL) { return TRUE; }
-    static bool EndDrawingOnTop(void) { return TRUE; }
+    static bool EndDrawingOnTop() { return TRUE; }
+
+protected:
+    virtual void DoGetSize(int *width, int *height) const;
 
 private:
     DECLARE_DYNAMIC_CLASS(wxScreenDC)
