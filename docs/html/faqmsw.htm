@@ -63,14 +63,13 @@ makefiles to see what other files have been left out.
 16-bit compilation is supported under Visual C++ 1.5, and Borland BC++ 4 to 5.
 <P>
 
-wxWindows 2 for Windows will also compile on Unix with gcc using TWIN32 from <a href="http://www.willows.com" target=_top>Willows</a>,
-although TWIN32 is still in a preliminary state. The resulting executables are
-Unix binaries that work with the TWIN32 Windows API emulator.<P>
+wxWindows 2 for Windows will also compile on Unix with gcc using Wine from <a href="http://www.winehq.org" target=_top>WineHQ</a>.
+The resulting executables are Unix binaries that work with the Wine Windows API emulator.<P>
 
 You can also compile wxWindows 2 for Windows on Unix with Cygwin or Mingw32, resulting
 in executables that will run on Windows. So in theory you could write your applications
 using wxGTK or wxMotif, then check/debug your wxWindows for Windows
-programs with TWIN32, and finally produce an ix86 Windows executable using Cygwin/Mingw32,
+programs with Wine, and finally produce an ix86 Windows executable using Cygwin/Mingw32,
 without ever needing a copy of Microsoft Windows. See the Technical Note on the Web site detailing cross-compilation.<P>
 
 <h3><a name="wince">What about Windows CE?</a></h3>
@@ -281,7 +280,8 @@ the <a href="#vcdebug">VC++ CRT memory debugging features</a> instead.
 
 <H3><a name="mfcport">How do I port MFC applications to wxWindows?</a></H3>
 
-Set up your interface from scratch using wxWindows (especially wxDesigner --
+Set up your interface from scratch using wxWindows (especially <a href="http://www.robeling.de" target=_top>wxDesigner</a>
+or <a href="http://www.anthemion.co.uk/dialogblocks/" target=_new>DialogBlocks</a> --
 it&#39;ll save you a <i>lot</i> of time) and when you have a shell prepared, you can start
 &#39;pouring in&#39; code from the MFC app, with appropriate
 modifications. This is the approach I have used, and I found
