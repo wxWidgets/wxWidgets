@@ -10,7 +10,6 @@
 /////////////////////////////////////////////////////////////////////////////
 
 #include <wx/wx.h>
-#define wxUSE_DISPLAY 1
 #include <wx/display.h>
 
 class TestApp : public wxApp
@@ -23,17 +22,33 @@ IMPLEMENT_APP(TestApp)
 
 bool TestApp::OnInit()
 {
+  bool is_use_display = 
+                        #if wxUSE_DISPLAY
+                        TRUE
+                        #else
+                        FALSE
+                        #endif
+                        ;
+  if( !is_use_display )
+  {
+    wxMessageBox( _T("This sample has to be compiled with wxUSE_DISPLAY"), _T("Building error"), wxOK);
+  }
+  #if wxUSE_DISPLAY
+  else
+  {
 	size_t count = wxDisplay::GetCount();
-	wxLogDebug ( "I detected %i display(s) on your system", count );
+    wxLogDebug ( _T("I detected %i display(s) on your system"), count );
 	size_t i = 0;
 	while ( i < count )
 	{
 		wxDisplay display ( i );
 		wxRect r = display.GetGeometry();
-		wxLogDebug ( "Display #%i \"%s\" = ( %i, %i, %i, %i ) @ %i bits",
+      wxLogDebug ( _T("Display #%i \"%s\" = ( %i, %i, %i, %i ) @ %i bits"),
 			i, display.GetName().c_str(), r.GetLeft(), r.GetTop(), r.GetWidth(), r.GetHeight(),
 			display.GetDepth() );
 		i++;
 	}
+  }
+  #endif
 	return FALSE;
 }
