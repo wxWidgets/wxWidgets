@@ -34,7 +34,7 @@ capabilities, (right click to try it out.)
 """
 
 if wxPlatform == '__WXMSW__':
-    face1 = 'Ariel'
+    face1 = 'Arial'
     face2 = 'Times New Roman'
     face3 = 'Courier New'
     pb = 6
@@ -51,7 +51,7 @@ def runTest(frame, nb, log):
     ed = wxStyledTextCtrl(nb, -1)
 
     ed.SetText(demoText)
-
+    ed.EmptyUndoBuffer()
 
     # make some styles
     ed.StyleSetSpec(wxSTC_STYLE_DEFAULT, "size:%d,face:%s" % (pb+2, face3))

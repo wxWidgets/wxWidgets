@@ -5501,13 +5501,13 @@ static void *SwigwxStyledTextEventTowxEvent(void *ptr) {
 static PyObject *_wrap_new_wxStyledTextEvent(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxStyledTextEvent * _result;
-    wxEventType  _arg0;
-    int  _arg1;
+    wxEventType  _arg0 = (wxEventType ) 0;
+    int  _arg1 = (int ) 0;
     char *_kwnames[] = { "commandType","id", NULL };
     char _ptemp[128];
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"ii:new_wxStyledTextEvent",_kwnames,&_arg0,&_arg1)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"|ii:new_wxStyledTextEvent",_kwnames,&_arg0,&_arg1)) 
         return NULL;
 {
     wxPy_BEGIN_ALLOW_THREADS;
@@ -7238,6 +7238,11 @@ SWIGEXPORT(void) initstc_c() {
 	 PyDict_SetItemString(d,"wxEVT_STC_MACRORECORD", PyInt_FromLong((long) wxEVT_STC_MACRORECORD));
 	 PyDict_SetItemString(d,"wxEVT_STC_MARGINCLICK", PyInt_FromLong((long) wxEVT_STC_MARGINCLICK));
 	 PyDict_SetItemString(d,"wxEVT_STC_NEEDSHOWN", PyInt_FromLong((long) wxEVT_STC_NEEDSHOWN));
+
+
+    wxClassInfo::CleanUpClasses();
+    wxClassInfo::InitializeClasses();
+
 {
    int i;
    for (i = 0; _swig_mapping[i].n1; i++)

@@ -65,8 +65,15 @@ def EVT_STC_MODIFIED(win, id, fn):
 def EVT_STC_CMDKEY(win, id, fn):
     win.Connect(id, -1, wxEVT_STC_CMDKEY, fn)
 
-def EVT_STC_UNKNOWNCMDKEY(win, id, fn):
-    win.Connect(id, -1, wxEVT_STC_UNKNOWNCMDKEY, fn)
+def EVT_STC_MACRORECORD(win, id, fn):
+    win.Connect(id, -1, wxEVT_STC_MACRORECORD, fn)
+
+def EVT_STC_MARGINCLICK(win, id, fn):
+    win.Connect(id, -1, wxEVT_STC_MARGINCLICK, fn)
+
+def EVT_STC_NEEDSHOWN(win, id, fn):
+    win.Connect(id, -1, wxEVT_STC_NEEDSHOWN, fn)
+
 
 
 class wxStyledTextCtrlPtr(wxControlPtr):
@@ -838,3 +845,10 @@ wxEVT_STC_KEY = stc_c.wxEVT_STC_KEY
 wxEVT_STC_MACRORECORD = stc_c.wxEVT_STC_MACRORECORD
 wxEVT_STC_MARGINCLICK = stc_c.wxEVT_STC_MARGINCLICK
 wxEVT_STC_NEEDSHOWN = stc_c.wxEVT_STC_NEEDSHOWN
+
+
+#-------------- USER INCLUDE -----------------------
+
+# Stuff these names into the wx namespace so wxPyConstructObject can find them
+
+wx.wxStyledTextEventPtr       = wxStyledTextEventPtr

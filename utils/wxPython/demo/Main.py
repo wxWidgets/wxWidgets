@@ -22,7 +22,8 @@ _useSplitter       = true
 _useNestedSplitter = true
 
 _treeList = [
-    ('New since last release', ['wxGrid', 'wxStyledTextCtrl_1',
+    ('New since last release', ['wxGrid',
+                                'wxStyledTextCtrl_1', 'wxStyledTextCtrl_2',
                                 'ActiveXWrapper_Acrobat', 'ActiveXWrapper_IE',
                                 'FileBrowseButton', 'wxCalendar']),
 
