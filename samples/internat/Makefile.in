@@ -15,8 +15,7 @@ program_dir = samples/internat
 
 DATAFILES=fr/internat.po fr/internat.mo \
 	de/internat.po de/internat.mo \
-	fr/wxstd.po fr/wxstd.mo \
-	de/wxstd.po de/wxstd.mo
+	ru/internat.po ru/internat.mo
 
 DATADIRS=fr de
 
