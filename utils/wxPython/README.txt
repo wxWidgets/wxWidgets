@@ -52,6 +52,11 @@ Updated wxMVCTree and added a demo for it.
 Added a wrapper class for the Visualization ToolKit (or VTK) in the
 wxPython.lib.vtk module.  (http://www.kitware.com/)
 
+Fixed wxTreeCtrl.SetItemImage and GetItemImage to recognise the new
+"which" parameter.
+
+Added wxPython.lib.spashscreen from Mike Fletcher.
+
 
 
 

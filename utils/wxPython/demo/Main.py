@@ -13,7 +13,7 @@
 
 import sys, os
 from   wxPython.wx import *
-
+from   wxPython.lib.splashscreen import SplashScreen
 
 #---------------------------------------------------------------------------
 
@@ -355,7 +355,16 @@ class MyApp(wxApp):
         wxImage_AddHandler(wxJPEGHandler())
         wxImage_AddHandler(wxPNGHandler())
         wxImage_AddHandler(wxGIFHandler())
-        frame = wxPythonDemo(NULL, -1, "wxPython: (A Demonstration)")
+
+        self.splash = SplashScreen(None, bitmapfile='bitmaps/splash.gif',
+                              duration=4000, callback=self.AfterSplash)
+        self.splash.Show(true)
+        wxYield()
+        return true
+
+    def AfterSplash(self):
+        self.splash.Close(true)
+        frame = wxPythonDemo(None, -1, "wxPython: (A Demonstration)")
         frame.Show(true)
         self.SetTopWindow(frame)
         return true
