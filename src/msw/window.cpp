@@ -901,16 +901,22 @@ void wxWindowMSW::SetScrollbar(int orient, int pos, int thumbVisible,
 
 void wxWindowMSW::ScrollWindow(int dx, int dy, const wxRect *prect)
 {
-    RECT rect;
+    RECT rect, *pr;
     if ( prect )
     {
         rect.left = prect->x;
         rect.top = prect->y;
         rect.right = prect->x + prect->width;
         rect.bottom = prect->y + prect->height;
+
+        pr = &rect;
+    }
+    else
+    {
+        pr = NULL;
     }
 
-    ::ScrollWindow(GetHwnd(), dx, dy, prect ? &rect : NULL, NULL);
+    ::ScrollWindow(GetHwnd(), dx, dy, pr, pr);
 }
 
 static bool ScrollVertically(HWND hwnd, int kind, int count)
