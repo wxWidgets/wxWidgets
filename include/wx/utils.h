@@ -297,8 +297,12 @@ WXDLLIMPEXP_BASE unsigned long wxGetProcessId();
 // Get free memory in bytes, or -1 if cannot determine amount (e.g. on UNIX)
 WXDLLIMPEXP_BASE wxMemorySize wxGetFreeMemory();
 
+#if wxUSE_ON_FATAL_EXCEPTION
+
 // should wxApp::OnFatalException() be called?
 WXDLLIMPEXP_BASE bool wxHandleFatalExceptions(bool doit = true);
+
+#endif // wxUSE_ON_FATAL_EXCEPTION
 
 // ----------------------------------------------------------------------------
 // Environment variables
