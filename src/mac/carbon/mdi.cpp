@@ -234,7 +234,8 @@ bool wxMDIParentFrame::Show( bool show )
     if ( show )
     {
         // TODO: check for other children
-        Move(-10000, -10000);
+        if(!GetToolBar())
+            Move(-10000, -10000);
     }
 
     if ( !wxFrame::Show(show) )
