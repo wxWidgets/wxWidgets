@@ -252,8 +252,7 @@ class OptionsDialog(wx.Dialog):
         sizer = wx.BoxSizer(wx.VERTICAL)
 
         optionsNotebook = wx.Notebook(self, -1, size = (310, 375), style = wx.NB_MULTILINE)
-        optionsNotebookSizer = wx.NotebookSizer(optionsNotebook)
-        sizer.Add(optionsNotebookSizer, 0, wx.ALL | wx.EXPAND, SPACE)
+        sizer.Add(optionsNotebook, 0, wx.ALL | wx.EXPAND, SPACE)
         for optionsPanelClass in optionsPanelClasses:
             optionsPanel = optionsPanelClass(optionsNotebook, -1)
             self._optionsPanels.append(optionsPanel)
