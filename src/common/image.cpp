@@ -113,9 +113,9 @@ wxImage::wxImage()
 {
 }
 
-wxImage::wxImage( int width, int height )
+wxImage::wxImage( int width, int height, bool clear )
 {
-    Create( width, height );
+    Create( width, height, clear );
 }
 
 wxImage::wxImage( int width, int height, unsigned char* data, bool static_data )
@@ -156,7 +156,7 @@ wxImage::wxImage( const wxImage* image )
     if (image) Ref(*image);
 }
 
-void wxImage::Create( int width, int height )
+void wxImage::Create( int width, int height, bool clear )
 {
     UnRef();
 
@@ -165,7 +165,7 @@ void wxImage::Create( int width, int height )
     M_IMGDATA->m_data = (unsigned char *) malloc( width*height*3 );
     if (M_IMGDATA->m_data)
     {
-        for (int l = 0; l < width*height*3; l++) M_IMGDATA->m_data[l] = 0;
+        if (clear) memset(M_IMGDATA->m_data, 0, width*height*3);
 
         M_IMGDATA->m_width = width;
         M_IMGDATA->m_height = height;
@@ -208,7 +208,7 @@ wxImage wxImage::Copy() const
 
     wxCHECK_MSG( Ok(), image, wxT("invalid image") );
 
-    image.Create( M_IMGDATA->m_width, M_IMGDATA->m_height );
+    image.Create( M_IMGDATA->m_width, M_IMGDATA->m_height, false );
 
     unsigned char *data = image.GetData();
 
@@ -244,7 +244,7 @@ wxImage wxImage::ShrinkBy( int xFactor , int yFactor ) const
     long width = old_width / xFactor ;
     long height = old_height / yFactor ;
 
-    image.Create( width , height );
+    image.Create( width, height, false );
 
     char unsigned *data = image.GetData();
 
@@ -341,7 +341,7 @@ wxImage wxImage::Scale( int width, int height ) const
     {
         return ShrinkBy( old_width / width , old_height / height ) ;
     }
-    image.Create( width, height );
+    image.Create( width, height, false );
 
     unsigned char *data = image.GetData();
 
@@ -357,43 +357,29 @@ wxImage wxImage::Scale( int width, int height ) const
     unsigned char *source_data = M_IMGDATA->m_data;
     unsigned char *target_data = data;
 
-#if 0
-    // This is nonsense, RR.
+    long x_delta = (old_width<<16) / width;
+    long y_delta = (old_height<<16) / height;
 
-    // We do (x, y) -> (x, y)*oldSize/newSize but the valid values of x and y
-    // are from 0 to size-1, hence all decrement the sizes
-    long old_old_width = old_width;
-    old_height--;
-    old_width--;
-    height--;
-    width--;
-    for ( long j = 0; j <= height; j++ )
-    {
-        // don't crash for images with height == 1
-        long y_offset = height ? (j * old_height / height)* old_old_width : 0;
+    unsigned char* dest_pixel = target_data;
 
-        for ( long i = 0; i <= width; i++ )
+    long y = 0;
+    for ( long j = 0; j < height; j++ )
         {
-            long x_offset = width ? (i * old_width) / width : 0;
+        unsigned char* src_line = &source_data[(y>>16)*old_width*3];
 
-            memcpy( target_data, source_data + 3*(y_offset + x_offset), 3 );
-            target_data += 3;
-        }
-    }
-#else
-    for (long j = 0; j < height; j++)
-    {
-        long y_offset = (j * old_height / height) * old_width;
-
-        for (long i = 0; i < width; i++)
+        long x = 0;
+        for ( long i = 0; i < width; i++ )
         {
-            memcpy( target_data,
-                source_data + 3*(y_offset + ((i * old_width )/ width)),
-                3 );
-            target_data += 3;
+             unsigned char* src_pixel = &src_line[(x>>16)*3];
+             dest_pixel[0] = src_pixel[0];
+             dest_pixel[1] = src_pixel[1];
+             dest_pixel[2] = src_pixel[2];
+             dest_pixel += 3;
+             x += x_delta;
         }
+
+        y += y_delta;
     }
-#endif
 
     // In case this is a cursor, make sure the hotspot is scalled accordingly:
     if ( HasOption(wxIMAGE_OPTION_CUR_HOTSPOT_X) )
@@ -412,7 +398,7 @@ wxImage wxImage::Rotate90( bool clockwise ) const
 
     wxCHECK_MSG( Ok(), image, wxT("invalid image") );
 
-    image.Create( M_IMGDATA->m_height, M_IMGDATA->m_width );
+    image.Create( M_IMGDATA->m_height, M_IMGDATA->m_width, false );
 
     unsigned char *data = image.GetData();
 
@@ -449,7 +435,7 @@ wxImage wxImage::Mirror( bool horizontally ) const
 
     wxCHECK_MSG( Ok(), image, wxT("invalid image") );
 
-    image.Create( M_IMGDATA->m_width, M_IMGDATA->m_height );
+    image.Create( M_IMGDATA->m_width, M_IMGDATA->m_height, false );
 
     unsigned char *data = image.GetData();
 
@@ -503,7 +489,7 @@ wxImage wxImage::GetSubImage( const wxRect &rect ) const
     int subwidth=rect.GetWidth();
     const int subheight=rect.GetHeight();
 
-    image.Create( subwidth, subheight );
+    image.Create( subwidth, subheight, false );
 
     unsigned char *subdata = image.GetData(), *data=GetData();
 
@@ -637,7 +623,7 @@ wxImage wxImage::ConvertToMono( unsigned char r, unsigned char g, unsigned char 
 
     wxCHECK_MSG( Ok(), image, wxT("invalid image") );
 
-    image.Create( M_IMGDATA->m_width, M_IMGDATA->m_height );
+    image.Create( M_IMGDATA->m_width, M_IMGDATA->m_height, false );
 
     unsigned char *data = image.GetData();
 
@@ -1405,6 +1391,7 @@ void wxImage::CleanUpHandlers()
     }
 }
 
+
 //-----------------------------------------------------------------------------
 // wxImageHandler
 //-----------------------------------------------------------------------------
@@ -1690,7 +1677,7 @@ wxImage wxImage::Rotate(double angle, const wxPoint & centre_of_rotation, bool i
     int x2 = (int) ceil (wxMax (wxMax(p1.x, p2.x), wxMax(p3.x, p4.x)));
     int y2 = (int) ceil (wxMax (wxMax(p1.y, p2.y), wxMax(p3.y, p4.y)));
 
-    wxImage rotated (x2 - x1 + 1, y2 - y1 + 1);
+    wxImage rotated (x2 - x1 + 1, y2 - y1 + 1, false);
 
     if (offset_after_rotation != NULL)
     {

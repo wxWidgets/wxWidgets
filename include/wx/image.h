@@ -140,7 +140,7 @@ class WXDLLEXPORT wxImage: public wxObject
 {
 public:
     wxImage();
-    wxImage( int width, int height );
+    wxImage( int width, int height, bool clear = true );
     wxImage( int width, int height, unsigned char* data, bool static_data = FALSE );
     wxImage( const wxString& name, long type = wxBITMAP_TYPE_ANY, int index = -1 );
     wxImage( const wxString& name, const wxString& mimetype, int index = -1 );
@@ -162,7 +162,7 @@ public:
 #endif
 #endif
 
-    void Create( int width, int height );
+    void Create( int width, int height, bool clear = true );
     void Create( int width, int height, unsigned char* data, bool static_data = FALSE );
     void Destroy();
 

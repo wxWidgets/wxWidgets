@@ -93,9 +93,10 @@ instead.) Constructs an image from a platform-dependent bitmap. This preserves
 mask information so that bitmaps and images can be converted back
 and forth without loss in that respect.
 
-\func{}{wxImage}{\param{int}{ width}, \param{int}{ height}}
+\func{}{wxImage}{\param{int}{ width}, \param{int}{ height}, \param{bool}{ clear=true}}
 
-Creates an image with the given width and height.
+Creates an image with the given width and height.  If {\it clear} is true, the new image will be initialized to black.
+Otherwise, the image data will be uninitialized.
 
 \func{}{wxImage}{\param{int}{ width}, \param{int}{ height}, \param{unsigned char*}{ data}, \param{bool}{ static\_data=false}}
 
@@ -275,9 +276,10 @@ Returns an identical copy of the image.
 
 \membersection{wxImage::Create}\label{wximagecreate}
 
-\func{bool}{Create}{\param{int}{ width}, \param{int}{ height}}
+\func{bool}{Create}{\param{int}{ width}, \param{int}{ height}, \param{bool}{ clear=true}}
 
-Creates a fresh image.
+Creates a fresh image.  If {\it clear} is true, the new image will be initialized to black.
+Otherwise, the image data will be uninitialized.
 
 \wxheading{Parameters}
 
