@@ -26,12 +26,12 @@
 #ifndef WX_PRECOMP
 #endif
 
+#ifndef __WXUNIVERSAL__
+
 #include "wx/datectrl.h"
 
 #define _WX_DEFINE_DATE_EVENTS_
 #include "wx/dateevt.h"
-
-#ifndef __WXUNIVERSAL__
 
 #include "wx/msw/wrapwin.h"
 #include "wx/msw/wrapcctl.h"
