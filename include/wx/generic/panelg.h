@@ -81,7 +81,7 @@ public:
 
     virtual void InitDialog();
 
-#ifdef __WXUNIV__
+#ifdef __WXUNIVERSAL__
     virtual bool ProvidesBackground() { return TRUE; }
 #endif
 
