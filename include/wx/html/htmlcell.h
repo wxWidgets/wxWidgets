@@ -51,6 +51,9 @@ public:
     int GetWidth() const {return m_Width;}
     int GetHeight() const {return m_Height;}
     int GetDescent() const {return m_Descent;}
+    
+    const wxString& GetId() const { return m_id; }
+    void SetId(const wxString& id) { m_id = id; }
 
     // returns the link associated with this cell. The position is position within
     // the cell so it varies from 0 to m_Width, from 0 to m_Height
@@ -119,7 +122,7 @@ public:
 
     // Returns true for simple == terminal cells, i.e. not composite ones.
     // This if for internal usage only and may disappear in future versions!
-    virtual bool IsTerminalCell() const { return true; }
+    virtual bool IsTerminalCell() const { return TRUE; }
 
     // Find the terminal cell inside this cell at the given position (relative
     // to this cell)
@@ -141,6 +144,8 @@ protected:
             // destination address if this fragment is hypertext link, NULL otherwise
     bool m_CanLiveOnPagebreak;
             // true if this cell can be placed on pagebreak, false otherwise
+    wxString m_id;
+            // unique identifier of the cell, generated from "id" property of tags
 };
 
 
