@@ -22,7 +22,6 @@ Most of them are documented in the wxRegEx
 class docs in wxWindows.
 
 Test Compile/Match - Adds compile/match to the match time
-speed test (i.e. it compiles and matches 
+speed test (i.e. it compiles/matches 
 the number of times that are specified 
-in the iterations field, otherwise
-it just matches).
+in the iterations field).

@@ -21,10 +21,12 @@
 //GRETA, Microsoft Research's templated regex library 
 //[http://research.microsoft.com/projects/greta/] 
 //Install - Get it from .net powertools, put the directory in this directory
+//(I.E.  All the files will be in $thisdir$/GRETA) 
 //#define wxUSE_GRETA 
 
 //PCRE (Perl Compatible Regular Expressions) [sourceforge.net/projects/pcre]
 //Install - Get the GnuWin32 version and put the files in this directory
+//MSVC - add libpcre.a from the GnuWin32 to this directory
 //#define wxUSE_PCRE  
 
 //===========================================================================
@@ -128,9 +130,10 @@ public:
         else
             pItem = new wxMenuItem (NULL, nID, szTitle, szToolTip, wxITEM_CHECK);
 
+#if defined(__WXMSW __)
         pItem->SetBackgroundColour(wxColour(115, 113, 115));
         pItem->SetTextColour(*wxBLACK);
-
+#endif
         pMenu->Append(pItem);
     }
 
@@ -172,6 +175,8 @@ public:
         AddMenuItem(HelpMenu, wxID_ABOUT, _T("&About...\tF1"), _("Show about dialog"));
 
         OptionsMenu->Check(ExtendedID, true);
+
+        OptionsMenu->Check(CompID, true);
         OptionsMenu->Check(MatchID, true);
 
         wxMenuBar *MenuBar = new wxMenuBar();
@@ -196,8 +201,8 @@ public:
         SearchHeader.Create(this, -1, _("String to Search:"), wxPoint(5, 55));
         IterHeader.Create(this, -1, _("Iterations (Match Time):"), wxPoint(100, 100));
 
-        ResultText.Create(this, -1, _(""), wxPoint(5, 150), wxSize(100,200), wxST_NO_AUTORESIZE);
-        ResultText2.Create(this, -1, _(""), wxPoint(115, 150), wxSize(100,200), wxST_NO_AUTORESIZE);
+        ResultText.Create(this, -1, _(""), wxPoint(5, 150), wxSize(100,230), wxST_NO_AUTORESIZE);
+        ResultText2.Create(this, -1, _(""), wxPoint(115, 150), wxSize(100,230), wxST_NO_AUTORESIZE);
 
         // Button
         OkButton.Create(this, OkButtonID, _("OK"), wxPoint(20, 120));
@@ -399,7 +404,7 @@ public:
         {
             //Here's where we actually search our string
             if ((e = Re.Exec(szSearch, nMatchFlags2)) != wxRe::wxRE_OK)
-                szStatus2 = wxString::Format(_("\nExecution/Matching Failed!\n%s\n"), wxRe::ErrorToString(e));
+                szStatus2 = wxString::Format(_("\n%s\n"), wxRe::ErrorToString(e));
             else
             {
                 dwStartIndex2 = Re.GetMatch(0).first;
@@ -440,50 +445,69 @@ public:
 
 #ifdef wxUSE_GRETA
         SetStatusText("Testing GRETA...");
+        bool bSuccess = true;
 
         std::string stdszPattern(szPattern);
-        rpattern Greta (stdszPattern,EXTENDED,MODE_MIXED);
+        rpattern Greta;
+        try 
+        {
+            Greta = rpattern(stdszPattern,EXTENDED,MODE_MIXED);
+        }
+        catch (...)
+        {
+            bSuccess = false;
+            szStatus3 += _("\nCompile Failed!\n");
+        }
         match_results r;
         std::string stdszSearch(szSearch);
 
-        //Here's where we actually search our string
-        if (!Greta.match(stdszSearch, r).matched)
-            szStatus3 += _("\nExecution/Matching Failed!\n");
-        else
+        if(bSuccess)
         {
-            szStatus3 = _("Success");
+            //Here's where we actually search our string
+            if (!(bSuccess = Greta.match(stdszSearch, r).matched))
+                szStatus3 += _("\nExecution/Matching Failed!\n");
+            else
+            {
+                szStatus3 = _("Success");
 
-            dwStartTime3 = clock();
+                dwStartTime3 = clock();
     
-            if (OptionsMenu->IsChecked(CompID))
-            {
-                for(i = 0; i < n; ++i)
+                if (OptionsMenu->IsChecked(CompID))
                 {
-                    //Supposively GRETA doesn't compile, but
-                    //it's clear that it slows performance greatly
-                    //when creating a rpattern object,
-                    //so one can only surmize that it performs
-                    //some kind of optimizations in the constructor
-                    Greta = rpattern(stdszPattern,EXTENDED,MODE_MIXED);
-                    SetStatusText(wxString::Format(_("GRETA Compile #%i"), i));
+                    for(i = 0; i < n; ++i)
+                    {
+                        //Supposively GRETA doesn't compile, but
+                        //it's clear that it slows performance greatly
+                        //when creating a rpattern object,
+                        //so one can only surmize that it performs
+                        //some kind of optimizations in the constructor
+                        Greta = rpattern(stdszPattern,EXTENDED,MODE_MIXED);
+                        SetStatusText(wxString::Format(_("GRETA Compile #%i"), i));
+                    }
                 }
-            }
-            if (OptionsMenu->IsChecked(MatchID))
-            {
-                for(i = 0; i < n; ++i)
+                if (OptionsMenu->IsChecked(MatchID))
                 {
-                    Greta.match(stdszSearch, r);
-                    SetStatusText(wxString::Format(_("GRETA Match #%i"), i));
+                    for(i = 0; i < n; ++i)
+                    {
+                        Greta.match(stdszSearch, r);
+                        SetStatusText(wxString::Format(_("GRETA Match #%i"), i));
+                    }
                 }
-            }
     
-            dwEndTime3 = clock() - dwStartTime3;
+                dwEndTime3 = clock() - dwStartTime3;
+            }
         }
 
+        if (bSuccess)
+        {
+            dwStartIndex3 = r.rstart();
+            dwEndIndex3 = r.rlength();
+        }
+        
         szResult3 = wxString::Format(
             _("--Greta--\nIndex:[%i]-[%i]\nString:%s\nMatch Time:%ums\nStatus:%s"),
-                            r.rstart(), r.rlength() + r.rstart(), 
-                            szSearch.Mid(r.rstart(), r.rlength()),
+                            dwStartIndex3, dwStartIndex3 + dwEndIndex3, 
+                            szSearch.Mid(dwStartIndex3, dwEndIndex3),
                             dwEndTime3, 
                             szStatus3);
 #endif //wxUSE_GRETA
@@ -505,7 +529,8 @@ public:
 	        int *m = new int[msize];
 
             //Here's where we actually search our string
-            if (!pcre_exec(pPcre, 0, szSearch, szSearch.Length(), 0, 0, m, msize))
+            pcre_exec(pPcre, 0, szSearch, szSearch.Length(), 0, 0, m, msize);
+            if (m[0] == -1)
                 szStatus4 = wxString::Format(_("\nExecution/Matching Failed!\n"));
             else
             {
