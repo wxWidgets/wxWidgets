@@ -181,6 +181,9 @@ bool wxPopupWindow::Create( wxWindow *parent, int style )
         return FALSE;
     }
 
+    // Unlike windows, top level windows are created hidden by default.
+    m_isShown = false;
+    
     // All dialogs should really have this style
     m_windowStyle |= wxTAB_TRAVERSAL;
 
