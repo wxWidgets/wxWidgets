@@ -20,6 +20,7 @@ Currently only the MOTIF GUI vcan be build by typing
  in the main directory of the distribution.
  
 It automatically makes the library in [.lib] and links the following samples
+ [.samples.menu]dialogs.exe
  [.samples.menu]menu.exe
  [.samples.menu]minimal.exe
  

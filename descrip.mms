@@ -15,7 +15,9 @@ all : setup.h
 	$(MMS)$(MMSQUALIFIERS)
 	set default [-.motif]
 	$(MMS)$(MMSQUALIFIERS)
-	set default [--.samples.menu]
+	set default [--.samples.dialogs]
+	$(MMS)$(MMSQUALIFIERS)
+	set default [-.samples.menu]
 	$(MMS)$(MMSQUALIFIERS)
 	set default [-.samples.minimal]
 	$(MMS)$(MMSQUALIFIERS)
