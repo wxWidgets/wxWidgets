@@ -1984,7 +1984,7 @@ const wxColour& wxGridCellAttr::GetTextColour() const
     {
         return m_colText;
     }
-    else if (m_defGridAttr != this)
+    else if (m_defGridAttr && m_defGridAttr != this)
     {
         return m_defGridAttr->GetTextColour();
     }
@@ -2000,7 +2000,7 @@ const wxColour& wxGridCellAttr::GetBackgroundColour() const
 {
     if (HasBackgroundColour())
         return m_colBack;
-    else if (m_defGridAttr != this)
+    else if (m_defGridAttr && m_defGridAttr != this)
         return m_defGridAttr->GetBackgroundColour();
     else
     {
@@ -2014,7 +2014,7 @@ const wxFont& wxGridCellAttr::GetFont() const
 {
     if (HasFont())
         return m_font;
-    else if (m_defGridAttr != this)
+    else if (m_defGridAttr && m_defGridAttr != this)
         return m_defGridAttr->GetFont();
     else
     {
@@ -2031,7 +2031,7 @@ void wxGridCellAttr::GetAlignment(int *hAlign, int *vAlign) const
         if ( hAlign ) *hAlign = m_hAlign;
         if ( vAlign ) *vAlign = m_vAlign;
     }
-    else if (m_defGridAttr != this)
+    else if (m_defGridAttr && m_defGridAttr != this)
         m_defGridAttr->GetAlignment(hAlign, vAlign);
     else
     {
@@ -2072,7 +2072,7 @@ wxGridCellRenderer* wxGridCellAttr::GetRenderer(wxGrid* grid, int row, int col) 
 
         if ( !renderer )
         {
-            if ( this != m_defGridAttr )
+            if (m_defGridAttr &&  this != m_defGridAttr )
             {
                 // if we still don't have one then use the grid default
                 // (no need for IncRef() here neither)
@@ -2120,7 +2120,7 @@ wxGridCellEditor* wxGridCellAttr::GetEditor(wxGrid* grid, int row, int col) cons
 
         if ( !editor )
         {
-            if ( this != m_defGridAttr )
+            if ( m_defGridAttr && this != m_defGridAttr )
             {
                 // if we still don't have one then use the grid default
                 // (no need for IncRef() here neither)
