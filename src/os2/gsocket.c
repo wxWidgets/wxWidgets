@@ -14,15 +14,21 @@
 #define BSD_SELECT // use Berkley Sockets select
 
 #include <assert.h>
-#include <sys\ioctl.h>
 #include <sys\types.h>
-#include <sys\socket.h>
 #include <utils.h>
 #include <sys\time.h>
 #include <in.h>
 #include <netdb.h>
 #include <nerrno.h>
+#if defined(__VISAGECPP__) && __IBMCPP__ < 400
+#include <socket.h>
+#include <ioctl.h>
+#include <select.h>
+#else
+#include <sys\socket.h>
+#include <sys\ioctl.h>
 #include <sys\select.h>
+#endif
 
 #include <string.h>
 #include <stdio.h>

@@ -160,7 +160,7 @@ bool wxShell(
     SData.PgmName  = zShell;
 
     sInputs = "/C " + rCommand;
-    SData.PgmInputs     = NULL; //(BYTE*)sInputs.c_str();
+    SData.PgmInputs     = (BYTE*)sInputs.c_str();
     SData.TermQ         = 0;
     SData.Environment   = 0;
     SData.InheritOpt    = SSF_INHERTOPT_SHELL;
@@ -177,7 +177,7 @@ bool wxShell(
     SData.ObjectBuffLen = (ULONG)sizeof(achObjBuf);
 
     rc = ::DosStartSession(&SData, &ulSessID, &vPid);
-    if (rc == 0)
+    if (rc == 0 || rc == 457) // NO_ERROR or SMG_START_IN_BACKGROUND
     {
         PTIB                            ptib;
         PPIB                            ppib;
