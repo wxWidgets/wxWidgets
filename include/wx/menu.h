@@ -7,6 +7,8 @@
 #include "wx/xt/menu.h"
 #elif defined(__WXGTK__)
 #include "wx/gtk/menu.h"
+#elif defined(__WXQT__)
+#include "wx/qt/menu.h"
 #endif
 
 #endif

@@ -70,11 +70,12 @@
 // Make sure the environment is set correctly
 #if defined(__WXMSW__) && defined(__X__)
 # error "Target can't be both X and Windows"
-#elif !defined(__WXMOTIF__) && !defined(__WXMSW__) && !defined(__WXGTK__) && !defined(__MAC__) && !defined(__X__)
-#error "No Target! Use -D[__WXMOTIF__|__WXGTK__|__WXMSW__|__MAC__]"
+#elif !defined(__WXMOTIF__) && !defined(__WXMSW__) && !defined(__WXGTK__) && \
+      !defined(__MAC__) && !defined(__X__) && !defined(__WXQT__)
+#error "No Target! Use -D[__WXMOTIF__|__WXGTK__|__WXMSW__|__MAC__|__QT__]"
 #endif
 
-#if defined(__WXMOTIF__) || defined(__WXGTK__)
+#if defined(__WXMOTIF__) || defined(__WXGTK__) || defined(__WXQT__)
 
 // Bool is now obsolete, use bool instead
 // typedef int Bool;

@@ -7,6 +7,8 @@
 #include "wx/xt/spinbutt.h"
 #elif defined(__WXGTK__)
 #include "wx/gtk/spinbutt.h"
+#elif defined(__WXQT__)
+#include "wx/qt/spinbutt.h"
 #endif
 
 #endif

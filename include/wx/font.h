@@ -7,6 +7,8 @@
 #include "wx/xt/font.h"
 #elif defined(__WXGTK__)
 #include "wx/gtk/font.h"
+#elif defined(__WXQT__)
+#include "wx/qt/font.h"
 #endif
 
 #endif

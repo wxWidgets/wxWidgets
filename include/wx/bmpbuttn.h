@@ -7,6 +7,8 @@
 #include "wx/xt/bmpbuttn.h"
 #elif defined(__WXGTK__)
 #include "wx/gtk/bmpbuttn.h"
+#elif defined(__WXQT__)
+#include "wx/qt/bmpbuttn.h"
 #endif
 
 #endif

@@ -13,6 +13,8 @@
 #   define classwxToolBar classwxToolBarMSW
 #elif defined(__WXGTK__)
 #   include "wx/gtk/tbargtk.h"
+#elif defined(__WXQT__)
+#   include "wx/qt/tbargtk.h"
 #endif
 
 #endif

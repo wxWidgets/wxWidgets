@@ -7,6 +7,8 @@
 #include "wx/generic/msgdlgg.h"
 #elif defined(__WXGTK__)
 #include "wx/generic/msgdlgg.h"
+#elif defined(__WXQT__)
+#include "wx/generic/msgdlgg.h"
 #endif
 
 #endif

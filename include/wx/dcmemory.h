@@ -7,6 +7,8 @@
 #include "wx/xt/dcmemory.h"
 #elif defined(__WXGTK__)
 #include "wx/gtk/dcmemory.h"
+#elif defined(__WXQT__)
+#include "wx/qt/dcmemory.h"
 #endif
 
 #endif

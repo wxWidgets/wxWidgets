@@ -110,6 +110,8 @@
 #include "wx/xt/settings.h"
 #elif defined(__WXGTK__)
 #include "wx/gtk/settings.h"
+#elif defined(__WXQT__)
+#include "wx/qt/settings.h"
 #endif
 
 #endif

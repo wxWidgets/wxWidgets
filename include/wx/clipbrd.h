@@ -7,6 +7,8 @@
 #include "wx/xt/clipbrd.h"
 #elif defined(__WXGTK__)
 #include "wx/gtk/clipbrd.h"
+#elif defined(__WXQT__)
+#include "wx/gtk/clipbrd.h"
 #endif
 
 #endif

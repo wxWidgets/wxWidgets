@@ -7,6 +7,8 @@
 #include "wx/xt/statbox.h"
 #elif defined(__WXGTK__)
 #include "wx/gtk/statbox.h"
+#elif defined(__WXQT__)
+#include "wx/qt/statbox.h"
 #endif
 
 #endif

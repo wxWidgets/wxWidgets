@@ -7,6 +7,8 @@
 #include "wx/xt/dcscreen.h"
 #elif defined(__WXGTK__)
 #include "wx/gtk/dcscreen.h"
+#elif defined(__WXQT__)
+#include "wx/qt/dcscreen.h"
 #endif
 
 #endif

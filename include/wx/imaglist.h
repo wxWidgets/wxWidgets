@@ -7,6 +7,8 @@
 #include "wx/generic/imaglist.h"
 #elif defined(__WXGTK__)
 #include "wx/generic/imaglist.h"
+#elif defined(__WXQT__)
+#include "wx/generic/imaglist.h"
 #endif
 
 #endif

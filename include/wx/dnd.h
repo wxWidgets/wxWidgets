@@ -8,6 +8,8 @@
 #elif defined(__WXMOTIF__)
 #elif defined(__WXGTK__)
 #include "wx/gtk/dnd.h"
+#elif defined(__WXQT__)
+#include "wx/qt/dnd.h"
 #endif
 
 #endif

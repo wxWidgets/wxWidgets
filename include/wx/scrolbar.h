@@ -7,6 +7,8 @@
 #include "wx/xt/scrolbar.h"
 #elif defined(__WXGTK__)
 #include "wx/gtk/scrolbar.h"
+#elif defined(__WXQT__)
+#include "wx/qt/scrolbar.h"
 #endif
 
 #endif

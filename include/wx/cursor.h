@@ -7,6 +7,8 @@
 #include "wx/xt/cursor.h"
 #elif defined(__WXGTK__)
 #include "wx/gtk/cursor.h"
+#elif defined(__WXQT__)
+#include "wx/qt/cursor.h"
 #endif
 
 #endif

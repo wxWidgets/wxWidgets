@@ -7,6 +7,8 @@
 #include "wx/xt/slider.h"
 #elif defined(__WXGTK__)
 #include "wx/gtk/slider.h"
+#elif defined(__WXQT__)
+#include "wx/qt/slider.h"
 #endif
 
 #endif

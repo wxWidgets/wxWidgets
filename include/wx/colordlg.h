@@ -7,6 +7,8 @@
 #include "wx/generic/colrdlgg.h"
 #elif defined(__WXGTK__)
 #include "wx/generic/colrdlgg.h"
+#elif defined(__WXQT__)
+#include "wx/generic/colrdlgg.h"
 #endif
 
 #endif

@@ -7,6 +7,8 @@
 #include "wx/xt/pen.h"
 #elif defined(__WXGTK__)
 #include "wx/gtk/pen.h"
+#elif defined(__WXQT__)
+#include "wx/qt/pen.h"
 #endif
 
 #endif

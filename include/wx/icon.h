@@ -7,6 +7,8 @@
 #include "wx/xt/icon.h"
 #elif defined(__WXGTK__)
 #include "wx/gtk/icon.h"
+#elif defined(__WXQT__)
+#include "wx/qt/icon.h"
 #endif
 
 #endif

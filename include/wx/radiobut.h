@@ -7,6 +7,8 @@
 #include "wx/xt/radiobut.h"
 #elif defined(__WXGTK__)
 #include "wx/gtk/radiobut.h"
+#elif defined(__WXQT__)
+#include "wx/qt/radiobut.h"
 #endif
 
 #endif

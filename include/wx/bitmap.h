@@ -7,6 +7,8 @@
 #include "wx/xt/bitmap.h"
 #elif defined(__WXGTK__)
 #include "wx/gtk/bitmap.h"
+#elif defined(__WXQT__)
+#include "wx/qt/bitmap.h"
 #endif
 
 #endif

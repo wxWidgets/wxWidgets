@@ -7,6 +7,8 @@
 #include "wx/xt/brush.h"
 #elif defined(__WXGTK__)
 #include "wx/gtk/brush.h"
+#elif defined(__WXQT__)
+#include "wx/qt/brush.h"
 #endif
 
 #endif

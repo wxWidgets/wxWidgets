@@ -7,6 +7,8 @@
 #include "wx/xt/statbmp.h"
 #elif defined(__WXGTK__)
 #include "wx/gtk/statbmp.h"
+#elif defined(__WXQT__)
+#include "wx/qt/statbmp.h"
 #endif
 
 #endif

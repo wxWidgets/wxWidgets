@@ -7,6 +7,8 @@
 #include "wx/xt/dialog.h"
 #elif defined(__WXGTK__)
 #include "wx/gtk/dialog.h"
+#elif defined(__WXQT__)
+#include "wx/qt/dialog.h"
 #endif
 
 #endif

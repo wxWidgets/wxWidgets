@@ -7,6 +7,8 @@
 #include "wx/xt/choice.h"
 #elif defined(__WXGTK__)
 #include "wx/gtk/choice.h"
+#elif defined(__WXQT__)
+#include "wx/qt/choice.h"
 #endif
 
 #endif

@@ -7,6 +7,8 @@
 #include "wx/xt/control.h"
 #elif defined(__WXGTK__)
 #include "wx/gtk/control.h"
+#elif defined(__WXQT__)
+#include "wx/qt/control.h"
 #endif
 
 #endif

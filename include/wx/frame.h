@@ -7,6 +7,8 @@
 #include "wx/xt/frame.h"
 #elif defined(__WXGTK__)
 #include "wx/gtk/frame.h"
+#elif defined(__WXQT__)
+#include "wx/qt/frame.h"
 #endif
 
 #endif

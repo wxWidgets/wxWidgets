@@ -7,6 +7,8 @@
 #include "wx/generic/listctrl.h"
 #elif defined(__WXGTK__)
 #include "wx/generic/listctrl.h"
+#elif defined(__WXQT__)
+#include "wx/generic/listctrl.h"
 #endif
 
 #endif

@@ -7,6 +7,8 @@
 #include "wx/xt/gauge.h"
 #elif defined(__WXGTK__)
 #include "wx/gtk/gauge.h"
+#elif defined(__WXQT__)
+#include "wx/qt/gauge.h"
 #endif
 
 #endif

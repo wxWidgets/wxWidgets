@@ -7,6 +7,8 @@
 #include "wx/xt/region.h"
 #elif defined(__WXGTK__)
 #include "wx/gtk/region.h"
+#elif defined(__WXQT__)
+#include "wx/qt/region.h"
 #endif
 
 #endif

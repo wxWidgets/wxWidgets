@@ -7,6 +7,8 @@
 #include "wx/xt/gdiobj.h"
 #elif defined(__WXGTK__)
 #include "wx/gtk/gdiobj.h"
+#elif defined(__WXQT__)
+#include "wx/qt/gdiobj.h"
 #endif
 
 #endif

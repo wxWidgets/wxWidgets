@@ -10,6 +10,51 @@ LIB_MINOR=1
 
 LIB_CPP_SRC=\
 \
+ qt/app.cpp \
+ qt/bitmap.cpp \
+ qt/brush.cpp \
+ qt/button.cpp \
+ qt/checkbox.cpp \
+ qt/choice.cpp \
+ qt/colour.cpp \
+ qt/control.cpp \
+ qt/combobox.cpp \
+ qt/cursor.cpp \
+ qt/data.cpp \
+ qt/dc.cpp \
+ qt/dcclient.cpp \
+ qt/dcmemory.cpp \
+ qt/dcscreen.cpp \
+ qt/dnd.cpp \
+ qt/dialog.cpp \
+ qt/filedlg.cpp \
+ qt/font.cpp \
+ qt/frame.cpp \
+ qt/gauge.cpp \
+ qt/gdiobj.cpp \
+ qt/icon.cpp \
+ qt/listbox.cpp \
+ qt/mdi.cpp \
+ qt/menu.cpp \
+ qt/notebook.cpp \
+ qt/palette.cpp \
+ qt/pen.cpp \
+ qt/radiobox.cpp \
+ qt/radiobut.cpp \
+ qt/region.cpp \
+ qt/scrolbar.cpp \
+ qt/settings.cpp \
+ qt/slider.cpp \
+ qt/statbox.cpp \
+ qt/stattext.cpp \
+ qt/tbargtk.cpp \
+ qt/textctrl.cpp \
+ qt/timer.cpp \
+ qt/utilsgtk.cpp \
+ qt/utilsres.cpp \
+ qt/window.cpp \
+\
+
  
 LIB_C_SRC=\
 \

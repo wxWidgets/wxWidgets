@@ -22,6 +22,8 @@
 
 /* define the system to compile */
 #undef __WXGTK__
+#undef __WXMOTIF__
+#undef __WXQT__
 #undef __UNIX__
 #undef __LINUX__
 #undef __SGI__

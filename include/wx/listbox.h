@@ -7,6 +7,8 @@
 #include "wx/xt/listbox.h"
 #elif defined(__WXGTK__)
 #include "wx/gtk/listbox.h"
+#elif defined(__WXQT__)
+#include "wx/qt/listbox.h"
 #endif
 
 #endif

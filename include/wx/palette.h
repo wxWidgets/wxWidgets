@@ -7,6 +7,8 @@
 #include "wx/xt/palette.h"
 #elif defined(__WXGTK__)
 #include "wx/gtk/palette.h"
+#elif defined(__WXQT__)
+#include "wx/qt/palette.h"
 #endif
 
 #endif

@@ -7,6 +7,8 @@
 #include "wx/xt/button.h"
 #elif defined(__WXGTK__)
 #include "wx/gtk/button.h"
+#elif defined(__WXQT__)
+#include "wx/qt/button.h"
 #endif
 
 #endif

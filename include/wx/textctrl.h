@@ -7,6 +7,8 @@
 #include "wx/xt/textctrl.h"
 #elif defined(__WXGTK__)
 #include "wx/gtk/textctrl.h"
+#elif defined(__WXQT__)
+#include "wx/qt/textctrl.h"
 #endif
 
 #endif

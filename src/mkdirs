@@ -6,13 +6,13 @@ if test ! -d gtk; then
 fi
 
 # create "/qt" if not present
-if test ! -d gtk; then
-    mkdir gtk
+if test ! -d qt; then
+    mkdir qt
 fi
 
 # create "/motif" if not present
-if test ! -d gtk; then
-    mkdir gtk
+if test ! -d motif; then
+    mkdir motif
 fi
 
 # create "/common" if not present

@@ -7,6 +7,8 @@
 #include "wx/xt/window.h"
 #elif defined(__WXGTK__)
 #include "wx/gtk/window.h"
+#elif defined(__WXQT__)
+#include "wx/qt/window.h"
 #endif
 
 #endif

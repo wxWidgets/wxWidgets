@@ -27,6 +27,8 @@ typedef wxObject* (*wxAppInitializerFunction) (void);  // returning wxApp* won't
 #include "wx/msw/app.h"
 #elif defined(__WXMOTIF__)
 #include "wx/xt/app.h"
+#elif defined(__WXQT__)
+#include "wx/qt/app.h"
 #elif defined(__WXGTK__)
 #include "wx/gtk/app.h"
 #endif

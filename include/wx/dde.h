@@ -7,6 +7,8 @@
 #include "wx/xt/dde.h"
 #elif defined(__WXGTK__)
 #include "wx/gtk/dde.h"
+#elif defined(__WXQT__)
+#include "wx/qt/dde.h"
 #endif
 
 #endif
