@@ -184,10 +184,12 @@ private:
         if ( m_frameStatusBar )
         {
             wxString msg;
-            wxSize sizeCl = GetClientSize();
-            msg.Printf(_("pos=(%d, %d), size=%dx%d (client=%dx%d)"),
+            wxSize sizeAll = GetSize(),
+                   sizeCl = GetClientSize();
+            msg.Printf(_("pos=(%d, %d), size=%dx%d or %dx%d (client=%dx%d)"),
                        pos.x, pos.y,
                        size.x, size.y,
+                       sizeAll.x, sizeAll.y,
                        sizeCl.x, sizeCl.y);
             SetStatusText(msg, 1);
         }
