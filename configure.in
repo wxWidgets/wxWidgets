@@ -4926,24 +4926,22 @@ fi
 
 AC_CONFIG_HEADER(setup.h:setup.h.in)
 
-dnl some more GUI only things
-if test "$wxUSE_GUI" = "yes"; then
-    dnl we need to pass SAMPLES_SUBDIRS (and some other) to the configure in
-    dnl samples and the only way to do it is, again, use the cache
-    wx_cv_path_samplesubdirs=$SAMPLES_SUBDIRS
-    wx_cv_if_gnu_make=$IF_GNU_MAKE
-    wx_cv_path_ifs=$PATH_IFS
-    wx_cv_program_ext=$PROGRAM_EXT
-    wx_cv_target_library=$WX_TARGET_LIBRARY
-    wx_cv_target_library_gl=$WX_TARGET_LIBRARY_GL
-    wx_cv_target_libtype=$WX_TARGET_LIBRARY_TYPE
-    dnl we need to export them because passing them through cache won't
-    dnl work when cache=/dev/null (which is default for autoconf 2.50)
-    export wx_cv_path_samplesubdirs wx_cv_if_gnu_make \
-           wx_cv_path_ifs wx_cv_program_ext \
-           wx_cv_target_library wx_cv_target_library_gl wx_cv_target_libtype
-    AC_CONFIG_SUBDIRS(demos samples utils contrib)
-fi
+dnl we need to pass SAMPLES_SUBDIRS (and some other) to the configure in
+dnl samples and the only way to do it is to use the environment (another
+dnl idea could have been to use the cache but this wouldn't work when
+dnl configure doesn't use cache at all which is the default with autoconf 2.50)
+wx_cv_path_samplesubdirs=$SAMPLES_SUBDIRS
+wx_cv_if_gnu_make=$IF_GNU_MAKE
+wx_cv_path_ifs=$PATH_IFS
+wx_cv_program_ext=$PROGRAM_EXT
+wx_cv_target_library=$WX_TARGET_LIBRARY
+wx_cv_target_library_gl=$WX_TARGET_LIBRARY_GL
+wx_cv_target_libtype=$WX_TARGET_LIBRARY_TYPE
+export wx_cv_path_samplesubdirs wx_cv_if_gnu_make \
+       wx_cv_path_ifs wx_cv_program_ext \
+       wx_cv_target_library wx_cv_target_library_gl wx_cv_target_libtype
+
+AC_CONFIG_SUBDIRS(demos samples utils contrib)
 
 dnl create each of the files in the space separated list from the file.in
 dnl (the original file name may be overriden by appending another name after a

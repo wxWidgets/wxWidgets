@@ -20398,8 +20398,10 @@ else
 fi
 
 
-INCLUDES="-I\${top_builddir}/lib/wx/include/${TOOLCHAIN_NAME} -I\${top_srcdir}/include \
-$REGEX_INCLUDE $ZLIB_INCLUDE $PNG_INCLUDE $JPEG_INCLUDE $TIFF_INCLUDE $TOOLKIT_INCLUDE"
+INCLUDES="-I\${top_builddir}/lib/wx/include/${TOOLCHAIN_NAME} \
+-I\${top_srcdir}/include \
+$REGEX_INCLUDE $ZLIB_INCLUDE $PNG_INCLUDE $JPEG_INCLUDE $TIFF_INCLUDE \
+$TOOLKIT_INCLUDE"
 
 if test "$wxUSE_GTK" = 1; then
     WXCONFIG_INCLUDE=
@@ -20515,7 +20517,7 @@ SAMPLES_SUBDIRS="`echo $SAMPLES_SUBDIRS | tr -s ' ' | tr ' ' '\n' | sort | uniq 
 
 
 echo $ac_n "checking whether ${MAKE-make} sets \${MAKE}""... $ac_c" 1>&6
-echo "configure:20519: checking whether ${MAKE-make} sets \${MAKE}" >&5
+echo "configure:20521: checking whether ${MAKE-make} sets \${MAKE}" >&5
 set dummy ${MAKE-make}; ac_make=`echo "$2" | sed 'y%./+-%__p_%'`
 if eval "test \"`echo '$''{'ac_cv_prog_make_${ac_make}_set'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
@@ -20548,20 +20550,19 @@ fi
 
 
 
-if test "$wxUSE_GUI" = "yes"; then
-            wx_cv_path_samplesubdirs=$SAMPLES_SUBDIRS
-    wx_cv_if_gnu_make=$IF_GNU_MAKE
-    wx_cv_path_ifs=$PATH_IFS
-    wx_cv_program_ext=$PROGRAM_EXT
-    wx_cv_target_library=$WX_TARGET_LIBRARY
-    wx_cv_target_library_gl=$WX_TARGET_LIBRARY_GL
-    wx_cv_target_libtype=$WX_TARGET_LIBRARY_TYPE
-            export wx_cv_path_samplesubdirs wx_cv_if_gnu_make \
-           wx_cv_path_ifs wx_cv_program_ext \
-           wx_cv_target_library wx_cv_target_library_gl wx_cv_target_libtype
-    subdirs="demos samples utils contrib"
+wx_cv_path_samplesubdirs=$SAMPLES_SUBDIRS
+wx_cv_if_gnu_make=$IF_GNU_MAKE
+wx_cv_path_ifs=$PATH_IFS
+wx_cv_program_ext=$PROGRAM_EXT
+wx_cv_target_library=$WX_TARGET_LIBRARY
+wx_cv_target_library_gl=$WX_TARGET_LIBRARY_GL
+wx_cv_target_libtype=$WX_TARGET_LIBRARY_TYPE
+export wx_cv_path_samplesubdirs wx_cv_if_gnu_make \
+       wx_cv_path_ifs wx_cv_program_ext \
+       wx_cv_target_library wx_cv_target_library_gl wx_cv_target_libtype
 
-fi
+subdirs="demos samples utils contrib"
+
 
 trap '' 1 2 15
 cat > confcache <<\EOF
