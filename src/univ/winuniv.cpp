@@ -763,9 +763,11 @@ int wxWindow::GetScrollRange(int orient) const
 
 void wxWindow::ScrollWindow(int dx, int dy, const wxRect *rect)
 {
+    // use native scrolling when available and do it in generic way
+    // otherwise:
 #ifdef __WXX11__
 
-    wxWindowX11::ScrollWindow( dx, dy, rect );
+    wxWindowNative::ScrollWindow(dx, dy, rect);
 
 #else
 
@@ -786,6 +788,19 @@ void wxWindow::ScrollWindow(int dx, int dy, const wxRect *rect)
         Refresh(TRUE /* erase bkgnd */, &r);
     }
     
+    // scroll children accordingly:    
+    wxPoint offset(dx, dy);
+    
+    for (wxWindowList::Node *node = GetChildren().GetFirst(); 
+         node; node = node->GetNext())
+    {
+        wxWindow *child = node->GetData();
+        if ( child != m_scrollbarVert && child != m_scrollbarHorz &&      
+             (rect == NULL || rect->Intersects(child->GetRect())) )
+        {
+            child->Move(child->GetPosition() + offset);
+        }
+    }    
 #endif
 }
 
