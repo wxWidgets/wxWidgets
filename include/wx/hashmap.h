@@ -18,6 +18,8 @@
 
 #include "wx/string.h"
 
+#include <stddef.h>             // for ptrdiff_t
+
 // private
 struct WXDLLEXPORT _wxHashTable_NodeBase
 {
