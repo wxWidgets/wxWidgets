@@ -1894,8 +1894,8 @@ protected:
     virtual void DoSetClientData( void *data );
     virtual void *DoGetClientData() const;
 
-
 private:
+    DECLARE_NO_COPY_CLASS(wxEvtHandler)
     DECLARE_DYNAMIC_CLASS(wxEvtHandler)
 };
 

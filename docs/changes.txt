@@ -54,6 +54,9 @@ All (GUI):
 - wxImage::ComputeHistogram()'s signature changed to 
   unsigned long ComputeHistogram(wxImageHistogram&) const
 
+- wxEvtHandler cannot be copied/assigned any longer - this never worked but
+  now it results in compile-time error instead of run-time crashes
+
 wxMSW:
 
 - build system changed: setup.h is not a static file in include/wx any more
