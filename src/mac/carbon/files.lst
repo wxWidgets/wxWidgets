@@ -42,6 +42,7 @@ ALL_SOURCES = \
 		common/choiccmn.cpp \
 		common/clipcmn.cpp \
 		common/cmdline.cpp \
+		common/cmdproc.cpp \
 		common/cmndata.cpp \
 		common/config.cpp \
 		common/cshelp.cpp \
@@ -181,6 +182,7 @@ ALL_HEADERS = \
 		choice.h \
 		clipbrd.h \
 		cmdline.h \
+		cmdproc.h \
 		cmndata.h \
 		colordlg.h \
 		colour.h \
@@ -431,6 +433,7 @@ COMMONOBJS = \
 		choiccmn.o \
 		clipcmn.o \
 		cmdline.o \
+		cmdproc.o \
 		cmndata.o \
 		config.o \
 		cshelp.o \
