@@ -5660,7 +5660,6 @@ fi
 
 if test "$wxUSE_TABDIALOG" = "yes"; then
     AC_DEFINE(wxUSE_TAB_DIALOG)
-    SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS tab"
 fi
 
 if test "$wxUSE_TEXTCTRL" = "yes"; then
