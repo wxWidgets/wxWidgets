@@ -172,7 +172,9 @@ wxChar **ConvertToStandardCommandArgs(const wxChar *p, int& argc)
     // and +1 here for the terminating NULL
     wxChar **argv = new wxChar *[argc + 1];
 
-    argv[0] = new wxChar[MAX_PATH];
+    // as we use wxStrdup below we must allocate the first argument using
+    // malloc(), not new[], as well
+    argv[0] = (wxChar *)malloc(MAX_PATH * sizeof(wxChar));
     ::GetModuleFileName(wxhInstance, argv[0], MAX_PATH);
 
     // copy all the other arguments to wxApp::argv[]
