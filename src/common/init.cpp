@@ -394,17 +394,9 @@ int wxEntryReal(int& argc, wxChar **argv)
 
     WX_SUPPRESS_UNUSED_WARN(cleanupOnExit);
 
-#if defined(__VISUALC__)
-	//Disable warning C4530: C++ exception handler used, but unwind semantics are not enabled. Specify -GX
-	#pragma warning (disable:4530)
-#endif  
-
     wxTRY
     {
 
-#if defined(__VISUALC__)
-	#pragma warning (default:4530)
-#endif  
         // app initialization
         if ( !wxTheApp->CallOnInit() )
         {
