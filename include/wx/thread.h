@@ -134,7 +134,7 @@ private:
 
 // in order to avoid any overhead under !MSW make all wxCriticalSection class
 // functions inline - but this can't be done under MSW
-#ifdef __WXMSW__
+#if defined(__WXMSW__) || defined(__WXPM__)
     class WXDLLEXPORT wxCriticalSectionInternal;
     #define WXCRITICAL_INLINE
 #else // !MSW

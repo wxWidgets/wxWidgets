@@ -438,7 +438,7 @@ enum
   wxWIN95,                  // Windows 95
   wxWIN386,                 // Watcom 32-bit supervisor modus
   wxMGL_UNIX,               // MGL with direct hardware access
-  wxMGL_X,                  // MGL on X 
+  wxMGL_X,                  // MGL on X
   wxMGL_WIN32,              // MGL on Win32
   wxMGL_OS2                 // MGL on OS/2
 };
@@ -450,53 +450,53 @@ enum
 // fixed length types
 
 #define wxInt8    char    signed
-#define wxUint8   char  unsigned  
+#define wxUint8   char  unsigned
 
 #ifdef __WIN16__
-#define wxInt16    int    signed  
-#define wxUint16   int  unsigned  
-#define wxInt32   long    signed  
-#define wxUint32  long  unsigned  
+#define wxInt16    int    signed
+#define wxUint16   int  unsigned
+#define wxInt32   long    signed
+#define wxUint32  long  unsigned
 #endif
 
 #ifdef __WIN32__
-#define wxInt16  short    signed  
-#define wxUint16 short  unsigned  
-#define wxInt32    int    signed  
-#define wxUint32   int  unsigned  
+#define wxInt16  short    signed
+#define wxUint16 short  unsigned
+#define wxInt32    int    signed
+#define wxUint32   int  unsigned
 #endif
 
 #ifdef __WXMAC__
-#define wxInt16  short    signed  
-#define wxUint16 short  unsigned  
-#define wxInt32    int    signed  
-#define wxUint32   int  unsigned  
+#define wxInt16  short    signed
+#define wxUint16 short  unsigned
+#define wxInt32    int    signed
+#define wxUint32   int  unsigned
 #endif
 
 #ifdef __WXOS2__
-#define wxInt16  short    signed  
-#define wxUint16 short  unsigned  
-#define wxInt32    int    signed  
-#define wxUint32   int  unsigned  
+#define wxInt16  short    signed
+#define wxUint16 short  unsigned
+#define wxInt32    int    signed
+#define wxUint32   int  unsigned
 #endif
 
 #if !defined(__WXMSW__) && !defined(__WXMAC__) && !defined(__WXOS2__)
   #if defined(SIZEOF_INT)
     /* well, this shouldn't happen... */
-    #define wxInt16  short    signed  
-    #define wxUint16 short  unsigned  
-    #define wxInt32    int    signed  
-    #define wxUint32   int  unsigned  
+    #define wxInt16  short    signed
+    #define wxUint16 short  unsigned
+    #define wxInt32    int    signed
+    #define wxUint32   int  unsigned
   #else
-    #define wxInt16  short    signed  
-    #define wxUint16 short  unsigned  
-    #define wxInt32    int    signed  
-    #define wxUint32   int  unsigned  
+    #define wxInt16  short    signed
+    #define wxUint16 short  unsigned
+    #define wxInt32    int    signed
+    #define wxUint32   int  unsigned
   #endif
 #endif
 
 #define  wxByte   wxUint8
-#define  wxWord   wxUint16        
+#define  wxWord   wxUint16
 
 // byte sex
 
@@ -516,12 +516,12 @@ enum
    ((wxUint16) ( \
     (((wxUint16) (val) & (wxUint16) 0x00ffU) << 8) | \
     (((wxUint16) (val) & (wxUint16) 0xff00U) >> 8)))
-    
+
 #define wxINT16_SWAP_ALWAYS(val) \
    ((wxInt16) ( \
     (((wxUint16) (val) & (wxUint16) 0x00ffU) << 8) | \
     (((wxUint16) (val) & (wxUint16) 0xff00U) >> 8)))
-    
+
 #define wxUINT32_SWAP_ALWAYS(val) \
    ((wxUint32) ( \
     (((wxUint32) (val) & (wxUint32) 0x000000ffU) << 24) | \
@@ -889,10 +889,10 @@ enum
 #define wxPD_REMAINING_TIME     0x0020
 
 /*
- * extended dialog specifiers. these values are stored in a different 
+ * extended dialog specifiers. these values are stored in a different
  * flag and thus do not overlap with other style flags. note that these
  * values do not correspond to the return values of the dialogs (for
- * those values, look at the wxID_XXX defines). 
+ * those values, look at the wxID_XXX defines).
  */
 #define wxOK                    0x00000001
 #define wxYES_NO                0x00000002
@@ -1003,8 +1003,8 @@ enum wxDirection
 
 // wxCENTRE                   = 0x0400 (defined above)
 
-// centering into frame rather than screen 
-#define wxCENTER_FRAME          0x0004  
+// centering into frame rather than screen
+#define wxCENTER_FRAME          0x0004
 
 
 // ----------------------------------------------------------------------------
@@ -1384,8 +1384,8 @@ typedef enum {
 // platform specific (implementation) parts of the headers
 // ---------------------------------------------------------------------------
 
-#ifdef __WXMSW__
-// Stand-ins for Windows types, to avoid #including all of windows.h
+#if defined(__WXMSW__) || defined(__WXPM__)
+// Stand-ins for Windows types or OS/2, to avoid #including all of windows.h or os2.h
 typedef unsigned long   WXHWND;
 typedef unsigned long   WXHANDLE;
 typedef unsigned long   WXHICON;
