@@ -157,12 +157,14 @@ public:
 	bool	QueryOnKeyFields(bool forUpdate = FALSE, bool distinct = FALSE);
 	bool	GetNext(void)   { return(getRec(SQL_FETCH_NEXT));  }
 	bool	operator++(int) { return(getRec(SQL_FETCH_NEXT));  }
-#if !wxODBC_FWD_ONLY_CURSORS
-	bool	GetPrev(void)   { return(getRec(SQL_FETCH_PRIOR)); }
-	bool	operator--(int) { return(getRec(SQL_FETCH_PRIOR)); }
-	bool	GetFirst(void)  { return(getRec(SQL_FETCH_FIRST)); }
-	bool	GetLast(void)   { return(getRec(SQL_FETCH_LAST));  }
-#endif
+
+	/***** These four functions only work with wxDB instances that are defined  *****
+	 ***** as not being FwdOnlyCursors                                          *****/
+	bool	GetPrev(void);
+	bool	operator--(int);
+	bool	GetFirst(void);
+	bool	GetLast(void);
+
 	bool	IsCursorClosedOnCommit(void);
 	bool	IsColNull(int colNo);
 	UWORD GetRowNum(void);

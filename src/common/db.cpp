@@ -111,7 +111,7 @@ char SQLLOGfn[DB_PATH_MAX+1] = "sqllog.txt";
 char DBerrorList[DB_MAX_ERROR_HISTORY][DB_MAX_ERROR_MSG_LEN];
 
 /********** wxDB Constructor **********/
-wxDB::wxDB(HENV &aHenv)
+wxDB::wxDB(HENV &aHenv, bool FwdOnlyCursors)
 {
 	int i;
 
@@ -155,6 +155,7 @@ wxDB::wxDB(HENV &aHenv)
 	
 	// Copy the HENV into the db class
 	henv = aHenv;
+	fwdOnlyCursors = FwdOnlyCursors;
 
 	// Allocate a data source connection handle
 	if (SQLAllocConnect(henv, &hdbc) != SQL_SUCCESS)
@@ -178,11 +179,11 @@ bool wxDB::Open(char *Dsn, char *Uid, char *AuthStr)
 
 	RETCODE retcode;
 
-#if !wxODBC_FWD_ONLY_CURSORS
-
-	// Specify that the ODBC cursor library be used, if needed.  This must be
-	// specified before the connection is made.
-	retcode = SQLSetConnectOption(hdbc, SQL_ODBC_CURSORS, SQL_CUR_USE_IF_NEEDED);
+	if (!FwdOnlyCursors())
+	{
+		// Specify that the ODBC cursor library be used, if needed.  This must be
+		// specified before the connection is made.
+		retcode = SQLSetConnectOption(hdbc, SQL_ODBC_CURSORS, SQL_CUR_USE_IF_NEEDED);
 
 #ifdef DBDEBUG_CONSOLE
 		if (retcode == SQL_SUCCESS)
@@ -190,8 +191,7 @@ bool wxDB::Open(char *Dsn, char *Uid, char *AuthStr)
 		else
 			cout << "SQLSetConnectOption(CURSOR_LIB) failed" << endl;
 #endif
-
-#endif
+	}
 
 	// Connect to the data source
 	retcode = SQLConnect(hdbc, (UCHAR FAR *) Dsn,		SQL_NTS,
@@ -1688,15 +1688,12 @@ bool wxDB::WriteSqlLog(const char *logMsg)
  */
 DBMS wxDB::Dbms(void)
 {
-	wxChar baseName[25];
+	wxChar baseName[25+1];
 
-	wxStrncpy(baseName,dbInf.dbmsName,6);
-	baseName[6] = 0;
-	if (!wxStricmp(baseName,"Oracle"))
-		return(dbmsORACLE);
+	wxStrncpy(baseName,dbInf.dbmsName,25);
 	if (!wxStricmp(dbInf.dbmsName,"Adaptive Server Anywhere"))
 		return(dbmsSYBASE_ASA);
-	if (!wxStricmp(dbInf.dbmsName,"SQL Server"))  // Sybase Adaptive Server Enterprise
+	if (!wxStricmp(dbInf.dbmsName,"SQL Server"))  // Sybase Adaptive Server 
 		return(dbmsSYBASE_ASE);
 	if (!wxStricmp(dbInf.dbmsName,"Microsoft SQL Server"))
 		return(dbmsMS_SQL_SERVER);
@@ -1704,24 +1701,29 @@ DBMS wxDB::Dbms(void)
 		return(dbmsMY_SQL);
 	if (!wxStricmp(dbInf.dbmsName,"PostgreSQL"))  // v6.5.0
 		return(dbmsPOSTGRES);
-	if (!wxStricmp(dbInf.dbmsName,"ACCESS"))
-		return(dbmsACCESS);
-	wxStrncpy(baseName,dbInf.dbmsName,5);
-	baseName[5] = 0;
-	if (!wxStricmp(baseName,"DBASE"))
-		return(dbmsDBASE);
-	wxStrncpy(baseName,dbInf.dbmsName,8);
+
 	baseName[8] = 0;
 	if (!wxStricmp(baseName,"Informix"))
 		return(dbmsINFORMIX);
 
-	return(dbmsUNIDENTIFIED);
+	baseName[6] = 0;
+	if (!wxStricmp(baseName,"Oracle"))
+		return(dbmsORACLE);
+	if (!wxStricmp(dbInf.dbmsName,"ACCESS"))
+		return(dbmsACCESS);
+	if (!wxStricmp(dbInf.dbmsName,"MySQL"))
+		return(dbmsMY_SQL);
 
+	baseName[5] = 0;
+	if (!wxStricmp(baseName,"DBASE"))
+		return(dbmsDBASE);
+
+	return(dbmsUNIDENTIFIED);
 }  // wxDB::Dbms()
 
 
 /********** GetDbConnection() **********/
-wxDB WXDLLEXPORT *GetDbConnection(DbStuff *pDbStuff)
+wxDB WXDLLEXPORT *GetDbConnection(DbStuff *pDbStuff, bool FwdOnlyCursors)
 {
 	DbList *pList;
 
@@ -1760,7 +1762,7 @@ wxDB WXDLLEXPORT *GetDbConnection(DbStuff *pDbStuff)
 	pList->PtrNext = 0;
 	pList->Free = FALSE;
 	wxStrcpy(pList->Dsn, pDbStuff->Dsn);
-	pList->PtrDb = new wxDB(pDbStuff->Henv);
+	pList->PtrDb = new wxDB(pDbStuff->Henv,FwdOnlyCursors);
 
 	// Connect to the datasource
 	if (pList->PtrDb->Open(pDbStuff->Dsn, pDbStuff->Uid, pDbStuff->AuthStr))

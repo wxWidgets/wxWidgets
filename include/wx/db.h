@@ -328,6 +328,8 @@ private:
 	bool setConnectionOptions(void);
 	void logError(const char *errMsg, const char *SQLState);
 
+	bool			fwdOnlyCursors;
+
 public:
 
 	// The following structure contains database information gathered from the
@@ -393,7 +395,7 @@ public:
 	SqlTypeInfo typeInfVarchar, typeInfInteger, typeInfFloat, typeInfDate;
 	
 	// Public member functions
-	wxDB(HENV &aHenv);
+	wxDB(HENV &aHenv, bool FwdOnlyCursors=(bool)wxODBC_FWD_ONLY_CURSORS);
 	bool		 Open(char *Dsn, char *Uid, char *AuthStr);  // Data Source Name, User ID, Password
 	void		 Close(void);
 	bool		 CommitTrans(void);
@@ -423,6 +425,7 @@ public:
 	bool		 SqlLog(enum sqlLog state, const char *filename = "sqllog.txt", bool append = FALSE);
 	bool		 WriteSqlLog(const char *logMsg);
 	DBMS		 Dbms(void);
+	bool		 FwdOnlyCursors(void) {return fwdOnlyCursors;}
 
 };  // wxDB
 
@@ -456,7 +459,7 @@ class CstructTablesInUse : public wxObject
 // for other code segments to use, or close all of them when the application has
 // completed.
 
-wxDB WXDLLEXPORT *GetDbConnection(DbStuff *pDbStuff);
+wxDB WXDLLEXPORT *GetDbConnection(DbStuff *pDbStuff, bool FwdOnlyCursors=(bool)wxODBC_FWD_ONLY_CURSORS);
 bool  WXDLLEXPORT FreeDbConnection(wxDB *pDb);
 void  WXDLLEXPORT CloseDbConnections(void);
 int   WXDLLEXPORT NumberDbConnectionsInUse(void);

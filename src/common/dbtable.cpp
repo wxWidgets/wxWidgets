@@ -461,31 +461,31 @@ bool wxTable::getRec(UWORD fetchType)
 {
 	RETCODE retcode;
 
-#if !wxODBC_FWD_ONLY_CURSORS
-
-	// Fetch the NEXT, PREV, FIRST or LAST record, depending on fetchType
-	UDWORD  cRowsFetched;
-	UWORD   rowStatus;
-
-//	if ((retcode = SQLExtendedFetch(hstmt, fetchType, 0, &cRowsFetched, &rowStatus)) != SQL_SUCCESS)
-   retcode = SQLExtendedFetch(hstmt, fetchType, 0, &cRowsFetched, &rowStatus);
-   if (retcode  != SQL_SUCCESS && retcode != SQL_SUCCESS_WITH_INFO)
-		if (retcode == SQL_NO_DATA_FOUND)
-			return(FALSE);
-		else
-			return(pDb->DispAllErrors(henv, hdbc, hstmt));
-#else
-
-	// Fetch the next record from the record set
-	retcode = SQLFetch(hstmt);
-	if (retcode != SQL_SUCCESS && retcode != SQL_SUCCESS_WITH_INFO)
+	if (!pDb->FwdOnlyCursors())
 	{
-		if (retcode == SQL_NO_DATA_FOUND)
-			return(FALSE);
-		else
-			return(pDb->DispAllErrors(henv, hdbc, hstmt));
+		// Fetch the NEXT, PREV, FIRST or LAST record, depending on fetchType
+		UDWORD  cRowsFetched;
+		UWORD   rowStatus;
+
+		retcode = SQLExtendedFetch(hstmt, fetchType, 0, &cRowsFetched, &rowStatus);
+		if (retcode  != SQL_SUCCESS && retcode != SQL_SUCCESS_WITH_INFO)
+			if (retcode == SQL_NO_DATA_FOUND)
+				return(FALSE);
+			else
+				return(pDb->DispAllErrors(henv, hdbc, hstmt));
 	}
-#endif
+	else
+	{
+		// Fetch the next record from the record set
+		retcode = SQLFetch(hstmt);
+		if (retcode != SQL_SUCCESS && retcode != SQL_SUCCESS_WITH_INFO)
+		{
+			if (retcode == SQL_NO_DATA_FOUND)
+				return(FALSE);
+			else
+				return(pDb->DispAllErrors(henv, hdbc, hstmt));
+		}
+	}
 
 	// Completed successfully
 	return(TRUE);
@@ -659,6 +659,54 @@ bool wxTable::QueryOnKeyFields(bool forUpdate, bool distinct)
 	return(query(DB_SELECT_KEYFIELDS, forUpdate, distinct));
 
 }  // wxTable::QueryOnKeyFields()
+
+/********** wxTable::GetPrev() **********/
+bool wxTable::GetPrev(void)
+{
+	if (pDb->FwdOnlyCursors())
+	{
+		wxFAIL_MSG(wxT("GetPrev()::Backward scrolling cursors are not enabled for this instance of wxTable"));
+		return FALSE;
+	}
+	else
+		return(getRec(SQL_FETCH_PRIOR));
+}  // wxTable::GetPrev()
+
+/********** wxTable::operator-- **********/
+bool wxTable::operator--(int)
+{
+	if (pDb->FwdOnlyCursors())
+	{
+		wxFAIL_MSG(wxT("operator--:Backward scrolling cursors are not enabled for this instance of wxTable"));
+		return FALSE;
+	}
+	else
+		return(getRec(SQL_FETCH_PRIOR));
+}  // wxTable::operator--
+
+/********** wxTable::GetFirst() **********/
+bool wxTable::GetFirst(void)
+{
+	if (pDb->FwdOnlyCursors())
+	{
+		wxFAIL_MSG(wxT("GetFirst():Backward scrolling cursors are not enabled for this instance of wxTable"));
+		return FALSE;
+	}
+	else
+		return(getRec(SQL_FETCH_FIRST));
+}  // wxTable::GetFirst()
+
+/********** wxTable::GetLast() **********/
+bool wxTable::GetLast(void)
+{
+	if (pDb->FwdOnlyCursors())
+	{
+		wxFAIL_MSG(wxT("GetLast()::Backward scrolling cursors are not enabled for this instance of wxTable"));
+		return FALSE;
+	}
+	else 
+		return(getRec(SQL_FETCH_LAST));
+}  // wxTable::GetLast()
 
 /********** wxTable::GetSelectStmt() **********/
 void wxTable::GetSelectStmt(char *pSqlStmt, int typeOfSelect, bool distinct)
