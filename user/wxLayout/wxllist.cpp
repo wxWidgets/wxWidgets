@@ -594,13 +594,13 @@ wxLayoutList::FindObjectCursor(wxPoint *cpos, CoordType *offset)
    if((**i).GetType()==WXLO_TYPE_LINEBREAK)
    {
       if(offset)
-         *offset = (cpos.x > object.x) : 1 : 0;
+         *offset = (cpos->x > object.x) ? 1 : 0;
       return i;
    }
    cpos->x = object.x; // would be the coordinate of next object
    cpos->y = object.y;
    cpos->x += width; // last object's width
-   if(*offset)  *offset = cpos->x-object.x
+   if(*offset)  *offset = cpos->x-object.x;
    return i; // not found
 }
 
