@@ -38,30 +38,30 @@ MyFrame::MyFrame( wxWindow *parent, wxWindowID id, const wxString &title,
     // Create menu and status bar.
     CreateMyMenuBar();
     CreateStatusBar(1);
-    SetStatusText( "Welcome to Styles!" );
+    SetStatusText( _T("Welcome to Styles!") );
     
     wxImage image;
-    image.LoadFile( "marble.jpg", wxBITMAP_TYPE_JPEG );
+    image.LoadFile( _T("marble.jpg"), wxBITMAP_TYPE_JPEG );
     
     wxBitmap bitmap( image );
 #ifdef __WXUNIVERSAL__
     SetBackground( bitmap, 0, wxTILE );
 #endif
     
-    new wxStaticText( this, -1, "This is text", wxPoint( 20,50 ) );
+    new wxStaticText( this, -1, _T("This is text"), wxPoint( 20,50 ) );
     
-    new wxCheckBox( this, -1, "This is a checkbox", wxPoint( 20,70 ) );
+    new wxCheckBox( this, -1, _T("This is a checkbox"), wxPoint( 20,70 ) );
 }
 
 void MyFrame::CreateMyMenuBar()
 {
     wxMenu *file_menu = new wxMenu;
-    file_menu->Append( ID_ABOUT, "About...", "Program info" );
+    file_menu->Append( ID_ABOUT, _T("About..."), _T("Program info") );
     file_menu->AppendSeparator();
-    file_menu->Append( ID_QUIT, "Quit...", "Quit program" );
+    file_menu->Append( ID_QUIT, _T("Quit..."), _T("Quit program") );
 
     wxMenuBar *menu_bar = new wxMenuBar();
-    menu_bar->Append( file_menu, "&File" );
+    menu_bar->Append( file_menu, _T("&File") );
     
     SetMenuBar( menu_bar );
 }
@@ -94,10 +94,10 @@ bool MyApp::OnInit()
 {
     wxInitAllImageHandlers();
 
-    SetVendorName("Free world");
-    SetAppName("Styles");
+    SetVendorName(_T("Free world"));
+    SetAppName(_T("Styles"));
     
-    MyFrame *frame = new MyFrame( NULL, -1, "Styles", wxPoint(20,20), wxSize(500,340) );
+    MyFrame *frame = new MyFrame( NULL, -1, _T("Styles"), wxPoint(20,20), wxSize(500,340) );
     frame->Show( TRUE );
     
     return TRUE;

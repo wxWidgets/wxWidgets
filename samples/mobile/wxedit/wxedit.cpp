@@ -59,23 +59,23 @@ MyFrame::MyFrame( wxWindow *parent, wxWindowID id, const wxString &title,
     // Create menu and status bar.
     CreateMyMenuBar();
     CreateStatusBar(1);
-    SetStatusText( "Welcome to wxEdit!" );
+    SetStatusText( _T("Welcome to wxEdit!") );
     
     // Create edit control. Since it is the only
     // control in the frame, it will be resized
     // to file it out.
-    m_text = new wxTextCtrl( this, -1, "", wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE );
+    m_text = new wxTextCtrl( this, -1, _T(""), wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE );
     
     // Read .ini file for file history etc.
     wxConfig *conf = (wxConfig*) wxConfig::Get();
 
     int entries = 0;    
-    conf->Read( "/History/Count", &entries );
+    conf->Read( _T("/History/Count"), &entries );
     
     for (int i = 0; i < entries; i++)
     {
         wxString tmp;
-        tmp.Printf( "/History/File%d", (int)i );
+        tmp.Printf( _T("/History/File%d"), (int)i );
         
         wxString res;
         conf->Read( tmp, &res );
@@ -123,31 +123,31 @@ void MyFrame::AddToHistory( const wxString &fname )
 void MyFrame::CreateMyMenuBar()
 {
     wxMenu *file_menu = new wxMenu;
-    file_menu->Append( ID_ABOUT, "About...", "Program info" );
+    file_menu->Append( ID_ABOUT, _T("About..."), _T("Program info") );
     file_menu->AppendSeparator();
-    file_menu->Append( ID_NEW, "New...", "New text" );
-    file_menu->Append( ID_OPEN, "Open...", "Open text" );
-    file_menu->Append( ID_SAVE, "Save", "Save text" );
-    file_menu->Append( ID_SAVEAS, "Save as...", "Save text as..." );
+    file_menu->Append( ID_NEW, _T("New..."), _T("New text") );
+    file_menu->Append( ID_OPEN, _T("Open..."), _T("Open text") );
+    file_menu->Append( ID_SAVE, _T("Save"), _T("Save text") );
+    file_menu->Append( ID_SAVEAS, _T("Save as..."), _T("Save text as...") );
     file_menu->AppendSeparator();
-    file_menu->Append( ID_QUIT, "Quit...", "Quit program" );
+    file_menu->Append( ID_QUIT, _T("Quit..."), _T("Quit program") );
 
     wxMenu *edit_menu = new wxMenu;
-    edit_menu->Append( ID_COPY, "Copy" );
-    edit_menu->Append( ID_CUT, "Cut" );
-    edit_menu->Append( ID_PASTE, "Paste" );
+    edit_menu->Append( ID_COPY, _T("Copy") );
+    edit_menu->Append( ID_CUT, _T("Cut") );
+    edit_menu->Append( ID_PASTE, _T("Paste") );
     edit_menu->AppendSeparator();
-    edit_menu->Append( ID_DELETE, "Delete" );
+    edit_menu->Append( ID_DELETE, _T("Delete") );
     
     wxMenu *history_menu = new wxMenu;
-    history_menu->Append( ID_LAST_1, "No file." );
-    history_menu->Append( ID_LAST_2, "No file." );
-    history_menu->Append( ID_LAST_3, "No file." );
+    history_menu->Append( ID_LAST_1, _T("No file.") );
+    history_menu->Append( ID_LAST_2, _T("No file.") );
+    history_menu->Append( ID_LAST_3, _T("No file.") );
     
     wxMenuBar *menu_bar = new wxMenuBar();
-    menu_bar->Append( file_menu, "&File" );
-    menu_bar->Append( edit_menu, "&Edit" );
-    menu_bar->Append( history_menu, "&History" );
+    menu_bar->Append( file_menu, _T("&File") );
+    menu_bar->Append( edit_menu, _T("&Edit") );
+    menu_bar->Append( history_menu, _T("&History") );
     
     SetMenuBar( menu_bar );
 }
@@ -198,16 +198,15 @@ void MyFrame::OnNew( wxCommandEvent &event )
         
     m_filename = wxEmptyString;
     
-    SetStatusText( "" );
+    SetStatusText( _T("") );
 }
 
 void MyFrame::OnOpen( wxCommandEvent &event )
 {
     if (!Discard()) return;
 
-    wxFileDialog dialog( this, "Open text", "", "",
-        "Text file (*.txt)|*.txt|"
-        "Any file (*)|*",
+    wxFileDialog dialog( this, _T("Open text"), _T(""), _T(""),
+        _T("Text file (*.txt)|*.txt|Any file (*)|*"),
         wxOPEN|wxFILE_MUST_EXIST );
     if (dialog.ShowModal() == wxID_OK)
     {
@@ -215,22 +214,22 @@ void MyFrame::OnOpen( wxCommandEvent &event )
 
 #ifdef __WXX11__
         wxFileName fname( dialog.GetPath() );
-        if ((fname.GetExt() == "cpp") ||
-            (fname.GetExt() == "c") ||
-            (fname.GetExt() == "h") ||
-            (fname.GetExt() == "cxx") ||
-            (fname.GetExt() == "hxx"))
+        if ((fname.GetExt() == _T("cpp")) ||
+            (fname.GetExt() == _T("c")) ||
+            (fname.GetExt() == _T("h")) ||
+            (fname.GetExt() == _T("cxx")) ||
+            (fname.GetExt() == _T("hxx")))
         {
             m_text->SetLanguage( wxSOURCE_LANG_CPP );
         }
         else
-        if (fname.GetExt() == "py")
+        if (fname.GetExt() == _T("py"))
         {
             m_text->SetLanguage( wxSOURCE_LANG_PYTHON );
         }
         else
-        if ((fname.GetExt() == "pl") ||
-            (fname.GetExt() == "pm"))
+        if ((fname.GetExt() == _T("pl")) ||
+            (fname.GetExt() == _T("pm")))
         {
             m_text->SetLanguage( wxSOURCE_LANG_PYTHON );
         }
@@ -254,9 +253,8 @@ void MyFrame::OnSave( wxCommandEvent &event )
 
 void MyFrame::OnSaveAs( wxCommandEvent &event )
 {
-    wxFileDialog dialog( this, "Open text", "", "",
-        "Text file (*.txt)|*.txt|"
-        "Any file (*)|*",
+    wxFileDialog dialog( this, _T("Open text"), _T(""), _T(""),
+        _T("Text file (*.txt)|*.txt|Any file (*)|*"),
         wxSAVE|wxOVERWRITE_PROMPT );
     if (dialog.ShowModal() == wxID_OK)
     {
@@ -269,8 +267,8 @@ void MyFrame::OnSaveAs( wxCommandEvent &event )
 
 void MyFrame::OnAbout( wxCommandEvent &event )
 {
-    wxMessageDialog dialog( this, "Welcome to wxEdit\n(C)opyright Robert Roebling",
-        "About wxEdit", wxOK|wxICON_INFORMATION );
+    wxMessageDialog dialog( this, _T("Welcome to wxEdit\n(C)opyright Robert Roebling"),
+        _T("About wxEdit"), wxOK|wxICON_INFORMATION );
     dialog.ShowModal();
 }
 
@@ -295,8 +293,8 @@ bool MyFrame::Discard()
 {
     if (m_text->IsModified())
     {
-        wxMessageDialog dialog( this, "Text has been\nmodified! Save?",
-            "wxEdit", wxYES_NO|wxCANCEL|wxICON_EXCLAMATION );
+        wxMessageDialog dialog( this, _T("Text has been\nmodified! Save?"),
+            _T("wxEdit"), wxYES_NO|wxCANCEL|wxICON_EXCLAMATION );
             
         int ret = dialog.ShowModal();
         
@@ -358,12 +356,12 @@ void MyFrame::OnCloseWindow( wxCloseEvent &event )
     if (m_history.GetCount() < (size_t)max)
         max = m_history.GetCount();
         
-    conf->Write( "/History/Count", max );
+    conf->Write( _T("/History/Count"), max );
     
     for (int i = 0; i < max; i++)
     {
         wxString tmp;
-        tmp.Printf( "/History/File%d", (int)i );
+        tmp.Printf( _T("/History/File%d"), (int)i );
         
         conf->Write( tmp, m_history[(size_t)i] );
     }
@@ -387,10 +385,10 @@ MyApp::MyApp()
 
 bool MyApp::OnInit()
 {
-    SetVendorName("Free world");
-    SetAppName("wxEdit");
+    SetVendorName(_T("Free world"));
+    SetAppName(_T("wxEdit"));
     
-    MyFrame *frame = new MyFrame( NULL, -1, "wxEdit", wxPoint(20,20), wxSize(500,340) );
+    MyFrame *frame = new MyFrame( NULL, -1, _T("wxEdit"), wxPoint(20,20), wxSize(500,340) );
     frame->Show( TRUE );
     
     return TRUE;
