@@ -111,7 +111,6 @@ private:
     bool                  m_iconized;
 
     virtual void DoGetSize(int *width, int *height) const;
-    virtual void DoGetPosition(int *x, int *y) const;
     virtual void DoSetSize(int x, int y,
         int width, int height,
         int sizeFlags = wxSIZE_AUTO);

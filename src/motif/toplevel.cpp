@@ -185,6 +185,29 @@ bool wxTopLevelWindowMotif::Create( wxWindow *parent, wxWindowID id,
     return retval;
 }
 
+void wxTopLevelWindowMotif::DoGetPosition(int *x, int *y) const
+{
+    Widget top = (Widget) GetTopWidget();
+    Window parent_window = XtWindow((Widget) top),
+        next_parent   = XtWindow((Widget) top),
+        root          = RootWindowOfScreen(XtScreen((Widget) top));
+
+    // search for the parent that is child of ROOT, because the WM may
+    // reparent twice and notify only the next parent (like FVWM)
+    while (next_parent != root) {
+        Window *theChildren; unsigned int n;
+        parent_window = next_parent;
+        XQueryTree(XtDisplay((Widget) top), parent_window, &root,
+            &next_parent, &theChildren, &n);
+        XFree(theChildren); // not needed
+    }
+    int xx, yy; unsigned int dummy;
+    XGetGeometry(XtDisplay((Widget) top), parent_window, &root,
+        &xx, &yy, &dummy, &dummy, &dummy, &dummy);
+    if (x) *x = xx;
+    if (y) *y = yy;
+}
+
 void wxTopLevelWindowMotif::Raise()
 {
     Widget top = (Widget) GetTopWidget();

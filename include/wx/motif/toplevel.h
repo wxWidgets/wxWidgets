@@ -69,6 +69,7 @@ protected:
     // common part of wxDialog/wxFrame destructors
     void PreDestroy();
 
+    virtual void DoGetPosition(int* x, int* y) const;
 private:
     // both these functions should be pure virtual
     virtual bool DoCreate( wxWindow* parent, wxWindowID id,

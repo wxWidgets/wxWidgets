@@ -404,28 +404,6 @@ void wxFrame::DoGetSize(int *width, int *height) const
     *width = xx; *height = yy;
 }
 
-void wxFrame::DoGetPosition(int *x, int *y) const
-{
-    Window parent_window = XtWindow((Widget) m_frameShell),
-        next_parent   = XtWindow((Widget) m_frameShell),
-        root          = RootWindowOfScreen(XtScreen((Widget) m_frameShell));
-
-    // search for the parent that is child of ROOT, because the WM may
-    // reparent twice and notify only the next parent (like FVWM)
-    while (next_parent != root) {
-        Window *theChildren; unsigned int n;
-        parent_window = next_parent;
-        XQueryTree(XtDisplay((Widget) m_frameShell), parent_window, &root,
-            &next_parent, &theChildren, &n);
-        XFree(theChildren); // not needed
-    }
-    int xx, yy; unsigned int dummy;
-    XGetGeometry(XtDisplay((Widget) m_frameShell), parent_window, &root,
-        &xx, &yy, &dummy, &dummy, &dummy, &dummy);
-    if (x) *x = xx;
-    if (y) *y = yy;
-}
-
 void wxFrame::DoSetSize(int x, int y, int width, int height, int WXUNUSED(sizeFlags))
 {
     if (x > -1)
