@@ -819,6 +819,9 @@ private:
     // initialize the current item if needed
     void UpdateCurrent();
 
+    // delete all items but don't refresh: called from dtor
+    void DoDeleteAllItems();
+
     // called when an item is [un]focuded, i.e. becomes [not] current
     //
     // currently unused
@@ -2159,7 +2162,7 @@ wxListMainWindow::wxListMainWindow( wxWindow *parent,
 
 wxListMainWindow::~wxListMainWindow()
 {
-    DeleteEverything();
+    DoDeleteAllItems();
 
     delete m_highlightBrush;
 
@@ -3549,7 +3552,8 @@ void wxListMainWindow::SetItemCount(long count)
 
     ResetVisibleLinesRange();
 
-    Refresh();
+    // scrollbars must be reset
+    m_dirty = TRUE;
 }
 
 int wxListMainWindow::GetSelectedItemCount()
@@ -3608,9 +3612,6 @@ bool wxListMainWindow::GetItemPosition(long item, wxPoint& pos)
 
 void wxListMainWindow::RecalculatePositions()
 {
-    if ( IsEmpty() )
-        return;
-
     wxClientDC dc( this );
     dc.SetFont( GetFont() );
 
@@ -3839,7 +3840,7 @@ void wxListMainWindow::DeleteColumn( int col )
     m_columns.DeleteNode( node );
 }
 
-void wxListMainWindow::DeleteAllItems()
+void wxListMainWindow::DoDeleteAllItems()
 {
     if ( IsEmpty() )
     {
@@ -3871,11 +3872,13 @@ void wxListMainWindow::DeleteAllItems()
     }
 
     m_lines.Clear();
+}
 
-    // NB: don't just set m_dirty to TRUE here as RecalculatePositions()
-    //     doesn't do anything if the control is empty and so we won't be
-    //     refreshed
-    Refresh();
+void wxListMainWindow::DeleteAllItems()
+{
+    DoDeleteAllItems();
+
+    RecalculatePositions();
 }
 
 void wxListMainWindow::DeleteEverything()
