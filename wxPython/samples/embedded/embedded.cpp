@@ -212,7 +212,7 @@ wxWindow* MyFrame::DoPythonStuff(wxWindow* parent)
     // More complex embedded situations will require passing C++ objects to
     // Python and/or returning objects from Python to be used in C++.  This
     // sample shows one way to do it.  NOTE: The above code could just have
-    // easily come from a file, or the whole thing coupld be in the Python
+    // easily come from a file, or the whole thing could be in the Python
     // module that is imported and manipulated directly in this C++ code.  See
     // the Python API for more details.
 
