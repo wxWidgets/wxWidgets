@@ -33,18 +33,18 @@ inline bool wxUsingUnicowsDll()
 
 #if wxUSE_GUI
 
-WXDLLEXPORT bool wxMSLU_DrawStateW(WXHDC dc, WXHBRUSH br, WXFARPROC outputFunc, 
-                                   WXLPARAM lData, WXWPARAM wData, 
-                                   int x, int y, int cx, int cy, 
-                                   unsigned int flags);
+WXDLLEXPORT int wxMSLU_DrawStateW(WXHDC dc, WXHBRUSH br, WXFARPROC outputFunc, 
+                                  WXLPARAM lData, WXWPARAM wData, 
+                                  int x, int y, int cx, int cy, 
+                                  unsigned int flags);
 #define DrawStateW(dc, br, func, ld, wd, x, y, cx, cy, flags) \
     wxMSLU_DrawStateW((WXHDC)dc,(WXHBRUSH)br,(WXFARPROC)func, \
                       ld, wd, x, y, cx, cy, flags)
 
-WXDLLEXPORT bool wxMSLU_GetOpenFileNameW(void *ofn);
+WXDLLEXPORT int wxMSLU_GetOpenFileNameW(void *ofn);
 #define GetOpenFileNameW(ofn) wxMSLU_GetOpenFileNameW((void*)ofn)
 
-WXDLLEXPORT bool wxMSLU_GetSaveFileNameW(void *ofn);
+WXDLLEXPORT int wxMSLU_GetSaveFileNameW(void *ofn);
 #define GetSaveFileNameW(ofn) wxMSLU_GetSaveFileNameW((void*)ofn)
 
 #endif
