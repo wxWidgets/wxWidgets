@@ -341,7 +341,7 @@ void wxFileConfig::Parse(wxTextFile& file, bool bLocal)
     }
     else {                        // a key
       const wxChar *pEnd = pStart;
-      while ( !wxIsspace(*pEnd) ) {
+      while ( *pEnd != _T('=') && !wxIsspace(*pEnd) ) {
         if ( *pEnd == _T('\\') ) {
           // next character may be space or not - still take it because it's
           // quoted
@@ -1277,7 +1277,7 @@ void ConfigEntry::SetValue(const wxString& strValue, bool bUser)
   if ( bUser ) {
     wxString strVal = FilterOutValue(strValue);
     wxString strLine;
-    strLine << FilterOutEntryName(m_strName) << _T(" = ") << strVal;
+    strLine << FilterOutEntryName(m_strName) << _T('=') << strVal;
 
     if ( m_pLine != NULL ) {
       // entry was read from the local config file, just modify the line
