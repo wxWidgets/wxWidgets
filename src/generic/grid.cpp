@@ -2301,7 +2301,7 @@ void wxGrid::CalcCellsExposed( wxRegion& reg )
         int colLeft, rowTop;
         for ( row = 0;  row < m_numRows;  row++ )
         {
-            if ( m_rowBottoms[row] < top ) continue;
+            if ( m_rowBottoms[row] <= top ) continue;
 
             rowTop = m_rowBottoms[row] - m_rowHeights[row];
             if ( rowTop > bottom ) break;
@@ -2310,7 +2310,7 @@ void wxGrid::CalcCellsExposed( wxRegion& reg )
 
             for ( col = 0;  col < m_numCols;  col++ )
             {
-                if ( m_colRights[col] < left ) continue;
+                if ( m_colRights[col] <= left ) continue;
 
                 colLeft = m_colRights[col] - m_colWidths[col];
                 if ( colLeft > right ) break;
@@ -3687,7 +3687,7 @@ void wxGrid::SetCurrentCell( const wxGridCellCoords& coords )
 
         // Clear the old current cell highlight
         wxRect r = BlockToDeviceRect(m_currentCellCoords, m_currentCellCoords);
-        r.x--; r.y--; r.width++; r.height++;
+	m_currentCellCoords = coords;	// Otherwise refresh redraws the hilit!
         m_gridWin->Refresh( FALSE, &r );
     }
 
