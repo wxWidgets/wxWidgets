@@ -81,6 +81,7 @@
         <option name="TOOLKIT"/>
         <option name="TOOLKIT_LOWERCASE"/>
         <option name="TOOLKIT_VERSION"/>
+        <option name="TOOLCHAIN_NAME"/>
         <option name="EXTRALIBS"/>
         <option name="EXTRALIBS_GUI"/>
         <option name="SAMPLES_RPATH_FLAG"/>

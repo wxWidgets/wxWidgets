@@ -98,10 +98,6 @@
         <if cond="PLATFORM_WIN32=='0'">$(WXVERSIONTAG)</if>
     </set>
 
-    <set var="TOOLCHAIN_NAME">
-        $(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)-$(WXVER_MAJOR).$(WXVER_MINOR)
-    </set>
-
     
     <!-- =============================================================== -->
     <!--                    Names of component libraries:                -->
