@@ -148,11 +148,10 @@ code, see the instructions in
 \func{void}{AddCatalogLookupPathPrefix}{\param{const wxString\& }{prefix}}
 
 Add a prefix to the catalog lookup path: the message catalog files will be
-looked up under prefix/<lang>/LC\_MESSAGES, prefix/LC\_MESSAGES and prefix
+looked up under prefix/<lang>/LC\_MESSAGES, prefix/<lang> and prefix
 (in this order).
 
-This only applies to subsequent invocations of AddCatalog()!
-
+This only applies to subsequent invocations of AddCatalog().
 
 \membersection{wxLocale::AddLanguage}\label{wxlocaleaddlanguage}
 
