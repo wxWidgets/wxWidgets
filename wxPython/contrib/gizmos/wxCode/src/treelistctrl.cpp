@@ -1877,7 +1877,7 @@ void wxTreeListMainWindow::Init()
 
     m_underMouse = NULL;
 
-#if defined( __WXMAC__ ) && __WXMAC_CARBON__
+#if defined( __WXMAC__ ) && defined(__WXMAC_CARBON__)
     m_normalFont.MacCreateThemeFont( kThemeViewsFont ) ;
 #else
     m_normalFont = wxSystemSettings::GetFont( wxSYS_DEFAULT_GUI_FONT );
