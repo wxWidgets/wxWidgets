@@ -1410,6 +1410,7 @@ wxLayoutList::LineBreak(void)
       m_FirstLine = m_CursorLine->GetPreviousLine();
    m_CursorPos.y++;
    m_CursorPos.x = 0;
+// doesn't help   m_CursorLine.MarkDirty();
    m_CursorLine->RecalculatePositions(true, this); //FIXME needed?
    return true;
 }

@@ -17,8 +17,13 @@ TODO
 =====================================================================
 
 Inserting NL in empty line sometimes doesn't move cursor down.
+Line numbers go a bit berserk, too. :-)
 
-Printing produces empty pages only.
+The following two probs can probably be fixed by adding the
+RecalculateLayout() method:
+ Funny re-layout shows again in sample text.
+ Printing works again, but layout at begin of new page is corrupted.
+
 
 Selections:
   - moving in negative direction doesn't work

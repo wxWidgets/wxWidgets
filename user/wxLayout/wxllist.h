@@ -606,6 +606,8 @@ public:
 
    /// Returns dirty state
    bool IsDirty(void) const { return m_Dirty; }
+   /// Marks line as diry.
+   void MarkDirty(void) { m_Dirty = true; }
 private:
    /// Destructor is private. Use DeleteLine() to remove it.
    ~wxLayoutLine();
