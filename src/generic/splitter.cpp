@@ -32,6 +32,7 @@
 #include "wx/splitter.h"
 #include "wx/dcscreen.h"
 #include "wx/settings.h"
+#include "wx/log.h"
 
 IMPLEMENT_DYNAMIC_CLASS(wxSplitterWindow, wxWindow)
 IMPLEMENT_DYNAMIC_CLASS(wxSplitterEvent, wxCommandEvent)

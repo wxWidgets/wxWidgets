@@ -915,6 +915,7 @@ GSocketError _GSocket_Input_Timeout(GSocket *socket)
 {
   struct timeval tv;
   fd_set readfds;
+  int ret;
 
   /* Linux select() will overwrite the struct on return */
   tv.tv_sec  = (socket->m_timeout / 1000);
@@ -924,8 +925,20 @@ GSocketError _GSocket_Input_Timeout(GSocket *socket)
   {
     FD_ZERO(&readfds);
     FD_SET(socket->m_fd, &readfds);
-    if (select(socket->m_fd + 1, &readfds, NULL, NULL, &tv) == 0)
+    ret = select(socket->m_fd + 1, &readfds, NULL, NULL, &tv);
+    if (ret == 0)
     {
+      printf( "GSocket_Input_Timeout, select returned 0\n" );
+      socket->m_error = GSOCK_TIMEDOUT;
+      return GSOCK_TIMEDOUT;
+    }
+    if (ret == -1)
+    {
+      printf( "GSocket_Input_Timeout, select returned -1\n" );
+      if (errno == EBADF) printf( "Invalid file descriptor\n" );
+      if (errno == EINTR) printf( "A non blocked signal was caught\n" );
+      if (errno == EINVAL) printf( "The highest number descriptor is negative\n" );
+      if (errno == ENOMEM) printf( "Not enough memory\n" );
       socket->m_error = GSOCK_TIMEDOUT;
       return GSOCK_TIMEDOUT;
     }
@@ -941,6 +954,7 @@ GSocketError _GSocket_Output_Timeout(GSocket *socket)
 {
   struct timeval tv;
   fd_set writefds;
+  int ret;
 
   /* Linux select() will overwrite the struct on return */
   tv.tv_sec  = (socket->m_timeout / 1000);
@@ -950,8 +964,20 @@ GSocketError _GSocket_Output_Timeout(GSocket *socket)
   {
     FD_ZERO(&writefds);
     FD_SET(socket->m_fd, &writefds);
-    if (select(socket->m_fd + 1, NULL, &writefds, NULL, &tv) == 0)
+    ret = select(socket->m_fd + 1, NULL, &writefds, NULL, &tv);
+    if (ret == 0)
     {
+      printf( "GSocket_Output_Timeout, select returned 0\n" );
+      socket->m_error = GSOCK_TIMEDOUT;
+      return GSOCK_TIMEDOUT;
+    }
+    if (ret == -1)
+    {
+      printf( "GSocket_Output_Timeout, select returned -1\n" );
+      if (errno == EBADF) printf( "Invalid file descriptor\n" );
+      if (errno == EINTR) printf( "A non blocked signal was caught\n" );
+      if (errno == EINVAL) printf( "The highest number descriptor is negative\n" );
+      if (errno == ENOMEM) printf( "Not enough memory\n" );
       socket->m_error = GSOCK_TIMEDOUT;
       return GSOCK_TIMEDOUT;
     }
