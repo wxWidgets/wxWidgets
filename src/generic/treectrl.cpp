@@ -1072,11 +1072,34 @@ void wxTreeCtrl::DeleteChildren(const wxTreeItemId& itemId)
 void wxTreeCtrl::Delete(const wxTreeItemId& itemId)
 {
     wxGenericTreeItem *item = itemId.m_pItem;
-    wxGenericTreeItem *parent = item->GetParent();
 
+    // don't stay with invalid m_key_current or we will crash in the next call
+    // to OnChar()
+    bool changeKeyCurrent = FALSE;
+    wxGenericTreeItem *itemKey = m_key_current;
+    while ( itemKey && !changeKeyCurrent )
+    {
+        if ( itemKey == item )
+        {
+            // m_key_current is a descendant of the item being deleted
+            changeKeyCurrent = TRUE;
+        }
+        else
+        {
+            itemKey = itemKey->GetParent();
+        }
+    }
+
+    wxGenericTreeItem *parent = item->GetParent();
     if ( parent )
     {
         parent->GetChildren().Remove( item );  // remove by value
+    }
+
+    if ( changeKeyCurrent )
+    {
+        // may be NULL or not
+        m_key_current = parent;
     }
 
     item->DeleteChildren(this);
@@ -1331,7 +1354,12 @@ void wxTreeCtrl::SelectItem(const wxTreeItemId& itemId,
     // shift press
     if (extended_select)
     {
-        if (m_current == NULL) m_current=m_key_current=GetRootItem().m_pItem;
+        if ( !m_current )
+        {
+            m_current =
+            m_key_current = GetRootItem().m_pItem;
+        }
+
         // don't change the mark (m_current)
         SelectItemRange(m_current, item);
     }
@@ -1951,7 +1979,6 @@ void wxTreeCtrl::OnChar( wxKeyEvent &event )
                 else
                 {
                     wxTreeItemId next = GetNextSibling( m_key_current );
-//                    if (next == 0)
                     if (!next)
                     {
                         wxTreeItemId current = m_key_current;
@@ -1961,7 +1988,6 @@ void wxTreeCtrl::OnChar( wxKeyEvent &event )
                             if (current) next = GetNextSibling( current );
                         }
                     }
-//                    if (next != 0)
                     if (next)
                     {
                         SelectItem( next, unselect_others, extended_select );
