@@ -88,6 +88,13 @@ public:
     // close the output stream indicating that nothing more will be written
     void CloseOutput() { delete m_outputStream; m_outputStream = NULL; }
 
+    // return TRUE if the child process stdout is not closed
+    bool IsInputOpened() const;
+
+    // return TRUE if any input is available on the child process stdout/err
+    bool IsInputAvailable() const;
+    bool IsErrorAvailable() const;
+
     // implementation only (for wxExecute)
     //
     // NB: the streams passed here should correspond to the child process

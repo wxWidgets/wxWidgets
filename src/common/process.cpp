@@ -120,6 +120,28 @@ void wxProcess::SetPipeStreams(wxInputStream *inputSstream,
     m_outputStream = outputStream;
 }
 
+// these are implemented in platform-dependent (and correct!) way under MSW and
+// Unix but we still have to provide these dummy versions for the other
+// platforms here
+#if !defined(__WIN32__) && !defined(__UNIX_LIKE__)
+
+bool wxProcess::IsInputOpened() const
+{
+    return TRUE;
+}
+
+bool wxProcess::IsInputAvailable() const
+{
+    return FALSE;
+}
+
+bool wxProcess::IsErrorAvailable() const
+{
+    return FALSE;
+}
+
+#endif // !Win32 && !Unix
+
 #endif // wxUSE_STREAMS
 
 // ----------------------------------------------------------------------------

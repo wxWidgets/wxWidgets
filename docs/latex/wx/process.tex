@@ -121,6 +121,38 @@ It returns an output stream correspoding to the input stream of the subprocess.
 If it is NULL, you have not turned on the redirection.
 See \helpref{wxProcess::Redirect}{wxprocessredirect}.
 
+\membersection{wxProcess::IsErrorAvailable}\label{wxprocessiserroravailable}
+
+\constfunc{bool}{IsErrorAvailable}{\void}
+
+Returns {\tt TRUE} if there is data to be read on the child process standard
+error stream.
+
+\wxheading{See also}
+
+\helpref{IsInputAvailable}{wxprocessisinputavailable}
+
+\membersection{wxProcess::IsInputAvailable}\label{wxprocessisinputavailable}
+
+\constfunc{bool}{IsInputAvailable}{\void}
+
+Returns {\tt TRUE} if there is data to be read on the child process standard
+output stream. This allows to write simple (and extremely inefficient)
+polling-based code waiting for a better mechanism in future wxWindows versions.
+
+See the \helpref{exec sample}{sampleexec} for an example of using this
+function.
+
+\wxheading{See also}
+
+\helpref{IsInputOpened}{wxprocessisinputopened}
+
+\membersection{wxProcess::IsInputOpened}\label{wxprocessisinputopened}
+
+\constfunc{bool}{IsInputOpened}{\void}
+
+Returns {\tt TRUE} if the child process standard output stream is opened.
+
 \membersection{wxProcess::Kill}\label{wxprocesskill}
 
 \func{static wxKillError}{Kill}{\param{int}{ pid}, \param{wxSignal}{ signal = wxSIGNONE}}
