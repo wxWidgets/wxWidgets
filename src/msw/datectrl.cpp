@@ -31,6 +31,8 @@
 #define _WX_DEFINE_DATE_EVENTS_
 #include "wx/dateevt.h"
 
+#ifndef __WXUNIVERSAL__
+
 #include "wx/msw/wrapwin.h"
 #include "wx/msw/wrapcctl.h"
 #include "wx/msw/private.h"
@@ -223,3 +225,4 @@ wxDatePickerCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
     return wxDatePickerCtrlBase::MSWOnNotify(idCtrl, lParam, result);
 }
 
+#endif // !__WXUNIVERSAL__
