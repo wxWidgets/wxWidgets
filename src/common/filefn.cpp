@@ -70,6 +70,11 @@
 #include <dir.h>
 #endif
 
+#include "wx/setup.h"
+#ifdef HAVE_FNMATCH_H
+#include   "fnmatch.h"
+#endif
+
 #ifdef __WINDOWS__
 #include "windows.h"
 #endif
@@ -1393,6 +1398,17 @@ bool wxIsWild( const wxString& pattern )
 };
 
 
+#ifdef HAVE_FNMATCH_H
+{
+   // dot_special: what is it supposed to do?
+   return fnmatch(pat.c_str(), text.c_str(), FNM_PERIOD) == 0;
+}
+#else
+
+#pragma error Broken implementation of wxMatchWild() -- needs fixing!
+   /*
+    * WARNING: this code is broken!
+    */
 bool wxMatchWild( const wxString& pat, const wxString& text, bool dot_special )
 {
   wxString tmp1 = pat;
@@ -1527,4 +1543,5 @@ bool wxMatchWild( const wxString& pat, const wxString& text, bool dot_special )
 	pattern++;
     return ((*str == '\0') && (*pattern == '\0'));
 };
+#endif
 
