@@ -24,6 +24,8 @@
 
 #if wxUSE_SPINBTN
 
+IMPLEMENT_DYNAMIC_CLASS(wxSpinButtonXmlHandler, wxXmlResourceHandler)
+
 wxSpinButtonXmlHandler::wxSpinButtonXmlHandler() 
 : wxXmlResourceHandler() 
 {
@@ -60,6 +62,8 @@ bool wxSpinButtonXmlHandler::CanHandle(wxXmlNode *node)
 #endif // wxUSE_SPINBTN
 
 #if wxUSE_SPINCTRL
+
+IMPLEMENT_DYNAMIC_CLASS(wxSpinCtrlXmlHandler, wxXmlResourceHandler)
 
 wxSpinCtrlXmlHandler::wxSpinCtrlXmlHandler() 
 : wxXmlResourceHandler() 

@@ -19,6 +19,7 @@
 
 class WXXMLDLLEXPORT wxSplitterWindowXmlHandler : public wxXmlResourceHandler
 {
+DECLARE_DYNAMIC_CLASS(wxSplitterWindowXmlHandler)
 public:
     wxSplitterWindowXmlHandler();
     virtual wxObject *DoCreateResource();

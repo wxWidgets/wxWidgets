@@ -27,6 +27,7 @@
 #include "wx/event.h"
 #include "wx/calctrl.h"
 
+IMPLEMENT_DYNAMIC_CLASS(wxCalendarCtrlXmlHandler, wxXmlResourceHandler)
 
 wxCalendarCtrlXmlHandler::wxCalendarCtrlXmlHandler() 
 : wxXmlResourceHandler() 

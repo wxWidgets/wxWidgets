@@ -22,6 +22,7 @@ class WXDLLEXPORT wxSizer;
 
 class WXXMLDLLEXPORT wxSizerXmlHandler : public wxXmlResourceHandler
 {
+DECLARE_DYNAMIC_CLASS(wxSizerXmlHandler)
 public:
     wxSizerXmlHandler();
     virtual wxObject *DoCreateResource();

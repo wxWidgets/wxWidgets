@@ -23,6 +23,8 @@
 #include "wx/listbox.h"
 #include "wx/intl.h"
 
+IMPLEMENT_DYNAMIC_CLASS(wxListBoxXmlHandler, wxXmlResourceHandler)
+
 wxListBoxXmlHandler::wxListBoxXmlHandler() 
 : wxXmlResourceHandler() , m_insideBox(FALSE)
 {

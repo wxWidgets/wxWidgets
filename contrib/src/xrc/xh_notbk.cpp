@@ -27,6 +27,8 @@
 #include "wx/notebook.h"
 #include "wx/sizer.h"
 
+IMPLEMENT_DYNAMIC_CLASS(wxNotebookXmlHandler, wxXmlResourceHandler)
+
 wxNotebookXmlHandler::wxNotebookXmlHandler() 
 : wxXmlResourceHandler(), m_isInside(FALSE), m_notebook(NULL)
 {

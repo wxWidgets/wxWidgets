@@ -22,6 +22,7 @@
 #include "wx/xrc/xh_bmp.h"
 #include "wx/bitmap.h"
 
+IMPLEMENT_DYNAMIC_CLASS(wxBitmapXmlHandler, wxXmlResourceHandler)
 
 wxBitmapXmlHandler::wxBitmapXmlHandler() 
 : wxXmlResourceHandler() 
@@ -37,6 +38,8 @@ bool wxBitmapXmlHandler::CanHandle(wxXmlNode *node)
 {
     return IsOfClass(node, wxT("wxBitmap"));
 }
+
+IMPLEMENT_DYNAMIC_CLASS(wxIconXmlHandler, wxXmlResourceHandler)
 
 wxIconXmlHandler::wxIconXmlHandler() 
 : wxXmlResourceHandler() 

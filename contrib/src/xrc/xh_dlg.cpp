@@ -24,6 +24,7 @@
 #include "wx/log.h"
 #include "wx/intl.h"
 
+IMPLEMENT_DYNAMIC_CLASS(wxDialogXmlHandler, wxXmlResourceHandler)
 
 wxDialogXmlHandler::wxDialogXmlHandler() : wxXmlResourceHandler()
 {

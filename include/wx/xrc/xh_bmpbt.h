@@ -20,6 +20,7 @@
 
 class WXXMLDLLEXPORT wxBitmapButtonXmlHandler : public wxXmlResourceHandler
 {
+DECLARE_DYNAMIC_CLASS(wxBitmapButtonXmlHandler)
 public:
     wxBitmapButtonXmlHandler();
     virtual wxObject *DoCreateResource();

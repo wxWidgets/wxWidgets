@@ -19,6 +19,7 @@
 
 class WXXMLDLLEXPORT wxMenuXmlHandler : public wxXmlResourceHandler
 {
+DECLARE_DYNAMIC_CLASS(wxMenuXmlHandler)
 public:
     wxMenuXmlHandler();
     virtual wxObject *DoCreateResource();
@@ -30,6 +31,7 @@ private:
 
 class WXXMLDLLEXPORT wxMenuBarXmlHandler : public wxXmlResourceHandler
 {
+	DECLARE_DYNAMIC_CLASS(wxMenuBarXmlHandler)
     public:
         wxMenuBarXmlHandler();
         virtual wxObject *DoCreateResource();

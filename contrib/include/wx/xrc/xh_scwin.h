@@ -22,6 +22,7 @@
 
 class WXXMLDLLEXPORT wxScrolledWindowXmlHandler : public wxXmlResourceHandler
 {
+DECLARE_DYNAMIC_CLASS(wxScrolledWindowXmlHandler)
 public:
     wxScrolledWindowXmlHandler();
     virtual wxObject *DoCreateResource();

@@ -25,6 +25,8 @@
 
 #if wxUSE_COMBOBOX
 
+IMPLEMENT_DYNAMIC_CLASS(wxComboBoxXmlHandler, wxXmlResourceHandler)
+
 wxComboBoxXmlHandler::wxComboBoxXmlHandler() 
 : wxXmlResourceHandler() , m_insideBox(FALSE)
 {

@@ -21,6 +21,7 @@
 
 class WXXMLDLLEXPORT wxGenericDirCtrlXmlHandler : public wxXmlResourceHandler
 {
+DECLARE_DYNAMIC_CLASS(wxGenericDirCtrlXmlHandler)
 public:
     wxGenericDirCtrlXmlHandler();
     virtual wxObject *DoCreateResource();

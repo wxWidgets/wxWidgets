@@ -19,6 +19,7 @@
 
 class WXXMLDLLEXPORT wxCheckListXmlHandler : public wxXmlResourceHandler
 {
+DECLARE_DYNAMIC_CLASS(wxCheckListXmlHandler)
 public:
     wxCheckListXmlHandler();
     virtual wxObject *DoCreateResource();

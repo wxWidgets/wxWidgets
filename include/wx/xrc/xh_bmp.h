@@ -20,6 +20,7 @@
 
 class WXXMLDLLEXPORT wxBitmapXmlHandler : public wxXmlResourceHandler
 {
+DECLARE_DYNAMIC_CLASS(wxBitmapXmlHandler)
 public:
     wxBitmapXmlHandler();
     virtual wxObject *DoCreateResource();
@@ -28,6 +29,7 @@ public:
 
 class WXXMLDLLEXPORT wxIconXmlHandler : public wxXmlResourceHandler
 {
+DECLARE_DYNAMIC_CLASS(wxIconXmlHandler)
 public:
     wxIconXmlHandler();
     virtual wxObject *DoCreateResource();

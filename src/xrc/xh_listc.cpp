@@ -24,6 +24,8 @@
 #include "wx/listctrl.h"
 
 
+IMPLEMENT_DYNAMIC_CLASS(wxListCtrlXmlHandler, wxXmlResourceHandler)
+
 wxListCtrlXmlHandler::wxListCtrlXmlHandler() 
 : wxXmlResourceHandler() 
 {

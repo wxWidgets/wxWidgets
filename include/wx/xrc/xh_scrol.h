@@ -22,6 +22,7 @@
 
 class WXXMLDLLEXPORT wxScrollBarXmlHandler : public wxXmlResourceHandler
 {
+	DECLARE_DYNAMIC_CLASS(wxScrollBarXmlHandler)
     enum
     {
         wxSL_DEFAULT_VALUE = 0,

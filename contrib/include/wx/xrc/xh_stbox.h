@@ -20,6 +20,7 @@
 
 class WXXMLDLLEXPORT wxStaticBoxXmlHandler : public wxXmlResourceHandler
 {
+DECLARE_DYNAMIC_CLASS(wxStaticBoxXmlHandler)
 public:
     wxStaticBoxXmlHandler();
     virtual wxObject *DoCreateResource();

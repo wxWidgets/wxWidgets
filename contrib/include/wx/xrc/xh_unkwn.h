@@ -20,6 +20,7 @@
 
 class WXXMLDLLEXPORT wxUnknownWidgetXmlHandler : public wxXmlResourceHandler
 {
+DECLARE_DYNAMIC_CLASS(wxUnknownWidgetXmlHandler)
 public:
     wxUnknownWidgetXmlHandler();
     virtual wxObject *DoCreateResource();

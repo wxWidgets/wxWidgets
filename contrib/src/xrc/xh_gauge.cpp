@@ -24,6 +24,8 @@
 
 #if wxUSE_GAUGE
 
+IMPLEMENT_DYNAMIC_CLASS(wxGaugeXmlHandler, wxXmlResourceHandler)
+
 wxGaugeXmlHandler::wxGaugeXmlHandler() 
 : wxXmlResourceHandler() 
 {

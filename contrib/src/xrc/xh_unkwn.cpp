@@ -77,6 +77,8 @@ void wxUnknownControlContainer::RemoveChild(wxWindowBase *child)
 }
 
 
+IMPLEMENT_DYNAMIC_CLASS(wxUnknownWidgetXmlHandler, wxXmlResourceHandler)
+
 wxUnknownWidgetXmlHandler::wxUnknownWidgetXmlHandler()
 : wxXmlResourceHandler()
 {

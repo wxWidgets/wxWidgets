@@ -25,6 +25,7 @@
 #include "wx/log.h"
 #include "wx/wizard.h"
 
+IMPLEMENT_DYNAMIC_CLASS(wxWizardXmlHandler, wxXmlResourceHandler)
 
 wxWizardXmlHandler::wxWizardXmlHandler() : wxXmlResourceHandler()
 {

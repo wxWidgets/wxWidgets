@@ -22,6 +22,7 @@
 
 class WXXMLDLLEXPORT wxSliderXmlHandler : public wxXmlResourceHandler
 {
+	DECLARE_DYNAMIC_CLASS(wxSliderXmlHandler)
     enum
     {
         wxSL_DEFAULT_VALUE = 0,

@@ -24,6 +24,8 @@
 
 #if wxUSE_STATLINE
 
+IMPLEMENT_DYNAMIC_CLASS(wxStaticLineXmlHandler, wxXmlResourceHandler)
+
 wxStaticLineXmlHandler::wxStaticLineXmlHandler() 
 : wxXmlResourceHandler() 
 {

@@ -24,6 +24,8 @@
 
 #if wxUSE_RADIOBOX
 
+IMPLEMENT_DYNAMIC_CLASS(wxRadioButtonXmlHandler, wxXmlResourceHandler)
+
 wxRadioButtonXmlHandler::wxRadioButtonXmlHandler() 
 : wxXmlResourceHandler() 
 {

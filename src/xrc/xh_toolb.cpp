@@ -25,6 +25,8 @@
 
 #if wxUSE_TOOLBAR
 
+IMPLEMENT_DYNAMIC_CLASS(wxToolBarXmlHandler, wxXmlResourceHandler)
+
 wxToolBarXmlHandler::wxToolBarXmlHandler() 
 : wxXmlResourceHandler(), m_isInside(FALSE), m_toolbar(NULL)
 {

@@ -19,6 +19,7 @@
 
 class WXXMLDLLEXPORT wxDialogXmlHandler : public wxXmlResourceHandler
 {
+DECLARE_DYNAMIC_CLASS(wxDialogXmlHandler)
 public:
     wxDialogXmlHandler();
     virtual wxObject *DoCreateResource();

@@ -27,6 +27,8 @@
 #include "wx/panel.h"
 #include "wx/tokenzr.h"
 
+IMPLEMENT_DYNAMIC_CLASS(wxSizerXmlHandler, wxXmlResourceHandler)
+
 bool wxSizerXmlHandler::IsSizerNode(wxXmlNode *node)
 {
     return (IsOfClass(node, wxT("wxBoxSizer"))) ||

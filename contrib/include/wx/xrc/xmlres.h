@@ -302,6 +302,7 @@ private:
 
 class WXXMLDLLEXPORT wxXmlResourceHandler : public wxObject
 {
+DECLARE_ABSTRACT_CLASS(wxXmlResourceHandler)
 public:
     // Constructor.
     wxXmlResourceHandler();

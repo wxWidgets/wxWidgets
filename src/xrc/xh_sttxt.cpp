@@ -22,6 +22,8 @@
 #include "wx/xrc/xh_sttxt.h"
 #include "wx/stattext.h"
 
+IMPLEMENT_DYNAMIC_CLASS(wxStaticTextXmlHandler, wxXmlResourceHandler)
+
 wxStaticTextXmlHandler::wxStaticTextXmlHandler() 
 : wxXmlResourceHandler() 
 {

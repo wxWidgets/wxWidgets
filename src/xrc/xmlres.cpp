@@ -143,6 +143,7 @@ bool wxXmlResource::Load(const wxString& filemask)
 }
 
 
+IMPLEMENT_ABSTRACT_CLASS(wxXmlResourceHandler, wxObject)
 
 void wxXmlResource::AddHandler(wxXmlResourceHandler *handler)
 {

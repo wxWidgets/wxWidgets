@@ -24,6 +24,8 @@
 
 #if wxUSE_SLIDER
 
+IMPLEMENT_DYNAMIC_CLASS(wxSliderXmlHandler, wxXmlResourceHandler)
+
 wxSliderXmlHandler::wxSliderXmlHandler() 
 : wxXmlResourceHandler() 
 {

@@ -22,6 +22,7 @@ class WXDLLEXPORT wxNotebook;
 
 class WXXMLDLLEXPORT wxNotebookXmlHandler : public wxXmlResourceHandler
 {
+DECLARE_DYNAMIC_CLASS(wxNotebookXmlHandler)
 public:
     wxNotebookXmlHandler();
     virtual wxObject *DoCreateResource();

@@ -23,6 +23,8 @@
 #include "wx/splitter.h"
 #include "wx/log.h"
 
+IMPLEMENT_DYNAMIC_CLASS(wxSplitterWindowXmlHandler, wxXmlResourceHandler)
+
 wxSplitterWindowXmlHandler::wxSplitterWindowXmlHandler() : wxXmlResourceHandler()
 {
     XRC_ADD_STYLE(wxSP_3D);

@@ -25,6 +25,8 @@
 
 #if wxUSE_RADIOBOX
 
+IMPLEMENT_DYNAMIC_CLASS(wxRadioBoxXmlHandler, wxXmlResourceHandler)
+
 wxRadioBoxXmlHandler::wxRadioBoxXmlHandler() 
 : wxXmlResourceHandler(), m_insideBox(FALSE)
 {
