@@ -1,4 +1,16 @@
 """
+<html><body>
+This demo shows how to embed an ActiveX control in a wxPython application, (Win32 only.)
+<p>
+The MakeActiveXClass function dynamically builds a new Class on the fly, that has the
+same signature and semantics as wxWindow.  This means that when you call the function
+you get back a new class that you can use just like wxWindow, (set the size and position,
+use in a sizer, etc.) except its contents will be the COM control.
+<p>
+This demo embeds the Internet Exploer WebBrowser control, and shows how to receive events
+from the COM control.  (The title bar and status bar are updated as pages change, in addition
+to the log messages being shown.)
+</body></html>
 """
 
 from wxPython.wx import *
@@ -38,8 +50,12 @@ class TestPanel(wxWindow):
         self.ie = theClass(self, -1, style=wxSUNKEN_BORDER)
 
 
-        btn = wxButton(self, wxNewId(), " Open ")
-        EVT_BUTTON(self, btn.GetId(), self.OnOpenButton)
+        #btn = wxButton(self, wxNewId(), " Open ")
+        #EVT_BUTTON(self, btn.GetId(), self.OnOpenButton)
+        #btnSizer.Add(btn, 0, wxEXPAND|wxALL, 5)
+
+        btn = wxButton(self, wxNewId(), " Home ")
+        EVT_BUTTON(self, btn.GetId(), self.OnHomeButton)
         btnSizer.Add(btn, 0, wxEXPAND|wxALL, 5)
 
         btn = wxButton(self, wxNewId(), " <-- ")
@@ -104,6 +120,8 @@ class TestPanel(wxWindow):
             self.ie.Navigate(self.current)
         dlg.Destroy()
 
+    def OnHomeButton(self, event):
+        self.ie.GoHome()    ## ET Phone Home!
 
     def OnPrevPageButton(self, event):
         self.ie.GoBack()

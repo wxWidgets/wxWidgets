@@ -140,18 +140,17 @@ static PyObject *_wrap_new_wxStyledTextCtrl(PyObject *self, PyObject *args, PyOb
     wxPoint * _arg2 = (wxPoint *) &wxDefaultPosition;
     wxSize * _arg3 = (wxSize *) &wxDefaultSize;
     long  _arg4 = (long ) 0;
-    wxString * _arg5 = (wxString *) &(wxSTCNameStr);
+    char * _arg5 = (char *) (wxSTCNameStr);
     PyObject * _argo0 = 0;
     wxPoint  temp;
     PyObject * _obj2 = 0;
     wxSize  temp0;
     PyObject * _obj3 = 0;
-    PyObject * _obj5 = 0;
     char *_kwnames[] = { "parent","id","pos","size","style","name", NULL };
     char _ptemp[128];
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi|OOlO:new_wxStyledTextCtrl",_kwnames,&_argo0,&_arg1,&_obj2,&_obj3,&_arg4,&_obj5)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi|OOls:new_wxStyledTextCtrl",_kwnames,&_argo0,&_arg1,&_obj2,&_obj3,&_arg4,&_arg5)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -172,17 +171,9 @@ static PyObject *_wrap_new_wxStyledTextCtrl(PyObject *self, PyObject *args, PyOb
     if (! wxSize_helper(_obj3, &_arg3))
         return NULL;
 }
-    if (_obj5)
-{
-    if (!PyString_Check(_obj5)) {
-        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
-        return NULL;
-    }
-    _arg5 = new wxString(PyString_AsString(_obj5), PyString_Size(_obj5));
-}
 {
     wxPy_BEGIN_ALLOW_THREADS;
-        _result = (wxStyledTextCtrl *)new_wxStyledTextCtrl(_arg0,_arg1,*_arg2,*_arg3,_arg4,*_arg5);
+        _result = (wxStyledTextCtrl *)new_wxStyledTextCtrl(_arg0,_arg1,*_arg2,*_arg3,_arg4,_arg5);
 
     wxPy_END_ALLOW_THREADS;
 }    if (_result) {
@@ -192,10 +183,6 @@ static PyObject *_wrap_new_wxStyledTextCtrl(PyObject *self, PyObject *args, PyOb
         Py_INCREF(Py_None);
         _resultobj = Py_None;
     }
-{
-    if (_obj5)
-        delete _arg5;
-}
     return _resultobj;
 }
 
@@ -2683,11 +2670,12 @@ static PyObject *_wrap_wxStyledTextCtrl_StyleSetForeground(PyObject *self, PyObj
     int  _arg1;
     wxColour * _arg2;
     PyObject * _argo0 = 0;
-    PyObject * _argo2 = 0;
+    wxColour  temp;
+    PyObject * _obj2 = 0;
     char *_kwnames[] = { "self","styleNum","colour", NULL };
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OiO:wxStyledTextCtrl_StyleSetForeground",_kwnames,&_argo0,&_arg1,&_argo2)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OiO:wxStyledTextCtrl_StyleSetForeground",_kwnames,&_argo0,&_arg1,&_obj2)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -2696,13 +2684,11 @@ static PyObject *_wrap_wxStyledTextCtrl_StyleSetForeground(PyObject *self, PyObj
         return NULL;
         }
     }
-    if (_argo2) {
-        if (_argo2 == Py_None) { _arg2 = NULL; }
-        else if (SWIG_GetPtrObj(_argo2,(void **) &_arg2,"_wxColour_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 3 of wxStyledTextCtrl_StyleSetForeground. Expected _wxColour_p.");
+{
+    _arg2 = &temp;
+    if (! wxColour_helper(_obj2, &_arg2))
         return NULL;
-        }
-    }
+}
 {
     wxPy_BEGIN_ALLOW_THREADS;
         wxStyledTextCtrl_StyleSetForeground(_arg0,_arg1,*_arg2);
@@ -2720,11 +2706,12 @@ static PyObject *_wrap_wxStyledTextCtrl_StyleSetBackground(PyObject *self, PyObj
     int  _arg1;
     wxColour * _arg2;
     PyObject * _argo0 = 0;
-    PyObject * _argo2 = 0;
+    wxColour  temp;
+    PyObject * _obj2 = 0;
     char *_kwnames[] = { "self","styleNum","colour", NULL };
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OiO:wxStyledTextCtrl_StyleSetBackground",_kwnames,&_argo0,&_arg1,&_argo2)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OiO:wxStyledTextCtrl_StyleSetBackground",_kwnames,&_argo0,&_arg1,&_obj2)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -2733,13 +2720,11 @@ static PyObject *_wrap_wxStyledTextCtrl_StyleSetBackground(PyObject *self, PyObj
         return NULL;
         }
     }
-    if (_argo2) {
-        if (_argo2 == Py_None) { _arg2 = NULL; }
-        else if (SWIG_GetPtrObj(_argo2,(void **) &_arg2,"_wxColour_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 3 of wxStyledTextCtrl_StyleSetBackground. Expected _wxColour_p.");
+{
+    _arg2 = &temp;
+    if (! wxColour_helper(_obj2, &_arg2))
         return NULL;
-        }
-    }
+}
 {
     wxPy_BEGIN_ALLOW_THREADS;
         wxStyledTextCtrl_StyleSetBackground(_arg0,_arg1,*_arg2);
@@ -3317,11 +3302,12 @@ static PyObject *_wrap_wxStyledTextCtrl_SetSelectionForeground(PyObject *self, P
     wxStyledTextCtrl * _arg0;
     wxColour * _arg1;
     PyObject * _argo0 = 0;
-    PyObject * _argo1 = 0;
+    wxColour  temp;
+    PyObject * _obj1 = 0;
     char *_kwnames[] = { "self","colour", NULL };
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxStyledTextCtrl_SetSelectionForeground",_kwnames,&_argo0,&_argo1)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxStyledTextCtrl_SetSelectionForeground",_kwnames,&_argo0,&_obj1)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -3330,13 +3316,11 @@ static PyObject *_wrap_wxStyledTextCtrl_SetSelectionForeground(PyObject *self, P
         return NULL;
         }
     }
-    if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxColour_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxStyledTextCtrl_SetSelectionForeground. Expected _wxColour_p.");
+{
+    _arg1 = &temp;
+    if (! wxColour_helper(_obj1, &_arg1))
         return NULL;
-        }
-    }
+}
 {
     wxPy_BEGIN_ALLOW_THREADS;
         wxStyledTextCtrl_SetSelectionForeground(_arg0,*_arg1);
@@ -3353,11 +3337,12 @@ static PyObject *_wrap_wxStyledTextCtrl_SetSelectionBackground(PyObject *self, P
     wxStyledTextCtrl * _arg0;
     wxColour * _arg1;
     PyObject * _argo0 = 0;
-    PyObject * _argo1 = 0;
+    wxColour  temp;
+    PyObject * _obj1 = 0;
     char *_kwnames[] = { "self","colour", NULL };
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxStyledTextCtrl_SetSelectionBackground",_kwnames,&_argo0,&_argo1)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxStyledTextCtrl_SetSelectionBackground",_kwnames,&_argo0,&_obj1)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -3366,13 +3351,11 @@ static PyObject *_wrap_wxStyledTextCtrl_SetSelectionBackground(PyObject *self, P
         return NULL;
         }
     }
-    if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxColour_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxStyledTextCtrl_SetSelectionBackground. Expected _wxColour_p.");
+{
+    _arg1 = &temp;
+    if (! wxColour_helper(_obj1, &_arg1))
         return NULL;
-        }
-    }
+}
 {
     wxPy_BEGIN_ALLOW_THREADS;
         wxStyledTextCtrl_SetSelectionBackground(_arg0,*_arg1);
@@ -3389,11 +3372,12 @@ static PyObject *_wrap_wxStyledTextCtrl_SetCaretForeground(PyObject *self, PyObj
     wxStyledTextCtrl * _arg0;
     wxColour * _arg1;
     PyObject * _argo0 = 0;
-    PyObject * _argo1 = 0;
+    wxColour  temp;
+    PyObject * _obj1 = 0;
     char *_kwnames[] = { "self","colour", NULL };
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxStyledTextCtrl_SetCaretForeground",_kwnames,&_argo0,&_argo1)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxStyledTextCtrl_SetCaretForeground",_kwnames,&_argo0,&_obj1)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -3402,13 +3386,11 @@ static PyObject *_wrap_wxStyledTextCtrl_SetCaretForeground(PyObject *self, PyObj
         return NULL;
         }
     }
-    if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxColour_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxStyledTextCtrl_SetCaretForeground. Expected _wxColour_p.");
+{
+    _arg1 = &temp;
+    if (! wxColour_helper(_obj1, &_arg1))
         return NULL;
-        }
-    }
+}
 {
     wxPy_BEGIN_ALLOW_THREADS;
         wxStyledTextCtrl_SetCaretForeground(_arg0,*_arg1);
@@ -3667,12 +3649,14 @@ static PyObject *_wrap_wxStyledTextCtrl_MarkerDefine(PyObject *self, PyObject *a
     wxColour * _arg3;
     wxColour * _arg4;
     PyObject * _argo0 = 0;
-    PyObject * _argo3 = 0;
-    PyObject * _argo4 = 0;
+    wxColour  temp;
+    PyObject * _obj3 = 0;
+    wxColour  temp0;
+    PyObject * _obj4 = 0;
     char *_kwnames[] = { "self","markerNumber","markerSymbol","foreground","background", NULL };
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OiiOO:wxStyledTextCtrl_MarkerDefine",_kwnames,&_argo0,&_arg1,&_arg2,&_argo3,&_argo4)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OiiOO:wxStyledTextCtrl_MarkerDefine",_kwnames,&_argo0,&_arg1,&_arg2,&_obj3,&_obj4)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -3681,20 +3665,16 @@ static PyObject *_wrap_wxStyledTextCtrl_MarkerDefine(PyObject *self, PyObject *a
         return NULL;
         }
     }
-    if (_argo3) {
-        if (_argo3 == Py_None) { _arg3 = NULL; }
-        else if (SWIG_GetPtrObj(_argo3,(void **) &_arg3,"_wxColour_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 4 of wxStyledTextCtrl_MarkerDefine. Expected _wxColour_p.");
+{
+    _arg3 = &temp;
+    if (! wxColour_helper(_obj3, &_arg3))
         return NULL;
-        }
-    }
-    if (_argo4) {
-        if (_argo4 == Py_None) { _arg4 = NULL; }
-        else if (SWIG_GetPtrObj(_argo4,(void **) &_arg4,"_wxColour_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 5 of wxStyledTextCtrl_MarkerDefine. Expected _wxColour_p.");
+}
+{
+    _arg4 = &temp0;
+    if (! wxColour_helper(_obj4, &_arg4))
         return NULL;
-        }
-    }
+}
 {
     wxPy_BEGIN_ALLOW_THREADS;
         wxStyledTextCtrl_MarkerDefine(_arg0,_arg1,_arg2,*_arg3,*_arg4);
@@ -3741,11 +3721,12 @@ static PyObject *_wrap_wxStyledTextCtrl_MarkerSetForeground(PyObject *self, PyOb
     int  _arg1;
     wxColour * _arg2;
     PyObject * _argo0 = 0;
-    PyObject * _argo2 = 0;
+    wxColour  temp;
+    PyObject * _obj2 = 0;
     char *_kwnames[] = { "self","markerNumber","colour", NULL };
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OiO:wxStyledTextCtrl_MarkerSetForeground",_kwnames,&_argo0,&_arg1,&_argo2)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OiO:wxStyledTextCtrl_MarkerSetForeground",_kwnames,&_argo0,&_arg1,&_obj2)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -3754,13 +3735,11 @@ static PyObject *_wrap_wxStyledTextCtrl_MarkerSetForeground(PyObject *self, PyOb
         return NULL;
         }
     }
-    if (_argo2) {
-        if (_argo2 == Py_None) { _arg2 = NULL; }
-        else if (SWIG_GetPtrObj(_argo2,(void **) &_arg2,"_wxColour_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 3 of wxStyledTextCtrl_MarkerSetForeground. Expected _wxColour_p.");
+{
+    _arg2 = &temp;
+    if (! wxColour_helper(_obj2, &_arg2))
         return NULL;
-        }
-    }
+}
 {
     wxPy_BEGIN_ALLOW_THREADS;
         wxStyledTextCtrl_MarkerSetForeground(_arg0,_arg1,*_arg2);
@@ -3778,11 +3757,12 @@ static PyObject *_wrap_wxStyledTextCtrl_MarkerSetBackground(PyObject *self, PyOb
     int  _arg1;
     wxColour * _arg2;
     PyObject * _argo0 = 0;
-    PyObject * _argo2 = 0;
+    wxColour  temp;
+    PyObject * _obj2 = 0;
     char *_kwnames[] = { "self","markerNumber","colour", NULL };
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OiO:wxStyledTextCtrl_MarkerSetBackground",_kwnames,&_argo0,&_arg1,&_argo2)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OiO:wxStyledTextCtrl_MarkerSetBackground",_kwnames,&_argo0,&_arg1,&_obj2)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -3791,13 +3771,11 @@ static PyObject *_wrap_wxStyledTextCtrl_MarkerSetBackground(PyObject *self, PyOb
         return NULL;
         }
     }
-    if (_argo2) {
-        if (_argo2 == Py_None) { _arg2 = NULL; }
-        else if (SWIG_GetPtrObj(_argo2,(void **) &_arg2,"_wxColour_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 3 of wxStyledTextCtrl_MarkerSetBackground. Expected _wxColour_p.");
+{
+    _arg2 = &temp;
+    if (! wxColour_helper(_obj2, &_arg2))
         return NULL;
-        }
-    }
+}
 {
     wxPy_BEGIN_ALLOW_THREADS;
         wxStyledTextCtrl_MarkerSetBackground(_arg0,_arg1,*_arg2);
@@ -4100,11 +4078,12 @@ static PyObject *_wrap_wxStyledTextCtrl_IndicatorSetColour(PyObject *self, PyObj
     int  _arg1;
     wxColour * _arg2;
     PyObject * _argo0 = 0;
-    PyObject * _argo2 = 0;
+    wxColour  temp;
+    PyObject * _obj2 = 0;
     char *_kwnames[] = { "self","indicNum","colour", NULL };
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OiO:wxStyledTextCtrl_IndicatorSetColour",_kwnames,&_argo0,&_arg1,&_argo2)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OiO:wxStyledTextCtrl_IndicatorSetColour",_kwnames,&_argo0,&_arg1,&_obj2)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -4113,13 +4092,11 @@ static PyObject *_wrap_wxStyledTextCtrl_IndicatorSetColour(PyObject *self, PyObj
         return NULL;
         }
     }
-    if (_argo2) {
-        if (_argo2 == Py_None) { _arg2 = NULL; }
-        else if (SWIG_GetPtrObj(_argo2,(void **) &_arg2,"_wxColour_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 3 of wxStyledTextCtrl_IndicatorSetColour. Expected _wxColour_p.");
+{
+    _arg2 = &temp;
+    if (! wxColour_helper(_obj2, &_arg2))
         return NULL;
-        }
-    }
+}
 {
     wxPy_BEGIN_ALLOW_THREADS;
         wxStyledTextCtrl_IndicatorSetColour(_arg0,_arg1,*_arg2);
@@ -4475,11 +4452,12 @@ static PyObject *_wrap_wxStyledTextCtrl_CallTipSetBackground(PyObject *self, PyO
     wxStyledTextCtrl * _arg0;
     wxColour * _arg1;
     PyObject * _argo0 = 0;
-    PyObject * _argo1 = 0;
+    wxColour  temp;
+    PyObject * _obj1 = 0;
     char *_kwnames[] = { "self","colour", NULL };
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxStyledTextCtrl_CallTipSetBackground",_kwnames,&_argo0,&_argo1)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxStyledTextCtrl_CallTipSetBackground",_kwnames,&_argo0,&_obj1)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -4488,13 +4466,11 @@ static PyObject *_wrap_wxStyledTextCtrl_CallTipSetBackground(PyObject *self, PyO
         return NULL;
         }
     }
-    if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxColour_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxStyledTextCtrl_CallTipSetBackground. Expected _wxColour_p.");
+{
+    _arg1 = &temp;
+    if (! wxColour_helper(_obj1, &_arg1))
         return NULL;
-        }
-    }
+}
 {
     wxPy_BEGIN_ALLOW_THREADS;
         wxStyledTextCtrl_CallTipSetBackground(_arg0,*_arg1);
@@ -5267,11 +5243,12 @@ static PyObject *_wrap_wxStyledTextCtrl_SetEdgeColour(PyObject *self, PyObject *
     wxStyledTextCtrl * _arg0;
     wxColour * _arg1;
     PyObject * _argo0 = 0;
-    PyObject * _argo1 = 0;
+    wxColour  temp;
+    PyObject * _obj1 = 0;
     char *_kwnames[] = { "self","colour", NULL };
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxStyledTextCtrl_SetEdgeColour",_kwnames,&_argo0,&_argo1)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxStyledTextCtrl_SetEdgeColour",_kwnames,&_argo0,&_obj1)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -5280,13 +5257,11 @@ static PyObject *_wrap_wxStyledTextCtrl_SetEdgeColour(PyObject *self, PyObject *
         return NULL;
         }
     }
-    if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxColour_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxStyledTextCtrl_SetEdgeColour. Expected _wxColour_p.");
+{
+    _arg1 = &temp;
+    if (! wxColour_helper(_obj1, &_arg1))
         return NULL;
-        }
-    }
+}
 {
     wxPy_BEGIN_ALLOW_THREADS;
         wxStyledTextCtrl_SetEdgeColour(_arg0,*_arg1);
@@ -7142,6 +7117,11 @@ SWIGEXPORT(void) initstcc() {
 	 PyDict_SetItemString(d,"wxSTC_CMD_ZOOMOUT", PyInt_FromLong((long) wxSTC_CMD_ZOOMOUT));
 	 PyDict_SetItemString(d,"wxSTC_CMD_DELWORDLEFT", PyInt_FromLong((long) wxSTC_CMD_DELWORDLEFT));
 	 PyDict_SetItemString(d,"wxSTC_CMD_DELWORDRIGHT", PyInt_FromLong((long) wxSTC_CMD_DELWORDRIGHT));
+	 PyDict_SetItemString(d,"wxSTC_CMD_LINECUT", PyInt_FromLong((long) wxSTC_CMD_LINECUT));
+	 PyDict_SetItemString(d,"wxSTC_CMD_LINEDELETE", PyInt_FromLong((long) wxSTC_CMD_LINEDELETE));
+	 PyDict_SetItemString(d,"wxSTC_CMD_LINETRANSPOSE", PyInt_FromLong((long) wxSTC_CMD_LINETRANSPOSE));
+	 PyDict_SetItemString(d,"wxSTC_CMD_LOWERCASE", PyInt_FromLong((long) wxSTC_CMD_LOWERCASE));
+	 PyDict_SetItemString(d,"wxSTC_CMD_UPPERCASE", PyInt_FromLong((long) wxSTC_CMD_UPPERCASE));
 	 PyDict_SetItemString(d,"wxSTC_LEX_CONTAINER", PyInt_FromLong((long) wxSTC_LEX_CONTAINER));
 	 PyDict_SetItemString(d,"wxSTC_LEX_NULL", PyInt_FromLong((long) wxSTC_LEX_NULL));
 	 PyDict_SetItemString(d,"wxSTC_LEX_PYTHON", PyInt_FromLong((long) wxSTC_LEX_PYTHON));

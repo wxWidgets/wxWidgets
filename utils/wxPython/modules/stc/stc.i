@@ -117,7 +117,12 @@ enum {
     wxSTC_CMD_ZOOMIN,
     wxSTC_CMD_ZOOMOUT,
     wxSTC_CMD_DELWORDLEFT,
-    wxSTC_CMD_DELWORDRIGHT
+    wxSTC_CMD_DELWORDRIGHT,
+    wxSTC_CMD_LINECUT,
+    wxSTC_CMD_LINEDELETE,
+    wxSTC_CMD_LINETRANSPOSE,
+    wxSTC_CMD_LOWERCASE,
+    wxSTC_CMD_UPPERCASE
 };
 
 
@@ -163,7 +168,7 @@ public:
     wxStyledTextCtrl(wxWindow *parent, wxWindowID id,
                      const wxPoint& pos = wxDefaultPosition,
                      const wxSize& size = wxDefaultSize, long style = 0,
-                     const wxString& name = wxSTCNameStr);
+                     const char* name = wxSTCNameStr);
     //~wxStyledTextCtrl();
 
 

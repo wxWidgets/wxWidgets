@@ -288,11 +288,12 @@ static PyObject *_wrap_wxColourData_SetColour(PyObject *self, PyObject *args, Py
     wxColourData * _arg0;
     wxColour * _arg1;
     PyObject * _argo0 = 0;
-    PyObject * _argo1 = 0;
+    wxColour  temp;
+    PyObject * _obj1 = 0;
     char *_kwnames[] = { "self","colour", NULL };
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxColourData_SetColour",_kwnames,&_argo0,&_argo1)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxColourData_SetColour",_kwnames,&_argo0,&_obj1)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -301,13 +302,11 @@ static PyObject *_wrap_wxColourData_SetColour(PyObject *self, PyObject *args, Py
         return NULL;
         }
     }
-    if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxColour_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxColourData_SetColour. Expected _wxColour_p.");
+{
+    _arg1 = &temp;
+    if (! wxColour_helper(_obj1, &_arg1))
         return NULL;
-        }
-    }
+}
 {
     wxPy_BEGIN_ALLOW_THREADS;
         wxColourData_SetColour(_arg0,*_arg1);
@@ -325,11 +324,12 @@ static PyObject *_wrap_wxColourData_SetCustomColour(PyObject *self, PyObject *ar
     int  _arg1;
     wxColour * _arg2;
     PyObject * _argo0 = 0;
-    PyObject * _argo2 = 0;
+    wxColour  temp;
+    PyObject * _obj2 = 0;
     char *_kwnames[] = { "self","i","colour", NULL };
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OiO:wxColourData_SetCustomColour",_kwnames,&_argo0,&_arg1,&_argo2)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OiO:wxColourData_SetCustomColour",_kwnames,&_argo0,&_arg1,&_obj2)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -338,13 +338,11 @@ static PyObject *_wrap_wxColourData_SetCustomColour(PyObject *self, PyObject *ar
         return NULL;
         }
     }
-    if (_argo2) {
-        if (_argo2 == Py_None) { _arg2 = NULL; }
-        else if (SWIG_GetPtrObj(_argo2,(void **) &_arg2,"_wxColour_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 3 of wxColourData_SetCustomColour. Expected _wxColour_p.");
+{
+    _arg2 = &temp;
+    if (! wxColour_helper(_obj2, &_arg2))
         return NULL;
-        }
-    }
+}
 {
     wxPy_BEGIN_ALLOW_THREADS;
         wxColourData_SetCustomColour(_arg0,_arg1,*_arg2);
@@ -2092,11 +2090,12 @@ static PyObject *_wrap_wxFontData_SetColour(PyObject *self, PyObject *args, PyOb
     wxFontData * _arg0;
     wxColour * _arg1;
     PyObject * _argo0 = 0;
-    PyObject * _argo1 = 0;
+    wxColour  temp;
+    PyObject * _obj1 = 0;
     char *_kwnames[] = { "self","colour", NULL };
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxFontData_SetColour",_kwnames,&_argo0,&_argo1)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxFontData_SetColour",_kwnames,&_argo0,&_obj1)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -2105,13 +2104,11 @@ static PyObject *_wrap_wxFontData_SetColour(PyObject *self, PyObject *args, PyOb
         return NULL;
         }
     }
-    if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxColour_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxFontData_SetColour. Expected _wxColour_p.");
+{
+    _arg1 = &temp;
+    if (! wxColour_helper(_obj1, &_arg1))
         return NULL;
-        }
-    }
+}
 {
     wxPy_BEGIN_ALLOW_THREADS;
         wxFontData_SetColour(_arg0,*_arg1);

@@ -37,11 +37,11 @@ various sources of help, but probably the best source is the
 wxPython-users mail list.  You can view the archive or subscribe by
 going to
 
-       http://starship.python.net/mailman/listinfo/wxpython-users
+       http://wxwindows.org/mailman/listinfo/wxpython-users
 
 Or you can send mail directly to the list using this address:
 
-       wxpython-users@starship.python.net
+       wxpython-users@wxwindows.org
 
 
 Other Info

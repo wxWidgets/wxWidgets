@@ -191,11 +191,12 @@ static PyObject *_wrap_wxListItemAttr_SetTextColour(PyObject *self, PyObject *ar
     wxListItemAttr * _arg0;
     wxColour * _arg1;
     PyObject * _argo0 = 0;
-    PyObject * _argo1 = 0;
+    wxColour  temp;
+    PyObject * _obj1 = 0;
     char *_kwnames[] = { "self","colText", NULL };
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxListItemAttr_SetTextColour",_kwnames,&_argo0,&_argo1)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxListItemAttr_SetTextColour",_kwnames,&_argo0,&_obj1)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -204,13 +205,11 @@ static PyObject *_wrap_wxListItemAttr_SetTextColour(PyObject *self, PyObject *ar
         return NULL;
         }
     }
-    if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxColour_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxListItemAttr_SetTextColour. Expected _wxColour_p.");
+{
+    _arg1 = &temp;
+    if (! wxColour_helper(_obj1, &_arg1))
         return NULL;
-        }
-    }
+}
 {
     wxPy_BEGIN_ALLOW_THREADS;
         wxListItemAttr_SetTextColour(_arg0,*_arg1);
@@ -227,11 +226,12 @@ static PyObject *_wrap_wxListItemAttr_SetBackgroundColour(PyObject *self, PyObje
     wxListItemAttr * _arg0;
     wxColour * _arg1;
     PyObject * _argo0 = 0;
-    PyObject * _argo1 = 0;
+    wxColour  temp;
+    PyObject * _obj1 = 0;
     char *_kwnames[] = { "self","colBack", NULL };
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxListItemAttr_SetBackgroundColour",_kwnames,&_argo0,&_argo1)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxListItemAttr_SetBackgroundColour",_kwnames,&_argo0,&_obj1)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -240,13 +240,11 @@ static PyObject *_wrap_wxListItemAttr_SetBackgroundColour(PyObject *self, PyObje
         return NULL;
         }
     }
-    if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxColour_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxListItemAttr_SetBackgroundColour. Expected _wxColour_p.");
+{
+    _arg1 = &temp;
+    if (! wxColour_helper(_obj1, &_arg1))
         return NULL;
-        }
-    }
+}
 {
     wxPy_BEGIN_ALLOW_THREADS;
         wxListItemAttr_SetBackgroundColour(_arg0,*_arg1);
@@ -883,11 +881,12 @@ static PyObject *_wrap_wxListItem_SetTextColour(PyObject *self, PyObject *args, 
     wxListItem * _arg0;
     wxColour * _arg1;
     PyObject * _argo0 = 0;
-    PyObject * _argo1 = 0;
+    wxColour  temp;
+    PyObject * _obj1 = 0;
     char *_kwnames[] = { "self","colText", NULL };
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxListItem_SetTextColour",_kwnames,&_argo0,&_argo1)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxListItem_SetTextColour",_kwnames,&_argo0,&_obj1)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -896,13 +895,11 @@ static PyObject *_wrap_wxListItem_SetTextColour(PyObject *self, PyObject *args, 
         return NULL;
         }
     }
-    if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxColour_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxListItem_SetTextColour. Expected _wxColour_p.");
+{
+    _arg1 = &temp;
+    if (! wxColour_helper(_obj1, &_arg1))
         return NULL;
-        }
-    }
+}
 {
     wxPy_BEGIN_ALLOW_THREADS;
         wxListItem_SetTextColour(_arg0,*_arg1);
@@ -919,11 +916,12 @@ static PyObject *_wrap_wxListItem_SetBackgroundColour(PyObject *self, PyObject *
     wxListItem * _arg0;
     wxColour * _arg1;
     PyObject * _argo0 = 0;
-    PyObject * _argo1 = 0;
+    wxColour  temp;
+    PyObject * _obj1 = 0;
     char *_kwnames[] = { "self","colBack", NULL };
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxListItem_SetBackgroundColour",_kwnames,&_argo0,&_argo1)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxListItem_SetBackgroundColour",_kwnames,&_argo0,&_obj1)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -932,13 +930,11 @@ static PyObject *_wrap_wxListItem_SetBackgroundColour(PyObject *self, PyObject *
         return NULL;
         }
     }
-    if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxColour_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxListItem_SetBackgroundColour. Expected _wxColour_p.");
+{
+    _arg1 = &temp;
+    if (! wxColour_helper(_obj1, &_arg1))
         return NULL;
-        }
-    }
+}
 {
     wxPy_BEGIN_ALLOW_THREADS;
         wxListItem_SetBackgroundColour(_arg0,*_arg1);
@@ -3736,11 +3732,12 @@ static PyObject *_wrap_wxListCtrl_SetTextColour(PyObject *self, PyObject *args, 
     wxListCtrl * _arg0;
     wxColour * _arg1;
     PyObject * _argo0 = 0;
-    PyObject * _argo1 = 0;
+    wxColour  temp;
+    PyObject * _obj1 = 0;
     char *_kwnames[] = { "self","col", NULL };
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxListCtrl_SetTextColour",_kwnames,&_argo0,&_argo1)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxListCtrl_SetTextColour",_kwnames,&_argo0,&_obj1)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -3749,13 +3746,11 @@ static PyObject *_wrap_wxListCtrl_SetTextColour(PyObject *self, PyObject *args, 
         return NULL;
         }
     }
-    if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxColour_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxListCtrl_SetTextColour. Expected _wxColour_p.");
+{
+    _arg1 = &temp;
+    if (! wxColour_helper(_obj1, &_arg1))
         return NULL;
-        }
-    }
+}
 {
     wxPy_BEGIN_ALLOW_THREADS;
         wxListCtrl_SetTextColour(_arg0,*_arg1);
@@ -4101,11 +4096,12 @@ static PyObject *_wrap_wxListCtrl_SetBackgroundColour(PyObject *self, PyObject *
     wxListCtrl * _arg0;
     wxColour * _arg1;
     PyObject * _argo0 = 0;
-    PyObject * _argo1 = 0;
+    wxColour  temp;
+    PyObject * _obj1 = 0;
     char *_kwnames[] = { "self","col", NULL };
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxListCtrl_SetBackgroundColour",_kwnames,&_argo0,&_argo1)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxListCtrl_SetBackgroundColour",_kwnames,&_argo0,&_obj1)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -4114,13 +4110,11 @@ static PyObject *_wrap_wxListCtrl_SetBackgroundColour(PyObject *self, PyObject *
         return NULL;
         }
     }
-    if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxColour_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxListCtrl_SetBackgroundColour. Expected _wxColour_p.");
+{
+    _arg1 = &temp;
+    if (! wxColour_helper(_obj1, &_arg1))
         return NULL;
-        }
-    }
+}
 {
     wxPy_BEGIN_ALLOW_THREADS;
         wxListCtrl_SetBackgroundColour(_arg0,*_arg1);
@@ -4648,6 +4642,44 @@ static PyObject *_wrap_wxTreeItemId_IsOk(PyObject *self, PyObject *args, PyObjec
 {
     wxPy_BEGIN_ALLOW_THREADS;
         _result = (bool )wxTreeItemId_IsOk(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+static int  wxTreeItemId___cmp__(wxTreeItemId *self,wxTreeItemId * other) {
+            return *self != *other;
+        }
+static PyObject *_wrap_wxTreeItemId___cmp__(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    int  _result;
+    wxTreeItemId * _arg0;
+    wxTreeItemId * _arg1;
+    PyObject * _argo0 = 0;
+    PyObject * _argo1 = 0;
+    char *_kwnames[] = { "self","other", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxTreeItemId___cmp__",_kwnames,&_argo0,&_argo1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxTreeItemId_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxTreeItemId___cmp__. Expected _wxTreeItemId_p.");
+        return NULL;
+        }
+    }
+    if (_argo1) {
+        if (_argo1 == Py_None) { _arg1 = NULL; }
+        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxTreeItemId_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxTreeItemId___cmp__. Expected _wxTreeItemId_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (int )wxTreeItemId___cmp__(_arg0,_arg1);
 
     wxPy_END_ALLOW_THREADS;
 }    _resultobj = Py_BuildValue("i",_result);
@@ -7388,11 +7420,12 @@ static PyObject *_wrap_wxTreeCtrl_SetItemTextColour(PyObject *self, PyObject *ar
     wxColour * _arg2;
     PyObject * _argo0 = 0;
     PyObject * _argo1 = 0;
-    PyObject * _argo2 = 0;
+    wxColour  temp;
+    PyObject * _obj2 = 0;
     char *_kwnames[] = { "self","item","col", NULL };
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OOO:wxTreeCtrl_SetItemTextColour",_kwnames,&_argo0,&_argo1,&_argo2)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OOO:wxTreeCtrl_SetItemTextColour",_kwnames,&_argo0,&_argo1,&_obj2)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -7408,13 +7441,11 @@ static PyObject *_wrap_wxTreeCtrl_SetItemTextColour(PyObject *self, PyObject *ar
         return NULL;
         }
     }
-    if (_argo2) {
-        if (_argo2 == Py_None) { _arg2 = NULL; }
-        else if (SWIG_GetPtrObj(_argo2,(void **) &_arg2,"_wxColour_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 3 of wxTreeCtrl_SetItemTextColour. Expected _wxColour_p.");
+{
+    _arg2 = &temp;
+    if (! wxColour_helper(_obj2, &_arg2))
         return NULL;
-        }
-    }
+}
 {
     wxPy_BEGIN_ALLOW_THREADS;
         wxTreeCtrl_SetItemTextColour(_arg0,*_arg1,*_arg2);
@@ -7433,11 +7464,12 @@ static PyObject *_wrap_wxTreeCtrl_SetItemBackgroundColour(PyObject *self, PyObje
     wxColour * _arg2;
     PyObject * _argo0 = 0;
     PyObject * _argo1 = 0;
-    PyObject * _argo2 = 0;
+    wxColour  temp;
+    PyObject * _obj2 = 0;
     char *_kwnames[] = { "self","item","col", NULL };
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OOO:wxTreeCtrl_SetItemBackgroundColour",_kwnames,&_argo0,&_argo1,&_argo2)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OOO:wxTreeCtrl_SetItemBackgroundColour",_kwnames,&_argo0,&_argo1,&_obj2)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -7453,13 +7485,11 @@ static PyObject *_wrap_wxTreeCtrl_SetItemBackgroundColour(PyObject *self, PyObje
         return NULL;
         }
     }
-    if (_argo2) {
-        if (_argo2 == Py_None) { _arg2 = NULL; }
-        else if (SWIG_GetPtrObj(_argo2,(void **) &_arg2,"_wxColour_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 3 of wxTreeCtrl_SetItemBackgroundColour. Expected _wxColour_p.");
+{
+    _arg2 = &temp;
+    if (! wxColour_helper(_obj2, &_arg2))
         return NULL;
-        }
-    }
+}
 {
     wxPy_BEGIN_ALLOW_THREADS;
         wxTreeCtrl_SetItemBackgroundColour(_arg0,*_arg1,*_arg2);
@@ -7681,6 +7711,7 @@ static PyMethodDef controls2cMethods[] = {
 	 { "wxTreeItemData_SetData", (PyCFunction) _wrap_wxTreeItemData_SetData, METH_VARARGS | METH_KEYWORDS },
 	 { "wxTreeItemData_GetData", (PyCFunction) _wrap_wxTreeItemData_GetData, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxTreeItemData", (PyCFunction) _wrap_new_wxTreeItemData, METH_VARARGS | METH_KEYWORDS },
+	 { "wxTreeItemId___cmp__", (PyCFunction) _wrap_wxTreeItemId___cmp__, METH_VARARGS | METH_KEYWORDS },
 	 { "wxTreeItemId_IsOk", (PyCFunction) _wrap_wxTreeItemId_IsOk, METH_VARARGS | METH_KEYWORDS },
 	 { "delete_wxTreeItemId", (PyCFunction) _wrap_delete_wxTreeItemId, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxTreeItemId", (PyCFunction) _wrap_new_wxTreeItemId, METH_VARARGS | METH_KEYWORDS },

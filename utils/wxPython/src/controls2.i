@@ -378,6 +378,11 @@ public:
     ~wxTreeItemId();
     bool IsOk();
 
+    %addmethods {
+        int __cmp__(wxTreeItemId* other) {
+            return *self != *other;
+        }
+    }
 };
 
 

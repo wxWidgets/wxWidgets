@@ -102,6 +102,7 @@ HELPEREXPORT bool wxSize_helper(PyObject* source, wxSize** obj);
 HELPEREXPORT bool wxPoint_helper(PyObject* source, wxPoint** obj);
 HELPEREXPORT bool wxRealPoint_helper(PyObject* source, wxRealPoint** obj);
 HELPEREXPORT bool wxRect_helper(PyObject* source, wxRect** obj);
+HELPEREXPORT bool wxColour_helper(PyObject* source, wxColour** obj);
 
 //----------------------------------------------------------------------
 

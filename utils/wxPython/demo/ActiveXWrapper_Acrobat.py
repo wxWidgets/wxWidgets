@@ -1,4 +1,16 @@
 """
+<html><body>
+This demo shows how to embed an ActiveX control in a wxPython application, (Win32 only.)
+<p>
+The MakeActiveXClass function dynamically builds a new Class on the fly, that has the
+same signature and semantics as wxWindow.  This means that when you call the function
+you get back a new class that you can use just like wxWindow, (set the size and position,
+use in a sizer, etc.) except its contents will be the COM control.
+<p>
+This demo embeds the Adobe Acrobat Reader, and gives you some buttons for opening a PDF
+file, changing pages, etc. that show how to call methods on the COM object.  If you don't
+have Acrobat Reader 4.0 installed it won't work.
+</body></html>
 """
 
 from wxPython.wx import *

@@ -715,6 +715,7 @@ def runTest(frame, nb, log):
 
 overview = """\
 This control provides a calendar control class for displaying and selecting dates.  In addition, the class is extended and can now be used for printing/previewing.
+
 Additional features include weekend highlighting and business type Monday-Sunday format.
 
 See example for various methods used to set display month, year, and highlighted dates (different font and background colours).

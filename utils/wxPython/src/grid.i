@@ -4,7 +4,7 @@
 //
 // Author:      Robin Dunn
 //
-// Created:     6/2/98
+// Created:     17-March-2000
 // RCS-ID:      $Id$
 // Copyright:   (c) 1998 by Total Control Software
 // Licence:     wxWindows license
@@ -1345,6 +1345,7 @@ public:
     void DisableCellEditControl();
     bool CanEnableCellControl() const;
     bool IsCellEditControlEnabled() const;
+    bool IsCellEditControlShown() const;
 
     bool IsCurrentCellReadOnly() const;
 

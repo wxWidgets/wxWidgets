@@ -38,6 +38,22 @@ method calls, properties, etc., and if the class or a mix-in has
 matching method names, then the COM events will be propogated back to
 them.
 
+Created a typemap that allows a string to be used for parameters
+expecting a wxColour type.  The string is either a colour name as
+defined in the wxColourDatabase, or a colour spec of the form
+"#RRGGBB".  See the wxStyledTextCtrl demo for an example.
+
+I almost forgot to mention the wxStyledTextCtrl!  Yes, the
+wxStyledTextCtrl is finally in wxPython!!  (And the crowd goes
+wild...)   There's no documentaTion yet (the crowd boos and hisses...)
+but I've included a very readable source file in the
+wxPython/demo/data directory, a couple fairly good examples, and you
+can also refer to the Scintilla documentaion at
+http://www.scintilla.org/ScintillaDoc.html to help fill in the gaps
+until the docs are done.  (The croud murmers contentedly as the tool
+provider smiles convincingly and removes his flame-proof suit.)
+
+
 
 
 What's new in 2.1.13

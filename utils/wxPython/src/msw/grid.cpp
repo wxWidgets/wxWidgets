@@ -2671,11 +2671,12 @@ static PyObject *_wrap_wxGridCellAttr_SetTextColour(PyObject *self, PyObject *ar
     wxGridCellAttr * _arg0;
     wxColour * _arg1;
     PyObject * _argo0 = 0;
-    PyObject * _argo1 = 0;
+    wxColour  temp;
+    PyObject * _obj1 = 0;
     char *_kwnames[] = { "self","colText", NULL };
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxGridCellAttr_SetTextColour",_kwnames,&_argo0,&_argo1)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxGridCellAttr_SetTextColour",_kwnames,&_argo0,&_obj1)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -2684,13 +2685,11 @@ static PyObject *_wrap_wxGridCellAttr_SetTextColour(PyObject *self, PyObject *ar
         return NULL;
         }
     }
-    if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxColour_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxGridCellAttr_SetTextColour. Expected _wxColour_p.");
+{
+    _arg1 = &temp;
+    if (! wxColour_helper(_obj1, &_arg1))
         return NULL;
-        }
-    }
+}
 {
     wxPy_BEGIN_ALLOW_THREADS;
         wxGridCellAttr_SetTextColour(_arg0,*_arg1);
@@ -2707,11 +2706,12 @@ static PyObject *_wrap_wxGridCellAttr_SetBackgroundColour(PyObject *self, PyObje
     wxGridCellAttr * _arg0;
     wxColour * _arg1;
     PyObject * _argo0 = 0;
-    PyObject * _argo1 = 0;
+    wxColour  temp;
+    PyObject * _obj1 = 0;
     char *_kwnames[] = { "self","colBack", NULL };
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxGridCellAttr_SetBackgroundColour",_kwnames,&_argo0,&_argo1)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxGridCellAttr_SetBackgroundColour",_kwnames,&_argo0,&_obj1)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -2720,13 +2720,11 @@ static PyObject *_wrap_wxGridCellAttr_SetBackgroundColour(PyObject *self, PyObje
         return NULL;
         }
     }
-    if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxColour_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxGridCellAttr_SetBackgroundColour. Expected _wxColour_p.");
+{
+    _arg1 = &temp;
+    if (! wxColour_helper(_obj1, &_arg1))
         return NULL;
-        }
-    }
+}
 {
     wxPy_BEGIN_ALLOW_THREADS;
         wxGridCellAttr_SetBackgroundColour(_arg0,*_arg1);
@@ -7373,6 +7371,33 @@ static PyObject *_wrap_wxGrid_IsCellEditControlEnabled(PyObject *self, PyObject 
     return _resultobj;
 }
 
+#define wxGrid_IsCellEditControlShown(_swigobj)  (_swigobj->IsCellEditControlShown())
+static PyObject *_wrap_wxGrid_IsCellEditControlShown(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    bool  _result;
+    wxGrid * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxGrid_IsCellEditControlShown",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxGrid_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxGrid_IsCellEditControlShown. Expected _wxGrid_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (bool )wxGrid_IsCellEditControlShown(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
 #define wxGrid_IsCurrentCellReadOnly(_swigobj)  (_swigobj->IsCurrentCellReadOnly())
 static PyObject *_wrap_wxGrid_IsCurrentCellReadOnly(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
@@ -8548,11 +8573,12 @@ static PyObject *_wrap_wxGrid_SetLabelBackgroundColour(PyObject *self, PyObject 
     wxGrid * _arg0;
     wxColour * _arg1;
     PyObject * _argo0 = 0;
-    PyObject * _argo1 = 0;
+    wxColour  temp;
+    PyObject * _obj1 = 0;
     char *_kwnames[] = { "self","arg2", NULL };
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxGrid_SetLabelBackgroundColour",_kwnames,&_argo0,&_argo1)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxGrid_SetLabelBackgroundColour",_kwnames,&_argo0,&_obj1)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -8561,13 +8587,11 @@ static PyObject *_wrap_wxGrid_SetLabelBackgroundColour(PyObject *self, PyObject 
         return NULL;
         }
     }
-    if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxColour_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxGrid_SetLabelBackgroundColour. Expected _wxColour_p.");
+{
+    _arg1 = &temp;
+    if (! wxColour_helper(_obj1, &_arg1))
         return NULL;
-        }
-    }
+}
 {
     wxPy_BEGIN_ALLOW_THREADS;
         wxGrid_SetLabelBackgroundColour(_arg0,*_arg1);
@@ -8584,11 +8608,12 @@ static PyObject *_wrap_wxGrid_SetLabelTextColour(PyObject *self, PyObject *args,
     wxGrid * _arg0;
     wxColour * _arg1;
     PyObject * _argo0 = 0;
-    PyObject * _argo1 = 0;
+    wxColour  temp;
+    PyObject * _obj1 = 0;
     char *_kwnames[] = { "self","arg2", NULL };
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxGrid_SetLabelTextColour",_kwnames,&_argo0,&_argo1)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxGrid_SetLabelTextColour",_kwnames,&_argo0,&_obj1)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -8597,13 +8622,11 @@ static PyObject *_wrap_wxGrid_SetLabelTextColour(PyObject *self, PyObject *args,
         return NULL;
         }
     }
-    if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxColour_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxGrid_SetLabelTextColour. Expected _wxColour_p.");
+{
+    _arg1 = &temp;
+    if (! wxColour_helper(_obj1, &_arg1))
         return NULL;
-        }
-    }
+}
 {
     wxPy_BEGIN_ALLOW_THREADS;
         wxGrid_SetLabelTextColour(_arg0,*_arg1);
@@ -8796,11 +8819,12 @@ static PyObject *_wrap_wxGrid_SetGridLineColour(PyObject *self, PyObject *args, 
     wxGrid * _arg0;
     wxColour * _arg1;
     PyObject * _argo0 = 0;
-    PyObject * _argo1 = 0;
+    wxColour  temp;
+    PyObject * _obj1 = 0;
     char *_kwnames[] = { "self","arg2", NULL };
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxGrid_SetGridLineColour",_kwnames,&_argo0,&_argo1)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxGrid_SetGridLineColour",_kwnames,&_argo0,&_obj1)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -8809,13 +8833,11 @@ static PyObject *_wrap_wxGrid_SetGridLineColour(PyObject *self, PyObject *args, 
         return NULL;
         }
     }
-    if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxColour_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxGrid_SetGridLineColour. Expected _wxColour_p.");
+{
+    _arg1 = &temp;
+    if (! wxColour_helper(_obj1, &_arg1))
         return NULL;
-        }
-    }
+}
 {
     wxPy_BEGIN_ALLOW_THREADS;
         wxGrid_SetGridLineColour(_arg0,*_arg1);
@@ -10051,11 +10073,12 @@ static PyObject *_wrap_wxGrid_SetDefaultCellBackgroundColour(PyObject *self, PyO
     wxGrid * _arg0;
     wxColour * _arg1;
     PyObject * _argo0 = 0;
-    PyObject * _argo1 = 0;
+    wxColour  temp;
+    PyObject * _obj1 = 0;
     char *_kwnames[] = { "self","arg2", NULL };
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxGrid_SetDefaultCellBackgroundColour",_kwnames,&_argo0,&_argo1)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxGrid_SetDefaultCellBackgroundColour",_kwnames,&_argo0,&_obj1)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -10064,13 +10087,11 @@ static PyObject *_wrap_wxGrid_SetDefaultCellBackgroundColour(PyObject *self, PyO
         return NULL;
         }
     }
-    if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxColour_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxGrid_SetDefaultCellBackgroundColour. Expected _wxColour_p.");
+{
+    _arg1 = &temp;
+    if (! wxColour_helper(_obj1, &_arg1))
         return NULL;
-        }
-    }
+}
 {
     wxPy_BEGIN_ALLOW_THREADS;
         wxGrid_SetDefaultCellBackgroundColour(_arg0,*_arg1);
@@ -10089,11 +10110,12 @@ static PyObject *_wrap_wxGrid_SetCellBackgroundColour(PyObject *self, PyObject *
     int  _arg2;
     wxColour * _arg3;
     PyObject * _argo0 = 0;
-    PyObject * _argo3 = 0;
+    wxColour  temp;
+    PyObject * _obj3 = 0;
     char *_kwnames[] = { "self","row","col","arg4", NULL };
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OiiO:wxGrid_SetCellBackgroundColour",_kwnames,&_argo0,&_arg1,&_arg2,&_argo3)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OiiO:wxGrid_SetCellBackgroundColour",_kwnames,&_argo0,&_arg1,&_arg2,&_obj3)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -10102,13 +10124,11 @@ static PyObject *_wrap_wxGrid_SetCellBackgroundColour(PyObject *self, PyObject *
         return NULL;
         }
     }
-    if (_argo3) {
-        if (_argo3 == Py_None) { _arg3 = NULL; }
-        else if (SWIG_GetPtrObj(_argo3,(void **) &_arg3,"_wxColour_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 4 of wxGrid_SetCellBackgroundColour. Expected _wxColour_p.");
+{
+    _arg3 = &temp;
+    if (! wxColour_helper(_obj3, &_arg3))
         return NULL;
-        }
-    }
+}
 {
     wxPy_BEGIN_ALLOW_THREADS;
         wxGrid_SetCellBackgroundColour(_arg0,_arg1,_arg2,*_arg3);
@@ -10125,11 +10145,12 @@ static PyObject *_wrap_wxGrid_SetDefaultCellTextColour(PyObject *self, PyObject 
     wxGrid * _arg0;
     wxColour * _arg1;
     PyObject * _argo0 = 0;
-    PyObject * _argo1 = 0;
+    wxColour  temp;
+    PyObject * _obj1 = 0;
     char *_kwnames[] = { "self","arg2", NULL };
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxGrid_SetDefaultCellTextColour",_kwnames,&_argo0,&_argo1)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxGrid_SetDefaultCellTextColour",_kwnames,&_argo0,&_obj1)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -10138,13 +10159,11 @@ static PyObject *_wrap_wxGrid_SetDefaultCellTextColour(PyObject *self, PyObject 
         return NULL;
         }
     }
-    if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxColour_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxGrid_SetDefaultCellTextColour. Expected _wxColour_p.");
+{
+    _arg1 = &temp;
+    if (! wxColour_helper(_obj1, &_arg1))
         return NULL;
-        }
-    }
+}
 {
     wxPy_BEGIN_ALLOW_THREADS;
         wxGrid_SetDefaultCellTextColour(_arg0,*_arg1);
@@ -10163,11 +10182,12 @@ static PyObject *_wrap_wxGrid_SetCellTextColour(PyObject *self, PyObject *args, 
     int  _arg2;
     wxColour * _arg3;
     PyObject * _argo0 = 0;
-    PyObject * _argo3 = 0;
+    wxColour  temp;
+    PyObject * _obj3 = 0;
     char *_kwnames[] = { "self","row","col","arg4", NULL };
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OiiO:wxGrid_SetCellTextColour",_kwnames,&_argo0,&_arg1,&_arg2,&_argo3)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OiiO:wxGrid_SetCellTextColour",_kwnames,&_argo0,&_arg1,&_arg2,&_obj3)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -10176,13 +10196,11 @@ static PyObject *_wrap_wxGrid_SetCellTextColour(PyObject *self, PyObject *args, 
         return NULL;
         }
     }
-    if (_argo3) {
-        if (_argo3 == Py_None) { _arg3 = NULL; }
-        else if (SWIG_GetPtrObj(_argo3,(void **) &_arg3,"_wxColour_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 4 of wxGrid_SetCellTextColour. Expected _wxColour_p.");
+{
+    _arg3 = &temp;
+    if (! wxColour_helper(_obj3, &_arg3))
         return NULL;
-        }
-    }
+}
 {
     wxPy_BEGIN_ALLOW_THREADS;
         wxGrid_SetCellTextColour(_arg0,_arg1,_arg2,*_arg3);
@@ -11093,11 +11111,12 @@ static PyObject *_wrap_wxGrid_SetSelectionBackground(PyObject *self, PyObject *a
     wxGrid * _arg0;
     wxColour * _arg1;
     PyObject * _argo0 = 0;
-    PyObject * _argo1 = 0;
+    wxColour  temp;
+    PyObject * _obj1 = 0;
     char *_kwnames[] = { "self","c", NULL };
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxGrid_SetSelectionBackground",_kwnames,&_argo0,&_argo1)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxGrid_SetSelectionBackground",_kwnames,&_argo0,&_obj1)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -11106,13 +11125,11 @@ static PyObject *_wrap_wxGrid_SetSelectionBackground(PyObject *self, PyObject *a
         return NULL;
         }
     }
-    if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxColour_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxGrid_SetSelectionBackground. Expected _wxColour_p.");
+{
+    _arg1 = &temp;
+    if (! wxColour_helper(_obj1, &_arg1))
         return NULL;
-        }
-    }
+}
 {
     wxPy_BEGIN_ALLOW_THREADS;
         wxGrid_SetSelectionBackground(_arg0,*_arg1);
@@ -11129,11 +11146,12 @@ static PyObject *_wrap_wxGrid_SetSelectionForeground(PyObject *self, PyObject *a
     wxGrid * _arg0;
     wxColour * _arg1;
     PyObject * _argo0 = 0;
-    PyObject * _argo1 = 0;
+    wxColour  temp;
+    PyObject * _obj1 = 0;
     char *_kwnames[] = { "self","c", NULL };
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxGrid_SetSelectionForeground",_kwnames,&_argo0,&_argo1)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxGrid_SetSelectionForeground",_kwnames,&_argo0,&_obj1)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -11142,13 +11160,11 @@ static PyObject *_wrap_wxGrid_SetSelectionForeground(PyObject *self, PyObject *a
         return NULL;
         }
     }
-    if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxColour_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxGrid_SetSelectionForeground. Expected _wxColour_p.");
+{
+    _arg1 = &temp;
+    if (! wxColour_helper(_obj1, &_arg1))
         return NULL;
-        }
-    }
+}
 {
     wxPy_BEGIN_ALLOW_THREADS;
         wxGrid_SetSelectionForeground(_arg0,*_arg1);
@@ -12495,6 +12511,7 @@ static PyMethodDef gridcMethods[] = {
 	 { "wxGrid_HideCellEditControl", (PyCFunction) _wrap_wxGrid_HideCellEditControl, METH_VARARGS | METH_KEYWORDS },
 	 { "wxGrid_ShowCellEditControl", (PyCFunction) _wrap_wxGrid_ShowCellEditControl, METH_VARARGS | METH_KEYWORDS },
 	 { "wxGrid_IsCurrentCellReadOnly", (PyCFunction) _wrap_wxGrid_IsCurrentCellReadOnly, METH_VARARGS | METH_KEYWORDS },
+	 { "wxGrid_IsCellEditControlShown", (PyCFunction) _wrap_wxGrid_IsCellEditControlShown, METH_VARARGS | METH_KEYWORDS },
 	 { "wxGrid_IsCellEditControlEnabled", (PyCFunction) _wrap_wxGrid_IsCellEditControlEnabled, METH_VARARGS | METH_KEYWORDS },
 	 { "wxGrid_CanEnableCellControl", (PyCFunction) _wrap_wxGrid_CanEnableCellControl, METH_VARARGS | METH_KEYWORDS },
 	 { "wxGrid_DisableCellEditControl", (PyCFunction) _wrap_wxGrid_DisableCellEditControl, METH_VARARGS | METH_KEYWORDS },
