@@ -241,6 +241,9 @@ LRESULT APIENTRY _EXPORT wxComboEditWndProc(HWND hWnd,
 
 WXLRESULT wxComboBox::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
 {
+    bool isSize = false;
+    long fromOld, toOld;
+
     // handle WM_CTLCOLOR messages from our EDIT control to be able to set its
     // colour correctly (to be the same as our own one)
     switch ( nMsg )
@@ -253,9 +256,26 @@ WXLRESULT wxComboBox::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lPara
                 m_value = GetString(wParam);
             m_selectionOld = -1;
             break;
+        case WM_SIZE:
+            GetSelection(&fromOld, &toOld);
+            isSize = true;
+            break;
     }
 
-    return wxChoice::MSWWindowProc(nMsg, wParam, lParam);
+    WXLRESULT result = wxChoice::MSWWindowProc(nMsg, wParam, lParam);
+
+    if(isSize)
+    {
+        long fromNew, toNew;
+        GetSelection(&fromNew, &toNew);
+
+        if ( fromOld != fromNew || toOld != toNew )
+        {
+            SetSelection(fromOld, toOld);
+        }
+    }
+
+    return result;
 }
 
 bool wxComboBox::MSWProcessEditMsg(WXUINT msg, WXWPARAM wParam, WXLPARAM lParam)
@@ -481,29 +501,6 @@ WXDWORD wxComboBox::MSWGetStyle(long style, WXDWORD *exstyle) const
     // NB: we used to also add CBS_NOINTEGRALHEIGHT here but why?
 
     return msStyle;
-}
-
-// ----------------------------------------------------------------------------
-// wxComboBox geometry
-// ----------------------------------------------------------------------------
-
-void
-wxComboBox::DoSetSize(int x, int y, int width, int height, int sizeFlags)
-{
-    // work around a Windows bug (search for "Bug in Windows Combobox" in
-    // Google Groups): resizing the combobox changes the selection in it
-    long fromOld, toOld;
-    GetSelection(&fromOld, &toOld);
-
-    wxChoice::DoSetSize(x, y, width, height, sizeFlags);
-
-    long fromNew, toNew;
-    GetSelection(&fromNew, &toNew);
-
-    if ( fromOld != fromNew || toOld != toNew )
-    {
-        SetSelection(fromOld, toOld);
-    }
 }
 
 // ----------------------------------------------------------------------------
