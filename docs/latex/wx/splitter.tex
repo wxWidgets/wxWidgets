@@ -331,6 +331,15 @@ Does not currently check for an out-of-range value.
 
 \helpref{wxSplitterWindow::GetSashPosition}{wxsplitterwindowgetsashposition}
 
+\membersection{wxSplitterWindow::SetSashSize}\label{wxsplitterwindowsetsashsize}
+
+\func{void}{SetSashSize}{\param{int }{size}}
+
+Sets the sash size. Normally, the sash size is determined according to the metrics
+of each platform, but the application can override this, for example to show
+a thin sash that the user is not expected to drag. If {\it size} is more -1,
+the custom sash size will be used.
+
 \membersection{wxSplitterWindow::SetMinimumPaneSize}\label{wxsplitterwindowsetminimumpanesize}
 
 \func{void}{SetMinimumPaneSize}{\param{int }{paneSize}}
