@@ -29,14 +29,11 @@
 // compile the std::string compatibility functions if defined
 #define   wxSTD_STRING_COMPATIBILITY
 
-// define to derive wxString from wxObject (deprecated!)
-#ifdef WXSTRING_IS_WXOBJECT
-    #undef WXSTRING_IS_WXOBJECT
-#endif
-
 // ----------------------------------------------------------------------------
 // headers
 // ----------------------------------------------------------------------------
+
+#include "wx/defs.h"        // everybody should include this
 
 #if defined(__WXMAC__) || defined(__VISAGECPP__)
     #include <ctype.h>
@@ -65,29 +62,24 @@
     #include <strings.h>    // for strcasecmp()
 #endif // HAVE_STRINGS_H
 
-#include "wx/defs.h"        // everybody should include this
 #include "wx/wxchar.h"      // for wxChar
 #include "wx/buffer.h"      // for wxCharBuffer
 #include "wx/strconv.h"     // for wxConvertXXX() macros and wxMBConv classes
-
-#ifndef  WX_PRECOMP
-  #ifdef    WXSTRING_IS_WXOBJECT
-    #include "wx/object.h" // base class
-  #endif
-#endif // !PCH
 
 // ---------------------------------------------------------------------------
 // macros
 // ---------------------------------------------------------------------------
 
-// 'naughty' cast
+// casts [unfortunately!] needed to call some broken functions which require
+// "char *" instead of "const char *"
 #define   WXSTRINGCAST (wxChar *)(const wxChar *)
 #define   wxCSTRINGCAST (wxChar *)(const wxChar *)
 #define   wxMBSTRINGCAST (char *)(const char *)
 #define   wxWCSTRINGCAST (wchar_t *)(const wchar_t *)
 
 // implementation only
-#define   ASSERT_VALID_INDEX(i) wxASSERT( (unsigned)(i) <= Len() )
+#define   wxASSERT_VALID_INDEX(i) \
+    wxASSERT_MSG( (size_t)(i) <= Len(), _T("invaid index in wxString") )
 
 // ----------------------------------------------------------------------------
 // constants
@@ -243,15 +235,8 @@ struct WXDLLEXPORT wxStringData
 //  - regular expressions support
 // ---------------------------------------------------------------------------
 
-#ifdef  WXSTRING_IS_WXOBJECT
-class WXDLLEXPORT wxString : public wxObject
-{
-    DECLARE_DYNAMIC_CLASS(wxString)
-#else   //WXSTRING_IS_WXOBJECT
 class WXDLLEXPORT wxString
 {
-#endif  //WXSTRING_IS_WXOBJECT
-
 friend class WXDLLEXPORT wxArrayString;
 
   // NB: special care was taken in arranging the member functions in such order
@@ -394,13 +379,13 @@ public:
   // data access (all indexes are 0 based)
     // read access
     wxChar  GetChar(size_t n) const
-      { ASSERT_VALID_INDEX( n );  return m_pchData[n]; }
+      { wxASSERT_VALID_INDEX( n );  return m_pchData[n]; }
     // read/write access
     wxChar& GetWritableChar(size_t n)
-      { ASSERT_VALID_INDEX( n ); CopyBeforeWrite(); return m_pchData[n]; }
+      { wxASSERT_VALID_INDEX( n ); CopyBeforeWrite(); return m_pchData[n]; }
     // write access
     void  SetChar(size_t n, wxChar ch)
-      { ASSERT_VALID_INDEX( n ); CopyBeforeWrite(); m_pchData[n] = ch; }
+      { wxASSERT_VALID_INDEX( n ); CopyBeforeWrite(); m_pchData[n] = ch; }
 
     // get last character
     wxChar  Last() const
@@ -433,24 +418,24 @@ public:
 
     // operator version of GetChar
     wxChar  operator[](size_t n) const
-      { ASSERT_VALID_INDEX( n ); return m_pchData[n]; }
+      { wxASSERT_VALID_INDEX( n ); return m_pchData[n]; }
 
     // operator version of GetChar
     wxChar  operator[](int n) const
-      { ASSERT_VALID_INDEX( n ); return m_pchData[n]; }
+      { wxASSERT_VALID_INDEX( n ); return m_pchData[n]; }
 
     // operator version of GetWriteableChar
     wxChar& operator[](size_t n)
-      { ASSERT_VALID_INDEX( n ); CopyBeforeWrite(); return m_pchData[n]; }
+      { wxASSERT_VALID_INDEX( n ); CopyBeforeWrite(); return m_pchData[n]; }
 
 #ifndef wxSIZE_T_IS_UINT
     // operator version of GetChar
     wxChar operator[](unsigned int n) const
-      { ASSERT_VALID_INDEX( n ); return m_pchData[n]; }
+      { wxASSERT_VALID_INDEX( n ); return m_pchData[n]; }
 
     // operator version of GetWriteableChar
     wxChar& operator[](unsigned int n)
-      { ASSERT_VALID_INDEX( n ); CopyBeforeWrite(); return m_pchData[n]; }
+      { wxASSERT_VALID_INDEX( n ); CopyBeforeWrite(); return m_pchData[n]; }
 #endif // size_t != unsigned int
 
     // implicit conversion to C string
@@ -1207,7 +1192,7 @@ inline wxString operator+(const wxCharBuffer& buf, const wxString& string)
 // ---------------------------------------------------------------------------
 
 // don't pollute the library user's name space
-#undef ASSERT_VALID_INDEX
+#undef wxASSERT_VALID_INDEX
 
 #if defined(wxSTD_STRING_COMPATIBILITY) && wxUSE_STD_IOSTREAM
 

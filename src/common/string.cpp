@@ -46,13 +46,9 @@
   #include <clib.h>
 #endif
 
-#ifdef  WXSTRING_IS_WXOBJECT
-  IMPLEMENT_DYNAMIC_CLASS(wxString, wxObject)
-#endif  //WXSTRING_IS_WXOBJECT
-
 #if wxUSE_UNICODE
-#undef wxUSE_EXPERIMENTAL_PRINTF
-#define wxUSE_EXPERIMENTAL_PRINTF 1
+    #undef wxUSE_EXPERIMENTAL_PRINTF
+    #define wxUSE_EXPERIMENTAL_PRINTF 1
 #endif
 
 // allocating extra space for each string consumes more memory but speeds up
