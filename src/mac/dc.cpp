@@ -652,8 +652,6 @@ void  wxDC::SetLogicalFunction( int function )
 void  wxDC::DoFloodFill( wxCoord x, wxCoord y, const wxColour& col,
                              int style )
 {
-}
-
     if (GetBrush().GetStyle() == wxTRANSPARENT)
     {
         wxLogDebug(wxT("In FloodFill, Current Brush is transparent, no filling done"));
@@ -676,12 +674,15 @@ void  wxDC::DoFloodFill( wxCoord x, wxCoord y, const wxColour& col,
     memdc.Blit(0, 0, width, height, (wxDC*) this, 0, 0);
     memdc.SelectObject(wxNullBitmap);
 
-    wxImage image(bitmap);
+    wxImage image = bitmap.ConvertToImage() ;
     image.DoFloodFill (x,y, GetBrush(), col, style, GetLogicalFunction());
     bitmap = wxBitmap(image);
     memdc.SelectObject(bitmap);
     this->Blit(0, 0, width, height, &memdc, 0, 0);
     memdc.SelectObject(wxNullBitmap);
+}
+
+
 bool  wxDC::DoGetPixel( wxCoord x, wxCoord y, wxColour *col ) const 
 {
     wxCHECK_MSG( Ok(), false, wxT("wxDC::DoGetPixel  Invalid DC") );

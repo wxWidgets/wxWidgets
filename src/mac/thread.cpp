@@ -205,7 +205,7 @@ wxMutexError wxMutex::Unlock()
 class wxConditionInternal
 {
 public:
-    wxConditionInternal()
+    wxConditionInternal(wxMutex& mutex) : m_mutex(mutex)
     {
         m_excessSignals = 0 ;
     }
@@ -247,11 +247,12 @@ public:
 
     wxArrayLong m_waiters ;
     wxInt32     m_excessSignals ;
+    wxMutex&    m_mutex;
 };
 
-wxCondition::wxCondition()
+wxCondition::wxCondition(wxMutex& mutex)
 {
-    m_internal = new wxConditionInternal;
+    m_internal = new wxConditionInternal(mutex);
 }
 
 wxCondition::~wxCondition()
@@ -264,10 +265,9 @@ void wxCondition::Wait()
     (void)m_internal->Wait(0xFFFFFFFFL);
 }
 
-bool wxCondition::Wait(unsigned long sec,
-                       unsigned long nsec)
+bool wxCondition::Wait(unsigned long timeout_millis)
 {
-    return m_internal->Wait(sec*1000 + nsec/1000000);
+    return m_internal->Wait(timeout_millis);
 }
 
 void wxCondition::Signal()
