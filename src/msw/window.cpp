@@ -1031,10 +1031,19 @@ long wxWindow::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam)
           break;
         }
 
+        case WM_MOVE:
+          {
+            wxMoveEvent event(wxPoint(LOWORD(lParam), HIWORD(lParam)),
+                              m_windowId);
+            event.SetEventObject(this);
+            if ( !GetEventHandler()->ProcessEvent(event) )
+              Default();
+          }
+          break;
+
         case WM_WINDOWPOSCHANGING:
         {
-          WINDOWPOS *pos = (WINDOWPOS *)lParam;
-          MSWOnWindowPosChanging((void *)pos);
+          MSWOnWindowPosChanging((void *)lParam);
           break;
         }
 
