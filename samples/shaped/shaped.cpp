@@ -154,7 +154,9 @@ ShapedFrame::ShapedFrame()
     m_hasShape = FALSE;
     m_bmp = wxBitmap("star.png", wxBITMAP_TYPE_PNG);
     SetSize(wxSize(m_bmp.GetWidth(), m_bmp.GetHeight()));
+#if wxUSE_TOOLTIP
     SetToolTip(wxT("Right-click to exit"));
+#endif
 #ifdef __WXMSW__
     // On wxGTK we can't do this yet because the window hasn't been created
     // yet so we wait until the EVT_WINDOW_CREATE event happens.  On wxMSW it
