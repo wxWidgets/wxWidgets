@@ -60,6 +60,9 @@ All (GUI):
 
 - wxGLCanvas now derives directly from wxWindow, not wxScrolledWindow
 
+- if you handle (and don't skip) EVT_KEY_DOWN, the EVT_CHAR event is not
+  generated at all
+
 - wxGridCellAttrProvider class API changed, you will need to update your code
   if you derived any classes from it
 
