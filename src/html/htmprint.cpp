@@ -457,7 +457,7 @@ wxHtmlEasyPrinting::wxHtmlEasyPrinting(const wxString& name, wxWindow *parentWin
 {
     m_ParentWindow = parentWindow;
     m_Name = name;
-    m_PrintData = new wxPrintData;
+    m_PrintData = NULL;
     m_PageSetupData = new wxPageSetupDialogData;
     m_Headers[0] = m_Headers[1] = m_Footers[0] = m_Footers[1] = wxEmptyString;
 
@@ -476,6 +476,13 @@ wxHtmlEasyPrinting::~wxHtmlEasyPrinting()
     delete m_PageSetupData;
 }
 
+
+wxPrintData *wxHtmlEasyPrinting::GetPrintData()
+{
+    if (m_PrintData == NULL)
+        m_PrintData = new wxPrintData();
+    return m_PrintData;
+}
 
 
 bool wxHtmlEasyPrinting::PreviewFile(const wxString &htmlfile)
@@ -525,7 +532,7 @@ bool wxHtmlEasyPrinting::PrintText(const wxString &htmltext, const wxString &bas
 bool wxHtmlEasyPrinting::DoPreview(wxHtmlPrintout *printout1, wxHtmlPrintout *printout2)
 {
     // Pass two printout objects: for preview, and possible printing.
-    wxPrintDialogData printDialogData(*m_PrintData);
+    wxPrintDialogData printDialogData(*GetPrintData());
     wxPrintPreview *preview = new wxPrintPreview(printout1, printout2, &printDialogData);
     if (!preview->Ok())
     {
@@ -546,7 +553,7 @@ bool wxHtmlEasyPrinting::DoPreview(wxHtmlPrintout *printout1, wxHtmlPrintout *pr
 
 bool wxHtmlEasyPrinting::DoPrint(wxHtmlPrintout *printout)
 {
-    wxPrintDialogData printDialogData(*m_PrintData);
+    wxPrintDialogData printDialogData(*GetPrintData());
     wxPrinter printer(&printDialogData);
 
     if (!printer.Print(m_ParentWindow, printout, TRUE))
@@ -554,7 +561,7 @@ bool wxHtmlEasyPrinting::DoPrint(wxHtmlPrintout *printout)
         return FALSE;
     }
 
-    (*m_PrintData) = printer.GetPrintDialogData().GetPrintData();
+    (*GetPrintData()) = printer.GetPrintDialogData().GetPrintData();
     return TRUE;
 }
 
@@ -562,31 +569,31 @@ bool wxHtmlEasyPrinting::DoPrint(wxHtmlPrintout *printout)
 
 void wxHtmlEasyPrinting::PrinterSetup()
 {
-    wxPrintDialogData printDialogData(*m_PrintData);
+    wxPrintDialogData printDialogData(*GetPrintData());
     wxPrintDialog printerDialog(m_ParentWindow, &printDialogData);
 
     printerDialog.GetPrintDialogData().SetSetupDialog(TRUE);
 
     if (printerDialog.ShowModal() == wxID_OK)
-        (*m_PrintData) = printerDialog.GetPrintDialogData().GetPrintData();
+        (*GetPrintData()) = printerDialog.GetPrintDialogData().GetPrintData();
 }
 
 
 
 void wxHtmlEasyPrinting::PageSetup()
 {
-    if (!m_PrintData->Ok())
+    if (!GetPrintData()->Ok())
     {
         wxLogError(_("There was a problem during page setup: you may need to set a default printer."));
         return;
     }
 
-    m_PageSetupData->SetPrintData(*m_PrintData);
+    m_PageSetupData->SetPrintData(*GetPrintData());
     wxPageSetupDialog pageSetupDialog(m_ParentWindow, m_PageSetupData);
 
     if (pageSetupDialog.ShowModal() == wxID_OK)
     {
-        (*m_PrintData) = pageSetupDialog.GetPageSetupData().GetPrintData();
+        (*GetPrintData()) = pageSetupDialog.GetPageSetupData().GetPrintData();
         (*m_PageSetupData) = pageSetupDialog.GetPageSetupData();
     }
 }

@@ -237,7 +237,7 @@ public:
     void SetFonts(wxString normal_face, wxString fixed_face, const int *sizes = 0);
     // Sets fonts to be used when displaying HTML page. (if size null then default sizes used)
 
-    wxPrintData *GetPrintData() {return m_PrintData;}
+    wxPrintData *GetPrintData();
     wxPageSetupDialogData *GetPageSetupData() {return m_PageSetupData;}
             // return page setting data objects. 
             // (You can set their parameters.)
