@@ -641,6 +641,9 @@ bool wxListCtrl::SetItem(wxListItem& info)
         return FALSE;
     }
 
+    // we need to update the item immediately to show the new image
+    bool updateNow = (info.m_mask & wxLIST_MASK_IMAGE) != 0;
+
     // check whether it has any custom attributes
     if ( info.HasAttributes() )
     {
@@ -652,11 +655,14 @@ bool wxListCtrl::SetItem(wxListItem& info)
             *attr = *info.GetAttributes();
 
         m_hasAnyAttr = TRUE;
+
+        // if the colour has changed, we must redraw the item
+        updateNow = TRUE;
     }
 
-    if ( info.m_mask & wxLIST_MASK_IMAGE )
+    if ( updateNow )
     {
-        // we need this to make the change visible
+        // we need this to make the change visible right now
         ListView_Update(GetHwnd(), item.iItem);
     }
 
