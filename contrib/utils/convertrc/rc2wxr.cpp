@@ -96,77 +96,36 @@ rc2wxr::~rc2wxr()
 
 
 void rc2wxr::Convert(wxString wxrfile, wxString rcfile)
-
 {
+    m_rc.Open(rcfile);
+    m_filesize=m_rc.Length();
+    if( (m_wxr  = wxFopen( wxrfile.fn_str(), _T("wt") )) == NULL )
+    {
+        return;
+    }
 
-m_rc.Open(rcfile);
+    wxString tok,prevtok;
 
-m_filesize=m_rc.Length();
+    while (!m_done)
+    {
+        tok=GetToken();
 
-if( (m_wxr  = wxFopen( wxrfile, _T("wt") )) == NULL )
+        if (tok==_T("DIALOG"))
+        {
+            ParseDialog(prevtok);
+        }
 
-{
+        if (tok==_T("MENU"))
+        {
+            ParseMenu(prevtok);
+        }
 
-  return;
+        prevtok=tok;
+    }
 
-}
+    fclose(m_wxr);
 
-
-
-
-
-wxString tok,prevtok;
-
-
-
-
-
-while (!m_done)
-
-{
-
-
-
-tok=GetToken();
-
-
-
-if (tok==_T("DIALOG"))
-
-{
-
-ParseDialog(prevtok);
-
-}
-
-
-
-
-
-if (tok==_T("MENU"))
-
-{
-
-ParseMenu(prevtok);
-
-}
-
-
-
-prevtok=tok;
-
-}
-
-
-
-fclose(m_wxr);
-
-//fclose(m_rc);
-
-m_rc.Close();
-
-
-
+    m_rc.Close();
 }
 
 

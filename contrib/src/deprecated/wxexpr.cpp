@@ -1072,7 +1072,7 @@ bool wxExprDatabase::Read(const wxString& filename)
 {
   noErrors = 0;
 
-  FILE *f = wxFopen(filename, _T("r"));
+  FILE *f = wxFopen(filename.fn_str(), _T("r"));
   if (f)
   {
     thewxExprDatabase = this;
@@ -1104,7 +1104,7 @@ bool wxExprDatabase::ReadFromString(const wxString& buffer)
 
 bool wxExprDatabase::Write(const wxString& fileName)
 {
-  FILE *stream = wxFopen( fileName, _T("w+"));
+  FILE *stream = wxFopen( fileName.fn_str(), _T("w+"));
 
   if (!stream)
     return false;

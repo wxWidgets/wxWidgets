@@ -251,7 +251,7 @@ bool wxResourceTable::ParseResourceFile(const wxString& filename)
 {
     wxExprDatabase db;
 
-    FILE *fd = wxFopen(filename, wxT("r"));
+    FILE *fd = wxFopen(filename.fn_str(), wxT("r"));
     if (!fd)
         return false;
     bool eof = false;
@@ -2831,7 +2831,7 @@ bool wxResourceParseIncludeFile(const wxString& f, wxResourceTable *table)
     if (!table)
         table = wxDefaultResourceTable;
 
-    FILE *fd = wxFopen(f, wxT("r"));
+    FILE *fd = wxFopen(f.fn_str(), wxT("r"));
     if (!fd)
     {
         return false;
