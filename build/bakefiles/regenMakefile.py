@@ -19,6 +19,9 @@ BAKEFILE = bakefile -v
 CDEPS = config.bkl common.bkl common_contrib.bkl
 SDEPS = config.bkl common.bkl common_samples.bkl
 MDEPS = common.bkl config.bkl files.bkl monolithic.bkl multilib.bkl opengl.bkl wxwin.py
+
+DSWFLAGS = -DRUNTIME_LIBS=dynamic -DOFFICIAL_BUILD=0 -DUSE_HTML=1 \
+           -DUSE_OPENGL=1 -DMONOLITHIC=0 -DUSE_GUI=1
 """)
 
 lines = {}
@@ -60,6 +63,11 @@ def addMakefile(bake, makedirs, deps=[], args={}):
     add(bake, makedirs, 'makefile.vc', dep, 'msvc', args)
     add(bake, makedirs, 'makefile.gcc', dep, 'mingw', args)
     add(bake, makedirs, 'makefile.wat', dep, 'watcom', args)
+
+    if 'msvc6prj' in args and args['msvc6prj'] != None:
+        add(bake, makedirs,
+            os.path.basename(bake.replace('/','\\')).replace('.bkl','.dsw'),
+            dep, 'msvc6prj', args)
     
     lines[bake] = linesCur
 
@@ -76,6 +84,7 @@ addMakefile('wx.bkl', {'all':'..','autoconf':'../..'}, [ '$(MDEPS)' ],
                 'msvc':'-DOPTIONS_FILE=config.vc',
                 'mingw':'-DOPTIONS_FILE=config.gcc',
                 'watcom':'-DOPTIONS_FILE=config.wat',
+                'msvc6prj':'$(DSWFLAGS)',
             })
 
 # samples main makefile:
@@ -86,6 +95,7 @@ addMakefile('../../samples/samples.bkl', {'all':'../../samples'},
             'msvc':'-DOPTIONS_FILE=../build/config.vc -DWRITE_OPTIONS_FILE=0',
             'mingw':'-DOPTIONS_FILE=../build/config.gcc -DWRITE_OPTIONS_FILE=0',
             'watcom':'-DOPTIONS_FILE=../build/config.wat -DWRITE_OPTIONS_FILE=0',
+            'msvc6prj':None,
             })
 
 
@@ -116,9 +126,12 @@ def onSubmakefile(type, dirname, names):
         'mingw':'-DOPTIONS_FILE='+cfgbase+'gcc -DWRITE_OPTIONS_FILE=0',
         'borland':'-DOPTIONS_FILE='+cfgbase+'bcc -DWRITE_OPTIONS_FILE=0',
         'watcom':'-DOPTIONS_FILE='+cfgbase+'wat -DWRITE_OPTIONS_FILE=0',
+        'msvc6prj':'$(DSWFLAGS)',
     }
-    
+
     for bake in bakes:
+        if bake.endswith('_samples.bkl'):
+            args['msvc6prj'] = None
         if type==CONTRIB_DIR:
             acdir = '../../contrib/src/%s' % dirname.split('/')[-1]
             ruledep = '$(CDEPS)'

@@ -7,6 +7,8 @@ BAKEFILE = bakefile -v
 CDEPS = config.bkl common.bkl common_contrib.bkl
 SDEPS = config.bkl common.bkl common_samples.bkl
 MDEPS = common.bkl config.bkl files.bkl monolithic.bkl multilib.bkl opengl.bkl wxwin.py
+
+DSWFLAGS = -DRUNTIME_LIBS=dynamic -DOFFICIAL_BUILD=0 -DUSE_HTML=1            -DUSE_OPENGL=1 -DMONOLITHIC=0 -DUSE_GUI=1
 AUTOCONF_ALL = \
 	../../Makefile.in \
 	../../contrib/samples/animate/Makefile.in \
@@ -391,6 +393,99 @@ MSVC_ALL = \
 	../../samples/wizard/makefile.vc \
 	../../samples/wxtest/makefile.vc \
 	../makefile.vc
+MSVC6PRJ_ALL = \
+	../../contrib/build/animate/animate.dsw \
+	../../contrib/build/fl/fl.dsw \
+	../../contrib/build/gizmos/gizmos.dsw \
+	../../contrib/build/ogl/ogl.dsw \
+	../../contrib/build/stc/stc.dsw \
+	../../contrib/build/svg/svg.dsw \
+	../../contrib/build/xrc/xrc.dsw \
+	../../contrib/samples/animate/anitest.dsw \
+	../../contrib/samples/svg/svgtest.dsw \
+	../../contrib/samples/xrc/xrcdemo.dsw \
+	../../contrib/utils/wxrc/wxrc.dsw \
+	../../samples/access/access.dsw \
+	../../samples/artprov/artprov.dsw \
+	../../samples/calendar/calendar.dsw \
+	../../samples/caret/caret.dsw \
+	../../samples/checklst/checklst.dsw \
+	../../samples/config/config.dsw \
+	../../samples/console/console.dsw \
+	../../samples/controls/controls.dsw \
+	../../samples/db/db.dsw \
+	../../samples/dialogs/dialogs.dsw \
+	../../samples/dialup/dialup.dsw \
+	../../samples/display/display.dsw \
+	../../samples/dnd/dnd.dsw \
+	../../samples/docview/docview.dsw \
+	../../samples/docvwmdi/docvwmdi.dsw \
+	../../samples/dragimag/dragimag.dsw \
+	../../samples/drawing/drawing.dsw \
+	../../samples/dynamic/dynamic.dsw \
+	../../samples/erase/erase.dsw \
+	../../samples/event/event.dsw \
+	../../samples/exec/exec.dsw \
+	../../samples/font/font.dsw \
+	../../samples/grid/grid.dsw \
+	../../samples/help/help.dsw \
+	../../samples/htlbox/htlbox.dsw \
+	../../samples/html/about/about.dsw \
+	../../samples/html/help/help.dsw \
+	../../samples/html/helpview/helpview.dsw \
+	../../samples/html/printing/printing.dsw \
+	../../samples/html/test/test.dsw \
+	../../samples/html/virtual/virtual.dsw \
+	../../samples/html/widget/widget.dsw \
+	../../samples/html/zip/zip.dsw \
+	../../samples/image/image.dsw \
+	../../samples/internat/internat.dsw \
+	../../samples/ipc/ipc.dsw \
+	../../samples/joytest/joytest.dsw \
+	../../samples/keyboard/keyboard.dsw \
+	../../samples/layout/layout.dsw \
+	../../samples/listbox/listbox.dsw \
+	../../samples/listctrl/listctrl.dsw \
+	../../samples/mdi/mdi.dsw \
+	../../samples/memcheck/memcheck.dsw \
+	../../samples/menu/menu.dsw \
+	../../samples/mfc/mfc.dsw \
+	../../samples/minifram/minifram.dsw \
+	../../samples/minimal/minimal.dsw \
+	../../samples/mobile/mobile.dsw \
+	../../samples/multimon/multimon.dsw \
+	../../samples/nativdlg/nativdlg.dsw \
+	../../samples/newgrid/newgrid.dsw \
+	../../samples/notebook/notebook.dsw \
+	../../samples/oleauto/oleauto.dsw \
+	../../samples/opengl/cube/cube.dsw \
+	../../samples/ownerdrw/ownerdrw.dsw \
+	../../samples/png/png.dsw \
+	../../samples/printing/printing.dsw \
+	../../samples/propsize/propsize.dsw \
+	../../samples/regtest/regtest.dsw \
+	../../samples/richedit/richedit.dsw \
+	../../samples/rotate/rotate.dsw \
+	../../samples/sashtest/sashtest.dsw \
+	../../samples/scroll/scroll.dsw \
+	../../samples/scrollsub/scrollsub.dsw \
+	../../samples/shaped/shaped.dsw \
+	../../samples/sockets/sockets.dsw \
+	../../samples/splitter/splitter.dsw \
+	../../samples/statbar/statbar.dsw \
+	../../samples/tab/tab.dsw \
+	../../samples/taskbar/taskbar.dsw \
+	../../samples/text/text.dsw \
+	../../samples/thread/thread.dsw \
+	../../samples/toolbar/toolbar.dsw \
+	../../samples/treectrl/treectrl.dsw \
+	../../samples/typetest/typetest.dsw \
+	../../samples/validate/validate.dsw \
+	../../samples/vscroll/vscroll.dsw \
+	../../samples/widgets/widgets.dsw \
+	../../samples/wizard/wizard.dsw \
+	../../samples/wxtest/wxtest.dsw \
+	../wx.dsw
 WATCOM_ALL = \
 	../../contrib/build/animate/makefile.wat \
 	../../contrib/build/fl/makefile.wat \
@@ -487,12 +582,13 @@ WATCOM_ALL = \
 	../../samples/wizard/makefile.wat \
 	../../samples/wxtest/makefile.wat \
 	../makefile.wat
-all: autoconf borland mingw msvc watcom
+all: autoconf borland mingw msvc msvc6prj watcom
 
 autoconf: $(AUTOCONF_ALL)
 borland: $(BORLAND_ALL)
 mingw: $(MINGW_ALL)
 msvc: $(MSVC_ALL)
+msvc6prj: $(MSVC6PRJ_ALL)
 watcom: $(WATCOM_ALL)
 
 clean:
@@ -877,6 +973,98 @@ clean:
 	rm -f ../../samples/wizard/makefile.vc
 	rm -f ../../samples/wxtest/makefile.vc
 	rm -f ../makefile.vc
+	rm -f ../../contrib/build/animate/animate.dsw
+	rm -f ../../contrib/build/fl/fl.dsw
+	rm -f ../../contrib/build/gizmos/gizmos.dsw
+	rm -f ../../contrib/build/ogl/ogl.dsw
+	rm -f ../../contrib/build/stc/stc.dsw
+	rm -f ../../contrib/build/svg/svg.dsw
+	rm -f ../../contrib/build/xrc/xrc.dsw
+	rm -f ../../contrib/samples/animate/anitest.dsw
+	rm -f ../../contrib/samples/svg/svgtest.dsw
+	rm -f ../../contrib/samples/xrc/xrcdemo.dsw
+	rm -f ../../contrib/utils/wxrc/wxrc.dsw
+	rm -f ../../samples/access/access.dsw
+	rm -f ../../samples/artprov/artprov.dsw
+	rm -f ../../samples/calendar/calendar.dsw
+	rm -f ../../samples/caret/caret.dsw
+	rm -f ../../samples/checklst/checklst.dsw
+	rm -f ../../samples/config/config.dsw
+	rm -f ../../samples/console/console.dsw
+	rm -f ../../samples/controls/controls.dsw
+	rm -f ../../samples/db/db.dsw
+	rm -f ../../samples/dialogs/dialogs.dsw
+	rm -f ../../samples/dialup/dialup.dsw
+	rm -f ../../samples/display/display.dsw
+	rm -f ../../samples/dnd/dnd.dsw
+	rm -f ../../samples/docview/docview.dsw
+	rm -f ../../samples/docvwmdi/docvwmdi.dsw
+	rm -f ../../samples/dragimag/dragimag.dsw
+	rm -f ../../samples/drawing/drawing.dsw
+	rm -f ../../samples/dynamic/dynamic.dsw
+	rm -f ../../samples/erase/erase.dsw
+	rm -f ../../samples/event/event.dsw
+	rm -f ../../samples/exec/exec.dsw
+	rm -f ../../samples/font/font.dsw
+	rm -f ../../samples/grid/grid.dsw
+	rm -f ../../samples/help/help.dsw
+	rm -f ../../samples/htlbox/htlbox.dsw
+	rm -f ../../samples/html/about/about.dsw
+	rm -f ../../samples/html/help/help.dsw
+	rm -f ../../samples/html/helpview/helpview.dsw
+	rm -f ../../samples/html/printing/printing.dsw
+	rm -f ../../samples/html/test/test.dsw
+	rm -f ../../samples/html/virtual/virtual.dsw
+	rm -f ../../samples/html/widget/widget.dsw
+	rm -f ../../samples/html/zip/zip.dsw
+	rm -f ../../samples/image/image.dsw
+	rm -f ../../samples/internat/internat.dsw
+	rm -f ../../samples/ipc/ipc.dsw
+	rm -f ../../samples/joytest/joytest.dsw
+	rm -f ../../samples/keyboard/keyboard.dsw
+	rm -f ../../samples/layout/layout.dsw
+	rm -f ../../samples/listbox/listbox.dsw
+	rm -f ../../samples/listctrl/listctrl.dsw
+	rm -f ../../samples/mdi/mdi.dsw
+	rm -f ../../samples/memcheck/memcheck.dsw
+	rm -f ../../samples/menu/menu.dsw
+	rm -f ../../samples/mfc/mfc.dsw
+	rm -f ../../samples/minifram/minifram.dsw
+	rm -f ../../samples/minimal/minimal.dsw
+	rm -f ../../samples/mobile/mobile.dsw
+	rm -f ../../samples/multimon/multimon.dsw
+	rm -f ../../samples/nativdlg/nativdlg.dsw
+	rm -f ../../samples/newgrid/newgrid.dsw
+	rm -f ../../samples/notebook/notebook.dsw
+	rm -f ../../samples/oleauto/oleauto.dsw
+	rm -f ../../samples/opengl/cube/cube.dsw
+	rm -f ../../samples/ownerdrw/ownerdrw.dsw
+	rm -f ../../samples/png/png.dsw
+	rm -f ../../samples/printing/printing.dsw
+	rm -f ../../samples/propsize/propsize.dsw
+	rm -f ../../samples/regtest/regtest.dsw
+	rm -f ../../samples/richedit/richedit.dsw
+	rm -f ../../samples/rotate/rotate.dsw
+	rm -f ../../samples/sashtest/sashtest.dsw
+	rm -f ../../samples/scroll/scroll.dsw
+	rm -f ../../samples/scrollsub/scrollsub.dsw
+	rm -f ../../samples/shaped/shaped.dsw
+	rm -f ../../samples/sockets/sockets.dsw
+	rm -f ../../samples/splitter/splitter.dsw
+	rm -f ../../samples/statbar/statbar.dsw
+	rm -f ../../samples/tab/tab.dsw
+	rm -f ../../samples/taskbar/taskbar.dsw
+	rm -f ../../samples/text/text.dsw
+	rm -f ../../samples/thread/thread.dsw
+	rm -f ../../samples/toolbar/toolbar.dsw
+	rm -f ../../samples/treectrl/treectrl.dsw
+	rm -f ../../samples/typetest/typetest.dsw
+	rm -f ../../samples/validate/validate.dsw
+	rm -f ../../samples/vscroll/vscroll.dsw
+	rm -f ../../samples/widgets/widgets.dsw
+	rm -f ../../samples/wizard/wizard.dsw
+	rm -f ../../samples/wxtest/wxtest.dsw
+	rm -f ../wx.dsw
 	rm -f ../../contrib/build/animate/makefile.wat
 	rm -f ../../contrib/build/fl/makefile.wat
 	rm -f ../../contrib/build/gizmos/makefile.wat
@@ -1003,6 +1191,9 @@ Makefile: regenMakefile.py
 ../../contrib/build/animate/makefile.wat: $(CDEPS) ../../contrib/build/animate/animate.bkl
 	$(BAKEFILE) -fwatcom -o$@  -DOPTIONS_FILE=../../../build/config.wat -DWRITE_OPTIONS_FILE=0 -DSRCDIR=../../src/animate -DWXTOPDIR=../../../ ../../contrib/build/animate/animate.bkl
 	touch $@
+../../contrib/build/animate/animate.dsw: $(CDEPS) ../../contrib/build/animate/animate.bkl
+	$(BAKEFILE) -fmsvc6prj -o$@  $(DSWFLAGS) -DSRCDIR=../../src/animate -DWXTOPDIR=../../../ ../../contrib/build/animate/animate.bkl
+	touch $@
 
 
 ../../contrib/src/fl/Makefile.in: $(CDEPS) ../../contrib/build/fl/fl.bkl
@@ -1019,6 +1210,9 @@ Makefile: regenMakefile.py
 	touch $@
 ../../contrib/build/fl/makefile.wat: $(CDEPS) ../../contrib/build/fl/fl.bkl
 	$(BAKEFILE) -fwatcom -o$@  -DOPTIONS_FILE=../../../build/config.wat -DWRITE_OPTIONS_FILE=0 -DSRCDIR=../../src/fl -DWXTOPDIR=../../../ ../../contrib/build/fl/fl.bkl
+	touch $@
+../../contrib/build/fl/fl.dsw: $(CDEPS) ../../contrib/build/fl/fl.bkl
+	$(BAKEFILE) -fmsvc6prj -o$@  $(DSWFLAGS) -DSRCDIR=../../src/fl -DWXTOPDIR=../../../ ../../contrib/build/fl/fl.bkl
 	touch $@
 
 
@@ -1037,6 +1231,9 @@ Makefile: regenMakefile.py
 ../../contrib/build/gizmos/makefile.wat: $(CDEPS) ../../contrib/build/gizmos/gizmos.bkl
 	$(BAKEFILE) -fwatcom -o$@  -DOPTIONS_FILE=../../../build/config.wat -DWRITE_OPTIONS_FILE=0 -DSRCDIR=../../src/gizmos -DWXTOPDIR=../../../ ../../contrib/build/gizmos/gizmos.bkl
 	touch $@
+../../contrib/build/gizmos/gizmos.dsw: $(CDEPS) ../../contrib/build/gizmos/gizmos.bkl
+	$(BAKEFILE) -fmsvc6prj -o$@  $(DSWFLAGS) -DSRCDIR=../../src/gizmos -DWXTOPDIR=../../../ ../../contrib/build/gizmos/gizmos.bkl
+	touch $@
 
 
 ../../contrib/src/ogl/Makefile.in: $(CDEPS) ../../contrib/build/ogl/ogl.bkl
@@ -1053,6 +1250,9 @@ Makefile: regenMakefile.py
 	touch $@
 ../../contrib/build/ogl/makefile.wat: $(CDEPS) ../../contrib/build/ogl/ogl.bkl
 	$(BAKEFILE) -fwatcom -o$@  -DOPTIONS_FILE=../../../build/config.wat -DWRITE_OPTIONS_FILE=0 -DSRCDIR=../../src/ogl -DWXTOPDIR=../../../ ../../contrib/build/ogl/ogl.bkl
+	touch $@
+../../contrib/build/ogl/ogl.dsw: $(CDEPS) ../../contrib/build/ogl/ogl.bkl
+	$(BAKEFILE) -fmsvc6prj -o$@  $(DSWFLAGS) -DSRCDIR=../../src/ogl -DWXTOPDIR=../../../ ../../contrib/build/ogl/ogl.bkl
 	touch $@
 
 
@@ -1071,6 +1271,9 @@ Makefile: regenMakefile.py
 ../../contrib/build/stc/makefile.wat: $(CDEPS) ../../contrib/build/stc/stc.bkl
 	$(BAKEFILE) -fwatcom -o$@  -DOPTIONS_FILE=../../../build/config.wat -DWRITE_OPTIONS_FILE=0 -DSRCDIR=../../src/stc -DWXTOPDIR=../../../ ../../contrib/build/stc/stc.bkl
 	touch $@
+../../contrib/build/stc/stc.dsw: $(CDEPS) ../../contrib/build/stc/stc.bkl
+	$(BAKEFILE) -fmsvc6prj -o$@  $(DSWFLAGS) -DSRCDIR=../../src/stc -DWXTOPDIR=../../../ ../../contrib/build/stc/stc.bkl
+	touch $@
 
 
 ../../contrib/src/svg/Makefile.in: $(CDEPS) ../../contrib/build/svg/svg.bkl
@@ -1087,6 +1290,9 @@ Makefile: regenMakefile.py
 	touch $@
 ../../contrib/build/svg/makefile.wat: $(CDEPS) ../../contrib/build/svg/svg.bkl
 	$(BAKEFILE) -fwatcom -o$@  -DOPTIONS_FILE=../../../build/config.wat -DWRITE_OPTIONS_FILE=0 -DSRCDIR=../../src/svg -DWXTOPDIR=../../../ ../../contrib/build/svg/svg.bkl
+	touch $@
+../../contrib/build/svg/svg.dsw: $(CDEPS) ../../contrib/build/svg/svg.bkl
+	$(BAKEFILE) -fmsvc6prj -o$@  $(DSWFLAGS) -DSRCDIR=../../src/svg -DWXTOPDIR=../../../ ../../contrib/build/svg/svg.bkl
 	touch $@
 
 
@@ -1105,6 +1311,9 @@ Makefile: regenMakefile.py
 ../../contrib/build/xrc/makefile.wat: $(CDEPS) ../../contrib/build/xrc/xrc.bkl
 	$(BAKEFILE) -fwatcom -o$@  -DOPTIONS_FILE=../../../build/config.wat -DWRITE_OPTIONS_FILE=0 -DSRCDIR=../../src/xrc -DWXTOPDIR=../../../ ../../contrib/build/xrc/xrc.bkl
 	touch $@
+../../contrib/build/xrc/xrc.dsw: $(CDEPS) ../../contrib/build/xrc/xrc.bkl
+	$(BAKEFILE) -fmsvc6prj -o$@  $(DSWFLAGS) -DSRCDIR=../../src/xrc -DWXTOPDIR=../../../ ../../contrib/build/xrc/xrc.bkl
+	touch $@
 
 
 ../../contrib/samples/animate/Makefile.in: $(SDEPS) ../../contrib/samples/animate/anitest.bkl
@@ -1121,6 +1330,9 @@ Makefile: regenMakefile.py
 	touch $@
 ../../contrib/samples/animate/makefile.wat: $(SDEPS) ../../contrib/samples/animate/anitest.bkl
 	$(BAKEFILE) -fwatcom -o$@  -DOPTIONS_FILE=../../../build/config.wat -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../../ ../../contrib/samples/animate/anitest.bkl
+	touch $@
+../../contrib/samples/animate/anitest.dsw: $(SDEPS) ../../contrib/samples/animate/anitest.bkl
+	$(BAKEFILE) -fmsvc6prj -o$@  $(DSWFLAGS) -DWXTOPDIR=../../../ ../../contrib/samples/animate/anitest.bkl
 	touch $@
 
 
@@ -1139,6 +1351,9 @@ Makefile: regenMakefile.py
 ../../contrib/samples/svg/makefile.wat: $(SDEPS) ../../contrib/samples/svg/svgtest.bkl
 	$(BAKEFILE) -fwatcom -o$@  -DOPTIONS_FILE=../../../build/config.wat -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../../ ../../contrib/samples/svg/svgtest.bkl
 	touch $@
+../../contrib/samples/svg/svgtest.dsw: $(SDEPS) ../../contrib/samples/svg/svgtest.bkl
+	$(BAKEFILE) -fmsvc6prj -o$@  $(DSWFLAGS) -DWXTOPDIR=../../../ ../../contrib/samples/svg/svgtest.bkl
+	touch $@
 
 
 ../../contrib/samples/xrc/Makefile.in: $(SDEPS) ../../contrib/samples/xrc/xrcdemo.bkl
@@ -1155,6 +1370,9 @@ Makefile: regenMakefile.py
 	touch $@
 ../../contrib/samples/xrc/makefile.wat: $(SDEPS) ../../contrib/samples/xrc/xrcdemo.bkl
 	$(BAKEFILE) -fwatcom -o$@  -DOPTIONS_FILE=../../../build/config.wat -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../../ ../../contrib/samples/xrc/xrcdemo.bkl
+	touch $@
+../../contrib/samples/xrc/xrcdemo.dsw: $(SDEPS) ../../contrib/samples/xrc/xrcdemo.bkl
+	$(BAKEFILE) -fmsvc6prj -o$@  $(DSWFLAGS) -DWXTOPDIR=../../../ ../../contrib/samples/xrc/xrcdemo.bkl
 	touch $@
 
 
@@ -1173,6 +1391,9 @@ Makefile: regenMakefile.py
 ../../contrib/utils/wxrc/makefile.wat: $(SDEPS) ../../contrib/utils/wxrc/wxrc.bkl
 	$(BAKEFILE) -fwatcom -o$@  -DOPTIONS_FILE=../../../build/config.wat -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../../ ../../contrib/utils/wxrc/wxrc.bkl
 	touch $@
+../../contrib/utils/wxrc/wxrc.dsw: $(SDEPS) ../../contrib/utils/wxrc/wxrc.bkl
+	$(BAKEFILE) -fmsvc6prj -o$@  $(DSWFLAGS) -DWXTOPDIR=../../../ ../../contrib/utils/wxrc/wxrc.bkl
+	touch $@
 
 
 ../../samples/access/Makefile.in: $(SDEPS) ../../samples/access/access.bkl
@@ -1189,6 +1410,9 @@ Makefile: regenMakefile.py
 	touch $@
 ../../samples/access/makefile.wat: $(SDEPS) ../../samples/access/access.bkl
 	$(BAKEFILE) -fwatcom -o$@  -DOPTIONS_FILE=../../build/config.wat -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/access/access.bkl
+	touch $@
+../../samples/access/access.dsw: $(SDEPS) ../../samples/access/access.bkl
+	$(BAKEFILE) -fmsvc6prj -o$@  $(DSWFLAGS) -DWXTOPDIR=../../ ../../samples/access/access.bkl
 	touch $@
 
 
@@ -1207,6 +1431,9 @@ Makefile: regenMakefile.py
 ../../samples/artprov/makefile.wat: $(SDEPS) ../../samples/artprov/artprov.bkl
 	$(BAKEFILE) -fwatcom -o$@  -DOPTIONS_FILE=../../build/config.wat -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/artprov/artprov.bkl
 	touch $@
+../../samples/artprov/artprov.dsw: $(SDEPS) ../../samples/artprov/artprov.bkl
+	$(BAKEFILE) -fmsvc6prj -o$@  $(DSWFLAGS) -DWXTOPDIR=../../ ../../samples/artprov/artprov.bkl
+	touch $@
 
 
 ../../samples/calendar/Makefile.in: $(SDEPS) ../../samples/calendar/calendar.bkl
@@ -1223,6 +1450,9 @@ Makefile: regenMakefile.py
 	touch $@
 ../../samples/calendar/makefile.wat: $(SDEPS) ../../samples/calendar/calendar.bkl
 	$(BAKEFILE) -fwatcom -o$@  -DOPTIONS_FILE=../../build/config.wat -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/calendar/calendar.bkl
+	touch $@
+../../samples/calendar/calendar.dsw: $(SDEPS) ../../samples/calendar/calendar.bkl
+	$(BAKEFILE) -fmsvc6prj -o$@  $(DSWFLAGS) -DWXTOPDIR=../../ ../../samples/calendar/calendar.bkl
 	touch $@
 
 
@@ -1241,6 +1471,9 @@ Makefile: regenMakefile.py
 ../../samples/caret/makefile.wat: $(SDEPS) ../../samples/caret/caret.bkl
 	$(BAKEFILE) -fwatcom -o$@  -DOPTIONS_FILE=../../build/config.wat -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/caret/caret.bkl
 	touch $@
+../../samples/caret/caret.dsw: $(SDEPS) ../../samples/caret/caret.bkl
+	$(BAKEFILE) -fmsvc6prj -o$@  $(DSWFLAGS) -DWXTOPDIR=../../ ../../samples/caret/caret.bkl
+	touch $@
 
 
 ../../samples/checklst/Makefile.in: $(SDEPS) ../../samples/checklst/checklst.bkl
@@ -1257,6 +1490,9 @@ Makefile: regenMakefile.py
 	touch $@
 ../../samples/checklst/makefile.wat: $(SDEPS) ../../samples/checklst/checklst.bkl
 	$(BAKEFILE) -fwatcom -o$@  -DOPTIONS_FILE=../../build/config.wat -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/checklst/checklst.bkl
+	touch $@
+../../samples/checklst/checklst.dsw: $(SDEPS) ../../samples/checklst/checklst.bkl
+	$(BAKEFILE) -fmsvc6prj -o$@  $(DSWFLAGS) -DWXTOPDIR=../../ ../../samples/checklst/checklst.bkl
 	touch $@
 
 
@@ -1275,6 +1511,9 @@ Makefile: regenMakefile.py
 ../../samples/config/makefile.wat: $(SDEPS) ../../samples/config/config.bkl
 	$(BAKEFILE) -fwatcom -o$@  -DOPTIONS_FILE=../../build/config.wat -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/config/config.bkl
 	touch $@
+../../samples/config/config.dsw: $(SDEPS) ../../samples/config/config.bkl
+	$(BAKEFILE) -fmsvc6prj -o$@  $(DSWFLAGS) -DWXTOPDIR=../../ ../../samples/config/config.bkl
+	touch $@
 
 
 ../../samples/console/Makefile.in: $(SDEPS) ../../samples/console/console.bkl
@@ -1291,6 +1530,9 @@ Makefile: regenMakefile.py
 	touch $@
 ../../samples/console/makefile.wat: $(SDEPS) ../../samples/console/console.bkl
 	$(BAKEFILE) -fwatcom -o$@  -DOPTIONS_FILE=../../build/config.wat -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/console/console.bkl
+	touch $@
+../../samples/console/console.dsw: $(SDEPS) ../../samples/console/console.bkl
+	$(BAKEFILE) -fmsvc6prj -o$@  $(DSWFLAGS) -DWXTOPDIR=../../ ../../samples/console/console.bkl
 	touch $@
 
 
@@ -1309,6 +1551,9 @@ Makefile: regenMakefile.py
 ../../samples/controls/makefile.wat: $(SDEPS) ../../samples/controls/controls.bkl
 	$(BAKEFILE) -fwatcom -o$@  -DOPTIONS_FILE=../../build/config.wat -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/controls/controls.bkl
 	touch $@
+../../samples/controls/controls.dsw: $(SDEPS) ../../samples/controls/controls.bkl
+	$(BAKEFILE) -fmsvc6prj -o$@  $(DSWFLAGS) -DWXTOPDIR=../../ ../../samples/controls/controls.bkl
+	touch $@
 
 
 ../../samples/db/Makefile.in: $(SDEPS) ../../samples/db/db.bkl
@@ -1325,6 +1570,9 @@ Makefile: regenMakefile.py
 	touch $@
 ../../samples/db/makefile.wat: $(SDEPS) ../../samples/db/db.bkl
 	$(BAKEFILE) -fwatcom -o$@  -DOPTIONS_FILE=../../build/config.wat -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/db/db.bkl
+	touch $@
+../../samples/db/db.dsw: $(SDEPS) ../../samples/db/db.bkl
+	$(BAKEFILE) -fmsvc6prj -o$@  $(DSWFLAGS) -DWXTOPDIR=../../ ../../samples/db/db.bkl
 	touch $@
 
 
@@ -1343,6 +1591,9 @@ Makefile: regenMakefile.py
 ../../samples/dialogs/makefile.wat: $(SDEPS) ../../samples/dialogs/dialogs.bkl
 	$(BAKEFILE) -fwatcom -o$@  -DOPTIONS_FILE=../../build/config.wat -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/dialogs/dialogs.bkl
 	touch $@
+../../samples/dialogs/dialogs.dsw: $(SDEPS) ../../samples/dialogs/dialogs.bkl
+	$(BAKEFILE) -fmsvc6prj -o$@  $(DSWFLAGS) -DWXTOPDIR=../../ ../../samples/dialogs/dialogs.bkl
+	touch $@
 
 
 ../../samples/dialup/Makefile.in: $(SDEPS) ../../samples/dialup/dialup.bkl
@@ -1359,6 +1610,9 @@ Makefile: regenMakefile.py
 	touch $@
 ../../samples/dialup/makefile.wat: $(SDEPS) ../../samples/dialup/dialup.bkl
 	$(BAKEFILE) -fwatcom -o$@  -DOPTIONS_FILE=../../build/config.wat -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/dialup/dialup.bkl
+	touch $@
+../../samples/dialup/dialup.dsw: $(SDEPS) ../../samples/dialup/dialup.bkl
+	$(BAKEFILE) -fmsvc6prj -o$@  $(DSWFLAGS) -DWXTOPDIR=../../ ../../samples/dialup/dialup.bkl
 	touch $@
 
 
@@ -1377,6 +1631,9 @@ Makefile: regenMakefile.py
 ../../samples/display/makefile.wat: $(SDEPS) ../../samples/display/display.bkl
 	$(BAKEFILE) -fwatcom -o$@  -DOPTIONS_FILE=../../build/config.wat -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/display/display.bkl
 	touch $@
+../../samples/display/display.dsw: $(SDEPS) ../../samples/display/display.bkl
+	$(BAKEFILE) -fmsvc6prj -o$@  $(DSWFLAGS) -DWXTOPDIR=../../ ../../samples/display/display.bkl
+	touch $@
 
 
 ../../samples/dnd/Makefile.in: $(SDEPS) ../../samples/dnd/dnd.bkl
@@ -1393,6 +1650,9 @@ Makefile: regenMakefile.py
 	touch $@
 ../../samples/dnd/makefile.wat: $(SDEPS) ../../samples/dnd/dnd.bkl
 	$(BAKEFILE) -fwatcom -o$@  -DOPTIONS_FILE=../../build/config.wat -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/dnd/dnd.bkl
+	touch $@
+../../samples/dnd/dnd.dsw: $(SDEPS) ../../samples/dnd/dnd.bkl
+	$(BAKEFILE) -fmsvc6prj -o$@  $(DSWFLAGS) -DWXTOPDIR=../../ ../../samples/dnd/dnd.bkl
 	touch $@
 
 
@@ -1411,6 +1671,9 @@ Makefile: regenMakefile.py
 ../../samples/docview/makefile.wat: $(SDEPS) ../../samples/docview/docview.bkl
 	$(BAKEFILE) -fwatcom -o$@  -DOPTIONS_FILE=../../build/config.wat -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/docview/docview.bkl
 	touch $@
+../../samples/docview/docview.dsw: $(SDEPS) ../../samples/docview/docview.bkl
+	$(BAKEFILE) -fmsvc6prj -o$@  $(DSWFLAGS) -DWXTOPDIR=../../ ../../samples/docview/docview.bkl
+	touch $@
 
 
 ../../samples/docvwmdi/Makefile.in: $(SDEPS) ../../samples/docvwmdi/docvwmdi.bkl
@@ -1427,6 +1690,9 @@ Makefile: regenMakefile.py
 	touch $@
 ../../samples/docvwmdi/makefile.wat: $(SDEPS) ../../samples/docvwmdi/docvwmdi.bkl
 	$(BAKEFILE) -fwatcom -o$@  -DOPTIONS_FILE=../../build/config.wat -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/docvwmdi/docvwmdi.bkl
+	touch $@
+../../samples/docvwmdi/docvwmdi.dsw: $(SDEPS) ../../samples/docvwmdi/docvwmdi.bkl
+	$(BAKEFILE) -fmsvc6prj -o$@  $(DSWFLAGS) -DWXTOPDIR=../../ ../../samples/docvwmdi/docvwmdi.bkl
 	touch $@
 
 
@@ -1445,6 +1711,9 @@ Makefile: regenMakefile.py
 ../../samples/dragimag/makefile.wat: $(SDEPS) ../../samples/dragimag/dragimag.bkl
 	$(BAKEFILE) -fwatcom -o$@  -DOPTIONS_FILE=../../build/config.wat -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/dragimag/dragimag.bkl
 	touch $@
+../../samples/dragimag/dragimag.dsw: $(SDEPS) ../../samples/dragimag/dragimag.bkl
+	$(BAKEFILE) -fmsvc6prj -o$@  $(DSWFLAGS) -DWXTOPDIR=../../ ../../samples/dragimag/dragimag.bkl
+	touch $@
 
 
 ../../samples/drawing/Makefile.in: $(SDEPS) ../../samples/drawing/drawing.bkl
@@ -1461,6 +1730,9 @@ Makefile: regenMakefile.py
 	touch $@
 ../../samples/drawing/makefile.wat: $(SDEPS) ../../samples/drawing/drawing.bkl
 	$(BAKEFILE) -fwatcom -o$@  -DOPTIONS_FILE=../../build/config.wat -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/drawing/drawing.bkl
+	touch $@
+../../samples/drawing/drawing.dsw: $(SDEPS) ../../samples/drawing/drawing.bkl
+	$(BAKEFILE) -fmsvc6prj -o$@  $(DSWFLAGS) -DWXTOPDIR=../../ ../../samples/drawing/drawing.bkl
 	touch $@
 
 
@@ -1479,6 +1751,9 @@ Makefile: regenMakefile.py
 ../../samples/dynamic/makefile.wat: $(SDEPS) ../../samples/dynamic/dynamic.bkl
 	$(BAKEFILE) -fwatcom -o$@  -DOPTIONS_FILE=../../build/config.wat -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/dynamic/dynamic.bkl
 	touch $@
+../../samples/dynamic/dynamic.dsw: $(SDEPS) ../../samples/dynamic/dynamic.bkl
+	$(BAKEFILE) -fmsvc6prj -o$@  $(DSWFLAGS) -DWXTOPDIR=../../ ../../samples/dynamic/dynamic.bkl
+	touch $@
 
 
 ../../samples/erase/Makefile.in: $(SDEPS) ../../samples/erase/erase.bkl
@@ -1495,6 +1770,9 @@ Makefile: regenMakefile.py
 	touch $@
 ../../samples/erase/makefile.wat: $(SDEPS) ../../samples/erase/erase.bkl
 	$(BAKEFILE) -fwatcom -o$@  -DOPTIONS_FILE=../../build/config.wat -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/erase/erase.bkl
+	touch $@
+../../samples/erase/erase.dsw: $(SDEPS) ../../samples/erase/erase.bkl
+	$(BAKEFILE) -fmsvc6prj -o$@  $(DSWFLAGS) -DWXTOPDIR=../../ ../../samples/erase/erase.bkl
 	touch $@
 
 
@@ -1513,6 +1791,9 @@ Makefile: regenMakefile.py
 ../../samples/event/makefile.wat: $(SDEPS) ../../samples/event/event.bkl
 	$(BAKEFILE) -fwatcom -o$@  -DOPTIONS_FILE=../../build/config.wat -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/event/event.bkl
 	touch $@
+../../samples/event/event.dsw: $(SDEPS) ../../samples/event/event.bkl
+	$(BAKEFILE) -fmsvc6prj -o$@  $(DSWFLAGS) -DWXTOPDIR=../../ ../../samples/event/event.bkl
+	touch $@
 
 
 ../../samples/exec/Makefile.in: $(SDEPS) ../../samples/exec/exec.bkl
@@ -1529,6 +1810,9 @@ Makefile: regenMakefile.py
 	touch $@
 ../../samples/exec/makefile.wat: $(SDEPS) ../../samples/exec/exec.bkl
 	$(BAKEFILE) -fwatcom -o$@  -DOPTIONS_FILE=../../build/config.wat -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/exec/exec.bkl
+	touch $@
+../../samples/exec/exec.dsw: $(SDEPS) ../../samples/exec/exec.bkl
+	$(BAKEFILE) -fmsvc6prj -o$@  $(DSWFLAGS) -DWXTOPDIR=../../ ../../samples/exec/exec.bkl
 	touch $@
 
 
@@ -1547,6 +1831,9 @@ Makefile: regenMakefile.py
 ../../samples/font/makefile.wat: $(SDEPS) ../../samples/font/font.bkl
 	$(BAKEFILE) -fwatcom -o$@  -DOPTIONS_FILE=../../build/config.wat -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/font/font.bkl
 	touch $@
+../../samples/font/font.dsw: $(SDEPS) ../../samples/font/font.bkl
+	$(BAKEFILE) -fmsvc6prj -o$@  $(DSWFLAGS) -DWXTOPDIR=../../ ../../samples/font/font.bkl
+	touch $@
 
 
 ../../samples/grid/Makefile.in: $(SDEPS) ../../samples/grid/grid.bkl
@@ -1563,6 +1850,9 @@ Makefile: regenMakefile.py
 	touch $@
 ../../samples/grid/makefile.wat: $(SDEPS) ../../samples/grid/grid.bkl
 	$(BAKEFILE) -fwatcom -o$@  -DOPTIONS_FILE=../../build/config.wat -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/grid/grid.bkl
+	touch $@
+../../samples/grid/grid.dsw: $(SDEPS) ../../samples/grid/grid.bkl
+	$(BAKEFILE) -fmsvc6prj -o$@  $(DSWFLAGS) -DWXTOPDIR=../../ ../../samples/grid/grid.bkl
 	touch $@
 
 
@@ -1581,6 +1871,9 @@ Makefile: regenMakefile.py
 ../../samples/help/makefile.wat: $(SDEPS) ../../samples/help/help.bkl
 	$(BAKEFILE) -fwatcom -o$@  -DOPTIONS_FILE=../../build/config.wat -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/help/help.bkl
 	touch $@
+../../samples/help/help.dsw: $(SDEPS) ../../samples/help/help.bkl
+	$(BAKEFILE) -fmsvc6prj -o$@  $(DSWFLAGS) -DWXTOPDIR=../../ ../../samples/help/help.bkl
+	touch $@
 
 
 ../../samples/htlbox/Makefile.in: $(SDEPS) ../../samples/htlbox/htlbox.bkl
@@ -1597,6 +1890,9 @@ Makefile: regenMakefile.py
 	touch $@
 ../../samples/htlbox/makefile.wat: $(SDEPS) ../../samples/htlbox/htlbox.bkl
 	$(BAKEFILE) -fwatcom -o$@  -DOPTIONS_FILE=../../build/config.wat -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/htlbox/htlbox.bkl
+	touch $@
+../../samples/htlbox/htlbox.dsw: $(SDEPS) ../../samples/htlbox/htlbox.bkl
+	$(BAKEFILE) -fmsvc6prj -o$@  $(DSWFLAGS) -DWXTOPDIR=../../ ../../samples/htlbox/htlbox.bkl
 	touch $@
 
 
@@ -1615,6 +1911,9 @@ Makefile: regenMakefile.py
 ../../samples/html/about/makefile.wat: $(SDEPS) ../../samples/html/about/about.bkl
 	$(BAKEFILE) -fwatcom -o$@  -DOPTIONS_FILE=../../../build/config.wat -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../../ ../../samples/html/about/about.bkl
 	touch $@
+../../samples/html/about/about.dsw: $(SDEPS) ../../samples/html/about/about.bkl
+	$(BAKEFILE) -fmsvc6prj -o$@  $(DSWFLAGS) -DWXTOPDIR=../../../ ../../samples/html/about/about.bkl
+	touch $@
 
 
 ../../samples/html/help/Makefile.in: $(SDEPS) ../../samples/html/help/help.bkl
@@ -1632,6 +1931,9 @@ Makefile: regenMakefile.py
 ../../samples/html/help/makefile.wat: $(SDEPS) ../../samples/html/help/help.bkl
 	$(BAKEFILE) -fwatcom -o$@  -DOPTIONS_FILE=../../../build/config.wat -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../../ ../../samples/html/help/help.bkl
 	touch $@
+../../samples/html/help/help.dsw: $(SDEPS) ../../samples/html/help/help.bkl
+	$(BAKEFILE) -fmsvc6prj -o$@  $(DSWFLAGS) -DWXTOPDIR=../../../ ../../samples/html/help/help.bkl
+	touch $@
 
 
 ../../samples/html/helpview/Makefile.in: $(SDEPS) ../../samples/html/helpview/helpview.bkl
@@ -1648,6 +1950,9 @@ Makefile: regenMakefile.py
 	touch $@
 ../../samples/html/helpview/makefile.wat: $(SDEPS) ../../samples/html/helpview/helpview.bkl
 	$(BAKEFILE) -fwatcom -o$@  -DOPTIONS_FILE=../../../build/config.wat -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../../ ../../samples/html/helpview/helpview.bkl
+	touch $@
+../../samples/html/helpview/helpview.dsw: $(SDEPS) ../../samples/html/helpview/helpview.bkl
+	$(BAKEFILE) -fmsvc6prj -o$@  $(DSWFLAGS) -DWXTOPDIR=../../../ ../../samples/html/helpview/helpview.bkl
 	touch $@
 
 
@@ -1683,6 +1988,9 @@ Makefile: regenMakefile.py
 ../../samples/html/printing/makefile.wat: $(SDEPS) ../../samples/html/printing/printing.bkl
 	$(BAKEFILE) -fwatcom -o$@  -DOPTIONS_FILE=../../../build/config.wat -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../../ ../../samples/html/printing/printing.bkl
 	touch $@
+../../samples/html/printing/printing.dsw: $(SDEPS) ../../samples/html/printing/printing.bkl
+	$(BAKEFILE) -fmsvc6prj -o$@  $(DSWFLAGS) -DWXTOPDIR=../../../ ../../samples/html/printing/printing.bkl
+	touch $@
 
 
 ../../samples/html/test/Makefile.in: $(SDEPS) ../../samples/html/test/test.bkl
@@ -1699,6 +2007,9 @@ Makefile: regenMakefile.py
 	touch $@
 ../../samples/html/test/makefile.wat: $(SDEPS) ../../samples/html/test/test.bkl
 	$(BAKEFILE) -fwatcom -o$@  -DOPTIONS_FILE=../../../build/config.wat -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../../ ../../samples/html/test/test.bkl
+	touch $@
+../../samples/html/test/test.dsw: $(SDEPS) ../../samples/html/test/test.bkl
+	$(BAKEFILE) -fmsvc6prj -o$@  $(DSWFLAGS) -DWXTOPDIR=../../../ ../../samples/html/test/test.bkl
 	touch $@
 
 
@@ -1717,6 +2028,9 @@ Makefile: regenMakefile.py
 ../../samples/html/virtual/makefile.wat: $(SDEPS) ../../samples/html/virtual/virtual.bkl
 	$(BAKEFILE) -fwatcom -o$@  -DOPTIONS_FILE=../../../build/config.wat -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../../ ../../samples/html/virtual/virtual.bkl
 	touch $@
+../../samples/html/virtual/virtual.dsw: $(SDEPS) ../../samples/html/virtual/virtual.bkl
+	$(BAKEFILE) -fmsvc6prj -o$@  $(DSWFLAGS) -DWXTOPDIR=../../../ ../../samples/html/virtual/virtual.bkl
+	touch $@
 
 
 ../../samples/html/widget/Makefile.in: $(SDEPS) ../../samples/html/widget/widget.bkl
@@ -1733,6 +2047,9 @@ Makefile: regenMakefile.py
 	touch $@
 ../../samples/html/widget/makefile.wat: $(SDEPS) ../../samples/html/widget/widget.bkl
 	$(BAKEFILE) -fwatcom -o$@  -DOPTIONS_FILE=../../../build/config.wat -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../../ ../../samples/html/widget/widget.bkl
+	touch $@
+../../samples/html/widget/widget.dsw: $(SDEPS) ../../samples/html/widget/widget.bkl
+	$(BAKEFILE) -fmsvc6prj -o$@  $(DSWFLAGS) -DWXTOPDIR=../../../ ../../samples/html/widget/widget.bkl
 	touch $@
 
 
@@ -1751,6 +2068,9 @@ Makefile: regenMakefile.py
 ../../samples/html/zip/makefile.wat: $(SDEPS) ../../samples/html/zip/zip.bkl
 	$(BAKEFILE) -fwatcom -o$@  -DOPTIONS_FILE=../../../build/config.wat -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../../ ../../samples/html/zip/zip.bkl
 	touch $@
+../../samples/html/zip/zip.dsw: $(SDEPS) ../../samples/html/zip/zip.bkl
+	$(BAKEFILE) -fmsvc6prj -o$@  $(DSWFLAGS) -DWXTOPDIR=../../../ ../../samples/html/zip/zip.bkl
+	touch $@
 
 
 ../../samples/image/Makefile.in: $(SDEPS) ../../samples/image/image.bkl
@@ -1767,6 +2087,9 @@ Makefile: regenMakefile.py
 	touch $@
 ../../samples/image/makefile.wat: $(SDEPS) ../../samples/image/image.bkl
 	$(BAKEFILE) -fwatcom -o$@  -DOPTIONS_FILE=../../build/config.wat -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/image/image.bkl
+	touch $@
+../../samples/image/image.dsw: $(SDEPS) ../../samples/image/image.bkl
+	$(BAKEFILE) -fmsvc6prj -o$@  $(DSWFLAGS) -DWXTOPDIR=../../ ../../samples/image/image.bkl
 	touch $@
 
 
@@ -1785,6 +2108,9 @@ Makefile: regenMakefile.py
 ../../samples/internat/makefile.wat: $(SDEPS) ../../samples/internat/internat.bkl
 	$(BAKEFILE) -fwatcom -o$@  -DOPTIONS_FILE=../../build/config.wat -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/internat/internat.bkl
 	touch $@
+../../samples/internat/internat.dsw: $(SDEPS) ../../samples/internat/internat.bkl
+	$(BAKEFILE) -fmsvc6prj -o$@  $(DSWFLAGS) -DWXTOPDIR=../../ ../../samples/internat/internat.bkl
+	touch $@
 
 
 ../../samples/ipc/Makefile.in: $(SDEPS) ../../samples/ipc/ipc.bkl
@@ -1801,6 +2127,9 @@ Makefile: regenMakefile.py
 	touch $@
 ../../samples/ipc/makefile.wat: $(SDEPS) ../../samples/ipc/ipc.bkl
 	$(BAKEFILE) -fwatcom -o$@  -DOPTIONS_FILE=../../build/config.wat -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/ipc/ipc.bkl
+	touch $@
+../../samples/ipc/ipc.dsw: $(SDEPS) ../../samples/ipc/ipc.bkl
+	$(BAKEFILE) -fmsvc6prj -o$@  $(DSWFLAGS) -DWXTOPDIR=../../ ../../samples/ipc/ipc.bkl
 	touch $@
 
 
@@ -1819,6 +2148,9 @@ Makefile: regenMakefile.py
 ../../samples/joytest/makefile.wat: $(SDEPS) ../../samples/joytest/joytest.bkl
 	$(BAKEFILE) -fwatcom -o$@  -DOPTIONS_FILE=../../build/config.wat -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/joytest/joytest.bkl
 	touch $@
+../../samples/joytest/joytest.dsw: $(SDEPS) ../../samples/joytest/joytest.bkl
+	$(BAKEFILE) -fmsvc6prj -o$@  $(DSWFLAGS) -DWXTOPDIR=../../ ../../samples/joytest/joytest.bkl
+	touch $@
 
 
 ../../samples/keyboard/Makefile.in: $(SDEPS) ../../samples/keyboard/keyboard.bkl
@@ -1835,6 +2167,9 @@ Makefile: regenMakefile.py
 	touch $@
 ../../samples/keyboard/makefile.wat: $(SDEPS) ../../samples/keyboard/keyboard.bkl
 	$(BAKEFILE) -fwatcom -o$@  -DOPTIONS_FILE=../../build/config.wat -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/keyboard/keyboard.bkl
+	touch $@
+../../samples/keyboard/keyboard.dsw: $(SDEPS) ../../samples/keyboard/keyboard.bkl
+	$(BAKEFILE) -fmsvc6prj -o$@  $(DSWFLAGS) -DWXTOPDIR=../../ ../../samples/keyboard/keyboard.bkl
 	touch $@
 
 
@@ -1853,6 +2188,9 @@ Makefile: regenMakefile.py
 ../../samples/layout/makefile.wat: $(SDEPS) ../../samples/layout/layout.bkl
 	$(BAKEFILE) -fwatcom -o$@  -DOPTIONS_FILE=../../build/config.wat -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/layout/layout.bkl
 	touch $@
+../../samples/layout/layout.dsw: $(SDEPS) ../../samples/layout/layout.bkl
+	$(BAKEFILE) -fmsvc6prj -o$@  $(DSWFLAGS) -DWXTOPDIR=../../ ../../samples/layout/layout.bkl
+	touch $@
 
 
 ../../samples/listbox/Makefile.in: $(SDEPS) ../../samples/listbox/listbox.bkl
@@ -1869,6 +2207,9 @@ Makefile: regenMakefile.py
 	touch $@
 ../../samples/listbox/makefile.wat: $(SDEPS) ../../samples/listbox/listbox.bkl
 	$(BAKEFILE) -fwatcom -o$@  -DOPTIONS_FILE=../../build/config.wat -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/listbox/listbox.bkl
+	touch $@
+../../samples/listbox/listbox.dsw: $(SDEPS) ../../samples/listbox/listbox.bkl
+	$(BAKEFILE) -fmsvc6prj -o$@  $(DSWFLAGS) -DWXTOPDIR=../../ ../../samples/listbox/listbox.bkl
 	touch $@
 
 
@@ -1887,6 +2228,9 @@ Makefile: regenMakefile.py
 ../../samples/listctrl/makefile.wat: $(SDEPS) ../../samples/listctrl/listctrl.bkl
 	$(BAKEFILE) -fwatcom -o$@  -DOPTIONS_FILE=../../build/config.wat -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/listctrl/listctrl.bkl
 	touch $@
+../../samples/listctrl/listctrl.dsw: $(SDEPS) ../../samples/listctrl/listctrl.bkl
+	$(BAKEFILE) -fmsvc6prj -o$@  $(DSWFLAGS) -DWXTOPDIR=../../ ../../samples/listctrl/listctrl.bkl
+	touch $@
 
 
 ../../samples/mdi/Makefile.in: $(SDEPS) ../../samples/mdi/mdi.bkl
@@ -1903,6 +2247,9 @@ Makefile: regenMakefile.py
 	touch $@
 ../../samples/mdi/makefile.wat: $(SDEPS) ../../samples/mdi/mdi.bkl
 	$(BAKEFILE) -fwatcom -o$@  -DOPTIONS_FILE=../../build/config.wat -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/mdi/mdi.bkl
+	touch $@
+../../samples/mdi/mdi.dsw: $(SDEPS) ../../samples/mdi/mdi.bkl
+	$(BAKEFILE) -fmsvc6prj -o$@  $(DSWFLAGS) -DWXTOPDIR=../../ ../../samples/mdi/mdi.bkl
 	touch $@
 
 
@@ -1921,6 +2268,9 @@ Makefile: regenMakefile.py
 ../../samples/memcheck/makefile.wat: $(SDEPS) ../../samples/memcheck/memcheck.bkl
 	$(BAKEFILE) -fwatcom -o$@  -DOPTIONS_FILE=../../build/config.wat -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/memcheck/memcheck.bkl
 	touch $@
+../../samples/memcheck/memcheck.dsw: $(SDEPS) ../../samples/memcheck/memcheck.bkl
+	$(BAKEFILE) -fmsvc6prj -o$@  $(DSWFLAGS) -DWXTOPDIR=../../ ../../samples/memcheck/memcheck.bkl
+	touch $@
 
 
 ../../samples/menu/Makefile.in: $(SDEPS) ../../samples/menu/menu.bkl
@@ -1937,6 +2287,9 @@ Makefile: regenMakefile.py
 	touch $@
 ../../samples/menu/makefile.wat: $(SDEPS) ../../samples/menu/menu.bkl
 	$(BAKEFILE) -fwatcom -o$@  -DOPTIONS_FILE=../../build/config.wat -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/menu/menu.bkl
+	touch $@
+../../samples/menu/menu.dsw: $(SDEPS) ../../samples/menu/menu.bkl
+	$(BAKEFILE) -fmsvc6prj -o$@  $(DSWFLAGS) -DWXTOPDIR=../../ ../../samples/menu/menu.bkl
 	touch $@
 
 
@@ -1955,6 +2308,9 @@ Makefile: regenMakefile.py
 ../../samples/mfc/makefile.wat: $(SDEPS) ../../samples/mfc/mfc.bkl
 	$(BAKEFILE) -fwatcom -o$@  -DOPTIONS_FILE=../../build/config.wat -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/mfc/mfc.bkl
 	touch $@
+../../samples/mfc/mfc.dsw: $(SDEPS) ../../samples/mfc/mfc.bkl
+	$(BAKEFILE) -fmsvc6prj -o$@  $(DSWFLAGS) -DWXTOPDIR=../../ ../../samples/mfc/mfc.bkl
+	touch $@
 
 
 ../../samples/minifram/Makefile.in: $(SDEPS) ../../samples/minifram/minifram.bkl
@@ -1971,6 +2327,9 @@ Makefile: regenMakefile.py
 	touch $@
 ../../samples/minifram/makefile.wat: $(SDEPS) ../../samples/minifram/minifram.bkl
 	$(BAKEFILE) -fwatcom -o$@  -DOPTIONS_FILE=../../build/config.wat -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/minifram/minifram.bkl
+	touch $@
+../../samples/minifram/minifram.dsw: $(SDEPS) ../../samples/minifram/minifram.bkl
+	$(BAKEFILE) -fmsvc6prj -o$@  $(DSWFLAGS) -DWXTOPDIR=../../ ../../samples/minifram/minifram.bkl
 	touch $@
 
 
@@ -1989,6 +2348,9 @@ Makefile: regenMakefile.py
 ../../samples/minimal/makefile.wat: $(SDEPS) ../../samples/minimal/minimal.bkl
 	$(BAKEFILE) -fwatcom -o$@  -DOPTIONS_FILE=../../build/config.wat -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/minimal/minimal.bkl
 	touch $@
+../../samples/minimal/minimal.dsw: $(SDEPS) ../../samples/minimal/minimal.bkl
+	$(BAKEFILE) -fmsvc6prj -o$@  $(DSWFLAGS) -DWXTOPDIR=../../ ../../samples/minimal/minimal.bkl
+	touch $@
 
 
 ../../samples/mobile/Makefile.in: $(SDEPS) ../../samples/mobile/mobile.bkl
@@ -2005,6 +2367,9 @@ Makefile: regenMakefile.py
 	touch $@
 ../../samples/mobile/makefile.wat: $(SDEPS) ../../samples/mobile/mobile.bkl
 	$(BAKEFILE) -fwatcom -o$@  -DOPTIONS_FILE=../../build/config.wat -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/mobile/mobile.bkl
+	touch $@
+../../samples/mobile/mobile.dsw: $(SDEPS) ../../samples/mobile/mobile.bkl
+	$(BAKEFILE) -fmsvc6prj -o$@  $(DSWFLAGS) -DWXTOPDIR=../../ ../../samples/mobile/mobile.bkl
 	touch $@
 
 
@@ -2023,6 +2388,9 @@ Makefile: regenMakefile.py
 ../../samples/multimon/makefile.wat: $(SDEPS) ../../samples/multimon/multimon.bkl
 	$(BAKEFILE) -fwatcom -o$@  -DOPTIONS_FILE=../../build/config.wat -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/multimon/multimon.bkl
 	touch $@
+../../samples/multimon/multimon.dsw: $(SDEPS) ../../samples/multimon/multimon.bkl
+	$(BAKEFILE) -fmsvc6prj -o$@  $(DSWFLAGS) -DWXTOPDIR=../../ ../../samples/multimon/multimon.bkl
+	touch $@
 
 
 ../../samples/nativdlg/Makefile.in: $(SDEPS) ../../samples/nativdlg/nativdlg.bkl
@@ -2039,6 +2407,9 @@ Makefile: regenMakefile.py
 	touch $@
 ../../samples/nativdlg/makefile.wat: $(SDEPS) ../../samples/nativdlg/nativdlg.bkl
 	$(BAKEFILE) -fwatcom -o$@  -DOPTIONS_FILE=../../build/config.wat -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/nativdlg/nativdlg.bkl
+	touch $@
+../../samples/nativdlg/nativdlg.dsw: $(SDEPS) ../../samples/nativdlg/nativdlg.bkl
+	$(BAKEFILE) -fmsvc6prj -o$@  $(DSWFLAGS) -DWXTOPDIR=../../ ../../samples/nativdlg/nativdlg.bkl
 	touch $@
 
 
@@ -2057,6 +2428,9 @@ Makefile: regenMakefile.py
 ../../samples/newgrid/makefile.wat: $(SDEPS) ../../samples/newgrid/newgrid.bkl
 	$(BAKEFILE) -fwatcom -o$@  -DOPTIONS_FILE=../../build/config.wat -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/newgrid/newgrid.bkl
 	touch $@
+../../samples/newgrid/newgrid.dsw: $(SDEPS) ../../samples/newgrid/newgrid.bkl
+	$(BAKEFILE) -fmsvc6prj -o$@  $(DSWFLAGS) -DWXTOPDIR=../../ ../../samples/newgrid/newgrid.bkl
+	touch $@
 
 
 ../../samples/notebook/Makefile.in: $(SDEPS) ../../samples/notebook/notebook.bkl
@@ -2073,6 +2447,9 @@ Makefile: regenMakefile.py
 	touch $@
 ../../samples/notebook/makefile.wat: $(SDEPS) ../../samples/notebook/notebook.bkl
 	$(BAKEFILE) -fwatcom -o$@  -DOPTIONS_FILE=../../build/config.wat -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/notebook/notebook.bkl
+	touch $@
+../../samples/notebook/notebook.dsw: $(SDEPS) ../../samples/notebook/notebook.bkl
+	$(BAKEFILE) -fmsvc6prj -o$@  $(DSWFLAGS) -DWXTOPDIR=../../ ../../samples/notebook/notebook.bkl
 	touch $@
 
 
@@ -2091,6 +2468,9 @@ Makefile: regenMakefile.py
 ../../samples/oleauto/makefile.wat: $(SDEPS) ../../samples/oleauto/oleauto.bkl
 	$(BAKEFILE) -fwatcom -o$@  -DOPTIONS_FILE=../../build/config.wat -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/oleauto/oleauto.bkl
 	touch $@
+../../samples/oleauto/oleauto.dsw: $(SDEPS) ../../samples/oleauto/oleauto.bkl
+	$(BAKEFILE) -fmsvc6prj -o$@  $(DSWFLAGS) -DWXTOPDIR=../../ ../../samples/oleauto/oleauto.bkl
+	touch $@
 
 
 ../../samples/opengl/cube/Makefile.in: $(SDEPS) ../../samples/opengl/cube/cube.bkl
@@ -2107,6 +2487,9 @@ Makefile: regenMakefile.py
 	touch $@
 ../../samples/opengl/cube/makefile.wat: $(SDEPS) ../../samples/opengl/cube/cube.bkl
 	$(BAKEFILE) -fwatcom -o$@  -DOPTIONS_FILE=../../../build/config.wat -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../../ ../../samples/opengl/cube/cube.bkl
+	touch $@
+../../samples/opengl/cube/cube.dsw: $(SDEPS) ../../samples/opengl/cube/cube.bkl
+	$(BAKEFILE) -fmsvc6prj -o$@  $(DSWFLAGS) -DWXTOPDIR=../../../ ../../samples/opengl/cube/cube.bkl
 	touch $@
 
 
@@ -2142,6 +2525,9 @@ Makefile: regenMakefile.py
 ../../samples/ownerdrw/makefile.wat: $(SDEPS) ../../samples/ownerdrw/ownerdrw.bkl
 	$(BAKEFILE) -fwatcom -o$@  -DOPTIONS_FILE=../../build/config.wat -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/ownerdrw/ownerdrw.bkl
 	touch $@
+../../samples/ownerdrw/ownerdrw.dsw: $(SDEPS) ../../samples/ownerdrw/ownerdrw.bkl
+	$(BAKEFILE) -fmsvc6prj -o$@  $(DSWFLAGS) -DWXTOPDIR=../../ ../../samples/ownerdrw/ownerdrw.bkl
+	touch $@
 
 
 ../../samples/png/Makefile.in: $(SDEPS) ../../samples/png/png.bkl
@@ -2158,6 +2544,9 @@ Makefile: regenMakefile.py
 	touch $@
 ../../samples/png/makefile.wat: $(SDEPS) ../../samples/png/png.bkl
 	$(BAKEFILE) -fwatcom -o$@  -DOPTIONS_FILE=../../build/config.wat -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/png/png.bkl
+	touch $@
+../../samples/png/png.dsw: $(SDEPS) ../../samples/png/png.bkl
+	$(BAKEFILE) -fmsvc6prj -o$@  $(DSWFLAGS) -DWXTOPDIR=../../ ../../samples/png/png.bkl
 	touch $@
 
 
@@ -2176,6 +2565,9 @@ Makefile: regenMakefile.py
 ../../samples/printing/makefile.wat: $(SDEPS) ../../samples/printing/printing.bkl
 	$(BAKEFILE) -fwatcom -o$@  -DOPTIONS_FILE=../../build/config.wat -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/printing/printing.bkl
 	touch $@
+../../samples/printing/printing.dsw: $(SDEPS) ../../samples/printing/printing.bkl
+	$(BAKEFILE) -fmsvc6prj -o$@  $(DSWFLAGS) -DWXTOPDIR=../../ ../../samples/printing/printing.bkl
+	touch $@
 
 
 ../../samples/propsize/Makefile.in: $(SDEPS) ../../samples/propsize/propsize.bkl
@@ -2192,6 +2584,9 @@ Makefile: regenMakefile.py
 	touch $@
 ../../samples/propsize/makefile.wat: $(SDEPS) ../../samples/propsize/propsize.bkl
 	$(BAKEFILE) -fwatcom -o$@  -DOPTIONS_FILE=../../build/config.wat -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/propsize/propsize.bkl
+	touch $@
+../../samples/propsize/propsize.dsw: $(SDEPS) ../../samples/propsize/propsize.bkl
+	$(BAKEFILE) -fmsvc6prj -o$@  $(DSWFLAGS) -DWXTOPDIR=../../ ../../samples/propsize/propsize.bkl
 	touch $@
 
 
@@ -2210,6 +2605,9 @@ Makefile: regenMakefile.py
 ../../samples/regtest/makefile.wat: $(SDEPS) ../../samples/regtest/regtest.bkl
 	$(BAKEFILE) -fwatcom -o$@  -DOPTIONS_FILE=../../build/config.wat -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/regtest/regtest.bkl
 	touch $@
+../../samples/regtest/regtest.dsw: $(SDEPS) ../../samples/regtest/regtest.bkl
+	$(BAKEFILE) -fmsvc6prj -o$@  $(DSWFLAGS) -DWXTOPDIR=../../ ../../samples/regtest/regtest.bkl
+	touch $@
 
 
 ../../samples/richedit/Makefile.in: $(SDEPS) ../../samples/richedit/richedit.bkl
@@ -2227,6 +2625,9 @@ Makefile: regenMakefile.py
 ../../samples/richedit/makefile.wat: $(SDEPS) ../../samples/richedit/richedit.bkl
 	$(BAKEFILE) -fwatcom -o$@  -DOPTIONS_FILE=../../build/config.wat -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/richedit/richedit.bkl
 	touch $@
+../../samples/richedit/richedit.dsw: $(SDEPS) ../../samples/richedit/richedit.bkl
+	$(BAKEFILE) -fmsvc6prj -o$@  $(DSWFLAGS) -DWXTOPDIR=../../ ../../samples/richedit/richedit.bkl
+	touch $@
 
 
 ../../samples/rotate/Makefile.in: $(SDEPS) ../../samples/rotate/rotate.bkl
@@ -2243,6 +2644,9 @@ Makefile: regenMakefile.py
 	touch $@
 ../../samples/rotate/makefile.wat: $(SDEPS) ../../samples/rotate/rotate.bkl
 	$(BAKEFILE) -fwatcom -o$@  -DOPTIONS_FILE=../../build/config.wat -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/rotate/rotate.bkl
+	touch $@
+../../samples/rotate/rotate.dsw: $(SDEPS) ../../samples/rotate/rotate.bkl
+	$(BAKEFILE) -fmsvc6prj -o$@  $(DSWFLAGS) -DWXTOPDIR=../../ ../../samples/rotate/rotate.bkl
 	touch $@
 
 
@@ -2278,6 +2682,9 @@ Makefile: regenMakefile.py
 ../../samples/sashtest/makefile.wat: $(SDEPS) ../../samples/sashtest/sashtest.bkl
 	$(BAKEFILE) -fwatcom -o$@  -DOPTIONS_FILE=../../build/config.wat -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/sashtest/sashtest.bkl
 	touch $@
+../../samples/sashtest/sashtest.dsw: $(SDEPS) ../../samples/sashtest/sashtest.bkl
+	$(BAKEFILE) -fmsvc6prj -o$@  $(DSWFLAGS) -DWXTOPDIR=../../ ../../samples/sashtest/sashtest.bkl
+	touch $@
 
 
 ../../samples/scroll/Makefile.in: $(SDEPS) ../../samples/scroll/scroll.bkl
@@ -2294,6 +2701,9 @@ Makefile: regenMakefile.py
 	touch $@
 ../../samples/scroll/makefile.wat: $(SDEPS) ../../samples/scroll/scroll.bkl
 	$(BAKEFILE) -fwatcom -o$@  -DOPTIONS_FILE=../../build/config.wat -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/scroll/scroll.bkl
+	touch $@
+../../samples/scroll/scroll.dsw: $(SDEPS) ../../samples/scroll/scroll.bkl
+	$(BAKEFILE) -fmsvc6prj -o$@  $(DSWFLAGS) -DWXTOPDIR=../../ ../../samples/scroll/scroll.bkl
 	touch $@
 
 
@@ -2312,6 +2722,9 @@ Makefile: regenMakefile.py
 ../../samples/scrollsub/makefile.wat: $(SDEPS) ../../samples/scrollsub/scrollsub.bkl
 	$(BAKEFILE) -fwatcom -o$@  -DOPTIONS_FILE=../../build/config.wat -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/scrollsub/scrollsub.bkl
 	touch $@
+../../samples/scrollsub/scrollsub.dsw: $(SDEPS) ../../samples/scrollsub/scrollsub.bkl
+	$(BAKEFILE) -fmsvc6prj -o$@  $(DSWFLAGS) -DWXTOPDIR=../../ ../../samples/scrollsub/scrollsub.bkl
+	touch $@
 
 
 ../../samples/shaped/Makefile.in: $(SDEPS) ../../samples/shaped/shaped.bkl
@@ -2328,6 +2741,9 @@ Makefile: regenMakefile.py
 	touch $@
 ../../samples/shaped/makefile.wat: $(SDEPS) ../../samples/shaped/shaped.bkl
 	$(BAKEFILE) -fwatcom -o$@  -DOPTIONS_FILE=../../build/config.wat -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/shaped/shaped.bkl
+	touch $@
+../../samples/shaped/shaped.dsw: $(SDEPS) ../../samples/shaped/shaped.bkl
+	$(BAKEFILE) -fmsvc6prj -o$@  $(DSWFLAGS) -DWXTOPDIR=../../ ../../samples/shaped/shaped.bkl
 	touch $@
 
 
@@ -2346,6 +2762,9 @@ Makefile: regenMakefile.py
 ../../samples/sockets/makefile.wat: $(SDEPS) ../../samples/sockets/sockets.bkl
 	$(BAKEFILE) -fwatcom -o$@  -DOPTIONS_FILE=../../build/config.wat -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/sockets/sockets.bkl
 	touch $@
+../../samples/sockets/sockets.dsw: $(SDEPS) ../../samples/sockets/sockets.bkl
+	$(BAKEFILE) -fmsvc6prj -o$@  $(DSWFLAGS) -DWXTOPDIR=../../ ../../samples/sockets/sockets.bkl
+	touch $@
 
 
 ../../samples/splitter/Makefile.in: $(SDEPS) ../../samples/splitter/splitter.bkl
@@ -2362,6 +2781,9 @@ Makefile: regenMakefile.py
 	touch $@
 ../../samples/splitter/makefile.wat: $(SDEPS) ../../samples/splitter/splitter.bkl
 	$(BAKEFILE) -fwatcom -o$@  -DOPTIONS_FILE=../../build/config.wat -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/splitter/splitter.bkl
+	touch $@
+../../samples/splitter/splitter.dsw: $(SDEPS) ../../samples/splitter/splitter.bkl
+	$(BAKEFILE) -fmsvc6prj -o$@  $(DSWFLAGS) -DWXTOPDIR=../../ ../../samples/splitter/splitter.bkl
 	touch $@
 
 
@@ -2380,6 +2802,9 @@ Makefile: regenMakefile.py
 ../../samples/statbar/makefile.wat: $(SDEPS) ../../samples/statbar/statbar.bkl
 	$(BAKEFILE) -fwatcom -o$@  -DOPTIONS_FILE=../../build/config.wat -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/statbar/statbar.bkl
 	touch $@
+../../samples/statbar/statbar.dsw: $(SDEPS) ../../samples/statbar/statbar.bkl
+	$(BAKEFILE) -fmsvc6prj -o$@  $(DSWFLAGS) -DWXTOPDIR=../../ ../../samples/statbar/statbar.bkl
+	touch $@
 
 
 ../../samples/tab/Makefile.in: $(SDEPS) ../../samples/tab/tab.bkl
@@ -2396,6 +2821,9 @@ Makefile: regenMakefile.py
 	touch $@
 ../../samples/tab/makefile.wat: $(SDEPS) ../../samples/tab/tab.bkl
 	$(BAKEFILE) -fwatcom -o$@  -DOPTIONS_FILE=../../build/config.wat -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/tab/tab.bkl
+	touch $@
+../../samples/tab/tab.dsw: $(SDEPS) ../../samples/tab/tab.bkl
+	$(BAKEFILE) -fmsvc6prj -o$@  $(DSWFLAGS) -DWXTOPDIR=../../ ../../samples/tab/tab.bkl
 	touch $@
 
 
@@ -2414,6 +2842,9 @@ Makefile: regenMakefile.py
 ../../samples/taskbar/makefile.wat: $(SDEPS) ../../samples/taskbar/taskbar.bkl
 	$(BAKEFILE) -fwatcom -o$@  -DOPTIONS_FILE=../../build/config.wat -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/taskbar/taskbar.bkl
 	touch $@
+../../samples/taskbar/taskbar.dsw: $(SDEPS) ../../samples/taskbar/taskbar.bkl
+	$(BAKEFILE) -fmsvc6prj -o$@  $(DSWFLAGS) -DWXTOPDIR=../../ ../../samples/taskbar/taskbar.bkl
+	touch $@
 
 
 ../../samples/text/Makefile.in: $(SDEPS) ../../samples/text/text.bkl
@@ -2430,6 +2861,9 @@ Makefile: regenMakefile.py
 	touch $@
 ../../samples/text/makefile.wat: $(SDEPS) ../../samples/text/text.bkl
 	$(BAKEFILE) -fwatcom -o$@  -DOPTIONS_FILE=../../build/config.wat -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/text/text.bkl
+	touch $@
+../../samples/text/text.dsw: $(SDEPS) ../../samples/text/text.bkl
+	$(BAKEFILE) -fmsvc6prj -o$@  $(DSWFLAGS) -DWXTOPDIR=../../ ../../samples/text/text.bkl
 	touch $@
 
 
@@ -2448,6 +2882,9 @@ Makefile: regenMakefile.py
 ../../samples/thread/makefile.wat: $(SDEPS) ../../samples/thread/thread.bkl
 	$(BAKEFILE) -fwatcom -o$@  -DOPTIONS_FILE=../../build/config.wat -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/thread/thread.bkl
 	touch $@
+../../samples/thread/thread.dsw: $(SDEPS) ../../samples/thread/thread.bkl
+	$(BAKEFILE) -fmsvc6prj -o$@  $(DSWFLAGS) -DWXTOPDIR=../../ ../../samples/thread/thread.bkl
+	touch $@
 
 
 ../../samples/toolbar/Makefile.in: $(SDEPS) ../../samples/toolbar/toolbar.bkl
@@ -2464,6 +2901,9 @@ Makefile: regenMakefile.py
 	touch $@
 ../../samples/toolbar/makefile.wat: $(SDEPS) ../../samples/toolbar/toolbar.bkl
 	$(BAKEFILE) -fwatcom -o$@  -DOPTIONS_FILE=../../build/config.wat -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/toolbar/toolbar.bkl
+	touch $@
+../../samples/toolbar/toolbar.dsw: $(SDEPS) ../../samples/toolbar/toolbar.bkl
+	$(BAKEFILE) -fmsvc6prj -o$@  $(DSWFLAGS) -DWXTOPDIR=../../ ../../samples/toolbar/toolbar.bkl
 	touch $@
 
 
@@ -2482,6 +2922,9 @@ Makefile: regenMakefile.py
 ../../samples/treectrl/makefile.wat: $(SDEPS) ../../samples/treectrl/treectrl.bkl
 	$(BAKEFILE) -fwatcom -o$@  -DOPTIONS_FILE=../../build/config.wat -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/treectrl/treectrl.bkl
 	touch $@
+../../samples/treectrl/treectrl.dsw: $(SDEPS) ../../samples/treectrl/treectrl.bkl
+	$(BAKEFILE) -fmsvc6prj -o$@  $(DSWFLAGS) -DWXTOPDIR=../../ ../../samples/treectrl/treectrl.bkl
+	touch $@
 
 
 ../../samples/typetest/Makefile.in: $(SDEPS) ../../samples/typetest/typetest.bkl
@@ -2498,6 +2941,9 @@ Makefile: regenMakefile.py
 	touch $@
 ../../samples/typetest/makefile.wat: $(SDEPS) ../../samples/typetest/typetest.bkl
 	$(BAKEFILE) -fwatcom -o$@  -DOPTIONS_FILE=../../build/config.wat -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/typetest/typetest.bkl
+	touch $@
+../../samples/typetest/typetest.dsw: $(SDEPS) ../../samples/typetest/typetest.bkl
+	$(BAKEFILE) -fmsvc6prj -o$@  $(DSWFLAGS) -DWXTOPDIR=../../ ../../samples/typetest/typetest.bkl
 	touch $@
 
 
@@ -2516,6 +2962,9 @@ Makefile: regenMakefile.py
 ../../samples/validate/makefile.wat: $(SDEPS) ../../samples/validate/validate.bkl
 	$(BAKEFILE) -fwatcom -o$@  -DOPTIONS_FILE=../../build/config.wat -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/validate/validate.bkl
 	touch $@
+../../samples/validate/validate.dsw: $(SDEPS) ../../samples/validate/validate.bkl
+	$(BAKEFILE) -fmsvc6prj -o$@  $(DSWFLAGS) -DWXTOPDIR=../../ ../../samples/validate/validate.bkl
+	touch $@
 
 
 ../../samples/vscroll/Makefile.in: $(SDEPS) ../../samples/vscroll/vscroll.bkl
@@ -2532,6 +2981,9 @@ Makefile: regenMakefile.py
 	touch $@
 ../../samples/vscroll/makefile.wat: $(SDEPS) ../../samples/vscroll/vscroll.bkl
 	$(BAKEFILE) -fwatcom -o$@  -DOPTIONS_FILE=../../build/config.wat -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/vscroll/vscroll.bkl
+	touch $@
+../../samples/vscroll/vscroll.dsw: $(SDEPS) ../../samples/vscroll/vscroll.bkl
+	$(BAKEFILE) -fmsvc6prj -o$@  $(DSWFLAGS) -DWXTOPDIR=../../ ../../samples/vscroll/vscroll.bkl
 	touch $@
 
 
@@ -2550,6 +3002,9 @@ Makefile: regenMakefile.py
 ../../samples/widgets/makefile.wat: $(SDEPS) ../../samples/widgets/widgets.bkl
 	$(BAKEFILE) -fwatcom -o$@  -DOPTIONS_FILE=../../build/config.wat -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/widgets/widgets.bkl
 	touch $@
+../../samples/widgets/widgets.dsw: $(SDEPS) ../../samples/widgets/widgets.bkl
+	$(BAKEFILE) -fmsvc6prj -o$@  $(DSWFLAGS) -DWXTOPDIR=../../ ../../samples/widgets/widgets.bkl
+	touch $@
 
 
 ../../samples/wizard/Makefile.in: $(SDEPS) ../../samples/wizard/wizard.bkl
@@ -2566,6 +3021,9 @@ Makefile: regenMakefile.py
 	touch $@
 ../../samples/wizard/makefile.wat: $(SDEPS) ../../samples/wizard/wizard.bkl
 	$(BAKEFILE) -fwatcom -o$@  -DOPTIONS_FILE=../../build/config.wat -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/wizard/wizard.bkl
+	touch $@
+../../samples/wizard/wizard.dsw: $(SDEPS) ../../samples/wizard/wizard.bkl
+	$(BAKEFILE) -fmsvc6prj -o$@  $(DSWFLAGS) -DWXTOPDIR=../../ ../../samples/wizard/wizard.bkl
 	touch $@
 
 
@@ -2584,6 +3042,9 @@ Makefile: regenMakefile.py
 ../../samples/wxtest/makefile.wat: $(SDEPS) ../../samples/wxtest/wxtest.bkl
 	$(BAKEFILE) -fwatcom -o$@  -DOPTIONS_FILE=../../build/config.wat -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../samples/wxtest/wxtest.bkl
 	touch $@
+../../samples/wxtest/wxtest.dsw: $(SDEPS) ../../samples/wxtest/wxtest.bkl
+	$(BAKEFILE) -fmsvc6prj -o$@  $(DSWFLAGS) -DWXTOPDIR=../../ ../../samples/wxtest/wxtest.bkl
+	touch $@
 
 
 ../../Makefile.in: $(MDEPS) wx.bkl
@@ -2600,4 +3061,7 @@ Makefile: regenMakefile.py
 	touch $@
 ../makefile.wat: $(MDEPS) wx.bkl
 	$(BAKEFILE) -fwatcom -o$@  -DOPTIONS_FILE=config.wat wx.bkl
+	touch $@
+../wx.dsw: $(MDEPS) wx.bkl
+	$(BAKEFILE) -fmsvc6prj -o$@  $(DSWFLAGS) wx.bkl
 	touch $@
