@@ -167,6 +167,7 @@ void wxGenericFontDialog::Init()
 {
   m_useEvents = FALSE;
   m_previewer = NULL;
+  Create( m_parent ) ;
 }
 
 wxGenericFontDialog::~wxGenericFontDialog()
@@ -180,6 +181,14 @@ void wxGenericFontDialog::OnCloseWindow(wxCloseEvent& WXUNUSED(event))
 
 bool wxGenericFontDialog::DoCreate(wxWindow *parent)
 {
+#ifdef __WXMAC__
+    if ( !wxDialog::Create( parent , -1 , _T("Choose Font") , wxDefaultPosition, wxDefaultSize, wxDEFAULT_DIALOG_STYLE,
+        _T("fontdialog") ) )
+    {
+        wxFAIL_MSG( wxT("wxFontDialog creation failed") );
+        return FALSE;
+    }
+#endif
   InitializeFont();
   CreateWidgets();
  
@@ -188,7 +197,7 @@ bool wxGenericFontDialog::DoCreate(wxWindow *parent)
 
 int wxGenericFontDialog::ShowModal()
 {
-  int ret = wxDialog::ShowModal();
+    int ret = wxDialog::ShowModal();
 
     if (ret != wxID_CANCEL)
     {
