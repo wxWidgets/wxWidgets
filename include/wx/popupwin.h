@@ -59,6 +59,8 @@ public:
     #include "wx/gtk/popupwin.h"
 #elif __WXX11__
     #include "wx/x11/popupwin.h"
+#elif __WXMOTIF__
+    #include "wx/motif/popupwin.h"
 #elif __WXMGL__
     #include "wx/mgl/popupwin.h"
 #else

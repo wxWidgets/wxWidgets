@@ -5319,16 +5319,12 @@ if test "$wxUSE_POPUPWIN" = "yes"; then
     if test "$wxUSE_MAC" = 1 -o "$wxUSE_COCOA" = 1 ; then
         AC_MSG_WARN([Popup window not yet supported under Mac OS X... disabled])
     else
-        if test "$wxUSE_MOTIF" = 1; then
-            AC_MSG_WARN([wxPopupWindow not yet supported under Motif... disabled])
+        if test "$wxUSE_PM" = 1; then
+            AC_MSG_WARN([wxPopupWindow not yet supported under PM... disabled])
         else
-            if test "$wxUSE_PM" = 1; then
-                AC_MSG_WARN([wxPopupWindow not yet supported under PM... disabled])
-            else
-                AC_DEFINE(wxUSE_POPUPWIN)
+            AC_DEFINE(wxUSE_POPUPWIN)
 
-                USES_CONTROLS=1
-            fi
+            USES_CONTROLS=1
         fi
     fi
 fi

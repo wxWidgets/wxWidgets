@@ -33311,21 +33311,16 @@ if test "$wxUSE_POPUPWIN" = "yes"; then
         { echo "$as_me:$LINENO: WARNING: Popup window not yet supported under Mac OS X... disabled" >&5
 echo "$as_me: WARNING: Popup window not yet supported under Mac OS X... disabled" >&2;}
     else
-        if test "$wxUSE_MOTIF" = 1; then
-            { echo "$as_me:$LINENO: WARNING: wxPopupWindow not yet supported under Motif... disabled" >&5
-echo "$as_me: WARNING: wxPopupWindow not yet supported under Motif... disabled" >&2;}
-        else
-            if test "$wxUSE_PM" = 1; then
-                { echo "$as_me:$LINENO: WARNING: wxPopupWindow not yet supported under PM... disabled" >&5
+        if test "$wxUSE_PM" = 1; then
+            { echo "$as_me:$LINENO: WARNING: wxPopupWindow not yet supported under PM... disabled" >&5
 echo "$as_me: WARNING: wxPopupWindow not yet supported under PM... disabled" >&2;}
-            else
-                cat >>confdefs.h <<\_ACEOF
+        else
+            cat >>confdefs.h <<\_ACEOF
 #define wxUSE_POPUPWIN 1
 _ACEOF
 
 
-                USES_CONTROLS=1
-            fi
+            USES_CONTROLS=1
         fi
     fi
 fi

@@ -1529,6 +1529,7 @@ COND_TOOLKIT_MOTIF_GUI_HDR =  \
 	wx/motif/minifram.h \
 	wx/motif/msgdlg.h \
 	wx/motif/palette.h \
+	wx/motif/popupwin.h \
 	wx/motif/print.h \
 	wx/motif/private.h \
 	wx/motif/radiobox.h \
@@ -3405,6 +3406,7 @@ COND_TOOLKIT_MOTIF___GUI_SRC_OBJECTS =  \
 	monodll_minifram.o \
 	monodll_msgdlg.o \
 	monodll_palette.o \
+	monodll_popupwin.o \
 	monodll_radiobox.o \
 	monodll_radiobut.o \
 	monodll_scrolbar.o \
@@ -3800,6 +3802,7 @@ COND_TOOLKIT_MOTIF___GUI_SRC_OBJECTS_1 =  \
 	monolib_minifram.o \
 	monolib_msgdlg.o \
 	monolib_palette.o \
+	monolib_popupwin.o \
 	monolib_radiobox.o \
 	monolib_radiobut.o \
 	monolib_scrolbar.o \
@@ -4195,6 +4198,7 @@ COND_TOOLKIT_MOTIF___GUI_SRC_OBJECTS_2 =  \
 	coredll_minifram.o \
 	coredll_msgdlg.o \
 	coredll_palette.o \
+	coredll_popupwin.o \
 	coredll_radiobox.o \
 	coredll_radiobut.o \
 	coredll_scrolbar.o \
@@ -4590,6 +4594,7 @@ COND_TOOLKIT_MOTIF___GUI_SRC_OBJECTS_3 =  \
 	corelib_minifram.o \
 	corelib_msgdlg.o \
 	corelib_palette.o \
+	corelib_popupwin.o \
 	corelib_radiobox.o \
 	corelib_radiobut.o \
 	corelib_scrolbar.o \
@@ -8508,6 +8513,9 @@ coredll_pnghand.o: $(srcdir)/src/mac/pnghand.cpp
 @COND_TOOLKIT_MSW_USE_GUI_1@coredll_popupwin.o: $(srcdir)/src/msw/popupwin.cpp
 @COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $<
 
+@COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@coredll_popupwin.o: $(srcdir)/src/motif/popupwin.cpp
+@COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $<
+
 coredll_print.o: $(srcdir)/src/os2/print.cpp
 	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $<
 
@@ -10606,6 +10614,9 @@ corelib_pnghand.o: $(srcdir)/src/mac/pnghand.cpp
 
 @COND_TOOLKIT_MSW_USE_GUI_1@corelib_popupwin.o: $(srcdir)/src/msw/popupwin.cpp
 @COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $<
+
+@COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@corelib_popupwin.o: $(srcdir)/src/motif/popupwin.cpp
+@COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $<
 
 corelib_print.o: $(srcdir)/src/os2/print.cpp
 	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $<
@@ -13433,6 +13444,9 @@ monodll_pnghand.o: $(srcdir)/src/mac/pnghand.cpp
 @COND_TOOLKIT_MSW_USE_GUI_1@monodll_popupwin.o: $(srcdir)/src/msw/popupwin.cpp
 @COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
 
+@COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@monodll_popupwin.o: $(srcdir)/src/motif/popupwin.cpp
+@COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
+
 monodll_print.o: $(srcdir)/src/os2/print.cpp
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
 
@@ -16032,6 +16046,9 @@ monolib_pnghand.o: $(srcdir)/src/mac/pnghand.cpp
 
 @COND_TOOLKIT_MSW_USE_GUI_1@monolib_popupwin.o: $(srcdir)/src/msw/popupwin.cpp
 @COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
+
+@COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@monolib_popupwin.o: $(srcdir)/src/motif/popupwin.cpp
+@COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
 
 monolib_print.o: $(srcdir)/src/os2/print.cpp
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<

@@ -28,7 +28,7 @@
     #pragma hdrstop
 #endif
 
-#if wxUSE_POPUPWIN && !defined(__WXMOTIF__)
+#if wxUSE_POPUPWIN
 
 #include "wx/popupwin.h"
 

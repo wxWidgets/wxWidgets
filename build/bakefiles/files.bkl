@@ -868,6 +868,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/motif/minifram.cpp
     src/motif/msgdlg.cpp
     src/motif/palette.cpp
+    src/motif/popupwin.cpp
     src/motif/radiobox.cpp
     src/motif/radiobut.cpp
     src/motif/scrolbar.cpp
@@ -944,6 +945,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/motif/minifram.h
     wx/motif/msgdlg.h
     wx/motif/palette.h
+    wx/motif/popupwin.h
     wx/motif/print.h
     wx/motif/private.h
     wx/motif/radiobox.h
