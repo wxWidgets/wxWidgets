@@ -418,7 +418,7 @@ public:
 
     // these are like Union() but don't ignore empty rectangles
     wxRect operator+(const wxRect& rect) const;
-    wxRect& wxRect::operator+=(const wxRect& rect)
+    wxRect& operator+=(const wxRect& rect)
     {
         *this = *this + rect;
         return *this;
