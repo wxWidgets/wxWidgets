@@ -82,11 +82,11 @@ unsigned short wxColourRefData::colMapAllocCounter[ 256 ] =
 
 void wxColourRefData::FreeColour()
 {
+#if 0        
     if (m_colormap)
     {
         Colormap cm = (Colormap)m_colormap;
 
-#if 0        
         GdkColormapPrivate *private_colormap = (GdkColormapPrivate*) m_colormap;
         if ((private_colormap->visual->type == GDK_VISUAL_GRAYSCALE) ||
             (private_colormap->visual->type == GDK_VISUAL_PSEUDO_COLOR))
@@ -97,8 +97,8 @@ void wxColourRefData::FreeColour()
             if (colMapAllocCounter[ idx ] == 0)
             gdk_colormap_free_colors( m_colormap, &m_color, 1 );
         }
-#endif
     }
+#endif
 }
 
 void wxColourRefData::AllocColour( WXColormap cmap )
