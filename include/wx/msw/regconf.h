@@ -1,8 +1,8 @@
 ///////////////////////////////////////////////////////////////////////////////
-// Name:        msw/regconf.h  
+// Name:        msw/regconf.h
 // Purpose:     Registry based implementation of wxConfigBase
 // Author:      Vadim Zeitlin
-// Modified by: 
+// Modified by:
 // Created:     27.04.98
 // RCS-ID:      $Id$
 // Copyright:   (c) 1998 Vadim Zeitlin <zeitlin@dptmaths.ens-cachan.fr>
@@ -29,8 +29,10 @@ class WXDLLEXPORT wxRegConfig : public wxConfigBase
 public:
   // ctor & dtor
     // will store data in HKLM\appName and HKCU\appName
-  wxRegConfig(const wxString& appName = "", const wxString& vendorName = "",
-              const wxString& localFilename = "", const wxString& globalFilename = "",
+  wxRegConfig(const wxString& appName = "",
+              const wxString& vendorName = "",
+              const wxString& localFilename = "",
+              const wxString& globalFilename = "",
               long style = 0);
 
     // dtor will save unsaved data

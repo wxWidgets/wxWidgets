@@ -53,8 +53,11 @@
 #endif
 
 // Style flags for constructor style parameter
-#define wxCONFIG_USE_LOCAL_FILE         1
-#define wxCONFIG_USE_GLOBAL_FILE        2
+enum
+{
+    wxCONFIG_USE_LOCAL_FILE = 1,
+    wxCONFIG_USE_GLOBAL_FILE = 2
+};
 
 // ----------------------------------------------------------------------------
 // various helper global functions
@@ -81,7 +84,7 @@ extern void wxSplitPath(wxArrayString& aParts, const char *sz);
 // There is always one current group given by the current path.
 //
 // Keys are pairs "key_name = value" where value may be of string or integer
-// (long) type (@@@ doubles and other types such as wxDate coming soon).
+// (long) type (TODO doubles and other types such as wxDate coming soon).
 // ----------------------------------------------------------------------------
 class WXDLLEXPORT wxConfigBase
 {
@@ -111,7 +114,9 @@ public:
     // should Get() try to create a new log object if the current one is NULL?
   static void DontCreateOnDemand() { ms_bAutoCreate = FALSE; }
 
-  // ctors & virtual dtor
+  // ctor & virtual dtor
+      // ctor (can be used as default ctor too)
+      //
       // Not all args will always be used by derived classes, but including
       // them all in each class ensures compatibility. If appName is empty,
       // uses wxApp name
@@ -234,11 +239,6 @@ public:
     // misc accessors
   wxString GetAppName() const { return m_appName; }
   wxString GetVendorName() const { return m_vendorName; }
-
-  virtual void SetAppName(const wxString& appName)
-    { m_appName = appName; }
-  virtual void SetVendorName(const wxString& vendorName)
-    { m_vendorName = vendorName; }
 
   void SetStyle(long style) { m_style = style; }
   long GetStyle() const { return m_style; }

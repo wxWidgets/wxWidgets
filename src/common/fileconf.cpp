@@ -198,15 +198,11 @@ void wxFileConfig::Init()
 wxFileConfig::wxFileConfig(const wxString& appName, const wxString& vendorName,
                            const wxString& strLocal, const wxString& strGlobal,
                            long style)
-            : wxConfigBase(appName, vendorName, strLocal, strGlobal, style),
+            : wxConfigBase(!appName && wxTheApp ? wxTheApp->GetAppName()
+                                                : appName,
+                           vendorName, strLocal, strGlobal, style),
               m_strLocalFile(strLocal), m_strGlobalFile(strGlobal)
 {
-  // Make up an application name if not supplied
-  if (appName.IsEmpty() && wxTheApp)
-  {
-    SetAppName(wxTheApp->GetAppName());
-  }
-
   // Make up names for files if empty
   if ( m_strLocalFile.IsEmpty() && (style & wxCONFIG_USE_LOCAL_FILE) )
   {
@@ -1106,18 +1102,11 @@ bool ConfigGroup::DeleteSubgroup(ConfigGroup *pGroup)
   }
 
   // and subgroups of this sungroup
-#if 0
-  // pGroup->m_aSubgroups.Count() gets decremented in DeleteSubgroup(),
-  // so we cannot do this.
-                        
   nCount = pGroup->m_aSubgroups.Count();
   for ( size_t nGroup = 0; nGroup < nCount; nGroup++ ) {
-    pGroup->DeleteSubgroup(pGroup->m_aSubgroups[nGroup]);
+    pGroup->DeleteSubgroup(pGroup->m_aSubgroups[0]);
   }
-#endif
-  while(pGroup->m_aSubgroups.Count() > 0)
-     pGroup->DeleteSubgroup(pGroup->m_aSubgroups[0]);
-     
+
   LineList *pLine = pGroup->m_pLine;
   if ( pLine != NULL ) {
     // notice that we may do this test inside the previous "if" because the

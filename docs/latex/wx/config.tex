@@ -235,9 +235,7 @@ actually enumerating them, but you will probably never need them.
 
 \membersection{Miscellaneous accessors}
 
-\helpref{SetAppName}{wxconfigbasesetappname}\\
 \helpref{GetAppName}{wxconfigbasegetappname}\\
-\helpref{SetVendorName}{wxconfigbasesetvendorname}\\
 \helpref{GetVendorName}{wxconfigbasegetvendorname}
 
 \membersection{Key access}
@@ -658,12 +656,6 @@ exists.
 Sets the config object as the current one, returns the pointer to the previous
 current object (both the parameter and returned value may be NULL)
 
-\membersection{wxConfigBase::SetAppName}\label{wxconfigbasesetappname}
-
-\func{void }{SetAppName}{\param{const wxString\&}{ appName}}
-
-Sets the application name.
-
 \membersection{wxConfigBase::SetExpandingEnvVars}\label{wxconfigbasesetexpandingenvvars}
 
 \func{void}{SetExpandEnvVars }{\param{bool }{bDoIt = TRUE}}
@@ -687,12 +679,6 @@ Sets whether defaults are written back to the config file.
 If on (default is off) all default values are written back to the config file.
 This allows the user to see what config options may be changed and is probably
 useful only for wxFileConfig.
-
-\membersection{wxConfigBase::SetVendorName}\label{wxconfigbasesetvendorname}
-
-\func{void}{SetVendorName}{\param{const wxString\&}{ vendorName}}
-
-Sets the vendor name.
 
 \membersection{wxConfigBase::Write}\label{wxconfigbasewrite}
 

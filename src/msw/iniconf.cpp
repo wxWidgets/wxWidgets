@@ -2,7 +2,7 @@
 // Name:        src/msw/iniconf.cpp
 // Purpose:     implementation of wxIniConfig class
 // Author:      Vadim Zeitlin
-// Modified by: 
+// Modified by:
 // Created:     27.07.98
 // RCS-ID:      $Id$
 // Copyright:   (c) 1998 Vadim Zeitlin <zeitlin@dptmaths.ens-cachan.fr>
@@ -55,31 +55,18 @@
 // ctor & dtor
 // ----------------------------------------------------------------------------
 
-wxIniConfig::wxIniConfig(const wxString& strAppName, const wxString& strVendor,
-    const wxString& localFilename, const wxString& globalFilename, long style):
-     wxConfigBase(strAppName, strVendor, localFilename, globalFilename, style)
+wxIniConfig::wxIniConfig(const wxString& strAppName,
+                         const wxString& strVendor,
+                         const wxString& localFilename,
+                         const wxString& globalFilename,
+                         long style)
+           : wxConfigBase(!appName && wxTheApp ? wxTheApp->GetAppName()
+                                               : appName,
+                          !vendorName ? (wxTheApp ? wxTheApp->GetVendorName()
+                                                  : appName)
+                                      : vendorName,
+                          strLocal, strGlobal, style),
 {
-    if ( GetAppName().IsEmpty() )
-    {
-        wxString app;
-        if (wxTheApp)
-            app = wxTheApp->GetAppName();
-        wxASSERT( !app.IsEmpty() );
-        SetAppName(app);
-    }
-
-    // Vendor name is required in wxIniConfig.
-    // TODO: should it be required? Why isn't appName used instead? -- JACS
-    if ( GetVendorName().IsEmpty() )
-    {
-        wxString vendor;
-        if (wxTheApp)
-            vendor = wxTheApp->GetVendorName();
-        else
-            vendor = strAppName;
-        SetVendorName(vendor);
-    }
-
     m_strLocalFilename = localFilename;
     if (m_strLocalFilename.IsEmpty())
     {
@@ -304,7 +291,7 @@ bool wxIniConfig::Read(const wxString& szKey, wxString *pstr) const
     return FALSE;
   }
   else {
-  	*pstr = szBuf ;
+    *pstr = szBuf ;
     return TRUE;
   }
 }
@@ -333,7 +320,7 @@ bool wxIniConfig::Read(const wxString& szKey, wxString *pstr,
     return FALSE;
   }
   else {
-  	*pstr = szBuf ;
+    *pstr = szBuf ;
     return TRUE;
   }
 }
@@ -431,7 +418,7 @@ bool wxIniConfig::DeleteGroup(const wxString& szKey)
 {
   wxConfigPathChanger path(this, szKey);
 
-  // passing NULL as section name to WritePrivateProfileString deletes the 
+  // passing NULL as section name to WritePrivateProfileString deletes the
   // whole section according to the docs
   bool bOk = WritePrivateProfileString(path.Name(), NULL,
                                        NULL, m_strLocalFilename) != 0;

@@ -14,16 +14,14 @@
 // headers
 // ----------------------------------------------------------------------------
 #ifdef __GNUG__
-  #pragma implementation "confbase.h"
+    #pragma implementation "confbase.h"
 #endif
 
-#include  "wx/wxprec.h"
+#include "wx/wxprec.h"
 
 #ifndef WX_PRECOMP
-#include  "wx/wx.h"
+    #include  "wx/wx.h"
 #endif
-
-#include  <wx/confbase.h>
 
 #if wxUSE_CONFIG
 
@@ -31,26 +29,17 @@
   #pragma hdrstop
 #endif  //__BORLANDC__
 
-#include  <wx/app.h>
-#include  <wx/file.h>
-#include  <wx/log.h>
-#include  <wx/textfile.h>
-#include  <wx/utils.h>
+#include "wx/app.h"
+#include "wx/file.h"
+#include "wx/log.h"
+#include "wx/textfile.h"
+#include "wx/utils.h"
 
-// we must include (one of) these files for wxConfigBase::Create
-#if defined(__WXMSW__) && defined(wxCONFIG_WIN32_NATIVE)
-  #ifdef __WIN32__
-    #include  <wx/msw/regconf.h>
-  #else  //WIN16
-    #include  <wx/msw/iniconf.h>
-  #endif
-#else // either we're under Unix or wish to use files even under Windows
-  #include  <wx/fileconf.h>
-#endif
+#include "wx/config.h"
 
-#include  <stdlib.h>
-#include  <math.h>
-#include  <ctype.h>       // for isalnum()
+#include <stdlib.h>
+#include <math.h>
+#include <ctype.h>    // for isalnum()
 
 // ----------------------------------------------------------------------------
 // global and class static variables
@@ -413,7 +402,5 @@ void wxSplitPath(wxArrayString& aParts, const char *sz)
   }
 }
 
-#endif
-
-  // wxUSE_CONFIG
+#endif // wxUSE_CONFIG
 

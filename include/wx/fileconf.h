@@ -144,25 +144,12 @@ public:
   static wxString GetLocalFileName(const char *szFile);
 
   // ctor & dtor
-
-#if 0
-    // the names of local and global (if not disabled) config files are
-    // constructed using Get{Local|Global}FileName functions described above
-    // (szAppName is just the (short) name of your application)
-  wxFileConfig(const char *szAppName, bool bLocalOnly = FALSE);
-    // this ctor allows you to specify custom names for both files (if strGlobal
-    // isn't a full path, it's considered to be relative to the standard
-    // directory, i.e. /etc under Unix and %windir% under Windows, if strLocal
-    // is not an absolute path, it's considered to be relative to the user's
-    // directory). If either of strings is empty, the corresponding file is not
-    // used.
-  wxFileConfig(const wxString& strLocal, const wxString& strGlobal);
-#endif
-
-   // New constructor: one size fits all. Specify wxCONFIG_USE_LOCAL_FILE
-   // or wxCONFIG_USE_GLOBAL_FILE to say which files should be used.
-  wxFileConfig(const wxString& appName, const wxString& vendorName = "",
-               const wxString& localFilename = "", const wxString& globalFilename = "",
+    // New constructor: one size fits all. Specify wxCONFIG_USE_LOCAL_FILE or
+    // wxCONFIG_USE_GLOBAL_FILE to say which files should be used.
+  wxFileConfig(const wxString& appName,
+               const wxString& vendorName = "",
+               const wxString& localFilename = "",
+               const wxString& globalFilename = "",
                long style = wxCONFIG_USE_LOCAL_FILE);
 
     // dtor will save unsaved data
