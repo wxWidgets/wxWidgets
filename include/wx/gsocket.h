@@ -11,6 +11,14 @@
 #ifndef __GSOCKET_H
 #define __GSOCKET_H
 
+/* DFE: Define this and compile gsocket.cpp instead of gsocket.c and
+   compile existing GUI gsock*.c as C++ to try out the new GSocket. */
+/* #define wxUSE_GSOCKET_CPLUSPLUS 1 */
+#undef wxUSE_GSOCKET_CPLUSPLUS
+#if !defined(__cplusplus) && defined(wxUSE_GSOCKET_CPLUSPLUS)
+#error "You need to compile this file (probably a GUI gsock peice) as C++"
+#endif
+
 #ifndef __GSOCKET_STANDALONE__
 #include "wx/setup.h"
 #include "wx/platform.h"
@@ -36,11 +44,17 @@
 #include <stdlib.h>
 #endif
 
+#ifdef wxUSE_GSOCKET_CPLUSPLUS
+typedef class GSocketBSD GSocket;
+#endif //def wxUSE_GSOCKET_CPLUSPLUS
+
 #ifdef __cplusplus
 extern "C" {
 #endif
 
+#ifndef wxUSE_GSOCKET_CPLUSPLUS
 typedef struct _GSocket GSocket;
+#endif //ndef wxUSE_GSOCKET_CPLUSPLUS
 typedef struct _GAddress GAddress;
 
 typedef enum {
@@ -135,6 +149,7 @@ GSocket *GSocket_new(void);
 void GSocket_destroy(GSocket *socket);
 
 
+#ifndef wxUSE_GSOCKET_CPLUSPLUS
 
 /* GSocket_Shutdown:
  *  Disallow further read/write operations on this socket, close
@@ -271,6 +286,8 @@ void GSocket_SetNonBlocking(GSocket *socket, int non_block);
  */
 void GSocket_SetTimeout(GSocket *socket, unsigned long millisec);
 
+#endif //ndef wxUSE_GSOCKET_CPLUSPLUS
+
 /* GSocket_GetError:
  *  Returns the last error occured for this socket. Note that successful
  *  operations do not clear this back to GSOCK_NOERROR, so use it only
@@ -278,6 +295,7 @@ void GSocket_SetTimeout(GSocket *socket, unsigned long millisec);
  */
 GSocketError WXDLLIMPEXP_NET GSocket_GetError(GSocket *socket);
 
+#ifndef wxUSE_GSOCKET_CPLUSPLUS
 
 /* Callbacks */
 
@@ -318,6 +336,8 @@ void GSocket_SetCallback(GSocket *socket, GSocketEventFlags flags,
  */
 void GSocket_UnsetCallback(GSocket *socket, GSocketEventFlags flags);
 
+#endif //ndef wxUSE_GSOCKET_CPLUSPLUS
+
 
 /* GAddress */
 
@@ -355,6 +375,9 @@ GSocketError GAddress_UNIX_GetPath(GAddress *address, char *path, size_t sbuf);
 }
 #endif /* __cplusplus */
 
+#ifdef wxUSE_GSOCKET_CPLUSPLUS
+#include "wx/unix/gsockunx.h"
+#endif // def wxUSE_GSOCKET_CPLUSPLUS
 
 #endif    /* wxUSE_SOCKETS || defined(__GSOCKET_STANDALONE__) */
 
