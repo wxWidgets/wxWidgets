@@ -165,11 +165,6 @@ public:
 // include the declaration of the real platform-dependent class
 // ----------------------------------------------------------------------------
 
-// TODO: this should go away once wxOS2 has been updated to use wxSSNative
-#if defined(__WXPM__)
-    #include "wx/os2/settings.h"
-#else
-
 class wxSystemSettings : public wxSystemSettingsNative
 {
 public:
@@ -180,8 +175,6 @@ public:
     static wxColour GetColour(wxSystemColour index);
 #endif // __WXUNIVERSAL__
 };
-
-#endif // ! __WXPM__
 
 #endif
     // _WX_SETTINGS_H_BASE_
