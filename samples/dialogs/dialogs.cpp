@@ -188,6 +188,8 @@ MyFrame::MyFrame(wxWindow *parent,
        : wxFrame(parent, -1, title, pos, size)
 {
     m_dialog = (MyModelessDialog *)NULL;
+
+    CreateStatusBar();
 }
 
 void MyFrame::ChooseColour(wxCommandEvent& WXUNUSED(event) )
