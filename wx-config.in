@@ -18,10 +18,15 @@ static_flag="@STATIC_FLAG@"
 
 # Misc configuration variables:
 
+update_prefixes()
+{
+    includedir="@includedir@"
+    libdir="@libdir@"
+}
 prefix="@prefix@"
 exec_prefix="@exec_prefix@"
-includedir="@includedir@"
-libdir="@libdir@"
+update_prefixes
+
 CC="@CC@"
 GCC="@GCC@"
 CXX="@CXX@"
@@ -227,12 +232,14 @@ while test $# -gt 0; do
       prefix=`makeabs $srcdir`
       exec_prefix=`makeabs $builddir`
       exec_prefix_set=yes
+      update_prefixes
       ;;
     --prefix=*)
       prefix=$optarg
       if test $exec_prefix_set = no ; then
         exec_prefix=$optarg
       fi
+      update_prefixes
       ;;
     --prefix)
       echo $prefix
@@ -240,6 +247,7 @@ while test $# -gt 0; do
     --exec-prefix=*)
       exec_prefix=$optarg
       exec_prefix_set=yes
+      update_prefixes
       ;;
     --exec-prefix)
       echo $exec_prefix
