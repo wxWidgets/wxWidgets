@@ -52,6 +52,7 @@ LIB_CPP_SRC=\
  common/zstream.cpp \
  common/objstrm.cpp \
  common/validate.cpp \
+ common/valtext.cpp \
  common/wxexpr.cpp \
 \
  gtk/app.cpp \
@@ -91,11 +92,11 @@ LIB_CPP_SRC=\
  gtk/settings.cpp \
  gtk/slider.cpp \
  gtk/statbox.cpp \
+ gtk/statbmp.cpp \
  gtk/stattext.cpp \
  gtk/tbargtk.cpp \
  gtk/textctrl.cpp \
  gtk/timer.cpp \
- gtk/treectrl.cpp \
  gtk/utilsgtk.cpp \
  gtk/utilsres.cpp \
  gtk/window.cpp \
@@ -114,8 +115,9 @@ LIB_CPP_SRC=\
  generic/splitter.cpp \
  generic/statusbr.cpp \
  generic/tabg.cpp \
- generic/textdlgg.cpp
-
+ generic/textdlgg.cpp \
+ generic/treectrl.cpp
+ 
  
 LIB_C_SRC=\
  common/extended.c \

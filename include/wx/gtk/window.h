@@ -103,7 +103,8 @@ public:
   virtual bool Show( bool show );
   virtual void Enable( bool enable );
   virtual void MakeModal( bool modal );
-  virtual bool IsEnabled() const { return m_isEnabled; };
+  virtual bool IsEnabled() const { return m_isEnabled; }
+  inline bool Enabled(void) const { return IsEnabled(); }
   virtual void SetFocus();
   virtual bool OnClose();
 
@@ -191,8 +192,9 @@ public:
   virtual void SetDropTarget( wxDropTarget *dropTarget );
   virtual wxDropTarget *GetDropTarget() const;
   
-private:
+//private:
   virtual GtkWidget* GetConnectWidget(void);
+  virtual bool IsOwnGtkWindow( GdkWindow *window );
   
 public:
   virtual void SetScrollbar( int orient, int pos, int thumbVisible,

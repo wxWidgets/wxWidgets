@@ -25,11 +25,16 @@ IMPLEMENT_DYNAMIC_CLASS(wxTextCtrl,wxControl)
 static void gtk_text_changed_callback( GtkWidget *WXUNUSED(widget), wxTextCtrl *win )
 {
   win->SetModified();
+  
+  wxCommandEvent event( wxEVT_COMMAND_TEXT_UPDATED, win->m_windowId );
+  wxString val( win->GetValue() );
+  if (!val.IsNull()) event.m_commandString = WXSTRINGCAST val;
+  event.SetEventObject( win );
+  win->GetEventHandler()->ProcessEvent( event );
 }
 
-
 BEGIN_EVENT_TABLE(wxTextCtrl, wxControl)
-//  EVT_CHAR(wxTextCtrl::OnChar)
+  EVT_CHAR(wxTextCtrl::OnChar)
 END_EVENT_TABLE()
 
 wxTextCtrl::wxTextCtrl(void) : streambuf()
@@ -77,7 +82,8 @@ bool wxTextCtrl::Create( wxWindow *parent, wxWindowID id, const wxString &value,
                      0, 0);
 
     // put the horizontal scrollbar in the lower left hand corner
-    if ( bHasHScrollbar ) {
+    if (bHasHScrollbar) 
+    {
       GtkWidget *hscrollbar = gtk_hscrollbar_new(GTK_TEXT(m_text)->hadj);
       gtk_table_attach(GTK_TABLE(m_widget), hscrollbar, 0, 1, 1, 2,
                        GTK_EXPAND | GTK_FILL,
@@ -92,9 +98,10 @@ bool wxTextCtrl::Create( wxWindow *parent, wxWindowID id, const wxString &value,
                      GTK_FILL,
                      GTK_EXPAND | GTK_FILL | GTK_SHRINK,
                      0, 0);
-    gtk_widget_show(vscrollbar);
+    gtk_widget_show( vscrollbar );
   }
-  else {
+  else 
+  {
     // a single-line text control: no need for scrollbars
     m_widget =
     m_text = gtk_entry_new();
@@ -107,7 +114,8 @@ bool wxTextCtrl::Create( wxWindow *parent, wxWindowID id, const wxString &value,
 
   PostCreation();
 
-  if ( bMultiLine ) {
+  if (bMultiLine) 
+  {
     gtk_widget_realize(m_text);
     gtk_widget_show(m_text);
   }
@@ -128,7 +136,7 @@ bool wxTextCtrl::Create( wxWindow *parent, wxWindowID id, const wxString &value,
   }
   else
   {
-    if ( bMultiLine )
+    if (bMultiLine)
       gtk_text_set_editable( GTK_TEXT(m_text), 1 );
   }
 
@@ -306,8 +314,25 @@ void wxTextCtrl::Delete(void)
   SetValue( "" );
 }
 
-void wxTextCtrl::OnChar( wxKeyEvent &WXUNUSED(event) )
+void wxTextCtrl::OnChar( wxKeyEvent &key_event )
 {
+  if ((key_event.KeyCode() == WXK_RETURN) && (m_windowStyle & wxPROCESS_ENTER))
+  {
+    wxCommandEvent event(wxEVT_COMMAND_TEXT_ENTER, m_windowId);
+    event.SetEventObject(this);
+    printf( "Hallo.\n" );
+    if (GetEventHandler()->ProcessEvent(event)) return;
+  }
+  else if (key_event.KeyCode() == WXK_TAB) 
+  {
+    wxNavigationKeyEvent event;
+    event.SetDirection( key_event.m_shiftDown );
+    event.SetWindowChange(FALSE);
+    event.SetEventObject(this);
+
+    if (GetEventHandler()->ProcessEvent(event)) return;
+  }
+  key_event.Skip();
 }
 
 int wxTextCtrl::overflow( int WXUNUSED(c) )
@@ -392,6 +417,13 @@ GtkWidget* wxTextCtrl::GetConnectWidget(void)
   return GTK_WIDGET(m_text);
 }
 
+bool wxTextCtrl::IsOwnGtkWindow( GdkWindow *window )
+{
+  if (m_windowStyle & wxTE_MULTILINE)
+    return (window == GTK_TEXT(m_text)->text_area);
+  else
+    return (window == GTK_ENTRY(m_text)->text_area);
+}
 
 
 

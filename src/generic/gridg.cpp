@@ -62,7 +62,8 @@ wxGenericGrid::wxGenericGrid(void)
   m_cellTextColour = *wxBLACK;
   m_cellBackgroundColour = *wxWHITE;
   m_labelTextColour = *wxBLACK;
-  m_labelBackgroundColour = *wxLIGHT_GREY;
+//  m_labelBackgroundColour = *wxLIGHT_GREY;
+  m_labelBackgroundColour = wxSystemSettings::GetSystemColour( wxSYS_COLOUR_BTNFACE );
   m_labelBackgroundBrush = NULL;
   m_labelTextFont = NULL;
   m_cellTextFont = NULL;
@@ -121,7 +122,8 @@ bool wxGenericGrid::Create(wxWindow *parent, wxWindowID id, const wxPoint& pos, 
   m_cellTextColour = *wxBLACK;
   m_cellBackgroundColour = *wxWHITE;
   m_labelTextColour = *wxBLACK;
-  m_labelBackgroundColour = *wxLIGHT_GREY;
+//  m_labelBackgroundColour = *wxLIGHT_GREY;
+  m_labelBackgroundColour = wxSystemSettings::GetSystemColour( wxSYS_COLOUR_BTNFACE );
   m_labelBackgroundBrush = NULL;
   m_labelTextFont = wxTheFontList->FindOrCreateFont(10, wxSWISS, wxNORMAL, wxBOLD);
   m_cellTextFont = wxTheFontList->FindOrCreateFont(10, wxSWISS, wxNORMAL, wxNORMAL);
@@ -839,11 +841,17 @@ void wxGenericGrid::DrawCellBackground(wxDC *dc, wxRectangle *rect, int row, int
   {
     dc->SetBrush(*cell->GetBackgroundBrush());
     dc->SetPen(*wxTRANSPARENT_PEN);
+    
+#ifdef 0    // In wxWin 2.0 the dc code is exact. RR.
 #ifdef __WXMOTIF__
     dc->DrawRectangle(rect->x+1, rect->y+1, rect->width-1, rect->height-1);
 #else
     dc->DrawRectangle(rect->x+1, rect->y+1, rect->width, rect->height);
 #endif
+#endif
+
+    dc->DrawRectangle(rect->x+1, rect->y+1, rect->width-1, rect->height-1);
+
     dc->SetPen(*wxBLACK_PEN);
   }
 }
@@ -1008,7 +1016,7 @@ void wxGenericGrid::AdjustScrollbars(void)
 */
     m_hScrollBar->SetScrollbar(m_hScrollBar->GetPosition(), wxMax(noHorizSteps, 1), nCols, wxMax(noHorizSteps, 1));
 
-    m_hScrollBar->SetSize(m_leftOfSheet, ch - m_scrollWidth,
+    m_hScrollBar->SetSize(m_leftOfSheet, ch - m_scrollWidth -2,
       cw - vertScrollBarWidth - m_leftOfSheet, m_scrollWidth);
   }
        
@@ -1370,8 +1378,9 @@ void wxGenericGrid::OnSelectCellImplementation(wxDC *dc, int row, int col)
 
   // Why isn't this needed for Windows??
   // Probably because of the SetValue??
+  // Arrrrrgh. This isn't needed anywhere, of course. RR.
 #ifndef __WXMSW__
-  HighlightCell(dc);
+//  HighlightCell(dc); 
 #endif
   dc->DestroyClippingRegion();
   
@@ -1427,16 +1436,27 @@ void wxGenericGrid::OnChangeSelectionLabel(void)
 void wxGenericGrid::HighlightCell(wxDC *dc)
 {
   dc->SetLogicalFunction(wxINVERT);
+  
   // Top
-  dc->DrawLine(m_currentRect.x + 1, m_currentRect.y + 1, m_currentRect.x + m_currentRect.width - 1, m_currentRect.y + 1);
+  dc->DrawLine( m_currentRect.x + 1, 
+                m_currentRect.y + 1, 
+                m_currentRect.x + m_currentRect.width - 1, 
+		m_currentRect.y + 1);
   // Right
-  dc->DrawLine(m_currentRect.x + m_currentRect.width - 1, m_currentRect.y + 1,
-      m_currentRect.x + m_currentRect.width - 1, m_currentRect.y +m_currentRect.height - 1);
+  dc->DrawLine( m_currentRect.x + m_currentRect.width - 1, 
+                m_currentRect.y + 1,
+                m_currentRect.x + m_currentRect.width - 1, 
+		m_currentRect.y +m_currentRect.height - 1 );
   // Bottom
-  dc->DrawLine(m_currentRect.x + m_currentRect.width - 1, m_currentRect.y + m_currentRect.height - 1,
-         m_currentRect.x + 1, m_currentRect.y + m_currentRect.height - 1);
+  dc->DrawLine( m_currentRect.x + m_currentRect.width - 1, 
+                m_currentRect.y + m_currentRect.height - 1,
+                m_currentRect.x + 1, 
+		m_currentRect.y + m_currentRect.height - 1);
   // Left
-  dc->DrawLine(m_currentRect.x + 1, m_currentRect.y + m_currentRect.height - 1, m_currentRect.x + 1, m_currentRect.y + 1);
+  dc->DrawLine( m_currentRect.x + 1, 
+                m_currentRect.y + m_currentRect.height - 1, 
+		m_currentRect.x + 1, 
+		m_currentRect.y + 1);
 
   dc->SetLogicalFunction(wxCOPY);
 }

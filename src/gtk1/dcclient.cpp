@@ -92,7 +92,7 @@ wxPaintDC::wxPaintDC(void)
   m_textGC = NULL;
   m_bgGC = NULL;
   m_cmap = NULL;
-};
+}
 
 wxPaintDC::wxPaintDC( wxWindow *window )
 {
@@ -120,21 +120,21 @@ wxPaintDC::wxPaintDC( wxWindow *window )
   long y = 0;
   window->GetDrawingOffset( &x, &y );
   SetInternalDeviceOrigin( -x, -y );
-};
+}
 
 wxPaintDC::~wxPaintDC(void)
 {
-};
+}
 
 void wxPaintDC::FloodFill( long WXUNUSED(x1), long WXUNUSED(y1), 
   wxColour *WXUNUSED(col), int WXUNUSED(style) )
 {
-};
+}
 
 bool wxPaintDC::GetPixel( long WXUNUSED(x1), long WXUNUSED(y1), wxColour *WXUNUSED(col) ) const
 {
   return FALSE;
-};
+}
 
 void wxPaintDC::DrawLine( long x1, long y1, long x2, long y2 )
 {
@@ -144,8 +144,8 @@ void wxPaintDC::DrawLine( long x1, long y1, long x2, long y2 )
   {
     gdk_draw_line( m_window, m_penGC, 
       XLOG2DEV(x1), YLOG2DEV(y1), XLOG2DEV(x2), YLOG2DEV(y2) );
-  };
-};
+  }
+}
 
 void wxPaintDC::CrossHair( long x, long y )
 {
@@ -162,8 +162,8 @@ void wxPaintDC::CrossHair( long x, long y )
       0, yy, XLOG2DEVREL(w), yy );
     gdk_draw_line( m_window, m_penGC,
       xx, 0, xx, YLOG2DEVREL(h) );
-  };
-};
+  }
+}
 
 void wxPaintDC::DrawArc( long x1, long y1, long x2, long y2, double xc, double yc )
 {
@@ -199,7 +199,7 @@ void wxPaintDC::DrawArc( long x1, long y1, long x2, long y2, double xc, double y
     radius2 = (xx2 - xxc == 0) ?
 	    (yy2 - yyc < 0) ? 90.0 : -90.0 :
 	    -atan2(double(yy2-yyc), double(xx2-xxc)) * RAD2DEG;
-  };
+  }
   long alpha1 = long(radius1 * 64.0);
   long alpha2 = long((radius2 - radius1) * 64.0);
   while (alpha2 <= 0) alpha2 += 360*64;
@@ -211,7 +211,7 @@ void wxPaintDC::DrawArc( long x1, long y1, long x2, long y2, double xc, double y
   if (m_pen.GetStyle() != wxTRANSPARENT)
     gdk_draw_arc( m_window, m_penGC, FALSE, xxc-r, yyc-r, 2*r,2*r, alpha1, alpha2 );
   
-};
+}
 
 void wxPaintDC::DrawEllipticArc( long x, long y, long width, long height, double sa, double ea )
 {
@@ -233,7 +233,7 @@ void wxPaintDC::DrawEllipticArc( long x, long y, long width, long height, double
   
   if (m_pen.GetStyle() != wxTRANSPARENT)
     gdk_draw_arc( m_window, m_penGC, FALSE, xx, yy, ww, hh, start, end );
-};
+}
 
 void wxPaintDC::DrawPoint( long x, long y )
 {
@@ -241,7 +241,7 @@ void wxPaintDC::DrawPoint( long x, long y )
   
   if (m_pen.GetStyle() != wxTRANSPARENT)
     gdk_draw_point( m_window, m_penGC, XLOG2DEV(x), YLOG2DEV(y) );
-};
+}
 
 void wxPaintDC::DrawLines( int n, wxPoint points[], long xoffset, long yoffset )
 {
@@ -256,8 +256,8 @@ void wxPaintDC::DrawLines( int n, wxPoint points[], long xoffset, long yoffset )
     long y1 = YLOG2DEV(points[i].y + yoffset);     // oh, what a waste
     long y2 = YLOG2DEV(points[i+1].y + yoffset);
     gdk_draw_line( m_window, m_penGC, x1, y1, x2, y2 );
-  };
-};
+  }
+}
 
 void wxPaintDC::DrawLines( wxList *points, long xoffset, long yoffset )
 {
@@ -276,8 +276,8 @@ void wxPaintDC::DrawLines( wxList *points, long xoffset, long yoffset )
     long y2 = YLOG2DEV(npoint->y + yoffset);
     gdk_draw_line( m_window, m_penGC, x1, y1, x2, y2 );
     node = node->Next();
-  };
-};
+  }
+}
 
 void wxPaintDC::DrawPolygon( int n, wxPoint points[], 
   long xoffset, long yoffset, int WXUNUSED(fillStyle) )
@@ -302,7 +302,7 @@ void wxPaintDC::DrawPolygon( int n, wxPoint points[],
  		     gdkpoints[(i+1)%n].x,
  		     gdkpoints[(i+1)%n].y);
    delete[] gdkpoints;
-};
+}
 
 void wxPaintDC::DrawPolygon( wxList *lines, long xoffset, 
                               long yoffset, int WXUNUSED(fillStyle))
@@ -335,7 +335,7 @@ void wxPaintDC::DrawPolygon( wxList *lines, long xoffset,
  		       gdkpoints[(i+1)%n].y);
      }
    delete[] gdkpoints;
-};
+}
 
 void wxPaintDC::DrawRectangle( long x, long y, long width, long height )
 {
@@ -358,7 +358,7 @@ void wxPaintDC::DrawRectangle( long x, long y, long width, long height )
     
   if (m_pen.GetStyle() != wxTRANSPARENT)
     gdk_draw_rectangle( m_window, m_penGC, FALSE, xx, yy, ww-1, hh-1 );
-};
+}
 
 void wxPaintDC::DrawRoundedRectangle( long x, long y, long width, long height, double radius )
 {
@@ -410,7 +410,7 @@ void wxPaintDC::DrawRoundedRectangle( long x, long y, long width, long height, d
     gdk_draw_arc( m_window, m_brushGC, TRUE, xx+ww-dd, yy, dd, dd, 0, 90*64 );
     gdk_draw_arc( m_window, m_brushGC, TRUE, xx+ww-dd, yy+hh-dd, dd, dd, 270*64, 90*64 );
     gdk_draw_arc( m_window, m_brushGC, TRUE, xx, yy+hh-dd, dd, dd, 180*64, 90*64 );
-  };
+  }
   
   if (m_pen.GetStyle() != wxTRANSPARENT)
   {
@@ -422,8 +422,8 @@ void wxPaintDC::DrawRoundedRectangle( long x, long y, long width, long height, d
     gdk_draw_arc( m_window, m_penGC, FALSE, xx+ww-dd, yy, dd, dd, 0, 90*64 );
     gdk_draw_arc( m_window, m_penGC, FALSE, xx+ww-dd, yy+hh-dd, dd, dd, 270*64, 90*64 );
     gdk_draw_arc( m_window, m_penGC, FALSE, xx, yy+hh-dd, dd, dd, 180*64, 90*64 );
-  };
-};
+  }
+}
 
 void wxPaintDC::DrawEllipse( long x, long y, long width, long height )
 {
@@ -443,12 +443,12 @@ void wxPaintDC::DrawEllipse( long x, long y, long width, long height )
   
   if (m_pen.GetStyle() != wxTRANSPARENT)
     gdk_draw_arc( m_window, m_penGC, FALSE, xx, yy, ww, hh, 0, 360*64 );
-};
+}
 
 bool wxPaintDC::CanDrawBitmap(void) const
 {
   return TRUE;
-};
+}
 
 void wxPaintDC::DrawIcon( const wxIcon &icon, long x, long y, bool useMask )
 {
@@ -466,7 +466,7 @@ void wxPaintDC::DrawIcon( const wxIcon &icon, long x, long y, bool useMask )
   {
     gdk_gc_set_clip_mask( m_penGC, mask );
     gdk_gc_set_clip_origin( m_penGC, xx, yy );
-  };
+  }
   
   GdkPixmap *pm = icon.GetPixmap();
   gdk_draw_pixmap( m_window, m_penGC, pm, 0, 0, xx, yy, -1, -1 );
@@ -475,8 +475,8 @@ void wxPaintDC::DrawIcon( const wxIcon &icon, long x, long y, bool useMask )
   {
     gdk_gc_set_clip_mask( m_penGC, NULL );
     gdk_gc_set_clip_origin( m_penGC, 0, 0 );
-  };
-};
+  }
+}
 
 bool wxPaintDC::Blit( long xdest, long ydest, long width, long height,
        wxDC *source, long xsrc, long ysrc, int WXUNUSED(logical_func), bool WXUNUSED(useMask) )
@@ -518,10 +518,9 @@ bool wxPaintDC::Blit( long xdest, long ydest, long width, long height,
 */
     
   return TRUE;
-};
+}
 
-void wxPaintDC::DrawText( const wxString &text, long x, long y, bool
-WXUNUSED(use16) )
+void wxPaintDC::DrawText( const wxString &text, long x, long y, bool WXUNUSED(use16) )
 {
   if (!Ok()) return;
 
@@ -551,14 +550,14 @@ WXUNUSED(use16) )
     if (font->descent > 0) ul_y++;
     gdk_draw_line( m_window, m_textGC, x, ul_y, x + width, ul_y);
   }
-};
+}
 
 
 
 bool wxPaintDC::CanGetTextExtent(void) const
 {
   return TRUE;
-};
+}
 
 void wxPaintDC::GetTextExtent( const wxString &string, long *width, long *height,
                      long *WXUNUSED(descent), long *WXUNUSED(externalLeading),
@@ -569,7 +568,7 @@ void wxPaintDC::GetTextExtent( const wxString &string, long *width, long *height
   GdkFont *font = m_font.GetInternalFont( m_scaleY );
   if (width) (*width) = long(gdk_string_width( font, string ) / m_scaleX);
   if (height) (*height) = long((font->ascent + font->descent) / m_scaleY);
-};
+}
 
 long wxPaintDC::GetCharWidth(void)
 {
@@ -577,7 +576,7 @@ long wxPaintDC::GetCharWidth(void)
   
   GdkFont *font = m_font.GetInternalFont( m_scaleY );
   return gdk_string_width( font, "H" );
-};
+}
 
 long wxPaintDC::GetCharHeight(void)
 {
@@ -585,7 +584,7 @@ long wxPaintDC::GetCharHeight(void)
   
   GdkFont *font = m_font.GetInternalFont( m_scaleY );
   return font->ascent + font->descent;
-};
+}
 
 void wxPaintDC::Clear(void)
 {
@@ -603,15 +602,15 @@ void wxPaintDC::Clear(void)
     int height = 0;
     GetSize( &width, &height );
     gdk_draw_rectangle( m_window, m_bgGC, TRUE, 0, 0, width, height );
-  };
-};
+  }
+}
 
 void wxPaintDC::SetFont( const wxFont &font )
 {
   if (!Ok()) return;
   
   m_font = font;
-};
+}
 
 void wxPaintDC::SetPen( const wxPen &pen )
 {
@@ -640,34 +639,34 @@ void wxPaintDC::SetPen( const wxPen &pen )
   GdkLineStyle lineStyle = GDK_LINE_SOLID;
   switch (m_pen.GetStyle())
   {
-    case wxSOLID:      { lineStyle = GDK_LINE_SOLID;       break; };
-    case wxDOT:        { lineStyle = GDK_LINE_ON_OFF_DASH; break; };
-    case wxLONG_DASH:  { lineStyle = GDK_LINE_ON_OFF_DASH; break; };
-    case wxSHORT_DASH: { lineStyle = GDK_LINE_ON_OFF_DASH; break; };
-    case wxDOT_DASH:   { lineStyle = GDK_LINE_DOUBLE_DASH; break; };
-  };
+    case wxSOLID:      { lineStyle = GDK_LINE_SOLID;       break; }
+    case wxDOT:        { lineStyle = GDK_LINE_ON_OFF_DASH; break; }
+    case wxLONG_DASH:  { lineStyle = GDK_LINE_ON_OFF_DASH; break; }
+    case wxSHORT_DASH: { lineStyle = GDK_LINE_ON_OFF_DASH; break; }
+    case wxDOT_DASH:   { lineStyle = GDK_LINE_DOUBLE_DASH; break; }
+  }
   
   GdkCapStyle capStyle = GDK_CAP_ROUND;
   switch (m_pen.GetCap())
   {
-    case wxCAP_ROUND:      { capStyle = (width <= 1) ? GDK_CAP_NOT_LAST : GDK_CAP_ROUND; break; };
-    case wxCAP_PROJECTING: { capStyle = GDK_CAP_PROJECTING; break; };
-    case wxCAP_BUTT:       { capStyle = GDK_CAP_BUTT;       break; };
-  };
+    case wxCAP_ROUND:      { capStyle = (width <= 1) ? GDK_CAP_NOT_LAST : GDK_CAP_ROUND; break; }
+    case wxCAP_PROJECTING: { capStyle = GDK_CAP_PROJECTING; break; }
+    case wxCAP_BUTT:       { capStyle = GDK_CAP_BUTT;       break; }
+  }
   
   GdkJoinStyle joinStyle = GDK_JOIN_ROUND;
   switch (m_pen.GetJoin())
   {
-    case wxJOIN_BEVEL: { joinStyle = GDK_JOIN_BEVEL; break; };
-    case wxJOIN_ROUND: { joinStyle = GDK_JOIN_ROUND; break; };
-    case wxJOIN_MITER: { joinStyle = GDK_JOIN_MITER; break; };
-  };
+    case wxJOIN_BEVEL: { joinStyle = GDK_JOIN_BEVEL; break; }
+    case wxJOIN_ROUND: { joinStyle = GDK_JOIN_ROUND; break; }
+    case wxJOIN_MITER: { joinStyle = GDK_JOIN_MITER; break; }
+  }
   
   gdk_gc_set_line_attributes( m_penGC, width, lineStyle, capStyle, joinStyle );
   
   m_pen.GetColour().CalcPixel( m_cmap );
   gdk_gc_set_foreground( m_penGC, m_pen.GetColour().GetColor() );
-};
+}
 
 void wxPaintDC::SetBrush( const wxBrush &brush )
 {
@@ -690,21 +689,21 @@ void wxPaintDC::SetBrush( const wxBrush &brush )
       break;
     default:
       fillStyle = GDK_STIPPLED;
-  };
+  }
  
   gdk_gc_set_fill( m_brushGC, fillStyle );
   
   if (m_brush.GetStyle() == wxSTIPPLE)
   {
     gdk_gc_set_stipple( m_brushGC, m_brush.GetStipple()->GetPixmap() );
-  };
+  }
   
   if (IS_HATCH(m_brush.GetStyle()))
   {
     int num = m_brush.GetStyle() - wxBDIAGONAL_HATCH;
     gdk_gc_set_stipple( m_brushGC, hatches[num] );
-  };
-};
+  }
+}
 
 // CMB 21/7/98: Added SetBackground. Sets background brush
 // for Clear() and bg colour for shapes filled with cross-hatch brush
@@ -730,21 +729,21 @@ void wxPaintDC::SetBackground( const wxBrush &brush )
       break;
     default:
       fillStyle = GDK_STIPPLED;
-  };
+  }
  
   gdk_gc_set_fill( m_bgGC, fillStyle );
   
   if (m_backgroundBrush.GetStyle() == wxSTIPPLE)
   {
     gdk_gc_set_stipple( m_bgGC, m_backgroundBrush.GetStipple()->GetPixmap() );
-  };
+  }
   
   if (IS_HATCH(m_backgroundBrush.GetStyle()))
   {
     int num = m_backgroundBrush.GetStyle() - wxBDIAGONAL_HATCH;
     gdk_gc_set_stipple( m_bgGC, hatches[num] );
-  };
-};
+  }
+}
 
 void wxPaintDC::SetLogicalFunction( int function )
 {
@@ -755,11 +754,11 @@ void wxPaintDC::SetLogicalFunction( int function )
     case wxXOR:    mode = GDK_INVERT; break;
     case wxINVERT: mode = GDK_INVERT; break;
     default:       break;
-  };
+  }
   m_logicalFunction = function;
   gdk_gc_set_function( m_penGC, mode );
   gdk_gc_set_function( m_brushGC, mode );
-};
+}
 
 void wxPaintDC::SetTextForeground( const wxColour &col )
 {
@@ -772,7 +771,7 @@ void wxPaintDC::SetTextForeground( const wxColour &col )
   
   m_textForegroundColour.CalcPixel( m_cmap );
   gdk_gc_set_foreground( m_textGC, m_textForegroundColour.GetColor() );
-};
+}
 
 void wxPaintDC::SetTextBackground( const wxColour &col )
 {
@@ -785,7 +784,7 @@ void wxPaintDC::SetTextBackground( const wxColour &col )
   
   m_textBackgroundColour.CalcPixel( m_cmap );
   gdk_gc_set_background( m_textGC, m_textBackgroundColour.GetColor() );
-};
+}
 
 void wxPaintDC::SetBackgroundMode( int mode )
 {
@@ -798,11 +797,11 @@ void wxPaintDC::SetBackgroundMode( int mode )
     gdk_gc_set_fill( m_brushGC,
       (m_backgroundMode == wxTRANSPARENT) ? GDK_STIPPLED : GDK_OPAQUE_STIPPLED);
   }
-};
+}
 
 void wxPaintDC::SetPalette( const wxPalette& WXUNUSED(palette) )
 {
-};
+}
 
 void wxPaintDC::SetClippingRegion( long x, long y, long width, long height )
 {
@@ -811,14 +810,14 @@ void wxPaintDC::SetClippingRegion( long x, long y, long width, long height )
   GdkRectangle rect;
   rect.x = XLOG2DEV(x);
   rect.y = YLOG2DEV(y);
-  rect.width = XLOG2DEV(x+width);
-  rect.height = YLOG2DEV(y+height);
+  rect.width = XLOG2DEVREL(width);
+  rect.height = YLOG2DEVREL(height);
   gdk_gc_set_clip_rectangle( m_penGC, &rect );
   gdk_gc_set_clip_rectangle( m_brushGC, &rect );
   gdk_gc_set_clip_rectangle( m_textGC, &rect );
   gdk_gc_set_clip_rectangle( m_bgGC, &rect );
   
-};
+}
 
 void wxPaintDC::DestroyClippingRegion(void)
 {
@@ -828,7 +827,7 @@ void wxPaintDC::DestroyClippingRegion(void)
   gdk_gc_set_clip_rectangle( m_brushGC, NULL );
   gdk_gc_set_clip_rectangle( m_textGC, NULL );
   gdk_gc_set_clip_rectangle( m_bgGC, NULL );
-};
+}
 
 void wxPaintDC::SetUpDC(void)
 {
@@ -859,13 +858,13 @@ void wxPaintDC::SetUpDC(void)
     hatch_bitmap[3] = gdk_bitmap_create_from_data( NULL, cross_bits, cross_width, cross_height );
     hatch_bitmap[4] = gdk_bitmap_create_from_data( NULL, horiz_bits, horiz_width, horiz_height );
     hatch_bitmap[5] = gdk_bitmap_create_from_data( NULL, verti_bits, verti_width, verti_height );
-  };
-};
+  }
+}
 
 GdkWindow *wxPaintDC::GetWindow(void)
 {
   return m_window;
-};
+}
 
 // ----------------------------------- spline code ----------------------------------------
 
@@ -1030,4 +1029,4 @@ void wxPaintDC::DrawOpenSpline( wxList *points )
     wx_spline_add_point( x2, y2 );
 
     wx_spline_draw_point_array( this );
-};
+}

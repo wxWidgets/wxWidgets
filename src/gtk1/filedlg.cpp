@@ -36,7 +36,7 @@ void gtk_filedialog_ok_callback( GtkWidget *WXUNUSED(widget), gpointer data )
 		return;
 	}
 
-  dialog->OnOk( event );
+  dialog->OnOK( event );
 };
 
 void gtk_filedialog_cancel_callback( GtkWidget *WXUNUSED(widget), gpointer data )

@@ -91,7 +91,10 @@ bool wxBitmapButton::Create(  wxWindow *parent, wxWindowID id, const wxBitmap &b
       
 void wxBitmapButton::SetDefault(void)
 {
+/*
+  GTK_WIDGET_SET_FLAGS( m_widget, GTK_CAN_DEFAULT );
   gtk_widget_grab_default( m_widget );
+*/
 }
 
 void wxBitmapButton::SetLabel( const wxString &label )
@@ -103,3 +106,21 @@ wxString wxBitmapButton::GetLabel(void) const
 {
   return wxControl::GetLabel();
 }
+
+void wxBitmapButton::SetBitmapLabel( const wxBitmap& bitmap )
+{
+  m_bitmap = bitmap;
+  if (!m_bitmap.Ok()) return;
+  
+  GtkButton *bin = GTK_BUTTON( m_widget );
+  GtkPixmap *g_pixmap = GTK_PIXMAP( bin->child );
+  
+  GdkBitmap *mask = NULL;
+  if (m_bitmap.GetMask()) mask = m_bitmap.GetMask()->GetBitmap();
+  
+  gtk_pixmap_set( g_pixmap, m_bitmap.GetPixmap(), mask );
+}
+
+
+
+

@@ -43,7 +43,7 @@ bool gtk_dialog_delete_callback( GtkWidget *WXUNUSED(widget), GdkEvent *WXUNUSED
 //-----------------------------------------------------------------------------
 
 BEGIN_EVENT_TABLE(wxDialog,wxWindow)
-  EVT_BUTTON  (wxID_OK,       wxDialog::OnOk)
+  EVT_BUTTON  (wxID_OK,       wxDialog::OnOK)
   EVT_BUTTON  (wxID_CANCEL,   wxDialog::OnCancel)
   EVT_BUTTON  (wxID_APPLY,    wxDialog::OnApply)
   EVT_CLOSE   (wxDialog::OnCloseWindow)
@@ -93,6 +93,11 @@ bool wxDialog::Create( wxWindow *parent,
   
   SetTitle( title );
   
+  if ((m_x != -1) || (m_y != -1))
+     gtk_widget_set_uposition( m_widget, m_x, m_y );
+     
+  gtk_widget_set_usize( m_widget, m_width, m_height );
+     
   PostCreation();
   
   return TRUE;
@@ -134,7 +139,7 @@ void wxDialog::OnCancel( wxCommandEvent &WXUNUSED(event) )
   };
 };
 
-void wxDialog::OnOk( wxCommandEvent &WXUNUSED(event) )
+void wxDialog::OnOK( wxCommandEvent &WXUNUSED(event) )
 {
   if ( Validate() && TransferDataFromWindow())
   {
@@ -186,6 +191,19 @@ void wxDialog::OnCloseWindow(wxCloseEvent& event)
     this->Destroy();
   };
 };
+
+void wxDialog::ImplementSetPosition(void)
+{
+  if ((m_x != -1) || (m_y != -1))
+     gtk_widget_set_uposition( m_widget, m_x, m_y );
+}
+
+void wxDialog::Centre( int direction )
+{
+  if (direction & wxHORIZONTAL == wxHORIZONTAL) m_x = (gdk_screen_width () - m_width) / 2;
+  if (direction & wxVERTICAL == wxVERTICAL) m_y = (gdk_screen_height () - m_height) / 2;
+  ImplementSetPosition();
+}
 
 bool wxDialog::Show( bool show )
 {

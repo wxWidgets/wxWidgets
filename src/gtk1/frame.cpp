@@ -211,6 +211,19 @@ bool wxFrame::Destroy()
   return TRUE;
 }
 
+void wxFrame::ImplementSetPosition(void)
+{
+  if ((m_x != -1) || (m_y != -1))
+     gtk_widget_set_uposition( m_widget, m_x, m_y );
+}
+
+void wxFrame::Centre( int direction )
+{
+  if (direction & wxHORIZONTAL == wxHORIZONTAL) m_x = (gdk_screen_width () - m_width) / 2;
+  if (direction & wxVERTICAL == wxVERTICAL) m_y = (gdk_screen_height () - m_height) / 2;
+  ImplementSetPosition();
+}
+
 void wxFrame::GetClientSize( int *width, int *height ) const
 {
   wxWindow::GetClientSize( width, height );

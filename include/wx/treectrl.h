@@ -6,7 +6,7 @@
 #elif defined(__WXMOTIF__)
 #include "wx/generic/treectrl.h"
 #elif defined(__WXGTK__)
-#include "wx/gtk/treectrl.h"
+#include "wx/generic/treectrl.h"
 #endif
 
 #endif

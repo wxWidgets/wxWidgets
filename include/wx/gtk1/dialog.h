@@ -63,7 +63,7 @@ class wxDialog: public wxWindow
     bool OnClose(void);
     void OnApply( wxCommandEvent &event );
     void OnCancel( wxCommandEvent &event );
-    void OnOk( wxCommandEvent &event );
+    void OnOK( wxCommandEvent &event );
     void OnPaint(wxPaintEvent& event);
     bool Destroy(void);
     void OnCloseWindow(wxCloseEvent& event);
@@ -75,15 +75,19 @@ class wxDialog: public wxWindow
     virtual void EndModal(int retCode);
     virtual bool IsModal(void) const { return ((GetWindowStyleFlag() & wxDIALOG_MODAL) == wxDIALOG_MODAL); }
     virtual void InitDialog(void);
+    virtual void Centre( int direction = wxHORIZONTAL );
     
   private:
   
     friend    wxWindow;
     friend    wxDC;
     friend    wxRadioBox;
+    
     bool       m_modalShowing;
     wxString   m_title;
     
+    virtual void ImplementSetPosition();
+  
   DECLARE_EVENT_TABLE()
     
 };

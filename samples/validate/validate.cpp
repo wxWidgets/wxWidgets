@@ -82,7 +82,7 @@ void MyFrame::OnQuit(wxCommandEvent& event)
 
 void MyFrame::OnTestDialog(wxCommandEvent& event)
 {
-	MyDialog dialog(this, "Validation test dialog", wxPoint(100, 100), wxSize(340, 200));
+	MyDialog dialog(this, "Validation test dialog", wxPoint(100, 100), wxSize(340, 170));
 
 	dialog.ShowModal();
 }
@@ -95,7 +95,7 @@ MyDialog::MyDialog(wxWindow *parent, const wxString& title, const wxPoint& pos, 
   wxButton *but2 = new wxButton(this, wxID_CANCEL, "Cancel", wxPoint(250, 60), wxSize(80, 30));
 
   wxTextCtrl *txt1 = new wxTextCtrl(this, VALIDATE_TEXT, "",
-    wxPoint(10, 10), wxSize(100, -1), 0, wxTextValidator(wxFILTER_ALPHA, &g_data.m_string));
+    wxPoint(10, 10), wxSize(120, -1), 0, wxTextValidator(wxFILTER_ALPHA, &g_data.m_string));
 
 //  SetBackgroundColour(wxColour(0,0,255));
 

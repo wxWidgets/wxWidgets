@@ -29,7 +29,6 @@
 #include "wx/notebook.h"
 #include "wx/statusbr.h"
 #include <wx/intl.h>
-//#include "wx/treectrl.h"
 #include "gdk/gdkkeysyms.h"
 #include <math.h>
 #include "wx/gtk/win_gtk.h"
@@ -272,9 +271,10 @@ gint gtk_window_key_press_callback( GtkWidget *WXUNUSED(widget), GdkEventKey *gd
 //-----------------------------------------------------------------------------
 // button_press
 
-gint gtk_window_button_press_callback( GtkWidget *widget, GdkEventButton *gdk_event, wxWindow *win )
-{ 
-  if (widget->window != gdk_event->window) return TRUE;
+gint gtk_window_button_press_callback( GtkWidget *WXUNUSED(widget), GdkEventButton *gdk_event, wxWindow *win )
+{
+  if (!win->IsOwnGtkWindow( gdk_event->window )) return TRUE;
+  
   if (g_blockEventsOnDrag) return TRUE;
 
   if (win->m_wxwindow)
@@ -353,10 +353,9 @@ gint gtk_window_button_press_callback( GtkWidget *widget, GdkEventButton *gdk_ev
 //-----------------------------------------------------------------------------
 // button_release
 
-gint gtk_window_button_release_callback( GtkWidget *widget, GdkEventButton *gdk_event, wxWindow *win )
+gint gtk_window_button_release_callback( GtkWidget *WXUNUSED(widget), GdkEventButton *gdk_event, wxWindow *win )
 { 
-  if (widget->window != gdk_event->window) return TRUE;
-
+  if (!win->IsOwnGtkWindow( gdk_event->window )) return TRUE;
   if (g_blockEventsOnDrag) return TRUE;
 
   if (!win->HasVMT()) return TRUE;
@@ -397,10 +396,9 @@ gint gtk_window_button_release_callback( GtkWidget *widget, GdkEventButton *gdk_
 //-----------------------------------------------------------------------------
 // motion_notify
 
-gint gtk_window_motion_notify_callback( GtkWidget *widget, GdkEventMotion *gdk_event, wxWindow *win )
+gint gtk_window_motion_notify_callback( GtkWidget *WXUNUSED(widget), GdkEventMotion *gdk_event, wxWindow *win )
 { 
-  if (widget->window != gdk_event->window) return TRUE;
-
+  if (!win->IsOwnGtkWindow( gdk_event->window )) return TRUE;
   if (g_blockEventsOnDrag) return TRUE;
 
   if (!win->HasVMT()) return TRUE;
@@ -1077,7 +1075,7 @@ void wxWindow::ImplementSetPosition(void)
   
   if (!m_parent)
   {
-    printf( _("wxWindow::SetSize error.\n") );
+    wxFAIL_MSG( _("wxWindow::SetSize error.\n") );
     return;
   }
   
@@ -1812,6 +1810,12 @@ GtkWidget* wxWindow::GetConnectWidget(void)
   return connect_widget;
 }
   
+bool wxWindow::IsOwnGtkWindow( GdkWindow *window )
+{
+  if (m_wxwindow) return (window == m_wxwindow->window);
+  return (window == m_widget->window);
+}
+
 void wxWindow::SetFont( const wxFont &font )
 {
   m_font = font;

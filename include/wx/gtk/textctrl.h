@@ -48,7 +48,7 @@ class wxTextCtrl: public wxControl, public streambuf
   DECLARE_EVENT_TABLE()
   DECLARE_DYNAMIC_CLASS(wxTextCtrl);
 
-public:
+  public:
     wxTextCtrl();
     wxTextCtrl( wxWindow *parent, wxWindowID id, const wxString &value = "",
       const wxPoint &pos = wxDefaultPosition, const wxSize &size = wxDefaultSize,
@@ -102,11 +102,12 @@ public:
     wxTextCtrl& operator<<(const char c);
 
     virtual GtkWidget* GetConnectWidget(void);
+    virtual bool IsOwnGtkWindow( GdkWindow *window );
     
-private:
-  bool  m_modified;
-
-  GtkWidget *m_text;
+  private:
+  
+    bool        m_modified;
+    GtkWidget  *m_text;
 };
 
 #endif // __GTKTEXTCTRLH__

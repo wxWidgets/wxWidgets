@@ -61,6 +61,7 @@ public:
 
   virtual bool Show( bool show );
   virtual void Enable( bool enable );
+  virtual void Centre( int direction = wxHORIZONTAL );
 
   virtual void GetClientSize( int *width, int *height ) const;
   virtual void SetClientSize( int const width, int const height );
@@ -90,6 +91,7 @@ public:
   virtual void SetIcon( const wxIcon &icon );
   void Iconize( bool WXUNUSED(iconize)) { }
   bool IsIconized(void) const { return FALSE; }
+  bool Iconized(void) const { return FALSE; }
 
   void OnActivate( wxActivateEvent &WXUNUSED(event) ) { } // called from docview.cpp
   void OnSize( wxSizeEvent &event );
@@ -107,6 +109,7 @@ private:
   // update frame's menus (called from OnIdle)
   void DoMenuUpdates();
   void DoMenuUpdates(wxMenu* menu);
+  virtual void ImplementSetPosition();
 
   GtkWidget    *m_mainWindow;
   wxMenuBar    *m_frameMenuBar;

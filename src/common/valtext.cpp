@@ -24,7 +24,8 @@
 #include <stdio.h>
 #include "wx/textctrl.h"
 #include "wx/utils.h"
-#include "wx/msgbxdlg.h"
+#include "wx/msgdlg.h"
+#include "wx/intl.h"
 #endif
 
 #include "wx/valtext.h"

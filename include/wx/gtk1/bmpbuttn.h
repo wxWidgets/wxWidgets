@@ -60,6 +60,9 @@ class wxBitmapButton: public wxControl
     void SetDefault(void);
     void SetLabel( const wxString &label );
     wxString GetLabel(void) const;
+    virtual void SetLabel(const wxBitmap& bitmap) { SetBitmapLabel(bitmap); }
+    virtual void SetBitmapLabel( const wxBitmap& bitmap );
+    wxBitmap& GetBitmapLabel(void) const { return (wxBitmap&) m_bitmap; }
     
   public:
   
