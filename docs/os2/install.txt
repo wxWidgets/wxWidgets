@@ -186,16 +186,17 @@ as well.
 
 In the following, let's assume you decided to build in
 \wx\wxWindows-2.4.2\build\pm. Now we need to set some environment
-variables, namely MAKE_SHELL (to a Unix like shell, let's assume ash)
+variables, namely MAKESHELL (to a Unix like shell, let's assume ash)
 and INSTALL (to point to the install script. If you omit this, configure
 might find something like the system's tcpip\pcomos\install.exe which will
 not do the thing you want), e.g.
-SET MAKE_SHELL=ash
+SET MAKESHELL=ash
 SET INSTALL=/wx/wxWindows-2.4.2/install-sh.
 
-Be warned that depending on the precise version of your make, setting
-MAKE_SHELL might not be sufficient, it might be necessary to set SHELL
-and even COMSPEC to a unix like shell as well.
+Be warned that depending on the precise version of your make, the
+variable that needs to be set might be MAKE_SHELL instead of MAKESHELL.
+If you have a really deficient version of GNU make, it might even be
+necessary to set SHELL or even COMSPEC to a unix like shell as well. 
 
 Now run the provided configure script by executing e.g.
 `ash -c "../../configure \
