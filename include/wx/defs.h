@@ -53,7 +53,7 @@
         #endif
     #endif // Sun
 
-    #ifdef __hpux
+    #if defined(__hpux) && !defined(__HPUX__)
         #define __HPUX__
     #endif // HP-UX
 
@@ -108,11 +108,14 @@
 //////////////////////////////////////////////////////////////////////////////////
 // Currently Only MS-Windows/NT, XView and Motif are supported
 //
-#if defined(__HPUX__) && !defined(__WXMOTIF__)
-# define __WXMOTIF__
+#if defined(__HPUX__) && !defined(__WXGTK__)
+    #ifndef __WXMOTIF__  
+        #define __WXMOTIF__
+    #endif // __WXMOTIF__
 #endif
+
 #if defined(__WXMOTIF__)
-# define __X__
+    #define __X__
 #endif
 
 #ifdef __WXMSW__
