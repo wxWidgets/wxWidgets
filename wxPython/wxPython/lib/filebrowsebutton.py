@@ -140,23 +140,23 @@ class FileBrowseButton(wxPanel):
         return button
 
 
-     def OnBrowse (self, event = None):
-         """ Going to browse for file... """
-         current = self.GetValue()
-         directory = os.path.split(current)
-         if os.path.isdir( current):
-             directory = current
-             current = ''
-         elif directory and os.path.isdir( directory[0] ):
-             current = directory[1]
-             directory = directory [0]
-         else:
-             directory = self.startDirectory
-         dlg = wxFileDialog(self, self.dialogTitle, directory, current, self.fileMask, self.fileMode)
+    def OnBrowse (self, event = None):
+        """ Going to browse for file... """
+        current = self.GetValue()
+        directory = os.path.split(current)
+        if os.path.isdir( current):
+            directory = current
+            current = ''
+        elif directory and os.path.isdir( directory[0] ):
+            current = directory[1]
+            directory = directory [0]
+        else:
+            directory = self.startDirectory
+        dlg = wxFileDialog(self, self.dialogTitle, directory, current, self.fileMask, self.fileMode)
 
-         if dlg.ShowModal() == wxID_OK:
-             self.SetValue (dlg.GetPath())
-         dlg.Destroy()
+        if dlg.ShowModal() == wxID_OK:
+            self.SetValue (dlg.GetPath())
+        dlg.Destroy()
 
 
 
