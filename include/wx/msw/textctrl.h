@@ -13,15 +13,22 @@
 #define _WX_TEXTCTRL_H_
 
 #ifdef __GNUG__
-#pragma interface "textctrl.h"
+    #pragma interface "textctrl.h"
 #endif
 
+#include "wx/setup.h"
 #include "wx/control.h"
 
 #if wxUSE_IOSTREAMH
-#include <iostream.h>
+    #include <iostream.h>
 #else
-#include <iostream>
+    #include <iostream>
+#endif
+
+#if defined(__WIN95__) && !defined(__TWIN32__)
+    #define wxUSE_RICHEDIT 1
+#else
+    #define wxUSE_RICHEDIT 0
 #endif
 
 WXDLLEXPORT_DATA(extern const char*) wxTextCtrlNameStr;
@@ -138,8 +145,12 @@ public:
   // --------------
   virtual void Command(wxCommandEvent& event);
   virtual bool MSWCommand(WXUINT param, WXWORD id);
-  inline bool IsRich() const { return m_isRich; }
-  inline void SetRichEdit(bool isRich) { m_isRich = isRich; }
+
+#if wxUSE_RICHEDIT
+  bool IsRich() const { return m_isRich; }
+  void SetRichEdit(bool isRich) { m_isRich = isRich; }
+#endif
+
   virtual WXHBRUSH OnCtlColor(WXHDC pDC, WXHWND pWnd, WXUINT nCtlColor,
                               WXUINT message, WXWPARAM wParam,
                               WXLPARAM lParam);
@@ -149,7 +160,10 @@ public:
   virtual long MSWGetDlgCode();
   
 protected:
+#if wxUSE_RICHEDIT
   bool      m_isRich; // Are we using rich text edit to implement this?
+#endif
+
   wxString  m_fileName;
   
   DECLARE_EVENT_TABLE()
