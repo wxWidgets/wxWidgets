@@ -1,32 +1,102 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        postscrp.h
+// Name:        dcps.h
 // Purpose:     wxPostScriptDC class
 // Author:      Julian Smart and others
 // Modified by:
-// Created:     01/02/97
 // RCS-ID:      $Id$
-// Copyright:   (c) Julian Smart and Markus Holzem
+// Copyright:   (c) Julian Smart, Robert Roebling and Markus Holzem
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
-
-#ifdef __WXGTK__
-
-#include "wx/gtk/dcps.h"
-
-#else
 
 #ifndef _WX_POSTSCRPH__
 #define _WX_POSTSCRPH__
 
 #ifdef __GNUG__
-#pragma interface "postscrp.h"
+#pragma interface
 #endif
 
 #include "wx/dc.h"
 #include "wx/dialog.h"
 #include "wx/module.h"
+#include <fstream.h>
 
 #if wxUSE_POSTSCRIPT
+
+//-----------------------------------------------------------------------------
+// classes
+//-----------------------------------------------------------------------------
+
+class wxPostScriptModule;
+class wxPostScriptDC;
+class wxPostScriptPrintDialog;
+class wxPrintSetupData;
+class wxPrintPaperType;
+class wxPrintPaperDatabase;
+
+//-----------------------------------------------------------------------------
+// constants
+//-----------------------------------------------------------------------------
+
+#define wxID_PRINTER_COMMAND        1
+#define wxID_PRINTER_OPTIONS        2
+#define wxID_PRINTER_ORIENTATION    3
+#define wxID_PRINTER_MODES          4
+#define wxID_PRINTER_X_SCALE        5
+#define wxID_PRINTER_Y_SCALE        6
+#define wxID_PRINTER_X_TRANS        7
+#define wxID_PRINTER_Y_TRANS        8
+
+// Print Orientation (Should also add Left, Right)
+enum {
+  PS_PORTRAIT = 1,
+  PS_LANDSCAPE = 2
+};// ps_orientation = PS_PORTRAIT;
+
+// Print Actions
+enum {
+  PS_PRINTER,
+  PS_FILE,
+  PS_PREVIEW
+};// ps_action = PS_PREVIEW;
+
+//-----------------------------------------------------------------------------
+// global data
+//-----------------------------------------------------------------------------
+
+WXDLLEXPORT_DATA(extern wxPrintSetupData*) wxThePrintSetupData;
+WXDLLEXPORT_DATA(extern wxPrintPaperDatabase*) wxThePrintPaperDatabase;
+
+//-----------------------------------------------------------------------------
+// functions for compatibility
+//-----------------------------------------------------------------------------
+
+// PostScript printer settings
+WXDLLEXPORT void wxSetPrinterCommand(const char *cmd);
+WXDLLEXPORT void wxSetPrintPreviewCommand(const char *cmd);
+WXDLLEXPORT void wxSetPrinterOptions(const char *flags);
+WXDLLEXPORT void wxSetPrinterOrientation(int orientation);
+WXDLLEXPORT void wxSetPrinterScaling(double x, double y);
+WXDLLEXPORT void wxSetPrinterTranslation(long x, long y);
+WXDLLEXPORT void wxSetPrinterMode(int mode);
+WXDLLEXPORT void wxSetPrinterFile(const char *f);
+WXDLLEXPORT void wxSetAFMPath(const char *f);
+
+// Get current values
+WXDLLEXPORT char* wxGetPrinterCommand();
+WXDLLEXPORT char* wxGetPrintPreviewCommand();
+WXDLLEXPORT char* wxGetPrinterOptions();
+WXDLLEXPORT int wxGetPrinterOrientation();
+WXDLLEXPORT void wxGetPrinterScaling(double* x, double* y);
+WXDLLEXPORT void wxGetPrinterTranslation(long *x, long *y);
+WXDLLEXPORT int wxGetPrinterMode();
+WXDLLEXPORT char* wxGetPrinterFile();
+WXDLLEXPORT char* wxGetAFMPath();
+
+WXDLLEXPORT extern void wxInitializePrintSetupData(bool init = TRUE);
+
+//-----------------------------------------------------------------------------
+// wxPostScriptModule
+//-----------------------------------------------------------------------------
 
 // A module to allow initialization/cleanup of PostScript-related
 // things without calling these functions from app.cpp.
@@ -40,21 +110,16 @@ public:
     void OnExit();
 };
 
-#if wxUSE_IOSTREAMH
-#  include <fstream.h>
-#else
-#  include <fstream>
-#  ifdef _MSC_VER
-      using namespace std;
-#  endif
-#endif
+//-----------------------------------------------------------------------------
+// wxPostScriptDC
+//-----------------------------------------------------------------------------
 
 class WXDLLEXPORT wxPostScriptDC: public wxDC
 {
   DECLARE_DYNAMIC_CLASS(wxPostScriptDC)
 
- public:
-  // Create a printer DC
+public:
+
   wxPostScriptDC();
   wxPostScriptDC(const wxString& output, bool interactive = TRUE, wxWindow *parent = (wxWindow *) NULL);
 
@@ -91,16 +156,22 @@ class WXDLLEXPORT wxPostScriptDC: public wxDC
 
   void DrawSpline(wxList *points);
 
+  bool Blit(long xdest, long ydest, long width, long height,
+            wxDC *source, long xsrc, long ysrc, int rop = wxCOPY, bool useMask = FALSE);
+  inline bool CanDrawBitmap(void) const { return TRUE; }
+
   void DrawIcon( const wxIcon& icon, long x, long y );
   void DrawBitmap( const wxBitmap& bitmap, long x, long y, bool useMask=FALSE );
+  
+  
   void DrawText(const wxString& text, long x, long y, bool use16 = FALSE);
 
   void Clear();
-  void SetFont(const wxFont& font);
-  void SetPen(const wxPen& pen);
-  void SetBrush(const wxBrush& brush);
-  void SetLogicalFunction(int function);
-  void SetBackground(const wxBrush& brush);
+  void SetFont( const wxFont& font );
+  void SetPen( const wxPen& pen );
+  void SetBrush( const wxBrush& brush );
+  void SetLogicalFunction( int function );
+  void SetBackground( const wxBrush& brush );
   
   void SetClippingRegion(long x, long y, long width, long height);
   void SetClippingRegion( const wxRegion &region );
@@ -113,57 +184,39 @@ class WXDLLEXPORT wxPostScriptDC: public wxDC
 
   long GetCharHeight();
   long GetCharWidth();
+  inline bool CanGetTextExtent(void) const { return FALSE; }
   void GetTextExtent(const wxString& string, long *x, long *y,
                      long *descent = (long *) NULL,
                      long *externalLeading = (long *) NULL,
                      wxFont *theFont = (wxFont *) NULL, bool use16 = FALSE);
-  virtual void SetLogicalOrigin(long x, long y);
-  virtual void CalcBoundingBox(long x, long y);
-
-  void SetMapMode(int mode);
-  void SetUserScale(double x, double y);
-  long DeviceToLogicalX(int x) const;
-  long DeviceToLogicalY(int y) const;
-  long DeviceToLogicalXRel(int x) const;
-  long DeviceToLogicalYRel(int y) const;
-  long LogicalToDeviceX(long x) const;
-  long LogicalToDeviceY(long y) const;
-  long LogicalToDeviceXRel(long x) const;
-  long LogicalToDeviceYRel(long y) const;
-  bool Blit(long xdest, long ydest, long width, long height,
-            wxDC *source, long xsrc, long ysrc, int rop = wxCOPY, bool useMask = FALSE);
-  inline bool CanGetTextExtent(void) const { return FALSE; }
-  inline bool CanDrawBitmap(void) const { return FALSE; }
-
+		     
   void GetSize(int* width, int* height) const;
   void GetSizeMM(long *width, long *height) const;
 
+  void SetAxisOrientation( bool xLeftRight, bool yBottomUp );
+  void SetDeviceOrigin( long x, long y );
+  
   inline void SetBackgroundMode(int WXUNUSED(mode)) {};
   inline void SetPalette(const wxPalette& WXUNUSED(palette)) {}
   
   inline ofstream *GetStream(void) const { return m_pstream; }
-  inline int GetYOrigin(void) const { return m_yOrigin; }
-
-  void SetupCTM();
 
 protected:
-  int               m_yOrigin;          // For EPS
+
   ofstream *        m_pstream;    // PostScript output stream
   wxString          m_title;
   unsigned char     m_currentRed;
   unsigned char     m_currentGreen;
   unsigned char     m_currentBlue;
-  double            m_scaleFactor;
+  int               m_pageNumber;
+  bool              m_clipping;
+  double            m_underlinePosition;
+  double            m_underlineThickness;
 };
 
-#define wxID_PRINTER_COMMAND        1
-#define wxID_PRINTER_OPTIONS        2
-#define wxID_PRINTER_ORIENTATION    3
-#define wxID_PRINTER_MODES          4
-#define wxID_PRINTER_X_SCALE        5
-#define wxID_PRINTER_Y_SCALE        6
-#define wxID_PRINTER_X_TRANS        7
-#define wxID_PRINTER_Y_TRANS        8
+//-----------------------------------------------------------------------------
+// wxPostScriptPrintDialog
+//-----------------------------------------------------------------------------
 
 class WXDLLEXPORT wxPostScriptPrintDialog: public wxDialog
 {
@@ -176,41 +229,9 @@ public:
     virtual int ShowModal(void) ;
 };
 
-
-// Print Orientation (Should also add Left, Right)
-enum {
-  PS_PORTRAIT = 1,
-  PS_LANDSCAPE = 2
-};// ps_orientation = PS_PORTRAIT;
-
-// Print Actions
-enum {
-  PS_PRINTER,
-  PS_FILE,
-  PS_PREVIEW
-};// ps_action = PS_PREVIEW;
-
-// PostScript printer settings
-WXDLLEXPORT void wxSetPrinterCommand(const char *cmd);
-WXDLLEXPORT void wxSetPrintPreviewCommand(const char *cmd);
-WXDLLEXPORT void wxSetPrinterOptions(const char *flags);
-WXDLLEXPORT void wxSetPrinterOrientation(int orientation);
-WXDLLEXPORT void wxSetPrinterScaling(double x, double y);
-WXDLLEXPORT void wxSetPrinterTranslation(long x, long y);
-WXDLLEXPORT void wxSetPrinterMode(int mode);
-WXDLLEXPORT void wxSetPrinterFile(const char *f);
-WXDLLEXPORT void wxSetAFMPath(const char *f);
-
-// Get current values
-WXDLLEXPORT char* wxGetPrinterCommand();
-WXDLLEXPORT char* wxGetPrintPreviewCommand();
-WXDLLEXPORT char* wxGetPrinterOptions();
-WXDLLEXPORT int wxGetPrinterOrientation();
-WXDLLEXPORT void wxGetPrinterScaling(double* x, double* y);
-WXDLLEXPORT void wxGetPrinterTranslation(long *x, long *y);
-WXDLLEXPORT int wxGetPrinterMode();
-WXDLLEXPORT char* wxGetPrinterFile();
-WXDLLEXPORT char* wxGetAFMPath();
+//-----------------------------------------------------------------------------
+// wxPrintSetupData
+//-----------------------------------------------------------------------------
 
 /*
  * PostScript print setup information
@@ -271,8 +292,9 @@ private:
   DECLARE_DYNAMIC_CLASS(wxPrintSetupData)
 };
 
-WXDLLEXPORT_DATA(extern wxPrintSetupData*) wxThePrintSetupData;
-WXDLLEXPORT extern void wxInitializePrintSetupData(bool init = TRUE);
+//-----------------------------------------------------------------------------
+// wxPrintPaperType
+//-----------------------------------------------------------------------------
 
 /*
  * Again, this only really needed for non-Windows platforms
@@ -296,6 +318,10 @@ private:
     DECLARE_DYNAMIC_CLASS(wxPrintPaperType)
 };
 
+//-----------------------------------------------------------------------------
+// wxPrintPaperDataBase
+//-----------------------------------------------------------------------------
+
 class WXDLLEXPORT wxPrintPaperDatabase: public wxList
 {
 public:
@@ -312,15 +338,9 @@ private:
     DECLARE_DYNAMIC_CLASS(wxPrintPaperDatabase)
 };
 
-WXDLLEXPORT_DATA(extern wxPrintPaperDatabase*) wxThePrintPaperDatabase;
 
 #endif 
-      // wxUSE_POSTSCRIPT
+    // wxUSE_POSTSCRIPT
 
 #endif
         // _WX_POSTSCRPH__
-	
-#endif 
-        // __WXGTK__
-      
-	

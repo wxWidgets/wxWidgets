@@ -35,7 +35,6 @@ LIB_CPP_SRC=\
  common/module.cpp \
  common/object.cpp \
  common/odbc.cpp \
- common/postscrp.cpp \
  common/prntbase.cpp \
  common/resource.cpp \
  common/serbase.cpp \
@@ -83,6 +82,7 @@ LIB_CPP_SRC=\
  gtk/dc.cpp \
  gtk/dcclient.cpp \
  gtk/dcmemory.cpp \
+ gtk/dcps.cpp \
  gtk/dcscreen.cpp \
  gtk/dnd.cpp \
  gtk/dialog.cpp \

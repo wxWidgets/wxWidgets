@@ -124,11 +124,17 @@ bool wxPostScriptPrinter::Print(wxWindow *parent, wxPrintout *printout, bool pro
   int logPPIPrinterX = 0;
   int logPPIPrinterY = 0;
 
-  // Correct values for X/PostScript?
   logPPIScreenX = 100;
   logPPIScreenY = 100;
+  
+/*
+  // Correct values for X/PostScript?
   logPPIPrinterX = 100;
   logPPIPrinterY = 100;
+*/
+
+  logPPIPrinterX = 72;
+  logPPIPrinterY = 72;
 
   printout->SetPPIScreen(logPPIScreenX, logPPIScreenY);
   printout->SetPPIPrinter(logPPIPrinterX, logPPIPrinterY);
@@ -238,7 +244,8 @@ void wxPostScriptPrintPreview::DetermineScaling(void)
     if (paper)
     {
       m_previewPrintout->SetPPIScreen(100, 100);
-      m_previewPrintout->SetPPIPrinter(100, 100);
+//      m_previewPrintout->SetPPIPrinter(100, 100);
+      m_previewPrintout->SetPPIPrinter(72, 72);
 
       // If in landscape mode, we need to swap the width and height.
       if ( m_printData.GetOrientation() == wxLANDSCAPE )

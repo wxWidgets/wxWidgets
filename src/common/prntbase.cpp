@@ -708,7 +708,7 @@ bool wxPrintPreviewBase::DrawBlankPage(wxWindow *canvas, wxDC& dc)
 /*
   dc.DrawRectangle((int)(x-1 + shadowOffset), (int)(y-1 + shadowOffset), (int)(actualWidth+2), (int)(actualHeight+2));
 */
-  dc.DrawRectangle((int)(x + shadowOffset), (int)(y + actualHeight), (int)(actualWidth), shadowOffset);
+  dc.DrawRectangle((int)(x + shadowOffset), (int)(y + actualHeight+1), (int)(actualWidth), shadowOffset);
   dc.DrawRectangle((int)(x + actualWidth), (int)(y + shadowOffset), shadowOffset, (int)(actualHeight));
 
   // Draw blank page allowing for 1-pixel border AROUND the actual page
@@ -722,7 +722,7 @@ bool wxPrintPreviewBase::DrawBlankPage(wxWindow *canvas, wxDC& dc)
   printf( "x: %d y: %d w: %d h: %d.\n", (int)r.x, (int)r.y, (int)r.width, (int)r.height );
 */
   
-  dc.DrawRectangle((int)(x-1), (int)(y-1), (int)(actualWidth+2), (int)(actualHeight+2));
+  dc.DrawRectangle((int)(x-2), (int)(y-1), (int)(actualWidth+3), (int)(actualHeight+2));
   
   return TRUE;
 }

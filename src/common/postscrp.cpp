@@ -2594,6 +2594,15 @@ void wxPrintPaperDatabase::CreateDatabase()
   AddPaperType(_("A3 297 x 420 mm"), 297, 420,         842, 1191);
   AddPaperType(_("Letter 8 1/2 x 11 in"), 216, 279,    612, 791);
   AddPaperType(_("Legal 8 1/2 x 14 in"), 216, 356,     612, 1009);
+  
+/*
+  This is for 100 ppi
+
+  AddPaperType(_("A4 210 x 297 mm"), 210, 297,         210*4, 297*4 );
+  AddPaperType(_("A3 297 x 420 mm"), 297, 420,         297*4, 420*4 );
+  AddPaperType(_("Letter 8 1/2 x 11 in"), 216, 279,    216*4, 279*4 );
+  AddPaperType(_("Legal 8 1/2 x 14 in"), 216, 356,     216*4, 356*4 );
+*/
 }
 
 void wxPrintPaperDatabase::ClearDatabase()

@@ -143,10 +143,10 @@ void wxWindowDC::DrawLine( long x1, long y1, long x2, long y2 )
     {
         gdk_draw_line( m_window, m_penGC, 
                        XLOG2DEV(x1), YLOG2DEV(y1), XLOG2DEV(x2), YLOG2DEV(y2) );
+		       
+        CalcBoundingBox(x1, y1);
+        CalcBoundingBox(x2, y2);
     }
-    
-    CalcBoundingBox(x1, y1);
-    CalcBoundingBox(x2, y2);
 }
 
 void wxWindowDC::CrossHair( long x, long y )
@@ -487,7 +487,7 @@ void wxWindowDC::DrawEllipse( long x, long y, long width, long height )
     if (m_pen.GetStyle() != wxTRANSPARENT)
         gdk_draw_arc( m_window, m_penGC, FALSE, xx, yy, ww, hh, 0, 360*64 );
 	
-    CalcBoundingBox( x, y );
+    CalcBoundingBox( x - width, y - height );
     CalcBoundingBox( x + width, y + height );
 }
 

@@ -383,6 +383,7 @@ bool MyPrintout::OnPrintPage(int page)
       DrawPageTwo(dc);
 
     dc->SetDeviceOrigin(0, 0);
+    dc->SetUserScale(1.0, 1.0);
 
     char buf[200];
     sprintf(buf, "PAGE %d", page);
@@ -499,8 +500,8 @@ void MyPrintout::DrawPageTwo(wxDC *dc)
   float logUnitsFactor = (float)(ppiPrinterX/(scale*25.1));
   float logUnits = (float)(50*logUnitsFactor);
   dc->SetPen(* wxBLACK_PEN);
-  dc->DrawLine(50, 50, (long)(50.0 + logUnits), 50);
-  dc->DrawLine(50, 50, 50, (long)(50.0 + logUnits));
+  dc->DrawLine(50, 250, (long)(50.0 + logUnits), 250);
+  dc->DrawLine(50, 250, 50, (long)(250.0 + logUnits));
 
   dc->SetFont(* wxGetApp().m_testFont);
   dc->SetBackgroundMode(wxTRANSPARENT);
@@ -522,7 +523,7 @@ void MyPrintout::DrawPageTwo(wxDC *dc)
   float bottomMarginLogical = (float)(logUnitsFactor*(pageHeightMM - bottomMargin));
   float rightMarginLogical = (float)(logUnitsFactor*(pageWidthMM - rightMargin));
 
-  dc->SetPen(wxBLACK_PEN);
+  dc->SetPen(wxRED_PEN);
   dc->DrawLine( (long)leftMarginLogical, (long)topMarginLogical, 
                 (long)rightMarginLogical, (long)topMarginLogical);
   dc->DrawLine( (long)leftMarginLogical, (long)bottomMarginLogical, 
@@ -534,12 +535,14 @@ void MyPrintout::DrawPageTwo(wxDC *dc)
 // Writes a header on a page. Margin units are in millimetres.
 bool WritePageHeader(wxPrintout *printout, wxDC *dc, char *text, float mmToLogical)
 {
+/*
   static wxFont *headerFont = (wxFont *) NULL;
   if (!headerFont)
   {
     headerFont = wxTheFontList->FindOrCreateFont(16, wxSWISS, wxNORMAL, wxBOLD);
   }
   dc->SetFont(headerFont);
+*/
 
   int pageWidthMM, pageHeightMM;
   
