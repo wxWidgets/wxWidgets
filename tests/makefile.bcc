@@ -31,7 +31,8 @@ TEST_CXXFLAGS = $(__RUNTIME_LIBS_6) -I$(BCCDIR)\include $(__DEBUGINFO) \
 	$(__DLLFLAG_p) $(CPPUNIT_CFLAGS) $(CPPFLAGS) $(CXXFLAGS)
 TEST_OBJECTS =  \
 	$(OBJS)\test_test.obj \
-	$(OBJS)\test_main.obj
+	$(OBJS)\test_main.obj \
+	$(OBJS)\test_regex.obj
 
 ### Conditionally set variables: ###
 
@@ -155,4 +156,7 @@ $(OBJS)\test_test.obj: .\test.cpp
 	$(CXX) -q -c -P -o$@ $(TEST_CXXFLAGS) $**
 
 $(OBJS)\test_main.obj: .\mbconv\main.cpp
+	$(CXX) -q -c -P -o$@ $(TEST_CXXFLAGS) $**
+
+$(OBJS)\test_regex.obj: .\regex\regex.cpp
 	$(CXX) -q -c -P -o$@ $(TEST_CXXFLAGS) $**

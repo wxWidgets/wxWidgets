@@ -439,6 +439,10 @@ SOURCE=.\mbconv\main.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\regex\regex.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\test.cpp
 # End Source File
 # End Group

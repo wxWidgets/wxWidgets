@@ -24,7 +24,8 @@ TEST_CXXFLAGS = /M$(__RUNTIME_LIBS_7)$(__DEBUGRUNTIME_3) /DWIN32 \
 	$(__EXCEPTIONSFLAG_9) $(CPPFLAGS) $(CXXFLAGS)
 TEST_OBJECTS =  \
 	$(OBJS)\test_test.obj \
-	$(OBJS)\test_main.obj
+	$(OBJS)\test_main.obj \
+	$(OBJS)\test_regex.obj
 
 ### Conditionally set variables: ###
 
@@ -211,4 +212,7 @@ $(OBJS)\test_test.obj: .\test.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(TEST_CXXFLAGS) $**
 
 $(OBJS)\test_main.obj: .\mbconv\main.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(TEST_CXXFLAGS) $**
+
+$(OBJS)\test_regex.obj: .\regex\regex.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(TEST_CXXFLAGS) $**

@@ -22,7 +22,8 @@ TEST_CXXFLAGS = $(__DEBUGINFO) $(__OPTIMIZEFLAG_2) $(GCCFLAGS) -DHAVE_W32API_H \
 	$(__EXCEPTIONSFLAG_4) $(__EXCEPTIONSFLAG_5) $(CPPFLAGS) $(CXXFLAGS)
 TEST_OBJECTS =  \
 	$(OBJS)\test_test.o \
-	$(OBJS)\test_main.o
+	$(OBJS)\test_main.o \
+	$(OBJS)\test_regex.o
 
 ### Conditionally set variables: ###
 
@@ -149,6 +150,9 @@ $(OBJS)\test_test.o: ./test.cpp
 	$(CXX) -c -o $@ $(TEST_CXXFLAGS) $<
 
 $(OBJS)\test_main.o: ./mbconv/main.cpp
+	$(CXX) -c -o $@ $(TEST_CXXFLAGS) $<
+
+$(OBJS)\test_regex.o: ./regex/regex.cpp
 	$(CXX) -c -o $@ $(TEST_CXXFLAGS) $<
 
 .PHONY: all clean

@@ -10,6 +10,7 @@
         <sources>
             test.cpp
             mbconv/main.cpp
+            regex/regex.cpp
         </sources>
         <wx-lib>base</wx-lib>
     </exe>
