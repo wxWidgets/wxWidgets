@@ -1,6 +1,6 @@
 #----------------------------------------------------------------------
-# Name:        wxPython.lib.dialogs
-# Purpose:     wxScrolledMessageDialog, wxMultipleChoiceDialog and
+# Name:        wx.lib.dialogs
+# Purpose:     ScrolledMessageDialog, MultipleChoiceDialog and
 #              function wrappers for the common dialogs by Kevin Altis.
 #
 # Author:      Various
@@ -155,8 +155,8 @@ def findDialog(parent=None, searchText='', wholeWordsOnly=0, caseSensitive=0):
     wx.StaticText(dlg, -1, 'Find what:', (7, 10))
     wSearchText = wx.TextCtrl(dlg, -1, searchText, (70, 7), (195, -1))
     wSearchText.SetValue(searchText)
-    wx.wxButton(dlg, wx.ID_OK, "Find Next", (280, 5), wx.DefaultSize).SetDefault()
-    wx.wxButton(dlg, wx.ID_CANCEL, "Cancel", (280, 35), wx.DefaultSize)
+    wx.Button(dlg, wx.ID_OK, "Find Next", (280, 5), wx.DefaultSize).SetDefault()
+    wx.Button(dlg, wx.ID_CANCEL, "Cancel", (280, 35), wx.DefaultSize)
     wWholeWord = wx.CheckBox(dlg, -1, 'Match whole word only',
                             (7, 35), wx.DefaultSize, wx.NO_BORDER)
 
@@ -218,6 +218,8 @@ def colourDialog(parent=None, colourData=None, colour=None):
 def fontDialog(parent=None, fontData=None, font=None):
     if fontData is None:
         fontData = wx.FontData()
+        fontData.SetColour(wx.BLACK)
+        fontData.SetInitialFont(wx.SystemSettings.GetFont(wx.SYS_DEFAULT_GUI_FONT))
 
     if font is not None:
         aFontData.SetInitialFont(font)
@@ -337,14 +339,16 @@ def multipleChoiceDialog(parent=None, message='', title='', lst=[], pos=wx.Defau
 
 
 if __name__ == '__main__':
+    #import os
+    #print os.getpid()
+    
     class MyApp(wx.App):
 
         def OnInit(self):
-            frame = wx.Frame(None, -1, "Dialogs", size=(400, 200))
+            self.frame = frame = wx.Frame(None, -1, "Dialogs", size=(400, 200))
             panel = wx.Panel(frame, -1)
             self.panel = panel
 
-            frame.Show(1)
 
             dialogNames = [
                 'alertDialog',
@@ -361,15 +365,26 @@ if __name__ == '__main__':
                 'singleChoiceDialog',
                 'textEntryDialog',
             ]
-            self.nameList = wx.ListBox(panel, -1, (0, 0), (130, 180), dialogNames, style=wx.LB_SINGLE)
-            self.Bind(wx.EVT_LISTBOX, self.OnNameListSelected, id=self.nameList.GetId())
+
+            self.nameList = wx.ListBox(panel, -1,
+                                       size=(130, 180),
+                                       choices=dialogNames,
+                                       style=wx.LB_SINGLE)
+            self.Bind(wx.EVT_LISTBOX, self.OnNameListSelected, self.nameList)
 
             tstyle = wx.TE_RICH2 | wx.TE_PROCESS_TAB | wx.TE_MULTILINE
-            self.text1 = wx.TextCtrl(panel, -1, pos=(150, 0), size=(200, 180), style=tstyle)
+            self.text1 = wx.TextCtrl(panel, -1, size=(200, 180), style=tstyle)
+
+            sizer = wx.BoxSizer(wx.HORIZONTAL)
+            sizer.Add(self.nameList, 0, wx.EXPAND|wx.ALL, 20)
+            sizer.Add(self.text1, 1,  wx.EXPAND|wx.ALL, 20)
+
+            panel.SetSizer(sizer)
 
             self.SetTopWindow(frame)
-
+            frame.Show(1)
             return 1
+
 
         def OnNameListSelected(self, evt):
             import pprint
@@ -390,8 +405,8 @@ if __name__ == '__main__':
                 result = fontDialog()
             elif sel == 'messageDialog':
                 result = messageDialog(None, 'Hello from Python and wxPython!',
-                          'A Message Box', wx.wxOK | wx.wxICON_INFORMATION)
-                          #wx.wxYES_NO | wx.wxNO_DEFAULT | wx.wxCANCEL | wx.wxICON_INFORMATION)
+                          'A Message Box', wx.OK | wx.ICON_INFORMATION)
+                          #wx.YES_NO | wx.NO_DEFAULT | wx.CANCEL | wx.ICON_INFORMATION)
                 #result = messageDialog(None, 'message', 'title')
             elif sel == 'multipleChoiceDialog':
                 result = multipleChoiceDialog(None, "message", "title", ['one', 'two', 'three'])
