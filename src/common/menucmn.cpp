@@ -132,7 +132,13 @@ wxAcceleratorEntry *wxGetAccelFromString(const wxString& label)
         else {
             if ( current.Len() == 1 ) {
                 // it's a letter
-                keyCode = wxToupper(current[0U]);
+                keyCode = current[0U];
+
+                // Only call wxToupper if control, alt, or shift is held down,
+                // otherwise lower case accelerators won't work.
+                if (accelFlags != wxACCEL_NORMAL) {
+                    keyCode = wxToupper(keyCode);
+                }
             }
             else {
                 // is it a function key?
