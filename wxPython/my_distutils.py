@@ -349,7 +349,15 @@ class MyBCPPCompiler(BCPPCompiler):
 
 from distutils import ccompiler
 
-ccompiler.default_compiler['nt'] = 'my_msvc'
+if hasattr(ccompiler, "default_compiler"):
+    ccompiler.default_compiler['nt'] = 'my_msvc'
+elif hasattr(ccompiler, "_default_compilers"):
+    lst = list(ccompiler._default_compilers)
+    lst.remove( ('nt', 'msvc') )
+    lst.append( ('nt', 'my_msvc') )
+    ccompiler._default_compilers = tuple(lst)
+
+
 ccompiler.compiler_class['my_msvc'] = ('my_distutils',
                                        'MyMSVCCompiler',
                                        'My MSVC derived class')
@@ -362,6 +370,52 @@ ccompiler.compiler_class['my_bcpp'] = ('my_distutils',
 # make it look like it is part of the package...
 import my_distutils
 sys.modules['distutils.my_distutils'] = my_distutils
+
+
+#----------------------------------------------------------------------
+# More hacking...  Distutils in Python 2.1 changed the strip_dir flag
+# passed to object_filenames to true, which causes problems for us since
+# there are a few duplicate source/object names between some of the
+# extensions in wxPython.  This hack replaces the CCompiler._prep_compile
+# method with this one.
+
+from distutils.dep_util import newer_pairwise
+
+def _prep_compile (self, sources, output_dir):
+    """Determine the list of object files corresponding to 'sources',
+    and figure out which ones really need to be recompiled.  Return a
+    list of all object files and a dictionary telling which source
+    files can be skipped.
+    """
+    # Get the list of expected output (object) files
+    objects = self.object_filenames (sources,
+                                     strip_dir=0,
+                                     output_dir=output_dir)
+
+    if self.force:
+        skip_source = {}            # rebuild everything
+        for source in sources:
+            skip_source[source] = 0
+    else:
+        # Figure out which source files we have to recompile according
+        # to a simplistic check -- we just compare the source and
+        # object file, no deep dependency checking involving header
+        # files.
+        skip_source = {}            # rebuild everything
+        for source in sources:      # no wait, rebuild nothing
+            skip_source[source] = 1
+
+        (n_sources, n_objects) = newer_pairwise (sources, objects)
+        for source in n_sources:    # no really, only rebuild what's
+            skip_source[source] = 0 # out-of-date
+
+    return (objects, skip_source)
+
+# _prep_compile ()
+
+CCompiler._prep_compile = _prep_compile
+
+
 
 
 #----------------------------------------------------------------------

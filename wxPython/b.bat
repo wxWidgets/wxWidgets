@@ -5,7 +5,7 @@ set FLAGS=USE_SWIG=1 IN_CVS_TREE=1
 
 
 rem  Use non-default python?
-iff "%1" == "15" .or. "%1" == "20" then
+iff "%1" == "15" .or. "%1" == "20" .or. "%1" == "21" then
 	set SETUP=c:\tools\python%1%\python.exe -u setup.py
 	shift
 else
