@@ -216,12 +216,17 @@ bool wxFile::Open(const wxChar *szFileName, OpenMode mode, int accessMode)
             flags |= O_RDONLY;
             break;
 
+        case write_append:
+            if ( wxFile::Exists(szFileName) )
+            {
+                flags |= O_WRONLY | O_APPEND;
+                break;
+            }
+            //else: fall through as write_append is the same as write if the
+            //      file doesn't exist
+
         case write:
             flags |= O_WRONLY | O_CREAT | O_TRUNC;
-            break;
-
-        case write_append:
-            flags |= O_WRONLY | O_CREAT | O_APPEND;
             break;
 
         case read_write:
