@@ -12,7 +12,7 @@
 #define _WX_HTMPRINT_H_
 
 #ifdef __GNUG__
-#pragma interface
+#pragma interface "htmprint.h"
 #endif
 
 #include <wx/defs.h>
@@ -33,46 +33,47 @@
 
 class WXDLLEXPORT wxHtmlDCRenderer : public wxObject
 {
-    public:
-        wxHtmlDCRenderer();
-        ~wxHtmlDCRenderer();
-        
-        // Following 3 methods *must* be called before any call to Render:
-        void SetDC(wxDC *dc, double pixel_scale = 1.0);
-                // asign DC to this render
-        void SetSize(int width, int height);
-                // sets size of output rectangle, in pixels. Note that you *can't* change
-                // width of the rectangle between calls to Render! (You can freely change height.)
-        void SetHtmlText(const wxString& html, const wxString& basepath = wxEmptyString, bool isdir = TRUE);
-                // sets the text to be displayed
-                //
-                // basepath is base directory (html string would be stored there if it was in
-                // file). It is used to determine path for loading images, for example.
-                // isdir is FALSE if basepath is filename, TRUE if it is directory name
-                // (see wxFileSystem for detailed explanation)
-                                
-        int Render(int x, int y, int from = 0, int dont_render = FALSE);
-                // [x,y] is position of upper-left corner of printing rectangle (see SetSize)
-                // from is y-coordinate of the very first visible cell 
-                // Returned value is y coordinate of first cell than didn't fit onto page.
-                // Use this value as 'from' in next call to Render in order to print multiple pages
-                // document
-                // If dont_render is TRUE then nothing is rendered into DC and it only counts
-                // pixels and return y coord of the next page
-                //
-                // CAUTION! Render() changes DC's user scale and does NOT restore it! 
-                
-        int GetTotalHeight();
-                // returns total height of the html document
-                // (compare Render's return value with this)
-        
-    private:
-    
-        wxDC *m_DC;
-        wxHtmlWinParser *m_Parser;
-        wxFileSystem *m_FS;
-        wxHtmlContainerCell *m_Cells;
-        int m_MaxWidth, m_Width, m_Height;
+public:
+    wxHtmlDCRenderer();
+    ~wxHtmlDCRenderer();
+
+    // Following 3 methods *must* be called before any call to Render:
+
+    // Asign DC to this render
+    void SetDC(wxDC *dc, double pixel_scale = 1.0);
+
+    // Sets size of output rectangle, in pixels. Note that you *can't* change
+    // width of the rectangle between calls to Render! (You can freely change height.)
+    void SetSize(int width, int height);
+
+    // Sets the text to be displayed.
+    // Basepath is base directory (html string would be stored there if it was in
+    // file). It is used to determine path for loading images, for example.
+    // isdir is FALSE if basepath is filename, TRUE if it is directory name
+    // (see wxFileSystem for detailed explanation)
+    void SetHtmlText(const wxString& html, const wxString& basepath = wxEmptyString, bool isdir = TRUE);
+
+    // [x,y] is position of upper-left corner of printing rectangle (see SetSize)
+    // from is y-coordinate of the very first visible cell 
+    // Returned value is y coordinate of first cell than didn't fit onto page.
+    // Use this value as 'from' in next call to Render in order to print multiple pages
+    // document
+    // If dont_render is TRUE then nothing is rendered into DC and it only counts
+    // pixels and return y coord of the next page
+    //
+    // CAUTION! Render() changes DC's user scale and does NOT restore it! 
+    int Render(int x, int y, int from = 0, int dont_render = FALSE);
+
+    // returns total height of the html document
+    // (compare Render's return value with this)
+    int GetTotalHeight();
+
+private:
+    wxDC *m_DC;
+    wxHtmlWinParser *m_Parser;
+    wxFileSystem *m_FS;
+    wxHtmlContainerCell *m_Cells;
+    int m_MaxWidth, m_Width, m_Height;
 };
 
 

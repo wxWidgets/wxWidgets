@@ -12,7 +12,7 @@
 #define _WX_HTMLPARS_H_
 
 #ifdef __GNUG__
-#pragma interface
+#pragma interface "htmlpars.h"
 #endif
 
 #include "wx/defs.h"

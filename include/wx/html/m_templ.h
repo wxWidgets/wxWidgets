@@ -27,7 +27,7 @@ I STRONGLY recommend reading and understanding these macros!!
 
 
 #ifdef __GNUG__
-#pragma interface
+#pragma interface "m_templ.h"
 #pragma implementation
 #endif
 
