@@ -906,23 +906,18 @@ extern GdkFont *GtkGetDefaultGuiFont()
 
 GdkFont *wxFont::GetInternalFont( float scale ) const
 {
+#ifdef __WXGTK20__
+    // Deprecated for GTK 2.0 and should be removed
+    // in the 2.5 tree.
+    wxFAIL_MSG( wxT("No longer used") );
+    
+    return (GdkFont *) NULL;
+    
+#else // GTK 1.x
     GdkFont *font = (GdkFont *) NULL;
 
     wxCHECK_MSG( Ok(), font, wxT("invalid font") )
 
-#ifdef __WXGTK20__
-    if (*this == wxSystemSettings::GetFont( wxSYS_DEFAULT_GUI_FONT))
-    {
-        font = GtkGetDefaultGuiFont();
-    }
-    else
-    {
-        PangoFontDescription *
-            font_description = GetNativeFontInfo()->description;
-
-        font = gdk_font_from_description( font_description );
-    }
-#else // GTK 1.x
     long int_scale = long(scale * 100.0 + 0.5); // key for fontlist
     int point_scale = (int)((M_FONTDATA->m_pointSize * 10 * int_scale) / 100);
 
@@ -971,12 +966,12 @@ GdkFont *wxFont::GetInternalFont( float scale ) const
             list[int_scale] = font;
         }
     }
-#endif  // GTK 2.0/1.x
 
     // it's quite useless to make it a wxCHECK because we're going to crash
     // anyhow...
     wxASSERT_MSG( font, wxT("could not load any font?") );
 
     return font;
+#endif  // GTK 2.0/1.x
 }
 

@@ -1492,6 +1492,10 @@ void wxWindowDC::DoDrawRotatedText( const wxString &text, wxCoord x, wxCoord y, 
 
     if (!m_window) return;
 
+#ifdef __WXGTK20__
+    // implement later without GdkFont for GTK 2.0
+    return;
+#endif
     GdkFont *font = m_font.GetInternalFont( m_scaleY );
 
     wxCHECK_RET( font, wxT("invalid font") );

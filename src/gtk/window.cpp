@@ -3420,9 +3420,31 @@ int wxWindowGTK::GetCharHeight() const
 
     wxCHECK_MSG( m_font.Ok(), 12, wxT("invalid font") );
 
+#ifdef __WXGTK20__
+    PangoContext *context = NULL;
+    if (m_widget)
+        context = gtk_widget_get_pango_context( m_widget );
+
+    if (!context)
+        return 0;
+
+    PangoFontDescription *desc = m_font.GetNativeFontInfo()->description;
+    PangoLayout *layout = pango_layout_new(context);
+    pango_layout_set_font_description(layout, desc);
+    pango_layout_set_text(layout, "H", 1);
+    PangoLayoutLine *line = (PangoLayoutLine *)pango_layout_get_lines(layout)->data;
+
+    PangoRectangle rect;
+    pango_layout_line_get_extents(line, NULL, &rect);
+
+    g_object_unref( G_OBJECT( layout ) );
+    
+    return (int) (rect.height / PANGO_SCALE);
+#else
     GdkFont *font = m_font.GetInternalFont( 1.0 );
 
     return font->ascent + font->descent;
+#endif
 }
 
 int wxWindowGTK::GetCharWidth() const
@@ -3431,9 +3453,31 @@ int wxWindowGTK::GetCharWidth() const
 
     wxCHECK_MSG( m_font.Ok(), 8, wxT("invalid font") );
 
+#ifdef __WXGTK20__
+    PangoContext *context = NULL;
+    if (m_widget)
+        context = gtk_widget_get_pango_context( m_widget );
+
+    if (!context)
+        return 0;
+
+    PangoFontDescription *desc = m_font.GetNativeFontInfo()->description;
+    PangoLayout *layout = pango_layout_new(context);
+    pango_layout_set_font_description(layout, desc);
+    pango_layout_set_text(layout, "H", 1);
+    PangoLayoutLine *line = (PangoLayoutLine *)pango_layout_get_lines(layout)->data;
+
+    PangoRectangle rect;
+    pango_layout_line_get_extents(line, NULL, &rect);
+
+    g_object_unref( G_OBJECT( layout ) );
+    
+    return (int) (rect.width / PANGO_SCALE);
+#else
     GdkFont *font = m_font.GetInternalFont( 1.0 );
 
     return gdk_string_width( font, "H" );
+#endif
 }
 
 void wxWindowGTK::GetTextExtent( const wxString& string,
