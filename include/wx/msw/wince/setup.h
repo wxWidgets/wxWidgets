@@ -371,7 +371,7 @@
 #define wxUSE_DYNAMIC_LOADER  0
 
 // Set to 1 to use socket classes
-#define wxUSE_SOCKETS       0
+#define wxUSE_SOCKETS       1
 
 // Set to 1 to enable virtual file systems (required by wxHTML)
 #define wxUSE_FILESYSTEM    1

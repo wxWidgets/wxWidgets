@@ -23,6 +23,10 @@
 
 #include "wx/msw/wrapwin.h"
 
+#ifdef __WXWINCE__
+#include <winsock.h>
+#endif
+
 class GSocketGUIFunctionsTableConcrete: public GSocketGUIFunctionsTable
 {
 public:
