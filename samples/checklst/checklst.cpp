@@ -46,7 +46,7 @@ class CheckListBoxFrame : public wxFrame
 {
 public:
     // ctor & dtor
-    CheckListBoxFrame(wxFrame *frame, const char *title,
+    CheckListBoxFrame(wxFrame *frame, const wxChar *title,
                       int x, int y, int w, int h);
     virtual ~CheckListBoxFrame();
 
