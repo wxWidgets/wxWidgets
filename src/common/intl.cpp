@@ -105,6 +105,11 @@ const size_t32 MSGCATALOG_MAGIC_SW = 0xde120495;
 // extension of ".mo" files
 #define MSGCATALOG_EXTENSION  _T(".mo")
 
+// the constants describing the format of lang_LANG locale string
+static const size_t LEN_LANG = 2;
+static const size_t LEN_SUBLANG = 2;
+static const size_t LEN_FULL = LEN_LANG + 1 + LEN_SUBLANG; // 1 for '_'
+
 // ----------------------------------------------------------------------------
 // global functions
 // ----------------------------------------------------------------------------
@@ -138,6 +143,23 @@ public:
 #endif // Debug/!Debug
 
 static wxLocale *wxSetLocale(wxLocale *pLocale);
+
+// helper functions of GetSystemLanguage()
+#ifdef __UNIX__
+
+// get just the language part
+static inline wxString ExtractLang(const wxString& langFull)
+{
+    return langFull.Left(LEN_LANG);
+}
+
+// get everything else (including the leading '_')
+static inline wxString ExtractNotLang(const wxString& langFull)
+{
+    return langFull.Mid(LEN_LANG);
+}
+
+#endif // __UNIX__
 
 // ----------------------------------------------------------------------------
 // wxMsgCatalog corresponds to one disk-file message catalog.
@@ -537,8 +559,6 @@ void wxMsgCatalog::ConvertEncoding()
 WX_DECLARE_EXPORTED_OBJARRAY(wxLanguageInfo, wxLanguageInfoArray);
 WX_DEFINE_OBJARRAY(wxLanguageInfoArray);
 
-
-
 wxLocale::wxLocale()
 {
   m_pszOldLocale = NULL;
@@ -589,8 +609,6 @@ bool wxLocale::Init(const wxChar *szName,
   return bOk;
 }
 
-
-
 bool wxLocale::Init(int language, int flags)
 {
     wxLanguageInfo *info = NULL;
@@ -602,8 +620,19 @@ bool wxLocale::Init(int language, int flags)
         InitLanguagesDB();
     }
 
-    if (lang == wxLANGUAGE_DEFAULT) lang = GetSystemLanguage();  
-    if (lang != wxLANGUAGE_UNKNOWN)
+    if (lang == wxLANGUAGE_DEFAULT)
+    {
+        // auto detect the language
+        lang = GetSystemLanguage();
+    }
+
+    // We failed to detect system language, so we will use English:
+    if (lang == wxLANGUAGE_UNKNOWN)
+    {
+       return FALSE;
+    }
+
+    if (lang != wxLANGUAGE_DEFAULT)
     {
         for (size_t i = 0; i < m_languagesDB->GetCount(); i++)
         {
@@ -615,11 +644,6 @@ bool wxLocale::Init(int language, int flags)
         }
     }
 
-    // We failed to detect system language, so we will use English:
-    if (lang == wxLANGUAGE_UNKNOWN)
-    {
-       return FALSE;
-    }
     // Unknown language:
     if (info == NULL)
     {
@@ -631,11 +655,13 @@ bool wxLocale::Init(int language, int flags)
     wxString canonical = info->CanonicalName;
     wxString locale;
     wxChar *retloc;
-    
+
     // Set the locale:
 #ifdef __UNIX__
-    if (language == wxLANGUAGE_DEFAULT) locale = wxEmptyString;
-    else locale = info->CanonicalName;
+    if (language == wxLANGUAGE_DEFAULT)
+        locale = wxEmptyString;
+    else
+        locale = info->CanonicalName;
 
     retloc = wxSetlocale(LC_ALL, locale);
 
@@ -665,7 +691,6 @@ bool wxLocale::Init(int language, int flags)
         wxLogError(wxT("Cannot set locale to '%s'."), locale.c_str());
         return FALSE;
     }
-
 #elif defined(__WIN32__)
     if (language != wxLANGUAGE_DEFAULT)
     {
@@ -675,8 +700,8 @@ bool wxLocale::Init(int language, int flags)
             retloc = wxT("C");
         }
         else
-        {       
-            wxUint32 lcid = MAKELCID(MAKELANGID(info->WinLang, info->WinSublang), 
+        {
+            wxUint32 lcid = MAKELCID(MAKELANGID(info->WinLang, info->WinSublang),
                                      SORT_DEFAULT);
             if (SetThreadLocale(lcid))
                 retloc = wxSetlocale(LC_ALL, wxEmptyString);
@@ -713,11 +738,11 @@ bool wxLocale::Init(int language, int flags)
         wxLogError(wxT("Cannot set locale to language %s."), name.c_str());
         return FALSE;
     }
-    
+
 #else
     return FALSE;
 #endif
-    
+
     return Init(name, canonical, wxString(retloc),
                 (flags & wxLOCALE_LOAD_DEFAULT) != 0,
                 (flags & wxLOCALE_CONV_ENCODING) != 0);
@@ -734,110 +759,152 @@ void wxLocale::AddCatalogLookupPathPrefix(const wxString& prefix)
     //else: already have it
 }
 
-
 int wxLocale::GetSystemLanguage() const
 {
-    int wxlang = wxLANGUAGE_UNKNOWN;
-    size_t i;
+    wxCHECK_MSG( m_languagesDB != NULL, wxLANGUAGE_UNKNOWN,
+                 _T("Languages DB not initialized, call wxLocale::Init!") );
 
-    wxASSERT_MSG(m_languagesDB != NULL, "Languages DB not initialized, call wxLocale::Init!");
-    
+    // init i to avoid compiler warning
+    size_t i = 0,
+           count = m_languagesDB->GetCount();
+
 #if defined(__UNIX__)
-    wxString lang;
-    if (!wxGetEnv(wxT("LC_ALL"), &lang) && 
-        !wxGetEnv(wxT("LC_MESSAGES"), &lang) &&
-        !wxGetEnv(wxT("LANG"), &lang))         
+    // first get the string identifying the language from the environment
+    wxString langFull;
+    if (!wxGetEnv(wxT("LC_ALL"), &langFull) &&
+        !wxGetEnv(wxT("LC_MESSAGES"), &langFull) &&
+        !wxGetEnv(wxT("LANG"), &langFull))
+    {
+        // no language specified
         return wxLANGUAGE_UNKNOWN;
-
-    bool is_abbrev = lang.Len() == 2 || 
-                     (lang.Len() == 5 && lang[2] == wxT('_'));
-        
-    // 0. Make sure the abbrev is according to latest ISO 639
-    //    (this is neccessary because glibc uses iw and in instead
-    //    of he and id respectively).
-    if (is_abbrev)
-    {
-       wxString mid = lang.Mid(0,2);
-       if (mid == wxT("iw")) lang = wxT("he") + lang.Mid(3);
-       else if (mid == wxT("in")) lang = wxT("id") + lang.Mid(3);
-       else if (mid == wxT("ji")) lang = wxT("yi") + lang.Mid(3);
     }
 
-    // 1. Try to find the lang as is:
-    if (is_abbrev)
+    if ( langFull == _T("C") )
     {
-        for (i = 0; i < m_languagesDB->GetCount(); i++)
+        // default C locale
+        return wxLANGUAGE_DEFAULT;
+    }
+
+    // the language string has the following form
+    //
+    //      lang[_LANG[.encoding]]
+    //
+    // where lang is the primary language, LANG is a sublang
+    //
+    // for example, the following strings are valid:
+    //      fr
+    //      fr_FR
+    //      de_DE.iso88591
+
+    // for now we don't use the encoding, although we probably should (doing
+    // translations of the msg catalogs on the fly as required) (TODO)
+    langFull = langFull.BeforeFirst(_T('.'));
+
+    // in addition to the format above, we also can have full language names
+    // in LANG env var - for example, SuSE is known to use LANG="german" - so
+    // check for this
+
+    // do we have just the language (or sublang too)?
+    bool justLang = langFull.Len() == LEN_LANG;
+    if ( justLang ||
+         (langFull.Len() == LEN_FULL && langFull[LEN_LANG] == wxT('_')) )
+    {
+        // 0. Make sure the lang is according to latest ISO 639
+        //    (this is neccessary because glibc uses iw and in instead
+        //    of he and id respectively).
+
+        // the language itself (second part is the dialect/sublang)
+        wxString langOrig = ExtractLang(langFull);
+
+        wxString lang;
+        if ( langOrig == wxT("iw"))
+            lang = _T("he");
+        else if ( langOrig == wxT("in") )
+            lang = wxT("id");
+        else if ( langOrig == wxT("ji") )
+            lang = wxT("yi");
+        else
+            lang = langOrig;
+
+        // did we change it?
+        if ( lang != langOrig )
         {
-            if (m_languagesDB->Item(i).CanonicalName == lang)
+            langFull = lang + ExtractNotLang(langFull);
+        }
+
+        // 1. Try to find the language either as is:
+        for ( i = 0; i < count; i++ )
+        {
+            if ( m_languagesDB->Item(i).CanonicalName == langFull )
             {
-                wxlang = m_languagesDB->Item(i).Language;
+                break;
+            }
+        }
+
+        // 2. If langFull is of the form xx_YY, try to find xx:
+        if ( i == count && !justLang )
+        {
+            for ( i = 0; i < count; i++ )
+            {
+                if ( m_languagesDB->Item(i).CanonicalName == lang )
+                {
+                    break;
+                }
+            }
+        }
+
+        // 3. If langFull is of the form xx, try to find any xx_YY record:
+        if ( i == count && justLang )
+        {
+            for ( i = 0; i < count; i++ )
+            {
+                if ( ExtractLang(m_languagesDB->Item(i).CanonicalName)
+                        == langFull )
+                {
+                    break;
+                }
+            }
+        }
+    }
+    else // not standard format
+    {
+        // try to find the name in verbose description
+        for ( i = 0; i < count; i++ )
+        {
+            if (m_languagesDB->Item(i).Description.CmpNoCase(langFull) == 0)
+            {
                 break;
             }
         }
     }
-
-    // 2. If lang is of the form xx_YY, try to find xx:
-    if (wxlang == wxLANGUAGE_UNKNOWN && is_abbrev && lang.Len() == 5)
-    {
-        wxString lang2 = lang.Mid(0,2);
-        for (i = 0; i < m_languagesDB->GetCount(); i++)
-        {
-            if (m_languagesDB->Item(i).CanonicalName == lang2)
-            {
-                wxlang = m_languagesDB->Item(i).Language;
-                break;
-            }
-        }
-    }
-
-    // 3. If lang is of the form xx, try to find any xx_YY record:
-    if (wxlang == wxLANGUAGE_UNKNOWN && is_abbrev && lang.Len() == 2)
-    {
-        for (i = 0; i < m_languagesDB->GetCount(); i++)
-        {
-            if (m_languagesDB->Item(i).CanonicalName.Mid(0,2) == lang)
-            {
-                wxlang = m_languagesDB->Item(i).Language;
-                break;
-            }
-        }
-    }
-
-    // 4. If everything failed, try to find the name in verbose description
-    //    (SuSE is known to use LANG="german"):
-    if (wxlang == wxLANGUAGE_UNKNOWN && !is_abbrev)
-    {
-        for (i = 0; i < m_languagesDB->GetCount(); i++)
-        {
-            if (m_languagesDB->Item(i).Description.CmpNoCase(lang) == 0)
-            {
-                wxlang = m_languagesDB->Item(i).Language;
-                break;
-            }
-        }
-    }
-
 #elif defined(__WIN32__)
     LCID lcid = GetUserDefaultLCID();
-    if (lcid == 0) return wxLANGUAGE_UNKNOWN;
-    wxUint32 lang = PRIMARYLANGID(LANGIDFROMLCID(lcid));
-    wxUint32 sublang = SUBLANGID(LANGIDFROMLCID(lcid));
-
-    for (i = 0; i < m_languagesDB->GetCount(); i++)
+    if ( lcid != 0 )
     {
-        if (m_languagesDB->Item(i).WinLang == lang &&
-            m_languagesDB->Item(i).WinSublang == sublang)
+        wxUint32 lang = PRIMARYLANGID(LANGIDFROMLCID(lcid));
+        wxUint32 sublang = SUBLANGID(LANGIDFROMLCID(lcid));
+
+        for ( i = 0; i < count; i++ )
         {
-            wxlang = m_languagesDB->Item(i).Language;
-            break;
+            if (m_languagesDB->Item(i).WinLang == lang &&
+                m_languagesDB->Item(i).WinSublang == sublang)
+            {
+                break;
+            }
         }
     }
-#endif
+    //else: leave wxlang == wxLANGUAGE_UNKNOWN
+#endif // Unix/Win32
 
-    return wxlang;
+    if ( i < count )
+    {
+        // we did find a matching entry, use it
+        return m_languagesDB->Item(i).Language;
+    }
+
+    // no info about this language in the database
+    return wxLANGUAGE_UNKNOWN;
 }
-
-
 
 void wxLocale::AddLanguage(const wxLanguageInfo& info)
 {
@@ -845,14 +912,10 @@ void wxLocale::AddLanguage(const wxLanguageInfo& info)
     m_languagesDB->Add(info);
 }
 
-
-
 wxString wxLocale::GetSysName() const
 {
     return wxSetlocale(LC_ALL, NULL);
 }
-
-
 
 // clean up
 wxLocale::~wxLocale()
@@ -972,11 +1035,6 @@ bool wxLocale::AddCatalog(const wxChar *szDomain)
   }
 }
 
-
-
-
-
-
 // ----------------------------------------------------------------------------
 // global functions and variables
 // ----------------------------------------------------------------------------
@@ -998,9 +1056,6 @@ wxLocale *wxSetLocale(wxLocale *pLocale)
   g_pLocale = pLocale;
   return pOld;
 }
-
-
-
 
 // ----------------------------------------------------------------------------
 // default languages table & initialization
@@ -1512,7 +1567,7 @@ void wxLocale::InitLanguagesDB()
    wxLanguageInfo info;
    wxStringTokenizer tkn;
 
-      LNG(wxLANGUAGE_ABKHAZIAN,                  "ab"   , 0              , 0                                 , "Abkhazian")
+   LNG(wxLANGUAGE_ABKHAZIAN,                  "ab"   , 0              , 0                                 , "Abkhazian")
    LNG(wxLANGUAGE_AFAR,                       "aa"   , 0              , 0                                 , "Afar")
    LNG(wxLANGUAGE_AFRIKAANS,                  "af_ZA", LANG_AFRIKAANS , SUBLANG_DEFAULT                   , "Afrikaans")
    LNG(wxLANGUAGE_ALBANIAN,                   "sq_AL", LANG_ALBANIAN  , SUBLANG_DEFAULT                   , "Albanian")
@@ -1740,7 +1795,7 @@ void wxLocale::InitLanguagesDB()
    LNG(wxLANGUAGE_YORUBA,                     "yo"   , 0              , 0                                 , "Yoruba")
    LNG(wxLANGUAGE_ZHUANG,                     "za"   , 0              , 0                                 , "Zhuang")
    LNG(wxLANGUAGE_ZULU,                       "zu"   , 0              , 0                                 , "Zulu")
-   
+
 };
 #undef LNG
 

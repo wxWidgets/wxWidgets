@@ -37,7 +37,7 @@
 
 //#define TEST_ARRAYS
 //#define TEST_CMDLINE
-#define TEST_DATETIME
+//#define TEST_DATETIME
 //#define TEST_DIR
 //#define TEST_DLLLOADER
 //#define TEST_ENVIRON
@@ -49,6 +49,7 @@
 //#define TEST_HASH
 //#define TEST_INFO_FUNCTIONS
 //#define TEST_LIST
+#define TEST_LOCALE
 //#define TEST_LOG
 //#define TEST_LONGLONG
 //#define TEST_MIME
@@ -61,7 +62,7 @@
 //#define TEST_TIMER
 //#define TEST_VCARD            -- don't enable this (VZ)
 //#define TEST_WCHAR
-#define TEST_ZIP
+//#define TEST_ZIP
 //#define TEST_ZLIB
 
 
@@ -807,6 +808,293 @@ static void TestListCtor()
 }
 
 #endif // TEST_LIST
+
+// ----------------------------------------------------------------------------
+// wxLocale
+// ----------------------------------------------------------------------------
+
+#ifdef TEST_LOCALE
+
+#include "wx/intl.h"
+#include "wx/utils.h"   // for wxSetEnv
+
+static wxLocale gs_localeDefault(wxLANGUAGE_ENGLISH);
+
+// find the name of the language from its value
+static const char *GetLangName(int lang)
+{
+    static const char *languageNames[] =
+    {
+        "DEFAULT", 
+        "UNKNOWN", 
+        "ABKHAZIAN",
+        "AFAR",
+        "AFRIKAANS",
+        "ALBANIAN",
+        "AMHARIC",
+        "ARABIC",
+        "ARABIC_ALGERIA",
+        "ARABIC_BAHRAIN",
+        "ARABIC_EGYPT",
+        "ARABIC_IRAQ",
+        "ARABIC_JORDAN",
+        "ARABIC_KUWAIT",
+        "ARABIC_LEBANON",
+        "ARABIC_LIBYA",
+        "ARABIC_MOROCCO",
+        "ARABIC_OMAN",
+        "ARABIC_QATAR",
+        "ARABIC_SAUDI_ARABIA",
+        "ARABIC_SUDAN",
+        "ARABIC_SYRIA",
+        "ARABIC_TUNISIA",
+        "ARABIC_UAE",
+        "ARABIC_YEMEN",
+        "ARMENIAN",
+        "ASSAMESE",
+        "AYMARA",
+        "AZERI",
+        "AZERI_CYRILLIC",
+        "AZERI_LATIN",
+        "BASHKIR",
+        "BASQUE",
+        "BELARUSIAN",
+        "BENGALI",
+        "BHUTANI",
+        "BIHARI",
+        "BISLAMA",
+        "BRETON",
+        "BULGARIAN",
+        "BURMESE",
+        "CAMBODIAN",
+        "CATALAN",
+        "CHINESE",
+        "CHINESE_SIMPLIFIED",
+        "CHINESE_TRADITIONAL",
+        "CHINESE_HONGKONG",
+        "CHINESE_MACAU",
+        "CHINESE_SINGAPORE",
+        "CHINESE_TAIWAN",
+        "CORSICAN",
+        "CROATIAN",
+        "CZECH",
+        "DANISH",
+        "DUTCH",
+        "DUTCH_BELGIAN",
+        "ENGLISH",
+        "ENGLISH_UK",
+        "ENGLISH_US",
+        "ENGLISH_AUSTRALIA",
+        "ENGLISH_BELIZE",
+        "ENGLISH_BOTSWANA",
+        "ENGLISH_CANADA",
+        "ENGLISH_CARIBBEAN",
+        "ENGLISH_DENMARK",
+        "ENGLISH_EIRE",
+        "ENGLISH_JAMAICA",
+        "ENGLISH_NEW_ZEALAND",
+        "ENGLISH_PHILIPPINES",
+        "ENGLISH_SOUTH_AFRICA",
+        "ENGLISH_TRINIDAD",
+        "ENGLISH_ZIMBABWE",
+        "ESPERANTO",
+        "ESTONIAN",
+        "FAEROESE",
+        "FARSI",
+        "FIJI",
+        "FINNISH",
+        "FRENCH",
+        "FRENCH_BELGIAN",
+        "FRENCH_CANADIAN",
+        "FRENCH_LUXEMBOURG",
+        "FRENCH_MONACO",
+        "FRENCH_SWISS",
+        "FRISIAN",
+        "GALICIAN",
+        "GEORGIAN",
+        "GERMAN",
+        "GERMAN_AUSTRIAN",
+        "GERMAN_BELGIUM",
+        "GERMAN_LIECHTENSTEIN",
+        "GERMAN_LUXEMBOURG",
+        "GERMAN_SWISS",
+        "GREEK",
+        "GREENLANDIC",
+        "GUARANI",
+        "GUJARATI",
+        "HAUSA",
+        "HEBREW",
+        "HINDI",
+        "HUNGARIAN",
+        "ICELANDIC",
+        "INDONESIAN",
+        "INTERLINGUA",
+        "INTERLINGUE",
+        "INUKTITUT",
+        "INUPIAK",
+        "IRISH",
+        "ITALIAN",
+        "ITALIAN_SWISS",
+        "JAPANESE",
+        "JAVANESE",
+        "KANNADA",
+        "KASHMIRI",
+        "KASHMIRI_INDIA",
+        "KAZAKH",
+        "KERNEWEK",
+        "KINYARWANDA",
+        "KIRGHIZ",
+        "KIRUNDI",
+        "KONKANI",
+        "KOREAN",
+        "KURDISH",
+        "LAOTHIAN",
+        "LATIN",
+        "LATVIAN",
+        "LINGALA",
+        "LITHUANIAN",
+        "MACEDONIAN",
+        "MALAGASY",
+        "MALAY",
+        "MALAYALAM",
+        "MALAY_BRUNEI_DARUSSALAM",
+        "MALAY_MALAYSIA",
+        "MALTESE",
+        "MANIPURI",
+        "MAORI",
+        "MARATHI",
+        "MOLDAVIAN",
+        "MONGOLIAN",
+        "NAURU",
+        "NEPALI",
+        "NEPALI_INDIA",
+        "NORWEGIAN_BOKMAL",
+        "NORWEGIAN_NYNORSK",
+        "OCCITAN",
+        "ORIYA",
+        "OROMO",
+        "PASHTO",
+        "POLISH",
+        "PORTUGUESE",
+        "PORTUGUESE_BRAZILIAN",
+        "PUNJABI",
+        "QUECHUA",
+        "RHAETO_ROMANCE",
+        "ROMANIAN",
+        "RUSSIAN",
+        "RUSSIAN_UKRAINE",
+        "SAMOAN",
+        "SANGHO",
+        "SANSKRIT",
+        "SCOTS_GAELIC",
+        "SERBIAN",
+        "SERBIAN_CYRILLIC",
+        "SERBIAN_LATIN",
+        "SERBO_CROATIAN",
+        "SESOTHO",
+        "SETSWANA",
+        "SHONA",
+        "SINDHI",
+        "SINHALESE",
+        "SISWATI",
+        "SLOVAK",
+        "SLOVENIAN",
+        "SOMALI",
+        "SPANISH",
+        "SPANISH_ARGENTINA",
+        "SPANISH_BOLIVIA",
+        "SPANISH_CHILE",
+        "SPANISH_COLOMBIA",
+        "SPANISH_COSTA_RICA",
+        "SPANISH_DOMINICAN_REPUBLIC",
+        "SPANISH_ECUADOR",
+        "SPANISH_EL_SALVADOR",
+        "SPANISH_GUATEMALA",
+        "SPANISH_HONDURAS",
+        "SPANISH_MEXICAN",
+        "SPANISH_MODERN",
+        "SPANISH_NICARAGUA",
+        "SPANISH_PANAMA",
+        "SPANISH_PARAGUAY",
+        "SPANISH_PERU",
+        "SPANISH_PUERTO_RICO",
+        "SPANISH_URUGUAY",
+        "SPANISH_US",
+        "SPANISH_VENEZUELA",
+        "SUNDANESE",
+        "SWAHILI",
+        "SWEDISH",
+        "SWEDISH_FINLAND",
+        "TAGALOG",
+        "TAJIK",
+        "TAMIL",
+        "TATAR",
+        "TELUGU",
+        "THAI",
+        "TIBETAN",
+        "TIGRINYA",
+        "TONGA",
+        "TSONGA",
+        "TURKISH",
+        "TURKMEN",
+        "TWI",
+        "UIGHUR",
+        "UKRAINIAN",
+        "URDU",
+        "URDU_INDIA",
+        "URDU_PAKISTAN",
+        "UZBEK",
+        "UZBEK_CYRILLIC",
+        "UZBEK_LATIN",
+        "VIETNAMESE",
+        "VOLAPUK",
+        "WELSH",
+        "WOLOF",
+        "XHOSA",
+        "YIDDISH",
+        "YORUBA",
+        "ZHUANG",
+        "ZULU",
+    };
+
+    if ( (size_t)lang < WXSIZEOF(languageNames) )
+        return languageNames[lang];
+    else
+        return "INVALID";
+}
+
+static void TestDefaultLang()
+{
+    puts("*** Testing wxLocale::GetSystemLanguage ***");
+
+    static const wxChar *langStrings[] =
+    {
+        NULL,               // system default
+        _T("C"),
+        _T("fr"),
+        _T("fr_FR"),
+        _T("en"),
+        _T("en_GB"),
+        _T("en_US"),
+        _T("de_DE.iso88591"),
+        _T("german"),
+        _T("?"),            // invalid lang spec
+        _T("klingonese"),   // I bet on some systems it does exist...
+    };
+
+    for ( size_t n = 0; n < WXSIZEOF(langStrings); n++ )
+    {
+        const char *langStr = langStrings[n];
+        if ( langStr )
+            wxSetEnv(_T("LC_ALL"), langStr);
+
+        int lang = gs_localeDefault.GetSystemLanguage();
+        printf("Locale for '%s' is %s.\n",
+               langStr ? langStr : "system default", GetLangName(lang));
+    }
+}
+
+#endif // TEST_LOCALE
 
 // ----------------------------------------------------------------------------
 // MIME types
@@ -4284,6 +4572,10 @@ int main(int argc, char **argv)
 #ifdef TEST_LIST
     TestListCtor();
 #endif // TEST_LIST
+
+#ifdef TEST_LOCALE
+    TestDefaultLang();
+#endif // TEST_LOCALE
 
 #ifdef TEST_LOG
     wxString s;

@@ -42,6 +42,7 @@
 // ----------------------------------------------------------------------------
 // forward decls
 // ----------------------------------------------------------------------------
+
 class WXDLLEXPORT wxLocale;
 class WXDLLEXPORT wxMsgCatalog;
 class WXDLLEXPORT wxLanguageInfoArray;
@@ -49,7 +50,6 @@ class WXDLLEXPORT wxLanguageInfoArray;
 // ============================================================================
 // locale support
 // ============================================================================
-
 
 // ----------------------------------------------------------------------------
 // wxLanguage: defines all supported languages
@@ -62,6 +62,7 @@ enum wxLanguage
 {
     // user's default/preffered language as got from OS:
     wxLANGUAGE_DEFAULT, 
+
     // unknown language, if wxLocale::GetSystemLanguage fails:
     wxLANGUAGE_UNKNOWN, 
     
@@ -313,9 +314,6 @@ struct WXDLLEXPORT wxLanguageInfo
     wxString Description;           // human-readable name of the language
 };
 
-
-
-
 // ----------------------------------------------------------------------------
 // wxLocale: encapsulates all language dependent settings, including current
 //           message catalogs, date, time and currency formats (TODO) &c
@@ -347,7 +345,7 @@ public:
             Init(szName, szShort, szLocale, bLoadDefault, bConvertEncoding); 
         }
 
-    wxLocale(int language,    // wxLanguage identifier
+    wxLocale(int language, // wxLanguage id or custom language
              int flags = wxLOCALE_LOAD_DEFAULT | wxLOCALE_CONV_ENCODING)
         { Init(language, flags); }
 
@@ -358,14 +356,15 @@ public:
               bool bLoadDefault = TRUE,
               bool bConvertEncoding = FALSE);
 
+        // same as second ctor (returns TRUE on success)
     bool Init(int language = wxLANGUAGE_DEFAULT,
               int flags = wxLOCALE_LOAD_DEFAULT | wxLOCALE_CONV_ENCODING);
+
         // restores old locale
     ~wxLocale();
     
     // Try to get user's (or OS's) prefered language setting.
-    // Return wxLanguage value or wxLANGUAGE_UNKNOWN if language-guessing
-    // algorithm failed
+    // Return wxLANGUAGE_UNKNOWN if language-guessing algorithm failed
     int GetSystemLanguage() const;
 
     // return TRUE if the locale was set successfully
