@@ -300,17 +300,6 @@ protected:
                                      ,wxCoord vWidth
                                      ,wxCoord vHeight
                                     );
-    virtual void DoGetClippingRegion( wxCoord* pX
-                                     ,wxCoord* pY
-                                     ,wxCoord* pWidth
-                                     ,wxCoord* pHeight)
-    {
-        GetClippingBox( pX
-                       ,pY
-                       ,pWidth
-                       ,pHeight
-                      );
-    }
 
     virtual void DoGetSize( int* pWidth
                            ,int* pHeight

@@ -100,7 +100,7 @@ public:
 
     // implementation from now on
     // --------------------------
-    
+
     virtual void ComputeScaleAndOrigin();
 
     wxCoord XDEV2LOG(wxCoord x) const
@@ -207,11 +207,6 @@ protected:
     virtual void DoSetClippingRegionAsRegion(const wxRegion& region);
     virtual void DoSetClippingRegion(wxCoord x, wxCoord y,
                                      wxCoord width, wxCoord height);
-    virtual void DoGetClippingRegion(wxCoord *x, wxCoord *y,
-                                     wxCoord *width, wxCoord *height)
-    {
-        GetClippingBox(x, y, width, height);
-    }
 
     virtual void DoGetSize(int *width, int *height) const;
     virtual void DoGetSizeMM(int* width, int* height) const;
@@ -231,50 +226,50 @@ protected:
 
     // common part of DoDrawText() and DoDrawRotatedText()
     void DrawAnyText(const wxString& text, wxCoord x, wxCoord y);
-    
+
     // MGL uses pens as both wxPens and wxBrushes, so we have to
     // switch them as needed:
     void SelectPen();
     void SelectBrush();
     void SelectMGLStipplePen(int style);
     void SelectMGLFatPen(int style, int flag);
-    
+
     // Select m_font into m_MGLDC:
     bool SelectMGLFont();
-    
+
     // Convert wxWin logical function to MGL rop:
     int LogicalFunctionToMGLRop(int logFunc) const;
-    
+
     // Unified implementation of DrawIcon, DrawBitmap and Blit:
-    void DoDrawSubBitmap(const wxBitmap &bmp, 
+    void DoDrawSubBitmap(const wxBitmap &bmp,
                          wxCoord x, wxCoord y, wxCoord w, wxCoord h,
                          wxCoord destx, wxCoord desty, int rop, bool useMask);
 
     // MGL DC class we use:
     MGLDevCtx        *m_MGLDC;
     bool              m_OwnsMGLDC:1;
-   
+
     // helper variables for SelectXXXX():
     bool              m_penSelected;
     bool              m_brushSelected;
     bool              m_downloadedPatterns[2];
 
-    // MGL does not render lines with width>1 with endings centered 
+    // MGL does not render lines with width>1 with endings centered
     // at given coords but with top left corner of the pen at them,
     // these offsets are used to correct it. They are computed by
     // SelectPen.
     int               m_penOfsX, m_penOfsY;
 
     double            m_mm_to_pix_x, m_mm_to_pix_y;
-    
+
     wxPalette         m_oldPalette;
-    
+
     wxRegion          m_currentClippingRegion;
     wxRegion          m_globalClippingRegion;
 
     // wxDC::Blit handles memoryDCs as special cases :(
     bool              m_isMemDC;
-    
+
     font_t            *m_mglFont;
 };
 

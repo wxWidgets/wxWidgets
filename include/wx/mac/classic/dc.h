@@ -57,7 +57,7 @@ class WXDLLEXPORT wxDC: public wxDCBase
 
     wxDC();
     ~wxDC();
-    
+
 
     // implement base class pure virtuals
     // ----------------------------------
@@ -66,7 +66,7 @@ class WXDLLEXPORT wxDC: public wxDCBase
 
     virtual bool StartDoc( const wxString& WXUNUSED(message) ) { return TRUE; }
     virtual void EndDoc(void) {};
-    
+
     virtual void StartPage(void) {};
     virtual void EndPage(void) {};
 
@@ -107,8 +107,8 @@ class WXDLLEXPORT wxDC: public wxDCBase
 
     void ComputeScaleAndOrigin(void);
   public:
-  
-    
+
+
     wxCoord XDEV2LOG(wxCoord x) const
     {
       long new_x = x - m_deviceOriginX ;
@@ -118,7 +118,7 @@ class WXDLLEXPORT wxDC: public wxDCBase
         return (wxCoord)((double)(new_x) / m_scaleX - 0.5) * m_signX + m_logicalOriginX;
     }
     wxCoord XDEV2LOGREL(wxCoord x) const
-    { 
+    {
       if (x > 0)
         return (wxCoord)((double)(x) / m_scaleX + 0.5);
       else
@@ -133,14 +133,14 @@ class WXDLLEXPORT wxDC: public wxDCBase
         return (wxCoord)((double)(new_y) / m_scaleY - 0.5) * m_signY + m_logicalOriginY;
     }
     wxCoord YDEV2LOGREL(wxCoord y) const
-    { 
+    {
       if (y > 0)
         return (wxCoord)((double)(y) / m_scaleY + 0.5);
       else
         return (wxCoord)((double)(y) / m_scaleY - 0.5);
     }
     wxCoord XLOG2DEV(wxCoord x) const
-    { 
+    {
       long new_x = x - m_logicalOriginX;
       if (new_x > 0)
         return (wxCoord)((double)(new_x) * m_scaleX + 0.5) * m_signX + m_deviceOriginX  ;
@@ -148,7 +148,7 @@ class WXDLLEXPORT wxDC: public wxDCBase
         return (wxCoord)((double)(new_x) * m_scaleX - 0.5) * m_signX + m_deviceOriginX ;
     }
     wxCoord XLOG2DEVREL(wxCoord x) const
-    { 
+    {
       if (x > 0)
         return (wxCoord)((double)(x) * m_scaleX + 0.5);
       else
@@ -163,14 +163,14 @@ class WXDLLEXPORT wxDC: public wxDCBase
         return (wxCoord)((double)(new_y) * m_scaleY - 0.5) * m_signY + m_deviceOriginY ;
     }
     wxCoord YLOG2DEVREL(wxCoord y) const
-    { 
+    {
       if (y > 0)
         return (wxCoord)((double)(y) * m_scaleY + 0.5);
       else
         return (wxCoord)((double)(y) * m_scaleY - 0.5);
     }
     wxCoord XLOG2DEVMAC(wxCoord x) const
-    { 
+    {
       long new_x = x - m_logicalOriginX;
       if (new_x > 0)
         return (wxCoord)((double)(new_x) * m_scaleX + 0.5) * m_signX + m_deviceOriginX + m_macLocalOrigin.x ;
@@ -202,7 +202,7 @@ protected:
     virtual void DoDrawArc(wxCoord x1, wxCoord y1,
                            wxCoord x2, wxCoord y2,
                            wxCoord xc, wxCoord yc);
-    
+
     virtual void DoDrawEllipticArc(wxCoord x, wxCoord y, wxCoord w, wxCoord h,
                                    double sa, double ea);
 
@@ -231,11 +231,6 @@ protected:
     virtual void DoSetClippingRegionAsRegion(const wxRegion& region);
     virtual void DoSetClippingRegion(wxCoord x, wxCoord y,
                                      wxCoord width, wxCoord height);
-    virtual void DoGetClippingRegion(wxCoord *x, wxCoord *y,
-                                     wxCoord *width, wxCoord *height)
-    {
-        GetClippingBox(x, y, width, height);
-    }
 
     virtual void DoGetSizeMM(int* width, int* height) const;
 
@@ -248,23 +243,23 @@ protected:
   protected:
     //begin wxmac
     // Variables used for scaling
-    double       m_mm_to_pix_x,m_mm_to_pix_y; 
+    double       m_mm_to_pix_x,m_mm_to_pix_y;
     // not yet used
-    bool         m_needComputeScaleX,m_needComputeScaleY;         
+    bool         m_needComputeScaleX,m_needComputeScaleY;
     // If un-scrolled is non-zero or d.o. changes with scrolling.
     // Set using SetInternalDeviceOrigin().
     long         m_internalDeviceOriginX,m_internalDeviceOriginY;
      // To be set by external classes such as wxScrolledWindow
      // using SetDeviceOrigin()
     long         m_externalDeviceOriginX,m_externalDeviceOriginY;
-                                                                    
+
     // Begin implementation for Mac
     public:
-                                    
+
     WXHDC                m_macPort ;
     WXHBITMAP            m_macMask ;
 
-    // in order to preserve the const inheritance of the virtual functions, we have to 
+    // in order to preserve the const inheritance of the virtual functions, we have to
     // use mutable variables starting from CWPro 5
 
     void                    MacInstallFont() const ;
