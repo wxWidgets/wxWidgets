@@ -196,7 +196,7 @@ int Editor::MaxScrollPos() {
 		return retVal;
 }
 
-static inline bool IsControlCharacter(char ch) {
+static inline bool IsControlCharacter(signed char ch) {
 	// iscntrl returns true for lots of chars > 127 which are displayable
 	return ch >= 0 && ch < ' ';
 }

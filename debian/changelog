@@ -1,3 +1,12 @@
+wxwindows2.2 (2.2.9) unstable; urgency=high
+
+  * fix for arches with unsigned char as default.
+  * high urgency because this fix really should get
+    into woody.
+    Closes: #127014
+
+ -- Ron Lee <ron@debian.org>  Mon, 31 Dec 2001 06:53:27 -0800
+
 wxwindows2.2 (2.2.8.5) unstable; urgency=low
 
   * Add wxSIZE_T_IS defines to setup.h
