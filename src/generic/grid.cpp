@@ -3904,9 +3904,9 @@ void wxGrid::CalcDimensions()
     int cw, ch;
     GetClientSize( &cw, &ch );
 
-    if ( m_colLabelWin->IsShown() )
-        cw -= m_rowLabelWidth;
     if ( m_rowLabelWin->IsShown() )
+        cw -= m_rowLabelWidth;
+    if ( m_colLabelWin->IsShown() )
         ch -= m_colLabelHeight;
 
     // grid total size
