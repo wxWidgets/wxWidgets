@@ -19,8 +19,28 @@ THISDIR = $(WXDIR)\contrib\src\xml
 DOCDIR=$(WXDIR)\contrib\docs
 LOCALDOCDIR=$(WXDIR)\contrib\docs\latex\xml
 
-# Set this to where your libxml is
-EXTRAFLAGS=-Id:\libxml\libxml2-2.1.1
+# Do not specify the 'libxml' directory on
+# this -I line, as the #includes use
+# <libxml/xxxx.h>.  If your libxml is installed
+# in "d:\libxml\libxml2-2.1.1\libxml" you would use:
+# wxLIBXMLDIR=-Id:\libxml\libxml2-2.1.1
+wxLIBXMLDIR=
+
+!if "$(wxLIBXMLDIR)" == ""
+!message
+!message SETUP REQUIRED
+!message
+!message You must set the wxLIBXMLDIR variable in makefile.vc before compiling
+!message
+!message If you do not have the libxml library, you will need to obtain & install
+!message it before compiling the wxXML code.  You can obtain libxml from:
+!message http://www.xmlsoft.org
+!message
+!error
+!endif
+
+# Set this to where your libxml directory is
+EXTRAFLAGS=$(wxLIBXMLDIR)
 
 # Unfortunately we need this _before_ we include makelib.vc
 !if "$(FINAL)" == "1"
