@@ -192,7 +192,7 @@ void wxMenu::Append(wxMenuItem *pItem)
                     keyCode = VK_F1 + n - 1;
                 }
                 else {
-                    wxLogDebug(_T("Unreckognized accel key '%s', accel "
+                    wxLogDebug(_T("Unrecognized accel key '%s', accel "
                                   "string ignored."), current.c_str());
                 }
             }
