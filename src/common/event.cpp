@@ -390,7 +390,7 @@ wxMouseEvent::wxMouseEvent(wxEventType commandType)
 void wxMouseEvent::Assign(const wxMouseEvent& event)
 {
     m_eventType = event.m_eventType;
-    
+
     m_x = event.m_x;
     m_y = event.m_y;
 
@@ -550,7 +550,7 @@ wxKeyEvent::wxKeyEvent(wxEventType type)
 #endif
 }
 
-wxKeyEvent::wxKeyEvent(const wxKeyEvent& evt) 
+wxKeyEvent::wxKeyEvent(const wxKeyEvent& evt)
     : wxEvent(evt)
 {
     m_x = evt.m_x;
@@ -565,12 +565,12 @@ wxKeyEvent::wxKeyEvent(const wxKeyEvent& evt)
     m_scanCode = evt.m_scanCode;
     m_rawCode = evt.m_rawCode;
     m_rawFlags = evt.m_rawFlags;
-        
+
 #if wxUSE_UNICODE
     m_uniChar = evt.m_uniChar;
 #endif
 }
-    
+
 wxWindowCreateEvent::wxWindowCreateEvent(wxWindow *win)
 {
     SetEventType(wxEVT_CREATE);
@@ -981,7 +981,8 @@ void wxEvtHandler::Connect( int id, int lastId,
     if (!m_dynamicEvents)
         m_dynamicEvents = new wxList;
 
-    m_dynamicEvents->Append( (wxObject*) entry );
+    // Insert at the front of the list so most recent additions are found first
+    m_dynamicEvents->Insert( (wxObject*) entry );
 }
 
 bool wxEvtHandler::Disconnect( int id, int lastId, wxEventType eventType,
@@ -1047,9 +1048,7 @@ bool wxEvtHandler::SearchDynamicEventTable( wxEvent& event )
 
                 (this->*((wxEventFunction) (entry->m_fn)))(event);
 
-                if (event.GetSkipped())
-                    return FALSE;
-                else
+                if ( ! event.GetSkipped() )
                     return TRUE;
             }
         }
