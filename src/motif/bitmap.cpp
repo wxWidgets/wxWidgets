@@ -229,7 +229,7 @@ bool wxBitmap::Create(void *data, long type, int width, int height, int depth)
     wxBitmapHandler *handler = FindHandler(type);
 
     if ( handler == NULL ) {
-        wxLogWarning("no data bitmap handler for type %d defined.", type);
+        wxLogWarning("no data bitmap handler for type %ld defined.", type);
 
         return FALSE;
     }
