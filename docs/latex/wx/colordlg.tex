@@ -27,7 +27,11 @@ This class represents the colour chooser dialog.
 \func{}{wxColourDialog}{\param{wxWindow* }{parent}, \param{wxColourData* }{data = NULL}}
 
 Constructor. Pass a parent window, and optionally a pointer to a block of colour
-data, which will be copied to the colour dialog's colour data.
+data, which will be copied to the colour dialog's colour data. Custom
+colours from colour data object will be be used in dialog's colour palette.
+Invalid entries in custom colours list will be ignored on some platforms (GTK)
+or replaced with white colour on platforms where custom colours palette has
+fixed size (MSW).
 
 \wxheading{See also}
 

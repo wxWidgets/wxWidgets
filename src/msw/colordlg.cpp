@@ -128,7 +128,12 @@ int wxColourDialog::ShowModal()
 
     int i;
     for (i = 0; i < 16; i++)
-      custColours[i] = wxColourToRGB(m_colourData.m_custColours[i]);
+    {
+        if (m_colourData.m_custColours[i].Ok())
+            custColours[i] = wxColourToRGB(m_colourData.m_custColours[i]);
+        else
+            custColours[i] = RGB(255,255,255);
+    }
 
     chooseColorStruct.lStructSize = sizeof(CHOOSECOLOR);
     if ( m_parent )

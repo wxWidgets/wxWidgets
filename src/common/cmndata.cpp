@@ -88,12 +88,9 @@
 
 wxColourData::wxColourData()
 {
-    int i;
-    for (i = 0; i < 16; i++)
-        m_custColours[i].Set(255, 255, 255);
-
-    m_chooseFull = FALSE;
+    m_chooseFull = false;
     m_dataColour.Set(0,0,0);
+    // m_custColours are wxNullColours initially
 }
 
 wxColourData::wxColourData(const wxColourData& data)
@@ -108,16 +105,15 @@ wxColourData::~wxColourData()
 
 void wxColourData::SetCustomColour(int i, const wxColour& colour)
 {
-    if (i > 15 || i < 0)
-        return;
+    wxCHECK_RET( (i >= 0 && i < 16), _T("custom colour index out of range") );
 
     m_custColours[i] = colour;
 }
 
 wxColour wxColourData::GetCustomColour(int i)
 {
-    if (i > 15 || i < 0)
-        return wxColour(0,0,0);
+    wxCHECK_MSG( (i >= 0 && i < 16), wxColour(0,0,0),
+                 _T("custom colour index out of range") );
 
     return m_custColours[i];
 }

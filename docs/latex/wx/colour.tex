@@ -181,7 +181,8 @@ This class holds a variety of information related to colour dialogs.
 
 \func{}{wxColourData}{\void}
 
-Constructor. Initializes the custom colours to white, the {\it data colour} setting
+Constructor. Initializes the custom colours to {\tt wxNullColour},
+the {\it data colour} setting
 to black, and the {\it choose full} setting to true.
 
 
@@ -218,7 +219,7 @@ The default colour is black.
 Gets the {\it i}th custom colour associated with the colour dialog. {\it i} should
 be an integer between 0 and 15.
 
-The default custom colours are all white.
+The default custom colours are invalid colours.
 
 
 \membersection{wxColourData::SetChooseFull}\label{wxcolourdatasetchoosefull}
@@ -247,7 +248,7 @@ The default colour is black.
 Sets the {\it i}th custom colour for the colour dialog. {\it i} should
 be an integer between 0 and 15.
 
-The default custom colours are all white.
+The default custom colours are invalid colours.
 
 
 \membersection{wxColourData::operator $=$}\label{wxcolourdataassign}
