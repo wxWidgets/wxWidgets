@@ -1637,33 +1637,6 @@ static PyObject *_wrap_new_wxMask(PyObject *self, PyObject *args, PyObject *kwar
     return _resultobj;
 }
 
-#define delete_wxMask(_swigobj) (delete _swigobj)
-static PyObject *_wrap_delete_wxMask(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    wxMask * _arg0;
-    PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:delete_wxMask",_kwnames,&_argo0)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxMask_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of delete_wxMask. Expected _wxMask_p.");
-        return NULL;
-        }
-    }
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        delete_wxMask(_arg0);
-
-    wxPy_END_ALLOW_THREADS;
-}    Py_INCREF(Py_None);
-    _resultobj = Py_None;
-    return _resultobj;
-}
-
 static void *SwigwxIconTowxBitmap(void *ptr) {
     wxIcon *src;
     wxBitmap *dest;
@@ -7291,7 +7264,6 @@ static PyMethodDef gdicMethods[] = {
 	 { "wxIcon_GetDepth", (PyCFunction) _wrap_wxIcon_GetDepth, METH_VARARGS | METH_KEYWORDS },
 	 { "delete_wxIcon", (PyCFunction) _wrap_delete_wxIcon, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxIcon", (PyCFunction) _wrap_new_wxIcon, METH_VARARGS | METH_KEYWORDS },
-	 { "delete_wxMask", (PyCFunction) _wrap_delete_wxMask, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxMask", (PyCFunction) _wrap_new_wxMask, METH_VARARGS | METH_KEYWORDS },
 	 { "wxBitmap_SetWidth", (PyCFunction) _wrap_wxBitmap_SetWidth, METH_VARARGS | METH_KEYWORDS },
 	 { "wxBitmap_SetPalette", (PyCFunction) _wrap_wxBitmap_SetPalette, METH_VARARGS | METH_KEYWORDS },

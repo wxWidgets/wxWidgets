@@ -92,7 +92,7 @@ wxBitmap* wxNoRefBitmap(char* name, long flags);
 class wxMask {
 public:
     wxMask(const wxBitmap& bitmap);
-    ~wxMask();
+    //~wxMask();
 };
 
 %new wxMask* wxMaskColour(const wxBitmap& bitmap, const wxColour& colour);

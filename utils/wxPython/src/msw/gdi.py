@@ -67,9 +67,6 @@ class wxMaskPtr :
     def __init__(self,this):
         self.this = this
         self.thisown = 0
-    def __del__(self,gdic=gdic):
-        if self.thisown == 1 :
-            gdic.delete_wxMask(self)
     def __repr__(self):
         return "<C wxMask instance at %s>" % (self.this,)
 class wxMask(wxMaskPtr):

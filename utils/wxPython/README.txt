@@ -63,6 +63,14 @@ Added wxPython.lib.filebrowsebutton also from Mike Fletcher.
 Renamed wxTreeCtrl.GetParent to GetItemParent to avoid a name clash
 with wxWindow.GetParent.
 
+Added wxIntersectRect to computer the intersection of two wxRect's.
+It is used like this:
+
+   intersect = wxIntersectRect(rect1, rect2)
+
+If r1 and r2 don't intersect then None is returned, otherwise the
+rectangle representing the intersection is returned.
+
 
 
 What's new in 2.1.11

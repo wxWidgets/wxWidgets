@@ -476,8 +476,8 @@ class wxTreeCtrlPtr(wxControlPtr):
         val = apply(controls2c.wxTreeCtrl_GetSelection,(self,) + _args, _kwargs)
         if val: val = wxTreeItemIdPtr(val) ; val.thisown = 1
         return val
-    def GetParent(self, *_args, **_kwargs):
-        val = apply(controls2c.wxTreeCtrl_GetParent,(self,) + _args, _kwargs)
+    def GetItemParent(self, *_args, **_kwargs):
+        val = apply(controls2c.wxTreeCtrl_GetItemParent,(self,) + _args, _kwargs)
         if val: val = wxTreeItemIdPtr(val) ; val.thisown = 1
         return val
     def GetSelections(self, *_args, **_kwargs):

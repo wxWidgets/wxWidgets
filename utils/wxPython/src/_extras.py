@@ -152,6 +152,9 @@ def EVT_IDLE(win, func):
 def EVT_UPDATE_UI(win, id, func):
     win.Connect(id, -1, wxEVT_UPDATE_UI, func)
 
+def EVT_UPDATE_UI_RANGE(win, id, id2, func):
+    win.Connect(id, id2, wxEVT_UPDATE_UI, func)
+
 
 # Mouse Events
 def EVT_LEFT_DOWN(win, func):

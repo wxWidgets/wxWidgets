@@ -265,7 +265,7 @@ public:
     void SetForegroundColour(const wxColour& colour);
     void SetId(int id);
     void SetName(const wxString& name);
-    void SetScrollbar(int orientation, int position, int thumbSize, int range, bool refresh = TRUE);
+    void SetScrollbar(int orientation, int position, int thumbSize, int range, int refresh = TRUE);
     void SetScrollPos(int orientation, int pos, bool refresh = TRUE);
 
     %name(SetDimensions) void SetSize(int x, int y, int width, int height, int sizeFlags=wxSIZE_AUTO);
@@ -433,6 +433,7 @@ public:
     void SetScrollbars(int pixelsPerUnitX, int pixelsPerUnitY,
                        int noUnitsX, int noUnitsY,
                        int xPos = 0, int yPos = 0);
+    void SetTargetWindow(wxWindow* window);
     void ViewStart(int* OUTPUT, int* OUTPUT);
 
     void CalcScrolledPosition( int x, int y, int *OUTPUT, int *OUTPUT);
@@ -481,9 +482,7 @@ public:
     %name(RemoveItem) wxMenuItem *Remove(wxMenuItem *item);
 
     %addmethods {
-        void Destroy() {
-            delete self;
-        }
+        void Destroy() { delete self; }
     }
     %name(DestroyId)bool Destroy(int id);
     %name(DestroyItem)bool Destroy(wxMenuItem *item);

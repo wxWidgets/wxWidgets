@@ -3542,13 +3542,12 @@ static PyObject *_wrap_wxWindow_SetScrollbar(PyObject *self, PyObject *args, PyO
     int  _arg2;
     int  _arg3;
     int  _arg4;
-    bool  _arg5 = (bool ) TRUE;
+    int  _arg5 = (int ) TRUE;
     PyObject * _argo0 = 0;
-    int tempbool5 = (int) TRUE;
     char *_kwnames[] = { "self","orientation","position","thumbSize","range","refresh", NULL };
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oiiii|i:wxWindow_SetScrollbar",_kwnames,&_argo0,&_arg1,&_arg2,&_arg3,&_arg4,&tempbool5)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oiiii|i:wxWindow_SetScrollbar",_kwnames,&_argo0,&_arg1,&_arg2,&_arg3,&_arg4,&_arg5)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -3557,7 +3556,6 @@ static PyObject *_wrap_wxWindow_SetScrollbar(PyObject *self, PyObject *args, PyO
         return NULL;
         }
     }
-    _arg5 = (bool ) tempbool5;
 {
     wxPy_BEGIN_ALLOW_THREADS;
         wxWindow_SetScrollbar(_arg0,_arg1,_arg2,_arg3,_arg4,_arg5);
@@ -5463,6 +5461,42 @@ static PyObject *_wrap_wxScrolledWindow_SetScrollbars(PyObject *self, PyObject *
     return _resultobj;
 }
 
+#define wxScrolledWindow_SetTargetWindow(_swigobj,_swigarg0)  (_swigobj->SetTargetWindow(_swigarg0))
+static PyObject *_wrap_wxScrolledWindow_SetTargetWindow(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxScrolledWindow * _arg0;
+    wxWindow * _arg1;
+    PyObject * _argo0 = 0;
+    PyObject * _argo1 = 0;
+    char *_kwnames[] = { "self","window", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxScrolledWindow_SetTargetWindow",_kwnames,&_argo0,&_argo1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxScrolledWindow_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxScrolledWindow_SetTargetWindow. Expected _wxScrolledWindow_p.");
+        return NULL;
+        }
+    }
+    if (_argo1) {
+        if (_argo1 == Py_None) { _arg1 = NULL; }
+        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxWindow_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxScrolledWindow_SetTargetWindow. Expected _wxWindow_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxScrolledWindow_SetTargetWindow(_arg0,_arg1);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
 #define wxScrolledWindow_ViewStart(_swigobj,_swigarg0,_swigarg1)  (_swigobj->ViewStart(_swigarg0,_swigarg1))
 static PyObject *_wrap_wxScrolledWindow_ViewStart(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
@@ -6494,9 +6528,7 @@ static PyObject *_wrap_wxMenu_RemoveItem(PyObject *self, PyObject *args, PyObjec
     return _resultobj;
 }
 
-static void  wxMenu_Destroy(wxMenu *self) {
-            delete self;
-        }
+static void  wxMenu_Destroy(wxMenu *self) { delete self; }
 static PyObject *_wrap_wxMenu_Destroy(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxMenu * _arg0;
@@ -8474,6 +8506,7 @@ static PyMethodDef windowscMethods[] = {
 	 { "wxScrolledWindow_CalcUnscrolledPosition", (PyCFunction) _wrap_wxScrolledWindow_CalcUnscrolledPosition, METH_VARARGS | METH_KEYWORDS },
 	 { "wxScrolledWindow_CalcScrolledPosition", (PyCFunction) _wrap_wxScrolledWindow_CalcScrolledPosition, METH_VARARGS | METH_KEYWORDS },
 	 { "wxScrolledWindow_ViewStart", (PyCFunction) _wrap_wxScrolledWindow_ViewStart, METH_VARARGS | METH_KEYWORDS },
+	 { "wxScrolledWindow_SetTargetWindow", (PyCFunction) _wrap_wxScrolledWindow_SetTargetWindow, METH_VARARGS | METH_KEYWORDS },
 	 { "wxScrolledWindow_SetScrollbars", (PyCFunction) _wrap_wxScrolledWindow_SetScrollbars, METH_VARARGS | METH_KEYWORDS },
 	 { "wxScrolledWindow_Scroll", (PyCFunction) _wrap_wxScrolledWindow_Scroll, METH_VARARGS | METH_KEYWORDS },
 	 { "wxScrolledWindow_PrepareDC", (PyCFunction) _wrap_wxScrolledWindow_PrepareDC, METH_VARARGS | METH_KEYWORDS },

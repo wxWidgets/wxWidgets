@@ -114,29 +114,35 @@ public:
 
 class wxRect {
 public:
-   wxRect(long x=0, long y=0, long w=0, long h=0);
-   // TODO: do this one too... wxRect(const wxPoint& pos, const wxSize& size);
-   ~wxRect();
+    wxRect(int x=0, int y=0, int w=0, int h=0);
+    // TODO: do this one too... wxRect(const wxPoint& pos, const wxSize& size);
+    ~wxRect();
 
-   long  GetX();
-   void SetX(long X);
-   long  GetY();
-   void SetY(long Y);
-   long  GetWidth();
-   void SetWidth(long w);
-   long  GetHeight();
-   void SetHeight(long h);
+    int  GetX();
+    void SetX(int X);
+    int  GetY();
+    void SetY(int Y);
+    int  GetWidth();
+    void SetWidth(int w);
+    int  GetHeight();
+    void SetHeight(int h);
 
 
-   wxPoint GetPosition();
-   wxSize GetSize();
+    wxPoint GetPosition();
+    wxSize GetSize();
 
-   long  GetLeft();
-   long  GetTop();
-   long  GetBottom();
-   long  GetRight();
+    int  GetLeft();
+    int  GetTop();
+    int  GetBottom();
+    int  GetRight();
 
-   long x, y, width, height;
+    void SetLeft(int left);
+    void SetRight(int right);
+    void SetTop(int top);
+    void SetBottom(int bottom);
+
+
+    int x, y, width, height;
 
     %addmethods {
         PyObject* asTuple() {
@@ -153,6 +159,44 @@ public:
 };
 
 
+//  %inline %{
+//      bool wxIntersectRect(wxRect* dest, wxRect* r1, wxRect* r2) {
+//          wxRegion reg1(*r1);
+//          wxRegion reg2(*r2);
+//          bool     success;
+//          *dest = wxRect(0,0,0,0);
+//          success = reg1.Intersect(reg2);
+//          if (success) {
+//              *dest = reg1.GetBox();
+//              return *dest != wxRect(0,0,0,0);
+//          }
+//          return FALSE;
+//      }
+//  %}
+
+
+%inline %{
+    PyObject* wxIntersectRect(wxRect* r1, wxRect* r2) {
+        wxRegion  reg1(*r1);
+        wxRegion  reg2(*r2);
+        wxRect    dest(0,0,0,0);
+        PyObject* obj;
+
+        reg1.Intersect(reg2);
+        dest = reg1.GetBox();
+
+        if (dest != wxRect(0,0,0,0)) {
+            bool doSave = wxPyRestoreThread();
+            wxRect* newRect = new wxRect(dest);
+            obj = wxPyConstructObject((void*)newRect, "wxRect");
+            PyObject_SetAttrString(obj, "thisown", PyInt_FromLong(1));
+            wxPySaveThread(doSave);
+            return obj;
+        }
+        Py_INCREF(Py_None);
+        return Py_None;
+    }
+%}
 
 
 //---------------------------------------------------------------------------
@@ -166,7 +210,7 @@ void wxRegisterId(long id);
 void wxBell();
 void wxDisplaySize(int *OUTPUT, int *OUTPUT);
 void wxEndBusyCursor();
-long wxExecute(const wxString& command, bool sync = FALSE);
+long wxExecute(const wxString& command, int sync = FALSE);
 long wxGetElapsedTime(bool resetTimer = TRUE);
 #ifdef __WXMSW__
 long wxGetFreeMemory();
@@ -272,13 +316,27 @@ public:
     wxRegionContain Contains(long x, long y);
     %name(ContainsPoint)wxRegionContain Contains(const wxPoint& pt);
     %name(ContainsRect)wxRegionContain Contains(const wxRect& rect);
+    %name(ContainsRectDim)wxRegionContain Contains(long x, long y, long w, long h);
 
     wxRect GetBox();
-    bool Intersect(const wxRect& rect);
+
+    bool Intersect(long x, long y, long width, long height);
+    %name(IntersectRect)bool Intersect(const wxRect& rect);
+    %name(IntersectRegion)bool Intersect(const wxRegion& region);
+
     bool IsEmpty();
-    bool Subtract(const wxRect& rect);
-    bool Union(const wxRect& rect);
-    bool Xor(const wxRect& rect);
+
+    bool Union(long x, long y, long width, long height);
+    %name(UnionRect)bool Union(const wxRect& rect);
+    %name(UnionRegion)bool Union(const wxRegion& region);
+
+    bool Subtract(long x, long y, long width, long height);
+    %name(SubtractRect)bool Subtract(const wxRect& rect);
+    %name(SubtractRegion)bool Subtract(const wxRegion& region);
+
+    bool Xor(long x, long y, long width, long height);
+    %name(XorRect)bool Xor(const wxRect& rect);
+    %name(XorRegion)bool Xor(const wxRegion& region);
 };
 
 

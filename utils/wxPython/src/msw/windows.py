@@ -589,6 +589,9 @@ class wxScrolledWindowPtr(wxPanelPtr):
     def SetScrollbars(self, *_args, **_kwargs):
         val = apply(windowsc.wxScrolledWindow_SetScrollbars,(self,) + _args, _kwargs)
         return val
+    def SetTargetWindow(self, *_args, **_kwargs):
+        val = apply(windowsc.wxScrolledWindow_SetTargetWindow,(self,) + _args, _kwargs)
+        return val
     def ViewStart(self, *_args, **_kwargs):
         val = apply(windowsc.wxScrolledWindow_ViewStart,(self,) + _args, _kwargs)
         return val
