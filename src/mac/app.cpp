@@ -1817,6 +1817,10 @@ int wxKeyCodeToMacModifier(wxKeyCode key)
 
 bool wxGetKeyState(wxKeyCode key) //virtual key code if < 10.2.x, else see below
 {
+//#ifdef __DARWIN__
+//	wxHIDKeyboard keyboard;
+//	return keyboard.IsActive(key);
+//#else
 // TODO:  Have it use HID Manager on OSX...
 //if OS X > 10.2 (i.e. 10.2.x)
 //a known apple bug prevents the system from determining led
@@ -1826,6 +1830,7 @@ bool wxGetKeyState(wxKeyCode key) //virtual key code if < 10.2.x, else see below
 //  KeyMapByteArray keymap; 
 //  GetKeys((BigEndianLong*)keymap);
 //  return !!(BitTst(keymap, (sizeof(KeyMapByteArray)*8) - iKey));
+//#endif
 }
 
 #if !TARGET_CARBON
