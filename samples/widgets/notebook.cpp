@@ -136,7 +136,7 @@ protected:
 
     // is the value in range?
     bool IsValidValue(int val) const
-        { return (val >= 0) && (val < m_notebook->GetPageCount()); }
+        { return (val >= 0) && (val < (int) m_notebook->GetPageCount()); }
 
     // the controls
     // ------------
