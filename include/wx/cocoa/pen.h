@@ -3,101 +3,68 @@
 // Purpose:     wxPen class
 // Author:      David Elliott
 // Modified by:
-// Created:     22.03.2003
+// Created:     2003/08/02 (stubs from 22.03.2003)
 // RCS-ID:      $Id$
 // Copyright:   (c) 2003 David Elliott
 // Licence:   	wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_PEN_H_
-#define _WX_PEN_H_
-
-#if defined(__GNUG__) && !defined(__APPLE__)
-#pragma interface "pen.h"
-#endif
+#ifndef __WX_COCOA_PEN_H__
+#define __WX_COCOA_PEN_H__
 
 #include "wx/gdiobj.h"
-#include "wx/colour.h"
-#include "wx/bitmap.h"
+#include "wx/gdicmn.h"
 
-class WXDLLEXPORT wxPen;
+class WXDLLEXPORT wxColour;
+class WXDLLEXPORT wxBitmap;
 
-class WXDLLEXPORT wxPenRefData: public wxGDIRefData
-{
-    friend class WXDLLEXPORT wxPen;
-public:
-    wxPenRefData();
-    wxPenRefData(const wxPenRefData& data);
-    ~wxPenRefData();
-
-    wxPenRefData& operator=(const wxPenRefData& data);
-
-protected:
-  int           m_width;
-  int           m_style;
-  int           m_join ;
-  int           m_cap ;
-  wxBitmap      m_stipple ;
-  int           m_nbDash ;
-  wxDash *      m_dash ;
-  wxColour      m_colour;
-/* TODO: implementation
-  WXHPEN        m_hPen;
-*/
-};
-
-#define M_PENDATA ((wxPenRefData *)m_refData)
-
-// Pen
+// ========================================================================
+// wxPen
+// ========================================================================
 class WXDLLEXPORT wxPen: public wxGDIObject
 {
-  DECLARE_DYNAMIC_CLASS(wxPen)
+    DECLARE_DYNAMIC_CLASS(wxPen)
 public:
-  wxPen();
-  wxPen(const wxColour& col, int width = 1, int style = wxSOLID);
-  wxPen(const wxBitmap& stipple, int width);
-  wxPen(const wxPen& pen)
-      : wxGDIObject()
-      { Ref(pen); }
-  ~wxPen();
+    wxPen();
+    wxPen(const wxColour& col, int width = 1, int style = wxSOLID);
+    wxPen(const wxBitmap& stipple, int width);
+    wxPen(const wxPen& pen)
+        : wxGDIObject()
+        { Ref(pen); }
+    ~wxPen();
 
-  inline wxPen& operator = (const wxPen& pen) { if (*this == pen) return (*this); Ref(pen); return *this; }
-  inline bool operator == (const wxPen& pen) { return m_refData == pen.m_refData; }
-  inline bool operator != (const wxPen& pen) { return m_refData != pen.m_refData; }
+    // wxObjectRefData
+    wxObjectRefData *CreateRefData() const;
+    wxObjectRefData *CloneRefData(const wxObjectRefData *data) const;
 
-  virtual bool Ok() const { return (m_refData != NULL) ; }
+    inline wxPen& operator = (const wxPen& pen)
+    {   if (*this == pen) return (*this); Ref(pen); return *this; }
+    inline bool operator == (const wxPen& pen)
+    {   return m_refData == pen.m_refData; }
+    inline bool operator != (const wxPen& pen)
+    {   return m_refData != pen.m_refData; }
 
-  // Override in order to recreate the pen
-  void SetColour(const wxColour& col) ;
-  void SetColour(unsigned char r, unsigned char g, unsigned char b)  ;
+    virtual bool Ok() const { return (m_refData != NULL) ; }
 
-  void SetWidth(int width)  ;
-  void SetStyle(int style)  ;
-  void SetStipple(const wxBitmap& stipple)  ;
-  void SetDashes(int nb_dashes, const wxDash *dash)  ;
-  void SetJoin(int join)  ;
-  void SetCap(int cap)  ;
+    void SetColour(const wxColour& col) ;
+    void SetColour(unsigned char r, unsigned char g, unsigned char b)  ;
 
-  inline wxColour& GetColour() const { return (M_PENDATA ? M_PENDATA->m_colour : wxNullColour); };
-  inline int GetWidth() const { return (M_PENDATA ? M_PENDATA->m_width : 0); };
-  inline int GetStyle() const { return (M_PENDATA ? M_PENDATA->m_style : 0); };
-  inline int GetJoin() const { return (M_PENDATA ? M_PENDATA->m_join : 0); };
-  inline int GetCap() const { return (M_PENDATA ? M_PENDATA->m_cap : 0); };
-  inline int GetDashes(wxDash **ptr) const {
-     *ptr = (M_PENDATA ? M_PENDATA->m_dash : (wxDash*) NULL); return (M_PENDATA ? M_PENDATA->m_nbDash : 0);
-  }
+    void SetWidth(int width);
+    void SetStyle(int style);
+    void SetStipple(const wxBitmap& stipple);
+    void SetDashes(int nb_dashes, const wxDash *dash);
+    void SetJoin(int join);
+    void SetCap(int cap);
 
-  inline wxBitmap *GetStipple() const { return (M_PENDATA ? (& M_PENDATA->m_stipple) : (wxBitmap*) NULL); };
+    wxColour& GetColour() const;
+    int GetWidth() const;
+    int GetStyle() const;
+    int GetJoin() const;
+    int GetCap() const;
+    int GetDashes(wxDash **ptr) const;
+    wxBitmap *GetStipple() const;
 
-// Implementation
-
-  // Useful helper: create the brush resource
-  bool RealizeResource();
-
-  // When setting properties, we must make sure we're not changing
-  // another object
-  void Unshare();
+    WX_NSColor GetNSColor();
 };
 
-#endif
-    // _WX_PEN_H_
+#endif // __WX_COCOA_PEN_H__
