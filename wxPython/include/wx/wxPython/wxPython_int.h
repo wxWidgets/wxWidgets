@@ -253,7 +253,7 @@ PyObject* wxArrayInt2PyList_helper(const wxArrayInt& arr);
 
 #ifndef wxPyUSE_EXPORTED_API
 
-class wxPyCallback : public wxObject {
+class wxPyCallback : public wxEvtHandler {
     DECLARE_ABSTRACT_CLASS(wxPyCallback);
 public:
     wxPyCallback(PyObject* func);
