@@ -87,3 +87,11 @@ wxEVT_GRID_EDITOR_HIDDEN = wx.grid.wxEVT_GRID_EDITOR_HIDDEN
 wxEVT_GRID_EDITOR_CREATED = wx.grid.wxEVT_GRID_EDITOR_CREATED
 
 
+d = globals()
+for k, v in wx.grid.__dict__.iteritems():
+    if k.startswith('EVT'):
+        d[k] = v
+del d, k, v
+
+
+
