@@ -12,10 +12,16 @@ from wxPython.xrc import *
 sysFont = wxSystemSettings_GetFont(wxSYS_SYSTEM_FONT)
 labelFont = wxFont(sysFont.GetPointSize(), wxDEFAULT, wxNORMAL, wxBOLD)
 modernFont = wxFont(sysFont.GetPointSize(), wxMODERN, wxNORMAL, wxNORMAL)
-smallerFont = wxFont(sysFont.GetPointSize() - 2, wxDEFAULT, wxNORMAL, wxNORMAL)
+smallerFont = wxFont(sysFont.GetPointSize()-2, wxDEFAULT, wxNORMAL, wxNORMAL)
 
 progname = 'XRCed'
 version = '0.1.0'
+
+try:
+    True
+except NameError:
+    True = 1==1
+    False = 1==0
 
 # Global variables
 
