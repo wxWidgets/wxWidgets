@@ -17,6 +17,7 @@
 #include "wx/string.h"
 #include "wx/font.h"
 #include "wx/gdicmn.h"
+#include "wx/encinfo.h"
 
 #if !USE_SHARED_LIBRARIES
 IMPLEMENT_DYNAMIC_CLASS(wxFont, wxGDIObject)

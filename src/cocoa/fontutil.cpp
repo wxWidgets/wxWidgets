@@ -36,6 +36,7 @@
 #include "wx/tokenzr.h"
 #include "wx/hash.h"
 #include "wx/module.h"
+#include "wx/encinfo.h"
 
 #ifdef __WXGTK20__
 
