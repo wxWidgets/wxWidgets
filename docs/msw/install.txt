@@ -135,7 +135,7 @@ To build the DLL version using makefiles:
    suitable precompiled header file for compiling applications.
    The resulting libraries are called:
 
-      wx\lib\wx[version].lib(dll) (debug version)
+      wx\lib\wx[version]d.lib(dll) (debug version)
       wx\lib\wx[version].lib(dll) (release version, using FINAL=1)
 
 2. Invoke a sample makefile with 'nmake -f makefile.vc WXUSINGDLL=1'
@@ -412,8 +412,8 @@ options, the linker gives up. So the date/time option is switched
 off for Watcom C++. Also, wxAutomationObject is not compiled with
 Watcom C++.
 Note (3): if Watcom can't read the precompiled header when
-building a sample, try deleting src\msw\watcom.pch and
-compiling the sample again.
+building a sample or library, try deleting src\msw\watcom.pch and
+compiling again.
 Note (4): if you get _popen_ and _pclose_ link errors, try
 recompiling wxWindows with XPM support disabled in setup.h.
 Alternatively, make sure these lines exist at the top of

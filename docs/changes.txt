@@ -52,7 +52,7 @@ wxMotif:
 
 Documentation:
 
-- Added preliminary wxGrid documentation.
+- Added wxDb documentation.
 - Added notes for Cygwin 1.1 to MSW install.txt.
 
 2.2.0
