@@ -7478,7 +7478,9 @@ bool wxGrid::IsCurrentCellReadOnly() const
 
 bool wxGrid::CanEnableCellControl() const
 {
-    return m_editable && !IsCurrentCellReadOnly();
+    return m_editable && (m_currentCellCoords != wxGridNoCellCoords) &&
+        !IsCurrentCellReadOnly();
+        
 }
 
 bool wxGrid::IsCellEditControlEnabled() const
@@ -7741,7 +7743,10 @@ static int CoordToRowOrCol(int coord, int defaultDist, int minDist,
         if ( coord >= BorderArray[i_max])
         {
             i_min = i_max;
-            i_max = coord / minDist;
+            if (minDist)
+                i_max = coord / minDist;
+            else
+                i_max =  BorderArray.GetCount() - 1;
         }
         if ( i_max >= BorderArray.GetCount())
             i_max = BorderArray.GetCount() - 1;
@@ -9486,14 +9491,18 @@ int wxGrid::GetRowMinimalHeight(int row) const
 
 void wxGrid::SetColMinimalAcceptableWidth( int width )
 {
-    if ( width<1 )
+    // We do allow a width of 0 since this gives us
+    // an easy way to temporarily hidding columns.
+    if ( width<0 )
         return;
     m_minAcceptableColWidth = width;
 }
 
 void wxGrid::SetRowMinimalAcceptableHeight( int height )
 {
-    if ( height<1 )
+    // We do allow a height of 0 since this gives us
+    // an easy way to temporarily hidding rows.
+    if ( height<0 )
         return;
     m_minAcceptableRowHeight = height;
 };
