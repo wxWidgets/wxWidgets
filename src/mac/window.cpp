@@ -56,9 +56,15 @@
 extern wxList wxPendingDelete;
 wxWindowMac* gFocusWindow = NULL ;
 
+#ifdef __WXUNIVERSAL__
+    IMPLEMENT_ABSTRACT_CLASS(wxWindowMac, wxWindowBase)
+#else // __WXMAC__
+    IMPLEMENT_DYNAMIC_CLASS(wxWindow, wxWindowBase)
+#endif // __WXUNIVERSAL__/__WXMAC__
+
 #if !USE_SHARED_LIBRARY
-IMPLEMENT_DYNAMIC_CLASS(wxWindowMac, wxEvtHandler)
-BEGIN_EVENT_TABLE(wxWindowMac, wxEvtHandler)
+
+BEGIN_EVENT_TABLE(wxWindowMac, wxWindowBase)
   EVT_ERASE_BACKGROUND(wxWindowMac::OnEraseBackground)
   EVT_SYS_COLOUR_CHANGED(wxWindowMac::OnSysColourChanged)
   EVT_INIT_DIALOG(wxWindowMac::OnInitDialog)

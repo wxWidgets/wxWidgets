@@ -134,14 +134,17 @@ wxNotebook::~wxNotebook()
 
 void wxNotebook::SetPadding(const wxSize& padding)
 {
+   wxFAIL_MSG( wxT("wxNotebook::SetPadding not implemented") );
 }
 
 void wxNotebook::SetTabSize(const wxSize& sz)
 {
+    wxFAIL_MSG( wxT("wxNotebook::SetTabSize not implemented") );
 }
 
 void wxNotebook::SetPageSize(const wxSize& size)
 {
+    wxFAIL_MSG( wxT("wxNotebook::SetPageSize not implemented") );
 }
 
 int wxNotebook::SetSelection(int nPage)
@@ -175,17 +178,18 @@ wxString wxNotebook::GetPageText(int nPage) const
 
 int wxNotebook::GetPageImage(int nPage) const
 {
-    wxASSERT( IS_VALID_PAGE(nPage) );
+    wxCHECK_MSG( IS_VALID_PAGE(nPage), -1, _T("invalid notebook page") );
 
-    // TODO
-    return 0;
+    return 0 ;
 }
 
 bool wxNotebook::SetPageImage(int nPage, int nImage)
 {
-    wxASSERT( IS_VALID_PAGE(nPage) );
+    wxCHECK_MSG( IS_VALID_PAGE(nPage), FALSE, _T("invalid notebook page") );
 
-    // TODO
+    wxCHECK_MSG( m_imageList && nImage < m_imageList->GetImageCount(), FALSE,
+                 _T("invalid image index in SetPageImage()") );
+
     return FALSE;
 }
 
@@ -305,14 +309,6 @@ void wxNotebook::MacSetupTabs()
 //     time because doing it in ::Create() doesn't work (for unknown reasons)
 void wxNotebook::OnSize(wxSizeEvent& event)
 {
-    static bool s_bFirstTime = TRUE;
-    if ( s_bFirstTime ) {
-        // TODO: any first-time-size processing.
-        s_bFirstTime = FALSE;
-    }
-
-    // TODO: all this may or may not be necessary for your platform
-
     // emulate page change (it's esp. important to do it first time because
     // otherwise our page would stay invisible)
     int nSel = m_nSelection;

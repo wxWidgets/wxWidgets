@@ -459,6 +459,7 @@ bool wxApp::Initialize()
   wxTheColourDatabase = new wxColourDatabase(wxKEY_STRING);
   wxTheColourDatabase->Initialize();
 
+#ifdef __WXDEBUG__
 #if wxUSE_LOG
     // flush the logged messages if any and install a 'safer' log target: the
     // default one (wxLogGui) can't be used after the resources are freed just
@@ -469,6 +470,7 @@ bool wxApp::Initialize()
     // this will flush the old messages if any
     delete wxLog::SetActiveTarget(new wxLogStderr);
 #endif // wxUSE_LOG
+#endif
 
   wxInitializeStockLists();
   wxInitializeStockObjects();
