@@ -148,8 +148,8 @@ Source: "samples\pySketch\images\*.bmp";   DestDir: "{app}\wxPython\samples\pySk
 
 [Icons]
 Name: "{group}\Run the DEMO";          Filename: "{code:GetPythonDir}\pythonw.exe";         WorkingDir: "{app}\wxPython\demo";      Parameters: "demo.py";
-Name: "{group}\wxWindows Referece";    Filename: "{app}\wxPython\docs\wx.chm";
-Name: "{group}\wxOGL Referece";        Filename: "{app}\wxPython\docs\ogl.chm";
+Name: "{group}\wxWindows Reference";   Filename: "{app}\wxPython\docs\wx.chm";
+Name: "{group}\wxOGL Reference";       Filename: "{app}\wxPython\docs\ogl.chm";
 Name: "{group}\licence.txt";           Filename: "{app}\wxPython\docs\licence\licence.txt";
 Name: "{group}\README.txt";            Filename: "{app}\wxPython\docs\README.txt";
 Name: "{group}\CHANGES.txt";           Filename: "{app}\wxPython\docs\CHANGES.txt";
