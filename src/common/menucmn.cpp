@@ -166,6 +166,8 @@ wxAcceleratorEntry *wxGetAccelFromString(const wxString& label)
                         keyCode = WXK_DELETE;
                     else if ( current == wxT("DELETE") )
                         keyCode = WXK_DELETE;
+                    else if ( current == wxT("BACK") )
+                        keyCode = WXK_BACK;
                     else if ( current == wxT("INS") )
                         keyCode = WXK_INSERT;
                     else if ( current == wxT("INSERT") )
@@ -288,7 +290,7 @@ void wxMenuBase::Init(long style)
 wxMenuBase::~wxMenuBase()
 {
     WX_CLEAR_LIST(wxMenuItemList, m_items);
-    
+
     // Actually, in GTK, the submenus have to get deleted first.
 }
 
