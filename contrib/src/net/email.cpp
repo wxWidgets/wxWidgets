@@ -36,7 +36,7 @@
 #include "wx/timer.h"
 #include "wx/wfstream.h"
 #include "stdlib.h"
-#include "process.h"
+#include "unistd.h"
 #endif
 
 // Send a message.
