@@ -49,6 +49,7 @@
 
 #if defined(__WXMAC__)
   #include  "wx/mac/private.h"  // includes mac headers
+  #include  "wx/filename.h"     // for MacSetTypeAndCreator
 #endif
 
 #if defined(__WXMSW__)
