@@ -353,57 +353,65 @@ void wxScrolledWindow::Scroll( int x_pos, int y_pos )
     if (((x_pos == -1) || (x_pos == m_xScrollPosition)) &&
         ((y_pos == -1) || (y_pos == m_yScrollPosition))) return;
 
-    int w, h;
-    m_targetWindow->GetClientSize(&w, &h);
-
     if ((x_pos != -1) && (m_xScrollPixelsPerLine))
     {
         int old_x = m_xScrollPosition;
         m_xScrollPosition = x_pos;
-
-        // Calculate page size i.e. number of scroll units you get on the
-        // current client window
-        int noPagePositions = (int) ( (w/(double)m_xScrollPixelsPerLine) + 0.5 );
-        if (noPagePositions < 1) noPagePositions = 1;
-
-        // Correct position if greater than extent of canvas minus
-        // the visible portion of it or if below zero
-        m_xScrollPosition = wxMin( m_xScrollLines-noPagePositions, m_xScrollPosition );
-        m_xScrollPosition = wxMax( 0, m_xScrollPosition );
-
-        if (old_x != m_xScrollPosition) {
-            m_targetWindow->ScrollWindow( (old_x-m_xScrollPosition)*m_xScrollPixelsPerLine, 0 );
-        }
+        m_hAdjust->value = x_pos;
+        
+        m_targetWindow->ScrollWindow( (old_x-m_xScrollPosition)*m_xScrollPixelsPerLine, 0 );
+        
+        gtk_signal_emit_by_name( GTK_OBJECT(m_hAdjust), "value_changed" );
     }
+    
     if ((y_pos != -1) && (m_yScrollPixelsPerLine))
     {
         int old_y = m_yScrollPosition;
         m_yScrollPosition = y_pos;
-
-        // Calculate page size i.e. number of scroll units you get on the
-        // current client window
-        int noPagePositions = (int) ( (h/(double)m_yScrollPixelsPerLine) + 0.5 );
-        if (noPagePositions < 1) noPagePositions = 1;
-
-        // Correct position if greater than extent of canvas minus
-        // the visible portion of it or if below zero
-        m_yScrollPosition = wxMin( m_yScrollLines-noPagePositions, m_yScrollPosition );
-        m_yScrollPosition = wxMax( 0, m_yScrollPosition );
+        m_vAdjust->value = y_pos;
         
-        if (old_y != m_yScrollPosition) {
-            m_targetWindow->ScrollWindow( 0, (old_y-m_yScrollPosition)*m_yScrollPixelsPerLine );
-        }
+        m_targetWindow->ScrollWindow( 0, (old_y-m_yScrollPosition)*m_yScrollPixelsPerLine );
+        
+        gtk_signal_emit_by_name( GTK_OBJECT(m_vAdjust), "value_changed" );
     }
 }
 
 void wxScrolledWindow::GtkVScroll( float value )
 {
-    Scroll( -1, (int)(value+0.5) );
+    if (!m_targetWindow)
+        return;
+
+    if (m_yScrollPixelsPerLine == 0)
+        return;
+    
+    int y_pos = (int)(value+0.5);
+    
+    if (y_pos == m_yScrollPosition)
+        return;
+    
+    int old_y = m_yScrollPosition;
+    m_yScrollPosition = y_pos;
+
+    m_targetWindow->ScrollWindow( 0, (old_y-m_yScrollPosition)*m_yScrollPixelsPerLine );
 }
 
 void wxScrolledWindow::GtkHScroll( float value )
 {
-    Scroll( (int)(value+0.5), -1 );
+    if (!m_targetWindow)
+        return;
+
+    if (m_xScrollPixelsPerLine == 0)
+        return;
+    
+    int x_pos = (int)(value+0.5);
+    
+    if (x_pos == m_xScrollPosition)
+        return;
+    
+    int old_x = m_xScrollPosition;
+    m_xScrollPosition = x_pos;
+
+    m_targetWindow->ScrollWindow( (old_x-m_xScrollPosition)*m_xScrollPixelsPerLine, 0 );
 }
 
 void wxScrolledWindow::EnableScrolling (bool x_scroll, bool y_scroll)
