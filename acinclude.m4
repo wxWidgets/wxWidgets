@@ -336,8 +336,6 @@ dnl ---------------------------------------------------------------------------
 dnl test for availability of iconv()
 dnl ---------------------------------------------------------------------------
 
-#serial AM2
-
 dnl From Bruno Haible.
 
 AC_DEFUN([AM_ICONV],
@@ -377,8 +375,7 @@ AC_DEFUN([AM_ICONV],
   ])
   if test "$am_cv_func_iconv" = yes; then
     AC_DEFINE(HAVE_ICONV, 1, [Define if you have the iconv() function.])
-    AC_MSG_CHECKING([for iconv declaration])
-    AC_CACHE_VAL(am_cv_proto_iconv, [
+    AC_CACHE_CHECK([if iconv needs const], wx_cv_func_iconv_const,
       AC_TRY_COMPILE([
 #include <stdlib.h>
 #include <iconv.h>
@@ -391,12 +388,19 @@ size_t iconv (iconv_t cd, char * *inbuf, size_t *inbytesleft, char * *outbuf, si
 #else
 size_t iconv();
 #endif
-], [], am_cv_proto_iconv_arg1="", am_cv_proto_iconv_arg1="const")
-      am_cv_proto_iconv="extern size_t iconv (iconv_t cd, $am_cv_proto_iconv_arg1 char * *inbuf, size_t *inbytesleft, char * *outbuf, size_t *outbytesleft);"])
-    am_cv_proto_iconv=`echo "[$]am_cv_proto_iconv" | tr -s ' ' | sed -e 's/( /(/'`
-    AC_MSG_RESULT([$]{ac_t:-
-         }[$]am_cv_proto_iconv)
-    AC_DEFINE_UNQUOTED(ICONV_CONST, $am_cv_proto_iconv_arg1,
+        ],
+        [],
+        wx_cv_func_iconv_const="no",
+        wx_cv_func_iconv_const="yes"
+      )
+    )
+
+    iconv_const=
+    if test "x$wx_cv_func_iconv_const" != "xyes"; then
+        iconv_const="const"
+    fi
+
+    AC_DEFINE_UNQUOTED(ICONV_CONST, $iconv_const,
       [Define as const if the declaration of iconv() needs const.])
   fi
   LIBICONV=
