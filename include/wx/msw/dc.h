@@ -135,7 +135,7 @@ public:
 #endif
 
 protected:
-    virtual void DoFloodFill(wxCoord x, wxCoord y, const wxColour& col,
+    virtual bool DoFloodFill(wxCoord x, wxCoord y, const wxColour& col,
                              int style = wxFLOOD_SURFACE);
 
     virtual bool DoGetPixel(wxCoord x, wxCoord y, wxColour *col) const;

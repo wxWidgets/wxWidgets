@@ -298,6 +298,80 @@ bool wxSetClipboardData(wxDataFormat dataFormat,
                 handle = SetClipboardData(dataFormat, hGlobalMemory);
                 break;
             }
+            // Only tested with non-Unicode, Visual C++ 6.0 so far
+#if defined(__VISUALC__) && !defined(UNICODE)
+        case wxDF_HTML:
+            {
+                char* html = (char *)data;
+                
+                // Create temporary buffer for HTML header...
+                char *buf = new char [400 + strlen(html)];
+                if(!buf) return FALSE;
+                
+                // Get clipboard id for HTML format...
+                static int cfid = 0;
+                if(!cfid) cfid = RegisterClipboardFormat(wxT("HTML Format"));
+                
+                // Create a template string for the HTML header...
+                strcpy(buf,
+                    "Version:0.9\r\n"
+                    "StartHTML:00000000\r\n"
+                    "EndHTML:00000000\r\n"
+                    "StartFragment:00000000\r\n"
+                    "EndFragment:00000000\r\n"
+                    "<html><body>\r\n"
+                    "<!--StartFragment -->\r\n");
+                
+                // Append the HTML...
+                strcat(buf, html);
+                strcat(buf, "\r\n");
+                // Finish up the HTML format...
+                strcat(buf,
+                    "<!--EndFragment-->\r\n"
+                    "</body>\r\n"
+                    "</html>");
+                
+                // Now go back, calculate all the lengths, and write out the
+                // necessary header information. Note, wsprintf() truncates the
+                // string when you overwrite it so you follow up with code to replace
+                // the 0 appended at the end with a '\r'...
+                char *ptr = strstr(buf, "StartHTML");
+                wsprintf(ptr+10, "%08u", strstr(buf, "<html>") - buf);
+                *(ptr+10+8) = '\r';
+                
+                ptr = strstr(buf, "EndHTML");
+                wsprintf(ptr+8, "%08u", strlen(buf));
+                *(ptr+8+8) = '\r';
+                
+                ptr = strstr(buf, "StartFragment");
+                wsprintf(ptr+14, "%08u", strstr(buf, "<!--StartFrag") - buf);
+                *(ptr+14+8) = '\r';
+                
+                ptr = strstr(buf, "EndFragment");
+                wsprintf(ptr+12, "%08u", strstr(buf, "<!--EndFrag") - buf);
+                *(ptr+12+8) = '\r';
+                
+                // Now you have everything in place ready to put on the
+                // clipboard.
+                
+                // Allocate global memory for transfer...
+                HGLOBAL hText = GlobalAlloc(GMEM_MOVEABLE |GMEM_DDESHARE, strlen(buf)+4);
+                
+                // Put your string in the global memory...
+                ptr = (char *)GlobalLock(hText);
+                strcpy(ptr, buf);
+                GlobalUnlock(hText);
+                
+                handle = ::SetClipboardData(cfid, hText);
+                
+                // Free memory...
+                GlobalFree(hText);
+                
+                // Clean up...
+                delete [] buf;
+                break;
+            }
+#endif
     }
 
     if ( handle == 0 )

@@ -202,7 +202,7 @@ public:
 #endif
 
 protected:
-    virtual void DoFloodFill( wxCoord         vX
+    virtual bool DoFloodFill( wxCoord         vX
                              ,wxCoord         vY
                              ,const wxColour& rCol
                              ,int             nStyle = wxFLOOD_SURFACE

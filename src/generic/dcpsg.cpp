@@ -441,9 +441,10 @@ void wxPostScriptDC::Clear()
     wxFAIL_MSG( wxT("wxPostScriptDC::Clear not implemented.") );
 }
 
-void wxPostScriptDC::DoFloodFill (wxCoord WXUNUSED(x), wxCoord WXUNUSED(y), const wxColour &WXUNUSED(col), int WXUNUSED(style))
+bool wxPostScriptDC::DoFloodFill (wxCoord WXUNUSED(x), wxCoord WXUNUSED(y), const wxColour &WXUNUSED(col), int WXUNUSED(style))
 {
     wxFAIL_MSG( wxT("wxPostScriptDC::FloodFill not implemented.") );
+    return FALSE;
 }
 
 bool wxPostScriptDC::DoGetPixel (wxCoord WXUNUSED(x), wxCoord WXUNUSED(y), wxColour * WXUNUSED(col)) const

@@ -332,13 +332,13 @@ void wxDC::Clear()
     }
 }
 
-extern void wxDoFloodFill(wxDC *dc, wxCoord x, wxCoord y, 
+extern bool wxDoFloodFill(wxDC *dc, wxCoord x, wxCoord y, 
                           const wxColour & col, int style);
 
-void wxDC::DoFloodFill(wxCoord x, wxCoord y,
+bool wxDC::DoFloodFill(wxCoord x, wxCoord y,
                        const wxColour& col, int style)
 {
-    wxDoFloodFill(this, x, y, col, style);
+    return wxDoFloodFill(this, x, y, col, style);
 }
 
 bool wxDC::DoGetPixel(wxCoord x, wxCoord y, wxColour *col) const

@@ -468,16 +468,17 @@ void wxDC::Clear()
     ::SetWindowOrgEx(GetHdc(), (int)m_logicalOriginX, (int)m_logicalOriginY, NULL);
 }
 
-void wxDC::DoFloodFill(wxCoord x, wxCoord y, const wxColour& col, int style)
+bool wxDC::DoFloodFill(wxCoord x, wxCoord y, const wxColour& col, int style)
 {
 #ifdef __WXMICROWIN__
-    if (!GetHDC()) return;
+    if (!GetHDC()) return FALSE;
 #endif
 
-    if ( !::ExtFloodFill(GetHdc(), XLOG2DEV(x), YLOG2DEV(y),
+    bool success = (0 != ::ExtFloodFill(GetHdc(), XLOG2DEV(x), YLOG2DEV(y),
                          col.GetPixel(),
                          style == wxFLOOD_SURFACE ? FLOODFILLSURFACE
-                                                  : FLOODFILLBORDER) )
+                                                  : FLOODFILLBORDER) ) ;
+    if (!success)
     {
         // quoting from the MSDN docs:
         //
@@ -495,6 +496,8 @@ void wxDC::DoFloodFill(wxCoord x, wxCoord y, const wxColour& col, int style)
     }
 
     CalcBoundingBox(x, y);
+    
+    return success;
 }
 
 bool wxDC::DoGetPixel(wxCoord x, wxCoord y, wxColour *col) const

@@ -1463,6 +1463,7 @@ enum wxDataFormatId
     wxDF_FILENAME =         15, /* CF_HDROP */
     wxDF_LOCALE =           16,
     wxDF_PRIVATE =          20,
+    wxDF_HTML =             30, /* Note: does not correspond to CF_ constant */
     wxDF_MAX
 };
 

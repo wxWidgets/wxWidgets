@@ -46,7 +46,7 @@ public:
 
 protected:
     virtual void DoGetSize(int *width, int *height) const;
-    virtual void DoFloodFill( wxCoord x, wxCoord y, const wxColour& col, int style = wxFLOOD_SURFACE );
+    virtual bool DoFloodFill( wxCoord x, wxCoord y, const wxColour& col, int style = wxFLOOD_SURFACE );
     virtual bool DoGetPixel( wxCoord x, wxCoord y, wxColour *col ) const;
     
     virtual void DoDrawPoint(wxCoord x, wxCoord y);

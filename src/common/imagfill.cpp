@@ -273,11 +273,11 @@ wxImageFloodFill(wxImage *image,
 }
 
 
-void wxDoFloodFill(wxDC *dc, wxCoord x, wxCoord y,
+bool wxDoFloodFill(wxDC *dc, wxCoord x, wxCoord y,
                    const wxColour& col, int style)
 {
     if (dc->GetBrush().GetStyle() == wxTRANSPARENT)
-        return;
+        return TRUE;
 
     int height = 0;
     int width  = 0;
@@ -285,6 +285,9 @@ void wxDoFloodFill(wxDC *dc, wxCoord x, wxCoord y,
 
     //it would be nice to fail if we don't get a sensible size...
     wxCHECK_RET(width >= 1 && height >= 1, wxT("In FloodFill, dc.GetSize routine failed, method not supported by this DC"));
+    
+    if (width <= 1 || height <= 1)
+        return FALSE;
 
     //this is much faster than doing the individual pixels
     wxMemoryDC memdc;
@@ -300,6 +303,8 @@ void wxDoFloodFill(wxDC *dc, wxCoord x, wxCoord y,
     memdc.SelectObject(bitmap);
     dc->Blit(0, 0, width, height, &memdc, 0, 0);
     memdc.SelectObject(wxNullBitmap);
+    
+    return TRUE;
 }
 
 #endif // wxUSE_IMAGE

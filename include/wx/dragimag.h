@@ -3,6 +3,10 @@
 
 #if wxUSE_DRAGIMAGE
 
+class WXDLLEXPORT wxRect;
+class WXDLLEXPORT wxMemoryDC;
+class WXDLLEXPORT wxDC;
+
 #if defined(__WXMSW__)
 #ifdef __WIN16__
 #include "wx/generic/dragimgg.h"

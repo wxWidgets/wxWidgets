@@ -557,7 +557,7 @@ void wxDC::Clear()
     ::GpiErase(m_hPS);
 } // end of wxDC::Clear
 
-void wxDC::DoFloodFill(
+bool wxDC::DoFloodFill(
   wxCoord                           vX
 , wxCoord                           vY
 , const wxColour&                   rCol
@@ -577,6 +577,8 @@ void wxDC::DoFloodFill(
         lOptions = FF_SURFACE;
 
     ::GpiFloodFill(m_hPS, lOptions, lColor);
+    
+    return TRUE;
 } // end of wxDC::DoFloodFill
 
 bool wxDC::DoGetPixel(

@@ -147,12 +147,12 @@ public:
         CalcBoundingBox(drawobject->MaxX(),drawobject->MaxY());
     }
 
-    void FloodFill(wxCoord x, wxCoord y, const wxColour& col,
+    bool FloodFill(wxCoord x, wxCoord y, const wxColour& col,
                    int style = wxFLOOD_SURFACE)
-        { DoFloodFill(x, y, col, style); }
-    void FloodFill(const wxPoint& pt, const wxColour& col,
+        { return DoFloodFill(x, y, col, style); }
+    bool FloodFill(const wxPoint& pt, const wxColour& col,
                    int style = wxFLOOD_SURFACE)
-        { DoFloodFill(pt.x, pt.y, col, style); }
+        { return DoFloodFill(pt.x, pt.y, col, style); }
 
     bool GetPixel(wxCoord x, wxCoord y, wxColour *col) const
         { return DoGetPixel(x, y, col); }
@@ -607,7 +607,7 @@ public:
 
 protected:
     // the pure virtual functions which should be implemented by wxDC
-    virtual void DoFloodFill(wxCoord x, wxCoord y, const wxColour& col,
+    virtual bool DoFloodFill(wxCoord x, wxCoord y, const wxColour& col,
                              int style = wxFLOOD_SURFACE) = 0;
 
     virtual bool DoGetPixel(wxCoord x, wxCoord y, wxColour *col) const = 0;

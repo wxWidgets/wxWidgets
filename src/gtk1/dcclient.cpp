@@ -401,13 +401,13 @@ void wxWindowDC::DoGetSize( int* width, int* height ) const
     m_owner->GetSize(width, height);
 }
 
-extern void wxDoFloodFill(wxDC *dc, wxCoord x, wxCoord y, 
+extern bool wxDoFloodFill(wxDC *dc, wxCoord x, wxCoord y, 
                           const wxColour & col, int style);
 
-void wxWindowDC::DoFloodFill(wxCoord x, wxCoord y,
+bool wxWindowDC::DoFloodFill(wxCoord x, wxCoord y,
                              const wxColour& col, int style)
 {
-    wxDoFloodFill(this, x, y, col, style);
+    return wxDoFloodFill(this, x, y, col, style);
 }
 
 bool wxWindowDC::DoGetPixel( wxCoord x1, wxCoord y1, wxColour *col ) const

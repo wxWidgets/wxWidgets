@@ -62,7 +62,7 @@ public:
   virtual void BeginDrawing() {}
   virtual void EndDrawing() {}
 
-  void DoFloodFill(wxCoord x1, wxCoord y1, const wxColour &col, int style=wxFLOOD_SURFACE );
+  bool DoFloodFill(wxCoord x1, wxCoord y1, const wxColour &col, int style=wxFLOOD_SURFACE );
   bool DoGetPixel(wxCoord x1, wxCoord y1, wxColour *col) const;
 
   void DoDrawLine(wxCoord x1, wxCoord y1, wxCoord x2, wxCoord y2);

@@ -487,7 +487,7 @@ Ends a document page (only relevant when outputting to a printer).
 
 \membersection{wxDC::FloodFill}\label{wxdcfloodfill}
 
-\func{void}{FloodFill}{\param{wxCoord}{ x}, \param{wxCoord}{ y}, \param{const wxColour\&}{ colour}, \param{int}{ style=wxFLOOD\_SURFACE}}
+\func{bool}{FloodFill}{\param{wxCoord}{ x}, \param{wxCoord}{ y}, \param{const wxColour\&}{ colour}, \param{int}{ style=wxFLOOD\_SURFACE}}
 
 Flood fills the device context starting from the given point, using
 the {\it current brush colour}, and using a style:
@@ -497,8 +497,11 @@ the {\it current brush colour}, and using a style:
 \item wxFLOOD\_BORDER: the area to be flooded is bounded by the given colour.
 \end{itemize}
 
+Returns FALSE if the operation failed.
+
 {\it Note:} The present implementation for non-Windows platforms may fail to find
-colour borders if the pixels do not match the colour exactly.
+colour borders if the pixels do not match the colour exactly. However the
+function will still return TRUE.
 
 \membersection{wxDC::GetBackground}\label{wxdcgetbackground}
 
