@@ -1683,8 +1683,15 @@ class ListCtrl(core.Control):
         return self.GetItemState(idx, wxLIST_STATE_SELECTED) != 0
 
     def SetColumnImage(self, col, image):
-        item = wxListItem()
-        item.SetMask(wxLIST_MASK_IMAGE)
+        item = self.GetColumn(col)
+        
+        item.SetMask( wxLIST_MASK_STATE |
+                      wxLIST_MASK_TEXT  |
+                      wxLIST_MASK_IMAGE |
+                      wxLIST_MASK_DATA  |
+                      wxLIST_SET_ITEM   |
+                      wxLIST_MASK_WIDTH |
+                      wxLIST_MASK_FORMAT )
         item.SetImage(image)
         self.SetColumn(col, item)
 

@@ -519,7 +519,14 @@ IMP_PYCALLBACK_LISTATTR_LONG(wxPyListCtrl, wxListCtrl, OnGetItemAttr);
 
 wxListItem *wxPyListCtrl_GetColumn(wxPyListCtrl *self,int col){
             wxListItem item;
-            item.SetMask(0xFFFF);
+            item.SetMask( wxLIST_MASK_STATE |
+                          wxLIST_MASK_TEXT  |
+                          wxLIST_MASK_IMAGE |
+                          wxLIST_MASK_DATA  |
+                          wxLIST_SET_ITEM   |
+                          wxLIST_MASK_WIDTH |
+                          wxLIST_MASK_FORMAT
+                          );
             if (self->GetColumn(col, item))
                 return new wxListItem(item);
             else

@@ -3352,7 +3352,6 @@ _core.Window_swigregister(WindowPtr)
 def PreWindow(*args, **kwargs):
     val = _core.new_PreWindow(*args, **kwargs)
     val.thisown = 1
-    
     return val
 
 Window_NewControlId = _core.Window_NewControlId
@@ -3642,7 +3641,6 @@ _core.Control_swigregister(ControlPtr)
 def PreControl(*args, **kwargs):
     val = _core.new_PreControl(*args, **kwargs)
     val.thisown = 1
-    
     return val
 
 #---------------------------------------------------------------------------
