@@ -110,8 +110,7 @@ bool wxButton::Create(wxWindow *parent, wxWindowID id, const wxString& label,
 void wxButton::SetDefault()
 {
     wxWindow *parent = GetParent();
-    wxPanel *panel = wxDynamicCast(parent, wxPanel);
-    if ( panel )
+    if ( parent )
         panel->SetDefaultItem(this);
 
     // We initially do not set XmNdefaultShadowThickness, to have small buttons.

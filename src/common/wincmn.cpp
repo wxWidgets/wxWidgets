@@ -268,6 +268,12 @@ wxWindowBase::~wxWindowBase()
     if ( m_tooltip )
         delete m_tooltip;
 #endif // wxUSE_TOOLTIPS
+
+    // reset the dangling pointer our parent window may keep to us
+    if ( m_parent && m_parent->GetDefaultItem() == this )
+    {
+        m_parent->SetDefaultItem(NULL);
+    }
 }
 
 bool wxWindowBase::Destroy()

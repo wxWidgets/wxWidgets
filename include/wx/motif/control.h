@@ -46,8 +46,6 @@ public:
             const wxValidator& validator = wxDefaultValidator,
             const wxString& name = wxControlNameStr);
 
-    ~wxControl();
-
     // simulates the event, returns TRUE if the event was processed
     virtual void Command(wxCommandEvent& WXUNUSED(event)) { }
 
