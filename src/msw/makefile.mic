@@ -127,6 +127,7 @@ COMMONOBJS  = \
 		$(COMMDIR)/mimecmn.$(OBJSUFF) \
 		$(COMMDIR)/module.$(OBJSUFF) \
 		$(COMMDIR)/mstream.$(OBJSUFF) \
+		$(COMMDIR)/nbkbase.$(OBJSUFF) \
 		$(COMMDIR)/object.$(OBJSUFF) \
 		$(COMMDIR)/objstrm.$(OBJSUFF) \
 		$(COMMDIR)/paper.$(OBJSUFF) \
