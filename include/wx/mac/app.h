@@ -197,11 +197,6 @@ private:
     short       m_currentRefNum ;
 } ;
 
-// TODO: add platform-specific arguments
-#ifndef __DARWIN__
-int WXDLLEXPORT wxEntry( int argc, char *argv[] , bool enterLoop = TRUE);
-#endif
-
 #endif
     // _WX_APP_H_
 
