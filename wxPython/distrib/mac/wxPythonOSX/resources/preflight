@@ -1,4 +1,0 @@
-#!/bin/sh
-# Cleanup any old install of the wxPython package
-rm -rf $2/Library/Frameworks/Python.framework/Versions/2.3/lib/python2.3/site-packages/wxPython
-exit 0
