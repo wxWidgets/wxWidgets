@@ -70,7 +70,6 @@ void wxMenu::Init()
 	Str255 	label;
 	wxMenuItem::MacBuildMenuString( label, NULL , NULL , m_title , false );
 	m_macMenuId = s_macNextMenuId++; 
-    wxCHECK_RET( s_macNextMenuId < 236 , "menu ids > 235 cannot be used for submenus on mac" );
 	m_hMenu = ::NewMenu(m_macMenuId, label);
 
     if ( !m_hMenu )

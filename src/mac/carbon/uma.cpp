@@ -222,39 +222,16 @@ void 			UMADisableMenuItem( MenuRef inMenu , MenuItemIndex inItem )
 
 void UMAAppendSubMenuItem( MenuRef menu , StringPtr l , SInt16 id ) 
 {
-	Str255 label ;
-	memcpy( label , l , l[0]+1 ) ;
-	// hardcoded adding of the submenu combination for mac
-
-	int theEnd = label[0] + 1; 
-	if (theEnd > 251) 
-		theEnd = 251; // mac allows only 255 characters
-	label[theEnd++] = '/';
-	label[theEnd++] = hMenuCmd; 
-	label[theEnd++] = '!';
-	label[theEnd++] = id ; 
-	label[theEnd] = 0x00;
-	label[0] = theEnd;
-	MacAppendMenu(menu, label);
+	MacAppendMenu(menu, l);
+	SetMenuItemHierarchicalID( menu , CountMenuItems( menu ) , id ) ;
 }
 
 void UMAInsertSubMenuItem( MenuRef menu , StringPtr l , MenuItemIndex item , SInt16 id  ) 
 {
-	Str255 label ;
-	memcpy( label , l , l[0]+1 ) ;
-	// hardcoded adding of the submenu combination for mac
-
-	int theEnd = label[0] + 1; 
-	if (theEnd > 251) 
-		theEnd = 251; // mac allows only 255 characters
-	label[theEnd++] = '/';
-	label[theEnd++] = hMenuCmd; 
-	label[theEnd++] = '!';
-	label[theEnd++] = id; 
-	label[theEnd] = 0x00;
-	label[0] = theEnd;
-	MacInsertMenuItem(menu, label , item);
+	MacInsertMenuItem(menu, l , item);
+	SetMenuItemHierarchicalID( menu , item , id ) ;
 }
+
 
 void UMAAppendMenuItem( MenuRef menu , StringPtr l , SInt16 key, UInt8 modifiers ) 
 {
