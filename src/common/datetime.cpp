@@ -3021,7 +3021,6 @@ const wxChar *wxDateTime::ParseDate(const wxChar *date)
     wxStringTokenizer tok(p, dateDelimiters);
     while ( tok.HasMoreTokens() )
     {
-        nPosCur = tok.GetPosition();
         wxString token = tok.GetNextToken();
 
         // is it a number?
@@ -3140,14 +3139,17 @@ const wxChar *wxDateTime::ParseDate(const wxChar *date)
         }
         else // not a number
         {
-            mon = GetMonthFromName(token, Name_Full | Name_Abbr);
-            if ( mon != Inv_Month )
+            // be careful not to overwrite the current mon value
+            Month mon2 = GetMonthFromName(token, Name_Full | Name_Abbr);
+            if ( mon2 != Inv_Month )
             {
                 // it's a month
                 if ( haveMon )
                 {
                     break;
                 }
+
+                mon = mon2;
 
                 haveMon = TRUE;
             }
@@ -3223,6 +3225,8 @@ const wxChar *wxDateTime::ParseDate(const wxChar *date)
                 }
             }
         }
+
+        nPosCur = tok.GetPosition();
     }
 
     // either no more tokens or the scan was stopped by something we couldn't
