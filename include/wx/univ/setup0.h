@@ -62,19 +62,6 @@
 // Recommended setting: 0 (please update your code)
 #define WXWIN_COMPATIBILITY_2_4 1
 
-// in wxMSW version 2.1.11 and earlier, wxIcon always derives from wxBitmap,
-// but this is very dangerous because you can mistakenly pass an icon instead
-// of a bitmap to a function taking "const wxBitmap&" - which will *not* work
-// because an icon is not a valid bitmap
-//
-// Starting from 2.1.12, you have the choice under this backwards compatible
-// behaviour (your code will still compile, but probably won't behave as
-// expected!) and not deriving wxIcon class from wxBitmap, but providing a
-// conversion ctor wxBitmap(const wxIcon&) instead.
-//
-// Recommended setting: 0
-#define wxICON_IS_BITMAP 0
-
 // Define as 1 for font size to be backward compatible to 1.63 and earlier.
 // 1.64 and later define point sizes to be compatible with Windows.
 //
@@ -227,13 +214,6 @@
 // Recommended setting: 1 (always)
 #define wxUSE_LOG 1
 
-// Support for command line parsing using wxCmdLineParser class.
-//
-// Default is 1
-//
-// Recommended setting: 1 (can be set to 0 if you don't use the cmd line)
-#define wxUSE_CMDLINE_PARSER 1
-
 // Recommended setting: 1
 #define wxUSE_LOGWINDOW 1
 
@@ -242,6 +222,13 @@
 
 // Recommended setting: 1
 #define wxUSE_LOG_DIALOG 1
+
+// Support for command line parsing using wxCmdLineParser class.
+//
+// Default is 1
+//
+// Recommended setting: 1 (can be set to 0 if you don't use the cmd line)
+#define wxUSE_CMDLINE_PARSER 1
 
 // Support for multithreaded applications: if 1, compile in thread classes
 // (thread.h) and make the library a bit more thread safe. Although thread
@@ -460,13 +447,13 @@
 // Recommended setting: 1
 #define wxUSE_PROTOCOL 1
 
-// Define this to use wxURL class.
-#define wxUSE_URL 1
-
 // The settings for the individual URL schemes
 #define wxUSE_PROTOCOL_FILE 1
 #define wxUSE_PROTOCOL_FTP 1
 #define wxUSE_PROTOCOL_HTTP 1
+
+// Define this to use wxURL class.
+#define wxUSE_URL 1
 
 // Support for regular expression matching via wxRegEx class: enable this to
 // use POSIX regular expressions in your code. You need to compile regex
@@ -630,6 +617,14 @@
 // Recommended setting: 1 (can be safely set to 0, not used by the library)
 #define wxUSE_CARET 1
 
+// Use wxDisplay class: it allows enumerating all displays on a system and
+// working with them.
+//
+// Default is 0 because it isn't yet implemented on all platforms
+//
+// Recommended setting: 1 if you need it, can be safely set to 0 otherwise
+#define wxUSE_DISPLAY       0
+
 // Miscellaneous geometry code: needed for Canvas library
 #define wxUSE_GEOMETRY 0
 
@@ -679,6 +674,10 @@
 
 // wxDC cacheing implementation
 #define wxUSE_DC_CACHEING 1
+
+// Set this to 1 to enable the use of DIB's for wxBitmap to support
+// bitmaps > 16MB on Win95/98/Me.  Set to 0 to use DDB's only.
+#define wxUSE_DIB_FOR_BITMAP 0
 
 // ----------------------------------------------------------------------------
 // common dialogs
@@ -824,7 +823,15 @@
 // smaller library.
 #define wxUSE_HTML 1
 
-// OpenGL canvas
+// Setting wxUSE_GLCANVAS to 1 enables OpenGL support. You need to have OpenGL
+// headers and libraries to be able to compile the library with wxUSE_GLCANVAS
+// set to 1. Note that for some compilers (notably Microsoft Visual C++) you
+// will need to manually add opengl32.lib and glu32.lib to the list of
+// libraries linked with your program if you use OpenGL.
+//
+// Default is 0.
+//
+// Recommended setting: 1 if you intend to use OpenGL, 0 otherwise
 #if defined(__WIN32__)
     #define wxUSE_GLCANVAS 1
 #else
@@ -865,6 +872,14 @@
 #else
     #define wxUSE_DRAG_AND_DROP 0
 #endif
+
+// Use wxAccessible for enhanced and customisable accessibility.
+// Depends on wxUSE_OLE.
+//
+// Default is 0.
+//
+// Recommended setting (at present): 0
+#define wxUSE_ACCESSIBILITY 0
 
 // ----------------------------------------------------------------------------
 // miscellaneous settings
@@ -1044,11 +1059,7 @@
 #define wxUSE_ICO_CUR 0
 
 // Set to 1 to compile in wxPalette class
-#if defined(__WIN32__)
-    #define wxUSE_PALETTE 1
-#else
-    #define wxUSE_PALETTE 1
-#endif
+ #define wxUSE_PALETTE 1
 
 // ----------------------------------------------------------------------------
 // Windows-only settings
@@ -1292,22 +1303,9 @@
 // unknown settings
 // ----------------------------------------------------------------------------
 
-// Use serialization (requires utils/serialize)?
-#define wxUSE_SERIAL 0
-
-// Use plotter?
-#define wxUSE_PLOT 0
-
 // If 1, enables provision of run-time type information.
 // NOW MANDATORY: don't change.
 #define wxUSE_DYNAMIC_CLASSES 1
-
-//??????
-#if defined(__WIN32__)
-    #define wxUSE_DISPLAY 0
-#else
-    #define wxUSE_DISPLAY 0
-#endif
 
 //??????
 #if defined(__WIN32__)
