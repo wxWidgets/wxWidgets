@@ -85,8 +85,8 @@ struct wxHtmlContentsItem
 {
     short int m_Level;
     int m_ID;
-    wxChar* m_Name;
-    wxChar* m_Page;
+    wxString m_Name;
+    wxString m_Page;
     wxHtmlBookRecord *m_Book;
     
     // returns full filename of m_Page, i.e. with book's basePath prepended
@@ -102,8 +102,8 @@ struct wxHtmlContentsItem
 class WXDLLIMPEXP_HTML wxHtmlSearchEngine : public wxObject
 {
 public:
-    wxHtmlSearchEngine() : wxObject() {m_Keyword = NULL; }
-    ~wxHtmlSearchEngine() {if (m_Keyword) delete[] m_Keyword; }
+    wxHtmlSearchEngine() : wxObject() {}
+    ~wxHtmlSearchEngine() {}
 
     // Sets the keyword we will be searching for
     virtual void LookFor(const wxString& keyword, bool case_sensitive, bool whole_words_only);
@@ -113,7 +113,7 @@ public:
     virtual bool Scan(const wxFSFile& file);
 
 private:
-    wxChar *m_Keyword;
+    wxString m_Keyword;
     bool m_CaseSensitive;
     bool m_WholeWords;
 
@@ -144,7 +144,7 @@ private:
     wxHtmlHelpData* m_Data;
     wxHtmlSearchEngine m_Engine;
     wxString m_Keyword, m_Name;
-    wxChar *m_LastPage;
+    wxString m_LastPage;
     wxHtmlContentsItem* m_ContentsItem;
     bool m_Active;   // search is not finished
     int m_CurIndex;  // where we are now
@@ -172,12 +172,15 @@ public:
     // See documentation for details on its format.
     // Returns success.
     bool AddBook(const wxString& book);
+#if WXWIN_COMPATIBILITY_2_4
+    wxDEPRECATED(
     bool AddBookParam(const wxFSFile& bookfile,
                       wxFontEncoding encoding,
                       const wxString& title, const wxString& contfile,
                       const wxString& indexfile = wxEmptyString,
                       const wxString& deftopic = wxEmptyString,
-                      const wxString& path = wxEmptyString);
+                      const wxString& path = wxEmptyString) );
+#endif
 
     // Some accessing stuff:
 
@@ -203,6 +206,13 @@ protected:
     int m_IndexCnt;  // list of index items
 
 protected:
+    bool AddBookParam(const wxFSFile& bookfile,
+                      const wxString& charset,
+                      const wxString& title, const wxString& contfile,
+                      const wxString& indexfile = wxEmptyString,
+                      const wxString& deftopic = wxEmptyString,
+                      const wxString& path = wxEmptyString);
+    
     // Imports .hhp files (MS HTML Help Workshop)
     bool LoadMSProject(wxHtmlBookRecord *book, wxFileSystem& fsys,
                        const wxString& indexfile, const wxString& contentsfile);

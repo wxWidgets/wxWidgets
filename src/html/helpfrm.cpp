@@ -1276,7 +1276,7 @@ void wxHtmlHelpFrame::OnToolbar(wxCommandEvent& event)
                 if (ha && ha->m_Index > 0)
                 {
                     wxHtmlContentsItem *it = m_Data->GetContents() + (ha->m_Index - 1);
-                    if (it->m_Page[0] != 0)
+                    if (!it->m_Page.empty())
                     {
                         m_HtmlWin->LoadPage(it->GetFullPath());
                         NotifyPageChanged();
@@ -1304,7 +1304,7 @@ void wxHtmlHelpFrame::OnToolbar(wxCommandEvent& event)
                     while (ind >= 0 && it->m_Level != level) ind--, it--;
                     if (ind >= 0)
                     {
-                        if (it->m_Page[0] != 0)
+                        if (!it->m_Page.empty())
                         {
                             m_HtmlWin->LoadPage(it->GetFullPath());
                             NotifyPageChanged();
@@ -1332,7 +1332,7 @@ void wxHtmlHelpFrame::OnToolbar(wxCommandEvent& event)
 
                     while (it->GetFullPath() == adr) it++;
 
-                    if (it->m_Page[0] != 0)
+                    if (!it->m_Page.empty())
                     {
                         m_HtmlWin->LoadPage(it->GetFullPath());
                         NotifyPageChanged();
@@ -1463,7 +1463,7 @@ void wxHtmlHelpFrame::OnContentsSel(wxTreeEvent& event)
     {
         it = m_Data->GetContents() + (pg->m_Id);
         m_UpdateContents = false;
-        if (it->m_Page[0] != 0)
+        if (!it->m_Page.empty())
             m_HtmlWin->LoadPage(it->GetFullPath());
         m_UpdateContents = true;
     }
@@ -1474,7 +1474,7 @@ void wxHtmlHelpFrame::OnContentsSel(wxTreeEvent& event)
 void wxHtmlHelpFrame::OnIndexSel(wxCommandEvent& WXUNUSED(event))
 {
     wxHtmlContentsItem *it = (wxHtmlContentsItem*) m_IndexList->GetClientData(m_IndexList->GetSelection());
-    if (it->m_Page[0] != 0)
+    if (!it->m_Page.empty())
         m_HtmlWin->LoadPage(it->GetFullPath());
     NotifyPageChanged();
 }
@@ -1514,7 +1514,7 @@ void wxHtmlHelpFrame::OnIndexFind(wxCommandEvent& event)
                 displ++;
                 if (first)
                 {
-                    if (index[i].m_Page[0] != 0)
+                    if (!index[i].m_Page.empty())
                         m_HtmlWin->LoadPage(index[i].GetFullPath());
                     NotifyPageChanged();
                     first = false;
@@ -1545,7 +1545,7 @@ void wxHtmlHelpFrame::OnIndexAll(wxCommandEvent& WXUNUSED(event))
         m_IndexList->Append(index[i].m_Name, (char*)(index + i));
         if (first)
         {
-            if (index[i].m_Page[0] != 0)
+            if (!index[i].m_Page.empty())
                 m_HtmlWin->LoadPage(index[i].GetFullPath());
             NotifyPageChanged();
             first = false;
@@ -1563,7 +1563,7 @@ void wxHtmlHelpFrame::OnSearchSel(wxCommandEvent& WXUNUSED(event))
     wxHtmlContentsItem *it = (wxHtmlContentsItem*) m_SearchList->GetClientData(m_SearchList->GetSelection());
     if (it)
     {
-        if (it->m_Page[0] != 0)
+        if (!it->m_Page.empty())
             m_HtmlWin->LoadPage(it->GetFullPath());
         NotifyPageChanged();
     }
