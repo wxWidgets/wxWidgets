@@ -48,12 +48,12 @@ else:  # GTK
 class ShellFacade:
     """Simplified interface to all shell-related functionality.
 
-    This is a semi-transparent facade, in that all attributes of other are
+    This is a semi-transparent facade, in that all attributes of other are 
     still accessible, even though only some are visible to the user."""
-
+    
     name = 'PyCrust Shell Interface'
     revision = __revision__
-
+    
     def __init__(self, other):
         """Create a ShellFacade instance."""
         methods = ['ask',
@@ -126,10 +126,10 @@ F8                Command-completion of History item.
 
 class Shell(wxStyledTextCtrl):
     """PyCrust Shell based on wxStyledTextCtrl."""
-
+    
     name = 'PyCrust Shell'
     revision = __revision__
-
+    
     def __init__(self, parent, id=-1, pos=wxDefaultPosition, \
                  size=wxDefaultSize, style=wxCLIP_CHILDREN, introText='', \
                  locals=None, InterpClass=None, *args, **kwds):
@@ -147,7 +147,7 @@ class Shell(wxStyledTextCtrl):
         else:
             Interpreter = InterpClass
         # Create default locals so we have something interesting.
-        shellLocals = {'__name__': 'PyCrust-Shell',
+        shellLocals = {'__name__': 'PyCrust-Shell', 
                        '__doc__': 'PyCrust-Shell, The PyCrust Python Shell.',
                        '__version__': VERSION,
                       }
@@ -194,12 +194,12 @@ class Shell(wxStyledTextCtrl):
 
     def destroy(self):
         del self.interp
-
+        
     def config(self):
         """Configure shell based on user preferences."""
         self.SetMarginType(1, wxSTC_MARGIN_NUMBER)
         self.SetMarginWidth(1, 40)
-
+        
         self.SetLexer(wxSTC_LEX_PYTHON)
         self.SetKeyWords(0, ' '.join(keyword.kwlist))
 
@@ -227,10 +227,10 @@ class Shell(wxStyledTextCtrl):
             self.write(self.interp.introText)
         except AttributeError:
             pass
-
+    
     def setBuiltinKeywords(self):
         """Create pseudo keywords as part of builtins.
-
+        
         This simply sets "close", "exit" and "quit" to a helpful string.
         """
         import __builtin__
@@ -239,19 +239,19 @@ class Shell(wxStyledTextCtrl):
 
     def quit(self):
         """Quit the application."""
-
+        
         # XXX Good enough for now but later we want to send a close event.
-
+        
         # In the close event handler we can make sure they want to quit.
         # Other applications, like PythonCard, may choose to hide rather than
         # quit so we should just post the event and let the surrounding app
         # decide what it wants to do.
         self.write('Click on the close button to leave the application.')
-
+    
     def setLocalShell(self):
         """Add 'shell' to locals as reference to ShellFacade instance."""
         self.interp.locals['shell'] = ShellFacade(other=self)
-
+    
     def execStartupScript(self, startupScript):
         """Execute the user's PYTHONSTARTUP script if they have one."""
         if startupScript and os.path.isfile(startupScript):
@@ -260,10 +260,10 @@ class Shell(wxStyledTextCtrl):
                       (`startupText`, `startupScript`))
         else:
             self.push('')
-
+            
     def setStyles(self, faces):
         """Configure font size, typeface and color for lexer."""
-
+        
         # Default style
         self.StyleSetSpec(wxSTC_STYLE_DEFAULT, "face:%(mono)s,size:%(size)d,back:%(backcol)s" % faces)
 
@@ -500,7 +500,7 @@ class Shell(wxStyledTextCtrl):
 
     def setStatusText(self, text):
         """Display status information."""
-
+        
         # This method will most likely be replaced by the enclosing app
         # to do something more interesting, like write to a status bar.
         print text
@@ -514,11 +514,11 @@ class Shell(wxStyledTextCtrl):
 
     def processLine(self):
         """Process the line of text at which the user hit Enter."""
-
+        
         # The user hit ENTER and we need to decide what to do. They could be
         # sitting on any line in the shell.
 
-        thepos = self.GetCurrentPos()
+        thepos = self.GetCurrentPos()        
         startpos = self.promptPosEnd
         endpos = self.GetTextLength()
         # If they hit RETURN inside the current command, execute the command.
@@ -544,7 +544,7 @@ class Shell(wxStyledTextCtrl):
 
     def getMultilineCommand(self, rstrip=1):
         """Extract a multi-line command from the editor.
-
+        
         The command may not necessarily be valid Python syntax."""
         # XXX Need to extract real prompts here. Need to keep track of the
         # prompt every time a command is issued.
@@ -578,10 +578,10 @@ class Shell(wxStyledTextCtrl):
         if rstrip:
             command = command.rstrip()
         return command
-
+    
     def getCommand(self, text=None, rstrip=1):
         """Extract a command from text which may include a shell prompt.
-
+        
         The command may not necessarily be valid Python syntax."""
         if not text:
             text = self.GetCurLine()[0]
@@ -605,7 +605,7 @@ class Shell(wxStyledTextCtrl):
         elif text[:ps2size] == ps2:
             text = text[ps2size:]
         return text
-
+    
     def push(self, command):
         """Send command to the interpreter for execution."""
         self.write(os.linesep)
@@ -645,7 +645,7 @@ class Shell(wxStyledTextCtrl):
 
     def prompt(self):
         """Display appropriate prompt for the context, either ps1 or ps2.
-
+        
         If this is a continuation line, autoindent as necessary."""
         if self.more:
             prompt = str(sys.ps2)
@@ -695,25 +695,25 @@ class Shell(wxStyledTextCtrl):
     def ask(self, prompt='Please enter your response:'):
         """Get response from the user."""
         return raw_input(prompt=prompt)
-
+        
     def pause(self):
         """Halt execution pending a response from the user."""
         self.ask('Press enter to continue:')
-
+        
     def clear(self):
         """Delete all text from the shell."""
         self.ClearAll()
-
+        
     def run(self, command, prompt=1, verbose=1):
         """Execute command within the shell as if it was typed in directly.
         >>> shell.run('print "this"')
         >>> print "this"
         this
-        >>>
+        >>> 
         """
         # Go to the very bottom of the text.
         endpos = self.GetTextLength()
-        self.SetCurrentPos(endpos)
+        self.SetCurrentPos(endpos)        
         command = command.rstrip()
         if prompt: self.prompt()
         if verbose: self.write(command)
@@ -731,7 +731,7 @@ class Shell(wxStyledTextCtrl):
                     self.run(command, prompt=0, verbose=1)
         finally:
             file.close()
-
+    
     def autoCompleteShow(self, command):
         """Display auto-completion popup list."""
         list = self.interp.getAutoCompleteList(command, \
@@ -763,11 +763,11 @@ class Shell(wxStyledTextCtrl):
     def writeOut(self, text):
         """Replacement for stdout."""
         self.write(text)
-
+    
     def writeErr(self, text):
         """Replacement for stderr."""
         self.write(text)
-
+    
     def redirectStdin(self, redirect=1):
         """If redirect is true then sys.stdin will come from the shell."""
         if redirect:
@@ -797,7 +797,7 @@ class Shell(wxStyledTextCtrl):
             return 1
         else:
             return 0
-
+    
     def CanCopy(self):
         """Return true if text is selected and can be copied."""
         return self.GetSelectionStart() != self.GetSelectionEnd()
@@ -893,7 +893,7 @@ class Shell(wxStyledTextCtrl):
                             command += '\n'
                             command += line
                     commands.append(command)
-                    for command in commands:
+                    for command in commands:    
                         command = command.replace('\n', os.linesep + sys.ps2)
                         self.write(command)
                         self.processLine()
@@ -912,7 +912,7 @@ ID_CALLTIPS_SHOW = NewId()
 
 class ShellMenu:
     """Mixin class to add standard menu items."""
-
+    
     def createMenus(self):
         m = self.fileMenu = wxMenu()
         m.AppendSeparator()
@@ -1073,14 +1073,14 @@ class ShellMenu:
             event.Check(self.shell.autoCompleteIncludeDouble)
         elif id == ID_CALLTIPS_SHOW:
             event.Check(self.shell.autoCallTip)
-
+            
 
 class ShellFrame(wxFrame, ShellMenu):
     """Frame containing the PyCrust shell component."""
-
+    
     name = 'PyCrust Shell Frame'
     revision = __revision__
-
+    
     def __init__(self, parent=None, id=-1, title='PyShell', \
                  pos=wxDefaultPosition, size=wxDefaultSize, \
                  style=wxDEFAULT_FRAME_STYLE, locals=None, \
@@ -1104,5 +1104,5 @@ class ShellFrame(wxFrame, ShellMenu):
         self.createMenus()
 
 
-
-
+           
+    
