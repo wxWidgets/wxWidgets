@@ -28,7 +28,7 @@ class TestTreeCtrlPanel(wxPanel):
         tID = NewId()
 
         self.tree = MyTreeCtrl(self, tID, wxDefaultPosition, wxDefaultSize,
-                               wxTR_HAS_BUTTONS | wxTR_EDIT_LABELS)# | wxTR_MULTIPLE)
+                               wxTR_HAS_BUTTONS | wxTR_EDIT_LABELS | wxTR_MULTIPLE)
 
         #il = wxImageList(16, 16)
         #idx1 = il.Add(wxBitmap('bitmaps/smiles.bmp', wxBITMAP_TYPE_BMP))
@@ -135,11 +135,12 @@ class TestTreeCtrlPanel(wxPanel):
     def OnSelChanged(self, event):
         self.item = event.GetItem()
         self.log.WriteText("OnSelChanged: %s\n" % self.tree.GetItemText(self.item))
-        self.log.WriteText("BoundingRect: %s\n" %
-                           self.tree.GetBoundingRect(self.item, true))
+        if wxPlatform == '__WXMSW__':
+            self.log.WriteText("BoundingRect: %s\n" %
+                               self.tree.GetBoundingRect(self.item, true))
         #items = self.tree.GetSelections()
         #print map(self.tree.GetItemText, items)
-
+        event.Skip()
 
 
 #---------------------------------------------------------------------------
