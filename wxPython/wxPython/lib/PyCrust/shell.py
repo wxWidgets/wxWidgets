@@ -667,6 +667,7 @@ class Shell(wxStyledTextCtrl):
         busy = wxBusyCursor()
         self.write(os.linesep)
         self.more = self.interp.push(command)
+        del busy
         if not self.more:
             self.addHistory(command.rstrip())
         self.prompt()
