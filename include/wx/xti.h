@@ -43,7 +43,7 @@
 #include "wx/arrstr.h"
 #include "wx/hashmap.h"
 
-#include <typeinfo.h>
+#include <typeinfo>
 
 // we will move this later to defs.h
 
