@@ -45,6 +45,7 @@
     <subproject id="listbox" template="sub"/>
     <subproject id="listctrl" template="sub"/>
     <subproject id="mdi" template="sub"/>
+    <subproject id="mediaplayer" template="sub"/>
     <subproject id="memcheck" template="sub"/>
     <subproject id="menu" template="sub"/>
     <subproject id="mfc" template="sub"/>
