@@ -22,10 +22,6 @@
 #import <AppKit/NSButton.h>
 #import <Foundation/NSString.h>
 
-wxCheckBoxBase::wxCheckBoxBase()
-{
-}
-
 IMPLEMENT_DYNAMIC_CLASS(wxCheckBox, wxControl)
 BEGIN_EVENT_TABLE(wxCheckBox, wxCheckBoxBase)
 END_EVENT_TABLE()
