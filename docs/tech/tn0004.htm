@@ -1,0 +1,218 @@
+<!doctype html public "-//w3c//dtd html 4.0 transitional//en">
+<html>
+<head>
+   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+   <meta name="Author" content="chris elliott">
+   <meta name="GENERATOR" content="Mozilla/4.7 [en] (Win95; I) [Netscape]">
+   <title>Compiling wx Samples in the Borland IDE</title>
+</head>
+<body>
+
+<h2>
+Compiling wxWindows samples with the Borland CBuilder</h2>
+
+This document is available online <a href="http://biolpc22.york.ac.uk/wx/bc/ide.html">here</a>.<P>
+
+<h2>
+Before you begin</h2>
+This refers to the 2.1.15 wxWindows distribution. It is my account of trying
+to compile the samples so I can use the Borland IDE to edit/compile/debug.
+I have used CBuilder 1.00 (2 patches, nice and fast) CBuilder 3 (slower)
+and CBuilder 4 (only occasionally)
+<p>Make sure that the wx distribution is extracted to a path with no spaces
+in it, and preferably on the root of your drive. Borland's compilers sometimes
+have problems with spaces and with the long paths which occur if you try
+to place it in a tree like <tt>d:\compiler\gui\wx...</tt>
+<h2>
+Part 1 Build the library</h2>
+Build the <b>wx\wx32.lib</b> and related files using the command line compiler
+<br>Run a command prompt in the <tt>wx/src/msw</tt> directory and type
+<p><tt>set wxwin=pathtowx</tt>
+<br><tt>set bccdir=pathtobc4</tt>
+<br><tt>make -f makefile.b32</tt>
+<p>In my case this I extracted the wx distribution in <b>c:\ </b>and the
+compiler is in <b>w:\borland\cb\bin </b>so this looks:
+<p><tt>set wxwin=c:\wx</tt>
+<br><tt>set bccdir=w:\borland\cb</tt>
+<br><tt>make -f makefile.b32</tt>
+<p>If this doesn't <b>compile</b>,
+<ul>
+<li>
+you've probably got the <b><tt>set wxwin </tt></b>command wrong,</li>
+
+<li>
+or the path was not set by the Borland setup</li>
+</ul>
+If this doesn't <b>link</b>,
+<ul>
+<li>
+you've probably got the <b><tt>set bccdir </tt></b>command wrong</li>
+</ul>
+
+<hr WIDTH="100%">
+<h2>
+To make the samples</h2>
+
+<h3>
+Solution 1</h3>
+
+<h4>
+<a href="http://biolpc22.york.ac.uk/wx/bc/download.html">Download</a> a zip file which contains modifed
+cpp, mak and bpr files - it will overwrite your wx distribution cpp files!</h4>
+
+<h4>
+Solution 2</h4>
+Creating the files by hand . This is for the calendar sample; you will
+have to change the names for the other samples
+<ul>
+<li>
+Create a calendar.mak file [must have the same name as the cpp file] in
+a plain text editor with <a href="http://biolpc22.york.ac.uk/wx/bc/calendar.mak">this contents</a></li>
+</ul>
+<tt>#-----------------------------------------------------------------------------</tt>
+<br><tt>#this is for Borland CBuilder IDE v1 and 3</tt>
+<br><tt>#add a \ at the end of the lines if you editor breaks the long
+lines up</tt>
+<br><tt>#copy this into notepad and save from there</tt>
+<br><tt>#-----------------------------------------------------------------------------</tt>
+<br><tt>!ifndef BCB</tt>
+<br><tt>BCB = $(MAKEDIR)\..</tt>
+<br><tt>!endif</tt>
+<br><tt>PROJECT = calendar.exe</tt>
+<br><tt>OBJFILES =</tt>
+<br><tt>RESFILES = calendar.res</tt>
+<br><tt>RESDEPEN = $(RESFILES)</tt>
+<br><tt>LIBFILES =</tt>
+<br><tt>#-----------------------------------------------------------------------------</tt>
+<br><tt>CFLAG1 = -Od -v -a1 -c</tt>
+<br><tt># -Od disable optimisations -v debug -a1 byte align -c compile
+only (matches my make for the library)</tt>
+<br><tt>CFLAG2 = -DINC_OLE2;__WIN95__;__WXMSW__;__WINDOWS__;WIN32;__BIDE__;-I$(BCB)\include;$(BCB)\include\vcl;..\..\include;
+-H=BC32.CSM</tt>
+<br><tt>PFLAGS =</tt>
+<br><tt>RFLAGS = -DINC_OLE2;__WIN95__;__WXMSW__;__WINDOWS__;WIN32;__BIDE__;
+-I$(BCB)\include;..\..\include;</tt>
+<br><tt>LFLAGS = -L$(BCB)\lib;$(BCB)\lib\obj;..\..\lib -aa -Tpe -v -V4.0
+-c</tt>
+<br><tt>IFLAGS =</tt>
+<br><tt>LINKER = ilink32</tt>
+<br><tt>#-----------------------------------------------------------------------------</tt>
+<br><tt>ALLOBJ = c0w32.obj $(OBJFILES)</tt>
+<br><tt>ALLRES = $(RESFILES)</tt>
+<br><tt>ALLLIB = $(LIBFILES) vcl.lib xpm.lib wx32.lib ole2w32.lib import32.lib
+odbc32.lib cw32mt.lib</tt>
+<br><tt>#you will need to add other libraries to the line above, eg the
+jpeg.lib for image samples</tt>
+<br><tt>---------------------------------------------------------------------------</tt>
+<br><tt>.autodepend</tt>
+<br>&nbsp;
+<p><tt>#-----------------------------------------------------------------------------</tt>
+<br><tt>$(PROJECT): $(OBJFILES) $(RESDEPEN)</tt>
+<p><tt>#end of file</tt>
+<br>&nbsp;
+<ul>
+<li>
+&nbsp;modify the .cpp file to include these<a href="http://biolpc22.york.ac.uk/wx/bc/calendar_include.cpp">
+lines </a>near the top</li>
+</ul>
+<tt>#ifdef __BIDE__</tt>
+<br><tt>#define _NO_VCL</tt>
+<br><tt>#include "condefs.h"</tt>
+<br><tt>#define WinMain WinMain</tt>
+<br><tt>&nbsp;&nbsp; // USEUNIT ("another.cpp"); // use a line like this
+if you have more than one .cpp file</tt>
+<br><tt>&nbsp;&nbsp;&nbsp; USERC ("calendar.rc");</tt>
+<br><tt>#endif</tt>
+<br>&nbsp;
+<p>In CBuilder 1 you can use <b>Open Project</b> to open the mak file and
+edit/compile/debug.
+<br>In CBuilder 3 and 4, then you can use <b>Open Project </b>and choose
+the Open Borland CBuilder 1 Project from the drop down file types. The
+system will modify the mak file and update it for you.
+<p>Now try compiling it in the ide.
+<h4>
+Hints:</h4>
+
+<ul>
+<li>
+You can set it up for normal and debug modes (change the -v switch in CFLAG1&nbsp;
+and LFLAG)</li>
+
+<li>
+If you get problems saying Project undefined, then copy the text using
+a simple editor like notepad to the file minimal.mak (I have had problems
+in CBuilder 1.00 with Unix style line endings)</li>
+
+<li>
+If you want to avoid the warnings about hiding virtual methods add <b><tt>-w-hid
+</tt></b>to the CFLAGS1 line</li>
+
+<li>
+the #define WinMain WinMain line allows CBuilder to think it has a non-VCL
+<tt>main </tt>function</li>
+
+<li>
+the USEUNIT macros tell CBuilder which other source files to include, without
+needing a VCL form</li>
+
+<li>
+the condefs.h file defines the USEUNIT macros for non-VCL use</li>
+
+<li>
+For the other samples, change the names of the cpp and rc files. If you
+have multiple files, just add more USEUNIT and USERC macros</li>
+</ul>
+
+<h3>
+Solution 3</h3>
+
+<ul>
+<li>
+download the wxWindows-2.1.15-bc.zip file,</li>
+
+<li>
+extract it</li>
+
+<li>
+use the <b><tt>idetomak</tt></b> (CBuilder 1) or&nbsp; <b><tt>idetobpr</tt></b>
+(CBuilder 3/4) utility on the <b><tt>.ide</tt></b> file in the samples
+directory. This modifies the cpp source and makes a "suitable" bpr file
+(at least in CBuilder 1/3/4).</li>
+
+<li>
+add the location of the wx/include files in the&nbsp; project | options
+| directory dialog</li>
+</ul>
+I found in CBuilder 1 that the <tt>idetomak</tt> utility did not manage
+to convert all the samples, but <tt>idetobpr</tt> worked OK in CBuilder
+3 and 4. I have a report that not all the bpr files made inb CBuilder 4
+are correct
+<h2>
+Error with ODBC32</h2>
+Sometimes you get an error saying that there are unreolved externals in
+ODBC. The soltuion is to run a command prompt in your <b><tt>wx\lib </tt></b>directory
+and use the <b><tt>implib </tt></b>command:
+<p><tt>C:\wx\lib><b>implib odbc32 c:\windows\system\odbc32.dll</b></tt>
+<p>This creates the necessary library, odbc32.lib
+<h2>
+Unresolved Problem</h2>
+<tt>In Borland CBuilder 1.00 (with linker service patch)&nbsp; I frequently
+get an error</tt>
+<p><tt>Turbo Incremental Link&nbsp; Version 1.0 Copyright (c) 1997 Borland
+International</tt>
+<br><tt>Fatal: Assertion failed: typeInx &lt; typeCnt at "ilinkdbg.c",
+line 2060</tt>
+<br><tt>Fatal: Access violation.&nbsp; Program terminated.</tt>
+<br><tt>Error: Internal failure -- retrying link...</tt>
+<br><tt>Fatal: Assertion failed: typeInx &lt; typeCnt at "ilinkdbg.c",
+line 2060</tt>
+<br><tt>Fatal: Access violation.&nbsp; Program terminated.</tt>
+<p><tt>** error 2 ** deleting minimal.exe</tt>
+<p>I have not been able to track down why sometimes this error occurs and
+other times it is OK
+<br>I have not seen this in Cbuilder 3 or 4
+<p>
+<hr WIDTH="100%">
+<p>Page updated on 31 May 2000 by Chris Elliott
+</body>
+</html>
