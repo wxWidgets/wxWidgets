@@ -1099,7 +1099,7 @@ public:
 	*/
 
 	// Not used, but required
-    virtual wxEvent* Clone() { return NULL; }
+    virtual wxEvent* Clone() const { return NULL; }
 
 #if wxCHECK_VERSION(2,3,0)
 	cbPluginEvent( wxEventType eventType, cbDockPane* pPane )
