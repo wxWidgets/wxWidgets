@@ -1,11 +1,11 @@
 ///////////////////////////////////////////////////////////////////////////////
-// Name:        palmos/toplevel.cpp
+// Name:        src/palmos/toplevel.cpp
 // Purpose:     implements wxTopLevelWindow for Palm OS
-// Author:      William Osborne
-// Modified by:
+// Author:      William Osborne - minimal working wxPalmOS port
+// Modified by: Wlodzimierz ABX Skiba - more than minimal functionality
 // Created:     10/13/04
-// RCS-ID:      $Id: 
-// Copyright:   (c) William Osborne <wbo@freeshell.org>
+// RCS-ID:      $Id$
+// Copyright:   (c) William Osborne <wbo@freeshell.org>, Wlodzimierz Skiba
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -104,39 +104,53 @@ bool wxTopLevelWindowPalm::CreateFrame(const wxString& title,
 }
 
 bool wxTopLevelWindowPalm::Create(wxWindow *parent,
-                                 wxWindowID id,
-                                 const wxString& title,
-                                 const wxPoint& pos,
-                                 const wxSize& size,
-                                 long style,
-                                 const wxString& name)
+                                  wxWindowID id,
+                                  const wxString& title,
+                                  const wxPoint& pos,
+                                  const wxSize& size,
+                                  long style,
+                                  const wxString& name)
 {
     ActiveParentFrame=NULL;
-    
+
     wxTopLevelWindows.Append(this);
 
     if ( parent )
         parent->AddChild(this);
 
-    m_windowId = id == -1 ? NewControlId() : id;
+    m_windowId = id == wxID_ANY ? NewControlId() : id;
 
-    FrameForm=FrmNewForm(m_windowId,title,0,0,160,160,false,0,NULL,0,NULL,0);
+    wxCoord x = ( ( pos.x == wxDefaultCoord ) ? 0 : pos.x ) ;
+    wxCoord y = ( ( pos.y == wxDefaultCoord ) ? 0 : pos.y ) ;
+    wxCoord w = ( ( size.x == wxDefaultCoord ) ? 160 : size.x ) ;
+    wxCoord h = ( ( size.y == wxDefaultCoord ) ? 160 : size.y ) ;
+
+    FrameForm = FrmNewForm( m_windowId,
+                            title,
+                            x, y,
+                            w, h,
+                            false,
+                            0,
+                            NULL,
+                            0,
+                            NULL,
+                            0);
     if(FrameForm==0)
         return false;
 
     FrmSetEventHandler(FrameForm,FrameFormHandleEvent);
-    
+
     return true;
 }
 
 bool wxTopLevelWindowPalm::Create(wxWindow *parent,
-                                 wxWindowID id,
-                                 const wxString& title,
-                                 const wxPoint& pos,
-                                 const wxSize& size,
-                                 long style,
-                                 const wxString& name,
-                                 wxFrame* PFrame)
+                                  wxWindowID id,
+                                  const wxString& title,
+                                  const wxPoint& pos,
+                                  const wxSize& size,
+                                  long style,
+                                  const wxString& name,
+                                  wxFrame* PFrame)
 {
     wxTopLevelWindows.Append(this);
 
@@ -150,11 +164,11 @@ bool wxTopLevelWindowPalm::Create(wxWindow *parent,
         return false;
 
     FrmSetEventHandler(FrameForm,FrameFormHandleEvent);
-    
+
     FrmSetActiveForm(FrameForm);
-    
+
     ActiveParentFrame=PFrame;
-    
+
     return true;
 }
 
@@ -173,11 +187,11 @@ void wxTopLevelWindowPalm::DoShowWindow(int nShowCmd)
 bool wxTopLevelWindowPalm::Show(bool show)
 {
     FrmDrawForm(FrameForm);
-    
+
     wxPaintEvent event(m_windowId);
     event.SetEventObject(this);
-    GetEventHandler()->ProcessEvent(event);  
-    
+    GetEventHandler()->ProcessEvent(event);
+
     return true;
 }
 
@@ -251,8 +265,8 @@ void wxTopLevelWindowPalm::OnActivate(wxActivateEvent& event)
 }
 
 /* Palm OS Event handler for the window
- * 
- * This function *must* be located outside of the wxTopLevelWindow class because 
+ *
+ * This function *must* be located outside of the wxTopLevelWindow class because
  * the Palm OS API expects a standalone C function as a callback.  You cannot 
  * pass a pointer to a member function of a C++ class as a callback because the 
  * prototypes don't match.  (A member function has a hidden "this" pointer as 
