@@ -84,7 +84,10 @@ bool wxFrame::m_useNativeStatusBar = FALSE;
 
 wxFrame::wxFrame()
 {
+#if wxUSE_TOOLBAR
     m_frameToolBar = NULL ;
+#endif // wxUSE_TOOLBAR
+
     m_frameMenuBar = NULL;
     m_frameStatusBar = NULL;
     
@@ -115,7 +118,9 @@ bool wxFrame::Create(wxWindow *parent,
     
     m_windowStyle = style;
     m_frameMenuBar = NULL;
+#if wxUSE_TOOLBAR
     m_frameToolBar = NULL ;
+#endif // wxUSE_TOOLBAR
     m_frameStatusBar = NULL;
     
     //// Motif-specific
@@ -363,6 +368,7 @@ void wxFrame::GetClientSize(int *x, int *y) const
         m_frameStatusBar->GetSize(& sbw, & sbh);
         yy -= sbh;
     }
+#if wxUSE_TOOLBAR
     if (m_frameToolBar)
     {
         int tbw, tbh;
@@ -372,6 +378,7 @@ void wxFrame::GetClientSize(int *x, int *y) const
         else
             yy -= tbh;
     }
+#endif // wxUSE_TOOLBAR
     /*
     if (GetMenuBar() != (wxMenuBar*) NULL)
     {
@@ -415,6 +422,7 @@ void wxFrame::SetClientSize(int width, int height)
             m_frameStatusBar->GetSize(& sbw, & sbh);
             height += sbh;
         }
+#if wxUSE_TOOLBAR
         if (m_frameToolBar)
         {
             int tbw, tbh;
@@ -424,6 +432,7 @@ void wxFrame::SetClientSize(int width, int height)
             else
                 height += tbh;
         }
+#endif // wxUSE_TOOLBAR
         
         XtVaSetValues((Widget) m_workArea, XmNheight, height, NULL);
     }
@@ -732,8 +741,11 @@ void wxFrame::OnSize(wxSizeEvent& event)
         wxWindow *win = (wxWindow *)node->Data();
         if ( !win->IsKindOf(CLASSINFO(wxFrame))  &&
             !win->IsKindOf(CLASSINFO(wxDialog)) && 
-            (win != GetStatusBar()) &&
-            (win != GetToolBar()) )
+            (win != GetStatusBar())
+#if wxUSE_TOOLBAR
+             && (win != GetToolBar())
+#endif // wxUSE_TOOLBAR
+           )
         {
             if ( child )
                 return;     // it's our second subwindow - nothing to do
@@ -867,6 +879,7 @@ void wxFrame::ProcessCommand(int id)
 wxPoint wxFrame::GetClientAreaOrigin() const
 {
     wxPoint pt(0, 0);
+#if wxUSE_TOOLBAR
     if (GetToolBar())
     {
         int w, h;
@@ -881,6 +894,8 @@ wxPoint wxFrame::GetClientAreaOrigin() const
             pt.y += h;
         }
     }
+#endif // wxUSE_TOOLBAR
+
     return pt;
 }
 
@@ -908,6 +923,7 @@ void wxFrame::ClientToScreen(int *x, int *y) const
     wxWindow::ClientToScreen(x, y);
 }
 
+#if wxUSE_TOOLBAR
 wxToolBar* wxFrame::CreateToolBar(long style, wxWindowID id, const wxString& name)
 {
     wxCHECK_MSG( m_frameToolBar == NULL, FALSE,
@@ -929,6 +945,16 @@ wxToolBar* wxFrame::CreateToolBar(long style, wxWindowID id, const wxString& nam
 wxToolBar* wxFrame::OnCreateToolBar(long style, wxWindowID id, const wxString& name)
 {
     return new wxToolBar(this, id, wxPoint(0, 0), wxSize(100, 24), style, name);
+}
+
+void wxFrame::SetToolBar(wxToolBar *toolbar)
+{
+    m_frameToolBar = toolbar;
+}
+
+wxToolBar *wxFrame::GetToolBar() const
+{
+    return m_frameToolBar;
 }
 
 void wxFrame::PositionToolBar()
@@ -956,6 +982,7 @@ void wxFrame::PositionToolBar()
         }
     }
 }
+#endif // wxUSE_TOOLBAR
 
 void wxFrame::CaptureMouse()
 {
@@ -1011,12 +1038,6 @@ void wxFrame::Lower(void)
     XLowerWindow(XtDisplay((Widget) m_frameShell), parent_window);
 }
 
-void wxFrame::SetToolBar(wxToolBar *toolbar)
-{ m_frameToolBar = toolbar; }
-
-wxToolBar *wxFrame::GetToolBar() const
-{ return m_frameToolBar; }
-
 void wxFrameFocusProc(Widget workArea, XtPointer clientData, 
                       XmAnyCallbackStruct *cbs)
 {
@@ -1055,7 +1076,9 @@ static void wxFrameMapProc(Widget frameShell, XtPointer clientData,
 //// Motif-specific
 bool wxFrame::PreResize()
 {
+#if wxUSE_TOOLBAR
     PositionToolBar();
+#endif // wxUSE_TOOLBAR
     PositionStatusBar();
     return TRUE;
 }

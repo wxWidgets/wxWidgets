@@ -16,7 +16,7 @@
 #include "wx/wx.h"
 #include "wx/app.h"
 #include "wx/timer.h"
-#include "wx/motif/toolbar.h"
+#include "wx/toolbar.h"
 
 #include <Xm/Xm.h>
 #include <Xm/PushBG.h>
@@ -605,7 +605,8 @@ wxToolBarTool *wxToolBar::AddTool(int index, const wxBitmap& bitmap, const wxBit
   else
     tool->m_y = m_yMargin;
 
-  tool->SetSize(GetDefaultButtonWidth(), GetDefaultButtonHeight());
+  wxSize& size = GetToolSize();
+  tool->SetSize(size.x, size.y);
 
   m_tools.Append((long)index, tool);
   return tool;

@@ -693,7 +693,14 @@ void wxLogFrame::OnSave(wxCommandEvent& WXUNUSED(event))
   // -------------------------
   int nLines = m_pTextCtrl->GetNumberOfLines();
   for ( int nLine = 0; bOk && nLine < nLines; nLine++ ) {
-    bOk = file.Write(m_pTextCtrl->GetLineText(nLine) + wxTextFile::GetEOL());
+    bOk = file.Write(m_pTextCtrl->GetLineText(nLine) + 
+// we're not going to pull in the whole wxTextFile if all we need is this...
+#if wxUSE_TEXTFILE
+                     wxTextFile::GetEOL()
+#else // !wxUSE_TEXTFILE
+			'\n'
+#endif // wxUSE_TEXTFILE
+                    );
   }
 
   if ( bOk )

@@ -114,12 +114,14 @@ public:
     const wxString& name);
 
   // Create toolbar
+#if wxUSE_TOOLBAR
   virtual wxToolBar* CreateToolBar(long style = wxNO_BORDER|wxTB_HORIZONTAL, wxWindowID id = -1, const wxString& name = wxToolBarNameStr);
   virtual wxToolBar *OnCreateToolBar(long style, wxWindowID id, const wxString& name);
   // If made known to the frame, the frame will manage it automatically.
   virtual void SetToolBar(wxToolBar *toolbar) ;
   virtual wxToolBar *GetToolBar() const ;
   virtual void PositionToolBar();
+#endif // wxUSE_TOOLBAR
 
   // Set status line text
   virtual void SetStatusText(const wxString& text, int number = 0);
@@ -188,7 +190,10 @@ protected:
   wxIcon                m_icon;
   bool                  m_iconized;
   static bool           m_useNativeStatusBar;
+
+#if wxUSE_TOOLBAR
   wxToolBar *           m_frameToolBar ;
+#endif // wxUSE_TOOLBAR
 
   //// Motif-specific
 

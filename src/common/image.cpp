@@ -100,10 +100,12 @@ wxImage::wxImage( const wxString& name, long type )
     LoadFile( name, type );
 }
 
+#if wxUSE_STREAM
 wxImage::wxImage( wxInputStream& stream, long type )
 {
     LoadFile( stream, type );
 }
+#endif // wxUSE_STREAM
 
 wxImage::wxImage( const wxImage& image )
 {
@@ -310,6 +312,7 @@ int wxImage::GetHeight() const
 
 bool wxImage::LoadFile( const wxString& filename, long type )
 {
+#if wxUSE_STREAM
     if (wxFileExists(filename))
     {
         wxFileInputStream stream(filename);
@@ -317,12 +320,28 @@ bool wxImage::LoadFile( const wxString& filename, long type )
     }
 
     else {
-        wxLogWarning( "Image file does not exist." );
+        wxLogError( "Can't load image from file '%s': file does not exist.", filename.c_str() );
 
         return FALSE;
     }
+#else // !wxUSE_STREAM
+        return FALSE;
+#endif // wxUSE_STREAM
 }
 
+bool wxImage::SaveFile( const wxString& filename, int type )
+{
+#if wxUSE_STREAM
+    wxFileOutputStream stream(filename);
+
+    if ( stream.LastError() == wxStream_NOERROR )
+        return SaveFile(stream, type);
+    else
+#endif // wxUSE_STREAM
+        return FALSE;
+}
+
+#if wxUSE_STREAM
 bool wxImage::LoadFile( wxInputStream& stream, long type )
 {
     UnRef();
@@ -341,16 +360,6 @@ bool wxImage::LoadFile( wxInputStream& stream, long type )
     return handler->LoadFile( this, stream );
 }
 
-bool wxImage::SaveFile( const wxString& filename, int type )
-{
-    wxFileOutputStream stream(filename);
-
-    if ( stream.LastError() == wxStream_NOERROR )
-        return SaveFile(stream, type);
-    else
-        return FALSE;
-}
-
 bool wxImage::SaveFile( wxOutputStream& stream, int type )
 {
     wxCHECK_MSG( Ok(), FALSE, "invalid image" );
@@ -366,6 +375,7 @@ bool wxImage::SaveFile( wxOutputStream& stream, int type )
 
     return handler->SaveFile( this, stream );
 }
+#endif // wxUSE_STREAM
 
 void wxImage::AddHandler( wxImageHandler *handler )
 {
@@ -463,6 +473,7 @@ void wxImage::CleanUpHandlers()
 IMPLEMENT_DYNAMIC_CLASS(wxImageHandler,wxObject)
 #endif
 
+#if wxUSE_STREAM
 bool wxImageHandler::LoadFile( wxImage *WXUNUSED(image), wxInputStream& WXUNUSED(stream) )
 {
     return FALSE;
@@ -472,6 +483,7 @@ bool wxImageHandler::SaveFile( wxImage *WXUNUSED(image), wxOutputStream& WXUNUSE
 {
     return FALSE;
 }
+#endif // wxUSE_STREAM
 
 //-----------------------------------------------------------------------------
 // wxPNGHandler
@@ -484,6 +496,7 @@ IMPLEMENT_DYNAMIC_CLASS(wxPNGHandler,wxImageHandler)
 #endif
 
 
+#if wxUSE_STREAM
 static void _PNG_stream_reader( png_structp png_ptr, png_bytep data, png_size_t length )
 {
    ((wxInputStream*) png_get_io_ptr( png_ptr )) -> Read(data, length);
@@ -736,6 +749,7 @@ bool wxPNGHandler::SaveFile( wxImage *image, wxOutputStream& stream )
   }
   return TRUE;
 }
+#endif // wxUSE_STREAM
 
 #endif
 
@@ -749,6 +763,7 @@ bool wxPNGHandler::SaveFile( wxImage *image, wxOutputStream& stream )
 IMPLEMENT_DYNAMIC_CLASS(wxBMPHandler,wxImageHandler)
 #endif
 
+#if wxUSE_STREAM
 bool wxBMPHandler::LoadFile( wxImage *image, wxInputStream& stream )
 {
    unsigned char      *data, *ptr;
@@ -1098,6 +1113,7 @@ bool wxBMPHandler::LoadFile( wxImage *image, wxInputStream& stream )
 
    return TRUE;
 }
+#endif // wxUSE_STREAM
 
 #ifdef __WXMSW__
 

@@ -22,7 +22,7 @@
 
 #ifndef WX_PRECOMP
     #include "wx/hash.h"
-    #ifdef wxUSE_SERIAL
+    #if wxUSE_SERIAL
         #include "wx/objstrm.h"
         #include "wx/serbase.h"
 
@@ -64,7 +64,7 @@ wxHashTable* wxClassInfo::sm_classTable = (wxHashTable*) NULL;
 wxObject::wxObject(void)
 {
   m_refData = (wxObjectRefData *) NULL;
-#ifdef wxUSE_SERIAL
+#if wxUSE_SERIAL
   m_serialObj = (wxObject_Serialize *)NULL;
 #endif
 }
@@ -72,7 +72,7 @@ wxObject::wxObject(void)
 wxObject::~wxObject(void)
 {
 	UnRef();
-#ifdef wxUSE_SERIAL
+#if wxUSE_SERIAL
 	if (m_serialObj)
 	  delete m_serialObj;
 #endif
@@ -269,7 +269,7 @@ wxObject *wxCreateDynamicObject(const char *name)
     return (wxObject*) NULL;
 }
 
-#ifdef wxUSE_SERIAL
+#if wxUSE_SERIAL
 
 #include "wx/serbase.h"
 #include "wx/dynlib.h"
