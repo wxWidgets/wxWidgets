@@ -12,14 +12,11 @@ TODO
 =====================================================================
 
 
-- typedef wxCoords CoordType ??
-
 - merge RecalulateXXX and Layout() into one
-- remove UpdateCursorScreenCoords() which is no longer needed
 
   - UNDO!!
   - replacement of llist in window
-  - selection highlighting is a bit broken
+
 Improve speed! (See layout problem below!)
 
   - wxlwindow needs to shrink scrollbar range when window contents get removed
@@ -29,9 +26,6 @@ Improve speed! (See layout problem below!)
 
 - The import of a private data object does not work yet, we need to get
   the objects back from the string.
-- Changing default settings in Clear() or changing/inserting/deleting
-  a wxLayoutObject needs to update the m_StyleInfo in all lines, only
-  then can we start using that one.
   
 - update rectangle (needs support in wxllist and wxWindows)
   --> needs a bit of fixing still
@@ -39,6 +33,5 @@ Improve speed! (See layout problem below!)
       offset handling seems a bit dodgy, white shadow to top/left of cursor
 
   - DragNDrop
-
   - Update docs, do full rtf/html editing. 
-  - Verify html export.
+  - Verify/fix html export.

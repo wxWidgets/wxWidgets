@@ -225,7 +225,9 @@ wxLayoutWindow::OnMouse(int eventId, wxMouseEvent& event)
    PrepareDC( dc );
    if ( eventId != WXLOWIN_MENU_MOUSEMOVE )
    {
-       // moving the mouse in a window shouldn't give it the focus!
+      // moving the mouse in a window shouldn't give it the focus!
+      // Oh yes! wxGTK's focus handling is so broken, that this is the 
+      // only sensible way to go.
       SetFocus();
    }
 
@@ -311,6 +313,7 @@ wxLayoutWindow::OnMouse(int eventId, wxMouseEvent& event)
              if ( m_llist->HasSelection() )
              {
                 m_llist->DiscardSelection();
+                m_Selecting = false;
                 DoPaint();     // TODO: we don't have to redraw everything!
              }
 
@@ -413,11 +416,16 @@ wxLayoutWindow::OnChar(wxKeyEvent& event)
    }
 #endif
 
+#if 0
    // Force m_Selecting to be false if shift is no longer
    // pressed. OnKeyUp() cannot catch all Shift-Up events.
-   if(!event.ShiftDown())
+   if(m_Selecting && !event.ShiftDown())
+   {
       m_Selecting = false;
-
+      m_llist->EndSelection();
+   }
+#endif
+   
    // If we deleted the selection here, we must not execute the
    // deletion in Delete/Backspace handling.
    bool deletedSelection = false;
@@ -436,17 +444,23 @@ wxLayoutWindow::OnChar(wxKeyEvent& event)
    // <Shift>+<arrow> starts selection
    if ( IsDirectionKey(keyCode) )
    {
-      if ( !m_Selecting )
+      if ( m_Selecting )
+      {
+         // just continue the old selection
+         if( event.ShiftDown() )
+            m_llist->ContinueSelection();
+         else
+         {
+            m_llist->DiscardSelection();
+            m_Selecting = false;
+         }
+      }
+      else if( event.ShiftDown() )
       {
          m_Selecting = true;
          m_llist->StartSelection();
       }
-      else
-      {
-         // just continue the old selection
-         if(! event.ShiftDown() )
-            m_llist->DiscardSelection();
-      }
+      
    }
    
    // If needed, make cursor visible:

@@ -2048,7 +2048,10 @@ wxLayoutList::LineBreak(void)
       height = m_CursorLine->GetHeight();
 
    m_CursorLine = m_CursorLine->Break(m_CursorPos.x, this);
-   m_CursorPos.y++;
+   if(m_CursorLine->GetPreviousLine() == NULL)
+      m_FirstLine = m_CursorLine;
+   if(m_CursorPos.x > 0)
+      m_CursorPos.y++;
    m_CursorPos.x = 0;
 
    // The following code will produce a height which is guaranteed to
