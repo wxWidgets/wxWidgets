@@ -783,7 +783,7 @@ bool wxDebugContext::PrintStatistics(bool detailed)
       {
         wxObject *obj = (wxObject *)st->GetActualData();
         if (obj->GetClassInfo()->GetClassName())
-          className = obj->GetClassInfo()->GetClassName();
+          className = (wxChar*)obj->GetClassInfo()->GetClassName();
       }
       wxDebugStatsStruct *stats = FindStatsStruct(list, className);
       if (!stats)
