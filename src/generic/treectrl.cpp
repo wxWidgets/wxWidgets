@@ -81,7 +81,10 @@ public:
   wxGenericTreeItem *GetParent() const { return m_parent; }
 
   // operations
-  void DeleteChildren();
+    // deletes all children notifying the treectrl about it if !NULL pointer
+    // given
+  void DeleteChildren(wxTreeCtrl *tree = NULL);
+    // FIXME don't know what is it for
   void Reset();
 
   // get count of all children (and grand children if 'recursively')
@@ -183,14 +186,24 @@ wxGenericTreeItem::~wxGenericTreeItem()
 {
   delete m_data;
 
-  DeleteChildren();
+  wxASSERT_MSG( m_children.IsEmpty(),
+                "please call DeleteChildren() before deleting the item" );
 }
 
-void wxGenericTreeItem::DeleteChildren()
+void wxGenericTreeItem::DeleteChildren(wxTreeCtrl *tree)
 {
   size_t count = m_children.Count();
   for ( size_t n = 0; n < count; n++ )
-    delete m_children[n];
+  {
+    wxGenericTreeItem *child = m_children[n];
+    if ( tree )
+    {
+      tree->SendDeleteEvent(child);
+    }
+
+    child->DeleteChildren(tree);
+    delete child;
+  }
 
   m_children.Empty();
 }
@@ -356,7 +369,8 @@ bool wxTreeCtrl::Create(wxWindow *parent, wxWindowID id,
 wxTreeCtrl::~wxTreeCtrl()
 {
   wxDELETE( m_hilightBrush );
-  wxDELETE( m_anchor );
+
+  DeleteAllItems();
 }
 
 // -----------------------------------------------------------------------------
@@ -698,10 +712,18 @@ wxTreeItemId wxTreeCtrl::AppendItem(const wxTreeItemId& parentId,
                       image, selImage, data);
 }
 
+void wxTreeCtrl::SendDeleteEvent(wxGenericTreeItem *item)
+{
+  wxTreeEvent event( wxEVT_COMMAND_TREE_DELETE_ITEM, GetId() );
+  event.m_item = item;
+  event.SetEventObject( this );
+  ProcessEvent( event );
+}
+
 void wxTreeCtrl::DeleteChildren(const wxTreeItemId& itemId)
 {
     wxGenericTreeItem *item = itemId.m_pItem;
-    item->DeleteChildren();
+    item->DeleteChildren(this);
 
     m_dirty = TRUE;
 }
@@ -711,17 +733,13 @@ void wxTreeCtrl::Delete(const wxTreeItemId& itemId)
   wxGenericTreeItem *item = itemId.m_pItem;
   wxGenericTreeItem *parent = item->GetParent();
 
-  // notify the parent...
-  wxTreeEvent event( wxEVT_COMMAND_TREE_DELETE_ITEM, GetId() );
-  event.m_item = item;
-  event.SetEventObject( this );
-  ProcessEvent( event );
-
   if ( parent )
   {
     parent->GetChildren().Remove(item);
   }
 
+  item->DeleteChildren(this);
+  SendDeleteEvent(item);
   delete item;
 
   m_dirty = TRUE;
@@ -731,7 +749,9 @@ void wxTreeCtrl::DeleteAllItems()
 {
   if ( m_anchor )
   {
+    m_anchor->DeleteChildren(this);
     delete m_anchor;
+
     m_anchor = NULL;
 
     m_dirty = TRUE;

@@ -423,12 +423,16 @@ public:
     void SortChildren(const wxTreeItemId& item,
                       wxTreeItemCmpFunc *cmpFunction = NULL);
 
+    // callbacks
     void OnPaint( wxPaintEvent &event );
     void OnSetFocus( wxFocusEvent &event );
     void OnKillFocus( wxFocusEvent &event );
     void OnChar( wxKeyEvent &event );
     void OnMouse( wxMouseEvent &event );
     void OnIdle( wxIdleEvent &event );
+
+    // implementation
+    void SendDeleteEvent(wxGenericTreeItem *itemBeingDeleted);
 
 protected:
     wxGenericTreeItem   *m_anchor;
