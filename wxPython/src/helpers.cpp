@@ -598,7 +598,7 @@ static void rsoPass2(const char* name)
     }
 
     // Find the object instance
-    obj = PyDict_GetItemString(wxPython_dict, dropwx(name));
+    obj = PyDict_GetItemString(wxPython_dict, (char*)dropwx(name));
     wxCHECK_RET(obj != NULL, wxT("Unable to find stock object"));
     wxCHECK_RET(wxPySwigInstance_Check(obj), wxT("Not a swig instance"));
 
@@ -614,12 +614,12 @@ static void rsoPass3(const char* name, const char* classname, void* ptr)
     PyObject* ptrobj;
 
     // Find the object instance
-    obj = PyDict_GetItemString(wxPython_dict, dropwx(name));
+    obj = PyDict_GetItemString(wxPython_dict, (char*)dropwx(name));
     wxCHECK_RET(obj != NULL, wxT("Unable to find stock object")); 
     wxCHECK_RET(wxPySwigInstance_Check(obj), wxT("Not a swig instance"));
 
     // Find the class object and put it back in the instance
-    classobj = PyDict_GetItemString(wxPython_dict, dropwx(classname));
+    classobj = PyDict_GetItemString(wxPython_dict, (char*)dropwx(classname));
     wxCHECK_RET(classobj != NULL, wxT("Unable to find stock class object")); 
     PyObject_SetAttrString(obj, "__class__",  classobj);
 
@@ -633,8 +633,6 @@ static void rsoPass3(const char* name, const char* classname, void* ptr)
 
 void wxPy_ReinitStockObjects(int pass)
 {
-    PyObject* obj;
-    PyObject* ptrobj;
 
 #define REINITOBJ(name, classname) \
     if (pass == 1) { name = (classname*)0xC0C0C0C0; } \
