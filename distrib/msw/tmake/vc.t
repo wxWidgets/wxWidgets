@@ -454,7 +454,7 @@ clean: $(PERIPH_CLEAN_TARGET)
 
 
 # Making documents
-docs:   allhlp allhtml allpdfrtf htb htmlhelp
+docs:   allhlp allhtml allpdfrtf allhtb allhtmlhelp
 alldocs: docs
 hlp:    wxhlp
 wxhlp:  $(DOCDIR)/winhelp/wx.hlp
@@ -473,11 +473,11 @@ referencps:	$(WXDIR)\docs\ps\referenc.ps
 allhlp: wxhlp
         cd $(WXDIR)\utils\dialoged\src
         nmake -f makefile.vc hlp
+        cd $(WXDIR)\utils\tex2rtf\src
+        nmake -f makefile.vc hlp
         cd $(THISDIR)
 
 #        cd $(WXDIR)\utils\wxhelp\src
-#        nmake -f makefile.vc hlp
-#        cd $(WXDIR)\utils\tex2rtf\src
 #        nmake -f makefile.vc hlp
 #        cd $(WXDIR)\utils\wxgraph\src
 #        nmake -f makefile.vc hlp
@@ -493,6 +493,22 @@ allhlp: wxhlp
 allhtml: wxhtml
         cd $(WXDIR)\utils\dialoged\src
         nmake -f makefile.vc html
+        cd $(WXDIR)\utils\tex2rtf\src
+        nmake -f makefile.vc html
+        cd $(THISDIR)
+
+allhtmlhelp: htmlhelp
+        cd $(WXDIR)\utils\dialoged\src
+        nmake -f makefile.vc htmlhelp
+        cd $(WXDIR)\utils\tex2rtf\src
+        nmake -f makefile.vc htmlhelp
+        cd $(THISDIR)
+
+allhtb: htb
+        cd $(WXDIR)\utils\dialoged\src
+        nmake -f makefile.vc htb
+        cd $(WXDIR)\utils\tex2rtf\src
+        nmake -f makefile.vc htb
         cd $(THISDIR)
 
 #        nmake -f makefile.vc html
@@ -501,8 +517,6 @@ allhtml: wxhtml
 #        cd $(WXDIR)\utils\hytext\src
 #        nmake -f makefile.vc html
 #        cd $(WXDIR)\utils\wxhelp\src
-#        nmake -f makefile.vc html
-#        cd $(WXDIR)\utils\tex2rtf\src
 #        nmake -f makefile.vc html
 #        cd $(WXDIR)\utils\wxgraph\src
 #        nmake -f makefile.vc html
@@ -514,10 +528,14 @@ allhtml: wxhtml
 allps: wxps referencps
         cd $(WXDIR)\utils\dialoged\src
         nmake -f makefile.vc ps
+        cd $(WXDIR)\utils\tex2rtf\src
+        nmake -f makefile.vc ps
         cd $(THISDIR)
 
 allpdfrtf: pdfrtf
         cd $(WXDIR)\utils\dialoged\src
+        nmake -f makefile.vc pdfrtf
+        cd $(WXDIR)\utils\tex2rtf\src
         nmake -f makefile.vc pdfrtf
         cd $(THISDIR)
 

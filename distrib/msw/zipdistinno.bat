@@ -3,10 +3,11 @@ rem Zip up an external, generic + Windows distribution of wxWindows 2
 rem using Inno Setup + ScriptMaker
 set src=%wxwin
 set dest=%src\deliver
+set webfiles=c:\wx2dev\wxWebSite
 set inno=0
 
 Rem Set this to the required version
-set version=2.2.7
+set version=2.2.8
 
 if "%src" == "" goto usage
 if "%dest" == "" goto usage
@@ -36,6 +37,13 @@ erase %dest\*-win32-*.zip
 
 if direxist %dest\wx erase /sxyz %dest\wx\
 if not direxist %dest mkdir %dest
+
+# Copy FAQ and other files from wxWebSite CVS
+if not direxist %webfiles% echo Error - %webfiles% does not exist
+if not direxist %webfiles% goto end
+echo Copying FAQ from %webfiles
+copy %webfiles%\site\faq*.htm %src\docs\html
+copy %webfiles%\site\platform.htm %src\docs\html
 
 cd %src
 echo Zipping...
