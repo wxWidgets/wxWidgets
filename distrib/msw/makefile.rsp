@@ -162,7 +162,6 @@ samples/mdi/descrip.mms
 samples/menu/descrip.mms
 samples/minimal/descrip.mms
 samples/resource/descrip.mms
-samples/richedit/descrip.mms
 src/common/descrip.mms
 src/generic/descrip.mms
 src/gtk/descrip.mms
