@@ -336,9 +336,8 @@ static inline const char *Bool2String(bool b)
   return b ? "" : "not ";
 }
 
-void MyTreeItemData::ShowInfo(wxTreeCtrl */*tree*/)
+void MyTreeItemData::ShowInfo(wxTreeCtrl *tree)
 {
-/*
   wxLogMessage("Item '%s': %sselected, %sexpanded, %sbold,\n"
                "%u children (%u immediately under this item).",
                m_desc.c_str(),
@@ -347,5 +346,4 @@ void MyTreeItemData::ShowInfo(wxTreeCtrl */*tree*/)
                Bool2String(tree->IsBold(GetId())),
                tree->GetChildrenCount(GetId()),
                tree->GetChildrenCount(GetId(), FALSE));
-*/
 }
