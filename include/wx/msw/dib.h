@@ -35,25 +35,36 @@ public:
     wxDIB(int width, int height, int depth)
         { Init(); (void)Create(width, height, depth); }
 
-    // same as ctor but with return value
+    // load a DIB from file (any depth is supoprted here unlike above)
+    //
+    // as above, use IsOk() to see if the bitmap was loaded successfully
+    wxDIB(const wxString& filename)
+        { Init(); (void)Load(filename); }
+
+    // same as the corresponding ctors but with return value
     bool Create(int width, int height, int depth);
+    bool Load(const wxString& filename);
 
     // dtor is not virtual, this class is not meant to be used polymorphically
-    ~wxDIB()
-    {
-        if ( m_handle && !::DeleteObject(m_handle) )
-        {
-            wxLogLastError(wxT("DeleteObject(hDIB)"));
-        }
-    }
+    ~wxDIB();
 
 
     // operations
     // ----------
 
+    // create a bitmap compatiblr with the given HDC (or screen by default) and
+    // return its handle, the caller is responsible for freeing it (using
+    // DeleteObject())
+    HBITMAP CreateDDB(HDC hdc = NULL) const;
+
     // get the handle from the DIB and reset it, i.e. this object won't destroy
     // the DIB after this (but the caller should do it)
     HBITMAP Detach() { HBITMAP hbmp = m_handle; m_handle = 0; return hbmp; }
+
+#if wxUSE_PALETTE
+    // create a palette for this DIB (always a trivial/default one for 24bpp)
+    wxPalette *CreatePalette() const;
+#endif // wxUSE_PALETTE
 
 
     // accessors
@@ -118,6 +129,20 @@ private:
         m_depth = 0;
     }
 
+    // free resources
+    void Free()
+    {
+        if ( m_handle )
+        {
+            if ( !::DeleteObject(m_handle) )
+            {
+                wxLogLastError(wxT("DeleteObject(hDIB)"));
+            }
+
+            Init();
+        }
+    }
+
     // the DIB section handle, 0 if invalid
     HBITMAP m_handle;
 
@@ -146,6 +171,14 @@ private:
     wxDIB& operator=(const wxDIB&);
 };
 
+// ----------------------------------------------------------------------------
+// inline functions implementation
+// ----------------------------------------------------------------------------
+
+inline wxDIB::~wxDIB()
+{
+    Free();
+}
 
 // ----------------------------------------------------------------------------
 // Functions for working with DIBs

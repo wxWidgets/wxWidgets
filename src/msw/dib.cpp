@@ -111,6 +111,30 @@ bool wxDIB::Create(int width, int height, int depth)
 }
 
 // ----------------------------------------------------------------------------
+// Loading/saving the DIBs
+// ----------------------------------------------------------------------------
+
+bool wxDIB::Load(const wxString& filename)
+{
+    m_handle = (HBITMAP)::LoadImage
+                         (
+                            wxGetInstance(),
+                            filename,
+                            IMAGE_BITMAP,
+                            0, 0, // don't specify the size
+                            LR_CREATEDIBSECTION | LR_LOADFROMFILE
+                         );
+    if ( !m_handle )
+    {
+        wxLogLastError(_T("LoadImage(LR_CREATEDIBSECTION | LR_LOADFROMFILE)"));
+
+        return false;
+    }
+
+    return true;
+}
+
+// ----------------------------------------------------------------------------
 // wxDIB accessors
 // ----------------------------------------------------------------------------
 
@@ -129,7 +153,6 @@ void wxDIB::DoGetObject() const
         if ( !::GetObject(m_handle, sizeof(ds), &ds) )
         {
             wxLogLastError(_T("GetObject(hDIB)"));
-
             return;
         }
 
@@ -141,6 +164,127 @@ void wxDIB::DoGetObject() const
         self->m_data = ds.dsBm.bmBits;
     }
 }
+
+HBITMAP wxDIB::CreateDDB(HDC hdc) const
+{
+    wxCHECK_MSG( m_handle, 0, _T("wxDIB::CreateDDB(): invalid object") );
+
+    DIBSECTION ds;
+    if ( !::GetObject(m_handle, sizeof(ds), &ds) )
+    {
+        wxLogLastError(_T("GetObject(hDIB)"));
+
+        return 0;
+    }
+
+    HBITMAP hbitmap = ::CreateCompatibleBitmap
+                        (
+                            hdc ? hdc : ScreenHDC(),
+                            ds.dsBm.bmWidth,
+                            ds.dsBm.bmHeight
+                        );
+    if ( !hbitmap )
+    {
+        wxLogLastError(_T("CreateCompatibleBitmap()"));
+
+        return 0;
+    }
+
+    MemoryHDC hdcMem;
+    SelectInHDC select(hdcMem, hbitmap);
+    if ( !select )
+    {
+        wxLogLastError(_T("SelectObjct(hBitmap)"));
+    }
+
+    if ( !::SetDIBits
+            (
+                hdcMem,
+                hbitmap,
+                0,
+                ds.dsBm.bmHeight,
+                ds.dsBm.bmBits,
+                (BITMAPINFO *)&ds.dsBmih,
+                DIB_RGB_COLORS
+            ) )
+    {
+        wxLogLastError(_T("SetDIBits"));
+
+        return 0;
+    }
+
+    return hbitmap;
+}
+
+#if wxUSE_PALETTE
+
+wxPalette *wxDIB::CreatePalette() const
+{
+    wxCHECK_MSG( m_handle, NULL, _T("wxDIB::CreatePalette(): invalid object") );
+
+    DIBSECTION ds;
+    if ( !::GetObject(m_handle, sizeof(ds), &ds) )
+    {
+        wxLogLastError(_T("GetObject(hDIB)"));
+
+        return 0;
+    }
+
+    // how many colours are we going to have in the palette?
+    DWORD biClrUsed = ds.dsBmih.biClrUsed;
+    if ( !biClrUsed )
+    {
+        // biClrUsed field might not be set
+        biClrUsed = 1 << ds.dsBmih.biBitCount;
+    }
+
+    if ( biClrUsed > 256 )
+    {
+        // only 8bpp bitmaps (and less) have palettes, so we surely don't
+        //
+        // NB: another possibility would be to return
+        //     GetStockObject(DEFAULT_PALETTE) or even CreateHalftonePalette()?
+        return NULL;
+    }
+
+    // LOGPALETTE struct has only 1 element in palPalEntry array, we're
+    // going to have biClrUsed of them so add necessary space
+    LOGPALETTE *pPalette = (LOGPALETTE *)
+        malloc(sizeof(LOGPALETTE) + (biClrUsed - 1)*sizeof(PALETTEENTRY));
+    wxCHECK_MSG( pPalette, NULL, _T("out of memory") );
+
+    // initialize the palette header
+    pPalette->palVersion = 0x300;  // magic number, not in docs but works
+    pPalette->palNumEntries = biClrUsed;
+
+    // and the colour table (it starts right after the end of the header)
+    const RGBQUAD *pRGB = (RGBQUAD *)((char *)&ds.dsBmih + ds.dsBmih.biSize);
+    for ( DWORD i = 0; i < biClrUsed; i++, pRGB++ )
+    {
+        pPalette->palPalEntry[i].peRed = pRGB->rgbRed;
+        pPalette->palPalEntry[i].peGreen = pRGB->rgbGreen;
+        pPalette->palPalEntry[i].peBlue = pRGB->rgbBlue;
+        pPalette->palPalEntry[i].peFlags = 0;
+    }
+
+    HPALETTE hPalette = ::CreatePalette(pPalette);
+
+    free(pPalette);
+
+    if ( !hPalette )
+    {
+        wxLogLastError(_T("CreatePalette"));
+
+        return NULL;
+    }
+
+    wxPalette *palette = new wxPalette;
+    palette->SetHPALETTE((WXHPALETTE)hPalette);
+
+    return palette;
+}
+
+#endif // wxUSE_PALETTE
 
 // ----------------------------------------------------------------------------
 // wxImage support
@@ -267,14 +411,14 @@ static bool wxWriteDIB(LPTSTR szFile, HANDLE hdib)
     LPBITMAPINFOHEADER  lpbi;
     int                 fh;
     OFSTRUCT            of;
-    
+
     if (!hdib)
         return FALSE;
-    
+
     fh = OpenFile(wxConvertWX2MB(szFile), &of, OF_CREATE | OF_READWRITE);
     if (fh == -1)
         return FALSE;
-    
+
     lpbi = (LPBITMAPINFOHEADER) GlobalLock(hdib);
 
     /* Fill in the fields of the file header */
@@ -284,13 +428,13 @@ static bool wxWriteDIB(LPTSTR szFile, HANDLE hdib)
     hdr.bfReserved2 = 0;
     hdr.bfOffBits = (DWORD) sizeof(BITMAPFILEHEADER) + lpbi->biSize +
         wxPaletteSize(lpbi);
-    
+
     /* Write the file header */
     _lwrite(fh, (LPSTR) &hdr, sizeof(BITMAPFILEHEADER));
-    
+
     /* Write the DIB header and the bits */
     lwrite(fh, (LPSTR) lpbi, GlobalSize(hdib));
-    
+
     GlobalUnlock(hdib);
     _lclose(fh);
     return TRUE;
@@ -309,10 +453,10 @@ WORD wxPaletteSize(VOID FAR * pv)
 {
     LPBITMAPINFOHEADER lpbi;
     WORD               NumColors;
-    
+
     lpbi = (LPBITMAPINFOHEADER) pv;
     NumColors = wxDibNumColors(lpbi);
-    
+
     if (lpbi->biSize == sizeof(BITMAPCOREHEADER))
         return (WORD)(NumColors * sizeof(RGBTRIPLE));
     else
@@ -331,10 +475,10 @@ static WORD wxDibNumColors(VOID FAR *pv)
     int                 bits;
     BITMAPINFOHEADER        *lpbi;
     BITMAPCOREHEADER        *lpbc;
-    
+
     lpbi = ((BITMAPINFOHEADER*) pv);
     lpbc = ((BITMAPCOREHEADER*) pv);
-    
+
     /*        With the BITMAPINFO format headers, the size of the palette
      *        is in biClrUsed, whereas in the BITMAPCORE - style headers, it
      *        is dependent on the bits per pixel ( = 2 raised to the power of
@@ -347,7 +491,7 @@ static WORD wxDibNumColors(VOID FAR *pv)
     }
     else
         bits = lpbc->bcBitCount;
-    
+
     switch (bits) {
     case 1:
         return 2;
@@ -424,7 +568,7 @@ static DWORD lwrite(int fh, VOID FAR *pv, DWORD ul)
  *                       filled with the appropriate handles.
  *               FALSE - otherwise
  */
- 
+
 bool wxReadDIB(LPTSTR lpFileName, HBITMAP *bitmap, HPALETTE *palette)
 {
     int fh;
@@ -437,32 +581,32 @@ bool wxReadDIB(LPTSTR lpFileName, HBITMAP *bitmap, HPALETTE *palette)
     HDC hDC;
     bool bCoreHead = FALSE;
     HANDLE hDIB = 0;
-    
+
     /* Open the file and get a handle to it's BITMAPINFO */
-    
+
     fh = OpenFile (wxConvertWX2MB(lpFileName), &of, OF_READ);
     if (fh == -1) {
         wxLogError(_("Can't open file '%s'"), lpFileName);
         return (0);
     }
-    
+
     hDIB = GlobalAlloc(GHND, (DWORD)(sizeof(BITMAPINFOHEADER) +
         256 * sizeof(RGBQUAD)));
     if (!hDIB)
         return(0);
-    
+
     lpbi = (LPBITMAPINFOHEADER)GlobalLock(hDIB);
-    
+
     /* read the BITMAPFILEHEADER */
     if (sizeof (bf) != _lread (fh, (LPSTR)&bf, sizeof (bf)))
         goto ErrExit;
-    
+
     if (bf.bfType != 0x4d42)        /* 'BM' */
         goto ErrExit;
-    
+
     if (sizeof(BITMAPCOREHEADER) != _lread (fh, (LPSTR)lpbi, sizeof(BITMAPCOREHEADER)))
         goto ErrExit;
-    
+
     if (lpbi->biSize == sizeof(BITMAPCOREHEADER))
     {
         lpbi->biSize = sizeof(BITMAPINFOHEADER);
@@ -479,7 +623,7 @@ bool wxReadDIB(LPTSTR lpFileName, HBITMAP *bitmap, HPALETTE *palette)
         if (sizeof(BITMAPINFOHEADER) != _lread (fh, (LPSTR)lpbi, sizeof(BITMAPINFOHEADER)))
             goto ErrExit;
     }
-    
+
     nNumColors = (WORD)lpbi->biClrUsed;
     if ( nNumColors == 0 )
     {
@@ -487,17 +631,17 @@ bool wxReadDIB(LPTSTR lpFileName, HBITMAP *bitmap, HPALETTE *palette)
         if (lpbi->biBitCount != 24)
             nNumColors = 1 << lpbi->biBitCount;        /* standard size table */
     }
-    
+
     /* fill in some default values if they are zero */
     if (lpbi->biClrUsed == 0)
         lpbi->biClrUsed = nNumColors;
-    
+
     if (lpbi->biSizeImage == 0)
     {
         lpbi->biSizeImage = ((((lpbi->biWidth * (DWORD)lpbi->biBitCount) + 31) & ~31) >> 3)
             * lpbi->biHeight;
     }
-    
+
     /* get a proper-sized buffer for header, color table and bits */
     GlobalUnlock(hDIB);
     hDIB = GlobalReAlloc(hDIB, lpbi->biSize +
@@ -505,9 +649,9 @@ bool wxReadDIB(LPTSTR lpFileName, HBITMAP *bitmap, HPALETTE *palette)
         lpbi->biSizeImage, 0);
     if (!hDIB)        /* can't resize buffer for loading */
         goto ErrExit2;
-    
+
     lpbi = (LPBITMAPINFOHEADER)GlobalLock(hDIB);
-    
+
     /* read the color table */
     if (!bCoreHead)
         _lread(fh, (LPSTR)(lpbi) + lpbi->biSize, nNumColors * sizeof(RGBQUAD));
@@ -516,9 +660,9 @@ bool wxReadDIB(LPTSTR lpFileName, HBITMAP *bitmap, HPALETTE *palette)
         signed int i;
         RGBQUAD FAR *pQuad;
         RGBTRIPLE FAR *pTriple;
-        
+
         _lread(fh, (LPSTR)(lpbi) + lpbi->biSize, nNumColors * sizeof(RGBTRIPLE));
-        
+
         pQuad = (RGBQUAD FAR *)((LPSTR)lpbi + lpbi->biSize);
         pTriple = (RGBTRIPLE FAR *) pQuad;
         for (i = nNumColors - 1; i >= 0; i--)
@@ -529,19 +673,19 @@ bool wxReadDIB(LPTSTR lpFileName, HBITMAP *bitmap, HPALETTE *palette)
             pQuad[i].rgbReserved = 0;
         }
     }
-    
+
     /* offset to the bits from start of DIB header */
     offBits = (WORD)(lpbi->biSize + nNumColors * sizeof(RGBQUAD));
-    
+
     if (bf.bfOffBits != 0L)
     {
         _llseek(fh,bf.bfOffBits,SEEK_SET);
     }
-    
+
     if (lpbi->biSizeImage == lread(fh, (LPSTR)lpbi + offBits, lpbi->biSizeImage))
     {
         GlobalUnlock(hDIB);
-        
+
         hDC = GetDC(NULL);
         if (!wxMakeBitmapAndPalette(hDC, hDIB, palette,
             bitmap))
@@ -563,7 +707,7 @@ ErrExit:
 ErrExit2:
     GlobalFree(hDIB);
     }
-    
+
     _lclose(fh);
     return(result);
 }
@@ -579,7 +723,7 @@ ErrExit2:
  *               FALSE --> unable to create objects.  both pointer are
  *                         not valid
  */
- 
+
 static bool wxMakeBitmapAndPalette(HDC hDC, HANDLE hDIB,
                         HPALETTE * phPal, HBITMAP * phBitmap)
 {
@@ -588,24 +732,24 @@ static bool wxMakeBitmapAndPalette(HDC hDC, HANDLE hDIB,
     HBITMAP hBitmap;
     HPALETTE hPalette, hOldPal;
     LPSTR lpBits;
-    
+
     lpInfo = (LPBITMAPINFOHEADER) GlobalLock(hDIB);
-    
+
     hPalette = wxMakeDIBPalette(lpInfo);
     if ( hPalette )
     {
         // Need to realize palette for converting DIB to bitmap.
         hOldPal = SelectPalette(hDC, hPalette, TRUE);
         RealizePalette(hDC);
-        
+
         lpBits = (LPSTR)lpInfo + (WORD)lpInfo->biSize +
             (WORD)lpInfo->biClrUsed * sizeof(RGBQUAD);
         hBitmap = CreateDIBitmap(hDC, lpInfo, CBM_INIT, lpBits,
             (LPBITMAPINFO)lpInfo, DIB_RGB_COLORS);
-        
+
         SelectPalette(hDC, hOldPal, TRUE);
         RealizePalette(hDC);
-        
+
         if (!hBitmap)
             DeleteObject(hPalette);
         else
@@ -615,9 +759,9 @@ static bool wxMakeBitmapAndPalette(HDC hDC, HANDLE hDIB,
             result = TRUE;
         }
     }
-    
+
     GlobalUnlock (hDIB);  // glt
-    
+
     return(result);
 }
 
@@ -628,14 +772,14 @@ static bool wxMakeBitmapAndPalette(HDC hDC, HANDLE hDIB,
  *  RETURNS    : non-zero - handle of a corresponding palette
  *               zero - unable to create palette
  */
- 
+
 HPALETTE wxMakeDIBPalette(LPBITMAPINFOHEADER lpInfo)
 {
     LPLOGPALETTE npPal;
     RGBQUAD far *lpRGB;
     HPALETTE hLogPal;
     WORD i;
-    
+
     /* since biClrUsed field was filled during the loading of the DIB,
      * we know it contains the number of colors in the color table.
      */
@@ -645,13 +789,13 @@ HPALETTE wxMakeDIBPalette(LPBITMAPINFOHEADER lpInfo)
             (WORD)lpInfo->biClrUsed * sizeof(PALETTEENTRY));
         if (!npPal)
             return NULL;
-        
+
         npPal->palVersion = 0x300;
         npPal->palNumEntries = (WORD)lpInfo->biClrUsed;
-        
+
         /* get pointer to the color table */
         lpRGB = (RGBQUAD FAR *)((LPSTR)lpInfo + lpInfo->biSize);
-        
+
         /* copy colors from the color table to the LogPalette structure */
         for (i = 0; (DWORD)i < lpInfo->biClrUsed; i++, lpRGB++)
         {
@@ -660,77 +804,19 @@ HPALETTE wxMakeDIBPalette(LPBITMAPINFOHEADER lpInfo)
             npPal->palPalEntry[i].peBlue = lpRGB->rgbBlue;
             npPal->palPalEntry[i].peFlags = 0;
         }
-        
+
         hLogPal = CreatePalette((LPLOGPALETTE)npPal);
         free(npPal);
-        
+
         return(hLogPal);
     }
-    
+
     /* 24-bit DIB with no color table. Return default palette. Another
      * option would be to create a 256 color "rainbow" palette to provide
      * some good color choices.
      */
     else
         return((HPALETTE) GetStockObject(DEFAULT_PALETTE));
-}
-
-bool wxLoadIntoBitmap(wxChar *filename, wxBitmap *bitmap, wxPalette **pal)
-{
-    HBITMAP hBitmap = NULL;
-    HPALETTE hPalette = NULL;
-    
-    bool success = (wxReadDIB(filename, &hBitmap, &hPalette) != 0);
-    
-    if (!success)
-    {
-        if (hPalette)
-            DeleteObject(hPalette);
-        return FALSE;
-    }
-    
-    if (hPalette)
-    {
-#if wxUSE_PALETTE
-        if (pal)
-        {
-            *pal = new wxPalette;
-            (*pal)->SetHPALETTE((WXHPALETTE) hPalette);
-        }
-        else
-#endif // wxUSE_PALETTE
-            DeleteObject(hPalette);
-    }
-    else if (pal)
-        *pal = NULL;
-    
-    if (hBitmap)
-    {
-        BITMAP bm;
-        GetObject(hBitmap, sizeof(bm), (LPSTR)&bm);
-        
-        bitmap->SetHBITMAP((WXHBITMAP) hBitmap);
-        bitmap->SetWidth(bm.bmWidth);
-        bitmap->SetHeight(bm.bmHeight);
-        bitmap->SetDepth(bm.bmPlanes * bm.bmBitsPixel);
-#if WXWIN_COMPATIBILITY_2
-        bitmap->SetOk(TRUE);
-#endif // WXWIN_COMPATIBILITY_2
-        return TRUE;
-    }
-    else return FALSE;
-}
-
-wxBitmap *wxLoadBitmap(wxChar *filename, wxPalette **pal)
-{
-    wxBitmap *bitmap = new wxBitmap;
-    if (wxLoadIntoBitmap(filename, bitmap, pal))
-        return bitmap;
-    else
-    {
-        delete bitmap;
-        return NULL;
-    }
 }
 
 /*
@@ -768,12 +854,12 @@ static void InitBitmapInfoHeader (LPBITMAPINFOHEADER lpBmInfoHdr,
 {
     //   _fmemset (lpBmInfoHdr, 0, sizeof (BITMAPINFOHEADER));
     memset (lpBmInfoHdr, 0, sizeof (BITMAPINFOHEADER));
-    
+
     lpBmInfoHdr->biSize      = sizeof (BITMAPINFOHEADER);
     lpBmInfoHdr->biWidth     = dwWidth;
     lpBmInfoHdr->biHeight    = dwHeight;
     lpBmInfoHdr->biPlanes    = 1;
-    
+
     if (nBPP <= 1)
         nBPP = 1;
     else if (nBPP <= 4)
@@ -786,7 +872,7 @@ static void InitBitmapInfoHeader (LPBITMAPINFOHEADER lpBmInfoHdr,
     */
     else
         nBPP = 24;
-    
+
     lpBmInfoHdr->biBitCount  = nBPP;
     lpBmInfoHdr->biSizeImage = WIDTHBYTES (dwWidth * nBPP) * dwHeight;
 }
@@ -818,52 +904,52 @@ HANDLE wxBitmapToDIB (HBITMAP hBitmap, HPALETTE hPal)
     HDC                hMemDC;
     HANDLE             hDIB;
     HPALETTE           hOldPal = NULL;
-    
+
     // Do some setup -- make sure the Bitmap passed in is valid,
     //  get info on the bitmap (like its height, width, etc.),
     //  then setup a BITMAPINFOHEADER.
-    
+
     if (!hBitmap)
         return NULL;
-    
+
     if (!GetObject (hBitmap, sizeof (Bitmap), (LPSTR) &Bitmap))
         return NULL;
-    
+
     InitBitmapInfoHeader (&bmInfoHdr,
         Bitmap.bmWidth,
         Bitmap.bmHeight,
-        Bitmap.bmPlanes * Bitmap.bmBitsPixel);    
-    
+        Bitmap.bmPlanes * Bitmap.bmBitsPixel);
+
     // Now allocate memory for the DIB.  Then, set the BITMAPINFOHEADER
     //  into this memory, and find out where the bitmap bits go.
-    
+
     hDIB = GlobalAlloc (GHND, sizeof (BITMAPINFOHEADER) +
         wxPaletteSize ((LPSTR) &bmInfoHdr) + bmInfoHdr.biSizeImage);
-    
+
     if (!hDIB)
         return NULL;
-    
+
     lpbmInfoHdr  = (LPBITMAPINFOHEADER) GlobalLock (hDIB);
-    
+
     *lpbmInfoHdr = bmInfoHdr;
     lpBits       = wxFindDIBBits ((LPSTR) lpbmInfoHdr);
-    
-    
+
+
     // Now, we need a DC to hold our bitmap.  If the app passed us
     //  a palette, it should be selected into the DC.
-    
+
     hMemDC = GetDC (NULL);
-    
+
     if (hPal)
     {
         hOldPal = SelectPalette (hMemDC, hPal, FALSE);
         RealizePalette (hMemDC);
     }
-    
+
     // We're finally ready to get the DIB.  Call the driver and let
     // it party on our bitmap.  It will fill in the color table,
     // and bitmap bits of our global memory block.
-    
+
     if (!GetDIBits (hMemDC, hBitmap, 0, Bitmap.bmHeight, lpBits,
             (LPBITMAPINFO) lpbmInfoHdr, DIB_RGB_COLORS))
     {
@@ -872,15 +958,15 @@ HANDLE wxBitmapToDIB (HBITMAP hBitmap, HPALETTE hPal)
         hDIB = NULL;
     }
     else
-        GlobalUnlock (hDIB);   
-    
+        GlobalUnlock (hDIB);
+
     // Finally, clean up and return.
-    
+
     if (hOldPal)
         SelectPalette (hMemDC, hOldPal, FALSE);
-    
+
     ReleaseDC (NULL, hMemDC);
-    
+
     return hDIB;
 }
 
@@ -891,7 +977,7 @@ bool wxSaveBitmap(wxChar *filename, wxBitmap *bitmap, wxPalette *palette)
     if (palette)
         hPalette = (HPALETTE) palette->GetHPALETTE();
 #endif // wxUSE_PALETTE
-    
+
     HANDLE dibHandle = wxBitmapToDIB((HBITMAP) bitmap->GetHBITMAP(), hPalette);
     if (dibHandle)
     {
