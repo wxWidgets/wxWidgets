@@ -3350,7 +3350,7 @@ bool wxWindowGTK::Show( bool show )
         gtk_widget_hide( m_widget );
 
     wxShowEvent eventShow(GetId(), show);
-    eventShow.m_eventObject = this;
+    eventShow.SetEventObject(this);
 
     GetEventHandler()->ProcessEvent(eventShow);
 

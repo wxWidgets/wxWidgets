@@ -2033,7 +2033,7 @@ void wxWindowBase::AdjustForParentClientOrigin(int& x, int& y, int sizeFlags) co
 void wxWindowBase::UpdateWindowUI(long flags)
 {
     wxUpdateUIEvent event(GetId());
-    event.m_eventObject = this;
+    event.SetEventObject(this);
 
     if ( GetEventHandler()->ProcessEvent(event) )
     {
@@ -2155,7 +2155,7 @@ void wxWindowBase::OnSysColourChanged(wxSysColourChangedEvent& event)
         if ( !win->IsTopLevel() )
         {
             wxSysColourChangedEvent event2;
-            event.m_eventObject = win;
+            event.SetEventObject(win);
             win->GetEventHandler()->ProcessEvent(event2);
         }
 

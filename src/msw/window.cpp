@@ -3545,7 +3545,7 @@ bool wxWindowMSW::HandleKillFocus(WXHWND hwnd)
 bool wxWindowMSW::HandleShow(bool show, int WXUNUSED(status))
 {
     wxShowEvent event(GetId(), show);
-    event.m_eventObject = this;
+    event.SetEventObject(this);
 
     return GetEventHandler()->ProcessEvent(event);
 }
@@ -3553,7 +3553,7 @@ bool wxWindowMSW::HandleShow(bool show, int WXUNUSED(status))
 bool wxWindowMSW::HandleInitDialog(WXHWND WXUNUSED(hWndFocus))
 {
     wxInitDialogEvent event(GetId());
-    event.m_eventObject = this;
+    event.SetEventObject(this);
 
     return GetEventHandler()->ProcessEvent(event);
 }
@@ -3588,7 +3588,7 @@ bool wxWindowMSW::HandleDropFiles(WXWPARAM wParam)
     DragFinish (hFilesInfo);
 
     wxDropFilesEvent event(wxEVT_DROP_FILES, gwFilesDropped, files);
-    event.m_eventObject = this;
+    event.SetEventObject(this);
 
     POINT dropPoint;
     DragQueryPoint(hFilesInfo, (LPPOINT) &dropPoint);
@@ -4404,7 +4404,7 @@ void wxWindowMSW::InitMouseEvent(wxMouseEvent& event,
     event.SetTimestamp(::GetMessageTime());
 #endif
 
-    event.m_eventObject = this;
+    event.SetEventObject(this);
     event.SetId(GetId());
 
 #if wxUSE_MOUSEEVENT_HACK
@@ -4609,7 +4609,7 @@ wxKeyEvent wxWindowMSW::CreateKeyEvent(wxEventType evType,
     event.m_controlDown = wxIsCtrlDown();
     event.m_altDown = (HIWORD(lParam) & KF_ALTDOWN) == KF_ALTDOWN;
 
-    event.m_eventObject = (wxWindow *)this; // const_cast
+    event.SetEventObject((wxWindow *)this); // const_cast
     event.m_keyCode = id;
 #if wxUSE_UNICODE
     event.m_uniChar = (wxChar) wParam;
@@ -4912,32 +4912,32 @@ bool wxWindowMSW::MSWOnScroll(int orientation, WXWORD wParam,
     wxScrollWinEvent event;
     event.SetPosition(pos);
     event.SetOrientation(orientation);
-    event.m_eventObject = this;
+    event.SetEventObject(this);
 
     switch ( wParam )
     {
     case SB_TOP:
-        event.m_eventType = wxEVT_SCROLLWIN_TOP;
+        event.SetEventType(wxEVT_SCROLLWIN_TOP);
         break;
 
     case SB_BOTTOM:
-        event.m_eventType = wxEVT_SCROLLWIN_BOTTOM;
+        event.SetEventType(wxEVT_SCROLLWIN_BOTTOM);
         break;
 
     case SB_LINEUP:
-        event.m_eventType = wxEVT_SCROLLWIN_LINEUP;
+        event.SetEventType(wxEVT_SCROLLWIN_LINEUP);
         break;
 
     case SB_LINEDOWN:
-        event.m_eventType = wxEVT_SCROLLWIN_LINEDOWN;
+        event.SetEventType(wxEVT_SCROLLWIN_LINEDOWN);
         break;
 
     case SB_PAGEUP:
-        event.m_eventType = wxEVT_SCROLLWIN_PAGEUP;
+        event.SetEventType(wxEVT_SCROLLWIN_PAGEUP);
         break;
 
     case SB_PAGEDOWN:
-        event.m_eventType = wxEVT_SCROLLWIN_PAGEDOWN;
+        event.SetEventType(wxEVT_SCROLLWIN_PAGEDOWN);
         break;
 
     case SB_THUMBPOSITION:
@@ -4963,9 +4963,9 @@ bool wxWindowMSW::MSWOnScroll(int orientation, WXWORD wParam,
             event.SetPosition(scrollInfo.nTrackPos);
         }
 
-        event.m_eventType = wParam == SB_THUMBPOSITION
+        event.SetEventType( wParam == SB_THUMBPOSITION
                                 ? wxEVT_SCROLLWIN_THUMBRELEASE
-                                : wxEVT_SCROLLWIN_THUMBTRACK;
+                                : wxEVT_SCROLLWIN_THUMBTRACK );
         break;
 
     default:
@@ -5333,7 +5333,7 @@ wxKeyboardHook(int nCode, WORD wParam, DWORD lParam)
             if ( (HIWORD(lParam) & KF_ALTDOWN) == KF_ALTDOWN )
                 event.m_altDown = true;
 
-            event.m_eventObject = NULL;
+            event.SetEventObject(NULL);
             event.m_keyCode = id;
             event.m_shiftDown = wxIsShiftDown();
             event.m_controlDown = wxIsCtrlDown();

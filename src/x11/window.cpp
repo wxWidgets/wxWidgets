@@ -1252,7 +1252,7 @@ void wxWindowX11::OnSysColourChanged(wxSysColourChangedEvent& event)
         if ( win->GetParent() )
         {
             wxSysColourChangedEvent event2;
-            event.m_eventObject = win;
+            event.SetEventObject(win);
             win->GetEventHandler()->ProcessEvent(event2);
         }
 

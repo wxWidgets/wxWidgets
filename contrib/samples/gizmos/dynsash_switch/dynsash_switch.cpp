@@ -239,7 +239,7 @@ void SwitchView::OnFocus(wxFocusEvent& event) {
     wxScrollBar *hscroll = m_dyn_sash->GetHScrollBar(this);
     wxScrollBar *vscroll = m_dyn_sash->GetVScrollBar(this);
 
-    if (event.m_eventObject == hscroll || event.m_eventObject == vscroll) {
+    if (event.GetEventObject() == hscroll || event.GetEventObject() == vscroll) {
         m_view->SetFocus();
     } else {
         event.Skip();

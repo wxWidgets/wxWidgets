@@ -211,7 +211,7 @@ static pascal OSStatus KeyboardEventHandler( EventHandlerCallRef handler , Event
 
                 event.m_x = point.h;
                 event.m_y = point.v;
-                event.m_timeStamp = when;
+                event.SetTimestamp(when);
                 wxWindow* focus = wxWindow::FindFocus() ;
                 event.SetEventObject(focus);
 

@@ -243,7 +243,7 @@ void wxVListBox::SendSelectedEvent()
 
     wxCommandEvent event(wxEVT_COMMAND_LISTBOX_SELECTED, GetId());
     event.SetEventObject(this);
-    event.m_commandInt = m_current;
+    event.SetInt(m_current);
 
     (void)GetEventHandler()->ProcessEvent(event);
 }
@@ -602,7 +602,7 @@ void wxVListBox::OnLeftDClick(wxMouseEvent& event)
     {
         wxCommandEvent event(wxEVT_COMMAND_LISTBOX_DOUBLECLICKED, GetId());
         event.SetEventObject(this);
-        event.m_commandInt = item;
+        event.SetInt(item);
 
         (void)GetEventHandler()->ProcessEvent(event);
     }

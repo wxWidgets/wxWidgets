@@ -1175,14 +1175,14 @@ void wxScrollHelper::HandleOnMouseWheel(wxMouseEvent& event)
 
         newEvent.SetPosition(0);
         newEvent.SetOrientation(wxVERTICAL);
-        newEvent.m_eventObject = m_win;
+        newEvent.SetEventObject(m_win);
 
         if (event.IsPageScroll())
         {
             if (lines > 0)
-                newEvent.m_eventType = wxEVT_SCROLLWIN_PAGEUP;
+                newEvent.SetEventType(wxEVT_SCROLLWIN_PAGEUP);
             else
-                newEvent.m_eventType = wxEVT_SCROLLWIN_PAGEDOWN;
+                newEvent.SetEventType(wxEVT_SCROLLWIN_PAGEDOWN);
 
             m_win->GetEventHandler()->ProcessEvent(newEvent);
         }
@@ -1190,9 +1190,9 @@ void wxScrollHelper::HandleOnMouseWheel(wxMouseEvent& event)
         {
             lines *= event.GetLinesPerAction();
             if (lines > 0)
-                newEvent.m_eventType = wxEVT_SCROLLWIN_LINEUP;
+                newEvent.SetEventType(wxEVT_SCROLLWIN_LINEUP);
             else
-                newEvent.m_eventType = wxEVT_SCROLLWIN_LINEDOWN;
+                newEvent.SetEventType(wxEVT_SCROLLWIN_LINEDOWN);
 
             int times = abs(lines);
             for (; times > 0; times--)

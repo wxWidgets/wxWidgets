@@ -315,7 +315,7 @@ bool wxRadioBox::MSWCommand(WXUINT cmd, WXWORD id)
 
 void wxRadioBox::Command(wxCommandEvent & event)
 {
-    SetSelection (event.m_commandInt);
+    SetSelection (event.GetInt());
     SetFocus();
     ProcessCommand(event);
 }

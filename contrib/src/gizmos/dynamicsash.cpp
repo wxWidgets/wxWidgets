@@ -1180,7 +1180,7 @@ void wxDynamicSashWindowLeaf::OnScroll(wxScrollEvent &WXUNUSED(event)) {
 }
 
 void wxDynamicSashWindowLeaf::OnFocus(wxFocusEvent &event) {
-    if (event.m_eventObject == m_hscroll || event.m_eventObject == m_vscroll) {
+    if (event.GetEventObject() == m_hscroll || event.GetEventObject() == m_vscroll) {
         m_child->SetFocus();
     }
 }

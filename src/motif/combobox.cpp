@@ -318,13 +318,13 @@ void  wxComboBoxCallback (Widget WXUNUSED(w), XtPointer clientData,
         {
             wxCommandEvent event (wxEVT_COMMAND_COMBOBOX_SELECTED,
                                   item->GetId());
-            event.m_commandInt = cbs->index - 1;
-            event.m_commandString = item->GetString (event.m_commandInt);
+            event.SetInt(cbs->index - 1);
+            event.SetString( item->GetString ( event.GetInt() ) );
             if ( item->HasClientObjectData() )
                 event.SetClientObject( item->GetClientObject(cbs->index - 1) );
             else if ( item->HasClientUntypedData() )
                 event.SetClientData( item->GetClientData(cbs->index - 1) );
-            event.m_extraLong = TRUE;
+            event.SetExtraLong(TRUE);
             event.SetEventObject(item);
             item->ProcessCommand (event);
             break;
@@ -332,9 +332,9 @@ void  wxComboBoxCallback (Widget WXUNUSED(w), XtPointer clientData,
     case XmCR_VALUE_CHANGED:
         {
             wxCommandEvent event (wxEVT_COMMAND_TEXT_UPDATED, item->GetId());
-            event.m_commandInt = -1;
-            event.m_commandString = item->GetValue();
-            event.m_extraLong = TRUE;
+            event.SetInt(-1);
+            event.SetString( item->GetValue() );
+            event.SetExtraLong(TRUE);
             event.SetEventObject(item);
             item->ProcessCommand (event);
             break;

@@ -1558,11 +1558,11 @@ void wxFrameLayout::FirePluginEvent( cbPluginEvent& event )
     {
         bool isInputEvt = true;
 #if wxCHECK_VERSION(2,3,0)
-        if ( event.m_eventType != cbEVT_PL_LEFT_DOWN &&
-             event.m_eventType != cbEVT_PL_LEFT_UP &&
-             event.m_eventType != cbEVT_PL_RIGHT_DOWN &&
-             event.m_eventType != cbEVT_PL_RIGHT_UP &&
-             event.m_eventType != cbEVT_PL_MOTION )
+        if ( event.GetEventType() != cbEVT_PL_LEFT_DOWN &&
+             event.GetEventType() != cbEVT_PL_LEFT_UP &&
+             event.GetEventType() != cbEVT_PL_RIGHT_DOWN &&
+             event.GetEventType() != cbEVT_PL_RIGHT_UP &&
+             event.GetEventType() != cbEVT_PL_MOTION )
             isInputEvt = false;
 #else
         switch ( event.m_eventType )

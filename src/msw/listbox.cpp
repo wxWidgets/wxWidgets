@@ -732,7 +732,7 @@ bool wxListBox::MSWCommand(WXUINT param, WXWORD WXUNUSED(id))
         event.SetExtraLong( HasMultipleSelection() ? IsSelected(n) : true );
     }
 
-    event.m_commandInt = n;
+    event.SetInt(n);
 
     return GetEventHandler()->ProcessEvent(event);
 }

@@ -546,11 +546,11 @@ void wxListBox::SetString(int N, const wxString& s)
 
 void wxListBox::Command (wxCommandEvent & event)
 {
-    if (event.m_extraLong)
-        SetSelection (event.m_commandInt);
+    if (event.GetExtraLong())
+        SetSelection (event.GetInt());
     else
     {
-        Deselect (event.m_commandInt);
+        Deselect (event.GetInt());
         return;
     }
     ProcessCommand (event);
@@ -577,8 +577,8 @@ void wxListBoxCallback (Widget WXUNUSED(w), XtPointer clientData,
         event.SetClientObject( item->GetClientObject(n) );
     else if ( item->HasClientUntypedData() )
         event.SetClientData( item->GetClientData(n) );
-    event.m_commandInt = n;
-    event.m_extraLong = TRUE;
+    event.SetInt(n);
+    event.SetExtraLong(TRUE);
     event.SetEventObject(item);
     event.SetString( item->GetString( n ) );
 

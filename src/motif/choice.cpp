@@ -441,8 +441,8 @@ void wxChoiceCallback (Widget w, XtPointer clientData, XtPointer WXUNUSED(ptr))
         {
             wxCommandEvent event(wxEVT_COMMAND_CHOICE_SELECTED, item->GetId());
             event.SetEventObject(item);
-            event.m_commandInt = n;
-            event.m_commandString = item->GetStrings().Item(n)->GetData();
+            event.SetInt(n);
+            event.SetString( item->GetStrings().Item(n)->GetData() );
             if ( item->HasClientObjectData() )
                 event.SetClientObject( item->GetClientObject(n) );
             else if ( item->HasClientUntypedData() )

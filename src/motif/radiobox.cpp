@@ -345,7 +345,7 @@ bool wxRadioBox::SetStringSelection (const wxString& s)
 
 void wxRadioBox::Command (wxCommandEvent & event)
 {
-    SetSelection (event.m_commandInt);
+    SetSelection (event.GetInt());
     ProcessCommand (event);
 }
 

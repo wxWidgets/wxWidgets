@@ -64,7 +64,7 @@ bool wxChoiceBase::SetStringSelection(const wxString& s)
 
 void wxChoiceBase::Command(wxCommandEvent& event)
 {
-    SetSelection(event.m_commandInt);
+    SetSelection(event.GetInt());
     (void)ProcessEvent(event);
 }
 

@@ -194,7 +194,7 @@ gtk_listbox_button_release_callback( GtkWidget * WXUNUSED(widget),
         n = -1;
     }
 
-    event.m_commandInt = n;
+    event.SetInt(n);
 
     listbox->GetEventHandler()->ProcessEvent( event );
 
@@ -320,7 +320,7 @@ gtk_listbox_key_press_callback( GtkWidget *widget, GdkEventKey *gdk_event, wxLis
             {
                 n = -1;
             }
-            new_event.m_commandInt = n;
+            new_event.SetInt(n);
             listbox->GetEventHandler()->ProcessEvent( new_event );
         }
     }
@@ -393,7 +393,7 @@ static void gtk_listitem_select_cb( GtkWidget *widget,
         n = -1;
     }
 
-    event.m_commandInt = n;
+    event.SetInt(n);
 
 //    No longer required with new code in wxLB_SINGLE
 //    listbox->GetEventHandler()->AddPendingEvent( event );

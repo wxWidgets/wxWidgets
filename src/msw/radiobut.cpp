@@ -237,7 +237,7 @@ bool wxRadioButton::GetValue() const
 
 void wxRadioButton::Command (wxCommandEvent& event)
 {
-    SetValue(event.m_commandInt != 0);
+    SetValue(event.GetInt() != 0);
     ProcessCommand(event);
 }
 

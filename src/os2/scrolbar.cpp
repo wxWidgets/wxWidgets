@@ -307,7 +307,7 @@ void wxScrollBar::Command (
   wxCommandEvent&                   rEvent
 )
 {
-    SetThumbPosition(rEvent.m_commandInt);
+    SetThumbPosition(rEvent.GetInt());
     ProcessCommand(rEvent);
 } // end of wxScrollBar::Command
 

@@ -810,7 +810,7 @@ bool wxListBox::OS2Command(
     {
         n = -1;
     }
-    vEvent.m_commandInt = n;
+    vEvent.SetInt(n);
     return GetEventHandler()->ProcessEvent(vEvent);
 } // end of wxListBox::OS2Command
 

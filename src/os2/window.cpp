@@ -3358,7 +3358,7 @@ bool wxWindowOS2::HandleShow(
 {
     wxShowEvent                     vEvent(GetId(), bShow);
 
-    vEvent.m_eventObject = this;
+    vEvent.SetEventObject(this);
     return GetEventHandler()->ProcessEvent(vEvent);
 } // end of wxWindowOS2::HandleShow
 
@@ -3368,7 +3368,7 @@ bool wxWindowOS2::HandleInitDialog(
 {
     wxInitDialogEvent               vEvent(GetId());
 
-    vEvent.m_eventObject = this;
+    vEvent.SetEventObject(this);
     return GetEventHandler()->ProcessEvent(vEvent);
 } // end of wxWindowOS2::HandleInitDialog
 
@@ -3673,7 +3673,7 @@ void wxWindowOS2::OnSysColourChanged(
         {
             wxSysColourChangedEvent vEvent;
 
-            rEvent.m_eventObject = pWin;
+            rEvent.SetEventObject(pWin);
             pWin->GetEventHandler()->ProcessEvent(vEvent);
         }
         node = node->GetNext();
@@ -4057,7 +4057,7 @@ void wxWindowOS2::InitMouseEvent(
     rEvent.m_rightDown   = (::WinGetKeyState(HWND_DESKTOP, VK_BUTTON2) &
 			    0x8000) != 0;
     rEvent.SetTimestamp(s_currentMsg.time);
-    rEvent.m_eventObject = this;
+    rEvent.SetEventObject(this);
     rEvent.SetId(GetId());
 
 #if wxUSE_MOUSEEVENT_HACK
@@ -4174,7 +4174,7 @@ wxKeyEvent wxWindowOS2::CreateKeyEvent(
     vEvent.m_controlDown = IsCtrlDown();
     vEvent.m_altDown     = (HIWORD(lParam) & KC_ALT) == KC_ALT;
 
-    vEvent.m_eventObject = (wxWindow *)this; // const_cast
+    vEvent.SetEventObject((wxWindow *)this); // const_cast
     vEvent.m_keyCode     = nId;
     vEvent.m_rawCode = (wxUint32)wParam;
     vEvent.m_rawFlags = (wxUint32)lParam;
@@ -4363,32 +4363,32 @@ bool wxWindowOS2::OS2OnScroll(
 
     vEvent.SetPosition(wPos);
     vEvent.SetOrientation(nOrientation);
-    vEvent.m_eventObject = this;
+    vEvent.SetEventObject(this);
 
     switch (wParam)
     {
         case SB_LINEUP:
-            vEvent.m_eventType = wxEVT_SCROLLWIN_LINEUP;
+            vEvent.SetEventType(wxEVT_SCROLLWIN_LINEUP);
             break;
 
         case SB_LINEDOWN:
-            vEvent.m_eventType = wxEVT_SCROLLWIN_LINEDOWN;
+            vEvent.SetEventType(wxEVT_SCROLLWIN_LINEDOWN);
             break;
 
         case SB_PAGEUP:
-            vEvent.m_eventType = wxEVT_SCROLLWIN_PAGEUP;
+            vEvent.SetEventType(wxEVT_SCROLLWIN_PAGEUP);
             break;
 
         case SB_PAGEDOWN:
-            vEvent.m_eventType = wxEVT_SCROLLWIN_PAGEDOWN;
+            vEvent.SetEventType(wxEVT_SCROLLWIN_PAGEDOWN);
             break;
 
         case SB_SLIDERPOSITION:
-            vEvent.m_eventType = wxEVT_SCROLLWIN_THUMBRELEASE;
+            vEvent.SetEventType(wxEVT_SCROLLWIN_THUMBRELEASE);
             break;
 
         case SB_SLIDERTRACK:
-            vEvent.m_eventType = wxEVT_SCROLLWIN_THUMBTRACK;
+            vEvent.SetEventType(wxEVT_SCROLLWIN_THUMBTRACK);
             break;
 
         default:

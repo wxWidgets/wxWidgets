@@ -1303,29 +1303,29 @@ void wxWindowMac::ScrollWindow(int dx, int dy, const wxRect *rect)
 
 void wxWindowMac::MacOnScroll(wxScrollEvent &event )
 {
-    if ( event.m_eventObject == m_vScrollBar || event.m_eventObject == m_hScrollBar )
+    if ( event.GetEventObject() == m_vScrollBar || event.GetEventObject() == m_hScrollBar )
     {
         wxScrollWinEvent wevent;
         wevent.SetPosition(event.GetPosition());
         wevent.SetOrientation(event.GetOrientation());
-        wevent.m_eventObject = this;
+        wevent.SetEventObject(this);
 
-        if (event.m_eventType == wxEVT_SCROLL_TOP)
-            wevent.m_eventType = wxEVT_SCROLLWIN_TOP;
-        else if (event.m_eventType == wxEVT_SCROLL_BOTTOM)
-            wevent.m_eventType = wxEVT_SCROLLWIN_BOTTOM;
-        else if (event.m_eventType == wxEVT_SCROLL_LINEUP)
-            wevent.m_eventType = wxEVT_SCROLLWIN_LINEUP;
-        else if (event.m_eventType == wxEVT_SCROLL_LINEDOWN)
-            wevent.m_eventType = wxEVT_SCROLLWIN_LINEDOWN;
-        else if (event.m_eventType == wxEVT_SCROLL_PAGEUP)
-            wevent.m_eventType = wxEVT_SCROLLWIN_PAGEUP;
-        else if (event.m_eventType == wxEVT_SCROLL_PAGEDOWN)
-            wevent.m_eventType = wxEVT_SCROLLWIN_PAGEDOWN;
-        else if (event.m_eventType == wxEVT_SCROLL_THUMBTRACK)
-            wevent.m_eventType = wxEVT_SCROLLWIN_THUMBTRACK;
-        else if (event.m_eventType == wxEVT_SCROLL_THUMBRELEASE)
-            wevent.m_eventType = wxEVT_SCROLLWIN_THUMBRELEASE;
+        if (event.GetEventType() == wxEVT_SCROLL_TOP)
+            wevent.SetEventType( wxEVT_SCROLLWIN_TOP );
+        else if (event.GetEventType() == wxEVT_SCROLL_BOTTOM)
+            wevent.SetEventType( wxEVT_SCROLLWIN_BOTTOM );
+        else if (event.GetEventType() == wxEVT_SCROLL_LINEUP)
+            wevent.SetEventType( wxEVT_SCROLLWIN_LINEUP );
+        else if (event.GetEventType() == wxEVT_SCROLL_LINEDOWN)
+            wevent.SetEventType( wxEVT_SCROLLWIN_LINEDOWN );
+        else if (event.GetEventType() == wxEVT_SCROLL_PAGEUP)
+            wevent.SetEventType( wxEVT_SCROLLWIN_PAGEUP );
+        else if (event.GetEventType() == wxEVT_SCROLL_PAGEDOWN)
+            wevent.SetEventType( wxEVT_SCROLLWIN_PAGEDOWN );
+        else if (event.GetEventType() == wxEVT_SCROLL_THUMBTRACK)
+            wevent.SetEventType( wxEVT_SCROLLWIN_THUMBTRACK );
+        else if (event.GetEventType() == wxEVT_SCROLL_THUMBRELEASE)
+            wevent.SetEventType( wxEVT_SCROLLWIN_THUMBRELEASE );
 
         GetEventHandler()->ProcessEvent(wevent);
     }
@@ -1805,7 +1805,7 @@ void wxWindowMac::MacRedraw( WXHRGN updatergnr , long time, bool erase)
             }
             
             wxPaintEvent event;
-            event.m_timeStamp = time ;
+            event.SetTimestamp(time);
             event.SetEventObject(this);
             GetEventHandler()->ProcessEvent(event);
  

@@ -1241,7 +1241,7 @@ bool wxApp::MacSendKeyDownEvent( wxWindow* focus , long keymessage , long modifi
 
     event.m_x = wherex;
     event.m_y = wherey;
-    event.m_timeStamp = when;
+    event.SetTimestamp(when);
     event.SetEventObject(focus);
     handled = focus->GetEventHandler()->ProcessEvent( event ) ;
     if ( handled && event.GetSkipped() )
@@ -1366,7 +1366,7 @@ bool wxApp::MacSendKeyUpEvent( wxWindow* focus , long keymessage , long modifier
 
     event.m_x = wherex;
     event.m_y = wherey;
-    event.m_timeStamp = when;
+    event.SetTimestamp(when);
     event.SetEventObject(focus);
     handled = focus->GetEventHandler()->ProcessEvent( event ) ;
 

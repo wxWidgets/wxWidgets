@@ -235,7 +235,9 @@ void wxSliderCallback (Widget widget, XtPointer clientData,
     }
 
     wxScrollEvent event(scrollEvent, slider->GetId());
-    XtVaGetValues (widget, XmNvalue, &event.m_commandInt, NULL);
+    int commandInt = event.GetInt();
+    XtVaGetValues (widget, XmNvalue, &commandInt, NULL);
+    event.SetInt(commandInt);
     event.SetEventObject(slider);
     slider->GetEventHandler()->ProcessEvent(event);
 

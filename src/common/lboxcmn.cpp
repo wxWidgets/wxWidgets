@@ -118,7 +118,7 @@ void wxListBoxBase::DeselectAll(int itemToLeaveSelected)
 
 void wxListBoxBase::Command(wxCommandEvent& event)
 {
-    SetSelection(event.m_commandInt, event.m_extraLong != 0);
+    SetSelection(event.GetInt(), event.GetExtraLong() != 0);
     (void)ProcessEvent(event);
 }
 

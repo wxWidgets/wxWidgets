@@ -211,7 +211,7 @@ static pascal OSStatus KeyboardEventHandler( EventHandlerCallRef handler , Event
 
                 event.m_x = point.h;
                 event.m_y = point.v;
-                event.m_timeStamp = when;
+                event.SetTimestamp(when);
                 wxWindow* focus = wxWindow::FindFocus() ;
                 event.SetEventObject(focus);
 
@@ -971,7 +971,7 @@ void wxTopLevelWindowMac::MacFireMouseEvent(
     event.m_x += m_x;
     event.m_y += m_y;
 
-    event.m_timeStamp = timestamp;
+    event.SetTimestamp(timestamp);
     event.SetEventObject(this);
     if ( wxTheApp->s_captureWindow )
     {
@@ -1051,7 +1051,7 @@ void wxTopLevelWindowMac::MacActivate( long timestamp , bool inIsActivating )
         s_macDeactivateWindow=NULL;
     MacDelayedDeactivation(timestamp);
     wxActivateEvent event(wxEVT_ACTIVATE, inIsActivating , m_windowId);
-    event.m_timeStamp = timestamp ;
+    event.SetTimestamp(timestamp);
     event.SetEventObject(this);
 
     GetEventHandler()->ProcessEvent(event);

@@ -146,8 +146,8 @@ void wxCheckListBox::DoToggleItem( int n, int x )
             event.SetClientObject( GetClientObject(n) );
         else if( HasClientUntypedData() )
             event.SetClientData( GetClientData(n) );
-        event.m_commandInt = n;
-        event.m_extraLong = TRUE;
+        event.SetInt(n);
+        event.SetExtraLong(TRUE);
         event.SetEventObject(this);
         event.SetString( GetString( n ) );
 

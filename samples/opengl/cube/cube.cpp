@@ -371,7 +371,7 @@ void TestGLCanvas::OnKeyDown( wxKeyEvent& event )
     if (!m_TimeInitialized)
     {
         m_TimeInitialized = 1;
-        m_xsynct = event.m_timeStamp;
+        m_xsynct = event.GetTimestamp();
         m_gsynct = wxStopWatch(&m_secbase);
 
         m_Key = evkey;
@@ -380,7 +380,7 @@ void TestGLCanvas::OnKeyDown( wxKeyEvent& event )
         m_LastRedraw = 0;
     }
 
-    unsigned long currTime = event.m_timeStamp - m_xsynct;
+    unsigned long currTime = event.GetTimestamp() - m_xsynct;
 
     if (evkey != m_Key)
     {

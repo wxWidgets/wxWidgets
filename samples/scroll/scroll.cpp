@@ -905,15 +905,15 @@ void MyAutoTimedScrollingWindow::OnScroll(wxScrollWinEvent& event)
     // FIXME: the cursor also moves when the scrollbar arrows are clicked
     if (HasCapture()) {
         if (event.GetOrientation() == wxHORIZONTAL) {
-            if (event.m_eventType == wxEVT_SCROLLWIN_LINEUP) {
+            if (event.GetEventType() == wxEVT_SCROLLWIN_LINEUP) {
                 --m_cursor.x;
-            } else if (event.m_eventType == wxEVT_SCROLLWIN_LINEDOWN) {
+            } else if (event.GetEventType() == wxEVT_SCROLLWIN_LINEDOWN) {
                 ++m_cursor.x;
             }
         } else if (event.GetOrientation() == wxVERTICAL) {
-            if (event.m_eventType == wxEVT_SCROLLWIN_LINEUP) {
+            if (event.GetEventType() == wxEVT_SCROLLWIN_LINEUP) {
                 --m_cursor.y;
-            } else if (event.m_eventType == wxEVT_SCROLLWIN_LINEDOWN) {
+            } else if (event.GetEventType() == wxEVT_SCROLLWIN_LINEDOWN) {
                 ++m_cursor.y;
             }
         }

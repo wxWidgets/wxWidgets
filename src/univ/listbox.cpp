@@ -892,7 +892,7 @@ bool wxListBox::SendEvent(wxEventType type, int item)
         event.SetString(GetString(item));
     }
 
-    event.m_commandInt = item;
+    event.SetInt(item);
 
     return GetEventHandler()->ProcessEvent(event);
 }
