@@ -22,7 +22,9 @@
 #include <wx/fontenum.h>
 #include <wx/tipdlg.h>
 #include <wx/process.h>
+#ifdef __WXMSW__
 #include <wx/joystick.h>
+#endif
 %}
 
 //----------------------------------------------------------------------
@@ -387,7 +389,10 @@ void wxPostEvent(wxEvtHandler *dest, wxEvent& event);
 void wxWakeUpIdle();
 
 
+#ifdef __WXMSW__
 void wxWakeUpMainThread();
+#endif
+
 void wxMutexGuiEnter();
 void wxMutexGuiLeave();
 

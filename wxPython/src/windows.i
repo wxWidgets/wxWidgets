@@ -731,7 +731,7 @@ public:
     static wxString GetLabelFromText(const wxString& text);
 
     // wxOwnerDrawn methods
-    // TODO: also look at other ownerdrawn classes...
+#ifdef __WXMSW__
     void SetFont(const wxFont& font);
     wxFont& GetFont();
     void SetTextColour(const wxColour& colText);
@@ -751,7 +751,7 @@ public:
     //bool IsCheckable();
     bool IsOwnerDrawn();
     void ResetOwnerDrawn();
-
+#endif
 };
 
 //---------------------------------------------------------------------------

@@ -162,6 +162,23 @@ class wxWindowDisabler(wxWindowDisablerPtr):
 
 
 
+class wxMutexGuiLockerPtr :
+    def __init__(self,this):
+        self.this = this
+        self.thisown = 0
+    def __del__(self,misc2c=misc2c):
+        if self.thisown == 1 :
+            misc2c.delete_wxMutexGuiLocker(self)
+    def __repr__(self):
+        return "<C wxMutexGuiLocker instance at %s>" % (self.this,)
+class wxMutexGuiLocker(wxMutexGuiLockerPtr):
+    def __init__(self,*_args,**_kwargs):
+        self.this = apply(misc2c.new_wxMutexGuiLocker,_args,_kwargs)
+        self.thisown = 1
+
+
+
+
 class wxTipProviderPtr :
     def __init__(self,this):
         self.this = this
@@ -575,11 +592,17 @@ wxCaret_GetBlinkTime = misc2c.wxCaret_GetBlinkTime
 
 wxCaret_SetBlinkTime = misc2c.wxCaret_SetBlinkTime
 
+wxSafeYield = misc2c.wxSafeYield
+
 wxPostEvent = misc2c.wxPostEvent
 
 wxWakeUpIdle = misc2c.wxWakeUpIdle
 
-wxSafeYield = misc2c.wxSafeYield
+wxMutexGuiEnter = misc2c.wxMutexGuiEnter
+
+wxMutexGuiLeave = misc2c.wxMutexGuiLeave
+
+wxThread_IsMain = misc2c.wxThread_IsMain
 
 wxShowTip = misc2c.wxShowTip
 

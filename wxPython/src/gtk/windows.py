@@ -620,8 +620,29 @@ class wxDialogPtr(wxPanelPtr):
     def SetReturnCode(self, *_args, **_kwargs):
         val = apply(windowsc.wxDialog_SetReturnCode,(self,) + _args, _kwargs)
         return val
+    def CreateTextSizer(self, *_args, **_kwargs):
+        val = apply(windowsc.wxDialog_CreateTextSizer,(self,) + _args, _kwargs)
+        if val: val = wxSizerPtr(val) 
+        return val
+    def CreateButtonSizer(self, *_args, **_kwargs):
+        val = apply(windowsc.wxDialog_CreateButtonSizer,(self,) + _args, _kwargs)
+        if val: val = wxSizerPtr(val) 
+        return val
     def __repr__(self):
         return "<C wxDialog instance at %s>" % (self.this,)
+    
+    # replace swig generated shadow methods to resolve import issues
+    def CreateTextSizer(self, *_args, **_kwargs):
+        import sizers
+        val = apply(windowsc.wxDialog_CreateTextSizer,(self,) + _args, _kwargs)
+        if val: val = sizers.wxSizerPtr(val)
+        return val
+    def CreateButtonSizer(self, *_args, **_kwargs):
+        import sizers
+        val = apply(windowsc.wxDialog_CreateButtonSizer,(self,) + _args, _kwargs)
+        if val: val = sizers.wxSizerPtr(val)
+        return val
+
 class wxDialog(wxDialogPtr):
     def __init__(self,*_args,**_kwargs):
         self.this = apply(windowsc.new_wxDialog,_args,_kwargs)

@@ -11,8 +11,6 @@ from gdi import *
 
 from clip_dnd import *
 
-from controls import *
-
 from events import *
 
 from streams import *
@@ -22,6 +20,8 @@ from mdi import *
 from frames import *
 
 from stattool import *
+
+from controls import *
 
 from controls2 import *
 
@@ -34,6 +34,8 @@ from windows3 import *
 from image import *
 
 from printfw import *
+
+from sizers import *
 
 from filesys import *
 

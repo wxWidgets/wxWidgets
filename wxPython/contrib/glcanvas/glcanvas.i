@@ -15,7 +15,12 @@
 
 %{
 #include "export.h"
+#ifdef __WXMSW__
 #include "myglcanvas.h"
+#else
+#include <wx/glcanvas.h>
+#endif
+
 %}
 
 //---------------------------------------------------------------------------

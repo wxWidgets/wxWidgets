@@ -619,9 +619,6 @@ class wxHtmlPrintoutPtr(wxPrintoutPtr):
     def __init__(self,this):
         self.this = this
         self.thisown = 0
-    def __del__(self,htmlc=htmlc):
-        if self.thisown == 1 :
-            htmlc.delete_wxHtmlPrintout(self)
     def SetHtmlText(self, *_args, **_kwargs):
         val = apply(htmlc.wxHtmlPrintout_SetHtmlText,(self,) + _args, _kwargs)
         return val
