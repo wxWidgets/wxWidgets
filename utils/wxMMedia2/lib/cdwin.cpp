@@ -14,11 +14,7 @@
 #include <windows.h>
 #include <stdio.h>
 #include <mmsystem.h>
-#ifdef WX_PRECOMP
 #include "wx/wxprec.h"
-#else
-#include "wx/wx.h"
-#endif
 #define WXMMEDIA_INTERNAL
 #include "cdbase.h"
 #include "cdwin.h"
@@ -69,7 +65,6 @@ wxCDAudioWin::~wxCDAudioWin(void)
 void wxCDAudioWin::PrepareToc(void)
 {
   MCI_STATUS_PARMS status_struct;
-  MCI_SET_PARMS set_struct;
   wxUint16 i, nb_m_trksize;
   wxCDtime total_time, *trk;
   DWORD ret, tmem;
@@ -201,7 +196,7 @@ wxCDtime wxCDAudioWin::GetTime(void)
   return cd_time;
 }
 
-wxCDAudio::CDtoc& wxCDAudioWin::GetToc(void)
+const wxCDAudio::CDtoc& wxCDAudioWin::GetToc(void)
 {
   return *m_toc;
 }

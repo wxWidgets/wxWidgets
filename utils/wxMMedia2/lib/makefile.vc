@@ -1,0 +1,106 @@
+#
+# File:		makefile.nt
+# Author:	Julian Smart
+# Created:	1993
+# Updated:	
+# Copyright:	(c) 1993, AIAI, University of Edinburgh
+#
+# "%W% %G%"
+#
+# Makefile : Builds GLCanvas class library (MS VC++).
+# Use FINAL=1 argument to nmake to build final version with no debugging
+# info
+
+# Set WXDIR for your system
+WXDIR = $(WXWIN)
+MMDIR = $(WXDIR)\utils\wxMMedia2
+THISDIR = $(MMDIR)\lib
+EXTRALIBS=$(WXDIR)\lib\glcanvas.lib
+
+LIBTARGET=$(WXDIR)\lib\mmedia2.lib
+OBJECTS = cdbase.obj cdwin.obj g711.obj g721.obj g723_24.obj \
+        g723_40.obj g72x.obj sndbase.obj sndcodec.obj sndpcm.obj \
+        sndcpcm.obj sndulaw.obj sndfile.obj sndwav.obj sndaiff.obj sndwin.obj \
+        vidbase.obj
+
+!include $(WXDIR)\src\makelib.vc
+
+cdbase.obj:      cdbase.h cdbase.$(SRCSUFF)
+        $(cc) @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF)
+<<
+
+cdwin.obj:      cdwin.h cdwin.$(SRCSUFF)
+        $(cc) @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF)
+<<
+
+g711.obj:      g72x.h g711.$(SRCSUFF)
+        $(cc) @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF)
+<<
+
+g721.obj:      g72x.h g721.$(SRCSUFF)
+        $(cc) @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF)
+<<
+
+g723_24.obj:      g72x.h g723_24.$(SRCSUFF)
+        $(cc) @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF)
+<<
+
+g723_40.obj:      g72x.h g723_40.$(SRCSUFF)
+        $(cc) @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF)
+<<
+
+sndbase.obj:      sndbase.h sndbase.$(SRCSUFF)
+        $(cc) @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF)
+<<
+
+sndcodec.obj:      sndcodec.h sndcodec.$(SRCSUFF)
+        $(cc) @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF)
+<<
+
+sndpcm.obj:      sndpcm.h sndpcm.$(SRCSUFF)
+        $(cc) @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF)
+<<
+
+sndcpcm.obj:      sndcpcm.h converter.def sndcpcm.$(SRCSUFF)
+        $(cc) @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF)
+<<
+
+sndulaw.obj:      sndulaw.h g72x.h sndulaw.$(SRCSUFF)
+        $(cc) @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF)
+<<
+
+sndfile.obj:      sndfile.h sndfile.$(SRCSUFF)
+        $(cc) @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF)
+<<
+
+sndwav.obj:      sndwav.h sndwav.$(SRCSUFF)
+        $(cc) @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF)
+<<
+
+sndaiff.obj:      sndaiff.h sndaiff.$(SRCSUFF)
+        $(cc) @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF)
+<<
+
+sndwin.obj:      sndwin.h sndwin.$(SRCSUFF)
+        $(cc) @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF)
+<<
+
+vidbase.obj:      vidbase.h vidbase.$(SRCSUFF)
+        $(cc) @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF)
+<<

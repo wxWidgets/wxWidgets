@@ -10,13 +10,15 @@
 #ifdef __GNUG__
 #pragma implementation "vidbase.h"
 #endif
+
+#include <wx/wxprec.h>
+
+#ifndef WX_PRECOMP
+#include <wx/stream.h>
 #include <wx/wfstream.h>
-#include "vidbase.h"
-#ifdef WX_PRECOMP
-#include "wx_prec.h"
-#else
-#include "wx/wx.h"
 #endif
+
+#include "vidbase.h"
 
 #ifdef __BORLANDC__
 #pragma hdrstop

@@ -9,9 +9,9 @@
 #pragma implementation "sndpcm.cpp"
 #endif
 
+#include <wx/wxprec.h>
 #include "sndbase.h"
 #include "sndpcm.h"
-
 
 wxSoundFormatPcm::wxSoundFormatPcm(wxUint32 srate, wxUint8 bps, 
                                    wxUint16 nchannels, bool sign,

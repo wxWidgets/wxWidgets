@@ -15,11 +15,7 @@
 #pragma interface
 #endif
 
-#ifdef WX_PRECOMP
-#include "wx_prec.h"
-#else
-#include "wx/wx.h"
-#endif
+#include "wx/wxprec.h"
 
 typedef struct wxCDtime {
   wxUint8 track;

@@ -9,6 +9,7 @@
 #pragma implementation "sndcodec.cpp"
 #endif
 
+#include <wx/wxprec.h>
 #include "sndbase.h"
 #include "sndcodec.h"
 

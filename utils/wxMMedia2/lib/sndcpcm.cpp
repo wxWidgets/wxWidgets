@@ -9,6 +9,7 @@
 #pragma implementation "sndcpcm.cpp"
 #endif
 
+#include <wx/wxprec.h>
 #include "sndbase.h"
 #include "sndpcm.h"
 #include "sndcpcm.h"

@@ -9,7 +9,8 @@
 #pragma implementation "sndaiff.cpp"
 #endif
 
-#include <wx/defs.h>
+#include <wx/wxprec.h>
+
 #include <wx/stream.h>
 #include <wx/datstrm.h>
 #include <wx/filefn.h>

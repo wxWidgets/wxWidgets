@@ -5,7 +5,12 @@
 // Author: Guilhem Lavaux <lavaux@easynet.fr> (C) 1999
 // CVSID: $Id$
 // --------------------------------------------------------------------------
+#include <wx/wxprec.h>
+
+#ifndef WX_PRECOMP
 #include <wx/stream.h>
+#endif
+
 #include "sndbase.h"
 #include "sndcodec.h"
 #include "sndfile.h"
@@ -258,8 +263,9 @@ bool wxSoundFileStream::StopProduction()
 void wxSoundFileStream::OnSoundEvent(int evt)
 {
   size_t len = m_sndio->GetBestSize();
-  char buffer[m_sndio->GetBestSize()];
+  char *buffer;
 
+  buffer = new char[m_sndio->GetBestSize()];
   wxSoundStream::OnSoundEvent(evt);
 
   switch(evt) {
@@ -284,6 +290,7 @@ void wxSoundFileStream::OnSoundEvent(int evt)
     m_codec.Write(buffer, len);
     break;
   }
+  delete[] buffer;
 }
 
 bool wxSoundFileStream::SetSoundFormat(const wxSoundFormatBase& format)

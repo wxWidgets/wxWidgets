@@ -9,6 +9,7 @@
 #pragma implementation "sndbase.cpp"
 #endif
 
+#include <wx/wxprec.h>
 #include "sndbase.h"
 
 

@@ -14,11 +14,7 @@
 #pragma interface
 #endif
 
-#ifdef WX_PRECOMP
 #include "wx/wxprec.h"
-#else
-#include "wx/wx.h"
-#endif
 #include "cdbase.h"
 
 #ifdef WXMMEDIA_INTERNAL
@@ -56,7 +52,7 @@ public:
   ///
   virtual wxCDtime GetTime(void);
   ///
-  virtual CDtoc& GetToc(void);
+  virtual const CDtoc& GetToc(void);
   ///
   virtual inline bool Ok(void) const { return m_ok; }
 protected:
