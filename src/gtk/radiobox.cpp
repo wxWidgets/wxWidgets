@@ -97,12 +97,21 @@ bool wxRadioBox::Create( wxWindow *parent, wxWindowID id, const wxString& title,
 
     GtkRadioButton *m_radio = (GtkRadioButton*) NULL;
 
+    wxString label;
     GSList *radio_button_group = (GSList *) NULL;
     for (int i = 0; i < n; i++)
     {
-        if (i) radio_button_group = gtk_radio_button_group( GTK_RADIO_BUTTON(m_radio) );
+        if ( i != 0 )
+            radio_button_group = gtk_radio_button_group( GTK_RADIO_BUTTON(m_radio) );
 
-        m_radio = GTK_RADIO_BUTTON( gtk_radio_button_new_with_label( radio_button_group, choices[i].mbc_str() ) );
+        label.Empty();
+        for ( const wxChar *pc = choices[i]; *pc; pc++ )
+        {
+            if ( *pc != _T('&') )
+                label += *pc;
+        }
+
+        m_radio = GTK_RADIO_BUTTON( gtk_radio_button_new_with_label( radio_button_group, label.mbc_str() ) );
 
         m_boxes.Append( (wxObject*) m_radio );
 
