@@ -232,7 +232,8 @@ int wxChoice::DoAppend(const wxString& item)
     {
         // we need to refresh our size in order to have enough space for the
         // newly added items
-        UpdateVisibleHeight();
+        if ( !IsFrozen() )
+            UpdateVisibleHeight();
     }
 
     return n;
@@ -250,7 +251,8 @@ int wxChoice::DoInsert(const wxString& item, int pos)
     }
     else // ok
     {
-        UpdateVisibleHeight();
+        if ( !IsFrozen() )
+            UpdateVisibleHeight();
     }
 
     return n;
@@ -267,7 +269,8 @@ void wxChoice::Delete(int n)
 
     SendMessage(GetHwnd(), CB_DELETESTRING, n, 0);
 
-    UpdateVisibleHeight();
+    if ( !IsFrozen() )
+        UpdateVisibleHeight();
 }
 
 void wxChoice::Clear()
@@ -276,7 +279,8 @@ void wxChoice::Clear()
 
     SendMessage(GetHwnd(), CB_RESETCONTENT, 0, 0);
 
-    UpdateVisibleHeight();
+    if ( !IsFrozen() )
+        UpdateVisibleHeight();
 }
 
 void wxChoice::Free()
