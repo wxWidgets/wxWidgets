@@ -50,9 +50,7 @@ public:
     wxBitmap(const char bits[], int width, int height, int depth = 1);
 
     // Initialize with XPM data
-#ifndef __DIGITALMARS__
     wxBitmap(const char **data) { CreateFromXpm(data); }
-#endif
     wxBitmap(char **data) { CreateFromXpm((const char **)data); }
 
     // Load a file or resource
