@@ -1565,6 +1565,9 @@ long wxListCtrl::InsertItem(wxListItem& info)
         {
             // take copy of attributes
             data->attr = new wxListItemAttr(*info.GetAttributes());
+
+            // and remember that we have some now...
+            m_hasAnyAttr = TRUE;
         }
     };
 
