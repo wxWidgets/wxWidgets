@@ -4920,4 +4920,14 @@ void wxListCtrl::SetItemCount(long count)
     m_mainWin->SetItemCount(count);
 }
 
+void wxListCtrl::RefreshItem(long item)
+{
+    m_mainWin->RefreshLine(item);
+}
+
+void wxListCtrl::RefreshItems(long itemFrom, long itemTo)
+{
+    m_mainWin->RefreshLines(itemFrom, itemTo);
+}
+
 #endif // wxUSE_LISTCTRL
