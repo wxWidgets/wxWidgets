@@ -1,0 +1,4 @@
+These are the changes for wxMac 2.3.2
+
+- support for configuration and build under Mac OS X using the Apple Developer
+  Tools

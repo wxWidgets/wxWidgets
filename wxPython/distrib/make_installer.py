@@ -67,6 +67,7 @@ Name: tools;   Description: "Tools";                         Types: full
 [Files]
 Source: "%(SYSDIR)s\MSVCRT.dll";            DestDir: "{sys}"; CopyMode: alwaysskipifsameorolder; Flags: sharedfile uninsneveruninstall restartreplace; Components: core
 Source: "%(SYSDIR)s\MSVCIRT.dll";           DestDir: "{sys}"; CopyMode: alwaysskipifsameorolder; Flags: sharedfile uninsneveruninstall restartreplace; Components: core
+Source: "%(SYSDIR)s\MSVCP60.dll";           DestDir: "{sys}"; CopyMode: alwaysskipifsameorolder; Flags: sharedfile uninsneveruninstall restartreplace; Components: core
 
 Source: "%(WXDIR)s\lib\%(WXDLL)s";          DestDir: "{app}\wxPython"; Components: core
 %(MSLU)s
@@ -76,6 +77,7 @@ Source: "wxPython\gridc.pyd";               DestDir: "{app}\wxPython"; Component
 Source: "wxPython\helpc.pyd";               DestDir: "{app}\wxPython"; Components: core
 Source: "wxPython\htmlc.pyd";               DestDir: "{app}\wxPython"; Components: core
 Source: "wxPython\calendarc.pyd";           DestDir: "{app}\wxPython"; Components: core
+Source: "wxPython\wizardc.pyd";             DestDir: "{app}\wxPython"; Components: core
 Source: "wxPython\glcanvasc.pyd";           DestDir: "{app}\wxPython"; Components: core
 Source: "wxPython\oglc.pyd";                DestDir: "{app}\wxPython"; Components: core
 Source: "wxPython\stc_c.pyd";               DestDir: "{app}\wxPython"; Components: core
@@ -189,7 +191,8 @@ Source: "samples\embedded\*.xpm";          DestDir: "{app}\wxPython\samples\embe
 
 [Run]
 ;; Recreate the tool scripts to use the paths on the users machine
-Filename: "{code:GetPythonDir}\python.exe";  Parameters: "CreateBatchFiles.py";  WorkingDir: "{code:GetPythonDir}\Scripts";  Components: tools
+Filename: "{code:GetPythonDir}\python.exe";  Parameters: "{code:GetPythonDir}\Lib\compileall.py {app}\wxPython"; Description: "Compile Python .py files to .pyc"; Flags: postinstall; Components: core
+Filename: "{code:GetPythonDir}\python.exe";  Parameters: "CreateBatchFiles.py";  WorkingDir: "{code:GetPythonDir}\Scripts";  Description: "Create batch files for tool scripts"; Flags: postinstall; Components: tools
 
 
 ;;------------------------------------------------------------
@@ -244,6 +247,15 @@ Type: files; Name: "{app}\wxPython\samples\stxview\StructuredText\*.pyc";
 Type: files; Name: "{app}\wxPython\samples\stxview\StructuredText\*.pyo";
 Type: files; Name: "{app}\wxPython\samples\frogedit\*.pyc";
 Type: files; Name: "{app}\wxPython\samples\frogedit\*.pyo";
+Type: files; Name: "{app}\wxPython\demo\data\*.pyc";
+Type: files; Name: "{app}\wxPython\demo\data\*.pyo";
+Type: files; Name: "{app}\wxPython\demo\dllwidget\*.pyc";
+Type: files; Name: "{app}\wxPython\demo\dllwidget\*.pyo";
+Type: files; Name: "{app}\wxPython\samples\embedded\*.pyc";
+Type: files; Name: "{app}\wxPython\samples\embedded\*.pyo";
+Type: files; Name: "{app}\wxPython\samples\pySketch\*.pyc";
+Type: files; Name: "{app}\wxPython\samples\pySketch\*.pyo";
+
 
 '''
 
