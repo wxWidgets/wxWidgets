@@ -24,9 +24,7 @@ Default constructor.
 
 \func{}{wxBitmap}{\param{const wxBitmap\& }{bitmap}}
 
-\func{}{wxBitmap}{\param{const wxBitmap* }{bitmap}}
-
-Copy constructors.
+Copy constructor.
 
 \func{}{wxBitmap}{\param{void*}{ data}, \param{int}{ type}, \param{int}{ width}, \param{int}{ height}, \param{int}{ depth = -1}}
 
@@ -61,7 +59,7 @@ Loads a bitmap from a file or resource.
 screen is used.}
 
 \docparam{name}{This can refer to a resource name under MS Windows, or a filename under MS Windows and X.
-Its meaning is determined by the {\it flags} parameter.}
+Its meaning is determined by the {\it type} parameter.}
 
 \docparam{type}{May be one of the following:
 
@@ -259,7 +257,7 @@ or set for the bitmap.
 
 \constfunc{wxMask*}{GetMask}{\void}
 
-Gets the associated mask if any) which may have been loaded from a file
+Gets the associated mask (if any) which may have been loaded from a file
 or set for the bitmap.
 
 \wxheading{See also}

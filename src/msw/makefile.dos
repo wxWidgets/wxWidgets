@@ -23,14 +23,12 @@ DUMMYOBJ=dummy.obj
 # This one overrides the others, to be consistent with the settings in wx_setup.h
 MINIMAL_WXWINDOWS_SETUP=0
 
-USE_CTL3D=1
 USE_XPM_IN_MSW=0
+USE_CTL3D=1
 
 !if "$(MINIMAL_WXWINDOWS_SETUP)" == "1"
 USE_CTL3D=0
-USE_IMAGE_LOADING_IN_MSW=0
 USE_XPM_IN_MSW=0
-USE_GNU_WXSTRING=0
 !endif
 
 PERIPH_LIBS=
@@ -52,24 +50,29 @@ COMMDIR=..\common
 OLEDIR=.\ole
 MSWDIR=.
 
-DOCDIR = $(WXDIR)\docs
-
 GENERICOBJS= \
   $(GENDIR)\choicdgg.obj \
-  $(GENDIR)\colrdlgg.obj \
-  $(GENDIR)\fontdlgg.obj \
+  $(GENDIR)\dirdlgg.obj \
   $(GENDIR)\gridg.obj \
-  $(GENDIR)\helpxlp.obj \
-  $(GENDIR)\msgdlgg.obj \
+  $(GENDIR)\imaglist.obj \
+  $(GENDIR)\listctrl.obj \
+  $(GENDIR)\notebook.obj \
   $(GENDIR)\panelg.obj \
-  $(GENDIR)\printps.obj \
-  $(GENDIR)\prntdlgg.obj \
   $(GENDIR)\scrolwin.obj \
   $(GENDIR)\splitter.obj \
   $(GENDIR)\statusbr.obj \
   $(GENDIR)\tabg.obj \
-  $(GENDIR)\textdlgg.obj
+  $(GENDIR)\textdlgg.obj\
+  $(GENDIR)\treectrl.obj
 
+# Don't need these generic objects for Windows
+#  $(GENDIR)\msgdlgg.obj \
+#  $(GENDIR)\fontdlgg.obj \
+#  $(GENDIR)\colrdlgg.obj \
+#  $(GENDIR)\printps.obj \
+#  $(GENDIR)\prntdlgg.obj \
+# $(GENDIR)\helpxlp.obj \
+ 
 COMMONOBJS = \
   $(COMMDIR)\config.obj \
   $(COMMDIR)\cmndata.obj \
@@ -81,7 +84,6 @@ COMMONOBJS = \
   $(COMMDIR)\filefn.obj \
   $(COMMDIR)\framecmn.obj \
   $(COMMDIR)\gdicmn.obj \
-  $(COMMDIR)\image.obj \
   $(COMMDIR)\intl.obj \
   $(COMMDIR)\helpbase.obj \
   $(COMMDIR)\ipcbase.obj \
@@ -91,7 +93,6 @@ COMMONOBJS = \
   $(COMMDIR)\module.obj \
   $(COMMDIR)\object.obj \
   $(COMMDIR)\odbc.obj \
-  $(COMMDIR)\postscrp.obj \
   $(COMMDIR)\process.obj \
   $(COMMDIR)\prntbase.obj \
   $(COMMDIR)\resource.obj \
@@ -118,8 +119,15 @@ COMMONOBJS = \
   $(COMMDIR)\extended.obj \
   $(COMMDIR)\wincmn.obj
 
-#  $(COMMDIR)\fileconf.obj # Doens't compile (nested classes)
+# Doesn't compile (nested classes)
+# $(COMMDIR)\fileconf.obj\
 
+# Fails when including png.h, on jmp_buf.
+#  $(COMMDIR)\image.obj \
+
+# Don't need this
+# $(COMMDIR)\postscrp.obj \
+ 
 MSWOBJS = \
   $(MSWDIR)\accel.obj \
   $(MSWDIR)\app.obj \
@@ -146,7 +154,6 @@ MSWOBJS = \
   $(MSWDIR)\dde.obj \
   $(MSWDIR)\dialog.obj \
   $(MSWDIR)\dib.obj \
-  $(MSWDIR)\dirdlg.obj \
   $(MSWDIR)\filedlg.obj \
   $(MSWDIR)\font.obj \
   $(MSWDIR)\fontdlg.obj \
@@ -155,10 +162,9 @@ MSWOBJS = \
   $(MSWDIR)\gdiobj.obj \
   $(MSWDIR)\helpwin.obj \
   $(MSWDIR)\icon.obj \
-  $(MSWDIR)\imaglist.obj \
+  $(MSWDIR)\iniconf.obj\
   $(MSWDIR)\joystick.obj \
   $(MSWDIR)\listbox.obj \
-  $(MSWDIR)\listctrl.obj \
   $(MSWDIR)\main.obj \
   $(MSWDIR)\mdi.obj \
   $(MSWDIR)\menu.obj\
@@ -186,18 +192,23 @@ MSWOBJS = \
   $(MSWDIR)\tbarmsw.obj \
   $(MSWDIR)\textctrl.obj \
   $(MSWDIR)\timer.obj \
-  $(MSWDIR)\treectrl.obj \
   $(MSWDIR)\utils.obj \
   $(MSWDIR)\utilsexc.obj \
   $(MSWDIR)\wave.obj \
   $(MSWDIR)\window.obj \
-  $(OLEDIR)\droptgt.obj \
   $(OLEDIR)\dropsrc.obj \
-  $(OLEDIR)\dataobj.obj \
-  $(OLEDIR)\oleutils.obj \
-  $(OLEDIR)\uuid.obj
+  $(OLEDIR)\droptgt.obj
 
+#  $(OLEDIR)\automtn.obj \
+#  $(OLEDIR)\dataobj.obj \
+#  $(OLEDIR)\oleutils.obj \
+#  $(OLEDIR)\uuid.obj
+
+# Not appropriate for 16-bit Windows
 #  $(MSWDIR)\registry.obj \
+#  $(MSWDIR)\dirdlg.obj \
+#  $(MSWDIR)\treectrl.obj \
+#  $(MSWDIR)\listctrl.obj \
 
 OBJECTS = $(COMMONOBJS) $(GENERICOBJS) $(MSWOBJS)
 
@@ -431,6 +442,11 @@ $(MSWDIR)/icon.obj:     $*.$(SRCSUFF)
 $(CPPFLAGS) /Fo$@ /c /Tp $*.$(SRCSUFF)
 <<
 
+$(MSWDIR)/iniconf.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /Fo$@ /c /Tp $*.$(SRCSUFF)
+<<
+
 $(MSWDIR)/imaglist.obj:     $*.$(SRCSUFF)
         cl @<<
 $(CPPFLAGS) /Fo$@ /c /Tp $*.$(SRCSUFF)
@@ -641,6 +657,11 @@ $(OLEDIR)/uuid.obj:     $*.$(SRCSUFF)
 $(CPPFLAGS) /Fo$@ /c /Tp $*.$(SRCSUFF)
 <<
 
+$(OLEDIR)/automtn.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /Fo$@ /c /Tp $*.$(SRCSUFF)
+<<
+
 ########################################################
 # Common objects (always compiled)
 
@@ -700,6 +721,11 @@ $(CPPFLAGS) /Fo$@ /c /Tp $*.$(SRCSUFF)
 <<
 
 $(COMMDIR)/helpbase.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /Fo$@ /c /Tp $*.$(SRCSUFF)
+<<
+
+$(COMMDIR)/image.obj:     $*.$(SRCSUFF)
         cl @<<
 $(CPPFLAGS) /Fo$@ /c /Tp $*.$(SRCSUFF)
 <<
@@ -909,12 +935,32 @@ $(GENDIR)/colrdlgg.obj:     $*.$(SRCSUFF)
 $(CPPFLAGS) /Fo$@ /c /Tp $*.$(SRCSUFF)
 <<
 
+$(GENDIR)/dirdlgg.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /Fo$@ /c /Tp $*.$(SRCSUFF)
+<<
+
 $(GENDIR)/fontdlgg.obj:     $*.$(SRCSUFF)
         cl @<<
 $(CPPFLAGS) /Fo$@ /c /Tp $*.$(SRCSUFF)
 <<
 
 $(GENDIR)/gridg.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /Fo$@ /c /Tp $*.$(SRCSUFF)
+<<
+
+$(GENDIR)/imaglist.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /Fo$@ /c /Tp $*.$(SRCSUFF)
+<<
+
+$(GENDIR)/listctrl.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /Fo$@ /c /Tp $*.$(SRCSUFF)
+<<
+
+$(GENDIR)/notebook.obj:     $*.$(SRCSUFF)
         cl @<<
 $(CPPFLAGS) /Fo$@ /c /Tp $*.$(SRCSUFF)
 <<
@@ -969,6 +1015,11 @@ $(GENDIR)/textdlgg.obj:     $*.$(SRCSUFF)
 $(CPPFLAGS) /Fo$@ /c /Tp $*.$(SRCSUFF)
 <<
 
+$(GENDIR)/treectrl.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /Fo$@ /c /Tp $*.$(SRCSUFF)
+<<
+
 $(OBJECTS):	$(WXDIR)/include/wx/setup.h
 
 # Peripheral components
@@ -1004,224 +1055,5 @@ clean: $(PERIPH_CLEAN_TARGET)
         cd $(WXDIR)\src\msw
 
 cleanall: clean
-
-# Making documents
-docs:   hlp
-hlp:    wxhlp faqhlp refhlp
-wxhlp:  $(DOCDIR)/winhelp/wx.hlp
-faqhlp: $(DOCDIR)/winhelp/faq.hlp
-refhlp: $(DOCDIR)/winhelp/techref.hlp
-rtf:    $(DOCDIR)/winhelp/wx.rtf
-faqrtf: $(DOCDIR)/winhelp/faq.rtf
-html:	wxhtml faqhtml
-wxhtml:	$(DOCDIR)\html\wx\wx.htm
-faqhtml: $(DOCDIR)\html\faq\faq.htm
-ps:     faqps wxps referencps
-wxps:	$(WXDIR)\docs\ps\wx.ps
-faqps:	$(WXDIR)\docs\ps\faq.ps
-referencps:	$(WXDIR)\docs\ps\referenc.ps
-
-alldocs: allhlp allhtml allps
-
-allhlp: wxhlp faqhlp
-        nmake -f makefile.dos hlp
-        cd $(WXDIR)\utils\wxprop\src
-        nmake -f makefile.dos hlp
-        cd $(WXDIR)\utils\dialoged\src
-        nmake -f makefile.dos hlp
-        cd $(THISDIR)
-
-#        cd $(WXDIR)\utils\wxhelp\src
-#        nmake -f makefile.dos hlp
-#        cd $(WXDIR)\utils\wxhelp2\src
-#        nmake -f makefile.dos hlp
-#        cd $(WXDIR)\utils\prologio\src
-#        nmake -f makefile.dos hlp
-#        cd $(WXDIR)\utils\tex2rtf\src
-#        nmake -f makefile.dos hlp
-#        cd $(WXDIR)\utils\wxgraph\src
-#        nmake -f makefile.dos hlp
-#        cd $(WXDIR)\utils\wxchart\src
-#        nmake -f makefile.dos hlp
-#        cd $(WXDIR)\utils\wxtree\src
-#        nmake -f makefile.dos hlp
-#        cd $(WXDIR)\utils\wxbuild\src
-#        nmake -f makefile.dos hlp
-#        cd $(WXDIR)\utils\wxgrid\src
-#        nmake -f makefile.dos hlp
-#        cd $(WXDIR)\utils\wxtab\src
-#        nmake -f makefile.dos hlp
-
-#        cd $(WXDIR)\utils\wxclips\src
-#        nmake -f makefile.dos hlp
-#        cd $(WXDIR)\utils\clips2c\src
-#        nmake -f makefile.dos hlp
-
-allhtml: wxhtml faqhtml
-        nmake -f makefile.dos html
-        cd $(WXDIR)\utils\wxprop\src
-        cd $(THISDIR)
-
-#        nmake -f makefile.dos html
-#        cd $(WXDIR)\utils\dialoged\src
-#        nmake -f makefile.dos html
-#        cd $(WXDIR)\utils\hytext\src
-#        nmake -f makefile.dos html
-#        cd $(WXDIR)\utils\wxhelp\src
-#        nmake -f makefile.dos html
-#        cd $(WXDIR)\utils\wxhelp2\src
-#        nmake -f makefile.dos html
-#        cd $(WXDIR)\utils\prologio\src
-#        nmake -f makefile.dos html
-#        cd $(WXDIR)\utils\tex2rtf\src
-#        nmake -f makefile.dos html
-#        cd $(WXDIR)\utils\wxgraph\src
-#        nmake -f makefile.dos html
-#        cd $(WXDIR)\utils\wxchart\src
-#        nmake -f makefile.dos html
-#        cd $(WXDIR)\utils\wxtree\src
-#        nmake -f makefile.dos html
-#        cd $(WXDIR)\utils\wxtab\src
-#        nmake -f makefile.dos html
-
-#        cd $(WXDIR)\utils\wxclips\src
-#        nmake -f makefile.dos html
-#        cd $(WXDIR)\utils\clips2c\src
-#        nmake -f makefile.dos html
-
-allps: wxps faqps
-        nmake -f makefile.dos ps
-        cd $(WXDIR)\utils\wxhelp\src
-        nmake -f makefile.dos ps
-        cd $(WXDIR)\utils\wxhelp2\src
-        nmake -f makefile.dos ps
-        cd $(WXDIR)\utils\tex2rtf\src
-        nmake -f makefile.dos ps
-        cd $(WXDIR)\utils\wxgraph\src
-        nmake -f makefile.dos ps
-        cd $(WXDIR)\utils\wxchart\src
-        nmake -f makefile.dos ps
-        cd $(WXDIR)\utils\wxtree\src
-        nmake -f makefile.dos ps
-        cd $(WXDIR)\utils\wxprop\src
-        nmake -f makefile.dos ps
-        cd $(WXDIR)\utils\dialoged\src
-        nmake -f makefile.dos ps
-        cd $(THISDIR)
-
-#        cd $(WXDIR)\utils\wxtab\src
-#        nmake -f makefile.dos ps
-#        cd $(WXDIR)\utils\prologio\src
-#        nmake -f makefile.dos ps
-#        cd $(WXDIR)\utils\wxclips\src
-#        nmake -f makefile.dos ps
-#        cd $(WXDIR)\utils\clips2c\src
-#        nmake -f makefile.dos ps
-
-$(DOCDIR)/winhelp/wx.hlp:         $(DOCDIR)/latex/wx/wx.rtf $(DOCDIR)/latex/wx/wx.hpj
-        cd $(DOCDIR)/latex/wx
-        -erase wx.ph
-        hc wx
-        move wx.hlp $(DOCDIR)\winhelp\wx.hlp
-        move wx.cnt $(DOCDIR)\winhelp\wx.cnt
-        cd $(THISDIR)
-
-$(DOCDIR)/winhelp/faq.hlp:         $(DOCDIR)/latex/faq/faq.rtf $(DOCDIR)/latex/faq/faq.hpj
-        cd $(DOCDIR)/latex/faq
-        -erase faq.ph
-        hc faq
-        move faq.hlp $(DOCDIR)\winhelp\faq.hlp
-        move faq.cnt $(DOCDIR)\winhelp\faq.cnt
-        cd $(THISDIR)
-
-$(DOCDIR)/winhelp/techref.hlp:         $(DOCDIR)/latex/techref/techref.rtf $(DOCDIR)/latex/techref/techref.hpj
-        cd $(DOCDIR)/latex/techref
-        -erase techref.ph
-        hc techref
-        move techref.hlp $(DOCDIR)\winhelp\techref.hlp
-        move techref.cnt $(DOCDIR)\winhelp\techref.cnt
-        cd $(THISDIR)
-
-$(DOCDIR)/latex/wx/wx.rtf:         $(DOCDIR)/latex/wx/classes.tex $(DOCDIR)/latex/wx/body.tex $(DOCDIR)/latex/wx/topics.tex $(DOCDIR)/latex/wx/manual.tex
-        cd $(DOCDIR)\latex\wx
-        -start /w tex2rtf $(DOCDIR)/latex/wx/manual.tex $(DOCDIR)/latex/wx/wx.rtf -twice -winhelp
-        cd $(THISDIR)
-
-$(DOCDIR)/latex/faq/faq.rtf:         $(DOCDIR)/latex/faq/faq.tex
-        cd $(DOCDIR)\latex\faq
-        -start /w tex2rtf $(DOCDIR)/latex/faq/faq.tex $(DOCDIR)/latex/faq/faq.rtf -twice -winhelp
-        cd $(THISDIR)
-
-$(DOCDIR)/latex/techref/techref.rtf:         $(DOCDIR)/latex/techref/techref.tex
-        cd $(DOCDIR)\latex\techref
-        -start /w tex2rtf $(DOCDIR)/latex/techref/techref.tex $(DOCDIR)/latex/techref/techref.rtf -twice -winhelp
-        cd $(THISDIR)
-
-$(DOCDIR)\html\wx\wx.htm:         $(DOCDIR)\latex\wx\classes.tex $(DOCDIR)\latex\wx\body.tex $(DOCDIR)/latex/wx/topics.tex $(DOCDIR)\latex\wx\manual.tex
-        cd $(DOCDIR)\latex\wx
-        -mkdir $(DOCDIR)\html\wx
-        -start /w tex2rtf $(DOCDIR)\latex\wx\manual.tex $(DOCDIR)\html\wx\wx.htm -twice -html -macros $(DOCDIR)\tex2rtf.ini
-        -erase $(DOCDIR)\html\wx\*.con
-        -erase $(DOCDIR)\html\wx\*.ref
-        -erase $(DOCDIR)\latex\wx\*.con
-        -erase $(DOCDIR)\latex\wx\*.ref
-        cd $(THISDIR)
-
-$(DOCDIR)\html\faq\faq.htm:         $(DOCDIR)\latex\faq\faq.tex
-        cd $(DOCDIR)\latex\faq
-        -mkdir $(DOCDIR)\html\faq
-        -start /w tex2rtf $(DOCDIR)\latex\faq\faq.tex $(DOCDIR)\html\faq\faq.htm -twice -html -macros $(DOCDIR)\tex2rtf.ini
-        -erase $(DOCDIR)\html\faq\*.con
-        -erase $(DOCDIR)\html\faq\*.ref
-        -erase $(DOCDIR)\latex\faq\*.con
-        -erase $(DOCDIR)\latexfaq\*.ref
-        cd $(THISDIR)
-
-$(WXDIR)\docs\latex\wx\manual.dvi:	$(DOCDIR)/latex/wx/body.tex $(DOCDIR)/latex/wx/manual.tex
-	cd $(WXDIR)\docs\latex\wx
-        -latex manual
-        -latex manual
-        -makeindx manual
-        -bibtex manual
-        -latex manual
-        -latex manual
-        cd $(THISDIR)
-
-$(WXDIR)\docs\ps\wx.ps:	$(WXDIR)\docs\latex\wx\manual.dvi
-	cd $(WXDIR)\docs\latex\wx
-        -dvips32 -o wx.ps manual
-        move wx.ps $(WXDIR)\docs\ps\wx.ps
-        cd $(THISDIR)
-
-$(WXDIR)\docs\latex\wx\referenc.dvi:	$(DOCDIR)/latex/wx/classes.tex $(DOCDIR)/latex/wx/topics.tex $(DOCDIR)/latex/wx/referenc.tex
-	cd $(WXDIR)\docs\latex\wx
-        -latex referenc
-        -latex referenc
-        -makeindx referenc
-        -bibtex referenc
-        -latex referenc
-        -latex referenc
-        cd $(THISDIR)
-
-$(WXDIR)\docs\ps\referenc.ps:	$(WXDIR)\docs\latex\wx\referenc.dvi
-	cd $(WXDIR)\docs\latex\wx
-        -dvips32 -o referenc.ps referenc
-        move referenc.ps $(WXDIR)\docs\ps\referenc.ps
-        cd $(THISDIR)
-
-$(WXDIR)\docs\latex\faq\faq.dvi:	$(DOCDIR)/latex/faq/faq.tex
-	cd $(WXDIR)\docs\latex\faq
-        -latex faq
-        -latex faq
-        -makeindx faq
-        -latex faq
-        -latex faq
-        cd $(THISDIR)
-
-$(WXDIR)\docs\ps\faq.ps:	$(WXDIR)\docs\latex\faq\faq.dvi
-	cd $(WXDIR)\docs\latex\faq
-        -dvips32 -o faq.ps faq
-        move faq.ps $(WXDIR)\docs\ps\faq.ps
-        cd $(THISDIR)
 
 

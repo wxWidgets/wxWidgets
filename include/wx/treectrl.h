@@ -2,7 +2,11 @@
 #define _WX_TREECTRL_H_BASE_
 
 #if defined(__WXMSW__)
+#ifdef __WIN16__
+#include "wx/generic/treectrl.h"
+#else
 #include "wx/msw/treectrl.h"
+#endif
 #elif defined(__WXMOTIF__)
 #include "wx/generic/treectrl.h"
 #elif defined(__WXGTK__)

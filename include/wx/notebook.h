@@ -2,7 +2,11 @@
 #define _WX_NOTEBOOK_H_BASE_
 
 #if defined(__WXMSW__)
+#ifdef __WIN16__
+  #include  "wx/generic/notebook.h"
+#else
   #include  "wx/msw/notebook.h"
+#endif
 #elif defined(__WXMOTIF__)
   #include  "wx/motif/notebook.h"
 #elif defined(__WXGTK__)

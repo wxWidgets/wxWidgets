@@ -940,8 +940,10 @@ typedef void *          WXMEASUREITEMSTRUCT;
 typedef void *          WXLPCREATESTRUCT;
 #ifdef __GNUWIN32__
 typedef int (*WXFARPROC)();
-#else
+#elif defined(__WIN32__)
 typedef int (__stdcall *WXFARPROC)();
+#else
+typedef int (*WXFARPROC)();
 #endif
 
 #endif

@@ -51,7 +51,7 @@ FortyCanvas::FortyCanvas(wxWindow* parent, int x, int y, int w, int h) :
 	m_font = wxTheFontList->FindOrCreateFont(10, wxSWISS, wxNORMAL, wxNORMAL);
 #endif
 	SetBackgroundColour(FortyApp::BackgroundColour());
-	AllowDoubleClick(true);
+	AllowDoubleClick(TRUE);
 
 	m_handCursor = new wxCursor(wxCURSOR_HAND);
 	m_arrowCursor = new wxCursor(wxCURSOR_ARROW);

@@ -21,7 +21,14 @@
   #pragma implementation "treectrl.h"
 #endif
 
-#include "wx/treectrl.h"
+// For compilers that support precompilation, includes "wx.h".
+#include "wx/wxprec.h"
+
+#ifdef __BORLANDC__
+#pragma hdrstop
+#endif
+
+#include "wx/generic/treectrl.h"
 #include "wx/settings.h"
 #include "wx/log.h"
 #include "wx/intl.h"
@@ -33,6 +40,8 @@
 // -----------------------------------------------------------------------------
 // array types
 // -----------------------------------------------------------------------------
+
+class WXDLLEXPORT wxGenericTreeItem;
 
 WX_DEFINE_ARRAY(wxGenericTreeItem *, wxArrayTreeItems);
 
@@ -525,14 +534,14 @@ bool wxTreeCtrl::IsBold(const wxTreeItemId& item) const
 
 wxTreeItemId wxTreeCtrl::GetParent(const wxTreeItemId& item) const
 {
-  wxCHECK_MSG( item.IsOk(), NULL, "invalid tree item" );
+  wxCHECK_MSG( item.IsOk(), wxTreeItemId(), "invalid tree item" );
 
   return item.m_pItem->GetParent();
 }
 
 wxTreeItemId wxTreeCtrl::GetFirstChild(const wxTreeItemId& item, long& cookie) const
 {
-  wxCHECK_MSG( item.IsOk(), NULL, "invalid tree item" );
+  wxCHECK_MSG( item.IsOk(), wxTreeItemId(), "invalid tree item" );
 
   cookie = 0;
   return GetNextChild(item, cookie);
@@ -540,7 +549,7 @@ wxTreeItemId wxTreeCtrl::GetFirstChild(const wxTreeItemId& item, long& cookie) c
 
 wxTreeItemId wxTreeCtrl::GetNextChild(const wxTreeItemId& item, long& cookie) const
 {
-  wxCHECK_MSG( item.IsOk(), NULL, "invalid tree item" );
+  wxCHECK_MSG( item.IsOk(), wxTreeItemId(), "invalid tree item" );
 
   wxArrayTreeItems& children = item.m_pItem->GetChildren();
   if ( (size_t)cookie < children.Count() )
@@ -550,20 +559,20 @@ wxTreeItemId wxTreeCtrl::GetNextChild(const wxTreeItemId& item, long& cookie) co
   else
   {
     // there are no more of them
-    return NULL;
+    return wxTreeItemId();
   }
 }
 
 wxTreeItemId wxTreeCtrl::GetNextSibling(const wxTreeItemId& item) const
 {
-  wxCHECK_MSG( item.IsOk(), NULL, "invalid tree item" );
+  wxCHECK_MSG( item.IsOk(), wxTreeItemId(), "invalid tree item" );
 
   wxGenericTreeItem *i = item.m_pItem;
   wxGenericTreeItem *parent = i->GetParent();
   if ( parent == NULL )
   {
     // root item doesn't have any siblings
-    return NULL;
+    return wxTreeItemId();
   }
 
   wxArrayTreeItems& siblings = parent->GetChildren();
@@ -571,51 +580,51 @@ wxTreeItemId wxTreeCtrl::GetNextSibling(const wxTreeItemId& item) const
   wxASSERT( index != NOT_FOUND ); // I'm not a child of my parent?
 
   size_t n = (size_t)(index + 1);
-  return n == siblings.Count() ? (wxGenericTreeItem*)NULL : siblings[n];
+  return n == siblings.Count() ? wxTreeItemId() : siblings[n];
 }
 
 wxTreeItemId wxTreeCtrl::GetPrevSibling(const wxTreeItemId& item) const
 {
-  wxCHECK_MSG( item.IsOk(), NULL, "invalid tree item" );
+  wxCHECK_MSG( item.IsOk(), wxTreeItemId(), "invalid tree item" );
 
   wxGenericTreeItem *i = item.m_pItem;
   wxGenericTreeItem *parent = i->GetParent();
   if ( parent == NULL )
   {
     // root item doesn't have any siblings
-    return NULL;
+    return wxTreeItemId();
   }
 
   wxArrayTreeItems& siblings = parent->GetChildren();
   int index = siblings.Index(i);
   wxASSERT( index != NOT_FOUND ); // I'm not a child of my parent?
 
-  return index == 0 ? (wxGenericTreeItem*)NULL : siblings[(size_t)(index - 1)];
+  return index == 0 ? wxTreeItemId() : siblings[(size_t)(index - 1)];
 }
 
 wxTreeItemId wxTreeCtrl::GetFirstVisibleItem() const
 {
   wxFAIL_MSG("not implemented");
 
-  return NULL;
+  return wxTreeItemId();
 }
 
 wxTreeItemId wxTreeCtrl::GetNextVisible(const wxTreeItemId& item) const
 {
-  wxCHECK_MSG( item.IsOk(), NULL, "invalid tree item" );
+  wxCHECK_MSG( item.IsOk(), wxTreeItemId(), "invalid tree item" );
 
   wxFAIL_MSG("not implemented");
 
-  return NULL;
+  return wxTreeItemId();
 }
 
 wxTreeItemId wxTreeCtrl::GetPrevVisible(const wxTreeItemId& item) const
 {
-  wxCHECK_MSG( item.IsOk(), NULL, "invalid tree item" );
+  wxCHECK_MSG( item.IsOk(), wxTreeItemId(), "invalid tree item" );
 
   wxFAIL_MSG("not implemented");
 
-  return NULL;
+  return wxTreeItemId();
 }
 
 // -----------------------------------------------------------------------------
@@ -657,7 +666,7 @@ wxTreeItemId wxTreeCtrl::AddRoot(const wxString& text,
                                  int image, int selImage,
                                  wxTreeItemData *data)
 {
-  wxCHECK_MSG( !m_anchor, NULL, "tree can have only one root" );
+  wxCHECK_MSG( !m_anchor, wxTreeItemId(), "tree can have only one root" );
 
   wxClientDC dc(this);
   m_anchor = new wxGenericTreeItem((wxGenericTreeItem *)NULL, text, dc,

@@ -10,8 +10,8 @@
 
 WXDIR = $(WXWIN)
 
-TARGET=docview
-OBJECTS=$(TARGET).obj view.obj doc.obj
+TARGET=conftest
+OBJECTS=$(TARGET).obj
 
 !include $(WXDIR)\src\makeprog.msc
 

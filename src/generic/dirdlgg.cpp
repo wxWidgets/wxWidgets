@@ -12,6 +12,13 @@
 #pragma implementation "dirdlgg.h"
 #endif
 
+// For compilers that support precompilation, includes "wx.h".
+#include "wx/wxprec.h"
+
+#ifdef __BORLANDC__
+#pragma hdrstop
+#endif
+
 #include "wx/defs.h"
 #include "wx/utils.h"
 #include "wx/dialog.h"
@@ -126,8 +133,8 @@ class wxDirCtrl: public wxTreeCtrl
 	      const wxSize& size = wxDefaultSize,
 	      const long style = wxTR_HAS_BUTTONS,
 	      const wxString& name = "wxTreeCtrl" );
-    void OnExpandItem( const wxTreeEvent &event );
-    void OnCollapseItem( const wxTreeEvent &event );
+    void OnExpandItem(wxTreeEvent &event );
+    void OnCollapseItem(wxTreeEvent &event );
     void ShowHidden( const bool yesno );
     DECLARE_EVENT_TABLE()
  protected:
@@ -235,7 +242,7 @@ void wxDirCtrl::CreateItems(const wxTreeItemId &parent)
   }
 }
 
-void wxDirCtrl::OnExpandItem( const wxTreeEvent &event )
+void wxDirCtrl::OnExpandItem(wxTreeEvent &event )
 {
   if (event.GetItem() == m_rootId)
   {
@@ -273,7 +280,7 @@ void wxDirCtrl::OnExpandItem( const wxTreeEvent &event )
 };
 
 
-void wxDirCtrl::OnCollapseItem( const wxTreeEvent &event )
+void wxDirCtrl::OnCollapseItem(wxTreeEvent &event )
 {
   wxTreeItemId child, parent = event.GetItem();
   long cookie;
@@ -414,7 +421,7 @@ void wxDirDialog::OnTreeSelected( wxTreeEvent &event )
     m_input->SetValue( *(data->m_path) );
 };
 
-void wxDirDialog::OnTreeKeyDown( wxKeyEvent &WXUNUSED(event) )
+void wxDirDialog::OnTreeKeyDown( wxTreeEvent &WXUNUSED(event) )
 {
   wxDirItemData *data = 
     (wxDirItemData*)m_dir->GetItemData(m_dir->GetSelection());

@@ -91,8 +91,8 @@ public:
 
   virtual bool Flush(bool bCurrentOnly = FALSE);
 
-  virtual bool DeleteEntry(const char *szKey, bool bGroupIfEmptyAlso);
-  virtual bool DeleteGroup(const char *szKey);
+  virtual bool DeleteEntry(const wxString& Key, bool bGroupIfEmptyAlso);
+  virtual bool DeleteGroup(const wxString& szKey);
   virtual bool DeleteAll();
 
 private:

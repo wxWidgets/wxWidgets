@@ -398,7 +398,7 @@ bool wxIniConfig::Flush(bool /* bCurrentOnly */)
 // delete
 // ----------------------------------------------------------------------------
 
-bool wxIniConfig::DeleteEntry(const char *szKey, bool bGroupIfEmptyAlso)
+bool wxIniConfig::DeleteEntry(const wxString& szKey, bool bGroupIfEmptyAlso)
 {
   // passing NULL as value to WritePrivateProfileString deletes the key
   if ( !Write(szKey, (const char *)NULL) )
@@ -417,7 +417,7 @@ bool wxIniConfig::DeleteEntry(const char *szKey, bool bGroupIfEmptyAlso)
   return bOk;
 }
 
-bool wxIniConfig::DeleteGroup(const char *szKey)
+bool wxIniConfig::DeleteGroup(const wxString& szKey)
 {
   wxConfigPathChanger path(this, szKey);
 
@@ -431,6 +431,10 @@ bool wxIniConfig::DeleteGroup(const char *szKey)
 
   return bOk;
 }
+
+#ifndef MAX_PATH
+#define MAX_PATH 256
+#endif
 
 bool wxIniConfig::DeleteAll()
 {
@@ -448,7 +452,7 @@ bool wxIniConfig::DeleteAll()
   wxString strFile = szBuf;
   strFile << '\\' << m_strLocalFilename;
 
-  if ( !DeleteFile(strFile) ) {
+  if ( !wxRemoveFile(strFile) ) {
     wxLogSysError(_("Can't delete the INI file '%s'"), strFile.c_str());
     return FALSE;
   }

@@ -58,8 +58,9 @@ Visual C++ 1.5 compilation
    make the wxWindows core library.
 2. Change directory to wx\samples and type 'nmake -f makefile.dos'
    to make all the samples. You can also make them individually.
-   NOTE: only a few samples have up-to-date makefiles, e.g.
-   minimal, docview, mdi. The utils makefile does not yet work.
+
+NOTE: 16-bit compilation is not recommended (see issues.txt):
+many things are broken, including dialog boxes.
 
 Borland C++ 4.5/5.0 compilation
 -------------------------------

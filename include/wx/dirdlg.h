@@ -2,7 +2,11 @@
 #define _WX_DIRDLG_H_BASE_
 
 #if defined(__WXMSW__)
+#ifdef __WIN16__
+#include "wx/generic/dirdlgg.h"
+#else
 #include "wx/msw/dirdlg.h"
+#endif
 #elif defined(__WXMOTIF__)
 #include "wx/generic/dirdlgg.h"
 #elif defined(__WXGTK__)

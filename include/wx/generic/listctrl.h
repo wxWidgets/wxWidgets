@@ -25,26 +25,30 @@
 #include "wx/scrolwin.h"
 #include "wx/settings.h"
 
+#if wxUSE_DRAG_AND_DROP
+class WXDLLEXPORT wxDropTarget;
+#endif
+
 //-----------------------------------------------------------------------------
 // classes
 //-----------------------------------------------------------------------------
 
-class wxListItem;
-class wxListEvent;
-class wxListCtrl;
+class WXDLLEXPORT wxListItem;
+class WXDLLEXPORT wxListEvent;
+class WXDLLEXPORT wxListCtrl;
 
 //-----------------------------------------------------------------------------
 // internal classes
 //-----------------------------------------------------------------------------
 
-class wxListHeaderData;
-class wxListItemData;
-class wxListLineData;
+class WXDLLEXPORT wxListHeaderData;
+class WXDLLEXPORT wxListItemData;
+class WXDLLEXPORT wxListLineData;
 
-class wxListHeaderWindow;
-class wxListMainWindow;
+class WXDLLEXPORT wxListHeaderWindow;
+class WXDLLEXPORT wxListMainWindow;
 
-class wxListRenameTimer;
+class WXDLLEXPORT wxListRenameTimer;
 //class wxListTextCtrl;
 
 //-----------------------------------------------------------------------------
@@ -164,7 +168,7 @@ enum {
 // wxListItem
 //-----------------------------------------------------------------------------
 
-class wxListItem: public wxObject
+class WXDLLEXPORT wxListItem: public wxObject
 {
   DECLARE_DYNAMIC_CLASS(wxListItem)
 
@@ -230,7 +234,7 @@ typedef void (wxEvtHandler::*wxListEventFunction)(wxListEvent&);
 //  wxListItemData (internal)
 //-----------------------------------------------------------------------------
 
-class wxListItemData : public wxObject
+class WXDLLEXPORT wxListItemData : public wxObject
 {
   DECLARE_DYNAMIC_CLASS(wxListItemData);
 
@@ -269,7 +273,7 @@ class wxListItemData : public wxObject
 //  wxListHeaderData (internal)
 //-----------------------------------------------------------------------------
 
-class wxListHeaderData : public wxObject
+class WXDLLEXPORT wxListHeaderData : public wxObject
 {
   DECLARE_DYNAMIC_CLASS(wxListHeaderData);
 
@@ -304,7 +308,7 @@ class wxListHeaderData : public wxObject
 //  wxListLineData (internal)
 //-----------------------------------------------------------------------------
 
-class wxListLineData : public wxObject
+class WXDLLEXPORT wxListLineData : public wxObject
 {
   DECLARE_DYNAMIC_CLASS(wxListLineData);
 
@@ -320,13 +324,13 @@ class wxListLineData : public wxObject
     int                 m_spacing;
     wxListMainWindow   *m_owner;
 
-    void DoDraw( wxPaintDC *dc, bool hilight, bool paintBG );
+    void DoDraw( wxDC *dc, bool hilight, bool paintBG );
 
   public:
     wxListLineData( void ) {};
     wxListLineData( wxListMainWindow *owner, int mode, wxBrush *hilightBrush );
-    void CalculateSize( wxPaintDC *dc, int spacing );
-    void SetPosition( wxPaintDC *dc, int x, int y,  int window_width );
+    void CalculateSize( wxDC *dc, int spacing );
+    void SetPosition( wxDC *dc, int x, int y,  int window_width );
     void SetColumnPosition( int index, int x );
     void GetSize( int &width, int &height );
     void GetExtent( int &x, int &y, int &width, int &height );
@@ -341,8 +345,8 @@ class wxListLineData : public wxObject
     void GetRect( wxRectangle &rect );
     void Hilight( bool on );
     void ReverseHilight( void );
-    void DrawRubberBand( wxPaintDC *dc, bool on );
-    void Draw( wxPaintDC *dc );
+    void DrawRubberBand( wxDC *dc, bool on );
+    void Draw( wxDC *dc );
     bool IsInRect( int x, int y, const wxRectangle &rect );
     bool IsHilighted( void );
     void AssignRect( wxRectangle &dest, int x, int y, int width, int height );
@@ -353,7 +357,7 @@ class wxListLineData : public wxObject
 //  wxListHeaderWindow (internal)
 //-----------------------------------------------------------------------------
 
-class wxListHeaderWindow : public wxWindow
+class WXDLLEXPORT wxListHeaderWindow : public wxWindow
 {
   DECLARE_DYNAMIC_CLASS(wxListHeaderWindow)
 
@@ -372,7 +376,7 @@ class wxListHeaderWindow : public wxWindow
     wxListHeaderWindow( wxWindow *win, wxWindowID id, wxListMainWindow *owner,
       const wxPoint &pos = wxDefaultPosition, const wxSize &size = wxDefaultSize,
       long style = 0, const wxString &name = "columntitles" );
-    void DoDrawRect( wxPaintDC *dc, int x, int y, int w, int h );
+    void DoDrawRect( wxDC *dc, int x, int y, int w, int h );
     void OnPaint( wxPaintEvent &event );
     void DrawCurrent();
     void OnMouse( wxMouseEvent &event );
@@ -385,7 +389,7 @@ class wxListHeaderWindow : public wxWindow
 // wxListRenameTimer (internal)
 //-----------------------------------------------------------------------------
 
-class wxListRenameTimer: public wxTimer
+class WXDLLEXPORT wxListRenameTimer: public wxTimer
 {
  private:
    wxListMainWindow   *m_owner;
@@ -399,7 +403,7 @@ class wxListRenameTimer: public wxTimer
 //  wxListTextCtrl (internal)
 //-----------------------------------------------------------------------------
 
-class wxListTextCtrl: public wxTextCtrl
+class WXDLLEXPORT wxListTextCtrl: public wxTextCtrl
 {
   DECLARE_DYNAMIC_CLASS(wxListTextCtrl);
 
@@ -426,7 +430,7 @@ class wxListTextCtrl: public wxTextCtrl
 //  wxListMainWindow (internal)
 //-----------------------------------------------------------------------------
 
-class wxListMainWindow: public wxScrolledWindow
+class WXDLLEXPORT wxListMainWindow: public wxScrolledWindow
 {
   DECLARE_DYNAMIC_CLASS(wxListMainWindow);
 
@@ -480,7 +484,7 @@ class wxListMainWindow: public wxScrolledWindow
     void OnSetFocus( wxFocusEvent &event );
     void OnKillFocus( wxFocusEvent &event );
     void OnSize( wxSizeEvent &event );
-    void DrawImage( int index, wxPaintDC *dc, int x, int y );
+    void DrawImage( int index, wxDC *dc, int x, int y );
     void GetImageSize( int index, int &width, int &height );
     int GetIndexOfLine( const wxListLineData *line );
     int GetTextLength( wxString &s );  // should be const
@@ -528,7 +532,7 @@ class wxListMainWindow: public wxScrolledWindow
 // wxListCtrl
 //-----------------------------------------------------------------------------
 
-class wxListCtrl: public wxControl
+class WXDLLEXPORT wxListCtrl: public wxControl
 {
   DECLARE_DYNAMIC_CLASS(wxListCtrl);
 
@@ -611,10 +615,13 @@ class wxListCtrl: public wxControl
     void SetForegroundColour( const wxColour &colour );
     void SetFont( const wxFont &font );
     
+#if wxUSE_DRAG_AND_DROP
     void SetDropTarget( wxDropTarget *dropTarget )
       { m_mainWin->SetDropTarget( dropTarget ); }
     wxDropTarget *GetDropTarget() const
       { return m_mainWin->GetDropTarget(); }
+#endif
+
     void SetCursor( const wxCursor &cursor )
       { if (m_mainWin) m_mainWin->wxWindow::SetCursor( cursor); }
     wxColour GetBackgroundColour() const

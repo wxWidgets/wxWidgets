@@ -339,14 +339,13 @@ wxToolBarTool *wxToolBarMSW::AddTool(int index, const wxBitmap& bitmap, const wx
 
   // TODO: use the mapping code from wxToolBar95 to get it right in this class
 #if !defined(__WIN32__) && !defined(__WIN386__)
-  wxBitmap *bitmap2 = NULL;
+  wxBitmap bitmap2;
   if (toggle)
   {
-    bitmap2 = new wxBitmap;
-    bitmap2->SetHBITMAP( (WXHBITMAP) CreateMappedBitmap(wxGetInstance(), (HBITMAP) ((wxBitmap& )bitmap).GetHBITMAP()));
+    bitmap2.SetHBITMAP( (WXHBITMAP) CreateMappedBitmap(wxGetInstance(), (HBITMAP) ((wxBitmap& )bitmap).GetHBITMAP()));
   }
 
-  wxToolBarTool *tool = new wxToolBarTool(index, bitmap, *bitmap2, toggle, xPos, yPos, helpString1, helpString2);
+  wxToolBarTool *tool = new wxToolBarTool(index, bitmap, bitmap2, toggle, xPos, yPos, helpString1, helpString2);
 #else
   wxToolBarTool *tool = new wxToolBarTool(index, bitmap, wxNullBitmap, toggle, xPos, yPos, helpString1, helpString2);
 #endif

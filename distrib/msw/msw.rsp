@@ -11,6 +11,7 @@ tools/gettext/msgunfmt.exe
 src/makeb32.env
 src/makebcc.env
 src/makemsw.env
+src/makeprog.msw
 src/makewat.env
 src/makeprog.wat
 src/makesc.env

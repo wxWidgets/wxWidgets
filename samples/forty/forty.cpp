@@ -93,7 +93,7 @@ bool FortyApp::OnInit()
 	// Show the frame
 	frame->Show(TRUE);
 
-	return true;
+	return TRUE;
 }
 
 const wxColour& FortyApp::BackgroundColour()

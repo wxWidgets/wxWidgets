@@ -11,6 +11,13 @@
 #pragma implementation "listctrl.h"
 #endif
 
+// For compilers that support precompilation, includes "wx.h".
+#include "wx/wxprec.h"
+
+#ifdef __BORLANDC__
+#pragma hdrstop
+#endif
+
 #include "wx/dcscreen.h"
 #include "wx/app.h"
 #include "wx/listctrl.h"
@@ -73,7 +80,7 @@ void wxListItemData::SetPosition( int x, int y )
     m_ypos = y;
 }
 
-void wxListItemData::SetSize( int const width, int height )
+void wxListItemData::SetSize( int width, int height )
 {
     if (width != -1) m_width = width;
     if (height != -1) m_height = height;
@@ -260,7 +267,7 @@ wxListLineData::wxListLineData( wxListMainWindow *owner, int mode, wxBrush *hili
     m_spacing = 0;
 }
 
-void wxListLineData::CalculateSize( wxPaintDC *dc, int spacing )
+void wxListLineData::CalculateSize( wxDC *dc, int spacing )
 {
     m_spacing = spacing;
     switch (m_mode)
@@ -319,7 +326,7 @@ void wxListLineData::CalculateSize( wxPaintDC *dc, int spacing )
     }
 }
 
-void wxListLineData::SetPosition( wxPaintDC *dc, int x, int y, int window_width )
+void wxListLineData::SetPosition( wxDC *dc, int x, int y, int window_width )
 {
   m_bound_all.x = x;
   m_bound_all.y = y;
@@ -470,7 +477,7 @@ void wxListLineData::SetItem( int index, const wxListItem &info )
     }
 }
 
-void wxListLineData::GetItem( int const index, wxListItem &info )
+void wxListLineData::GetItem( int index, wxListItem &info )
 {
     int i = index;
     wxNode *node = m_items.Nth( i );
@@ -516,7 +523,7 @@ int wxListLineData::GetImage( int index )
     return -1;
 }
 
-void wxListLineData::DoDraw( wxPaintDC *dc, bool hilight, bool paintBG )
+void wxListLineData::DoDraw( wxDC *dc, bool hilight, bool paintBG )
 {
     long dev_x = dc->LogicalToDeviceX( m_bound_all.x-2 );
     long dev_y = dc->LogicalToDeviceY( m_bound_all.y-2 );
@@ -616,7 +623,7 @@ void wxListLineData::ReverseHilight( void )
         m_owner->DeselectLine( this );
 }
 
-void wxListLineData::DrawRubberBand( wxPaintDC *dc, bool on )
+void wxListLineData::DrawRubberBand( wxDC *dc, bool on )
 {
     if (on)
     {
@@ -627,7 +634,7 @@ void wxListLineData::DrawRubberBand( wxPaintDC *dc, bool on )
     }
 }
 
-void wxListLineData::Draw( wxPaintDC *dc )
+void wxListLineData::Draw( wxDC *dc )
 {
     DoDraw( dc, m_hilighted, m_hilighted );
 }
@@ -696,7 +703,7 @@ wxListHeaderWindow::~wxListHeaderWindow( void )
     delete m_resizeCursor;
 }
 
-void wxListHeaderWindow::DoDrawRect( wxPaintDC *dc, int x, int y, int w, int h )
+void wxListHeaderWindow::DoDrawRect( wxDC *dc, int x, int y, int w, int h )
 {
     const int m_corner = 1;
 
@@ -1536,7 +1543,7 @@ void wxListMainWindow::OnSize( wxSizeEvent &WXUNUSED(event) )
 */
 }
 
-void wxListMainWindow::DrawImage( int index, wxPaintDC *dc, int x, int y )
+void wxListMainWindow::DrawImage( int index, wxDC *dc, int x, int y )
 {
     if ((m_mode & wxLC_ICON) && (m_normal_image_list))
     {
@@ -1577,7 +1584,7 @@ void wxListMainWindow::GetImageSize( int index, int &width, int &height )
 
 int wxListMainWindow::GetTextLength( wxString &s )
 {
-    wxPaintDC dc( this );
+    wxClientDC dc( this );
     long lw = 0;
     long lh = 0;
     dc.GetTextExtent( s, &lw, &lh );
@@ -1891,7 +1898,7 @@ void wxListMainWindow::CalculatePositions( void )
 {
     if (!m_lines.First()) return;
 
-    wxPaintDC dc( this );
+    wxClientDC dc( this );
     dc.SetFont( GetFont() );
 
     int iconSpacing = 0;

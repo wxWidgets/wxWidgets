@@ -95,7 +95,7 @@ class WXDLLEXPORT wxDirDialog: public wxDialog
     int ShowModal();
 
     void OnTreeSelected( wxTreeEvent &event );
-    void OnTreeKeyDown( wxKeyEvent &event );
+    void OnTreeKeyDown( wxTreeEvent &event );
     void OnSize(wxSizeEvent& event);
     void OnOK(wxCommandEvent& event);
     void OnCancel(wxCommandEvent& event); 

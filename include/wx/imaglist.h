@@ -2,7 +2,11 @@
 #define _WX_IMAGLIST_H_BASE_
 
 #if defined(__WXMSW__)
+#ifdef __WIN16__
+#include "wx/generic/imaglist.h"
+#else
 #include "wx/msw/imaglist.h"
+#endif
 #elif defined(__WXMOTIF__)
 #include "wx/generic/imaglist.h"
 #elif defined(__WXGTK__)

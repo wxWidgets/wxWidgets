@@ -72,7 +72,7 @@
 
 //// BEGIN for console support: VC++ only
 
-#if defined(__WXDEBUG__) && defined(_MSC_VER) && !defined(__NO_VC_CRTDBG__)
+#if defined(__WXDEBUG__) && !defined(__WIN16__) && defined(_MSC_VER) && !defined(__NO_VC_CRTDBG__)
     #define wxUSE_VC_CRTDBG
 #else
     #undef wxUSE_VC_CRTDBG
@@ -106,7 +106,9 @@
 #  undef new
 #  endif
 
+#ifndef __WIN16__
 #  include <crtdbg.h>
+#endif
 
 #  if defined(__WXDEBUG__) && wxUSE_GLOBAL_MEMORY_OPERATORS && wxUSE_DEBUG_NEW_ALWAYS
 #  define new new(__FILE__,__LINE__)

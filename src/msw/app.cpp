@@ -43,6 +43,7 @@
   #include "wx/resource.h"
 #endif
 
+#include <ole2.h>
 #include <string.h>
 #include <ctype.h>
 

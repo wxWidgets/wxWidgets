@@ -10,8 +10,8 @@
 
 WXDIR = $(WXWIN)
 
-TARGET=docview
-OBJECTS=$(TARGET).obj view.obj doc.obj
+TARGET=forty
+OBJECTS = $(TARGET).obj canvas.obj card.obj game.obj pile.obj playerdg.obj scoredg.obj scorefil.obj
 
 !include $(WXDIR)\src\makeprog.msc
 

@@ -194,7 +194,11 @@ void wxDC::SetClippingRegion(const wxRegion& region)
   m_clipX2 = box.x + box.width;
   m_clipY2 = box.y + box.height;
 
+#ifdef __WIN16__
+  SelectClipRgn((HDC) m_hDC, (HRGN) region.GetHRGN());
+#else
   ExtSelectClipRgn((HDC) m_hDC, (HRGN) region.GetHRGN(), RGN_AND);
+#endif
 }
 
 void wxDC::DoClipping(WXHDC dc)
@@ -887,11 +891,14 @@ bool wxDC::StartDoc(const wxString& message)
 #endif
 #endif
 
+#ifndef __WIN16__
   if (ret <= 0)
   {
     DWORD lastError = GetLastError();
     wxDebugMsg("wxDC::StartDoc failed with error: %d\n", lastError);
   }
+#endif
+
   return (ret > 0);
 }
 

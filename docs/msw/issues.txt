@@ -1,12 +1,6 @@
 Current issues and bugs
 -----------------------
 
-Owner-draw menus
-----------------
-
-If USE_OWNER_DRAWN = 1 and you create a wxMenu, you get 'all bets
-are off' memory checking warnings from wxWindows.
-
 Memory-checking subsystem
 -------------------------
 
@@ -14,5 +8,7 @@ This conflicts with wxUSE_IOSTREAMSH = 0 using MS VC++ 5.0
 (crashes the template code). It should be switched off if you
 wish to use wxUSE_IOSTREAMSH = 0.
 
-
-
+Many things seem to be broken for 16-bit Windows, including
+dialogs (crash in wxFindWinFromHandle). The generic tree, list
+and notebook controls don't work. The generic wxImageList drawing
+function doesn't work (wxDC::SelectObject problem).

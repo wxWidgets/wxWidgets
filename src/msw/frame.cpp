@@ -612,8 +612,10 @@ void wxFrame::MSWCreate(int id, wxWindow *parent, const char *wclass, wxWindow *
 
   WXDWORD extendedStyle = MakeExtendedStyle(style);
 
+#ifndef __WIN16__
   if (style & wxFRAME_TOOL_WINDOW)
     extendedStyle |= WS_EX_TOOLWINDOW;
+#endif
 
   if (style & wxSTAY_ON_TOP)
     extendedStyle |= WS_EX_TOPMOST;

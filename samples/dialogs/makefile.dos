@@ -1,81 +1,17 @@
 #
 # File:		makefile.dos
 # Author:	Julian Smart
-# Created:	1993
+# Created:	1998
 # Updated:	
-# Copyright:	(c) 1993, AIAI, University of Edinburgh
 #
-# "%W% %G%"
-#
-# Makefile : Builds dialogs example (DOS).
+# Makefile : Builds 16-bit sample, VC++ 1.5
 # Use FINAL=1 argument to nmake to build final version with no debugging
 # info
 
 WXDIR = $(WXWIN)
 
-!include $(WXDIR)\src\makemsc.env
+TARGET=dialogs
+OBJECTS=$(TARGET).obj
 
-THISDIR = $(WXDIR)\samples\dialogs
-WXLIB = $(WXDIR)\lib\wx.lib
-LIBS=$(WXLIB) oldnames libw llibcew commdlg shell ddeml
+!include $(WXDIR)\src\makeprog.msc
 
-!ifndef FINAL
-FINAL=0
-!endif
-
-INC=/I$(WXDIR)\include\msw /I$(WXDIR)\include\base
-
-# Set this to nothing if using MS C++ 7
-ZOPTION=/Z7
-
-!if "$(FINAL)" == "0"
-CPPFLAGS=/AL /W3 /Zi $(ZOPTION) /G2sw /Od /YuWX_PREC.H /DDEBUG=$(DEBUG) /Dwx_msw /Fp$(WXDIR)\src\msw\wx.pch $(INC)
-LINKFLAGS=/NOD /CO /ONERROR:NOEXE /SEG:512
-!else
-CPPFLAGS=/AL /W3 /G2sw /Ox /YuWX_PREC.H /Dwx_msw /DDEBUG=$(DEBUG) /Fp$(WXDIR)\src\msw\wx.pch $(INC)
-LINKFLAGS=/NOD /ONERROR:NOEXE /SEG:512
-!endif
-
-HEADERS =
-SOURCES = dialogs.$(SRCSUFF)
-OBJECTS = dialogs.obj
-
-all:    dialogs.exe
-
-wx:
-        cd $(WXDIR)\src\msw
-        nmake -f makefile.dos FINAL=$(FINAL)
-        cd $(THISDIR)
-
-wxclean:
-        cd $(WXDIR)\src\msw
-        nmake -f makefile.dos clean
-        cd $(THISDIR)
-
-
-dialogs.exe:      $(WXDIR)\src\msw\dummy.obj $(WXLIB) $(OBJECTS) dialogs.def dialogs.res
-        link $(LINKFLAGS) @<<
-$(OBJECTS) $(WXDIR)\src\msw\dummy.obj,
-dialogs,
-NUL,
-$(LIBS),
-dialogs.def
-;
-<<
-        rc -30 -K dialogs.res
-
-dialogs.obj:      dialogs.$(SRCSUFF)
-        cl @<<
-$(CPPFLAGS) /c /Tp $*.$(SRCSUFF)
-<<
-
-dialogs.res :      dialogs.rc $(WXDIR)\include\msw\wx.rc
-    rc -r /dFAFA_LIB /i$(WXDIR)\contrib\fafa /i$(WXDIR)\include\msw dialogs
-
-clean:
-        -erase *.obj
-        -erase *.exe
-        -erase *.res
-        -erase *.map
-        -erase *.sbr
-        -erase *.pdb

@@ -61,7 +61,10 @@ wxAcceleratorRefData::~wxAcceleratorRefData()
 {
   if (m_hAccel)
   {
+    // This function not available in WIN16
+#ifndef __WIN16__
     DestroyAcceleratorTable((HACCEL) m_hAccel);
+#endif
   }
   m_hAccel = 0 ;
 }
@@ -99,6 +102,8 @@ extern int wxCharCodeWXToMSW(int id, bool *isVirtual);
 // Create from an array
 wxAcceleratorTable::wxAcceleratorTable(int n, const wxAcceleratorEntry entries[])
 {
+    // Not available in WIN16
+#ifndef __WIN16__
     m_refData = new wxAcceleratorRefData;
 
     ACCEL* arr = new ACCEL[n];
@@ -128,6 +133,7 @@ wxAcceleratorTable::wxAcceleratorTable(int n, const wxAcceleratorEntry entries[]
     delete[] arr;
 
     M_ACCELDATA->m_ok = (M_ACCELDATA->m_hAccel != 0);
+#endif
 }
 
 bool wxAcceleratorTable::Ok(void) const
