@@ -577,6 +577,27 @@ void wxApp::CleanUp()
 #endif // wxUSE_LOG
 }
 
+//----------------------------------------------------------------------
+// Entry point helpers, used by wxPython
+//----------------------------------------------------------------------
+
+int  WXDLLEXPORT wxEntryStart( int WXUNUSED(argc), char** WXUNUSED(argv) )
+{
+    return wxApp::Initialize();
+}
+
+int  WXDLLEXPORT wxEntryInitGui()
+{
+    wxTheApp->OnInitGui();
+    return 0;
+}
+
+void WXDLLEXPORT wxEntryCleanup()
+{
+    wxApp::CleanUp();
+}
+
+
 #if !defined(_WINDLL) || (defined(_WINDLL) && defined(WXMAKINGDLL))
 
 // temporarily disable this warning which would be generated in release builds
@@ -585,7 +606,9 @@ void wxApp::CleanUp()
     #pragma warning(disable: 4715) // not all control paths return a value
 #endif // Visual C++
 
-//// Main wxWindows entry point
+//----------------------------------------------------------------------
+// Main wxWindows entry point
+//----------------------------------------------------------------------
 int wxEntry(WXHINSTANCE hInstance,
             WXHINSTANCE WXUNUSED(hPrevInstance),
             char *lpCmdLine,
@@ -620,7 +643,7 @@ int wxEntry(WXHINSTANCE hInstance,
 #endif
         wxhInstance = (HINSTANCE) hInstance;
 
-        if (!wxApp::Initialize())
+        if (!wxEntryStart(0,0))
             return 0;
 
         // create the application object or ensure that one already exists
@@ -643,7 +666,7 @@ int wxEntry(WXHINSTANCE hInstance,
 
         // GUI-specific initialisation. In fact on Windows we don't have any,
         // but this call is provided for compatibility across platforms.
-        wxTheApp->OnInitGui();
+        wxEntryInitGui();
 
         // We really don't want timestamps by default, because it means
         // we can't simply double-click on the error message and get to that
@@ -685,7 +708,7 @@ int wxEntry(WXHINSTANCE hInstance,
 
         wxTheApp->OnExit();
 
-        wxApp::CleanUp();
+        wxEntryCleanup();
 
         return retValue;
 
@@ -718,12 +741,14 @@ int wxEntry(WXHINSTANCE hInstance,
 
 #else /*  _WINDLL  */
 
-//// Entry point for DLLs
+//----------------------------------------------------------------------
+// Entry point for wxWindows + the App in a DLL
+//----------------------------------------------------------------------
 
 int wxEntry(WXHINSTANCE hInstance)
 {
     wxhInstance = (HINSTANCE) hInstance;
-    wxApp::Initialize();
+    wxEntryStart(0, 0);
 
     // The app may have declared a global application object, but we recommend
     // the IMPLEMENT_APP macro is used instead, which sets an initializer function
@@ -741,7 +766,7 @@ int wxEntry(WXHINSTANCE hInstance)
     wxTheApp->argc = 0;
     wxTheApp->argv = NULL;
 
-    wxTheApp->OnInitGui();
+    wxEntryInitGui();
 
     wxTheApp->OnInit();
 

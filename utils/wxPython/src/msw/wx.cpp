@@ -615,7 +615,7 @@ PyObject *ptrfree(PyObject *_PTRVALUE) {
 
 
     void wxApp_CleanUp() {
-        wxApp::CleanUp();
+        __wxCleanup();
     }
 
 extern "C" SWIGEXPORT(void) initwindowsc();

@@ -105,9 +105,9 @@ int  wxPyApp::MainLoop(void) {
 //---------------------------------------------------------------------
 //----------------------------------------------------------------------
 
-int wxEntryStart( int argc, char *argv[] );
-int wxEntryInitGui();
-void wxEntryCleanup();
+int  WXDLLEXPORT wxEntryStart( int argc, char** argv );
+int  WXDLLEXPORT wxEntryInitGui();
+void WXDLLEXPORT wxEntryCleanup();
 
 
 // This is where we pick up the first part of the wxEntry functionality...
@@ -124,55 +124,6 @@ void __wxPreStart()
     // a C++ wxWindows app.
     if (wxTopLevelWindows.Number() > 0)
         return;
-
-#if 0
-
-#ifdef __WXMSW__
-    wxApp::Initialize();
-#endif
-
-#ifdef __WXGTK__
-    PyObject* sysargv = PySys_GetObject("argv");
-    int argc = PyList_Size(sysargv);
-    char** argv = new char*[argc+1];
-    int x;
-    for(x=0; x<argc; x++)
-        argv[x] = PyString_AsString(PyList_GetItem(sysargv, x));
-    argv[argc] = NULL;
-
-#if wxUSE_THREADS
-    /* GTK 1.2 up to version 1.2.3 has broken threads */
-    if ((gtk_major_version == 1) &&
-        (gtk_minor_version == 2) &&
-        (gtk_micro_version < 4))
-    {
-        printf( "wxWindows warning: GUI threading disabled due to outdated GTK version\n" );
-    }
-    else
-    {
-        g_thread_init(NULL);
-    }
-#endif
-
-    gtk_set_locale();
-
-#if wxUSE_WCHAR_T
-    if (!wxOKlibc()) wxConvCurrent = &wxConvLocal;
-#else
-    if (!wxOKlibc()) wxConvCurrent = (wxMBConv*) NULL;
-#endif
-
-    gdk_threads_enter();
-    gtk_init( &argc, &argv );
-    wxSetDetectableAutoRepeat( TRUE );
-    delete [] argv;
-
-    if (!wxApp::Initialize())
-    {
-        gdk_threads_leave();
-    }
-#endif
-#endif // 0
 
 
     PyObject* sysargv = PySys_GetObject("argv");
