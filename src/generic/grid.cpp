@@ -483,7 +483,7 @@ void wxGridCellTextEditor::SetSize(const wxRect& rectOrig)
 #if defined(__WXGTK__)
     rect.Inflate(rect.x ? 1 : 0, rect.y ? 1 : 0);
 #else // !GTK
-    int extra = row && col ? 2 : 1;
+    int extra = rect.x && rect.y ? 2 : 1;
 #if defined(__WXMOTIF__)
     extra *= 2;
 #endif
@@ -618,7 +618,7 @@ void wxGridCellNumberEditor::Create(wxWindow* parent,
         wxGridCellTextEditor::Create(parent, id, evtHandler);
 
 #if wxUSE_VALIDATORS
-        Text()->SetValidator(new wxTextValidator(wxFILTER_NUMERIC));
+        Text()->SetValidator(wxTextValidator(wxFILTER_NUMERIC));
 #endif // wxUSE_VALIDATORS
     }
 }
@@ -711,7 +711,7 @@ void wxGridCellFloatEditor::Create(wxWindow* parent,
     wxGridCellTextEditor::Create(parent, id, evtHandler);
 
 #if wxUSE_VALIDATORS
-    Text()->SetValidator(new wxTextValidator(wxFILTER_NUMERIC));
+    Text()->SetValidator(wxTextValidator(wxFILTER_NUMERIC));
 #endif // wxUSE_VALIDATORS
 }
 
