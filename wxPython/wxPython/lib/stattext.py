@@ -100,10 +100,11 @@ class wxGenStaticText(wxPyControl):
 
 
     def OnPaint(self, event):
+        dc = wxBufferedPaintDC(self)
+        #dc = wxPaintDC(self)
         width, height = self.GetClientSize()
         if not width or not height:
             return
-        dc = wxBufferedPaintDC(self)
         dc.SetBackground(wxBrush(self.GetBackgroundColour(), wxSOLID))
         dc.SetTextForeground(self.GetForegroundColour())
         dc.Clear()
