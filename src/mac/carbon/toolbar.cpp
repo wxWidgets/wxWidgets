@@ -99,8 +99,10 @@ public:
         {
             // separator size
             wxSize sz = GetToolBar()->GetToolSize() ;
-            sz.x /= 4 ;
-            sz.y /= 4 ;
+            if ( GetToolBar()->GetWindowStyleFlag() & wxTB_VERTICAL )
+                sz.y /= 4 ;
+            else
+                sz.x /= 4 ;
             return sz ;
         }
     }
