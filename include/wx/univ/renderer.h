@@ -701,7 +701,7 @@ public:
     virtual void DrawStatusField(wxDC& dc,
                                  const wxRect& rect,
                                  const wxString& label,
-                                 int flags = 0, inst style = 0)
+                                 int flags = 0, int style = 0)
         { m_renderer->DrawStatusField(dc, rect, label, flags, style); }
 
     virtual void DrawFrameTitleBar(wxDC& dc,
