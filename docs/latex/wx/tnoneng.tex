@@ -94,7 +94,7 @@ You can use \helpref{wxEncodingConverter}{wxencodingconverter} and
 \helpref{wxFontMapper}{wxfontmapper} to display text:
 
 \begin{verbatim}
-if (!wxTheFontMapper->IsEncodingAvailable(enc, facename))
+if (!wxFontMapper::Get()->IsEncodingAvailable(enc, facename))
 {
    wxFontEncoding alternative;
    if (wxTheFontMapper->GetAltForEncoding(enc, &alternative, 

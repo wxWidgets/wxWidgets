@@ -59,6 +59,11 @@ public:
     // virtual dtor for a base class
     virtual ~wxFontMapper();
 
+    // return instance of the wxFontMapper singleton
+    static wxFontMapper *Get();
+    // set the sigleton to 'mapper' instance and return previous one
+    static wxFontMapper *Set(wxFontMapper *mapper);
+
 #if wxUSE_GUI
     // find an alternative for the given encoding (which is supposed to not be
     // available on this system). If successful, return TRUE and fill info
@@ -180,6 +185,9 @@ protected:
 #endif // wxUSE_GUI
 
     friend class wxFontMapperPathChanger;
+    
+private:
+    static wxFontMapper *sm_instance;
 };
 
 // ----------------------------------------------------------------------------
@@ -187,7 +195,8 @@ protected:
 // ----------------------------------------------------------------------------
 
 // the default font mapper for wxWindows programs
-WXDLLEXPORT_DATA(extern wxFontMapper *) wxTheFontMapper;
+// do NOT use! This is for backward compatibility, use wxFontMapper::Get() instead
+#define wxTheFontMapper (wxFontMapper::Get())
 
 #endif // wxUSE_FONTMAP
 

@@ -46,7 +46,7 @@ TAG_HANDLER_BEGIN(META, "META")
             if (content.Left(19) == _T("text/html; charset="))
             {
                 wxFontEncoding enc =
-                    wxTheFontMapper->CharsetToEncoding(content.Mid(19));
+                    wxFontMapper::Get()->CharsetToEncoding(content.Mid(19));
                 if (enc == wxFONTENCODING_SYSTEM) return FALSE;
                 if (enc == m_WParser->GetInputEncoding()) return FALSE;
 

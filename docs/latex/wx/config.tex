@@ -434,7 +434,7 @@ destructor)
 
 \membersection{wxConfigBase::Get}\label{wxconfigbaseget}
 
-\func{wxConfigBase *}{Get}{\param{bool }{CreateOnDemand = TRUE}}
+\func{static wxConfigBase *}{Get}{\param{bool }{CreateOnDemand = TRUE}}
 
 Get the current config object. If there is no current object and
 {\it CreateOnDemand} is TRUE, creates one
@@ -684,7 +684,7 @@ exists.
 
 \membersection{wxConfigBase::Set}\label{wxconfigbaseset}
 
-\func{wxConfigBase *}{Set}{\param{wxConfigBase *}{pConfig}}
+\func{static wxConfigBase *}{Set}{\param{wxConfigBase *}{pConfig}}
 
 Sets the config object as the current one, returns the pointer to the previous
 current object (both the parameter and returned value may be NULL)

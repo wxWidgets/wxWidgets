@@ -791,7 +791,7 @@ public:
                                      enc(wxFONTENCODING_SYSTEM)
     {
         if (name)
-            enc = wxTheFontMapper->CharsetToEncoding(name, FALSE);
+            enc = wxFontMapper::Get()->CharsetToEncoding(name, FALSE);
 
         m_ok = m2w.Init(enc, wxFONTENCODING_UNICODE) &&
                w2m.Init(wxFONTENCODING_UNICODE, enc);
@@ -840,7 +840,7 @@ static wxCharacterSet *wxGetCharacterSet(const wxChar *name)
 {
     // check for the special case of ASCII charset
 #if wxUSE_FONTMAP
-    if ( wxTheFontMapper->CharsetToEncoding(name) == wxFONTENCODING_DEFAULT )
+    if ( wxFontMapper::Get()->CharsetToEncoding(name) == wxFONTENCODING_DEFAULT )
 #else // wxUSE_FONTMAP
     if ( !name )
 #endif // wxUSE_FONTMAP/!wxUSE_FONTMAP

@@ -523,7 +523,7 @@ void wxNativeFontInfo::SetEncoding(wxFontEncoding encoding)
     if ( !wxGetNativeFontEncoding(encoding, &info) )
     {
 #if wxUSE_FONTMAP
-        if ( wxTheFontMapper->GetAltForEncoding(encoding, &info) )
+        if ( wxFontMapper::Get()->GetAltForEncoding(encoding, &info) )
         {
             if ( !info.facename.empty() )
             {

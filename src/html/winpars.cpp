@@ -390,21 +390,21 @@ void wxHtmlWinParser::SetInputEncoding(wxFontEncoding enc)
     bool availfix, availnorm;
 
     // exact match?
-    availnorm = wxTheFontMapper->IsEncodingAvailable(enc, m_FontFaceNormal);
-    availfix = wxTheFontMapper->IsEncodingAvailable(enc, m_FontFaceFixed);
+    availnorm = wxFontMapper::Get()->IsEncodingAvailable(enc, m_FontFaceNormal);
+    availfix = wxFontMapper::Get()->IsEncodingAvailable(enc, m_FontFaceFixed);
     if (availnorm && availfix)
         m_OutputEnc = enc;
 
     // alternatives?
-    else if (wxTheFontMapper->GetAltForEncoding(enc, &altnorm, m_FontFaceNormal, FALSE) &&
-             wxTheFontMapper->GetAltForEncoding(enc, &altfix, m_FontFaceFixed, FALSE) &&
+    else if (wxFontMapper::Get()->GetAltForEncoding(enc, &altnorm, m_FontFaceNormal, FALSE) &&
+             wxFontMapper::Get()->GetAltForEncoding(enc, &altfix, m_FontFaceFixed, FALSE) &&
              altnorm == altfix)
         m_OutputEnc = altnorm;
 
     // at least normal face?
     else if (availnorm)
         m_OutputEnc = enc;
-    else if (wxTheFontMapper->GetAltForEncoding(enc, &altnorm, m_FontFaceNormal, FALSE))
+    else if (wxFontMapper::Get()->GetAltForEncoding(enc, &altnorm, m_FontFaceNormal, FALSE))
         m_OutputEnc = altnorm;
 
     // okay, let convert to ISO_8859-1, available always

@@ -2426,7 +2426,6 @@ EXPORTS
       GetEncodingName__12wxFontMapperF14wxFontEncoding
       ;wxFontMapper::~wxFontMapper()
       __dt__12wxFontMapperFv
-      wxTheFontMapper
       ;wxFontMapper::GetDefaultConfigPath()
       GetDefaultConfigPath__12wxFontMapperFv
       ;wxFontMapper::GetEncodingDescription(wxFontEncoding)

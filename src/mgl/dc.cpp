@@ -759,7 +759,7 @@ bool wxDC::SelectMGLFont()
              !wxTestFontEncoding(nativeEnc) )
         {
 #if wxUSE_FONTMAP
-            if ( !wxTheFontMapper->GetAltForEncoding(encoding, &nativeEnc) )
+            if ( !wxFontMapper::Get()->GetAltForEncoding(encoding, &nativeEnc) )
 #endif
             {
                 nativeEnc.mglEncoding = MGL_ENCODING_ASCII;

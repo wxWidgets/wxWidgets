@@ -184,11 +184,11 @@ static void TestCharset()
 
     for ( size_t n = 0; n < WXSIZEOF(charsets); n++ )
     {
-        wxFontEncoding enc = wxTheFontMapper->CharsetToEncoding(charsets[n]);
+        wxFontEncoding enc = wxFontMapper::Get()->CharsetToEncoding(charsets[n]);
         wxPrintf(_T("Charset: %s\tEncoding: %s (%s)\n"),
                  charsets[n],
-                 wxTheFontMapper->GetEncodingName(enc).c_str(),
-                 wxTheFontMapper->GetEncodingDescription(enc).c_str());
+                 wxFontMapper::Get()->GetEncodingName(enc).c_str(),
+                 wxFontMapper::Get()->GetEncodingDescription(enc).c_str());
     }
 }
 

@@ -475,7 +475,7 @@ wxString wxNativeFontInfo::ToUserString() const
     wxFontEncoding enc = GetEncoding();
     if ( enc != wxFONTENCODING_DEFAULT && enc != wxFONTENCODING_SYSTEM )
     {
-        desc << _T(' ') << wxTheFontMapper->GetEncodingName(enc);
+        desc << _T(' ') << wxFontMapper::Get()->GetEncodingName(enc);
     }
 #endif // wxUSE_FONTMAP
 
@@ -528,7 +528,7 @@ bool wxNativeFontInfo::FromUserString(const wxString& s)
             SetPointSize(size);
         }
 #if wxUSE_FONTMAP
-        else if ( (encoding = wxTheFontMapper->CharsetToEncoding(token, FALSE))
+        else if ( (encoding = wxFontMapper::Get()->CharsetToEncoding(token, FALSE))
                     != wxFONTENCODING_DEFAULT )
         {
             SetEncoding(encoding);

@@ -89,7 +89,7 @@ bool wxFontEnumeratorHelper::SetEncoding(wxFontEncoding encoding)
     wxNativeEncodingInfo info;
     if ( !wxGetNativeFontEncoding(encoding, &info) )
     {
-        if ( !wxTheFontMapper->GetAltForEncoding(encoding, &info) )
+        if ( !wxFontMapper::Get()->GetAltForEncoding(encoding, &info) )
         {
             // no such encodings at all
             return FALSE;

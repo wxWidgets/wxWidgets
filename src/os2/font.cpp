@@ -702,7 +702,7 @@ void wxNativeFontInfo::SetEncoding(
                                  ))
     {
 #if wxUSE_FONTMAP
-        if (wxTheFontMapper->GetAltForEncoding( eEncoding
+        if (wxFontMapper::Get()->GetAltForEncoding( eEncoding
                                                ,&vInfo
                                               ))
         {

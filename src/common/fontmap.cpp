@@ -178,27 +178,6 @@ static const wxChar* gs_encodingNames[] =
     wxT( "utf-8" ),
 };
 
-// ----------------------------------------------------------------------------
-// global data
-// ----------------------------------------------------------------------------
-
-wxFontMapper * wxTheFontMapper = NULL;
-
-class wxFontMapperModule: public wxModule
-{
-public:
-    wxFontMapperModule() : wxModule() { }
-    virtual bool OnInit() { wxTheFontMapper = new wxFontMapper; return TRUE; }
-    virtual void OnExit()
-    {
-        delete wxTheFontMapper;
-        wxTheFontMapper = NULL;
-    }
-
-    DECLARE_DYNAMIC_CLASS(wxFontMapperModule)
-};
-
-IMPLEMENT_DYNAMIC_CLASS(wxFontMapperModule, wxModule)
 
 // ----------------------------------------------------------------------------
 // private classes
@@ -255,6 +234,34 @@ wxFontMapper::~wxFontMapper()
         delete m_config;
 #endif // wxUSE_CONFIG
 }
+
+wxFontMapper *wxFontMapper::sm_instance = NULL;
+
+/*static*/ wxFontMapper *wxFontMapper::Get()
+{
+    if ( !sm_instance )
+        sm_instance = new wxFontMapper;
+    return sm_instance;
+}
+
+/*static*/ wxFontMapper *wxFontMapper::Set(wxFontMapper *mapper)
+{
+    wxFontMapper *old = sm_instance;
+    sm_instance = mapper;
+    return old;
+}
+
+class wxFontMapperModule: public wxModule
+{
+public:
+    wxFontMapperModule() : wxModule() {}
+    virtual bool OnInit() { return TRUE; }
+    virtual void OnExit() { delete wxFontMapper::Set(NULL); }
+
+    DECLARE_DYNAMIC_CLASS(wxFontMapperModule)
+};
+
+IMPLEMENT_DYNAMIC_CLASS(wxFontMapperModule, wxModule)
 
 // ----------------------------------------------------------------------------
 // customisation

@@ -112,6 +112,8 @@ wxBase:
 - wxLocale now works in Unicode mode
 - wxLocale can now load message catalogs in arbitrary encoding
 - fixed the bug related to the redrawing on resize introduced in 2.3.2
+- added static wxFontMapper::Get() accessor (use of wxTheFontMapper is now
+  deprecated)
 
 Unix (Base/GUI):
 

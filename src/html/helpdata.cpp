@@ -618,7 +618,7 @@ bool wxHtmlHelpData::AddBook(const wxString& book)
 
         wxFontEncoding enc;
         if (charset == wxEmptyString) enc = wxFONTENCODING_SYSTEM;
-        else enc = wxTheFontMapper->CharsetToEncoding(charset);
+        else enc = wxFontMapper::Get()->CharsetToEncoding(charset);
         bool rtval = AddBookParam(*fi, enc,
                                   title, contents, index, start, fsys.GetPath());
         delete fi;

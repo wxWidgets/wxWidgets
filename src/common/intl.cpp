@@ -444,7 +444,7 @@ void wxMsgCatalogFile::FillHash(wxMessagesHash& hash, bool convertEncoding) cons
     if ( convertEncoding )
     {
         wxFontEncoding targetEnc = wxFONTENCODING_SYSTEM;
-        wxFontEncoding enc = wxTheFontMapper->CharsetToEncoding(charset, FALSE);
+        wxFontEncoding enc = wxFontMapper::Get()->CharsetToEncoding(charset, FALSE);
         if ( enc == wxFONTENCODING_SYSTEM )
         {
             convertEncoding = FALSE; // unknown encoding
@@ -1340,7 +1340,7 @@ wxFontEncoding wxLocale::GetSystemEncoding()
     wxString encname = GetSystemEncodingName();
     if ( !encname.empty() )
     {
-        wxFontEncoding enc = wxTheFontMapper->
+        wxFontEncoding enc = wxFontMapper::Get()->
             CharsetToEncoding(encname, FALSE /* not interactive */);
 
         // this should probably be considered as a bug in CharsetToEncoding():

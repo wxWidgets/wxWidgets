@@ -632,7 +632,7 @@ void MyFrame::OnViewMsg(wxCommandEvent& WXUNUSED(event))
     }
 
     // ok, now get the corresponding encoding
-    wxFontEncoding fontenc = wxTheFontMapper->CharsetToEncoding(charset);
+    wxFontEncoding fontenc = wxFontMapper::Get()->CharsetToEncoding(charset);
     if ( fontenc == wxFONTENCODING_SYSTEM )
     {
         wxLogError(wxT("Charset '%s' is unsupported."), charset.c_str());
@@ -642,11 +642,11 @@ void MyFrame::OnViewMsg(wxCommandEvent& WXUNUSED(event))
     m_textctrl->LoadFile(filename);
 
     if ( fontenc == wxFONTENCODING_UTF8 ||
-            !wxTheFontMapper->IsEncodingAvailable(fontenc) )
+            !wxFontMapper::Get()->IsEncodingAvailable(fontenc) )
     {
         // try to find some similar encoding:
         wxFontEncoding encAlt;
-        if ( wxTheFontMapper->GetAltForEncoding(fontenc, &encAlt) )
+        if ( wxFontMapper::Get()->GetAltForEncoding(fontenc, &encAlt) )
         {
             wxEncodingConverter conv;
 
@@ -732,7 +732,7 @@ void MyCanvas::OnPaint( wxPaintEvent &WXUNUSED(event) )
     fontInfo.Printf(wxT("Font size is %d points, family: %s, encoding: %s"),
                     m_font.GetPointSize(),
                     m_font.GetFamilyString().c_str(),
-                    wxTheFontMapper->
+                    wxFontMapper::Get()->
                         GetEncodingDescription(m_font.GetEncoding()).c_str());
 
     dc.DrawText(fontInfo, x, y);

@@ -23,10 +23,6 @@ and "interactive" is FALSE or user denied to choose any replacement),
 the class queries \helpref{wxEncodingConverter}{wxencodingconverter} 
 for "equivalent" encodings (e.g. iso8859-2 and cp1250) and tries them.
 
-\wxheading{Global variables}
-
-{\tt wxFontMapper *wxTheFontMapper} is defined.
-
 \wxheading{Using wxFontMapper in conjunction with wxEncodingConverter}
 
 If you need to display text in encoding which is not available at
@@ -39,11 +35,11 @@ and convert the text to this encoding
 Following code snippet demonstrates it:
 
 \begin{verbatim}
-if (!wxTheFontMapper->IsEncodingAvailable(enc, facename))
+if (!wxFontMapper::Get()->IsEncodingAvailable(enc, facename))
 {
    wxFontEncoding alternative;
-   if (wxTheFontMapper->GetAltForEncoding(enc, &alternative,
-                                          facename, FALSE))
+   if (wxFontMapper::Get()->GetAltForEncoding(enc, &alternative,
+                                              facename, FALSE))
    {
        wxEncodingConverter encconv;
        if (!encconv.Init(enc, alternative))
@@ -79,11 +75,27 @@ No base class
 
 Default ctor.
 
+\wxheading{Note}
+
+The preferred way of creating a wxFontMapper instance is to call 
+\helpref{wxFontMapper::Get}{wxfontmapperget}.
+
 \membersection{wxFontMapper::\destruct{wxFontMapper}}\label{wxfontmapperdtor}
 
 \func{}{\destruct{wxFontMapper}}{\void}
 
 Virtual dtor for a base class.
+
+\membersection{wxFontMapper::Get}\label{wxfontmapperget}
+
+\func{static wxFontMapper *}{Get}{\void}
+
+Get the current font mapper object. If there is no current object, creates
+one.
+
+\wxheading{See also}
+
+\helpref{wxFontMapper::Set}{wxfontmapperset}
 
 \membersection{wxFontMapper::GetAltForEncoding}\label{wxfontmappergetaltforencoding}
 
@@ -138,6 +150,18 @@ The parent window for modal dialogs.
 \func{void}{SetDialogTitle}{\param{const wxString\& }{title}}
 
 The title for the dialogs (note that default is quite reasonable).
+
+\membersection{wxFontMapper::Set}\label{wxfontmapperset}
+
+\func{static wxFontMapper *}{Set}{\param{wxFontMapper *}{mapper}}
+
+Set the current font mapper object and return previous one (may be NULL).
+This method is only useful if you want to plug-in an alternative font mapper
+into wxWindows.
+
+\wxheading{See also}
+
+\helpref{wxFontMapper::Get}{wxfontmapperget}
 
 \membersection{wxFontMapper::SetConfig}\label{wxfontmappersetconfig}
 

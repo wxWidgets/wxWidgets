@@ -79,7 +79,7 @@ static char **CreateFontList(wxChar spacing,
     if ( !wxTestFontEncoding(info) )
     {
         // ask font mapper for a replacement
-        (void)wxTheFontMapper->GetAltForEncoding(encoding, &info);
+        (void)wxFontMapper::Get()->GetAltForEncoding(encoding, &info);
     }
 #endif // wxUSE_FONTMAP
 
