@@ -23081,7 +23081,7 @@ while test \${#} -gt 0; do
         exit 1
         ;;
 
-        *.o)
+        *.o | *.a)
         # collect object files
         objects="\${objects} \${1}"
         ;;
