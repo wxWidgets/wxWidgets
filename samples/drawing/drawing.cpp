@@ -291,6 +291,16 @@ bool MyApp::LoadImages()
     wxMask *mask = new wxMask(*gs_bmpMask, *wxBLACK);
     gs_bmpWithMask->SetMask(mask);
 
+    {
+        wxStopWatch sw;
+        wxMask m;
+        for ( int i = 0; i < 1000; i++ )
+        {
+            m.Create(*gs_bmpWithColMask, *wxWHITE);
+        }
+        wxLogMessage("Total time: %ldms", sw.Time());
+    }
+
     mask = new wxMask(*gs_bmpWithColMask, *wxWHITE);
     gs_bmpWithColMask->SetMask(mask);
 
@@ -333,6 +343,14 @@ void MyApp::DeleteBitmaps()
     delete gs_bmp4;
     delete gs_bmp4_mono;
     delete gs_bmp36;
+
+    gs_bmpNoMask = NULL;
+    gs_bmpWithColMask = NULL;
+    gs_bmpMask = NULL;
+    gs_bmpWithMask = NULL;
+    gs_bmp4 = NULL;
+    gs_bmp4_mono = NULL;
+    gs_bmp36 = NULL;
 }
 
 // ----------------------------------------------------------------------------
