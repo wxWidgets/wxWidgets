@@ -333,6 +333,7 @@ pascal Boolean CrossPlatformFilterCallback (
             	CFURLPathStyle pathstyle = kCFURLHFSPathStyle;
 #endif
             	CFStringRef cfString = CFURLCopyFileSystemPath(fullURLRef, pathstyle);
+            	::CFRelease( fullURLRef ) ;
             	wxString file = wxMacCFStringHolder(cfString).AsString(wxFont::GetDefaultEncoding());
 
                 display = CheckFile( file , theInfo->fileAndFolder.fileInfo.finderInfo.fdType , data ) ;
@@ -355,29 +356,13 @@ int wxFileDialog::ShowModal()
     // this was always unset in the old code
     dialogCreateOptions.optionFlags &= ~kNavSelectDefaultLocation;
 
-#if wxUSE_UNICODE
-    // tried using wxMacCFStringHolder in the code below, but it seems
-    // the CFStrings were being released before the save dialog was called,
-    // causing a crash - open dialog works fine with or without wxMacCFStringHolder
-    CFStringRef titleRef = ::CFStringCreateWithCharacters( kCFAllocatorDefault,
-                                (const unsigned short*)m_message.wc_str(), 
-                                m_message.Len() );
-#else
-    CFStringRef titleRef = ::CFStringCreateWithCString(NULL,
-                                                       m_message.c_str(),
-                                                       m_font.GetEncoding() );
-#endif
-    dialogCreateOptions.windowTitle = titleRef;
-#if wxUSE_UNICODE
-    CFStringRef defaultFileNameRef = ::CFStringCreateWithCharacters( kCFAllocatorDefault,
-                                        (const unsigned short*)m_fileName.wc_str(), 
-                                        m_fileName.Len() );
-#else
-    CFStringRef defaultFileNameRef = ::CFStringCreateWithCString(NULL,
-                                                                 m_fileName.c_str(),
-                                                                 m_font.GetEncoding());
-#endif
-    dialogCreateOptions.saveFileName = defaultFileNameRef;
+    wxMacCFStringHolder message(m_message, m_font.GetEncoding());
+    dialogCreateOptions.windowTitle = message;
+
+    wxMacCFStringHolder defaultFileName(m_fileName, m_font.GetEncoding());
+    dialogCreateOptions.saveFileName = defaultFileName;
+
+
     NavDialogRef dialog;
     NavObjectFilterUPP navFilterUPP = NULL;
     CFArrayRef cfArray = NULL; // for popupExtension
@@ -433,20 +418,8 @@ int wxFileDialog::ShowModal()
     if (navFilterUPP)
         ::DisposeNavObjectFilterUPP(navFilterUPP);
     if (cfArray)
-    {
-        CFIndex n = ::CFArrayGetCount(cfArray);
-        for (CFIndex i = 0; i < n; i++)
-        {
-            CFStringRef str = (CFStringRef) ::CFArrayGetValueAtIndex(cfArray, i);
-            if (str)
-                ::CFRelease(str);
-        }
         ::CFRelease(cfArray);
-    }
-    if (titleRef)
-        ::CFRelease(titleRef);
-    if (defaultFileNameRef)
-        ::CFRelease(defaultFileNameRef);
+
     if (err != noErr)
         return wxID_CANCEL;
 
