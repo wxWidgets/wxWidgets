@@ -388,8 +388,8 @@ void SliderWidgetsPage::CreateSlider()
         if ( m_sizerSlider->GetChildren().GetCount() )
         {
             // we have 2 spacers, remove them too
-            m_sizerSlider->Remove( 0u );
-            m_sizerSlider->Remove( 0u );
+            m_sizerSlider->Remove( 0 );
+            m_sizerSlider->Remove( 0 );
         }
 
         delete m_slider;
