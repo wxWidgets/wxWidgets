@@ -207,7 +207,6 @@ ALL_SOURCES = \
 		motif/glcanvas.cpp \
 		motif/gsockmot.c \
 		motif/icon.cpp \
-		motif/joystick.cpp \
 		motif/listbox.cpp \
 		motif/main.cpp \
 		motif/mdi.cpp \
@@ -514,7 +513,6 @@ ALL_HEADERS = \
 		motif/checklst.h \
 		motif/choice.h \
 		motif/clipbrd.h \
-		motif/colordlg.h \
 		motif/colour.h \
 		motif/combobox.h \
 		motif/control.h \
@@ -530,23 +528,19 @@ ALL_HEADERS = \
 		motif/dnd.h \
 		motif/filedlg.h \
 		motif/font.h \
-		motif/fontdlg.h \
 		motif/frame.h \
 		motif/gauge.h \
 		motif/gdiobj.h \
 		motif/glcanvas.h \
 		motif/icon.h \
-		motif/joystick.h \
 		motif/listbox.h \
 		motif/mdi.h \
 		motif/menu.h \
 		motif/menuitem.h \
-		motif/metafile.h \
 		motif/minifram.h \
 		motif/msgdlg.h \
 		motif/palette.h \
 		motif/print.h \
-		motif/printdlg.h \
 		motif/private.h \
 		motif/radiobox.h \
 		motif/radiobut.h \
@@ -841,7 +835,6 @@ GUIOBJS = \
 		glcanvas.o \
 		gsockmot.o \
 		icon.o \
-		joystick.o \
 		listbox.o \
 		main.o \
 		mdi.o \

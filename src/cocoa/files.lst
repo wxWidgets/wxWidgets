@@ -143,6 +143,7 @@ ALL_SOURCES = \
 		common/quantize.cpp \
 		common/radiocmn.cpp \
 		common/regex.cpp \
+		common/rgncmn.cpp \
 		common/sckaddr.cpp \
 		common/sckfile.cpp \
 		common/sckipc.cpp \
@@ -374,6 +375,8 @@ ALL_HEADERS = \
 		ioswrap.h \
 		ipc.h \
 		ipcbase.h \
+		isql.h \
+		isqlext.h \
 		joystick.h \
 		layout.h \
 		laywin.h \
@@ -416,6 +419,7 @@ ALL_HEADERS = \
 		quantize.h \
 		radiobox.h \
 		radiobut.h \
+		rawbmp.h \
 		regex.h \
 		region.h \
 		sashwin.h \
@@ -693,6 +697,7 @@ COMMONOBJS = \
 		quantize.o \
 		radiocmn.o \
 		regex.o \
+		rgncmn.o \
 		sckaddr.o \
 		sckfile.o \
 		sckipc.o \

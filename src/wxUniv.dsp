@@ -465,10 +465,6 @@ SOURCE=.\common\regex.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\common\resource.cpp
-# End Source File
-# Begin Source File
-
 SOURCE=.\common\rgncmn.cpp
 # End Source File
 # Begin Source File
@@ -590,10 +586,6 @@ SOURCE=.\common\wincmn.cpp
 # Begin Source File
 
 SOURCE=.\common\wxchar.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\common\wxexpr.cpp
 # End Source File
 # Begin Source File
 
@@ -737,18 +729,6 @@ SOURCE=.\generic\progdlgg.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\generic\prop.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\generic\propform.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\generic\proplist.cpp
-# End Source File
-# Begin Source File
-
 SOURCE=.\generic\sashwin.cpp
 # End Source File
 # Begin Source File
@@ -790,10 +770,6 @@ SOURCE=.\generic\tipwin.cpp
 # Begin Source File
 
 SOURCE=.\generic\treectlg.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\generic\treelay.cpp
 # End Source File
 # Begin Source File
 
@@ -1607,10 +1583,6 @@ SOURCE=..\include\wx\event.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\include\wx\expr.h
-# End Source File
-# Begin Source File
-
 SOURCE=..\include\wx\fdrepdlg.h
 # End Source File
 # Begin Source File
@@ -1975,18 +1947,6 @@ SOURCE=..\include\wx\progdlg.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\include\wx\prop.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\include\wx\propform.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\include\wx\proplist.h
-# End Source File
-# Begin Source File
-
 SOURCE=..\include\wx\quantize.h
 # End Source File
 # Begin Source File
@@ -2008,10 +1968,6 @@ SOURCE=..\include\wx\regex.h
 # Begin Source File
 
 SOURCE=..\include\wx\region.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\include\wx\resource.h
 # End Source File
 # Begin Source File
 
@@ -2272,10 +2228,6 @@ SOURCE=..\include\wx\wx_cw_d.h
 # Begin Source File
 
 SOURCE=..\include\wx\wxchar.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\include\wx\wxexpr.h
 # End Source File
 # Begin Source File
 

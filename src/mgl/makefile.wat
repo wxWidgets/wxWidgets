@@ -70,9 +70,6 @@ GENERICOBJS= accel.obj &
 	printps.obj &
 	prntdlgg.obj &
 	progdlgg.obj &
-	prop.obj &
-	propform.obj &
-	proplist.obj &
 	sashwin.obj &
 	scrlwing.obj &
 	spinctlg.obj &
@@ -85,7 +82,6 @@ GENERICOBJS= accel.obj &
 	tipdlg.obj &
 	tipwin.obj &
 	treectlg.obj &
-	treelay.obj &
 	wizard.obj
 
 COMMONOBJS = &
@@ -186,7 +182,6 @@ COMMONOBJS = &
 	quantize.obj &
 	radiocmn.obj &
 	regex.obj &
-	resource.obj &
 	rgncmn.obj &
 	sckaddr.obj &
 	sckfile.obj &
@@ -219,7 +214,6 @@ COMMONOBJS = &
 	wfstream.obj &
 	wincmn.obj &
 	wxchar.obj &
-	wxexpr.obj &
 	xpmdecod.obj &
 	zipstrm.obj &
 	zstream.obj
@@ -824,9 +818,6 @@ radiocmn.obj:     $(COMMDIR)\radiocmn.cpp
 regex.obj:     $(COMMDIR)\regex.cpp
   *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
 
-resource.obj:     $(COMMDIR)\resource.cpp
-  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
-
 rgncmn.obj:     $(COMMDIR)\rgncmn.cpp
   *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
 
@@ -921,9 +912,6 @@ wincmn.obj:     $(COMMDIR)\wincmn.cpp
   *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
 
 wxchar.obj:     $(COMMDIR)\wxchar.cpp
-  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
-
-wxexpr.obj:     $(COMMDIR)\wxexpr.cpp
   *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
 
 xpmdecod.obj:     $(COMMDIR)\xpmdecod.cpp
@@ -1042,15 +1030,6 @@ prntdlgg.obj:     $(GENDIR)\prntdlgg.cpp
 progdlgg.obj:     $(GENDIR)\progdlgg.cpp
   *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
 
-prop.obj:     $(GENDIR)\prop.cpp
-  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
-
-propform.obj:     $(GENDIR)\propform.cpp
-  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
-
-proplist.obj:     $(GENDIR)\proplist.cpp
-  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
-
 sashwin.obj:     $(GENDIR)\sashwin.cpp
   *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
 
@@ -1085,9 +1064,6 @@ tipwin.obj:     $(GENDIR)\tipwin.cpp
   *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
 
 treectlg.obj:     $(GENDIR)\treectlg.cpp
-  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
-
-treelay.obj:     $(GENDIR)\treelay.cpp
   *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
 
 wizard.obj:     $(GENDIR)\wizard.cpp
