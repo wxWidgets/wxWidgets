@@ -2,8 +2,8 @@
 
 Classes: \helpref{wxLayoutConstraints}{wxlayoutconstraints}, \helpref{wxIndividualLayoutConstraint}{wxindividuallayoutconstraint}.
 
-Objects of class wxLayoutConstraint can be associated with a window to define the
-way its subwindows are laid out, with respect to their siblings or parent.
+Objects of class wxLayoutConstraint can be associated with a window to define
+the way it is laid out, with respect to its siblings or the parent.
 
 The class consists of the following eight constraints of class wxIndividualLayoutConstraint,
 some or all of which should be accessed directly to set the appropriate
@@ -34,9 +34,12 @@ label).
 
 The constrains calculation is done in \helpref{wxWindow::Layout}{wxwindowlayout} 
 function which evaluates constraints. To call it you can either call
-wxWindow::SetAutoLayout to tell default OnSize handlers to call Layout
-automatically whenever the window size changes, or override OnSize and call Layout
-yourself.
+\helpref{wxWindow::SetAutoLayout}{wxwindowsetautolayout} if the parent window
+is a frame, panel or a dialog to tell default OnSize handlers to call Layout
+automatically whenever the window size changes, or override OnSize and call
+Layout yourself (note that you do have to call 
+\helpref{Layout}{wxwindowlayout} yourself if the parent window is not a
+frame, panel or dialog).
 
 \subsection{Constraint layout: more detail}
 
