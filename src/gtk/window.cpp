@@ -3320,8 +3320,8 @@ void wxWindowGTK::WarpPointer( int x, int y )
 {
     wxCHECK_RET( (m_widget != NULL), wxT("invalid window") );
 
-    /* we provide this function ourselves as it is
-       missing in GDK (top of this file)  */
+    // We provide this function ourselves as it is
+    // missing in GDK (top of this file).
 
     GdkWindow *window = (GdkWindow*) NULL;
     if (m_wxwindow)
@@ -3348,86 +3348,23 @@ void wxWindowGTK::Refresh( bool eraseBackground, const wxRect *rect )
     {
         if (rect)
         {
-            gdk_window_clear_area( GTK_PIZZA(m_wxwindow)->bin_window,
-                                   rect->x, rect->y,
-                                   rect->width, rect->height );
-        }
-        else
-        {
-            gdk_window_clear( GTK_PIZZA(m_wxwindow)->bin_window );
-        }
-    }
-
-    /* there is no GTK equivalent of "draw only, don't clear" so we
-       invent our own in the GtkPizza widget */
-
-    if (!rect)
-    {
-        if (m_wxwindow)
-        {
-#if 0
-            GtkPizza *pizza = GTK_PIZZA(m_wxwindow);
-            gboolean old_clear = pizza->clear_on_draw;
-            gtk_pizza_set_clear( pizza, FALSE );
-            gtk_widget_draw( m_wxwindow, (GdkRectangle*) NULL );
-            gtk_pizza_set_clear( pizza, old_clear );
-#endif
-
-#if 1
             // Schedule for later Updating in ::Update() or ::OnInternalIdle().
-            m_updateRegion.Union( 0, 0, m_wxwindow->allocation.width, m_wxwindow->allocation.height );
-#else
-            GdkEventExpose gdk_event;
-            gdk_event.type = GDK_EXPOSE;
-            gdk_event.window = GTK_PIZZA(m_wxwindow)->bin_window;
-            gdk_event.count = 0;
-            gdk_event.area.x = 0;
-            gdk_event.area.y = 0;
-            gdk_event.area.width = m_wxwindow->allocation.width;
-            gdk_event.area.height = m_wxwindow->allocation.height;
-            gtk_window_expose_callback( m_wxwindow, &gdk_event, (wxWindow *)this );
-#endif
+            m_clearRegion.Union( rect->x, rect->y, rect->width, rect->height );
         }
         else
         {
-            gtk_widget_draw( m_widget, (GdkRectangle*) NULL );
+            // Schedule for later Updating in ::Update() or ::OnInternalIdle().
+            m_clearRegion.Clear();
+            m_clearRegion.Union( 0, 0, m_wxwindow->allocation.width, m_wxwindow->allocation.height );
         }
     }
-    else
-    {
 
+    if (rect)
+    {
         if (m_wxwindow)
         {
-#if 0
-            GtkPizza *pizza = GTK_PIZZA(m_wxwindow);
-            gboolean old_clear = pizza->clear_on_draw;
-            gtk_pizza_set_clear( pizza, FALSE );
-
-            GdkRectangle gdk_rect;
-            gdk_rect.x = rect->x;
-            gdk_rect.y = rect->y;
-            gdk_rect.width = rect->width;
-            gdk_rect.height = rect->height;
-            gtk_widget_draw( m_wxwindow, &gdk_rect );
-            gtk_window_draw_callback( m_wxwindow, &gdk_rect, this );
-
-            gtk_pizza_set_clear( pizza, old_clear );
-#endif
-
-#if 1
             // Schedule for later Updating in ::Update() or ::OnInternalIdle().
             m_updateRegion.Union( rect->x, rect->y, rect->width, rect->height );
-#else
-            GdkEventExpose gdk_event;
-            gdk_event.type = GDK_EXPOSE;
-            gdk_event.window = GTK_PIZZA(m_wxwindow)->bin_window;
-            gdk_event.count = 0;
-            gdk_event.area.x = rect->x;
-            gdk_event.area.y = rect->y;
-            gdk_event.area.width = rect->width;
-            gdk_event.area.height = rect->height;
-            gtk_window_expose_callback( m_wxwindow, &gdk_event, (wxWindow *)this );
-#endif
         }
         else
         {
@@ -3437,6 +3374,19 @@ void wxWindowGTK::Refresh( bool eraseBackground, const wxRect *rect )
             gdk_rect.width = rect->width;
             gdk_rect.height = rect->height;
             gtk_widget_draw( m_widget, &gdk_rect );
+        }
+    }
+    else
+    {
+        if (m_wxwindow)
+        {
+            // Schedule for later Updating in ::Update() or ::OnInternalIdle().
+            m_updateRegion.Clear();
+            m_updateRegion.Union( 0, 0, m_wxwindow->allocation.width, m_wxwindow->allocation.height );
+        }
+        else
+        {
+            gtk_widget_draw( m_widget, (GdkRectangle*) NULL );
         }
     }
 }
@@ -3451,33 +3401,35 @@ void wxWindowGTK::Update()
 
 void wxWindowGTK::GtkSendPaintEvents()
 {
+    if (!m_wxwindow)
+    {
+        m_clearRegion.Clear();
+        m_updateRegion.Clear();
+        return;
+    }
+
     m_clipPaintRegion = TRUE;
 
-    wxWindowDC dc( (wxWindow*)this );
-    dc.SetClippingRegion( m_updateRegion );
-    wxEraseEvent erase_event( GetId(), &dc );
-    erase_event.SetEventObject( this );
-
-#if 1
-    GetEventHandler()->ProcessEvent( erase_event );
-#else
-    if (!GetEventHandler()->ProcessEvent(erase_event))
+    if (!m_clearRegion.IsEmpty())
     {
+        wxWindowDC dc( (wxWindow*)this );
+        dc.SetClippingRegion( m_clearRegion );
+        
+        wxEraseEvent erase_event( GetId(), &dc );
+        erase_event.SetEventObject( this );
+    
         if (!GetEventHandler()->ProcessEvent(erase_event))
         {
-            wxClientDC dc( this );
-            dc.SetBrush( wxBrush( GetBackgroundColour(), wxSOLID ) );
-            dc.SetPen( *wxTRANSPARENT_PEN );
-
-            wxRegionIterator upd( m_updateRegion );
+            wxRegionIterator upd( m_clearRegion );
             while (upd)
             {
-                dc.DrawRectangle( upd.GetX(), upd.GetY(), upd.GetWidth(), upd.GetHeight() );
+                gdk_window_clear_area( GTK_PIZZA(m_wxwindow)->bin_window,
+                                       upd.GetX(), upd.GetY(), upd.GetWidth(), upd.GetHeight() );
                 upd ++;
             }
         }
+        m_clearRegion.Clear();
     }
-#endif
 
     wxNcPaintEvent nc_paint_event( GetId() );
     nc_paint_event.SetEventObject( this );
@@ -4099,6 +4051,16 @@ void wxWindowGTK::ScrollWindow( int dx, int dy, const wxRect* WXUNUSED(rect) )
         int ch = 0;
         GetClientSize( &cw, &ch );
         m_updateRegion.Intersect( 0, 0, cw, ch );
+    }
+    
+    if (!m_clearRegion.IsEmpty())
+    {
+        m_clearRegion.Offset( dx, dy );
+        
+        int cw = 0;
+        int ch = 0;
+        GetClientSize( &cw, &ch );
+        m_clearRegion.Intersect( 0, 0, cw, ch );
     }
     
 #if 1

@@ -183,6 +183,9 @@ public:
     GdkICAttr           *m_icattr;
 #endif
 
+    // The area to be cleared (and not just refreshed)
+    wxRegion             m_clearRegion;
+
     // scrolling stuff
     GtkAdjustment       *m_hAdjust,*m_vAdjust;
     float                m_oldHorizontalPos;
