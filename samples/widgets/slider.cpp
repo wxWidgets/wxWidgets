@@ -288,7 +288,7 @@ SliderWidgetsPage::SliderWidgetsPage(wxNotebook *notebook,
     sizerMiddle->Add(sizerRow, 0, wxALL | wxGROW, 5);
 
     sizerRow = CreateSizerWithTextAndButton(SliderPage_SetThumbLen,
-                                            _T("Thumb &lenght"),
+                                            _T("Thumb &length"),
                                             SliderPage_ThumbLenText,
                                             &m_textThumbLen);
 
@@ -438,7 +438,7 @@ void SliderWidgetsPage::DoSetThumbLen()
     long len;
     if ( !m_textThumbLen->GetValue().ToLong(&len) )
     {
-        wxLogWarning(_T("Invalid slider thumb lenght"));
+        wxLogWarning(_T("Invalid slider thumb length"));
 
         return;
     }

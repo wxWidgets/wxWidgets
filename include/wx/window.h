@@ -193,7 +193,7 @@ public:
 
 
         // window id uniquely identifies the window among its siblings unless
-        // it is -1 which means "don't care"
+        // it is wxID_ANY which means "don't care"
     void SetId( wxWindowID winid ) { m_windowId = winid; }
     wxWindowID GetId() const { return m_windowId; }
 
@@ -216,7 +216,7 @@ public:
         {  DoSetSize(x, y, width, height, sizeFlags); }
 
     void SetSize( int width, int height )
-        { DoSetSize( -1, -1, width, height, wxSIZE_USE_EXISTING ); }
+        { DoSetSize( wxDefaultCoord, wxDefaultCoord, width, height, wxSIZE_USE_EXISTING ); }
 
     void SetSize( const wxSize& size )
         { SetSize( size.x, size.y); }
@@ -225,7 +225,7 @@ public:
         { DoSetSize(rect.x, rect.y, rect.width, rect.height, sizeFlags); }
 
     void Move(int x, int y, int flags = wxSIZE_USE_EXISTING)
-        { DoSetSize(x, y, -1, -1, flags); }
+        { DoSetSize(x, y, wxDefaultCoord, wxDefaultCoord, flags); }
 
     void Move(const wxPoint& pt, int flags = wxSIZE_USE_EXISTING)
         { Move(pt.x, pt.y, flags); }
@@ -316,7 +316,7 @@ public:
     void InvalidateBestSize() { m_bestSizeCache = wxDefaultSize; }
     void CacheBestSize(const wxSize& size) const
         { wxConstCast(this, wxWindowBase)->m_bestSizeCache = size; }
-    
+
         // There are times (and windows) where 'Best' size and 'Min' size
         // are vastly out of sync.  This should be remedied somehow, but in
         // the meantime, this method will return the larger of BestSize
@@ -332,7 +332,7 @@ public:
         // minimum size, giving priority to the min size components, and
         // returns the results.
     wxSize GetBestFittingSize() const;
-    
+
         // A 'Smart' SetSize that will fill in default size values with 'best'
         // size.  Sets the minsize to what was passed in.
     void SetBestFittingSize(const wxSize& size=wxDefaultSize);
@@ -359,8 +359,8 @@ public:
 
         // set min/max size of the window
     virtual void SetSizeHints( int minW, int minH,
-                               int maxW = -1, int maxH = -1,
-                               int incW = -1, int incH = -1 );
+                               int maxW = wxDefaultCoord, int maxH = wxDefaultCoord,
+                               int incW = wxDefaultCoord, int incH = wxDefaultCoord );
     void SetSizeHints( const wxSize& minSize,
                        const wxSize& maxSize=wxDefaultSize,
                        const wxSize& incSize=wxDefaultSize)
@@ -371,7 +371,7 @@ public:
     }
 
     virtual void SetVirtualSizeHints( int minW, int minH,
-                                      int maxW = -1, int maxH = -1 );
+                                      int maxW = wxDefaultCoord, int maxH = wxDefaultCoord );
     void SetVirtualSizeHints( const wxSize& minSize,
                               const wxSize& maxSize=wxDefaultSize)
     {
@@ -389,7 +389,7 @@ public:
 
     void SetMinSize(const wxSize& minSize) { SetSizeHints(minSize); }
     void SetMaxSize(const wxSize& maxSize) { SetSizeHints(GetMinSize(), maxSize); }
-    
+
         // Methods for accessing the virtual size of a window.  For most
         // windows this is just the client area of the window, but for
         // some like scrolled windows it is more or less independent of
@@ -472,7 +472,7 @@ public:
 
         // Returns true if this class should have the background colour
         // changed to match the parent window's theme.  For example when a
-        // page is added to a notebook it and it's children may need to have
+        // page is added to a notebook it and its children may need to have
         // the colours adjusted depending on the current theme settings, but
         // not all windows/controls can do this without looking wrong.
     virtual void ApplyParentThemeBackground(const wxColour& WXUNUSED(bg))
@@ -1065,7 +1065,7 @@ protected:
     void SendDestroyEvent();
 
     // the window id - a number which uniquely identifies a window among
-    // its siblings unless it is -1
+    // its siblings unless it is wxID_ANY
     wxWindowID           m_windowId;
 
     // the parent window of this window (or NULL) and the list of the children
@@ -1074,7 +1074,7 @@ protected:
     wxWindowList         m_children;
 
     // the minimal allowed size for the window (no minimal size if variable(s)
-    // contain(s) -1)
+    // contain(s) wxDefaultCoord)
     int                  m_minWidth,
                          m_minHeight,
                          m_maxWidth,
@@ -1144,7 +1144,7 @@ protected:
     bool                 m_hasBgCol:1;
     bool                 m_hasFgCol:1;
     bool                 m_hasFont:1;
-    
+
     // and should it be inherited by children?
     bool                 m_inheritBgCol:1;
     bool                 m_inheritFgCol:1;
@@ -1181,8 +1181,8 @@ protected:
 
     // Get the default size for the new window if no explicit size given. TLWs
     // have their own default size so this is just for non top-level windows.
-    static int WidthDefault(int w) { return w == -1 ? 20 : w; }
-    static int HeightDefault(int h) { return h == -1 ? 20 : h; }
+    static int WidthDefault(int w) { return w == wxDefaultCoord ? 20 : w; }
+    static int HeightDefault(int h) { return h == wxDefaultCoord ? 20 : h; }
 
 
     // Used to save the results of DoGetBestSize so it doesn't need to be
@@ -1192,7 +1192,7 @@ protected:
     // keep the old name for compatibility, at least until all the internal
     // usages of it are changed to SetBestFittingSize
     void SetBestSize(const wxSize& size) { SetBestFittingSize(size); }
-        
+
     // set the initial window size if none is given (i.e. at least one of the
     // components of the size passed to ctor/Create() is -1)
     //
@@ -1202,7 +1202,7 @@ protected:
     // can be accurately calculated
     virtual void SetInitialBestSize(const wxSize& WXUNUSED(size)) {}
 
-    
+
 
     // more pure virtual functions
     // ---------------------------

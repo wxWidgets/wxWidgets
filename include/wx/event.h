@@ -349,8 +349,8 @@ public:
     // Can instruct event processor that we wish to ignore this event
     // (treat as if the event table entry had not been found): this must be done
     // to allow the event processing by the base classes (calling event.Skip()
-    // is the analog of calling the base class verstion of a virtual function)
-    void Skip(bool skip = TRUE) { m_skipped = skip; }
+    // is the analog of calling the base class version of a virtual function)
+    void Skip(bool skip = true) { m_skipped = skip; }
     bool GetSkipped() const { return m_skipped; };
 
     // this function is used to create a copy of the event polymorphically and
@@ -510,7 +510,7 @@ public:
     // Get checkbox value
     bool IsChecked() const { return m_commandInt != 0; }
 
-    // TRUE if the listbox event was a selection.
+    // true if the listbox event was a selection.
     bool IsSelection() const { return (m_extraLong != 0); }
 
     void SetExtraLong(long extraLong) { m_extraLong = extraLong; }
@@ -539,17 +539,17 @@ class WXDLLIMPEXP_CORE wxNotifyEvent  : public wxCommandEvent
 public:
     wxNotifyEvent(wxEventType commandType = wxEVT_NULL, int winid = 0)
         : wxCommandEvent(commandType, winid)
-        { m_bAllow = TRUE; }
+        { m_bAllow = true; }
 
     wxNotifyEvent(const wxNotifyEvent& event)
         : wxCommandEvent(event)
         { m_bAllow = event.m_bAllow; }
 
     // veto the operation (usually it's allowed by default)
-    void Veto() { m_bAllow = FALSE; }
+    void Veto() { m_bAllow = false; }
 
     // allow the operation if it was disabled by default
-    void Allow() { m_bAllow = TRUE; }
+    void Allow() { m_bAllow = true; }
 
     // for implementation code only: is the operation allowed?
     bool IsAllowed() const { return m_bAllow; }
@@ -1199,7 +1199,7 @@ private:
 class WXDLLIMPEXP_CORE wxActivateEvent : public wxEvent
 {
 public:
-    wxActivateEvent(wxEventType type = wxEVT_NULL, bool active = TRUE, int Id = 0)
+    wxActivateEvent(wxEventType type = wxEVT_NULL, bool active = true, int Id = 0)
         : wxEvent(Id, type)
         { m_active = active; }
     wxActivateEvent(const wxActivateEvent& event)
@@ -1282,9 +1282,9 @@ class WXDLLIMPEXP_CORE wxCloseEvent : public wxEvent
 public:
     wxCloseEvent(wxEventType type = wxEVT_NULL, int winid = 0)
         : wxEvent(winid, type),
-          m_loggingOff(TRUE),
-          m_veto(FALSE),      // should be FALSE by default
-          m_canVeto(TRUE) {}
+          m_loggingOff(true),
+          m_veto(false),      // should be false by default
+          m_canVeto(true) {}
 
     wxCloseEvent(const wxCloseEvent & event)
         : wxEvent(event),
@@ -1295,9 +1295,9 @@ public:
     void SetLoggingOff(bool logOff) { m_loggingOff = logOff; }
     bool GetLoggingOff() const { return m_loggingOff; }
 
-    void Veto(bool veto = TRUE)
+    void Veto(bool veto = true)
     {
-        // GetVeto() will return FALSE anyhow...
+        // GetVeto() will return false anyhow...
         wxCHECK_RET( m_canVeto,
                      wxT("call to Veto() ignored (can't veto this event)") );
 
@@ -1326,7 +1326,7 @@ private:
 class WXDLLIMPEXP_CORE wxShowEvent : public wxEvent
 {
 public:
-    wxShowEvent(int winid = 0, bool show = FALSE)
+    wxShowEvent(int winid = 0, bool show = false)
         : wxEvent(winid, wxEVT_SHOW)
         { m_show = show; }
     wxShowEvent(const wxShowEvent & event)
@@ -1352,7 +1352,7 @@ private:
 class WXDLLIMPEXP_CORE wxIconizeEvent : public wxEvent
 {
 public:
-    wxIconizeEvent(int winid = 0, bool iconized = TRUE)
+    wxIconizeEvent(int winid = 0, bool iconized = true)
         : wxEvent(winid, wxEVT_ICONIZE)
         { m_iconized = iconized; }
     wxIconizeEvent(const wxIconizeEvent & event)
@@ -1564,7 +1564,7 @@ public:
         m_enabled =
         m_setEnabled =
         m_setText =
-        m_setChecked = FALSE;
+        m_setChecked = false;
     }
     wxUpdateUIEvent(const wxUpdateUIEvent & event)
         : wxCommandEvent(event),
@@ -1583,9 +1583,9 @@ public:
     bool GetSetChecked() const { return m_setChecked; }
     bool GetSetEnabled() const { return m_setEnabled; }
 
-    void Check(bool check) { m_checked = check; m_setChecked = TRUE; }
-    void Enable(bool enable) { m_enabled = enable; m_setEnabled = TRUE; }
-    void SetText(const wxString& text) { m_text = text; m_setText = TRUE; }
+    void Check(bool check) { m_checked = check; m_setChecked = true; }
+    void Enable(bool enable) { m_enabled = enable; m_setEnabled = true; }
+    void SetText(const wxString& text) { m_text = text; m_setText = true; }
 
     // Sets the interval between updates in milliseconds.
     // Set to -1 to disable updates, or to 0 to update as frequently as possible.
@@ -1730,7 +1730,7 @@ class WXDLLIMPEXP_CORE wxQueryNewPaletteEvent : public wxEvent
 public:
     wxQueryNewPaletteEvent(wxWindowID winid = 0)
         : wxEvent(winid, wxEVT_QUERY_NEW_PALETTE),
-          m_paletteRealized(FALSE)
+          m_paletteRealized(false)
         { }
     wxQueryNewPaletteEvent(const wxQueryNewPaletteEvent & event)
         : wxEvent(event),
@@ -1949,14 +1949,14 @@ class WXDLLIMPEXP_CORE wxIdleEvent : public wxEvent
 public:
     wxIdleEvent()
         : wxEvent(0, wxEVT_IDLE),
-          m_requestMore(FALSE)
+          m_requestMore(false)
         { }
     wxIdleEvent(const wxIdleEvent & event)
         : wxEvent(event),
           m_requestMore(event.m_requestMore)
     { }
 
-    void RequestMore(bool needMore = TRUE) { m_requestMore = needMore; }
+    void RequestMore(bool needMore = true) { m_requestMore = needMore; }
     bool MoreRequested() const { return m_requestMore; }
 
     virtual wxEvent *Clone() const { return new wxIdleEvent(*this); }

@@ -257,7 +257,7 @@ ClookUpDlg::ClookUpDlg(wxWindow *parent, wxChar *windowTitle, wxChar *tableName,
 // necessary if joins are involved since by default both columns must come from the
 // same table.
 //
-// If you do query by sql statement, you must pass in the maximum lenght of column1,
+// If you do query by sql statement, you must pass in the maximum length of column1,
 // since it cannot be derived when you query using your own sql statement.
 //
 // The optional database connection can be used if you'd like the lookup class

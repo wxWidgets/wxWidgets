@@ -650,7 +650,7 @@ public:
     inline CoordType GetLineNumber() const { return m_LineNumber; }
 
     /** Return the length of the line.
-        @return line lenght in cursor positions
+        @return line length in cursor positions
     */
     inline CoordType GetLength() const { return m_Length; }
     //@}

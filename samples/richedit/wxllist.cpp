@@ -1100,7 +1100,7 @@ wxLayoutLine::Draw(wxDC &dc,
 
    pos.y += m_BaseLine;
 
-   CoordType xpos = 0; // cursorpos, lenght of line
+   CoordType xpos = 0; // cursorpos, length of line
 
    CoordType from, to;
 

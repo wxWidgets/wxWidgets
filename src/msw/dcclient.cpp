@@ -75,7 +75,7 @@ static PAINTSTRUCT g_paintStruct;
 
 #ifdef __WXDEBUG__
     // a global variable which we check to verify that wxPaintDC are only
-    // created in resopnse to WM_PAINT message - doing this from elsewhere is a
+    // created in response to WM_PAINT message - doing this from elsewhere is a
     // common programming error among wxWidgets programmers and might lead to
     // very subtle and difficult to debug refresh/repaint bugs.
     int g_isPainting = 0;
