@@ -3133,6 +3133,14 @@ void wxWindow::ScrollWindow( int dx, int dy, const wxRect* WXUNUSED(rect) )
 
     wxCHECK_RET( m_wxwindow != NULL, "window needs client area for scrolling" );
 
+    wxNode *node = m_children.First();
+    while (node)
+    {
+        wxWindow *child = (wxWindow*) node->Data();
+	child->Move( child->m_x + dx, child->m_y + dy );
+	node = node->Next();
+    }
+
     int cw = 0;
     int ch = 0;
     GetClientSize( &cw, &ch );
