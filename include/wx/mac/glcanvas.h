@@ -114,6 +114,10 @@ class WXDLLEXPORT wxGLCanvas: public wxWindow
    // It sets the viewport correctly and update the context.
    // You shouldn't call glViewport yourself either (use SetViewport if you must reset it.)
    void OnSize(wxSizeEvent& event);
+   
+	 virtual void MacSuperChangedPosition() ;
+	 virtual void MacTopLevelWindowChangedPosition() ;
+	 void MacUpdateView() ;
 
    inline wxGLContext* GetContext() const { return m_glContext; }
 
