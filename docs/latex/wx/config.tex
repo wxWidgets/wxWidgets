@@ -230,7 +230,8 @@ actually enumerating them, but you will probably never need them.
 
 \helpref{HasGroup}{wxconfigbasehasgroup}\\
 \helpref{HasEntry}{wxconfigbasehasentry}\\
-\helpref{Exists}{wxconfigbaseexists}
+\helpref{Exists}{wxconfigbaseexists}\\
+\helpref{GetEntryType}{wxconfigbasegetentrytype}
 
 \membersection{Miscellaneous accessors}
 
@@ -435,6 +436,29 @@ Get the current config object. If there is no current object, creates one
 \constfunc{wxString}{GetAppName}{\void}
 
 Returns the application name.
+
+\membersection{wxConfigBase::GetEntryType}\label{wxconfigbasegetentrytype}
+
+\constfunc{enum wxConfigBase::EntryType}{GetEntryType}{\param{const wxString\& }{name}}
+
+Returns the type of the given entry or {\it Unknown} if the entry doesn't
+exist. This function should be used to decide which version of Read() should
+be used because some of wxConfig implementations will complain about type
+mismatch otherwise: e.g., an attempt to read a string value from an integer
+key with \helpref{wxRegConfig}{wxregconfig} will fail.
+
+The result is an element of enum EntryType:
+
+\begin{verbatim}
+  enum EntryType
+  {
+    Unknown,
+    String,
+    Boolean,
+    Integer,
+    Float
+  };
+\end{verbatim}
 
 \membersection{wxConfigBase::GetFirstGroup}\label{wxconfigbasegetfirstgroup}
 

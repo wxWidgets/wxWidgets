@@ -1,7 +1,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 // Name:        confbase.h
 // Purpose:     declaration of the base class of all config implementations
-//              (see also: fileconf.h and msw/regconf.h)
+//              (see also: fileconf.h and msw/regconf.h and iniconf.h)
 // Author:      Karsten Ballüder & Vadim Zeitlin
 // Modified by:
 // Created:     07.04.98 (adapted from appconf.h)
@@ -86,6 +86,17 @@ extern void wxSplitPath(wxArrayString& aParts, const char *sz);
 class WXDLLEXPORT wxConfigBase
 {
 public:
+  // constants
+    // the type of an entry
+  enum EntryType
+  {
+    Unknown,
+    String,
+    Boolean,
+    Integer,    // use Read(long *)
+    Float       // use Read(double *)
+  };
+
   // static functions
     // sets the config object, returns the previous pointer
   static wxConfigBase *Set(wxConfigBase *pConfig);
@@ -145,6 +156,13 @@ public:
     // returns TRUE if either a group or an entry with a given name exist
   bool Exists(const wxString& strName) const
     { return HasGroup(strName) || HasEntry(strName); }
+
+    // get the entry type
+  virtual EntryType GetEntryType(const wxString& name) const
+  {
+    // by default all entries are strings
+    return HasEntry(name) ? String : Unknown;
+  }
 
   // key access: returns TRUE if value was really read, FALSE if default used
   // (and if the key is not found the default value is returned.)
@@ -217,14 +235,14 @@ public:
   wxString ExpandEnvVars(const wxString& str) const;
 
     // misc accessors
-  inline wxString GetAppName() const { return m_appName; }
-  inline wxString GetVendorName() const { return m_vendorName; }
+  wxString GetAppName() const { return m_appName; }
+  wxString GetVendorName() const { return m_vendorName; }
 
-  inline void SetAppName(const wxString& appName) { m_appName = appName; }
-  inline void SetVendorName(const wxString& vendorName) { m_vendorName = vendorName; }
+  void SetAppName(const wxString& appName) { m_appName = appName; }
+  void SetVendorName(const wxString& vendorName) { m_vendorName = vendorName; }
 
-  inline void SetStyle(long style) { m_style = style; }
-  inline long GetStyle() const { return m_style; }
+  void SetStyle(long style) { m_style = style; }
+  long GetStyle() const { return m_style; }
 
 protected:
   static bool IsImmutable(const wxString& key)
@@ -293,8 +311,8 @@ private:
   #define sm_classwxConfig sm_classwxFileConfig
 #endif
 
-#endif 
- 
+#endif
+
   // wxUSE_CONFIG
 
 #endif
