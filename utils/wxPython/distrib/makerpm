@@ -12,11 +12,15 @@ fi
 
 
 
-mkdir i386
 strip /usr/lib/python1.5/site-packages/wxPython/wxcmodule.so
 
 cat wxPython.spec.in | sed s/__VERSION__/$1/g > wxPython.spec
-rpm --rcfile .rpmrc -bb wxPython.spec
 
-mv i386/*.rpm .
-rm -rf i386
+mkdir /usr/doc/wxPython-$1
+cp ../README.txt /usr/doc/wxPython-$1
+
+rpm -bb wxPython.spec
+
+mv /usr/src/redhat/RPMS/*/wxPython*.rpm .
+
+rm -r /usr/doc/wxPython-$1

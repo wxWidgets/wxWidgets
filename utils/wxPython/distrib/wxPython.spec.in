@@ -1,7 +1,7 @@
 Summary: Cross platform GUI toolkit for use with the Python language.
 Name: wxPython
 Version: __VERSION__
-Release: 3
+Release: 1
 Copyright: wxWindows
 Group: Development/Languages/Python
 Source: http://alldunn.com/wxPython/wxPython-__VERSION__.tar.gz
@@ -36,6 +36,6 @@ extension language for applications that need a programmable interface.
 #make install
 
 %files
-%doc ../README.txt
+%doc /usr/doc/wxPython-__VERSION__/README.txt
 /usr/lib/python1.5/site-packages/wxPython
 

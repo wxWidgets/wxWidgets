@@ -10,6 +10,8 @@ wxPython/demo/README.txt
 
 wxPython/lib/*.py
 wxPython/lib/*.txt
+wxPython/lib/sizers/*.py
+wxPython/lib/sizers/*.txt
 
 
 wxPython/src/*.i
@@ -31,7 +33,7 @@ wxPython/src/gtk/*.cpp
 wxPython/src/gtk/*.h
 wxPython/src/gtk/*.py
 
-wxPython/src/motif/*.cpp
+wxpython/src/motif/*.cpp
 wxPython/src/motif/*.h
 wxPython/src/motif/*.py
 
@@ -40,5 +42,3 @@ wxPython/src/qt/*.h
 wxPython/src/qt/*.py
 
 wxPython/SWIG.patches/*.patch
-
-

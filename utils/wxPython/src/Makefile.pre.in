@@ -390,13 +390,18 @@ wxInstall :	sharedmods $(PYMODULES)
 	-for i in $(PYMODULES); do \
 		cp $$i $(TARGETDIR); \
 	done
-	if [ "$(TARGETDIR)" != ".." ]; then        \
-		mkdir $(TARGETDIR)/lib;            \
-		mkdir $(TARGETDIR)/demo;           \
-		cp ../lib/*.py $(TARGETDIR)/lib;   \
-		cp ../demo/*.py $(TARGETDIR)/demo; \
-		cp ../lib/*.txt $(TARGETDIR)/lib;  \
-		cp ../demo/*.txt $(TARGETDIR)/demo;\
+	if [ "$(TARGETDIR)" != ".." ]; then        		\
+		mkdir $(TARGETDIR)/lib;            		\
+		mkdir $(TARGETDIR)/lib/sizers;     		\
+		mkdir $(TARGETDIR)/demo;           		\
+		mkdir $(TARGETDIR)/demo/bitmaps;      		\
+		cp ../lib/*.py $(TARGETDIR)/lib;   		\
+		cp ../lib/sizers/*.py $(TARGETDIR)/lib/sizers;	\
+		cp ../demo/*.py $(TARGETDIR)/demo; 		\
+		cp ../lib/*.txt $(TARGETDIR)/lib;  		\
+		cp ../lib/sizers/*.txt $(TARGETDIR)/lib/sizers;	\
+		cp ../demo/*.txt $(TARGETDIR)/demo;		\
+		cp ../demo/bitmaps/[a-z]* $(TARGETDIR)/demo/bitmaps;	\
 	fi
 	if [ "$(TARGETDIR)" != ".." ]; then      \
 		python $(LIBDEST)/compileall.py $(TARGETDIR);      \
