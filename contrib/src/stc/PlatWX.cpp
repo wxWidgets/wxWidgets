@@ -456,17 +456,13 @@ class wxSTCListBox : public wxListBox {
 public:
     wxSTCListBox(wxWindow* parent, wxWindowID id)
         : wxListBox(parent, id, wxDefaultPosition, wxDefaultSize,
-                    0, NULL, wxLB_SINGLE | wxSIMPLE_BORDER | wxLB_SORT )
+                    0, NULL, wxLB_SINGLE | wxSIMPLE_BORDER) // | wxLB_SORT )
         {}
 
     void OnFocus(wxFocusEvent& event) {
         GetParent()->SetFocus();
         event.Skip();
     }
-
-#if 0 // #ifdef __WXGTK__
-    void DoSetFirstItem(int n);
-#endif
 
 private:
     DECLARE_EVENT_TABLE()
@@ -475,52 +471,6 @@ private:
 BEGIN_EVENT_TABLE(wxSTCListBox, wxListBox)
     EVT_SET_FOCUS(wxSTCListBox::OnFocus)
 END_EVENT_TABLE()
-
-
-
-
-#if 0 // #ifdef __WXGTK__
-    // This can be removed after 2.2.2 I think
-void wxSTCListBox::DoSetFirstItem( int n )
-{
-    wxCHECK_RET( m_list, wxT("invalid listbox") );
-
-    if (gdk_pointer_is_grabbed () && GTK_WIDGET_HAS_GRAB (m_list))
-        return;
-
-    // terribly efficient
-    const gchar *vadjustment_key = "gtk-vadjustment";
-    guint vadjustment_key_id = g_quark_from_static_string (vadjustment_key);
-
-    GtkAdjustment *adjustment =
-       (GtkAdjustment*) gtk_object_get_data_by_id (GTK_OBJECT (m_list), vadjustment_key_id);
-    wxCHECK_RET( adjustment, wxT("invalid listbox code") );
-
-    GList *target = g_list_nth( m_list->children, n );
-    wxCHECK_RET( target, wxT("invalid listbox index") );
-
-    GtkWidget *item = GTK_WIDGET(target->data);
-    wxCHECK_RET( item, wxT("invalid listbox code") );
-
-    // find the last item before this one which is already realized
-    size_t nItemsBefore;
-    for ( nItemsBefore = 0; item && (item->allocation.y == -1); nItemsBefore++ )
-    {
-        target = target->prev;
-        if ( !target )
-        {
-            // nothing we can do if there are no allocated items yet
-            return;
-        }
-
-        item = GTK_WIDGET(target->data);
-    }
-
-    gtk_adjustment_set_value(adjustment,
-                             item->allocation.y +
-                                nItemsBefore*item->allocation.height);
-}
-#endif
 
 
 ListBox::ListBox() {
@@ -544,11 +494,10 @@ PRectangle ListBox::GetDesiredRect() {
     rc.left = 0;
     if (sz.x > 400)
         sz.x = 400;
-    if (sz.y > 150)  // TODO:  Use desiredVisibleRows??
-        sz.y = 150;
+//      if (sz.y > 150)  // TODO:  Use desiredVisibleRows??
+//          sz.y = 150;  // For now just use the default from GetBestSize
     rc.right = sz.x;
     rc.bottom = sz.y;
-
     return rc;
 }
 
