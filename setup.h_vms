@@ -372,6 +372,11 @@
 #define wxUSE_LONGLONG 1
 
 /*
+ * Use geometry classes
+ */
+#define wxUSE_GEOMETRY 1
+
+/*
  * Use wxFile class
  */
 #define wxUSE_FILE 1
@@ -686,6 +691,12 @@
 /* Define if you have sigemptyset() */
 #define HAVE_SIGEMPTYSET 1
 
+/* Define if you have the putenv function.  */
+#define HAVE_PUTENV 1
+
+/* Define if you have the setenv function.  */
+#undef HAVE_SETENV
+ 
 /* Define if you have shl_load() */
 #undef HAVE_SHL_LOAD
 
