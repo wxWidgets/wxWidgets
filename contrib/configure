@@ -812,7 +812,6 @@ done
 ac_given_srcdir=$srcdir
 
 trap 'rm -fr `echo "
-            Makefile
             src/Makefile
             src/ogl/Makefile
             src/mmedia/Makefile
@@ -822,6 +821,7 @@ trap 'rm -fr `echo "
             src/gizmos/Makefile
             src/plot/Makefile
             src/applet/Makefile
+            src/fl/Makefile
             samples/Makefile
             samples/mmedia/Makefile
             samples/ogl/Makefile
@@ -838,6 +838,11 @@ trap 'rm -fr `echo "
             samples/xrc/Makefile
             samples/plot/Makefile
             samples/applet/Makefile
+            samples/fl/fl_demo1
+            samples/fl/fl_demo2
+            samples/fl/fl_sample1
+            samples/fl/fl_sample2
+            samples/fl/fl_sample3
             utils/Makefile
             utils/wxrc/Makefile
             utils/wxrcedit/Makefile
@@ -930,6 +935,7 @@ CONFIG_FILES=\${CONFIG_FILES-"Makefile
             src/gizmos/Makefile
             src/plot/Makefile
             src/applet/Makefile
+            src/fl/Makefile
             samples/Makefile
             samples/mmedia/Makefile
             samples/ogl/Makefile
@@ -946,6 +952,11 @@ CONFIG_FILES=\${CONFIG_FILES-"Makefile
             samples/xrc/Makefile
             samples/plot/Makefile
             samples/applet/Makefile
+            samples/fl/fl_demo1
+            samples/fl/fl_demo2
+            samples/fl/fl_sample1
+            samples/fl/fl_sample2
+            samples/fl/fl_sample3
             utils/Makefile
             utils/wxrc/Makefile
             utils/wxrcedit/Makefile

@@ -1,6 +1,6 @@
 # $Id$
 
-CONTRIB_SUBDIRS=ogl mmedia stc xrc applet plot canvas animate
+CONTRIB_SUBDIRS=ogl mmedia stc xrc applet plot canvas animate fl
 
 all:
 	@for d in $(CONTRIB_SUBDIRS); do (cd $$d && $(MAKE)); done

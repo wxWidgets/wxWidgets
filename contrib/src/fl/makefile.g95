@@ -1,0 +1,20 @@
+#
+# File:         makefile.g95
+# Author:       Hans Van Leemputten
+# Created:      2001
+# Updated:
+# Copyright:    (c) wxWorkshop team, 2001
+#
+# Makefile for wxWindows FrameLayout library (Cygwin/Mingw32).
+
+WXDIR = ../../..
+LIB_NAME = fl
+OBJ_EXT	= o
+
+include files.lst
+
+LIBTARGET=$(WXDIR)/lib/lib$(LIB_NAME).a
+OBJECTS = $(FL_OBJECTS)
+
+include $(WXDIR)/src/makelib.g95
+
