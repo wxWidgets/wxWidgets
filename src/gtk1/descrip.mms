@@ -162,8 +162,10 @@ all : $(SOURCES)
 	$(MMS)$(MMSQUALIFIERS) $(OBJECTS)
 .ifdef __WXUNIVERSAL__
 	library [--.lib]libwx_gtk_univ.olb $(OBJECTS)
+	library [--.lib]libwx_gtk_univ.olb [.CXX_REPOSITORY]*.obj
 .else
 	library [--.lib]libwx_gtk.olb $(OBJECTS)
+	library [--.lib]libwx_gtk.olb [.CXX_REPOSITORY]*.obj
 	$(MMS)$(MMSQUALIFIERS) $(OBJECTS0)
 	library [--.lib]libwx_gtk.olb $(OBJECTS0)
 .endif

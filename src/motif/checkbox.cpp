@@ -18,6 +18,12 @@
 
 #ifdef __VMS
 #define XtDisplay XTDISPLAY
+#define XmNtoggleMode 0
+#define XmTOGGLE_INDETERMINATE 1
+#define XmTOGGLE_BOOLEAN 2
+#define XmUNSET 3
+#define XmSET 4
+#define XmINDETERMINATE 5
 #endif
 
 #include "wx/defs.h"

@@ -928,6 +928,11 @@
 #define wxUSE_HTML 1
 
 /*
+ * wxWebKitCtrl
+ */
+#define wxUSE_WEBKIT 1
+
+/*
  * (virtual) filesystems code
  */
 #define wxUSE_FILESYSTEM 1
