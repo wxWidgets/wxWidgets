@@ -1344,6 +1344,10 @@ void wxTextCtrl::Undo()
 {
     if (CanUndo())
     {
+        if ( m_macUsesTXN ) 
+        {
+            TXNUndo((TXNObject)m_macTXN); 
+        }
     }
 }
 
@@ -1351,16 +1355,36 @@ void wxTextCtrl::Redo()
 {
     if (CanRedo())
     {
+        if ( m_macUsesTXN ) 
+        {
+            TXNRedo((TXNObject)m_macTXN); 
+        }
     }
 }
 
 bool wxTextCtrl::CanUndo() const
 {
+    if ( !IsEditable() ) 
+    {
+        return false ; 
+    }
+    if ( m_macUsesTXN ) 
+    {
+        return TXNCanUndo((TXNObject)m_macTXN,NULL); 
+    }
     return FALSE ;
 }
 
 bool wxTextCtrl::CanRedo() const
 {
+    if ( !IsEditable() ) 
+    {
+        return false ; 
+    }
+    if ( m_macUsesTXN ) 
+    {
+        return TXNCanRedo((TXNObject)m_macTXN,NULL); 
+    }
     return FALSE ;
 }
 
