@@ -132,7 +132,7 @@ protected:
     /// remove first item matching this value
   void Remove(long lItem);
     /// remove item by index
-  void Remove(size_t uiIndex);
+  void RemoveAt(size_t uiIndex);
   //@}
 
   /// sort array elements using given compare function
@@ -198,7 +198,8 @@ public:                                                             \
   void Insert(T Item, size_t uiIndex)                               \
     { wxBaseArray::Insert((long)Item, uiIndex) ; }                  \
                                                                     \
-  void Remove(size_t uiIndex) { wxBaseArray::Remove(uiIndex); }     \
+  void Remove(size_t uiIndex) { RemoveAt(uiIndex); }                \
+  void RemoveAt(size_t uiIndex) { wxBaseArray::RemoveAt(uiIndex); } \
   void Remove(T Item)                                               \
     { int iIndex = Index(Item);                                     \
       wxCHECK2_MSG( iIndex != wxNOT_FOUND, return,                  \
@@ -260,7 +261,8 @@ public:                                                             \
   void Add(T Item)                                                  \
     { wxBaseArray::Add((long)Item, (CMPFUNC)m_fnCompare); }         \
                                                                     \
-  void Remove(size_t uiIndex) { wxBaseArray::Remove(uiIndex); }     \
+  void Remove(size_t uiIndex) { RemoveAt(uiIndex); }                \
+  void RemoveAt(size_t uiIndex) { wxBaseArray::RemoveAt(uiIndex); } \
   void Remove(T Item)                                               \
     { int iIndex = Index(Item);                                     \
       wxCHECK2_MSG( iIndex != wxNOT_FOUND, return,                  \
@@ -307,7 +309,8 @@ public:                                                             \
   T*   Detach(size_t uiIndex)                                       \
     { T* p = (T*)wxBaseArray::Item(uiIndex);                        \
       wxBaseArray::Remove(uiIndex); return p; }                     \
-  void Remove(size_t uiIndex);                                      \
+  void Remove(size_t uiIndex) { RemoveAt(uiIndex); }                \
+  void RemoveAt(size_t uiIndex);                                    \
                                                                     \
   void Sort(CMPFUNC##T fCmp) { wxBaseArray::Sort((CMPFUNC)fCmp); }  \
                                                                     \

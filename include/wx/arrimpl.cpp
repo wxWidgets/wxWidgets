@@ -21,7 +21,7 @@
  *****************************************************************************/
 
 // needed to resolve the conflict between global T and macro parameter T
-#define _WX_ERROR_REMOVE2(x)     wxT("bad index in " #x "::Remove()")
+#define _WX_ERROR_REMOVE2(x)     wxT("bad index in " #x "::RemoveAt()")
 
 // macro implements remaining (not inline) methods of template list
 // (it's private to this file)
@@ -59,13 +59,13 @@ void name::Empty()                                                            \
   wxBaseArray::Clear();                                                       \
 }                                                                             \
                                                                               \
-void name::Remove(size_t uiIndex)                                             \
+void name::RemoveAt(size_t uiIndex)                                             \
 {                                                                             \
   wxCHECK_RET( uiIndex < Count(), _WX_ERROR_REMOVE2(name) );                  \
                                                                               \
   delete (T*)wxBaseArray::Item(uiIndex);                                      \
                                                                               \
-  wxBaseArray::Remove(uiIndex);                                               \
+  wxBaseArray::RemoveAt(uiIndex);                                               \
 }                                                                             \
                                                                               \
 void name::Add(const T& item)                                                 \

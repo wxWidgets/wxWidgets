@@ -200,6 +200,7 @@ does exactly the same as \helpref{Item()}{wxarrayitem} method.
 \helpref{WX\_CLEAR\_ARRAY}{wxcleararray}\\
 \helpref{Empty}{wxarrayempty}\\
 \helpref{Clear}{wxarrayclear}\\
+\helpref{RemoveAt}{wxarrayremoveat}\\
 \helpref{Remove}{wxarrayremove}
 
 \membersection{Searching and sorting}
@@ -412,7 +413,6 @@ it exists only for compatibility.
 \func{T *}{Detach}{\param{size\_t }{index}}
 
 Removes the element from the array, but, unlike, 
-
 \helpref{Remove()}{wxarrayremove} doesn't delete it. The function returns the
 pointer to the removed element.
 
@@ -493,12 +493,13 @@ the array classes.
 
 \membersection{wxArray::Remove}\label{wxarrayremove}
 
-\func{\void}{Remove}{\param{size\_t }{index}}
-
 \func{\void}{Remove}{\param{T }{item}}
 
-Removes the element from the array either by index or by value. When an element
-is removed from wxObjArray it is deleted by the array - use 
+Removes the element from the array either by value: the first item of the
+array equal to {\it item} is removed, an assert failure will result from an
+attempt to remove an item which doesn't exist in the array.
+
+When an element is removed from wxObjArray it is deleted by the array - use 
 \helpref{Detach()}{wxobjarraydetach} if you don't want this to happen. On the
 other hand, when an object is removed from a wxArray nothing happens - you
 should delete the it manually if required:
@@ -507,6 +508,25 @@ should delete the it manually if required:
 T *item = array[n];
 delete item;
 array.Remove(n)
+\end{verbatim}
+
+See also \helpref{WX\_CLEAR\_ARRAY}{wxcleararray} macro which deletes all
+elements of a wxArray (supposed to contain pointers).
+
+\membersection{wxArray::RemoveAt}\label{wxarrayremoveat}
+
+\func{\void}{RemoveAt}{\param{size\_t }{index}}
+
+Removes the element from the array either by index. When an element
+is removed from wxObjArray it is deleted by the array - use 
+\helpref{Detach()}{wxobjarraydetach} if you don't want this to happen. On the
+other hand, when an object is removed from a wxArray nothing happens - you
+should delete the it manually if required:
+
+\begin{verbatim}
+T *item = array[n];
+delete item;
+array.RemoveAt(n)
 \end{verbatim}
 
 See also \helpref{WX\_CLEAR\_ARRAY}{wxcleararray} macro which deletes all
