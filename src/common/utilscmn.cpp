@@ -1294,7 +1294,7 @@ static long wxDoExecuteWithCapture(const wxString& command,
     wxProcess *process = new wxProcess;
     process->Redirect();
 
-    long rc = wxExecute(command, TRUE /* sync */, process);
+    long rc = wxExecute(command, wxEXEC_SYNC, process);
 
 #if wxUSE_STREAMS
     if ( rc != -1 )
