@@ -29,9 +29,6 @@
 
 #include "cube.h"
 
-// This statement initializes the whole application and calls OnInit
-MyApp myApp;
-
 IMPLEMENT_APP(MyApp)
 
 // `Main program' equivalent, creating windows and returning main app frame
@@ -125,6 +122,10 @@ TestGLCanvas::~TestGLCanvas(void)
 
 void TestGLCanvas::OnPaint( wxPaintEvent& event )
 {
+    // This is a dummy, to avoid an endless succession of paint messages.
+    // OnPaint handlers must always create a wxPaintDC.
+    wxPaintDC dc(this);
+
     if ( !GetContext() )
         return;
 
