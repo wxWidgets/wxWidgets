@@ -481,6 +481,19 @@ bool wxToolBar::Realize()
 
     const bool isVertical = HasFlag(wxTB_VERTICAL);
 
+    bool doRemap, doRemapBg, doTransparent;
+    if (wxSystemOptions::GetOptionInt(wxT("msw.remap")) == 2)
+    {
+        doRemapBg = doRemap = false;
+        doTransparent = true;       
+    }
+    else
+    {   doRemap = !wxSystemOptions::HasOption(wxT("msw.remap"))
+            || wxSystemOptions::GetOptionInt(wxT("msw.remap")) == 1;
+        doRemapBg = !doRemap;
+        doTransparent = false;
+    }
+
     // delete all old buttons, if any
     for ( size_t pos = 0; pos < m_nButtons; pos++ )
     {
@@ -520,6 +533,9 @@ bool wxToolBar::Realize()
         wxMemoryDC dcAllButtons;
         wxBitmap bitmap(totalBitmapWidth, totalBitmapHeight);
         dcAllButtons.SelectObject(bitmap);
+        if (doTransparent)
+            dcAllButtons.SetBackground(*wxTRANSPARENT_BRUSH);
+        else
         dcAllButtons.SetBackground(*wxLIGHT_GREY_BRUSH);
         dcAllButtons.Clear();
 
@@ -544,7 +560,7 @@ bool wxToolBar::Realize()
         MemoryHDC memoryDC2;
 #endif // USE_BITMAP_MASKS/!USE_BITMAP_MASKS
 
-        if (wxSystemOptions::HasOption(wxT("msw.remap")) && wxSystemOptions::GetOptionInt(wxT("msw.remap")) == 0)
+        if (doRemapBg)
         {
 #if USE_BITMAP_MASKS
             dcAllButtons.SelectObject(wxNullBitmap);
@@ -610,7 +626,7 @@ bool wxToolBar::Realize()
         bitmap.SetHBITMAP(0);
 #endif // USE_BITMAP_MASKS/!USE_BITMAP_MASKS
 
-        if (!wxSystemOptions::HasOption(wxT("msw.remap")) || wxSystemOptions::GetOptionInt(wxT("msw.remap")) == 1)
+        if (doRemap)
         {
             // Map to system colours
             hBitmap = (HBITMAP)MapBitmap((WXHBITMAP) hBitmap,
