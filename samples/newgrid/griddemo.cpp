@@ -68,6 +68,8 @@ BEGIN_EVENT_TABLE( GridFrame, wxFrame )
     EVT_MENU( ID_TOGGLEROWLABELS,  GridFrame::ToggleRowLabels )
     EVT_MENU( ID_TOGGLECOLLABELS,  GridFrame::ToggleColLabels )
     EVT_MENU( ID_TOGGLEEDIT, GridFrame::ToggleEditing )
+    EVT_MENU( ID_TOGGLEROWSIZING, GridFrame::ToggleRowSizing )
+    EVT_MENU( ID_TOGGLECOLSIZING, GridFrame::ToggleColSizing )    
     EVT_MENU( ID_SETLABELCOLOUR, GridFrame::SetLabelColour )
     EVT_MENU( ID_SETLABELTEXTCOLOUR, GridFrame::SetLabelTextColour )
     EVT_MENU( ID_ROWLABELHORIZALIGN, GridFrame::SetRowLabelHorizAlignment )
@@ -120,6 +122,8 @@ GridFrame::GridFrame()
     viewMenu->Append( ID_TOGGLEROWLABELS,  "&Row labels", "", TRUE );
     viewMenu->Append( ID_TOGGLECOLLABELS,  "&Col labels", "", TRUE );
     viewMenu->Append( ID_TOGGLEEDIT,  "&Editable", "", TRUE );
+    viewMenu->Append( ID_TOGGLEROWSIZING, "Ro&w drag-resize", "", TRUE );
+    viewMenu->Append( ID_TOGGLECOLSIZING, "C&ol drag-resize", "", TRUE );
 
     wxMenu *rowLabelMenu = new wxMenu;
 
@@ -186,9 +190,6 @@ GridFrame::GridFrame()
     //
     //grid->CreateGrid( 100, 100 );
     grid->SetTable(new SimpleTable(100, 100), TRUE);
-
-    // VZ: cell borders don't look nice otherwise :-) (for now...)
-    grid->SetDefaultCellBackgroundColour(wxColour(200, 200, 180));
 
     grid->SetRowSize( 0, 60 );
     grid->SetCellValue( 0, 0, "Ctrl+Home\nwill go to\nthis cell" );
@@ -260,6 +261,8 @@ void GridFrame::SetDefaults()
     GetMenuBar()->Check( ID_TOGGLEROWLABELS, TRUE );
     GetMenuBar()->Check( ID_TOGGLECOLLABELS, TRUE );
     GetMenuBar()->Check( ID_TOGGLEEDIT, TRUE );
+    GetMenuBar()->Check( ID_TOGGLEROWSIZING, TRUE );
+    GetMenuBar()->Check( ID_TOGGLECOLSIZING, TRUE );
 }
 
 
@@ -293,6 +296,20 @@ void GridFrame::ToggleEditing( wxCommandEvent& WXUNUSED(ev) )
 {
     grid->EnableEditing(
         GetMenuBar()->IsChecked( ID_TOGGLEEDIT ) );
+}
+
+
+void GridFrame::ToggleRowSizing( wxCommandEvent& WXUNUSED(ev) )
+{
+    grid->EnableDragRowSize( 
+        GetMenuBar()->IsChecked( ID_TOGGLEROWSIZING ) );
+}
+
+
+void GridFrame::ToggleColSizing( wxCommandEvent& WXUNUSED(ev) )
+{
+    grid->EnableDragColSize( 
+        GetMenuBar()->IsChecked( ID_TOGGLECOLSIZING ) );
 }
 
 

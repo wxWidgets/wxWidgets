@@ -37,6 +37,8 @@ class GridFrame : public wxFrame
     void ToggleRowLabels( wxCommandEvent& );
     void ToggleColLabels( wxCommandEvent& );
     void ToggleEditing( wxCommandEvent& );
+    void ToggleRowSizing( wxCommandEvent& );
+    void ToggleColSizing( wxCommandEvent& );
     void SetLabelColour( wxCommandEvent& );
     void SetLabelTextColour( wxCommandEvent& );
     void SetRowLabelHorizAlignment( wxCommandEvent& );
@@ -79,6 +81,8 @@ public:
         ID_TOGGLEROWLABELS = 100,
         ID_TOGGLECOLLABELS,
         ID_TOGGLEEDIT,
+        ID_TOGGLEROWSIZING,
+        ID_TOGGLECOLSIZING,
         ID_SETLABELCOLOUR,
         ID_SETLABELTEXTCOLOUR,
         ID_ROWLABELALIGN,
