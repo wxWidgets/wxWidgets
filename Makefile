@@ -58,7 +58,7 @@ user::
 makefiles:: recreate
 Makefiles:: recreate
 recreate::
-	@install/unix/setup/general/createall
+	@setup/general/createall
 
 # the following ones define what needs to be done to distribute the 
 # library and its components

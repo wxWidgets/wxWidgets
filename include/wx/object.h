@@ -199,7 +199,7 @@ class WXDLLEXPORT wxObject
 
 protected:
   wxObjectRefData *m_refData;
-#ifdef USE_STORABLE_CLASSES
+#ifdef USE_SERIAL
   wxObject_Serialize *m_serialObj;
 #endif
 };

@@ -65,7 +65,7 @@
 #include "wx/dirdlg.h"
 #include "wx/cmndata.h"
 #include "wx/intl.h"
-#ifdef USE_STORABLE_CLASSES
+#ifdef USE_SERIAL
 #include "wx/objstrm.h"
 #include "wx/serbase.h"
 #endif

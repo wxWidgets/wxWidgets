@@ -191,6 +191,16 @@ static gint gtk_window_key_press_callback( GtkWidget *widget, GdkEventKey *gdk_e
   
   bool ret = win->GetEventHandler()->ProcessEvent( event );
   
+  if (!ret)
+  {
+    int command = win->GetAcceleratorTable()->GetCommand( event );
+    if (command != -1)
+    {
+      wxCommandEvent command_event( wxEVT_COMMAND_MENU_SELECTED, command );
+      ret = win->GetEventHandler()->ProcessEvent( command_event );
+    }
+  }
+  
   if (ret)
   {
     if ((gdk_event->keyval >= 0x20) && (gdk_event->keyval <= 0xFF)) 
@@ -1752,6 +1762,11 @@ bool wxWindow::TransferDataFromWindow(void)
    node = node->Next();
   }
   return TRUE;
+}
+
+void wxWindow::SetAcceleratorTable( const wxAcceleratorTable& accel )
+{
+  m_acceleratorTable = accel;
 }
 
 void wxWindow::OnInitDialog( wxInitDialogEvent &WXUNUSED(event) )

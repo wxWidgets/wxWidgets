@@ -1,0 +1,18 @@
+depend::
+	@echo "$(CXX) -MM \
+	    $(WX_INCLUDES) \
+	    $(ADD_COMPILE) \
+	    $(LIB_SRC) $(BIN_SRC) $(BIN2_SRC)"
+	@(cd .. ;\
+	    $(CXX) -MM \
+	    $(WX_INCLUDES) \
+	    $(ADD_COMPILE) \
+	    $(LIB_SRC) $(BIN_SRC) $(BIN2_SRC)\
+	) > .depend
+	@cp Makefile Makefile.bak
+	@cat Makefile.bak | awk 'BEGIN { found=0;} { if ( $$0 == "# DO NOT DELETE") {found=1} ; { if ( found==0 ) { print $$0; } } }' > Makefile1
+	@echo "# DO NOT DELETE" >> Makefile1
+	@cat .depend >> Makefile1
+	@mv Makefile1 Makefile
+	@rm .depend
+

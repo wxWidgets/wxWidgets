@@ -26,6 +26,7 @@
 #include "wx/dc.h"
 #include "wx/region.h"
 #include "wx/dnd.h"
+#include "wx/accel.h"
 
 //-----------------------------------------------------------------------------
 // global data
@@ -77,8 +78,10 @@ public:
            const wxString& name = wxPanelNameStr);
   virtual ~wxWindow();
 
-  virtual bool LoadFromResource(wxWindow *parent, const wxString& resourceName, const wxResourceTable *table = (const wxResourceTable *) NULL);
-  virtual wxControl *CreateItem(const wxItemResource *childResource, const wxResourceTable *table = (const wxResourceTable *) NULL);
+  virtual bool LoadFromResource( wxWindow *parent, const wxString& resourceName, 
+                                 const wxResourceTable *table = (const wxResourceTable *) NULL);
+  virtual wxControl *CreateItem( const wxItemResource *childResource, 
+                                 const wxResourceTable *table = (const wxResourceTable *) NULL);
 
   bool Close( bool force = FALSE );
   virtual bool Destroy();
@@ -131,6 +134,9 @@ public:
   virtual wxValidator *GetValidator();
   virtual void SetValidator( const wxValidator &validator );
 
+  virtual void SetAcceleratorTable( const wxAcceleratorTable& accel );
+  virtual wxAcceleratorTable *GetAcceleratorTable() { return &m_acceleratorTable; }
+  
   bool IsBeingDeleted();
 
   void SetId( wxWindowID id );
@@ -211,11 +217,6 @@ public:
   virtual void SetDropTarget( wxDropTarget *dropTarget );
   virtual wxDropTarget *GetDropTarget() const;
 
-//private:
-  virtual GtkWidget* GetConnectWidget(void);
-  virtual bool IsOwnGtkWindow( GdkWindow *window );
-
-public:
   virtual void SetScrollbar( int orient, int pos, int thumbVisible,
     int range, bool refresh = TRUE );
   virtual void SetScrollPos( int orient, int pos, bool refresh = TRUE );
@@ -224,14 +225,13 @@ public:
   virtual int GetScrollRange( int orient ) const;
   virtual void ScrollWindow( int dx, int dy, const wxRect* rect = (wxRect *) NULL );
 
-  // return FALSE from here if the window doesn't want the focus
   virtual bool AcceptsFocus() const;
-
-  // update the UI state (called from OnIdle)
   void UpdateWindowUI();
 
-
 public:         // cannot get private going yet
+
+  virtual GtkWidget* GetConnectWidget(void);
+  virtual bool IsOwnGtkWindow( GdkWindow *window );
 
   void PreCreation( wxWindow *parent, wxWindowID id, const wxPoint &pos,
     const wxSize &size, long style, const wxString &name );
@@ -240,47 +240,48 @@ public:         // cannot get private going yet
   virtual void ImplementSetSize();
   virtual void ImplementSetPosition();
 
-  wxWindow       *m_parent;
-  wxList          m_children;
-  int             m_x,m_y;
-  int             m_width,m_height;
-  int             m_minWidth,m_minHeight;
-  int             m_maxWidth,m_maxHeight;
-  int             m_retCode;
-  wxEvtHandler   *m_eventHandler;
-  wxValidator    *m_windowValidator;
-  wxDropTarget   *m_pDropTarget;
-  wxWindowID      m_windowId;
-  wxCursor       *m_cursor;
-  wxFont          m_font;
-  wxColour        m_backgroundColour;
-  wxColour        m_defaultBackgroundColour;
-  wxColour        m_foregroundColour ;
-  wxColour        m_defaultForegroundColour;
-  wxRegion        m_updateRegion;
-  long            m_windowStyle;
-  bool            m_isShown;
-  bool            m_isEnabled;
-  wxString        m_windowName;
+  wxWindow            *m_parent;
+  wxList               m_children;
+  int                  m_x,m_y;
+  int                  m_width,m_height;
+  int                  m_minWidth,m_minHeight;
+  int                  m_maxWidth,m_maxHeight;
+  int                  m_retCode;
+  wxEvtHandler        *m_eventHandler;
+  wxValidator         *m_windowValidator;
+  wxDropTarget        *m_pDropTarget;
+  wxWindowID           m_windowId;
+  wxCursor            *m_cursor;
+  wxFont               m_font;
+  wxColour             m_backgroundColour;
+  wxColour             m_defaultBackgroundColour;
+  wxColour             m_foregroundColour ;
+  wxColour             m_defaultForegroundColour;
+  wxRegion             m_updateRegion;
+  long                 m_windowStyle;
+  bool                 m_isShown;
+  bool                 m_isEnabled;
+  wxString             m_windowName;
+  wxAcceleratorTable   m_acceleratorTable;
 
-  GtkWidget      *m_widget;
-  GtkWidget      *m_wxwindow;
-  GtkAdjustment  *m_hAdjust,*m_vAdjust;
-  float           m_oldHorizontalPos;
-  float           m_oldVerticalPos;
-  bool            m_needParent;
-  bool            m_hasScrolling;
-  bool            m_hasVMT;
-  bool            m_sizeSet;
-  bool            m_resizing;
+  GtkWidget           *m_widget;
+  GtkWidget           *m_wxwindow;
+  GtkAdjustment       *m_hAdjust,*m_vAdjust;
+  float                m_oldHorizontalPos;
+  float                m_oldVerticalPos;
+  bool                 m_needParent;
+  bool                 m_hasScrolling;
+  bool                 m_hasVMT;
+  bool                 m_sizeSet;
+  bool                 m_resizing;
 
-public:  // Layout section
+public:
 
-  wxLayoutConstraints * m_constraints;
-  wxList *              m_constraintsInvolvedIn;
-  wxSizer *             m_windowSizer;
-  wxWindow *            m_sizerParent;
-  bool                  m_autoLayout;
+  wxLayoutConstraints *m_constraints;
+  wxList              *m_constraintsInvolvedIn;
+  wxSizer             *m_windowSizer;
+  wxWindow            *m_sizerParent;
+  bool                 m_autoLayout;
 
   wxLayoutConstraints *GetConstraints() const;
   void SetConstraints( wxLayoutConstraints *constraints );

@@ -1,1 +1,1 @@
-include ../install/unix/setup/general/makeapp
+include ../setup/general/makeapp

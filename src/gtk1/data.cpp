@@ -13,7 +13,12 @@
 // #pragma implementation
 #endif
 
-#include "wx/wx.h"
+#include "wx/defs.h"
+#include "wx/object.h"
+#include "wx/window.h"
+#include "wx/dc.h"
+#include "wx/accel.h"
+#include "wx/postscrp.h"
 
 #define _MAXPATHLEN 500
 
@@ -108,14 +113,15 @@ wxCursor *wxHOURGLASS_CURSOR = (wxCursor *) NULL;
 wxCursor *wxCROSS_CURSOR = (wxCursor *) NULL;
 
 // 'Null' objects
-wxBitmap wxNullBitmap;
-wxIcon   wxNullIcon;  
-wxCursor wxNullCursor;
-wxPen    wxNullPen;
-wxBrush  wxNullBrush;
-wxFont   wxNullFont;
-wxColour wxNullColour;
-wxPalette wxNullPalette; 
+wxAcceleratorTable   wxNullAcceleratorTable;
+wxBitmap   wxNullBitmap;
+wxIcon     wxNullIcon;  
+wxCursor   wxNullCursor;
+wxPen      wxNullPen;
+wxBrush    wxNullBrush;
+wxFont     wxNullFont;
+wxColour   wxNullColour;
+wxPalette  wxNullPalette; 
 
 // Default window names
 const char *wxButtonNameStr = "button";

@@ -1,0 +1,15 @@
+# all that is to do
+all:: checkneeds library
+clean:: clean_library clean_obj
+
+# now include definite rules
+LIB_BASE_DIR=$(GLOBAL_LIB_DIR)
+
+# include rules to create library
+include $(RULES_GENERIC)/lib
+# include rules to create objects
+include $(RULES_GENERIC)/obj
+# include rule to check for defines needed
+include $(RULES_GENERIC)/needed
+
+

@@ -54,6 +54,7 @@ LIB_CPP_SRC=\
  common/valtext.cpp \
  common/wxexpr.cpp \
 \
+ gtk/accel.cpp \
  gtk/app.cpp \
  gtk/bitmap.cpp \
  gtk/bmpbuttn.cpp \

@@ -15,6 +15,7 @@
 #pragma interface
 #endif
 
+#include "wx/defs.h"
 #include "wx/window.h"
 #include "wx/frame.h"
 

@@ -1,0 +1,24 @@
+#SHELL=/bin/sh
+MYGREP=$(WXBASEDIR)/setup/general/mygrep
+checkneeds::
+	@if test "x$(NEEDED_DEFINES)" != x ; then \
+	  RESULT=0 ; \
+	  for each in $(NEEDED_DEFINES) xxx; do \
+	    if test "$$each" != xxx ; then \
+	      LINE=`cat $(SETUP_DIR)/wx_setup.h \
+	            | sed "s/ /,/g" \
+	            | $(MYGREP) ",$$each," \
+	            | $(MYGREP) "#define" \
+	            | $(MYGREP) "1" ` ; \
+	      if test "x$$LINE" = x ; then \
+	        (TMPVAR=`pwd`;\
+	         TMPVAR=`dirname $$TMPVAR`;\
+	         echo "$$each needed to compile "`basename $$TMPVAR`"...";\
+                );\
+	        RESULT=1 ; \
+	      fi; \
+	    fi; \
+	  done ;\
+	  exit $$RESULT; \
+	fi
+

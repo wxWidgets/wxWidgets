@@ -19,7 +19,7 @@
 #elif defined(__WXSTUBS__)
 #include "wx/stubs/setup.h"
 #elif defined(__WXGTK__)
-#include "wx/../../install/unix/setup/setup.h"
+#include "wx/../../setup/setup.h"
 #endif
 
 #endif

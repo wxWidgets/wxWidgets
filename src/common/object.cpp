@@ -22,7 +22,7 @@
 
 #ifndef WX_PRECOMP
 #include "wx/hash.h"
-#ifdef USE_STORABLE_CLASSES
+#ifdef USE_SERIAL
 #include "wx/objstrm.h"
 #include "wx/serbase.h"
 #endif
@@ -53,7 +53,7 @@ wxHashTable wxClassInfo::classTable(wxKEY_STRING);
 wxObject::wxObject(void)
 {
   m_refData = (wxObjectRefData *) NULL;
-#ifdef USE_STORABLE_CLASSES
+#ifdef USE_SERIAL
   m_serialObj = (wxObject_Serialize *)NULL;
 #endif
 }
@@ -61,7 +61,7 @@ wxObject::wxObject(void)
 wxObject::~wxObject(void)
 {
 	UnRef();
-#ifdef USE_STORABLE_CLASSES
+#ifdef USE_SERIAL
 	if (m_serialObj)
 	  delete m_serialObj;
 #endif

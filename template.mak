@@ -14,10 +14,10 @@
 
 # no need to edit below this line !!!!
 
-RULES_DIR=$(WXBASEDIR)/install/unix/setup/rules
+RULES_DIR=$(WXBASEDIR)/setup/rules
 RULES_GENERIC=$(RULES_DIR)/generic
-SETUP_DIR=$(WXBASEDIR)/install/unix/setup/$(OS)
-SHARE_DIR=$(WXBASEDIR)/install/unix/setup/shared
+SETUP_DIR=$(WXBASEDIR)/setup/$(OS)
+SHARE_DIR=$(WXBASEDIR)/setup/shared
 
 SRCDIR=$(WXBASEDIR)/src
 UTILS=$(WXBASEDIR)/utils
