@@ -26,7 +26,7 @@ include ./src/make.env
 	$(CXX) -c $(CXXFLAGS) $(PICFLAGS) @WXMSW_DLL_DEFINES@ -o $@ $<
 
 %.r : %.rsrc
-	$(DEREZ) $^ Carbon.r --useDF > $@
+	$(DEREZ) $^ Carbon.r -useDF > $@
 
 ########################### Paths #################################
 
@@ -331,7 +331,7 @@ $(build_libdir)/@WX_LIBRARY_NAME_SHARED_GL@:  glcanvas.o $(build_libdir)/@WX_LIB
 	@$(INSTALL) -d $(build_libdir)
 	$(SHARED_LD) $@ $(SONAME_FLAGS_GL) glcanvas.o -L$(build_libdir) @WXCONFIG_LIBS@ $(EXTRALIBS) $(OPENGLLIBS)
 
-$(build_libdir)/@WX_RESOURCES_DARWIN@: $(MACRESOURCES)
+$(build_libdir)/@WX_RESOURCES_MACOSX@: $(MACRESOURCES)
 	@$(INSTALL) -d $(build_libdir)
 	$(RESCOMP) -d __UNIX__ -useDF $^ -o $@
 

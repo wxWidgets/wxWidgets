@@ -558,12 +558,14 @@ case "${host}" in
     DEFAULT_DEFAULT_wxUSE_PM=1
   ;;
 
-  *-*-darwin* )
+  powerpc-*-darwin* )
+    dnl PowerPC Darwin based distributions (including Mac OS X)
     USE_BSD=1
     USE_DARWIN=1
     SO_SUFFIX=dylib
     AC_DEFINE(__BSD__)
     AC_DEFINE(__DARWIN__)
+    AC_DEFINE(__POWERPC__)
     DEFAULT_DEFAULT_wxUSE_MAC=1
   ;;
 
@@ -1946,6 +1948,11 @@ equivalent variable and GTK+ is version 1.2.3 or above.
 
     dnl we can't call this MAC_DIST or autoconf thinks its a macro
     if test "$wxUSE_MAC" = 1; then
+        CPPFLAGS="${CPPFLAGS} -cpp-precomp"
+        CFLAGS="${CFLAGS} -fpascal-strings"
+        CXXFLAGS="${CXXFLAGS} -fpascal-strings"
+        TOOLCHAIN_DEFS="${TOOLCHAIN_DEFS} -DTARGET_CARBON"
+
         TOOLKIT=MAC
         GUIDIST=MACX_DIST
     fi
@@ -2120,8 +2127,8 @@ WX_LIBRARY_LINK2="lib${WX_LIBRARY}.${SO_SUFFIX}"
 WX_LIBRARY_LINK1_GL="lib${WX_LIBRARY_GL}.${SO_SUFFIX}.${WX_CURRENT}"
 WX_LIBRARY_LINK2_GL="lib${WX_LIBRARY_GL}.${SO_SUFFIX}"
 
-dnl the name of the resources file for wxMAC
-WX_RESOURCES_DARWIN="lib${WX_LIBRARY}.rsrc"
+dnl the name of the resources file for wxMac
+WX_RESOURCES_MACOSX="lib${WX_LIBRARY}.rsrc"
 
 
 dnl --- the marker for quick search, leave it here: SHARED_LIB_SETUP ---
@@ -2198,24 +2205,10 @@ if test "$wxUSE_SHARED" = "yes"; then
       ;;
 
       *-*-darwin* )
-        dnl FIXME: do we need __UNIX__ here?  It's already defined above
-        dnl for darwin right??
-        TOOLCHAIN_DEFS="${TOOLCHAIN_DEFS} -D__UNIX__ -D__DARWIN__ -D__POWERPC__"
-        CPPFLAGS="${CPPFLAGS} -fno-common"
+        CFLAGS="${CFLAGS} -fno-common"
+        CXXFLAGS="${CXXFLAGS} -fno-common"
         SHARED_LD="${CXX} -dynamiclib -o"
         PIC_FLAG="-dynamic -fPIC"
-
-        dnl add the resources target for wxMac
-        if test "$wxUSE_MAC" = 1 ; then
-            WX_ALL="${WX_ALL} lib${WX_LIBRARY}.r"
-            TOOLCHAIN_DEFS="${TOOLCHAIN_DEFS} -DTARGET_CARBON"
-            CPPFLAGS="${CPPFLAGS} -fpascal-strings"
-            CXXFLAGS="${CXXFLAGS} -cpp-precomp"
-            AC_CHECK_PROG(RESCOMP, Rez, Rez, /Developer/Tools/Rez)
-            AC_CHECK_PROG(DEREZ, Derez, Derez, /Developer/Tools/Derez)
-            LIBWXMACRES="\$(top_builddir)/lib/lib${WX_LIBRARY}.r"
-            LIBWXMACRESCOMP="\$(RESCOMP) Carbon.r -t APPL ${LIBWXMACRES} -o \$(BIN_PROGRAM)"
-        fi
       ;;
 
       *-*-aix* )
@@ -2297,6 +2290,15 @@ if test "$wxUSE_SHARED" = "no"; then
     WX_TARGET_LIBRARY_GL="${WX_LIBRARY_NAME_STATIC_GL}"
 
     WX_TARGET_LIBRARY_TYPE="a"
+fi
+
+if test "$wxUSE_MAC" = 1; then
+    dnl add the resources target for wxMac
+    WX_ALL="${WX_ALL} \$(build_libdir)/lib${WX_LIBRARY}.r"
+    AC_CHECK_PROG(RESCOMP, Rez, Rez, /Developer/Tools/Rez)
+    AC_CHECK_PROG(DEREZ, Derez, Derez, /Developer/Tools/Derez)
+    LIBWXMACRES="\$(top_builddir)/lib/lib${WX_LIBRARY}.r"
+    LIBWXMACRESCOMP="\$(RESCOMP) Carbon.r -t APPL ${LIBWXMACRES} -o \$(BIN_PROGRAM)"
 fi
 
 dnl ------------------------------------------------------------------------
@@ -2701,7 +2703,12 @@ dnl get the library function to use for wxGetDiskSpace()
 AC_CACHE_CHECK(for statfs, wx_cv_func_statfs,
     AC_TRY_COMPILE(
         [
-             #include <sys/vfs.h>
+             #ifdef __DARWIN__
+               #include <sys/param.h>
+               #include <sys/mount.h>
+             #else
+               #include <sys/vfs.h>
+             #endif
         ],
         [
              long l;
@@ -3119,11 +3126,10 @@ if test "$GCC" = yes ; then
         CODE_GEN_FLAGS_CXX="$CODE_GEN_FLAGS_CXX -fno-exceptions"
     fi
     if test "$wxUSE_PERMISSIVE" = "yes" ; then
-       CODE_GEN_FLAGS="$CODE_GEN_FLAGS -fpermissive"
+        CODE_GEN_FLAGS="$CODE_GEN_FLAGS -fpermissive"
     fi
     if test "$wxUSE_NO_DEPS" = "no" ; then
-        CFLAGS="-MMD ${CFLAGS}"
-        CXXFLAGS="-MMD ${CXXFLAGS}"
+        CPPFLAGS="-MMD ${CPPFLAGS}"
     fi
     if test "$USE_WIN32" = 1 ; then
         # I'm not even really sure what this was ever added to solve,
@@ -4543,7 +4549,7 @@ dnl additional resurces settings
 AC_SUBST(RESCOMP)
 AC_SUBST(RESFLAGS)
 AC_SUBST(RESPROGRAMOBJ)
-AC_SUBST(WX_RESOURCES_DARWIN)
+AC_SUBST(WX_RESOURCES_MACOSX)
 
 dnl additional for Mac OS X
 AC_SUBST(DEREZ)
