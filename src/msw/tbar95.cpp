@@ -864,7 +864,7 @@ bool wxToolBar::MSWOnNotify(int WXUNUSED(idCtrl),
     // the tooltips control created by the toolbar is sometimes Unicode, even
     // in an ANSI application - this seems to be a bug in comctl32.dll v5
     UINT code = hdr->code;
-    if ( (code != TTN_NEEDTEXTA) && (code != TTN_NEEDTEXTW) )
+    if ( (code != (UINT) TTN_NEEDTEXTA) && (code != (UINT) TTN_NEEDTEXTW) )
         return FALSE;
 
     HWND toolTipWnd = (HWND)::SendMessage((HWND)GetHWND(), TB_GETTOOLTIPS, 0, 0);

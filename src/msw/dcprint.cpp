@@ -194,7 +194,7 @@ bool wxPrinterDC::StartDoc(const wxString& message)
     if (ret <= 0)
     {
         DWORD lastError = GetLastError();
-        wxLogDebug(wxT("wxDC::StartDoc failed with error: %d\n"), lastError);
+        wxLogDebug(wxT("wxDC::StartDoc failed with error: %ld\n"), lastError);
     }
 #endif
 

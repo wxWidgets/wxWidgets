@@ -735,7 +735,7 @@ void wxTopLevelWindowMSW::OnActivate(wxActivateEvent& event)
     if ( event.GetActive() )
     {
         // restore focus to the child which was last focused
-        wxLogTrace(_T("focus"), _T("wxTLW %08x activated."), m_hWnd);
+        wxLogTrace(_T("focus"), _T("wxTLW %08x activated."), (int) m_hWnd);
 
         wxWindow *parent = m_winLastFocused ? m_winLastFocused->GetParent()
                                             : NULL;
@@ -770,9 +770,9 @@ void wxTopLevelWindowMSW::OnActivate(wxActivateEvent& event)
 
         wxLogTrace(_T("focus"),
                    _T("wxTLW %08x deactivated, last focused: %08x."),
-                   m_hWnd,
-                   m_winLastFocused ? GetHwndOf(m_winLastFocused)
-                                    : NULL);
+                   (int) m_hWnd,
+                   (int) (m_winLastFocused ? GetHwndOf(m_winLastFocused)
+                                           : NULL));
 
         event.Skip();
     }

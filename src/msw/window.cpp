@@ -2249,7 +2249,7 @@ LRESULT WXDLLEXPORT APIENTRY _EXPORT wxWndProc(HWND hWnd, UINT message, WPARAM w
     // trace all messages - useful for the debugging
 #ifdef __WXDEBUG__
     wxLogTrace(wxTraceMessages, wxT("Processing %s(wParam=%8lx, lParam=%8lx)"),
-               wxGetMessageName(message), wParam, lParam);
+               wxGetMessageName(message), (long) wParam, lParam);
 #endif // __WXDEBUG__
 
     wxWindowMSW *wnd = wxFindWinFromHandle((WXHWND) hWnd);
@@ -2852,7 +2852,7 @@ void wxAssociateWinWithHandle(HWND hWnd, wxWindowMSW *win)
     if ( oldWin && (oldWin != win) )
     {
         wxLogDebug(wxT("HWND %X already associated with another window (%s)"),
-                   hWnd, win->GetClassInfo()->GetClassName());
+                   (int) hWnd, win->GetClassInfo()->GetClassName());
     }
     else
 #endif // __WXDEBUG__

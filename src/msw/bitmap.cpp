@@ -966,7 +966,7 @@ bool wxBitmap::Create(void *data, long type, int width, int height, int depth)
 
     if ( !handler )
     {
-        wxLogDebug(wxT("Failed to create bitmap: no bitmap handler for type %d defined."), type);
+        wxLogDebug(wxT("Failed to create bitmap: no bitmap handler for type %ld defined."), type);
 
         return FALSE;
     }

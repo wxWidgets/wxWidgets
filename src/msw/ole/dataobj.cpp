@@ -554,7 +554,7 @@ STDMETHODIMP wxIDataObject::QueryGetData(FORMATETC *pformatetc)
     // the only one allowed by current COM implementation
     if ( pformatetc->lindex != -1 ) {
         wxLogTrace(wxTRACE_OleCalls,
-                   wxT("wxIDataObject::QueryGetData: bad lindex %d"),
+                   wxT("wxIDataObject::QueryGetData: bad lindex %ld"),
                    pformatetc->lindex);
 
         return DV_E_LINDEX;
@@ -563,7 +563,7 @@ STDMETHODIMP wxIDataObject::QueryGetData(FORMATETC *pformatetc)
     // we don't support anything other (THUMBNAIL, ICON, DOCPRINT...)
     if ( pformatetc->dwAspect != DVASPECT_CONTENT ) {
         wxLogTrace(wxTRACE_OleCalls,
-                   wxT("wxIDataObject::QueryGetData: bad dwAspect %d"),
+                   wxT("wxIDataObject::QueryGetData: bad dwAspect %ld"),
                    pformatetc->dwAspect);
 
         return DV_E_DVASPECT;
