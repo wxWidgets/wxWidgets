@@ -174,7 +174,7 @@ public:
     bool LayoutMDIFrame(wxMDIParentFrame* frame, wxRect* rect = (wxRect*) NULL);
 
     // mainWindow is sized to whatever's left over.
-    bool LayoutFrame(wxFrame* frame, wxWindow* mainWindow);
+    bool LayoutFrame(wxFrame* frame, wxWindow* mainWindow = (wxWindow*) NULL);
 };
 
 #endif

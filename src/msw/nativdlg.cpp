@@ -174,7 +174,7 @@ wxWindow* wxWindow::CreateWindowFromHWND(wxWindow* parent, WXHWND hWnd)
 		{
 			// TODO: how to find the bitmap?
 			win = new wxBitmapButton;
-			wxMessageBox("Have not yet implemented bitmap button as BS_BITMAP button.");
+			wxLogError("Have not yet implemented bitmap button as BS_BITMAP button.");
 		}
 #endif
 		else if (style1 == BS_OWNERDRAW)
@@ -199,7 +199,7 @@ wxWindow* wxWindow::CreateWindowFromHWND(wxWindow* parent, WXHWND hWnd)
 		{
 			char buf[256];
 			sprintf(buf, "Don't know what kind of button this is: id = %d", (int) id);
-			wxMessageBox(buf);
+			wxLogError(buf);
 		}
 	}
 	else if (str == "COMBOBOX")
@@ -247,7 +247,7 @@ wxWindow* wxWindow::CreateWindowFromHWND(wxWindow* parent, WXHWND hWnd)
 			win = new wxStaticBitmap;
 
 			// Help! this doesn't correspond with the wxWin implementation.
-			wxMessageBox("Please make SS_BITMAP statics into owner-draw buttons.");
+			wxLogError("Please make SS_BITMAP statics into owner-draw buttons.");
 		}
 #endif
 	}
@@ -255,7 +255,7 @@ wxWindow* wxWindow::CreateWindowFromHWND(wxWindow* parent, WXHWND hWnd)
 	{
 		wxString msg("Don't know how to convert from Windows class ");
 		msg += str;
-		wxMessageBox(msg);
+		wxLogError(msg);
 	}
 
 	if (win)

@@ -1,8 +1,8 @@
 wxWindows 2.0 for Motif installation
 ------------------------------------
 
-- Prerequisites: Motif 1.2 or above, or
-  Lesstif (not yet tested).
+- Prerequisites: Motif 1.2 or above, or Lesstif
+  (not yet tested). Motif 2.0 and above may also be suitable.
 
 - Download the files wx200gen.zip and wx200mot.zip, and
   documentation in a preferred format, such as wx200htm.zip
@@ -12,6 +12,32 @@ wxWindows 2.0 for Motif installation
   directory. Use the -a option if available to convert the ASCII
   files to Unix format. Don't worry about files being
   overwritten: they should be identical anyway.
+
+COMPILING USING CONFIGURE
+
+- You can use the wxGTK configure system to make wxMotif, or
+  you can follow the following steps to use the simpler (but
+  less automatic) makefile system. If using configure, the
+  following script should make the library and samples, when
+  run from the top-level wxWindows directory (see also 'makewx'
+  in this directory):
+
+  # Make wxMotif using the configure system
+  chmod a+x install/unix/config.sub
+  install/unix/setup/general/* \
+    install/unix/config.guess install/unix/setup/shared/*
+  cd install/unix
+  autoconf && ./configure --with-shared --with-motif --with-debug_flag \
+   --with-debug_info --without-threads
+  cd ../..
+  make makefiles
+  make
+
+COMPILING USING MAKEFILES
+
+- Choose a .env file from src/makeenvs that matches your
+  environment, and copy it to src/make.env. These are the
+  settings read by wxWindows for Motif makefiles.
 
 - Edit src/make.env to change options according to your local
   environment. In particular, change WXDIR to where wxWindows is
@@ -42,10 +68,10 @@ Notes:
 ------
 
 - Better installation and makefile systems are
-  required. I didn't use the wxGTK system because I couldn't
-  understand it or make it work with wxMotif. Also I think
-  we should use something that can be made to work easily
-  with applications outside the wxWindows hierarchy.
+  required. Although the wxGTK config system can be used to make
+  wxMotif and samples, it can't easily be made to work
+  with applications outside the wxWindows hierarchy. Hence the
+  simple makefile system.
 
 - Debugging mode is switched on by default. To compile in non-debug
   mode, remove the -D__WXDEBUG__ switch in make.env.
@@ -59,6 +85,11 @@ Notes:
   need to install the XPM package. It can be obtained from:
 
   ftp://ftp.x.org/contrib/libraries/xpm-3.4k.tar.gz
+  http://sunfreeware.com
+
+  You may need to modify make.env to add -I and -L options pointing to where Xpm
+  is installed and possibly change bitmap.cpp to
+  include <xpm.h> instead of <X11/xpm.h>
 
   Alternatively, edit include/motif/setup.h, set wxUSE_XPM
   to 0, and recompile. You will not be able to load any XPMs,
@@ -70,5 +101,5 @@ Notes:
     wxwin-users@wx.dent.med.uni-muenchen.de
 
 
-Julian Smart, November 1998.
+Julian Smart, December 1998.
 julian.smart@ukonline.co.uk

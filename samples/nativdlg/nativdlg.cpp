@@ -91,7 +91,7 @@ void MyFrame::OnQuit(wxCommandEvent& event)
 void MyFrame::OnTest1(wxCommandEvent& event)
 {
       MyDialog *dialog = new MyDialog;
-      if (dialog->LoadNativeDialog(this, dialog1))
+      if (dialog->LoadNativeDialog(this, "dialog1"))
       {
 /*
         wxTextCtrl *text = (wxTextCtrl *)wxFindWindowByName("multitext3", dialog);

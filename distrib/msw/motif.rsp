@@ -6,6 +6,9 @@ config.guess
 config.sub
 wx-config.in
 mkinstalldirs
+
+makeenvs/*.env
+
 src/Makefile
 src/Makefile.in
 src/*.inc
@@ -89,7 +92,8 @@ src/makeprog.env
 
 include/wx/motif/*.h
 
-docs/motif/*.*
+docs/motif/*.txt
+docs/motif/makewx
 
 lib/dummy
 

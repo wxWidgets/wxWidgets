@@ -1,7 +1,10 @@
 #include "wx/msw/wx.rc"
 
 /* Comment out these lines for Borland C++ or GNU-WIN32 */
+/*
 dialog1 TEXT "dialog1.wxr"
 menu1 TEXT "menu1.wxr"
-
+*/
+dialog1 WXRDATA "dialog1.wxr"
+menu1 WXRDATA "menu1.wxr"
 

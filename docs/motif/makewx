@@ -1,0 +1,7 @@
+# Make wxMotif using the configure system
+chmod a+x install/unix/config.sub install/unix/setup/general/* install/unix/config.guess install/unix/setup/shared/*
+cd install/unix
+autoconf && ./configure --with-shared --with-gtk --with-debug_flag --with-debug_info --without-threads
+cd ../..
+make makefiles
+make

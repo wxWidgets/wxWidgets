@@ -176,4 +176,4 @@ double ConvertFromIeeeExtended(const unsigned char *bytes)
 		return f;
 }
 
-#endif // wxUSE_APPLE_IEEE
+#endif /* wxUSE_APPLE_IEEE */

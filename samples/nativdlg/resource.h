@@ -2,7 +2,7 @@
 // Microsoft Developer Studio generated include file.
 // Used by dialog1.rc
 //
-#define dialog1                         101
+// #define dialog1                         101
 #define IDC_EDIT1                       1000
 #define IDC_CHECK1                      1001
 #define IDC_COMBO1                      1003

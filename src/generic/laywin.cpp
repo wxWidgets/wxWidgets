@@ -226,7 +226,8 @@ bool wxLayoutAlgorithm::LayoutFrame(wxFrame* frame, wxWindow* mainWindow)
 
     rect = event.GetRect();
 
-    mainWindow->SetSize(rect.x, rect.y, rect.width, rect.height);
+    if (mainWindow)
+        mainWindow->SetSize(rect.x, rect.y, rect.width, rect.height);
 
     return TRUE;
 }
