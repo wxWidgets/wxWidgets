@@ -255,6 +255,11 @@ contrib/samples/ogl/ogledit/OgleditVC.dsw
 contrib/samples/ogl/studio/StudioVC.dsp
 contrib/samples/ogl/studio/StudioVC.dsw
 
+contrib/src/xml/wxXMLVC.dsp
+contrib/src/xml/wxXMLVC.dsw
+
+contrib/samples/ogl/ogledit/OgleditVC.dsp
+
 contrib/src/mmedia/MmediaVC.dsp
 contrib/src/mmedia/MMediaVC.dsw
 
@@ -266,4 +271,7 @@ contrib/src/stc/StcVC.dsw
 
 contrib/samples/stc/StcTestVC.dsp
 contrib/samples/stc/StcTestVC.dsw
+
+contrib/utils/wxrc/wxrcVC.dsp
+contrib/utils/wxrc/wxrcVC.dsw
 

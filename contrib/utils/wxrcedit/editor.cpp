@@ -104,7 +104,7 @@ END_EVENT_TABLE()
 
 
 
-#ifdef __UNIX__
+#if defined(__UNIX__) || wxUSE_XPM_IN_MSW
 #include "bitmaps/preview.xpm"
 #include "bitmaps/close.xpm"
 #include "bitmaps/save.xpm"
@@ -119,6 +119,12 @@ END_EVENT_TABLE()
 #include "bitmaps/used.xpm"
 #endif
 
+#if defined(__WXMSW__) && defined(wxUSE_XPM_IN_MSW)
+#undef wxBITMAP
+#define wxBITMAP(arg) wxBitmap(arg##_xpm)
+#undef wxICON
+#define wxICON(arg) wxIcon(arg##_xpm)
+#endif
 
 
 EditorFrame *EditorFrame::ms_Instance = NULL;
@@ -164,6 +170,9 @@ EditorFrame::EditorFrame(wxFrame *parent, const wxString& filename)
     
     // Create toolbar:
     wxToolBar *toolBar = CreateToolBar(wxNO_BORDER | wxTB_HORIZONTAL | wxTB_FLAT);
+#ifdef __WXMSW__
+    toolBar->SetToolBitmapSize(wxSize(24, 24));
+#endif
     toolBar->SetMargins(2, 2);
     toolBar -> AddTool(ID_EXIT, wxBITMAP(close), wxNullBitmap,
                        FALSE, -1, -1, (wxObject *) NULL,

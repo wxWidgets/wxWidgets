@@ -1,0 +1,29 @@
+#
+# File:		makefile.vc
+# Author:	Julian Smart
+# Created:	2000
+# Updated:
+# Copyright:	(c) Julian Smart
+#
+# "%W% %G%"
+#
+# Makefile : Builds wxrc (XML resource compiler)
+# Use FINAL=1 argument to nmake to build final version with no debugging
+# info
+# Set WXDIR for your system
+WXDIR = $(WXWIN)
+
+PROGRAM=wxrc
+
+FINAL=0
+
+!if "$(FINAL)" == "0"
+EXTRALIBS=$(WXDIR)\lib\wxxmld.lib
+!else
+EXTRALIBS=$(WXDIR)\lib\wxxml.lib
+!endif
+
+OBJECTS = $(PROGRAM).obj
+
+!include $(WXDIR)\src\makeprog.vc
+

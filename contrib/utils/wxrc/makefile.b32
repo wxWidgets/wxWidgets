@@ -1,0 +1,17 @@
+#
+# File:		makefile.b32
+# Author:	Julian Smart
+# Created:	1999
+# Updated:	
+# Copyright:
+#
+# Makefile : Builds wxrc for 32-bit BC++
+
+WXDIR = $(WXWIN)
+
+TARGET=wxrc
+EXTRALIBS=$(WXDIR)\lib\wxxml.lib
+OBJECTS = $(TARGET).obj
+
+!include $(WXDIR)\src\makeprog.b32
+

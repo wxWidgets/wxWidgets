@@ -16,13 +16,14 @@
 
 
 class wxXmlNode;
-class wxTreeCtrl;
-class wxScrolledWindow;
-class wxSplitterWindow;
+class WXDLLEXPORT wxTreeCtrl;
+class WXDLLEXPORT wxScrolledWindow;
+class WXDLLEXPORT wxSplitterWindow;
 
 #include "wx/frame.h"
-
-
+#include "wx/treectrl.h"
+#include "wx/imaglist.h"
+#include "wx/listctrl.h"
 
 class NodeHandler;
 class wxXmlNode;

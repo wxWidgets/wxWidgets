@@ -1,0 +1,17 @@
+#
+# File:		makefile.b32
+# Author:	Julian Smart
+# Created:	1999
+# Updated:	
+# Copyright:
+#
+# Makefile : Builds wxrcedit for 32-bit BC++
+
+WXDIR = $(WXWIN)
+
+TARGET=wxrcedit
+EXTRALIBS=$(WXDIR)\lib\wxxml.lib
+OBJECTS=edapp.obj editor.obj nodehnd.obj prophnd.obj xmlhelpr.obj
+
+!include $(WXDIR)\src\makeprog.b32
+

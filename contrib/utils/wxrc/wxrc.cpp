@@ -30,16 +30,21 @@
 #include "wx/xml/xml.h"
 #include "wx/ffile.h"
 
-
+/*
 #if wxUSE_GUI
 #error "You must compile the resource compiler with wxBase!"
 #endif
-
+*/
 
 class XmlResApp : public wxApp
 {
 public:
+
+#if wxUSE_GUI
+    bool OnInit();
+#else
     virtual int OnRun();
+#endif
     
 private:
     
@@ -58,7 +63,11 @@ private:
 
 IMPLEMENT_APP(XmlResApp)
 
+#if wxUSE_GUI
+bool XmlResApp::OnInit()
+#else
 int XmlResApp::OnRun()
+#endif
 {
     static const wxCmdLineEntryDesc cmdLineDesc[] =
     {
@@ -87,11 +96,19 @@ int XmlResApp::OnRun()
             retCode = 0;
             ParseParams(parser);
             CompileRes();
+#if wxUSE_GUI
+            return FALSE;
+#else
             return retCode;
+#endif
             break;
 
         default:
+#if wxUSE_GUI
+            return FALSE;
+#else
             return 1;
+#endif
             break;
     }
 }
