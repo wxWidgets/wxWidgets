@@ -607,6 +607,11 @@ pascal static void wxMacAssertOutputHandler(OSType componentSignature, UInt32 op
 
 #endif //__WXDEBUG__
 
+extern "C" {
+   /* m_macEventPosted run loop source callback: */
+   void macPostedEventCallback(void *unused) { wxTheApp->ProcessPendingEvents(); }
+}
+
 bool wxApp::Initialize(int& argc, wxChar **argv)
 {
     // Mac-specific
@@ -674,6 +679,13 @@ bool wxApp::Initialize(int& argc, wxChar **argv)
 
     wxMacCreateNotifierTable() ;
 
+    /* connect posted events to common-mode run loop so that wxPostEvent events
+       are handled even while we're in the menu or on a scrollbar */
+    CFRunLoopSourceContext event_posted_context = {0};
+    event_posted_context.perform = macPostedEventCallback;
+    m_macEventPosted = CFRunLoopSourceCreate(NULL,0,&event_posted_context);
+    CFRunLoopAddSource(CFRunLoopGetCurrent(), m_macEventPosted, kCFRunLoopCommonModes);
+
     UMAShowArrowCursor() ;
 
     return true;
@@ -720,6 +732,12 @@ void wxApp::CleanUp()
 #if wxUSE_TOOLTIPS
     wxToolTip::RemoveToolTips() ;
 #endif
+
+    if (m_macEventPosted)
+    {
+        CFRelease(m_macEventPosted);
+    }
+    m_macEventPosted = NULL;
 
     // One last chance for pending objects to be cleaned up
     wxTheApp->DeletePendingObjects();
@@ -857,6 +875,7 @@ wxApp::wxApp()
 
   m_macCurrentEvent = NULL ;
   m_macCurrentEventHandlerCallRef = NULL ;
+  m_macEventPosted = NULL ;
 }
 
 int wxApp::MainLoop()
@@ -913,6 +932,10 @@ void wxApp::OnIdle(wxIdleEvent& event)
 
 void wxApp::WakeUpIdle()
 {
+    if (m_macEventPosted)
+    {
+        CFRunLoopSourceSignal(m_macEventPosted);
+    }
     wxMacWakeUp() ;
 }
 
