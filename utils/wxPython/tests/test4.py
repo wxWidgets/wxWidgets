@@ -25,8 +25,8 @@ class TestSimpleControlsDlg(wxDialog):
                           wxDefaultPosition, wxSize(350, 350))
 
 
-        sampleList = ['zero', 'one', 'two', 'three', 'four', 'five',
-                      'six', 'seven', 'eight']
+        sampleList = ["zero", "one", "two", "three", "four", "five",
+                      "six", "seven", "eight", "nine", "ten"]
 
         y_pos = 5
         delta = 25
@@ -1000,7 +1000,11 @@ if __name__ == '__main__':
 #----------------------------------------------------------------------------
 #
 # $Log$
+# Revision 1.15  1999/03/05 07:23:42  RD
+# Minor wxPython changes for wxWin 2.0
+#
 # Revision 1.14  1999/02/27 04:20:50  RD
+#
 # minor tweaks for testing
 #
 # Revision 1.13  1999/02/20 09:04:44  RD

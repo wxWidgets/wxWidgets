@@ -9,7 +9,7 @@ item: Global
   Progress Bar DLL=%_WISE_%\Progress\WIZ%_EXE_OS_TYPE_%.DLL
   Start Gradient=128 128 255
   End Gradient=64 0 128
-  Windows Flags=00000100000000010010110000001000
+  Windows Flags=00000100000000010010110000011000
   Log Pathname=%MAINDIR%\INSTALL.LOG
   Message Font=MS Sans Serif
   Font Size=8
@@ -17,7 +17,7 @@ item: Global
   Patch Flags=0000000000001001
   Patch Threshold=85
   Patch Memory=4000
-  EXE Filename=wxPython-2.0b5.exe
+  EXE Filename=wxPython-2.0b6.exe
   FTP Cluster Size=20
   Per-User Version ID=1
   Dialogs Version=6
@@ -74,6 +74,9 @@ end
 item: Check Configuration
   Flags=10111011
 end
+item: Remark
+  Text=     1.5 and 1.5.1 have a CurrentVersion key
+end
 item: Get Registry Key Value
   Variable=PYTHONVER
   Key=SOFTWARE\Python\PythonCore\CurrentVersion
@@ -84,12 +87,12 @@ item: If/While Statement
   Variable=PYTHONVER
   Value=None
 end
-item: Display Message
-  Title=Installation Error
-  Text=Existing Python installation was not found, wxPython installation can not proceed.  Please download and install the Python core interpreter and library (version 1.5.1 or greater) from http://www.python.org/download/
-  Flags=00001000
+item: Remark
+  Text=     Just try 1.5 since 1.5.2b2 doesn't set CurrentVersion but uses 1.5
 end
-item: Exit Installation
+item: Set Variable
+  Variable=PYTHONVER
+  Value=1.5
 end
 item: End Block
 end
@@ -97,6 +100,19 @@ item: Get Registry Key Value
   Variable=PYTHONDIR
   Key=SOFTWARE\Python\PythonCore\%PYTHONVER%\InstallPath
   Flags=00000100
+end
+item: If/While Statement
+  Variable=PYTHONDIR
+  Value=None
+end
+item: Display Message
+  Title=Installation Error
+  Text=An existing Python installation was not found, wxPython installation can not proceed.  Please download and install the Python core interpreter and library (version 1.5.1 or greater) from http://www.python.org/download/
+  Flags=00001000
+end
+item: Exit Installation
+end
+item: End Block
 end
 item: Set Variable
   Variable=MAINDIR
@@ -212,7 +228,7 @@ item: Custom Dialog Set
     Title=Welcome
     Title French=Bienvenue
     Title German=Willkommen
-    Title Portuguese=Bem-vindo 
+    Title Portuguese=Bem-vindo
     Title Spanish=Bienvenido
     Title Italian=Benvenuto
     Title Danish=Velkommen
@@ -308,11 +324,11 @@ item: Custom Dialog Set
       Text French=ATTENTION : Ce programme est protégé par la loi sur les droits d'exploitation et par les traités internationaux
       Text French=
       Text French=Toute reproduction ou distribution, même partielle, de ce programme qui n'aura pas reçu d'autorisation préalable fera l'objet de poursuites et sera sévèrement sanctionnée par le droit civil et pénal
-      Text German=Wir empfehlen nachdrücklich, vor Ausführen dieses Installationsprogramms alle Windows-Programme zu beenden. 
+      Text German=Wir empfehlen nachdrücklich, vor Ausführen dieses Installationsprogramms alle Windows-Programme zu beenden.
       Text German=
       Text German=Auf Abbrechen klicken, um die Installation zu beenden und alle laufenden Programme zu schließen. Auf Weiter klicken, um mit dem Installationsprogramm beginnen.
       Text German=
-      Text German=WARNUNG: Dieses Programm ist urheberrechtlich sowie durch internationale Verträge geschützt. 
+      Text German=WARNUNG: Dieses Programm ist urheberrechtlich sowie durch internationale Verträge geschützt.
       Text German=
       Text German=Die unzulässige Vervielfältigung oder Verbreitung dieses Programms, ob ganz oder auszugsweise, kann schwere zivil- und strafrechtliche Konsequenzen nach sich ziehen und wird unter voller Ausschöpfung der Rechtsmittel geahndet.
       Text Portuguese=Recomenda-se insistentemente que saia de todos os programas do Windows antes de executar este Programa de Configuração.
@@ -340,7 +356,7 @@ item: Custom Dialog Set
       Text Danish=
       Text Danish=Klik på Annuller for at forlade installationsprogrammet og lukke alle igangværende programmer. Klik på Næste for at fortsætte med installationsprogrammet.
       Text Danish=
-      Text Danish=ADVARSEL: Dette program er beskyttet af copyright og internationale traktater. 
+      Text Danish=ADVARSEL: Dette program er beskyttet af copyright og internationale traktater.
       Text Danish=
       Text Danish=Uautoriseret gengivelse eller videresalg af dette program eller dele heraf kan føre til streng civil- og/eller kriminel stra. Retsforfølgning heraf vil finde sted i det videste omfang der hjemles muligt.
       Text Dutch=Het wordt aangeraden om alle Windows programma's af te sluiten voordat u met de installatie van dit programma begint.
@@ -356,7 +372,7 @@ item: Custom Dialog Set
       Text Norwegian=
       Text Norwegian=ADVARSEL: Dette programmet er beskyttet i henhold til lover om opphavsrett og internasjonale konvensjoner.
       Text Norwegian=
-      Text Norwegian=Uautorisert kopiering eller distribuering av dette programmet eller deler av det, vil resultere i alvorlig sivil og kriminell straff og vil føre til saksmål i høyest mulig utstrekning i henhold til loven. 
+      Text Norwegian=Uautorisert kopiering eller distribuering av dette programmet eller deler av det, vil resultere i alvorlig sivil og kriminell straff og vil føre til saksmål i høyest mulig utstrekning i henhold til loven.
       Text Swedish=Du tillråds bestämt att gå ur alla Windows-program innan du kör installationsprogrammet.
       Text Swedish=
       Text Swedish=Klicka på Avbryt för att gå ur installationsprogrammet och stäng eventuella program som du har laddade. Klicka på Nästa för att fortsätta med installationen.
@@ -443,7 +459,7 @@ item: Custom Dialog Set
       Create Flags=01010000000000000000000000000000
       Text=Setup will install %APPTITLE% in the following folder.
       Text=
-      Text=To install into a different folder, click Browse, and select another folder. 
+      Text=To install into a different folder, click Browse, and select another folder.
       Text=
       Text=You can choose not to install %APPTITLE% by clicking Cancel to exit Setup.
       Text French=%APPTITLE% va être installé dans le répertoire ci-dessous
@@ -615,7 +631,7 @@ item: Custom Dialog Set
       Flags=0000000000000001
       Text=Cancel
       Text French=Annuler
-      Text German=Abbrechen 
+      Text German=Abbrechen
       Text Portuguese=Cancelar
       Text Spanish=Cancelar
       Text Italian=Annulla
@@ -631,7 +647,7 @@ item: Custom Dialog Set
   Display Variable=DISPLAY
   Flags=00000001
   item: Dialog
-    Title=Select Components 
+    Title=Select Components
     Title French=Sélectionner les éléments
     Title German=Komponenten auswählen
     Title Portuguese=Seleccionar Componentes
@@ -961,19 +977,14 @@ item: Install File
   Flags=0000001010010010
 end
 item: Install File
-  Source=e:\Projects\wxPython\tests\bitmaps\tog1.bmp
-  Destination=%MAINDIR%\wxPython\demo\bitmaps\tog1.bmp
-  Flags=0000000010000010
+  Source=c:\WINNT\System32\Msvcirt.dll
+  Destination=%SYS%\Msvcirt.dll
+  Flags=0000001010000011
 end
 item: Install File
-  Source=e:\Projects\wxPython\tests\bitmaps\test2.bmp
-  Destination=%MAINDIR%\wxPython\demo\bitmaps\test2.bmp
-  Flags=0000000010000010
-end
-item: Install File
-  Source=e:\Projects\wxPython\tests\bitmaps\tog2.bmp
-  Destination=%MAINDIR%\wxPython\demo\bitmaps\tog2.bmp
-  Flags=0000000010000010
+  Source=c:\WINNT\System32\Msvcrt.dll
+  Destination=%SYS%\Msvcrt.dll
+  Flags=0000001010000011
 end
 item: Install File
   Source=e:\Projects\wxPython\__init__.py
@@ -1041,6 +1052,11 @@ item: Install File
   Flags=0000000010000010
 end
 item: Install File
+  Source=e:\Projects\wxPython\controls.py
+  Destination=%MAINDIR%\wxPython\controls.py
+  Flags=0000000010000010
+end
+item: Install File
   Source=e:\Projects\wxPython\wx.py
   Destination=%MAINDIR%\wxPython\wx.py
   Flags=0000000010000010
@@ -1096,6 +1112,11 @@ item: Install File
   Flags=0000000010000010
 end
 item: Install File
+  Source=E:\PROJECTS\wxPython\tests\wxPlotCanvas.py
+  Destination=%MAINDIR%\wxPython\demo\wxPlotCanvas.py
+  Flags=0000000010000010
+end
+item: Install File
   Source=e:\Projects\wxPython\tests\bitmaps\copy.bmp
   Destination=%MAINDIR%\wxPython\demo\bitmaps\copy.bmp
   Flags=0000000010000010
@@ -1126,8 +1147,18 @@ item: Install File
   Flags=0000000010000010
 end
 item: Install File
-  Source=e:\Projects\wxPython\controls.py
-  Destination=%MAINDIR%\wxPython\controls.py
+  Source=e:\Projects\wxPython\tests\bitmaps\tog1.bmp
+  Destination=%MAINDIR%\wxPython\demo\bitmaps\tog1.bmp
+  Flags=0000000010000010
+end
+item: Install File
+  Source=e:\Projects\wxPython\tests\bitmaps\test2.bmp
+  Destination=%MAINDIR%\wxPython\demo\bitmaps\test2.bmp
+  Flags=0000000010000010
+end
+item: Install File
+  Source=e:\Projects\wxPython\tests\bitmaps\tog2.bmp
+  Destination=%MAINDIR%\wxPython\demo\bitmaps\tog2.bmp
   Flags=0000000010000010
 end
 item: End Block
@@ -1336,7 +1367,7 @@ item: Custom Dialog Set
     Title=Installation Complete
     Title French=Installation en cours
     Title German=Installation abgeschlossen
-    Title Portuguese=Instalação Completa 
+    Title Portuguese=Instalação Completa
     Title Spanish=Se ha completado la Instalación
     Title Italian=Installazione completata
     Title Danish=Installation gennemført

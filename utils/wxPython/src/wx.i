@@ -47,7 +47,7 @@
 
 //---------------------------------------------------------------------------
 
-#define __version__ "2.0b5"
+#define __version__ "2.0b6"
 
 wxPoint     wxPyDefaultPosition;
 wxSize      wxPyDefaultSize;
@@ -158,7 +158,11 @@ extern "C" SWIGEXPORT(void,initutilsc)();
 /////////////////////////////////////////////////////////////////////////////
 //
 // $Log$
+// Revision 1.8  1999/03/05 07:22:32  RD
+// Minor wxPython changes for wxWin 2.0
+//
 // Revision 1.7  1999/02/25 07:08:37  RD
+//
 // wxPython version 2.0b5
 //
 // Revision 1.6  1999/02/20 09:03:04  RD
