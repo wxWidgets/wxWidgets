@@ -61,6 +61,12 @@ wxIcon::wxIcon(const wxString& icon_file, long flags,
     LoadFile(icon_file, flags, desiredWidth, desiredHeight);
 }
 
+void wxIcon::CopyFromBitmap(const wxBitmap& bmp)
+{
+    wxIcon *icon = (wxIcon*)(&bmp);
+    *this = *icon;
+}
+
 wxIcon::~wxIcon()
 {
 }

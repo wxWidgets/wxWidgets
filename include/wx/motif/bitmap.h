@@ -171,6 +171,9 @@ public:
     virtual bool SaveFile(const wxString& name, int type, const wxPalette *cmap = NULL);
     
     wxImage ConvertToImage() const;
+
+    // copies the contents and mask of the given (colour) icon to the bitmap
+    virtual bool CopyFromIcon(const wxIcon& icon);
     
     bool Ok() const { return (M_BITMAPDATA && M_BITMAPDATA->m_ok); }
     int GetWidth() const { return (M_BITMAPDATA ? M_BITMAPDATA->m_width : 0); }

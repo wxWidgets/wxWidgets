@@ -167,6 +167,12 @@ bool wxBitmap::CreateFromXpm(const char **bits)
     return Create(bits, wxBITMAP_TYPE_XPM_DATA, 0, 0, 0);
 }
 
+bool wxBitmap::CopyFromIcon(const wxIcon& icon)
+{
+    *this = icon;
+    return TRUE;
+}
+
 bool wxBitmap::Create(int w, int h, int d)
 {
     UnRef();

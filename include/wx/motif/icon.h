@@ -45,6 +45,11 @@ public:
     
     bool LoadFile(const wxString& name, long flags = wxBITMAP_TYPE_XPM,
         int desiredWidth = -1, int desiredHeight = -1);
+
+    // create from bitmap (which should have a mask unless it's monochrome):
+    // there shouldn't be any implicit bitmap -> icon conversion (i.e. no
+    // ctors, assignment operators...), but it's ok to have such function
+    void CopyFromBitmap(const wxBitmap& bmp);
     
     inline wxIcon& operator = (const wxIcon& icon) { if (*this == icon) return (*this); Ref(icon); return *this; }
     inline bool operator == (const wxIcon& icon) const { return m_refData == icon.m_refData; }
