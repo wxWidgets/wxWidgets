@@ -125,7 +125,7 @@ public:
     void DoButtonDown(Point pt, unsigned int curTime, bool shift, bool ctrl, bool alt);
     void DoButtonUp(Point pt, unsigned int curTime, bool ctrl);
     void DoButtonMove(Point pt);
-    void DoMouseWheel(int rotation, int delta, int linesPerAction, int ctrlDown);
+    void DoMouseWheel(int rotation, int delta, int linesPerAction, int ctrlDown, bool isPageScroll);
     void DoAddChar(int key);
     int  DoKeyDown(int key, bool shift, bool ctrl, bool alt, bool* consumed);
     void DoTick() { Tick(); }

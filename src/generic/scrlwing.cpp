@@ -1084,10 +1084,6 @@ void wxScrollHelper::HandleOnMouseLeave(wxMouseEvent& event)
 
 #if wxUSE_MOUSEWHEEL
 
-#ifndef  WHEEL_PAGESCROLL
-#define WHEEL_PAGESCROLL  (UINT_MAX)   // signifies to scroll a page
-#endif
-
 void wxScrollHelper::HandleOnMouseWheel(wxMouseEvent& event)
 {
     m_wheelRotation += event.GetWheelRotation();
@@ -1103,7 +1099,7 @@ void wxScrollHelper::HandleOnMouseWheel(wxMouseEvent& event)
         newEvent.SetOrientation(wxVERTICAL);
         newEvent.m_eventObject = m_win;
 
-        if (event.GetLinesPerAction() == WHEEL_PAGESCROLL)
+        if (event.IsPageScroll())
         {
             if (lines > 0)
                 newEvent.m_eventType = wxEVT_SCROLLWIN_PAGEUP;

@@ -741,6 +741,9 @@ public:
     // wheel action.  Defaults to one.
     int GetLinesPerAction() const { return m_linesPerAction; }
 
+    // Is the system set to do page scrolling?
+    bool IsPageScroll() const { return m_linesPerAction == UINT_MAX; }
+
     virtual wxEvent *Clone() const { return new wxMouseEvent(*this); }
 
 public:
@@ -1492,7 +1495,7 @@ public:
         m_checked =
         m_enabled =
         m_setEnabled =
-        m_setText = 
+        m_setText =
         m_setChecked = FALSE;
     }
     wxUpdateUIEvent(const wxUpdateUIEvent & event)

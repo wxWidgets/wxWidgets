@@ -1912,7 +1912,8 @@ void wxStyledTextCtrl::OnMouseWheel(wxMouseEvent& evt) {
     m_swx->DoMouseWheel(evt.GetWheelRotation(),
                         evt.GetWheelDelta(),
                         evt.GetLinesPerAction(),
-                        evt.ControlDown());
+                        evt.ControlDown(),
+                        evt.IsPageScroll());
 }
 
 

@@ -467,8 +467,9 @@ void ScintillaWX::DoVScroll(int type, int pos) {
     ScrollTo(topLineNew);
 }
 
-
-void ScintillaWX::DoMouseWheel(int rotation, int delta, int linesPerAction, int ctrlDown) {
+void ScintillaWX::DoMouseWheel(int rotation, int delta,
+                               int linesPerAction, int ctrlDown,
+                               bool isPageScroll ) {
     int topLineNew = topLine;
     int lines;
 
@@ -485,7 +486,10 @@ void ScintillaWX::DoMouseWheel(int rotation, int delta, int linesPerAction, int 
         lines = wheelRotation / delta;
         wheelRotation -= lines * delta;
         if (lines != 0) {
-            lines *= linesPerAction;
+            if (isPageScroll)
+                lines = lines * LinesOnScreen();  // lines is either +1 or -1
+            else
+                lines *= linesPerAction;
             topLineNew -= lines;
             ScrollTo(topLineNew);
         }
