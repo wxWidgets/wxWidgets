@@ -43,6 +43,7 @@ public:
     // and everything else as drawing 1.
     virtual void SetPen( const wxPen &pen );
     virtual void SetBrush( const wxBrush &brush );
+    virtual void SetBackground( const wxBrush &brush );
     virtual void SetTextForeground( const wxColour &col );
     virtual void SetTextBackground( const wxColour &col );
 

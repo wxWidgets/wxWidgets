@@ -79,44 +79,51 @@ void wxMemoryDC::SelectObject( const wxBitmap& bitmap )
     }
 }
 
-void wxMemoryDC::SetPen( const wxPen &pen )
+void wxMemoryDC::SetPen( const wxPen& penOrig )
 {
-    if (m_selected.Ok() && m_selected.GetBitmap() && (*wxTRANSPARENT_PEN != pen))
+    wxPen pen( penOrig );
+    if ( m_selected.Ok() &&
+            m_selected.GetBitmap() &&
+                (pen != *wxTRANSPARENT_PEN) )
     {
-        if (*wxWHITE_PEN == pen)
-            wxWindowDC::SetPen( *wxBLACK_PEN );
-        else
-            wxWindowDC::SetPen( *wxWHITE_PEN );
+        pen.SetColour( pen.GetColour() == *wxWHITE ? *wxBLACK : *wxWHITE );
     }
-    else
-    {
-        wxWindowDC::SetPen( pen );
-    }
+
+    wxWindowDC::SetPen( pen );
 }
 
-void wxMemoryDC::SetBrush( const wxBrush &brush )
+void wxMemoryDC::SetBrush( const wxBrush& brushOrig )
 {
-    if (m_selected.Ok() && m_selected.GetBitmap() && (*wxTRANSPARENT_BRUSH != brush))
+    wxBrush brush( brushOrig );
+    if ( m_selected.Ok() &&
+            m_selected.GetBitmap() &&
+                (brush != *wxTRANSPARENT_BRUSH) )
     {
-        if (*wxWHITE_BRUSH == brush)
-            wxWindowDC::SetBrush( *wxBLACK_BRUSH );
-        else
-            wxWindowDC::SetBrush( *wxWHITE_BRUSH );
+        brush.SetColour( brush.GetColour() == *wxWHITE ? *wxBLACK : *wxWHITE);
     }
-    else
-    {
-        wxWindowDC::SetBrush( brush );
-    }
+
+    wxWindowDC::SetBrush( brush );
 }
 
-void wxMemoryDC::SetTextForeground( const wxColour &col )
+void wxMemoryDC::SetBackground( const wxBrush& brushOrig ) 
 {
-    if (m_selected.Ok() && m_selected.GetBitmap())
+    wxBrush brush(brushOrig);
+
+    if ( m_selected.Ok() &&
+            m_selected.GetBitmap() &&
+                (brush != *wxTRANSPARENT_BRUSH) )
     {
-        if (col == *wxWHITE)
-            wxWindowDC::SetTextForeground( *wxBLACK );
-        else
-            wxWindowDC::SetTextForeground( *wxWHITE );
+        brush.SetColour( brush.GetColour() == *wxWHITE ? *wxBLACK : *wxWHITE );
+    }
+
+    wxWindowDC::SetBackground( brush );
+}
+
+void wxMemoryDC::SetTextForeground( const wxColour& col )
+{
+    if ( m_selected.Ok() && m_selected.GetBitmap() )
+    {
+        wxWindowDC::SetTextForeground( col == *wxWHITE ? *wxBLACK : *wxWHITE);
     }
     else
     {
@@ -128,10 +135,7 @@ void wxMemoryDC::SetTextBackground( const wxColour &col )
 {
     if (m_selected.Ok() && m_selected.GetBitmap())
     {
-        if (col == *wxWHITE)
-            wxWindowDC::SetTextBackground( *wxBLACK );
-        else
-            wxWindowDC::SetTextBackground( *wxWHITE );
+        wxWindowDC::SetTextBackground( col == *wxWHITE ? *wxBLACK : *wxWHITE );
     }
     else
     {
