@@ -103,6 +103,13 @@ void wxHtmlWinParser::AddModule(wxHtmlTagsModule *module)
 
 
 
+void wxHtmlWinParser::RemoveModule(wxHtmlTagsModule *module)
+{
+    m_Modules.DeleteObject(module);
+}
+
+
+
 void wxHtmlWinParser::SetFonts(wxString normal_face, wxString fixed_face, const int *sizes)
 {
     int i, j, k, l, m;
@@ -392,6 +399,7 @@ bool wxHtmlTagsModule::OnInit()
 
 void wxHtmlTagsModule::OnExit()
 {
+    wxHtmlWinParser::RemoveModule(this);
 }
 #endif
 
