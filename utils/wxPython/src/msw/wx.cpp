@@ -646,11 +646,6 @@ extern "C" SWIGEXPORT(void) initframesc();
 extern "C" SWIGEXPORT(void) initwindows3c();
 extern "C" SWIGEXPORT(void) initimagec();
 extern "C" SWIGEXPORT(void) initprintfwc();
-#ifndef SEPARATE
-extern "C" SWIGEXPORT(void) initutilsc();
-//extern "C" SWIGEXPORT(void) initoglc();
-extern "C" SWIGEXPORT(void) initglcanvasc();
-#endif
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -2644,13 +2639,6 @@ SWIGEXPORT(void) initwxc() {
     initwindows3c();
     initimagec();
     initprintfwc();
-#ifndef SEPARATE
-    initutilsc();
-//    initoglc();
-#ifdef WITH_GLCANVAS
-    initglcanvasc();
-#endif
-#endif
 {
    int i;
    for (i = 0; _swig_mapping[i].n1; i++)

@@ -6,6 +6,7 @@ Setup.in.new
 Setup.save
 Setup.save
 Setup.test
+build.local
 compile.py
 config.c
 glcanvas.h
@@ -24,7 +25,10 @@ wxPython.dsw
 wxPython.ncb
 wxPython.opt
 wxc.exp
+wxc.ilk
 wxc.lib
+wxc.pch
+wxc.pyd
 wxc.res
 wxp.pch
 wxpc.exp

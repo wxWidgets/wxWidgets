@@ -53,6 +53,10 @@ for some of the new features and such.  Also they have encorporated my
 patches so there is really no reason to stick with the current (very
 old) release...
 
+New build system based on a Python program.  Now wxPython builds are
+the same on MSW or Unix systems.  See distrib/build.py for details.
+
+
 
 
 What's new in 2.1b2
@@ -306,42 +310,56 @@ me.  You don't need SWIG to build the extension module as all the
 generated C++ code is included under the src directory.
 
 I added a few minor features to SWIG to control some of the code
-generation.  If you want to playaround with this the patches are in
-wxPython/SWIG.patches and they should be applied to the 1.1p5 version
-of SWIG.  These new patches are documented at
-http://starship.skyport.net/crew/robind/#swig, and they should also
-end up in the 1.2 version of SWIG.
+generation.  If you want to play around with this you will need to get
+a recent version of SWIG from their CVS or from a daily build.  See
+http://www.swig.org/ for details.
 
 wxPython is organized as a Python package.  This means that the
 directory containing the results of the build process should be a
 subdirectory of a directory on the PYTHONPATH.  (And preferably should
 be named wxPython.)  You can control where the build process will dump
-wxPython by setting the TARGETDIR makefile variable.  The default is
-$(WXWIN)/utils/wxPython, where this README.txt is located.  If you
-leave it here then you should add $(WXWIN)/utils to your PYTHONPATH.
-However, you may prefer to use something that is already on your
-PYTHONPATH, such as the site-packages directory on Unix systems.
+wxPython by setting the TARGETDIR variable for the build utility, (see
+below.)
 
 
-Win32
------
+1. Build wxWindows as described in its BuildCVS.txt file.  For *nix
+   systems I run configure with these flags:
 
-1. Build wxWindows with wxUSE_RESOURCE_LOADING_IN_MSW set to 1 in
-include/wx/msw/setup.h so icons can be loaded dynamically.  While
-there, make sure wxUSE_OWNER_DRAWN is also set to 1.
+                --with-gtk
+                --with-libjpeg
+                --without-odbc
+                --enable-unicode=no
+                --enable-threads=yes
+                --enable-socket=yes
+                --enable-static=no
+                --enable-shared=yes
+                --disable-std_iostreams
 
-2. Change into the $(WXWIN)/utils/wxPython/src directory.
+   You can use whatever flags you want, but I know these work.
 
-3. Edit makefile.vc and specify where your python installation is at.
-You may also want to fiddle with the TARGETDIR variable as described
-above.
+2. At this point you may want to make an alias or symlink, script,
+   batch file, whatever on the PATH that invokes
+   $(WXWIN)/utils/wxPython/distrib/build.py to help simplify matters
+   somewhat.  For example, on my win32 system I have a file named
+   build.bat in a directory on the PATH that contains:
 
-4. Run nmake -f makefile.vc
+   python $(WXWIN)/utils/wxPython/distrib/build.py %1 %2 %3 %4 %5 %6
 
-5. If it builds successfully, congratulations!  Move on to the next
-step.  If not then you can try mailing me for help.  Also, I will
-always have a pre-built win32 version of this extension module at
-http://alldunn.com/wxPython/.
+
+3. Change into the $(WXWIN)/utils/wxPython/src directory.
+
+4. Type "build -b" to build wxPython and "build -i" to install it.
+
+   The build.py script actually generates a Makefile based on what it
+   finds on your system and information found in the build.cfg file.
+   If you have troubles building or you want it built or installed in
+   a different way, take a look at the docstring in build.py, you may
+   be able to override configuration options in a file named
+   build.local.
+
+5. To build and install the add-on modules, change to the appropriate
+   directory under $(WXWIN)/utils/wxPython/modules and run the build
+   utility again.
 
 6. Change to the $(WXWIN)/utils/wxPython/demo directory.
 
@@ -349,43 +367,19 @@ http://alldunn.com/wxPython/.
 
     python demo.py
 
-To run it without requiring a console, you can use the pythonw.exe
-version of Python either from the command line or from a shortcut.
+To run it without requiring a console on win32, you can use the
+pythonw.exe version of Python either from the command line or from a
+shortcut.
 
 
-
-Unix
-----
-0. I configure wxWindows like this, YMMV:
-
-./configure  --with-gtk --disable-shared --enable-threads --disable-unicode
-
-1. Change into the $(WXWIN)/utils/wxPython/src directory.
-
-2. Edit Setup.in and ensure that the flags, directories, and toolkit
-options are correct.  See the above commentary about TARGETDIR.  There
-are a few sample Setup.in.[platform] files provided.
-
-3. Run this command to generate a makefile:
-
-    make -f Makefile.pre.in boot
-
-4. Run these commands to build and then install the wxPython extension
-module:
-
-    make
-    make install
-
-
-5. Change to the $(WXWIN)/utils/wxPython/demo directory.
-
-6. Try executing the demo program.  For example:
-
-    python demo.py
 
 ----------------
 Robin Dunn
 robin@alldunn.com
+
+
+
+
 
 
 

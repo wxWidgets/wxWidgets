@@ -1,6 +1,7 @@
 *.gz
 *.rpm
 *.zip
+build.pyc
 filelist
 wxPython.spec
 wxp2.wse
