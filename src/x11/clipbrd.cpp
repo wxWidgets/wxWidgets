@@ -26,8 +26,10 @@
 // data
 //-----------------------------------------------------------------------------
 
+#if !wxUSE_NANOX
 Atom  g_clipboardAtom   = 0;
 Atom  g_targetsAtom     = 0;
+#endif
 
 // the trace mask we use with wxLogTrace() - call
 // wxLog::AddTraceMask(TRACE_CLIPBOARD) to enable the trace messages from here
@@ -290,10 +292,11 @@ wxClipboard::wxClipboard()
     /* we use m_targetsWidget to query what formats are available */
 
     /* we use m_clipboardWidget to get and to offer data */
-
+#if !wxUSE_NANOX
     if (!g_clipboardAtom) g_clipboardAtom = XInternAtom( (Display*) wxGetDisplay(), "CLIPBOARD", False );
     if (!g_targetsAtom) g_targetsAtom = XInternAtom( (Display*) wxGetDisplay(), "TARGETS", False );
-
+#endif
+    
     m_formatSupported = FALSE;
     m_targetRequested = 0;
 
@@ -377,6 +380,9 @@ bool wxClipboard::SetData( wxDataObject *data )
 
 bool wxClipboard::AddData( wxDataObject *data )
 {
+#if wxUSE_NANOX
+    return FALSE;
+#else
     wxCHECK_MSG( m_open, FALSE, wxT("clipboard not open") );
 
     wxCHECK_MSG( data, FALSE, wxT("data is invalid") );
@@ -440,6 +446,7 @@ bool wxClipboard::AddData( wxDataObject *data )
 #endif
 
     return res;
+#endif
 }
 
 void wxClipboard::Close()

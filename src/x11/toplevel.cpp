@@ -148,12 +148,44 @@ bool wxTopLevelWindowX11::Create(wxWindow *parent,
     extraFlags |= GR_EVENT_MASK_CLOSE_REQ;
 #endif
 
+#if wxUSE_NANOX
     XSelectInput( xdisplay, xwindow,
-        extraFlags | ExposureMask | KeyPressMask | KeyReleaseMask | ButtonPressMask | ButtonReleaseMask |
-        ButtonMotionMask | EnterWindowMask | LeaveWindowMask | PointerMotionMask |
-        KeymapStateMask | FocusChangeMask | ColormapChangeMask | StructureNotifyMask |
-        PropertyChangeMask );
-
+                  extraFlags |
+                  ExposureMask |
+                  KeyPressMask |
+                  KeyReleaseMask |
+                  ButtonPressMask |
+                  ButtonReleaseMask |
+                  ButtonMotionMask |
+                  EnterWindowMask |
+                  LeaveWindowMask |
+                  PointerMotionMask |
+                  KeymapStateMask |
+                  FocusChangeMask |
+                  ColormapChangeMask |
+                  StructureNotifyMask |
+                  PropertyChangeMask
+                  );
+#else
+    XSelectInput( xdisplay, xwindow,
+                  extraFlags |
+                  ExposureMask |
+                  KeyPressMask |
+                  KeyReleaseMask |
+                  ButtonPressMask |
+                  ButtonReleaseMask |
+                  ButtonMotionMask |
+                  EnterWindowMask |
+                  LeaveWindowMask |
+                  PointerMotionMask |
+                  KeymapStateMask |
+                  FocusChangeMask |
+                  ColormapChangeMask |
+                  StructureNotifyMask |
+                  PropertyChangeMask
+                  );
+#endif
+    
     wxAddWindowToTable( xwindow, (wxWindow*) this );
 
     // Set background to None which will prevent X11 from clearing the
@@ -189,7 +221,14 @@ bool wxTopLevelWindowX11::Create(wxWindow *parent,
     XSetWMProtocols( xdisplay, xwindow, wm_protocols, 2);
 #endif
     
+#if 0 // wxUSE_NANOX
+    GR_WM_PROPERTIES props;
+    props.flags = GR_WM_FLAGS_TITLE;
+    props.title = (GR_CHAR*) "Hello";
+    GrSetWMProperties(xwindow, &props);
+#else
     wxSetWMDecorations( xwindow, style);
+#endif
 
     SetTitle(title);
     

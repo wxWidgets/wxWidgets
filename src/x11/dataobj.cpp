@@ -97,11 +97,15 @@ wxDataFormatId wxDataFormat::GetType() const
 
 wxString wxDataFormat::GetId() const
 {
+#if wxUSE_NANOX
+    return wxEmptyString;
+#else
     char *t = XGetAtomName ((Display*) wxGetDisplay(), m_format);
     wxString ret( t );  // this will convert from ascii to Unicode
     if (t) 
         XFree( t );
     return ret;
+#endif
 }
 
 void wxDataFormat::SetId( NativeFormat format )
@@ -123,20 +127,24 @@ void wxDataFormat::SetId( NativeFormat format )
 
 void wxDataFormat::SetId( const wxChar *id )
 {
+#if !wxUSE_NANOX
     PrepareFormats();
     m_type = wxDF_PRIVATE;
     wxString tmp( id );
     m_format = XInternAtom( (Display*) wxGetDisplay(), wxMBSTRINGCAST tmp.mbc_str(), FALSE );  // what is the string cast for?
+#endif
 }
 
 void wxDataFormat::PrepareFormats()
 {
+#if !wxUSE_NANOX
     if (!g_textAtom)
         g_textAtom = XInternAtom( (Display*) wxGetDisplay(), "STRING", FALSE );
     if (!g_pngAtom)
         g_pngAtom = XInternAtom( (Display*) wxGetDisplay(), "image/png", FALSE );
     if (!g_fileAtom)
         g_fileAtom = XInternAtom( (Display*) wxGetDisplay(), "text/uri-list", FALSE );
+#endif
 }
 
 //-------------------------------------------------------------------------

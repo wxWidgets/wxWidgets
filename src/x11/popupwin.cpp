@@ -87,7 +87,10 @@ bool wxPopupWindow::Create( wxWindow *parent, int style )
 
     XSetTransientForHint( xdisplay, xwindow, xparent );
 
-#if !wxUSE_NANOX
+#if wxUSE_NANOX
+    // Switch off WM
+    wxSetWMDecorations(xwindow, 0);
+#else
     XWMHints wm_hints;
     wm_hints.flags = InputHint | StateHint /* | WindowGroupHint */;
     wm_hints.input = True;

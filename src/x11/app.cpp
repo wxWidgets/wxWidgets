@@ -411,6 +411,7 @@ int wxApp::MainLoop()
     return rt;
 }
 
+#if !wxUSE_NANOX
 //-----------------------------------------------------------------------
 // X11 predicate function for exposure compression
 //-----------------------------------------------------------------------
@@ -442,6 +443,8 @@ static Bool expose_predicate (Display *display, XEvent *xevent, XPointer arg)
     
     return TRUE;
 }
+#endif
+    // wxUSE_NANOX
 
 //-----------------------------------------------------------------------
 // Processes an X event.
