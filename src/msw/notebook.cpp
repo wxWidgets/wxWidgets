@@ -144,6 +144,13 @@ bool wxNotebook::Create(wxWindow *parent,
     tabStyle &= WS_BORDER;
   if (m_windowStyle & wxNB_FIXEDWIDTH)
     tabStyle |= TCS_FIXEDWIDTH ;
+  if (m_windowStyle & wxNB_BOTTOM)
+    tabStyle |= TCS_RIGHT;
+  if (m_windowStyle & wxNB_LEFT)
+    tabStyle |= TCS_VERTICAL;
+  if (m_windowStyle & wxNB_RIGHT)
+    tabStyle |= TCS_VERTICAL|TCS_RIGHT;
+        
 
   if ( !MSWCreate(GetId(), GetParent(), WC_TABCONTROL,
                   this, NULL, pos.x, pos.y, size.x, size.y,
