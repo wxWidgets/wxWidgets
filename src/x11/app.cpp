@@ -1219,6 +1219,8 @@ bool wxApp::Yield(bool onlyIfNeeded)
     return TRUE;
 }
 
+#ifdef __WXDEBUG__
+
 void wxApp::OnAssert(const wxChar *file, int line, const wxChar *msg)
 {
     // While the GUI isn't working that well, just print out the
@@ -1231,4 +1233,6 @@ void wxApp::OnAssert(const wxChar *file, int line, const wxChar *msg)
     wxLogDebug(msg2);
 #endif
 }
+
+#endif // __WXDEBUG__
 
