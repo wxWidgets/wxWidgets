@@ -64,6 +64,10 @@
     #define LVS_EX_FULLROWSELECT 0x00000020
 #endif
 
+#ifndef LVS_OWNERDATA
+    #define LVS_OWNERDATA 0x1000
+#endif
+
 // ----------------------------------------------------------------------------
 // private functions
 // ----------------------------------------------------------------------------
@@ -452,6 +456,16 @@ long wxListCtrl::ConvertToMSWStyle(long& oldStyle, long style) const
 
     if ( style & wxLC_VIRTUAL )
     {
+        int ver = wxTheApp->GetComCtl32Version();
+        if ( ver < 470 )
+        {
+            wxLogWarning(_("Please install a newer version of comctl32.dll\n"
+                           "(at least version 4.70 is required but you have "
+                           "%d.%02d)\n"
+                           "or this program won't operate correctly."),
+                        ver / 100, ver % 100);
+        }
+
         wstyle |= LVS_OWNERDATA;
     }
 
