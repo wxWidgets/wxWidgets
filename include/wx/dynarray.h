@@ -564,6 +564,7 @@ public:                                                                  \
   size_t GetCount() const { return base_array::size(); }                 \
   size_t size() const { return base_array::size(); }                     \
   bool IsEmpty() const { return base_array::empty(); }                   \
+  bool empty() const { return base_array::empty(); }                     \
   size_t Count() const { return base_array::size(); }                    \
   void Shrink() { base::Shrink(); }                                      \
                                                                          \
