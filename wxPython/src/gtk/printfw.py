@@ -157,6 +157,7 @@ class wxPrintDataPtr(wxObjectPtr):
         return val
     def __repr__(self):
         return "<%s.%s instance; proxy of C++ wxPrintData instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this)
+    def __nonzero__(self): return self.Ok()
 class wxPrintData(wxPrintDataPtr):
     def __init__(self,*_args,**_kwargs):
         self.this = printfwc.new_wxPrintData(*_args,**_kwargs)
@@ -291,6 +292,7 @@ class wxPageSetupDialogDataPtr(wxObjectPtr):
         return val
     def __repr__(self):
         return "<%s.%s instance; proxy of C++ wxPageSetupDialogData instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this)
+    def __nonzero__(self): return self.Ok()
 class wxPageSetupDialogData(wxPageSetupDialogDataPtr):
     def __init__(self,*_args,**_kwargs):
         self.this = printfwc.new_wxPageSetupDialogData(*_args,**_kwargs)
@@ -403,6 +405,7 @@ class wxPrintDialogDataPtr(wxObjectPtr):
         return val
     def __repr__(self):
         return "<%s.%s instance; proxy of C++ wxPrintDialogData instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this)
+    def __nonzero__(self): return self.Ok()
 class wxPrintDialogData(wxPrintDialogDataPtr):
     def __init__(self,*_args,**_kwargs):
         self.this = printfwc.new_wxPrintDialogData(*_args,**_kwargs)
@@ -593,6 +596,7 @@ class wxPrintPreviewPtr(wxObjectPtr):
         return val
     def __repr__(self):
         return "<%s.%s instance; proxy of C++ wxPrintPreview instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this)
+    def __nonzero__(self): return self.Ok()
 class wxPrintPreview(wxPrintPreviewPtr):
     def __init__(self,*_args,**_kwargs):
         self.this = printfwc.new_wxPrintPreview(*_args,**_kwargs)

@@ -147,6 +147,7 @@ class wxCaretPtr :
         return val
     def __repr__(self):
         return "<%s.%s instance; proxy of C++ wxCaret instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this)
+    def __nonzero__(self): return self.IsOk()
 class wxCaret(wxCaretPtr):
     def __init__(self,*_args,**_kwargs):
         self.this = misc2c.new_wxCaret(*_args,**_kwargs)
@@ -794,6 +795,7 @@ class wxJoystickPtr(wxObjectPtr):
         return val
     def __repr__(self):
         return "<%s.%s instance; proxy of C++ wxJoystick instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this)
+    def __nonzero__(self): return self.IsOk()
 class wxJoystick(wxJoystickPtr):
     def __init__(self,*_args,**_kwargs):
         self.this = misc2c.new_wxJoystick(*_args,**_kwargs)
@@ -820,6 +822,7 @@ class wxWavePtr(wxObjectPtr):
         return val
     def __repr__(self):
         return "<%s.%s instance; proxy of C++ wxWave instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this)
+    def __nonzero__(self): return self.IsOk()
 class wxWave(wxWavePtr):
     def __init__(self,*_args,**_kwargs):
         self.this = misc2c.new_wxWave(*_args,**_kwargs)

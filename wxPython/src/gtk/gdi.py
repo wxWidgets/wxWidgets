@@ -96,6 +96,7 @@ class wxBitmapPtr(wxGDIObjectPtr):
         mask = wxMaskColour(self, colour)
         self.SetMask(mask)
     
+    def __nonzero__(self): return self.Ok()
 class wxBitmap(wxBitmapPtr):
     def __init__(self,*_args,**_kwargs):
         self.this = gdic.new_wxBitmap(*_args,**_kwargs)
@@ -160,6 +161,7 @@ class wxIconPtr(wxGDIObjectPtr):
         return val
     def __repr__(self):
         return "<%s.%s instance; proxy of C++ wxIcon instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this)
+    def __nonzero__(self): return self.Ok()
 class wxIcon(wxIconPtr):
     def __init__(self,*_args,**_kwargs):
         self.this = gdic.new_wxIcon(*_args,**_kwargs)
@@ -223,6 +225,7 @@ class wxCursorPtr(wxGDIObjectPtr):
         return val
     def __repr__(self):
         return "<%s.%s instance; proxy of C++ wxCursor instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this)
+    def __nonzero__(self): return self.Ok()
 class wxCursor(wxCursorPtr):
     def __init__(self,this):
         self.this = this
@@ -357,6 +360,7 @@ class wxPenPtr(wxGDIObjectPtr):
         return val
     def __repr__(self):
         return "<%s.%s instance; proxy of C++ wxPen instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this)
+    def __nonzero__(self): return self.Ok()
 class wxPen(wxPenPtr):
     def __init__(self,*_args,**_kwargs):
         self.this = gdic.new_wxPen(*_args,**_kwargs)
@@ -449,6 +453,7 @@ class wxBrushPtr(wxGDIObjectPtr):
         return val
     def __repr__(self):
         return "<%s.%s instance; proxy of C++ wxBrush instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this)
+    def __nonzero__(self): return self.Ok()
 class wxBrush(wxBrushPtr):
     def __init__(self,*_args,**_kwargs):
         self.this = gdic.new_wxBrush(*_args,**_kwargs)
@@ -797,6 +802,7 @@ class wxDCPtr(wxObjectPtr):
         return val
     def __repr__(self):
         return "<%s.%s instance; proxy of C++ wxDC instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this)
+    def __nonzero__(self): return self.Ok()
     
     def DrawPointList(self, points, pens=None):
         if pens is None:
@@ -1041,6 +1047,7 @@ class wxPalettePtr(wxGDIObjectPtr):
         return val
     def __repr__(self):
         return "<%s.%s instance; proxy of C++ wxPalette instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this)
+    def __nonzero__(self): return self.Ok()
 class wxPalette(wxPalettePtr):
     def __init__(self,*_args,**_kwargs):
         self.this = gdic.new_wxPalette(*_args,**_kwargs)

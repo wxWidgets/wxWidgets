@@ -345,6 +345,7 @@ class wxImagePtr(wxObjectPtr):
         return val
     def __repr__(self):
         return "<%s.%s instance; proxy of C++ wxImage instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this)
+    def __nonzero__(self): return self.Ok()
 class wxImage(wxImagePtr):
     def __init__(self,*_args,**_kwargs):
         self.this = imagec.new_wxImage(*_args,**_kwargs)
