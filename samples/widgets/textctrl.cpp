@@ -70,6 +70,18 @@ enum TextLines
     TextLines_Multi
 };
 
+#ifdef __WXMSW__
+
+// textctrl kind values
+enum TextKind
+{
+    TextKind_Plain,
+    TextKind_Rich,
+    TextKind_Rich2
+};
+
+#endif // __WXMSW__
+
 // default values for the controls
 static const struct ControlValues
 {
@@ -77,12 +89,18 @@ static const struct ControlValues
     bool password;
     bool wraplines;
     bool readonly;
+#ifdef __WXMSW__
+    TextKind textKind;
+#endif // __WXMSW__
 } DEFAULTS =
 {
     TextLines_Multi,    // multiline
     FALSE,              // not password
     TRUE,               // do wrap lines
-    FALSE               // not readonly
+    FALSE,              // not readonly
+#ifdef __WXMSW__
+    TextKind_Plain      // plain EDIT control
+#endif // __WXMSW__
 };
 
 // ----------------------------------------------------------------------------
@@ -156,6 +174,11 @@ protected:
                *m_chkWrapLines,
                *m_chkReadonly;
 
+    // under MSW we test rich edit controls as well here
+#ifdef __WXMSW__
+    wxRadioBox *m_radioKind;
+#endif // __WXMSW__
+
     // the textctrl itself and the sizer it is in
     wxTextCtrl *m_text;
     wxSizer *m_sizerText;
@@ -167,7 +190,8 @@ protected:
                *m_textPosLast,
                *m_textLineLast,
                *m_textSelFrom,
-               *m_textSelTo;
+               *m_textSelTo,
+               *m_textRange;
 
     // and the data to show in them
     long m_posCur,
@@ -226,6 +250,9 @@ TextWidgetsPage::TextWidgetsPage(wxNotebook *notebook, wxImageList *imaglist)
     imaglist->Add(wxBitmap(text_xpm));
 
     // init everything
+#ifdef __WXMSW__
+    m_radioKind =
+#endif // __WXMSW__
     m_radioTextLines = (wxRadioBox *)NULL;
 
     m_chkPassword =
@@ -239,7 +266,9 @@ TextWidgetsPage::TextWidgetsPage(wxNotebook *notebook, wxImageList *imaglist)
     m_textPosLast =
     m_textLineLast =
     m_textSelFrom =
-    m_textSelTo = (wxTextCtrl *)NULL;
+    m_textSelTo =
+    m_textRange = (wxTextCtrl *)NULL;
+
     m_sizerText = (wxSizer *)NULL;
 
     m_posCur =
@@ -275,7 +304,25 @@ TextWidgetsPage::TextWidgetsPage(wxNotebook *notebook, wxImageList *imaglist)
                         sizerLeft, _T("&Read-only mode")
                     );
 
+#ifdef __WXMSW__
+    static const wxString kinds[] =
+    {
+        _T("plain edit"),
+        _T("rich edit"),
+        _T("rich edit 2.0"),
+    };
+
+    m_radioKind = new wxRadioBox(this, -1, _T("Control &kind"),
+                                 wxDefaultPosition, wxDefaultSize,
+                                 WXSIZEOF(kinds), kinds,
+                                 1, wxRA_SPECIFY_COLS);
+
+    sizerLeft->Add(5, 5, 0, wxGROW | wxALL, 5); // spacer
+    sizerLeft->Add(m_radioKind, 0, wxGROW | wxALL, 5);
+#endif // __WXMSW__
+
     wxButton *btn = new wxButton(this, TextPage_Reset, _T("&Reset"));
+    sizerLeft->Add(5, 5, 0, wxGROW | wxALL, 5); // spacer
     sizerLeft->Add(btn, 0, wxALIGN_CENTRE_HORIZONTAL | wxALL, 15);
 
     // middle pane
@@ -352,6 +399,20 @@ TextWidgetsPage::TextWidgetsPage(wxNotebook *notebook, wxImageList *imaglist)
                         ),
                         0, wxALL, 5
                      );
+
+    m_textRange = new wxTextCtrl(this, -1, _T(""),
+                                 wxDefaultPosition, wxDefaultSize,
+                                 wxTE_READONLY);
+    sizerMiddleDown->Add
+                     (
+                        CreateTextWithLabelSizer
+                        (
+                          _T("Range 10..20:"),
+                          m_textRange
+                        ),
+                        0, wxALL, 5
+                     );
+
     wxSizer *sizerMiddle = new wxBoxSizer(wxVERTICAL);
     sizerMiddle->Add(sizerMiddleUp, 0, wxGROW);
     sizerMiddle->Add(sizerMiddleDown, 1, wxGROW | wxTOP, 5);
@@ -428,6 +489,9 @@ void TextWidgetsPage::Reset()
     m_chkPassword->SetValue(DEFAULTS.password);
     m_chkWrapLines->SetValue(DEFAULTS.wraplines);
     m_chkReadonly->SetValue(DEFAULTS.readonly);
+#ifdef __WXMSW__
+    m_radioKind->SetSelection(DEFAULTS.textKind);
+#endif // __WXMSW__
 }
 
 void TextWidgetsPage::CreateText()
@@ -436,7 +500,7 @@ void TextWidgetsPage::CreateText()
     switch ( m_radioTextLines->GetSelection() )
     {
         default:
-            wxFAIL_MSG( _T("unexpected radio box selection") );
+            wxFAIL_MSG( _T("unexpected lines radio box selection") );
 
         case TextLines_Single:
             break;
@@ -453,6 +517,25 @@ void TextWidgetsPage::CreateText()
         flags |= wxTE_READONLY;
     if ( !m_chkWrapLines->GetValue() )
         flags |= wxHSCROLL;
+
+#ifdef __WXMSW__
+    switch ( m_radioKind->GetSelection() )
+    {
+        default:
+            wxFAIL_MSG( _T("unexpected kind radio box selection") );
+
+        case TextKind_Plain:
+            break;
+
+        case TextKind_Rich:
+            flags |= wxTE_RICH;
+            break;
+
+        case TextKind_Rich2:
+            flags |= wxTE_RICH2;
+            break;
+    }
+#endif // __WXMSW__
 
     wxString valueOld;
     if ( m_text )
@@ -543,6 +626,11 @@ void TextWidgetsPage::OnIdle(wxIdleEvent& WXUNUSED(event))
             m_selTo = selTo;
         }
     }
+
+    if ( m_textRange )
+    {
+        m_textRange->SetValue(m_text->GetRange(10, 20));
+    }
 }
 
 void TextWidgetsPage::OnButtonReset(wxCommandEvent& WXUNUSED(event))
@@ -554,20 +642,30 @@ void TextWidgetsPage::OnButtonReset(wxCommandEvent& WXUNUSED(event))
 
 void TextWidgetsPage::OnButtonSet(wxCommandEvent& WXUNUSED(event))
 {
-    m_text->SetValue(_T("Yellow submarine"));
+    m_text->SetValue(m_text->GetWindowStyle() & wxTE_MULTILINE
+                        ? _T("Here,\nthere and\neverywhere")
+                        : _T("Yellow submarine"));
+
     m_text->SetFocus();
 }
 
 void TextWidgetsPage::OnButtonAdd(wxCommandEvent& WXUNUSED(event))
 {
-    m_text->AppendText(_T("here, there and everywhere"));
-    m_text->SetFocus();
+    if ( m_text->GetWindowStyle() & wxTE_MULTILINE )
+    {
+        m_text->AppendText(_T("We all live in a\n"));
+    }
+
+    m_text->AppendText(_T("Yellow submarine"));
 }
 
 void TextWidgetsPage::OnButtonInsert(wxCommandEvent& WXUNUSED(event))
 {
-    m_text->WriteText(_T("is there anybody going to listen to my story"));
-    m_text->SetFocus();
+    m_text->WriteText(_T("Is there anybody going to listen to my story"));
+    if ( m_text->GetWindowStyle() & wxTE_MULTILINE )
+    {
+        m_text->WriteText(_T("\nall about the girl who came to stay"));
+    }
 }
 
 void TextWidgetsPage::OnButtonClear(wxCommandEvent& WXUNUSED(event))
@@ -625,6 +723,9 @@ void TextWidgetsPage::OnUpdateUIPasswordCheckbox(wxUpdateUIEvent& event)
 void TextWidgetsPage::OnUpdateUIResetButton(wxUpdateUIEvent& event)
 {
     event.Enable( (m_radioTextLines->GetSelection() != DEFAULTS.textLines) ||
+#ifdef __WXMSW__
+                  (m_radioKind->GetSelection() != DEFAULTS.textKind) ||
+#endif // __WXMSW__
                   (m_chkReadonly->GetValue() != DEFAULTS.readonly) ||
                   (m_chkPassword->GetValue() != DEFAULTS.password) ||
                   (m_chkWrapLines->GetValue() != DEFAULTS.wraplines) );
