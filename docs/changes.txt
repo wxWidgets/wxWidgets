@@ -81,6 +81,9 @@ wxMSW:
 - wxGetHomeDir() uses HOME environment variable and if it is set will not
   return the programs directory any longer but its value (this function has
   never been meant to return the programs directory anyhow)
+  
+- wxHTML apps don't need to include wx/html/msw/wxhtml.rc in resources file
+  anymore. The file was removed from wxMSW
 
 Unix ports:
 
