@@ -71,7 +71,7 @@ typedef long celt;				/* type to hold chr, MCCE number, or
 #define DIGITVAL(c) ((c)-'0')	/* turn chr digit into its value */
 
 /*  RN - the "not use sizeof() thing is really asanine!" */
-#ifdef wxUSE_UNICODE
+#if wxUSE_UNICODE
 #	define CHRBITS 32
 #else
 #	define CHRBITS 8			/* bits in a chr; must not use sizeof */
