@@ -3684,6 +3684,21 @@ PRINT_MODE_PREVIEW = _windows_.PRINT_MODE_PREVIEW
 PRINT_MODE_FILE = _windows_.PRINT_MODE_FILE
 PRINT_MODE_PRINTER = _windows_.PRINT_MODE_PRINTER
 PRINT_MODE_STREAM = _windows_.PRINT_MODE_STREAM
+PRINTBIN_DEFAULT = _windows_.PRINTBIN_DEFAULT
+PRINTBIN_ONLYONE = _windows_.PRINTBIN_ONLYONE
+PRINTBIN_LOWER = _windows_.PRINTBIN_LOWER
+PRINTBIN_MIDDLE = _windows_.PRINTBIN_MIDDLE
+PRINTBIN_MANUAL = _windows_.PRINTBIN_MANUAL
+PRINTBIN_ENVELOPE = _windows_.PRINTBIN_ENVELOPE
+PRINTBIN_ENVMANUAL = _windows_.PRINTBIN_ENVMANUAL
+PRINTBIN_AUTO = _windows_.PRINTBIN_AUTO
+PRINTBIN_TRACTOR = _windows_.PRINTBIN_TRACTOR
+PRINTBIN_SMALLFMT = _windows_.PRINTBIN_SMALLFMT
+PRINTBIN_LARGEFMT = _windows_.PRINTBIN_LARGEFMT
+PRINTBIN_LARGECAPACITY = _windows_.PRINTBIN_LARGECAPACITY
+PRINTBIN_CASSETTE = _windows_.PRINTBIN_CASSETTE
+PRINTBIN_FORMSOURCE = _windows_.PRINTBIN_FORMSOURCE
+PRINTBIN_USER = _windows_.PRINTBIN_USER
 class PrintData(_core.Object):
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxPrintData instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
@@ -3742,6 +3757,10 @@ class PrintData(_core.Object):
         """GetQuality(self) -> int"""
         return _windows_.PrintData_GetQuality(*args, **kwargs)
 
+    def GetBin(*args, **kwargs):
+        """GetBin(self) -> int"""
+        return _windows_.PrintData_GetBin(*args, **kwargs)
+
     def SetNoCopies(*args, **kwargs):
         """SetNoCopies(self, int v)"""
         return _windows_.PrintData_SetNoCopies(*args, **kwargs)
@@ -3777,6 +3796,10 @@ class PrintData(_core.Object):
     def SetQuality(*args, **kwargs):
         """SetQuality(self, int quality)"""
         return _windows_.PrintData_SetQuality(*args, **kwargs)
+
+    def SetBin(*args, **kwargs):
+        """SetBin(self, int bin)"""
+        return _windows_.PrintData_SetBin(*args, **kwargs)
 
     def GetPrinterCommand(*args, **kwargs):
         """GetPrinterCommand(self) -> String"""

@@ -504,7 +504,6 @@
 %rename(OutputStream)                       wxOutputStream;
 %rename(FSFile)                             wxFSFile;
 %rename(FileSystem)                         wxFileSystem;
-%rename(FileSystem_URLToFileName)           wxFileSystem_URLToFileName;
 %rename(InternetFSHandler)                  wxInternetFSHandler;
 %rename(ZipFSHandler)                       wxZipFSHandler;
 %rename(MemoryFSHandler)                    wxMemoryFSHandler;
@@ -602,6 +601,7 @@
 %rename(WakeUpIdle)                         wxWakeUpIdle;
 %rename(PostEvent)                          wxPostEvent;
 %rename(App_CleanUp)                        wxApp_CleanUp;
+%rename(EventLoop)                          wxEventLoop;
 %rename(AcceleratorEntry)                   wxAcceleratorEntry;
 %rename(AcceleratorTable)                   wxAcceleratorTable;
 %rename(NullAcceleratorTable)               wxNullAcceleratorTable;

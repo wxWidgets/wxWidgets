@@ -18548,6 +18548,32 @@ static PyObject *_wrap_PrintData_GetQuality(PyObject *, PyObject *args, PyObject
 }
 
 
+static PyObject *_wrap_PrintData_GetBin(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxPrintData *arg1 = (wxPrintData *) 0 ;
+    int result;
+    PyObject * obj0 = 0 ;
+    char *kwnames[] = {
+        (char *) "self", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:PrintData_GetBin",kwnames,&obj0)) goto fail;
+    if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxPrintData,
+    SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = (int)(arg1)->GetBin();
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    resultobj = SWIG_From_int((int)result);
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
 static PyObject *_wrap_PrintData_SetNoCopies(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPrintData *arg1 = (wxPrintData *) 0 ;
@@ -18813,6 +18839,35 @@ static PyObject *_wrap_PrintData_SetQuality(PyObject *, PyObject *args, PyObject
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         (arg1)->SetQuality(arg2);
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    Py_INCREF(Py_None); resultobj = Py_None;
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_PrintData_SetBin(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxPrintData *arg1 = (wxPrintData *) 0 ;
+    int arg2 ;
+    PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
+    char *kwnames[] = {
+        (char *) "self",(char *) "bin", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:PrintData_SetBin",kwnames,&obj0,&obj1)) goto fail;
+    if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxPrintData,
+    SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
+    arg2 = (int)SWIG_As_int(obj1); 
+    if (PyErr_Occurred()) SWIG_fail;
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        (arg1)->SetBin((wxPrintBin )arg2);
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
@@ -25617,6 +25672,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"PrintData_GetPaperId", (PyCFunction) _wrap_PrintData_GetPaperId, METH_VARARGS | METH_KEYWORDS, NULL },
 	 { (char *)"PrintData_GetPaperSize", (PyCFunction) _wrap_PrintData_GetPaperSize, METH_VARARGS | METH_KEYWORDS, NULL },
 	 { (char *)"PrintData_GetQuality", (PyCFunction) _wrap_PrintData_GetQuality, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"PrintData_GetBin", (PyCFunction) _wrap_PrintData_GetBin, METH_VARARGS | METH_KEYWORDS, NULL },
 	 { (char *)"PrintData_SetNoCopies", (PyCFunction) _wrap_PrintData_SetNoCopies, METH_VARARGS | METH_KEYWORDS, NULL },
 	 { (char *)"PrintData_SetCollate", (PyCFunction) _wrap_PrintData_SetCollate, METH_VARARGS | METH_KEYWORDS, NULL },
 	 { (char *)"PrintData_SetOrientation", (PyCFunction) _wrap_PrintData_SetOrientation, METH_VARARGS | METH_KEYWORDS, NULL },
@@ -25626,6 +25682,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"PrintData_SetPaperId", (PyCFunction) _wrap_PrintData_SetPaperId, METH_VARARGS | METH_KEYWORDS, NULL },
 	 { (char *)"PrintData_SetPaperSize", (PyCFunction) _wrap_PrintData_SetPaperSize, METH_VARARGS | METH_KEYWORDS, NULL },
 	 { (char *)"PrintData_SetQuality", (PyCFunction) _wrap_PrintData_SetQuality, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"PrintData_SetBin", (PyCFunction) _wrap_PrintData_SetBin, METH_VARARGS | METH_KEYWORDS, NULL },
 	 { (char *)"PrintData_GetPrinterCommand", (PyCFunction) _wrap_PrintData_GetPrinterCommand, METH_VARARGS | METH_KEYWORDS, NULL },
 	 { (char *)"PrintData_GetPrinterOptions", (PyCFunction) _wrap_PrintData_GetPrinterOptions, METH_VARARGS | METH_KEYWORDS, NULL },
 	 { (char *)"PrintData_GetPreviewCommand", (PyCFunction) _wrap_PrintData_GetPreviewCommand, METH_VARARGS | METH_KEYWORDS, NULL },
@@ -27198,6 +27255,21 @@ SWIGEXPORT(void) SWIG_init(void) {
     PyDict_SetItemString(d,"PRINT_MODE_FILE", SWIG_From_int((int)wxPRINT_MODE_FILE));
     PyDict_SetItemString(d,"PRINT_MODE_PRINTER", SWIG_From_int((int)wxPRINT_MODE_PRINTER));
     PyDict_SetItemString(d,"PRINT_MODE_STREAM", SWIG_From_int((int)wxPRINT_MODE_STREAM));
+    PyDict_SetItemString(d,"PRINTBIN_DEFAULT", SWIG_From_int((int)wxPRINTBIN_DEFAULT));
+    PyDict_SetItemString(d,"PRINTBIN_ONLYONE", SWIG_From_int((int)wxPRINTBIN_ONLYONE));
+    PyDict_SetItemString(d,"PRINTBIN_LOWER", SWIG_From_int((int)wxPRINTBIN_LOWER));
+    PyDict_SetItemString(d,"PRINTBIN_MIDDLE", SWIG_From_int((int)wxPRINTBIN_MIDDLE));
+    PyDict_SetItemString(d,"PRINTBIN_MANUAL", SWIG_From_int((int)wxPRINTBIN_MANUAL));
+    PyDict_SetItemString(d,"PRINTBIN_ENVELOPE", SWIG_From_int((int)wxPRINTBIN_ENVELOPE));
+    PyDict_SetItemString(d,"PRINTBIN_ENVMANUAL", SWIG_From_int((int)wxPRINTBIN_ENVMANUAL));
+    PyDict_SetItemString(d,"PRINTBIN_AUTO", SWIG_From_int((int)wxPRINTBIN_AUTO));
+    PyDict_SetItemString(d,"PRINTBIN_TRACTOR", SWIG_From_int((int)wxPRINTBIN_TRACTOR));
+    PyDict_SetItemString(d,"PRINTBIN_SMALLFMT", SWIG_From_int((int)wxPRINTBIN_SMALLFMT));
+    PyDict_SetItemString(d,"PRINTBIN_LARGEFMT", SWIG_From_int((int)wxPRINTBIN_LARGEFMT));
+    PyDict_SetItemString(d,"PRINTBIN_LARGECAPACITY", SWIG_From_int((int)wxPRINTBIN_LARGECAPACITY));
+    PyDict_SetItemString(d,"PRINTBIN_CASSETTE", SWIG_From_int((int)wxPRINTBIN_CASSETTE));
+    PyDict_SetItemString(d,"PRINTBIN_FORMSOURCE", SWIG_From_int((int)wxPRINTBIN_FORMSOURCE));
+    PyDict_SetItemString(d,"PRINTBIN_USER", SWIG_From_int((int)wxPRINTBIN_USER));
     PyDict_SetItemString(d,"PRINTER_NO_ERROR", SWIG_From_int((int)wxPRINTER_NO_ERROR));
     PyDict_SetItemString(d,"PRINTER_CANCELLED", SWIG_From_int((int)wxPRINTER_CANCELLED));
     PyDict_SetItemString(d,"PRINTER_ERROR", SWIG_From_int((int)wxPRINTER_ERROR));

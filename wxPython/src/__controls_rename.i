@@ -109,6 +109,14 @@
 %rename(LB_ALIGN_MASK)                      wxLB_ALIGN_MASK;
 %rename(Listbook)                           wxListbook;
 %rename(ListbookEvent)                      wxListbookEvent;
+%rename(CHB_DEFAULT)                        wxCHB_DEFAULT;
+%rename(CHB_TOP)                            wxCHB_TOP;
+%rename(CHB_BOTTOM)                         wxCHB_BOTTOM;
+%rename(CHB_LEFT)                           wxCHB_LEFT;
+%rename(CHB_RIGHT)                          wxCHB_RIGHT;
+%rename(CHB_ALIGN_MASK)                     wxCHB_ALIGN_MASK;
+%rename(Choicebook)                         wxChoicebook;
+%rename(ChoicebookEvent)                    wxChoicebookEvent;
 %rename(BookCtrlSizer)                      wxBookCtrlSizer;
 %rename(NotebookSizer)                      wxNotebookSizer;
 %rename(TOOL_STYLE_BUTTON)                  wxTOOL_STYLE_BUTTON;

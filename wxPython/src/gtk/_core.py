@@ -1771,6 +1771,11 @@ class FileSystem(Object):
         return _core_.FileSystem_FileNameToURL(*args, **kwargs)
 
     FileNameToURL = staticmethod(FileNameToURL)
+    def URLToFileName(*args, **kwargs):
+        """URLToFileName(String url) -> String"""
+        return _core_.FileSystem_URLToFileName(*args, **kwargs)
+
+    URLToFileName = staticmethod(URLToFileName)
 
 class FileSystemPtr(FileSystem):
     def __init__(self, this):
@@ -1791,10 +1796,10 @@ def FileSystem_FileNameToURL(*args, **kwargs):
     """FileSystem_FileNameToURL(String filename) -> String"""
     return _core_.FileSystem_FileNameToURL(*args, **kwargs)
 
-
 def FileSystem_URLToFileName(*args, **kwargs):
     """FileSystem_URLToFileName(String url) -> String"""
     return _core_.FileSystem_URLToFileName(*args, **kwargs)
+
 class InternetFSHandler(CPPFileSystemHandler):
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxInternetFSHandler instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
@@ -1865,14 +1870,22 @@ def __wxMemoryFSHandler_AddFile_wxBitmap(*args, **kwargs):
 def __wxMemoryFSHandler_AddFile_Data(*args, **kwargs):
     """__wxMemoryFSHandler_AddFile_Data(String filename, PyObject data)"""
     return _core_.__wxMemoryFSHandler_AddFile_Data(*args, **kwargs)
-def MemoryFSHandler_AddFile(filename, a, b=''):
-    if isinstance(a, wx.Image):
-        __wxMemoryFSHandler_AddFile_wxImage(filename, a, b)
-    elif isinstance(a, wx.Bitmap):
-        __wxMemoryFSHandler_AddFile_wxBitmap(filename, a, b)
-    elif type(a) == str:
-        __wxMemoryFSHandler_AddFile_Data(filename, a)
-    else: raise TypeError, 'wx.Image, wx.Bitmap or string expected'
+def MemoryFSHandler_AddFile(filename, dataItem, imgType=-1):
+    """
+    Add 'file' to the memory filesystem.  The dataItem parameter can
+    either be a `wx.Bitmap`, `wx.Image` or a string that can contain
+    arbitrary data.  If a bitmap or image is used then the imgType
+    parameter should specify what kind of image file it should be
+    written as, wx.BITMAP_TYPE_PNG, etc.
+    """
+    if isinstance(dataItem, wx.Image):
+        __wxMemoryFSHandler_AddFile_wxImage(filename, dataItem, imgType)
+    elif isinstance(dataItem, wx.Bitmap):
+        __wxMemoryFSHandler_AddFile_wxBitmap(filename, dataItem, imgType)
+    elif type(dataItem) == str:
+        __wxMemoryFSHandler_AddFile_Data(filename, dataItem)
+    else:
+        raise TypeError, 'wx.Image, wx.Bitmap or string expected'
 
 class MemoryFSHandler(CPPFileSystemHandler):
     def __repr__(self):
@@ -5395,6 +5408,69 @@ _sys.__wxPythonCleanup = __wxPyCleanup()
 
 
 #----------------------------------------------------------------------------
+
+#---------------------------------------------------------------------------
+
+class EventLoop(object):
+    def __repr__(self):
+        return "<%s.%s; proxy of C++ wxEventLoop instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
+    def __init__(self, *args, **kwargs):
+        """__init__(self) -> EventLoop"""
+        newobj = _core_.new_EventLoop(*args, **kwargs)
+        self.this = newobj.this
+        self.thisown = 1
+        del newobj.thisown
+    def __del__(self, destroy=_core_.delete_EventLoop):
+        """__del__(self)"""
+        try:
+            if self.thisown: destroy(self)
+        except: pass
+
+    def Run(*args, **kwargs):
+        """Run(self) -> int"""
+        return _core_.EventLoop_Run(*args, **kwargs)
+
+    def Exit(*args, **kwargs):
+        """Exit(self, int rc=0)"""
+        return _core_.EventLoop_Exit(*args, **kwargs)
+
+    def Pending(*args, **kwargs):
+        """Pending(self) -> bool"""
+        return _core_.EventLoop_Pending(*args, **kwargs)
+
+    def Dispatch(*args, **kwargs):
+        """Dispatch(self) -> bool"""
+        return _core_.EventLoop_Dispatch(*args, **kwargs)
+
+    def IsRunning(*args, **kwargs):
+        """IsRunning(self) -> bool"""
+        return _core_.EventLoop_IsRunning(*args, **kwargs)
+
+    def GetActive(*args, **kwargs):
+        """GetActive() -> EventLoop"""
+        return _core_.EventLoop_GetActive(*args, **kwargs)
+
+    GetActive = staticmethod(GetActive)
+    def SetActive(*args, **kwargs):
+        """SetActive(EventLoop loop)"""
+        return _core_.EventLoop_SetActive(*args, **kwargs)
+
+    SetActive = staticmethod(SetActive)
+
+class EventLoopPtr(EventLoop):
+    def __init__(self, this):
+        self.this = this
+        if not hasattr(self,"thisown"): self.thisown = 0
+        self.__class__ = EventLoop
+_core_.EventLoop_swigregister(EventLoopPtr)
+
+def EventLoop_GetActive(*args, **kwargs):
+    """EventLoop_GetActive() -> EventLoop"""
+    return _core_.EventLoop_GetActive(*args, **kwargs)
+
+def EventLoop_SetActive(*args, **kwargs):
+    """EventLoop_SetActive(EventLoop loop)"""
+    return _core_.EventLoop_SetActive(*args, **kwargs)
 
 #---------------------------------------------------------------------------
 
