@@ -20,7 +20,7 @@
 #pragma hdrstop
 #endif
 
-#if wxUSE_MSGDLG
+#if wxUSE_MSGDLG && !defined(__WXGTK20__)
 
 #ifndef WX_PRECOMP
     #include "wx/utils.h"
@@ -162,5 +162,5 @@ void wxGenericMessageDialog::OnCancel(wxCommandEvent& WXUNUSED(event))
     }
 }
 
-#endif // wxUSE_MSGDLG
+#endif // wxUSE_MSGDLG && !defined(__WXGTK20__)
 
