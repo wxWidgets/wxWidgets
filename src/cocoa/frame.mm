@@ -200,6 +200,7 @@ wxStatusBar* wxFrame::CreateStatusBar(int number,
                                           wxWindowID winid,
                                           const wxString& name)
 {
+    wxAutoNSAutoreleasePool pool;
     wxFrameBase::CreateStatusBar(number,style,winid,name);
     if(m_frameStatusBar)
     {
@@ -233,6 +234,7 @@ wxToolBar* wxFrame::CreateToolBar(long style,
                                       wxWindowID winid,
                                       const wxString& name)
 {
+    wxAutoNSAutoreleasePool pool;
     wxFrameBase::CreateToolBar(style,winid,name);
     if(m_frameToolBar)
     {
