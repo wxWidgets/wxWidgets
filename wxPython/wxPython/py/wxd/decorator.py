@@ -29,7 +29,8 @@ def decorateClass(item, realdict):
     try:
         wxclass = realdict[classname]
     except:
-        print classname
+        # print classname
+        pass
     else:
         if item.__doc__:
             wxclass.__doc__ = item.__doc__
