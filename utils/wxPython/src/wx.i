@@ -47,7 +47,7 @@
 
 //---------------------------------------------------------------------------
 
-#define __version__ "0.5.4"
+#define __version__ "2.0b5"
 
 wxPoint     wxPyDefaultPosition;
 wxSize      wxPyDefaultSize;
@@ -156,7 +156,20 @@ extern "C" SWIGEXPORT(void,initwindows3c)();
 /////////////////////////////////////////////////////////////////////////////
 //
 // $Log$
+// Revision 1.6  1999/02/20 09:03:04  RD
+// Added wxWindow_FromHWND(hWnd) for wxMSW to construct a wxWindow from a
+// window handle.  If you can get the window handle into the python code,
+// it should just work...  More news on this later.
+//
+// Added wxImageList, wxToolTip.
+//
+// Re-enabled wxConfig.DeleteAll() since it is reportedly fixed for the
+// wxRegConfig class.
+//
+// As usual, some bug fixes, tweaks, etc.
+//
 // Revision 1.5  1999/02/01 00:10:41  RD
+//
 // Added the missing EVT_LIST_ITEM_SELECTED and friends.
 //
 // Revision 1.4  1999/01/30 07:30:16  RD

@@ -3568,6 +3568,7 @@ SWIGEXPORT(void,initcmndlgsc)() {
 	 SWIG_RegisterMapping("_class_wxEvtHandler","_wxEvtHandler",0);
 	 SWIG_RegisterMapping("_wxIndividualLayoutConstraint","_class_wxIndividualLayoutConstraint",0);
 	 SWIG_RegisterMapping("_wxCursor","_class_wxCursor",0);
+	 SWIG_RegisterMapping("_wxToolTip","_class_wxToolTip",0);
 	 SWIG_RegisterMapping("_wxMask","_class_wxMask",0);
 	 SWIG_RegisterMapping("_wxPageSetupData","_class_wxPageSetupData",0);
 	 SWIG_RegisterMapping("_wxPyMenu","_class_wxPyMenu",0);
@@ -3577,6 +3578,7 @@ SWIGEXPORT(void,initcmndlgsc)() {
 	 SWIG_RegisterMapping("_long","_wxDash",0);
 	 SWIG_RegisterMapping("_long","_unsigned_long",0);
 	 SWIG_RegisterMapping("_long","_signed_long",0);
+	 SWIG_RegisterMapping("_wxImageList","_class_wxImageList",0);
 	 SWIG_RegisterMapping("_class_wxAcceleratorTable","_wxAcceleratorTable",0);
 	 SWIG_RegisterMapping("_wxDC","_class_wxDC",0);
 	 SWIG_RegisterMapping("_class_wxSingleChoiceDialog","_wxSingleChoiceDialog",0);
@@ -3602,6 +3604,7 @@ SWIGEXPORT(void,initcmndlgsc)() {
 	 SWIG_RegisterMapping("_wxPanel","_class_wxColourDialog",SwigwxColourDialogTowxPanel);
 	 SWIG_RegisterMapping("_wxPanel","_wxColourDialog",SwigwxColourDialogTowxPanel);
 	 SWIG_RegisterMapping("_wxPanel","_class_wxPanel",0);
+	 SWIG_RegisterMapping("_class_wxToolTip","_wxToolTip",0);
 	 SWIG_RegisterMapping("_class_wxMask","_wxMask",0);
 	 SWIG_RegisterMapping("_class_wxPageSetupData","_wxPageSetupData",0);
 	 SWIG_RegisterMapping("_wxColour","_class_wxColour",0);
@@ -3752,6 +3755,7 @@ SWIGEXPORT(void,initcmndlgsc)() {
 	 SWIG_RegisterMapping("_short","_WXTYPE",0);
 	 SWIG_RegisterMapping("_short","_unsigned_short",0);
 	 SWIG_RegisterMapping("_short","_signed_short",0);
+	 SWIG_RegisterMapping("_class_wxImageList","_wxImageList",0);
 	 SWIG_RegisterMapping("_wxWindowID","_EBool",0);
 	 SWIG_RegisterMapping("_wxWindowID","_uint",0);
 	 SWIG_RegisterMapping("_wxWindowID","_int",0);

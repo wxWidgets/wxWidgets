@@ -138,9 +138,6 @@ public:
     bool ShiftDown();
     long KeyCode();
 
-//  void Position(float *OUTPUT, float *OUTPUT);
-//  float GetX();
-//  float GetY();
 };
 
 //---------------------------------------------------------------------------
@@ -298,7 +295,20 @@ public:
 /////////////////////////////////////////////////////////////////////////////
 //
 // $Log$
+// Revision 1.7  1999/02/20 09:02:57  RD
+// Added wxWindow_FromHWND(hWnd) for wxMSW to construct a wxWindow from a
+// window handle.  If you can get the window handle into the python code,
+// it should just work...  More news on this later.
+//
+// Added wxImageList, wxToolTip.
+//
+// Re-enabled wxConfig.DeleteAll() since it is reportedly fixed for the
+// wxRegConfig class.
+//
+// As usual, some bug fixes, tweaks, etc.
+//
 // Revision 1.6  1999/02/06 22:55:00  RD
+//
 // Follow up for changes in wxWindows to various event classes
 //
 // Revision 1.5  1998/12/15 20:41:17  RD

@@ -190,6 +190,7 @@ class wxListCtrlPtr(wxControlPtr):
         return val
     def GetImageList(self,arg0):
         val = controls2c.wxListCtrl_GetImageList(self.this,arg0)
+        val = wxImageListPtr(val)
         return val
     def GetItemData(self,arg0):
         val = controls2c.wxListCtrl_GetItemData(self.this,arg0)
@@ -272,13 +273,13 @@ class wxListCtrlPtr(wxControlPtr):
         val = controls2c.wxListCtrl_SetColumnWidth(self.this,arg0,arg1)
         return val
     def SetImageList(self,arg0,arg1):
-        val = controls2c.wxListCtrl_SetImageList(self.this,arg0,arg1)
+        val = controls2c.wxListCtrl_SetImageList(self.this,arg0.this,arg1)
         return val
     def SetItem(self,arg0):
         val = controls2c.wxListCtrl_SetItem(self.this,arg0.this)
         return val
-    def SetItemString(self,arg0,arg1,arg2,*args):
-        val = apply(controls2c.wxListCtrl_SetItemString,(self.this,arg0,arg1,arg2,)+args)
+    def SetStringItem(self,arg0,arg1,arg2,*args):
+        val = apply(controls2c.wxListCtrl_SetStringItem,(self.this,arg0,arg1,arg2,)+args)
         return val
     def SetItemData(self,arg0,arg1):
         val = controls2c.wxListCtrl_SetItemData(self.this,arg0,arg1)
@@ -411,15 +412,17 @@ class wxTreeCtrlPtr(wxControlPtr):
         return val
     def GetImageList(self):
         val = controls2c.wxTreeCtrl_GetImageList(self.this)
+        val = wxImageListPtr(val)
         return val
     def GetStateImageList(self):
         val = controls2c.wxTreeCtrl_GetStateImageList(self.this)
+        val = wxImageListPtr(val)
         return val
     def SetImageList(self,arg0):
-        val = controls2c.wxTreeCtrl_SetImageList(self.this,arg0)
+        val = controls2c.wxTreeCtrl_SetImageList(self.this,arg0.this)
         return val
     def SetStateImageList(self,arg0):
-        val = controls2c.wxTreeCtrl_SetStateImageList(self.this,arg0)
+        val = controls2c.wxTreeCtrl_SetStateImageList(self.this,arg0.this)
         return val
     def GetItemText(self,arg0):
         val = controls2c.wxTreeCtrl_GetItemText(self.this,arg0.this)
@@ -623,3 +626,45 @@ class wxTreeCtrl(wxTreeCtrlPtr):
 
 #-------------- VARIABLE WRAPPERS ------------------
 
+wxLIST_MASK_TEXT = controls2c.wxLIST_MASK_TEXT
+wxLIST_MASK_IMAGE = controls2c.wxLIST_MASK_IMAGE
+wxLIST_MASK_DATA = controls2c.wxLIST_MASK_DATA
+wxLIST_MASK_WIDTH = controls2c.wxLIST_MASK_WIDTH
+wxLIST_MASK_FORMAT = controls2c.wxLIST_MASK_FORMAT
+wxLIST_STATE_DONTCARE = controls2c.wxLIST_STATE_DONTCARE
+wxLIST_STATE_DROPHILITED = controls2c.wxLIST_STATE_DROPHILITED
+wxLIST_STATE_FOCUSED = controls2c.wxLIST_STATE_FOCUSED
+wxLIST_STATE_SELECTED = controls2c.wxLIST_STATE_SELECTED
+wxLIST_STATE_CUT = controls2c.wxLIST_STATE_CUT
+wxLIST_HITTEST_ABOVE = controls2c.wxLIST_HITTEST_ABOVE
+wxLIST_HITTEST_BELOW = controls2c.wxLIST_HITTEST_BELOW
+wxLIST_HITTEST_NOWHERE = controls2c.wxLIST_HITTEST_NOWHERE
+wxLIST_HITTEST_ONITEMICON = controls2c.wxLIST_HITTEST_ONITEMICON
+wxLIST_HITTEST_ONITEMLABEL = controls2c.wxLIST_HITTEST_ONITEMLABEL
+wxLIST_HITTEST_ONITEMRIGHT = controls2c.wxLIST_HITTEST_ONITEMRIGHT
+wxLIST_HITTEST_ONITEMSTATEICON = controls2c.wxLIST_HITTEST_ONITEMSTATEICON
+wxLIST_HITTEST_TOLEFT = controls2c.wxLIST_HITTEST_TOLEFT
+wxLIST_HITTEST_TORIGHT = controls2c.wxLIST_HITTEST_TORIGHT
+wxLIST_HITTEST_ONITEM = controls2c.wxLIST_HITTEST_ONITEM
+wxLIST_NEXT_ABOVE = controls2c.wxLIST_NEXT_ABOVE
+wxLIST_NEXT_ALL = controls2c.wxLIST_NEXT_ALL
+wxLIST_NEXT_BELOW = controls2c.wxLIST_NEXT_BELOW
+wxLIST_NEXT_LEFT = controls2c.wxLIST_NEXT_LEFT
+wxLIST_NEXT_RIGHT = controls2c.wxLIST_NEXT_RIGHT
+wxLIST_ALIGN_DEFAULT = controls2c.wxLIST_ALIGN_DEFAULT
+wxLIST_ALIGN_LEFT = controls2c.wxLIST_ALIGN_LEFT
+wxLIST_ALIGN_TOP = controls2c.wxLIST_ALIGN_TOP
+wxLIST_ALIGN_SNAP_TO_GRID = controls2c.wxLIST_ALIGN_SNAP_TO_GRID
+wxLIST_FORMAT_LEFT = controls2c.wxLIST_FORMAT_LEFT
+wxLIST_FORMAT_RIGHT = controls2c.wxLIST_FORMAT_RIGHT
+wxLIST_FORMAT_CENTRE = controls2c.wxLIST_FORMAT_CENTRE
+wxLIST_FORMAT_CENTER = controls2c.wxLIST_FORMAT_CENTER
+wxLIST_AUTOSIZE = controls2c.wxLIST_AUTOSIZE
+wxLIST_AUTOSIZE_USEHEADER = controls2c.wxLIST_AUTOSIZE_USEHEADER
+wxLIST_RECT_BOUNDS = controls2c.wxLIST_RECT_BOUNDS
+wxLIST_RECT_ICON = controls2c.wxLIST_RECT_ICON
+wxLIST_RECT_LABEL = controls2c.wxLIST_RECT_LABEL
+wxLIST_FIND_UP = controls2c.wxLIST_FIND_UP
+wxLIST_FIND_DOWN = controls2c.wxLIST_FIND_DOWN
+wxLIST_FIND_LEFT = controls2c.wxLIST_FIND_LEFT
+wxLIST_FIND_RIGHT = controls2c.wxLIST_FIND_RIGHT

@@ -15,6 +15,7 @@
 %{
 #include "helpers.h"
 #include <wx/resource.h>
+#include <wx/tooltip.h>
 %}
 
 //----------------------------------------------------------------------
@@ -31,23 +32,30 @@
 
 class wxSize {
 public:
+    long x;
+    long y;
     %name(width) long x;
     %name(height)long y;
 
     wxSize(long w=0, long h=0);
     ~wxSize();
     void Set(long w, long h);
+    long GetX();
+    long GetY();
     %name(GetWidth) long GetX();
     %name(GetHeight)long GetY();
 
     %addmethods {
-        PyObject* __str__() {
+        PyObject* asTuple() {
             PyObject* tup = PyTuple_New(2);
             PyTuple_SET_ITEM(tup, 0, PyInt_FromLong(self->x));
             PyTuple_SET_ITEM(tup, 1, PyInt_FromLong(self->y));
             return tup;
         }
     }
+    %pragma(python) addtoclass = "def __str__(self): return str(self.asTuple())"
+    %pragma(python) addtoclass = "def __repr__(self): return str(self.asTuple())"
+
 };
 
 //---------------------------------------------------------------------------
@@ -72,13 +80,15 @@ public:
             self->x = x;
             self->y = y;
         }
-        PyObject* __str__() {
+        PyObject* asTuple() {
             PyObject* tup = PyTuple_New(2);
             PyTuple_SET_ITEM(tup, 0, PyInt_FromLong(self->x));
             PyTuple_SET_ITEM(tup, 1, PyInt_FromLong(self->y));
             return tup;
         }
     }
+    %pragma(python) addtoclass = "def __str__(self): return str(self.asTuple())"
+    %pragma(python) addtoclass = "def __repr__(self): return str(self.asTuple())"
 };
 
 //---------------------------------------------------------------------------
@@ -108,6 +118,19 @@ public:
    long  GetRight();
 
    long x, y, width, height;
+
+    %addmethods {
+        PyObject* asTuple() {
+            PyObject* tup = PyTuple_New(4);
+            PyTuple_SET_ITEM(tup, 0, PyInt_FromLong(self->x));
+            PyTuple_SET_ITEM(tup, 1, PyInt_FromLong(self->y));
+            PyTuple_SET_ITEM(tup, 0, PyInt_FromLong(self->width));
+            PyTuple_SET_ITEM(tup, 1, PyInt_FromLong(self->height));
+            return tup;
+        }
+    }
+    %pragma(python) addtoclass = "def __str__(self): return str(self.asTuple())"
+    %pragma(python) addtoclass = "def __repr__(self): return str(self.asTuple())"
 };
 
 
@@ -357,10 +380,47 @@ public:
 };
 
 //---------------------------------------------------------------------------
+// wxToolTip
+
+class wxToolTip {
+public:
+    wxToolTip(const wxString &tip);
+
+    void SetTip(const wxString& tip);
+    wxString GetTip();
+    void SetWindow(wxWindow *win);
+    wxWindow *GetWindow();
+};
+
+
+%inline %{
+    void wxToolTip_Enable(bool flag) {
+        wxToolTip::Enable(flag);
+    }
+
+    void wxToolTip_SetDelay(long milliseconds) {
+        wxToolTip::SetDelay(milliseconds);
+    }
+%}
+
+//---------------------------------------------------------------------------
 /////////////////////////////////////////////////////////////////////////////
 //
 // $Log$
+// Revision 1.11  1999/02/20 09:03:01  RD
+// Added wxWindow_FromHWND(hWnd) for wxMSW to construct a wxWindow from a
+// window handle.  If you can get the window handle into the python code,
+// it should just work...  More news on this later.
+//
+// Added wxImageList, wxToolTip.
+//
+// Re-enabled wxConfig.DeleteAll() since it is reportedly fixed for the
+// wxRegConfig class.
+//
+// As usual, some bug fixes, tweaks, etc.
+//
 // Revision 1.10  1999/01/30 07:30:14  RD
+//
 // Added wxSashWindow, wxSashEvent, wxLayoutAlgorithm, etc.
 //
 // Various cleanup, tweaks, minor additions, etc. to maintain

@@ -41,6 +41,52 @@ extern wxValidator wxPyDefaultValidator;
 
 //----------------------------------------------------------------------
 
+enum {
+    wxLIST_MASK_TEXT,
+    wxLIST_MASK_IMAGE,
+    wxLIST_MASK_DATA,
+    wxLIST_MASK_WIDTH,
+    wxLIST_MASK_FORMAT,
+    wxLIST_STATE_DONTCARE,
+    wxLIST_STATE_DROPHILITED,
+    wxLIST_STATE_FOCUSED,
+    wxLIST_STATE_SELECTED,
+    wxLIST_STATE_CUT,
+    wxLIST_HITTEST_ABOVE,
+    wxLIST_HITTEST_BELOW,
+    wxLIST_HITTEST_NOWHERE,
+    wxLIST_HITTEST_ONITEMICON,
+    wxLIST_HITTEST_ONITEMLABEL,
+    wxLIST_HITTEST_ONITEMRIGHT,
+    wxLIST_HITTEST_ONITEMSTATEICON,
+    wxLIST_HITTEST_TOLEFT,
+    wxLIST_HITTEST_TORIGHT,
+    wxLIST_HITTEST_ONITEM,
+    wxLIST_NEXT_ABOVE,
+    wxLIST_NEXT_ALL,
+    wxLIST_NEXT_BELOW,
+    wxLIST_NEXT_LEFT,
+    wxLIST_NEXT_RIGHT,
+    wxLIST_ALIGN_DEFAULT,
+    wxLIST_ALIGN_LEFT,
+    wxLIST_ALIGN_TOP,
+    wxLIST_ALIGN_SNAP_TO_GRID,
+    wxLIST_FORMAT_LEFT,
+    wxLIST_FORMAT_RIGHT,
+    wxLIST_FORMAT_CENTRE,
+    wxLIST_FORMAT_CENTER,
+    wxLIST_AUTOSIZE,
+    wxLIST_AUTOSIZE_USEHEADER,
+    wxLIST_RECT_BOUNDS,
+    wxLIST_RECT_ICON,
+    wxLIST_RECT_LABEL,
+    wxLIST_FIND_UP,
+    wxLIST_FIND_DOWN,
+    wxLIST_FIND_LEFT,
+    wxLIST_FIND_RIGHT,
+};
+
+
 class wxListItem {
 public:
     long            m_mask;     // Indicates what fields are valid
@@ -156,9 +202,11 @@ public:
     bool SetColumn(int col, wxListItem& item);
     bool SetColumnWidth(int col, int width);
     void SetImageList(wxImageList* imageList, int which);
+
     bool SetItem(wxListItem& info);
-    %name(SetItemString)long SetItem(long index, int col, const wxString& label,
+    %name(SetStringItem)long SetItem(long index, int col, const wxString& label,
                                      int imageId = -1);
+
     bool SetItemData(long item, long data);
     bool SetItemImage(long item, int image, int selImage);
     bool SetItemPosition(long item, const wxPoint& pos);
@@ -371,7 +419,20 @@ public:
 /////////////////////////////////////////////////////////////////////////////
 //
 // $Log$
+// Revision 1.15  1999/02/20 09:02:56  RD
+// Added wxWindow_FromHWND(hWnd) for wxMSW to construct a wxWindow from a
+// window handle.  If you can get the window handle into the python code,
+// it should just work...  More news on this later.
+//
+// Added wxImageList, wxToolTip.
+//
+// Re-enabled wxConfig.DeleteAll() since it is reportedly fixed for the
+// wxRegConfig class.
+//
+// As usual, some bug fixes, tweaks, etc.
+//
 // Revision 1.14  1999/01/30 07:30:10  RD
+//
 // Added wxSashWindow, wxSashEvent, wxLayoutAlgorithm, etc.
 //
 // Various cleanup, tweaks, minor additions, etc. to maintain

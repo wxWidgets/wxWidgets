@@ -1,6 +1,6 @@
 #----------------------------------------------------------------------------
 # Name:		makefile.nt
-# Purpose:	Win32, VC++ 5 makefile for wxPython
+# Purpose:	Win32, VC++ 5/6 makefile for wxPython
 #
 # Author:       Robin Dunn
 #
@@ -9,7 +9,7 @@
 # Copyright:    (c) 1998 by Total Control Software
 # Licence:      wxWindows license
 #----------------------------------------------------------------------------
-VERSION=0.5.4
+VERSION=2.0b5
 
 # Set WXDIR to the root wxWindows directory for your system
 WXDIR = $(WXWIN)
@@ -30,18 +30,22 @@ TARGETDIR=..
 # runtime.
 COMPILEPY=0
 
+# If your wxWindows is built as a DLL, set this to 1.  Using 0 means
+# that wxWindows will be staticaly linked with wxPython.
+WXUSINGDLL=1
+
+# (experimental)
 SEPARATE=0
 
 #----------------------------------------------------------------------
 
-WXUSINGDLL=0
 NOPCH=1
 THISDIR=$(WXDIR)\utils\wxPython
 
 EXTRALIBS=$(PYTHONDIR)\libs\python15.lib
 EXTRAINC=-I$(PYTHONDIR)\include -I.
 EXTRAFLAGS=/Fpwxp.pch /YXhelpers.h -DSWIG_GLOBAL -DHAVE_CONFIG_H
-OVERRIDEFLAGS=/GX-
+OVERRIDEFLAGS=/GX- /DwxUSE_GLOBAL_MEMORY_OPERATORS=0
 
 
 SWIGFLAGS=-c++ -shadow -python -dnone -D__WXMSW__
@@ -172,6 +176,8 @@ clean:
 	-erase $(TARGETDIR)\*.pyo
 
 
+showflags:
+	@echo $(CPPFLAGS)
 
 #------------------------------------------------------------------------
 
@@ -268,7 +274,20 @@ dist:
 #------------------------------------------------------------------------
 #
 # $Log$
+# Revision 1.2  1999/02/20 09:03:00  RD
+# Added wxWindow_FromHWND(hWnd) for wxMSW to construct a wxWindow from a
+# window handle.  If you can get the window handle into the python code,
+# it should just work...  More news on this later.
+#
+# Added wxImageList, wxToolTip.
+#
+# Re-enabled wxConfig.DeleteAll() since it is reportedly fixed for the
+# wxRegConfig class.
+#
+# As usual, some bug fixes, tweaks, etc.
+#
 # Revision 1.1  1999/02/06 23:47:03  RD
+#
 # Changing makefile.nt to makefile.vc as in rest of wxWindows
 #
 # Revision 1.10  1999/02/01 00:10:40  RD

@@ -1,8 +1,6 @@
 
 @echo off
 
-rem cd %WXWIN%\utils
 
-zip -@ -r wxPython\wxPython-%1.zip < wxPython\distrib\wxPython.rsp
+zip -@ -r wxPython\wxPython-src-%1.zip < wxPython\distrib\wxPython.rsp
 
-cd -

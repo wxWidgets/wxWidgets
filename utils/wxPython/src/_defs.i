@@ -15,85 +15,133 @@
 //---------------------------------------------------------------------------
 // Forward declares...
 
-class wxPyApp;
-class wxEvtHandler;
-class wxWindow;
-class wxFrame;
-class wxMiniFrame;
-class wxPanel;
-class wxDialog;
-class wxMenu;
-class wxPyMenu;
-class wxMenuBar;
-class wxMenuItem;
-class wxEvent;
-class wxSizeEvent;
-class wxCloseEvent;
-class wxCommandEvent;
-class wxScrollEvent;
-class wxMouseEvent;
-class wxKeyEvent;
-class wxMoveEvent;
-class wxPaintEvent;
-class wxEraseEvent;
-class wxFocusEvent;
+class wxAcceleratorEntry;
+class wxAcceleratorTable;
 class wxActivateEvent;
-class wxInitDialogEvent;
-class wxMenuEvent;
-class wxShowEvent;
-class wxIconizeEvent;
-class wxMaximizeEvent;
-class wxJoystickEvent;
-class wxDropFilesEvent;
-class wxIdleEvent;
-class wxUpdateUIEvent;
-class wxSysColourChangedEvent;
-class wxSize;
-class wxRealPoint;
-class wxPoint;
-class wxRect;
+class wxBitmapButton;
 class wxBitmap;
-class wxMask;
-class wxIcon;
-class wxCursor;
-class wxFont;
-class wxColour;
-class wxPen;
 class wxBrush;
-class wxDC;
-class wxMemoryDC;
-class wxScreenDC;
+class wxButton;
+class wxCalculateLayoutEvent;
+class wxCheckBox;
+class wxCheckListBox;
+class wxChoice;
 class wxClientDC;
-class wxPaintDC;
-class wxPostScriptDC;
-class wxPrinterDC;
-class wxMetaFileDC;
-class wxMDIParentFrame;
+class wxCloseEvent;
+class wxColourData;
+class wxColourDialog;
+class wxColour;
+class wxComboBox;
+class wxCommandEvent;
+class wxConfig;
+class wxControl;
+class wxCursor;
+class wxDC;
+class wxDialog;
+class wxDirDialog;
+class wxDropFilesEvent;
+class wxEraseEvent;
+class wxEvent;
+class wxEvtHandler;
+class wxFileDialog;
+class wxFocusEvent;
+class wxFontData;
+class wxFontDialog;
+class wxFont;
+class wxFrame;
+class wxGauge;
+class wxGridCell;
+class wxGridEvent;
+class wxGrid;
+class wxIconizeEvent;
+class wxIcon;
+class wxIdleEvent;
+class wxImageList;
+class wxIndividualLayoutConstraint;
+class wxInitDialogEvent;
+class wxJoystickEvent;
+class wxKeyEvent;
+class wxLayoutAlgorithm;
+class wxLayoutConstraints;
+class wxListBox;
+class wxListCtrl;
+class wxListEvent;
+class wxListItem;
 class wxMDIChildFrame;
 class wxMDIClientWindow;
-class wxControl;
-class wxButton;
-class wxBitmapButton;
-class wxCheckBox;
-class wxChoice;
-class wxComboBox;
-class wxGauge;
-class wxStaticBox;
-class wxStaticText;
-class wxListBox;
-class wxTextCtrl;
-class wxScrollBar;
-class wxSpinButton;
-class wxStaticBitmap;
+class wxMDIParentFrame;
+class wxMask;
+class wxMaximizeEvent;
+class wxMemoryDC;
+class wxMenuBar;
+class wxMenuEvent;
+class wxMenuItem;
+class wxMenu;
+class wxMessageDialog;
+class wxMetaFileDC;
+class wxMiniFrame;
+class wxMouseEvent;
+class wxMoveEvent;
+class wxNotebookEvent;
+class wxNotebook;
+class wxPageSetupData;
+class wxPageSetupDialog;
+class wxPaintDC;
+class wxPaintEvent;
+class wxPalette;
+class wxPanel;
+class wxPen;
+class wxPoint;
+class wxPostScriptDC;
+class wxPrintData;
+class wxPrintDialog;
+class wxPrinterDC;
+class wxQueryLayoutInfoEvent;
 class wxRadioBox;
 class wxRadioButton;
+class wxRealPoint;
+class wxRect;
+class wxRegionIterator;
+class wxRegion;
+class wxSashEvent;
+class wxSashLayoutWindow;
+class wxSashWindow;
+class wxScreenDC;
+class wxScrollBar;
+class wxScrollEvent;
+class wxScrolledWindow;
+class wxShowEvent;
+class wxSingleChoiceDialog;
+class wxSizeEvent;
+class wxSize;
 class wxSlider;
-
-class wxPyTimer;
-class wxIndividualLayoutConstraint;
-class wxLayoutConstraints;
-class wxToolBar;
+class wxSpinButton;
+class wxSpinEvent;
+class wxSplitterWindow;
+class wxStaticBitmap;
+class wxStaticBox;
+class wxStaticText;
 class wxStatusBar;
+class wxSysColourChangedEvent;
+class wxTaskBarIcon;
+class wxTextCtrl;
+class wxTextEntryDialog;
+class wxTimer;
+class wxToolBarTool;
+class wxToolBar;
+class wxToolTip;
+class wxTreeCtrl;
+class wxTreeEvent;
+class wxTreeItemData;
+class wxTreeItemId;
+class wxUpdateUIEvent;
+class wxWindowDC;
+class wxWindow;
+
+class wxPyApp;
+class wxPyMenu;
+class wxPyTimer;
+
 
 //---------------------------------------------------------------------------
 
@@ -531,6 +579,7 @@ typedef enum {
 #define TRUE 1
 #define true 1
 
+const char* wxVERSION_STRING;
 
 //---------------------------------------------------------------------------
 //---------------------------------------------------------------------------
@@ -705,7 +754,20 @@ enum wxEventType {
 /////////////////////////////////////////////////////////////////////////////
 //
 // $Log$
+// Revision 1.11  1999/02/20 09:02:54  RD
+// Added wxWindow_FromHWND(hWnd) for wxMSW to construct a wxWindow from a
+// window handle.  If you can get the window handle into the python code,
+// it should just work...  More news on this later.
+//
+// Added wxImageList, wxToolTip.
+//
+// Re-enabled wxConfig.DeleteAll() since it is reportedly fixed for the
+// wxRegConfig class.
+//
+// As usual, some bug fixes, tweaks, etc.
+//
 // Revision 1.10  1999/01/30 07:30:08  RD
+//
 // Added wxSashWindow, wxSashEvent, wxLayoutAlgorithm, etc.
 //
 // Various cleanup, tweaks, minor additions, etc. to maintain

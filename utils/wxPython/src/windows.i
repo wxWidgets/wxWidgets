@@ -63,7 +63,8 @@ public:
     void CaptureMouse();
     void Center(int direction = wxHORIZONTAL);
     void Centre(int direction = wxHORIZONTAL);
-    void ClientToScreen(int *BOTH, int *BOTH);
+    %name(ClientToScreenXY)void ClientToScreen(int *BOTH, int *BOTH);
+    wxPoint ClientToScreen(const wxPoint& pt);
     bool Close(int force = FALSE);
     bool Destroy();
     void DestroyChildren();
@@ -72,7 +73,7 @@ public:
 #endif
     void Enable(bool enable);
     //bool FakePopupMenu(wxMenu* menu, int x, int y);
-    %name(FindWindowByID) wxWindow* FindWindow(long id);
+    %name(FindWindowById) wxWindow* FindWindow(long id);
     %name(FindWindowByName) wxWindow* FindWindow(const wxString& name);
     void Fit();
     wxColour GetBackgroundColour();
@@ -102,7 +103,10 @@ public:
     int GetScrollRange(int orientation);
     %name(GetSizeTuple) void GetSize(int *OUTPUT, int *OUTPUT);
     wxSize GetSize();
-    void GetTextExtent(const wxString& string, int *OUTPUT, int *OUTPUT); // int* descent = NULL, int* externalLeading = NULL, const wxFont* font = NULL, bool use16 = FALSE)
+    void GetTextExtent(const wxString& string, int *OUTPUT, int *OUTPUT);
+    %name(GetFullTextExtent)void GetTextExtent(const wxString& string,
+                       int *OUTPUT, int *OUTPUT, int *OUTPUT, int* OUTPUT,
+                       const wxFont* font = NULL); //, bool use16 = FALSE)
     wxString GetTitle();
     long GetWindowStyleFlag();
     void InitDialog();
@@ -113,7 +117,8 @@ public:
     bool LoadFromResource(wxWindow* parent, const wxString& resourceName, const wxResourceTable* resourceTable = NULL);
     void Lower();
     void MakeModal(bool flag);
-    void Move(int x, int y);
+    %name(MoveXY)void Move(int x, int y);
+    void Move(const wxPoint& point);
 
     //wxEvtHandler* PopEventHandler(bool deleteHandler = FALSE);
     bool PopupMenu(wxMenu *menu, int x, int y);
@@ -122,7 +127,9 @@ public:
     void Raise();
     void Refresh(bool eraseBackground = TRUE, const wxRect* rect = NULL);
     void ReleaseMouse();
-    void ScreenToClient(int *BOTH, int *BOTH);
+    %name(ScreenToClientXY)void ScreenToClient(int *BOTH, int *BOTH);
+    wxPoint ScreenToClient(const wxPoint& pt);
+
     void ScrollWindow(int dx, int dy, const wxRect* rect = NULL);
     void SetAcceleratorTable(const wxAcceleratorTable& accel);
     void SetAutoLayout(bool autoLayout);
@@ -138,9 +145,6 @@ public:
     void SetScrollbar(int orientation, int position, int thumbSize, int range, bool refresh = TRUE);
     void SetScrollPos(int orientation, int pos, bool refresh = TRUE);
 
-    //void SetSize(int x, int y, int width, int height, int sizeFlags=wxSIZE_AUTO);
-    //%name(SetSizeOnly) void SetSize(int width, int height);
-
     %name(SetDimensions) void SetSize(int x, int y, int width, int height, int sizeFlags=wxSIZE_AUTO);
     %addmethods {
         void SetSize(const wxSize& size) {
@@ -153,7 +157,8 @@ public:
     }
 
     void SetSizeHints(int minW=-1, int minH=-1, int maxW=-1, int maxH=-1, int incW=-1, int incH=-1);
-    void SetClientSize(int width, int height);
+    %name(SetClientSizeWH)void SetClientSize(int width, int height);
+    void SetClientSize(const wxSize& size);
     //void SetPalette(wxPalette* palette);
     void SetCursor(const wxCursor&cursor);
     //void SetEventHandler(wxEvtHandler* handler);
@@ -170,6 +175,9 @@ public:
     %name(ConvertPixelPointToDialog) wxPoint ConvertPixelsToDialog(const wxPoint& pt);
     %name(ConvertPixelSizeToDialog)  wxSize  ConvertPixelsToDialog(const wxSize& sz);
 
+    %name(SetToolTipString)void SetToolTip(const wxString &tip);
+    void SetToolTip(wxToolTip *tooltip);
+    wxToolTip* GetToolTip();
 };
 
 %pragma(python) code = "
@@ -177,15 +185,24 @@ def wxDLG_PNT(win, point):
     return win.ConvertDialogPointToPixels(point)
 
 def wxDLG_SZE(win, size):
-    return win.ConvertDialogPointToPixels(size)
+    return win.ConvertDialogSizeToPixels(size)
 "
 
-// Static method(s)
 #ifdef __WXMSW__
 %inline %{
     wxWindow* wxWindow_FindFocus() {
         return wxWindow::FindFocus();
     }
+%}
+
+
+%inline %{
+wxWindow* wxWindow_FromHWND(unsigned long hWnd) {
+    wxWindow* win = new wxWindow;
+    win->SetHWND(hWnd);
+    win->SubclassWin(hWnd);
+    return win;
+}
 %}
 #endif
 
@@ -270,6 +287,8 @@ public:
                 int checkable = FALSE);
     %name(AppendMenu)void Append(int id, const wxString& item, wxMenu *subMenu,
                 const wxString& helpString = wxPyEmptyStr);
+    %name(AppendItem)void Append(const wxMenuItem* item);
+
     void AppendSeparator();
     void Break();
     void Check(int id, bool flag);
@@ -351,7 +370,20 @@ public:
 /////////////////////////////////////////////////////////////////////////////
 //
 // $Log$
+// Revision 1.12  1999/02/20 09:03:03  RD
+// Added wxWindow_FromHWND(hWnd) for wxMSW to construct a wxWindow from a
+// window handle.  If you can get the window handle into the python code,
+// it should just work...  More news on this later.
+//
+// Added wxImageList, wxToolTip.
+//
+// Re-enabled wxConfig.DeleteAll() since it is reportedly fixed for the
+// wxRegConfig class.
+//
+// As usual, some bug fixes, tweaks, etc.
+//
 // Revision 1.11  1998/12/18 15:49:10  RR
+//
 //   wxClipboard now serves the primary selection as well
 //   wxPython fixes
 //   warning mesages

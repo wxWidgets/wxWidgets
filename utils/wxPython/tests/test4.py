@@ -271,6 +271,9 @@ class TestNotebookWindow(wxFrame):
         win = TestTreeCtrlPanel(nb, log)
         nb.AddPage(win, "TreeCtrl")
 
+        win = TestListCtrlPanel(nb, log)
+        nb.AddPage(win, "ListCtrl")
+
         win = ColoredPanel(nb, wxRED)
         nb.AddPage(win, "Red")
 
@@ -338,7 +341,7 @@ class CustomStatusBar(wxStatusBar):
         # figure out how tall to make it.
         dc = wxClientDC(self)
         dc.SetFont(self.GetFont())
-        (w,h, d,e) = dc.GetTextExtent('X')
+        (w,h) = dc.GetTextExtent('X')
         h = int(h * 1.8)
         self.SetSize(wxSize(100, h))
 
@@ -497,6 +500,53 @@ class TestTreeCtrl(wxFrame):
                          wxDefaultPosition, wxSize(250, 300))
 
         p = TestTreeCtrlPanel(self, log)
+
+
+#---------------------------------------------------------------------------
+
+class TestListCtrlPanel(wxPanel):
+    def __init__(self, parent, log):
+        wxPanel.__init__(self, parent, -1)
+
+        self.log = log
+        tID = 1101
+
+        self.il = wxImageList(16, 16)
+        idx1 = self.il.Add(wxNoRefBitmap('bitmaps/smiles.bmp', wxBITMAP_TYPE_BMP))
+
+        self.list = wxListCtrl(self, tID, wxDefaultPosition, wxDefaultSize,
+                               wxLC_REPORT|wxSUNKEN_BORDER)
+        self.list.SetImageList(self.il, wxIMAGE_LIST_SMALL)
+
+        self.list.SetToolTip(wxToolTip("This is a ToolTip!"))
+        wxToolTip_Enable(true)
+
+        self.list.InsertColumn(0, "Column 0")
+        self.list.InsertColumn(1, "Column 1")
+        self.list.InsertColumn(2, "One More Column (2)")
+        for x in range(50):
+            self.list.InsertImageStringItem(x, "This is item %d" % x, idx1)
+            self.list.SetStringItem(x, 1, "Col 1, item %d" % x)
+            self.list.SetStringItem(x, 2, "item %d in column 2" % x)
+
+        self.list.SetColumnWidth(0, wxLIST_AUTOSIZE)
+        self.list.SetColumnWidth(1, wxLIST_AUTOSIZE)
+        self.list.SetColumnWidth(2, wxLIST_AUTOSIZE)
+
+
+    def OnSize(self, event):
+        w,h = self.GetClientSizeTuple()
+        self.list.SetDimensions(0, 0, w, h)
+
+
+
+
+class TestListCtrl(wxFrame):
+    def __init__(self, parent, log):
+        wxFrame.__init__(self, parent, -1, 'Test ListCtrl',
+                         wxDefaultPosition, wxSize(250, 300))
+
+        p = TestListCtrlPanel(self, log)
 
 
 #---------------------------------------------------------------------------
@@ -741,6 +791,10 @@ class AppFrame(wxFrame):
         EVT_MENU(self, mID, self.OnTestTreeCtrl)
 
         mID = NewId()
+        menu.Append(mID, '&List Control')
+        EVT_MENU(self, mID, self.OnTestListCtrl)
+
+        mID = NewId()
         menu.Append(mID, 'S&ash Window and Layout Algorithm')
         EVT_MENU(self, mID, self.OnTestSashWindow)
 
@@ -890,6 +944,10 @@ class AppFrame(wxFrame):
         win = TestTreeCtrl(self, self)
         win.Show(true)
 
+    def OnTestListCtrl(self, event):
+        win = TestListCtrl(self, self)
+        win.Show(true)
+
     def OnTestSashWindow(self, event):
         win = TestSashWindow(self, self)
         win.Show(true)
@@ -942,7 +1000,20 @@ if __name__ == '__main__':
 #----------------------------------------------------------------------------
 #
 # $Log$
+# Revision 1.13  1999/02/20 09:04:44  RD
+# Added wxWindow_FromHWND(hWnd) for wxMSW to construct a wxWindow from a
+# window handle.  If you can get the window handle into the python code,
+# it should just work...  More news on this later.
+#
+# Added wxImageList, wxToolTip.
+#
+# Re-enabled wxConfig.DeleteAll() since it is reportedly fixed for the
+# wxRegConfig class.
+#
+# As usual, some bug fixes, tweaks, etc.
+#
 # Revision 1.12  1999/01/30 07:31:33  RD
+#
 # Added wxSashWindow, wxSashEvent, wxLayoutAlgorithm, etc.
 #
 # Various cleanup, tweaks, minor additions, etc. to maintain

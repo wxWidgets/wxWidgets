@@ -29,7 +29,7 @@ class MyCanvas(wxWindow):
         font = wxFont(42, wxSWISS, wxNORMAL, wxNORMAL)
         dc.SetFont(font)
         st = "Python Rules!"
-        tw,th, d,e = dc.GetTextExtent(st)
+        tw,th = dc.GetTextExtent(st)
         dc.DrawText(st, (size.width-tw)/2, (size.height-th)/2)
         dc.EndDrawing()
 
@@ -147,7 +147,20 @@ if __name__ == '__main__':
 #----------------------------------------------------------------------------
 #
 # $Log$
+# Revision 1.5  1999/02/20 09:04:43  RD
+# Added wxWindow_FromHWND(hWnd) for wxMSW to construct a wxWindow from a
+# window handle.  If you can get the window handle into the python code,
+# it should just work...  More news on this later.
+#
+# Added wxImageList, wxToolTip.
+#
+# Re-enabled wxConfig.DeleteAll() since it is reportedly fixed for the
+# wxRegConfig class.
+#
+# As usual, some bug fixes, tweaks, etc.
+#
 # Revision 1.4  1998/12/16 22:12:46  RD
+#
 # Tweaks needed to be able to build wxPython with wxGTK.
 #
 # Revision 1.3  1998/12/15 20:44:35  RD

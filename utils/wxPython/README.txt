@@ -35,11 +35,48 @@ working the same as described in the wxWindows documents the best
 thing to do is to scan through the wxPython sources, especially the .i
 files, as that is where the interfaces for wxPython are defined.
 
-Currently this extension module is designed such that the entire
-application will be written in Python.  I havn't tried it yet, but I
-am sure that attempting to embed wxPython in a C++ wxWindows
-application will cause problems.  However there is a plan to support
-this in the future.
+I have reports of successfully embedding wxPython within a wxWindows
+C++ app on GTK.  It hasn't yet been attempted on MSW (to my knowledge)
+so I don't know how successful such an attempt would be.  However it
+is certainly possible.
+
+
+
+Getting Help
+------------
+
+Since wxPython is a blending of multiple technologies, help comes from
+multiple sources.  See the http://alldunn.com/wxPython for details on
+various sources of help, but probably the best source is the
+wxPython-users mail list.  You can view the archive or subscribe by
+going to
+
+       http://starship.python.net/mailman/listinfo/wxpython-users
+
+Or you can send mail directly to the list using this address:
+
+       wxpython-users@starship.python.net
+
+
+
+
+What's new in 2.0b5
+-------------------
+Well obviously the numbering scheme has changed.  I did this to
+reflect the fact that this truly is the second major revision of
+wxPython, (well the third actually if you count the one I did for
+wxWindows 1.68 and then threw away...) and also that it is associated
+with the 2.0 version of wxWindows.
+
+I have finally started documenting wxPython.  There are several pages
+in the wxWindows documentation tree specifically about wxPython, and I
+have added notes within the class references about where wxPython
+diverges from wxWindows.
+
+[[  What else have I done??? ]]
+
+As usual, some bug fixes, tweaks, etc.
+
 
 
 What's new in 0.5.3

@@ -1,11 +1,9 @@
-wxPython\*.pyd
-wxPython\*.pyc
-wxPython\*.pyo
-wxPython\*.py
 wxPython\*.txt
 
 wxPython\tests\*.py
-wxPython\tests\bitmaps
+wxPython\tests\bitmaps\*.bmp
+wxPython\tests\bitmaps\*.ico
+
 
 
 wxPython\src\*.i
@@ -17,7 +15,7 @@ wxPython\src\*.def
 wxPython\src\*.rc
 wxPython\src\makefile.*
 wxPython\src\Makefile.pre.in
-wxPython\src\Setup.in
+wxPython\src\Setup.*
 
 wxPython\src\msw\*.cpp
 wxPython\src\msw\*.h

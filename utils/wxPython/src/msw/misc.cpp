@@ -55,6 +55,7 @@ extern PyObject *SWIG_newvarlink(void);
 
 #include "helpers.h"
 #include <wx/resource.h>
+#include <wx/tooltip.h>
 
 static PyObject* l_output_helper(PyObject* target, PyObject* o) {
     PyObject*   o2;
@@ -119,6 +120,14 @@ static char* wxStringErrorMsg = "string type is required for parameter";
         char * retval;
         wxGetResource(section, entry, &retval, file);
         return retval;
+    }
+
+    void wxToolTip_Enable(bool flag) {
+        wxToolTip::Enable(flag);
+    }
+
+    void wxToolTip_SetDelay(long milliseconds) {
+        wxToolTip::SetDelay(milliseconds);
     }
 static PyObject *_wrap_wxFileSelector(PyObject *self, PyObject *args) {
     PyObject * _resultobj;
@@ -1006,8 +1015,36 @@ static PyObject *_wrap_wxResourceParseString(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
+static PyObject *_wrap_wxToolTip_Enable(PyObject *self, PyObject *args) {
+    PyObject * _resultobj;
+    bool  _arg0;
+    int tempbool0;
+
+    self = self;
+    if(!PyArg_ParseTuple(args,"i:wxToolTip_Enable",&tempbool0)) 
+        return NULL;
+    _arg0 = (bool ) tempbool0;
+    wxToolTip_Enable(_arg0);
+    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+static PyObject *_wrap_wxToolTip_SetDelay(PyObject *self, PyObject *args) {
+    PyObject * _resultobj;
+    long  _arg0;
+
+    self = self;
+    if(!PyArg_ParseTuple(args,"l:wxToolTip_SetDelay",&_arg0)) 
+        return NULL;
+    wxToolTip_SetDelay(_arg0);
+    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
 #define wxSize_x_set(_swigobj,_swigval) (_swigobj->x = _swigval,_swigval)
-static PyObject *_wrap_wxSize_width_set(PyObject *self, PyObject *args) {
+static PyObject *_wrap_wxSize_x_set(PyObject *self, PyObject *args) {
     PyObject * _resultobj;
     long  _result;
     wxSize * _arg0;
@@ -1015,11 +1052,11 @@ static PyObject *_wrap_wxSize_width_set(PyObject *self, PyObject *args) {
     char * _argc0 = 0;
 
     self = self;
-    if(!PyArg_ParseTuple(args,"sl:wxSize_width_set",&_argc0,&_arg1)) 
+    if(!PyArg_ParseTuple(args,"sl:wxSize_x_set",&_argc0,&_arg1)) 
         return NULL;
     if (_argc0) {
         if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_wxSize_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxSize_width_set. Expected _wxSize_p.");
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxSize_x_set. Expected _wxSize_p.");
         return NULL;
         }
     }
@@ -1029,18 +1066,18 @@ static PyObject *_wrap_wxSize_width_set(PyObject *self, PyObject *args) {
 }
 
 #define wxSize_x_get(_swigobj) ((long ) _swigobj->x)
-static PyObject *_wrap_wxSize_width_get(PyObject *self, PyObject *args) {
+static PyObject *_wrap_wxSize_x_get(PyObject *self, PyObject *args) {
     PyObject * _resultobj;
     long  _result;
     wxSize * _arg0;
     char * _argc0 = 0;
 
     self = self;
-    if(!PyArg_ParseTuple(args,"s:wxSize_width_get",&_argc0)) 
+    if(!PyArg_ParseTuple(args,"s:wxSize_x_get",&_argc0)) 
         return NULL;
     if (_argc0) {
         if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_wxSize_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxSize_width_get. Expected _wxSize_p.");
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxSize_x_get. Expected _wxSize_p.");
         return NULL;
         }
     }
@@ -1050,7 +1087,7 @@ static PyObject *_wrap_wxSize_width_get(PyObject *self, PyObject *args) {
 }
 
 #define wxSize_y_set(_swigobj,_swigval) (_swigobj->y = _swigval,_swigval)
-static PyObject *_wrap_wxSize_height_set(PyObject *self, PyObject *args) {
+static PyObject *_wrap_wxSize_y_set(PyObject *self, PyObject *args) {
     PyObject * _resultobj;
     long  _result;
     wxSize * _arg0;
@@ -1058,11 +1095,11 @@ static PyObject *_wrap_wxSize_height_set(PyObject *self, PyObject *args) {
     char * _argc0 = 0;
 
     self = self;
-    if(!PyArg_ParseTuple(args,"sl:wxSize_height_set",&_argc0,&_arg1)) 
+    if(!PyArg_ParseTuple(args,"sl:wxSize_y_set",&_argc0,&_arg1)) 
         return NULL;
     if (_argc0) {
         if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_wxSize_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxSize_height_set. Expected _wxSize_p.");
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxSize_y_set. Expected _wxSize_p.");
         return NULL;
         }
     }
@@ -1072,18 +1109,18 @@ static PyObject *_wrap_wxSize_height_set(PyObject *self, PyObject *args) {
 }
 
 #define wxSize_y_get(_swigobj) ((long ) _swigobj->y)
-static PyObject *_wrap_wxSize_height_get(PyObject *self, PyObject *args) {
+static PyObject *_wrap_wxSize_y_get(PyObject *self, PyObject *args) {
     PyObject * _resultobj;
     long  _result;
     wxSize * _arg0;
     char * _argc0 = 0;
 
     self = self;
-    if(!PyArg_ParseTuple(args,"s:wxSize_height_get",&_argc0)) 
+    if(!PyArg_ParseTuple(args,"s:wxSize_y_get",&_argc0)) 
         return NULL;
     if (_argc0) {
         if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_wxSize_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxSize_height_get. Expected _wxSize_p.");
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxSize_y_get. Expected _wxSize_p.");
         return NULL;
         }
     }
@@ -1153,70 +1190,70 @@ static PyObject *_wrap_wxSize_Set(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-#define wxSize_GetWidth(_swigobj)  (_swigobj->GetX())
-static PyObject *_wrap_wxSize_GetWidth(PyObject *self, PyObject *args) {
+#define wxSize_GetX(_swigobj)  (_swigobj->GetX())
+static PyObject *_wrap_wxSize_GetX(PyObject *self, PyObject *args) {
     PyObject * _resultobj;
     long  _result;
     wxSize * _arg0;
     char * _argc0 = 0;
 
     self = self;
-    if(!PyArg_ParseTuple(args,"s:wxSize_GetWidth",&_argc0)) 
+    if(!PyArg_ParseTuple(args,"s:wxSize_GetX",&_argc0)) 
         return NULL;
     if (_argc0) {
         if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_wxSize_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxSize_GetWidth. Expected _wxSize_p.");
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxSize_GetX. Expected _wxSize_p.");
         return NULL;
         }
     }
-    _result = (long )wxSize_GetWidth(_arg0);
+    _result = (long )wxSize_GetX(_arg0);
     _resultobj = Py_BuildValue("l",_result);
     return _resultobj;
 }
 
-#define wxSize_GetHeight(_swigobj)  (_swigobj->GetY())
-static PyObject *_wrap_wxSize_GetHeight(PyObject *self, PyObject *args) {
+#define wxSize_GetY(_swigobj)  (_swigobj->GetY())
+static PyObject *_wrap_wxSize_GetY(PyObject *self, PyObject *args) {
     PyObject * _resultobj;
     long  _result;
     wxSize * _arg0;
     char * _argc0 = 0;
 
     self = self;
-    if(!PyArg_ParseTuple(args,"s:wxSize_GetHeight",&_argc0)) 
+    if(!PyArg_ParseTuple(args,"s:wxSize_GetY",&_argc0)) 
         return NULL;
     if (_argc0) {
         if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_wxSize_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxSize_GetHeight. Expected _wxSize_p.");
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxSize_GetY. Expected _wxSize_p.");
         return NULL;
         }
     }
-    _result = (long )wxSize_GetHeight(_arg0);
+    _result = (long )wxSize_GetY(_arg0);
     _resultobj = Py_BuildValue("l",_result);
     return _resultobj;
 }
 
-static PyObject * wxSize___str__(wxSize *self) {
+static PyObject * wxSize_asTuple(wxSize *self) {
             PyObject* tup = PyTuple_New(2);
             PyTuple_SET_ITEM(tup, 0, PyInt_FromLong(self->x));
             PyTuple_SET_ITEM(tup, 1, PyInt_FromLong(self->y));
             return tup;
         }
-static PyObject *_wrap_wxSize___str__(PyObject *self, PyObject *args) {
+static PyObject *_wrap_wxSize_asTuple(PyObject *self, PyObject *args) {
     PyObject * _resultobj;
     PyObject * _result;
     wxSize * _arg0;
     char * _argc0 = 0;
 
     self = self;
-    if(!PyArg_ParseTuple(args,"s:wxSize___str__",&_argc0)) 
+    if(!PyArg_ParseTuple(args,"s:wxSize_asTuple",&_argc0)) 
         return NULL;
     if (_argc0) {
         if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_wxSize_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxSize___str__. Expected _wxSize_p.");
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxSize_asTuple. Expected _wxSize_p.");
         return NULL;
         }
     }
-    _result = (PyObject *)wxSize___str__(_arg0);
+    _result = (PyObject *)wxSize_asTuple(_arg0);
 {
   _resultobj = _result;
 }
@@ -1497,28 +1534,28 @@ static PyObject *_wrap_wxPoint_Set(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject * wxPoint___str__(wxPoint *self) {
+static PyObject * wxPoint_asTuple(wxPoint *self) {
             PyObject* tup = PyTuple_New(2);
             PyTuple_SET_ITEM(tup, 0, PyInt_FromLong(self->x));
             PyTuple_SET_ITEM(tup, 1, PyInt_FromLong(self->y));
             return tup;
         }
-static PyObject *_wrap_wxPoint___str__(PyObject *self, PyObject *args) {
+static PyObject *_wrap_wxPoint_asTuple(PyObject *self, PyObject *args) {
     PyObject * _resultobj;
     PyObject * _result;
     wxPoint * _arg0;
     char * _argc0 = 0;
 
     self = self;
-    if(!PyArg_ParseTuple(args,"s:wxPoint___str__",&_argc0)) 
+    if(!PyArg_ParseTuple(args,"s:wxPoint_asTuple",&_argc0)) 
         return NULL;
     if (_argc0) {
         if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_wxPoint_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPoint___str__. Expected _wxPoint_p.");
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPoint_asTuple. Expected _wxPoint_p.");
         return NULL;
         }
     }
-    _result = (PyObject *)wxPoint___str__(_arg0);
+    _result = (PyObject *)wxPoint_asTuple(_arg0);
 {
   _resultobj = _result;
 }
@@ -2036,6 +2073,36 @@ static PyObject *_wrap_wxRect_height_get(PyObject *self, PyObject *args) {
     }
     _result = (long )wxRect_height_get(_arg0);
     _resultobj = Py_BuildValue("l",_result);
+    return _resultobj;
+}
+
+static PyObject * wxRect_asTuple(wxRect *self) {
+            PyObject* tup = PyTuple_New(4);
+            PyTuple_SET_ITEM(tup, 0, PyInt_FromLong(self->x));
+            PyTuple_SET_ITEM(tup, 1, PyInt_FromLong(self->y));
+            PyTuple_SET_ITEM(tup, 0, PyInt_FromLong(self->width));
+            PyTuple_SET_ITEM(tup, 1, PyInt_FromLong(self->height));
+            return tup;
+        }
+static PyObject *_wrap_wxRect_asTuple(PyObject *self, PyObject *args) {
+    PyObject * _resultobj;
+    PyObject * _result;
+    wxRect * _arg0;
+    char * _argc0 = 0;
+
+    self = self;
+    if(!PyArg_ParseTuple(args,"s:wxRect_asTuple",&_argc0)) 
+        return NULL;
+    if (_argc0) {
+        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_wxRect_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxRect_asTuple. Expected _wxRect_p.");
+        return NULL;
+        }
+    }
+    _result = (PyObject *)wxRect_asTuple(_arg0);
+{
+  _resultobj = _result;
+}
     return _resultobj;
 }
 
@@ -3315,7 +3382,152 @@ static PyObject *_wrap_new_wxAcceleratorTable(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
+#define new_wxToolTip(_swigarg0) (new wxToolTip(_swigarg0))
+static PyObject *_wrap_new_wxToolTip(PyObject *self, PyObject *args) {
+    PyObject * _resultobj;
+    wxToolTip * _result;
+    wxString * _arg0;
+    PyObject * _obj0 = 0;
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTuple(args,"O:new_wxToolTip",&_obj0)) 
+        return NULL;
+{
+    if (!PyString_Check(_obj0)) {
+        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
+        return NULL;
+    }
+    _arg0 = new wxString(PyString_AsString(_obj0));
+}
+    _result = (wxToolTip *)new_wxToolTip(*_arg0);
+    SWIG_MakePtr(_ptemp, (char *) _result,"_wxToolTip_p");
+    _resultobj = Py_BuildValue("s",_ptemp);
+{
+    if (_obj0)
+        delete _arg0;
+}
+    return _resultobj;
+}
+
+#define wxToolTip_SetTip(_swigobj,_swigarg0)  (_swigobj->SetTip(_swigarg0))
+static PyObject *_wrap_wxToolTip_SetTip(PyObject *self, PyObject *args) {
+    PyObject * _resultobj;
+    wxToolTip * _arg0;
+    wxString * _arg1;
+    char * _argc0 = 0;
+    PyObject * _obj1 = 0;
+
+    self = self;
+    if(!PyArg_ParseTuple(args,"sO:wxToolTip_SetTip",&_argc0,&_obj1)) 
+        return NULL;
+    if (_argc0) {
+        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_wxToolTip_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxToolTip_SetTip. Expected _wxToolTip_p.");
+        return NULL;
+        }
+    }
+{
+    if (!PyString_Check(_obj1)) {
+        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
+        return NULL;
+    }
+    _arg1 = new wxString(PyString_AsString(_obj1));
+}
+    wxToolTip_SetTip(_arg0,*_arg1);
+    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+{
+    if (_obj1)
+        delete _arg1;
+}
+    return _resultobj;
+}
+
+#define wxToolTip_GetTip(_swigobj)  (_swigobj->GetTip())
+static PyObject *_wrap_wxToolTip_GetTip(PyObject *self, PyObject *args) {
+    PyObject * _resultobj;
+    wxString * _result;
+    wxToolTip * _arg0;
+    char * _argc0 = 0;
+
+    self = self;
+    if(!PyArg_ParseTuple(args,"s:wxToolTip_GetTip",&_argc0)) 
+        return NULL;
+    if (_argc0) {
+        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_wxToolTip_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxToolTip_GetTip. Expected _wxToolTip_p.");
+        return NULL;
+        }
+    }
+    _result = new wxString (wxToolTip_GetTip(_arg0));
+{
+    _resultobj = PyString_FromString(WXSTRINGCAST *(_result));
+}
+{
+    delete _result;
+}
+    return _resultobj;
+}
+
+#define wxToolTip_SetWindow(_swigobj,_swigarg0)  (_swigobj->SetWindow(_swigarg0))
+static PyObject *_wrap_wxToolTip_SetWindow(PyObject *self, PyObject *args) {
+    PyObject * _resultobj;
+    wxToolTip * _arg0;
+    wxWindow * _arg1;
+    char * _argc0 = 0;
+    char * _argc1 = 0;
+
+    self = self;
+    if(!PyArg_ParseTuple(args,"ss:wxToolTip_SetWindow",&_argc0,&_argc1)) 
+        return NULL;
+    if (_argc0) {
+        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_wxToolTip_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxToolTip_SetWindow. Expected _wxToolTip_p.");
+        return NULL;
+        }
+    }
+    if (_argc1) {
+        if (SWIG_GetPtr(_argc1,(void **) &_arg1,"_wxWindow_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxToolTip_SetWindow. Expected _wxWindow_p.");
+        return NULL;
+        }
+    }
+    wxToolTip_SetWindow(_arg0,_arg1);
+    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxToolTip_GetWindow(_swigobj)  (_swigobj->GetWindow())
+static PyObject *_wrap_wxToolTip_GetWindow(PyObject *self, PyObject *args) {
+    PyObject * _resultobj;
+    wxWindow * _result;
+    wxToolTip * _arg0;
+    char * _argc0 = 0;
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTuple(args,"s:wxToolTip_GetWindow",&_argc0)) 
+        return NULL;
+    if (_argc0) {
+        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_wxToolTip_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxToolTip_GetWindow. Expected _wxToolTip_p.");
+        return NULL;
+        }
+    }
+    _result = (wxWindow *)wxToolTip_GetWindow(_arg0);
+    SWIG_MakePtr(_ptemp, (char *) _result,"_wxWindow_p");
+    _resultobj = Py_BuildValue("s",_ptemp);
+    return _resultobj;
+}
+
 static PyMethodDef misccMethods[] = {
+	 { "wxToolTip_GetWindow", _wrap_wxToolTip_GetWindow, 1 },
+	 { "wxToolTip_SetWindow", _wrap_wxToolTip_SetWindow, 1 },
+	 { "wxToolTip_GetTip", _wrap_wxToolTip_GetTip, 1 },
+	 { "wxToolTip_SetTip", _wrap_wxToolTip_SetTip, 1 },
+	 { "new_wxToolTip", _wrap_new_wxToolTip, 1 },
 	 { "new_wxAcceleratorTable", _wrap_new_wxAcceleratorTable, 1 },
 	 { "wxAcceleratorEntry_GetCommand", _wrap_wxAcceleratorEntry_GetCommand, 1 },
 	 { "wxAcceleratorEntry_GetKeyCode", _wrap_wxAcceleratorEntry_GetKeyCode, 1 },
@@ -3370,6 +3582,7 @@ static PyMethodDef misccMethods[] = {
 	 { "wxPyTimer_Interval", _wrap_wxPyTimer_Interval, 1 },
 	 { "delete_wxPyTimer", _wrap_delete_wxPyTimer, 1 },
 	 { "new_wxPyTimer", _wrap_new_wxPyTimer, 1 },
+	 { "wxRect_asTuple", _wrap_wxRect_asTuple, 1 },
 	 { "wxRect_height_get", _wrap_wxRect_height_get, 1 },
 	 { "wxRect_height_set", _wrap_wxRect_height_set, 1 },
 	 { "wxRect_width_get", _wrap_wxRect_width_get, 1 },
@@ -3394,7 +3607,7 @@ static PyMethodDef misccMethods[] = {
 	 { "wxRect_GetX", _wrap_wxRect_GetX, 1 },
 	 { "delete_wxRect", _wrap_delete_wxRect, 1 },
 	 { "new_wxRect", _wrap_new_wxRect, 1 },
-	 { "wxPoint___str__", _wrap_wxPoint___str__, 1 },
+	 { "wxPoint_asTuple", _wrap_wxPoint_asTuple, 1 },
 	 { "wxPoint_Set", _wrap_wxPoint_Set, 1 },
 	 { "delete_wxPoint", _wrap_delete_wxPoint, 1 },
 	 { "new_wxPoint", _wrap_new_wxPoint, 1 },
@@ -3408,16 +3621,24 @@ static PyMethodDef misccMethods[] = {
 	 { "wxRealPoint_y_set", _wrap_wxRealPoint_y_set, 1 },
 	 { "wxRealPoint_x_get", _wrap_wxRealPoint_x_get, 1 },
 	 { "wxRealPoint_x_set", _wrap_wxRealPoint_x_set, 1 },
-	 { "wxSize___str__", _wrap_wxSize___str__, 1 },
-	 { "wxSize_GetHeight", _wrap_wxSize_GetHeight, 1 },
-	 { "wxSize_GetWidth", _wrap_wxSize_GetWidth, 1 },
+	 { "wxSize_asTuple", _wrap_wxSize_asTuple, 1 },
+	 { "wxSize_GetHeight", _wrap_wxSize_GetY, 1 },
+	 { "wxSize_GetWidth", _wrap_wxSize_GetX, 1 },
+	 { "wxSize_GetY", _wrap_wxSize_GetY, 1 },
+	 { "wxSize_GetX", _wrap_wxSize_GetX, 1 },
 	 { "wxSize_Set", _wrap_wxSize_Set, 1 },
 	 { "delete_wxSize", _wrap_delete_wxSize, 1 },
 	 { "new_wxSize", _wrap_new_wxSize, 1 },
-	 { "wxSize_height_get", _wrap_wxSize_height_get, 1 },
-	 { "wxSize_height_set", _wrap_wxSize_height_set, 1 },
-	 { "wxSize_width_get", _wrap_wxSize_width_get, 1 },
-	 { "wxSize_width_set", _wrap_wxSize_width_set, 1 },
+	 { "wxSize_height_get", _wrap_wxSize_y_get, 1 },
+	 { "wxSize_height_set", _wrap_wxSize_y_set, 1 },
+	 { "wxSize_width_get", _wrap_wxSize_x_get, 1 },
+	 { "wxSize_width_set", _wrap_wxSize_x_set, 1 },
+	 { "wxSize_y_get", _wrap_wxSize_y_get, 1 },
+	 { "wxSize_y_set", _wrap_wxSize_y_set, 1 },
+	 { "wxSize_x_get", _wrap_wxSize_x_get, 1 },
+	 { "wxSize_x_set", _wrap_wxSize_x_set, 1 },
+	 { "wxToolTip_SetDelay", _wrap_wxToolTip_SetDelay, 1 },
+	 { "wxToolTip_Enable", _wrap_wxToolTip_Enable, 1 },
 	 { "wxResourceParseString", _wrap_wxResourceParseString, 1 },
 	 { "wxResourceParseFile", _wrap_wxResourceParseFile, 1 },
 	 { "wxResourceParseData", _wrap_wxResourceParseData, 1 },
@@ -3496,11 +3717,13 @@ SWIGEXPORT(void,initmiscc)() {
 	 SWIG_RegisterMapping("_signed_long","_long",0);
 	 SWIG_RegisterMapping("_class_wxRegionIterator","_wxRegionIterator",0);
 	 SWIG_RegisterMapping("_wxIndividualLayoutConstraint","_class_wxIndividualLayoutConstraint",0);
+	 SWIG_RegisterMapping("_wxToolTip","_class_wxToolTip",0);
 	 SWIG_RegisterMapping("_byte","_unsigned_char",0);
 	 SWIG_RegisterMapping("_long","_unsigned_long",0);
 	 SWIG_RegisterMapping("_long","_signed_long",0);
 	 SWIG_RegisterMapping("_class_wxAcceleratorTable","_wxAcceleratorTable",0);
 	 SWIG_RegisterMapping("_class_wxRealPoint","_wxRealPoint",0);
+	 SWIG_RegisterMapping("_class_wxToolTip","_wxToolTip",0);
 	 SWIG_RegisterMapping("_uint","_unsigned_int",0);
 	 SWIG_RegisterMapping("_uint","_int",0);
 	 SWIG_RegisterMapping("_uint","_wxWindowID",0);

@@ -16,6 +16,7 @@
 %{
 #include "helpers.h"
 #include <wx/metafile.h>
+#include <wx/imaglist.h>
 #ifndef __WXMSW__
 #include <wx/dcps.h>
 #endif
@@ -307,8 +308,10 @@ public:
     }
     void GetSize(int* OUTPUT, int* OUTPUT); //void GetSize(long* OUTPUT, long* OUTPUT);
     wxColour& GetTextBackground();
-    void GetTextExtent(const wxString& string, long *OUTPUT, long *OUTPUT,
-                       long *OUTPUT, long *OUTPUT);
+    void GetTextExtent(const wxString& string, long *OUTPUT, long *OUTPUT);
+    %name(GetFullTextExtent)void GetTextExtent(const wxString& string,
+                       long *OUTPUT, long *OUTPUT, long *OUTPUT, long* OUTPUT,
+                       const wxFont* font = NULL);
     wxColour& GetTextForeground();
     long LogicalToDeviceX(long x);
     long LogicalToDeviceXRel(long x);
@@ -436,6 +439,9 @@ public:
 
 
 %readonly
+%{
+#if 0
+%}
 extern wxFont *wxNORMAL_FONT;
 extern wxFont *wxSMALL_FONT;
 extern wxFont *wxITALIC_FONT;
@@ -484,6 +490,11 @@ extern wxPalette wxNullPalette;
 extern wxFont   wxNullFont;
 extern wxColour wxNullColour;
 
+%readwrite
+%{
+#endif
+%}
+
 //---------------------------------------------------------------------------
 
 class wxPalette {
@@ -498,13 +509,55 @@ public:
 
 //---------------------------------------------------------------------------
 
+enum {
+    wxIMAGELIST_DRAW_NORMAL ,
+    wxIMAGELIST_DRAW_TRANSPARENT,
+    wxIMAGELIST_DRAW_SELECTED,
+    wxIMAGELIST_DRAW_FOCUSED,
+    wxIMAGE_LIST_NORMAL,
+    wxIMAGE_LIST_SMALL,
+    wxIMAGE_LIST_STATE
+};
+
+class wxImageList {
+public:
+    wxImageList(int width, int height, const bool mask=TRUE, int initialCount=1);
+    ~wxImageList();
+
+    int Add(const wxBitmap& bitmap, const wxBitmap& mask = wxNullBitmap);
+    %name(AddWithColourMask)int Add(const wxBitmap& bitmap, const wxColour& maskColour);
+    %name(AddIcon)int Add(const wxIcon& icon);
+
+    bool Draw(int index, wxDC& dc, int x, int x, int flags = wxIMAGELIST_DRAW_NORMAL,
+              const bool solidBackground = FALSE);
+
+    int GetImageCount();
+    bool Remove(int index);
+    bool RemoveAll();
+    bool Replace(int index, const wxBitmap& bitmap, const wxBitmap& mask = wxNullBitmap);
+    %name(ReplaceIcon)bool Replace(int index, const wxIcon& icon);
+};
+
 
 //---------------------------------------------------------------------------
 
 /////////////////////////////////////////////////////////////////////////////
 //
 // $Log$
+// Revision 1.13  1999/02/20 09:02:58  RD
+// Added wxWindow_FromHWND(hWnd) for wxMSW to construct a wxWindow from a
+// window handle.  If you can get the window handle into the python code,
+// it should just work...  More news on this later.
+//
+// Added wxImageList, wxToolTip.
+//
+// Re-enabled wxConfig.DeleteAll() since it is reportedly fixed for the
+// wxRegConfig class.
+//
+// As usual, some bug fixes, tweaks, etc.
+//
 // Revision 1.12  1999/01/30 07:30:11  RD
+//
 // Added wxSashWindow, wxSashEvent, wxLayoutAlgorithm, etc.
 //
 // Various cleanup, tweaks, minor additions, etc. to maintain

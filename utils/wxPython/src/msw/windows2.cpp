@@ -2164,6 +2164,28 @@ static void *SwigwxGridEventTowxEvent(void *ptr) {
     return (void *) dest;
 }
 
+#define wxGridEvent_m_row_set(_swigobj,_swigval) (_swigobj->m_row = _swigval,_swigval)
+static PyObject *_wrap_wxGridEvent_m_row_set(PyObject *self, PyObject *args) {
+    PyObject * _resultobj;
+    int  _result;
+    wxGridEvent * _arg0;
+    int  _arg1;
+    char * _argc0 = 0;
+
+    self = self;
+    if(!PyArg_ParseTuple(args,"si:wxGridEvent_m_row_set",&_argc0,&_arg1)) 
+        return NULL;
+    if (_argc0) {
+        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_wxGridEvent_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxGridEvent_m_row_set. Expected _wxGridEvent_p.");
+        return NULL;
+        }
+    }
+    _result = (int )wxGridEvent_m_row_set(_arg0,_arg1);
+    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
 #define wxGridEvent_m_row_get(_swigobj) ((int ) _swigobj->m_row)
 static PyObject *_wrap_wxGridEvent_m_row_get(PyObject *self, PyObject *args) {
     PyObject * _resultobj;
@@ -2181,6 +2203,28 @@ static PyObject *_wrap_wxGridEvent_m_row_get(PyObject *self, PyObject *args) {
         }
     }
     _result = (int )wxGridEvent_m_row_get(_arg0);
+    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxGridEvent_m_col_set(_swigobj,_swigval) (_swigobj->m_col = _swigval,_swigval)
+static PyObject *_wrap_wxGridEvent_m_col_set(PyObject *self, PyObject *args) {
+    PyObject * _resultobj;
+    int  _result;
+    wxGridEvent * _arg0;
+    int  _arg1;
+    char * _argc0 = 0;
+
+    self = self;
+    if(!PyArg_ParseTuple(args,"si:wxGridEvent_m_col_set",&_argc0,&_arg1)) 
+        return NULL;
+    if (_argc0) {
+        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_wxGridEvent_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxGridEvent_m_col_set. Expected _wxGridEvent_p.");
+        return NULL;
+        }
+    }
+    _result = (int )wxGridEvent_m_col_set(_arg0,_arg1);
     _resultobj = Py_BuildValue("i",_result);
     return _resultobj;
 }
@@ -2206,6 +2250,28 @@ static PyObject *_wrap_wxGridEvent_m_col_get(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
+#define wxGridEvent_m_x_set(_swigobj,_swigval) (_swigobj->m_x = _swigval,_swigval)
+static PyObject *_wrap_wxGridEvent_m_x_set(PyObject *self, PyObject *args) {
+    PyObject * _resultobj;
+    int  _result;
+    wxGridEvent * _arg0;
+    int  _arg1;
+    char * _argc0 = 0;
+
+    self = self;
+    if(!PyArg_ParseTuple(args,"si:wxGridEvent_m_x_set",&_argc0,&_arg1)) 
+        return NULL;
+    if (_argc0) {
+        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_wxGridEvent_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxGridEvent_m_x_set. Expected _wxGridEvent_p.");
+        return NULL;
+        }
+    }
+    _result = (int )wxGridEvent_m_x_set(_arg0,_arg1);
+    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
 #define wxGridEvent_m_x_get(_swigobj) ((int ) _swigobj->m_x)
 static PyObject *_wrap_wxGridEvent_m_x_get(PyObject *self, PyObject *args) {
     PyObject * _resultobj;
@@ -2223,6 +2289,28 @@ static PyObject *_wrap_wxGridEvent_m_x_get(PyObject *self, PyObject *args) {
         }
     }
     _result = (int )wxGridEvent_m_x_get(_arg0);
+    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxGridEvent_m_y_set(_swigobj,_swigval) (_swigobj->m_y = _swigval,_swigval)
+static PyObject *_wrap_wxGridEvent_m_y_set(PyObject *self, PyObject *args) {
+    PyObject * _resultobj;
+    int  _result;
+    wxGridEvent * _arg0;
+    int  _arg1;
+    char * _argc0 = 0;
+
+    self = self;
+    if(!PyArg_ParseTuple(args,"si:wxGridEvent_m_y_set",&_argc0,&_arg1)) 
+        return NULL;
+    if (_argc0) {
+        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_wxGridEvent_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxGridEvent_m_y_set. Expected _wxGridEvent_p.");
+        return NULL;
+        }
+    }
+    _result = (int )wxGridEvent_m_y_set(_arg0,_arg1);
     _resultobj = Py_BuildValue("i",_result);
     return _resultobj;
 }
@@ -2248,6 +2336,30 @@ static PyObject *_wrap_wxGridEvent_m_y_get(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
+#define wxGridEvent_m_control_set(_swigobj,_swigval) (_swigobj->m_control = _swigval,_swigval)
+static PyObject *_wrap_wxGridEvent_m_control_set(PyObject *self, PyObject *args) {
+    PyObject * _resultobj;
+    bool  _result;
+    wxGridEvent * _arg0;
+    bool  _arg1;
+    char * _argc0 = 0;
+    int tempbool1;
+
+    self = self;
+    if(!PyArg_ParseTuple(args,"si:wxGridEvent_m_control_set",&_argc0,&tempbool1)) 
+        return NULL;
+    if (_argc0) {
+        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_wxGridEvent_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxGridEvent_m_control_set. Expected _wxGridEvent_p.");
+        return NULL;
+        }
+    }
+    _arg1 = (bool ) tempbool1;
+    _result = (bool )wxGridEvent_m_control_set(_arg0,_arg1);
+    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
 #define wxGridEvent_m_control_get(_swigobj) ((bool ) _swigobj->m_control)
 static PyObject *_wrap_wxGridEvent_m_control_get(PyObject *self, PyObject *args) {
     PyObject * _resultobj;
@@ -2265,6 +2377,30 @@ static PyObject *_wrap_wxGridEvent_m_control_get(PyObject *self, PyObject *args)
         }
     }
     _result = (bool )wxGridEvent_m_control_get(_arg0);
+    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxGridEvent_m_shift_set(_swigobj,_swigval) (_swigobj->m_shift = _swigval,_swigval)
+static PyObject *_wrap_wxGridEvent_m_shift_set(PyObject *self, PyObject *args) {
+    PyObject * _resultobj;
+    bool  _result;
+    wxGridEvent * _arg0;
+    bool  _arg1;
+    char * _argc0 = 0;
+    int tempbool1;
+
+    self = self;
+    if(!PyArg_ParseTuple(args,"si:wxGridEvent_m_shift_set",&_argc0,&tempbool1)) 
+        return NULL;
+    if (_argc0) {
+        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_wxGridEvent_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxGridEvent_m_shift_set. Expected _wxGridEvent_p.");
+        return NULL;
+        }
+    }
+    _arg1 = (bool ) tempbool1;
+    _result = (bool )wxGridEvent_m_shift_set(_arg0,_arg1);
     _resultobj = Py_BuildValue("i",_result);
     return _resultobj;
 }
@@ -2287,6 +2423,37 @@ static PyObject *_wrap_wxGridEvent_m_shift_get(PyObject *self, PyObject *args) {
     }
     _result = (bool )wxGridEvent_m_shift_get(_arg0);
     _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxGridEvent_m_cell_set(_swigobj,_swigval) (_swigobj->m_cell = _swigval,_swigval)
+static PyObject *_wrap_wxGridEvent_m_cell_set(PyObject *self, PyObject *args) {
+    PyObject * _resultobj;
+    wxGridCell * _result;
+    wxGridEvent * _arg0;
+    wxGridCell * _arg1;
+    char * _argc0 = 0;
+    char * _argc1 = 0;
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTuple(args,"ss:wxGridEvent_m_cell_set",&_argc0,&_argc1)) 
+        return NULL;
+    if (_argc0) {
+        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_wxGridEvent_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxGridEvent_m_cell_set. Expected _wxGridEvent_p.");
+        return NULL;
+        }
+    }
+    if (_argc1) {
+        if (SWIG_GetPtr(_argc1,(void **) &_arg1,"_wxGridCell_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxGridEvent_m_cell_set. Expected _wxGridCell_p.");
+        return NULL;
+        }
+    }
+    _result = (wxGridCell *)wxGridEvent_m_cell_set(_arg0,_arg1);
+    SWIG_MakePtr(_ptemp, (char *) _result,"_wxGridCell_p");
+    _resultobj = Py_BuildValue("s",_ptemp);
     return _resultobj;
 }
 
@@ -3508,12 +3675,19 @@ static PyMethodDef windows2cMethods[] = {
 	 { "wxNotebookEvent_GetOldSelection", _wrap_wxNotebookEvent_GetOldSelection, 1 },
 	 { "wxNotebookEvent_GetSelection", _wrap_wxNotebookEvent_GetSelection, 1 },
 	 { "wxGridEvent_m_cell_get", _wrap_wxGridEvent_m_cell_get, 1 },
+	 { "wxGridEvent_m_cell_set", _wrap_wxGridEvent_m_cell_set, 1 },
 	 { "wxGridEvent_m_shift_get", _wrap_wxGridEvent_m_shift_get, 1 },
+	 { "wxGridEvent_m_shift_set", _wrap_wxGridEvent_m_shift_set, 1 },
 	 { "wxGridEvent_m_control_get", _wrap_wxGridEvent_m_control_get, 1 },
+	 { "wxGridEvent_m_control_set", _wrap_wxGridEvent_m_control_set, 1 },
 	 { "wxGridEvent_m_y_get", _wrap_wxGridEvent_m_y_get, 1 },
+	 { "wxGridEvent_m_y_set", _wrap_wxGridEvent_m_y_set, 1 },
 	 { "wxGridEvent_m_x_get", _wrap_wxGridEvent_m_x_get, 1 },
+	 { "wxGridEvent_m_x_set", _wrap_wxGridEvent_m_x_set, 1 },
 	 { "wxGridEvent_m_col_get", _wrap_wxGridEvent_m_col_get, 1 },
+	 { "wxGridEvent_m_col_set", _wrap_wxGridEvent_m_col_set, 1 },
 	 { "wxGridEvent_m_row_get", _wrap_wxGridEvent_m_row_get, 1 },
+	 { "wxGridEvent_m_row_set", _wrap_wxGridEvent_m_row_set, 1 },
 	 { "wxGrid_UpdateDimensions", _wrap_wxGrid_UpdateDimensions, 1 },
 	 { "wxGrid_SetRowHeight", _wrap_wxGrid_SetRowHeight, 1 },
 	 { "wxGrid_SetLabelValue", _wrap_wxGrid_SetLabelValue, 1 },
@@ -3651,6 +3825,7 @@ SWIGEXPORT(void,initwindows2c)() {
 	 SWIG_RegisterMapping("_wxPaintEvent","_class_wxPaintEvent",0);
 	 SWIG_RegisterMapping("_wxIndividualLayoutConstraint","_class_wxIndividualLayoutConstraint",0);
 	 SWIG_RegisterMapping("_wxCursor","_class_wxCursor",0);
+	 SWIG_RegisterMapping("_wxToolTip","_class_wxToolTip",0);
 	 SWIG_RegisterMapping("_wxMask","_class_wxMask",0);
 	 SWIG_RegisterMapping("_wxGrid","_class_wxGrid",0);
 	 SWIG_RegisterMapping("_wxPyMenu","_class_wxPyMenu",0);
@@ -3664,6 +3839,7 @@ SWIGEXPORT(void,initwindows2c)() {
 	 SWIG_RegisterMapping("_long","_wxDash",0);
 	 SWIG_RegisterMapping("_long","_unsigned_long",0);
 	 SWIG_RegisterMapping("_long","_signed_long",0);
+	 SWIG_RegisterMapping("_wxImageList","_class_wxImageList",0);
 	 SWIG_RegisterMapping("_wxDropFilesEvent","_class_wxDropFilesEvent",0);
 	 SWIG_RegisterMapping("_wxBitmapButton","_class_wxBitmapButton",0);
 	 SWIG_RegisterMapping("_class_wxAcceleratorTable","_wxAcceleratorTable",0);
@@ -3681,6 +3857,7 @@ SWIGEXPORT(void,initwindows2c)() {
 	 SWIG_RegisterMapping("_wxInitDialogEvent","_class_wxInitDialogEvent",0);
 	 SWIG_RegisterMapping("_wxCheckBox","_class_wxCheckBox",0);
 	 SWIG_RegisterMapping("_wxTextCtrl","_class_wxTextCtrl",0);
+	 SWIG_RegisterMapping("_class_wxToolTip","_wxToolTip",0);
 	 SWIG_RegisterMapping("_class_wxMask","_wxMask",0);
 	 SWIG_RegisterMapping("_class_wxKeyEvent","_wxKeyEvent",0);
 	 SWIG_RegisterMapping("_class_wxGrid","_wxGrid",0);
@@ -3810,6 +3987,7 @@ SWIGEXPORT(void,initwindows2c)() {
 	 SWIG_RegisterMapping("_wxJoystickEvent","_class_wxJoystickEvent",0);
 	 SWIG_RegisterMapping("_class_wxChoice","_wxChoice",0);
 	 SWIG_RegisterMapping("_class_wxSlider","_wxSlider",0);
+	 SWIG_RegisterMapping("_class_wxImageList","_wxImageList",0);
 	 SWIG_RegisterMapping("_class_wxBitmapButton","_wxBitmapButton",0);
 	 SWIG_RegisterMapping("_class_wxNotebook","_wxNotebook",0);
 	 SWIG_RegisterMapping("_wxWindowID","_EBool",0);

@@ -1,7 +1,7 @@
 #!/bin/env python
 #----------------------------------------------------------------------------
-# Name:         test1.py
-# Purpose:      A minimal wxPython program
+# Name:         test7.py
+# Purpose:      A minimal wxPython program that is a bit smarter than test1.
 #
 # Author:       Robin Dunn
 #
@@ -30,6 +30,22 @@ class MyFrame(wxFrame):
         EVT_SIZE(self, self.OnSize)
         EVT_MOVE(self, self.OnMove)
 
+        # Add a panel and some controls to display the size and position
+        panel = wxPanel(self, -1)
+        wxStaticText(panel, -1, "Size:",
+                     wxDLG_PNT(panel, wxPoint(4, 4)),  wxDefaultSize)
+        wxStaticText(panel, -1, "Pos:",
+                     wxDLG_PNT(panel, wxPoint(4, 14)), wxDefaultSize)
+        self.sizeCtrl = wxTextCtrl(panel, -1, "",
+                                   wxDLG_PNT(panel, wxPoint(24, 4)),
+                                   wxDLG_SZE(panel, wxSize(36, -1)),
+                                   wxTE_READONLY)
+
+        self.posCtrl = wxTextCtrl(panel, -1, "",
+                                  wxDLG_PNT(panel, wxPoint(24, 14)),
+                                  wxDLG_SZE(panel, wxSize(36, -1)),
+                                  wxTE_READONLY)
+
 
     # This method is called automatically when the CLOSE event is
     # sent to this window
@@ -42,13 +58,17 @@ class MyFrame(wxFrame):
     # because of the association above.
     def OnSize(self, event):
         size = event.GetSize()
-        print "size:", size.width, size.height
+        self.sizeCtrl.SetValue("%s, %s" % (size.width, size.height))
+
+        # tell the event system to continue looking for an event handler,
+        # so the default handler will get called.
+        event.Skip()
 
     # This method is called by the System when the window is moved,
     # because of the association above.
     def OnMove(self, event):
         pos = event.GetPosition()
-        print "pos:", pos.x, pos.y
+        self.posCtrl.SetValue("%s, %s" % (pos.x, pos.y))
 
 
 
@@ -79,4 +99,12 @@ app.MainLoop()     # Tell it to start processing events
 
 #----------------------------------------------------------------------------
 #
+
+
+
+
+
+
+
+
 

@@ -61,7 +61,7 @@ public:
 
 
     void DontCreateOnDemand();
-    // **** DANGER Will Robinson! DANGER!  bool DeleteAll();
+    bool DeleteAll();  // This is supposed to have been fixed...
     bool DeleteEntry(const wxString& key, bool bDeleteGroupIfEmpty = TRUE);
     bool DeleteGroup(const wxString& key);
     bool Exists(wxString& strName);
@@ -138,6 +138,18 @@ public:
 /////////////////////////////////////////////////////////////////////////////
 //
 // $Log$
+// Revision 1.2  1999/02/20 09:03:02  RD
+// Added wxWindow_FromHWND(hWnd) for wxMSW to construct a wxWindow from a
+// window handle.  If you can get the window handle into the python code,
+// it should just work...  More news on this later.
+//
+// Added wxImageList, wxToolTip.
+//
+// Re-enabled wxConfig.DeleteAll() since it is reportedly fixed for the
+// wxRegConfig class.
+//
+// As usual, some bug fixes, tweaks, etc.
+//
 // Revision 1.1  1998/12/15 20:41:23  RD
 // Changed the import semantics from "from wxPython import *" to "from
 // wxPython.wx import *"  This is for people who are worried about

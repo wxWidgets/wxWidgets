@@ -10,12 +10,6 @@
 // Licence:     wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
-#ifdef __WXMSW__
-#include <windows.h>
-#undef FindWindow
-#undef GetCharWidth
-#undef LoadAccelerators
-#endif
 
 #ifdef __WXGTK__
 #include "gtk/gtk.h"
@@ -24,6 +18,14 @@
 #undef DEBUG
 #include <Python.h>
 #include "helpers.h"
+#ifdef __WXMSW__
+#include <wx/msw/private.h>
+#undef FindWindow
+#undef GetCharWidth
+#undef LoadAccelerators
+#undef GetClassInfo
+#undef GetClassName
+#endif
 #include <wx/module.h>
 
 //---------------------------------------------------------------------------
@@ -38,8 +40,6 @@ wxString    wxPyEmptyStr("");
 
 
 #ifdef __WXMSW__             // If building for win32...
-extern HINSTANCE wxhInstance;
-
 //----------------------------------------------------------------------
 // This gets run when the DLL is loaded.  We just need to save a handle.
 //----------------------------------------------------------------------
@@ -50,7 +50,7 @@ BOOL WINAPI DllMain(
     LPVOID      lpvReserved  // reserved
    )
 {
-    wxhInstance = hinstDLL;
+    wxSetInstance(hinstDLL);
     return 1;
 }
 #endif
@@ -72,6 +72,7 @@ int  wxPyApp::MainLoop(void) {
     AfterMainLoop();
     return retval;
 }
+
 
 void wxPyApp::AfterMainLoop(void) {
     // more stuff from wxEntry...
@@ -583,7 +584,20 @@ wxAcceleratorEntry* wxAcceleratorEntry_LIST_helper(PyObject* source) {
 /////////////////////////////////////////////////////////////////////////////
 //
 // $Log$
+// Revision 1.19  1999/02/20 09:02:59  RD
+// Added wxWindow_FromHWND(hWnd) for wxMSW to construct a wxWindow from a
+// window handle.  If you can get the window handle into the python code,
+// it should just work...  More news on this later.
+//
+// Added wxImageList, wxToolTip.
+//
+// Re-enabled wxConfig.DeleteAll() since it is reportedly fixed for the
+// wxRegConfig class.
+//
+// As usual, some bug fixes, tweaks, etc.
+//
 // Revision 1.18  1999/01/30 08:17:27  RD
+//
 // Added wxSashWindow, wxSashEvent, wxLayoutAlgorithm, etc.
 //
 // Various cleanup, tweaks, minor additions, etc. to maintain
