@@ -89,18 +89,6 @@ wxMenuItem::~wxMenuItem()
 {
 }
 
-// misc
-// ----
-
-// delete the sub menu
-void wxMenuItem::DeleteSubMenu()
-{
-    wxASSERT( m_subMenu != NULL );
-
-    delete m_subMenu;
-    m_subMenu = NULL;
-}
-
 // change item state
 // -----------------
 

@@ -47,8 +47,6 @@ public:
     virtual void SetBitmap(const wxBitmap& bitmap) { m_bitmap = bitmap; }
     virtual const wxBitmap& GetBitmap() const { return m_bitmap; }
     
-    void DeleteSubMenu();
-    
     // implementation from now on
     void CreateItem (WXWidget menu, wxMenuBar * menuBar, wxMenu * topMenu);
     void DestroyItem(bool full);

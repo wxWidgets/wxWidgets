@@ -93,6 +93,10 @@ wxMSW:
 - wxRegConf couldn't read global settings without admin privileges and didn't
   even try to do it by default -- now it does
 
+wxMotif:
+
+- removed wxMenuItem::DeleteSubMenu()
+
 wxHTML:
 
 - improved tables and lists layout algorithms (Tim Kosse)
