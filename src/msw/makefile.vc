@@ -141,8 +141,8 @@ COMMONOBJS = \
   ..\common\$D\paper.obj \
   ..\common\$D\string.obj \
   ..\common\$D\socket.obj \
-  ..\common\$D\socket.obj \
   ..\common\$D\sckaddr.obj \
+  ..\common\$D\sckint.obj \
   ..\common\$D\sckfile.obj \
   ..\common\$D\sckipc.obj \
   ..\common\$D\sckstrm.obj \

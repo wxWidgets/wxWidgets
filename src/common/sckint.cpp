@@ -155,11 +155,23 @@ void *SocketWaiter::Entry()
     if (FD_ISSET(m_fd, &sockwr_set))
       ProcessWriteEvent();
 
+#if wxUSE_THREADS
+#ifdef Yield
+#undef Yield
+#endif
+
     if (ret == 0)
       // If nothing happened, we wait for 100 ms.
       wxThread::Sleep(10);
     else
       wxThread::Yield();
+#else
+    if (ret == 0)
+      // If nothing happened, we wait for 100 ms.
+      wxUsleep(10);
+    else
+      wxYield();
+#endif
 
     // Check whether we should exit.
     if (TestDestroy())
