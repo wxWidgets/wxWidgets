@@ -4,7 +4,7 @@
 # Set WXDIR for your system
 WXDIR = $(WXWIN)
 
-PROGRAM=toolbar
+PROGRAM=wxib
 OBJECTS = $(PROGRAM).obj
 
 !include $(WXDIR)\src\makeprog.vc
