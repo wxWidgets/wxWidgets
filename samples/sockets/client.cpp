@@ -533,6 +533,12 @@ void MyFrame::OnTestURL(wxCommandEvent& WXUNUSED(event))
 
   // Parse the URL
   wxURL url(urlname);
+  if (url.GetError() != wxURL_NOERR)
+  {
+    m_text->AppendText(_("Error: couldn't parse URL\n"));
+    m_text->AppendText(_("=== URL test ends ===\n"));
+    return;
+  }
 
   // Try to get the input stream (connects to the given URL)
   m_text->AppendText(_("Trying to establish connection...\n"));
@@ -557,6 +563,13 @@ void MyFrame::OnTestURL(wxCommandEvent& WXUNUSED(event))
 
   // Get the data
   wxFileOutputStream sout(wxString("test.url"));
+  if (!sout.Ok())
+  {
+    m_text->AppendText(_("Error: couldn't open file for output\n"));
+    m_text->AppendText(_("=== URL test ends ===\n"));
+    return;
+  }
+
   data->Read(sout);
   m_text->AppendText(_("Results written to file: test.url\n"));
   m_text->AppendText(_("Done.\n"));
