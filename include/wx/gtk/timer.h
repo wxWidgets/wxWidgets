@@ -12,41 +12,26 @@
 #define __GTKTIMERH__
 
 #ifdef __GNUG__
-#pragma interface
+    #pragma interface "timer.h"
 #endif
-
-#include "wx/defs.h"
-#include "wx/object.h"
-
-//-----------------------------------------------------------------------------
-// derived classes
-//-----------------------------------------------------------------------------
-
-class wxTimer;
 
 //-----------------------------------------------------------------------------
 // wxTimer
 //-----------------------------------------------------------------------------
 
-class wxTimer: public wxObject
+class wxTimer : public wxTimerBase
 {
 public:
     wxTimer();
     ~wxTimer();
 
-    int Interval() const { return m_time; }
-
-    bool OneShot() const { return m_oneShot; }
-
     virtual bool Start( int millisecs = -1, bool oneShot = FALSE );
     virtual void Stop();
 
-    virtual void Notify() = 0;  // override this
+    virtual bool IsRunning() const { return m_tag != -1; }
 
 protected:
     int  m_tag;
-    int  m_time;
-    bool m_oneShot;
 
 private:
     DECLARE_ABSTRACT_CLASS(wxTimer)

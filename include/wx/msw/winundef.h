@@ -128,7 +128,7 @@
 
 #ifdef StartDoc
    #undef StartDoc
-   #ifdef __GNUWIN32__
+   #ifdef __GNUG__
       #define DOCINFOW DOCINFO
       #define DOCINFOA DOCINFO
    #endif

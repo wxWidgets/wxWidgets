@@ -37,24 +37,24 @@ void wxTimerCallback (wxTimer * timer)
     return;			// Avoid to process spurious timer events
 
   if (!timer->m_oneShot)
-    timer->m_id = XtAppAddTimeOut ((XtAppContext) wxTheApp->GetAppContext(), timer->m_milli,
-		  (XtTimerCallbackProc) wxTimerCallback, (XtPointer) timer);
+    timer->m_id = XtAppAddTimeOut((XtAppContext) wxTheApp->GetAppContext(),
+                                  timer->m_milli,
+                                  (XtTimerCallbackProc) wxTimerCallback,
+                                  (XtPointer) timer);
   else
     timer->m_id = 0;
-  timer->Notify ();
+
+  timer->Notify();
 }
 
 wxTimer::wxTimer()
 {
     m_id = 0;
-    m_milli = 0 ;
-    m_id = 0;
-    m_oneShot = FALSE;
 }
 
 wxTimer::~wxTimer()
 {
-    Stop();
+    wxTimer::Stop();
     wxTimerList.DeleteObject(this);
 }
 
@@ -62,20 +62,15 @@ bool wxTimer::Start(int milliseconds, bool mode)
 {
     Stop();
 
-    m_oneShot = mode;
-    if (milliseconds < 0)
-        milliseconds = m_lastMilli;
-
-    if (milliseconds <= 0)
-        return FALSE;
-
-    m_lastMilli = m_milli = milliseconds;
+    (void)wxTimerBase::Start(milliseconds, mode);
 
     if (!wxTimerList.Find((long)this))
         wxTimerList.Append((long)this, this);
 
-    m_id = XtAppAddTimeOut ((XtAppContext) wxTheApp->GetAppContext(), milliseconds,
-		   (XtTimerCallbackProc) wxTimerCallback, (XtPointer) this);
+    m_id = XtAppAddTimeOut((XtAppContext) wxTheApp->GetAppContext(),
+                            m_milli,
+                            (XtTimerCallbackProc) wxTimerCallback,
+                            (XtPointer) this);
     return TRUE;
 }
 

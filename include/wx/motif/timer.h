@@ -13,36 +13,28 @@
 #define _WX_TIMER_H_
 
 #ifdef __GNUG__
-#pragma interface "timer.h"
+    #pragma interface "timer.h"
 #endif
 
-#include "wx/object.h"
-
-class WXDLLEXPORT wxTimer: public wxObject
+class WXDLLEXPORT wxTimer : public wxTimerBase
 {
-  DECLARE_DYNAMIC_CLASS(wxTimer)
+friend void wxTimerCallback(wxTimer * timer);
 
- friend void wxTimerCallback (wxTimer * timer);
+public:
+    wxTimer();
+    ~wxTimer();
 
- public:
-  wxTimer();
-  ~wxTimer();
-  virtual bool Start(int milliseconds = -1,bool one_shot = FALSE); // Start timer
-  virtual void Stop();                   // Stop timer
-  virtual void Notify() = 0;             // Override this member
-  inline int Interval() { return m_milli ; }; // Returns the current interval time (0 if stop)
+    virtual bool Start(int milliseconds = -1, bool oneShot = FALSE);
+    virtual void Stop();
+
+    virtual bool IsRunning() const { return m_id != 0; }
 
 protected:
-  bool      m_oneShot ;
-  int       m_milli ;
-  int       m_lastMilli ;
-  long      m_id;
+    long m_id;
 
+private:
+    DECLARE_DYNAMIC_CLASS(wxTimer)
 };
-
-/* Note: these are implemented in common/timercmn.cpp, so need to implement them separately.
- * But you may need to modify timercmn.cpp.
- */
 
 #endif
     // _WX_TIMER_H_

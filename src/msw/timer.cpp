@@ -20,27 +20,19 @@
     #pragma hdrstop
 #endif
 
-#include "wx/window.h"
-#include "wx/msw/private.h"
-
 #ifndef WX_PRECOMP
     #include "wx/setup.h"
+    #include "wx/window.h"
     #include "wx/list.h"
     #include "wx/event.h"
     #include "wx/app.h"
+    #include "wx/intl.h"
+    #include "wx/log.h"
 #endif
-
-#include "wx/intl.h"
-#include "wx/log.h"
 
 #include "wx/timer.h"
 
-#include <time.h>
-#include <sys/types.h>
-
-#if !defined(__SC__) && !defined(__GNUWIN32__) && !defined(__MWERKS__)
-    #include <sys/timeb.h>
-#endif
+#include "wx/msw/private.h"
 
 // ----------------------------------------------------------------------------
 // private functions
@@ -73,37 +65,31 @@ UINT WINAPI _EXPORT wxTimerProc(HWND hwnd, WORD, int idTimer, DWORD);
 
 wxTimer::wxTimer()
 {
-    milli = 0;
-    lastMilli = -1;
-    id = 0;
+    m_id = 0;
 }
 
 wxTimer::~wxTimer()
 {
-    Stop();
+    wxTimer::Stop();
 
     wxTimerList.DeleteObject(this);
 }
 
-bool wxTimer::Start(int milliseconds, bool mode)
+bool wxTimer::Start(int milliseconds, bool oneShot)
 {
-    oneShot = mode;
-    if (milliseconds < 0)
-        milliseconds = lastMilli;
+    (void)wxTimerBase::Start(milliseconds, oneShot);
 
-    wxCHECK_MSG( milliseconds > 0, FALSE, wxT("invalid value for timer timeour") );
-
-    lastMilli = milli = milliseconds;
+    wxCHECK_MSG( m_milli > 0, FALSE, wxT("invalid value for timer timeour") );
 
     wxTimerList.DeleteObject(this);
     TIMERPROC wxTimerProcInst = (TIMERPROC)
         MakeProcInstance((FARPROC)wxTimerProc, wxGetInstance());
 
-    id = SetTimer(NULL, (UINT)(id ? id : 1),
-                  (UINT)milliseconds, wxTimerProcInst);
-    if (id > 0)
+    m_id = SetTimer(NULL, (UINT)(m_id ? m_id : 1),
+                    (UINT)milliseconds, wxTimerProcInst);
+    if ( m_id > 0 )
     {
-        wxTimerList.Append(id, this);
+        wxTimerList.Append(m_id, this);
 
         return TRUE;
     }
@@ -117,13 +103,13 @@ bool wxTimer::Start(int milliseconds, bool mode)
 
 void wxTimer::Stop()
 {
-    if ( id )
+    if ( m_id )
     {
-        KillTimer(NULL, (UINT)id);
+        KillTimer(NULL, (UINT)m_id);
         wxTimerList.DeleteObject(this);
     }
-    id = 0;
-    milli = 0;
+
+    m_id = 0;
 }
 
 // ----------------------------------------------------------------------------
@@ -133,10 +119,10 @@ void wxTimer::Stop()
 void wxProcessTimer(wxTimer& timer)
 {
     // Avoid to process spurious timer events
-    if ( timer.id == 0)
+    if ( timer.m_id == 0)
         return;
 
-    if ( timer.oneShot )
+    if ( timer.IsOneShot() )
         timer.Stop();
 
     timer.Notify();
