@@ -558,7 +558,7 @@ Visual C++:
   > nmake -f makefile.vc BUILD=debug UNICODE=1
 
 Borland C++:
-  > nmake -f makefile.bcc -DBUILD=debug -DUNICODE=1
+  > make -f makefile.bcc -DBUILD=debug -DUNICODE=1
   (Note that you have to use -D to set the variable, unlike in other make
   tools!)
 
