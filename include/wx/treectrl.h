@@ -33,14 +33,14 @@ static const int wxTREE_HITTEST_NOWHERE          = 0x0004;
 static const int wxTREE_HITTEST_ONITEMBUTTON     = 0x0008;
     // on the bitmap associated with an item.
 static const int wxTREE_HITTEST_ONITEMICON       = 0x0010;
-    // on the ident associated with an item.
-static const int wxTREE_HITTEST_ONITEMIDENT      = 0x0020;
+    // on the indent associated with an item.
+static const int wxTREE_HITTEST_ONITEMINDENT     = 0x0020;
     // on the label (string) associated with an item.
 static const int wxTREE_HITTEST_ONITEMLABEL      = 0x0040;
     // on the right of the label associated with an item.
 static const int wxTREE_HITTEST_ONITEMRIGHT      = 0x0080;
     // on the label (string) associated with an item.
-//static const int wxTREE_HITTEST_ONITEMSTATEICON  = 0x0100;
+static const int wxTREE_HITTEST_ONITEMSTATEICON  = 0x0100;
     // on the left of the wxTreeCtrl.
 static const int wxTREE_HITTEST_TOLEFT           = 0x0200;
     // on the right of the wxTreeCtrl.

@@ -363,6 +363,12 @@ private:
 
 DWORD wxThreadInternal::WinThreadStart(wxThread *thread)
 {
+    // first of all, check whether we hadn't been cancelled already
+    if ( thread->m_internal->GetState() == STATE_EXITED )
+    {
+        return (DWORD)-1;
+    }
+
     // store the thread object in the TLS
     if ( !::TlsSetValue(gs_tlsThisThread, thread) )
     {
@@ -430,7 +436,7 @@ bool wxThreadInternal::Create(wxThread *thread)
     typedef unsigned (__stdcall *RtlThreadStart)(void *);
 
     m_hThread = (HANDLE)_beginthreadex(NULL, 0,
-                                       (RtlThreadStart)    
+                                       (RtlThreadStart)
                                        wxThreadInternal::WinThreadStart,
                                        thread, CREATE_SUSPENDED,
                                        (unsigned int *)&m_tid);
@@ -595,7 +601,7 @@ bool wxThread::SetConcurrency(size_t level)
     // set it: we can't link to SetProcessAffinityMask() because it doesn't
     // exist in Win9x, use RT binding instead
 
-    typedef BOOL (*SETPROCESSAFFINITYMASK)(HANDLE, DWORD *);
+    typedef BOOL (*SETPROCESSAFFINITYMASK)(HANDLE, DWORD);
 
     // can use static var because we're always in the main thread here
     static SETPROCESSAFFINITYMASK pfnSetProcessAffinityMask = NULL;
@@ -621,7 +627,7 @@ bool wxThread::SetConcurrency(size_t level)
         return FALSE;
     }
 
-    if ( pfnSetProcessAffinityMask(hProcess, &dwProcMask) == 0 )
+    if ( pfnSetProcessAffinityMask(hProcess, dwProcMask) == 0 )
     {
         wxLogLastError(_T("SetProcessAffinityMask"));
 
@@ -714,11 +720,29 @@ wxThreadError wxThread::Delete(ExitCode *pRc)
     ExitCode rc = 0;
 
     // Delete() is always safe to call, so consider all possible states
-    if ( IsPaused() )
+
+    // has the thread started to run?
+    bool shouldResume = FALSE;
+
+    {
+        wxCriticalSectionLocker lock(m_critsect);
+
+        if ( m_internal->GetState() == STATE_NEW )
+        {
+            // WinThreadStart() will see it and terminate immediately
+            m_internal->SetState(STATE_EXITED);
+
+            shouldResume = TRUE;
+        }
+    }
+
+    // is the thread paused?
+    if ( shouldResume || IsPaused() )
         Resume();
 
     HANDLE hThread = m_internal->GetHandle();
 
+    // does is still run?
     if ( IsRunning() )
     {
         if ( IsMain() )

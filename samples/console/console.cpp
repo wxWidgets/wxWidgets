@@ -31,14 +31,57 @@
 
 //#define TEST_ARRAYS
 //#define TEST_LOG
+#define TEST_MIME
 //#define TEST_STRINGS
-#define TEST_THREADS
+//#define TEST_THREADS
 //#define TEST_TIME
 //#define TEST_LONGLONG
 
 // ============================================================================
 // implementation
 // ============================================================================
+
+// ----------------------------------------------------------------------------
+// MIME types
+// ----------------------------------------------------------------------------
+
+#ifdef TEST_MIME
+
+#include <wx/mimetype.h>
+
+static void TestMimeEnum()
+{
+    wxMimeTypesManager mimeTM;
+    wxArrayString mimetypes;
+
+    size_t count = mimeTM.EnumAllFileTypes(mimetypes);
+
+    printf("*** All %u known filetypes: ***\n", count);
+
+    wxArrayString exts;
+    wxString desc;
+
+    for ( size_t n = 0; n < count; n++ )
+    {
+        wxFileType *filetype = mimeTM.GetFileTypeFromMimeType(mimetypes[n]);
+        if ( !filetype )
+            continue;
+        filetype->GetDescription(&desc);
+        filetype->GetExtensions(exts);
+
+        wxString extsAll;
+        for ( size_t e = 0; e < exts.GetCount(); e++ )
+        {
+            if ( e > 0 )
+                extsAll << _T(", ");
+            extsAll += exts[e];
+        }
+
+        printf("\t%s: %s (%s)\n", mimetypes[n], desc, extsAll);
+    }
+}
+
+#endif // TEST_MIME
 
 // ----------------------------------------------------------------------------
 // long long
@@ -647,7 +690,10 @@ int main(int argc, char **argv)
 #endif // TEST_LOG
 
 #ifdef TEST_THREADS
-    printf("This system has %d CPUs\n", wxThread::GetCPUCount());
+    int nCPUs = wxThread::GetCPUCount();
+    printf("This system has %d CPUs\n", nCPUs);
+    if ( nCPUs != -1 )
+        wxThread::SetConcurrency(nCPUs);
 
     if ( argc > 1 && argv[1][0] == 't' )
         wxLog::AddTraceMask("thread");
@@ -669,6 +715,10 @@ int main(int argc, char **argv)
     if ( 1 )
         TestDivision();
 #endif // TEST_LONGLONG
+
+#ifdef TEST_MIME
+    TestMimeEnum();
+#endif // TEST_MIME
 
 #ifdef TEST_TIME
     TestTimeStatic();

@@ -478,7 +478,14 @@ private:
                              wxTreeItemIndirectData *data);
     bool HasIndirectData(const wxTreeItemId& item) const;
 
+    // the array storing all item ids which have indirect data
     wxArrayTreeItemIds m_itemsWithIndirectData;
+
+    // the hash storing the items attributes (indexed by items ids)
+    wxHashTable m_attrs;
+
+    // TRUE if the hash above is not empty
+    bool m_hasAnyAttr;
 
     DECLARE_DYNAMIC_CLASS(wxTreeCtrl)
 };

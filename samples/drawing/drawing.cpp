@@ -212,46 +212,46 @@ void MyCanvas::DrawTestLines( int x, int y, int width, wxDC &dc )
 {
     dc.SetPen( wxPen( "black", width, wxSOLID) );
     dc.SetBrush( *wxRED_BRUSH );
-    dc.DrawRectangle( x+10, y+10, 400, 190 );
+    dc.DrawRectangle( x+10, y+10, 110, 190 );
     
     dc.SetPen( wxPen( "black", width, wxSOLID) );
-    dc.DrawLine( x+20, y+20, 390, y+20 );
+    dc.DrawLine( x+20, y+20, 100, y+20 );
     dc.SetPen( wxPen( "black", width, wxDOT) );
-    dc.DrawLine( x+20, y+30, 390, y+30 );
+    dc.DrawLine( x+20, y+30, 100, y+30 );
     dc.SetPen( wxPen( "black", width, wxSHORT_DASH) );
-    dc.DrawLine( x+20, y+40, 390, y+40 );
+    dc.DrawLine( x+20, y+40, 100, y+40 );
     dc.SetPen( wxPen( "black", width, wxLONG_DASH) );
-    dc.DrawLine( x+20, y+50, 390, y+50 );
+    dc.DrawLine( x+20, y+50, 100, y+50 );
     dc.SetPen( wxPen( "black", width, wxDOT_DASH) );
-    dc.DrawLine( x+20, y+60, 390, y+60 );
+    dc.DrawLine( x+20, y+60, 100, y+60 );
 
     dc.SetPen( wxPen( "black", width, wxBDIAGONAL_HATCH) );
-    dc.DrawLine( x+20, y+70, 390, y+70 );
+    dc.DrawLine( x+20, y+70, 100, y+70 );
     dc.SetPen( wxPen( "black", width, wxCROSSDIAG_HATCH) );
-    dc.DrawLine( x+20, y+80, 390, y+80 );
+    dc.DrawLine( x+20, y+80, 100, y+80 );
     dc.SetPen( wxPen( "black", width, wxFDIAGONAL_HATCH) );
-    dc.DrawLine( x+20, y+90, 390, y+90 );
+    dc.DrawLine( x+20, y+90, 100, y+90 );
     dc.SetPen( wxPen( "black", width, wxCROSS_HATCH) );
-    dc.DrawLine( x+20, y+100, 390, y+100 );
+    dc.DrawLine( x+20, y+100, 100, y+100 );
     dc.SetPen( wxPen( "black", width, wxHORIZONTAL_HATCH) );
-    dc.DrawLine( x+20, y+110, 390, y+110 );
+    dc.DrawLine( x+20, y+110, 100, y+110 );
     dc.SetPen( wxPen( "black", width, wxVERTICAL_HATCH) );
-    dc.DrawLine( x+20, y+120, 390, y+120 );
+    dc.DrawLine( x+20, y+120, 100, y+120 );
 
     wxPen ud( "black", width, wxUSER_DASH );
     wxDash dash1[1];
     dash1[0] = 0;
     ud.SetDashes( 1, dash1 );
-    dc.DrawLine( x+20, y+140, 390, y+140 );
+    dc.DrawLine( x+20, y+140, 100, y+140 );
     dash1[0] = 1;
     ud.SetDashes( 1, dash1 );
-    dc.DrawLine( x+20, y+150, 390, y+150 );
+    dc.DrawLine( x+20, y+150, 100, y+150 );
     dash1[0] = 2;
     ud.SetDashes( 1, dash1 );
-    dc.DrawLine( x+20, y+160, 390, y+160 );
+    dc.DrawLine( x+20, y+160, 100, y+160 );
     dash1[0] = 0xFF;
     ud.SetDashes( 1, dash1 );
-    dc.DrawLine( x+20, y+170, 390, y+170 );
+    dc.DrawLine( x+20, y+170, 100, y+170 );
 
 }
 
@@ -278,8 +278,14 @@ void MyCanvas::OnPaint(wxPaintEvent &WXUNUSED(event))
 
     dc.DrawText( "This is text", 110, 10 );
 
-    dc.DrawRotatedText( "+90 rotated text", 30, 30, 90 );
-    dc.DrawRotatedText( "-90 rotated text", 30, 30, -90 );
+    wxString text;
+    dc. SetBackgroundMode(wxSOLID);
+
+    for ( int n = -180; n < 180; n += 30 )
+    {
+        text.Printf("     %d rotated text", n);
+        dc.DrawRotatedText(text , 400, 400, n);
+    }
 
     dc.SetFont( wxFont( 18, wxSWISS, wxNORMAL, wxNORMAL ) );
 
@@ -289,7 +295,6 @@ void MyCanvas::OnPaint(wxPaintEvent &WXUNUSED(event))
     long height;
     long descent;
     dc.GetTextExtent( "This is Swiss 18pt text.", &length, &height, &descent );
-    wxString text;
     text.Printf( "Dimensions are length %ld, height %ld, descent %ld", length, height, descent );
     dc.DrawText( text, 110, 80 );
 

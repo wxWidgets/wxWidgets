@@ -666,7 +666,7 @@ void wxDC::DrawAnyText(const wxString& text, wxCoord x, wxCoord y)
                                                           : OPAQUE);
 
     if ( ::TextOut(GetHdc(), XLOG2DEV(x), YLOG2DEV(y),
-                   text.c_str(), text.length()) != 0 )
+                   text.c_str(), text.length()) == 0 )
     {
         wxLogLastError("TextOut");
     }
@@ -684,28 +684,39 @@ void wxDC::DoDrawRotatedText(const wxString& text,
                              wxCoord x, wxCoord y,
                              double angle)
 {
-    if ( angle == 0.0 )
+    // we test that we have some font because otherwise we should still use the
+    // "else" part below to avoid that DrawRotatedText(angle = 180) and
+    // DrawRotatedText(angle = 0) use different fonts (we can't use the default
+    // font for drawing rotated fonts unfortunately)
+    if ( (angle == 0.0) && m_font.Ok() )
     {
         DoDrawText(text, x, y);
     }
     else
     {
+        // NB: don't take DEFAULT_GUI_FONT because it's not TrueType and so
+        //     can't have non zero orientation/escapement
+        wxFont font = m_font.Ok() ? m_font : *wxNORMAL_FONT;
+        HFONT hfont = (HFONT)font.GetResourceHandle();
         LOGFONT lf;
-        wxFillLogFont(&lf, &m_font);
+        if ( ::GetObject(hfont, sizeof(lf), &lf) == 0 )
+        {
+            wxLogLastError("GetObject(hfont)");
+        }
 
         // GDI wants the angle in tenth of degree
         long angle10 = (long)(angle * 10);
         lf.lfEscapement = angle10;
         lf. lfOrientation = angle10;
 
-        HFONT hfont = ::CreateFontIndirect(&lf);
+        hfont = ::CreateFontIndirect(&lf);
         if ( !hfont )
         {
             wxLogLastError("CreateFont");
         }
         else
         {
-            HFONT hfontOld = ::SelectObject(GetHdc(), hfont);
+            HFONT hfontOld = (HFONT)::SelectObject(GetHdc(), hfont);
 
             DrawAnyText(text, x, y);
 

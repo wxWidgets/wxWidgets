@@ -183,6 +183,7 @@ private:
 // wxTreeItemIndirectData. So we have to maintain a list of all items which
 // have indirect data inside the listctrl itself.
 // ----------------------------------------------------------------------------
+
 class wxTreeItemIndirectData
 {
 public:
@@ -288,6 +289,7 @@ void wxTreeCtrl::Init()
     m_imageListNormal = NULL;
     m_imageListState = NULL;
     m_textCtrl = NULL;
+    m_hasAnyAttr = FALSE;
 }
 
 bool wxTreeCtrl::Create(wxWindow *parent,
@@ -389,6 +391,18 @@ bool wxTreeCtrl::Create(wxWindow *parent,
 
 wxTreeCtrl::~wxTreeCtrl()
 {
+    // delete any attributes
+    if ( m_hasAnyAttr )
+    {
+        for ( wxNode *node = m_attrs.Next(); node; node = m_attrs.Next() )
+        {
+            delete (wxTreeItemAttr *)node->Data();
+        }
+
+        // prevent TVN_DELETEITEM handler from deleting the attributes again!
+        m_hasAnyAttr = FALSE;
+    }
+
     DeleteTextCtrl();
 
     // delete user data to prevent memory leaks
@@ -713,6 +727,53 @@ void wxTreeCtrl::SetItemDropHighlight(const wxTreeItemId& item, bool highlight)
     wxTreeViewItem tvItem(item, TVIF_STATE, TVIS_DROPHILITED);
     tvItem.state = highlight ? TVIS_DROPHILITED : 0;
     DoSetItem(&tvItem);
+}
+
+void wxTreeCtrl::SetItemTextColour(const wxTreeItemId& item,
+                                   const wxColour& col)
+{
+    m_hasAnyAttr = TRUE;
+
+    long id = (long)(WXHTREEITEM)item;
+    wxTreeItemAttr *attr = (wxTreeItemAttr *)m_attrs.Get(id);
+    if ( !attr )
+    {
+        attr = new wxTreeItemAttr;
+        m_attrs.Put(id, (wxObject *)attr);
+    }
+
+    attr->SetTextColour(col);
+}
+
+void wxTreeCtrl::SetItemBackgroundColour(const wxTreeItemId& item,
+                                         const wxColour& col)
+{
+    m_hasAnyAttr = TRUE;
+
+    long id = (long)(WXHTREEITEM)item;
+    wxTreeItemAttr *attr = (wxTreeItemAttr *)m_attrs.Get(id);
+    if ( !attr )
+    {
+        attr = new wxTreeItemAttr;
+        m_attrs.Put(id, (wxObject *)attr);
+    }
+
+    attr->SetBackgroundColour(col);
+}
+
+void wxTreeCtrl::SetItemFont(const wxTreeItemId& item, const wxFont& font)
+{
+    m_hasAnyAttr = TRUE;
+
+    long id = (long)(WXHTREEITEM)item;
+    wxTreeItemAttr *attr = (wxTreeItemAttr *)m_attrs.Get(id);
+    if ( !attr )
+    {
+        attr = new wxTreeItemAttr;
+        m_attrs.Put(id, (wxObject *)attr);
+    }
+
+    attr->SetFont(font);
 }
 
 // ----------------------------------------------------------------------------
@@ -1354,23 +1415,23 @@ bool wxTreeCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
     switch ( hdr->code )
     {
         case NM_RCLICK:
-        {
-            if ( wxControl::MSWOnNotify(idCtrl, lParam, result) )
-                return TRUE;
-
-            TV_HITTESTINFO tvhti;
-            ::GetCursorPos(&(tvhti.pt));
-            ::ScreenToClient(GetHwnd(),&(tvhti.pt));
-            if ( TreeView_HitTest(GetHwnd(),&tvhti) )
             {
-                if( tvhti.flags & TVHT_ONITEM )
+                if ( wxControl::MSWOnNotify(idCtrl, lParam, result) )
+                    return TRUE;
+
+                TV_HITTESTINFO tvhti;
+                ::GetCursorPos(&(tvhti.pt));
+                ::ScreenToClient(GetHwnd(),&(tvhti.pt));
+                if ( TreeView_HitTest(GetHwnd(),&tvhti) )
                 {
-                    event.m_item = (WXHTREEITEM) tvhti.hItem;
-                    eventType=wxEVT_COMMAND_TREE_ITEM_RIGHT_CLICK;
+                    if( tvhti.flags & TVHT_ONITEM )
+                    {
+                        event.m_item = (WXHTREEITEM) tvhti.hItem;
+                        eventType = wxEVT_COMMAND_TREE_ITEM_RIGHT_CLICK;
+                    }
                 }
             }
             break;
-        }
 
         case TVN_BEGINDRAG:
             eventType = wxEVT_COMMAND_TREE_BEGIN_DRAG;
@@ -1386,8 +1447,8 @@ bool wxTreeCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
 
                 event.m_item = (WXHTREEITEM) tv->itemNew.hItem;
                 event.m_pointDrag = wxPoint(tv->ptDrag.x, tv->ptDrag.y);
-                break;
             }
+            break;
 
         case TVN_BEGINLABELEDIT:
             {
@@ -1396,17 +1457,23 @@ bool wxTreeCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
 
                 event.m_item = (WXHTREEITEM) info->item.hItem;
                 event.m_label = info->item.pszText;
-                break;
             }
+            break;
 
         case TVN_DELETEITEM:
             {
                 eventType = wxEVT_COMMAND_TREE_DELETE_ITEM;
                 NM_TREEVIEW *tv = (NM_TREEVIEW *)lParam;
 
-                event.m_item = (WXHTREEITEM) tv->itemOld.hItem;
-                break;
+                event.m_item = (WXHTREEITEM)tv->itemOld.hItem;
+
+                if ( m_hasAnyAttr )
+                {
+                    delete (wxTreeItemAttr *)m_attrs.
+                                Delete((long)tv->itemOld.hItem);
+                }
             }
+            break;
 
         case TVN_ENDLABELEDIT:
             {
@@ -1464,8 +1531,8 @@ bool wxTreeCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
                 eventType = g_events[expand][ing];
 
                 event.m_item = (WXHTREEITEM) tv->itemNew.hItem;
-                break;
             }
+            break;
 
         case TVN_KEYDOWN:
             {
@@ -1483,8 +1550,8 @@ bool wxTreeCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
 
                     GetEventHandler()->ProcessEvent(event2);
                 }
-                break;
             }
+            break;
 
         case TVN_SELCHANGED:
             eventType = wxEVT_COMMAND_TREE_SEL_CHANGED;
@@ -1500,8 +1567,105 @@ bool wxTreeCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
 
                 event.m_item = (WXHTREEITEM) tv->itemNew.hItem;
                 event.m_itemOld = (WXHTREEITEM) tv->itemOld.hItem;
-                break;
             }
+            break;
+
+#ifdef NM_CUSTOMDRAW
+        case NM_CUSTOMDRAW:
+            {
+                LPNMTVCUSTOMDRAW lptvcd = (LPNMTVCUSTOMDRAW)lParam;
+                NMCUSTOMDRAW& nmcd = lptvcd->nmcd;
+                switch( nmcd.dwDrawStage )
+                {
+                    case CDDS_PREPAINT:
+                        // if we've got any items with non standard attributes,
+                        // notify us before painting each item
+                        *result = m_hasAnyAttr ? CDRF_NOTIFYITEMDRAW
+                                               : CDRF_DODEFAULT;
+                        return TRUE;
+
+                    case CDDS_ITEMPREPAINT:
+                        {
+                            wxTreeItemAttr *attr =
+                                (wxTreeItemAttr *)m_attrs.Get(nmcd.dwItemSpec);
+
+                            if ( !attr )
+                            {
+                                // nothing to do for this item
+                                return CDRF_DODEFAULT;
+                            }
+
+                            HFONT hFont;
+                            wxColour colText, colBack;
+                            if ( attr->HasFont() )
+                            {
+                                wxFont font = attr->GetFont();
+                                hFont = (HFONT)font.GetResourceHandle();
+                            }
+                            else
+                            {
+                                hFont = 0;
+                            }
+
+                            if ( attr->HasTextColour() )
+                            {
+                                colText = attr->GetTextColour();
+                            }
+                            else
+                            {
+                                colText = GetForegroundColour();
+                            }
+
+                            // selection colours should override ours
+                            if ( nmcd.uItemState & CDIS_SELECTED )
+                            {
+                                DWORD clrBk = ::GetSysColor(COLOR_HIGHLIGHT);
+                                lptvcd->clrTextBk = clrBk;
+
+                                // try to make the text visible
+                                lptvcd->clrText = wxColourToRGB(colText);
+                                lptvcd->clrText |= ~clrBk;
+                                lptvcd->clrText &= 0x00ffffff;
+                            }
+                            else
+                            {
+                                if ( attr->HasBackgroundColour() )
+                                {
+                                    colBack = attr->GetBackgroundColour();
+                                }
+                                else
+                                {
+                                    colBack = GetBackgroundColour();
+                                }
+
+                                lptvcd->clrText = wxColourToRGB(colText);
+                                lptvcd->clrTextBk = wxColourToRGB(colBack);
+                            }
+
+                            // note that if we wanted to set colours for
+                            // individual columns (subitems), we would have
+                            // returned CDRF_NOTIFYSUBITEMREDRAW from here
+                            if ( hFont )
+                            {
+                                ::SelectObject(nmcd.hdc, hFont);
+
+                                *result = CDRF_NEWFONT;
+                            }
+                            else
+                            {
+                                *result = CDRF_DODEFAULT;
+                            }
+
+                            return TRUE;
+                        }
+
+                    default:
+                        *result = CDRF_DODEFAULT;
+                        return TRUE;
+                }
+            }
+            break;
+#endif // NM_CUSTOMDRAW
 
         default:
             return wxControl::MSWOnNotify(idCtrl, lParam, result);

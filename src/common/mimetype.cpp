@@ -138,7 +138,7 @@ public:
     wxFileType *GetFileTypeFromExtension(const wxString& ext);
     wxFileType *GetFileTypeFromMimeType(const wxString& mimeType);
 
-    size_t EnumAllFileTypes(wxFileType **filetypes);
+    size_t EnumAllFileTypes(wxArrayString& mimetypes);
 
     // this are NOPs under Windows
     bool ReadMailcap(const wxString& filename, bool fallback = TRUE)
@@ -167,7 +167,7 @@ public :
     wxFileType *GetFileTypeFromExtension(const wxString& ext);
     wxFileType *GetFileTypeFromMimeType(const wxString& mimeType);
 
-    size_t EnumAllFileTypes(wxFileType **filetypes);
+    size_t EnumAllFileTypes(wxArrayString& mimetypes);
 
     // this are NOPs under MacOS
     bool ReadMailcap(const wxString& filename, bool fallback = TRUE) { return TRUE; }
@@ -354,7 +354,7 @@ public:
     wxFileType *GetFileTypeFromExtension(const wxString& ext);
     wxFileType *GetFileTypeFromMimeType(const wxString& mimeType);
 
-    size_t EnumAllFileTypes(wxFileType **filetypes);
+    size_t EnumAllFileTypes(wxArrayString& mimetypes);
 
     bool ReadMailcap(const wxString& filename, bool fallback = FALSE);
     bool ReadMimeTypes(const wxString& filename);
@@ -654,11 +654,9 @@ void wxMimeTypesManager::AddFallbacks(const wxFileTypeInfo *filetypes)
     }
 }
 
-size_t wxMimeTypesManager::EnumAllFileTypes(wxFileType **filetypes)
+size_t wxMimeTypesManager::EnumAllFileTypes(wxArrayString& mimetypes)
 {
-    wxCHECK_MSG( filetypes, 0u, _T("bad pointer in EnumAllFileTypes") );
-
-    return m_impl->EnumAllFileTypes(filetypes);
+    return m_impl->EnumAllFileTypes(mimetypes);
 }
 
 // ============================================================================
@@ -945,12 +943,22 @@ wxMimeTypesManagerImpl::GetFileTypeFromMimeType(const wxString& mimeType)
     return NULL;
 }
 
-size_t wxMimeTypesManagerImpl::EnumAllFileTypes(wxFileType **filetypes)
+size_t wxMimeTypesManagerImpl::EnumAllFileTypes(wxArrayString& mimetypes)
 {
     // enumerate all keys under MIME_DATABASE_KEY
     wxRegKey key(wxRegKey::HKCR, MIME_DATABASE_KEY);
 
-    return 0;
+    wxString type;
+    long cookie;
+    bool cont = key.GetFirstKey(type, cookie);
+    while ( cont )
+    {
+        mimetypes.Add(type);
+
+        cont = key.GetNextKey(type, cookie);
+    }
+
+    return mimetypes.GetCount();
 }
 
 #elif defined ( __WXMAC__ )
@@ -1069,7 +1077,7 @@ wxMimeTypesManagerImpl::GetFileTypeFromMimeType(const wxString& mimeType)
     return NULL;
 }
 
-size_t wxMimeTypesManagerImpl::EnumAllFileTypes(wxFileType **filetypes)
+size_t wxMimeTypesManagerImpl::EnumAllFileTypes(wxArrayString& mimetypes)
 {
     wxFAIL_MSG( _T("TODO") ); // VZ: don't know anything about this for Mac
 
@@ -1762,17 +1770,11 @@ bool wxMimeTypesManagerImpl::ReadMailcap(const wxString& strFileName,
     return TRUE;
 }
 
-size_t wxMimeTypesManagerImpl::EnumAllFileTypes(wxFileType **filetypes)
+size_t wxMimeTypesManagerImpl::EnumAllFileTypes(wxArrayString& mimetypes)
 {
-    size_t count = m_aTypes.GetCount();
+    mimetypes = m_aTypes;
 
-    *filetypes = new wxFileType[count];
-    for ( size_t n = 0; n < count; n++ )
-    {
-        (*filetypes)[n].m_impl->Init(this, n);
-    }
-
-    return count;
+    return m_aTypes.GetCount();
 }
 
 #endif

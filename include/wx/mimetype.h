@@ -190,11 +190,10 @@ public:
         // read in additional file in mime.types format
     bool ReadMimeTypes(const wxString& filename);
 
-    // enumerate all known file types: the caller is responsible for freeing
-    // both the array and its elements! The previous value of filetypes is lost
+    // enumerate all known MIME types
     //
     // returns the number of retrieved file types
-    size_t EnumAllFileTypes(wxFileType **filetypes);
+    size_t EnumAllFileTypes(wxArrayString& mimetypes);
 
     // these functions can be used to provide default values for some of the
     // MIME types inside the program itself (you may also use

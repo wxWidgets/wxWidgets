@@ -1280,7 +1280,7 @@ bool wxListCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
 
                 if ( m_hasAnyAttr )
                 {
-                    delete m_attrs.Delete(hdr->iItem);
+                    delete (wxListItemAttr *)m_attrs.Delete(hdr->iItem);
                 }
             }
             break;
