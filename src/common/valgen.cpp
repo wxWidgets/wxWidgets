@@ -225,7 +225,7 @@ bool wxGenericValidator::TransferToWindow(void)
             {
                 pControl->SetStringSelection(* m_pString);
             }
-            else
+            if ((m_validatorWindow->GetWindowStyle() & wxCB_READONLY) == 0)
             {
                 pControl->SetValue(* m_pString);
             }
@@ -450,7 +450,10 @@ bool wxGenericValidator::TransferFromWindow(void)
     }
     else if (m_pString)
     {
-        *m_pString = pControl->GetValue();
+        if (m_validatorWindow->GetWindowStyle() & wxCB_READONLY)
+            *m_pString = pControl->GetStringSelection();
+        else
+            *m_pString = pControl->GetValue();
         return true;
     }
   } else
