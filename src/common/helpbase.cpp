@@ -25,6 +25,7 @@
 #endif
 
 #include "wx/helpbase.h"
+#include "wx/app.h"
 
 #ifdef __WXMSW__
 #include "wx/msw/private.h"
