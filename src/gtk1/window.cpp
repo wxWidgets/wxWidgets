@@ -509,6 +509,10 @@ static int gtk_window_expose_callback( GtkWidget *widget,
                                   gdk_event->area.y,
                                   gdk_event->area.width,
                                   gdk_event->area.height );
+    win->m_clearRegion.Union( gdk_event->area.x,
+                                  gdk_event->area.y,
+                                  gdk_event->area.width,
+                                  gdk_event->area.height );
 
     // Actual redrawing takes place in idle time.
     win->GtkUpdate();
@@ -4241,7 +4245,6 @@ void wxWindowGTK::ScrollWindow( int dx, int dy, const wxRect* WXUNUSED(rect) )
         GetClientSize( &cw, &ch );
         m_clearRegion.Intersect( 0, 0, cw, ch );
     }
-
     m_clipPaintRegion = TRUE;
 
     gtk_pizza_scroll( GTK_PIZZA(m_wxwindow), -dx, -dy );
