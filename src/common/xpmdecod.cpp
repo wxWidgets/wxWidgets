@@ -178,7 +178,10 @@ wxImage wxXPMDecoder::ReadFile(wxInputStream& stream)
             if ( (*q == '*') && (*(q + 1) == '/') )
                 break;
         }
-        strcpy(p, q + 2);
+        
+        // memmove allows overlaps (unlike strcpy):
+        size_t cpylen = strlen(q + 2) + 1;
+        memmove(p, q + 2, cpylen); 
     }
 
     /*
