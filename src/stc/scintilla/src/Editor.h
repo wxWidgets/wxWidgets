@@ -133,6 +133,19 @@ public:
 			len = 0;
 		rectangular = rectangular_;
 	}
+	void Copy(const char *s_, int len_, bool rectangular_=false) {
+		delete []s;
+		s = new char[len_];
+		if (s) {
+			len = len_;
+			for (int i = 0; i < len_; i++) {
+				s[i] = s_[i];
+			}
+		} else {
+			len = 0;
+		}
+		rectangular = rectangular_;
+	}
 };
 
 /**
@@ -416,10 +429,14 @@ protected:	// ScintillaBase subclass needs access to much of Editor
 	long SearchInTarget(const char *text, int length);
 	void GoToLine(int lineNo);
 
+	virtual void CopyToClipboard(const SelectionText &selectedText) = 0;
 	char *CopyRange(int start, int end);
+	void CopySelectionFromRange(SelectionText *ss, int start, int end);
 	void CopySelectionRange(SelectionText *ss);
+	void CopyRangeToClipboard(int start, int end);
+	void CopyText(int length, const char *text);
 	void SetDragPosition(int newPos);
-	void DisplayCursor(Window::Cursor c);
+	virtual void DisplayCursor(Window::Cursor c);
 	virtual void StartDrag();
 	void DropAt(int position, const char *value, bool moving, bool rectangular);
 	/** PositionInSelection returns 0 if position in selection, -1 if position before selection, and 1 if after.

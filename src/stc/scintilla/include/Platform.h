@@ -57,6 +57,7 @@ typedef void *SurfaceID;
 typedef void *WindowID;
 typedef void *MenuID;
 typedef void *TickerID;
+typedef void *Function;
 
 /**
  * A geometric point class.
@@ -432,6 +433,23 @@ class ElapsedTime {
 public:
 	ElapsedTime();
 	double Duration(bool reset=false);
+};
+
+/**
+ * Dynamic Library (DLL/SO/...) loading
+ */
+class DynamicLibrary {
+public:
+	virtual ~DynamicLibrary() {};
+
+	/// @return Pointer to function "name", or NULL on failure.
+	virtual Function FindFunction(const char *name) = 0;
+
+	/// @return true if the library was loaded successfully.
+	virtual bool IsValid() = 0;
+
+	/// @return An instance of a DynamicLibrary subclass with "modulePath" loaded.
+	static DynamicLibrary *Load(const char *modulePath);
 };
 
 /**
