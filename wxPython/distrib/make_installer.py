@@ -96,7 +96,7 @@ Source: "wxPython\lib\colourchooser\*.py";  DestDir: "{app}\wxPython\lib\colourc
 Source: "wxPython\py\*.py";                 DestDir: "{app}\wxPython\py"; Components: core
 Source: "wxPython\py\*.txt";                DestDir: "{app}\wxPython\py"; Components: core
 Source: "wxPython\py\*.ico";                DestDir: "{app}\wxPython\py"; Components: core
-Source: "wxPython\py\Py.ico";               DestDir: "{app}\wxPython\py"; DestName: "PyCrust.ico"; Components: core
+Source: "wxPython\py\PyCrust.ico";          DestDir: "{app}\wxPython\py"; Components: core
 Source: "wxPython\py\tests\*.py";           DestDir: "{app}\wxPython\py\tests"; Components: core
 Source: "wxPython\py\wxd\*.py";             DestDir: "{app}\wxPython\py\wxd"; Components: core
 
