@@ -11,7 +11,7 @@
 # Makefile : Builds wxWindows library for Watcom C++, WIN32
 !include ..\makewat.env
 
-LIBTARGET   = $(WXDIR)\lib\wx$(TOOLKIT)$(DEBGUSUFFIX)$(WATCOM_SUFFIX).lib
+LIBTARGET = $(WXDIR)\lib\$(LIBNAME).lib
 
 EXTRATARGETS = png zlib jpeg tiff regex
 EXTRATARGETSCLEAN = clean_png clean_zlib clean_jpeg clean_tiff clean_regex
