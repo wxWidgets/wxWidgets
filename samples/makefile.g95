@@ -20,41 +20,43 @@ MAKEFILE=makefile.g95
 # Mingw make may not have a shell to use, so can't use a loop here. Sigh.
 # Please add new sample directories alphabetically to make it easier to
 # keep track.
+
 all clean:
 	-$(MAKE) -C calendar -f $(MAKEFILE) $@
 	-$(MAKE) -C caret -f $(MAKEFILE) $@
 	-$(MAKE) -C checklst -f $(MAKEFILE) $@
 	-$(MAKE) -C config -f $(MAKEFILE) $@
-	-$(MAKE) -C console -f $(MAKEFILE) $@
 	-$(MAKE) -C controls -f $(MAKEFILE) $@
 	-$(MAKE) -C db -f $(MAKEFILE) $@
-	-$(MAKE) -C ipc -f $(MAKEFILE) $@
 	-$(MAKE) -C dialogs -f $(MAKEFILE) $@
+	-$(MAKE) -C dialup -f $(MAKEFILE) $@
 	-$(MAKE) -C dnd -f $(MAKEFILE) $@
 	-$(MAKE) -C docview -f $(MAKEFILE) $@
 	-$(MAKE) -C docvwmdi -f $(MAKEFILE) $@
+	-$(MAKE) -C dragimag -f $(MAKEFILE) $@
 	-$(MAKE) -C drawing -f $(MAKEFILE) $@
 	-$(MAKE) -C dynamic -f $(MAKEFILE) $@
+	-$(MAKE) -C exec -f $(MAKEFILE) $@
 	-$(MAKE) -C font -f $(MAKEFILE) $@
 	-$(MAKE) -C grid -f $(MAKEFILE) $@
 	-$(MAKE) -C help -f $(MAKEFILE) $@
 	-$(MAKE) -C html -f $(MAKEFILE) $@
 	-$(MAKE) -C image -f $(MAKEFILE) $@
 	-$(MAKE) -C internat -f $(MAKEFILE) $@
+	-$(MAKE) -C ipc -f $(MAKEFILE) $@
 	-$(MAKE) -C joytest -f $(MAKEFILE) $@
 	-$(MAKE) -C layout -f $(MAKEFILE) $@
 	-$(MAKE) -C listctrl -f $(MAKEFILE) $@
 	-$(MAKE) -C mdi -f $(MAKEFILE) $@
-	-$(MAKE) -C memcheck -f $(MAKEFILE) $@
 	-$(MAKE) -C menu -f $(MAKEFILE) $@
 	-$(MAKE) -C minifram -f $(MAKEFILE) $@
 	-$(MAKE) -C minimal -f $(MAKEFILE) $@
 	-$(MAKE) -C nativdlg -f $(MAKEFILE) $@
-	-$(MAKE) -C dialup -f $(MAKEFILE) $@
 	-$(MAKE) -C newgrid -f $(MAKEFILE) $@
 	-$(MAKE) -C notebook -f $(MAKEFILE) $@
 	-$(MAKE) -C oleauto -f $(MAKEFILE) $@
 	-$(MAKE) -C ownerdrw -f $(MAKEFILE) $@
+	-$(MAKE) -C plot -f $(MAKEFILE) $@
 	-$(MAKE) -C png -f $(MAKEFILE) $@
 	-$(MAKE) -C printing -f $(MAKEFILE) $@
 	-$(MAKE) -C proplist -f $(MAKEFILE) $@
@@ -66,20 +68,34 @@ all clean:
 	-$(MAKE) -C sashtest -f $(MAKEFILE) $@
 	-$(MAKE) -C scroll -f $(MAKEFILE) $@
 	-$(MAKE) -C scrollsub -f $(MAKEFILE) $@
+	-$(MAKE) -C sockets -f $(MAKEFILE) $@
 	-$(MAKE) -C splitter -f $(MAKEFILE) $@
+	-$(MAKE) -C statbar -f $(MAKEFILE) $@
 	-$(MAKE) -C tab -f $(MAKEFILE) $@
 	-$(MAKE) -C taskbar -f $(MAKEFILE) $@
 	-$(MAKE) -C text -f $(MAKEFILE) $@
 	-$(MAKE) -C thread -f $(MAKEFILE) $@
 	-$(MAKE) -C toolbar -f $(MAKEFILE) $@
 	-$(MAKE) -C treectrl -f $(MAKEFILE) $@
+	-$(MAKE) -C treelay -f $(MAKEFILE) $@
 	-$(MAKE) -C typetest -f $(MAKEFILE) $@
 	-$(MAKE) -C validate -f $(MAKEFILE) $@
 	-$(MAKE) -C wizard -f $(MAKEFILE) $@
-	-$(MAKE) -C sockets -f $(MAKEFILE) $@
 
-# MFC still not available for mingw32
+
+# Samples untested
+#
+#	-$(MAKE) -C opengl -f $(MAKEFILE) $@
+
+# Missing makefile, sample untested
+#
+#	-$(MAKE) -C console -f $(MAKEFILE) $@
+
+# MFC still not available for cygwin/mingw
 #
 #	-$(MAKE) -C mfc -f $(MAKEFILE) $@
 
+# Memcheck does not work under cygwin/mingw
+#
+#	-$(MAKE) -C memcheck -f $(MAKEFILE) $@
 
