@@ -79,63 +79,63 @@ functions that take a wxKeyEvent argument.
 \latexignore{\rtfignore{\wxheading{Members}}}
 
 
-\membersection{wxKeyEvent::m\_altDown}
+\membersection{wxKeyEvent::m\_altDown}\label{wxkeyeventmaltdown}
 
 \member{bool}{m\_altDown}
 
 true if the Alt key is pressed down.
 
 
-\membersection{wxKeyEvent::m\_controlDown}
+\membersection{wxKeyEvent::m\_controlDown}\label{wxkeyeventmcontroldown}
 
 \member{bool}{m\_controlDown}
 
 true if control is pressed down.
 
 
-\membersection{wxKeyEvent::m\_keyCode}
+\membersection{wxKeyEvent::m\_keyCode}\label{wxkeyeventmkeycode}
 
 \member{long}{m\_keyCode}
 
 Virtual keycode. See \helpref{Keycodes}{keycodes} for a list of identifiers.
 
 
-\membersection{wxKeyEvent::m\_metaDown}
+\membersection{wxKeyEvent::m\_metaDown}\label{wxkeyeventmmetadown}
 
 \member{bool}{m\_metaDown}
 
 true if the Meta key is pressed down.
 
 
-\membersection{wxKeyEvent::m\_shiftDown}
+\membersection{wxKeyEvent::m\_shiftDown}\label{wxkeyeventmshiftdown}
 
 \member{bool}{m\_shiftDown}
 
 true if shift is pressed down.
 
 
-\membersection{wxKeyEvent::m\_x}
+\membersection{wxKeyEvent::m\_x}\label{wxkeyeventmx}
 
 \member{int}{m\_x}
 
 X position of the event.
 
 
-\membersection{wxKeyEvent::m\_y}
+\membersection{wxKeyEvent::m\_y}\label{wxkeyeventmy}
 
 \member{int}{m\_y}
 
 Y position of the event.
 
 
-\membersection{wxKeyEvent::wxKeyEvent}
+\membersection{wxKeyEvent::wxKeyEvent}\label{wxkeyeventctor}
 
 \func{}{wxKeyEvent}{\param{WXTYPE}{ keyEventType}}
 
 Constructor. Currently, the only valid event types are wxEVT\_CHAR and wxEVT\_CHAR\_HOOK.
 
 
-\membersection{wxKeyEvent::AltDown}
+\membersection{wxKeyEvent::AltDown}\label{wxkeyeventaltdown}
 
 \constfunc{bool}{AltDown}{\void}
 
@@ -162,7 +162,7 @@ as \helpref{MetaDown()}{wxkeyeventmetadown}.
 Returns true if the control key was down at the time of the key event.
 
 
-\membersection{wxKeyEvent::GetKeyCode}
+\membersection{wxKeyEvent::GetKeyCode}\label{wxkeyeventgetkeycode}
 
 \constfunc{int}{GetKeyCode}{\void}
 
@@ -171,7 +171,7 @@ while non-ASCII events return values such as {\bf WXK\_LEFT} for the
 left cursor key. See \helpref{Keycodes}{keycodes} for a full list of the virtual key codes.
 
 
-\membersection{wxKeyEvent::GetPosition}
+\membersection{wxKeyEvent::GetPosition}\label{wxkeyeventgetposition}
 
 \constfunc{wxPoint}{GetPosition}{\void}
 
@@ -180,7 +180,7 @@ left cursor key. See \helpref{Keycodes}{keycodes} for a full list of the virtual
 Obtains the position (in client coordinates) at which the key was pressed.
 
 
-\membersection{wxKeyEvent::GetRawKeyCode}
+\membersection{wxKeyEvent::GetRawKeyCode}\label{wxkeyeventgetrawkeycode}
 
 \constfunc{wxUint32}{GetRawKeyCode}{\void}
 
@@ -191,7 +191,7 @@ which should only be used in advanced applications.
 {\tt\#ifdef wxHAS\_RAW\_KEY\_CODES} to determine if this feature is available.
 
 
-\membersection{wxKeyEvent::GetRawKeyFlags}
+\membersection{wxKeyEvent::GetRawKeyFlags}\label{wxkeyeventgetrawkeyflags}
 
 \constfunc{wxUint32}{GetRawKeyFlags}{\void}
 
@@ -202,7 +202,7 @@ platform-dependent and should only be used in advanced applications.
 {\tt \#ifdef wxHAS\_RAW\_KEY\_CODES} to determine if this feature is available.
 
 
-\membersection{wxKeyEvent::GetUnicodeKey}
+\membersection{wxKeyEvent::GetUnicodeKey}\label{wxkeyeventgetunicodekey}
 
 \constfunc{wxChar}{GetUnicodeKey}{\void}
 
@@ -212,21 +212,21 @@ This function is only available in Unicode build, i.e. when
 \texttt{wxUSE\_UNICODE} is $1$.
 
 
-\membersection{wxKeyEvent::GetX}
+\membersection{wxKeyEvent::GetX}\label{wxkeyeventgetx}
 
 \constfunc{long}{GetX}{\void}
 
 Returns the X position (in client coordinates) of the event.
 
 
-\membersection{wxKeyEvent::GetY}
+\membersection{wxKeyEvent::GetY}\label{wxkeyeventgety}
 
 \constfunc{long}{GetY}{\void}
 
 Returns the Y (in client coordinates) position of the event.
 
 
-\membersection{wxKeyEvent::HasModifiers}
+\membersection{wxKeyEvent::HasModifiers}\label{wxkeyeventhasmodifiers}
 
 \constfunc{bool}{HasModifiers}{\void}
 

@@ -51,20 +51,20 @@ the size of the hash table.
 
 \latexignore{\rtfignore{\wxheading{Members}}}
 
-\membersection{wxHashTable::wxHashTable}
+\membersection{wxHashTable::wxHashTable}\label{wxhashtablector}
 
 \func{}{wxHashTable}{\param{unsigned int}{ key\_type}, \param{int}{ size = 1000}}
 
 Constructor. {\it key\_type} is one of wxKEY\_INTEGER, or wxKEY\_STRING,
 and indicates what sort of keying is required. {\it size} is optional.
 
-\membersection{wxHashTable::\destruct{wxHashTable}}
+\membersection{wxHashTable::\destruct{wxHashTable}}\label{wxhashtabledtor}
 
 \func{}{\destruct{wxHashTable}}{\void}
 
 Destroys the hash table.
 
-\membersection{wxHashTable::BeginFind}
+\membersection{wxHashTable::BeginFind}\label{wxhashtablebeginfind}
 
 \func{void}{BeginFind}{\void}
 
@@ -72,13 +72,13 @@ The counterpart of {\it Next}.  If the application wishes to iterate
 through all the data in the hash table, it can call {\it BeginFind} and
 then loop on {\it Next}.
 
-\membersection{wxHashTable::Clear}
+\membersection{wxHashTable::Clear}\label{wxhashtableclear}
 
 \func{void}{Clear}{\void}
 
 Clears the hash table of all nodes (but as usual, doesn't delete user data).
 
-\membersection{wxHashTable::Delete}
+\membersection{wxHashTable::Delete}\label{wxhashtabledelete}
 
 \func{wxObject *}{Delete}{\param{long}{ key}}
 
@@ -86,7 +86,7 @@ Clears the hash table of all nodes (but as usual, doesn't delete user data).
 
 Deletes entry in hash table and returns the user's data (if found).
 
-\membersection{wxHashTable::DeleteContents}
+\membersection{wxHashTable::DeleteContents}\label{wxhashtabledeletecontents}
 
 \func{void}{DeleteContents}{\param{bool}{ flag}}
 
@@ -94,7 +94,7 @@ If set to true data stored in hash table will be deleted when hash table object
 is destroyed.
 
 
-\membersection{wxHashTable::Get}
+\membersection{wxHashTable::Get}\label{wxhashtableget}
 
 \func{wxObject *}{Get}{\param{long}{ key}}
 
@@ -103,14 +103,14 @@ is destroyed.
 Gets data from the hash table, using an integer or string key (depending on which
 has table constructor was used).
 
-\membersection{wxHashTable::MakeKey}
+\membersection{wxHashTable::MakeKey}\label{wxhashtablemakekey}
 
 \func{long}{MakeKey}{\param{const wxString\& }{string}}
 
 Makes an integer key out of a string. An application may wish to make a key
 explicitly (for instance when combining two data values to form a key).
 
-\membersection{wxHashTable::Next}
+\membersection{wxHashTable::Next}\label{wxhashtablenext}
 
 \func{wxHashTable::Node *}{Next}{\void}
 
@@ -121,7 +121,7 @@ The return value is functionally equivalent to \textbf{wxNode} but might not be
 implemented as a \textbf{wxNode}. The user will probably only wish to use the
 \textbf{GetData} method to retrieve the data; the node may also be deleted.
 
-\membersection{wxHashTable::Put}
+\membersection{wxHashTable::Put}\label{wxhashtableput}
 
 \func{void}{Put}{\param{long}{ key}, \param{wxObject *}{object}}
 
@@ -131,7 +131,7 @@ Inserts data into the hash table, using an integer or string key (depending on w
 has table constructor was used). The key string is copied and stored by the hash
 table implementation.
 
-\membersection{wxHashTable::GetCount}
+\membersection{wxHashTable::GetCount}\label{wxhashtablegetcount}
 
 \constfunc{size\_t}{GetCount}{\void}
 

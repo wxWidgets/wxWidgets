@@ -104,14 +104,14 @@ enum TransferMode
 \latexignore{\rtfignore{\wxheading{Members}}}
 
 
-\membersection{wxFTP::wxFTP}
+\membersection{wxFTP::wxFTP}\label{wxftpctor}
 
 \func{}{wxFTP}{\void}
 
 Default constructor.
 
 
-\membersection{wxFTP::\destruct{wxFTP}}
+\membersection{wxFTP::\destruct{wxFTP}}\label{wxftpdtor}
 
 \func{}{\destruct{wxFTP}}{\void}
 
@@ -126,7 +126,7 @@ Aborts the download currently in process, returns {\tt true} if ok, {\tt false}
 if an error occured.
 
 
-\membersection{wxFTP::CheckCommand}
+\membersection{wxFTP::CheckCommand}\label{wxftpcheckcommand}
 
 \func{bool}{CheckCommand}{\param{const wxString\&}{ command}, \param{char }{ret}}
 
@@ -146,7 +146,7 @@ Send the specified {\it command} to the FTP server and return the first
 character of the return code.
 
 
-\membersection{wxFTP::GetLastResult}
+\membersection{wxFTP::GetLastResult}\label{wxftpgetlastresult}
 
 \func{const wxString\&}{GetLastResult}{\void}
 
@@ -156,7 +156,7 @@ command.
 % ----------------------------------------------------------------------------
 
 
-\membersection{wxFTP::ChDir}
+\membersection{wxFTP::ChDir}\label{wxftpchdir}
 
 \func{bool}{ChDir}{\param{const wxString\&}{ dir}}
 
@@ -164,7 +164,7 @@ Change the current FTP working directory.
 Returns true if successful.
 
 
-\membersection{wxFTP::MkDir}
+\membersection{wxFTP::MkDir}\label{wxftpmkdir}
 
 \func{bool}{MkDir}{\param{const wxString\&}{ dir}}
 
@@ -172,7 +172,7 @@ Create the specified directory in the current FTP working directory.
 Returns true if successful.
 
 
-\membersection{wxFTP::RmDir}
+\membersection{wxFTP::RmDir}\label{wxftprmdir}
 
 \func{bool}{RmDir}{\param{const wxString\&}{ dir}}
 
@@ -180,7 +180,7 @@ Remove the specified directory from the current FTP working directory.
 Returns true if successful.
 
 
-\membersection{wxFTP::Pwd}
+\membersection{wxFTP::Pwd}\label{wxftppwd}
 
 \func{wxString}{Pwd}{\void}
 
@@ -189,7 +189,7 @@ Returns the current FTP working directory.
 % ----------------------------------------------------------------------------
 
 
-\membersection{wxFTP::Rename}
+\membersection{wxFTP::Rename}\label{wxftprename}
 
 \func{bool}{Rename}{\param{const wxString\&}{ src}, \param{const wxString\&}{ dst}}
 
@@ -198,7 +198,7 @@ Rename the specified {\it src} element to {\it dst}. Returns true if successful.
 % ----------------------------------------------------------------------------
 
 
-\membersection{wxFTP::RmFile}
+\membersection{wxFTP::RmFile}\label{wxftprmfile}
 
 \func{bool}{RmFile}{\param{const wxString\&}{ path}}
 
@@ -207,21 +207,21 @@ Delete the file specified by {\it path}. Returns true if successful.
 % ----------------------------------------------------------------------------
 
 
-\membersection{wxFTP::SetAscii}
+\membersection{wxFTP::SetAscii}\label{wxftpsetascii}
 
 \func{bool}{SetAscii}{\void}
 
 Sets the transfer mode to ASCII. It will be used for the next transfer.
 
 
-\membersection{wxFTP::SetBinary}
+\membersection{wxFTP::SetBinary}\label{wxftpsetbinary}
 
 \func{bool}{SetBinary}{\void}
 
 Sets the transfer mode to binary (IMAGE). It will be used for the next transfer.
 
 
-\membersection{wxFTP::SetPassive}
+\membersection{wxFTP::SetPassive}\label{wxftpsetpassive}
 
 \func{void}{SetPassive}{\param{bool }{pasv}}
 
@@ -231,7 +231,7 @@ support passive move, you may call this function with \false argument to use
 active connection.
 
 
-\membersection{wxFTP::SetTransferMode}
+\membersection{wxFTP::SetTransferMode}\label{wxftpsettransfermode}
 
 \func{bool}{SetTransferMode}{\param{TransferMode }{mode}}
 
@@ -243,7 +243,7 @@ If this function is never called, binary transfer mode is used by default.
 % ----------------------------------------------------------------------------
 
 
-\membersection{wxFTP::SetUser}
+\membersection{wxFTP::SetUser}\label{wxftpsetuser}
 
 \func{void}{SetUser}{\param{const wxString\&}{ user}}
 
@@ -260,7 +260,7 @@ For example, you can use: "ftp://a\_user:a\_password@a.host:service/a\_directory
 to specify a user and a password.
 
 
-\membersection{wxFTP::SetPassword}
+\membersection{wxFTP::SetPassword}\label{wxftpsetpassword}
 
 \func{void}{SetPassword}{\param{const wxString\&}{ passwd}}
 
@@ -348,7 +348,7 @@ otherwise.
 % ----------------------------------------------------------------------------
 
 
-\membersection{wxFTP::GetOutputStream}
+\membersection{wxFTP::GetOutputStream}\label{wxftpgetoutputstream}
 
 \func{wxOutputStream *}{GetOutputStream}{\param{const wxString\&}{ file}}
 
@@ -367,7 +367,7 @@ An initialized write-only stream.
 % ----------------------------------------------------------------------------
 
 
-\membersection{wxFTP::GetInputStream}\label{wxftpgetinput}
+\membersection{wxFTP::GetInputStream}\label{wxftpgetinputstream}
 
 \func{wxInputStream *}{GetInputStream}{\param{const wxString\&}{ path}}
 

@@ -56,7 +56,7 @@ enum wxPathFormat
 \latexignore{\rtfignore{\wxheading{Function groups}}}
 
 
-\membersection{File name format}
+\membersection{File name format}\label{filenameformat}
 
 wxFileName currently supports the file names in the Unix, DOS/Windows, Mac OS
 and VMS formats. Although these formats are quite different, wxFileName tries
@@ -88,12 +88,12 @@ class are \helpref{GetVolumeSeparator}{wxfilenamegetvolumeseparator},\rtfsp
 \helpref{IsRelative}{wxfilenameisrelative}
 
 
-\membersection{File name construction}
+\membersection{File name construction}\label{filenameconstruction}
 
 TODO.
 
 
-\membersection{File tests}
+\membersection{File tests}\label{filetests}
 
 Before doing the other tests you should use \helpref{IsOk}{wxfilenameisok} to
 verify that the filename is well defined. If it is, 
@@ -105,7 +105,7 @@ File names should be compared using \helpref{SameAs}{wxfilenamesameas} method
 or \helpref{$==$}{wxfilenameoperatorequal}.
 
 
-\membersection{File name components}
+\membersection{File name components}\label{filenamecomponents}
 
 These functions allow to examine and modify the directories of the path:
 
@@ -129,7 +129,7 @@ following functions:
 \helpref{SetVolume}{wxfilenamesetvolume}\\
 
 
-\membersection{Operations}
+\membersection{Operations}\label{filenameoperations}
 
 These methods allow to work with the file creation, access and modification
 times. Note that not all filesystems under all platforms implement these times

@@ -152,7 +152,7 @@ means that you can't use {\tt --it}, {\tt it + 3}, {\tt it1 - it2}.
 
 \latexignore{\rtfignore{\wxheading{Members}}}
 
-\membersection{wxHashMap::wxHashMap}
+\membersection{wxHashMap::wxHashMap}\label{wxhashmapctor}
 
 \func{}{wxHashMap}{\param{size\_type}{ size = 10}}
 
@@ -163,7 +163,7 @@ to preserve performance.
 
 Copy constructor.
 
-\membersection{wxHashMap::begin}
+\membersection{wxHashMap::begin}\label{wxhashmapbegin}
 
 \constfunc{const\_iterator}{begin}{}
 
@@ -172,26 +172,26 @@ Copy constructor.
 Returns an iterator pointing at the first element of the hash map.
 Please remember that hash maps do not guarantee ordering.
 
-\membersection{wxHashMap::clear}
+\membersection{wxHashMap::clear}\label{wxhashmapclear}
 
 \func{void}{clear}{}
 
 Removes all elements from the hash map.
 
-\membersection{wxHashMap::count}
+\membersection{wxHashMap::count}\label{wxhashmapcount}
 
 \constfunc{size\_type}{count}{\param{const key\_type\&}{ key}}
 
 Counts the number of elements with the given key present in the map.
 This function can actually return 0 or 1.
 
-\membersection{wxHashMap::empty}
+\membersection{wxHashMap::empty}\label{wxhashmapempty}
 
 \constfunc{bool}{empty}{}
 
 Returns true if the hash map does not contain any element, false otherwise.
 
-\membersection{wxHashMap::end}
+\membersection{wxHashMap::end}\label{wxhashmapend}
 
 \constfunc{const\_iterator}{end}{}
 
@@ -200,7 +200,7 @@ Returns true if the hash map does not contain any element, false otherwise.
 Returns an iterator pointing at the one-after-the-last element of the hash map.
 Please remember that hash maps do not guarantee ordering.
 
-\membersection{wxHashMap::erase}
+\membersection{wxHashMap::erase}\label{wxhashmaperase}
 
 \func{size\_type}{erase}{\param{const key\_type\&}{ key}}
 
@@ -214,7 +214,7 @@ erased (either 0 or 1).
 Erases the element pointed to by the iterator. After the deletion
 the iterator is no longer valid and must not be used.
 
-\membersection{wxHashMap::find}
+\membersection{wxHashMap::find}\label{wxhashmapfind}
 
 \func{iterator}{find}{\param{const key\_type\&}{ key}}
 
@@ -224,13 +224,13 @@ If an element with the given key is present, the functions returns
 an iterator pointing at that element, otherwise an invalid iterator
 is returned (i.e. hashmap.find( non\_existent\_key ) == hashmap.end()).
 
-\membersection{wxHashMap::insert}
+\membersection{wxHashMap::insert}\label{wxhashmapinsert}
 
 \func{void}{insert}{\param{const value\_type\&}{ v}}
 
 Inserts the given value in the hash map.
 
-\membersection{wxHashMap::operator[]}
+\membersection{wxHashMap::operator[]}\label{wxhashmapbracket}
 
 \func{mapped\_type\&}{operator[]}{\param{const key\_type\&}{ key}}
 
@@ -238,7 +238,7 @@ Use it as an array subscript. The only difference is that if the
 given key is not present in the hash map, an element with the
 default {\tt value\_type()} is inserted in the table.
 
-\membersection{wxHashMap::size}
+\membersection{wxHashMap::size}\label{wxhashmapsize}
 
 \constfunc{size\_type}{size}{}
 

@@ -25,7 +25,7 @@ is being developed.
 % Hostname
 %
 
-\membersection{wxIPaddress::Hostname}
+\membersection{wxIPaddress::Hostname}\label{wxipaddresshostname}
 
 \func{virtual bool}{Hostname}{\param{const wxString\&}{ hostname}}
 
@@ -37,12 +37,6 @@ or an IP-style address in a format dependent on implementation.
 Returns true on success, false if something goes wrong
 (invalid hostname or invalid IP address).
 
-%
-% Hostname
-%
-
-\membersection{wxIPaddress::Hostname}
-
 \func{virtual wxString}{Hostname}{\void}
 
 Returns the hostname which matches the IP address.
@@ -51,7 +45,7 @@ Returns the hostname which matches the IP address.
 % IPAddress
 %
 
-\membersection{wxIPaddress::IPAddress}
+\membersection{wxIPaddress::IPAddress}\label{wxipaddressipaddress}
 
 \func{virtual wxString}{IPAddress}{\void}
 
@@ -61,7 +55,7 @@ Returns a wxString containing the IP address.
 % Service
 %
 
-\membersection{wxIPaddress::Service}
+\membersection{wxIPaddress::Service}\label{wxipaddressservice}
 
 \func{virtual bool}{Service}{\param{const wxString\&}{ service}}
 
@@ -72,12 +66,6 @@ Set the port to that corresponding to the specified {\it service}.
 Returns true on success, false if something goes wrong
 (invalid service).
 
-%
-% Service
-%
-
-\membersection{wxIPaddress::Service}
-
 \func{virtual bool}{Service}{\param{unsigned short}{ service}}
 
 Set the port to that corresponding to the specified {\it service}.
@@ -86,12 +74,6 @@ Set the port to that corresponding to the specified {\it service}.
 
 Returns true on success, false if something goes wrong
 (invalid service).
-
-%
-% Service
-%
-
-\membersection{wxIPaddress::Service}
 
 \func{virtual unsigned short}{Service}{\void}
 

@@ -76,7 +76,7 @@ PNM format, {\bf wxPNMHandler} will always save as raw RGB.
 
 \latexignore{\rtfignore{\wxheading{Members}}}
 
-\membersection{wxImage::wxImage}\label{wximageconstr}
+\membersection{wxImage::wxImage}\label{wximagector}
 
 \func{}{wxImage}{\void}
 
@@ -199,7 +199,7 @@ platform-dependent bitmap}
 \end{itemize}
 }
 
-\membersection{wxImage::\destruct{wxImage}}
+\membersection{wxImage::\destruct{wxImage}}\label{wximagedtor}
 
 \func{}{\destruct{wxImage}}{\void}
 
@@ -223,7 +223,7 @@ of a given handler class in an application session.}
 returns true if the current image handlers can read this file
 
 \pythonnote{In wxPython this static method is named {\tt wxImage\_AddHandler}.}
-\membersection{wxImage::CleanUpHandlers}
+\membersection{wxImage::CleanUpHandlers}\label{wximagecleanuphandlers}
 
 \func{static void}{CleanUpHandlers}{\void}
 
@@ -341,7 +341,7 @@ Returns false if there is no unused colour left, true on success.
 Note that this method involves computing the histogram, which is
 computationally intensive operation.
 
-\membersection{wxImage::FindHandler}
+\membersection{wxImage::FindHandler}\label{wximagefindhandler}
 
 \func{static wxImageHandler*}{FindHandler}{\param{const wxString\& }{name}}
 
@@ -375,7 +375,7 @@ A pointer to the handler if found, NULL otherwise.
 
 \helpref{wxImageHandler}{wximagehandler}
 
-\membersection{wxImage::GetImageExtWildcard}
+\membersection{wxImage::GetImageExtWildcard}\label{wximagegetimageextwildcard}
 
 \func{static wxString}{GetImageExtWildcard}{\void}
 
@@ -481,7 +481,7 @@ available images.
 Number of available images. For most image handlers, this is 1 (exceptions
 are TIFF and ICO formats).
 
-\membersection{wxImage::GetHandlers}
+\membersection{wxImage::GetHandlers}\label{wximagegethandlers}
 
 \func{static wxList\&}{GetHandlers}{\void}
 
@@ -602,7 +602,7 @@ Returns true if the given option is present. The function is case-insensitive to
 \helpref{wxImage::GetOption}{wximagegetoption},\rtfsp
 \helpref{wxImage::GetOptionInt}{wximagegetoptionint}
 
-\membersection{wxImage::InitStandardHandlers}
+\membersection{wxImage::InitStandardHandlers}\label{wximageinitstandardhandlers}
 
 \func{static void}{InitStandardHandlers}{\void}
 
@@ -617,7 +617,7 @@ the user.
 \helpref{wxImageHandler}{wximagehandler}, 
 \helpref{wxInitAllImageHandlers}{wxinitallimagehandlers}
 
-\membersection{wxImage::InsertHandler}
+\membersection{wxImage::InsertHandler}\label{wximageinserthandler}
 
 \func{static void}{InsertHandler}{\param{wxImageHandler*}{ handler}}
 
@@ -721,7 +721,7 @@ mimetype from a file}
 
 Returns true if image data is present.
 
-\membersection{wxImage::RemoveHandler}
+\membersection{wxImage::RemoveHandler}\label{wximageremovehandler}
 
 \func{static bool}{RemoveHandler}{\param{const wxString\& }{name}}
 
@@ -1005,7 +1005,7 @@ data, but in some cases this might be too slow so that the data will have to
 be set directly. In that case you will have to get access to the image data 
 using the \helpref{GetData}{wximagegetdata} method.
 
-\membersection{wxImage::operator $=$}
+\membersection{wxImage::operator $=$}\label{wximageassign}
 
 \func{wxImage\& }{operator $=$}{\param{const wxImage\& }{image}}
 
@@ -1021,7 +1021,7 @@ counter. It is a fast operation.
 
 Returns 'this' object.
 
-\membersection{wxImage::operator $==$}
+\membersection{wxImage::operator $==$}\label{wximageequal}
 
 \constfunc{bool}{operator $==$}{\param{const wxImage\& }{image}}
 
@@ -1036,7 +1036,7 @@ equal (a fast test).
 
 Returns true if the images were effectively equal, false otherwise.
 
-\membersection{wxImage::operator $!=$}
+\membersection{wxImage::operator $!=$}\label{wximagenotequal}
 
 \constfunc{bool}{operator $!=$}{\param{const wxImage\& }{image}}
 
@@ -1082,26 +1082,26 @@ created by IJG.)
 
 \latexignore{\rtfignore{\wxheading{Members}}}
 
-\membersection{wxImageHandler::wxImageHandler}\label{wximagehandlerconstr}
+\membersection{wxImageHandler::wxImageHandler}\label{wximagehandlerctor}
 
 \func{}{wxImageHandler}{\void}
 
 Default constructor. In your own default constructor, initialise the members
 m\_name, m\_extension and m\_type.
 
-\membersection{wxImageHandler::\destruct{wxImageHandler}}
+\membersection{wxImageHandler::\destruct{wxImageHandler}}\label{wximagehandlerdtor}
 
 \func{}{\destruct{wxImageHandler}}{\void}
 
 Destroys the wxImageHandler object.
 
-\membersection{wxImageHandler::GetName}
+\membersection{wxImageHandler::GetName}\label{wximagehandlergetname}
 
 \constfunc{wxString}{GetName}{\void}
 
 Gets the name of this handler.
 
-\membersection{wxImageHandler::GetExtension}
+\membersection{wxImageHandler::GetExtension}\label{wximagehandlergetextension}
 
 \constfunc{wxString}{GetExtension}{\void}
 
@@ -1122,13 +1122,13 @@ available images.
 Number of available images. For most image handlers, this is 1 (exceptions
 are TIFF and ICO formats).
 
-\membersection{wxImageHandler::GetType}
+\membersection{wxImageHandler::GetType}\label{wximagehandlergettype}
 
 \constfunc{long}{GetType}{\void}
 
 Gets the image type associated with this handler.
 
-\membersection{wxImageHandler::GetMimeType}
+\membersection{wxImageHandler::GetMimeType}\label{wximagehandlergetmimetype}
 
 \constfunc{wxString}{GetMimeType}{\void}
 
@@ -1184,7 +1184,7 @@ true if the operation succeeded, false otherwise.
 \helpref{wxImage::SaveFile}{wximagesavefile}, 
 \helpref{wxImageHandler::LoadFile}{wximagehandlerloadfile}
 
-\membersection{wxImageHandler::SetName}
+\membersection{wxImageHandler::SetName}\label{wximagehandlersetname}
 
 \func{void}{SetName}{\param{const wxString\& }{name}}
 
@@ -1194,7 +1194,7 @@ Sets the handler name.
 
 \docparam{name}{Handler name.}
 
-\membersection{wxImageHandler::SetExtension}
+\membersection{wxImageHandler::SetExtension}\label{wximagehandlersetextension}
 
 \func{void}{SetExtension}{\param{const wxString\& }{extension}}
 
@@ -1214,7 +1214,7 @@ Sets the handler MIME type.
 
 \docparam{mimename}{Handler MIME type.}
 
-\membersection{wxImageHandler::SetType}
+\membersection{wxImageHandler::SetType}\label{wximagehandlersettype}
 
 \func{void}{SetType}{\param{long }{type}}
 

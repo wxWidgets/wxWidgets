@@ -21,7 +21,7 @@ which means that their values should be calculated by looking at known constrain
 
 \latexignore{\rtfignore{\wxheading{Members}}}
 
-\subsection{Edges and relationships}
+\subsection{Edges and relationships}\label{edgesandrelationships}
 
 The {\it wxEdge}\index{wxEdge} enumerated type specifies the type of edge or dimension of a window.
 
@@ -52,26 +52,26 @@ default for dimensions.}
 \twocolitem{wxAbsolute}{The edge or dimension should be a given absolute value.}
 \end{twocollist}
 
-\membersection{wxIndividualLayoutConstraint::wxIndividualLayoutConstraint}
+\membersection{wxIndividualLayoutConstraint::wxIndividualLayoutConstraint}\label{wxindividuallayoutconstraintctor}
 
 \func{void}{wxIndividualLayoutConstraint}{\void}
 
 Constructor. Not used by the end-user.
 
-\membersection{wxIndividualLayoutConstraint::Above}
+\membersection{wxIndividualLayoutConstraint::Above}\label{wxindividuallayoutconstraintabove}
 
 \func{void}{Above}{\param{wxWindow *}{otherWin}, \param{int}{ margin = 0}}
 
 Constrains this edge to be above the given window, with an
 optional margin. Implicitly, this is relative to the top edge of the other window.
 
-\membersection{wxIndividualLayoutConstraint::Absolute}
+\membersection{wxIndividualLayoutConstraint::Absolute}\label{wxindividuallayoutconstraintabsolute}
 
 \func{void}{Absolute}{\param{int}{ value}}
 
 Constrains this edge or dimension to be the given absolute value.
 
-\membersection{wxIndividualLayoutConstraint::AsIs}
+\membersection{wxIndividualLayoutConstraint::AsIs}\label{wxindividuallayoutconstraintasis}
 
 \func{void}{AsIs}{\void}
 
@@ -82,49 +82,49 @@ This is important when considering panel items which are intended
 to have a default size, such as a button, which may take its size
 from the size of the button label.
 
-\membersection{wxIndividualLayoutConstraint::Below}
+\membersection{wxIndividualLayoutConstraint::Below}\label{wxindividuallayoutconstraintbelow}
 
 \func{void}{Below}{\param{wxWindow *}{otherWin}, \param{int}{ margin = 0}}
 
 Constrains this edge to be below the given window, with an
 optional margin. Implicitly, this is relative to the bottom edge of the other window.
 
-\membersection{wxIndividualLayoutConstraint::Unconstrained}
+\membersection{wxIndividualLayoutConstraint::Unconstrained}\label{wxindividuallayoutconstraintunconstrained}
 
 \func{void}{Unconstrained}{\void}
 
 Sets this edge or dimension to be unconstrained, that is, dependent on
 other edges and dimensions from which this value can be deduced.
 
-\membersection{wxIndividualLayoutConstraint::LeftOf}
+\membersection{wxIndividualLayoutConstraint::LeftOf}\label{wxindividuallayoutconstraintleftof}
 
 \func{void}{LeftOf}{\param{wxWindow *}{otherWin}, \param{int}{ margin = 0}}
 
 Constrains this edge to be to the left of the given window, with an
 optional margin. Implicitly, this is relative to the left edge of the other window.
 
-\membersection{wxIndividualLayoutConstraint::PercentOf}
+\membersection{wxIndividualLayoutConstraint::PercentOf}\label{wxindividuallayoutconstraintpercentof}
 
 \func{void}{PercentOf}{\param{wxWindow *}{otherWin}, \param{wxEdge}{ edge}, \param{int}{ per}}
 
 Constrains this edge or dimension to be to a percentage of the given window, with an
 optional margin.
 
-\membersection{wxIndividualLayoutConstraint::RightOf}
+\membersection{wxIndividualLayoutConstraint::RightOf}\label{wxindividuallayoutconstraintrightof}
 
 \func{void}{RightOf}{\param{wxWindow *}{otherWin}, \param{int}{ margin = 0}}
 
 Constrains this edge to be to the right of the given window, with an
 optional margin. Implicitly, this is relative to the right edge of the other window.
 
-\membersection{wxIndividualLayoutConstraint::SameAs}
+\membersection{wxIndividualLayoutConstraint::SameAs}\label{wxindividuallayoutconstraintsameas}
 
 \func{void}{SameAs}{\param{wxWindow *}{otherWin}, \param{wxEdge}{ edge}, \param{int}{ margin = 0}}
 
 Constrains this edge or dimension to be to the same as the edge of the given window, with an
 optional margin.
 
-\membersection{wxIndividualLayoutConstraint::Set}
+\membersection{wxIndividualLayoutConstraint::Set}\label{wxindividuallayoutconstraintset}
 
 \func{void}{Set}{\param{wxRelationship}{ rel}, \param{wxWindow *}{otherWin}, \param{wxEdge}{ otherEdge},
  \param{int}{ value = 0}, \param{int}{ margin = 0}}

@@ -51,7 +51,7 @@ For more information please see \helpref{Bitmap and icon overview}{wxbitmapoverv
 
 \latexignore{\rtfignore{\wxheading{Members}}}
 
-\membersection{wxIcon::wxIcon}\label{wxiconconstr}
+\membersection{wxIcon::wxIcon}\label{wxiconctor}
 
 \func{}{wxIcon}{\void}
 
@@ -208,7 +208,7 @@ must have mask colour set.
 \end{itemize}
 }
 
-\membersection{wxIcon::\destruct{wxIcon}}
+\membersection{wxIcon::\destruct{wxIcon}}\label{wxicondtor}
 
 \func{}{\destruct{wxIcon}}{\void}
 
@@ -222,7 +222,7 @@ destroyed automatically by wxWidgets when the application exits.
 
 Do not delete an icon that is selected into a memory device context.
 
-\membersection{wxIcon::GetDepth}
+\membersection{wxIcon::GetDepth}\label{wxicongetdepth}
 
 \constfunc{int}{GetDepth}{\void}
 
@@ -275,7 +275,7 @@ true if the operation succeeded, false otherwise.
 
 \wxheading{See also}
 
-\helpref{wxIcon::wxIcon}{wxiconconstr}
+\helpref{wxIcon::wxIcon}{wxiconctor}
 
 \membersection{wxIcon::Ok}\label{wxiconok}
 
@@ -341,7 +341,7 @@ Sets the height member (does not affect the icon data).
 
 \docparam{height}{Icon height in pixels.}
 
-\membersection{wxIcon::SetOk}
+\membersection{wxIcon::SetOk}\label{wxiconsetok}
 
 \func{void}{SetOk}{\param{int }{isOk}}
 
@@ -351,7 +351,7 @@ Sets the validity member (does not affect the icon data).
 
 \docparam{isOk}{Validity flag.}
 
-\membersection{wxIcon::SetWidth}
+\membersection{wxIcon::SetWidth}\label{wxiconsetwidth}
 
 \func{void}{SetWidth}{\param{int }{width}}
 
@@ -361,7 +361,7 @@ Sets the width member (does not affect the icon data).
 
 \docparam{width}{Icon width in pixels.}
 
-\membersection{wxIcon::operator $=$}
+\membersection{wxIcon::operator $=$}\label{wxiconassign}
 
 \func{wxIcon\& }{operator $=$}{\param{const wxIcon\& }{icon}}
 
@@ -377,7 +377,7 @@ counter. It is a fast operation.
 
 Returns 'this' object.
 
-\membersection{wxIcon::operator $==$}
+\membersection{wxIcon::operator $==$}\label{wxiconequal}
 
 \func{bool}{operator $==$}{\param{const wxIcon\& }{icon}}
 
@@ -392,7 +392,7 @@ equal (a fast test).
 
 Returns true if the icons were effectively equal, false otherwise.
 
-\membersection{wxIcon::operator $!=$}
+\membersection{wxIcon::operator $!=$}\label{wxiconnotequal}
 
 \func{bool}{operator $!=$}{\param{const wxIcon\& }{icon}}
 

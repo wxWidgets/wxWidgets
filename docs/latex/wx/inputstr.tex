@@ -18,19 +18,19 @@ wxInputStream is an abstract base class which may not be used directly.
 % -----------
 % ctor & dtor
 % -----------
-\membersection{wxInputStream::wxInputStream}
+\membersection{wxInputStream::wxInputStream}\label{wxinputstreamctor}
 
 \func{}{wxInputStream}{\void}
 
 Creates a dummy input stream.
 
-\membersection{wxInputStream::\destruct{wxInputStream}}
+\membersection{wxInputStream::\destruct{wxInputStream}}\label{wxinputstreamdtor}
 
 \func{}{\destruct{wxInputStream}}{\void}
 
 Destructor.
 
-\membersection{wxInputStream::GetC}
+\membersection{wxInputStream::GetC}\label{wxinputstreamgetc}
 
 \func{char}{GetC}{\void}
 
@@ -61,7 +61,7 @@ a non-zero number of bytes have been read.
 
 Returns the last number of bytes read.
 
-\membersection{wxInputStream::Peek}
+\membersection{wxInputStream::Peek}\label{wxinputstreampeek}
 
 \func{char}{Peek}{\void}
 
@@ -73,7 +73,7 @@ Blocks until something appears in the stream if necessary, if nothing
 ever does (i.e. EOF) LastRead() will return 0 (and the return value is
 undefined), otherwise LastRead() returns 1.
 
-\membersection{wxInputStream::Read}
+\membersection{wxInputStream::Read}\label{wxinputstreamread}
 
 \func{wxInputStream\&}{Read}{\param{void *}{buffer}, \param{size\_t}{ size}}
 
@@ -114,7 +114,7 @@ Changes the stream current position.
 
 The new stream position or wxInvalidOffset on error.
 
-\membersection{wxInputStream::TellI}
+\membersection{wxInputStream::TellI}\label{wxinputstreamtelli}
 
 \constfunc{off\_t}{TellI}{\void}
 
