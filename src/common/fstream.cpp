@@ -44,10 +44,7 @@ char wxFileInputStream::Peek()
 
 size_t wxFileInputStream::DoRead(void *buffer, size_t size)
 {
-  size_t ret = wxFile::Read(buffer, size);
-  m_eof = wxFile::Eof();
-
-  return ret;
+  return wxFile::Read(buffer, size);
 }
 
 off_t wxFileInputStream::DoSeekInput(off_t pos, wxSeekMode mode)

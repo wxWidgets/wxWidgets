@@ -59,31 +59,37 @@ void wxStreamBuffer::WriteBack(char c)
 
 void wxStreamBuffer::SetBufferIO(char *buffer_start, char *buffer_end)
 {
-  m_buffer_pos  = m_buffer_start = buffer_start;
-  m_buffer_end  = buffer_end;
+  size_t ret;
+
+  m_buffer_start = buffer_start;
+  m_buffer_end   = buffer_end;
 
   m_buffer_size = m_buffer_end-m_buffer_start;
+
+  if (m_istream) {
+    ret = m_istream->DoRead(m_buffer_start, m_buffer_size);
+    m_buffer_end = m_buffer_start + ret;
+  }
+  m_buffer_pos = m_buffer_start;
 }
 
 void wxStreamBuffer::SetBufferIO(size_t bufsize)
 {
-  if (m_buffer_start)
-    delete[] m_buffer_start;
+  char *b_start;
+
+  wxDELETE(m_buffer_start);
 
   if (!bufsize) {
     m_buffer_start = NULL;
     m_buffer_end = NULL;
     m_buffer_pos = NULL;
     m_buffer_size = 0;
+    return;
   }
 
-  m_buffer_start = new char[bufsize];
-  m_buffer_end   = m_buffer_start + bufsize;
-  if (m_istream)
-    m_buffer_pos = m_buffer_end;
-  else
-    m_buffer_pos = m_buffer_start;
-  m_buffer_size  = bufsize;
+  b_start = new char[bufsize];
+
+  SetBufferIO(b_start, b_start + bufsize);
 }
 
 void wxStreamBuffer::ResetBuffer()
@@ -125,9 +131,10 @@ void wxStreamBuffer::Read(void *buffer, size_t size)
 
       read_ret = m_istream->DoRead(m_buffer_start, m_buffer_size);
 
-      // Read failed
+      // Read failed: EOF
       if (read_ret == 0) {
         m_istream->m_lastread = orig_size-size;
+        m_istream->m_eof = TRUE;
         m_buffer_pos = m_buffer_end = m_buffer_start;
         return;
       } else {
@@ -361,25 +368,30 @@ wxInputStream& wxInputStream::operator>>(wxObject *& obj)
 
 off_t wxInputStream::SeekI(off_t pos, wxSeekMode mode)
 {
-  off_t ret_off;
+  off_t ret_off, diff, last_access;
+
+  last_access = m_i_streambuf->GetLastAccess();
 
   switch (mode) {
   case wxFromStart:
-    if ( (unsigned)abs (DoTellInput()-pos) > m_i_streambuf->GetLastAccess()  ) {
+    diff = DoTellInput() - pos;
+    if ( diff < 0 || diff > last_access  ) {
       ret_off = DoSeekInput(pos, wxFromStart);
       m_i_streambuf->ResetBuffer();
       return ret_off;
     } else {
-      m_i_streambuf->SetIntPosition(DoTellInput() - pos);
+      m_i_streambuf->SetIntPosition(last_access - diff);
       return pos;
     }
   case wxFromCurrent:
-    if ( ((unsigned)pos > m_i_streambuf->GetLastAccess()) || (pos < 0) ) {
+    diff = pos + m_i_streambuf->GetIntPosition();
+
+    if ( (diff > last_access) || (diff < 0) ) {
       ret_off = DoSeekInput(pos, wxFromCurrent);
       m_i_streambuf->ResetBuffer();
       return ret_off;
     } else {
-      m_i_streambuf->SetIntPosition(pos);
+      m_i_streambuf->SetIntPosition(diff);
       return pos;
     }
   case wxFromEnd:
