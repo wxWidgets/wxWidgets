@@ -269,6 +269,7 @@ bool wxWindowX11::Show(bool show)
 	msg.Printf("Mapping window of type %s", GetClassInfo()->GetClassName());
 	wxLogDebug(msg);
         XMapWindow(xdisp, xwin);
+	XSync(xdisp, False);
     }
     else
     {
