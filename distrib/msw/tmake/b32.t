@@ -15,9 +15,7 @@
     #! now transform these hashes into $project tags
     foreach $file (sort keys %wxGeneric) {
         my $tag = "";
-        if ( $wxGeneric{$file} =~ /\b(G|16|U)\b/ ) {
-            next;
-        }
+        next if $wxGeneric{$file} =~ /\b(PS|G|16|U)\b/;
 
         $file =~ s/cp?p?$/obj/;
         $project{"WXGENERICOBJS"} .= "\$(MSWDIR)\\" . $file . " "
@@ -40,8 +38,10 @@
             next;
         }
 
+        my $isOle = $wxMSW{$file} =~ /\bO\b/;
         $file =~ s/cp?p?$/obj/;
-        $project{"WXMSWOBJS"} .= "\$(MSWDIR)\\" . $file . " "
+        $project{"WXMSWOBJS"} .= ($isOle ? "\$(OLEDIR)\\" : "\$(MSWDIR)\\")
+                                 . $file . " "
     }
 #$}
 
