@@ -203,7 +203,7 @@ public:
         { return FALSE; }
 
     // copy data from buffer to our data
-    virtual bool SetData(size_t len, const void *WXUNUSED(buf))
+    virtual bool SetData(size_t WXUNUSED(len), const void *WXUNUSED(buf))
         { return FALSE; }
 
     // implement base class pure virtuals
