@@ -925,10 +925,14 @@ void wxListBox::OnChar(wxKeyEvent& event)
     /* generate wxID_CANCEL if command-. or <esc> has been pressed (typically in dialogs) */
     else if (event.GetKeyCode() == WXK_ESCAPE || (event.GetKeyCode() == '.' && event.MetaDown() ) )
     {
+    	// FIXME: look in ancestors, not just parent.
         wxWindow* win = GetParent()->FindWindow( wxID_CANCEL ) ;
-        wxCommandEvent new_event(wxEVT_COMMAND_BUTTON_CLICKED,wxID_CANCEL);
-        new_event.SetEventObject( win );
-        win->GetEventHandler()->ProcessEvent( new_event );
+        if (win)
+        {
+        	wxCommandEvent new_event(wxEVT_COMMAND_BUTTON_CLICKED,wxID_CANCEL);
+        	new_event.SetEventObject( win );
+        	win->GetEventHandler()->ProcessEvent( new_event );
+      	}
     }
     else if ( event.GetKeyCode() == WXK_TAB )
     {
