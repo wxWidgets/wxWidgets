@@ -95,7 +95,8 @@ bool wxTopLevelWindowX11::Create(wxWindow *parent,
     // TODO: For dialogs, this should be wxSYS_COLOUR_3DFACE
     m_backgroundColour = wxSystemSettings::GetColour(wxSYS_COLOUR_APPWORKSPACE);
     m_backgroundColour.CalcPixel( (WXColormap) cm );
-
+    m_hasBgCol = TRUE;
+	
     XSetWindowAttributes xattributes;
     XSizeHints size_hints;
     XWMHints wm_hints;

@@ -138,6 +138,7 @@ bool wxWindowX11::Create(wxWindow *parent, wxWindowID id,
 
     m_backgroundColour = wxSystemSettings::GetColour(wxSYS_COLOUR_3DFACE);
     m_backgroundColour.CalcPixel( (WXColormap) cm ); 
+    m_hasBgCol = TRUE;
     
     m_foregroundColour = *wxBLACK;
     m_foregroundColour.CalcPixel( (WXColormap) cm ); 
@@ -1313,8 +1314,7 @@ int wxComputeColours (Display *display, wxColour * back, wxColour * fore)
 
 bool wxWindowX11::SetBackgroundColour(const wxColour& col)
 {
-    if ( !wxWindowBase::SetBackgroundColour(col) )
-        return FALSE;
+    wxWindowBase::SetBackgroundColour(col);
 
     if (!GetMainWindow())
         return FALSE;

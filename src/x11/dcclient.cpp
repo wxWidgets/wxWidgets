@@ -1233,7 +1233,10 @@ void wxWindowDC::DoDrawText( const wxString &text, wxCoord x, wxCoord y )
     y = YLOG2DEV(y);
 
     XCharStruct overall_return;
-    int direction, slen, ascent, descent;
+    int direction = 0;
+    int slen = text.Length();
+    int ascent = 0;
+    int descent = 0;
     (void)XTextExtents((XFontStruct*) xfont, (char*) (const char*) text, slen, &direction,
                                &ascent, &descent, &overall_return);
 #if 0
