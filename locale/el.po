@@ -1,10 +1,10 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: wxWidgets 2.5.2\n"
+"Project-Id-Version: wxWidgets 2.5.4\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2005-02-15 01:23+0100\n"
-"PO-Revision-Date: 2004-11-23 09:03+0200\n"
-"Last-Translator: Tsolakos Stavros <tsolako1@otenet.gr>\n"
+"PO-Revision-Date: 2005-02-16 09:03+0200\n"
+"Last-Translator: InterZone <info@interzone.gr>\n"
 "Language-Team: Tsolakos Stavros <tsolako1@otenet.gr>, Nassos Yiannopoulos "
 "<nassosy@compulink.gr>\n"
 "MIME-Version: 1.0\n"
@@ -13,7 +13,7 @@ msgstr ""
 
 #: ../src/palmos/utils.cpp:210
 msgid " "
-msgstr ""
+msgstr " "
 
 #: ../src/common/log.cpp:322
 #, c-format
@@ -419,7 +419,6 @@ msgstr "(σελιδοδείκτες)"
 #: ../contrib/src/deprecated/resource.cpp:1840
 #: ../contrib/src/deprecated/resource.cpp:1970
 #: ../contrib/src/deprecated/resource.cpp:3062
-#, fuzzy
 msgid ""
 ", expected static, #include or #define\n"
 "while parsing resource."
@@ -826,9 +825,9 @@ msgid "Can't enumerate values of key '%s'"
 msgstr "Δεν είναι δυνατή η απαρίθμηση των τιμών του κλειδιού '%s'"
 
 #: ../src/msw/registry.cpp:1267
-#, fuzzy, c-format
+#, c-format
 msgid "Can't export value of unsupported type %d."
-msgstr "Δεν είναι δυνατή η αντιγραφή τιμών μη υποστηριζομένου τύπου %d."
+msgstr "Δεν είναι δυνατή η εξαγωγή τιμών μη υποστηριζομένου τύπου %d."
 
 #: ../src/common/ffile.cpp:241
 #, c-format
@@ -1142,8 +1141,7 @@ msgstr "Υπολογιστής"
 #, c-format
 msgid "Config entry name cannot start with '%c'."
 msgstr ""
-"Το όνομα εισόδου διαμόρφωσης (Config entry name) δεν μπορεί να αρχίζει με '%"
-"c'"
+"Το όνομα εισόδου διαμόρφωσης (Config entry name) δεν μπορεί να αρχίζει με '%c'"
 
 #: ../src/generic/filedlgg.cpp:1287 ../src/gtk/filedlg.cpp:56
 msgid "Confirm"
@@ -1380,9 +1378,8 @@ msgid "Default encoding"
 msgstr "Προκαθορισμένη κωδικοποίηση"
 
 #: ../src/generic/prntdlgg.cpp:506
-#, fuzzy
 msgid "Default printer"
-msgstr "Προκαθορισμένη κωδικοποίηση"
+msgstr "Προκαθορισμένος εκτυπωτής"
 
 #: ../contrib/src/gizmos/editlbox.cpp:160
 msgid "Delete item"
@@ -1574,21 +1571,18 @@ msgstr "Executive, 7 1/4 x 10 1/2 ίντσες"
 #: ../contrib/src/deprecated/resource.cpp:1869
 #: ../contrib/src/deprecated/resource.cpp:1999
 #: ../contrib/src/deprecated/resource.cpp:3091
-#, fuzzy
 msgid "Expected '*' while parsing resource."
 msgstr "Αναμενόταν '*' κατά την ανάγνωση του πόρου(resource)."
 
 #: ../contrib/src/deprecated/resource.cpp:1886
 #: ../contrib/src/deprecated/resource.cpp:2015
 #: ../contrib/src/deprecated/resource.cpp:3108
-#, fuzzy
 msgid "Expected '=' while parsing resource."
 msgstr "Αναμενόταν '=' κατά την ανάγνωση του πόρου(resource)."
 
 #: ../contrib/src/deprecated/resource.cpp:1855
 #: ../contrib/src/deprecated/resource.cpp:1985
 #: ../contrib/src/deprecated/resource.cpp:3077
-#, fuzzy
 msgid "Expected 'char' while parsing resource."
 msgstr "Αναμενόταν 'char' κατά την ανάγνωση του πόρου(resource)."
 
@@ -1800,11 +1794,11 @@ msgid "Failed to get data from the clipboard"
 msgstr "Αποτυχία λήψης δεδομένων απο το πρόχειρο"
 
 #: ../src/msw/stackwalk.cpp:221
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Failed to get stack backtrace:\n"
 "%s"
-msgstr "Αποτυχία κατά την λήψη των ονομάτων των ISP: %s"
+msgstr "Αποτυχία λήψης πορείας στοίβας"
 
 #: ../src/common/stopwatch.cpp:189
 msgid "Failed to get the local system time"
@@ -1850,9 +1844,9 @@ msgid "Failed to load image %d from file '%s'."
 msgstr "Αποτυχία φόρτωσης της εικόνας %d από το αρχείο '%s'."
 
 #: ../src/msw/enhmeta.cpp:84
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to load metafile from file \"%s\"."
-msgstr "Αποτυχία φόρτωσης της εικόνας %d από το αρχείο '%s'."
+msgstr "Αποτυχία φόρτωσης της μετα-εικόνας από το αρχείο '%s'."
 
 #: ../src/msw/volume.cpp:312
 msgid "Failed to load mpr.dll."
@@ -2172,9 +2166,8 @@ msgid "GTK+ theme"
 msgstr "Θέμα GTK+"
 
 #: ../src/common/prntbase.cpp:229
-#, fuzzy
 msgid "Generic PostScript"
-msgstr "Αρχείο PostScript"
+msgstr "Γενικό PostScript"
 
 #: ../src/common/paper.cpp:152
 msgid "German Legal Fanfold, 8 1/2 x 13 in"
@@ -2280,9 +2273,8 @@ msgid "Home"
 msgstr "Αρχική σελίδα"
 
 #: ../src/generic/dirctrlg.cpp:626
-#, fuzzy
 msgid "Home directory"
-msgstr "Νέος κατάλογος"
+msgstr "Αρχικός κατάλογος"
 
 #: ../include/wx/filefn.h:142
 msgid "I64"
@@ -2853,9 +2845,8 @@ msgid "Page Setup"
 msgstr "Οργάνωση(setup) Σελίδας"
 
 #: ../src/common/prntbase.cpp:452 ../src/gtk/gnome/gprint.cpp:533
-#, fuzzy
 msgid "Page setup"
-msgstr "Οργάνωση(setup) Σελίδας"
+msgstr "Ρύθμιση(setup) Σελίδας"
 
 #: ../src/generic/prntdlgg.cpp:210
 msgid "Pages"
@@ -2971,9 +2962,8 @@ msgid "Print previe&w"
 msgstr "Π&ροεπισκόπηση εκτύπωσης"
 
 #: ../src/gtk/gnome/gprint.cpp:778
-#, fuzzy
 msgid "Print preview"
-msgstr "Π&ροεπισκόπηση εκτύπωσης"
+msgstr "Προεπισκόπηση εκτύπωσης"
 
 #: ../src/generic/prntdlgg.cpp:622
 msgid "Print spooling"
@@ -2988,9 +2978,8 @@ msgid "Print to File"
 msgstr "Εκτύπωση σε Αρχείο"
 
 #: ../src/generic/prntdlgg.cpp:489
-#, fuzzy
 msgid "Printer"
-msgstr "Εκτύπωση"
+msgstr "Εκτυπωτής"
 
 #: ../src/generic/prntdlgg.cpp:625
 msgid "Printer command:"
@@ -3009,9 +2998,8 @@ msgid "Printer..."
 msgstr "Εκτυπωτής..."
 
 #: ../src/generic/prntdlgg.cpp:190
-#, fuzzy
 msgid "Printer:"
-msgstr "Εκτυπωτής..."
+msgstr "Εκτυπωτής:"
 
 #: ../src/common/prntbase.cpp:311 ../src/common/prntbase.cpp:532
 msgid "Printing "
@@ -3048,9 +3036,8 @@ msgid "Read error on file '%s'"
 msgstr "Λάθος ανάγνωσης στο αρχείο '%s'"
 
 #: ../src/common/prntbase.cpp:243
-#, fuzzy
 msgid "Ready"
-msgstr "&Επανάληψη"
+msgstr "Έτοιμο"
 
 #: ../src/xrc/xmlres.cpp:582
 #, c-format
@@ -3139,9 +3126,8 @@ msgid "Roman"
 msgstr "Ρωμαϊκό"
 
 #: ../src/common/sizer.cpp:1757
-#, fuzzy
 msgid "Save"
-msgstr "&Αποθήκευση"
+msgstr "Αποθήκευση"
 
 #: ../src/common/fldlgcmn.cpp:250
 #, c-format
@@ -3271,9 +3257,8 @@ msgstr "Μέγεθος"
 
 #: ../src/generic/progdlgg.cpp:220 ../src/generic/progdlgg.cpp:238
 #: ../src/generic/progdlgg.cpp:593
-#, fuzzy
 msgid "Skip"
-msgstr "Χειρόγραφο(Script)"
+msgstr "Παράλειψη"
 
 #: ../src/generic/fontdlgg.cpp:232
 msgid "Slant"
@@ -3319,7 +3304,6 @@ msgid "Statement, 5 1/2 x 8 1/2 in"
 msgstr "Δήλωση, 5 1/2 x 8 1/2 ίντσες"
 
 #: ../src/generic/prntdlgg.cpp:198
-#, fuzzy
 msgid "Status:"
 msgstr "Κατάσταση: "
 
@@ -3622,7 +3606,6 @@ msgstr "Αναίρεση διαγραφής"
 #: ../contrib/src/deprecated/resource.cpp:3084
 #: ../contrib/src/deprecated/resource.cpp:3101
 #: ../contrib/src/deprecated/resource.cpp:3115
-#, fuzzy
 msgid "Unexpected end of file while parsing resource."
 msgstr "Απροσδόκητο τέλος αρχείου κατά την ανάγνωση πόρου."
 
@@ -3716,7 +3699,7 @@ msgid "Unnamed command"
 msgstr "Ανώνυμη εντολή"
 
 #: ../contrib/src/deprecated/resource.cpp:2367
-#, fuzzy, c-format
+#, c-format
 msgid "Unrecognized style %s while parsing resource."
 msgstr "Μη-αναγνωρίσιμο στύλ %s κατα την ανάγνωση πόρου."
 
@@ -3811,29 +3794,25 @@ msgid "Windows 2000 (build %lu"
 msgstr ""
 
 #: ../src/msw/utils.cpp:1099
-#, fuzzy
 msgid "Windows 95"
-msgstr "Windows 9%c"
+msgstr "Windows 95"
 
 #: ../src/msw/utils.cpp:1095
-#, fuzzy
 msgid "Windows 95 OSR2"
-msgstr "Windows 9%c"
+msgstr "Windows 95 OSR2"
 
 #: ../src/msw/utils.cpp:1110
-#, fuzzy
 msgid "Windows 98"
-msgstr "Windows 9%c"
+msgstr "Windows 98"
 
 #: ../src/msw/utils.cpp:1106
-#, fuzzy
 msgid "Windows 98 SE"
-msgstr "Windows 9%c"
+msgstr "Windows 98 SE"
 
 #: ../src/msw/utils.cpp:1117
-#, fuzzy, c-format
+#, c-format
 msgid "Windows 9x (%d.%d)"
-msgstr "Windows 9%c"
+msgstr "Windows 9x (%d.%d)"
 
 #: ../src/common/fmapbase.cpp:130
 msgid "Windows Arabic (CP 1256)"
@@ -3876,9 +3855,8 @@ msgid "Windows Korean (CP 949)"
 msgstr "Windows Κορεάτικο (CP 949)"
 
 #: ../src/msw/utils.cpp:1114
-#, fuzzy
 msgid "Windows ME"
-msgstr "Windows 3.1"
+msgstr "Windows ME"
 
 #: ../src/msw/utils.cpp:1149
 #, c-format
@@ -4148,9 +4126,8 @@ msgstr ""
 "(descriptor) %d"
 
 #: ../src/common/zipstrm.cpp:1344
-#, fuzzy
 msgid "can't find central directory in zip"
-msgstr "Δεν είναι δυνατή η εύρεση της τρέχουσας θέσης στο αρχείου '%s'"
+msgstr "Δεν είναι δυνατή η εύρεση του κεντρικού καταλόγου στο συμπιεσμένο αρχείο"
 
 #: ../src/common/file.cpp:429
 #, c-format
@@ -4205,12 +4182,10 @@ msgid "can't query for GUI plugins name in console applications"
 msgstr "δεν είναι δυνατή η αναζήτηση για επεκτάσεις GUI σε εφαρμογές κονσόλας"
 
 #: ../src/common/zipstrm.cpp:432
-#, fuzzy
 msgid "can't re-initialize zlib deflate stream"
 msgstr "Δεν είναι δυνατή η αρχικοποίηση της ροής zlib deflate."
 
 #: ../src/common/zipstrm.cpp:457
-#, fuzzy
 msgid "can't re-initialize zlib inflate stream"
 msgstr "Δεν είναι δυνατή η αρχικοποίηση της ροής zlib inflate."
 
@@ -4238,7 +4213,7 @@ msgstr "αδύνατη η αναζήτηση(seek) στον περγραφέα(descriptor) αρχείου %d"
 #, c-format
 msgid "can't seek on file descriptor %d, large files support is not enabled."
 msgstr ""
-"αδύνατη η αναζήτηση(seek) στον περγραφέα(descriptor) αρχείου %d, η "
+"αδύνατη η αναζήτηση(seek) στον περιγραφέα(descriptor) αρχείου %d, η "
 "υποστήριξη μεγάλων αρχείων δεν είναι ενεργοποιημένη."
 
 #: ../src/common/textfile.cpp:196
@@ -4323,18 +4298,17 @@ msgid "error opening file"
 msgstr "σφάλμα κατά το άνοιγμα του αρχείου"
 
 #: ../src/common/zipstrm.cpp:1429
-#, fuzzy
 msgid "error reading zip central directory"
-msgstr "Σφάλμα κατα τη δημιουργία καταλόγου"
+msgstr "σφάλμα κατα την ανάγνωση κεντρικού καταλόγου στο συμπιεσμένο αρχείο"
 
 #: ../src/common/zipstrm.cpp:1507
 msgid "error reading zip local header"
-msgstr ""
+msgstr "σφάλμα κατά την ανάγνωση τοπικής κεφαλίδας του συμπιεσμένου αρχείου"
 
 #: ../src/common/zipstrm.cpp:2208
 #, c-format
 msgid "error writing zip entry '%s': bad crc or length"
-msgstr ""
+msgstr "σφάλμα κατά την εγγραφή αρχείου zip '%s': εσφαλμένο crc ή μήκος"
 
 #: ../src/msw/dialup.cpp:844
 msgid "establish"
@@ -4417,9 +4391,8 @@ msgid "invalid message box return value"
 msgstr "μη αποδεκτή τιμή επιστροφής παράθυρου μηνύματος"
 
 #: ../src/common/zipstrm.cpp:1293
-#, fuzzy
 msgid "invalid zip file"
-msgstr "Λανθασμένο αρχείο κλειδαριά (lock file) '%s'."
+msgstr "μη έγκυρο συμπιεσμένο αρχείο"
 
 #: ../src/common/fontcmn.cpp:585 ../src/common/fontcmn.cpp:649
 msgid "italic"
@@ -4492,14 +4465,14 @@ msgid "reading"
 msgstr "γίνεται ανάγνωση"
 
 #: ../src/common/zipstrm.cpp:1730
-#, fuzzy, c-format
+#, c-format
 msgid "reading zip stream (entry %s): bad crc"
-msgstr "ανάγνωση ροής Gzip: εσφαλμένο crc "
+msgstr "ανάγνωση ροής zip (εγγραφή %s): εσφαλμένο crc "
 
 #: ../src/common/zipstrm.cpp:1727
-#, fuzzy, c-format
+#,  c-format
 msgid "reading zip stream (entry %s): bad length"
-msgstr "ανάγνωση ροής Gzip: λανθασμένο μήκος"
+msgstr "ανάγνωση ροής zip (εγγραφή %s): λανθασμένο μήκος"
 
 #: ../src/msw/dde.cpp:1077
 msgid "reentrancy problem."
@@ -4547,9 +4520,8 @@ msgid "specify the theme to use"
 msgstr "καθορίστε το θέμα που θα χρησιμοποιηθεί"
 
 #: ../src/common/zipstrm.cpp:1633
-#, fuzzy
 msgid "stored file length not in Zip header"
-msgstr "Μη υποστηριζόμενη σημαία στην κεφαλίδα Gzip"
+msgstr "το μήκος του αποθκευμένου αρχείου δεν υπάρχει στην κεφαλίδα Zip"
 
 #: ../src/common/cmdline.cpp:1085
 msgid "str"
@@ -4646,14 +4618,12 @@ msgid "unnamed%d"
 msgstr "απροσδιόριστο%d"
 
 #: ../src/common/zipstrm.cpp:1647 ../src/common/zipstrm.cpp:2002
-#, fuzzy
 msgid "unsupported Zip compression method"
-msgstr "μη υποστηριζόμενη μέθοδος συμπίεσης στη ροή Gzip"
+msgstr "μη υποστηριζόμενη μέθοδος συμπίεσης Zip"
 
 #: ../src/common/zipstrm.cpp:1137
-#, fuzzy
 msgid "unsupported zip archive"
-msgstr "Μη υποστηριζόμενη σημαία στην κεφαλίδα Gzip"
+msgstr "Μη υποστηριζόμενο συμπιεσμένο αρχείο zip"
 
 #: ../src/common/intl.cpp:1119
 #, c-format
