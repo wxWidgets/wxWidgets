@@ -28,6 +28,61 @@ enum {
     wxBU_AUTODRAW,
 };
 
+// enum wxStockItemID
+// {
+//     wxSTOCK_NONE = 0,
+//     wxSTOCK_ADD,
+//     wxSTOCK_APPLY,
+//     wxSTOCK_BOLD,
+//     wxSTOCK_CANCEL,
+//     wxSTOCK_CLEAR,
+//     wxSTOCK_CLOSE,
+//     wxSTOCK_COPY,
+//     wxSTOCK_CUT,
+//     wxSTOCK_DELETE,
+//     wxSTOCK_FIND,
+//     wxSTOCK_FIND_AND_REPLACE,
+//     wxSTOCK_GO_BACK,
+//     wxSTOCK_GO_DOWN,
+//     wxSTOCK_GO_FORWARD,
+//     wxSTOCK_GO_UP,
+//     wxSTOCK_HELP,
+//     wxSTOCK_HOME,
+//     wxSTOCK_INDENT,
+//     wxSTOCK_INDEX,
+//     wxSTOCK_ITALIC,
+//     wxSTOCK_JUSTIFY_CENTER,
+//     wxSTOCK_JUSTIFY_FILL,
+//     wxSTOCK_JUSTIFY_LEFT,
+//     wxSTOCK_JUSTIFY_RIGHT,
+//     wxSTOCK_NEW,
+//     wxSTOCK_NO,
+//     wxSTOCK_OK,
+//     wxSTOCK_OPEN,
+//     wxSTOCK_PASTE,
+//     wxSTOCK_PREFERENCES,
+//     wxSTOCK_PRINT,
+//     wxSTOCK_PRINT_PREVIEW,
+//     wxSTOCK_PROPERTIES,
+//     wxSTOCK_QUIT,
+//     wxSTOCK_REDO,
+//     wxSTOCK_REFRESH,
+//     wxSTOCK_REMOVE,
+//     wxSTOCK_REVERT_TO_SAVED,
+//     wxSTOCK_SAVE,
+//     wxSTOCK_SAVE_AS,
+//     wxSTOCK_STOP,
+//     wxSTOCK_UNDELETE,
+//     wxSTOCK_UNDERLINE,
+//     wxSTOCK_UNDO,
+//     wxSTOCK_UNINDENT,
+//     wxSTOCK_YES,
+//     wxSTOCK_ZOOM_100,
+//     wxSTOCK_ZOOM_FIT,
+//     wxSTOCK_ZOOM_IN,
+//     wxSTOCK_ZOOM_OUT
+// };
+
 //---------------------------------------------------------------------------
 
 DocStr(wxButton,
@@ -38,12 +93,12 @@ indeed almost any other window.", "
 Window Styles
 -------------
     ==============   ==========================================
-    wx.BU_LEFT       Left-justifies the label. WIN32 only.
+    wx.BU_LEFT       Left-justifies the label. Windows and GTK+ only.
     wx.BU_TOP        Aligns the label to the top of the button.
-                     WIN32 only.
-    wx.BU_RIGHT      Right-justifies the bitmap label. WIN32 only.
+                     Windows and GTK+ only.
+    wx.BU_RIGHT      Right-justifies the bitmap label. Windows and GTK+ only.
     wx.BU_BOTTOM     Aligns the label to the bottom of the button.
-                     WIN32 only.
+                     Windows and GTK+ only.
     wx.BU_EXACTFIT   Creates the button as small as possible
                      instead of making it of the standard size
                      (which is the default behaviour.)
@@ -57,6 +112,8 @@ Events
 
 :see: `wx.BitmapButton`
 ");
+//, `wx.StockButton`
+
 
 MustHaveApp(wxButton);
 
@@ -83,6 +140,85 @@ public:
         "Precreate a Button for 2-phase creation.", "",
         PreButton);
 
+//     DocCtorStrName(
+//         wxButton(wxWindow *parent, wxWindowID id,
+//                  wxStockItemID stock,
+//                  const wxString& descriptiveLabel = wxPyEmptyString,
+//                  const wxPoint& pos = wxDefaultPosition,
+//                  long style = 0,
+//                  const wxValidator& validator = wxDefaultValidator,
+//                  const wxString& name = wxButtonNameStr),
+//         "Used to create a stock `wx.Button`.  Stock buttons are commonly used
+// buttons such as OK or Cancel. They have standard label and dimensions
+// and may have different appearance on some platforms (e.g. GTK+ 2
+// decorates them with icons). Using this from is the preferred way of
+// creating standard buttons.", "
+
+//     :param stock: The stock ID of the button to create. One of the following:
+
+//             ============================
+//              ``wx.STOCK_NONE``
+//              ``wx.STOCK_ADD``
+//              ``wx.STOCK_APPLY``
+//              ``wx.STOCK_BOLD``
+//              ``wx.STOCK_CANCEL``
+//              ``wx.STOCK_CLEAR``
+//              ``wx.STOCK_CLOSE``
+//              ``wx.STOCK_COPY``
+//              ``wx.STOCK_CUT``
+//              ``wx.STOCK_DELETE``
+//              ``wx.STOCK_FIND``
+//              ``wx.STOCK_FIND_AND_REPLACE``
+//              ``wx.STOCK_GO_BACK``
+//              ``wx.STOCK_GO_DOWN``
+//              ``wx.STOCK_GO_FORWARD``
+//              ``wx.STOCK_GO_UP``
+//              ``wx.STOCK_HELP``
+//              ``wx.STOCK_HOME``
+//              ``wx.STOCK_INDENT``
+//              ``wx.STOCK_INDEX``
+//              ``wx.STOCK_ITALIC``
+//              ``wx.STOCK_JUSTIFY_CENTER``
+//              ``wx.STOCK_JUSTIFY_FILL``
+//              ``wx.STOCK_JUSTIFY_LEFT``
+//              ``wx.STOCK_JUSTIFY_RIGHT``
+//              ``wx.STOCK_NEW``
+//              ``wx.STOCK_NO``
+//              ``wx.STOCK_OK``
+//              ``wx.STOCK_OPEN``
+//              ``wx.STOCK_PASTE``
+//              ``wx.STOCK_PREFERENCES``
+//              ``wx.STOCK_PRINT``
+//              ``wx.STOCK_PRINT_PREVIEW``
+//              ``wx.STOCK_PROPERTIES``
+//              ``wx.STOCK_QUIT``
+//              ``wx.STOCK_REDO``
+//              ``wx.STOCK_REFRESH``
+//              ``wx.STOCK_REMOVE``
+//              ``wx.STOCK_REVERT_TO_SAVED``
+//              ``wx.STOCK_SAVE``
+//              ``wx.STOCK_SAVE_AS``
+//              ``wx.STOCK_STOP``
+//              ``wx.STOCK_UNDELETE``
+//              ``wx.STOCK_UNDERLINE``
+//              ``wx.STOCK_UNDO``
+//              ``wx.STOCK_UNINDENT``
+//              ``wx.STOCK_YES``
+//              ``wx.STOCK_ZOOM_100``
+//              ``wx.STOCK_ZOOM_FIT``
+//              ``wx.STOCK_ZOOM_IN``
+//              ``wx.STOCK_ZOOM_OUT``
+//             ============================
+
+
+//     :param descriptiveLabel: Optional label to be used on platforms
+// where standard buttons have descriptive rather than generic
+// labels. Mac is one such platforms, well-behaved Mac apps should use
+// descriptive labels (e.g. \"Save\" and \"Don't Save\" instead of \"OK\"
+// and \"Cancel\"). This argument is ignored on other platforms.",
+//         StockButton);
+
+    
     // Turn it back on again
     %typemap(out) wxButton* { $result = wxPyMake_wxObject($1, $owner); }
 
