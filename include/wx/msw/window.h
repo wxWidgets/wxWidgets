@@ -422,7 +422,6 @@ protected:
     bool                  m_useCtl3D:1; // Using CTL3D for this control
     bool                  m_backgroundTransparent:1;
     bool                  m_mouseInWindow:1;
-    bool                  m_doubleClickAllowed:1;
     bool                  m_lastKeydownProcessed:1;
 
     // the size of one page for scrolling

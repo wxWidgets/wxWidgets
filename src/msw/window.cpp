@@ -312,8 +312,6 @@ void wxWindowMSW::Init()
     InitBase();
 
     // MSW specific
-    m_doubleClickAllowed = 0;
-
     m_isBeingDeleted = FALSE;
     m_oldWndProc = 0;
     m_useCtl3D = FALSE;
@@ -2951,20 +2949,7 @@ bool wxWindowMSW::MSWCreate(const wxChar *wclass,
 
     // controlId is menu handle for the top level windows, so set it to 0
     // unless we're creating a child window
-    int controlId;
-    if ( style & WS_CHILD )
-    {
-        controlId = GetId();
-
-        if ( GetWindowStyleFlag() & wxCLIP_SIBLINGS )
-        {
-            style |= WS_CLIPSIBLINGS;
-        }
-    }
-    else // !child
-    {
-        controlId = 0;
-    }
+    int controlId = style & WS_CHILD ? GetId() : 0;
 
     // for each class "Foo" we have we also have "FooNR" ("no repaint") class
     // which is the same but without CS_[HV]REDRAW class styles so using it
