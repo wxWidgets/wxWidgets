@@ -466,3 +466,11 @@ Checking in include/wx/msw/spinctrl.h;
 /pack/cvsroots/wxwindows/wxWindows/include/wx/msw/spinctrl.h,v  <--  spinctrl.h
 new revision: 1.16; previous revision: 1.15
 
+40. calling SetValue(GetValue()) didn't reset the modified flag
+
+http://sf.net/tracker/index.php?func=detail&aid=678391&group_id=9863&atid=109863
+
+Checking in src/msw/textctrl.cpp;
+/pack/cvsroots/wxwindows/wxWindows/src/msw/textctrl.cpp,v  <--  textctrl.cpp
+new revision: 1.164; previous revision: 1.163
+
