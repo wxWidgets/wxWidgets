@@ -1,4 +1,0 @@
-# anything that may be placed into panel
-node panel_item
-abstract
-derived from sizer_item
