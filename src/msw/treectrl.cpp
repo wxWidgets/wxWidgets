@@ -45,6 +45,7 @@
 #include "wx/dynarray.h"
 #include "wx/imaglist.h"
 #include "wx/treectrl.h"
+#include "wx/settings.h"
 
 #ifdef __GNUWIN32__
 #ifndef wxUSE_NORLANDER_HEADERS
