@@ -163,6 +163,8 @@ void wxDialog::DoShowModal()
 
     wxModalDialogs.Append(this);
 
+    SetFocus() ;
+    
 #if TARGET_CARBON
     BeginAppModalStateForWindow(  (WindowRef) MacGetWindowRef()) ;
 #else
