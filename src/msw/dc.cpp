@@ -1001,6 +1001,7 @@ void wxDC::SetRop(WXHDC dc)
         return;
 
     int c_rop;
+    
     // These may be wrong
     switch (m_logicalFunction)
     {
@@ -1019,6 +1020,34 @@ void wxDC::SetRop(WXHDC dc)
     case wxEQUIV:
     case wxNAND:
     case wxCOPY:
+    
+#if 0
+        // these probably wouldn't be wrong, RR
+
+	    case wxXOR:          c_rop = R2_XORPEN;        break;
+	    case wxINVERT:       c_rop = R2_NOT;           break;
+	    case wxOR_REVERSE:   c_rop = R2_MERGEPENNOT;   break;
+	    case wxAND_REVERSE:  c_rop = R2_MASKPENNOT;    break;
+	    case wxCLEAR:        c_rop = R2_BLACK;         break;
+	    case wxSET:          c_rop = R2_WHITE;         break;
+	    case wxOR_INVERT:    c_rop = R2_MERGENOTPEN;   break;
+	    case wxAND:          c_rop = R2_MASKPEN;       break;
+	    case wxOR:           c_rop = R2_MERGEPEN;      break;
+	    case wxEQUIV:        c_rop = R2_NOTXORPEN;     break;
+	    case wxNAND:         c_rop = R2_NOTMASKPEN;    break;
+	    case wxAND_INVERT:   c_rop = R2_MASKNOTPEN;    break;
+	    case wxCOPY:         c_rop = R2_COPYPEN;       break;
+	    case wxNO_OP:        c_rop = R2_NOP;           break;
+	    case wxSRC_INVERT:   c_rop = R2_NOTCOPYPEN;    break;
+        
+        // what is this one?
+        case wxNOR:          c_rop = R2_COPYPEN;       break;
+
+        // these are actually ternary ROPs
+        case wxSRC_AND:      c_rop = R2_MASKPEN;       break;
+        case wxSRC_OR:       c_rop = R2_MERGEPEN;      break;
+#endif
+    
     default:
         c_rop = R2_COPYPEN; break;
     }

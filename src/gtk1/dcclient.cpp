@@ -1273,9 +1273,7 @@ void wxWindowDC::SetLogicalFunction( int function )
         case wxCLEAR:        mode = GDK_CLEAR;         break;
         case wxSET:          mode = GDK_SET;           break;
         case wxOR_INVERT:    mode = GDK_OR_INVERT;     break;
-        case wxSRC_AND:
         case wxAND:          mode = GDK_AND;           break;
-        case wxSRC_OR:
         case wxOR:           mode = GDK_OR;            break;
         case wxEQUIV:        mode = GDK_EQUIV;         break;
         case wxNAND:         mode = GDK_NAND;          break;
@@ -1283,6 +1281,13 @@ void wxWindowDC::SetLogicalFunction( int function )
         case wxCOPY:         mode = GDK_COPY;          break;
         case wxNO_OP:        mode = GDK_NOOP;          break;
         case wxSRC_INVERT:   mode = GDK_COPY_INVERT;   break;
+        
+        // unsupported by GTK
+        case wxNOR:          mode = GDK_COPY;          break;
+
+        // these are actually ternary ROPs
+        case wxSRC_AND:      mode = GDK_AND;           break;
+        case wxSRC_OR:       mode = GDK_OR;            break;
 #endif
         default:
         {
