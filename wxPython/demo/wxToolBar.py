@@ -71,6 +71,8 @@ class TestToolBar(wxFrame):
 
     def OnToolClick(self, event):
         self.log.WriteText("tool %s clicked\n" % event.GetId())
+        tb = self.GetToolBar()
+        tb.EnableTool(10, not tb.GetToolEnabled(10))
 
     def OnToolRClick(self, event):
         self.log.WriteText("tool %s right-clicked\n" % event.GetId())
