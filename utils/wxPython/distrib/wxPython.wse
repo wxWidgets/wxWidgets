@@ -804,13 +804,6 @@ item: Check Disk Space
 end
 item: Remark
 end
-remarked item: If/While Statement
-  Variable=COMPONENTS
-  Value=A
-  Flags=00001010
-end
-remarked item: End Block
-end
 item: Install File
   Source=d:\WINNT\System32\Msvcirt.dll
   Destination=%SYS%\Msvcirt.dll
@@ -834,7 +827,7 @@ item: Install File
 end
 item: Install File
   Source=e:\Projects\wx\utils\wxPython\*.pyd
-  Destination=%MAINDIR%\wxPython\
+  Destination=%MAINDIR%\wxPython
   Description=wxPython extension modules
   Flags=0000000010000010
 end
@@ -864,7 +857,7 @@ item: Install File
 end
 item: Install File
   Source=E:\Projects\wx\utils\wxPython\demo\README.txt
-  Destination=%MAINDIR%\wxPython\demo
+  Destination=%MAINDIR%\wxPython\demo\README.txt
   Description=Demos
   Flags=0000000010000010
 end
@@ -961,25 +954,6 @@ item: Install File
   Flags=0000000010000010
 end
 item: Remark
-end
-remarked item: If/While Statement
-  Variable=COMPONENTS
-  Value=B
-  Flags=00001010
-end
-remarked item: Install File
-  Source=e:\projects\wx\docs\html\wx\*.*
-  Destination=%MAINDIR%\wxPython\docs
-  Description=wxPython documentation
-  Flags=0000000010000010
-end
-remarked item: Install File
-  Source=e:\projects\wx\docs\html\wx\wx.htm
-  Destination=%MAINDIR%\wxPython\docs\index.htm
-  Description=wxPython documentation
-  Flags=0000000010000010
-end
-remarked item: End Block
 end
 item: Remark
 end
@@ -1132,17 +1106,13 @@ item: Set Variable
   Value=%GROUPDIR%\%GROUP%
 end
 item: Create Shortcut
-  Source=%UNINSTALL_PATH%
-  Destination=%CGROUPDIR%\%CGROUP_SAVE%\Uninstall %APPTITLE%.lnk
-  Command Options=%INST_LOG_PATH%
-  Icon Number=0
-end
-item: Create Shortcut
-  Source=pythonw.exe
+  Source=%PYTHONDIR%\pythonw.exe
   Destination=%CGROUPDIR%\%CGROUP_SAVE%\Run the DEMO.lnk
   Command Options=demo.py
   Working Directory=%MAINDIR%\wxPython\demo
   Icon Number=0
+  Key Type=1536
+  Flags=00000001
 end
 item: Create Shortcut
   Source=%MAINDIR%\wxPython\docs\wx.chm
@@ -1155,6 +1125,12 @@ item: Create Shortcut
   Icon Number=0
   Key Type=1536
   Flags=00000001
+end
+item: Create Shortcut
+  Source=%UNINSTALL_PATH%
+  Destination=%CGROUPDIR%\%CGROUP_SAVE%\Uninstall %APPTITLE%.lnk
+  Command Options=%INST_LOG_PATH%
+  Icon Number=0
 end
 item: Else Statement
 end
