@@ -401,6 +401,7 @@ void WidgetsFrame::OnButtonClearLog(wxCommandEvent& WXUNUSED(event))
 
 void WidgetsFrame::OnSetFgCol(wxCommandEvent& WXUNUSED(event))
 {
+#if wxUSE_COLOURDLG
     wxColour col = wxGetColourFromUser(this, m_colFg);
     if ( !col.Ok() )
         return;
@@ -410,10 +411,14 @@ void WidgetsFrame::OnSetFgCol(wxCommandEvent& WXUNUSED(event))
     WidgetsPage *page = wxStaticCast(m_book->GetCurrentPage(), WidgetsPage);
     page->GetWidget()->SetForegroundColour(m_colFg);
     page->GetWidget()->Refresh();
+#else
+    wxLogMessage(_T("None colour dialog available in current build."));
+#endif
 }
 
 void WidgetsFrame::OnSetBgCol(wxCommandEvent& WXUNUSED(event))
 {
+#if wxUSE_COLOURDLG
     wxColour col = wxGetColourFromUser(this, m_colBg);
     if ( !col.Ok() )
         return;
@@ -423,6 +428,9 @@ void WidgetsFrame::OnSetBgCol(wxCommandEvent& WXUNUSED(event))
     WidgetsPage *page = wxStaticCast(m_book->GetCurrentPage(), WidgetsPage);
     page->GetWidget()->SetBackgroundColour(m_colBg);
     page->GetWidget()->Refresh();
+#else
+    wxLogMessage(_T("None colour dialog available in current build."));
+#endif
 }
 
 #endif // wxUSE_MENUS
