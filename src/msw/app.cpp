@@ -52,7 +52,7 @@
 
 // use debug CRT functions for memory leak detections in VC++ if we're not
 // using wxWindows own methods
-#if defined(__WXDEBUG__) && defined(_MSC_VER) && !wxUSE_GLOBAL_MEMORY_OPERATORS
+#if defined(__WXDEBUG__) && defined(_MSC_VER) && !wxUSE_GLOBAL_MEMORY_OPERATORS && !defined(__NO_VC_CRTDBG__)
     #define wxUSE_VC_CRTDBG
 #else
     #undef wxUSE_VC_CRTDBG
