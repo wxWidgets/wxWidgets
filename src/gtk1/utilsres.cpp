@@ -58,7 +58,7 @@ bool wxWriteResource(const wxString& section, const wxString& entry, int value, 
     return wxWriteResource(section, entry, buf, file);
 }
 
-bool wxGetResource(const wxString& section, const wxString& entry, char **value, const wxString& file )
+bool wxGetResource(const wxString& section, const wxString& entry, wxChar **value, const wxString& file )
 {
     wxString filename( file );
     if (filename.IsEmpty()) filename = wxT(".wxWindows");
@@ -72,7 +72,7 @@ bool wxGetResource(const wxString& section, const wxString& entry, char **value,
     {
         if (!result.IsEmpty())
         {
-            char *s = new char[result.Len()+1];
+            wxChar *s = new wxChar[result.Len()+1];
             wxStrcpy( s, result.c_str() );
             *value = s;
             return TRUE;
