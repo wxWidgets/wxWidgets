@@ -165,6 +165,8 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
     // create a status bar just for fun (by default with 1 pane only)
     CreateStatusBar(2);
     SetStatusText("Welcome to wxWindows!");
+    
+//    SetSizeHints( size.x, size.y, size.x, size.y );
 }
 
 

@@ -287,6 +287,7 @@ wxGenericTreeItem *wxGenericTreeItem::HitTest( const wxPoint& point,
   if ((point.y > m_y) && (point.y < m_y + m_height))
   {
     // FIXME why +5?
+    //  Because that is the size of the plus sign, RR
     if ((point.x > m_xCross-5) && (point.x < m_xCross+5) &&
         (point.y > m_yCross-5) && (point.y < m_yCross+5) &&
         (IsExpanded() || HasPlus()))
@@ -295,8 +296,10 @@ wxGenericTreeItem *wxGenericTreeItem::HitTest( const wxPoint& point,
       return this;
     }
 
+    /* TODO: we should do a query here like
+         m_imageListNormal->GetSize( item->GetImage(), image_w, image_h );  */
     int w = m_width;
-    if (m_image != -1) w += 20;
+    if (m_image != -1) w += 24;
 
     if ((point.x > m_x) && (point.x < m_x+w))
     {
@@ -1113,7 +1116,7 @@ void wxTreeCtrl::PaintItem(wxGenericTreeItem *item, wxDC& dc)
     int total_h = (image_h > text_h) ? image_h : text_h;
     if(m_lineHeight > total_h) total_h = m_lineHeight;
     
-    dc.DrawRectangle( item->GetX()-2, item->GetY(), image_w+text_w+2, total_h );
+    dc.DrawRectangle( item->GetX()-2, item->GetY(), image_w+text_w+4, total_h );
 
     if ((item->IsExpanded()) && (item->GetSelectedImage() != -1))
     {
