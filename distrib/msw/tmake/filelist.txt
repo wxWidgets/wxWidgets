@@ -157,7 +157,7 @@ log.cpp	C	B
 longlong.cpp	C	B
 memory.cpp	C
 menucmn.cpp	C
-mimetype.cpp	C	32,B
+mimecmn.cpp	C	32,B
 module.cpp	C	B
 mstream.cpp	C
 object.cpp	C	B
@@ -307,6 +307,7 @@ fontutil.cpp	U
 threadpsx.cpp	U	B
 utilsunx.cpp	U	B
 gsocket.c	U
+mimetype.cpp	U	B
 
 gsockgtk.c	R
 win_gtk.c	R
@@ -1026,6 +1027,8 @@ statbox.h	2
 
 fontutil.h	S
 execute.h	S
+mimetype.h	S
+gsockunx.h	S
 
 file.h	P
 ftp.h	P

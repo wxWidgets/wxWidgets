@@ -190,7 +190,9 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
 #endif
 
     // set the frame icon
+#ifndef __WXGTK__
     SetIcon(wxICON(mondrian));
+#endif
 
     // create a menu bar
     wxMenu *menuFile = new wxMenu(_T(""), wxMENU_TEAROFF);
@@ -223,7 +225,7 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
 
 #if wxUSE_STATUSBAR
     // create a status bar just for fun (by default with 1 pane only)
-    CreateStatusBar(2);
+    CreateStatusBar();
     SetStatusText(_T("Welcome to wxWindows!"));
 #endif // wxUSE_STATUSBAR
 }

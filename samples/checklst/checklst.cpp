@@ -204,24 +204,24 @@ void CheckListBoxFrame::OnQuit(wxCommandEvent& WXUNUSED(event))
 
 void CheckListBoxFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
 {
-    wxMessageBox(_T("Demo of wxCheckListBox control\n"
+    wxMessageBox(wxT("Demo of wxCheckListBox control\n"
                     "© Vadim Zeitlin 1998-1999"),
-                 _T("About wxCheckListBox"),
+                 wxT("About wxCheckListBox"),
                  wxICON_INFORMATION, this);
 }
 
 void CheckListBoxFrame::OnListboxSelect(wxCommandEvent& event)
 {
     int nSel = event.GetSelection();
-    wxLogStatus(this, _T("item %d selected (%schecked)"), nSel,
-                      m_pListBox->IsChecked(nSel) ? _T("") : _T("not "));
+    wxLogStatus(this, wxT("Item %d selected (%schecked)"), nSel,
+                      m_pListBox->IsChecked(nSel) ? _T("") : wxT("not "));
 }
 
 void CheckListBoxFrame::OnListboxDblClick(wxCommandEvent& WXUNUSED(event))
 {
     wxString strSelection;
-    strSelection.sprintf(_T("item %d double clicked"), m_pListBox->GetSelection());
-    wxMessageDialog dialog(this, strSelection);
+    strSelection.sprintf(wxT("Item %d double clicked"), m_pListBox->GetSelection());
+    wxMessageDialog dialog(this, strSelection, wxT("wxCheckListBox message"), wxICON_INFORMATION);
     dialog.ShowModal();
 }
 
@@ -229,8 +229,8 @@ void CheckListBoxFrame::OnCheckboxToggle(wxCommandEvent& event)
 {
     unsigned int nItem = event.GetInt();
 
-    wxLogStatus(this, _T("item %d was %schecked"), nItem,
-                      m_pListBox->IsChecked(nItem) ? _T("") : _T("un"));
+    wxLogStatus(this, wxT("item %d was %schecked"), nItem,
+                      m_pListBox->IsChecked(nItem) ? wxT("") : wxT("un"));
 }
 
 void CheckListBoxFrame::OnButtonUp(wxCommandEvent& WXUNUSED(event))
@@ -253,7 +253,7 @@ void CheckListBoxFrame::OnButtonMove(bool up)
         int positionNew = up ? selection - 1 : selection + 2;
         if ( positionNew < 0 || positionNew > m_pListBox->GetCount() )
         {
-            wxLogStatus(this, _T("Can't move this item %s"), up ? _T("up") : _T("down"));
+            wxLogStatus(this, wxT("Can't move this item %s"), up ? wxT("up") : wxT("down"));
         }
         else
         {
@@ -274,12 +274,12 @@ void CheckListBoxFrame::OnButtonMove(bool up)
             AdjustColour(selection);
             AdjustColour(selectionNew);
 
-            wxLogStatus(this, _T("Item moved %s"), up ? _T("up") : _T("down"));
+            wxLogStatus(this, wxT("Item moved %s"), up ? wxT("up") : wxT("down"));
         }
     }
     else
     {
-        wxLogStatus(this, _T("Please select an item"));
+        wxLogStatus(this, wxT("Please select an item"));
     }
 }
 

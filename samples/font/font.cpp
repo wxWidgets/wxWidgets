@@ -235,34 +235,36 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
     SetStatusText("Welcome to wxWindows font demo!");
 }
 
+// --------------------------------------------------------
 
-// event handlers
+class MyEncodingEnumerator : public wxFontEnumerator
+{
+public:
+    MyEncodingEnumerator() 
+        { m_n = 0; }
+
+    const wxString& GetText() const 
+        { return m_text; }
+
+protected:
+    virtual bool OnFontEncoding(const wxString& facename,
+                                const wxString& encoding)
+    {
+        wxString text;
+        text.Printf("Encoding %d: %s (available in facename '%s')\n",
+                    ++m_n, encoding.c_str(), facename.c_str());
+        m_text += text;
+        return TRUE;
+    }
+
+private:
+    size_t m_n;
+    wxString m_text;
+};
+
 void MyFrame::OnEnumerateEncodings(wxCommandEvent& WXUNUSED(event))
 {
-    class MyEncodingEnumerator : public wxFontEnumerator
-    {
-    public:
-        MyEncodingEnumerator() { m_n = 0; }
-
-        const wxString& GetText() const { return m_text; }
-
-    protected:
-        virtual bool OnFontEncoding(const wxString& facename,
-                                    const wxString& encoding)
-        {
-            wxString text;
-            text.Printf("Encoding %d: %s (available in facename '%s')\n",
-                         ++m_n, encoding.c_str(), facename.c_str());
-            m_text += text;
-
-            return TRUE;
-        }
-
-    private:
-        size_t m_n;
-
-        wxString m_text;
-    } fontEnumerator;
+    MyEncodingEnumerator fontEnumerator;
 
     fontEnumerator.EnumerateEncodings();
 
@@ -270,28 +272,33 @@ void MyFrame::OnEnumerateEncodings(wxCommandEvent& WXUNUSED(event))
                  fontEnumerator.GetText().c_str());
 }
 
+// -------------------------------------------------------------
+
+class MyFontEnumerator : public wxFontEnumerator
+{
+public:
+    bool GotAny() const 
+        { return !m_facenames.IsEmpty(); }
+
+    const wxArrayString& GetFacenames() const 
+        { return m_facenames; }
+
+protected:
+    virtual bool OnFacename(const wxString& facename)
+    {
+        m_facenames.Add(facename);
+        return TRUE;
+    }
+
+    private:
+        wxArrayString m_facenames;
+} fontEnumerator;
+
 bool MyFrame::DoEnumerateFamilies(bool fixedWidthOnly,
                                   wxFontEncoding encoding,
                                   bool silent)
 {
-    class MyFontEnumerator : public wxFontEnumerator
-    {
-    public:
-        bool GotAny() const { return !m_facenames.IsEmpty(); }
-
-        const wxArrayString& GetFacenames() const { return m_facenames; }
-
-    protected:
-        virtual bool OnFacename(const wxString& facename)
-        {
-            m_facenames.Add(facename);
-
-            return TRUE;
-        }
-
-    private:
-        wxArrayString m_facenames;
-    } fontEnumerator;
+    MyFontEnumerator fontEnumerator;
 
     fontEnumerator.EnumerateFacenames(encoding, fixedWidthOnly);
 

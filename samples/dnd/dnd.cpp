@@ -1772,7 +1772,7 @@ static void ShowBitmap(const wxBitmap& bitmap)
     frame->SetStatusText(wxString::Format(_T("%dx%d"), w, h));
 
     frame->SetClientSize(w > 100 ? 100 : w, h > 100 ? 100 : h);
-    frame->Show();
+    frame->Show(TRUE);
 }
 
 #ifdef USE_METAFILES
