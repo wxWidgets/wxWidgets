@@ -376,7 +376,8 @@ enum wxDBMS
     dbmsDBASE,
     dbmsINFORMIX,
     dbmsVIRTUOSO,
-    dbmsDB2
+    dbmsDB2,
+    dbmsINTERBASE
 };
 
 
@@ -545,7 +546,7 @@ public:
     wxDbSqlTypeInfo GetTypeInfDate()    {return typeInfDate;}
 
     bool         TableExists(const char *tableName, const char *userID=NULL, const char *path=NULL);  // Table name can refer to a table, view, alias or synonym
-    bool         TablePrivileges(const char *tableName, const char* priv, const char *userID=NULL, const char *path="");  // Table name can refer to a table, view, alias or synonym
+    bool         TablePrivileges(const char *tableName, const char* priv, const char *schema=NULL, const char *userID=NULL, const char *path="");  // Table name can refer to a table, view, alias or synonym
     void         LogError(const char *errMsg, const char *SQLState = 0) {logError(errMsg, SQLState);}
     void         SetDebugErrorMessages(bool state) { silent = !state; }
     bool         SetSqlLogging(wxDbSqlLogState state, const wxChar *filename = SQL_LOG_FILENAME, bool append = FALSE);

@@ -646,15 +646,31 @@ bool wxDb::Open(wxDb *copyDb)
 
     // VARCHAR = Variable length character string
     typeInfVarchar.FsqlType = copyDb->typeInfVarchar.FsqlType;
+    wxStrcpy(typeInfVarchar.TypeName, copyDb->typeInfVarchar.TypeName);
+    typeInfVarchar.Precision        = copyDb->typeInfVarchar.Precision;
+    typeInfVarchar.CaseSensitive    = copyDb->typeInfVarchar.CaseSensitive;
+    typeInfVarchar.MaximumScale     = copyDb->typeInfVarchar.MaximumScale;
 
     // Float
     typeInfFloat.FsqlType = copyDb->typeInfFloat.FsqlType;
+    wxStrcpy(typeInfFloat.TypeName, copyDb->typeInfFloat.TypeName);
+    typeInfFloat.Precision        = copyDb->typeInfFloat.Precision;
+    typeInfFloat.CaseSensitive    = copyDb->typeInfFloat.CaseSensitive;
+    typeInfFloat.MaximumScale     = copyDb->typeInfFloat.MaximumScale;
 
     // Integer
-    typeInfFloat.FsqlType = copyDb->typeInfFloat.FsqlType;
+    typeInfInteger.FsqlType = copyDb->typeInfInteger.FsqlType;
+    wxStrcpy(typeInfInteger.TypeName, copyDb->typeInfInteger.TypeName);
+    typeInfInteger.Precision        = copyDb->typeInfInteger.Precision;
+    typeInfInteger.CaseSensitive    = copyDb->typeInfInteger.CaseSensitive;
+    typeInfInteger.MaximumScale     = copyDb->typeInfInteger.MaximumScale;
 
     // Date/Time
     typeInfDate.FsqlType = copyDb->typeInfDate.FsqlType;
+    wxStrcpy(typeInfDate.TypeName, copyDb->typeInfDate.TypeName);
+    typeInfDate.Precision        = copyDb->typeInfDate.Precision;
+    typeInfDate.CaseSensitive    = copyDb->typeInfDate.CaseSensitive;
+    typeInfDate.MaximumScale     = copyDb->typeInfDate.MaximumScale;
 
 #ifdef DBDEBUG_CONSOLE
     cout << "VARCHAR DATA TYPE: " << typeInfVarchar.TypeName << endl;
@@ -1873,7 +1889,7 @@ wxDbColInf *wxDb::GetColumns(char *tableName[], const char *userID)
     if (Dbms() == dbmsDBASE)
         UserID = "";
 
-    // Oracle user names may only be in uppercase, so force
+    // Oracle and Interbase user names may only be in uppercase, so force
     // the name to uppercase
     if (Dbms() == dbmsORACLE)
         UserID = UserID.Upper();
@@ -1902,9 +1918,10 @@ wxDbColInf *wxDb::GetColumns(char *tableName[], const char *userID)
         for (tbl = 0; tableName[tbl]; tbl++)
         {
             TableName = tableName[tbl];
-            // Oracle table names are uppercase only, so force
+            // Oracle and Interbase table names are uppercase only, so force
             // the name to uppercase just in case programmer forgot to do this
-            if (Dbms() == dbmsORACLE)
+            if ((Dbms() == dbmsORACLE) || 
+                (Dbms() == dbmsINTERBASE))
                 TableName = TableName.Upper();
 
             SQLFreeStmt(hstmt, SQL_CLOSE);
@@ -2072,9 +2089,10 @@ wxDbColInf *wxDb::GetColumns(char *tableName, int *numCols, const char *userID)
         }
 
         TableName = tableName;
-        // Oracle table names are uppercase only, so force
+        // Oracle and Interbase table names are uppercase only, so force
         // the name to uppercase just in case programmer forgot to do this
-        if (Dbms() == dbmsORACLE)
+        if ((Dbms() == dbmsORACLE) || 
+            (Dbms() == dbmsINTERBASE))
             TableName = TableName.Upper();
 
         SQLFreeStmt(hstmt, SQL_CLOSE);
@@ -2341,9 +2359,10 @@ wxDbColInf *wxDb::GetColumns(char *tableName, int *numCols, const char *userID)
         }
         
         TableName = tableName;
-        // Oracle table names are uppercase only, so force
+        // Oracle and Interbase table names are uppercase only, so force
         // the name to uppercase just in case programmer forgot to do this
-        if (Dbms() == dbmsORACLE)
+        if ((Dbms() == dbmsORACLE) || 
+            (Dbms() == dbmsINTERBASE))
             TableName = TableName.Upper();
         
         SQLFreeStmt(hstmt, SQL_CLOSE);
@@ -2595,9 +2614,10 @@ int wxDb::GetColumnCount(char *tableName, const char *userID)
         // Loop through each table name
         {
             TableName = tableName;
-            // Oracle table names are uppercase only, so force
+            // Oracle and Interbase table names are uppercase only, so force
             // the name to uppercase just in case programmer forgot to do this
-            if (Dbms() == dbmsORACLE)
+            if ((Dbms() == dbmsORACLE) || 
+                (Dbms() == dbmsINTERBASE))
                 TableName = TableName.Upper();
 
             SQLFreeStmt(hstmt, SQL_CLOSE);
@@ -2964,9 +2984,10 @@ bool wxDb::TableExists(const char *tableName, const char *userID, const char *ta
         UserID = UserID.Upper();
     
     TableName = tableName;
-    // Oracle table names are uppercase only, so force
+    // Oracle and Interbase table names are uppercase only, so force
     // the name to uppercase just in case programmer forgot to do this
-    if (Dbms() == dbmsORACLE)
+    if ((Dbms() == dbmsORACLE) || 
+        (Dbms() == dbmsINTERBASE))
         TableName = TableName.Upper();
     
     SQLFreeStmt(hstmt, SQL_CLOSE);
@@ -3011,8 +3032,8 @@ bool wxDb::TableExists(const char *tableName, const char *userID, const char *ta
 
 
 /********** wxDb::TablePrivileges() **********/
-bool wxDb::TablePrivileges(const char *tableName, const char* priv,
-                      const char *userID, const char *tablePath)
+bool wxDb::TablePrivileges(const char *tableName, const char* priv, const char *schema,
+                           const char *userID, const char *tablePath)
 {
     wxDbTablePrivilegeInfo  result;
     SDWORD  cbRetVal;
@@ -3044,17 +3065,28 @@ bool wxDb::TablePrivileges(const char *tableName, const char* priv,
         UserID = UserID.Upper();
     
     TableName = tableName;
-    // Oracle table names are uppercase only, so force 
+    // Oracle and Interbase table names are uppercase only, so force
     // the name to uppercase just in case programmer forgot to do this
-    if (Dbms() == dbmsORACLE)
+    if ((Dbms() == dbmsORACLE) || 
+        (Dbms() == dbmsINTERBASE))
         TableName = TableName.Upper();
     
     SQLFreeStmt(hstmt, SQL_CLOSE);
-    
-    retcode = SQLTablePrivileges(hstmt,
-                                 NULL, 0,                                    // Catalog
-                                 NULL, 0,                                    // Schema
-                                 (UCHAR FAR *)TableName.GetData(), SQL_NTS);  
+
+    if (!schema)
+    {
+        retcode = SQLTablePrivileges(hstmt,
+                                     NULL, 0,                                    // Catalog
+                                     NULL, 0,                                    // Schema
+                                     (UCHAR FAR *)TableName.c_str(), SQL_NTS);  
+    }
+    else
+    {
+        retcode = SQLTablePrivileges(hstmt,
+                                     NULL, 0,                                    // Catalog
+                                     (UCHAR FAR *)schema, SQL_NTS,               // Schema
+                                     (UCHAR FAR *)TableName.c_str(), SQL_NTS);  
+    }
 
 #ifdef DBDEBUG_CONSOLE 
     fprintf(stderr ,"SQLTablePrivileges() returned %i \n",retcode);
@@ -3063,35 +3095,36 @@ bool wxDb::TablePrivileges(const char *tableName, const char* priv,
     if ((retcode != SQL_SUCCESS) && (retcode != SQL_SUCCESS_WITH_INFO))
         return(DispAllErrors(henv, hdbc, hstmt));
 
-    if (SQLGetData(hstmt, 1, SQL_C_CHAR, (UCHAR*) result.tableQual, 128, &cbRetVal) != SQL_SUCCESS)
-        return(DispAllErrors(henv, hdbc, hstmt));
-    
-    if (SQLGetData(hstmt, 2, SQL_C_CHAR, (UCHAR*) result.tableOwner, 128, &cbRetVal) != SQL_SUCCESS)
-        return(DispAllErrors(henv, hdbc, hstmt));
-    
-    if (SQLGetData(hstmt, 3, SQL_C_CHAR, (UCHAR*) result.tableName, 128, &cbRetVal) != SQL_SUCCESS)
-        return(DispAllErrors(henv, hdbc, hstmt));
-    
-    if (SQLGetData(hstmt, 4, SQL_C_CHAR, (UCHAR*) result.grantor, 128, &cbRetVal) != SQL_SUCCESS)
-        return(DispAllErrors(henv, hdbc, hstmt));
-    
-    if (SQLGetData(hstmt, 5, SQL_C_CHAR, (UCHAR*) result.grantee, 128, &cbRetVal) != SQL_SUCCESS)
-        return(DispAllErrors(henv, hdbc, hstmt));
-    
-    if (SQLGetData(hstmt, 6, SQL_C_CHAR, (UCHAR*) result.privilege, 128, &cbRetVal) != SQL_SUCCESS)
-        return(DispAllErrors(henv, hdbc, hstmt));
-    
-    if (SQLGetData(hstmt, 7, SQL_C_CHAR, (UCHAR*) result.grantable, 3, &cbRetVal) != SQL_SUCCESS)
-        return(DispAllErrors(henv, hdbc, hstmt));
-    
     retcode = SQLFetch(hstmt);
     while (retcode == SQL_SUCCESS || retcode == SQL_SUCCESS_WITH_INFO) 
     {
+        if (SQLGetData(hstmt, 1, SQL_C_CHAR, (UCHAR*) result.tableQual, sizeof(result.tableQual), &cbRetVal) != SQL_SUCCESS)
+            return(DispAllErrors(henv, hdbc, hstmt));
+    
+        if (SQLGetData(hstmt, 2, SQL_C_CHAR, (UCHAR*) result.tableOwner, sizeof(result.tableOwner), &cbRetVal) != SQL_SUCCESS)
+            return(DispAllErrors(henv, hdbc, hstmt));
+    
+        if (SQLGetData(hstmt, 3, SQL_C_CHAR, (UCHAR*) result.tableName, sizeof(result.tableName), &cbRetVal) != SQL_SUCCESS)
+            return(DispAllErrors(henv, hdbc, hstmt));
+    
+        if (SQLGetData(hstmt, 4, SQL_C_CHAR, (UCHAR*) result.grantor, sizeof(result.grantor), &cbRetVal) != SQL_SUCCESS)
+            return(DispAllErrors(henv, hdbc, hstmt));
+    
+        if (SQLGetData(hstmt, 5, SQL_C_CHAR, (UCHAR*) result.grantee, sizeof(result.grantee), &cbRetVal) != SQL_SUCCESS)
+            return(DispAllErrors(henv, hdbc, hstmt));
+    
+        if (SQLGetData(hstmt, 6, SQL_C_CHAR, (UCHAR*) result.privilege, sizeof(result.privilege), &cbRetVal) != SQL_SUCCESS)
+            return(DispAllErrors(henv, hdbc, hstmt));
+    
+        if (SQLGetData(hstmt, 7, SQL_C_CHAR, (UCHAR*) result.grantable, sizeof(result.grantable), &cbRetVal) != SQL_SUCCESS)
+            return(DispAllErrors(henv, hdbc, hstmt));
+
 #ifdef DBDEBUG_CONSOLE
         fprintf(stderr,"Scanning %s privilege on table %s.%s granted by %s to %s\n",
                 result.privilege,result.tableOwner,result.tableName,
                 result.grantor, result.grantee);
 #endif 
+
         if (UserID.IsSameAs(result.tableOwner,false))
         {
             SQLFreeStmt(hstmt, SQL_CLOSE);
@@ -3232,6 +3265,11 @@ wxDBMS wxDb::Dbms(void)
     wxChar baseName[25+1];
     wxStrncpy(baseName,dbInf.dbmsName,25);
     baseName[25] = 0;
+
+    // RGG 20001025 : add support for Interbase
+    // GT : Integrated to base classes on 20001121
+    if (!wxStricmp(dbInf.dbmsName,"Interbase"))
+        return((wxDBMS)(dbmsType = dbmsINTERBASE));
 
     // BJO 20000428 : add support for Virtuoso
     if (!wxStricmp(dbInf.dbmsName,"OpenLink Virtuoso VDBMS"))
