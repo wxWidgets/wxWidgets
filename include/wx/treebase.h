@@ -74,6 +74,11 @@ inline bool operator==(const wxTreeItemId& i1, const wxTreeItemId& i2)
     return i1.m_pItem == i2.m_pItem;
 }
 
+inline bool operator!=(const wxTreeItemId& i1, const wxTreeItemId& i2)
+{
+    return i1.m_pItem != i2.m_pItem;
+}
+
 // ----------------------------------------------------------------------------
 // wxTreeItemData is some (arbitrary) user class associated with some item. The
 // main advantage of having this class (compared to old untyped interface) is
