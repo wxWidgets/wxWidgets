@@ -542,7 +542,7 @@ wxFileName::CreateTempFileName(const wxString& prefix, wxFile *fileTemp)
     if ( dir.empty() )
     {
 #if defined(__WXMAC__) && !defined(__DARWIN__)
-        dir = wxMacFindFolder(  (short) kOnSystemDisk, pTemporaryFolder, kCreateFolder ) ;
+        dir = wxMacFindFolder(  (short) kOnSystemDisk, kTemporaryFolderType, kCreateFolder ) ;
 #else // !Mac
         dir = wxGetenv(_T("TMP"));
         if ( dir.empty() )
