@@ -1140,6 +1140,12 @@ void HelpGenVisitor::VisitClass( spClass& cl )
     }
     totalText << derived << "\n\n";
 
+    // include file section
+    wxString includeFile = "\\wxheading{Include files}\n\n";
+    includeFile << "<" << m_fileHeader << ">";
+
+    totalText << includeFile << "\n\n";
+
     // write all this to file
     m_file.WriteTeX(totalText);
 
@@ -2197,6 +2203,9 @@ static const wxString GetVersionString()
 
 /*
    $Log$
+   Revision 1.22  2002/01/21 21:18:50  JS
+   Now adds 'include file' heading
+
    Revision 1.21  2002/01/04 11:06:09  JS
    Fixed missing membersections bug and also bug with functions not being written
    in the right class
