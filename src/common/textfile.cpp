@@ -31,13 +31,14 @@
 #if wxUSE_TEXTFILE
 
 #ifndef WX_PRECOMP
-    #include  "wx/string.h"
-    #include  "wx/intl.h"
-    #include  "wx/file.h"
-    #include  "wx/log.h"
+    #include "wx/string.h"
+    #include "wx/intl.h"
+    #include "wx/file.h"
+    #include "wx/log.h"
 #endif
 
 #include "wx/textfile.h"
+#include "wx/filename.h"
 
 // ============================================================================
 // wxTextFile class implementation
@@ -172,7 +173,11 @@ bool wxTextFile::OnRead(wxMBConv& conv)
 
 bool wxTextFile::OnWrite(wxTextFileType typeNew, wxMBConv& conv)
 {
-    wxTempFile fileTmp(m_strBufferName);
+    wxFileName fn = m_strBufferName;
+    if ( !fn.IsAbsolute() )
+        fn.Normalize();
+
+    wxTempFile fileTmp(fn.GetFullName());
 
     if ( !fileTmp.IsOpened() ) {
         wxLogError(_("can't write buffer '%s' to disk."), m_strBufferName.c_str());
