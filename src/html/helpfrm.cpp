@@ -346,13 +346,8 @@ bool wxHtmlHelpFrame::Create(wxWindow* parent, wxWindowID id,
 
 
             wxLayoutConstraints *b4 = new wxLayoutConstraints;
-            m_ContentsBox = new wxTreeCtrl(dummy, wxID_HTML_TREECTRL,
-                                           wxDefaultPosition, wxDefaultSize,
-#ifdef __WXMAC__
-       wxSUNKEN_BORDER|wxTR_MAC_BUTTONS|wxTR_NO_LINES|wxTR_ROW_LINES );
-#else
-       wxSUNKEN_BORDER|wxTR_HAS_BUTTONS );
-#endif
+            m_ContentsBox = new wxTreeCtrl( dummy, wxID_HTML_TREECTRL,
+                wxDefaultPosition, wxDefaultSize, wxSUNKEN_BORDER|wxTR_HAS_BUTTONS );
             m_ContentsBox->AssignImageList(ContentsImageList);
 
             b4->top.Below (m_Bookmarks, 10);
