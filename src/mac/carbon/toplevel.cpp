@@ -1382,6 +1382,7 @@ void wxTopLevelWindowMac::MacGetContentAreaInset( int &left , int &top , int &ri
 
 void wxTopLevelWindowMac::DoMoveWindow(int x, int y, int width, int height)
 {
+    m_cachedClippedRectValid = false ;
     Rect bounds = { y , x , y + height , x + width } ;
     verify_noerr(SetWindowBounds( (WindowRef) m_macWindow, kWindowStructureRgn , &bounds )) ;
 }
