@@ -297,7 +297,7 @@ bool wxTabCtrl::InsertItem(int item, const wxString& text, int imageId, void* da
     TC_ITEM tcItem;
     tcItem.mask = TCIF_PARAM;
     tcItem.lParam = (long) data;
-    if (text != wxEmptyString)
+    if (!text.empty())
     {
         tcItem.mask |= TCIF_TEXT;
         wxStrcpy(buf, (const wxChar*) text);

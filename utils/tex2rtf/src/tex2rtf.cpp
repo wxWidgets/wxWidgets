@@ -398,7 +398,7 @@ bool MyApp::OnInit()
      */
 
     wxString path = TexPathList.FindValidPath(MacroFile);
-    if (path != _T(""))
+    if (!path.empty())
       ReadCustomMacros((wxChar *)path.c_str());
 
 #if wxUSE_STATUSBAR
@@ -434,7 +434,7 @@ bool MyApp::OnInit()
      */
 
     wxString path = TexPathList.FindValidPath(MacroFile);
-    if (path != _T(""))
+    if (!path.empty())
       ReadCustomMacros((wxChar*)path.c_str());
 
     Go();
@@ -743,7 +743,7 @@ void MyFrame::OnLoadMacros(wxCommandEvent& WXUNUSED(event))
 {
       textWindow->Clear();
       wxString s = wxFileSelector(_T("Choose custom macro file"), wxPathOnly(MacroFile), wxFileNameFromPath(MacroFile), _T("ini"), _T("*.ini"));
-      if (s != _T("") && wxFileExists(s))
+      if (!s.empty() && wxFileExists(s))
       {
         MacroFile = copystring(s);
         ReadCustomMacros((wxChar *)s.c_str());
@@ -862,7 +862,7 @@ void ChooseInputFile(bool force)
   if (force || !InputFile)
   {
     wxString s = wxFileSelector(_T("Choose LaTeX input file"), wxPathOnly(InputFile), wxFileNameFromPath(InputFile), _T("tex"), _T("*.tex"));
-    if (s != _T(""))
+    if (!s.empty())
     {
       // Different file, so clear index entries.
       ClearKeyWordTable();
@@ -916,7 +916,7 @@ void ChooseOutputFile(bool force)
   {
     wxString s = wxFileSelector(_T("Choose output file"), path, wxFileNameFromPath(OutputFile),
                    extensionBuf, wildBuf);
-    if (s != _T(""))
+    if (!s.empty())
       OutputFile = copystring(s);
   }
 }
@@ -971,7 +971,7 @@ bool Go(void)
   if (!bulletFile)
   {
     wxString s = TexPathList.FindValidPath(_T("bullet.bmp"));
-    if (s != _T(""))
+    if (!s.empty())
     {
       wxString str = wxFileNameFromPath(s);
       bulletFile = copystring(str);

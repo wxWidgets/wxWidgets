@@ -486,7 +486,7 @@ void MainWindow::Search(bool ask)
     if (ask || m_searchString.empty())
     {
         wxString s = wxGetTextFromUser( _T("Enter search string"), _T("Search"), m_searchString);
-        if (s != wxEmptyString)
+        if (!s.empty())
         {
             s.MakeLower();
             m_searchString = s;

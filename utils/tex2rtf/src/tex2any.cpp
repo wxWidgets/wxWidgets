@@ -813,7 +813,7 @@ bool read_a_line(wxChar *buf)
   if (checkSyntax)
   {
       wxString bufStr = buf;
-      for (int index=0; syntaxTokens[index] != wxEmptyString; index++)
+      for (int index=0; !syntaxTokens[index].empty(); index++)
       {
           size_t pos = bufStr.find(syntaxTokens[index]);
           if (pos != wxString::npos && pos != 0)

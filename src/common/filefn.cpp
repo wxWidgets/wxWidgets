@@ -673,7 +673,7 @@ wxContractPath (const wxString& filename, const wxString& envname, const wxStrin
   const wxChar *val;
 #ifndef __WXWINCE__
   wxChar *tcp;
-  if (envname != WXSTRINGCAST NULL && (val = wxGetenv (WXSTRINGCAST envname)) != NULL &&
+  if (!envname.empty() && (val = wxGetenv (WXSTRINGCAST envname)) != NULL &&
      (tcp = wxStrstr (dest, val)) != NULL)
     {
         wxStrcpy (wxFileFunctionsBuffer, tcp + wxStrlen (val));
@@ -1734,7 +1734,7 @@ int WXDLLEXPORT wxParseCommonDialogsFilter(const wxString& filterStr, wxArrayStr
     // autocompletion
     for( size_t j = 0 ; j < descriptions.GetCount() ; j++ )
     {
-        if ( descriptions[j] == wxEmptyString && filters[j] != wxEmptyString )
+        if ( descriptions[j].empty() && !filters[j].empty() )
         {
             descriptions[j].Printf(_("Files (%s)"), filters[j].c_str());
         }

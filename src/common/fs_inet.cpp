@@ -67,11 +67,11 @@ protected:
 static wxString StripProtocolAnchor(const wxString& location)
 {
     wxString myloc(location.BeforeLast(wxT('#')));
-    if (myloc.IsEmpty()) myloc = location.AfterFirst(wxT(':'));
+    if (myloc.empty()) myloc = location.AfterFirst(wxT(':'));
     else myloc = myloc.AfterFirst(wxT(':'));
 
     // fix malformed url:
-    if (myloc.Left(2) != wxT("//"))
+    if (!myloc.Left(2).IsSameAs(wxT("//")))
     {
         if (myloc.GetChar(0) != wxT('/')) myloc = wxT("//") + myloc;
         else myloc = wxT("/") + myloc;

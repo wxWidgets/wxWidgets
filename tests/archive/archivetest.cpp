@@ -320,7 +320,7 @@ private:
 TempDir::TempDir()
 {
     wxString tmp = wxFileName::CreateTempFileName(_T("arctest-"));
-    if (tmp != wxEmptyString) {
+    if (!tmp.empty()) {
         wxRemoveFile(tmp);
         m_original = wxGetCwd();
         CPPUNIT_ASSERT(wxMkdir(tmp, 0700));
@@ -331,7 +331,7 @@ TempDir::TempDir()
 
 TempDir::~TempDir()
 {
-    if (m_tmp != wxEmptyString) {
+    if (!m_tmp.empty()) {
         wxSetWorkingDirectory(m_original);
         RemoveDir(m_tmp);
     }

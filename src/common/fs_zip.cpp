@@ -83,7 +83,7 @@ wxFSFile* wxZipFSHandler::OpenFile(wxFileSystem& WXUNUSED(fs), const wxString& l
     wxString left = GetLeftLocation(location);
     wxInputStream *s;
 
-    if (GetProtocol(left) != wxT("file"))
+    if (!GetProtocol(left).IsSameAs(wxT("file")))
     {
         wxLogError(_("ZIP handler currently supports only local files!"));
         return NULL;
@@ -133,7 +133,7 @@ wxString wxZipFSHandler::FindFirst(const wxString& spec, int flags)
         m_Archive = NULL;
     }
 
-    if (GetProtocol(left) != wxT("file"))
+    if (!GetProtocol(left).IsSameAs(wxT("file")))
     {
         wxLogError(_("ZIP handler currently supports only local files!"));
         return wxEmptyString;
@@ -203,14 +203,14 @@ wxString wxZipFSHandler::DoFind()
         if (m_AllowDirs)
         {
             dir = namestr.BeforeLast(wxT('/'));
-            while (!dir.IsEmpty())
+            while (!dir.empty())
             {
                 if( m_DirsFound->find(dir) == m_DirsFound->end() )
                 {
                     (*m_DirsFound)[dir] = 1;
                     filename = dir.AfterLast(wxT('/'));
                     dir = dir.BeforeLast(wxT('/'));
-                    if (!filename.IsEmpty() && m_BaseDir == dir &&
+                    if (!filename.empty() && m_BaseDir == dir &&
                                 wxMatchWild(m_Pattern, filename, false))
                         match = m_ZipFile + wxT("#zip:") + dir + wxT("/") + filename;
                 }
@@ -221,7 +221,7 @@ wxString wxZipFSHandler::DoFind()
 
         filename = namestr.AfterLast(wxT('/'));
         dir = namestr.BeforeLast(wxT('/'));
-        if (m_AllowFiles && !filename.IsEmpty() && m_BaseDir == dir &&
+        if (m_AllowFiles && !filename.empty() && m_BaseDir == dir &&
                             wxMatchWild(m_Pattern, filename, false))
             match = m_ZipFile + wxT("#zip:") + namestr;
     }

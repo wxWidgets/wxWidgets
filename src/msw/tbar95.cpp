@@ -583,7 +583,7 @@ bool wxToolBar::Realize()
             dcAllButtons.SetBackground(*wxTRANSPARENT_BRUSH);
         else
             dcAllButtons.SetBackground(*wxLIGHT_GREY_BRUSH);
-#endif        
+#endif
         dcAllButtons.Clear();
 
         m_hBitmap = bitmap.GetHBITMAP();
@@ -1088,7 +1088,7 @@ wxToolBarToolBase *GetItemSkippingDummySpacers(const wxToolBarToolsList& tools,
 {
     wxToolBarToolsList::compatibility_iterator current = tools.GetFirst();
 
-    for ( ; current != 0; current = current->GetNext() )
+    for ( ; current ; current = current->GetNext() )
     {
         if ( index == 0 )
             return current->GetData();
@@ -1251,7 +1251,7 @@ void wxToolBar::OnEraseBackground(wxEraseEvent& event)
         event.Skip();
         return;
     }
-    
+
     // notice that this 'dumb' implementation may cause flicker for some of the
     // controls in which case they should intercept wxEraseEvent and process it
     // themselves somehow

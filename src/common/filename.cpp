@@ -1056,7 +1056,7 @@ bool wxFileName::GetShortcutTarget(const wxString& shortcutPath, wxString& targe
     bool success = false;
 
     // Assume it's not a shortcut if it doesn't end with lnk
-    if (ext.Lower() != wxT("lnk"))
+    if (ext.CmpNoCase(wxT("lnk"))!=0)
         return false;
 
     // create a ShellLink object
@@ -1453,7 +1453,7 @@ wxString wxFileName::GetPath( int flags, wxPathFormat format ) const
                 }
 
                 // convert back from ".." to nothing
-                if ( m_dirs[i] != wxT("..") )
+                if ( !m_dirs[i].IsSameAs(wxT("..")) )
                      fullpath += m_dirs[i];
                 break;
 
@@ -1470,7 +1470,7 @@ wxString wxFileName::GetPath( int flags, wxPathFormat format ) const
                 // TODO: What to do with ".." under VMS
 
                 // convert back from ".." to nothing
-                if ( m_dirs[i] != wxT("..") )
+                if ( !m_dirs[i].IsSameAs(wxT("..")) )
                     fullpath += m_dirs[i];
                 break;
         }

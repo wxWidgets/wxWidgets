@@ -304,7 +304,7 @@ bool wxVariantDataStringList::Read(wxString& WXUNUSED(str))
     return false;
 }
 
-#endif //2.4 compat 
+#endif //2.4 compat
 
 /*
  * wxVariantDataLong
@@ -1994,7 +1994,7 @@ void wxVariant::ClearList()
     }
     else
     {
-        if (GetType() != wxT("list"))
+        if (!GetType().IsSameAs(wxT("list")))
         {
             delete m_data;
             m_data = NULL;
