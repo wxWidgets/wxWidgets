@@ -44,12 +44,10 @@
     // this header is not included from wx/datectrl.h if we have a native
     // version, but we do need it here
     #include "wx/generic/datectrl.h"
-#endif
-
-// we need to define _WX_DEFINE_DATE_EVENTS_ before including wx/dateevt.h to
-// define the event types we use if we're the only date picker control version
-// being compiled -- otherwise it's defined in the native version implementation
-#ifndef wxHAS_NATIVE_DATEPICKCTRL
+#else
+    // we need to define _WX_DEFINE_DATE_EVENTS_ before including wx/dateevt.h to
+    // define the event types we use if we're the only date picker control version
+    // being compiled -- otherwise it's defined in the native version implementation
     #define _WX_DEFINE_DATE_EVENTS_
 #endif
 
@@ -73,6 +71,27 @@ enum
 #ifndef DEFAULT_ITEM_WIDTH
     #define DEFAULT_ITEM_WIDTH 100
 #endif
+
+#ifdef __WXMSW__
+    #undef wxUSE_POPUPWIN
+    #define wxUSE_POPUPWIN    0  // Popup not working
+    #define TXTCTRL_FLAGS     wxNO_BORDER
+    #define BTN_FLAGS         wxNO_BORDER
+    #define CALBORDER         0
+    #define RIGHTBUTTONBORDER 3
+    #define TOPBUTTONBORDER   0
+    #define BUTTONBORDER      3
+    #define TXTPOSY           1
+#else
+    #define TXTCTRL_FLAGS     0
+    #define BTN_FLAGS         wxBU_AUTODRAW
+    #define CALBORDER         4
+    #define RIGHTBUTTONBORDER 0
+    #define TOPBUTTONBORDER   0
+    #define BUTTONBORDER      0
+    #define TXTPOSY           0
+#endif
+
 
 // ----------------------------------------------------------------------------
 // local classes
@@ -99,7 +118,7 @@ public:
                 wxWindowID id,
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
-                long style = 0, 
+                long style = 0,
                 const wxValidator& validator = wxDefaultValidator);
 
     void DoMoveWindow(int x, int y, int w, int h);
@@ -128,10 +147,17 @@ bool wxDropdownButton::Create(wxWindow *parent,
                               long WXUNUSED(style),
                               const wxValidator& validator)
 {
+    m_marginX = 0;
+    m_marginY = 0;
+
     wxBitmap chkBmp(15,15);  // arbitrary
     if ( !wxBitmapButton::Create(parent, id, chkBmp,
-                                 pos, wxDefaultSize, wxBU_AUTODRAW, validator) )
+                                 pos, wxDefaultSize, BTN_FLAGS, validator) )
         return false;
+
+#if (BTNFLAGS & wxBU_AUTODRAW ) == 0
+    m_windowStyle |= wxBU_AUTODRAW;
+#endif
 
     const wxSize sz = GetSize();
     int w = chkBmp.GetWidth(),
@@ -171,7 +197,6 @@ void wxDropdownButton::DoMoveWindow(int x, int y, int w, int h)
         dc.SelectObject(bmp);
 
         wxRendererNative::Get().DrawComboBoxDropButton(this, dc, wxRect(0,0,bw, bh));
-
         SetBitmapLabel(bmp);
     }
 
@@ -269,7 +294,7 @@ bool wxDatePickerCtrlGeneric::Create(wxWindow *parent,
 
     InheritAttributes();
 
-    m_txt = new wxTextCtrl(this, CTRLID_TXT);
+    m_txt = new wxTextCtrl(this, CTRLID_TXT, wxEmptyString, wxDefaultPosition, wxDefaultSize, TXTCTRL_FLAGS);
 
     m_txt->Connect(wxEVT_KEY_DOWN,
                    wxKeyEventHandler(wxDatePickerCtrlGeneric::OnEditKey),
@@ -278,10 +303,10 @@ bool wxDatePickerCtrlGeneric::Create(wxWindow *parent,
                    wxFocusEventHandler(wxDatePickerCtrlGeneric::OnKillFocus),
                    NULL, this);
 
-    const int height = m_txt->GetBestSize().y;
+    const int height = m_txt->GetBestSize().y - BUTTONBORDER;
 
     m_btn = new wxDropdownButton(this, CTRLID_BTN, wxDefaultPosition, wxSize(height, height));
- 
+
     m_popup = new wxDatePopupInternal(this);
     m_popup->SetFont(GetFont());
 
@@ -329,17 +354,6 @@ bool wxDatePickerCtrlGeneric::Create(wxWindow *parent,
 
     SetFormat(wxT("%x"));
 
-
-#ifdef __WXMSW__
-    #define CALBORDER         0
-    #define RIGHTBUTTONBORDER 2
-    #define TOPBUTTONBORDER   1
-#else
-    #define CALBORDER         4
-    #define RIGHTBUTTONBORDER 0
-    #define TOPBUTTONBORDER   0
-#endif
-
     width = yearPosition.x + yearSize.x+2+CALBORDER/2;
     if (width < calSize.x-4)
         width = calSize.x-4;
@@ -362,12 +376,12 @@ bool wxDatePickerCtrlGeneric::Create(wxWindow *parent,
     m_popup->Hide();
 
     if (!date.IsValid())
-        SetValue(wxDateTime::Today());
-    else
-        SetValue(date);
+        date.Today();
+
+    SetValue(date);
 
     SetBestFittingSize(size);
-    
+
     return true;
 }
 
@@ -413,7 +427,7 @@ void wxDatePickerCtrlGeneric::DoMoveWindow(int x, int y, int w, int h)
     wxSize bs=m_btn->GetBestSize();
     int eh=m_txt->GetBestSize().y;
 
-    m_txt->SetSize(0, 0, w-bs.x-1, h > eh ? eh : h);
+    m_txt->SetSize(0, TXTPOSY, w-bs.x-RIGHTBUTTONBORDER, h > eh ? eh-TXTPOSY : h-TXTPOSY);
     m_btn->SetSize(w - bs.x-RIGHTBUTTONBORDER, TOPBUTTONBORDER, bs.x, h > bs.y ? bs.y : h);
 
     if (m_dropped)
