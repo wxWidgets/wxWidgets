@@ -3048,7 +3048,15 @@ void wxListMainWindow::OnMouse( wxMouseEvent &event )
         m_renameTimer->Stop();
         m_lastOnSame = FALSE;
 
+#ifdef __WXGTK__
+        // FIXME: wxGTK generates bad sequence of events prior to doubleclick
+        //        ("down, up, down, double, up" while other ports 
+        //        do "down, up, double, up"). We have to have this hack
+        //        in place till somebody fixes wxGTK...
         if ( current == m_lineBeforeLastClicked )
+#else
+        if ( current == m_lineLastClicked )
+#endif
         {
             SendNotify( current, wxEVT_COMMAND_LIST_ITEM_ACTIVATED );
 
