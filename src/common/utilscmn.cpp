@@ -89,7 +89,7 @@
     #include "wx/msw/private.h"
 #endif
 
-#ifdef __WXBASE__
+#if 1 // def __WXBASE__
 
 // ----------------------------------------------------------------------------
 // common data
