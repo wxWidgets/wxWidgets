@@ -149,7 +149,7 @@ bool wxListBox::Create(wxWindow *parent, wxWindowID id,
                        const wxValidator& validator,
                        const wxString& name)
 {
-  m_noItems = n;
+  m_noItems = 0;
   m_hWnd = 0;
   m_selected = 0;
 
@@ -227,6 +227,7 @@ bool wxListBox::Create(wxWindow *parent, wxWindowID id,
     Append(choices[ui]);
   }
 
+  /* Not needed -- done in Append
 #if wxUSE_OWNER_DRAWN
     if ( m_windowStyle & wxLB_OWNERDRAW ) {
       for (ui = 0; ui < (size_t)n; ui++) {
@@ -238,6 +239,7 @@ bool wxListBox::Create(wxWindow *parent, wxWindowID id,
       }
     }
 #endif
+*/
 
   if ( (m_windowStyle & wxLB_MULTIPLE) == 0 )
     SendMessage(hwnd, LB_SETCURSEL, 0, 0);

@@ -198,11 +198,11 @@ IMPLEMENT_DYNAMIC_CLASS(wxComboBox, wxControl)
 #include "wx/dcclient.h"
 #include "wx/dcscreen.h"
 IMPLEMENT_ABSTRACT_CLASS(wxDC, wxObject)
-IMPLEMENT_DYNAMIC_CLASS(wxClientDC, wxDC)
 IMPLEMENT_DYNAMIC_CLASS(wxWindowDC, wxDC)
-IMPLEMENT_DYNAMIC_CLASS(wxPaintDC, wxDC)
-IMPLEMENT_DYNAMIC_CLASS(wxMemoryDC, wxDC)
+IMPLEMENT_DYNAMIC_CLASS(wxPaintDC, wxWindowDC)
+IMPLEMENT_DYNAMIC_CLASS(wxClientDC, wxWindowDC)
 IMPLEMENT_DYNAMIC_CLASS(wxScreenDC, wxWindowDC)
+IMPLEMENT_DYNAMIC_CLASS(wxMemoryDC, wxDC)
 
 #if defined(__WXMSW__)
 #include "wx/dcprint.h"

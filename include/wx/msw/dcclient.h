@@ -18,19 +18,6 @@
 
 #include "wx/dc.h"
 
-class WXDLLEXPORT wxClientDC: public wxDC
-{
-  DECLARE_DYNAMIC_CLASS(wxClientDC)
-
- public:
-  wxClientDC(void);
-
-  // Create a DC corresponding to a canvas
-  wxClientDC(wxWindow *win);
-
-  ~wxClientDC(void);
-};
-
 class WXDLLEXPORT wxWindowDC: public wxDC
 {
   DECLARE_DYNAMIC_CLASS(wxWindowDC)
@@ -44,7 +31,20 @@ class WXDLLEXPORT wxWindowDC: public wxDC
   ~wxWindowDC(void);
 };
 
-class WXDLLEXPORT wxPaintDC: public wxDC
+class WXDLLEXPORT wxClientDC: public wxWindowDC
+{
+  DECLARE_DYNAMIC_CLASS(wxClientDC)
+
+ public:
+  wxClientDC(void);
+
+  // Create a DC corresponding to a canvas
+  wxClientDC(wxWindow *win);
+
+  ~wxClientDC(void);
+};
+
+class WXDLLEXPORT wxPaintDC: public wxWindowDC
 {
   DECLARE_DYNAMIC_CLASS(wxPaintDC)
 

@@ -75,12 +75,7 @@ IMPLEMENT_DYNAMIC_CLASS(wxToolBar95, wxToolBarBase)
 #endif
 
 BEGIN_EVENT_TABLE(wxToolBar95, wxToolBarBase)
-#if 0 // it seems like none of these functions does anything anyhow
-    EVT_SIZE(wxToolBar95::OnSize)
-    EVT_PAINT(wxToolBar95::OnPaint)
-    EVT_KILL_FOCUS(wxToolBar95::OnKillFocus)
     EVT_MOUSE_EVENTS(wxToolBar95::OnMouseEvent)
-#endif // 0
     EVT_SYS_COLOUR_CHANGED(wxToolBar95::OnSysColourChanged)
 END_EVENT_TABLE()
 
@@ -511,6 +506,20 @@ void wxToolBar95::OnSysColourChanged(wxSysColourChangedEvent& event)
 
     // Propagate the event to the non-top-level children
     wxWindow::OnSysColourChanged(event);
+}
+
+void wxToolBar95::OnMouseEvent(wxMouseEvent& event)
+{
+    if (event.RightDown())
+    {
+        // For now, we don't have an id. Later we could
+        // try finding the tool.
+        OnRightClick((int)-1, event.GetX(), event.GetY());
+    }
+    else
+    {
+        Default();
+    }
 }
 
 // These are the default colors used to map the bitmap colors

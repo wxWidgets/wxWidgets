@@ -28,23 +28,16 @@ class WXDLLEXPORT wxWindow;
 // Under Windows, wxClientDC, wxPaintDC and wxWindowDC are implemented differently.
 // On many platforms, however, they will be the same.
 
-typedef wxPaintDC wxClientDC;
-typedef wxPaintDC wxWindowDC;
-
-//-----------------------------------------------------------------------------
-// wxPaintDC
-//-----------------------------------------------------------------------------
-
-class WXDLLEXPORT wxPaintDC: public wxDC
+class WXDLLEXPORT wxWindowDC: public wxDC
 {
-  DECLARE_DYNAMIC_CLASS(wxPaintDC)
+  DECLARE_DYNAMIC_CLASS(wxWindowDC)
 
   public:
 
-    wxPaintDC(void);
-    wxPaintDC( wxWindow *win );
-    
-    ~wxPaintDC(void);
+    wxWindowDC(void);
+    wxWindowDC( wxWindow *win );
+
+    ~wxWindowDC(void);
     
     virtual void FloodFill( long x1, long y1, wxColour* col, int style=wxFLOOD_SURFACE );
     virtual bool GetPixel( long x1, long y1, wxColour *col ) const;
@@ -95,6 +88,36 @@ class WXDLLEXPORT wxPaintDC: public wxDC
     virtual void DestroyClippingRegion(void);
     
     virtual void DrawSpline( wxList *points );
+};
+
+//-----------------------------------------------------------------------------
+// wxPaintDC
+//-----------------------------------------------------------------------------
+
+class WXDLLEXPORT wxPaintDC: public wxWindowDC
+{
+  DECLARE_DYNAMIC_CLASS(wxPaintDC)
+
+  public:
+
+    wxPaintDC(void):wxWindowDC() {};
+    wxPaintDC( wxWindow *win ): wxWindowDC(win) {};
+
+};
+
+//-----------------------------------------------------------------------------
+// wxClientDC
+//-----------------------------------------------------------------------------
+
+class WXDLLEXPORT wxClientDC: public wxWindowDC
+{
+  DECLARE_DYNAMIC_CLASS(wxClientDC)
+
+  public:
+
+    wxClientDC(void):wxWindowDC() {};
+    wxClientDC( wxWindow *win ): wxWindowDC(win) {};
+
 };
 
 #endif

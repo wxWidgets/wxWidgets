@@ -28,47 +28,50 @@
 //-----------------------------------------------------------------------------
 
 #if !USE_SHARED_LIBRARY
-//IMPLEMENT_DYNAMIC_CLASS(wxClientDC, wxDC)
-//IMPLEMENT_DYNAMIC_CLASS(wxWindowDC, wxDC)
-IMPLEMENT_DYNAMIC_CLASS(wxPaintDC, wxDC)
+IMPLEMENT_DYNAMIC_CLASS(wxWindowDC, wxDC)
+IMPLEMENT_DYNAMIC_CLASS(wxClientDC, wxWindowDC)
+IMPLEMENT_DYNAMIC_CLASS(wxPaintDC, wxWindowDC)
 #endif
 
+/*
+ * wxWindowDC
+ */
 
-wxPaintDC::wxPaintDC(void)
+wxWindowDC::wxWindowDC(void)
 {
 };
 
-wxPaintDC::wxPaintDC( wxWindow *window )
+wxWindowDC::wxWindowDC( wxWindow *window )
 {
 };
 
-wxPaintDC::~wxPaintDC(void)
+wxWindowDC::~wxWindowDC(void)
 {
 };
 
-void wxPaintDC::FloodFill( long WXUNUSED(x1), long WXUNUSED(y1), 
+void wxWindowDC::FloodFill( long WXUNUSED(x1), long WXUNUSED(y1), 
   wxColour* WXUNUSED(col), int WXUNUSED(style) )
 {
 };
 
-bool wxPaintDC::GetPixel( long WXUNUSED(x1), long WXUNUSED(y1), wxColour *WXUNUSED(col) ) const
+bool wxWindowDC::GetPixel( long WXUNUSED(x1), long WXUNUSED(y1), wxColour *WXUNUSED(col) ) const
 {
   return FALSE;
 };
 
-void wxPaintDC::DrawLine( long x1, long y1, long x2, long y2 )
+void wxWindowDC::DrawLine( long x1, long y1, long x2, long y2 )
 {
   if (!Ok()) return;
   
 };
 
-void wxPaintDC::CrossHair( long x, long y )
+void wxWindowDC::CrossHair( long x, long y )
 {
   if (!Ok()) return;
   
 };
 
-void wxPaintDC::DrawArc( long x1, long y1, long x2, long y2, long xc, long yc )
+void wxWindowDC::DrawArc( long x1, long y1, long x2, long y2, long xc, long yc )
 {
   if (!Ok()) return;
   
@@ -114,7 +117,7 @@ void wxPaintDC::DrawArc( long x1, long y1, long x2, long y2, long xc, long yc )
   
 };
 
-void wxPaintDC::DrawEllipticArc( long x, long y, long width, long height, double sa, double ea )
+void wxWindowDC::DrawEllipticArc( long x, long y, long width, long height, double sa, double ea )
 {
   if (!Ok()) return;
   
@@ -134,14 +137,14 @@ void wxPaintDC::DrawEllipticArc( long x, long y, long width, long height, double
   if (m_pen.GetStyle() != wxTRANSPARENT) {};
 };
 
-void wxPaintDC::DrawPoint( long x, long y )
+void wxWindowDC::DrawPoint( long x, long y )
 {
   if (!Ok()) return;
   
   if (m_pen.GetStyle() != wxTRANSPARENT) {};
 };
 
-void wxPaintDC::DrawLines( int n, wxPoint points[], long xoffset, long yoffset )
+void wxWindowDC::DrawLines( int n, wxPoint points[], long xoffset, long yoffset )
 {
   if (!Ok()) return;
   
@@ -156,7 +159,7 @@ void wxPaintDC::DrawLines( int n, wxPoint points[], long xoffset, long yoffset )
   };
 };
 
-void wxPaintDC::DrawLines( wxList *points, long xoffset, long yoffset )
+void wxWindowDC::DrawLines( wxList *points, long xoffset, long yoffset )
 {
   if (!Ok()) return;
   
@@ -175,19 +178,19 @@ void wxPaintDC::DrawLines( wxList *points, long xoffset, long yoffset )
   };
 };
 
-void wxPaintDC::DrawPolygon( int WXUNUSED(n), wxPoint WXUNUSED(points)[], 
+void wxWindowDC::DrawPolygon( int WXUNUSED(n), wxPoint WXUNUSED(points)[], 
   long WXUNUSED(xoffset), long WXUNUSED(yoffset), int WXUNUSED(fillStyle) )
 {
   if (!Ok()) return;
 };
 
-void wxPaintDC::DrawPolygon( wxList *WXUNUSED(lines), long WXUNUSED(xoffset), 
+void wxWindowDC::DrawPolygon( wxList *WXUNUSED(lines), long WXUNUSED(xoffset), 
                              long WXUNUSED(yoffset), int WXUNUSED(fillStyle) )
 {
   if (!Ok()) return;
 };
 
-void wxPaintDC::DrawRectangle( long x, long y, long width, long height )
+void wxWindowDC::DrawRectangle( long x, long y, long width, long height )
 {
   if (!Ok()) return;
 
@@ -208,7 +211,7 @@ void wxPaintDC::DrawRectangle( long x, long y, long width, long height )
   if (m_pen.GetStyle() != wxTRANSPARENT) {};
 };
 
-void wxPaintDC::DrawRoundedRectangle( long x, long y, long width, long height, double radius )
+void wxWindowDC::DrawRoundedRectangle( long x, long y, long width, long height, double radius )
 {
   if (!Ok()) return;
   
@@ -259,7 +262,7 @@ void wxPaintDC::DrawRoundedRectangle( long x, long y, long width, long height, d
   };
 };
 
-void wxPaintDC::DrawEllipse( long x, long y, long width, long height )
+void wxWindowDC::DrawEllipse( long x, long y, long width, long height )
 {
   if (!Ok()) return;
   
@@ -277,12 +280,12 @@ void wxPaintDC::DrawEllipse( long x, long y, long width, long height )
   if (m_pen.GetStyle() != wxTRANSPARENT) {};
 };
 
-bool wxPaintDC::CanDrawBitmap(void) const
+bool wxWindowDC::CanDrawBitmap(void) const
 {
   return TRUE;
 };
 
-void wxPaintDC::DrawIcon( const wxIcon &icon, long x, long y, bool useMask )
+void wxWindowDC::DrawIcon( const wxIcon &icon, long x, long y, bool useMask )
 {
   if (!Ok()) return;
   
@@ -293,7 +296,7 @@ void wxPaintDC::DrawIcon( const wxIcon &icon, long x, long y, bool useMask )
   
 };
 
-bool wxPaintDC::Blit( long xdest, long ydest, long width, long height,
+bool wxWindowDC::Blit( long xdest, long ydest, long width, long height,
        wxDC *source, long xsrc, long ysrc, int WXUNUSED(logical_func), bool WXUNUSED(useMask) )
 {
   if (!Ok()) return FALSE;
@@ -322,7 +325,7 @@ bool wxPaintDC::Blit( long xdest, long ydest, long width, long height,
   return TRUE;
 };
 
-void wxPaintDC::DrawText( const wxString &text, long x, long y, bool
+void wxWindowDC::DrawText( const wxString &text, long x, long y, bool
 WXUNUSED(use16) )
 {
   if (!Ok()) return;
@@ -331,12 +334,12 @@ WXUNUSED(use16) )
 
 
 
-bool wxPaintDC::CanGetTextExtent(void) const
+bool wxWindowDC::CanGetTextExtent(void) const
 {
   return TRUE;
 };
 
-void wxPaintDC::GetTextExtent( const wxString &string, long *width, long *height,
+void wxWindowDC::GetTextExtent( const wxString &string, long *width, long *height,
                      long *WXUNUSED(descent), long *WXUNUSED(externalLeading),
                      wxFont *WXUNUSED(theFont), bool WXUNUSED(use16) )
 {
@@ -344,32 +347,32 @@ void wxPaintDC::GetTextExtent( const wxString &string, long *width, long *height
   
 };
 
-long wxPaintDC::GetCharWidth(void)
+long wxWindowDC::GetCharWidth(void)
 {
   if (!Ok()) return 0;
   return 0;
 };
 
-long wxPaintDC::GetCharHeight(void)
+long wxWindowDC::GetCharHeight(void)
 {
   if (!Ok()) return 0;
   return 0;
 };
 
-void wxPaintDC::Clear(void)
+void wxWindowDC::Clear(void)
 {
   if (!Ok()) return;
   
 };
 
-void wxPaintDC::SetFont( const wxFont &font )
+void wxWindowDC::SetFont( const wxFont &font )
 {
   if (!Ok()) return;
   
   m_font = font;
 };
 
-void wxPaintDC::SetPen( const wxPen &pen )
+void wxWindowDC::SetPen( const wxPen &pen )
 {
   if (!Ok()) return;
 
@@ -380,7 +383,7 @@ void wxPaintDC::SetPen( const wxPen &pen )
   if (!m_pen.Ok()) return;
 };
 
-void wxPaintDC::SetBrush( const wxBrush &brush )
+void wxWindowDC::SetBrush( const wxBrush &brush )
 {
   if (!Ok()) return;
   
@@ -392,7 +395,7 @@ void wxPaintDC::SetBrush( const wxBrush &brush )
   
 };
 
-void wxPaintDC::SetBackground( const wxBrush &brush )
+void wxWindowDC::SetBackground( const wxBrush &brush )
 {
   if (!Ok()) return;
   
@@ -404,12 +407,12 @@ void wxPaintDC::SetBackground( const wxBrush &brush )
   
 };
 
-void wxPaintDC::SetLogicalFunction( int function )
+void wxWindowDC::SetLogicalFunction( int function )
 {
   if (m_logicalFunction == function) return;
 };
 
-void wxPaintDC::SetTextForeground( const wxColour &col )
+void wxWindowDC::SetTextForeground( const wxColour &col )
 {
   if (!Ok()) return;
   
@@ -419,7 +422,7 @@ void wxPaintDC::SetTextForeground( const wxColour &col )
   if (!m_textForegroundColour.Ok()) return;
 };
 
-void wxPaintDC::SetTextBackground( const wxColour &col )
+void wxWindowDC::SetTextBackground( const wxColour &col )
 {
   if (!Ok()) return;
   
@@ -429,7 +432,7 @@ void wxPaintDC::SetTextBackground( const wxColour &col )
   if (!m_textBackgroundColour.Ok()) return;
 };
 
-void wxPaintDC::SetBackgroundMode( int mode )
+void wxWindowDC::SetBackgroundMode( int mode )
 {
   m_backgroundMode = mode;
 
@@ -438,17 +441,17 @@ void wxPaintDC::SetBackgroundMode( int mode )
   }
 };
 
-void wxPaintDC::SetPalette( const wxPalette& WXUNUSED(palette) )
+void wxWindowDC::SetPalette( const wxPalette& WXUNUSED(palette) )
 {
 };
 
-void wxPaintDC::SetClippingRegion( long x, long y, long width, long height )
+void wxWindowDC::SetClippingRegion( long x, long y, long width, long height )
 {
   wxDC::SetClippingRegion( x, y, width, height );
   
 };
 
-void wxPaintDC::DestroyClippingRegion(void)
+void wxWindowDC::DestroyClippingRegion(void)
 {
   wxDC::DestroyClippingRegion();
   
@@ -569,7 +572,7 @@ static void wx_spline_draw_point_array(wxDC *dc)
   }
 }
 
-void wxPaintDC::DrawSpline( wxList *points )
+void wxWindowDC::DrawSpline( wxList *points )
 {
     wxPoint *p;
     double           cx1, cy1, cx2, cy2, cx3, cy3, cx4, cy4;

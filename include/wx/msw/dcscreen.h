@@ -16,9 +16,9 @@
 #pragma interface "dcscreen.h"
 #endif
 
-#include "wx/dc.h"
+#include "wx/dcclient.h"
 
-class WXDLLEXPORT wxScreenDC: public wxDC
+class WXDLLEXPORT wxScreenDC: public wxWindowDC
 {
   DECLARE_DYNAMIC_CLASS(wxScreenDC)
 

@@ -29,10 +29,43 @@
 #include <windows.h>
 
 #if !USE_SHARED_LIBRARY
-IMPLEMENT_DYNAMIC_CLASS(wxClientDC, wxDC)
 IMPLEMENT_DYNAMIC_CLASS(wxWindowDC, wxDC)
-IMPLEMENT_DYNAMIC_CLASS(wxPaintDC, wxDC)
+IMPLEMENT_DYNAMIC_CLASS(wxClientDC, wxWindowDC)
+IMPLEMENT_DYNAMIC_CLASS(wxPaintDC, wxWindowDC)
 #endif
+
+/*
+ * wxWindowDC
+ */
+
+wxWindowDC::wxWindowDC(void)
+{
+  m_canvas = NULL;
+}
+
+wxWindowDC::wxWindowDC(wxWindow *the_canvas)
+{
+  m_canvas = the_canvas;
+//  m_hDC = (WXHDC) ::GetDCEx((HWND) the_canvas->GetHWND(), NULL, DCX_WINDOW);
+  m_hDC = (WXHDC) ::GetWindowDC((HWND) the_canvas->GetHWND() );
+  m_hDCCount ++;
+}
+
+wxWindowDC::~wxWindowDC(void)
+{
+  if (m_canvas && m_hDC)
+  {
+    SelectOldObjects(m_hDC);
+
+    ::ReleaseDC((HWND) m_canvas->GetHWND(), (HDC) m_hDC);
+	m_hDC = 0;
+  }
+  m_hDCCount --;
+}
+
+/*
+ * wxClientDC
+ */
 
 wxClientDC::wxClientDC(void)
 {
@@ -59,30 +92,9 @@ wxClientDC::~wxClientDC(void)
   }
 }
 
-wxWindowDC::wxWindowDC(void)
-{
-  m_canvas = NULL;
-}
-
-wxWindowDC::wxWindowDC(wxWindow *the_canvas)
-{
-  m_canvas = the_canvas;
-//  m_hDC = (WXHDC) ::GetDCEx((HWND) the_canvas->GetHWND(), NULL, DCX_WINDOW);
-  m_hDC = (WXHDC) ::GetWindowDC((HWND) the_canvas->GetHWND() );
-  m_hDCCount ++;
-}
-
-wxWindowDC::~wxWindowDC(void)
-{
-  if (m_canvas && m_hDC)
-  {
-    SelectOldObjects(m_hDC);
-
-    ::ReleaseDC((HWND) m_canvas->GetHWND(), (HDC) m_hDC);
-	m_hDC = 0;
-  }
-  m_hDCCount --;
-}
+/*
+ * wxPaintDC
+ */
 
 wxPaintDC::wxPaintDC(void)
 {
