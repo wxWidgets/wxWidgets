@@ -361,6 +361,9 @@ WXDWORD wxToolBar::MSWGetStyle(long style, WXDWORD *exstyle) const
     if ( style & wxTB_NOALIGN )
         msStyle |= CCS_NOPARENTALIGN;
 
+    if ( style & wxTB_VERTICAL )
+        msStyle |= CCS_VERT;
+
     return msStyle;
 }
 
@@ -652,8 +655,8 @@ bool wxToolBar::Realize()
         wxToolBarToolBase *tool = node->GetData();
 
         // don't add separators to the vertical toolbar - looks ugly
-        if ( isVertical && tool->IsSeparator() )
-            continue;
+        //if ( isVertical && tool->IsSeparator() )
+        //    continue;
 
         TBBUTTON& button = buttons[i];
 
@@ -1162,7 +1165,7 @@ void wxToolBar::OnMouseEvent(wxMouseEvent& event)
 
 bool wxToolBar::HandleSize(WXWPARAM wParam, WXLPARAM lParam)
 {
-    // calculate our minor dimenstion ourselves - we're confusing the standard
+    // calculate our minor dimension ourselves - we're confusing the standard
     // logic (TB_AUTOSIZE) with our horizontal toolbars and other hacks
     RECT r;
     if ( ::SendMessage(GetHwnd(), TB_GETITEMRECT, 0, (LPARAM)&r) )
