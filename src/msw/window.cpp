@@ -581,7 +581,7 @@ bool wxWindowMSW::Show(bool show)
     int cshow = show ? SW_SHOW : SW_HIDE;
     ::ShowWindow(hWnd, cshow);
 
-    if ( show )
+    if ( show && IsTopLevel() )
     {
         wxBringWindowToTop(hWnd);
     }
