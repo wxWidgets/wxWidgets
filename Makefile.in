@@ -937,8 +937,10 @@ SAMPLES_DIST: ALL_GUI_DIST
 	cp $(SAMPDIR)/internat/*.po $(DISTDIR)/samples/internat
 	cp $(SAMPDIR)/internat/fr/*.mo $(DISTDIR)/samples/internat/fr
 	cp $(SAMPDIR)/internat/de/*.mo $(DISTDIR)/samples/internat/de
+	cp $(SAMPDIR)/internat/ru/*.mo $(DISTDIR)/samples/internat/de
 	cp $(SAMPDIR)/internat/fr/*.po $(DISTDIR)/samples/internat/fr
 	cp $(SAMPDIR)/internat/de/*.po $(DISTDIR)/samples/internat/de
+	cp $(SAMPDIR)/internat/ru/*.po $(DISTDIR)/samples/internat/de
 
 	mkdir $(DISTDIR)/samples/ipc
 	cp $(SAMPDIR)/ipc/Makefile.in $(DISTDIR)/samples/ipc
