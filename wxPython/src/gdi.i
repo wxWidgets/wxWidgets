@@ -406,7 +406,7 @@ public:
 
     %pragma(python) addtoclass = "asTuple = Get
     def __str__(self):                  return str(self.asTuple())
-    def __repr__(self):                 return 'wxColour:' + str(self.asTuple())
+    def __repr__(self):                 return 'wxColour' + str(self.asTuple())
     def __nonzero__(self):              return self.Ok()
     def __getinitargs__(self):          return ()
     def __getstate__(self):             return self.asTuple()
@@ -1147,6 +1147,10 @@ public:
     %addmethods {
         void Next() {
             (*self) ++;
+        }
+
+        bool __nonzero__() {
+            return self->operator bool();
         }
     };
 };
