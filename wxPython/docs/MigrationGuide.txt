@@ -347,13 +347,17 @@ Then you can just simplify it like this::
     dc.DrawRectangle(p, s)
 
 Now before you start yelling and screaming at me for breaking all your
-code, take note that up above I said, "...using the new wx namespace..."
-That's because if you are still importing from wxPython.wx then there
-are some classes defined there with Draw and etc. methods that have
-2.4 compatible signatures.  However if/when the old wxPython.wx
-namespace is removed then these classes will be removed too so you
-should plan on migrating to the new namespace and new DC Draw methods
-before that time.
+code, take note that up above I said, "...using the new wx
+namespace..."  That's because if you are still importing from
+wxPython.wx then there are some classes defined there with Draw and
+etc. methods that have 2.4 compatible signatures.  Unfortunately there
+is one exception to this behaviour.  If a DC is returned from a
+function or method then an instance of the new class (with the new
+methods described above) will be returned instead of the compatibility
+class.  If/When the old wxPython.wx namespace is removed then these
+compatibility classes will be removed too so you should plan on
+migrating to the new namespace and new DC Draw methods before that
+time.
 
 
 
@@ -432,6 +436,11 @@ then you will need to use the ``proportion`` name instead of ``option``.
 
 When adding a spacer to a sizer you now need to use a wx.Size or a
 2-integer sequence instead of separate width and height parameters.
+This allows for more consistency in how you add the various types of
+items to a sizer.  The first parameter defines the item (instead of
+the possibily first two, depending on if you are doing a spacer or
+not,) and that item can either be a window, a sizer or a spacer (which
+can be a sequence or a wx.Size.)
 
 The wx.GridBagSizer class (very similar to the RowColSizer in the
 library) has been added to C++ and wrapped for wxPython.  It can also
@@ -440,6 +449,14 @@ be used from XRC.
 You should not use AddWindow, AddSizer, AddSpacer (and similar for
 Insert, Prepend, and etc.) methods any longer.  Just use Add and the
 wrappers will figure out what to do.
+
+**[Changed in 2.5.1.6]** wx.ADJUST_MINSIZE is now the default
+behaviour for window items in sizers.  This means that the item's
+GetAdjustedBestSize will be called when calculating layout and the
+return value from that will be used for the minimum size.  Added
+wx.FIXED_SIZE flag for when you would like the old behavior but you
+should only need it when your desired size is smaller than the item's
+GetBestSize().
 
 
 PlatformInfo
