@@ -18,6 +18,7 @@
 #endif
 
 #include "wx/fontenc.h"
+#include "wx/arrstr.h"
 
 // ----------------------------------------------------------------------------
 // wxFontEnumerator enumerates all available fonts on the system or only the

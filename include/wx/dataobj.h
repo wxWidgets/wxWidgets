@@ -26,6 +26,7 @@
 #include "wx/string.h"
 #include "wx/bitmap.h"
 #include "wx/list.h"
+#include "wx/arrstr.h"
 
 // ============================================================================
 /*
