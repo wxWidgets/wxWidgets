@@ -17,67 +17,67 @@ document class and a view class.
 
 \latexignore{\rtfignore{\wxheading{Members}}}
 
-\membersection{wxDocTemplate::m\_defaultExt}
+\membersection{wxDocTemplate::m\_defaultExt}\label{wxdoctemplatemdefaultext}
 
 \member{wxString}{m\_defaultExt}
 
 The default extension for files of this type.
 
-\membersection{wxDocTemplate::m\_description}
+\membersection{wxDocTemplate::m\_description}\label{wxdoctemplatemdescription}
 
 \member{wxString}{m\_description}
 
 A short description of this template.
 
-\membersection{wxDocTemplate::m\_directory}
+\membersection{wxDocTemplate::m\_directory}\label{wxdoctemplatemdirectory}
 
 \member{wxString}{m\_directory}
 
 The default directory for files of this type.
 
-\membersection{wxDocTemplate::m\_docClassInfo}
+\membersection{wxDocTemplate::m\_docClassInfo}\label{wxdoctemplatemdocclassinfo}
 
 \member{wxClassInfo* }{m\_docClassInfo}
 
 Run-time class information that allows document instances to be constructed dynamically.
 
-\membersection{wxDocTemplate::m\_docTypeName}
+\membersection{wxDocTemplate::m\_docTypeName}\label{wxdoctemplatemdoctypename}
 
 \member{wxString}{m\_docTypeName}
 
 The named type of the document associated with this template.
 
-\membersection{wxDocTemplate::m\_documentManager}
+\membersection{wxDocTemplate::m\_documentManager}\label{wxdoctemplatedocumentmanager}
 
 \member{wxDocTemplate*}{m\_documentManager}
 
 A pointer to the document manager for which this template was created.
 
-\membersection{wxDocTemplate::m\_fileFilter}
+\membersection{wxDocTemplate::m\_fileFilter}\label{wxdoctemplatemfilefilter}
 
 \member{wxString}{m\_fileFilter}
 
 The file filter (such as {\tt *.txt}) to be used in file selector dialogs.
 
-\membersection{wxDocTemplate::m\_flags}
+\membersection{wxDocTemplate::m\_flags}\label{wxdoctemplatemflags}
 
 \member{long}{m\_flags}
 
 The flags passed to the constructor.
 
-\membersection{wxDocTemplate::m\_viewClassInfo}
+\membersection{wxDocTemplate::m\_viewClassInfo}\label{wxdoctemplatemviewclassinfo}
 
 \member{wxClassInfo*}{m\_viewClassInfo}
 
 Run-time class information that allows view instances to be constructed dynamically.
 
-\membersection{wxDocTemplate::m\_viewTypeName}
+\membersection{wxDocTemplate::m\_viewTypeName}\label{wxdoctemplatemviewtypename}
 
 \member{wxString}{m\_viewTypeName}
 
 The named type of the view associated with this template.
 
-\membersection{wxDocTemplate::wxDocTemplate}
+\membersection{wxDocTemplate::wxDocTemplate}\label{wxdoctemplatector}
 
 \func{}{wxDocTemplate}{\param{wxDocManager* }{manager}, \param{const wxString\& }{descr}, \param{const wxString\& }{filter},
  \param{const wxString\& }{dir}, \param{const wxString\& }{ext}, \param{const wxString\& }{docTypeName},
@@ -140,13 +140,13 @@ ext, docTypeName, viewTypeName )}}{
 {\tt Wx::DocTemplate::CreateView()} must be overridden}
 \end{twocollist}}}
 
-\membersection{wxDocTemplate::\destruct{wxDocTemplate}}
+\membersection{wxDocTemplate::\destruct{wxDocTemplate}}\label{wxdoctemplatedtor}
 
 \func{void}{\destruct{wxDocTemplate}}{\void}
 
 Destructor.
 
-\membersection{wxDocTemplate::CreateDocument}
+\membersection{wxDocTemplate::CreateDocument}\label{wxdoctemplatecreatedocument}
 
 \func{wxDocument *}{CreateDocument}{\param{const wxString\& }{path}, \param{long}{ flags = 0}}
 
@@ -157,7 +157,7 @@ function to return an appropriate document instance.
 This function calls wxDocTemplate::InitDocument which in turns
 calls wxDocument::OnCreate.
 
-\membersection{wxDocTemplate::CreateView}
+\membersection{wxDocTemplate::CreateView}\label{wxdoctemplatecreateview}
 
 \func{wxView *}{CreateView}{\param{wxDocument *}{doc}, \param{long}{ flags = 0}}
 
@@ -165,99 +165,99 @@ Creates a new instance of the associated view class. If you have not supplied
 a wxClassInfo parameter to the template constructor, you will need to override this
 function to return an appropriate view instance.
 
-\membersection{wxDocTemplate::GetDefaultExtension}
+\membersection{wxDocTemplate::GetDefaultExtension}\label{wxdoctemplategetdefaultextension}
 
 \func{wxString}{GetDefaultExtension}{\void}
 
 Returns the default file extension for the document data, as passed to the document template constructor.
 
-\membersection{wxDocTemplate::GetDescription}
+\membersection{wxDocTemplate::GetDescription}\label{wxdoctemplategetdescription}
 
 \func{wxString}{GetDescription}{\void}
 
 Returns the text description of this template, as passed to the document template constructor.
 
-\membersection{wxDocTemplate::GetDirectory}
+\membersection{wxDocTemplate::GetDirectory}\label{wxdoctemplategetdirectory}
 
 \func{wxString}{GetDirectory}{\void}
 
 Returns the default directory, as passed to the document template constructor.
 
-\membersection{wxDocTemplate::GetDocumentManager}
+\membersection{wxDocTemplate::GetDocumentManager}\label{wxdoctemplategetdocumentmanager}
 
 \func{wxDocManager *}{GetDocumentManager}{\void}
 
 Returns a pointer to the document manager instance for which this template was created.
 
-\membersection{wxDocTemplate::GetDocumentName}
+\membersection{wxDocTemplate::GetDocumentName}\label{wxdoctemplategetdocumentname}
 
 \func{wxString}{GetDocumentName}{\void}
 
 Returns the document type name, as passed to the document template constructor.
 
-\membersection{wxDocTemplate::GetFileFilter}
+\membersection{wxDocTemplate::GetFileFilter}\label{wxdoctemplategetfilefilter}
 
 \func{wxString}{GetFileFilter}{\void}
 
 Returns the file filter, as passed to the document template constructor.
 
-\membersection{wxDocTemplate::GetFlags}
+\membersection{wxDocTemplate::GetFlags}\label{wxdoctemplategetflags}
 
 \func{long}{GetFlags}{\void}
 
 Returns the flags, as passed to the document template constructor.
 
-\membersection{wxDocTemplate::GetViewName}
+\membersection{wxDocTemplate::GetViewName}\label{wxdoctemplategetviewname}
 
 \func{wxString}{GetViewName}{\void}
 
 Returns the view type name, as passed to the document template constructor.
 
-\membersection{wxDocTemplate::InitDocument}
+\membersection{wxDocTemplate::InitDocument}\label{wxdoctemplateinitdocument}
 
 \func{bool}{InitDocument}{\param{wxDocument* }{doc}, \param{const wxString\& }{path}, \param{long}{ flags = 0}}
 
 Initialises the document, calling wxDocument::OnCreate. This is called from
 wxDocTemplate::CreateDocument.
 
-\membersection{wxDocTemplate::IsVisible}
+\membersection{wxDocTemplate::IsVisible}\label{wxdoctemplateisvisible}
 
 \func{bool}{IsVisible}{\void}
 
 Returns true if the document template can be shown in user dialogs, false otherwise.
 
-\membersection{wxDocTemplate::SetDefaultExtension}
+\membersection{wxDocTemplate::SetDefaultExtension}\label{wxdoctemplatesetdefaultextension}
 
 \func{void}{SetDefaultExtension}{\param{const wxString\& }{ext}}
 
 Sets the default file extension.
 
-\membersection{wxDocTemplate::SetDescription}
+\membersection{wxDocTemplate::SetDescription}\label{wxdoctemplatesetdescription}
 
 \func{void}{SetDescription}{\param{const wxString\& }{descr}}
 
 Sets the template description.
 
-\membersection{wxDocTemplate::SetDirectory}
+\membersection{wxDocTemplate::SetDirectory}\label{wxdoctemplatesetdirectory}
 
 \func{void}{SetDirectory}{\param{const wxString\& }{dir}}
 
 Sets the default directory.
 
-\membersection{wxDocTemplate::SetDocumentManager}
+\membersection{wxDocTemplate::SetDocumentManager}\label{wxdoctemplatesetdocumentmanager}
 
 \func{void}{SetDocumentManager}{\param{wxDocManager *}{manager}}
 
 Sets the pointer to the document manager instance for which this template was created.
 Should not be called by the application.
 
-\membersection{wxDocTemplate::SetFileFilter}
+\membersection{wxDocTemplate::SetFileFilter}\label{wxdoctemplatesetfilefilter}
 
 \func{void}{SetFileFilter}{\param{const wxString\& }{filter}}
 
 Sets the file filter.
 
-\membersection{wxDocTemplate::SetFlags}
+\membersection{wxDocTemplate::SetFlags}\label{wxdoctemplatesetflags}
 
 \func{void}{SetFlags}{\param{long }{flags}}
 

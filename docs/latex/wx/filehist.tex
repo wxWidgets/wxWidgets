@@ -21,32 +21,32 @@ as well as the MDI parent frame.
 
 \latexignore{\rtfignore{\wxheading{Members}}}
 
-\membersection{wxFileHistory::m\_fileHistory}
+\membersection{wxFileHistory::m\_fileHistory}\label{wxfilehistorymfilehistory}
 
 \member{char**}{m\_fileHistory}
 
 A character array of strings corresponding to the most recently opened
 files.
 
-\membersection{wxFileHistory::m\_fileHistoryN}
+\membersection{wxFileHistory::m\_fileHistoryN}\label{wxfilehistorymfilehistoryn}
 
 \member{size\_t}{m\_fileHistoryN}
 
 The number of files stored in the history array.
 
-\membersection{wxFileHistory::m\_fileMaxFiles}
+\membersection{wxFileHistory::m\_fileMaxFiles}\label{wxfilehistorymfilemaxfiles}
 
 \member{size\_t}{m\_fileMaxFiles}
 
 The maximum number of files to be stored and displayed on the menu.
 
-\membersection{wxFileHistory::m\_fileMenu}
+\membersection{wxFileHistory::m\_fileMenu}\label{wxfilehistorymfilemenu}
 
 \member{wxMenu*}{m\_fileMenu}
 
 The file menu used to display the file history list (if enabled).
 
-\membersection{wxFileHistory::wxFileHistory}
+\membersection{wxFileHistory::wxFileHistory}\label{wxfilehistoryctor}
 
 \func{}{wxFileHistory}{\param{size\_t}{ maxFiles = 9}, \param{wxWindowID}{ idBase = wxID\_FILE1}}
 
@@ -58,13 +58,13 @@ history menu item.  Since menu items can't share the same ID you should change
 idBase (To one of your own defined IDs) when using more than one wxFileHistory
 in your application.
 
-\membersection{wxFileHistory::\destruct{wxFileHistory}}
+\membersection{wxFileHistory::\destruct{wxFileHistory}}\label{wxfilehistorydtor}
 
 \func{}{\destruct{wxFileHistory}}{\void}
 
 Destructor.
 
-\membersection{wxFileHistory::AddFileToHistory}
+\membersection{wxFileHistory::AddFileToHistory}\label{wxfilehistoryaddfiletohistory}
 
 \func{void}{AddFileToHistory}{\param{const wxString\& }{filename}}
 
@@ -86,19 +86,19 @@ Appends the files in the history list, to the given menu only.
 
 Returns the file at this index (zero-based).
 
-\membersection{wxFileHistory::GetMaxFiles}
+\membersection{wxFileHistory::GetMaxFiles}\label{wxfilehistorygetmaxfiles}
 
 \constfunc{size\_t}{GetMaxFiles}{\void}
 
 Returns the maximum number of files that can be stored.
 
-\membersection{wxFileHistory::GetNoHistoryFiles}
+\membersection{wxFileHistory::GetNoHistoryFiles}\label{wxfilehistorygetnohistoryfiles}
 
 \constfunc{size\_t}{GetNoHistoryFiles}{\void}
 
 Returns the number of files currently stored in the file history.
 
-\membersection{wxFileHistory::Load}
+\membersection{wxFileHistory::Load}\label{wxfilehistoryload}
 
 \func{void}{Load}{\param{wxConfigBase\& }{config}}
 
@@ -108,13 +108,13 @@ Loads the file history from the given config object. This function should be cal
 
 \helpref{wxConfig}{wxconfigbase}
 
-\membersection{wxFileHistory::RemoveMenu}
+\membersection{wxFileHistory::RemoveMenu}\label{wxfilehistoryremovemenu}
 
 \func{void}{RemoveMenu}{\param{wxMenu* }{menu}}
 
 Removes this menu from the list of those managed by this object.
 
-\membersection{wxFileHistory::Save}
+\membersection{wxFileHistory::Save}\label{wxfilehistorysave}
 
 \func{void}{Save}{\param{wxConfigBase\& }{config}}
 
@@ -125,7 +125,7 @@ explicitly by the application.
 
 \helpref{wxConfig}{wxconfigbase}
 
-\membersection{wxFileHistory::UseMenu}
+\membersection{wxFileHistory::UseMenu}\label{wxfilehistoryusemenu}
 
 \func{void}{UseMenu}{\param{wxMenu* }{menu}}
 

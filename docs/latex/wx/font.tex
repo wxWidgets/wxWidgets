@@ -20,7 +20,7 @@ You can retrieve the current system font settings with \helpref{wxSystemSettings
 \wxheading{Constants}
 
 The possible values for the \arg{family} parameter of \helpref{wxFont
-constructor}{wxfontconstr} are (the old names are for compatibility only):
+constructor}{wxfontctor} are (the old names are for compatibility only):
 
 \begin{verbatim}
 enum wxFontFamily
@@ -146,7 +146,7 @@ wxSWISS\_FONT}
 \latexignore{\rtfignore{\wxheading{Members}}}
 
 
-\membersection{wxFont::wxFont}\label{wxfontconstr}
+\membersection{wxFont::wxFont}\label{wxfontctor}
 
 \func{}{wxFont}{\void}
 
@@ -218,7 +218,7 @@ See also \helpref{wxDC::SetFont}{wxdcsetfont}, \helpref{wxDC::DrawText}{wxdcdraw
 and \helpref{wxDC::GetTextExtent}{wxdcgettextextent}.
 
 
-\membersection{wxFont::\destruct{wxFont}}
+\membersection{wxFont::\destruct{wxFont}}\label{wxfontdtor}
 
 \func{}{\destruct{wxFont}}{\void}
 
@@ -271,7 +271,7 @@ typeface information.
 
 \constfunc{int}{GetFamily}{\void}
 
-Gets the font family. See \helpref{wxFont::wxFont}{wxfontconstr} for a list of valid
+Gets the font family. See \helpref{wxFont::wxFont}{wxfontctor} for a list of valid
 family identifiers.
 
 \wxheading{See also}
@@ -306,7 +306,7 @@ Gets the point size.
 
 \constfunc{int}{GetStyle}{\void}
 
-Gets the font style. See \helpref{wxFont::wxFont}{wxfontconstr} for a list of valid
+Gets the font style. See \helpref{wxFont::wxFont}{wxfontctor} for a list of valid
 styles.
 
 \wxheading{See also}
@@ -329,7 +329,7 @@ Returns true if the font is underlined, false otherwise.
 
 \constfunc{int}{GetWeight}{\void}
 
-Gets the font weight. See \helpref{wxFont::wxFont}{wxfontconstr} for a list of valid
+Gets the font weight. See \helpref{wxFont::wxFont}{wxfontctor} for a list of valid
 weight identifiers.
 
 \wxheading{See also}
@@ -356,7 +356,7 @@ weight identifiers.
  \param{wxFontEncoding }{encoding = wxFONTENCODING\_DEFAULT}}
 
 These functions take the same parameters as \helpref{wxFont
-constructor}{wxfontconstr} and return a new font object allocated on the heap.
+constructor}{wxfontctor} and return a new font object allocated on the heap.
 
 Using \texttt{New()} is currently the only way to directly create a font with
 the given size in pixels on platforms other than wxMSW.

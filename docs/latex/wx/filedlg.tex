@@ -47,7 +47,7 @@ is displayed as ``*.bmp'', and both
 
 \latexignore{\rtfignore{\wxheading{Members}}}
 
-\membersection{wxFileDialog::wxFileDialog}\label{wxfiledialogconstr}
+\membersection{wxFileDialog::wxFileDialog}\label{wxfiledialogctor}
 
 \func{}{wxFileDialog}{\param{wxWindow* }{parent}, \param{const wxString\& }{message = "Choose a file"},\rtfsp
 \param{const wxString\& }{defaultDir = ""}, \param{const wxString\& }{defaultFile = ``"},\rtfsp
@@ -91,7 +91,7 @@ functionality must be implemented in the program itself now (manually remember
 the last path used and pass it to the dialog the next time it is called) or
 by using this flag.
 
-\membersection{wxFileDialog::\destruct{wxFileDialog}}
+\membersection{wxFileDialog::\destruct{wxFileDialog}}\label{wxfiledialogdtor}
 
 \func{}{\destruct{wxFileDialog}}{\void}
 
@@ -196,7 +196,7 @@ Sets the path (the combined directory and filename that will be returned when th
 
 \func{void}{SetStyle}{\param{long }{style}}
 
-Sets the dialog style. See \helpref{wxFileDialog::wxFileDialog}{wxfiledialogconstr} for details.
+Sets the dialog style. See \helpref{wxFileDialog::wxFileDialog}{wxfiledialogctor} for details.
 
 \membersection{wxFileDialog::SetWildcard}\label{wxfiledialogsetwildcard}
 

@@ -24,32 +24,32 @@ For more information about events, see the \helpref{Event handling overview}{eve
 
 \latexignore{\rtfignore{\wxheading{Members}}}
 
-\membersection{wxEvent::wxEvent}
+\membersection{wxEvent::wxEvent}\label{wxeventctor}
 
 \func{}{wxEvent}{\param{int }{id = 0}, \param{wxEventType }{eventType = {\tt wxEVT\_NULL}}}
 
 Constructor. Should not need to be used directly by an application.
 
-\membersection{wxEvent::m\_eventObject}
+\membersection{wxEvent::m\_eventObject}\label{wxeventmeventobject}
 
 \member{wxObject*}{m\_eventObject}
 
 The object (usually a window) that the event was generated from,
 or should be sent to.
 
-\membersection{wxEvent::m\_eventType}
+\membersection{wxEvent::m\_eventType}\label{wxeventmeventtype}
 
 \member{WXTYPE}{m\_eventType}
 
 The type of the event, such as wxEVENT\_TYPE\_BUTTON\_COMMAND.
 
-\membersection{wxEvent::m\_id}
+\membersection{wxEvent::m\_id}\label{wxeventmid}
 
 \member{int}{m\_id}
 
 Identifier for the window.
 
-\membersection{wxEvent::m\_propagationLevel}
+\membersection{wxEvent::m\_propagationLevel}\label{wxeventmpropagationlevel}
 
 \member{int}{m\_propagationLevel}
 
@@ -68,13 +68,13 @@ Any positive number means that the event should be propagated but no more than
 the given number of times. E.g. the propagation level may be set to $1$ to
 propagate the event to its parent only, but not to its grandparent.
 
-\membersection{wxEvent::m\_skipped}
+\membersection{wxEvent::m\_skipped}\label{wxeventmskipped}
 
 \member{bool}{m\_skipped}
 
 Set to true by {\bf Skip} if this event should be skipped.
 
-\membersection{wxEvent::m\_timeStamp}
+\membersection{wxEvent::m\_timeStamp}\label{wxeventmtimestamp}
 
 \member{long}{m\_timeStamp}
 
@@ -101,33 +101,33 @@ a new event (call it MyEvent) and then define the Clone function like this:
     wxEvent *Clone(void) const { return new MyEvent(*this); }
 \end{verbatim}
 
-\membersection{wxEvent::GetEventObject}
+\membersection{wxEvent::GetEventObject}\label{wxeventgeteventobject}
 
 \func{wxObject*}{GetEventObject}{\void}
 
 Returns the object associated with the
 event, if any.
 
-\membersection{wxEvent::GetEventType}
+\membersection{wxEvent::GetEventType}\label{wxeventgeteventtype}
 
 \func{WXTYPE}{GetEventType}{\void}
 
 Returns the identifier of the given event type,
 such as wxEVENT\_TYPE\_BUTTON\_COMMAND.
 
-\membersection{wxEvent::GetId}
+\membersection{wxEvent::GetId}\label{wxeventgetid}
 
 \constfunc{int}{GetId}{\void}
 
 Returns the identifier associated with this event, such as a button command id.
 
-\membersection{wxEvent::GetSkipped}
+\membersection{wxEvent::GetSkipped}\label{wxeventgetskipped}
 
 \constfunc{bool}{GetSkipped}{\void}
 
 Returns true if the event handler should be skipped, false otherwise.
 
-\membersection{wxEvent::GetTimestamp}
+\membersection{wxEvent::GetTimestamp}\label{wxeventgettimestamp}
 
 \func{long}{GetTimestamp}{\void}
 
@@ -150,25 +150,25 @@ Sets the propagation level to the given value (for example returned from an
 earlier call to \helpref{StopPropagation}{wxeventstoppropagation}).
 
 
-\membersection{wxEvent::SetEventObject}
+\membersection{wxEvent::SetEventObject}\label{wxeventseteventobject}
 
 \func{void}{SetEventObject}{\param{wxObject* }{object}}
 
 Sets the originating object.
 
-\membersection{wxEvent::SetEventType}
+\membersection{wxEvent::SetEventType}\label{wxeventseteventtype}
 
 \func{void}{SetEventType}{\param{WXTYPE }{typ}}
 
 Sets the event type.
 
-\membersection{wxEvent::SetId}
+\membersection{wxEvent::SetId}\label{wxeventsetid}
 
 \func{void}{SetId}{\param{int}{ id}}
 
 Sets the identifier associated with this event, such as a button command id.
 
-\membersection{wxEvent::SetTimestamp}
+\membersection{wxEvent::SetTimestamp}\label{wxeventsettimestamp}
 
 \func{void}{SetTimestamp}{\param{long }{timeStamp}}
 

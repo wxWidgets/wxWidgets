@@ -39,7 +39,7 @@ None
 
 \latexignore{\rtfignore{\wxheading{Members}}}
 
-\membersection{wxDataInputStream::wxDataInputStream}\label{wxdatainputstreamconstr}
+\membersection{wxDataInputStream::wxDataInputStream}\label{wxdatainputstreamctor}
 
 \func{}{wxDataInputStream}{\param{wxInputStream\&}{ stream}}
 
@@ -57,13 +57,13 @@ mode (see \helpref{wxDataInputStream::ReadString}{wxdatainputstreamreadstring}
 documentation for detailed description). Note that you must not destroy
 {\it conv} before you destroy this wxDataInputStream instance!}
 
-\membersection{wxDataInputStream::\destruct{wxDataInputStream}}
+\membersection{wxDataInputStream::\destruct{wxDataInputStream}}\label{wxdatainputstreamdtor}
 
 \func{}{\destruct{wxDataInputStream}}{\void}
 
 Destroys the wxDataInputStream object.
 
-\membersection{wxDataInputStream::BigEndianOrdered}
+\membersection{wxDataInputStream::BigEndianOrdered}\label{wxdatainputstreambigendianordered}
 
 \func{void}{BigEndianOrdered}{\param{bool}{ be\_order}}
 
@@ -72,7 +72,7 @@ order, such as written by programs on a big endian architecture
 (e.g. Sparc) or written by Java-Streams (which always use 
 big-endian order).
   
-\membersection{wxDataInputStream::Read8}
+\membersection{wxDataInputStream::Read8}\label{wxdatainputstreamread8}
 
 \func{wxUint8}{Read8}{\void}
 
@@ -83,7 +83,7 @@ Reads a single byte from the stream.
 Reads bytes from the stream in a specified buffer. The amount of
 bytes to read is specified by the {\it size} variable.
 
-\membersection{wxDataInputStream::Read16}
+\membersection{wxDataInputStream::Read16}\label{wxdatainputstreamread16}
 
 \func{wxUint16}{Read16}{\void}
 
@@ -94,7 +94,7 @@ Reads a 16 bit unsigned integer from the stream.
 Reads 16 bit unsigned integers from the stream in a specified buffer. the
 amount of 16 bit unsigned integer to read is specified by the {\it size} variable.
 
-\membersection{wxDataInputStream::Read32}
+\membersection{wxDataInputStream::Read32}\label{wxdatainputstreamread32}
 
 \func{wxUint32}{Read32}{\void}
 
@@ -105,7 +105,7 @@ Reads a 32 bit unsigned integer from the stream.
 Reads 32 bit unsigned integers from the stream in a specified buffer. the amount of
 32 bit unsigned integer to read is specified by the {\it size} variable.
 
-\membersection{wxDataInputStream::Read64}
+\membersection{wxDataInputStream::Read64}\label{wxdatainputstreamread32}
 
 \func{wxUint64}{Read64}{\void}
 
@@ -116,7 +116,7 @@ Reads a 64 bit unsigned integer from the stream.
 Reads 64 bit unsigned integers from the stream in a specified buffer. the amount of
 64 bit unsigned integer to read is specified by the {\it size} variable.
 
-\membersection{wxDataInputStream::ReadDouble}
+\membersection{wxDataInputStream::ReadDouble}\label{wxdatainputstreamreaddouble}
 
 \func{double}{ReadDouble}{\void}
 

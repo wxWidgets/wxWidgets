@@ -181,7 +181,7 @@ No base class
 \latexignore{\rtfignore{\wxheading{Function groups}}}
 
 
-\membersection{Static functions}
+\membersection{Static functions}\label{datetimestaticfunctions}
 
 For convenience, all static functions are collected here. These functions
 either set or return the static variables of wxDateSpan (the country), return
@@ -216,7 +216,7 @@ supported. Future versions will support other calendars.
 \helpref{Today}{wxdatetimetoday}
 
 
-\membersection{Constructors, assignment operators and setters}
+\membersection{Constructors, assignment operators and setters}\label{datetimeconstructors}
 
 Constructors and various {\tt Set()} methods are collected here. If you
 construct a date object from separate values for day, month and year, you
@@ -250,11 +250,11 @@ values were correct as constructors can not return an error code.
 \helpref{operator$=$(struct tm)}{wxdatetimeoperatoreqtm}\rtfsp
 
 
-\membersection{Accessors}
+\membersection{Accessors}\label{datetimeaccessors}
 
 Here are the trivial accessors. Other functions, which might have to perform
 some more complicated calculations to find the answer are under the 
-\helpref{Calendar calculations}{wxdatetimecalculations} section.
+\helpref{Calendar calculations}{datetimecalculations} section.
 
 \helpref{IsValid}{wxdatetimeisvalid}\\
 \helpref{GetTicks}{wxdatetimegetticks}\\
@@ -275,7 +275,7 @@ some more complicated calculations to find the answer are under the
 \helpref{GetAsDOS}{wxdatetimegetasdos}
 
 
-\membersection{Date comparison}
+\membersection{Date comparison}\label{datecomparison}
 
 There are several function to allow date comparison. To supplement them, a few
 global operators $>$, $<$ etc taking wxDateTime are defined.
@@ -290,7 +290,7 @@ global operators $>$, $<$ etc taking wxDateTime are defined.
 \helpref{IsEqualUpTo}{wxdatetimeisequalupto}
 
 
-\membersection{Date arithmetics}
+\membersection{Date arithmetics}\label{datearithmetics}
 
 These functions carry out \helpref{arithmetics}{tdatearithm} on the wxDateTime
 objects. As explained in the overview, either wxTimeSpan or wxDateSpan may be
@@ -314,7 +314,7 @@ defined to be equivalent to the second forms of these functions.
 \helpref{oparator$-=$(wxDateSpan)}{wxdatetimesubtractds}
 
 
-\membersection{Parsing and formatting dates}
+\membersection{Parsing and formatting dates}\label{datetimeparsing}
 
 These functions convert wxDateTime obejcts to and from text. The
 conversions to text are mostly trivial: you can either do it using the default
@@ -358,7 +358,7 @@ parse the strings such as {\tt "tomorrow"}, {\tt "March first"} and even
 \helpref{FormatISOTime}{wxdatetimeformatisotime}
 
 
-\membersection{Calendar calculations}\label{wxdatetimecalculations}
+\membersection{Calendar calculations}\label{datetimecalculations}
 
 The functions in this section perform the basic calendar calculations, mostly
 related to the week days. They allow to find the given week day in the
@@ -384,7 +384,7 @@ wxDateTime -- they only work with the date part of it.
 \helpref{GetYearDay}{wxdatetimegetyearday}
 
 
-\membersection{Astronomical/historical functions}
+\membersection{Astronomical/historical functions}\label{astronomyhistoryfunctions}
 
 Some degree of support for the date units used in astronomy and/or history is
 provided. You can construct a wxDateTime object from a
@@ -401,7 +401,7 @@ provided. You can construct a wxDateTime object from a
 \helpref{GetRataDie}{wxdatetimegetratadie}
 
 
-\membersection{Time zone and DST support}
+\membersection{Time zone and DST support}\label{datetimedstzone}
 
 Please see the \helpref{time zone overview}{tdatetimezones} for more
 information about time zones. ormally, these functions should be rarely used.

@@ -255,7 +255,7 @@ ODBC errors.}
 
 Default cursor scrolling is defined by wxODBC\_FWD\_ONLY\_CURSORS in setup.h
 when the wxWidgets library is built.  This behavior can be overridden when
-an instance of a wxDb is created (see \helpref{wxDb constructor}{wxdbconstr}).
+an instance of a wxDb is created (see \helpref{wxDb constructor}{wxdbctor}).
 Default setting of this value true, as not all databases/drivers support
 both types of cursors.
 
@@ -380,7 +380,7 @@ available through the ODBC driver manager on the current workstation.
 
 \latexignore{\rtfignore{\wxheading{Members}}}
 
-\membersection{wxDb::wxDb}\label{wxdbconstr}
+\membersection{wxDb::wxDb}\label{wxdbctor}
 
 \func{}{wxDb}{\void}
 
@@ -1083,7 +1083,7 @@ The default setting of whether a wxDb connection to a database allows
 forward-only or also backward scrolling cursors is defined in setup.h by the
 value of wxODBC\_FWD\_ONLY\_CURSORS.  This default setting can be overridden
 when the wxDb connection is initially created (see
-\helpref{wxDb constructor}{wxdbconstr} and \helpref{wxDbGetConnection}{wxdbfunctions}).
+\helpref{wxDb constructor}{wxdbctor} and \helpref{wxDbGetConnection}{wxdbfunctions}).
 
 \wxheading{Return value}
 
@@ -1103,7 +1103,7 @@ versions prior to 2.4.
 
 \wxheading{See also}
 
-\helpref{wxDb constructor}{wxdbconstr}, \helpref{wxDbGetConnection}{wxdbfunctions}
+\helpref{wxDb constructor}{wxdbctor}, \helpref{wxDbGetConnection}{wxdbfunctions}
 
 \membersection{wxDb::IsOpen}\label{wxdbisopen}
 
@@ -1335,7 +1335,7 @@ When compiled in release mode (FINAL=1), this setting has no affect.
 
 \wxheading{See also}
 
-\helpref{wxDb constructor}{wxdbconstr}
+\helpref{wxDb constructor}{wxdbctor}
 
 \membersection{wxDb::SetSqlLogging}\label{wxdbsetsqllogging}
 
@@ -1565,7 +1565,7 @@ This class is used to hold information about the columns bound to an
 instance of a wxDbTable object.
 
 Each instance of this class describes one column in the wxDbTable
-object.  When calling the \helpref{wxDb constructor}{wxdbconstr}, a
+object.  When calling the \helpref{wxDb constructor}{wxdbctor}, a
 parameter passed in indicates the number of columns that will be defined for
 the wxDbTable object.  The constructor uses this information to allocate
 adequate memory for all of the column descriptions in your wxDbTable object.
@@ -1602,7 +1602,7 @@ public.
 \wxheading{See also}
 
 \helpref{database classes overview}{odbcoverview},
-\helpref{wxDbTable::GetColDefs}{wxdbtablegetcoldefs}, \helpref{wxDb constructor}{wxdbconstr}
+\helpref{wxDbTable::GetColDefs}{wxdbtablegetcoldefs}, \helpref{wxDb constructor}{wxdbctor}
 
 \membersection{wxDbColDef::Initialize}\label{wxdbcoldefinitialize}
 
@@ -1711,7 +1711,7 @@ name, user ID, password and default directory path (used with dBase).  Other
 optional fields held in this class are and file type, both for future
 functions planned to be added for creating/manipulating datasource definitions.
 
-\membersection{wxDbConnectInf::wxDbConnectInf}
+\membersection{wxDbConnectInf::wxDbConnectInf}\label{wxdbconnectinfctor}
 
 \func{}{wxDbConnectInf}{\void}
 
@@ -3996,7 +3996,7 @@ construction, NULL  terminates the list. Use Null also if using two step constru
 See the database grid example in \helpref{wxDbGridTableBase}{wxdbgridtablebase} to
 see two different ways for adding columns.
 
-\membersection{wxDbGridColInfo::\destruct{wxDbGridColInfo}}
+\membersection{wxDbGridColInfo::\destruct{wxDbGridColInfo}}\label{wxdbgridcolinfodtor}
 
 \func{}{\destruct{wxDbGridColInfo}}{}
 

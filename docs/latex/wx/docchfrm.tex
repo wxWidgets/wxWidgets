@@ -24,19 +24,19 @@ See the example application in {\tt samples/docview}.
 
 \helpref{Document/view overview}{docviewoverview}, \helpref{wxFrame}{wxframe}
 
-\membersection{wxDocChildFrame::m\_childDocument}
+\membersection{wxDocChildFrame::m\_childDocument}\label{wxdocchildframemchilddocument}
 
 \member{wxDocument*}{m\_childDocument}
 
 The document associated with the frame.
 
-\membersection{wxDocChildFrame::m\_childView}
+\membersection{wxDocChildFrame::m\_childView}\label{wxdocchildframemchildview}
 
 \member{wxView*}{m\_childView}
 
 The view associated with the frame.
 
-\membersection{wxDocChildFrame::wxDocChildFrame}
+\membersection{wxDocChildFrame::wxDocChildFrame}\label{wxdocchildframector}
 
 \func{}{wxDocChildFrame}{\param{wxDocument* }{doc}, \param{wxView* }{view}, \param{wxFrame* }{parent},
  \param{wxWindowID}{ id}, \param{const wxString\& }{title}, \param{const wxPoint\&}{ pos = wxDefaultPosition},
@@ -45,25 +45,25 @@ The view associated with the frame.
 
 Constructor.
 
-\membersection{wxDocChildFrame::\destruct{wxDocChildFrame}}
+\membersection{wxDocChildFrame::\destruct{wxDocChildFrame}}\label{wxdocchildframedtor}
 
 \func{}{\destruct{wxDocChildFrame}}{\void}
 
 Destructor.
 
-\membersection{wxDocChildFrame::GetDocument}
+\membersection{wxDocChildFrame::GetDocument}\label{wxdocchildframegetdocument}
 
 \constfunc{wxDocument*}{GetDocument}{\void}
 
 Returns the document associated with this frame.
 
-\membersection{wxDocChildFrame::GetView}
+\membersection{wxDocChildFrame::GetView}\label{wxdocchildframegetview}
 
 \constfunc{wxView*}{GetView}{\void}
 
 Returns the view associated with this frame.
 
-\membersection{wxDocChildFrame::OnActivate}
+\membersection{wxDocChildFrame::OnActivate}\label{wxdocchildframeonactivate}
 
 \func{void}{OnActivate}{\param{wxActivateEvent}{ event}}
 
@@ -71,19 +71,19 @@ Sets the currently active view to be the frame's view. You may need
 to override (but still call) this function in order to set the keyboard
 focus for your subwindow.
 
-\membersection{wxDocChildFrame::OnCloseWindow}
+\membersection{wxDocChildFrame::OnCloseWindow}\label{wxdocchildframeonclosewindow}
 
 \func{void}{OnCloseWindow}{\param{wxCloseEvent\&}{ event}}
 
 Closes and deletes the current view and document.
 
-\membersection{wxDocChildFrame::SetDocument}
+\membersection{wxDocChildFrame::SetDocument}\label{wxdocchildframesetdocument}
 
 \func{void}{SetDocument}{\param{wxDocument *}{doc}}
 
 Sets the document for this frame.
 
-\membersection{wxDocChildFrame::SetView}
+\membersection{wxDocChildFrame::SetView}\label{wxdocchildframesetview}
 
 \func{void}{SetView}{\param{wxView *}{view}}
 

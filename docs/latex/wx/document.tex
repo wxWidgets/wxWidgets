@@ -21,31 +21,31 @@ and \helpref{wxDocManager}{wxdocmanager} classes.
 
 \latexignore{\rtfignore{\wxheading{Members}}}
 
-\membersection{wxDocument::m\_commandProcessor}
+\membersection{wxDocument::m\_commandProcessor}\label{wxdocumentmcommandprocessor}
 
 \member{wxCommandProcessor*}{m\_commandProcessor}
 
 A pointer to the command processor associated with this document.
 
-\membersection{wxDocument::m\_documentFile}
+\membersection{wxDocument::m\_documentFile}\label{wxdocumentmdocumentfile}
 
 \member{wxString}{m\_documentFile}
 
 Filename associated with this document (``" if none).
 
-\membersection{wxDocument::m\_documentModified}
+\membersection{wxDocument::m\_documentModified}\label{wxdocumentmdocumentmodified}
 
 \member{bool}{m\_documentModified}
 
 true if the document has been modified, false otherwise.
 
-\membersection{wxDocument::m\_documentTemplate}
+\membersection{wxDocument::m\_documentTemplate}\label{wxdocumentmdocumenttemplate}
 
 \member{wxDocTemplate *}{m\_documentTemplate}
 
 A pointer to the template from which this document was created.
 
-\membersection{wxDocument::m\_documentTitle}
+\membersection{wxDocument::m\_documentTitle}\label{wxdocumentmdocumenttitle}
 
 \member{wxString}{m\_documentTitle}
 
@@ -63,39 +63,39 @@ created that use the same document type, this variable is used in wxDocManager::
 to collate a list of alternative view types that can be used on this kind of
 document. Do not change the value of this variable.
 
-\membersection{wxDocument::m\_documentViews}
+\membersection{wxDocument::m\_documentViews}\label{wxdocumentmdocumentviews}
 
 \member{wxList}{m\_documentViews}
 
 List of wxView instances associated with this document.
 
-\membersection{wxDocument::wxDocument}
+\membersection{wxDocument::wxDocument}\label{wxdocumentctor}
 
 \func{}{wxDocument}{\void}
 
 Constructor. Define your own default constructor to initialize application-specific
 data.
 
-\membersection{wxDocument::\destruct{wxDocument}}
+\membersection{wxDocument::\destruct{wxDocument}}\label{wxdocumentdtor}
 
 \func{}{\destruct{wxDocument}}{\void}
 
 Destructor. Removes itself from the document manager.
 
-\membersection{wxDocument::AddView}
+\membersection{wxDocument::AddView}\label{wxdocumentaddview}
 
 \func{virtual bool}{AddView}{\param{wxView *}{view}}
 
 If the view is not already in the list of views, adds the view and calls OnChangedViewList.
 
-\membersection{wxDocument::Close}
+\membersection{wxDocument::Close}\label{wxdocumentclose}
 
 \func{virtual bool}{Close}{\void}
 
 Closes the document, by calling OnSaveModified and then (if this returned true) OnCloseDocument.
 This does not normally delete the document object: use DeleteAllViews to do this implicitly.
 
-\membersection{wxDocument::DeleteAllViews}
+\membersection{wxDocument::DeleteAllViews}\label{wxdocumentdeleteviews}
 
 \func{virtual bool}{DeleteAllViews}{\void}
 
@@ -104,7 +104,7 @@ delete the document itself, because the wxView destructor calls RemoveView. This
 in turns calls wxDocument::OnChangedViewList, whose default implemention is to
 save and delete the document if no views exist.
 
-\membersection{wxDocument::GetCommandProcessor}
+\membersection{wxDocument::GetCommandProcessor}\label{wxdocumentgetcommandprocessor}
 
 \constfunc{wxCommandProcessor*}{GetCommandProcessor}{\void}
 
@@ -112,32 +112,32 @@ Returns a pointer to the command processor associated with this document.
 
 See \helpref{wxCommandProcessor}{wxcommandprocessor}.
 
-\membersection{wxDocument::GetDocumentTemplate}
+\membersection{wxDocument::GetDocumentTemplate}\label{wxdocumentgetdocumenttemplate}
 
 \constfunc{wxDocTemplate*}{GetDocumentTemplate}{\void}
 
 Gets a pointer to the template that created the document.
 
-\membersection{wxDocument::GetDocumentManager}
+\membersection{wxDocument::GetDocumentManager}\label{wxdocumentgetdocumentmanager}
 
 \constfunc{wxDocManager*}{GetDocumentManager}{\void}
 
 Gets a pointer to the associated document manager.
 
-\membersection{wxDocument::GetDocumentName}
+\membersection{wxDocument::GetDocumentName}\label{wxdocumentgetdocumentname}
 
 \constfunc{wxString}{GetDocumentName}{\void}
 
 Gets the document type name for this document. See the comment for \helpref{documentTypeName}{documenttypename}.
 
-\membersection{wxDocument::GetDocumentWindow}
+\membersection{wxDocument::GetDocumentWindow}\label{wxdocumentgetdocumentwindow}
 
 \constfunc{wxWindow*}{GetDocumentWindow}{\void}
 
 Intended to return a suitable window for using as a parent for document-related
 dialog boxes. By default, uses the frame associated with the first view.
 
-\membersection{wxDocument::GetFilename}
+\membersection{wxDocument::GetFilename}\label{wxdocumentgetfilename}
 
 \constfunc{wxString}{GetFilename}{\void}
 
@@ -153,7 +153,7 @@ in many cases a document will only have a single view.
 
 See also: \helpref{GetViews}{wxdocumentgetviews}
 
-\membersection{wxDocument::GetPrintableName}
+\membersection{wxDocument::GetPrintableName}\label{wxdocumentgetprintablename}
 
 \constfunc{virtual void}{GetPrintableName}{\param{wxString\& }{name}}
 
@@ -164,7 +164,7 @@ filename, the string {\bf unnamed}.
 \perlnote{In wxPerl this function must return the modified name rather
 than just modifying the argument.}
 
-\membersection{wxDocument::GetTitle}
+\membersection{wxDocument::GetTitle}\label{wxdocumentgettitle}
 
 \constfunc{wxString}{GetTitle}{\void}
 
@@ -190,7 +190,7 @@ record of being modified (for example if using wxTextWindow to view and edit the
 
 See also \helpref{Modify}{wxdocumentmodify}.
 
-\membersection{wxDocument::LoadObject}
+\membersection{wxDocument::LoadObject}\label{wxdocumentloadobject}
 
 \func{virtual istream\&}{LoadObject}{\param{istream\& }{stream}}
 
@@ -213,7 +213,7 @@ record of being modified (for example if using wxTextWindow to view and edit the
 
 See also \helpref{IsModified}{wxdocumentismodified}.
 
-\membersection{wxDocument::OnChangedViewList}
+\membersection{wxDocument::OnChangedViewList}\label{wxdocumentonchangedviewlist}
 
 \func{virtual void}{OnChangedViewList}{\void}
 
@@ -221,7 +221,7 @@ Called when a view is added to or deleted from this document. The default
 implementation saves and deletes the document if no views exist (the last
 one has just been removed).
 
-\membersection{wxDocument::OnCloseDocument}
+\membersection{wxDocument::OnCloseDocument}\label{wxdocumentonclosedocument}
 
 \func{virtual bool}{OnCloseDocument}{\void}
 
@@ -229,7 +229,7 @@ The default implementation calls DeleteContents (an empty implementation)
 sets the modified flag to false. Override this to
 supply additional behaviour when the document is closed with Close.
 
-\membersection{wxDocument::OnCreate}
+\membersection{wxDocument::OnCreate}\label{wxdocumentoncreate}
 
 \func{virtual bool}{OnCreate}{\param{const wxString\& }{path}, \param{long}{ flags}}
 
@@ -238,7 +238,7 @@ to initialize itself. The default implementation uses the
 template associated with the document to create an initial view.
 If this function returns false, the document is deleted.
 
-\membersection{wxDocument::OnCreateCommandProcessor}
+\membersection{wxDocument::OnCreateCommandProcessor}\label{wxdocumentoncreatecommandprocessor}
 
 \func{virtual wxCommandProcessor*}{OnCreateCommandProcessor}{\void}
 
@@ -248,14 +248,14 @@ an instance of wxCommandProcessor.
 
 See \helpref{wxCommandProcessor}{wxcommandprocessor}.
 
-\membersection{wxDocument::OnNewDocument}
+\membersection{wxDocument::OnNewDocument}\label{wxdocumentonnewdocument}
 
 \func{virtual bool}{OnNewDocument}{\void}
 
 The default implementation calls OnSaveModified and DeleteContents, makes a default title for the
 document, and notifies the views that the filename (in fact, the title) has changed.
 
-\membersection{wxDocument::OnOpenDocument}
+\membersection{wxDocument::OnOpenDocument}\label{wxdocumentonopendocument}
 
 \func{virtual bool}{OnOpenDocument}{\param{const wxString\& }{filename}}
 
@@ -265,7 +265,7 @@ unmodified; otherwise, an error message box is displayed. The document's
 views are notified that the filename has changed, to give windows an opportunity
 to update their titles. All of the document's views are then updated.
 
-\membersection{wxDocument::OnSaveDocument}
+\membersection{wxDocument::OnSaveDocument}\label{wxdocumentonsavedocument}
 
 \func{virtual bool}{OnSaveDocument}{\param{const wxString\& }{filename}}
 
@@ -273,7 +273,7 @@ Constructs an output file stream for the given filename (which must not be empty
 and calls SaveObject. If SaveObject returns true, the document is set to
 unmodified; otherwise, an error message box is displayed.
 
-\membersection{wxDocument::OnSaveModified}
+\membersection{wxDocument::OnSaveModified}\label{wxdocumentonsavemodified}
 
 \func{virtual bool}{OnSaveModified}{\void}
 
@@ -282,26 +282,26 @@ be changed. If the user replies Yes, the Save function is called. If No, the
 document is marked as unmodified and the function succeeds. If Cancel, the
 function fails.
 
-\membersection{wxDocument::RemoveView}
+\membersection{wxDocument::RemoveView}\label{wxdocumentremoveview}
 
 \func{virtual bool}{RemoveView}{\param{wxView* }{view}}
 
 Removes the view from the document's list of views, and calls OnChangedViewList.
 
-\membersection{wxDocument::Save}
+\membersection{wxDocument::Save}\label{wxdocumentsave}
 
 \func{virtual bool}{Save}{\void}
 
 Saves the document by calling OnSaveDocument if there is an associated filename,
 or SaveAs if there is no filename.
 
-\membersection{wxDocument::SaveAs}
+\membersection{wxDocument::SaveAs}\label{wxdocumentsaveas}
 
 \func{virtual bool}{SaveAs}{\void}
 
 Prompts the user for a file to save to, and then calls OnSaveDocument.
 
-\membersection{wxDocument::SaveObject}
+\membersection{wxDocument::SaveObject}\label{wxdocumentsaveobject}
 
 \func{virtual ostream\&}{SaveObject}{\param{ostream\& }{stream}}
 
@@ -314,7 +314,7 @@ automatically when the document contents need to be saved.
 Note that only one of these forms exists, depending on how wxWidgets
 was configured.
 
-\membersection{wxDocument::SetCommandProcessor}
+\membersection{wxDocument::SetCommandProcessor}\label{wxdocumentsetcommandprocessor}
 
 \func{virtual void}{SetCommandProcessor}{\param{wxCommandProcessor *}{processor}}
 
@@ -324,20 +324,20 @@ instead.
 
 See \helpref{wxCommandProcessor}{wxcommandprocessor}.
 
-\membersection{wxDocument::SetDocumentName}
+\membersection{wxDocument::SetDocumentName}\label{wxdocumentsetdocumentname}
 
 \func{void}{SetDocumentName}{\param{const wxString\& }{name}}
 
 Sets the document type name for this document. See the comment for \helpref{documentTypeName}{documenttypename}.
 
-\membersection{wxDocument::SetDocumentTemplate}
+\membersection{wxDocument::SetDocumentTemplate}\label{wxdocumentsetdocumenttemplate}
 
 \func{void}{SetDocumentTemplate}{\param{wxDocTemplate* }{templ}}
 
 Sets the pointer to the template that created the document. Should only be called by the
 framework.
 
-\membersection{wxDocument::SetFilename}
+\membersection{wxDocument::SetFilename}\label{wxdocumentsetfilename}
 
 \func{void}{SetFilename}{\param{const wxString\& }{filename}, \param{bool}{ notifyViews = false}}
 
@@ -345,7 +345,7 @@ Sets the filename for this document. Usually called by the framework.
 
 If {\it notifyViews} is true, wxView::OnChangeFilename is called for all views.
 
-\membersection{wxDocument::SetTitle}
+\membersection{wxDocument::SetTitle}\label{wxdocumentsettitle}
 
 \func{void}{SetTitle}{\param{const wxString\& }{title}}
 
