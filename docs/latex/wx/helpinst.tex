@@ -131,8 +131,8 @@ Returns FALSE if unsuccessful or not implemented.
 If the help viewer is not running, runs it and displays the given section.
 
 The interpretation of {\it section} differs between help viewers. For most viewers,
-this call is equivalent to KeywordSearch. For MS HTML Help, external HTML help
-and simple wxHTML help, if {\it section} has a .htm
+this call is equivalent to KeywordSearch. For MS HTML Help, wxHTML help and external HTML help,
+if {\it section} has a .htm
 or .html extension, that HTML file will be displayed; otherwise
 a keyword search is done.
 
@@ -140,9 +140,9 @@ a keyword search is done.
 
 If the help viewer is not running, runs it and displays the given section.
 
-{\it WinHelp, MS HTML Help:} {\it sectionNo} is a context id.
+{\it WinHelp, MS HTML Help} {\it sectionNo} is a context id.
 
-{\it External HTML help/simple wxHTML help:} wxExtHelpController implements {\it sectionNo} as an id in a map file, which is of the form:
+{\it External HTML help:} wxExtHelpController implements {\it sectionNo} as an id in a map file, which is of the form:
 
 \begin{verbatim}
 0  wx.html             ; Index

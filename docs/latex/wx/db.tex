@@ -623,8 +623,8 @@ entry is also logged to the defined log file.
 \docparam{aHdbc}{Handle to the ODBC connection.  Pass this in if the ODBC
 function call that erred required a hdbc or hstmt argument.}
 
-\docparam{aHstmt}{Handle to the ODBC statement being executed against.  Pass
-this in if the ODBC function call that erred out required a hstmt argument.}
+\docparam{aHstmt}{Handle to the ODBC statement being executed against.  Pass 
+this in if the ODBC function call that failed required a hstmt argument.}
 
 \wxheading{Remarks}
 
@@ -980,10 +980,10 @@ in the result set after the current position of the cursor.
 \wxheading{Parameters}
 
 \docparam{aHenv}{A handle to the ODBC environment.}
-\docparam{aHdbc}{{\it OPTIONAL.}  A handle to the ODBC connection.  Pass this
-in if the ODBC function call that erred out required a hdbc or hstmt argument.}
-\docparam{AHstmt}{{\it OPTIONAL.}A handle to the ODBC statement being executed
-against.  Pass this in if the ODBC function call that erred out requires a
+\docparam{aHdbc}{{\it OPTIONAL.}  A handle to the ODBC connection.  Pass this 
+in if the ODBC function call that failed required a hdbc or hstmt argument.}
+\docparam{AHstmt}{{\it OPTIONAL.}A handle to the ODBC statement being executed 
+against.  Pass this in if the ODBC function call that failed requires a 
 hstmt argument.}
 
 \wxheading{Example}
@@ -991,8 +991,7 @@ hstmt argument.}
 \begin{verbatim}
    if (SQLExecDirect(hstmt, (UCHAR FAR *) pSqlStmt, SQL_NTS) != SQL_SUCCESS)
    {
-      // Display all ODBC errors for this stmt
-      return(db.DispAllErrors(db.henv, db.hdbc, hstmt));
+      return(db.GetNextError(db.henv, db.hdbc, hstmt));
    }
 \end{verbatim}
 
@@ -1685,15 +1684,15 @@ name, user ID, password and default directory path (used with dBase).  Other
 optional fields held in this class are and file type, both for future
 functions planned to be added for creating/manipulating datasource definitions.
 
-\membersection{wxDbConnectInf::wxDbConnectInfo}
+\membersection{wxDbConnectInf::wxDbConnectInf}
 
 \func{}{wxDbConnectInf}{\void}
 
 Default constructor.
 
-\func{}{wxDb}{\param{HENV }{henv}, \param{const wxString \&}{dsn},
-\param{const wxString \&}{userID=""}, \param{const wxString \&}{password},
-\param{const wxString \&}{defaultDir=""}, \param{const wxString \&}{description=""},
+\func{}{wxDbConnectInf}{\param{HENV }{henv}, \param{const wxString \&}{dsn}, 
+\param{const wxString \&}{userID=""}, \param{const wxString \&}{password}, 
+\param{const wxString \&}{defaultDir=""}, \param{const wxString \&}{description=""}, 
 \param{const wxString \&}{fileType=""}}
 
 Constructor which allows initial settings of all the classes member variables.
