@@ -563,6 +563,27 @@ enum
     wxLOG_User = 100  // user defined levels start here
 };
 
+#define wxTRACE_MemAlloc "memalloc" // trace memory allocation (new/delete)
+#define wxTRACE_Messages "messages" // trace window messages/X callbacks
+#define wxTRACE_ResAlloc "resalloc" // trace GDI resource allocation
+#define wxTRACE_RefCount "refcount" // trace various ref counting operations
+
+#ifdef  __WXMSW__
+#define wxTRACE_OleCalls "ole"      // OLE interface calls
+#endif
+
+enum {
+    wxTraceMemAlloc,
+    wxTraceMessages,
+    wxTraceResAlloc,
+    wxTraceRefCount,
+
+#ifdef  __WXMSW__
+    wxTraceOleCalls,
+#endif
+};
+
+
 
 class wxLog
 {
@@ -571,7 +592,7 @@ public:
 
     static bool IsEnabled();
     static bool EnableLogging(bool doIt = TRUE);
-    static void OnLog(wxLogLevel level, const wxString& szString, int t=0);
+    static void OnLog(unsigned long level, const wxString& szString, int t=0);
 
     virtual void Flush();
     bool HasPendingMessages() const;
@@ -586,7 +607,7 @@ public:
     static void SetVerbose(bool bVerbose = TRUE);
 
     static void DontCreateOnDemand();
-    static void SetTraceMask(wxTraceMask ulMask);
+    static void SetTraceMask(long ulMask);
     static void AddTraceMask(const wxString& str);
     static void RemoveTraceMask(const wxString& str);
     static void ClearTraceMasks();
@@ -1512,11 +1533,24 @@ public:
 //----------------------------------------------------------------------
 //----------------------------------------------------------------------
 
+// %{
+// #if wxUSE_UNICODE
+// #define ADD_STRING(dict, str) \
+//     wxString tmp##str(str); \
+//     PyDict_SetItemString(dict, #str, \
+//                          PyUnicode_FromUnicode(tmp##str.c_str(), tmp##str.Len()))
+// #else
+// #define ADD_STRING(dict, str) \
+//     PyDict_SetItemString(d, #str, PyString_FromString(str))
+// #endif
+// %}
+
 
 %init %{
     wxPyPtrTypeMap_Add("wxDragImage", "wxGenericDragImage");
     wxPyPtrTypeMap_Add("wxProcess", "wxPyProcess");
     wxPyPtrTypeMap_Add("wxArtProvider", "wxPyArtProvider");
+
 %}
 
 //----------------------------------------------------------------------

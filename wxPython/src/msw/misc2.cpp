@@ -4620,23 +4620,15 @@ static PyObject *_wrap_wxLog_EnableLogging(PyObject *self, PyObject *args, PyObj
 
 static PyObject *_wrap_wxLog_OnLog(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
-    wxLogLevel * _arg0;
+    unsigned long  _arg0;
     wxString * _arg1;
     int  _arg2 = (int ) 0;
-    PyObject * _argo0 = 0;
     PyObject * _obj1 = 0;
     char *_kwnames[] = { "level","szString","t", NULL };
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO|i:wxLog_OnLog",_kwnames,&_argo0,&_obj1,&_arg2)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"lO|i:wxLog_OnLog",_kwnames,&_arg0,&_obj1,&_arg2)) 
         return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxLogLevel_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxLog_OnLog. Expected _wxLogLevel_p.");
-        return NULL;
-        }
-    }
 {
     _arg1 = wxString_in_helper(_obj1);
     if (_arg1 == NULL)
@@ -4644,7 +4636,7 @@ static PyObject *_wrap_wxLog_OnLog(PyObject *self, PyObject *args, PyObject *kwa
 }
 {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-    wxLog::OnLog(*_arg0,*_arg1,_arg2);
+    wxLog::OnLog(_arg0,*_arg1,_arg2);
 
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
@@ -4867,23 +4859,15 @@ static PyObject *_wrap_wxLog_DontCreateOnDemand(PyObject *self, PyObject *args, 
 
 static PyObject *_wrap_wxLog_SetTraceMask(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
-    wxTraceMask * _arg0;
-    PyObject * _argo0 = 0;
+    long  _arg0;
     char *_kwnames[] = { "ulMask", NULL };
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxLog_SetTraceMask",_kwnames,&_argo0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"l:wxLog_SetTraceMask",_kwnames,&_arg0)) 
         return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxTraceMask_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxLog_SetTraceMask. Expected _wxTraceMask_p.");
-        return NULL;
-        }
-    }
 {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-    wxLog::SetTraceMask(*_arg0);
+    wxLog::SetTraceMask(_arg0);
 
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
@@ -10713,6 +10697,16 @@ SWIGEXPORT(void) initmisc2c() {
 	 PyDict_SetItemString(d,"wxLOG_Trace", PyInt_FromLong((long) wxLOG_Trace));
 	 PyDict_SetItemString(d,"wxLOG_Progress", PyInt_FromLong((long) wxLOG_Progress));
 	 PyDict_SetItemString(d,"wxLOG_User", PyInt_FromLong((long) wxLOG_User));
+	 PyDict_SetItemString(d,"wxTRACE_MemAlloc", PyString_FromString("memalloc"));
+	 PyDict_SetItemString(d,"wxTRACE_Messages", PyString_FromString("messages"));
+	 PyDict_SetItemString(d,"wxTRACE_ResAlloc", PyString_FromString("resalloc"));
+	 PyDict_SetItemString(d,"wxTRACE_RefCount", PyString_FromString("refcount"));
+	 PyDict_SetItemString(d,"wxTRACE_OleCalls", PyString_FromString("ole"));
+	 PyDict_SetItemString(d,"wxTraceMemAlloc", PyInt_FromLong((long) wxTraceMemAlloc));
+	 PyDict_SetItemString(d,"wxTraceMessages", PyInt_FromLong((long) wxTraceMessages));
+	 PyDict_SetItemString(d,"wxTraceResAlloc", PyInt_FromLong((long) wxTraceResAlloc));
+	 PyDict_SetItemString(d,"wxTraceRefCount", PyInt_FromLong((long) wxTraceRefCount));
+	 PyDict_SetItemString(d,"wxTraceOleCalls", PyInt_FromLong((long) wxTraceOleCalls));
 	 PyDict_SetItemString(d,"wxEVT_END_PROCESS", PyInt_FromLong((long) wxEVT_END_PROCESS));
 	 PyDict_SetItemString(d,"wxEXEC_ASYNC", PyInt_FromLong((long) wxEXEC_ASYNC));
 	 PyDict_SetItemString(d,"wxEXEC_SYNC", PyInt_FromLong((long) wxEXEC_SYNC));
@@ -10766,6 +10760,7 @@ SWIGEXPORT(void) initmisc2c() {
     wxPyPtrTypeMap_Add("wxDragImage", "wxGenericDragImage");
     wxPyPtrTypeMap_Add("wxProcess", "wxPyProcess");
     wxPyPtrTypeMap_Add("wxArtProvider", "wxPyArtProvider");
+
 {
    int i;
    for (i = 0; _swig_mapping[i].n1; i++)
