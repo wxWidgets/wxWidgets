@@ -19,6 +19,10 @@
 class WXDLLEXPORT wxConsoleAppTraits : public wxConsoleAppTraitsBase
 {
 public:
+    // other miscellaneous helpers
+    // ---------------------------
+
+    virtual int GetOSVersion(int *verMaj, int *verMin);
 };
 
 #if wxUSE_GUI
@@ -26,6 +30,10 @@ public:
 class WXDLLEXPORT wxGUIAppTraits : public wxGUIAppTraitsBase
 {
 public:
+    // other miscellaneous helpers
+    // ---------------------------
+
+    virtual int GetOSVersion(int *verMaj, int *verMin);
 };
 
 #endif // wxUSE_GUI

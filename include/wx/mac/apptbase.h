@@ -33,9 +33,6 @@ public:
     // other miscellaneous helpers
     // ---------------------------
 
-    // under Mac this function does the same thing for console and GUI
-    // applications so we can implement it directly in the base class
-    virtual int GetOSVersion(int *verMaj, int *verMin);
 };
 
 #endif // _WX_MAC_APPTBASE_H_
