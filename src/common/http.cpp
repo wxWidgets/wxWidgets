@@ -147,8 +147,8 @@ bool wxHTTP::ParseHeaders()
     if (line.Length() == 0)
       break;
 
-	wxString left_str = line.BeforeFirst(':');
-	wxString *str = new wxString(line.AfterFirst(':').Strip(wxString::both));
+    wxString left_str = line.BeforeFirst(':');
+    wxString *str = new wxString(line.AfterFirst(':').Strip(wxString::both));
     left_str.MakeUpper();
 
     m_headers.Append(left_str, (wxObject *) str);
@@ -196,12 +196,6 @@ bool wxHTTP::Connect(wxSockAddress& addr, bool WXUNUSED(wait))
 bool wxHTTP::BuildRequest(const wxString& path, wxHTTP_Req req)
 {
   wxChar *tmp_buf;
-  wxChar buf[200]; // 200 is arbitrary.
-  wxString tmp_str = path;
-
-  // If there is no User-Agent defined, define it.
-  if (GetHeader(wxT("User-Agent")).IsNull())
-    SetHeader(wxT("User-Agent"), wxT("wxWindows 2.x"));
 
   switch (req) {
   case wxHTTP_GET:
@@ -211,16 +205,22 @@ bool wxHTTP::BuildRequest(const wxString& path, wxHTTP_Req req)
     return FALSE;
   }
 
+  // If there is no User-Agent defined, define it.
+  if (GetHeader(wxT("User-Agent")).IsNull())
+    SetHeader(wxT("User-Agent"), wxT("wxWindows 2.x"));
+
   SaveState();
   SetFlags(wxSOCKET_NONE);
   Notify(FALSE);
 
-  wxSprintf(buf, wxT("%s %s HTTP/1.0\r\n"), tmp_buf, tmp_str.GetData());
+  wxString buf;
+  buf.Printf(wxT("%s %s HTTP/1.0\r\n"), tmp_buf, path.c_str());
   const wxWX2MBbuf pathbuf = wxConvLibc.cWX2MB(buf);
   Write(pathbuf, strlen(wxMBSTRINGCAST pathbuf));
   SendHeaders();
   Write("\r\n", 2);
 
+  wxString tmp_str;
   m_perr = GetLine(this, tmp_str);
   if (m_perr != wxPROTO_NOERR) {
     RestoreState();
@@ -243,7 +243,7 @@ bool wxHTTP::BuildRequest(const wxString& path, wxHTTP_Req req)
   token.NextToken();
   tmp_str2 = token.NextToken();
 
-  switch (tmp_str2[(unsigned int) 0]) {
+  switch (tmp_str2[0u]) {
   case wxT('1'):
     /* INFORMATION / SUCCESS */
     break;
