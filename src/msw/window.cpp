@@ -1172,35 +1172,80 @@ void wxWindow::DoGetClientSize(int *x, int *y) const
         *y = rect.bottom;
 }
 
+// set the size of the window: if the dimensions are positive, just use them,
+// but if any of them is equal to -1, it means that we must find the value for
+// it ourselves (unless sizeFlags contains wxSIZE_ALLOW_MINUS_ONE flag, in
+// which case -1 is a valid value for x and y)
+//
+// If sizeFlags contains wxSIZE_AUTO_WIDTH/HEIGHT flags (default), we calculate
+// the width/height to best suit our contents, otherwise we reuse the current
+// width/height
 void wxWindow::DoSetSize(int x, int y, int width, int height, int sizeFlags)
 {
+    // get the current size and position...
     int currentX, currentY;
     GetPosition(&currentX, &currentY);
     int currentW,currentH;
     GetSize(&currentW, &currentH);
 
-    if ( x == currentX && y == currentY && width == currentW && height == currentH )
+    // ... and don't do anything (avoiding flicker) if it's already ok
+    if ( x == currentX && y == currentY &&
+         width == currentW && height == currentH )
+    {
         return;
+    }
 
-    int actualWidth = width;
-    int actualHeight = height;
-    int actualX = x;
-    int actualY = y;
     if ( x == -1 || (sizeFlags & wxSIZE_ALLOW_MINUS_ONE) )
-        actualX = currentX;
+        x = currentX;
     if ( y == -1 || (sizeFlags & wxSIZE_ALLOW_MINUS_ONE) )
-        actualY = currentY;
+        y = currentY;
 
-    AdjustForParentClientOrigin(actualX, actualY, sizeFlags);
+    AdjustForParentClientOrigin(x, y, sizeFlags);
 
+    wxSize size(-1, -1);
     if ( width == -1 )
-        actualWidth = currentW;
-    if ( height == -1 )
-        actualHeight = currentH;
+    {
+        if ( sizeFlags && wxSIZE_AUTO_WIDTH )
+        {
+            size = DoGetBestSize();
+            width = size.x;
+        }
+        else
+        {
+            // just take the current one
+            width = currentW;
+        }
+    }
 
-    HWND hWnd = GetHwnd();
-    if ( hWnd )
-        MoveWindow(hWnd, actualX, actualY, actualWidth, actualHeight, (BOOL)TRUE);
+    if ( height == -1 )
+    {
+        if ( sizeFlags && wxSIZE_AUTO_HEIGHT )
+        {
+            if ( size.x == -1 )
+            {
+                size= DoGetBestSize();
+            }
+            //else: already called DoGetBestSize() above
+
+            height = size.y;
+        }
+        else
+        {
+            // just take the current one
+            height = currentH;
+        }
+    }
+
+    if ( !::MoveWindow(GetHwnd(), x, y, width, height, TRUE) )
+    {
+        wxLogLastError("MoveWindow");
+    }
+}
+
+// for a generic window there is no natural best size - just use the current one
+wxSize wxWindow::DoGetBestSize()
+{
+    return GetSize();
 }
 
 void wxWindow::DoSetClientSize(int width, int height)
@@ -1316,7 +1361,7 @@ void wxWindow::GetTextExtent(const wxString& string,
 
     SIZE sizeRect;
     TEXTMETRIC tm;
-    GetTextExtentPoint(dc, (const wxChar *)string, (int)string.Length(), &sizeRect);
+    GetTextExtentPoint(dc, string, (int)string.Length(), &sizeRect);
     GetTextMetrics(dc, &tm);
 
     if ( fontToUse && fnt && hfontOld )

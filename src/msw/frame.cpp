@@ -241,28 +241,11 @@ void wxFrame::DoGetPosition(int *x, int *y) const
 
 void wxFrame::DoSetSize(int x, int y, int width, int height, int sizeFlags)
 {
-  int currentX, currentY;
-  int x1 = x;
-  int y1 = y;
-  int w1 = width;
-  int h1 = height;
+    wxWindow::DoSetSize(x, y, width, height, sizeFlags);
 
-  GetPosition(&currentX, &currentY);
-  if (x == -1 || (sizeFlags & wxSIZE_ALLOW_MINUS_ONE))
-    x1 = currentX;
-  if (y == -1 || (sizeFlags & wxSIZE_ALLOW_MINUS_ONE))
-    y1 = currentY;
-
-  int ww,hh ;
-  GetSize(&ww,&hh) ;
-  if (width == -1) w1 = ww ;
-  if (height==-1) h1 = hh ;
-
-  MoveWindow(GetHwnd(), x1, y1, w1, h1, (BOOL)TRUE);
-
-  wxSizeEvent event(wxSize(width, height), m_windowId);
-  event.SetEventObject( this );
-  GetEventHandler()->ProcessEvent(event);
+    wxSizeEvent event(wxSize(width, height), m_windowId);
+    event.SetEventObject( this );
+    GetEventHandler()->ProcessEvent(event);
 }
 
 bool wxFrame::Show(bool show)

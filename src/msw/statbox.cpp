@@ -99,50 +99,31 @@ bool wxStaticBox::Create(wxWindow *parent, wxWindowID id,
   return TRUE;
 }
 
-void wxStaticBox::SetLabel(const wxString& label)
+wxSize wxStaticBox::DoGetBestSize()
 {
-  SetWindowText((HWND)m_hWnd, (const wxChar *)label);
+    int cx, cy;
+    wxGetCharSize(GetHWND(), &cx, &cy, &GetFont());
+
+    int wBox;
+    GetTextExtent(wxGetWindowText(m_hWnd), &wBox, &cy);
+
+    wBox += 3*cx;
+    int hBox = EDIT_HEIGHT_FROM_CHAR_HEIGHT(cy);
+
+    return wxSize(wBox, hBox);
 }
 
 void wxStaticBox::DoSetSize(int x, int y, int width, int height, int sizeFlags)
 {
-  int currentX, currentY;
-  GetPosition(&currentX, &currentY);
+    wxControl::DoSetSize(x, y, width, height, sizeFlags);
 
-  int x1 = x;
-  int y1 = y;
-  int w1 = width;
-  int h1 = height;
-
-  if (x == -1 || (sizeFlags & wxSIZE_ALLOW_MINUS_ONE))
-    x1 = currentX;
-  if (y == -1 || (sizeFlags & wxSIZE_ALLOW_MINUS_ONE))
-    y1 = currentY;
-
-  AdjustForParentClientOrigin(x1, y1, sizeFlags);
-
-  // If we're prepared to use the existing size, then...
-  if (width == -1 && height == -1 && ((sizeFlags & wxSIZE_AUTO) != wxSIZE_AUTO))
-  {
-    GetSize(&w1, &h1);
-  }
-
-  int current_width;
-
-  int cx;
-  int cy;
-  int cyf;
-
-  wxGetCharSize(GetHWND(), &cx, &cy, & this->GetFont());
-
-  GetTextExtent(wxGetWindowText(m_hWnd), &current_width, &cyf,
-                NULL,NULL, & this->GetFont());
-  if ( w1 < 0 )
-   w1 = current_width + 3*cx;
-  if ( h1 < 0 )
-    h1 = EDIT_HEIGHT_FROM_CHAR_HEIGHT(cyf);
-
-  MoveWindow((HWND)m_hWnd, x1, y1, w1, h1, TRUE);
+    // the static box should always be on the bottom of the Z-order, otherwise
+    // it may hide controls which are positioned inside it
+    if ( !::SetWindowPos(GetHwnd(), HWND_TOP, 0, 0, 0, 0,
+                         SWP_NOMOVE | SWP_NOSIZE) )
+    {
+        wxLogLastError(_T("SetWindowPos"));
+    }
 }
 
 WXHBRUSH wxStaticBox::OnCtlColor(WXHDC pDC, WXHWND pWnd, WXUINT nCtlColor,
@@ -202,7 +183,7 @@ void wxStaticBox::OnEraseBackground(wxEraseEvent& event)
 
         RECT rect;
 
-        ::GetClientRect((HWND) GetHWND(), &rect);
+        ::GetClientRect(GetHwnd(), &rect);
         ::FillRect ((HDC) event.GetDC()->GetHDC(), &rect, hBrush);
         ::DeleteObject(hBrush);
         ::SetMapMode((HDC) event.GetDC()->GetHDC(), mode);
@@ -215,7 +196,7 @@ void wxStaticBox::OnEraseBackground(wxEraseEvent& event)
 
 long wxStaticBox::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
 {
-    if (nMsg == WM_NCHITTEST)
+    if ( 0 )//nMsg == WM_NCHITTEST)
     {
         int xPos = LOWORD(lParam);  // horizontal position of cursor
         int yPos = HIWORD(lParam);  // vertical position of cursor

@@ -351,134 +351,145 @@ wxString wxRadioBox::GetString(int N) const
 // Restored old code.
 void wxRadioBox::DoSetSize(int x, int y, int width, int height, int sizeFlags)
 {
-  int currentX, currentY;
-  GetPosition(&currentX, &currentY);
-  int xx = x;
-  int yy = y;
+    int currentX, currentY;
+    GetPosition(&currentX, &currentY);
+    int xx = x;
+    int yy = y;
 
-  if (x == -1 || (sizeFlags & wxSIZE_ALLOW_MINUS_ONE))
-    xx = currentX;
-  if (y == -1 || (sizeFlags & wxSIZE_ALLOW_MINUS_ONE))
-    yy = currentY;
+    if (x == -1 || (sizeFlags & wxSIZE_ALLOW_MINUS_ONE))
+        xx = currentX;
+    if (y == -1 || (sizeFlags & wxSIZE_ALLOW_MINUS_ONE))
+        yy = currentY;
 
-  wxChar buf[400];
+    wxString buf;
 
-  int y_offset = yy;
-  int x_offset = xx;
-  int current_width, cyf;
+    int y_offset = yy;
+    int x_offset = xx;
+    int current_width, cyf;
 
-  int cx1,cy1;
-  wxGetCharSize(m_hWnd, &cx1, &cy1, & GetFont());
-  // Attempt to have a look coherent with other platforms:
-  // We compute the biggest toggle dim, then we align all
-  // items according this value.
-  int maxWidth =  -1;
-  int maxHeight = -1;
+    int cx1,cy1;
+    wxGetCharSize(m_hWnd, &cx1, &cy1, & GetFont());
 
-  int i;
-  for (i = 0 ; i < m_noItems; i++)
-  {
-    int eachWidth;
-    int eachHeight;
-    if (m_radioWidth[i]<0)
+    // Attempt to have a look coherent with other platforms: We compute the
+    // biggest toggle dim, then we align all items according this value.
+    int maxWidth =  -1;
+    int maxHeight = -1;
+
+    int i;
+    for (i = 0 ; i < m_noItems; i++)
     {
-      // It's a labelled toggle
-      GetWindowText((HWND) m_radioButtons[i], buf, 300);
-      GetTextExtent(buf, &current_width, &cyf,NULL,NULL, & GetFont());
-      eachWidth = (int)(current_width + RADIO_SIZE);
-      eachHeight = (int)((3*cyf)/2);
+        int eachWidth;
+        int eachHeight;
+        if (m_radioWidth[i]<0)
+        {
+            // It's a labelled toggle
+            buf = wxGetWindowText(m_radioButtons[i]);
+            GetTextExtent(buf, &current_width, &cyf);
+            eachWidth = (int)(current_width + RADIO_SIZE);
+            eachHeight = (int)((3*cyf)/2);
+        }
+        else
+        {
+            eachWidth = m_radioWidth[i];
+            eachHeight = m_radioHeight[i];
+        }
+
+        if (maxWidth<eachWidth)
+            maxWidth = eachWidth;
+        if (maxHeight<eachHeight)
+            maxHeight = eachHeight;
     }
-    else
+
+    if (m_hWnd)
     {
-      eachWidth = m_radioWidth[i];
-      eachHeight = m_radioHeight[i];
-    }
-    if (maxWidth<eachWidth) maxWidth = eachWidth;
-    if (maxHeight<eachHeight) maxHeight = eachHeight;
-  }
+        int totWidth;
+        int totHeight;
 
-  if (m_hWnd)
-  {
-    int totWidth;
-    int totHeight;
-
-    int nbHor = GetNumHor(),
+        int nbHor = GetNumHor(),
         nbVer = GetNumVer();
 
-    // this formula works, but I don't know why.
-    // Please, be sure what you do if you modify it!!
-    if (m_radioWidth[0]<0)
-      totHeight = (nbVer * maxHeight) + cy1/2;
-    else
-      totHeight = nbVer * (maxHeight+cy1/2);
-    totWidth  = nbHor * (maxWidth+cx1);
+        // this formula works, but I don't know why.
+        // Please, be sure what you do if you modify it!!
+        if (m_radioWidth[0]<0)
+            totHeight = (nbVer * maxHeight) + cy1/2;
+        else
+            totHeight = nbVer * (maxHeight+cy1/2);
+        totWidth  = nbHor * (maxWidth+cx1);
+
+        int extraHeight = cy1;
+
+#if !CTL3D
+        // Requires a bigger group box in plain Windows
+        extraHeight *= 3;
+        extraHeight /= 2;
+#endif
+
+        MoveWindow(GetHwnd(), x_offset, y_offset,
+                totWidth+cx1, totHeight+extraHeight,
+                TRUE);
+
+        x_offset += cx1;
+        y_offset += cy1;
+    }
 
 #if (!CTL3D)
-    // Requires a bigger group box in plain Windows
-    MoveWindow((HWND) m_hWnd,x_offset,y_offset,totWidth+cx1,totHeight+(3*cy1)/2,TRUE);
-#else
-    MoveWindow((HWND) m_hWnd,x_offset,y_offset,totWidth+cx1,totHeight+cy1,TRUE);
+    y_offset += (int)(cy1/2); // Fudge factor since buttons overlapped label
+    // JACS 2/12/93. CTL3D draws group label quite high.
 #endif
-    x_offset += cx1;
-    y_offset += cy1;
-  }
+    int startX = x_offset;
+    int startY = y_offset;
 
-#if (!CTL3D)
-  y_offset += (int)(cy1/2); // Fudge factor since buttons overlapped label
-                            // JACS 2/12/93. CTL3D draws group label quite high.
-#endif
-  int startX = x_offset;
-  int startY = y_offset;
+    for ( i = 0 ; i < m_noItems; i++)
+    {
+        // Bidimensional radio adjustment
+        if (i&&((i%m_majorDim)==0)) // Why is this omitted for i = 0?
+        {
+            if (m_windowStyle & wxRA_VERTICAL)
+            {
+                y_offset = startY;
+                x_offset += maxWidth + cx1;
+            }
+            else
+            {
+                x_offset = startX;
+                y_offset += maxHeight;
+                if (m_radioWidth[0]>0)
+                    y_offset += cy1/2;
+            }
+        }
+        int eachWidth;
+        int eachHeight;
+        if (m_radioWidth[i]<0)
+        {
+            // It's a labeled item
+            buf = wxGetWindowText(m_radioButtons[i]);
+            GetTextExtent(buf, &current_width, &cyf);
 
-  for ( i = 0 ; i < m_noItems; i++)
-  {
-    // Bidimensional radio adjustment
-    if (i&&((i%m_majorDim)==0)) // Why is this omitted for i = 0?
-    {
-      if (m_windowStyle & wxRA_VERTICAL)
-      {
-        y_offset = startY;
-        x_offset += maxWidth + cx1;
-      }
-      else
-      {
-        x_offset = startX;
-        y_offset += maxHeight;
-        if (m_radioWidth[0]>0)
-          y_offset += cy1/2;
-      }
-    }
-    int eachWidth;
-    int eachHeight;
-    if (m_radioWidth[i]<0)
-    {
-      // It's a labeled item
-      GetWindowText((HWND) m_radioButtons[i], buf, 300);
-      GetTextExtent(buf, &current_width, &cyf,NULL,NULL, & GetFont());
+            // How do we find out radio button bitmap size!!
+            // By adjusting them carefully, manually :-)
+            eachWidth = (int)(current_width + RADIO_SIZE);
+            eachHeight = (int)((3*cyf)/2);
+        }
+        else
+        {
+            eachWidth = m_radioWidth[i];
+            eachHeight = m_radioHeight[i];
+        }
 
-      // How do we find out radio button bitmap size!!
-      // By adjusting them carefully, manually :-)
-      eachWidth = (int)(current_width + RADIO_SIZE);
-      eachHeight = (int)((3*cyf)/2);
-    }
-    else
-    {
-      eachWidth = m_radioWidth[i];
-      eachHeight = m_radioHeight[i];
-    }
+        MoveWindow((HWND)m_radioButtons[i], x_offset, y_offset,
+                   eachWidth, eachHeight,
+                   TRUE);
 
-    MoveWindow((HWND) m_radioButtons[i],x_offset,y_offset,eachWidth,eachHeight,TRUE);
-    if (m_windowStyle & wxRA_SPECIFY_ROWS)
-    {
-      y_offset += maxHeight;
-      if (m_radioWidth[0]>0)
-        y_offset += cy1/2;
+        if (m_windowStyle & wxRA_SPECIFY_ROWS)
+        {
+            y_offset += maxHeight;
+            if (m_radioWidth[0]>0)
+                y_offset += cy1/2;
+        }
+        else
+            x_offset += maxWidth + cx1;
     }
-    else
-      x_offset += maxWidth + cx1;
-  }
 }
-
 
 void wxRadioBox::GetSize(int *width, int *height) const
 {

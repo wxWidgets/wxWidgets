@@ -24,7 +24,7 @@ WXDLLEXPORT_DATA(extern const wxChar*) wxStaticBoxNameStr;
 class WXDLLEXPORT wxStaticBox : public wxControl
 {
 DECLARE_DYNAMIC_CLASS(wxStaticBox)
-        
+
 public:
     wxStaticBox() { }
 
@@ -37,30 +37,32 @@ public:
     {
         Create(parent, id, label, pos, size, style, name);
     }
-    
+
     bool Create(wxWindow *parent, wxWindowID id,
         const wxString& label,
         const wxPoint& pos = wxDefaultPosition,
         const wxSize& size = wxDefaultSize,
         long style = 0,
         const wxString& name = wxStaticBoxNameStr);
-    
+
+    // implementation from now on
+    // --------------------------
+
     void OnEraseBackground(wxEraseEvent& event);
-    
+
     virtual long MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam);
-    
-    void SetLabel(const wxString& label);
 
     virtual WXHBRUSH OnCtlColor(WXHDC pDC, WXHWND pWnd, WXUINT nCtlColor,
                                 WXUINT message, WXWPARAM wParam, WXLPARAM lParam);
-    
+
     // overriden base class virtuals
     virtual bool AcceptsFocus() const { return FALSE; }
-    
+
 protected:
     virtual void DoSetSize(int x, int y,
                            int width, int height,
                            int sizeFlags = wxSIZE_AUTO);
+    virtual wxSize DoGetBestSize();
 
 private:
     DECLARE_EVENT_TABLE()

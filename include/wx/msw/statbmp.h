@@ -83,9 +83,7 @@ protected:
         wxBitmap *bitmap;
     } m_image;
 
-    virtual void DoSetSize(int x, int y,
-                           int width, int height,
-                           int sizeFlags = wxSIZE_AUTO);
+    virtual wxSize DoGetBestSize();
 };
 
 #endif

@@ -126,8 +126,8 @@ bool wxGaugeMSW::Create(wxWindow *parent, wxWindowID id,
   SendMessage(wx_button, ZYZG_SETORIENTATION, wOrient, 0);
   SendMessage(wx_button, ZYZG_SETRANGE, range, 0);
 
-  SendMessage((HWND) GetHWND(), ZYZG_SETFGCOLOR, 0, RGB(GetForegroundColour().Red(), GetForegroundColour().Green(), GetForegroundColour().Blue()));
-  SendMessage((HWND) GetHWND(), ZYZG_SETBKCOLOR, 0, RGB(GetBackgroundColour().Red(), GetBackgroundColour().Green(), GetBackgroundColour().Blue()));
+  SendMessage(GetHwnd(), ZYZG_SETFGCOLOR, 0, RGB(GetForegroundColour().Red(), GetForegroundColour().Green(), GetForegroundColour().Blue()));
+  SendMessage(GetHwnd(), ZYZG_SETBKCOLOR, 0, RGB(GetBackgroundColour().Red(), GetBackgroundColour().Green(), GetBackgroundColour().Blue()));
 
   SetFont(parent->GetFont());
 
@@ -137,85 +137,53 @@ bool wxGaugeMSW::Create(wxWindow *parent, wxWindowID id,
     height = 50;
   SetSize(x, y, width, height);
 
-  ShowWindow((HWND) GetHWND(), SW_SHOW);
+  ShowWindow(GetHwnd(), SW_SHOW);
 
   return TRUE;
 }
 
-void wxGaugeMSW::DoSetSize(int x, int y, int width, int height, int sizeFlags)
-{
-  int currentX, currentY;
-  GetPosition(&currentX, &currentY);
-  int x1 = x;
-  int y1 = y;
-  int w1 = width;
-  int h1 = height;
-
-  if (x == -1 || (sizeFlags & wxSIZE_ALLOW_MINUS_ONE))
-    x1 = currentX;
-  if (y == -1 || (sizeFlags & wxSIZE_ALLOW_MINUS_ONE))
-    y1 = currentY;
-
-  AdjustForParentClientOrigin(x1, y1, sizeFlags);
-
-  // If we're prepared to use the existing size, then...
-  if (width == -1 && height == -1 && ((sizeFlags & wxSIZE_AUTO) != wxSIZE_AUTO))
-  {
-    GetSize(&w1, &h1);
-  }
-
-  // Deal with default size (using -1 values)
-  if (w1<=0)
-    w1 = DEFAULT_ITEM_WIDTH;
-
-  if (h1<=0)
-    h1 = DEFAULT_ITEM_HEIGHT;
-
-  MoveWindow((HWND) GetHWND(), x1, y1, w1, h1, TRUE);
-}
-
 void wxGaugeMSW::SetShadowWidth(int w)
 {
-  SendMessage((HWND) GetHWND(), ZYZG_SETWIDTH3D, w, 0);
+  SendMessage(GetHwnd(), ZYZG_SETWIDTH3D, w, 0);
 }
 
 void wxGaugeMSW::SetBezelFace(int w)
 {
-  SendMessage((HWND) GetHWND(), ZYZG_SETBEZELFACE, w, 0);
+  SendMessage(GetHwnd(), ZYZG_SETBEZELFACE, w, 0);
 }
 
 void wxGaugeMSW::SetRange(int r)
 {
   m_rangeMax = r;
 
-  SendMessage((HWND) GetHWND(), ZYZG_SETRANGE, r, 0);
+  SendMessage(GetHwnd(), ZYZG_SETRANGE, r, 0);
 }
 
 void wxGaugeMSW::SetValue(int pos)
 {
   m_gaugePos = pos;
 
-  SendMessage((HWND) GetHWND(), ZYZG_SETPOSITION, pos, 0);
+  SendMessage(GetHwnd(), ZYZG_SETPOSITION, pos, 0);
 }
 
 int wxGaugeMSW::GetShadowWidth(void) const
 {
-  return (int) SendMessage((HWND) GetHWND(), ZYZG_GETWIDTH3D, 0, 0);
+  return (int) SendMessage(GetHwnd(), ZYZG_GETWIDTH3D, 0, 0);
 }
 
 int wxGaugeMSW::GetBezelFace(void) const
 {
-  return (int) SendMessage((HWND) GetHWND(), ZYZG_GETBEZELFACE, 0, 0);
+  return (int) SendMessage(GetHwnd(), ZYZG_GETBEZELFACE, 0, 0);
 }
 
 int wxGaugeMSW::GetRange(void) const
 {
-  return (int) SendMessage((HWND) GetHWND(), ZYZG_GETRANGE, 0, 0);
+  return (int) SendMessage(GetHwnd(), ZYZG_GETRANGE, 0, 0);
 }
 
 int wxGaugeMSW::GetValue(void) const
 {
-  return (int) SendMessage((HWND) GetHWND(), ZYZG_GETPOSITION, 0, 0);
+  return (int) SendMessage(GetHwnd(), ZYZG_GETPOSITION, 0, 0);
 }
 
 bool wxGaugeMSW::SetForegroundColour(const wxColour& col)
@@ -223,7 +191,7 @@ bool wxGaugeMSW::SetForegroundColour(const wxColour& col)
     if ( !wxControl::SetForegroundColour(col) )
         return FALSE;
 
-    SendMessage((HWND) GetHWND(), ZYZG_SETFGCOLOR, 0, RGB(col.Red(), col.Green(), col.Blue()));
+    SendMessage(GetHwnd(), ZYZG_SETFGCOLOR, 0, RGB(col.Red(), col.Green(), col.Blue()));
 
     return TRUE;
 }
@@ -233,7 +201,7 @@ bool wxGaugeMSW::SetBackgroundColour(const wxColour& col)
     if ( !wxControl::SetBackgroundColour(col) )
         return FALSE;
 
-    SendMessage((HWND) GetHWND(), ZYZG_SETBKCOLOR, 0, RGB(col.Red(), col.Green(), col.Blue()));
+    SendMessage(GetHwnd(), ZYZG_SETBKCOLOR, 0, RGB(col.Red(), col.Green(), col.Blue()));
 
     return TRUE;
 }

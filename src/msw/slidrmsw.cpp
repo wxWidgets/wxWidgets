@@ -248,12 +248,12 @@ wxSliderMSW::~wxSliderMSW()
 
 int wxSliderMSW::GetValue() const
 {
-  return ::GetScrollPos((HWND) GetHWND(), SB_CTL);
+  return ::GetScrollPos(GetHwnd(), SB_CTL);
 }
 
 void wxSliderMSW::SetValue(int value)
 {
-  ::SetScrollPos((HWND) GetHWND(), SB_CTL, value, TRUE);
+  ::SetScrollPos(GetHwnd(), SB_CTL, value, TRUE);
   if (m_staticValue)
   {
     wxSprintf(wxBuffer, _T("%d"), value);
@@ -315,6 +315,8 @@ void wxSliderMSW::GetPosition(int *x, int *y) const
   *y = point.y;
 }
 
+// TODO one day, make sense of all this horros and replace it with a readable
+//      DoGetBestSize()
 void wxSliderMSW::DoSetSize(int x, int y, int width, int height, int sizeFlags)
 {
   int x1 = x;
@@ -379,7 +381,7 @@ void wxSliderMSW::DoSetSize(int x, int y, int width, int height, int sizeFlags)
     if (slider_length < 100)
       slider_length = 100;
 
-    MoveWindow((HWND) GetHWND(), x_offset, y_offset, slider_length, slider_height, TRUE);
+    MoveWindow(GetHwnd(), x_offset, y_offset, slider_length, slider_height, TRUE);
     x_offset += slider_length + cx;
 
     MoveWindow((HWND) m_staticMax, x_offset, y_offset, (int)max_len, cy, TRUE);
@@ -391,7 +393,7 @@ void wxSliderMSW::DoSetSize(int x, int y, int width, int height, int sizeFlags)
             w1 = 200;
         if ( h1 < 0 )
             h1 = 20;
-        MoveWindow((HWND) GetHWND(), x1, y1, w1, h1, TRUE);
+        MoveWindow(GetHwnd(), x1, y1, w1, h1, TRUE);
     }
   }
   else
@@ -435,7 +437,7 @@ void wxSliderMSW::DoSetSize(int x, int y, int width, int height, int sizeFlags)
     if (slider_length < 100)
       slider_length = 100;
 
-    MoveWindow((HWND) GetHWND(), x_offset, y_offset, slider_width, slider_length, TRUE);
+    MoveWindow(GetHwnd(), x_offset, y_offset, slider_width, slider_length, TRUE);
     y_offset += slider_length;
 
     MoveWindow((HWND) m_staticMax, x_offset, y_offset, (int)max_len, cy, TRUE);
@@ -447,7 +449,7 @@ void wxSliderMSW::DoSetSize(int x, int y, int width, int height, int sizeFlags)
             w1 = 20;
         if ( h1 < 0 )
             h1 = 200;
-        MoveWindow((HWND) GetHWND(), x1, y1, w1, h1, TRUE);
+        MoveWindow(GetHwnd(), x1, y1, w1, h1, TRUE);
     }
   }
 }
@@ -457,7 +459,7 @@ void wxSliderMSW::SetRange(int minValue, int maxValue)
   m_rangeMin = minValue;
   m_rangeMax = maxValue;
 
-  ::SetScrollRange((HWND) GetHWND(), SB_CTL, m_rangeMin, m_rangeMax, TRUE);
+  ::SetScrollRange(GetHwnd(), SB_CTL, m_rangeMin, m_rangeMax, TRUE);
   wxChar buf[40];
   if ( m_staticMin )
   {

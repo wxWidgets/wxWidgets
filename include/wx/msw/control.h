@@ -69,6 +69,8 @@ protected:
    // For controls like radiobuttons which are really composite
    wxList           m_subControls;
 
+    virtual wxSize DoGetBestSize();
+
 private:
    DECLARE_EVENT_TABLE()
 };

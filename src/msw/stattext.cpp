@@ -94,24 +94,8 @@ bool wxStaticText::Create(wxWindow *parent, wxWindowID id,
   return TRUE;
 }
 
-void wxStaticText::DoSetSize(int x, int y, int width, int height, int sizeFlags)
+wxSize wxStaticText::DoGetBestSize()
 {
-    int currentX, currentY;
-    GetPosition(&currentX, &currentY);
-
-    int x1 = x;
-    int y1 = y;
-
-    if (x == -1 || (sizeFlags & wxSIZE_ALLOW_MINUS_ONE))
-        x1 = currentX;
-    if (y == -1 || (sizeFlags & wxSIZE_ALLOW_MINUS_ONE))
-        y1 = currentY;
-
-    AdjustForParentClientOrigin(x1, y1, sizeFlags);
-
-    int actualWidth = width;
-    int actualHeight = height;
-
     wxString text(wxGetWindowText(GetHWND()));
 
     int widthTextMax = 0, widthLine,
@@ -138,36 +122,16 @@ void wxStaticText::DoSetSize(int x, int y, int width, int height, int sizeFlags)
         }
     }
 
-    int ww, hh;
-    GetSize(&ww, &hh);
-
-    // If we're prepared to use the existing width, then...
-    if (width == -1 && ((sizeFlags & wxSIZE_AUTO_WIDTH) != wxSIZE_AUTO_WIDTH))
-    {
-        actualWidth = ww;
-    }
-    else if (width == -1)
-    {
-        actualWidth = widthTextMax;
-    }
-    
-    // If we're prepared to use the existing height, then...
-    if (height == -1 && ((sizeFlags & wxSIZE_AUTO_HEIGHT) != wxSIZE_AUTO_HEIGHT))
-    {
-        actualHeight = hh;
-    }
-    else if (height == -1)
-    {
-        actualHeight = heightTextTotal;
-    }
-    
-    MoveWindow(GetHwnd(), x1, y1, actualWidth, actualHeight, TRUE);
+    return wxSize(widthTextMax, heightTextTotal);
 }
 
 void wxStaticText::SetLabel(const wxString& label)
 {
     SetWindowText(GetHwnd(), label);
 
+    // adjust the size of the window to fit to the label (this behaviour is
+    // backward compatible and generally makes sense but we might want to still
+    // provide the user a way to disable it) (VZ)
     DoSetSize(-1, -1, -1, -1, wxSIZE_AUTO_WIDTH | wxSIZE_AUTO_HEIGHT);
 }
 

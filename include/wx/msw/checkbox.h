@@ -53,9 +53,7 @@ public:
             WXUINT message, WXWPARAM wParam, WXLPARAM lParam);
 
 protected:
-    virtual void DoSetSize(int x, int y,
-                           int width, int height,
-                           int sizeFlags = wxSIZE_AUTO);
+    virtual wxSize DoGetBestSize();
 };
 
 class WXDLLEXPORT wxBitmapCheckBox: public wxCheckBox
@@ -82,15 +80,7 @@ public:
             const wxValidator& validator = wxDefaultValidator,
             const wxString& name = wxCheckBoxNameStr);
 
-    virtual void SetValue(bool value);
-    virtual bool GetValue() const ;
-
     virtual void SetLabel(const wxBitmap& bitmap);
-
-protected:
-    virtual void DoSetSize(int x, int y,
-                           int width, int height,
-                           int sizeFlags = wxSIZE_AUTO);
 };
 #endif
     // _WX_CHECKBOX_H_

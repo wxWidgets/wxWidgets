@@ -133,10 +133,6 @@ protected:
     // control items
     wxListBoxItemsArray m_aItems;
 #endif
-
-    virtual void DoSetSize(int x, int y,
-                           int width, int height,
-                           int sizeFlags = wxSIZE_AUTO);
 };
 
 #endif

@@ -277,12 +277,12 @@ wxSlider95::~wxSlider95()
 
 int wxSlider95::GetValue() const
 {
-  return ::SendMessage((HWND) GetHWND(), TBM_GETPOS, 0, 0);
+  return ::SendMessage(GetHwnd(), TBM_GETPOS, 0, 0);
 }
 
 void wxSlider95::SetValue(int value)
 {
-  ::SendMessage((HWND) GetHWND(), TBM_SETPOS, (WPARAM)TRUE, (LPARAM)value);
+  ::SendMessage(GetHwnd(), TBM_SETPOS, (WPARAM)TRUE, (LPARAM)value);
   if (m_staticValue)
   {
     wxSprintf(wxBuffer, _T("%d"), value);
@@ -344,6 +344,8 @@ void wxSlider95::GetPosition(int *x, int *y) const
   *y = point.y;
 }
 
+// TODO one day, make sense of all this horros and replace it with a readable
+//      DoGetBestSize()
 void wxSlider95::DoSetSize(int x, int y, int width, int height, int sizeFlags)
 {
   int x1 = x;
@@ -413,7 +415,7 @@ void wxSlider95::DoSetSize(int x, int y, int width, int height, int sizeFlags)
     if (slider_length < 100)
       slider_length = 100;
 
-    MoveWindow((HWND) GetHWND(), x_offset, y_offset, slider_length, slider_height, TRUE);
+    MoveWindow(GetHwnd(), x_offset, y_offset, slider_length, slider_height, TRUE);
     x_offset += slider_length + cx;
 
     MoveWindow((HWND) m_staticMax, x_offset, y_offset, (int)max_len, cy, TRUE);
@@ -430,7 +432,7 @@ void wxSlider95::DoSetSize(int x, int y, int width, int height, int sizeFlags)
             w1 = 200;
         if ( h1 < 0 )
             h1 = 20;
-        MoveWindow((HWND) GetHWND(), x1, y1, w1, h1, TRUE);
+        MoveWindow(GetHwnd(), x1, y1, w1, h1, TRUE);
     }
   }
   else
@@ -479,7 +481,7 @@ void wxSlider95::DoSetSize(int x, int y, int width, int height, int sizeFlags)
     if (slider_length < 100)
       slider_length = 100;
 
-    MoveWindow((HWND) GetHWND(), x_offset, y_offset, slider_width, slider_length, TRUE);
+    MoveWindow(GetHwnd(), x_offset, y_offset, slider_width, slider_length, TRUE);
     y_offset += slider_length;
 
     MoveWindow((HWND) m_staticMax, x_offset, y_offset, (int)max_len, cy, TRUE);
@@ -496,7 +498,7 @@ void wxSlider95::DoSetSize(int x, int y, int width, int height, int sizeFlags)
             w1 = 20;
         if ( h1 < 0 )
             h1 = 200;
-        MoveWindow((HWND) GetHWND(), x1, y1, w1, h1, TRUE);
+        MoveWindow(GetHwnd(), x1, y1, w1, h1, TRUE);
     }
   }
 }
@@ -506,7 +508,7 @@ void wxSlider95::SetRange(int minValue, int maxValue)
   m_rangeMin = minValue;
   m_rangeMax = maxValue;
 
-  ::SendMessage((HWND) GetHWND(), TBM_SETRANGE, TRUE, MAKELONG(minValue, maxValue));
+  ::SendMessage(GetHwnd(), TBM_SETRANGE, TRUE, MAKELONG(minValue, maxValue));
 
   wxChar buf[40];
   if ( m_staticMin )
@@ -545,12 +547,12 @@ WXHBRUSH wxSlider95::OnCtlColor(WXHDC pDC, WXHWND pWnd, WXUINT nCtlColor,
 void wxSlider95::SetTickFreq(int n, int pos)
 {
   m_tickFreq = n;
-  ::SendMessage( (HWND) GetHWND(), TBM_SETTICFREQ, (WPARAM) n, (LPARAM) pos );
+  ::SendMessage( GetHwnd(), TBM_SETTICFREQ, (WPARAM) n, (LPARAM) pos );
 }
 
 void wxSlider95::SetPageSize(int pageSize)
 {
-  ::SendMessage( (HWND) GetHWND(), TBM_SETPAGESIZE, (WPARAM) 0, (LPARAM) pageSize );
+  ::SendMessage( GetHwnd(), TBM_SETPAGESIZE, (WPARAM) 0, (LPARAM) pageSize );
   m_pageSize = pageSize;
 }
 
@@ -561,53 +563,53 @@ int wxSlider95::GetPageSize() const
 
 void wxSlider95::ClearSel()
 {
-  ::SendMessage( (HWND) GetHWND(), TBM_CLEARSEL, (WPARAM) TRUE, (LPARAM) 0 );
+  ::SendMessage( GetHwnd(), TBM_CLEARSEL, (WPARAM) TRUE, (LPARAM) 0 );
 }
 
 void wxSlider95::ClearTicks()
 {
-  ::SendMessage( (HWND) GetHWND(), TBM_CLEARTICS, (WPARAM) TRUE, (LPARAM) 0 );
+  ::SendMessage( GetHwnd(), TBM_CLEARTICS, (WPARAM) TRUE, (LPARAM) 0 );
 }
 
 void wxSlider95::SetLineSize(int lineSize)
 {
   m_lineSize = lineSize;
-  ::SendMessage( (HWND) GetHWND(), TBM_SETLINESIZE, (WPARAM) 0, (LPARAM) lineSize );
+  ::SendMessage( GetHwnd(), TBM_SETLINESIZE, (WPARAM) 0, (LPARAM) lineSize );
 }
 
 int wxSlider95::GetLineSize() const
 {
-  return (int) ::SendMessage( (HWND) GetHWND(), TBM_GETLINESIZE, (WPARAM) 0, (LPARAM) 0 );
+  return (int) ::SendMessage( GetHwnd(), TBM_GETLINESIZE, (WPARAM) 0, (LPARAM) 0 );
 }
 
 int wxSlider95::GetSelEnd() const
 {
-  return (int) ::SendMessage( (HWND) GetHWND(), TBM_SETSELEND, (WPARAM) 0, (LPARAM) 0 );
+  return (int) ::SendMessage( GetHwnd(), TBM_SETSELEND, (WPARAM) 0, (LPARAM) 0 );
 }
 
 int wxSlider95::GetSelStart() const
 {
-  return (int) ::SendMessage( (HWND) GetHWND(), TBM_GETSELSTART, (WPARAM) 0, (LPARAM) 0 );
+  return (int) ::SendMessage( GetHwnd(), TBM_GETSELSTART, (WPARAM) 0, (LPARAM) 0 );
 }
 
 void wxSlider95::SetSelection(int minPos, int maxPos)
 {
-  ::SendMessage( (HWND) GetHWND(), TBM_SETSEL, (WPARAM) TRUE, (LPARAM) MAKELONG( minPos, maxPos) );
+  ::SendMessage( GetHwnd(), TBM_SETSEL, (WPARAM) TRUE, (LPARAM) MAKELONG( minPos, maxPos) );
 }
 
 void wxSlider95::SetThumbLength(int len)
 {
-  ::SendMessage( (HWND) GetHWND(), TBM_SETTHUMBLENGTH, (WPARAM) len, (LPARAM) 0 );
+  ::SendMessage( GetHwnd(), TBM_SETTHUMBLENGTH, (WPARAM) len, (LPARAM) 0 );
 }
 
 int wxSlider95::GetThumbLength() const
 {
-  return (int) ::SendMessage( (HWND) GetHWND(), TBM_GETTHUMBLENGTH, (WPARAM) 0, (LPARAM) 0 );
+  return (int) ::SendMessage( GetHwnd(), TBM_GETTHUMBLENGTH, (WPARAM) 0, (LPARAM) 0 );
 }
 
 void wxSlider95::SetTick(int tickPos)
 {
-  ::SendMessage( (HWND) GetHWND(), TBM_SETTIC, (WPARAM) 0, (LPARAM) tickPos );
+  ::SendMessage( GetHwnd(), TBM_SETTIC, (WPARAM) 0, (LPARAM) tickPos );
 }
 
 bool wxSlider95::ContainsHWND(WXHWND hWnd) const

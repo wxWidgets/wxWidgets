@@ -70,10 +70,6 @@ public:
 protected:
     int      m_rangeMax;
     int      m_gaugePos;
-
-    virtual void DoSetSize(int x, int y,
-                           int width, int height,
-                           int sizeFlags = wxSIZE_AUTO);
 };
 
 #endif

@@ -59,7 +59,8 @@ public:
     wxTextCtrl(wxWindow *parent, wxWindowID id,
             const wxString& value = wxEmptyString,
             const wxPoint& pos = wxDefaultPosition,
-            const wxSize& size = wxDefaultSize, long style = 0,
+            const wxSize& size = wxDefaultSize,
+            long style = 0,
             const wxValidator& validator = wxDefaultValidator,
             const wxString& name = wxTextCtrlNameStr)
 #ifndef NO_TEXT_WINDOW_STREAM
@@ -72,13 +73,15 @@ public:
     bool Create(wxWindow *parent, wxWindowID id,
             const wxString& value = wxEmptyString,
             const wxPoint& pos = wxDefaultPosition,
-            const wxSize& size = wxDefaultSize, long style = wxTE_PROCESS_TAB,
+            const wxSize& size = wxDefaultSize,
+            long style = 0,
             const wxValidator& validator = wxDefaultValidator,
             const wxString& name = wxTextCtrlNameStr);
 
     // accessors
     // ---------
-    virtual wxString GetValue() const ;
+
+    virtual wxString GetValue() const;
     virtual void SetValue(const wxString& value);
 
     virtual int GetLineLength(long lineNo) const;
@@ -148,25 +151,9 @@ public:
     virtual void ShowPosition(long pos);
     virtual void Clear();
 
-    // callbacks
-    // ---------
-    void OnDropFiles(wxDropFilesEvent& event);
-    void OnChar(wxKeyEvent& event); // Process 'enter' if required
+    // Implementation from now on
+    // --------------------------
 
-    void OnCut(wxCommandEvent& event);
-    void OnCopy(wxCommandEvent& event);
-    void OnPaste(wxCommandEvent& event);
-    void OnUndo(wxCommandEvent& event);
-    void OnRedo(wxCommandEvent& event);
-
-    void OnUpdateCut(wxUpdateUIEvent& event);
-    void OnUpdateCopy(wxUpdateUIEvent& event);
-    void OnUpdatePaste(wxUpdateUIEvent& event);
-    void OnUpdateUndo(wxUpdateUIEvent& event);
-    void OnUpdateRedo(wxUpdateUIEvent& event);
-
-    // Implementation
-    // --------------
     virtual void Command(wxCommandEvent& event);
     virtual bool MSWCommand(WXUINT param, WXWORD id);
 
@@ -184,6 +171,23 @@ public:
 
     virtual bool AcceptsFocus() const;
 
+    // callbacks
+    // ---------
+    void OnDropFiles(wxDropFilesEvent& event);
+    void OnChar(wxKeyEvent& event); // Process 'enter' if required
+
+    void OnCut(wxCommandEvent& event);
+    void OnCopy(wxCommandEvent& event);
+    void OnPaste(wxCommandEvent& event);
+    void OnUndo(wxCommandEvent& event);
+    void OnRedo(wxCommandEvent& event);
+
+    void OnUpdateCut(wxUpdateUIEvent& event);
+    void OnUpdateCopy(wxUpdateUIEvent& event);
+    void OnUpdatePaste(wxUpdateUIEvent& event);
+    void OnUpdateUndo(wxUpdateUIEvent& event);
+    void OnUpdateRedo(wxUpdateUIEvent& event);
+
 protected:
 #if wxUSE_RICHEDIT
     bool      m_isRich; // Are we using rich text edit to implement this?
@@ -195,9 +199,7 @@ protected:
     // limit is big enough)
     void AdjustSpaceLimit();
 
-    virtual void DoSetSize(int x, int y,
-                           int width, int height,
-                           int sizeFlags = wxSIZE_AUTO);
+    virtual wxSize DoGetBestSize();
 
 private:
     DECLARE_EVENT_TABLE()

@@ -63,9 +63,7 @@ protected:
     // send a notification event, return TRUE if processed
     bool SendClickEvent();
 
-    virtual void DoSetSize(int x, int y,
-                           int width, int height,
-                           int sizeFlags = wxSIZE_AUTO);
+    virtual wxSize DoGetBestSize();
 };
 
 #endif

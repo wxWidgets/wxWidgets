@@ -73,9 +73,10 @@ public:
 protected:
     int     m_noStrings;
 
+    virtual wxSize DoGetBestSize();
     virtual void DoSetSize(int x, int y,
-            int width, int height,
-            int sizeFlags = wxSIZE_AUTO);
+                           int width, int height,
+                           int sizeFlags = wxSIZE_AUTO);
 };
 
 #endif

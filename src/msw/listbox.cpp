@@ -518,65 +518,8 @@ wxString wxListBox::GetString(int N) const
     return result;
 }
 
-void wxListBox::DoSetSize(int x, int y, int width, int height, int sizeFlags)
-{
-    int currentX, currentY;
-    GetPosition(&currentX, &currentY);
-
-    int x1 = x;
-    int y1 = y;
-    int w1 = width;
-    int h1 = height;
-
-    if (x == -1 || (sizeFlags & wxSIZE_ALLOW_MINUS_ONE))
-        x1 = currentX;
-    if (y == -1 || (sizeFlags & wxSIZE_ALLOW_MINUS_ONE))
-        y1 = currentY;
-
-    AdjustForParentClientOrigin(x1, y1, sizeFlags);
-
-    // If we're prepared to use the existing size, then...
-    if (width == -1 && height == -1 && ((sizeFlags & wxSIZE_AUTO) != wxSIZE_AUTO))
-    {
-        GetSize(&w1, &h1);
-    }
-
-    int cx; // button font dimensions
-    int cy;
-
-    wxGetCharSize(GetHWND(), &cx, &cy, & this->GetFont());
-
-    float control_width, control_height, control_x, control_y;
-
-    // Deal with default size (using -1 values)
-    if (w1<=0)
-        w1 = DEFAULT_ITEM_WIDTH;
-
-    if (h1<=0)
-        h1 = DEFAULT_ITEM_HEIGHT;
-
-    control_x = (float)x1;
-    control_y = (float)y1;
-    control_width = (float)w1;
-    control_height = (float)h1;
-
-    // Calculations may have made size too small
-    if (control_height <= 0)
-        control_height = (float)DEFAULT_ITEM_HEIGHT;
-
-    if (control_width <= 0)
-        control_width = (float)DEFAULT_ITEM_WIDTH;
-
-    MoveWindow(GetHwnd(),
-               (int)control_x, (int)control_y,
-               (int)control_width, (int)control_height,
-               TRUE);
-
-}
-
-// Windows-specific code to set the horizontal extent of
-// the listbox, if necessary. If s is non-NULL, it's
-// used to calculate the horizontal extent.
+// Windows-specific code to set the horizontal extent of the listbox, if
+// necessary. If s is non-NULL, it's used to calculate the horizontal extent.
 // Otherwise, all strings are used.
 void wxListBox::SetHorizontalExtent(const wxString& s)
 {

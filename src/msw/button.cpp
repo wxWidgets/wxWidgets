@@ -113,54 +113,27 @@ wxButton::~wxButton()
 // size management including autosizing
 // ----------------------------------------------------------------------------
 
-void wxButton::DoSetSize(int x, int y, int width, int height, int sizeFlags)
+wxSize wxButton::DoGetBestSize()
 {
-    int currentX, currentY;
-    GetPosition(&currentX, &currentY);
-    int x1 = x;
-    int y1 = y;
-    if (x == -1 || (sizeFlags & wxSIZE_ALLOW_MINUS_ONE))
-        x1 = currentX;
-    if (y == -1 || (sizeFlags & wxSIZE_ALLOW_MINUS_ONE))
-        y1 = currentY;
+    wxString label = wxGetWindowText(GetHWND());
+    int wBtn;
+    GetTextExtent(label, &wBtn, NULL);
 
-    AdjustForParentClientOrigin(x1, y1, sizeFlags);
+    int wChar, hChar;
+    wxGetCharSize(GetHWND(), &wChar, &hChar, &GetFont());
 
-    int actualWidth = width;
-    int actualHeight = height;
-    int ww, hh;
-    GetSize(&ww, &hh);
+    // add a margin - the button is wider than just its label
+    wBtn += 3*wChar;
 
-    int current_width;
-    int cyf;
-    wxString buf = wxGetWindowText(GetHWND());
-    GetTextExtent(buf, &current_width, &cyf, NULL, NULL, &GetFont());
+    // the button height is proportional to the height of the font used
+    int hBtn = BUTTON_HEIGHT_FROM_CHAR_HEIGHT(hChar);
 
-    // If we're prepared to use the existing width, then...
-    if (width == -1 && ((sizeFlags & wxSIZE_AUTO_WIDTH) != wxSIZE_AUTO_WIDTH))
-    {
-        actualWidth = ww;
-    }
-    else if (width == -1)
-    {
-        int cx;
-        int cy;
-        wxGetCharSize(GetHWND(), &cx, &cy, & this->GetFont());
-        actualWidth = (int)(current_width + 3*cx) ;
-    }
-
-    // If we're prepared to use the existing height, then...
-    if (height == -1 && ((sizeFlags & wxSIZE_AUTO_HEIGHT) != wxSIZE_AUTO_HEIGHT))
-    {
-        actualHeight = hh;
-    }
-    else if (height == -1)
-    {
-        actualHeight = BUTTON_HEIGHT_FROM_CHAR_HEIGHT(cyf);
-    }
-
-    MoveWindow(GetHwnd(), x1, y1, actualWidth, actualHeight, TRUE);
+    return wxSize(wBtn, hBtn);
 }
+
+// ----------------------------------------------------------------------------
+// set this button as the default one in its panel
+// ----------------------------------------------------------------------------
 
 void wxButton::SetDefault()
 {

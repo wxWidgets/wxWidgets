@@ -140,39 +140,11 @@ void wxStaticBitmap::Free()
     m_image.icon = NULL;
 }
 
-void wxStaticBitmap::DoSetSize(int x, int y, int width, int height, int sizeFlags)
+wxSize wxStaticBitmap::DoGetBestSize()
 {
-    int currentX, currentY;
-    GetPosition(&currentX, &currentY);
-    int x1 = x;
-    int y1 = y;
-
-    if (x == -1 || (sizeFlags & wxSIZE_ALLOW_MINUS_ONE))
-        x1 = currentX;
-    if (y == -1 || (sizeFlags & wxSIZE_ALLOW_MINUS_ONE))
-        y1 = currentY;
-
-    AdjustForParentClientOrigin(x1, y1, sizeFlags);
-
-    int actualWidth = width;
-    int actualHeight = height;
-
-    int ww, hh;
-    GetSize(&ww, &hh);
-
-    // If we're prepared to use the existing width, then...
-    if (width == -1 && ((sizeFlags & wxSIZE_AUTO_WIDTH) != wxSIZE_AUTO_WIDTH))
-        actualWidth = ww;
-    else
-        actualWidth = width;
-
-    // If we're prepared to use the existing height, then...
-    if (height == -1 && ((sizeFlags & wxSIZE_AUTO_HEIGHT) != wxSIZE_AUTO_HEIGHT))
-        actualHeight = hh;
-    else
-        actualHeight = height;
-
-    MoveWindow((HWND) GetHWND(), x1, y1, actualWidth, actualHeight, TRUE);
+    // reuse the current size (as wxWindow does) instead of using some
+    // arbitrary default size (as wxControl, our immediate base class, does)
+    return wxWindow::DoGetBestSize();
 }
 
 void wxStaticBitmap::SetBitmap(const wxBitmap& bitmap)

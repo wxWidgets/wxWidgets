@@ -58,9 +58,9 @@ bool wxGauge95::Create(wxWindow *parent, wxWindowID id,
   m_windowStyle = style;
 
   if ( id == -1 )
-  	m_windowId = (int)NewControlId();
+      m_windowId = (int)NewControlId();
   else
-	m_windowId = id;
+      m_windowId = id;
 
   int x = pos.x;
   int y = pos.y;
@@ -106,38 +106,6 @@ bool wxGauge95::Create(wxWindow *parent, wxWindowID id,
   ShowWindow((HWND) GetHWND(), SW_SHOW);
 
   return TRUE;
-}
-
-void wxGauge95::DoSetSize(int x, int y, int width, int height, int sizeFlags)
-{
-  int currentX, currentY;
-  GetPosition(&currentX, &currentY);
-  int x1 = x;
-  int y1 = y;
-  int w1 = width;
-  int h1 = height;
-
-  if (x == -1 || (sizeFlags & wxSIZE_ALLOW_MINUS_ONE))
-    x1 = currentX;
-  if (y == -1 || (sizeFlags & wxSIZE_ALLOW_MINUS_ONE))
-    y1 = currentY;
-
-  AdjustForParentClientOrigin(x1, y1, sizeFlags);
-
-  // If we're prepared to use the existing size, then...
-  if (width == -1 && height == -1 && ((sizeFlags & wxSIZE_AUTO) != wxSIZE_AUTO))
-  {
-    GetSize(&w1, &h1);
-  }
-
-  // Deal with default size (using -1 values)
-  if (w1<=0)
-    w1 = DEFAULT_ITEM_WIDTH;
-
-  if (h1<=0)
-    h1 = DEFAULT_ITEM_HEIGHT;
-
-  MoveWindow((HWND) GetHWND(), x1, y1, w1, h1, TRUE);
 }
 
 void wxGauge95::SetShadowWidth(int w)

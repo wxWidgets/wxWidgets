@@ -123,19 +123,19 @@ bool wxChoice::Create(wxWindow *parent, wxWindowID id,
 
 void wxChoice::Append(const wxString& item)
 {
-  SendMessage((HWND) GetHWND(), CB_ADDSTRING, 0, (LONG)(const wxChar *)item);
+  SendMessage(GetHwnd(), CB_ADDSTRING, 0, (LONG)(const wxChar *)item);
 
   m_noStrings ++;
 }
 
 void wxChoice::Delete(int n)
 {
-  m_noStrings = (int)SendMessage((HWND) GetHWND(), CB_DELETESTRING, n, 0);
+  m_noStrings = (int)SendMessage(GetHwnd(), CB_DELETESTRING, n, 0);
 }
 
 void wxChoice::Clear(void)
 {
-  SendMessage((HWND) GetHWND(), CB_RESETCONTENT, 0, 0);
+  SendMessage(GetHwnd(), CB_RESETCONTENT, 0, 0);
 
   m_noStrings = 0;
 }
@@ -143,12 +143,12 @@ void wxChoice::Clear(void)
 
 int wxChoice::GetSelection(void) const
 {
-  return (int)SendMessage((HWND) GetHWND(), CB_GETCURSEL, 0, 0);
+  return (int)SendMessage(GetHwnd(), CB_GETCURSEL, 0, 0);
 }
 
 void wxChoice::SetSelection(int n)
 {
-  SendMessage((HWND) GetHWND(), CB_SETCURSEL, n, 0);
+  SendMessage(GetHwnd(), CB_SETCURSEL, n, 0);
 }
 
 int wxChoice::FindString(const wxString& s) const
@@ -159,14 +159,14 @@ int wxChoice::FindString(const wxString& s) const
   char buf[512];
   for (int i = 0; i < Number(); i++)
   {
-    int len = (int)SendMessage((HWND) GetHWND(), CB_GETLBTEXT, i, (LPARAM)(LPSTR)buf);
+    int len = (int)SendMessage(GetHwnd(), CB_GETLBTEXT, i, (LPARAM)(LPSTR)buf);
     buf[len] = 0;
     if (strcmp(buf, (const char *)s) == 0)
       return i;
   }
   return -1;
 #else
- int pos = (int)SendMessage((HWND) GetHWND(), CB_FINDSTRINGEXACT, (WPARAM)-1, (LPARAM)(LPSTR)(const wxChar *)s);
+ int pos = (int)SendMessage(GetHwnd(), CB_FINDSTRINGEXACT, (WPARAM)-1, (LPARAM)(LPSTR)(const wxChar *)s);
  if (pos == LB_ERR)
    return -1;
  else
@@ -176,99 +176,60 @@ int wxChoice::FindString(const wxString& s) const
 
 wxString wxChoice::GetString(int n) const
 {
-  int len = (int)SendMessage((HWND) GetHWND(), CB_GETLBTEXT, n, (long)wxBuffer);
-  wxBuffer[len] = 0;
-  return wxString(wxBuffer);
+    size_t len = (size_t)::SendMessage(GetHwnd(), CB_GETLBTEXTLEN, n, 0);
+    wxString str;
+    if ( ::SendMessage(GetHwnd(), CB_GETLBTEXT, n,
+                       (LPARAM)str.GetWriteBuf(len)) == CB_ERR )
+    {
+        wxLogLastError("SendMessage(CB_GETLBTEXT)");
+    }
+
+    str.UngetWriteBuf();
+
+    return str;
 }
 
-void wxChoice::DoSetSize(int x, int y, int width, int height, int sizeFlags)
+void wxChoice::DoSetSize(int x, int y,
+                         int width, int height,
+                         int sizeFlags)
 {
-  int currentX, currentY;
-  GetPosition(&currentX, &currentY);
+    // Ignore height parameter because height doesn't mean 'initially
+    // displayed' height, it refers to the drop-down menu as well. The
+    // wxWindows interpretation is different; also, getting the size returns
+    // the _displayed_ size (NOT the drop down menu size) so
+    // setting-getting-setting size would not work.
+    wxControl::DoSetSize(x, y, width, -1, sizeFlags);
+}
 
-  int x1 = x;
-  int y1 = y;
-  int w1 = width;
-  int h1 = height;
-
-  if (x == -1 || (sizeFlags & wxSIZE_ALLOW_MINUS_ONE))
-    x1 = currentX;
-  if (y == -1 || (sizeFlags & wxSIZE_ALLOW_MINUS_ONE))
-    y1 = currentY;
-
-  AdjustForParentClientOrigin(x1, y1, sizeFlags);
-
-  // If we're prepared to use the existing size, then...
-  if (width == -1 && height == -1 && ((sizeFlags & wxSIZE_AUTO) != wxSIZE_AUTO))
-  {
-    GetSize(&w1, &h1);
-  }
-
-  int cx; // button font dimensions
-  int cy;
-  wxGetCharSize(GetHWND(), &cx, &cy, & this->GetFont());
-
-  int control_width, control_height;
-
-  // Ignore height parameter because height doesn't
-  // mean 'initially displayed' height, it refers to the
-  // drop-down menu as well. The wxWindows interpretation
-  // is different; also, getting the size returns the
-  // _displayed_ size (NOT the drop down menu size)
-  // so setting-getting-setting size would not work.
-  h1 = -1;
-
-  // Deal with default size (using -1 values)
-  if (width <= 0)
-  {
-    // Find the longest string
-    if (m_noStrings == 0)
+wxSize wxChoice::DoGetBestSize()
+{
+    // find the widest string
+    int wLine;
+    int wChoice = 0;
+    for ( int i = 0; i < m_noStrings; i++ )
     {
-      control_width = 100;
-    }
-    else
-    {
-      int len, ht;
-      int longest = 0;
-      int i;
-      for (i = 0; i < m_noStrings; i++)
-      {
         wxString str(GetString(i));
-        GetTextExtent(str, &len, &ht, NULL, NULL, & this->GetFont());
-        if ( len > longest)
-            longest = len;
-      }
-
-      control_width = longest + cx*5;
+        GetTextExtent(str, &wLine, NULL);
+        if ( wLine > wChoice )
+            wChoice = wLine;
     }
-  }
-  else
-  {
-    // If non-default width...
-    control_width = w1;
-  }
 
+    // give it some reasonable default value if there are no strings in the
+    // list
+    if ( wChoice == 0 )
+        wChoice = 100;
 
-  // Choice drop-down list depends on number of items (limited to 10)
-  if (h1 <= 0)
-  {
-    if (m_noStrings == 0)
-        h1 = EDIT_HEIGHT_FROM_CHAR_HEIGHT(cy)*10;
-    else
-        h1 = EDIT_HEIGHT_FROM_CHAR_HEIGHT(cy)*(wxMin(10, m_noStrings) + 1);
-  }
+    // the combobox should be larger than the widest string
+    int cx, cy;
+    wxGetCharSize(GetHWND(), &cx, &cy, &GetFont());
 
-  control_height = h1;
+    wChoice += 5*cx;
 
-  // Calculations may have made text size too small
-  if (control_height <= 0)
-    control_height = EDIT_HEIGHT_FROM_CHAR_HEIGHT(cy);
+    // Choice drop-down list depends on number of items (limited to 10)
+    size_t nStrings = m_noStrings == 0 ? 10 : wxMin(10, m_noStrings) + 1;
+    int hChoice = EDIT_HEIGHT_FROM_CHAR_HEIGHT(cy)*nStrings;
 
-  if (control_width <= 0)
-    control_width = 100;
-
-  MoveWindow((HWND)GetHWND(), x1, y1,
-             control_width, control_height, TRUE);
+    return wxSize(wChoice, hChoice);
 }
 
 WXHBRUSH wxChoice::OnCtlColor(WXHDC pDC, WXHWND pWnd, WXUINT nCtlColor,

@@ -336,53 +336,15 @@ void wxTextCtrl::SetValue(const wxString& value)
   AdjustSpaceLimit();
 }
 
-void wxTextCtrl::DoSetSize(int x, int y, int width, int height, int sizeFlags)
+wxSize wxTextCtrl::DoGetBestSize()
 {
-  int currentX, currentY;
-  GetPosition(&currentX, &currentY);
-  int x1 = x;
-  int y1 = y;
-  int w1 = width;
-  int h1 = height;
+    int cx, cy;
+    wxGetCharSize(GetHWND(), &cx, &cy, &GetFont());
 
-  if (x == -1 || (sizeFlags & wxSIZE_ALLOW_MINUS_ONE))
-    x1 = currentX;
-  if (y == -1 || (sizeFlags & wxSIZE_ALLOW_MINUS_ONE))
-    y1 = currentY;
+    int wText = DEFAULT_ITEM_WIDTH;
+    int hText = EDIT_HEIGHT_FROM_CHAR_HEIGHT(cy);
 
-  AdjustForParentClientOrigin(x1, y1, sizeFlags);
-
-  int cx; // button font dimensions
-  int cy;
-
-  wxGetCharSize(GetHWND(), &cx, &cy, & this->GetFont());
-
-  int control_width, control_height, control_x, control_y;
-
-  // If we're prepared to use the existing size, then...
-  if (width == -1 && height == -1 && ((sizeFlags & wxSIZE_AUTO) != wxSIZE_AUTO))
-  {
-    GetSize(&w1, &h1);
-  }
-
-  // Deal with default size (using -1 values)
-  if (w1<=0)
-    w1 = DEFAULT_ITEM_WIDTH;
-
-  control_x = x1;
-  control_y = y1;
-  control_width = w1;
-  control_height = h1;
-
-  // Calculations may have made text size too small
-  if (control_height <= 0)
-    control_height = EDIT_HEIGHT_FROM_CHAR_HEIGHT(cy);
-
-  if (control_width <= 0)
-    control_width = DEFAULT_ITEM_WIDTH;
-
-  MoveWindow(GetHwnd(), (int)control_x, (int)control_y,
-                              (int)control_width, (int)control_height, TRUE);
+    return wxSize(wText, hText);
 }
 
 // Clipboard operations
@@ -759,18 +721,23 @@ void wxTextCtrl::ShowPosition(long pos)
 int wxTextCtrl::GetLineLength(long lineNo) const
 {
     long charIndex = XYToPosition(0, lineNo);
-    HWND hWnd = GetHwnd();
-    int len = (int)SendMessage(hWnd, EM_LINELENGTH, (WPARAM)charIndex, (LPARAM)0);
+    int len = (int)SendMessage(GetHwnd(), EM_LINELENGTH, charIndex, 0);
     return len;
 }
 
 wxString wxTextCtrl::GetLineText(long lineNo) const
 {
-    HWND hWnd = GetHwnd();
-    *(WORD *)wxBuffer = 512;
-    int noChars = (int)SendMessage(hWnd, EM_GETLINE, (WPARAM)lineNo, (LPARAM)wxBuffer);
-    wxBuffer[noChars] = 0;
-  return wxString(wxBuffer);
+    size_t len = (size_t)GetLineLength(lineNo);
+    char *buf = (char *)malloc(len);
+    *(WORD *)buf = len;
+    int noChars = (int)SendMessage(GetHwnd(), EM_GETLINE, lineNo, (LPARAM)buf);
+    buf[noChars] = 0;
+
+    wxString str(buf);
+
+    free(buf);
+
+    return str;
 }
 
 bool wxTextCtrl::CanCopy() const

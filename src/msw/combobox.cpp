@@ -146,11 +146,6 @@ bool wxComboBox::Create(wxWindow *parent, wxWindowID id,
   return TRUE;
 }
 
-wxString wxComboBox::GetValue() const
-{
-  return wxGetWindowText(GetHWND());
-}
-
 void wxComboBox::SetValue(const wxString& value)
 {
   // If newlines are denoted by just 10, must stick 13 in front.
@@ -177,43 +172,43 @@ void wxComboBox::SetValue(const wxString& value)
       j ++;
     }
     tmp[j] = 0;
-    SetWindowText((HWND) GetHWND(), tmp);
+    SetWindowText(GetHwnd(), tmp);
     delete[] tmp;
   }
   else
-    SetWindowText((HWND) GetHWND(), (const wxChar *)value);
+    SetWindowText(GetHwnd(), value);
 }
 
 // Clipboard operations
 void wxComboBox::Copy()
 {
-  HWND hWnd = (HWND) GetHWND();
+  HWND hWnd = GetHwnd();
   SendMessage(hWnd, WM_COPY, 0, 0L);
 }
 
 void wxComboBox::Cut()
 {
-  HWND hWnd = (HWND) GetHWND();
+  HWND hWnd = GetHwnd();
   SendMessage(hWnd, WM_CUT, 0, 0L);
 }
 
 void wxComboBox::Paste()
 {
-  HWND hWnd = (HWND) GetHWND();
+  HWND hWnd = GetHwnd();
   SendMessage(hWnd, WM_PASTE, 0, 0L);
 }
 
 void wxComboBox::SetEditable(bool editable)
 {
   // Can't implement in MSW?
-//  HWND hWnd = (HWND) GetHWND();
+//  HWND hWnd = GetHwnd();
 //  SendMessage(hWnd, EM_SETREADONLY, (WPARAM)!editable, (LPARAM)0L);
 }
 
 void wxComboBox::SetInsertionPoint(long pos)
 {
 /*
-  HWND hWnd = (HWND) GetHWND();
+  HWND hWnd = GetHwnd();
 #ifdef __WIN32__
   SendMessage(hWnd, EM_SETSEL, pos, pos);
   SendMessage(hWnd, EM_SCROLLCARET, (WPARAM)0, (LPARAM)0);
@@ -236,7 +231,7 @@ void wxComboBox::SetInsertionPointEnd()
 long wxComboBox::GetInsertionPoint() const
 {
 /*
-  DWORD Pos=(DWORD)SendMessage((HWND) GetHWND(), EM_GETSEL, 0, 0L);
+  DWORD Pos=(DWORD)SendMessage(GetHwnd(), EM_GETSEL, 0, 0L);
   return Pos&0xFFFF;
 */
   return 0;
@@ -245,14 +240,14 @@ long wxComboBox::GetInsertionPoint() const
 long wxComboBox::GetLastPosition() const
 {
 /*
-    HWND hWnd = (HWND) GetHWND();
+    HWND hWnd = GetHwnd();
 
     // Will always return a number > 0 (according to docs)
     int noLines = (int)SendMessage(hWnd, EM_GETLINECOUNT, (WPARAM)0, (LPARAM)0L);
 
     // This gets the char index for the _beginning_ of the last line
     int charIndex = (int)SendMessage(hWnd, EM_LINEINDEX, (WPARAM)(noLines-1), (LPARAM)0L);
-    
+
     // Get number of characters in the last line. We'll add this to the character
     // index for the last line, 1st position.
     int lineLength = (int)SendMessage(hWnd, EM_LINELENGTH, (WPARAM)charIndex, (LPARAM)0L);
@@ -265,10 +260,10 @@ long wxComboBox::GetLastPosition() const
 void wxComboBox::Replace(long from, long to, const wxString& value)
 {
 #if wxUSE_CLIPBOARD
-    HWND hWnd = (HWND) GetHWND();
+    HWND hWnd = GetHwnd();
     long fromChar = from;
     long toChar = to;
-    
+
     // Set selection and remove it
 #ifdef __WIN32__
     SendMessage(hWnd, CB_SETEDITSEL, fromChar, toChar);
@@ -287,10 +282,10 @@ void wxComboBox::Replace(long from, long to, const wxString& value)
 
 void wxComboBox::Remove(long from, long to)
 {
-    HWND hWnd = (HWND) GetHWND();
+    HWND hWnd = GetHwnd();
     long fromChar = from;
     long toChar = to;
-    
+
     // Cut all selected text
 #ifdef __WIN32__
     SendMessage(hWnd, CB_SETEDITSEL, fromChar, toChar);
@@ -302,7 +297,7 @@ void wxComboBox::Remove(long from, long to)
 
 void wxComboBox::SetSelection(long from, long to)
 {
-    HWND hWnd = (HWND) GetHWND();
+    HWND hWnd = GetHwnd();
     long fromChar = from;
     long toChar = to;
     // if from and to are both -1, it means
@@ -313,7 +308,7 @@ void wxComboBox::SetSelection(long from, long to)
       fromChar = 0;
       toChar = -1;
     }
-    
+
 #ifdef __WIN32__
     SendMessage(hWnd, CB_SETEDITSEL, (WPARAM)fromChar, (LPARAM)toChar);
 //    SendMessage(hWnd, EM_SCROLLCARET, (WPARAM)0, (LPARAM)0);
@@ -321,6 +316,22 @@ void wxComboBox::SetSelection(long from, long to)
     // WPARAM is 0: selection is scrolled into view
     SendMessage(hWnd, CB_SETEDITSEL, (WPARAM)0, (LPARAM)MAKELONG(fromChar, toChar));
 #endif
+}
+
+void wxComboBox::DoSetSize(int x, int y,
+                           int width, int height,
+                           int sizeFlags)
+{
+    wxControl::DoSetSize(x, y, width, height, sizeFlags);
+
+    // VZ: for unknown (to me) reasons, if we don't do this, the combobox
+    //     somehow is hidden by the static boxes, although static boxes do
+    //     put themselves at the very end of Z-order.
+    if ( !::SetWindowPos(GetHwnd(), HWND_BOTTOM, 0, 0, 0, 0,
+                         SWP_NOMOVE | SWP_NOSIZE) )
+    {
+        wxLogLastError(_T("SetWindowPos"));
+    }
 }
 
 #endif

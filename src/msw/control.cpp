@@ -58,6 +58,11 @@ wxControl::~wxControl()
     m_isBeingDeleted = TRUE;
 }
 
+wxSize wxControl::DoGetBestSize()
+{
+    return wxSize(DEFAULT_ITEM_WIDTH, DEFAULT_ITEM_HEIGHT);
+}
+
 bool wxControl::ProcessCommand(wxCommandEvent& event)
 {
 #if WXWIN_COMPATIBILITY
