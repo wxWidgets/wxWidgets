@@ -2868,8 +2868,7 @@ bool wxWindowMSW::MSWCreate(int id,
 
         if ( !m_hWnd )
         {
-            wxLogError(_("Can't create window of class %s!\nPossible Windows 3.x compatibility problem?"),
-                       wclass);
+            wxLogSysError(_("Can't create window of class %s"), wclass);
 
             return FALSE;
         }
