@@ -93,6 +93,10 @@ Added a helper function named wxPyTypeCast that can convert shadow
 objects of one type into shadow objects of another type.  (Like doing
 a down-cast.)  See the implementation in wx.py for some docs.
 
+Fixed wxImage GetData and SetData to properly use String objects for
+data transfer.
+
+Added access methods to wxGridEvent.
 
 
 

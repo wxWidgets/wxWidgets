@@ -219,6 +219,13 @@ public:
     bool        m_control;
     bool        m_shift;
     wxGridCell* m_cell;
+
+    int GetRow();
+    int GetCol();
+    wxPoint GetPosition();
+    bool ControlDown();
+    bool ShiftDown();
+    wxGridCell* GetCell();
 };
 
 

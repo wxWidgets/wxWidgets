@@ -102,8 +102,27 @@ public:
     int GetWidth();
     int GetHeight();
 
-    unsigned char *GetData();
-    void SetData( unsigned char *data );
+    //unsigned char *GetData();
+    //void SetData( unsigned char *data );
+
+    %addmethods {
+        PyObject* GetData() {
+            unsigned char* data = self->GetData();
+            int len = self->GetWidth() * self->GetHeight() * 3;
+            return PyString_FromStringAndSize((char*)data, len);
+        }
+
+        void SetData(PyObject* data) {
+            unsigned char* dataPtr;
+
+            if (! PyString_Check(data)) {
+                PyErr_SetString(PyExc_TypeError, "Expected string object");
+                return /* NULL */ ;
+            }
+            dataPtr = (unsigned char*)PyString_AsString(data);
+            self->SetData(dataPtr);
+        }
+    }
 
     void SetMaskColour( unsigned char r, unsigned char g, unsigned char b );
     unsigned char GetMaskRed();
