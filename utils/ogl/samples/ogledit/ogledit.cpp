@@ -44,6 +44,7 @@ IMPLEMENT_APP(MyApp)
 MyApp::MyApp(void)
 {
   frame = NULL;
+  myDocManager= NULL;
 }
 
 // The `main program' equivalent, creating the windows and returning the
@@ -53,7 +54,7 @@ bool MyApp::OnInit(void)
   wxOGLInitialize();
   
   //// Create a document manager
-  wxDocManager *myDocManager = new wxDocManager;
+  myDocManager = new wxDocManager;
 
   //// Create a template relating drawing documents to their views
   (void) new wxDocTemplate(myDocManager, "Diagram", "*.dia", "", "dia", "Diagram Doc", "Diagram View",
@@ -126,6 +127,13 @@ bool MyApp::OnInit(void)
   return TRUE;
 }
 
+int MyApp::OnExit(void)
+{
+    wxOGLCleanUp();
+    delete myDocManager;
+    return 0;
+}
+
 /*
  * This is the top-level window of the application.
  */
@@ -191,8 +199,7 @@ MyCanvas *MyFrame::CreateCanvas(wxView *view, wxFrame *parent)
 
   // Non-retained canvas
   MyCanvas *canvas = new MyCanvas(view, parent, -1, wxPoint(0, 0), wxSize(width, height), 0);
-  wxCursor *cursor = new wxCursor(wxCURSOR_HAND);
-  canvas->SetCursor(cursor);
+  canvas->SetCursor(wxCursor(wxCURSOR_HAND));
 
   // Give it scrollbars
   canvas->SetScrollbars(20, 20, 50, 50);

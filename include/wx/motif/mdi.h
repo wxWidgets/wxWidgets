@@ -1,8 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        mdi.h
 // Purpose:     MDI (Multiple Document Interface) classes.
-//              This doesn't have to be implemented just like Windows,
-//              it could be a tabbed design as in wxGTK.
 // Author:      Julian Smart
 // Modified by:
 // Created:     17/09/98
@@ -26,8 +24,10 @@ WXDLLEXPORT_DATA(extern const char*) wxStatusLineNameStr;
 class WXDLLEXPORT wxMDIClientWindow;
 class WXDLLEXPORT wxMDIChildFrame;
 
+#if wxUSE_MDI_WIDGETS
 class XsMDICanvas;
 class wxXsMDIWindow;
+#endif
 
 class WXDLLEXPORT wxMDIParentFrame: public wxFrame
 {
@@ -147,7 +147,9 @@ public:
   bool Show(bool show);
   void BuildClientArea(WXWidget parent);
   inline WXWidget GetTopWidget() const { return m_mainWidget; };
+#if wxUSE_MDI_WIDGETS
   inline wxXsMDIWindow *GetMDIWindow() const { return m_mdiWindow; };
+#endif
   virtual void OnRaise();
   virtual void OnLower();
 
@@ -189,14 +191,17 @@ class WXDLLEXPORT wxMDIClientWindow: public wxWindow
   // Explicitly call default scroll behaviour
   void OnScroll(wxScrollEvent& event);
 
+#if wxUSE_MDI_WIDGETS
   inline XsMDICanvas* GetMDICanvas() const { return m_mdiCanvas; }
-
   WXWidget GetTopWidget() const { return m_topWidget; }
+#endif
 
 protected:
 
+#if wxUSE_MDI_WIDGETS
   XsMDICanvas*   m_mdiCanvas;
   WXWidget       m_topWidget;
+#endif
 
 DECLARE_EVENT_TABLE()
 };

@@ -198,7 +198,7 @@ $(WXLIB) : $(OBJECTS)
 	$(RANLIB) $@
 
 ../common/y_tab.$(OBJSUFF):	../common/y_tab.c ../common/lex_yy.c
-	$(CCLEX) -c $(CFLAGS) -o $@ ../common/y_tab.c
+	$(CCLEX) -c $(CFLAGS) -DNO_CONFIGURE -o $@ ../common/y_tab.c
 
 # Replace lex with flex if you run into compilation
 # problems with lex_yy.c. See also note about LEX_SCANNER

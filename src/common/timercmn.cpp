@@ -70,7 +70,7 @@ void wxStartTimer(void)
 {
 #if defined(__xlC__) || defined(__AIX__) || defined(__SVR4__) || defined(__SYSV__) || (defined(__GNUWIN32__) && !defined(__MINGW32__)) // || defined(__AIXV3__)
   struct timeval tp;
-#ifdef __SYSV__
+#if defined(__SYSV__) || (defined (__GNUWIN32__) && !defined (__MINGW32__))
   gettimeofday(&tp, (struct timezone *)NULL);
 #else
   gettimeofday(&tp);
@@ -94,7 +94,7 @@ long wxGetElapsedTime(bool resetTimer)
 {
 #if defined(__xlC__) || defined(__AIX__) || defined(__SVR4__) || defined(__SYSV__) || (defined(__GNUWIN32__) && !defined(__MINGW32__)) // || defined(__AIXV3__)
   struct timeval tp;
-#ifdef __SYSV__
+#if defined(__SYSV__) || (defined (__GNUWIN32__) && !defined (__MINGW32__))
   gettimeofday(&tp, (struct timezone *)NULL);
 #else
   gettimeofday(&tp);
@@ -190,7 +190,7 @@ long wxGetCurrentTime(void)
 {
 #if defined(__xlC__) || defined(__AIX__) || defined(__SVR4__) || defined(__SYSV__) // || defined(__AIXV3__)
   struct timeval tp;
-#ifdef __SYSV__
+#if defined(__SYSV__) || (defined (__GNUWIN32__) && !defined (__MINGW32__))
   gettimeofday(&tp, (struct timezone *)NULL);
 #else
   gettimeofday(&tp);

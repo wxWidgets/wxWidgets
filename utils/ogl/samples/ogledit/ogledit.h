@@ -25,9 +25,11 @@ class MyApp: public wxApp
 {
  public:
   MyFrame *frame;
+  wxDocManager* myDocManager;
 
   MyApp(void);
   bool OnInit(void);
+  int OnExit(void);
 
   // Palette stuff
   EditorToolPalette *CreatePalette(wxFrame *parent);

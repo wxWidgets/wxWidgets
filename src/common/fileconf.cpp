@@ -114,6 +114,9 @@ wxString wxFileConfig::GetLocalDir()
   
   wxGetHomeDir(&strDir);
 
+  if (strDir.Last() != '/' && strDir.Last() != '\\')
+    strDir += "/";
+
   return strDir;
 }
 

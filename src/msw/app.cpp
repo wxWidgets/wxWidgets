@@ -568,6 +568,13 @@ int wxEntry(WXHINSTANCE hInstance,
   }
 
   wxTheApp->OnExit();
+
+  // flush the logged messages if any
+  wxLog *pLog = wxLog::GetActiveTarget();
+  if ( pLog != NULL && pLog->HasPendingMessages() )
+    pLog->Flush();
+
+
   wxApp::CleanUp();
 
   delete wxTheApp;

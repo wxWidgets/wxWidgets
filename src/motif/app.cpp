@@ -197,6 +197,14 @@ int wxEntry( int argc, char *argv[] )
   
     if (wxTheApp->Initialized()) retValue = wxTheApp->OnRun();
 
+    // flush the logged messages if any
+    wxLog *pLog = wxLog::GetActiveTarget();
+    if ( pLog != NULL && pLog->HasPendingMessages() )
+      pLog->Flush();
+
+    delete wxLog::SetActiveTarget(new wxLogStderr); // So dialog boxes aren't used
+                                   // for further messages
+
     if (wxTheApp->GetTopWindow())
     {
       delete wxTheApp->GetTopWindow();
@@ -206,6 +214,7 @@ int wxEntry( int argc, char *argv[] )
     wxTheApp->DeletePendingObjects();
   
     wxTheApp->OnExit();
+
   
     wxApp::CleanUp();
 
@@ -294,7 +303,7 @@ void wxApp::ProcessXEvent(WXEvent* _event)
 {
     XEvent* event = (XEvent*) _event;
 
-    if (CheckForAccelerator(_event))
+    if ((event->type == KeyPress) && CheckForAccelerator(_event))
     {
         // Do nothing! We intercepted and processed the event as an accelerator.
         return;

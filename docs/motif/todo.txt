@@ -53,6 +53,16 @@ High Priority
 
 - wxGrid: scrollbars don't hide; problem with cell selection.
 
+- MDI: seems to be broken for a more complex application I'm testing.
+  Frame decorations don't draw properly, and a child window doesn't
+  process events properly. So probably we should have an alternative
+  implementation that uses tabs, a la wxGTK. The system menu could
+  be implemented using a pop-up menu that applies to the currently
+  active window.
+
+- Controls in a wxToolBar don't work. Probably due to form layout
+  problems; the workaround is to use a separate panel for controls.
+
 - Miscellaneous events.
 
 - Write makefiles for all samples and utilities.

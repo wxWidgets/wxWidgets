@@ -2217,6 +2217,30 @@ void wxCanvasInputEvent (Widget drawingArea, XtPointer data, XmDrawingAreaCallba
 
   local_event = *(cbs->event);	// We must keep a copy!
 
+  /*
+  switch (local_event.xany.type)
+    {
+    case EnterNotify:
+      cout << "EnterNotify\n";
+      break;
+    case LeaveNotify:
+      cout << "LeaveNotify\n";
+      break;
+    case ButtonPress:
+      cout << "ButtonPress\n";
+      break;
+    case ButtonRelease:
+      cout << "ButtonRelease\n";
+      break;
+    case MotionNotify:
+      cout << "MotionNotify\n";
+      break;
+    default:
+      cout << "Something else\n";
+      break;
+  }
+  */
+
   switch (local_event.xany.type)
     {
     case EnterNotify:

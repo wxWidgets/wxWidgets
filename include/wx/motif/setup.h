@@ -117,6 +117,11 @@
 #define wxUSE_GADGETS       0
                                   // Use gadgets where possible
 
+#define wxUSE_MDI_WIDGETS   1
+                                  // Use Scott Sadler's MDI widgets (buggy).
+                                  // If 0, uses normal frames.
+                 
+
 /*
  * Finer detail
  *
