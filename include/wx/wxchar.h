@@ -366,7 +366,7 @@ typedef unsigned __WCHAR_TYPE__ wxUChar;
 #     define wxUChar unsigned char
 #   endif
 
-#   ifdef __FreeBSD__
+#   if defined(__FreeBSD__) || defined(__MACH__)
 #     undef _T
 #   endif
 
@@ -419,7 +419,7 @@ typedef unsigned __WCHAR_TYPE__ wxUChar;
 #  elif defined(__SC__) || defined(__VISUALC__) || (defined(__MWERKS__) && defined(__INTEL__))
 #    define wxStricmp _stricmp
 #    define wxStrnicmp _strnicmp
-#  elif defined(__UNIX__) || defined(__GNUWIN32__)
+#  elif defined(__UNIX__) || defined(__GNUWIN32__) || defined(__MACH__)
 #    define wxStricmp strcasecmp
 #    define wxStrnicmp strncasecmp
 #  elif defined(__MWERKS__) && !defined(__INTEL__)
