@@ -81,7 +81,9 @@ NavEventProc(
 {
 	OpenUserDataRec * data = ( OpenUserDataRec *) ioUserData ;
 	if (inSelector == kNavCBEvent) {	
+#if !TARGET_CARBON
          wxTheApp->MacHandleOneEvent(ioParams->eventData.eventDataParms.event);
+#endif
 	} 
 	else if ( inSelector == kNavCBStart )
 	{
@@ -300,8 +302,7 @@ wxString wxFileSelector(const char *title,
 
     if ( fileDialog.ShowModal() == wxID_OK )
     {
-        strcpy(wxBuffer, (const char *)fileDialog.GetPath());
-        return wxBuffer;
+        return fileDialog.GetPath();
     }
     else
         return wxGetEmptyString();
@@ -324,8 +325,7 @@ WXDLLEXPORT wxString wxFileSelectorEx(const char *title,
     if ( fileDialog.ShowModal() == wxID_OK )
     {
         *defaultFilterIndex = fileDialog.GetFilterIndex();
-        strcpy(wxBuffer, (const char *)fileDialog.GetPath());
-        return wxBuffer;
+        return fileDialog.GetPath();
     }
     else
         return wxGetEmptyString();
@@ -379,6 +379,15 @@ int wxFileDialog::ShowModal()
     NavReplyRecord	       mNavReply;
     AEDesc		       mDefaultLocation ;
     bool		       mSelectDefault = false ;
+		
+	// zero all data
+	
+	m_path = wxEmptyString ;
+	m_fileName = wxEmptyString ;
+	m_paths.Empty();
+	m_fileNames.Empty();
+
+	// setup dialog
 		
     ::NavGetDefaultDialogOptions(&mNavOptions);
 	
@@ -495,7 +504,6 @@ int wxFileDialog::ShowModal()
     }
 		
     if ( (err != noErr) && (err != userCanceledErr) ) {
-        m_path = "" ;
         return wxID_CANCEL ;
     }
 
