@@ -241,7 +241,7 @@ $(WXDIR)\lib\$(WXLIBNAME).dll: $(DUMMYOBJ) $(OBJECTS)
     $(link) @<<
     $(LINKFLAGS)
     -out:$(WXDIR)\lib\$(WXLIBNAME).dll
-    $(DUMMYOBJ) $(OBJECTS) $(guilibsdll) shell32.lib comctl32.lib ctl3d32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib odbc32.lib advapi32.lib winmm.lib $(WXDIR)\lib\winpng.lib $(WXDIR)\lib\zlib.lib $(WXDIR)\lib\xpm.lib $(WXDIR)\lib\jpeg.lib $(WXDIR)\lib\tiff.lib
+    $(DUMMYOBJ) $(OBJECTS) $(guilibsdll) shell32.lib comctl32.lib ctl3d32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib odbc32.lib advapi32.lib winmm.lib $(WXDIR)\lib\png$(LIBEXT).lib $(WXDIR)\lib\zlib$(LIBEXT).lib $(WXDIR)\lib\xpm$(LIBEXT).lib $(WXDIR)\lib\jpeg$(LIBEXT).lib $(WXDIR)\lib\tiff$(LIBEXT).lib
 <<
 
 !endif
