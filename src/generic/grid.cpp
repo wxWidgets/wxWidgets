@@ -1238,14 +1238,14 @@ void wxGridCellBoolEditor::SetSize(const wxRect& r)
     int vAlign = wxALIGN_CENTRE;
     if (GetCellAttr())
         GetCellAttr()->GetAlignment(& hAlign, & vAlign);
-    
+
     int x = 0, y = 0;
     if (hAlign == wxALIGN_LEFT)
     {
         x = r.x + 2;
 #ifdef __WXMSW__
         x += 2;
-#endif        
+#endif
         y = r.y + r.height/2 - size.y/2;
     }
     else if (hAlign == wxALIGN_RIGHT)
@@ -1258,7 +1258,7 @@ void wxGridCellBoolEditor::SetSize(const wxRect& r)
         x = r.x + r.width/2 - size.x/2;
         y = r.y + r.height/2 - size.y/2;
     }
-    
+
     m_control->Move(x, y);
 }
 
@@ -1575,7 +1575,7 @@ void wxGridCellRenderer::Draw(wxGrid& grid,
       {
           dc.SetBrush( wxBrush(attr.GetBackgroundColour(), wxSOLID) );
       }
-    }  
+    }
     else
     {
       dc.SetBrush(wxBrush(wxSystemSettings::GetSystemColour(wxSYS_COLOUR_BTNFACE), wxSOLID));
@@ -1995,7 +1995,7 @@ void wxGridCellBoolRenderer::Draw(wxGrid& grid,
     // draw a border around checkmark
     int vAlign, hAlign;
     attr.GetAlignment(& hAlign, &vAlign);
-    
+
     wxRect rectBorder;
     if (hAlign == wxALIGN_CENTRE)
     {
@@ -2009,14 +2009,14 @@ void wxGridCellBoolRenderer::Draw(wxGrid& grid,
         rectBorder.x = rect.x + 2;
         rectBorder.y = rect.y + rect.height/2 - size.y/2;
         rectBorder.width = size.x;
-        rectBorder.height = size.y;        
+        rectBorder.height = size.y;
     }
     else if (hAlign == wxALIGN_RIGHT)
     {
         rectBorder.x = rect.x + rect.width - size.x - 2;
         rectBorder.y = rect.y + rect.height/2 - size.y/2;
         rectBorder.width = size.x;
-        rectBorder.height = size.y;        
+        rectBorder.height = size.y;
     }
 
     bool value;
@@ -3963,8 +3963,7 @@ void wxGrid::Init()
     // TODO: something better than this ?
     //
     m_labelFont = this->GetFont();
-//    m_labelFont = wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT);
-//    m_labelFont.SetWeight( m_labelFont.GetWeight() + 2 );
+    m_labelFont.SetWeight( wxBOLD );
 
     m_rowLabelHorizAlign = wxALIGN_CENTRE;
     m_rowLabelVertAlign  = wxALIGN_CENTRE;
@@ -4008,8 +4007,8 @@ void wxGrid::Init()
     m_selectingBottomRight = wxGridNoCellCoords;
 //  m_selectionBackground = wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHT);
 //  m_selectionForeground = wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHTTEXT);
-    m_selectionBackground = *wxBLACK; 
-    m_selectionForeground = *wxWHITE; 
+    m_selectionBackground = *wxBLACK;
+    m_selectionForeground = *wxWHITE;
 
     m_editable = TRUE;  // default for whole grid
 
