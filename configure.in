@@ -2922,11 +2922,11 @@ if test "$TOOLKIT" != "MSW" ; then
 
         AC_CHECK_HEADER([sql.h], [found_sql_h=1])
         if test "x$found_sql_h" = "x1" ; then
-            AC_CHECK_LIB(SQLAllocEnv, iodbc, ODBC_LINK=" -liodbc",
+            AC_CHECK_LIB(iodbc, SQLAllocEnv, ODBC_LINK=" -liodbc",
             [
-                AC_CHECK_LIB(SQLAllocEnv, unixodbc, ODBC_LINK=" -lunixodbc",
+                AC_CHECK_LIB(unixodbc, SQLAllocEnv, ODBC_LINK=" -lunixodbc",
                 [
-                    AC_CHECK_LIB(SQLAllocEnv, odbc, ODBC_LINK=" -lodbc")
+                    AC_CHECK_LIB(odbc, SQLAllocEnv, ODBC_LINK=" -lodbc")
                 ])
             ])
         fi 
