@@ -1020,6 +1020,15 @@
 #   endif
 #endif /* wxMGL */
 
+// Hopefully we can emulate these dialogs in due course
+#if wxUSE_SMARTPHONE
+#   ifdef wxUSE_COLOURDLG
+#       undef wxUSE_COLOURDLG
+#       define wxUSE_COLOURDLG 0
+#   endif
+#endif /* wxUSE_SMARTPHONE */
+
+
 /* generic controls dependencies */
 #if !defined(__WXMSW__) || defined(__WXUNIVERSAL__)
 #   if wxUSE_FONTDLG || wxUSE_FILEDLG || wxUSE_CHOICEDLG
