@@ -529,7 +529,6 @@ bool wxTopLevelWindowMSW::Create(wxWindow *parent,
 #endif
 
 #ifdef __SMARTPHONE__
-    SetLeftMenu(wxID_EXIT, _("Done"));
     SetRightMenu(); // to nothing for initialization
 #endif
 
@@ -977,8 +976,11 @@ wxDlgProc(HWND hDlg,
 #if defined(__WXWINCE__) && !defined(__WINCE_STANDARDSDK__) && !defined(__HANDHELDPC__)
         SHINITDLGINFO shidi;
         shidi.dwMask = SHIDIM_FLAGS;
-        shidi.dwFlags = SHIDIF_DONEBUTTON |
-                        SHIDIF_SIZEDLGFULLSCREEN;
+        shidi.dwFlags = SHIDIF_SIZEDLGFULLSCREEN
+#ifndef __SMARTPHONE__
+                        | SHIDIF_DONEBUTTON
+#endif
+                        ;
         shidi.hDlg = hDlg;
         SHInitDialog( &shidi );
 #else // no SHInitDialog()

@@ -47,6 +47,10 @@
     #include <commdlg.h>
 #endif
 
+#ifdef __SMARTPHONE__
+    #include "wx/msw/wince/resources.h"
+#endif // __SMARTPHONE__
+
 // ----------------------------------------------------------------------------
 // wxWin macros
 // ----------------------------------------------------------------------------
@@ -106,9 +110,15 @@ IMPLEMENT_DYNAMIC_CLASS(wxDialog, wxTopLevelWindow)
 #endif
 
 BEGIN_EVENT_TABLE(wxDialog, wxDialogBase)
+#ifdef __SMARTPHONE__
+    EVT_MENU(wxID_OK, wxDialog::OnOK)
+    EVT_MENU(wxID_APPLY, wxDialog::OnApply)
+    EVT_MENU(wxID_CANCEL, wxDialog::OnCancel)
+#else
     EVT_BUTTON(wxID_OK, wxDialog::OnOK)
     EVT_BUTTON(wxID_APPLY, wxDialog::OnApply)
     EVT_BUTTON(wxID_CANCEL, wxDialog::OnCancel)
+#endif
 
     EVT_SYS_COLOUR_CHANGED(wxDialog::OnSysColourChanged)
 
@@ -181,6 +191,10 @@ bool wxDialog::Create(wxWindow *parent,
         SetFont(wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT));
 
     SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_3DFACE));
+
+#ifdef __SMARTPHONE__
+    SetLeftMenu(wxID_OK, _("OK"));
+#endif
 
     return true;
 }
@@ -437,18 +451,28 @@ WXLRESULT wxDialog::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lPar
 #ifdef __WXWINCE__
         // react to pressing the OK button in the title
         case WM_COMMAND:
-            if (LOWORD(wParam) == IDOK)
+        {
+            switch ( LOWORD(wParam) )
             {
-                wxButton *btn = wxDynamicCast(FindWindow(wxID_CANCEL), wxButton);
-                if ( btn && btn->IsEnabled() )
-                {
-                    // if we do have a cancel button, do press it
-                    btn->MSWCommand(BN_CLICKED, 0 /* unused */);
-                    processed = true;
+#ifndef __SMARTPHONE__
+                case IDOK:
+                    wxButton *btn = wxDynamicCast(FindWindow(wxID_CANCEL), wxButton);
+                    if ( btn && btn->IsEnabled() )
+                    {
+                        // if we do have a cancel button, do press it
+                        btn->MSWCommand(BN_CLICKED, 0 /* unused */);
+                        processed = true;
+                        break;
+                    }
+#else // ifdef __SMARTPHONE__
+                case IDM_LEFT:
+                case IDM_RIGHT:
+                    processed = HandleCommand( LOWORD(wParam) , 0 , NULL );
                     break;
-                }
+#endif // __SMARTPHONE__
             }
             break;
+        }
 #endif
         case WM_CLOSE:
             // if we can't close, tell the system that we processed the
