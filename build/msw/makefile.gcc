@@ -982,6 +982,7 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_tglbtn.o \
 	$(OBJS)\monodll_treectrl.o \
 	$(OBJS)\monodll_colrdlgg.o \
+	$(OBJS)\monodll_fontdlgg.o \
 	$(OBJS)\monodll_fdrepdlg.o \
 	$(OBJS)\monodll_fontdlg.o \
 	$(OBJS)\monodll_helpchm.o \
@@ -1424,6 +1425,7 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_tglbtn.o \
 	$(OBJS)\monolib_treectrl.o \
 	$(OBJS)\monolib_colrdlgg.o \
+	$(OBJS)\monolib_fontdlgg.o \
 	$(OBJS)\monolib_fdrepdlg.o \
 	$(OBJS)\monolib_fontdlg.o \
 	$(OBJS)\monolib_helpchm.o \
@@ -1849,6 +1851,7 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\coredll_tglbtn.o \
 	$(OBJS)\coredll_treectrl.o \
 	$(OBJS)\coredll_colrdlgg.o \
+	$(OBJS)\coredll_fontdlgg.o \
 	$(OBJS)\coredll_fdrepdlg.o \
 	$(OBJS)\coredll_fontdlg.o \
 	$(OBJS)\coredll_helpchm.o \
@@ -2250,6 +2253,7 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\corelib_tglbtn.o \
 	$(OBJS)\corelib_treectrl.o \
 	$(OBJS)\corelib_colrdlgg.o \
+	$(OBJS)\corelib_fontdlgg.o \
 	$(OBJS)\corelib_fdrepdlg.o \
 	$(OBJS)\corelib_fontdlg.o \
 	$(OBJS)\corelib_helpchm.o \
@@ -3715,9 +3719,6 @@ $(OBJS)\monodll_dirdlgg.o: ../../src/generic/dirdlgg.cpp
 $(OBJS)\monodll_filedlgg.o: ../../src/generic/filedlgg.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $<
 
-$(OBJS)\monodll_fontdlgg.o: ../../src/generic/fontdlgg.cpp
-	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $<
-
 $(OBJS)\monodll_mdig.o: ../../src/generic/mdig.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $<
 
@@ -4476,6 +4477,11 @@ endif
 
 ifeq ($(USE_GUI),1)
 $(OBJS)\monodll_colrdlgg.o: ../../src/generic/colrdlgg.cpp
+	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $<
+endif
+
+ifeq ($(USE_GUI),1)
+$(OBJS)\monodll_fontdlgg.o: ../../src/generic/fontdlgg.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $<
 endif
 
@@ -5289,9 +5295,6 @@ $(OBJS)\monolib_dirdlgg.o: ../../src/generic/dirdlgg.cpp
 $(OBJS)\monolib_filedlgg.o: ../../src/generic/filedlgg.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $<
 
-$(OBJS)\monolib_fontdlgg.o: ../../src/generic/fontdlgg.cpp
-	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $<
-
 $(OBJS)\monolib_mdig.o: ../../src/generic/mdig.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $<
 
@@ -6050,6 +6053,11 @@ endif
 
 ifeq ($(USE_GUI),1)
 $(OBJS)\monolib_colrdlgg.o: ../../src/generic/colrdlgg.cpp
+	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $<
+endif
+
+ifeq ($(USE_GUI),1)
+$(OBJS)\monolib_fontdlgg.o: ../../src/generic/fontdlgg.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $<
 endif
 
@@ -7139,9 +7147,6 @@ $(OBJS)\coredll_dirdlgg.o: ../../src/generic/dirdlgg.cpp
 $(OBJS)\coredll_filedlgg.o: ../../src/generic/filedlgg.cpp
 	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $<
 
-$(OBJS)\coredll_fontdlgg.o: ../../src/generic/fontdlgg.cpp
-	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $<
-
 $(OBJS)\coredll_mdig.o: ../../src/generic/mdig.cpp
 	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $<
 
@@ -7781,6 +7786,11 @@ $(OBJS)\coredll_colrdlgg.o: ../../src/generic/colrdlgg.cpp
 endif
 
 ifeq ($(USE_GUI),1)
+$(OBJS)\coredll_fontdlgg.o: ../../src/generic/fontdlgg.cpp
+	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $<
+endif
+
+ifeq ($(USE_GUI),1)
 ifeq ($(WXUNIV),0)
 $(OBJS)\coredll_fdrepdlg.o: ../../src/msw/fdrepdlg.cpp
 	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $<
@@ -8366,9 +8376,6 @@ $(OBJS)\corelib_dirdlgg.o: ../../src/generic/dirdlgg.cpp
 	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $<
 
 $(OBJS)\corelib_filedlgg.o: ../../src/generic/filedlgg.cpp
-	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $<
-
-$(OBJS)\corelib_fontdlgg.o: ../../src/generic/fontdlgg.cpp
 	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $<
 
 $(OBJS)\corelib_mdig.o: ../../src/generic/mdig.cpp
@@ -9006,6 +9013,11 @@ endif
 
 ifeq ($(USE_GUI),1)
 $(OBJS)\corelib_colrdlgg.o: ../../src/generic/colrdlgg.cpp
+	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $<
+endif
+
+ifeq ($(USE_GUI),1)
+$(OBJS)\corelib_fontdlgg.o: ../../src/generic/fontdlgg.cpp
 	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $<
 endif
 

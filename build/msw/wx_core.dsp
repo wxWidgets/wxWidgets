@@ -4217,65 +4217,6 @@ SOURCE=..\..\src\generic\filedlgg.cpp
 # Begin Source File
 
 SOURCE=..\..\src\generic\fontdlgg.cpp
-
-!IF  "$(CFG)" == "core - Win32 DLL Universal Unicode Release"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Unicode Debug"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Release"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Debug"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Release"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Release"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Release"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Debug"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Release"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Debug"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 Unicode Release"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Unicode Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Release"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Debug"
-
-# PROP Exclude_From_Build 1
-
-!ENDIF
-
 # End Source File
 # Begin Source File
 

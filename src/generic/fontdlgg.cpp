@@ -42,6 +42,7 @@
 #include "wx/cmndata.h"
 #include "wx/sizer.h"
 #include "wx/fontdlg.h"
+#include "wx/generic/fontdlgg.h"
 #include "wx/settings.h"
 
 //-----------------------------------------------------------------------------
