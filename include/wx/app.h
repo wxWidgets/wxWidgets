@@ -438,13 +438,15 @@ public:
     #define IMPLEMENT_WXWIN_MAIN
 #endif
 
-// Use this macro exactly once, the argument is the name of the wxApp-derived
-// class which is the class of your application.
-#define IMPLEMENT_APP(appname)                           \
-    wxApp *wxCreateApp() { return new appname; }         \
-    wxAppInitializer wxTheAppInitializer((wxAppInitializerFunction) wxCreateApp); \
-    appname& wxGetApp() { return *(appname *)wxTheApp; } \
-    IMPLEMENT_WXWIN_MAIN
+#ifdef __WXUNIVERSAL__
+    #include "wx/univ/theme.h"
+
+    #define IMPLEMENT_WX_THEME_SUPPORT \
+        WX_USE_THEME(win32); \
+        WX_USE_THEME(gtk);
+#else
+    #define IMPLEMENT_WX_THEME_SUPPORT
+#endif
 
 // Use this macro if you want to define your own main() or WinMain() function
 // and call wxEntry() from there.
@@ -453,6 +455,20 @@ public:
     wxAppInitializer wxTheAppInitializer((wxAppInitializerFunction) wxCreateApp); \
     appname& wxGetApp() { return *(appname *)wxTheApp; }
 
+// Same as IMPLEMENT_APP() normally but doesn't include themes support in
+// wxUniversal builds
+#define IMPLEMENT_APP_NO_THEMES(appname)    \
+    IMPLEMENT_APP_NO_MAIN(appname)          \
+    IMPLEMENT_WXWIN_MAIN
+
+// Use this macro exactly once, the argument is the name of the wxApp-derived
+// class which is the class of your application.
+#define IMPLEMENT_APP(appname)              \
+    IMPLEMENT_APP_NO_THEMES(appname)        \
+    IMPLEMENT_WX_THEME_SUPPORT
+
+// this macro can be used multiple times and just allows you to use wxGetApp()
+// function
 #define DECLARE_APP(appname) extern appname& wxGetApp();
 
 #endif

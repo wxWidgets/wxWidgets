@@ -173,13 +173,6 @@ WX_DEFINE_ARRAY(WidgetsPage *, ArrayWidgetsPage);
 
 IMPLEMENT_APP(WidgetsApp)
 
-#ifdef __WXUNIVERSAL__
-    #include "wx/univ/theme.h"
-
-    WX_USE_THEME(win32);
-    WX_USE_THEME(gtk);
-#endif // __WXUNIVERSAL__
-
 // ----------------------------------------------------------------------------
 // event tables
 // ----------------------------------------------------------------------------
@@ -201,17 +194,18 @@ bool WidgetsApp::OnInit()
 {
     // the reason for having these ifdef's is that I often run two copies of
     // this sample side by side and it is useful to see which one is which
-    wxString title =
+    wxString title;
 #if defined(__WXUNIVERSAL__)
-    _T("wxUniv")
-#elif defined(__WXMSW__)
-    _T("wxMSW")
-#elif defined(__WXGTK__)
-    _T("wxGTK")
-#else
-    _T("wxWindows")
+    title = _T("wxUniv/")
 #endif
-    ;
+
+#if defined(__WXMSW__)
+    title += _T("wxMSW");
+#elif defined(__WXGTK__)
+    title += _T("wxGTK");
+#else
+    title += _T("wxWindows");
+#endif
 
     wxFrame *frame = new WidgetsFrame(title + _T(" widgets demo"));
     frame->Show();
