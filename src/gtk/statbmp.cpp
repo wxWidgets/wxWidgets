@@ -54,7 +54,7 @@ void wxStaticBitmap::CreatePixmapWidget()
 
     m_focusWidget = m_widget;
 
-    PostCreation();
+    PostCreation(wxDefaultSize);
 }
 
 bool wxStaticBitmap::Create( wxWindow *parent, wxWindowID id, const wxBitmap &bitmap,
@@ -78,8 +78,6 @@ bool wxStaticBitmap::Create( wxWindow *parent, wxWindowID id, const wxBitmap &bi
         if ( m_bitmap.GetMask() )
             mask = m_bitmap.GetMask()->GetBitmap();
         m_widget = gtk_pixmap_new( m_bitmap.GetPixmap(), mask );
-
-        SetBestSize( size );
     }
     else
     {
@@ -87,7 +85,7 @@ bool wxStaticBitmap::Create( wxWindow *parent, wxWindowID id, const wxBitmap &bi
         m_focusWidget = m_widget;
     }
 
-    PostCreation();
+    PostCreation(size);
     m_parent->DoAddChild( this );
 
     return TRUE;

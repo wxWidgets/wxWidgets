@@ -171,8 +171,7 @@ bool wxComboBox::Create( wxWindow *parent, wxWindowID id, const wxString& value,
 
     m_focusWidget = combo->entry;
 
-    PostCreation();
-    InheritAttributes();
+    PostCreation(size);
 
     ConnectWidget( combo->button );
 
@@ -189,24 +188,12 @@ bool wxComboBox::Create( wxWindow *parent, wxWindowID id, const wxString& value,
     gtk_signal_connect( GTK_OBJECT(combo->list), "select-child",
       GTK_SIGNAL_FUNC(gtk_combo_select_child_callback), (gpointer)this );
 
-    wxSize size_best( DoGetBestSize() );
-    wxSize new_size( size );
-    if (new_size.x == -1)
-        new_size.x = size_best.x;
-    if (new_size.y == -1)
-        new_size.y = size_best.y;
-    if (new_size.y > size_best.y)
-        new_size.y = size_best.y;
-    if ((new_size.x != size.x) || (new_size.y != size.y))
-    {
-        SetSize( new_size.x, new_size.y );
+    SetBestSize(size); // need this too because this is a wxControlWithItems
 
-        // This is required for tool bar support
-        gtk_widget_set_usize( m_widget, new_size.x, new_size.y );
-    }
-
-    Show( TRUE );
-
+    // This is required for tool bar support
+    wxSize setsize = GetSize();
+    gtk_widget_set_usize( m_widget, setsize.x, setsize.y );
+    
     return TRUE;
 }
 

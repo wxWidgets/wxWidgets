@@ -126,23 +126,9 @@ bool wxSpinCtrl::Create(wxWindow *parent, wxWindowID id,
     
     m_parent->DoAddChild( this );
 
-    PostCreation();
-    InheritAttributes();
-
-    wxSize size_best( DoGetBestSize() );
-    wxSize new_size( size );
-    if (new_size.x == -1)
-        new_size.x = size_best.x;
-    if (new_size.y == -1)
-        new_size.y = size_best.y;
-    if (new_size.y > size_best.y)
-        new_size.y = size_best.y;
-    if ((new_size.x != size.x) || (new_size.y != size.y))
-        SetSize( new_size.x, new_size.y );
+    PostCreation(size);
 
     SetValue( value );
-
-    Show( TRUE );
 
     return TRUE;
 }

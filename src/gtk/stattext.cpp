@@ -90,7 +90,7 @@ bool wxStaticText::Create(wxWindow *parent,
 
     m_parent->DoAddChild( this );
 
-    PostCreation();
+    PostCreation(size);
     
     // the bug below only happens with GTK 2
 #ifdef __WXGTK20__
@@ -108,27 +108,6 @@ bool wxStaticText::Create(wxWindow *parent,
         );
     }
 #endif // __WXGTK20__
-
-    ApplyWidgetStyle();
-
-    InheritAttributes();
-//    wxControl::SetFont( parent->GetFont() );
-    
-    wxSize size_best( DoGetBestSize() );
-    wxSize new_size( size );
-    if (new_size.x == -1)
-        new_size.x = size_best.x;
-    if (new_size.y == -1)
-        new_size.y = size_best.y;
-    if ((new_size.x != size.x) || (new_size.y != size.y))
-        SetSize( new_size.x, new_size.y );
-
-//     if (ShouldInheritColours())
-//     {
-//         SetBackgroundColour( parent->GetBackgroundColour() );
-//         SetForegroundColour( parent->GetForegroundColour() );
-//     }
-    Show( TRUE );
 
     return TRUE;
 }
@@ -168,7 +147,10 @@ void wxStaticText::SetLabel( const wxString &label )
 
     // adjust the label size to the new label unless disabled
     if (!HasFlag(wxST_NO_AUTORESIZE))
+    {
         SetSize( GetBestSize() );
+        SetSizeHints(GetSize());
+    }
 }
 
 bool wxStaticText::SetFont( const wxFont &font )
@@ -177,8 +159,10 @@ bool wxStaticText::SetFont( const wxFont &font )
 
     // adjust the label size to the new label unless disabled
     if (!HasFlag(wxST_NO_AUTORESIZE))
+    {
         SetSize( GetBestSize() );
-    
+        SetSizeHints(GetSize());
+    }
     return ret;
 }
 

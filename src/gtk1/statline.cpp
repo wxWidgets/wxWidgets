@@ -74,9 +74,7 @@ bool wxStaticLine::Create( wxWindow *parent, wxWindowID id,
 
     m_parent->DoAddChild( this );
 
-    PostCreation();
-
-    Show( TRUE );
+    PostCreation(size);
 
     return TRUE;
 }

@@ -365,14 +365,12 @@ bool wxNotebook::Create(wxWindow *parent, wxWindowID id,
     gtk_signal_connect( GTK_OBJECT(m_widget), "key_press_event",
       GTK_SIGNAL_FUNC(gtk_notebook_key_press_callback), (gpointer)this );
 
-    PostCreation();
+    PostCreation(size);
 
     SetFont( parent->GetFont() );
 
     gtk_signal_connect( GTK_OBJECT(m_widget), "realize",
                             GTK_SIGNAL_FUNC(gtk_notebook_realized_callback), (gpointer) this );
-
-    Show( TRUE );
 
     return TRUE;
 }

@@ -179,12 +179,7 @@ bool wxScrollBar::Create(wxWindow *parent, wxWindowID id,
 
     m_parent->DoAddChild( this );
 
-    PostCreation();
-    InheritAttributes();
-
-    SetBestSize(size);
-
-    Show( TRUE );
+    PostCreation(size);
 
     return TRUE;
 }

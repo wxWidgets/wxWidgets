@@ -86,6 +86,16 @@ wxSize wxControl::DoGetBestSize() const
     return wxSize(req.width, req.height);
 }
 
+
+void wxControl::PostCreation(const wxSize& size)
+{
+    wxWindow::PostCreation();
+    InheritAttributes();
+    ApplyWidgetStyle();
+    SetInitialBestSize(size);
+}
+
+
 #ifdef __WXGTK20__
 wxString wxControl::PrepareLabelMnemonics( const wxString &label ) const
 {

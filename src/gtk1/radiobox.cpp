@@ -246,16 +246,10 @@ bool wxRadioBox::Create( wxWindow *parent, wxWindowID id, const wxString& title,
     bool wasShown = IsShown();
     if ( wasShown )
         Hide(); // prevent PostCreation() from showing us
-    PostCreation();
-    InheritAttributes();
-
-    ApplyWidgetStyle();
 
     SetLabel( title );
 
-    SetFont( parent->GetFont() );
-
-    SetBestSize( size );
+    PostCreation(size);
 
     if ( wasShown )
         Show();

@@ -141,10 +141,7 @@ bool wxSlider::Create(wxWindow *parent, wxWindowID id,
 
     m_parent->DoAddChild( this );
 
-    PostCreation();
-    InheritAttributes();
-
-    Show( TRUE );
+    PostCreation(size);
 
     return TRUE;
 }

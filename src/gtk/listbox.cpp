@@ -404,16 +404,10 @@ bool wxListBox::Create( wxWindow *parent, wxWindowID id,
         DoAppend(choices[i]);
     }
 
-    // call it after appending the strings to the listbox, otherwise it doesn't
-    // work correctly
-    SetBestSize( size );
-
     m_parent->DoAddChild( this );
 
-    PostCreation();
-    InheritAttributes();
-
-    Show( TRUE );
+    PostCreation(size);
+    SetBestSize(size); // need this too because this is a wxControlWithItems
 
     return TRUE;
 }

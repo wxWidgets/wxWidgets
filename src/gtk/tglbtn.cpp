@@ -79,13 +79,6 @@ bool wxToggleBitmapButton::Create(wxWindow *parent, wxWindowID id,
 
     if (m_bitmap.Ok())
     {
-        wxSize newSize = size;
-        int border = (style & wxNO_BORDER) ? 4 : 10;
-        if (newSize.x == -1)
-            newSize.x = m_bitmap.GetWidth()+border;
-        if (newSize.y == -1)
-            newSize.y = m_bitmap.GetHeight()+border;
-        SetSize( newSize.x, newSize.y );
         OnSetBitmap();
     }
 
@@ -95,10 +88,7 @@ bool wxToggleBitmapButton::Create(wxWindow *parent, wxWindowID id,
 
     m_parent->DoAddChild(this);
 
-    PostCreation();
-    InheritAttributes();
-
-    Show( TRUE );
+    PostCreation(size);
 
     return TRUE;
 }
@@ -207,15 +197,15 @@ void wxToggleBitmapButton::OnInternalIdle()
 // Get the "best" size for this control.
 wxSize wxToggleBitmapButton::DoGetBestSize() const
 {
-    wxSize ret(wxControl::DoGetBestSize());
-   
-    if (!HasFlag(wxBU_EXACTFIT))
-    {
-        if (ret.x < 80) ret.x = 80;
-    }
+    wxSize best;
     
-
-   return ret;
+    if (m_bitmap.Ok())
+    {
+        int border = HasFlag(wxNO_BORDER) ? 4 : 10;
+        best.x = m_bitmap.GetWidth()+border;
+        best.y = m_bitmap.GetHeight()+border;
+    }
+    return best;
 }
 // ------------------------------------------------------------------------
 // wxToggleButton
@@ -251,19 +241,7 @@ bool wxToggleButton::Create(wxWindow *parent, wxWindowID id,
 
    m_parent->DoAddChild(this);
 
-   PostCreation();
-   InheritAttributes();
-
-   wxSize size_best(DoGetBestSize());
-   wxSize new_size(size);
-   if (new_size.x == -1)
-      new_size.x = size_best.x;
-   if (new_size.y == -1)
-      new_size.y = size_best.y;
-   if ((new_size.x != size.x) || (new_size.y != size.y))
-      SetSize(new_size.x, new_size.y);
-
-   Show(TRUE);
+   PostCreation(size);
 
    return TRUE;
 }

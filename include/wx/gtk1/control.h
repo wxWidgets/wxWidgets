@@ -55,6 +55,8 @@ public:
 
 protected:
     virtual wxSize DoGetBestSize() const;
+    void PostCreation(const wxSize& size);
+
 #ifdef __WXGTK20__
     wxString PrepareLabelMnemonics( const wxString &label ) const;
 #endif

@@ -135,19 +135,7 @@ bool wxButton::Create(  wxWindow *parent, wxWindowID id, const wxString &label,
 
     m_parent->DoAddChild( this );
 
-    PostCreation();
-    InheritAttributes();
-
-    wxSize best_size( DoGetBestSize() );
-    wxSize new_size( size );
-    if (new_size.x == -1)
-        new_size.x = best_size.x;
-    if (new_size.y == -1)
-        new_size.y = best_size.y;
-    if ((new_size.x != size.x) || (new_size.y != size.y))
-        SetSize( new_size.x, new_size.y );
-
-    SetSize( new_size );
+    PostCreation(size);
 
     return TRUE;
 }

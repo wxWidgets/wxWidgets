@@ -66,9 +66,7 @@ bool wxStaticBox::Create( wxWindow *parent,
 
     m_parent->DoAddChild( this );
 
-    PostCreation();
-
-    InheritAttributes();
+    PostCreation(size);
 
     // need to set non default alignment?
     gfloat xalign;
@@ -81,8 +79,6 @@ bool wxStaticBox::Create( wxWindow *parent,
 
     if ( xalign )
         gtk_frame_set_label_align(GTK_FRAME( m_widget ), xalign, 0.0);
-
-    Show( TRUE );
 
     return TRUE;
 }

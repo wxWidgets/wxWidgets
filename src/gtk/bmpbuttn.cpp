@@ -149,13 +149,6 @@ bool wxBitmapButton::Create( wxWindow *parent,
 
     if (m_bmpNormal.Ok())
     {
-        wxSize newSize = size;
-        wxSize bestSize = DoGetBestSize();
-        if (newSize.x == -1)
-            newSize.x = bestSize.x;
-        if (newSize.y == -1)
-            newSize.y = bestSize.y;
-        SetSize( newSize.x, newSize.y );
         OnSetBitmap();
     }
 
@@ -173,10 +166,7 @@ bool wxBitmapButton::Create( wxWindow *parent,
 
     m_parent->DoAddChild( this );
 
-    PostCreation();
-    InheritAttributes();
-
-    Show( TRUE );
+    PostCreation(size);
 
     return TRUE;
 }

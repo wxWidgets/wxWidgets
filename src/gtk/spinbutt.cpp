@@ -150,10 +150,7 @@ bool wxSpinButton::Create(wxWindow *parent,
 
     m_parent->DoAddChild( this );
 
-    PostCreation();
-    InheritAttributes();
-
-    Show( TRUE );
+    PostCreation(new_size);
 
     return TRUE;
 }

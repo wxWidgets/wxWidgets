@@ -373,9 +373,7 @@ bool wxToolBar::Create( wxWindow *parent,
 
     m_parent->DoAddChild( this );
 
-    PostCreation();
-
-    Show( TRUE );
+    PostCreation(size);
 
     return TRUE;
 }

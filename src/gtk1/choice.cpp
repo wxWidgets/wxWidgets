@@ -122,12 +122,8 @@ bool wxChoice::Create( wxWindow *parent, wxWindowID id,
 
     m_parent->DoAddChild( this );
 
-    PostCreation();
-    InheritAttributes();
-
-    SetBestSize(size);
-
-    Show( TRUE );
+    PostCreation(size);
+    SetBestSize(size); // need this too because this is a wxControlWithItems
 
     return TRUE;
 }

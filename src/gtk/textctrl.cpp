@@ -348,17 +348,7 @@ bool wxTextCtrl::Create( wxWindow *parent,
 
     m_focusWidget = m_text;
 
-    PostCreation();
-    InheritAttributes();
-
-    wxSize size_best( DoGetBestSize() );
-    wxSize new_size( size );
-    if (new_size.x == -1)
-        new_size.x = size_best.x;
-    if (new_size.y == -1)
-        new_size.y = size_best.y;
-    if ((new_size.x != size.x) || (new_size.y != size.y))
-        SetSize( new_size.x, new_size.y );
+    PostCreation(size);
 
     if (multi_line)
         gtk_widget_show(m_text);
@@ -460,8 +450,6 @@ bool wxTextCtrl::Create( wxWindow *parent,
 
     wxTextAttr attrDef( colFg, m_backgroundColour, parent->GetFont() );
     SetDefaultStyle( attrDef );
-
-    Show( TRUE );
 
     return TRUE;
 }
