@@ -640,8 +640,8 @@ bool wxResourceManager::DeleteWindow(wxWindow* win)
     
     win->Destroy();
     
-    if (clearDisplay)
-        m_editorPanel->Clear();
+    //if (clearDisplay)
+    //    m_editorPanel->Clear();
     
     return TRUE;
 }
@@ -1218,7 +1218,7 @@ void wxResourceManager::ClearCurrentDialog()
         DisassociateResource(m_editorPanel->m_childWindow);
         DeleteWindow(m_editorPanel->m_childWindow);
         m_editorPanel->m_childWindow = NULL;
-        m_editorPanel->Clear();
+        //m_editorPanel->Clear();
     }
 }
 

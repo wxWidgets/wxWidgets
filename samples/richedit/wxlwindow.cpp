@@ -214,7 +214,7 @@ wxLayoutWindow::Clear(int family,
 {
    GetLayoutList()->Clear(family,size,style,weight,underline,fg,bg);
    SetBackgroundColour(GetLayoutList()->GetDefaultStyleInfo().GetBGColour());
-   wxScrolledWindow::Clear();
+   //wxScrolledWindow::Clear();
    ResizeScrollbars(true);
    SetDirty();
    SetModified(FALSE);
