@@ -354,7 +354,7 @@ public:
     virtual wxSize GetToolBarButtonSize(wxCoord *separator) const
         { if ( separator ) *separator = 5; return wxSize(16, 15); }
     virtual wxSize GetToolBarMargin() const
-        { return wxSize(6, 6); }
+        { return wxSize(4, 4); }
 
     virtual wxRect GetTextTotalArea(const wxTextCtrl *text,
                                     const wxRect& rect) const;

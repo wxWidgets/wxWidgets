@@ -67,6 +67,10 @@ public:
 
     virtual void SetToolShortHelp(int id, const wxString& helpString);
 
+    virtual void SetMargins(int x, int y);
+    void SetMargins(const wxSize& size)
+        { SetMargins((int) size.x, (int) size.y); }
+    
 protected:
     // common part of all ctors
     void Init();
@@ -110,15 +114,6 @@ protected:
     // vertical toolbar, left/right for a horizontal one
     void GetRectLimits(const wxRect& rect, wxCoord *start, wxCoord *end) const;
 
-    // wxButton actions: all these use m_toolPressed and can only be called if
-    // we have one
-    void Toggle();
-    void Press();
-    void Release();
-
-    // this one used m_toolCurrent
-    void Click();
-
 private:
     // have we calculated the positions of our tools?
     bool m_needsLayout;
@@ -129,14 +124,8 @@ private:
     // the total size of all toolbar elements
     wxCoord m_maxWidth,
             m_maxHeight;
-    
-    // the tool over which the mouse currently is or NULL
-    wxToolBarToolBase *m_toolCurrent;
 
-    // the tool which currently has the mouse capture (i.e. the one user is
-    // pressing) or NULL
-    wxToolBarTool *m_toolPressed;
-
+private:
     DECLARE_DYNAMIC_CLASS(wxToolBar)
 };
 
@@ -145,7 +134,7 @@ private:
 // click into button press/release actions
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxStdToolbarInputHandler : public wxStdButtonInputHandler
+class WXDLLEXPORT wxStdToolbarInputHandler : public wxStdInputHandler
 {
 public:
     wxStdToolbarInputHandler(wxInputHandler *inphand);
@@ -158,6 +147,11 @@ public:
     virtual bool HandleMouseMove(wxInputConsumer *consumer, const wxMouseEvent& event);
     virtual bool HandleFocus(wxInputConsumer *consumer, const wxFocusEvent& event);
     virtual bool HandleActivation(wxInputConsumer *consumer, bool activated);
+    
+private:
+    wxWindow            *m_winCapture;
+    wxToolBarToolBase   *m_toolCapture;
+    wxToolBarToolBase   *m_toolLast;
 };
 
 #endif // _WX_UNIV_TOOLBAR_H_

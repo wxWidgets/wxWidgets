@@ -236,9 +236,9 @@ void wxButton::SetImageLabel(const wxBitmap& bitmap)
 
 void wxButton::SetImageMargins(wxCoord x, wxCoord y)
 {
-    m_marginBmpX = x;
-    m_marginBmpY = y;
-
+    m_marginBmpX = x + 2;
+    m_marginBmpY = y + 2;
+    
     SetBestSize(wxDefaultSize);
 }
 
