@@ -140,8 +140,7 @@ bool wxDC::CocoaUnwindStackAndTakeFocus()
 
 wxDC::wxDC(void)
 {
-    m_cocoaFlipped = false;
-    m_cocoaHeight = 0.0;
+    m_cocoaWxToBoundsTransform;
     m_pen = *wxBLACK_PEN;
 }
 
@@ -159,26 +158,31 @@ bool wxDC::CocoaUnlockFocus()
     return false;
 }
 
-void wxDC::CocoaApplyTransformations()
+/*static*/ WX_NSAffineTransform wxDC::CocoaGetWxToBoundsTransform(bool isFlipped, float height)
 {
+    NSAffineTransform *transform = nil;
     // This transform flips the graphics since wxDC uses top-left origin
-    if(!m_cocoaFlipped)
+    if(!isFlipped)
     {
         // The transform is auto released
-        NSAffineTransform *transform = [NSAffineTransform transform];
+        transform = [NSAffineTransform transform];
         /*  x' = 1x + 0y + 0
             y' = 0x + -1y + window's height
         */
         NSAffineTransformStruct matrix = {
             1,  0
         ,   0, -1
-        ,   0, m_cocoaHeight
+        ,   0, height
         };
         [transform setTransformStruct: matrix];
-        // Apply the transform 
-        [transform concat];
     }
-    // TODO: Apply scaling transformation
+    return transform;
+}
+
+void wxDC::CocoaApplyTransformations()
+{
+    [m_cocoaWxToBoundsTransform concat];
+    // TODO: Apply device/logical/user position/scaling transformations
 }
 
 void wxDC::DoDrawRectangle(wxCoord x, wxCoord y, wxCoord width, wxCoord height)

@@ -13,6 +13,7 @@
 #ifndef WX_PRECOMP
     #include "wx/log.h"
     #include "wx/window.h"
+    #include "wx/dc.h"
 #endif //WX_PRECOMP
 #include "wx/tooltip.h"
 
@@ -398,6 +399,13 @@ NSRect wxWindowCocoa::CocoaTransformWxToBounds(NSRect rectWx)
     ,   rectWx.size.width
     ,   rectWx.size.height
     );
+}
+
+WX_NSAffineTransform wxWindowCocoa::CocoaGetWxToBoundsTransform()
+{
+    // TODO: Handle scrolling offset
+    NSAffineTransform *transform = wxDC::CocoaGetWxToBoundsTransform([GetNSView() isFlipped], [GetNSView() bounds].size.height);
+    return transform;
 }
 
 bool wxWindowCocoa::Cocoa_drawRect(const NSRect &rect)

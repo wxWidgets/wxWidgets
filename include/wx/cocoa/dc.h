@@ -12,6 +12,8 @@
 #ifndef __WX_COCOA_DC_H__
 #define __WX_COCOA_DC_H__
 
+DECLARE_WXCOCOA_OBJC_CLASS(NSAffineTransform);
+
 class WXDLLEXPORT wxDC;
 WX_DECLARE_LIST(wxDC, wxCocoaDCStack);
 
@@ -38,6 +40,8 @@ public:
     static WX_NSTextStorage sm_cocoaNSTextStorage;
     static WX_NSLayoutManager sm_cocoaNSLayoutManager;
     static WX_NSTextContainer sm_cocoaNSTextContainer;
+    // Create a simple Wx to Bounds transform (just flip the coordinate system)
+    static WX_NSAffineTransform CocoaGetWxToBoundsTransform(bool isFlipped, float height);
 protected:
 // DC stack
     static wxCocoaDCStack sm_cocoaDCStack;
@@ -54,8 +58,7 @@ protected:
     void CocoaUnwindStackAndLoseFocus();
 // DC flipping/transformation
     void CocoaApplyTransformations();
-    float m_cocoaHeight;
-    bool m_cocoaFlipped;
+    WX_NSAffineTransform m_cocoaWxToBoundsTransform;
 // Blitting
     virtual bool CocoaDoBlitOnFocusedDC(wxCoord xdest, wxCoord ydest,
         wxCoord width, wxCoord height, wxCoord xsrc, wxCoord ysrc,
