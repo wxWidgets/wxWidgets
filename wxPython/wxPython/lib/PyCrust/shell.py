@@ -125,8 +125,8 @@ class Shell(wxStyledTextCtrl):
         else:
             Interpreter = InterpClass
         # Create default locals so we have something interesting.
-        shellLocals = {'__name__': 'PyShell', 
-                       '__doc__': 'PyShell, The PyCrust Python Shell.',
+        shellLocals = {'__name__': 'PyCrust-Shell', 
+                       '__doc__': 'PyCrust-Shell, The PyCrust Python Shell.',
                        '__version__': VERSION,
                       }
         # Add the dictionary that was passed in.
@@ -283,10 +283,10 @@ class Shell(wxStyledTextCtrl):
         """Keypress event handler.
 
         Prevents modification of previously submitted commands/responses."""
+        if not self.CanEdit():
+            return
         key = event.KeyCode()
         currpos = self.GetCurrentPos()
-        if currpos < self.prompt1Pos[1]:
-            return
         stoppos = self.promptPos[1]
         if key == ord('.'):
             # The dot or period key activates auto completion.
@@ -318,8 +318,13 @@ class Shell(wxStyledTextCtrl):
         key = event.KeyCode()
         currpos = self.GetCurrentPos()
         stoppos = self.promptPos[1]
+        # Return is used to submit a command to the interpreter.
+        if key == WXK_RETURN:
+            if self.AutoCompActive(): self.AutoCompCancel()
+            if self.CallTipActive: self.CallTipCancel()
+            self.processLine()
         # If the auto-complete window is up let it do its thing.
-        if self.AutoCompActive():
+        elif self.AutoCompActive():
             event.Skip()
         # Retrieve the previous command from the history buffer.
         elif (event.ControlDown() and key == WXK_UP) \
@@ -332,10 +337,6 @@ class Shell(wxStyledTextCtrl):
         # Search up the history for the text in front of the cursor.
         elif key == WXK_F8:
             self.OnHistorySearch()
-        # Return is used to submit a command to the interpreter.
-        elif key == WXK_RETURN:
-            if self.CallTipActive: self.CallTipCancel()
-            self.processLine()
         # Home needs to be aware of the prompt.
         elif key == WXK_HOME:
             if currpos >= stoppos:
@@ -357,7 +358,7 @@ class Shell(wxStyledTextCtrl):
                 event.Skip()
         # Only allow these keys after the latest prompt.
         elif key in (WXK_TAB, WXK_DELETE):
-            if currpos >= self.prompt1Pos[1]:
+            if self.CanEdit():
                 event.Skip()
         # Don't toggle between insert mode and overwrite mode.
         elif key == WXK_INSERT:
@@ -367,9 +368,9 @@ class Shell(wxStyledTextCtrl):
 
     def OnHistoryRetrieve(self, step):
         """Retrieve the previous/next command from the history buffer."""
-        startpos = self.GetCurrentPos()
-        if startpos < self.prompt1Pos[1]:
+        if not self.CanEdit():
             return
+        startpos = self.GetCurrentPos()
         newindex = self.historyIndex + step
         if not (-1 <= newindex < len(self.history)):
             return
@@ -386,9 +387,9 @@ class Shell(wxStyledTextCtrl):
 
     def OnHistorySearch(self):
         """Search up the history buffer for the text in front of the cursor."""
-        startpos = self.GetCurrentPos()
-        if startpos < self.prompt1Pos[1]:
+        if not self.CanEdit():
             return
+        startpos = self.GetCurrentPos()
         # The text up to the cursor is what we search for.
         numCharsAfterCursor = self.GetTextLength() - startpos
         searchText = self.getCommand(rstrip=0)
@@ -547,6 +548,12 @@ class Shell(wxStyledTextCtrl):
         """Display text in the shell.
 
         Replace line endings with OS-specific endings."""
+        text = self.fixLineEndings(text)
+        self.AddText(text)
+        self.EnsureCaretVisible()
+
+    def fixLineEndings(self, text):
+        """Return text with line endings replaced by OS-specific endings."""
         lines = text.split('\r\n')
         for l in range(len(lines)):
             chunks = lines[l].split('\r')
@@ -554,9 +561,7 @@ class Shell(wxStyledTextCtrl):
                 chunks[c] = os.linesep.join(chunks[c].split('\n'))
             lines[l] = os.linesep.join(chunks)
         text = os.linesep.join(lines)
-        self.AddText(text)
-        self.EnsureCaretVisible()
-        #self.ScrollToColumn(0)
+        return text
 
     def prompt(self):
         """Display appropriate prompt for the context, either ps1 or ps2.
@@ -698,11 +703,61 @@ class Shell(wxStyledTextCtrl):
 
     def CanCut(self):
         """Return true if text is selected and can be cut."""
-        return self.GetSelectionStart() != self.GetSelectionEnd()
+        if self.GetSelectionStart() != self.GetSelectionEnd() \
+        and self.GetSelectionStart() >= self.prompt1Pos[1] \
+        and self.GetSelectionEnd() >= self.prompt1Pos[1]:
+            return 1
+        else:
+            return 0
     
     def CanCopy(self):
         """Return true if text is selected and can be copied."""
         return self.GetSelectionStart() != self.GetSelectionEnd()
+
+    def CanPaste(self):
+        """Return true if a paste should succeed."""
+        if self.CanEdit() and wxStyledTextCtrl.CanPaste(self):
+            return 1
+        else:
+            return 0
+
+    def CanEdit(self):
+        """Return true if editing should succeed."""
+        return self.GetCurrentPos() >= self.prompt1Pos[1]
+
+    def Cut(self):
+        """Remove selection and place it on the clipboard."""
+        if self.CanCut() and self.CanCopy():
+            if self.AutoCompActive(): self.AutoCompCancel()
+            if self.CallTipActive: self.CallTipCancel()
+            self.Copy()
+            self.ReplaceSelection('')
+
+    def Copy(self):
+        """Copy selection and place it on the clipboard."""
+        if self.CanCopy():
+            command = self.GetSelectedText()
+            command = command.replace(os.linesep + sys.ps2, os.linesep)
+            data = wxTextDataObject(command)
+            if wxTheClipboard.Open():
+                wxTheClipboard.SetData(data)
+                wxTheClipboard.Close()
+
+    def Paste(self):
+        """Replace selection with clipboard contents."""
+        if self.CanPaste():
+            if wxTheClipboard.Open():
+                if wxTheClipboard.IsSupported(wxDataFormat(wxDF_TEXT)):
+                    data = wxTextDataObject()
+                    if wxTheClipboard.GetData(data):
+                        command = data.GetText()
+                        command = self.fixLineEndings(command)
+                        command = command.replace(os.linesep + sys.ps2, '\n')
+                        command = command.replace(os.linesep, '\n')
+                        command = command.replace('\n', os.linesep + sys.ps2)
+                        self.ReplaceSelection('')
+                        self.write(command)
+                wxTheClipboard.Close()
 
 
 wxID_SELECTALL = NewId()  # This *should* be defined by wxPython.
@@ -727,9 +782,9 @@ class ShellMenu:
         m.Append(wxID_UNDO, '&Undo \tCtrl+Z', 'Undo the last action')
         m.Append(wxID_REDO, '&Redo \tCtrl+Y', 'Redo the last undone action')
         m.AppendSeparator()
-        m.Append(wxID_CUT, 'Cu&t', 'Cut the selection')
-        m.Append(wxID_COPY, '&Copy', 'Copy the selection')
-        m.Append(wxID_PASTE, '&Paste', 'Paste')
+        m.Append(wxID_CUT, 'Cu&t \tCtrl+X', 'Cut the selection')
+        m.Append(wxID_COPY, '&Copy \tCtrl+C', 'Copy the selection')
+        m.Append(wxID_PASTE, '&Paste \tCtrl+V', 'Paste')
         m.AppendSeparator()
         m.Append(wxID_CLEAR, 'Cle&ar', 'Delete the selection')
         m.Append(wxID_SELECTALL, 'Select A&ll', 'Select all text')

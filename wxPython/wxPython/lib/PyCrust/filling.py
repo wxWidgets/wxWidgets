@@ -53,7 +53,8 @@ class FillingTree(wxTreeCtrl):
         objtype = type(object)
         if objtype is types.DictType:
             dict = object
-        elif (objtype in (types.InstanceType, types.ModuleType)) \
+        elif (objtype in (types.ClassType, types.InstanceType, \
+                          types.ModuleType)) \
         or hasattr(object, '__class__'):
             for key in introspect.getAttributeNames(object):
                 # Believe it or not, some attributes can disappear, such as
