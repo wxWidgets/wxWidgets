@@ -1725,30 +1725,32 @@ bool wxListCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
         // almost all messages use NM_LISTVIEW
         NM_LISTVIEW *nmLV = (NM_LISTVIEW *)nmhdr;
 
-        // this is true for almost all events
+        const int iItem = nmLV->iItem;
+
+        // set the data event field for all messages for which the system gives
+        // us a valid NM_LISTVIEW::lParam
         switch( nmLV->hdr.code )
         {
-        case LVN_BEGINDRAG:
-        case LVN_BEGINRDRAG:
-        case LVN_COLUMNCLICK:
+            case LVN_BEGINDRAG:
+            case LVN_BEGINRDRAG:
+            case LVN_COLUMNCLICK:
 #ifdef LVN_HOTTRACK
-        case LVN_HOTTRACK:
+            case LVN_HOTTRACK:
 #endif
-        case LVN_ITEMCHANGED:
-        case LVN_ITEMCHANGING:
-        {
-            wxListItemInternalData *internaldata =
-                (wxListItemInternalData *) nmLV->lParam;
+            case LVN_ITEMCHANGED:
+            case LVN_ITEMCHANGING:
+                if ( iItem != -1 )
+                {
+                    wxListItemInternalData *internaldata =
+                        (wxListItemInternalData *) nmLV->lParam;
 
-            // from PSDK: "This member is undefined for notification
-            // messages that do not use it."
-            // Now, which notifications do not use it?
-            if (nmLV->iItem != -1 && internaldata)
-                event.m_item.m_data = internaldata->lParam;
-        }
-        default:
-            // fall through
-            ;
+                    if ( internaldata )
+                        event.m_item.m_data = internaldata->lParam;
+                }
+
+            default:
+                // fall through
+                ;
         }
 
         switch ( nmhdr->code )
@@ -1763,7 +1765,7 @@ bool wxListCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
                     eventType = wxEVT_COMMAND_LIST_BEGIN_DRAG;
                 }
 
-                event.m_itemIndex = nmLV->iItem;
+                event.m_itemIndex = iItem;
                 event.m_pointDrag.x = nmLV->ptAction.x;
                 event.m_pointDrag.y = nmLV->ptAction.y;
                 break;
@@ -1825,9 +1827,9 @@ bool wxListCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
 
             case LVN_DELETEITEM:
                 eventType = wxEVT_COMMAND_LIST_DELETE_ITEM;
-                event.m_itemIndex = nmLV->iItem;
+                event.m_itemIndex = iItem;
                 // delete the assoicated internal data
-                wxDeleteInternalData(this, nmLV->iItem);
+                wxDeleteInternalData(this, iItem);
                 break;
 
             case LVN_SETDISPINFO:
@@ -1840,22 +1842,25 @@ bool wxListCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
 
             case LVN_INSERTITEM:
                 eventType = wxEVT_COMMAND_LIST_INSERT_ITEM;
-                event.m_itemIndex = nmLV->iItem;
+                event.m_itemIndex = iItem;
                 break;
 
             case LVN_ITEMCHANGED:
                 // we translate this catch all message into more interesting
                 // (and more easy to process) wxWindows events
 
-                // first of all, we deal with the state change events only
-                if ( nmLV->uChanged & LVIF_STATE )
+                // first of all, we deal with the state change events only and
+                // only for valid items (item == -1 for the virtual list
+                // control)
+                if ( nmLV->uChanged & LVIF_STATE && iItem != -1 )
                 {
                     // temp vars for readability
                     const UINT stOld = nmLV->uOldState;
                     const UINT stNew = nmLV->uNewState;
 
-                    event.m_item.SetId(nmLV->iItem);
-                    event.m_item.SetMask(wxLIST_MASK_TEXT|wxLIST_MASK_IMAGE|
+                    event.m_item.SetId(iItem);
+                    event.m_item.SetMask(wxLIST_MASK_TEXT |
+                                         wxLIST_MASK_IMAGE |
                                          wxLIST_MASK_DATA);
                     GetItem(event.m_item);
 
@@ -1863,7 +1868,7 @@ bool wxListCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
                     if ( !(stOld & LVIS_FOCUSED) && (stNew & LVIS_FOCUSED) )
                     {
                         eventType = wxEVT_COMMAND_LIST_ITEM_FOCUSED;
-                        event.m_itemIndex = nmLV->iItem;
+                        event.m_itemIndex = iItem;
                     }
 
                     if ( (stNew & LVIS_SELECTED) != (stOld & LVIS_SELECTED) )
@@ -1880,7 +1885,7 @@ bool wxListCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
                         {
                             // then need to set m_itemIndex as it wasn't done
                             // above
-                            event.m_itemIndex = nmLV->iItem;
+                            event.m_itemIndex = iItem;
                         }
 
                         eventType = stNew & LVIS_SELECTED
@@ -1948,16 +1953,16 @@ bool wxListCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
 
                 // else translate it into wxEVT_COMMAND_LIST_ITEM_ACTIVATED event
                 // if it happened on an item (and not on empty place)
-                if ( nmLV->iItem == -1 )
+                if ( iItem == -1 )
                 {
                     // not on item
                     return FALSE;
                 }
 
                 eventType = wxEVT_COMMAND_LIST_ITEM_ACTIVATED;
-                event.m_itemIndex = nmLV->iItem;
-                event.m_item.m_text = GetItemText(nmLV->iItem);
-                event.m_item.m_data = GetItemData(nmLV->iItem);
+                event.m_itemIndex = iItem;
+                event.m_item.m_text = GetItemText(iItem);
+                event.m_item.m_data = GetItemData(iItem);
                 break;
 
             case NM_RCLICK:
