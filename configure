@@ -12247,7 +12247,7 @@ rm -f conftest*
 
         if test "$wxUSE_NANOX" = "yes"; then
             TOOLKIT_INCLUDE="-I\$(top_srcdir)/include/wx/x11/nanox -I\$(MICROWIN)/src/include $TOOLKIT_INCLUDE"
-            TOOLCHAIN_DEFS="${TOOLCHAIN_DEFS} -D__NANOX__ -DMWPIXEL_FORMAT=MWPF_TRUECOLOR0888 -DHAVE_FILEIO -DHAVE_BMP_SUPPORT=1 -DHAVE_GIF_SUPPORT=1 -DHAVE_PNM_SUPPORT=1 -DHAVE_XPM_SUPPORT=1 -DLINUX=1 -DUNIX=1 -O -DUSE_EXPOSURE -DSCREEN_HEIGHT=480 -DSCREEN_WIDTH=640 -DSCREEN_DEPTH=4 -DX11=1"
+            TOOLCHAIN_DEFS="${TOOLCHAIN_DEFS} -D__NANOX__ -DMWPIXEL_FORMAT=MWPF_TRUECOLOR0888 -DHAVE_FILEIO -DHAVE_BMP_SUPPORT=1 -DHAVE_GIF_SUPPORT=1 -DHAVE_PNM_SUPPORT=1 -DHAVE_XPM_SUPPORT=1 -DLINUX=1 -DUNIX=1 -DUSE_EXPOSURE -DSCREEN_HEIGHT=480 -DSCREEN_WIDTH=640 -DSCREEN_DEPTH=4 -DX11=1"
             GUI_TK_LIBRARY="$GUI_TK_LIBRARY \$(MICROWIN)/src/lib/libnano-X.a"
         else
             GUI_TK_LIBRARY="$GUI_TK_LIBRARY -lX11$xpm_link"
@@ -14798,13 +14798,13 @@ cat >> confdefs.h <<EOF
 EOF
 
 
-echo $ac_n "checking size of int *""... $ac_c" 1>&6
-echo "configure:14803: checking size of int *" >&5
-if eval "test \"`echo '$''{'ac_cv_sizeof_int_p'+set}'`\" = set"; then
+echo $ac_n "checking size of void *""... $ac_c" 1>&6
+echo "configure:14803: checking size of void *" >&5
+if eval "test \"`echo '$''{'ac_cv_sizeof_void_p'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
 else
   if test "$cross_compiling" = yes; then
-  ac_cv_sizeof_int_p=4
+  ac_cv_sizeof_void_p=4
 else
   cat > conftest.$ac_ext <<EOF
 #line 14811 "configure"
@@ -14814,26 +14814,26 @@ main()
 {
   FILE *f=fopen("conftestval", "w");
   if (!f) exit(1);
-  fprintf(f, "%d\n", sizeof(int *));
+  fprintf(f, "%d\n", sizeof(void *));
   exit(0);
 }
 EOF
 if { (eval echo configure:14822: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest${ac_exeext} && (./conftest; exit) 2>/dev/null
 then
-  ac_cv_sizeof_int_p=`cat conftestval`
+  ac_cv_sizeof_void_p=`cat conftestval`
 else
   echo "configure: failed program was:" >&5
   cat conftest.$ac_ext >&5
   rm -fr conftest*
-  ac_cv_sizeof_int_p=0
+  ac_cv_sizeof_void_p=0
 fi
 rm -fr conftest*
 fi
 
 fi
-echo "$ac_t""$ac_cv_sizeof_int_p" 1>&6
+echo "$ac_t""$ac_cv_sizeof_void_p" 1>&6
 cat >> confdefs.h <<EOF
-#define SIZEOF_INT_P $ac_cv_sizeof_int_p
+#define SIZEOF_VOID_P $ac_cv_sizeof_void_p
 EOF
 
 
