@@ -14,7 +14,7 @@ class MyApp: public wxApp
 {
 public:
     bool OnInit();
-    bool InitToolbar(wxToolBar* toolBar, bool small = FALSE);
+    bool InitToolbar(wxToolBar* toolBar, bool smallicons = FALSE);
 };
 
 // Define a new frame

@@ -95,7 +95,7 @@ bool MyApp::OnInit()
     return TRUE;
 }
 
-bool MyApp::InitToolbar(wxToolBar* toolBar, bool small)
+bool MyApp::InitToolbar(wxToolBar* toolBar, bool smallicons)
 {
   // Set up toolbar
   wxBitmap* toolBarBitmaps[8];
@@ -103,7 +103,7 @@ bool MyApp::InitToolbar(wxToolBar* toolBar, bool small)
 #ifdef __WXMSW__
   toolBarBitmaps[0] = new wxBitmap("icon1");
   toolBarBitmaps[1] = new wxBitmap("icon2");
-  if ( !small )
+  if ( !smallicons )
   {
       toolBarBitmaps[2] = new wxBitmap("icon3");
       toolBarBitmaps[3] = new wxBitmap("icon4");
@@ -115,7 +115,7 @@ bool MyApp::InitToolbar(wxToolBar* toolBar, bool small)
 #else
   toolBarBitmaps[0] = new wxBitmap( new_xpm );
   toolBarBitmaps[1] = new wxBitmap( open_xpm );
-  if ( !small )
+  if ( !smallicons )
   {
       toolBarBitmaps[2] = new wxBitmap( save_xpm );
       toolBarBitmaps[3] = new wxBitmap( copy_xpm );
@@ -137,7 +137,7 @@ bool MyApp::InitToolbar(wxToolBar* toolBar, bool small)
   currentX += width + 5;
   toolBar->AddTool(wxID_OPEN, *(toolBarBitmaps[1]), wxNullBitmap, FALSE, currentX, -1, (wxObject *) NULL, "Open file");
 
-  if ( !small )
+  if ( !smallicons )
   {
       currentX += width + 5;
       toolBar->AddTool(wxID_SAVE, *(toolBarBitmaps[2]), wxNullBitmap, FALSE, currentX, -1, (wxObject *) NULL, "Save file");
@@ -161,7 +161,7 @@ bool MyApp::InitToolbar(wxToolBar* toolBar, bool small)
   toolBar->Realize();
 
   // Can delete the bitmaps since they're reference counted
-  int i, max = small ? 2 : WXSIZEOF(toolBarBitmaps);
+  int i, max = smallicons ? 2 : WXSIZEOF(toolBarBitmaps);
   for (i = 0; i < max; i++)
     delete toolBarBitmaps[i];
 
