@@ -195,7 +195,6 @@ FUNCTION IS NOW A MEMBER OF wxFrame - gt
     // event handlers
     // --------------
 
-    void OnSetFocus(wxFocusEvent& event);
     void OnEraseBackground(wxEraseEvent& event);
     void OnIdle(wxIdleEvent& event);
     void OnPaint(wxPaintEvent& event);
