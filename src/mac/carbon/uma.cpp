@@ -667,11 +667,11 @@ void UMAHideControl						(ControlHandle 			theControl)
 {
 	if ( UMAHasAppearance() )
 	{
-   	::HideControl( theControl ) ;
+   		::HideControl( theControl ) ;
    }
    else
    {
-   	::HideControl( theControl ) ;
+   		::HideControl( theControl ) ;
    }
 }
 
@@ -1359,16 +1359,26 @@ void UMAHighlightAndActivateWindow( WindowRef inWindowRef , bool inActivate )
 	{
 //		bool isHighlighted = IsWindowHighlited( inWindowRef ) ;
 //		if ( inActivate != isHightlited )
-				HiliteWindow( inWindowRef , inActivate ) ;
-				ControlHandle control = NULL ;
-				UMAGetRootControl( inWindowRef , & control ) ;
-				if ( control )
-				{
-					if ( inActivate )
-						UMAActivateControl( control ) ;
-					else
-						UMADeactivateControl( control ) ;
-				}	
+		GrafPtr port ;
+		GetPort( &port ) ;
+#if TARGET_CARBON
+		SetPort( GetWindowPort( inWindowRef ) ) ;
+#else
+		SetPort( inWindowRef ) ;
+#endif
+		SetOrigin( 0 , 0 ) ;
+		HiliteWindow( inWindowRef , inActivate ) ;
+		ControlHandle control = NULL ;
+		UMAGetRootControl( inWindowRef , & control ) ;
+		if ( control )
+		{
+			if ( inActivate )
+				UMAActivateControl( control ) ;
+			else
+				UMADeactivateControl( control ) ;
+		}	
+		SetPort( port ) ;
+		wxDC::MacInvalidateSetup() ;
 	}
 }
 OSStatus UMADrawThemePlacard( const Rect *inRect , ThemeDrawState inState ) 

@@ -32,6 +32,7 @@
 #include "wx/notebook.h"
 #include "wx/tabctrl.h"
 #include "wx/tooltip.h"
+#include "wx/statusbr.h"
 // TODO remove the line below, just for lookup-up convenience CS
 #include "wx/window.h"
 
@@ -194,7 +195,7 @@ bool wxWindow::Create(wxWindow *parent, wxWindowID id,
   	m_width = WidthDefault( size.x );
   	m_height = HeightDefault( size.y ) ;
 
-	if ( ! IsKindOf( CLASSINFO ( wxControl ) ) )
+	if ( ! IsKindOf( CLASSINFO ( wxControl ) ) && ! IsKindOf( CLASSINFO( wxStatusBar ) ) )
 	{
     	MacCreateScrollBars( style ) ;
 	}
@@ -584,7 +585,8 @@ void wxWindow::DoSetSize(int x, int y, int width, int height, int sizeFlags)
 			if ( doResize )
 				::SizeWindow(m_macWindowData->m_macWindow, m_width, m_height  , true); 
 			
-			// the OS takes care of invalidating and erasing	
+			// the OS takes care of invalidating and erasing the new area
+			// we have erased the old one	
 			
 			if ( IsKindOf( CLASSINFO( wxFrame ) ) )
 			{
@@ -708,6 +710,18 @@ void wxWindow::MacSuperShown( bool show )
 			child->MacSuperShown( show ) ;
 		node = node->Next();
 	}
+}
+
+bool wxWindow::MacIsReallyShown() const 
+{
+	bool status = m_isShown ;
+	wxWindow * win = this ;
+	while ( status && win->m_parent != NULL )
+	{
+		win = win->m_parent ;
+		status = win->m_isShown ;
+	}
+	return status ;
 }
 
 int wxWindow::GetCharHeight() const

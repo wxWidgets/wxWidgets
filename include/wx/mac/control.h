@@ -103,6 +103,7 @@ protected:
 protected:
    // For controls like radiobuttons which are really composite
 	ControlHandle		m_macControl ;
+	bool				m_macControlIsShown ;
    	wxList m_subControls;
 	int							m_macHorizontalBorder ;
 	int							m_macVerticalBorder ;

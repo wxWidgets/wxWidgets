@@ -266,6 +266,7 @@ void wxControl::MacPostControlCreate()
 	ControlHandle container = GetParent()->MacGetContainerForEmbedding() ;
 	wxASSERT_MSG( container != NULL , "No valid mac container control" ) ;
 	::UMAEmbedControl( m_macControl , container ) ;
+	m_macControlIsShown  = true ;
 	MacAdjustControlRect() ;
 	wxAssociateControlWithMacControl( m_macControl , this ) ;
 }
@@ -416,12 +417,19 @@ void  wxControl::MacSuperShown( bool show )
 	{
 		if ( !show )
 		{
-			::UMAHideControl( m_macControl ) ;
+			if ( m_macControlIsShown )
+			{
+				::UMAHideControl( m_macControl ) ;
+				m_macControlIsShown = false ;
+			}
 		}
 		else
 		{
-			if ( m_isShown )
+			if ( MacIsReallyShown() && !m_macControlIsShown )
+			{
 				::UMAShowControl( m_macControl ) ;
+				m_macControlIsShown = true ;
+			}
 		}
 	}
 		
@@ -541,10 +549,22 @@ bool  wxControl::Show(bool show)
 		
 	if ( m_macControl )
 	{
-		if ( show )
-			::UMAShowControl( m_macControl ) ;
+		if ( !show )
+		{
+			if ( m_macControlIsShown )
+			{
+				::UMAHideControl( m_macControl ) ;
+				m_macControlIsShown = false ;
+			}
+		}
 		else
-			::UMAHideControl( m_macControl ) ;
+		{
+			if ( MacIsReallyShown() && !m_macControlIsShown )
+			{
+				::UMAShowControl( m_macControl ) ;
+				m_macControlIsShown = true ;
+			}
+		}
 	}
 	return TRUE ;
 }
