@@ -1,4 +1,3 @@
-
 <HTML>
 
 <HEAD>
@@ -45,7 +44,8 @@ See also <a href="faq.htm">top-level FAQ page</a>.
 <li><a href="#shortcutproblem">Why are menu hotkeys or shortcuts not working in my application?</a></li>
 <li><a href="#regconfig">Why can I not write to the HKLM part of the registry with wxRegConfig?</a></li>
 <li><a href="#access">Is MS Active Accessibility supported?</a></li>
-<li><a href="#dspfmt">Why does Visual C++ complain about corrupted project files{/a></li>
+<li><a href="#dspfmt">Why does Visual C++ complain about corrupted project files??</a></li>
+<li><a href="#crtmismatch">Visual C++ gives errors about multiply defined symbols, what can I do?</a></li>
 </ul>
 <hr>
 
@@ -76,7 +76,7 @@ without ever needing a copy of Microsoft Windows. See the Technical Note on the 
 
 <h3><a name="wince">What about Windows CE?</a></h3>
 
-This port is largely complete. For further information, see the <a href="http://www.wxwindows.org/embedded.htm#wxwince">wxEmbedded</a> page.<P>
+This port is largely complete. For further information, see the <a href="http://www.wxwidgets.org/embedded.htm#wxwince">wxEmbedded</a> page.<P>
 
 <h3><a name="winxp">What do I need to do for Windows XP?</a></h3>
 
@@ -244,7 +244,7 @@ lib/mswd<P>
 
 or if building the static Release library, lib/msw.<P>
 
-See also the <a href="http://wiki.wxwindows.org/wiki.pl?Table_Of_Contents">wxWiki Contents</a>
+See also the <a href="http://wiki.wxwidgets.org/wiki.pl?Table_Of_Contents">wxWiki Contents</a>
 for more information.<P>
 
 
@@ -335,7 +335,7 @@ example) and regenerate the makefile using tmake.<P>
 
 tmake can be found at
 <a href="http://www.troll.no/freebies/tmake.html" target=_new>www.troll.no/freebies/tmake.html</a>.
-It&#39;s a Perl5 program and so it needs Perl (doh). There is a binary for 
+It&#39;s a Perl5 program and so it needs Perl (doh). There is a binary for
 Windows (available from the same page), but I haven&#39;t used it, so
 I don&#39;t know if it works as flawlessly as "perl tmake" does (note
 for people knowing Perl: don&#39;t try to run tmake with -w, it won&#39;t
@@ -344,7 +344,7 @@ just go to distrib/msw/tmake and type<P>
 
 <pre>tmake -t b32 wxwin.pro -o ../../src/msw/makefile.b32</pre><P>
 
-The makefiles are untested - I don&#39;t have any of Borland, Watcom  or
+The makefiles are untested - I don&#39;t have any of Borland, Watcom or
 Symantec and I don&#39;t have enough diskspace to recompile even with
 VC6 using makefiles. The new makefiles are as close as possible to the
 old ones, but not closer: in fact, there has been many strange things
@@ -451,7 +451,7 @@ First, you can use wxRegKey directly, for example:
     regKey.SetName(idName);
 
     {
-        wxLogNull dummy; 
+        wxLogNull dummy;
         if (!regKey.Create())
         {
             idName = wxT("HKEY_CURRENT_USER\\SOFTWARE\\My Company\\My Product\\Stuff\\");
@@ -491,13 +491,13 @@ bool myGlobalConfig::Write (const wxString& key, const wxString& value)
 
 <H3><a name="#access">Is MS Active Accessibility supported?</a></H3>
 
-This is being worked on. Please see <a href="http://www.wxwindows.org/access.htm">this page</a>
+This is being worked on. Please see <a href="http://www.wxwidgets.org/access.htm">this page</a>
 for the current status.
 
 <P>
 
 
-<h3><a name="#dspfmt">Why does Visual C++ complain about corrupted project files{/a></h3>
+<h3><a name="#dspfmt">Why does Visual C++ complain about corrupted project files??</a></h3>
 
 If you have downloaded the wxWidgets sources from the cvs using a Unix cvs
 client or downloaded a daily snapshot in <tt>.tar.gz</tt> format, it is likely
@@ -509,6 +509,32 @@ format using any of the thousands ways to do it.
 Of course, another possibility is to always use only the Windows cvs client
 and to avoid this problem completely.
 <p>
+
+<h3><a name="#crtmismatch">Visual C++ gives errors about multiply defined symbols, what can I do?</a></h3>
+
+If you get errors like this
+
+<pre>
+MSVCRTD.lib(MSVCRTD.dll) : error LNK2005: _xxxxxx already defined in LIBCD.lib(yyyyy.obj)
+</pre>
+
+when linking your project, this means that you used different versions of CRT
+(C Run-Time) library for wxWindows (or possibly another library) and the main
+project. Visual C++ provides static or dynamic and multithread safe or not
+versions of CRT for each of debug and release builds, for a total of 8
+libraries. You can choose among them by going to the "Code generation"
+page/subitem of the "C++" tab/item in the project proprieties dialog in VC6/7.
+<p>
+To avoid problems, you <strong>must</strong> use the same one for all
+components of your project. wxWindows uses multithread safe DLL version of the
+CRT which is a good choice but may be problematic when distributing your
+applications if you don&#39;t include the CRT DLL in your installation -- in this
+case you may decide to switch to using a static CRT version. If you build with
+<tt>wxUSE_THREADS == 0</tt> you may also use the non MT-safe version as it is
+slightly smaller and faster.
+<p>
+But the most important thing is to use the <strong>same</strong> CRT setting for
+all components of your project.
 
 </font>
 

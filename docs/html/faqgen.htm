@@ -42,6 +42,7 @@ See also <a href="faq.htm">top-level FAQ page</a>.
 <li><a href="#jave">What about Java?</a></li>
 <li><a href="#dotnet">What about .NET/Mono?</a></li>
 <li><a href="#help">How can I help the project?</a></li>
+<li><a href="#newport">How do I start a new port?</a></li>
 </ul>
 <hr>
 
@@ -54,7 +55,7 @@ so your program will take on the native &#39;look and feel&#39; that users are f
 Although GUI applications are mostly built programmatically, there are several dialog editors to help
 build attractive dialogs and panels. Robert Roebling&#39;s <a href="http://www.roebling.com">wxDesigner</a>
 and Anthemion Software's <a href="http://www.anthemion.co.uk/dialogblocks/" target=_new>DialogBlocks</a>
-are two commercial examples, but there are others: see the <a href="lnk_tools.htm">Useful Tools</a> page.<P>
+are two commercial examples, but there are others: see the <a href="lnk_tool.htm">Useful Tools</a> page.<P>
 
 You don&#39;t have to use C++ to use wxWidgets: there is a <a href="http://wxpython.org">Python interface</a> for wxWidgets 2,
 and also a <a href="http://wxperl.sourceforge.net" target=_top>Perl interface</a>.
@@ -309,9 +310,63 @@ Update: a <a href="http://wxnet.sourceforge.net/" target=_new>wx.NET</a> project
 
 <H3><a name="help">How can I help the project?</a></H3>
 
-Please check out the <a href="http://www.wxwindows.org/develop2.htm">Community</a> pages,
+Please check out the <a href="http://www.wxwidgets.org/develop2.htm">Community</a> pages,
 in particular the <a href="projects.htm">suggested projects</a>, and
 mail the developers&#39; mailing list with your own suggestions.<P>
+
+<H3><a name="newport">How do I start a new port?</a></H3>
+
+Please subscribe to the wx-dev <a href="maillst2.htm">developers&#39; mailing list</a> and
+ask if anyone else is interested in helping with the port, or
+has specific suggestions. Also please read the <a href="standard.htm">coding standards</a>.
+
+<P>
+Each port consists of a platform-specific part (e.g. src/msw, include/wx/msw),
+a generic set of widgets and dialogs for when the port doesn't support
+them natively (src/generic, include/wx/generic) and the common code
+that all ports use (src/common, include/wx). By browsing the source
+you should get a good idea of the general pattern.<P>
+
+Take a port that most closely matches your port, and strip out
+the implementation so you have a skeleton port that compiles. Ask on wx-dev
+first for the wxStubs port - however, any such predefined skeleton
+port may be out of date, so make a judgement on whether to use it.
+Perhaps it will still save you time to clean up wxStubs, and
+others may benefit from this too.<P>
+
+You will need to define a symbol for the new port, e.g. __WXXBOX__.
+Look at files such as wx/defs.h, wx/wxchar.h for areas where you'll
+need to add to existing conditionals to set up wide character
+support and other issues. If the GUI runs on a Unix variant,
+define the __UNIX__ variable in your makefile.<P>
+
+Then you can start implementing the port, starting with
+wxWindow, wxTopLevelWindow, wxFrame, wxDialog so you
+can get the minimal sample running as soon as possible.<P>
+
+If GDI objects (wxPen, wxBrush, etc.) are not concepts in your
+native GUI, you may wish to use very generic versions of
+some of these - see the wxX11 port.<P>
+
+Consider using the wxUniversal widget set as a quick way
+to implement wxWidgets on your platform. You only need
+to define some basic classes such as device contexts,
+wxWindow, wxTopLevelWindow, GDI objects etc. and
+the actual widgets will be drawn for you. See wxX11,
+wxMGL, and wxMSW/Univ for sample wxUniversal ports.<P>
+
+To begin with, you can use whatever makefiles or project
+files work for you. Look at existing makefiles to see what
+generic/common/Unix files need to be included. Later, you'll want to integrate support
+for your port into configure (Unix-like systems and gcc under Windows),
+and bakefile (for other makefiles on Windows).<P>
+
+Submit your port as patches via SourceForge; you might
+wish to separate it into one patch that touches common headers
+and source files, and another containing the port-specific code, to make
+it much easier for us to review and apply the patches.<P>
+
+Good luck!
 
 </font>
 
