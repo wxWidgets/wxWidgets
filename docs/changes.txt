@@ -207,6 +207,7 @@ wxGTK:
 - fixed a memory leak in generic wxFileDialog
 - implemented wxTextCtrl::Remove/Replace() for GTK2
 - improved X11 ShowFullScreen
+- added support for GTK2 label mnemonics
 
 wxMSW:
 

@@ -55,6 +55,9 @@ public:
 
 protected:
     virtual wxSize DoGetBestSize() const;
+#ifdef __WXGTK20__
+    wxString PrepareLabelMnemonics( const wxString &label ) const;
+#endif
 
     wxString   m_label;
     char       m_chAccel;  // enabled to avoid breaking binary compatibility later on
