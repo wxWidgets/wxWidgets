@@ -77,7 +77,7 @@ static WNDPROC gs_wndprocToolTip = (WNDPROC)NULL;
 class wxToolInfo : public TOOLINFO
 {
 public:
-    wxToolInfo(HWND hwnd)
+    wxToolInfo(HWND hwndOwner)
     {
         // initialize all members
         ::ZeroMemory(this, sizeof(TOOLINFO));
@@ -95,8 +95,9 @@ public:
         cbSize = sizeof(TOOLINFO);
 #endif // compile-time comctl32.dll version
 
+        hwnd = hwndOwner;
         uFlags = TTF_IDISHWND;
-        uId = (UINT)hwnd;
+        uId = (UINT)hwndOwner;
     }
 };
 
@@ -311,7 +312,7 @@ void wxToolTip::Add(WXHWND hWnd)
                     }
                 }
 
-                HDC hdc = CreateCompatibleDC(NULL);
+                MemoryHDC hdc;
                 if ( !hdc )
                 {
                     wxLogLastError(wxT("CreateCompatibleDC(NULL)"));
@@ -327,8 +328,6 @@ void wxToolTip::Add(WXHWND hWnd)
                 {
                     wxLogLastError(wxT("GetTextExtentPoint"));
                 }
-
-                DeleteDC(hdc);
 
                 SendTooltipMessage(GetToolTipCtrl(), TTM_SETMAXTIPWIDTH,
                                    0, (void *)sz.cx);
@@ -402,7 +401,7 @@ void wxToolTip::SetTip(const wxString& tip)
 
     if ( m_window )
     {
-        // update it immediately
+        // update the tip text shown by the control
         wxToolInfo ti(GetHwndOf(m_window));
         ti.lpszText = (wxChar *)m_text.c_str();
 
