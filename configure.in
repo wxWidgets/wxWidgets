@@ -1663,7 +1663,7 @@ equivalent variable and GTK+ is version 1.2.3 or above.
         esac
 
         TOOLKIT_INCLUDE="$wx_cv_cflags_gtk"
-        GUI_TK_LIBRARY="$wx_cv_lib_gtk"
+        GUI_TK_LIBRARY="$wx_cv_libs_gtk"
 
         AFMINSTALL=afminstall
         TOOLKIT=GTK
