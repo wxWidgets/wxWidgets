@@ -34,22 +34,29 @@ def wxPyTypeCast(obj, typeStr):
 
 wxPy_isinstance = isinstance
 
-wxDC.FloodFill = wxDC.FloodFillXY
-wxDC.GetPixel = wxDC.GetPixelXY
-wxDC.DrawLine = wxDC.DrawLineXY
-wxDC.CrossHair = wxDC.CrossHairXY
-wxDC.DrawArc = wxDC.DrawArcXY
-wxDC.DrawCheckMark = wxDC.DrawCheckMarkXY
-wxDC.DrawEllipticArc = wxDC.DrawEllipticArcXY
-wxDC.DrawPoint = wxDC.DrawPointXY
-wxDC.DrawRectangle = wxDC.DrawRectangleXY
-wxDC.DrawRoundedRectangle = wxDC.DrawRoundedRectangleXY
-wxDC.DrawCircle = wxDC.DrawCircleXY
-wxDC.DrawEllipse = wxDC.DrawEllipseXY
-wxDC.DrawIcon = wxDC.DrawIconXY
-wxDC.DrawBitmap = wxDC.DrawBitmapXY
-wxDC.DrawText = wxDC.DrawTextXY
-wxDC.DrawRotatedText = wxDC.DrawRotatedTextXY
-wxDC.Blit = wxDC.BlitXY
-wxDC.SetClippingRegion = wxDC.SetClippingRegionXY 
+
+# To get wxDC methods compatible with the old 2.4 wxDC uncomment these
+# lines.  Note however that doing this will break any code that
+# expects the new-style methods.  (Is there a way to do this that does
+# not have that problem?  I suppose we could provide two versions of
+# the DC classes and just rename them here...)
+
+#wxDC.FloodFill = wxDC.FloodFillXY
+#wxDC.GetPixel = wxDC.GetPixelXY
+#wxDC.DrawLine = wxDC.DrawLineXY
+#wxDC.CrossHair = wxDC.CrossHairXY
+#wxDC.DrawArc = wxDC.DrawArcXY
+#wxDC.DrawCheckMark = wxDC.DrawCheckMarkXY
+#wxDC.DrawEllipticArc = wxDC.DrawEllipticArcXY
+#wxDC.DrawPoint = wxDC.DrawPointXY
+#wxDC.DrawRectangle = wxDC.DrawRectangleXY
+#wxDC.DrawRoundedRectangle = wxDC.DrawRoundedRectangleXY
+#wxDC.DrawCircle = wxDC.DrawCircleXY
+#wxDC.DrawEllipse = wxDC.DrawEllipseXY
+#wxDC.DrawIcon = wxDC.DrawIconXY
+#wxDC.DrawBitmap = wxDC.DrawBitmapXY
+#wxDC.DrawText = wxDC.DrawTextXY
+#wxDC.DrawRotatedText = wxDC.DrawRotatedTextXY
+#wxDC.Blit = wxDC.BlitXY
+#wxDC.SetClippingRegion = wxDC.SetClippingRegionXY 
 
