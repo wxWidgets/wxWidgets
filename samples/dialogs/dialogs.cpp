@@ -421,6 +421,36 @@ void MyFrame::ChooseColour(wxCommandEvent& WXUNUSED(event) )
 }
 #endif // wxUSE_COLOURDLG
 
+#if USE_COLOURDLG_GENERIC
+void MyFrame::ChooseColourGeneric(wxCommandEvent& WXUNUSED(event))
+{
+    m_clrData.SetColour(myCanvas->GetBackgroundColour());
+
+    //FIXME:TODO:This has no effect...
+    m_clrData.SetChooseFull(true);
+
+    for (int i = 0; i < 16; i++)
+    {
+        wxColour colour(
+            (unsigned char)(i*16),
+            (unsigned char)(i*16),
+            (unsigned char)(i*16)
+        );
+        m_clrData.SetCustomColour(i, colour);
+    }
+
+    wxGenericColourDialog *dialog = new wxGenericColourDialog(this, &m_clrData);
+    if (dialog->ShowModal() == wxID_OK)
+    {
+        m_clrData = dialog->GetColourData();
+        myCanvas->SetBackgroundColour(m_clrData.GetColour());
+        myCanvas->ClearBackground();
+        myCanvas->Refresh();
+    }
+    dialog->Destroy();
+}
+#endif // USE_COLOURDLG_GENERIC
+
 #if wxUSE_FONTDLG
 void MyFrame::ChooseFont(wxCommandEvent& WXUNUSED(event) )
 {
@@ -445,35 +475,6 @@ void MyFrame::ChooseFont(wxCommandEvent& WXUNUSED(event) )
     //else: cancelled by the user, don't change the font
 }
 #endif // wxUSE_FONTDLG
-
-#if USE_COLOURDLG_GENERIC
-void MyFrame::ChooseColourGeneric(wxCommandEvent& WXUNUSED(event))
-{
-    wxColourData data;
-    data.SetChooseFull(true);
-    for (int i = 0; i < 16; i++)
-    {
-        wxColour colour(
-            (unsigned char)(i*16),
-            (unsigned char)(i*16),
-            (unsigned char)(i*16)
-        );
-        data.SetCustomColour(i, colour);
-    }
-
-    wxGenericColourDialog *dialog = new wxGenericColourDialog(this, &data);
-    if (dialog->ShowModal() == wxID_OK)
-    {
-        wxColourData retData = dialog->GetColourData();
-        wxColour col = retData.GetColour();
-//        wxBrush *brush = wxTheBrushList->FindOrCreateBrush(&col, wxSOLID);
-        myCanvas->SetBackgroundColour(col);
-        myCanvas->ClearBackground();
-        myCanvas->Refresh();
-    }
-    dialog->Destroy();
-}
-#endif // USE_COLOURDLG_GENERIC
 
 #if USE_FONTDLG_GENERIC
 void MyFrame::ChooseFontGeneric(wxCommandEvent& WXUNUSED(event) )
