@@ -85,7 +85,7 @@ static const char *wxPostScriptHeaderConicTo = "\
     p1_x p1_y p2_x p2_y to_x to_y curveto\n\
 }  bind def\n\
 ";
-      
+
 static const char *wxPostScriptHeaderEllipse = "\
 /ellipsedict 8 dict def\n\
 ellipsedict /mtrx matrix put\n\
@@ -321,7 +321,7 @@ bool wxPostScriptDC::Create( const wxString &output, bool interactive, wxWindow 
     wxPrintData data;
     data.SetFilename( output );
     data.SetPrintMode( wxPRINT_MODE_FILE );
-    
+
     if (interactive)
     {
         wxPrintDialogData ddata( data );
@@ -334,7 +334,7 @@ bool wxPostScriptDC::Create( const wxString &output, bool interactive, wxWindow 
         }
         data = dialog.GetPrintDialogData().GetPrintData();
     }
-    
+
     return TRUE;
 }
 #endif
@@ -1184,7 +1184,7 @@ static int paps_cubic_to( FT_Vector*  control1,
   OutlineInfo *outline_info = (OutlineInfo*)user_data;
   fprintf(outline_info->file,
 	  "%d %d %d %d %d %d curveto\n",
-	  (int)control1->x , 
+	  (int)control1->x ,
 	  (int)control1->y ,
 	  (int)control2->x ,
 	  (int)control2->y ,
@@ -1204,20 +1204,20 @@ void draw_bezier_outline(FILE *file,
   FT_Int load_flags = FT_LOAD_NO_BITMAP;
   FT_Glyph glyph;
 
-  FT_Outline_Funcs outlinefunc = 
+  FT_Outline_Funcs outlinefunc =
   {
     paps_move_to,
     paps_line_to,
     paps_conic_to,
     paps_cubic_to
   };
-  
+
   OutlineInfo outline_info;
   outline_info.file = file;
 
   fprintf(file, "gsave\n");
   fprintf(file, "%d %d translate\n", pos_x, pos_y );
-  
+
   // We have to replace the "," from the German
   // locale with the Englich "." for PostScript
   char buf[100];
@@ -1231,7 +1231,7 @@ void draw_bezier_outline(FILE *file,
   FT_Outline_Decompose (&(((FT_OutlineGlyph)glyph)->outline),
                         &outlinefunc, &outline_info);
   fprintf(file, "closepath fill grestore\n");
-  
+
   FT_Done_Glyph (glyph);
 }
 
@@ -1280,12 +1280,12 @@ void wxPostScriptDC::DoDrawText( const wxString& text, wxCoord x, wxCoord y )
             m_currentGreen = green;
         }
     }
-    
+
 #if wxUSE_PANGO
     int ps_dpi = 72;
     int pango_dpi = 600;
     PangoContext *context = pango_ft2_get_context ( pango_dpi, pango_dpi );
-    
+
     double scale = (double)pango_dpi / (double)ps_dpi;
     scale /= m_userScaleY;
 
@@ -1301,15 +1301,15 @@ void wxPostScriptDC::DoDrawText( const wxString& text, wxCoord x, wxCoord y )
     wxCharBuffer buffer = wxConvUTF8.cWC2MB( wxConvLocal.cWX2WC( text ) );
 #endif
 	pango_layout_set_text( layout, (const char*) buffer, strlen(buffer) );
-    
+
     fprintf( m_pstream, "%%%% %s\n", (const char*)buffer );
 
     PangoRectangle rect;
     pango_layout_get_extents(layout, NULL, &rect);
-    
+
     int xx = LogicalToDeviceX( x );
     int yy = LogicalToDeviceY( y );
-    
+
     int xxx = xx * PANGO_SCALE;
     int yyy = yy * PANGO_SCALE - (int)(rect.height * 0.66 / scale);  // Move down by estimated baseline. HACK.
 
@@ -1320,10 +1320,10 @@ void wxPostScriptDC::DoDrawText( const wxString& text, wxCoord x, wxCoord y )
     for (int i = 0; i < num_lines; i++)
     {
         PangoLayoutLine *line = pango_layout_get_line( layout, i );
-        
+
         // width of glyphs already printed
         int all_width = 0;
-        
+
         // Loop over runs in line
         GSList *runs_list = line->runs;
         while (runs_list)
@@ -1334,7 +1334,7 @@ void wxPostScriptDC::DoDrawText( const wxString& text, wxCoord x, wxCoord y )
             PangoAnalysis *analysis = &item->analysis;
             PangoFont *font = analysis->font;
             FT_Face ft_face = pango_ft2_font_get_face(font);
-            
+
             int num_glyphs = glyphs->num_glyphs;
             for (int glyph_idx = 0; glyph_idx < num_glyphs; glyph_idx++)
             {
@@ -1342,12 +1342,12 @@ void wxPostScriptDC::DoDrawText( const wxString& text, wxCoord x, wxCoord y )
                 int pos_x = xxx + (int)((double)(all_width+geometry.x_offset) / scale);
                 int pos_y = yyy + (int)((double)geometry.y_offset / scale );
                 all_width += geometry.width;
-                
+
                 draw_bezier_outline( m_pstream, ft_face,
 			      (FT_UInt)(glyphs->glyphs[glyph_idx].glyph),
-			      pos_x / PANGO_SCALE, 
+			      pos_x / PANGO_SCALE,
                   pos_y / PANGO_SCALE,
-                  1.0/(ps_kludge_factor * scale * 26.6), 
+                  1.0/(ps_kludge_factor * scale * 26.6),
                   1.0/(ps_kludge_factor * scale * 26.6) );
             }
             runs_list = runs_list->next;
@@ -1577,15 +1577,15 @@ void wxPostScriptDC::DoDrawSpline( wxList *points )
     p = (wxPoint *)node->GetData();
     c = p->x;
     d = p->y;
-    x3 = 
+    x3 =
          #if 0
-         a = 
-         #endif 
+         a =
+         #endif
          (double)(x1 + c) / 2;
-    y3 = 
+    y3 =
          #if 0
-         b = 
-         #endif 
+         b =
+         #endif
          (double)(y1 + d) / 2;
 
     fprintf( m_pstream,
@@ -1598,8 +1598,7 @@ void wxPostScriptDC::DoDrawSpline( wxList *points )
     CalcBoundingBox( (wxCoord)x1, (wxCoord)y1 );
     CalcBoundingBox( (wxCoord)x3, (wxCoord)y3 );
 
-    node = node->GetNext();
-    while (node)
+	while ((node = node->GetNext()))
     {
         q = (wxPoint *)node->GetData();
 
@@ -1755,9 +1754,9 @@ bool wxPostScriptDC::StartDoc( const wxString& message )
         fprintf( m_pstream, "%%%%Orientation: Landscape\n" );
     else
         fprintf( m_pstream, "%%%%Orientation: Portrait\n" );
-    
+
     // fprintf( m_pstream, "%%%%Pages: %d\n", (wxPageNumber - 1) );
-    
+
     const char *paper;
     switch (m_printData.GetPaperId())
     {
@@ -1821,7 +1820,7 @@ void wxPostScriptDC::EndDoc ()
     fclose( m_pstream );
     m_pstream = (FILE *) NULL;
 
-#if 0    
+#if 0
     // THE FOLLOWING HAS BEEN CONTRIBUTED BY Andy Fyfe <andy@hyperparallel.com>
     wxCoord wx_printer_translate_x, wx_printer_translate_y;
     double wx_printer_scale_x, wx_printer_scale_y;
@@ -1889,7 +1888,7 @@ void wxPostScriptDC::EndDoc ()
 #endif
 
 #if defined(__X__) || defined(__WXGTK__)
-    if (m_ok && (m_printData.GetPrintMode() == wxPRINT_MODE_PRINTER))    
+    if (m_ok && (m_printData.GetPrintMode() == wxPRINT_MODE_PRINTER))
     {
         wxString command;
         command += m_printData.GetPrinterCommand();
@@ -2007,20 +2006,20 @@ void wxPostScriptDC::DoGetTextExtent(const wxString& string,
         if (externalLeading) (*externalLeading) = 0;
         return;
     }
-    
+
 #if wxUSE_PANGO
     int wx_dpi = GetResolution();
     int pango_dpi = 600;
     PangoContext *context = pango_ft2_get_context ( pango_dpi, pango_dpi );
-    
+
     double scale = pango_dpi / wx_dpi;
     scale /= m_userScaleY;
-    
+
     pango_context_set_language (context, pango_language_from_string ("en_US"));
     pango_context_set_base_dir (context, PANGO_DIRECTION_LTR );
 
     PangoLayout *layout = pango_layout_new (context);
-    
+
     PangoFontDescription *desc = fontToUse->GetNativeFontInfo()->description;
     pango_layout_set_font_description(layout, desc);
 #if wxUSE_UNICODE
@@ -2031,10 +2030,10 @@ void wxPostScriptDC::DoGetTextExtent(const wxString& string,
 #endif
     pango_layout_set_text(layout, (const char*) data, strlen( (const char*) data ));
     PangoLayoutLine *line = (PangoLayoutLine *)pango_layout_get_lines(layout)->data;
- 
+
     PangoRectangle rect;
     pango_layout_line_get_extents(line, NULL, &rect);
-    
+
     if (x) (*x) = (wxCoord) ( rect.width / PANGO_SCALE / scale );
     if (y) (*y) = (wxCoord) ( rect.height / PANGO_SCALE / scale );
     if (descent)
@@ -2043,7 +2042,7 @@ void wxPostScriptDC::DoGetTextExtent(const wxString& string,
         (*descent) = 0;
     }
     if (externalLeading) (*externalLeading) = 0;  // ??
-    
+
     g_object_unref( G_OBJECT( layout ) );
 #else
    // GTK 2.0
@@ -2171,7 +2170,7 @@ void wxPostScriptDC::DoGetTextExtent(const wxString& string,
         }
 
         FILE *afmFile = NULL;
-        
+
         // Get the directory of the AFM files
         wxString afmName;
         if (!m_printData.GetFontMetricPath().IsEmpty())
