@@ -5,14 +5,14 @@
 # TODO:  Parameterize the versions, builddirs, etc...
 
 # Script configs
-PYVERSION=2.3a1
+PYVERSION=2.3a2
 PYVER=2.3
-BUILDNUM=3
+BUILDNUM=2
 DOCLEANUP=no
 
 PROGDIR="`dirname \"$0\"`"
 TMPDIR=/tmp/_py
-TMPDIR=/projects/_py
+#TMPDIR=/projects/_py
 
 BUILDROOT=$TMPDIR/build
 INSTALLROOT=$TMPDIR/install
@@ -87,6 +87,11 @@ Build date:   `date`
 EOF
 
 
+# fix a bug in the IDLE install
+IDLERES=$INSTALLROOT/Applications/MacPython-2.3/IDLE.app/Contents/Resources
+mv $IDLERES/idlelib/idle $IDLERES
+
+
 # Finally, build the package...
 rm -rf MacPython-OSX.pkg
 python $PROGDIR/../buildpkg.py \
@@ -96,9 +101,10 @@ python $PROGDIR/../buildpkg.py \
     --NeedsAuthorization="YES" \
     --Relocatable="NO" \
     --InstallOnly="YES" \
-    --RootVolumeOnly="YES" \
     $INSTALLROOT \
     $RESOURCEDIR
+
+##    --RootVolumeOnly="YES" \
 
 # ...and then make a disk image containing the package.
 mv MacPython-OSX.pkg $DMGDIR/root

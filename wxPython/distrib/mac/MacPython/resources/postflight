@@ -58,3 +58,9 @@ for d in lib/python$PYVER/site-packages bin; do
     chmod g+w  $DEST/Library/Frameworks/Python.framework/Versions/$PYVER/$d
 done
 
+
+# The link in the app bundles needs updated.
+for app in BuildApplet IDLE PackageManager PythonIDE; do
+    ln -s $DEST/Library/Frameworks/Python.framework/Versions/$PYVER/Resources/Python.app/Contents/MacOS/python \
+          $DEST/Applications/MacPython-$PYVER/$app.app/Contents/MacOS
+done
