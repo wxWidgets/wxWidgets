@@ -2,7 +2,7 @@
 // Name:        tokenzr.cpp
 // Purpose:     String tokenizer
 // Author:      Guilhem Lavaux
-// Modified by: Vadim Zeitlin
+// Modified by: Vadim Zeitlin (almost full rewrite)
 // Created:     04/22/98
 // RCS-ID:      $Id$
 // Copyright:   (c) Guilhem Lavaux
@@ -105,10 +105,16 @@ bool wxStringTokenizer::HasMoreTokens() const
 
     if ( m_string.find_first_not_of(m_delims) == wxString::npos )
     {
-        // no non empty tokens left, but in wxTOKEN_RET_EMPTY_ALL mode we
-        // still may return TRUE if GetNextToken() wasn't called yet for the
-        // last trailing empty token
-        return m_mode == wxTOKEN_RET_EMPTY_ALL ? m_hasMore : FALSE;
+        // no non empty tokens left, but in 2 cases we still may return TRUE if
+        // GetNextToken() wasn't called yet for this empty token:
+        //
+        //   a) in wxTOKEN_RET_EMPTY_ALL mode we always do it
+        //   b) in wxTOKEN_RET_EMPTY mode we do it in the special case of a
+        //      string containing only the delimiter: then there is an empty
+        //      token just before it
+        return (m_mode == wxTOKEN_RET_EMPTY_ALL) ||
+               (m_mode == wxTOKEN_RET_EMPTY && m_pos == 0)
+                    ? m_hasMore : FALSE;
     }
     else
     {

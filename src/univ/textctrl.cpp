@@ -12,8 +12,8 @@
 /*
    Search for "OPT" for possible optimizations
 
-   Possible optimization would be to always store the coords in the text in
-   triplets (pos, col, line) and update them simultaneously instead of
+   A possible global optimization would be to always store the coords in the
+   text in triplets (pos, col, line) and update them simultaneously instead of
    recalculating col and line from pos each time it is needed. Currently we
    only do it for the current position but we might also do it for the
    selection start and end.
@@ -58,6 +58,8 @@
 #include "wx/univ/colschem.h"
 #include "wx/univ/theme.h"
 
+#include "wx/cmdproc.h"
+
 // turn extra wxTextCtrl-specific debugging on/off
 #define WXDEBUG_TEXT
 
@@ -73,6 +75,7 @@
 // private functions
 // ----------------------------------------------------------------------------
 
+// exchange two positions so that from is always less than or equal to to
 static inline void OrderPositions(long& from, long& to)
 {
     if ( from > to )
@@ -82,6 +85,127 @@ static inline void OrderPositions(long& from, long& to)
         to = tmp;
     }
 }
+
+// ----------------------------------------------------------------------------
+// constants
+// ----------------------------------------------------------------------------
+
+// names of text ctrl commands
+#define wxTEXT_COMMAND_INSERT _T("insert")
+#define wxTEXT_COMMAND_REMOVE _T("remove")
+
+// ----------------------------------------------------------------------------
+// private classes for undo/redo management
+// ----------------------------------------------------------------------------
+
+/*
+   We use custom versions of wxWindows command processor to implement undo/redo
+   as we want to avoid storing the backpointer to wxTextCtrl in wxCommand
+   itself: this is a waste of memory as all commands in the given command
+   processor always have the same associated wxTextCtrl and so it makes sense
+   to store the backpointer there.
+
+   As for the rest of the implementation, it's fairly standard: we have 2
+   command classes corresponding to adding and removing text.
+ */
+
+// a command corresponding to a wxTextCtrl action
+class wxTextCtrlCommand : public wxCommand
+{
+public:
+    wxTextCtrlCommand(const wxString& name) : wxCommand(TRUE, name) { }
+
+    // we don't use these methods as they don't make sense for us as we need a
+    // wxTextCtrl to be applied
+    virtual bool Do() { wxFAIL_MSG(_T("shouldn't be called")); return FALSE; }
+    virtual bool Undo() { wxFAIL_MSG(_T("shouldn't be called")); return FALSE; }
+
+    // instead, our command processor uses these methods
+    virtual bool Do(wxTextCtrl *text) = 0;
+    virtual bool Undo(wxTextCtrl *text) = 0;
+};
+
+// insert text command
+class wxTextCtrlInsertCommand : public wxTextCtrlCommand
+{
+public:
+    wxTextCtrlInsertCommand(const wxString& textToInsert)
+        : wxTextCtrlCommand(wxTEXT_COMMAND_INSERT), m_text(textToInsert)
+    {
+    }
+
+    // combine the 2 commands together
+    void Append(wxTextCtrlInsertCommand *other);
+
+    virtual bool Do(wxTextCtrl *text);
+    virtual bool Undo(wxTextCtrl *text);
+
+private:
+    wxString m_text;
+};
+
+// remove text command
+class wxTextCtrlRemoveCommand : public wxTextCtrlCommand
+{
+public:
+    wxTextCtrlRemoveCommand(long from, long to)
+        : wxTextCtrlCommand(wxTEXT_COMMAND_REMOVE)
+    {
+        m_from = from;
+        m_to = to;
+    }
+
+    virtual bool Do(wxTextCtrl *text);
+    virtual bool Undo(wxTextCtrl *text);
+
+private:
+    // the range of text to delete
+    long m_from,
+         m_to;
+
+    // the text which was deleted when this command was Do()ne
+    wxString m_textDeleted;
+};
+
+// a command processor for a wxTextCtrl
+class wxTextCtrlCommandProcessor : public wxCommandProcessor
+{
+public:
+    wxTextCtrlCommandProcessor(wxTextCtrl *text)
+    {
+        m_compressInserts = FALSE;
+
+        m_text = text;
+    }
+
+    // override Store() to compress multiple wxTextCtrlInsertCommand into one
+    virtual void Store(wxCommand *command);
+
+    // stop compressing insert commands when this is called
+    void StopCompressing() { m_compressInserts = FALSE; }
+
+    // accessors
+    wxTextCtrl *GetTextCtrl() const { return m_text; }
+    bool IsCompressing() const { return m_compressInserts; }
+
+protected:
+    virtual bool DoCommand(wxCommand& cmd)
+        { return ((wxTextCtrlCommand &)cmd).Do(m_text); }
+    virtual bool UndoCommand(wxCommand& cmd)
+        { return ((wxTextCtrlCommand &)cmd).Undo(m_text); }
+
+    // check if this command is a wxTextCtrlInsertCommand and return it casted
+    // to the right type if it is or NULL otherwise
+    wxTextCtrlInsertCommand *IsInsertCommand(wxCommand *cmd);
+
+private:
+    // the control we're associated with
+    wxTextCtrl *m_text;
+
+    // if the flag is TRUE we're compressing subsequent insert commands into
+    // one so that the entire typing could be undone in one call to Undo()
+    bool m_compressInserts;
+};
 
 // ============================================================================
 // implementation
@@ -131,6 +255,9 @@ void wxTextCtrl::Init()
 
     // init wxScrollHelper
     SetWindow(this);
+
+    // init the undo manager
+    m_cmdProcessor = new wxTextCtrlCommandProcessor(this);
 }
 
 bool wxTextCtrl::Create(wxWindow *parent,
@@ -182,6 +309,11 @@ bool wxTextCtrl::Create(wxWindow *parent,
     m_hasCaret = FALSE;
 
     return TRUE;
+}
+
+wxTextCtrl::~wxTextCtrl()
+{
+    delete m_cmdProcessor;
 }
 
 // ----------------------------------------------------------------------------
@@ -514,6 +646,7 @@ void wxTextCtrl::Replace(long from, long to, const wxString& text)
         // repaint
         RefreshPixelRange(0, startNewText, widthNewText);
     }
+    //OPT: special case for replacements inside single line?
     else // multiline
     {
         /*
@@ -528,18 +661,25 @@ void wxTextCtrl::Replace(long from, long to, const wxString& text)
         {
             if ( line > lineStart )
             {
-                // from previous line
+                // from the previous line
                 textOrig += _T('\n');
             }
 
             textOrig += m_lines[line];
         }
 
+        // we need to append the '\n' for the last line unless there is no
+        // following line
+        size_t countOld = m_lines.GetCount();
+
         // (2) replace text in the combined string
+
+        // (2a) leave the part before replaced area unchanged
         wxString textNew(textOrig, colStart);
 
         // these values will be used to refresh the changed area below
-        wxCoord widthNewText, startNewText = GetTextWidth(textNew);
+        wxCoord widthNewText,
+                startNewText = GetTextWidth(textNew);
         if ( (size_t)colStart == m_lines[lineStart].length() )
         {
             // text appended, refresh just enough to show the new text
@@ -550,31 +690,42 @@ void wxTextCtrl::Replace(long from, long to, const wxString& text)
             widthNewText = 0;
         }
 
+        // (2b) insert new text
         textNew += text;
-        size_t toRel = (size_t)((to - from) + colStart); // adjust for index shift
+
+        // (2c) and append the end of the old text
+
+        // adjust for index shift: to is relative to colStart, not 0
+        size_t toRel = (size_t)((to - from) + colStart);
         if ( toRel < textOrig.length() )
+        {
             textNew += textOrig.c_str() + toRel;
+        }
 
         // (3) break it into lines
-        wxArrayString lines;
-        if ( textNew.empty() )
+
+        // (3a) all empty tokens should be counted as replacing with "foo" and
+        //      with "foo\n" should have different effects
+        wxArrayString lines = wxStringTokenize(textNew, _T("\n"),
+                                               wxTOKEN_RET_EMPTY_ALL);
+
+        if ( lines.IsEmpty() )
         {
-            // special case: if the replacement string is empty we still want to
-            // have one (empty) string in the lines array but wxStringTokenize()
-            // won't put anything in it in this case, so do it ourselves
             lines.Add(wxEmptyString);
         }
-        else // break into lines normally
+
+        // (3b) special case: if we replace everything till the end we need to
+        //      keep an empty line or the lines would disappear completely
+        //      (this also takes care of never leaving m_lines empty)
+        if ( ((size_t)lineEnd == countOld - 1) && lines.IsEmpty() )
         {
-           lines = wxStringTokenize(textNew, _T("\n"), wxTOKEN_RET_EMPTY_ALL);
+            lines.Add(wxEmptyString);
         }
 
         size_t nReplaceCount = lines.GetCount(),
                nReplaceLine = 0;
 
         // (4) merge into the array
-
-        size_t countOld = m_lines.GetCount();
 
         // (4a) replace
         for ( line = lineStart; line <= lineEnd; line++, nReplaceLine++ )
@@ -588,11 +739,15 @@ void wxTextCtrl::Replace(long from, long to, const wxString& text)
             }
             else // no more replacement lines
             {
-                // (4b) delete all extra lines
-                while ( line <= lineEnd )
+                // (4b) delete all extra lines (note that we need to delete
+                //      them backwards because indices shift while we do it)
+                for ( long lineDel = lineEnd; lineDel >= line; lineDel-- )
                 {
-                    m_lines.RemoveAt(line++);
+                    m_lines.RemoveAt(lineDel);
                 }
+
+                // update line to exit the loop
+                line = lineEnd + 1;
             }
         }
 
@@ -629,6 +784,12 @@ void wxTextCtrl::Replace(long from, long to, const wxString& text)
         m_posLast += text.length() - to + from;
     }
 
+#ifdef WXDEBUG_TEXT_REPLACE
+    // optimized code above should give the same result as straightforward
+    // computation in the beginning
+    wxASSERT_MSG( GetValue() == textTotalNew, _T("error in Replace()") );
+#endif // WXDEBUG_TEXT_REPLACE
+
     // update the current position: note that we always put the cursor at the
     // end of the replacement text
     DoSetInsertionPoint(from + text.length());
@@ -636,12 +797,6 @@ void wxTextCtrl::Replace(long from, long to, const wxString& text)
     // and the selection (do it after setting the cursor to have correct value
     // for selection anchor)
     ClearSelection();
-
-#ifdef WXDEBUG_TEXT_REPLACE
-    // optimized code above should give the same result as straightforward
-    // computation in the beginning
-    wxASSERT_MSG( GetValue() == textTotalNew, _T("error in Replace()") );
-#endif // WXDEBUG_TEXT_REPLACE
 }
 
 void wxTextCtrl::Remove(long from, long to)
@@ -1297,15 +1452,27 @@ void wxTextCtrl::Copy()
 
 void wxTextCtrl::Cut()
 {
-    if ( HasSelection() )
-    {
-        Copy();
+    (void)DoCut();
+}
 
-        RemoveSelection();
-    }
+bool wxTextCtrl::DoCut()
+{
+    if ( !HasSelection() )
+        return FALSE;
+
+    Copy();
+
+    RemoveSelection();
+
+    return TRUE;
 }
 
 void wxTextCtrl::Paste()
+{
+    (void)DoPaste();
+}
+
+bool wxTextCtrl::DoPaste()
 {
 #if wxUSE_CLIPBOARD
     wxClipboardLocker clipLock;
@@ -1315,30 +1482,132 @@ void wxTextCtrl::Paste()
             && wxTheClipboard->GetData(data) )
     {
         // reverse transformation: '\r\n\" -> '\n'
-        WriteText(wxTextFile::Translate(data.GetText(), wxTextFileType_Unix));
+        wxString text = wxTextFile::Translate(data.GetText(),
+                                              wxTextFileType_Unix);
+        if ( !text.empty() )
+        {
+            WriteText(text);
+
+            return TRUE;
+        }
     }
 #endif // wxUSE_CLIPBOARD
+
+    return FALSE;
+}
+
+// ----------------------------------------------------------------------------
+// Undo and redo
+// ----------------------------------------------------------------------------
+
+wxTextCtrlInsertCommand *
+wxTextCtrlCommandProcessor::IsInsertCommand(wxCommand *command)
+{
+    return (wxTextCtrlInsertCommand *)
+            (command && (command->GetName() == wxTEXT_COMMAND_INSERT)
+                ? command : NULL);
+}
+
+void wxTextCtrlCommandProcessor::Store(wxCommand *command)
+{
+    wxTextCtrlInsertCommand *cmdIns = IsInsertCommand(command);
+    if ( cmdIns )
+    {
+        if ( IsCompressing() )
+        {
+            wxTextCtrlInsertCommand *
+                cmdInsLast = IsInsertCommand(GetCurrentCommand());
+
+            // this would be a logic error in the code here as the flag is only
+            // set after adding insert command and reset after adding any other
+            // one
+            wxCHECK_RET( cmdInsLast,
+                         _T("when compressing commands last must be insert") );
+
+            cmdInsLast->Append(cmdIns);
+
+            delete cmdIns;
+
+            // don't need to call the base class version
+            return;
+        }
+        else // not compressing
+        {
+            // append the following insert commands to this one
+            m_compressInserts = TRUE;
+        }
+    }
+    else // not an insert command
+    {
+        // stop compressing insert commands - this won't work with the last
+        // command not being an insert one anyhow
+        StopCompressing();
+
+        // the base class version will do the job normally
+    }
+
+    wxCommandProcessor::Store(command);
+}
+
+void wxTextCtrlInsertCommand::Append(wxTextCtrlInsertCommand *other)
+{
+    m_text += other->m_text;
+}
+
+bool wxTextCtrlInsertCommand::Do(wxTextCtrl *text)
+{
+    text->WriteText(m_text);
+
+    return TRUE;
+}
+
+bool wxTextCtrlInsertCommand::Undo(wxTextCtrl *text)
+{
+    wxFAIL_MSG(_T("TODO"));
+
+    return FALSE;
+}
+
+bool wxTextCtrlRemoveCommand::Do(wxTextCtrl *text)
+{
+    text->SetSelection(m_from, m_to);
+    m_textDeleted = text->GetSelectionText();
+    text->RemoveSelection();
+
+    return TRUE;
+}
+
+bool wxTextCtrlRemoveCommand::Undo(wxTextCtrl *text)
+{
+    wxFAIL_MSG(_T("TODO"));
+
+    return FALSE;
 }
 
 void wxTextCtrl::Undo()
 {
-    wxFAIL_MSG(_T("not implemented"));
+    // the caller must check it
+    wxASSERT_MSG( CanUndo(), _T("can't call Undo() if !CanUndo()") );
+
+    m_cmdProcessor->Undo();
 }
 
 void wxTextCtrl::Redo()
 {
-    wxFAIL_MSG(_T("not implemented"));
-}
+    // the caller must check it
+    wxASSERT_MSG( CanRedo(), _T("can't call Undo() if !CanUndo()") );
 
+    m_cmdProcessor->Redo();
+}
 
 bool wxTextCtrl::CanUndo() const
 {
-    return FALSE;
+    return IsEditable() && m_cmdProcessor->CanUndo();
 }
 
 bool wxTextCtrl::CanRedo() const
 {
-    return FALSE;
+    return IsEditable() && m_cmdProcessor->CanRedo();
 }
 
 // ----------------------------------------------------------------------------
@@ -1616,7 +1885,7 @@ wxTextCtrlHitTestResult wxTextCtrl::HitTest(const wxPoint& pos,
 
     // row calculation is simple as we assume that all lines have the same
     // height
-    int row = (y - 1) / GetCharHeight();
+    int row = y / GetCharHeight();
     int rowMax = GetNumberOfLines() - 1;
     if ( row > rowMax )
     {
@@ -2381,7 +2650,12 @@ bool wxTextCtrl::PerformAction(const wxControlAction& actionOrig,
                                long numArg,
                                const wxString& strArg)
 {
+    // has the text changed as result of this action?
     bool textChanged = FALSE;
+
+    // the command this action corresponds to or NULL if this action doesn't
+    // change text at all or can't be undone
+    wxTextCtrlCommand *command = (wxTextCtrlCommand *)NULL;
 
     wxString action;
     bool del = FALSE,
@@ -2414,6 +2688,18 @@ bool wxTextCtrl::PerformAction(const wxControlAction& actionOrig,
     {
         newPos = m_curPos + GetLineLength(m_curRow) - m_curCol;
     }
+    else if ( (action == wxACTION_TEXT_GOTO) ||
+              (action == wxACTION_TEXT_FIRST) ||
+              (action == wxACTION_TEXT_LAST) )
+    {
+        if ( action == wxACTION_TEXT_FIRST )
+            numArg = 0;
+        else if ( action == wxACTION_TEXT_LAST )
+            numArg = GetLastPosition();
+        //else: numArg already contains the position
+
+        newPos = numArg;
+    }
     else if ( action == wxACTION_TEXT_UP )
     {
         if ( m_curRow > 0 )
@@ -2444,7 +2730,8 @@ bool wxTextCtrl::PerformAction(const wxControlAction& actionOrig,
     {
         if ( IsEditable() && !strArg.empty() )
         {
-            WriteText(strArg);
+            // inserting text can be undone
+            command = new wxTextCtrlInsertCommand(strArg);
 
             textChanged = TRUE;
         }
@@ -2475,6 +2762,16 @@ bool wxTextCtrl::PerformAction(const wxControlAction& actionOrig,
         if ( IsEditable() )
             Paste();
     }
+    else if ( action == wxACTION_TEXT_UNDO )
+    {
+        if ( CanUndo() )
+            Undo();
+    }
+    else if ( action == wxACTION_TEXT_REDO )
+    {
+        if ( CanRedo() )
+            Redo();
+    }
     else
     {
         return wxControl::PerformAction(action, numArg, strArg);
@@ -2493,9 +2790,11 @@ bool wxTextCtrl::PerformAction(const wxControlAction& actionOrig,
         if ( del )
         {
             // if we have the selection, remove just it
+            long from, to;
             if ( HasSelection() )
             {
-                RemoveSelection();
+                from = m_selStart;
+                to = m_selEnd;
             }
             else
             {
@@ -2503,10 +2802,22 @@ bool wxTextCtrl::PerformAction(const wxControlAction& actionOrig,
                 // the new one
                 if ( m_curPos != newPos )
                 {
-                    Remove(m_curPos, newPos);
-
-                    textChanged = TRUE;
+                    from = m_curPos;
+                    to = newPos;
                 }
+                else // nothing to delete
+                {
+                    // prevent test below from working
+                    from = INVALID_POS_VALUE;
+
+                    // and this is just to silent the compiler warning
+                    to = 0;
+                }
+            }
+
+            if ( from != INVALID_POS_VALUE )
+            {
+                command = new wxTextCtrlRemoveCommand(from, to);
             }
         }
         else // cursor movement command
@@ -2524,6 +2835,19 @@ bool wxTextCtrl::PerformAction(const wxControlAction& actionOrig,
                 ClearSelection();
             }
         }
+    }
+
+    if ( command )
+    {
+        // execute and remember it to be able to undo it later
+        m_cmdProcessor->Submit(command);
+
+        // undoable commands always change text
+        textChanged = TRUE;
+    }
+    else // no undoable command
+    {
+        // m_cmdProcessor->StopCompressing()
     }
 
     if ( textChanged )
@@ -2600,7 +2924,8 @@ bool wxStdTextCtrlInputHandler::HandleKey(wxControl *control,
                                           const wxKeyEvent& event,
                                           bool pressed)
 {
-    if ( !pressed )
+    // we're only interested in key presses without Alt modifier
+    if ( !pressed || event.AltDown() )
         return FALSE;
 
     wxControlAction action;
@@ -2616,19 +2941,23 @@ bool wxStdTextCtrlInputHandler::HandleKey(wxControl *control,
     {
         // cursor movement
         case WXK_HOME:
-            action << wxACTION_TEXT_HOME;
+            action << (ctrlDown ? wxACTION_TEXT_FIRST
+                                : wxACTION_TEXT_HOME);
             break;
 
         case WXK_END:
-            action << wxACTION_TEXT_END;
+            action << (ctrlDown ? wxACTION_TEXT_LAST
+                                : wxACTION_TEXT_END);
             break;
 
         case WXK_UP:
-            action << wxACTION_TEXT_UP;
+            if ( !ctrlDown )
+                action << wxACTION_TEXT_UP;
             break;
 
         case WXK_DOWN:
-            action << wxACTION_TEXT_DOWN;
+            if ( !ctrlDown )
+                action << wxACTION_TEXT_DOWN;
             break;
 
         case WXK_LEFT:
@@ -2643,11 +2972,13 @@ bool wxStdTextCtrlInputHandler::HandleKey(wxControl *control,
 
         // delete
         case WXK_DELETE:
-            action << wxACTION_TEXT_PREFIX_DEL << wxACTION_TEXT_RIGHT;
+            if ( !ctrlDown )
+                action << wxACTION_TEXT_PREFIX_DEL << wxACTION_TEXT_RIGHT;
             break;
 
         case WXK_BACK:
-            action << wxACTION_TEXT_PREFIX_DEL << wxACTION_TEXT_LEFT;
+            if ( !ctrlDown )
+                action << wxACTION_TEXT_PREFIX_DEL << wxACTION_TEXT_LEFT;
             break;
 
         // something else
@@ -2660,6 +2991,10 @@ bool wxStdTextCtrlInputHandler::HandleKey(wxControl *control,
             {
                 switch ( keycode )
                 {
+                    case 'A':
+                        action = wxACTION_TEXT_REDO;
+                        break;
+
                     case 'C':
                         action = wxACTION_TEXT_COPY;
                         break;
@@ -2671,11 +3006,15 @@ bool wxStdTextCtrlInputHandler::HandleKey(wxControl *control,
                     case 'X':
                         action = wxACTION_TEXT_CUT;
                         break;
+
+                    case 'Z':
+                        action = wxACTION_TEXT_UNDO;
+                        break;
                 }
             }
     }
 
-    if ( action != wxACTION_NONE )
+    if ( (action != wxACTION_NONE) && (action != wxACTION_TEXT_PREFIX_SEL) )
     {
         control->PerformAction(action, -1, str);
 

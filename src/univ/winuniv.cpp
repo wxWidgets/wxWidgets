@@ -596,6 +596,7 @@ void wxWindow::SetScrollbar(int orient,
                             int range,
                             bool refresh)
 {
+    bool hasClientSizeChanged = FALSE;
     wxScrollBar *scrollbar = GetScrollbar(orient);
     if ( range )
     {
@@ -610,6 +611,9 @@ void wxWindow::SetScrollbar(int orient,
                 m_scrollbarVert = scrollbar;
             else
                 m_scrollbarHorz = scrollbar;
+
+            // the client area diminished as we created a scrollbar
+            hasClientSizeChanged = TRUE;
 
             PositionScrollbars();
         }
@@ -639,6 +643,9 @@ void wxWindow::SetScrollbar(int orient,
                 else
                     m_scrollbarHorz = NULL;
 
+                // the client area increased as we removed a scrollbar
+                hasClientSizeChanged = TRUE;
+
                 // the size of the remaining scrollbar must be adjusted
                 if ( m_scrollbarHorz || m_scrollbarVert )
                 {
@@ -646,6 +653,13 @@ void wxWindow::SetScrollbar(int orient,
                 }
             }
         }
+    }
+
+    // give the window a chance to relayout
+    if ( hasClientSizeChanged )
+    {
+        wxSizeEvent event(GetSize());
+        (void)GetEventHandler()->ProcessEvent(event);
     }
 }
 

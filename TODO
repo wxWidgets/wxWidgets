@@ -12,7 +12,6 @@ wxTextCtrl
 ?   text ctrl display pb when text is truncated
 *   too much is refreshed when double clicking (word select)
 
-!   update rect overlaps with horz scrollbar
 !!  own ScrollWindow() for horz scrolling as we must always scroll by char!
 
 All
@@ -46,6 +45,7 @@ All
 +   text ctrl horz scrolling
 +   DoDraw should iterate over update region instead of using bounding box
 +   listbox: horz scrollbar doesn't appear
++   wxTextCtrl update rect overlaps with horz scrollbar
 
 MSW
 

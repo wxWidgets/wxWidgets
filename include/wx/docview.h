@@ -31,7 +31,6 @@ class WXDLLEXPORT wxView;
 class WXDLLEXPORT wxDocTemplate;
 class WXDLLEXPORT wxDocManager;
 class WXDLLEXPORT wxPrintInfo;
-class WXDLLEXPORT wxCommand;
 class WXDLLEXPORT wxCommandProcessor;
 class WXDLLEXPORT wxFileHistory;
 class WXDLLEXPORT wxConfigBase;
@@ -512,65 +511,6 @@ protected:
     wxView*       m_printoutView;
 };
 #endif // wxUSE_PRINTING_ARCHITECTURE
-
-// ----------------------------------------------------------------------------
-// Command processing framework
-// ----------------------------------------------------------------------------
-
-class WXDLLEXPORT wxCommand : public wxObject
-{
-    DECLARE_CLASS(wxCommand)
-
-public:
-    wxCommand(bool canUndoIt = FALSE, const wxString& name = "");
-    ~wxCommand();
-
-    // Override this to perform a command
-    virtual bool Do() = 0;
-
-    // Override this to undo a command
-    virtual bool Undo() = 0;
-
-    virtual bool CanUndo() const { return m_canUndo; }
-    virtual wxString GetName() const { return m_commandName; }
-
-protected:
-    bool     m_canUndo;
-    wxString m_commandName;
-};
-
-class WXDLLEXPORT wxCommandProcessor : public wxObject
-{
-    DECLARE_DYNAMIC_CLASS(wxCommandProcessor)
-
-public:
-    wxCommandProcessor(int maxCommands = 100);
-    ~wxCommandProcessor();
-
-    // Pass a command to the processor. The processor calls Do(); if
-    // successful, is appended to the command history unless storeIt is FALSE.
-    virtual bool Submit(wxCommand *command, bool storeIt = TRUE);
-    virtual bool Undo();
-    virtual bool Redo();
-    virtual bool CanUndo() const;
-    virtual bool CanRedo() const;
-
-    // Call this to manage an edit menu.
-    void SetEditMenu(wxMenu *menu) { m_commandEditMenu = menu; }
-    wxMenu *GetEditMenu() const { return m_commandEditMenu; }
-    virtual void SetMenuStrings();
-    virtual void Initialize();
-
-    wxList& GetCommands() const { return (wxList&) m_commands; }
-    int GetMaxCommands() const { return m_maxNoCommands; }
-    virtual void ClearCommands();
-
-protected:
-    int           m_maxNoCommands;
-    wxList        m_commands;
-    wxNode*       m_currentCommand;
-    wxMenu*       m_commandEditMenu;
-};
 
 // ----------------------------------------------------------------------------
 // File history management

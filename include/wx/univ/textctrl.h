@@ -17,6 +17,7 @@
 #endif
 
 class WXDLLEXPORT wxCaret;
+class WXDLLEXPORT wxTextCtrlCommandProcessor;
 
 #include "wx/scrolwin.h"    // for wxScrollHelper
 
@@ -25,6 +26,9 @@ class WXDLLEXPORT wxCaret;
 // ----------------------------------------------------------------------------
 
 // cursor movement and also selection and delete operations
+#define wxACTION_TEXT_GOTO          _T("goto")  // to pos in numArg
+#define wxACTION_TEXT_FIRST         _T("first") // go to pos 0
+#define wxACTION_TEXT_LAST          _T("last")  // go to last pos
 #define wxACTION_TEXT_HOME          _T("home")
 #define wxACTION_TEXT_END           _T("end")
 #define wxACTION_TEXT_LEFT          _T("left")
@@ -55,6 +59,10 @@ class WXDLLEXPORT wxCaret;
 #define wxACTION_TEXT_EXTEND_SEL    _T("extendsel")
 #define wxACTION_TEXT_SEL_WORD      _T("wordsel")
 #define wxACTION_TEXT_SEL_LINE      _T("linesel")
+
+// undo or redo
+#define wxACTION_TEXT_UNDO          _T("undo")
+#define wxACTION_TEXT_REDO          _T("redo")
 
 // ----------------------------------------------------------------------------
 // wxTextCtrl::HitTest return values
@@ -101,6 +109,8 @@ public:
                 long style = 0,
                 const wxValidator& validator = wxDefaultValidator,
                 const wxString& name = wxTextCtrlNameStr);
+
+    virtual ~wxTextCtrl();
 
     // implement base class pure virtuals
     // ----------------------------------
@@ -332,6 +342,11 @@ protected:
         m_value = value;
     }
 
+    // clipboard operations (unlike the versions without Do prefix, they have a
+    // return code)
+    bool DoCut();
+    bool DoPaste();
+
 private:
     // update the scrollbars (only called from OnIdle)
     void UpdateScrollbars();
@@ -389,6 +404,9 @@ private:
 
     // the max line length in pixels
     wxCoord m_widthMax;
+
+    // the object to which we delegate our undo/redo implementation
+    wxTextCtrlCommandProcessor *m_cmdProcessor;
 
     DECLARE_EVENT_TABLE()
     DECLARE_DYNAMIC_CLASS(wxTextCtrl)

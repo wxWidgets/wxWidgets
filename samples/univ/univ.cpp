@@ -121,6 +121,8 @@ protected:
     void OnLeftUp(wxMouseEvent& event);
 
 private:
+    void TestTextCtrlReplace(wxTextCtrl *text, const wxString& value);
+
     // any class wishing to process wxWindows events must use this macro
     DECLARE_EVENT_TABLE()
 };
@@ -394,14 +396,40 @@ MyUnivFrame::MyUnivFrame(const wxString& title)
     text->SetSize(sizeText);
 #else
     wxTextCtrl *text = new wxTextCtrl(this, -1, //_T("Hello,\nMultiverse!"),
-                                      "0\n1\n2\n3\n4\n5\n6\n7\n8\n9\n10\n11\n",
+                                      //"0\n1\n2\n3\n4\n5\n6\n7\n8\n9\n10\n11\n",
+                                      "",
                                       wxPoint(10, 30),
                                       wxSize(-1, 150),
                                       wxTE_MULTILINE);
+
+    // test wxTextCtrl::Replace()
+    TestTextCtrlReplace(text, "");
+    TestTextCtrlReplace(text, "0\n1\n2\n3");
+    TestTextCtrlReplace(text, "0\n1\n2\n3\n");
+    TestTextCtrlReplace(text, "first\nsecond\n\nthird line");
 #endif
     text->SetFocus();
     //text->SetEditable(FALSE);
 #endif // !TEST_TEXT_ONLY/TEST_TEXT_ONLY
+}
+
+void MyUnivFrame::TestTextCtrlReplace(wxTextCtrl *text, const wxString& value)
+{
+    long last = value.length();
+    for ( long from = 0; from <= last; from++ )
+    {
+        for ( long to = from; to <= last; to++ )
+        {
+            text->SetValue(value);
+            text->Replace(from, to, "");
+            text->SetValue(value);
+            text->Replace(from, to, "foo");
+            text->SetValue(value);
+            text->Replace(from, to, _T("a\nb\n"));
+            text->SetValue(value);
+            text->Replace(from, to, _T("a\nb\nc"));
+        }
+    }
 }
 
 void MyUnivFrame::OnButton(wxCommandEvent& event)
