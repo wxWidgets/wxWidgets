@@ -712,11 +712,11 @@ void wxWindowMac::DoSetSize(int x, int y, int width, int height, int sizeFlags)
     	}
     	if ( doResize )
     	{
-	    MacRepositionScrollBars() ;
-	    wxSize size(m_width, m_height);
-	    wxSizeEvent event(size, m_windowId);
-	    event.SetEventObject(this);
-	    GetEventHandler()->ProcessEvent(event);
+	         MacRepositionScrollBars() ;
+	         wxSize size(m_width, m_height);
+	         wxSizeEvent event(size, m_windowId);
+	         event.SetEventObject(this);
+	         GetEventHandler()->ProcessEvent(event);
     	}
 	}
 }
