@@ -922,9 +922,13 @@ bool wxMetaTagHandler::HandleTag(const wxHtmlTag& tag)
 wxString wxHtmlParser::ExtractCharsetInformation(const wxString& markup)
 {
     wxString charset;
-    wxMetaTagParser parser;
-    parser.AddTagHandler(new wxMetaTagHandler(&charset));
-    parser.Parse(markup);
+    wxMetaTagParser *parser = new wxMetaTagParser();
+    if(parser)
+    {
+        parser->AddTagHandler(new wxMetaTagHandler(&charset));
+        parser->Parse(markup);
+        delete parser;
+    }
     return charset;
 }
 
