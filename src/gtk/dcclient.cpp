@@ -340,15 +340,15 @@ void wxWindowDC::DoDrawPolygon( int n, wxPoint points[], wxCoord xoffset, wxCoor
     }
 
     if (m_window)
-	{
-		if 	((m_brush.GetStyle() == wxSTIPPLE_MASK_OPAQUE) && (m_brush.GetStipple()->GetMask()))		
-        	gdk_draw_polygon (m_window, m_textGC, TRUE, gdkpoints, n);
-		else
-		{ 
-   			if ((m_brush.GetStyle() != wxTRANSPARENT))
-        		gdk_draw_polygon (m_window, m_brushGC, TRUE, gdkpoints, n);
-		}		
-	}
+    {
+        if ((m_brush.GetStyle() == wxSTIPPLE_MASK_OPAQUE) && (m_brush.GetStipple()->GetMask()))
+            gdk_draw_polygon (m_window, m_textGC, TRUE, gdkpoints, n);
+        else
+        {
+            if ((m_brush.GetStyle() != wxTRANSPARENT))
+                gdk_draw_polygon (m_window, m_brushGC, TRUE, gdkpoints, n);
+        }
+    }
 
     // To do: Fillstyle
 
@@ -385,19 +385,19 @@ void wxWindowDC::DoDrawRectangle( wxCoord x, wxCoord y, wxCoord width, wxCoord h
 
     if (m_window)
     {
-   	  if ((m_brush.GetStyle() == wxSTIPPLE_MASK_OPAQUE) && (m_brush.GetStipple()->GetMask()))
-   	  {
-             gdk_draw_rectangle( m_window, m_textGC, TRUE, xx, yy, ww, hh );
-           	 gdk_draw_rectangle( m_window, m_penGC, FALSE, xx, yy, ww-1, hh-1 );
-	  }
-	  else
-	  {
-      	if (m_brush.GetStyle() != wxTRANSPARENT)
-             gdk_draw_rectangle( m_window, m_brushGC, TRUE, xx, yy, ww, hh );
+        if ((m_brush.GetStyle() == wxSTIPPLE_MASK_OPAQUE) && (m_brush.GetStipple()->GetMask()))
+        {
+            gdk_draw_rectangle( m_window, m_textGC, TRUE, xx, yy, ww, hh );
+            gdk_draw_rectangle( m_window, m_penGC, FALSE, xx, yy, ww-1, hh-1 );
+        }
+        else
+        {
+            if (m_brush.GetStyle() != wxTRANSPARENT)
+                gdk_draw_rectangle( m_window, m_brushGC, TRUE, xx, yy, ww, hh );
 
-      	if (m_pen.GetStyle() != wxTRANSPARENT)
-             gdk_draw_rectangle( m_window, m_penGC, FALSE, xx, yy, ww-1, hh-1 );
-	  }
+            if (m_pen.GetStyle() != wxTRANSPARENT)
+                gdk_draw_rectangle( m_window, m_penGC, FALSE, xx, yy, ww-1, hh-1 );
+        }
     }
 
     CalcBoundingBox( x, y );
@@ -577,7 +577,7 @@ void wxWindowDC::DoDrawBitmap( const wxBitmap &bitmap,
         gdk_draw_bitmap( m_window, m_textGC, use_bitmap.GetBitmap(), 0, 0, xx, yy, -1, -1 );
     else
         gdk_draw_pixmap( m_window, m_penGC, use_bitmap.GetPixmap(), 0, 0, xx, yy, -1, -1 );
-        
+
     /* remove mask again if any */
 
     if (useMask && mask)
@@ -887,7 +887,7 @@ void wxWindowDC::DoDrawRotatedText( const wxString &text, wxCoord x, wxCoord y, 
     double x3 = x4 + x2,
            y3 = y4 + y2;
 
-    // calc max and min 
+    // calc max and min
     wxCoord maxX = (wxCoord)(dmax(x2, dmax(x3, x4)) + 0.5),
             maxY = (wxCoord)(dmax(y2, dmax(y3, y4)) + 0.5),
             minX = (wxCoord)(dmin(x2, dmin(x3, x4)) - 0.5),
@@ -898,7 +898,7 @@ void wxWindowDC::DoDrawRotatedText( const wxString &text, wxCoord x, wxCoord y, 
 
     GdkColor *colText = m_textForegroundColour.GetColor(),
              *colBack = m_textBackgroundColour.GetColor();
-    
+
     bool textColSet = TRUE;
 
     unsigned char *data = image.GetData();
@@ -1099,7 +1099,7 @@ void wxWindowDC::SetPen( const wxPen &pen )
         }
 
         case wxTRANSPARENT:
-		case wxSTIPPLE_MASK_OPAQUE:
+        case wxSTIPPLE_MASK_OPAQUE:
         case wxSTIPPLE:
         case wxSOLID:
         default:
@@ -1137,7 +1137,7 @@ void wxWindowDC::SetPen( const wxPen &pen )
         case wxCAP_BUTT:       { capStyle = GDK_CAP_BUTT;       break; }
         case wxCAP_ROUND:
         default:
-        { 
+        {
             if (width <= 1)
             {
                 width = 0;
@@ -1147,7 +1147,7 @@ void wxWindowDC::SetPen( const wxPen &pen )
             {
                 capStyle = GDK_CAP_ROUND;
             }
-            break; 
+            break;
         }
     }
 
@@ -1260,7 +1260,12 @@ void wxWindowDC::SetLogicalFunction( int function )
 {
     wxCHECK_RET( Ok(), wxT("invalid window dc") );
 
-    if (m_logicalFunction == function) return;
+    if (m_logicalFunction == function)
+        return;
+
+    // VZ: shouldn't this be a CHECK?
+    if (!m_window)
+        return;
 
     GdkFunction mode = GDK_COPY;
     switch (function)
@@ -1281,7 +1286,7 @@ void wxWindowDC::SetLogicalFunction( int function )
         case wxCOPY:         mode = GDK_COPY;          break;
         case wxNO_OP:        mode = GDK_NOOP;          break;
         case wxSRC_INVERT:   mode = GDK_COPY_INVERT;   break;
-        
+
         // unsupported by GTK
         case wxNOR:          mode = GDK_COPY;          break;
 #endif
@@ -1294,11 +1299,12 @@ void wxWindowDC::SetLogicalFunction( int function )
 
     m_logicalFunction = function;
 
-    if (!m_window) return;
-
     gdk_gc_set_function( m_penGC, mode );
     gdk_gc_set_function( m_brushGC, mode );
-    gdk_gc_set_function( m_textGC, mode );
+
+    // to stay compatible with wxMSW, we don't apply ROPs to the text
+    // operations (i.e. DrawText/DrawRotatedText)
+    //  gdk_gc_set_function( m_textGC, mode );
 }
 
 void wxWindowDC::SetTextForeground( const wxColour &col )
@@ -1385,7 +1391,7 @@ void wxWindowDC::DoSetClippingRegionAsRegion( const wxRegion &region  )
 
     wxCoord x,y,w,h;
     region.GetBox( x, y, w, h );
-    
+
     wxDC::DoSetClippingRegion( x, y, w, h );
 
     if (!m_window) return;
