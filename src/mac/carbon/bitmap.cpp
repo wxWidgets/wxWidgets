@@ -324,12 +324,12 @@ void wxMacCreateBitmapButton( ControlButtonContentInfo*info , const wxBitmap& bi
                 if ( bitmap.GetMask() )
                 {
                     info->u.cIconHandle = wxMacCreateCIcon( MAC_WXHBITMAP(bmap->m_hBitmap) , MAC_WXHBITMAP(bitmap.GetMask()->GetMaskBitmap()) ,
-                                                           8 , bmap->m_width ) ;
+                                                           24 , bmap->m_width ) ;
                 }
                 else
                 {
                     info->u.cIconHandle = wxMacCreateCIcon( MAC_WXHBITMAP(bmap->m_hBitmap) , NULL ,
-                                                           8 , bmap->m_width ) ;
+                                                           24 , bmap->m_width ) ;
                 }
             }
             else
