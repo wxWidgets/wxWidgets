@@ -312,8 +312,15 @@ int wxIFFDecoder::ReadIFF()
     while (dataptr + 8 <= dataend) {
     // get chunk length and make even
     size_t chunkLen = (iff_getlong(dataptr + 4) + 1) & 0xfffffffe;
-    if (chunkLen < 0) {     // format error?
-       break;
+#ifdef __VMS
+       // Silence compiler warning
+       int chunkLen_;
+       chunkLen_ = chunkLen;
+       if (chunkLen_ < 0) {     // format error?
+#else
+       if (chunkLen < 0) {     // format error?
+#endif
+	  break;
     }
     bool truncated = (dataptr + 8 + chunkLen > dataend);
 

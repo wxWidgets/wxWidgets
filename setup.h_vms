@@ -839,6 +839,11 @@
 #define wxUSE_PCX 1
 
 /*
+ * IFF image format support
+ */
+#define wxUSE_IFF 1
+
+/*
  * PNM image format support
  */
 #define wxUSE_PNM 1
@@ -847,6 +852,11 @@
  * XPM image format support
  */
 #define wxUSE_XPM 1
+
+/*
+ * MS Icons and Cursors format support
+ */
+#define wxUSE_ICO_CUR 0
 
 /*
  * Disable this if your compiler can't cope

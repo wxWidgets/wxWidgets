@@ -85,10 +85,12 @@ OBJECTS1=fs_inet.obj,\
 		hash.obj,\
 		helpbase.obj,\
 		http.obj,\
+		iffdecod.obj,\
 		imagall.obj,\
 		imagbmp.obj,\
 		image.obj,\
 		imaggif.obj,\
+		imagiff.obj,\
 		imagjpeg.obj,\
 		imagpcx.obj,\
 		imagpng.obj,\
@@ -199,10 +201,12 @@ SOURCES = \
 		hash.cpp,\
 		helpbase.cpp,\
 		http.cpp,\
+		iffdecod.cpp,\
 		imagall.cpp,\
 		imagbmp.cpp,\
 		image.cpp,\
 		imaggif.cpp,\
+		imagiff.cpp,\
 		imagjpeg.cpp,\
 		imagpcx.cpp,\
 		imagpng.cpp,\
@@ -345,10 +349,12 @@ gifdecod.obj : gifdecod.cpp
 hash.obj : hash.cpp
 helpbase.obj : helpbase.cpp
 http.obj : http.cpp
+iffdecod.obj : iffdecod.cpp
 imagall.obj : imagall.cpp
 imagbmp.obj : imagbmp.cpp
 image.obj : image.cpp
 imaggif.obj : imaggif.cpp
+imagiff.obj : imagiff.cpp
 imagjpeg.obj : imagjpeg.cpp
 imagpcx.obj : imagpcx.cpp
 imagpng.obj : imagpng.cpp

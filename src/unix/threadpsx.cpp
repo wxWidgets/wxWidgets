@@ -928,9 +928,17 @@ int wxThread::GetCPUCount()
     return -1;
 }
 
+#ifdef __VMS
+  // VMS is a 64 bit system and threads have 64 bit pointers.
+  // ??? also needed for other systems????
+unsigned long long wxThread::GetCurrentId()
+{
+    return (unsigned long long)pthread_self();
+#else
 unsigned long wxThread::GetCurrentId()
 {
     return (unsigned long)pthread_self();
+#endif
 }
 
 bool wxThread::SetConcurrency(size_t level)

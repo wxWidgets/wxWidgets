@@ -289,8 +289,13 @@ public:
         // Get the platform specific thread ID and return as a long.  This
         // can be used to uniquely identify threads, even if they are not
         // wxThreads.  This is used by wxPython.
-    static unsigned long GetCurrentId();
-
+	// On VMS thread pointers are 64 bits (also needed for other systems???
+#ifdef __VMS
+   static unsigned long long GetCurrentId();
+#else
+   static unsigned long GetCurrentId();
+#endif
+   
         // sets the concurrency level: this is, roughly, the number of threads
         // the system tries to schedule to run in parallel. 0 means the
         // default value (usually acceptable, but may not yield the best
