@@ -30,6 +30,7 @@
 #endif
 
 #include "wx/html/webkit.h"
+#include "wx/notebook.h"
 //#include "wx/html/wklisten.h"
 
 
@@ -105,7 +106,7 @@ bool wxWebKitCtrl::Create(wxWindow *parent,
 {
 
     m_currentURL = strURL;
-    m_pageTitle = wxT("");
+    //m_pageTitle = _("Untitled Page");
  
  //still needed for wxCocoa??
 /*
@@ -146,16 +147,17 @@ bool wxWebKitCtrl::Create(wxWindow *parent,
     wxControl::Create(parent, m_windowID, pos, size, style , validator , name);
     WebInitForCarbon();
     HIWebViewCreate( (HIViewRef*) &m_macControl );
-    MacPostControlCreate(pos, size);
-
-    HIViewSetVisible( (HIViewRef) m_macControl, true );
     
     m_webView = (WebView*) HIWebViewGetWebView( (HIViewRef) m_macControl );
+    MacPostControlCreate(pos, size);
+    
+    HIViewSetVisible( (HIViewRef) m_macControl, true );           
 #endif
 
     // Register event listener interfaces
     MyFrameLoadMonitor* myFrameLoadMonitor = [[MyFrameLoadMonitor alloc] initWithWxWindow: (wxWindow*)this];
     [m_webView setFrameLoadDelegate:myFrameLoadMonitor];
+    
     LoadURL(m_currentURL);
     return true;
 }
@@ -225,7 +227,7 @@ void wxWebKitCtrl::Stop(){
 
 bool wxWebKitCtrl::CanGetPageSource(){
     if ( !m_webView )
-        return;
+        return false;
         
     WebDataSource* dataSource = [[m_webView mainFrame] dataSource];
     return ( [[dataSource representation] canProvideDocumentSource] );
@@ -233,7 +235,7 @@ bool wxWebKitCtrl::CanGetPageSource(){
 
 wxString wxWebKitCtrl::GetPageSource(){
     if ( !m_webView )
-        return;
+        return wxT("");
     
     if (CanGetPageSource()){
         WebDataSource* dataSource = [[m_webView mainFrame] dataSource];
@@ -253,8 +255,19 @@ void wxWebKitCtrl::SetPageSource(wxString& source, const wxString& baseUrl){
 }
 
 void wxWebKitCtrl::OnSize(wxSizeEvent &event){
+    if ( GetParent()->IsKindOf( CLASSINFO( wxNotebook) ) ){
+        NSRect bounds = [m_webView frame];
+        bounds.origin.x += GetParent()->GetPosition().x;
+        bounds.origin.y += 18;
+        [m_webView setFrame:bounds];
+     } 
     [m_webView display];
     event.Skip();
+}
+
+void wxWebKitCtrl::MacVisibilityChanged(){
+    bool isHidden = !IsControlVisible( (HIViewRef)m_macControl);
+    [m_webView setHidden:isHidden];
 }
 
 //------------------------------------------------------------

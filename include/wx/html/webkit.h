@@ -70,6 +70,7 @@ public:
     void OnSize(wxSizeEvent &event);
 protected:
     DECLARE_EVENT_TABLE()
+    void MacVisibilityChanged();
 
 private:
     wxWindow *m_parent;
