@@ -177,7 +177,7 @@
  * to define both size_t and int version of wxString::operator[] because it
  * should really be size_t, but a lot of old, broken code uses int indices.
  */
-#define wxUSE_SIZE_T_STRING_OPERATOR 1
+#define wxUSE_SIZE_T_STRING_OPERATOR 0
 
 /* ------------------------------------------------------------------------ */
 /* misc options                                                             */
