@@ -71,8 +71,6 @@
     #endif
 #elif (defined(__WXPM__))
     #include <io.h>
-    #define   W_OK        2
-    #define   R_OK        4
 #elif (defined(__WXSTUBS__))
     // Have to ifdef this for different environments
     #include <io.h>
@@ -84,8 +82,6 @@
 #endif
     char* mktemp( char * path ) { return path ;}
     #include <stat.h>
-    #define   W_OK        2
-    #define   R_OK        4
     #include  <unistd.h>
 #else
     #error  "Please specify the header with file functions declarations."
@@ -94,18 +90,21 @@
 #include  <stdio.h>       // SEEK_xxx constants
 #include  <fcntl.h>       // O_RDONLY &c
 
-#ifndef __MWERKS__
-    #include  <sys/types.h>   // needed for stat
-    #include  <sys/stat.h>    // stat
-#elif ( defined(__MWERKS__) && defined(__WXMSW__) )
+#if !defined(__MWERKS__) || defined(__WXMSW__)
     #include  <sys/types.h>   // needed for stat
     #include  <sys/stat.h>    // stat
 #endif
 
-#if defined(__BORLANDC__) || defined(_MSC_VER)
-    #define   W_OK        2
-    #define   R_OK        4
-#endif
+// Windows compilers don't have these constants
+#ifndef W_OK
+    enum
+    {
+        F_OK = 0,   // test for existence
+        X_OK = 1,   //          execute permission
+        W_OK = 2,   //          write
+        R_OK = 4    //          read
+    };
+#endif // W_OK
 
 // there is no distinction between text and binary files under Unix, so define
 // O_BINARY as 0 if the system headers don't do it already
@@ -138,6 +137,7 @@
 
 #include  "wx/filename.h"
 #include  "wx/file.h"
+#include  "wx/filefn.h"
 
 #ifdef __WXMSW__
     #include "wx/msw/mslu.h"
@@ -150,19 +150,22 @@
 // ----------------------------------------------------------------------------
 // static functions
 // ----------------------------------------------------------------------------
+
 bool wxFile::Exists(const wxChar *name)
 {
-    wxStructStat st;
-    return !wxAccess(name, 0) &&
-           !wxStat(name, &st) &&
-           (st.st_mode & S_IFREG);
+    return wxFileExists(name);
 }
 
 bool wxFile::Access(const wxChar *name, OpenMode mode)
 {
-    int how = 0;
+    int how;
 
-    switch ( mode ) {
+    switch ( mode )
+    {
+        default:
+            wxFAIL_MSG(wxT("bad wxFile::Access mode parameter."));
+            // fall through
+
         case read:
             how = R_OK;
             break;
@@ -171,11 +174,12 @@ bool wxFile::Access(const wxChar *name, OpenMode mode)
             how = W_OK;
             break;
 
-        default:
-            wxFAIL_MSG(wxT("bad wxFile::Access mode parameter."));
+        case read_write:
+            how = R_OK | W_OK;
+            break;
     }
 
-    return wxAccess( name, how) == 0;
+    return wxAccess(name, how) == 0;
 }
 
 // ----------------------------------------------------------------------------

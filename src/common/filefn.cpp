@@ -326,18 +326,16 @@ wxString wxPathList::FindAbsoluteValidPath (const wxString& file)
 bool
 wxFileExists (const wxString& filename)
 {
+    // we must use GetFileAttributes() instead of the ANSI C functions because
+    // it can cope with network (UNC) paths unlike them
 #if defined(__WIN32__) && !defined(__WXMICROWIN__)
-    // GetFileAttributes can copy with network paths unlike stat()
     DWORD ret = ::GetFileAttributes(filename);
 
     return (ret != (DWORD)-1) && !(ret & FILE_ATTRIBUTE_DIRECTORY);
-#else
-    wxStructStat stbuf;
-    if ( !filename.empty() && wxStat( filename, &stbuf) == 0 )
-        return TRUE;
-
-    return FALSE;
-#endif
+#else // !__WIN32__
+    wxStructStat st;
+    return wxStat(filename, &st) == 0 && (st.st_mode & S_IFREG);
+#endif // __WIN32__/!__WIN32__
 }
 
 bool
