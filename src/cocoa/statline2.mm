@@ -12,6 +12,8 @@
 #include "wx/app.h"
 #include "wx/statline.h"
 
+#import <AppKit/NSView.h>
+
 IMPLEMENT_DYNAMIC_CLASS(wxStaticLine, wxControl)
 BEGIN_EVENT_TABLE(wxStaticLine, wxStaticLineBase)
 END_EVENT_TABLE()
@@ -25,7 +27,8 @@ bool wxStaticLine::Create(wxWindow *parent, wxWindowID winid,
 {
     if(!CreateControl(parent,winid,pos,size,style,wxDefaultValidator,name))
         return false;
-    m_cocoaNSView = NULL;
+    SetNSView([[NSView alloc] initWithFrame: NSMakeRect(10,10,20,20)]);
+    [m_cocoaNSView release];
     if(m_parent)
         m_parent->CocoaAddChild(this);
     return true;
@@ -34,5 +37,6 @@ bool wxStaticLine::Create(wxWindow *parent, wxWindowID winid,
 wxStaticLine::~wxStaticLine()
 {
     CocoaRemoveFromParent();
+    SetNSView(NULL);
 }
 
