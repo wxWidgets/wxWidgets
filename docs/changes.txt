@@ -112,6 +112,7 @@ All (GUI):
   min size using SetSizeHints, and calls to wxSizer::SetItemMinSize
   are also forwarded to SetSizeHints for window items.
 - added wxRegEx::GetMatchCount()
+- it is now possible to display images in wxHtmlListBox
 
 wxMSW:
 

@@ -63,6 +63,19 @@ wxListBox styles can not be used here.
 Returns {\tt true} on success or {\tt false} if the control couldn't be created
 
 
+\membersection{wxHtmlListBox::GetFileSystem}\label{wxhtmllistboxgetfilesystem}
+
+\func{wxFileSystem\&}{GetFileSystem}{\void}
+
+\constfunc{const wxFileSystem\&}{GetFileSystem}{\void}
+
+Returns the \helpref{wxFileSystem}{wxfilesystem} used by the HTML parser of
+this object. The file system object is used to resolve the paths in HTML
+fragments displayed in the control and you should use 
+\helpref{wxFileSystem::ChangePathTo}{wxfilesystemchangepathto} if you use
+relative paths for the images or other resources embedded in your HTML.
+
+
 \membersection{wxHtmlListBox::GetSelectedTextBgColour}\label{wxhtmllistboxgetselectedtextbgcolour}
 
 \constfunc{wxColour}{GetSelectedTextBgColour}{\param{const wxColour\& }{colBg}}
