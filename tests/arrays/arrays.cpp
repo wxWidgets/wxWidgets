@@ -268,6 +268,12 @@ void ArraysTestCase::wxStringArrayTest()
                                            _T("thermit") ,
                                            _T("alligator") ) );
     CPPUNIT_ASSERT( COMPARE_COUNT( a1 , 5 ) );
+    CPPUNIT_ASSERT( a1.Index( "dog" ) == 0 );
+    CPPUNIT_ASSERT( a1.Index( "human" ) == 1 );
+    CPPUNIT_ASSERT( a1.Index( "humann" ) == wxNOT_FOUND );
+    CPPUNIT_ASSERT( a1.Index( "condor" ) == 2 );
+    CPPUNIT_ASSERT( a1.Index( "thermit" ) == 3 );
+    CPPUNIT_ASSERT( a1.Index( "alligator" ) == 4 );
 }
 
 void ArraysTestCase::wxObjArrayTest()
@@ -330,6 +336,13 @@ void ArraysTestCase::wxArray ## name ## Test()                                \
                                                                               \
     CPPUNIT_ASSERT( COMPARE_4_VALUES(b,1,3,5,17) );                           \
     CPPUNIT_ASSERT( COMPARE_COUNT( b , 4 ) );                                 \
+    CPPUNIT_ASSERT( b.Index( 0 ) == wxNOT_FOUND );                            \
+    CPPUNIT_ASSERT( b.Index( 1 ) == 0 );                                      \
+    CPPUNIT_ASSERT( b.Index( 3 ) == 1 );                                      \
+    CPPUNIT_ASSERT( b.Index( 4 ) == wxNOT_FOUND );                            \
+    CPPUNIT_ASSERT( b.Index( 5 ) == 2 );                                      \
+    CPPUNIT_ASSERT( b.Index( 6 ) == wxNOT_FOUND );                            \
+    CPPUNIT_ASSERT( b.Index( 17 ) == 3 );                                     \
 }
 
 TestArrayOf(UShort);

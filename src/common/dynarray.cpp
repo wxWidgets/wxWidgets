@@ -99,8 +99,8 @@ int name::Index(T lItem, CMPFUNC fnCompare) const                           \
 {                                                                           \
     Predicate p((SCMPFUNC)fnCompare);                                       \
     const_iterator it = std::lower_bound(begin(), end(), lItem, p);         \
-    return (it != end() &&                                                  \
-            p(lItem, *it)) ? (int)(it - begin()) : wxNOT_FOUND;             \
+    return (it != end() && !p(lItem, *it)) ?                                \
+                             (int)(it - begin()) : wxNOT_FOUND;             \
 }                                                                           \
                                                                             \
 void name::Shrink()                                                         \
