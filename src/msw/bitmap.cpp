@@ -434,6 +434,13 @@ wxBitmap::wxBitmap(int w, int h, int d)
     (void)Create(w, h, d);
 }
 
+wxBitmap::wxBitmap(int w, int h, const wxDC& dc)
+{
+    Init();
+
+    (void)Create(w, h, dc);
+}
+
 wxBitmap::wxBitmap(void *data, long type, int width, int height, int depth)
 {
     Init();
