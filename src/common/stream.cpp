@@ -795,17 +795,30 @@ char wxInputStream::GetC()
 
 wxInputStream& wxInputStream::Read(void *buf, size_t size)
 {
-    size_t retsize = GetWBack(buf, size);
-    if (retsize == size)
-    {
-        m_lastcount = size;
-        m_lasterror = wxStream_NOERROR;
-        return *this;
-    }
-    size -= retsize;
-    buf = (char *)buf + retsize;
+    char *p = (char *)buf;
+    m_lastcount = 0;
 
-    m_lastcount = OnSysRead(buf, size) + retsize;
+    size_t read = GetWBack(buf, size);
+    for ( ;; )
+    {
+        size -= read;
+        m_lastcount += read;
+        p += read;
+
+        if ( !size )
+        {
+            // we read the requested amount of data
+            break;
+        }
+
+        read = OnSysRead(buf, size);
+        if ( !read )
+        {
+            // no more data available
+            break;
+        }
+    }
+
     return *this;
 }
 
