@@ -210,7 +210,7 @@ void MyThread::OnExit()
         // waiting for us
         if ( wxGetApp().m_waitingUntilAllDone )
         {
-            wxGetApp().m_waitingUntilAllDone = FALSE;
+            wxGetApp().m_waitingUntilAllDone = false;
 
             wxGetApp().m_semAllDone.Post();
         }
@@ -355,7 +355,7 @@ END_EVENT_TABLE()
 MyApp::MyApp()
      : m_semAllDone()
 {
-    m_waitingUntilAllDone = FALSE;
+    m_waitingUntilAllDone = false;
 }
 
 MyApp::~MyApp()
@@ -407,17 +407,17 @@ bool MyApp::OnInit()
     frame->SetMenuBar(menuBar);
 
     // Show the frame
-    frame->Show(TRUE);
+    frame->Show(true);
 
     SetTopWindow(frame);
 
-    return TRUE;
+    return true;
 }
 
 // My frame constructor
 MyFrame::MyFrame(wxFrame *frame, const wxString& title,
                  int x, int y, int w, int h)
-       : wxFrame(frame, -1, title, wxPoint(x, y), wxSize(w, h))
+       : wxFrame(frame, wxID_ANY, title, wxPoint(x, y), wxSize(w, h))
 {
     m_nRunning = m_nCount = 0;
 
@@ -425,7 +425,7 @@ MyFrame::MyFrame(wxFrame *frame, const wxString& title,
 
     CreateStatusBar(2);
 
-    m_txtctrl = new wxTextCtrl(this, -1, _T(""), wxPoint(0, 0), wxSize(0, 0),
+    m_txtctrl = new wxTextCtrl(this, wxID_ANY, _T(""), wxPoint(0, 0), wxSize(0, 0),
                                wxTE_MULTILINE | wxTE_READONLY);
 
 }
@@ -450,7 +450,7 @@ MyFrame::~MyFrame()
     if ( count )
     {
         // set the flag for MyThread::OnExit()
-        wxGetApp().m_waitingUntilAllDone = TRUE;
+        wxGetApp().m_waitingUntilAllDone = true;
 
         // stop all threads
         while ( ! threads.IsEmpty() )
@@ -644,7 +644,7 @@ void MyFrame::OnIdle(wxIdleEvent& event)
 
 void MyFrame::OnQuit(wxCommandEvent& WXUNUSED(event) )
 {
-    Close(TRUE);
+    Close(true);
 }
 
 void MyFrame::OnExecMain(wxCommandEvent& WXUNUSED(event))
@@ -734,7 +734,7 @@ void MyFrame::OnStartWorker(wxCommandEvent& WXUNUSED(event))
                         );
 
     // thread is not running yet, no need for crit sect
-    m_cancelled = FALSE;
+    m_cancelled = false;
 
     thread->Run();
 }
@@ -763,7 +763,7 @@ void MyFrame::OnWorkerEvent(wxCommandEvent& event)
         {
             wxCriticalSectionLocker lock(m_critsectWork);
 
-            m_cancelled = TRUE;
+            m_cancelled = true;
         }
     }
 #endif

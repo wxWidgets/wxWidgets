@@ -88,7 +88,7 @@ class MyFrame: public wxFrame
 {
 public:
     MyFrame(wxFrame *parent,
-            wxWindowID id = -1,
+            wxWindowID id = wxID_ANY,
             const wxString& title = _T("wxToolBar Sample"),
             const wxPoint& pos = wxDefaultPosition,
             const wxSize& size = wxDefaultSize,
@@ -223,7 +223,7 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU_RANGE(IDM_TOOLBAR_SHOW_TEXT, IDM_TOOLBAR_SHOW_BOTH,
                    MyFrame::OnToolbarStyle)
 
-    EVT_MENU(-1, MyFrame::OnToolLeftClick)
+    EVT_MENU(wxID_ANY, MyFrame::OnToolLeftClick)
 
     EVT_COMBOBOX(ID_COMBO, MyFrame::OnCombo)
 
@@ -254,7 +254,7 @@ IMPLEMENT_APP(MyApp)
 bool MyApp::OnInit()
 {
     // Create the main frame window
-    MyFrame* frame = new MyFrame((wxFrame *) NULL, -1,
+    MyFrame* frame = new MyFrame((wxFrame *) NULL, wxID_ANY,
                                  _T("wxToolBar Sample"),
 #ifdef __WXWINCE__
                                  wxDefaultPosition, wxDefaultSize
@@ -263,7 +263,7 @@ bool MyApp::OnInit()
 #endif
                                  );
 
-    frame->Show(TRUE);
+    frame->Show(true);
 
 #ifndef __SMARTPHONE__
     frame->SetStatusText(_T("Hello, wxWidgets"));
@@ -271,7 +271,7 @@ bool MyApp::OnInit()
 
     SetTopWindow(frame);
 
-    return TRUE;
+    return true;
 }
 
 void MyFrame::RecreateToolbar()
@@ -343,7 +343,7 @@ void MyFrame::RecreateToolbar()
     // adding a combo to a vertical toolbar is not very smart
     if ( m_horzToolbar )
     {
-        wxComboBox *combo = new wxComboBox(toolBar, ID_COMBO, _T(""), wxDefaultPosition, wxSize(200,-1) );
+        wxComboBox *combo = new wxComboBox(toolBar, ID_COMBO, _T(""), wxDefaultPosition, wxSize(200,wxDefaultSize.y) );
         combo->Append(_T("This"));
         combo->Append(_T("is a"));
         combo->Append(_T("combobox"));
@@ -383,9 +383,9 @@ MyFrame::MyFrame(wxFrame* parent,
 {
     m_tbar = NULL;
 
-    m_smallToolbar = TRUE;
-    m_horzToolbar = TRUE;
-    m_horzText = FALSE;
+    m_smallToolbar = true;
+    m_horzToolbar = true;
+    m_horzText = false;
     m_rows = 1;
     m_nPrint = 1;
 
@@ -455,12 +455,12 @@ MyFrame::MyFrame(wxFrame* parent,
     // Associate the menu bar with the frame
     SetMenuBar(menuBar);
 
-    menuBar->Check(IDM_TOOLBAR_SHOW_BOTH, TRUE);
+    menuBar->Check(IDM_TOOLBAR_SHOW_BOTH, true);
 
     // Create the toolbar
     RecreateToolbar();
 
-    m_textWindow = new wxTextCtrl(this, -1, _T(""), wxPoint(0, 0), wxSize(-1, -1), wxTE_MULTILINE);
+    m_textWindow = new wxTextCtrl(this, wxID_ANY, _T(""), wxPoint(0, 0), wxDefaultSize, wxTE_MULTILINE);
 }
 
 #if USE_GENERIC_TBAR
@@ -483,7 +483,7 @@ void MyFrame::LayoutChildren()
     int offset;
     if ( m_tbar )
     {
-        m_tbar->SetSize(-1, size.y);
+        m_tbar->SetSize(wxDefaultSize.x, size.y);
         m_tbar->Move(0, 0);
 
         offset = m_tbar->GetSize().x;
@@ -544,7 +544,7 @@ void MyFrame::OnToggleAnotherToolbar(wxCommandEvent& WXUNUSED(event))
         style &= ~wxTB_HORIZONTAL;
         style |= wxTB_VERTICAL;
 
-        m_tbar = new wxToolBar(this, -1,
+        m_tbar = new wxToolBar(this, wxID_ANY,
                                wxDefaultPosition, wxDefaultSize,
                                style);
 
@@ -588,7 +588,7 @@ void MyFrame::OnToggleToolbarOrient(wxCommandEvent& WXUNUSED(event))
 
 void MyFrame::OnQuit(wxCommandEvent& WXUNUSED(event))
 {
-    Close(TRUE);
+    Close(true);
 }
 
 void MyFrame::OnAbout(wxCommandEvent& event)

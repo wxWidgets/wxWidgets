@@ -66,11 +66,11 @@ bool MyApp::OnInit(void)
 //  canvas->SetScrollbars(20, 20, 50, 50, 4, 4);
   frame->canvas = canvas;
 
-  frame->Show(TRUE);
+  frame->Show(true);
 
   frame->SetStatusText(_T("Hello, wxWidgets"));
 
-  return TRUE;
+  return true;
 }
 
 BEGIN_EVENT_TABLE(MyFrame, wxFrame)
@@ -82,7 +82,7 @@ END_EVENT_TABLE()
 
 // Define my frame constructor
 MyFrame::MyFrame(wxFrame *frame, const wxString& title, const wxPoint& pos, const wxSize& size):
-  wxFrame(frame, -1, title, pos, size)
+  wxFrame(frame, wxID_ANY, title, pos, size)
 {
   canvas = (MyCanvas *) NULL;
 }
@@ -99,7 +99,7 @@ MyFrame::~MyFrame()
 
 void MyFrame::OnQuit(wxCommandEvent& WXUNUSED(event))
 {
-    Close(TRUE);
+    Close(true);
 }
 
 void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
@@ -165,7 +165,7 @@ END_EVENT_TABLE()
 
 // Define a constructor for my canvas
 MyCanvas::MyCanvas(wxWindow *parent, const wxPoint& pos, const wxSize& size):
- wxScrolledWindow(parent, -1, pos, size)
+ wxScrolledWindow(parent, wxID_ANY, pos, size)
 {
 }
 
@@ -195,7 +195,7 @@ void MyCanvas::OnPaint(wxPaintEvent& WXUNUSED(event))
     memDC.SelectObject(* g_TestBitmap);
 
     // Normal, non-transparent blitting
-    dc.Blit(20, 20, g_TestBitmap->GetWidth(), g_TestBitmap->GetHeight(), & memDC, 0, 0, wxCOPY, FALSE);
+    dc.Blit(20, 20, g_TestBitmap->GetWidth(), g_TestBitmap->GetHeight(), & memDC, 0, 0, wxCOPY, false);
 
     memDC.SelectObject(wxNullBitmap);
   }
@@ -207,7 +207,7 @@ void MyCanvas::OnPaint(wxPaintEvent& WXUNUSED(event))
 
     // Transparent blitting if there's a mask in the bitmap
     dc.Blit(20 + g_TestBitmap->GetWidth() + 20, 20, g_TestBitmap->GetWidth(), g_TestBitmap->GetHeight(), & memDC,
-      0, 0, wxCOPY, TRUE);
+      0, 0, wxCOPY, true);
 
     memDC.SelectObject(wxNullBitmap);
   }
