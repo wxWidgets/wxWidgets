@@ -2,7 +2,7 @@
 // Name:        htmlutil.cpp
 // Purpose:     Converts Latex to HTML
 // Author:      Julian Smart
-// Modified by: Wlodzimiez ABX Skiba 2003/2004 Unicode support
+// Modified by: Wlodzimierz ABX Skiba 2003/2004 Unicode support
 //              Ron Lee
 // Created:     7.9.93
 // RCS-ID:      $Id$
@@ -30,6 +30,8 @@
 #include "tex2rtf.h"
 #include "table.h"
 
+#define HTML_FILENAME_PATTERN _T("%s_%s.html")
+
 #if !WXWIN_COMPATIBILITY_2_4
 static inline wxChar* copystring(const wxChar* s)
     { return wxStrcpy(new wxChar[wxStrlen(s) + 1], s); }
@@ -40,6 +42,8 @@ extern wxHashTable TexReferences;
 
 extern void DecToHex(int, wxChar *);
 void GenerateHTMLIndexFile(wxChar *fname);
+
+bool PrimaryAnchorOfTheFile( wxChar *file, wxChar *label );
 
 void GenerateHTMLWorkshopFiles(wxChar *fname);
 void HTMLWorkshopAddToContents(int level, wxChar *s, wxChar *file);
@@ -205,7 +209,7 @@ void ReopenFile(FILE **fd, wxChar **fileName, const wxChar *label)
   {
     if (fileId == 1)
       gs_filenames.Add(wxEmptyString);
-    wxSnprintf(buf, sizeof(buf), _T("%s_%s.html"), FileRoot, label);
+    wxSnprintf(buf, sizeof(buf), HTML_FILENAME_PATTERN, FileRoot, label);
     gs_filenames.Add(buf);
   }
   if (*fileName) delete[] *fileName;
@@ -476,7 +480,7 @@ void AddBrowseButtons(wxChar *upLabel, wxChar *upFilename,
 
   if (upLabel && upFilename)
   {
-    if (wxStrlen(upLabel) > 0)
+    if ( (wxStrlen(upLabel) > 0) && !PrimaryAnchorOfTheFile(upFilename, upLabel) )
       wxSnprintf(buf, sizeof(buf),
                  _T("<A HREF=\"%s#%s\">%s</A> "),
                  ConvertCase(upFilename), upLabel, upReference);
@@ -501,9 +505,14 @@ void AddBrowseButtons(wxChar *upLabel, wxChar *upFilename,
 
   if (previousLabel && previousFilename)
   {
-    wxSnprintf(buf, sizeof(buf),
-               _T("<A HREF=\"%s#%s\">%s</A> "),
-               ConvertCase(previousFilename), previousLabel, backReference);
+    if (PrimaryAnchorOfTheFile(previousFilename, previousLabel))
+      wxSnprintf(buf, sizeof(buf),
+                 _T("<A HREF=\"%s\">%s</A> "),
+                 ConvertCase(previousFilename), backReference);
+    else
+      wxSnprintf(buf, sizeof(buf),
+                 _T("<A HREF=\"%s#%s\">%s</A> "),
+                 ConvertCase(previousFilename), previousLabel, backReference);
     if (wxStrcmp(previousLabel, _T("contents")) == 0)
     {
 //      TexOutput(_T("<NOFRAMES>"));
@@ -550,9 +559,14 @@ void AddBrowseButtons(wxChar *upLabel, wxChar *upFilename,
 
   if (nextLabel && nextFilename)
   {
-    wxSnprintf(buf, sizeof(buf),
-               _T("<A HREF=\"%s#%s\">%s</A> "),
-               ConvertCase(nextFilename), nextLabel, forwardReference);
+    if (PrimaryAnchorOfTheFile(nextFilename, nextLabel))
+      wxSnprintf(buf, sizeof(buf),
+                 _T("<A HREF=\"%s\">%s</A> "),
+                 ConvertCase(nextFilename), forwardReference);
+    else
+      wxSnprintf(buf, sizeof(buf),
+                 _T("<A HREF=\"%s#%s\">%s</A> "),
+                 ConvertCase(nextFilename), nextLabel, forwardReference);
     TexOutput(buf);
   }
   else
@@ -764,12 +778,18 @@ void HTMLOnMacro(int macroId, int no_args, bool start)
                        lastTopic, lastFileName,  // Last topic
                        topicName, ChaptersName); // This topic
 
-      wxFprintf(Contents, _T("\n<LI><A HREF=\"%s#%s\">"), ConvertCase(ChaptersName), topicName);
+      if(PrimaryAnchorOfTheFile(ChaptersName, topicName))
+        wxFprintf(Contents, _T("\n<LI><A HREF=\"%s\">"), ConvertCase(ChaptersName));
+      else
+        wxFprintf(Contents, _T("\n<LI><A HREF=\"%s#%s\">"), ConvertCase(ChaptersName), topicName);
 
       if (htmlFrameContents && FrameContents)
       {
         SetCurrentOutput(FrameContents);
-        wxFprintf(FrameContents, _T("\n<LI><A HREF=\"%s#%s\" TARGET=\"mainwindow\">"), ConvertCase(ChaptersName), topicName);
+        if(PrimaryAnchorOfTheFile(ChaptersName, topicName))
+          wxFprintf(FrameContents, _T("\n<LI><A HREF=\"%s\" TARGET=\"mainwindow\">"), ConvertCase(ChaptersName));
+        else
+          wxFprintf(FrameContents, _T("\n<LI><A HREF=\"%s#%s\" TARGET=\"mainwindow\">"), ConvertCase(ChaptersName), topicName);
         OutputCurrentSection();
         wxFprintf(FrameContents, _T("</A>\n"));
       }
@@ -831,9 +851,19 @@ void HTMLOnMacro(int macroId, int no_args, bool start)
 
       SetCurrentOutputs(jumpFrom, Sections);
       if (DocumentStyle == LATEX_ARTICLE)
-        wxFprintf(jumpFrom, _T("\n<LI><A HREF=\"%s#%s\">"), ConvertCase(SectionsName), topicName);
+      {
+        if(PrimaryAnchorOfTheFile(SectionsName, topicName))
+          wxFprintf(jumpFrom, _T("\n<LI><A HREF=\"%s\">"), ConvertCase(SectionsName));
+        else
+          wxFprintf(jumpFrom, _T("\n<LI><A HREF=\"%s#%s\">"), ConvertCase(SectionsName), topicName);
+      }
       else
-        wxFprintf(jumpFrom, _T("\n<A HREF=\"%s#%s\"><B>"), ConvertCase(SectionsName), topicName);
+      {
+        if(PrimaryAnchorOfTheFile(SectionsName, topicName))
+          wxFprintf(jumpFrom, _T("\n<A HREF=\"%s\"><B>"), ConvertCase(SectionsName));
+        else
+          wxFprintf(jumpFrom, _T("\n<A HREF=\"%s#%s\"><B>"), ConvertCase(SectionsName), topicName);
+      }
 
       wxFprintf(Sections, _T("\n<H2>"));
       OutputCurrentSection();
@@ -924,7 +954,10 @@ void HTMLOnMacro(int macroId, int no_args, bool start)
                            topicName, SubsectionsName); // This topic
 
             SetCurrentOutputs(Sections, Subsections);
-            wxFprintf(Sections, _T("\n<A HREF=\"%s#%s\"><B>"), ConvertCase(SubsectionsName), topicName);
+            if(PrimaryAnchorOfTheFile(SubsectionsName, topicName))
+              wxFprintf(Sections, _T("\n<A HREF=\"%s\"><B>"), ConvertCase(SubsectionsName));
+            else
+              wxFprintf(Sections, _T("\n<A HREF=\"%s#%s\"><B>"), ConvertCase(SubsectionsName), topicName);
 
             wxFprintf(Subsections, _T("\n<H3>"));
             OutputCurrentSection();
@@ -1006,7 +1039,10 @@ void HTMLOnMacro(int macroId, int no_args, bool start)
                          topicName, SubsubsectionsName); // This topic
 
             SetCurrentOutputs(Subsections, Subsubsections);
-            wxFprintf(Subsections, _T("\n<A HREF=\"%s#%s\"><B>"), ConvertCase(SubsubsectionsName), topicName);
+            if(PrimaryAnchorOfTheFile(SubsubsectionsName, topicName))
+              wxFprintf(Subsections, _T("\n<A HREF=\"%s\"><B>"), ConvertCase(SubsubsectionsName));
+            else
+              wxFprintf(Subsections, _T("\n<A HREF=\"%s#%s\"><B>"), ConvertCase(SubsubsectionsName), topicName);
 
             wxFprintf(Subsubsections, _T("\n<H3>"));
             OutputCurrentSection();
@@ -1982,13 +2018,17 @@ bool HTMLOnArgument(int macroId, int arg_no, bool start)
             {
               TraverseChildrenFromChunk(helpRefFilename);
               TexOutput(_T("#"));
+              TexOutput(refName);
             }
             else if (refFilename)
             {
               TexOutput(ConvertCase(refFilename));
-              TexOutput(_T("#"));
+              if(!PrimaryAnchorOfTheFile(texRef->refFile, refName))
+              {
+                TexOutput(_T("#"));
+                TexOutput(refName);
+              }
             }
-            TexOutput(refName);
             TexOutput(_T("\">"));
             if (helpRefText)
               TraverseChildrenFromChunk(helpRefText);
@@ -2771,7 +2811,10 @@ bool HTMLOnArgument(int macroId, int arg_no, bool start)
                        _T("bibliography"), ChaptersName); // This topic
 
       SetCurrentOutputs(Contents, Chapters);
-      wxFprintf(Contents, _T("\n<LI><A HREF=\"%s#%s\">"), ConvertCase(ChaptersName), "bibliography");
+      if(PrimaryAnchorOfTheFile(ChaptersName, _T("bibliography")))
+        wxFprintf(Contents, _T("\n<LI><A HREF=\"%s\">"), ConvertCase(ChaptersName));
+      else
+        wxFprintf(Contents, _T("\n<LI><A HREF=\"%s#%s\">"), ConvertCase(ChaptersName), _T("bibliography"));
 
       wxFprintf(Contents, _T("%s</A>\n"), ReferencesNameString);
       wxFprintf(Chapters, _T("</H2>\n</A>\n"));
@@ -3329,7 +3372,15 @@ void HTMLWorkshopStartContents()
 
 void HTMLWorkshopEndContents()
 {
-  for (int i = HTMLWorkshopLastLevel; i >= 0; i--)
-    wxFprintf(HTMLWorkshopContents, _T("</UL>\n"));
-  fclose(HTMLWorkshopContents);
+    for (int i = HTMLWorkshopLastLevel; i >= 0; i--)
+        wxFprintf(HTMLWorkshopContents, _T("</UL>\n"));
+    fclose(HTMLWorkshopContents);
+}
+
+
+bool PrimaryAnchorOfTheFile( wxChar *file, wxChar *label )
+{
+    wxString file_label;
+    file_label.Printf( HTML_FILENAME_PATTERN, FileRoot, label );
+    return file_label.IsSameAs( file , false );
 }
