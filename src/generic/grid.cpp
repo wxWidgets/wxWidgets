@@ -2591,8 +2591,8 @@ wxGridCellAttr *wxGridCellAttrProvider::GetAttr(int row, int col,
                     wxGridCellAttr *attrrow = m_data->m_rowAttrs.GetAttr(row);
                     wxGridCellAttr *attrcol = m_data->m_colAttrs.GetAttr(col);
 
-                    if((attrcell != attrrow) && (attrrow !=attrcol) && (attrcell != attrcol)){
-                        // Two or move are non NULL
+                    if((attrcell != attrrow) && (attrrow != attrcol) && (attrcell != attrcol)){
+                        // Two or more are non NULL
                         attr = new wxGridCellAttr;
                         attr->SetKind(wxGridCellAttr::Merged);
 
@@ -2614,11 +2614,21 @@ wxGridCellAttr *wxGridCellAttrProvider::GetAttr(int row, int col,
                         //m_data->m_mergeAttr.SetAttr(attr, row, col);
                     }
                     else
-        {
+                    {
                         // one or none is non null return it or null.
                         if(attrrow) attr = attrrow;
-                        if(attrcol) attr = attrcol;
-                        if(attrcell) attr = attrcell;
+                        if(attrcol)
+                        {
+                            if(attr)
+                                attr->DecRef();
+                            attr = attrcol;
+                        }
+                        if(attrcell)
+                        {
+                            if(attr)
+                                attr->DecRef();
+                            attr = attrcell;
+                        }
                     }
                 }
             break;
@@ -2626,10 +2636,10 @@ wxGridCellAttr *wxGridCellAttrProvider::GetAttr(int row, int col,
                 attr = m_data->m_cellAttrs.GetAttr(row, col);
             break;
             case (wxGridCellAttr::Col):
-                 attr = m_data->m_colAttrs.GetAttr(col);
+                attr = m_data->m_colAttrs.GetAttr(col);
             break;
             case (wxGridCellAttr::Row):
-            attr = m_data->m_rowAttrs.GetAttr(row);
+                attr = m_data->m_rowAttrs.GetAttr(row);
             break;
             default:
                 // unused as yet...
@@ -3815,7 +3825,7 @@ wxEND_HANDLERS_TABLE()
 wxCONSTRUCTOR_5( wxGrid , wxWindow* , Parent , wxWindowID , Id , wxPoint , Position , wxSize , Size , long , WindowStyle )
 
 /*
- TODO : Expose more information of a list's layout etc. via appropriate objects (‡ la NotebookPageInfo)
+ TODO : Expose more information of a list's layout etc. via appropriate objects (Å‡ la NotebookPageInfo)
 */
 #else
 IMPLEMENT_DYNAMIC_CLASS( wxGrid, wxScrolledWindow )
