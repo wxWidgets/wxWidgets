@@ -28,7 +28,7 @@ ALL_SOURCES = \
 		generic/propform.cpp \
 		generic/proplist.cpp \
 		generic/sashwin.cpp \
-		generic/scrolwin.cpp \
+		generic/scrlwing.cpp \
 		generic/splash.cpp \
 		generic/splitter.cpp \
 		generic/statusbr.cpp \
