@@ -2470,6 +2470,8 @@ OSStatus wxMacMLTEClassicControl::DoCreate()
 
 #if TARGET_API_MAC_OSX
 
+#if MAC_OS_X_VERSION_MAX_ALLOWED > MAC_OS_X_VERSION_10_2
+
 wxMacMLTEHIViewControl::wxMacMLTEHIViewControl( wxWindow *wxPeer,
                          const wxString& str,
                          const wxPoint& pos,
@@ -2536,6 +2538,9 @@ bool wxMacMLTEHIViewControl::NeedsFocusRect() const
 {
     return m_windowStyle & wxNO_BORDER ? false : true;
 }
+
+#endif // MAC_OS_X_VERSION_MAX_ALLOWED > MAC_OS_X_VERSION_10_2
+
 
 #endif
 
