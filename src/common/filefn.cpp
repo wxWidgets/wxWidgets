@@ -255,7 +255,7 @@ static inline wxChar* MYcopystring(const wxChar* s)
 
 void wxPathList::Add (const wxString& path)
 {
-    wxStringList::Append (WXSTRINGCAST path);
+    wxStringList::Add (WXSTRINGCAST path);
 }
 
 // Add paths e.g. from the PATH environment variable

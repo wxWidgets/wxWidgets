@@ -1053,6 +1053,20 @@ WX_DECLARE_LIST_XO(wxString, wxStringListBase, class WXDLLEXPORT);
 class WXDLLEXPORT wxStringList : public wxStringListBase
 {
 public:
+    compatibility_iterator Append(wxChar* s)
+        { wxString tmp = s; delete[] s; return wxStringListBase::Append(tmp); }
+    compatibility_iterator Insert(wxChar* s)
+        { wxString tmp = s; delete[] s; return wxStringListBase::Insert(tmp); }
+    compatibility_iterator Insert(size_t pos, wxChar* s)
+    {
+        wxString tmp = s;
+        delete[] s;
+        return wxStringListBase::Insert(pos, tmp);
+    }
+    compatibility_iterator Add(const wxChar* s)
+        { push_back(s); return GetLast(); }
+    compatibility_iterator Prepend(const wxChar* s)
+        { push_front(s); return GetFirst(); }
 };
 
 #endif // wxUSE_STL
