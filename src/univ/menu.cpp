@@ -352,14 +352,9 @@ void wxPopupMenuWindow::ChangeCurrent(wxMenuItemList::Node *node)
 
 wxMenuItemList::Node *wxPopupMenuWindow::GetPrevNode() const
 {
-    wxMenuItemList::Node *node = m_nodeCurrent;
-    if ( !node )
-    {
-        // start from the end if no current item
-        node = m_menu->GetMenuItems().GetLast();
-    }
-
-    return GetPrevNode(node);
+    // return the last node if there had been no previously selected one
+    return m_nodeCurrent ? GetPrevNode(m_nodeCurrent)
+                         : m_menu->GetMenuItems().GetLast();
 }
 
 wxMenuItemList::Node *
@@ -380,14 +375,9 @@ wxPopupMenuWindow::GetPrevNode(wxMenuItemList::Node *node) const
 
 wxMenuItemList::Node *wxPopupMenuWindow::GetNextNode() const
 {
-    wxMenuItemList::Node *node = m_nodeCurrent;
-    if ( !node )
-    {
-        // start from the beginning if no current item
-        node = m_menu->GetMenuItems().GetFirst();
-    }
-
-    return GetNextNode(node);
+    // return the first node if there had been no previously selected one
+    return m_nodeCurrent ? GetNextNode(m_nodeCurrent)
+                         : m_menu->GetMenuItems().GetFirst();
 }
 
 wxMenuItemList::Node *
