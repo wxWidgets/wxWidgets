@@ -26,9 +26,13 @@
 #include "wx/log.h"
 #include <string.h>
 
-
 #include "wx/geometry.h"
 #include "wx/datstrm.h"
+
+// normally this is defined in <math.h>
+#ifndef M_PI
+    #define M_PI 3.14159265358979323846
+#endif
 
 //
 // wxPoint2D
@@ -177,8 +181,8 @@ wxDouble wxPoint2DInt::GetVectorAngle()
             return 180;
     }
 
-    // casts needed MIPSpro compiler under SGI
-    wxDouble deg = atan2( (double)m_y , (double)m_x ) * 180 / 3.14159265359;
+    // casts needed for MIPSpro compiler under SGI
+    wxDouble deg = atan2( (double)m_y , (double)m_x ) * 180 / M_PI;
     if ( deg < 0 )
     {
         deg += 360;
@@ -187,40 +191,42 @@ wxDouble wxPoint2DInt::GetVectorAngle()
 }
 
 
-void wxPoint2DInt::SetVectorAngle( wxDouble degrees ) {
-	wxDouble length = this->GetVectorLength() ;
-	m_x = length * cos( degrees / 180 * 3.14159265359 ) ;
-	m_y = length * sin( degrees / 180 * 3.14159265359 ) ;
-}
-	
-wxDouble wxPoint2DDouble::GetVectorAngle() const
+void wxPoint2DInt::SetVectorAngle( wxDouble degrees )
 {
-	if ( m_x == 0 )
-	{
-		if ( m_y >= 0 )
-			return 90 ;
-		else
-			return 270 ;
-	}
-	if ( m_y == 0 )
-	{
-		if ( m_x >= 0 )
-			return 0 ;
-		else
-			return 180 ;
-	}
-	wxDouble deg = atan2( m_y , m_x ) * 180 / 3.14159265359 ;
-	if ( deg < 0 )
-	{
-		deg += 360 ;
-	}
-	return deg ;
+    wxDouble length = GetVectorLength();
+    m_x = (int)(length * cos( degrees / 180 * M_PI ));
+    m_y = (int)(length * sin( degrees / 180 * M_PI ));
 }
 
-void wxPoint2DDouble::SetVectorAngle( wxDouble degrees ) {
-	wxDouble length = this->GetVectorLength() ;
-	m_x = length * cos( degrees / 180 * 3.14159265359 ) ;
-	m_y = length * sin( degrees / 180 * 3.14159265359 ) ;
+wxDouble wxPoint2DDouble::GetVectorAngle() const
+{
+    if ( m_x == 0 )
+    {
+        if ( m_y >= 0 )
+            return 90;
+        else
+            return 270;
+    }
+    if ( m_y == 0 )
+    {
+        if ( m_x >= 0 )
+            return 0;
+        else
+            return 180;
+    }
+    wxDouble deg = atan2( m_y , m_x ) * 180 / M_PI;
+    if ( deg < 0 )
+    {
+        deg += 360;
+    }
+    return deg;
+}
+
+void wxPoint2DDouble::SetVectorAngle( wxDouble degrees )
+{
+    wxDouble length = GetVectorLength();
+    m_x = length * cos( degrees / 180 * M_PI );
+    m_y = length * sin( degrees / 180 * M_PI );
 }
 
 // wxRect2D
