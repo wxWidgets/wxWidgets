@@ -1,12 +1,8 @@
 Welcome to wxWindows/Mac 2
 
-More Information is available from our own page at 
+More Information is available from the wxWindows project home page at
 
-http://www.advanced.ch/wxwin (mac port) 
-
-or on the wxWindows project in general
-
-from http://www.wxwindows.org 
+http://www.wxwindows.org 
 
 For more information, please see changes.txt, todo.txt, and the
 manuals.

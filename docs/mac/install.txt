@@ -3,8 +3,9 @@ Installing latest headers (and Carbon Support)
 
 NOTE : these steps are not necessary for Pro 6, only for Pro 5.3
 
-the latest build for carbon support lead to a few changes you will have to follow, in order
-to successfully compile the code (also necessary if you don't want to build the carbon targets)
+the latest build for carbon support lead to a few changes you will have to
+follow, in order to successfully compile the code (also necessary if you don't
+want to build the carbon targets)
 
 1. you need CodeWarrior Pro 5.3 , i.e. 5.0 with all the upgrades
 2. you have to download the 3.3.2 universal interfaces from 
@@ -17,8 +18,9 @@ to successfully compile the code (also necessary if you don't want to build the 
 		#include <Controls.h>
 6. rebuild all MacHeaders from the MacHeaders.mcp project in the same folder
 
-if you want to build the carbon targets, you will also need the latest carbonized version of
-MSL from Metrowerks, at the time of writing, this meant applying the changes from the folders
+if you want to build the carbon targets, you will also need the latest
+carbonized version of MSL from Metrowerks, at the time of writing, this meant
+applying the changes from the folders
 CodeWarrior Pro 5:Pre-Release:Carbon & MacOSX Development:Carbonized MSL and
 CodeWarrior Pro 5:Pre-Release:Carbon & MacOSX Development:Carbonized Runtimes 
 (consult the file CodeWarrior Pro 5:Pre-Release:Carbon & MacOSX Development:Carbon & MacOSX README)
@@ -26,44 +28,58 @@ CodeWarrior Pro 5:Pre-Release:Carbon & MacOSX Development:Carbonized Runtimes
 setup.h
 -------
 
-in order to build wxMac with CodeWarrior, you must copy or alias the file include/wx/mac/setup0.h
-to include/wx/setup.h.
+in order to build wxMac with CodeWarrior, you must copy or alias the file
+include/wx/mac/setup0.h to include/wx/setup.h.
 
-this step is not needed when using the Apple Developer Tools under Mac OS X since the setup.h
-file is automatically generated during the configuration of wxMac.
+this step is not needed when using the Apple Developer Tools under Mac OS X
+since the setup.h file is automatically generated during the configuration.
 
 OpenGL
 ------
 
-In order to build opengl support with CodeWarrior, you must install the opengl libraries and headers
-from http://developer.apple.com/opengl/index.html
+In order to build opengl support with CodeWarrior, you must install the opengl
+libraries and headers from http://developer.apple.com/opengl/index.html
 
-If you want OpenGL support with CodeWarrior, set wxUSE_OPENGL in include/wx/setup.h to 1
+If you want OpenGL support with CodeWarrior, set wxUSE_OPENGL to 1 in
+include/wx/setup.h
 
-If you don't want OpenGl support, remove the file "glcanvas.cpp" from the project before
-compilation and leave the setting at 0
+If you don't want OpenGl support, remove the file "glcanvas.cpp" from the
+project before compilation and leave the setting at 0
 
-If you want OpenGL support with the Apple Developer Tools under Mac OS X, add --with-opengl to the
-arguments of configure when configuring wxMac.
+If you want OpenGL support with the Apple Developer Tools under Mac OS X, add
+--with-opengl to the arguments of configure when configuring wxMac.
 
 Project Files
 -------------
 
-There are always the makemac.mcp or *M5.mcp files for Pro 5.3 and the makemac6.mcp files for Pro 6
+The project files are stored as xml text files and converted to binary
+CodeWarrior projects in the distribution (see AppleScript Files below):
+  - *M5.xml -> *M5.mcp for CodeWarrior 5.3
+  - *M6.xml -> *M6.mcp for CodeWarrior 6
+  - *M7.xml -> *M7.mcp for CodeWarrior 7
 
 In order to build the library (and then the samples) you need to make the
 following projects (for 5.3)
-:src:wxWindowsM5.mcp
-:src:png:makemac.mcp
-:src:tif:makemac.mcp
-:src:jpeg:makemac.mcp
-:src:zlib:makemac.mcp
+:src:wxxindowsM5.mcp
+:src:png:pngM5.mcp
+:src:tiff:tiffM5.mcp
+:src:jpeg:jpegM5.mcp
+:src:zlib:zlibM5.mcp
+
+AppleScript Files
+-----------------
+
+Several AppleScript files are provided in the docs:mac directory (currently
+only for CodeWarrior 5.3 related projects):
+  - M5xml2mcp.applescript to convert xml files to CodeWarrior projects
+  - M5mcp2xml.applescript to convert CodeWarrior projects to xml files
+  - M5build.applescript to automatically build all samples/demos projects
 
 Apple Developers Tools
 ----------------------
 
-As in all Unix projects, you need to do something like this
-under MacOS 10.1 with the Apple Developers Tools installed.
+As in all Unix projects, you need to do something like this under MacOS 10.1
+with the Apple Developers Tools installed:
 
 1) cd into the source dir
 2) mkdir build
@@ -71,23 +87,23 @@ under MacOS 10.1 with the Apple Developers Tools installed.
 4) ../configure
 5) make
 
-If you want to install the library, you need to be able
-to log in as "root". For this, "root" has to be activated
-in the NetInfo utility - there you will also have to
-choose a password for the "root" user. Then
+If you want to install the library, you need to be able to log in as "root".
+For this, "root" has to be activated in the NetInfo utility - there you will
+also have to choose a password for the "root" user. Then
 
 6) su
 7) type <PASSWORD>
 8) make install
 9) exit
 
-Note: There are currently link problems (in some rare cases)
-with wxMAC and Apple's tools when compiling the library as
-a shared library (the default). You might want to type
+Note:
+You might want to configure a static library instead:
 
 4) ../configure --disable-shared
 
-to build a static library instead.
+or activate OpenGL:
+
+4) ../configure --with-opengl
 
 
 Problems with .xpm files
@@ -98,11 +114,12 @@ if you have downloaded all the files and get errors like :
 Error   : the file 'wx/generic/tip.xpm' cannot be opened
 tipdlg.cpp line 201   #include "wx/generic/tip.xpm"
 
-then your cvs has changed the type of the .xpm files to something other than text, in order to fix this
-either change the type by using a resource editor or drag the files from /include/wx/generic/..xpm on 
-the SetTypeFromExtension application that is included in this folder. This small applet itself queries
-the Internet Config, so you will have to associate the "xpm" extension with CodeWarrior before making
-use of this applet.
+then your cvs has changed the type of the .xpm files to something other than
+text, in order to fix this either change the type by using a resource editor
+or drag the files from /include/wx/generic/..xpm on the SetTypeFromExtension
+application that is included in this folder. This small applet itself queries
+the Internet Config, so you will have to associate the "xpm" extension with
+CodeWarrior before making use of this applet.
 
 Missing PLStringFuncsLib
 ------------------------
