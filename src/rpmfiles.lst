@@ -53,7 +53,6 @@
 /usr/include/wx/sckipc.h
 /usr/include/wx/sckstrm.h
 /usr/include/wx/serbase.h
-/usr/include/wx/setup.h
 /usr/include/wx/snglinst.h
 /usr/include/wx/socket.h
 /usr/include/wx/strconv.h

@@ -859,7 +859,6 @@ scrolbar.h	WXH
 scrolwin.h	WXH
 serbase.h	WXH	Base
 settings.h	WXH
-setup.h	WXH	Base
 sizer.h	WXH
 slider.h	WXH
 socket.h	WXH	Base
