@@ -1,0 +1,85 @@
+<?xml version="1.0"?>
+<!DOCTYPE gcapaper SYSTEM "gcapap-X.dtd" [
+<!ENTITY footprint SYSTEM "footprint.tif" NDATA tiff >
+<!ENTITY footprint SYSTEM "footprint.eps" NDATA eps >
+<!ENTITY shoes SYSTEM "shoes.tif" NDATA tiff >
+<!ENTITY super1 "&#90;">
+]>
+
+<gcapaper><front><title>Using SGML to make footprints in the sand
+</title><keyword>footprints</keyword><keyword>sand</keyword>
+<author><fname>Jane</fname><surname>Doe</surname>
+<jobtitle>Empress</jobtitle>
+<address><affil>Universe Corporation</affil>
+<aline>1 Main Street</aline>
+<city>Perfect City</city>
+<province>Dorado</province>
+<cntry>Neutral</cntry><postcode>999999</postcode>
+<phone>+55 555 555 5550</phone>
+<fax>+55 555 555 5555</fax>
+<email>jane@universe.com</email>
+<web>www.universe.com</web>
+</address>
+<bio><para>Jane Doe is the Empress of the Universe <bibref refloc="jd000"/>, a position to which she has always aspired.</para></bio>
+</author>
+<author><fname>Fred</fname><surname>Bloggs</surname>
+<jobtitle>Designer</jobtitle>
+<address><affil>Fred (The Shoe) Bloggs Ltd</affil>
+<aline>1 Shoe Lane</aline>
+<city>Perfect City</city>
+<province>Dorado</province>
+<cntry>Neutral</cntry><postcode>999999</postcode>
+<phone>+55 555 555 1122</phone>
+<fax>+55 555 555 1133</fax>
+<email>fred@shoebloggs.com</email>
+<web>www.shoebloggs.com</web></address>
+<bio><para>Fred has always wanted to create the perfect shoe for making footprints in the sand. Now with SGML and XML, he has been able to document his design.</para></bio>
+</author>
+<abstract>
+<para><keyword>ease</keyword><keyword>documentation</keyword>It's not easy being an Empress of the Universe (<a href="http://www.universe.com"/>), but with the right pair of shoes and the right documentation on how to make footprints in the sand of life, it's easier than it was. Since the introduction of <acronym.grp><acronym>SGML</acronym><expansion>Standard Generalized Markup Language</expansion></acronym.grp> and <acronym.grp><acronym>XML</acronym><expansion>Extensible Markup Language</expansion></acronym.grp> it is now possible to identify and manage the key bits of information on this process.</para>
+</abstract>
+</front>
+<body><section id="jd001"><title>Introduction</title>
+<para><keyword>documentation</keyword>Since its inception, the Universe has always had sand, now it has an Empress, a good shoe design, and <acronym>SGML</acronym> / <acronym>XML</acronym> documentation. The time is now ripe for making <highlight style="ital">footprints</highlight> in the sand.</para></section>
+<section id="jd002"><title>Footprints - truly a push technology</title><keyword>push</keyword>
+<para>One could safely say that making footprints is a push technology. This is even more true when the footprint maker is the Empress of the Universe. </para>
+<subsec1 id="jd003"><title>The sands of time</title><keyword>time</keyword>
+<para>The 1<super>st</super> think to remember about the Universe is the time/space continuum to which it conforms. This then confuses the sands of time to be something more like the sands of time/space continuum because if you wait on those sands long enough they may be somewhere else - not necessarily because of the time/space continuum but because the winds will <highlight style="ital">push</highlight> them down the beach.</para></subsec1>
+<subsec1 id="jd004"><title>Identifying the footprints</title>
+<para>In order to truly understand who has walked on the sands and left the footprints, it is important to identify the <keyword>characteristics</keyword>characteristics of the footprint. In the graphic <xref refloc="jd005" type="title"/>, we can see the footprints are large, well shaped, and evenly distributed from front to back and side to side.</para>
+<figure id="jd005"><title>Footprint in Sand</title><caption><para>Note the evenly distributed shape and indention</para></caption><graphic figname="footprint"/></figure>
+<para>This footprint begs the question, 'What kind of remarkable <keyword>shoe</keyword>shoe could make such a wonderful footprint?'</para>
+<table id="t1">
+<tgroup cols="2">
+<thead><row><entry>Shoe Type</entry><entry>Remarkability Rating</entry></row></thead>
+<tbody><row><entry>Acme Shoe</entry><entry>Unremarkable</entry></row>
+<row><entry>Budget Shoe</entry><entry>Not worth remarking on</entry></row>
+<row><entry>Super Duper Shoe</entry><entry>Absolutely Remarkable</entry></row></tbody>
+</tgroup></table></subsec1>
+<subsec1 id="jd006"><title>The Shoe What Made the Footprint</title>
+<para>The remarkable footprint is made by a combination of a terrific shoe worn on a fantastic foot propelled by a one-of-a-kind Empress. As can be seen in Figure <xref refloc="jd007" type="number"/>, the shoe is worthy of an Empress.</para>
+<figure id="jd007"><title>The Terrific Shoe</title><graphic figname="shoes"/></figure>
+<para>The design goals of the shoe were:
+<randlist style = "bulleted">
+<li><para>to minimize time-consuming manual tasks such as shoelace tying;</para></li>
+<li><para>to allow different decorations to be placed on the toes; and</para></li>
+<li><para>to enforce a good arch.</para></li></randlist></para></subsec1></section>
+<section id="jd008"><title>Documenting the Shoe</title>
+<para>Documenting the shoe was the best part for Fred Bloggs. His superior design could be captured for all time in a neutrally-encoded, content-specific manner. An excerpt from his DTD gives an insight into the type of information he captured in his documentation.</para>
+<code.block>&lt;!DOCTYPE shoedoc [
+&lt;!ELEMENT shoedoc - - (design, mfg, care, recycle) >
+&lt;!ATTLIST shoedoc designer CDATA #REQUIRED
+                  date     CDATA #REQUIRED>
+&lt;!ELEMENT design - - (specs, desc) >
+etc.
+</code.block>
+<para>An excerpt from the documentation also gives us insights.</para>
+<code.block><![CDATA[<design>
+<specs sizerange="4-12" widthrange="aa-d" color="navy black white red taupe">
+<para>The arch shall be high. The toe shall be narrow, but not pinch. The heel shall not come off in grates. Sand shall not get in.</para></specs>]]>
+</code.block>
+</section></body>
+<rear><acknowl>
+<para>The authors wish to express our thanks to the Universe for being there and to  gravity for holding the sand down long enough to see the footprints.</para></acknowl>
+<bibliog>
+<bibitem id="jd000"><bib>Barrett 00</bib><pub>Barrett, B., Being Empress Made Easy, Galaxy Division of Universal Publishers. 0000</pub></bibitem></bibliog></rear></gcapaper>
