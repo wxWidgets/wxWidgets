@@ -2663,7 +2663,7 @@ wxIcon wxResourceCreateIcon(const wxString& resource, wxResourceTable *table)
                 wxLogWarning(_("Icon resource specification %s not found."), (const wxChar*) resource);
                 break;
 #else
-                return wxIcon(name, bitmapType);
+                return wxIcon(name, (wxBitmapType) bitmapType);
 #endif
             }
         }
