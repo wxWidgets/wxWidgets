@@ -425,6 +425,9 @@ bool wxFrame::Create( wxWindow *parent,
     m_insertCallback = (wxInsertChildFunction) wxInsertChildInFrame;
 
     GtkWindowType win_type = GTK_WINDOW_TOPLEVEL;
+    
+    if (style & wxFRAME_TOOL_WINDOW)
+        win_type = GTK_WINDOW_POPUP;
 
     m_widget = gtk_window_new( win_type );
 
