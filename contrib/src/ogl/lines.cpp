@@ -2334,7 +2334,7 @@ wxRealPoint *wxLineShape::GetNextControlPoint(wxShape *nodeObject)
     return (wxRealPoint *)node->Data();
   }
   else
-    return FALSE;
+    return NULL;
 }
 
 /*

@@ -10,7 +10,7 @@
 WXDIR = $(WXWIN)
 
 TARGET=mmboard
-EXTRALIBS=$(WXDIR)\contrib\lib\mmedia.lib
+EXTRALIBS=$(WXDIR)\lib\mmedia.lib
 OBJECTS = $(TARGET).obj mmbman.obj
 
 !include $(WXDIR)\src\makeprog.b32
