@@ -28,6 +28,7 @@
 
 #include "wx/cmdline.h"
 #include "wx/xml/xml.h"
+#include "wx/xml/xmlio.h"
 #include "wx/ffile.h"
 
 /*
@@ -76,13 +77,15 @@ int XmlResApp::OnRun()
         { wxCMD_LINE_SWITCH, "u", "uncompressed",  "do not compress .xml files (C++ only)" },
         { wxCMD_LINE_OPTION, "n", "function",  "C++ function name (with -c) [InitXmlResource]" },
         { wxCMD_LINE_OPTION, "o", "output",  "output file [resource.rsc/cpp]" },
-        { wxCMD_LINE_OPTION, "h", "handlers",  "output list of neccessary handlers to this file" },
+        { wxCMD_LINE_OPTION, "l", "list-of-handlers",  "output list of neccessary handlers to this file" },
 
         { wxCMD_LINE_PARAM,  NULL, NULL, "input file",
             wxCMD_LINE_VAL_STRING, wxCMD_LINE_PARAM_MULTIPLE },
 
         { wxCMD_LINE_NONE }
     };
+
+    wxXmlDocument::AddHandler(new wxXmlIOHandlerBinZ);
 
     wxCmdLineParser parser(cmdLineDesc, argc, argv);
 
@@ -287,7 +290,7 @@ void " + parFuncname + "()\n\
     {\n\
         wxMemoryFSHandler::AddFile(\"xml_resource/dummy_file\", \"dummy one\");\n\
         wxFileSystem fsys;\n\
-        wxFSFile *f = fsys.OpenFile(\"xml_resource/dummy_file\");\n\
+        wxFSFile *f = fsys.OpenFile(\"memory:xml_resource/dummy_file\");\n\
         wxMemoryFSHandler::RemoveFile(\"xml_resource/dummy_file\");\n\
         if (f) delete f;\n\
         else wxFileSystem::AddHandler(new wxMemoryFSHandler);\n\
@@ -299,7 +302,7 @@ void " + parFuncname + "()\n\
         wxString s;
         s.Printf("    wxMemoryFSHandler::AddFile(\"xml_resource/" + flist[i] +
                  "\", xml_res_file_%i, xml_res_size_%i);\n"
-                 "    wxTheXmlResource->Read(\"xml_resource/" + flist[i] + 
+                 "    wxTheXmlResource->Load(\"memory:xml_resource/" + flist[i] + 
                  "\", wxXML_BINARY);\n", i, i);
         file.Write(s);
     }
