@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: wxWindows\n"
-"POT-Creation-Date: 2000-12-03 21:03-0800\n"
+"POT-Creation-Date: 2002-06-03 21:07+0200\n"
 "PO-Revision-Date: 2001-11-03 23:25Central Europe Standard Time\n"
 "Last-Translator: Vegh Janos <janos_vegh@usa.net>\n"
 "Language-Team: wxWindows translators <wx-translators@wxwindows.org>\n"
@@ -9,30 +9,20 @@ msgstr ""
 "Content-Type: text/plain; charset=iso-8859-2\n"
 "Content-Transfer-Encoding: 8-bit\n"
 
-#: ../src/generic/dirctrlg.cpp:1259
-#: ../src/generic/dirdlgg.cpp:550
-msgid "\n(Do you have the required permissions?)"
-msgstr "\n(Rendelkezik a szükséges jogosultsággal?)"
-
-#: ../src/generic/dirctrlg.cpp:1246
-#: ../src/generic/dirdlgg.cpp:537
-msgid "\ndoes not exist\nCreate it now?"
-msgstr "\nnem létezik\nLétrehozzam most?"
-
-#: ../src/common/log.cpp:240
+#: ../src/common/log.cpp:304
 #, c-format
 msgid " (error %ld: %s)"
 msgstr " (hiba %ld: %s)"
 
-#: ../src/common/docview.cpp:1206
+#: ../src/common/docview.cpp:1227
 msgid " - "
 msgstr " - "
 
-#: ../src/html/htmprint.cpp:500
+#: ../src/html/htmprint.cpp:505
 msgid " Preview"
 msgstr " Nyomtatási kép"
 
-#: ../src/generic/filedlgg.cpp:328
+#: ../src/generic/filedlgg.cpp:465
 msgid " bytes "
 msgstr " bájt(ok)"
 
@@ -56,194 +46,224 @@ msgstr "#15 Boriték, 5 x 11 1/2 hüvelyk"
 msgid "#9 Envelope, 3 7/8 x 8 7/8 in"
 msgstr "#10 Boriték, 3 7/8 x 8 7/8 hüvelyk"
 
-#: ../src/common/resourc2.cpp:265
-#: ../src/common/resourc2.cpp:1334
-#: ../src/common/resource.cpp:1778
-#: ../src/common/resource.cpp:1908
-#: ../src/common/resource.cpp:2989
+#: ../src/common/resourc2.cpp:265 ../src/common/resourc2.cpp:1326
+#: ../src/common/resource.cpp:1777 ../src/common/resource.cpp:1907
+#: ../src/common/resource.cpp:2983
 #, c-format
 msgid "#define %s must be an integer."
 msgstr "#define %s-nek egésznek kell lennie."
 
-#: ../src/html/helpfrm.cpp:750
-#: ../src/html/helpfrm.cpp:751
-#: ../src/html/helpfrm.cpp:1329
-#: ../src/html/helpfrm.cpp:1358
+#: ../src/html/helpfrm.cpp:772 ../src/html/helpfrm.cpp:773
+#: ../src/html/helpfrm.cpp:1376 ../src/html/helpfrm.cpp:1406
 #, c-format
 msgid "%i of %i"
 msgstr "%i. (össz %i)"
 
-#: ../src/common/cmdline.cpp:787
+#: ../src/common/cmdline.cpp:776
 #, c-format
 msgid "%s (or %s)"
 msgstr "%s (vagy %s)"
 
-#: ../src/generic/logg.cpp:258
+#: ../src/generic/logg.cpp:239
 #, c-format
 msgid "%s Error"
 msgstr "%s Hiba"
 
-#: ../src/generic/logg.cpp:266
+#: ../src/generic/logg.cpp:247
 #, c-format
 msgid "%s Information"
 msgstr "%s Információ"
 
-#: ../src/generic/logg.cpp:262
+#: ../src/generic/logg.cpp:243
 #, c-format
 msgid "%s Warning"
 msgstr "%s Figyelmeztetés"
 
-#: ../src/common/resourc2.cpp:709
-#: ../src/common/resource.cpp:2360
+#: ../src/common/resourc2.cpp:709 ../src/common/resource.cpp:2359
 #, c-format
 msgid "%s not a bitmap resource specification."
 msgstr "%s nem bitmap erõforrás specifikáció."
 
-#: ../src/common/resourc2.cpp:864
-#: ../src/common/resource.cpp:2515
+#: ../src/common/resourc2.cpp:860 ../src/common/resource.cpp:2509
 #, c-format
 msgid "%s not an icon resource specification."
 msgstr "%s nem ikon erõforrás specifikáció."
 
-#: ../src/common/resourc2.cpp:357
-#: ../src/common/resourc2.cpp:1430
-#: ../src/common/resource.cpp:1871
-#: ../src/common/resource.cpp:2000
-#: ../src/common/resource.cpp:3086
+#: ../src/common/resourc2.cpp:357 ../src/common/resourc2.cpp:1422
+#: ../src/common/resource.cpp:1870 ../src/common/resource.cpp:1999
+#: ../src/common/resource.cpp:3080
 #, c-format
 msgid "%s: ill-formed resource file syntax."
 msgstr "%s: nyelvtanilag hibás erõforrás fájl."
 
-#: ../src/generic/logg.cpp:492
-#: ../src/generic/tipdlg.cpp:170
+#: ../src/msw/mdi.cpp:189
+msgid "&Arrange Icons"
+msgstr ""
+
+#: ../src/generic/fdrepdlg.cpp:170 ../src/generic/wizard.cpp:260
+#, fuzzy
+msgid "&Cancel"
+msgstr "Mégsem"
+
+#: ../src/msw/mdi.cpp:185
+msgid "&Cascade"
+msgstr ""
+
+#: ../src/generic/logg.cpp:484 ../src/generic/tipdlg.cpp:171
 msgid "&Close"
 msgstr "&Bezár"
 
-#: ../src/generic/logg.cpp:704
+#: ../src/generic/logg.cpp:688
 msgid "&Details"
 msgstr "&Részletek"
 
-#: ../src/generic/wizard.cpp:284
+#: ../src/generic/fdrepdlg.cpp:168
+#, fuzzy
+msgid "&Find"
+msgstr "Keres"
+
+#: ../src/generic/wizard.cpp:402
 msgid "&Finish"
 msgstr "Be&fejez"
 
-#: ../src/generic/logg.cpp:493
+#: ../src/generic/wizard.cpp:249
+#, fuzzy
+msgid "&Help"
+msgstr "Súgó"
+
+#: ../src/generic/logg.cpp:485
 msgid "&Log"
 msgstr "&Napló"
 
-#: ../src/generic/wizard.cpp:189
-#: ../src/generic/wizard.cpp:286
+#: ../src/univ/themes/win32.cpp:4539
+msgid "&Move"
+msgstr ""
+
+#: ../src/msw/mdi.cpp:190
+#, fuzzy
+msgid "&Next"
+msgstr "&Következõ >"
+
+#: ../src/generic/wizard.cpp:257 ../src/generic/wizard.cpp:404
 msgid "&Next >"
 msgstr "&Következõ >"
 
-#: ../src/generic/tipdlg.cpp:175
+#: ../src/generic/tipdlg.cpp:176
 msgid "&Next Tip"
 msgstr "&Következõ ötlet"
 
-#: ../src/common/docview.cpp:1978
-#: ../src/common/docview.cpp:1989
+#: ../src/common/cmdproc.cpp:255 ../src/common/cmdproc.cpp:266
 msgid "&Redo"
 msgstr "&Újra"
 
-#: ../src/common/docview.cpp:1972
-#: ../src/common/docview.cpp:1999
+#: ../src/common/cmdproc.cpp:249 ../src/common/cmdproc.cpp:276
 msgid "&Redo "
 msgstr "&Újra"
 
-#: ../src/generic/logg.cpp:488
-#: ../src/generic/logg.cpp:789
+#: ../src/generic/fdrepdlg.cpp:174
+msgid "&Replace"
+msgstr ""
+
+#: ../src/univ/themes/win32.cpp:4538
+#, fuzzy
+msgid "&Restore"
+msgstr "&Újra"
+
+#: ../src/generic/logg.cpp:480 ../src/generic/logg.cpp:785
 msgid "&Save..."
 msgstr "&Mentés..."
 
-#: ../src/generic/tipdlg.cpp:172
+#: ../src/generic/tipdlg.cpp:173
 msgid "&Show tips at startup"
 msgstr "Mutass &ötleteket inditáskor"
 
-#: ../src/common/docview.cpp:1984
+#: ../src/univ/themes/win32.cpp:4541
+#, fuzzy
+msgid "&Size"
+msgstr "Méret"
+
+#: ../src/common/cmdproc.cpp:261
 msgid "&Undo"
 msgstr "&Visszavonás"
 
-#: ../src/common/docview.cpp:1959
+#: ../src/common/cmdproc.cpp:236
 msgid "&Undo "
 msgstr "&Visszavonás"
 
-#: ../src/msw/mdi.cpp:1280
-#: ../src/msw/mdi.cpp:1287
+#: ../src/msw/mdi.cpp:1317 ../src/msw/mdi.cpp:1324 ../src/msw/mdi.cpp:1349
 msgid "&Window"
 msgstr "&Ablak"
 
-#: ../src/common/config.cpp:396
+#: ../src/common/config.cpp:394 ../src/msw/regconf.cpp:264
 #, c-format
 msgid "'%s' has extra '..', ignored."
 msgstr "'%s' után felesleges '..'-t találtam, elhanyagoltam."
 
-#: ../src/common/valtext.cpp:140
+#: ../src/common/valtext.cpp:147 ../src/common/valtext.cpp:177
+#: ../src/common/valtext.cpp:183
 #, c-format
 msgid "'%s' is invalid"
 msgstr "'%s' érvénytelen"
 
-#: ../src/common/cmdline.cpp:709
+#: ../src/common/cmdline.cpp:698
 #, c-format
 msgid "'%s' is not a correct numeric value for option '%s'."
 msgstr "'%s' nem megfelelõ számérték a(z) '%s' beállításához."
 
-#: ../src/common/intl.cpp:395
+#: ../src/common/intl.cpp:401
 #, c-format
 msgid "'%s' is not a valid message catalog."
 msgstr "'%s' érvénytelen üzenet katalógus."
 
-#: ../src/common/textfile.cpp:254
-#, c-format
-msgid "'%s' is probably a binary file."
+#: ../src/common/textbuf.cpp:245
+#, fuzzy, c-format
+msgid "'%s' is probably a binary buffer."
 msgstr "'%s' valószínûleg bináris fájl."
 
-#: ../src/common/valtext.cpp:178
+#: ../src/common/valtext.cpp:172
 #, c-format
 msgid "'%s' should be numeric."
 msgstr "'%s' csak számérték lehet."
 
-#: ../src/common/valtext.cpp:160
+#: ../src/common/valtext.cpp:154
 #, c-format
 msgid "'%s' should only contain ASCII characters."
 msgstr "'%s' csak ASCII jeleket tartalmazhat."
 
-#: ../src/common/valtext.cpp:166
+#: ../src/common/valtext.cpp:160
 #, c-format
 msgid "'%s' should only contain alphabetic characters."
 msgstr "'%s' csak betûket tartalmazhat."
 
-#: ../src/common/valtext.cpp:172
+#: ../src/common/valtext.cpp:166
 #, c-format
 msgid "'%s' should only contain alphabetic or numeric characters."
 msgstr "'%s' csak betûket vagy számokat tartalmazhat."
 
-#: ../src/html/helpfrm.cpp:706
+#: ../src/html/helpfrm.cpp:709
 msgid "(Help)"
 msgstr "(Súgó)"
 
-#: ../src/html/helpfrm.cpp:289
-#: ../src/html/helpfrm.cpp:818
-#: ../src/html/helpfrm.cpp:1384
+#: ../src/html/helpfrm.cpp:310 ../src/html/helpfrm.cpp:840
+#: ../src/html/helpfrm.cpp:1433
 msgid "(bookmarks)"
 msgstr "(könyvjelzõk)"
 
-#: ../src/common/resourc2.cpp:297
-#: ../src/common/resourc2.cpp:1370
-#: ../src/common/resource.cpp:1810
-#: ../src/common/resource.cpp:1940
-#: ../src/common/resource.cpp:3025
-msgid ", expected static, #include or #define\nwhilst parsing resource."
-msgstr ", static, #include vagy #define\n kulcszót vártam az erõforrás értelmezésekor."
+#: ../src/common/resourc2.cpp:297 ../src/common/resourc2.cpp:1362
+#: ../src/common/resource.cpp:1809 ../src/common/resource.cpp:1939
+#: ../src/common/resource.cpp:3019
+msgid ""
+", expected static, #include or #define\n"
+"whilst parsing resource."
+msgstr ""
+", static, #include vagy #define\n"
+" kulcszót vártam az erõforrás értelmezésekor."
 
-#: ../src/generic/dirctrlg.cpp:600
-#: ../src/generic/dirdlgg.cpp:264
-#: ../src/generic/filedlgg.cpp:713
+#: ../src/generic/dirctrlg.cpp:698 ../src/generic/filedlgg.cpp:918
 msgid "."
 msgstr "."
 
-#: ../src/generic/dirctrlg.cpp:601
-#: ../src/generic/dirdlgg.cpp:265
-#: ../src/generic/filedlgg.cpp:714
+#: ../src/generic/dirctrlg.cpp:699 ../src/generic/filedlgg.cpp:919
 msgid ".."
 msgstr ".."
 
@@ -259,48 +279,69 @@ msgstr "11 x 17 hüvelyk"
 msgid "6 3/4 Envelope, 3 5/8 x 6 1/2 in"
 msgstr "6 3/4 Boríték, 3 5/8 x 6 1/2 hüvelyk"
 
-#: ../src/html/htmprint.cpp:278
+#: ../src/html/htmprint.cpp:282
 msgid ": file does not exist!"
 msgstr ": a file nem létezik!"
 
-#: ../src/common/fontmap.cpp:471
+#: ../src/common/fontmap.cpp:626
 msgid ": unknown charset"
 msgstr ": ismeretlen jelkészlet"
 
-#: ../src/common/fontmap.cpp:664
+#: ../src/common/fontmap.cpp:857
 msgid ": unknown encoding"
 msgstr ": ismeretlen kódolás"
 
-#: ../src/generic/wizard.cpp:186
+#: ../src/generic/wizard.cpp:254
 msgid "< &Back"
 msgstr "< &Vissza"
 
-#: ../src/generic/filedlgg.cpp:356
+#: ../src/generic/filedlgg.cpp:493
 msgid "<DIR>"
 msgstr "<DIR>"
 
-#: ../src/generic/filedlgg.cpp:323
+#: ../src/generic/filedlgg.cpp:460
 msgid "<DIR> "
 msgstr "<DIR> "
 
-#: ../src/generic/filedlgg.cpp:357
+#: ../src/generic/filedlgg.cpp:494
 msgid "<LINK>"
 msgstr "<LINK>"
 
-#: ../src/generic/filedlgg.cpp:324
+#: ../src/generic/filedlgg.cpp:461
 msgid "<LINK> "
 msgstr "<LINK> "
 
-#: ../src/html/helpfrm.cpp:967
-msgid "<html><body>Normal face<br>(and <u>underlined</u>. <i>Italic face.</i> <b>Bold face.</b> <b><i>Bold italic face.</i></b><br><font size=-2>font size -2</font><br><font size=-1>font size -1</font><br><font size=+0>font size +0</font><br><font size=+1>font size +1</font><br><font size=+2>font size +2</font><br><font size=+3>font size +3</font><br><font size=+4>font size +4</font><br><p><tt>Fixed size face.<br> <b>bold</b> <i>italic</i> <b><i>bold italic <u>underlined</u></i></b><br><font size=-2>font size -2</font><br><font size=-1>font size -1</font><br><font size=+0>font size +0</font><br><font size=+1>font size +1</font><br><font size=+2>font size +2</font><br><font size=+3>font size +3</font><br><font size=+4>font size +4</font></tt></body></html>"
-msgstr "<html><body>Normál<br>(and <u>Aláhúzott</u>. <i>Dõlt.</i> <b>Félkövér.</b> <b><i>Félkövér dõlt.</i></b><br><font size=-2>betû méret-2</font><br><font size=-1>betû méret -1</font><br><font size=+0>betû méret +0</font><br><font size=+1>betû méret +1</font><br><font size=+2>betû méret +2</font><br><font size=+3>betû méret +3</font><br><font size=+4>betû méret +4</font><br><p><tt>Rögzített méretû típus.<br> <b>félkövér</b> <i>dõlt</i> <b><i>félkövér dõlt <u>aláhúzott</u></i></b><br><font size=-2>betû méret -2</font><br><font size=-1>betû méret -1</font><br><font size=+0>betû méret +0</font><br><font size=+1>betû méret +1</font><br><font size=+2>betû méret +2</font><br><font size=+3>betû méret +3</font><br><font size=+4>betû méret +4</font></tt></body></html>"
+#: ../src/html/helpfrm.cpp:992
+msgid ""
+"<html><body>Normal face<br>(and <u>underlined</u>. <i>Italic face.</i> "
+"<b>Bold face.</b> <b><i>Bold italic face.</i></b><br><font size=-2>font size "
+"-2</font><br><font size=-1>font size -1</font><br><font size=+0>font size "
+"+0</font><br><font size=+1>font size +1</font><br><font size=+2>font size "
+"+2</font><br><font size=+3>font size +3</font><br><font size=+4>font size "
+"+4</font><br><p><tt>Fixed size face.<br> <b>bold</b> <i>italic</i> "
+"<b><i>bold italic <u>underlined</u></i></b><br><font size=-2>font size -2</"
+"font><br><font size=-1>font size -1</font><br><font size=+0>font size +0</"
+"font><br><font size=+1>font size +1</font><br><font size=+2>font size +2</"
+"font><br><font size=+3>font size +3</font><br><font size=+4>font size +4</"
+"font></tt></body></html>"
+msgstr ""
+"<html><body>Normál<br>(and <u>Aláhúzott</u>. <i>Dõlt.</i> <b>Félkövér.</b> "
+"<b><i>Félkövér dõlt.</i></b><br><font size=-2>betû méret-2</font><br><font "
+"size=-1>betû méret -1</font><br><font size=+0>betû méret +0</font><br><font "
+"size=+1>betû méret +1</font><br><font size=+2>betû méret +2</font><br><font "
+"size=+3>betû méret +3</font><br><font size=+4>betû méret +4</"
+"font><br><p><tt>Rögzített méretû típus.<br> <b>félkövér</b> <i>dõlt</i> "
+"<b><i>félkövér dõlt <u>aláhúzott</u></i></b><br><font size=-2>betû méret -2</"
+"font><br><font size=-1>betû méret -1</font><br><font size=+0>betû méret +0</"
+"font><br><font size=+1>betû méret +1</font><br><font size=+2>betû méret +2</"
+"font><br><font size=+3>betû méret +3</font><br><font size=+4>betû méret +4</"
+"font></tt></body></html>"
 
 #: ../src/common/paper.cpp:113
 msgid "A3 sheet, 297 x 420 mm"
 msgstr "A3 lap, 297 x 420 mm"
 
-#: ../src/common/paper.cpp:104
-#: ../src/generic/dcpsg.cpp:2543
+#: ../src/common/paper.cpp:104 ../src/generic/dcpsg.cpp:2545
 msgid "A4 sheet, 210 x 297 mm"
 msgstr "A4 lap, 210 x 297 mm"
 
@@ -312,41 +353,51 @@ msgstr "A4 kis lap, 210 x 297 mm"
 msgid "A5 sheet, 148 x 210 mm"
 msgstr "A5 lap, 148 x 210 mm"
 
-#: ../src/generic/fontdlgg.cpp:325
+#: ../src/generic/fontdlgg.cpp:83
 msgid "ABCDEFGabcdefg12345"
 msgstr "ABCDEFGabcdefg12345"
 
-#: ../src/html/helpfrm.cpp:283
+#: ../src/common/ftp.cpp:369
+msgid "ASCII"
+msgstr ""
+
+#: ../src/html/helpfrm.cpp:323
 msgid "Add current page to bookmarks"
 msgstr "Add hozzá ezt a lapot a könyvjelzõkhöz"
 
-#: ../src/generic/colrdlgg.cpp:269
+#: ../src/generic/colrdlgg.cpp:273
 msgid "Add to custom colours"
 msgstr "Add hozzá a felhasználói színekhez"
 
-#: ../src/html/helpctrl.cpp:84
+#: ../src/html/helpctrl.cpp:90
 #, c-format
 msgid "Adding book %s"
 msgstr "Add hozzá a %s könyvet"
 
-#: ../src/generic/prntdlgg.cpp:163
+#: ../src/generic/prntdlgg.cpp:162
 msgid "All"
 msgstr "Mindet"
 
-#: ../src/generic/filedlgg.cpp:825
+#: ../include/wx/defs.h:1732 ../src/generic/filedlgg.cpp:1041
 msgid "All files (*)|*"
 msgstr "Minden fájlt (*)|*"
 
-#: ../src/unix/dialup.cpp:359
+#: ../include/wx/defs.h:1729
+#, fuzzy
+msgid "All files (*.*)|*.*"
+msgstr "Minden fájlt (*)|*"
+
+#: ../src/unix/dialup.cpp:362
 msgid "Already dialling ISP."
 msgstr "Már tárcsázom az ISPt."
 
-#: ../src/generic/logg.cpp:1036
+#: ../src/generic/logg.cpp:1051
 #, c-format
 msgid "Append log to file '%s' (choosing [No] will overwrite it)?"
-msgstr "A naplót  a(z) '%s' file végéhez írjam? (Ha [Nem]-et választ, felülírom!)"
+msgstr ""
+"A naplót  a(z) '%s' file végéhez írjam? (Ha [Nem]-et választ, felülírom!)"
 
-#: ../src/common/fontmap.cpp:102
+#: ../src/common/fontmap.cpp:117
 msgid "Arabic (ISO-8859-6)"
 msgstr "Arab (ISO-8859-6)"
 
@@ -370,74 +421,59 @@ msgstr "B5 lap, 182 x 257 milliméter"
 msgid "B6 Envelope, 176 x 125 mm"
 msgstr "B6 Boriték, 176 x 125 mm"
 
-#: ../src/common/imagbmp.cpp:400
-msgid "BMP: Cannot deal with 4bit encoded yet."
-msgstr "BMP:  4bit kódolással még nem tudok dolgozni."
-
-#: ../src/common/imagbmp.cpp:266
-#: ../src/common/imagbmp.cpp:278
+#: ../src/common/imagbmp.cpp:467 ../src/common/imagbmp.cpp:483
 msgid "BMP: Couldn't allocate memory."
 msgstr "BMP: Nem sikerült memóriát foglalni."
 
-#: ../src/common/imagbmp.cpp:62
+#: ../src/common/imagbmp.cpp:86
 msgid "BMP: Couldn't save invalid image."
 msgstr "BMP: Nem tudtam elmenteni a hibás képet."
 
-#: ../src/common/imagbmp.cpp:154
+#: ../src/common/imagbmp.cpp:290
+#, fuzzy
+msgid "BMP: Couldn't write RGB color map."
+msgstr "BMP: Nem tudtam kiírni az adatokat."
+
+#: ../src/common/imagbmp.cpp:422
 msgid "BMP: Couldn't write data."
 msgstr "BMP: Nem tudtam kiírni az adatokat."
 
-#: ../src/common/imagbmp.cpp:131
-msgid "BMP: Couldn't write the file header."
+#: ../src/common/imagbmp.cpp:195
+#, fuzzy
+msgid "BMP: Couldn't write the file (Bitmap) header."
 msgstr "BMP: Nem tudtam kiírni a fájl fejet."
 
-#: ../src/common/imagbmp.cpp:257
-msgid "BMP: Encoding doesn't match bitdepth."
-msgstr "BMP: A kódolás nem felel meg a bitmélységnek."
+#: ../src/common/imagbmp.cpp:216
+#, fuzzy
+msgid "BMP: Couldn't write the file (BitmapInfo) header."
+msgstr "BMP: Nem tudtam kiírni a fájl fejet."
 
-#: ../src/common/imagbmp.cpp:220
-msgid "BMP: Image height > 32767 pixels for file."
-msgstr "BMP: A képmagasság a fájl-ban  > 32767 pixel."
+#: ../src/common/imagbmp.cpp:120
+msgid "BMP: wxImage doesn't have own wxPalette."
+msgstr ""
 
-#: ../src/common/imagbmp.cpp:214
-msgid "BMP: Image width > 32767 pixels for file."
-msgstr "BMP: A képszélesség a fájl-ban  > 32767 pixel."
-
-#: ../src/common/imagbmp.cpp:234
-msgid "BMP: Unknown bitdepth in file."
-msgstr "BMP: Ismeretlen bitmélység a fájl-ban."
-
-#: ../src/common/imagbmp.cpp:243
-msgid "BMP: Unknown encoding in file."
-msgstr "BMP: Ismeretlen kódolás a fájl-ban."
-
-#: ../src/generic/helpwxht.cpp:157
-msgid "Back"
-msgstr "Vissza"
-
-#: ../src/common/dlgcmn.cpp:135
+#: ../src/common/dlgcmn.cpp:170
 msgid "Backward"
 msgstr "Hátra"
 
-#: ../src/common/fontmap.cpp:109
+#: ../src/common/fontmap.cpp:124
 msgid "Baltic (ISO-8859-13)"
 msgstr "Balti (ISO-8859-13)"
 
-#: ../src/common/fontmap.cpp:100
+#: ../src/common/fontmap.cpp:115
 msgid "Baltic (old) (ISO-8859-4)"
 msgstr "Balti (régi) (ISO-8859-4)"
 
-#: ../src/common/resourc2.cpp:844
-#: ../src/common/resource.cpp:2495
+#: ../src/common/resourc2.cpp:840 ../src/common/resource.cpp:2489
 #, c-format
 msgid "Bitmap resource specification %s not found."
 msgstr "Nem találom a(z) %s bittérkép leírást."
 
-#: ../src/generic/fontdlgg.cpp:217
+#: ../src/generic/fontdlgg.cpp:234
 msgid "Bold"
 msgstr "Félkövér"
 
-#: ../src/generic/prntdlgg.cpp:662
+#: ../src/generic/prntdlgg.cpp:659
 msgid "Bottom margin (mm):"
 msgstr "Alsó margó (mm):"
 
@@ -445,7 +481,7 @@ msgstr "Alsó margó (mm):"
 msgid "C sheet, 17 x 22 in"
 msgstr "C lap,  17 x 22 hüvelyk"
 
-#: ../src/generic/logg.cpp:490
+#: ../src/generic/logg.cpp:482
 msgid "C&lear"
 msgstr "Tör&lés"
 
@@ -469,449 +505,509 @@ msgstr "C6 Boríték, 114 x 162 mm"
 msgid "C65 Envelope, 114 x 229 mm"
 msgstr "C65 Boríték, 114 x 229 mm"
 
-#: ../src/msw/thread.cpp:222
-msgid "Can not create event object."
-msgstr "Nem tudom létrehozni az esemény objektumot."
-
-#: ../src/msw/thread.cpp:124
+#: ../src/msw/thread.cpp:145
 msgid "Can not create mutex"
 msgstr "Nem tudom létrehozni a mutexet"
 
-#: ../src/common/filefn.cpp:1310
-#: ../src/msw/dir.cpp:294
-#: ../src/unix/dir.cpp:214
+#: ../src/common/filefn.cpp:1334
+#, fuzzy, c-format
+msgid "Can not enumerate files '%s'"
+msgstr "Nem tudom megszámolni a(z) '%s' könyvtárban a fájlokat"
+
+#: ../src/msw/dir.cpp:296 ../src/unix/dir.cpp:224
 #, c-format
 msgid "Can not enumerate files in directory '%s'"
 msgstr "Nem tudom megszámolni a(z) '%s' könyvtárban a fájlokat"
 
-#: ../src/mac/thread.cpp:439
-#: ../src/msw/thread.cpp:552
+#: ../src/mac/thread.cpp:455 ../src/msw/thread.cpp:761
 #, c-format
 msgid "Can not resume thread %x"
 msgstr "Nem tudom folytatni a(z) %x szálat"
 
-#: ../src/msw/thread.cpp:433
+#: ../src/msw/thread.cpp:635
 msgid "Can not start thread: error writing TLS."
 msgstr "Nem tudom elindítani a szálat: hiba a TLS írásakor."
 
-#: ../src/mac/thread.cpp:415
-#: ../src/msw/thread.cpp:537
+#: ../src/mac/thread.cpp:431 ../src/msw/thread.cpp:746
 #, c-format
 msgid "Can not suspend thread %x"
 msgstr "Nem tudom felfüggeszteni a(z) %x szálat"
 
-#: ../src/msw/thread.cpp:871
+#: ../src/msw/thread.cpp:1085
 msgid "Can not wait for thread termination"
 msgstr "Nem tudom megvárni a szál befejezõdését"
 
-#: ../src/common/docview.cpp:1961
+#: ../src/common/cmdproc.cpp:238
 msgid "Can't &Undo "
 msgstr "Nem lehet &Visszavonni"
 
-#: ../src/common/image.cpp:1030
+#: ../src/common/image.cpp:1289
 #, c-format
 msgid "Can't check image format of file '%s': file does not exist."
-msgstr "Nem tudom megvizsgálni a(z) '%s' kép fájl formátumát: nincs ilyen fájl."
+msgstr ""
+"Nem tudom megvizsgálni a(z) '%s' kép fájl formátumát: nincs ilyen fájl."
 
-#: ../src/msw/registry.cpp:412
+#: ../src/msw/registry.cpp:421
 #, c-format
 msgid "Can't close registry key '%s'"
 msgstr "Nem tudom lezárni a(z) '%s' registry kulcsot"
 
-#: ../src/msw/registry.cpp:488
+#: ../src/msw/registry.cpp:493
 #, c-format
 msgid "Can't copy values of unsupported type %d."
 msgstr "Nem tudom a nem támogatott %d típusú értékeket lemásolni."
 
-#: ../src/msw/listctrl.cpp:217
-msgid "Can't create list control window, check that comctl32.dll is installed."
-msgstr "Nem tudom létrehozni a lista vezérlõ ablakot, ellenõrizze, hogy a comctl32.dll installálva van-e."
+#: ../src/msw/toplevel.cpp:305
+msgid "Can't create dialog using memory template"
+msgstr ""
 
-#: ../src/msw/registry.cpp:395
+#: ../src/os2/toplevel.cpp:266
+#, fuzzy, c-format
+msgid "Can't create dialog using template '%ul'"
+msgstr "nem tudom létrehozni a(z) '%s' fájl-t"
+
+#: ../src/msw/listctrl.cpp:318
+msgid "Can't create list control window, check that comctl32.dll is installed."
+msgstr ""
+"Nem tudom létrehozni a lista vezérlõ ablakot, ellenõrizze, hogy a comctl32."
+"dll installálva van-e."
+
+#: ../src/msw/registry.cpp:402
 #, c-format
 msgid "Can't create registry key '%s'"
 msgstr "Nem tudom létrehozni a '%s' registry kulcsot"
 
-#: ../src/msw/utilsexc.cpp:441
+#: ../src/msw/utilsexc.cpp:485
 msgid "Can't create the inter-process read pipe"
 msgstr "Nem tudom létrehozni a processek közötti csövet olvasásra"
 
-#: ../src/msw/utilsexc.cpp:453
+#: ../src/msw/utilsexc.cpp:498
 msgid "Can't create the inter-process write pipe"
 msgstr "Nem tudom létrehozni a processek közötti csövet írásra"
 
-#: ../src/mac/thread.cpp:394
-#: ../src/msw/thread.cpp:519
+#: ../src/mac/thread.cpp:410 ../src/msw/thread.cpp:728
 msgid "Can't create thread"
 msgstr "Nem tudom létrehozni a szálat"
 
-#: ../src/msw/window.cpp:2486
-#, c-format
-msgid "Can't create window of class %s!\nPossible Windows 3.x compatibility problem?"
-msgstr "Nem tudom létrehozni a(z) %s osztályú ablakot!\n Windows 3.x kompatibilitás probléma lehet?"
+#: ../src/msw/window.cpp:2966
+#, fuzzy, c-format
+msgid "Can't create window of class %s"
+msgstr "nem tudom létrehozni a(z) '%s' fájl-t"
 
-#: ../src/msw/registry.cpp:656
+#: ../src/msw/registry.cpp:661
 #, c-format
 msgid "Can't delete key '%s'"
 msgstr "Nem tudom törölni a(z) '%s' kulcsot"
 
-#: ../src/msw/iniconf.cpp:476
+#: ../src/msw/iniconf.cpp:445
 #, c-format
 msgid "Can't delete the INI file '%s'"
 msgstr "Nem tudom törölni a '%s' INI fájt"
 
-#: ../src/msw/registry.cpp:681
+#: ../src/msw/registry.cpp:686
 #, c-format
 msgid "Can't delete value '%s' from key '%s'"
 msgstr "Nem tudom törölni a '%s' értéket a '%s' kulcsból"
 
-#: ../src/msw/registry.cpp:692
+#: ../src/msw/registry.cpp:697
 #, c-format
 msgid "Can't delete value of key '%s'"
 msgstr "Nem tudom törölni a(z) '%s' kulcs értékét"
 
-#: ../src/msw/registry.cpp:1020
+#: ../src/msw/registry.cpp:1025
 #, c-format
 msgid "Can't enumerate subkeys of key '%s'"
 msgstr "Nem tudtam megszámlálni a(z) '%s' kulcs alkulcsait"
 
-#: ../src/msw/registry.cpp:975
+#: ../src/msw/registry.cpp:980
 #, c-format
 msgid "Can't enumerate values of key '%s'"
 msgstr "Nem tudtam megszámlálni a(z) '%s' kulcs értékeit"
 
-#: ../src/common/ffile.cpp:234
+#: ../src/common/ffile.cpp:226
 #, c-format
 msgid "Can't find current position in file '%s'"
 msgstr "Nem találom a(z) '%s' fájlban a jelenlegi pozíciót"
 
-#: ../src/msw/window.cpp:2403
-#, c-format
-msgid "Can't find dialog template '%s'!\nCheck resource include path for finding wx.rc."
-msgstr "Nem találom a(z) '%s' párbeszéd template-et!\nEllenõrizze a wx.rc erõforrás elérési útvonalát."
-
-#: ../src/common/object.cpp:356
-#: ../src/common/object.cpp:381
-#, c-format
-msgid "Can't find the serialization object '%s' for the object '%s'."
-msgstr "Nem találom a soros ki-bemeneti '%s' objektumot a(z) '%s' objektumhoz."
-
-#: ../src/msw/registry.cpp:344
+#: ../src/msw/registry.cpp:351
 #, c-format
 msgid "Can't get info about registry key '%s'"
 msgstr "Nincs információm a '%s' registry kulcsról"
 
-#: ../src/common/image.cpp:730
-#: ../src/common/image.cpp:750
+#: ../src/common/image.cpp:913 ../src/common/image.cpp:933
 #, c-format
 msgid "Can't load image from file '%s': file does not exist."
 msgstr "Nem tudom betölteni a képet a(z) '%s' fájlból: nincs ilyen fájl."
-
-#: ../src/common/object.cpp:349
-msgid "Can't load wxSerial dynamic library."
-msgstr "Nem tudom betölteni a  wxSerial dinamikus könyvtárat."
 
 #: ../src/msw/dib.cpp:434
 #, c-format
 msgid "Can't open file '%s'"
 msgstr "Nem tudom megnyitni a(z) '%s' fájlt"
 
-#: ../src/msw/registry.cpp:370
+#: ../src/msw/registry.cpp:377
 #, c-format
 msgid "Can't open registry key '%s'"
 msgstr "Nem tudom megnyitni a(z) '%s' registry kulcsot"
 
-#: ../src/msw/registry.cpp:899
+#: ../src/msw/registry.cpp:904
 #, c-format
 msgid "Can't read value of '%s'"
 msgstr "Nem tudom olvasni a(z) '%s' értékét"
 
-#: ../src/msw/registry.cpp:772
-#: ../src/msw/registry.cpp:811
+#: ../src/msw/registry.cpp:777 ../src/msw/registry.cpp:816
 #, c-format
 msgid "Can't read value of key '%s'"
 msgstr "Nem tudom olvasni a(z) '%s' kulcs értékét"
 
-#: ../src/generic/logg.cpp:550
-#: ../src/generic/logg.cpp:947
+#: ../src/common/image.cpp:955
+#, fuzzy, c-format
+msgid "Can't save image to file '%s': unknown extension."
+msgstr "Nem tudom betölteni a képet a(z) '%s' fájlból: nincs ilyen fájl."
+
+#: ../src/generic/logg.cpp:544 ../src/generic/logg.cpp:952
 msgid "Can't save log contents to file."
 msgstr "Nem tudom a napló tartalmát fájlba menteni."
 
-#: ../src/msw/thread.cpp:485
+#: ../src/msw/thread.cpp:687
 msgid "Can't set thread priority"
 msgstr "Nem tudom a szál prioritását beállítani"
 
-#: ../src/msw/registry.cpp:797
-#: ../src/msw/registry.cpp:923
+#: ../src/msw/registry.cpp:802 ../src/msw/registry.cpp:928
 #, c-format
 msgid "Can't set value of '%s'"
 msgstr "Nem tudom a(z) '%s' értéket beállítani"
 
-#: ../src/common/dlgcmn.cpp:148
-#: ../src/common/prntbase.cpp:109
-#: ../src/generic/dcpsg.cpp:2267
-#: ../src/generic/dirctrlg.cpp:1205
-#: ../src/generic/dirdlgg.cpp:424
-#: ../src/generic/filedlgg.cpp:916
-#: ../src/generic/fontdlgg.cpp:257
-#: ../src/generic/prntdlgg.cpp:468
-#: ../src/generic/progdlgg.cpp:182
-#: ../src/generic/proplist.cpp:523
-#: ../src/generic/wizard.cpp:192
-#: ../src/gtk/filedlg.cpp:173
-#: ../src/gtk/fontdlg.cpp:173
-#: ../src/html/helpfrm.cpp:949
+#: ../src/common/dlgcmn.cpp:183 ../src/generic/dcpsg.cpp:2269
+#: ../src/generic/dirdlgg.cpp:153 ../src/generic/filedlgg.cpp:1155
+#: ../src/generic/filedlgg.cpp:1174 ../src/generic/fontdlgg.cpp:257
+#: ../src/generic/prntdlgg.cpp:465 ../src/generic/progdlgg.cpp:211
+#: ../src/generic/proplist.cpp:511 ../src/gtk/filedlg.cpp:173
+#: ../src/gtk/fontdlg.cpp:141 ../src/html/helpfrm.cpp:974
 #: ../src/motif/msgdlg.cpp:180
 msgid "Cancel"
 msgstr "Mégsem"
 
-#: ../src/msw/dialup.cpp:518
+#: ../contrib/src/xrc/xmlres.cpp:866 ../contrib/src/xrc/xmlres.cpp:907
+msgid "Cannot convert dialog units: dialog unknown."
+msgstr ""
+
+#: ../src/common/strconv.cpp:900
+#, c-format
+msgid "Cannot convert from encoding '%s'!"
+msgstr ""
+
+#: ../src/msw/dialup.cpp:502
 #, c-format
 msgid "Cannot find active dialup connection: %s"
 msgstr "Nem találom a(z) %s aktív telefonos kapcsolatot"
 
-#: ../src/msw/dialup.cpp:832
+#: ../contrib/src/xrc/xmlres.cpp:223
+#, fuzzy, c-format
+msgid "Cannot find container for unknown control '%s'."
+msgstr "Nem találom a(z) %s aktív telefonos kapcsolatot"
+
+#: ../contrib/src/xrc/xmlres.cpp:921
+#, fuzzy, c-format
+msgid "Cannot find font node '%s'."
+msgstr "Nem tudom megnyitni a(z) '%s' URL-t"
+
+#: ../src/msw/dialup.cpp:816
 msgid "Cannot find the location of address book file"
 msgstr "Nem találom a telefonkönyv fájl helyét"
 
-#: ../src/unix/threadpsx.cpp:954
+#: ../src/unix/threadpsx.cpp:1200
 #, c-format
 msgid "Cannot get priority range for scheduling policy %d."
 msgstr "Nincs prioritási tartománya a(z) %d ütemezési elõíráshoz."
 
-#: ../src/unix/utilsunx.cpp:721
+#: ../src/unix/utilsunx.cpp:897
 msgid "Cannot get the hostname"
 msgstr "Nem ismerem a gazdagép nevét"
 
-#: ../src/unix/utilsunx.cpp:757
+#: ../src/unix/utilsunx.cpp:933
 msgid "Cannot get the official hostname"
 msgstr "Nem ismerem a gazdagép hivatalos nevét"
 
-#: ../src/msw/dialup.cpp:925
+#: ../src/msw/dialup.cpp:910
 msgid "Cannot hang up - no active dialup connection."
 msgstr "Nem tudom letenni - nincs aktív telefonkapcsolat."
 
-#: ../src/msw/app.cpp:252
+#: ../src/msw/app.cpp:248
 msgid "Cannot initialize OLE"
 msgstr "Nem tudom inicializálni az OLEt"
 
-#: ../src/html/htmlfilt.cpp:146
+#: ../src/mgl/window.cpp:546
+#, fuzzy
+msgid "Cannot initialize display."
+msgstr "Nem tudom inicializálni az OLEt"
+
+#: ../src/msw/volume.cpp:627
+#, fuzzy, c-format
+msgid "Cannot load icon from '%s'."
+msgstr "Nem tudom megnyitni a(z) '%s' URL-t"
+
+#: ../contrib/src/xrc/xmlres.cpp:336
+#, fuzzy, c-format
+msgid "Cannot load resources from file '%s'."
+msgstr "Nem találom az erõforrás %s beágyazott fájlját."
+
+#: ../src/html/htmlfilt.cpp:171
 #, c-format
 msgid "Cannot open HTML document: %s"
 msgstr "Nem tudom megnyitni a(z) %s HTML dokumentumot"
 
-#: ../src/html/helpdata.cpp:673
+#: ../src/html/helpdata.cpp:579
 #, c-format
 msgid "Cannot open HTML help book: %s"
 msgstr "Nem tudom megnyitni a(z) %s súgó könyvet"
 
-#: ../src/generic/helpext.cpp:96
+#: ../src/generic/helpext.cpp:101
 #, c-format
 msgid "Cannot open URL '%s'"
 msgstr "Nem tudom megnyitni a(z) '%s' URL-t"
 
-#: ../src/html/helpdata.cpp:363
+#: ../src/html/helpdata.cpp:275
 #, c-format
 msgid "Cannot open contents file: %s"
 msgstr "Nem tudom megnyitni a(z) %s tartalom fájlt"
 
-#: ../src/generic/dcpsg.cpp:1596
+#: ../contrib/src/xrc/xmlres.cpp:310
+#, fuzzy, c-format
+msgid "Cannot open file '%s'."
+msgstr "Nem tudom megnyitni a(z) '%s' fájlt"
+
+#: ../src/generic/dcpsg.cpp:1584
 msgid "Cannot open file for PostScript printing!"
 msgstr "Nem tudom a fájlt PostScript nyomtatásra megnyitni!"
 
-#: ../src/html/helpdata.cpp:379
+#: ../src/html/helpdata.cpp:288
 #, c-format
 msgid "Cannot open index file: %s"
 msgstr "Nem tudom a(z) %s index fájlt megnyitni"
 
-#: ../src/html/helpfrm.cpp:1222
+#: ../contrib/src/xrc/xmlres.cpp:854
+#, fuzzy, c-format
+msgid "Cannot parse coordinates from '%s'."
+msgstr "Nem tudom megnyitni a(z) %s tartalom fájlt"
+
+#: ../contrib/src/xrc/xmlres.cpp:895
+#, fuzzy, c-format
+msgid "Cannot parse dimension from '%s'."
+msgstr "Nem tudom megszámolni a(z) '%s' könyvtárban a fájlokat"
+
+#: ../src/html/helpfrm.cpp:1265
 msgid "Cannot print empty page."
 msgstr "Nem tudok üres oldalt nyomtatni."
 
-#: ../src/unix/threadpsx.cpp:935
+#: ../src/msw/volume.cpp:188 ../src/msw/volume.cpp:519
+#, fuzzy, c-format
+msgid "Cannot read typename from '%s'!"
+msgstr "Nem tudom olvasni a(z) '%s' értékét"
+
+#: ../src/unix/threadpsx.cpp:1181
 msgid "Cannot retrieve thread scheduling policy."
 msgstr "Nem találom a szál ütemezés elõírásait."
 
-#: ../src/unix/threadpsx.cpp:588
+#: ../src/unix/threadpsx.cpp:806
 msgid "Cannot start thread: error writing TLS"
 msgstr "Nem tudom elindítani a szálat: hiba a TLS írásakor"
 
-#: ../src/html/helpfrm.cpp:413
+#: ../src/html/helpfrm.cpp:406
 msgid "Case sensitive"
 msgstr "Kis/nagybetûk különbözõek"
 
-#: ../src/common/fontmap.cpp:110
+#: ../src/common/fontmap.cpp:125
 msgid "Celtic (ISO-8859-14)"
 msgstr "Kelta (ISO-8859-14)"
 
-#: ../src/common/fontmap.cpp:98
-msgid "Central European (ISO-8859-2/Latin 2)"
+#: ../src/common/fontmap.cpp:113
+#, fuzzy
+msgid "Central European (ISO-8859-2)"
 msgstr "Közép-európai (ISO-8859-2/Latin 2)"
 
-#: ../src/msw/dialup.cpp:767
+#: ../src/msw/dialup.cpp:751
 msgid "Choose ISP to dial"
 msgstr "Válassza ki a tárcsázandó ISPt"
 
-#: ../src/gtk/fontdlg.cpp:154
+#: ../src/gtk/fontdlg.cpp:122
 msgid "Choose font"
 msgstr "Válasszon betûtípust"
 
-#: ../src/generic/logg.cpp:490
+#: ../src/msw/glcanvas.cpp:428
+msgid "ChoosePixelFormat failed."
+msgstr ""
+
+#: ../src/generic/logg.cpp:482
 msgid "Clear the log contents"
 msgstr "A napló fájl törlése"
 
-#: ../src/common/prntbase.cpp:359
-#: ../src/generic/progdlgg.cpp:310
-#: ../src/generic/proplist.cpp:518
+#: ../src/common/prntbase.cpp:364 ../src/generic/progdlgg.cpp:356
+#: ../src/generic/proplist.cpp:506
 msgid "Close"
 msgstr "Bezárás"
 
-#: ../src/generic/logg.cpp:492
+#: ../src/univ/themes/win32.cpp:4547
+msgid "Close\tAlt-F4"
+msgstr ""
+
+#: ../src/generic/logg.cpp:484
 msgid "Close this window"
 msgstr "Zárja be ezt az ablakot"
 
-#: ../src/generic/dirctrlg.cpp:452
+#: ../src/generic/dirctrlg.cpp:547
 msgid "Computer"
 msgstr "Számítógép"
 
-#: ../src/common/fileconf.cpp:758
+#: ../src/common/fileconf.cpp:868
 #, c-format
 msgid "Config entry name cannot start with '%c'."
 msgstr "Konfigurációs bejegyzés nem kezdõdhet '%c'-vel."
 
-#: ../src/generic/filedlgg.cpp:1077
-#: ../src/gtk/filedlg.cpp:72
+#: ../src/generic/filedlgg.cpp:1338 ../src/gtk/filedlg.cpp:72
 msgid "Confirm"
 msgstr "Megerõsítés"
 
-#: ../src/html/htmlwin.cpp:173
+#: ../src/msw/mimetype.cpp:684
+msgid "Confirm registry update"
+msgstr ""
+
+#: ../src/html/htmlwin.cpp:262
 msgid "Connecting..."
 msgstr "Kapcsolódás..."
 
-#: ../src/generic/helpxlp.cpp:240
-#, c-format
-msgid "Connection to wxHelp timed out in %d seconds"
-msgstr "A wxHelp-pel nem jött létre kapcsolat %d másodperc alatt"
-
-#: ../src/generic/helpwxht.cpp:159
-#: ../src/html/helpfrm.cpp:316
-#: ../src/html/helpfrm.cpp:325
+#: ../src/html/helpfrm.cpp:346
 msgid "Contents"
 msgstr "Tartalom"
 
-#: ../src/generic/prntdlgg.cpp:196
+#: ../src/common/strconv.cpp:579
+#, c-format
+msgid "Convertion to charset '%s' doesn't work."
+msgstr ""
+
+#: ../src/generic/prntdlgg.cpp:195
 msgid "Copies:"
 msgstr "Másolat(ok):"
 
-#: ../src/common/resourc2.cpp:287
-#: ../src/common/resource.cpp:1800
-#: ../src/common/resource.cpp:1930
+#: ../src/common/resourc2.cpp:287 ../src/common/resource.cpp:1799
+#: ../src/common/resource.cpp:1929
 #, c-format
 msgid "Could not find resource include file %s."
 msgstr "Nem találom az erõforrás %s beágyazott fájlját."
 
-#: ../src/generic/tabg.cpp:1042
+#: ../src/generic/tabg.cpp:1044
 msgid "Could not find tab for id"
 msgstr "Nem találok lapválasztót az azonosítóhoz"
 
-#: ../src/msw/textctrl.cpp:1249
+#: ../src/msw/textctrl.cpp:1799
 #, c-format
 msgid "Could not load Rich Edit DLL '%s'"
 msgstr "Nem tudom betölteni a(z) '%s' Rich Edit DLL-t"
 
-#: ../src/common/resource.cpp:796
+#: ../src/common/resource.cpp:795
 #, c-format
-msgid "Could not resolve control class or id '%s'. Use (non-zero) integer instead\n or provide #define (see manual for caveats)"
-msgstr "Nem tudom feloldani a(z) '%s' vezérlõ osztályt vagy azonosítót. Használjon (nem-nulla) egészet helyette\nvagy adja meg #define után (az okokról lásd a kézikönyvet)"
+msgid ""
+"Could not resolve control class or id '%s'. Use (non-zero) integer instead\n"
+" or provide #define (see manual for caveats)"
+msgstr ""
+"Nem tudom feloldani a(z) '%s' vezérlõ osztályt vagy azonosítót. Használjon "
+"(nem-nulla) egészet helyette\n"
+"vagy adja meg #define után (az okokról lásd a kézikönyvet)"
 
-#: ../src/common/resource.cpp:1245
+#: ../src/common/resource.cpp:1244
 #, c-format
-msgid "Could not resolve menu id '%s'. Use (non-zero) integer instead\nor provide #define (see manual for caveats)"
-msgstr "Nem tudom feloldani a(z) '%s' menü azonosítót. Használjon (nem-nulla) egészet helyette\nvagy adja meg #define után (az okokról lásd a kézikönyvet)"
+msgid ""
+"Could not resolve menu id '%s'. Use (non-zero) integer instead\n"
+"or provide #define (see manual for caveats)"
+msgstr ""
+"Nem tudom feloldani a(z) '%s' menü azonosítót. Használjon (nem-nulla) "
+"egészet helyette\n"
+"vagy adja meg #define után (az okokról lásd a kézikönyvet)"
 
-#: ../src/common/prntbase.cpp:711
+#: ../src/common/prntbase.cpp:720
 msgid "Could not start document preview."
 msgstr "Nem tudom a dokument megtekintését kezdeményezni."
 
-#: ../src/generic/printps.cpp:197
-#: ../src/msw/printwin.cpp:252
+#: ../src/generic/printps.cpp:197 ../src/msw/printwin.cpp:252
 msgid "Could not start printing."
 msgstr "Nem tudom elindítani a nyomtatást."
 
-#: ../src/common/wincmn.cpp:800
+#: ../src/common/wincmn.cpp:1124
 msgid "Could not transfer data to window"
 msgstr "Nem tudtam adatot átvinni az ablakba"
 
-#: ../src/msw/thread.cpp:166
+#: ../src/msw/thread.cpp:187
 msgid "Couldn't acquire a mutex lock"
 msgstr "Nem kapok mutex lezárást"
 
-#: ../src/msw/dragimag.cpp:142
-#: ../src/msw/dragimag.cpp:179
-#: ../src/msw/imaglist.cpp:152
-#: ../src/msw/imaglist.cpp:174
+#: ../src/msw/dragimag.cpp:148 ../src/msw/dragimag.cpp:184
+#: ../src/msw/imaglist.cpp:152 ../src/msw/imaglist.cpp:174
 #: ../src/msw/imaglist.cpp:187
 msgid "Couldn't add an image to the image list."
 msgstr "Nem tudok egy képet a képek listájához hozzáadni."
 
-#: ../src/msw/timer.cpp:96
+#: ../src/msw/timer.cpp:103
 msgid "Couldn't create a timer"
 msgstr "Nem tudtam idõzítõt létrehozni"
 
-#: ../src/common/dynlib.cpp:305
+#: ../src/mgl/cursor.cpp:135 ../src/mgl/cursor.cpp:166
+#, fuzzy
+msgid "Couldn't create cursor."
+msgstr "Nem tudtam idõzítõt létrehozni"
+
+#: ../src/common/dynlib.cpp:344 ../src/common/dynload.cpp:280
 #, c-format
 msgid "Couldn't find symbol '%s' in a dynamic library"
 msgstr "Nem találom a(z) '%s' szimbólumot a dinamikus könyvtárban"
 
-#: ../src/mac/thread.cpp:469
-#: ../src/msw/thread.cpp:578
+#: ../src/mac/thread.cpp:485 ../src/msw/thread.cpp:787
 msgid "Couldn't get the current thread pointer"
 msgstr "Nem kaptam meg a mutatót a jelenlegi szálhoz"
 
-#: ../src/msw/utilsexc.cpp:665
-#, c-format
-msgid "Couldn't launch DDE server '%s'."
-msgstr "Nem tudtam elindítani a '%s' DDE kiszolgálót."
-
-#: ../src/common/imagpng.cpp:251
+#: ../src/common/imagpng.cpp:298
 msgid "Couldn't load a PNG image - file is corrupted or not enough memory."
-msgstr "Nem tudtam betölteni a PNG képet - hibás a fájl vagy nincs elég memória."
+msgstr ""
+"Nem tudtam betölteni a PNG képet - hibás a fájl vagy nincs elég memória."
 
-#: ../src/msw/ole/dataobj.cpp:151
+#: ../src/msw/ole/dataobj.cpp:143
 #, c-format
 msgid "Couldn't register clipboard format '%s'."
 msgstr "Nem tudtam regisztrálni a(z) '%s' vágólap formátumot."
 
-#: ../src/msw/thread.cpp:198
+#: ../src/msw/thread.cpp:219
 msgid "Couldn't release a mutex"
 msgstr "Nem tudtam elengedni a mutex-et"
 
-#: ../src/msw/listctrl.cpp:624
+#: ../src/msw/listctrl.cpp:696
 #, c-format
 msgid "Couldn't retrieve information about list control item %d."
 msgstr "Nem kaptam információt a lista vezérlõ %d elemérõl."
 
-#: ../src/mac/thread.cpp:706
-#: ../src/msw/thread.cpp:958
+#: ../src/common/imagpng.cpp:334 ../src/common/imagpng.cpp:345
+#: ../src/common/imagpng.cpp:353
+#, fuzzy
+msgid "Couldn't save PNG image."
+msgstr "JPEG: Nem tudtam elmenteni a képet."
+
+#: ../src/mac/thread.cpp:729 ../src/msw/thread.cpp:1175
 msgid "Couldn't terminate thread"
 msgstr "Nem tudtam befejezni a szálat"
 
-#: ../src/generic/dirctrlg.cpp:1312
-#: ../src/generic/dirdlgg.cpp:571
+#: ../src/generic/dirdlgg.cpp:263
 msgid "Create directory"
 msgstr "Hozzon létre könyvtárat"
 
-#: ../src/generic/filedlgg.cpp:883
+#: ../src/generic/dirdlgg.cpp:103 ../src/generic/filedlgg.cpp:1108
 msgid "Create new directory"
 msgstr "Hozzon létre egy új könyvtárat"
 
-#: ../src/generic/filedlgg.cpp:890
+#: ../src/generic/filedlgg.cpp:1119
 msgid "Current directory:"
 msgstr "A jelenlegi könyvtár:"
 
-#: ../src/common/fontmap.cpp:101
-msgid "Cyrillic (Latin 5)"
-msgstr "Cirill (Latin 5)"
+#: ../src/common/fontmap.cpp:116
+#, fuzzy
+msgid "Cyrillic (ISO-8859-5)"
+msgstr "Kelta (ISO-8859-14)"
 
 #: ../src/common/paper.cpp:106
 msgid "D sheet, 22 x 34 in"
@@ -921,122 +1017,186 @@ msgstr "D lap, 22 x 34 hüvelyk"
 msgid "DDE poke request failed"
 msgstr "DDE adatbeírás nem sikerült"
 
+#: ../src/common/imagbmp.cpp:618
+#, fuzzy
+msgid "DIB Header: Cannot deal with 4bit encoded yet."
+msgstr "BMP:  4bit kódolással még nem tudok dolgozni."
+
+#: ../src/common/imagbmp.cpp:836
+#, fuzzy
+msgid "DIB Header: Encoding doesn't match bitdepth."
+msgstr "BMP: A kódolás nem felel meg a bitmélységnek."
+
+#: ../src/common/imagbmp.cpp:798
+#, fuzzy
+msgid "DIB Header: Image height > 32767 pixels for file."
+msgstr "BMP: A képmagasság a fájl-ban  > 32767 pixel."
+
+#: ../src/common/imagbmp.cpp:792
+#, fuzzy
+msgid "DIB Header: Image width > 32767 pixels for file."
+msgstr "BMP: A képszélesség a fájl-ban  > 32767 pixel."
+
+#: ../src/common/imagbmp.cpp:812
+#, fuzzy
+msgid "DIB Header: Unknown bitdepth in file."
+msgstr "BMP: Ismeretlen bitmélység a fájl-ban."
+
+#: ../src/common/imagbmp.cpp:822
+#, fuzzy
+msgid "DIB Header: Unknown encoding in file."
+msgstr "BMP: Ismeretlen kódolás a fájl-ban."
+
 #: ../src/common/paper.cpp:128
 msgid "DL Envelope, 110 x 220 mm"
 msgstr "DL Boríték,  110 x 220 mm"
 
-#: ../src/generic/filedlgg.cpp:535
+#: ../src/generic/filedlgg.cpp:689
 msgid "Date"
 msgstr "Dátum"
 
-#: ../src/generic/fontdlgg.cpp:207
+#: ../src/generic/fontdlgg.cpp:224
 msgid "Decorative"
 msgstr "Dekoratív"
 
-#: ../src/msw/dialup.cpp:354
-msgid "Dial up functions are unavailable because the remote access service (RAS) is not installed on this machine. Please install it."
-msgstr "A tárcsázó funkciók nem használhatók, mert a távoli elérés szolgáltatás (RAS) nincs installálva ezen a gépen. Kérem installálja."
+#: ../src/common/fontmap.cpp:386
+msgid "Default encoding"
+msgstr ""
 
-#: ../src/generic/tipdlg.cpp:177
+#: ../src/unix/snglinst.cpp:269
+#, fuzzy, c-format
+msgid "Deleted stale lock file '%s'."
+msgstr "Nem tudom törölni a '%s' INI fájt"
+
+#: ../src/msw/dialup.cpp:351
+msgid ""
+"Dial up functions are unavailable because the remote access service (RAS) is "
+"not installed on this machine. Please install it."
+msgstr ""
+"A tárcsázó funkciók nem használhatók, mert a távoli elérés szolgáltatás "
+"(RAS) nincs installálva ezen a gépen. Kérem installálja."
+
+#: ../src/os2/toplevel.cpp:264
+#, fuzzy
+msgid "Did you forget to include wx/os2/wx.rc in your resources?"
+msgstr ""
+"Nem sikerült létrehozni a párbeszéd ablakot. Valószínûleg elfelejtette "
+"beépíteni a wx/msw/wx.rc fájlt az erõforrás fájljába."
+
+#: ../src/generic/tipdlg.cpp:178
 msgid "Did you know..."
 msgstr "Tudta Ön, hogy..."
 
-#: ../src/common/filefn.cpp:1088
+#: ../src/common/filefn.cpp:1228
 #, c-format
 msgid "Directory '%s' couldn't be created"
 msgstr "Nem sikerült létrehozni a(z) '%s' könyvtárat"
 
-#: ../src/generic/dirctrlg.cpp:1247
-#: ../src/generic/dirdlgg.cpp:538
+#: ../src/mgl/dirmgl.cpp:217
+#, fuzzy, c-format
+msgid "Directory '%s' doesn't exist!"
+msgstr "A könyvtár nem létezik"
+
+#: ../src/generic/dirdlgg.cpp:188
 msgid "Directory does not exist"
 msgstr "A könyvtár nem létezik"
 
-#: ../src/html/helpfrm.cpp:380
-msgid "Display all index items that contain given substring. Search is case insensitive."
-msgstr "Írja ki az összes index bejegyzést, ami tartalmazza az adott bejegyzést. A keresés kis/nagy betûre nem érzékeny."
+#: ../src/html/helpfrm.cpp:374
+msgid ""
+"Display all index items that contain given substring. Search is case "
+"insensitive."
+msgstr ""
+"Írja ki az összes index bejegyzést, ami tartalmazza az adott bejegyzést. A "
+"keresés kis/nagy betûre nem érzékeny."
 
-#: ../src/html/helpfrm.cpp:554
+#: ../src/html/helpfrm.cpp:540
 msgid "Display options dialog"
 msgstr "Képernyõ beállítási párbeszédablak"
 
-#: ../src/common/docview.cpp:440
+#: ../src/msw/mimetype.cpp:677
+#, c-format
+msgid ""
+"Do you want to overwrite the command used to %s files with extension \"%s"
+"\" ?\n"
+"Current value is \n"
+"%s, \n"
+"New value is \n"
+"%s %1"
+msgstr ""
+
+#: ../src/common/docview.cpp:438
 #, c-format
 msgid "Do you want to save changes to document %s?"
 msgstr "Elmentsem a(z) %s dokument változásait?"
 
-#: ../src/html/htmlwin.cpp:230
+#: ../src/html/htmlwin.cpp:314
 msgid "Done"
 msgstr "Kész"
 
-#: ../src/generic/progdlgg.cpp:316
+#: ../src/generic/progdlgg.cpp:368
 msgid "Done."
 msgstr "Kész."
+
+#: ../src/generic/fdrepdlg.cpp:157
+#, fuzzy
+msgid "Down"
+msgstr "Kész"
 
 #: ../src/common/paper.cpp:107
 msgid "E sheet, 34 x 44 in"
 msgstr "E lap, 34 x 44 hüvelyk"
 
-#: ../src/generic/progdlgg.cpp:156
+#: ../src/generic/progdlgg.cpp:183
 msgid "Elapsed time : "
 msgstr "Az eltelt idõ : "
 
-#: ../src/generic/helphtml.cpp:320
+#: ../src/generic/helphtml.cpp:335
 msgid "Entries found"
 msgstr "A talált bejegyzések"
 
-#: ../src/common/config.cpp:349
+#: ../src/common/config.cpp:345
 #, c-format
-msgid "Environment variables expansion failed: missing '%c' at position %d in '%s'."
-msgstr "A környezeti változók kifejtése nem sikerült: hiányzik '%c' a(z) %d helyen '%s'-ból."
+msgid ""
+"Environment variables expansion failed: missing '%c' at position %d in '%s'."
+msgstr ""
+"A környezeti változók kifejtése nem sikerült: hiányzik '%c' a(z) %d helyen '%"
+"s'-ból."
 
-#: ../src/generic/dirctrlg.cpp:604
-#: ../src/generic/dirctrlg.cpp:622
-#: ../src/generic/dirctrlg.cpp:633
-#: ../src/generic/dirctrlg.cpp:1347
-#: ../src/generic/dirdlgg.cpp:268
-#: ../src/generic/dirdlgg.cpp:286
-#: ../src/generic/dirdlgg.cpp:297
-#: ../src/generic/dirdlgg.cpp:604
-#: ../src/generic/filedlgg.cpp:625
-#: ../src/generic/filedlgg.cpp:717
-#: ../src/generic/filedlgg.cpp:731
-#: ../src/generic/filedlgg.cpp:744
-#: ../src/generic/filedlgg.cpp:1043
-#: ../src/generic/filedlgg.cpp:1092
-#: ../src/generic/helpxlp.cpp:241
-#: ../src/gtk/filedlg.cpp:80
-#: ../src/gtk/fontdlg.cpp:67
+#: ../src/generic/dirctrlg.cpp:702 ../src/generic/dirctrlg.cpp:720
+#: ../src/generic/dirctrlg.cpp:731 ../src/generic/dirdlgg.cpp:298
+#: ../src/generic/filedlgg.cpp:825 ../src/generic/filedlgg.cpp:922
+#: ../src/generic/filedlgg.cpp:936 ../src/generic/filedlgg.cpp:949
+#: ../src/generic/filedlgg.cpp:1303 ../src/generic/filedlgg.cpp:1353
+#: ../src/gtk/filedlg.cpp:80 ../src/gtk/fontdlg.cpp:72
 msgid "Error"
 msgstr "Hiba"
 
-#: ../src/unix/utilsunx.cpp:1002
-#: ../src/unix/utilsunx.cpp:1010
+#: ../src/unix/utilsunx.cpp:1215 ../src/unix/utilsunx.cpp:1223
 msgid "Error "
 msgstr "Hiba"
 
-#: ../src/generic/dirctrlg.cpp:1260
-#: ../src/generic/dirdlgg.cpp:551
+#: ../src/generic/dirdlgg.cpp:203
 msgid "Error creating directory"
 msgstr "Hiba a könyvtár létrehozásakor"
 
-#: ../src/common/log.cpp:356
+#: ../src/common/imagbmp.cpp:845
+#, fuzzy
+msgid "Error in reading image DIB ."
+msgstr "TIFF: Hiba a kép olvasásakor."
+
+#: ../src/common/log.cpp:460
 msgid "Error: "
 msgstr "Hiba: "
 
-#: ../src/common/fontmap.cpp:99
+#: ../src/common/fontmap.cpp:114
 msgid "Esperanto (ISO-8859-3)"
 msgstr "Eszperantó (ISO-8859-3)"
 
-#: ../src/generic/progdlgg.cpp:163
+#: ../src/generic/progdlgg.cpp:191
 msgid "Estimated time : "
 msgstr "A becsült idõ : "
 
-#: ../src/generic/dirctrlg.cpp:575
-#: ../src/generic/dirdlgg.cpp:217
-msgid "Etcetera"
-msgstr "Satöbbi"
-
-#: ../src/msw/utilsexc.cpp:544
+#: ../src/msw/utilsexc.cpp:594
 #, c-format
 msgid "Execution of command '%s' failed"
 msgstr "Nem sikerült végrehajtani a(z) '%s' parancsot"
@@ -1045,56 +1205,73 @@ msgstr "Nem sikerült végrehajtani a(z) '%s' parancsot"
 msgid "Executive, 7 1/4 x 10 1/2 in"
 msgstr "Executive, 7 1/4 x 10 1/2 hüvelyk"
 
-#: ../src/common/resourc2.cpp:326
-#: ../src/common/resourc2.cpp:1399
-#: ../src/common/resource.cpp:1839
-#: ../src/common/resource.cpp:1969
-#: ../src/common/resource.cpp:3054
+#: ../src/common/resourc2.cpp:326 ../src/common/resourc2.cpp:1391
+#: ../src/common/resource.cpp:1838 ../src/common/resource.cpp:1968
+#: ../src/common/resource.cpp:3048
 msgid "Expected '*' whilst parsing resource."
 msgstr "Az erõforrás fájl feldolgozásakor '*'-t vártam."
 
-#: ../src/common/resourc2.cpp:342
-#: ../src/common/resourc2.cpp:1415
-#: ../src/common/resource.cpp:1856
-#: ../src/common/resource.cpp:1985
-#: ../src/common/resource.cpp:3071
+#: ../src/common/resourc2.cpp:342 ../src/common/resourc2.cpp:1407
+#: ../src/common/resource.cpp:1855 ../src/common/resource.cpp:1984
+#: ../src/common/resource.cpp:3065
 msgid "Expected '=' whilst parsing resource."
 msgstr "Az erõforrás fájl feldolgozásakor '='-t vártam."
 
-#: ../src/common/resourc2.cpp:312
-#: ../src/common/resourc2.cpp:1385
-#: ../src/common/resource.cpp:1825
-#: ../src/common/resource.cpp:1955
-#: ../src/common/resource.cpp:3040
+#: ../src/common/resourc2.cpp:312 ../src/common/resourc2.cpp:1377
+#: ../src/common/resource.cpp:1824 ../src/common/resource.cpp:1954
+#: ../src/common/resource.cpp:3034
 msgid "Expected 'char' whilst parsing resource."
 msgstr "Az erõforrás fájl feldolgozásakor 'char'-t vártam."
 
-#: ../src/msw/dialup.cpp:860
+#: ../src/msw/dialup.cpp:845
 #, c-format
 msgid "Failed to %s dialup connection: %s"
 msgstr "Nem sikerült %s a(z) %s telefonos kapcsolatban"
 
-#: ../src/msw/clipbrd.cpp:122
+#: ../src/unix/snglinst.cpp:243
+msgid "Failed to access lock file."
+msgstr ""
+
+#: ../src/common/filename.cpp:172
+#, fuzzy
+msgid "Failed to close file handle"
+msgstr "Nem sikerült lezárni a vágólapot."
+
+#: ../src/unix/snglinst.cpp:308
+#, fuzzy, c-format
+msgid "Failed to close lock file '%s'"
+msgstr "nem sikerült kiüríteni a(z) '%s' fájl pufferét"
+
+#: ../src/msw/clipbrd.cpp:127
 msgid "Failed to close the clipboard."
 msgstr "Nem sikerült lezárni a vágólapot."
 
-#: ../src/msw/dialup.cpp:801
+#: ../src/msw/dialup.cpp:785
 msgid "Failed to connect: missing username/password."
-msgstr "Nem sikerült létrehozni a kapcsolatot: hiányzik a felhasználói név vagy a jelszó."
+msgstr ""
+"Nem sikerült létrehozni a kapcsolatot: hiányzik a felhasználói név vagy a "
+"jelszó."
 
-#: ../src/msw/dialup.cpp:747
+#: ../src/msw/dialup.cpp:731
 msgid "Failed to connect: no ISP to dial."
 msgstr "Nem sikerült létrehozni a kapcsolatot: nincs tárcsázható ISP."
 
-#: ../src/msw/registry.cpp:592
+#: ../src/msw/registry.cpp:597
 #, c-format
 msgid "Failed to copy registry value '%s'"
 msgstr "Nem sikerült lemásolni a(z) '%s' registry bejegyzést"
 
-#: ../src/msw/registry.cpp:601
+#: ../src/msw/registry.cpp:606
 #, c-format
 msgid "Failed to copy the contents of registry key '%s' to '%s'."
-msgstr "Nem sikerült lemásolni a(z) '%s' registry bejegyzést tartalmát a(z) '%s'-be."
+msgstr ""
+"Nem sikerült lemásolni a(z) '%s' registry bejegyzést tartalmát a(z) '%s'-be."
+
+#: ../src/common/filefn.cpp:1081
+#, fuzzy, c-format
+msgid "Failed to copy the file '%s' to '%s'"
+msgstr ""
+"Nem sikerült lemásolni a(z) '%s' registry bejegyzést tartalmát a(z) '%s'-be."
 
 #: ../src/msw/dde.cpp:924
 msgid "Failed to create DDE string"
@@ -1104,31 +1281,51 @@ msgstr "Nem sikerült létrehozni a DDE láncot"
 msgid "Failed to create MDI parent frame."
 msgstr "Nem sikerült létrehozni az MDI szülõ keretet."
 
-#: ../src/msw/statbr95.cpp:149
+#: ../src/msw/statbr95.cpp:110
 msgid "Failed to create a status bar."
 msgstr "Nem sikerült lérehozni az állapotsort."
+
+#: ../src/common/filename.cpp:705
+#, fuzzy
+msgid "Failed to create a temporary file name"
+msgstr "Nem sikerült létrehozni az MDI szülõ keretet."
 
 #: ../src/msw/dde.cpp:401
 #, c-format
 msgid "Failed to create connection to server '%s' on topic '%s'"
-msgstr "Nem sikerült kapcsolatot létrehozni a '%s' kiszolgálóval a '%s' témában"
+msgstr ""
+"Nem sikerült kapcsolatot létrehozni a '%s' kiszolgálóval a '%s' témában"
 
-#: ../src/msw/dialog.cpp:183
-msgid "Failed to create dialog. You probably forgot to include wx/msw/wx.rc in your resources."
-msgstr "Nem sikerült létrehozni a párbeszéd ablakot. Valószínûleg elfelejtette beépíteni a wx/msw/wx.rc fájlt az erõforrás fájljába."
-
-#: ../src/generic/dirctrlg.cpp:1258
-#: ../src/generic/dirdlgg.cpp:549
-msgid "Failed to create directory "
+#: ../src/msw/toplevel.cpp:303
+#, fuzzy
+msgid "Failed to create dialog. Incorrect DLGTEMPLATE?"
 msgstr "Nem sikerült létrehozni a könyvtárat"
 
-#: ../src/html/winpars.cpp:375
+#: ../src/generic/dirdlgg.cpp:201
+#, fuzzy, c-format
+msgid ""
+"Failed to create directory '%s'\n"
+"(Do you have the required permissions?)"
+msgstr ""
+"\n"
+"(Rendelkezik a szükséges jogosultsággal?)"
+
+#: ../src/msw/mimetype.cpp:168
+#, fuzzy, c-format
+msgid "Failed to create registry entry for '%s' files."
+msgstr "Nem tudtam a(z) '%s' registry kulcsot '%s'-re átnevezni."
+
+#: ../src/msw/fdrepdlg.cpp:442
+#, c-format
+msgid "Failed to create the standard find/replace dialog (error code %d)"
+msgstr ""
+
+#: ../src/html/winpars.cpp:428
 #, c-format
 msgid "Failed to display HTML document in %s encoding"
 msgstr "Nem sikerült a HTML dokumentumot %s kódolással megjeleníteni"
 
-#: ../src/mac/clipbrd.cpp:61
-#: ../src/msw/clipbrd.cpp:134
+#: ../src/mac/clipbrd.cpp:167 ../src/msw/clipbrd.cpp:139
 msgid "Failed to empty the clipboard."
 msgstr "Nem sikerült kiüríteni a vágólapot."
 
@@ -1136,70 +1333,155 @@ msgstr "Nem sikerült kiüríteni a vágólapot."
 msgid "Failed to establish an advise loop with DDE server"
 msgstr "Nem sikerült létrehozni tanácsadói kapcsolatot a DDE kiszolgálóval"
 
-#: ../src/msw/dialup.cpp:639
+#: ../src/msw/dialup.cpp:623
 #, c-format
 msgid "Failed to establish dialup connection: %s"
 msgstr "Nem sikerült létrehozni a telefonos kapcsolatot: %s"
 
-#: ../src/unix/utilsunx.cpp:441
-#: ../src/unix/utilsunx.cpp:469
+#: ../src/unix/utilsunx.cpp:586 ../src/unix/utilsunx.cpp:614
 #, c-format
 msgid "Failed to execute '%s'\n"
 msgstr "Nem sikerült végrehajtani '%s'-t\n"
 
-#: ../src/common/resourc2.cpp:808
-#: ../src/common/resource.cpp:2459
+#: ../src/common/resourc2.cpp:808 ../src/common/resource.cpp:2458
 #, c-format
-msgid "Failed to find XBM resource %s.\nForgot to use wxResourceLoadBitmapData?"
-msgstr "Nem találom a(z) %s XBM erõforrást.\nElfelejtette használni a wxResourceLoadBitmapData-t?"
+msgid ""
+"Failed to find XBM resource %s.\n"
+"Forgot to use wxResourceLoadBitmapData?"
+msgstr ""
+"Nem találom a(z) %s XBM erõforrást.\n"
+"Elfelejtette használni a wxResourceLoadBitmapData-t?"
 
-#: ../src/common/resourc2.cpp:963
-#: ../src/common/resource.cpp:2614
+#: ../src/common/resourc2.cpp:959 ../src/common/resource.cpp:2608
 #, c-format
-msgid "Failed to find XBM resource %s.\nForgot to use wxResourceLoadIconData?"
-msgstr "Nem találom a(z) %s XBM erõforrást.\nElfelejtette használni a wxResourceLoadIconData-t?"
+msgid ""
+"Failed to find XBM resource %s.\n"
+"Forgot to use wxResourceLoadIconData?"
+msgstr ""
+"Nem találom a(z) %s XBM erõforrást.\n"
+"Elfelejtette használni a wxResourceLoadIconData-t?"
 
-#: ../src/common/resourc2.cpp:824
-#: ../src/common/resource.cpp:2475
+#: ../src/common/resourc2.cpp:823 ../src/common/resource.cpp:2473
 #, c-format
-msgid "Failed to find XPM resource %s.\nForgot to use wxResourceLoadBitmapData?"
-msgstr "Nem találom a(z) %s XpM erõforrást.\nElfelejtette használni a wxResourceLoadBitmapData-t?"
+msgid ""
+"Failed to find XPM resource %s.\n"
+"Forgot to use wxResourceLoadBitmapData?"
+msgstr ""
+"Nem találom a(z) %s XpM erõforrást.\n"
+"Elfelejtette használni a wxResourceLoadBitmapData-t?"
 
-#: ../src/msw/dialup.cpp:699
+#: ../src/msw/dialup.cpp:683
 #, c-format
 msgid "Failed to get ISP names: %s"
 msgstr "Nem kaptam meg a(z) %s ISP neveket"
 
-#: ../src/msw/clipbrd.cpp:623
+#: ../src/mac/clipbrd.cpp:118
+#, fuzzy
+msgid "Failed to get clipboard data."
+msgstr "Nem tudtam a vágólap adatot beállítani."
+
+#: ../src/msw/clipbrd.cpp:712
 msgid "Failed to get data from the clipboard"
 msgstr "Nem kaptam a vágólapról adatokat"
 
-#: ../src/common/timercmn.cpp:264
+#: ../src/common/timercmn.cpp:282
 msgid "Failed to get the UTC system time."
 msgstr "Nem kaptam meg az UTC rendszer idõt."
 
-#: ../src/common/timercmn.cpp:216
+#: ../src/common/timercmn.cpp:233
 msgid "Failed to get the local system time"
 msgstr "Nem kaptam meg a helyi rendszer idõt"
 
-#: ../src/unix/threadpsx.cpp:754
-msgid "Failed to join a thread, potential memory leak detected - please restart the program"
-msgstr "Nem tudtam a szálhoz csatlakozni, valószínûleg memória lyukat találtam - kérem indítsa újra a programot"
+#: ../src/common/filefn.cpp:1460
+#, fuzzy
+msgid "Failed to get the working directory"
+msgstr "Nem sikerült létrehozni a könyvtárat"
 
-#: ../src/common/dynlib.cpp:235
+#: ../src/univ/theme.cpp:120
+msgid "Failed to initialize GUI: no built-in themes found."
+msgstr ""
+
+#: ../src/msw/helpchm.cpp:69
+msgid "Failed to initialize MS HTML Help."
+msgstr ""
+
+#: ../src/msw/glcanvas.cpp:730
+#, fuzzy
+msgid "Failed to initialize OpenGL"
+msgstr "Nem tudom inicializálni az OLEt"
+
+#: ../src/unix/threadpsx.cpp:987
+msgid ""
+"Failed to join a thread, potential memory leak detected - please restart the "
+"program"
+msgstr ""
+"Nem tudtam a szálhoz csatlakozni, valószínûleg memória lyukat találtam - "
+"kérem indítsa újra a programot"
+
+#: ../src/msw/utils.cpp:726
+#, fuzzy, c-format
+msgid "Failed to kill process %d"
+msgstr "Nem tudtam átirányítani a gyermek processz be/kimenetét"
+
+#: ../src/common/iconbndl.cpp:67
+#, fuzzy, c-format
+msgid "Failed to load image %d from file '%s'."
+msgstr "Nem tudtam betölteni a(z) '%s' osztott könyvtárat"
+
+#: ../src/msw/volume.cpp:340
+#, fuzzy
+msgid "Failed to load mpr.dll."
+msgstr "Nem tudtam a vágólap adatot beállítani."
+
+#: ../src/common/dynlib.cpp:274 ../src/common/dynload.cpp:196
 #, c-format
 msgid "Failed to load shared library '%s'"
 msgstr "Nem tudtam betölteni a(z) '%s' osztott könyvtárat"
 
-#: ../src/msw/clipbrd.cpp:102
+#: ../src/common/dynlib.cpp:256 ../src/common/dynload.cpp:125
+#, fuzzy, c-format
+msgid "Failed to load shared library '%s' Error '%s'"
+msgstr "Nem tudtam betölteni a(z) '%s' osztott könyvtárat"
+
+#: ../src/unix/snglinst.cpp:192
+#, fuzzy, c-format
+msgid "Failed to lock the lock file '%s'"
+msgstr "nem sikerült kiüríteni a(z) '%s' fájl pufferét"
+
+#: ../src/common/regex.cpp:251
+#, fuzzy, c-format
+msgid "Failed to match '%s' in regular expression: %s"
+msgstr "Nem sikerült %s a(z) %s telefonos kapcsolatban"
+
+#: ../src/common/filename.cpp:1632
+#, fuzzy, c-format
+msgid "Failed to modify file times for '%s'"
+msgstr "nem sikerült kiüríteni a(z) '%s' fájl pufferét"
+
+#: ../src/common/filename.cpp:160
+#, fuzzy, c-format
+msgid "Failed to open '%s' for %s"
+msgstr "Nem tudtam megnyitni a vágólapot."
+
+#: ../src/common/filename.cpp:727
+#, fuzzy
+msgid "Failed to open temporary file."
+msgstr "Nem tudtam megnyitni a vágólapot."
+
+#: ../src/msw/clipbrd.cpp:107
 msgid "Failed to open the clipboard."
 msgstr "Nem tudtam megnyitni a vágólapot."
 
-#: ../src/msw/clipbrd.cpp:539
+#: ../src/msw/clipbrd.cpp:616
 msgid "Failed to put data on the clipboard"
 msgstr "Nem tudtam adatokat tenni a vágólapra"
 
-#: ../src/unix/utilsunx.cpp:540
+#: ../src/unix/snglinst.cpp:252
+#, fuzzy
+msgid "Failed to read PID from lock file."
+msgstr "Nem sikerült létrehozni az MDI szülõ keretet."
+
+#: ../src/unix/utilsunx.cpp:694
 msgid "Failed to redirect child process input/output"
 msgstr "Nem tudtam átirányítani a gyermek processz be/kimenetét"
 
@@ -1208,30 +1490,45 @@ msgstr "Nem tudtam átirányítani a gyermek processz be/kimenetét"
 msgid "Failed to register DDE server '%s'"
 msgstr "Nem tudtam regisztrálni a(z) '%s' DDE kiszolgálót"
 
-#: ../src/common/fontmap.cpp:516
+#: ../src/common/fontmap.cpp:674
 #, c-format
 msgid "Failed to remember the encoding for the charset '%s'."
 msgstr "Nem emlékszem a '%s' jelkészlet kódolására."
 
-#: ../src/msw/registry.cpp:438
+#: ../src/unix/snglinst.cpp:296
+#, fuzzy, c-format
+msgid "Failed to remove lock file '%s'"
+msgstr "nem tudom eltávolítani a(z) '%s' fájlt"
+
+#: ../src/unix/snglinst.cpp:262
+#, fuzzy, c-format
+msgid "Failed to remove stale lock file '%s'."
+msgstr "Nem tudtam a(z) '%s' registry értéket '%s'-re átnevezni."
+
+#: ../src/msw/registry.cpp:443
 #, c-format
 msgid "Failed to rename registry value '%s' to '%s'."
 msgstr "Nem tudtam a(z) '%s' registry értéket '%s'-re átnevezni."
 
-#: ../src/msw/registry.cpp:538
+#: ../src/msw/registry.cpp:543
 #, c-format
 msgid "Failed to rename the registry key '%s' to '%s'."
 msgstr "Nem tudtam a(z) '%s' registry kulcsot '%s'-re átnevezni."
 
-#: ../src/msw/clipbrd.cpp:428
+#: ../src/msw/clipbrd.cpp:505
 msgid "Failed to retrieve data from the clipboard."
 msgstr "Nem tudtam adatot elõvenni a vágólapról."
 
-#: ../src/msw/dialup.cpp:463
+#: ../src/common/filename.cpp:1698
+#, fuzzy, c-format
+msgid "Failed to retrieve file times for '%s'"
+msgstr "Nem sikerült értelmezni a RAS hibaüzenet szövegét"
+
+#: ../src/msw/dialup.cpp:447
 msgid "Failed to retrieve text of RAS error message"
 msgstr "Nem sikerült értelmezni a RAS hibaüzenet szövegét"
 
-#: ../src/msw/clipbrd.cpp:652
+#: ../src/msw/clipbrd.cpp:742
 msgid "Failed to retrieve the supported clipboard formats"
 msgstr "Nem tudtam meghatározni a támogatott vágólap formátumokat"
 
@@ -1239,22 +1536,31 @@ msgstr "Nem tudtam meghatározni a támogatott vágólap formátumokat"
 msgid "Failed to send DDE advise notification"
 msgstr "Nem sikerült DDE tanácsot küldeni"
 
-#: ../src/mac/clipbrd.cpp:226
-#: ../src/msw/clipbrd.cpp:300
+#: ../src/common/ftp.cpp:368
+#, fuzzy, c-format
+msgid "Failed to set FTP transfer mode to %s."
+msgstr "Nem tudtam a(z) %d szál prioritást beállítani."
+
+#: ../src/msw/clipbrd.cpp:379
 msgid "Failed to set clipboard data."
 msgstr "Nem tudtam a vágólap adatot beállítani."
 
-#: ../src/unix/threadpsx.cpp:1071
+#: ../src/common/file.cpp:527
+#, fuzzy
+msgid "Failed to set temporary file permissions"
+msgstr "Nem tudtam a(z) %d szál prioritást beállítani."
+
+#: ../src/unix/threadpsx.cpp:1317
 #, c-format
 msgid "Failed to set thread priority %d."
 msgstr "Nem tudtam a(z) %d szál prioritást beállítani."
 
-#: ../src/common/fs_mem.cpp:167
+#: ../src/common/fs_mem.cpp:168
 #, c-format
 msgid "Failed to store image '%s' to memory VFS!"
 msgstr "Nem tudtam a '%s' képet a VFS memóriába tárolni!"
 
-#: ../src/unix/threadpsx.cpp:1251
+#: ../src/unix/threadpsx.cpp:1497
 msgid "Failed to terminate a thread."
 msgstr "Nem tudtam lezárni a szálat."
 
@@ -1262,61 +1568,83 @@ msgstr "Nem tudtam lezárni a szálat."
 msgid "Failed to terminate the advise loop with DDE server"
 msgstr "Nem tudtam lezárni a tanácskozási ciklust a DDE kiszolgálóval"
 
-#: ../src/msw/dialup.cpp:933
+#: ../src/msw/dialup.cpp:918
 #, c-format
 msgid "Failed to terminate the dialup connection: %s"
 msgstr "Nem tudtam lezárni a(z) %s telefon kapcsolatot"
+
+#: ../src/common/filename.cpp:1647
+#, fuzzy, c-format
+msgid "Failed to touch the file '%s'"
+msgstr "nem sikerült kiüríteni a(z) '%s' fájl pufferét"
+
+#: ../src/unix/snglinst.cpp:302
+#, fuzzy, c-format
+msgid "Failed to unlock lock file '%s'"
+msgstr "nem sikerült kiüríteni a(z) '%s' fájl pufferét"
 
 #: ../src/msw/dde.cpp:301
 #, c-format
 msgid "Failed to unregister DDE server '%s'"
 msgstr "Nem tudtam a(z) '%s' DDE kiszolgáló regisztrációját megszüntetni"
 
-#: ../src/generic/logg.cpp:386
+#: ../src/unix/snglinst.cpp:173
+#, fuzzy, c-format
+msgid "Failed to write to lock file '%s'"
+msgstr "nem sikerült kiüríteni a(z) '%s' fájl pufferét"
+
+#: ../src/generic/logg.cpp:372
 msgid "Fatal error"
 msgstr "Végzetes hiba"
 
-#: ../src/common/log.cpp:349
+#: ../src/common/log.cpp:453
 msgid "Fatal error: "
 msgstr "Végzetes hiba:"
 
-#: ../src/mac/app.cpp:793
-#: ../src/msw/app.cpp:1257
+#: ../src/mac/app.cpp:1217 ../src/msw/app.cpp:1306
 msgid "Fatal error: exiting"
 msgstr "Végzetes hiba: kilépés"
 
-#: ../src/generic/filedlgg.cpp:1074
-#: ../src/gtk/filedlg.cpp:69
+#: ../src/mgl/bitmap.cpp:544
+#, fuzzy, c-format
+msgid "File %s does not exist."
+msgstr ": a file nem létezik!"
+
+#: ../src/generic/filedlgg.cpp:1335 ../src/gtk/filedlg.cpp:69
 #, c-format
 msgid "File '%s' already exists, do you really want to overwrite it?"
 msgstr "A(z) '%s file már létezik, valóban  felül akarja írni?"
 
-#: ../src/common/textcmn.cpp:94
+#: ../src/msw/filedlg.cpp:502
+#, fuzzy, c-format
+msgid ""
+"File '%s' already exists.\n"
+"Do you want to replace it?"
+msgstr "A(z) '%s file már létezik, valóban  felül akarja írni?"
+
+#: ../src/common/textcmn.cpp:158
 msgid "File couldn't be loaded."
 msgstr "A fájlt nem tudtam betölteni."
 
-#: ../src/common/docview.cpp:296
-#: ../src/common/docview.cpp:332
-#: ../src/common/docview.cpp:1388
+#: ../src/common/docview.cpp:292 ../src/common/docview.cpp:329
+#: ../src/common/docview.cpp:1409
 msgid "File error"
 msgstr "Fájl hiba"
 
-#: ../src/generic/dirctrlg.cpp:622
-#: ../src/generic/dirdlgg.cpp:286
-#: ../src/generic/filedlgg.cpp:731
+#: ../src/generic/dirctrlg.cpp:720 ../src/generic/filedlgg.cpp:936
 msgid "File name exists already."
 msgstr "Már van ilyen nevû fájl."
 
-#: ../src/msw/filedlg.cpp:303
+#: ../src/msw/filedlg.cpp:350
 #, c-format
 msgid "Files (%s)|%s"
 msgstr "Fájlok (%s)|%s"
 
-#: ../src/html/helpfrm.cpp:354
+#: ../src/html/helpfrm.cpp:362
 msgid "Find"
 msgstr "Keres"
 
-#: ../src/html/helpfrm.cpp:928
+#: ../src/html/helpfrm.cpp:950
 msgid "Fixed font:"
 msgstr "Nem skálázható jelkészlet:"
 
@@ -1324,55 +1652,61 @@ msgstr "Nem skálázható jelkészlet:"
 msgid "Folio, 8 1/2 x 13 in"
 msgstr "Folio, 8 1/2 x 13 hüvelyk"
 
-#: ../src/generic/fontdlgg.cpp:124
+#: ../src/generic/fontdlgg.cpp:174
 msgid "Font"
 msgstr "Jelkészlet"
 
-#: ../src/html/helpfrm.cpp:938
+#: ../src/html/helpfrm.cpp:960
 msgid "Font size:"
 msgstr "Jelkészlet mérete:"
 
-#: ../src/unix/utilsunx.cpp:497
+#: ../src/unix/utilsunx.cpp:642
 msgid "Fork failed"
 msgstr "A folyamat elágaztatása nem sikerült"
 
-#: ../src/common/dlgcmn.cpp:132
-#: ../src/generic/helpwxht.cpp:158
+#: ../src/common/dlgcmn.cpp:167
 msgid "Forward"
 msgstr "Elõre"
 
-#: ../src/common/resourc2.cpp:295
-#: ../src/common/resourc2.cpp:1368
-#: ../src/common/resource.cpp:1808
-#: ../src/common/resource.cpp:1938
-#: ../src/common/resource.cpp:3023
+#: ../src/common/resourc2.cpp:295 ../src/common/resourc2.cpp:1360
+#: ../src/common/resource.cpp:1807 ../src/common/resource.cpp:1937
+#: ../src/common/resource.cpp:3017
 msgid "Found "
 msgstr "Megtaláltam"
 
-#: ../src/html/helpfrm.cpp:663
+#: ../src/html/helpfrm.cpp:661
 #, c-format
 msgid "Found %i matches"
 msgstr "%i megfelelõt találtam"
 
-#: ../src/generic/prntdlgg.cpp:187
+#: ../src/generic/prntdlgg.cpp:186
 msgid "From:"
 msgstr "Tól:"
 
-#: ../src/common/imaggif.cpp:74
+#: ../src/common/imaggif.cpp:100
+#, fuzzy
+msgid "GIF: Invalid gif index."
+msgstr "Hibás TIFF kép index."
+
+#: ../src/common/imaggif.cpp:75
 msgid "GIF: data stream seems to be truncated."
 msgstr "GIF: az adatfolyam csonkítottnak tûnik."
 
-#: ../src/common/imaggif.cpp:58
+#: ../src/common/imaggif.cpp:59
 msgid "GIF: error in GIF image format."
 msgstr "GIF: hiba a GIF képformátumban."
 
-#: ../src/common/imaggif.cpp:61
+#: ../src/common/imaggif.cpp:62
 msgid "GIF: not enough memory."
 msgstr "GIF: nincs elég tároló."
 
-#: ../src/common/imaggif.cpp:64
+#: ../src/common/imaggif.cpp:65
 msgid "GIF: unknown error!!!"
 msgstr "GIF: ismeretlen hiba!!!"
+
+#: ../src/univ/themes/gtk.cpp:623
+msgid "GTK+ theme"
+msgstr ""
 
 #: ../src/common/paper.cpp:142
 msgid "German Legal Fanfold, 8 1/2 x 13 in"
@@ -1382,116 +1716,212 @@ msgstr "Német bírósági leporelló, 8 1/2 x 13 hüvelyk"
 msgid "German Std Fanfold, 8 1/2 x 12 in"
 msgstr "Német standard leporelló, 8 1/2 x 12 hüvelyk"
 
-#: ../src/html/helpfrm.cpp:520
+#: ../src/common/image.cpp:762
+msgid "GetUnusedColour:: No Unused Color in image "
+msgstr ""
+
+#: ../src/html/helpfrm.cpp:506
 msgid "Go back"
 msgstr "Menj vissza"
 
-#: ../src/html/helpfrm.cpp:523
+#: ../src/html/helpfrm.cpp:509
 msgid "Go forward"
 msgstr "Menj elõre"
 
-#: ../src/html/helpfrm.cpp:528
+#: ../src/html/helpfrm.cpp:514
 msgid "Go one level up in document hierarchy"
 msgstr "Menj a dokumentum hierarchia eggyel magasabb szintjére"
 
-#: ../src/generic/filedlgg.cpp:875
+#: ../src/generic/dirdlgg.cpp:108 ../src/generic/filedlgg.cpp:1097
 msgid "Go to home directory"
 msgstr "Menj a saját (hon) könyvtárba"
 
-#: ../src/generic/filedlgg.cpp:869
+#: ../src/generic/filedlgg.cpp:1089
 msgid "Go to parent directory"
 msgstr "Menj a szülõ könyvtárba"
 
-#: ../src/common/fontmap.cpp:103
+#: ../src/common/fontmap.cpp:118
 msgid "Greek (ISO-8859-7)"
 msgstr "Görög (ISO-8859-7)"
 
-#: ../src/html/htmlwin.cpp:267
+#: ../src/html/htmlwin.cpp:354
 #, c-format
 msgid "HTML anchor %s does not exist."
 msgstr "A(z) %s horgony nem létezik."
 
-#: ../src/html/helpfrm.cpp:1236
-msgid "HTML files (*.htm)|*.htm|HTML files (*.html)|*.html|Help books (*.htb)|*.htb|Help books (*.zip)|*.zip|HTML Help Project (*.hhp)|*.hhp|All files (*.*)|*"
-msgstr "HTML files (*.htm)|*.htm|HTML fájlok (*.html)|*.html|Súgó könyvek (*.htb)|*.htb|Súgó könyvek (*.zip)|*.zip|HTML Súgó Project (*.hhp)|*.hhp|Minden fájl (*.*)|*"
+#: ../src/html/helpfrm.cpp:1279
+msgid ""
+"HTML files (*.htm)|*.htm|HTML files (*.html)|*.html|Help books (*.htb)|*.htb|"
+"Help books (*.zip)|*.zip|HTML Help Project (*.hhp)|*.hhp|All files (*.*)|*"
+msgstr ""
+"HTML files (*.htm)|*.htm|HTML fájlok (*.html)|*.html|Súgó könyvek (*.htb)|*."
+"htb|Súgó könyvek (*.zip)|*.zip|HTML Súgó Project (*.hhp)|*.hhp|Minden fájl "
+"(*.*)|*"
 
-#: ../src/common/fontmap.cpp:104
+#: ../src/common/fontmap.cpp:119
 msgid "Hebrew (ISO-8859-8)"
 msgstr "Héber (ISO-8859-8)"
 
-#: ../src/common/dlgcmn.cpp:144
-#: ../src/generic/proplist.cpp:528
-#: ../src/html/helpfrm.cpp:215
-#: ../src/msw/mdi.cpp:1276
+#: ../src/common/dlgcmn.cpp:179 ../src/generic/proplist.cpp:516
+#: ../src/html/helpfrm.cpp:240 ../src/msw/mdi.cpp:1313
 msgid "Help"
 msgstr "Súgó"
 
-#: ../src/html/helpfrm.cpp:911
+#: ../src/html/helpfrm.cpp:933
 msgid "Help Browser Options"
 msgstr "Súgó Böngészõ beállítások"
 
-#: ../src/generic/helphtml.cpp:319
-#: ../src/generic/helphtml.cpp:320
+#: ../src/generic/helphtml.cpp:334 ../src/generic/helphtml.cpp:335
 msgid "Help Index"
 msgstr "Súgó tartalomjegyzék"
 
-#: ../src/html/helpfrm.cpp:1220
+#: ../src/html/helpfrm.cpp:1263
 msgid "Help Printing"
 msgstr "Súgó nyomtatás"
 
-#: ../src/generic/helpwxht.cpp:251
-#: ../src/html/helpctrl.cpp:38
+#: ../src/html/helpctrl.cpp:44
 #, c-format
 msgid "Help: %s"
 msgstr "Súgó: %s"
 
-#: ../src/common/resourc2.cpp:997
-#: ../src/common/resourc2.cpp:1008
-#: ../src/common/resource.cpp:2648
-#: ../src/common/resource.cpp:2659
+#: ../src/common/imagbmp.cpp:858
+#, fuzzy
+msgid "ICO: Error in reading mask DIB."
+msgstr "TIFF: Hiba a kép olvasásakor."
+
+#: ../src/common/imagbmp.cpp:960 ../src/common/imagbmp.cpp:1019
+#: ../src/common/imagbmp.cpp:1028 ../src/common/imagbmp.cpp:1039
+#: ../src/common/imagbmp.cpp:1083 ../src/common/imagbmp.cpp:1093
+#: ../src/common/imagbmp.cpp:1102
+#, fuzzy
+msgid "ICO: Error writing the image file!"
+msgstr "TIFF: Hiba a kép írásakor."
+
+#: ../src/common/imagbmp.cpp:928
+msgid "ICO: Image too tall for an icon."
+msgstr ""
+
+#: ../src/common/imagbmp.cpp:934
+msgid "ICO: Image too wide for an icon."
+msgstr ""
+
+#: ../src/common/imagbmp.cpp:1167
+#, fuzzy
+msgid "ICO: Invalid icon index."
+msgstr "Hibás TIFF kép index."
+
+#: ../src/common/imagiff.cpp:767
+#, fuzzy
+msgid "IFF: data stream seems to be truncated."
+msgstr "GIF: az adatfolyam csonkítottnak tûnik."
+
+#: ../src/common/imagiff.cpp:751
+#, fuzzy
+msgid "IFF: error in IFF image format."
+msgstr "GIF: hiba a GIF képformátumban."
+
+#: ../src/common/imagiff.cpp:754
+#, fuzzy
+msgid "IFF: not enough memory."
+msgstr "GIF: nincs elég tároló."
+
+#: ../src/common/imagiff.cpp:757
+#, fuzzy
+msgid "IFF: unknown error!!!"
+msgstr "GIF: ismeretlen hiba!!!"
+
+#: ../src/common/resourc2.cpp:989 ../src/common/resourc2.cpp:1000
+#: ../src/common/resource.cpp:2638 ../src/common/resource.cpp:2649
 #, c-format
 msgid "Icon resource specification %s not found."
 msgstr "Nem találom a(z) %s ikon erõforrás meghatározását."
 
-#: ../src/common/resource.cpp:251
+#: ../src/common/resource.cpp:250
 msgid "Ill-formed resource file syntax."
 msgstr "Nyelvtani hibás erõforrás fájl."
 
-#: ../src/generic/dirctrlg.cpp:604
-#: ../src/generic/dirdlgg.cpp:268
-#: ../src/generic/filedlgg.cpp:717
+#: ../src/generic/dirctrlg.cpp:702 ../src/generic/filedlgg.cpp:922
 msgid "Illegal directory name."
 msgstr "Hibás könyvtár név."
 
-#: ../src/generic/filedlgg.cpp:1043
+#: ../src/generic/filedlgg.cpp:1303
 msgid "Illegal file specification."
 msgstr "Hibás fájl meghatározás."
 
-#: ../src/msw/textctrl.cpp:219
-msgid "Impossible to create a rich edit control, using simple text control instead. Please reinstall riched32.dll"
-msgstr "Nem tudok formázott szövegkontrollt készíteni, egyszerû szövegkontrollt használok helyette. Kérem installálja újra a riched32.dll fájlt"
+#: ../src/common/image.cpp:785
+msgid "Image and Mask have different sizes"
+msgstr ""
 
-#: ../src/unix/utilsunx.cpp:350
+#: ../src/common/image.cpp:1064
+#, c-format
+msgid "Image file is not of type %d."
+msgstr ""
+
+#: ../src/msw/textctrl.cpp:249
+msgid ""
+"Impossible to create a rich edit control, using simple text control instead. "
+"Please reinstall riched32.dll"
+msgstr ""
+"Nem tudok formázott szövegkontrollt készíteni, egyszerû szövegkontrollt "
+"használok helyette. Kérem installálja újra a riched32.dll fájlt"
+
+#: ../src/unix/utilsunx.cpp:390
 msgid "Impossible to get child process input"
 msgstr "Nem kapom meg a gyermek processz bemenetét"
 
-#: ../src/html/helpdata.cpp:414
-msgid "Incorrect version of HTML help book"
-msgstr "A HTML súgó könyv változata nem megfelelõ"
+#: ../src/common/filefn.cpp:1097
+#, fuzzy, c-format
+msgid "Impossible to get permissions for file '%s'"
+msgstr "Nem kapom meg a gyermek processz bemenetét"
 
-#: ../src/html/helpfrm.cpp:386
+#: ../src/common/filefn.cpp:1111
+#, fuzzy, c-format
+msgid "Impossible to overwrite the file '%s'"
+msgstr "nem sikerült kiüríteni a(z) '%s' fájl pufferét"
+
+#: ../src/common/filefn.cpp:1161
+#, c-format
+msgid "Impossible to set permissions for the file '%s'"
+msgstr ""
+
+#: ../src/html/helpfrm.cpp:387
 msgid "Index"
 msgstr "Tartalomjegyzék"
 
-#: ../src/common/fontmap.cpp:108
+#: ../src/common/fontmap.cpp:123
 msgid "Indian (ISO-8859-12)"
 msgstr "Indiai  (ISO-8859-12)"
 
-#: ../src/common/imagtiff.cpp:171
+#: ../src/common/imagtiff.cpp:183
 msgid "Invalid TIFF image index."
 msgstr "Hibás TIFF kép index."
 
-#: ../src/generic/fontdlgg.cpp:213
+#: ../contrib/src/xrc/xmlres.cpp:342
+#, c-format
+msgid "Invalid XRC resource '%s': doesn't have root node 'resource'."
+msgstr ""
+
+#: ../src/common/appcmn.cpp:327
+#, fuzzy, c-format
+msgid "Invalid display mode specification '%s'."
+msgstr "Hibás fájl meghatározás."
+
+#: ../src/x11/app.cpp:227
+#, fuzzy, c-format
+msgid "Invalid geometry specification '%s'"
+msgstr "Hibás fájl meghatározás."
+
+#: ../src/unix/snglinst.cpp:280
+#, fuzzy, c-format
+msgid "Invalid lock file '%s'."
+msgstr "nem tudom lezárni a(z) '%s' fájlt."
+
+#: ../src/common/regex.cpp:173
+#, c-format
+msgid "Invalid regular expression '%s': %s"
+msgstr ""
+
+#: ../src/generic/fontdlgg.cpp:230
 msgid "Italic"
 msgstr "Dõlt"
 
@@ -1499,21 +1929,20 @@ msgstr "Dõlt"
 msgid "Italy Envelope, 110 x 230 mm"
 msgstr "Olasz boríték, 110 x 230 mm"
 
-#: ../src/common/imagjpeg.cpp:202
+#: ../src/common/imagjpeg.cpp:222
 msgid "JPEG: Couldn't load - file is probably corrupted."
 msgstr "JPEG: nem tudtam betölteni - a fájl valószínûleg hibás"
 
-#: ../src/common/imagjpeg.cpp:315
+#: ../src/common/imagjpeg.cpp:336
 msgid "JPEG: Couldn't save image."
 msgstr "JPEG: Nem tudtam elmenteni a képet."
 
-#: ../src/common/fontmap.cpp:112
+#: ../src/common/fontmap.cpp:127
 msgid "KOI8-R"
 msgstr "KOI8-R"
 
-#: ../src/generic/dcpsg.cpp:2258
-#: ../src/generic/prntdlgg.cpp:441
-#: ../src/generic/prntdlgg.cpp:637
+#: ../src/generic/dcpsg.cpp:2260 ../src/generic/prntdlgg.cpp:438
+#: ../src/generic/prntdlgg.cpp:634
 msgid "Landscape"
 msgstr "Fekvõ"
 
@@ -1521,7 +1950,7 @@ msgstr "Fekvõ"
 msgid "Ledger, 17 x 11 in"
 msgstr "Ledger, 17 x 11 hüvelyk"
 
-#: ../src/generic/prntdlgg.cpp:649
+#: ../src/generic/prntdlgg.cpp:646
 msgid "Left margin (mm):"
 msgstr "Bal margó (mm):"
 
@@ -1537,19 +1966,17 @@ msgstr "Kisméretû levél, 8 1/2 x 11 hüvelyk"
 msgid "Letter, 8 1/2 x 11 in"
 msgstr "Levél, 8 1/2 x 11 hüvelyk"
 
-#: ../src/generic/fontdlgg.cpp:216
+#: ../src/generic/fontdlgg.cpp:233
 msgid "Light"
 msgstr "Vékony"
 
-#: ../src/generic/filedlgg.cpp:1279
-#: ../src/gtk/filedlg.cpp:249
-#: ../src/motif/filedlg.cpp:357
-#: ../src/msw/filedlg.cpp:483
+#: ../src/generic/filedlgg.cpp:1545 ../src/gtk/filedlg.cpp:249
+#: ../src/motif/filedlg.cpp:357 ../src/msw/filedlg.cpp:539
 #, c-format
 msgid "Load %s file"
 msgstr "A(z) %s fájl betöltése"
 
-#: ../src/html/htmlwin.cpp:197
+#: ../src/html/htmlwin.cpp:282
 msgid "Loading : "
 msgstr "Betöltés : "
 
@@ -1561,31 +1988,61 @@ msgstr "A szürke  Ascii PNM kép betöltése még nincs implementálva."
 msgid "Loading Grey Raw PNM image is not yet implemented."
 msgstr "A szürke nyers PNM kép betöltése még nincs implementálva."
 
-#: ../src/generic/logg.cpp:553
+#: ../src/generic/logg.cpp:547
 #, c-format
 msgid "Log saved to the file '%s'."
 msgstr "A naplót a(z) '%s' fájl-ba mentettem."
 
-#: ../src/gtk/mdi.cpp:435
+#: ../src/gtk/mdi.cpp:432
 msgid "MDI child"
 msgstr "MDI gyermek"
 
-#: ../src/unix/mimetype.cpp:1570
+#: ../src/msw/helpchm.cpp:60
+#, fuzzy
+msgid ""
+"MS HTML Help functions are unavailable because the MS HTML Help library is "
+"not installed on this machine. Please install it."
+msgstr ""
+"A tárcsázó funkciók nem használhatók, mert a távoli elérés szolgáltatás "
+"(RAS) nincs installálva ezen a gépen. Kérem installálja."
+
+#: ../src/univ/themes/win32.cpp:4545
+msgid "Ma&ximize"
+msgstr ""
+
+#: ../src/unix/mimetype.cpp:2418
 #, c-format
 msgid "Mailcap file %s, line %d: incomplete entry ignored."
 msgstr "Mailcap fájl %s, %d. sor: elhanyagoltam a hiányos elemet."
 
-#: ../src/common/fs_mem.cpp:144
+#: ../src/generic/fdrepdlg.cpp:152
+msgid "Match case"
+msgstr ""
+
+#: ../src/common/fs_mem.cpp:145
 #, c-format
 msgid "Memory VFS already contains file '%s'!"
 msgstr "A VFS memóriában már van '%s' fájl!"
 
-#: ../src/unix/mimetype.cpp:1292
+#: ../src/univ/themes/metal.cpp:174
+msgid "Metal theme"
+msgstr ""
+
+#: ../src/univ/themes/win32.cpp:4543
+msgid "Mi&nimize"
+msgstr ""
+
+#: ../src/unix/mimetype.cpp:2078
 #, c-format
 msgid "Mime.types file %s, line %d: unterminated quoted string."
 msgstr "%s mime-típusú fájl, %d. sor: befejezetlen idézõjeles szöveg."
 
-#: ../src/generic/fontdlgg.cpp:208
+#: ../src/mgl/app.cpp:173
+#, c-format
+msgid "Mode %ix%i-%i not available."
+msgstr ""
+
+#: ../src/generic/fontdlgg.cpp:225
 msgid "Modern"
 msgstr "Modern"
 
@@ -1593,98 +2050,98 @@ msgstr "Modern"
 msgid "Monarch Envelope, 3 7/8 x 7 1/2 in"
 msgstr "Birodalmi boríték, 3 7/8 x 7 1/2 hüvelyk"
 
-#: ../src/common/dlgcmn.cpp:141
+#: ../src/common/dlgcmn.cpp:176
 msgid "More..."
 msgstr "Még..."
 
-#: ../src/generic/dirctrlg.cpp:571
-#: ../src/generic/dirdlgg.cpp:213
-msgid "Mounted Devices"
-msgstr "Hozzáférhetõ eszközök"
-
-#: ../src/generic/dirdlgg.cpp:208
-msgid "My Harddisk"
-msgstr "Az Én Mágneslemezem"
-
-#: ../src/generic/dirctrlg.cpp:570
-#: ../src/generic/dirdlgg.cpp:212
-msgid "My Home"
-msgstr "Az Én Saját Könyvtáram"
-
-#: ../src/generic/filedlgg.cpp:533
+#: ../src/generic/filedlgg.cpp:687
 msgid "Name"
 msgstr "Név"
 
-#: ../src/generic/dirctrlg.cpp:1211
-#: ../src/generic/dirdlgg.cpp:426
-msgid "New..."
-msgstr "Új..."
-
-#: ../src/generic/filedlgg.cpp:610
+#: ../src/generic/dirdlgg.cpp:272 ../src/generic/dirdlgg.cpp:282
+#: ../src/generic/filedlgg.cpp:801 ../src/generic/filedlgg.cpp:810
 msgid "NewName"
 msgstr "ÚjNév"
 
-#: ../src/html/helpfrm.cpp:534
+#: ../src/html/helpfrm.cpp:520
 msgid "Next page"
 msgstr "Következõ oldal"
 
-#: ../src/common/dlgcmn.cpp:111
-#: ../src/common/dlgcmn.cpp:121
+#: ../src/common/dlgcmn.cpp:156 ../src/mac/msgdlg.cpp:78
 #: ../src/motif/msgdlg.cpp:180
 msgid "No"
 msgstr "Nem"
 
-#: ../src/common/resourc2.cpp:814
-#: ../src/common/resourc2.cpp:969
-#: ../src/common/resource.cpp:2465
-#: ../src/common/resource.cpp:2620
+#: ../src/common/image.cpp:793
+msgid "No Unused Color in image being masked"
+msgstr ""
+
+#: ../src/common/resourc2.cpp:814 ../src/common/resourc2.cpp:965
+#: ../src/common/resource.cpp:2464 ../src/common/resource.cpp:2614
 msgid "No XBM facility available!"
 msgstr "Nincs XBM felhasználási lehetõség!"
 
-#: ../src/common/resourc2.cpp:830
-#: ../src/common/resource.cpp:2480
-msgid "No XPM facility available!"
-msgstr "Nincs XPM felhasználási lehetõség!"
-
-#: ../src/common/resourc2.cpp:991
-#: ../src/common/resource.cpp:2642
+#: ../src/common/resourc2.cpp:983 ../src/common/resource.cpp:2632
 msgid "No XPM icon facility available!"
 msgstr "Nincs XPM ikon felhasználási lehetõség!"
 
-#: ../src/generic/helphtml.cpp:314
+#: ../src/generic/helphtml.cpp:329
 msgid "No entries found."
 msgstr "Nem találtam elemet."
 
-#: ../src/common/image.cpp:835
+#: ../src/common/fontmap.cpp:865
+#, c-format
+msgid ""
+"No font for displaying text in encoding '%s' found,\n"
+"but an alternative encoding '%s' is available.\n"
+"Do you want to use this encoding (otherwise you will have to choose another "
+"one)?"
+msgstr ""
+
+#: ../src/common/fontmap.cpp:870
+#, fuzzy, c-format
+msgid ""
+"No font for displaying text in encoding '%s' found.\n"
+"Would you like to select a font to be used for this encoding\n"
+"(otherwise the text in this encoding will not be shown correctly)?"
+msgstr ""
+"A(z) '%s' kódolás ismeretlen.\n"
+"Szeretne választani egy jelkészletet ehhez a kódoláshoz\n"
+"(Különben az e kódolással készített szöveg nem jelezhetõ ki helyesen)?"
+
+#: ../contrib/src/xrc/xmlres.cpp:522
+#, c-format
+msgid "No handler found for XML node '%s', class '%s'!"
+msgstr ""
+
+#: ../src/common/image.cpp:1046 ../src/common/image.cpp:1089
 msgid "No handler found for image type."
 msgstr "Ilyen típusú képhez nem találtam kezelõt."
 
-#: ../src/common/image.cpp:843
-#: ../src/common/image.cpp:877
+#: ../src/common/image.cpp:1054 ../src/common/image.cpp:1097
+#: ../src/common/image.cpp:1131
 #, c-format
 msgid "No image handler for type %d defined."
 msgstr "%d  típusú képhez nincs kezelõ meghatározva."
 
-#: ../src/common/image.cpp:861
-#: ../src/common/image.cpp:893
+#: ../src/common/image.cpp:1115 ../src/common/image.cpp:1147
 #, c-format
 msgid "No image handler for type %s defined."
 msgstr "%s  típusú képhez nincs kezelõ meghatározva."
 
-#: ../src/html/helpfrm.cpp:652
+#: ../src/html/helpfrm.cpp:650
 msgid "No matching page found yet"
 msgstr "Még nem találtam egy megfelelõ oldalt"
 
-#: ../src/common/fontmap.cpp:106
+#: ../src/common/fontmap.cpp:121
 msgid "Nordic (ISO-8859-10)"
 msgstr "Északi (ISO-8859-10)"
 
-#: ../src/generic/fontdlgg.cpp:212
-#: ../src/generic/fontdlgg.cpp:215
+#: ../src/generic/fontdlgg.cpp:229 ../src/generic/fontdlgg.cpp:232
 msgid "Normal"
 msgstr "Normál"
 
-#: ../src/html/helpfrm.cpp:920
+#: ../src/html/helpfrm.cpp:942
 msgid "Normal font:"
 msgstr "Normál jelkészlet:"
 
@@ -1692,82 +2149,68 @@ msgstr "Normál jelkészlet:"
 msgid "Note, 8 1/2 x 11 in"
 msgstr "Feljegyzés, 8 1/2 x 11 hüvelyk"
 
-#: ../src/common/dlgcmn.cpp:127
-#: ../src/generic/dcpsg.cpp:2266
-#: ../src/generic/dirctrlg.cpp:1203
-#: ../src/generic/dirdlgg.cpp:422
-#: ../src/generic/filedlgg.cpp:907
-#: ../src/generic/fontdlgg.cpp:256
-#: ../src/generic/logg.cpp:748
-#: ../src/generic/prntdlgg.cpp:467
-#: ../src/generic/proplist.cpp:511
-#: ../src/gtk/filedlg.cpp:167
-#: ../src/gtk/fontdlg.cpp:167
-#: ../src/html/helpfrm.cpp:948
+#: ../src/common/dlgcmn.cpp:162 ../src/generic/dcpsg.cpp:2268
+#: ../src/generic/dirdlgg.cpp:151 ../src/generic/filedlgg.cpp:1154
+#: ../src/generic/filedlgg.cpp:1165 ../src/generic/fontdlgg.cpp:256
+#: ../src/generic/logg.cpp:732 ../src/generic/prntdlgg.cpp:464
+#: ../src/generic/proplist.cpp:499 ../src/gtk/filedlg.cpp:167
+#: ../src/gtk/fontdlg.cpp:135 ../src/html/helpfrm.cpp:972
 msgid "OK"
 msgstr "Igen"
 
-#: ../src/html/helpfrm.cpp:542
-#: ../src/html/helpfrm.cpp:1231
+#: ../src/html/helpfrm.cpp:528 ../src/html/helpfrm.cpp:1274
 msgid "Open HTML document"
 msgstr "Nyisd meg a HTML dokumentumot"
 
-#: ../src/generic/dirctrlg.cpp:633
-#: ../src/generic/dirctrlg.cpp:1347
-#: ../src/generic/dirdlgg.cpp:297
-#: ../src/generic/dirdlgg.cpp:604
-#: ../src/generic/filedlgg.cpp:625
-#: ../src/generic/filedlgg.cpp:744
+#: ../src/generic/dirctrlg.cpp:731 ../src/generic/dirdlgg.cpp:298
+#: ../src/generic/filedlgg.cpp:825 ../src/generic/filedlgg.cpp:949
 msgid "Operation not permitted."
 msgstr "Ez a mûvelet nincs megengedve."
 
-#: ../src/common/cmdline.cpp:642
+#: ../src/common/cmdline.cpp:631
 #, c-format
 msgid "Option '%s' requires a value, '=' expected."
 msgstr "A(z) '%s' beállítás egy értéket kér, '='-et vártam."
 
-#: ../src/common/cmdline.cpp:662
+#: ../src/common/cmdline.cpp:651
 #, c-format
 msgid "Option '%s' requires a value."
 msgstr "A(z) '%s' beállítás egy értéket kér."
 
-#: ../src/common/cmdline.cpp:723
+#: ../src/common/cmdline.cpp:712
 #, c-format
 msgid "Option '%s': '%s' cannot be converted to a date."
 msgstr "A(z) '%s' beállítása: '%s' nem alakítható át dátummá."
 
-#: ../src/generic/prntdlgg.cpp:447
+#: ../src/generic/prntdlgg.cpp:444
 msgid "Options"
 msgstr "Lehetõségek"
 
-#: ../src/generic/prntdlgg.cpp:443
-#: ../src/generic/prntdlgg.cpp:638
+#: ../src/generic/prntdlgg.cpp:440 ../src/generic/prntdlgg.cpp:635
 msgid "Orientation"
 msgstr "Irányultság"
 
-#: ../src/common/imagpcx.cpp:460
-#: ../src/common/imagpcx.cpp:483
+#: ../src/common/imagpcx.cpp:455 ../src/common/imagpcx.cpp:478
 msgid "PCX: couldn't allocate memory"
 msgstr "PCX: nem tudtam memóriát foglalni"
 
-#: ../src/common/imagpcx.cpp:459
+#: ../src/common/imagpcx.cpp:454
 msgid "PCX: image format unsupported"
 msgstr "PCX: nem támogatott kép formátum"
 
-#: ../src/common/imagpcx.cpp:482
+#: ../src/common/imagpcx.cpp:477
 msgid "PCX: invalid image"
 msgstr "PCX: érvénytelen kép"
 
-#: ../src/common/imagpcx.cpp:446
+#: ../src/common/imagpcx.cpp:441
 msgid "PCX: this is not a PCX file."
 msgstr "PCX: ez nem PCX fájl."
 
-#: ../src/common/imagpcx.cpp:462
-#: ../src/common/imagpcx.cpp:484
+#: ../src/common/imagpcx.cpp:457 ../src/common/imagpcx.cpp:479
 msgid "PCX: unknown error !!!"
 msgstr "PCX: ismeretlen hiba !!!"
 
-#: ../src/common/imagpcx.cpp:461
+#: ../src/common/imagpcx.cpp:456
 msgid "PCX: version number too low"
 msgstr "PCX: túl alacsony verziószám"
 
@@ -1783,170 +2226,169 @@ msgstr "PNM: Azonosítalan fájl formátum."
 msgid "PNM: File seems truncated."
 msgstr "PNM: A fájl csonkítottnak tûnik."
 
-#: ../src/common/prntbase.cpp:731
+#: ../src/common/prntbase.cpp:741
 #, c-format
 msgid "Page %d"
 msgstr "%d. oldal"
 
-#: ../src/common/prntbase.cpp:729
+#: ../src/common/prntbase.cpp:739
 #, c-format
 msgid "Page %d of %d"
 msgstr "%d. oldal (%d-bõl)"
 
-#: ../src/generic/prntdlgg.cpp:604
+#: ../src/generic/prntdlgg.cpp:601
 msgid "Page Setup"
 msgstr "Oldal beállítás"
 
-#: ../src/generic/prntdlgg.cpp:164
+#: ../src/generic/prntdlgg.cpp:163
 msgid "Pages"
 msgstr "Oldalak"
 
-#: ../src/generic/prntdlgg.cpp:555
-#: ../src/generic/prntdlgg.cpp:626
-#: ../src/generic/prntdlgg.cpp:808
+#: ../src/generic/prntdlgg.cpp:552 ../src/generic/prntdlgg.cpp:623
+#: ../src/generic/prntdlgg.cpp:805
 msgid "Paper Size"
 msgstr "Papír méret"
 
-#: ../src/generic/prntdlgg.cpp:433
-#: ../src/generic/prntdlgg.cpp:615
-#: ../src/generic/prntdlgg.cpp:804
+#: ../src/generic/prntdlgg.cpp:430 ../src/generic/prntdlgg.cpp:612
+#: ../src/generic/prntdlgg.cpp:801
 msgid "Paper size"
 msgstr "Papír méret"
 
-#: ../src/generic/filedlgg.cpp:537
+#: ../src/generic/filedlgg.cpp:692
 msgid "Permissions"
 msgstr "Jogosultságok"
 
-#: ../src/unix/utilsunx.cpp:440
-#: ../src/unix/utilsunx.cpp:468
+#: ../src/unix/utilsunx.cpp:585 ../src/unix/utilsunx.cpp:613
 msgid "Pipe creation failed"
 msgstr "A csõ létrehozása nem sikerült"
 
-#: ../src/gtk/fontdlg.cpp:67
+#: ../src/gtk/fontdlg.cpp:72
 msgid "Please choose a valid font."
 msgstr "Kérem válasszon egy érvényes jelkészletet."
 
-#: ../src/generic/filedlgg.cpp:1092
-#: ../src/gtk/filedlg.cpp:80
+#: ../src/generic/filedlgg.cpp:1353 ../src/gtk/filedlg.cpp:80
 msgid "Please choose an existing file."
 msgstr "Kérem válasszon egy létezõ fájlt."
 
-#: ../src/msw/dialup.cpp:768
+#: ../src/msw/dialup.cpp:752
 msgid "Please choose which ISP do you want to connect to"
 msgstr "Kérem válassza ki, melyik ISP-hez akar kapcsolódni"
 
-#: ../src/common/prntbase.cpp:107
-msgid "Please wait..."
-msgstr "Kérem várjon..."
+#: ../src/msw/listctrl.cpp:536
+#, c-format
+msgid ""
+"Please install a newer version of comctl32.dll\n"
+"(at least version 4.70 is required but you have %d.%02d)\n"
+"or this program won't operate correctly."
+msgstr ""
 
-#: ../src/generic/dcpsg.cpp:2257
-#: ../src/generic/prntdlgg.cpp:440
-#: ../src/generic/prntdlgg.cpp:636
+#: ../src/common/prntbase.cpp:111
+msgid "Please wait while printing\n"
+msgstr ""
+
+#: ../src/generic/dcpsg.cpp:2259 ../src/generic/prntdlgg.cpp:437
+#: ../src/generic/prntdlgg.cpp:633
 msgid "Portrait"
 msgstr "Álló"
 
-#: ../src/generic/dcpsg.cpp:391
+#: ../src/generic/dcpsg.cpp:388
 msgid "PostScript"
 msgstr "PostScript"
 
-#: ../src/generic/prntdlgg.cpp:272
+#: ../src/generic/prntdlgg.cpp:271
 msgid "PostScript file"
 msgstr "PostScript fájl"
 
-#: ../src/generic/dcpsg.cpp:2299
+#: ../src/generic/dcpsg.cpp:2301
 msgid "PostScript:"
 msgstr "PostScript:"
 
-#: ../src/generic/dcpsg.cpp:2262
+#: ../src/generic/dcpsg.cpp:2264
 msgid "Preview Only"
 msgstr "Csak elõkép"
 
-#: ../src/html/helpfrm.cpp:942
+#: ../src/html/helpfrm.cpp:964
 msgid "Preview:"
 msgstr "Elõkép:"
 
-#: ../src/html/helpfrm.cpp:531
+#: ../src/html/helpfrm.cpp:517
 msgid "Previous page"
 msgstr "Elõzõ oldal"
 
-#: ../src/generic/prntdlgg.cpp:113
-#: ../src/generic/prntdlgg.cpp:127
+#: ../src/generic/prntdlgg.cpp:112 ../src/generic/prntdlgg.cpp:126
 msgid "Print"
 msgstr "Nyomtatás"
 
-#: ../src/common/docview.cpp:897
+#: ../src/common/docview.cpp:910
 msgid "Print Preview"
 msgstr "Nyomtatási kép"
 
-#: ../src/common/prntbase.cpp:687
-#: ../src/common/prntbase.cpp:711
+#: ../src/common/prntbase.cpp:696 ../src/common/prntbase.cpp:720
 msgid "Print Preview Failure"
 msgstr "Nyomtatási kép hiba"
 
-#: ../src/generic/prntdlgg.cpp:172
+#: ../src/generic/prntdlgg.cpp:171
 msgid "Print Range"
 msgstr "Nyomtatási tartomány"
 
-#: ../src/generic/prntdlgg.cpp:408
-#: ../src/generic/prntdlgg.cpp:415
+#: ../src/generic/prntdlgg.cpp:405 ../src/generic/prntdlgg.cpp:412
 msgid "Print Setup"
 msgstr "Nyomtatási beállítások"
 
-#: ../src/generic/prntdlgg.cpp:455
+#: ../src/generic/prntdlgg.cpp:452
 msgid "Print in colour"
 msgstr "Színes nyomtatás"
 
-#: ../src/generic/prntdlgg.cpp:457
+#: ../src/generic/prntdlgg.cpp:454
 msgid "Print spooling"
 msgstr "Nyomtatás sorbaállítással"
 
-#: ../src/html/helpfrm.cpp:548
+#: ../src/html/helpfrm.cpp:534
 msgid "Print this page"
 msgstr "Nyomtatsd ezt az oldalt"
 
-#: ../src/generic/dcpsg.cpp:2261
-#: ../src/generic/prntdlgg.cpp:150
+#: ../src/generic/dcpsg.cpp:2263 ../src/generic/prntdlgg.cpp:149
 msgid "Print to File"
 msgstr "Nyomtatás fájlba"
 
-#: ../src/common/prntbase.cpp:366
+#: ../src/common/prntbase.cpp:371
 msgid "Print..."
 msgstr "Nyomtatás..."
 
-#: ../src/generic/dcpsg.cpp:2272
+#: ../src/generic/dcpsg.cpp:2274
 msgid "Printer Command: "
 msgstr "Nyomtató parancs: "
 
-#: ../src/generic/dcpsg.cpp:2277
+#: ../src/generic/dcpsg.cpp:2279
 msgid "Printer Options: "
 msgstr "Nyomtató lehetõségek: "
 
-#: ../src/generic/dcpsg.cpp:360
+#: ../src/generic/dcpsg.cpp:357
 msgid "Printer Settings"
 msgstr "Nyomtató beállítások"
 
-#: ../src/generic/prntdlgg.cpp:459
+#: ../src/generic/prntdlgg.cpp:456
 msgid "Printer command:"
 msgstr "Nyomtató parancs:"
 
-#: ../src/generic/prntdlgg.cpp:149
+#: ../src/generic/prntdlgg.cpp:148
 msgid "Printer options"
 msgstr "Nyomtató lehetõségek"
 
-#: ../src/generic/prntdlgg.cpp:463
+#: ../src/generic/prntdlgg.cpp:460
 msgid "Printer options:"
 msgstr "Nyomtató lehetõségek:"
 
-#: ../src/generic/prntdlgg.cpp:682
+#: ../src/generic/prntdlgg.cpp:679
 msgid "Printer..."
 msgstr "Nyomtató..."
 
-#: ../src/common/prntbase.cpp:106
-#: ../src/common/prntbase.cpp:148
-msgid "Printing"
+#: ../src/common/prntbase.cpp:108 ../src/common/prntbase.cpp:153
+#, fuzzy
+msgid "Printing "
 msgstr "Nyomtatás"
 
-#: ../src/common/prntbase.cpp:120
+#: ../src/common/prntbase.cpp:125
 msgid "Printing Error"
 msgstr "Nyomtatási hiba"
 
@@ -1959,7 +2401,7 @@ msgstr "A(z) %d. oldalt nyomtatom..."
 msgid "Printing..."
 msgstr "Nyomtatás..."
 
-#: ../src/common/log.cpp:350
+#: ../src/common/log.cpp:454
 msgid "Program aborted."
 msgstr "A program rendellenesen fejezõdött be."
 
@@ -1967,182 +2409,223 @@ msgstr "A program rendellenesen fejezõdött be."
 msgid "Quarto, 215 x 275 mm"
 msgstr "Quarto, 215 x 275 mm"
 
-#: ../src/generic/logg.cpp:1038
+#: ../src/generic/logg.cpp:1053
 msgid "Question"
 msgstr "Kérdés"
 
-#: ../src/common/ffile.cpp:133
-#: ../src/common/ffile.cpp:154
+#: ../src/common/ffile.cpp:125 ../src/common/ffile.cpp:146
 #, c-format
 msgid "Read error on file '%s'"
 msgstr "Olvasási hiba a(z) '%s' fájlban"
 
-#: ../src/msw/registry.cpp:530
+#: ../contrib/src/xrc/xmlres.cpp:497
+#, c-format
+msgid "Referenced object node with ref=\"%s\" not found!"
+msgstr ""
+
+#: ../src/msw/registry.cpp:535
 #, c-format
 msgid "Registry key '%s' already exists."
 msgstr "Már létezik a(z) '%s' registry kulcs."
 
-#: ../src/msw/registry.cpp:499
+#: ../src/msw/registry.cpp:504
 #, c-format
 msgid "Registry key '%s' does not exist, cannot rename it."
 msgstr "A(z) '%s' registry kulcs még nem létezik, nem tudom átnevezni."
 
-#: ../src/msw/registry.cpp:626
+#: ../src/msw/registry.cpp:631
 #, c-format
-msgid "Registry key '%s' is needed for normal system operation,\ndeleting it will leave your system in unusable state:\noperation aborted."
-msgstr "A(z) '%s' registry kulcs a normális mûködéshez szükséges,\nannak törlése használhatatlanná teszi az Ön rendszerét:\na mûveletet nem hajtom végre."
+msgid ""
+"Registry key '%s' is needed for normal system operation,\n"
+"deleting it will leave your system in unusable state:\n"
+"operation aborted."
+msgstr ""
+"A(z) '%s' registry kulcs a normális mûködéshez szükséges,\n"
+"annak törlése használhatatlanná teszi az Ön rendszerét:\n"
+"a mûveletet nem hajtom végre."
 
-#: ../src/msw/registry.cpp:430
+#: ../src/msw/registry.cpp:435
 #, c-format
 msgid "Registry value '%s' already exists."
 msgstr "Már létezik a(z) '%s' registry érték."
 
-#: ../src/generic/helphtml.cpp:319
+#: ../src/generic/helphtml.cpp:334
 msgid "Relevant entries:"
 msgstr "A megfelelõ tagok:"
 
-#: ../src/generic/progdlgg.cpp:170
+#: ../src/generic/progdlgg.cpp:199
 msgid "Remaining time : "
 msgstr "A hátralevõ idõ : "
 
-#: ../src/html/helpfrm.cpp:282
+#: ../src/html/helpfrm.cpp:324
 msgid "Remove current page from bookmarks"
 msgstr "Töröld ezt az oldalt a könyvjelzõk közül"
 
-#: ../src/msw/filedlg.cpp:445
-#, c-format
-msgid "Replace file '%s'?"
+#: ../src/generic/fdrepdlg.cpp:177
+#, fuzzy
+msgid "Replace &all"
 msgstr "Helyettesítsem a(z) '%s' fájlt?"
 
-#: ../src/generic/prntdlgg.cpp:661
+#: ../src/generic/fdrepdlg.cpp:129
+msgid "Replace with:"
+msgstr ""
+
+#: ../contrib/src/xrc/xmlres.cpp:359
+msgid "Resource files must have same version number!"
+msgstr ""
+
+#: ../src/generic/prntdlgg.cpp:658
 msgid "Right margin (mm):"
 msgstr "Jobb margó (mm):"
 
-#: ../src/generic/fontdlgg.cpp:206
+#: ../src/generic/fontdlgg.cpp:223
 msgid "Roman"
 msgstr "Roman"
 
-#: ../src/generic/filedlgg.cpp:1295
-#: ../src/gtk/filedlg.cpp:265
-#: ../src/motif/filedlg.cpp:359
-#: ../src/msw/filedlg.cpp:484
+#: ../src/generic/filedlgg.cpp:1561 ../src/gtk/filedlg.cpp:265
+#: ../src/motif/filedlg.cpp:359 ../src/msw/filedlg.cpp:541
 #, c-format
 msgid "Save %s file"
 msgstr "A(z) %s fájl elmentése"
 
-#: ../src/common/docview.cpp:249
+#: ../src/common/docview.cpp:245
 msgid "Save as"
 msgstr "Mentés másként"
 
-#: ../src/generic/logg.cpp:488
+#: ../src/generic/logg.cpp:480
 msgid "Save log contents to file"
 msgstr "Mentsd a napló tartalmát fájlba"
 
-#: ../src/generic/fontdlgg.cpp:209
+#: ../src/mgl/window.cpp:132
+msgid "Screenshot captured: "
+msgstr ""
+
+#: ../src/generic/fontdlgg.cpp:226
 msgid "Script"
 msgstr "Script"
 
-#: ../src/generic/helpwxht.cpp:161
-#: ../src/html/helpfrm.cpp:429
-#: ../src/html/helpfrm.cpp:449
+#: ../src/html/helpfrm.cpp:408 ../src/html/helpfrm.cpp:423
 msgid "Search"
 msgstr "Keresés"
 
-#: ../src/html/helpfrm.cpp:431
-msgid "Search contents of help book(s) for all occurences of the text you typed above"
-msgstr "Keresd meg a fentebb beírt szöveg valamennyi elõfordulását a súgó könyv(ek)ben"
+#: ../src/html/helpfrm.cpp:410
+msgid ""
+"Search contents of help book(s) for all occurences of the text you typed "
+"above"
+msgstr ""
+"Keresd meg a fentebb beírt szöveg valamennyi elõfordulását a súgó könyv(ek)"
+"ben"
 
-#: ../src/html/helpfrm.cpp:767
+#: ../src/generic/fdrepdlg.cpp:158
+#, fuzzy
+msgid "Search direction"
+msgstr "Hozzon létre könyvtárat"
+
+#: ../src/generic/fdrepdlg.cpp:117
+#, fuzzy
+msgid "Search for:"
+msgstr "Keresés"
+
+#: ../src/html/helpfrm.cpp:789
 msgid "Search in all books"
 msgstr "Keresés az összes könyvben"
 
-#: ../src/html/helpfrm.cpp:652
+#: ../src/html/helpfrm.cpp:650
 msgid "Searching..."
 msgstr "Keresek..."
 
-#: ../src/generic/dirctrlg.cpp:454
-#: ../src/generic/dirdlgg.cpp:191
+#: ../src/generic/dirctrlg.cpp:549
 msgid "Sections"
 msgstr "Szakaszok"
 
-#: ../src/common/ffile.cpp:221
+#: ../src/common/ffile.cpp:213
 #, c-format
 msgid "Seek error on file '%s'"
 msgstr "Keresési hiba a(z) '%s' fájlban"
 
-#: ../src/common/docview.cpp:1472
+#: ../src/common/docview.cpp:1525
 msgid "Select a document template"
 msgstr "Válasszon dokumentum template-et"
 
-#: ../src/common/docview.cpp:1519
+#: ../src/common/docview.cpp:1601
 msgid "Select a document view"
 msgstr "Válasszon dokumentum nézetet"
 
-#: ../src/common/docview.cpp:1371
-#: ../src/common/docview.cpp:1422
+#: ../src/common/docview.cpp:1392 ../src/common/docview.cpp:1443
 msgid "Select a file"
 msgstr "Válasszon fájlt"
 
-#: ../src/generic/dcpsg.cpp:2260
+#: ../src/generic/dcpsg.cpp:2262
 msgid "Send to Printer"
 msgstr "Küldd a nyomtatóra"
 
-#: ../src/common/cmdline.cpp:679
+#: ../src/common/cmdline.cpp:668
 #, c-format
 msgid "Separator expected after the option '%s'."
 msgstr "A(z) '%s' választási lehetõség után elválasztó jelet vártam."
 
-#: ../src/common/dlgcmn.cpp:138
+#: ../src/msw/glcanvas.cpp:432
+#, fuzzy
+msgid "SetPixelFormat failed."
+msgstr "A csõ létrehozása nem sikerült"
+
+#: ../src/common/dlgcmn.cpp:173
 msgid "Setup"
 msgstr "Beállítás"
 
-#: ../src/generic/prntdlgg.cpp:155
+#: ../src/generic/prntdlgg.cpp:154
 msgid "Setup..."
 msgstr "Beállítás..."
 
-#: ../src/msw/dialup.cpp:539
+#: ../src/msw/dialup.cpp:523
 msgid "Several active dialup connections found, choosing one randomly."
-msgstr "Több aktív telefonkapcsolatot találtam, az egyiket véletlenszerûen kiválasztom."
+msgstr ""
+"Több aktív telefonkapcsolatot találtam, az egyiket véletlenszerûen "
+"kiválasztom."
 
-#: ../src/html/helpfrm.cpp:345
+#: ../src/html/helpfrm.cpp:364
 msgid "Show all"
 msgstr "Mutatsd mindet"
 
-#: ../src/html/helpfrm.cpp:379
+#: ../src/html/helpfrm.cpp:375
 msgid "Show all items in index"
 msgstr "Mutatsd meg a tartalomjegyzék valamennyi elemét"
 
-#: ../src/generic/filedlgg.cpp:913
+#: ../src/generic/dirdlgg.cpp:135
+#, fuzzy
+msgid "Show hidden directories"
+msgstr "Mutatsd meg a rejtett fájlokat"
+
+#: ../src/generic/filedlgg.cpp:1149 ../src/generic/filedlgg.cpp:1171
 msgid "Show hidden files"
 msgstr "Mutatsd meg a rejtett fájlokat"
 
-#: ../src/html/helpfrm.cpp:515
+#: ../src/html/helpfrm.cpp:501
 msgid "Show/hide navigation panel"
 msgstr "Bemutatja/elrejti az irányító elemeket"
 
-#: ../src/generic/filedlgg.cpp:534
+#: ../src/generic/filedlgg.cpp:688
 msgid "Size"
 msgstr "Méret"
 
-#: ../src/generic/fontdlgg.cpp:214
+#: ../src/generic/fontdlgg.cpp:231
 msgid "Slant"
 msgstr "Dõlt"
 
-#: ../src/common/docview.cpp:306
+#: ../src/common/docview.cpp:302
 msgid "Sorry, could not open this file for saving."
 msgstr "Sajnálom, nem tudtam megnyitni a fájlt mentésre."
 
-#: ../src/common/docview.cpp:342
-#: ../src/common/docview.cpp:354
-#: ../src/common/docview.cpp:1390
+#: ../src/common/docview.cpp:339 ../src/common/docview.cpp:352
+#: ../src/common/docview.cpp:1411
 msgid "Sorry, could not open this file."
 msgstr "Sajnálom, nem tudtam megnyitni ezt a fájlt."
 
-#: ../src/common/docview.cpp:313
+#: ../src/common/docview.cpp:309
 msgid "Sorry, could not save this file."
 msgstr "Sajnálom, nem tudtam elmenteni ezt a fájlt."
 
-#: ../src/common/prntbase.cpp:687
+#: ../src/common/prntbase.cpp:696
 msgid "Sorry, not enough memory to create a preview."
 msgstr "Sajnálom, nincs elég memória az elõkép létrehozásához."
 
@@ -2150,33 +2633,37 @@ msgstr "Sajnálom, nincs elég memória az elõkép létrehozásához."
 msgid "Statement, 5 1/2 x 8 1/2 in"
 msgstr "Bejelentés, 5 1/2 x 8 1/2 hüvelyk"
 
-#: ../src/generic/logg.cpp:613
+#: ../src/generic/logg.cpp:597
 msgid "Status: "
 msgstr "Állapot: "
 
-#: ../src/generic/fontdlgg.cpp:210
+#: ../contrib/src/xrc/xmlres.cpp:557
+#, c-format
+msgid "Subclass '%s' not found for resource '%s', not subclassing!"
+msgstr ""
+
+#: ../src/generic/fontdlgg.cpp:227
 msgid "Swiss"
 msgstr "Svájci"
 
-#: ../src/common/imagtiff.cpp:192
-#: ../src/common/imagtiff.cpp:203
-#: ../src/common/imagtiff.cpp:314
+#: ../src/common/imagtiff.cpp:204 ../src/common/imagtiff.cpp:215
+#: ../src/common/imagtiff.cpp:326
 msgid "TIFF: Couldn't allocate memory."
 msgstr "TIFF: Nem tudtam memóriát foglalni."
 
-#: ../src/common/imagtiff.cpp:163
+#: ../src/common/imagtiff.cpp:175
 msgid "TIFF: Error loading image."
 msgstr "TIFF: Hiba a kép betöltésekor."
 
-#: ../src/common/imagtiff.cpp:214
+#: ../src/common/imagtiff.cpp:226
 msgid "TIFF: Error reading image."
 msgstr "TIFF: Hiba a kép olvasásakor."
 
-#: ../src/common/imagtiff.cpp:291
+#: ../src/common/imagtiff.cpp:303
 msgid "TIFF: Error saving image."
 msgstr "TIFF: Hiba a kép elmentésekor."
 
-#: ../src/common/imagtiff.cpp:338
+#: ../src/common/imagtiff.cpp:350
 msgid "TIFF: Error writing image."
 msgstr "TIFF: Hiba a kép írásakor."
 
@@ -2184,118 +2671,155 @@ msgstr "TIFF: Hiba a kép írásakor."
 msgid "Tabloid, 11 x 17 in"
 msgstr "Tabloid, 11 x 17 hüvelyk"
 
-#: ../src/generic/fontdlgg.cpp:211
+#: ../src/generic/fontdlgg.cpp:228
 msgid "Teletype"
 msgstr "Teletype"
 
-#: ../src/common/docview.cpp:1473
+#: ../src/common/docview.cpp:1526
 msgid "Templates"
 msgstr "Minták"
 
-#: ../src/generic/dirctrlg.cpp:576
-#: ../src/generic/dirdlgg.cpp:218
-msgid "Temporary"
-msgstr "Idõleges"
-
-#: ../src/common/fontmap.cpp:107
+#: ../src/common/fontmap.cpp:122
 msgid "Thai (ISO-8859-11)"
 msgstr "Thai (ISO-8859-11)"
 
-#: ../src/generic/dirctrlg.cpp:569
-#: ../src/generic/dirdlgg.cpp:210
-msgid "The Computer"
-msgstr "A Számítógép"
+#: ../src/common/ftp.cpp:569
+msgid "The FTP server doesn't support passive mode."
+msgstr ""
 
-#: ../src/common/fontmap.cpp:475
+#: ../src/common/fontmap.cpp:630
 #, c-format
-msgid "The charset '%s' is unknown. You may select\nanother charset to replace it with or choose\n[Cancel] if it cannot be replaced"
-msgstr "A(z) '%s' jelkészlet ismeretlen.Választhat másik\nkészletet ennek helyettesítésére vagy\n[Mégsem]-t ha nem helyettesíthetõ"
+msgid ""
+"The charset '%s' is unknown. You may select\n"
+"another charset to replace it with or choose\n"
+"[Cancel] if it cannot be replaced"
+msgstr ""
+"A(z) '%s' jelkészlet ismeretlen.Választhat másik\n"
+"készletet ennek helyettesítésére vagy\n"
+"[Mégsem]-t ha nem helyettesíthetõ"
 
-#: ../src/msw/ole/dataobj.cpp:169
+#: ../src/msw/ole/dataobj.cpp:161
 #, c-format
 msgid "The clipboard format '%d' doesn't exist."
 msgstr "A(z) '%d' vágólap formátum nem létezik."
 
-#: ../src/generic/dirctrlg.cpp:1244
-#: ../src/generic/dirdlgg.cpp:535
-msgid "The directory "
-msgstr "A könyvtár "
+#: ../src/generic/dirdlgg.cpp:186
+#, fuzzy, c-format
+msgid ""
+"The directory '%s' does not exist\n"
+"Create it now?"
+msgstr ""
+"\n"
+"nem létezik\n"
+"Létrehozzam most?"
 
-#: ../src/common/fontmap.cpp:668
+#: ../src/common/docview.cpp:1789
+#, fuzzy, c-format
+msgid ""
+"The file '%s' doesn't exist and couldn't be opened.\n"
+"It has been removed from the most recently used files list."
+msgstr ""
+"A(z) '%s' fájl nem létezik és nem nyitható meg.\n"
+"Az MRU fájlok listájáról is el van távolítva."
+
+#: ../src/common/filename.cpp:884
 #, c-format
-msgid "The encoding '%s' is unknown.\nWould you like to select a font to be used for this encoding\n(otherwise the text in this encoding will not be shown correctly)?"
-msgstr "A(z) '%s' kódolás ismeretlen.\nSzeretne választani egy jelkészletet ehhez a kódoláshoz\n(Különben az e kódolással készített szöveg nem jelezhetõ ki helyesen)?"
+msgid "The path '%s' contains too many \"..\"!"
+msgstr ""
 
-#: ../src/common/docview.cpp:1707
-#, c-format
-msgid "The file '%s' doesn't exist and couldn't be opened.\nIt has been also removed from the MRU files list."
-msgstr "A(z) '%s' fájl nem létezik és nem nyitható meg.\nAz MRU fájlok listájáról is el van távolítva."
-
-#: ../src/common/cmdline.cpp:813
+#: ../src/common/cmdline.cpp:802
 #, c-format
 msgid "The required parameter '%s' was not specified."
 msgstr "A szükséges '%s' paraméter nincs megadva."
 
-#: ../src/common/textcmn.cpp:121
+#: ../src/common/textcmn.cpp:187
 msgid "The text couldn't be saved."
 msgstr "A szöveget nem tudom elmenteni."
 
-#: ../src/common/cmdline.cpp:792
+#: ../src/common/cmdline.cpp:781
 #, c-format
 msgid "The value for the option '%s' must be specified."
 msgstr "A(z) '%s' beállítás értékét meg kell adni."
 
-#: ../src/msw/dialup.cpp:415
+#: ../src/msw/dialup.cpp:411
 #, c-format
-msgid "The version of remote access service (RAS) installed on this machine is tooold, please upgrade (the following required function is missing: %s)."
-msgstr "Az ezen a gépre installált távoli hozzáférési lehetõség  (RAS) túl régi, kérem frissítsen (A(z) %s szükséges funkció hiányzik)."
+msgid ""
+"The version of remote access service (RAS) installed on this machine is "
+"tooold, please upgrade (the following required function is missing: %s)."
+msgstr ""
+"Az ezen a gépre installált távoli hozzáférési lehetõség  (RAS) túl régi, "
+"kérem frissítsen (A(z) %s szükséges funkció hiányzik)."
 
-#: ../src/msw/thread.cpp:1083
-msgid "Thread module initialization failed: can not store value in thread local storage"
-msgstr "A szál modul inicializálása nem sikerült: nem tudok értéket tárolni a szál helyi tárolójába"
+#: ../src/html/htmprint.cpp:548
+msgid ""
+"There was a problem during page setup: you may need to set a default printer."
+msgstr ""
 
-#: ../src/unix/threadpsx.cpp:1441
+#: ../src/msw/thread.cpp:1298
+msgid ""
+"Thread module initialization failed: can not store value in thread local "
+"storage"
+msgstr ""
+"A szál modul inicializálása nem sikerült: nem tudok értéket tárolni a szál "
+"helyi tárolójába"
+
+#: ../src/unix/threadpsx.cpp:1688
 msgid "Thread module initialization failed: failed to create thread key"
-msgstr "A szál modul inicializálása nem sikerült: nem sikerült a szálhoz kulcsot készíteni"
+msgstr ""
+"A szál modul inicializálása nem sikerült: nem sikerült a szálhoz kulcsot "
+"készíteni"
 
-#: ../src/msw/thread.cpp:1071
-msgid "Thread module initialization failed: impossible to allocate index in thread local storage"
-msgstr "A szál modul inicializálása nem sikerült: nem lehet indexet foglalni a szál helyi tárolájában"
+#: ../src/msw/thread.cpp:1286
+msgid ""
+"Thread module initialization failed: impossible to allocate index in thread "
+"local storage"
+msgstr ""
+"A szál modul inicializálása nem sikerült: nem lehet indexet foglalni a szál "
+"helyi tárolájában"
 
-#: ../src/unix/threadpsx.cpp:962
+#: ../src/unix/threadpsx.cpp:1208
 msgid "Thread priority setting is ignored."
 msgstr "A szál prioritás beállítását elhanyagoltam."
 
-#: ../src/generic/filedlgg.cpp:536
+#: ../src/msw/mdi.cpp:186
+msgid "Tile &Horizontally"
+msgstr ""
+
+#: ../src/msw/mdi.cpp:187
+msgid "Tile &Vertically"
+msgstr ""
+
+#: ../src/generic/filedlgg.cpp:690
 msgid "Time"
 msgstr "Idõ"
 
-#: ../src/generic/tipdlg.cpp:162
+#: ../src/generic/tipdlg.cpp:163
 msgid "Tip of the Day"
 msgstr "A Nap Tippje"
 
-#: ../src/generic/tipdlg.cpp:138
+#: ../src/generic/tipdlg.cpp:139
 msgid "Tips not available, sorry!"
 msgstr "Nincsenek tippek, sajnálom!"
 
-#: ../src/generic/prntdlgg.cpp:191
+#: ../src/generic/prntdlgg.cpp:190
 msgid "To:"
 msgstr "Ig:"
 
-#: ../src/generic/prntdlgg.cpp:650
+#: ../src/generic/prntdlgg.cpp:647
 msgid "Top margin (mm):"
 msgstr "Felsõ margó (mm):"
 
-#: ../src/common/fs_mem.cpp:202
+#: ../src/common/fs_mem.cpp:203
 #, c-format
 msgid "Trying to remove file '%s' from memory VFS, but it is not loaded!"
-msgstr "Megpróbáltam eltávolítani a(z) '%s' fájlt a VFS tárolóból, de nincs betöltve!"
+msgstr ""
+"Megpróbáltam eltávolítani a(z) '%s' fájlt a VFS tárolóból, de nincs betöltve!"
 
-#: ../src/common/sckaddr.cpp:107
+#: ../src/common/sckaddr.cpp:126
 msgid "Trying to solve a NULL hostname: giving up"
 msgstr "Megpróbáltam feloldani a NULL gazdagép nevet: feladom"
 
-#: ../src/common/fontmap.cpp:105
+#: ../src/common/fontmap.cpp:120
 msgid "Turkish (ISO-8859-9)"
 msgstr "Török (ISO-8859-9)"
 
@@ -2303,243 +2827,296 @@ msgstr "Török (ISO-8859-9)"
 msgid "US Std Fanfold, 14 7/8 x 11 in"
 msgstr "USA standard leporelló, 14 7/8 x 11 hüvelyk"
 
-#: ../src/html/htmlwin.cpp:183
+#: ../src/html/htmlwin.cpp:270
 #, c-format
 msgid "Unable to open requested HTML document: %s"
 msgstr "Nem tudom megnyitni a(z) %s HTML dokumentumot"
 
-#: ../src/generic/fontdlgg.cpp:242
+#: ../src/generic/fontdlgg.cpp:252
 msgid "Underline"
 msgstr "Aláhúzás"
 
-#: ../src/common/resourc2.cpp:305
-#: ../src/common/resourc2.cpp:319
-#: ../src/common/resourc2.cpp:335
-#: ../src/common/resourc2.cpp:349
-#: ../src/common/resourc2.cpp:1378
-#: ../src/common/resourc2.cpp:1392
-#: ../src/common/resourc2.cpp:1408
-#: ../src/common/resourc2.cpp:1422
-#: ../src/common/resource.cpp:1818
-#: ../src/common/resource.cpp:1832
-#: ../src/common/resource.cpp:1849
-#: ../src/common/resource.cpp:1863
-#: ../src/common/resource.cpp:1948
-#: ../src/common/resource.cpp:1962
-#: ../src/common/resource.cpp:1978
-#: ../src/common/resource.cpp:1992
-#: ../src/common/resource.cpp:3033
-#: ../src/common/resource.cpp:3047
-#: ../src/common/resource.cpp:3064
-#: ../src/common/resource.cpp:3078
+#: ../src/common/resourc2.cpp:305 ../src/common/resourc2.cpp:319
+#: ../src/common/resourc2.cpp:335 ../src/common/resourc2.cpp:349
+#: ../src/common/resourc2.cpp:1370 ../src/common/resourc2.cpp:1384
+#: ../src/common/resourc2.cpp:1400 ../src/common/resourc2.cpp:1414
+#: ../src/common/resource.cpp:1817 ../src/common/resource.cpp:1831
+#: ../src/common/resource.cpp:1848 ../src/common/resource.cpp:1862
+#: ../src/common/resource.cpp:1947 ../src/common/resource.cpp:1961
+#: ../src/common/resource.cpp:1977 ../src/common/resource.cpp:1991
+#: ../src/common/resource.cpp:3027 ../src/common/resource.cpp:3041
+#: ../src/common/resource.cpp:3058 ../src/common/resource.cpp:3072
 msgid "Unexpected end of file whilst parsing resource."
 msgstr "Váratlan fájl vége az erõforrás fájl értelmezése során."
 
-#: ../src/common/cmdline.cpp:764
+#: ../src/common/cmdline.cpp:753
 #, c-format
 msgid "Unexpected parameter '%s'"
 msgstr "Váratlan '%s' paraméter"
+
+#: ../src/common/fontmap.cpp:141
+msgid "Unicode 7 bit (UTF-7)"
+msgstr ""
+
+#: ../src/common/fontmap.cpp:142
+msgid "Unicode 8 bit (UTF-8)"
+msgstr ""
 
 #: ../src/msw/dde.cpp:1020
 #, c-format
 msgid "Unknown DDE error %08x"
 msgstr "Ismeretlen DDE hiba %08x"
 
-#: ../src/common/fontmap.cpp:329
+#: ../src/common/fontmap.cpp:403
 #, c-format
 msgid "Unknown encoding (%d)"
 msgstr "Ismeretlen (%d) kódolás"
 
-#: ../src/unix/mimetype.cpp:1335
+#: ../src/unix/mimetype.cpp:2125
 #, c-format
 msgid "Unknown field in file %s, line %d: '%s'."
 msgstr "A(z) %s fájl %d-edik sorában: '%s' ismeretlen mezõ."
 
-#: ../src/common/cmdline.cpp:548
+#: ../src/common/cmdline.cpp:537
 #, c-format
 msgid "Unknown long option '%s'"
 msgstr "Ismeretlen hosszú opció '%s'"
 
-#: ../src/common/cmdline.cpp:570
+#: ../src/common/cmdline.cpp:559
 #, c-format
 msgid "Unknown option '%s'"
 msgstr "Ismeretlen opció '%s'"
 
-#: ../src/common/mimecmn.cpp:161
+#: ../contrib/src/xrc/xmlres.cpp:627
+msgid "Unknown style flag "
+msgstr ""
+
+#: ../src/common/mimecmn.cpp:167
 #, c-format
 msgid "Unmatched '{' in an entry for mime type %s."
 msgstr "Páratlan '{' a(z) %s mime típus egyik elemében."
 
-#: ../src/common/docview.cpp:1956
-#: ../src/common/docview.cpp:1971
-#: ../src/common/docview.cpp:1998
+#: ../src/common/cmdproc.cpp:233 ../src/common/cmdproc.cpp:248
+#: ../src/common/cmdproc.cpp:275
 msgid "Unnamed command"
 msgstr "Név nélküli parancs"
 
-#: ../src/common/resourc2.cpp:687
-#: ../src/common/resource.cpp:2337
+#: ../src/common/resourc2.cpp:687 ../src/common/resource.cpp:2336
 #, c-format
 msgid "Unrecognized style %s whilst parsing resource."
 msgstr "Ismeretlen %s stílust találtam az erõforrás értelmezésekor."
 
-#: ../src/mac/clipbrd.cpp:191
-#: ../src/msw/clipbrd.cpp:268
-#: ../src/msw/clipbrd.cpp:369
+#: ../src/mac/clipbrd.cpp:58 ../src/msw/clipbrd.cpp:273
+#: ../src/msw/clipbrd.cpp:447
 msgid "Unsupported clipboard format."
 msgstr "Nem támogatott vágólap formátum."
 
-#: ../src/common/cmdline.cpp:849
+#: ../src/common/appcmn.cpp:311
+#, c-format
+msgid "Unsupported theme '%s'."
+msgstr ""
+
+#: ../src/generic/fdrepdlg.cpp:157
+msgid "Up"
+msgstr ""
+
+#: ../src/common/cmdline.cpp:838
 #, c-format
 msgid "Usage: %s"
 msgstr "Használat: %s"
 
-#: ../src/generic/dirctrlg.cpp:573
-#: ../src/generic/dirdlgg.cpp:215
-msgid "User"
-msgstr "Felhasználó"
-
-#: ../src/generic/dirctrlg.cpp:572
-#: ../src/generic/dirdlgg.cpp:214
-msgid "User Local"
-msgstr "Helyi felhasználó"
-
-#: ../src/common/valtext.cpp:188
+#: ../src/common/valtext.cpp:196
 msgid "Validation conflict"
 msgstr "Érvényességi ütközés"
 
-#: ../src/generic/dirctrlg.cpp:574
-#: ../src/generic/dirdlgg.cpp:216
-msgid "Variables"
-msgstr "Változók"
-
-#: ../src/generic/filedlgg.cpp:861
+#: ../src/generic/filedlgg.cpp:1079
 msgid "View files as a detailed view"
 msgstr "A fájlok bemutatása részletezve"
 
-#: ../src/generic/filedlgg.cpp:855
+#: ../src/generic/filedlgg.cpp:1072
 msgid "View files as a list view"
 msgstr "A fájlok bemutatása lista szerûen"
 
-#: ../src/common/docview.cpp:1520
+#: ../src/common/docview.cpp:1602
 msgid "Views"
 msgstr "Nézetek"
 
-#: ../src/unix/utilsunx.cpp:270
-#: ../src/unix/utilsunx.cpp:619
+#: ../src/unix/utilsunx.cpp:801
 msgid "Waiting for subprocess termination failed"
 msgstr "Nem sikerült megvárni az alprocessz befejezõdését"
 
-#: ../src/common/docview.cpp:437
-#: ../src/common/resource.cpp:121
+#: ../src/common/docview.cpp:435 ../src/common/resource.cpp:124
 msgid "Warning"
 msgstr "Figyelmeztetés"
 
-#: ../src/common/log.cpp:360
+#: ../src/common/log.cpp:464
 msgid "Warning: "
 msgstr "Figyelmeztetés: "
 
-#: ../src/html/htmlpars.cpp:185
+#: ../src/html/htmlpars.cpp:357
 msgid "Warning: attempt to remove HTML tag handler from empty stack."
-msgstr "Figyeleztetés: üres veremtárolóból próbál eltávolítani HTML összetevõt."
+msgstr ""
+"Figyeleztetés: üres veremtárolóból próbál eltávolítani HTML összetevõt."
 
-#: ../src/common/fontmap.cpp:97
-msgid "Western European (ISO-8859-1/Latin 1)"
+#: ../src/common/fontmap.cpp:112
+#, fuzzy
+msgid "Western European (ISO-8859-1)"
 msgstr "Nyugat-európai (ISO-8859-1/Latin 1)"
 
-#: ../src/common/fontmap.cpp:111
-msgid "Western European with Euro (ISO-8859-15/Latin 0)"
+#: ../src/common/fontmap.cpp:126
+#, fuzzy
+msgid "Western European with Euro (ISO-8859-15)"
 msgstr "Nyugat-európai Euro-val (ISO-8859-15/Latin 0)"
 
-#: ../src/html/helpfrm.cpp:421
+#: ../src/generic/fdrepdlg.cpp:149
+#, fuzzy
+msgid "Whole word"
+msgstr "Csak egész szavak"
+
+#: ../src/html/helpfrm.cpp:407
 msgid "Whole words only"
 msgstr "Csak egész szavak"
 
-#: ../src/msw/utils.cpp:571
+#: ../src/univ/themes/win32.cpp:1168
+msgid "Win32 theme"
+msgstr ""
+
+#: ../src/msw/utils.cpp:975
 msgid "Win32s on Windows 3.1"
 msgstr "Win32s a  Windows 3.1-en"
 
-#: ../src/msw/mdi.cpp:1311
-msgid "Window"
-msgstr "Ablak"
-
-#: ../src/msw/utils.cpp:603
+#: ../src/msw/utils.cpp:1007
 msgid "Windows 3.1"
 msgstr "Windows 3.1"
 
-#: ../src/msw/utils.cpp:575
+#: ../src/msw/utils.cpp:979
 #, c-format
 msgid "Windows 9%c"
 msgstr "Windows 9%c"
 
-#: ../src/common/fontmap.cpp:119
+#: ../src/common/fontmap.cpp:138
 msgid "Windows Arabic (CP 1256)"
 msgstr "Windows Arab (CP 1256)"
 
-#: ../src/common/fontmap.cpp:120
+#: ../src/common/fontmap.cpp:139
 msgid "Windows Baltic (CP 1257)"
 msgstr "Windows Balti (CP 1257)"
 
-#: ../src/common/fontmap.cpp:113
+#: ../src/common/fontmap.cpp:132
 msgid "Windows Central European (CP 1250)"
 msgstr "Windows Közép-európai (CP 1250)"
 
-#: ../src/common/fontmap.cpp:114
+#: ../src/common/fontmap.cpp:129
+msgid "Windows Chinese Simplified (CP 936)"
+msgstr ""
+
+#: ../src/common/fontmap.cpp:131
+#, fuzzy
+msgid "Windows Chinese Traditional (CP 950)"
+msgstr "Windows Nyugat-európai (CP 1252)"
+
+#: ../src/common/fontmap.cpp:133
 msgid "Windows Cyrillic (CP 1251)"
 msgstr "Windows Orosz (CP 1251)"
 
-#: ../src/common/fontmap.cpp:116
+#: ../src/common/fontmap.cpp:135
 msgid "Windows Greek (CP 1253)"
 msgstr "Windows Görög (CP 1253)"
 
-#: ../src/common/fontmap.cpp:118
+#: ../src/common/fontmap.cpp:137
 msgid "Windows Hebrew (CP 1255)"
 msgstr "Windows Héber (CP 1255)"
 
-#: ../src/common/fontmap.cpp:117
+#: ../src/common/fontmap.cpp:128
+#, fuzzy
+msgid "Windows Japanese (CP 932)"
+msgstr "Windows Görög (CP 1253)"
+
+#: ../src/common/fontmap.cpp:130
+#, fuzzy
+msgid "Windows Korean (CP 949)"
+msgstr "Windows Görög (CP 1253)"
+
+#: ../src/common/fontmap.cpp:136
 msgid "Windows Turkish (CP 1254)"
 msgstr "Windows Török (CP 1254)"
 
-#: ../src/common/fontmap.cpp:115
+#: ../src/common/fontmap.cpp:134
 msgid "Windows Western European (CP 1252)"
 msgstr "Windows Nyugat-európai (CP 1252)"
 
-#: ../src/common/fontmap.cpp:121
+#: ../src/common/fontmap.cpp:140
 msgid "Windows/DOS OEM (CP 437)"
 msgstr "Windows/DOS OEM (CP 437)"
 
-#: ../src/common/ffile.cpp:168
+#: ../src/common/ffile.cpp:160
 #, c-format
 msgid "Write error on file '%s'"
 msgstr "Irási hiba a(z) '%s' fájlban"
 
-#: ../src/generic/dcpsg.cpp:2317
+#: ../src/generic/dcpsg.cpp:2319
 msgid "X Scaling"
 msgstr "X skálázás"
 
-#: ../src/generic/dcpsg.cpp:2326
+#: ../src/generic/dcpsg.cpp:2328
 msgid "X Translation"
 msgstr "X eltolás"
 
-#: ../src/generic/dcpsg.cpp:2321
+#: ../contrib/src/xrc/xml.cpp:529
+#, c-format
+msgid "XML parsing error: '%s' at line %d"
+msgstr ""
+
+#: ../src/common/xpmdecod.cpp:761
+msgid "XPM: Malformed pixel data!"
+msgstr ""
+
+#: ../src/common/xpmdecod.cpp:711 ../src/common/xpmdecod.cpp:720
+#, c-format
+msgid "XPM: malformed colour definition '%s'!"
+msgstr ""
+
+#: ../contrib/src/xrc/xmlres.cpp:435
+#, fuzzy, c-format
+msgid "XRC resource '%s' (class '%s') not found!"
+msgstr "Nem találom a(z) %s ikon erõforrás meghatározását."
+
+#: ../contrib/src/xrc/xmlres.cpp:764 ../contrib/src/xrc/xmlres.cpp:774
+#, c-format
+msgid "XRC resource: Cannot create bitmap from '%s'."
+msgstr ""
+
+#: ../contrib/src/xrc/xh_dlg.cpp:52 ../contrib/src/xrc/xh_frame.cpp:57
+msgid "XRC resource: Cannot create dialog without instance."
+msgstr ""
+
+#: ../contrib/src/xrc/xmlres.cpp:744
+#, c-format
+msgid "XRC resource: Incorrect colour specification '%s' for property '%s'."
+msgstr ""
+
+#: ../src/generic/dcpsg.cpp:2323
 msgid "Y Scaling"
 msgstr "Y skálázás"
 
-#: ../src/generic/dcpsg.cpp:2330
+#: ../src/generic/dcpsg.cpp:2332
 msgid "Y Translation"
 msgstr "Y eltolás"
 
-#: ../src/common/dlgcmn.cpp:109
-#: ../src/common/dlgcmn.cpp:116
+#: ../src/common/dlgcmn.cpp:151 ../src/mac/msgdlg.cpp:77
 #: ../src/motif/msgdlg.cpp:180
 msgid "Yes"
 msgstr "Igen"
 
-#: ../src/generic/dirctrlg.cpp:1311
-#: ../src/generic/dirdlgg.cpp:570
+#: ../src/generic/dirdlgg.cpp:262
 msgid "You cannot add a new directory to this section."
 msgstr "Nem tud könyvtárat hozzáadni ehhez a szakaszhoz."
 
-#: ../src/common/docview.cpp:2067
+#: ../src/common/fs_zip.cpp:86 ../src/common/fs_zip.cpp:123
+msgid "ZIP handler currently supports only local files!"
+msgstr ""
+
+#: ../src/common/docview.cpp:1938
 msgid "[EMPTY]"
 msgstr "[ÜRES]"
 
@@ -2548,8 +3125,16 @@ msgid "a DDEML application has created a prolonged race condition."
 msgstr "a DDEML alkalmazás meghosszabított versenyhelyzetet teremtett."
 
 #: ../src/msw/dde.cpp:975
-msgid "a DDEML function was called without first calling the DdeInitialize function,\nor an invalid instance identifier\nwas passed to a DDEML function."
-msgstr "egy DDEML függvényt hívott anélkül, hogy elõször a  DdeInitialize függvényt hívta volna,\nvagy érvénytelen instance azonosítót \nadott át a DDEML függvénynek."
+msgid ""
+"a DDEML function was called without first calling the DdeInitialize "
+"function,\n"
+"or an invalid instance identifier\n"
+"was passed to a DDEML function."
+msgstr ""
+"egy DDEML függvényt hívott anélkül, hogy elõször a  DdeInitialize függvényt "
+"hívta volna,\n"
+"vagy érvénytelen instance azonosítót \n"
+"adott át a DDEML függvénynek."
 
 #: ../src/msw/dde.cpp:993
 msgid "a client's attempt to establish a conversation has failed."
@@ -2581,23 +3166,38 @@ msgstr "a szinkron adatlerakás kérési tranzakció nem fejezõdött be idõre."
 
 #: ../src/msw/dde.cpp:1014
 msgid "a request to end an advise transaction has timed out."
-msgstr "a  tanácskozási tranzakció befejezésének kérése nem fejezõdött be idõre."
+msgstr ""
+"a  tanácskozási tranzakció befejezésének kérése nem fejezõdött be idõre."
 
 #: ../src/msw/dde.cpp:1008
-msgid "a server-side transaction was attempted on a conversation\nthat was terminated by the client, or the server\nterminated before completing a transaction."
-msgstr "a kiszolgáló olyan párbeszédben kísérelt meg tranzakciót végrehajtani\namelyiket az ügyfél már befejezett, vagy a kiszolgáló\na tranzakció befejezése elõtt kilépett."
+msgid ""
+"a server-side transaction was attempted on a conversation\n"
+"that was terminated by the client, or the server\n"
+"terminated before completing a transaction."
+msgstr ""
+"a kiszolgáló olyan párbeszédben kísérelt meg tranzakciót végrehajtani\n"
+"amelyiket az ügyfél már befejezett, vagy a kiszolgáló\n"
+"a tranzakció befejezése elõtt kilépett."
 
 #: ../src/msw/dde.cpp:996
 msgid "a transaction failed."
 msgstr "sikertelen tranzakció."
 
-#: ../src/common/utilscmn.cpp:470
+#: ../src/common/menucmn.cpp:99
 msgid "alt"
 msgstr "alt"
 
 #: ../src/msw/dde.cpp:978
-msgid "an application initialized as APPCLASS_MONITOR has\nattempted to perform a DDE transaction,\nor an application initialized as APPCMD_CLIENTONLY has \nattempted to perform server transactions."
-msgstr "egy APPCLASS_MONITOR-ként inicializált alkalmazás\nDDE tranzakciót próbált végezni,\nvagy  APPCMD_CLIENTONLY-ként inicializált alkalmazás\npróbált meg kiszolgáló tranzakciót végezni."
+msgid ""
+"an application initialized as APPCLASS_MONITOR has\n"
+"attempted to perform a DDE transaction,\n"
+"or an application initialized as APPCMD_CLIENTONLY has \n"
+"attempted to perform server transactions."
+msgstr ""
+"egy APPCLASS_MONITOR-ként inicializált alkalmazás\n"
+"DDE tranzakciót próbált végezni,\n"
+"vagy  APPCMD_CLIENTONLY-ként inicializált alkalmazás\n"
+"próbált meg kiszolgáló tranzakciót végezni."
 
 #: ../src/msw/dde.cpp:1002
 msgid "an internal call to the PostMessage function has failed. "
@@ -2608,255 +3208,304 @@ msgid "an internal error has occurred in the DDEML."
 msgstr "belsõ hiba történt a DDEML-ben."
 
 #: ../src/msw/dde.cpp:1017
-msgid "an invalid transaction identifier was passed to a DDEML function.\nOnce the application has returned from an XTYP_XACT_COMPLETE callback,\nthe transaction identifier for that callback is no longer valid."
-msgstr "érvénytelen azonosítót adott át a DDEML függvénynek.\nHa az alkalmazás visszatért egy XTYP_XACT_COMPLETE visszahívásból,\na tranzakció azonosítója erre a hívásra már nem érvényes."
+msgid ""
+"an invalid transaction identifier was passed to a DDEML function.\n"
+"Once the application has returned from an XTYP_XACT_COMPLETE callback,\n"
+"the transaction identifier for that callback is no longer valid."
+msgstr ""
+"érvénytelen azonosítót adott át a DDEML függvénynek.\n"
+"Ha az alkalmazás visszatért egy XTYP_XACT_COMPLETE visszahívásból,\n"
+"a tranzakció azonosítója erre a hívásra már nem érvényes."
 
-#: ../src/common/fileconf.cpp:1448
+#: ../src/common/fileconf.cpp:1556
 #, c-format
 msgid "attempt to change immutable key '%s' ignored."
-msgstr "elhanyagoltam a változtathatatlan '%s' kulcs megváltoztatására tett kísérletét."
+msgstr ""
+"elhanyagoltam a változtathatatlan '%s' kulcs megváltoztatására tett "
+"kísérletét."
 
-#: ../src/common/ffile.cpp:101
+#: ../src/common/ftp.cpp:369
+msgid "binary"
+msgstr ""
+
+#: ../src/common/fontcmn.cpp:518
+#, fuzzy
+msgid "bold"
+msgstr "Félkövér"
+
+#: ../src/common/fontcmn.cpp:442
+#, fuzzy
+msgid "bold "
+msgstr "Félkövér"
+
+#: ../src/common/ffile.cpp:93
 #, c-format
 msgid "can't close file '%s'"
 msgstr "nem tudom lezárni a(z) '%s' fájlt."
 
-#: ../src/common/file.cpp:257
+#: ../src/common/file.cpp:276
 #, c-format
 msgid "can't close file descriptor %d"
 msgstr "nem tudom lezárni a(z) %d fájl leírót"
 
-#: ../src/common/file.cpp:555
-#: ../src/common/file.cpp:565
+#: ../src/common/file.cpp:554
 #, c-format
 msgid "can't commit changes to file '%s'"
 msgstr "nem tudom érvényre juttatni a(z) '%s' fájl változásait"
 
-#: ../src/common/file.cpp:200
+#: ../src/common/file.cpp:219
 #, c-format
 msgid "can't create file '%s'"
 msgstr "nem tudom létrehozni a(z) '%s' fájl-t"
 
-#: ../src/common/fileconf.cpp:918
+#: ../src/common/fileconf.cpp:1025
 #, c-format
 msgid "can't delete user configuration file '%s'"
 msgstr "nem tudom törölni a(z) '%s' felhasználói konfigurációs fájlt"
 
-#: ../src/common/file.cpp:436
+#: ../src/common/file.cpp:459
 #, c-format
 msgid "can't determine if the end of file is reached on descriptor %d"
-msgstr "nem tudom meghatározni, hogy a fájl végét értük-e el a(z) %d leíróval megadott fájlban"
+msgstr ""
+"nem tudom meghatározni, hogy a fájl végét értük-e el a(z) %d leíróval "
+"megadott fájlban"
 
-#: ../src/common/file.cpp:402
+#: ../src/common/file.cpp:425
 #, c-format
 msgid "can't find length of file on file descriptor %d"
-msgstr "nem tudom meghatározni a fájl hosszát a(z) %d leíróval megadott fájlban"
+msgstr ""
+"nem tudom meghatározni a fájl hosszát a(z) %d leíróval megadott fájlban"
 
-#: ../src/msw/utils.cpp:376
+#: ../src/msw/utils.cpp:374
 msgid "can't find user's HOME, using current directory."
-msgstr "nem tudom meghatározni a felhasználó saját könyvtárát, a jelenlegit használom tovább."
+msgstr ""
+"nem tudom meghatározni a felhasználó saját könyvtárát, a jelenlegit "
+"használom tovább."
 
-#: ../src/common/file.cpp:316
+#: ../src/common/file.cpp:339
 #, c-format
 msgid "can't flush file descriptor %d"
 msgstr "nem tudom kiüríteni a(z) %d leíróval megadott fájl pufferét"
 
-#: ../src/common/file.cpp:370
+#: ../src/common/file.cpp:393
 #, c-format
 msgid "can't get seek position on file descriptor %d"
 msgstr "nem találom a keresési pozíciót a(z) %d leíróval megadott fájlban"
 
-#: ../src/common/fontmap.cpp:610
+#: ../src/common/fontmap.cpp:766
 msgid "can't load any font, aborting"
 msgstr "egyetlen jelkészletet sem tudok betölteni, kilépek"
 
-#: ../src/common/ffile.cpp:85
-#: ../src/common/file.cpp:243
+#: ../src/common/ffile.cpp:77 ../src/common/file.cpp:262
 #, c-format
 msgid "can't open file '%s'"
 msgstr "nem tudom megnyitni a(z) '%s' fájlt"
 
-#: ../src/common/fileconf.cpp:317
+#: ../src/common/fileconf.cpp:388
 #, c-format
 msgid "can't open global configuration file '%s'."
 msgstr "nem tudom megnyitni a(z) '%s' globális konfigurációs fájlt."
 
-#: ../src/common/fileconf.cpp:329
+#: ../src/common/fileconf.cpp:400
 #, c-format
 msgid "can't open user configuration file '%s'."
 msgstr "nem tudom megnyitni a(z) '%s' felhasználói konfigurációs fájlt."
 
-#: ../src/common/fileconf.cpp:798
+#: ../src/common/fileconf.cpp:905
 msgid "can't open user configuration file."
 msgstr "nem tudom megnyitni a felhasználó konfigurációs fájlját."
 
-#: ../src/common/file.cpp:283
+#: ../src/common/file.cpp:302
 #, c-format
 msgid "can't read from file descriptor %d"
 msgstr "nem tudok olvasni a(z) %d leíróval megadott fájból"
 
-#: ../src/common/file.cpp:550
-#: ../src/common/file.cpp:560
+#: ../src/common/file.cpp:549
 #, c-format
 msgid "can't remove file '%s'"
 msgstr "nem tudom eltávolítani a(z) '%s' fájlt"
 
-#: ../src/common/file.cpp:578
-#: ../src/common/file.cpp:581
+#: ../src/common/file.cpp:565
 #, c-format
 msgid "can't remove temporary file '%s'"
 msgstr "nem tudom eltávolítani a(z) '%s' átmeneti fájlt"
 
-#: ../src/common/file.cpp:356
+#: ../src/common/file.cpp:379
 #, c-format
 msgid "can't seek on file descriptor %d"
 msgstr "nem tudok keresni a(z) %d leíróval megadott fájlban"
 
-#: ../src/common/textfile.cpp:358
-#, c-format
-msgid "can't write file '%s' to disk."
+#: ../src/common/textfile.cpp:196
+#, fuzzy, c-format
+msgid "can't write buffer '%s' to disk."
 msgstr "nem tudom a mágneslemezre írni a(z) '%s' fájlt."
 
-#: ../src/common/file.cpp:301
+#: ../src/common/file.cpp:324
 #, c-format
 msgid "can't write to file descriptor %d"
 msgstr "nem tudok írni a(z) %d leíróval megadott fájba"
 
-#: ../src/common/fileconf.cpp:805
+#: ../src/common/fileconf.cpp:912
 msgid "can't write user configuration file."
 msgstr "nem tudom írni a felhasználó konfigurációs fájlját."
 
-#: ../src/common/intl.cpp:357
+#: ../src/common/intl.cpp:363
 #, c-format
 msgid "catalog file for domain '%s' not found."
 msgstr "a(z) '%s' domén konfigurációs fájlját nem találom."
 
-#: ../src/common/utilscmn.cpp:468
+#: ../src/common/menucmn.cpp:97
 msgid "ctrl"
 msgstr "ctrl"
 
-#: ../src/common/cmdline.cpp:962
+#: ../src/common/cmdline.cpp:979
 msgid "date"
 msgstr "dátum"
 
-#: ../src/common/datetime.cpp:3182
+#: ../src/common/fontmap.cpp:413
+#, fuzzy
+msgid "default"
+msgstr "alt"
+
+#: ../src/common/datetime.cpp:3237
 msgid "eighteenth"
 msgstr "tizennyolcadik"
 
-#: ../src/common/datetime.cpp:3172
+#: ../src/common/datetime.cpp:3227
 msgid "eighth"
 msgstr "nyolcadik"
 
-#: ../src/common/datetime.cpp:3175
+#: ../src/common/datetime.cpp:3230
 msgid "eleventh"
 msgstr "tizenegyedik"
 
-#: ../src/common/fileconf.cpp:1435
+#: ../src/common/fileconf.cpp:1543
 #, c-format
 msgid "entry '%s' appears more than once in group '%s'"
 msgstr "a(z) '%s' elem egynél többször jelenik meg a(z) '%s' csoportban"
 
-#: ../src/msw/dialup.cpp:861
+#: ../src/msw/dialup.cpp:846
 msgid "establish"
 msgstr "megalapoz"
 
-#: ../src/common/ffile.cpp:182
+#: ../src/common/ffile.cpp:174
 #, c-format
 msgid "failed to flush the file '%s'"
 msgstr "nem sikerült kiüríteni a(z) '%s' fájl pufferét"
 
-#: ../src/common/datetime.cpp:3179
+#: ../src/common/datetime.cpp:3234
 msgid "fifteenth"
 msgstr "tizenötödik"
 
-#: ../src/common/datetime.cpp:3169
+#: ../src/common/datetime.cpp:3224
 msgid "fifth"
 msgstr "ötödik"
 
-#: ../src/common/fileconf.cpp:479
+#: ../src/common/fileconf.cpp:612
 #, c-format
 msgid "file '%s', line %d: '%s' ignored after group header."
 msgstr "'%s' fájl, %d. sor: '%s' -t elhanyagoltam a csoport fejléce után."
 
-#: ../src/common/fileconf.cpp:508
+#: ../src/common/fileconf.cpp:641
 #, c-format
 msgid "file '%s', line %d: '=' expected."
 msgstr "'%s' fájl, %d. sor: '=' -t vártam."
 
-#: ../src/common/fileconf.cpp:534
+#: ../src/common/fileconf.cpp:667
 #, c-format
 msgid "file '%s', line %d: key '%s' was first found at line %d."
-msgstr "'%s' fájl, %d. sor: a(z) '%s' kulcsot elõször a(z) %d sorban találtam meg."
+msgstr ""
+"'%s' fájl, %d. sor: a(z) '%s' kulcsot elõször a(z) %d sorban találtam meg."
 
-#: ../src/common/fileconf.cpp:524
+#: ../src/common/fileconf.cpp:657
 #, c-format
 msgid "file '%s', line %d: value for immutable key '%s' ignored."
-msgstr "file '%s', line %d: a változtathatatlan '%s' kulcs új értékét elhanyagoltam."
+msgstr ""
+"file '%s', line %d: a változtathatatlan '%s' kulcs új értékét elhanyagoltam."
 
-#: ../src/common/fileconf.cpp:447
+#: ../src/common/fileconf.cpp:580
 #, c-format
 msgid "file '%s': unexpected character %c at line %d."
 msgstr "'%s' fájl: a(z) %c nem várt jel a(z) %d sorban."
 
-#: ../src/common/datetime.cpp:3165
+#: ../src/common/datetime.cpp:3220
 msgid "first"
 msgstr "elsõ"
 
-#: ../src/common/datetime.cpp:3178
+#: ../src/common/datetime.cpp:3233
 msgid "fourteenth"
 msgstr "tizennegyedik"
 
-#: ../src/common/datetime.cpp:3168
+#: ../src/common/datetime.cpp:3223
 msgid "fourth"
 msgstr "negyedik"
 
-#: ../src/common/timercmn.cpp:260
+#: ../src/common/appcmn.cpp:250
+msgid "generate verbose log messages"
+msgstr ""
+
+#: ../src/common/timercmn.cpp:278
 msgid "gmtime() failed"
 msgstr "nem sikerült a gmtime()"
 
-#: ../src/msw/dialup.cpp:861
+#: ../src/msw/dialup.cpp:846
 msgid "initiate"
 msgstr "kezdeményez"
 
-#: ../src/common/file.cpp:440
+#: ../src/common/file.cpp:463
 msgid "invalid eof() return value."
 msgstr "érvénytelen eof() visszatérési érték."
 
-#: ../src/generic/logg.cpp:1052
+#: ../src/generic/logg.cpp:1067
 msgid "invalid message box return value"
 msgstr "érvénytelen üzenet ablak visszatérési érték"
 
-#: ../src/html/helpfrm.cpp:913
+#: ../src/common/fontcmn.cpp:458 ../src/common/fontcmn.cpp:522
+#, fuzzy
+msgid "italic"
+msgstr "Dõlt"
+
+#: ../src/html/helpfrm.cpp:935
 msgid "large"
 msgstr "nagy"
 
-#: ../src/common/intl.cpp:549
+#: ../src/common/fontcmn.cpp:514
+#, fuzzy
+msgid "light"
+msgstr "Vékony"
+
+#: ../src/common/fontcmn.cpp:438
+#, fuzzy
+msgid "light "
+msgstr "Vékony"
+
+#: ../src/common/intl.cpp:614
 #, c-format
 msgid "locale '%s' can not be set."
 msgstr "A(z) '%s' helyi változó nem állítható be."
 
-#: ../src/common/intl.cpp:352
+#: ../src/common/intl.cpp:358
 #, c-format
 msgid "looking for catalog '%s' in path '%s'."
 msgstr "keresem a(z) '%s' katalógust a(z) '%s' elérési úton."
 
-#: ../src/html/helpfrm.cpp:913
+#: ../src/html/helpfrm.cpp:935
 msgid "medium"
 msgstr "közepes"
 
-#: ../src/common/datetime.cpp:3329
+#: ../src/common/datetime.cpp:3385
 msgid "midnight"
 msgstr "éjfél"
 
-#: ../src/common/timercmn.cpp:256
+#: ../src/common/timercmn.cpp:274
 msgid "mktime() failed"
 msgstr "mktime() nem sikerült"
 
-#: ../src/common/datetime.cpp:3183
+#: ../src/common/datetime.cpp:3238
 msgid "nineteenth"
 msgstr "tizenkilencedik"
 
-#: ../src/common/datetime.cpp:3173
+#: ../src/common/datetime.cpp:3228
 msgid "ninth"
 msgstr "kilencedik"
 
@@ -2864,55 +3513,71 @@ msgstr "kilencedik"
 msgid "no DDE error."
 msgstr "nincs DDE hiba."
 
-#: ../src/html/helpdata.cpp:660
+#: ../src/html/helpdata.cpp:559
 msgid "noname"
 msgstr "névtelen"
 
-#: ../src/common/datetime.cpp:3328
+#: ../src/common/datetime.cpp:3384
 msgid "noon"
 msgstr "dél"
 
-#: ../src/common/cmdline.cpp:961
+#: ../src/common/cmdline.cpp:978
 msgid "num"
 msgstr "num"
+
+#: ../src/common/filename.cpp:162
+msgid "reading"
+msgstr ""
 
 #: ../src/msw/dde.cpp:1005
 msgid "reentrancy problem."
 msgstr "újrabelépési probléma."
 
-#: ../src/common/datetime.cpp:3166
+#: ../src/common/datetime.cpp:3221
 msgid "second"
 msgstr "második"
 
-#: ../src/common/datetime.cpp:3181
+#: ../src/common/datetime.cpp:3236
 msgid "seventeenth"
 msgstr "tizenhetedik"
 
-#: ../src/common/datetime.cpp:3171
+#: ../src/common/datetime.cpp:3226
 msgid "seventh"
 msgstr "hetedik"
 
-#: ../src/common/utilscmn.cpp:472
+#: ../src/common/menucmn.cpp:101
 msgid "shift"
 msgstr "eltol"
 
-#: ../src/common/datetime.cpp:3180
+#: ../src/common/appcmn.cpp:240
+msgid "show this help message"
+msgstr ""
+
+#: ../src/common/datetime.cpp:3235
 msgid "sixteenth"
 msgstr "tizenhatodik"
 
-#: ../src/common/datetime.cpp:3170
+#: ../src/common/datetime.cpp:3225
 msgid "sixth"
 msgstr "hatodik"
 
-#: ../src/html/helpfrm.cpp:913
+#: ../src/html/helpfrm.cpp:935
 msgid "small"
 msgstr "kicsi"
 
-#: ../src/common/cmdline.cpp:960
+#: ../src/common/appcmn.cpp:275
+msgid "specify display mode to use (e.g. 640x480-16)"
+msgstr ""
+
+#: ../src/common/appcmn.cpp:261
+msgid "specify the theme to use"
+msgstr ""
+
+#: ../src/common/cmdline.cpp:977
 msgid "str"
 msgstr "str"
 
-#: ../src/common/datetime.cpp:3174
+#: ../src/common/datetime.cpp:3229
 msgid "tenth"
 msgstr "tizedik"
 
@@ -2920,98 +3585,224 @@ msgstr "tizedik"
 msgid "the response to the transaction caused the DDE_FBUSY bit to be set."
 msgstr "a tranzakció eredményeként a DDE_FBUSY bit beállítódott."
 
-#: ../src/common/datetime.cpp:3167
+#: ../src/common/datetime.cpp:3222
 msgid "third"
 msgstr "harmadik"
 
-#: ../src/common/datetime.cpp:3177
+#: ../src/common/datetime.cpp:3232
 msgid "thirteenth"
 msgstr "tizenharmadik"
 
-#: ../src/common/datetime.cpp:3022
+#: ../src/common/datetime.cpp:3064
 msgid "today"
 msgstr "ma"
 
-#: ../src/common/datetime.cpp:3024
+#: ../src/common/datetime.cpp:3066
 msgid "tomorrow"
 msgstr "holnap"
 
-#: ../src/common/datetime.cpp:3176
+#: ../src/common/datetime.cpp:3231
 msgid "twelfth"
 msgstr "tizenkettedik"
 
-#: ../src/common/datetime.cpp:3184
+#: ../src/common/datetime.cpp:3239
 msgid "twentieth"
 msgstr "huszadik"
 
-#: ../src/common/fileconf.cpp:1555
+#: ../src/common/fontcmn.cpp:510
+#, fuzzy
+msgid "underlined"
+msgstr "Aláhúzás"
+
+#: ../src/common/fontcmn.cpp:425
+#, fuzzy
+msgid "underlined "
+msgstr "Aláhúzás"
+
+#: ../src/common/fileconf.cpp:1663
 #, c-format
 msgid "unexpected \" at position %d in '%s'."
 msgstr "váratlan \" a(z) %d pozícióban, a(z) '%s' fájlban."
 
-#: ../src/generic/progdlgg.cpp:244
+#: ../src/generic/progdlgg.cpp:283
 msgid "unknown"
 msgstr "ismeretlen"
 
-#: ../src/msw/dialup.cpp:466
+#: ../src/common/regex.cpp:144
+#, fuzzy
+msgid "unknown error"
+msgstr "GIF: ismeretlen hiba!!!"
+
+#: ../src/msw/dialup.cpp:450
 #, c-format
 msgid "unknown error (error code %08x)."
 msgstr "ismeretlen hiba (hiba kód %08x)."
 
-#: ../src/common/file.cpp:339
+#: ../src/common/textbuf.cpp:229
+#, fuzzy
+msgid "unknown line terminator"
+msgstr "ismeretlen keresési kezdõpont"
+
+#: ../src/common/file.cpp:362
 msgid "unknown seek origin"
 msgstr "ismeretlen keresési kezdõpont"
 
-#: ../src/common/fontmap.cpp:351
+#: ../src/common/fontmap.cpp:430
 #, c-format
 msgid "unknown-%d"
 msgstr "ismeretlen-%d"
 
-#: ../src/common/docview.cpp:406
+#: ../src/common/docview.cpp:404
 msgid "unnamed"
 msgstr "névtelen"
 
-#: ../src/common/docview.cpp:1188
+#: ../src/common/docview.cpp:1209
 #, c-format
 msgid "unnamed%d"
 msgstr "névtelen%d"
 
-#: ../src/common/intl.cpp:362
+#: ../src/common/intl.cpp:368
 #, c-format
 msgid "using catalog '%s' from '%s'."
 msgstr "a(z) '%s' katalógust használom (a(z) '%s' közül)."
 
-#: ../src/html/helpfrm.cpp:913
+#: ../src/html/helpfrm.cpp:935
 msgid "very large"
 msgstr "nagyon nagy"
 
-#: ../src/html/helpfrm.cpp:913
+#: ../src/html/helpfrm.cpp:935
 msgid "very small"
 msgstr "nagyon kicsi"
 
-#: ../src/common/timercmn.cpp:287
+#: ../src/common/filename.cpp:162
+#, fuzzy
+msgid "writing"
+msgstr "Nyomtatás"
+
+#: ../src/common/dynlib.cpp:333
+#, c-format
+msgid "wxDllLoader failed to GetSymbol '%s'"
+msgstr ""
+
+#: ../src/common/dynload.cpp:270
+#, c-format
+msgid "wxDynamicLibrary failed to GetSymbol '%s'"
+msgstr ""
+
+#: ../src/common/timercmn.cpp:323
 msgid "wxGetTimeOfDay failed."
 msgstr "wxGetTimeOfDay hibát eredményezett."
 
-#: ../src/common/socket.cpp:329
-#: ../src/common/socket.cpp:383
+#: ../src/common/socket.cpp:392 ../src/common/socket.cpp:446
 msgid "wxSocket: invalid signature in ReadMsg."
 msgstr "wxSocket: érvénytelen aláírás  ReadMsg-ben."
 
-#: ../src/common/socket.cpp:903
+#: ../src/common/socket.cpp:967
 msgid "wxSocket: unknown event!."
 msgstr "wxSocket: ismeretlen esemény!."
 
-#: ../src/motif/app.cpp:596
+#: ../src/motif/app.cpp:580
 #, c-format
 msgid "wxWindows could not open display for '%s': exiting."
 msgstr "a wxWindows nem tudott képernyõt nyitni '%s' számára: kilépés."
 
-#: ../src/common/filefn.cpp:1232
-msgid "wxWindows: error finding temporary file name.\n"
-msgstr "wxWindows: hiba az idõszakos fájlnév keresésekor.\n"
+#: ../src/x11/app.cpp:261
+#, fuzzy
+msgid "wxWindows could not open display. Exiting."
+msgstr "a wxWindows nem tudott képernyõt nyitni '%s' számára: kilépés."
 
-#: ../src/common/datetime.cpp:3023
+#: ../src/common/datetime.cpp:3065
 msgid "yesterday"
 msgstr "tegnap"
 
+#, fuzzy
+#~ msgid "Fatal Error"
+#~ msgstr "Végzetes hiba"
+
+#, fuzzy
+#~ msgid "Fatal error: %s\n"
+#~ msgstr "Végzetes hiba:"
+
+#~ msgid "Back"
+#~ msgstr "Vissza"
+
+#~ msgid "Can not create event object."
+#~ msgstr "Nem tudom létrehozni az esemény objektumot."
+
+#~ msgid ""
+#~ "Can't create window of class %s!\n"
+#~ "Possible Windows 3.x compatibility problem?"
+#~ msgstr ""
+#~ "Nem tudom létrehozni a(z) %s osztályú ablakot!\n"
+#~ " Windows 3.x kompatibilitás probléma lehet?"
+
+#~ msgid ""
+#~ "Can't find dialog template '%s'!\n"
+#~ "Check resource include path for finding wx.rc."
+#~ msgstr ""
+#~ "Nem találom a(z) '%s' párbeszéd template-et!\n"
+#~ "Ellenõrizze a wx.rc erõforrás elérési útvonalát."
+
+#~ msgid "Can't find the serialization object '%s' for the object '%s'."
+#~ msgstr ""
+#~ "Nem találom a soros ki-bemeneti '%s' objektumot a(z) '%s' objektumhoz."
+
+#~ msgid "Can't load wxSerial dynamic library."
+#~ msgstr "Nem tudom betölteni a  wxSerial dinamikus könyvtárat."
+
+#~ msgid "Connection to wxHelp timed out in %d seconds"
+#~ msgstr "A wxHelp-pel nem jött létre kapcsolat %d másodperc alatt"
+
+#~ msgid "Couldn't launch DDE server '%s'."
+#~ msgstr "Nem tudtam elindítani a '%s' DDE kiszolgálót."
+
+#~ msgid "Cyrillic (Latin 5)"
+#~ msgstr "Cirill (Latin 5)"
+
+#~ msgid "Etcetera"
+#~ msgstr "Satöbbi"
+
+#~ msgid "Incorrect version of HTML help book"
+#~ msgstr "A HTML súgó könyv változata nem megfelelõ"
+
+#~ msgid "Mounted Devices"
+#~ msgstr "Hozzáférhetõ eszközök"
+
+#~ msgid "My Harddisk"
+#~ msgstr "Az Én Mágneslemezem"
+
+#~ msgid "My Home"
+#~ msgstr "Az Én Saját Könyvtáram"
+
+#~ msgid "New..."
+#~ msgstr "Új..."
+
+#~ msgid "No XPM facility available!"
+#~ msgstr "Nincs XPM felhasználási lehetõség!"
+
+#~ msgid "Please wait..."
+#~ msgstr "Kérem várjon..."
+
+#~ msgid "Temporary"
+#~ msgstr "Idõleges"
+
+#~ msgid "The Computer"
+#~ msgstr "A Számítógép"
+
+#~ msgid "The directory "
+#~ msgstr "A könyvtár "
+
+#~ msgid "User"
+#~ msgstr "Felhasználó"
+
+#~ msgid "User Local"
+#~ msgstr "Helyi felhasználó"
+
+#~ msgid "Variables"
+#~ msgstr "Változók"
+
+#~ msgid "Window"
+#~ msgstr "Ablak"
+
+#~ msgid "wxWindows: error finding temporary file name.\n"
+#~ msgstr "wxWindows: hiba az idõszakos fájlnév keresésekor.\n"
