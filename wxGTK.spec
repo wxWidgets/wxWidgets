@@ -1,6 +1,6 @@
 %define pref /usr
 %define ver 2.3.0
-%define rel 0
+%define rel 1
 
 Summary: The GTK+ 1.2 port of the wxWindows library
 Name: wxGTK
@@ -68,6 +68,7 @@ make prefix=$RPM_BUILD_ROOT%{pref} install
 /sbin/ldconfig
 
 %files
+%defattr (-, root, root)
 %defattr (644, root, root, 755)
 %doc COPYING.LIB INSTALL.txt LICENCE.txt README.txt SYMBOLS.txt TODO.txt
 %dir %{pref}/share/wx
@@ -76,13 +77,14 @@ make prefix=$RPM_BUILD_ROOT%{pref} install
 %attr(755, -, -) %{pref}/lib/libwx_gtk-2.2.*
 
 %files devel
+%defattr (-, root, root)
 %defattr (644, root, root, 755)
 %dir %{pref}/include/wx
 %{pref}/include/wx/*
 %dir %{pref}/lib/wx
 %{pref}/lib/wx/*
-%attr(755, -, -) %{pref}/bin/wxgtk-config
-%attr(755, -, -) %{pref}/bin/wx-config
+%attr(755, root, root) %{pref}/bin/wxgtk-config
+%attr(755, root, root) %{pref}/bin/wx-config
 
 %files gl
-%attr(755, -, -) %{pref}/lib/libwx_gtk_gl*
+%attr(755, root, root) %{pref}/lib/libwx_gtk_gl*
