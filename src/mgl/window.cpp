@@ -171,22 +171,39 @@ static ibool MGLAPI wxWindowMouseHandler(window_t *wnd, event_t *e)
     event.m_leftDown = e->modifiers & EVT_LEFTBUT;
     event.m_middleDown = e->modifiers & EVT_MIDDLEBUT;
     event.m_rightDown = e->modifiers & EVT_RIGHTBUT;
-    
+   
     switch (e->what)
     {
         case EVT_MOUSEDOWN:
-            if ( e->message & EVT_LEFTBMASK )
-                type = (e->message & EVT_DBLCLICK) ?
-                        wxEVT_LEFT_DCLICK : wxEVT_LEFT_DOWN;
-            else if ( e->message & EVT_MIDDLEBMASK )
-                type = (e->message & EVT_DBLCLICK) ?
-                        wxEVT_MIDDLE_DCLICK : wxEVT_MIDDLE_DOWN;
-            else if ( e->message & EVT_RIGHTBMASK )
-                type = (e->message & EVT_DBLCLICK) ? 
-                        wxEVT_RIGHT_DCLICK : wxEVT_RIGHT_DOWN;
-
+            // Change focus if the user clicks outside focused window:
             if ( win->AcceptsFocus() && wxWindow::FindFocus() != win )
                 win->SetFocus();
+
+            if ( e->message & EVT_LEFTBMASK )
+                type = wxEVT_LEFT_DOWN;
+            else if ( e->message & EVT_MIDDLEBMASK )
+                type = wxEVT_MIDDLE_DOWN;
+            else if ( e->message & EVT_RIGHTBMASK )
+                type = wxEVT_RIGHT_DOWN;
+
+            if ( e->message & EVT_DBLCLICK )
+            {
+                // MGL doesn't generate two subsequent single clicks prior
+                // to a double click, but rather only fires one single click
+                // followed by one double click. wxWindows expects two single
+                // clicks, so we have to emulate the second one.
+                event.SetEventType(type);
+                win->GetEventHandler()->ProcessEvent(event);
+            
+                // And change event type for the real double click event
+                // that will be generated later in this function:
+                if ( e->message & EVT_LEFTBMASK )
+                    type = wxEVT_LEFT_DCLICK;
+                else if ( e->message & EVT_MIDDLEBMASK )
+                    type = wxEVT_MIDDLE_DCLICK;
+                else if ( e->message & EVT_RIGHTBMASK )
+                    type = wxEVT_RIGHT_DCLICK;
+            }
 
             break;
 
