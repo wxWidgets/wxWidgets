@@ -88,7 +88,8 @@ OBJECTS0= \
 	stattext.obj,\
 	tbargtk.obj,\
 	textctrl.obj,\
-	tglbtn.obj
+	tglbtn.obj,\
+	msgdlg.obj
 
 SOURCES =\
 	app.cpp,\
@@ -125,6 +126,7 @@ SOURCES =\
 	mdi.cpp,\
 	menu.cpp,\
 	minifram.cpp,\
+	msgdlg.cpp,\
 	notebook.cpp,\
 	pen.cpp,\
 	popupwin.cpp,\
@@ -193,6 +195,7 @@ gsockgtk.obj : gsockgtk.c
 icon.obj : icon.cpp
 listbox.obj : listbox.cpp
 main.obj : main.cpp
+msgdlg.obj : msgdlg.cpp
 mdi.obj : mdi.cpp
 menu.obj : menu.cpp
 minifram.obj : minifram.cpp

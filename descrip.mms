@@ -14,6 +14,9 @@
 	set def [.wxwindows]
 
 all :
+	set default [.include.wx]
+	if f$search("DEPRECATED.DIR") .eqs. "" then set file/enter=[]deprecated.dir [--.contrib.include.wx]deprecated.dir
+	set default [--]
 	make gtk
 	purge [...]
 	delete [...]*.obj;
@@ -35,7 +38,9 @@ gtk : [.include.wx]setup.h
 	$(MMS)$(MMSQUALIFIERS)/macro=(__WXGTK__=1)
 	set default [-.gtk]
 	$(MMS)$(MMSQUALIFIERS)/macro=(__WXGTK__=1)
-	set default [--.demos.bombs]
+	set default [--.contrib.src.deprecated]
+	$(MMS)$(MMSQUALIFIERS)/macro=(__WXGTK__=1)
+	set default [---.demos.bombs]
 	$(MMS)$(MMSQUALIFIERS)/macro=(__WXGTK__=1)
 	set default [--.samples.calendar]
 	$(MMS)$(MMSQUALIFIERS)/macro=(__WXGTK__=1)
@@ -69,8 +74,6 @@ gtk : [.include.wx]setup.h
 	$(MMS)$(MMSQUALIFIERS)/macro=(__WXGTK__=1)
 	set default [-.minimal]
 	$(MMS)$(MMSQUALIFIERS)/macro=(__WXGTK__=1)
-	set default [-.resource]
-	$(MMS)$(MMSQUALIFIERS)/macro=(__WXGTK__=1)
 	set default [-.richedit]
 	$(MMS)$(MMSQUALIFIERS)/macro=(__WXGTK__=1)
 	set default [--.utils.dialoged.src]
@@ -90,7 +93,9 @@ univ : [.include.wx]setup.h
 	$(MMS)$(MMSQUALIFIERS)/macro=(__WXGTK__=1,__WXUNIVERSAL__=1)
 	set default [-.univ]
 	$(MMS)$(MMSQUALIFIERS)/macro=(__WXGTK__=1,__WXUNIVERSAL__=1)
-#	set default [--.demos.bombs]
+	set default [--.contrib.src.deprecated]
+	$(MMS)$(MMSQUALIFIERS)/macro=(__WXGTK__=1,__WXUNIVERSAL__=1)
+#	set default [---.demos.bombs]
 #	$(MMS)$(MMSQUALIFIERS)/macro=(__WXGTK__=1,__WXUNIVERSAL__=1)
 #	set default [--.samples.calendar]
 #	$(MMS)$(MMSQUALIFIERS)/macro=(__WXGTK__=1,__WXUNIVERSAL__=1)
@@ -124,8 +129,6 @@ univ : [.include.wx]setup.h
 #	$(MMS)$(MMSQUALIFIERS)/macro=(__WXGTK__=1,__WXUNIVERSAL__=1)
 #	set default [-.minimal]
 #	$(MMS)$(MMSQUALIFIERS)/macro=(__WXGTK__=1,__WXUNIVERSAL__=1)
-#	set default [-.resource]
-#	$(MMS)$(MMSQUALIFIERS)/macro=(__WXGTK__=1,__WXUNIVERSAL__=1)
 #	set default [-.richedit]
 #	$(MMS)$(MMSQUALIFIERS)/macro=(__WXGTK__=1,__WXUNIVERSAL__=1)
 #	set default [--.utils.dialoged.src]
@@ -143,7 +146,9 @@ motif : [.include.wx]setup.h
 	$(MMS)$(MMSQUALIFIERS)/macro=(__WXMOTIF__=1)
 	set default [-.x11]
 	$(MMS)$(MMSQUALIFIERS)/macro=(__WXMOTIF__=1)
-	set default [--.demos.bombs]
+	set default [--.contrib.src.deprecated]
+	$(MMS)$(MMSQUALIFIERS)/macro=(__WXMOTIF__=1)
+	set default [---.demos.bombs]
 	$(MMS)$(MMSQUALIFIERS)/macro=(__WXMOTIF__=1)
 	set default [--.samples.calendar]
 	$(MMS)$(MMSQUALIFIERS)/macro=(__WXMOTIF__=1)
@@ -162,8 +167,6 @@ motif : [.include.wx]setup.h
 	set default [-.menu]
 	$(MMS)$(MMSQUALIFIERS)/macro=(__WXMOTIF__=1)
 	set default [-.minimal]
-	$(MMS)$(MMSQUALIFIERS)/macro=(__WXMOTIF__=1)
-	set default [-.resource]
 	$(MMS)$(MMSQUALIFIERS)/macro=(__WXMOTIF__=1)
 	set default [--.utils.dialoged.src]
 	$(MMS)$(MMSQUALIFIERS)/macro=(__WXMOTIF__=1)

@@ -63,6 +63,9 @@
    byte first (like Motorola and SPARC, unlike Intel and VAX).  */
 #undef WORDS_BIGENDIAN
 
+/* Define this if your version of Motif is greater than 2.0 */
+/* #undef __WXMOTIF20__ */
+
 #ifdef __WXGTK__
 /* Define this if your version of GTK+ is greater than 1.2 */
 #define __WXGTK12__ 1
@@ -71,7 +74,7 @@
 #define __WXGTK127__ 1
 
 /* Define this if your version of GTK+ is greater than 1.3 */
-#undef __WXGTK20__
+/* #undef __WXGTK20__ */
 #endif
 
 /*
@@ -80,27 +83,29 @@
 #define wxUSE_UNIX 1
 
 #define __UNIX__
-#undef __LINUX__
-#undef __SGI__
-#undef __HPUX__
-#undef __SYSV__
-#undef __SVR4__
+
 #undef __AIX__
-#undef __SUN__
-#undef __SOLARIS__
-#undef __SUNOS__
-#define __ALPHA__
-#undef __IA64__
-#undef __OSF__
-#undef __DARWIN__
-#undef __NETBSD__
 #undef __BSD__
-#undef __FREEBSD__
-#undef __OPENBSD__
-#define __VMS__
-#undef __ULTRIX__
-#undef __DATA_GENERAL__
+#undef __DARWIN__
 #undef __EMX__
+#undef __FREEBSD__
+#undef __HPUX__
+#undef __LINUX__
+#undef __NETBSD__
+#undef __OPENBSD__
+#undef __OSF__
+#undef __SGI__
+#undef __SOLARIS__
+#undef __SUN__
+#undef __SUNOS__
+#undef __SVR4__
+#undef __SYSV__
+#undef __ULTRIX__
+#undef __UNIXWARE__
+#define __VMS__
+
+#undef __IA64__
+#define __ALPHA__
 
 /* NanoX (with wxX11) */
 #define wxUSE_NANOX 0
@@ -158,6 +163,11 @@
  * Define if your compiler supports the explicit keyword
  */
 #define HAVE_EXPLICIT 1
+
+/*
+ * Define if your compiler supports const_cast<>()
+ */
+#define HAVE_CONST_CAST 1
 
 /*
  * Use regex support
@@ -383,6 +393,11 @@
  */
 #define wxUSE_CHOICE 1
 /*
+ * Use wxDisplay class
+ */
+#define wxUSE_DISPLAY !
+
+/*
  * Use this control
  */
 #define wxUSE_GAUGE 1
@@ -391,12 +406,12 @@
  */
 #define wxUSE_GRID 1
 /*
- * Use this control
+ * Use the new prototype wxGrid classes
+ * (wxUSE_GRID must also be defined)
  */
 #define wxUSE_NEW_GRID 1
 /*
- * Use the new prototype wxGrid classes
- * (wxUSE_GRID must also be defined)
+ * Use wxImageList class
  */
 #define wxUSE_IMAGLIST 1
 /*
@@ -1190,5 +1205,8 @@
 
 /* define this when wxDC::Blit() respects SetDeviceOrigin() in wxGTK */
 #define wxHAS_WORKING_GTK_DC_BLIT 1
+
+/* Define this is you have X11/extensions/shape.h */
+#define HAVE_XSHAPE 1
 
 #endif /* __WX_SETUP_H__ */

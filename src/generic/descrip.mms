@@ -62,9 +62,6 @@ OBJECTS = \
 		printps.obj,\
 		prntdlgg.obj,\
 		progdlgg.obj,\
-		prop.obj,\
-		propform.obj,\
-		proplist.obj,\
 		sashwin.obj,\
 		splitter.obj,\
 		tbarsmpl.obj,\
@@ -104,9 +101,6 @@ SOURCES = \
 		printps.cpp,\
 		prntdlgg.cpp,\
 		progdlgg.cpp,\
-		prop.cpp,\
-		propform.cpp,\
-		proplist.cpp,\
 		sashwin.cpp,\
 		splitter.cpp,\
 		statline.cpp,\
@@ -171,9 +165,6 @@ panelg.obj : panelg.cpp
 printps.obj : printps.cpp
 prntdlgg.obj : prntdlgg.cpp
 progdlgg.obj : progdlgg.cpp
-prop.obj : prop.cpp
-propform.obj : propform.cpp
-proplist.obj : proplist.cpp
 scrlwing.obj : scrlwing.cpp
 spinctlg.obj : spinctlg.cpp
 sashwin.obj : sashwin.cpp

@@ -39,11 +39,11 @@ OBJECTS=dialoged.obj,reseditr.obj,dlghndlr.obj,reswrite.obj,winprop.obj,\
 
 .ifdef __WXMOTIF__
 dialoged.exe : $(OBJECTS)
-	cxxlink $(OBJECTS),[---.lib]vms/opt
+	cxxlink $(OBJECTS),[---.lib]libwx_motif_deprecated/lib,vms/opt
 .else
 .ifdef __WXGTK__
 dialoged_gtk.exe : $(OBJECTS)
-	cxxlink/exec=dialoged_gtk.exe $(OBJECTS),[---.lib]vms_gtk/opt
+	cxxlink/exec=dialoged_gtk.exe $(OBJECTS),[---.lib]libwx_gtk_deprecated/lib,vms_gtk/opt
 .endif
 .endif
 
