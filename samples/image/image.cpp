@@ -423,7 +423,7 @@ MyCanvas::MyCanvas( wxWindow *parent, wxWindowID id,
         yH = 2420 + image.GetOptionInt(wxIMAGE_OPTION_CUR_HOTSPOT_Y) ;
     }
 
-    m_ani_images = wxImage::GetImageCount ( dir + _T("horse.ani"), wxBITMAP_TYPE_ANI );
+    m_ani_images = wxImage::GetImageCount ( dir + _T("horse3.ani"), wxBITMAP_TYPE_ANI );
     if (m_ani_images==0)
         wxLogError(wxT("No ANI-format images found"));
     else
@@ -432,7 +432,7 @@ MyCanvas::MyCanvas( wxWindow *parent, wxWindowID id,
     for (i=0; i < m_ani_images; i++)
     {
         image.Destroy();
-        if (!image.LoadFile( dir + _T("horse.ani"), wxBITMAP_TYPE_ANI, i ))
+        if (!image.LoadFile( dir + _T("horse3.ani"), wxBITMAP_TYPE_ANI, i ))
         {
             wxString tmp = wxT("Can't load image number ");
             tmp << i ;
