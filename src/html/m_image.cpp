@@ -429,6 +429,7 @@ TAG_HANDLER_BEGIN(IMG, "IMG,MAP,AREA")
                 {
                     cel = new wxHtmlImageCell(str, w, h, m_WParser->GetPixelScale(), al, mn);
                     cel->SetLink(m_WParser->GetLink());
+                    cel->SetId(tag.GetParam(wxT("id"))); // may be empty
                     m_WParser->GetContainer()->InsertCell(cel);
                     delete str;
                 }
