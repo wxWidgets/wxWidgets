@@ -1558,7 +1558,10 @@ bool wxVariant::operator== (const wxStringList& value) const
 
 bool wxVariant::operator!= (const wxStringList& value) const
 {
-    return (!((*this) == value));
+    wxASSERT_MSG( (GetType() == wxT("stringlist")), wxT("Invalid type for == operator") );
+
+    wxVariantDataStringList other(value);
+    return !(m_data->Eq(other));
 }
 
 void wxVariant::operator= (const wxStringList& value)
