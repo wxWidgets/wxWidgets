@@ -3024,15 +3024,16 @@ bool wxWindowMSW::HandleEndSession(bool endSession, long logOff)
     if ( !endSession )
         return FALSE;
 
+    // only send once
+    if ( (this != wxTheApp->GetTopWindow()) )
+        return FALSE;
+
     wxCloseEvent event(wxEVT_END_SESSION, -1);
     event.SetEventObject(wxTheApp);
     event.SetCanVeto(FALSE);
     event.SetLoggingOff( (logOff == (long)ENDSESSION_LOGOFF) );
-    if ( (this == wxTheApp->GetTopWindow()) && // Only send once
-        wxTheApp->ProcessEvent(event))
-    {
-    }
-    return TRUE;
+
+    return wxTheApp->ProcessEvent(event);
 }
 
 // ---------------------------------------------------------------------------
