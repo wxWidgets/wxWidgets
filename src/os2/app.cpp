@@ -555,7 +555,7 @@ bool wxApp::DoMessage()
 {
     BOOL                            bRc = ::WinGetMsg(vHabmain, &svCurrentMsg, HWND(NULL), 0, 0);
 
-    wxUsleep(1000);
+//    wxUsleep(1000);
     if (bRc == 0)
     {
         // got WM_QUIT

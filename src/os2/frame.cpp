@@ -1150,7 +1150,7 @@ bool wxFrame::HandlePaint()
 {
     RECTL                           vRect;
 
-    if (::WinQueryUpdateRect(m_hFrame, &vRect))
+    if (::WinQueryUpdateRect(GetHwnd(), &vRect))
     {
         if (m_bIconized)
         {
@@ -1169,7 +1169,7 @@ bool wxFrame::HandlePaint()
             // is being processed
             //
             RECTL                   vRect2;
-            HPS                     hPs = ::WinBeginPaint(m_hFrame, NULLHANDLE, &vRect2);
+            HPS                     hPs = ::WinBeginPaint(GetHwnd(), NULLHANDLE, &vRect2);
 
             //
             // Erase background before painting or we get white background
