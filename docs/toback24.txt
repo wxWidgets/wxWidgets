@@ -356,3 +356,10 @@ Checking in src/common/fileconf.cpp;
 new revision: 1.93; previous revision: 1.92
 done
 
+28. Set orientation for scrolbar events
+
+Checking in src/msw/scrolbar.cpp;
+/pack/cvsroots/wxwindows/wxWindows/src/msw/scrolbar.cpp,v  <--  scrolbar.cpp
+new revision: 1.24; previous revision: 1.23
+done
+
