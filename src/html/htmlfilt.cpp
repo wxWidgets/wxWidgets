@@ -130,7 +130,7 @@ bool wxHtmlFilterHTML::CanRead(const wxFSFile& file) const
 // This is true in most case but some page can return:
 // "text/html; char-encoding=...."
 // So we use Find instead
-  return (file.GetMimeType().Find(wxT("text/html")) == 0);
+  return (file.GetMimeType().Find(_("text/html")) == 0);
 }
 
 
@@ -148,7 +148,15 @@ wxString wxHtmlFilterHTML::ReadFile(const wxFSFile& file) const
     doc = src;
     delete[] src;
 
-    return doc;
+    // add meta tag if we obtained this through http:    
+    if (file.GetMimeType().Find(_T("; charset=")) == 0)
+    {
+        wxString s(_T("<meta http-equiv=\"Content-Type\" content=\""));
+        s << file.GetMimeType() <<  _T("\">");
+        return s;
+    }
+
+    else return doc;
 }
 
 
