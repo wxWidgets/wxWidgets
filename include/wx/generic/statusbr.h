@@ -92,7 +92,6 @@ public:
   void SetBorderY(int y);
 
   void OnPaint(wxPaintEvent& event);
-  void OnSize(wxSizeEvent& event);
   
   void OnLeftDown(wxMouseEvent& event);
   void OnRightDown(wxMouseEvent& event);

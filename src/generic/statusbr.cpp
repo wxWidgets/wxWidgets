@@ -49,7 +49,6 @@
 
 BEGIN_EVENT_TABLE(wxStatusBarGeneric, wxWindow)
     EVT_PAINT(wxStatusBarGeneric::OnPaint)
-    EVT_SIZE(wxStatusBarGeneric::OnSize)
     EVT_LEFT_DOWN(wxStatusBarGeneric::OnLeftDown)
     EVT_RIGHT_DOWN(wxStatusBarGeneric::OnRightDown)
     EVT_SYS_COLOUR_CHANGED(wxStatusBarGeneric::OnSysColourChanged)
@@ -299,10 +298,8 @@ bool wxStatusBarGeneric::GetFieldRect(int n, wxRect& rect) const
     GetClientSize(&width, &height);
 #endif
 
-    // we cache m_widthsAbs between calls normally but it's cleared when the
-    // status widths change so recompute it if needed and also if client width
-    // has changed to take into account the fact that derived OnSize is run
-    // before cache has been cleared in own OnSize
+    // we cache m_widthsAbs between calls and recompute it if client
+    // width has changed (or when it is initially empty)
     if ( m_widthsAbs.IsEmpty() || (m_lastClientWidth != width) )
     {
         wxConstCast(this, wxStatusBarGeneric)->
@@ -381,14 +378,6 @@ void wxStatusBarGeneric::SetMinHeight(int height)
     {
         SetSize(-1, -1, -1, height + 2*m_borderY);
     }
-}
-
-void wxStatusBarGeneric::OnSize(wxSizeEvent& event)
-{
-    // have to recompute the widths in pixels
-    m_widthsAbs.Empty();
-    
-    event.Skip();
 }
 
 void wxStatusBarGeneric::OnLeftDown(wxMouseEvent& event)
