@@ -30,11 +30,27 @@
 #endif
 
 #ifdef wxUSE_GSOCKET_CPLUSPLUS
-class GSocketBSD
+class GSocketGUIFunctionsTableConcrete: public GSocketGUIFunctionsTable
 {
 public:
-    GSocketBSD();
-    virtual ~GSocketBSD();
+    virtual bool OnInit();
+    virtual void OnExit();
+    virtual bool CanUseEventLoop();
+    virtual bool Init_Socket(GSocket *socket);
+    virtual void Destroy_Socket(GSocket *socket);
+    virtual void Install_Callback(GSocket *socket, GSocketEvent event);
+    virtual void Uninstall_Callback(GSocket *socket, GSocketEvent event);
+    virtual void Enable_Events(GSocket *socket);
+    virtual void Disable_Events(GSocket *socket);
+};
+#endif /* def wxUSE_GSOCKET_CPLUSPLUS */
+
+#ifdef wxUSE_GSOCKET_CPLUSPLUS
+class GSocket
+{
+public:
+    GSocket();
+    virtual ~GSocket();
     bool IsOk() { return m_ok; }
     void Close();
     void Shutdown();
@@ -52,7 +68,7 @@ public:
     GSocketEventFlags Select(GSocketEventFlags flags);
     void SetNonBlocking(int non_block);
     void SetTimeout(unsigned long millisec);
-    GSocketError GetError();
+    GSocketError WXDLLIMPEXP_NET GetError();
     void SetCallback(GSocketEventFlags flags,
         GSocketCallback callback, char *cdata);
     void UnsetCallback(GSocketEventFlags flags);
@@ -62,6 +78,8 @@ public:
     /* API compatibility functions */
     static void _GSocket_Detected_Read(GSocket *socket);
     static void _GSocket_Detected_Write(GSocket *socket);
+    virtual void Detected_Read();
+    virtual void Detected_Write();
 protected:
     void Enable(GSocketEvent event);
     void Disable(GSocketEvent event);
@@ -71,13 +89,7 @@ protected:
     int Recv_Dgram(char *buffer, int size);
     int Send_Stream(const char *buffer, int size);
     int Send_Dgram(const char *buffer, int size);
-    void Detected_Read();
-    void Detected_Write();
     bool m_ok;
-    virtual void EventLoop_Enable_Events() = 0;
-    virtual void EventLoop_Disable_Events() = 0;
-    virtual void EventLoop_Install_Callback(GSocketEvent event) = 0;
-    virtual void EventLoop_Uninstall_Callback(GSocketEvent event) = 0;
 public:
     /* DFE: We can't protect these data member until the GUI code is updated */
     /* protected: */
@@ -109,37 +121,15 @@ struct _GSocket
 
   char *m_gui_dependent;
 
+#ifndef wxUSE_GSOCKET_CPLUSPLUS
   /* Function pointers */
   struct GSocketBaseFunctionsTable *m_functions;
+#endif /* ndef wxUSE_GSOCKET_CPLUSPLUS */
 };
 #ifndef wxUSE_GSOCKET_CPLUSPLUS
 #ifdef __cplusplus
 }
 #endif  /* __cplusplus */
-#else
-/**************************************************************************/
-/* GSocketBSDGUIShim */
-class GSocketBSDGUIShim:public GSocketBSD
-{
-    friend void GSocket_SetGUIFunctions(struct GSocketGUIFunctionsTable *guifunc);
-public:
-    static inline bool GUI_Init();
-    static inline void GUI_Cleanup();
-    static inline bool UseGUI();
-    GSocketBSDGUIShim();
-    virtual ~GSocketBSDGUIShim();
-protected:
-    virtual void EventLoop_Enable_Events();
-    virtual void EventLoop_Disable_Events();
-    virtual void EventLoop_Install_Callback(GSocketEvent event);
-    virtual void EventLoop_Uninstall_Callback(GSocketEvent event);
-private:
-/* Table of GUI-related functions. We must call them indirectly because
- * of wxBase and GUI separation: */
-
-    static struct GSocketGUIFunctionsTable *ms_gui_functions;
-};
-
 #endif /* ndef wxUSE_GSOCKET_CPLUSPLUS */
 
 #ifdef __cplusplus
@@ -192,6 +182,8 @@ inline void GSocket_SetNonBlocking(GSocket *socket, int non_block)
 {   socket->SetNonBlocking(non_block); }
 inline void GSocket_SetTimeout(GSocket *socket, unsigned long millisec)
 {   socket->SetTimeout(millisec); }
+inline GSocketError GSocket_GetError(GSocket *socket)
+{   return socket->GetError(); }
 inline void GSocket_SetCallback(GSocket *socket, GSocketEventFlags flags,
                          GSocketCallback fallback, char *cdata)
 {   socket->SetCallback(flags,fallback,cdata); }
@@ -203,6 +195,8 @@ inline GSocketError GSocket_GetSockOpt(GSocket *socket, int level, int optname,
 inline GSocketError GSocket_SetSockOpt(GSocket *socket, int level, int optname,
                         const void *optval, int optlen)
 {   return socket->SetSockOpt(level,optname,optval,optlen); }
+inline void GSocket_destroy(GSocket *socket)
+{   delete socket; }
 
 #endif /* def wxUSE_GSOCKET_CPLUSPLUS */
 

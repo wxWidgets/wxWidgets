@@ -588,7 +588,7 @@ void wxGUIAppTraitsBase::RemoveFromPendingDelete(wxObject *object)
 
 GSocketGUIFunctionsTable* wxGUIAppTraitsBase::GetSocketGUIFunctionsTable()
 {
-#if defined(__WINDOWS__) && defined(wxUSE_GSOCKET_CPLUSPLUS)
+#if defined(wxUSE_GSOCKET_CPLUSPLUS)
     static GSocketGUIFunctionsTableConcrete table;
     return &table;
 #else
@@ -612,7 +612,7 @@ GSocketGUIFunctionsTable* wxGUIAppTraitsBase::GetSocketGUIFunctionsTable()
     };
     return &table;
 #endif // !__WXMAC__ || __DARWIN__
-#endif // defined(__WINDOWS__) && defined(wxUSE_GSOCKET_CPLUSPLUS)
+#endif // defined(wxUSE_GSOCKET_CPLUSPLUS)
 }
 
 #endif

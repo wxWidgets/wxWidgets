@@ -11,14 +11,10 @@
 #ifndef __GSOCKET_H
 #define __GSOCKET_H
 
-#ifdef __WINDOWS__
-/* #define wxUSE_GSOCKET_CPLUSPLUS 1 */
-#undef wxUSE_GSOCKET_CPLUSPLUS
-#else
 /* DFE: Define this and compile gsocket.cpp instead of gsocket.c and
    compile existing GUI gsock*.c as C++ to try out the new GSocket. */
+/* #define wxUSE_GSOCKET_CPLUSPLUS 1 */
 #undef wxUSE_GSOCKET_CPLUSPLUS
-#endif
 #if !defined(__cplusplus) && defined(wxUSE_GSOCKET_CPLUSPLUS)
 #error "You need to compile this file (probably a GUI gsock peice) as C++"
 #endif
@@ -49,11 +45,7 @@
 #endif
 
 #ifdef wxUSE_GSOCKET_CPLUSPLUS
-# ifdef __WINDOWS__
 class GSocket;
-# else
-typedef class GSocketBSD GSocket;
-# endif
 #endif
 
 #ifdef __cplusplus
@@ -116,7 +108,7 @@ typedef void (*GSocketCallback)(GSocket *socket, GSocketEvent event,
 
 /* Functions tables for internal use by GSocket code: */
 
-#ifndef __WINDOWS__
+#if !defined(__WINDOWS__) && !defined(wxUSE_GSOCKET_CPLUSPLUS)
 struct GSocketBaseFunctionsTable
 {
     void (*Detected_Read)(GSocket *socket);
@@ -124,7 +116,7 @@ struct GSocketBaseFunctionsTable
 };
 #endif
 
-#if defined(__WINDOWS__) && defined(wxUSE_GSOCKET_CPLUSPLUS)
+#if defined(wxUSE_GSOCKET_CPLUSPLUS)
 /* Actually this is a misnomer now, but reusing this name means I don't
    have to ifdef app traits or common socket code */
 class GSocketGUIFunctionsTable
@@ -157,7 +149,7 @@ struct GSocketGUIFunctionsTable
     void (*Enable_Events)(GSocket *socket);
     void (*Disable_Events)(GSocket *socket);
 };
-#endif /* defined(__WINDOWS__) && defined(wxUSE_GSOCKET_CPLUSPLUS) */
+#endif /* defined(wxUSE_GSOCKET_CPLUSPLUS) */
 
 
 /* Global initializers */
@@ -176,7 +168,7 @@ void GSocket_Cleanup(void);
 /* Constructors / Destructors */
 
 GSocket *GSocket_new(void);
-#if !defined(__WINDOWS__) || !defined(wxUSE_GSOCKET_CPLUSPLUS)
+#if !defined(wxUSE_GSOCKET_CPLUSPLUS)
 void GSocket_destroy(GSocket *socket);
 #endif
 
