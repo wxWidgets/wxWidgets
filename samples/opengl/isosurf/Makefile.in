@@ -19,7 +19,9 @@ PROGRAM=isosurf
 
 LIBRARIES=$(top_builddir)/lib/@WX_TARGET_LIBRARY_GL@ $(OPENGLLIBS)
 
-OBJECTS=$(PROGRAM).o
+OBJECTS =$(PROGRAM).o
+DEPFILES=$(PROGRAM).d
 
 include ../../../src/makeprog.env
 
+-include $(DEPFILES)

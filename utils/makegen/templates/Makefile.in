@@ -8,6 +8,8 @@ program_dir = samples/#NAME
 PROGRAM=#NAME
 
 OBJECTS=$(PROGRAM).o
+DEPFILES=$(PROGRAM).d
 
 include ../../src/makeprog.env
 
+-include $DEPFILES)

@@ -9,7 +9,9 @@ PROGRAM=hhp2cached
 
 
 OBJECTS=$(PROGRAM).o
+DEPFILES=$(PROGRAM).d
 
 include ../../src/makeprog.env
 
+-include $(DEPFILES)
 

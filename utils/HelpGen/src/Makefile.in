@@ -13,6 +13,10 @@ PROGRAM=HelpGen
 OBJECTS = HelpGen.o cjparser.o docripper.o ifcontext.o markup.o \
           scriptbinder.o sourcepainter.o srcparser.o \
           wx_extra_imps.o
+DEPFILES= HelpGen.d cjparser.d docripper.d ifcontext.d markup.d \
+          scriptbinder.d sourcepainter.d srcparser.d \
+          wx_extra_imps.d
 
 include ../../../src/makeprog.env
 
+-include $(DEPFILES)

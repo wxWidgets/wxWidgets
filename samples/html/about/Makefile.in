@@ -18,7 +18,9 @@ DATAFILES = data/about.htm data/logo.png
 
 PROGRAM=about
 
-OBJECTS=$(PROGRAM).o
+OBJECTS =$(PROGRAM).o
+DEPFILES=$(PROGRAM).d
 
 include ../../../src/makeprog.env
 
+-include $(DEPFILES)

@@ -19,7 +19,9 @@ DATAFILES = test.zip
 
 PROGRAM=helpview
 
-OBJECTS=$(PROGRAM).o
+OBJECTS =$(PROGRAM).o
+DEPFILES=$(PROGRAM).d
 
 include ../../../src/makeprog.env
 
+-include $(DEPFILES)

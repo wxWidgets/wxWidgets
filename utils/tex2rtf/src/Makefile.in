@@ -19,6 +19,8 @@ program_dir = utils/tex2rtf/src
 PROGRAM=tex2rtf
 
 OBJECTS = tex2rtf.o tex2any.o texutils.o rtfutils.o xlputils.o htmlutil.o readshg.o table.o
+DEPFILES=tex2rtf.d tex2any.d texutils.d rtfutils.d xlputils.d htmlutil.d readshg.d table.d
 
 include ../../../src/makeprog.env
 
+-include $(DEPFILES)

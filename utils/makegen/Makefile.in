@@ -16,7 +16,9 @@ DATAFILES = templates/Makefile.in templates/makefile.b32 \
             templates/makefile.wat
 
 OBJECTS=$(PROGRAM).o
+DEPFILES=$(PROGRAM).d
 
 include ../../src/makeprog.env
 
+-include $(DEPFILES)
 
