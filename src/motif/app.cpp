@@ -346,22 +346,35 @@ void wxApp::ProcessXEvent(WXEvent* _event)
                    widget, XtParent(widget));
 #endif // DEBUG
 
-      if (CheckForAccelerator(_event))
-      {
-        // Do nothing! We intercepted and processed the event as an
-        // accelerator.
-        return;
-      }
-      else if (CheckForKeyDown(_event))
-      {
-        // We intercepted and processed the key down event
-        return;
-      }
-      else
-      {
-        XtDispatchEvent(event);
-        return;
-      }
+	if (CheckForAccelerator(_event))
+	{
+            // Do nothing! We intercepted and processed the event as an
+            // accelerator.
+            return;
+	}
+	else if (CheckForKeyDown(_event))
+	{
+            // We intercepted and processed the key down event
+            return;
+	}
+	else
+	{
+            XtDispatchEvent(event);
+	    return;
+	}
+    }
+    else if (event->type == KeyRelease)
+    {
+        if (CheckForKeyUp(_event))
+	{
+	    // We intercepted and processed the key up event
+	    return;
+	}
+	else
+	{
+	    XtDispatchEvent(event);
+	    return;
+	}
     }
     else if (event->type == PropertyNotify)
     {
@@ -640,21 +653,46 @@ bool wxApp::CheckForKeyDown(WXEvent* event)
     XEvent* xEvent = (XEvent*) event;
     if (xEvent->xany.type == KeyPress)
     {
-      Widget widget = XtWindowToWidget((Display*) wxGetDisplay(),
-                                       xEvent->xany.window);
-      wxWindow* win = NULL;
+        Widget widget = XtWindowToWidget((Display*) wxGetDisplay(),
+					 xEvent->xany.window);
+	wxWindow* win = NULL;
 
-      // Find the first wxWindow that corresponds to this event window
-      while (widget && !(win = wxGetWindowFromTable(widget)))
-          widget = XtParent(widget);
+	// Find the first wxWindow that corresponds to this event window
+	while (widget && !(win = wxGetWindowFromTable(widget)))
+            widget = XtParent(widget);
 
-      if (!widget || !win)
-          return FALSE;
+	if (!widget || !win)
+            return FALSE;
 
-      wxKeyEvent keyEvent(wxEVT_KEY_DOWN);
-      wxTranslateKeyEvent(keyEvent, win, (Widget) 0, xEvent);
+	wxKeyEvent keyEvent(wxEVT_KEY_DOWN);
+	wxTranslateKeyEvent(keyEvent, win, (Widget) 0, xEvent);
 
-      return win->ProcessEvent( keyEvent );
+	return win->ProcessEvent( keyEvent );
+    }
+
+    return FALSE;
+}
+
+bool wxApp::CheckForKeyUp(WXEvent* event)
+{
+    XEvent* xEvent = (XEvent*) event;
+    if (xEvent->xany.type == KeyRelease)
+    {
+        Widget widget = XtWindowToWidget((Display*) wxGetDisplay(),
+					 xEvent->xany.window);
+	wxWindow* win = NULL;
+
+	// Find the first wxWindow that corresponds to this event window
+	while (widget && !(win = wxGetWindowFromTable(widget)))
+            widget = XtParent(widget);
+
+	if (!widget || !win)
+            return FALSE;
+
+	wxKeyEvent keyEvent(wxEVT_KEY_UP);
+	wxTranslateKeyEvent(keyEvent, win, (Widget) 0, xEvent);
+
+	return win->ProcessEvent( keyEvent );
     }
 
     return FALSE;
