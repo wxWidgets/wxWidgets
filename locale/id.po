@@ -1,6 +1,6 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: wxWindows Internationalization\n"
+"Project-Id-Version: wxWindows-2.5.1\n"
 "POT-Creation-Date: 2002-12-12 11:59+0100\n"
 "PO-Revision-Date: 2002-10-22 23:28+0700\n"
 "Last-Translator: Bambang Purnomosidi D. P. <i-am-the-boss@bpdp.org>\n"

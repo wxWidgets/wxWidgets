@@ -139,6 +139,6 @@ namely:
                                                                  Vadim Zeitlin
 
 
-This file is accurate for the version 2.5.0 of wxBase. It was last modified on
+This file is accurate for the version 2.5.1 of wxBase. It was last modified on
 Jan 22, 2003.
 

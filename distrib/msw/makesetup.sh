@@ -22,7 +22,7 @@ PROGNAME=$0
 SCRIPTDIR=$WXWIN/distrib/msw
 WEBFILES=c:/wx2dev/wxWebSite
 # Set this to the required version
-VERSION=2.5.0
+VERSION=2.5.1
 
 . $SCRIPTDIR/setup.var
 

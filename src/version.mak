@@ -11,7 +11,7 @@
 
 wxMAJOR_VERSION=2
 wxMINOR_VERSION=5
-wxRELEASE_NUMBER=0
+wxRELEASE_NUMBER=1
 
 # release number if used in the DLL file names only for the unstable branch as
 # for the stable branches the micro releases are supposed to be backwards

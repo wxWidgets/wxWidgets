@@ -4,7 +4,7 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: wxWindows-2.4\n"
+"Project-Id-Version: wxWindows-2.5.1\n"
 "POT-Creation-Date: 2002-12-12 11:59+0100\n"
 "PO-Revision-Date: 2003-01-03 19:56+0100\n"
 "Last-Translator: Janusz Piwowarski <jpiw@go2.pl>\n"
