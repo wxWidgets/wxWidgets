@@ -1131,7 +1131,7 @@ static gint gtk_window_key_press_callback( GtkWidget *widget,
                  memcmp(gdk_event, &s_lastEvent, sizeof(GdkEventKey)) != 0;
     s_lastEvent = *gdk_event;
 #else
-    // 2005.01.26 modified by hzysoft@sina.com.tw:
+    // 2005.01.26 modified by Hong Jen Yee (hzysoft@sina.com.tw):
     // There is no need to store lastEvent. The original code makes GTK+ IM 
     // dysfunction. When we get a key_press event here, it could be originate
     // from the current widget or its child widgets.  However, only the widget
@@ -1149,7 +1149,7 @@ static gint gtk_window_key_press_callback( GtkWidget *widget,
 #endif
     
 #ifdef __WXGTK20__
-    // 2005.01.26 modified by hzysoft@sina.com.tw:
+    // 2005.01.26 modified by Hong Jen Yee (hzysoft@sina.com.tw):
     // We should let GTK+ IM filter key event first. According to GTK+ 2.0 API
     // docs, if IM filter returns true, NO FURTHER PROCESSING SHOULD BE DONE for
     // this keystroke. Making wxWidgets unable to receive EVT_KEY_DOWN in this
@@ -1169,24 +1169,75 @@ static gint gtk_window_key_press_callback( GtkWidget *widget,
 #endif
 
     wxKeyEvent event( wxEVT_KEY_DOWN );
-    if ( !wxTranslateGTKKeyEventToWx(event, win, gdk_event) )
+    bool ret = FALSE;
+
+    // 2005.02.02 modified by Hong Jen Yee (hzysoft@sina.com.tw).
+    // In GTK+ 1.2, strings sent by IMs are also regarded as key_press events whose 
+    // keyCodes cannot be recognized by wxWidgets. These MBCS strings, however, are 
+    // composed of more than one character, which means gdk_event->length will always 
+    // greater than one. When gtk_event->length == 1, this may be an ASCII character
+    // and can be translated by wx.  However, when MBCS characters are sent by IM, 
+    // gdk_event->length will >= 2. So neither should we pass it to accelerator table,
+    // nor should we pass it to controls. The following explanation was excerpted
+    // from GDK documentation.
+    // gint length : the length of string.
+    // gchar *string : a null-terminated multi-byte string containing the composed
+    // characters resulting from the key press. When text is being input, in a GtkEntry
+    // for example, it is these characters which should be added to the input buffer.
+    // When using Input Methods to support internationalized text input, the composed
+    // characters appear here after the pre-editing has been completed.
+
+#ifndef __WXGTK20__     // This is for GTK+ 1.2 only.
+    if ( (gdk_event->length > 1) ) // If this event contains a pre-edited string from IM.
+    {
+        // We should translate this key event into wxEVT_CHAR not wxEVT_KEY_DOWN.
+        #if wxUSE_UNICODE   // GTK+ 1.2 is not UTF-8 based.
+            const wxWCharBuffer string = wxConvLocal.cMB2WC( gdk_event->string );
+            if( !string )   return FALSE;
+        #else
+            const char* string = gdk_event->string;
+        #endif
+
+        // Implement OnCharHook by checking ancesteror top level windows
+        wxWindow *parent = window;
+        while (parent && !parent->IsTopLevel())
+            parent = parent->GetParent();
+
+        for( wxChar* pstr = string; *pstr; pstr++ )
+        {
+        #if wxUSE_UNICODE
+            event.m_uniChar = *pstr;
+            // Backward compatible for ISO-8859-1
+            event.m_keyCode = *pstr < 256 ? event.m_uniChar : 0;
+        #else
+            event.m_keyCode = *pstr;
+        #endif
+            if (parent)
+            {
+                event.SetEventType( wxEVT_CHAR_HOOK );
+                ret = parent->GetEventHandler()->ProcessEvent( event );
+            }
+            if (!ret)
+            {
+                event.SetEventType(wxEVT_CHAR);
+                window->GetEventHandler()->ProcessEvent( event );
+            }
+        }
+        return TRUE;
+    }
+    // Only translate the key event when it's not sent with a pre-edited string.
+    else 
+#endif  // #ifndef  __WXGTK20__
+    if( !wxTranslateGTKKeyEventToWx(event, win, gdk_event) )
     {
         // unknown key pressed, ignore (the event would be useless anyhow)
-        // 2005.02.22 modified by hzysoft@sina.com.tw.
-        // In GTK+ 1.2, strings sent by IMs are also regarded as key_press events whose 
-        // keyCodes cannot be recognized by wxWidgets. These MBCS strings, however, are 
-        // composed of more than one character, which means gdk_event->length will always 
-        // greater than one.
-        // When gtk_event->length == 1, this may be an ASCII character and can be translated 
-        // by WX.  However, when MBCS characters are sent by IM, gdk_event->length will >= 2.
-        // So when gdk_event->length >= 2, this is not an invalid key but a part of a string 
-        // sent by IM which contains user input and shouldn't be ignored.
-        if (gdk_event->length <= 1) // Only ignore those keys whose gdk_event->length <=1.
             return FALSE;
     }
-
+    else // This event doesn't contain a pre-edited string and is not an invalid key either.
+    {
     // Emit KEY_DOWN event
-    bool ret = win->GetEventHandler()->ProcessEvent( event );
+        ret = win->GetEventHandler()->ProcessEvent( event );
+    }
 
 #if wxUSE_ACCEL
     if (!ret)
@@ -3723,18 +3774,28 @@ void wxWindowGTK::Raise()
 {
     wxCHECK_RET( (m_widget != NULL), wxT("invalid window") );
 
-    if (!m_widget->window) return;
-
-    gdk_window_raise( m_widget->window );
+    if (m_wxwindow && m_wxwindow->window)
+    {
+        gdk_window_raise( m_wxwindow->window );
+    }
+     else if (m_widget->window)
+    {
+        gdk_window_raise( m_widget->window );
+    }
 }
 
 void wxWindowGTK::Lower()
 {
     wxCHECK_RET( (m_widget != NULL), wxT("invalid window") );
 
-    if (!m_widget->window) return;
-
-    gdk_window_lower( m_widget->window );
+    if (m_wxwindow && m_wxwindow->window)
+    {
+        gdk_window_lower( m_wxwindow->window );
+    }
+     else if (m_widget->window)
+    {
+        gdk_window_lower( m_widget->window );
+    }
 }
 
 bool wxWindowGTK::SetCursor( const wxCursor &cursor )
