@@ -32,7 +32,10 @@ public:
               long style = wxCAPTION | wxCLIP_CHILDREN | wxRESIZE_BORDER,
               const wxString& name = wxFrameNameStr)
   {
-      Create(parent, id, title, pos, size, style | wxFRAME_TOOL_WINDOW | wxFRAME_FLOAT_ON_PARENT, name);
+      Create(parent, id, title, pos, size,
+             style |
+             wxFRAME_TOOL_WINDOW |
+             (parent ? wxFRAME_FLOAT_ON_PARENT : 0), name);
   }
 
 protected:
