@@ -17,7 +17,7 @@
     $project{"COMMONDEPS"} .= "parser.d ";
 
     foreach $file (sort keys %wxGeneric) {
-        next if $wxGeneric{$file} =~ /\bR\b/;
+        next if $wxGeneric{$file} =~ /\bNotMGL\b/;
 
         ($fileobj = $file) =~ s/cp?p?$/\o/;
         ($filedep = $file) =~ s/cp?p?$/\d/;
@@ -28,7 +28,7 @@
     }
 
     foreach $file (sort keys %wxCommon) {
-        next if $wxCommon{$file} =~ /\bR\b/;
+        next if $wxCommon{$file} =~ /\bNotMGL\b/;
 
         ($fileobj = $file) =~ s/cp?p?$/\o/;
         ($filedep = $file) =~ s/cp?p?$/\d/;
@@ -43,8 +43,8 @@
         ($filedep = $file) =~ s/cp?p?$/\d/;
 
         $project{"MGL_SOURCES"} .= "mgl/" . $file . " ";
-        $project{"GUIOBJS"} .= $fileobj . " ";
-        $project{"GUIDEPS"} .= $filedep . " ";
+#!        $project{"GUIOBJS"} .= $fileobj . " ";
+#!        $project{"GUIDEPS"} .= $filedep . " ";
 
         if ( $wxMGL{$file} =~ /\bL\b/ ) {
             $project{"GUI_LOWLEVEL_OBJS"} .= $fileobj . " ";
@@ -115,11 +115,11 @@ GENERICOBJS = \
 GENERICDEPS = \
 		#$ ExpandList("GENERICDEPS");
 
-GUIOBJS = \
-		#$ ExpandList("GUIOBJS");
-
-GUIDEPS = \
-		#$ ExpandList("GUIDEPS");
+#!GUIOBJS = \
+#!		#$ ExpandList("GUIOBJS");
+#!
+#!GUIDEPS = \
+#!		#$ ExpandList("GUIDEPS");
 
 GUI_LOWLEVEL_OBJS = \
 		#$ ExpandList("GUI_LOWLEVEL_OBJS");
