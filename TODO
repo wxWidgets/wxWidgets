@@ -20,7 +20,7 @@ samples:
 
 wxTextCtrl
 
-*!! display corrupted when typing text in quickly (single line only)
+*   PageUp/Down keys support
 *   caret leaves traces under wxGTK
 ?   text ctrl display pb when text is truncated
 ?   too much is refreshed when double clicking (word select)
@@ -64,6 +64,7 @@ All
 +   vertical cursor movement should remember the original x position
 +   remember selection when losing/gaining activation
 +   scrolling by dragging mouse outside the window
++   display corrupted when typing text in quickly (single line only)
 
 MSW
 

@@ -357,6 +357,12 @@ bool wxWindowMSW::Create(wxWindow *parent, wxWindowID id,
     }
 #endif // wxUniversal/!wxUniversal
 
+    if ( style & wxPOPUP_WINDOW )
+    {
+        // a popup window floats on top of everything
+        exStyle |= WS_EX_TOPMOST | WS_EX_TOOLWINDOW;
+    }
+
     return MSWCreate(m_windowId, parent, wxCanvasClassName,
                      (wxWindow *)this, NULL,
                      pos.x, pos.y,

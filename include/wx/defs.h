@@ -870,15 +870,15 @@ enum wxBorder
 #define wxBORDER                wxBORDER_SIMPLE
 #define wxSIMPLE_BORDER         wxBORDER_SIMPLE
 #define wxSTATIC_BORDER         wxBORDER_STATIC
-#define wxTRANSPARENT_WINDOW    0x00100000
 #define wxNO_BORDER             wxBORDER_NONE
 
 // Override CTL3D etc. control colour processing to allow own background
 // colour.
-// OBSOLETE - use wxNO_3D instead
-#define wxUSER_COLOURS          0x00800000
 // Override CTL3D or native 3D styles for children
 #define wxNO_3D                 0x00800000
+
+// OBSOLETE - use wxNO_3D instead
+#define wxUSER_COLOURS          wxNO_3D
 
 // wxALWAYS_SHOW_SB: instead of hiding the scrollbar when it is not needed,
 // disable it - but still show (see also wxLB_ALWAYS_SB style)
@@ -892,6 +892,8 @@ enum wxBorder
 // 'transparent' (panel paints the background for it)
 #define wxCLIP_CHILDREN         0x00400000
 
+#define wxTRANSPARENT_WINDOW    0x00100000
+
 // Add this style to a panel to get tab traversal working outside of dialogs
 // (on by default for wxPanel, wxDialog, wxScrolledWindow)
 #define wxTAB_TRAVERSAL         0x00080000
@@ -900,9 +902,14 @@ enum wxBorder
 // Windows, it won't normally get the dialog navigation key events)
 #define wxWANTS_CHARS           0x00040000
 
-// Make window retained (mostly Motif, I think)
+// Make window retained (mostly Motif, I think) -- obsolete (VZ)?
 #define wxRETAINED              0x00020000
 #define wxBACKINGSTORE          wxRETAINED
+
+// set this flag to create a special popup window: it will be always shown on
+// top of other windows, will capture the mouse and will be dismissed when the
+// mouse is clicked outside of it or if it loses focus in any other way
+#define wxPOPUP_WINDOW          0x00020000
 
 // don't invalidate the whole window (resulting in a PAINT event) when the
 // window is resized (currently, makes sense for wxMSW only)

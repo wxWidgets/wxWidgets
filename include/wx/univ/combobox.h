@@ -16,6 +16,8 @@
     #pragma implementation "univcombobox.h"
 #endif
 
+class WXDLLEXPORT wxListBox;
+
 // ----------------------------------------------------------------------------
 // the actions supported by this control
 // ----------------------------------------------------------------------------
@@ -69,6 +71,8 @@ public:
                 const wxValidator& validator = wxDefaultValidator,
                 const wxString& name = wxComboBoxNameStr);
 
+    virtual ~wxComboControl();
+
     // a combo control needs a control for popup window it displays
     void SetPopupControl(wxControl *control);
     wxControl *GetPopupControl() const { return m_ctrlPopup; }
@@ -95,6 +99,9 @@ protected:
     // common part of all ctors
     void Init();
 
+    // access the control components
+    wxTextCtrl *GetText() const { return m_text; }
+
 private:
     // the text control all the time and the one we popup when m_btn is pressed
     wxTextCtrl *m_text;
@@ -108,10 +115,12 @@ private:
 // wxComboBox: a combination of text control and a listbox
 // ----------------------------------------------------------------------------
 
-class wxComboBox : public wxComboListBoxBase
+class wxComboBox : public wxComboControl, public wxComboBoxBase
 {
 public:
     // ctors and such
+    wxComboBox() { Init(); }
+
     wxComboBox(wxWindow *parent,
                wxWindowID id,
                const wxString& value = wxEmptyString,
@@ -123,6 +132,8 @@ public:
                const wxValidator& validator = wxDefaultValidator,
                const wxString& name = wxComboBoxNameStr)
     {
+        Init();
+
         (void)Create(parent, id, value, pos, size, n, choices,
                      style, validator, name);
     }
@@ -138,63 +149,53 @@ public:
                 const wxValidator& validator = wxDefaultValidator,
                 const wxString& name = wxComboBoxNameStr);
 
+    // the wxUniversal-specific methods
+    // --------------------------------
+
     // implement the combobox interface
+
+    // wxTextCtrl methods
+    virtual void Copy();
+    virtual void Cut();
+    virtual void Paste();
+    virtual void SetInsertionPoint(long pos);
+    virtual void SetInsertionPointEnd();
+    virtual long GetInsertionPoint() const;
+    virtual long GetLastPosition() const;
+    virtual void Replace(long from, long to, const wxString& value);
+    virtual void Remove(long from, long to);
+    virtual void SetSelection(long from, long to);
+    virtual void SetEditable(bool editable);
 
     // wxControlWithItems methods
     virtual void Clear();
     virtual void Delete(int n);
-
-    virtual int GetCount() const { return (int)m_strings.GetCount(); }
-    virtual wxString GetString(int n) const { return m_strings[n]; }
+    virtual int GetCount() const;
+    virtual wxString GetString(int n) const;
     virtual void SetString(int n, const wxString& s);
-    virtual int FindString(const wxString& s) const
-        { return m_strings.Index(s); }
-
-    virtual bool IsSelected(int n) const
-        { return m_selections.Index(n) != wxNOT_FOUND; }
-    virtual void SetSelection(int n, bool select = TRUE);
+    virtual int FindString(const wxString& s) const;
+    virtual void Select(int n);
     virtual int GetSelection() const;
-    virtual int GetSelections(wxArrayInt& aSelections) const;
+    void SetSelection(int n) { Select(n); }
 
 protected:
     virtual int DoAppend(const wxString& item);
-    virtual void DoInsertItems(const wxArrayString& items, int pos);
-    virtual void DoSetItems(const wxArrayString& items, void **clientData);
-
-    virtual void DoSetFirstItem(int n);
-
     virtual void DoSetItemClientData(int n, void* clientData);
     virtual void* DoGetItemClientData(int n) const;
     virtual void DoSetItemClientObject(int n, wxClientData* clientData);
     virtual wxClientData* DoGetItemClientObject(int n) const;
 
-public:
-    // the wxUniversal-specific methods
-    // --------------------------------
-
-    // override the wxControl virtual methods
-    virtual bool PerformAction(const wxControlAction& action,
-                               long numArg = 0l,
-                               const wxString& strArg = wxEmptyString);
-
-protected:
-    virtual wxSize DoGetBestClientSize() const;
-    virtual void DoDraw(wxControlRenderer *renderer);
-    virtual wxBorder GetDefaultBorder() const;
-
-    virtual wxString GetInputHandlerType() const;
-
     // common part of all ctors
     void Init();
 
-    // event handlers
-    void OnSize(wxSizeEvent& event);
-
-    // common part of Clear() and DoSetItems(): clears everything
-    virtual void DoClear();
+    // get the associated listbox
+    wxListBox *GetLBox() const { return m_lbox; }
 
 private:
-    DECLARE_EVENT_TABLE()
+    // the popup listbox
+    wxListBox *m_lbox;
+
+    //DECLARE_EVENT_TABLE()
     DECLARE_DYNAMIC_CLASS(wxComboBox)
 };
 

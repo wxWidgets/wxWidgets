@@ -1,6 +1,6 @@
 ///////////////////////////////////////////////////////////////////////////////
 // Name:        common/ctrlsub.cpp
-// Purpose:     wxControlWithItems implementation
+// Purpose:     wxItemContainer implementation
 // Author:      Vadim Zeitlin
 // Modified by:
 // Created:     22.10.99
@@ -42,7 +42,7 @@
 // selection
 // ----------------------------------------------------------------------------
 
-wxString wxControlWithItems::GetStringSelection() const
+wxString wxItemContainer::GetStringSelection() const
 {
     wxString s;
     int sel = GetSelection();
@@ -56,9 +56,9 @@ wxString wxControlWithItems::GetStringSelection() const
 // client data
 // ----------------------------------------------------------------------------
 
-void wxControlWithItems::SetClientObject(int n, wxClientData *data)
+void wxItemContainer::SetClientObject(int n, wxClientData *data)
 {
-    wxASSERT_MSG( m_clientDataItemsType != ClientData_Void,
+    wxASSERT_MSG( m_clientDataItemsType != wxClientData_Void,
                   wxT("can't have both object and void client data") );
 
     wxClientData *clientDataOld = DoGetItemClientObject(n);
@@ -66,29 +66,29 @@ void wxControlWithItems::SetClientObject(int n, wxClientData *data)
         delete clientDataOld;
 
     DoSetItemClientObject(n, data);
-    m_clientDataItemsType = ClientData_Object;
+    m_clientDataItemsType = wxClientData_Object;
 }
 
-wxClientData *wxControlWithItems::GetClientObject(int n) const
+wxClientData *wxItemContainer::GetClientObject(int n) const
 {
-    wxASSERT_MSG( m_clientDataItemsType == ClientData_Object,
+    wxASSERT_MSG( m_clientDataItemsType == wxClientData_Object,
                   wxT("this window doesn't have object client data") );
 
     return DoGetItemClientObject(n);
 }
 
-void wxControlWithItems::SetClientData(int n, void *data)
+void wxItemContainer::SetClientData(int n, void *data)
 {
-    wxASSERT_MSG( m_clientDataItemsType != ClientData_Object,
+    wxASSERT_MSG( m_clientDataItemsType != wxClientData_Object,
                   wxT("can't have both object and void client data") );
 
     DoSetItemClientData(n, data);
-    m_clientDataItemsType = ClientData_Void;
+    m_clientDataItemsType = wxClientData_Void;
 }
 
-void *wxControlWithItems::GetClientData(int n) const
+void *wxItemContainer::GetClientData(int n) const
 {
-    wxASSERT_MSG( m_clientDataItemsType == ClientData_Void,
+    wxASSERT_MSG( m_clientDataItemsType == wxClientData_Void,
                   wxT("this window doesn't have void client data") );
 
     return DoGetItemClientData(n);

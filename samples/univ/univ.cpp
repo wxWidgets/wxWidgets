@@ -38,6 +38,7 @@
     #include "wx/button.h"
     #include "wx/checkbox.h"
     #include "wx/checklst.h"
+    #include "wx/combobox.h"
     #include "wx/listbox.h"
     #include "wx/radiobox.h"
     #include "wx/radiobut.h"
@@ -53,10 +54,8 @@
 
 #include "wx/univ/theme.h"
 
-#define TEST_TEXT_ONLY
-
-//#define DEBUG_SCROLL
-//#define DEBUG_LISTBOX
+#define TEST_COMBO
+//#define TEST_TEXT
 
 // ----------------------------------------------------------------------------
 // resources
@@ -212,13 +211,13 @@ bool MyUnivApp::OnInit()
     wxFrame *frame = new MyUnivFrame(_T("wxUniversal demo"));
     frame->Show();
 
-#ifdef DEBUG_SCROLL
+#ifdef TEST_SCROLL
     wxLog::AddTraceMask(_T("scroll"));
 #endif
-#ifdef DEBUG_LISTBOX
+#ifdef TEST_LISTBOX
     wxLog::AddTraceMask(_T("listbox"));
 #endif
-#ifdef TEST_TEXT_ONLY
+#ifdef TEST_TEXT
     wxLog::AddTraceMask(_T("text"));
 #endif
 
@@ -239,10 +238,20 @@ MyUnivFrame::MyUnivFrame(const wxString& title)
 #endif
                     )
 {
+    static const wxString choices[] =
+    {
+        _T("This"),
+        _T("is one of my"),
+        _T("really"),
+        _T("wonderful"),
+        _T("examples"),
+    };
+
     SetBackgroundColour(wxGetApp().GetBgColour());
 
     new wxStaticText(this, _T("Test static text"), wxPoint(10, 10));
-#ifndef TEST_TEXT_ONLY
+
+#ifdef TEST_STATIC_TEXT
     new wxStaticText(this, _T("Test static text"), wxPoint(10, 10));
     new wxStaticText(this,
                      _T("&Multi line\n(and very very very very long)\nstatic text"),
@@ -250,6 +259,7 @@ MyUnivFrame::MyUnivFrame(const wxString& title)
 
     (new wxStaticText(this, _T("&Disabled text"), wxPoint(10, 30)))->Disable();
 
+#ifdef TEST_STATIC_LINE
     new wxStaticLine(this, wxPoint(190, 10), 50, wxLI_VERTICAL);
 
     wxStaticText *text = new wxStaticText(this, _T("Demo of &border styles:"),
@@ -259,6 +269,7 @@ MyUnivFrame::MyUnivFrame(const wxString& title)
     text->SetForegroundColour(*wxBLUE);
 
     new wxStaticLine(this, wxPoint(10, 80), 120, wxLI_HORIZONTAL);
+#endif // TEST_STATIC_LINE
 
     wxCoord x = 10;
     #define CREATE_STATIC_BORDER_DEMO(border) \
@@ -275,6 +286,9 @@ MyUnivFrame::MyUnivFrame(const wxString& title)
 
     #undef CREATE_STATIC_BORDER_DEMO
 
+#endif // TEST_STATIC_TEXT
+
+#ifdef TEST_STATIC_BOX
     wxStaticBox *box = new wxStaticBox(this, _T("&Alignments demo:"),
                                        wxPoint(10, 150),
                                        wxSize(500, 120));
@@ -297,12 +311,21 @@ MyUnivFrame::MyUnivFrame(const wxString& title)
 
     #undef CREATE_STATIC_ALIGN_DEMO
 
+#endif // TEST_STATIC_BOX
+
+#ifdef TEST_BUTTON
     new wxButton(this, Univ_Button1, _T("&Press me"), wxPoint(10, 300));
     new wxButton(this, Univ_Button2, _T("&And me"), wxPoint(100, 300));
+#endif // TEST_BUTTON
 
+#ifdef TEST_STATIC_BMP
     new wxStaticBitmap(this, tip_xpm, wxPoint(10, 350));
     new wxStaticBitmap(this, -1, tip_xpm, wxPoint(50, 350),
                        wxDefaultSize, wxSUNKEN_BORDER);
+
+#endif // TEST_STATIC_BMP
+
+#ifdef TEST_SCROLL
 
 #if 0
     wxScrollBar *sb;
@@ -326,6 +349,9 @@ MyUnivFrame::MyUnivFrame(const wxString& title)
     //win->Scroll(10, 0);
 #endif
 
+#endif // TEST_SCROLL
+
+#ifdef TEST_BMP_BUTTON
     new wxButton(this, -1, open_xpm, _T("&Open..."), wxPoint(10, 420));
 
     wxBitmap bmp1(wxTheApp->GetStdIcon(wxICON_INFORMATION)),
@@ -339,15 +365,9 @@ MyUnivFrame::MyUnivFrame(const wxString& title)
                                  );
     bmpBtn->SetBitmapSelected(bmp2);
     bmpBtn->SetBitmapFocus(bmp3);
+#endif // TEST_BMP_BUTTON
 
-    static const wxString choices[] =
-    {
-        _T("This"),
-        _T("is one of my"),
-        _T("really"),
-        _T("wonderful"),
-        _T("examples"),
-    };
+#ifdef TEST_LISTBOX
     wxListBox *lbox = new wxListBox(this, -1, wxPoint(550, 10), wxDefaultSize,
                                     WXSIZEOF(choices), choices,
                                     wxLB_MULTIPLE | wxLB_ALWAYS_SB);
@@ -359,10 +379,16 @@ MyUnivFrame::MyUnivFrame(const wxString& title)
                      i % 10 ? _T("") : _T("very very long "), i));
     }
 
+#endif // TEST_LISTBOX
+
+#ifdef TEST_CHECKBOX
     new wxCheckBox(this, -1, _T("Check me"), wxPoint(10, 550));
     new wxCheckBox(this, -1, _T("Don't check me"),
                    wxPoint(150, 550), wxDefaultSize,
                    wxALIGN_RIGHT);
+#endif // TEST_CHECKBOX
+
+#ifdef TEST_RADIO
     new wxRadioButton(this, -1, _T("Toggle me"), wxPoint(10, 600));
     new wxRadioButton(this, -1, _T("And then me"), wxPoint(150, 600));
 
@@ -376,13 +402,24 @@ MyUnivFrame::MyUnivFrame(const wxString& title)
                    WXSIZEOF(choices), choices,
                    WXSIZEOF(choices),
                    wxRA_SPECIFY_ROWS);
+#endif // TEST_RADIO
 
+#ifdef TEST_CHECKLISTBOX
     wxCheckListBox *checkLbox = new wxCheckListBox(this, -1,
                                                    wxPoint(500, 550),
                                                    wxDefaultSize,
                                                    WXSIZEOF(choices), choices);
     checkLbox->Check(2);
+#endif // TEST_CHECKLISTBOX
 
+#ifdef TEST_COMBO
+    wxComboBox *combo = new wxComboBox(this, -1, _T("Initial value"),
+                                       wxPoint(300, 300), wxDefaultSize,
+                                       WXSIZEOF(choices), choices);
+    combo->SetSelection(1);
+#endif // TEST_COMBO
+
+#ifdef TEST_TEXT
     new wxTextCtrl(this, -1, _T("Hello, Universe!"),
                    wxPoint(550, 150), wxDefaultSize);
 #else // TEST_TEXT_ONLY
@@ -426,7 +463,8 @@ MyUnivFrame::MyUnivFrame(const wxString& title)
     sizeText.x = 200;
     text->SetSize(sizeText);
 #endif
-#endif // !TEST_TEXT_ONLY/TEST_TEXT_ONLY
+
+#endif // TEST_TEXT
 }
 
 void MyUnivFrame::TestTextCtrlReplace(wxTextCtrl *text, const wxString& value)

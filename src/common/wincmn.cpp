@@ -108,7 +108,7 @@ void wxWindowBase::InitBase()
 
     // no client data (yet)
     m_clientData = NULL;
-    m_clientDataType = ClientData_None;
+    m_clientDataType = wxClientData_None;
 
     // the default event handler is just this window
     m_eventHandler = this;
@@ -229,7 +229,7 @@ wxWindowBase::~wxWindowBase()
 #endif // wxUSE_VALIDATORS
 
     // we only delete object data, not untyped
-    if ( m_clientDataType == ClientData_Object )
+    if ( m_clientDataType == wxClientData_Object )
         delete m_clientObject;
 
 #if wxUSE_CONSTRAINTS
@@ -1347,21 +1347,21 @@ wxPoint wxWindowBase::ConvertDialogToPixels(const wxPoint& pt)
 
 void wxWindowBase::DoSetClientObject( wxClientData *data )
 {
-    wxASSERT_MSG( m_clientDataType != ClientData_Void,
+    wxASSERT_MSG( m_clientDataType != wxClientData_Void,
                   wxT("can't have both object and void client data") );
 
     if ( m_clientObject )
         delete m_clientObject;
 
     m_clientObject = data;
-    m_clientDataType = ClientData_Object;
+    m_clientDataType = wxClientData_Object;
 }
 
 wxClientData *wxWindowBase::DoGetClientObject() const
 {
     // it's not an error to call GetClientObject() on a window which doesn't
     // have client data at all - NULL will be returned
-    wxASSERT_MSG( m_clientDataType != ClientData_Void,
+    wxASSERT_MSG( m_clientDataType != wxClientData_Void,
                   wxT("this window doesn't have object client data") );
 
     return m_clientObject;
@@ -1369,18 +1369,18 @@ wxClientData *wxWindowBase::DoGetClientObject() const
 
 void wxWindowBase::DoSetClientData( void *data )
 {
-    wxASSERT_MSG( m_clientDataType != ClientData_Object,
+    wxASSERT_MSG( m_clientDataType != wxClientData_Object,
                   wxT("can't have both object and void client data") );
 
     m_clientData = data;
-    m_clientDataType = ClientData_Void;
+    m_clientDataType = wxClientData_Void;
 }
 
 void *wxWindowBase::DoGetClientData() const
 {
     // it's not an error to call GetClientData() on a window which doesn't have
     // client data at all - NULL will be returned
-    wxASSERT_MSG( m_clientDataType != ClientData_Object,
+    wxASSERT_MSG( m_clientDataType != wxClientData_Object,
                   wxT("this window doesn't have void client data") );
 
     return m_clientData;

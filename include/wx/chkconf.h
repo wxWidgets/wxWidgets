@@ -69,6 +69,17 @@
 #   endif
 #endif /* wxUSE_RADIOBTN */
 
+#if wxUSE_COMBOBOX
+#   if defined(__WXUNIVERSAL__) && !wxUSE_LISTBOX
+#        ifdef wxABORT_ON_CONFIG_ERROR
+#            error "wxComboBox requires wxListBox in wxUniversal"
+#        else
+#            undef wxUSE_LISTBOX
+#            define wxUSE_LISTBOX
+#        endif
+#   endif
+#endif /* wxUSE_COMBOBOX */
+
 #if wxUSE_RADIOBTN
 #   if defined(__WXUNIVERSAL__) && !wxUSE_CHECKBOX
 #        ifdef wxABORT_ON_CONFIG_ERROR

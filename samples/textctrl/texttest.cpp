@@ -664,7 +664,7 @@ void TextTestFrame::OnButtonAdd(wxCommandEvent& WXUNUSED(event))
 
 void TextTestFrame::OnButtonInsert(wxCommandEvent& WXUNUSED(event))
 {
-    m_text->AppendText(_T("is there anybody going to listen to my story"));
+    m_text->WriteText(_T("is there anybody going to listen to my story"));
     m_text->SetFocus();
 }
 
