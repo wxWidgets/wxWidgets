@@ -58,8 +58,8 @@ BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LINK32=link.exe
-# ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /dll /machine:I386 /out:"../lib/wxbase233u.dll"
-# ADD LINK32 kernel32.lib user32.lib advapi32.lib shell32.lib wsock32.lib ../lib/zlib.lib ../lib/regex.lib /nologo /version:2.3 /dll /machine:I386 /out:"../lib/wxbase233u.dll"
+# ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /dll /machine:I386 /out:"../lib/wxbase24u.dll"
+# ADD LINK32 kernel32.lib user32.lib advapi32.lib shell32.lib wsock32.lib ../lib/zlib.lib ../lib/regex.lib /nologo /version:2.4 /dll /machine:I386 /out:"../lib/wxbase24u.dll"
 
 !ELSEIF  "$(CFG)" == "wxBase - Win32 Debug Unicode DLL"
 
@@ -84,9 +84,8 @@ BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LINK32=link.exe
-# ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /dll /debug /machine:I386 /pdbtype:sept /out:"../lib/wxbase233ud.dll"
-# ADD LINK32 kernel32.lib user32.lib advapi32.lib shell32.lib wsock32.lib ../lib/zlibd.lib ../lib/regexd.lib /nologo /version:2.2 /dll /debug /machine:I386 /pdbtype:sept /out:"../lib/wxbase233ud.dll"
-
+# ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /dll /debug /machine:I386 /pdbtype:sept /out:"../lib/wxbase24ud.dll"
+# ADD LINK32 kernel32.lib user32.lib advapi32.lib shell32.lib wsock32.lib ../lib/zlibd.lib ../lib/regexd.lib /nologo /version:2.4 /dll /machine:I386 /out:"../lib/wxbase24ud.dll"
 !ELSEIF  "$(CFG)" == "wxBase - Win32 Release Unicode"
 
 # PROP BASE Use_MFC 0
@@ -156,8 +155,8 @@ BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LINK32=link.exe
-# ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /dll /machine:I386 /out:"../lib/wxbase233.dll"
-# ADD LINK32 kernel32.lib user32.lib advapi32.lib shell32.lib wsock32.lib ../lib/zlib.lib ../lib/regex.lib /nologo /version:2.3 /dll /machine:I386 /out:"../lib/wxbase233.dll"
+# ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /dll /machine:I386 /out:"../lib/wxbase24.dll"
+# ADD LINK32 kernel32.lib user32.lib advapi32.lib shell32.lib wsock32.lib ../lib/zlib.lib ../lib/regex.lib /nologo /version:2.4 /dll /machine:I386 /out:"../lib/wxbase24.dll"
 
 !ELSEIF  "$(CFG)" == "wxBase - Win32 Debug DLL"
 
@@ -182,8 +181,8 @@ BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LINK32=link.exe
-# ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /dll /debug /machine:I386 /pdbtype:sept /out:"../lib/wxbase233d.dll"
-# ADD LINK32 kernel32.lib user32.lib advapi32.lib shell32.lib wsock32.lib ../lib/zlibd.lib ../lib/regexd.lib /nologo /version:2.2 /dll /debug /machine:I386 /pdbtype:sept /out:"../lib/wxbase233d.dll"
+# ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /dll /debug /machine:I386 /pdbtype:sept /out:"../lib/wxbase24d.dll"
+# ADD LINK32 kernel32.lib user32.lib advapi32.lib shell32.lib wsock32.lib ../lib/zlibd.lib ../lib/regexd.lib /nologo /version:2.4 /dll /machine:I386 /out:"../lib/wxbase24d.dll"
 
 !ELSEIF  "$(CFG)" == "wxBase - Win32 Release"
 
@@ -710,6 +709,10 @@ SOURCE=..\include\wx\datstrm.h
 # Begin Source File
 
 SOURCE=..\include\wx\db.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\dbkeyg.h
 # End Source File
 # Begin Source File
 
