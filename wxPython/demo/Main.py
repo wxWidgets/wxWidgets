@@ -483,7 +483,7 @@ class MyApp(wxApp):
         wxInitAllImageHandlers()
 
         self.splash = SplashScreen(None, bitmapfile='bitmaps/splash.gif',
-                              duration=4000, callback=self.AfterSplash)
+                                   duration=4000, callback=self.AfterSplash)
         self.splash.Show(true)
         wxYield()
         return true

@@ -25,7 +25,29 @@ class TestVirtualList(wxListCtrl):
         self.attr2 = wxListItemAttr()
         self.attr2.SetBackgroundColour("light blue")
 
+        EVT_LIST_ITEM_SELECTED(self, self.GetId(), self.OnItemSelected)
+        EVT_LIST_ITEM_ACTIVATED(self, self.GetId(), self.OnItemActivated)
 
+
+    def OnItemSelected(self, event):
+        self.currentItem = event.m_itemIndex
+        self.log.WriteText('OnItemSelected: "%s", "%s", "%s", "%s"\n' %
+                           (self.currentItem,
+                            self.GetItemText(self.currentItem),
+                            self.getColumnText(self.currentItem, 1),
+                            self.getColumnText(self.currentItem, 2)))
+
+    def OnItemActivated(self, event):
+        self.currentItem = event.m_itemIndex
+        self.log.WriteText("OnItemActivated: %s\n" % self.GetItemText(self.currentItem))
+
+    def getColumnText(self, index, col):
+        item = self.GetItem(index, col)
+        return item.GetText()
+
+    #---------------------------------------------------
+    # These methods are callbacks for implementing the
+    # "virtualness" of the list...
     def OnGetItemText(self, item, col):
         return "Item %d, column %d" % (item, col)
 
