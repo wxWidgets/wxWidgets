@@ -728,7 +728,7 @@ void wxWindow::SetScrollbar(
     int                             nPageSize = nThumbVisible;
     SBCDATA                         vInfo;
     HWND                            hWnd = GetHwnd();
-    ULONG                           ulStyle = WS_VISIBLE;
+    ULONG                           ulStyle = WS_VISIBLE | WS_SYNCPAINT;
     RECTL                           vRect;
 
     ::WinQueryWindowRect(hWnd, &vRect);
@@ -752,7 +752,7 @@ void wxWindow::SetScrollbar(
             // registered as child windows of the window in order that child
             // windows may be scrolled without scrolling the scrollbars themselves!
             //
-            m_hWndScrollBarHorz = ::WinCreateWindow( HWND_DESKTOP
+            m_hWndScrollBarHorz = ::WinCreateWindow( hWnd
                                                     ,WC_SCROLLBAR
                                                     ,(PSZ)NULL
                                                     ,ulStyle
@@ -802,7 +802,7 @@ void wxWindow::SetScrollbar(
         ulStyle |= SBS_VERT;
         if (m_hWndScrollBarVert == 0L)
         {
-            m_hWndScrollBarVert = ::WinCreateWindow( HWND_DESKTOP
+            m_hWndScrollBarVert = ::WinCreateWindow( hWnd
                                                     ,WC_SCROLLBAR
                                                     ,(PSZ)NULL
                                                     ,ulStyle
@@ -867,7 +867,15 @@ void wxWindow::ScrollWindow(
         vRect2.xRight  = pRect->x + pRect->width;
         vRect2.yBottom = pRect->y;
     }
+    else
+    {
+        ::WinQueryWindowRect(GetHwnd(), &vRect2);
+        ::WinQueryWindowRect(m_hWndScrollBarHorz, &vRect);
+        vRect2.yBottom += vRect.yTop - vRect.yBottom;
+        ::WinQueryWindowRect(m_hWndScrollBarVert, &vRect);
+        vRect2.xRight -= vRect.xRight - vRect.xLeft;
 
+    }
     if (pRect)
         ::WinScrollWindow( GetHwnd()
                           ,(LONG)nDx
@@ -876,7 +884,7 @@ void wxWindow::ScrollWindow(
                           ,NULL
                           ,NULLHANDLE
                           ,NULL
-                          ,SW_SCROLLCHILDREN | SW_INVALIDATERGN
+                          ,SW_INVALIDATERGN
                          );
     else
         ::WinScrollWindow( GetHwnd()
@@ -886,8 +894,29 @@ void wxWindow::ScrollWindow(
                           ,NULL
                           ,NULLHANDLE
                           ,NULL
-                          ,SW_SCROLLCHILDREN | SW_INVALIDATERGN
+                          ,SW_INVALIDATERGN
                          );
+
+    //
+    // Move the children
+    wxWindowList::Node*             pCurrent = GetChildren().GetFirst();
+    SWP                             vSwp;
+
+    while (pCurrent)
+    {
+        wxWindow*                   pChildWin = pCurrent->GetData();
+
+        ::WinQueryWindowPos(pChildWin->GetHWND(), &vSwp);
+        ::WinSetWindowPos( pChildWin->GetHWND()
+                          ,HWND_TOP
+                          ,vSwp.x + nDx
+                          ,vSwp.y + nDy
+                          ,0
+                          ,0
+                          , SWP_MOVE | SWP_SHOW
+                         );
+        pCurrent = pCurrent->GetNext();
+    }
 } // end of wxWindow::ScrollWindow
 
 // ---------------------------------------------------------------------------
