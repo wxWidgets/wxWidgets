@@ -30,7 +30,7 @@ class WXDLLEXPORT wxDialog : public wxDialogBase
     DECLARE_DYNAMIC_CLASS(wxDialog)
 
 public:
-    wxDialog();
+    wxDialog() { Init(); }
 
     // Constructor with a modal flag, but no window id - the old convention
     wxDialog(wxWindow *parent,
@@ -39,9 +39,10 @@ public:
              long style = wxDEFAULT_DIALOG_STYLE,
              const wxString& name = wxDialogNameStr)
     {
-        long modalStyle = modal ? wxDIALOG_MODAL : wxDIALOG_MODELESS ;
+        Init();
+        m_isModalStyle = modal;
         Create(parent, -1, title, wxPoint(x, y), wxSize(width, height),
-               style | modalStyle, name);
+               style, name);
     }
 
     // Constructor with no modal flag - the new convention.
@@ -52,6 +53,7 @@ public:
              long style = wxDEFAULT_DIALOG_STYLE,
              const wxString& name = wxDialogNameStr)
     {
+        Init();
         Create(parent, id, title, pos, size, style, name);
     }
 
@@ -98,6 +100,8 @@ public:
     void DoShowModal();
 
 private:
+    void Init();
+    bool m_isModalStyle;
     DECLARE_EVENT_TABLE()
 };
 
