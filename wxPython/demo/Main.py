@@ -318,7 +318,7 @@ class MessagePanel(wx.Panel):
         box.Add((10,10), 2)
 
         self.SetSizer(box)
-        
+        self.Fit()
         
 
 #---------------------------------------------------------------------------

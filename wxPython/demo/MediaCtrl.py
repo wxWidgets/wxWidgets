@@ -14,7 +14,11 @@ class TestPanel(wx.Panel):
                           style=wx.TAB_TRAVERSAL|wx.CLIP_CHILDREN)
 
         # Create some controls
-        self.mc = wx.media.MediaCtrl(self, style=wx.SIMPLE_BORDER)
+        try:
+            self.mc = wx.media.MediaCtrl(self, style=wx.SIMPLE_BORDER)
+        except NotImplementedError:
+            self.Destroy()
+            raise
 
         btn1 = wx.Button(self, -1, "Load File")
         self.Bind(wx.EVT_BUTTON, self.OnLoadFile, btn1)
