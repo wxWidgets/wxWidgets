@@ -210,8 +210,10 @@ bool wxHtmlWindow::LoadPage(const wxString& location)
         m_History.Add(new HtmlHistoryItem(m_OpenedPage, m_OpenedAnchor));
     }
 
+    if (m_OpenedPageTitle == wxEmptyString)
+        OnSetTitle(wxFileNameFromPath(m_OpenedPage));
     SetCursor(*wxSTANDARD_CURSOR);
-
+    
     wxYield();
     m_tmpCanDrawLocks--;
     Refresh();
