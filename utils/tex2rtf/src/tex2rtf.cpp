@@ -31,9 +31,16 @@
 #endif
 
 #ifndef NO_GUI
-#include "wx/help.h"
-#include "wx/timer.h"
-#endif
+    #include "wx/timer.h"
+    #include "wx/help.h"
+    #include "wx/cshelp.h"
+    #include "wx/helphtml.h"
+    #ifdef __WXMSW__
+        #include "wx/msw/helpchm.h"
+    #else
+        #include "wx/html/helpctrl.h"
+    #endif
+#endif // !NO_GUI
 
 #if wxUSE_IOSTREAMH
 #include <iostream.h>
@@ -78,18 +85,17 @@ extern wxChar *TexTmpBibName;      // Temporary bibliography output file name
 extern wxList ColourTable;
 extern TexChunk *TopLevel;
 
-
-
 #if wxUSE_HELP
-wxHelpController *HelpInstance = NULL;
+wxHelpControllerBase *HelpInstance = NULL;
 #endif // wxUSE_HELP
 
 #ifdef __WXMSW__
 static wxChar *ipc_buffer = NULL;
 static wxChar Tex2RTFLastStatus[100];
 Tex2RTFServer *TheTex2RTFServer = NULL;
-#endif
-#endif
+#endif // __WXMSW__
+
+#endif // !NO_GUI
 
 wxChar *bulletFile = NULL;
 
@@ -367,7 +373,11 @@ bool MyApp::OnInit()
 //    ShowOptions();
 
 #if wxUSE_HELP
-    HelpInstance = new wxHelpController();
+#if wxUSE_MS_HTML_HELP && !defined(__WXUNIVERSAL__)
+    HelpInstance = new wxCHMHelpController;
+#else
+    HelpInstance = new wxHtmlHelpController;
+#endif
     HelpInstance->Initialize(_T("tex2rtf"));
 #endif // wxUSE_HELP
 
