@@ -133,7 +133,6 @@ IMPLEMENT_DYNAMIC_CLASS(wxColour,wxGDIObject)
 
 wxColour::wxColour()
 {
-    m_refData = new wxColourRefData();
 }
 
 wxColour::wxColour( unsigned char red, unsigned char green, unsigned char blue )
