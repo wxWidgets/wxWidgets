@@ -27,7 +27,7 @@
   #pragma hdrstop
 #endif
 
-#if wxUSE_DYNLIB_CLASS
+#if wxUSE_DYNLIB_CLASS && !wxUSE_DYNAMIC_LOADER
 
 #if defined(__WINDOWS__)
     #include "wx/msw/private.h"
