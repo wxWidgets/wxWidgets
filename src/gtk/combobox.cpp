@@ -314,14 +314,13 @@ int wxComboBox::FindString( const wxString &item )
     {
         GtkBin *bin = GTK_BIN( child->data );
         GtkLabel *label = GTK_LABEL( bin->child );
-        if (item == label->label) return count;
+        if (item == label->label)
+            return count;
         count++;
         child = child->next;
     }
 
-    wxFAIL_MSG( "wxComboBox: string not found" );
-
-    return -1;
+    return wxNOT_FOUND;
 }
 
 int wxComboBox::GetSelection() const
@@ -354,17 +353,20 @@ wxString wxComboBox::GetString( int n ) const
 
     GtkWidget *list = GTK_COMBO(m_widget)->list;
 
+    wxString str;
     GList *child = g_list_nth( GTK_LIST(list)->children, n );
     if (child)
     {
         GtkBin *bin = GTK_BIN( child->data );
         GtkLabel *label = GTK_LABEL( bin->child );
-        return label->label;
+        str = label->label;
+    }
+    else
+    {
+        wxFAIL_MSG( "wxComboBox: wrong index" );
     }
 
-    wxFAIL_MSG( "wxComboBox: wrong index" );
-
-    return "";
+    return str;
 }
 
 wxString wxComboBox::GetStringSelection() const
@@ -529,18 +531,40 @@ void wxComboBox::SetEditable( bool editable )
 
 void wxComboBox::OnChar( wxKeyEvent &event )
 {
-    // make Enter generate "selected" event if there is only one item in the
-    // combobox - without it, it's impossible to select it at all!
-    if ( (event.KeyCode() == WXK_RETURN) && (Number() == 0) )
+    if ( event.KeyCode() == WXK_RETURN )
     {
-        wxCommandEvent event( wxEVT_COMMAND_COMBOBOX_SELECTED, GetId() );
-        event.SetInt( 0 );
-        event.SetString( copystring(GetValue()) );
-        event.SetEventObject( this );
-        GetEventHandler()->ProcessEvent( event );
+        wxString value = GetValue();
 
-        delete [] event.GetString();
+        if ( Number() == 0 )
+        {
+            // make Enter generate "selected" event if there is only one item
+            // in the combobox - without it, it's impossible to select it at
+            // all!
+            wxCommandEvent event( wxEVT_COMMAND_COMBOBOX_SELECTED, GetId() );
+            event.SetInt( 0 );
+            event.SetString( (char *)value.c_str() );
+            event.SetEventObject( this );
+            GetEventHandler()->ProcessEvent( event );
+        }
+        else
+        {
+            // add the item to the list if it's not there yet
+            if ( FindString(value) == wxNOT_FOUND )
+            {
+                Append(value);
+
+                // and generate the selected event for it
+                wxCommandEvent event( wxEVT_COMMAND_COMBOBOX_SELECTED, GetId() );
+                event.SetInt( Number() - 1 );
+                event.SetString( (char *)value.c_str() );
+                event.SetEventObject( this );
+                GetEventHandler()->ProcessEvent( event );
+            }
+            //else: do nothing, this will open the listbox
+        }
     }
+
+    event.Skip();
 }
 
 void wxComboBox::OnSize( wxSizeEvent &event )
