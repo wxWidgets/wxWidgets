@@ -1396,7 +1396,7 @@ bool wxPathExists(const wxChar *pszPathName)
 
 #ifdef __OS2__
     // OS/2 can't handle "d:", it wants either "d:\" or "d:."
-    if (strPath.length() == 2 && strPath[1] == _T(':'))
+    if (strPath.length() == 2 && strPath[1u] == _T(':'))
         strPath << _T('.');
 #endif
 
