@@ -35,8 +35,14 @@
 // ============================================================================
 @interface wxNSWindowDelegate : NSObject
 {
+    wxCocoaNSWindow *m_wxCocoaInterface;
 }
 
+- (id)init;
+- (void)setWxCocoaInterface: (wxCocoaNSWindow *)wxCocoaInterface;
+- (wxCocoaNSWindow *)wxCocoaInterface;
+
+// Delegate message handlers
 - (void)windowDidBecomeKey: (NSNotification *)notification;
 - (void)windowDidResignKey: (NSNotification *)notification;
 - (void)windowDidBecomeMain: (NSNotification *)notification;
@@ -47,9 +53,26 @@
 
 @implementation wxNSWindowDelegate : NSObject
 
+- (id)init
+{
+    m_wxCocoaInterface = NULL;
+    return [super init];
+}
+
+- (void)setWxCocoaInterface: (wxCocoaNSWindow *)wxCocoaInterface
+{
+    m_wxCocoaInterface = wxCocoaInterface;
+}
+
+- (wxCocoaNSWindow *)wxCocoaInterface
+{
+    return m_wxCocoaInterface;
+}
+
 - (void)windowDidBecomeKey: (NSNotification *)notification
 {
     wxCocoaNSWindow *win = wxCocoaNSWindow::GetFromCocoa([notification object]);
+    wxASSERT(win==m_wxCocoaInterface);
     wxCHECK_RET(win,wxT("notificationDidBecomeKey received but no wxWindow exists"));
     win->CocoaDelegate_windowDidBecomeKey();
 }
@@ -57,6 +80,7 @@
 - (void)windowDidResignKey: (NSNotification *)notification
 {
     wxCocoaNSWindow *win = wxCocoaNSWindow::GetFromCocoa([notification object]);
+    wxASSERT(win==m_wxCocoaInterface);
     wxCHECK_RET(win,wxT("notificationDidResignKey received but no wxWindow exists"));
     win->CocoaDelegate_windowDidResignKey();
 }
@@ -64,6 +88,7 @@
 - (void)windowDidBecomeMain: (NSNotification *)notification
 {
     wxCocoaNSWindow *win = wxCocoaNSWindow::GetFromCocoa([notification object]);
+    wxASSERT(win==m_wxCocoaInterface);
     wxCHECK_RET(win,wxT("notificationDidBecomeMain received but no wxWindow exists"));
     win->CocoaDelegate_windowDidBecomeMain();
 }
@@ -71,6 +96,7 @@
 - (void)windowDidResignMain: (NSNotification *)notification
 {
     wxCocoaNSWindow *win = wxCocoaNSWindow::GetFromCocoa([notification object]);
+    wxASSERT(win==m_wxCocoaInterface);
     wxCHECK_RET(win,wxT("notificationDidResignMain received but no wxWindow exists"));
     win->CocoaDelegate_windowDidResignMain();
 }
@@ -79,6 +105,7 @@
 {
     wxLogTrace(wxTRACE_COCOA,wxT("windowShouldClose"));
     wxCocoaNSWindow *tlw = wxCocoaNSWindow::GetFromCocoa(sender);
+    wxASSERT(tlw==m_wxCocoaInterface);
     if(tlw && !tlw->CocoaDelegate_windowShouldClose())
     {
         wxLogTrace(wxTRACE_COCOA,wxT("Window will not be closed"));
@@ -91,6 +118,7 @@
 - (void)windowWillClose: (NSNotification *)notification
 {
     wxCocoaNSWindow *win = wxCocoaNSWindow::GetFromCocoa([notification object]);
+    wxASSERT(win==m_wxCocoaInterface);
     wxCHECK_RET(win,wxT("windowWillClose received but no wxWindow exists"));
     win->CocoaDelegate_windowWillClose();
 }
@@ -103,7 +131,17 @@
 
 WX_IMPLEMENT_OBJC_INTERFACE_HASHMAP(NSWindow)
 
-struct objc_object *wxCocoaNSWindow::sm_cocoaDelegate = [[wxNSWindowDelegate alloc] init];
+wxCocoaNSWindow::wxCocoaNSWindow()
+{
+    m_cocoaDelegate = [[wxNSWindowDelegate alloc] init];
+    [m_cocoaDelegate setWxCocoaInterface: this];
+}
+
+wxCocoaNSWindow::~wxCocoaNSWindow()
+{
+    [m_cocoaDelegate setWxCocoaInterface: NULL];
+    [m_cocoaDelegate release];
+}
 
 void wxCocoaNSWindow::AssociateNSWindow(WX_NSWindow cocoaNSWindow)
 {
@@ -111,7 +149,7 @@ void wxCocoaNSWindow::AssociateNSWindow(WX_NSWindow cocoaNSWindow)
     {
         [cocoaNSWindow setReleasedWhenClosed: NO];
         sm_cocoaHash.insert(wxCocoaNSWindowHash::value_type(cocoaNSWindow,this));
-        [cocoaNSWindow setDelegate: sm_cocoaDelegate];
+        [cocoaNSWindow setDelegate: m_cocoaDelegate];
     }
 }
 

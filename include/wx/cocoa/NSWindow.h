@@ -19,6 +19,8 @@ WX_DECLARE_OBJC_HASHMAP(NSWindow);
 
 class WXDLLEXPORT wxMenuBar;
 
+DECLARE_WXCOCOA_OBJC_CLASS(wxNSWindowDelegate);
+
 class wxCocoaNSWindow
 {
 /* NSWindow is a rather special case and requires some extra attention */
@@ -36,7 +38,9 @@ public:
     virtual void CocoaDelegate_windowDidResignMain(void) { }
     virtual wxMenuBar* GetAppMenuBar(wxCocoaNSWindow *win);
 protected:
-    static struct objc_object *sm_cocoaDelegate;
+    wxCocoaNSWindow();
+    virtual ~wxCocoaNSWindow();
+    WX_wxNSWindowDelegate m_cocoaDelegate;
 };
 
 #endif // _WX_COCOA_NSWINDOW_H_
