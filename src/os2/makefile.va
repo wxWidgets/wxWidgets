@@ -251,6 +251,7 @@ COMMONOBJS = \
   ..\common\$D\imagbmp.obj \
   ..\common\$D\image.obj \
   ..\common\$D\imaggif.obj \
+  ..\common\$D\imagiff.obj \
   ..\common\$D\imagjpeg.obj \
   ..\common\$D\imagpcx.obj \
   ..\common\$D\imagpng.obj \
@@ -381,6 +382,7 @@ COMLIBOBJS2 = \
   imagbmp.obj \
   image.obj \
   imaggif.obj \
+  imagiff.obj \
   imagjpeg.obj \
   imagpcx.obj \
   imagpng.obj \
@@ -407,10 +409,10 @@ COMLIBOBJS2 = \
   popupcmn.obj \
   prntbase.obj \
   process.obj \
-  protocol.obj \
-  quantize.obj
+  protocol.obj
 
 COMLIBOBJS3 = \
+  quantize.obj \
   radiocmn.obj \
   regex.obj \
   resource.obj \
@@ -747,6 +749,7 @@ $(COMLIBOBJS2):
   copy ..\common\$D\imagbmp.obj
   copy ..\common\$D\image.obj
   copy ..\common\$D\imaggif.obj
+  copy ..\common\$D\imagiff.obj
   copy ..\common\$D\imagjpeg.obj
   copy ..\common\$D\imagpcx.obj
   copy ..\common\$D\imagpng.obj
@@ -774,9 +777,9 @@ $(COMLIBOBJS2):
   copy ..\common\$D\prntbase.obj
   copy ..\common\$D\process.obj
   copy ..\common\$D\protocol.obj
-  copy ..\common\$D\quantize.obj
 
 $(COMLIBOBJS3):
+  copy ..\common\$D\quantize.obj
   copy ..\common\$D\radiocmn.obj
   copy ..\common\$D\regex.obj
   copy ..\common\$D\resource.obj

@@ -327,7 +327,6 @@ wxWindowOS2::~wxWindowOS2()
 {
     m_isBeingDeleted = TRUE;
 
-    OS2DetachWindowMenu();
     for (wxWindow* pWin = GetParent(); pWin; pWin = pWin->GetParent())
     {
         wxFrame*                    pFrame = wxDynamicCast(pWin, wxFrame);
@@ -1545,7 +1544,7 @@ void wxWindowOS2::DoMoveWindow(
     HWND                            hParent;
     wxWindow*                       pParent = GetParent();
 
-    if (pParent)
+    if (pParent && !IsKindOf(CLASSINFO(wxDialog)))
     {
         int                         nOS2Height = GetOS2ParentHeight(pParent);
 
@@ -1607,7 +1606,7 @@ void wxWindowOS2::DoSetSize(
     int                             nY2 = nY;
     wxWindow*                       pParent = (wxWindow*)GetParent();
 
-    if (pParent)
+    if (pParent && !IsKindOf(CLASSINFO(wxDialog)))
     {
         int                         nOS2Height = GetOS2ParentHeight(pParent);
 
@@ -2718,6 +2717,8 @@ MRESULT wxWindowOS2::OS2WindowProc(
 #endif // __WXDEBUG__
         if (IsKindOf(CLASSINFO(wxFrame)))
             mResult = ::WinDefWindowProc(m_hWnd, uMsg, wParam, lParam);
+        else if (IsKindOf(CLASSINFO(wxDialog)))
+            mResult = ::WinDefDlgProc( m_hWnd, uMsg, wParam, lParam);
         else
             mResult = OS2DefWindowProc(uMsg, wParam, lParam);
     }
@@ -2807,40 +2808,6 @@ void wxRemoveHandleAssociation(
 void wxWindowOS2::OS2DestroyWindow()
 {
 }
-
-void wxWindowOS2::OS2DetachWindowMenu()
-{
-#ifndef __WXUNIVERSAL__
-    if (m_hMenu)
-    {
-        HMENU                       hMenu = (HMENU)m_hMenu;
-
-        int                         nN = (int)::WinSendMsg(hMenu, MM_QUERYITEMCOUNT, 0, 0);
-        int                         i;
-
-        for (i = 0; i < nN; i++)
-        {
-            wxChar                   zBuf[100];
-            int                      nChars = (int)::WinSendMsg( hMenu
-                                                                ,MM_QUERYITEMTEXT
-                                                                ,MPFROM2SHORT(i, nN)
-                                                                ,zBuf
-                                                               );
-            if (!nChars)
-            {
-                wxLogLastError(wxT("GetMenuString"));
-                continue;
-            }
-
-            if (wxStrcmp(zBuf, wxT("&Window")) == 0)
-            {
-                ::WinSendMsg(hMenu, MM_DELETEITEM, MPFROM2SHORT(i, TRUE), 0);
-                break;
-            }
-        }
-    }
-#endif // __WXUNIVERSAL__
-} // end of wxWindowOS2::OS2DetachWindowMenu
 
 bool wxWindowOS2::OS2GetCreateWindowCoords(
   const wxPoint&                    rPos

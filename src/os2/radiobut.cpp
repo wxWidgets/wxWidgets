@@ -27,6 +27,11 @@
 
 IMPLEMENT_DYNAMIC_CLASS(wxRadioButton, wxControl)
 
+void wxRadioButton::Init()
+{
+    m_bFocusJustSet = FALSE;
+} // end of wxRadioButton::Init
+
 void wxRadioButton::Command (
   wxCommandEvent&                   rEvent
 )
@@ -48,102 +53,80 @@ bool wxRadioButton::Create(
 , const wxString&                   rsName
 )
 {
-    int                             nX          = rPos.x;
-    int                             nY          = rPos.y;
-    int                             nWidth      = rSize.x;
-    int                             nHeight     = rSize.y;
-    long                            lsStyle     = 0L;
-    long                            lGroupStyle = 0L;
-
-    SetName(rsName);
+    if ( !CreateControl( pParent
+                        ,vId
+                        ,rPos
+                        ,rSize
+                        ,lStyle
 #if wxUSE_VALIDATORS
-    SetValidator(rValidator);
+                        ,rValidator
 #endif
+                        ,rsName))
+        return FALSE;
 
-    if (pParent)
-        pParent->AddChild(this);
+    long                            lSstyle = HasFlag(wxRB_GROUP) ? WS_GROUP : 0;
 
-    SetBackgroundColour(pParent->GetBackgroundColour());
-    SetForegroundColour(pParent->GetForegroundColour());
+    lSstyle |= BS_AUTORADIOBUTTON;
 
-    if (vId == -1)
-        m_windowId = (int)NewControlId();
-    else
-        m_windowId = vId;
+    if (HasFlag(wxCLIP_SIBLINGS))
+        lSstyle |= WS_CLIPSIBLINGS;
 
+    if (!OS2CreateControl( _T("BUTTON")
+                          ,lSstyle
+                          ,rPos
+                          ,rSize
+                          ,rsLabel
+                          ,0
+                         ))
+        return FALSE;
 
-    m_windowStyle = lStyle ;
+    if (HasFlag(wxRB_GROUP))
+        SetValue(TRUE);
 
-    if (m_windowStyle & wxRB_GROUP)
-        lGroupStyle = WS_GROUP;
-
-    lsStyle = lGroupStyle | BS_AUTORADIOBUTTON | WS_VISIBLE ;
-
-    if (m_windowStyle & wxCLIP_SIBLINGS )
-        lsStyle |= WS_CLIPSIBLINGS;
-    //
-    // If the parent is a scrolled window the controls must
-    // have this style or they will overlap the scrollbars
-    //
-    if (pParent)
-        if (pParent->IsKindOf(CLASSINFO(wxScrolledWindow)) ||
-            pParent->IsKindOf(CLASSINFO(wxGenericScrolledWindow)))
-            lsStyle |= WS_CLIPSIBLINGS;
-
-    m_hWnd = (WXHWND)::WinCreateWindow ( GetHwndOf(pParent)
-                                        ,WC_BUTTON
-                                        ,rsLabel.c_str()
-                                        ,lsStyle
-                                        ,0, 0, 0, 0
-                                        ,GetWinHwnd(pParent)
-                                        ,HWND_TOP
-                                        ,(HMENU)m_windowId
-                                        ,NULL
-                                        ,NULL
-                                       );
-    wxCHECK_MSG(m_hWnd, FALSE, wxT("Failed to create radiobutton"));
-
-    if (rsLabel != wxT(""))
-    {
-        int                         nLabelWidth;
-        int                         nLabelHeight;
-
-        GetTextExtent( rsLabel
-                      ,&nLabelWidth
-                      ,&nLabelHeight
-                      ,NULL
-                      ,NULL
-                      ,&this->GetFont()
-                     );
-        if (nWidth < 0)
-            nWidth = (int)(nLabelWidth + RADIO_SIZE);
-        if (nHeight<0)
-        {
-            nHeight = (int)(nLabelHeight);
-            if (nHeight < RADIO_SIZE)
-                nHeight = RADIO_SIZE;
-        }
-    }
-    else
-    {
-        if (nWidth < 0)
-            nWidth = RADIO_SIZE;
-        if (nHeight < 0)
-            nHeight = RADIO_SIZE;
-    }
-
-    //
-    // Subclass again for purposes of dialog editing mode
-    //
-    SubclassWin((WXHWND)m_hWnd);
-    SetFont(pParent->GetFont());
-    SetSize( nX
-            ,nY
-            ,nWidth
-            ,nHeight
+    SetFont(*wxSMALL_FONT);
+    SetSize( rPos.x
+            ,rPos.y
+            ,rSize.x
+            ,rSize.y
            );
-    return FALSE;
+    return TRUE;
 } // end of wxRadioButton::Create
+
+wxSize wxRadioButton::DoGetBestSize() const
+{
+    static int                      snRadioSize = 0;
+
+    if (!snRadioSize)
+    {
+        wxScreenDC                  vDC;
+
+        vDC.SetFont(wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT));
+        snRadioSize = vDC.GetCharHeight();
+    }
+
+    wxString                        sStr = GetLabel();
+    int                             nRadioWidth;
+    int                             nRadioHeight;
+
+    if (!sStr.empty())
+    {
+        GetTextExtent( sStr
+                      ,&nRadioWidth
+                      ,&nRadioHeight
+                     );
+        nRadioWidth += snRadioSize + GetCharWidth();
+        if (nRadioHeight < snRadioSize)
+            nRadioHeight = snRadioSize;
+    }
+    else
+    {
+        nRadioWidth  = snRadioSize;
+        nRadioHeight = snRadioSize;
+    }
+    return wxSize( nRadioWidth
+                  ,nRadioHeight
+                 );
+} // end of wxRadioButton::DoGetBestSize
 
 //
 // Get single selection, for single choice list items
@@ -171,6 +154,22 @@ bool wxRadioButton::OS2Command(
     else
         return FALSE;
 } // end of wxRadioButton::OS2Command
+
+void wxRadioButton::SetFocus()
+{
+    // when the radio button receives a WM_SETFOCUS message it generates a
+    // BN_CLICKED which is totally unexpected and leads to catastrophic results
+    // if you pop up a dialog from the radio button event handler as, when the
+    // dialog is dismissed, the focus is returned to the radio button which
+    // generates BN_CLICKED which leads to showing another dialog and so on
+    // without end!
+    //
+    // to aviod this, we drop the pseudo BN_CLICKED events generated when the
+    // button gains focus
+    m_bFocusJustSet = TRUE;
+
+    wxControl::SetFocus();
+}
 
 void wxRadioButton::SetLabel(
   const wxString&                   rsLabel

@@ -80,8 +80,16 @@ inline bool IsMdiCommandId(int id)
     return (id >= wxFIRST_MDI_CHILD) && (id <= wxLAST_MDI_CHILD);
 }
 
+// unpack the parameters of WM_MDIACTIVATE message
 static void UnpackMDIActivate(WXWPARAM wParam, WXLPARAM lParam,
                               WXWORD *activate, WXHWND *hwndAct, WXHWND *hwndDeact);
+
+// return the HMENU of the MDI menu
+static inline HMENU GetMDIWindowMenu(wxMDIParentFrame *frame)
+{
+    wxMenu *menu = frame->GetWindowMenu();
+    return menu ? GetHmenuOf(menu) : 0;
+}
 
 // ===========================================================================
 // implementation

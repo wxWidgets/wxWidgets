@@ -197,15 +197,15 @@ bool wxTopLevelWindowOS2::CreateDialog(
     }
 
     HWND                            hWndDlg;
-    HWND                            hWndParent;
+    HWND                            hWndOwner;
 
     if (pParent)
-        hWndParent = GetHwndOf(pParent);
+        hWndOwner = GetHwndOf(pParent);
     else
-        hWndParent = HWND_DESKTOP;
+        hWndOwner = HWND_DESKTOP;
 
-    hWndDlg = ::WinLoadDlg( hWndParent
-                           ,hWndParent
+    hWndDlg = ::WinLoadDlg( HWND_DESKTOP
+                           ,hWndOwner
                            ,(PFNWP)wxDlgProc
                            ,NULL
                            ,(ULONG)ulDlgTemplate

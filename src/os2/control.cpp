@@ -135,6 +135,8 @@ bool wxControl::OS2CreateControl(
         zClass = WC_COMBOBOX;
     else if ((strcmp(zClassname, "STATIC")) == 0)
         zClass = WC_STATIC;
+    else if ((strcmp(zClassname, "BUTTON")) == 0)
+        zClass = WC_BUTTON;
     dwStyle |= WS_VISIBLE;
 
     //
