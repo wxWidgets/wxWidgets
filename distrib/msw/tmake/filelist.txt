@@ -121,6 +121,7 @@ treectlg.cpp	Generic
 treelay.cpp	Generic
 wizard.cpp	Generic
 
+accesscmn.cpp	Common
 appcmn.cpp	Common	Base
 artprov.cpp	Common
 artstd.cpp	Common
@@ -257,6 +258,7 @@ zstream.cpp	Common	Base
 gsocket.c	MSW	Socket,Base
 gsockmsw.c	MSW	Socket,Base
 accel.cpp	MSW
+access.cpp	MSW	OLE
 app.cpp	MSW	LowLevel
 automtn.cpp	MSW	OLE,LowLevel
 bitmap.cpp	MSW	LowLevel
@@ -567,7 +569,6 @@ accel.cpp	Motif
 app.cpp	Motif
 bitmap.cpp	Motif
 bmpbuttn.cpp	Motif
-# brush.cpp	Motif
 button.cpp	Motif
 checkbox.cpp	Motif
 checklst.cpp	Motif
@@ -602,7 +603,6 @@ menuitem.cpp	Motif
 minifram.cpp	Motif
 msgdlg.cpp	Motif
 palette.cpp	Motif
-# pen.cpp	Motif
 radiobox.cpp	Motif
 radiobut.cpp	Motif
 region.cpp	Motif
@@ -755,6 +755,7 @@ htmprint.cpp	HTML
 arrimpl.cpp	WXH	Base
 listimpl.cpp	WXH	Base
 accel.h	WXH
+access.h	WXH
 app.h	WXH	Base
 artprov.h	WXH
 bitmap.h	WXH
@@ -1147,7 +1148,6 @@ accel.h	MotifH
 app.h	MotifH
 bitmap.h	MotifH
 bmpbuttn.h	MotifH
-# brush.h	MotifH
 button.h	MotifH
 checkbox.h	MotifH
 checklst.h	MotifH
@@ -1184,7 +1184,6 @@ metafile.h	MotifH
 minifram.h	MotifH
 msgdlg.h	MotifH
 palette.h	MotifH
-# pen.h	MotifH
 print.h	MotifH
 printdlg.h	MotifH
 private.h	MotifH
@@ -1354,6 +1353,7 @@ wave.h	MSWH
 window.h	MSWH
 winundef.h	MSWH	Base
 
+access.h	MSWH	OLE
 automtn.h	MSWH	OLE
 dataform.h	MSWH	OLE
 dataobj.h	MSWH	OLE
