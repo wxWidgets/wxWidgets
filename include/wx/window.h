@@ -1114,10 +1114,12 @@ WXDLLEXPORT extern wxPoint wxGetMousePosition();
 // get the currently active window of this application or NULL
 WXDLLEXPORT extern wxWindow *wxGetActiveWindow();
 
+// get the (first) top level parent window
+WXDLLEXPORT wxWindow* wxGetTopLevelParent(wxWindow *win);
+
 // deprecated (doesn't start with 'wx' prefix), use wxWindow::NewControlId()
 inline int NewControlId() { return wxWindowBase::NewControlId(); }
 
 #endif
     // _WX_WINDOW_H_BASE_
 
-// vi:sts=4:sw=4:et

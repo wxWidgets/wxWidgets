@@ -120,6 +120,7 @@ the corresponding topic.
 \helpref{wxGetSingleChoice}{wxgetsinglechoice}\\
 \helpref{wxGetTempFileName}{wxgettempfilename}\\
 \helpref{wxGetTextFromUser}{wxgettextfromuser}\\
+\helpref{wxGetTopLevelParent}{wxgettoplevelparent}\\
 \helpref{wxGetTranslation}{wxgettranslation}\\
 \helpref{wxGetUTCTime}{wxgetutctime}\\
 \helpref{wxGetUserHome}{wxgetuserhome}\\
@@ -2232,6 +2233,17 @@ See also \helpref{wxWriteResource}{wxwriteresource}, \helpref{wxConfigBase}{wxco
 \wxheading{Include files}
 
 <wx/utils.h>
+
+\membersection{::wxGetTopLevelParent}\label{wxgettoplevelparent}
+
+\func{wxWindow *}{wxGetTopLevelParent}{\param{wxWindow }{*win}}
+
+Returns the first top level parent of the given window, or in other words, the
+frame or dialog containing it, or {\tt NULL}.
+
+\wxheading{Include files}
+
+<wx/window.h>
 
 \membersection{::wxLoadUserResource}\label{wxloaduserresource}
 

@@ -1795,4 +1795,15 @@ void wxWindowBase::ReleaseMouse()
                GetCapture());
 }
 
-// vi:sts=4:sw=4:et
+// ----------------------------------------------------------------------------
+// global functions
+// ----------------------------------------------------------------------------
+
+wxWindow* wxGetTopLevelParent(wxWindow *win)
+{
+    while ( win && !win->IsTopLevel() )
+         win = win->GetParent();
+
+    return win;
+}
+
