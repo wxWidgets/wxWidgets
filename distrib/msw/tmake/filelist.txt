@@ -69,10 +69,10 @@ choicdgg.cpp	Generic
 colrdlgg.cpp	Generic	Generic
 dcpsg.cpp	Generic	NotMSW
 dirctrlg.cpp	Generic
-dirdlgg.cpp	Generic	NotWin32,NotOS2
+dirdlgg.cpp	Generic	NotWin32,NotOS2,NotMac
 dragimgg.cpp	Generic	NotOS2
 fdrepdlg.cpp	Generic	NotMSW
-filedlgg.cpp	Generic	NotMSW,NotX,NotOS2
+filedlgg.cpp	Generic	NotMSW,NotX,NotOS2,NotMac
 fontdlgg.cpp	Generic	Generic,NotOS2
 grid.cpp	Generic
 gridctrl.cpp	Generic
@@ -346,7 +346,7 @@ wave.cpp	MSW
 window.cpp	MSW	LowLevel
 
 dialup.cpp	Unix	NotMac
-dir.cpp	Unix	Base
+dir.cpp	Unix	Base,NotMac
 fontenum.cpp	Unix	NotMac
 fontutil.cpp	Unix	NotMac
 gsocket.c	Unix	Base,NotMac
@@ -478,7 +478,10 @@ dcmemory.cpp	Mac
 dcprint.cpp	Mac
 dcscreen.cpp	Mac
 dialog.cpp	Mac
+dirdlg.cpp	Mac
+dirmac.cpp	Mac
 dnd.cpp	Mac
+filedlg.cpp	Mac
 font.cpp	Mac
 fontdlg.cpp	Mac
 fontenum.cpp	Mac
@@ -490,7 +493,6 @@ icon.cpp	Mac
 joystick.cpp	Mac
 listbox.cpp	Mac
 macnotfy.cpp	Mac
-main.cpp	Mac
 mdi.cpp	Mac
 menu.cpp	Mac
 menuitem.cpp	Mac
