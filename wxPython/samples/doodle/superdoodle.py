@@ -261,7 +261,7 @@ class ColourIndicator(wxWindow):
     def __init__(self, parent):
         wxWindow.__init__(self, parent, -1, style=wxSUNKEN_BORDER)
         self.SetBackgroundColour(wxWHITE)
-        self.SetSize(wxSize(-1, 40))
+        self.SetSize(wxSize(-1, 45))
         self.colour = self.thickness = None
         EVT_PAINT(self, self.OnPaint)
 

@@ -1,4 +1,4 @@
-#!/usr/local/bin/python
+#!/usr/bin/env python
 
 # simple text editor
 #
@@ -366,4 +366,3 @@ if __name__ == '__main__':
 
     launcher = FrogEditLauncher()
     launcher.Main()
-

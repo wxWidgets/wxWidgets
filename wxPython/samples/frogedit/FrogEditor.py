@@ -1,4 +1,3 @@
-#!/usr/local/bin/python
 
 # simple text editor
 #
@@ -78,7 +77,7 @@ class FrogEditor(wxEditor):
 
     def SetAltFuncs(self, action):
         wxEditor.SetAltFuncs(self, action)
-        action['x'] = self.Exit 
+        action['x'] = self.Exit
 
     #----------- commands -----------
 
