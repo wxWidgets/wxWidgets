@@ -111,6 +111,11 @@ public:
                            int flags = 0,
                            int alignment = wxALIGN_LEFT,
                            int indexAccel = -1);
+    virtual void DrawTextBorder(wxDC& dc,
+                                wxBorder border,
+                                const wxRect& rect,
+                                int flags = 0,
+                                wxRect *rectIn = (wxRect *)NULL);
     virtual void DrawButtonBorder(wxDC& dc,
                                   const wxRect& rect,
                                   int flags = 0,
@@ -1172,6 +1177,16 @@ bool wxWin32Renderer::AreScrollbarsInsideBorder() const
 // ----------------------------------------------------------------------------
 // borders
 // ----------------------------------------------------------------------------
+
+void wxWin32Renderer::DrawTextBorder(wxDC& dc,
+                                     wxBorder border,
+                                     const wxRect& rect,
+                                     int flags,
+                                     wxRect *rectIn)
+{
+    // text controls are not special under windows
+    return DrawBorder(dc, border, rect, flags, rectIn);
+}
 
 void wxWin32Renderer::DrawButtonBorder(wxDC& dc,
                                        const wxRect& rectTotal,

@@ -195,7 +195,7 @@ protected:
     virtual bool DoDrawBackground(wxDC& dc);
 
     // draw the controls border
-    virtual void DoDrawBorder(wxDC& dc);
+    virtual void DoDrawBorder(wxDC& dc, const wxRect& rect);
 
     // draw the controls contents
     virtual void DoDraw(wxControlRenderer *renderer);

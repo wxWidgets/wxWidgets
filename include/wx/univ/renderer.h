@@ -106,6 +106,14 @@ public:
                             int flags = 0,
                             wxRect *rectIn = (wxRect *)NULL) = 0;
 
+    // draw text control border (I hate to have a separate method for this but
+    // it is needed to accomodate GTK+)
+    virtual void DrawTextBorder(wxDC& dc,
+                                wxBorder border,
+                                const wxRect& rect,
+                                int flags = 0,
+                                wxRect *rectIn = (wxRect *)NULL) = 0;
+
     // draw push button border and return the rectangle left for the label
     virtual void DrawButtonBorder(wxDC& dc,
                                   const wxRect& rect,
@@ -312,6 +320,17 @@ public:
                             int flags = 0,
                             wxRect *rectIn = (wxRect *)NULL)
         { m_renderer->DrawBorder(dc, border, rect, flags, rectIn); }
+    virtual void DrawTextBorder(wxDC& dc,
+                                wxBorder border,
+                                const wxRect& rect,
+                                int flags = 0,
+                                wxRect *rectIn = (wxRect *)NULL)
+        { m_renderer->DrawTextBorder(dc, border, rect, flags, rectIn); }
+    virtual void DrawButtonBorder(wxDC& dc,
+                                  const wxRect& rect,
+                                  int flags = 0,
+                                  wxRect *rectIn = (wxRect *)NULL)
+        { m_renderer->DrawButtonBorder(dc, rect, flags, rectIn); }
     virtual void DrawFrame(wxDC& dc,
                            const wxString& label,
                            const wxRect& rect,
@@ -325,11 +344,6 @@ public:
     virtual void DrawVerticalLine(wxDC& dc,
                                   wxCoord x, wxCoord y1, wxCoord y2)
         { m_renderer->DrawVerticalLine(dc, x, y1, y2); }
-    virtual void DrawButtonBorder(wxDC& dc,
-                                  const wxRect& rect,
-                                  int flags = 0,
-                                  wxRect *rectIn = (wxRect *)NULL)
-        { m_renderer->DrawButtonBorder(dc, rect, flags, rectIn); }
     virtual void DrawArrow(wxDC& dc,
                            wxDirection dir,
                            const wxRect& rect,

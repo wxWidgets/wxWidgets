@@ -2772,7 +2772,16 @@ void wxTextCtrl::RefreshTextRect(const wxRect& rectClient)
 }
 
 // ----------------------------------------------------------------------------
-// drawing
+// border drawing
+// ----------------------------------------------------------------------------
+
+void wxTextCtrl::DoDrawBorder(wxDC& dc, const wxRect& rect)
+{
+    m_renderer->DrawTextBorder(dc, GetBorder(), rect, GetStateFlags());
+}
+
+// ----------------------------------------------------------------------------
+// client area drawing
 // ----------------------------------------------------------------------------
 
 /*
@@ -3622,12 +3631,10 @@ bool wxStdTextCtrlInputHandler::HandleFocus(wxControl *control,
     if ( event.GetEventType() == wxEVT_KILL_FOCUS )
     {
         wxStaticCast(control, wxTextCtrl)->ClearSelection();
-
-        // don't refresh
-        return FALSE;
     }
 
-    return wxStdInputHandler::HandleFocus(control, event);
+    // refresh
+    return TRUE;
 }
 
 #endif // wxUSE_TEXTCTRL

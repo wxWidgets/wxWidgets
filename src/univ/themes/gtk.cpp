@@ -91,6 +91,11 @@ public:
                            int flags = 0,
                            int alignment = wxALIGN_LEFT,
                            int indexAccel = -1);
+    virtual void DrawTextBorder(wxDC& dc,
+                                wxBorder border,
+                                const wxRect& rect,
+                                int flags = 0,
+                                wxRect *rectIn = (wxRect *)NULL);
     virtual void DrawButtonBorder(wxDC& dc,
                                   const wxRect& rect,
                                   int flags = 0,
@@ -675,10 +680,10 @@ void wxGTKRenderer::DrawRaisedBorder(wxDC& dc, wxRect *rect)
 }
 
 void wxGTKRenderer::DrawBorder(wxDC& dc,
-                                 wxBorder border,
-                                 const wxRect& rectTotal,
-                                 int WXUNUSED(flags),
-                                 wxRect *rectIn)
+                               wxBorder border,
+                               const wxRect& rectTotal,
+                               int flags,
+                               wxRect *rectIn)
 {
     size_t width;
 
@@ -773,8 +778,31 @@ bool wxGTKRenderer::AreScrollbarsInsideBorder() const
 }
 
 // ----------------------------------------------------------------------------
-// borders
+// special borders
 // ----------------------------------------------------------------------------
+
+void wxGTKRenderer::DrawTextBorder(wxDC& dc,
+                                   wxBorder border,
+                                   const wxRect& rectOrig,
+                                   int flags,
+                                   wxRect *rectIn)
+{
+    wxRect rect = rectOrig;
+
+    if ( flags & wxCONTROL_FOCUSED )
+    {
+        DrawRect(dc, &rect, m_penBlack);
+        DrawAntiShadedRect(dc, &rect, m_penDarkGrey, m_penHighlight);
+    }
+    else // !focused
+    {
+        DrawAntiShadedRect(dc, &rect, m_penDarkGrey, m_penHighlight);
+        DrawAntiShadedRect(dc, &rect, m_penBlack, m_penHighlight);
+    }
+
+    if ( rectIn )
+        *rectIn = rect;
+}
 
 void wxGTKRenderer::DrawButtonBorder(wxDC& dc,
                                      const wxRect& rectTotal,

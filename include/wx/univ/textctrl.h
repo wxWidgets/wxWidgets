@@ -250,7 +250,7 @@ public:
     // override this to take into account our scrollbar-less scrolling
     virtual void CalcUnscrolledPosition(int x, int y, int *xx, int *yy) const;
 
-    // set the right colours
+    // set the right colours and border
     virtual bool IsContainerWindow() const { return TRUE; }
     virtual wxBorder GetDefaultBorder() const { return wxBORDER_SUNKEN; }
 
@@ -271,6 +271,8 @@ protected:
 
     void DoDrawTextInRect(wxDC& dc, const wxRect& rectUpdate);
 
+    // override base class methods
+    virtual void DoDrawBorder(wxDC& dc, const wxRect& rect);
     virtual void DoDraw(wxControlRenderer *renderer);
 
     // calc the size from the text extent

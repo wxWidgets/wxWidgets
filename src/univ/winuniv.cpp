@@ -191,11 +191,30 @@ void wxWindow::OnNcPaint(wxPaintEvent& event)
 {
     if ( m_renderer )
     {
-        // get the DC to use and create renderer on it
-        wxWindowDC dc(this);
+        // get the window rect
+        wxRect rect;
+        wxSize size = GetSize();
+        rect.x =
+        rect.y = 0;
+        rect.width = size.x;
+        rect.height = size.y;
 
-        // draw the border
-        DoDrawBorder(dc);
+        // if the scrollbars are outside the border, we must adjust the rect to
+        // exclude them
+        if ( !m_renderer->AreScrollbarsInsideBorder() )
+        {
+            wxScrollBar *scrollbar = GetScrollbar(wxVERTICAL);
+            if ( scrollbar )
+                rect.width -= scrollbar->GetSize().x;
+
+            scrollbar = GetScrollbar(wxHORIZONTAL);
+            if ( scrollbar )
+                rect.height -= scrollbar->GetSize().y;
+        }
+
+        // get the DC and draw the border on it
+        wxWindowDC dc(this);
+        DoDrawBorder(dc, rect);
     }
 }
 
@@ -249,37 +268,15 @@ bool wxWindow::DoDrawBackground(wxDC& dc)
     return TRUE;
 }
 
-void wxWindow::DoDrawBorder(wxDC& dc)
+void wxWindow::DoDrawBorder(wxDC& dc, const wxRect& rect)
 {
-    // get the window rect
-    wxRect rect;
-    wxSize size = GetSize();
-    rect.x =
-    rect.y = 0;
-    rect.width = size.x;
-    rect.height = size.y;
-
-    // if the scrollbars are outside the border, we must adjust the rect to
-    // exclude them
-    if ( !m_renderer->AreScrollbarsInsideBorder() )
-    {
-        wxScrollBar *scrollbar = GetScrollbar(wxVERTICAL);
-        if ( scrollbar )
-            rect.width -= scrollbar->GetSize().x;
-
-        scrollbar = GetScrollbar(wxHORIZONTAL);
-        if ( scrollbar )
-            rect.height -= scrollbar->GetSize().y;
-    }
-
     // draw outline unless the update region is enitrely inside it in which
     // case we don't need to do it
 #if 0 // doesn't seem to work, why?
     if ( wxRegion(rect).Contains(GetUpdateRegion().GetBox()) != wxInRegion )
 #endif
     {
-        m_renderer->DrawBorder(dc, GetBorder(),
-                               rect, GetStateFlags(), &rect);
+        m_renderer->DrawBorder(dc, GetBorder(), rect, GetStateFlags());
     }
 }
 
