@@ -74,10 +74,11 @@ public:
 
     wxSize GetMinSize() const
         { return m_minSize; }
+    wxSize GetMinSizeWithBorder() const;
+
     void SetMinSize(const wxSize& size)
         {
-            if (IsWindow() && !(m_flag & wxFIXED_MINSIZE))
-                m_window->SetSizeHints(size);
+            if (IsWindow()) m_window->SetMinSize(size);
             m_minSize = size;            
         }
     void SetMinSize( int x, int y )
@@ -450,6 +451,9 @@ protected:
     // both directions or only one
     int m_flexDirection;
     wxFlexSizerGrowMode m_growMode;
+
+    // saves CalcMin result to optimize RecalcSizes
+    wxSize m_calculatedMinSize;
 
 private:
     DECLARE_CLASS(wxFlexGridSizer)

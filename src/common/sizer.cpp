@@ -99,7 +99,6 @@ wxSizerItem::wxSizerItem( int width, int height, int proportion, int flag, int b
 wxSizerItem::wxSizerItem( wxWindow *window, int proportion, int flag, int border, wxObject* userData )
     : m_window( window )
     , m_sizer( NULL )
-    , m_minSize( window->GetSize() )    // minimal size is the initial size
     , m_proportion( proportion )
     , m_border( border )
     , m_flag( flag )
@@ -109,6 +108,10 @@ wxSizerItem::wxSizerItem( wxWindow *window, int proportion, int flag, int border
     // aspect ratio calculated from initial size
     SetRatio( m_minSize );
 
+    if (flag & wxFIXED_MINSIZE)
+        window->SetMinSize(window->GetSize());
+    m_minSize = window->GetSize();
+    
     // m_size is calculated later
 }
 
@@ -178,25 +181,29 @@ wxSize wxSizerItem::GetSize() const
 wxSize wxSizerItem::CalcMin()
 {
     wxSize ret;
+    
     if (IsSizer())
     {
-        ret = m_sizer->GetMinSize();
+        m_minSize = m_sizer->GetMinSize();
 
         // if we have to preserve aspect ratio _AND_ this is
         // the first-time calculation, consider ret to be initial size
         if ((m_flag & wxSHAPED) && !m_ratio)
             SetRatio(ret);
     }
-    else
+    else if ( IsWindow() )
     {
-        if ( IsWindow() && !(m_flag & wxFIXED_MINSIZE) )
-        {
-            // Since the size of the window may change during runtime, we
-            // should use the current minimal/best size.
-            m_minSize = m_window->GetBestFittingSize();
-        }
-        ret = m_minSize;
+        // Since the size of the window may change during runtime, we
+        // should use the current minimal/best size.
+        m_minSize = m_window->GetBestFittingSize();
     }
+
+    return GetMinSizeWithBorder();
+}
+
+wxSize wxSizerItem::GetMinSizeWithBorder() const
+{
+    wxSize ret = m_minSize;
 
     if (m_flag & wxWEST)
         ret.x += m_border;
@@ -206,9 +213,10 @@ wxSize wxSizerItem::CalcMin()
         ret.y += m_border;
     if (m_flag & wxSOUTH)
         ret.y += m_border;
-
+    
     return ret;
 }
+
 
 void wxSizerItem::SetDimension( wxPoint pos, wxSize size )
 {
@@ -596,7 +604,11 @@ void wxSizer::FitInside( wxWindow *window )
 
 void wxSizer::Layout()
 {
+    // (re)calculates minimums needed for each item and other preparations
+    // for layout
     CalcMin();
+
+    // Applies the layout and repositions/resizes the items
     RecalcSizes();
 }
 
@@ -811,7 +823,7 @@ bool wxSizer::DoSetItemMinSize( size_t index, int width, int height )
     }
     else
     {
-        // ... but the minimal size of spacers and windows in stored in them
+        // ... but the minimal size of spacers and windows is stored via the item
         item->SetMinSize( width, height );
     }
 
@@ -1093,9 +1105,8 @@ void wxFlexGridSizer::RecalcSizes()
 
     wxPoint pt( GetPosition() );
     wxSize sz( GetSize() );
-    wxSize minsz( CalcMin() );
 
-    AdjustForGrowables(sz, minsz, nrows, ncols);
+    AdjustForGrowables(sz, m_calculatedMinSize, nrows, ncols);
 
     sz = wxSize( pt.x + sz.x, pt.y + sz.y );
 
@@ -1180,7 +1191,8 @@ wxSize wxFlexGridSizer::CalcMin()
         if ( m_rowHeights[ row ] != -1 )
             height += m_rowHeights[ row ] + ( row == nrows-1 ? 0 : m_vgap );
 
-    return wxSize( width, height );
+    m_calculatedMinSize = wxSize( width, height );
+    return m_calculatedMinSize;
 }
 
 void wxFlexGridSizer::AdjustForFlexDirection()
@@ -1375,7 +1387,7 @@ void wxBoxSizer::RecalcSizes()
 
         if (item->IsShown())
         {
-            wxSize size( item->CalcMin() );
+            wxSize size( item->GetMinSizeWithBorder() );
 
             if (m_orient == wxVERTICAL)
             {
@@ -1446,11 +1458,15 @@ wxSize wxBoxSizer::CalcMin()
     m_fixedWidth = 0;
     m_fixedHeight = 0;
 
+    // precalc item minsizes and count proportions
     wxSizerItemList::compatibility_iterator node = m_children.GetFirst();
     while (node)
     {
         wxSizerItem *item = node->GetData();
 
+        if (item->IsShown())
+            item->CalcMin();  // result is stored in the item
+        
         if (item->IsShown() && item->GetProportion() != 0)
             m_stretchable += item->GetProportion();
 
@@ -1468,7 +1484,7 @@ wxSize wxBoxSizer::CalcMin()
         if (item->IsShown() && item->GetProportion() != 0)
         {
             int stretch = item->GetProportion();
-            wxSize size( item->CalcMin() );
+            wxSize size( item->GetMinSizeWithBorder() );
             int minSize;
             
             // Integer division rounded up is (a + b - 1) / b
@@ -1493,7 +1509,7 @@ wxSize wxBoxSizer::CalcMin()
 
         if (item->IsShown())
         {
-            wxSize size( item->CalcMin() );
+            wxSize size( item->GetMinSizeWithBorder() );
             if (item->GetProportion() != 0)
             {
                 if (m_orient == wxHORIZONTAL)

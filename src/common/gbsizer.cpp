@@ -494,7 +494,8 @@ wxSize wxGridBagSizer::CalcMin()
     for (idx=0; idx < m_rows; idx++)
         height += m_rowHeights[idx] + ( idx == m_rows-1 ? 0 : m_vgap );
 
-    return wxSize(width, height);   
+    m_calculatedMinSize = wxSize(width, height);
+    return m_calculatedMinSize;
 }
 
 
@@ -504,9 +505,6 @@ void wxGridBagSizer::RecalcSizes()
     if (m_children.GetCount() == 0)
         return;
 
-    // Calculates minsize and populates m_rowHeights and m_colWidths
-    wxSize  minsz( CalcMin() ); 
-
     wxPoint pt( GetPosition() );
     wxSize  sz( GetSize() );
    
@@ -514,7 +512,7 @@ void wxGridBagSizer::RecalcSizes()
     m_cols = m_colWidths.GetCount();
     int idx, width, height;
 
-    AdjustForGrowables(sz, minsz, m_rows, m_cols);
+    AdjustForGrowables(sz, m_calculatedMinSize, m_rows, m_cols);
 
     // Find the start positions on the window of the rows and columns
     wxArrayInt rowpos;
