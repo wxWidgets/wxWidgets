@@ -1074,18 +1074,18 @@ GSocketError _GAddress_translate_to(GAddress *address,
 
 GSocketError _GAddress_Init_INET(GAddress *address)
 {
-  address->m_addr = (struct sockaddr *)malloc(sizeof(struct sockaddr_in));
-  if (address->m_addr == NULL) {
+  address->m_len  = sizeof(struct sockaddr_in);
+  address->m_addr = (struct sockaddr *)malloc(address->m_len));
+  if (address->m_addr == NULL)
+  {
     address->m_error = GSOCK_MEMERR;
     return GSOCK_MEMERR;
   }
 
-  address->m_len  = sizeof(struct sockaddr_in);
-
   address->m_family = GSOCK_INET;
   address->m_realfamily = PF_INET;
   ((struct sockaddr_in *)address->m_addr)->sin_family = AF_INET;
-  ((struct sockaddr_in *)address->m_addr)->sin_addr.s_addr   = INADDR_ANY;
+  ((struct sockaddr_in *)address->m_addr)->sin_addr.s_addr = INADDR_ANY;
 
   return GSOCK_NOERROR;
 }
@@ -1103,18 +1103,22 @@ GSocketError GAddress_INET_SetHostName(GAddress *address, const char *hostname)
 
   /* If it is a numeric host name, convert it now */
 #if defined(HAVE_INET_ATON)
-  if (inet_aton(hostname, addr) == 0) {
+  if (inet_aton(hostname, addr) == 0)
+  {
 #elif defined(HAVE_INET_ADDR)
   /* Fix from Guillermo Rodriguez Garcia <guille@iies.es> */
-  if ( (addr->s_addr = inet_addr(hostname)) == -1 ) {
+  if ( (addr->s_addr = inet_addr(hostname)) == -1 )
+  {
 #else
   /* Use gethostbyname by default */
-  if (1) {
+  if (1)
+  {
 #endif
     struct in_addr *array_addr;
 
     /* It is a real name, we solve it */
-    if ((he = gethostbyname(hostname)) == NULL) {
+    if ((he = gethostbyname(hostname)) == NULL)
+    {
       address->m_error = GSOCK_NOHOST;
       return GSOCK_NOHOST;
     }
@@ -1148,14 +1152,16 @@ GSocketError GAddress_INET_SetPortName(GAddress *address, const char *port,
   assert(address != NULL);
   CHECK_ADDRESS(address, INET, GSOCK_INVADDR);
 
-  if (!port) {
+  if (!port)
+  {
     address->m_error = GSOCK_INVPORT;
     return GSOCK_INVPORT;
   }
  
   se = getservbyname(port, protocol);
   if (!se) {
-    if (isdigit(port[0])) {
+    if (isdigit(port[0]))
+    {
       int port_int;
 
       port_int = atoi(port);
@@ -1199,8 +1205,9 @@ GSocketError GAddress_INET_GetHostName(GAddress *address, char *hostname, size_t
   addr = (struct sockaddr_in *)address->m_addr;
   addr_buf = (char *)&(addr->sin_addr);
 
-  he       = gethostbyaddr(addr_buf, sizeof(addr->sin_addr), AF_INET);
-  if (he == NULL) {
+  he = gethostbyaddr(addr_buf, sizeof(addr->sin_addr), AF_INET);
+  if (he == NULL)
+  {
     address->m_error = GSOCK_NOHOST;
     return GSOCK_NOHOST;
   }
@@ -1241,13 +1248,14 @@ unsigned short GAddress_INET_GetPort(GAddress *address)
 
 GSocketError _GAddress_Init_UNIX(GAddress *address)
 {
+  address->m_len  = sizeof(struct sockaddr_un);
   address->m_addr = (struct sockaddr *)malloc(address->m_len);
-  if (address->m_addr == NULL) {
+  if (address->m_addr == NULL)
+  {
     address->m_error = GSOCK_MEMERR;
     return GSOCK_MEMERR;
   }
 
-  address->m_len  = sizeof(struct sockaddr_un);
   address->m_family = GSOCK_UNIX;
   address->m_realfamily = PF_UNIX;
   ((struct sockaddr_un *)address->m_addr)->sun_family = AF_UNIX;
