@@ -6,15 +6,8 @@
     <include file="../../../build/bakefiles/common_contrib.bkl"/>
 
     <set var="XRC_SRC">
-        <!-- expat: FIXME, use as external lib -->
-        expat/xmlparse/xmlparse.c
-        expat/xmltok/xmltok.c
-        expat/xmltok/xmlrole.c 
-
         <!-- the core: -->
-        xml.cpp
         xmlres.cpp
-        
         <!-- handlers: -->
         xh_bmp.cpp
         xh_bmpbt.cpp
@@ -56,7 +49,6 @@
 
     <headers template="wx_contrib_headers">
         <files>
-            wx/xrc/xml.h
             wx/xrc/xmlres.h
             wx/xrc/xh_all.h
             wx/xrc/xh_bmp.h
@@ -100,11 +92,10 @@
     <dll id="xrcdll" template="wx_contrib_dll" cond="SHARED=='1'">
         <define>WXUSINGDLL</define>
         <define>WXMAKINGDLL_XRC</define>
-        <include>$(SRCDIR)/expat/xmlparse</include>
-        <include>$(SRCDIR)/expat/xmltok</include>
         <sources>$(XRC_SRC)</sources>
         <wx-lib>html</wx-lib>
         <wx-lib>core</wx-lib>
+        <wx-lib>xml</wx-lib>
         <wx-lib>base</wx-lib>
     </dll>
     
