@@ -642,18 +642,18 @@ void *wxBitmap::GetMGLbitmap_t() const
 
 class wxMGLBitmapHandler: public wxBitmapHandler
 {
-    public:
-        wxMGLBitmapHandler(wxBitmapType type,
-                           const wxString& extension, const wxString& name);
-        
-        virtual bool Create(wxBitmap *bitmap, void *data, long flags, 
-                              int width, int height, int depth = 1)
-            { return FALSE; }
-    
-        virtual bool LoadFile(wxBitmap *bitmap, const wxString& name, long flags,
-                              int desiredWidth, int desiredHeight);
-        virtual bool SaveFile(const wxBitmap *bitmap, const wxString& name, 
-                              int type, const wxPalette *palette = NULL);
+public:
+    wxMGLBitmapHandler(wxBitmapType type,
+                       const wxString& extension, const wxString& name);
+
+    virtual bool Create(wxBitmap *bitmap, void *data, long flags, 
+                          int width, int height, int depth = 1)
+        { return FALSE; }
+
+    virtual bool LoadFile(wxBitmap *bitmap, const wxString& name, long flags,
+                          int desiredWidth, int desiredHeight);
+    virtual bool SaveFile(const wxBitmap *bitmap, const wxString& name, 
+                          int type, const wxPalette *palette = NULL);
 };
 
 wxMGLBitmapHandler::wxMGLBitmapHandler(wxBitmapType type, 
@@ -671,34 +671,138 @@ bool wxMGLBitmapHandler::LoadFile(wxBitmap *bitmap, const wxString& name,
                                   int WXUNUSED(desiredWidth), 
                                   int WXUNUSED(desiredHeight))
 {
-    bitmap_t *bmp = NULL;
+    int width, height, bpp;
+    pixel_format_t pf;
+    wxString fullname;
+    wxMemoryDC dc;
+    
+    switch (flags)
+    {
+        case wxBITMAP_TYPE_BMP_RESOURCE:
+        case wxBITMAP_TYPE_JPEG_RESOURCE:
+        case wxBITMAP_TYPE_PNG_RESOURCE:
+        case wxBITMAP_TYPE_PCX_RESOURCE:
+            fullname = name + wxT(".bmp");
+            break;
+        default:
+            fullname= name;
+            break;
+    }   
 
     switch (flags)
     {
         case wxBITMAP_TYPE_BMP:
-            bmp = MGL_loadBitmap(name.mb_str(), TRUE);
-            break;
         case wxBITMAP_TYPE_BMP_RESOURCE:
-            bmp = MGL_loadBitmap(wxString(name + wxT(".bmp")).mb_str(), TRUE);
+            if ( !MGL_getBitmapSize(fullname.mb_str(), &width, &height, &bpp, &pf) )
+                return FALSE;
+            bitmap->Create(width, height, -1);
+            if ( !bitmap->Ok() ) return FALSE;
+            dc.SelectObject(*bitmap);
+            if ( !dc.GetMGLDC()->loadBitmapIntoDC(fullname.mb_str(), 0, 0, TRUE) )
+                return FALSE;
+            break;
+
+        case wxBITMAP_TYPE_JPEG:
+        case wxBITMAP_TYPE_JPEG_RESOURCE:
+            if ( !MGL_getJPEGSize(fullname.mb_str(), &width, &height, &bpp, &pf) )
+                return FALSE;
+            bitmap->Create(width, height, -1);
+            if ( !bitmap->Ok() ) return FALSE;
+            dc.SelectObject(*bitmap);
+            if ( !dc.GetMGLDC()->loadJPEGIntoDC(fullname.mb_str(), 0, 0, TRUE) )
+                return FALSE;
+            break;
+
+        case wxBITMAP_TYPE_PNG:
+        case wxBITMAP_TYPE_PNG_RESOURCE:
+            if ( !MGL_getPNGSize(fullname.mb_str(), &width, &height, &bpp, &pf) )
+                return FALSE;
+            bitmap->Create(width, height, -1);
+            if ( !bitmap->Ok() ) return FALSE;
+            dc.SelectObject(*bitmap);
+            if ( !dc.GetMGLDC()->loadPNGIntoDC(fullname.mb_str(), 0, 0, TRUE) )
+                return FALSE;
+            break;
+
+        case wxBITMAP_TYPE_PCX:
+        case wxBITMAP_TYPE_PCX_RESOURCE:
+            if ( !MGL_getPCXSize(fullname.mb_str(), &width, &height, &bpp) )
+                return FALSE;
+            bitmap->Create(width, height, -1);
+            if ( !bitmap->Ok() ) return FALSE;
+            dc.SelectObject(*bitmap);
+            if ( !dc.GetMGLDC()->loadPCXIntoDC(fullname.mb_str(), 0, 0, TRUE) )
+                return FALSE;
+            break;
+
+        default:
+            wxFAIL_MSG(wxT("Unsupported image format."));
+            break;
+    }
+
+    return TRUE;
+}
+
+bool wxMGLBitmapHandler::SaveFile(const wxBitmap *bitmap, const wxString& name, 
+                                  int type, const wxPalette * WXUNUSED(palette))
+{
+    wxMemoryDC mem;
+    MGLDevCtx *tdc;
+    int w = bitmap->GetWidth(),
+        h = bitmap->GetHeight();
+
+    mem.SelectObject(*bitmap);
+    tdc = mem.GetMGLDC();
+
+    switch (type)
+    {
+        case wxBITMAP_TYPE_BMP:
+            return tdc->saveBitmapFromDC(name.mb_str(), 0, 0, w, h);
             break;
         case wxBITMAP_TYPE_JPEG:
-            bmp = MGL_loadJPEG(name.mb_str(), 0);
+            return tdc->saveJPEGFromDC(name.mb_str(), 0, 0, w, h, 75);
             break;
-        case wxBITMAP_TYPE_JPEG_RESOURCE:
-            bmp = MGL_loadJPEG(wxString(name + wxT(".jpg")).mb_str(), 0);
+        case wxBITMAP_TYPE_PNG:
+            return tdc->savePNGFromDC(name.mb_str(), 0, 0, w, h);
             break;
+        case wxBITMAP_TYPE_PCX:
+            return tdc->savePCXFromDC(name.mb_str(), 0, 0, w, h);
+            break;
+        default:
+            return FALSE;
+            break;
+    }
+}
+
+
+
+// let's handle PNGs in special way because they have alpha channel 
+// which we can access via bitmap_t most easily
+class wxPNGBitmapHandler: public wxMGLBitmapHandler
+{
+public:
+    wxPNGBitmapHandler(wxBitmapType type,
+                       const wxString& extension, const wxString& name)
+        : wxMGLBitmapHandler(type, extension, name) {}
+
+    virtual bool LoadFile(wxBitmap *bitmap, const wxString& name, long flags,
+                          int desiredWidth, int desiredHeight);
+};
+
+bool wxPNGBitmapHandler::LoadFile(wxBitmap *bitmap, const wxString& name, 
+                                  long flags, 
+                                  int WXUNUSED(desiredWidth), 
+                                  int WXUNUSED(desiredHeight))
+{
+    bitmap_t *bmp = NULL;
+
+    switch (flags)
+    {
         case wxBITMAP_TYPE_PNG:
             bmp = MGL_loadPNG(name.mb_str(), TRUE);
             break;
         case wxBITMAP_TYPE_PNG_RESOURCE:
             bmp = MGL_loadPNG(wxString(name + wxT(".png")).mb_str(), TRUE);
-            break;
-        case wxBITMAP_TYPE_PCX:
-            bmp = MGL_loadPCX(name.mb_str(), TRUE);
-            break;
-        case wxBITMAP_TYPE_PCX_RESOURCE:
-            bmp = MGL_loadPCX(wxString(name + wxT(".pcx")).mb_str(), TRUE);
-            break;
         default:
             break;
     }
@@ -741,37 +845,6 @@ bool wxMGLBitmapHandler::LoadFile(wxBitmap *bitmap, const wxString& name,
     MGL_unloadBitmap(bmp);
     
     return TRUE;
-}
-
-bool wxMGLBitmapHandler::SaveFile(const wxBitmap *bitmap, const wxString& name, 
-                                  int type, const wxPalette * WXUNUSED(palette))
-{
-    wxMemoryDC mem;
-    MGLDevCtx *tdc;
-    int w = bitmap->GetWidth(),
-        h = bitmap->GetHeight();
-
-    mem.SelectObject(*bitmap);
-    tdc = mem.GetMGLDC();
-
-    switch (type)
-    {
-        case wxBITMAP_TYPE_BMP:
-            return tdc->saveBitmapFromDC(name.mb_str(), 0, 0, w, h);
-            break;
-        case wxBITMAP_TYPE_JPEG:
-            return tdc->saveJPEGFromDC(name.mb_str(), 0, 0, w, h, 75);
-            break;
-        case wxBITMAP_TYPE_PNG:
-            return tdc->savePNGFromDC(name.mb_str(), 0, 0, w, h);
-            break;
-        case wxBITMAP_TYPE_PCX:
-            return tdc->savePCXFromDC(name.mb_str(), 0, 0, w, h);
-            break;
-        default:
-            return FALSE;
-            break;
-    }
 }
 
 
@@ -857,12 +930,13 @@ bool wxICOBitmapHandler::SaveFile(const wxBitmap *bitmap, const wxString& name,
 {
     AddHandler(new wxMGLBitmapHandler(wxBITMAP_TYPE_BMP, wxT("bmp"), wxT("Windows bitmap")));
     AddHandler(new wxMGLBitmapHandler(wxBITMAP_TYPE_BMP_RESOURCE, wxEmptyString, wxT("Windows bitmap resource")));
-    AddHandler(new wxMGLBitmapHandler(wxBITMAP_TYPE_PNG, wxT("png"), wxT("PNG image")));
-    AddHandler(new wxMGLBitmapHandler(wxBITMAP_TYPE_PNG_RESOURCE, wxEmptyString, wxT("PNG resource")));
     AddHandler(new wxMGLBitmapHandler(wxBITMAP_TYPE_JPEG, wxT("jpg"), wxT("JPEG image")));
     AddHandler(new wxMGLBitmapHandler(wxBITMAP_TYPE_JPEG_RESOURCE, wxEmptyString, wxT("JPEG resource")));
     AddHandler(new wxMGLBitmapHandler(wxBITMAP_TYPE_PCX, wxT("pcx"), wxT("PCX image")));
     AddHandler(new wxMGLBitmapHandler(wxBITMAP_TYPE_PCX_RESOURCE, wxEmptyString, wxT("PCX resource")));
+
+    AddHandler(new wxPNGBitmapHandler(wxBITMAP_TYPE_PNG, wxT("png"), wxT("PNG image")));
+    AddHandler(new wxPNGBitmapHandler(wxBITMAP_TYPE_PNG_RESOURCE, wxEmptyString, wxT("PNG resource")));
 
     AddHandler(new wxICOBitmapHandler(wxBITMAP_TYPE_ICO, wxT("ico"), wxT("Icon resource")));
     AddHandler(new wxICOBitmapHandler(wxBITMAP_TYPE_ICO_RESOURCE, wxEmptyString, wxT("Icon resource")));
