@@ -226,8 +226,7 @@ static PyObject *_wrap_wxImageFromBitmap(PyObject *self, PyObject *args, PyObjec
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxImageFromBitmap",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxBitmap_p")) {
+        if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxBitmap_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxImageFromBitmap. Expected _wxBitmap_p.");
         return NULL;
         }
@@ -436,8 +435,7 @@ static PyObject *_wrap_wxBitmapFromImage(PyObject *self, PyObject *args, PyObjec
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O|i:wxBitmapFromImage",_kwnames,&_argo0,&_arg1)) 
         return NULL;
     if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxImage_p")) {
+        if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxImage_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxBitmapFromImage. Expected _wxImage_p.");
         return NULL;
         }
@@ -1669,8 +1667,7 @@ static PyObject *_wrap_wxImage_SetMaskFromImage(PyObject *self, PyObject *args, 
         }
     }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxImage_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxImage_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxImage_SetMaskFromImage. Expected _wxImage_p.");
         return NULL;
         }
@@ -2251,8 +2248,7 @@ static PyObject *_wrap_wxImage_Paste(PyObject *self, PyObject *args, PyObject *k
         }
     }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxImage_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxImage_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxImage_Paste. Expected _wxImage_p.");
         return NULL;
         }

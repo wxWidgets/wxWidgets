@@ -359,8 +359,7 @@ static PyObject *_wrap_wxWizardPage_Create(PyObject *self, PyObject *args, PyObj
         }
     }
     if (_argo2) {
-        if (_argo2 == Py_None) { _arg2 = NULL; }
-        else if (SWIG_GetPtrObj(_argo2,(void **) &_arg2,"_wxBitmap_p")) {
+        if (SWIG_GetPtrObj(_argo2,(void **) &_arg2,"_wxBitmap_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 3 of wxWizardPage_Create. Expected _wxBitmap_p.");
         return NULL;
         }
@@ -636,8 +635,7 @@ static PyObject *_wrap_wxPyWizardPage_Create(PyObject *self, PyObject *args, PyO
         }
     }
     if (_argo2) {
-        if (_argo2 == Py_None) { _arg2 = NULL; }
-        else if (SWIG_GetPtrObj(_argo2,(void **) &_arg2,"_wxBitmap_p")) {
+        if (SWIG_GetPtrObj(_argo2,(void **) &_arg2,"_wxBitmap_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 3 of wxPyWizardPage_Create. Expected _wxBitmap_p.");
         return NULL;
         }
@@ -1382,8 +1380,7 @@ static PyObject *_wrap_new_wxWizardPageSimple(PyObject *self, PyObject *args, Py
         }
     }
     if (_argo3) {
-        if (_argo3 == Py_None) { _arg3 = NULL; }
-        else if (SWIG_GetPtrObj(_argo3,(void **) &_arg3,"_wxBitmap_p")) {
+        if (SWIG_GetPtrObj(_argo3,(void **) &_arg3,"_wxBitmap_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 4 of new_wxWizardPageSimple. Expected _wxBitmap_p.");
         return NULL;
         }
@@ -1479,8 +1476,7 @@ static PyObject *_wrap_wxWizardPageSimple_Create(PyObject *self, PyObject *args,
         }
     }
     if (_argo4) {
-        if (_argo4 == Py_None) { _arg4 = NULL; }
-        else if (SWIG_GetPtrObj(_argo4,(void **) &_arg4,"_wxBitmap_p")) {
+        if (SWIG_GetPtrObj(_argo4,(void **) &_arg4,"_wxBitmap_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 5 of wxWizardPageSimple_Create. Expected _wxBitmap_p.");
         return NULL;
         }
@@ -1679,8 +1675,7 @@ static PyObject *_wrap_new_wxWizard(PyObject *self, PyObject *args, PyObject *kw
         return NULL;
 }
     if (_argo3) {
-        if (_argo3 == Py_None) { _arg3 = NULL; }
-        else if (SWIG_GetPtrObj(_argo3,(void **) &_arg3,"_wxBitmap_p")) {
+        if (SWIG_GetPtrObj(_argo3,(void **) &_arg3,"_wxBitmap_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 4 of new_wxWizard. Expected _wxBitmap_p.");
         return NULL;
         }
@@ -1779,8 +1774,7 @@ static PyObject *_wrap_wxWizard_Create(PyObject *self, PyObject *args, PyObject 
         return NULL;
 }
     if (_argo4) {
-        if (_argo4 == Py_None) { _arg4 = NULL; }
-        else if (SWIG_GetPtrObj(_argo4,(void **) &_arg4,"_wxBitmap_p")) {
+        if (SWIG_GetPtrObj(_argo4,(void **) &_arg4,"_wxBitmap_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 5 of wxWizard_Create. Expected _wxBitmap_p.");
         return NULL;
         }

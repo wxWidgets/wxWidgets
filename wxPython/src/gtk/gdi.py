@@ -250,11 +250,19 @@ class wxColourPtr(wxObjectPtr):
     def Get(self, *_args, **_kwargs):
         val = apply(gdic.wxColour_Get,(self,) + _args, _kwargs)
         return val
+    def __eq__(self, *_args, **_kwargs):
+        val = apply(gdic.wxColour___eq__,(self,) + _args, _kwargs)
+        return val
+    def __ne__(self, *_args, **_kwargs):
+        val = apply(gdic.wxColour___ne__,(self,) + _args, _kwargs)
+        return val
     def __repr__(self):
         return "<C wxColour instance at %s>" % (self.this,)
     asTuple = Get
     def __str__(self): return str(self.asTuple())
     def __repr__(self): return str(self.asTuple())
+    def __nonzero__(self):      return self.asTuple() != (0,0,0)
+
 class wxColour(wxColourPtr):
     def __init__(self,*_args,**_kwargs):
         self.this = apply(gdic.new_wxColour,_args,_kwargs)

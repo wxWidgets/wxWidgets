@@ -53,6 +53,12 @@ class wxSizePtr :
     def __cmp__(self, *_args, **_kwargs):
         val = apply(miscc.wxSize___cmp__,(self,) + _args, _kwargs)
         return val
+    def __eq__(self, *_args, **_kwargs):
+        val = apply(miscc.wxSize___eq__,(self,) + _args, _kwargs)
+        return val
+    def __ne__(self, *_args, **_kwargs):
+        val = apply(miscc.wxSize___ne__,(self,) + _args, _kwargs)
+        return val
     def __setattr__(self,name,value):
         if name == "x" :
             miscc.wxSize_x_set(self,value)
@@ -88,6 +94,7 @@ class wxSizePtr :
         if index == 0: self.width = val
         elif index == 1: self.height = val
         else: raise IndexError
+    def __nonzero__(self):      return self.asTuple() != (0,0)
 
 class wxSize(wxSizePtr):
     def __init__(self,*_args,**_kwargs):
@@ -121,6 +128,12 @@ class wxRealPointPtr :
     def __cmp__(self, *_args, **_kwargs):
         val = apply(miscc.wxRealPoint___cmp__,(self,) + _args, _kwargs)
         return val
+    def __eq__(self, *_args, **_kwargs):
+        val = apply(miscc.wxRealPoint___eq__,(self,) + _args, _kwargs)
+        return val
+    def __ne__(self, *_args, **_kwargs):
+        val = apply(miscc.wxRealPoint___ne__,(self,) + _args, _kwargs)
+        return val
     def __setattr__(self,name,value):
         if name == "x" :
             miscc.wxRealPoint_x_set(self,value)
@@ -146,6 +159,7 @@ class wxRealPointPtr :
         if index == 0: self.width = val
         elif index == 1: self.height = val
         else: raise IndexError
+    def __nonzero__(self):      return self.asTuple() != (0.0, 0.0)
 
 class wxRealPoint(wxRealPointPtr):
     def __init__(self,*_args,**_kwargs):
@@ -179,6 +193,12 @@ class wxPointPtr :
     def __cmp__(self, *_args, **_kwargs):
         val = apply(miscc.wxPoint___cmp__,(self,) + _args, _kwargs)
         return val
+    def __eq__(self, *_args, **_kwargs):
+        val = apply(miscc.wxPoint___eq__,(self,) + _args, _kwargs)
+        return val
+    def __ne__(self, *_args, **_kwargs):
+        val = apply(miscc.wxPoint___ne__,(self,) + _args, _kwargs)
+        return val
     def __setattr__(self,name,value):
         if name == "x" :
             miscc.wxPoint_x_set(self,value)
@@ -204,6 +224,7 @@ class wxPointPtr :
         if index == 0: self.x = val
         elif index == 1: self.y = val
         else: raise IndexError
+    def __nonzero__(self):      return self.asTuple() != (0,0)
 
 class wxPoint(wxPointPtr):
     def __init__(self,*_args,**_kwargs):
@@ -298,6 +319,12 @@ class wxRectPtr :
     def __cmp__(self, *_args, **_kwargs):
         val = apply(miscc.wxRect___cmp__,(self,) + _args, _kwargs)
         return val
+    def __eq__(self, *_args, **_kwargs):
+        val = apply(miscc.wxRect___eq__,(self,) + _args, _kwargs)
+        return val
+    def __ne__(self, *_args, **_kwargs):
+        val = apply(miscc.wxRect___ne__,(self,) + _args, _kwargs)
+        return val
     def __setattr__(self,name,value):
         if name == "x" :
             miscc.wxRect_x_set(self,value)
@@ -335,6 +362,7 @@ class wxRectPtr :
         elif index == 2: self.width = val
         elif index == 3: self.height = val
         else: raise IndexError
+    def __nonzero__(self):      return self.asTuple() != (0,0,0,0)
 
     # override the __getattr__ made by SWIG
     def __getattr__(self, name):

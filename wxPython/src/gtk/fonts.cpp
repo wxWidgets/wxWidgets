@@ -1111,8 +1111,7 @@ static PyObject *_wrap_new_wxFontFromNativeInfo(PyObject *self, PyObject *args, 
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:new_wxFontFromNativeInfo",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxNativeFontInfo_p")) {
+        if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxNativeFontInfo_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of new_wxFontFromNativeInfo. Expected _wxNativeFontInfo_p.");
         return NULL;
         }
@@ -1766,8 +1765,7 @@ static PyObject *_wrap_wxFont_SetNativeFontInfo(PyObject *self, PyObject *args, 
         }
     }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxNativeFontInfo_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxNativeFontInfo_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxFont_SetNativeFontInfo. Expected _wxNativeFontInfo_p.");
         return NULL;
         }
@@ -3081,8 +3079,7 @@ static PyObject *_wrap_wxLocale_AddLanguage(PyObject *self, PyObject *args, PyOb
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxLocale_AddLanguage",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxLanguageInfo_p")) {
+        if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxLanguageInfo_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxLocale_AddLanguage. Expected _wxLanguageInfo_p.");
         return NULL;
         }
