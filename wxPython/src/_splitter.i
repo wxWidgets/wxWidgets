@@ -364,14 +364,12 @@ EVT_SPLITTER_SASH_POS_CHANGING and
 EVT_SPLITTER_SASH_POS_CHANGED events.");
     
 
-    // UNSPLIT event methods
     DocDeclStr(
         wxWindow *, GetWindowBeingRemoved() const,
         "Returns a pointer to the window being removed when a
 splitter window is unsplit.");
     
 
-    // DCLICK event methods
     DocDeclStr(
         int , GetX() const,
         "Returns the x coordinate of the double-click point in a
