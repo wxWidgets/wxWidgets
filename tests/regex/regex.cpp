@@ -45,10 +45,6 @@
 #include "wx/cppunit.h"
 #include <stdexcept>
 
-#ifdef __DMC__
-    #include <locale.h>
-#endif
-
 using namespace std;
 using namespace CppUnit;
 
@@ -323,35 +319,14 @@ wxString RegExTestCase::quote(const wxString& arg)
 
 ///////////////////////////////////////////////////////////////////////////////
 // Test suite
-//
-// In a non-unicode build the regex is affected by the current locale, so
-// this derived TestSuite is used. It sets the locale in it's run() method
-// for the duration of the regex tests.
 
 class RegExTestSuite : public TestSuite
 {
 public:
-    RegExTestSuite(string name);
-    void run(TestResult *result);
+    RegExTestSuite(string name) : TestSuite(name) { }
     void add(const char *mode, const char *id, const char *flags,
              const char *pattern, const char *data, const char *expected, ...);
 };
-
-// constructor, sets the locale so that it is set when the tests are added
-//
-RegExTestSuite::RegExTestSuite(string name) : TestSuite(name)
-{
-    setlocale(LC_ALL, "");
-}
-
-// run the test suite, sets the locale again since it may have been changed
-// by another test since this suite was crated
-//
-void RegExTestSuite::run(TestResult *result)
-{
-    setlocale(LC_ALL, "");
-    TestSuite::run(result);
-}
 
 // Add a testcase to the suite
 //
