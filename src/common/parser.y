@@ -156,8 +156,11 @@ void yyerror(char *s)
  * the UNIX flex expects a proper function.
  */
 
-/* At least on alphaev6-dec-osf4.0e yywrap() must be #define'd */
-#if defined( __ALPHA__ ) && !defined( __VMS__ )
+/* At least on alphaev6-dec-osf4.0e yywrap() must be #define'd.
+ * RL: ... but on Debian/Alpha(linux) it must not, so hopefully
+ *     testing for __OSF__ here is what we really want.
+ */
+#ifdef __OSF__
 #ifndef yywrap
 #define yywrap() 1
 #endif
