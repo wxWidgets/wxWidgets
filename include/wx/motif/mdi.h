@@ -231,6 +231,8 @@ public:
     
     // Implementation
     void OnPageChanged(wxNotebookEvent& event);
+
+    int FindPage(const wxNotebookPage* page);
     
 protected:
     virtual void DoSetSize(int x, int y,
@@ -241,7 +243,6 @@ protected:
     void DoGetClientSize(int *width, int *height) const;
     void DoGetSize(int *width, int *height) const ;
     void DoGetPosition(int *x, int *y) const ;
-    
     
 private:
     DECLARE_EVENT_TABLE()

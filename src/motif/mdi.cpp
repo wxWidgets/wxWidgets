@@ -18,7 +18,6 @@
 #define XtWindow XTWINDOW
 #endif
 
-#include "wx/tab.h"
 #include "wx/mdi.h"
 #include "wx/menu.h"
 #include "wx/settings.h"
@@ -427,8 +426,15 @@ wxMDIChildFrame::~wxMDIChildFrame()
         wxMDIClientWindow* clientWindow = parentFrame->GetClientWindow();
 
         // Remove page if still there
-        if (clientWindow->RemovePage(this))
-            clientWindow->Refresh();
+        {
+            int i = clientWindow->FindPage(this);
+
+            if (i != -1)
+            {
+                clientWindow->RemovePage(i);
+                clientWindow->Refresh();
+            }
+        }
 
         // Set the selection to the first remaining page
         if (clientWindow->GetPageCount() > 0)
@@ -547,9 +553,14 @@ void wxMDIChildFrame::SetTitle(const wxString& title)
 {
     wxTopLevelWindow::SetTitle( title );
     wxMDIClientWindow* clientWindow = GetMDIParentFrame()->GetClientWindow();
-    int pageNo = clientWindow->FindPagePosition(this);
-    if (pageNo > -1)
-        clientWindow->SetPageText(pageNo, title);
+
+    // Remove page if still there
+    {
+        int i = clientWindow->FindPage(this);
+
+        if (i != -1)
+            clientWindow->SetPageText(i, title);
+    }
 }
 
 // MDI operations
@@ -635,15 +646,22 @@ bool wxMDIClientWindow::CreateClient(wxMDIParentFrame *parent, long style)
     if (success)
     {
         wxFont font(10, wxSWISS, wxNORMAL, wxNORMAL);
-        wxFont selFont(10, wxSWISS, wxNORMAL, wxBOLD);
-        GetTabView()->SetTabFont(font);
-        GetTabView()->SetSelectedTabFont(selFont);
-        GetTabView()->SetTabSize(120, 18);
-        GetTabView()->SetTabSelectionHeight(20);
+        SetFont(font);
         return TRUE;
     }
     else
         return FALSE;
+}
+
+int wxMDIClientWindow::FindPage(const wxNotebookPage* page)
+{
+    for (int i = GetPageCount() - 1; i >= 0; --i)
+    {
+        if (GetPage(i) == page)
+            return i;
+    }
+
+    return -1;
 }
 
 void wxMDIClientWindow::DoSetSize(int x, int y, int width, int height, int sizeFlags)
