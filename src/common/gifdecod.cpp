@@ -20,14 +20,13 @@
 #endif
 
 #ifndef WX_PRECOMP
-#  include "wx/setup.h"
+#  include "wx/defs.h"
 #endif
 
-#if wxUSE_STREAMS
+#if wxUSE_STREAMS && wxUSE_GIF
 
 #include <stdlib.h>
 #include <string.h>
-#include "wx/defs.h"
 #include "wx/gifdecod.h"
  
 
@@ -626,4 +625,4 @@ int wxGIFDecoder::ReadGIF()
     return E_OK;
 }
 
-#endif // wxUSE_STREAM
+#endif // wxUSE_STREAMS && wxUSE_GIF
