@@ -1,7 +1,7 @@
 Recent Changes for wxPython
 =====================================================================
 
-2.5.2.2
+2.5.2.3
 -------
 
 wx.ADJUST_MINSIZE is now the default behaviour for window items in
@@ -96,10 +96,10 @@ with a more modern reimplementation.
 Added a new version (0.8.3) of FloatCanvas from Chris Barker.  It's now
 in a subpackage of wx.lib.
 
-
 It is now possible to change the tab traversal order of controls on a
 panel or dialog.  For details see the new MoveAfterInTabOrder and
 MoveBeforeInTabOrder methods of wx.Window.
+
 
 
 
