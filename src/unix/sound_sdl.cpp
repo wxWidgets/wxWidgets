@@ -304,7 +304,7 @@ bool wxSoundBackendSDL::Play(wxSoundData *data, unsigned flags,
             if (wxThread::IsMain())
                 wxMutexGuiLeave();
 #endif
-            wxUsleep(10);
+            wxMilliSleep(10);
 #if wxUSE_THREADS
             if (wxThread::IsMain())
                 wxMutexGuiEnter();
