@@ -51,9 +51,10 @@ or Unicode mode for a total of 8 possibilities.
 
 a) Using Visual C++ 6.0
 
-   Simply open the src/wxBase.dsw file in MSDEV and build it. When it is
-done you can also open samples/console/console.dsp project and build it as
-well.
+   Simply open the src/wxBase.dsw file in MSDEV and build it (you may need to
+right click on wxBase in the project tree to make it the active project). When
+it is done you can also open samples/console/console.dsp project and build it
+as well.
 
 b) Cygwin
 
@@ -61,8 +62,8 @@ b) Cygwin
 
 c) Borland
 
-   Please refer to the docs/msw/install.txt. The console sample compiles and runs
-   but does not pass all tests (04 sept 02)
+   Please refer to the docs/msw/install.txt. The console sample compiles and
+   runs but does not pass all tests (as of Sep 4, 2002)
 
 d) Other compilers
 
@@ -125,6 +126,6 @@ namely:
 								 Vadim Zeitlin
 
 
-This file is accurate for the version 2.4.0 of wxBase. It was last modified on
-Dec 24, 2002.
+This file is accurate for the version 2.4.1 of wxBase. It was last modified on
+June 13, 2003.
 
