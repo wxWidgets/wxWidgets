@@ -2,6 +2,7 @@
 # Purpose:      Classes for parameter introduction
 # Author:       Roman Rolinsky <rolinsky@mema.ucl.ac.be>
 # Created:      22.08.2001
+# RCS-ID:       $Id$
 
 from wxPython.wx import *
 from wxPython.xrc import *
@@ -13,25 +14,23 @@ def SetCurrentXXX(xxx):
     global currentXXX
     currentXXX = xxx
 
-# Register objects in the view
-registered = {}
-def Register(param, obj):
-    registered[param] = obj
-def GetRegistered(param):
-    return registered[param]
-def ClearRegister():
-    registered.clear()
-
 genericStyles = ['wxSIMPLE_BORDER', 'wxSUNKEN_BORDER', 'wxRAISED_BORDER',
                  'wxTAB_TRAVERSAL', 'wxWANTS_CHARS', 'wxVSCROLL', 'wxHSCROLL']
 
-class ParamBinaryOr(wxPanel):
-    ID_TEXT_CTRL = wxNewId()
-    ID_BUTTON_CHOICES = wxNewId()
-    def __init__(self, parent, id, value, size, name, param):
+# Class that can properly disable children
+class PPanel(wxPanel):
+    def __init__(self, parent, id, name):
         wxPanel.__init__(self, parent, id, name=name)
+    def Enable(self, value):
+        for w in self.GetChildren():
+            w.Enable(value)
+
+class ParamBinaryOr(PPanel):
+    def __init__(self, parent, id, value, size, name):
+        PPanel.__init__(self, parent, id, name)
+        self.ID_TEXT_CTRL = wxNewId()
+        self.ID_BUTTON_CHOICES = wxNewId()
         self.SetBackgroundColour(panel.GetBackgroundColour())
-        Register(param, self)
         sizer = wxBoxSizer()
         self.text = wxTextCtrl(self, self.ID_TEXT_CTRL, value, size=wxSize(200,-1))
         sizer.Add(self.text, 0, wxRIGHT, 10)
@@ -50,9 +49,9 @@ class ParamBinaryOr(wxPanel):
     def SetValue(self, value):
         self.text.SetValue(value)
     def OnButtonChoices(self, evt):
-        dlg = wxDialog(self, -1, 'Choices', size=wxSize(250,300))
+        dlg = wxDialog(self, -1, 'Choices')
         topSizer = wxBoxSizer(wxVERTICAL)
-        listBox = wxCheckListBox(dlg, -1, choices=self.values)
+        listBox = wxCheckListBox(dlg, -1, choices=self.values, size=(250,200))
         value = map(string.strip, string.split(self.text.GetValue(), '|'))
         if value == ['']: value = []
         ignored = []
@@ -76,6 +75,7 @@ class ParamBinaryOr(wxPanel):
         topSizer.Add(sizer, 0, wxALL | wxEXPAND, 10)
         dlg.SetAutoLayout(true)
         dlg.SetSizer(topSizer)
+        topSizer.Fit(dlg)
         dlg.Center()
         if dlg.ShowModal() != wxID_OK: return
         value = []
@@ -95,19 +95,153 @@ class ParamFlag(ParamBinaryOr):
     equal = {'wxALIGN_CENTER': 'wxALIGN_CENTRE',
              'wxALIGN_CENTER_VERTICAL': 'wxALIGN_CENTRE_VERTICAL',
              'wxALIGN_CENTER_HORIZONTAL': 'wxALIGN_CENTRE_HORIZONTAL'}
-    def __init__(self, parent, id, value, size, name, param):
-        ParamBinaryOr.__init__(self, parent, id, value, size, name, param)
+    def __init__(self, parent, id, value, size, name):
+        ParamBinaryOr.__init__(self, parent, id, value, size, name)
 
 class ParamStyle(ParamBinaryOr):
     equal = {'wxALIGN_CENTER': 'wxALIGN_CENTRE'}
-    def __init__(self, parent, id, value, size, name, param):
-        self.values = currentXXX.styles + genericStyles
-        ParamBinaryOr.__init__(self, parent, id, value, size, name, param)
+    def __init__(self, parent, id, value, size, name):
+        self.values = currentXXX.winStyles + genericStyles
+        ParamBinaryOr.__init__(self, parent, id, value, size, name)
 
-class ParamInt(wxPanel):
-    ID_SPIN_CTRL = wxNewId()
-    def __init__(self, parent, id, value, size, name, param):
-        wxPanel.__init__(self, parent, id, name=name)
+class ParamExStyle(ParamBinaryOr):
+    def __init__(self, parent, id, value, size, name):
+        if currentXXX:
+            self.values = currentXXX.exStyles # constant at the moment
+        else:
+            self.values = []
+        ParamBinaryOr.__init__(self, parent, id, value, size, name)
+
+class ParamColour(PPanel):
+    def __init__(self, parent, id, value, size, name):
+        PPanel.__init__(self, parent, id, name)
+        self.ID_TEXT_CTRL = wxNewId()
+        self.ID_BUTTON = wxNewId()
+        self.SetBackgroundColour(panel.GetBackgroundColour())
+        sizer = wxBoxSizer()
+        self.text = wxTextCtrl(self, self.ID_TEXT_CTRL, str(value), size=wxSize(60,-1))
+        sizer.Add(self.text, 0, wxGROW | wxRIGHT, 10)
+        self.button = wxPanel(self, self.ID_BUTTON, wxDefaultPosition, wxSize(40, -1))
+        sizer.Add(self.button, 0, wxGROW)
+        self.SetAutoLayout(true)
+        self.SetSizer(sizer)
+        sizer.Fit(self)
+        self.textModified = false
+        self.SetValue(value)
+        EVT_PAINT(self.button, self.OnPaintButton)
+        EVT_TEXT(self, self.ID_TEXT_CTRL, self.OnChange)
+        EVT_LEFT_DOWN(self.button, self.OnLeftDown)
+    def GetValue(self):
+        return self.value
+    def SetValue(self, value):
+        if not value: value = '#FFFFFF'
+        self.value = value
+        self.text.SetValue(str(value))  # update text ctrl
+        self.button.SetBackgroundColour(wxNamedColour(value))
+        self.button.Refresh()
+    def OnChange(self, evt):
+        panel.SetModified(true)
+        self.textModified = true
+        evt.Skip()
+    def OnPaintButton(self, evt):
+        dc = wxPaintDC(self.button)
+        dc.SetBrush(wxTRANSPARENT_BRUSH)
+        if panel.page2.IsEnabled() and self.IsEnabled(): dc.SetPen(wxBLACK_PEN)
+        else: dc.SetPen(wxGREY_PEN)
+        size = self.button.GetSize()
+        dc.DrawRectangle(0, 0, size.x, size.y)
+    def OnLeftDown(self, evt):
+        dlg = wxColourDialog(self)
+        if dlg.ShowModal() == wxID_OK:
+            self.SetValue('#%02X%02X%02X' % dlg.GetColourData().GetColour().Get())
+            panel.SetModified(true)
+
+################################################################################
+
+# Mapping from wx constants ro XML strings
+fontFamiliesWx2Xml = {wxDEFAULT: 'default', wxDECORATIVE: 'decorative',
+                wxROMAN: 'roman', wxSCRIPT: 'script', wxSWISS: 'swiss',
+                wxMODERN: 'modern'}
+fontStylesWx2Xml = {wxNORMAL: 'normal', wxSLANT: 'slant', wxITALIC: 'italic'}
+fontWeightsWx2Xml = {wxNORMAL: 'normal', wxLIGHT: 'light', wxBOLD: 'bold'}
+def ReverseMap(m):
+    rm = {}
+    for k,v in m.items(): rm[v] = k
+    return rm
+fontFamiliesXml2wx = ReverseMap(fontFamiliesWx2Xml)
+fontStylesXml2wx = ReverseMap(fontStylesWx2Xml)
+fontWeightsXml2wx = ReverseMap(fontWeightsWx2Xml)
+
+class ParamFont(PPanel):
+    def __init__(self, parent, id, value, size, name):
+        PPanel.__init__(self, parent, id, name)
+        self.ID_TEXT_CTRL = wxNewId()
+        self.ID_BUTTON_SELECT = wxNewId()
+        self.SetBackgroundColour(panel.GetBackgroundColour())
+        sizer = wxBoxSizer()
+        self.text = wxTextCtrl(self, self.ID_TEXT_CTRL, str(value), size=wxSize(200,-1))
+        sizer.Add(self.text, 0, wxRIGHT, 10)
+        self.button = wxButton(self, self.ID_BUTTON_SELECT, 'Select...')
+        sizer.Add(self.button)
+        self.SetAutoLayout(true)
+        self.SetSizer(sizer)
+        sizer.Fit(self)
+        self.textModified = false
+        EVT_BUTTON(self, self.ID_BUTTON_SELECT, self.OnButtonSelect)
+        EVT_TEXT(self, self.ID_TEXT_CTRL, self.OnChange)
+    def OnChange(self, evt):
+        panel.SetModified(true)
+        self.textModified = true
+        evt.Skip()
+    def GetValue(self):
+        if self.textModified:           # text has newer value
+            return eval(self.text.GetValue())
+        return self.value
+    def SetValue(self, value):
+        if not value: value = [''] * 7
+        self.value = value
+        self.text.SetValue(str(value))  # update text ctrl
+    def OnButtonSelect(self, evt):
+        if self.textModified:           # text has newer value
+            self.value = eval(self.text.GetValue())
+        # Make initial font
+        try: size = int(self.value[0])
+        except ValueError: size = 12
+        try: family = fontFamiliesXml2wx[self.value[1]]
+        except KeyError: family = wxDEFAULT
+        try: style = fontStylesXml2wx[self.value[2]]
+        except KeyError: style = wxNORMAL
+        try: weight = fontWeightsXml2wx[self.value[3]]
+        except KeyError: weight = wxNORMAL
+        try: underlined = int(self.value[4])
+        except ValueError: underlined = 0
+        face = self.value[5]
+        mapper = wxFontMapper()
+        enc = wxFONTENCODING_DEFAULT
+        if not self.value[6]: enc = mapper.CharsetToEncoding(self.value[6])
+        if enc == wxFONTENCODING_DEFAULT: enc = wxFONTENCODING_SYSTEM
+        font = wxFont(size, family, style, weight, underlined, face, enc)
+        data = wxFontData()
+        data.SetInitialFont(font)
+        dlg = wxFontDialog(self, data)
+        if dlg.ShowModal() != wxID_OK: return
+        font = dlg.GetFontData().GetChosenFont()
+        value = [str(font.GetPointSize()), fontFamiliesWx2Xml[font.GetFamily()],
+                 fontStylesWx2Xml[font.GetStyle()],
+                 fontWeightsWx2Xml[font.GetWeight()],
+                 str(font.GetUnderlined()), font.GetFaceName(),
+                 wxFontMapper_GetEncodingName(font.GetEncoding())]
+        # Add ignored flags
+        self.SetValue(value)
+        panel.SetModified(true)
+        self.textModified = false
+
+################################################################################
+
+class ParamInt(PPanel):
+    def __init__(self, parent, id, value, size, name):
+        PPanel.__init__(self, parent, id, name)
+        self.ID_SPIN_CTRL = wxNewId()
         sizer = wxBoxSizer()
         self.spin = wxSpinCtrl(self, self.ID_SPIN_CTRL, value, size=wxSize(50,-1))
         self.SetBackgroundColour(panel.GetBackgroundColour())
@@ -115,7 +249,6 @@ class ParamInt(wxPanel):
         self.SetAutoLayout(true)
         self.SetSizer(sizer)
         sizer.Fit(self)
-        Register(param, self)
         EVT_SPINCTRL(self, self.ID_SPIN_CTRL, self.OnChange)
     def GetValue(self):
         return str(self.spin.GetValue())
@@ -127,27 +260,24 @@ class ParamInt(wxPanel):
         evt.Skip()
 
 class ParamText(wxTextCtrl):
-    def __init__(self, parent, id, value, size, name, param):
+    def __init__(self, parent, id, value, size, name):
         wxTextCtrl.__init__(self, parent, id, value, size=wxSize(200,-1), name=name)
-        Register(param, self)
         EVT_TEXT(self, id, self.OnChange)
     def OnChange(self, evt):
         panel.SetModified(true)
         evt.Skip()
 
 class ParamAccel(wxTextCtrl):
-    def __init__(self, parent, id, value, size, name, param):
+    def __init__(self, parent, id, value, size, name):
         wxTextCtrl.__init__(self, parent, id, value, size=wxSize(50,-1), name=name)
-        Register(param, self)
         EVT_TEXT(self, id, self.OnChange)
     def OnChange(self, evt):
         panel.SetModified(true)
         evt.Skip()
 
 class ParamPosSize(wxTextCtrl):
-    def __init__(self, parent, id, value, size, name, param):
+    def __init__(self, parent, id, value, size, name):
         wxTextCtrl.__init__(self, parent, id, value, size=wxSize(80,-1), name=name)
-        Register(param, self)
         EVT_TEXT(self, id, self.OnChange)
     def OnChange(self, evt):
         panel.SetModified(true)
@@ -155,6 +285,7 @@ class ParamPosSize(wxTextCtrl):
 
 class ContentDialog(wxDialog):
     def __init__(self, parent, value):
+        #wxPreDialog(self)
         # Use another constructor
         w = frame.res.LoadDialog(parent, 'ID_DIALOG_CONTENT')
         self.this = w.this
@@ -166,8 +297,9 @@ class ContentDialog(wxDialog):
         # Set list items
         for v in value:
             self.list.Append(v)
-        # !!! Bug in XRC or wxWin listbox select random items
-        self.FindWindowByName('wxID_OK').SetFocus()
+        self.SetAutoLayout(true)
+        # !!! self.SetSizer(sizer)
+        self.GetSizer().Fit(self)
         # Callbacks
         self.ID_BUTTON_APPEND = XMLID('ID_BUTTON_APPEND')
         self.ID_BUTTON_REMOVE = XMLID('ID_BUTTON_REMOVE')
@@ -203,15 +335,15 @@ class ContentDialog(wxDialog):
         elif evt.GetId() == self.ID_BUTTON_UP:
             evt.Enable(self.list.GetSelection() > 0)
         elif evt.GetId() == self.ID_BUTTON_DOWN:
-            evt.Enable(self.list.GetSelection() < self.list.Number() - 1)
+            evt.Enable(self.list.GetSelection() != -1 and \
+                       self.list.GetSelection() < self.list.Number() - 1)
 
-class ParamContent(wxPanel):
-    ID_TEXT_CTRL = wxNewId()
-    ID_BUTTON_EDIT = wxNewId()
-    def __init__(self, parent, id, value, size, name, param):
-        wxPanel.__init__(self, parent, id, name=name)
+class ParamContent(PPanel):
+    def __init__(self, parent, id, value, size, name):
+        PPanel.__init__(self, parent, id, name)
+        self.ID_TEXT_CTRL = wxNewId()
+        self.ID_BUTTON_EDIT = wxNewId()
         self.SetBackgroundColour(panel.GetBackgroundColour())
-        Register(param, self)
         sizer = wxBoxSizer()
         self.text = wxTextCtrl(self, self.ID_TEXT_CTRL, str(value), size=wxSize(200,-1))
         sizer.Add(self.text, 0, wxRIGHT, 10)
@@ -248,11 +380,11 @@ class ParamContent(wxPanel):
         self.textModified = false
 
 # Boxless radiobox 
-class RadioBox(wxPanel):
-    ID_RADIO_CHOICE = wxNewId()         # economize on IDs, use names
+class RadioBox(PPanel):
     def __init__(self, parent, id, choices,
                  pos=wxDefaultPosition, size=wxDefaultSize, name='radiobox'):
-        wxPanel.__init__(self, parent, id, pos, size, name=name)
+        PPanel.__init__(self, parent, id, name)
+        self.ID_RADIO_CHOICE = wxNewId()         # economize on IDs, use names
         self.SetBackgroundColour(panel.GetBackgroundColour())
         self.choices = choices
         topSizer = wxBoxSizer()
@@ -281,9 +413,8 @@ class RadioBox(wxPanel):
 class ParamBool(RadioBox):
     values = {'yes': '1', 'no': '0'}
     seulav = {'1': 'yes', '0': 'no'}
-    def __init__(self, parent, id, value, size, name, param):
+    def __init__(self, parent, id, value, size, name):
         RadioBox.__init__(self, parent, id, choices = self.values.keys(), name=name)
-        Register(param, self)
         self.SetValue(value)
     def GetValue(self):
         return self.values[self.GetStringSelection()]
@@ -294,9 +425,8 @@ class ParamBool(RadioBox):
 class ParamOrient(RadioBox):
     values = {'horizontal': 'wxHORIZONTAL', 'vertical': 'wxVERTICAL'}
     seulav = {'wxHORIZONTAL': 'horizontal', 'wxVERTICAL': 'vertical'}
-    def __init__(self, parent, id, value, size, name, param):
+    def __init__(self, parent, id, value, size, name):
         RadioBox.__init__(self, parent, id, choices = self.values.keys(), name=name)
-        Register(param, self)
         self.SetValue(value)
     def GetValue(self):
         return self.values[self.GetStringSelection()]
@@ -306,7 +436,7 @@ class ParamOrient(RadioBox):
 
 paramDict = {
     'flag': ParamFlag,
-    'style': ParamStyle,
+    'style': ParamStyle, 'exstyle': ParamExStyle,
     'pos': ParamPosSize, 'size': ParamPosSize,
     'border': ParamInt, 'cols': ParamInt, 'rows': ParamInt,
     'vgap': ParamInt, 'hgap': ParamInt,
@@ -314,4 +444,8 @@ paramDict = {
     'label': ParamText, 'title': ParamText, 'value': ParamText,
     'content': ParamContent, 'selection': ParamInt,
     'min': ParamInt, 'max': ParamInt,
+    'fg': ParamColour, 'bg': ParamColour, 'font': ParamFont,
+    'enabled': ParamBool, 'focused': ParamBool, 'hidden': ParamBool,
+    'tooltip': ParamText
     }
+

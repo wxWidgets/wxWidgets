@@ -80,12 +80,11 @@ include src/gtk/*.h
 include src/gtk/*.py
 
 include tools/*.py
-tools/XRCed/CHANGES
-tools/XRCed/TODO
-tools/XRCed/README
-tools/XRCed/*.py
-tools/XRCed/*.xrc
-
+include tools/XRCed/CHANGES
+include tools/XRCed/TODO
+include tools/XRCed/README
+include tools/XRCed/*.py
+include tools/XRCed/*.xrc
 
 include contrib/glcanvas/*.i
 include contrib/glcanvas/*.py

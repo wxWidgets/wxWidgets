@@ -1,7 +1,8 @@
-# Name:         xxx.py (xxx is easy to distinguish from 'wx' :) )
+# Name:         xxx.py ('xxx' is easy to distinguish from 'wx' :) )
 # Purpose:      XML interface classes
 # Author:       Roman Rolinsky <rolinsky@mema.ucl.ac.be>
 # Created:      22.08.2001
+# RCS-ID:       $Id$
 
 from wxPython.wx import *
 from wxPython.xrc import *
@@ -12,23 +13,23 @@ from params import *
 
 # Classes to interface DOM objects
 class xxxObject:
-    # Param ids for controls
-    ID_CHECK_PARAMS = wxNewId()
-    ID_TEXT_PARAMS = wxNewId()
     # Default behavior
     hasChildren = false                 # has children elements?
+    hasStyle = true                     # almost everyone
     hasName = true                      # has name attribute?
     isSizer = hasChild = false
+    # Style parameters (all optional)
+    styles = ['fg', 'bg', 'font', 'enabled', 'focused', 'hidden', 'tooltip']
     # Required paremeters: none by default
     required = []
     # Default parameters with default values
     default = {}
     # Parameter types
     paramDict = {}
-    # Additional styles
-    styles = []
+    # Window styles and extended styles
+    winStyles = []
     # Tree icon index
-    image = -1
+    #image = -1
     # Construct a new xxx object from DOM element
     # parent is parent xxx object (or None if none), element is DOM element object
     def __init__(self, parent, element):
@@ -45,9 +46,10 @@ class xxxObject:
             if node.nodeType == minidom.Node.ELEMENT_NODE:
                 if node.tagName == 'object':
                     continue            # do nothing for object children here
-                if not node.tagName in self.allParams:
+                if not node.tagName in self.allParams and not node.tagName in self.styles:
                     print 'WARNING: unknown parameter for %s: %s' % \
                           (self.className, node.tagName)
+                    continue
                 if node.tagName == 'content': # has items
                     # Param value is a list of text nodes
                     l = []
@@ -68,6 +70,9 @@ class xxxObject:
                             node.removeChild(n)
                             n.unlink()
                     self.params[node.tagName] = l
+                elif node.tagName == 'font': # has children
+                    # we read and write all font parameters at once
+                    self.params[node.tagName] = xxxFont(self, node)
                 else:                   # simple parameter
                     if not node.hasChildNodes():
                         # If does not have child nodes, create empty text node
@@ -81,37 +86,35 @@ class xxxObject:
                 # Remove all other nodes
                 element.removeChild(node)
                 node.unlink()
-                
     # Generate HTML
     def generateHtml(self, prefix=''):
         SetCurrentXXX(self)
-        html = '<table cellspacing=0 cellpadding=0><tr><td width=130>\
+        html = '<table cellspacing=0 cellpadding=0><tr><td width=120>\
 <font size="+1"><b>%s</b></font></td>' % self.className
         # Has id (name) attribute
         if self.hasName:
             html += """\
 <td><wxp module="xxx" class="ParamText" width=150>
 <param name="id" value="%d">
-<param name="name" value="text_name">
+<param name="name" value="data_name">
 <param name="value" value='("%s")'>
-<param name="param" value="name">
-</wxp></td>""" % (self.ID_TEXT_PARAMS, self.name)
+</wxp></td>""" % (-1, self.name)
         html += '</table><p>'
         html += '<table cellspacing=0 cellpadding=0>\n'
         # Add required parameters
         for param in self.allParams:
             # Add checkbox or just text
             if param in self.required:
-                html += '<tr><td width=25></td><td width=110>%s: </td>' % param
+                html += '<tr><td width=20></td><td width=100>%s: </td>' % param
             else:                       # optional parameter
                 html += """\
 <tr><td width=20><wxp class="wxCheckBox">
 <param name="id" value="%d">
 <param name="size" value="(20,-1)">
-<param name="name" value="check_%s">
+<param name="name" value="%s">
 <param name="label" value=("")>
-</wxp></td><td width=110>%s: </td>
-""" % (self.ID_CHECK_PARAMS, param, param + '&nbsp;')
+</wxp></td><td width=100>%s: </td>
+""" % (paramIDs[param], prefix + 'check_' + param, param)
             # Add value part
             if self.params.has_key(param):
                 if param == 'content':
@@ -137,12 +140,10 @@ class xxxObject:
             html += """\
 <td><wxp module="xxx" class="%s">
 <param name="id" value="%d">
-<param name="name" value="text_%s">
+<param name="name" value="%s">
 <param name="value" value="%s">
-<param name="param" value="%s">
 </wxp></td>
-""" % (typeClass, self.ID_TEXT_PARAMS,
-       prefix + param, value, prefix + param)
+""" % (typeClass, -1, prefix + 'data_' + param, value)
         html += '</table>\n'
         return html
     # Returns real tree object
@@ -161,6 +162,41 @@ class xxxObject:
 
 ################################################################################
 
+class xxxFont(xxxObject):
+    allParams = ['size', 'style', 'weight', 'family', 'underlined',
+                 'face', 'encoding']
+    def __init__(self, parent, element):
+        xxxObject.__init__(self, parent, element)
+        self.parentNode = element       # required to behave similar to DOM node
+        self.data = self.value()
+    def updateXML(self, value):
+        # `value' is a list of strings corresponding to all parameters
+        elem = self.element
+        for node in elem.childNodes:
+            elem.removeChild(node)
+        i = 0
+        self.params.clear()
+        for param in self.allParams:
+            if value[i]:
+                fontElem = tree.dom.createElement(param)
+                textNode = tree.dom.createTextNode(value[i])
+                self.params[param] = textNode
+                fontElem.appendChild(textNode)
+                elem.appendChild(fontElem)
+            i += 1
+        # Update data
+        self.data = self.value()
+    def value(self):
+        v = []
+        for p in self.allParams:
+            try:
+                v.append(str(self.params[p].data))
+            except KeyError:
+                v.append('')
+        return v
+
+################################################################################
+
 class xxxContainer(xxxObject):
     hasChildren = true
 
@@ -169,21 +205,30 @@ class xxxContainer(xxxObject):
 
 class xxxPanel(xxxContainer):
     allParams = ['pos', 'size', 'style']
+    styles = ['fg', 'bg', 'font', 'enabled', 'focused', 'hidden', 'exstyle',
+              'tooltip']
+    exStyles = ['wxWS_EX_VALIDATE_RECURSIVELY']
 
 class xxxDialog(xxxContainer):
     allParams = ['title', 'pos', 'size', 'style']
     required = ['title']
-    styles = ['wxDIALOG_MODAL', 'wxCAPTION', 'wxDEFAULT_DIALOG_STYLE',
+    winStyles = ['wxDIALOG_MODAL', 'wxCAPTION', 'wxDEFAULT_DIALOG_STYLE',
               'wxRESIZE_BORDER', 'wxSYSTEM_MENU',  'wxTHICK_FRAME', 'wxSTAY_ON_TOP']
+    styles = ['fg', 'bg', 'font', 'enabled', 'focused', 'hidden', 'exstyle',
+              'tooltip']
+    exStyles = ['wxWS_EX_VALIDATE_RECURSIVELY']
 
 class xxxFrame(xxxContainer):
     allParams = ['title', 'centered', 'pos', 'size', 'style']
     paramDict = {'centered': ParamBool}
     required = ['title']
-    styles = ['wxDEFAULT_FRAME_STYLE', 'wxICONIZE', 'wxCAPTION', 'wxMINIMIZE',
+    winStyles = ['wxDEFAULT_FRAME_STYLE', 'wxICONIZE', 'wxCAPTION', 'wxMINIMIZE',
               'wxICONIZE', 'wxMINIMIZE_BOX', 'wxMAXIMIZE', 'wxMAXIMIZE_BOX',
               'wxSTAY_ON_TOP', 'wxSYSTEM_MENU', 'wxRESIZE_BORDER',
               'wxFRAME_FLOAT_ON_PARENT', 'wxFRAME_TOOL_WINDOW']
+    styles = ['fg', 'bg', 'font', 'enabled', 'focused', 'hidden', 'exstyle',
+              'tooltip']
+    exStyles = ['wxWS_EX_VALIDATE_RECURSIVELY']
 
 ################################################################################
 # Controls
@@ -191,15 +236,15 @@ class xxxFrame(xxxContainer):
 class xxxStaticText(xxxObject):
     allParams = ['label', 'pos', 'size', 'style']
     required = ['label']
-    styles = ['wxALIGN_LEFT', 'wxALIGN_RIGHT', 'wxALIGN_CENTRE', 'wxST_NO_AUTORESIZE']
+    winStyles = ['wxALIGN_LEFT', 'wxALIGN_RIGHT', 'wxALIGN_CENTRE', 'wxST_NO_AUTORESIZE']
 
 class xxxStaticLine(xxxObject):
     allParams = ['pos', 'size', 'style']
-    styles = ['wxLI_HORIZONTAL', 'wxLI_VERTICAL']
+    winStyles = ['wxLI_HORIZONTAL', 'wxLI_VERTICAL']
 
 class xxxTextCtrl(xxxObject):
     allParams = ['value', 'pos', 'size', 'style']
-    styles = ['wxTE_PROCESS_ENTER', 'wxTE_PROCESS_TAB', 'wxTE_MULTILINE',
+    winStyles = ['wxTE_PROCESS_ENTER', 'wxTE_PROCESS_TAB', 'wxTE_MULTILINE',
               'wxTE_PASSWORD', 'wxTE_READONLY']
 
 class xxxChoice(xxxObject):
@@ -214,24 +259,24 @@ class xxxSlider(xxxObject):
                  'linesize': ParamInt, 'thumb': ParamInt, 'thumb': ParamInt,
                  'tick': ParamInt, 'selmin': ParamInt, 'selmax': ParamInt}
     required = ['value', 'min', 'max']
-    styles = ['wxSL_HORIZONTAL', 'wxSL_VERTICAL', 'wxSL_AUTOTICKS', 'wxSL_LABELS',
+    winStyles = ['wxSL_HORIZONTAL', 'wxSL_VERTICAL', 'wxSL_AUTOTICKS', 'wxSL_LABELS',
               'wxSL_LEFT', 'wxSL_RIGHT', 'wxSL_TOP', 'wxSL_SELRANGE']
 
 class xxxGauge(xxxObject):
     allParams = ['range', 'pos', 'size', 'style', 'value', 'shadow', 'bezel']
     paramDict = {'range': ParamInt, 'value': ParamInt,
                  'shadow': ParamInt, 'bezel': ParamInt}
-    styles = ['wxGA_HORIZONTAL', 'wxGA_VERTICAL', 'wxGA_PROGRESSBAR', 'wxGA_SMOOTH']
+    winStyles = ['wxGA_HORIZONTAL', 'wxGA_VERTICAL', 'wxGA_PROGRESSBAR', 'wxGA_SMOOTH']
 
 class xxxScrollBar(xxxObject):
     allParams = ['pos', 'size', 'style', 'value', 'thumbsize', 'range', 'pagesize']
     paramDict = {'value': ParamInt, 'range': ParamInt, 'thumbsize': ParamInt,
                  'pagesize': ParamInt}
-    styles = ['wxSB_HORIZONTAL', 'wxSB_VERTICAL']
+    winStyles = ['wxSB_HORIZONTAL', 'wxSB_VERTICAL']
 
 class xxxListCtrl(xxxObject):
     allParams = ['pos', 'size', 'style']
-    styles = ['wxLC_LIST', 'wxLC_REPORT', 'wxLC_ICON', 'wxLC_SMALL_ICON',
+    winStyles = ['wxLC_LIST', 'wxLC_REPORT', 'wxLC_ICON', 'wxLC_SMALL_ICON',
               'wxLC_ALIGN_TOP', 'wxLC_ALIGN_LEFT', 'wxLC_AUTOARRANGE',
               'wxLC_USER_TEXT', 'wxLC_EDIT_LABELS', 'wxLC_NO_HEADER',
               'wxLC_SINGLE_SEL', 'wxLC_SORT_ASCENDING', 'wxLC_SORT_DESCENDING']
@@ -241,13 +286,13 @@ xxxCheckList = xxxListCtrl
 
 class xxxTreeCtrl(xxxObject):
     allParams = ['pos', 'size', 'style']
-    styles = ['wxTR_HAS_BUTTONS', 'wxTR_NO_LINES', 'wxTR_LINES_AT_ROOT',
+    winStyles = ['wxTR_HAS_BUTTONS', 'wxTR_NO_LINES', 'wxTR_LINES_AT_ROOT',
               'wxTR_EDIT_LABELS', 'wxTR_MULTIPLE']
 
 class xxxHtmlWindow(xxxObject):
     allParams = ['pos', 'size', 'style', 'borders', 'url', 'htmlcode']
     paramDict = {'borders': ParamInt}
-    styles = ['wxHW_SCROLLBAR_NEVER', 'wxHW_SCROLLBAR_AUTO']
+    winStyles = ['wxHW_SCROLLBAR_NEVER', 'wxHW_SCROLLBAR_AUTO']
 
 class xxxCalendar(xxxObject):
     allParams = ['pos', 'size', 'style']
@@ -255,7 +300,7 @@ class xxxCalendar(xxxObject):
 class xxxNotebook(xxxContainer):
     allParams = ['usenotebooksizer', 'pos', 'size', 'style']
     paramDict = {'usenotebooksizer': ParamBool}
-    styles = ['wxNB_FIXEDWIDTH', 'wxNB_LEFT', 'wxNB_RIGHT', 'wxNB_BOTTOM']
+    winStyles = ['wxNB_FIXEDWIDTH', 'wxNB_LEFT', 'wxNB_RIGHT', 'wxNB_BOTTOM']
 
 ################################################################################
 # Buttons
@@ -264,23 +309,23 @@ class xxxButton(xxxObject):
     allParams = ['label', 'default', 'pos', 'size', 'style']
     paramDict = {'default': ParamBool}
     required = ['label']
-    styles = ['wxBU_LEFT', 'wxBU_TOP', 'wxBU_RIGHT', 'wxBU_BOTTOM']
+    winStyles = ['wxBU_LEFT', 'wxBU_TOP', 'wxBU_RIGHT', 'wxBU_BOTTOM']
 
 class xxxBitmapButton(xxxObject):
     allParams = ['bitmap', 'selected', 'focus', 'disabled', 'default',
                  'pos', 'size', 'style']
     required = ['bitmap']
-    styles = ['wxBU_LEFT', 'wxBU_TOP', 'wxBU_RIGHT', 'wxBU_BOTTOM']
+    winStyles = ['wxBU_LEFT', 'wxBU_TOP', 'wxBU_RIGHT', 'wxBU_BOTTOM']
 
 class xxxRadioButton(xxxObject):
     allParams = ['label', 'value', 'pos', 'size', 'style']
     paramDict = {'value': ParamBool}
     required = ['label']
-    styles = ['wxRB_GROUP']
+    winStyles = ['wxRB_GROUP']
 
 class xxxSpinButton(xxxObject):
     allParams = ['pos', 'size', 'style']
-    styles = ['wxSP_HORIZONTAL', 'wxSP_VERTICAL', 'wxSP_ARROW_KEYS', 'wxSP_WRAP']
+    winStyles = ['wxSP_HORIZONTAL', 'wxSP_VERTICAL', 'wxSP_ARROW_KEYS', 'wxSP_WRAP']
 
 ################################################################################
 # Boxes
@@ -293,7 +338,7 @@ class xxxRadioBox(xxxObject):
     allParams = ['label', 'content', 'selection', 'dimension', 'pos', 'size', 'style']
     paramDict = {'dimension': ParamInt}
     required = ['label', 'content']
-    styles = ['wxRA_SPECIFY_ROWS', 'wxRA_SPECIFY_COLS']
+    winStyles = ['wxRA_SPECIFY_ROWS', 'wxRA_SPECIFY_COLS']
 
 class xxxCheckBox(xxxObject):
     allParams = ['label', 'pos', 'size', 'style']
@@ -302,20 +347,20 @@ class xxxCheckBox(xxxObject):
 class xxxComboBox(xxxObject):
     allParams = ['content', 'selection', 'value', 'pos', 'size', 'style']
     required = ['content']
-    styles = ['wxCB_SIMPLE', 'wxCB_DROPDOWN', 'wxCB_READONLY', 'wxCB_DROPDOWN',
+    winStyles = ['wxCB_SIMPLE', 'wxCB_DROPDOWN', 'wxCB_READONLY', 'wxCB_DROPDOWN',
               'wxCB_SORT']
 
 class xxxListBox(xxxObject):
     allParams = ['content', 'selection', 'pos', 'size', 'style']
     required = ['content']
-    styles = ['wxLB_SINGLE', 'wxLB_MULTIPLE', 'wxLB_EXTENDED', 'wxLB_HSCROLL',
+    winStyles = ['wxLB_SINGLE', 'wxLB_MULTIPLE', 'wxLB_EXTENDED', 'wxLB_HSCROLL',
               'wxLB_ALWAYS_SB', 'wxLB_NEEDED_SB', 'wxLB_SORT']
 
 ################################################################################
 # Sizers
 
 class xxxSizer(xxxContainer):
-    hasName = false
+    hasName = hasStyle = false
     paramDict = {'orient': ParamOrient}
     isSizer = true
 
@@ -344,10 +389,7 @@ class xxxFlexGridSizer(xxxGridSizer):
 # Container with only one child.
 # Not shown in tree.
 class xxxChildContainer(xxxObject):
-    # Special param ids
-    ID_CHECK_PARAMS = wxNewId()
-    ID_TEXT_PARAMS = wxNewId()
-    hasName = false
+    hasName = hasStyle = false
     hasChild = true
     def __init__(self, parent, element):
         xxxObject.__init__(self, parent, element)
@@ -396,7 +438,7 @@ class xxxNotebookPage(xxxChildContainer):
             self.child.allParams.remove('size')
 
 class xxxSpacer(xxxObject):
-    hasName = false
+    hasName = hasStyle = false
     allParams = ['size', 'option', 'flag', 'border']
     paramDict = {'option': ParamInt}
     default = {'size': '0,0'}
@@ -413,8 +455,10 @@ class xxxMenuItem(xxxObject):
     default = {'label': ''}
 
 class xxxSeparator(xxxObject):
-    hasName = false
+    hasName = hasStyle = false
     allParams = []
+
+################################################################################
 
 xxxDict = {
     'wxPanel': xxxPanel,
@@ -460,6 +504,17 @@ xxxDict = {
     'separator': xxxSeparator,
     }
 
+# Create IDs for all parameters of all classes
+paramIDs = {'fg': wxNewId(), 'bg': wxNewId(), 'exstyle': wxNewId(), 'font': wxNewId(),
+            'enabled': wxNewId(), 'focused': wxNewId(), 'hidden': wxNewId(),
+            'tooltip': wxNewId()
+            }
+for cl in xxxDict.values():
+    for param in cl.allParams + cl.paramDict.keys():
+        if not paramIDs.has_key(param):
+            paramIDs[param] = wxNewId()
+
+################################################################################
 # Helper functions
 
 # Test for object elements

@@ -2,6 +2,7 @@
 # Purpose:      XRC editor, main module
 # Author:       Roman Rolinsky <rolinsky@mema.ucl.ac.be>
 # Created:      20.08.2001
+# RCS-ID:       $Id$
 
 from wxPython.wx import *
 from wxPython.xrc import *
@@ -14,10 +15,14 @@ import tempfile
 import images
 
 # String constants
-htmlHeader = '<html><body bgcolor="#b0c4de">\n'
+
+faceColour = wxSystemSettings_GetSystemColour(wxSYS_COLOUR_3DFACE)
+# Stange wxHtmlWindow behavior: when bgcolor is exact, it turns white
+bgcolor = (faceColour.Red()-1, faceColour.Green()-1, faceColour.Blue()-1)
+htmlHeader = '<html><body bgcolor="#%02x%02x%02x">\n' % bgcolor
 htmlFooter = '</body></html>\n'
 progname = 'XRCed'
-version = '0.0.3'
+version = '0.0.5'
 
 # Local modules
 from xxx import *
@@ -48,40 +53,85 @@ def SetMenu(m, list):
         else:                           # separator
             m.AppendSeparator()
 
-# Properties panel
-class Panel(wxHtmlWindow):
-    def __init__(self, parent, id):
-        wxHtmlWindow.__init__(self, parent, id)
-        self.SetBorders(5)
-        self.SetFonts('', '', [8, 10, 12, 14, 16, 19, 24])
-        EVT_CHECKBOX(self, xxxObject.ID_CHECK_PARAMS, self.OnCheckParams)
-        EVT_CHECKBOX(self, xxxChildContainer.ID_CHECK_PARAMS, self.OnCheckParams)
-        self.modified = false
+################################################################################
 
+# Properties panel containing notebook
+class Panel(wxNotebook):
+    def __init__(self, parent, id = -1):
+        wxNotebook.__init__(self, parent, id, style=wxNB_BOTTOM)
+        #self.SetBackgroundColour(wxColour(bgcolor))
+        sys.modules['params'].panel = self
+        self.page1 = HtmlPage(self)
+        self.AddPage(self.page1, 'Properties')
+        self.page2 = None
+    def SetData(self, xxx):
+        self.page1.SetPageData(xxx)
+        # Replace/remove style page
+        if self.page2:
+            self.RemovePage(1)
+            self.page2.Destroy()
+        if xxx and xxx.treeObject().hasStyle:
+            self.page2 = StylePage(self, xxx.treeObject())
+            self.AddPage(self.page2, 'Style')
+        else:
+            self.page2 = None
     def Clear(self):
-        self.SetPage(htmlHeader + 'select a tree item on the left' + htmlFooter)
+        self.page1.Clear()
+        if self.page2:
+            self.RemovePage(1)
+            self.page2.Destroy()
+            self.page2 = None
+    # If some parameter on some page has changed
+    def IsModified(self):
+        return self.page1.IsModified() or self.page2 and self.page2.IsModified()
+    def SetModified(self, value):
+        self.page1.SetModified(value)
+        if self.page2:
+            self.page2.SetModified(value)
 
+################################################################################
+
+# General class for notebook pages
+class ParamPage:
+    def __init__(self):
+        # Register event handlers
+        for id in paramIDs.values():
+            EVT_CHECKBOX(self, id, self.OnCheckParams)
     def OnCheckParams(self, evt):
         selected = tree.GetSelection()
         xxx = tree.GetPyData(selected)
-        if xxx.hasChild and evt.GetId() != xxxChildContainer.ID_CHECK_PARAMS:
-            xxx = xxx.child
-        # Set current object
-        param = evt.GetEventObject().GetName()[6:]
-        if xxx.hasChild:
-            w = GetRegistered('_'+param)
+        winName = evt.GetEventObject().GetName()
+        sizerParam = false
+        if winName[0] == '_':
+            param = winName[7:]
+            sizerParam = true
         else:
-            w = GetRegistered(param)
+            if xxx.hasChild: xxx = xxx.child
+            param = winName[6:]
+        # Set current object
+        if sizerParam:
+            w = self.FindWindowByName('_data_' + param)
+        else:
+            w = self.FindWindowByName('data_' + param)
         elem = xxx.element
         if evt.IsChecked():
             # Ad  new text node in order of allParams
-            w.SetValue('')
-            textElem = tree.dom.createElement(param)
-            textNode = tree.dom.createTextNode('')
-            textElem.appendChild(textNode)
+            w.SetValue('')              # set empty (default) value
+            # For font element, we have to create another object
+            if param == 'font':
+                # Make XXX object
+                textElem = tree.dom.createElement('font')
+                font = xxxFont(xxx, textElem)
+                xxx.params['font'] = font
+            else:
+                textElem = tree.dom.createElement(param)
+                textNode = tree.dom.createTextNode('')
+                textElem.appendChild(textNode)
+                xxx.params[param] = textNode
             # Find place to put new element: first present element after param
             found = false
-            for p in xxx.allParams[xxx.allParams.index(param) + 1:]:
+            paramStyles = xxx.allParams + xxx.styles
+            for p in paramStyles[paramStyles.index(param) + 1:]:
                 # Content params don't have same type
                 if xxx.params.has_key(p) and p != 'content':
                     found = true
@@ -91,7 +141,6 @@ class Panel(wxHtmlWindow):
                 elem.insertBefore(textElem, nextTextElem)
             else:
                 elem.appendChild(textElem)
-            xxx.params[param] = textNode
         else:
             # Remove parameter element and following text node
             textElem = xxx.params[param].parentNode
@@ -105,11 +154,107 @@ class Panel(wxHtmlWindow):
         # Set modified flas
         self.SetModified(true)
 
-    # If some parameter was changed
+
+################################################################################
+
+# Properties panel notebook page
+class HtmlPage(wxHtmlWindow, ParamPage):
+    def __init__(self, parent, id = -1):
+        wxHtmlWindow.__init__(self, parent, id)
+        ParamPage.__init__(self)
+        self.SetBorders(5)
+        if wxGetOsVersion()[1] == 1:
+            self.SetFonts('', '', [8, 10, 12, 14, 16, 19, 24])
+        else:
+            self.SetFonts("", "", [7, 8, 10, 12, 16, 22, 30])
+        self.modified = false
+    def Clear(self):
+        self.SetPage(htmlHeader + 'select a tree item on the left' + htmlFooter)
+    def SetPageData(self, xxx):
+        if not xxx:
+            self.SetPage(htmlHeader + 'this item has no properties' + htmlFooter)
+            return
+        self.SetPage(htmlHeader + xxx.generateHtml() + htmlFooter)
+        # Set values, checkboxes to false, disable defaults
+        if xxx.hasChild: prefix = '_'
+        else: prefix = ''
+        for param in xxx.allParams:
+            if xxx.params.has_key(param):
+                if param == 'content':
+                    value = []
+                    for text in xxx.params[param]:
+                        value.append(str(text.data)) # convert from unicode
+                else:
+                    value = xxx.params[param].data
+                self.FindWindowByName(prefix + 'data_' + param).SetValue(value)
+                if not param in xxx.required:
+                    self.FindWindowByName(prefix + 'check_' + param).SetValue(true)
+            else:
+                self.FindWindowByName(prefix + 'data_' + param).Enable(false)
+        # Same for the child of sizeritem
+        if xxx.hasChild:
+            xxx = xxx.child
+            for param in xxx.allParams:
+                if xxx.params.has_key(param):
+                    if param == 'content':
+                        value = []
+                        for text in xxx.params[param]:
+                            value.append(str(text.data)) # convert from unicode
+                    else:
+                        value = xxx.params[param].data
+                    self.FindWindowByName('data_' + param).SetValue(value)
+                    if not param in xxx.required:
+                        self.FindWindowByName('check_' + param).SetValue(true)
+                else:
+                    self.FindWindowByName('data_' + param).Enable(false)
+    # If some parameter has changed
     def IsModified(self):
         return self.modified
     def SetModified(self, value):
         self.modified = value
+
+################################################################################
+
+# Style notebook page
+class StylePage(wxPanel, ParamPage):
+    def __init__(self, parent, xxx):
+        wxPanel.__init__(self, parent, -1)
+        ParamPage.__init__(self)
+        if wxGetOsVersion()[1] == 1:
+            self.SetFont(wxFont(12, wxDEFAULT, wxNORMAL, wxNORMAL))
+        else:
+            self.SetFont(wxFont(10, wxDEFAULT, wxNORMAL, wxNORMAL))
+        topSizer = wxBoxSizer(wxVERTICAL)
+        sizer = wxFlexGridSizer(len(xxx.styles), 2, 0, 1)
+        self.controls = {}              # save python objects
+        for param in xxx.styles:
+            present = param in xxx.params.keys()
+            check = wxCheckBox(self, paramIDs[param],
+                               param + ':', name = 'check_' + param)
+            check.SetValue(present)
+            control = paramDict[param](self, -1, '', (-1, -1),
+                                       'data_' + param)
+            if present:
+                control.SetValue(xxx.params[param].data)
+            else:
+                control.SetValue('')
+            control.Enable(present)
+            sizer.AddMany([ (check, 0, 0),
+                            (control, 0, 0) ])
+            self.controls[param] = control
+        topSizer.Add(sizer, 1, wxALL, 5)
+        self.SetAutoLayout(true)
+        self.SetSizer(topSizer)
+        
+        self.modified = false
+
+    # If some parameter has changed
+    def IsModified(self):
+        return self.modified
+    def SetModified(self, value):
+        self.modified = value
+
+################################################################################
 
 class HightLightBox:
     def __init__(self, pos, size):
@@ -136,6 +281,8 @@ class HightLightBox:
         map(wxWindow.Destroy, self.lines)
         testWin.highLight = None
 
+################################################################################
+
 class MemoryFile:
     def __init__(self, name):
         self.name = name
@@ -151,7 +298,8 @@ class MemoryFile:
 
 class XML_Tree(wxTreeCtrl):
     def __init__(self, parent, id):
-        wxTreeCtrl.__init__(self, parent, id)
+        wxTreeCtrl.__init__(self, parent, id,
+                            style=wxTR_HAS_BUTTONS | wxTR_LINES_AT_ROOT)
         self.SetBackgroundColour(wxColour(224, 248, 224))
         EVT_TREE_SEL_CHANGED(self, self.GetId(), self.OnSelChanged)
         EVT_TREE_ITEM_ACTIVATED(self, self.GetId(), self.OnItemActivated)
@@ -162,17 +310,19 @@ class XML_Tree(wxTreeCtrl):
         self.dom = None
         # Create image list
         il = wxImageList(16, 16, true)
-        xxxPanel.image = il.AddIcon( wxIconFromXPMData(images.getTreePanelData()) )
-        xxxDialog.image = il.AddIcon( wxIconFromXPMData(images.getTreeDialogData()) )
-        xxxFrame.image = il.AddIcon( wxIconFromXPMData(images.getTreeFrameData()) )
-        xxxMenuBar.image = il.AddIcon( wxIconFromXPMData(images.getTreeMenuBarData()) )
-        xxxMenu.image = il.AddIcon( wxIconFromXPMData(images.getTreeMenuData()) )
-        xxxSizer.imageH = il.AddIcon( wxIconFromXPMData(images.getTreeSizerHData()) )
-        xxxSizer.imageV = il.AddIcon( wxIconFromXPMData(images.getTreeSizerVData()) )
-        xxxStaticBoxSizer.imageH = il.AddIcon( wxIconFromXPMData(images.getTreeStaticBoxSizerHData()) )
-        xxxStaticBoxSizer.imageV = il.AddIcon( wxIconFromXPMData(images.getTreeStaticBoxSizerVData()) )
-        xxxGridSizer.image = il.AddIcon( wxIconFromXPMData(images.getTreeSizerGridData()) )
-        xxxFlexGridSizer.image = il.AddIcon( wxIconFromXPMData(images.getTreeSizerFlexGridData()) )
+        self.rootImage = il.AddIcon(wxIconFromXPMData(images.getTreeRootData()))
+        xxxObject.image = il.AddIcon(wxIconFromXPMData(images.getTreeDefaultData()))
+        xxxPanel.image = il.AddIcon(wxIconFromXPMData(images.getTreePanelData()))
+        xxxDialog.image = il.AddIcon(wxIconFromXPMData(images.getTreeDialogData()))
+        xxxFrame.image = il.AddIcon(wxIconFromXPMData(images.getTreeFrameData()))
+        xxxMenuBar.image = il.AddIcon(wxIconFromXPMData(images.getTreeMenuBarData()))
+        xxxMenu.image = il.AddIcon(wxIconFromXPMData(images.getTreeMenuData()))
+        xxxSizer.imageH = il.AddIcon(wxIconFromXPMData(images.getTreeSizerHData()))
+        xxxSizer.imageV = il.AddIcon(wxIconFromXPMData(images.getTreeSizerVData()))
+        xxxStaticBoxSizer.imageH = il.AddIcon(wxIconFromXPMData(images.getTreeStaticBoxSizerHData()))
+        xxxStaticBoxSizer.imageV = il.AddIcon(wxIconFromXPMData(images.getTreeStaticBoxSizerVData()))
+        xxxGridSizer.image = il.AddIcon(wxIconFromXPMData(images.getTreeSizerGridData()))
+        xxxFlexGridSizer.image = il.AddIcon(wxIconFromXPMData(images.getTreeSizerFlexGridData()))
         self.il = il
         self.SetImageList(il)
 
@@ -182,7 +332,7 @@ class XML_Tree(wxTreeCtrl):
         wxTreeCtrl.Unselect(self)
     def GetSelection(self):
         return self.selection
-
+        
     def ExpandAll(self, item):
         if self.ItemHasChildren(item):
             self.Expand(item)
@@ -226,7 +376,7 @@ class XML_Tree(wxTreeCtrl):
                 elif n.nodeType != minidom.Node.ELEMENT_NODE:
                     treeObj.element.removeChild(n)
                     n.unlink()
-
+                    
 
     # Remove leaf of tree, return it's data object
     def RemoveLeaf(self, leaf):
@@ -300,51 +450,12 @@ class XML_Tree(wxTreeCtrl):
         item = evt.GetItem()
         self.selection = item           # !!! fix
         xxx = self.GetPyData(item)
-        html = htmlHeader
-        # List of parameters tuples (parameter, isDefined)
-        if not xxx:                     # root item
-            html += 'this item has no properties' + htmlFooter
-            panel.SetPage(html)
-            if testWin and testWin.highLight:
-                testWin.highLight.Remove()
+        # Update panel
+        panel.SetData(xxx)
+        # Remove highlight?
+        if not xxx and testWin and testWin.highLight:
+            testWin.highLight.Remove()
             return
-        # Normal nodes
-        ClearRegister()                 # empty register
-        html += xxx.generateHtml()
-        html += htmlFooter
-        panel.SetPage(html)
-        # Set values, checkboxes to false, disable defaults
-        if xxx.hasChild: prefix = '_'
-        else: prefix = ''
-        for param in xxx.allParams:
-            if xxx.params.has_key(param):
-                if param == 'content':
-                    value = []
-                    for text in xxx.params[param]:
-                        value.append(str(text.data)) # convert from unicode
-                else:
-                    value = xxx.params[param].data
-                GetRegistered(prefix + param).SetValue(value)
-                if not param in xxx.required:
-                    panel.FindWindowByName('check_' + param).SetValue(true)
-            else:
-                GetRegistered(prefix + param).Enable(false)
-        # Same for the child of sizeritem
-        if xxx.hasChild:
-            xxx = xxx.child
-            for param in xxx.allParams:
-                if xxx.params.has_key(param):
-                    if param == 'content':
-                        value = []
-                        for text in xxx.params[param]:
-                            value.append(str(text.data)) # convert from unicode
-                    else:
-                        value = xxx.params[param].data
-                    GetRegistered(param).SetValue(value)
-                    if not param in xxx.required:
-                        panel.FindWindowByName('check_' + param).SetValue(true)
-                else:
-                    GetRegistered(param).Enable(false)
         # Clear flag
         panel.SetModified(false)
         # Hightlighting is done in OnIdle
@@ -390,7 +501,7 @@ class XML_Tree(wxTreeCtrl):
         except AttributeError:
             testWin.highLight = HightLightBox(pos, size)
         testWin.highLight.item = item
-
+                
     # Double-click
     def OnItemActivated(self, evt):
         item = evt.GetItem()
@@ -399,7 +510,7 @@ class XML_Tree(wxTreeCtrl):
         if panel.IsModified():
             self.Apply(xxx, item)       # apply changes
         self.CreateTestWin(item)
-
+        
     # (re)create test window
     def CreateTestWin(self, node):
         global testWin
@@ -494,7 +605,7 @@ class XML_Tree(wxTreeCtrl):
         testWin.highLight = None
         if highLight and not tree.pendingHighLight:
             self.HighLight(highLight)
-
+        
     def OnCloseTestWin(self, evt):
         global testWin, testWinPos
         testWinPos = testWin.GetPosition()
@@ -510,14 +621,15 @@ class XML_Tree(wxTreeCtrl):
         if xxx.hasChildren and not self.ItemHasChildren(item):
             return false
         return not (self.IsExpanded(item) and self.ItemHasChildren(item))
-
+        
     # Pull-down
     def OnRightDown(self, evt):
         # Setup menu
-        pullDownMenu.menu = wxMenu()
+        menu = wxMenu()
+        
         item = self.GetSelection()
-        if not item.IsOk():
-            pullDownMenu.menu.Append(pullDownMenu.ID_EXPAND, 'Expand', 'Expand tree')
+        if not item.IsOk(): 
+            menu.Append(pullDownMenu.ID_EXPAND, 'Expand', 'Expand tree')
         else:
             self.ctrl = evt.ControlDown() # save Ctrl state
             m = wxMenu()                # create menu
@@ -543,33 +655,31 @@ class XML_Tree(wxTreeCtrl):
                         m.Enable(pullDownMenu.ID_NEW_SPACER, false)
             # Select correct label for create menu
             if item == self.GetRootItem():
-                pullDownMenu.menu.AppendMenu(wxNewId(), 'Create', m, 'Create top-level object')
+                menu.AppendMenu(wxNewId(), 'Create', m, 'Create top-level object')
             else:
                 if not needInsert:
-                    pullDownMenu.menu.AppendMenu(wxNewId(), 'Create child', m,
-                                                 'Create child object')
+                    menu.AppendMenu(wxNewId(), 'Create child', m,
+                                            'Create child object')
                 else:
-                    pullDownMenu.menu.AppendMenu(wxNewId(), 'Create Sibling', m,
-                                                 'Create sibling of selected object')
-            pullDownMenu.menu.AppendSeparator()
-            pullDownMenu.menu.Append(wxID_CUT, 'Cut', 'Cut to the clipboard')
-            pullDownMenu.menu.Append(wxID_COPY, 'Copy', 'Copy to the clipboard')
-            pullDownMenu.menu.Append(wxID_PASTE, 'Paste', 'Paste from the clipboard')
-            pullDownMenu.menu.Append(pullDownMenu.ID_DELETE,
-                                     'Delete', 'Delete object')
+                    menu.AppendMenu(wxNewId(), 'Create Sibling', m,
+                                            'Create sibling of selected object')
+            menu.AppendSeparator()
+            menu.Append(wxID_CUT, 'Cut', 'Cut to the clipboard')
+            menu.Append(wxID_COPY, 'Copy', 'Copy to the clipboard')
+            menu.Append(wxID_PASTE, 'Paste', 'Paste from the clipboard')
+            menu.Append(pullDownMenu.ID_DELETE,
+                                'Delete', 'Delete object')
             if item.IsOk() and self.ItemHasChildren(item):
-                pullDownMenu.menu.AppendSeparator()
-                pullDownMenu.menu.Append(pullDownMenu.ID_EXPAND, 'Expand', 'Expand subtree')
-        self.PopupMenu(pullDownMenu.menu, evt.GetPosition())
-        pullDownMenu.menu.Destroy()
-        pullDownMenu.menu = None
-
+                menu.AppendSeparator()
+                menu.Append(pullDownMenu.ID_EXPAND, 'Expand', 'Expand subtree')
+        self.PopupMenu(menu, evt.GetPosition())
+        menu.Destroy()
 
     # Clear tree
     def Clear(self):
         self.DeleteAllItems()
         # Add minimal structure
-        root = self.AddRoot('XML tree')
+        root = self.AddRoot('XML tree', self.rootImage)
         self.Unselect()
         if self.dom: self.dom.unlink()
         self.dom = minidom.Document()
@@ -577,7 +687,7 @@ class XML_Tree(wxTreeCtrl):
         # Create main node
         self.mainNode = self.dom.createElement('resource')
         self.dom.appendChild(self.mainNode)
-
+        
     # Apply changes
     def Apply(self, xxx, item):
         if not xxx: return
@@ -585,7 +695,7 @@ class XML_Tree(wxTreeCtrl):
         if xxx.undo: xxx.undo.unlink()
         xxx.undo = xxx.element.cloneNode(false)
         if xxx.hasName:
-            name = GetRegistered('name').GetValue()
+            name = panel.page1.FindWindowByName('data_name').GetValue()
             if xxx.name != name:
                 xxx.name = name
                 xxx.element.setAttribute('name', name)
@@ -593,7 +703,7 @@ class XML_Tree(wxTreeCtrl):
         if xxx.hasChild: prefix = '_'
         else: prefix = ''
         for param, data in xxx.params.items():
-            value = GetRegistered(prefix + param).GetValue()
+            value = panel.FindWindowByName(prefix + 'data_' + param).GetValue()
             if param == 'content':
                 # If number if items is not the same, recreate children
                 if len(value) != len(data):
@@ -611,6 +721,8 @@ class XML_Tree(wxTreeCtrl):
                 else:
                     for i in range(len(value)):
                         data[i].data = value[i]
+            elif param == 'font':
+                data.updateXML(value)
             else:
                 data.data = value
         if xxx.hasChild:
@@ -622,10 +734,63 @@ class XML_Tree(wxTreeCtrl):
             # Set global modified state
             frame.modified = true
 
+class PullDownMenu:
+    ID_NEW_PANEL = wxNewId()
+    ID_NEW_DIALOG = wxNewId()
+    ID_NEW_FRAME = wxNewId()
+    ID_NEW_MENU_BAR = wxNewId()
+    ID_NEW_MENU = wxNewId()
+
+    ID_NEW_STATIC_TEXT = wxNewId()
+    ID_NEW_TEXT_CTRL = wxNewId()
+
+    ID_NEW_BUTTON = wxNewId()
+    ID_NEW_BITMAP_BUTTON = wxNewId()
+    ID_NEW_RADIO_BUTTON = wxNewId()
+    ID_NEW_SPIN_BUTTON = wxNewId()
+
+    ID_NEW_STATIC_BOX = wxNewId()
+    ID_NEW_CHECK_BOX = wxNewId()
+    ID_NEW_RADIO_BOX = wxNewId()
+    ID_NEW_COMBO_BOX = wxNewId()
+    ID_NEW_LIST_BOX = wxNewId()
+        
+    ID_NEW_STATIC_LINE = wxNewId()
+    ID_NEW_CHOICE = wxNewId()
+    ID_NEW_SLIDER = wxNewId()
+    ID_NEW_GAUGE = wxNewId()
+    ID_NEW_SCROLL_BAR = wxNewId()
+    ID_NEW_TREE_CTRL = wxNewId()
+    ID_NEW_LIST_CTRL = wxNewId()
+    ID_NEW_CHECK_LIST = wxNewId()
+    ID_NEW_NOTEBOOK = wxNewId()
+    ID_NEW_HTML_WINDOW = wxNewId()
+    ID_NEW_CALENDAR = wxNewId()
+        
+    ID_NEW_BOX_SIZER = wxNewId()
+    ID_NEW_STATIC_BOX_SIZER = wxNewId()
+    ID_NEW_GRID_SIZER = wxNewId()
+    ID_NEW_FLEX_GRID_SIZER = wxNewId()
+    ID_NEW_SPACER = wxNewId()
+    ID_NEW_MENU = wxNewId()
+    ID_NEW_MENU_ITEM = wxNewId()
+    ID_NEW_SEPARATOR = wxNewId()
+    ID_NEW_LAST = wxNewId()
+    ID_EXPAND = wxNewId()
+
+    def __init__(self, parent):
+        self.ID_DELETE = parent.ID_DELETE
+        EVT_MENU_RANGE(parent, self.ID_NEW_PANEL,
+                       self.ID_NEW_LAST, parent.OnCreate)
+        EVT_MENU(parent, self.ID_EXPAND, parent.OnExpand)
+        # We connect to tree, but process in frame
+        EVT_MENU_HIGHLIGHT_ALL(tree, parent.OnPullDownHighlight)
+
 class Frame(wxFrame):
     def __init__(self, size):
         wxFrame.__init__(self, None, -1, '', size=size)
         self.CreateStatusBar()
+        self.SetIcon(wxIconFromXPMData(images.getIconData()))
 
         # Make menus
         menuBar = wxMenuBar()
@@ -638,7 +803,7 @@ class Frame(wxFrame):
         menu.AppendSeparator()
         menu.Append(wxID_EXIT, '&Quit\tCtrl-Q', 'Exit application')
         menuBar.Append(menu, '&File')
-
+        
         menu = wxMenu()
         menu.Append(wxID_UNDO, '&Undo\tCtrl-Z', 'Undo')
         menu.Append(wxID_REDO, '&Redo\tCtrl-R', 'Redo')
@@ -649,7 +814,7 @@ class Frame(wxFrame):
         self.ID_DELETE = wxNewId()
         menu.Append(self.ID_DELETE, '&Delete\tCtrl-D', 'Delete object')
         menuBar.Append(menu, '&Edit')
-
+        
         menu = wxMenu()
         self.ID_REFRESH = wxNewId()
         menu.Append(self.ID_REFRESH, '&Refresh\tCtrl-R', 'Refresh view')
@@ -658,7 +823,7 @@ class Frame(wxFrame):
                     'Toggle auto-refresh mode', true)
         menu.Check(self.ID_AUTO_REFRESH, conf.autoRefresh)
         menuBar.Append(menu, '&View')
-
+        
         menu = wxMenu()
         menu.Append(wxID_ABOUT, 'About...', 'About XCRed')
         if debug:
@@ -671,8 +836,8 @@ class Frame(wxFrame):
         self.SetMenuBar(menuBar)
 
         # Create toolbar
-        tb = self.CreateToolBar()#wxTB_DOCKABLE | wxTB_FLAT)
-        tb.SetToolBitmapSize((24,23))
+        tb = self.CreateToolBar(wxTB_HORIZONTAL | wxNO_BORDER | wxTB_FLAT)
+        tb.SetToolBitmapSize((24, 23))
         tb.AddSimpleTool(wxID_NEW, images.getNewBitmap(), 'New', 'New file')
         tb.AddSimpleTool(wxID_OPEN, images.getOpenBitmap(), 'Open', 'Open file')
         tb.AddSimpleTool(wxID_SAVE, images.getSaveBitmap(), 'Save', 'Save file')
@@ -686,8 +851,8 @@ class Frame(wxFrame):
         tb.AddSimpleTool(self.ID_AUTO_REFRESH, images.getAutoRefreshBitmap(),
                          'Auto-refresh', 'Toggle auto-refresh mode', true)
         tb.ToggleTool(self.ID_AUTO_REFRESH, conf.autoRefresh)
-        self.tb = tb
         tb.Realize()
+        self.tb = tb
 
         # File
         EVT_MENU(self, wxID_NEW, self.OnNew)
@@ -715,85 +880,26 @@ class Frame(wxFrame):
         EVT_UPDATE_UI(self, self.ID_DELETE, self.OnUpdateUI)
 
         # Build interface
-        splitter = wxSplitterWindow(self, -1)
+        sizer = wxBoxSizer(wxVERTICAL)
+        sizer.Add(wxStaticLine(self, -1), 0, wxEXPAND)
+        splitter = wxSplitterWindow(self, -1, style=wxSP_3DSASH)
+        splitter.SetMinimumPaneSize(100)
         # Create tree
         global tree
         tree = XML_Tree(splitter, -1)
         sys.modules['xxx'].tree = tree
         # Create panel for parameters
         global panel
-        #panel = wxPanel(self, -1)
-        # Sizer for static box
-        #sizer = wxBoxSizer()
-        panel = Panel(splitter, -1)
-        sys.modules['params'].panel = panel
-        #sizer.Add(panel, 1, wxEXPAND)
-        #box = wxStaticBox(panel, -1, 'Parameters')
-        #boxSizer = wxStaticBoxSizer(box)
-        #boxSizer.Add(wxButton(panel, -1, 'BUTT ON'))
-        #sizer.Add(boxSizer, 1, wxEXPAND | wxALL, 10)
-        #panel.SetAutoLayout(true)
-        #panel.SetSizer(sizer)
+        panel = Panel(splitter)
         # Set plitter windows
         splitter.SplitVertically(tree, panel, 200)
-        #topSizer = wxBoxSizer()
-        #topSizer.Add(splitter, 1, wxEXPAND)
-        #self.SetAutoLayout(true)
-        #self.SetSizer(topSizer)
+        sizer.Add(splitter, 1, wxEXPAND)
+        self.SetAutoLayout(true)
+        self.SetSizer(sizer)
 
         # Init pull-down menu data
-        class MenuData: pass
         global pullDownMenu
-        pullDownMenu = MenuData()
-        pullDownMenu.menu = None
-        pullDownMenu.ID_NEW_PANEL = wxNewId()
-        pullDownMenu.ID_NEW_DIALOG = wxNewId()
-        pullDownMenu.ID_NEW_FRAME = wxNewId()
-        pullDownMenu.ID_NEW_MENU_BAR = wxNewId()
-        pullDownMenu.ID_NEW_MENU = wxNewId()
-
-        pullDownMenu.ID_NEW_STATIC_TEXT = wxNewId()
-        pullDownMenu.ID_NEW_TEXT_CTRL = wxNewId()
-
-        pullDownMenu.ID_NEW_BUTTON = wxNewId()
-        pullDownMenu.ID_NEW_BITMAP_BUTTON = wxNewId()
-        pullDownMenu.ID_NEW_RADIO_BUTTON = wxNewId()
-        pullDownMenu.ID_NEW_SPIN_BUTTON = wxNewId()
-
-        pullDownMenu.ID_NEW_STATIC_BOX = wxNewId()
-        pullDownMenu.ID_NEW_CHECK_BOX = wxNewId()
-        pullDownMenu.ID_NEW_RADIO_BOX = wxNewId()
-        pullDownMenu.ID_NEW_COMBO_BOX = wxNewId()
-        pullDownMenu.ID_NEW_LIST_BOX = wxNewId()
-
-        pullDownMenu.ID_NEW_STATIC_LINE = wxNewId()
-        pullDownMenu.ID_NEW_CHOICE = wxNewId()
-        pullDownMenu.ID_NEW_SLIDER = wxNewId()
-        pullDownMenu.ID_NEW_GAUGE = wxNewId()
-        pullDownMenu.ID_NEW_SCROLL_BAR = wxNewId()
-        pullDownMenu.ID_NEW_TREE_CTRL = wxNewId()
-        pullDownMenu.ID_NEW_LIST_CTRL = wxNewId()
-        pullDownMenu.ID_NEW_CHECK_LIST = wxNewId()
-        pullDownMenu.ID_NEW_NOTEBOOK = wxNewId()
-        pullDownMenu.ID_NEW_HTML_WINDOW = wxNewId()
-        pullDownMenu.ID_NEW_CALENDAR = wxNewId()
-
-        pullDownMenu.ID_NEW_BOX_SIZER = wxNewId()
-        pullDownMenu.ID_NEW_STATIC_BOX_SIZER = wxNewId()
-        pullDownMenu.ID_NEW_GRID_SIZER = wxNewId()
-        pullDownMenu.ID_NEW_FLEX_GRID_SIZER = wxNewId()
-        pullDownMenu.ID_NEW_SPACER = wxNewId()
-        pullDownMenu.ID_NEW_MENU = wxNewId()
-        pullDownMenu.ID_NEW_MENU_ITEM = wxNewId()
-        pullDownMenu.ID_NEW_SEPARATOR = wxNewId()
-        pullDownMenu.ID_NEW_LAST = wxNewId()
-        pullDownMenu.ID_DELETE = self.ID_DELETE
-        pullDownMenu.ID_EXPAND = wxNewId()
-        EVT_MENU_RANGE(self, pullDownMenu.ID_NEW_PANEL,
-                       pullDownMenu.ID_NEW_LAST, self.OnCreate)
-        EVT_MENU(self, pullDownMenu.ID_EXPAND, self.OnExpand)
-        # We connect to tree, but process in frame
-        EVT_MENU_HIGHLIGHT_ALL(tree, self.OnPullDownHighlight)
+        pullDownMenu = PullDownMenu(self)
         # Mapping from IDs to element names
         self.createMap = {
             pullDownMenu.ID_NEW_PANEL: 'wxPanel',
@@ -809,13 +915,13 @@ class Frame(wxFrame):
             pullDownMenu.ID_NEW_BITMAP_BUTTON: 'wxBitmapButton',
             pullDownMenu.ID_NEW_RADIO_BUTTON: 'wxRadioButton',
             pullDownMenu.ID_NEW_SPIN_BUTTON: 'wxSpinButton',
-
+            
             pullDownMenu.ID_NEW_STATIC_BOX: 'wxStaticBox',
             pullDownMenu.ID_NEW_CHECK_BOX: 'wxCheckBox',
             pullDownMenu.ID_NEW_RADIO_BOX: 'wxRadioBox',
             pullDownMenu.ID_NEW_COMBO_BOX: 'wxComboBox',
             pullDownMenu.ID_NEW_LIST_BOX: 'wxListBox',
-
+            
             pullDownMenu.ID_NEW_STATIC_LINE: 'wxStaticLine',
             pullDownMenu.ID_NEW_CHOICE: 'wxChoice',
             pullDownMenu.ID_NEW_SLIDER: 'wxSlider',
@@ -827,7 +933,7 @@ class Frame(wxFrame):
             pullDownMenu.ID_NEW_NOTEBOOK: 'wxNotebook',
             pullDownMenu.ID_NEW_HTML_WINDOW: 'wxHtmlWindow',
             pullDownMenu.ID_NEW_CALENDAR: 'wxCalendar',
-
+            
             pullDownMenu.ID_NEW_BOX_SIZER: 'wxBoxSizer',
             pullDownMenu.ID_NEW_STATIC_BOX_SIZER: 'wxStaticBoxSizer',
             pullDownMenu.ID_NEW_GRID_SIZER: 'wxGridSizer',
@@ -882,7 +988,7 @@ class Frame(wxFrame):
             (pullDownMenu.ID_NEW_MENU_ITEM, 'MenuItem', 'Create menu item'),
             (pullDownMenu.ID_NEW_SEPARATOR, 'Separator', 'Create separator'),
             ]
-
+        
         # Initialize
         self.Clear()
 
@@ -905,7 +1011,7 @@ class Frame(wxFrame):
             self.Open(path)
             wxEndBusyCursor()
             self.SetStatusText('Ready')
-        dlg.Destroy()
+        dlg.Destroy()            
 
     def OnSaveOrSaveAs(self, evt):
         if evt.GetId() == wxID_SAVEAS or not self.dataFile:
@@ -914,9 +1020,12 @@ class Frame(wxFrame):
             dlg = wxFileDialog(self, 'Save As', os.path.dirname(self.dataFile),
                                defaultName, '*.xrc',
                                wxSAVE | wxOVERWRITE_PROMPT | wxCHANGE_DIR)
-            if dlg.ShowModal() == wxID_CANCEL: return
-            path = dlg.GetPath()
-            dlg.Destroy()
+            if dlg.ShowModal() == wxID_OK:
+                path = dlg.GetPath()
+                dlg.Destroy()
+            else:
+                dlg.Destroy()
+                return
         else:
             path = self.dataFile
         self.SetStatusText('Saving...')
@@ -939,10 +1048,10 @@ class Frame(wxFrame):
                 xxx = MakeXXXFromDOM(tree.GetPyData(parent).treeObject(), elem)
                 item = tree.InsertItem( parent, prev, xxx.treeObject().className,
                                         data=wxTreeItemData(xxx) )
-
+        
     def OnRedo(self, evt):
         print '*** being implemented'
-
+        
     def OnCut(self, evt):
         selected = tree.GetSelection()
         # Undo info
@@ -985,7 +1094,7 @@ class Frame(wxFrame):
                 appendChild = true
                 selected = tree.GetItemParent(selected)
         # Expanded container (must have children)
-        elif tree.IsExpanded(selected) and tree.ItemHasChildren(selected):
+        elif tree.IsExpanded(selected) and tree.ItemHasChildren(selected): 
             appendChild = false
             nextItem = tree.GetFirstChild(selected, 0)[0]
             parentLeaf = selected
@@ -1111,11 +1220,9 @@ class Frame(wxFrame):
         self.tb.ToggleTool(self.ID_AUTO_REFRESH, conf.autoRefresh)
 
     def OnAbout(self, evt):
-        dlg = wxMessageDialog(self, '%s %s\n\nRoman Rolinsky <rolinsky@mema.ucl.ac.be>' % \
+        wxMessageDialog(self, '%s %s\n\nRoman Rolinsky <rolinsky@mema.ucl.ac.be>' % \
                         (progname, version),
-                        'About %s' % progname, wxOK | wxCENTRE)
-        dlg.ShowModal()
-        dlg.Destroy()
+                        'About %s' % progname, wxOK | wxCENTRE).ShowModal()
 
     # Simple emulation of python command line
     def OnDebugCMD(self, evt):
@@ -1146,7 +1253,7 @@ class Frame(wxFrame):
                 appendChild = true
                 selected = tree.GetItemParent(selected)
         # Expanded container (must have children)
-        elif tree.IsExpanded(selected) and tree.ItemHasChildren(selected):
+        elif tree.IsExpanded(selected) and tree.ItemHasChildren(selected): 
             appendChild = false
             nextItem = tree.GetFirstChild(selected, 0)[0]
             parentLeaf = selected
@@ -1203,9 +1310,12 @@ class Frame(wxFrame):
 
     def OnPullDownHighlight(self, evt):
         menuId = evt.GetMenuId()
-        help = ''
-        if menuId != -1: help = pullDownMenu.GetHelpString(menuId)
-        self.SetStatusText(help)
+        if menuId != -1:
+            menu = evt.GetEventObject()
+            help = menu.GetHelpString(menuId)
+            self.SetStatusText(help)
+        else:
+            self.SetStatusText('')
 
     def OnUpdateUI(self, evt):
         if evt.GetId() in [wxID_CUT, wxID_COPY, self.ID_DELETE]:
@@ -1258,9 +1368,11 @@ class Frame(wxFrame):
             self.SetTitle(progname + ': ' + os.path.basename(path))
         except:
             wxLogError('Error reading file: ' + path)
+            raise
 
     def Save(self, path):
         try:
+            self.OnRefresh(wxCommandEvent())
             memFile = MemoryFile(path)
             tree.dom.writexml(memFile)
             memFile.close()
@@ -1268,14 +1380,13 @@ class Frame(wxFrame):
             panel.SetModified(false)
         except:
             wxLogError('Error writing file: ' + path)
+            raise
 
     def AskSave(self):
         if not (self.modified or panel.IsModified()): return true
         flags = wxICON_EXCLAMATION | wxYES_NO | wxCANCEL | wxCENTRE
-        dlg = wxMessageDialog( self, 'File is modified. Save before exit?',
-                               'Save before too late?', flags )
-        say = dlg.ShowModal()
-        dlg.Destroy()
+        say = wxMessageDialog( self, 'File is modified. Save before exit?',
+                               'Save before too late?', flags ).ShowModal()
         if say == wxID_YES:
             self.OnSaveOrSaveAs(wxCommandEvent(wxID_SAVE))
             # If save was successful, modified flag is unset
@@ -1285,6 +1396,8 @@ class Frame(wxFrame):
             panel.SetModified(false)
             return true
         return false
+
+################################################################################
 
 class App(wxApp):
     def OnInit(self):

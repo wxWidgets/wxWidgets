@@ -26,3 +26,8 @@ TODO for XRCed
 
 * import XRC/WXR files
 
+* disable some window creation when it's not valid
+
+* check for memory leaks from wx objects
+
+* style defaults for `hidde' and `focused' should be false
