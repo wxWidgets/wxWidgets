@@ -270,13 +270,13 @@ WXDLLEXPORT bool wxRmdir(const wxString& dir, int flags = 0);
 #define wxPATH_SEP_MAC        wxT(";")
 
 // platform independent versions
-#if defined(__UNIX__) && !defined(__GNUWIN32__)
+#if defined(__UNIX__) && !defined(__CYGWIN__)
   #define wxFILE_SEP_PATH     wxFILE_SEP_PATH_UNIX
   #define wxPATH_SEP          wxPATH_SEP_UNIX
 #elif defined(__MAC__)
   #define wxFILE_SEP_PATH     wxFILE_SEP_PATH_MAC
   #define wxPATH_SEP          wxPATH_SEP_MAC
-#elif defined(__GNUWIN32__) // Cygwin
+#elif defined(__CYGWIN__) // Cygwin
   #define wxFILE_SEP_PATH     wxFILE_SEP_PATH_DOS
   #define wxPATH_SEP          wxPATH_SEP_UNIX
 #else   // Windows and OS/2

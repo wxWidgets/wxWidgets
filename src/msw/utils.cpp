@@ -61,7 +61,7 @@ extern "C" {
     #endif
 #endif  //GNUWIN32
 
-#if defined(__GNUWIN32__) && !defined(__TWIN32__)
+#if defined(__CYGWIN__) && !defined(__TWIN32__)
     #include <sys/unistd.h>
     #include <sys/stat.h>
     #include <sys/cygwin.h> // for cygwin_conv_to_full_win32_path()
@@ -374,7 +374,7 @@ const wxChar* wxGetHomeDir(wxString *pstr)
     if ( strDir.Last() != wxT('/') )
       strDir << wxT('/');
 
-    #ifdef __GNUWIN32__
+    #ifdef __CYGWIN__
       // Cygwin returns unix type path but that does not work well
       static wxChar windowsPath[MAX_PATH];
       cygwin_conv_to_full_win32_path(strDir, windowsPath);

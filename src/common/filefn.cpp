@@ -119,7 +119,9 @@
     //
     // note that it must be included after <windows.h>
     #ifdef __GNUWIN32__
-        #include <sys/cygwin.h>
+        #ifdef __CYGWIN__
+            #include <sys/cygwin.h>
+        #endif
         #include <wchar.h>
         #ifndef __TWIN32__
             #include <sys/unistd.h>
@@ -1461,11 +1463,11 @@ wxChar *wxGetWorkingDirectory(wxChar *buf, int sz)
         }
 #endif // __DJGPP__
 
-#ifdef __GNUWIN32__
+#ifdef __CYGWIN__
         // another example of DOS/Unix mix (Cygwin)
         wxString pathUnix = buf;
         cygwin_conv_to_full_win32_path(pathUnix, buf);
-#endif // __GNUWIN32__
+#endif // __CYGWIN__
 
         // finally convert the result to Unicode if needed
 #if wxUSE_UNICODE && !defined(HAVE_WGETCWD)
