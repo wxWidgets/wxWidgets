@@ -440,6 +440,9 @@ size_t wxDIB::ConvertFromBitmap(BITMAPINFO *pbi, HBITMAP hbmp)
 }
 
 /* static */
+#ifdef __DIGITALMARS__
+extern "C"
+#endif
 HGLOBAL wxDIB::ConvertFromBitmap(HBITMAP hbmp)
 {
     // first calculate the size needed

@@ -174,6 +174,11 @@ bool wxIsClipboardFormatAvailable(wxDataFormat dataFormat)
     }
 }
 
+#ifdef __DIGITALMARS__
+extern "C" HGLOBAL wxDIB::ConvertFromBitmap(HBITMAP hbmp);
+#endif
+
+
 bool wxSetClipboardData(wxDataFormat dataFormat,
                         const void *data,
                         int width, int height)
