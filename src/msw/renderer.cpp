@@ -62,13 +62,15 @@ public:
 
     virtual void DrawSplitterBorder(wxWindow *win,
                                     wxDC& dc,
-                                    const wxRect& rect);
+                                    const wxRect& rect,
+                                    int flags = 0);
     virtual void DrawSplitterSash(wxWindow *win,
                                   wxDC& dc,
                                   const wxSize& size,
                                   wxCoord position,
-                                  wxOrientation orient);
-    virtual wxPoint GetSplitterSashAndBorder(const wxWindow *win);
+                                  wxOrientation orient,
+                                  int flags = 0);
+    virtual wxSplitterRenderParams GetSplitterParams(const wxWindow *win);
 
 private:
     DECLARE_NO_COPY_CLASS(wxRendererXP)
@@ -113,15 +115,17 @@ wxRendererNative& wxRendererXP::Get()
 // the width of the sash: this is the same as used by Explorer...
 static const wxCoord SASH_WIDTH = 4;
 
-wxPoint wxRendererXP::GetSplitterSashAndBorder(const wxWindow * WXUNUSED(win))
+wxSplitterRenderParams
+wxRendererXP::GetSplitterParams(const wxWindow * WXUNUSED(win))
 {
-    return wxPoint(SASH_WIDTH, 0);
+    return wxSplitterRenderParams(SASH_WIDTH, 0, false);
 }
 
 void
 wxRendererXP::DrawSplitterBorder(wxWindow * WXUNUSED(win),
                                  wxDC& WXUNUSED(dc),
-                                 const wxRect& WXUNUSED(rect))
+                                 const wxRect& WXUNUSED(rect),
+                                 int WXUNUSED(flags))
 {
 }
 
@@ -130,7 +134,8 @@ wxRendererXP::DrawSplitterSash(wxWindow *win,
                                wxDC& dc,
                                const wxSize& size,
                                wxCoord position,
-                               wxOrientation orient)
+                               wxOrientation orient,
+                               int WXUNUSED(flags))
 {
     // I don't know if it is correct to use the rebar background for the
     // splitter but it least this works ok in the default theme
