@@ -4,9 +4,9 @@
 // Author:      David Elliott
 // Modified by:
 // Created:     2002/12/15
-// RCS-ID:      $Id: 
-// Copyright:   2002 David Elliott
-// Licence:     wxWidgets licence
+// RCS-ID:      $Id$
+// Copyright:   2002-2004 David Elliott
+// Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
 // ============================================================================
@@ -81,20 +81,6 @@
 }
 
 @end //implementation wxNSMenuItemTarget
-
-// ============================================================================
-// @class wxPoserNSMenuItem
-// ============================================================================
-@interface wxPoserNSMenuItem : NSMenuItem
-{
-}
-
-@end // wxPoserNSMenuItem
-
-WX_IMPLEMENT_POSER(wxPoserNSMenuItem);
-@implementation wxPoserNSMenuItem : NSMenuItem
-
-@end // wxPoseRNSMenuItem
 
 // ============================================================================
 // wxMenuItemCocoa implementation
