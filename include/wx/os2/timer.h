@@ -19,7 +19,14 @@ class WXDLLEXPORT wxTimer: public wxTimerBase
 friend void wxProcessTimer(wxTimer& timer);
 
 public:
-    wxTimer();
+    wxTimer() { Init(); }
+    wxTimer( wxEvtHandler* pOwner
+            ,int           nId = -1
+           )
+           : wxTimerBase( pOwner
+                         ,nId
+                        )
+        { Init(); }
     ~wxTimer();
 
     virtual bool Start( int  nMilliseconds = -1
@@ -30,6 +37,8 @@ public:
     inline virtual bool IsRunning(void) const { return m_ulId != 0L; }
 
 protected:
+    void Init(void);
+
     ULONG                            m_ulId;
     HAB                              m_Hab;
 
@@ -37,5 +46,10 @@ private:
     DECLARE_ABSTRACT_CLASS(wxTimer)
 };
 
+extern ULONG wxTimerProc( HWND  WXUNUSED(hwnd)
+                         ,ULONG
+                         ,int   nIdTimer
+                         ,ULONG
+                        );
 #endif
     // _WX_TIMER_H_
