@@ -371,7 +371,7 @@ bool wxBitmap::CopyFromIcon(const wxIcon& icon)
     M_BITMAPDATA->m_cocoaNSBitmapImageRep = newBitmapRep;
     M_BITMAPDATA->m_width = [newBitmapRep pixelsWide];
     M_BITMAPDATA->m_height = [newBitmapRep pixelsHigh];
-    M_BITMAPDATA->m_depth = [newBitmapRep bitsPerSample];
+    M_BITMAPDATA->m_depth = [newBitmapRep bitsPerSample]*[newBitmapRep samplesPerPixel];
     M_BITMAPDATA->m_ok = true;
     M_BITMAPDATA->m_numColors = 0;
     M_BITMAPDATA->m_quality = 0;
