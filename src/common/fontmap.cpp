@@ -882,7 +882,7 @@ bool wxFontMapper::GetAltForEncoding(wxFontEncoding encoding,
             wxFontData data;
             data.SetEncoding(encoding);
             data.EncodingInfo() = *info;
-            wxFontDialog dialog(m_windowParent, &data);
+            wxFontDialog dialog(m_windowParent, data);
             if ( dialog.ShowModal() == wxID_OK )
             {
                 wxFontData retData = dialog.GetFontData();

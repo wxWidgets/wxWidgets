@@ -59,10 +59,10 @@ class WXDLLEXPORT wxGenericFontDialog: public wxDialog
  public:
  
   wxGenericFontDialog(void);
-  wxGenericFontDialog(wxWindow *parent, wxFontData *data = (wxFontData *) NULL);
+  wxGenericFontDialog(wxWindow *parent, const wxFontData& data);
   ~wxGenericFontDialog(void);
 
-  bool Create(wxWindow *parent, wxFontData *data = (wxFontData *) NULL);
+  bool Create(wxWindow *parent, const wxFontData& data);
 
   int ShowModal(void);
 

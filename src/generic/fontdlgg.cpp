@@ -170,7 +170,7 @@ wxGenericFontDialog::wxGenericFontDialog(void)
   dialogParent = NULL;
 }
 
-wxGenericFontDialog::wxGenericFontDialog(wxWindow *parent, wxFontData *data):
+wxGenericFontDialog::wxGenericFontDialog(wxWindow *parent, const wxFontData& data):
   wxDialog(parent, -1, _("Font"), wxDefaultPosition, wxDefaultSize,
            wxDEFAULT_DIALOG_STYLE|wxDIALOG_MODAL|wxRESIZE_BORDER)
 {
@@ -188,12 +188,11 @@ void wxGenericFontDialog::OnCloseWindow(wxCloseEvent& WXUNUSED(event))
   EndModal(wxID_CANCEL);
 }
 
-bool wxGenericFontDialog::Create(wxWindow *parent, wxFontData *data)
+bool wxGenericFontDialog::Create(wxWindow *parent, const wxFontData& data)
 {
   dialogParent = parent;
 
-  if (data)
-    fontData = *data;
+  fontData = data;
 
   InitializeFont();
   CreateWidgets();

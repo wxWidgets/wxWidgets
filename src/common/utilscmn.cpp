@@ -1002,7 +1002,7 @@ wxFont wxGetFontFromUser(wxWindow *parent, const wxFont& fontInit)
     }
 
     wxFont fontRet;
-    wxFontDialog dialog(parent, &data);
+    wxFontDialog dialog(parent, data);
     if ( dialog.ShowModal() == wxID_OK )
     {
         fontRet = dialog.GetFontData().GetChosenFont();

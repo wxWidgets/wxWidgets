@@ -30,17 +30,16 @@ wxFontDialog::wxFontDialog()
     m_dialogParent = NULL;
 }
 
-wxFontDialog::wxFontDialog(wxWindow *parent, wxFontData *data)
+wxFontDialog::wxFontDialog(wxWindow *parent, const wxFontData&  data)
 {
     Create(parent, data);
 }
 
-bool wxFontDialog::Create(wxWindow *parent, wxFontData *data)
+bool wxFontDialog::Create(wxWindow *parent, const wxFontData& data)
 {
     m_dialogParent = parent;
 
-    if (data)
-        m_fontData = *data;
+    m_fontData = data;
 
     // TODO: you may need to do dialog creation here, unless it's
     // done in ShowModal.

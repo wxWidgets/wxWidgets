@@ -29,9 +29,9 @@ class WXDLLEXPORT wxFontDialog: public wxDialog
 DECLARE_DYNAMIC_CLASS(wxFontDialog)
 public:
     wxFontDialog();
-    wxFontDialog(wxWindow *parent, wxFontData *data = NULL);
+    wxFontDialog(wxWindow *parent, const wxFontData& data);
 
-    bool Create(wxWindow *parent, wxFontData *data = NULL);
+    bool Create(wxWindow *parent, const wxFontData& data);
 
     int ShowModal();
     wxFontData& GetFontData() { return m_fontData; }
