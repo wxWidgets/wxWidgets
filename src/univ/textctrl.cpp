@@ -1585,6 +1585,11 @@ bool wxTextCtrl::IsEditable() const
     return m_isEditable && IsEnabled();
 }
 
+void wxTextCtrl::MarkDirty()
+{
+    m_isModified = TRUE;
+}
+
 void wxTextCtrl::DiscardEdits()
 {
     m_isModified = FALSE;

@@ -1261,7 +1261,11 @@ bool wxTextCtrl::IsModified() const
     return SendMessage(GetHwnd(), EM_GETMODIFY, 0, 0) != 0;
 }
 
-// Makes 'unmodified'
+void wxTextCtrl::MarkDirty()
+{
+    SendMessage(GetHwnd(), EM_SETMODIFY, TRUE, 0L);
+}
+
 void wxTextCtrl::DiscardEdits()
 {
     SendMessage(GetHwnd(), EM_SETMODIFY, FALSE, 0L);

@@ -76,6 +76,7 @@ public:
     virtual void Remove(long from, long to);
 
     // clears the dirty flag
+    virtual void MarkDirty();
     virtual void DiscardEdits();
 
     // writing text inserts it at the current position, appending always

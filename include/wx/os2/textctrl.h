@@ -74,6 +74,7 @@ public:
 
     virtual bool LoadFile(const wxString& rsFile);
 
+    virtual void MarkDirty();
     virtual void DiscardEdits(void);
 
     virtual void WriteText(const wxString& rsText);

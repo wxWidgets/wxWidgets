@@ -86,6 +86,7 @@ public:
     
     virtual void WriteText(const wxString& text);
     virtual void AppendText(const wxString& text);
+    virtual void MarkDirty();
     virtual void DiscardEdits();
     virtual bool IsModified() const;
     

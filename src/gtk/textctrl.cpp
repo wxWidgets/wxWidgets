@@ -905,6 +905,11 @@ void wxTextCtrl::OnParentEnable( bool enable )
     }
 }
 
+void wxTextCtrl::MarkDirty()
+{
+    m_modified = TRUE;
+}
+
 void wxTextCtrl::DiscardEdits()
 {
     m_modified = FALSE;

@@ -72,6 +72,10 @@ void wxTextCtrl::SetEditable(bool)
 {
 }
 
+void wxTextCtrl::MarkDirty()
+{
+}
+
 void wxTextCtrl::DiscardEdits()
 {
 }

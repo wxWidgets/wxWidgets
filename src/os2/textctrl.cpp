@@ -710,6 +710,11 @@ bool wxTextCtrl::IsModified() const
     return bRc;
 } // end of wxTextCtrl::IsModified
 
+void wxTextCtrl::MarkDirty()
+{
+    wxFAIL_MSG( _T("not implemented") );
+}
+
 //
 // Makes 'unmodified'
 //

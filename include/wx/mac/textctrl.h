@@ -76,7 +76,8 @@ public:
   // load the controls contents from the file
   virtual bool LoadFile(const wxString& file);
 
-  // clears the dirty flag
+  // sets/clears the dirty flag
+  virtual void MarkDirty();
   virtual void DiscardEdits();
 
   // set the max number of characters which may be entered in a single line

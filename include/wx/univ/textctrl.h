@@ -152,7 +152,8 @@ public:
     virtual void Replace(wxTextPos from, wxTextPos to, const wxString& value);
     virtual void Remove(wxTextPos from, wxTextPos to);
 
-    // clears the dirty flag
+    // sets/clears the dirty flag
+    virtual void MarkDirty();
     virtual void DiscardEdits();
 
     // writing text inserts it at the current position, appending always

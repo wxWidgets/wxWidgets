@@ -74,6 +74,7 @@ public:
     virtual bool LoadFile(const wxString& file);
 
     // clears the dirty flag
+    virtual void MarkDirty();
     virtual void DiscardEdits();
 
     virtual void SetMaxLength(unsigned long len);

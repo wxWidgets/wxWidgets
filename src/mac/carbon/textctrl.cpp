@@ -1433,7 +1433,12 @@ bool wxTextCtrl::CanRedo() const
     return FALSE ;
 }
 
-// Makes 'unmodified'
+// Makes modifie or unmodified
+void wxTextCtrl::MarkDirty()
+{
+    m_dirty = true;
+}
+
 void wxTextCtrl::DiscardEdits()
 {
     m_dirty = false;

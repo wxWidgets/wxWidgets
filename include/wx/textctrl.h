@@ -262,7 +262,8 @@ public:
     virtual bool LoadFile(const wxString& file);
     virtual bool SaveFile(const wxString& file = wxEmptyString);
 
-    // clears the dirty flag
+    // sets/clears the dirty flag
+    virtual void MarkDirty() = 0;
     virtual void DiscardEdits() = 0;
 
     // set the max number of characters which may be entered in a single line
