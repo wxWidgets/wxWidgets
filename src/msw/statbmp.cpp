@@ -262,19 +262,4 @@ void wxStaticBitmap::SetImageNoCopy( wxGDIImage* image)
     ::InvalidateRect(GetHwndOf(GetParent()), &rect, TRUE);
 }
 
-// We need this or the control can never be moved e.g. in Dialog Editor.
-WXLRESULT wxStaticBitmap::MSWWindowProc(WXUINT nMsg,
-                                   WXWPARAM wParam,
-                                   WXLPARAM lParam)
-{
-#ifndef __WXWINCE__
-    // Ensure that static items get messages. Some controls don't like this
-    // message to be intercepted (e.g. RichEdit), hence the tests.
-    if ( nMsg == WM_NCHITTEST )
-        return (long)HTCLIENT;
-#endif
-
-    return wxWindow::MSWWindowProc(nMsg, wParam, lParam);
-}
-
 #endif // wxUSE_STATBMP
