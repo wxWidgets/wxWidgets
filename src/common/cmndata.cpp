@@ -51,6 +51,7 @@
 
 #ifdef __WXMSW__
     #include <windows.h>
+    #include <wx/msw/private.h>
 
     #if !defined(__WIN32__)
         #include <print.h>
@@ -211,6 +212,41 @@ wxPrintData::~wxPrintData()
 
 #ifdef __WXMSW__
 
+static wxString wxGetPrintDlgError()
+{
+    DWORD err = CommDlgExtendedError();
+    wxString msg = "Unknown";
+    switch (err)
+    {
+        case CDERR_FINDRESFAILURE: msg = "CDERR_FINDRESFAILURE"; break;
+        case CDERR_INITIALIZATION: msg = "CDERR_INITIALIZATION"; break;
+        case CDERR_LOADRESFAILURE: msg = "CDERR_LOADRESFAILURE"; break;
+        case CDERR_LOADSTRFAILURE: msg = "CDERR_LOADSTRFAILURE"; break;
+        case CDERR_LOCKRESFAILURE: msg = "CDERR_LOCKRESFAILURE"; break;
+        case CDERR_MEMALLOCFAILURE: msg = "CDERR_MEMALLOCFAILURE"; break;
+        case CDERR_MEMLOCKFAILURE: msg = "CDERR_MEMLOCKFAILURE"; break;
+        case CDERR_NOHINSTANCE: msg = "CDERR_NOHINSTANCE"; break;
+        case CDERR_NOHOOK: msg = "CDERR_NOHOOK"; break;
+        case CDERR_NOTEMPLATE: msg = "CDERR_NOTEMPLATE"; break;
+        case CDERR_STRUCTSIZE: msg = "CDERR_STRUCTSIZE"; break;
+        case  PDERR_RETDEFFAILURE: msg = "PDERR_RETDEFFAILURE"; break;
+        case  PDERR_PRINTERNOTFOUND: msg = "PDERR_PRINTERNOTFOUND"; break;
+        case  PDERR_PARSEFAILURE: msg = "PDERR_PARSEFAILURE"; break;
+        case  PDERR_NODEVICES: msg = "PDERR_NODEVICES"; break;
+        case  PDERR_NODEFAULTPRN: msg = "PDERR_NODEFAULTPRN"; break;
+        case  PDERR_LOADDRVFAILURE: msg = "PDERR_LOADDRVFAILURE"; break;
+        case  PDERR_INITFAILURE: msg = "PDERR_INITFAILURE"; break;
+        case  PDERR_GETDEVMODEFAIL: msg = "PDERR_GETDEVMODEFAIL"; break;
+        case  PDERR_DNDMMISMATCH: msg = "PDERR_DNDMMISMATCH"; break;
+        case  PDERR_DEFAULTDIFFERENT: msg = "PDERR_DEFAULTDIFFERENT"; break;
+        case  PDERR_CREATEICFAILURE: msg = "PDERR_CREATEICFAILURE"; break;
+        default: break;
+    }
+    return msg;
+}
+ 
+
+
 void wxPrintData::ConvertToNative()
 {
     HGLOBAL hDevMode = (HGLOBAL) m_devMode;
@@ -221,16 +257,17 @@ void wxPrintData::ConvertToNative()
 
         // GNU-WIN32 has the wrong size PRINTDLG - can't work out why.
 #ifdef __GNUWIN32__
+        memset(pd, 0, 66);
         pd->lStructSize    = 66 ;
-        memset(pd, 0, sizeof(PRINTDLG));
 #else
-        pd->lStructSize    = sizeof(PRINTDLG);
         memset(pd, 0, sizeof(PRINTDLG));
+        pd->lStructSize    = sizeof(PRINTDLG);
 #endif
 
         pd->hwndOwner      = (HWND)NULL;
         pd->hDevMode       = NULL; // Will be created by PrintDlg
         pd->hDevNames      = NULL; // Ditto
+        pd->hInstance      = (HINSTANCE) wxGetInstance();
 
         pd->Flags          = PD_RETURNDEFAULT;
         pd->nCopies        = 1;
@@ -245,6 +282,11 @@ void wxPrintData::ConvertToNative()
                 GlobalFree(pd->hDevNames);
             pd->hDevMode = NULL;
             pd->hDevNames = NULL;
+#ifdef __WXDEBUG__
+            wxString str("Printing error: ");
+            str += wxGetPrintDlgError();
+            wxLogDebug(str);
+#endif
         }
         else
         {
