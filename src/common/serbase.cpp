@@ -30,8 +30,9 @@
 // wxObject_Serialize
 // ----------------------------------------------------------------------------
 
-#if !USE_SHARED_LIBRARY
 IMPLEMENT_DYNAMIC_CLASS(wxObject_Serialize,wxObject)
+
+#if !USE_SHARED_LIBRARY
 IMPLEMENT_SERIAL_CLASS(wxList, wxObject)
 IMPLEMENT_SERIAL_CLASS(wxHashTable, wxObject)
 #endif
