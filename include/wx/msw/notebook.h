@@ -22,6 +22,16 @@
   #include <wx/dynarray.h>
 #endif  //_DYNARRAY_H
 
+// This is a work-around for missing defines in gcc-2.95 headers
+#ifndef TCS_RIGHT
+#define TCS_RIGHT       0x0002
+#endif
+#ifndef TCS_VERTICAL
+#define TCS_VERTICAL    0x0080
+#endif
+#ifndef TCS_BOTTOM
+#define TCS_BOTTOM      TCS_RIGHT
+#endif
 // ----------------------------------------------------------------------------
 // types
 // ----------------------------------------------------------------------------
