@@ -29,7 +29,7 @@ Motif/LessTif, MS Windows, Mac) from the same source code.
 ./configure --prefix=%{pref}
 
 %build
-cd src && make
+make
 
 %install
 rm -rf $RPM_BUILD_ROOT

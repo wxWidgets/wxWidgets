@@ -284,12 +284,13 @@ MSWDIR   = $(WXDIR)/src/msw
 INCDIR   = $(WXDIR)/include
 SAMPDIR  = $(WXDIR)/samples
 UTILSDIR = $(WXDIR)/utils
+MISCDIR  = $(WXDIR)/misc
 
 DOCDIR = $(WXDIR)/docs
 
 ########################## Archive name ###############################
 
-WXARCHIVE = wx$(TOOLKIT)-$(WX_MAJOR_VERSION_NUMBER).$(WX_MINOR_VERSION_NUMBER).$(WX_RELEASE_NUMBER).tgz
+WXARCHIVE = wx$(TOOLKIT)-$(WX_MAJOR_VERSION_NUMBER).$(WX_MINOR_VERSION_NUMBER).$(WX_RELEASE_NUMBER)-b9.tgz
 DISTDIR = ./_dist_dir/wx$(TOOLKIT)
 
 ############################## Files ##################################
@@ -543,6 +544,7 @@ preinstall: $(top_builddir)/lib/@WX_TARGET_LIBRARY@ $(top_builddir)/wx-config $(
 	$(INSTALL) -d $(prefix)
 	$(INSTALL) -d $(bindir)
 	$(INSTALL) -d $(libdir)
+	$(INSTALL) -d $(datadir)
 
 	$(INSTALL_SCRIPT) $(top_builddir)/wx-config $(bindir)/wx-config
 	$(INSTALL_PROGRAM) $(top_builddir)/lib/@WX_TARGET_LIBRARY@ $(libdir)/@WX_TARGET_LIBRARY@
@@ -552,6 +554,12 @@ preinstall: $(top_builddir)/lib/@WX_TARGET_LIBRARY@ $(top_builddir)/wx-config $(
 	$(INSTALL) -d $(libdir)/wx/include/wx
 	$(INSTALL) -d $(libdir)/wx/include/wx/@TOOLKIT_DIR@
 	$(INSTALL_DATA) $(top_builddir)/setup.h $(libdir)/wx/include/wx/@TOOLKIT_DIR@/setup.h
+	
+	$(INSTALL) -d $(datadir)/wx
+	$(INSTALL) -d $(datadir)/wx/afm
+	$(INSTALL) -d $(datadir)/wx/gs_afm
+	$(INSTALL_DATA) $(top_srcdir)/misc/afm/*.afm $(datadir)/wx/afm
+	$(INSTALL_DATA) $(top_srcdir)/misc/gs_afm/*.afm $(datadir)/wx/gs_afm
 	
 	$(INSTALL) -d $(includedir)/wx
 	$(INSTALL) -d $(includedir)/wx/msw
@@ -592,6 +600,11 @@ uninstall:
 	@echo " Removing helper files..."
 	@$(RM) $(libdir)/wx/include/wx/@TOOLKIT_DIR@/setup.h
 	@$(RM) $(bindir)/wx-config
+	@$(RM) $(datadir)/wx/afm/*
+	@$(RM) $(datadir)/wx/gs_afm/*
+	@rmdir $(datadir)/wx/gs_afm
+	@rmdir $(datadir)/wx/afm
+	@rmdir $(datadir)/wx
 	@echo " Removing headers..."
 	@list='$(HEADERS)'; for p in $$list; do \
 	  $(RM) $(includedir)/wx/$$p; \
@@ -603,7 +616,7 @@ uninstall:
 	@if test -d $(libdir)/wx; then rmdir $(libdir)/wx; fi
 	@if test -d $(includedir)/wx/gtk; then rmdir $(includedir)/wx/gtk; fi
 	@if test -d $(includedir)/wx/motif; then rmdir $(includedir)/wx/motif; fi
-	@if test -d $(includedir)/wx/motif; then rmdir $(includedir)/wx/msw; fi
+	@if test -d $(includedir)/wx/msw; then rmdir $(includedir)/wx/msw; fi
 	@if test -d $(includedir)/wx/html; then rmdir $(includedir)/wx/html; fi
 	@if test -d $(includedir)/wx/unix; then rmdir $(includedir)/wx/unix; fi
 	@if test -d $(includedir)/wx/generic; then rmdir $(includedir)/wx/generic; fi
@@ -922,7 +935,14 @@ UTILS_DIST:
 	cp $(UTILSDIR)/glcanvas/$(TOOLKITDIR)/*.h $(DISTDIR)/utils/glcanvas/$(TOOLKITDIR)
 	cp $(UTILSDIR)/glcanvas/$(TOOLKITDIR)/*.cpp $(DISTDIR)/utils/glcanvas/$(TOOLKITDIR)
 	
-dist: ALL_DIST @GUIDIST@ SAMPLES_DIST UTILS_DIST
+MISC_DIST:
+	mkdir $(DISTDIR)/misc
+	mkdir $(DISTDIR)/misc/afm
+	cp $(MISCDIR)/afm/*.afm  $(DISTDIR)/misc/afm
+	mkdir $(DISTDIR)/misc/gs_afm
+	cp $(MISCDIR)/gs_afm/*.afm  $(DISTDIR)/misc/gs_afm
+	
+dist: ALL_DIST @GUIDIST@ SAMPLES_DIST UTILS_DIST MISC_DIST
 	cd _dist_dir; tar ch wx$(TOOLKIT) | gzip -f9 > $(WXARCHIVE); mv $(WXARCHIVE) ..
 	$(RM) -r _dist_dir
 

@@ -29,7 +29,7 @@ Motif/LessTif, MS Windows, Mac) from the same source code.
 ./configure --prefix=%{pref} --disable-threads --disable-std_iostreams
 
 %build
-cd src && make
+make
 
 %install
 rm -rf $RPM_BUILD_ROOT

@@ -38,7 +38,7 @@ Header files for the wxGTK, the GTK+ 1.2 port of the wxWindows library.
 ./configure --prefix=%{pref} --enable-threads --disable-std_iostreams
 
 %build
-cd src && make
+make
 
 %install
 rm -rf $RPM_BUILD_ROOT

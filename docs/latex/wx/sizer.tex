@@ -69,6 +69,27 @@ using the {\it option} flag and the result will be that the left button will be 
 side of the dialog and the right button with the right side - the space in between will shrink and grow with
 the dialog.}
 
+\docparam{option}{Although the meaning of this parameter is undefined in wxSizer, it is used in wxBoxSizer
+to indicate if a child of a sizer can change its size in the main orientation of the wxBoxSizer - where
+0 stands for not changable and a value of more than zero in interpreted relative to the value of other
+children of the same wxBoxSizer. You might, e.g., have a horizontal wxBoxSizer with three children, two
+of which are supposed to change their size with the sizer, then the two stretchable windows would get a 
+value of 1 each to make them grow and shrink equally with the sizer's vertical dimension.}
+
+\docparam{flag}{This parameter can be used to set a number of flags which can be combined using
+the binary OR operator |. Two main behaviours are defined using these flags: One is the border
+around a window: the {\it border} parameter determines the border width whereas the flags given here
+determine where the border may be (wxTOP, wxBOTTOM, wxLEFT, wxRIGHT or wxALL). The other flags
+determine the child window's behaviour if the size of the sizer changes, but - in contrast to
+the {\it option} flag - not in the main orientation, but the respectively other orientation. So
+if you created a wxBoxSizer with the wxVERTICAL option, these flags will be relevant if the
+sizer changes its horizontal size. A child may get resized to completely fill out the new size (using
+either wxGROW or wxEXPAND), may get centered (wxCENTER or wxCENTRE) or may get aligned to either
+side (wxALIGN_LEFT and wxALIGN_TOP are set to 0 and thus represent the default, wxALIGN_RIGHT and
+wxALIGN_BOTTOM have their obvious meaning.}
+
+\docparam{border}{Determines the border width, if the {\it flag} parameter is set to any border.}
+
 \membersection{wxSizer::Prepend}\label{wxsizerprepend}
 
 \func{void}{Prepend}{\param{wxWindow* }{window}, \param{int }{option = 0}, \param{int }{flag = 0}, \param{int }{border = 0}}
