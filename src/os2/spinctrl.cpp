@@ -129,6 +129,8 @@ bool wxSpinCtrl::Create(
 , const wxString&                   rsName
 )
 {
+    SWP                             vSwp;
+
     if (vId == -1)
         m_windowId = NewControlId();
     else
@@ -177,6 +179,9 @@ bool wxSpinCtrl::Create(
     if(pParent)
         pParent->AddChild((wxSpinButton *)this);
     SetFont(pParent->GetFont());
+    ::WinQueryWindowPos(m_hWnd, &vSwp);
+    SetXComp(vSwp.x);
+    SetYComp(vSwp.y);
     SetSize( rPos.x
             ,rPos.y
             ,rSize.x
@@ -262,12 +267,9 @@ void wxSpinCtrl::DoMoveWindow(
 
     if (pParent)
     {
-        if (pParent->IsKindOf(CLASSINFO(wxFrame)))
-        {
-            nY = pParent->GetClientSize().y - (nY + nHeight);
-        }
-        else
-            nY = pParent->GetSize().y - (nY + nHeight);
+        int                         nOS2Height = GetOS2ParentHeight(pParent);
+
+        nY = nOS2Height - (nY + nHeight);
     }
     else
     {

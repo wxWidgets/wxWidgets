@@ -49,6 +49,80 @@ wxSlider::~wxSlider()
         ::WinDestroyWindow((HWND)m_hStaticValue);
 } // end of wxSlider::~wxSlider
 
+void wxSlider::AdjustSubControls(
+  int                               nX
+, int                               nY
+, int                               nWidth
+, int                               nHeight
+, int                               nSizeFlags
+)
+{
+    SWP                             vSwp;
+    int                             nXOffset = nX;
+    int                             nYOffset = nY;
+    int                             nCx;     // slider,min,max sizes
+    int                             nCy;
+    int                             nCyf;
+    char                            zBuf[300];
+
+    wxGetCharSize( GetHWND()
+                  ,&nCx
+                  ,&nCy
+                  ,&this->GetFont()
+                 );
+
+    if ((m_windowStyle & wxSL_VERTICAL) != wxSL_VERTICAL)
+    {
+        if (m_windowStyle & wxSL_LABELS )
+        {
+            int                     nMinLen = 0;
+            int                     nMaxLen = 0;
+
+            ::WinQueryWindowText((HWND)m_hStaticMin, 300, zBuf);
+            GetTextExtent(zBuf, &nMinLen, &nCyf, NULL, NULL, &this->GetFont());
+
+            ::WinQueryWindowText((HWND)m_hStaticMax, 300, zBuf);
+            GetTextExtent(zBuf, &nMaxLen, &nCyf, NULL, NULL, &this->GetFont());
+
+            if (m_hStaticValue)
+            {
+                int                 nNewWidth = wxMax(nMinLen, nMaxLen);
+                int                 nValueHeight = nCyf;
+
+                ::WinSetWindowPos( (HWND)m_hStaticValue
+                                  ,HWND_TOP
+                                  ,(LONG)nXOffset - (nNewWidth + nCx + nMinLen + nCx)
+                                  ,(LONG)nYOffset
+                                  ,(LONG)nNewWidth
+                                  ,(LONG)nValueHeight
+                                  ,SWP_ZORDER | SWP_SIZE | SWP_MOVE | SWP_SHOW
+                                 );
+            }
+            ::WinSetWindowPos( (HWND)m_hStaticMin
+                              ,HWND_TOP
+                              ,(LONG)nXOffset - (nMinLen + nCx)
+                              ,(LONG)nYOffset
+                              ,(LONG)nMinLen
+                              ,(LONG)nCy
+                              ,SWP_ZORDER | SWP_SIZE | SWP_MOVE | SWP_SHOW
+                             );
+            nXOffset += nWidth + nCx;
+
+            ::WinSetWindowPos( (HWND)m_hStaticMax
+                              ,HWND_TOP
+                              ,(LONG)nXOffset
+                              ,(LONG)nYOffset
+                              ,(LONG)nMaxLen
+                              ,(LONG)nCy
+                              ,SWP_ZORDER | SWP_SIZE | SWP_MOVE | SWP_SHOW
+                             );
+        }
+    }
+    //
+    // Now deal with a vertical slider -- OS/2 doesn't have vertical sliders
+    //
+} // end of wxSlider::AdjustSubControls
+
 void wxSlider::ClearSel()
 {
 } // end of wxSlider::ClearSel
@@ -345,24 +419,11 @@ void wxSlider::DoSetSize(
 
     if (pParent)
     {
-        //
-        // Under OS/2, where a frame window is the parent, most child windows
-        // that are not specific frame clients are actually children of the
-        // frame's client, not the frame itself, and so position themselves
-        // with regards to the client origin, not the frame.
-        //
-        if (pParent->IsKindOf(CLASSINFO(wxFrame)))
-        {
-            nYOffset = pParent->GetClientSize().y - (nYOffset + nOS2Height);
-            if (nY != -1)
-                nY1 = pParent->GetClientSize().y - (nY1 + nOS2Height);
-        }
-        else
-        {
-            nYOffset = pParent->GetSize().y - (nYOffset + nOS2Height);
-            if (nY != -1)
-                nY1 = pParent->GetSize().y - (nY1 + nOS2Height);
-        }
+        int                         nOS2ParentHeight = GetOS2ParentHeight(pParent);
+
+        nYOffset = nOS2ParentHeight - (nYOffset + nOS2Height);
+        if (nY != -1)
+            nY1 = nOS2ParentHeight - (nY1 + nOS2Height);
     }
     else
     {
@@ -373,6 +434,7 @@ void wxSlider::DoSetSize(
         if (nY != -1)
             nY1 = vRect.yTop - (nY1 + nOS2Height);
     }
+    m_nSizeFlags = nSizeFlags;
 
     GetPosition( &nCurrentX
                 ,&nCurrentY

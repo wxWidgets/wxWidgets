@@ -122,6 +122,7 @@ bool wxGauge::Create(
     int                             nWidth   = rSize.x;
     int                             nHeight  = rSize.y;
     long                            lMsStyle = 0L;
+    SWP                             vSwp;
 
     SetName(rsName);
 #if wxUSE_VALIDATORS
@@ -173,6 +174,9 @@ bool wxGauge::Create(
                             );
     ::WinSetWindowULong(GetHwnd(), QWL_USER, (LONG)this);
     fnWndProcGauge = (WXFARPROC)::WinSubclassWindow(m_hWnd, (PFNWP)wxGaugeWndProc);
+    ::WinQueryWindowPos(m_hWnd, &vSwp);
+    SetXComp(vSwp.x);
+    SetYComp(vSwp.y);
     SetFont(pParent->GetFont());
     if (nWidth == -1L)
         nWidth = 50L;

@@ -141,10 +141,10 @@ bool wxControl::OS2CreateControl(
                                        ,(PSZ)zClassname              // Window class
                                        ,(PSZ)rsLabel.c_str()         // Initial Text
                                        ,(ULONG)dwStyle               // Style flags
-                                       ,(LONG)rPos.x                 // X pos of origin
-                                       ,(LONG)rPos.y                 // Y pos of origin
-                                       ,(LONG)rSize.x                // control width
-                                       ,(LONG)rSize.y                // control height
+                                       ,(LONG)0                      // X pos of origin
+                                       ,(LONG)0                      // Y pos of origin
+                                       ,(LONG)0                      // control width
+                                       ,(LONG)0                      // control height
                                        ,(HWND)GetHwndOf(GetParent()) // owner window handle (same as parent
                                        ,HWND_TOP                     // initial z position
                                        ,(ULONG)GetId()               // Window identifier

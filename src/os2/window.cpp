@@ -1521,19 +1521,9 @@ void wxWindowOS2::DoMoveWindow(
 
     if (pParent)
     {
-        hParent = GetWinHwnd(pParent);
-        if (pParent->IsKindOf(CLASSINFO(wxFrame)))
-        {
-            if (IsKindOf(CLASSINFO(wxStatusBar)) ||
-                IsKindOf(CLASSINFO(wxMenuBar)) ||
-                IsKindOf(CLASSINFO(wxToolBar))
-               )
-                nY = pParent->GetSize().y - (nY + nHeight);
-            else
-                nY = pParent->GetClientSize().y - (nY + nHeight);
-        }
-        else
-            nY = pParent->GetSize().y - (nY + nHeight);
+        int                         nOS2Height = GetOS2ParentHeight(pParent);
+
+        nY = nOS2Height - (nY + nHeight);
     }
     else
     {
@@ -3898,6 +3888,162 @@ bool wxWindowOS2::OS2OnScroll(
     }
     return GetEventHandler()->ProcessEvent(vEvent);
 } // end of wxWindowOS2::OS2OnScroll
+
+void wxWindowOS2::MoveChildren(
+  int                               nDiff
+)
+{
+    SWP                                 vSwp;
+
+    for (wxWindowList::Node* pNode = GetChildren().GetFirst();
+         pNode;
+         pNode = pNode->GetNext())
+    {
+        wxWindow*                   pWin = pNode->GetData();
+
+        ::WinQueryWindowPos( GetHwndOf(pWin)
+                            ,&vSwp
+                           );
+        if (pWin->IsKindOf(CLASSINFO(wxControl)))
+        {
+            wxControl*          pCtrl;
+
+            //
+            // Must deal with controls that have margins like ENTRYFIELD.  The SWP
+            // struct of such a control will have and origin offset from its intended
+            // position by the width of the margins.
+            //
+            pCtrl = wxDynamicCast(pWin, wxControl);
+            vSwp.y -= pCtrl->GetYComp();
+            vSwp.x -= pCtrl->GetXComp();
+        }
+        ::WinSetWindowPos( GetHwndOf(pWin)
+                          ,HWND_TOP
+                          ,vSwp.x
+                          ,vSwp.y - nDiff
+                          ,vSwp.cx
+                          ,vSwp.cy
+                          ,SWP_MOVE
+                         );
+        if (pWin->IsKindOf(CLASSINFO(wxRadioBox)))
+        {
+            wxRadioBox*     pRadioBox;
+
+            pRadioBox = wxDynamicCast(pWin, wxRadioBox);
+            pRadioBox->AdjustButtons( (int)vSwp.x
+                                     ,(int)vSwp.y - nDiff
+                                     ,(int)vSwp.cx
+                                     ,(int)vSwp.cy
+                                     ,pRadioBox->GetSizeFlags()
+                                    );
+        }
+        if (pWin->IsKindOf(CLASSINFO(wxSlider)))
+        {
+            wxSlider*           pSlider;
+
+            pSlider = wxDynamicCast(pWin, wxSlider);
+            pSlider->AdjustSubControls( (int)vSwp.x
+                                       ,(int)vSwp.y - nDiff
+                                       ,(int)vSwp.cx
+                                       ,(int)vSwp.cy
+                                       ,(int)pSlider->GetSizeFlags()
+                                      );
+        }
+    }
+} // end of wxWindowOS2::MoveChildren
+
+//
+//  Getting the Y position for a window, like a control, is a real
+//  pain.  There are three sitatuions we must deal with in determining
+//  the OS2 to wxWindows Y coordinate.
+//
+//  1)  The controls are created in a dialog.
+//      This is the easiest since a dialog is created with its original
+//      size so the standard: Y = ParentHeight - (Y + ControlHeight);
+//
+//  2)  The controls are direct children of a frame
+//      In this instance the controls are actually children of the Frame's
+//      client.  During creation the frame's client resizes several times
+//      during creation of the status bar and toolbars.  The CFrame class
+//      will take care of this using its AlterChildPos proc.
+//
+//  3)  The controls are children of a panel, which in turn is a child of
+//      a frame.
+//      This is the nastiest case.  A panel is created as the only child of
+//      the frame and as such, when a frame has only one child, the child is
+//      expanded to fit the entire client area of the frame.  Because the
+//      controls are created BEFORE this occurs their positions are totally
+//      whacked and any call to WinQueryWindowPos will return invalid
+//      coordinates.  So for this situation we have to compare the size of
+//      the panel at control creation time with that of the frame client.  If
+//      they are the same we can use the standard Y position equation.  If
+//      not, then we must use the Frame Client's dimensions to position them
+//      as that will be the eventual size of the panel after the frame resizes
+//      it!
+//
+int wxWindowOS2::GetOS2ParentHeight(
+  wxWindowOS2*               pParent
+)
+{
+    wxWindowOS2*             pGrandParent = NULL;
+
+    //
+    // Case 1
+    //
+    if (pParent->IsKindOf(CLASSINFO(wxDialog)))
+        return(pParent->GetSize().y);
+
+    //
+    // Case 2 -- if we are one of the separately built standard Frame
+    //           children, like a statusbar, menubar, or toolbar we want to
+    //           use the frame, itself, for positioning.  Otherwise we are
+    //           child window and want to use the Frame's client.
+    //
+    else if (pParent->IsKindOf(CLASSINFO(wxFrame)))
+    {
+        if (IsKindOf(CLASSINFO(wxStatusBar)) ||
+            IsKindOf(CLASSINFO(wxMenuBar))   ||
+            IsKindOf(CLASSINFO(wxToolBar))
+           )
+            return(pParent->GetSize().y);
+        else
+            return(pParent->GetClientSize().y);
+    }
+
+    //
+    // Case 3 -- this is for any window that is the sole child of a Frame.
+    //           The grandparent must exist and it must be of type CFrame
+    //           and it's height must be different. Otherwise the standard
+    //           applies.
+    //
+    else
+    {
+        pGrandParent = pParent->GetParent();
+        if (pGrandParent &&
+            pGrandParent->IsKindOf(CLASSINFO(wxFrame)) &&
+            pGrandParent->GetClientSize().y != pParent->GetSize().y
+           )
+        {
+            int                     nParentHeight = 0L;
+            int                     nStatusBarHeight = 0L;
+            wxFrame*                pFrame = wxDynamicCast(pGrandParent, wxFrame);
+            wxStatusBar*            pStatbar = pFrame->GetStatusBar();
+
+            nParentHeight = pGrandParent->GetClientSize().y;
+            if (pStatbar)
+                nStatusBarHeight = pStatbar->GetSize().y;
+            nParentHeight -= nStatusBarHeight;
+            return(nParentHeight);
+        }
+        else
+            //
+            // Panel is a child of some other kind of window so we'll
+            // just use it's original size
+            //
+            return(pParent->GetClientSize().y);
+    }
+    return(0L);
+} // end of wxWindowOS2::GetOS2ParentHeight
 
 // ===========================================================================
 // global functions

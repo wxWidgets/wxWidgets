@@ -67,10 +67,10 @@ bool wxStaticLine::Create(
                                        ,WC_STATIC
                                        ,""
                                        ,WS_VISIBLE | SS_TEXT | DT_VCENTER | DT_CENTER
-                                       ,rPos.x
-                                       ,rPos.y
-                                       ,vSizeReal.x
-                                       ,vSizeReal.y
+                                       ,0
+                                       ,0
+                                       ,0
+                                       ,0
                                        ,GetWinHwnd(pParent)
                                        ,HWND_TOP
                                        ,(ULONG)m_windowId
@@ -83,6 +83,11 @@ bool wxStaticLine::Create(
         return FALSE;
     }
     SubclassWin(m_hWnd);
+    SetSize( rPos.x
+            ,rPos.y
+            ,rSize.x
+            ,rSize.y
+           );
     return TRUE;
 } // end of wxStaticLine::Create
 

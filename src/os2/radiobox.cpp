@@ -86,7 +86,7 @@ void wxRadioBox::AdjustButtons(
 , int                               nY
 , int                               nWidth
 , int                               nHeight
-, long                              lSizeFlags
+, int                               nSizeFlags
 )
 {
     wxSize                          vMaxSize;
@@ -480,7 +480,9 @@ void wxRadioBox::DoSetSize(
 
     if (pParent)
     {
-        nYy = pParent->GetClientSize().y - (nYy + nHeight);
+        int                         nOS2Height = GetOS2ParentHeight(pParent);
+
+        nYy = nOS2Height - (nYy + nHeight);
         nYOffset = nYy + nHeight;
     }
     else

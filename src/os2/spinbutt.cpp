@@ -61,6 +61,7 @@ bool wxSpinButton::Create(
     int                             nY      = rPos.y;
     int                             nWidth  = rSize.x;
     int                             nHeight = rSize.y;
+    SWP                             vSwp;
 
     m_min = 0;
     m_max = 100;
@@ -128,6 +129,9 @@ bool wxSpinButton::Create(
     if(pParent)
         pParent->AddChild((wxSpinButton *)this);
 
+    ::WinQueryWindowPos(m_hWnd, &vSwp);
+    SetXComp(vSwp.x);
+    SetYComp(vSwp.y);
     SetFont(pParent->GetFont());
     //
     // For OS/2 we want to hide the text portion so we can substitute an
