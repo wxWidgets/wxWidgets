@@ -19,6 +19,7 @@
 #include "wx/utils.h"
 #include "wx/app.h"
 #include "wx/pen.h"
+#include "wx/log.h"
 #endif
 
 #include "wx/os2/private.h"

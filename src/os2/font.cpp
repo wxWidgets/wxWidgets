@@ -28,6 +28,7 @@
     #include "wx/utils.h"
     #include "wx/app.h"
     #include "wx/font.h"
+    #include "wx/log.h"
 #endif // WX_PRECOMP
 
 #include "wx/os2/private.h"
