@@ -451,7 +451,7 @@ void MyFrame::DoResizeFont(int diff)
 
 void MyFrame::DoChangeFont(const wxFont& font, const wxColour& col)
 {
-    Resize(GetSize(), font);
+    Resize(GetClientSize(), font);
 
     m_canvas->SetTextFont(font);
     if ( col.Ok() )
@@ -610,9 +610,7 @@ void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
 
 void MyFrame::OnSize(wxSizeEvent& event)
 {
-    wxSize size = event.GetSize();
-
-    Resize(size);
+    Resize(GetClientSize());
 
     event.Skip();
 }
