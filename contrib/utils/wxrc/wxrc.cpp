@@ -62,8 +62,12 @@ private:
     void DeleteTempFiles(const wxArrayString& flist);
     void MakePackageZIP(const wxArrayString& flist);
     void MakePackageCPP(const wxArrayString& flist);
+
+    void OutputGettext();
+    wxArrayString FindStrings();
+    wxArrayString FindStrings(wxXmlNode *node);
             
-    bool flagVerbose, flagCPP, flagCompress;
+    bool flagVerbose, flagCPP, flagCompress, flagGettext;
     wxString parOutput, parFuncname, parOutputPath;
     wxArrayString parFiles;
     int retCode;
@@ -79,14 +83,16 @@ int XmlResApp::OnRun()
 {
     static const wxCmdLineEntryDesc cmdLineDesc[] =
     {
+        { wxCMD_LINE_SWITCH, "h", "help",  "show help message" },
         { wxCMD_LINE_SWITCH, "v", "verbose", "be verbose" },
         { wxCMD_LINE_SWITCH, "c", "cpp-code",  "output C++ source rather than .rsc file" },
         { wxCMD_LINE_SWITCH, "u", "uncompressed",  "do not compress .xml files (C++ only)" },
+        { wxCMD_LINE_SWITCH, "g", "gettext",  "output .po catalog (to stdout or file if -o used)" },
         { wxCMD_LINE_OPTION, "n", "function",  "C++ function name (with -c) [InitXmlResource]" },
         { wxCMD_LINE_OPTION, "o", "output",  "output file [resource.xrs/cpp]" },
         { wxCMD_LINE_OPTION, "l", "list-of-handlers",  "output list of neccessary handlers to this file" },
 
-        { wxCMD_LINE_PARAM,  NULL, NULL, "input file",
+        { wxCMD_LINE_PARAM,  NULL, NULL, "input file(s)",
             wxCMD_LINE_VAL_STRING, wxCMD_LINE_PARAM_MULTIPLE },
 
         { wxCMD_LINE_NONE }
@@ -105,7 +111,10 @@ int XmlResApp::OnRun()
         case 0:
             retCode = 0;
             ParseParams(parser);
-            CompileRes();
+            if (flagGettext)
+                OutputGettext();
+            else
+                CompileRes();
 #if wxUSE_GUI
             return FALSE;
 #else
@@ -128,12 +137,18 @@ int XmlResApp::OnRun()
 
 void XmlResApp::ParseParams(const wxCmdLineParser& cmdline)
 {
+    flagGettext = cmdline.Found("g");
     flagVerbose = cmdline.Found("v");
     flagCPP = cmdline.Found("c");
     flagCompress = flagCPP && !cmdline.Found("u");
 
     if (!cmdline.Found("o", &parOutput)) 
-        parOutput = flagCPP ? "resource.cpp" : "resource.xrs";
+    {
+        if (flagGettext)
+            parOutput = wxEmptyString;
+        else
+            parOutput = flagCPP ? "resource.cpp" : "resource.xrs";
+    }
     parOutputPath = wxPathOnly(parOutput);
     if (!parOutputPath) parOutputPath = ".";
 
@@ -378,4 +393,89 @@ void " + parFuncname + "()\n\
     file.Write("\n}\n");
 
 
+}
+
+
+
+void XmlResApp::OutputGettext()
+{
+    wxArrayString str = FindStrings();
+    
+    wxFFile fout;
+    if (!parOutput) fout.Attach(stdout);
+    else fout.Open(parOutput, _T("wt"));
+    
+    for (size_t i = 0; i < str.GetCount(); i++)
+        fout.Write(_T("msgid \"") + str[i] + _T("\"\nmsgstr \"\"\n\n"));
+    
+    if (!parOutput) fout.Detach();
+}
+
+
+
+wxArrayString XmlResApp::FindStrings()
+{
+    wxArrayString arr, a2;
+
+    for (size_t i = 0; i < parFiles.Count(); i++)
+    {
+        if (flagVerbose) 
+            wxPrintf("processing " + parFiles[i] +  "...\n");
+
+        wxXmlDocument doc;        
+        if (!doc.Load(parFiles[i]))
+        {
+            wxLogError("Error parsing file " + parFiles[i]);
+            retCode = 1;
+            continue;
+        }
+        a2 = FindStrings(doc.GetRoot());
+        WX_APPEND_ARRAY(arr, a2);
+    }
+    
+    return arr;
+}
+
+
+
+wxArrayString XmlResApp::FindStrings(wxXmlNode *node)
+{
+    wxArrayString arr;
+
+    wxXmlNode *n = node;
+    if (n == NULL) return arr;
+    n = n->GetChildren();
+    
+    while (n)
+    {
+        if ((node->GetType() == wxXML_ELEMENT_NODE) &&
+            // parent is an element, i.e. has subnodes...
+            (n->GetType() == wxXML_TEXT_NODE || 
+            n->GetType() == wxXML_CDATA_SECTION_NODE) &&
+            // ...it is textnode...
+            (
+                node/*not n!*/->GetName() == _T("label") ||
+                (node/*not n!*/->GetName() == _T("value") &&
+                               !n->GetContent().IsNumber()) ||
+                node/*not n!*/->GetName() == _T("help") ||
+                node/*not n!*/->GetName() == _T("longhelp") ||
+                node/*not n!*/->GetName() == _T("tooltip") ||
+                node/*not n!*/->GetName() == _T("htmlcode") ||
+                node/*not n!*/->GetName() == _T("title")
+            ))
+            // ...and known to contain filename
+        {
+            arr.Add(n->GetContent());
+        }
+        
+        // subnodes:
+        if (n->GetType() == wxXML_ELEMENT_NODE)
+        {
+            wxArrayString a2 = FindStrings(n);
+            WX_APPEND_ARRAY(arr, a2);
+        }
+        
+        n = n->GetNext();
+    }
+    return arr;
 }
