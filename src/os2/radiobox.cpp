@@ -15,6 +15,8 @@
 #ifndef WX_PRECOMP
     #include <stdio.h>
     #include "wx/setup.h"
+    #include "wx/wxchar.h"
+    #include "wx/string.h"
     #include "wx/bitmap.h"
     #include "wx/brush.h"
     #include "wx/radiobox.h"
