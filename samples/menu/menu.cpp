@@ -857,7 +857,8 @@ void MyFrame::ShowContextMenu(const wxPoint& pos)
     menu.Append(Menu_Popup_Submenu, _T("&Submenu"), CreateDummyMenu(NULL));
     menu.Append(Menu_Popup_ToBeDeleted, _T("To be &deleted"));
     menu.Append(Menu_Popup_ToBeChecked, _T("To be &checked"), _T(""), TRUE);
-    menu.Append(Menu_Popup_ToBeGreyed, _T("To be &greyed"));
+    menu.Append(Menu_Popup_ToBeGreyed, _T("To be &greyed"),
+                _T("This menu item should be initially greyed out"));
     menu.AppendSeparator();
     menu.Append(Menu_File_Quit, _T("E&xit"));
 
