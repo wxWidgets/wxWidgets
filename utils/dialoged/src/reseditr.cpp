@@ -486,6 +486,8 @@ bool wxResourceManager::New(bool loadFromFile, const wxString& filename)
 
 bool wxResourceManager::Clear(bool WXUNUSED(deleteWindows), bool force)
 {
+  wxPropertyInfo::CloseWindow();
+
   if (!force && Modified())
   {
     int ans = wxMessageBox("Save modified resource file?", "Dialog Editor", wxYES_NO | wxCANCEL);
@@ -927,6 +929,8 @@ bool wxResourceManager::EditSelectedResource()
 
 bool wxResourceManager::Edit(wxItemResource *res)
 {
+  wxPropertyInfo::CloseWindow();
+
   ClearCurrentDialog();
 
   wxString resType(res->GetType());
@@ -966,6 +970,8 @@ bool wxResourceManager::Edit(wxItemResource *res)
 
 bool wxResourceManager::CreateNewPanel()
 {
+  wxPropertyInfo::CloseWindow();
+
   ClearCurrentDialog();
 
   char buf[256];
@@ -1456,6 +1462,25 @@ void wxResourceManager::RemoveSelection(wxWindow *win)
   m_selections.DeleteObject(win);
 }
 
+void wxResourceManager::DeselectItemIfNecessary(wxWindow *win)
+{
+    if (win->IsKindOf(CLASSINFO(wxControl)) && (win->GetEventHandler() != win))
+    {
+        // Deselect and refresh window in case we leave selection
+        // handles behind
+        wxControl *item = (wxControl *)win;
+        wxResourceEditorControlHandler *childHandler = (wxResourceEditorControlHandler *)item->GetEventHandler();
+        if (childHandler->IsSelected())
+        {
+            wxResourceManager::GetCurrentResourceManager()->RemoveSelection(item);
+            childHandler->SelectItem(FALSE);
+#ifndef __WXGTK__
+            item->GetParent()->Refresh();
+#endif
+        }
+    } 
+}
+
 // Need to search through resource table removing this from
 // any resource which has this as a parent.
 bool wxResourceManager::RemoveResourceFromParent(wxItemResource *res)
@@ -1515,24 +1540,7 @@ bool wxResourceManager::DeleteResource(wxItemResource *res)
 
 bool wxResourceManager::DeleteResource(wxWindow *win)
 {
-  if (win->IsKindOf(CLASSINFO(wxControl)) && (win->GetEventHandler() != win))
-  {
-    // Deselect and refresh window in case we leave selection
-    // handles behind
-    wxControl *item = (wxControl *)win;
-    wxResourceEditorControlHandler *childHandler = (wxResourceEditorControlHandler *)item->GetEventHandler();
-
-    wxASSERT_MSG( win->GetEventHandler()->IsKindOf(CLASSINFO(wxResourceEditorControlHandler)), "Wrong kind of handler in DeleteResource" );
-
-    if (childHandler->IsSelected())
-    {
-      RemoveSelection(item);
-      childHandler->SelectItem(FALSE);
-#ifndef __WXGTK__
-      item->GetParent()->Refresh();
-#endif
-    }
-  }
+  DeselectItemIfNecessary(win);
   
   wxItemResource *res = FindResourceForWindow(win);
   
@@ -1803,7 +1811,7 @@ bool wxResourceManager::RepairResourceIds()
  // Deletes 'win' and creates a new window from the resource that
  // was associated with it. E.g. if you can't change properties on the
  // fly, you'll need to delete the window and create it again.
-wxWindow *wxResourceManager::RecreateWindowFromResource(wxWindow *win, wxWindowPropertyInfo *info)
+wxWindow *wxResourceManager::RecreateWindowFromResource(wxWindow *win, wxWindowPropertyInfo *info, bool instantiateFirst)
 {
   wxItemResource *resource = FindResourceForWindow(win);
 
@@ -1816,7 +1824,9 @@ wxWindow *wxResourceManager::RecreateWindowFromResource(wxWindow *win, wxWindowP
     info = newInfo;
   }
 
-  info->InstantiateResource(resource);
+  // May not always want to copy values back from the resource
+  if (instantiateFirst)
+    info->InstantiateResource(resource);
 
   wxWindow *newWin = NULL;
   wxWindow *parent = win->GetParent();
@@ -2175,6 +2185,7 @@ void wxResourceEditorFrame::OnRecreateSelection(wxCommandEvent& WXUNUSED(event))
 
 void wxResourceEditorFrame::OnCloseWindow(wxCloseEvent& event)
 {
+  wxPropertyInfo::CloseWindow();
   if (manager->Modified())
   {
      if (!manager->Clear(TRUE, FALSE))
@@ -2273,21 +2284,7 @@ void ObjectMenuProc(wxMenu *menu, wxCommandEvent& event)
     }
     case OBJECT_MENU_DELETE:
     {
-      if (data->IsKindOf(CLASSINFO(wxControl)) && (data->GetEventHandler() != data))
-      {
-         // Deselect and refresh window in case we leave selection
-         // handles behind
-         wxControl *item = (wxControl *)data;
-         wxResourceEditorControlHandler *childHandler = (wxResourceEditorControlHandler *)item->GetEventHandler();
-         if (childHandler->IsSelected())
-         {
-            wxResourceManager::GetCurrentResourceManager()->RemoveSelection(item);
-            childHandler->SelectItem(FALSE);
-#ifndef __WXGTK__
-            item->GetParent()->Refresh();
-#endif
-         }
-      } 
+      wxResourceManager::GetCurrentResourceManager()->DeselectItemIfNecessary(data);
 
       wxResourceManager::GetCurrentResourceManager()->SaveInfoAndDeleteHandler(data);
       wxResourceManager::GetCurrentResourceManager()->DeleteResource(data);

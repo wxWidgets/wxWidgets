@@ -47,6 +47,7 @@ wxPropertyValue::wxPropertyValue(void)
 
 wxPropertyValue::wxPropertyValue(const wxPropertyValue& copyFrom)
 {
+  m_value.string = (wxChar*) NULL;
   m_modifiedFlag = FALSE;
   Copy((wxPropertyValue& )copyFrom);
 }
@@ -336,6 +337,11 @@ wxPropertyValue *wxPropertyValue::NewCopy(void) const
 
 void wxPropertyValue::Copy(wxPropertyValue& copyFrom)
 {
+  if (m_type == wxPropertyValueString)
+  {
+    delete[] m_value.string ;
+    m_value.string = NULL;
+  }
   m_type = copyFrom.Type();
 
   switch (m_type)
@@ -587,6 +593,14 @@ void wxPropertyValue::operator=(const wxString& val1)
   const wxChar *val = (const wxChar *)val1;
 
   m_modifiedFlag = TRUE;
+
+  wxPropertyValueType oldType = m_type;
+  if (oldType == wxPropertyValueString)
+  {
+    delete[] m_value.string ;
+    m_value.string = NULL;
+  }
+
   if (m_type == wxPropertyValueNull)
     m_type = wxPropertyValueString;
 
@@ -599,8 +613,7 @@ void wxPropertyValue::operator=(const wxString& val1)
   }
   else if (m_type == wxPropertyValueStringPtr)
   {
-    if (*m_value.stringPtr)
-      delete[] *m_value.stringPtr;
+    wxFAIL_MSG( "Shouldn't try to assign a wxString reference to a char* pointer.");
     if (val)
       *m_value.stringPtr = copystring(val);
     else
@@ -615,6 +628,13 @@ void wxPropertyValue::operator=(const wxString& val1)
 
 void wxPropertyValue::operator=(const long val)
 {
+  wxPropertyValueType oldType = m_type;
+  if (oldType == wxPropertyValueString)
+  {
+    delete[] m_value.string ;
+    m_value.string = NULL;
+  }
+
   m_modifiedFlag = TRUE;
   if (m_type == wxPropertyValueNull)
     m_type = wxPropertyValueInteger;
@@ -634,6 +654,13 @@ void wxPropertyValue::operator=(const long val)
 
 void wxPropertyValue::operator=(const bool val)
 {
+  wxPropertyValueType oldType = m_type;
+  if (oldType == wxPropertyValueString)
+  {
+    delete[] m_value.string ;
+    m_value.string = NULL;
+  }
+
   m_modifiedFlag = TRUE;
   if (m_type == wxPropertyValueNull)
     m_type = wxPropertyValuebool;
@@ -649,6 +676,13 @@ void wxPropertyValue::operator=(const bool val)
 
 void wxPropertyValue::operator=(const float val)
 {
+  wxPropertyValueType oldType = m_type;
+  if (oldType == wxPropertyValueString)
+  {
+    delete[] m_value.string ;
+    m_value.string = NULL;
+  }
+
   m_modifiedFlag = TRUE;
   if (m_type == wxPropertyValueNull)
     m_type = wxPropertyValueReal;
@@ -668,6 +702,13 @@ void wxPropertyValue::operator=(const float val)
 
 void wxPropertyValue::operator=(const wxChar **val)
 {
+  wxPropertyValueType oldType = m_type;
+  if (oldType == wxPropertyValueString)
+  {
+    delete[] m_value.string ;
+    m_value.string = NULL;
+  }
+
   m_modifiedFlag = TRUE;
   m_type = wxPropertyValueStringPtr;
 

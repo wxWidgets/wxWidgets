@@ -123,18 +123,7 @@ bool wxPropertyInfo::Edit(wxWindow *WXUNUSED(parent), const wxString& title)
       }
       else
       {
-        int w, h, x, y;
-        sm_propertyWindow->GetSize(& w, & h);
-        sm_propertyWindow->GetPosition(& x, & y);
-
-        wxResourceManager::GetCurrentResourceManager()->GetPropertyWindowSize().width = w;
-        wxResourceManager::GetCurrentResourceManager()->GetPropertyWindowSize().height = h;
-        wxResourceManager::GetCurrentResourceManager()->GetPropertyWindowSize().x = x;
-        wxResourceManager::GetCurrentResourceManager()->GetPropertyWindowSize().y = y;
-
-        // Close the window, so we can create a new one for the different window
-        sm_propertyWindow->Destroy();
-        sm_propertyWindow = (wxDialogEditorPropertyListFrame *) NULL;
+          CloseWindow(); // Close the window so we can open a new one
       }
   }
 
@@ -164,7 +153,7 @@ bool wxPropertyInfo::Edit(wxWindow *WXUNUSED(parent), const wxString& title)
   propSheet->SetAllModified(FALSE);
 
   wxResourcePropertyListView *view = new wxResourcePropertyListView(this, NULL,
-     wxPROP_BUTTON_OK | wxPROP_BUTTON_CANCEL |
+     wxPROP_BUTTON_OK | // wxPROP_BUTTON_CANCEL |
      wxPROP_BUTTON_CHECK_CROSS|wxPROP_DYNAMIC_VALUE_FIELD|wxPROP_PULLDOWN|wxPROP_SHOWVALUES);
 
   wxDialogEditorPropertyListFrame *propWin = new wxDialogEditorPropertyListFrame(view,
@@ -198,6 +187,24 @@ bool wxPropertyInfo::Edit(wxWindow *WXUNUSED(parent), const wxString& title)
 #endif
 
   return TRUE;
+}
+
+void wxPropertyInfo::CloseWindow()
+{
+  if (sm_propertyWindow)
+  {
+        int w, h, x, y;
+        sm_propertyWindow->GetSize(& w, & h);
+        sm_propertyWindow->GetPosition(& x, & y);
+
+        wxResourceManager::GetCurrentResourceManager()->GetPropertyWindowSize().width = w;
+        wxResourceManager::GetCurrentResourceManager()->GetPropertyWindowSize().height = h;
+        wxResourceManager::GetCurrentResourceManager()->GetPropertyWindowSize().x = x;
+        wxResourceManager::GetCurrentResourceManager()->GetPropertyWindowSize().y = y;
+
+        sm_propertyWindow->Destroy();
+        sm_propertyWindow = (wxDialogEditorPropertyListFrame *) NULL;
+  }
 }
 
 /*
@@ -376,7 +383,15 @@ bool wxWindowPropertyInfo::SetProperty(wxString& name, wxProperty *property)
   {
     wxFont *newFont = SetFontProperty(name, property, font);
     if (newFont)
+    {
       m_propertyWindow->SetFont(* newFont);
+      wxItemResource* resource = wxResourceManager::GetCurrentResourceManager()->FindResourceForWindow(m_propertyWindow);
+      if (resource)
+      {
+          resource->SetFont(* newFont);
+      }
+    }
+
     return TRUE;
   }
   else if (name == "name")
@@ -771,6 +786,7 @@ wxProperty *wxItemPropertyInfo::GetProperty(wxString& name)
 bool wxItemPropertyInfo::SetProperty(wxString& name, wxProperty *property)
 {
   wxControl *itemWindow = (wxControl *)m_propertyWindow; 
+#if 0
   wxFont *font = & itemWindow->GetFont();
 
   if (font && (name == "fontPoints" || name == "fontFamily" || name == "fontStyle" || name == "fontWeight" || name == "fontUnderlined" ))
@@ -780,7 +796,9 @@ bool wxItemPropertyInfo::SetProperty(wxString& name, wxProperty *property)
       itemWindow->SetFont(* newFont);
     return TRUE;
   }
-  else if (name == "label")
+  else
+#endif
+  if (name == "label")
   {
     itemWindow->SetLabel(property->GetValue().StringValue());
     return TRUE;
@@ -1460,6 +1478,8 @@ bool wxRadioBoxPropertyInfo::SetProperty(wxString& name, wxProperty *property)
   wxRadioBox *radioBox = (wxRadioBox *)m_propertyWindow;
   if (name == "numberRowsOrCols")
   {
+    wxResourceManager::GetCurrentResourceManager()->DeselectItemIfNecessary(radioBox);
+
     radioBox->SetNumberOfRowsOrCols((int)property->GetValue().IntegerValue());
     m_propertyWindow = wxResourceManager::GetCurrentResourceManager()->RecreateWindowFromResource(radioBox, this);
     return TRUE;
@@ -1480,11 +1500,14 @@ bool wxRadioBoxPropertyInfo::SetProperty(wxString& name, wxProperty *property)
         windowStyle -= wxRA_SPECIFY_COLS;
       windowStyle |= wxRA_SPECIFY_ROWS;
     }
+    wxResourceManager::GetCurrentResourceManager()->DeselectItemIfNecessary(radioBox);
+
     radioBox->SetWindowStyleFlag(windowStyle);
     wxItemResource *resource = wxResourceManager::GetCurrentResourceManager()->FindResourceForWindow(radioBox);
     resource->SetStyle(windowStyle);
+    resource->SetSize(resource->GetX(), resource->GetY(), -1, -1); // Let it calculate it's own size
     
-    m_propertyWindow = wxResourceManager::GetCurrentResourceManager()->RecreateWindowFromResource(radioBox, this);
+    m_propertyWindow = wxResourceManager::GetCurrentResourceManager()->RecreateWindowFromResource(radioBox, this, FALSE);
     return TRUE;
   }
   else if (name == "values")
@@ -1506,9 +1529,32 @@ bool wxRadioBoxPropertyInfo::SetProperty(wxString& name, wxProperty *property)
       expr = expr->GetNext();
     }
     resource->SetStringValues(stringList);
-    m_propertyWindow = wxResourceManager::GetCurrentResourceManager()->RecreateWindowFromResource(radioBox, this);
+    resource->SetSize(resource->GetX(), resource->GetY(), -1, -1); // Let it calculate it's own size
+    m_propertyWindow = wxResourceManager::GetCurrentResourceManager()->RecreateWindowFromResource(radioBox, this, FALSE);
     return TRUE;
   }
+  else if (name == "fontPoints" || name == "fontFamily" || name == "fontStyle" || name == "fontWeight" || name == "fontUnderlined" )
+  {
+    wxFont *font = & m_propertyWindow->GetFont();
+    if (!font)
+        return FALSE;
+    wxFont *newFont = SetFontProperty(name, property, font);
+    if (newFont)
+    {
+      wxItemResource* resource = wxResourceManager::GetCurrentResourceManager()->FindResourceForWindow(m_propertyWindow);
+      if (resource)
+      {
+          resource->SetFont(* newFont);
+      }
+
+      wxResourceManager::GetCurrentResourceManager()->DeselectItemIfNecessary(radioBox);
+
+      radioBox->SetFont(* newFont);
+      radioBox->SetSize(-1, -1, -1, -1, wxSIZE_AUTO_WIDTH | wxSIZE_AUTO_HEIGHT);
+      return TRUE;
+    }
+  }
+
   return wxItemPropertyInfo::SetProperty(name, property);
 }
 

@@ -252,9 +252,12 @@ public:
    // Deletes 'win' and creates a new window from the resource that
    // was associated with it. E.g. if you can't change properties on the
    // fly, you'll need to delete the window and create it again.
-   virtual wxWindow *RecreateWindowFromResource(wxWindow *win, wxWindowPropertyInfo *info = NULL);
+   virtual wxWindow *RecreateWindowFromResource(wxWindow *win, wxWindowPropertyInfo *info = NULL, bool instantiateFirst = TRUE);
 
    virtual bool RecreateSelection();
+
+   // Remove selection handles if this control is selected
+   void DeselectItemIfNecessary(wxWindow *win);
 
    // Need to search through resource table removing this from
    // any resource which has this as a parent.

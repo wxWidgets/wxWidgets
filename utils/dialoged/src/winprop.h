@@ -74,6 +74,7 @@ class wxPropertyInfo: public wxObject
   virtual bool SetProperty(wxString& propName, wxProperty *property) = 0;
   virtual void GetPropertyNames(wxStringList& names) = 0;
   virtual bool Edit(wxWindow *parent, const wxString& title);
+  static void CloseWindow(); // Close the current window if open.
 };
 
 // For all windows

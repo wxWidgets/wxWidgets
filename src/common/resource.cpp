@@ -537,7 +537,18 @@ wxControl *wxResourceTable::CreateItem(wxWindow *parent, const wxItemResource* c
   else
   {
     if (control && childResource->GetFont().Ok())
+    {
       control->SetFont(childResource->GetFont());
+
+#ifdef __WXMSW__
+      // Force the layout algorithm since the size changes the layout
+      if (control->IsKindOf(CLASSINFO(wxRadioBox)))
+      {
+        wxSize sz = control->GetSize();
+        control->SetSize(-1, -1, -1, -1, wxSIZE_AUTO_WIDTH|wxSIZE_AUTO_HEIGHT);
+      }
+#endif
+    }
   }
   return control;
 }
@@ -962,12 +973,10 @@ wxItemResource *wxResourceInterpretControl(wxResourceTable& table, wxExpr *expr)
 
         if (expr->Nth(count) && expr->Nth(count)->Type() == PrologList)
         {
-         // controlItem->SetLabelFont(wxResourceInterpretFontSpec(expr->Nth(count)));
-        // Do nothing
-         count ++;
-
-          if (expr->Nth(count) && expr->Nth(count)->Type() == PrologList)
-            controlItem->SetFont(wxResourceInterpretFontSpec(expr->Nth(count)));
+         // Skip past the obsolete label font spec if there are two consecutive specs
+         if (expr->Nth(count+1) && expr->Nth(count+1)->Type() == PrologList)
+           count ++;
+         controlItem->SetFont(wxResourceInterpretFontSpec(expr->Nth(count)));
        }
      }
    }
@@ -1067,10 +1076,10 @@ wxItemResource *wxResourceInterpretControl(wxResourceTable& table, wxExpr *expr)
       }
       if (expr->Nth(count) && expr->Nth(count)->Type() == PrologList)
       {
-         // controlItem->SetLabelFont(wxResourceInterpretFontSpec(expr->Nth(count)));
-         count ++;
-         if (expr->Nth(count) && expr->Nth(count)->Type() == PrologList)
-           controlItem->SetFont(wxResourceInterpretFontSpec(expr->Nth(count)));
+         // Skip past the obsolete label font spec if there are two consecutive specs
+         if (expr->Nth(count+1) && expr->Nth(count+1)->Type() == PrologList)
+           count ++;
+         controlItem->SetFont(wxResourceInterpretFontSpec(expr->Nth(count)));
       }
    }
   }
@@ -1093,11 +1102,10 @@ wxItemResource *wxResourceInterpretControl(wxResourceTable& table, wxExpr *expr)
 
       if (expr->Nth(count) && expr->Nth(count)->Type() == PrologList)
      {
-        // controlItem->SetLabelFont(wxResourceInterpretFontSpec(expr->Nth(count)));
-      count ++;
-
-        if (expr->Nth(count) && expr->Nth(count)->Type() == PrologList)
-          controlItem->SetFont(wxResourceInterpretFontSpec(expr->Nth(count)));
+         // Skip past the obsolete label font spec if there are two consecutive specs
+         if (expr->Nth(count+1) && expr->Nth(count+1)->Type() == PrologList)
+           count ++;
+         controlItem->SetFont(wxResourceInterpretFontSpec(expr->Nth(count)));
      }
    }
   }
@@ -1129,11 +1137,10 @@ wxItemResource *wxResourceInterpretControl(wxResourceTable& table, wxExpr *expr)
 
         if (expr->Nth(count) && expr->Nth(count)->Type() == PrologList)
        {
-          // controlItem->SetLabelFont(wxResourceInterpretFontSpec(expr->Nth(count)));
-        count ++;
-
-          if (expr->Nth(count) && expr->Nth(count)->Type() == PrologList)
-            controlItem->SetFont(wxResourceInterpretFontSpec(expr->Nth(count)));
+         // Skip past the obsolete label font spec if there are two consecutive specs
+         if (expr->Nth(count+1) && expr->Nth(count+1)->Type() == PrologList)
+           count ++;
+         controlItem->SetFont(wxResourceInterpretFontSpec(expr->Nth(count)));
        }
      }
    }
@@ -1167,11 +1174,10 @@ wxItemResource *wxResourceInterpretControl(wxResourceTable& table, wxExpr *expr)
 
       if (expr->Nth(count) && expr->Nth(count)->Type() == PrologList)
      {
-        // controlItem->SetLabelFont(wxResourceInterpretFontSpec(expr->Nth(count)));
-      count ++;
-
-        if (expr->Nth(count) && expr->Nth(count)->Type() == PrologList)
-          controlItem->SetFont(wxResourceInterpretFontSpec(expr->Nth(count)));
+         // Skip past the obsolete label font spec if there are two consecutive specs
+         if (expr->Nth(count+1) && expr->Nth(count+1)->Type() == PrologList)
+           count ++;
+         controlItem->SetFont(wxResourceInterpretFontSpec(expr->Nth(count)));
      }
    }
   }
