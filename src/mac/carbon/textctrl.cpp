@@ -185,6 +185,7 @@ static pascal void TPPaneDrawProc(ControlRef theControl, ControlPartCode thePart
     char state;
     Rect bounds;
         /* set up our globals */
+        
     tpvars = (STPTextPaneVars **) GetControlReference(theControl);
     if (tpvars != NULL) {
         state = HGetState((Handle) tpvars);
@@ -1347,6 +1348,40 @@ void wxTextCtrl::OnChar(wxKeyEvent& event)
         event1.SetEventObject( this );
         GetEventHandler()->ProcessEvent(event1);
     }
+}
+
+void  wxTextCtrl::MacSuperShown( bool show ) 
+{
+    bool former = m_macControlIsShown ;
+    wxControl::MacSuperShown( show ) ;
+    if ( (former != m_macControlIsShown) && m_macUsesTXN )
+    {
+        if ( m_macControlIsShown )
+        	TXNSetFrameBounds( (TXNObject) m_macTXN, (**(STPTextPaneVars **)m_macTXNvars).fRTextArea.top, (**(STPTextPaneVars **)m_macTXNvars).fRTextArea.left, 
+			    (**(STPTextPaneVars **)m_macTXNvars).fRTextArea.bottom,(**(STPTextPaneVars **)m_macTXNvars).fRTextArea.right, (**(STPTextPaneVars **)m_macTXNvars).fTXNFrame);
+        else
+        	TXNSetFrameBounds( (TXNObject) m_macTXN, (**(STPTextPaneVars **)m_macTXNvars).fRTextArea.top + 30000, (**(STPTextPaneVars **)m_macTXNvars).fRTextArea.left, 
+			   (**(STPTextPaneVars **)m_macTXNvars).fRTextArea.bottom + 30000, (**(STPTextPaneVars **)m_macTXNvars).fRTextArea.right, (**(STPTextPaneVars **)m_macTXNvars).fTXNFrame);
+    }
+}
+
+bool  wxTextCtrl::Show(bool show) 
+{
+    bool former = m_macControlIsShown ;
+    
+    bool retval = wxControl::Show( show ) ;
+    
+    if ( former != m_macControlIsShown )
+    {
+        if ( m_macControlIsShown )
+        	TXNSetFrameBounds( (TXNObject) m_macTXN, (**(STPTextPaneVars **)m_macTXNvars).fRTextArea.top, (**(STPTextPaneVars **)m_macTXNvars).fRTextArea.left, 
+			    (**(STPTextPaneVars **)m_macTXNvars).fRTextArea.bottom,(**(STPTextPaneVars **)m_macTXNvars).fRTextArea.right, (**(STPTextPaneVars **)m_macTXNvars).fTXNFrame);
+        else
+        	TXNSetFrameBounds( (TXNObject) m_macTXN, (**(STPTextPaneVars **)m_macTXNvars).fRTextArea.top + 30000, (**(STPTextPaneVars **)m_macTXNvars).fRTextArea.left, 
+			   (**(STPTextPaneVars **)m_macTXNvars).fRTextArea.bottom + 30000, (**(STPTextPaneVars **)m_macTXNvars).fRTextArea.right, (**(STPTextPaneVars **)m_macTXNvars).fTXNFrame);
+    }
+    
+    return retval ;
 }
 
 // ----------------------------------------------------------------------------
