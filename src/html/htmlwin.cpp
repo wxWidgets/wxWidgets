@@ -41,7 +41,7 @@ WX_DEFINE_OBJARRAY(HtmlHistoryArray)
 
 
 wxHtmlWindow::wxHtmlWindow(wxWindow *parent, wxWindowID id, const wxPoint& pos, const wxSize& size,
-                long style, const wxString& name) : wxScrolledWindow(parent, id, pos, size, wxVSCROLL, name)
+                long style, const wxString& name) : wxScrolledWindow(parent, id, pos, size, wxVSCROLL | wxHSCROLL, name)
 {
     m_tmpMouseMoved = FALSE;
     m_tmpLastLink = NULL;
@@ -155,7 +155,7 @@ bool wxHtmlWindow::LoadPage(const wxString& location)
         if (f == NULL) {
             wxString err;
 
-            err.Printf(_("The browser is unable to open requested location :\n\n%s"), WXSTRINGCAST location);
+            err.Printf(_("Unable to open requested location :\n\n%s"), WXSTRINGCAST location);
             m_tmpCanDrawLocks--;
             Refresh();
             wxMessageBox(err, "Error");
@@ -271,11 +271,12 @@ void wxHtmlWindow::CreateLayout()
 #endif
         GetClientSize(&ClientWidth, &ClientHeight);
         m_Cell -> Layout(ClientWidth);
-        if (ClientHeight < m_Cell -> GetHeight()) {
-            SetScrollbars(wxHTML_SCROLL_STEP, wxHTML_SCROLL_STEP,
-                          m_Cell -> GetWidth() / wxHTML_SCROLL_STEP,
-                          m_Cell -> GetHeight() / wxHTML_SCROLL_STEP
-                          /*cheat: top-level frag is always container*/);
+        if (ClientHeight < m_Cell -> GetHeight() + GetCharHeight()) {
+            SetScrollbars(
+                  wxHTML_SCROLL_STEP, wxHTML_SCROLL_STEP,
+                  m_Cell -> GetWidth() / wxHTML_SCROLL_STEP,
+                  (m_Cell -> GetHeight() + GetCharHeight()) / wxHTML_SCROLL_STEP
+                  /*cheat: top-level frag is always container*/);
         }
         else { /* we fit into window, no need for scrollbars */
             SetScrollbars(wxHTML_SCROLL_STEP, 1, m_Cell -> GetWidth() / wxHTML_SCROLL_STEP, 0); // disable...
