@@ -2514,11 +2514,6 @@ if test "$wxUSE_SHARED" = "yes"; then
 
         WX_LIBRARY_IMPORTLIB="${WX_LIBRARY_NAME_SHARED}.a"
 
-        dnl  FIXME: this is a hack..  do we need a --static flag to wx-config?
-        dnl  or is this just plain wrong?
-        dnl  This is NOT compatible with both static and dynamic linking
-        WXCONFIG_LIBS="${WXCONFIG_LIBS}.${SO_SUFFIX}"
-
         SHARED_LD="${CXX} -shared -Wl,--out-implib,lib/${WX_LIBRARY_IMPORTLIB} -o"
         TOOLCHAIN_DEFS="${TOOLCHAIN_DEFS} -DWXUSINGDLL=1"
 
