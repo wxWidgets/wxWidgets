@@ -221,10 +221,13 @@ bool wxSetClipboardData(wxDataFormat dataFormat,
             {
                 wxBitmap *bitmap = (wxBitmap *)data;
 
-                HGLOBAL hDIB = wxDIB::ConvertFromBitmap(GetHbitmapOf(*bitmap));
-                if ( hDIB )
+                if ( bitmap && bitmap->Ok() )
                 {
-                    handle = ::SetClipboardData(CF_DIB, hDIB);
+                    wxDIB dib(*bitmap);
+                    if ( dib.IsOk() )
+                    {
+                        handle = ::SetClipboardData(CF_DIB, dib.Detach());
+                    }
                 }
                 break;
             }
