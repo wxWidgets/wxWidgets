@@ -510,7 +510,6 @@ void wxHtmlHelpFrame::CreateContents(bool show_progress)
     wxProgressDialog *progress = NULL;
     wxString proginfo;
 
-wxLogDebug("building context");
     m_ContentsBox->Clear();
 
     int cnt = m_Data->GetContentsCnt();
@@ -560,7 +559,6 @@ wxLogDebug("building context");
     if (show_progress)
         delete progress;
     m_ContentsBox -> Expand(roots[0]);
-wxLogDebug("...done");
 }
 
 
@@ -633,7 +631,7 @@ void wxHtmlHelpFrame::ReadCustomization(wxConfigBase *cfg, const wxString& path)
 
     if (path != wxEmptyString) {
         oldpath = cfg -> GetPath();
-        cfg -> SetPath(path);
+        cfg -> SetPath(_T("/") + path);
     }
 
     m_Cfg.navig_on = cfg -> Read("hcNavigPanel", m_Cfg.navig_on) != 0;
@@ -674,7 +672,7 @@ void wxHtmlHelpFrame::ReadCustomization(wxConfigBase *cfg, const wxString& path)
     }
 
     if (m_HtmlWin)
-        m_HtmlWin->ReadCustomization(cfg, path);
+        m_HtmlWin->ReadCustomization(cfg);
 
     if (path != wxEmptyString)
         cfg -> SetPath(oldpath);
@@ -687,7 +685,7 @@ void wxHtmlHelpFrame::WriteCustomization(wxConfigBase *cfg, const wxString& path
 
     if (path != wxEmptyString) {
         oldpath = cfg -> GetPath();
-        cfg -> SetPath(path);
+        cfg -> SetPath(_T("/") + path);
     }
 
     cfg -> Write("hcNavigPanel", m_Cfg.navig_on);
@@ -715,7 +713,7 @@ void wxHtmlHelpFrame::WriteCustomization(wxConfigBase *cfg, const wxString& path
     }
 
     if (m_HtmlWin)
-        m_HtmlWin->WriteCustomization(cfg, path);
+        m_HtmlWin->WriteCustomization(cfg);
 
     if (path != wxEmptyString)
         cfg -> SetPath(oldpath);
