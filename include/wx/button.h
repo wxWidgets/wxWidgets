@@ -25,7 +25,7 @@
 #define wxBU_TOP             0x0080
 #define wxBU_RIGHT           0x0100
 #define wxBU_BOTTOM          0x0200
-
+#define wxBU_ALIGN_MASK      ( wxBU_LEFT | wxBU_TOP | wxBU_RIGHT | wxBU_BOTTOM )
 #endif
 
 #if wxUSE_BUTTON
