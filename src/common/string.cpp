@@ -1143,7 +1143,7 @@ wxString wxString::Format(const wxChar *pszFormat, ...)
 wxString wxString::FormatV(const wxChar *pszFormat, va_list argptr)
 {
     wxString s;
-    s.Printf(pszFormat, argptr);
+    s.PrintfV(pszFormat, argptr);
     return s;
 }
 
