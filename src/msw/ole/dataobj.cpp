@@ -415,5 +415,7 @@ static const char *GetTymedName(DWORD tymed)
   }
 }
 
+// TODO: OLE parts of wxBitmap/File/MetafileDataObject
+
 #endif
 

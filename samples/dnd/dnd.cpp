@@ -29,7 +29,7 @@
 #endif
 
 // ----------------------------------------------------------------------------
-// Derive 2 simple classes which just put in the listbox the strings (text or
+// Derive two simple classes which just put in the listbox the strings (text or
 // file names) we drop on them
 // ----------------------------------------------------------------------------
 class DnDText : public wxTextDropTarget

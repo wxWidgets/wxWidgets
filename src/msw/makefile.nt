@@ -1734,3 +1734,4 @@ updatedocs: touchmanual alldocs
 # Office StartUp folder, and PDFMaker should be installed.
 updatepdf:  # touchmanual pdfrtf
     start /w "winword d:\wx2\wxWindows\docs\latex\pdf\wx.rtf /mGeneratePDF"
+

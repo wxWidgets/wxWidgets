@@ -480,4 +480,3 @@ bool wxClipboard::GetData( wxDataObject *data )
 }
 
 #endif // wxUSE_CLIPBOARD
-

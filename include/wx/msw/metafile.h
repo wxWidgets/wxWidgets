@@ -176,3 +176,4 @@ private:
 #endif // wxUSE_METAFILE
 #endif
     // _WX_METAFIILE_H_
+

@@ -151,5 +151,7 @@ private:
 // wxMetaFileDataObject: see metafile.h is a specialization of wxDataObject for bitmap data
 // ----------------------------------------------------------------------------
 
+TODO: wxFileDataObject.
+
 #endif  //_WX_OLEDATAOBJ_H
 

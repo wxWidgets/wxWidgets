@@ -412,3 +412,4 @@ bool wxMakeMetafilePlaceable(const wxString& filename, int x1, int y1, int x2, i
 }
 
 #endif // wxUSE_METAFILE
+
