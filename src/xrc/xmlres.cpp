@@ -407,10 +407,25 @@ wxXmlNode *wxXmlResource::DoFindResource(wxXmlNode *parent,
         if ( node->GetType() == wxXML_ELEMENT_NODE &&
                  (node->GetName() == wxT("object") ||
                   node->GetName() == wxT("object_ref")) &&
-                (!classname ||
-                 node->GetPropVal(wxT("class"), wxEmptyString) == classname) &&
-                node->GetPropVal(wxT("name"), &dummy) && dummy == name )
-            return node;
+             node->GetPropVal(wxT("name"), &dummy) && dummy == name )
+        {
+            wxString cls(node->GetPropVal(wxT("class"), wxEmptyString));
+            if (!classname || cls == classname)
+                return node;
+            // object_ref may not have 'class' property:
+            if (cls.empty() && node->GetName() == wxT("object_ref"))
+            {
+                wxString refName = node->GetPropVal(wxT("ref"), wxEmptyString);
+                if (refName.empty())
+                    continue;
+                wxXmlNode* refNode = FindResource(refName, wxEmptyString, TRUE);
+                if (refNode &&
+                    refNode->GetPropVal(wxT("class"), wxEmptyString) == classname)
+                {
+                    return node;
+                }
+            }
+        }
     }
 
     if ( recursive )
