@@ -62,8 +62,7 @@
 #   pragma warning(disable:4699)    // using precompiled header
 #   pragma warning(disable:4134)    // conversion between pointers to members of same class
 #   pragma warning(disable:4710)    // function not inlined
-#   pragma warning(disable:4284)    // 
-#   pragma warning(disable:4097)    // 
+#   pragma warning(disable:4097)    // typedef used as class
 #ifndef WIN32
 #   pragma warning(disable:4135)    // conversion between different integral types
 #   pragma warning(disable:4769)    // assignment of near pointer to long integer
