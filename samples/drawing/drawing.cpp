@@ -367,7 +367,8 @@ MyCanvas::MyCanvas( MyFrame *parent ) : wxScrolledWindow( parent )
 
 void MyCanvas::DrawTestPoly( int x, int y,wxDC &dc,int transparent )
 {
-    wxBrush* brush4 = new wxBrush(*gs_bmp4);
+//    wxBrush* brush4 = new wxBrush(*gs_bmp4);
+    wxBrush* brush4 = new wxBrush(*wxBLACK,wxFDIAGONAL_HATCH);
     wxBrush* brush4_mono = new wxBrush(*gs_bmp4_mono);
     wxBrush* brush36 = new wxBrush(*gs_bmp36);
 
@@ -1015,6 +1016,7 @@ void MyCanvas::OnPaint(wxPaintEvent &WXUNUSED(event))
 {
     wxPaintDC dc(this);
     PrepareDC(dc);
+    
     m_owner->PrepareDC(dc);
 
     dc.SetBackgroundMode( m_owner->m_backgroundMode );
@@ -1080,6 +1082,13 @@ void MyCanvas::OnPaint(wxPaintEvent &WXUNUSED(event))
         case Show_Ops:
             DrawWithLogicalOps(dc);
             break;
+          
+        default:
+        {
+          dc.SetPen( *wxBLACK_PEN );
+          dc.DrawLine( 0,0,100,100 );
+        }
+    
     }
 }
 
@@ -1220,12 +1229,12 @@ void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
 
 void MyFrame::OnShow(wxCommandEvent& event)
 {
-    m_canvas->Show((ScreenToShow)(event.GetInt() - MenuShow_First));
+    m_canvas->Show((ScreenToShow)(event.GetId() - MenuShow_First));
 }
 
 void MyFrame::OnOption(wxCommandEvent& event)
 {
-    switch (event.GetInt())
+    switch (event.GetId())
     {
         case MapMode_Text:
             m_mapMode = wxMM_TEXT;
