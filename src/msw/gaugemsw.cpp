@@ -6,7 +6,7 @@
 // Created:     01/02/97
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart and Markus Holzem
-// Licence:   	wxWindows licence
+// Licence:       wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifdef __GNUG__
@@ -77,8 +77,8 @@ bool wxGaugeMSW::Create(wxWindow *parent, wxWindowID id,
   if ( !wxGaugeMSWInitialised )
   {
     if (!gaugeInit((HINSTANCE) wxGetInstance()))
-    	wxFatalError("Cannot initalize Gauge library");
-	wxGaugeMSWInitialised = TRUE;
+        wxFatalError("Cannot initalize Gauge library");
+    wxGaugeMSWInitialised = TRUE;
   }
 
   SetName(name);
@@ -94,9 +94,9 @@ bool wxGaugeMSW::Create(wxWindow *parent, wxWindowID id,
   m_windowStyle = style;
 
   if ( id == -1 )
-  	m_windowId = (int)NewControlId();
+      m_windowId = (int)NewControlId();
   else
-	m_windowId = id;
+    m_windowId = id;
 
   int x = pos.x;
   int y = pos.y;
@@ -218,16 +218,24 @@ int wxGaugeMSW::GetValue(void) const
   return (int) SendMessage((HWND) GetHWND(), ZYZG_GETPOSITION, 0, 0);
 }
 
-void wxGaugeMSW::SetForegroundColour(const wxColour& col)
+bool wxGaugeMSW::SetForegroundColour(const wxColour& col)
 {
-  m_foregroundColour = col ;
-  SendMessage((HWND) GetHWND(), ZYZG_SETFGCOLOR, 0, RGB(col.Red(), col.Green(), col.Blue()));
+    if ( !wxControl::SetForegroundColour(col) )
+        return FALSE;
+
+    SendMessage((HWND) GetHWND(), ZYZG_SETFGCOLOR, 0, RGB(col.Red(), col.Green(), col.Blue()));
+
+    return TRUE;
 }
 
 void wxGaugeMSW::SetBackgroundColour(const wxColour& col)
 {
-  m_backgroundColour = col ;
-  SendMessage((HWND) GetHWND(), ZYZG_SETBKCOLOR, 0, RGB(col.Red(), col.Green(), col.Blue()));
+    if ( !wxControl::SetBackgroundColour(col) )
+        return FALSE;
+
+    SendMessage((HWND) GetHWND(), ZYZG_SETBKCOLOR, 0, RGB(col.Red(), col.Green(), col.Blue()));
+
+    return TRUE;
 }
 
 
@@ -704,7 +712,7 @@ static DWORD    rgbDefTextColor;
 static DWORD    rgbDefBkColor;
 static BOOL     fSupport3D;
 
-#if !defined(APIENTRY)	// NT defines APIENTRY, 3.x not
+#if !defined(APIENTRY)    // NT defines APIENTRY, 3.x not
 #define APIENTRY FAR PASCAL
 #endif
  
@@ -873,13 +881,13 @@ static void PASCAL gaugePaint(HWND hwnd, HDC hdc)
     if ((GetWindowLong(hwnd, GWL_STYLE) & ZYZGS_3D) && fSupport3D)
     {
         Draw3DRect(hdc, &rc1, pgauge->wWidth3D, DRAW3D_OUT);
-	InflateRect(&rc1, ~(pgauge->wWidth3D), ~(pgauge->wWidth3D));
+    InflateRect(&rc1, ~(pgauge->wWidth3D), ~(pgauge->wWidth3D));
 
         Draw3DFaceFrame(hdc, &rc1, pgauge->wWidthBezelFace);
-	InflateRect(&rc1, ~(pgauge->wWidthBezelFace), ~(pgauge->wWidthBezelFace));
+    InflateRect(&rc1, ~(pgauge->wWidthBezelFace), ~(pgauge->wWidthBezelFace));
 
         Draw3DRect(hdc, &rc1, pgauge->wWidth3D, DRAW3D_IN);
-	InflateRect(&rc1, ~(pgauge->wWidth3D), ~(pgauge->wWidth3D));
+    InflateRect(&rc1, ~(pgauge->wWidth3D), ~(pgauge->wWidth3D));
 
         /* draw a black border on the _inside_ */
         FrameRect(hdc, &rc1, (HBRUSH) GetStockObject(BLACK_BRUSH));
@@ -1106,7 +1114,7 @@ zyzgForceRepaint:
             else
                 wParam = 1;
 
-	    InflateRect(&rc, ~(wParam), ~(wParam));
+        InflateRect(&rc, ~(wParam), ~(wParam));
             InvalidateRect(hwnd, &rc, FALSE);
             UpdateWindow(hwnd);
             return (0L);

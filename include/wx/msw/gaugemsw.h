@@ -57,8 +57,8 @@ public:
     int GetRange(void) const ;
     int GetValue(void) const ;
 
-    void SetForegroundColour(const wxColour& col);
-    void SetBackgroundColour(const wxColour& col);
+    bool SetForegroundColour(const wxColour& col);
+    bool SetBackgroundColour(const wxColour& col);
 
     // Backward compatibility
 #if WXWIN_COMPATIBILITY
