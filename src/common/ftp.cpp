@@ -478,6 +478,8 @@ public:
 
     virtual ~wxInputFTPStream()
     {
+        delete m_i_socket;
+
         if ( LastError() == wxStream_NOERROR )
         {
             // wait for "226 transfer completed"
@@ -489,8 +491,6 @@ public:
         {
             m_ftp->Abort();
         }
-
-        delete m_i_socket;
     }
 
     wxFTP *m_ftp;
