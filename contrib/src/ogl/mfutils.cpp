@@ -30,6 +30,8 @@
 #include <wx/ogl/mfutils.h>
 #include <stdio.h>
 
+static char _buf[1024]; // a temp buffer to use inplace of wxBuffer, which is deprecated.
+
 static char hexArray[] = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B',
   'C', 'D', 'E', 'F' };
 
@@ -41,7 +43,7 @@ static void DecToHex(int dec, char *buf)
   buf[1] = hexArray[secondDigit];
   buf[2] = 0;
 }
- 
+
 // 16-bit unsigned integer
 static unsigned int getshort(FILE *fp)
 {
@@ -72,7 +74,7 @@ static long getint(FILE *fp)
   int c, c1, c2, c3;
   c = getc(fp);  c1 = getc(fp);  c2 = getc(fp);  c3 = getc(fp);
   long res = (long)((long) c) +
-         (((long) c1) << 8) + 
+         (((long) c1) << 8) +
 	 (((long) c2) << 16) +
 	 (((long) c3) << 24);
   return res;
@@ -103,7 +105,7 @@ wxXMetaFile::wxXMetaFile(char *file)
   bottom = 0.0;
   left = 0.0;
   right = 0.0;
-  
+
   if (file)
     ok = ReadFile(file);
 }
@@ -115,7 +117,7 @@ wxXMetaFile::wxXMetaFile(char *file)
   [1]----param2---     wxBrush
   [2]             |    wxFont
   [3]             | -> wxPen
-  
+
  The handle table works as follows.
  When a GDI object is created whilst reading in the
  metafile, the (e.g.) createpen record is added to the
@@ -123,7 +125,7 @@ wxXMetaFile::wxXMetaFile(char *file)
  record's param1 is a pointer to the actual wxPen, and
  its param2 is the index into the gdiObjects list, which only
  grows and never shrinks (unlike the handle table.)
- 
+
  When SelectObject(index) is found, the index in the file
  refers to the position in the handle table. BUT we then
  set param2 to be the position of the wxPen in gdiObjects,
@@ -135,7 +137,7 @@ wxXMetaFile::wxXMetaFile(char *file)
  allows us to create all GDI objects in advance of playing the
  metafile).
 */
- 
+
 
 static wxMetaRecord *HandleTable[100];
 static int HandleTableSize = 0;
@@ -154,7 +156,7 @@ int AddMetaRecordHandle(wxMetaRecord *record)
       return i;
     }
   // No free spaces in table, so append.
-  
+
   HandleTable[HandleTableSize] = record;
   HandleTableSize ++;
   return (HandleTableSize - 1);
@@ -163,13 +165,13 @@ int AddMetaRecordHandle(wxMetaRecord *record)
 bool wxXMetaFile::ReadFile(char *file)
 {
   HandleTableSize = 0;
-  
+
   FILE *handle = fopen(file, "rb");
   if (!handle) return FALSE;
 
   // Read placeable metafile header, if any
   long key = getint(handle);
-    
+
   if (key == (long) 0x9AC6CDD7)
   {
     long hmf = getshort(handle);
@@ -213,7 +215,7 @@ bool wxXMetaFile::ReadFile(char *file)
     fclose(handle);
     return FALSE;
   }
-  
+
   long mtSize = getint(handle);
   int mtNoObjects = getshort(handle);
   long mtMaxRecord = getint(handle);
@@ -420,7 +422,7 @@ bool wxXMetaFile::ReadFile(char *file)
           rec->points[i].x = getshort(handle);
           rec->points[i].y = getshort(handle);
         }
-        
+
         metaRecords.Append(rec);
         break;
       }
@@ -434,7 +436,7 @@ bool wxXMetaFile::ReadFile(char *file)
           rec->points[i].x = getshort(handle);
           rec->points[i].y = getshort(handle);
         }
-        
+
         metaRecords.Append(rec);
         break;
       }
@@ -472,8 +474,8 @@ bool wxXMetaFile::ReadFile(char *file)
       case META_DIBCREATEPATTERNBRUSH:
       {
         wxMetaRecord *rec = new wxMetaRecord(META_DIBCREATEPATTERNBRUSH);
-        fread((void *)wxBuffer, sizeof(char), (int)((2*rdSize) - 6), handle);
-        
+        fread((void *)_buf, sizeof(char), (int)((2*rdSize) - 6), handle);
+
         metaRecords.Append(rec);
         gdiObjects.Append(rec);
         AddMetaRecordHandle(rec);
@@ -497,8 +499,8 @@ bool wxXMetaFile::ReadFile(char *file)
       case META_CREATEPALETTE:
       {
         wxMetaRecord *rec = new wxMetaRecord(META_CREATEPALETTE);
-        fread((void *)wxBuffer, sizeof(char), (int)((2*rdSize) - 6), handle);
-        
+        fread((void *)_buf, sizeof(char), (int)((2*rdSize) - 6), handle);
+
         metaRecords.Append(rec);
         gdiObjects.Append(rec);
         AddMetaRecordHandle(rec);
@@ -508,7 +510,7 @@ bool wxXMetaFile::ReadFile(char *file)
       case META_CREATEBRUSH:
       {
         wxMetaRecord *rec = new wxMetaRecord(META_CREATEBRUSH);
-        fread((void *)wxBuffer, sizeof(char), (int)((2*rdSize) - 6), handle);
+        fread((void *)_buf, sizeof(char), (int)((2*rdSize) - 6), handle);
         metaRecords.Append(rec);
         gdiObjects.Append(rec);
         AddMetaRecordHandle(rec);
@@ -518,7 +520,7 @@ bool wxXMetaFile::ReadFile(char *file)
       case META_CREATEPATTERNBRUSH:
       {
         wxMetaRecord *rec = new wxMetaRecord(META_CREATEPATTERNBRUSH);
-        fread((void *)wxBuffer, sizeof(char), (int)((2*rdSize) - 6), handle);
+        fread((void *)_buf, sizeof(char), (int)((2*rdSize) - 6), handle);
         metaRecords.Append(rec);
         gdiObjects.Append(rec);
         AddMetaRecordHandle(rec);
@@ -549,7 +551,7 @@ bool wxXMetaFile::ReadFile(char *file)
 
         AddMetaRecordHandle(rec);
         rec->param2 = (long)(gdiObjects.Number() - 1);
-        
+
         // For some reason, the size of this record is sometimes 9 words!!!
         // instead of the usual 8. So read 2 characters extra.
         if (rdSize == 9)
@@ -683,8 +685,8 @@ bool wxXMetaFile::ReadFile(char *file)
       case META_CREATEBITMAPINDIRECT:
       {
         wxMetaRecord *rec = new wxMetaRecord(META_CREATEBITMAPINDIRECT);
-        fread((void *)wxBuffer, sizeof(char), (int)((2*rdSize) - 6), handle);
-        
+        fread((void *)_buf, sizeof(char), (int)((2*rdSize) - 6), handle);
+
         metaRecords.Append(rec);
         gdiObjects.Append(rec);
         AddMetaRecordHandle(rec);
@@ -694,8 +696,8 @@ bool wxXMetaFile::ReadFile(char *file)
       case META_CREATEBITMAP:
       {
         wxMetaRecord *rec = new wxMetaRecord(META_CREATEBITMAP);
-        fread((void *)wxBuffer, sizeof(char), (int)((2*rdSize) - 6), handle);
-        
+        fread((void *)_buf, sizeof(char), (int)((2*rdSize) - 6), handle);
+
         metaRecords.Append(rec);
         gdiObjects.Append(rec);
         AddMetaRecordHandle(rec);
@@ -705,7 +707,7 @@ bool wxXMetaFile::ReadFile(char *file)
       case META_CREATEREGION:
       {
         wxMetaRecord *rec = new wxMetaRecord(META_CREATEREGION);
-        fread((void *)wxBuffer, sizeof(char), (int)((2*rdSize) - 6), handle);
+        fread((void *)_buf, sizeof(char), (int)((2*rdSize) - 6), handle);
 
         metaRecords.Append(rec);
         gdiObjects.Append(rec);
@@ -715,7 +717,7 @@ bool wxXMetaFile::ReadFile(char *file)
       }
       default:
       {
-        fread((void *)wxBuffer, sizeof(char), (int)((2*rdSize) - 6), handle);
+        fread((void *)_buf, sizeof(char), (int)((2*rdSize) - 6), handle);
         break;
       }
     }
@@ -865,7 +867,7 @@ bool wxXMetaFile::Play(wxDC *dc)
           rec->points[i].x = getshort(handle);
           rec->points[i].y = getshort(handle);
         }
-*/        
+*/
         break;
       }
       case META_POLYLINE:
@@ -879,7 +881,7 @@ bool wxXMetaFile::Play(wxDC *dc)
           rec->points[i].x = getshort(handle);
           rec->points[i].y = getshort(handle);
         }
-*/        
+*/
         break;
       }
 //      case META_ESCAPE:
@@ -915,7 +917,7 @@ bool wxXMetaFile::Play(wxDC *dc)
       {
 /*
         fread((void *)wxBuffer, sizeof(char), (int)(rdSize - 3), handle);
-*/        
+*/
         break;
       }
 //      case META_STRETCHDIB:
@@ -1055,14 +1057,14 @@ bool wxXMetaFile::Play(wxDC *dc)
       {
 /*
         fread((void *)wxBuffer, sizeof(char), (int)(rdSize - 3), handle);
-*/        
+*/
         break;
       }
       case META_CREATEBITMAP:
       {
 /*
         fread((void *)wxBuffer, sizeof(char), (int)(rdSize - 3), handle);
-*/        
+*/
         break;
       }
       case META_CREATEREGION:
