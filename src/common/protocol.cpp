@@ -40,9 +40,9 @@
 
 wxProtoInfo::wxProtoInfo(const wxChar *name, const wxChar *serv,
                          const bool need_host1, wxClassInfo *info)
+           : m_protoname(name),
+             m_servname(serv)
 {
-    m_protoname = name;
-    m_servname = serv;
     m_cinfo = info;
     m_needhost = need_host1;
     next = wxURL::ms_protocols;
