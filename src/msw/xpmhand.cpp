@@ -35,7 +35,7 @@
 
 #if wxUSE_XPM_IN_MSW
     #define FOR_MSW 1
-    #include "../xpm/xpm34.h"
+    #include "../xpm/xpm.h"
 #endif
 
 #include "wx/xpmhand.h"
@@ -45,6 +45,7 @@
 
 static void XpmToBitmap(wxBitmap *bitmap,
                         const XImage *ximage,
+                        const XImage *xmask,
                         const XpmAttributes& xpmAttr)
 {
     wxBitmapRefData *refData = bitmap->GetBitmapData();
@@ -57,28 +58,16 @@ static void XpmToBitmap(wxBitmap *bitmap,
         wxLogLastError("GetObject(bitmap)");
     }
 
-    refData->m_width = bm.bmWidth;
-    refData->m_height = bm.bmHeight;
-    refData->m_depth = bm.bmPlanes * bm.bmBitsPixel;
+    refData->m_width     = bm.bmWidth;
+    refData->m_height    = bm.bmHeight;
+    refData->m_depth     = bm.bmPlanes * bm.bmBitsPixel;
     refData->m_numColors = xpmAttr.npixels;
 
-    // next get the mask, if any
-    if ( xpmAttr.mask_pixel != XpmUndefPixel )
+    // GRG Jan/2000, mask support
+    if (xmask)
     {
-        int red, green, blue;
-        const char *clrString = xpmAttr.colorTable[xpmAttr.mask_pixel].c_color;
-        if ( strcmp(clrString, "None") == 0 )
-        {
-            // TODO what to do here??
-            red = green = 0;
-            blue = 1;
-        }
-        else
-        {
-            sscanf(clrString, "#%02x%02x%02x", &red, &green, &blue);
-        }
-
-        wxMask *mask = new wxMask(*bitmap, wxColour(red, green, blue));
+        wxMask *mask = new wxMask();
+        mask->SetMaskBitmap((WXHBITMAP) wxInvertMask(xmask->bitmap));
         bitmap->SetMask(mask);
     }
 }
@@ -93,7 +82,8 @@ bool wxXPMFileHandler::LoadFile(wxBitmap *bitmap,
                                 int desiredWidth, int desiredHeight)
 {
 #if wxUSE_XPM_IN_MSW
-    XImage *ximage;
+    XImage *ximage = NULL;
+    XImage *xmask = NULL;
     XpmAttributes xpmAttr;
     HDC     dc;
 
@@ -104,16 +94,18 @@ bool wxXPMFileHandler::LoadFile(wxBitmap *bitmap,
         int errorStatus = XpmReadFileToImage(&dc,
                                              wxMBSTRINGCAST name.fn_str(),
                                              &ximage,
-                                             (XImage **)NULL,
+                                             &xmask,
                                              &xpmAttr);
         DeleteDC(dc);
         if (errorStatus == XpmSuccess)
         {
-            XpmToBitmap(bitmap, ximage, xpmAttr);
+            XpmToBitmap(bitmap, ximage, xmask, xpmAttr);
 
             XpmFree(xpmAttr.pixels);
             XpmFreeAttributes(&xpmAttr);
             XImageFree(ximage);
+            if (xmask)
+                XDestroyImage(xmask);
         }
 
 #if WXWIN_COMPATIBILITY_2
@@ -134,29 +126,44 @@ bool wxXPMFileHandler::SaveFile(wxBitmap *bitmap,
 {
 #if wxUSE_XPM_IN_MSW
     XImage ximage;
+    XImage xmask;
+    bool hasmask = FALSE;
 
     HDC dc = CreateCompatibleDC(NULL);
     if (dc)
     {
-        if ( SelectObject(dc, GetHbitmapOf(*bitmap)) )
+        /* fill the XImage struct 'by hand' */
+        wxBitmapRefData *refData = bitmap->GetBitmapData();
+        ximage.width  = refData->m_width;
+        ximage.height = refData->m_height;
+        ximage.depth  = refData->m_depth;
+        ximage.bitmap = (HBITMAP)refData->m_hBitmap;
+
+        // GRG Jan/2000, mask support
+        hasmask = (refData->m_bitmapMask != NULL);
+        if (hasmask)
         {
-            /* for following SetPixel */
-            /* fill the XImage struct 'by hand' */
-            wxBitmapRefData *refData = bitmap->GetBitmapData();
-            ximage.width = refData->m_width;
-            ximage.height = refData->m_height;
-            ximage.depth = refData->m_depth;
-            ximage.bitmap = (HBITMAP)refData->m_hBitmap;
-            int errorStatus = XpmWriteFileFromImage(&dc, wxMBSTRINGCAST name.fn_str(),
-                                                    &ximage, (XImage *) NULL,
-                                                    (XpmAttributes *) NULL);
-
-            if (dc)
-                DeleteDC(dc);
-
-            if (errorStatus == XpmSuccess)
-                return TRUE;    /* no error */
+            /* Strangely enough, the MSW version of xpmlib is not
+             * coherent with itself regarding masks; we have to invert
+             * the mask we get when loading, but we still must pass it
+             * 'as is' when saving...
+             */
+            xmask.bitmap = (HBITMAP) refData->m_bitmapMask->GetMaskBitmap();
+            xmask.width  = refData->m_width;
+            xmask.height = refData->m_height;
+            xmask.depth  = 1;
         }
+
+        int errorStatus = XpmWriteFileFromImage(
+            &dc,
+            wxMBSTRINGCAST name.fn_str(),
+            &ximage,
+            (hasmask? &xmask : (XImage *)NULL),
+            (XpmAttributes *) NULL);
+
+        DeleteDC(dc);
+
+        return (errorStatus == XpmSuccess);
     }
 #endif // !wxUSE_XPM_IN_MSW
 
@@ -173,7 +180,8 @@ bool wxXPMDataHandler::Create(wxBitmap *bitmap,
                               int depth)
 {
 #if wxUSE_XPM_IN_MSW
-  XImage *ximage;
+  XImage *ximage = NULL;
+  XImage *xmask = NULL;
   XpmAttributes xpmAttr;
 
   HDC dc = CreateCompatibleDC(NULL);  /* memory DC */
@@ -183,17 +191,19 @@ bool wxXPMDataHandler::Create(wxBitmap *bitmap,
       xpmAttr.valuemask = XpmReturnInfos | XpmColorTable;
       int errorStatus = XpmCreateImageFromData(&dc, (char **)data,
                                                &ximage,
-                                               (XImage **) NULL,
+                                               &xmask,
                                                &xpmAttr);
       DeleteDC(dc);
 
       if ( errorStatus == XpmSuccess )
       {
-          XpmToBitmap(bitmap, ximage, xpmAttr);
+          XpmToBitmap(bitmap, ximage, xmask, xpmAttr);
 
           XpmFree(xpmAttr.pixels);
           XpmFreeAttributes(&xpmAttr);
           XImageFree(ximage); // releases the malloc, but does not destroy bitmap
+          if (xmask)
+              XDestroyImage(xmask);
       }
 
 #if WXWIN_COMPATIBILITY_2
