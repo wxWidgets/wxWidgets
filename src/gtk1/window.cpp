@@ -1337,24 +1337,13 @@ static void gtk_wxwindow_commit_cb (GtkIMContext *context,
     }
 
 #if wxUSE_UNICODE
-    event.m_uniChar = g_utf8_get_char( str );
-
-    // Backward compatible for ISO-8859
-    if (event.m_uniChar < 256)
-        event.m_keyCode = event.m_uniChar;
-    wxLogTrace(TRACE_KEYS, _T("IM sent character '%c'"), event.m_uniChar);
+    const wxWCharBuffer data = wxConvUTF8.cMB2WC( (char*)str );
 #else
-    wchar_t unistr[2];
-    unistr[0] = g_utf8_get_char(str);
-    unistr[1] = 0;
-    wxCharBuffer ansistr(wxConvLocal.cWC2MB(unistr));
-    // We cannot handle characters that cannot be represented in 
-    // current locale's charset in non-Unicode mode:
-    if (ansistr.data() == NULL)
-        return;
-    event.m_keyCode = ansistr[0u];
-    wxLogTrace(TRACE_KEYS, _T("IM sent character '%c'"), (wxChar)event.m_keyCode);
+    const wxWCharBuffer wdata = wxConvUTF8.cMB2WC( (char*)str );
+    const wxCharBuffer data = wxConvLocal.cWC2MB( wdata );
 #endif // wxUSE_UNICODE
+    if( !(const wxChar*)data )
+        return;
 
     bool ret = false;
 
@@ -1362,16 +1351,28 @@ static void gtk_wxwindow_commit_cb (GtkIMContext *context,
     wxWindow *parent = window;
     while (parent && !parent->IsTopLevel())
         parent = parent->GetParent();
-    if (parent)
-    {
-        event.SetEventType( wxEVT_CHAR_HOOK );
-        ret = parent->GetEventHandler()->ProcessEvent( event );
-    }
 
-    if (!ret)
+    for( const wxChar* pstr = data; *pstr; pstr++ )
     {
-        event.SetEventType(wxEVT_CHAR);
-        ret = window->GetEventHandler()->ProcessEvent( event );
+#if wxUSE_UNICODE
+        event.m_uniChar = *pstr;
+        // Backward compatible for ISO-8859
+        event.m_keyCode = *pstr < 256 ? event.m_uniChar : 0;
+        wxLogTrace(TRACE_KEYS, _T("IM sent character '%c'"), event.m_uniChar);
+#else
+        event.m_keyCode = *pstr;
+#endif  // wxUSE_UNICODE
+        if (parent)
+        {
+            event.SetEventType( wxEVT_CHAR_HOOK );
+            ret = parent->GetEventHandler()->ProcessEvent( event );
+        }
+
+        if (!ret)
+        {
+            event.SetEventType(wxEVT_CHAR);
+            ret = window->GetEventHandler()->ProcessEvent( event );
+        }
     }
 }
 #endif
