@@ -20,8 +20,9 @@ import images
 
 # For debugging
 ##wx.Trap();
+##print "wx.VERSION_STRING = ", wx.VERSION_STRING
 ##print os.getpid();
-##raw_input("Press a key...")
+##raw_input("Press Enter...")
 
 
 #---------------------------------------------------------------------------
@@ -470,7 +471,7 @@ class wxPythonDemo(wx.Frame):
         # Set up a log on the View Log Notebook page
         self.log = wx.TextCtrl(splitter2, -1,
                               style = wx.TE_MULTILINE|wx.TE_READONLY|wx.HSCROLL)
-
+        
         # Set the wxWindows log target to be this textctrl
         #wx.Log_SetActiveTarget(wx.LogTextCtrl(self.log))
 
@@ -634,7 +635,7 @@ class wxPythonDemo(wx.Frame):
                 self.tree.EnsureVisible(selectedDemo)
 
 
-        wx.LogMessage('window handle: %s' % self.GetHandle())
+##        wx.LogMessage('window handle: %s' % self.GetHandle())
 
 
     #---------------------------------------------

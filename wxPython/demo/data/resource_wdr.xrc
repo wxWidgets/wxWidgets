@@ -23,7 +23,7 @@
             <flag>wxTOP|wxLEFT|wxRIGHT|wxEXPAND|wxGROW|wxALIGN_CENTRE_VERTICAL</flag>
             <border>5</border>
             <object class="wxTextCtrl" name="ID_NameField">
-              <size>80,-1</size>
+              <size>100,-1</size>
               <value></value>
             </object>
           </object>
@@ -38,7 +38,7 @@
             <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT|wxTOP</flag>
             <border>5</border>
             <object class="wxTextCtrl" name="ID_Addr1Field">
-              <size>80,-1</size>
+              <size>100,-1</size>
               <value></value>
             </object>
           </object>
@@ -49,7 +49,7 @@
             <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT|wxTOP</flag>
             <border>5</border>
             <object class="wxTextCtrl" name="ID_TEXTCTRL">
-              <size>80,-1</size>
+              <size>100,-1</size>
               <value></value>
             </object>
           </object>
@@ -102,7 +102,7 @@
             <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT|wxTOP</flag>
             <border>5</border>
             <object class="wxTextCtrl" name="ID_PhoneField">
-              <size>80,-1</size>
+              <size>100,-1</size>
               <value></value>
             </object>
           </object>
@@ -117,7 +117,7 @@
             <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT|wxTOP</flag>
             <border>5</border>
             <object class="wxTextCtrl" name="ID_EmailField">
-              <size>80,-1</size>
+              <size>100,-1</size>
               <value></value>
             </object>
           </object>

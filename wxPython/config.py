@@ -87,7 +87,7 @@ BUILD_DLLWIDGET = 0# Build a module that enables unknown wx widgets
 
                    # Internet Explorer wrapper (experimental)
 BUILD_IEWIN = (os.name == 'nt')
-BUILD_ACTIVEX = (os.name == 'nt')  # new version of IEWIN
+BUILD_ACTIVEX = (os.name == 'nt')  # new version of IEWIN and more
 
 
 CORE_ONLY = 0      # if true, don't build any of the above
