@@ -747,6 +747,8 @@ static void gtk_window_draw_callback( GtkWidget *widget, GdkRectangle *rect, wxW
     win->GetUpdateRegion().Union( rect->x, rect->y,
                                   rect->width, rect->height );
 
+    win->m_clipPaintRegion = TRUE;
+    
     wxEraseEvent eevent( win->GetId() );
     eevent.SetEventObject( win );
     win->GetEventHandler()->ProcessEvent(eevent);
@@ -757,6 +759,8 @@ static void gtk_window_draw_callback( GtkWidget *widget, GdkRectangle *rect, wxW
 
     win->GetUpdateRegion().Clear();
     
+    win->m_clipPaintRegion = FALSE;
+    
     GList *children = pizza->children;
     while (children)
     {
@@ -765,7 +769,9 @@ static void gtk_window_draw_callback( GtkWidget *widget, GdkRectangle *rect, wxW
 
         GdkRectangle child_area;
         if (gtk_widget_intersect (child->widget, rect, &child_area))
-            gtk_widget_draw (child->widget, (GdkRectangle*) NULL );
+        {
+            gtk_widget_draw (child->widget, &child_area /* (GdkRectangle*) NULL*/ );
+        }
     }
 }
 

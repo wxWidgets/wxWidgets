@@ -267,8 +267,6 @@ bool wxDialog::Create( wxWindow *parent,
                        const wxPoint &pos, const wxSize &size,
                        long style, const wxString &name )
 {
-    g_openDialogs++;
-
     wxTopLevelWindows.Append( this );
 
     m_needParent = FALSE;
@@ -345,8 +343,6 @@ wxDialog::~wxDialog()
     {
         wxTheApp->ExitMainLoop();
     }
-    
-    g_openDialogs--;
 }
 
 void wxDialog::SetTitle( const wxString& title )
@@ -631,9 +627,13 @@ int wxDialog::ShowModal()
 
     m_modalShowing = TRUE;
 
+    g_openDialogs++;
+
     gtk_grab_add( m_widget );
     gtk_main();
     gtk_grab_remove( m_widget );
+
+    g_openDialogs--;
 
     return GetReturnCode();
 }
