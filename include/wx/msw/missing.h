@@ -381,5 +381,9 @@ typedef struct _paraformat2 {
     #define ENDSESSION_LOGOFF    0x80000000
 #endif
 
+#ifndef HANGUL_CHARSET
+    #define HANGUL_CHARSET  129
+#endif
+
 #endif
     // _WX_MISSING_H_

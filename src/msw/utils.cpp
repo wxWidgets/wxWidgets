@@ -34,6 +34,7 @@
 #include "wx/apptrait.h"
 
 #include "wx/msw/private.h"     // includes <windows.h>
+#include "wx/msw/missing.h"     // CHARSET_HANGUL
 
 #ifdef __GNUWIN32_OLD__
     // apparently we need to include winsock.h to get WSADATA and other stuff
