@@ -42,7 +42,7 @@
 /*
  * Supports bool type
  */
-#define HAVE_BOOL 0
+#undef HAVE_BOOL
 
 /* ------------------------------------------------------------------------ */
 /* library options                                                          */
