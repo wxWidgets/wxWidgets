@@ -102,6 +102,12 @@ class wxHtmlParserPtr :
     def GetSource(self, *_args, **_kwargs):
         val = apply(htmlc.wxHtmlParser_GetSource,(self,) + _args, _kwargs)
         return val
+    def PushTagHandler(self, *_args, **_kwargs):
+        val = apply(htmlc.wxHtmlParser_PushTagHandler,(self,) + _args, _kwargs)
+        return val
+    def PopTagHandler(self, *_args, **_kwargs):
+        val = apply(htmlc.wxHtmlParser_PopTagHandler,(self,) + _args, _kwargs)
+        return val
     def __repr__(self):
         return "<C wxHtmlParser instance at %s>" % (self.this,)
 class wxHtmlParser(wxHtmlParserPtr):
@@ -141,6 +147,10 @@ class wxHtmlWinParserPtr(wxHtmlParserPtr):
         return val
     def OpenContainer(self, *_args, **_kwargs):
         val = apply(htmlc.wxHtmlWinParser_OpenContainer,(self,) + _args, _kwargs)
+        if val: val = wxHtmlContainerCellPtr(val) 
+        return val
+    def SetContainer(self, *_args, **_kwargs):
+        val = apply(htmlc.wxHtmlWinParser_SetContainer,(self,) + _args, _kwargs)
         if val: val = wxHtmlContainerCellPtr(val) 
         return val
     def CloseContainer(self, *_args, **_kwargs):
@@ -327,6 +337,12 @@ class wxHtmlCellPtr :
     def Find(self, *_args, **_kwargs):
         val = apply(htmlc.wxHtmlCell_Find,(self,) + _args, _kwargs)
         if val: val = wxHtmlCellPtr(val) 
+        return val
+    def AdjustPagebreak(self, *_args, **_kwargs):
+        val = apply(htmlc.wxHtmlCell_AdjustPagebreak,(self,) + _args, _kwargs)
+        return val
+    def SetCanLiveOnPagebreak(self, *_args, **_kwargs):
+        val = apply(htmlc.wxHtmlCell_SetCanLiveOnPagebreak,(self,) + _args, _kwargs)
         return val
     def __repr__(self):
         return "<C wxHtmlCell instance at %s>" % (self.this,)
@@ -515,6 +531,119 @@ class wxHtmlWindow(wxHtmlWindowPtr):
 
 
 
+class wxHtmlDCRendererPtr :
+    def __init__(self,this):
+        self.this = this
+        self.thisown = 0
+    def __del__(self,htmlc=htmlc):
+        if self.thisown == 1 :
+            htmlc.delete_wxHtmlDCRenderer(self)
+    def SetDC(self, *_args, **_kwargs):
+        val = apply(htmlc.wxHtmlDCRenderer_SetDC,(self,) + _args, _kwargs)
+        return val
+    def SetSize(self, *_args, **_kwargs):
+        val = apply(htmlc.wxHtmlDCRenderer_SetSize,(self,) + _args, _kwargs)
+        return val
+    def SetHtmlText(self, *_args, **_kwargs):
+        val = apply(htmlc.wxHtmlDCRenderer_SetHtmlText,(self,) + _args, _kwargs)
+        return val
+    def Render(self, *_args, **_kwargs):
+        val = apply(htmlc.wxHtmlDCRenderer_Render,(self,) + _args, _kwargs)
+        return val
+    def GetTotalHeight(self, *_args, **_kwargs):
+        val = apply(htmlc.wxHtmlDCRenderer_GetTotalHeight,(self,) + _args, _kwargs)
+        return val
+    def __repr__(self):
+        return "<C wxHtmlDCRenderer instance at %s>" % (self.this,)
+class wxHtmlDCRenderer(wxHtmlDCRendererPtr):
+    def __init__(self,*_args,**_kwargs):
+        self.this = apply(htmlc.new_wxHtmlDCRenderer,_args,_kwargs)
+        self.thisown = 1
+
+
+
+
+class wxHtmlPrintoutPtr(wxPrintoutPtr):
+    def __init__(self,this):
+        self.this = this
+        self.thisown = 0
+    def __del__(self,htmlc=htmlc):
+        if self.thisown == 1 :
+            htmlc.delete_wxHtmlPrintout(self)
+    def SetHtmlText(self, *_args, **_kwargs):
+        val = apply(htmlc.wxHtmlPrintout_SetHtmlText,(self,) + _args, _kwargs)
+        return val
+    def SetHtmlFile(self, *_args, **_kwargs):
+        val = apply(htmlc.wxHtmlPrintout_SetHtmlFile,(self,) + _args, _kwargs)
+        return val
+    def SetHeader(self, *_args, **_kwargs):
+        val = apply(htmlc.wxHtmlPrintout_SetHeader,(self,) + _args, _kwargs)
+        return val
+    def SetFooter(self, *_args, **_kwargs):
+        val = apply(htmlc.wxHtmlPrintout_SetFooter,(self,) + _args, _kwargs)
+        return val
+    def SetMargins(self, *_args, **_kwargs):
+        val = apply(htmlc.wxHtmlPrintout_SetMargins,(self,) + _args, _kwargs)
+        return val
+    def __repr__(self):
+        return "<C wxHtmlPrintout instance at %s>" % (self.this,)
+class wxHtmlPrintout(wxHtmlPrintoutPtr):
+    def __init__(self,*_args,**_kwargs):
+        self.this = apply(htmlc.new_wxHtmlPrintout,_args,_kwargs)
+        self.thisown = 1
+
+
+
+
+class wxHtmlEasyPrintingPtr :
+    def __init__(self,this):
+        self.this = this
+        self.thisown = 0
+    def __del__(self,htmlc=htmlc):
+        if self.thisown == 1 :
+            htmlc.delete_wxHtmlEasyPrinting(self)
+    def PreviewFile(self, *_args, **_kwargs):
+        val = apply(htmlc.wxHtmlEasyPrinting_PreviewFile,(self,) + _args, _kwargs)
+        return val
+    def PreviewText(self, *_args, **_kwargs):
+        val = apply(htmlc.wxHtmlEasyPrinting_PreviewText,(self,) + _args, _kwargs)
+        return val
+    def PrintFile(self, *_args, **_kwargs):
+        val = apply(htmlc.wxHtmlEasyPrinting_PrintFile,(self,) + _args, _kwargs)
+        return val
+    def PrintText(self, *_args, **_kwargs):
+        val = apply(htmlc.wxHtmlEasyPrinting_PrintText,(self,) + _args, _kwargs)
+        return val
+    def PrinterSetup(self, *_args, **_kwargs):
+        val = apply(htmlc.wxHtmlEasyPrinting_PrinterSetup,(self,) + _args, _kwargs)
+        return val
+    def PageSetup(self, *_args, **_kwargs):
+        val = apply(htmlc.wxHtmlEasyPrinting_PageSetup,(self,) + _args, _kwargs)
+        return val
+    def SetHeader(self, *_args, **_kwargs):
+        val = apply(htmlc.wxHtmlEasyPrinting_SetHeader,(self,) + _args, _kwargs)
+        return val
+    def SetFooter(self, *_args, **_kwargs):
+        val = apply(htmlc.wxHtmlEasyPrinting_SetFooter,(self,) + _args, _kwargs)
+        return val
+    def GetPrintData(self, *_args, **_kwargs):
+        val = apply(htmlc.wxHtmlEasyPrinting_GetPrintData,(self,) + _args, _kwargs)
+        if val: val = wxPrintDataPtr(val) 
+        return val
+    def GetPageSetupData(self, *_args, **_kwargs):
+        val = apply(htmlc.wxHtmlEasyPrinting_GetPageSetupData,(self,) + _args, _kwargs)
+        if val: val = wxPageSetupDialogDataPtr(val) 
+        return val
+    def __repr__(self):
+        return "<C wxHtmlEasyPrinting instance at %s>" % (self.this,)
+class wxHtmlEasyPrinting(wxHtmlEasyPrintingPtr):
+    def __init__(self,*_args,**_kwargs):
+        self.this = apply(htmlc.new_wxHtmlEasyPrinting,_args,_kwargs)
+        self.thisown = 1
+
+
+
+
 
 
 #-------------- FUNCTION WRAPPERS ------------------
@@ -546,6 +675,9 @@ wxHTML_INDENT_ALL = htmlc.wxHTML_INDENT_ALL
 wxHTML_COND_ISANCHOR = htmlc.wxHTML_COND_ISANCHOR
 wxHTML_COND_ISIMAGEMAP = htmlc.wxHTML_COND_ISIMAGEMAP
 wxHTML_COND_USER = htmlc.wxHTML_COND_USER
+wxPAGE_ODD = htmlc.wxPAGE_ODD
+wxPAGE_EVEN = htmlc.wxPAGE_EVEN
+wxPAGE_ALL = htmlc.wxPAGE_ALL
 
 
 #-------------- USER INCLUDE -----------------------

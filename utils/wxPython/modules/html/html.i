@@ -16,10 +16,13 @@
 %{
 #include "helpers.h"
 #include <wx/html/htmlwin.h>
+#include <wx/html/htmprint.h>
 #include <wx/image.h>
 #include <wx/fs_zip.h>
 #include <wx/fs_inet.h>
 #include <wx/wfstream.h>
+
+#include "printfw.h"
 %}
 
 //---------------------------------------------------------------------------
@@ -33,6 +36,7 @@
 %extern events.i
 %extern controls.i
 %extern controls2.i
+%extern printfw.i
 
 %extern utils.i
 
@@ -200,6 +204,8 @@ public:
     // wxObject* GetProduct();
     void AddTagHandler(wxHtmlTagHandler *handler);
     wxString* GetSource();
+    void PushTagHandler(wxHtmlTagHandler* handler, wxString tags);
+    void PopTagHandler();
 
 
     // void AddText(const char* txt) = 0;
@@ -223,7 +229,9 @@ public:
 
     wxHtmlContainerCell* GetContainer();
     wxHtmlContainerCell* OpenContainer();
+    wxHtmlContainerCell *SetContainer(wxHtmlContainerCell *c);
     wxHtmlContainerCell* CloseContainer();
+
     int GetFontSize();
     void SetFontSize(int s);
     int GetFontBold();
@@ -332,7 +340,7 @@ public:
     void OnExit() {
         Py_DECREF(m_tagHandlerClass);
         m_tagHandlerClass = NULL;
-        for (int x=0; x < m_objArray.GetCount(); x++) {
+        for (size_t x=0; x < m_objArray.GetCount(); x++) {
             PyObject* obj = (PyObject*)m_objArray.Item(x);
             Py_DECREF(obj);
         }
@@ -377,6 +385,7 @@ private:
     }
 %}
 
+
 //---------------------------------------------------------------------------
 //---------------------------------------------------------------------------
 
@@ -400,6 +409,9 @@ public:
     void Draw(wxDC& dc, int x, int y, int view_y1, int view_y2);
     void DrawInvisible(wxDC& dc, int x, int y);
     const wxHtmlCell* Find(int condition, const void* param);
+
+    bool AdjustPagebreak(int * pagebreak);
+    void SetCanLiveOnPagebreak(bool can);
 };
 
 
@@ -515,6 +527,73 @@ public:
         wxHtmlWindow::AddFilter(filter);
     }
 %}
+
+
+//---------------------------------------------------------------------------
+//---------------------------------------------------------------------------
+
+
+class wxHtmlDCRenderer {
+public:
+    wxHtmlDCRenderer();
+    ~wxHtmlDCRenderer();
+
+    void SetDC(wxDC *dc, int maxwidth);
+    void SetSize(int width, int height);
+    void SetHtmlText(const wxString& html,
+                     const wxString& basepath = wxEmptyString,
+                     bool isdir = TRUE);
+    int Render(int x, int y, int from = 0, int dont_render = FALSE);
+    int GetTotalHeight();
+                // returns total height of the html document
+                // (compare Render's return value with this)
+};
+
+enum {
+    wxPAGE_ODD,
+    wxPAGE_EVEN,
+    wxPAGE_ALL
+};
+
+
+class wxHtmlPrintout : public wxPyPrintout {
+public:
+    wxHtmlPrintout(const wxString& title = "Printout");
+    ~wxHtmlPrintout();
+
+    void SetHtmlText(const wxString& html,
+                     const wxString &basepath = wxEmptyString,
+                     bool isdir = TRUE);
+    void SetHtmlFile(const wxString &htmlfile);
+    void SetHeader(const wxString& header, int pg = wxPAGE_ALL);
+    void SetFooter(const wxString& footer, int pg = wxPAGE_ALL);
+    void SetMargins(float top = 25.2, float bottom = 25.2,
+                    float left = 25.2, float right = 25.2,
+                    float spaces = 5);
+};
+
+
+
+class wxHtmlEasyPrinting {
+public:
+    wxHtmlEasyPrinting(const wxString& name = "Printing",
+                       wxFrame *parent_frame = NULL);
+    ~wxHtmlEasyPrinting();
+
+    void PreviewFile(const wxString &htmlfile);
+    void PreviewText(const wxString &htmltext, const wxString& basepath = wxEmptyString);
+    void PrintFile(const wxString &htmlfile);
+    void PrintText(const wxString &htmltext, const wxString& basepath = wxEmptyString);
+    void PrinterSetup();
+    void PageSetup();
+    void SetHeader(const wxString& header, int pg = wxPAGE_ALL);
+    void SetFooter(const wxString& footer, int pg = wxPAGE_ALL);
+
+    wxPrintData *GetPrintData() {return m_PrintData;}
+    wxPageSetupDialogData *GetPageSetupData() {return m_PageSetupData;}
+
+};
+
 
 
 //---------------------------------------------------------------------------

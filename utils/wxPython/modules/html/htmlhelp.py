@@ -55,12 +55,6 @@ class wxHtmlHelpFrameCfgPtr :
         if name == "navig_on" :
             htmlhelpc.wxHtmlHelpFrameCfg_navig_on_set(self,value)
             return
-        if name == "style" :
-            htmlhelpc.wxHtmlHelpFrameCfg_style_set(self,value)
-            return
-        if name == "titleformat" :
-            htmlhelpc.wxHtmlHelpFrameCfg_titleformat_set(self,value)
-            return
         self.__dict__[name] = value
     def __getattr__(self,name):
         if name == "x" : 
@@ -75,10 +69,6 @@ class wxHtmlHelpFrameCfgPtr :
             return htmlhelpc.wxHtmlHelpFrameCfg_sashpos_get(self)
         if name == "navig_on" : 
             return htmlhelpc.wxHtmlHelpFrameCfg_navig_on_get(self)
-        if name == "style" : 
-            return htmlhelpc.wxHtmlHelpFrameCfg_style_get(self)
-        if name == "titleformat" : 
-            return htmlhelpc.wxHtmlHelpFrameCfg_titleformat_get(self)
         raise AttributeError,name
     def __repr__(self):
         return "<C wxHtmlHelpFrameCfg instance at %s>" % (self.this,)
@@ -378,3 +368,5 @@ wxID_HTML_SEARCHPAGE = htmlhelpc.wxID_HTML_SEARCHPAGE
 wxID_HTML_SEARCHTEXT = htmlhelpc.wxID_HTML_SEARCHTEXT
 wxID_HTML_SEARCHLIST = htmlhelpc.wxID_HTML_SEARCHLIST
 wxID_HTML_SEARCHBUTTON = htmlhelpc.wxID_HTML_SEARCHBUTTON
+wxID_HTML_SEARCHCHOICE = htmlhelpc.wxID_HTML_SEARCHCHOICE
+wxID_HTML_HELPFRAME = htmlhelpc.wxID_HTML_HELPFRAME

@@ -53,7 +53,10 @@ enum {
     wxID_HTML_SEARCHPAGE,
     wxID_HTML_SEARCHTEXT,
     wxID_HTML_SEARCHLIST,
-    wxID_HTML_SEARCHBUTTON
+    wxID_HTML_SEARCHBUTTON,
+    wxID_HTML_SEARCHCHOICE,
+    wxID_HTML_HELPFRAME
+
 };
 
 //---------------------------------------------------------------------------
@@ -66,8 +69,6 @@ public:
     long x, y, w, h;
     long sashpos;
     bool navig_on;
-    int style;
-    wxString titleformat;
 };
 
 
