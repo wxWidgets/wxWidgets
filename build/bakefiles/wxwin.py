@@ -28,6 +28,8 @@ def mk_wxid(id):
     return wxid
 
 
+# All libs that are part of the main library (i.e. non-contrib):
+MAIN_LIBS = ['mono', 'base', 'core', 'html']
 # List of library names/ids for categories with different names:
 LIBS_NOGUI = ['']
 LIBS_GUI   = ['core', 'html']
@@ -59,10 +61,15 @@ def mkDllName(wxid):
 
 def libToLink(wxlibname):
     """Returns string to pass to <sys-lib> when linking against 'wxlibname'.
-       libToLink('foo') returns '$(WXLIB_FOO)' which must be defined in
-       common.bkl as either nothing (in monolithic build) or mkLibName('foo')
-       (otherwise)."""
-    return '$(WXLIB_%s)' % wxlibname.upper()
+       For one of main libraries, libToLink('foo') returns '$(WXLIB_FOO)' which
+       must be defined in common.bkl as either nothing (in monolithic build) or
+       mkLibName('foo') (otherwise).
+       For contrib libraries, it returns mkDllName(wxlibname).       
+       """
+    if wxlibname in MAIN_LIBS:
+        return '$(WXLIB_%s)' % wxlibname.upper()
+    else:
+        return mkLibName(wxlibname)
 
 
 wxVersion = None

@@ -7,7 +7,7 @@
     <!--                            wxBase library                         -->
     <!-- ================================================================= -->
     
-    <dll id="basedll" template="wx_dll"
+    <dll id="basedll" template="wx_base_dll"
          cond="SHARED=='1' and MONOLITHIC=='0'">
         <define>WXMAKINGDLL_BASE</define>
         <define>wxUSE_BASE=1</define>
@@ -15,7 +15,7 @@
         <sources>$(BASE_SRC) $(BASE_AND_GUI_SRC)</sources>
     </dll>
     
-    <lib id="baselib" template="wx_lib"
+    <lib id="baselib" template="wx_base_lib"
          cond="SHARED=='0' and MONOLITHIC=='0'">
         <define>wxUSE_BASE=1</define> 
         <define>wxUSE_GUI=0</define> 

@@ -1,7 +1,11 @@
 <?xml version="1.0" ?>
+<!-- $Id$ -->
+
 <makefile>
     
-    <include file="common.bkl"/>
+    <if cond="not isdefined('file_common_samples_included')">
+        <include file="common.bkl"/>
+    </if>
     
     <set var="CONTRIB_HDR_DIR">$(SRCDIR)/../../include</set>
     
@@ -13,6 +17,12 @@
         <include>$(CONTRIB_HDR_DIR)</include>
     </template>
     
+    <if cond="isdefined('file_common_samples_included')">
+        <template id="wx_contrib_sample" template="wx_sample">
+            <include>$(CONTRIB_HDR_DIR)</include>
+        </template>
+    </if>
+    
     <template id="wx_contrib_dll"
               template="wx_dll_b" template_append="wx_append">
         <include>$(CONTRIB_HDR_DIR)</include>
@@ -20,8 +30,9 @@
         <sys-lib>$(WXLIB_MONO)</sys-lib>
     </template>
 
+    
     <template id="wx_contrib_headers">
         <srcdir>$(CONTRIB_HDR_DIR)</srcdir>
-    </template>
+    </template>    
     
 </makefile>
