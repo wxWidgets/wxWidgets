@@ -434,6 +434,7 @@ bool wxSizer::Detach( wxSizer *sizer )
         if (item->GetSizer() == sizer)
         {
             item->DetachSizer();
+            delete item;
             m_children.Erase( node );
             return true;
         }
@@ -455,6 +456,7 @@ bool wxSizer::Detach( wxWindow *window )
         if (item->GetWindow() == window)
         {
             item->GetWindow()->SetContainingSizer( NULL );
+            delete item;
             m_children.Erase( node );
             return true;
         }
@@ -481,6 +483,7 @@ bool wxSizer::Detach( int index )
     else if( item->IsWindow() )
         item->GetWindow()->SetContainingSizer( NULL );
 
+    delete item;
     m_children.Erase( node );
     return true;
 }

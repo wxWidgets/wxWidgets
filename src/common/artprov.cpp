@@ -148,6 +148,7 @@ wxArtProviderCache *wxArtProvider::sm_cache = NULL;
 
 /*static*/ void wxArtProvider::CleanUpProviders()
 {
+    WX_CLEAR_LIST(wxArtProvidersList, *sm_providers);
     wxDELETE(sm_providers);
     wxDELETE(sm_cache);
 }
