@@ -105,6 +105,7 @@ public:
   void OnDeleteChildren(wxCommandEvent& event);
   void OnDeleteAll(wxCommandEvent& event);
   void OnRecreate(wxCommandEvent& event);
+  void OnCollapseAndReset(wxCommandEvent& event);
 
   void OnSetBold(wxCommandEvent& WXUNUSED(event)) { DoSetBold(TRUE); }
   void OnClearBold(wxCommandEvent& WXUNUSED(event)) { DoSetBold(FALSE); }
@@ -140,6 +141,7 @@ enum
   TreeTest_DeleteChildren,
   TreeTest_DeleteAll,
   TreeTest_Recreate,
+  TreeTest_CollapseAndReset,
   TreeTest_EnsureVisible,
   TreeTest_Ctrl = 100
 };

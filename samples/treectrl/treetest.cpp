@@ -61,6 +61,7 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
   EVT_MENU(TreeTest_DeleteChildren, MyFrame::OnDeleteChildren)
   EVT_MENU(TreeTest_DeleteAll, MyFrame::OnDeleteAll)
   EVT_MENU(TreeTest_Recreate, MyFrame::OnRecreate)
+  EVT_MENU(TreeTest_CollapseAndReset, MyFrame::OnCollapseAndReset)
   EVT_MENU(TreeTest_EnsureVisible, MyFrame::OnEnsureVisible)
 END_EVENT_TABLE()
 
@@ -119,6 +120,7 @@ MyFrame::MyFrame(const wxString& title, int x, int y, int w, int h)
 
   tree_menu->Append(TreeTest_Dump, "D&ump tree items");
   tree_menu->Append(TreeTest_Recreate, "&Recreate the tree");
+  tree_menu->Append(TreeTest_CollapseAndReset, "C&ollapse and reset");
   tree_menu->AppendSeparator();
   tree_menu->Append(TreeTest_Delete, "&Delete this item");
   tree_menu->Append(TreeTest_DeleteChildren, "Delete &children");
@@ -265,6 +267,11 @@ void MyFrame::OnRecreate(wxCommandEvent& event)
   m_treeCtrl->AddTestItemsToTree(3, 2);
 }
 
+void MyFrame::OnCollapseAndReset(wxCommandEvent& event)
+{
+  m_treeCtrl->CollapseAndReset(m_treeCtrl->GetRootItem());  
+}
+
 void MyFrame::OnEnsureVisible(wxCommandEvent& event)
 {
     m_treeCtrl->DoEnsureVisible();
@@ -409,11 +416,11 @@ void MyTreeCtrl::OnItemCollapsing(wxTreeEvent& event)
 {
   wxLogMessage("OnItemCollapsing");
 
-  // for testing, prevent the user from collapsing the root item
+  // for testing, prevent the user from collapsing the first child folder
   wxTreeItemId itemId = event.GetItem();
-  if ( !GetParent(itemId).IsOk() )
+  if ( GetParent(itemId) == GetRootItem() && !GetPrevSibling(itemId) )
   {
-    wxMessageBox("You can't collapse the root item.");
+    wxMessageBox("You can't collapse this item.");
 
     event.Veto();
   }

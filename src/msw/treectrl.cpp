@@ -671,8 +671,10 @@ void wxTreeCtrl::DeleteAllItems()
 
 void wxTreeCtrl::DoExpand(const wxTreeItemId& item, int flag)
 {
-    wxASSERT_MSG( flag == TVE_COLLAPSE || flag == TVE_COLLAPSERESET ||
-                  flag == TVE_EXPAND   || flag == TVE_TOGGLE,
+    wxASSERT_MSG( flag == TVE_COLLAPSE ||
+                  flag == (TVE_COLLAPSE | TVE_COLLAPSERESET) ||
+                  flag == TVE_EXPAND   ||
+                  flag == TVE_TOGGLE,
                   "Unknown flag in wxTreeCtrl::DoExpand" );
 
     // TreeView_Expand doesn't send TVN_ITEMEXPAND(ING) messages, so we must
@@ -712,7 +714,7 @@ void wxTreeCtrl::Collapse(const wxTreeItemId& item)
 
 void wxTreeCtrl::CollapseAndReset(const wxTreeItemId& item)
 {
-    DoExpand(item, TVE_COLLAPSERESET);
+    DoExpand(item, TVE_COLLAPSE | TVE_COLLAPSERESET);
 }
 
 void wxTreeCtrl::Toggle(const wxTreeItemId& item)
