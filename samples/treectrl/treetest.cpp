@@ -42,6 +42,7 @@
 BEGIN_EVENT_TABLE(MyFrame, wxFrame)
   EVT_MENU(TreeTest_Quit, MyFrame::OnQuit)
   EVT_MENU(TreeTest_About, MyFrame::OnAbout)
+  EVT_MENU(TreeTest_Dump, MyFrame::OnDump)
 END_EVENT_TABLE()
 
 BEGIN_EVENT_TABLE(MyTreeCtrl, wxTreeCtrl)
@@ -58,7 +59,7 @@ BEGIN_EVENT_TABLE(MyTreeCtrl, wxTreeCtrl)
   EVT_TREE_ITEM_COLLAPSING(TreeTest_Ctrl, MyTreeCtrl::OnItemCollapsing)
   EVT_TREE_SEL_CHANGED(TreeTest_Ctrl, MyTreeCtrl::OnSelChanged)
   EVT_TREE_SEL_CHANGING(TreeTest_Ctrl, MyTreeCtrl::OnSelChanging)
-  EVT_TREE_KEY_DOWN(TreeTest_Ctrl, MyTreeCtrl::OnKeyDown)
+  EVT_CHAR(MyTreeCtrl::OnKeyDown)
 END_EVENT_TABLE()
 
 IMPLEMENT_APP(MyApp)
@@ -92,8 +93,12 @@ MyFrame::MyFrame(const wxString& title, int x, int y, int w, int h)
   // Make a menubar
   wxMenu *file_menu = new wxMenu;
 
+  file_menu->Append(TreeTest_Dump, "&Dump tree items");
+  file_menu->AppendSeparator();
   file_menu->Append(TreeTest_About, "&About...");
+  file_menu->AppendSeparator();
   file_menu->Append(TreeTest_Quit, "E&xit");
+
   wxMenuBar *menu_bar = new wxMenuBar;
   menu_bar->Append(file_menu, "&File");
   SetMenuBar(menu_bar);
@@ -142,10 +147,18 @@ void MyFrame::OnQuit(wxCommandEvent& WXUNUSED(event))
 
 void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
 {
-  wxMessageDialog dialog(this, "Tree test sample\nJulian Smart (c) 1997",
+  wxMessageDialog dialog(this,
+                         "Tree test sample\n"
+                         "Julian Smart (c) 1997",
                          "About tree test", wxOK);
 
   dialog.ShowModal();
+}
+
+void MyFrame::OnDump(wxCommandEvent& WXUNUSED(event))
+{
+  wxTreeItemId root=m_treeCtrl->GetSelection();
+  m_treeCtrl->GetItemsRecursively(root, -1);
 }
 
 // MyTreeCtrl implementation
@@ -164,7 +177,7 @@ MyTreeCtrl::MyTreeCtrl(wxWindow *parent, const wxWindowID id,
   SetImageList(m_imageListNormal);
 
   // Add some items to the tree
-  AddTestItemsToTree(4, 3);
+  AddTestItemsToTree(3, 2);
 }
 
 MyTreeCtrl::~MyTreeCtrl()
@@ -174,7 +187,8 @@ MyTreeCtrl::~MyTreeCtrl()
 
 void MyTreeCtrl::AddItemsRecursively(const wxTreeItemId& idParent,
                                      size_t numChildren,
-                                     size_t depth)
+                                     size_t depth,
+                                     size_t folder)
 {
   if ( depth > 0 )
   {
@@ -182,11 +196,15 @@ void MyTreeCtrl::AddItemsRecursively(const wxTreeItemId& idParent,
     for ( size_t n = 0; n < numChildren; n++ )
     {
       // at depth 1 elements won't have any more children
-      str.Printf("%s child %d", depth == 1 ? "File" : "Folder", n + 1);
+      if (depth == 1)
+        str.Printf("%s child %d.%d", "File", folder, n + 1);
+      else
+        str.Printf("%s child %d","Folder", n + 1);
+
       int image = depth == 1 ? TreeCtrlIcon_File : TreeCtrlIcon_Folder;
       wxTreeItemId id = AppendItem(idParent, str, image, image,
                                    new MyTreeItemData(str));
-      AddItemsRecursively(id, numChildren, depth - 1);
+      AddItemsRecursively(id, numChildren, depth - 1,n+1);
     }
   }
   //else: done!
@@ -199,8 +217,30 @@ void MyTreeCtrl::AddTestItemsToTree(size_t numChildren,
                         TreeCtrlIcon_Folder, TreeCtrlIcon_Folder,
                         new MyTreeItemData("Root item"));
 
-  AddItemsRecursively(rootId, numChildren, depth);
+  AddItemsRecursively(rootId, numChildren, depth,0);
 }
+
+void MyTreeCtrl::GetItemsRecursively(const wxTreeItemId& idParent, long cookie)
+{
+  wxTreeItemId id;
+
+  if( cookie == -1 )
+    id = GetFirstChild(idParent, cookie);
+  else
+    id = GetNextChild(idParent, cookie);
+
+  if(id <= 0)
+    return;
+
+  wxString text=GetItemText(id);
+  wxLogMessage(text);
+
+  if (ItemHasChildren(id))
+    GetItemsRecursively(id,-1);
+
+  GetItemsRecursively(idParent, cookie);
+}
+
 
 // avoid repetition
 #define TREE_EVENT_HANDLER(name)                                \
@@ -259,8 +299,11 @@ static inline const char *Bool2String(bool b)
 
 void MyTreeItemData::ShowInfo(wxTreeCtrl *tree)
 {
-  wxLogMessage("Item '%s': %sselected, %sexpanded.",
+  wxLogMessage("Item '%s': %sselected, %sexpanded, "
+               "%u children (%u immediately under this item).",
                m_desc.c_str(),
                Bool2String(tree->IsSelected(GetId())),
-               Bool2String(tree->IsExpanded(GetId())));
+               Bool2String(tree->IsExpanded(GetId())),
+               tree->GetChildrenCount(GetId()),
+               tree->GetChildrenCount(GetId(), FALSE));
 }

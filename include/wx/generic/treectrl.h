@@ -268,6 +268,13 @@ public:
         // is this item currently selected (the same as has focus)?
     bool IsSelected(const wxTreeItemId& item) const;
 
+    // number of children
+    // ------------------
+
+        // if 'recursively' is FALSE, only immediate children count, otherwise
+        // the returned number is the number of all items in this branch
+    size_t GetChildrenCount(const wxTreeItemId& item, bool recursively = TRUE);
+
     // navigation
     // ----------
 

@@ -56,10 +56,13 @@ public:
   void OnSelChanging(wxTreeEvent& event);
   void OnKeyDown(wxTreeEvent& event);
 
+	void GetItemsRecursively(const wxTreeItemId& idParent, long cookie);
+
 private:
   void AddItemsRecursively(const wxTreeItemId& idParent,
                            size_t nChildren,
-                           size_t depth);
+                           size_t depth,
+													 size_t folder);
 
   void AddTestItemsToTree(size_t numChildren,
                           size_t depth);
@@ -80,6 +83,7 @@ public:
   // menu callbacks
   void OnQuit(wxCommandEvent& event);
   void OnAbout(wxCommandEvent& event);
+  void OnDump(wxCommandEvent& event);
 
 private:
   MyTreeCtrl *m_treeCtrl;
@@ -92,6 +96,7 @@ enum
 {
   TreeTest_Quit,
   TreeTest_About,
+  TreeTest_Dump,
   TreeTest_Ctrl = 100
 };
 
