@@ -1,6 +1,30 @@
 
 20th November '99: wxWindows 2.1.12 released
 
+Who has a BigEndian computer (e.g. Sparc) that runs a 15 and/or
+16 bit colour mode. I need this for testing purposes, i.e. this
+person could help me by running a small testprogram and sending
+me the output.
+
+Added wxStopWatch class.
+
+wxBitmap now derives from wxGDIObject.
+
+Added inlined classes for 2D geometry calculations.
+
+wxSpinCtrl now has its own event, intercepted using EVT_SPINCTRL.
+
+The ODBC classes can now be configured at run-time if they
+are to use forward-only cursors or not.
+
+Added wxDateTime class.
+
+Rewritten wxThread to have a flag controlling if the
+thread will delete its C++ class itself ("delete this") or
+if the main thread must delete the C++ class.
+
+Added TIFF reading code.
+
 Minor compile and build fixes for different architectures.
 
 Added more flags to wxSizer for proportional sizing and
@@ -23,6 +47,11 @@ several such windows.
 Some minor updates to wxSockets.
 
 Speed-up for new encoding related font code.
+
+Change wxListCtrl to send deferred events, i.e. events emitted by
+the list ctrl won't get processed before the next idle message.
+
+Some more minor changes.
 
 7st November '99: wxWindows 2.1.11 released
 

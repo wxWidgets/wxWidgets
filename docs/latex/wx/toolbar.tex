@@ -11,7 +11,7 @@ Used on platforms with no native toolbar control, or where scrolling is required
 \end{itemize}
 
 Note that the base class {\bf wxToolBarBase} defines
-automatic scrolling management functionality which is identical
+automatic scrolling management functionality which is similar
 to \helpref{wxScrolledWindow}{wxscrolledwindow}, so please refer to this class also.
 Not all toolbars support scrolling, but wxToolBarSimple does.
 
@@ -36,10 +36,15 @@ wxToolBarBase\\
 You may also create a toolbar that is managed by the frame, by
 calling \helpref{wxFrame::CreateToolBar}{wxframecreatetoolbar}.
 
+Due to the use of native toolbars on the various platforms, certain adaptions will
+often have to be made in order to get optimal look on all platforms as some platforms
+ignore the values for explicit placement and use their own layout and the meaning
+of a "separator" is a vertical line under Windows95 vs. simple space under GTK etc.
+
 {\bf wxToolBar95:} Note that this toolbar paints tools to reflect user-selected colours.
 The toolbar orientation must always be {\bf wxHORIZONTAL}.
 
-{\bf wxToolBarGtk:}  The toolbar orientation is ignored and is always {\bf wxHORIZONTAL}.
+{\bf wxToolBarGtk:} The toolbar orientation is ignored and is always {\bf wxHORIZONTAL}.
 
 \wxheading{Window styles}
 
@@ -142,6 +147,14 @@ calling \helpref{wxFrame::CreateToolBar}{wxframecreatetoolbar}.
 \func{void}{\destruct{wxToolBar}}{\void}
 
 Toolbar destructor.
+
+\membersection{wxToolBar::AddControl}\label{wxtoolbaraddcontrol}
+
+\func{bool}{AddControl}{\param{wxControl*}{ control}}
+
+Adds any control to the toolbar, typically e.g. a combobox.
+
+\docparam{control}{The control to be added.}
 
 \membersection{wxToolBar::AddSeparator}\label{wxtoolbaraddseparator}
 
