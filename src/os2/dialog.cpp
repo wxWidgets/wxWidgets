@@ -41,6 +41,7 @@ BEGIN_EVENT_TABLE(wxDialog, wxDialogBase)
     EVT_BUTTON(wxID_CANCEL, wxDialog::OnCancel)
     EVT_CHAR_HOOK(wxDialog::OnCharHook)
     EVT_SYS_COLOUR_CHANGED(wxDialog::OnSysColourChanged)
+
     EVT_CLOSE(wxDialog::OnCloseWindow)
 END_EVENT_TABLE()
 
@@ -130,26 +131,35 @@ bool wxDialog::Create(
     return TRUE;
 } // end of wxDialog::Create
 
+// deprecated ctor
+wxDialog::wxDialog(wxWindow *parent,
+                   const wxString& title,
+                   bool WXUNUSED(modal),
+                   int x,
+                   int y,
+                   int w,
+                   int h,
+                   long style,
+                   const wxString& name)
+{
+    Init();
+
+    Create(parent, wxID_ANY, title, wxPoint(x, y), wxSize(w, h), style, name);
+}
+
 void wxDialog::SetModal(
-  bool                              bFlag
+  bool                              WXUNUSED(bFlag)
 )
 {
-    if (bFlag)
-    {
-        m_windowStyle |= wxDIALOG_MODAL ;
-        wxModelessWindows.DeleteObject(this);
-    }
-    else
-    {
-        m_windowStyle &= ~wxDIALOG_MODAL ;
-        wxModelessWindows.Append(this);
-    }
+    // nothing to do, obsolete method
 } // end of wxDialog::SetModal
 
 wxDialog::~wxDialog()
 {
     m_isBeingDeleted = TRUE;
-    Show(FALSE);
+
+    // this will also reenable all the other windows for a modal dialog
+    Show(false);
 } // end of wxDialog::~wxDialog
 
 //
@@ -190,109 +200,72 @@ void wxDialog::OnCharHook(
 // showing the dialogs
 // ----------------------------------------------------------------------------
 
-bool wxDialog::IsModal() const
-{
-    return (GetWindowStyleFlag() & wxDIALOG_MODAL) != 0;
-} // end of wxDialog::IsModal
-
 bool wxDialog::IsModalShowing() const
 {
-    return m_modalData != NULL; // const_cast
+    return IsModal();
 } // end of wxDialog::IsModalShowing
 
-void wxDialog::DoShowModal()
+
+wxWindow *wxDialog::FindSuitableParent() const
 {
-    wxWindow*                       pParent = GetParent();
-    wxWindow*                       pOldFocus = m_pOldFocus;
-    HWND                            hWndOldFocus = 0;
-
-    wxCHECK_RET( !IsModalShowing(), _T("DoShowModal() called twice") );
-    wxCHECK_RET( IsModal(), _T("can't DoShowModal() modeless dialog") );
-
-    if (pOldFocus)
-        hWndOldFocus = (HWND)pOldFocus->GetHWND();
-
-    //
-    // Remember where the focus was
-    //
-    if (!pOldFocus)
+    // first try to use the currently active window
+    HWND hwndFg = ::WinQueryActiveWindow(HWND_DESKTOP);
+    wxWindow *parent = hwndFg ? wxFindWinFromHandle((WXHWND)hwndFg)
+                              : NULL;
+    if ( !parent )
     {
-        pOldFocus = pParent;
-        if (pParent)
-            hWndOldFocus = GetHwndOf(pParent);
+        // next try the main app window
+        parent = wxTheApp->GetTopWindow();
     }
 
-    //
-    // Disable all other app windows
-    //
-    wxASSERT_MSG(!m_pWindowDisabler, _T("disabling windows twice?"));
-
-    //
-    // Before entering the modal loop, reset the "is in OnIdle()" flag (see
-    // comment in app.cpp)
-    //
-    extern bool                     gbInOnIdle;
-    bool                            bWasInOnIdle = gbInOnIdle;
-
-    gbInOnIdle = FALSE;
-
-    // enter the modal loop
+    // finally, check if the parent we found is really suitable
+    if ( !parent || parent == (wxWindow *)this || !parent->IsShown() )
     {
-        wxDialogModalDataTiedPtr modalData(&m_modalData,
-                                           new wxDialogModalData(this));
-        modalData->RunLoop();
+        // don't use this one
+        parent = NULL;
     }
-    gbInOnIdle = bWasInOnIdle;
 
-    //
-    // and restore focus
-    // Note that this code MUST NOT access the dialog object's data
-    // in case the object has been deleted (which will be the case
-    // for a modal dialog that has been destroyed before calling EndModal).
-    //
-    if (pOldFocus && (pOldFocus != this) && ::WinIsWindow(vHabmain, hWndOldFocus))
-    {
-        //
-        // This is likely to prove that the object still exists
-        //
-        if (wxFindWinFromHandle((WXHWND) hWndOldFocus) == pOldFocus)
-            pOldFocus->SetFocus();
-    }
-} // end of wxDialog::DoShowModal
+    return parent;
+}
 
 bool wxDialog::Show(
   bool                              bShow
 )
 {
-    if (!bShow)
+    if ( bShow == IsShown() )
+        return false;
+
+    if (!bShow && m_modalData )
     {
-        //
-        // If we had disabled other app windows, reenable them back now because
+        // we need to do this before calling wxDialogBase version because if we
+        // had disabled other app windows, they must be reenabled right now as
         // if they stay disabled Windows will activate another window (one
-        // which is enabled, anyhow) and we will lose activation.  We really don't
-        // do this in OS/2 since PM does this for us.
-        //
+        // which is enabled, anyhow) when we're hidden in the base class Show()
+        // and we will lose activation
+        m_modalData->ExitLoop();
+#if 0
         if (m_pWindowDisabler)
         {
             delete m_pWindowDisabler;
             m_pWindowDisabler = NULL;
         }
-        if ( m_modalData )
-            m_modalData->ExitLoop();
-    }
-
-    //
-    // ShowModal() may be called for already shown dialog
-    //
-    if (!wxDialogBase::Show(bShow) && !(bShow && IsModal()))
-    {
-        //
-        // Nothing to do
-        //
-        return FALSE;
+#endif
     }
 
     if (bShow)
+    {
+        // this usually will result in TransferDataToWindow() being called
+        // which will change the controls values so do it before showing as
+        // otherwise we could have some flicker
+        InitDialog();
+    }
+
+    wxDialogBase::Show(bShow);
+
+    if (GetTitle().c_str())
+        ::WinSetWindowText((HWND)GetHwnd(), GetTitle().c_str());
+
+    if ( bShow )
     {
         // dialogs don't get WM_SIZE message after creation unlike most (all?)
         // other windows and so could start their life non laid out correctly
@@ -300,40 +273,10 @@ bool wxDialog::Show(
         //
         // NB: normally we should call it just the first time but doing it
         //     every time is simpler than keeping a flag
-//         Layout();
-
-        //
-        // Usually will result in TransferDataToWindow() being called
-        //
-        InitDialog();
+        Layout();
     }
 
-    if (GetTitle().c_str())
-        ::WinSetWindowText((HWND)GetHwnd(), GetTitle().c_str());
-    if (IsModal())
-    {
-        if (bShow)
-        {
-            //
-            // Modal dialog needs a parent window, so try to find one
-            //
-            if (!GetParent())
-            {
-                wxWindow*           pParent = wxTheApp->GetTopWindow();
-
-                if ( pParent && pParent != this && pParent->IsShown() )
-                {
-                    //
-                    // Use it
-                    //
-                    m_parent = pParent;
-
-                }
-            }
-            DoShowModal();
-        }
-    }
-    return TRUE;
+    return true;
 } // end of wxDialog::Show
 
 //
@@ -341,11 +284,67 @@ bool wxDialog::Show(
 //
 int wxDialog::ShowModal()
 {
-    if (!IsModal())
+    wxASSERT_MSG( !IsModal(), _T("wxDialog::ShowModal() reentered?") );
+
+    m_endModalCalled = false;
+
+    Show();
+
+    // EndModal may have been called from InitDialog handler (called from
+    // inside Show()), which would cause an infinite loop if we didn't take it
+    // into account
+    if ( !m_endModalCalled )
     {
-        SetModal(TRUE);
+        // modal dialog needs a parent window, so try to find one
+        wxWindow *parent = GetParent();
+        if ( !parent )
+        {
+            parent = FindSuitableParent();
+        }
+
+        // remember where the focus was
+        wxWindow *oldFocus = m_pOldFocus;
+        if ( !oldFocus )
+        {
+            // VZ: do we really want to do this?
+            oldFocus = parent;
+        }
+
+        // We have to remember the HWND because we need to check
+        // the HWND still exists (oldFocus can be garbage when the dialog
+        // exits, if it has been destroyed)
+        HWND hwndOldFocus = oldFocus ? GetHwndOf(oldFocus) : NULL;
+
+
+        //
+        // Before entering the modal loop, reset the "is in OnIdle()" flag (see
+        // comment in app.cpp)
+        //
+        extern bool                     gbInOnIdle;
+        bool                            bWasInOnIdle = gbInOnIdle;
+
+        gbInOnIdle = FALSE;
+
+        // enter and run the modal loop
+        {
+            wxDialogModalDataTiedPtr modalData(&m_modalData,
+                                               new wxDialogModalData(this));
+            modalData->RunLoop();
+        }
+        gbInOnIdle = bWasInOnIdle;
+
+        // and restore focus
+        // Note that this code MUST NOT access the dialog object's data
+        // in case the object has been deleted (which will be the case
+        // for a modal dialog that has been destroyed before calling EndModal).
+        if ( oldFocus && (oldFocus != this) && ::WinIsWindow(vHabmain, hwndOldFocus))
+        {
+            // This is likely to prove that the object still exists
+            if (wxFindWinFromHandle((WXHWND) hwndOldFocus) == oldFocus)
+                oldFocus->SetFocus();
+        }
     }
-    Show(TRUE);
+
     return GetReturnCode();
 } // end of wxDialog::ShowModal
 
@@ -353,9 +352,21 @@ void wxDialog::EndModal(
   int                               nRetCode
 )
 {
+    wxASSERT_MSG( IsModal(), _T("EndModal() called for non modal dialog") );
+
+    m_endModalCalled = true;
     SetReturnCode(nRetCode);
-    Show(FALSE);
+
+    Hide();
 } // end of wxDialog::EndModal
+
+void wxDialog::EndDialog(int rc)
+{
+    if ( IsModal() )
+        EndModal(rc);
+    else
+        Hide();
+}
 
 // ----------------------------------------------------------------------------
 // wxWin event handlers
@@ -376,7 +387,7 @@ void wxDialog::OnOK(
 {
     if ( Validate() && TransferDataFromWindow() )
     {
-        EndModal(wxID_OK);
+        EndDialog(wxID_OK);
     }
 } // end of wxDialog::OnOK
 
@@ -384,7 +395,7 @@ void wxDialog::OnCancel(
   wxCommandEvent&                   rEvent
 )
 {
-    EndModal(wxID_CANCEL);
+    EndDialog(wxID_CANCEL);
 } // end of wxDialog::OnCancel
 
 void wxDialog::OnCloseWindow(
@@ -392,8 +403,7 @@ void wxDialog::OnCloseWindow(
 )
 {
     //
-    // We'll send a Cancel message by default,
-    // which may close the dialog.
+    // We'll send a Cancel message by default, which may close the dialog.
     // Check for looping if the Cancel event handler calls Close().
     //
     // Note that if a cancel button and handler aren't present in the dialog,

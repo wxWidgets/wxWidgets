@@ -27,52 +27,17 @@ public:
 
   inline wxDialog() { Init(); }
 
-  //
-  // Constructor with a modal flag, but no window id - the old convention
-  //
-  inline wxDialog( wxWindow*       pParent
-                  ,const wxString& rsTitle
-                  ,bool            bModal
-                  ,int             nX = -1
-                  ,int             nY = -1
-                  ,int             nWidth = 500
-                  ,int             nHeight = 500
-                  ,long            lStyle = wxDEFAULT_DIALOG_STYLE
-                  ,const wxString& rsName = wxDialogNameStr
-                 )
+    // full ctor
+    wxDialog(wxWindow *parent, wxWindowID id,
+             const wxString& title,
+             const wxPoint& pos = wxDefaultPosition,
+             const wxSize& size = wxDefaultSize,
+             long style = wxDEFAULT_DIALOG_STYLE,
+             const wxString& name = wxDialogNameStr)
     {
-        long                        lModalStyle = lStyle ? wxDIALOG_MODAL : wxDIALOG_MODELESS ;
+        Init();
 
-        Create( pParent
-               ,-1
-               ,rsTitle
-               ,wxPoint(nX, nY)
-               ,wxSize(nWidth, nHeight)
-               ,lStyle | lModalStyle
-               ,rsName
-              );
-    }
-
-    //
-    // Constructor with no modal flag - the new convention.
-    //
-    inline wxDialog( wxWindow*       pParent
-                    ,wxWindowID      vId
-                    ,const wxString& rsTitle
-                    ,const wxPoint&  rPos = wxDefaultPosition
-                    ,const wxSize&   rSize = wxDefaultSize
-                    ,long            lStyle = wxDEFAULT_DIALOG_STYLE
-                    ,const wxString& rsName = wxDialogNameStr
-                   )
-    {
-        Create( pParent
-               ,vId
-               ,rsTitle
-               ,rPos
-               ,rSize
-               ,lStyle
-               ,rsName
-              );
+        (void)Create(parent, id, title, pos, size, style, name);
     }
 
     bool Create( wxWindow*       pParent
@@ -83,31 +48,22 @@ public:
                 ,long            lStyle = wxDEFAULT_DIALOG_STYLE
                 ,const wxString& rsName = wxDialogNameStr
                );
-    ~wxDialog();
+    virtual ~wxDialog();
 
-            void SetModal(bool bFlag);
-    virtual bool IsModal(void) const;
+    // return true if we're showing the dialog modally
+    virtual bool IsModal() const { return m_modalData != NULL; }
 
-    // For now, same as Show(TRUE) but returns return code
+    // show the dialog modally and return the value passed to EndModal()
     virtual int ShowModal();
 
     // may be called to terminate the dialog with the given return code
     virtual void EndModal(int retCode);
 
-    //
-    // Returns TRUE if we're in a modal loop
-    //
-            bool IsModalShowing() const;
-
-    //
-    // Implementation only from now on
+    // implementation only from now on
     // -------------------------------
-    //
 
-    //
-    // Override some base class virtuals
-    //
-    virtual bool Show(bool bShow);
+    // override some base class virtuals
+    virtual bool Show(bool show = true);
 
     //
     // Event handlers
@@ -134,20 +90,47 @@ public:
                                   ,WXWPARAM wParam
                                   ,WXLPARAM lParam
                                  );
+    // obsolete methods
+    // ----------------
+
+    // Constructor with a modal flag, but no window id - the old convention
+    wxDEPRECATED( wxDialog( wxWindow*       pParent
+                           ,const wxString& rsTitle
+                           ,bool            bModal
+                           ,int             nX = -1
+                           ,int             nY = -1
+                           ,int             nWidth = 500
+                           ,int             nHeight = 500
+                           ,long            lStyle = wxDEFAULT_DIALOG_STYLE
+                           ,const wxString& rsName = wxDialogNameStr
+                          ) );
+
+    // just call Show() or ShowModal()
+    wxDEPRECATED( void SetModal(bool bFlag) );
+
+    // use IsModal()
+    wxDEPRECATED( bool IsModalShowing() const );
 
 protected:
     //
-    // Show modal dialog and enter modal loop
+    // find the window to use as parent for this dialog if none has been
+    // specified explicitly by the user
     //
-    void DoShowModal(void);
+    // may return NULL
+    //
+    wxWindow *FindSuitableParent() const;
 
     //
     // Common part of all ctors
     //
     void Init(void);
 
+    // end either modal or modeless dialog
+    void EndDialog(int rc);
+
 private:
     wxWindow*                       m_pOldFocus;
+    bool        m_endModalCalled; // allow for closing within InitDialog
 
     // this pointer is non-NULL only while the modal event loop is running
     wxDialogModalData *m_modalData;
@@ -160,6 +143,7 @@ private:
 
     DECLARE_DYNAMIC_CLASS(wxDialog)
     DECLARE_EVENT_TABLE()
+    DECLARE_NO_COPY_CLASS(wxDialog)
 }; // end of CLASS wxDialog
 
 #endif // _WX_DIALOG_H_
