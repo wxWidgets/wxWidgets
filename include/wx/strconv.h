@@ -86,6 +86,31 @@ public:
     virtual size_t WC2MB(char *outputBuf, const wchar_t *psz, size_t outputSize) const;
 };
 
+#ifdef __UNIX__
+
+// ----------------------------------------------------------------------------
+// wxConvBrokenFileNames is made for Unix in Unicode mode when
+// files are accidentally written in an encoding which is not
+// the system encoding. Typically, the system encoding will be
+// UTF8 but there might be files stored in ISO8859-1 on disk.
+// ----------------------------------------------------------------------------
+
+class WXDLLIMPEXP_BASE wxConvBrokenFileNames : public wxMBConv
+{
+public:
+    wxConvBrokenFileNames();
+    virtual ~wxConvBrokenFileNames() { delete m_conv; }
+
+    virtual size_t MB2WC(wchar_t *outputBuf, const char *psz, size_t outputSize) const;
+    virtual size_t WC2MB(char *outputBuf, const wchar_t *psz, size_t outputSize) const;
+
+private:
+    // the conversion object we forward to
+    wxMBConv *m_conv;
+};
+
+#endif
+
 // ----------------------------------------------------------------------------
 // wxMBConvUTF7 (for conversion using UTF7 encoding)
 // ----------------------------------------------------------------------------
