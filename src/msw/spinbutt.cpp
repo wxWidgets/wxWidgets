@@ -179,19 +179,51 @@ wxSize wxSpinButton::DoGetBestSize() const
 
 int wxSpinButton::GetValue() const
 {
+#ifdef UDM_GETPOS32
+    if ( wxTheApp->GetComCtl32Version() >= 580 )
+    {
+        // use the full 32 bit range if available
+        return ::SendMessage(GetHwnd(), UDM_GETPOS32, 0, 0);
+    }
+#endif // UDM_GETPOS32
+
+    // we're limited to 16 bit
     return (short)LOWORD(::SendMessage(GetHwnd(), UDM_GETPOS, 0, 0));
 }
 
 void wxSpinButton::SetValue(int val)
 {
-    ::SendMessage(GetHwnd(), UDM_SETPOS, 0, (LPARAM) MAKELONG((short) val, 0));
+    // wxSpinButtonBase::SetValue(val); -- no, it is pure virtual
+
+#ifdef UDM_SETPOS32
+    if ( wxTheApp->GetComCtl32Version() >= 580 )
+    {
+        // use the full 32 bit range if available
+        ::SendMessage(GetHwnd(), UDM_SETPOS32, 0, val);
+    }
+    else // we're limited to 16 bit
+#endif // UDM_SETPOS32
+    {
+        ::SendMessage(GetHwnd(), UDM_SETPOS, 0, MAKELONG((short) val, 0));
+    }
 }
 
 void wxSpinButton::SetRange(int minVal, int maxVal)
 {
     wxSpinButtonBase::SetRange(minVal, maxVal);
-    ::SendMessage(GetHwnd(), UDM_SETRANGE, 0,
-                   (LPARAM) MAKELONG((short)maxVal, (short)minVal));
+
+#ifdef UDM_SETRANGE32
+    if ( wxTheApp->GetComCtl32Version() >= 471 )
+    {
+        // use the full 32 bit range if available
+        ::SendMessage(GetHwnd(), UDM_SETRANGE32, minVal, maxVal);
+    }
+    else // we're limited to 16 bit
+#endif // UDM_SETRANGE32
+    {
+        ::SendMessage(GetHwnd(), UDM_SETRANGE, 0,
+                      (LPARAM) MAKELONG((short)maxVal, (short)minVal));
+    }
 }
 
 bool wxSpinButton::MSWOnScroll(int WXUNUSED(orientation), WXWORD wParam,
@@ -214,14 +246,7 @@ bool wxSpinButton::MSWOnScroll(int WXUNUSED(orientation), WXWORD wParam,
 
 bool wxSpinButton::MSWOnNotify(int WXUNUSED(idCtrl), WXLPARAM lParam, WXLPARAM *result)
 {
-#ifndef __GNUWIN32__
-#if defined(__BORLANDC__) || defined(__WATCOMC__)
     LPNM_UPDOWN lpnmud = (LPNM_UPDOWN)lParam;
-#elif defined(__VISUALC__) && (__VISUALC__ >= 1000) && (__VISUALC__ < 1020)
-    LPNM_UPDOWN lpnmud = (LPNM_UPDOWN)lParam;
-#else
-    LPNMUPDOWN lpnmud = (LPNMUPDOWN)lParam;
-#endif
 
     if (lpnmud->hdr.hwndFrom != GetHwnd()) // make sure it is the right control
         return FALSE;
@@ -237,9 +262,6 @@ bool wxSpinButton::MSWOnNotify(int WXUNUSED(idCtrl), WXLPARAM lParam, WXLPARAM *
     *result = event.IsAllowed() ? 0 : 1;
 
     return processed;
-#else // GnuWin32
-    return FALSE;
-#endif
 }
 
 bool wxSpinButton::MSWCommand(WXUINT WXUNUSED(cmd), WXWORD WXUNUSED(id))

@@ -177,6 +177,8 @@ wxMSW:
 - improvements to wxWindows applications behaviour when the system colours
   are changed
 - fixed wxProgressDialog for ranges > 65535
+- wxSpinButton and wxSpinCtrl now support full 32 bit range (if the version
+  of comctl32.dll installed on the system supports it)
 - wxFontEnumerator now returns all fonts, not only TrueType ones
 - bugs in handling wxFrame styles (border/caption related) fixed
 - showing a dialog from EVT_RADIOBUTTON handler doesn't lead to an infinite
