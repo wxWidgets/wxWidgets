@@ -3034,14 +3034,14 @@ void wxListMainWindow::OnMouse( wxMouseEvent &event )
         if ( !(cmdModifierDown || event.ShiftDown()) )
         {
             if( IsSingleSel() || !IsHighlighted(current) )
-        {
-            HighlightAll( false );
+            {
+                HighlightAll( false );
 
-            ChangeCurrent(current);
+                ChangeCurrent(current);
 
-            ReverseHighlight(m_current);
-        }
-	     else // multi sel & current is highlighted & no mod keys
+                ReverseHighlight(m_current);
+            }
+            else // multi sel & current is highlighted & no mod keys
             {
                 m_lineSelectSingleOnUp = current;	
                 ChangeCurrent(current); // change focus
