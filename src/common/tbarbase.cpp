@@ -96,6 +96,7 @@ wxToolBarTool::wxToolBarTool(wxControl *control)
 {
     m_toolStyle = wxTOOL_STYLE_CONTROL;
     m_control = control;
+    m_index = control->GetId();
 }
 
 wxToolBarTool::~wxToolBarTool()

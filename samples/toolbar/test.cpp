@@ -211,6 +211,9 @@ bool MyApp::InitToolbar(wxToolBar* toolBar, bool smallicons)
   toolBar->AddTool(wxID_NEW, *(toolBarBitmaps[0]), wxNullBitmap, FALSE, currentX, -1, (wxObject *) NULL, "New file");
   currentX += width + 5;
   toolBar->AddTool(wxID_OPEN, *(toolBarBitmaps[1]), wxNullBitmap, FALSE, currentX, -1, (wxObject *) NULL, "Open file");
+  currentX += width + 5;
+  toolBar->AddTool(wxID_SAVE, *(toolBarBitmaps[2]), wxNullBitmap, TRUE, currentX, -1, (wxObject *) NULL, "Toggle button 1");
+
   toolBar->AddSeparator();
 
   wxComboBox *combo = new wxComboBox(toolBar, ID_COMBO);
@@ -223,11 +226,7 @@ bool MyApp::InitToolbar(wxToolBar* toolBar, bool smallicons)
 
   if ( !smallicons )
   {
-      toolBar->AddSeparator();
       currentX += width + 5;
-      toolBar->AddTool(wxID_SAVE, *(toolBarBitmaps[2]), wxNullBitmap, TRUE, currentX, -1, (wxObject *) NULL, "Toggle button 1");
-      currentX += width + 5;
-      toolBar->AddSeparator();
       toolBar->AddTool(wxID_COPY, *(toolBarBitmaps[3]), wxNullBitmap, TRUE, currentX, -1, (wxObject *) NULL, "Toggle button 2");
       currentX += width + 5;
       toolBar->AddTool(wxID_CUT, *(toolBarBitmaps[4]), wxNullBitmap, FALSE, currentX, -1, (wxObject *) NULL, "Toggle/Untoggle help button");
@@ -249,7 +248,7 @@ bool MyApp::InitToolbar(wxToolBar* toolBar, bool smallicons)
   toolBar->Realize();
 
   // Can delete the bitmaps since they're reference counted
-  int i, max = smallicons ? 2 : WXSIZEOF(toolBarBitmaps);
+  int i, max = smallicons ? 3 : WXSIZEOF(toolBarBitmaps);
   for (i = 0; i < max; i++)
     delete toolBarBitmaps[i];
 

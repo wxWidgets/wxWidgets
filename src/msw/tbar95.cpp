@@ -134,14 +134,6 @@ bool wxToolBar95::Create(wxWindow *parent,
     if ( !CreateControl(parent, id, pos, size, style, name) )
         return FALSE;
 
-    // set up the colors and fonts
-#if 0
-    wxRGBToColour(m_backgroundColour, GetSysColor(COLOR_BTNFACE));
-    m_foregroundColour = *wxBLACK;
-
-    SetFont(wxSystemSettings::GetSystemFont(wxSYS_DEFAULT_GUI_FONT));
-#endif
-
     // prepare flags
     DWORD msflags = 0;      // WS_VISIBLE | WS_CHILD always included
     if (style & wxBORDER)
@@ -151,15 +143,21 @@ bool wxToolBar95::Create(wxWindow *parent,
     if (style & wxTB_FLAT)
     {
         if (wxTheApp->GetComCtl32Version() > 400)
-            msflags |= TBSTYLE_FLAT | TBSTYLE_TRANSPARENT;
+            msflags |= TBSTYLE_FLAT;
     }
 
     // MSW-specific initialisation
     if ( !wxControl::MSWCreateControl(TOOLBARCLASSNAME, msflags) )
         return FALSE;
 
-    // Toolbar-specific initialisation
+    // toolbar-specific post initialisation
     ::SendMessage(GetHwnd(), TB_BUTTONSTRUCTSIZE, sizeof(TBBUTTON), 0);
+
+    // set up the colors and fonts
+    wxRGBToColour(m_backgroundColour, GetSysColor(COLOR_BTNFACE));
+    m_foregroundColour = *wxBLACK;
+
+    SetFont(wxSystemSettings::GetSystemFont(wxSYS_DEFAULT_GUI_FONT));
 
     // position it
     int x = pos.x;
@@ -423,7 +421,11 @@ bool wxToolBar95::CreateTools()
 
         // and position the control itself correctly vertically
         RECT r;
-        SendMessage(GetHwnd(), TB_GETRECT, 0, (LPARAM)(LPRECT)&r);
+        if ( !SendMessage(GetHwnd(), TB_GETRECT,
+                          tool->m_index, (LPARAM)(LPRECT)&r) )
+        {
+            wxLogLastError("TB_GETRECT");
+        }
 
         int height = r.bottom - r.top;
         int diff = height - size.y;
