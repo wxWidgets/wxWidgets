@@ -161,9 +161,14 @@ bool wxControl::OS2CreateControl(
     SubclassWin(m_hWnd);
 
     //
-    // Controls use the same font and colours as their parent dialog by default
+    // Controls use the same colours as their parent dialog by default
     //
     InheritAttributes();
+    //
+    // All OS/2 ctrls use the small font
+    //
+    SetFont(*wxSMALL_FONT);
+
     SetXComp(0);
     SetYComp(0);
     SetSize( rPos.x
