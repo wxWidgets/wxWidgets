@@ -95,6 +95,17 @@ Returns the help string associated with the menu item.
 
 Returns the menu item identifier.
 
+\membersection{wxMenuItem::GetLabel}\label{wxmenuitemgetlabel}
+
+\constfunc{wxString}{GetLabel}{\void}
+
+Returns the text associated with the menu item without any accelerator
+characaters it might contain.
+
+\wxheading{See also}
+
+\helpref{GetText}{wxmenuitemgettext}
+
 \membersection{wxMenuItem::GetMarginWidth}\label{wxmenuitemgetmarginwidth}
 
 \constfunc{int}{GetMarginWidth}{\void}
@@ -106,6 +117,21 @@ Gets the width of the menu item checkmark bitmap (Windows only).
 \constfunc{wxString}{GetName}{\void}
 
 Returns the text associated with the menu item.
+
+{\bf NB:} this function is deprecated, please use 
+\helpref{GetText}{wxmenuitemgettext} or \helpref{GetLabel}{wxmenuitemgetlabel} 
+instead.
+
+\membersection{wxMenuItem::GetText}\label{wxmenuitemgettext}
+
+\constfunc{wxString}{GetText}{\void}
+
+Returns the text associated with the menu item, such as it was passed to the
+wxMenuItem constructor, i.e. with any accelerator characters it may contain.
+
+\wxheading{See also}
+
+\helpref{GetLabel}{wxmenuitemgetlabel}
 
 \membersection{wxMenuItem::GetSubMenu}\label{wxmenuitemgetsubmenu}
 
