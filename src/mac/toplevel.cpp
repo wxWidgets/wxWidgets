@@ -354,30 +354,27 @@ static pascal OSStatus WindowEventHandler( EventHandlerCallRef handler , EventRe
                 GetEventParameter( event, kEventParamCurrentBounds, typeQDRectangle, NULL,
                     sizeof( newContentRect ), NULL, &newContentRect );
 
-                wxRect contentRect(newContentRect.left , newContentRect.top ,
-                    newContentRect.right - newContentRect.left ,
-                    newContentRect.bottom - newContentRect.top) ;
+                wxSize formerSize = toplevelWindow->GetSize() ;
 
-                bool handled = false ;
-                if ((attributes & kWindowBoundsChangeSizeChanged) != 0)
+                if ( (attributes & kWindowBoundsChangeSizeChanged ) || 
+                    ( attributes & kWindowBoundsChangeOriginChanged ) )
+                    toplevelWindow->SetSize( newContentRect.left , newContentRect.top ,
+                        newContentRect.right - newContentRect.left ,
+                        newContentRect.bottom - newContentRect.top, wxSIZE_USE_EXISTING);
+    
+                int x , y , w , h ;
+                toplevelWindow->GetPosition( &x , &y ) ;
+                toplevelWindow->GetSize( &w , &h ) ;
+                Rect adjustedRect  = { y , x , y + h , x + w } ;
+
+                if ( !EqualRect( &newContentRect , &adjustedRect ) )
                 {
-                    wxSizeEvent event(contentRect , toplevelWindow->GetId());
-                    event.SetEventObject(toplevelWindow);
-                    handled = toplevelWindow->GetEventHandler()->ProcessEvent(event);
-                    contentRect = event.GetRect() ;
+                    SetEventParameter( event , kEventParamCurrentBounds , typeQDRectangle, sizeof( adjustedRect ) , &adjustedRect ) ;
                 }
-                else if ( attributes & kWindowBoundsChangeOriginChanged != 0)
-                {
-                    wxMoveEvent event(contentRect , toplevelWindow->GetId());
-                    event.SetEventObject(toplevelWindow);
-                    handled = toplevelWindow->GetEventHandler()->ProcessEvent(event);
-                    contentRect = event.GetRect() ;
-                }
-                if ( handled )
-                {
-                    SetRect( &newContentRect , contentRect.GetLeft() , contentRect.GetTop() , contentRect.GetRight() , contentRect.GetBottom() ) ;
-                    SetEventParameter( event, kEventParamCurrentBounds, typeQDRectangle, sizeof( newContentRect ), &newContentRect );
-                }
+                
+                if ( toplevelWindow->GetSize() != formerSize )
+                    toplevelWindow->Update() ;
+        
                 result = noErr ;
             }
             break ;
