@@ -474,7 +474,7 @@ void wxNotebook::MacSetupTabs()
                 SetControlData( (ControlHandle) m_macControl, ii+1,kControlTabImageContentTag,
                     sizeof( info ), (Ptr)&info );
                 wxASSERT_MSG( err == noErr , wxT("Error when setting icon on tab") ) ;
-                if ( UMAGetSystemVersion() <= 0x1030 )
+                if ( UMAGetSystemVersion() < 0x1030 )
                 {              	
                 	UnregisterIconRef( 'WXNG' , (OSType) 1 ) ;
                 }
