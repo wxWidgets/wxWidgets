@@ -99,8 +99,6 @@ static PyObject* t_output_helper(PyObject* target, PyObject* o) {
     static const wxString wxPyTreeListCtrlNameStr(wxT("treelistctrl"));
     static const wxString wxPyEmptyString(wxT(""));
 
-    typedef wxTreeCtrl wxPyTreeCtrl;
-
 class wxPyTreeCompanionWindow: public wxTreeCompanionWindow
 {
 public:

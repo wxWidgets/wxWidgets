@@ -225,9 +225,6 @@ public:
  * It also updates the scrolled window vertical scrollbar as appropriate.
  */
 
-%{
-    typedef wxTreeCtrl wxPyTreeCtrl;
-%}
 
 class wxRemotelyScrolledTreeCtrl: public wxPyTreeCtrl
 {
