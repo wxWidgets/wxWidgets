@@ -44,8 +44,8 @@ for flag in $*; do
     case ${flag} in
 	skiptar)     skiptar=1                   ;;
 	use_cvs)     skiptar=1; use_cvs=1        ;;
-	skipconfig)  skipconfig=1                ;;
-	skipbuild)   skipbuild=1                 ;;
+	skipconfig)  skipconfig=1; skiptar=1     ;;
+	skipbuild)   skipbuild=1; skipconfig=1; skiptar=1 ;;
 	skipinstall) skipinstall=1               ;;
         skipdmg)     skipdmg=1                   ;;
 	skipclean)   skipclean=1                 ;;
