@@ -14,8 +14,8 @@
         <sources>$(OPENGL_SRC)</sources>
 
         <!-- link against base and core libs in multilib build: --> 
-        <library>coredll</library>
-        <library>basedll</library>
+        <wx-lib>coredll</wx-lib>
+        <wx-lib>basedll</wx-lib>
         <!-- link against the wxWin library in monolithic build: -->
         <sys-lib>$(WXLIB_MONO)</sys-lib>
 
