@@ -503,14 +503,16 @@ void wxComboBox::Remove(long from, long to)
     gtk_editable_delete_text( GTK_EDITABLE(entry), (gint)from, (gint)to );
 }
 
-void wxComboBox::SetSelection( long WXUNUSED(from), long WXUNUSED(to) )
+void wxComboBox::SetSelection( long from, long to )
 {
-    wxFAIL_MSG( "wxComboBox::SetSelection not implemented" );
+    GtkWidget *entry = GTK_COMBO(m_widget)->entry;
+    gtk_editable_select_region( GTK_EDITABLE(entry), (gint)from, (gint)to );
 }
 
-void wxComboBox::SetEditable( bool WXUNUSED(editable) )
+void wxComboBox::SetEditable( bool editable )
 {
-    wxFAIL_MSG( "wxComboBox::SetEditable not implemented" );
+    GtkWidget *entry = GTK_COMBO(m_widget)->entry;
+    gtk_entry_set_editable( GTK_ENTRY(entry), editable );
 }
 
 void wxComboBox::OnSize( wxSizeEvent &event )
