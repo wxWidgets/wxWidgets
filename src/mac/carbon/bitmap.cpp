@@ -64,8 +64,8 @@ IconFamilyHandle wxMacCreateIconFamily(const wxBitmap& bitmap)
     int h = bmp.GetHeight() ;
     int sz = wxMax( w , h ) ;
     
-    OSType dataType ;
-    OSType maskType ;
+    OSType dataType = 0 ;
+    OSType maskType = 0 ;
     
     if ( sz == 64 )
     {
@@ -100,68 +100,73 @@ IconFamilyHandle wxMacCreateIconFamily(const wxBitmap& bitmap)
         dataType = kSmall32BitData ;
         maskType = kSmall8BitMask ;
     }
+
+    if ( dataType != 0 )
+    {
+        Handle data = NULL ; 
+        Handle maskdata = NULL ;
+        unsigned char * maskptr = NULL ;
+        unsigned char * ptr = NULL ;
+        size_t size ;
+        size_t masksize ;
+
+        size = sz * sz * 4 ;
+        data = NewHandle( size) ;    
+        HLock( data ) ;
+        ptr = (unsigned char*) *data ;
+        memset( ptr , 0, size ) ;
+
+        masksize = sz * sz ;
+        maskdata = NewHandle( masksize ) ;    
+        HLock( maskdata ) ;
+        maskptr = (unsigned char*) *maskdata ;
+        memset( maskptr , 0 , masksize ) ;
+
+        bool hasAlpha = bmp.HasAlpha() ;
+        wxMask *mask = bmp.GetMask() ;    
+        unsigned char * source = (unsigned char*) bmp.GetRawAccess() ;
+        unsigned char * masksource = mask ? (unsigned char*) mask->GetRawAccess() : NULL ;
+        for ( int y = 0 ; y < h ; ++y )
+        {
+            unsigned char * dest = ptr + y * sz * 4 ;
+            unsigned char * maskdest = maskptr + y * sz ;
+            for ( int x = 0 ; x < w ; ++x )
+            {
+                unsigned char a = *source ++ ;
+                unsigned char r = *source ++ ;
+                unsigned char g = *source ++ ;
+                unsigned char b = *source ++ ;
+                
+                *dest++ = 0 ;
+                *dest++ = r ;
+                *dest++ = g ;
+                *dest++ = b ;
+                
+                if ( mask )
+                    *maskdest++ = *masksource++ ;
+                else if ( hasAlpha )
+                    *maskdest++ = a ;
+                else
+                    *maskdest++ = 0xFF ;
+            }
+        }
+        
+        OSStatus err = SetIconFamilyData( iconFamily, dataType , data ) ;
+        wxASSERT_MSG( err == noErr , wxT("Error when adding bitmap") ) ;
+
+        err = SetIconFamilyData( iconFamily, maskType , maskdata ) ;
+        wxASSERT_MSG( err == noErr , wxT("Error when adding mask") ) ;
+        HUnlock( data ) ;
+        HUnlock( maskdata ) ;
+        DisposeHandle( data ) ;
+        DisposeHandle( maskdata ) ;
+    }
     else
     {
-        return NULL ;
+        PicHandle pic = wxMacCreatePicHandle( bitmap ) ;
+        SetIconFamilyData( iconFamily, 'PICT' , (Handle) pic ) ;
+        KillPicture( pic ) ;
     }
-
-    Handle data = NULL ; 
-    Handle maskdata = NULL ;
-    unsigned char * maskptr = NULL ;
-    unsigned char * ptr = NULL ;
-    size_t size ;
-    size_t masksize ;
-
-    size = sz * sz * 4 ;
-    data = NewHandle( size) ;    
-    HLock( data ) ;
-    ptr = (unsigned char*) *data ;
-    memset( ptr , 0, size ) ;
-
-    masksize = sz * sz ;
-    maskdata = NewHandle( masksize ) ;    
-    HLock( maskdata ) ;
-    maskptr = (unsigned char*) *maskdata ;
-    memset( maskptr , 0 , masksize ) ;
-
-    bool hasAlpha = bmp.HasAlpha() ;
-    wxMask *mask = bmp.GetMask() ;    
-    unsigned char * source = (unsigned char*) bmp.GetRawAccess() ;
-    unsigned char * masksource = mask ? (unsigned char*) mask->GetRawAccess() : NULL ;
-    for ( int y = 0 ; y < h ; ++y )
-    {
-        unsigned char * dest = ptr + y * sz * 4 ;
-        unsigned char * maskdest = maskptr + y * sz ;
-        for ( int x = 0 ; x < w ; ++x )
-        {
-            unsigned char a = *source ++ ;
-            unsigned char r = *source ++ ;
-            unsigned char g = *source ++ ;
-            unsigned char b = *source ++ ;
-            
-            *dest++ = 0 ;
-            *dest++ = r ;
-            *dest++ = g ;
-            *dest++ = b ;
-            
-            if ( mask )
-                *maskdest++ = *masksource++ ;
-            else if ( hasAlpha )
-                *maskdest++ = a ;
-            else
-                *maskdest++ = 0xFF ;
-        }
-    }
-    
-    OSStatus err = SetIconFamilyData( iconFamily, dataType , data ) ;
-    wxASSERT_MSG( err == noErr , wxT("Error when adding bitmap") ) ;
-
-    err = SetIconFamilyData( iconFamily, maskType , maskdata ) ;
-    wxASSERT_MSG( err == noErr , wxT("Error when adding mask") ) ;
-    HUnlock( data ) ;
-    HUnlock( maskdata ) ;
-    DisposeHandle( data ) ;
-    DisposeHandle( maskdata ) ;
     return iconFamily ;
 }
 
@@ -195,10 +200,39 @@ PicHandle wxMacCreatePicHandle( const wxBitmap &bmp )
     PicHandle       pict = NULL ;
     GWorldPtr       wp = NULL ;
     GWorldPtr       mask = NULL ;
+    int height = bmp.GetHeight() ;
+    int width = bmp.GetWidth() ;
+    
+    Rect rect = { 0 , 0 , height , width } ;
 
     GetGWorld( &origPort , &origDev ) ;
 
     wp = (GWorldPtr) bmp.GetHBITMAP( (WXHBITMAP*) &mask ) ;
+
+    RgnHandle clipRgn = NULL ;
+
+    if ( mask )
+    {
+        GWorldPtr monoworld ;
+        clipRgn = NewRgn() ;
+        OSStatus err = NewGWorld( &monoworld , 1 , &rect , NULL , NULL , 0 ) ;
+        LockPixels( GetGWorldPixMap( monoworld ) ) ;
+        LockPixels( GetGWorldPixMap( mask ) ) ;
+        SetGWorld( monoworld , NULL ) ;
+        RGBColor       white = { 0xffff ,0xffff , 0xffff } ;
+        RGBColor       black = { 0x0000 ,0x0000 , 0x0000 } ;
+        RGBForeColor( &black ) ;
+        RGBBackColor( &white ) ;
+        CopyBits(GetPortBitMapForCopyBits(mask),
+                GetPortBitMapForCopyBits(monoworld),
+                &rect,
+                &rect,
+                srcCopy,NULL);
+        BitMapToRegion( clipRgn , (BitMap*) *GetGWorldPixMap( monoworld ) ) ;
+        UnlockPixels( GetGWorldPixMap( monoworld ) ) ;
+        UnlockPixels( GetGWorldPixMap( mask ) ) ;
+        DisposeGWorld( monoworld ) ;
+    }
 
     SetGWorld( wp , NULL ) ;
     Rect portRect ;
@@ -212,16 +246,21 @@ PicHandle wxMacCreatePicHandle( const wxBitmap &bmp )
         RGBForeColor( &black ) ;
         RGBBackColor( &white ) ;
 
+        if ( clipRgn )
+            SetClip( clipRgn ) ;
+
         LockPixels( GetGWorldPixMap( wp ) ) ;
         CopyBits(GetPortBitMapForCopyBits(wp),
                 GetPortBitMapForCopyBits(wp),
                 &portRect,
                 &portRect,
-                srcCopy,NULL);
+                srcCopy,clipRgn);
         UnlockPixels( GetGWorldPixMap( wp ) ) ;
         ClosePicture();
     }
     SetGWorld( origPort , origDev ) ;
+    if ( clipRgn )
+        DisposeRgn( clipRgn ) ;
 
     return pict;
 }
@@ -235,7 +274,7 @@ void wxMacCreateBitmapButton( ControlButtonContentInfo*info , const wxBitmap& bi
         if ( bmap == NULL )
             return ;
         info->contentType = kControlContentIconRef ;
-        info->u.iconRef = wxMacCreateIconRef( bitmap ) ;  
+        info->u.iconRef = wxMacCreateIconRef( bitmap ) ;
         wxASSERT_MSG( info->u.iconRef , wxT("Converting to IconRef not possible") ) ;
 #if wxMAC_USE_CORE_GRAPHICS              
         /*
@@ -329,13 +368,13 @@ void wxBitmapRefData::UseAlpha( bool use )
     {
         int width = GetWidth() ;
         int height = GetHeight() ;
-        m_maskBytesPerRow = ( width + 3 ) & 0xFFFFFFC ;
+        m_maskBytesPerRow = ( width * 4 + 3 ) & 0xFFFFFFC ;
         size_t size = height * m_maskBytesPerRow ;
         unsigned char * data = (unsigned char * ) m_maskMemBuf.GetWriteBuf( size ) ;
         memset( data , 0 , size ) ;
         wxASSERT( m_hMaskBitmap == NULL ) ;
         Rect rect = { 0 , 0 , height , width } ;
-        verify_noerr( NewGWorldFromPtr( (GWorldPtr*) &m_hMaskBitmap , k8IndexedGrayPixelFormat , &rect , NULL , NULL , 0 ,
+        verify_noerr( NewGWorldFromPtr( (GWorldPtr*) &m_hMaskBitmap , k32ARGBPixelFormat , &rect , NULL , NULL , 0 ,
             (char*) data , m_maskBytesPerRow ) ) ; 
         wxASSERT_MSG( m_hMaskBitmap , wxT("Unable to create GWorld context for alpha mask") ) ;
         m_maskMemBuf.UngetWriteBuf(size) ;
@@ -498,9 +537,13 @@ void wxBitmapRefData::UpdateAlphaMask() const
         for ( int y = 0 ; y < h ; ++y , destalphabase += m_maskBytesPerRow )
         {
             unsigned char* destalpha = destalphabase ;
-            for( int x = 0 ; x < w ; ++x , sourcemask += 4, ++destalpha )
+            for( int x = 0 ; x < w ; ++x , sourcemask += 4 )
             {
-                *destalpha = *sourcemask ;
+                // we must have 24 bit depth for non quartz smooth alpha
+                *destalpha++ = 255 ;
+                *destalpha++ = 255  - *sourcemask ;
+                *destalpha++ = 255  - *sourcemask ;
+                *destalpha++ = 255  - *sourcemask ;
             }
         }
     }
@@ -1183,6 +1226,9 @@ void *wxMask::GetRawAccess() const
 {
     return m_memBuf.GetData() ;
 }
+
+// this can be a k8IndexedGrayPixelFormat GWorld, because it never stores other values than black or white
+// so no rainbox colors will be created by QD when blitting
 
 void wxMask::RealizeNative() 
 {
