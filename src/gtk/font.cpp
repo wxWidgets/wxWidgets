@@ -86,8 +86,10 @@ public:
 #endif // GTK 2.0/1.x
     }
 
+#ifndef __WXGTK20__
     // reinitilize the font with the gived XFLD
     void ReInit(const wxString& fontname);
+#endif
 
     // setters: all of them also take care to modify m_nativeFontInfo if we
     // have it so as to not lose the information not carried by our fields
@@ -440,12 +442,14 @@ wxFontRefData::wxFontRefData(const wxString& fontname)
     InitFromNative();
 }
 
+#ifndef __WXGTK20__
 void wxFontRefData::ReInit(const wxString& fontname)
 {
     m_nativeFontInfo.SetXFontName(fontname);
 
     InitFromNative();
 }
+#endif
 
 void wxFontRefData::ClearGdkFonts()
 {
