@@ -962,9 +962,9 @@ int wxSprintf( wxChar *str, const wxChar *format, ... )
     va_list argptr;
     va_start(argptr, format);
 
-    // note that wxString::Format() uses wxVsnprintf(), not wxSprintf(), so
+    // note that wxString::FormatV() uses wxVsnprintf(), not wxSprintf(), so
     // it's safe to implement this one in terms of it
-    wxString s(wxString::Format(format, argptr));
+    wxString s(wxString::FormatV(format, argptr));
     wxStrcpy(str, s);
 
     va_end(argptr);
