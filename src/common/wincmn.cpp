@@ -438,7 +438,8 @@ void wxWindowBase::Centre(int direction)
         //RN:  If we are using wxDisplay we get
         //the dimensions of the monitor the window is on,
         //otherwise we get the dimensions of the primary monitor
-#if wxUSE_DISPLAY
+        //FIXME:  wxDisplay::GetFromWindow only implemented on MSW
+#if wxUSE_DISPLAY && defined(__WXMSW__)
         int nDisplay = wxDisplay::GetFromWindow((wxWindow*)this);
         if(nDisplay != wxNOT_FOUND)
         {
