@@ -14,7 +14,9 @@ LNK = $(name).lnk
 
 OBJECTS = dcsvg.obj 
 
-all: $(SVGLIB)
+
+all:     $(SVGLIB) .SYMBOLIC
+    
 
 $(SVGLIB): $(OBJECTS)
 	*wlib /b /c /n /P=256 $(SVGLIB) $(OBJECTS)
