@@ -113,6 +113,8 @@ public:
     void OnChangeToolTip(wxCommandEvent& event);
     void OnToggleHelp(wxCommandEvent& WXUNUSED(event)) { DoToggleHelp(); }
 
+    void OnToolbarStyle(wxCommandEvent& event);
+
     void OnToolLeftClick(wxCommandEvent& event);
     void OnToolEnter(wxCommandEvent& event);
 
@@ -163,6 +165,9 @@ enum
     IDM_TOOLBAR_TOGGLEHELP,
     IDM_TOOLBAR_TOGGLE_ANOTHER_TOOLBAR,
     IDM_TOOLBAR_CHANGE_TOOLTIP,
+    IDM_TOOLBAR_SHOW_TEXT,
+    IDM_TOOLBAR_SHOW_ICONS,
+    IDM_TOOLBAR_SHOW_BOTH,
 
     ID_COMBO = 1000
 };
@@ -191,6 +196,9 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(IDM_TOOLBAR_INSERTPRINT, MyFrame::OnInsertPrint)
     EVT_MENU(IDM_TOOLBAR_TOGGLEHELP, MyFrame::OnToggleHelp)
     EVT_MENU(IDM_TOOLBAR_CHANGE_TOOLTIP, MyFrame::OnChangeToolTip)
+
+    EVT_MENU_RANGE(IDM_TOOLBAR_SHOW_TEXT, IDM_TOOLBAR_SHOW_BOTH,
+                   MyFrame::OnToolbarStyle)
 
     EVT_MENU(-1, MyFrame::OnToolLeftClick)
 
@@ -234,11 +242,13 @@ void MyFrame::RecreateToolbar()
 {
     // delete and recreate the toolbar
     wxToolBarBase *toolBar = GetToolBar();
+    long style = toolBar ? toolBar->GetWindowStyle() : TOOLBAR_STYLE;
+
     delete toolBar;
 
     SetToolBar(NULL);
 
-    long style = TOOLBAR_STYLE;
+    style &= ~(wxTB_HORIZONTAL | wxTB_VERTICAL);
     style |= m_horzToolbar ? wxTB_HORIZONTAL : wxTB_VERTICAL;
 
     toolBar = CreateToolBar(style, ID_TOOLBAR);
@@ -280,17 +290,8 @@ void MyFrame::RecreateToolbar()
         toolBar->SetToolBitmapSize(wxSize(w, h));
     }
 
-#ifdef __WXMSW__
-    int width = 24;
-#else
-    int width = 16;
-#endif
-
-    int currentX = 5;
-
-    toolBar->AddTool(wxID_NEW, toolBarBitmaps[0], wxNullBitmap, FALSE, currentX, -1, (wxObject *) NULL, "New file");
-    currentX += width + 5;
-    toolBar->AddTool(wxID_OPEN, toolBarBitmaps[1], wxNullBitmap, FALSE, currentX, -1, (wxObject *) NULL, "Open file");
+    toolBar->AddTool(wxID_NEW, _T("New"), toolBarBitmaps[0], _T("New file"));
+    toolBar->AddTool(wxID_OPEN, _T("Open"), toolBarBitmaps[1], _T("Open file"));
 
     // neither the generic nor Motif native toolbars really support this
 #if (wxUSE_TOOLBAR_NATIVE && !USE_GENERIC_TBAR) && !defined(__WXMOTIF__) && !defined(__WXX11__)
@@ -303,26 +304,17 @@ void MyFrame::RecreateToolbar()
         combo->Append("combobox");
         combo->Append("in a");
         combo->Append("toolbar");
-/*
-        wxTextCtrl *combo = new wxTextCtrl( toolBar, -1, "", wxDefaultPosition, wxSize(80,-1) );
-*/
         toolBar->AddControl(combo);
     }
 #endif // toolbars which don't support controls
 
-    currentX += width + 5;
-    toolBar->AddTool(wxID_SAVE, toolBarBitmaps[2], wxNullBitmap, TRUE, currentX, -1, (wxObject *) NULL, "Toggle button 1");
-    currentX += width + 5;
-    toolBar->AddTool(wxID_COPY, toolBarBitmaps[3], wxNullBitmap, TRUE, currentX, -1, (wxObject *) NULL, "Toggle button 2");
-    currentX += width + 5;
-    toolBar->AddTool(wxID_CUT, toolBarBitmaps[4], wxNullBitmap, FALSE, currentX, -1, (wxObject *) NULL, "Toggle/Untoggle help button");
-    currentX += width + 5;
-    toolBar->AddTool(wxID_PASTE, toolBarBitmaps[5], wxNullBitmap, FALSE, currentX, -1, (wxObject *) NULL, "Paste");
-    currentX += width + 5;
-    toolBar->AddTool(wxID_PRINT, toolBarBitmaps[6], wxNullBitmap, FALSE, currentX, -1, (wxObject *) NULL, "Delete this tool");
-    currentX += width + 5;
+    toolBar->AddTool(wxID_SAVE, _T("Save"), toolBarBitmaps[2], _T("Toggle button 1"), wxITEM_CHECK);
+    toolBar->AddTool(wxID_COPY, _T("Copy"), toolBarBitmaps[3], _T("Toggle button 2"), wxITEM_CHECK);
+    toolBar->AddTool(wxID_CUT, _T("Cut"), toolBarBitmaps[4], _T("Toggle/Untoggle help button"));
+    toolBar->AddTool(wxID_PASTE, _T("Paste"), toolBarBitmaps[5], _T("Paste"));
+    toolBar->AddTool(wxID_PRINT, _T("Print"), toolBarBitmaps[6], _T("Delete this tool"));
     toolBar->AddSeparator();
-    toolBar->AddTool(wxID_HELP, toolBarBitmaps[7], wxNullBitmap, TRUE, currentX, -1, (wxObject *) NULL, "Help button");
+    toolBar->AddTool(wxID_HELP, _T("Help"), toolBarBitmaps[7], _T("Help button"), wxITEM_CHECK);
 
     // after adding the buttons to the toolbar, must call Realize() to reflect
     // the changes
@@ -385,9 +377,13 @@ MyFrame::MyFrame(wxFrame* parent,
     tbarMenu->Append(IDM_TOOLBAR_TOGGLEHELP, "Toggle &help button\tCtrl-T", "");
     tbarMenu->AppendSeparator();
     tbarMenu->Append(IDM_TOOLBAR_CHANGE_TOOLTIP, "Change tool tip", "");
+    tbarMenu->AppendSeparator();
+    tbarMenu->AppendRadioItem(IDM_TOOLBAR_SHOW_TEXT, "Show &text\tAlt-T");
+    tbarMenu->AppendRadioItem(IDM_TOOLBAR_SHOW_ICONS, "Show &icons\tAlt-I");
+    tbarMenu->AppendRadioItem(IDM_TOOLBAR_SHOW_BOTH, "Show &both\tAlt-B");
 
     wxMenu *fileMenu = new wxMenu;
-    fileMenu->Append(wxID_EXIT, "E&xit", "Quit toolbar sample" );
+    fileMenu->Append(wxID_EXIT, "E&xit\tAlt-X", "Quit toolbar sample" );
 
     wxMenu *helpMenu = new wxMenu;
     helpMenu->Append(wxID_HELP, "&About", "About toolbar sample");
@@ -459,14 +455,20 @@ void MyFrame::OnToggleAnotherToolbar(wxCommandEvent& WXUNUSED(event))
     }
     else
     {
+        long style = GetToolBar()->GetWindowStyle();
+        style &= ~wxTB_HORIZONTAL;
+        style |= wxTB_VERTICAL;
+
         m_tbar = new wxToolBar(this, -1,
                                wxDefaultPosition, wxDefaultSize,
-                               TOOLBAR_STYLE | wxTB_VERTICAL);
-        m_tbar->AddTool(wxID_HELP, wxBITMAP(help),
-                        wxNullBitmap, FALSE,
-                        NULL,
-                        "This is the help button",
-                        "This is the long help for the help button");
+                               style);
+
+        m_tbar->AddRadioTool(wxID_NEW, _T("First"), wxBITMAP(new));
+        m_tbar->AddRadioTool(wxID_NEW, _T("Second"), wxBITMAP(new));
+        m_tbar->AddRadioTool(wxID_NEW, _T("Third"), wxBITMAP(new));
+        m_tbar->AddSeparator();
+        m_tbar->AddTool(wxID_HELP, _T("Help"), wxBITMAP(help));
+
         m_tbar->Realize();
     }
 
@@ -572,6 +574,28 @@ void MyFrame::OnUpdateCopyAndCut(wxUpdateUIEvent& event)
 void MyFrame::OnChangeToolTip(wxCommandEvent& WXUNUSED(event))
 {
     GetToolBar()->SetToolShortHelp(wxID_NEW, _T("New toolbar button"));
+}
+
+void MyFrame::OnToolbarStyle(wxCommandEvent& event)
+{
+    long style = GetToolBar()->GetWindowStyle();
+    style &= ~(wxTB_NOICONS | wxTB_TEXT);
+
+    switch ( event.GetId() )
+    {
+        case IDM_TOOLBAR_SHOW_TEXT:
+            style |= wxTB_NOICONS | wxTB_TEXT;
+            break;
+
+        case IDM_TOOLBAR_SHOW_ICONS:
+            // nothing to do
+            break;
+
+        case IDM_TOOLBAR_SHOW_BOTH:
+            style |= wxTB_TEXT;
+    }
+
+    GetToolBar()->SetWindowStyle(style);
 }
 
 void MyFrame::OnInsertPrint(wxCommandEvent& WXUNUSED(event))
