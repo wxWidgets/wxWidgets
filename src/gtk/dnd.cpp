@@ -263,6 +263,8 @@ wxDropSource::DragResult wxDropSource::DoDragDrop( bool WXUNUSED(bAllowMove) )
   
   UnregisterWindow();
   
+  g_blockEventsOnDrag = FALSE;
+  
   return m_retValue;
 };
 

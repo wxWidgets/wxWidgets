@@ -124,6 +124,20 @@ bool MyApp::OnInit(void)
 }
 
 //----------------------------------------------------------------------
+// MyTextCtrl
+//----------------------------------------------------------------------
+
+BEGIN_EVENT_TABLE(MyTextCtrl, wxTextCtrl)
+  EVT_RIGHT_DOWN   (MyTextCtrl::OnRightButton)
+END_EVENT_TABLE()
+  
+MyTextCtrl::MyTextCtrl( wxWindow *parent, wxWindowID id, const wxString &value,
+      const wxPoint &pos, const wxSize &size, int style ) :
+  wxTextCtrl( parent, id, value, pos, size, style )
+{
+}
+
+//----------------------------------------------------------------------
 // MyPanel
 //----------------------------------------------------------------------
 

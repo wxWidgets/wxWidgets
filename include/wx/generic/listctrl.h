@@ -540,7 +540,9 @@ class wxListMainWindow: public wxScrolledWindow
     long FindItem(long start, long data);
     long HitTest( int x, int y, int &flags );
     void InsertItem( wxListItem &item );
+//    void AddItem( wxListItem &item );
     void InsertColumn( long col, wxListItem &item );
+//    void AddColumn( wxListItem &item );
     void SortItems( wxListCtrlCompare fn, long data );
     virtual bool OnListNotify( wxListEvent &event );
 

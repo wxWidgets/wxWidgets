@@ -400,16 +400,16 @@ void wxFrame::SetMenuBar( wxMenuBar *menuBar )
   
   if (m_frameMenuBar)
   {
+    wxNode *node = m_frameMenuBar->m_menus.First();
+    while (node)
+    {
+      wxMenu *menu = (wxMenu*)node->Data();
+      SetInvokingWindow( menu, this );
+      node = node->Next();
+    };
+    
     if (m_frameMenuBar->m_parent != this)
     {
-      wxNode *node = m_frameMenuBar->m_menus.First();
-      while (node)
-      {
-        wxMenu *menu = (wxMenu*)node->Data();
-        SetInvokingWindow( menu, this );
-        node = node->Next();
-      };
-  
       m_frameMenuBar->m_parent = this;
       gtk_myfixed_put( GTK_MYFIXED(m_mainWindow),
         m_frameMenuBar->m_widget, m_frameMenuBar->m_x, m_frameMenuBar->m_y );

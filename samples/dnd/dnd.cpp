@@ -82,7 +82,8 @@ public:
   void OnHelp (wxCommandEvent& event);
   void OnLogClear(wxCommandEvent& event);
 
-  void OnMouseBtnDown(wxMouseEvent& event);
+  void OnLeftDown(wxMouseEvent& event);
+  void OnRightDown(wxMouseEvent& event);
 
   bool OnClose();
   
@@ -116,10 +117,8 @@ BEGIN_EVENT_TABLE(DnDFrame, wxFrame)
   EVT_MENU(Menu_Drag,  DnDFrame::OnDrag)
   EVT_MENU(Menu_Help,  DnDFrame::OnHelp)
   EVT_MENU(Menu_Clear, DnDFrame::OnLogClear)
-
-  EVT_LEFT_DOWN(OnMouseBtnDown)
-  EVT_RIGHT_DOWN(OnMouseBtnDown)
-  EVT_MIDDLE_DOWN(OnMouseBtnDown)
+  EVT_LEFT_DOWN(OnLeftDown)
+  EVT_RIGHT_DOWN(OnRightDown)
 END_EVENT_TABLE()
 
 // `Main program' equivalent, creating windows and returning main app frame
@@ -291,10 +290,11 @@ bool DnDFrame::OnClose()
   return TRUE; 
 }
 
-void DnDFrame::OnMouseBtnDown(wxMouseEvent& /* event */ )
+void DnDFrame::OnLeftDown(wxMouseEvent &WXUNUSED(event) )
 {
   if ( !m_strText.IsEmpty() ) {
     // start drag operation
+    
     wxTextDataObject data(m_strText);
     wxDropSource dragSource(data, this);
     const char *pc;
@@ -310,6 +310,17 @@ void DnDFrame::OnMouseBtnDown(wxMouseEvent& /* event */ )
 
     SetStatusText(wxString("Drag result: ") + pc);
   }
+}
+
+void DnDFrame::OnRightDown(wxMouseEvent &event )
+{
+  wxMenu *menu = new wxMenu;
+  
+  menu->Append(Menu_Drag, "&Test drag...");
+  menu->Append(Menu_About, "&About");
+  menu->Append(Menu_Quit, "E&xit");
+  
+  PopupMenu( menu, event.GetX(), event.GetY() );
 }
 
 DnDFrame::~DnDFrame()

@@ -167,7 +167,7 @@ void wxListBox::Delete( int n )
   wxNode *node = m_clientData.Nth( n );
   if (!node)
   {
-    wxFAIL_MSG(_("wxListBox::Delete wrong index"));
+    wxFAIL_MSG("wxListBox::Delete wrong index");
   }
   else
     m_clientData.DeleteNode( node );
@@ -347,7 +347,7 @@ int wxListBox::GetIndex( GtkWidget *item ) const
   return -1;
 };
 
-GtkWidget *wxListBox::GetDropTargetWidget(void)
+GtkWidget *wxListBox::GetConnectWidget(void)
 {
   return GTK_WIDGET(m_list);
 };

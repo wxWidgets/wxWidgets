@@ -324,7 +324,7 @@ void wxMDIClientWindow::AddChild( wxWindow *child )
 {
   if (!child->IsKindOf(CLASSINFO(wxMDIChildFrame)))
   {
-     wxFAIL_MSG(_("wxNotebook::AddChild: Child has to be wxMDIChildFrame"));
+     wxFAIL_MSG("wxNotebook::AddChild: Child has to be wxMDIChildFrame");
      return;
   };
 

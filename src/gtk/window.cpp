@@ -25,6 +25,7 @@
 #include "wx/dcclient.h"
 #include "wx/dnd.h"
 #include "wx/mdi.h"
+#include "wx/menu.h"
 #include "wx/notebook.h"
 #include "wx/statusbr.h"
 #include <wx/intl.h>
@@ -55,13 +56,13 @@ void gtk_window_expose_callback( GtkWidget *WXUNUSED(widget), GdkEventExpose *gd
   if (g_blockEventsOnDrag) return;
   
 /*
- if (IS_KIND_OF(win,wxTreeCtrl))
+ if (IS_KIND_OF(win,wxStatusBar))
  {
     printf( "OnExpose from " );
   if (win->GetClassInfo() && win->GetClassInfo()->GetClassName())
     printf( win->GetClassInfo()->GetClassName() );
   printf( ".\n" );
-  
+
   printf( "x: %d \n", gdk_event->area.x );
   printf( "y: %d \n", gdk_event->area.y );
   printf( "w: %d \n", gdk_event->area.width );
@@ -92,6 +93,8 @@ void gtk_window_draw_callback( GtkWidget *WXUNUSED(widget), GdkRectangle *rect, 
   if (g_blockEventsOnDrag) return;
   
 /*
+ if (IS_KIND_OF(win,wxStatusBar))
+ {
   printf( "OnDraw from " );
   if (win->GetClassInfo() && win->GetClassInfo()->GetClassName())
     printf( win->GetClassInfo()->GetClassName() );
@@ -101,6 +104,7 @@ void gtk_window_draw_callback( GtkWidget *WXUNUSED(widget), GdkRectangle *rect, 
   printf( "y: %d \n", rect->y );
   printf( "w: %d \n", rect->width );
   printf( "h: %d \n", rect->height );
+}
 */
 
   win->m_updateRegion.Union( rect->x, rect->y, rect->width, rect->height );
@@ -297,7 +301,7 @@ gint gtk_window_button_press_callback( GtkWidget *widget, GdkEventButton *gdk_ev
     printf( win->GetClassInfo()->GetClassName() );
   printf( ".\n" );
 */
-  
+
   wxEventType event_type = wxEVT_LEFT_DOWN;
   
   if (gdk_event->button == 1)
@@ -945,8 +949,7 @@ void wxWindow::PostCreation(void)
 //  GtkStyle *style = m_widget->style;
 //  style->font = m_font.GetInternalFont( 1.0 );          // destroy old font ?
   
-  GtkWidget *connect_widget = m_widget;
-  if (m_wxwindow) connect_widget = m_wxwindow;
+  GtkWidget *connect_widget = GetConnectWidget();
  
   gtk_object_set_data (GTK_OBJECT (connect_widget), "MyWxWindow", (gpointer)this );
   
@@ -1418,8 +1421,7 @@ void wxWindow::MakeModal( bool modal )
 
 void wxWindow::SetFocus(void)
 {
-  GtkWidget *connect_widget = m_widget;
-  if (m_wxwindow) connect_widget = m_wxwindow;
+  GtkWidget *connect_widget = GetConnectWidget();
   if (connect_widget)
   {
     if (GTK_WIDGET_CAN_FOCUS(connect_widget) && !GTK_WIDGET_HAS_FOCUS (connect_widget) )
@@ -1587,7 +1589,7 @@ void wxWindow::Refresh( bool eraseBackground, const wxRect *rect )
         rect->width, 
         rect->height );
     else
-      Clear();
+      Clear(); 
   };
   if (!rect)
   {
@@ -1713,9 +1715,29 @@ void wxWindow::InitDialog(void)
   GetEventHandler()->ProcessEvent(event);
 };
 
+static void SetInvokingWindow( wxMenu *menu, wxWindow *win )
+{
+  menu->SetInvokingWindow( win );
+  wxNode *node = menu->m_items.First();
+  while (node)
+  {
+    wxMenuItem *menuitem = (wxMenuItem*)node->Data();
+    if (menuitem->IsSubMenu())
+      SetInvokingWindow( menuitem->GetSubMenu(), win );
+    node = node->Next();
+  };
+};
+
+bool wxWindow::PopupMenu( wxMenu *menu, int WXUNUSED(x), int WXUNUSED(y) )
+{
+  SetInvokingWindow( menu, this );
+  gtk_menu_popup( GTK_MENU(menu->m_menu), NULL, NULL, NULL, NULL, 0, 0 );
+  return TRUE;
+}
+
 void wxWindow::SetDropTarget( wxDropTarget *dropTarget )
 {
-  GtkWidget *dnd_widget = GetDropTargetWidget();
+  GtkWidget *dnd_widget = GetConnectWidget();
   
   if (m_pDropTarget)
   {
@@ -1740,7 +1762,7 @@ wxDropTarget *wxWindow::GetDropTarget() const
   return m_pDropTarget;
 };
 
-GtkWidget* wxWindow::GetDropTargetWidget(void)
+GtkWidget* wxWindow::GetConnectWidget(void)
 {
   GtkWidget *connect_widget = m_widget;
   if (m_wxwindow) connect_widget = m_wxwindow;
@@ -1779,8 +1801,7 @@ long wxWindow::GetWindowStyleFlag(void) const
 
 void wxWindow::CaptureMouse(void)
 {
-  GtkWidget *connect_widget = m_widget;
-  if (m_wxwindow) connect_widget = m_wxwindow;
+  GtkWidget *connect_widget = GetConnectWidget();
   gtk_grab_add( connect_widget );
   gdk_pointer_grab ( connect_widget->window, FALSE,
                     (GdkEventMask)
@@ -1792,8 +1813,7 @@ void wxWindow::CaptureMouse(void)
 
 void wxWindow::ReleaseMouse(void)
 {
-  GtkWidget *connect_widget = m_widget;
-  if (m_wxwindow) connect_widget = m_wxwindow;
+  GtkWidget *connect_widget = GetConnectWidget();
   gtk_grab_remove( connect_widget );
   gdk_pointer_ungrab ( GDK_CURRENT_TIME );
 };

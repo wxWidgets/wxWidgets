@@ -99,7 +99,7 @@ public:
     wxTextCtrl& operator<<(double d);
     wxTextCtrl& operator<<(const char c);
 
-    virtual GtkWidget* GetDropTargetWidget(void);
+    virtual GtkWidget* GetConnectWidget(void);
     
 private:
   bool  m_modified;

@@ -164,11 +164,14 @@ public:
   virtual bool TransferDataFromWindow();
   void OnInitDialog( wxInitDialogEvent &event );
   virtual void InitDialog();
+  
+  virtual bool PopupMenu( wxMenu *menu, int x, int y );
 
   virtual void SetDropTarget( wxDropTarget *dropTarget );
   virtual wxDropTarget *GetDropTarget() const;
+  
 private:
-  virtual GtkWidget* GetDropTargetWidget(void);
+  virtual GtkWidget* GetConnectWidget(void);
   
 public:
   virtual void SetScrollbar( int orient, int pos, int thumbVisible,

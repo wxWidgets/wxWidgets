@@ -16,6 +16,7 @@
 #include "wx/panel.h"
 #include "wx/utils.h"
 #include "wx/imaglist.h"
+#include "wx/intl.h"
 #include "wx/log.h"
 
 //-----------------------------------------------------------------------------

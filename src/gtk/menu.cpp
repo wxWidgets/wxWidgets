@@ -15,6 +15,7 @@
 
 #include "wx/menu.h"
 #include "wx/log.h"
+#include "wx/intl.h"
 
 //-----------------------------------------------------------------------------
 // wxMenuBar
@@ -183,6 +184,7 @@ wxMenuItem::wxMenuItem()
 
 void wxMenuItem::SetText(const wxString& str)
 {
+  m_text = "";
   for ( const char *pc = str; *pc != '\0'; pc++ ) {
     if ( *pc == '&' )
       pc++; // skip it
@@ -193,7 +195,7 @@ void wxMenuItem::SetText(const wxString& str)
 
 void wxMenuItem::Check( bool check )
 {
-  wxCHECK_RET( IsCheckable(), _("can't check uncheckable item!") )
+  wxCHECK_RET( IsCheckable(), _("Can't check uncheckable item!") )
 
   m_isChecked = check;
   gtk_check_menu_item_set_state( (GtkCheckMenuItem*)m_menuItem, (gint)check );
