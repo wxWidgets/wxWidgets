@@ -519,6 +519,8 @@ private:
 
     DECLARE_EVENT_TABLE()
     DECLARE_DYNAMIC_CLASS(wxTextCtrl)
+
+    friend class wxWrappedLineData;
 };
 
 // ----------------------------------------------------------------------------
