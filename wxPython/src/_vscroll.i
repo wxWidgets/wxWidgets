@@ -333,22 +333,44 @@ public:
     // this method is valid for both single and multi selection listboxes
     size_t GetSelectedCount() const;
 
-    // get the first selected item, returns wxNOT_FOUND if none
-    //
-    // cookie is an opaque parameter which should be passed to
-    // GetNextSelected() later
-    //
-    // this method is only valid for the multi selection listboxes
-    int GetFirstSelected(unsigned long& cookie) const;
+    %extend {
+        // get the first selected item, returns wxNOT_FOUND if none
+        //
+        // cookie is an opaque parameter which should be passed to
+        // GetNextSelected() later
+        //
+        // this method is only valid for the multi selection listboxes
+        //int GetFirstSelected(unsigned long& cookie) const;
+        PyObject* GetFirstSelected() {
+            unsigned long cookie = 0;
+            int selected = self->GetFirstSelected(cookie);
+            bool blocked = wxPyBeginBlockThreads();
+            PyObject* tup = PyTuple_New(2);
+            PyTuple_SET_ITEM(tup, 0, PyInt_FromLong(selected));
+            PyTuple_SET_ITEM(tup, 1, PyInt_FromLong(cookie));
+            wxPyEndBlockThreads(blocked);
+            return tup;           
+        }   
 
-    // get next selection item, return wxNOT_FOUND if no more
-    //
-    // cookie must be the same parameter that was passed to GetFirstSelected()
-    // before
-    //
-    // this method is only valid for the multi selection listboxes
-    int GetNextSelected(unsigned long& cookie) const;
+        // get next selection item, return wxNOT_FOUND if no more
+        //
+        // cookie must be the same parameter that was passed to GetFirstSelected()
+        // before
+        //
+        // this method is only valid for the multi selection listboxes
+        // int GetNextSelected(unsigned long& cookie) const;
+        PyObject* GetNextSelected(unsigned long cookie) {
+            int selected = self->GetNextSelected(cookie);
+            bool blocked = wxPyBeginBlockThreads();
+            PyObject* tup = PyTuple_New(2);
+            PyTuple_SET_ITEM(tup, 0, PyInt_FromLong(selected));
+            PyTuple_SET_ITEM(tup, 1, PyInt_FromLong(cookie));
+            wxPyEndBlockThreads(blocked);
+            return tup;           
+        }   
+    }
 
+    
     // get the margins around each item
     wxPoint GetMargins() const;
 
