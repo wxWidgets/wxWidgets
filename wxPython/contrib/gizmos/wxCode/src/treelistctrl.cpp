@@ -1294,7 +1294,7 @@ void wxTreeListHeaderWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
     {
         //DoDrawRect( &dc, x, HEADER_OFFSET_Y, more_w, h-2 );
         wxRendererNative::Get().DrawHeaderButton(
-            this, dc, wxRect(x, HEADER_OFFSET_Y, more_w, h-3),
+            this, dc, wxRect(x, HEADER_OFFSET_Y, more_w, h-2),
             m_parent->IsEnabled() ? 0 : wxCONTROL_DISABLED);
     }
 
