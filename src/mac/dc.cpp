@@ -36,8 +36,6 @@ IMPLEMENT_ABSTRACT_CLASS(wxDC, wxObject)
 #define mm2pt			2.83464566929
 #define pt2mm			0.352777777778
 
-long wxDC::m_macCurrentPortId = 1 ;
-
 //-----------------------------------------------------------------------------
 // wxDC
 //-----------------------------------------------------------------------------
@@ -76,47 +74,36 @@ wxDC::wxDC()
 	m_macBrushInstalled = false ;
 	m_macPenInstalled = false ;
 	
-	m_macPortId = 0 ;
 	m_macLocalOrigin.h = m_macLocalOrigin.v = 0 ;
 	m_macClipRect.left = -32000 ;
 	m_macClipRect.top = -32000 ;
 	m_macClipRect.right = 32000 ;
 	m_macClipRect.bottom = 32000 ;
-	::GetPort( &m_macOrigPort ) ;
 
     m_pen = *wxBLACK_PEN;
     m_font = *wxNORMAL_FONT;
     m_brush = *wxWHITE_BRUSH;
 };
 
+wxMacPortSetter::wxMacPortSetter( wxDC* dc ) :
+	m_ph( dc->m_macPort ) 
+{
+	wxASSERT( dc->Ok() ) ;
+	
+	dc->MacSetupPort(&m_ph) ;
+}
+
+wxMacPortSetter::~wxMacPortSetter() 
+{
+}
+
 wxDC::~wxDC(void)
 {
-	if ( !m_macPortHelper.IsCleared() )
-	{
-	GrafPtr port ;
-	GetPort( &port ) ;
-	SetPort( m_macPortHelper.GetCurrentPort() ) ;
-	SetOrigin( 0 , 0 ) ;
-	SetPort( port ) ;
-	}
-	/*
-	if ( m_macPort )
-	{
-		::SetPort( m_macPort ) ;
-		::SetOrigin( 0 , 0 ) ;
-		::ClipRect( &m_macPort->portRect ) ;
-		::PenNormal() ;
-		::SetPort( m_macOrigPort ) ;
-	}
-	*/
-	++m_macCurrentPortId ;
 };
 
-void wxDC::MacSetupPort() const
+void wxDC::MacSetupPort(AGAPortHelper* help) const
 {
-	AGAPortHelper* help = (AGAPortHelper*) &m_macPortHelper ;
 	help->Setup( m_macPort ) ;
-	m_macPortId = ++m_macCurrentPortId ;
 	::SetOrigin(-m_macLocalOrigin.h, -m_macLocalOrigin.v);
 	::ClipRect(&m_macClipRect);
 
@@ -131,7 +118,7 @@ void wxDC::DoDrawBitmap( const wxBitmap &bmp, wxCoord x, wxCoord y, bool useMask
 	
   if (!Ok()) 
   	return;
-  MacVerifySetup() ;
+  wxMacPortSetter helper(this) ;
   
   long xx1 = XLOG2DEV(x); 
   long yy1 = YLOG2DEV(y);
@@ -200,7 +187,7 @@ void wxDC::DoDrawIcon( const wxIcon &icon, wxCoord x, wxCoord y )
 {
   if (!Ok()) 
   	return;
-  MacVerifySetup() ;
+  wxMacPortSetter helper(this) ;
   
   long xx1 = XLOG2DEV(x); 
   long yy1 = YLOG2DEV(y);
@@ -219,7 +206,7 @@ void wxDC::DoDrawIcon( const wxIcon &icon, wxCoord x, wxCoord y )
 
 void wxDC::DoSetClippingRegion( wxCoord x, wxCoord y, wxCoord width, wxCoord height )
 {
-  	MacVerifySetup() ;
+  	wxMacPortSetter helper(this) ;
 	if( m_clipping )
 	{
 		m_clipX1 = wxMax( m_clipX1 , x ) ;
@@ -252,7 +239,7 @@ void wxDC::DoSetClippingRegionAsRegion( const wxRegion &region  )
 {
     wxCHECK_RET( Ok(), wxT("invalid window dc") );
 
-  	MacVerifySetup() ;
+  	wxMacPortSetter helper(this) ;
     if (region.Empty())
     {
         DestroyClippingRegion();
@@ -266,7 +253,7 @@ void wxDC::DoSetClippingRegionAsRegion( const wxRegion &region  )
 
 void wxDC::DestroyClippingRegion(void)
 {
-  MacVerifySetup() ;
+  wxMacPortSetter helper(this) ;
   m_clipping = FALSE;
 //	Rect clip = { -32000 , -32000 , 32000 , 32000 } ;
 	::ClipRect(&m_macClipRect);
@@ -436,7 +423,7 @@ void  wxDC::SetFont( const wxFont &font )
   if (!Ok()) 
   	return;
   	
-  MacVerifySetup() ;
+//  wxMacPortSetter helper(this) ;
   
   m_font = font;
   m_macFontInstalled = false ;
@@ -447,7 +434,7 @@ void  wxDC::SetPen( const wxPen &pen )
   if (!Ok()  ) 
   	return;
 
-  MacVerifySetup() ;
+//  wxMacPortSetter helper(this) ;
 
 	if ( m_pen == pen )
 		return ;
@@ -464,7 +451,7 @@ void  wxDC::SetBrush( const wxBrush &brush )
 {
   if (!Ok() ) 
   	return;
-  MacVerifySetup() ;
+//  wxMacPortSetter helper(this) ;
   
   if (m_brush == brush) 
   	return;
@@ -477,7 +464,7 @@ void  wxDC::SetBackground( const wxBrush &brush )
 {
   if (!Ok()) 
   	return;
-  MacVerifySetup() ;
+//  wxMacPortSetter helper(this) ;
   
   if (m_backgroundBrush == brush) 
   	return;
@@ -515,7 +502,7 @@ void  wxDC::DoDrawLine( wxCoord x1, wxCoord y1, wxCoord x2, wxCoord y2 )
   if (!Ok()) 
   	return;
   	
-  MacVerifySetup() ;
+  wxMacPortSetter helper(this) ;
   
   if (m_pen.GetStyle() != wxTRANSPARENT)
   {
@@ -551,7 +538,7 @@ void  wxDC::DoDrawPoint( wxCoord x, wxCoord y )
   if (!Ok()) 
   	return;
   	
-  MacVerifySetup() ;
+  wxMacPortSetter helper(this) ;
   
   if (m_pen.GetStyle() != wxTRANSPARENT) 
   {
@@ -569,7 +556,7 @@ void  wxDC::DoDrawLines(int n, wxPoint points[],
 {
   if (!Ok()) 
   	return;
-  MacVerifySetup() ;
+  wxMacPortSetter helper(this) ;
   
   if (m_pen.GetStyle() == wxTRANSPARENT) 
   	return;
@@ -596,7 +583,7 @@ void  wxDC::DoDrawPolygon(int n, wxPoint points[],
 {
   if (!Ok()) 
   	return;
-  MacVerifySetup() ;
+  wxMacPortSetter helper(this) ;
   
   PolyHandle polygon = OpenPoly() ;
   long x1, x2 , y1 , y2 ;
@@ -630,7 +617,7 @@ void  wxDC::DoDrawRectangle(wxCoord x, wxCoord y, wxCoord width, wxCoord height)
 {
   if (!Ok()) 
   	return;
-  MacVerifySetup() ;
+  wxMacPortSetter helper(this) ;
 	
 	long xx = XLOG2DEV(x);
 	long yy = YLOG2DEV(y);
@@ -675,7 +662,7 @@ void  wxDC::DoDrawRoundedRectangle(wxCoord x, wxCoord y,
 {
   if (!Ok()) 
   	return;
-  MacVerifySetup() ;
+  wxMacPortSetter helper(this) ;
 	
   if (radius < 0.0) 
   	radius = - radius * ((width < height) ? width : height);
@@ -721,7 +708,7 @@ void  wxDC::DoDrawEllipse(wxCoord x, wxCoord y, wxCoord width, wxCoord height)
 {
   if (!Ok()) 
   	return;
-  MacVerifySetup() ;
+  wxMacPortSetter helper(this) ;
 
 	long xx = XLOG2DEV(x);
 	long yy = YLOG2DEV(y);
@@ -772,7 +759,7 @@ bool  wxDC::DoBlit(wxCoord xdest, wxCoord ydest, wxCoord width, wxCoord height,
                         wxDC *source, wxCoord xsrc, wxCoord ysrc, int logical_func , bool useMask )
 {
   if (!Ok()) return FALSE;
-  MacVerifySetup() ;
+  wxMacPortSetter helper(this) ;
 
 	CGrafPtr			sourcePort = (CGrafPtr) source->m_macPort ;
 	PixMapHandle	bmappixels =  GetGWorldPixMap( sourcePort ) ; 
@@ -843,7 +830,7 @@ void  wxDC::DoDrawText(const wxString& strtext, wxCoord x, wxCoord y)
 {
   if (!Ok()) 
   	return;
-  MacVerifySetup() ;
+  wxMacPortSetter helper(this) ;
 
 	long xx = XLOG2DEV(x);
 	long yy = YLOG2DEV(y);
@@ -923,7 +910,7 @@ void  wxDC::DoGetTextExtent( const wxString &string, wxCoord *width, wxCoord *he
   if (!Ok()) 
   	return;
  
-   MacVerifySetup() ;
+   wxMacPortSetter helper(this) ;
 
  	wxFont formerFont = m_font ; 
  	
@@ -1005,7 +992,7 @@ wxCoord   wxDC::GetCharWidth(void) const
   if (!Ok()) 
   	return 1;
  
-   MacVerifySetup() ;
+   wxMacPortSetter helper(this) ;
 
 	MacInstallFont() ;
 
@@ -1020,7 +1007,7 @@ wxCoord   wxDC::GetCharHeight(void) const
   if (!Ok()) 
   	return 1;
  
-   MacVerifySetup() ;
+   wxMacPortSetter helper(this) ;
 
 	MacInstallFont() ;
 
@@ -1034,7 +1021,7 @@ void  wxDC::Clear(void)
 {
   if (!Ok()) 
   	return;
-  MacVerifySetup() ;
+  wxMacPortSetter helper(this) ;
 	Rect rect = { -32767 , -32767 , 32767 , 32767 } ;
 	
 	if (m_backgroundBrush.GetStyle() != wxTRANSPARENT) 
@@ -1048,10 +1035,9 @@ void wxDC::MacInstallFont() const
 {
   if (!Ok()) 
   	return;
-  MacVerifySetup() ;
 
-	if ( m_macFontInstalled )
-		return ;
+//	if ( m_macFontInstalled )
+//		return ;
 	Pattern blackColor ;
 	
 	wxFontRefData * font = (wxFontRefData*) m_font.GetRefData() ;
@@ -1170,12 +1156,11 @@ void wxDC::MacInstallPen() const
 {
   if (!Ok()) 
   	return;
-  MacVerifySetup() ;
 
 	Pattern	 blackColor;
 
-	if ( m_macPenInstalled )
-		return ;
+//	if ( m_macPenInstalled )
+//		return ;
 
 	RGBColor forecolor = m_pen.GetColour().GetPixel();
 	RGBColor backcolor = m_backgroundBrush.GetColour().GetPixel();
@@ -1257,10 +1242,10 @@ void wxDC::MacInstallBrush() const
 {
   if (!Ok()) 
   	return;
-  MacVerifySetup() ;
+
 	Pattern	 blackColor, whiteColor ;
-	if ( m_macBrushInstalled )
-		return ;
+//	if ( m_macBrushInstalled )
+//		return ;
 
 	// foreground
 

@@ -28,7 +28,6 @@ wxScreenDC::wxScreenDC()
 #else
 	m_macPort = LMGetWMgrPort() ;
 #endif
-	MacSetupPort() ;
  	m_ok = TRUE ;
 	BitMap screenBits;
 	GetQDGlobalsScreenBits( &screenBits );

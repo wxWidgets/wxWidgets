@@ -125,7 +125,6 @@ wxPrinterDC::~wxPrinterDC(void)
 		::UMAPrClose() ;
 //	  ::SetPort( macPrintFormerPort ) ;
 		::SetPort( LMGetWMgrPort() ) ;
-		m_macPortHelper.Clear() ;
 	}
 #else
 	if ( m_ok ) 

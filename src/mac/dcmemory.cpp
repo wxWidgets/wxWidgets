@@ -68,7 +68,6 @@ void wxMemoryDC::SelectObject( const wxBitmap& bitmap )
 			{
 				m_macMask = mask->GetMaskBitmap() ;
 			}
-			MacSetupPort() ;
  			m_ok = TRUE ;
 			// SetBackground(wxBrush(*wxWHITE, wxSOLID));
  		}

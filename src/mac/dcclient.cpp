@@ -59,7 +59,6 @@ wxWindowDC::wxWindowDC(wxWindow *the_canvas)
 	m_maxX = size.x  ;
 	m_maxY = size.y ; 
 
-	MacSetupPort() ;
  	m_ok = TRUE ;
   SetBackground(wxBrush(the_canvas->GetBackgroundColour(), wxSOLID));
 }
@@ -83,7 +82,6 @@ wxClientDC::wxClientDC(wxWindow *window)
 	
 	window->MacGetPortClientParams(&m_macLocalOrigin, &m_macClipRect , &windowref , &rootwindow );
 	m_macPort = UMAGetWindowPort( windowref ) ;
-	MacSetupPort() ;
 	m_minY = m_minX =  0;
 	wxSize size = window->GetSize() ;
 	m_maxX = size.x  ;
@@ -113,7 +111,6 @@ wxPaintDC::wxPaintDC(wxWindow *window)
 	window->MacGetPortClientParams(&m_macLocalOrigin, &m_macClipRect , &windowref , &rootwindow );
 
 	m_macPort = UMAGetWindowPort( windowref ) ;
-	MacSetupPort() ;
  	m_ok = TRUE ;
 	wxCoord x , y ,w , h ;
 	window->GetUpdateRegion().GetBox( x , y , w , h ) ;

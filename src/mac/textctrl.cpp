@@ -194,7 +194,6 @@ void wxTextCtrl::SetValue(const wxString& st)
 			
 			UMADrawControl( m_macControl ) ;
 			UMASetThemeWindowBackground( win->MacGetWindowData()->m_macWindow , win->MacGetWindowData()->m_macWindowBackgroundTheme , false ) ;
-			wxDC::MacInvalidateSetup() ;
 		}
 	}
 }
@@ -283,7 +282,6 @@ void wxTextCtrl::Paste()
 				
 				UMADrawControl( m_macControl ) ;
 				UMASetThemeWindowBackground( win->MacGetWindowData()->m_macWindow , win->MacGetWindowData()->m_macWindowBackgroundTheme , false ) ;
-				wxDC::MacInvalidateSetup() ;
 			}
 		}
 	}

@@ -48,6 +48,15 @@ extern int wxPageNumber;
 // wxDC
 //-----------------------------------------------------------------------------
 
+class WXDLLEXPORT wxMacPortSetter
+{
+public :
+	wxMacPortSetter( wxDC* dc ) ;
+	~wxMacPortSetter() ;
+private :
+	AGAPortHelper m_ph ;
+} ;
+
 class WXDLLEXPORT wxDC: public wxDCBase
 {
   DECLARE_DYNAMIC_CLASS(wxDC)
@@ -255,15 +264,9 @@ protected:
 	mutable bool	m_macPenInstalled ;
 	mutable bool	m_macBrushInstalled ;
 	
-	mutable long	m_macPortId ;
-	GrafPtr				m_macOrigPort ;
 	Rect					m_macClipRect ;
 	Point					m_macLocalOrigin ;
-	mutable AGAPortHelper	m_macPortHelper ;
-	void					MacSetupPort() const ;
-	void					MacVerifySetup() const { if ( m_macPortId != m_macCurrentPortId ) MacSetupPort() ; } 
-	static void				MacInvalidateSetup() { m_macCurrentPortId++ ; }
-	static long m_macCurrentPortId ;
+	void					MacSetupPort( AGAPortHelper* ph ) const ;
 };
 
 #endif

@@ -835,7 +835,6 @@ OSErr UMASetKeyboardFocus				(WindowPtr 				inWindow,
 	}
 #endif
 	SetPort( port ) ;
-	wxDC::MacInvalidateSetup() ;
 	return err ;
 }
 
@@ -1379,7 +1378,6 @@ void UMAHighlightAndActivateWindow( WindowRef inWindowRef , bool inActivate )
 				UMADeactivateControl( control ) ;
 		}	
 		SetPort( port ) ;
-		wxDC::MacInvalidateSetup() ;
 	}
 }
 OSStatus UMADrawThemePlacard( const Rect *inRect , ThemeDrawState inState ) 

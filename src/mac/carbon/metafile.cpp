@@ -115,23 +115,11 @@ bool wxMetaFile::Play(wxDC *dc)
 	if (!dc->Ok() )
 		return FALSE;
 		
-	dc->MacVerifySetup() ;
-	
 	{
+		wxMacPortSetter helper( dc ) ;
 		PicHandle pict = GetHMETAFILE() ;
 		DrawPicture( pict , &(**pict).picFrame ) ;
 	}
-/*
-    if (!m_refData)
-        return FALSE;
-
-    dc->BeginDrawing();
-
-    if (dc->GetHDC() && M_METAFILEDATA->m_metafile)
-        PlayMetaFile((HDC) dc->GetHDC(), (HMETAFILE) M_METAFILEDATA->m_metafile);
-
-    dc->EndDrawing();
-*/
     return TRUE;
 }
 

@@ -2353,7 +2353,6 @@ wxMacDrawingHelper::~wxMacDrawingHelper()
 		Rect portRect ;
 		GetPortBounds( m_currentPort , &portRect ) ;
 		ClipRect( &portRect ) ;
-		wxDC::MacInvalidateSetup() ;	
 	}
 		
 	if ( m_formerPort != m_currentPort )
