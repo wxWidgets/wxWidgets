@@ -832,7 +832,7 @@ bool wxFTP::GetList(wxArrayString& files,
     if ( !CheckCommand(line, '1') )
     {
         m_lastError = wxPROTO_PROTERR;
-        wxLogDebug("FTP 'LIST' command returned unexpected result from server");
+        wxLogDebug(_T("FTP 'LIST' command returned unexpected result from server"));
         delete sock;
         return false;
     }
