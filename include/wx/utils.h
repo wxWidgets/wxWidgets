@@ -56,12 +56,6 @@ class WXDLLIMPEXP_BASE wxPoint;
 // String functions (deprecated, use wxString)
 // ----------------------------------------------------------------------------
 
-// Useful buffer (FIXME VZ: To be removed!!!)
-// Now only needed in MSW port
-#if !defined(__WXMOTIF__) && !defined(__WXGTK__) && !defined(__WXX11__) && !defined(__WXMGL__) && !defined(__WXMAC__)
-WXDLLIMPEXP_DATA_BASE(extern wxChar*) wxBuffer;
-#endif
-
 // Make a copy of this string using 'new'
 WXDLLIMPEXP_BASE wxChar* copystring(const wxChar *s);
 

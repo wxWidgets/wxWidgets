@@ -486,8 +486,6 @@ private:
 // global data
 // ---------------------------------------------------------------------------
 
-WXDLLIMPEXP_DATA_BASE(extern wxChar*) wxBuffer;
-
 WXDLLIMPEXP_DATA_BASE(extern HINSTANCE) wxhInstance;
 
 // ---------------------------------------------------------------------------

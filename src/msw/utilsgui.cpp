@@ -83,22 +83,23 @@ bool wxWriteResource(const wxString& section, const wxString& entry, int value, 
 bool wxGetResource(const wxString& section, const wxString& entry, wxChar **value, const wxString& file)
 {
     static const wxChar defunkt[] = wxT("$$default");
+
+    wxChar buf[1024];
     if (file != wxT(""))
     {
-        int n = GetPrivateProfileString((LPCTSTR)WXSTRINGCAST section, (LPCTSTR)WXSTRINGCAST entry, (LPCTSTR)defunkt,
-                (LPTSTR)wxBuffer, 1000, (LPCTSTR)WXSTRINGCAST file);
-        if (n == 0 || wxStrcmp(wxBuffer, defunkt) == 0)
+        int n = GetPrivateProfileString(section, entry, defunkt,
+                                        buf, WXSIZEOF(buf), file);
+        if (n == 0 || wxStrcmp(buf, defunkt) == 0)
             return FALSE;
     }
     else
     {
-        int n = GetProfileString((LPCTSTR)WXSTRINGCAST section, (LPCTSTR)WXSTRINGCAST entry, (LPCTSTR)defunkt,
-                (LPTSTR)wxBuffer, 1000);
-        if (n == 0 || wxStrcmp(wxBuffer, defunkt) == 0)
+        int n = GetProfileString(section, entry, defunkt, buf, WXSIZEOF(buf));
+        if (n == 0 || wxStrcmp(buf, defunkt) == 0)
             return FALSE;
     }
     if (*value) delete[] (*value);
-    *value = copystring(wxBuffer);
+    *value = copystring(buf);
     return TRUE;
 }
 

@@ -240,99 +240,86 @@ bool wxGetUserId(wxChar *buf, int maxSize)
 // Get user name e.g. Julian Smart
 bool wxGetUserName(wxChar *buf, int maxSize)
 {
-#if wxUSE_PENWINDOWS && !defined(__WATCOMC__) && !defined(__GNUWIN32__)
-    extern HANDLE g_hPenWin; // PenWindows Running?
-    if (g_hPenWin)
-    {
-        // PenWindows Does have a user concept!
-        // Get the current owner of the recognizer
-        GetPrivateProfileString("Current", "User", default_name, wxBuffer, maxSize - 1, "PENWIN.INI");
-        strncpy(buf, wxBuffer, maxSize - 1);
-    }
-    else
-#endif
-    {
 #ifdef USE_NET_API
-        CHAR szUserName[256];
-        if ( !wxGetUserId(szUserName, WXSIZEOF(szUserName)) )
-            return FALSE;
+    CHAR szUserName[256];
+    if ( !wxGetUserId(szUserName, WXSIZEOF(szUserName)) )
+        return FALSE;
 
-        // TODO how to get the domain name?
-        CHAR *szDomain = "";
+    // TODO how to get the domain name?
+    CHAR *szDomain = "";
 
-        // the code is based on the MSDN example (also see KB article Q119670)
-        WCHAR wszUserName[256];          // Unicode user name
-        WCHAR wszDomain[256];
-        LPBYTE ComputerName;
+    // the code is based on the MSDN example (also see KB article Q119670)
+    WCHAR wszUserName[256];          // Unicode user name
+    WCHAR wszDomain[256];
+    LPBYTE ComputerName;
 
-        USER_INFO_2 *ui2;         // User structure
+    USER_INFO_2 *ui2;         // User structure
 
-        // Convert ANSI user name and domain to Unicode
-        MultiByteToWideChar( CP_ACP, 0, szUserName, strlen(szUserName)+1,
-                wszUserName, WXSIZEOF(wszUserName) );
-        MultiByteToWideChar( CP_ACP, 0, szDomain, strlen(szDomain)+1,
-                wszDomain, WXSIZEOF(wszDomain) );
+    // Convert ANSI user name and domain to Unicode
+    MultiByteToWideChar( CP_ACP, 0, szUserName, strlen(szUserName)+1,
+            wszUserName, WXSIZEOF(wszUserName) );
+    MultiByteToWideChar( CP_ACP, 0, szDomain, strlen(szDomain)+1,
+            wszDomain, WXSIZEOF(wszDomain) );
 
-        // Get the computer name of a DC for the domain.
-        if ( NetGetDCName( NULL, wszDomain, &ComputerName ) != NERR_Success )
-        {
-            wxLogError(wxT("Can not find domain controller"));
+    // Get the computer name of a DC for the domain.
+    if ( NetGetDCName( NULL, wszDomain, &ComputerName ) != NERR_Success )
+    {
+        wxLogError(wxT("Can not find domain controller"));
+
+        goto error;
+    }
+
+    // Look up the user on the DC
+    NET_API_STATUS status = NetUserGetInfo( (LPWSTR)ComputerName,
+            (LPWSTR)&wszUserName,
+            2, // level - we want USER_INFO_2
+            (LPBYTE *) &ui2 );
+    switch ( status )
+    {
+        case NERR_Success:
+            // ok
+            break;
+
+        case NERR_InvalidComputer:
+            wxLogError(wxT("Invalid domain controller name."));
 
             goto error;
-        }
 
-        // Look up the user on the DC
-        NET_API_STATUS status = NetUserGetInfo( (LPWSTR)ComputerName,
-                (LPWSTR)&wszUserName,
-                2, // level - we want USER_INFO_2
-                (LPBYTE *) &ui2 );
-        switch ( status )
-        {
-            case NERR_Success:
-                // ok
-                break;
+        case NERR_UserNotFound:
+            wxLogError(wxT("Invalid user name '%s'."), szUserName);
 
-            case NERR_InvalidComputer:
-                wxLogError(wxT("Invalid domain controller name."));
+            goto error;
 
-                goto error;
+        default:
+            wxLogSysError(wxT("Can't get information about user"));
 
-            case NERR_UserNotFound:
-                wxLogError(wxT("Invalid user name '%s'."), szUserName);
+            goto error;
+    }
 
-                goto error;
+    // Convert the Unicode full name to ANSI
+    WideCharToMultiByte( CP_ACP, 0, ui2->usri2_full_name, -1,
+            buf, maxSize, NULL, NULL );
 
-            default:
-                wxLogSysError(wxT("Can't get information about user"));
-
-                goto error;
-        }
-
-        // Convert the Unicode full name to ANSI
-        WideCharToMultiByte( CP_ACP, 0, ui2->usri2_full_name, -1,
-                buf, maxSize, NULL, NULL );
-
-        return TRUE;
+    return TRUE;
 
 error:
-        wxLogError(wxT("Couldn't look up full user name."));
+    wxLogError(wxT("Couldn't look up full user name."));
 
-        return FALSE;
+    return FALSE;
 #else  // !USE_NET_API
-        // Could use NIS, MS-Mail or other site specific programs
-        // Use wxWindows configuration data
-        bool ok = GetProfileString(WX_SECTION, eUSERNAME, wxT(""), buf, maxSize - 1) != 0;
-        if ( !ok )
-        {
-            ok = wxGetUserId(buf, maxSize);
-        }
-
-        if ( !ok )
-        {
-            wxStrncpy(buf, wxT("Unknown User"), maxSize);
-        }
-#endif // Win32/16
+    // Could use NIS, MS-Mail or other site specific programs
+    // Use wxWindows configuration data
+    bool ok = GetProfileString(WX_SECTION, eUSERNAME, wxT(""), buf, maxSize - 1) != 0;
+    if ( !ok )
+    {
+        ok = wxGetUserId(buf, maxSize);
     }
+
+    if ( !ok )
+    {
+        wxStrncpy(buf, wxT("Unknown User"), maxSize);
+    }
+#endif // Win32/16
 
     return TRUE;
 }

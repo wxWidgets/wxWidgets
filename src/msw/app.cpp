@@ -119,7 +119,6 @@
 // global variables
 // ---------------------------------------------------------------------------
 
-extern wxChar *wxBuffer;
 extern wxList WXDLLEXPORT wxPendingDelete;
 #ifndef __WXMICROWIN__
 extern void wxSetKeyboardHook(bool doIt);
@@ -286,8 +285,6 @@ bool wxApp::Initialize(int& argc, wxChar **argv)
         return FALSE;
     }
 #endif // wxUSE_UNICODE && !wxUSE_UNICODE_MSLU
-
-    wxBuffer = new wxChar[1500]; // FIXME
 
 #if defined(__WIN95__) && !defined(__WXMICROWIN__)
     InitCommonControls();
@@ -500,9 +497,6 @@ bool wxApp::UnregisterWindowClasses()
 
 void wxApp::CleanUp()
 {
-    delete[] wxBuffer;
-    wxBuffer = NULL;
-
 #ifndef __WXMICROWIN__
     wxSetKeyboardHook(FALSE);
 #endif
