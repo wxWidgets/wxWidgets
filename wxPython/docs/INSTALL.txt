@@ -103,7 +103,7 @@ instructions above, except for a few small, but important details:
    custom build you do yourself will end up in /Library/Frameworks
    even on Panther...
 
-4. You need to use pythonw atg the command line or PythonLauncher app
+4. You need to use pythonw at the command line or PythonLauncher app
    to run wxPython apps.
 
 
