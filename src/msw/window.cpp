@@ -302,7 +302,7 @@ wxWindow::~wxWindow(void)
     if (m_sizerParent)
         m_sizerParent->RemoveChild((wxWindow *)this);
 #endif
-    
+
     // wxWnd
     MSWDetachWindowMenu();
 
@@ -323,7 +323,7 @@ wxWindow::~wxWindow(void)
         m_globalHandle = 0;
     }
 #endif
-    
+
     delete m_children;
     m_children = NULL;
 
@@ -340,7 +340,7 @@ wxWindow::~wxWindow(void)
     if ( m_windowValidator )
         delete m_windowValidator;
 
-    // Restore old Window proc, if required 
+    // Restore old Window proc, if required
     // and remove hWnd <-> wxWindow association
     UnsubclassWin();
 }
@@ -381,7 +381,7 @@ bool wxWindow::Create(wxWindow *parent, wxWindowID id,
 #if  wxUSE_DRAG_AND_DROP
     m_pDropTarget = NULL;
 #endif
-    
+
     // MSW-specific
     m_hWnd = 0;
     m_winEnabled = TRUE;
@@ -827,7 +827,7 @@ void wxWindow::GetTextExtent(const wxString& string, int *x, int *y,
     HWND hWnd = (HWND) GetHWND();
     HDC dc = ::GetDC(hWnd);
 
-    HFONT fnt = 0; 
+    HFONT fnt = 0;
     HFONT was = 0;
     if (fontToUse && fontToUse->Ok())
     {
@@ -840,7 +840,7 @@ void wxWindow::GetTextExtent(const wxString& string, int *x, int *y,
     GetTextExtentPoint(dc, (const char *)string, (int)string.Length(), &sizeRect);
     GetTextMetrics(dc, &tm);
 
-    if (fontToUse && fnt && was) 
+    if (fontToUse && fnt && was)
         SelectObject(dc,was) ;
 
     ReleaseDC(hWnd, dc);
@@ -954,7 +954,7 @@ long wxWindow::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam)
     wxLogTrace(wxTraceMessages, "Processing %s(%lx, %lx)",
         wxGetMessageName(message), wParam, lParam);
 #endif // WXDEBUG
-    
+
     HWND hWnd = (HWND)m_hWnd;
 
     switch (message)
@@ -1020,7 +1020,7 @@ long wxWindow::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam)
             else return MSWDefWindowProc(message, wParam, lParam );
             break;
         }
-        
+
     case WM_SIZE:
         {
             int width = LOWORD(lParam);
@@ -1028,7 +1028,7 @@ long wxWindow::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam)
             MSWOnSize(width, height, wParam);
             break;
         }
-        
+
     case WM_MOVE:
         {
             wxMoveEvent event(wxPoint(LOWORD(lParam), HIWORD(lParam)),
@@ -1044,7 +1044,7 @@ long wxWindow::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam)
             MSWOnWindowPosChanging((void *)lParam);
             break;
         }
-        
+
     case WM_RBUTTONDOWN:
         {
             int x = (DIMENSION_TYPE) LOWORD(lParam);
@@ -1231,7 +1231,7 @@ long wxWindow::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam)
             return MSWOnMeasureItem((int)wParam, (WXMEASUREITEMSTRUCT *)lParam);
             break;
         }
-        
+
     case WM_KEYDOWN:
         // we consider these message "not interesting"
         if ( wParam == VK_SHIFT || wParam == VK_CONTROL )
@@ -1435,7 +1435,7 @@ long wxWindow::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam)
                 return 1L;
             break;
         }
-        
+
     case WM_GETMINMAXINFO:
         {
             MINMAXINFO *info = (MINMAXINFO *)lParam;
@@ -1450,7 +1450,7 @@ long wxWindow::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam)
             return MSWDefWindowProc(message, wParam, lParam );
             break;
         }
-        
+
     case WM_GETDLGCODE:
         return MSWGetDlgCode();
 
@@ -1544,7 +1544,7 @@ void wxWindow::MSWCreate(int id, wxWindow *parent, const char *wclass, wxWindow 
         m_hWnd = (WXHWND) ::CreateDialog(wxGetInstance(), dialog_template, hParent,
             (DLGPROC)dlgproc);
 #endif
-        
+
         if (m_hWnd == 0)
             MessageBox(NULL, "Can't find dummy dialog template!\nCheck resource include path for finding wx.rc.",
             "wxWindows Error", MB_ICONEXCLAMATION | MB_OK);
@@ -1638,7 +1638,7 @@ bool wxWindow::MSWOnDestroy(void)
         m_pDropTarget = NULL;
     }
 #endif
-    
+
     return TRUE;
 }
 
@@ -1662,7 +1662,7 @@ bool wxWindow::MSWOnNotify(WXWPARAM wParam, WXLPARAM lParam)
     NMHDR *hdr = (NMHDR *)lParam;
     HWND hWnd = (HWND)hdr->hwndFrom;
     wxWindow *win = wxFindWinFromHandle((WXHWND) hWnd);
-    
+
     if ( win )
         return win->MSWNotify(wParam, lParam);
     else
@@ -1680,7 +1680,7 @@ bool wxWindow::MSWOnNotify(WXWPARAM wParam, WXLPARAM lParam)
     }
 
     return FALSE;
-    
+
 #endif
     return FALSE;
 }
@@ -1701,7 +1701,7 @@ bool wxWindow::MSWOnActivate(int state, bool WXUNUSED(minimized), WXHWND WXUNUSE
 #if WXDEBUG > 1
     wxDebugMsg("wxWindow::MSWOnActivate %d\n", handle);
 #endif
-    
+
     wxActivateEvent event(wxEVT_ACTIVATE, ((state == WA_ACTIVE) || (state == WA_CLICKACTIVE)),
         m_windowId);
     event.SetEventObject(this);
@@ -1721,7 +1721,7 @@ bool wxWindow::MSWOnSetFocus(WXHWND WXUNUSED(hwnd))
         if (m_caretShown)
             ::ShowCaret((HWND) GetHWND());
     }
-    
+
     wxFocusEvent event(wxEVT_SET_FOCUS, m_windowId);
     event.SetEventObject(this);
     if (!GetEventHandler()->ProcessEvent(event))
@@ -1739,7 +1739,7 @@ bool wxWindow::MSWOnKillFocus(WXHWND WXUNUSED(hwnd))
     {
         ::DestroyCaret();
     }
-    
+
     wxFocusEvent event(wxEVT_KILL_FOCUS, m_windowId);
     event.SetEventObject(this);
     if (!GetEventHandler()->ProcessEvent(event))
@@ -1752,7 +1752,7 @@ void wxWindow::MSWOnDropFiles(WXWPARAM wParam)
 #if WXDEBUG > 1
     wxDebugMsg("wxWindow::MSWOnDropFiles %d\n", m_hWnd);
 #endif
-    
+
     HDROP hFilesInfo = (HDROP) wParam;
     POINT dropPoint;
     DragQueryPoint(hFilesInfo, (LPPOINT) &dropPoint);
@@ -1803,7 +1803,7 @@ bool wxWindow::MSWOnDrawItem(int id, WXDRAWITEMSTRUCT *itemStruct)
             );
     }
 #endif  // owner-drawn menus
-    
+
     wxWindow *item = FindItem(id);
 #if wxUSE_DYNAMIC_CLASSES
     if (item && item->IsKindOf(CLASSINFO(wxControl)))
@@ -1823,11 +1823,11 @@ bool wxWindow::MSWOnMeasureItem(int id, WXMEASUREITEMSTRUCT *itemStruct)
         wxMenuItem *pMenuItem = (wxMenuItem *)(pMeasureStruct->itemData);
         wxCHECK( pMenuItem->IsKindOf(CLASSINFO(wxMenuItem)), FALSE );
 
-        return pMenuItem->OnMeasureItem(&pMeasureStruct->itemWidth, 
+        return pMenuItem->OnMeasureItem(&pMeasureStruct->itemWidth,
             &pMeasureStruct->itemHeight);
     }
 #endif  // owner-drawn menus
-    
+
     wxWindow *item = FindItem(id);
 #if wxUSE_DYNAMIC_CLASSES
     if (item && item->IsKindOf(CLASSINFO(wxControl)))
@@ -1920,7 +1920,7 @@ void wxWindow::OnSysColourChanged(wxSysColourChangedEvent& event)
             event.m_eventObject = win;
             win->GetEventHandler()->ProcessEvent(event2);
         }
-        
+
         node = node->Next();
     }
 }
@@ -1938,12 +1938,12 @@ long wxWindow::Default()
     // Ignore 'fake' events (perhaps generated as a result of a separate real event)
     if (m_lastMsg == 0)
         return 0;
-    
+
 #ifdef __WXDEBUG__
     wxLogTrace(wxTraceMessages, "Forwarding %s to DefWindowProc.",
         wxGetMessageName(m_lastMsg));
 #endif // WXDEBUG
-    
+
     return this->MSWDefWindowProc(m_lastMsg, m_lastWParam, m_lastLParam);
 }
 
@@ -2065,7 +2065,7 @@ bool wxWindow::MSWOnPaint(void)
     m_updateRegion = wxRegion(updateRect.left, updateRect.top,
         updateRect.right - updateRect.left, updateRect.bottom - updateRect.top);
 #endif
-    
+
     wxPaintEvent event(m_windowId);
     event.SetEventObject(this);
     if (!GetEventHandler()->ProcessEvent(event))
@@ -2117,7 +2117,7 @@ bool wxWindow::MSWOnCommand(WXWORD id, WXWORD cmd, WXHWND control)
     sprintf(buf, "Looking for item %d...\n", id);
     wxDebugMsg(buf);
 #endif
-    
+
     wxWindow *item = FindItem(id);
     if (item)
     {
@@ -2506,7 +2506,7 @@ void wxWindow::MSWOnJoyDown(int joystick, int x, int y, WXUINT flags)
         change = wxJOY_BUTTON3;
     if (flags & JOY_BUTTON4CHG)
         change = wxJOY_BUTTON4;
-    
+
     if (flags & JOY_BUTTON1)
         buttons |= wxJOY_BUTTON1;
     if (flags & JOY_BUTTON2)
@@ -2515,11 +2515,11 @@ void wxWindow::MSWOnJoyDown(int joystick, int x, int y, WXUINT flags)
         buttons |= wxJOY_BUTTON3;
     if (flags & JOY_BUTTON4)
         buttons |= wxJOY_BUTTON4;
-    
+
     wxJoystickEvent event(wxEVT_JOY_BUTTON_DOWN, buttons, joystick, change);
     event.SetPosition(wxPoint(x, y));
     event.SetEventObject(this);
-    
+
     GetEventHandler()->ProcessEvent(event);
 }
 
@@ -2535,7 +2535,7 @@ void wxWindow::MSWOnJoyUp(int joystick, int x, int y, WXUINT flags)
         change = wxJOY_BUTTON3;
     if (flags & JOY_BUTTON4CHG)
         change = wxJOY_BUTTON4;
-    
+
     if (flags & JOY_BUTTON1)
         buttons |= wxJOY_BUTTON1;
     if (flags & JOY_BUTTON2)
@@ -2544,11 +2544,11 @@ void wxWindow::MSWOnJoyUp(int joystick, int x, int y, WXUINT flags)
         buttons |= wxJOY_BUTTON3;
     if (flags & JOY_BUTTON4)
         buttons |= wxJOY_BUTTON4;
-    
+
     wxJoystickEvent event(wxEVT_JOY_BUTTON_UP, buttons, joystick, change);
     event.SetPosition(wxPoint(x, y));
     event.SetEventObject(this);
-    
+
     GetEventHandler()->ProcessEvent(event);
 }
 
@@ -2563,11 +2563,11 @@ void wxWindow::MSWOnJoyMove(int joystick, int x, int y, WXUINT flags)
         buttons |= wxJOY_BUTTON3;
     if (flags & JOY_BUTTON4)
         buttons |= wxJOY_BUTTON4;
-    
+
     wxJoystickEvent event(wxEVT_JOY_MOVE, buttons, joystick, 0);
     event.SetPosition(wxPoint(x, y));
     event.SetEventObject(this);
-    
+
     GetEventHandler()->ProcessEvent(event);
 }
 
@@ -2582,11 +2582,11 @@ void wxWindow::MSWOnJoyZMove(int joystick, int z, WXUINT flags)
         buttons |= wxJOY_BUTTON3;
     if (flags & JOY_BUTTON4)
         buttons |= wxJOY_BUTTON4;
-    
+
     wxJoystickEvent event(wxEVT_JOY_ZMOVE, buttons, joystick, 0);
     event.SetZPosition(z);
     event.SetEventObject(this);
-    
+
     GetEventHandler()->ProcessEvent(event);
 }
 
@@ -2640,7 +2640,7 @@ void wxWindow::MSWOnVScroll(WXWORD wParam, WXWORD pos, WXHWND control)
         return;
         break;
     }
-    
+
     if (!GetEventHandler()->ProcessEvent(event))
         Default();
 }
@@ -3086,14 +3086,14 @@ void wxWindow::WarpPointer (int x_pos, int y_pos)
     // Move the pointer to (x_pos,y_pos) coordinates. They are expressed in
     // pixel coordinates, relatives to the canvas -- So, we first need to
     // substract origin of the window, then convert to screen position
-    
+
     int x = x_pos; int y = y_pos;
     RECT rect;
     GetWindowRect ((HWND) GetHWND(), &rect);
-    
+
     x += rect.left;
     y += rect.top;
-    
+
     SetCursorPos (x, y);
 }
 
@@ -3104,11 +3104,11 @@ void wxWindow::MSWDeviceToLogical (float *x, float *y) const
 bool wxWindow::MSWOnEraseBkgnd (WXHDC pDC)
 {
     wxDC dc ;
-    
+
     dc.SetHDC(pDC);
     dc.SetWindow(this);
     dc.BeginDrawing();
-    
+
     wxEraseEvent event(m_windowId, &dc);
     event.m_eventObject = this;
     if (!GetEventHandler()->ProcessEvent(event))
@@ -3122,7 +3122,7 @@ bool wxWindow::MSWOnEraseBkgnd (WXHDC pDC)
         dc.EndDrawing();
         dc.SelectOldObjects(pDC);
     }
-    
+
     dc.SetHDC((WXHDC) NULL);
     return TRUE;
 }
@@ -3155,7 +3155,7 @@ void wxWindow::OnEraseBackground(wxEraseEvent& event)
 void wxWindow::SetScrollRange(int orient, int range, bool refresh)
 {
 #if defined(__WIN95__)
-    
+
     int range1 = range;
 
     // Try to adjust the range to cope with page size > 1
@@ -3315,7 +3315,7 @@ int wxWindow::GetScrollRange(int orient) const
         // October 10th: new range concept.
         maxPos += pageSize;
 #endif
-        
+
         return maxPos;
     }
     else
@@ -3373,7 +3373,7 @@ SetScrollPage(orient, thumbVisible, FALSE);
 
   int oldRange = range - thumbVisible ;
   SetScrollRange(orient, oldRange, FALSE);
-  
+
     SetScrollPos(orient, pos, refresh);
     */
 #if defined(__WIN95__)
@@ -3439,7 +3439,7 @@ void wxWindow::ScrollWindow(int dx, int dy, const wxRectangle *rect)
         rect2.right = rect->x + rect->width;
         rect2.bottom = rect->y + rect->height;
     }
-    
+
     if ( rect )
         ::ScrollWindow((HWND) GetHWND(), dx, dy, &rect2, NULL);
     else
@@ -3475,7 +3475,7 @@ void wxWindow::SubclassWin(WXHWND hWnd)
 void wxWindow::UnsubclassWin(void)
 {
     wxRemoveHandleAssociation(this);
-    
+
     // Restore old Window proc
     if ((HWND) GetHWND())
     {
@@ -3494,7 +3494,7 @@ WXDWORD wxWindow::MakeExtendedStyle(long style, bool eliminateBorders)
     WXDWORD exStyle = 0;
     if ( style & wxTRANSPARENT_WINDOW )
         exStyle |= WS_EX_TRANSPARENT ;
-    
+
     if ( !eliminateBorders )
     {
         if ( style & wxSUNKEN_BORDER )
@@ -3554,7 +3554,7 @@ WXDWORD wxWindow::Determine3DEffects(WXDWORD defaultBorderStyle, bool *want3D)
     if ( *want3D )
         nativeBorder = FALSE;
 #endif
-    
+
     DWORD exStyle = MakeExtendedStyle(m_windowStyle, !nativeBorder);
 
     // If we want 3D, but haven't specified a border here,
@@ -3565,7 +3565,7 @@ WXDWORD wxWindow::Determine3DEffects(WXDWORD defaultBorderStyle, bool *want3D)
         (m_windowStyle & wxSTATIC_BORDER) || (m_windowStyle & wxSIMPLE_BORDER) ))
         exStyle |= defaultBorderStyle; // WS_EX_CLIENTEDGE ;
 #endif
-    
+
     return exStyle;
 }
 
@@ -3579,13 +3579,13 @@ void wxWindow::OnChar(wxKeyEvent& event)
                 return;
         }
     }
-    
+
     bool isVirtual;
     int id = wxCharCodeWXToMSW((int)event.KeyCode(), &isVirtual);
-    
+
     if ( id == -1 )
         id= m_lastWParam;
-    
+
     if ( !event.ControlDown() )
         (void) MSWDefWindowProc(m_lastMsg, (WPARAM) id, m_lastLParam);
 }
@@ -3621,7 +3621,7 @@ bool wxWindow::TransferDataToWindow(void)
             wxMessageBox("Application Error", "Could not transfer data to window", wxOK|wxICON_EXCLAMATION);
             return FALSE;
         }
-        
+
         node = node->Next();
     }
     return TRUE;
@@ -3639,7 +3639,7 @@ bool wxWindow::TransferDataFromWindow(void)
         {
             return FALSE;
         }
-        
+
         node = node->Next();
     }
     return TRUE;
@@ -3655,7 +3655,7 @@ bool wxWindow::Validate(void)
         {
             return FALSE;
         }
-        
+
         node = node->Next();
     }
     return TRUE;
@@ -4187,9 +4187,9 @@ void wxWindow::OnDefaultAction(wxControl *initiatingItem)
   event.m_clientData = lbox->wxListBox::GetClientData(event.m_commandInt);
   }
   event.m_eventObject = lbox;
-  
+
     lbox->ProcessCommand(event);
-    
+
       if (event.m_commandString)
       delete[] event.m_commandString;
       return;
@@ -4229,7 +4229,7 @@ void wxWindow::Fit(void)
             maxX = wx + ww;
         if ( wy + wh > maxY )
             maxY = wy + wh;
-        
+
         node = node->Next();
     }
     SetClientSize(maxX + 5, maxY + 5);
@@ -4240,7 +4240,7 @@ void wxWindow::SetValidator(const wxValidator& validator)
     if ( m_windowValidator )
         delete m_windowValidator;
     m_windowValidator = validator.Clone();
-    
+
     if ( m_windowValidator )
         m_windowValidator->SetWindow(this) ;
 }
@@ -4250,7 +4250,7 @@ wxWindow *wxWindow::FindWindow(long id)
 {
     if ( GetId() == id)
         return this;
-    
+
     wxNode *node = GetChildren()->First();
     while ( node )
     {
@@ -4267,7 +4267,7 @@ wxWindow *wxWindow::FindWindow(const wxString& name)
 {
     if ( GetName() == name)
         return this;
-    
+
     wxNode *node = GetChildren()->First();
     while ( node )
     {
@@ -4303,7 +4303,7 @@ int y_pages = 0;
   // Bugfix begin
   if (vert_units)
   y_pages = (int)(v_height/vert_units) - y_page;
-  
+
     #ifdef __WXMSW__
     int y = 0;
     #else
@@ -4400,17 +4400,17 @@ void wxWindow::OnIdle(wxIdleEvent& event)
         {
             // Generate a LEAVE event
             m_mouseInWindow = FALSE;
-            
+
             int state = 0;
             if (::GetKeyState(VK_SHIFT) != 0)
                 state |= MK_SHIFT;
             if (::GetKeyState(VK_CONTROL) != 0)
                 state |= MK_CONTROL;
-            
+
             // Unfortunately the mouse button and keyboard state may have changed
             // by the time the OnIdle function is called, so 'state' may be
             // meaningless.
-            
+
             MSWOnMouseLeave(pt.x, pt.y, state);
         }
     }
@@ -4518,7 +4518,7 @@ const char *wxGetMessageName(int message)
     case 0x0046: return "WM_WINDOWPOSCHANGING";
     case 0x0047: return "WM_WINDOWPOSCHANGED";
     case 0x0048: return "WM_POWER";
-        
+
 #ifdef  __WIN32__
     case 0x004A: return "WM_COPYDATA";
     case 0x004B: return "WM_CANCELJOURNAL";
@@ -4536,7 +4536,7 @@ const char *wxGetMessageName(int message)
     case 0x007F: return "WM_GETICON";
     case 0x0080: return "WM_SETICON";
 #endif  //WIN32
-        
+
     case 0x0081: return "WM_NCCREATE";
     case 0x0082: return "WM_NCDESTROY";
     case 0x0083: return "WM_NCCALCSIZE";
@@ -4563,13 +4563,13 @@ const char *wxGetMessageName(int message)
     case 0x0106: return "WM_SYSCHAR";
     case 0x0107: return "WM_SYSDEADCHAR";
     case 0x0108: return "WM_KEYLAST";
-        
+
 #ifdef  __WIN32__
     case 0x010D: return "WM_IME_STARTCOMPOSITION";
     case 0x010E: return "WM_IME_ENDCOMPOSITION";
     case 0x010F: return "WM_IME_COMPOSITION";
 #endif  //WIN32
-        
+
     case 0x0110: return "WM_INITDIALOG";
     case 0x0111: return "WM_COMMAND";
     case 0x0112: return "WM_SYSCOMMAND";
@@ -4594,7 +4594,7 @@ const char *wxGetMessageName(int message)
     case 0x0210: return "WM_PARENTNOTIFY";
     case 0x0211: return "WM_ENTERMENULOOP";
     case 0x0212: return "WM_EXITMENULOOP";
-        
+
 #ifdef  __WIN32__
     case 0x0213: return "WM_NEXTMENU";
     case 0x0214: return "WM_SIZING";
@@ -4603,7 +4603,7 @@ const char *wxGetMessageName(int message)
     case 0x0218: return "WM_POWERBROADCAST";
     case 0x0219: return "WM_DEVICECHANGE";
 #endif  //WIN32
-        
+
     case 0x0220: return "WM_MDICREATE";
     case 0x0221: return "WM_MDIDESTROY";
     case 0x0222: return "WM_MDIACTIVATE";
@@ -4616,7 +4616,7 @@ const char *wxGetMessageName(int message)
     case 0x0229: return "WM_MDIGETACTIVE";
     case 0x0230: return "WM_MDISETMENU";
     case 0x0233: return "WM_DROPFILES";
-        
+
 #ifdef  __WIN32__
     case 0x0281: return "WM_IME_SETCONTEXT";
     case 0x0282: return "WM_IME_NOTIFY";
@@ -4627,7 +4627,7 @@ const char *wxGetMessageName(int message)
     case 0x0290: return "WM_IME_KEYDOWN";
     case 0x0291: return "WM_IME_KEYUP";
 #endif  //WIN32
-        
+
     case 0x0300: return "WM_CUT";
     case 0x0301: return "WM_COPY";
     case 0x0302: return "WM_PASTE";
@@ -4646,7 +4646,7 @@ const char *wxGetMessageName(int message)
     case 0x030F: return "WM_QUERYNEWPALETTE";
     case 0x0310: return "WM_PALETTEISCHANGING";
     case 0x0311: return "WM_PALETTECHANGED";
-        
+
 #ifdef __WIN32__
         // common controls messages - although they're not strictly speaking
         // standard, it's nice to decode them nevertheless
@@ -4729,7 +4729,7 @@ const char *wxGetMessageName(int message)
     case 0x1000 + 63: return "LVM_GETHOTCURSOR";
     case 0x1000 + 64: return "LVM_APPROXIMATEVIEWRECT";
     case 0x1000 + 65: return "LVM_SETWORKAREA";
-        
+
         // tree view
     case 0x1100 + 0: return "TVM_INSERTITEMA";
     case 0x1100 + 50: return "TVM_INSERTITEMW";
@@ -4761,7 +4761,7 @@ const char *wxGetMessageName(int message)
     case 0x1100 + 64: return "TVM_GETISEARCHSTRINGW";
     case 0x1100 + 24: return "TVM_SETTOOLTIPS";
     case 0x1100 + 25: return "TVM_GETTOOLTIPS";
-        
+
         // header
     case 0x1200 + 0: return "HDM_GETITEMCOUNT";
     case 0x1200 + 1: return "HDM_INSERTITEMA";
@@ -4781,7 +4781,7 @@ const char *wxGetMessageName(int message)
     case 0x1200 + 17: return "HDM_GETORDERARRAY";
     case 0x1200 + 18: return "HDM_SETORDERARRAY";
     case 0x1200 + 19: return "HDM_SETHOTDIVIDER";
-        
+
         // tab control
     case 0x1300 + 2: return "TCM_GETIMAGELIST";
     case 0x1300 + 3: return "TCM_SETIMAGELIST";
@@ -4810,7 +4810,7 @@ const char *wxGetMessageName(int message)
     case 0x1300 + 48: return "TCM_SETCURFOCUS";
     case 0x1300 + 49: return "TCM_SETMINTABWIDTH";
     case 0x1300 + 50: return "TCM_DESELECTALL";
-        
+
         // toolbar
     case WM_USER+1: return "TB_ENABLEBUTTON";
     case WM_USER+2: return "TB_CHECKBUTTON";
@@ -4868,9 +4868,9 @@ const char *wxGetMessageName(int message)
     case WM_USER+60: return "TB_SETMAXTEXTROWS";
     case WM_USER+61: return "TB_GETTEXTROWS";
     case WM_USER+41: return "TB_GETBITMAPFLAGS";
-        
+
 #endif //WIN32
-        
+
     default:
         static char s_szBuf[128];
         sprintf(s_szBuf, "<unknown message = %d>", message);

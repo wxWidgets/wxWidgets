@@ -6,7 +6,7 @@
 // Created:     01/02/97
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart and Markus Holzem
-// Licence:   	wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifdef __GNUG__
@@ -59,13 +59,13 @@ bool wxComboBox::MSWCommand(WXUINT param, WXWORD WXUNUSED(id))
 }
 
 bool wxComboBox::Create(wxWindow *parent, wxWindowID id,
-           const wxString& value,
-           const wxPoint& pos,
-           const wxSize& size,
-		   int n, const wxString choices[],
-		   long style,
-           const wxValidator& validator,
-           const wxString& name)
+                        const wxString& value,
+                        const wxPoint& pos,
+                        const wxSize& size,
+                        int n, const wxString choices[],
+                        long style,
+                        const wxValidator& validator,
+                        const wxString& name)
 {
   SetName(name);
   SetValidator(validator);
@@ -77,21 +77,22 @@ bool wxComboBox::Create(wxWindow *parent, wxWindowID id,
   m_windowStyle = style;
 
   if ( id == -1 )
-  	m_windowId = (int)NewControlId();
+    m_windowId = (int)NewControlId();
   else
-	m_windowId = id;
+    m_windowId = id;
 
   int x = pos.x;
   int y = pos.y;
   int width = size.x;
   int height = size.y;
 
-  long msStyle = WS_CHILD | WS_HSCROLL | WS_VSCROLL
-                     | WS_TABSTOP | WS_VISIBLE | CBS_NOINTEGRALHEIGHT;
+  long msStyle = WS_CHILD | WS_HSCROLL | WS_VSCROLL |
+                 WS_TABSTOP | WS_VISIBLE | CBS_NOINTEGRALHEIGHT;
+
   if (m_windowStyle & wxCB_READONLY)
     msStyle |= CBS_DROPDOWNLIST;
-  else if (m_windowStyle & wxCB_SIMPLE) // A list (shown always) and edit control
-    msStyle |= CBS_SIMPLE;
+  else if (m_windowStyle & wxCB_SIMPLE)
+    msStyle |= CBS_SIMPLE; // A list (shown always) and edit control
   else
     msStyle |= CBS_DROPDOWN;
 
@@ -103,14 +104,16 @@ bool wxComboBox::Create(wxWindow *parent, wxWindowID id,
 
   // Even with extended styles, need to combine with WS_BORDER
   // for them to look right.
-  if (want3D || (m_windowStyle & wxSIMPLE_BORDER) || (m_windowStyle & wxRAISED_BORDER) ||
-       (m_windowStyle & wxSUNKEN_BORDER) || (m_windowStyle & wxDOUBLE_BORDER))
+  if ( want3D || wxStyleHasBorder(m_windowStyle) )
     msStyle |= WS_BORDER;
 
-  HWND wx_combo = CreateWindowEx(exStyle, "COMBOBOX", NULL,
+  m_hWnd = (WXHWND)::CreateWindowEx(exStyle, "COMBOBOX", NULL,
                    msStyle,
                    0, 0, 0, 0, (HWND) parent->GetHWND(), (HMENU)m_windowId,
                    wxGetInstance(), NULL);
+
+  wxCHECK_MSG( m_hWnd, FALSE, "Failed to create combobox" );
+
 /*
 #if CTL3D
   if (want3D)
@@ -121,20 +124,23 @@ bool wxComboBox::Create(wxWindow *parent, wxWindowID id,
 #endif
 */
 
-  m_hWnd = (WXHWND)wx_combo;
-
   // Subclass again for purposes of dialog editing mode
-  SubclassWin((WXHWND)wx_combo);
+  SubclassWin(m_hWnd);
 
   SetFont(* parent->GetFont());
   int i;
   for (i = 0; i < n; i++)
-    SendMessage(wx_combo, CB_INSERTSTRING, i, (LONG)(const char *)choices[i]);
-  SendMessage(wx_combo, CB_SETCURSEL, i, 0);
+  {
+    Append(choices[i]);
+  }
+
+  SetSelection(i);
 
   SetSize(x, y, width, height);
-  if ( value != "" )
-    SetWindowText(wx_combo, (const char *)value);
+  if ( !value.IsEmpty() )
+  {
+    SetValue(value);
+  }
 
   return TRUE;
 }

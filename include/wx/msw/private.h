@@ -6,7 +6,7 @@
 // Created:     01/02/97
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
-// Licence:   	wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef _WX_PRIVATE_H_
@@ -52,18 +52,18 @@ wxFont WXDLLEXPORT wxCreateFontFromLogFont(LOGFONT *logFont); // , bool createNe
 #  endif
 #endif
 
-#if !defined(APIENTRY)	// NT defines APIENTRY, 3.x not
+#if !defined(APIENTRY)  // NT defines APIENTRY, 3.x not
 #define APIENTRY FAR PASCAL
 #endif
- 
+
 #ifdef __WIN32__
 #define _EXPORT /**/
 #else
 #define _EXPORT _export
 typedef signed short int SHORT ;
 #endif
- 
-#if !defined(__WIN32__)	// 3.x uses FARPROC for dialogs
+
+#if !defined(__WIN32__)  // 3.x uses FARPROC for dialogs
 #define DLGPROC FARPROC
 #endif
 
@@ -104,7 +104,7 @@ VOID    WINAPI ibAdjustWindowRect( HWND hWnd, LPRECT lprc ) ;
  * Decide what window classes we're going to use
  * for this combination of CTl3D/FAFA settings
  */
- 
+
 #define STATIC_CLASS     "STATIC"
 #define STATIC_FLAGS     (SS_LEFT|WS_CHILD|WS_VISIBLE)
 #define CHECK_CLASS      "BUTTON"
@@ -151,8 +151,15 @@ void WXDLLEXPORT wxAddControlHandle(WXHWND hWnd, wxWindow *item);
 // Safely get the window text (i.e. without using fixed size buffer)
 extern wxString WXDLLEXPORT wxGetWindowText(WXHWND hWnd);
 
+// Does this window style specify any border?
+inline bool WXDLLEXPORT wxStyleHasBorder(long style)
+{
+  return (style & (wxSIMPLE_BORDER | wxRAISED_BORDER |
+                   wxSUNKEN_BORDER | wxDOUBLE_BORDER)) != 0;
+}
+
 #if !defined(__WIN32__) && !defined(WS_EX_CLIENTEDGE)
-#define WS_EX_CLIENTEDGE 0
+  #define WS_EX_CLIENTEDGE 0
 #endif
 
 #endif

@@ -6,7 +6,7 @@
 // Created:     04/01/98
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart and Markus Holzem
-// Licence:   	wxWindows license
+// Licence:     wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
 #ifdef __GNUG__
@@ -34,7 +34,7 @@ IMPLEMENT_DYNAMIC_CLASS(wxRadioButton, wxControl)
 #endif
 
 bool wxRadioButton::Create(wxWindow *parent, wxWindowID id,
-		   const wxString& label,
+       const wxString& label,
            const wxPoint& pos,
            const wxSize& size, long style,
            const wxValidator& validator,
@@ -49,9 +49,9 @@ bool wxRadioButton::Create(wxWindow *parent, wxWindowID id,
   SetForegroundColour(parent->GetForegroundColour());
 
   if ( id == -1 )
-  	m_windowId = (int)NewControlId();
+    m_windowId = (int)NewControlId();
   else
-	m_windowId = id;
+  m_windowId = id;
 
   int x = pos.x;
   int y = pos.y;
@@ -72,18 +72,20 @@ bool wxRadioButton::Create(wxWindow *parent, wxWindowID id,
 
   // Even with extended styles, need to combine with WS_BORDER
   // for them to look right.
-  if (want3D && ((m_windowStyle & wxSIMPLE_BORDER) || (m_windowStyle & wxRAISED_BORDER) ||
-       (m_windowStyle & wxSUNKEN_BORDER) || (m_windowStyle & wxDOUBLE_BORDER)))
+  if ( want3D || wxStyleHasBorder(m_windowStyle) )
     msStyle |= WS_BORDER;
 
   m_hWnd = (WXHWND) CreateWindowEx(exStyle, RADIO_CLASS, (const char *)label,
                           msStyle,0,0,0,0,
                           (HWND) parent->GetHWND(), (HMENU)m_windowId, wxGetInstance(), NULL);
+
+  wxCHECK_MSG( m_hWnd, FALSE, "Failed to create radiobutton" );
+
 #if CTL3D
   if (want3D)
   {
     Ctl3dSubclassCtl((HWND) m_hWnd);
- 	m_useCtl3D = TRUE;
+   m_useCtl3D = TRUE;
   }
 #endif
 
@@ -141,7 +143,7 @@ bool wxRadioButton::GetValue(void) const
 }
 
 WXHBRUSH wxRadioButton::OnCtlColor(WXHDC pDC, WXHWND pWnd, WXUINT nCtlColor,
-			WXUINT message, WXWPARAM wParam, WXLPARAM lParam)
+      WXUINT message, WXWPARAM wParam, WXLPARAM lParam)
 {
 #if CTL3D
   if ( m_useCtl3D )
@@ -177,7 +179,7 @@ void wxRadioButton::Command (wxCommandEvent & event)
 // Not implemented
 #if 0
 bool wxBitmapRadioButton::Create(wxWindow *parent, wxWindowID id,
-		   const wxBitmap *bitmap,
+       const wxBitmap *bitmap,
            const wxPoint& pos,
            const wxSize& size, long style,
            const wxValidator& validator,
@@ -191,9 +193,9 @@ bool wxBitmapRadioButton::Create(wxWindow *parent, wxWindowID id,
   SetForegroundColour(parent->GetForegroundColour());
 
   if ( id == -1 )
-  	m_windowId = (int)NewControlId();
+    m_windowId = (int)NewControlId();
   else
-	m_windowId = id;
+  m_windowId = id;
 
   int x = pos.x;
   int y = pos.y;
@@ -211,11 +213,14 @@ bool wxBitmapRadioButton::Create(wxWindow *parent, wxWindowID id,
   m_hWnd = (WXHWND) CreateWindowEx(MakeExtendedStyle(m_windowStyle), RADIO_CLASS, "toggle",
                           msStyle,0,0,0,0,
                           (HWND) parent->GetHWND(), (HMENU)m_windowId, wxGetInstance(), NULL);
+
+  wxCHECK_MSG( m_hWnd, "Failed to create radio button", FALSE );
+
 #if CTL3D
   if (!(GetParent()->GetWindowStyleFlag() & wxUSER_COLOURS))
   {
     Ctl3dSubclassCtl((HWND) GetHWND());
-	  m_useCtl3D = TRUE;
+    m_useCtl3D = TRUE;
   }
 #endif
 

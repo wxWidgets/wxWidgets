@@ -83,8 +83,7 @@ bool wxCheckBox::Create(wxWindow *parent, wxWindowID id, const wxString& label,
 
   // Even with extended styles, need to combine with WS_BORDER
   // for them to look right.
-  if (want3D && ((m_windowStyle & wxSIMPLE_BORDER) || (m_windowStyle & wxRAISED_BORDER) ||
-       (m_windowStyle & wxSUNKEN_BORDER) || (m_windowStyle & wxDOUBLE_BORDER)))
+  if ( want3D || wxStyleHasBorder(m_windowStyle) )
     msStyle |= WS_BORDER;
 
   m_hWnd = (WXHWND)CreateWindowEx(exStyle, "BUTTON", Label,

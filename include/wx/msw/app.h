@@ -57,7 +57,7 @@ class WXDLLEXPORT wxApp: public wxEvtHandler
   void OnEndSession(wxCloseEvent& event);
   void OnQueryEndSession(wxCloseEvent& event);
 
-// Generic
+  // Generic
   virtual bool OnInit() { return FALSE; };
 
   // No specific tasks to do here.
@@ -66,6 +66,10 @@ class WXDLLEXPORT wxApp: public wxEvtHandler
   // Called to set off the main loop
   virtual int OnRun() { return MainLoop(); };
   virtual int OnExit() { return 0; }
+
+  // called when a fatal exception occurs, this function should take care not
+  // to do anything which might provoke a nested exception!
+  virtual void OnFatalException() { }
 
   inline void SetPrintMode(int mode) { m_printMode = mode; }
   inline int GetPrintMode() const { return m_printMode; }

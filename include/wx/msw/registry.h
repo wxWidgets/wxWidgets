@@ -203,40 +203,12 @@ private:
   wxRegKey(const wxRegKey& key);            // not implemented
   wxRegKey& operator=(const wxRegKey& key); // not implemented
 
-  WXHKEY        m_hKey,           // our handle
+  WXHKEY      m_hKey,           // our handle
               m_hRootKey;       // handle of the top key (i.e. StdKey)
   wxString    m_strKey;         // key name (relative to m_hRootKey)
 
   MUTABLE long m_dwLastError;   // last error (0 if none)
 };
-
-// ----------------------------------------------------------------------------
-// high level functions working with the registry
-// ----------------------------------------------------------------------------
-
-// file extensions and MIME types
-// ------------------------------
-
-// Look for and return the extension (with leading '.') which corresponds to
-// MIME type strMimeType in pExt.
-//
-// Return value: true if MIME type was found, false otherwise
-bool GetExtensionFromMimeType(wxString *pExt, const wxString& strMimeType);
-
-// Look for MIME type of the given extension, return TRUE if found.
-bool GetMimeTypeFromExtension(wxString *pMimeType, const wxString& strExt);
-
-// Get file type from extension (it's not the same thing: for example, for
-// the extension .txt the default file type is txtfile), return FALSE if not
-// found.
-bool GetFileTypeFromExtension(wxString *pFileType, const wxString& strExt);
-
-// Get the default icon from file type
-class wxIcon;
-bool GetFileTypeIcon(wxIcon *pIcon, const wxString& strFileType);
-
-// Get the description of files of this type
-bool GetFileTypeDescription(wxString *pDesc, const wxString& strFileType);
 
 #endif  //_REGISTRY_H
 

@@ -258,6 +258,8 @@ wxLog *wxLog::GetActiveTarget()
           ms_pLogger = wxTheApp->CreateLogTarget();
       #endif
 
+      s_bInGetActiveTarget = FALSE;
+
       // do nothing if it fails - what can we do?
     }
   }
@@ -265,15 +267,17 @@ wxLog *wxLog::GetActiveTarget()
   return ms_pLogger;
 }
 
-wxLog *wxLog::SetActiveTarget(wxLog *pLogger, bool bNoFlashOld)
+wxLog *wxLog::SetActiveTarget(wxLog *pLogger)
 {
-  // flush the old messages before changing
-  if ( (ms_pLogger != NULL) && !bNoFlashOld ) {
+  if ( ms_pLogger != NULL ) {
+    // flush the old messages before changing because otherwise they might
+    // get lost later if this target is not restored
     ms_pLogger->Flush();
   }
 
   wxLog *pOldLogger = ms_pLogger;
   ms_pLogger = pLogger;
+
   return pOldLogger;
 }
 
@@ -779,8 +783,7 @@ void wxLogWindow::DoLogString(const char *szString)
   pText->WriteText(szString);
   pText->WriteText("\n"); // "\n" ok here (_not_ "\r\n")
 
-  // ensure that the line can be seen
-  // @@@ TODO
+  // TODO ensure that the line can be seen
 }
 
 wxFrame *wxLogWindow::GetFrame() const
@@ -794,11 +797,13 @@ void wxLogWindow::OnFrameCreate(wxFrame *WXUNUSED(frame))
 
 void wxLogWindow::OnFrameDelete(wxFrame *WXUNUSED(frame))
 {
-  m_pLogFrame = (wxLogFrame *) NULL;
+  m_pLogFrame = (wxLogFrame *)NULL;
 }
 
 wxLogWindow::~wxLogWindow()
 {
+  delete m_pOldLog;
+
   // may be NULL if log frame already auto destroyed itself
   delete m_pLogFrame;
 }
@@ -813,6 +818,7 @@ wxLogWindow::~wxLogWindow()
 // static variables
 // ----------------------------------------------------------------------------
 wxLog      *wxLog::ms_pLogger      = (wxLog *) NULL;
+bool        wxLog::ms_doLog        = TRUE;
 bool        wxLog::ms_bAutoCreate  = TRUE;
 wxTraceMask wxLog::ms_ulTraceMask  = (wxTraceMask)0;
 
@@ -941,6 +947,8 @@ void wxOnAssert(const char *szFile, int nLine, const char *szMsg)
   if ( s_bInAssert ) {
     // He-e-e-e-elp!! we're trapped in endless loop
     Trap();
+
+    return;
   }
 
   s_bInAssert = TRUE;

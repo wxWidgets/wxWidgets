@@ -6,7 +6,7 @@
 // Created:     04/01/98
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart and Markus Holzem
-// Licence:   	wxWindows license
+// Licence:     wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
 #ifdef __GNUG__
@@ -46,9 +46,9 @@ bool wxStaticText::Create(wxWindow *parent, wxWindowID id,
   SetForegroundColour(parent->GetForegroundColour()) ;
 
   if ( id == -1 )
-  	m_windowId = (int)NewControlId();
+    m_windowId = (int)NewControlId();
   else
-	m_windowId = id;
+  m_windowId = id;
 
   int x = pos.x;
   int y = pos.y;
@@ -67,14 +67,15 @@ bool wxStaticText::Create(wxWindow *parent, wxWindowID id,
 
   // Even with extended styles, need to combine with WS_BORDER
   // for them to look right.
-  if ((m_windowStyle & wxSIMPLE_BORDER) || (m_windowStyle & wxRAISED_BORDER) ||
-       (m_windowStyle & wxSUNKEN_BORDER) || (m_windowStyle & wxDOUBLE_BORDER))
+  if ( wxStyleHasBorder(m_windowStyle) )
     msStyle |= WS_BORDER;
 
-  HWND static_item = CreateWindowEx(MakeExtendedStyle(m_windowStyle), "STATIC", (const char *)label,
+  m_hWnd = (WXHWND)::CreateWindowEx(MakeExtendedStyle(m_windowStyle), "STATIC", (const char *)label,
                          msStyle,
                          0, 0, 0, 0, (HWND) parent->GetHWND(), (HMENU)m_windowId,
                          wxGetInstance(), NULL);
+
+  wxCHECK_MSG( m_hWnd, FALSE, "Failed to create static ctrl" );
 
 #if CTL3D
 /*
@@ -83,12 +84,11 @@ bool wxStaticText::Create(wxWindow *parent, wxWindowID id,
 */
 #endif
 
-  m_hWnd = (WXHWND)static_item;
-
-  SubclassWin((WXHWND)static_item);
+  SubclassWin(m_hWnd);
 
   SetFont(* parent->GetFont());
   SetSize(x, y, width, height);
+
   return TRUE;
 }
 
@@ -166,14 +166,14 @@ void wxStaticText::SetLabel(const wxString& label)
 }
 
 WXHBRUSH wxStaticText::OnCtlColor(WXHDC pDC, WXHWND pWnd, WXUINT nCtlColor,
-			WXUINT message, WXWPARAM wParam, WXLPARAM lParam)
+      WXUINT message, WXWPARAM wParam, WXLPARAM lParam)
 {
 /*
 #if CTL3D
   if ( m_useCtl3D )
   {
     HBRUSH hbrush = Ctl3dCtlColorEx(message, wParam, lParam);
-      
+
     if (hbrush != (HBRUSH) 0)
       return hbrush;
     else

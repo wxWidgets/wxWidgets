@@ -99,8 +99,8 @@ static PAINTSTRUCT g_paintStruct;
 // Don't call Begin/EndPaint if it's already been called:
 // for example, if calling a base class OnPaint.
 
-WXHDC wxPaintDC::ms_PaintHDC = 0;
-size_t  wxPaintDC::ms_PaintCount = 0; // count of ms_PaintHDC usage
+WXHDC  wxPaintDC::ms_PaintHDC = 0;
+size_t wxPaintDC::ms_PaintCount = 0; // count of ms_PaintHDC usage
 
 wxPaintDC::wxPaintDC(wxWindow *canvas)
 {
@@ -132,7 +132,7 @@ wxPaintDC::~wxPaintDC()
       m_hDC = NULL;
       ms_PaintHDC = NULL;
     }
-    //else: ms_PaintHDC still in use
+    else { }//: ms_PaintHDC still in use
   }
 }
 

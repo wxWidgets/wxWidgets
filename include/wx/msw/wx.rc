@@ -96,9 +96,9 @@ WXCURSOR_BLANK          CURSOR  DISCARDABLE     "wx/msw/blank.cur"
 // Default Icons
 //
 
-wxDEFAULT_FRAME               ICON "wx/msw/std.ico"
-wxDEFAULT_MDIPARENTFRAME      ICON "wx/msw/mdi.ico"
-wxDEFAULT_MDICHILDFRAME       ICON "wx/msw/child.ico"
+//wxDEFAULT_FRAME               ICON "wx/msw/std.ico"
+//wxDEFAULT_MDIPARENTFRAME      ICON "wx/msw/mdi.ico"
+//wxDEFAULT_MDICHILDFRAME       ICON "wx/msw/child.ico"
 
 //////////////////////////////////////////////////////////////////////////////
 //

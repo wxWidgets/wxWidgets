@@ -6,7 +6,7 @@
 // Created:     04/01/98
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart and Markus Holzem
-// Licence:   	wxWindows license
+// Licence:     wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
 #ifdef __GNUG__
@@ -125,23 +125,30 @@ bool wxRadioBox::Create(wxWindow *parent, wxWindowID id, const wxString& title,
   WXDWORD exStyle = Determine3DEffects(0, &want3D) ;
   // Even with extended styles, need to combine with WS_BORDER
   // for them to look right.
-  if (want3D && ((m_windowStyle & wxSIMPLE_BORDER) || (m_windowStyle & wxRAISED_BORDER) ||
-       (m_windowStyle & wxSUNKEN_BORDER) || (m_windowStyle & wxDOUBLE_BORDER)))
+  if ( want3D || wxStyleHasBorder(m_windowStyle) )
     msStyle |= WS_BORDER;
 
 
-  m_hWnd = (WXHWND) CreateWindowEx((DWORD) exStyle, GROUP_CLASS, (title == "" ? NULL : (const char *)title),
-                           msStyle,
-                           0,0,0,0,
-                           (HWND) parent->GetHWND(), (HMENU) m_windowId, wxGetInstance(), NULL) ;
-
   HWND the_handle = (HWND) parent->GetHWND() ;
+
+  m_hWnd = (WXHWND)::CreateWindowEx
+                     (
+                      (DWORD)exStyle,
+                      GROUP_CLASS,
+                      title,
+                      msStyle,
+                      0, 0, 0, 0,
+                      the_handle,
+                      (HMENU)m_windowId,
+                      wxGetInstance(),
+                      NULL
+                     );
 
 #if CTL3D
   if (want3D)
   {
-    Ctl3dSubclassCtl((HWND) m_hWnd);
- 	m_useCtl3D = TRUE;
+    Ctl3dSubclassCtl((HWND)m_hWnd);
+    m_useCtl3D = TRUE;
   }
 #endif
 
@@ -171,7 +178,7 @@ bool wxRadioBox::Create(wxWindow *parent, wxWindowID id, const wxString& title,
   if (want3D)
   {
     Ctl3dSubclassCtl((HWND) m_hWnd);
- 	m_useCtl3D = TRUE;
+   m_useCtl3D = TRUE;
   }
 #endif
     if (GetFont())
@@ -235,8 +242,7 @@ bool wxRadioBox::Create(wxWindow *parent, wxWindowID id, const wxString& title,
   WXDWORD exStyle = Determine3DEffects(0, &want3D) ;
   // Even with extended styles, need to combine with WS_BORDER
   // for them to look right.
-  if (want3D && ((m_windowStyle & wxSIMPLE_BORDER) || (m_windowStyle & wxRAISED_BORDER) ||
-       (m_windowStyle & wxSUNKEN_BORDER) || (m_windowStyle & wxDOUBLE_BORDER)))
+  if ( want3D || wxStyleHasBorder(m_windowStyle) )
     msStyle |= WS_BORDER;
 
   m_hWnd = (WXHWND) CreateWindowEx((DWORD) exStyle, GROUP_CLASS, (title == "" ? NULL : (const char *)title),
@@ -250,7 +256,7 @@ bool wxRadioBox::Create(wxWindow *parent, wxWindowID id, const wxString& title,
   if (want3D)
   {
     Ctl3dSubclassCtl((HWND) m_hWnd);
- 	m_useCtl3D = TRUE;
+   m_useCtl3D = TRUE;
   }
 #endif
 
@@ -283,7 +289,7 @@ bool wxRadioBox::Create(wxWindow *parent, wxWindowID id, const wxString& title,
   if (want3D)
   {
     Ctl3dSubclassCtl((HWND) m_hWnd);
- 	m_useCtl3D = TRUE;
+   m_useCtl3D = TRUE;
   }
 #endif
     m_subControls.Append((wxObject *)newId);
@@ -651,7 +657,7 @@ void wxRadioBox::Show(int item, bool show)
 }
 
 WXHBRUSH wxRadioBox::OnCtlColor(WXHDC pDC, WXHWND pWnd, WXUINT nCtlColor,
-			WXUINT message, WXWPARAM wParam, WXLPARAM lParam)
+      WXUINT message, WXWPARAM wParam, WXLPARAM lParam)
 {
 #if CTL3D
   if ( m_useCtl3D )
@@ -701,11 +707,11 @@ bool wxRadioBox::SetStringSelection (const wxString& s)
 
 bool wxRadioBox::ContainsHWND(WXHWND hWnd) const
 {
-	int i;
+  int i;
     for (i = 0; i < Number(); i++)
        if (GetRadioButtons()[i] == hWnd)
           return TRUE;
-	return FALSE;
+  return FALSE;
 }
 
 void wxRadioBox::Command (wxCommandEvent & event)
@@ -716,7 +722,7 @@ void wxRadioBox::Command (wxCommandEvent & event)
 
 long wxRadioBox::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
 {
-	if (nMsg == WM_NCHITTEST)
+  if (nMsg == WM_NCHITTEST)
     {
         int xPos = LOWORD(lParam);  // horizontal position of cursor
         int yPos = HIWORD(lParam);  // vertical position of cursor
@@ -729,6 +735,6 @@ long wxRadioBox::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
             return (long)HTCLIENT;
     }
 
-	return wxControl::MSWWindowProc(nMsg, wParam, lParam);
+  return wxControl::MSWWindowProc(nMsg, wParam, lParam);
 }
 

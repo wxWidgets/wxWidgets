@@ -20,6 +20,8 @@
 
 class WXDLLEXPORT wxTimer : public wxObject
 {
+friend void wxProcessTimer(wxTimer& timer);
+
 public:
     wxTimer();
     ~wxTimer();
@@ -34,7 +36,7 @@ public:
     int Interval() const { return milli; };
     bool OneShot() const { return oneShot; }
 
-public:
+protected:
     bool oneShot ;
     int  milli ;
     int  lastMilli ;

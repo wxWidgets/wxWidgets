@@ -198,35 +198,33 @@ bool wxListBox::Create(wxWindow *parent, wxWindowID id,
 
   // Even with extended styles, need to combine with WS_BORDER
   // for them to look right.
-  if ( want3D || (m_windowStyle & wxSIMPLE_BORDER)
-              || (m_windowStyle & wxRAISED_BORDER)
-              || (m_windowStyle & wxSUNKEN_BORDER)
-              || (m_windowStyle & wxDOUBLE_BORDER) ) {
+  if ( want3D || wxStyleHasBorder(m_windowStyle) )
+  {
     wstyle |= WS_BORDER;
   }
 
-  HWND wx_list = CreateWindowEx(exStyle, "LISTBOX", NULL,
+  m_hWnd = (WXHWND)::CreateWindowEx(exStyle, "LISTBOX", NULL,
                                 wstyle | WS_CHILD,
                                 0, 0, 0, 0, 
                                 (HWND)parent->GetHWND(), (HMENU)m_windowId,
                                 wxGetInstance(), NULL);
 
-  m_hWnd = (WXHWND)wx_list;
+  wxCHECK_MSG( m_hWnd, FALSE, "Failed to create listbox" );
 
 #if CTL3D
   if (want3D)
   {
-    Ctl3dSubclassCtl(wx_list);
+    Ctl3dSubclassCtl(hwnd);
     m_useCtl3D = TRUE;
   }
 #endif
 
   // Subclass again to catch messages
-  SubclassWin((WXHWND)wx_list);
+  SubclassWin(m_hWnd);
 
   size_t ui;
   for (ui = 0; ui < (size_t)n; ui++) {
-    SendMessage(wx_list, LB_ADDSTRING, 0, (LPARAM)(const char *)choices[ui]);
+    Append(choices[ui]);
   }
 
 #if wxUSE_OWNER_DRAWN
@@ -236,19 +234,19 @@ bool wxListBox::Create(wxWindow *parent, wxWindowID id,
         wxOwnerDrawn *pNewItem = CreateItem(ui);
         pNewItem->SetName(choices[ui]);
         m_aItems.Add(pNewItem);
-        ListBox_SetItemData(wx_list, ui, pNewItem);
+        ListBox_SetItemData(hwnd, ui, pNewItem);
       }
     }
 #endif
 
-  if ((m_windowStyle & wxLB_MULTIPLE) == 0)
-    SendMessage(wx_list, LB_SETCURSEL, 0, 0);
+  if ( (m_windowStyle & wxLB_MULTIPLE) == 0 )
+    SendMessage(hwnd, LB_SETCURSEL, 0, 0);
 
   SetFont(* parent->GetFont());
 
   SetSize(x, y, width, height);
 
-  ShowWindow(wx_list, SW_SHOW);
+  Show(TRUE);
 
   return TRUE;
 }

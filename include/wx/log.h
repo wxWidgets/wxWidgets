@@ -75,13 +75,20 @@ public:
   // ctor
   wxLog();
 
+  // these functions allow to completely disable all log messages
+    // is logging disabled now?
+  static bool IsEnabled() { return ms_doLog; }
+    // change the flag state, return the previous one
+  static bool EnableLogging(bool doIt = TRUE)
+    { bool doLogOld = ms_doLog; ms_doLog = doIt; return doLogOld; }
+
   // sink function
   static void OnLog(wxLogLevel level, const char *szString)
   {
-    wxLog *pLogger = GetActiveTarget();
-    if ( pLogger )
-    {
-      pLogger->DoLog(level, szString);
+    if ( IsEnabled() ) {
+      wxLog *pLogger = GetActiveTarget();
+      if ( pLogger )
+        pLogger->DoLog(level, szString);
     }
   }
 
@@ -99,10 +106,8 @@ public:
     // get current log target, will call wxApp::CreateLogTarget() to create one
     // if none exists
   static wxLog *GetActiveTarget();
-    // change log target, pLogger = NULL disables logging. if bNoFlashOld is true,
-    // the old log target isn't flashed which might lead to loss of messages!
-    // returns the previous log target
-  static wxLog *SetActiveTarget(wxLog *pLogger, bool bNoFlashOld = FALSE);
+    // change log target, pLogger may be NULL
+  static wxLog *SetActiveTarget(wxLog *pLogger);
 
   // functions controlling the default wxLog behaviour
     // verbose mode is activated by standard command-line '-verbose' option
@@ -151,6 +156,7 @@ private:
   // static variables
   // ----------------
   static wxLog      *ms_pLogger;      // currently active log sink
+  static bool        ms_doLog;        // FALSE => all logging disabled
   static bool        ms_bAutoCreate;  // automatically create new log targets?
   static wxTraceMask ms_ulTraceMask;  // controls wxLogTrace behaviour
 };
@@ -293,12 +299,11 @@ void Foo() {
 class WXDLLEXPORT wxLogNull
 {
 public:
-  // ctor saves old log target, dtor restores it
-  wxLogNull() { m_pPrevLogger = wxLog::SetActiveTarget((wxLog *)NULL, TRUE); }
- ~wxLogNull() { (void)wxLog::SetActiveTarget(m_pPrevLogger);  }
+  wxLogNull() { m_flagOld = wxLog::EnableLogging(FALSE); }
+ ~wxLogNull() { (void)wxLog::EnableLogging(m_flagOld);   }
 
 private:
-  wxLog *m_pPrevLogger; // old log target
+  bool m_flagOld; // the previous value of the wxLog::ms_doLog
 };
 
 // ============================================================================

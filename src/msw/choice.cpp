@@ -6,7 +6,7 @@
 // Created:     04/01/98
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart and Markus Holzem
-// Licence:   	wxWindows license
+// Licence:     wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
 #ifdef __GNUG__
@@ -48,8 +48,8 @@ bool wxChoice::MSWCommand(WXUINT param, WXWORD WXUNUSED(id))
 bool wxChoice::Create(wxWindow *parent, wxWindowID id,
            const wxPoint& pos,
            const wxSize& size,
-		   int n, const wxString choices[],
-		   long style,
+       int n, const wxString choices[],
+       long style,
            const wxValidator& validator,
            const wxString& name)
 {
@@ -63,9 +63,9 @@ bool wxChoice::Create(wxWindow *parent, wxWindowID id,
   m_windowStyle = style;
 
   if ( id == -1 )
-  	m_windowId = (int)NewControlId();
+    m_windowId = (int)NewControlId();
   else
-	m_windowId = id;
+  m_windowId = id;
 
   int x = pos.x;
   int y = pos.y;
@@ -82,14 +82,16 @@ bool wxChoice::Create(wxWindow *parent, wxWindowID id,
 
   // Even with extended styles, need to combine with WS_BORDER
   // for them to look right.
-  if (want3D || (m_windowStyle & wxSIMPLE_BORDER) || (m_windowStyle & wxRAISED_BORDER) ||
-       (m_windowStyle & wxSUNKEN_BORDER) || (m_windowStyle & wxDOUBLE_BORDER))
+  if ( want3D || wxStyleHasBorder(m_windowStyle) )
     msStyle |= WS_BORDER;
 
-  HWND wx_combo = CreateWindowEx(exStyle, "COMBOBOX", NULL,
+  m_hWnd = (WXHWND)::CreateWindowEx(exStyle, "COMBOBOX", NULL,
                    msStyle,
                    0, 0, 0, 0, (HWND) parent->GetHWND(), (HMENU)m_windowId,
                    wxGetInstance(), NULL);
+
+  wxCHECK_MSG( m_hWnd, FALSE, "Failed to create combobox" );
+
 /*
 #if CTL3D
   if (want3D)
@@ -100,17 +102,17 @@ bool wxChoice::Create(wxWindow *parent, wxWindowID id,
 #endif
 */
 
-  m_hWnd = (WXHWND) wx_combo;
-
   // Subclass again for purposes of dialog editing mode
-  SubclassWin((WXHWND) wx_combo);
+  SubclassWin(m_hWnd);
 
   SetFont(* parent->GetFont());
 
   int i;
   for (i = 0; i < n; i++)
-    SendMessage(wx_combo, CB_INSERTSTRING, i, (LONG)(const char *)choices[i]);
-  SendMessage(wx_combo, CB_SETCURSEL, i, 0);
+  {
+    Append(choices[i]);
+  }
+  SetSelection(n);
 
   SetSize(x, y, width, height);
 
@@ -266,9 +268,9 @@ void wxChoice::SetSize(int x, int y, int width, int height, int sizeFlags)
 }
 
 WXHBRUSH wxChoice::OnCtlColor(WXHDC pDC, WXHWND pWnd, WXUINT nCtlColor,
-			WXUINT message, WXWPARAM wParam, WXLPARAM lParam)
+      WXUINT message, WXWPARAM wParam, WXLPARAM lParam)
 {
-	return 0;
+  return 0;
 }
 
 long wxChoice::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)

@@ -9,22 +9,33 @@
 // Licence:   	wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
+// ============================================================================
+// declarations
+// ============================================================================
+
+// ----------------------------------------------------------------------------
+// headers
+// ----------------------------------------------------------------------------
+
 #ifdef __GNUG__
-#pragma implementation "timer.h"
+    #pragma implementation "timer.h"
 #endif
 
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
 #ifdef __BORLANDC__
-#pragma hdrstop
+    #pragma hdrstop
 #endif
 
 #ifndef WX_PRECOMP
-#include "wx/setup.h"
-#include "wx/list.h"
-#include "wx/app.h"
+    #include "wx/setup.h"
+    #include "wx/list.h"
+    #include "wx/app.h"
 #endif
+
+#include "wx/intl.h"
+#include "wx/log.h"
 
 #include "wx/timer.h"
 #include "wx/msw/private.h"
@@ -33,81 +44,113 @@
 #include <sys/types.h>
 
 #if !defined(__SC__) && !defined(__GNUWIN32__)
-#include <sys/timeb.h>
+    #include <sys/timeb.h>
 #endif
-#ifdef __WIN32__
-#define _EXPORT /**/
-#else
-#define _EXPORT _export
-#endif
+
+// ----------------------------------------------------------------------------
+// private functions
+// ----------------------------------------------------------------------------
 
 wxList wxTimerList(wxKEY_INTEGER);
 UINT WINAPI _EXPORT wxTimerProc(HWND hwnd, WORD, int idTimer, DWORD);
 
-#if !USE_SHARED_LIBRARY
-IMPLEMENT_ABSTRACT_CLASS(wxTimer, wxObject)
+// ----------------------------------------------------------------------------
+// macros
+// ----------------------------------------------------------------------------
+
+#ifdef __WIN32__
+    #define _EXPORT /**/
+#else
+    #define _EXPORT _export
 #endif
 
+#if !USE_SHARED_LIBRARY
+    IMPLEMENT_ABSTRACT_CLASS(wxTimer, wxObject)
+#endif
+
+// ============================================================================
+// implementation
+// ============================================================================
+
+// ----------------------------------------------------------------------------
+// wxTimer class
+// ----------------------------------------------------------------------------
 wxTimer::wxTimer(void)
 {
-  milli = 0 ;
-  lastMilli = -1 ;
-  id = 0;
+    milli = 0 ;
+    lastMilli = -1 ;
+    id = 0;
 }
 
 wxTimer::~wxTimer(void)
 {
-  Stop();
+    Stop();
 
-  wxTimerList.DeleteObject(this);
+    wxTimerList.DeleteObject(this);
 }
 
-bool wxTimer::Start(int milliseconds,bool mode)
+bool wxTimer::Start(int milliseconds, bool mode)
 {
-  oneShot = mode ;
-  if (milliseconds < 0)
-    milliseconds = lastMilli;
+    oneShot = mode ;
+    if (milliseconds < 0)
+        milliseconds = lastMilli;
 
-  if (milliseconds <= 0)
-    return FALSE;
+    wxCHECK_MSG( milliseconds > 0, FALSE, "invalid value for timer timeour" );
 
-  lastMilli = milli = milliseconds;
+    lastMilli = milli = milliseconds;
 
-  wxTimerList.DeleteObject(this);
-  TIMERPROC wxTimerProcInst = (TIMERPROC) MakeProcInstance((FARPROC)wxTimerProc,
-                                          wxGetInstance());
+    wxTimerList.DeleteObject(this);
+    TIMERPROC wxTimerProcInst = (TIMERPROC)
+        MakeProcInstance((FARPROC)wxTimerProc, wxGetInstance());
 
-  id = SetTimer(NULL, (UINT)(id ? id : 1), (UINT)milliseconds, wxTimerProcInst);
-  if (id > 0)
-  {
-    wxTimerList.Append(id, this);
-    return TRUE;
-  }
-  else return FALSE;
+    id = SetTimer(NULL, (UINT)(id ? id : 1),
+                  (UINT)milliseconds, wxTimerProcInst);
+    if (id > 0)
+    {
+        wxTimerList.Append(id, this);
+
+        return TRUE;
+    }
+    else
+    {
+        wxLogSysError(_("Couldn't create a timer"));
+
+        return FALSE;
+    }
 }
 
 void wxTimer::Stop(void)
 {
-  if (id) {
-    KillTimer(NULL, (UINT)id);
-    wxTimerList.DeleteObject(this); /* @@@@ */
-  }
-  id = 0 ;
-  milli = 0 ;
+    if (id) {
+        KillTimer(NULL, (UINT)id);
+        wxTimerList.DeleteObject(this); /* @@@@ */
+    }
+    id = 0 ;
+    milli = 0 ;
+}
+
+// ----------------------------------------------------------------------------
+// private functions
+// ----------------------------------------------------------------------------
+static void wxProcessTimer(wxTimer& timer)
+{
+    // Avoid to process spurious timer events
+    if ( timer.id == 0)
+        return;
+
+    if ( timer.oneShot )
+        timer.Stop();
+
+    timer.Notify();
 }
 
 UINT WINAPI _EXPORT wxTimerProc(HWND WXUNUSED(hwnd), WORD, int idTimer, DWORD)
 {
-  wxNode *node = wxTimerList.Find((long)idTimer);
-  if (node)
-  {
-    wxTimer *timer = (wxTimer *)node->Data();
-    if (timer->id==0)
-      return(0) ; // Avoid to process spurious timer events
-    if (timer->oneShot)
-      timer->Stop() ;
-    timer->Notify();
-  }
-  return 0;
-}
+    wxNode *node = wxTimerList.Find((long)idTimer);
 
+    wxCHECK_MSG( node, 0, "bogus timer id in wxTimerProc" );
+
+    wxProcessTimer(*(wxTimer *)node->Data());
+
+    return 0;
+}

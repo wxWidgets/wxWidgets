@@ -6,7 +6,7 @@
 // Created:     04/01/98
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart and Markus Holzem
-// Licence:   	wxWindows license
+// Licence:     wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
 #ifdef __GNUG__
@@ -67,9 +67,9 @@
 IMPLEMENT_DYNAMIC_CLASS(wxTextCtrl, wxControl)
 
 BEGIN_EVENT_TABLE(wxTextCtrl, wxControl)
-	EVT_CHAR(wxTextCtrl::OnChar)
-	EVT_DROP_FILES(wxTextCtrl::OnDropFiles)
-	EVT_ERASE_BACKGROUND(wxTextCtrl::OnEraseBackground)
+  EVT_CHAR(wxTextCtrl::OnChar)
+  EVT_DROP_FILES(wxTextCtrl::OnDropFiles)
+  EVT_ERASE_BACKGROUND(wxTextCtrl::OnEraseBackground)
 END_EVENT_TABLE()
 
 #endif
@@ -85,11 +85,11 @@ wxTextCtrl::wxTextCtrl(void)
 }
 
 bool wxTextCtrl::Create(wxWindow *parent, wxWindowID id,
-		   const wxString& value,
-           const wxPoint& pos,
-           const wxSize& size, long style,
-           const wxValidator& validator,
-           const wxString& name)
+                        const wxString& value,
+                        const wxPoint& pos,
+                        const wxSize& size, long style,
+                        const wxValidator& validator,
+                        const wxString& name)
 {
   m_fileName = "";
   SetName(name);
@@ -106,9 +106,9 @@ bool wxTextCtrl::Create(wxWindow *parent, wxWindowID id,
   SetForegroundColour(parent->GetForegroundColour()) ;
 
   if ( id == -1 )
-  	m_windowId = (int)NewControlId();
+    m_windowId = (int)NewControlId();
   else
-	m_windowId = id;
+  m_windowId = id;
 
   int x = pos.x;
   int y = pos.y;
@@ -129,9 +129,10 @@ bool wxTextCtrl::Create(wxWindow *parent, wxWindowID id,
 //    m_globalHandle = (WXHGLOBAL) GlobalAlloc(GMEM_MOVEABLE | GMEM_ZEROINIT,
 //                         256L);
 #endif
+
   long msStyle = ES_LEFT | WS_VISIBLE | WS_CHILD | WS_TABSTOP;
   if (m_windowStyle & wxTE_MULTILINE)
-	msStyle |= ES_MULTILINE | ES_WANTRETURN | WS_VSCROLL ; // WS_BORDER
+  msStyle |= ES_MULTILINE | ES_WANTRETURN | WS_VSCROLL ; // WS_BORDER
   else
     msStyle |= ES_AUTOHSCROLL ;
 
@@ -146,16 +147,14 @@ bool wxTextCtrl::Create(wxWindow *parent, wxWindowID id,
   char *windowClass = "EDIT";
 #if defined(__WIN95__)
   if ( m_windowStyle & wxTE_MULTILINE )
-#else
-  if ( FALSE )
-#endif
   {
-      msStyle |= ES_AUTOVSCROLL;
-	  m_isRich = TRUE;
-	  windowClass = "RichEdit" ;
+    msStyle |= ES_AUTOVSCROLL;
+    m_isRich = TRUE;
+    windowClass = "RichEdit" ;
   }
   else
-	  m_isRich = FALSE;
+#endif
+    m_isRich = FALSE;
 
   bool want3D;
   WXDWORD exStyle = Determine3DEffects(WS_EX_CLIENTEDGE, &want3D) ;
@@ -166,36 +165,36 @@ bool wxTextCtrl::Create(wxWindow *parent, wxWindowID id,
   if (m_windowStyle & wxSIMPLE_BORDER)
   {
     windowClass = "EDIT";
-	m_isRich = FALSE;
+  m_isRich = FALSE;
   }
 #endif
 
   // Even with extended styles, need to combine with WS_BORDER
   // for them to look right.
-  if (want3D || (m_windowStyle & wxSIMPLE_BORDER) || (m_windowStyle & wxRAISED_BORDER) ||
-       (m_windowStyle & wxSUNKEN_BORDER) || (m_windowStyle & wxDOUBLE_BORDER))
+  if ( want3D || wxStyleHasBorder(m_windowStyle) )
     msStyle |= WS_BORDER;
 
-  HWND edit = CreateWindowEx(exStyle, windowClass, NULL,
+  m_hWnd = (WXHWND)::CreateWindowEx(exStyle, windowClass, NULL,
                         msStyle,
                         0, 0, 0, 0, (HWND) ((wxWindow*)parent)->GetHWND(), (HMENU)m_windowId,
                         m_globalHandle ? (HINSTANCE) m_globalHandle : wxGetInstance(), NULL);
 
+  wxCHECK_MSG( m_hWnd, FALSE, "Failed to create text ctrl" );
+
 #if CTL3D
   if ( want3D )
   {
-    Ctl3dSubclassCtl(edit);
-	m_useCtl3D = TRUE;
+    Ctl3dSubclassCtl((HWND)m_hWnd);
+    m_useCtl3D = TRUE;
   }
 #endif
-
-  m_hWnd = (WXHWND)edit;
 
 #if defined(__WIN95__)
   if (m_isRich)
   {
-	// Have to enable events
-	::SendMessage(edit, EM_SETEVENTMASK, 0, ENM_CHANGE | ENM_DROPFILES | ENM_SELCHANGE | ENM_UPDATE);
+    // Have to enable events
+    ::SendMessage((HWND)m_hWnd, EM_SETEVENTMASK, 0,
+                  ENM_CHANGE | ENM_DROPFILES | ENM_SELCHANGE | ENM_UPDATE);
   }
 #endif
 
@@ -203,19 +202,21 @@ bool wxTextCtrl::Create(wxWindow *parent, wxWindowID id,
 
   if ( parent->GetFont() && parent->GetFont()->Ok() )
   {
-	SetFont(* parent->GetFont());
+  SetFont(* parent->GetFont());
   }
   else
   {
-  	SetFont(wxSystemSettings::GetSystemFont(wxSYS_SYSTEM_FONT));
+    SetFont(wxSystemSettings::GetSystemFont(wxSYS_SYSTEM_FONT));
   }
 
   SetSize(x, y, width, height);
 
   // Causes a crash for Symantec C++ and WIN32 for some reason
 #if !(defined(__SC__) && defined(__WIN32__))
-  if (value != "")
-    SetWindowText(edit, (const char *)value);
+  if ( !value.IsEmpty() )
+  {
+    SetValue(value);
+  }
 #endif
 
   return TRUE;
@@ -224,39 +225,39 @@ bool wxTextCtrl::Create(wxWindow *parent, wxWindowID id,
 // Make sure the window style (etc.) reflects the HWND style (roughly)
 void wxTextCtrl::AdoptAttributesFromHWND(void)
 {
-	wxWindow::AdoptAttributesFromHWND();
+  wxWindow::AdoptAttributesFromHWND();
 
-	HWND hWnd = (HWND) GetHWND();
-	long style = GetWindowLong((HWND) hWnd, GWL_STYLE);
+  HWND hWnd = (HWND) GetHWND();
+  long style = GetWindowLong((HWND) hWnd, GWL_STYLE);
 
     char buf[256];
 
 #ifndef __WIN32__
-	GetClassName((HWND) hWnd, buf, 256);
+  GetClassName((HWND) hWnd, buf, 256);
 #else
 #ifdef UNICODE
-	GetClassNameW((HWND) hWnd, buf, 256);
+  GetClassNameW((HWND) hWnd, buf, 256);
 #else
-	GetClassNameA((HWND) hWnd, buf, 256);
+  GetClassNameA((HWND) hWnd, buf, 256);
 #endif
 #endif
 
-	wxString str(buf);
-	str.UpperCase();
+  wxString str(buf);
+  str.UpperCase();
 
-	if (str == "EDIT")
-		m_isRich = FALSE;
-	else
-		m_isRich = TRUE;
+  if (str == "EDIT")
+    m_isRich = FALSE;
+  else
+    m_isRich = TRUE;
 
-	if (style & ES_MULTILINE)
-		m_windowStyle |= wxTE_MULTILINE;
-	if (style & ES_PASSWORD)
-		m_windowStyle |= wxTE_PASSWORD;
-	if (style & ES_READONLY)
-		m_windowStyle |= wxTE_READONLY;
-	if (style & ES_WANTRETURN)
-		m_windowStyle |= wxTE_PROCESS_ENTER;
+  if (style & ES_MULTILINE)
+    m_windowStyle |= wxTE_MULTILINE;
+  if (style & ES_PASSWORD)
+    m_windowStyle |= wxTE_PASSWORD;
+  if (style & ES_READONLY)
+    m_windowStyle |= wxTE_READONLY;
+  if (style & ES_WANTRETURN)
+    m_windowStyle |= wxTE_PROCESS_ENTER;
 }
 
 void wxTextCtrl::SetupColours(void)
@@ -272,7 +273,7 @@ wxString wxTextCtrl::GetValue(void) const
     GetWindowText((HWND) GetHWND(), s, length+1);
     wxString str(s);
     delete[] s;
-	return str;
+  return str;
 }
 
 void wxTextCtrl::SetValue(const wxString& value)
@@ -539,13 +540,13 @@ bool wxTextCtrl::LoadFile(const wxString& file)
       while (!input.eof() && input.peek() != EOF)
       {
         input.getline(wxBuffer, 500);
-	int len = strlen(wxBuffer);
-	wxBuffer[len] = 13;
-	wxBuffer[len+1] = 10;
-	wxBuffer[len+2] = 0;
-	strcpy(tmp_buffer+pos, wxBuffer);
-	pos += strlen(wxBuffer);
-	no_lines++;
+  int len = strlen(wxBuffer);
+  wxBuffer[len] = 13;
+  wxBuffer[len+1] = 10;
+  wxBuffer[len+2] = 0;
+  strcpy(tmp_buffer+pos, wxBuffer);
+  pos += strlen(wxBuffer);
+  no_lines++;
       }
 
 //      SendMessage((HWND) GetHWND(), WM_SETTEXT, 0, (LPARAM)tmp_buffer);
@@ -571,7 +572,7 @@ bool wxTextCtrl::SaveFile(const wxString& file)
 
   ofstream output((char*) (const char*) theFile);
   if (output.bad())
-	return FALSE;
+  return FALSE;
 
     // This will only save 64K max
     unsigned long nbytes = SendMessage((HWND) GetHWND(), WM_GETTEXTLENGTH, 0, 0);
@@ -579,13 +580,13 @@ bool wxTextCtrl::SaveFile(const wxString& file)
     SendMessage((HWND) GetHWND(), WM_GETTEXT, (WPARAM)(nbytes+1), (LPARAM)tmp_buffer);
     char *pstr = tmp_buffer;
 
-	// Convert \r\n to just \n
-	while (*pstr)
-	{
-		if (*pstr != '\r')
-			output << *pstr;
-		pstr++;
-	}
+  // Convert \r\n to just \n
+  while (*pstr)
+  {
+    if (*pstr != '\r')
+      output << *pstr;
+    pstr++;
+  }
 
     farfree(tmp_buffer);
     SendMessage((HWND) GetHWND(), EM_SETMODIFY, FALSE, 0L);
@@ -709,7 +710,7 @@ wxString wxTextCtrl::GetLineText(long lineNo) const
     *(WORD *)wxBuffer = 512;
     int noChars = (int)SendMessage(hWnd, EM_GETLINE, (WPARAM)lineNo, (LPARAM)wxBuffer);
     wxBuffer[noChars] = 0;
-	return wxString(wxBuffer);
+  return wxString(wxBuffer);
 }
 
 /*
@@ -898,7 +899,7 @@ wxTextCtrl& wxTextCtrl::operator<<(const char c)
 }
 
 WXHBRUSH wxTextCtrl::OnCtlColor(WXHDC pDC, WXHWND pWnd, WXUINT nCtlColor,
-			WXUINT message, WXWPARAM wParam, WXLPARAM lParam)
+      WXUINT message, WXWPARAM wParam, WXLPARAM lParam)
 {
 #if CTL3D
   if ( m_useCtl3D )
@@ -927,13 +928,13 @@ WXHBRUSH wxTextCtrl::OnCtlColor(WXHDC pDC, WXHWND pWnd, WXUINT nCtlColor,
 
 void wxTextCtrl::OnChar(wxKeyEvent& event)
 {
-	if ( (event.KeyCode() == WXK_RETURN) && (m_windowStyle & wxPROCESS_ENTER))
-	{
-		wxCommandEvent event(wxEVT_COMMAND_TEXT_ENTER, m_windowId);
-		event.SetEventObject( this );
-		if ( GetEventHandler()->ProcessEvent(event) )
+  if ( (event.KeyCode() == WXK_RETURN) && (m_windowStyle & wxPROCESS_ENTER))
+  {
+    wxCommandEvent event(wxEVT_COMMAND_TEXT_ENTER, m_windowId);
+    event.SetEventObject( this );
+    if ( GetEventHandler()->ProcessEvent(event) )
       return;
-	}
+  }
   else if ( event.KeyCode() == WXK_TAB ) {
     wxNavigationKeyEvent event;
     event.SetDirection(!(::GetKeyState(VK_SHIFT) & 0x100));
@@ -1059,24 +1060,24 @@ bool wxTextCtrl::MSWCommand(WXUINT param, WXWORD WXUNUSED(id))
 #if defined(__WIN95__)
 bool wxTextCtrl::MSWNotify(WXWPARAM wParam, WXLPARAM lParam)
 {
-	wxCommandEvent event(0, m_windowId);
-	int eventType = 0;
-	NMHDR *hdr1 = (NMHDR *) lParam;
-	switch ( hdr1->code )
-	{
-		// Insert case code here
-		default :
-			return wxControl::MSWNotify(wParam, lParam);
-			break;
-	}
+  wxCommandEvent event(0, m_windowId);
+  int eventType = 0;
+  NMHDR *hdr1 = (NMHDR *) lParam;
+  switch ( hdr1->code )
+  {
+    // Insert case code here
+    default :
+      return wxControl::MSWNotify(wParam, lParam);
+      break;
+  }
 
-	event.SetEventObject( this );
-	event.SetEventType(eventType);
+  event.SetEventObject( this );
+  event.SetEventType(eventType);
 
-	if ( !ProcessEvent(event) )
-		return FALSE;
+  if ( !ProcessEvent(event) )
+    return FALSE;
 
-  	return TRUE;
+    return TRUE;
 }
 #endif
 #endif
