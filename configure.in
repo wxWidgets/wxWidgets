@@ -3008,6 +3008,15 @@ AC_CHECK_FUNCS(vsnprintf)
 if test "$wxUSE_UNICODE" = yes; then
     dnl also look if we have wide char IO functions
     AC_CHECK_FUNCS(fputwc wprintf vswprintf)
+    dnl MinGW has a vswprintf with a different prototype, and
+    dnl a _vsnwprintf with the correct prototype, but AC_CHECK_FUNCS
+    dnl finds it even if it is not declared in some versions...
+    AC_MSG_CHECKING([for _vsnwprintf])
+    AC_TRY_COMPILE([#include <wchar.h>],
+                   [&_vsnwprintf;],
+                   [AC_MSG_RESULT([yes])
+                    AC_DEFINE(HAVE__VSNWPRINTF)],
+                   [AC_MSG_RESULT([no])]);
 fi
 
 AC_LANG_RESTORE
