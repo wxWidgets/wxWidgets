@@ -72,7 +72,7 @@ TIFFPrintDirectory(TIFF* tif, FILE* fd, long flags)
 	uint16 i;
 	long l, n;
 
-	fprintf(fd, "TIFF Directory at offset 0x%lx\n", (long) tif->tif_diroff);
+	fprintf(fd, "TIFF Directory at offset 0x%lx\n", tif->tif_diroff);
 	td = &tif->tif_dir;
 	if (TIFFFieldSet(tif,FIELD_SUBFILETYPE)) {
 		fprintf(fd, "  Subfile Type:");
@@ -98,6 +98,42 @@ TIFFPrintDirectory(TIFF* tif, FILE* fd, long flags)
 			    (u_long) td->td_imagedepth);
 		fprintf(fd, "\n");
 	}
+
+ 	/* Begin Pixar */
+ 	if (TIFFFieldSet(tif,FIELD_IMAGEFULLWIDTH) ||
+ 	    TIFFFieldSet(tif,FIELD_IMAGEFULLLENGTH)) {
+	  fprintf(fd, "  Pixar Full Image Width: %lu Full Image Length: %lu\n",
+		  (u_long) td->td_imagefullwidth,
+		  (u_long) td->td_imagefulllength);
+ 	}
+ 	if (TIFFFieldSet(tif,FIELD_TEXTUREFORMAT))
+	  _TIFFprintAsciiTag(fd, "Texture Format", td->td_textureformat);
+ 	if (TIFFFieldSet(tif,FIELD_WRAPMODES))
+	  _TIFFprintAsciiTag(fd, "Texture Wrap Modes", td->td_wrapmodes);
+ 	if (TIFFFieldSet(tif,FIELD_FOVCOT))
+	  fprintf(fd, "  Field of View Cotangent: %g\n", td->td_fovcot);
+	if (TIFFFieldSet(tif,FIELD_MATRIX_WORLDTOSCREEN)) {
+	  typedef float	Matrix[4][4];
+	  Matrix*		m = (Matrix*)td->td_matrixWorldToScreen;
+	  
+	  fprintf(fd, "  Matrix NP:\n\t%g %g %g %g\n\t%g %g %g %g\n\t%g %g %g %g\n\t%g %g %g %g\n",
+		  (*m)[0][0], (*m)[0][1], (*m)[0][2], (*m)[0][3],
+		  (*m)[1][0], (*m)[1][1], (*m)[1][2], (*m)[1][3],
+		  (*m)[2][0], (*m)[2][1], (*m)[2][2], (*m)[2][3],
+		  (*m)[3][0], (*m)[3][1], (*m)[3][2], (*m)[3][3]);
+ 	}
+ 	if (TIFFFieldSet(tif,FIELD_MATRIX_WORLDTOCAMERA)) {
+	  typedef float	Matrix[4][4];
+	  Matrix*		m = (Matrix*)td->td_matrixWorldToCamera;
+	  
+	  fprintf(fd, "  Matrix Nl:\n\t%g %g %g %g\n\t%g %g %g %g\n\t%g %g %g %g\n\t%g %g %g %g\n",
+		  (*m)[0][0], (*m)[0][1], (*m)[0][2], (*m)[0][3],
+		  (*m)[1][0], (*m)[1][1], (*m)[1][2], (*m)[1][3],
+		  (*m)[2][0], (*m)[2][1], (*m)[2][2], (*m)[2][3],
+		  (*m)[3][0], (*m)[3][1], (*m)[3][2], (*m)[3][3]);
+ 	}
+ 	/* End Pixar */
+	
 	if (TIFFFieldSet(tif,FIELD_TILEDIMENSIONS)) {
 		fprintf(fd, "  Tile Width: %lu Tile Length: %lu",
 		    (u_long) td->td_tilewidth, (u_long) td->td_tilelength);
@@ -148,6 +184,12 @@ TIFFPrintDirectory(TIFF* tif, FILE* fd, long flags)
 			break;
 		case SAMPLEFORMAT_IEEEFP:
 			fprintf(fd, "IEEE floating point\n");
+			break;
+		case SAMPLEFORMAT_COMPLEXINT:
+			fprintf(fd, "complex signed integer\n");
+			break;
+		case SAMPLEFORMAT_COMPLEXIEEEFP:
+			fprintf(fd, "complex IEEE floating point\n");
 			break;
 		default:
 			fprintf(fd, "%u (0x%x)\n",
@@ -277,8 +319,19 @@ TIFFPrintDirectory(TIFF* tif, FILE* fd, long flags)
 	}
 #ifdef YCBCR_SUPPORT
 	if (TIFFFieldSet(tif,FIELD_YCBCRSUBSAMPLING))
+        {
+            /*
+             * For hacky reasons (see tif_jpeg.c - JPEGFixupTestSubsampling),
+             * we need to fetch this rather than trust what is in our
+             * structures.
+             */
+            uint16 subsampling[2];
+
+            TIFFGetField( tif, TIFFTAG_YCBCRSUBSAMPLING, 
+                          subsampling + 0, subsampling + 1 );
 		fprintf(fd, "  YCbCr Subsampling: %u, %u\n",
-		    td->td_ycbcrsubsampling[0], td->td_ycbcrsubsampling[1]);
+                        subsampling[0], subsampling[1] );
+        }
 	if (TIFFFieldSet(tif,FIELD_YCBCRPOSITIONING)) {
 		fprintf(fd, "  YCbCr Positioning: ");
 		switch (td->td_ycbcrpositioning) {
@@ -309,8 +362,8 @@ TIFFPrintDirectory(TIFF* tif, FILE* fd, long flags)
 		_TIFFprintAsciiTag(fd, "Date & Time", td->td_datetime);
 	if (TIFFFieldSet(tif,FIELD_HOSTCOMPUTER))
 		_TIFFprintAsciiTag(fd, "Host Computer", td->td_hostcomputer);
-	if (TIFFFieldSet(tif,FIELD_SOFTWARE))
-		_TIFFprintAsciiTag(fd, "Software", td->td_software);
+	if (TIFFFieldSet(tif,FIELD_COPYRIGHT))
+		_TIFFprintAsciiTag(fd, "Copyright", td->td_copyright);
 	if (TIFFFieldSet(tif,FIELD_DOCUMENTNAME))
 		_TIFFprintAsciiTag(fd, "Document Name", td->td_documentname);
 	if (TIFFFieldSet(tif,FIELD_IMAGEDESCRIPTION))
@@ -437,8 +490,85 @@ TIFFPrintDirectory(TIFF* tif, FILE* fd, long flags)
 		fputc('\n', fd);
 	}
 #endif
-	if (tif->tif_printdir)
-		(*tif->tif_printdir)(tif, fd, flags);
+        /*
+        ** Custom tag support.
+        */
+        {
+            int  i;
+            short count;
+
+            count = (short) TIFFGetTagListCount( tif );
+            for( i = 0; i < count; i++ )
+            {
+                ttag_t  tag = TIFFGetTagListEntry( tif, i );
+                const TIFFFieldInfo *fld;
+
+                fld = TIFFFieldWithTag( tif, tag );
+                if( fld == NULL )
+                    continue;
+
+                if( fld->field_passcount )
+                {
+                    short value_count;
+                    int j;
+                    void *raw_data;
+                    
+                    if( TIFFGetField( tif, tag, &value_count, &raw_data ) != 1 )
+                        continue;
+
+                    fprintf(fd, "  %s: ", fld->field_name );
+
+                    for( j = 0; j < value_count; j++ )
+                    {
+			if( fld->field_type == TIFF_BYTE )
+                            fprintf( fd, "%d",
+                                     (int) ((char *) raw_data)[j] );
+			else if( fld->field_type == TIFF_SHORT )
+                            fprintf( fd, "%d",
+                                     (int) ((short *) raw_data)[j] );
+                        else if( fld->field_type == TIFF_LONG )
+                            fprintf( fd, "%d",
+                                     (int) ((long *) raw_data)[j] );
+			else if( fld->field_type == TIFF_RATIONAL )
+			    fprintf( fd, "%f",
+				     ((float *) raw_data)[j] );
+                        else if( fld->field_type == TIFF_ASCII )
+                        {
+                            fprintf( fd, "%s",
+                                     (char *) raw_data );
+                            break;
+                        }
+                        else if( fld->field_type == TIFF_DOUBLE )
+                            fprintf( fd, "%f",
+                                     ((double *) raw_data)[j] );
+                        else if( fld->field_type == TIFF_FLOAT )
+                            fprintf( fd, "%f",
+                                     ((float *) raw_data)[j] );
+                        else
+                        {
+                            fprintf( fd,
+                                     "<unsupported data type in TIFFPrint>" );
+                            break;
+                        }
+
+                        if( j < value_count-1 )
+                            fprintf( fd, "," );
+                    }
+                    fprintf( fd, "\n" );
+                } 
+                else if( !fld->field_passcount
+                         && fld->field_type == TIFF_ASCII )
+                {
+                    char *data;
+                    
+                    if( TIFFGetField( tif, tag, &data ) )
+                        fprintf(fd, "  %s: %s\n", fld->field_name, data );
+                }
+            }
+        }
+        
+	if (tif->tif_tagmethods.printdir)
+		(*tif->tif_tagmethods.printdir)(tif, fd, flags);
 	if ((flags & TIFFPRINT_STRIPS) &&
 	    TIFFFieldSet(tif,FIELD_STRIPOFFSETS)) {
 		tstrip_t s;
@@ -460,7 +590,7 @@ _TIFFprintAscii(FILE* fd, const char* cp)
 	for (; *cp != '\0'; cp++) {
 		const char* tp;
 
-		if (isprint((int)*cp)) {
+		if (isprint(*cp)) {
 			fputc(*cp, fd);
 			continue;
 		}

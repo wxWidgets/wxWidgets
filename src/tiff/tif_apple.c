@@ -39,21 +39,19 @@
  * Create below fills in a blank creator signature and sets the file type
  * to 'TIFF'.  It is much better for the application to do this by Create'ing
  * the file first and TIFFOpen'ing it later.
+ * ---------
+ * This code has been "Carbonized", and may not work with older MacOS versions.
+ * If so, grab the tif_apple.c out of an older libtiff distribution, like
+ * 3.5.5 from www.libtiff.org.
  */
 
-#ifdef __MACH__
-   	  #include <ansi_prefix.mach.h>
-   	  #include <msl_c_version.h>
-   	  #include <stdint.h>
-   	  #undef WCHAR_MAX
-   	  #include <machine/ansi.h>
-#endif
 #include "tiffiop.h"
-#include <MacErrors.h>
+#include <Errors.h>
 #include <Files.h>
 #include <Memory.h>
+#include <Script.h>
 
-#if defined(__PPCC__) || defined(__SYMANTEC__) || defined(__MRC__) || defined(applec)
+#if defined(__PPCC__) || defined(__SC__) || defined(__MRC__) || defined(applec)
 #define	CtoPstr	c2pstr
 #endif
 
@@ -149,6 +147,13 @@ TIFFFdOpen(int fd, const char* name, const char* mode)
 	return (tif);
 }
 
+static void ourc2pstr( char* inString )
+{
+	int	sLen = strlen( inString );
+	BlockMoveData( inString, &inString[1], sLen );
+	inString[0] = sLen;
+}
+
 /*
  * Open a TIFF file for read/writing.
  */
@@ -160,32 +165,38 @@ TIFFOpen(const char* name, const char* mode)
 	FInfo finfo;
 	short fref;
 	OSErr err;
+	FSSpec	fSpec;
 
 	strcpy((char*) pname, name);
-	CtoPstr((char*) pname);
+	ourc2pstr((char*) pname);
+	
+	err = FSMakeFSSpec( 0, 0, pname, &fSpec );
 
 	switch (_TIFFgetMode(mode, module)) {
 	default:
 		return ((TIFF*) 0);
 	case O_RDWR | O_CREAT | O_TRUNC:
-		if (GetFInfo(pname, 0, &finfo) == noErr)
-			FSDelete(pname, 0);
+		if (FSpGetFInfo(&fSpec, &finfo) == noErr)
+			FSpDelete(&fSpec);
 		/* fall through */
 	case O_RDWR | O_CREAT:
-		if ((err = GetFInfo(pname, 0, &finfo)) == fnfErr) {
-			if (Create(pname, 0, '    ', 'TIFF') != noErr)
+		if ((err = FSpGetFInfo(&fSpec, &finfo)) == fnfErr) {
+			if (FSpCreate(&fSpec, '    ', 'TIFF', smSystemScript) != noErr)
 				goto badCreate;
-			if (FSOpen(pname, 0, &fref) != noErr)
+			if (FSpOpenDF(&fSpec, fsRdWrPerm, &fref) != noErr)
 				goto badOpen;
 		} else if (err == noErr) {
-			if (FSOpen(pname, 0, &fref) != noErr)
+			if (FSpOpenDF(&fSpec, fsRdWrPerm, &fref) != noErr)
 				goto badOpen;
 		} else
 			goto badOpen;
 		break;
 	case O_RDONLY:
+		if (FSpOpenDF(&fSpec, fsRdPerm, &fref) != noErr)
+			goto badOpen;
+		break;
 	case O_RDWR:
-		if (FSOpen(pname, 0, &fref) != noErr)
+		if (FSpOpenDF(&fSpec, fsRdWrPerm, &fref) != noErr)
 			goto badOpen;
 		break;
 	}

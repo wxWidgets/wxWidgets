@@ -24,9 +24,7 @@
  */
 #include "tiffiop.h"
 
-#define VERSION "LIBTIFF, Version 3.5.201\nCopyright (c) 1988-1996 Sam Leffler\nCopyright (c) 1991-1996 Silicon Graphics, Inc."
-
-static const char TIFFVersion[] = VERSION;
+static const char TIFFVersion[] = TIFFLIB_VERSION_STR;
 
 const char*
 TIFFGetVersion(void)

@@ -4,23 +4,23 @@
  * Copyright (c) 1988-1997 Sam Leffler
  * Copyright (c) 1991-1997 Silicon Graphics, Inc.
  *
- * Permission to use, copy, modify, distribute, and sell this software and
+ * Permission to use, copy, modify, distribute, and sell this software and 
  * its documentation for any purpose is hereby granted without fee, provided
  * that (i) the above copyright notices and this permission notice appear in
  * all copies of the software and related documentation, and (ii) the names of
  * Sam Leffler and Silicon Graphics may not be used in any advertising or
  * publicity relating to the software without the specific, prior written
  * permission of Sam Leffler and Silicon Graphics.
- *
- * THE SOFTWARE IS PROVIDED "AS-IS" AND WITHOUT WARRANTY OF ANY KIND,
- * EXPRESS, IMPLIED OR OTHERWISE, INCLUDING WITHOUT LIMITATION, ANY
- * WARRANTY OF MERCHANTABILITY OR FITNESS FOR A PARTICULAR PURPOSE.
- *
+ * 
+ * THE SOFTWARE IS PROVIDED "AS-IS" AND WITHOUT WARRANTY OF ANY KIND, 
+ * EXPRESS, IMPLIED OR OTHERWISE, INCLUDING WITHOUT LIMITATION, ANY 
+ * WARRANTY OF MERCHANTABILITY OR FITNESS FOR A PARTICULAR PURPOSE.  
+ * 
  * IN NO EVENT SHALL SAM LEFFLER OR SILICON GRAPHICS BE LIABLE FOR
  * ANY SPECIAL, INCIDENTAL, INDIRECT OR CONSEQUENTIAL DAMAGES OF ANY KIND,
  * OR ANY DAMAGES WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS,
- * WHETHER OR NOT ADVISED OF THE POSSIBILITY OF DAMAGE, AND ON ANY THEORY OF
- * LIABILITY, ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE
+ * WHETHER OR NOT ADVISED OF THE POSSIBILITY OF DAMAGE, AND ON ANY THEORY OF 
+ * LIABILITY, ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE 
  * OF THIS SOFTWARE.
  */
 
@@ -30,26 +30,21 @@
  * Predictor Tag Support (used by multiple codecs).
  */
 #include "tiffiop.h"
-/* Watcom C++ (or its make utility) doesn't like long filenames */
-#ifdef wxUSE_SHORTNAMES
-#include "tif_pred.h"
-#else
 #include "tif_predict.h"
-#endif
 
 #include <assert.h>
 
 #define	PredictorState(tif)	((TIFFPredictorState*) (tif)->tif_data)
 
-static	void LINKAGEMODE horAcc8(TIFF*, tidata_t, tsize_t);
-static	void LINKAGEMODE horAcc16(TIFF*, tidata_t, tsize_t);
-static	void LINKAGEMODE swabHorAcc16(TIFF*, tidata_t, tsize_t);
-static	void LINKAGEMODE horDiff8(TIFF*, tidata_t, tsize_t);
-static	void LINKAGEMODE horDiff16(TIFF*, tidata_t, tsize_t);
-static	int LINKAGEMODE PredictorDecodeRow(TIFF*, tidata_t, tsize_t, tsample_t);
-static	int LINKAGEMODE PredictorDecodeTile(TIFF*, tidata_t, tsize_t, tsample_t);
-static	int LINKAGEMODE PredictorEncodeRow(TIFF*, tidata_t, tsize_t, tsample_t);
-static	int LINKAGEMODE PredictorEncodeTile(TIFF*, tidata_t, tsize_t, tsample_t);
+static	void horAcc8(TIFF*, tidata_t, tsize_t);
+static	void horAcc16(TIFF*, tidata_t, tsize_t);
+static	void swabHorAcc16(TIFF*, tidata_t, tsize_t);
+static	void horDiff8(TIFF*, tidata_t, tsize_t);
+static	void horDiff16(TIFF*, tidata_t, tsize_t);
+static	int PredictorDecodeRow(TIFF*, tidata_t, tsize_t, tsample_t);
+static	int PredictorDecodeTile(TIFF*, tidata_t, tsize_t, tsample_t);
+static	int PredictorEncodeRow(TIFF*, tidata_t, tsize_t, tsample_t);
+static	int PredictorEncodeTile(TIFF*, tidata_t, tsize_t, tsample_t);
 
 static int
 PredictorSetup(TIFF* tif)
@@ -165,7 +160,7 @@ static void
 horAcc8(TIFF* tif, tidata_t cp0, tsize_t cc)
 {
 	TIFFPredictorState* sp = PredictorState(tif);
-	u_int stride = sp->stride;
+	tsize_t stride = sp->stride;
 
 	char* cp = (char*) cp0;
 	if (cc > stride) {
@@ -179,9 +174,9 @@ horAcc8(TIFF* tif, tidata_t cp0, tsize_t cc)
 			u_int cb = cp[2];
 			do {
 				cc -= 3, cp += 3;
-				cp[0] = (cr += cp[0]);
-				cp[1] = (cg += cp[1]);
-				cp[2] = (cb += cp[2]);
+				cp[0] = (char) (cr += cp[0]);
+				cp[1] = (char) (cg += cp[1]);
+				cp[2] = (char) (cb += cp[2]);
 			} while ((int32) cc > 0);
 		} else if (stride == 4)  {
 			u_int cr = cp[0];
@@ -190,14 +185,14 @@ horAcc8(TIFF* tif, tidata_t cp0, tsize_t cc)
 			u_int ca = cp[3];
 			do {
 				cc -= 4, cp += 4;
-				cp[0] = (cr += cp[0]);
-				cp[1] = (cg += cp[1]);
-				cp[2] = (cb += cp[2]);
-				cp[3] = (ca += cp[3]);
+				cp[0] = (char) (cr += cp[0]);
+				cp[1] = (char) (cg += cp[1]);
+				cp[2] = (char) (cb += cp[2]);
+				cp[3] = (char) (ca += cp[3]);
 			} while ((int32) cc > 0);
 		} else  {
 			do {
-				REPEAT4(stride, cp[stride] += *cp; cp++)
+				REPEAT4(stride, cp[stride] = (char) (cp[stride] + *cp); cp++)
 				cc -= stride;
 			} while ((int32) cc > 0);
 		}
@@ -208,7 +203,7 @@ static void
 swabHorAcc16(TIFF* tif, tidata_t cp0, tsize_t cc)
 {
 	TIFFPredictorState* sp = PredictorState(tif);
-	u_int stride = sp->stride;
+	tsize_t stride = sp->stride;
 	uint16* wp = (uint16*) cp0;
 	tsize_t wc = cc / 2;
 
@@ -225,7 +220,7 @@ swabHorAcc16(TIFF* tif, tidata_t cp0, tsize_t cc)
 static void
 horAcc16(TIFF* tif, tidata_t cp0, tsize_t cc)
 {
-	u_int stride = PredictorState(tif)->stride;
+	tsize_t stride = PredictorState(tif)->stride;
 	uint16* wp = (uint16*) cp0;
 	tsize_t wc = cc / 2;
 
@@ -288,7 +283,7 @@ static void
 horDiff8(TIFF* tif, tidata_t cp0, tsize_t cc)
 {
 	TIFFPredictorState* sp = PredictorState(tif);
-	u_int stride = sp->stride;
+	tsize_t stride = sp->stride;
 	char* cp = (char*) cp0;
 
 	if (cc > stride) {
@@ -333,7 +328,7 @@ static void
 horDiff16(TIFF* tif, tidata_t cp0, tsize_t cc)
 {
 	TIFFPredictorState* sp = PredictorState(tif);
-	u_int stride = sp->stride;
+	tsize_t stride = sp->stride;
 	int16 *wp = (int16*) cp0;
 	tsize_t wc = cc/2;
 
@@ -420,7 +415,7 @@ PredictorVGetField(TIFF* tif, ttag_t tag, va_list ap)
 	return (1);
 }
 
-static void LINKAGEMODE
+static void
 PredictorPrintDir(TIFF* tif, FILE* fd, long flags)
 {
 	TIFFPredictorState* sp = PredictorState(tif);
@@ -448,12 +443,15 @@ TIFFPredictorInit(TIFF* tif)
 	 * override parent get/set field methods.
 	 */
 	_TIFFMergeFieldInfo(tif, predictFieldInfo, N(predictFieldInfo));
-	sp->vgetparent = tif->tif_vgetfield;
-	tif->tif_vgetfield = PredictorVGetField;/* hook for predictor tag */
-	sp->vsetparent = tif->tif_vsetfield;
-	tif->tif_vsetfield = PredictorVSetField;/* hook for predictor tag */
-	sp->printdir = tif->tif_printdir;
-	tif->tif_printdir = PredictorPrintDir;	/* hook for predictor tag */
+	sp->vgetparent = tif->tif_tagmethods.vgetfield;
+	tif->tif_tagmethods.vgetfield =
+            PredictorVGetField;/* hook for predictor tag */
+	sp->vsetparent = tif->tif_tagmethods.vsetfield;
+	tif->tif_tagmethods.vsetfield =
+            PredictorVSetField;/* hook for predictor tag */
+	sp->printdir = tif->tif_tagmethods.printdir;
+	tif->tif_tagmethods.printdir =
+            PredictorPrintDir;	/* hook for predictor tag */
 
 	sp->setupdecode = tif->tif_setupdecode;
 	tif->tif_setupdecode = PredictorSetupDecode;

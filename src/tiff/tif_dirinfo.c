@@ -4,23 +4,23 @@
  * Copyright (c) 1988-1997 Sam Leffler
  * Copyright (c) 1991-1997 Silicon Graphics, Inc.
  *
- * Permission to use, copy, modify, distribute, and sell this software and
+ * Permission to use, copy, modify, distribute, and sell this software and 
  * its documentation for any purpose is hereby granted without fee, provided
  * that (i) the above copyright notices and this permission notice appear in
  * all copies of the software and related documentation, and (ii) the names of
  * Sam Leffler and Silicon Graphics may not be used in any advertising or
  * publicity relating to the software without the specific, prior written
  * permission of Sam Leffler and Silicon Graphics.
- *
- * THE SOFTWARE IS PROVIDED "AS-IS" AND WITHOUT WARRANTY OF ANY KIND,
- * EXPRESS, IMPLIED OR OTHERWISE, INCLUDING WITHOUT LIMITATION, ANY
- * WARRANTY OF MERCHANTABILITY OR FITNESS FOR A PARTICULAR PURPOSE.
- *
+ * 
+ * THE SOFTWARE IS PROVIDED "AS-IS" AND WITHOUT WARRANTY OF ANY KIND, 
+ * EXPRESS, IMPLIED OR OTHERWISE, INCLUDING WITHOUT LIMITATION, ANY 
+ * WARRANTY OF MERCHANTABILITY OR FITNESS FOR A PARTICULAR PURPOSE.  
+ * 
  * IN NO EVENT SHALL SAM LEFFLER OR SILICON GRAPHICS BE LIABLE FOR
  * ANY SPECIAL, INCIDENTAL, INDIRECT OR CONSEQUENTIAL DAMAGES OF ANY KIND,
  * OR ANY DAMAGES WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS,
- * WHETHER OR NOT ADVISED OF THE POSSIBILITY OF DAMAGE, AND ON ANY THEORY OF
- * LIABILITY, ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE
+ * WHETHER OR NOT ADVISED OF THE POSSIBILITY OF DAMAGE, AND ON ANY THEORY OF 
+ * LIABILITY, ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE 
  * OF THIS SOFTWARE.
  */
 
@@ -31,14 +31,25 @@
  */
 #include "tiffiop.h"
 #include <stdlib.h>
+#include <assert.h>
+#include <stdio.h>
 
 /*
  * NB: NB: THIS ARRAY IS ASSUMED TO BE SORTED BY TAG.
  *     If a tag can have both LONG and SHORT types
  *     then the LONG must be placed before the SHORT for
  *     writing to work properly.
+ *
+ * NOTE: The second field (field_readcount) and third field (field_writecount)
+ *       sometimes use the values TIFF_VARIABLE (-1), TIFF_VARIABLE2 (-3)
+ *       and TIFFTAG_SPP (-2). The macros should be used but would throw off 
+ *       the formatting of the code, so please interprete the -1, -2 and -3 
+ *       values accordingly.
  */
-static const TIFFFieldInfo tiffFieldInfo[] = {
+#ifndef VMS
+static 
+#endif
+const TIFFFieldInfo tiffFieldInfo[] = {
     { TIFFTAG_SUBFILETYPE,	 1, 1, TIFF_LONG,	FIELD_SUBFILETYPE,
       TRUE,	FALSE,	"SubfileType" },
 /* XXX SHORT for compatibility w/ old versions of the library */
@@ -54,10 +65,19 @@ static const TIFFFieldInfo tiffFieldInfo[] = {
       TRUE,	FALSE,	"ImageLength" },
     { TIFFTAG_IMAGELENGTH,	 1, 1, TIFF_SHORT,	FIELD_IMAGEDIMENSIONS,
       TRUE,	FALSE,	"ImageLength" },
+/* XXX LONG for compatibility with some broken TIFF writers */
+    { TIFFTAG_BITSPERSAMPLE,	-1,-1, TIFF_LONG,	FIELD_BITSPERSAMPLE,
+      FALSE,	FALSE,	"BitsPerSample" },
     { TIFFTAG_BITSPERSAMPLE,	-1,-1, TIFF_SHORT,	FIELD_BITSPERSAMPLE,
       FALSE,	FALSE,	"BitsPerSample" },
+/* XXX LONG for compatibility with some broken TIFF writers */
+    { TIFFTAG_COMPRESSION,	-1, 1, TIFF_LONG,	FIELD_COMPRESSION,
+      FALSE,	FALSE,	"Compression" },
     { TIFFTAG_COMPRESSION,	-1, 1, TIFF_SHORT,	FIELD_COMPRESSION,
       FALSE,	FALSE,	"Compression" },
+/* XXX LONG for compatibility with some broken TIFF writers */
+    { TIFFTAG_PHOTOMETRIC,	 1, 1, TIFF_LONG,	FIELD_PHOTOMETRIC,
+      FALSE,	FALSE,	"PhotometricInterpretation" },
     { TIFFTAG_PHOTOMETRIC,	 1, 1, TIFF_SHORT,	FIELD_PHOTOMETRIC,
       FALSE,	FALSE,	"PhotometricInterpretation" },
     { TIFFTAG_THRESHHOLDING,	 1, 1, TIFF_SHORT,	FIELD_THRESHHOLDING,
@@ -122,11 +142,9 @@ static const TIFFFieldInfo tiffFieldInfo[] = {
       TRUE,	FALSE,	"PageNumber" },
     { TIFFTAG_COLORRESPONSEUNIT, 1, 1, TIFF_SHORT,	FIELD_IGNORE,
       TRUE,	FALSE,	"ColorResponseUnit" },
-#ifdef COLORIMETRY_SUPPORT
     { TIFFTAG_TRANSFERFUNCTION,	-1,-1, TIFF_SHORT,	FIELD_TRANSFERFUNCTION,
       TRUE,	FALSE,	"TransferFunction" },
-#endif
-    { TIFFTAG_SOFTWARE,		-1,-1, TIFF_ASCII,	FIELD_SOFTWARE,
+    { TIFFTAG_SOFTWARE,		-1,-1, TIFF_ASCII,	FIELD_CUSTOM,
       TRUE,	FALSE,	"Software" },
     { TIFFTAG_DATETIME,		20,20, TIFF_ASCII,	FIELD_DATETIME,
       TRUE,	FALSE,	"DateTime" },
@@ -134,12 +152,10 @@ static const TIFFFieldInfo tiffFieldInfo[] = {
       TRUE,	FALSE,	"Artist" },
     { TIFFTAG_HOSTCOMPUTER,	-1,-1, TIFF_ASCII,	FIELD_HOSTCOMPUTER,
       TRUE,	FALSE,	"HostComputer" },
-#ifdef COLORIMETRY_SUPPORT
     { TIFFTAG_WHITEPOINT,	 2, 2, TIFF_RATIONAL,FIELD_WHITEPOINT,
       TRUE,	FALSE,	"WhitePoint" },
     { TIFFTAG_PRIMARYCHROMATICITIES,6,6,TIFF_RATIONAL,FIELD_PRIMARYCHROMAS,
       TRUE,	FALSE,	"PrimaryChromaticities" },
-#endif
     { TIFFTAG_COLORMAP,		-1,-1, TIFF_SHORT,	FIELD_COLORMAP,
       TRUE,	FALSE,	"ColorMap" },
     { TIFFTAG_HALFTONEHINTS,	 2, 2, TIFF_SHORT,	FIELD_HALFTONEHINTS,
@@ -158,11 +174,8 @@ static const TIFFFieldInfo tiffFieldInfo[] = {
       FALSE,	FALSE,	"TileByteCounts" },
     { TIFFTAG_TILEBYTECOUNTS,	-1, 1, TIFF_SHORT,	FIELD_STRIPBYTECOUNTS,
       FALSE,	FALSE,	"TileByteCounts" },
-#ifdef TIFFTAG_SUBIFD
     { TIFFTAG_SUBIFD,		-1,-1, TIFF_LONG,	FIELD_SUBIFD,
       TRUE,	TRUE,	"SubIFD" },
-#endif
-#ifdef CMYK_SUPPORT		/* 6.0 CMYK tags */
     { TIFFTAG_INKSET,		 1, 1, TIFF_SHORT,	FIELD_INKSET,
       FALSE,	FALSE,	"InkSet" },
     { TIFFTAG_INKNAMES,		-1,-1, TIFF_ASCII,	FIELD_INKNAMES,
@@ -175,7 +188,6 @@ static const TIFFFieldInfo tiffFieldInfo[] = {
       FALSE,	FALSE,	"DotRange" },
     { TIFFTAG_TARGETPRINTER,	-1,-1, TIFF_ASCII,	FIELD_TARGETPRINTER,
       TRUE,	FALSE,	"TargetPrinter" },
-#endif
     { TIFFTAG_EXTRASAMPLES,	-1,-1, TIFF_SHORT,	FIELD_EXTRASAMPLES,
       FALSE,	FALSE,	"ExtraSamples" },
 /* XXX for bogus Adobe Photoshop v2.5 files */
@@ -187,21 +199,19 @@ static const TIFFFieldInfo tiffFieldInfo[] = {
       TRUE,	FALSE,	"SMinSampleValue" },
     { TIFFTAG_SMAXSAMPLEVALUE,	-2,-1, TIFF_ANY,	FIELD_SMAXSAMPLEVALUE,
       TRUE,	FALSE,	"SMaxSampleValue" },
-#ifdef YCBCR_SUPPORT		/* 6.0 YCbCr tags */
     { TIFFTAG_YCBCRCOEFFICIENTS, 3, 3, TIFF_RATIONAL,	FIELD_YCBCRCOEFFICIENTS,
       FALSE,	FALSE,	"YCbCrCoefficients" },
     { TIFFTAG_YCBCRSUBSAMPLING,	 2, 2, TIFF_SHORT,	FIELD_YCBCRSUBSAMPLING,
       FALSE,	FALSE,	"YCbCrSubsampling" },
     { TIFFTAG_YCBCRPOSITIONING,	 1, 1, TIFF_SHORT,	FIELD_YCBCRPOSITIONING,
       FALSE,	FALSE,	"YCbCrPositioning" },
-#endif
-#ifdef COLORIMETRY_SUPPORT
     { TIFFTAG_REFERENCEBLACKWHITE,6,6,TIFF_RATIONAL,	FIELD_REFBLACKWHITE,
       TRUE,	FALSE,	"ReferenceBlackWhite" },
 /* XXX temporarily accept LONG for backwards compatibility */
     { TIFFTAG_REFERENCEBLACKWHITE,6,6,TIFF_LONG,	FIELD_REFBLACKWHITE,
       TRUE,	FALSE,	"ReferenceBlackWhite" },
-#endif
+    { TIFFTAG_XMLPACKET,	-1,-3, TIFF_UNDEFINED,	FIELD_XMLPACKET,
+      FALSE,	TRUE,	"XMLPacket" },
 /* begin SGI tags */
     { TIFFTAG_MATTEING,		 1, 1, TIFF_SHORT,	FIELD_EXTRASAMPLES,
       FALSE,	FALSE,	"Matteing" },
@@ -216,25 +226,37 @@ static const TIFFFieldInfo tiffFieldInfo[] = {
     { TIFFTAG_TILEDEPTH,	 1, 1, TIFF_SHORT,	FIELD_TILEDEPTH,
       FALSE,	FALSE,	"TileDepth" },
 /* end SGI tags */
+/* begin Pixar tags */
+    { TIFFTAG_PIXAR_IMAGEFULLWIDTH,  1, 1, TIFF_LONG,	FIELD_IMAGEFULLWIDTH,
+      TRUE,	FALSE,	"ImageFullWidth" },
+    { TIFFTAG_PIXAR_IMAGEFULLLENGTH, 1, 1, TIFF_LONG,	FIELD_IMAGEFULLLENGTH,
+      TRUE,	FALSE,	"ImageFullLength" },
+    { TIFFTAG_PIXAR_TEXTUREFORMAT,  -1,-1, TIFF_ASCII,	FIELD_TEXTUREFORMAT,
+      TRUE,	FALSE,	"TextureFormat" },
+    { TIFFTAG_PIXAR_WRAPMODES,	    -1,-1, TIFF_ASCII,	FIELD_WRAPMODES,
+      TRUE,	FALSE,	"TextureWrapModes" },
+    { TIFFTAG_PIXAR_FOVCOT,	     1, 1, TIFF_FLOAT,	FIELD_FOVCOT,
+      TRUE,	FALSE,	"FieldOfViewCotan" },
+    { TIFFTAG_PIXAR_MATRIX_WORLDTOSCREEN,	16,16,	TIFF_FLOAT,
+      FIELD_MATRIX_WORLDTOSCREEN,	TRUE,	FALSE,	"MatrixWorldToScreen" },
+    { TIFFTAG_PIXAR_MATRIX_WORLDTOCAMERA,	16,16,	TIFF_FLOAT,
+       FIELD_MATRIX_WORLDTOCAMERA,	TRUE,	FALSE,	"MatrixWorldToCamera" },
+    { TIFFTAG_COPYRIGHT,	-1,-1, TIFF_ASCII,	FIELD_COPYRIGHT,
+      TRUE,	FALSE,	"Copyright" },
+/* end Pixar tags */
 #ifdef IPTC_SUPPORT
 #ifdef PHOTOSHOP_SUPPORT
-    { TIFFTAG_RICHTIFFIPTC, -1,-1, TIFF_LONG,   FIELD_RICHTIFFIPTC,
+    { TIFFTAG_RICHTIFFIPTC, -1,-1, TIFF_LONG,   FIELD_RICHTIFFIPTC, 
       FALSE,    TRUE,   "RichTIFFIPTC" },
 #else
-    { TIFFTAG_RICHTIFFIPTC, -1,-3, TIFF_UNDEFINED, FIELD_RICHTIFFIPTC,
+    { TIFFTAG_RICHTIFFIPTC, -1,-3, TIFF_UNDEFINED, FIELD_RICHTIFFIPTC, 
       FALSE,    TRUE,   "RichTIFFIPTC" },
 #endif
 #endif
-#ifdef PHOTOSHOP_SUPPORT
-    { TIFFTAG_PHOTOSHOP,    -1,-3, TIFF_UNDEFINED, FIELD_PHOTOSHOP,
+    { TIFFTAG_PHOTOSHOP,    -1,-3, TIFF_BYTE,   FIELD_PHOTOSHOP, 
       FALSE,    TRUE,   "Photoshop" },
-    { TIFFTAG_PHOTOSHOP,    -1,-1, TIFF_BYTE,   FIELD_PHOTOSHOP,
-      FALSE,    TRUE,   "Photoshop" },
-#endif
-#ifdef ICC_SUPPORT
     { TIFFTAG_ICCPROFILE,	-1,-3, TIFF_UNDEFINED,	FIELD_ICCPROFILE,
       FALSE,	TRUE,	"ICC Profile" },
-#endif
     { TIFFTAG_STONITS,		 1, 1, TIFF_DOUBLE,	FIELD_STONITS,
       FALSE,	FALSE,	"StoNits" },
 };
@@ -244,13 +266,26 @@ void
 _TIFFSetupFieldInfo(TIFF* tif)
 {
 	if (tif->tif_fieldinfo) {
+		int  i;
+
+		for (i = 0; i < tif->tif_nfields; i++) 
+		{
+			TIFFFieldInfo *fld = tif->tif_fieldinfo[i];
+			if (fld->field_bit == FIELD_CUSTOM && 
+				strncmp("Tag ", fld->field_name, 4) == 0) 
+				{
+				_TIFFfree(fld->field_name);
+				_TIFFfree(fld);
+				}
+		}   
+      
 		_TIFFfree(tif->tif_fieldinfo);
 		tif->tif_nfields = 0;
 	}
 	_TIFFMergeFieldInfo(tif, tiffFieldInfo, N(tiffFieldInfo));
 }
 
-static int LINKAGEMODE
+static int
 tagCompare(const void* a, const void* b)
 {
 	const TIFFFieldInfo* ta = *(const TIFFFieldInfo**) a;
@@ -259,7 +294,7 @@ tagCompare(const void* a, const void* b)
 	if (ta->field_tag != tb->field_tag)
 		return (ta->field_tag < tb->field_tag ? -1 : 1);
 	else
-		return (tb->field_type < ta->field_type ? -1 : 1);
+		return ((int)tb->field_type - (int)ta->field_type);
 }
 
 void
@@ -276,17 +311,14 @@ _TIFFMergeFieldInfo(TIFF* tif, const TIFFFieldInfo info[], int n)
 		tif->tif_fieldinfo = (TIFFFieldInfo**)
 		    _TIFFmalloc(n * sizeof (TIFFFieldInfo*));
 	}
+	assert(tif->tif_fieldinfo != NULL);
 	tp = &tif->tif_fieldinfo[tif->tif_nfields];
 	for (i = 0; i < n; i++)
 		tp[i] = (TIFFFieldInfo*) &info[i];	/* XXX */
-	/*
-	 * NB: the core tags are presumed sorted correctly.
-	 */
-	if (tif->tif_nfields > 0)
-		qsort(tif->tif_fieldinfo, (size_t) (tif->tif_nfields += n),
-		    sizeof (TIFFFieldInfo*), tagCompare);
-	else
-		tif->tif_nfields += n;
+
+        /* Sort the field info by tag number */
+        qsort(tif->tif_fieldinfo, (size_t) (tif->tif_nfields += n),
+              sizeof (TIFFFieldInfo*), tagCompare);
 }
 
 void
@@ -310,21 +342,36 @@ _TIFFPrintFieldInfo(TIFF* tif, FILE* fd)
 	}
 }
 
-const int tiffDataWidth[] = {
-    1,	/* nothing */
-    1,	/* TIFF_BYTE */
-    1,	/* TIFF_ASCII */
-    2,	/* TIFF_SHORT */
-    4,	/* TIFF_LONG */
-    8,	/* TIFF_RATIONAL */
-    1,	/* TIFF_SBYTE */
-    1,	/* TIFF_UNDEFINED */
-    2,	/* TIFF_SSHORT */
-    4,	/* TIFF_SLONG */
-    8,	/* TIFF_SRATIONAL */
-    4,	/* TIFF_FLOAT */
-    8,	/* TIFF_DOUBLE */
-};
+/*
+ * Return size of TIFFDataType in bytes
+ */
+int
+TIFFDataWidth(TIFFDataType type)
+{
+	switch(type)
+	{
+	case 0:  /* nothing */
+	case 1:  /* TIFF_BYTE */
+	case 2:  /* TIFF_ASCII */
+	case 6:  /* TIFF_SBYTE */
+	case 7:  /* TIFF_UNDEFINED */
+		return 1;
+	case 3:  /* TIFF_SHORT */
+	case 8:  /* TIFF_SSHORT */
+		return 2;
+	case 4:  /* TIFF_LONG */
+	case 9:  /* TIFF_SLONG */
+	case 11: /* TIFF_FLOAT */
+        case 13: /* TIFF_IFD */
+		return 4;
+	case 5:  /* TIFF_RATIONAL */
+	case 10: /* TIFF_SRATIONAL */
+	case 12: /* TIFF_DOUBLE */
+		return 8;
+	default:
+		return 0; /* will return 0 for unknown types */
+	}
+}
 
 /*
  * Return nearest TIFFDataType to the sample type of an image.
@@ -332,7 +379,7 @@ const int tiffDataWidth[] = {
 TIFFDataType
 _TIFFSampleToTagType(TIFF* tif)
 {
-	int bps = (int) TIFFhowmany(tif->tif_dir.td_bitspersample, 8);
+	uint32 bps = TIFFhowmany8(tif->tif_dir.td_bitspersample);
 
 	switch (tif->tif_dir.td_sampleformat) {
 	case SAMPLEFORMAT_IEEEFP:
@@ -360,7 +407,16 @@ _TIFFFindFieldInfo(TIFF* tif, ttag_t tag, TIFFDataType dt)
 	    (dt == TIFF_ANY || dt == last->field_type))
 		return (last);
 	/* NB: if table gets big, use sorted search (e.g. binary search) */
-	for (i = 0, n = tif->tif_nfields; i < n; i++) {
+	if(dt != TIFF_ANY) {
+            TIFFFieldInfo key = {0, 0, 0, 0, 0, 0, 0, 0};
+            key.field_tag = tag;
+            key.field_type = dt;
+            return((const TIFFFieldInfo *) bsearch(&key, 
+						   tif->tif_fieldinfo, 
+						   tif->tif_nfields,
+						   sizeof(TIFFFieldInfo), 
+						   tagCompare));
+        } else for (i = 0, n = tif->tif_nfields; i < n; i++) {
 		const TIFFFieldInfo* fip = tif->tif_fieldinfo[i];
 		if (fip->field_tag == tag &&
 		    (dt == TIFF_ANY || fip->field_type == dt))
@@ -368,9 +424,6 @@ _TIFFFindFieldInfo(TIFF* tif, ttag_t tag, TIFFDataType dt)
 	}
 	return ((const TIFFFieldInfo *)0);
 }
-
-#include <assert.h>
-#include <stdio.h>
 
 const TIFFFieldInfo*
 _TIFFFieldWithTag(TIFF* tif, ttag_t tag)
@@ -383,4 +436,51 @@ _TIFFFieldWithTag(TIFF* tif, ttag_t tag)
 		/*NOTREACHED*/
 	}
 	return (fip);
+}
+
+const TIFFFieldInfo*
+_TIFFFindOrRegisterFieldInfo( TIFF *tif, ttag_t tag, TIFFDataType dt )
+
+{
+    const TIFFFieldInfo *fld;
+
+    fld = _TIFFFindFieldInfo( tif, tag, dt );
+    if( fld == NULL )
+    {
+        fld = _TIFFCreateAnonFieldInfo( tif, tag, dt );
+        _TIFFMergeFieldInfo( tif, fld, 1 );
+    }
+
+    return fld;
+}
+
+TIFFFieldInfo*
+_TIFFCreateAnonFieldInfo(TIFF *tif, ttag_t tag, TIFFDataType field_type)
+{
+    TIFFFieldInfo *fld;
+
+    fld = (TIFFFieldInfo *) _TIFFmalloc(sizeof (TIFFFieldInfo));
+    if (fld == NULL)
+	return NULL;
+    _TIFFmemset( fld, 0, sizeof(TIFFFieldInfo) );
+
+    fld->field_tag = tag;
+    fld->field_readcount = TIFF_VARIABLE;
+    fld->field_writecount = TIFF_VARIABLE;
+    fld->field_type = field_type;
+    fld->field_bit = FIELD_CUSTOM;
+    fld->field_oktochange = TRUE;
+    fld->field_passcount = TRUE;
+    fld->field_name = (char *) _TIFFmalloc(32);
+    if (fld->field_name == NULL) {
+	_TIFFfree(fld);
+	return NULL;
+    }
+
+    /* note that this name is a special sign to TIFFClose() and
+     * _TIFFSetupFieldInfo() to free the field
+     */
+    sprintf(fld->field_name, "Tag %d", (int) tag);
+
+    return fld;    
 }

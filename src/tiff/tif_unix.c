@@ -47,7 +47,11 @@ _tiffWriteProc(thandle_t fd, tdata_t buf, tsize_t size)
 static toff_t
 _tiffSeekProc(thandle_t fd, toff_t off, int whence)
 {
+#if USE_64BIT_API == 1
+	return ((toff_t) lseek64((int) fd, (off64_t) off, whence));
+#else
 	return ((toff_t) lseek((int) fd, (off_t) off, whence));
+#endif
 }
 
 static int
@@ -65,8 +69,13 @@ _tiffSizeProc(thandle_t fd)
 	long fsize;
 	return ((fsize = lseek((int) fd, 0, SEEK_END)) < 0 ? 0 : fsize);
 #else
+#if USE_64BIT_API == 1
+	struct stat64 sb;
+	return (toff_t) (fstat64((int) fd, &sb) < 0 ? 0 : sb.st_size);
+#else
 	struct stat sb;
 	return (toff_t) (fstat((int) fd, &sb) < 0 ? 0 : sb.st_size);
+#endif
 #endif
 }
 
@@ -148,7 +157,11 @@ TIFFOpen(const char* name, const char* mode)
 #ifdef _AM29K
 	fd = open(name, m);
 #else
+#if USE_64BIT_API == 1
+	fd = open(name, m | O_LARGEFILE, 0666);
+#else
 	fd = open(name, m, 0666);
+#endif
 #endif
 	if (fd < 0) {
 		TIFFError(module, "%s: Cannot open", name);

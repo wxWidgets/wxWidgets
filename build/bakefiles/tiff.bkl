@@ -45,6 +45,7 @@
 		    src/tiff/tif_aux.c
 		    src/tiff/tif_close.c
 		    src/tiff/tif_codec.c
+            src/tiff/tif_color.c
 		    src/tiff/tif_compress.c
 		    src/tiff/tif_dir.c
 		    src/tiff/tif_dirinfo.c

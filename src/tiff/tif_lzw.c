@@ -4,23 +4,23 @@
  * Copyright (c) 1988-1997 Sam Leffler
  * Copyright (c) 1991-1997 Silicon Graphics, Inc.
  *
- * Permission to use, copy, modify, distribute, and sell this software and
+ * Permission to use, copy, modify, distribute, and sell this software and 
  * its documentation for any purpose is hereby granted without fee, provided
  * that (i) the above copyright notices and this permission notice appear in
  * all copies of the software and related documentation, and (ii) the names of
  * Sam Leffler and Silicon Graphics may not be used in any advertising or
  * publicity relating to the software without the specific, prior written
  * permission of Sam Leffler and Silicon Graphics.
- *
- * THE SOFTWARE IS PROVIDED "AS-IS" AND WITHOUT WARRANTY OF ANY KIND,
- * EXPRESS, IMPLIED OR OTHERWISE, INCLUDING WITHOUT LIMITATION, ANY
- * WARRANTY OF MERCHANTABILITY OR FITNESS FOR A PARTICULAR PURPOSE.
- *
+ * 
+ * THE SOFTWARE IS PROVIDED "AS-IS" AND WITHOUT WARRANTY OF ANY KIND, 
+ * EXPRESS, IMPLIED OR OTHERWISE, INCLUDING WITHOUT LIMITATION, ANY 
+ * WARRANTY OF MERCHANTABILITY OR FITNESS FOR A PARTICULAR PURPOSE.  
+ * 
  * IN NO EVENT SHALL SAM LEFFLER OR SILICON GRAPHICS BE LIABLE FOR
  * ANY SPECIAL, INCIDENTAL, INDIRECT OR CONSEQUENTIAL DAMAGES OF ANY KIND,
  * OR ANY DAMAGES WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS,
- * WHETHER OR NOT ADVISED OF THE POSSIBILITY OF DAMAGE, AND ON ANY THEORY OF
- * LIABILITY, ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE
+ * WHETHER OR NOT ADVISED OF THE POSSIBILITY OF DAMAGE, AND ON ANY THEORY OF 
+ * LIABILITY, ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE 
  * OF THIS SOFTWARE.
  */
 
@@ -36,12 +36,7 @@
  *
  * The original Berkeley copyright notice appears below in its entirety.
  */
-/* Watcom C++ (or its make utility) doesn't like long filenames */
-#ifdef wxUSE_SHORTNAMES
-#include "tif_pred.h"
-#else
 #include "tif_predict.h"
-#endif
 
 #include <assert.h>
 #include <stdio.h>
@@ -111,6 +106,11 @@ typedef	struct {
 #define	lzw_nextbits	base.nextbits
 
 /*
+ * Encoding-specific state.
+ */
+typedef uint16 hcode_t;			/* codes fit in 16 bits */
+
+/*
  * Decoding-specific state.
  */
 typedef struct code_ent {
@@ -120,10 +120,12 @@ typedef struct code_ent {
 	u_char	firstchar;		/* first token of string */
 } code_t;
 
-typedef	int (LINKAGEMODE *decodeFunc)(TIFF*, tidata_t, tsize_t, tsample_t);
+typedef	int (*decodeFunc)(TIFF*, tidata_t, tsize_t, tsample_t);
 
 typedef struct {
 	LZWBaseState base;
+
+        /* Decoding specific data */
 	long	dec_nbitsmask;		/* lzw_nbits 1 bits, right adjusted */
 	long	dec_restart;		/* restart count */
 #ifdef LZW_CHECKEOS
@@ -135,38 +137,15 @@ typedef struct {
 	code_t*	dec_free_entp;		/* next free entry */
 	code_t*	dec_maxcodep;		/* max available entry */
 	code_t*	dec_codetab;		/* kept separate for small machines */
-} LZWDecodeState;
-
-/*
- * Encoding-specific state.
- */
-typedef uint16 hcode_t;			/* codes fit in 16 bits */
-typedef struct {
-	long	hash;
-	hcode_t	code;
-} hash_t;
-
-typedef struct {
-	LZWBaseState base;
-	int	enc_oldcode;		/* last code encountered */
-	long	enc_checkpoint;		/* point at which to clear table */
-#define CHECK_GAP	10000		/* enc_ratio check interval */
-	long	enc_ratio;		/* current compression ratio */
-	long	enc_incount;		/* (input) data bytes encoded */
-	long	enc_outcount;		/* encoded (output) bytes */
-	tidata_t enc_rawlimit;		/* bound on tif_rawdata buffer */
-	hash_t*	enc_hashtab;		/* kept separate for small machines */
-} LZWEncodeState;
+} LZWCodecState;
 
 #define	LZWState(tif)		((LZWBaseState*) (tif)->tif_data)
-#define	DecoderState(tif)	((LZWDecodeState*) LZWState(tif))
-#define	EncoderState(tif)	((LZWEncodeState*) LZWState(tif))
+#define	DecoderState(tif)	((LZWCodecState*) LZWState(tif))
 
-static	int LINKAGEMODE LZWDecode(TIFF*, tidata_t, tsize_t, tsample_t);
+static	int LZWDecode(TIFF*, tidata_t, tsize_t, tsample_t);
 #ifdef LZW_COMPAT
-static	int LINKAGEMODE LZWDecodeCompat(TIFF*, tidata_t, tsize_t, tsample_t);
+static	int LZWDecodeCompat(TIFF*, tidata_t, tsize_t, tsample_t);
 #endif
-static	void cl_hash(LZWEncodeState*);
 
 /*
  * LZW Decoder.
@@ -195,11 +174,12 @@ static	void cl_hash(LZWEncodeState*);
 static int
 LZWSetupDecode(TIFF* tif)
 {
-	LZWDecodeState* sp = DecoderState(tif);
-	static const char module[] = " LZWSetupDecode";
+	LZWCodecState* sp = DecoderState(tif);
+	static const char module[] = "LZWSetupDecode";
 	int code;
 
 	assert(sp != NULL);
+
 	if (sp->dec_codetab == NULL) {
 		sp->dec_codetab = (code_t*)_TIFFmalloc(CSIZE*sizeof (code_t));
 		if (sp->dec_codetab == NULL) {
@@ -209,12 +189,13 @@ LZWSetupDecode(TIFF* tif)
 		/*
 		 * Pre-load the table.
 		 */
-		for (code = 255; code >= 0; code--) {
-			sp->dec_codetab[code].value = code;
-			sp->dec_codetab[code].firstchar = code;
-			sp->dec_codetab[code].length = 1;
-			sp->dec_codetab[code].next = NULL;
-		}
+                code = 255;
+                do {
+                    sp->dec_codetab[code].value = (u_char) code;
+                    sp->dec_codetab[code].firstchar = (u_char) code;
+                    sp->dec_codetab[code].length = 1;
+                    sp->dec_codetab[code].next = NULL;
+                } while (code--);
 	}
 	return (1);
 }
@@ -225,7 +206,7 @@ LZWSetupDecode(TIFF* tif)
 static int
 LZWPreDecode(TIFF* tif, tsample_t s)
 {
-	LZWDecodeState *sp = DecoderState(tif);
+	LZWCodecState *sp = DecoderState(tif);
 
 	(void) s;
 	assert(sp != NULL);
@@ -316,7 +297,7 @@ codeLoop(TIFF* tif)
 static int
 LZWDecode(TIFF* tif, tidata_t op0, tsize_t occ0, tsample_t s)
 {
-	LZWDecodeState *sp = DecoderState(tif);
+	LZWCodecState *sp = DecoderState(tif);
 	char *op = (char*) op0;
 	long occ = (long) occ0;
 	char *tp;
@@ -366,7 +347,7 @@ LZWDecode(TIFF* tif, tidata_t op0, tsize_t occ0, tsample_t s)
 			--tp;
 			t = codep->value;
 			codep = codep->next;
-			*tp = t;
+			*tp = (char) t;
 		} while (--residue && codep);
 		sp->dec_restart = 0;
 	}
@@ -392,7 +373,7 @@ LZWDecode(TIFF* tif, tidata_t op0, tsize_t occ0, tsample_t s)
 			NextCode(tif, sp, bp, code, GetNextCode);
 			if (code == CODE_EOI)
 				break;
-			*op++ = code, occ--;
+			*op++ = (char)code, occ--;
 			oldcodep = sp->dec_codetab + code;
 			continue;
 		}
@@ -401,8 +382,22 @@ LZWDecode(TIFF* tif, tidata_t op0, tsize_t occ0, tsample_t s)
 		/*
 	 	 * Add the new entry to the code table.
 	 	 */
-		assert(&sp->dec_codetab[0] <= free_entp && free_entp < &sp->dec_codetab[CSIZE]);
+		if (free_entp < &sp->dec_codetab[0] ||
+			free_entp >= &sp->dec_codetab[CSIZE]) {
+			TIFFError(tif->tif_name,
+			"LZWDecode: Corrupted LZW table at scanline %d",
+			tif->tif_row);
+			return (0);
+		}
+
 		free_entp->next = oldcodep;
+		if (free_entp->next < &sp->dec_codetab[0] ||
+			free_entp->next >= &sp->dec_codetab[CSIZE]) {
+			TIFFError(tif->tif_name,
+			"LZWDecode: Corrupted LZW table at scanline %d",
+			tif->tif_row);
+			return (0);
+		}
 		free_entp->firstchar = free_entp->next->firstchar;
 		free_entp->length = free_entp->next->length+1;
 		free_entp->value = (codep < free_entp) ?
@@ -419,6 +414,13 @@ LZWDecode(TIFF* tif, tidata_t op0, tsize_t occ0, tsample_t s)
 		 	 * Code maps to a string, copy string
 			 * value to output (written in reverse).
 		 	 */
+			if(codep->length == 0) {
+			    TIFFError(tif->tif_name,
+	    		    "LZWDecode: Wrong length of decoded string: "
+			    "data probably corrupted at scanline %d",
+			    tif->tif_row);	
+			    return (0);
+			}
 			if (codep->length > occ) {
 				/*
 				 * String is too long for decode buffer,
@@ -449,7 +451,7 @@ LZWDecode(TIFF* tif, tidata_t op0, tsize_t occ0, tsample_t s)
 				--tp;
 				t = codep->value;
 				codep = codep->next;
-				*tp = t;
+				*tp = (char) t;
 			} while (codep && tp > op);
 			if (codep) {
 			    codeLoop(tif);
@@ -457,7 +459,7 @@ LZWDecode(TIFF* tif, tidata_t op0, tsize_t occ0, tsample_t s)
 			}
 			op += len, occ -= len;
 		} else
-			*op++ = code, occ--;
+			*op++ = (char)code, occ--;
 	}
 
 	tif->tif_rawcp = (tidata_t) bp;
@@ -494,10 +496,10 @@ LZWDecode(TIFF* tif, tidata_t op0, tsize_t occ0, tsample_t s)
 	nextbits -= nbits;					\
 }
 
-static int LINKAGEMODE
+static int
 LZWDecodeCompat(TIFF* tif, tidata_t op0, tsize_t occ0, tsample_t s)
 {
-	LZWDecodeState *sp = DecoderState(tif);
+	LZWCodecState *sp = DecoderState(tif);
 	char *op = (char*) op0;
 	long occ = (long) occ0;
 	char *tp;
@@ -567,7 +569,7 @@ LZWDecodeCompat(TIFF* tif, tidata_t op0, tsize_t occ0, tsample_t s)
 			NextCode(tif, sp, bp, code, GetNextCodeCompat);
 			if (code == CODE_EOI)
 				break;
-			*op++ = code, occ--;
+			*op++ = (char) code, occ--;
 			oldcodep = sp->dec_codetab + code;
 			continue;
 		}
@@ -576,8 +578,22 @@ LZWDecodeCompat(TIFF* tif, tidata_t op0, tsize_t occ0, tsample_t s)
 		/*
 	 	 * Add the new entry to the code table.
 	 	 */
-		assert(&sp->dec_codetab[0] <= free_entp && free_entp < &sp->dec_codetab[CSIZE]);
+		if (free_entp < &sp->dec_codetab[0] ||
+			free_entp >= &sp->dec_codetab[CSIZE]) {
+			TIFFError(tif->tif_name,
+			"LZWDecodeCompat: Corrupted LZW table at scanline %d",
+			tif->tif_row);
+			return (0);
+		}
+
 		free_entp->next = oldcodep;
+		if (free_entp->next < &sp->dec_codetab[0] ||
+			free_entp->next >= &sp->dec_codetab[CSIZE]) {
+			TIFFError(tif->tif_name,
+			"LZWDecodeCompat: Corrupted LZW table at scanline %d",
+			tif->tif_row);
+			return (0);
+		}
 		free_entp->firstchar = free_entp->next->firstchar;
 		free_entp->length = free_entp->next->length+1;
 		free_entp->value = (codep < free_entp) ?
@@ -594,6 +610,13 @@ LZWDecodeCompat(TIFF* tif, tidata_t op0, tsize_t occ0, tsample_t s)
 		 	 * Code maps to a string, copy string
 			 * value to output (written in reverse).
 		 	 */
+			if(codep->length == 0) {
+			    TIFFError(tif->tif_name,
+	    		    "LZWDecodeCompat: Wrong length of decoded "
+			    "string: data probably corrupted at scanline %d",
+			    tif->tif_row);	
+			    return (0);
+			}
 			if (codep->length > occ) {
 				/*
 				 * String is too long for decode buffer,
@@ -619,11 +642,11 @@ LZWDecodeCompat(TIFF* tif, tidata_t op0, tsize_t occ0, tsample_t s)
 				*--tp = codep->value;
 			} while( (codep = codep->next) != NULL);
 		} else
-			*op++ = code, occ--;
+			*op++ = (char) code, occ--;
 	}
 
 	tif->tif_rawcp = (tidata_t) bp;
-	sp->lzw_nbits = nbits;
+	sp->lzw_nbits = (u_short) nbits;
 	sp->lzw_nextdata = nextdata;
 	sp->lzw_nextbits = nextbits;
 	sp->dec_nbitsmask = nbitsmask;
@@ -641,355 +664,59 @@ LZWDecodeCompat(TIFF* tif, tidata_t op0, tsize_t occ0, tsample_t s)
 }
 #endif /* LZW_COMPAT */
 
-/*
- * LZW Encoding.
- */
 
-static int
-LZWSetupEncode(TIFF* tif)
-{
-	LZWEncodeState* sp = EncoderState(tif);
-	static const char module[] = "LZWSetupEncode";
-
-	assert(sp != NULL);
-	sp->enc_hashtab = (hash_t*) _TIFFmalloc(HSIZE*sizeof (hash_t));
-	if (sp->enc_hashtab == NULL) {
-		TIFFError(module, "No space for LZW hash table");
-		return (0);
-	}
-	return (1);
-}
-
-/*
- * Reset encoding state at the start of a strip.
- */
-static int
-LZWPreEncode(TIFF* tif, tsample_t s)
-{
-	LZWEncodeState *sp = EncoderState(tif);
-
-	(void) s;
-	assert(sp != NULL);
-	sp->lzw_nbits = BITS_MIN;
-	sp->lzw_maxcode = MAXCODE(BITS_MIN);
-	sp->lzw_free_ent = CODE_FIRST;
-	sp->lzw_nextbits = 0;
-	sp->lzw_nextdata = 0;
-	sp->enc_checkpoint = CHECK_GAP;
-	sp->enc_ratio = 0;
-	sp->enc_incount = 0;
-	sp->enc_outcount = 0;
-	/*
-	 * The 4 here insures there is space for 2 max-sized
-	 * codes in LZWEncode and LZWPostDecode.
-	 */
-	sp->enc_rawlimit = tif->tif_rawdata + tif->tif_rawdatasize-1 - 4;
-	cl_hash(sp);		/* clear hash table */
-	sp->enc_oldcode = (hcode_t) -1;	/* generates CODE_CLEAR in LZWEncode */
-	return (1);
-}
-
-#define	CALCRATIO(sp, rat) {					\
-	if (incount > 0x007fffff) { /* NB: shift will overflow */\
-		rat = outcount >> 8;				\
-		rat = (rat == 0 ? 0x7fffffff : incount/rat);	\
-	} else							\
-		rat = (incount<<8) / outcount;			\
-}
-#define	PutNextCode(op, c) {					\
-	nextdata = (nextdata << nbits) | c;			\
-	nextbits += nbits;					\
-	*op++ = (u_char)(nextdata >> (nextbits-8));		\
-	nextbits -= 8;						\
-	if (nextbits >= 8) {					\
-		*op++ = (u_char)(nextdata >> (nextbits-8));	\
-		nextbits -= 8;					\
-	}							\
-	outcount += nbits;					\
-}
-
-/*
- * Encode a chunk of pixels.
- *
- * Uses an open addressing double hashing (no chaining) on the
- * prefix code/next character combination.  We do a variant of
- * Knuth's algorithm D (vol. 3, sec. 6.4) along with G. Knott's
- * relatively-prime secondary probe.  Here, the modular division
- * first probe is gives way to a faster exclusive-or manipulation.
- * Also do block compression with an adaptive reset, whereby the
- * code table is cleared when the compression ratio decreases,
- * but after the table fills.  The variable-length output codes
- * are re-sized at this point, and a CODE_CLEAR is generated
- * for the decoder.
- */
-static int LINKAGEMODE
-LZWEncode(TIFF* tif, tidata_t bp, tsize_t cc, tsample_t s)
-{
-	register LZWEncodeState *sp = EncoderState(tif);
-	register long fcode;
-	register hash_t *hp;
-	register int h, c;
-	hcode_t ent;
-	long disp;
-	long incount, outcount, checkpoint;
-	long nextdata, nextbits;
-	int free_ent, maxcode, nbits;
-	tidata_t op, limit;
-
-	(void) s;
-	if (sp == NULL)
-		return (0);
-	/*
-	 * Load local state.
-	 */
-	incount = sp->enc_incount;
-	outcount = sp->enc_outcount;
-	checkpoint = sp->enc_checkpoint;
-	nextdata = sp->lzw_nextdata;
-	nextbits = sp->lzw_nextbits;
-	free_ent = sp->lzw_free_ent;
-	maxcode = sp->lzw_maxcode;
-	nbits = sp->lzw_nbits;
-	op = tif->tif_rawcp;
-	limit = sp->enc_rawlimit;
-	ent = sp->enc_oldcode;
-
-	if (ent == (hcode_t) -1 && cc > 0) {
-		/*
-		 * NB: This is safe because it can only happen
-		 *     at the start of a strip where we know there
-		 *     is space in the data buffer.
-		 */
-		PutNextCode(op, CODE_CLEAR);
-		ent = *bp++; cc--; incount++;
-	}
-	while (cc > 0) {
-		c = *bp++; cc--; incount++;
-		fcode = ((long)c << BITS_MAX) + ent;
-		h = (c << HSHIFT) ^ ent;	/* xor hashing */
-#ifdef _WINDOWS
-		/*
-		 * Check hash index for an overflow.
-		 */
-		if (h >= HSIZE)
-			h -= HSIZE;
-#endif
-		hp = &sp->enc_hashtab[h];
-		if (hp->hash == fcode) {
-			ent = hp->code;
-			continue;
-		}
-		if (hp->hash >= 0) {
-			/*
-			 * Primary hash failed, check secondary hash.
-			 */
-			disp = HSIZE - h;
-			if (h == 0)
-				disp = 1;
-			do {
-				/*
-				 * Avoid pointer arithmetic 'cuz of
-				 * wraparound problems with segments.
-				 */
-				if ((h -= disp) < 0)
-					h += HSIZE;
-				hp = &sp->enc_hashtab[h];
-				if (hp->hash == fcode) {
-					ent = hp->code;
-					goto hit;
-				}
-			} while (hp->hash >= 0);
-		}
-		/*
-		 * New entry, emit code and add to table.
-		 */
-		/*
-		 * Verify there is space in the buffer for the code
-		 * and any potential Clear code that might be emitted
-		 * below.  The value of limit is setup so that there
-		 * are at least 4 bytes free--room for 2 codes.
-		 */
-		if (op > limit) {
-			tif->tif_rawcc = (tsize_t)(op - tif->tif_rawdata);
-			TIFFFlushData1(tif);
-			op = tif->tif_rawdata;
-		}
-		PutNextCode(op, ent);
-		ent = c;
-		hp->code = free_ent++;
-		hp->hash = fcode;
-		if (free_ent == CODE_MAX-1) {
-			/* table is full, emit clear code and reset */
-			cl_hash(sp);
-			sp->enc_ratio = 0;
-			incount = 0;
-			outcount = 0;
-			free_ent = CODE_FIRST;
-			PutNextCode(op, CODE_CLEAR);
-			nbits = BITS_MIN;
-			maxcode = MAXCODE(BITS_MIN);
-		} else {
-			/*
-			 * If the next entry is going to be too big for
-			 * the code size, then increase it, if possible.
-			 */
-			if (free_ent > maxcode) {
-				nbits++;
-				assert(nbits <= BITS_MAX);
-				maxcode = (int) MAXCODE(nbits);
-			} else if (incount >= checkpoint) {
-				long rat;
-				/*
-				 * Check compression ratio and, if things seem
-				 * to be slipping, clear the hash table and
-				 * reset state.  The compression ratio is a
-				 * 24+8-bit fractional number.
-				 */
-				checkpoint = incount+CHECK_GAP;
-				CALCRATIO(sp, rat);
-				if (rat <= sp->enc_ratio) {
-					cl_hash(sp);
-					sp->enc_ratio = 0;
-					incount = 0;
-					outcount = 0;
-					free_ent = CODE_FIRST;
-					PutNextCode(op, CODE_CLEAR);
-					nbits = BITS_MIN;
-					maxcode = MAXCODE(BITS_MIN);
-				} else
-					sp->enc_ratio = rat;
-			}
-		}
-	hit:
-		;
-	}
-
-	/*
-	 * Restore global state.
-	 */
-	sp->enc_incount = incount;
-	sp->enc_outcount = outcount;
-	sp->enc_checkpoint = checkpoint;
-	sp->enc_oldcode = ent;
-	sp->lzw_nextdata = nextdata;
-	sp->lzw_nextbits = nextbits;
-	sp->lzw_free_ent = free_ent;
-	sp->lzw_maxcode = maxcode;
-	sp->lzw_nbits = nbits;
-	tif->tif_rawcp = op;
-	return (1);
-}
-
-/*
- * Finish off an encoded strip by flushing the last
- * string and tacking on an End Of Information code.
- */
-static int
-LZWPostEncode(TIFF* tif)
-{
-	register LZWEncodeState *sp = EncoderState(tif);
-	tidata_t op = tif->tif_rawcp;
-	long nextbits = sp->lzw_nextbits;
-	long nextdata = sp->lzw_nextdata;
-	long outcount = sp->enc_outcount;
-	int nbits = sp->lzw_nbits;
-
-	if (op > sp->enc_rawlimit) {
-		tif->tif_rawcc = (tsize_t)(op - tif->tif_rawdata);
-		TIFFFlushData1(tif);
-		op = tif->tif_rawdata;
-	}
-	if (sp->enc_oldcode != (hcode_t) -1) {
-		PutNextCode(op, sp->enc_oldcode);
-		sp->enc_oldcode = (hcode_t) -1;
-	}
-	PutNextCode(op, CODE_EOI);
-	if (nextbits > 0)
-		*op++ = (u_char)(nextdata << (8-nextbits));
-	tif->tif_rawcc = (tsize_t)(op - tif->tif_rawdata);
-	return (1);
-}
-
-/*
- * Reset encoding hash table.
- */
-static void
-cl_hash(LZWEncodeState* sp)
-{
-	register hash_t *hp = &sp->enc_hashtab[HSIZE-1];
-	register long i = HSIZE-8;
-
- 	do {
-		i -= 8;
-		hp[-7].hash = -1;
-		hp[-6].hash = -1;
-		hp[-5].hash = -1;
-		hp[-4].hash = -1;
-		hp[-3].hash = -1;
-		hp[-2].hash = -1;
-		hp[-1].hash = -1;
-		hp[ 0].hash = -1;
-		hp -= 8;
-	} while (i >= 0);
-    	for (i += 8; i > 0; i--, hp--)
-		hp->hash = -1;
-}
 
 static void
 LZWCleanup(TIFF* tif)
 {
-	if (tif->tif_data) {
-		if (tif->tif_mode == O_RDONLY) {
-			if (DecoderState(tif)->dec_codetab)
-				_TIFFfree(DecoderState(tif)->dec_codetab);
-		} else {
-			if (EncoderState(tif)->enc_hashtab)
-				_TIFFfree(EncoderState(tif)->enc_hashtab);
-		}
-		_TIFFfree(tif->tif_data);
-		tif->tif_data = NULL;
-	}
+    if (tif->tif_data) {
+        if (DecoderState(tif)->dec_codetab)
+            _TIFFfree(DecoderState(tif)->dec_codetab);
+        _TIFFfree(tif->tif_data);
+        tif->tif_data = NULL;
+    }
+}
+
+static int
+LZWSetupEncode(TIFF* tif)
+{
+    TIFFError(tif->tif_name,
+              "LZW compression is not available to due to Unisys patent enforcement");
+    return (0);
 }
 
 int
 TIFFInitLZW(TIFF* tif, int scheme)
 {
 	assert(scheme == COMPRESSION_LZW);
+
 	/*
 	 * Allocate state block so tag methods have storage to record values.
 	 */
-	if (tif->tif_mode == O_RDONLY) {
-		tif->tif_data = (tidata_t) _TIFFmalloc(sizeof (LZWDecodeState));
-		if (tif->tif_data == NULL)
-			goto bad;
-		DecoderState(tif)->dec_codetab = NULL;
-		DecoderState(tif)->dec_decode = NULL;
-	} else {
-		tif->tif_data = (tidata_t) _TIFFmalloc(sizeof (LZWEncodeState));
-		if (tif->tif_data == NULL)
-			goto bad;
-		EncoderState(tif)->enc_hashtab = NULL;
-	}
+	tif->tif_data = (tidata_t) _TIFFmalloc(sizeof (LZWCodecState));
+	if (tif->tif_data == NULL)
+		goto bad;
+	DecoderState(tif)->dec_codetab = NULL;
+	DecoderState(tif)->dec_decode = NULL;
+
 	/*
 	 * Install codec methods.
 	 */
+	tif->tif_setupencode = LZWSetupEncode;
 	tif->tif_setupdecode = LZWSetupDecode;
 	tif->tif_predecode = LZWPreDecode;
 	tif->tif_decoderow = LZWDecode;
 	tif->tif_decodestrip = LZWDecode;
 	tif->tif_decodetile = LZWDecode;
-	tif->tif_setupencode = LZWSetupEncode;
-	tif->tif_preencode = LZWPreEncode;
-	tif->tif_postencode = LZWPostEncode;
-	tif->tif_encoderow = LZWEncode;
-	tif->tif_encodestrip = LZWEncode;
-	tif->tif_encodetile = LZWEncode;
 	tif->tif_cleanup = LZWCleanup;
+
 	/*
 	 * Setup predictor setup.
 	 */
 	(void) TIFFPredictorInit(tif);
+
 	return (1);
+
 bad:
 	TIFFError("TIFFInitLZW", "No space for LZW state block");
 	return (0);

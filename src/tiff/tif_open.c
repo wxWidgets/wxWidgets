@@ -4,23 +4,23 @@
  * Copyright (c) 1988-1997 Sam Leffler
  * Copyright (c) 1991-1997 Silicon Graphics, Inc.
  *
- * Permission to use, copy, modify, distribute, and sell this software and
+ * Permission to use, copy, modify, distribute, and sell this software and 
  * its documentation for any purpose is hereby granted without fee, provided
  * that (i) the above copyright notices and this permission notice appear in
  * all copies of the software and related documentation, and (ii) the names of
  * Sam Leffler and Silicon Graphics may not be used in any advertising or
  * publicity relating to the software without the specific, prior written
  * permission of Sam Leffler and Silicon Graphics.
- *
- * THE SOFTWARE IS PROVIDED "AS-IS" AND WITHOUT WARRANTY OF ANY KIND,
- * EXPRESS, IMPLIED OR OTHERWISE, INCLUDING WITHOUT LIMITATION, ANY
- * WARRANTY OF MERCHANTABILITY OR FITNESS FOR A PARTICULAR PURPOSE.
- *
+ * 
+ * THE SOFTWARE IS PROVIDED "AS-IS" AND WITHOUT WARRANTY OF ANY KIND, 
+ * EXPRESS, IMPLIED OR OTHERWISE, INCLUDING WITHOUT LIMITATION, ANY 
+ * WARRANTY OF MERCHANTABILITY OR FITNESS FOR A PARTICULAR PURPOSE.  
+ * 
  * IN NO EVENT SHALL SAM LEFFLER OR SILICON GRAPHICS BE LIABLE FOR
  * ANY SPECIAL, INCIDENTAL, INDIRECT OR CONSEQUENTIAL DAMAGES OF ANY KIND,
  * OR ANY DAMAGES WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS,
- * WHETHER OR NOT ADVISED OF THE POSSIBILITY OF DAMAGE, AND ON ANY THEORY OF
- * LIABILITY, ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE
+ * WHETHER OR NOT ADVISED OF THE POSSIBILITY OF DAMAGE, AND ON ANY THEORY OF 
+ * LIABILITY, ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE 
  * OF THIS SOFTWARE.
  */
 
@@ -29,22 +29,22 @@
  */
 #include "tiffiop.h"
 
-void LINKAGEMODE _TIFFSetDefaultCompressionState(TIFF* tif);
+void _TIFFSetDefaultCompressionState(TIFF* tif);
 
 static const long typemask[13] = {
-	0L,		/* TIFF_NOTYPE */
-	0x000000ffL,	/* TIFF_BYTE */
-	0xffffffffL,	/* TIFF_ASCII */
-	0x0000ffffL,	/* TIFF_SHORT */
-	0xffffffffL,	/* TIFF_LONG */
-	0xffffffffL,	/* TIFF_RATIONAL */
-	0x000000ffL,	/* TIFF_SBYTE */
-	0x000000ffL,	/* TIFF_UNDEFINED */
-	0x0000ffffL,	/* TIFF_SSHORT */
-	0xffffffffL,	/* TIFF_SLONG */
-	0xffffffffL,	/* TIFF_SRATIONAL */
-	0xffffffffL,	/* TIFF_FLOAT */
-	0xffffffffL,	/* TIFF_DOUBLE */
+	(long)0L,		/* TIFF_NOTYPE */
+	(long)0x000000ffL,	/* TIFF_BYTE */
+	(long)0xffffffffL,	/* TIFF_ASCII */
+	(long)0x0000ffffL,	/* TIFF_SHORT */
+	(long)0xffffffffL,	/* TIFF_LONG */
+	(long)0xffffffffL,	/* TIFF_RATIONAL */
+	(long)0x000000ffL,	/* TIFF_SBYTE */
+	(long)0x000000ffL,	/* TIFF_UNDEFINED */
+	(long)0x0000ffffL,	/* TIFF_SSHORT */
+	(long)0xffffffffL,	/* TIFF_SLONG */
+	(long)0xffffffffL,	/* TIFF_SRATIONAL */
+	(long)0xffffffffL,	/* TIFF_FLOAT */
+	(long)0xffffffffL,	/* TIFF_DOUBLE */
 };
 static const int bigTypeshift[13] = {
 	0,		/* TIFF_NOTYPE */
@@ -156,6 +156,11 @@ TIFFClientOpen(
 	tif->tif_curstrip = (tstrip_t) -1;	/* invalid strip */
 	tif->tif_row = (uint32) -1;		/* read/write pre-increment */
 	tif->tif_clientdata = clientdata;
+	if (!readproc || !writeproc || !seekproc || !closeproc
+			|| !sizeproc || !mapproc || !unmapproc) {
+		TIFFError(module, "One of the client procedures are NULL pointer");
+		goto bad3;
+	}
 	tif->tif_readproc = readproc;
 	tif->tif_writeproc = writeproc;
 	tif->tif_seekproc = seekproc;
@@ -170,11 +175,12 @@ TIFFClientOpen(
 	 * a file is opened read-only.
 	 */
 	tif->tif_flags = FILLORDER_MSB2LSB;
-	if (m == O_RDONLY)
+	if (m == O_RDONLY )
+            tif->tif_flags |= TIFF_MAPPED;
+
 #ifdef STRIPCHOP_DEFAULT
-		tif->tif_flags |= TIFF_MAPPED|STRIPCHOP_DEFAULT;
-#else
-		tif->tif_flags |= TIFF_MAPPED;
+	if (m == O_RDONLY || m == O_RDWR)
+		tif->tif_flags |= STRIPCHOP_DEFAULT;
 #endif
 
 	{ union { int32 i; char c[4]; } u; u.i = 1; bigendian = u.c[0] == 0; }
@@ -284,6 +290,15 @@ TIFFClientOpen(
 		if (tif->tif_flags & TIFF_SWAB)
 			TIFFSwabShort(&tif->tif_header.tiff_version);
 		tif->tif_header.tiff_diroff = 0;	/* filled in later */
+
+                /*
+                 * This seek shouldn't be necessary, but I have had some
+                 * crazy problems with a failed fseek() on Solaris leaving
+                 * the current file pointer out of whack when an fwrite()
+                 * is done. 
+                 */
+                TIFFSeekFile( tif, 0, SEEK_SET );
+
 		if (!WriteOK(tif, &tif->tif_header, sizeof (TIFFHeader))) {
 			TIFFError(name, "Error writing TIFF header");
 			goto bad;
@@ -298,6 +313,8 @@ TIFFClientOpen(
 		if (!TIFFDefaultDirectory(tif))
 			goto bad;
 		tif->tif_diroff = 0;
+		tif->tif_dirlist = NULL;
+		tif->tif_dirnumber = 0;
 		return (tif);
 	}
 	/*
@@ -327,7 +344,7 @@ TIFFClientOpen(
 		TIFFError(name,
 		    "Not a TIFF file, bad version number %d (0x%x)",
 		    tif->tif_header.tiff_version,
-		    tif->tif_header.tiff_version);
+		    tif->tif_header.tiff_version); 
 		goto bad;
 	}
 	tif->tif_flags |= TIFF_MYBUFFER;
@@ -369,6 +386,7 @@ bad:
 	return ((TIFF*)0);
 bad2:
 	(void) (*closeproc)(clientdata);
+bad3:
 	return ((TIFF*)0);
 }
 

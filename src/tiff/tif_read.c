@@ -32,8 +32,8 @@
 #include <stdio.h>
 #include <assert.h>
 
-static	int TIFFFillStrip(TIFF*, tstrip_t);
-static	int TIFFFillTile(TIFF*, ttile_t);
+	int TIFFFillStrip(TIFF*, tstrip_t);
+	int TIFFFillTile(TIFF*, ttile_t);
 static	int TIFFStartStrip(TIFF*, tstrip_t);
 static	int TIFFStartTile(TIFF*, ttile_t);
 static	int TIFFCheckRead(TIFF*, int);
@@ -104,7 +104,10 @@ TIFFReadScanline(TIFF* tif, tdata_t buf, uint32 row, tsample_t sample)
 		 */
 		e = (*tif->tif_decoderow)
 		    (tif, (tidata_t) buf, tif->tif_scanlinesize, sample);
-		tif->tif_row++;
+
+                /* we are now poised at the beginning of the next row */
+                tif->tif_row = row + 1;
+
 		if (e)
 			(*tif->tif_postdecode)(tif, (tidata_t) buf,
 			    tif->tif_scanlinesize);
@@ -122,6 +125,7 @@ TIFFReadEncodedStrip(TIFF* tif, tstrip_t strip, tdata_t buf, tsize_t size)
 	TIFFDirectory *td = &tif->tif_dir;
 	uint32 nrows;
 	tsize_t stripsize;
+        tstrip_t sep_strip, strips_per_sep;
 
 	if (!TIFFCheckRead(tif, 0))
 		return (-1);
@@ -132,18 +136,29 @@ TIFFReadEncodedStrip(TIFF* tif, tstrip_t strip, tdata_t buf, tsize_t size)
 	}
 	/*
 	 * Calculate the strip size according to the number of
-	 * rows in the strip (check for truncated last strip).
+	 * rows in the strip (check for truncated last strip on any
+         * of the separations).
 	 */
-	if (strip != td->td_nstrips-1 ||
+        if( td->td_rowsperstrip >= td->td_imagelength )
+            strips_per_sep = 1;
+        else
+            strips_per_sep = (td->td_imagelength+td->td_rowsperstrip-1)
+                / td->td_rowsperstrip;
+
+        sep_strip = strip % strips_per_sep;
+
+	if (sep_strip != strips_per_sep-1 ||
 	    (nrows = td->td_imagelength % td->td_rowsperstrip) == 0)
 		nrows = td->td_rowsperstrip;
+
 	stripsize = TIFFVStripSize(tif, nrows);
 	if (size == (tsize_t) -1)
 		size = stripsize;
 	else if (size > stripsize)
 		size = stripsize;
-	if (TIFFFillStrip(tif, strip) && (*tif->tif_decodestrip)(tif,
-	    (tidata_t) buf, size, (tsample_t)(strip / td->td_stripsperimage))) {
+	if (TIFFFillStrip(tif, strip) 
+            && (*tif->tif_decodestrip)(tif, (tidata_t) buf, size, 
+                         (tsample_t)(strip / td->td_stripsperimage)) > 0 ) {
 		(*tif->tif_postdecode)(tif, (tidata_t) buf, size);
 		return (size);
 	} else
@@ -226,7 +241,7 @@ TIFFReadRawStrip(TIFF* tif, tstrip_t strip, tdata_t buf, tsize_t size)
  * The data buffer is expanded, as necessary, to
  * hold the strip's data.
  */
-static int
+int
 TIFFFillStrip(TIFF* tif, tstrip_t strip)
 {
 	static const char module[] = "TIFFFillStrip";
@@ -256,7 +271,7 @@ TIFFFillStrip(TIFF* tif, tstrip_t strip)
 		if ((tif->tif_flags & TIFF_MYBUFFER) && tif->tif_rawdata)
 			_TIFFfree(tif->tif_rawdata);
 		tif->tif_flags &= ~TIFF_MYBUFFER;
-		if (td->td_stripoffset[strip] + bytecount > tif->tif_size) {
+		if ( td->td_stripoffset[strip] + bytecount > tif->tif_size) {
 			/*
 			 * This error message might seem strange, but it's
 			 * what would happen if a read were done instead.
@@ -423,7 +438,7 @@ TIFFReadRawTile(TIFF* tif, ttile_t tile, tdata_t buf, tsize_t size)
  * The data buffer is expanded, as necessary, to
  * hold the tile's data.
  */
-static int
+int
 TIFFFillTile(TIFF* tif, ttile_t tile)
 {
 	static const char module[] = "TIFFFillTile";
@@ -453,7 +468,7 @@ TIFFFillTile(TIFF* tif, ttile_t tile)
 		if ((tif->tif_flags & TIFF_MYBUFFER) && tif->tif_rawdata)
 			_TIFFfree(tif->tif_rawdata);
 		tif->tif_flags &= ~TIFF_MYBUFFER;
-		if (td->td_stripoffset[tile] + bytecount > tif->tif_size) {
+		if ( td->td_stripoffset[tile] + bytecount > tif->tif_size) {
 			tif->tif_curtile = NOTILE;
 			return (0);
 		}

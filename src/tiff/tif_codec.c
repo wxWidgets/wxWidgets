@@ -4,23 +4,23 @@
  * Copyright (c) 1988-1997 Sam Leffler
  * Copyright (c) 1991-1997 Silicon Graphics, Inc.
  *
- * Permission to use, copy, modify, distribute, and sell this software and
+ * Permission to use, copy, modify, distribute, and sell this software and 
  * its documentation for any purpose is hereby granted without fee, provided
  * that (i) the above copyright notices and this permission notice appear in
  * all copies of the software and related documentation, and (ii) the names of
  * Sam Leffler and Silicon Graphics may not be used in any advertising or
  * publicity relating to the software without the specific, prior written
  * permission of Sam Leffler and Silicon Graphics.
- *
- * THE SOFTWARE IS PROVIDED "AS-IS" AND WITHOUT WARRANTY OF ANY KIND,
- * EXPRESS, IMPLIED OR OTHERWISE, INCLUDING WITHOUT LIMITATION, ANY
- * WARRANTY OF MERCHANTABILITY OR FITNESS FOR A PARTICULAR PURPOSE.
- *
+ * 
+ * THE SOFTWARE IS PROVIDED "AS-IS" AND WITHOUT WARRANTY OF ANY KIND, 
+ * EXPRESS, IMPLIED OR OTHERWISE, INCLUDING WITHOUT LIMITATION, ANY 
+ * WARRANTY OF MERCHANTABILITY OR FITNESS FOR A PARTICULAR PURPOSE.  
+ * 
  * IN NO EVENT SHALL SAM LEFFLER OR SILICON GRAPHICS BE LIABLE FOR
  * ANY SPECIAL, INCIDENTAL, INDIRECT OR CONSEQUENTIAL DAMAGES OF ANY KIND,
  * OR ANY DAMAGES WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS,
- * WHETHER OR NOT ADVISED OF THE POSSIBILITY OF DAMAGE, AND ON ANY THEORY OF
- * LIABILITY, ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE
+ * WHETHER OR NOT ADVISED OF THE POSSIBILITY OF DAMAGE, AND ON ANY THEORY OF 
+ * LIABILITY, ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE 
  * OF THIS SOFTWARE.
  */
 
@@ -31,7 +31,7 @@
  */
 #include "tiffiop.h"
 
-static	int LINKAGEMODE NotConfigured(TIFF*, int);
+static	int NotConfigured(TIFF*, int);
 
 #ifndef	LZW_SUPPORT
 #define	TIFFInitLZW		NotConfigured
@@ -91,6 +91,7 @@ TIFFCodec _TIFFBuiltinCODECS[] = {
     { "CCITT Group 4",	COMPRESSION_CCITTFAX4,	TIFFInitCCITTFax4 },
     { "ISO JBIG",	COMPRESSION_JBIG,	TIFFInitJBIG },
     { "Deflate",	COMPRESSION_DEFLATE,	TIFFInitZIP },
+    { "AdobeDeflate",   COMPRESSION_ADOBE_DEFLATE , TIFFInitZIP }, 
     { "PixarLog",	COMPRESSION_PIXARLOG,	TIFFInitPixarLog },
     { "SGILog",		COMPRESSION_SGILOG,	TIFFInitSGILog },
     { "SGILog24",	COMPRESSION_SGILOG24,	TIFFInitSGILog },
@@ -107,10 +108,43 @@ _notConfigured(TIFF* tif)
 	return (0);
 }
 
-static int LINKAGEMODE
+static int
 NotConfigured(TIFF* tif, int scheme)
 {
-	tif->tif_setupdecode = _notConfigured;
-	tif->tif_setupencode = _notConfigured;
-	return (1);
+    (void) scheme;
+    
+    tif->tif_decodestatus = FALSE;
+    tif->tif_setupdecode = _notConfigured;
+    tif->tif_encodestatus = FALSE;
+    tif->tif_setupencode = _notConfigured;
+    return (1);
 }
+
+/************************************************************************/
+/*                       TIFFIsCODECConfigured()                        */
+/************************************************************************/
+
+/**
+ * Check whether we have working codec for the specific coding scheme.
+ * 
+ * @return returns 1 if the codec is configured and working. Otherwise
+ * 0 will be returned.
+ */
+
+int
+TIFFIsCODECConfigured(uint16 scheme)
+{
+	const TIFFCodec* codec = TIFFFindCODEC(scheme);
+
+	if(codec == NULL) {
+            return 0;
+        }
+        if(codec->init == NULL) {
+            return 0;
+        }
+	if(codec->init != NotConfigured){
+            return 1;
+        }
+	return 0;
+}
+

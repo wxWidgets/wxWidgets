@@ -46,13 +46,7 @@
  * directory ftp://ftp.uu.net/pub/archiving/zip/doc.  The library was
  * last found at ftp://ftp.uu.net/pub/archiving/zip/zlib/zlib-0.99.tar.gz.
  */
-/* Watcom C++ (or its make utility) doesn't like long filenames */
-#ifdef __WATCOMC__
-#include "tif_pred.h"
-#else
 #include "tif_predict.h"
-#endif
-
 #include "zlib.h"
 
 #include <stdio.h>
@@ -234,7 +228,8 @@ ZIPPostEncode(TIFF* tif)
 		switch (state) {
 		case Z_STREAM_END:
 		case Z_OK:
-		    if (sp->stream.avail_out != tif->tif_rawdatasize) {
+		    if ((int)sp->stream.avail_out != (int)tif->tif_rawdatasize)
+                    {
 			    tif->tif_rawcc =
 				tif->tif_rawdatasize - sp->stream.avail_out;
 			    TIFFFlushData1(tif);
@@ -318,7 +313,7 @@ TIFFInitZIP(TIFF* tif, int scheme)
 {
 	ZIPState* sp;
 
-	assert(scheme == COMPRESSION_DEFLATE);
+	assert( (scheme == COMPRESSION_DEFLATE) || (scheme == COMPRESSION_ADOBE_DEFLATE));
 
 	/*
 	 * Allocate state block so tag methods have storage to record values.
@@ -337,10 +332,10 @@ TIFFInitZIP(TIFF* tif, int scheme)
 	 * override parent get/set field methods.
 	 */
 	_TIFFMergeFieldInfo(tif, zipFieldInfo, N(zipFieldInfo));
-	sp->vgetparent = tif->tif_vgetfield;
-	tif->tif_vgetfield = ZIPVGetField;	/* hook for codec tags */
-	sp->vsetparent = tif->tif_vsetfield;
-	tif->tif_vsetfield = ZIPVSetField;	/* hook for codec tags */
+	sp->vgetparent = tif->tif_tagmethods.vgetfield;
+	tif->tif_tagmethods.vgetfield = ZIPVGetField;	/* hook for codec tags */
+	sp->vsetparent = tif->tif_tagmethods.vsetfield;
+	tif->tif_tagmethods.vsetfield = ZIPVSetField;	/* hook for codec tags */
 
 	/* Default values for codec-specific fields */
 	sp->zipquality = Z_DEFAULT_COMPRESSION;	/* default comp. level */

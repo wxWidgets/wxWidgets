@@ -33,7 +33,7 @@
  * #defines on the command line, this file can be edited to
  * configure the library.  Otherwise, one can override portability
  * and configuration-related definitions from a Makefile or command
- * line by defining FEATURE_SUPPORT and COMPRESSION_SUPPORT (see below).
+ * line by defining COMPRESSION_SUPPORT (see below).
  */
 
 /*
@@ -51,6 +51,8 @@
  * HOST_BIGENDIAN	native cpu byte order: 1 if big-endian (Motorola)
  *			or 0 if little-endian (Intel); this may be used
  *			in codecs to optimize code
+ * USE_64BIT_API	set to 1 if tif_unix.c should use lseek64(),
+ *                      fstat64() and stat64 allowing 2-4GB files.
  */
 #ifndef HAVE_IEEEFP
 #define	HAVE_IEEEFP	1
@@ -62,24 +64,9 @@
 #define	HOST_BIGENDIAN	1
 #endif
 
-#ifndef FEATURE_SUPPORT
-/*
- * Feature support definitions:
- *
- *    COLORIMETRY_SUPPORT enable support for 6.0 colorimetry tags
- *    YCBCR_SUPPORT	enable support for 6.0 YCbCr tags
- *    CMYK_SUPPORT	enable support for 6.0 CMYK tags
- *    ICC_SUPPORT	enable support for ICC profile tag
- *    PHOTOSHOP_SUPPORT enable support for PHOTOSHOP resource tag
- *    IPTC_SUPPORT  enable support for RichTIFF IPTC tag
- */
-#define	COLORIMETRY_SUPPORT
-#define	YCBCR_SUPPORT
-#define	CMYK_SUPPORT
-#define	ICC_SUPPORT
-#define PHOTOSHOP_SUPPORT
-#define IPTC_SUPPORT
-#endif /* FEATURE_SUPPORT */
+#ifndef USE_64BIT_API
+#  define USE_64BIT_API	0
+#endif
 
 #ifndef COMPRESSION_SUPPORT
 /*
@@ -91,7 +78,7 @@
  *    THUNDER_SUPPORT	enable support for ThunderScan 4-bit RLE algorithm
  *    NEXT_SUPPORT	enable support for NeXT 2-bit RLE algorithm
  *    OJPEG_SUPPORT	enable support for 6.0-style JPEG DCT algorithms
- *			(no builtin support, only a codec hook)
+ *			(requires IJG software)
  *    JPEG_SUPPORT	enable support for post-6.0-style JPEG DCT algorithms
  *			(requires freely available IJG software, see tif_jpeg.c)
  *    ZIP_SUPPORT	enable support for Deflate algorithm
@@ -127,6 +114,16 @@
  *			or not to convert single-strip uncompressed images
  *			to mutiple strips of ~8Kb--to reduce memory use)
  * SUBIFD_SUPPORT	enable support for SubIFD tag (thumbnails and such)
+ * DEFAULT_EXTRASAMPLE_AS_ALPHA
+ *                      The RGBA interface will treat a fourth sample with
+ *                      no EXTRASAMPLE_ value as being ASSOCALPHA.  Many
+ *                      packages produce RGBA files but don't mark the alpha
+ *                      properly.
+ * CHECK_JPEG_YCBCR_SUBSAMPLING
+ *                      Enable picking up YCbCr subsampling info from the
+ *                      JPEG data stream to support files lacking the tag.
+ *                      See Bug 168 in Bugzilla, and JPEGFixupTestSubsampling()
+ *                      for details. 
  */
 #ifndef STRIPCHOP_DEFAULT
 #define	STRIPCHOP_DEFAULT	TIFF_STRIPCHOP	/* default is to enable */
@@ -134,4 +131,23 @@
 #ifndef SUBIFD_SUPPORT
 #define	SUBIFD_SUPPORT		1	/* enable SubIFD tag (330) support */
 #endif
+#ifndef DEFAULT_EXTRASAMPLE_AS_ALPHA
+#define DEFAULT_EXTRASAMPLE_AS_ALPHA 1
+#endif
+#ifndef CHECK_JPEG_YCBCR_SUBSAMPLING
+#define CHECK_JPEG_YCBCR_SUBSAMPLING 1
+#endif
+
+/*
+ * Feature support definitions.
+ * XXX: These macros are obsoleted. Don't use them in your apps!
+ * Macros stays here for backward compatibility and should be always defined.
+ */
+#define	COLORIMETRY_SUPPORT
+#define	YCBCR_SUPPORT
+#define	CMYK_SUPPORT
+#define	ICC_SUPPORT
+#define PHOTOSHOP_SUPPORT
+#define IPTC_SUPPORT
+
 #endif /* _TIFFCONF_ */

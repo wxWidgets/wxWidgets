@@ -360,6 +360,8 @@ static const char* StateNames[] = {
     doneBlack1d:							\
 	if (a0 >= lastx)						\
 	    goto done1d;						\
+        if( *(pa-1) == 0 && *(pa-2) == 0 )				\
+            pa -= 2;                                                    \
     }									\
 eof1d:									\
     prematureEOF(a0);							\
@@ -485,9 +487,10 @@ done1d:									\
 	    goto eol2d;							\
 	case S_EOL:							\
 	    *pa++ = lastx - a0;						\
-	    NeedBits8(5,eof2d);						\
-	    if (GetBits(5))						\
+	    NeedBits8(4,eof2d);						\
+	    if (GetBits(4))						\
 		unexpected("EOL", a0);					\
+            ClrBits(4);                                                 \
 	    EOLcnt = 1;							\
 	    goto eol2d;							\
 	default:							\

@@ -84,15 +84,8 @@
  * 
  */
 
-/* Watcom C++ (or its make utility) doesn't like long filenames */
-#ifdef __WATCOMC__
-#include "tif_pred.h"
-#else
 #include "tif_predict.h"
-#endif
-
 #include "zlib.h"
-#include "zutil.h"
 
 #include <stdio.h>
 #include <assert.h>
@@ -496,8 +489,7 @@ PixarLogMakeTables(PixarLogState *sp)
 
     int  nlin, lt2size;
     int  i, j;
-    double  b, c, linstep, max;
-    double  k, v, dv, r, lr2, r2;
+    double  b, c, linstep, v;
     float *ToLinearF;
     uint16 *ToLinear16;
     unsigned char *ToLinear8;
@@ -506,14 +498,14 @@ PixarLogMakeTables(PixarLogState *sp)
     uint16  *From8;
 
     c = log(RATIO);	
-    nlin = 1./c;	/* nlin must be an integer */
+    nlin = (int)1./c;	/* nlin must be an integer */
     c = 1./nlin;
     b = exp(-c*ONE);	/* multiplicative scale factor [b*exp(c*ONE) = 1] */
     linstep = b*c*exp(1.);
 
     LogK1 = 1./c;	/* if (v >= 2)  token = k1*log(v*k2) */
     LogK2 = 1./b;
-    lt2size = (2./linstep)+1;
+    lt2size = (int)(2./linstep) + 1;
     FromLT2 = (uint16 *)_TIFFmalloc(lt2size*sizeof(uint16));
     From14 = (uint16 *)_TIFFmalloc(16384*sizeof(uint16));
     From8 = (uint16 *)_TIFFmalloc(256*sizeof(uint16));
@@ -551,9 +543,9 @@ PixarLogMakeTables(PixarLogState *sp)
 
     for (i = 0; i < TSIZEP1; i++)  {
 	v = ToLinearF[i]*65535.0 + 0.5;
-	ToLinear16[i] = (v > 65535.0) ? 65535 : v;
+	ToLinear16[i] = (v > 65535.0) ? 65535 : (uint16)v;
 	v = ToLinearF[i]*255.0  + 0.5;
-	ToLinear8[i]  = (v > 255.0) ? 255 : v;
+	ToLinear8[i]  = (v > 255.0) ? 255 : (unsigned char)v;
     }
 
     j = 0;
@@ -638,11 +630,23 @@ PixarLogGuessDataFmt(TIFFDirectory *td)
 	return guess;
 }
 
+static uint32
+multiply(size_t m1, size_t m2)
+{
+	uint32	bytes = m1 * m2;
+
+	if (m1 && bytes / m1 != m2)
+		bytes = 0;
+
+	return bytes;
+}
+
 static int
 PixarLogSetupDecode(TIFF* tif)
 {
 	TIFFDirectory *td = &tif->tif_dir;
 	PixarLogState* sp = DecoderState(tif);
+	tsize_t tbuf_size;
 	static const char module[] = "PixarLogSetupDecode";
 
 	assert(sp != NULL);
@@ -655,8 +659,13 @@ PixarLogSetupDecode(TIFF* tif)
 
 	sp->stride = (td->td_planarconfig == PLANARCONFIG_CONTIG ?
 	    td->td_samplesperpixel : 1);
-	sp->tbuf = (uint16 *) _TIFFmalloc(sp->stride * 
-		td->td_imagewidth * td->td_rowsperstrip * sizeof(uint16));
+	tbuf_size = multiply(multiply(multiply(sp->stride, td->td_imagewidth),
+				      td->td_rowsperstrip), sizeof(uint16));
+	if (tbuf_size == 0)
+		return (0);
+	sp->tbuf = (uint16 *) _TIFFmalloc(tbuf_size);
+	if (sp->tbuf == NULL)
+		return (0);
 	if (sp->user_datafmt == PIXARLOGDATAFMT_UNKNOWN)
 		sp->user_datafmt = PixarLogGuessDataFmt(td);
 	if (sp->user_datafmt == PIXARLOGDATAFMT_UNKNOWN) {
@@ -681,7 +690,6 @@ PixarLogSetupDecode(TIFF* tif)
 static int
 PixarLogPreDecode(TIFF* tif, tsample_t s)
 {
-	TIFFDirectory *td = &tif->tif_dir;
 	PixarLogState* sp = DecoderState(tif);
 
 	(void) s;
@@ -807,6 +815,7 @@ PixarLogSetupEncode(TIFF* tif)
 {
 	TIFFDirectory *td = &tif->tif_dir;
 	PixarLogState* sp = EncoderState(tif);
+	tsize_t tbuf_size;
 	static const char module[] = "PixarLogSetupEncode";
 
 	assert(sp != NULL);
@@ -815,8 +824,13 @@ PixarLogSetupEncode(TIFF* tif)
 
 	sp->stride = (td->td_planarconfig == PLANARCONFIG_CONTIG ?
 	    td->td_samplesperpixel : 1);
-	sp->tbuf = (uint16 *) _TIFFmalloc(sp->stride * 
-		td->td_imagewidth * td->td_rowsperstrip * sizeof(uint16));
+	tbuf_size = multiply(multiply(multiply(sp->stride, td->td_imagewidth),
+				      td->td_rowsperstrip), sizeof(uint16));
+	if (tbuf_size == 0)
+		return (0);
+	sp->tbuf = (uint16 *) _TIFFmalloc(tbuf_size);
+	if (sp->tbuf == NULL)
+		return (0);
 	if (sp->user_datafmt == PIXARLOGDATAFMT_UNKNOWN)
 		sp->user_datafmt = PixarLogGuessDataFmt(td);
 	if (sp->user_datafmt == PIXARLOGDATAFMT_UNKNOWN) {
@@ -839,7 +853,6 @@ PixarLogSetupEncode(TIFF* tif)
 static int
 PixarLogPreEncode(TIFF* tif, tsample_t s)
 {
-	TIFFDirectory *td = &tif->tif_dir;
 	PixarLogState *sp = EncoderState(tif);
 
 	(void) s;
@@ -1288,10 +1301,10 @@ TIFFInitPixarLog(TIFF* tif, int scheme)
 
 	/* Override SetField so we can handle our private pseudo-tag */
 	_TIFFMergeFieldInfo(tif, pixarlogFieldInfo, N(pixarlogFieldInfo));
-	sp->vgetparent = tif->tif_vgetfield;
-	tif->tif_vgetfield = PixarLogVGetField;   /* hook for codec tags */
-	sp->vsetparent = tif->tif_vsetfield;
-	tif->tif_vsetfield = PixarLogVSetField;   /* hook for codec tags */
+	sp->vgetparent = tif->tif_tagmethods.vgetfield;
+	tif->tif_tagmethods.vgetfield = PixarLogVGetField;   /* hook for codec tags */
+	sp->vsetparent = tif->tif_tagmethods.vsetfield;
+	tif->tif_tagmethods.vsetfield = PixarLogVSetField;   /* hook for codec tags */
 
 	/* Default values for codec-specific fields */
 	sp->quality = Z_DEFAULT_COMPRESSION; /* default comp. level */

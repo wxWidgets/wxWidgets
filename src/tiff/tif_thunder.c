@@ -4,23 +4,23 @@
  * Copyright (c) 1988-1997 Sam Leffler
  * Copyright (c) 1991-1997 Silicon Graphics, Inc.
  *
- * Permission to use, copy, modify, distribute, and sell this software and
+ * Permission to use, copy, modify, distribute, and sell this software and 
  * its documentation for any purpose is hereby granted without fee, provided
  * that (i) the above copyright notices and this permission notice appear in
  * all copies of the software and related documentation, and (ii) the names of
  * Sam Leffler and Silicon Graphics may not be used in any advertising or
  * publicity relating to the software without the specific, prior written
  * permission of Sam Leffler and Silicon Graphics.
- *
- * THE SOFTWARE IS PROVIDED "AS-IS" AND WITHOUT WARRANTY OF ANY KIND,
- * EXPRESS, IMPLIED OR OTHERWISE, INCLUDING WITHOUT LIMITATION, ANY
- * WARRANTY OF MERCHANTABILITY OR FITNESS FOR A PARTICULAR PURPOSE.
- *
+ * 
+ * THE SOFTWARE IS PROVIDED "AS-IS" AND WITHOUT WARRANTY OF ANY KIND, 
+ * EXPRESS, IMPLIED OR OTHERWISE, INCLUDING WITHOUT LIMITATION, ANY 
+ * WARRANTY OF MERCHANTABILITY OR FITNESS FOR A PARTICULAR PURPOSE.  
+ * 
  * IN NO EVENT SHALL SAM LEFFLER OR SILICON GRAPHICS BE LIABLE FOR
  * ANY SPECIAL, INCIDENTAL, INDIRECT OR CONSEQUENTIAL DAMAGES OF ANY KIND,
  * OR ANY DAMAGES WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS,
- * WHETHER OR NOT ADVISED OF THE POSSIBILITY OF DAMAGE, AND ON ANY THEORY OF
- * LIABILITY, ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE
+ * WHETHER OR NOT ADVISED OF THE POSSIBILITY OF DAMAGE, AND ON ANY THEORY OF 
+ * LIABILITY, ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE 
  * OF THIS SOFTWARE.
  */
 
@@ -60,7 +60,7 @@ static const int threebitdeltas[8] = { 0, 1, 2, 3, 0, -3, -2, -1 };
 	if (npixels++ & 1) \
 	    *op++ |= lastpixel; \
 	else \
-	    op[0] = lastpixel << 4; \
+	    op[0] = (tidataval_t) (lastpixel << 4); \
 }
 
 static int
@@ -91,8 +91,10 @@ ThunderDecode(TIFF* tif, tidata_t op, tsize_t maxpixels)
 			} else
 				lastpixel |= lastpixel << 4;
 			npixels += n;
-			for (; n > 0; n -= 2)
-				*op++ = lastpixel;
+			if (npixels < maxpixels) {
+				for (; n > 0; n -= 2)
+					*op++ = (tidataval_t) lastpixel;
+			}
 			if (n == -1)
 				*--op &= 0xf0;
 			lastpixel &= 0xf;
@@ -128,7 +130,7 @@ ThunderDecode(TIFF* tif, tidata_t op, tsize_t maxpixels)
 	return (1);
 }
 
-static int LINKAGEMODE
+static int
 ThunderDecodeRow(TIFF* tif, tidata_t buf, tsize_t occ, tsample_t s)
 {
 	tidata_t row = buf;

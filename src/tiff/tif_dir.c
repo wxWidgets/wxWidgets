@@ -40,26 +40,33 @@
 #define DATATYPE_UINT		2       /* !unsigned integer data */
 #define DATATYPE_IEEEFP		3       /* !IEEE floating point data */
 
-void
-_TIFFsetByteArray(void** vpp, void* vp, long n)
+static void
+setByteArray(void** vpp, void* vp, size_t nmemb, size_t elem_size)
 {
 	if (*vpp)
 		_TIFFfree(*vpp), *vpp = 0;
-	if (vp && (*vpp = (void*) _TIFFmalloc(n)))
-		_TIFFmemcpy(*vpp, vp, n);
+	if (vp) {
+		tsize_t	bytes = nmemb * elem_size;
+		if (elem_size && bytes / elem_size == nmemb)
+			*vpp = (void*) _TIFFmalloc(bytes);
+		if (*vpp)
+			_TIFFmemcpy(*vpp, vp, bytes);
+	}
 }
+void _TIFFsetByteArray(void** vpp, void* vp, long n)
+    { setByteArray(vpp, vp, n, 1); }
 void _TIFFsetString(char** cpp, char* cp)
-    { _TIFFsetByteArray((void**) cpp, (void*) cp, (long) (strlen(cp)+1)); }
+    { setByteArray((void**) cpp, (void*) cp, strlen(cp)+1, 1); }
 void _TIFFsetNString(char** cpp, char* cp, long n)
-    { _TIFFsetByteArray((void**) cpp, (void*) cp, n); }
+    { setByteArray((void**) cpp, (void*) cp, n, 1); }
 void _TIFFsetShortArray(uint16** wpp, uint16* wp, long n)
-    { _TIFFsetByteArray((void**) wpp, (void*) wp, n*sizeof (uint16)); }
+    { setByteArray((void**) wpp, (void*) wp, n, sizeof (uint16)); }
 void _TIFFsetLongArray(uint32** lpp, uint32* lp, long n)
-    { _TIFFsetByteArray((void**) lpp, (void*) lp, n*sizeof (uint32)); }
+    { setByteArray((void**) lpp, (void*) lp, n, sizeof (uint32)); }
 void _TIFFsetFloatArray(float** fpp, float* fp, long n)
-    { _TIFFsetByteArray((void**) fpp, (void*) fp, n*sizeof (float)); }
+    { setByteArray((void**) fpp, (void*) fp, n, sizeof (float)); }
 void _TIFFsetDoubleArray(double** dpp, double* dp, long n)
-    { _TIFFsetByteArray((void**) dpp, (void*) dp, n*sizeof (double)); }
+    { setByteArray((void**) dpp, (void*) dp, n, sizeof (double)); }
 
 /*
  * Install extra samples information.
@@ -84,7 +91,6 @@ setExtraSamples(TIFFDirectory* td, va_list ap, int* v)
 	return (1);
 }
 
-#ifdef CMYK_SUPPORT
 static int
 checkInkNamesString(TIFF* tif, int slen, const char* s)
 {
@@ -110,15 +116,15 @@ bad:
 	    td->td_samplesperpixel-i);
 	return (0);
 }
-#endif
 
 static int
 _TIFFVSetField(TIFF* tif, ttag_t tag, va_list ap)
 {
+	static const char module[] = "_TIFFVSetField";
+	
 	TIFFDirectory* td = &tif->tif_dir;
 	int status = 1;
 	uint32 v32;
-	uint16 v16;
 	int i, v;
 	double d;
 	char* s;
@@ -153,14 +159,14 @@ _TIFFVSetField(TIFF* tif, ttag_t tag, va_list ap)
 		}
 		break;
 	case TIFFTAG_COMPRESSION:
-		v16 = va_arg(ap, int) & 0xffff;
+		v = va_arg(ap, int) & 0xffff;
 		/*
 		 * If we're changing the compression scheme,
 		 * the notify the previous module so that it
 		 * can cleanup any state it's setup.
 		 */
 		if (TIFFFieldSet(tif, FIELD_COMPRESSION)) {
-			if (td->td_compression == v16)
+			if (td->td_compression == v)
 				break;
 			(*tif->tif_cleanup)(tif);
 			tif->tif_flags &= ~TIFF_CODERSETUP;
@@ -168,8 +174,10 @@ _TIFFVSetField(TIFF* tif, ttag_t tag, va_list ap)
 		/*
 		 * Setup new compression routine state.
 		 */
-		if( (status = TIFFSetCompressionScheme(tif, v16)) != 0 )
-			td->td_compression = v16;
+		if( (status = TIFFSetCompressionScheme(tif, v)) != 0 )
+                    td->td_compression = (uint16) v;
+                else
+                    status = 0;
 		break;
 	case TIFFTAG_PHOTOMETRIC:
 		td->td_photometric = (uint16) va_arg(ap, int);
@@ -204,8 +212,8 @@ _TIFFVSetField(TIFF* tif, ttag_t tag, va_list ap)
 	case TIFFTAG_MODEL:
 		_TIFFsetString(&td->td_model, va_arg(ap, char*));
 		break;
-	case TIFFTAG_SOFTWARE:
-		_TIFFsetString(&td->td_software, va_arg(ap, char*));
+	case TIFFTAG_COPYRIGHT:
+		_TIFFsetString(&td->td_copyright, va_arg(ap, char*));
 		break;
 	case TIFFTAG_ORIENTATION:
 		v = va_arg(ap, int);
@@ -338,9 +346,24 @@ _TIFFVSetField(TIFF* tif, ttag_t tag, va_list ap)
 		break;
 	case TIFFTAG_SAMPLEFORMAT:
 		v = va_arg(ap, int);
-		if (v < SAMPLEFORMAT_UINT || SAMPLEFORMAT_VOID < v)
+		if (v < SAMPLEFORMAT_UINT || SAMPLEFORMAT_COMPLEXIEEEFP < v)
 			goto badvalue;
 		td->td_sampleformat = (uint16) v;
+
+                /*  Try to fix up the SWAB function for complex data. */
+                if( td->td_sampleformat == SAMPLEFORMAT_COMPLEXINT 
+                    && td->td_bitspersample == 32
+                    && tif->tif_postdecode == _TIFFSwab32BitData )
+                    tif->tif_postdecode = _TIFFSwab16BitData;
+                else if( (td->td_sampleformat == SAMPLEFORMAT_COMPLEXINT 
+                          || td->td_sampleformat == SAMPLEFORMAT_COMPLEXIEEEFP)
+                         && td->td_bitspersample == 64
+                         && tif->tif_postdecode == _TIFFSwab64BitData )
+                    tif->tif_postdecode = _TIFFSwab32BitData;
+                else if( td->td_sampleformat == SAMPLEFORMAT_COMPLEXIEEEFP
+                         && td->td_bitspersample == 128
+                         && tif->tif_postdecode == NULL )
+                    tif->tif_postdecode = _TIFFSwab64BitData;
 		break;
 	case TIFFTAG_IMAGEDEPTH:
 		td->td_imagedepth = va_arg(ap, uint32);
@@ -351,19 +374,43 @@ _TIFFVSetField(TIFF* tif, ttag_t tag, va_list ap)
 			goto badvaluedbl;
 		td->td_stonits = d;
 		break;
-#if SUBIFD_SUPPORT
+	/* Begin Pixar Tags */
+ 	case TIFFTAG_PIXAR_IMAGEFULLWIDTH:
+ 		td->td_imagefullwidth = va_arg(ap, uint32);
+ 		break;
+ 	case TIFFTAG_PIXAR_IMAGEFULLLENGTH:
+ 		td->td_imagefulllength = va_arg(ap, uint32);
+ 		break;
+ 	case TIFFTAG_PIXAR_TEXTUREFORMAT:
+ 		_TIFFsetString(&td->td_textureformat, va_arg(ap, char*));
+ 		break;
+ 	case TIFFTAG_PIXAR_WRAPMODES:
+ 		_TIFFsetString(&td->td_wrapmodes, va_arg(ap, char*));
+ 		break;
+ 	case TIFFTAG_PIXAR_FOVCOT:
+ 		td->td_fovcot = (float) va_arg(ap, dblparam_t);
+ 		break;
+ 	case TIFFTAG_PIXAR_MATRIX_WORLDTOSCREEN:
+ 		_TIFFsetFloatArray(&td->td_matrixWorldToScreen,
+ 			va_arg(ap, float*), 16);
+ 		break;
+ 	case TIFFTAG_PIXAR_MATRIX_WORLDTOCAMERA:
+ 		_TIFFsetFloatArray(&td->td_matrixWorldToCamera,
+ 			va_arg(ap, float*), 16);
+ 		break;
+ 	/* End Pixar Tags */	       
+
 	case TIFFTAG_SUBIFD:
 		if ((tif->tif_flags & TIFF_INSUBIFD) == 0) {
 			td->td_nsubifd = (uint16) va_arg(ap, int);
 			_TIFFsetLongArray(&td->td_subifd, va_arg(ap, uint32*),
 			    (long) td->td_nsubifd);
 		} else {
-			TIFFError(tif->tif_name, "Sorry, cannot nest SubIFDs");
+			TIFFError(module, "%s: Sorry, cannot nest SubIFDs",
+				  tif->tif_name);
 			status = 0;
 		}
 		break;
-#endif
-#ifdef YCBCR_SUPPORT
 	case TIFFTAG_YCBCRCOEFFICIENTS:
 		_TIFFsetFloatArray(&td->td_ycbcrcoeffs, va_arg(ap, float*), 3);
 		break;
@@ -374,8 +421,6 @@ _TIFFVSetField(TIFF* tif, ttag_t tag, va_list ap)
 		td->td_ycbcrsubsampling[0] = (uint16) va_arg(ap, int);
 		td->td_ycbcrsubsampling[1] = (uint16) va_arg(ap, int);
 		break;
-#endif
-#ifdef COLORIMETRY_SUPPORT
 	case TIFFTAG_WHITEPOINT:
 		_TIFFsetFloatArray(&td->td_whitepoint, va_arg(ap, float*), 2);
 		break;
@@ -392,8 +437,6 @@ _TIFFVSetField(TIFF* tif, ttag_t tag, va_list ap)
 		/* XXX should check for null range */
 		_TIFFsetFloatArray(&td->td_refblackwhite, va_arg(ap, float*), 6);
 		break;
-#endif
-#ifdef CMYK_SUPPORT
 	case TIFFTAG_INKSET:
 		td->td_inkset = (uint16) va_arg(ap, int);
 		break;
@@ -418,71 +461,160 @@ _TIFFVSetField(TIFF* tif, ttag_t tag, va_list ap)
 	case TIFFTAG_TARGETPRINTER:
 		_TIFFsetString(&td->td_targetprinter, va_arg(ap, char*));
 		break;
-#endif
-#ifdef ICC_SUPPORT
 	case TIFFTAG_ICCPROFILE:
 		td->td_profileLength = (uint32) va_arg(ap, uint32);
 		_TIFFsetByteArray(&td->td_profileData, va_arg(ap, void*),
 		    td->td_profileLength);
 		break;
-#endif
-#ifdef PHOTOSHOP_SUPPORT
  	case TIFFTAG_PHOTOSHOP:
   		td->td_photoshopLength = (uint32) va_arg(ap, uint32);
   		_TIFFsetByteArray (&td->td_photoshopData, va_arg(ap, void*),
  			td->td_photoshopLength);
  		break;
-#endif
-#ifdef IPTC_SUPPORT
-    case TIFFTAG_RICHTIFFIPTC: 
+	case TIFFTAG_RICHTIFFIPTC: 
   		td->td_richtiffiptcLength = (uint32) va_arg(ap, uint32);
-#ifdef PHOTOSHOP_SUPPORT
-  		_TIFFsetLongArray ((uint32**)&td->td_richtiffiptcData, va_arg(ap, uint32*),
- 			td->td_richtiffiptcLength);
-#else
-  		_TIFFsetByteArray (&td->td_photoshopData, va_arg(ap, void*),
- 			td->td_photoshopLength);
-#endif
+  		_TIFFsetLongArray ((uint32**)&td->td_richtiffiptcData,
+				   va_arg(ap, uint32*),
+				   td->td_richtiffiptcLength);
  		break;
-#endif
-	default:
-		/*
-		 * This can happen if multiple images are open with
-		 * different codecs which have private tags.  The
-		 * global tag information table may then have tags
-		 * that are valid for one file but not the other. 
-		 * If the client tries to set a tag that is not valid
-		 * for the image's codec then we'll arrive here.  This
-		 * happens, for example, when tiffcp is used to convert
-		 * between compression schemes and codec-specific tags
-		 * are blindly copied.
-		 */
-		TIFFError("TIFFSetField",
+	case TIFFTAG_XMLPACKET:
+		td->td_xmlpacketLength = (uint32) va_arg(ap, uint32);
+		_TIFFsetByteArray(&td->td_xmlpacketData, va_arg(ap, void*),
+		    td->td_xmlpacketLength);
+		break;
+        default: {
+            const TIFFFieldInfo* fip = _TIFFFindFieldInfo(tif, tag, TIFF_ANY);
+            TIFFTagValue *tv;
+            int           tv_size, iCustom;
+
+            /*
+             * This can happen if multiple images are open with
+             * different codecs which have private tags.  The
+             * global tag information table may then have tags
+             * that are valid for one file but not the other. 
+             * If the client tries to set a tag that is not valid
+             * for the image's codec then we'll arrive here.  This
+             * happens, for example, when tiffcp is used to convert
+             * between compression schemes and codec-specific tags
+             * are blindly copied.
+             */
+            if( fip == NULL || fip->field_bit != FIELD_CUSTOM )
+            {
+		TIFFError(module,
 		    "%s: Invalid %stag \"%s\" (not supported by codec)",
-		    tif->tif_name, isPseudoTag(tag) ? "pseduo-" : "",
+		    tif->tif_name, isPseudoTag(tag) ? "pseudo-" : "",
 		    _TIFFFieldWithTag(tif, tag)->field_name);
 		status = 0;
 		break;
+            }
+
+            /*
+             * Find the existing entry for this custom value.
+             */
+            tv = NULL;
+            for( iCustom = 0; iCustom < td->td_customValueCount; iCustom++ )
+            {
+                if( td->td_customValues[iCustom].info == fip )
+                {
+                    tv = td->td_customValues + iCustom;
+                    if( tv->value != NULL )
+                        _TIFFfree( tv->value );
+                    break;
+                }
+            }
+
+            /*
+             * Grow the custom list if the entry was not found.
+             */
+            if( tv == NULL )
+            {
+		TIFFTagValue	*new_customValues;
+		
+		td->td_customValueCount++;
+		new_customValues = (TIFFTagValue *)
+			_TIFFrealloc(td->td_customValues,
+				     sizeof(TIFFTagValue) * td->td_customValueCount);
+		if (!new_customValues) {
+			TIFFError(module,
+		"%s: Failed to allocate space for list of custom values",
+				  tif->tif_name);
+			status = 0;
+			goto end;
+		}
+
+		td->td_customValues = new_customValues;
+
+                tv = td->td_customValues + (td->td_customValueCount-1);
+                tv->info = fip;
+                tv->value = NULL;
+                tv->count = 0;
+            }
+
+            /*
+             * Set custom value ... save a copy of the custom tag value.
+             */
+            tv_size = TIFFDataWidth(fip->field_type);
+            if( fip->field_passcount )
+                tv->count = (int) va_arg(ap, int);
+            else
+                tv->count = 1;
+            if( fip->field_passcount )
+            {
+                tv->value = _TIFFmalloc(tv_size * tv->count);
+		if ( !tv->value ) {
+			va_end(ap);
+			return 0;
+		}
+                _TIFFmemcpy( tv->value, (void *) va_arg(ap,void*),
+                             tv->count * tv_size );
+            }
+            else if( fip->field_type == TIFF_ASCII )
+            {
+                const char *value = (const char *) va_arg(ap,const char *);
+                tv->count = strlen(value)+1;
+                tv->value = _TIFFmalloc(tv->count);
+		if ( !tv->value ) {
+			va_end(ap);
+			return 0;
+		}
+                strcpy( tv->value, value );
+            }
+            else
+            {
+                /* not supporting "pass by value" types yet */
+		TIFFWarning(module, " ... pass by value not implemented.");
+
+                tv->value = _TIFFmalloc(tv_size * tv->count);
+		if ( !tv->value ) {
+			va_end(ap);
+			return 0;
+		}
+                _TIFFmemset( tv->value, 0, tv->count * tv_size );
+                status = 0;
+            }
+          }
 	}
 	if (status) {
-		TIFFSetFieldBit(tif, _TIFFFieldWithTag(tif, tag)->field_bit);
-		tif->tif_flags |= TIFF_DIRTYDIRECT;
+            TIFFSetFieldBit(tif, _TIFFFieldWithTag(tif, tag)->field_bit);
+            tif->tif_flags |= TIFF_DIRTYDIRECT;
 	}
+
+end:
 	va_end(ap);
 	return (status);
 badvalue:
-	TIFFError(tif->tif_name, "%d: Bad value for \"%s\"", v,
-	    _TIFFFieldWithTag(tif, tag)->field_name);
+	TIFFError(module, "%.1000s: Bad value %d for \"%s\"",
+		  tif->tif_name, v, _TIFFFieldWithTag(tif, tag)->field_name);
 	va_end(ap);
 	return (0);
 badvalue32:
-	TIFFError(tif->tif_name, "%ld: Bad value for \"%s\"", v32,
-	    _TIFFFieldWithTag(tif, tag)->field_name);
+	TIFFError(module, "%.1000s: Bad value %ld for \"%s\"",
+		   tif->tif_name, v32, _TIFFFieldWithTag(tif, tag)->field_name);
 	va_end(ap);
 	return (0);
 badvaluedbl:
-	TIFFError(tif->tif_name, "%f: Bad value for \"%s\"", d,
-	    _TIFFFieldWithTag(tif, tag)->field_name);
+	TIFFError(module, "%.1000s: Bad value %f for \"%s\"",
+		  tif->tif_name, d, _TIFFFieldWithTag(tif, tag)->field_name);
 	va_end(ap);
 	return (0);
 }
@@ -550,257 +682,312 @@ int
 TIFFVSetField(TIFF* tif, ttag_t tag, va_list ap)
 {
 	return OkToChangeTag(tif, tag) ?
-	    (*tif->tif_vsetfield)(tif, tag, ap) : 0;
+	    (*tif->tif_tagmethods.vsetfield)(tif, tag, ap) : 0;
 }
 
 static int
 _TIFFVGetField(TIFF* tif, ttag_t tag, va_list ap)
 {
-	TIFFDirectory* td = &tif->tif_dir;
+    TIFFDirectory* td = &tif->tif_dir;
+    int            ret_val = 1;
 
-	switch (tag) {
+    switch (tag) {
 	case TIFFTAG_SUBFILETYPE:
-		*va_arg(ap, uint32*) = td->td_subfiletype;
-		break;
+            *va_arg(ap, uint32*) = td->td_subfiletype;
+            break;
 	case TIFFTAG_IMAGEWIDTH:
-		*va_arg(ap, uint32*) = td->td_imagewidth;
-		break;
+            *va_arg(ap, uint32*) = td->td_imagewidth;
+            break;
 	case TIFFTAG_IMAGELENGTH:
-		*va_arg(ap, uint32*) = td->td_imagelength;
-		break;
+            *va_arg(ap, uint32*) = td->td_imagelength;
+            break;
 	case TIFFTAG_BITSPERSAMPLE:
-		*va_arg(ap, uint16*) = td->td_bitspersample;
-		break;
+            *va_arg(ap, uint16*) = td->td_bitspersample;
+            break;
 	case TIFFTAG_COMPRESSION:
-		*va_arg(ap, uint16*) = td->td_compression;
-		break;
+            *va_arg(ap, uint16*) = td->td_compression;
+            break;
 	case TIFFTAG_PHOTOMETRIC:
-		*va_arg(ap, uint16*) = td->td_photometric;
-		break;
+            *va_arg(ap, uint16*) = td->td_photometric;
+            break;
 	case TIFFTAG_THRESHHOLDING:
-		*va_arg(ap, uint16*) = td->td_threshholding;
-		break;
+            *va_arg(ap, uint16*) = td->td_threshholding;
+            break;
 	case TIFFTAG_FILLORDER:
-		*va_arg(ap, uint16*) = td->td_fillorder;
-		break;
+            *va_arg(ap, uint16*) = td->td_fillorder;
+            break;
 	case TIFFTAG_DOCUMENTNAME:
-		*va_arg(ap, char**) = td->td_documentname;
-		break;
+            *va_arg(ap, char**) = td->td_documentname;
+            break;
 	case TIFFTAG_ARTIST:
-		*va_arg(ap, char**) = td->td_artist;
-		break;
+            *va_arg(ap, char**) = td->td_artist;
+            break;
 	case TIFFTAG_DATETIME:
-		*va_arg(ap, char**) = td->td_datetime;
-		break;
+            *va_arg(ap, char**) = td->td_datetime;
+            break;
 	case TIFFTAG_HOSTCOMPUTER:
-		*va_arg(ap, char**) = td->td_hostcomputer;
-		break;
+            *va_arg(ap, char**) = td->td_hostcomputer;
+            break;
 	case TIFFTAG_IMAGEDESCRIPTION:
-		*va_arg(ap, char**) = td->td_imagedescription;
-		break;
+            *va_arg(ap, char**) = td->td_imagedescription;
+            break;
 	case TIFFTAG_MAKE:
-		*va_arg(ap, char**) = td->td_make;
-		break;
+            *va_arg(ap, char**) = td->td_make;
+            break;
 	case TIFFTAG_MODEL:
-		*va_arg(ap, char**) = td->td_model;
-		break;
-	case TIFFTAG_SOFTWARE:
-		*va_arg(ap, char**) = td->td_software;
-		break;
+            *va_arg(ap, char**) = td->td_model;
+            break;
+	case TIFFTAG_COPYRIGHT:
+            *va_arg(ap, char**) = td->td_copyright;
+            break;
 	case TIFFTAG_ORIENTATION:
-		*va_arg(ap, uint16*) = td->td_orientation;
-		break;
+            *va_arg(ap, uint16*) = td->td_orientation;
+            break;
 	case TIFFTAG_SAMPLESPERPIXEL:
-		*va_arg(ap, uint16*) = td->td_samplesperpixel;
-		break;
+            *va_arg(ap, uint16*) = td->td_samplesperpixel;
+            break;
 	case TIFFTAG_ROWSPERSTRIP:
-		*va_arg(ap, uint32*) = td->td_rowsperstrip;
-		break;
+            *va_arg(ap, uint32*) = td->td_rowsperstrip;
+            break;
 	case TIFFTAG_MINSAMPLEVALUE:
-		*va_arg(ap, uint16*) = td->td_minsamplevalue;
-		break;
+            *va_arg(ap, uint16*) = td->td_minsamplevalue;
+            break;
 	case TIFFTAG_MAXSAMPLEVALUE:
-		*va_arg(ap, uint16*) = td->td_maxsamplevalue;
-		break;
+            *va_arg(ap, uint16*) = td->td_maxsamplevalue;
+            break;
 	case TIFFTAG_SMINSAMPLEVALUE:
-		*va_arg(ap, double*) = td->td_sminsamplevalue;
-		break;
+            *va_arg(ap, double*) = td->td_sminsamplevalue;
+            break;
 	case TIFFTAG_SMAXSAMPLEVALUE:
-		*va_arg(ap, double*) = td->td_smaxsamplevalue;
-		break;
+            *va_arg(ap, double*) = td->td_smaxsamplevalue;
+            break;
 	case TIFFTAG_XRESOLUTION:
-		*va_arg(ap, float*) = td->td_xresolution;
-		break;
+            *va_arg(ap, float*) = td->td_xresolution;
+            break;
 	case TIFFTAG_YRESOLUTION:
-		*va_arg(ap, float*) = td->td_yresolution;
-		break;
+            *va_arg(ap, float*) = td->td_yresolution;
+            break;
 	case TIFFTAG_PLANARCONFIG:
-		*va_arg(ap, uint16*) = td->td_planarconfig;
-		break;
+            *va_arg(ap, uint16*) = td->td_planarconfig;
+            break;
 	case TIFFTAG_XPOSITION:
-		*va_arg(ap, float*) = td->td_xposition;
-		break;
+            *va_arg(ap, float*) = td->td_xposition;
+            break;
 	case TIFFTAG_YPOSITION:
-		*va_arg(ap, float*) = td->td_yposition;
-		break;
+            *va_arg(ap, float*) = td->td_yposition;
+            break;
 	case TIFFTAG_PAGENAME:
-		*va_arg(ap, char**) = td->td_pagename;
-		break;
+            *va_arg(ap, char**) = td->td_pagename;
+            break;
 	case TIFFTAG_RESOLUTIONUNIT:
-		*va_arg(ap, uint16*) = td->td_resolutionunit;
-		break;
+            *va_arg(ap, uint16*) = td->td_resolutionunit;
+            break;
 	case TIFFTAG_PAGENUMBER:
-		*va_arg(ap, uint16*) = td->td_pagenumber[0];
-		*va_arg(ap, uint16*) = td->td_pagenumber[1];
-		break;
+            *va_arg(ap, uint16*) = td->td_pagenumber[0];
+            *va_arg(ap, uint16*) = td->td_pagenumber[1];
+            break;
 	case TIFFTAG_HALFTONEHINTS:
-		*va_arg(ap, uint16*) = td->td_halftonehints[0];
-		*va_arg(ap, uint16*) = td->td_halftonehints[1];
-		break;
+            *va_arg(ap, uint16*) = td->td_halftonehints[0];
+            *va_arg(ap, uint16*) = td->td_halftonehints[1];
+            break;
 	case TIFFTAG_COLORMAP:
-		*va_arg(ap, uint16**) = td->td_colormap[0];
-		*va_arg(ap, uint16**) = td->td_colormap[1];
-		*va_arg(ap, uint16**) = td->td_colormap[2];
-		break;
+            *va_arg(ap, uint16**) = td->td_colormap[0];
+            *va_arg(ap, uint16**) = td->td_colormap[1];
+            *va_arg(ap, uint16**) = td->td_colormap[2];
+            break;
 	case TIFFTAG_STRIPOFFSETS:
 	case TIFFTAG_TILEOFFSETS:
-		*va_arg(ap, uint32**) = td->td_stripoffset;
-		break;
+            *va_arg(ap, uint32**) = td->td_stripoffset;
+            break;
 	case TIFFTAG_STRIPBYTECOUNTS:
 	case TIFFTAG_TILEBYTECOUNTS:
-		*va_arg(ap, uint32**) = td->td_stripbytecount;
-		break;
+            *va_arg(ap, uint32**) = td->td_stripbytecount;
+            break;
 	case TIFFTAG_MATTEING:
-		*va_arg(ap, uint16*) =
-		    (td->td_extrasamples == 1 &&
-		     td->td_sampleinfo[0] == EXTRASAMPLE_ASSOCALPHA);
-		break;
+            *va_arg(ap, uint16*) =
+                (td->td_extrasamples == 1 &&
+                 td->td_sampleinfo[0] == EXTRASAMPLE_ASSOCALPHA);
+            break;
 	case TIFFTAG_EXTRASAMPLES:
-		*va_arg(ap, uint16*) = td->td_extrasamples;
-		*va_arg(ap, uint16**) = td->td_sampleinfo;
-		break;
+            *va_arg(ap, uint16*) = td->td_extrasamples;
+            *va_arg(ap, uint16**) = td->td_sampleinfo;
+            break;
 	case TIFFTAG_TILEWIDTH:
-		*va_arg(ap, uint32*) = td->td_tilewidth;
-		break;
+            *va_arg(ap, uint32*) = td->td_tilewidth;
+            break;
 	case TIFFTAG_TILELENGTH:
-		*va_arg(ap, uint32*) = td->td_tilelength;
-		break;
+            *va_arg(ap, uint32*) = td->td_tilelength;
+            break;
 	case TIFFTAG_TILEDEPTH:
-		*va_arg(ap, uint32*) = td->td_tiledepth;
-		break;
+            *va_arg(ap, uint32*) = td->td_tiledepth;
+            break;
 	case TIFFTAG_DATATYPE:
-		switch (td->td_sampleformat) {
+            switch (td->td_sampleformat) {
 		case SAMPLEFORMAT_UINT:
-			*va_arg(ap, uint16*) = DATATYPE_UINT;
-			break;
+                    *va_arg(ap, uint16*) = DATATYPE_UINT;
+                    break;
 		case SAMPLEFORMAT_INT:
-			*va_arg(ap, uint16*) = DATATYPE_INT;
-			break;
+                    *va_arg(ap, uint16*) = DATATYPE_INT;
+                    break;
 		case SAMPLEFORMAT_IEEEFP:
-			*va_arg(ap, uint16*) = DATATYPE_IEEEFP;
-			break;
+                    *va_arg(ap, uint16*) = DATATYPE_IEEEFP;
+                    break;
 		case SAMPLEFORMAT_VOID:
-			*va_arg(ap, uint16*) = DATATYPE_VOID;
-			break;
-		}
-		break;
+                    *va_arg(ap, uint16*) = DATATYPE_VOID;
+                    break;
+            }
+            break;
 	case TIFFTAG_SAMPLEFORMAT:
-		*va_arg(ap, uint16*) = td->td_sampleformat;
-		break;
+            *va_arg(ap, uint16*) = td->td_sampleformat;
+            break;
 	case TIFFTAG_IMAGEDEPTH:
-		*va_arg(ap, uint32*) = td->td_imagedepth;
-		break;
+            *va_arg(ap, uint32*) = td->td_imagedepth;
+            break;
 	case TIFFTAG_STONITS:
-		*va_arg(ap, double*) = td->td_stonits;
-		break;
-#if SUBIFD_SUPPORT
+            *va_arg(ap, double*) = td->td_stonits;
+            break;
 	case TIFFTAG_SUBIFD:
-		*va_arg(ap, uint16*) = td->td_nsubifd;
-		*va_arg(ap, uint32**) = td->td_subifd;
-		break;
-#endif
-#ifdef YCBCR_SUPPORT
+            *va_arg(ap, uint16*) = td->td_nsubifd;
+            *va_arg(ap, uint32**) = td->td_subifd;
+            break;
 	case TIFFTAG_YCBCRCOEFFICIENTS:
-		*va_arg(ap, float**) = td->td_ycbcrcoeffs;
-		break;
+            *va_arg(ap, float**) = td->td_ycbcrcoeffs;
+            break;
 	case TIFFTAG_YCBCRPOSITIONING:
-		*va_arg(ap, uint16*) = td->td_ycbcrpositioning;
-		break;
+            *va_arg(ap, uint16*) = td->td_ycbcrpositioning;
+            break;
 	case TIFFTAG_YCBCRSUBSAMPLING:
-		*va_arg(ap, uint16*) = td->td_ycbcrsubsampling[0];
-		*va_arg(ap, uint16*) = td->td_ycbcrsubsampling[1];
-		break;
-#endif
-#ifdef COLORIMETRY_SUPPORT
+            *va_arg(ap, uint16*) = td->td_ycbcrsubsampling[0];
+            *va_arg(ap, uint16*) = td->td_ycbcrsubsampling[1];
+            break;
 	case TIFFTAG_WHITEPOINT:
-		*va_arg(ap, float**) = td->td_whitepoint;
-		break;
+            *va_arg(ap, float**) = td->td_whitepoint;
+            break;
 	case TIFFTAG_PRIMARYCHROMATICITIES:
-		*va_arg(ap, float**) = td->td_primarychromas;
-		break;
+            *va_arg(ap, float**) = td->td_primarychromas;
+            break;
 	case TIFFTAG_TRANSFERFUNCTION:
-		*va_arg(ap, uint16**) = td->td_transferfunction[0];
-		if (td->td_samplesperpixel - td->td_extrasamples > 1) {
-			*va_arg(ap, uint16**) = td->td_transferfunction[1];
-			*va_arg(ap, uint16**) = td->td_transferfunction[2];
-		}
-		break;
+            *va_arg(ap, uint16**) = td->td_transferfunction[0];
+            if (td->td_samplesperpixel - td->td_extrasamples > 1) {
+                *va_arg(ap, uint16**) = td->td_transferfunction[1];
+                *va_arg(ap, uint16**) = td->td_transferfunction[2];
+            }
+            break;
 	case TIFFTAG_REFERENCEBLACKWHITE:
-		*va_arg(ap, float**) = td->td_refblackwhite;
-		break;
-#endif
-#ifdef CMYK_SUPPORT
+            *va_arg(ap, float**) = td->td_refblackwhite;
+            break;
 	case TIFFTAG_INKSET:
-		*va_arg(ap, uint16*) = td->td_inkset;
-		break;
+            *va_arg(ap, uint16*) = td->td_inkset;
+            break;
 	case TIFFTAG_DOTRANGE:
-		*va_arg(ap, uint16*) = td->td_dotrange[0];
-		*va_arg(ap, uint16*) = td->td_dotrange[1];
-		break;
+            *va_arg(ap, uint16*) = td->td_dotrange[0];
+            *va_arg(ap, uint16*) = td->td_dotrange[1];
+            break;
 	case TIFFTAG_INKNAMES:
-		*va_arg(ap, char**) = td->td_inknames;
-		break;
+            *va_arg(ap, char**) = td->td_inknames;
+            break;
 	case TIFFTAG_NUMBEROFINKS:
-		*va_arg(ap, uint16*) = td->td_ninks;
-		break;
+            *va_arg(ap, uint16*) = td->td_ninks;
+            break;
 	case TIFFTAG_TARGETPRINTER:
-		*va_arg(ap, char**) = td->td_targetprinter;
-		break;
-#endif
-#ifdef ICC_SUPPORT
+            *va_arg(ap, char**) = td->td_targetprinter;
+            break;
 	case TIFFTAG_ICCPROFILE:
-		*va_arg(ap, uint32*) = td->td_profileLength;
-		*va_arg(ap, void**) = td->td_profileData;
-		break;
-#endif
-#ifdef PHOTOSHOP_SUPPORT
+            *va_arg(ap, uint32*) = td->td_profileLength;
+            *va_arg(ap, void**) = td->td_profileData;
+            break;
  	case TIFFTAG_PHOTOSHOP:
- 		*va_arg(ap, uint32*) = td->td_photoshopLength;
- 		*va_arg(ap, void**) = td->td_photoshopData;
- 		break;
-#endif
-#ifdef IPTC_SUPPORT
+            *va_arg(ap, uint32*) = td->td_photoshopLength;
+            *va_arg(ap, void**) = td->td_photoshopData;
+            break;
  	case TIFFTAG_RICHTIFFIPTC:
- 		*va_arg(ap, uint32*) = td->td_richtiffiptcLength;
- 		*va_arg(ap, void**) = td->td_richtiffiptcData;
- 		break;
-#endif
-	default:
-		/*
-		 * This can happen if multiple images are open with
-		 * different codecs which have private tags.  The
-		 * global tag information table may then have tags
-		 * that are valid for one file but not the other. 
-		 * If the client tries to get a tag that is not valid
-		 * for the image's codec then we'll arrive here.
-		 */
-		TIFFError("TIFFGetField",
-		    "%s: Invalid %stag \"%s\" (not supported by codec)",
-		    tif->tif_name, isPseudoTag(tag) ? "pseudo-" : "",
-		    _TIFFFieldWithTag(tif, tag)->field_name);
-		break;
-	}
-	return (1);
+            *va_arg(ap, uint32*) = td->td_richtiffiptcLength;
+            *va_arg(ap, void**) = td->td_richtiffiptcData;
+            break;
+	case TIFFTAG_XMLPACKET:
+            *va_arg(ap, uint32*) = td->td_xmlpacketLength;
+            *va_arg(ap, void**) = td->td_xmlpacketData;
+            break;
+            /* Begin Pixar Tags */
+ 	case TIFFTAG_PIXAR_IMAGEFULLWIDTH:
+            *va_arg(ap, uint32*) = td->td_imagefullwidth;
+            break;
+ 	case TIFFTAG_PIXAR_IMAGEFULLLENGTH:
+            *va_arg(ap, uint32*) = td->td_imagefulllength;
+            break;
+ 	case TIFFTAG_PIXAR_TEXTUREFORMAT:
+            *va_arg(ap, char**) = td->td_textureformat;
+            break;
+ 	case TIFFTAG_PIXAR_WRAPMODES:
+            *va_arg(ap, char**) = td->td_wrapmodes;
+            break;
+ 	case TIFFTAG_PIXAR_FOVCOT:
+            *va_arg(ap, float*) = td->td_fovcot;
+            break;
+ 	case TIFFTAG_PIXAR_MATRIX_WORLDTOSCREEN:
+            *va_arg(ap, float**) = td->td_matrixWorldToScreen;
+            break;
+ 	case TIFFTAG_PIXAR_MATRIX_WORLDTOCAMERA:
+            *va_arg(ap, float**) = td->td_matrixWorldToCamera;
+            break;
+            /* End Pixar Tags */
+
+        default:
+        {
+            const TIFFFieldInfo* fip = _TIFFFindFieldInfo(tif, tag, TIFF_ANY);
+            int           i;
+            
+            /*
+             * This can happen if multiple images are open with
+             * different codecs which have private tags.  The
+             * global tag information table may then have tags
+             * that are valid for one file but not the other. 
+             * If the client tries to get a tag that is not valid
+             * for the image's codec then we'll arrive here.
+             */
+            if( fip == NULL || fip->field_bit != FIELD_CUSTOM )
+            {
+                TIFFError("_TIFFVGetField",
+                          "%s: Invalid %stag \"%s\" (not supported by codec)",
+                          tif->tif_name, isPseudoTag(tag) ? "pseudo-" : "",
+                          _TIFFFieldWithTag(tif, tag)->field_name);
+                ret_val = 0;
+                break;
+            }
+
+            /*
+            ** Do we have a custom value?
+            */
+            ret_val = 0;
+            for( i = 0; i < td->td_customValueCount; i++ )
+            {
+                TIFFTagValue *tv = td->td_customValues + i;
+
+                if( tv->info->field_tag != tag )
+                    continue;
+                
+                if( fip->field_passcount )
+                {
+                    *va_arg(ap, u_short *) = (u_short) tv->count;
+                    *va_arg(ap, void **) = tv->value;
+                    ret_val = 1;
+                    break;
+                }
+                else if( fip->field_type == TIFF_ASCII )
+                {
+                    *va_arg(ap, void **) = tv->value;
+                    ret_val = 1;
+                    break;
+                }
+                else
+                {
+                    printf( "TIFFVGetField ... pass by value not imp.\n" );
+                    break;
+                }
+            }
+        }
+    }
+    return( ret_val );
 }
 
 /*
@@ -830,7 +1017,7 @@ TIFFVGetField(TIFF* tif, ttag_t tag, va_list ap)
 {
 	const TIFFFieldInfo* fip = _TIFFFindFieldInfo(tif, tag, TIFF_ANY);
 	return (fip && (isPseudoTag(tag) || TIFFFieldSet(tif, fip->field_bit)) ?
-	    (*tif->tif_vgetfield)(tif, tag, ap) : 0);
+	    (*tif->tif_tagmethods.vgetfield)(tif, tag, ap) : 0);
 }
 
 #define	CleanupField(member) {		\
@@ -846,50 +1033,52 @@ TIFFVGetField(TIFF* tif, ttag_t tag, va_list ap)
 void
 TIFFFreeDirectory(TIFF* tif)
 {
-	register TIFFDirectory *td = &tif->tif_dir;
+    TIFFDirectory *td = &tif->tif_dir;
+    int            i;
 
-	CleanupField(td_colormap[0]);
-	CleanupField(td_colormap[1]);
-	CleanupField(td_colormap[2]);
-	CleanupField(td_documentname);
-	CleanupField(td_artist);
-	CleanupField(td_datetime);
-	CleanupField(td_hostcomputer);
-	CleanupField(td_imagedescription);
-	CleanupField(td_make);
-	CleanupField(td_model);
-	CleanupField(td_software);
-	CleanupField(td_pagename);
-	CleanupField(td_sampleinfo);
-#if SUBIFD_SUPPORT
-	CleanupField(td_subifd);
-#endif
-#ifdef YCBCR_SUPPORT
-	CleanupField(td_ycbcrcoeffs);
-#endif
-#ifdef CMYK_SUPPORT
-	CleanupField(td_inknames);
-	CleanupField(td_targetprinter);
-#endif
-#ifdef COLORIMETRY_SUPPORT
-	CleanupField(td_whitepoint);
-	CleanupField(td_primarychromas);
-	CleanupField(td_refblackwhite);
-	CleanupField(td_transferfunction[0]);
-	CleanupField(td_transferfunction[1]);
-	CleanupField(td_transferfunction[2]);
-#endif
-#ifdef ICC_SUPPORT
-	CleanupField(td_profileData);
-#endif
-#ifdef PHOTOSHOP_SUPPORT
-	CleanupField(td_photoshopData);
-#endif
-#ifdef IPTC_SUPPORT
-	CleanupField(td_richtiffiptcData);
-#endif
-	CleanupField(td_stripoffset);
-	CleanupField(td_stripbytecount);
+    CleanupField(td_colormap[0]);
+    CleanupField(td_colormap[1]);
+    CleanupField(td_colormap[2]);
+    CleanupField(td_documentname);
+    CleanupField(td_artist);
+    CleanupField(td_datetime);
+    CleanupField(td_hostcomputer);
+    CleanupField(td_imagedescription);
+    CleanupField(td_make);
+    CleanupField(td_model);
+    CleanupField(td_copyright);
+    CleanupField(td_pagename);
+    CleanupField(td_sampleinfo);
+    CleanupField(td_subifd);
+    CleanupField(td_ycbcrcoeffs);
+    CleanupField(td_inknames);
+    CleanupField(td_targetprinter);
+    CleanupField(td_whitepoint);
+    CleanupField(td_primarychromas);
+    CleanupField(td_refblackwhite);
+    CleanupField(td_transferfunction[0]);
+    CleanupField(td_transferfunction[1]);
+    CleanupField(td_transferfunction[2]);
+    CleanupField(td_profileData);
+    CleanupField(td_photoshopData);
+    CleanupField(td_richtiffiptcData);
+    CleanupField(td_xmlpacketData);
+    CleanupField(td_stripoffset);
+    CleanupField(td_stripbytecount);
+    /* Begin Pixar Tags */
+    CleanupField(td_textureformat);
+    CleanupField(td_wrapmodes);
+    CleanupField(td_matrixWorldToScreen);
+    CleanupField(td_matrixWorldToCamera);
+    /* End Pixar Tags */
+
+    /* Cleanup custom tag values */
+    for( i = 0; i < td->td_customValueCount; i++ )
+        _TIFFfree( td->td_customValues[i].value );
+
+    if( td->td_customValues != NULL )
+        _TIFFfree( td->td_customValues );
+          
 }
 #undef CleanupField
 
@@ -904,6 +1093,26 @@ TIFFSetTagExtender(TIFFExtendProc extender)
 	TIFFExtendProc prev = _TIFFextender;
 	_TIFFextender = extender;
 	return (prev);
+}
+
+/*
+ * Setup for a new directory.  Should we automatically call
+ * TIFFWriteDirectory() if the current one is dirty?
+ *
+ * The newly created directory will not exist on the file till
+ * TIFFWriteDirectory(), TIFFFlush() or TIFFClose() is called.
+ */
+int
+TIFFCreateDirectory(TIFF* tif)
+{
+    TIFFDefaultDirectory(tif);
+    tif->tif_diroff = 0;
+    tif->tif_nextdiroff = 0;
+    tif->tif_curoff = 0;
+    tif->tif_row = (uint32) -1;
+    tif->tif_curstrip = (tstrip_t) -1;
+
+    return 0;
 }
 
 /*
@@ -926,21 +1135,17 @@ TIFFDefaultDirectory(TIFF* tif)
 	td->td_tilelength = (uint32) -1;
 	td->td_tiledepth = 1;
 	td->td_resolutionunit = RESUNIT_INCH;
-	td->td_sampleformat = SAMPLEFORMAT_VOID;
+	td->td_sampleformat = SAMPLEFORMAT_UINT;
 	td->td_imagedepth = 1;
-#ifdef YCBCR_SUPPORT
 	td->td_ycbcrsubsampling[0] = 2;
 	td->td_ycbcrsubsampling[1] = 2;
 	td->td_ycbcrpositioning = YCBCRPOSITION_CENTERED;
-#endif
-#ifdef CMYK_SUPPORT
 	td->td_inkset = INKSET_CMYK;
 	td->td_ninks = 4;
-#endif
 	tif->tif_postdecode = _TIFFNoPostDecode;
-	tif->tif_vsetfield = _TIFFVSetField;
-	tif->tif_vgetfield = _TIFFVGetField;
-	tif->tif_printdir = NULL;
+	tif->tif_tagmethods.vsetfield = _TIFFVSetField;
+	tif->tif_tagmethods.vgetfield = _TIFFVGetField;
+	tif->tif_tagmethods.printdir = NULL;
 	/*
 	 *  Give client code a chance to install their own
 	 *  tag extensions & methods, prior to compression overloads.
@@ -957,37 +1162,73 @@ TIFFDefaultDirectory(TIFF* tif)
 	 * (i.e. TIFFSetField).
 	 */
 	tif->tif_flags &= ~TIFF_DIRTYDIRECT;
+
+        /*
+         * As per http://bugzilla.remotesensing.org/show_bug.cgi?id=19
+         * we clear the ISTILED flag when setting up a new directory.
+         * Should we also be clearing stuff like INSUBIFD?
+         */
+        tif->tif_flags &= ~TIFF_ISTILED;
+
 	return (1);
 }
 
 static int
 TIFFAdvanceDirectory(TIFF* tif, uint32* nextdir, toff_t* off)
 {
-	static const char module[] = "TIFFAdvanceDirectory";
-	uint16 dircount;
-
-	if (!SeekOK(tif, *nextdir) ||
-	    !ReadOK(tif, &dircount, sizeof (uint16))) {
-		TIFFError(module, "%s: Error fetching directory count",
-		    tif->tif_name);
-		return (0);
-	}
-	if (tif->tif_flags & TIFF_SWAB)
-		TIFFSwabShort(&dircount);
-	if (off != NULL)
-		*off = TIFFSeekFile(tif,
-		    dircount*sizeof (TIFFDirEntry), SEEK_CUR);
-	else
-		(void) TIFFSeekFile(tif,
-		    dircount*sizeof (TIFFDirEntry), SEEK_CUR);
-	if (!ReadOK(tif, nextdir, sizeof (uint32))) {
-		TIFFError(module, "%s: Error fetching directory link",
-		    tif->tif_name);
-		return (0);
-	}
-	if (tif->tif_flags & TIFF_SWAB)
-		TIFFSwabLong(nextdir);
-	return (1);
+    static const char module[] = "TIFFAdvanceDirectory";
+    uint16 dircount;
+    if (isMapped(tif))
+    {
+        toff_t poff=*nextdir;
+        if (poff+sizeof(uint16) > tif->tif_size)
+        {
+            TIFFError(module, "%s: Error fetching directory count",
+                      tif->tif_name);
+            return (0);
+        }
+        _TIFFmemcpy(&dircount, tif->tif_base+poff, sizeof (uint16));
+        if (tif->tif_flags & TIFF_SWAB)
+            TIFFSwabShort(&dircount);
+        poff+=sizeof (uint16)+dircount*sizeof (TIFFDirEntry);
+        if (off != NULL)
+            *off = poff;
+        if (((toff_t) (poff+sizeof (uint32))) > tif->tif_size)
+        {
+            TIFFError(module, "%s: Error fetching directory link",
+                      tif->tif_name);
+            return (0);
+        }
+        _TIFFmemcpy(nextdir, tif->tif_base+poff, sizeof (uint32));
+        if (tif->tif_flags & TIFF_SWAB)
+            TIFFSwabLong(nextdir);
+        return (1);
+    }
+    else
+    {
+        if (!SeekOK(tif, *nextdir) ||
+            !ReadOK(tif, &dircount, sizeof (uint16))) {
+            TIFFError(module, "%s: Error fetching directory count",
+                      tif->tif_name);
+            return (0);
+        }
+        if (tif->tif_flags & TIFF_SWAB)
+            TIFFSwabShort(&dircount);
+        if (off != NULL)
+            *off = TIFFSeekFile(tif,
+                                dircount*sizeof (TIFFDirEntry), SEEK_CUR);
+        else
+            (void) TIFFSeekFile(tif,
+                                dircount*sizeof (TIFFDirEntry), SEEK_CUR);
+        if (!ReadOK(tif, nextdir, sizeof (uint32))) {
+            TIFFError(module, "%s: Error fetching directory link",
+                      tif->tif_name);
+            return (0);
+        }
+        if (tif->tif_flags & TIFF_SWAB)
+            TIFFSwabLong(nextdir);
+        return (1);
+    }
 }
 
 /*
@@ -996,12 +1237,12 @@ TIFFAdvanceDirectory(TIFF* tif, uint32* nextdir, toff_t* off)
 tdir_t
 TIFFNumberOfDirectories(TIFF* tif)
 {
-	uint32 nextdir = tif->tif_header.tiff_diroff;
-	tdir_t n = 0;
-
-	while (nextdir != 0 && TIFFAdvanceDirectory(tif, &nextdir, NULL))
-		n++;
-	return (n);
+    toff_t nextdir = tif->tif_header.tiff_diroff;
+    tdir_t n = 0;
+    
+    while (nextdir != 0 && TIFFAdvanceDirectory(tif, &nextdir, NULL))
+        n++;
+    return (n);
 }
 
 /*
@@ -1011,7 +1252,7 @@ TIFFNumberOfDirectories(TIFF* tif)
 int
 TIFFSetDirectory(TIFF* tif, tdir_t dirn)
 {
-	uint32 nextdir;
+	toff_t nextdir;
 	tdir_t n;
 
 	nextdir = tif->tif_header.tiff_diroff;
@@ -1025,6 +1266,11 @@ TIFFSetDirectory(TIFF* tif, tdir_t dirn)
 	 * tif_curdir after successfully reading the directory.
 	 */
 	tif->tif_curdir = (dirn - n) - 1;
+	/*
+	 * Reset tif_dirnumber counter nad start new list of seen directories.
+	 * We need this in order to prevent IFD loops.
+	 */
+	tif->tif_dirnumber = 0;
 	return (TIFFReadDirectory(tif));
 }
 
@@ -1038,6 +1284,11 @@ int
 TIFFSetSubDirectory(TIFF* tif, uint32 diroff)
 {
 	tif->tif_nextdiroff = diroff;
+	/*
+	 * Reset tif_dirnumber counter nad start new list of seen directories.
+	 * We need this in order to prevent IFD loops.
+	 */
+	tif->tif_dirnumber = 0;
 	return (TIFFReadDirectory(tif));
 }
 
@@ -1067,7 +1318,7 @@ int
 TIFFUnlinkDirectory(TIFF* tif, tdir_t dirn)
 {
 	static const char module[] = "TIFFUnlinkDirectory";
-	uint32 nextdir;
+	toff_t nextdir;
 	toff_t off;
 	tdir_t n;
 
@@ -1174,7 +1425,6 @@ TIFFReassignTagToIgnore (enum TIFFIgnoreSense task, int TIFFtagID)
       case TIS_EMPTY:
         tagcount = 0 ;			/* Clear the list */
         return (TRUE) ;
-        break;
         
       default:
         break;
@@ -1182,3 +1432,4 @@ TIFFReassignTagToIgnore (enum TIFFIgnoreSense task, int TIFFtagID)
     
     return (FALSE);
 }
+

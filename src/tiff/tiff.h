@@ -42,8 +42,24 @@
 #define	TIFF_BIGENDIAN		0x4d4d
 #define	TIFF_LITTLEENDIAN	0x4949
 
-#ifndef _TIFF_DATA_TYPEDEFS_
+/*
+ * The so called TIFF types conflict with definitions from inttypes.h 
+ * included from sys/types.h on AIX (at least using VisualAge compiler). 
+ * We try to work around this by detecting this case.  Defining 
+ * _TIFF_DATA_TYPEDEFS_ short circuits the later definitions in tiff.h, and
+ * we will in the holes not provided for by inttypes.h. 
+ *
+ * See http://bugzilla.remotesensing.org/show_bug.cgi?id=39
+ */
+#if defined(_H_INTTYPES) && defined(_ALL_SOURCE) && defined(USING_VISUALAGE)
+
 #define _TIFF_DATA_TYPEDEFS_
+typedef unsigned char uint8;
+typedef unsigned short uint16;
+typedef unsigned int uint32;
+
+#endif
+
 /*
  * Intrinsic data types required by the file format:
  *
@@ -52,23 +68,22 @@
  * 32-bit quantities	int32/uint32
  * strings		unsigned char*
  */
-#ifndef _AIX43 /* int{8,16,32} already defined on AIX */
+#ifndef _TIFF_DATA_TYPEDEFS_
+#define _TIFF_DATA_TYPEDEFS_
+
 #ifdef __STDC__
 typedef	signed char int8;	/* NB: non-ANSI compilers may not grok */
 #else
 typedef	char int8;
 #endif
-typedef	short int16;
-#endif
 typedef	unsigned char uint8;
+typedef	short int16;
 typedef	unsigned short uint16;	/* sizeof (uint16) must == 2 */
-#if defined(__alpha) || (defined(_MIPS_SZLONG) && _MIPS_SZLONG == 64)
+#if defined(__alpha) || (defined(_MIPS_SZLONG) && _MIPS_SZLONG == 64) || defined(__LP64__) || defined(__arch64__)
 typedef	int int32;
 typedef	unsigned int uint32;	/* sizeof (uint32) must == 4 */
 #else
-#ifndef _AIX43
 typedef	long int32;
-#endif
 typedef	unsigned long uint32;	/* sizeof (uint32) must == 4 */
 #endif
 #endif /* _TIFF_DATA_TYPEDEFS_ */
@@ -101,10 +116,10 @@ typedef	struct {
  * offset field.
  */
 typedef	struct {
-	uint16	tdir_tag;	/* see below */
-	uint16	tdir_type;	/* data type; see below */
-	uint32  tdir_count;	/* number of items; length in spec */
-	uint32  tdir_offset;	/* byte offset to field data */
+	uint16		tdir_tag;	/* see below */
+	uint16		tdir_type;	/* data type; see below */
+	uint32		tdir_count;	/* number of items; length in spec */
+	uint32		tdir_offset;	/* byte offset to field data */
 } TIFFDirEntry;
 
 /*
@@ -133,7 +148,8 @@ typedef	enum {
 	TIFF_SLONG	= 9,	/* !32-bit signed integer */
 	TIFF_SRATIONAL	= 10,	/* !64-bit signed fraction */
 	TIFF_FLOAT	= 11,	/* !32-bit IEEE floating point */
-	TIFF_DOUBLE	= 12	/* !64-bit IEEE floating point */
+	TIFF_DOUBLE	= 12,	/* !64-bit IEEE floating point */
+	TIFF_IFD	= 13	/* %32-bit unsigned integer (offset) */
 } TIFFDataType;
 
 /*
@@ -154,15 +170,17 @@ typedef	enum {
 #define	    COMPRESSION_NONE		1	/* dump mode */
 #define	    COMPRESSION_CCITTRLE	2	/* CCITT modified Huffman RLE */
 #define	    COMPRESSION_CCITTFAX3	3	/* CCITT Group 3 fax encoding */
+#define     COMPRESSION_CCITT_T4        3       /* CCITT T.4 (TIFF 6 name) */
 #define	    COMPRESSION_CCITTFAX4	4	/* CCITT Group 4 fax encoding */
-#define	    COMPRESSION_LZW		5	/* Lempel-Ziv  & Welch */
+#define     COMPRESSION_CCITT_T6        4       /* CCITT T.6 (TIFF 6 name) */
+#define	    COMPRESSION_LZW		5       /* Lempel-Ziv  & Welch */
 #define	    COMPRESSION_OJPEG		6	/* !6.0 JPEG */
 #define	    COMPRESSION_JPEG		7	/* %JPEG DCT compression */
 #define	    COMPRESSION_NEXT		32766	/* NeXT 2-bit RLE */
 #define	    COMPRESSION_CCITTRLEW	32771	/* #1 w/ word alignment */
 #define	    COMPRESSION_PACKBITS	32773	/* Macintosh RLE */
 #define	    COMPRESSION_THUNDERSCAN	32809	/* ThunderScan RLE */
-/* codes 32895-32898 are reserved for ANSI IT8 TIFF/IT <dkelly@etsinc.com) */
+/* codes 32895-32898 are reserved for ANSI IT8 TIFF/IT <dkelly@apago.com) */
 #define	    COMPRESSION_IT8CTPAD	32895   /* IT8 CT w/padding */
 #define	    COMPRESSION_IT8LW		32896   /* IT8 Linework RLE */
 #define	    COMPRESSION_IT8MP		32897   /* IT8 Monochrome picture */
@@ -171,11 +189,13 @@ typedef	enum {
 #define     COMPRESSION_PIXARFILM	32908   /* Pixar companded 10bit LZW */
 #define	    COMPRESSION_PIXARLOG	32909   /* Pixar companded 11bit ZIP */
 #define	    COMPRESSION_DEFLATE		32946	/* Deflate compression */
+#define     COMPRESSION_ADOBE_DEFLATE   8       /* Deflate compression, as recognized by Adobe */
 /* compression code 32947 is reserved for Oceana Matrix <dev@oceana.com> */
 #define     COMPRESSION_DCS             32947   /* Kodak DCS encoding */
 #define	    COMPRESSION_JBIG		34661	/* ISO JBIG */
 #define     COMPRESSION_SGILOG		34676	/* SGI Log Luminance RLE */
 #define     COMPRESSION_SGILOG24	34677	/* SGI Log 24-bit packed */
+#define     COMPRESSION_JP2000          34712   /* Leadtools JPEG2000 */
 #define	TIFFTAG_PHOTOMETRIC		262	/* photometric interpretation */
 #define	    PHOTOMETRIC_MINISWHITE	0	/* min value is white */
 #define	    PHOTOMETRIC_MINISBLACK	1	/* min value is black */
@@ -185,6 +205,8 @@ typedef	enum {
 #define	    PHOTOMETRIC_SEPARATED	5	/* !color separations */
 #define	    PHOTOMETRIC_YCBCR		6	/* !CCIR 601 */
 #define	    PHOTOMETRIC_CIELAB		8	/* !1976 CIE L*a*b* */
+#define	    PHOTOMETRIC_ICCLAB		9	/* ICC L*a*b* [Adobe TIFF Technote 4] */
+#define	    PHOTOMETRIC_ITULAB		10	/* ITU L*a*b* */
 #define     PHOTOMETRIC_LOGL		32844	/* CIE Log2(L) */
 #define     PHOTOMETRIC_LOGLUV		32845	/* CIE Log2(L) (u',v') */
 #define	TIFFTAG_THRESHHOLDING		263	/* +thresholding used on data */
@@ -233,10 +255,12 @@ typedef	enum {
 #define	    GRAYRESPONSEUNIT_100000S	5	/* hundred-thousandths */
 #define	TIFFTAG_GRAYRESPONSECURVE	291	/* $gray scale response curve */
 #define	TIFFTAG_GROUP3OPTIONS		292	/* 32 flag bits */
+#define	TIFFTAG_T4OPTIONS		292	/* TIFF 6.0 proper name alias */
 #define	    GROUP3OPT_2DENCODING	0x1	/* 2-dimensional coding */
 #define	    GROUP3OPT_UNCOMPRESSED	0x2	/* data not compressed */
 #define	    GROUP3OPT_FILLBITS		0x4	/* fill to byte boundary */
 #define	TIFFTAG_GROUP4OPTIONS		293	/* 32 flag bits */
+#define TIFFTAG_T6OPTIONS               293     /* TIFF 6.0 proper name */
 #define	    GROUP4OPT_UNCOMPRESSED	0x2	/* data not compressed */
 #define	TIFFTAG_RESOLUTIONUNIT		296	/* units of resolutions */
 #define	    RESUNIT_NONE		1	/* no meaningful units */
@@ -271,7 +295,8 @@ typedef	enum {
 #define	TIFFTAG_CONSECUTIVEBADFAXLINES	328	/* max consecutive bad lines */
 #define	TIFFTAG_SUBIFD			330	/* subimage descriptors */
 #define	TIFFTAG_INKSET			332	/* !inks in separated image */
-#define	    INKSET_CMYK			1	/* !cyan-magenta-yellow-black */
+#define	    INKSET_CMYK			1	/* !cyan-magenta-yellow-black color */
+#define	    INKSET_MULTIINK		2	/* !multi-ink or hi-fi color */
 #define	TIFFTAG_INKNAMES		333	/* !ascii names of inks */
 #define	TIFFTAG_NUMBEROFINKS		334	/* !number of inks */
 #define	TIFFTAG_DOTRANGE		336	/* !0% and 100% dot codes */
@@ -285,9 +310,16 @@ typedef	enum {
 #define	    SAMPLEFORMAT_INT		2	/* !signed integer data */
 #define	    SAMPLEFORMAT_IEEEFP		3	/* !IEEE floating point data */
 #define	    SAMPLEFORMAT_VOID		4	/* !untyped data */
+#define	    SAMPLEFORMAT_COMPLEXINT	5	/* !complex signed int */
+#define	    SAMPLEFORMAT_COMPLEXIEEEFP	6	/* !complex ieee floating */
 #define	TIFFTAG_SMINSAMPLEVALUE		340	/* !variable MinSampleValue */
 #define	TIFFTAG_SMAXSAMPLEVALUE		341	/* !variable MaxSampleValue */
+#define	TIFFTAG_CLIPPATH		343	/* %ClipPath [Adobe TIFF technote 2] */
+#define	TIFFTAG_XCLIPPATHUNITS	344	/* %XClipPathUnits [Adobe TIFF technote 2] */
+#define	TIFFTAG_YCLIPPATHUNITS	344	/* %YClipPathUnits [Adobe TIFF technote 2] */
+#define	TIFFTAG_INDEXED			345	/* %Indexed [Adobe TIFF Technote 3] */
 #define	TIFFTAG_JPEGTABLES		347	/* %JPEG table stream */
+#define	TIFFTAG_OPIPROXY		351	/* %OPI Proxy [Adobe TIFF technote] */
 /*
  * Tags 512-521 are obsoleted by Technical Note #2
  * which specifies a revised JPEG-in-TIFF scheme.
@@ -309,6 +341,8 @@ typedef	enum {
 #define	    YCBCRPOSITION_CENTERED	1	/* !as in PostScript Level 2 */
 #define	    YCBCRPOSITION_COSITED	2	/* !as in CCIR 601-1 */
 #define	TIFFTAG_REFERENCEBLACKWHITE	532	/* !colorimetry info */
+#define	TIFFTAG_XMLPACKET		700		/* %XML packet [Adobe XMP technote 9-14-02] (dkelly@apago.com) */
+#define TIFFTAG_OPIIMAGEID		32781	/* %OPI ImageID [Adobe TIFF technote] */
 /* tags 32952-32956 are private tags registered to Island Graphics */
 #define TIFFTAG_REFPTS			32953	/* image reference points */
 #define TIFFTAG_REGIONTACKPOINT		32954	/* region-xform tack point */
@@ -329,13 +363,21 @@ typedef	enum {
  */
 #define TIFFTAG_PIXAR_IMAGEFULLWIDTH    33300   /* full image size in x */
 #define TIFFTAG_PIXAR_IMAGEFULLLENGTH   33301   /* full image size in y */
+ /* Tags 33302-33306 are used to identify special image modes and data
+  * used by Pixar's texture formats.
+  */
+#define TIFFTAG_PIXAR_TEXTUREFORMAT	33302	/* texture map format */
+#define TIFFTAG_PIXAR_WRAPMODES		33303	/* s & t wrap modes */
+#define TIFFTAG_PIXAR_FOVCOT		33304	/* cotan(fov) for env. maps */
+#define TIFFTAG_PIXAR_MATRIX_WORLDTOSCREEN 33305
+#define TIFFTAG_PIXAR_MATRIX_WORLDTOCAMERA 33306
 /* tag 33405 is a private tag registered to Eastman Kodak */
 #define TIFFTAG_WRITERSERIALNUMBER      33405   /* device serial number */
 /* tag 33432 is listed in the 6.0 spec w/ unknown ownership */
 #define	TIFFTAG_COPYRIGHT		33432	/* copyright string */
 /* IPTC TAG from RichTIFF specifications */
 #define TIFFTAG_RICHTIFFIPTC    33723
-/* 34016-34029 are reserved for ANSI IT8 TIFF/IT <dkelly@etsinc.com) */
+/* 34016-34029 are reserved for ANSI IT8 TIFF/IT <dkelly@apago.com) */
 #define TIFFTAG_IT8SITE			34016	/* site name */
 #define TIFFTAG_IT8COLORSEQUENCE	34017	/* color seq. [RGB,CMYK,etc] */
 #define TIFFTAG_IT8HEADER		34018	/* DDES Header */
@@ -350,6 +392,9 @@ typedef	enum {
 #define TIFFTAG_IT8PIXELINTENSITYRANGE	34027	/* MP pixel intensity value */
 #define TIFFTAG_IT8TRANSPARENCYINDICATOR 34028	/* HC transparency switch */
 #define TIFFTAG_IT8COLORCHARACTERIZATION 34029	/* color character. table */
+#define TIFFTAG_IT8HCUSAGE			34030	/* HC usage indicator */
+#define TIFFTAG_IT8TRAPINDICATOR	34031	/* Trapping indicator (untrapped=0, trapped=1) */
+#define TIFFTAG_IT8CMYKEQUIVALENT	34032	/* CMYK color equivalents */
 /* tags 34232-34236 are private tags registered to Texas Instruments */
 #define TIFFTAG_FRAMECOUNT              34232   /* Sequence Frame Count */
 /* tag 34750 is a private tag registered to Adobe? */
@@ -431,4 +476,7 @@ typedef	enum {
 #define     SGILOGDATAFMT_16BIT		1	/* 16-bit samples */
 #define     SGILOGDATAFMT_RAW		2	/* uninterpreted data */
 #define     SGILOGDATAFMT_8BIT		3	/* 8-bit RGB monitor values */
+#define TIFFTAG_SGILOGENCODE		65561 /* SGILog data encoding control*/
+#define     SGILOGENCODE_NODITHER	0     /* do not dither encoded values*/
+#define     SGILOGENCODE_RANDITHER	1     /* randomly dither encd values */
 #endif /* _TIFF_ */

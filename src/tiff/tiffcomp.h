@@ -52,21 +52,13 @@
 #endif
 
 #if defined(__MWERKS__) || defined(THINK_C)
-#ifdef __MACH__
-#include <sys/types.h>
-#else
 #include <unix.h>
 #include <math.h>
-#endif
-#endif
-
-#if defined (__SC__) && !defined (__DMC__)
-    #define __SYMANTEC__
 #endif
 
 #include <stdio.h>
 
-#if defined(__PPCC__) || defined(__SYMANTEC__) || defined(__MRC__)
+#if defined(__PPCC__) || defined(__SC__) || defined(__MRC__)
 #include <types.h>
 #elif !defined(__MWERKS__) && !defined(THINK_C) && !defined(__acornriscos) && !defined(applec)
 #include <sys/types.h>
@@ -87,16 +79,12 @@
  * additional includes are also done to pull in the
  * appropriate definitions we're looking for.
  */
-#if defined(__MWERKS__) || defined(THINK_C) || defined(__PPCC__) || defined(__SYMANTEC__) || defined(__MRC__)
+#if defined(__MWERKS__) || defined(THINK_C) || defined(__PPCC__) || defined(__SC__) || defined(__MRC__)
 #include <stdlib.h>
-#ifndef __MACH__
 #define	BSDTYPES
-#endif
 #define	HAVE_UNISTD_H	0
-#elif defined(_WINDOWS) || defined(__WIN32__) || defined(_Windows)
-#define BSDTYPES
-#elif defined(__DJGPP__)
-#define BSDTYPES
+#elif (defined(_WINDOWS) || defined(__WIN32__) || defined(_Windows) || defined(_WIN32)) && !defined(unix)
+#define	BSDTYPES
 #elif defined(OS2_16) || defined(OS2_32)
 #define	BSDTYPES
 #elif defined(__acornriscos)
@@ -131,11 +119,17 @@
  * then define BSDTYPES in your Makefile.
  */
 #if defined(BSDTYPES)
+# ifndef _BSDTYPES_DEFINED
+#  ifndef __u_char_defined
 typedef	unsigned char u_char;
 typedef	unsigned short u_short;
 typedef	unsigned int u_int;
 typedef	unsigned long u_long;
-#endif
+#   define __u_char_defined
+#  endif /* __u_char_defined */
+#  define _BSDTYPES_DEFINED
+# endif /* _BSDTYPES_DEFINED */
+#endif /* BSDTYPES */
 
 /*
  * dblparam_t is the type that a double precision
@@ -143,7 +137,7 @@ typedef	unsigned long u_long;
  * stack (when coerced by the compiler).
  */
 /* Note: on MacPowerPC "extended" is undefined. So only use it for 68K-Macs */
-#if defined(__SYMANTEC__) || defined(THINK_C)
+#if defined(__SC__) || defined(THINK_C)
 typedef extended dblparam_t;
 #else
 typedef double dblparam_t;

@@ -4,23 +4,23 @@
  * Copyright (c) 1988-1997 Sam Leffler
  * Copyright (c) 1991-1997 Silicon Graphics, Inc.
  *
- * Permission to use, copy, modify, distribute, and sell this software and
+ * Permission to use, copy, modify, distribute, and sell this software and 
  * its documentation for any purpose is hereby granted without fee, provided
  * that (i) the above copyright notices and this permission notice appear in
  * all copies of the software and related documentation, and (ii) the names of
  * Sam Leffler and Silicon Graphics may not be used in any advertising or
  * publicity relating to the software without the specific, prior written
  * permission of Sam Leffler and Silicon Graphics.
- *
- * THE SOFTWARE IS PROVIDED "AS-IS" AND WITHOUT WARRANTY OF ANY KIND,
- * EXPRESS, IMPLIED OR OTHERWISE, INCLUDING WITHOUT LIMITATION, ANY
- * WARRANTY OF MERCHANTABILITY OR FITNESS FOR A PARTICULAR PURPOSE.
- *
+ * 
+ * THE SOFTWARE IS PROVIDED "AS-IS" AND WITHOUT WARRANTY OF ANY KIND, 
+ * EXPRESS, IMPLIED OR OTHERWISE, INCLUDING WITHOUT LIMITATION, ANY 
+ * WARRANTY OF MERCHANTABILITY OR FITNESS FOR A PARTICULAR PURPOSE.  
+ * 
  * IN NO EVENT SHALL SAM LEFFLER OR SILICON GRAPHICS BE LIABLE FOR
  * ANY SPECIAL, INCIDENTAL, INDIRECT OR CONSEQUENTIAL DAMAGES OF ANY KIND,
  * OR ANY DAMAGES WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS,
- * WHETHER OR NOT ADVISED OF THE POSSIBILITY OF DAMAGE, AND ON ANY THEORY OF
- * LIABILITY, ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE
+ * WHETHER OR NOT ADVISED OF THE POSSIBILITY OF DAMAGE, AND ON ANY THEORY OF 
+ * LIABILITY, ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE 
  * OF THIS SOFTWARE.
  */
 
@@ -34,7 +34,7 @@
  * a port.h file that reflects the system capabilities.
  * Doing this obviates all the dreck done in tiffcomp.h.
  */
-#if (defined(unix) || defined(__unix)) && !defined(__DJGPP__)
+#if defined(unix) || defined(__unix)
 #include "port.h"
 #include "tiffconf.h"
 #else
@@ -49,6 +49,12 @@
 #define	FALSE	0
 #endif
 
+typedef struct client_info {
+    struct client_info *next;
+    void      *data;
+    char      *name;
+} TIFFClientInfoLink;
+
 /*
  * Typedefs for ``method pointers'' used internally.
  */
@@ -58,14 +64,11 @@ typedef	tidataval_t* tidata_t;		/* reference to internal image data */
 typedef	void (*TIFFVoidMethod)(TIFF*);
 typedef	int (*TIFFBoolMethod)(TIFF*);
 typedef	int (*TIFFPreMethod)(TIFF*, tsample_t);
-typedef	int (LINKAGEMODE *TIFFCodeMethod)(TIFF*, tidata_t, tsize_t, tsample_t);
-typedef	int (LINKAGEMODE *TIFFSeekMethod)(TIFF*, uint32);
-typedef	void (LINKAGEMODE *TIFFPostMethod)(TIFF*, tidata_t, tsize_t);
-typedef	int (*TIFFVSetMethod)(TIFF*, ttag_t, va_list);
-typedef	int (*TIFFVGetMethod)(TIFF*, ttag_t, va_list);
-typedef	void (LINKAGEMODE *TIFFPrintMethod)(TIFF*, FILE*, long);
-typedef	uint32 (LINKAGEMODE *TIFFStripMethod)(TIFF*, uint32);
-typedef	void (LINKAGEMODE *TIFFTileMethod)(TIFF*, uint32*, uint32*);
+typedef	int (*TIFFCodeMethod)(TIFF*, tidata_t, tsize_t, tsample_t);
+typedef	int (*TIFFSeekMethod)(TIFF*, uint32);
+typedef	void (*TIFFPostMethod)(TIFF*, tidata_t, tsize_t);
+typedef	uint32 (*TIFFStripMethod)(TIFF*, uint32);
+typedef	void (*TIFFTileMethod)(TIFF*, uint32*, uint32*);
 
 struct tiff {
 	char*		tif_name;	/* name of open file */
@@ -85,13 +88,15 @@ struct tiff {
 #define	TIFF_MAPPED		0x0800	/* file is mapped into memory */
 #define	TIFF_POSTENCODE		0x1000	/* need call to postencode routine */
 #define	TIFF_INSUBIFD		0x2000	/* currently writing a subifd */
-#define	TIFF_UPSAMPLED		0x4000	/* library is doing data up-sampling */
+#define	TIFF_UPSAMPLED		0x4000	/* library is doing data up-sampling */ 
 #define	TIFF_STRIPCHOP		0x8000	/* enable strip chopping support */
 	toff_t		tif_diroff;	/* file offset of current directory */
 	toff_t		tif_nextdiroff;	/* file offset of following directory */
+	toff_t*		tif_dirlist;	/* list of offsets to already seen */
+					/* directories to prevent IFD looping */
+	uint16		tif_dirnumber;  /* number of already seen directories */
 	TIFFDirectory	tif_dir;	/* internal rep of current directory */
 	TIFFHeader	tif_header;	/* file's header block */
-        tidata_t        tif_clientdir;  /* client TIFF directory */
 	const int*	tif_typeshift;	/* data type shift counts */
 	const long*	tif_typemask;	/* data type masks */
 	uint32		tif_row;	/* current scanline */
@@ -108,9 +113,11 @@ struct tiff {
 	ttile_t		tif_curtile;	/* current tile for read/write */
 	tsize_t		tif_tilesize;	/* # of bytes in a tile */
 /* compression scheme hooks */
+	int		tif_decodestatus;
 	TIFFBoolMethod	tif_setupdecode;/* called once before predecode */
 	TIFFPreMethod	tif_predecode;	/* pre- row/strip/tile decoding */
 	TIFFBoolMethod	tif_setupencode;/* called once before preencode */
+	int		tif_encodestatus;
 	TIFFPreMethod	tif_preencode;	/* pre- row/strip/tile encoding */
 	TIFFBoolMethod	tif_postencode;	/* post- row/strip/tile encoding */
 	TIFFCodeMethod	tif_decoderow;	/* scanline decoding routine */
@@ -149,9 +156,8 @@ struct tiff {
 /* tag support */
 	TIFFFieldInfo**	tif_fieldinfo;	/* sorted table of registered tags */
 	int		tif_nfields;	/* # entries in registered tag table */
-	TIFFVSetMethod	tif_vsetfield;	/* tag set routine */
-	TIFFVGetMethod	tif_vgetfield;	/* tag get routine */
-	TIFFPrintMethod	tif_printdir;	/* directory print routine */
+        TIFFTagMethods  tif_tagmethods; /* tag get/set/print routines */
+        TIFFClientInfoLink *tif_clientinfo; /* extra client information. */
 };
 
 #define	isPseudoTag(t)	(t > 0xffff)	/* is tag value normal or pseudo */
@@ -180,7 +186,7 @@ struct tiff {
  */
 #ifndef ReadOK
 #define	ReadOK(tif, buf, size) \
-	(TIFFReadFile(tif, (tdata_t) buf, (tsize_t) size) == (tsize_t) size)
+	(TIFFReadFile(tif, (tdata_t) buf, (tsize_t)(size)) == (tsize_t)(size))
 #endif
 #ifndef SeekOK
 #define	SeekOK(tif, off) \
@@ -192,8 +198,12 @@ struct tiff {
 #endif
 
 /* NB: the uint32 casts are to silence certain ANSI-C compilers */
-#define	TIFFhowmany(x, y) ((((uint32)(x))+(((uint32)(y))-1))/((uint32)(y)))
-#define	TIFFroundup(x, y) (TIFFhowmany(x,y)*((uint32)(y)))
+#define TIFFhowmany(x, y) ((((uint32)(x))+(((uint32)(y))-1))/((uint32)(y)))
+#define TIFFhowmany8(x) (((x)&0x07)?((uint32)(x)>>3)+1:(uint32)(x)>>3)
+#define	TIFFroundup(x, y) (TIFFhowmany(x,y)*(y))
+
+#define TIFFmax(A,B) ((A)>(B)?(A):(B))
+#define TIFFmin(A,B) ((A)<(B)?(A):(B))
 
 #if defined(__cplusplus)
 extern "C" {
@@ -206,15 +216,16 @@ extern	int _TIFFNoRowDecode(TIFF*, tidata_t, tsize_t, tsample_t);
 extern	int _TIFFNoStripDecode(TIFF*, tidata_t, tsize_t, tsample_t);
 extern	int _TIFFNoTileDecode(TIFF*, tidata_t, tsize_t, tsample_t);
 extern	void _TIFFNoPostDecode(TIFF*, tidata_t, tsize_t);
+extern  int  _TIFFNoPreCode (TIFF*, tsample_t); 
 extern	int _TIFFNoSeek(TIFF*, uint32);
 extern	void _TIFFSwab16BitData(TIFF*, tidata_t, tsize_t);
 extern	void _TIFFSwab32BitData(TIFF*, tidata_t, tsize_t);
 extern	void _TIFFSwab64BitData(TIFF*, tidata_t, tsize_t);
-extern	int  TIFFFlushData1(TIFF*);
-extern	void  TIFFFreeDirectory(TIFF*);
-extern	int  TIFFDefaultDirectory(TIFF*);
-extern	int  TIFFSetCompressionScheme(TIFF*, uint16);
-extern	int  TIFFSetDefaultCompressionState(TIFF*);
+extern	int TIFFFlushData1(TIFF*);
+extern	void TIFFFreeDirectory(TIFF*);
+extern	int TIFFDefaultDirectory(TIFF*);
+extern	int TIFFSetCompressionScheme(TIFF*, int);
+extern	int TIFFSetDefaultCompressionState(TIFF*);
 extern	uint32 _TIFFDefaultStripSize(TIFF*, uint32);
 extern	void _TIFFDefaultTileSize(TIFF*, uint32*, uint32*);
 
@@ -231,7 +242,7 @@ extern	void _TIFFprintAsciiTag(FILE*, const char*, const char*);
 GLOBALDATA(TIFFErrorHandler,_TIFFwarningHandler);
 GLOBALDATA(TIFFErrorHandler,_TIFFerrorHandler);
 
-extern int TIFFInitDumpMode(TIFF*, int);
+extern	int TIFFInitDumpMode(TIFF*, int);
 #ifdef PACKBITS_SUPPORT
 extern	int TIFFInitPackBits(TIFF*, int);
 #endif
