@@ -229,6 +229,12 @@ public:
                                  int step = 1,
                                  int flags = 0);
 
+    virtual void DrawMenuBarItem(wxDC& dc,
+                                 const wxRect& rect,
+                                 const wxString& label,
+                                 int flags = 0,
+                                 int indexAccel = -1);
+
     virtual void GetComboBitmaps(wxBitmap *bmpNormal,
                                  wxBitmap *bmpPressed,
                                  wxBitmap *bmpDisabled);
@@ -273,6 +279,7 @@ public:
     virtual wxSize GetSliderThumbSize(const wxRect& rect,
                                       wxOrientation orient) const;
     virtual wxSize GetProgressBarStep() const { return wxSize(16, 32); }
+    virtual wxSize GetMenuBarItemSize(const wxSize& sizeText) const;
 
 protected:
     // helper of DrawLabel() and DrawCheckOrRadioButton()
@@ -1719,12 +1726,13 @@ void wxWin32Renderer::DrawItem(wxDC& dc,
                                const wxRect& rect,
                                int flags)
 {
-    wxColour colFg;
+    wxDCTextColourChanger colChanger(dc);
+
     if ( flags & wxCONTROL_SELECTED )
     {
+        colChanger.Set(wxSCHEME_COLOUR(m_scheme, HIGHLIGHT_TEXT));
+
         wxColour colBg = wxSCHEME_COLOUR(m_scheme, HIGHLIGHT);
-        colFg = dc.GetTextForeground();
-        dc.SetTextForeground(wxSCHEME_COLOUR(m_scheme, HIGHLIGHT_TEXT));
         dc.SetBrush(wxBrush(colBg, wxSOLID));
         dc.SetPen(wxPen(colBg, 0, wxSOLID));
         dc.DrawRectangle(rect);
@@ -1738,12 +1746,6 @@ void wxWin32Renderer::DrawItem(wxDC& dc,
     if ( flags & wxCONTROL_FOCUSED )
     {
         DrawFocusRect(dc, rect);
-    }
-
-    // restore the text colour
-    if ( colFg.Ok() )
-    {
-        dc.SetTextForeground(colFg);
     }
 }
 
@@ -2249,6 +2251,44 @@ void wxWin32Renderer::DrawSliderTicks(wxDC& dc,
 
     // always draw the line at the end position
     DrawLine(dc, x2, y1, x2, y2, orient == wxVERTICAL);
+}
+
+// ----------------------------------------------------------------------------
+// menu and menubar
+// ----------------------------------------------------------------------------
+
+void wxWin32Renderer::DrawMenuBarItem(wxDC& dc,
+                                      const wxRect& rect,
+                                      const wxString& label,
+                                      int flags,
+                                      int indexAccel)
+{
+    wxDCTextColourChanger colChanger(dc);
+
+    if ( flags & wxCONTROL_SELECTED )
+    {
+        colChanger.Set(wxSCHEME_COLOUR(m_scheme, HIGHLIGHT_TEXT));
+
+        wxColour colBg = wxSCHEME_COLOUR(m_scheme, HIGHLIGHT);
+        dc.SetBrush(wxBrush(colBg, wxSOLID));
+        dc.SetPen(wxPen(colBg, 0, wxSOLID));
+        dc.DrawRectangle(rect);
+    }
+
+    // don't draw the focus rect around menu bar items
+    DrawLabel(dc, label, rect, flags & ~wxCONTROL_FOCUSED,
+              wxALIGN_CENTRE, indexAccel);
+}
+
+wxSize wxWin32Renderer::GetMenuBarItemSize(const wxSize& sizeText) const
+{
+    wxSize size = sizeText;
+
+    // FIXME: menubar height is configurable under Windows
+    size.x += 5;
+    size.y += 5;
+
+    return size;
 }
 
 // ----------------------------------------------------------------------------

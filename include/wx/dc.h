@@ -747,5 +747,34 @@ private:
     #include "wx/stubs/dc.h"
 #endif
 
+// ----------------------------------------------------------------------------
+// helper class: you can use it to temporarily change the DC text colour and
+// restore it automatically when the object goes out of scope
+// ----------------------------------------------------------------------------
+
+class WXDLLEXPORT wxDCTextColourChanger
+{
+public:
+    wxDCTextColourChanger(wxDC& dc) : m_dc(dc) { }
+
+    ~wxDCTextColourChanger()
+    {
+        if ( m_colFgOld.Ok() )
+            m_dc.SetTextForeground(m_colFgOld);
+    }
+
+    void Set(const wxColour& col)
+    {
+        if ( !m_colFgOld.Ok() )
+            m_colFgOld = m_dc.GetTextForeground();
+        m_dc.SetTextForeground(col);
+    }
+
+private:
+    wxDC& m_dc;
+
+    wxColour m_colFgOld;
+};
+
 #endif
     // _WX_DC_H_BASE_

@@ -131,9 +131,11 @@ protected:
     // helper
     void DetachMenuBar();
 
+#if wxUSE_MENUS_NATIVE
     // a plug in for MDI frame classes which need to do something special when
     // the menubar is set
     virtual void InternalSetMenuBar();
+#endif // wxUSE_MENUS_NATIVE
 
     // propagate our state change to all child frames
     void IconizeChildFrames(bool bIconize);

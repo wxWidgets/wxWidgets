@@ -21,6 +21,7 @@
 #include "wx/bitmap.h"      // for m_bitmapBg
 
 class WXDLLEXPORT wxControlRenderer;
+class WXDLLEXPORT wxMenu;
 class WXDLLEXPORT wxRenderer;
 class WXDLLEXPORT wxScrollBar;
 
@@ -102,6 +103,14 @@ public:
 
     // take into account the borders here
     virtual wxPoint GetClientAreaOrigin() const;
+
+    // popup menu support
+    // ------------------
+
+#if wxUSE_MENUS
+    // implemented in menu.cpp
+    virtual bool DoPopupMenu(wxMenu *menu, int x, int y);
+#endif // wxUSE_MENUS
 
     // miscellaneous other methods
     // ---------------------------

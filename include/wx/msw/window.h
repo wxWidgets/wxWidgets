@@ -28,6 +28,14 @@
 //     to reenable it
 #define wxUSE_MOUSEEVENT_HACK 0
 
+// when building wxUniv/MSW we don't want the code for native menu use to be
+// compiled in - it should only be used when building real wxMSW
+#ifdef __WXUNIVERSAL__
+    #define wxUSE_MENUS_NATIVE 0
+#else // __WXMSW__
+    #define wxUSE_MENUS_NATIVE wxUSE_MENUS
+#endif // __WXUNIVERSAL__/__WXMSW__
+
 // ---------------------------------------------------------------------------
 // constants
 // ---------------------------------------------------------------------------
@@ -103,9 +111,9 @@ public:
                                const wxFont *theFont = (const wxFont *) NULL)
                                const;
 
-#if wxUSE_MENUS
+#if wxUSE_MENUS_NATIVE
     virtual bool DoPopupMenu( wxMenu *menu, int x, int y );
-#endif // wxUSE_MENUS
+#endif // wxUSE_MENUS_NATIVE
 
     virtual void SetScrollbar( int orient, int pos, int thumbVisible,
                                int range, bool refresh = TRUE );

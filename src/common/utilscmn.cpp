@@ -419,9 +419,41 @@ wxChar *wxStripMenuCodes(wxChar *in, wxChar *out)
     return out;
 }
 
-wxString wxStripMenuCodes(const wxString& str)
+wxString wxStripMenuCodes(const wxString& in)
 {
-    return wxMenuItem::GetLabelFromText(str);
+    wxString out;
+
+    size_t len = in.length();
+    out.reserve(len);
+
+    for ( size_t n = 0; n < len; n++ )
+    {
+        wxChar ch = in[n];
+        if ( ch == _T('&') )
+        {
+            // skip it, it is used to introduce the accel char (or to quote
+            // itself in which case it should still be skipped): note that it
+            // can't be the last character of the string
+            if ( ++n == len )
+            {
+                wxLogDebug(_T("Invalid menu string '%s'"), in.c_str());
+            }
+            else
+            {
+                // use the next char instead
+                ch = in[n];
+            }
+        }
+        else if ( ch == _T('\t') )
+        {
+            // everything after TAB is accel string, exit the loop
+            break;
+        }
+
+        out += ch;
+    }
+
+    return out;
 }
 
 #endif // wxUSE_MENUS

@@ -32,6 +32,7 @@
     #include "wx/dynarray.h"
     #include "wx/controlh"      // for FindAccelIndex()
     #include "wx/menu.h"
+    #include "wx/settings.h"
 #endif // WX_PRECOMP
 
 #if wxUSE_MENUS
@@ -44,18 +45,18 @@
 
 struct WXDLLEXPORT wxMenuInfo
 {
-    wxMenuInfo(wxMenuBar *menubar, const wxString& title)
+    wxMenuInfo(wxMenuBar *menubar, const wxString& text)
     {
-        SetLabel(menubar, title);
+        SetLabel(menubar, text);
     }
 
-    void SetLabel(wxMenuBar *menubar, const wxString& title)
+    void SetLabel(wxMenuBar *menubar, const wxString& text)
     {
-        label = title;
+        indexAccel = wxControl::FindAccelIndex(text, &label);
 
         wxSize size;
         wxClientDC dc(menubar);
-        dc.GetTextExtent(title, &size.x, &size.y);
+        dc.GetTextExtent(label, &size.x, &size.y);
 
         // adjust for the renderer we use and store the width
         width = menubar->GetRenderer()->GetMenuBarItemSize(size).x;
@@ -63,6 +64,7 @@ struct WXDLLEXPORT wxMenuInfo
 
     wxString label;
     wxCoord width;
+    int indexAccel;
     bool isEnabled;
 };
 
@@ -74,9 +76,9 @@ WX_DEFINE_OBJARRAY(wxMenuInfoArray);
 // wxWin macros
 // ----------------------------------------------------------------------------
 
-IMPLEMENT_DYNAMIC_CLASS(wxMenu, wxMenuBase)
-IMPLEMENT_DYNAMIC_CLASS(wxMenuBar, wxMenuBarBase)
-IMPLEMENT_DYNAMIC_CLASS(wxMenuItem, wxMenuItemBase)
+IMPLEMENT_DYNAMIC_CLASS(wxMenu, wxEvtHandler)
+IMPLEMENT_DYNAMIC_CLASS(wxMenuBar, wxWindow)
+IMPLEMENT_DYNAMIC_CLASS(wxMenuItem, wxObject)
 
 BEGIN_EVENT_TABLE(wxMenuBar, wxMenuBarBase)
     EVT_SET_FOCUS(wxMenuBar::OnSetFocus)
@@ -90,6 +92,18 @@ END_EVENT_TABLE()
 
 // ----------------------------------------------------------------------------
 // wxMenu
+// ----------------------------------------------------------------------------
+
+void wxMenu::Init()
+{
+}
+
+wxMenu::~wxMenu()
+{
+}
+
+// ----------------------------------------------------------------------------
+// wxMenu adding/removing items
 // ----------------------------------------------------------------------------
 
 bool wxMenu::DoAppend(wxMenuItem *item)
@@ -120,9 +134,37 @@ wxMenuItem *wxMenu::DoRemove(wxMenuItem *item)
 }
 
 // ----------------------------------------------------------------------------
-// wxMenuItemBase
+// wxMenuItem construction
 // ----------------------------------------------------------------------------
 
+wxMenuItem::wxMenuItem(wxMenu *parentMenu,
+                       int id,
+                       const wxString& text,
+                       const wxString& help,
+                       bool isCheckable,
+                       wxMenu *subMenu)
+{
+    m_id = id;
+    m_parentMenu = parentMenu;
+    m_subMenu = subMenu;
+
+    m_text = text;
+    m_help = help;
+
+    m_isCheckable = isCheckable;
+    m_isEnabled = TRUE;
+    m_isChecked = FALSE;
+}
+
+wxMenuItem::~wxMenuItem()
+{
+}
+
+// ----------------------------------------------------------------------------
+// wxMenuItemBase methods implemented here
+// ----------------------------------------------------------------------------
+
+/* static */
 wxMenuItem *wxMenuItemBase::New(wxMenu *parentMenu,
                                 int id,
                                 const wxString& name,
@@ -131,6 +173,37 @@ wxMenuItem *wxMenuItemBase::New(wxMenu *parentMenu,
                                 wxMenu *subMenu)
 {
     return new wxMenuItem(parentMenu, id, name, help, isCheckable, subMenu);
+}
+
+/* static */
+wxString wxMenuItemBase::GetLabelFromText(const wxString& text)
+{
+    return wxStripMenuCodes(text);
+}
+
+// ----------------------------------------------------------------------------
+// wxMenuItem operations
+// ----------------------------------------------------------------------------
+
+void wxMenuItem::SetText(const wxString& text)
+{
+}
+
+void wxMenuItem::SetCheckable(bool checkable)
+{
+}
+
+void wxMenuItem::Enable(bool enable)
+{
+}
+
+void wxMenuItem::Check(bool check)
+{
+}
+
+bool wxMenuItem::IsChecked() const
+{
+    return FALSE;
 }
 
 // ----------------------------------------------------------------------------
@@ -163,6 +236,8 @@ void wxMenuBar::Attach(wxFrame *frame)
     {
         // we have no way to return the error from here anyhow :-(
         (void)Create(frame, -1);
+
+        SetFont(wxSystemSettings::GetSystemFont(wxSYS_SYSTEM_FONT));
     }
 
     // remember the last frame which had us to avoid unnecessarily reparenting
@@ -179,6 +254,10 @@ void wxMenuBar::Detach()
     }
 
     wxMenuBarBase::Detach();
+}
+
+wxMenuBar::~wxMenuBar()
+{
 }
 
 // ----------------------------------------------------------------------------
@@ -344,9 +423,14 @@ void wxMenuBar::DoDraw(wxControlRenderer *renderer)
             flags |= wxCONTROL_SELECTED;
         }
 
-        wxString label = GetLabelTop(n);
-        GetRenderer()->DrawMenuBarItem(renderer->GetDC(), rect, label, flags,
-                                       wxControl::FindAccelIndex(label));
+        GetRenderer()->DrawMenuBarItem
+                       (
+                            renderer->GetDC(),
+                            rect,
+                            m_menuInfos[n].label,
+                            flags,
+                            m_menuInfos[n].indexAccel
+                       );
     }
 }
 
@@ -499,6 +583,17 @@ void wxMenuBar::OnKeyDown(wxKeyEvent& event)
         default:
             event.Skip();
     }
+}
+
+// ----------------------------------------------------------------------------
+// popup menu support
+// ----------------------------------------------------------------------------
+
+bool wxWindow::DoPopupMenu(wxMenu *menu, int x, int y)
+{
+    wxFAIL_MSG( _T("not implemented") );
+
+    return FALSE;
 }
 
 #endif // wxUSE_MENUS

@@ -687,20 +687,20 @@ void wxMenuBarBase::Detach()
 
 wxMenuItem *wxMenuBarBase::FindItem(int id, wxMenu **menu) const
 {
-    if ( itemMenu )
-        *itemMenu = NULL;
+    if ( menu )
+        *menu = NULL;
 
     wxMenuItem *item = NULL;
     size_t count = GetMenuCount();
     for ( size_t i = 0; !item && (i < count); i++ )
     {
-        item = m_menus[i]->FindItem(id, itemMenu);
+        item = m_menus[i]->FindItem(id, menu);
     }
 
     return item;
 }
 
-int wxMenuBarBp::FindMenuItem(const wxString& menu, const wxString& item) const
+int wxMenuBarBase::FindMenuItem(const wxString& menu, const wxString& item) const
 {
     wxString label = wxMenuItem::GetLabelFromText(menu);
 

@@ -68,9 +68,9 @@ extern wxWindowList wxModelessWindows;
 extern wxList WXDLLEXPORT wxPendingDelete;
 extern const wxChar *wxFrameClassName;
 
-#if wxUSE_MENUS
+#if wxUSE_MENUS_NATIVE
 extern wxMenu *wxCurrentPopupMenu;
-#endif // wxUSE_MENUS
+#endif // wxUSE_MENUS_NATIVE
 
 // ----------------------------------------------------------------------------
 // event tables
@@ -449,22 +449,19 @@ void wxFrame::DetachMenuBar()
 void wxFrame::SetMenuBar(wxMenuBar *menubar)
 {
 #if wxUSE_MENUS
+    // detach the old menu bar in any case
+    DetachMenuBar();
+
+#if wxUSE_MENUS_NATIVE
     if ( !menubar )
     {
-        DetachMenuBar();
-
         // actually remove the menu from the frame
         m_hMenu = (WXHMENU)0;
         InternalSetMenuBar();
     }
     else // set new non NULL menu bar
     {
-        m_frameMenuBar = NULL;
-
         // Can set a menubar several times.
-        // TODO: how to prevent a memory leak if you have a currently-unattached
-        // menubar? wxWindows assumes that the frame will delete the menu (otherwise
-        // there are problems for MDI).
         if ( menubar->GetHMenu() )
         {
             m_hMenu = menubar->GetHMenu();
@@ -480,12 +477,18 @@ void wxFrame::SetMenuBar(wxMenuBar *menubar)
         }
 
         InternalSetMenuBar();
+    }
+#endif // wxUSE_MENUS_NATIVE
 
+    if ( menubar )
+    {
         m_frameMenuBar = menubar;
         menubar->Attach(this);
     }
 #endif // wxUSE_MENUS
 }
+
+#if wxUSE_MENUS_NATIVE
 
 void wxFrame::InternalSetMenuBar()
 {
@@ -494,6 +497,8 @@ void wxFrame::InternalSetMenuBar()
         wxLogLastError(wxT("SetMenu"));
     }
 }
+
+#endif // wxUSE_MENUS_NATIVE
 
 // Responds to colour changes, and passes event on to children.
 void wxFrame::OnSysColourChanged(wxSysColourChangedEvent& event)
@@ -855,7 +860,7 @@ bool wxFrame::MSWTranslateMessage(WXMSG* pMsg)
     if ( wxWindow::MSWTranslateMessage(pMsg) )
         return TRUE;
 
-#if wxUSE_MENUS
+#if wxUSE_MENUS && wxUSE_ACCEL
     // try the menu bar accels
     wxMenuBar *menuBar = GetMenuBar();
     if ( !menuBar )
@@ -865,7 +870,7 @@ bool wxFrame::MSWTranslateMessage(WXMSG* pMsg)
     return acceleratorTable.Translate(this, pMsg);
 #else
     return FALSE;
-#endif // wxUSE_MENUS
+#endif // wxUSE_MENUS && wxUSE_ACCEL
 }
 
 // ---------------------------------------------------------------------------
@@ -982,7 +987,7 @@ bool wxFrame::HandleCommand(WXWORD id, WXWORD cmd, WXHWND control)
     // handle here commands from menus and accelerators
     if ( cmd == 0 || cmd == 1 )
     {
-#if wxUSE_MENUS
+#if wxUSE_MENUS_NATIVE
         if ( wxCurrentPopupMenu )
         {
             wxMenu *popupMenu = wxCurrentPopupMenu;
@@ -990,7 +995,7 @@ bool wxFrame::HandleCommand(WXWORD id, WXWORD cmd, WXHWND control)
 
             return popupMenu->MSWCommand(cmd, id);
         }
-#endif // wxUSE_MENUS
+#endif // wxUSE_MENUS_NATIVE
 
         if ( ProcessCommand(id) )
         {

@@ -185,6 +185,12 @@ public:
         // we don't have the ticks in GTK version
     }
 
+    virtual void DrawMenuBarItem(wxDC& dc,
+                                 const wxRect& rect,
+                                 const wxString& label,
+                                 int flags = 0,
+                                 int indexAccel = -1);
+
     virtual void GetComboBitmaps(wxBitmap *bmpNormal,
                                  wxBitmap *bmpPressed,
                                  wxBitmap *bmpDisabled);
@@ -230,6 +236,7 @@ public:
     virtual wxSize GetSliderThumbSize(const wxRect& rect,
                                       wxOrientation orient) const;
     virtual wxSize GetProgressBarStep() const { return wxSize(16, 32); }
+    virtual wxSize GetMenuBarItemSize(const wxSize& sizeText) const;
 
     // helpers for "wxBitmap wxColourScheme::Get()"
     void DrawCheckBitmap(wxDC& dc, const wxRect& rect);
@@ -1719,6 +1726,24 @@ void wxGTKRenderer::DrawSliderThumb(wxDC& dc,
     }
 
     DrawShadedRect(dc, &rect, m_penDarkGrey, m_penHighlight);
+}
+
+// ----------------------------------------------------------------------------
+// menu and menubar
+// ----------------------------------------------------------------------------
+
+void wxGTKRenderer::DrawMenuBarItem(wxDC& dc,
+                                    const wxRect& rect,
+                                    const wxString& label,
+                                    int flags,
+                                    int indexAccel)
+{
+    DrawLabel(dc, label, rect, flags, wxALIGN_CENTRE, indexAccel);
+}
+
+wxSize wxGTKRenderer::GetMenuBarItemSize(const wxSize& sizeText) const
+{
+    return sizeText;
 }
 
 // ----------------------------------------------------------------------------

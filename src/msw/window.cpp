@@ -110,9 +110,9 @@
 // the last Windows message we got (MT-UNSAFE)
 extern MSG s_currentMsg;
 
-#if wxUSE_MENUS
+#if wxUSE_MENUS_NATIVE
 wxMenu *wxCurrentPopupMenu = NULL;
-#endif // wxUSE_MENUS
+#endif // wxUSE_MENUS_NATIVE
 
 extern wxList WXDLLEXPORT wxPendingDelete;
 extern const wxChar *wxCanvasClassName;
@@ -148,7 +148,13 @@ static bool IsMouseInWindow(HWND hwnd);
 // event tables
 // ---------------------------------------------------------------------------
 
-IMPLEMENT_DYNAMIC_CLASS(wxWindowMSW, wxWindowBase)
+// in wxUniv/MSW this class is abstract because it doesn't have DoPopupMenu()
+// method
+#ifdef __WXUNIVERSAL__
+    IMPLEMENT_ABSTRACT_CLASS(wxWindowMSW, wxWindowBase)
+#else // __WXMSW__
+    IMPLEMENT_DYNAMIC_CLASS(wxWindowMSW, wxWindowBase)
+#endif // __WXUNIVERSAL__/__WXMSW__
 
 BEGIN_EVENT_TABLE(wxWindowMSW, wxWindowBase)
     EVT_ERASE_BACKGROUND(wxWindowMSW::OnEraseBackground)
@@ -1537,7 +1543,7 @@ void wxWindowMSW::GetCaretPos(int *x, int *y) const
 // popup menu
 // ---------------------------------------------------------------------------
 
-#if wxUSE_MENUS
+#if wxUSE_MENUS_NATIVE
 
 bool wxWindowMSW::DoPopupMenu(wxMenu *menu, int x, int y)
 {
@@ -1560,7 +1566,7 @@ bool wxWindowMSW::DoPopupMenu(wxMenu *menu, int x, int y)
     return TRUE;
 }
 
-#endif // wxUSE_MENUS
+#endif // wxUSE_MENUS_NATIVE
 
 // ===========================================================================
 // pre/post message processing
@@ -2950,7 +2956,7 @@ bool wxWindowMSW::MSWOnDrawItem(int id, WXDRAWITEMSTRUCT *itemStruct)
 {
 #if wxUSE_OWNER_DRAWN
 
-#if wxUSE_MENUS
+#if wxUSE_MENUS_NATIVE
     // is it a menu item?
     if ( id == 0 )
     {
@@ -2973,7 +2979,7 @@ bool wxWindowMSW::MSWOnDrawItem(int id, WXDRAWITEMSTRUCT *itemStruct)
                             (wxOwnerDrawn::wxODStatus)pDrawStruct->itemState
                           );
     }
-#endif // wxUSE_MENUS
+#endif // wxUSE_MENUS_NATIVE
 
 #if wxUSE_CONTROLS
     wxWindow *item = FindItem(id);
@@ -3288,7 +3294,7 @@ void wxWindowMSW::SendSizeEvent()
 
 bool wxWindowMSW::HandleCommand(WXWORD id, WXWORD cmd, WXHWND control)
 {
-#if wxUSE_MENUS
+#if wxUSE_MENUS_NATIVE
     if ( wxCurrentPopupMenu )
     {
         wxMenu *popupMenu = wxCurrentPopupMenu;
@@ -3296,7 +3302,7 @@ bool wxWindowMSW::HandleCommand(WXWORD id, WXWORD cmd, WXHWND control)
 
         return popupMenu->MSWCommand(cmd, id);
     }
-#endif // wxUSE_MENUS
+#endif // wxUSE_MENUS_NATIVE
 
     wxWindow *win = (wxWindow*) NULL;
     if ( cmd == 0 || cmd == 1 ) // menu or accel - use id
