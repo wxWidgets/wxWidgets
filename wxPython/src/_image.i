@@ -134,7 +134,19 @@ public:
 values than startR, startG, startB.  Returns a tuple consisting of a
 success flag and rgb values.", "");
 
+    
+    DocDeclStr(
+        bool , ConvertAlphaToMask(byte threshold = 128),
+        "If the image has alpha channel, this method converts it to mask. All pixels
+with alpha value less than ``threshold`` are replaced with mask colour and the
+alpha channel is removed. Mask colour is chosen automatically using
+`FindFirstUnusedColour`.
 
+If the image image doesn't have alpha channel, ConvertAlphaToMask does
+nothing.", "");
+    
+
+    
     // Set image's mask to the area of 'mask' that has <mr,mg,mb> colour
     bool SetMaskFromImage(const wxImage & mask,
                           byte mr, byte mg, byte mb);
