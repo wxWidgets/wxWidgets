@@ -44,6 +44,7 @@
 #include "wx/volume.h"
 
 #include <shellapi.h>
+#include <shlobj.h>
 #include "wx/msw/missing.h"
 
 #if wxUSE_BASE

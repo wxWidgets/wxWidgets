@@ -281,7 +281,7 @@ int wxEventLoop::Run()
     // wxModalEventLoop depends on this (so we can't just use ON_BLOCK_EXIT or
     // something similar here)
 #if wxUSE_EXCEPTIONS
-    bool retryAfterException;
+    bool retryAfterException = false;
     do {
         retryAfterException=false;
 #endif
