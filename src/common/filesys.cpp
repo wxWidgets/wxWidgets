@@ -39,7 +39,7 @@ wxString wxFileSystemHandler::GetMimeTypeFromExt(const wxString& location)
 {
     wxString ext, mime;
     wxString loc = GetRightLocation(location);
-    char c;
+    wxChar c;
     int l = loc.Length(), l2;
 
     l2 = l;
@@ -166,7 +166,7 @@ wxString wxFileSystemHandler::GetRightLocation(const wxString& location) const
 
 wxString wxFileSystemHandler::GetAnchor(const wxString& location) const
 {
-    char c;
+    wxChar c;
     int l = location.Length();
 
     for (int i = l-1; i >= 0; i--) {
@@ -354,7 +354,7 @@ wxFSFile* wxFileSystem::OpenFile(const wxString& location)
 {
     wxString loc = MakeCorrectPath(location);
     unsigned i, ln;
-    char meta;
+    wxChar meta;
     wxFSFile *s = NULL;
     wxList::compatibility_iterator node;
 
