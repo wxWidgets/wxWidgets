@@ -360,8 +360,7 @@ void wxScrollHelper::SetScrollbars(int pixelsPerUnitX,
     // For better backward compatibility we set persisting limits
     // here not just the size.  It makes SetScrollbars 'sticky'
     // emulating the old non-autoscroll behaviour.
-
-    m_targetWindow->SetVirtualSizeHints( w, h );
+    //   m_targetWindow->SetVirtualSizeHints( w, h );
 
     // The above should arguably be deprecated, this however we still need.
 
