@@ -368,11 +368,11 @@ $(TAB)copy "$(DOLLAR)(InputPath)" $(LIBDIRNAME)\wx\setup.h
             <msvc-file-group>wxUniv Sources:src/univ/*</msvc-file-group>
             <msvc-file-group>wxHTML Sources:src/html/*</msvc-file-group>
             <msvc-file-group>Setup Headers:*/setup.h</msvc-file-group>
-            <msvc-file-group>Common Headers:*wx/[!/]*.h</msvc-file-group>
             <msvc-file-group>MSW Headers:*wx/msw/*.h</msvc-file-group>
             <msvc-file-group>Generic Headers:*wx/generic/*.h</msvc-file-group>
             <msvc-file-group>wxUniv Headers:*wx/univ/*.h</msvc-file-group>
             <msvc-file-group>wxHTML Headers:*wx/html/*.h</msvc-file-group>
+            <msvc-file-group>Common Headers:*wx/*.h</msvc-file-group>
         </if>
     </template>
 
