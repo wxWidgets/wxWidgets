@@ -18,7 +18,9 @@
 #if wxUSE_SOCKETS || defined(__GSOCKET_STANDALONE__)
 
 #include <stddef.h>
+#ifndef __WXMAC__
 #include <sys/types.h>
+#endif
 
 #ifdef __cplusplus
 extern "C" {

@@ -54,6 +54,10 @@ protected:
     #include "wx/msw/statbr95.h"
 
     typedef wxStatusBar95 wxStatusBarReal;
+#elif defined(__WXMAC__)
+    #include "wx/mac/statusbr.h"
+
+    typedef wxStatusBarMac wxStatusBarReal;
 #else
     #include "wx/generic/statusbr.h"
 

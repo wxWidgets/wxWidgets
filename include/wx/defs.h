@@ -691,7 +691,7 @@ typedef float wxFloat32 ;
         = { 0xE158 };
 
     #pragma parameter __D0 wxINT16_SWAP_ALWAYS(__D0)
-    pascal wxInt16 wxUINT16_SWAP_ALWAYS(wxInt16 value)
+    pascal wxInt16 wxINT16_SWAP_ALWAYS(wxInt16 value)
         = { 0xE158 };
 
     #pragma parameter __D0 wxUINT32_SWAP_ALWAYS (__D0)
@@ -699,7 +699,7 @@ typedef float wxFloat32 ;
         = { 0xE158, 0x4840, 0xE158 };
 
     #pragma parameter __D0 wxINT32_SWAP_ALWAYS (__D0)
-    pascal wxInt32 wxUINT32_SWAP_ALWAYS(wxInt32 value)
+    pascal wxInt32 wxINT32_SWAP_ALWAYS(wxInt32 value)
         = { 0xE158, 0x4840, 0xE158 };
 
 #endif
