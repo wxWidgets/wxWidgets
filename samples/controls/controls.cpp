@@ -193,6 +193,7 @@ bool MyApp::OnInit()
     frame->SetMenuBar(menu_bar);
 
     frame->Show(TRUE);
+    frame->SetCursor(wxCursor(wxCURSOR_HAND));
 
     SetTopWindow(frame);
 
@@ -497,13 +498,14 @@ m_text(NULL), m_notebook(NULL)
 
     wxString choices2[] =
     {
-        "Wonderful",
-        "examples.",
+        "First", "Second", "Third",
+        "Fourth", "Fifth", //"Sixth",
+        //"Seventh", "Eighth", "Nineth", "Tenth"
     };
 
     panel = new wxPanel(m_notebook);
-    (void)new wxRadioBox( panel, ID_RADIOBOX, "That", wxPoint(10,160), wxSize(-1,-1), 2, choices2, 1, wxRA_SPECIFY_ROWS );
-    m_radio = new wxRadioBox( panel, ID_RADIOBOX, "This", wxPoint(10,10), wxSize(-1,-1), 5, choices, 1, wxRA_SPECIFY_COLS );
+    (void)new wxRadioBox( panel, ID_RADIOBOX, "That", wxPoint(10,160), wxSize(-1,-1), WXSIZEOF(choices2), choices2, 1, wxRA_SPECIFY_ROWS );
+    m_radio = new wxRadioBox( panel, ID_RADIOBOX, "This", wxPoint(10,10), wxSize(-1,-1), WXSIZEOF(choices), choices, 1, wxRA_SPECIFY_COLS );
     (void)new wxButton( panel, ID_RADIOBOX_SEL_NUM, "Select #2", wxPoint(180,30), wxSize(140,30) );
     (void)new wxButton( panel, ID_RADIOBOX_SEL_STR, "Select 'This'", wxPoint(180,80), wxSize(140,30) );
     m_fontButton = new wxButton( panel, ID_SET_FONT, "Set more Italic font", wxPoint(340,30), wxSize(140,30) );
