@@ -67,11 +67,11 @@
     #include "wx/string.h"
     #include "wx/intl.h"
     #include "wx/log.h"
-    #include "wx/module.h"
 #endif // WX_PRECOMP
 
 #include "wx/thread.h"
 #include "wx/tokenzr.h"
+#include "wx/module.h"
 
 #define wxDEFINE_TIME_CONSTANTS // before including datetime.h
 
