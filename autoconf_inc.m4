@@ -106,6 +106,12 @@ dnl ### begin block 1_COND_MONOLITHIC_0_SHARED_0_USE_HTML_1 ###
         COND_MONOLITHIC_0_SHARED_0_USE_HTML_1=""
     fi
     AC_SUBST(COND_MONOLITHIC_0_SHARED_0_USE_HTML_1)
+dnl ### begin block 1_COND_MONOLITHIC_0_SHARED_0_USE_ODBC_1 ###
+    COND_MONOLITHIC_0_SHARED_0_USE_ODBC_1="#"
+    if test "x$MONOLITHIC" = "x0" -a "x$SHARED" = "x0" -a "x$USE_ODBC" = "x1" ; then
+        COND_MONOLITHIC_0_SHARED_0_USE_ODBC_1=""
+    fi
+    AC_SUBST(COND_MONOLITHIC_0_SHARED_0_USE_ODBC_1)
 dnl ### begin block 1_COND_MONOLITHIC_0_SHARED_1 ###
     COND_MONOLITHIC_0_SHARED_1="#"
     if test "x$MONOLITHIC" = "x0" -a "x$SHARED" = "x1" ; then
@@ -130,6 +136,12 @@ dnl ### begin block 1_COND_MONOLITHIC_0_SHARED_1_USE_HTML_1 ###
         COND_MONOLITHIC_0_SHARED_1_USE_HTML_1=""
     fi
     AC_SUBST(COND_MONOLITHIC_0_SHARED_1_USE_HTML_1)
+dnl ### begin block 1_COND_MONOLITHIC_0_SHARED_1_USE_ODBC_1 ###
+    COND_MONOLITHIC_0_SHARED_1_USE_ODBC_1="#"
+    if test "x$MONOLITHIC" = "x0" -a "x$SHARED" = "x1" -a "x$USE_ODBC" = "x1" ; then
+        COND_MONOLITHIC_0_SHARED_1_USE_ODBC_1=""
+    fi
+    AC_SUBST(COND_MONOLITHIC_0_SHARED_1_USE_ODBC_1)
 dnl ### begin block 1_COND_MONOLITHIC_1 ###
     COND_MONOLITHIC_1="#"
     if test "x$MONOLITHIC" = "x1" ; then

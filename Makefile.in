@@ -192,7 +192,10 @@ ALL_BASE_HEADERS =  \
 	wx/socket.h \
 	wx/url.h \
 	$(NET_PLATFORM_HDR) \
-	wx/xml/xml.h
+	wx/xml/xml.h \
+	wx/db.h \
+	wx/dbkeyg.h \
+	wx/dbtable.h
 ALL_BASE_SOURCES =  \
 	src/common/appbase.cpp \
 	src/common/clntdata.cpp \
@@ -295,7 +298,9 @@ ALL_BASE_SOURCES =  \
 	src/unix/gsocket.c \
 	src/msw/gsocket.c \
 	src/mac/gsocket.c \
-	src/xml/xml.cpp
+	src/xml/xml.cpp \
+	src/common/db.cpp \
+	src/common/dbtable.cpp
 ALL_HEADERS =  \
 	$(ALL_BASE_HEADERS) \
 	$(ALL_GUI_HEADERS)
@@ -1147,9 +1152,6 @@ COND_USE_GUI_1_ALL_GUI_HEADERS =  \
 	wx/wxhtml.h \
 	wx/htmllbox.h \
 	$(OPENGL_HDR) \
-	wx/db.h \
-	wx/dbkeyg.h \
-	wx/dbtable.h \
 	wx/dbgrid.h
 @COND_USE_GUI_1@ALL_GUI_HEADERS = $(COND_USE_GUI_1_ALL_GUI_HEADERS)
 COND_PLATFORM_UNIX_1_BASE_PLATFORM_HDR =  \
@@ -5720,10 +5722,10 @@ COND_MONOLITHIC_0_SHARED_0_USE_HTML_1___htmllib___depname = \
 @COND_MONOLITHIC_1_SHARED_0@__install_monolib___depname = install_monolib
 @COND_MONOLITHIC_0_SHARED_1@__install_netdll___depname = install_netdll
 @COND_MONOLITHIC_0_SHARED_0@__install_netlib___depname = install_netlib
-@COND_MONOLITHIC_0_SHARED_1_USE_GUI_1_USE_ODBC_1@__install_odbcdll___depname \
-@COND_MONOLITHIC_0_SHARED_1_USE_GUI_1_USE_ODBC_1@	= install_odbcdll
-@COND_MONOLITHIC_0_SHARED_0_USE_GUI_1_USE_ODBC_1@__install_odbclib___depname \
-@COND_MONOLITHIC_0_SHARED_0_USE_GUI_1_USE_ODBC_1@	= install_odbclib
+@COND_MONOLITHIC_0_SHARED_1_USE_ODBC_1@__install_odbcdll___depname \
+@COND_MONOLITHIC_0_SHARED_1_USE_ODBC_1@	= install_odbcdll
+@COND_MONOLITHIC_0_SHARED_0_USE_ODBC_1@__install_odbclib___depname \
+@COND_MONOLITHIC_0_SHARED_0_USE_ODBC_1@	= install_odbclib
 @COND_SHARED_0_WXUSE_EXPAT_BUILTIN@__install_wxexpat___depname \
 @COND_SHARED_0_WXUSE_EXPAT_BUILTIN@	= install_wxexpat
 @COND_SHARED_0_USE_GUI_1_WXUSE_LIBJPEG_BUILTIN@__install_wxjpeg___depname \
@@ -5828,9 +5830,9 @@ COND_MONOLITHIC_0_SHARED_0___netlib___depname = \
 @COND_MONOLITHIC_0_SHARED_0@__netlib___depname = $(COND_MONOLITHIC_0_SHARED_0___netlib___depname)
 @COND_GCC_PCH_1@__odbcdll_PCH_DEP = .pch/wxprec_odbcdll/wx/wxprec.h.gch
 @COND_GCC_PCH_1@__odbcdll_PCH_INC = -I.pch/wxprec_odbcdll
-COND_MONOLITHIC_0_SHARED_1_USE_GUI_1_USE_ODBC_1___odbcdll___depname = \
+COND_MONOLITHIC_0_SHARED_1_USE_ODBC_1___odbcdll___depname = \
 	$(LIBDIRNAME)/$(DLLPREFIX)$(WXDLLNAMEPREFIX)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_odbc$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf3)
-@COND_MONOLITHIC_0_SHARED_1_USE_GUI_1_USE_ODBC_1@__odbcdll___depname = $(COND_MONOLITHIC_0_SHARED_1_USE_GUI_1_USE_ODBC_1___odbcdll___depname)
+@COND_MONOLITHIC_0_SHARED_1_USE_ODBC_1@__odbcdll___depname = $(COND_MONOLITHIC_0_SHARED_1_USE_ODBC_1___odbcdll___depname)
 COND_PLATFORM_WIN32_1___odbcdll___importlib = \
 	-Wl,--out-implib,$(LIBDIRNAME)/libwx_base$(WXBASEPORT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_odbc-2.5$(HOST_SUFFIX)$(DLLIMPEXT)
 @COND_PLATFORM_WIN32_1@__odbcdll___importlib = $(COND_PLATFORM_WIN32_1___odbcdll___importlib)
@@ -5865,9 +5867,9 @@ COND_USE_SOVERSOLARIS_1___odbcdll___soname_flags = \
 @COND_USE_SOVERSOLARIS_1@__odbcdll___soname_flags = $(COND_USE_SOVERSOLARIS_1___odbcdll___soname_flags)
 @COND_GCC_PCH_1@__odbclib_PCH_DEP = .pch/wxprec_odbclib/wx/wxprec.h.gch
 @COND_GCC_PCH_1@__odbclib_PCH_INC = -I.pch/wxprec_odbclib
-COND_MONOLITHIC_0_SHARED_0_USE_GUI_1_USE_ODBC_1___odbclib___depname = \
+COND_MONOLITHIC_0_SHARED_0_USE_ODBC_1___odbclib___depname = \
 	$(LIBDIRNAME)/libwx_base$(WXBASEPORT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_odbc-2.5$(HOST_SUFFIX).a
-@COND_MONOLITHIC_0_SHARED_0_USE_GUI_1_USE_ODBC_1@__odbclib___depname = $(COND_MONOLITHIC_0_SHARED_0_USE_GUI_1_USE_ODBC_1___odbclib___depname)
+@COND_MONOLITHIC_0_SHARED_0_USE_ODBC_1@__odbclib___depname = $(COND_MONOLITHIC_0_SHARED_0_USE_ODBC_1___odbclib___depname)
 @COND_WXUSE_EXPAT_BUILTIN@__wxexpat___depname = \
 @COND_WXUSE_EXPAT_BUILTIN@	$(LIBDIRNAME)/libwxexpat$(WXDEBUGFLAG)$(HOST_SUFFIX).a
 @COND_USE_GUI_1_WXUSE_LIBJPEG_BUILTIN@__wxjpeg___depname \
@@ -11249,15 +11251,15 @@ install-wxconfig:
 @COND_MONOLITHIC_0_SHARED_0@	$(INSTALL_DIR) $(libdir)
 @COND_MONOLITHIC_0_SHARED_0@	$(INSTALL_DATA) $(LIBDIRNAME)/libwx_base$(WXBASEPORT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_net-2.5$(HOST_SUFFIX).a $(libdir)
 
-@COND_MONOLITHIC_0_SHARED_1_USE_GUI_1_USE_ODBC_1@install_odbcdll: 
-@COND_MONOLITHIC_0_SHARED_1_USE_GUI_1_USE_ODBC_1@	$(INSTALL_DIR) $(libdir)
-@COND_MONOLITHIC_0_SHARED_1_USE_GUI_1_USE_ODBC_1@	$(INSTALL_DATA) $(LIBDIRNAME)/libwx_base$(WXBASEPORT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_odbc-2.5$(HOST_SUFFIX)$(DLLIMPEXT) $(libdir)
-@COND_MONOLITHIC_0_SHARED_1_USE_GUI_1_USE_ODBC_1@	$(INSTALL_PROGRAM) $(LIBDIRNAME)/$(DLLPREFIX)$(WXDLLNAMEPREFIX)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_odbc$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf3) $(libdir)
-@COND_MONOLITHIC_0_SHARED_1_USE_GUI_1_USE_ODBC_1@	(cd $(libdir) ; $(__odbcdll___so_symlinks_inst_cmd))
+@COND_MONOLITHIC_0_SHARED_1_USE_ODBC_1@install_odbcdll: 
+@COND_MONOLITHIC_0_SHARED_1_USE_ODBC_1@	$(INSTALL_DIR) $(libdir)
+@COND_MONOLITHIC_0_SHARED_1_USE_ODBC_1@	$(INSTALL_DATA) $(LIBDIRNAME)/libwx_base$(WXBASEPORT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_odbc-2.5$(HOST_SUFFIX)$(DLLIMPEXT) $(libdir)
+@COND_MONOLITHIC_0_SHARED_1_USE_ODBC_1@	$(INSTALL_PROGRAM) $(LIBDIRNAME)/$(DLLPREFIX)$(WXDLLNAMEPREFIX)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_odbc$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf3) $(libdir)
+@COND_MONOLITHIC_0_SHARED_1_USE_ODBC_1@	(cd $(libdir) ; $(__odbcdll___so_symlinks_inst_cmd))
 
-@COND_MONOLITHIC_0_SHARED_0_USE_GUI_1_USE_ODBC_1@install_odbclib: 
-@COND_MONOLITHIC_0_SHARED_0_USE_GUI_1_USE_ODBC_1@	$(INSTALL_DIR) $(libdir)
-@COND_MONOLITHIC_0_SHARED_0_USE_GUI_1_USE_ODBC_1@	$(INSTALL_DATA) $(LIBDIRNAME)/libwx_base$(WXBASEPORT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_odbc-2.5$(HOST_SUFFIX).a $(libdir)
+@COND_MONOLITHIC_0_SHARED_0_USE_ODBC_1@install_odbclib: 
+@COND_MONOLITHIC_0_SHARED_0_USE_ODBC_1@	$(INSTALL_DIR) $(libdir)
+@COND_MONOLITHIC_0_SHARED_0_USE_ODBC_1@	$(INSTALL_DATA) $(LIBDIRNAME)/libwx_base$(WXBASEPORT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_odbc-2.5$(HOST_SUFFIX).a $(libdir)
 
 @COND_SHARED_0_WXUSE_EXPAT_BUILTIN@install_wxexpat: 
 @COND_SHARED_0_WXUSE_EXPAT_BUILTIN@	$(INSTALL_DIR) $(libdir)
@@ -16439,9 +16441,9 @@ netlib_socket.o: $(srcdir)/src/common/socket.cpp
 netlib_url.o: $(srcdir)/src/common/url.cpp
 	$(CXXC) -c -o $@ $(NETLIB_CXXFLAGS) $<
 
-@COND_MONOLITHIC_0_SHARED_1_USE_GUI_1_USE_ODBC_1@$(LIBDIRNAME)/$(DLLPREFIX)$(WXDLLNAMEPREFIX)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_odbc$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf3): $(__odbcdll_PCH_DEP)  $(ODBCDLL_OBJECTS) $(__wxtiff___depname) $(__wxjpeg___depname) $(__wxpng___depname) $(__wxexpat___depname) $(__wxzlib___depname) $(__wxodbc___depname) $(__wxregex___depname) $(__basedll___depname)
-@COND_MONOLITHIC_0_SHARED_1_USE_GUI_1_USE_ODBC_1@	$(SHARED_LD_CXX) $@ $(ODBCDLL_OBJECTS) $(LDFLAGS)   -L$(LIBDIRNAME) $(__odbcdll___macinstnamecmd) $(__odbcdll___importlib) $(__odbcdll___soname_flags) $(dll___macver)  $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) $(__LIB_ZLIB_p) $(__LIB_ODBC_p) $(__LIB_REGEX_p) $(__LIB_EXPAT_p) $(EXTRALIBS) $(LIBDIRNAME)/libwx_base$(WXBASEPORT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)-2.5$(HOST_SUFFIX)$(DLLIMPEXT) $(EXTRALIBS_ODBC)
-@COND_MONOLITHIC_0_SHARED_1_USE_GUI_1_USE_ODBC_1@	$(__odbcdll___so_symlinks_cmd)
+@COND_MONOLITHIC_0_SHARED_1_USE_ODBC_1@$(LIBDIRNAME)/$(DLLPREFIX)$(WXDLLNAMEPREFIX)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_odbc$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf3): $(__odbcdll_PCH_DEP)  $(ODBCDLL_OBJECTS) $(__wxtiff___depname) $(__wxjpeg___depname) $(__wxpng___depname) $(__wxexpat___depname) $(__wxzlib___depname) $(__wxodbc___depname) $(__wxregex___depname) $(__basedll___depname)
+@COND_MONOLITHIC_0_SHARED_1_USE_ODBC_1@	$(SHARED_LD_CXX) $@ $(ODBCDLL_OBJECTS) $(LDFLAGS)   -L$(LIBDIRNAME) $(__odbcdll___macinstnamecmd) $(__odbcdll___importlib) $(__odbcdll___soname_flags) $(dll___macver)  $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) $(__LIB_ZLIB_p) $(__LIB_ODBC_p) $(__LIB_REGEX_p) $(__LIB_EXPAT_p) $(EXTRALIBS) $(LIBDIRNAME)/libwx_base$(WXBASEPORT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)-2.5$(HOST_SUFFIX)$(DLLIMPEXT) $(EXTRALIBS_ODBC)
+@COND_MONOLITHIC_0_SHARED_1_USE_ODBC_1@	$(__odbcdll___so_symlinks_cmd)
 
 odbcdll_db.o: $(srcdir)/src/common/db.cpp
 	$(CXXC) -c -o $@ $(ODBCDLL_CXXFLAGS) $<
@@ -16449,10 +16451,10 @@ odbcdll_db.o: $(srcdir)/src/common/db.cpp
 odbcdll_dbtable.o: $(srcdir)/src/common/dbtable.cpp
 	$(CXXC) -c -o $@ $(ODBCDLL_CXXFLAGS) $<
 
-@COND_MONOLITHIC_0_SHARED_0_USE_GUI_1_USE_ODBC_1@$(LIBDIRNAME)/libwx_base$(WXBASEPORT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_odbc-2.5$(HOST_SUFFIX).a: $(__odbclib_PCH_DEP)  $(ODBCLIB_OBJECTS)
-@COND_MONOLITHIC_0_SHARED_0_USE_GUI_1_USE_ODBC_1@	rm -f $@
-@COND_MONOLITHIC_0_SHARED_0_USE_GUI_1_USE_ODBC_1@	$(AR) rcu $@ $(ODBCLIB_OBJECTS)
-@COND_MONOLITHIC_0_SHARED_0_USE_GUI_1_USE_ODBC_1@	$(RANLIB) $@
+@COND_MONOLITHIC_0_SHARED_0_USE_ODBC_1@$(LIBDIRNAME)/libwx_base$(WXBASEPORT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_odbc-2.5$(HOST_SUFFIX).a: $(__odbclib_PCH_DEP)  $(ODBCLIB_OBJECTS)
+@COND_MONOLITHIC_0_SHARED_0_USE_ODBC_1@	rm -f $@
+@COND_MONOLITHIC_0_SHARED_0_USE_ODBC_1@	$(AR) rcu $@ $(ODBCLIB_OBJECTS)
+@COND_MONOLITHIC_0_SHARED_0_USE_ODBC_1@	$(RANLIB) $@
 
 odbclib_db.o: $(srcdir)/src/common/db.cpp
 	$(CXXC) -c -o $@ $(ODBCLIB_CXXFLAGS) $<

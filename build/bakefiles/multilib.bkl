@@ -101,7 +101,7 @@
     <!-- ================================================================= -->
     
     <dll id="odbcdll" template="wx_base_dll"
-         cond="SHARED=='1' and USE_GUI=='1' and USE_ODBC=='1' and MONOLITHIC=='0'">
+         cond="SHARED=='1' and USE_ODBC=='1' and MONOLITHIC=='0'">
         <define>WXUSINGDLL</define>
         <define>WXMAKINGDLL_ODBC</define>
         <sources>$(ODBC_SRC)</sources>
@@ -111,7 +111,7 @@
     </dll>
     
     <lib id="odbclib" template="wx_base_lib"
-        cond="SHARED=='0' and USE_GUI=='1' and USE_ODBC=='1' and MONOLITHIC=='0'">
+        cond="SHARED=='0' and USE_ODBC=='1' and MONOLITHIC=='0'">
         <sources>$(ODBC_SRC)</sources>
         <msvc-headers>$(ODBC_HDR)</msvc-headers>
     </lib>
