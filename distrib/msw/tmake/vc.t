@@ -112,6 +112,11 @@ $(CPPFLAGS2) /Fo$@ /c /Tc $<
 $(CPPFLAGS) /Fo$@ /c /Tp $<
 <<
 
+{..\msw}.c{..\msw\$D}.obj:
+	cl @<<
+$(CPPFLAGS2) /Fo$@ /c /Tc $<
+<<
+
 {..\msw\ole}.cpp{..\msw\ole\$D}.obj:
 	cl @<<
 $(CPPFLAGS) /Fo$@ /c /Tp $<
@@ -156,7 +161,7 @@ HTMLOBJS = \
 
 # Add $(NONESSENTIALOBJS) if wanting generic dialogs, PostScript etc.
 # Add $(HTMLOBJS) if wanting wxHTML classes
-OBJECTS = $(COMMONOBJS) $(GENERICOBJS) $(MSWOBJS)
+OBJECTS = $(COMMONOBJS) $(GENERICOBJS) $(MSWOBJS) $(HTMLOBJS)
 
 # Normal, static library
 all:    dirs $(DUMMYOBJ) $(OBJECTS) $(PERIPH_TARGET) png zlib xpm jpeg $(LIBTARGET)
