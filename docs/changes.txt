@@ -20,7 +20,7 @@ wxMSW:
 
 - wxChoice sizing bug introduced in 2.2.5 fixed (oops) and calculating of
   the size of initially empty wxChoice controls fixed as well
-- jpeg library compilation fixed for older versions of mingw32 and cygwin
+- jpeg library compilation fixed for newer versions of mingw32 and cygwin
 
 2.2.5
 -----
