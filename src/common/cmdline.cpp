@@ -521,7 +521,7 @@ int wxCmdLineParser::Parse()
                 }
                 while ( optInd == wxNOT_FOUND );
 
-                if ( (len > 0) && (len != name.length()) )
+                if ( (optInd != wxNOT_FOUND) && (len != name.length()) )
                 {
                     // our option is only part of this argument, there is
                     // something else in it - it is either the value of this
@@ -532,9 +532,10 @@ int wxCmdLineParser::Parse()
                         // pretend that all the rest of the argument is the
                         // next argument, in fact
                         wxString arg2 = arg[0u];
-                        arg2 += name.Mid(len);
+                        arg2 += name.Mid(len + 1); // compensates extra --
 
                         m_data->m_arguments.Insert(arg2, n + 1);
+                        count++;
                     }
                     //else: it's our value, we'll deal with it below
                 }
