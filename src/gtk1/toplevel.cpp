@@ -40,6 +40,9 @@
 
 #include "wx/unix/utilsx11.h"
 
+// XA_CARDINAL
+#include <X11/Xatom.h>
+
 // ----------------------------------------------------------------------------
 // idle system
 // ----------------------------------------------------------------------------
@@ -500,9 +503,62 @@ wxTopLevelWindowGTK::~wxTopLevelWindowGTK()
     }
 }
 
+
+// X11 ICCCM values for window layers
+#define  WIN_LAYER_NORMAL      4
+#define  WIN_LAYER_ABOVE_DOCK  10
+
+// X11 window manager property name
+#define  XA_WIN_LAYER          "_WIN_LAYER"
+
+// X11 window manager property name atom
+static Atom gs_XA_WIN_LAYER = 0;
+
+
+static void wx_win_hints_set_layer(GtkWidget *window, int layer)
+{
+  XEvent xev;
+  GdkWindowPrivate *priv;
+  gint prev_error;
+  
+  prev_error = gdk_error_warnings;
+  gdk_error_warnings = 0;
+  priv = (GdkWindowPrivate*)(GTK_WIDGET(window)->window);
+  
+  if (GTK_WIDGET_MAPPED(window))
+    {
+      xev.type = ClientMessage;
+      xev.xclient.type = ClientMessage;
+      xev.xclient.window = priv->xwindow;
+      xev.xclient.message_type = gs_XA_WIN_LAYER;
+      xev.xclient.format = 32;
+      xev.xclient.data.l[0] = (long)layer;
+      xev.xclient.data.l[1] = gdk_time_get();
+      
+      XSendEvent(GDK_DISPLAY(), GDK_ROOT_WINDOW(), False,
+         SubstructureNotifyMask, (XEvent*) &xev);
+    }
+  else
+    {
+      long data[1];
+      
+      data[0] = layer;
+      XChangeProperty(GDK_DISPLAY(), priv->xwindow, gs_XA_WIN_LAYER,
+              XA_CARDINAL, 32, PropModeReplace, (unsigned char *)data,
+              1);
+    }
+  gdk_error_warnings = prev_error;
+}
+
 bool wxTopLevelWindowGTK::ShowFullScreen(bool show, long style )
 {
     if (show == m_fsIsShowing) return FALSE; // return what?
+
+    if (gs_XA_WIN_LAYER == 0)
+    {
+        // Initialose X11 Atom only once
+        gs_XA_WIN_LAYER = XInternAtom( GDK_DISPLAY(), XA_WIN_LAYER, False );
+    }
 
     m_fsIsShowing = show;
 
@@ -514,32 +570,26 @@ bool wxTopLevelWindowGTK::ShowFullScreen(bool show, long style )
         GetPosition( &m_fsSaveFrame.x, &m_fsSaveFrame.y );
         GetSize( &m_fsSaveFrame.width, &m_fsSaveFrame.height );
 
-        gtk_widget_hide( m_widget );
-        gtk_widget_unrealize( m_widget );
+        int screen_width,screen_height;
+        wxDisplaySize( &screen_width, &screen_height );
+        
+		gint client_x, client_y, root_x, root_y;
+		gint width, height;
 
-        m_gdkDecor = (long) GDK_DECOR_BORDER;
-        m_gdkFunc = (long) GDK_FUNC_MOVE;
+		gdk_window_get_origin (m_widget->window, &root_x, &root_y);
+		gdk_window_get_geometry (m_widget->window, &client_x, &client_y,
+					 &width, &height, NULL);
+                     
+        wx_win_hints_set_layer( m_widget, WIN_LAYER_ABOVE_DOCK );
 
-        int x;
-        int y;
-        wxDisplaySize( &x, &y );
-        SetSize( 0, 0, x, y );
-
-        gtk_widget_realize( m_widget );
-        gtk_widget_show( m_widget );
+		gdk_window_move_resize (m_widget->window, -client_x, -client_y,
+					screen_width + 1, screen_height + 1);
     }
     else
     {
-        gtk_widget_hide( m_widget );
-        gtk_widget_unrealize( m_widget );
-
-        m_gdkFunc = m_fsSaveGdkFunc;
-        m_gdkDecor = m_fsSaveGdkDecor;
-
+        wx_win_hints_set_layer( m_widget, WIN_LAYER_NORMAL );
+        
         SetSize( m_fsSaveFrame.x, m_fsSaveFrame.y, m_fsSaveFrame.width, m_fsSaveFrame.height );
-
-        gtk_widget_realize( m_widget );
-        gtk_widget_show( m_widget );
     }
 
     return TRUE;
