@@ -53,7 +53,7 @@ class wxImageList: public wxObject
    
   public:
 
-    wxImageList::wxImageList() { }
+    wxImageList() { }
     wxImageList( int width, int height, bool mask = TRUE, int initialCount = 1 );
     ~wxImageList();
     bool Create();
