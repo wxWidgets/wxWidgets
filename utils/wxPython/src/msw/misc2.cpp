@@ -110,6 +110,19 @@ static PyObject* t_output_helper(PyObject* target, PyObject* o) {
 
 static char* wxStringErrorMsg = "string type is required for parameter";
 
+
+    wxColour wxSystemSettings_GetSystemColour(int index) {
+        return wxSystemSettings::GetSystemColour(index);
+    }
+
+    wxFont wxSystemSettings_GetSystemFont(int index) {
+        return wxSystemSettings::GetSystemFont(index);
+    }
+
+    int wxSystemSettings_GetSystemMetric(int index) {
+        return wxSystemSettings::GetSystemMetric(index);
+    }
+
     void wxToolTip_Enable(bool flag) {
         wxToolTip::Enable(flag);
     }
@@ -128,6 +141,480 @@ static char* wxStringErrorMsg = "string type is required for parameter";
 #ifdef __cplusplus
 extern "C" {
 #endif
+static PyObject *_wrap_wxFileSelector(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxString * _result;
+    char * _arg0;
+    char * _arg1 = (char *) NULL;
+    char * _arg2 = (char *) NULL;
+    char * _arg3 = (char *) NULL;
+    char * _arg4 = (char *) "*.*";
+    int  _arg5 = (int ) 0;
+    wxWindow * _arg6 = (wxWindow *) NULL;
+    int  _arg7 = (int ) -1;
+    int  _arg8 = (int ) -1;
+    PyObject * _argo6 = 0;
+    char *_kwnames[] = { "message","default_path","default_filename","default_extension","wildcard","flags","parent","x","y", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"s|ssssiOii:wxFileSelector",_kwnames,&_arg0,&_arg1,&_arg2,&_arg3,&_arg4,&_arg5,&_argo6,&_arg7,&_arg8)) 
+        return NULL;
+    if (_argo6) {
+        if (_argo6 == Py_None) { _arg6 = NULL; }
+        else if (SWIG_GetPtrObj(_argo6,(void **) &_arg6,"_wxWindow_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 7 of wxFileSelector. Expected _wxWindow_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = new wxString (wxFileSelector(_arg0,_arg1,_arg2,_arg3,_arg4,_arg5,_arg6,_arg7,_arg8));
+
+    wxPy_END_ALLOW_THREADS;
+}{
+    _resultobj = PyString_FromString(WXSTRINGCAST *(_result));
+}
+{
+    delete _result;
+}
+    return _resultobj;
+}
+
+static PyObject *_wrap_wxGetTextFromUser(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxString * _result;
+    wxString * _arg0;
+    wxString * _arg1 = (wxString *) &wxPyEmptyStr;
+    wxString * _arg2 = (wxString *) &wxPyEmptyStr;
+    wxWindow * _arg3 = (wxWindow *) NULL;
+    int  _arg4 = (int ) -1;
+    int  _arg5 = (int ) -1;
+    bool  _arg6 = (bool ) TRUE;
+    PyObject * _obj0 = 0;
+    PyObject * _obj1 = 0;
+    PyObject * _obj2 = 0;
+    PyObject * _argo3 = 0;
+    int tempbool6 = (int) TRUE;
+    char *_kwnames[] = { "message","caption","default_value","parent","x","y","centre", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O|OOOiii:wxGetTextFromUser",_kwnames,&_obj0,&_obj1,&_obj2,&_argo3,&_arg4,&_arg5,&tempbool6)) 
+        return NULL;
+{
+    if (!PyString_Check(_obj0)) {
+        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
+        return NULL;
+    }
+    _arg0 = new wxString(PyString_AsString(_obj0), PyString_Size(_obj0));
+}
+    if (_obj1)
+{
+    if (!PyString_Check(_obj1)) {
+        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
+        return NULL;
+    }
+    _arg1 = new wxString(PyString_AsString(_obj1), PyString_Size(_obj1));
+}
+    if (_obj2)
+{
+    if (!PyString_Check(_obj2)) {
+        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
+        return NULL;
+    }
+    _arg2 = new wxString(PyString_AsString(_obj2), PyString_Size(_obj2));
+}
+    if (_argo3) {
+        if (_argo3 == Py_None) { _arg3 = NULL; }
+        else if (SWIG_GetPtrObj(_argo3,(void **) &_arg3,"_wxWindow_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 4 of wxGetTextFromUser. Expected _wxWindow_p.");
+        return NULL;
+        }
+    }
+    _arg6 = (bool ) tempbool6;
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = new wxString (wxGetTextFromUser(*_arg0,*_arg1,*_arg2,_arg3,_arg4,_arg5,_arg6));
+
+    wxPy_END_ALLOW_THREADS;
+}{
+    _resultobj = PyString_FromString(WXSTRINGCAST *(_result));
+}
+{
+    if (_obj0)
+        delete _arg0;
+}
+{
+    if (_obj1)
+        delete _arg1;
+}
+{
+    if (_obj2)
+        delete _arg2;
+}
+{
+    delete _result;
+}
+    return _resultobj;
+}
+
+static PyObject *_wrap_wxGetSingleChoice(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxString * _result;
+    wxString * _arg0;
+    wxString * _arg1;
+    int  _arg2;
+    wxString * _arg3;
+    wxWindow * _arg4 = (wxWindow *) NULL;
+    int  _arg5 = (int ) -1;
+    int  _arg6 = (int ) -1;
+    bool  _arg7 = (bool ) TRUE;
+    int  _arg8 = (int ) 150;
+    int  _arg9 = (int ) 200;
+    PyObject * _obj0 = 0;
+    PyObject * _obj1 = 0;
+    PyObject * _obj3 = 0;
+    PyObject * _argo4 = 0;
+    int tempbool7 = (int) TRUE;
+    char *_kwnames[] = { "message","caption","LIST","parent","x","y","centre","width","height", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OOO|Oiiiii:wxGetSingleChoice",_kwnames,&_obj0,&_obj1,&_obj3,&_argo4,&_arg5,&_arg6,&tempbool7,&_arg8,&_arg9)) 
+        return NULL;
+{
+    if (!PyString_Check(_obj0)) {
+        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
+        return NULL;
+    }
+    _arg0 = new wxString(PyString_AsString(_obj0), PyString_Size(_obj0));
+}
+{
+    if (!PyString_Check(_obj1)) {
+        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
+        return NULL;
+    }
+    _arg1 = new wxString(PyString_AsString(_obj1), PyString_Size(_obj1));
+}
+    if (_obj3)
+{
+    _arg3 = wxString_LIST_helper(_obj3);
+    if (_arg3 == NULL) {
+        return NULL;
+    }
+}
+    if (_argo4) {
+        if (_argo4 == Py_None) { _arg4 = NULL; }
+        else if (SWIG_GetPtrObj(_argo4,(void **) &_arg4,"_wxWindow_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 5 of wxGetSingleChoice. Expected _wxWindow_p.");
+        return NULL;
+        }
+    }
+    _arg7 = (bool ) tempbool7;
+{
+    if (_obj3) {
+        _arg2 = PyList_Size(_obj3);
+    }
+    else {
+        _arg2 = 0;
+    }
+}
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = new wxString (wxGetSingleChoice(*_arg0,*_arg1,_arg2,_arg3,_arg4,_arg5,_arg6,_arg7,_arg8,_arg9));
+
+    wxPy_END_ALLOW_THREADS;
+}{
+    _resultobj = PyString_FromString(WXSTRINGCAST *(_result));
+}
+{
+    if (_obj0)
+        delete _arg0;
+}
+{
+    if (_obj1)
+        delete _arg1;
+}
+{
+    delete [] _arg3;
+}
+{
+    delete _result;
+}
+    return _resultobj;
+}
+
+static PyObject *_wrap_wxGetSingleChoiceIndex(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    int  _result;
+    wxString * _arg0;
+    wxString * _arg1;
+    int  _arg2;
+    wxString * _arg3;
+    wxWindow * _arg4 = (wxWindow *) NULL;
+    int  _arg5 = (int ) -1;
+    int  _arg6 = (int ) -1;
+    bool  _arg7 = (bool ) TRUE;
+    int  _arg8 = (int ) 150;
+    int  _arg9 = (int ) 200;
+    PyObject * _obj0 = 0;
+    PyObject * _obj1 = 0;
+    PyObject * _obj3 = 0;
+    PyObject * _argo4 = 0;
+    int tempbool7 = (int) TRUE;
+    char *_kwnames[] = { "message","caption","LIST","parent","x","y","centre","width","height", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OOO|Oiiiii:wxGetSingleChoiceIndex",_kwnames,&_obj0,&_obj1,&_obj3,&_argo4,&_arg5,&_arg6,&tempbool7,&_arg8,&_arg9)) 
+        return NULL;
+{
+    if (!PyString_Check(_obj0)) {
+        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
+        return NULL;
+    }
+    _arg0 = new wxString(PyString_AsString(_obj0), PyString_Size(_obj0));
+}
+{
+    if (!PyString_Check(_obj1)) {
+        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
+        return NULL;
+    }
+    _arg1 = new wxString(PyString_AsString(_obj1), PyString_Size(_obj1));
+}
+    if (_obj3)
+{
+    _arg3 = wxString_LIST_helper(_obj3);
+    if (_arg3 == NULL) {
+        return NULL;
+    }
+}
+    if (_argo4) {
+        if (_argo4 == Py_None) { _arg4 = NULL; }
+        else if (SWIG_GetPtrObj(_argo4,(void **) &_arg4,"_wxWindow_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 5 of wxGetSingleChoiceIndex. Expected _wxWindow_p.");
+        return NULL;
+        }
+    }
+    _arg7 = (bool ) tempbool7;
+{
+    if (_obj3) {
+        _arg2 = PyList_Size(_obj3);
+    }
+    else {
+        _arg2 = 0;
+    }
+}
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (int )wxGetSingleChoiceIndex(*_arg0,*_arg1,_arg2,_arg3,_arg4,_arg5,_arg6,_arg7,_arg8,_arg9);
+
+    wxPy_END_ALLOW_THREADS;
+}    _resultobj = Py_BuildValue("i",_result);
+{
+    if (_obj0)
+        delete _arg0;
+}
+{
+    if (_obj1)
+        delete _arg1;
+}
+{
+    delete [] _arg3;
+}
+    return _resultobj;
+}
+
+static PyObject *_wrap_wxMessageBox(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    int  _result;
+    wxString * _arg0;
+    wxString * _arg1 = (wxString *) &wxPyEmptyStr;
+    int  _arg2 = (int ) wxOK|wxCENTRE;
+    wxWindow * _arg3 = (wxWindow *) NULL;
+    int  _arg4 = (int ) -1;
+    int  _arg5 = (int ) -1;
+    PyObject * _obj0 = 0;
+    PyObject * _obj1 = 0;
+    PyObject * _argo3 = 0;
+    char *_kwnames[] = { "message","caption","style","parent","x","y", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O|OiOii:wxMessageBox",_kwnames,&_obj0,&_obj1,&_arg2,&_argo3,&_arg4,&_arg5)) 
+        return NULL;
+{
+    if (!PyString_Check(_obj0)) {
+        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
+        return NULL;
+    }
+    _arg0 = new wxString(PyString_AsString(_obj0), PyString_Size(_obj0));
+}
+    if (_obj1)
+{
+    if (!PyString_Check(_obj1)) {
+        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
+        return NULL;
+    }
+    _arg1 = new wxString(PyString_AsString(_obj1), PyString_Size(_obj1));
+}
+    if (_argo3) {
+        if (_argo3 == Py_None) { _arg3 = NULL; }
+        else if (SWIG_GetPtrObj(_argo3,(void **) &_arg3,"_wxWindow_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 4 of wxMessageBox. Expected _wxWindow_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (int )wxMessageBox(*_arg0,*_arg1,_arg2,_arg3,_arg4,_arg5);
+
+    wxPy_END_ALLOW_THREADS;
+}    _resultobj = Py_BuildValue("i",_result);
+{
+    if (_obj0)
+        delete _arg0;
+}
+{
+    if (_obj1)
+        delete _arg1;
+}
+    return _resultobj;
+}
+
+static PyObject *_wrap_wxGetNumberFromUser(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    long  _result;
+    wxString * _arg0;
+    wxString * _arg1;
+    wxString * _arg2;
+    long  _arg3;
+    long  _arg4 = (long ) 0;
+    long  _arg5 = (long ) 100;
+    wxWindow * _arg6 = (wxWindow *) NULL;
+    wxPoint * _arg7 = (wxPoint *) &wxPyDefaultPosition;
+    PyObject * _obj0 = 0;
+    PyObject * _obj1 = 0;
+    PyObject * _obj2 = 0;
+    PyObject * _argo6 = 0;
+    wxPoint  temp;
+    PyObject * _obj7 = 0;
+    char *_kwnames[] = { "message","prompt","caption","value","min","max","parent","pos", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OOOl|llOO:wxGetNumberFromUser",_kwnames,&_obj0,&_obj1,&_obj2,&_arg3,&_arg4,&_arg5,&_argo6,&_obj7)) 
+        return NULL;
+{
+    if (!PyString_Check(_obj0)) {
+        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
+        return NULL;
+    }
+    _arg0 = new wxString(PyString_AsString(_obj0), PyString_Size(_obj0));
+}
+{
+    if (!PyString_Check(_obj1)) {
+        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
+        return NULL;
+    }
+    _arg1 = new wxString(PyString_AsString(_obj1), PyString_Size(_obj1));
+}
+{
+    if (!PyString_Check(_obj2)) {
+        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
+        return NULL;
+    }
+    _arg2 = new wxString(PyString_AsString(_obj2), PyString_Size(_obj2));
+}
+    if (_argo6) {
+        if (_argo6 == Py_None) { _arg6 = NULL; }
+        else if (SWIG_GetPtrObj(_argo6,(void **) &_arg6,"_wxWindow_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 7 of wxGetNumberFromUser. Expected _wxWindow_p.");
+        return NULL;
+        }
+    }
+    if (_obj7)
+{
+    _arg7 = &temp;
+    if (! wxPoint_helper(_obj7, &_arg7))
+        return NULL;
+}
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (long )wxGetNumberFromUser(*_arg0,*_arg1,*_arg2,_arg3,_arg4,_arg5,_arg6,*_arg7);
+
+    wxPy_END_ALLOW_THREADS;
+}    _resultobj = Py_BuildValue("l",_result);
+{
+    if (_obj0)
+        delete _arg0;
+}
+{
+    if (_obj1)
+        delete _arg1;
+}
+{
+    if (_obj2)
+        delete _arg2;
+}
+    return _resultobj;
+}
+
+static PyObject *_wrap_wxColourDisplay(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    bool  _result;
+    char *_kwnames[] = {  NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,":wxColourDisplay",_kwnames)) 
+        return NULL;
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (bool )wxColourDisplay();
+
+    wxPy_END_ALLOW_THREADS;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+static PyObject *_wrap_wxDisplayDepth(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    int  _result;
+    char *_kwnames[] = {  NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,":wxDisplayDepth",_kwnames)) 
+        return NULL;
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (int )wxDisplayDepth();
+
+    wxPy_END_ALLOW_THREADS;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+static PyObject *_wrap_wxSetCursor(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxCursor * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "cursor", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxSetCursor",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxCursor_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxSetCursor. Expected _wxCursor_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxSetCursor(*_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
 static PyObject *_wrap_wxFindWindowByLabel(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxWindow * _result;
@@ -217,6 +704,314 @@ static PyObject *_wrap_wxFindWindowByName(PyObject *self, PyObject *args, PyObje
     if (_obj0)
         delete _arg0;
 }
+    return _resultobj;
+}
+
+static PyObject *_wrap_wxBeginBusyCursor(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxCursor * _arg0 = (wxCursor *) wxHOURGLASS_CURSOR;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "cursor", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"|O:wxBeginBusyCursor",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxCursor_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxBeginBusyCursor. Expected _wxCursor_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxBeginBusyCursor(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+static PyObject *_wrap_wxGetActiveWindow(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxWindow * _result;
+    char *_kwnames[] = {  NULL };
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,":wxGetActiveWindow",_kwnames)) 
+        return NULL;
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (wxWindow *)wxGetActiveWindow();
+
+    wxPy_END_ALLOW_THREADS;
+}    if (_result) {
+        SWIG_MakePtr(_ptemp, (char *) _result,"_wxWindow_p");
+        _resultobj = Py_BuildValue("s",_ptemp);
+    } else {
+        Py_INCREF(Py_None);
+        _resultobj = Py_None;
+    }
+    return _resultobj;
+}
+
+static PyObject *_wrap_wxResourceAddIdentifier(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    bool  _result;
+    char * _arg0;
+    int  _arg1;
+    char *_kwnames[] = { "name","value", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"si:wxResourceAddIdentifier",_kwnames,&_arg0,&_arg1)) 
+        return NULL;
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (bool )wxResourceAddIdentifier(_arg0,_arg1);
+
+    wxPy_END_ALLOW_THREADS;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+static PyObject *_wrap_wxResourceClear(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    char *_kwnames[] = {  NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,":wxResourceClear",_kwnames)) 
+        return NULL;
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxResourceClear();
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+static PyObject *_wrap_wxResourceCreateBitmap(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxBitmap * _result;
+    char * _arg0;
+    char *_kwnames[] = { "resource", NULL };
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"s:wxResourceCreateBitmap",_kwnames,&_arg0)) 
+        return NULL;
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = new wxBitmap (wxResourceCreateBitmap(_arg0));
+
+    wxPy_END_ALLOW_THREADS;
+}    SWIG_MakePtr(_ptemp, (void *) _result,"_wxBitmap_p");
+    _resultobj = Py_BuildValue("s",_ptemp);
+    return _resultobj;
+}
+
+static PyObject *_wrap_wxResourceCreateIcon(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxIcon * _result;
+    char * _arg0;
+    char *_kwnames[] = { "resource", NULL };
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"s:wxResourceCreateIcon",_kwnames,&_arg0)) 
+        return NULL;
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = new wxIcon (wxResourceCreateIcon(_arg0));
+
+    wxPy_END_ALLOW_THREADS;
+}    SWIG_MakePtr(_ptemp, (void *) _result,"_wxIcon_p");
+    _resultobj = Py_BuildValue("s",_ptemp);
+    return _resultobj;
+}
+
+static PyObject *_wrap_wxResourceCreateMenuBar(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxMenuBar * _result;
+    char * _arg0;
+    char *_kwnames[] = { "resource", NULL };
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"s:wxResourceCreateMenuBar",_kwnames,&_arg0)) 
+        return NULL;
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (wxMenuBar *)wxResourceCreateMenuBar(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}    if (_result) {
+        SWIG_MakePtr(_ptemp, (char *) _result,"_wxMenuBar_p");
+        _resultobj = Py_BuildValue("s",_ptemp);
+    } else {
+        Py_INCREF(Py_None);
+        _resultobj = Py_None;
+    }
+    return _resultobj;
+}
+
+static PyObject *_wrap_wxResourceGetIdentifier(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    int  _result;
+    char * _arg0;
+    char *_kwnames[] = { "name", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"s:wxResourceGetIdentifier",_kwnames,&_arg0)) 
+        return NULL;
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (int )wxResourceGetIdentifier(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+static PyObject *_wrap_wxResourceParseData(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    bool  _result;
+    char * _arg0;
+    wxResourceTable * _arg1 = (wxResourceTable *) NULL;
+    PyObject * _argo1 = 0;
+    char *_kwnames[] = { "resource","table", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"s|O:wxResourceParseData",_kwnames,&_arg0,&_argo1)) 
+        return NULL;
+    if (_argo1) {
+        if (_argo1 == Py_None) { _arg1 = NULL; }
+        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxResourceTable_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxResourceParseData. Expected _wxResourceTable_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (bool )wxResourceParseData(_arg0,_arg1);
+
+    wxPy_END_ALLOW_THREADS;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+static PyObject *_wrap_wxResourceParseFile(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    bool  _result;
+    char * _arg0;
+    wxResourceTable * _arg1 = (wxResourceTable *) NULL;
+    PyObject * _argo1 = 0;
+    char *_kwnames[] = { "filename","table", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"s|O:wxResourceParseFile",_kwnames,&_arg0,&_argo1)) 
+        return NULL;
+    if (_argo1) {
+        if (_argo1 == Py_None) { _arg1 = NULL; }
+        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxResourceTable_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxResourceParseFile. Expected _wxResourceTable_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (bool )wxResourceParseFile(_arg0,_arg1);
+
+    wxPy_END_ALLOW_THREADS;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+static PyObject *_wrap_wxResourceParseString(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    bool  _result;
+    char * _arg0;
+    wxResourceTable * _arg1 = (wxResourceTable *) NULL;
+    PyObject * _argo1 = 0;
+    char *_kwnames[] = { "resource","table", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"s|O:wxResourceParseString",_kwnames,&_arg0,&_argo1)) 
+        return NULL;
+    if (_argo1) {
+        if (_argo1 == Py_None) { _arg1 = NULL; }
+        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxResourceTable_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxResourceParseString. Expected _wxResourceTable_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (bool )wxResourceParseString(_arg0,_arg1);
+
+    wxPy_END_ALLOW_THREADS;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+static PyObject *_wrap_wxSystemSettings_GetSystemColour(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxColour * _result;
+    int  _arg0;
+    char *_kwnames[] = { "index", NULL };
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"i:wxSystemSettings_GetSystemColour",_kwnames,&_arg0)) 
+        return NULL;
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = new wxColour (wxSystemSettings_GetSystemColour(_arg0));
+
+    wxPy_END_ALLOW_THREADS;
+}    SWIG_MakePtr(_ptemp, (void *) _result,"_wxColour_p");
+    _resultobj = Py_BuildValue("s",_ptemp);
+    return _resultobj;
+}
+
+static PyObject *_wrap_wxSystemSettings_GetSystemFont(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxFont * _result;
+    int  _arg0;
+    char *_kwnames[] = { "index", NULL };
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"i:wxSystemSettings_GetSystemFont",_kwnames,&_arg0)) 
+        return NULL;
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = new wxFont (wxSystemSettings_GetSystemFont(_arg0));
+
+    wxPy_END_ALLOW_THREADS;
+}    SWIG_MakePtr(_ptemp, (void *) _result,"_wxFont_p");
+    _resultobj = Py_BuildValue("s",_ptemp);
+    return _resultobj;
+}
+
+static PyObject *_wrap_wxSystemSettings_GetSystemMetric(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    int  _result;
+    int  _arg0;
+    char *_kwnames[] = { "index", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"i:wxSystemSettings_GetSystemMetric",_kwnames,&_arg0)) 
+        return NULL;
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (int )wxSystemSettings_GetSystemMetric(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}    _resultobj = Py_BuildValue("i",_result);
     return _resultobj;
 }
 
@@ -943,8 +1738,31 @@ static PyMethodDef misc2cMethods[] = {
 	 { "wxCaret_GetBlinkTime", (PyCFunction) _wrap_wxCaret_GetBlinkTime, METH_VARARGS | METH_KEYWORDS },
 	 { "wxToolTip_SetDelay", (PyCFunction) _wrap_wxToolTip_SetDelay, METH_VARARGS | METH_KEYWORDS },
 	 { "wxToolTip_Enable", (PyCFunction) _wrap_wxToolTip_Enable, METH_VARARGS | METH_KEYWORDS },
+	 { "wxSystemSettings_GetSystemMetric", (PyCFunction) _wrap_wxSystemSettings_GetSystemMetric, METH_VARARGS | METH_KEYWORDS },
+	 { "wxSystemSettings_GetSystemFont", (PyCFunction) _wrap_wxSystemSettings_GetSystemFont, METH_VARARGS | METH_KEYWORDS },
+	 { "wxSystemSettings_GetSystemColour", (PyCFunction) _wrap_wxSystemSettings_GetSystemColour, METH_VARARGS | METH_KEYWORDS },
+	 { "wxResourceParseString", (PyCFunction) _wrap_wxResourceParseString, METH_VARARGS | METH_KEYWORDS },
+	 { "wxResourceParseFile", (PyCFunction) _wrap_wxResourceParseFile, METH_VARARGS | METH_KEYWORDS },
+	 { "wxResourceParseData", (PyCFunction) _wrap_wxResourceParseData, METH_VARARGS | METH_KEYWORDS },
+	 { "wxResourceGetIdentifier", (PyCFunction) _wrap_wxResourceGetIdentifier, METH_VARARGS | METH_KEYWORDS },
+	 { "wxResourceCreateMenuBar", (PyCFunction) _wrap_wxResourceCreateMenuBar, METH_VARARGS | METH_KEYWORDS },
+	 { "wxResourceCreateIcon", (PyCFunction) _wrap_wxResourceCreateIcon, METH_VARARGS | METH_KEYWORDS },
+	 { "wxResourceCreateBitmap", (PyCFunction) _wrap_wxResourceCreateBitmap, METH_VARARGS | METH_KEYWORDS },
+	 { "wxResourceClear", (PyCFunction) _wrap_wxResourceClear, METH_VARARGS | METH_KEYWORDS },
+	 { "wxResourceAddIdentifier", (PyCFunction) _wrap_wxResourceAddIdentifier, METH_VARARGS | METH_KEYWORDS },
+	 { "wxGetActiveWindow", (PyCFunction) _wrap_wxGetActiveWindow, METH_VARARGS | METH_KEYWORDS },
+	 { "wxBeginBusyCursor", (PyCFunction) _wrap_wxBeginBusyCursor, METH_VARARGS | METH_KEYWORDS },
 	 { "wxFindWindowByName", (PyCFunction) _wrap_wxFindWindowByName, METH_VARARGS | METH_KEYWORDS },
 	 { "wxFindWindowByLabel", (PyCFunction) _wrap_wxFindWindowByLabel, METH_VARARGS | METH_KEYWORDS },
+	 { "wxSetCursor", (PyCFunction) _wrap_wxSetCursor, METH_VARARGS | METH_KEYWORDS },
+	 { "wxDisplayDepth", (PyCFunction) _wrap_wxDisplayDepth, METH_VARARGS | METH_KEYWORDS },
+	 { "wxColourDisplay", (PyCFunction) _wrap_wxColourDisplay, METH_VARARGS | METH_KEYWORDS },
+	 { "wxGetNumberFromUser", (PyCFunction) _wrap_wxGetNumberFromUser, METH_VARARGS | METH_KEYWORDS },
+	 { "wxMessageBox", (PyCFunction) _wrap_wxMessageBox, METH_VARARGS | METH_KEYWORDS },
+	 { "wxGetSingleChoiceIndex", (PyCFunction) _wrap_wxGetSingleChoiceIndex, METH_VARARGS | METH_KEYWORDS },
+	 { "wxGetSingleChoice", (PyCFunction) _wrap_wxGetSingleChoice, METH_VARARGS | METH_KEYWORDS },
+	 { "wxGetTextFromUser", (PyCFunction) _wrap_wxGetTextFromUser, METH_VARARGS | METH_KEYWORDS },
+	 { "wxFileSelector", (PyCFunction) _wrap_wxFileSelector, METH_VARARGS | METH_KEYWORDS },
 	 { NULL, NULL }
 };
 #ifdef __cplusplus
@@ -1111,6 +1929,92 @@ SWIGEXPORT(void) initmisc2c() {
 	 SWIG_globals = SWIG_newvarlink();
 	 m = Py_InitModule("misc2c", misc2cMethods);
 	 d = PyModule_GetDict(m);
+	 PyDict_SetItemString(d,"wxSYS_WHITE_BRUSH", PyInt_FromLong((long) wxSYS_WHITE_BRUSH));
+	 PyDict_SetItemString(d,"wxSYS_LTGRAY_BRUSH", PyInt_FromLong((long) wxSYS_LTGRAY_BRUSH));
+	 PyDict_SetItemString(d,"wxSYS_GRAY_BRUSH", PyInt_FromLong((long) wxSYS_GRAY_BRUSH));
+	 PyDict_SetItemString(d,"wxSYS_DKGRAY_BRUSH", PyInt_FromLong((long) wxSYS_DKGRAY_BRUSH));
+	 PyDict_SetItemString(d,"wxSYS_BLACK_BRUSH", PyInt_FromLong((long) wxSYS_BLACK_BRUSH));
+	 PyDict_SetItemString(d,"wxSYS_NULL_BRUSH", PyInt_FromLong((long) wxSYS_NULL_BRUSH));
+	 PyDict_SetItemString(d,"wxSYS_HOLLOW_BRUSH", PyInt_FromLong((long) wxSYS_HOLLOW_BRUSH));
+	 PyDict_SetItemString(d,"wxSYS_WHITE_PEN", PyInt_FromLong((long) wxSYS_WHITE_PEN));
+	 PyDict_SetItemString(d,"wxSYS_BLACK_PEN", PyInt_FromLong((long) wxSYS_BLACK_PEN));
+	 PyDict_SetItemString(d,"wxSYS_NULL_PEN", PyInt_FromLong((long) wxSYS_NULL_PEN));
+	 PyDict_SetItemString(d,"wxSYS_OEM_FIXED_FONT", PyInt_FromLong((long) wxSYS_OEM_FIXED_FONT));
+	 PyDict_SetItemString(d,"wxSYS_ANSI_FIXED_FONT", PyInt_FromLong((long) wxSYS_ANSI_FIXED_FONT));
+	 PyDict_SetItemString(d,"wxSYS_ANSI_VAR_FONT", PyInt_FromLong((long) wxSYS_ANSI_VAR_FONT));
+	 PyDict_SetItemString(d,"wxSYS_SYSTEM_FONT", PyInt_FromLong((long) wxSYS_SYSTEM_FONT));
+	 PyDict_SetItemString(d,"wxSYS_DEVICE_DEFAULT_FONT", PyInt_FromLong((long) wxSYS_DEVICE_DEFAULT_FONT));
+	 PyDict_SetItemString(d,"wxSYS_DEFAULT_PALETTE", PyInt_FromLong((long) wxSYS_DEFAULT_PALETTE));
+	 PyDict_SetItemString(d,"wxSYS_SYSTEM_FIXED_FONT", PyInt_FromLong((long) wxSYS_SYSTEM_FIXED_FONT));
+	 PyDict_SetItemString(d,"wxSYS_DEFAULT_GUI_FONT", PyInt_FromLong((long) wxSYS_DEFAULT_GUI_FONT));
+	 PyDict_SetItemString(d,"wxSYS_COLOUR_SCROLLBAR", PyInt_FromLong((long) wxSYS_COLOUR_SCROLLBAR));
+	 PyDict_SetItemString(d,"wxSYS_COLOUR_BACKGROUND", PyInt_FromLong((long) wxSYS_COLOUR_BACKGROUND));
+	 PyDict_SetItemString(d,"wxSYS_COLOUR_ACTIVECAPTION", PyInt_FromLong((long) wxSYS_COLOUR_ACTIVECAPTION));
+	 PyDict_SetItemString(d,"wxSYS_COLOUR_INACTIVECAPTION", PyInt_FromLong((long) wxSYS_COLOUR_INACTIVECAPTION));
+	 PyDict_SetItemString(d,"wxSYS_COLOUR_MENU", PyInt_FromLong((long) wxSYS_COLOUR_MENU));
+	 PyDict_SetItemString(d,"wxSYS_COLOUR_WINDOW", PyInt_FromLong((long) wxSYS_COLOUR_WINDOW));
+	 PyDict_SetItemString(d,"wxSYS_COLOUR_WINDOWFRAME", PyInt_FromLong((long) wxSYS_COLOUR_WINDOWFRAME));
+	 PyDict_SetItemString(d,"wxSYS_COLOUR_MENUTEXT", PyInt_FromLong((long) wxSYS_COLOUR_MENUTEXT));
+	 PyDict_SetItemString(d,"wxSYS_COLOUR_WINDOWTEXT", PyInt_FromLong((long) wxSYS_COLOUR_WINDOWTEXT));
+	 PyDict_SetItemString(d,"wxSYS_COLOUR_CAPTIONTEXT", PyInt_FromLong((long) wxSYS_COLOUR_CAPTIONTEXT));
+	 PyDict_SetItemString(d,"wxSYS_COLOUR_ACTIVEBORDER", PyInt_FromLong((long) wxSYS_COLOUR_ACTIVEBORDER));
+	 PyDict_SetItemString(d,"wxSYS_COLOUR_INACTIVEBORDER", PyInt_FromLong((long) wxSYS_COLOUR_INACTIVEBORDER));
+	 PyDict_SetItemString(d,"wxSYS_COLOUR_APPWORKSPACE", PyInt_FromLong((long) wxSYS_COLOUR_APPWORKSPACE));
+	 PyDict_SetItemString(d,"wxSYS_COLOUR_HIGHLIGHT", PyInt_FromLong((long) wxSYS_COLOUR_HIGHLIGHT));
+	 PyDict_SetItemString(d,"wxSYS_COLOUR_HIGHLIGHTTEXT", PyInt_FromLong((long) wxSYS_COLOUR_HIGHLIGHTTEXT));
+	 PyDict_SetItemString(d,"wxSYS_COLOUR_BTNFACE", PyInt_FromLong((long) wxSYS_COLOUR_BTNFACE));
+	 PyDict_SetItemString(d,"wxSYS_COLOUR_BTNSHADOW", PyInt_FromLong((long) wxSYS_COLOUR_BTNSHADOW));
+	 PyDict_SetItemString(d,"wxSYS_COLOUR_GRAYTEXT", PyInt_FromLong((long) wxSYS_COLOUR_GRAYTEXT));
+	 PyDict_SetItemString(d,"wxSYS_COLOUR_BTNTEXT", PyInt_FromLong((long) wxSYS_COLOUR_BTNTEXT));
+	 PyDict_SetItemString(d,"wxSYS_COLOUR_INACTIVECAPTIONTEXT", PyInt_FromLong((long) wxSYS_COLOUR_INACTIVECAPTIONTEXT));
+	 PyDict_SetItemString(d,"wxSYS_COLOUR_BTNHIGHLIGHT", PyInt_FromLong((long) wxSYS_COLOUR_BTNHIGHLIGHT));
+	 PyDict_SetItemString(d,"wxSYS_COLOUR_3DDKSHADOW", PyInt_FromLong((long) wxSYS_COLOUR_3DDKSHADOW));
+	 PyDict_SetItemString(d,"wxSYS_COLOUR_3DLIGHT", PyInt_FromLong((long) wxSYS_COLOUR_3DLIGHT));
+	 PyDict_SetItemString(d,"wxSYS_COLOUR_INFOTEXT", PyInt_FromLong((long) wxSYS_COLOUR_INFOTEXT));
+	 PyDict_SetItemString(d,"wxSYS_COLOUR_INFOBK", PyInt_FromLong((long) wxSYS_COLOUR_INFOBK));
+	 PyDict_SetItemString(d,"wxSYS_COLOUR_DESKTOP", PyInt_FromLong((long) wxSYS_COLOUR_DESKTOP));
+	 PyDict_SetItemString(d,"wxSYS_COLOUR_3DFACE", PyInt_FromLong((long) wxSYS_COLOUR_3DFACE));
+	 PyDict_SetItemString(d,"wxSYS_COLOUR_3DSHADOW", PyInt_FromLong((long) wxSYS_COLOUR_3DSHADOW));
+	 PyDict_SetItemString(d,"wxSYS_COLOUR_3DHIGHLIGHT", PyInt_FromLong((long) wxSYS_COLOUR_3DHIGHLIGHT));
+	 PyDict_SetItemString(d,"wxSYS_COLOUR_3DHILIGHT", PyInt_FromLong((long) wxSYS_COLOUR_3DHILIGHT));
+	 PyDict_SetItemString(d,"wxSYS_COLOUR_BTNHILIGHT", PyInt_FromLong((long) wxSYS_COLOUR_BTNHILIGHT));
+	 PyDict_SetItemString(d,"wxSYS_MOUSE_BUTTONS", PyInt_FromLong((long) wxSYS_MOUSE_BUTTONS));
+	 PyDict_SetItemString(d,"wxSYS_BORDER_X", PyInt_FromLong((long) wxSYS_BORDER_X));
+	 PyDict_SetItemString(d,"wxSYS_BORDER_Y", PyInt_FromLong((long) wxSYS_BORDER_Y));
+	 PyDict_SetItemString(d,"wxSYS_CURSOR_X", PyInt_FromLong((long) wxSYS_CURSOR_X));
+	 PyDict_SetItemString(d,"wxSYS_CURSOR_Y", PyInt_FromLong((long) wxSYS_CURSOR_Y));
+	 PyDict_SetItemString(d,"wxSYS_DCLICK_X", PyInt_FromLong((long) wxSYS_DCLICK_X));
+	 PyDict_SetItemString(d,"wxSYS_DCLICK_Y", PyInt_FromLong((long) wxSYS_DCLICK_Y));
+	 PyDict_SetItemString(d,"wxSYS_DRAG_X", PyInt_FromLong((long) wxSYS_DRAG_X));
+	 PyDict_SetItemString(d,"wxSYS_DRAG_Y", PyInt_FromLong((long) wxSYS_DRAG_Y));
+	 PyDict_SetItemString(d,"wxSYS_EDGE_X", PyInt_FromLong((long) wxSYS_EDGE_X));
+	 PyDict_SetItemString(d,"wxSYS_EDGE_Y", PyInt_FromLong((long) wxSYS_EDGE_Y));
+	 PyDict_SetItemString(d,"wxSYS_HSCROLL_ARROW_X", PyInt_FromLong((long) wxSYS_HSCROLL_ARROW_X));
+	 PyDict_SetItemString(d,"wxSYS_HSCROLL_ARROW_Y", PyInt_FromLong((long) wxSYS_HSCROLL_ARROW_Y));
+	 PyDict_SetItemString(d,"wxSYS_HTHUMB_X", PyInt_FromLong((long) wxSYS_HTHUMB_X));
+	 PyDict_SetItemString(d,"wxSYS_ICON_X", PyInt_FromLong((long) wxSYS_ICON_X));
+	 PyDict_SetItemString(d,"wxSYS_ICON_Y", PyInt_FromLong((long) wxSYS_ICON_Y));
+	 PyDict_SetItemString(d,"wxSYS_ICONSPACING_X", PyInt_FromLong((long) wxSYS_ICONSPACING_X));
+	 PyDict_SetItemString(d,"wxSYS_ICONSPACING_Y", PyInt_FromLong((long) wxSYS_ICONSPACING_Y));
+	 PyDict_SetItemString(d,"wxSYS_WINDOWMIN_X", PyInt_FromLong((long) wxSYS_WINDOWMIN_X));
+	 PyDict_SetItemString(d,"wxSYS_WINDOWMIN_Y", PyInt_FromLong((long) wxSYS_WINDOWMIN_Y));
+	 PyDict_SetItemString(d,"wxSYS_SCREEN_X", PyInt_FromLong((long) wxSYS_SCREEN_X));
+	 PyDict_SetItemString(d,"wxSYS_SCREEN_Y", PyInt_FromLong((long) wxSYS_SCREEN_Y));
+	 PyDict_SetItemString(d,"wxSYS_FRAMESIZE_X", PyInt_FromLong((long) wxSYS_FRAMESIZE_X));
+	 PyDict_SetItemString(d,"wxSYS_FRAMESIZE_Y", PyInt_FromLong((long) wxSYS_FRAMESIZE_Y));
+	 PyDict_SetItemString(d,"wxSYS_SMALLICON_X", PyInt_FromLong((long) wxSYS_SMALLICON_X));
+	 PyDict_SetItemString(d,"wxSYS_SMALLICON_Y", PyInt_FromLong((long) wxSYS_SMALLICON_Y));
+	 PyDict_SetItemString(d,"wxSYS_HSCROLL_Y", PyInt_FromLong((long) wxSYS_HSCROLL_Y));
+	 PyDict_SetItemString(d,"wxSYS_VSCROLL_X", PyInt_FromLong((long) wxSYS_VSCROLL_X));
+	 PyDict_SetItemString(d,"wxSYS_VSCROLL_ARROW_X", PyInt_FromLong((long) wxSYS_VSCROLL_ARROW_X));
+	 PyDict_SetItemString(d,"wxSYS_VSCROLL_ARROW_Y", PyInt_FromLong((long) wxSYS_VSCROLL_ARROW_Y));
+	 PyDict_SetItemString(d,"wxSYS_VTHUMB_Y", PyInt_FromLong((long) wxSYS_VTHUMB_Y));
+	 PyDict_SetItemString(d,"wxSYS_CAPTION_Y", PyInt_FromLong((long) wxSYS_CAPTION_Y));
+	 PyDict_SetItemString(d,"wxSYS_MENU_Y", PyInt_FromLong((long) wxSYS_MENU_Y));
+	 PyDict_SetItemString(d,"wxSYS_NETWORK_PRESENT", PyInt_FromLong((long) wxSYS_NETWORK_PRESENT));
+	 PyDict_SetItemString(d,"wxSYS_PENWINDOWS_PRESENT", PyInt_FromLong((long) wxSYS_PENWINDOWS_PRESENT));
+	 PyDict_SetItemString(d,"wxSYS_SHOW_SOUNDS", PyInt_FromLong((long) wxSYS_SHOW_SOUNDS));
+	 PyDict_SetItemString(d,"wxSYS_SWAP_BUTTONS", PyInt_FromLong((long) wxSYS_SWAP_BUTTONS));
 {
    int i;
    for (i = 0; _swig_mapping[i].n1; i++)

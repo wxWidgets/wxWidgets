@@ -227,8 +227,7 @@ class AppFrame(wxFrame):
 	self.sb = AppStatusBar(self)
         self.SetStatusBar(self.sb)
 
-        self.list = wxListCtrl(self, 1100)
-	self.list.SetSingleStyle(wxLC_REPORT)
+        self.list = wxListCtrl(self, 1100, style=wxLC_REPORT)
 	self.list.InsertColumn(0, 'Subject')
 	self.list.InsertColumn(1, 'Date')
 	self.list.InsertColumn(2, 'Posted by')

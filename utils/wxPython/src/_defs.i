@@ -250,6 +250,8 @@ enum {
     wxTE_READONLY,
     wxTE_RICH,
     wxTE_MULTILINE,
+    wxTE_AUTO_SCROLL,
+    wxTE_NO_VSCROLL,
     wxCB_SIMPLE,
     wxCB_DROPDOWN,
     wxCB_SORT,

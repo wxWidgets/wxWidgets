@@ -499,6 +499,7 @@ public:
     void SetLabelTop(int pos, const wxString& label);
     int GetMenuCount();
     wxMenu* GetMenu(int i);
+    void Refresh();
 };
 
 

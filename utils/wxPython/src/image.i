@@ -72,7 +72,15 @@ public:
     wxGIFHandler();
 };
 
+class wxPNMHandler : public wxImageHandler {
+public:
+    wxPNMHandler();
+};
 
+class wxPCXHandler : public wxImageHandler {
+public:
+    wxPCXHandler();
+};
 
 //---------------------------------------------------------------------------
 
@@ -164,9 +172,7 @@ void wxImage_AddHandler(wxImageHandler *handler);
     }
 %}
 
+void wxInitAllImageHandlers();
+
 //---------------------------------------------------------------------------
 //---------------------------------------------------------------------------
-
-
-
-

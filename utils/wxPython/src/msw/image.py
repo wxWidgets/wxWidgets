@@ -98,6 +98,34 @@ class wxGIFHandler(wxGIFHandlerPtr):
 
 
 
+class wxPNMHandlerPtr(wxImageHandlerPtr):
+    def __init__(self,this):
+        self.this = this
+        self.thisown = 0
+    def __repr__(self):
+        return "<C wxPNMHandler instance at %s>" % (self.this,)
+class wxPNMHandler(wxPNMHandlerPtr):
+    def __init__(self,*_args,**_kwargs):
+        self.this = apply(imagec.new_wxPNMHandler,_args,_kwargs)
+        self.thisown = 1
+
+
+
+
+class wxPCXHandlerPtr(wxImageHandlerPtr):
+    def __init__(self,this):
+        self.this = this
+        self.thisown = 0
+    def __repr__(self):
+        return "<C wxPCXHandler instance at %s>" % (self.this,)
+class wxPCXHandler(wxPCXHandlerPtr):
+    def __init__(self,*_args,**_kwargs):
+        self.this = apply(imagec.new_wxPCXHandler,_args,_kwargs)
+        self.thisown = 1
+
+
+
+
 class wxImagePtr :
     def __init__(self,this):
         self.this = this
@@ -214,6 +242,8 @@ def wxImageFromBitmap(*_args, **_kwargs):
     return val
 
 wxImage_AddHandler = imagec.wxImage_AddHandler
+
+wxInitAllImageHandlers = imagec.wxInitAllImageHandlers
 
 
 

@@ -90,7 +90,6 @@ class TestHtmlPanel(wxPanel):
 
 
     def OnWithWidgets(self, event):
-        print self.cwd
         os.chdir(self.cwd)
         name = os.path.join(self.cwd, 'data/widgetTest.htm')
         self.html.LoadPage(name)
