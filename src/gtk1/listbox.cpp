@@ -578,20 +578,20 @@ void wxListBox::GtkAddItem( const wxString &item, int pos )
         gtk_widget_realize( list_item );
         gtk_widget_realize( GTK_BIN(list_item)->child );
 
-        // Apply current widget style to the new list_item
-        GtkRcStyle *style = CreateWidgetStyle();
-        if (style)
-        {
-            gtk_widget_modify_style( GTK_WIDGET( list_item ), style );
-            GtkBin *bin = GTK_BIN( list_item );
-            GtkWidget *label = GTK_WIDGET( bin->child );
-            gtk_widget_modify_style( label, style );
-            gtk_rc_style_unref( style );
-        }
-
 #if wxUSE_TOOLTIPS
         if (m_tooltip) m_tooltip->Apply( this );
 #endif
+    }
+
+    // Apply current widget style to the new list_item
+    GtkRcStyle *style = CreateWidgetStyle();
+    if (style)
+    {
+        gtk_widget_modify_style( GTK_WIDGET( list_item ), style );
+        GtkBin *bin = GTK_BIN( list_item );
+        GtkWidget *label = GTK_WIDGET( bin->child );
+        gtk_widget_modify_style( label, style );
+        gtk_rc_style_unref( style );
     }
 }
 
