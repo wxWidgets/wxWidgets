@@ -451,8 +451,18 @@ bool wxTopLevelWindowGTK::Create( wxWindow *parent,
             m_widget = gtk_window_new(GTK_WINDOW_TOPLEVEL);
 #if GTK_CHECK_VERSION(2,1,0)
             if (style & wxFRAME_TOOL_WINDOW)
+            {
                 gtk_window_set_type_hint(GTK_WINDOW(m_widget),
                                          GDK_WINDOW_TYPE_HINT_UTILITY);
+                
+                // On some WMs, like KDE, a TOOL_WINDOW will still show
+                // on the taskbar, but on Gnome a TOOL_WINDOW will not.
+                // For consistency between WMs and with Windows, we 
+                // should set the NO_TASKBAR flag which will apply
+                // the set_skip_taskbar_hint if it is available,
+                // ensuring no taskbar entry will appear.
+                style |= wxFRAME_NO_TASKBAR;
+            }
 #endif
 
         }
