@@ -116,10 +116,10 @@ class PropEditCtrlDim : public PropEditCtrlTxt
 
 
 
-class PropEditCtrlXMLID : public PropEditCtrlTxt
+class PropEditCtrlXRCID : public PropEditCtrlTxt
 {
     public:
-        PropEditCtrlXMLID(PropertiesFrame *propFrame)
+        PropEditCtrlXRCID(PropertiesFrame *propFrame)
            : PropEditCtrlTxt(propFrame) {}
                 
         virtual void ReadValue();

@@ -359,19 +359,19 @@ wxTreeItemId PropEditCtrlDim::CreateTreeEntry(wxTreeItemId parent, const Propert
 
 
 
-// --------------------- PropEditCtrlXMLID -----------------------------
+// --------------------- PropEditCtrlXRCID -----------------------------
 
 #define REAL_NODE (NodeHandler::Find(GetNode())->GetRealNode(GetNode()))
 
 
-void PropEditCtrlXMLID::ReadValue()
+void PropEditCtrlXRCID::ReadValue()
 {
     m_TextCtrl->SetValue(REAL_NODE->GetPropVal(_T("name"), wxEmptyString));
 }
 
 
 
-void PropEditCtrlXMLID::WriteValue()
+void PropEditCtrlXRCID::WriteValue()
 {
     wxString s =m_TextCtrl->GetValue();
     if (s.IsEmpty()) s = _T("-1");
@@ -385,7 +385,7 @@ void PropEditCtrlXMLID::WriteValue()
 
 
 
-void PropEditCtrlXMLID::Clear()
+void PropEditCtrlXRCID::Clear()
 {
     EndEdit();
     REAL_NODE->DeleteProperty(_T("name"));
@@ -395,7 +395,7 @@ void PropEditCtrlXMLID::Clear()
 
 
 
-void PropEditCtrlXMLID::OnDetails()
+void PropEditCtrlXRCID::OnDetails()
 {
     wxString choices[] = {wxString(_T("-1"))
       #define stdID(id) , wxString(#id)
@@ -420,7 +420,7 @@ void PropEditCtrlXMLID::OnDetails()
       };
 
     wxString s = 
-        wxGetSingleChoice(_("Choose from predefined IDs:"), _("XMLID"), 
+        wxGetSingleChoice(_("Choose from predefined IDs:"), _("XRCID"), 
                           38/*sizeof choices*/, choices);
     if (!s) return;
     m_TextCtrl->SetValue(s);
@@ -430,14 +430,14 @@ void PropEditCtrlXMLID::OnDetails()
 
 
 
-wxString PropEditCtrlXMLID::GetValueAsText(wxTreeItemId ti)
+wxString PropEditCtrlXRCID::GetValueAsText(wxTreeItemId ti)
 {
     return REAL_NODE->GetPropVal(_T("name"), wxEmptyString);
 }
 
 
 
-bool PropEditCtrlXMLID::IsPresent(const PropertyInfo& pinfo)
+bool PropEditCtrlXRCID::IsPresent(const PropertyInfo& pinfo)
 {
     return REAL_NODE->HasProp(_T("name"));
 }

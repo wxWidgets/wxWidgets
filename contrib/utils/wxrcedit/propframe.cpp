@@ -246,7 +246,7 @@ PropertiesFrame::PropertiesFrame()
     m_EditCtrls.Put(_T("integer"), new PropEditCtrlInt(this));
     m_EditCtrls.Put(_T("not_implemented"), new PropEditCtrlNull(this));
     m_EditCtrls.Put(_T("text"), new PropEditCtrlTxt(this));
-    m_EditCtrls.Put(_T("xmlid"), new PropEditCtrlXMLID(this));
+    m_EditCtrls.Put(_T("xmlid"), new PropEditCtrlXRCID(this));
     m_EditCtrls.Put(_T("font"), new PropEditCtrlFont(this));
     m_EditCtrls.Put(_T("choice"), new PropEditCtrlChoice(this));
     m_EditCtrls.Put(_T("file"), new PropEditCtrlFile(this));
@@ -277,7 +277,7 @@ void PropertiesFrame::ShowProps(wxXmlNode *node)
    m_Node = node;
    
    ClearProps();
-   AddSingleProp(PropertyInfo(_T("xmlid"), _T("XMLID"), wxEmptyString));
+   AddSingleProp(PropertyInfo(_T("xmlid"), _T("XRCID"), wxEmptyString));
    AddProps(NodeHandler::Find(node)->GetPropsList(node));
    
    m_tree->Expand(m_tree->GetRootItem());

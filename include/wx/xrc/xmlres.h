@@ -179,8 +179,8 @@ public:
 
     // Returns a numeric ID that is equivalent to the string id used in an XML
     // resource. To be used in event tables.
-    // Macro XMLID is provided for convenience
-    static int GetXMLID(const wxChar *str_id);
+    // Macro XRCID is provided for convenience
+    static int GetXRCID(const wxChar *str_id);
 
     // Returns version information (a.b.c.d = d+ 256*c + 256^2*b + 256^3*a).
     long GetVersion() const { return m_version; }
@@ -239,14 +239,14 @@ private:
 // wxWindows event tables.
 // Example:
 //    BEGIN_EVENT_TABLE(MyFrame, wxFrame)
-//       EVT_MENU(XMLID("quit"), MyFrame::OnQuit)
-//       EVT_MENU(XMLID("about"), MyFrame::OnAbout)
-//       EVT_MENU(XMLID("new"), MyFrame::OnNew)
-//       EVT_MENU(XMLID("open"), MyFrame::OnOpen)
+//       EVT_MENU(XRCID("quit"), MyFrame::OnQuit)
+//       EVT_MENU(XRCID("about"), MyFrame::OnAbout)
+//       EVT_MENU(XRCID("new"), MyFrame::OnNew)
+//       EVT_MENU(XRCID("open"), MyFrame::OnOpen)
 //    END_EVENT_TABLE()
 
-#define XMLID(str_id) \
-    wxXmlResource::GetXMLID(wxT(str_id))
+#define XRCID(str_id) \
+    wxXmlResource::GetXRCID(wxT(str_id))
 
 
 // This macro returns pointer to particular control in dialog
@@ -255,14 +255,14 @@ private:
 // Example:
 //    wxDialog dlg;
 //    wxXmlResource::Get()->LoadDialog(&dlg, mainFrame, "my_dialog");
-//    XMLCTRL(dlg, "my_textctrl", wxTextCtrl)->SetValue(wxT("default value"));
+//    XRCCTRL(dlg, "my_textctrl", wxTextCtrl)->SetValue(wxT("default value"));
 
 #ifdef __WXDEBUG__
-#define XMLCTRL(window, id, type) \
-    (wxDynamicCast((window).FindWindow(XMLID(id)), type))
+#define XRCCTRL(window, id, type) \
+    (wxDynamicCast((window).FindWindow(XRCID(id)), type))
 #else
-#define XMLCTRL(window, id, type) \
-    ((type*)((window).FindWindow(XMLID(id))))
+#define XRCCTRL(window, id, type) \
+    ((type*)((window).FindWindow(XRCID(id))))
 #endif
 
 // wxXmlResourceHandler is an abstract base class for resource handlers
@@ -348,7 +348,7 @@ protected:
     // - calls wxGetTranslations (unless disabled in wxXmlResource)
     wxString GetText(const wxString& param);
 
-    // Returns the XMLID.
+    // Returns the XRCID.
     int GetID();
 
     // Returns the resource name.
@@ -426,7 +426,8 @@ void wxXmlInitResourceModule();
    ------------------------------------------------------------------------- */
 #define ADD_STYLE         XRC_ADD_STYLE
 #define wxTheXmlResource  wxXmlResource::Get()
-
+#define XMLID             XRCID
+#define XMLCTRL           XRCCTRL
 
 
 #endif // _WX_XMLRES_H_

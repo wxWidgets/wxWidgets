@@ -86,10 +86,10 @@ private:
 // handlers) which process them. It can be also done at run-time, but for the
 // simple menu events like this the static method is much simpler.
 BEGIN_EVENT_TABLE(MyFrame, wxFrame)
-    EVT_MENU(XMLID("menu_quit"),  MyFrame::OnQuit)
-    EVT_MENU(XMLID("menu_about"), MyFrame::OnAbout)
-    EVT_MENU(XMLID("menu_dlg1"), MyFrame::OnDlg1)
-    EVT_MENU(XMLID("menu_dlg2"), MyFrame::OnDlg2)
+    EVT_MENU(XRCID("menu_quit"),  MyFrame::OnQuit)
+    EVT_MENU(XRCID("menu_about"), MyFrame::OnAbout)
+    EVT_MENU(XRCID("menu_dlg1"), MyFrame::OnDlg1)
+    EVT_MENU(XRCID("menu_dlg2"), MyFrame::OnDlg2)
 END_EVENT_TABLE()
 
 // Create a new application object: this macro will allow wxWindows to create

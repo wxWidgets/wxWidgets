@@ -58,7 +58,7 @@ void wxUnknownControlContainer::AddChild(wxWindowBase *child)
 
     SetBackgroundColour(m_bg);
     child->SetName(m_controlName);
-    child->SetId(wxXmlResource::GetXMLID(m_controlName));
+    child->SetId(wxXmlResource::GetXRCID(m_controlName));
     m_controlAdded = TRUE;
 
     wxSizer *sizer = new wxBoxSizer(wxHORIZONTAL);
