@@ -706,7 +706,7 @@ void wxDividedShapeControlPoint::OnEndDragLeft(double x, double y, int keys, int
         wxShapeRegion *region = (wxShapeRegion *)node->Data();
         if (region->GetText())
         {
-        char *s = copystring(region->GetText());
+        wxChar *s = copystring(region->GetText());
         dividedObject->FormatText(dc, s, i);
         delete[] s;
         }

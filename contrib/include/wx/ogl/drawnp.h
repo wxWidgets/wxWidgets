@@ -22,7 +22,7 @@
  * Drawing operations
  *
  */
- 
+
 #define  DRAWOP_SET_PEN             1
 #define  DRAWOP_SET_BRUSH           2
 #define  DRAWOP_SET_FONT            3
@@ -54,7 +54,7 @@
  * Base, virtual class
  *
  */
- 
+
 class wxDrawOp: public wxObject
 {
 public:
@@ -91,7 +91,7 @@ protected:
  * Set font, brush, text colour
  *
  */
- 
+
 class wxOpSetGDI: public wxDrawOp
 {
  public:
@@ -114,7 +114,7 @@ public:
  * Set/destroy clipping
  *
  */
- 
+
 class wxOpSetClipping: public wxDrawOp
 {
 public:
@@ -137,12 +137,12 @@ public:
  * Draw line, rectangle, rounded rectangle, ellipse, point, arc, text
  *
  */
- 
+
 class wxOpDraw: public wxDrawOp
 {
  public:
   wxOpDraw(int theOp, double theX1, double theY1, double theX2, double theY2,
-         double radius = 0.0, char *s = NULL);
+         double radius = 0.0, wxChar *s = NULL);
   ~wxOpDraw();
   void Do(wxDC& dc, double xoffset, double yoffset);
   void Scale(double scaleX, double scaleY);
@@ -160,7 +160,7 @@ public:
   double     m_x3;
   double     m_y3;
   double     m_radius;
-  char*     m_textString;
+  wxChar*    m_textString;
 
 };
 
@@ -196,7 +196,7 @@ public:
 public:
   wxRealPoint*  m_points;
   int           m_noPoints;
-  
+
 };
 
 #endif

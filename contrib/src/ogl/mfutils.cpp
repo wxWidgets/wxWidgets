@@ -381,8 +381,8 @@ bool wxXMetaFile::ReadFile(char *file)
       {
         wxMetaRecord *rec = new wxMetaRecord(META_TEXTOUT);
         int count = getshort(handle);
-        rec->stringParam = new char[count+1];
-        fread((void *)rec->stringParam, sizeof(char), count, handle);
+        rec->stringParam = new wxChar[count+1];
+        fread((void *)rec->stringParam, sizeof(wxChar), count, handle);
         rec->stringParam[count] = 0;
         rec->param2 = getshort(handle); // Y
         rec->param1 = getshort(handle); // X

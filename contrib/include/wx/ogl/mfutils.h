@@ -169,9 +169,9 @@ class wxMetaRecord: public wxObject
   long param6;
   long param7;
   long param8;
-  char *stringParam;
+  wxChar *stringParam;
   wxRealPoint *points;
-  
+
   wxMetaRecord(int fun)
   {
     metaFunction = fun; points = NULL; stringParam = NULL;
@@ -197,7 +197,7 @@ class wxXMetaFile: public wxObject
                      // referenced by position in list by SelectObject
   wxXMetaFile(char *file = NULL);
   ~wxXMetaFile(void);
-  
+
   // After this is called, the metafile cannot be used for anything
   // since it is now owned by the clipboard.
   bool SetClipboard(int width = 0, int height = 0);

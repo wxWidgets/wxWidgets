@@ -818,25 +818,26 @@ int wxShape::GetRegionId(const wxString& name)
 void wxShape::NameRegions(const wxString& parentName)
 {
   int n = GetNumberOfTextRegions();
-  char buf[100];
+  wxString buff;
   for (int i = 0; i < n; i++)
   {
     if (parentName.Length() > 0)
-      sprintf(buf, "%s.%d", (const char*) parentName, i);
+      buff << parentName << "." << i;
     else
-      sprintf(buf, "%d", i);
-    SetRegionName(buf, i);
+      buff << i;
+    SetRegionName(buff, i);
   }
   wxNode *node = m_children.First();
   int j = 0;
   while (node)
   {
+    buff.Empty();
     wxShape *child = (wxShape *)node->Data();
     if (parentName.Length() > 0)
-      sprintf(buf, "%s.%d", (const char*) parentName, j);
+      buff << parentName << "." << i;
     else
-      sprintf(buf, "%d", j);
-    child->NameRegions(buf);
+      buff << i;
+    child->NameRegions(buff);
     node = node->Next();
     j ++;
   }
@@ -872,7 +873,7 @@ void wxShape::FindRegionNames(wxStringList& list)
   for (int i = 0; i < n; i++)
   {
     wxString name(GetRegionName(i));
-    list.Add((const char*) name);
+    list.Add(name);
   }
 
   wxNode *node = m_children.First();
@@ -1931,7 +1932,7 @@ void wxShape::ReadAttributes(wxExpr *clause)
           }
       }
       wxShapeTextLine *line =
-            new wxShapeTextLine(the_x, the_y, (char*) (const char*) the_string);
+            new wxShapeTextLine(the_x, the_y, the_string);
       m_text.Append(line);
 
       node = node->next;
@@ -2226,7 +2227,7 @@ void wxShape::ReadRegions(wxExpr *clause)
         if (the_string)
         {
           wxShapeTextLine *line =
-              new wxShapeTextLine(the_x, the_y, (char*) (const char*) the_string);
+              new wxShapeTextLine(the_x, the_y, the_string);
           region->m_formattedText.Append(line);
         }
         node = node->next;
@@ -2992,7 +2993,7 @@ bool wxShape::GetBranchingAttachmentInfo(int attachment, wxRealPoint& root, wxRe
         }
         default:
         {
-            wxFAIL_MSG( "Unrecognised attachment point in GetBranchingAttachmentInfo." );
+            wxFAIL_MSG( wxT("Unrecognised attachment point in GetBranchingAttachmentInfo.") );
             break;
         }
     }
@@ -3051,7 +3052,7 @@ bool wxShape::GetBranchingAttachmentPoint(int attachment, int n, wxRealPoint& pt
         }
         default:
         {
-            wxFAIL_MSG( "Unrecognised attachment point in GetBranchingAttachmentPoint." );
+            wxFAIL_MSG( wxT("Unrecognised attachment point in GetBranchingAttachmentPoint.") );
             break;
         }
     }
@@ -3116,7 +3117,7 @@ wxRealPoint wxShape::GetBranchingAttachmentRoot(int attachment)
         }
         default:
         {
-            wxFAIL_MSG( "Unrecognised attachment point in GetBranchingAttachmentRoot." );
+            wxFAIL_MSG( wxT("Unrecognised attachment point in GetBranchingAttachmentRoot.") );
             break;
         }
     }

@@ -257,9 +257,9 @@ bool wxDiagram::SaveFile(const wxString& filename)
   }
   OnDatabaseSave(*database);
 
-  char tempFile[400];
-  wxGetTempFileName("diag", tempFile);
-  FILE* file = fopen(tempFile, "w");
+  wxString tempFile;
+  wxGetTempFileName(wxT("diag"), tempFile);
+  FILE* file = fopen(tempFile.mb_str(wxConvFile), "w");
   if (! file)
   {
     wxEndBusyCursor();
@@ -350,11 +350,11 @@ void wxDiagram::ReadNodes(wxExprDatabase& database)
   wxExpr *clause = database.FindClauseByFunctor("shape");
   while (clause)
   {
-    char *type = NULL;
+    wxChar *type = NULL;
     long parentId = -1;
 
-    clause->AssignAttributeValue("type", &type);
-    clause->AssignAttributeValue("parent", &parentId);
+    clause->AssignAttributeValue(wxT("type"), &type);
+    clause->AssignAttributeValue(wxT("parent"), &parentId);
     wxClassInfo *classInfo = wxClassInfo::FindClass(type);
     if (classInfo)
     {
@@ -394,12 +394,12 @@ void wxDiagram::ReadLines(wxExprDatabase& database)
   wxExpr *clause = database.FindClauseByFunctor("line");
   while (clause)
   {
-    wxString type("");
+    wxString type;
     long parentId = -1;
 
     clause->GetAttributeValue("type", type);
     clause->GetAttributeValue("parent", parentId);
-    wxClassInfo *classInfo = wxClassInfo::FindClass((char*) (const char*) type);
+    wxClassInfo *classInfo = wxClassInfo::FindClass(type);
     if (classInfo)
     {
       wxLineShape *shape = (wxLineShape *)classInfo->CreateObject();

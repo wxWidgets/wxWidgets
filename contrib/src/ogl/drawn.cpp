@@ -71,7 +71,7 @@ void wxDrawnShape::OnDraw(wxDC& dc)
     m_metafiles[m_currentAngle].m_outlinePen = g_oglTransparentPen;
     m_metafiles[m_currentAngle].Draw(dc, m_xpos + m_shadowOffsetX, m_ypos + m_shadowOffsetY);
   }
-    
+
   m_metafiles[m_currentAngle].m_outlinePen = m_pen;
   m_metafiles[m_currentAngle].m_fillBrush = m_brush;
   m_metafiles[m_currentAngle].Draw(dc, m_xpos, m_ypos);
@@ -137,7 +137,7 @@ void wxDrawnShape::Rotate(double x, double y, double theta)
     // Rotate metafile
     if (!m_metafiles[0].GetRotateable())
       return;
-    
+
     m_metafiles[0].Rotate(x, y, theta);
   }
 
@@ -406,12 +406,12 @@ void wxDrawnShape::SetDrawnBackgroundMode(int mode)
  * Individual operations
  *
  */
- 
+
 /*
  * Set font, brush, text colour
  *
  */
- 
+
 wxOpSetGDI::wxOpSetGDI(int theOp, wxPseudoMetaFile *theImage, int theGdiIndex, int theMode):
   wxDrawOp(theOp)
 {
@@ -585,7 +585,7 @@ void wxOpSetGDI::ReadExpr(wxPseudoMetaFile *image, wxExpr *expr)
  * Set/destroy clipping
  *
  */
- 
+
 wxOpSetClipping::wxOpSetClipping(int theOp, double theX1, double theY1,
     double theX2, double theY2):wxDrawOp(theOp)
 {
@@ -600,7 +600,7 @@ wxDrawOp *wxOpSetClipping::Copy(wxPseudoMetaFile *newImage)
   wxOpSetClipping *newOp = new wxOpSetClipping(m_op, m_x1, m_y1, m_x2, m_y2);
   return newOp;
 }
-    
+
 void wxOpSetClipping::Do(wxDC& dc, double xoffset, double yoffset)
 {
   switch (m_op)
@@ -675,9 +675,9 @@ void wxOpSetClipping::ReadExpr(wxPseudoMetaFile *image, wxExpr *expr)
  * Draw line, rectangle, rounded rectangle, ellipse, point, arc, text
  *
  */
- 
+
 wxOpDraw::wxOpDraw(int theOp, double theX1, double theY1, double theX2, double theY2,
-         double theRadius, char *s):wxDrawOp(theOp)
+         double theRadius, wxChar *s) : wxDrawOp(theOp)
 {
   m_x1 = theX1;
   m_y1 = theY1;
@@ -969,7 +969,7 @@ void wxOpDraw::ReadExpr(wxPseudoMetaFile *image, wxExpr *expr)
       m_x1 = expr->Nth(1)->RealValue();
       m_y1 = expr->Nth(2)->RealValue();
       wxString str(expr->Nth(3)->StringValue());
-      m_textString = copystring((const char*) str);
+      m_textString = copystring(str);
       break;
     }
     case DRAWOP_DRAW_ARC:
@@ -1119,7 +1119,7 @@ wxExpr *wxOpPolyDraw::WriteExpr(wxPseudoMetaFile *image)
    * E.g. "1B9080CD". 4 hex digits per coordinate pair.
    *
    */
-   
+
   for (int i = 0; i < m_noPoints; i++)
   {
     long signedX = (long)(m_points[i].x*100.0);
@@ -1128,7 +1128,7 @@ wxExpr *wxOpPolyDraw::WriteExpr(wxPseudoMetaFile *image)
     // Scale to 0 -> 64K
     long unSignedX = (long)(signedX + 32767.0);
     long unSignedY = (long)(signedY + 32767.0);
-    
+
 //    IntToHex((unsigned int)signedX, buf2);
 //    IntToHex((unsigned int)signedY, buf3);
     IntToHex((int)unSignedX, buf2);
@@ -1163,7 +1163,7 @@ void wxOpPolyDraw::ReadExpr(wxPseudoMetaFile *image, wxExpr *expr)
     buf1[2] = hexString[(size_t)(bufPtr + 2)];
     buf1[3] = hexString[(size_t)(bufPtr + 3)];
     buf1[4] = 0;
-    
+
     buf2[0] = hexString[(size_t)(bufPtr + 4)];
     buf2[1] = hexString[(size_t)(bufPtr + 5)];
     buf2[2] = hexString[(size_t)(bufPtr + 6)];
@@ -1251,7 +1251,7 @@ bool wxOpPolyDraw::GetPerimeterPoint(double x1, double y1,
       }
     }
   }
-  
+
   double *xpoints = new double[n];
   double *ypoints = new double[n];
 
@@ -1263,7 +1263,7 @@ bool wxOpPolyDraw::GetPerimeterPoint(double x1, double y1,
     ypoints[i] = point->y + yOffset;
   }
 
-  oglFindEndForPolyline(n, xpoints, ypoints, 
+  oglFindEndForPolyline(n, xpoints, ypoints,
                         x1, y1, x2, y2, x3, y3);
 
   delete[] xpoints;
@@ -1288,7 +1288,7 @@ static void IntToHex(unsigned int dec, char *buf)
   int digit2 = (int)((dec - (digit1*4096))/256);
   int digit3 = (int)((dec - (digit1*4096) - (digit2*256))/16);
   int digit4 = dec - (digit1*4096 + digit2*256 + digit3*16);
-  
+
   buf[0] = hexArray[digit1];
   buf[1] = hexArray[digit2];
   buf[2] = hexArray[digit3];
@@ -1450,16 +1450,16 @@ void wxPseudoMetaFile::Rotate(double x, double y, double theta)
 void wxPseudoMetaFile::WriteAttributes(wxExpr *clause, int whichAngle)
 {
   wxString widthStr;
-  widthStr.Printf("meta_width%d", whichAngle);
+  widthStr.Printf(wxT("meta_width%d"), whichAngle);
 
   wxString heightStr;
-  heightStr.Printf("meta_height%d", whichAngle);
+  heightStr.Printf(wxT("meta_height%d"), whichAngle);
 
   wxString outlineStr;
-  outlineStr.Printf("outline_op%d", whichAngle);
+  outlineStr.Printf(wxT("outline_op%d"), whichAngle);
 
   wxString rotateableStr;
-  rotateableStr.Printf("meta_rotateable%d", whichAngle);
+  rotateableStr.Printf(wxT("meta_rotateable%d"), whichAngle);
 
   // Write width and height
   clause->AddAttributeValue(widthStr, m_width);
@@ -1553,7 +1553,7 @@ void wxPseudoMetaFile::WriteAttributes(wxExpr *clause, int whichAngle)
       node = node->Next();
     }
     wxString outlineObjectsStr;
-    outlineObjectsStr.Printf("outline_objects%d", whichAngle);
+    outlineObjectsStr.Printf(wxT("outline_objects%d"), whichAngle);
 
     clause->AddAttributeValue(outlineObjectsStr, outlineExpr);
   }
@@ -1567,26 +1567,26 @@ void wxPseudoMetaFile::WriteAttributes(wxExpr *clause, int whichAngle)
       node = node->Next();
     }
     wxString fillObjectsStr;
-    fillObjectsStr.Printf("fill_objects%d", whichAngle);
+    fillObjectsStr.Printf(wxT("fill_objects%d"), whichAngle);
 
     clause->AddAttributeValue(fillObjectsStr, fillExpr);
   }
-    
+
 }
 
 void wxPseudoMetaFile::ReadAttributes(wxExpr *clause, int whichAngle)
 {
   wxString widthStr;
-  widthStr.Printf("meta_width%d", whichAngle);
+  widthStr.Printf(wxT("meta_width%d"), whichAngle);
 
   wxString heightStr;
-  heightStr.Printf("meta_height%d", whichAngle);
+  heightStr.Printf(wxT("meta_height%d"), whichAngle);
 
   wxString outlineStr;
-  outlineStr.Printf("outline_op%d", whichAngle);
+  outlineStr.Printf(wxT("outline_op%d"), whichAngle);
 
   wxString rotateableStr;
-  rotateableStr.Printf("meta_rotateable%d", whichAngle);
+  rotateableStr.Printf(wxT("meta_rotateable%d"), whichAngle);
 
   clause->GetAttributeValue(widthStr, m_width);
   clause->GetAttributeValue(heightStr, m_height);
@@ -1693,7 +1693,7 @@ void wxPseudoMetaFile::ReadAttributes(wxExpr *clause, int whichAngle)
           m_ops.Append(theOp);
           break;
         }
-        
+
         case DRAWOP_SET_CLIPPING_RECT:
         case DRAWOP_DESTROY_CLIPPING_RECT:
         {
@@ -1733,7 +1733,7 @@ void wxPseudoMetaFile::ReadAttributes(wxExpr *clause, int whichAngle)
   }
 
   wxString outlineObjectsStr;
-  outlineObjectsStr.Printf("outline_objects%d", whichAngle);
+  outlineObjectsStr.Printf(wxT("outline_objects%d"), whichAngle);
 
   // Now read in the list of outline and fill operations, if any
   wxExpr *expr1 = clause->AttributeValue(outlineObjectsStr);
@@ -1748,7 +1748,7 @@ void wxPseudoMetaFile::ReadAttributes(wxExpr *clause, int whichAngle)
   }
 
   wxString fillObjectsStr;
-  fillObjectsStr.Printf("fill_objects%d", whichAngle);
+  fillObjectsStr.Printf(wxT("fill_objects%d"), whichAngle);
 
   expr1 = clause->AttributeValue(fillObjectsStr);
   if (expr1)
@@ -1784,7 +1784,7 @@ void wxPseudoMetaFile::Copy(wxPseudoMetaFile& copy)
     copy.m_gdiObjects.Append(obj);
     node = node->Next();
   }
-  
+
   // Copy the operations
   node = m_ops.First();
   while (node)
@@ -1814,14 +1814,14 @@ void wxPseudoMetaFile::Copy(wxPseudoMetaFile& copy)
  * fit width and return new width and height.
  *
  */
- 
+
 bool wxPseudoMetaFile::LoadFromMetaFile(char *filename, double *rwidth, double *rheight)
 {
   if (!FileExists(filename))
     return NULL;
-    
+
   wxXMetaFile *metaFile = new wxXMetaFile;
-  
+
   if (!metaFile->ReadFile(filename))
   {
     delete metaFile;
@@ -1977,7 +1977,7 @@ bool wxPseudoMetaFile::LoadFromMetaFile(char *filename, double *rwidth, double *
           newPoints[i].x = record->points[i].x;
           newPoints[i].y = record->points[i].y;
         }
-        
+
         wxOpPolyDraw *op = new wxOpPolyDraw(DRAWOP_DRAW_POLYGON, n, newPoints);
         m_ops.Append(op);
         break;
@@ -1991,7 +1991,7 @@ bool wxPseudoMetaFile::LoadFromMetaFile(char *filename, double *rwidth, double *
           newPoints[i].x = record->points[i].x;
           newPoints[i].y = record->points[i].y;
         }
-        
+
         wxOpPolyDraw *op = new wxOpPolyDraw(DRAWOP_DRAW_POLYLINE, n, newPoints);
         m_ops.Append(op);
         break;

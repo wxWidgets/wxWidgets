@@ -63,11 +63,11 @@ wxList          oglObjectCopyMapping(wxKEY_INTEGER);
 void wxOGLInitialize()
 {
   g_oglNormalFont = wxTheFontList->FindOrCreateFont(10, wxSWISS, wxNORMAL, wxNORMAL);
-  g_oglBlackPen = wxThePenList->FindOrCreatePen("BLACK", 1, wxSOLID);
-  g_oglTransparentPen = wxThePenList->FindOrCreatePen("WHITE", 1, wxTRANSPARENT);
-  g_oglBlackForegroundPen = wxThePenList->FindOrCreatePen("BLACK", 1, wxSOLID);
-  g_oglWhiteBackgroundPen = wxThePenList->FindOrCreatePen("WHITE", 1, wxSOLID);
-  g_oglWhiteBackgroundBrush = wxTheBrushList->FindOrCreateBrush("WHITE", wxSOLID);
+  g_oglBlackPen = wxThePenList->FindOrCreatePen(wxT("BLACK"), 1, wxSOLID);
+  g_oglTransparentPen = wxThePenList->FindOrCreatePen(wxT("WHITE"), 1, wxTRANSPARENT);
+  g_oglBlackForegroundPen = wxThePenList->FindOrCreatePen(wxT("BLACK"), 1, wxSOLID);
+  g_oglWhiteBackgroundPen = wxThePenList->FindOrCreatePen(wxT("WHITE"), 1, wxSOLID);
+  g_oglWhiteBackgroundBrush = wxTheBrushList->FindOrCreateBrush(wxT("WHITE"), wxSOLID);
 
   OGLInitializeConstraintTypes();
 
@@ -135,16 +135,17 @@ int FontSizeDialog(wxFrame *parent, int old_size)
 {
   if (old_size <= 0)
     old_size = 10;
-  char buf[40];
-  sprintf(buf, "%d", old_size);
-  wxString ans = wxGetTextFromUser("Enter point size", "Font size", buf, parent);
-  if (ans == "")
+  wxString buf;
+  buf << old_size;
+  wxString ans = wxGetTextFromUser(wxT("Enter point size"), wxT("Font size"), buf, parent);
+  if (ans.Length() == 0)
     return 0;
 
-  int new_size = atoi(ans);
+  long new_size = 0;
+  ans.ToLong(&new_size);
   if ((new_size <= 0) || (new_size > 40))
   {
-    wxMessageBox("Invalid point size!", "Error", wxOK);
+    wxMessageBox(wxT("Invalid point size!"), wxT("Error"), wxOK);
     return 0;
   }
   return new_size;
@@ -354,24 +355,24 @@ wxStringList *oglFormatText(wxDC& dc, const wxString& text, double width, double
   wxStringList word_list;
 
   // Make new lines into NULL strings at this point
-  int i = 0; int j = 0; int len = strlen(text);
-  char word[200]; word[0] = 0;
+  int i = 0; int j = 0; int len = text.Length();
+  wxChar word[200]; word[0] = 0;
   bool end_word = FALSE; bool new_line = FALSE;
   while (i < len)
   {
     switch (text[i])
     {
-      case '%':
+      case wxT('%'):
       {
         i ++;
         if (i == len)
-        { word[j] = '%'; j ++; }
+        { word[j] = wxT('%'); j ++; }
         else
         {
-          if (text[i] == 'n')
+          if (text[i] == wxT('n'))
           { new_line = TRUE; end_word = TRUE; i++; }
           else
-          { word[j] = '%'; j ++; word[j] = text[i]; j ++; i ++; }
+          { word[j] = wxT('%'); j ++; word[j] = text[i]; j ++; i ++; }
         }
         break;
       }
@@ -384,7 +385,7 @@ wxStringList *oglFormatText(wxDC& dc, const wxString& text, double width, double
       {
         new_line = TRUE; end_word = TRUE; i++;
       }
-      case ' ':
+      case wxT(' '):
       {
         end_word = TRUE;
         i ++;
@@ -414,8 +415,7 @@ wxStringList *oglFormatText(wxDC& dc, const wxString& text, double width, double
   // Now, make a list of strings which can fit in the box
   wxStringList *string_list = new wxStringList;
 
-  char buffer[400];
-  buffer[0] = 0;
+  wxString buffer;
   wxNode *node = word_list.First();
   long x, y;
 
@@ -427,17 +427,17 @@ wxStringList *oglFormatText(wxDC& dc, const wxString& text, double width, double
     if (!s)
     {
       // FORCE NEW LINE
-      if (strlen(buffer) > 0)
+      if (buffer.Length() > 0)
         string_list->Add(buffer);
 
-      buffer[0] = 0;
+      buffer.Empty();
     }
     else
     {
-      if (buffer[0] != 0)
-        strcat(buffer, " ");
+      if (buffer.Length() != 0)
+        buffer += " ";
 
-      strcat(buffer, s);
+      buffer += s;
       dc.GetTextExtent(buffer, &x, &y);
 
       // Don't fit within the bounding box if we're fitting shape to contents
@@ -447,14 +447,14 @@ wxStringList *oglFormatText(wxDC& dc, const wxString& text, double width, double
         if (oldBuffer.Length() > 0)
           string_list->Add(oldBuffer);
 
-        buffer[0] = 0;
-        strcat(buffer, s);
+        buffer.Empty();
+        buffer += s;
       }
     }
 
     node = node->Next();
   }
-  if (buffer[0] != 0)
+  if (buffer.Length() != 0)
     string_list->Add(buffer);
 
   return string_list;
@@ -799,29 +799,32 @@ bool oglRoughlyEqual(double val1, double val2, double tol)
  */
 
 // Array used in DecToHex conversion routine.
-static char sg_HexArray[] = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B',
-  'C', 'D', 'E', 'F' };
+static wxChar sg_HexArray[] = { wxT('0'), wxT('1'), wxT('2'), wxT('3'),
+                                wxT('4'), wxT('5'), wxT('6'), wxT('7'),
+                                wxT('8'), wxT('9'), wxT('A'), wxT('B'),
+                                wxT('C'), wxT('D'), wxT('E'), wxT('F')
+};
 
 // Convert 2-digit hex number to decimal
-unsigned int oglHexToDec(char* buf)
+unsigned int oglHexToDec(wxChar* buf)
 {
   int firstDigit, secondDigit;
 
-  if (buf[0] >= 'A')
-    firstDigit = buf[0] - 'A' + 10;
+  if (buf[0] >= wxT('A'))
+    firstDigit = buf[0] - wxT('A') + 10;
   else
-    firstDigit = buf[0] - '0';
+    firstDigit = buf[0] - wxT('0');
 
-  if (buf[1] >= 'A')
-    secondDigit = buf[1] - 'A' + 10;
+  if (buf[1] >= wxT('A'))
+    secondDigit = buf[1] - wxT('A') + 10;
   else
-    secondDigit = buf[1] - '0';
+    secondDigit = buf[1] - wxT('0');
 
   return firstDigit * 16 + secondDigit;
 }
 
 // Convert decimal integer to 2-character hex string
-void oglDecToHex(unsigned int dec, char *buf)
+void oglDecToHex(unsigned int dec, wxChar *buf)
 {
     int firstDigit = (int)(dec/16.0);
     int secondDigit = (int)(dec - (firstDigit*16.0));
@@ -834,22 +837,22 @@ void oglDecToHex(unsigned int dec, char *buf)
 wxColour oglHexToColour(const wxString& hex)
 {
     if (hex.Length() == 6)
-	{
-        char buf[7];
-        strncpy(buf, hex, 7);
-        unsigned int r = oglHexToDec((char *)buf);
-        unsigned int g = oglHexToDec((char *)(buf+2));
-        unsigned int b = oglHexToDec((char *)(buf+4));
+    {
+        long r, g, b;
+        r = g = b = 0;
+        hex.Mid(0,2).ToLong(&r, 16);
+        hex.Mid(2,2).ToLong(&g, 16);
+        hex.Mid(4,2).ToLong(&b, 16);
         return wxColour(r, g, b);
-	}
-	else
-	    return wxColour(0,0,0);
+    }
+    else
+        return wxColour(0,0,0);
 }
 
 // RGB to 3-digit hex
 wxString oglColourToHex(const wxColour& colour)
 {
-    char buf[7];
+    wxChar buf[7];
     unsigned int red = colour.Red();
     unsigned int green = colour.Green();
     unsigned int blue = colour.Blue();
