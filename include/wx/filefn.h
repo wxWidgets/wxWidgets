@@ -178,6 +178,8 @@ enum wxSeekMode
     #undef __HUGEFILES_SUPPORTED
     #if defined(__MINGW32__)
         #define __HUGEFILES_SUPPORTED 1
+    #elif defined(__MWERKS__)
+        #define __HUGEFILES_SUPPORTED 0
     #elif defined(__DMC__)
         #define __HUGEFILES_SUPPORTED 0
     #elif ((_INTEGRAL_MAX_BITS >= 64) || defined(_LARGE_FILES))
@@ -203,11 +205,13 @@ enum wxSeekMode
 
     #if defined(__MWERKS__)
         #if __MSL__ >= 0x6000
-            #define wxRead        _read(fd, (void *)buf, nCount)
-            #define wxWrite        _write(fd, (void *)buf, nCount)
+            #define wxRead(fd, buf, nCount)  _read(fd, (void *)buf, nCount)
+            #define wxWrite(fd, buf, nCount) _write(fd, (void *)buf, nCount)
         #else
-            #define wxRead        _read(fd, (const char *)buf, nCount)
-            #define wxWrite        _write(fd, (const char *)buf, nCount)
+            #define wxRead(fd, buf, nCount)\
+                  _read(fd, (const char *)buf, nCount)
+            #define wxWrite(fd, buf, nCount)\
+                  _write(fd, (const char *)buf, nCount)
         #endif
     #else
         #if defined(__DMC__) || defined(__WATCOMC__)
