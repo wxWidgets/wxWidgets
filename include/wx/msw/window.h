@@ -21,9 +21,6 @@
     #pragma interface "window.h"
 #endif
 
-// for HANDLE
-#include "wx/msw/wrapwin.h"
-
 // [at least] some version of Windows send extra mouse move messages after
 // a mouse click or a key press - to temporarily fix this problem, set the
 // define below to 1
@@ -477,6 +474,11 @@ protected:
     wxKeyEvent CreateKeyEvent(wxEventType evType, int id,
                               WXLPARAM lParam = 0, WXWPARAM wParam = 0) const;
 
+
+    // default OnEraseBackground() implementation, return true if we did erase
+    // the background, false otherwise
+    bool DoEraseBackground(wxDC& dc);
+
 private:
     // common part of all ctors
     void Init();
@@ -497,7 +499,7 @@ private:
     unsigned int m_frozenness;
 
     // current defer window position operation handle (may be NULL)
-    HANDLE m_hDWP;
+    WXHANDLE m_hDWP;
 
 
     DECLARE_DYNAMIC_CLASS(wxWindowMSW)
