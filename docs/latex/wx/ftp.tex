@@ -44,7 +44,7 @@ Example of using wxFTP for file downloading:
     }
     else
     {
-        size_t size = in->StreamSize();
+        size_t size = in->GetSize();
         char *data = new char[size];
         if ( !in->Read(data, size) )
         {
@@ -365,9 +365,9 @@ send new commands without reconnecting.
   ftp.ChDir("a_directory");
   in_stream = ftp.GetInputStream("a_file_to_get");
 
-  data = new char[in_stream->StreamSize()];
+  data = new char[in_stream->GetSize()];
 
-  in_stream->Read(data, in_stream->StreamSize());
+  in_stream->Read(data, in_stream->GetSize());
   if (in_stream->LastError() != wxStream_NOERROR) {
     // Do something.
   }
