@@ -26,6 +26,8 @@ all (GUI):
 - wxTreeCtrl and wxListCtrl allow setting colour/fonts for individual items
 - "file open" dialog allows selecting multiple files at once (contributed by
   John Norris)
+- wxMimeTypesManager uses GNOME/KDE MIME database to get the icons for the
+  MIME types if available (Unix only)
 - wxDC::DrawRotatedText() (based on contribution by Hans-Joachim Baader)
 
 - TIFF support added (libtiff required and included in the distribution)

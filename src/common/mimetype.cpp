@@ -43,8 +43,11 @@
 #ifdef __WXMSW__
     #include "wx/msw/registry.h"
     #include "windows.h"
-#else  // Unix
+#elif defined(__UNIX__)
+    #include "wx/ffile.h"
     #include "wx/textfile.h"
+    #include "wx/dir.h"
+    #include "wx/utils.h"
 #endif // OS
 
 #include "wx/mimetype.h"
@@ -341,6 +344,54 @@ private:
 
 WX_DEFINE_ARRAY(MailCapEntry *, ArrayTypeEntries);
 
+// the base class which may be used to find an icon for the MIME type
+class wxMimeTypeIconHandler
+{
+public:
+    virtual bool GetIcon(const wxString& mimetype, wxIcon *icon) = 0;
+};
+
+WX_DEFINE_ARRAY(wxMimeTypeIconHandler *, ArrayIconHandlers);
+
+// the icon handler which uses GNOME MIME database
+class wxGNOMEIconHandler : public wxMimeTypeIconHandler
+{
+public:
+    virtual bool GetIcon(const wxString& mimetype, wxIcon *icon);
+
+private:
+    void Init();
+    void LoadIconsFromKeyFile(const wxString& filename);
+    void LoadKeyFilesFromDir(const wxString& dirbase);
+
+    static bool m_inited;
+
+    static wxSortedArrayString ms_mimetypes;
+    static wxArrayString       ms_icons;
+};
+
+// the icon handler which uses KDE MIME database
+class wxKDEIconHandler : public wxMimeTypeIconHandler
+{
+public:
+    virtual bool GetIcon(const wxString& mimetype, wxIcon *icon);
+
+private:
+    void LoadLinksForMimeSubtype(const wxString& dirbase,
+                                 const wxString& subdir,
+                                 const wxString& filename);
+    void LoadLinksForMimeType(const wxString& dirbase,
+                              const wxString& subdir);
+    void LoadLinkFilesFromDir(const wxString& dirbase);
+    void Init();
+
+    static bool m_inited;
+
+    static wxSortedArrayString ms_mimetypes;
+    static wxArrayString       ms_icons;
+};
+
+// this is the real wxMimeTypesManager for Unix
 class wxMimeTypesManagerImpl
 {
 friend class wxFileTypeImpl; // give it access to m_aXXX variables
@@ -376,11 +427,17 @@ public:
         // file type
     wxString GetExtension(size_t index) { return m_aExtensions[index]; }
 
+        // get the array of icon handlers
+    static ArrayIconHandlers& GetIconHandlers();
+
 private:
     wxArrayString m_aTypes,         // MIME types
                   m_aDescriptions,  // descriptions (just some text)
                   m_aExtensions;    // space separated list of extensions
     ArrayTypeEntries m_aEntries;    // commands and tests for this file type
+
+    // head of the linked list of the icon handlers
+    static ArrayIconHandlers ms_iconHandlers;
 };
 
 class wxFileTypeImpl
@@ -394,8 +451,7 @@ public:
     bool GetExtensions(wxArrayString& extensions);
     bool GetMimeType(wxString *mimeType) const
         { *mimeType = m_manager->m_aTypes[m_index]; return TRUE; }
-    bool GetIcon(wxIcon * WXUNUSED(icon)) const
-        { return FALSE; }   // TODO maybe with Gnome/KDE integration...
+    bool GetIcon(wxIcon *icon) const;
     bool GetDescription(wxString *desc) const
         { *desc = m_manager->m_aDescriptions[m_index]; return TRUE; }
 
@@ -1115,6 +1171,369 @@ size_t wxMimeTypesManagerImpl::EnumAllFileTypes(wxArrayString& mimetypes)
 
 #else  // Unix
 
+// ============================================================================
+// Unix implementation
+// ============================================================================
+
+// ----------------------------------------------------------------------------
+// various statics
+// ----------------------------------------------------------------------------
+
+static wxGNOMEIconHandler gs_iconHandlerGNOME;
+static wxKDEIconHandler gs_iconHandlerKDE;
+
+bool wxGNOMEIconHandler::m_inited = FALSE;
+wxSortedArrayString wxGNOMEIconHandler::ms_mimetypes;
+wxArrayString       wxGNOMEIconHandler::ms_icons;
+
+bool wxKDEIconHandler::m_inited = FALSE;
+wxSortedArrayString wxKDEIconHandler::ms_mimetypes;
+wxArrayString       wxKDEIconHandler::ms_icons;
+
+ArrayIconHandlers wxMimeTypesManagerImpl::ms_iconHandlers;
+
+// ----------------------------------------------------------------------------
+// wxGNOMEIconHandler
+// ----------------------------------------------------------------------------
+
+// GNOME stores the info we're interested in in several locations:
+//  1. xxx.keys files under /usr/share/mime-info
+//  2. xxx.keys files under ~/.gnome/mime-info
+//
+// The format of xxx.keys file is the following:
+//
+// mimetype/subtype:
+//      field=value
+//
+// with blank lines separating the entries and indented lines starting with
+// TABs. We're interested in the field icon-filename whose value is the path
+// containing the icon.
+
+void wxGNOMEIconHandler::LoadIconsFromKeyFile(const wxString& filename)
+{
+    wxTextFile textfile(filename);
+    if ( !textfile.Open() )
+        return;
+
+    // values for the entry being parsed
+    wxString curMimeType, curIconFile;
+
+    const wxChar *pc;
+    size_t nLineCount = textfile.GetLineCount();
+    for ( size_t nLine = 0; ; nLine++ )
+    {
+        if ( nLine < nLineCount )
+        {
+            pc = textfile[nLine].c_str();
+            if ( *pc == _T('#') )
+            {
+                // skip comments
+                continue;
+            }
+        }
+        else
+        {
+            // so that we will fall into the "if" below
+            pc = NULL;
+        }
+
+        if ( !pc || !*pc )
+        {
+            // end of the entry
+            if ( !!curMimeType && !!curIconFile )
+            {
+                // do we already know this mimetype?
+                int i = ms_mimetypes.Index(curMimeType);
+                if ( i == wxNOT_FOUND )
+                {
+                    // add a new entry
+                    size_t n = ms_mimetypes.Add(curMimeType);
+                    ms_icons.Insert(curIconFile, n);
+                }
+                else
+                {
+                    // replace the existing one (this means that the directories
+                    // should be searched in order of increased priority!)
+                    ms_icons[(size_t)i] = curIconFile;
+                }
+            }
+
+            if ( !pc )
+            {
+                // the end - this can only happen if nLine == nLineCount
+                break;
+            }
+
+            curIconFile.Empty();
+
+            continue;
+        }
+
+        // what do we have here?
+        if ( *pc == _T('\t') )
+        {
+            // this is a field=value ling
+            pc++; // skip leading TAB
+
+            static const int lenField = 13; // strlen("icon-filename")
+            if ( wxStrncmp(pc, _T("icon-filename"), lenField) == 0 )
+            {
+                // skip '=' which follows and take everything left until the end
+                // of line
+                curIconFile = pc + lenField + 1;
+            }
+            //else: some other field, we don't care
+        }
+        else
+        {
+            // this is the start of the new section
+            curMimeType.Empty();
+
+            while ( *pc != _T(':') && *pc != _T('\0') )
+            {
+                curMimeType += *pc++;
+            }
+
+            if ( !*pc )
+            {
+                // we reached the end of line without finding the colon,
+                // something is wrong - ignore this line completely
+                wxLogDebug(_T("Unreckognized line %d in file '%s' ignored"),
+                           nLine + 1, filename.c_str());
+
+                break;
+            }
+        }
+    }
+}
+
+void wxGNOMEIconHandler::LoadKeyFilesFromDir(const wxString& dirbase)
+{
+    wxASSERT_MSG( !!dirbase && !wxEndsWithPathSeparator(dirbase),
+                  _T("base directory shouldn't end with a slash") );
+
+    wxString dirname = dirbase;
+    dirname << _T("/mime-info");
+
+    if ( !wxDir::Exists(dirname) )
+        return;
+
+    wxDir dir(dirname);
+    if ( !dir.IsOpened() )
+        return;
+
+    // we will concatenate it with filename to get the full path below
+    dirname += _T('/');
+
+    wxString filename;
+    bool cont = dir.GetFirst(&filename, _T("*.keys"), wxDIR_FILES);
+    while ( cont )
+    {
+        LoadIconsFromKeyFile(dirname + filename);
+
+        cont = dir.GetNext(&filename);
+    }
+}
+
+void wxGNOMEIconHandler::Init()
+{
+    wxArrayString dirs;
+    dirs.Add(_T("/usr/share"));
+    dirs.Add(wxGetHomeDir() + _T("/.gnome"));
+
+    size_t nDirs = dirs.GetCount();
+    for ( size_t nDir = 0; nDir < nDirs; nDir++ )
+    {
+        LoadKeyFilesFromDir(dirs[nDir]);
+    }
+
+    m_inited = TRUE;
+}
+
+bool wxGNOMEIconHandler::GetIcon(const wxString& mimetype, wxIcon *icon)
+{
+    if ( !m_inited )
+    {
+        Init();
+    }
+
+    int index = ms_mimetypes.Index(mimetype);
+    if ( index == wxNOT_FOUND )
+        return FALSE;
+
+    wxString iconname = ms_icons[(size_t)index];
+
+#if wxUSE_GUI
+    *icon = wxIcon(iconname);
+#else
+    // helpful for testing in console mode
+    wxLogDebug(_T("Found GNOME icon for '%s': '%s'\n"),
+               mimetype.c_str(), iconname.c_str());
+#endif
+
+    return TRUE;
+}
+
+// ----------------------------------------------------------------------------
+// wxKDEIconHandler
+// ----------------------------------------------------------------------------
+
+// KDE stores the icon info in its .kdelnk files. The file for mimetype/subtype
+// may be found in either of the following locations
+//
+//  1. /usr/share/mimelnk/mimetype/subtype.kdelnk
+//  2. ~/.kde/share/mimelnk/mimetype/subtype.kdelnk
+//
+// The format of a .kdelnk file is almost the same as the one used by
+// wxFileConfig, i.e. there are groups, comments and entries. The icon is the
+// value for the entry "Type"
+
+void wxKDEIconHandler::LoadLinksForMimeSubtype(const wxString& dirbase,
+                                               const wxString& subdir,
+                                               const wxString& filename)
+{
+    wxFFile file(dirbase + filename);
+    if ( !file.IsOpened() )
+        return;
+
+    // these files are small, slurp the entire file at once
+    wxString text;
+    if ( !file.ReadAll(&text) )
+        return;
+
+    int pos = text.Find(_T("Icon="));
+    if ( pos == wxNOT_FOUND )
+    {
+        // no icon info
+        return;
+    }
+
+    wxString icon;
+
+    const wxChar *pc = text.c_str() + pos + 5;  // 5 == strlen("Icon=")
+    while ( *pc && *pc != _T('\n') )
+    {
+        icon += *pc++;
+    }
+
+    if ( !!icon )
+    {
+        // don't check that the file actually exists - would be too slow
+        icon.Prepend(_T("/usr/share/icons/"));
+
+        // construct mimetype from the directory name and the basename of the
+        // file (it always has .kdelnk extension)
+        wxString mimetype;
+        mimetype << subdir << _T('/') << filename.BeforeLast(_T('.'));
+
+        // do we already have this MIME type?
+        int i = ms_mimetypes.Index(mimetype);
+        if ( i == wxNOT_FOUND )
+        {
+            // add it
+            size_t n = ms_mimetypes.Add(mimetype);
+            ms_icons.Insert(icon, n);
+        }
+        else
+        {
+            // replace the old value
+            ms_icons[(size_t)i] = icon;
+        }
+    }
+}
+
+void wxKDEIconHandler::LoadLinksForMimeType(const wxString& dirbase,
+                                            const wxString& subdir)
+{
+    wxString dirname = dirbase;
+    dirname += subdir;
+    wxDir dir(dirname);
+    if ( !dir.IsOpened() )
+        return;
+
+    dirname += _T('/');
+
+    wxString filename;
+    bool cont = dir.GetFirst(&filename, _T("*.kdelnk"), wxDIR_FILES);
+    while ( cont )
+    {
+        LoadLinksForMimeSubtype(dirname, subdir, filename);
+
+        cont = dir.GetNext(&filename);
+    }
+}
+
+void wxKDEIconHandler::LoadLinkFilesFromDir(const wxString& dirbase)
+{
+    wxASSERT_MSG( !!dirbase && !wxEndsWithPathSeparator(dirbase),
+                  _T("base directory shouldn't end with a slash") );
+
+    wxString dirname = dirbase;
+    dirname << _T("/mimelnk");
+
+    if ( !wxDir::Exists(dirname) )
+        return;
+
+    wxDir dir(dirname);
+    if ( !dir.IsOpened() )
+        return;
+
+    // we will concatenate it with dir name to get the full path below
+    dirname += _T('/');
+
+    wxString subdir;
+    bool cont = dir.GetFirst(&subdir, wxEmptyString, wxDIR_DIRS);
+    while ( cont )
+    {
+        LoadLinksForMimeType(dirname, subdir);
+
+        cont = dir.GetNext(&subdir);
+    }
+}
+
+void wxKDEIconHandler::Init()
+{
+    wxArrayString dirs;
+    dirs.Add(_T("/usr/share"));
+    dirs.Add(wxGetHomeDir() + _T("/.kde/share"));
+
+    size_t nDirs = dirs.GetCount();
+    for ( size_t nDir = 0; nDir < nDirs; nDir++ )
+    {
+        LoadLinkFilesFromDir(dirs[nDir]);
+    }
+
+    m_inited = TRUE;
+}
+
+bool wxKDEIconHandler::GetIcon(const wxString& mimetype, wxIcon *icon)
+{
+    if ( !m_inited )
+    {
+        Init();
+    }
+
+    int index = ms_mimetypes.Index(mimetype);
+    if ( index == wxNOT_FOUND )
+        return FALSE;
+
+    wxString iconname = ms_icons[(size_t)index];
+
+#if wxUSE_GUI
+    *icon = wxIcon(iconname);
+#else
+    // helpful for testing in console mode
+    wxLogDebug(_T("Found KDE icon for '%s': '%s'\n"),
+               mimetype.c_str(), iconname.c_str());
+#endif
+
+    return TRUE;
+}
+
+// ----------------------------------------------------------------------------
+// wxFileTypeImpl (Unix)
+// ----------------------------------------------------------------------------
+
 MailCapEntry *
 wxFileTypeImpl::GetEntry(const wxFileType::MessageParameters& params) const
 {
@@ -1139,6 +1558,22 @@ wxFileTypeImpl::GetEntry(const wxFileType::MessageParameters& params) const
     }
 
     return entry;
+}
+
+bool wxFileTypeImpl::GetIcon(wxIcon *icon) const
+{
+    wxString mimetype;
+    (void)GetMimeType(&mimetype);
+
+    ArrayIconHandlers& handlers = m_manager->GetIconHandlers();
+    size_t count = handlers.GetCount();
+    for ( size_t n = 0; n < count; n++ )
+    {
+        if ( handlers[n]->GetIcon(mimetype, icon) )
+            return TRUE;
+    }
+
+    return FALSE;
 }
 
 bool
@@ -1194,6 +1629,22 @@ bool wxFileTypeImpl::GetExtensions(wxArrayString& extensions)
     }
 
     return TRUE;
+}
+
+// ----------------------------------------------------------------------------
+// wxMimeTypesManagerImpl (Unix)
+// ----------------------------------------------------------------------------
+
+/* static */
+ArrayIconHandlers& wxMimeTypesManagerImpl::GetIconHandlers()
+{
+    if ( ms_iconHandlers.GetCount() == 0 )
+    {
+        ms_iconHandlers.Add(&gs_iconHandlerGNOME);
+        ms_iconHandlers.Add(&gs_iconHandlerKDE);
+    }
+
+    return ms_iconHandlers;
 }
 
 // read system and user mailcaps (TODO implement mime.types support)
