@@ -1355,7 +1355,15 @@ not be used at all.", "");
         "Returns the foreground colour of the window.  The interpretation of
 foreground colour is dependent on the window class; it may be the text
 colour or other colour, or it may not be used at all.", "");
-    
+
+// TODO:
+//     // if the window shouldn't inherit its colour from the parent, override
+//     // this function to return true
+//     //
+//     // this is currently only used by wxMSW and wxUniv but should be useful for
+//     // the other ports too
+//     virtual bool ProvidesBackground() const;
+
 
     // Set/get the background style.
     // Pass one of wxBG_STYLE_SYSTEM, wxBG_STYLE_COLOUR, wxBG_STYLE_CUSTOM
