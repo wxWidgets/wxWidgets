@@ -17,9 +17,9 @@
 #include "wx/generic/colrdlgg.h"
 #endif
 
-#if defined(__WXMSW__)
+#if !defined(__WXMSW__)
 #define wxColourDialog wxGenericColourDialog
-#define sm_classwxColourDialog sm_classwxColourDialog
+#define sm_classwxColourDialog sm_classwxGenericColourDialog
 #endif
 
 #endif

@@ -111,8 +111,10 @@ class WXDLLEXPORT wxGenericColourDialog: public wxDialog
 DECLARE_EVENT_TABLE()
 };
 
+/* This shouldn't be necessary, we have a #define in wx/colordlg.h.
 #ifdef __WXGTK__
 typedef wxGenericColourDialog wxColourDialog;
 #endif
+*/
 
 #endif
