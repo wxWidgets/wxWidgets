@@ -3088,7 +3088,7 @@ this function to commit or rollback the insertion.
     wxStrcpy(parts->PartName, "10");
     wxStrcpy(parts->PartDesc, "Part #10");
     parts->Qty = 1000;
-    RETCODE retcode = parts.Insert();
+    RETCODE retcode = parts->Insert();
     switch(retcode)
     {
         case DB_SUCCESS:
