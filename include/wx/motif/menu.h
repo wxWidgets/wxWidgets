@@ -18,6 +18,7 @@
 
 #include "wx/colour.h"
 #include "wx/font.h"
+#include "wx/arrstr.h"
 
 class wxFrame;
 

@@ -32,6 +32,7 @@
 
 #ifndef WX_PRECOMP
     #include "wx/ctrlsub.h"
+    #include "wx/arrstr.h"
 #endif
 
 // ============================================================================

@@ -38,6 +38,7 @@ typedef void *wxTreeItemIdValue;
 
 class WXDLLEXPORT wxTreeItemId
 {
+    friend bool operator==(const wxTreeItemId&, const wxTreeItemId&);
 public:
     // ctors
         // 0 is invalid value for HTREEITEM
@@ -63,7 +64,15 @@ public:
 #endif // WXWIN_COMPATIBILITY_2_4
 
     wxTreeItemIdValue m_pItem;
+    bool operator!() const { return !IsOk(); }
+    operator bool() const { return IsOk(); }
+
 };
+
+inline bool operator==(const wxTreeItemId& i1, const wxTreeItemId& i2)
+{
+    return i1.m_pItem == i2.m_pItem;
+}
 
 // ----------------------------------------------------------------------------
 // wxTreeItemData is some (arbitrary) user class associated with some item. The

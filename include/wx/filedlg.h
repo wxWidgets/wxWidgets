@@ -19,6 +19,7 @@
 #endif
 
 #include "wx/dialog.h"
+#include "wx/arrstr.h"
 
 //----------------------------------------------------------------------------
 // wxFileDialog data

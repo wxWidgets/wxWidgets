@@ -20,6 +20,7 @@
 #include "wx/defs.h"
 
 #include "wx/checklst.h"
+#include "wx/arrstr.h"
 
 // ============================================================================
 // implementation
