@@ -28,6 +28,7 @@ class MyModelessDialog : public wxDialog
 public:
     MyModelessDialog(wxWindow *parent);
 
+    void OnButton(wxCommandEvent& event);
     void OnClose(wxCloseEvent& event);
 
 private:
@@ -90,8 +91,6 @@ public:
 #endif
 
     void OnExit(wxCommandEvent& event);
-
-    void OnButton(wxCommandEvent& event);
 
 private:
     MyModelessDialog *m_dialog;

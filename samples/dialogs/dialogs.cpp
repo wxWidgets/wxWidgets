@@ -91,8 +91,6 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_FIND_CLOSE(-1, MyFrame::OnFindDialog)
 #endif // wxUSE_FINDREPLDLG
     EVT_MENU(wxID_EXIT,                             MyFrame::OnExit)
-
-    EVT_BUTTON(DIALOGS_MODELESS_BTN,                MyFrame::OnButton)
 END_EVENT_TABLE()
 
 BEGIN_EVENT_TABLE(MyModalDialog, wxDialog)
@@ -100,6 +98,8 @@ BEGIN_EVENT_TABLE(MyModalDialog, wxDialog)
 END_EVENT_TABLE()
 
 BEGIN_EVENT_TABLE(MyModelessDialog, wxDialog)
+    EVT_BUTTON(DIALOGS_MODELESS_BTN, MyModelessDialog::OnButton)
+
     EVT_CLOSE(MyModelessDialog::OnClose)
 END_EVENT_TABLE()
 
@@ -548,12 +548,6 @@ void MyFrame::ModelessDlg(wxCommandEvent& event)
     }
 }
 
-void MyFrame::OnButton(wxCommandEvent& WXUNUSED(event))
-{
-    wxMessageBox("Button pressed in modeless dialog", "Info",
-                 wxOK | wxICON_INFORMATION, this);
-}
-
 void MyFrame::ShowTip(wxCommandEvent& event)
 {
 #if wxUSE_STARTUP_TIPS
@@ -740,6 +734,12 @@ MyModelessDialog::MyModelessDialog(wxWindow *parent)
 
     sizerTop->SetSizeHints(this);
     sizerTop->Fit(this);
+}
+
+void MyModelessDialog::OnButton(wxCommandEvent& WXUNUSED(event))
+{
+    wxMessageBox("Button pressed in modeless dialog", "Info",
+                 wxOK | wxICON_INFORMATION, this);
 }
 
 void MyModelessDialog::OnClose(wxCloseEvent& event)
