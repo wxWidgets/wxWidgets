@@ -1492,7 +1492,7 @@ class TextAttr(object):
         return _controls_.TextAttr_SetTabs(*args, **kwargs)
 
     def SetLeftIndent(*args, **kwargs):
-        """SetLeftIndent(self, int indent)"""
+        """SetLeftIndent(self, int indent, int subIndent=0)"""
         return _controls_.TextAttr_SetLeftIndent(*args, **kwargs)
 
     def SetRightIndent(*args, **kwargs):
@@ -1558,6 +1558,10 @@ class TextAttr(object):
     def GetLeftIndent(*args, **kwargs):
         """GetLeftIndent(self) -> long"""
         return _controls_.TextAttr_GetLeftIndent(*args, **kwargs)
+
+    def GetLeftSubIndent(*args, **kwargs):
+        """GetLeftSubIndent(self) -> long"""
+        return _controls_.TextAttr_GetLeftSubIndent(*args, **kwargs)
 
     def GetRightIndent(*args, **kwargs):
         """GetRightIndent(self) -> long"""

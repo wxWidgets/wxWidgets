@@ -535,8 +535,11 @@ PyObject *wxPen_GetDashes(wxPen *self){
             int count = self->GetDashes(&dashes);
             bool blocked = wxPyBeginBlockThreads();
             PyObject* retval = PyList_New(0);
-            for (int x=0; x<count; x++)
-                PyList_Append(retval, PyInt_FromLong(dashes[x]));
+            for (int x=0; x<count; x++) {
+                PyObject* pyint = PyInt_FromLong(dashes[x]);
+                PyList_Append(retval, pyint);
+                Py_DECREF(pyint);
+            }
             wxPyEndBlockThreads(blocked);
             return retval;
         }

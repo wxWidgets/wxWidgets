@@ -1268,6 +1268,85 @@ bool wxDateSpan___ne__(wxDateSpan *self,wxDateSpan const *other){ return other ?
 
 #include <wx/dataobj.h>
 
+PyObject *wxDataObject_GetAllFormats(wxDataObject *self,wxDataObject::Direction dir){
+            size_t count = self->GetFormatCount(dir);
+            wxDataFormat* formats = new wxDataFormat[count];
+            self->GetAllFormats(formats, dir);
+
+            bool blocked = wxPyBeginBlockThreads();
+            PyObject* list = PyList_New(count);
+            for (size_t i=0; i<count; i++) {
+                wxDataFormat* format = new wxDataFormat(formats[i]);
+                PyObject* obj = wxPyConstructObject((void*)format, wxT("wxDataFormat"), True);
+                PyList_Append(list, obj);
+                Py_DECREF(obj);
+            }            
+            wxPyEndBlockThreads(blocked);
+            delete [] formats;
+            return list;
+        }
+PyObject *wxDataObject_GetDataHere(wxDataObject *self,wxDataFormat const &format){
+            PyObject* rval = NULL;
+            size_t size = self->GetDataSize(format);            
+            bool blocked = wxPyBeginBlockThreads();
+            if (size) {
+                char* buf = new char[size];
+                if (self->GetDataHere(format, buf)) 
+                    rval = PyString_FromStringAndSize(buf, size);
+                delete [] buf;
+            }
+            if (! rval) {
+                rval = Py_None;
+                Py_INCREF(rval);
+            }
+            wxPyEndBlockThreads(blocked);
+            return rval;
+        }
+bool wxDataObject_SetData(wxDataObject *self,wxDataFormat const &format,PyObject *data){
+            bool rval;
+            bool blocked = wxPyBeginBlockThreads();
+            if (PyString_Check(data)) {
+                rval = self->SetData(format, PyString_Size(data), PyString_AsString(data));
+            }
+            else {
+                // raise a TypeError if not a string
+                PyErr_SetString(PyExc_TypeError, "String expected.");
+                rval = False;
+            }
+            wxPyEndBlockThreads(blocked);
+            return rval;
+        }
+PyObject *wxDataObjectSimple_GetDataHere(wxDataObjectSimple *self){
+            PyObject* rval = NULL;
+            size_t size = self->GetDataSize();            
+            bool blocked = wxPyBeginBlockThreads();
+            if (size) {
+                char* buf = new char[size];
+                if (self->GetDataHere(buf)) 
+                    rval = PyString_FromStringAndSize(buf, size);
+                delete [] buf;
+            }
+            if (! rval) {
+                rval = Py_None;
+                Py_INCREF(rval);
+            }
+            wxPyEndBlockThreads(blocked);
+            return rval;
+        }
+bool wxDataObjectSimple_SetData(wxDataObjectSimple *self,PyObject *data){
+            bool rval;
+            bool blocked = wxPyBeginBlockThreads();
+            if (PyString_Check(data)) {
+                rval = self->SetData(PyString_Size(data), PyString_AsString(data));
+            }
+            else {
+                // raise a TypeError if not a string
+                PyErr_SetString(PyExc_TypeError, "String expected.");
+                rval = False;
+            }
+            wxPyEndBlockThreads(blocked);
+            return rval;
+        }
   // Create a new class for wxPython to use
 class wxPyDataObjectSimple : public wxDataObjectSimple {
 public:
@@ -1362,7 +1441,7 @@ wxBitmap wxPyBitmapDataObject::GetBitmap() const {
     wxPyEndBlockThreads(blocked);
     return *rval;
 }
-
+ 
 void wxPyBitmapDataObject::SetBitmap(const wxBitmap& bitmap) {
     bool blocked = wxPyBeginBlockThreads();
     if (wxPyCBH_findCallback(m_myInst, "SetBitmap")) {
@@ -1373,28 +1452,25 @@ void wxPyBitmapDataObject::SetBitmap(const wxBitmap& bitmap) {
     wxPyEndBlockThreads(blocked);
 }
 
-void wxCustomDataObject_TakeData(wxCustomDataObject *self,PyObject *data){
-            if (PyString_Check(data)) {
-                // for Python we just call SetData here since we always need it to make a copy.
-                self->SetData(PyString_Size(data), PyString_AsString(data));
-            }
-            else {
-                // raise a TypeError if not a string
-                PyErr_SetString(PyExc_TypeError, "String expected.");
-            }
-        }
 bool wxCustomDataObject_SetData(wxCustomDataObject *self,PyObject *data){
+            bool rval;
+            bool blocked = wxPyBeginBlockThreads();
             if (PyString_Check(data)) {
-                return self->SetData(PyString_Size(data), PyString_AsString(data));
+                rval = self->SetData(PyString_Size(data), PyString_AsString(data));
             }
             else {
                 // raise a TypeError if not a string
                 PyErr_SetString(PyExc_TypeError, "String expected.");
-                return False;
+                rval = False;
             }
+            wxPyEndBlockThreads(blocked);
+            return rval;
         }
 PyObject *wxCustomDataObject_GetData(wxCustomDataObject *self){
-            return PyString_FromStringAndSize((char*)self->GetData(), self->GetSize());
+            PyObject* obj;
+            bool blocked = wxPyBeginBlockThreads();
+            obj = PyString_FromStringAndSize((char*)self->GetData(), self->GetSize());
+            wxPyEndBlockThreads(blocked);      
         }
 
 #include <wx/metafile.h>
@@ -1489,6 +1565,7 @@ PyObject *wxDisplay_GetModes(wxDisplay *self,wxVideoMode const &mode){
                 wxVideoMode* m = new wxVideoMode(arr.Item(i));
                 PyObject* pyObj = wxPyConstructObject(m, wxT("wxVideoMode"), true);
                 PyList_Append(pyList, pyObj);
+                Py_DECREF(pyObj);
             }
             wxPyEndBlockThreads(blocked);
             return pyList;
@@ -24371,32 +24448,29 @@ static PyObject *_wrap_DataObject_GetDataSize(PyObject *self, PyObject *args, Py
 static PyObject *_wrap_DataObject_GetAllFormats(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxDataObject *arg1 = (wxDataObject *) 0 ;
-    wxDataFormat *arg2 = (wxDataFormat *) 0 ;
-    int arg3 = (int) wxDataObject::Get ;
+    int arg2 = (int) wxDataObject::Get ;
+    PyObject *result;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
-    PyObject * obj2 = 0 ;
     char *kwnames[] = {
-        (char *) "self",(char *) "formats",(char *) "dir", NULL 
+        (char *) "self",(char *) "dir", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO|O:DataObject_GetAllFormats",kwnames,&obj0,&obj1,&obj2)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O|O:DataObject_GetAllFormats",kwnames,&obj0,&obj1)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxDataObject,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
-    if ((SWIG_ConvertPtr(obj1,(void **)(&arg2),SWIGTYPE_p_wxDataFormat,
-    SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
-    if (obj2) {
-        arg3 = (wxDataObject::Direction) SWIG_AsInt(obj2); 
+    if (obj1) {
+        arg2 = (wxDataObject::Direction) SWIG_AsInt(obj1); 
         if (PyErr_Occurred()) SWIG_fail;
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
-        ((wxDataObject const *)arg1)->GetAllFormats(arg2,(wxDataObject::Direction )arg3);
+        result = (PyObject *)wxDataObject_GetAllFormats(arg1,(wxDataObject::Direction )arg2);
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    Py_INCREF(Py_None); resultobj = Py_None;
+    resultobj = result;
     return resultobj;
     fail:
     return NULL;
@@ -24407,16 +24481,14 @@ static PyObject *_wrap_DataObject_GetDataHere(PyObject *self, PyObject *args, Py
     PyObject *resultobj;
     wxDataObject *arg1 = (wxDataObject *) 0 ;
     wxDataFormat *arg2 = 0 ;
-    void *arg3 = (void *) 0 ;
-    bool result;
+    PyObject *result;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
-    PyObject * obj2 = 0 ;
     char *kwnames[] = {
-        (char *) "self",(char *) "format",(char *) "buf", NULL 
+        (char *) "self",(char *) "format", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO:DataObject_GetDataHere",kwnames,&obj0,&obj1,&obj2)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:DataObject_GetDataHere",kwnames,&obj0,&obj1)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxDataObject,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
     if ((SWIG_ConvertPtr(obj1,(void **)(&arg2),SWIGTYPE_p_wxDataFormat,
@@ -24426,17 +24498,14 @@ static PyObject *_wrap_DataObject_GetDataHere(PyObject *self, PyObject *args, Py
         PyErr_SetString(PyExc_TypeError,"null reference");
         SWIG_fail;
     }
-    if ((SWIG_ConvertPtr(obj2,&arg3,0,SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
-        result = (bool)((wxDataObject const *)arg1)->GetDataHere((wxDataFormat const &)*arg2,arg3);
+        result = (PyObject *)wxDataObject_GetDataHere(arg1,(wxDataFormat const &)*arg2);
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    {
-        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
-    }
+    resultobj = result;
     return resultobj;
     fail:
     return NULL;
@@ -24447,18 +24516,16 @@ static PyObject *_wrap_DataObject_SetData(PyObject *self, PyObject *args, PyObje
     PyObject *resultobj;
     wxDataObject *arg1 = (wxDataObject *) 0 ;
     wxDataFormat *arg2 = 0 ;
-    size_t arg3 ;
-    void *arg4 = (void *) 0 ;
+    PyObject *arg3 = (PyObject *) 0 ;
     bool result;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     PyObject * obj2 = 0 ;
-    PyObject * obj3 = 0 ;
     char *kwnames[] = {
-        (char *) "self",(char *) "format",(char *) "len",(char *) "buf", NULL 
+        (char *) "self",(char *) "format",(char *) "data", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOOO:DataObject_SetData",kwnames,&obj0,&obj1,&obj2,&obj3)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO:DataObject_SetData",kwnames,&obj0,&obj1,&obj2)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxDataObject,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
     if ((SWIG_ConvertPtr(obj1,(void **)(&arg2),SWIGTYPE_p_wxDataFormat,
@@ -24468,12 +24535,10 @@ static PyObject *_wrap_DataObject_SetData(PyObject *self, PyObject *args, PyObje
         PyErr_SetString(PyExc_TypeError,"null reference");
         SWIG_fail;
     }
-    arg3 = (size_t) SWIG_AsUnsignedLong(obj2); 
-    if (PyErr_Occurred()) SWIG_fail;
-    if ((SWIG_ConvertPtr(obj3,&arg4,0,SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
+    arg3 = obj2;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
-        result = (bool)(arg1)->SetData((wxDataFormat const &)*arg2,arg3,(void const *)arg4);
+        result = (bool)wxDataObject_SetData(arg1,(wxDataFormat const &)*arg2,arg3);
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
@@ -24591,6 +24656,89 @@ static PyObject *_wrap_DataObjectSimple_SetFormat(PyObject *self, PyObject *args
 }
 
 
+static PyObject *_wrap_DataObjectSimple_GetDataSize(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxDataObjectSimple *arg1 = (wxDataObjectSimple *) 0 ;
+    size_t result;
+    PyObject * obj0 = 0 ;
+    char *kwnames[] = {
+        (char *) "self", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:DataObjectSimple_GetDataSize",kwnames,&obj0)) goto fail;
+    if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxDataObjectSimple,
+    SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = (size_t)((wxDataObjectSimple const *)arg1)->GetDataSize();
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    resultobj = SWIG_FromUnsignedLong((unsigned long)result);
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_DataObjectSimple_GetDataHere(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxDataObjectSimple *arg1 = (wxDataObjectSimple *) 0 ;
+    PyObject *result;
+    PyObject * obj0 = 0 ;
+    char *kwnames[] = {
+        (char *) "self", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:DataObjectSimple_GetDataHere",kwnames,&obj0)) goto fail;
+    if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxDataObjectSimple,
+    SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = (PyObject *)wxDataObjectSimple_GetDataHere(arg1);
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    resultobj = result;
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_DataObjectSimple_SetData(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxDataObjectSimple *arg1 = (wxDataObjectSimple *) 0 ;
+    PyObject *arg2 = (PyObject *) 0 ;
+    bool result;
+    PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
+    char *kwnames[] = {
+        (char *) "self",(char *) "data", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:DataObjectSimple_SetData",kwnames,&obj0,&obj1)) goto fail;
+    if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxDataObjectSimple,
+    SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
+    arg2 = obj1;
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = (bool)wxDataObjectSimple_SetData(arg1,arg2);
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
 static PyObject * DataObjectSimple_swigregister(PyObject *self, PyObject *args) {
     PyObject *obj;
     if (!PyArg_ParseTuple(args,(char*)"O", &obj)) return NULL;
@@ -24696,7 +24844,7 @@ static PyObject *_wrap_DataObjectComposite_Add(PyObject *self, PyObject *args, P
     PyObject *resultobj;
     wxDataObjectComposite *arg1 = (wxDataObjectComposite *) 0 ;
     wxDataObjectSimple *arg2 = (wxDataObjectSimple *) 0 ;
-    int arg3 = (int) False ;
+    bool arg3 = (bool) False ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     PyObject * obj2 = 0 ;
@@ -24710,7 +24858,7 @@ static PyObject *_wrap_DataObjectComposite_Add(PyObject *self, PyObject *args, P
     if ((SWIG_ConvertPtr(obj1,(void **)(&arg2),SWIGTYPE_p_wxDataObjectSimple,
     SWIG_POINTER_EXCEPTION | SWIG_POINTER_DISOWN)) == -1) SWIG_fail;
     if (obj2) {
-        arg3 = (int) SWIG_AsInt(obj2); 
+        arg3 = (bool) SWIG_AsBool(obj2); 
         if (PyErr_Occurred()) SWIG_fail;
     }
     {
@@ -25266,34 +25414,6 @@ static PyObject *_wrap_new_CustomDataObject(PyObject *self, PyObject *args, PyOb
         if (PyErr_Occurred()) SWIG_fail;
     }
     resultobj = SWIG_NewPointerObj((void*)(result), SWIGTYPE_p_wxCustomDataObject, 1);
-    return resultobj;
-    fail:
-    return NULL;
-}
-
-
-static PyObject *_wrap_CustomDataObject_TakeData(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject *resultobj;
-    wxCustomDataObject *arg1 = (wxCustomDataObject *) 0 ;
-    PyObject *arg2 = (PyObject *) 0 ;
-    PyObject * obj0 = 0 ;
-    PyObject * obj1 = 0 ;
-    char *kwnames[] = {
-        (char *) "self",(char *) "data", NULL 
-    };
-    
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:CustomDataObject_TakeData",kwnames,&obj0,&obj1)) goto fail;
-    if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxCustomDataObject,
-    SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
-    arg2 = obj1;
-    {
-        PyThreadState* __tstate = wxPyBeginAllowThreads();
-        wxCustomDataObject_TakeData(arg1,arg2);
-        
-        wxPyEndAllowThreads(__tstate);
-        if (PyErr_Occurred()) SWIG_fail;
-    }
-    Py_INCREF(Py_None); resultobj = Py_None;
     return resultobj;
     fail:
     return NULL;
@@ -28678,6 +28798,9 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"new_DataObjectSimple", (PyCFunction) _wrap_new_DataObjectSimple, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"DataObjectSimple_GetFormat", (PyCFunction) _wrap_DataObjectSimple_GetFormat, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"DataObjectSimple_SetFormat", (PyCFunction) _wrap_DataObjectSimple_SetFormat, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"DataObjectSimple_GetDataSize", (PyCFunction) _wrap_DataObjectSimple_GetDataSize, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"DataObjectSimple_GetDataHere", (PyCFunction) _wrap_DataObjectSimple_GetDataHere, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"DataObjectSimple_SetData", (PyCFunction) _wrap_DataObjectSimple_SetData, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"DataObjectSimple_swigregister", DataObjectSimple_swigregister, METH_VARARGS },
 	 { (char *)"new_PyDataObjectSimple", (PyCFunction) _wrap_new_PyDataObjectSimple, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"PyDataObjectSimple__setCallbackInfo", (PyCFunction) _wrap_PyDataObjectSimple__setCallbackInfo, METH_VARARGS | METH_KEYWORDS },
@@ -28705,7 +28828,6 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"FileDataObject_AddFile", (PyCFunction) _wrap_FileDataObject_AddFile, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"FileDataObject_swigregister", FileDataObject_swigregister, METH_VARARGS },
 	 { (char *)"new_CustomDataObject", (PyCFunction) _wrap_new_CustomDataObject, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"CustomDataObject_TakeData", (PyCFunction) _wrap_CustomDataObject_TakeData, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"CustomDataObject_SetData", (PyCFunction) _wrap_CustomDataObject_SetData, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"CustomDataObject_GetSize", (PyCFunction) _wrap_CustomDataObject_GetSize, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"CustomDataObject_GetData", (PyCFunction) _wrap_CustomDataObject_GetData, METH_VARARGS | METH_KEYWORDS },

@@ -11275,27 +11275,6 @@ static PyObject * Image_swigregister(PyObject *self, PyObject *args) {
     Py_INCREF(obj);
     return Py_BuildValue((char *)"");
 }
-static PyObject *_wrap_InitAllImageHandlers(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject *resultobj;
-    char *kwnames[] = {
-        NULL 
-    };
-    
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)":InitAllImageHandlers",kwnames)) goto fail;
-    {
-        PyThreadState* __tstate = wxPyBeginAllowThreads();
-        wxInitAllImageHandlers();
-        
-        wxPyEndAllowThreads(__tstate);
-        if (PyErr_Occurred()) SWIG_fail;
-    }
-    Py_INCREF(Py_None); resultobj = Py_None;
-    return resultobj;
-    fail:
-    return NULL;
-}
-
-
 static int _wrap_NullImage_set(PyObject *_val) {
     PyErr_SetString(PyExc_TypeError,"Variable NullImage is read-only.");
     return 1;
@@ -40459,7 +40438,6 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"Image_ConvertToBitmap", (PyCFunction) _wrap_Image_ConvertToBitmap, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"Image_ConvertToMonoBitmap", (PyCFunction) _wrap_Image_ConvertToMonoBitmap, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"Image_swigregister", Image_swigregister, METH_VARARGS },
-	 { (char *)"InitAllImageHandlers", (PyCFunction) _wrap_InitAllImageHandlers, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"new_BMPHandler", (PyCFunction) _wrap_new_BMPHandler, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"BMPHandler_swigregister", BMPHandler_swigregister, METH_VARARGS },
 	 { (char *)"new_ICOHandler", (PyCFunction) _wrap_new_ICOHandler, METH_VARARGS | METH_KEYWORDS },

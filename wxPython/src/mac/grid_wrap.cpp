@@ -8091,6 +8091,111 @@ static PyObject *_wrap_new_Grid(PyObject *self, PyObject *args, PyObject *kwargs
 }
 
 
+static PyObject *_wrap_new_PreGrid(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxGrid *result;
+    char *kwnames[] = {
+        NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)":new_PreGrid",kwnames)) goto fail;
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = (wxGrid *)new wxGrid();
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    {
+        resultobj = wxPyMake_wxObject(result); 
+    }
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_Grid_Create(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxGrid *arg1 = (wxGrid *) 0 ;
+    wxWindow *arg2 = (wxWindow *) 0 ;
+    int arg3 ;
+    wxPoint const &arg4_defvalue = wxDefaultPosition ;
+    wxPoint *arg4 = (wxPoint *) &arg4_defvalue ;
+    wxSize const &arg5_defvalue = wxDefaultSize ;
+    wxSize *arg5 = (wxSize *) &arg5_defvalue ;
+    long arg6 = (long) wxWANTS_CHARS ;
+    wxString const &arg7_defvalue = wxPyPanelNameStr ;
+    wxString *arg7 = (wxString *) &arg7_defvalue ;
+    bool result;
+    wxPoint temp4 ;
+    wxSize temp5 ;
+    bool temp7 = False ;
+    PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
+    PyObject * obj2 = 0 ;
+    PyObject * obj3 = 0 ;
+    PyObject * obj4 = 0 ;
+    PyObject * obj5 = 0 ;
+    PyObject * obj6 = 0 ;
+    char *kwnames[] = {
+        (char *) "self",(char *) "parent",(char *) "id",(char *) "pos",(char *) "size",(char *) "style",(char *) "name", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO|OOOO:Grid_Create",kwnames,&obj0,&obj1,&obj2,&obj3,&obj4,&obj5,&obj6)) goto fail;
+    if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxGrid,
+    SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
+    if ((SWIG_ConvertPtr(obj1,(void **)(&arg2),SWIGTYPE_p_wxWindow,
+    SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
+    arg3 = (int) SWIG_AsInt(obj2); 
+    if (PyErr_Occurred()) SWIG_fail;
+    if (obj3) {
+        {
+            arg4 = &temp4;
+            if ( ! wxPoint_helper(obj3, &arg4)) SWIG_fail;
+        }
+    }
+    if (obj4) {
+        {
+            arg5 = &temp5;
+            if ( ! wxSize_helper(obj4, &arg5)) SWIG_fail;
+        }
+    }
+    if (obj5) {
+        arg6 = (long) SWIG_AsLong(obj5); 
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    if (obj6) {
+        {
+            arg7 = wxString_in_helper(obj6);
+            if (arg7 == NULL) SWIG_fail;
+            temp7 = True;
+        }
+    }
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = (bool)(arg1)->Create(arg2,arg3,(wxPoint const &)*arg4,(wxSize const &)*arg5,arg6,(wxString const &)*arg7);
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
+    {
+        if (temp7)
+        delete arg7;
+    }
+    return resultobj;
+    fail:
+    {
+        if (temp7)
+        delete arg7;
+    }
+    return NULL;
+}
+
+
 static PyObject *_wrap_Grid_CreateGrid(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGrid *arg1 = (wxGrid *) 0 ;
@@ -15700,6 +15805,8 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"GridCellCoords_Get", (PyCFunction) _wrap_GridCellCoords_Get, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"GridCellCoords_swigregister", GridCellCoords_swigregister, METH_VARARGS },
 	 { (char *)"new_Grid", (PyCFunction) _wrap_new_Grid, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"new_PreGrid", (PyCFunction) _wrap_new_PreGrid, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Grid_Create", (PyCFunction) _wrap_Grid_Create, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"Grid_CreateGrid", (PyCFunction) _wrap_Grid_CreateGrid, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"Grid_SetSelectionMode", (PyCFunction) _wrap_Grid_SetSelectionMode, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"Grid_GetSelectionMode", (PyCFunction) _wrap_Grid_GetSelectionMode, METH_VARARGS | METH_KEYWORDS },

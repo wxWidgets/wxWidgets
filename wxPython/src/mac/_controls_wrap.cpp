@@ -895,6 +895,7 @@ PyObject *wxPyTreeCtrl_GetSelections(wxPyTreeCtrl *self){
                 wxTreeItemId *tii = new wxTreeItemId(array.Item(x));
                 PyObject* item = wxPyConstructObject((void*)tii, wxT("wxTreeItemId"), True);
                 PyList_Append(rval, item);
+                Py_DECREF(item);
             }
             wxPyEndBlockThreads(blocked);
             return rval;
@@ -7234,20 +7235,26 @@ static PyObject *_wrap_TextAttr_SetLeftIndent(PyObject *self, PyObject *args, Py
     PyObject *resultobj;
     wxTextAttr *arg1 = (wxTextAttr *) 0 ;
     int arg2 ;
+    int arg3 = (int) 0 ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
+    PyObject * obj2 = 0 ;
     char *kwnames[] = {
-        (char *) "self",(char *) "indent", NULL 
+        (char *) "self",(char *) "indent",(char *) "subIndent", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:TextAttr_SetLeftIndent",kwnames,&obj0,&obj1)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO|O:TextAttr_SetLeftIndent",kwnames,&obj0,&obj1,&obj2)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxTextAttr,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
     arg2 = (int) SWIG_AsInt(obj1); 
     if (PyErr_Occurred()) SWIG_fail;
+    if (obj2) {
+        arg3 = (int) SWIG_AsInt(obj2); 
+        if (PyErr_Occurred()) SWIG_fail;
+    }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
-        (arg1)->SetLeftIndent(arg2);
+        (arg1)->SetLeftIndent(arg2,arg3);
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
@@ -7713,6 +7720,32 @@ static PyObject *_wrap_TextAttr_GetLeftIndent(PyObject *self, PyObject *args, Py
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         result = (long)((wxTextAttr const *)arg1)->GetLeftIndent();
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    resultobj = SWIG_FromLong((long)result);
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_TextAttr_GetLeftSubIndent(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxTextAttr *arg1 = (wxTextAttr *) 0 ;
+    long result;
+    PyObject * obj0 = 0 ;
+    char *kwnames[] = {
+        (char *) "self", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:TextAttr_GetLeftSubIndent",kwnames,&obj0)) goto fail;
+    if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxTextAttr,
+    SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = (long)((wxTextAttr const *)arg1)->GetLeftSubIndent();
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
@@ -31149,6 +31182,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"TextAttr_GetAlignment", (PyCFunction) _wrap_TextAttr_GetAlignment, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"TextAttr_GetTabs", (PyCFunction) _wrap_TextAttr_GetTabs, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"TextAttr_GetLeftIndent", (PyCFunction) _wrap_TextAttr_GetLeftIndent, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"TextAttr_GetLeftSubIndent", (PyCFunction) _wrap_TextAttr_GetLeftSubIndent, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"TextAttr_GetRightIndent", (PyCFunction) _wrap_TextAttr_GetRightIndent, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"TextAttr_GetFlags", (PyCFunction) _wrap_TextAttr_GetFlags, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"TextAttr_IsDefault", (PyCFunction) _wrap_TextAttr_IsDefault, METH_VARARGS | METH_KEYWORDS },
