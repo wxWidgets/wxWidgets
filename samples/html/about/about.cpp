@@ -171,7 +171,9 @@
 
         topsizer -> Add(html, 1, wxALL, 10);
 
+#if wxUSE_STATLINE
         topsizer -> Add(new wxStaticLine(&dlg, wxID_ANY), 0, wxEXPAND | wxLEFT | wxRIGHT, 10);
+#endif // wxUSE_STATLINE
 
         wxButton *bu1 = new wxButton(&dlg, wxID_OK, _("OK"));
         bu1 -> SetDefault();
