@@ -834,16 +834,24 @@ void wxGenericDirCtrl::ExpandDir(wxTreeItemId parentId)
         {
             int style = wxDIR_FILES;
             if (m_showHidden) style |= wxDIR_HIDDEN;
-            if (d.GetFirst(& eachFilename, m_currentFilterStr, style))
+            // Process each filter (ex: "JPEG Files (*.jpg;*.jpeg)|*.jpg;*.jpeg")
+            wxStringTokenizer strTok;
+            wxString curFilter;
+            strTok.SetString(m_currentFilterStr,wxT(";"));
+            while(strTok.HasMoreTokens())
             {
-                do
+                curFilter = strTok.GetNextToken();
+                if (d.GetFirst(& eachFilename, m_currentFilterStr, style))
                 {
-                    if ((eachFilename != wxT(".")) && (eachFilename != wxT("..")))
+                    do
                     {
-                        filenames.Add(eachFilename);
+                        if ((eachFilename != wxT(".")) && (eachFilename != wxT("..")))
+                        {
+                            filenames.Add(eachFilename);
+                        }
                     }
+                    while (d.GetNext(& eachFilename));
                 }
-                while (d.GetNext(& eachFilename));
             }
         }
         filenames.Sort(wxDirCtrlStringCompareFunction);
