@@ -125,7 +125,7 @@ public:
     virtual bool SetSelection(const wxString& value);
     virtual wxControl *GetControl() { return this; }
     virtual void OnShow();
-    virtual wxCoord wxComboListBox::GetBestWidth() const;
+    virtual wxCoord GetBestWidth() const;
 
 protected:
     // we shouldn't return height too big from here
