@@ -146,6 +146,17 @@ If the image image doesn't have alpha channel, ConvertAlphaToMask does
 nothing.", "");
     
 
+    DocDeclStr(
+        bool , ConvertColourToAlpha( unsigned char r, unsigned char g, unsigned char b ),
+        "This method converts an image where the original alpha information is
+only available as a shades of a colour (actually shades of grey)
+typically when you draw anti-aliased text into a bitmap. The DC
+drawing routines draw grey values on the black background although
+they actually mean to draw white with differnt alpha values.  This
+method reverses it, assuming a black (!) background and white text.
+The method will then fill up the whole image with the colour given.", "");
+    
+
     
     // Set image's mask to the area of 'mask' that has <mr,mg,mb> colour
     bool SetMaskFromImage(const wxImage & mask,
