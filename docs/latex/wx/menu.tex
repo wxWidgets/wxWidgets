@@ -97,7 +97,7 @@ and recreation of internal data structures.
 \membersection{wxMenu::Append}\label{wxmenuappend}
 
 \func{void}{Append}{\param{int}{ id}, \param{const wxString\& }{ item}, \param{const wxString\& }{helpString = ""},\rtfsp
-\param{wxItemKind}{ kind = wxItem\_Normal}}
+\param{wxItemKind}{ kind = wxITEM\_NORMAL}}
 
 Adds a string item to the end of the menu.
 
@@ -121,8 +121,8 @@ such as bitmaps and fonts.
 
 \docparam{menu}{Pull-right submenu.}
 
-\docparam{kind}{May be {\tt wxItem\_Separator}, {\tt wxItem\_Normal}, 
-{\tt wxItem\_Check} or {\tt wxItem\_Radio}}
+\docparam{kind}{May be {\tt wxITEM\_SEPARATOR}, {\tt wxITEM\_NORMAL}, 
+{\tt wxITEM\_CHECK} or {\tt wxITEM\_RADIO}}
 
 \docparam{helpString}{An optional help string associated with the item.
 By default, \helpref{wxFrame::OnMenuHighlight}{wxframeonmenuhighlight} displays
@@ -384,7 +384,7 @@ This is relevant only to popup menus.
 
 \func{void}{Insert}{\param{size\_t }{pos}, \param{int}{ id},\rtfsp
 \param{const wxString\& }{ item}, \param{const wxString\& }{helpString = ""},\rtfsp
-\param{wxItemKind}{ kind = wxItem\_Normal}}
+\param{wxItemKind}{ kind = wxITEM\_NORMAL}}
 
 Inserts the given {\it item} before the position {\it pos}. Inserting the item
 at the position \helpref{GetMenuItemCount}{wxmenugetmenuitemcount} is the same
@@ -472,7 +472,7 @@ TRUE if the menu item is enabled, FALSE otherwise.
 
 \func{void}{Prepend}{\param{int}{ id},\rtfsp
 \param{const wxString\& }{ item}, \param{const wxString\& }{helpString = ""},\rtfsp
-\param{wxItemKind}{ kind = wxItem\_Normal}}
+\param{wxItemKind}{ kind = wxITEM\_NORMAL}}
 
 Inserts the given {\it item} at the position $0$.
 
