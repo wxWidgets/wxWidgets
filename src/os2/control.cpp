@@ -41,25 +41,64 @@ wxControl::wxControl()
 #endif // WXWIN_COMPATIBILITY
 }
 
+bool wxControl::Create(wxWindow *parent, wxWindowID id,
+                       const wxPoint& pos,
+                       const wxSize& size, long style,
+#if wxUSE_VALIDATORS
+                       const wxValidator& validator,
+#endif
+                       const wxString& name)
+{
+    bool rval = wxWindow::Create(parent, id, pos, size, style, name);
+    if (rval) {
+#if wxUSE_VALIDATORS
+        SetValidator(validator);
+#endif
+    }
+    return rval;
+}
+
 wxControl::~wxControl()
 {
     m_isBeingDeleted = TRUE;
 }
 
-bool wxControl::OS2CreateControl(const wxChar *classname, WXDWORD style)
+bool wxControl::OS2CreateControl(const wxChar *classname,
+                                 WXDWORD style,
+                                 const wxPoint& pos,
+                                 const wxSize& size,
+                                 const wxString& label,
+                                 WXDWORD exstyle)
 {
-    m_hWnd = (WXHWND)::WinCreateWindow( GetHwndOf(GetParent())
-                                       ,classname
-                                       ,NULL
-                                       ,style
-                                       ,0,0,0,0
-                                       ,NULLHANDLE
-                                       ,HWND_TOP
-                                       ,(HMENU)GetId()
-                                       ,NULL
-                                       ,NULL
-                                      );
+    // VZ: if someone could put a comment here explaining what exactly this is
+    //     needed for, it would be nice...
+    bool want3D;
 
+    // if no extended style given, determine it ourselves
+    if ( exstyle == (WXDWORD)-1 )
+    {
+        exstyle = GetExStyle(style);
+    }
+
+// TODO:
+/*
+    // all controls have these childs (wxWindows creates all controls visible
+    // by default)
+    style |= WS_CHILD | WS_VISIBLE;
+
+    m_hWnd = (WXHWND)::CreateWindowEx
+                       (
+                        exstyle,            // extended style
+                        classname,          // the kind of control to create
+                        label,              // the window name
+                        style,              // the window style
+                        pos.x, pos.y,       // the window position
+                        size.x, size.y,     //            and size
+                        GetHwndOf(GetParent()),  // parent
+                        (HMENU)GetId(),     // child id
+                        wxGetInstance(),    // app instance
+                        NULL                // creation parameters
+                       );
 
     if ( !m_hWnd )
     {
@@ -70,12 +109,20 @@ bool wxControl::OS2CreateControl(const wxChar *classname, WXDWORD style)
         return FALSE;
     }
 
+#if wxUSE_CTL3D
+    if ( want3D )
+    {
+        Ctl3dSubclassCtl(GetHwnd());
+        m_useCtl3D = TRUE;
+    }
+#endif // wxUSE_CTL3D
+
     // subclass again for purposes of dialog editing mode
     SubclassWin(m_hWnd);
 
     // controls use the same font and colours as their parent dialog by default
     InheritAttributes();
-
+*/
     return TRUE;
 }
 
