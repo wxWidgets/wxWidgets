@@ -542,7 +542,7 @@ GSocket *GSocket::WaitConnection()
   /* Wait for a connection (with timeout) */
   if (Input_Timeout() == GSOCK_TIMEDOUT)
   {
-    GSocket_destroy(connection);
+    delete connection;
     /* m_error set by _GSocket_Input_Timeout */
     return NULL;
   }
@@ -556,7 +556,7 @@ GSocket *GSocket::WaitConnection()
     else
       m_error = GSOCK_IOERR;
 
-    GSocket_destroy(connection);
+    delete connection;
     return NULL;
   }
 
@@ -568,7 +568,7 @@ GSocket *GSocket::WaitConnection()
   connection->m_peer = GAddress_new();
   if (!connection->m_peer)
   {
-    GSocket_destroy(connection);
+    delete connection;
     m_error = GSOCK_MEMERR;
     return NULL;
   }
@@ -576,7 +576,7 @@ GSocket *GSocket::WaitConnection()
   if (err != GSOCK_NOERROR)
   {
     GAddress_destroy(connection->m_peer);
-    GSocket_destroy(connection);
+    delete connection;
     m_error = err;
     return NULL;
   }
