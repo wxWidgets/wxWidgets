@@ -100,6 +100,8 @@ DBTree::~DBTree()
  (pDoc->db_Br+i_Which)->cl_BrowserDB = NULL;
  delete ct_BrowserDB;
  delete p_imageListNormal;
+ delete popupMenu1;
+ delete popupMenu2;
 }
 //----------------------------------------------------------------------------------------
 #undef TREE_EVENT_HANDLER
@@ -202,7 +204,7 @@ int  DBTree::OnPopulate()
      z++;
      if (z % 10 == 0)
      {
-      Temp0.Printf(_("-I-> DBTree::OnPopulate(%s) - Table %6d has been read."),(ct_BrowserDB->pTableInf+x)->tableName,z);
+      Temp0.Printf(_("-I-> DBTree::OnPopulate(%s) - Table %6d (from %d) has been read."),(ct_BrowserDB->pTableInf+x)->tableName,z,ct_BrowserDB->numTables);
       pDoc->p_MainFrame->SetStatusText(Temp0, 0);
      }
     }    // if ((ct_BrowserDB->pTableInf+x)->tableType == "TABLE" or VIEW)

@@ -88,6 +88,7 @@ PgmCtrl::PgmCtrl(wxWindow *parent, const wxWindowID id,const wxPoint& pos, const
 PgmCtrl::~PgmCtrl()
 {
  delete p_imageListNormal;
+ delete popupMenu1;  
 }
 //----------------------------------------------------------------------------------------
 #undef TREE_EVENT_HANDLER
@@ -242,7 +243,7 @@ void PgmCtrl::OnRightSelect(wxTreeEvent& WXUNUSED(event))
   }
   //--------------------------------------------------------------------------------------
  }
-}
+} // void PgmCtrl::OnRightSelect(wxTreeEvent& WXUNUSED(event))
 //----------------------------------------------------------------------------------------
 void PgmCtrl::OnMouseMove(wxMouseEvent &event)
 {
