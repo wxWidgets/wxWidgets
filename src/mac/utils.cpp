@@ -197,7 +197,8 @@ void wxBell()
     SysBeep(30);
 }
 
-int wxAppTraits::GetOSVersion(int *majorVsn, int *minorVsn)
+// our OS version is the same in non GUI and GUI cases
+static int DoGetOSVersion(int *majorVsn, int *minorVsn)
 {
     long theSystem ;
 
@@ -217,9 +218,19 @@ int wxAppTraits::GetOSVersion(int *majorVsn, int *minorVsn)
 #endif
 }
 
+int wxConsoleAppTraits::GetOSVersion(int *majorVsn, int *minorVsn)
+{
+    return DoGetOSVersion(majorVsn, minorVsn);
+}
+
 #endif // wxUSE_BASE
 
 #if wxUSE_GUI
+
+int wxGUIAppTraits::GetOSVersion(int *majorVsn, int *minorVsn)
+{
+    return DoGetOSVersion(majorVsn, minorVsn);
+}
 
 // Reading and writing resources (eg WIN.INI, .Xdefaults)
 #if wxUSE_RESOURCES

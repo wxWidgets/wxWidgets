@@ -85,10 +85,8 @@ wxConsoleAppTraits::WaitForChild(wxExecuteData& execData)
 // misc other stuff
 // ----------------------------------------------------------------------------
 
-// WXWIN_OS_DESCRIPTION is normally defined by configure
-#if defined( __MWERKS__ ) && defined(__MACH__)
-    #define WXWIN_OS_DESCRIPTION "MacOS X"
-#endif
+// this is in mac/utils.cpp under Mac
+#ifndef __WXMAC__
 
 int wxConsoleAppTraits::GetOSVersion(int *verMaj, int *verMin)
 {
@@ -109,4 +107,6 @@ int wxConsoleAppTraits::GetOSVersion(int *verMaj, int *verMin)
 
     return wxUNIX;
 }
+
+#endif // __WXMAC__
 
