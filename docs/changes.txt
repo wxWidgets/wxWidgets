@@ -184,6 +184,7 @@ OTHER CHANGES
 All:
 
 - Spanish translations updated (Javier San Jose)
+- fixed DLL build of db.cpp with some OpenWatcom (ABX)
 
 All (GUI):
 
