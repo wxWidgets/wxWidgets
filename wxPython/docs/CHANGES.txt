@@ -236,6 +236,16 @@ base implementation and wx.lib.pydocview for Python-specific
 extensions.  There are also a couple sample applications located in
 samples/docview. 
 
+Added GetBitmap, GetIcon to wx.ImageList.
+
+wxGTK wx.Button.SetLabel no longer invalidates/resets the font.
+
+wx.Sizer.AddWindow, AddSizer, AddSpacer and etc. have now been
+undeprecated at the request of Riaan Booysen, the Boa Constructor team
+lead.  Boa needs them to help keep track of what kind of item is being
+managed by the sizer.  They are now just simple compatibility aliases
+for Add, and etc.
+
 
 
 
