@@ -33,7 +33,7 @@
 
 #include "wxpoem.h"
 
-#if defined(__WXGTK__) || defined(__WXMOTIF__) || defined(__WXMAC__)
+#if defined(__WXGTK__) || defined(__WXMOTIF__) || defined(__WXMAC__) || defined(__WXX11__)
 #include "corner1.xpm"
 #include "corner2.xpm"
 #include "corner3.xpm"
@@ -650,7 +650,7 @@ bool MyApp::OnInit()
   Corner3 = new wxIcon("icon_3");
   Corner4 = new wxIcon("icon_4");
 #endif
-#if defined(__WXGTK__) || defined(__WXMOTIF__) || defined(__WXMAC__)
+#if defined(__WXGTK__) || defined(__WXMOTIF__) || defined(__WXMAC__) || defined(__WXX11__)
   Corner1 = new wxIcon( corner1_xpm );
   Corner2 = new wxIcon( corner2_xpm );
   Corner3 = new wxIcon( corner3_xpm );
