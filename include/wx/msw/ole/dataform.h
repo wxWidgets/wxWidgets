@@ -19,8 +19,8 @@
 class WXDLLEXPORT wxDataFormat
 {
 public:
-    // the clipboard formats under Win32 are UINTs
-    typedef unsigned int NativeFormat;
+    // the clipboard formats under Win32 are WORDs
+    typedef unsigned short NativeFormat;
 
     wxDataFormat(NativeFormat format = wxDF_INVALID) { m_format = format; }
     wxDataFormat(const wxChar *format) { SetId(format); }
@@ -48,19 +48,19 @@ public:
     NativeFormat GetFormatId() const { return m_format; }
     operator NativeFormat() const { return m_format; }
 
-    // this only works with standard ids
-    void SetType(wxDataFormatId format) { m_format = format; }
-    wxDataFormatId GetType() const { return m_format; }
+    // this works with standard as well as custom ids
+    void SetType(NativeFormat format) { m_format = format; }
+    NativeFormat GetType() const { return m_format; }
 
     // string ids are used for custom types - this SetId() must be used for
     // application-specific formats
     wxString GetId() const;
     void SetId(const wxChar *format);
 
-private:
     // returns TRUE if the format is one of those defined in wxDataFormatId
     bool IsStandard() const { return m_format > 0 && m_format < wxDF_MAX; }
 
+private:
     NativeFormat m_format;
 };
 
