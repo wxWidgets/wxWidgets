@@ -64,14 +64,14 @@ with any legal name.
 
 \latexignore{\rtfignore{\wxheading{Members}}}
 
-\membersection{wxScopedArray::wxScopedArray}
+\membersection{wxScopedArray::wxScopedArray}\label{wxscopedarrayctor}
 
 \func{}{wxScopedArray}{\param{type}{ * T = NULL}}
 
 Creates the smart pointer with the given pointer or none if NULL.  On
 compilers that support it, this uses the explicit keyword.
 
-\membersection{wxScopedArray::reset}
+\membersection{wxScopedArray::reset}\label{wxscopedarrayreset}
 
 \func{\void}{reset}{\param{T}{ p * = NULL}}
 
@@ -79,21 +79,21 @@ Deletes the currently held pointer and sets it to 'p' or to NULL if no
 arguments are specified. This function does check to make sure that the
 pointer you are assigning is not the same pointer that is already stored.
 
-\membersection{wxScopedArray::operator []}
+\membersection{wxScopedArray::operator []}\label{wxscopedarraybracket}
 
 \func{const T \&}{operator []}{\param{long int}{i}}
 
 This operator acts like the standard [] indexing operator for C++ arrays.  The
 function does not do bounds checking.
 
-\membersection{wxScopedArray::get}
+\membersection{wxScopedArray::get}\label{wxscopedarrayget}
 
 \func{const T*}{get}{\void}
 
 This operator gets the pointer stored in the smart pointer or returns NULL if
 there is none.
 
-\membersection{wxScopedArray::swap}
+\membersection{wxScopedArray::swap}\label{wxscopedarrayswap}
 
 \func{\void}{swap}{\param{wxScopedPtr}{ \& ot}}
 

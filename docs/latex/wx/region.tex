@@ -18,7 +18,7 @@ reference counting, so copying and assignment operations are fast.
 
 \latexignore{\rtfignore{\wxheading{Members}}}
 
-\membersection{wxRegion::wxRegion}\label{wxregionconstr}
+\membersection{wxRegion::wxRegion}\label{wxregionctor}
 
 \func{}{wxRegion}{\void}
 
@@ -58,7 +58,7 @@ Constructs a region using the non-transparent pixels of a bitmap.  See
 \helpref{Union}{wxregionunion} for more details.
 
 
-\membersection{wxRegion::\destruct{wxRegion}}
+\membersection{wxRegion::\destruct{wxRegion}}\label{wxregiondtor}
 
 \func{}{\destruct{wxRegion}}{\void}
 
@@ -262,7 +262,7 @@ See \helpref{wxPaintEvent}{wxpaintevent} for an example of use.
 
 \latexignore{\rtfignore{\wxheading{Members}}}
 
-\membersection{wxRegionIterator::wxRegionIterator}
+\membersection{wxRegionIterator::wxRegionIterator}\label{wxregioniteratorctor}
 
 \func{}{wxRegionIterator}{\void}
 
@@ -272,55 +272,55 @@ Default constructor.
 
 Creates an iterator object given a region.
 
-\membersection{wxRegionIterator::GetX}
+\membersection{wxRegionIterator::GetX}\label{wxregioniteratorgetx}
 
 \constfunc{wxCoord}{GetX}{\void}
 
 Returns the x value for the current region.
 
-\membersection{wxRegionIterator::GetY}
+\membersection{wxRegionIterator::GetY}\label{wxregioniteratorgety}
 
 \constfunc{wxCoord}{GetY}{\void}
 
 Returns the y value for the current region.
 
-\membersection{wxRegionIterator::GetW}
+\membersection{wxRegionIterator::GetW}\label{wxregioniteratorgetw}
 
 \constfunc{wxCoord}{GetW}{\void}
 
 An alias for GetWidth.
 
-\membersection{wxRegionIterator::GetWidth}
+\membersection{wxRegionIterator::GetWidth}\label{wxregioniteratorgetwidth}
 
 \constfunc{wxCoord}{GetWidth}{\void}
 
 Returns the width value for the current region.
 
-\membersection{wxRegionIterator::GetH}
+\membersection{wxRegionIterator::GetH}\label{wxregioniteratorgeth}
 
 \constfunc{wxCoord}{GetH}{\void}
 
 An alias for GetHeight.
 
-\membersection{wxRegionIterator::GetHeight}
+\membersection{wxRegionIterator::GetHeight}\label{wxregioniteratorgetheight}
 
 \constfunc{wxCoord}{GetWidth}{\void}
 
 Returns the width value for the current region.
 
-\membersection{wxRegionIterator::GetRect}
+\membersection{wxRegionIterator::GetRect}\label{wxregioniteratorgetrect}
 
 \constfunc{wxRect}{GetRect}{\void}
 
 Returns the current rectangle.
 
-\membersection{wxRegionIterator::HaveRects}
+\membersection{wxRegionIterator::HaveRects}\label{wxregioniteratorhaverects}
 
 \constfunc{bool}{HaveRects}{\void}
 
 Returns {\tt true} if there are still some rectangles; otherwise returns {\tt false}.
 
-\membersection{wxRegionIterator::Reset}
+\membersection{wxRegionIterator::Reset}\label{wxregioniteratorreset}
 
 \func{void}{Reset}{\void}
 
@@ -330,7 +330,7 @@ Resets the iterator to the beginning of the rectangles.
 
 Resets the iterator to the given region.
 
-\membersection{wxRegionIterator::operator $++$}
+\membersection{wxRegionIterator::operator $++$}\label{wxregioniteratorinc}
 
 \func{void}{operator $++$}{\void}
 
@@ -338,7 +338,7 @@ Increment operator. Increments the iterator to the next region.
 
 \pythonnote{A wxPython alias for this operator is called {\tt Next}.}
 
-\membersection{wxRegionIterator::operator bool}
+\membersection{wxRegionIterator::operator bool}\label{wxregioniteratorbool}
 
 \constfunc{}{operator bool}{\void}
 

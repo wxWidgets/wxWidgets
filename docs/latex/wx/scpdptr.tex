@@ -88,7 +88,7 @@ Once again, in this cass \texttt{CLASSNAME} will be \texttt{TYPEPtr}.
 
 \latexignore{\rtfignore{\wxheading{Members}}}
 
-\membersection{wxScopedPtr::wxScopedPtr}
+\membersection{wxScopedPtr::wxScopedPtr}\label{wxscopedptrctor}
 
 \func{}{explicit wxScopedPtr}{\param{type}{ * T = NULL}}
 
@@ -96,14 +96,14 @@ Creates the smart pointer with the given pointer or none if {\tt NULL}.  On
 compilers that support it, this uses the explicit keyword.
 
 
-\membersection{wxScopedPtr::\destruct{wxScopedPtr}}
+\membersection{wxScopedPtr::\destruct{wxScopedPtr}}\label{wxscopedptrdtor}
 
 \func{}{\destruct{wxScopedPtr}}{\void}
 
 Destructor frees the pointer help by this object if it is not {\tt NULL}.
 
 
-\membersection{wxScopedPtr::release}
+\membersection{wxScopedPtr::release}\label{wxscopedptrrelease}
 
 \func{T *}{release}{\void}
 
@@ -112,7 +112,7 @@ Returns the currently hold pointer and resets the smart pointer object to
 deleting the pointer.
 
 
-\membersection{wxScopedPtr::reset}
+\membersection{wxScopedPtr::reset}\label{wxscopedptrreset}
 
 \func{\void}{reset}{\param{T}{ p * = NULL}}
 
@@ -121,7 +121,7 @@ arguments are specified. This function does check to make sure that the
 pointer you are assigning is not the same pointer that is already stored.
 
 
-\membersection{wxScopedPtr::operator *}
+\membersection{wxScopedPtr::operator *}\label{wxscopedptrptr}
 
 \func{const T\&}{operator *}{\void}
 
@@ -130,7 +130,7 @@ being pointed to by the pointer.  If the pointer is NULL or invalid this will
 crash.
 
 
-\membersection{wxScopedPtr::operator -$>$} % TODO
+\membersection{wxScopedPtr::operator -$>$}\label{wxscopedptrref}
 
 \func{const T*}{operator -$>$}{\void} % TODO
 
@@ -138,7 +138,7 @@ This operator works like the standard C++ pointer operator to return the pointer
 in the smart pointer or NULL if it is empty.
 
 
-\membersection{wxScopedPtr::get}
+\membersection{wxScopedPtr::get}\label{wxscopedptrget}
 
 \func{const T*}{get}{\void}
 
@@ -146,7 +146,7 @@ This operator gets the pointer stored in the smart pointer or returns NULL if
 there is none.
 
 
-\membersection{wxScopedPtr::swap}
+\membersection{wxScopedPtr::swap}\label{wxscopedptrswap}
 
 \func{\void}{swap}{\param{wxScopedPtr}{ \& other}}
 
