@@ -21,6 +21,8 @@ from distutils.spawn import spawn
 
 #---------------------------------------------------------------------------
 
+DO_UNLINK = True
+
 wxPythonDir = "wxPython"
 swig_cmd = "/opt/swig/bin/swig"
 if os.name == 'nt':
@@ -31,7 +33,7 @@ swig_args = ['-c++',
              '-nodefault',
 
              '-xml',
-             #'-xmllang', 'python',
+             '-xmllite',
 
              '-I./src',
              '-c'
@@ -146,7 +148,7 @@ def main(args):
         swigFile.write(renamerTemplateEnd)
         swigFile.close()
 
-        # Compare the file jsut created with the existing one and
+        # Compare the file just created with the existing one and
         # blow away the old one if they are different.
         if open(swigDest).read() != open(swigDestTemp).read():
             os.unlink(swigDest)
@@ -154,8 +156,9 @@ def main(args):
         else:
             print swigDest + " not changed."
             os.unlink(swigDestTemp)
-            
-        os.unlink(xmlDest)
+
+        if DO_UNLINK:
+            os.unlink(xmlDest)
 
 
 #---------------------------------------------------------------------------
