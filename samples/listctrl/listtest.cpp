@@ -92,6 +92,7 @@ BEGIN_EVENT_TABLE(MyListCtrl, wxListCtrl)
     EVT_LIST_ITEM_DESELECTED(LIST_CTRL, MyListCtrl::OnDeselected)
     EVT_LIST_KEY_DOWN(LIST_CTRL, MyListCtrl::OnListKeyDown)
     EVT_LIST_ITEM_ACTIVATED(LIST_CTRL, MyListCtrl::OnActivated)
+    EVT_LIST_ITEM_FOCUSED(LIST_CTRL, MyListCtrl::OnFocused)
 
     EVT_LIST_COL_CLICK(LIST_CTRL, MyListCtrl::OnColClick)
     EVT_LIST_COL_RIGHT_CLICK(LIST_CTRL, MyListCtrl::OnColRightClick)
@@ -748,6 +749,11 @@ void MyListCtrl::OnDeselected(wxListEvent& event)
 void MyListCtrl::OnActivated(wxListEvent& event)
 {
     LogEvent(event, _T("OnActivated"));
+}
+
+void MyListCtrl::OnFocused(wxListEvent& event)
+{
+    LogEvent(event, _T("OnFocused"));
 }
 
 void MyListCtrl::OnListKeyDown(wxListEvent& event)

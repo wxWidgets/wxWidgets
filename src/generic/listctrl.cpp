@@ -72,6 +72,7 @@ DEFINE_EVENT_TYPE(wxEVT_COMMAND_LIST_COL_END_DRAG)
 DEFINE_EVENT_TYPE(wxEVT_COMMAND_LIST_ITEM_RIGHT_CLICK)
 DEFINE_EVENT_TYPE(wxEVT_COMMAND_LIST_ITEM_MIDDLE_CLICK)
 DEFINE_EVENT_TYPE(wxEVT_COMMAND_LIST_ITEM_ACTIVATED)
+DEFINE_EVENT_TYPE(wxEVT_COMMAND_LIST_ITEM_FOCUSED)
 DEFINE_EVENT_TYPE(wxEVT_COMMAND_LIST_CACHE_HINT)
 
 // ----------------------------------------------------------------------------
@@ -684,7 +685,9 @@ public:
     bool IsEmpty() const { return GetItemCount() == 0; }
     void SetItemCount(long count);
 
-    void ResetCurrent() { m_current = (size_t)-1; }
+    // change the current (== focused) item, send a notification event
+    void ChangeCurrent(size_t current);
+    void ResetCurrent() { ChangeCurrent((size_t)-1); }
     bool HasCurrent() const { return m_current != (size_t)-1; }
 
     // send out a wxListEvent
@@ -826,12 +829,6 @@ private:
 
     // delete all items but don't refresh: called from dtor
     void DoDeleteAllItems();
-
-    // called when an item is [un]focuded, i.e. becomes [not] current
-    //
-    // currently unused
-    void OnFocusLine( size_t line );
-    void OnUnfocusLine( size_t line );
 
     // the height of one line using the current font
     wxCoord m_lineHeight;
@@ -2865,21 +2862,22 @@ void wxListMainWindow::SendNotify( size_t line,
     // what we're trying to avoid
     if ( !IsVirtual() && (command != wxEVT_COMMAND_LIST_DELETE_ITEM) )
     {
-        GetLine(line)->GetItem( 0, le.m_item );
+        if ( line != (size_t)-1 )
+        {
+            GetLine(line)->GetItem( 0, le.m_item );
+        }
+        //else: this happens for wxEVT_COMMAND_LIST_ITEM_FOCUSED event
     }
     //else: there may be no more such item
 
     GetParent()->GetEventHandler()->ProcessEvent( le );
 }
 
-void wxListMainWindow::OnFocusLine( size_t WXUNUSED(line) )
+void wxListMainWindow::ChangeCurrent(size_t current)
 {
-//  SendNotify( line, wxEVT_COMMAND_LIST_ITEM_FOCUSSED );
-}
+    m_current = current;
 
-void wxListMainWindow::OnUnfocusLine( size_t WXUNUSED(line) )
-{
-//  SendNotify( line, wxEVT_COMMAND_LIST_ITEM_UNFOCUSSED );
+    SendNotify(current, wxEVT_COMMAND_LIST_ITEM_FOCUSED);
 }
 
 void wxListMainWindow::EditLabel( long item )
@@ -3086,7 +3084,8 @@ void wxListMainWindow::OnMouse( wxMouseEvent &event )
         if ( IsSingleSel() || !(event.ControlDown() || event.ShiftDown()) )
         {
             HighlightAll( FALSE );
-            m_current = current;
+
+            ChangeCurrent(current);
 
             ReverseHighlight(m_current);
         }
@@ -3094,13 +3093,13 @@ void wxListMainWindow::OnMouse( wxMouseEvent &event )
         {
             if (event.ControlDown())
             {
-                m_current = current;
+                ChangeCurrent(current);
 
                 ReverseHighlight(m_current);
             }
             else if (event.ShiftDown())
             {
-                m_current = current;
+                ChangeCurrent(current);
 
                 size_t lineFrom = oldCurrent,
                        lineTo = current;
@@ -3123,8 +3122,6 @@ void wxListMainWindow::OnMouse( wxMouseEvent &event )
         if (m_current != oldCurrent)
         {
             RefreshLine( oldCurrent );
-            OnUnfocusLine( oldCurrent );
-            OnFocusLine( m_current );
         }
 
         // forceClick is only set if the previous click was on another item
@@ -3180,7 +3177,7 @@ void wxListMainWindow::OnArrowChar(size_t newCurrent, const wxKeyEvent& event)
     // items anyhow
     if ( event.ShiftDown() && !IsSingleSel() )
     {
-        m_current = newCurrent;
+        ChangeCurrent(newCurrent);
 
         // select all the items between the old and the new one
         if ( oldCurrent > newCurrent )
@@ -3197,7 +3194,7 @@ void wxListMainWindow::OnArrowChar(size_t newCurrent, const wxKeyEvent& event)
         if ( !event.ControlDown() )
             HighlightAll(FALSE);
 
-        m_current = newCurrent;
+        ChangeCurrent(newCurrent);
 
         HighlightLine( oldCurrent, FALSE );
         RefreshLine( oldCurrent );
@@ -3208,8 +3205,6 @@ void wxListMainWindow::OnArrowChar(size_t newCurrent, const wxKeyEvent& event)
         }
     }
 
-    OnUnfocusLine( oldCurrent );
-    OnFocusLine( m_current );
     RefreshLine( m_current );
 
     MoveToFocus();
@@ -3711,9 +3706,7 @@ void wxListMainWindow::SetItemState( long litem, long state, long stateMask )
             // don't do anything if this item is already focused
             if ( item != m_current )
             {
-                OnUnfocusLine( m_current );
-                m_current = item;
-                OnFocusLine( m_current );
+                ChangeCurrent(item);
 
                 if ( oldCurrent != (size_t)-1 )
                 {
@@ -3733,8 +3726,7 @@ void wxListMainWindow::SetItemState( long litem, long state, long stateMask )
             // don't do anything if this item is not focused
             if ( item == m_current )
             {
-                OnUnfocusLine( m_current );
-                m_current = (size_t)-1;
+                ResetCurrent();
 
                 RefreshLine( oldCurrent );
             }
@@ -3754,9 +3746,7 @@ void wxListMainWindow::SetItemState( long litem, long state, long stateMask )
                 // single sel mode
                 if ( m_current != item )
                 {
-                    OnUnfocusLine( m_current );
-                    m_current = item;
-                    OnFocusLine( m_current );
+                    ChangeCurrent(item);
 
                     if ( oldCurrent != (size_t)-1 )
                     {
@@ -4013,12 +4003,7 @@ void wxListMainWindow::UpdateCurrent()
 {
     if ( !HasCurrent() && !IsEmpty() )
     {
-        m_current = 0;
-    }
-
-    if ( m_current != (size_t)-1 )
-    {
-        OnFocusLine( m_current );
+        ChangeCurrent(0);
     }
 }
 
@@ -4533,9 +4518,6 @@ wxListCtrl::wxListCtrl()
 
 wxListCtrl::~wxListCtrl()
 {
-    if ( m_mainWin )
-        m_mainWin->ResetCurrent();
-
     if (m_ownsImageListNormal)
         delete m_imageListNormal;
     if (m_ownsImageListSmall)

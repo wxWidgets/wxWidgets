@@ -49,6 +49,7 @@ public:
     void OnDeselected(wxListEvent& event);
     void OnListKeyDown(wxListEvent& event);
     void OnActivated(wxListEvent& event);
+    void OnFocused(wxListEvent& event);
     void OnCacheHint(wxListEvent& event);
 
     void OnChar(wxKeyEvent& event);

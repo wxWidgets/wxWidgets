@@ -63,6 +63,7 @@ All (GUI):
 - wxWizard changes: loading from WXR support, help button (Robert Cavanaugh)
 - wxDirSelector() added (Paul A. Thiessen)
 - wxGrid cell editing veto support (Roger Gammans)
+- wxListCtrl ITEM_FOCUSED event added
 
 wxMSW:
 
