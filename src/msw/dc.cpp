@@ -71,6 +71,16 @@
 #define MAKEROP4(fore,back) (DWORD)((((back) << 8) & 0xFF000000) | (fore))
 #endif
 
+// apparently with MicroWindows it is possible that HDC is 0 so we have to
+// check for this ourselves
+#ifdef __WXMICROWIN__
+    #define WXMICROWIN_CHECK_HDC if ( !GetHDC() ) return;
+    #define WXMICROWIN_CHECK_HDC_RET(x) if ( !GetHDC() ) return x;
+#else
+    #define WXMICROWIN_CHECK_HDC
+    #define WXMICROWIN_CHECK_HDC_RET(x)
+#endif
+
 IMPLEMENT_ABSTRACT_CLASS(wxDC, wxDCBase)
 
 // ---------------------------------------------------------------------------
@@ -357,9 +367,7 @@ void wxDC::SelectOldObjects(WXHDC dc)
 
 void wxDC::UpdateClipBox()
 {
-#ifdef __WXMICROWIN__
-    if (!GetHDC()) return;
-#endif
+    WXMICROWIN_CHECK_HDC
 
     RECT rect;
     ::GetClipBox(GetHdc(), &rect);
@@ -375,9 +383,7 @@ void wxDC::SetClippingHrgn(WXHRGN hrgn)
 {
     wxCHECK_RET( hrgn, wxT("invalid clipping region") );
 
-#ifdef __WXMICROWIN__
-    if (!GetHdc()) return;
-#endif // __WXMICROWIN__
+    WXMICROWIN_CHECK_HDC
 
     // note that we combine the new clipping region with the existing one: this
     // is compatible with what the other ports do and is the documented
@@ -441,9 +447,7 @@ void wxDC::DoSetClippingRegionAsRegion(const wxRegion& region)
 
 void wxDC::DestroyClippingRegion()
 {
-#ifdef __WXMICROWIN__
-    if (!GetHDC()) return;
-#endif
+    WXMICROWIN_CHECK_HDC
 
     if (m_clipping && m_hDC)
     {
@@ -483,9 +487,7 @@ bool wxDC::CanGetTextExtent() const
 
 int wxDC::GetDepth() const
 {
-#ifdef __WXMICROWIN__
-    if (!GetHDC()) return 16;
-#endif
+    WXMICROWIN_CHECK_HDC_RET(16)
 
     return (int)::GetDeviceCaps(GetHdc(), BITSPIXEL);
 }
@@ -496,9 +498,7 @@ int wxDC::GetDepth() const
 
 void wxDC::Clear()
 {
-#ifdef __WXMICROWIN__
-    if (!GetHDC()) return;
-#endif
+    WXMICROWIN_CHECK_HDC
 
     RECT rect;
     if ( m_canvas )
@@ -546,9 +546,7 @@ bool wxDC::DoFloodFill(wxCoord x, wxCoord y, const wxColour& col, int style)
     return FALSE;
 #else
 
-#ifdef __WXMICROWIN__
-    if (!GetHDC()) return FALSE;
-#endif
+    WXMICROWIN_CHECK_HDC_RET(FALSE)
 
     bool success = (0 != ::ExtFloodFill(GetHdc(), XLOG2DEV(x), YLOG2DEV(y),
                          col.GetPixel(),
@@ -579,9 +577,7 @@ bool wxDC::DoFloodFill(wxCoord x, wxCoord y, const wxColour& col, int style)
 
 bool wxDC::DoGetPixel(wxCoord x, wxCoord y, wxColour *col) const
 {
-#ifdef __WXMICROWIN__
-    if (!GetHDC()) return FALSE;
-#endif
+    WXMICROWIN_CHECK_HDC_RET(FALSE)
 
     wxCHECK_MSG( col, FALSE, _T("NULL colour parameter in wxDC::GetPixel") );
 
@@ -595,9 +591,7 @@ bool wxDC::DoGetPixel(wxCoord x, wxCoord y, wxColour *col) const
 
 void wxDC::DoCrossHair(wxCoord x, wxCoord y)
 {
-#ifdef __WXMICROWIN__
-    if (!GetHDC()) return;
-#endif
+    WXMICROWIN_CHECK_HDC
 
     wxCoord x1 = x-VIEWPORT_EXTENT;
     wxCoord y1 = y-VIEWPORT_EXTENT;
@@ -613,9 +607,7 @@ void wxDC::DoCrossHair(wxCoord x, wxCoord y)
 
 void wxDC::DoDrawLine(wxCoord x1, wxCoord y1, wxCoord x2, wxCoord y2)
 {
-#ifdef __WXMICROWIN__
-    if (!GetHDC()) return;
-#endif
+    WXMICROWIN_CHECK_HDC
 
     wxDrawLine(GetHdc(), XLOG2DEV(x1), YLOG2DEV(y1), XLOG2DEV(x2), YLOG2DEV(y2));
 
@@ -638,9 +630,7 @@ void wxDC::DoDrawArc(wxCoord x1, wxCoord y1,
     DoDrawEllipticArcRot( xc-r, yc-r, 2*r, 2*r, sa, ea );
 #else
 
-#ifdef __WXMICROWIN__
-    if (!GetHDC()) return;
-#endif
+    WXMICROWIN_CHECK_HDC
 
     wxColourChanger cc(*this); // needed for wxSTIPPLE_MASK_OPAQUE handling
 
@@ -691,9 +681,7 @@ void wxDC::DoDrawArc(wxCoord x1, wxCoord y1,
 void wxDC::DoDrawCheckMark(wxCoord x1, wxCoord y1,
                            wxCoord width, wxCoord height)
 {
-#ifdef __WXMICROWIN__
-    if (!GetHDC()) return;
-#endif
+    WXMICROWIN_CHECK_HDC
 
     wxCoord x2 = x1 + width,
             y2 = y1 + height;
@@ -733,9 +721,7 @@ void wxDC::DoDrawCheckMark(wxCoord x1, wxCoord y1,
 
 void wxDC::DoDrawPoint(wxCoord x, wxCoord y)
 {
-#ifdef __WXMICROWIN__
-    if (!GetHDC()) return;
-#endif
+    WXMICROWIN_CHECK_HDC
 
     COLORREF color = 0x00ffffff;
     if (m_pen.Ok())
@@ -750,9 +736,7 @@ void wxDC::DoDrawPoint(wxCoord x, wxCoord y)
 
 void wxDC::DoDrawPolygon(int n, wxPoint points[], wxCoord xoffset, wxCoord yoffset,int fillStyle)
 {
-#ifdef __WXMICROWIN__
-    if (!GetHDC()) return;
-#endif
+    WXMICROWIN_CHECK_HDC
 
     wxColourChanger cc(*this); // needed for wxSTIPPLE_MASK_OPAQUE handling
 
@@ -801,9 +785,7 @@ wxDC::DoDrawPolyPolygon(int n,
                         wxCoord yoffset,
                         int fillStyle)
 {
-#ifdef __WXMICROWIN__
-    if (!GetHDC()) return;
-#endif
+    WXMICROWIN_CHECK_HDC
 
     wxColourChanger cc(*this); // needed for wxSTIPPLE_MASK_OPAQUE handling
     int i, cnt;
@@ -839,9 +821,7 @@ wxDC::DoDrawPolyPolygon(int n,
 
 void wxDC::DoDrawLines(int n, wxPoint points[], wxCoord xoffset, wxCoord yoffset)
 {
-#ifdef __WXMICROWIN__
-    if (!GetHDC()) return;
-#endif
+    WXMICROWIN_CHECK_HDC
 
     // Do things less efficiently if we have offsets
     if (xoffset != 0 || yoffset != 0)
@@ -870,9 +850,7 @@ void wxDC::DoDrawLines(int n, wxPoint points[], wxCoord xoffset, wxCoord yoffset
 
 void wxDC::DoDrawRectangle(wxCoord x, wxCoord y, wxCoord width, wxCoord height)
 {
-#ifdef __WXMICROWIN__
-    if (!GetHDC()) return;
-#endif
+    WXMICROWIN_CHECK_HDC
 
     wxColourChanger cc(*this); // needed for wxSTIPPLE_MASK_OPAQUE handling
 
@@ -911,9 +889,7 @@ void wxDC::DoDrawRectangle(wxCoord x, wxCoord y, wxCoord width, wxCoord height)
 
 void wxDC::DoDrawRoundedRectangle(wxCoord x, wxCoord y, wxCoord width, wxCoord height, double radius)
 {
-#ifdef __WXMICROWIN__
-    if (!GetHDC()) return;
-#endif
+    WXMICROWIN_CHECK_HDC
 
     wxColourChanger cc(*this); // needed for wxSTIPPLE_MASK_OPAQUE handling
 
@@ -947,9 +923,7 @@ void wxDC::DoDrawRoundedRectangle(wxCoord x, wxCoord y, wxCoord width, wxCoord h
 
 void wxDC::DoDrawEllipse(wxCoord x, wxCoord y, wxCoord width, wxCoord height)
 {
-#ifdef __WXMICROWIN__
-    if (!GetHDC()) return;
-#endif
+    WXMICROWIN_CHECK_HDC
 
     wxColourChanger cc(*this); // needed for wxSTIPPLE_MASK_OPAQUE handling
 
@@ -969,9 +943,7 @@ void wxDC::DoDrawEllipticArc(wxCoord x,wxCoord y,wxCoord w,wxCoord h,double sa,d
     DoDrawEllipticArcRot( x, y, w, h, sa, ea );
 #else
 
-#ifdef __WXMICROWIN__
-    if (!GetHDC()) return;
-#endif
+    WXMICROWIN_CHECK_HDC
 
     wxColourChanger cc(*this); // needed for wxSTIPPLE_MASK_OPAQUE handling
 
@@ -1017,9 +989,7 @@ void wxDC::DoDrawEllipticArc(wxCoord x,wxCoord y,wxCoord w,wxCoord h,double sa,d
 
 void wxDC::DoDrawIcon(const wxIcon& icon, wxCoord x, wxCoord y)
 {
-#ifdef __WXMICROWIN__
-    if (!GetHDC()) return;
-#endif
+    WXMICROWIN_CHECK_HDC
 
     wxCHECK_RET( icon.Ok(), wxT("invalid icon in DrawIcon") );
 
@@ -1035,9 +1005,7 @@ void wxDC::DoDrawIcon(const wxIcon& icon, wxCoord x, wxCoord y)
 
 void wxDC::DoDrawBitmap( const wxBitmap &bmp, wxCoord x, wxCoord y, bool useMask )
 {
-#ifdef __WXMICROWIN__
-    if (!GetHDC()) return;
-#endif
+    WXMICROWIN_CHECK_HDC
 
     wxCHECK_RET( bmp.Ok(), _T("invalid bitmap in wxDC::DrawBitmap") );
 
@@ -1170,9 +1138,7 @@ void wxDC::DoDrawBitmap( const wxBitmap &bmp, wxCoord x, wxCoord y, bool useMask
 
 void wxDC::DoDrawText(const wxString& text, wxCoord x, wxCoord y)
 {
-#ifdef __WXMICROWIN__
-    if (!GetHDC()) return;
-#endif
+    WXMICROWIN_CHECK_HDC
 
     DrawAnyText(text, x, y);
 
@@ -1186,9 +1152,7 @@ void wxDC::DoDrawText(const wxString& text, wxCoord x, wxCoord y)
 
 void wxDC::DrawAnyText(const wxString& text, wxCoord x, wxCoord y)
 {
-#ifdef __WXMICROWIN__
-    if (!GetHDC()) return;
-#endif
+    WXMICROWIN_CHECK_HDC
 
     // prepare for drawing the text
     if ( m_textForegroundColour.Ok() )
@@ -1230,9 +1194,7 @@ void wxDC::DoDrawRotatedText(const wxString& text,
                              wxCoord x, wxCoord y,
                              double angle)
 {
-#ifdef __WXMICROWIN__
-    if (!GetHDC()) return;
-#endif
+    WXMICROWIN_CHECK_HDC
 
     // we test that we have some font because otherwise we should still use the
     // "else" part below to avoid that DrawRotatedText(angle = 180) and
@@ -1305,9 +1267,7 @@ void wxDC::DoDrawRotatedText(const wxString& text,
 
 void wxDC::DoSelectPalette(bool realize)
 {
-#ifdef __WXMICROWIN__
-    if (!GetHDC()) return;
-#endif
+    WXMICROWIN_CHECK_HDC
 
     // Set the old object temporarily, in case the assignment deletes an object
     // that's not yet selected out.
@@ -1362,9 +1322,7 @@ void wxDC::InitializePalette()
 
 void wxDC::SetFont(const wxFont& the_font)
 {
-#ifdef __WXMICROWIN__
-    if (!GetHDC()) return;
-#endif
+    WXMICROWIN_CHECK_HDC
 
     // Set the old object temporarily, in case the assignment deletes an object
     // that's not yet selected out.
@@ -1397,9 +1355,7 @@ void wxDC::SetFont(const wxFont& the_font)
 
 void wxDC::SetPen(const wxPen& pen)
 {
-#ifdef __WXMICROWIN__
-    if (!GetHDC()) return;
-#endif
+    WXMICROWIN_CHECK_HDC
 
     // Set the old object temporarily, in case the assignment deletes an object
     // that's not yet selected out.
@@ -1431,9 +1387,7 @@ void wxDC::SetPen(const wxPen& pen)
 
 void wxDC::SetBrush(const wxBrush& brush)
 {
-#ifdef __WXMICROWIN__
-    if (!GetHDC()) return;
-#endif
+    WXMICROWIN_CHECK_HDC
 
     // Set the old object temporarily, in case the assignment deletes an object
     // that's not yet selected out.
@@ -1481,9 +1435,7 @@ void wxDC::SetBrush(const wxBrush& brush)
 
 void wxDC::SetBackground(const wxBrush& brush)
 {
-#ifdef __WXMICROWIN__
-    if (!GetHDC()) return;
-#endif
+    WXMICROWIN_CHECK_HDC
 
     m_backgroundBrush = brush;
 
@@ -1495,9 +1447,7 @@ void wxDC::SetBackground(const wxBrush& brush)
 
 void wxDC::SetBackgroundMode(int mode)
 {
-#ifdef __WXMICROWIN__
-    if (!GetHDC()) return;
-#endif
+    WXMICROWIN_CHECK_HDC
 
     m_backgroundMode = mode;
 
@@ -1507,9 +1457,7 @@ void wxDC::SetBackgroundMode(int mode)
 
 void wxDC::SetLogicalFunction(int function)
 {
-#ifdef __WXMICROWIN__
-    if (!GetHDC()) return;
-#endif
+    WXMICROWIN_CHECK_HDC
 
     m_logicalFunction = function;
 
@@ -1574,9 +1522,7 @@ void wxDC::EndPage()
 
 wxCoord wxDC::GetCharHeight() const
 {
-#ifdef __WXMICROWIN__
-    if (!GetHDC()) return 0;
-#endif
+    WXMICROWIN_CHECK_HDC_RET(0)
 
     TEXTMETRIC lpTextMetric;
 
@@ -1587,9 +1533,7 @@ wxCoord wxDC::GetCharHeight() const
 
 wxCoord wxDC::GetCharWidth() const
 {
-#ifdef __WXMICROWIN__
-    if (!GetHDC()) return 0;
-#endif
+    WXMICROWIN_CHECK_HDC_RET(0)
 
     TEXTMETRIC lpTextMetric;
 
@@ -1648,9 +1592,7 @@ void wxDC::DoGetTextExtent(const wxString& string, wxCoord *x, wxCoord *y,
 
 void wxDC::SetMapMode(int mode)
 {
-#ifdef __WXMICROWIN__
-    if (!GetHDC()) return;
-#endif
+    WXMICROWIN_CHECK_HDC
 
     m_mappingMode = mode;
 
@@ -1721,9 +1663,7 @@ void wxDC::SetMapMode(int mode)
 
 void wxDC::SetUserScale(double x, double y)
 {
-#ifdef __WXMICROWIN__
-    if (!GetHDC()) return;
-#endif
+    WXMICROWIN_CHECK_HDC
 
 #ifndef __WXWINCE__
     if ( x == m_userScaleX && y == m_userScaleY )
@@ -1738,9 +1678,7 @@ void wxDC::SetUserScale(double x, double y)
 
 void wxDC::SetAxisOrientation(bool xLeftRight, bool yBottomUp)
 {
-#ifdef __WXMICROWIN__
-    if (!GetHDC()) return;
-#endif
+    WXMICROWIN_CHECK_HDC
 
 #ifndef __WXWINCE__
     int signX = xLeftRight ? 1 : -1,
@@ -1758,9 +1696,7 @@ void wxDC::SetAxisOrientation(bool xLeftRight, bool yBottomUp)
 
 void wxDC::SetSystemScale(double x, double y)
 {
-#ifdef __WXMICROWIN__
-    if (!GetHDC()) return;
-#endif
+    WXMICROWIN_CHECK_HDC
 
 #ifndef __WXWINCE__
     if ( x == m_scaleX && y == m_scaleY )
@@ -1775,9 +1711,7 @@ void wxDC::SetSystemScale(double x, double y)
 
 void wxDC::SetLogicalOrigin(wxCoord x, wxCoord y)
 {
-#ifdef __WXMICROWIN__
-    if (!GetHDC()) return;
-#endif
+    WXMICROWIN_CHECK_HDC
 
 #ifndef __WXWINCE__
     if ( x == m_logicalOriginX && y == m_logicalOriginY )
@@ -1792,9 +1726,7 @@ void wxDC::SetLogicalOrigin(wxCoord x, wxCoord y)
 
 void wxDC::SetDeviceOrigin(wxCoord x, wxCoord y)
 {
-#ifdef __WXMICROWIN__
-    if (!GetHDC()) return;
-#endif
+    WXMICROWIN_CHECK_HDC
 
 #ifndef __WXWINCE__
     if ( x == m_deviceOriginX && y == m_deviceOriginY )
@@ -1867,9 +1799,7 @@ bool wxDC::DoBlit(wxCoord xdest, wxCoord ydest,
 {
     wxCHECK_MSG( source, FALSE, _T("wxDC::Blit(): NULL wxDC pointer") );
 
-#ifdef __WXMICROWIN__
-    if (!GetHDC()) return FALSE;
-#endif
+    WXMICROWIN_CHECK_HDC_RET(FALSE)
 
     const wxBitmap& bmpSrc = source->m_selectedBitmap;
     if ( bmpSrc.Ok() && bmpSrc.HasAlpha() )
@@ -2148,9 +2078,7 @@ bool wxDC::DoBlit(wxCoord xdest, wxCoord ydest,
 
 void wxDC::DoGetSize(int *w, int *h) const
 {
-#ifdef __WXMICROWIN__
-    if (!GetHDC()) return;
-#endif
+    WXMICROWIN_CHECK_HDC
 
     if ( w ) *w = ::GetDeviceCaps(GetHdc(), HORZRES);
     if ( h ) *h = ::GetDeviceCaps(GetHdc(), VERTRES);
@@ -2158,9 +2086,7 @@ void wxDC::DoGetSize(int *w, int *h) const
 
 void wxDC::DoGetSizeMM(int *w, int *h) const
 {
-#ifdef __WXMICROWIN__
-    if (!GetHDC()) return;
-#endif
+    WXMICROWIN_CHECK_HDC
 
     // if we implement it in terms of DoGetSize() instead of directly using the
     // results returned by GetDeviceCaps(HORZ/VERTSIZE) as was done before, it
@@ -2190,9 +2116,7 @@ void wxDC::DoGetSizeMM(int *w, int *h) const
 
 wxSize wxDC::GetPPI() const
 {
-#ifdef __WXMICROWIN__
-    if (!GetHDC()) return wxSize();
-#endif
+    WXMICROWIN_CHECK_HDC_RET(wxSize())
 
     int x = ::GetDeviceCaps(GetHdc(), LOGPIXELSX);
     int y = ::GetDeviceCaps(GetHdc(), LOGPIXELSY);
@@ -2203,9 +2127,7 @@ wxSize wxDC::GetPPI() const
 // For use by wxWindows only, unless custom units are required.
 void wxDC::SetLogicalScale(double x, double y)
 {
-#ifdef __WXMICROWIN__
-    if (!GetHDC()) return;
-#endif
+    WXMICROWIN_CHECK_HDC
 
     m_logicalScaleX = x;
     m_logicalScaleY = y;
