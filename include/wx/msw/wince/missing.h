@@ -92,6 +92,21 @@ extern "C"
 #define HGDI_ERROR ((HANDLE)(0xFFFFFFFFL))
 #endif
 
+// some windows styles don't exist in CE SDK, replace them with closest
+// equivalents
+#ifndef WS_THICKFRAME
+    #define WS_THICKFRAME WS_BORDER
+#endif
+
+#ifndef WS_MINIMIZE
+    #define WS_MINIMIZE 0
+#endif
+
+#ifndef WS_MAXIMIZE
+    #define WS_MAXIMIZE 0
+#endif
+
+
 // global memory functions don't exist under CE (good riddance, of course, but
 // the existing code still uses them in some places, so make it compile)
 //
