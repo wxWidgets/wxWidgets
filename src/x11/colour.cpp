@@ -90,23 +90,21 @@ unsigned short wxColourRefData::colMapAllocCounter[ 256 ] =
 
 void wxColourRefData::FreeColour()
 {
-#if 0        
-    if (m_colormap)
-    {
-        Colormap cm = (Colormap)m_colormap;
-
-        GdkColormapPrivate *private_colormap = (GdkColormapPrivate*) m_colormap;
-        if ((private_colormap->visual->type == GDK_VISUAL_GRAYSCALE) ||
-            (private_colormap->visual->type == GDK_VISUAL_PSEUDO_COLOR))
-        {
-            int idx = m_color.pixel;
-            colMapAllocCounter[ idx ] = colMapAllocCounter[ idx ] - 1;
+    if (!m_colormap)
+        return;
         
-            if (colMapAllocCounter[ idx ] == 0)
-            gdk_colormap_free_colors( m_colormap, &m_color, 1 );
+    if ((wxTheApp->m_visualType == GrayScale) ||
+        (wxTheApp->m_visualType == PseudoColor))
+    {
+        int idx = m_color.pixel;
+        colMapAllocCounter[ idx ] = colMapAllocCounter[ idx ] - 1;
+        
+        if (colMapAllocCounter[ idx ] == 0)
+        {
+            unsigned long pixel = m_color.pixel;
+            XFreeColors( wxGlobalDisplay(), (Colormap) m_colormap, &pixel, 1, 0 );
         }
     }
-#endif
 }
 
 void wxColourRefData::AllocColour( WXColormap cmap )
@@ -116,20 +114,18 @@ void wxColourRefData::AllocColour( WXColormap cmap )
 
     FreeColour();
 
-#if 0    
-    GdkColormapPrivate *private_colormap = (GdkColormapPrivate*) cmap;
-    if ((private_colormap->visual->type == GDK_VISUAL_GRAYSCALE) ||
-        (private_colormap->visual->type == GDK_VISUAL_PSEUDO_COLOR))
+    if ((wxTheApp->m_visualType == GrayScale) ||
+        (wxTheApp->m_visualType == PseudoColor))
     {
-        m_hasPixel = gdk_colormap_alloc_color( cmap, &m_color, FALSE, TRUE );
+        m_hasPixel = XAllocColor( wxGlobalDisplay(), (Colormap) cmap, &m_color );
         int idx = m_color.pixel;
         colMapAllocCounter[ idx ] = colMapAllocCounter[ idx ] + 1;
     }
     else
-#endif
     {
         m_hasPixel = XAllocColor( wxGlobalDisplay(), (Colormap) cmap, &m_color );
     }
+    
     m_colormap = cmap;
 }
 

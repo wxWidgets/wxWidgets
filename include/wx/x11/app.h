@@ -44,7 +44,7 @@ class WXDLLEXPORT wxApp : public wxAppBase
         
 public:
     wxApp();
-    ~wxApp() {}
+    ~wxApp();
     
     // override base class (pure) virtuals
     // -----------------------------------
@@ -94,19 +94,38 @@ public:
     // This handler is called when a property change event occurs
     virtual bool HandlePropertyChange(WXEvent *event);
     
-    // We need this before create the app
-    static   WXDisplay* GetDisplay() { return ms_display; }
-    static   WXDisplay* ms_display;
-
     // Values that can be passed on the command line.
     // Returns -1, -1 if none specified.
     const wxSize& GetInitialSize() const { return m_initialSize; }
     bool GetShowIconic() const { return m_showIconic; }
     
+    // We need this before creating the app
+    static   WXDisplay* GetDisplay() { return ms_display; }
+    static   WXDisplay* ms_display;
+
 public:
     static long           sm_lastMessageTime;
     bool                  m_showIconic;    
     wxSize                m_initialSize;
+    
+    // Someone find a better place for these
+    int                   m_visualType;   // TrueColor, DirectColor etc.
+    int                   m_visualDepth;
+    int                   m_visualColormapSize;
+    void                 *m_visualColormap;
+    int                   m_visualScreen;
+    unsigned long         m_visualRedMask;
+    unsigned long         m_visualGreenMask;
+    unsigned long         m_visualBlueMask;
+    int                   m_visualRedShift;
+    int                   m_visualGreenShift;
+    int                   m_visualBlueShift;
+    int                   m_visualRedPrec;
+    int                   m_visualGreenPrec;
+    int                   m_visualBluePrec;
+    
+    unsigned char        *m_colorCube;
+    
 protected:
     bool                  m_keepGoing;
     

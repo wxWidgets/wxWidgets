@@ -97,11 +97,8 @@ bool wxMask::Create( const wxBitmap& bitmap,
     m_display = bitmap.GetDisplay();
     
     Display *xdisplay = (Display*) m_display;
-
     int xscreen = DefaultScreen( xdisplay );
     Window xroot = RootWindow( xdisplay, xscreen );
-    Visual* xvisual = DefaultVisual( xdisplay, xscreen );
-    int bpp = DefaultDepth( xdisplay, xscreen );
     
     m_bitmap = (WXPixmap) XCreatePixmap( xdisplay, xroot, image.GetWidth(), image.GetHeight(), 1 );
     GC gc = XCreateGC( xdisplay, (Pixmap) m_bitmap, 0, NULL );
@@ -117,18 +114,8 @@ bool wxMask::Create( const wxBitmap& bitmap,
     unsigned char green = colour.Green();
     unsigned char blue = colour.Blue();
 
-    XVisualInfo vinfo_template;
-    XVisualInfo *vi;
-
-    vinfo_template.visual = xvisual;
-    vinfo_template.visualid = XVisualIDFromVisual( xvisual );
-    vinfo_template.depth = bpp;
-    int nitem = 0;
-
-    vi = XGetVisualInfo( xdisplay, VisualIDMask|VisualDepthMask, &vinfo_template, &nitem );
-    wxASSERT_MSG( vi, wxT("No visual info") );
+    int bpp = wxTheApp->m_visualDepth;
     
-    if ((bpp == 16) && (vi->red_mask != 0xf800)) bpp = 15;
     if (bpp == 15)
     {
         red = red & 0xf8;
@@ -540,7 +527,7 @@ bool wxBitmap::CreateFromImage( const wxImage& image, int depth )
     Window xroot = RootWindow( xdisplay, xscreen );
     Visual* xvisual = DefaultVisual( xdisplay, xscreen );
     
-    int bpp = DefaultDepth( xdisplay, xscreen );
+    int bpp = wxTheApp->m_visualDepth;
     
     int width = image.GetWidth();
     int height = image.GetHeight();
@@ -590,20 +577,6 @@ bool wxBitmap::CreateFromImage( const wxImage& image, int depth )
             SetMask( mask );
         }
 
-        // Retrieve info
-
-        XVisualInfo vinfo_template;
-        XVisualInfo *vi;
-
-        vinfo_template.visual = xvisual;
-        vinfo_template.visualid = XVisualIDFromVisual( xvisual );
-        vinfo_template.depth = bpp;
-        int nitem = 0;
-
-        vi = XGetVisualInfo( xdisplay, VisualIDMask|VisualDepthMask, &vinfo_template, &nitem );
-        wxASSERT_MSG( vi, wxT("No visual info") );
-
-        if ((bpp == 16) && (vi->red_mask != 0xf800)) bpp = 15;
         if (bpp < 8) bpp = 8;
 
         // Render
@@ -613,15 +586,13 @@ bool wxBitmap::CreateFromImage( const wxImage& image, int depth )
 
         if (bpp > 8)
         {
-            if ((vi->red_mask > vi->green_mask) && (vi->green_mask > vi->blue_mask))      b_o = RGB;
-            else if ((vi->red_mask > vi->blue_mask) && (vi->blue_mask > vi->green_mask))  b_o = RBG;
-            else if ((vi->blue_mask > vi->red_mask) && (vi->red_mask > vi->green_mask))   b_o = BRG;
-            else if ((vi->blue_mask > vi->green_mask) && (vi->green_mask > vi->red_mask)) b_o = BGR;
-            else if ((vi->green_mask > vi->red_mask) && (vi->red_mask > vi->blue_mask))   b_o = GRB;
-            else if ((vi->green_mask > vi->blue_mask) && (vi->blue_mask > vi->red_mask))  b_o = GBR;
+            if ((wxTheApp->m_visualRedMask > wxTheApp->m_visualGreenMask) && (wxTheApp->m_visualGreenMask > wxTheApp->m_visualBlueMask))      b_o = RGB;
+            else if ((wxTheApp->m_visualRedMask > wxTheApp->m_visualBlueMask) && (wxTheApp->m_visualBlueMask > wxTheApp->m_visualGreenMask))  b_o = RBG;
+            else if ((wxTheApp->m_visualBlueMask > wxTheApp->m_visualRedMask) && (wxTheApp->m_visualRedMask > wxTheApp->m_visualGreenMask))   b_o = BRG;
+            else if ((wxTheApp->m_visualBlueMask > wxTheApp->m_visualGreenMask) && (wxTheApp->m_visualGreenMask > wxTheApp->m_visualRedMask)) b_o = BGR;
+            else if ((wxTheApp->m_visualGreenMask > wxTheApp->m_visualRedMask) && (wxTheApp->m_visualRedMask > wxTheApp->m_visualBlueMask))   b_o = GRB;
+            else if ((wxTheApp->m_visualGreenMask > wxTheApp->m_visualBlueMask) && (wxTheApp->m_visualBlueMask > wxTheApp->m_visualRedMask))  b_o = GBR;
         }
-
-        XFree( vi );
 
         int r_mask = image.GetMaskRed();
         int g_mask = image.GetMaskGreen();
@@ -629,6 +600,8 @@ bool wxBitmap::CreateFromImage( const wxImage& image, int depth )
 
         unsigned char* data = image.GetData();
         wxASSERT_MSG( data, "No image data" );
+        
+        unsigned char *colorCube = wxTheApp->m_colorCube;
 
         bool hasMask = image.HasMask();
 
@@ -657,27 +630,7 @@ bool wxBitmap::CreateFromImage( const wxImage& image, int depth )
                     case 8:
                     {
                         int pixel = 0;
-#if 0                        
-                        if (wxTheApp->m_colorCube)
-                        {
-                            pixel = wxTheApp->m_colorCube[ ((r & 0xf8) << 7) + ((g & 0xf8) << 2) + ((b & 0xf8) >> 3) ];
-                        }
-                        else
-                        {
-                            GdkColormap *cmap = gtk_widget_get_default_colormap();
-                            GdkColor *colors = cmap->colors;
-                            int max = 3 * (65536);
-    
-                            for (int i = 0; i < cmap->size; i++)
-                            {
-                                int rdiff = (r << 8) - colors[i].red;
-                                int gdiff = (g << 8) - colors[i].green;
-                                int bdiff = (b << 8) - colors[i].blue;
-                                int sum = ABS (rdiff) + ABS (gdiff) + ABS (bdiff);
-                                if (sum < max) { pixel = i; max = sum; }
-                            }
-                        }
-#endif    
+                        pixel = colorCube[ ((r & 0xf8) << 7) + ((g & 0xf8) << 2) + ((b & 0xf8) >> 3) ];
                         XPutPixel( data_image, x, y, pixel );
                         break;
                     }
@@ -752,10 +705,6 @@ bool wxBitmap::CreateFromImage( const wxImage& image, int depth )
 
         GC gc = XCreateGC( xdisplay, (Pixmap) M_BMPDATA->m_pixmap, 0, NULL );
         XPutImage( xdisplay, (Pixmap) M_BMPDATA->m_pixmap, gc, data_image, 0, 0, 0, 0, width, height );
-#ifdef __WXDEBUG__
-	XSync(wxGlobalDisplay(), False);
-#endif
-
         XDestroyImage( data_image );
         XFreeGC( xdisplay, gc );
 
@@ -776,24 +725,6 @@ bool wxBitmap::CreateFromImage( const wxImage& image, int depth )
     // wxUSE_NANOX
 }
 
-static void wxCalcPrecAndShift( unsigned long mask, int *shift, int *prec )
-{
-  *shift = 0;
-  *prec = 0;
-
-  while (!(mask & 0x1))
-    {
-      (*shift)++;
-      mask >>= 1;
-    }
-
-  while (mask & 0x1)
-    {
-      (*prec)++;
-      mask >>= 1;
-    }
-}
-
 wxImage wxBitmap::ConvertToImage() const
 {
     wxImage image;
@@ -803,10 +734,7 @@ wxImage wxBitmap::ConvertToImage() const
     Display *xdisplay = (Display*) M_BMPDATA->m_display;
     wxASSERT_MSG( xdisplay, wxT("No display") );
     
-    int xscreen = DefaultScreen( xdisplay );
-    Visual* xvisual = DefaultVisual( xdisplay, xscreen );
-    
-    int bpp = DefaultDepth( xdisplay, xscreen );
+    int bpp = wxTheApp->m_visualDepth;
 
 #if wxUSE_NANOX
     wxGetImageFromDrawable((Pixmap) GetPixmap(), 0, 0, GetWidth(), GetHeight(), image);
@@ -865,48 +793,22 @@ wxImage wxBitmap::ConvertToImage() const
 
     if (GetPixmap())
     {
-        // Retrieve info
-
-        XVisualInfo vinfo_template;
-        XVisualInfo *vi;
-
-        vinfo_template.visual = xvisual;
-        vinfo_template.visualid = XVisualIDFromVisual( xvisual );
-        vinfo_template.depth = bpp;
-        int nitem = 0;
-
-        vi = XGetVisualInfo( xdisplay, VisualIDMask|VisualDepthMask, &vinfo_template, &nitem );
-        wxASSERT_MSG( vi, wxT("No visual info") );
+        red_shift_right = wxTheApp->m_visualRedShift;
+        red_shift_left = 8-wxTheApp->m_visualRedPrec;
+        green_shift_right = wxTheApp->m_visualGreenShift;
+        green_shift_left = 8-wxTheApp->m_visualGreenPrec;
+        blue_shift_right = wxTheApp->m_visualBlueShift;
+        blue_shift_left = 8-wxTheApp->m_visualBluePrec;
         
-        int red_prec,green_prec,blue_prec;
-        int red_shift,green_shift,blue_shift;
-        wxCalcPrecAndShift( vi->red_mask, &red_shift, &red_prec );
-        wxCalcPrecAndShift( vi->green_mask, &green_shift, &green_prec );
-        wxCalcPrecAndShift( vi->blue_mask, &blue_shift, &blue_prec );
-        if (bpp == 16) bpp = red_prec + green_prec + blue_prec;
-        
-        red_shift_right = red_shift;
-        red_shift_left = 8-red_prec;
-        green_shift_right = green_shift;
-        green_shift_left = 8-green_prec;
-        blue_shift_right = blue_shift;
-        blue_shift_left = 8-blue_prec;
-        
-#if 0
-        use_shift = (vi->visual->c_class == TrueColor) || (vi->visual->c_class == DirectColor);
-#else
-        use_shift = TRUE;
-#endif
-        
-        XFree( vi );
+        use_shift = (wxTheApp->m_visualType == GrayScale) || (wxTheApp->m_visualType != PseudoColor);
     }
+    
     if (GetBitmap())
     {
         bpp = 1;
     }
 
-
-//    GdkColormap *cmap = gtk_widget_get_default_colormap();
+    XColor *colors = (XColor*) wxTheApp->m_visualColormap;
 
     int width = GetWidth();
     int height = GetHeight();
@@ -937,14 +839,12 @@ wxImage wxBitmap::ConvertToImage() const
                 data[pos+1] = (pixel >> green_shift_right) << green_shift_left;
                 data[pos+2] = (pixel >> blue_shift_right)  << blue_shift_left;
             }
-#if 0
-            else if (cmap->colors)
+            else if (colors)
             {
-                data[pos] =   cmap->colors[pixel].red   >> 8;
-                data[pos+1] = cmap->colors[pixel].green >> 8;
-                data[pos+2] = cmap->colors[pixel].blue  >> 8;
+                data[pos] =   colors[pixel].red   >> 8;
+                data[pos+1] = colors[pixel].green >> 8;
+                data[pos+2] = colors[pixel].blue  >> 8;
             }
-#endif
             else
             {
                 wxFAIL_MSG( wxT("Image conversion failed. Unknown visual type.") );
