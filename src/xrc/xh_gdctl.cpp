@@ -19,7 +19,7 @@
     #pragma hdrstop
 #endif
 
-#if wxUSE_XML && wxUSE_XRC && wxUSE_DIRDLG
+#if wxUSE_XRC && wxUSE_DIRDLG
 
 #include "wx/textctrl.h"
 #include "wx/xrc/xh_gdctl.h"
@@ -60,4 +60,4 @@ bool wxGenericDirCtrlXmlHandler::CanHandle(wxXmlNode *node)
     return IsOfClass(node, wxT("wxGenericDirCtrl"));
 }
 
-#endif // wxUSE_XML && wxUSE_XRC && wxUSE_DIRDLG
+#endif // wxUSE_XRC && wxUSE_DIRDLG

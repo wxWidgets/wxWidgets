@@ -19,7 +19,7 @@
     #pragma hdrstop
 #endif
 
-#if wxUSE_XML && wxUSE_XRC
+#if wxUSE_XRC
 
 #include "wx/dialog.h"
 #include "wx/panel.h"

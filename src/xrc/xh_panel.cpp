@@ -19,7 +19,7 @@
     #pragma hdrstop
 #endif
 
-#if wxUSE_XML && wxUSE_XRC
+#if wxUSE_XRC
 
 #include "wx/xrc/xh_panel.h"
 #include "wx/panel.h"
@@ -57,4 +57,4 @@ bool wxPanelXmlHandler::CanHandle(wxXmlNode *node)
     return IsOfClass(node, wxT("wxPanel"));
 }
 
-#endif // wxUSE_XML && wxUSE_XRC
+#endif // wxUSE_XRC

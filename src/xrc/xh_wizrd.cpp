@@ -19,7 +19,7 @@
     #pragma hdrstop
 #endif
 
-#if wxUSE_XML && wxUSE_XRC && wxUSE_WIZARDDLG
+#if wxUSE_XRC && wxUSE_WIZARDDLG
 
 #include "wx/xrc/xh_wizrd.h"
 #include "wx/log.h"

@@ -19,7 +19,7 @@
     #pragma hdrstop
 #endif
 
-#if wxUSE_XML && wxUSE_XRC
+#if wxUSE_XRC
 
 #include "wx/xrc/xh_dlg.h"
 #include "wx/dialog.h"
@@ -82,4 +82,4 @@ bool wxDialogXmlHandler::CanHandle(wxXmlNode *node)
     return IsOfClass(node, wxT("wxDialog"));
 }
 
-#endif // wxUSE_XML && wxUSE_XRC
+#endif // wxUSE_XRC

@@ -19,7 +19,7 @@
     #pragma hdrstop
 #endif
 
-#if wxUSE_XML && wxUSE_XRC
+#if wxUSE_XRC
 
 #include "wx/xrc/xh_frame.h"
 #include "wx/frame.h"
@@ -87,4 +87,4 @@ bool wxFrameXmlHandler::CanHandle(wxXmlNode *node)
     return IsOfClass(node, wxT("wxFrame"));
 }
 
-#endif // wxUSE_XML && wxUSE_XRC
+#endif // wxUSE_XRC

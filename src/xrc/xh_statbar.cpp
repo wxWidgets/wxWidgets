@@ -19,7 +19,7 @@
     #pragma hdrstop
 #endif
 
-#if wxUSE_XML && wxUSE_XRC && wxUSE_STATUSBAR
+#if wxUSE_XRC && wxUSE_STATUSBAR
 
 #include "wx/frame.h"
 #include "wx/string.h"
@@ -105,5 +105,5 @@ bool wxStatusBarXmlHandler::CanHandle(wxXmlNode *node)
     return IsOfClass(node, wxT("wxStatusBar"));
 }
 
-#endif // wxUSE_XML && wxUSE_XRC && wxUSE_STATUSBAR
+#endif // wxUSE_XRC && wxUSE_STATUSBAR
 

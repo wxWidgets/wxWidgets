@@ -19,7 +19,7 @@
     #pragma hdrstop
 #endif
 
-#if wxUSE_XML && wxUSE_XRC && wxUSE_COMBOBOX
+#if wxUSE_XRC && wxUSE_COMBOBOX
 
 #include "wx/xrc/xh_combo.h"
 #include "wx/combobox.h"
@@ -100,4 +100,4 @@ bool wxComboBoxXmlHandler::CanHandle(wxXmlNode *node)
            (m_insideBox && node->GetName() == wxT("item")));
 }
 
-#endif // wxUSE_XML && wxUSE_XRC && wxUSE_COMBOBOX
+#endif // wxUSE_XRC && wxUSE_COMBOBOX
