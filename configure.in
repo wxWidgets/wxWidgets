@@ -1885,7 +1885,8 @@ dnl check whether C++ compiler supports C++ casts
 AC_CXX_CONST_CAST
 AC_CXX_REINTERPRET_CAST
 AC_CXX_STATIC_CAST
-AC_CXX_DYNAMIC_CAST
+dnl we don't use HAVE_DYNAMIC_CAST anywhere right now...
+dnl AC_CXX_DYNAMIC_CAST
 
 dnl check various STL features
 if test "$wxUSE_STL" = "yes"; then
