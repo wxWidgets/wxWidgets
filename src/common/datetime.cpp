@@ -1851,6 +1851,7 @@ wxString wxDateTime::Format(const wxChar *format, const TimeZone& tz) const
                 break;
 
             case _T('j'):               // day of year has 3 digits
+            case _T('l'):               // milliseconds have 3 digits
                 fmt = _T("%03d");
                 break;
 
