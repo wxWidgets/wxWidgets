@@ -195,6 +195,7 @@ Name: "{group}\Resource Editor";       Filename: "{code:GetPythonDir}\pythonw.ex
 [UninstallDelete]
 Type: files; Name: "{app}\wxPython\*.pyc";
 Type: files; Name: "{app}\wxPython\*.pyo";
+Type: files; Name: "{app}\wxPython\*.pyd";
 Type: files; Name: "{app}\wxPython\lib\*.pyc";
 Type: files; Name: "{app}\wxPython\lib\*.pyo";
 Type: files; Name: "{app}\wxPython\lib\editor\*.pyc";
