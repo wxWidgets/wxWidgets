@@ -151,7 +151,7 @@ wxSize wxCheckBox::DoGetBestSize() const
 {
     int wCheckbox, hCheckbox;
 
-    wxString str = wxGetWindowText(GetHWND());
+    wxString str = wxGetWindowText(GetHWND()) + " ";
 
     if ( !str.IsEmpty() )
     {
