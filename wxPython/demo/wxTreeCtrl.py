@@ -21,14 +21,15 @@ class MyTreeCtrl(wxTreeCtrl):
 
 class TestTreeCtrlPanel(wxPanel):
     def __init__(self, parent, log):
-        wxPanel.__init__(self, parent, -1)
+        # Use the WANTS_CHARS style so the panel doesn't eat the Return key.
+        wxPanel.__init__(self, parent, -1, style=wxWANTS_CHARS)
         EVT_SIZE(self, self.OnSize)
 
         self.log = log
         tID = NewId()
 
         self.tree = MyTreeCtrl(self, tID, wxDefaultPosition, wxDefaultSize,
-                               wxTR_HAS_BUTTONS | wxTR_EDIT_LABELS | wxTR_MULTIPLE)
+                               wxTR_HAS_BUTTONS | wxTR_EDIT_LABELS)# | wxTR_MULTIPLE)
 
         #il = wxImageList(16, 16)
         #idx1 = il.Add(wxBitmap('bitmaps/smiles.bmp', wxBITMAP_TYPE_BMP))
@@ -68,6 +69,7 @@ class TestTreeCtrlPanel(wxPanel):
         EVT_TREE_SEL_CHANGED    (self, tID, self.OnSelChanged)
         EVT_TREE_BEGIN_LABEL_EDIT(self, tID, self.OnBeginEdit)
         EVT_TREE_END_LABEL_EDIT (self, tID, self.OnEndEdit)
+        EVT_TREE_ITEM_ACTIVATED (self, tID, self.OnActivate)
 
         EVT_LEFT_DCLICK(self.tree, self.OnLeftDClick)
         EVT_RIGHT_DOWN(self.tree, self.OnRightClick)
@@ -141,6 +143,10 @@ class TestTreeCtrlPanel(wxPanel):
         #items = self.tree.GetSelections()
         #print map(self.tree.GetItemText, items)
         event.Skip()
+
+
+    def OnActivate(self, evt):
+        self.log.WriteText("OnActivate: %s\n" % self.tree.GetItemText(self.item))
 
 
 #---------------------------------------------------------------------------
