@@ -1296,4 +1296,9 @@ extern int ZEXPORT unzGetGlobalComment (file, szComment, uSizeBuf)
 	return (int)uReadThis;
 }
 
-#endif
+#else
+
+// the file shouldn't be empty, som compilers don't like it
+static const int dummyVariableInUnzip = 17;
+
+#endif // wxUSE_ZLIB && wxUSE_ZIPSTREAM

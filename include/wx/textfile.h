@@ -11,16 +11,21 @@
 // Licence:     wxWindows license
 ///////////////////////////////////////////////////////////////////////////////
 
-#ifndef _TEXTFILE_H
-#define _TEXTFILE_H
+#ifndef _WX_TEXTFILE_H
+#define _WX_TEXTFILE_H
 
 #ifdef __GNUG__
-#pragma interface "textfile.h"
+    #pragma interface "textfile.h"
 #endif
 
 #include "wx/defs.h"
 
-#if wxUSE_TEXTFILE && wxUSE_FILE
+#if !wxUSE_FILE
+    #undef wxUSE_TEXTFILE
+    #define wxUSE_TEXTFILE 0
+#endif // wxUSE_FILE
+
+#if wxUSE_TEXTFILE
 
 #include "wx/string.h"
 #include "wx/file.h"
@@ -44,8 +49,19 @@ WX_DEFINE_ARRAY(wxTextFileType, ArrayFileType);
 class WXDLLEXPORT wxTextFile
 {
 public:
-  // default type for current platform (determined at compile time)
+  // constants and static functions
+    // default type for current platform (determined at compile time)
   static const wxTextFileType typeDefault;
+
+    // this function returns a string which is identical to "text" passed in
+    // except that the line terminator characters are changed to correspond the
+    // given type. Called with the default argument, the function translates
+    // the string to the native format (Unix for Unix, DOS for Windows, ...).
+  static wxString Translate(const wxString& text,
+                            wxTextFileType type = typeDefault);
+
+    // get the file termination string
+  static const wxChar *GetEOL(wxTextFileType type = typeDefault);
 
   // ctors
     // def ctor, use Open(string)
@@ -115,10 +131,6 @@ public:
   // possibly in another format
   bool Write(wxTextFileType typeNew = wxTextFileType_None);
 
-  // get the file termination string
-  // Note: implementation moved to textfile to prevent warning due to switch.
-  static const wxChar *GetEOL(wxTextFileType type = typeDefault);
-
   // dtor
   ~wxTextFile();
 
@@ -142,9 +154,34 @@ private:
   wxString      m_strFile;  // name of the file
 };
 
-#endif
-  // wxUSE_TEXTFILE && wxUSE_FILE
+#else // !wxUSE_TEXTFILE
 
-#endif
-  // _TEXTFILE_H
+// these static wxTextFile methods are used internally by wxWindows, so should
+// be defined even if we're compiling without wxTextFile at all.
+
+class WXDLLEXPORT wxTextFile
+{
+public:
+    // default type for current platform (determined at compile time)
+    static const wxTextFileType typeDefault;
+
+    // this function returns a string which is identical to "text" passed in
+    // except that the line terminator characters are changed to correspond the
+    // given type. Called with the default argument, the function translates
+    // the string to the native format (Unix for Unix, DOS for Windows, ...).
+    static wxString Translate(const wxString& text,
+                              wxTextFileType type = typeDefault);
+
+    // get the file termination string
+    static const wxChar *GetEOL(wxTextFileType type = typeDefault);
+
+private:
+    // copy ctor/assignment operator not implemented
+    wxTextFile(const wxTextFile&);
+    wxTextFile& operator=(const wxTextFile&);
+};
+
+#endif // wxUSE_TEXTFILE
+
+#endif // _WX_TEXTFILE_H
 

@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        file.cpp
+// Name:        file.h
 // Purpose:     wxFile - encapsulates low-level "file descriptor"
 //              wxTempFile - safely replace the old file
 // Author:      Vadim Zeitlin
@@ -10,8 +10,8 @@
 // Licence:     wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef   __FILEH__
-#define   __FILEH__
+#ifndef _WX_FILEH__
+#define _WX_FILEH__
 
 #ifdef __GNUG__
 #pragma interface "file.h"
@@ -96,10 +96,14 @@ public:
   // read/write (unbuffered)
     // returns number of bytes read or ofsInvalid on error
   off_t Read(void *pBuf, off_t nCount);
-    // returns true on success
+    // returns the number of bytes written
   size_t Write(const void *pBuf, size_t nCount);
     // returns true on success
-  bool Write(const wxString& s) { return Write(s.c_str(), s.Len()*sizeof(wxChar)) != 0; }
+  bool Write(const wxString& s)
+  {
+      size_t size = s.Len()*sizeof(wxChar);
+      return Write(s.c_str(), size) == size;
+  }
     // flush data not yet written
   bool Flush();
 
@@ -118,11 +122,11 @@ public:
   bool IsOpened() const { return m_fd != fd_invalid; }
     // is end of file reached?
   bool Eof() const;
-    // is an error occured?
+    // has an error occured?
   bool Error() const { return m_error; }
 
   // dtor closes the file if opened
-  ~wxFile();
+  ~wxFile() { Close(); }
 
 private:
   // copy ctor and assignment operator are private because
@@ -180,7 +184,6 @@ private:
   wxFile    m_file;     // the temporary file
 };
 
-#endif
+#endif // wxUSE_FILE
 
-#endif
-        // _WX_FILEH__
+#endif // _WX_FILEH__

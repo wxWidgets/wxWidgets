@@ -85,7 +85,7 @@ public:
     virtual void Clear();
     
     /// X11 has two clipboards which get selected by this call. Empty on MSW.
-    inline void UsePrimarySelection( bool WXUNUSED(primary) ) { }
+    void UsePrimarySelection( bool WXUNUSED(primary) = FALSE ) { }
     
 };
 

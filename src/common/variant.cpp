@@ -588,7 +588,7 @@ bool wxVariantDataBool::Read(wxInputStream& str)
 {
     wxTextInputStream s(str);
 
-    m_value = s.Read8();
+    m_value = s.Read8() != 0;
     return TRUE;
 }
 #endif // wxUSE_STREAMS

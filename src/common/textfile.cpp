@@ -14,33 +14,35 @@
 // ============================================================================
 
 #ifdef __GNUG__
-#pragma implementation "textfile.h"
+    #pragma implementation "textfile.h"
 #endif
 
 #include  "wx/wxprec.h"
 
 #ifdef    __BORLANDC__
-  #pragma hdrstop
+    #pragma hdrstop
 #endif  //__BORLANDC__
 
+#if !wxUSE_FILE
+    #undef wxUSE_TEXTFILE
+    #define wxUSE_TEXTFILE 0
+#endif // wxUSE_FILE
+
 #ifndef WX_PRECOMP
-#include "wx/defs.h"
+    #include  "wx/string.h"
+    #include  "wx/intl.h"
+    #include  "wx/file.h"
+    #include  "wx/log.h"
 #endif
 
-#if wxUSE_TEXTFILE && wxUSE_FILE
-
-#include  <wx/string.h>
-#include  <wx/intl.h>
-#include  <wx/file.h>
-#include  <wx/log.h>
-#include  <wx/textfile.h>
+#include  "wx/textfile.h"
 
 // ============================================================================
 // wxTextFile class implementation
 // ============================================================================
 
 // ----------------------------------------------------------------------------
-// static variables
+// static methods (always compiled in)
 // ----------------------------------------------------------------------------
 
 // default type is the native one
@@ -56,6 +58,71 @@ const wxTextFileType wxTextFile::typeDefault =
   #error  "wxTextFile: unsupported platform."
 #endif
 
+const wxChar *wxTextFile::GetEOL(wxTextFileType type)
+{
+    switch ( type ) {
+      default:
+        wxFAIL_MSG(_T("bad file type in wxTextFile::GetEOL."));
+        // fall through nevertheless - we must return something...
+
+      case wxTextFileType_None: return _T("");
+      case wxTextFileType_Unix: return _T("\n");
+      case wxTextFileType_Dos:  return _T("\r\n");
+      case wxTextFileType_Mac:  return _T("\r");
+    }
+}
+
+
+wxString wxTextFile::Translate(const wxString& text, wxTextFileType type)
+{
+    // don't do anything if there is nothing to do
+    if ( type == wxTextFileType_None )
+        return text;
+
+    wxString eol = GetEOL(type), result;
+
+    // optimization: we know that the length of the new string will be about
+    // the same as the length of the old one, so prealloc memory to aviod
+    // unnecessary relocations
+    result.Alloc(text.Len());
+
+    wxChar chLast = 0;
+    for ( const wxChar *pc = text.c_str(); *pc; pc++ )
+    {
+        wxChar ch = *pc;
+        switch ( ch ) {
+            case '\n':
+                // Dos/Unix line termination
+                result += eol;
+                chLast = '\n';
+                break;
+
+            case '\r':
+                if ( chLast == '\r' ) {
+                    // Mac empty line
+                    result += eol;
+                }
+                else
+                    chLast = '\r';
+                break;
+
+            default:
+                if ( chLast == '\r' ) {
+                    // Mac line termination
+                    result += eol;
+                    chLast = ch;
+                }
+                else {
+                    // add to the current line
+                    result += ch;
+                }
+        }
+    }
+
+    return result;
+}
+
+#if wxUSE_TEXTFILE
 
 // ----------------------------------------------------------------------------
 // ctors & dtor
@@ -135,7 +202,7 @@ wxTextFileType wxTextFile::GuessType() const
 
   #undef   AnalyseLine
 
-  // interpret the results (@@ far from being even 50% fool proof)
+  // interpret the results (FIXME far from being even 50% fool proof)
   if ( nDos + nUnix + nMac == 0 ) {
     // no newlines at all
     wxLogWarning(_("'%s' is probably a binary file."), m_strFile.c_str());
@@ -257,18 +324,5 @@ bool wxTextFile::Write(wxTextFileType typeNew)
   return fileTmp.Commit();
 }
 
-const wxChar *wxTextFile::GetEOL(wxTextFileType type)
-{
-    switch ( type ) {
-      case wxTextFileType_None: return _T("");
-      case wxTextFileType_Unix: return _T("\n");
-      case wxTextFileType_Dos:  return _T("\r\n");
-      case wxTextFileType_Mac:  return _T("\r");
+#endif // wxUSE_TEXTFILE
 
-      default:
-        wxFAIL_MSG(_T("bad file type in wxTextFile::GetEOL."));
-        return (const wxChar *) NULL;
-    }
-}
-
-#endif

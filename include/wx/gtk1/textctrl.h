@@ -8,27 +8,11 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-
 #ifndef __GTKTEXTCTRLH__
 #define __GTKTEXTCTRLH__
 
 #ifdef __GNUG__
-#pragma interface
-#endif
-
-#include "wx/defs.h"
-#include "wx/object.h"
-#include "wx/string.h"
-#include "wx/control.h"
-
-#if wxUSE_STD_IOSTREAM
-
-#if wxUSE_IOSTREAMH
-#include <iostream.h>
-#else
-#include <iostream>
-#endif
-
+    #pragma interface
 #endif
 
 //-----------------------------------------------------------------------------
@@ -38,25 +22,12 @@
 class wxTextCtrl;
 
 //-----------------------------------------------------------------------------
-// global data
+// wxTextCtrl
 //-----------------------------------------------------------------------------
 
-extern const char *wxTextCtrlNameStr;
-
-//-----------------------------------------------------------------------------
-//  wxTextCtrl
-//-----------------------------------------------------------------------------
-
-#if wxUSE_STD_IOSTREAM
-class wxTextCtrl: public wxControl, public streambuf
-#else
-class wxTextCtrl: public wxControl
-#endif
+class wxTextCtrl: public wxTextCtrlBase
 {
-  DECLARE_EVENT_TABLE()
-  DECLARE_DYNAMIC_CLASS(wxTextCtrl);
-
-  public:
+public:
     wxTextCtrl();
     wxTextCtrl( wxWindow *parent, wxWindowID id, const wxString &value = "",
       const wxPoint &pos = wxDefaultPosition, const wxSize &size = wxDefaultSize,
@@ -66,35 +37,55 @@ class wxTextCtrl: public wxControl
       const wxPoint &pos = wxDefaultPosition, const wxSize &size = wxDefaultSize,
       int style = 0, const wxValidator& validator = wxDefaultValidator,
       const wxString &name = wxTextCtrlNameStr );
-    wxString GetValue() const;
-    void SetValue( const wxString &value );
-    void WriteText( const wxString &text );
-    void AppendText( const wxString &text );
 
-    bool LoadFile( const wxString &file );
-    bool SaveFile( const wxString &file );
-    bool IsModified() const { return m_modified; }
-    void SetModified() { m_modified = TRUE; }
-    void DiscardEdits() { m_modified = FALSE; }
-    wxString GetLineText( long lineNo ) const;
-    void OnDropFiles( wxDropFilesEvent &event );
-    long PositionToXY( long pos, long *x, long *y ) const;
-    long XYToPosition( long x, long y ) const;
-    int GetLineLength(long lineNo) const;
-    int GetNumberOfLines() const;
-    virtual void SetInsertionPoint( long pos );
-    virtual void SetInsertionPointEnd();
-    virtual void SetEditable( bool editable );
-    virtual void SetSelection( long from, long to );
-    void ShowPosition( long pos );
-    virtual long GetInsertionPoint() const;
-    virtual long GetLastPosition() const;
-    virtual void Remove( long from, long to );
-    virtual void Replace( long from, long to, const wxString &value );
-    void Cut();
-    void Copy();
-    void Paste();
-    void Clear();
+    // implement base class pure virtuals
+    // ----------------------------------
+
+    virtual wxString GetValue() const;
+    virtual void SetValue(const wxString& value);
+
+    virtual int GetLineLength(long lineNo) const;
+    virtual wxString GetLineText(long lineNo) const;
+    virtual int GetNumberOfLines() const;
+
+    virtual bool IsModified() const;
+    virtual bool IsEditable() const;
+
+    // If the return values from and to are the same, there is no selection.
+    virtual void GetSelection(long* from, long* to) const;
+
+    // operations
+    // ----------
+
+    // editing
+    virtual void Clear();
+    virtual void Replace(long from, long to, const wxString& value);
+    virtual void Remove(long from, long to);
+
+    // load/save the controls contents from/to the file
+    virtual bool LoadFile(const wxString& file);
+    virtual bool SaveFile(const wxString& file);
+
+    // clears the dirty flag
+    virtual void DiscardEdits();
+
+    // writing text inserts it at the current position, appending always
+    // inserts it at the end
+    virtual void WriteText(const wxString& text);
+    virtual void AppendText(const wxString& text);
+
+    // translate between the position (which is just an index in the text ctrl
+    // considering all its contents as a single strings) and (x, y) coordinates
+    // which represent column and line.
+    virtual long XYToPosition(long x, long y) const;
+    virtual void PositionToXY(long pos, long *x, long *y) const;
+
+    virtual void ShowPosition(long pos);
+
+    // Clipboard operations
+    virtual void Copy();
+    virtual void Cut();
+    virtual void Paste();
 
     virtual bool CanCopy() const;
     virtual bool CanCut() const;
@@ -107,11 +98,17 @@ class wxTextCtrl: public wxControl
     virtual bool CanUndo() const;
     virtual bool CanRedo() const;
 
-    // If the return values from and to are the same, there is no
-    // selection.
-    virtual void GetSelection(long* from, long* to) const;
-    virtual bool IsEditable() const ;
+    // Insertion point
+    virtual void SetInsertionPoint(long pos);
+    virtual void SetInsertionPointEnd();
+    virtual long GetInsertionPoint() const;
+    virtual long GetLastPosition() const;
 
+    virtual void SetSelection(long from, long to);
+    virtual void SetEditable(bool editable);
+
+    // Implementation from now on
+    void OnDropFiles( wxDropFilesEvent &event );
     void OnChar( wxKeyEvent &event );
 
     void OnCut(wxCommandEvent& event);
@@ -126,38 +123,24 @@ class wxTextCtrl: public wxControl
     void OnUpdateUndo(wxUpdateUIEvent& event);
     void OnUpdateRedo(wxUpdateUIEvent& event);
 
-#if wxUSE_STD_IOSTREAM
-    int overflow(int i);
-    int sync();
-    int underflow();
-#endif
-
-    wxTextCtrl& operator<<(const wxString& s);
-    wxTextCtrl& operator<<(int i);
-    wxTextCtrl& operator<<(long i);
-    wxTextCtrl& operator<<(float f);
-    wxTextCtrl& operator<<(double d);
-    wxTextCtrl& operator<<(const char c);
-
     bool SetFont( const wxFont &font );
     bool SetForegroundColour(const wxColour &colour);
     bool SetBackgroundColour(const wxColour &colour);
 
-  // implementation    
-    
     GtkWidget* GetConnectWidget();
     bool IsOwnGtkWindow( GdkWindow *window );
     void ApplyWidgetStyle();
     void CalculateScrollbar();
-    
-  private:
-  
+
+private:
     bool        m_modified;
     GtkWidget  *m_text;
     GtkWidget  *m_vScrollbar;
     bool        m_vScrollbarVisible;
+
+    DECLARE_EVENT_TABLE()
+    DECLARE_DYNAMIC_CLASS(wxTextCtrl);
 };
 
 #endif // __GTKTEXTCTRLH__
-
 

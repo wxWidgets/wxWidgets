@@ -206,12 +206,6 @@ wxFile::wxFile(const wxChar *szFileName, OpenMode mode)
     Open(szFileName, mode);
 }
 
-// dtor
-wxFile::~wxFile()
-{
-    Close();
-}
-
 // create the file, fail if it already exists and bOverwrite
 bool wxFile::Create(const wxChar *szFileName, bool bOverwrite, int accessMode)
 {
@@ -350,25 +344,25 @@ off_t wxFile::Seek(off_t ofs, wxSeekMode mode)
 {
     wxASSERT( IsOpened() );
 
-    int flag = -1;
+    int origin;
     switch ( mode ) {
+        default:
+            wxFAIL_MSG(_("unknown seek origin"));
+
         case wxFromStart:
-            flag = SEEK_SET;
+            origin = SEEK_SET;
             break;
 
         case wxFromCurrent:
-            flag = SEEK_CUR;
+            origin = SEEK_CUR;
             break;
 
         case wxFromEnd:
-            flag = SEEK_END;
+            origin = SEEK_END;
             break;
-
-        default:
-            wxFAIL_MSG(_("unknown seek origin"));
     }
 
-    int iRc = lseek(m_fd, ofs, flag);
+    int iRc = lseek(m_fd, ofs, origin);
     if ( iRc == -1 ) {
         wxLogSysError(_("can't seek on file descriptor %d"), m_fd);
         return wxInvalidOffset;

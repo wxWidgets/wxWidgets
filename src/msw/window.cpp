@@ -1828,8 +1828,8 @@ long wxWindow::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam)
         case WM_MBUTTONUP:
         case WM_MBUTTONDBLCLK:
             {
-                int x = LOWORD(lParam);
-                int y = HIWORD(lParam);
+                short x = LOWORD(lParam);
+                short y = HIWORD(lParam);
 
                 processed = HandleMouseEvent(message, x, y, wParam);
             }
