@@ -214,9 +214,9 @@ enum  ErrCode
 // (as yet untested) by ensuring that we zero all the bits in a pointer 
 // (which is always the same length as a long (at least with the LP64 standard) 
 // --- offer aug 98
-#define wxDELETE(p)      if ( (p) ) { delete (p); (p) = 0L; }
+#define wxDELETE(p)      if ( (p) ) { delete (p); p = 0L; }
 #else
-#define wxDELETE(p)      if ( (p) != NULL ) { delete (p); p = NULL; }
+#define wxDELETE(p)      if ( (p) != NULL ) { delete p; p = NULL; }
 #endif /* __SGI__CC__ */
 
 // delete an array and NULL it (see comments above)
@@ -224,7 +224,7 @@ enum  ErrCode
 // see above comment.
 #define wxDELETEA(p)      if ( (p) ) { delete [] (p); p = 0L; }
 #else
-#define wxDELETEA(p)      if ( ((void *)) (p) != NULL ) { delete [] (p); (void *) p = NULL; }
+#define wxDELETEA(p)      if ( ((void *) (p)) != NULL ) { delete [] p; p = NULL; }
 #endif /* __SGI__CC__ */
 
 /// size of statically declared array

@@ -25,7 +25,6 @@ RADIOBOX_ICON   ICON "bitmaps/radiobox.ico"
 RADIOBTN_ICON   ICON "bitmaps/radiobtn.ico"
 SCROLBAR_ICON   ICON "bitmaps/scrolbar.ico"
 
-aiai_icn        ICON  "bitmaps/aiai.ico"
 #include "wx/msw/wx.rc"
 
 DIALOGBOXTOOL   BITMAP "bitmaps/dialog.bmp"

@@ -1,6 +1,3 @@
-wxSTD_MDIPARENTFRAME    ICON    "aiai.ico"
-aiai_icn                ICON    "aiai.ico"
-
 tick_bmp                BITMAP  "tick.bmp"
 cross_bmp               BITMAP  "cross.bmp"
 
