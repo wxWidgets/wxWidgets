@@ -292,7 +292,7 @@ class CalDraw:
             self.cal_days.append(str(i))
             i = i + 1
 
-        self.end_pos = dow + dim
+        self.end_pos = start_pos + dim - 1
 
         return start_pos
 
