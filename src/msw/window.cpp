@@ -4099,10 +4099,11 @@ void wxWindowMSW::OnEraseBackground(wxEraseEvent& event)
 {
     RECT rect;
     ::GetClientRect(GetHwnd(), &rect);
-
-    COLORREF ref = PALETTERGB(m_backgroundColour.Red(),
-                              m_backgroundColour.Green(),
-                              m_backgroundColour.Blue());
+    
+    wxColour backgroundColour( /*m_backgroundColour*/ GetBackgroundColour());
+    COLORREF ref = PALETTERGB(backgroundColour.Red(),
+                              backgroundColour.Green(),
+                              backgroundColour.Blue());
     HBRUSH hBrush = ::CreateSolidBrush(ref);
     if ( !hBrush )
         wxLogLastError(wxT("CreateSolidBrush"));
