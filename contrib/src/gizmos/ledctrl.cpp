@@ -189,54 +189,54 @@ void wxLEDNumberCtrl::OnPaint(wxPaintEvent &WXUNUSED(event))
     const int DigitCount = m_Value.Len();
     for (int offset=0, i = 0; offset < DigitCount; ++offset, ++i)
     {
-        char c = m_Value.GetChar(offset);
+        wxChar c = m_Value.GetChar(offset);
 
         // Draw faded lines if wanted.
-        if (m_DrawFaded && (c != '.'))
+        if (m_DrawFaded && (c != _T('.')))
             DrawDigit(MemDc, DIGITALL, i);
 
         // Draw the digits.
         switch (c)
         {
-            case '0' :
+            case _T('0') :
                 DrawDigit(MemDc, DIGIT0, i);
                 break;
-            case '1' :
+            case _T('1') :
                 DrawDigit(MemDc, DIGIT1, i);
                 break;
-            case '2' :
+            case _T('2') :
                 DrawDigit(MemDc, DIGIT2, i);
                 break;
-            case '3' :
+            case _T('3') :
                 DrawDigit(MemDc, DIGIT3, i);
                 break;
-            case '4' :
+            case _T('4') :
                 DrawDigit(MemDc, DIGIT4, i);
                 break;
-            case '5' :
+            case _T('5') :
                 DrawDigit(MemDc, DIGIT5, i);
                 break;
-            case '6' :
+            case _T('6') :
                 DrawDigit(MemDc, DIGIT6, i);
                 break;
-            case '7' :
+            case _T('7') :
                 DrawDigit(MemDc, DIGIT7, i);
                 break;
-            case '8' :
+            case _T('8') :
                 DrawDigit(MemDc, DIGIT8, i);
                 break;
-            case '9' :
+            case _T('9') :
                 DrawDigit(MemDc, DIGIT9, i);
                 break;
-            case '-' :
+            case _T('-') :
                 DrawDigit(MemDc, DASH, i);
                 break;
-            case '.' :
+            case _T('.') :
                 // Display the decimal in the previous segment
                 i--;
                 DrawDigit(MemDc, DECIMALSIGN, i);
                 break;
-            case ' ' :
+            case _T(' ') :
                 // just skip it
                 break;
             default :
