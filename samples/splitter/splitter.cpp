@@ -356,7 +356,8 @@ END_EVENT_TABLE()
 MySplitterWindow::MySplitterWindow(wxFrame *parent)
                 : wxSplitterWindow(parent, -1,
                                    wxDefaultPosition, wxDefaultSize,
-                                   0x700| wxSP_LIVE_UPDATE | wxCLIP_CHILDREN)
+                                   wxSP_3D | wxSP_LIVE_UPDATE |
+                                   wxCLIP_CHILDREN /* | wxSP_NO_XP_THEME */ )
 {
     m_frame = parent;
 }

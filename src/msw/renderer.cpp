@@ -30,8 +30,8 @@
     #include "wx/dc.h"
 #endif //WX_PRECOMP
 
+#include "wx/splitter.h"
 #include "wx/renderer.h"
-
 #include "wx/msw/uxtheme.h"
 
 // ----------------------------------------------------------------------------
@@ -116,17 +116,24 @@ wxRendererNative& wxRendererXP::Get()
 static const wxCoord SASH_WIDTH = 4;
 
 wxSplitterRenderParams
-wxRendererXP::GetSplitterParams(const wxWindow * WXUNUSED(win))
+wxRendererXP::GetSplitterParams(const wxWindow * win)
 {
-    return wxSplitterRenderParams(SASH_WIDTH, 0, false);
+    if (win->GetWindowStyle() & wxSP_NO_XP_THEME)
+        return m_rendererNative.GetSplitterParams(win);
+    else
+        return wxSplitterRenderParams(SASH_WIDTH, 0, false);
 }
 
 void
-wxRendererXP::DrawSplitterBorder(wxWindow * WXUNUSED(win),
-                                 wxDC& WXUNUSED(dc),
-                                 const wxRect& WXUNUSED(rect),
-                                 int WXUNUSED(flags))
+wxRendererXP::DrawSplitterBorder(wxWindow * win,
+                                 wxDC& dc,
+                                 const wxRect& rect,
+                                 int flags)
 {
+    if (win->GetWindowStyle() & wxSP_NO_XP_THEME)
+    {
+        m_rendererNative.DrawSplitterBorder(win, dc, rect, flags);
+    }
 }
 
 void
@@ -135,8 +142,15 @@ wxRendererXP::DrawSplitterSash(wxWindow *win,
                                const wxSize& size,
                                wxCoord position,
                                wxOrientation orient,
-                               int WXUNUSED(flags))
+                               int flags)
 {
+    if (win->GetWindowStyle() & wxSP_NO_XP_THEME)
+    {
+        m_rendererNative.DrawSplitterSash(
+                   win, dc, size, position, orient, flags);
+        return;
+    }
+    
     // I don't know if it is correct to use the rebar background for the
     // splitter but it least this works ok in the default theme
     wxUxThemeHandle hTheme(win, L"REBAR");

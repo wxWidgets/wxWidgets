@@ -13,6 +13,7 @@
 #define wxSP_LIVE_UPDATE      0x0080
 #define wxSP_3DSASH           0x0100
 #define wxSP_3DBORDER         0x0200
+#define wxSP_NO_XP_THEME      0x0400
 #define wxSP_BORDER           wxSP_3DBORDER
 #define wxSP_3D               (wxSP_3DBORDER | wxSP_3DSASH)
 

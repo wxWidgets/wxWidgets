@@ -6,10 +6,6 @@ This class manages up to two subwindows. The current view can be
 split into two programmatically (perhaps from a menu command), and unsplit
 either programmatically or via the wxSplitterWindow user interface.
 
-Appropriate 3D shading for the Windows 95 user interface is an option -
-this is also recommended for GTK. Optionally, the sash can be made to
-look more like the native control under MacOS X.
-
 \wxheading{Window styles}
 
 \begin{twocollist}\itemsep=0pt
@@ -18,6 +14,8 @@ look more like the native control under MacOS X.
 \twocolitem{\windowstyle{wxSP\_3DBORDER}}{Synonym for wxSP\_BORDER.}
 \twocolitem{\windowstyle{wxSP\_BORDER}}{Draws a standard border.}
 \twocolitem{\windowstyle{wxSP\_NOBORDER}}{No border (default).}
+\twocolitem{\windowstyle{wxSP\_NO\_XP\_THEME}}{Under Windows XP, switches off the attempt to draw the
+splitter using Windows XP theming, so the borders and sash will take on the pre-XP look.}
 \twocolitem{\windowstyle{wxSP\_PERMIT\_UNSPLIT}}{Always allow to
 unsplit, even with the minimum pane size other than zero.}
 \twocolitem{\windowstyle{wxSP\_LIVE\_UPDATE}}{Don't draw XOR line but resize the child windows immediately.}

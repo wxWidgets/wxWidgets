@@ -77,8 +77,18 @@ OTHER CHANGES
 2.5.2
 -----
 
+All:
+
+All (GUI):
+
+- wxHtmlWindow now delays image scaling until rendering,
+  resulting in much better display of scaled images
+
 wxMSW:
+
 - wxWindow::Freeze()/Thaw() can now be nested
+- Added wxSP_NO_XP_THEME style to wxSplitterWindow to switch off
+  XP theming (some applications look bad without 3D borders)
 
 
 2.5.1
