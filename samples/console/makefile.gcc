@@ -48,10 +48,13 @@ WXUNIV = 0
 ### Variables: ###
 
 OBJS = gcc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)
-CONSOLE_CXXFLAGS = $(CPPFLAGS) -D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) -I./../../include -I./../../lib\gcc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG) -I./../../src/tiff -I./../../src/jpeg -I./../../src/png -I./../../src/zlib  -I./../../src/regex -I. $(__DLLFLAG_p) $(__MULTILIB_FLAG_p) $(CXXFLAGS)
+CONSOLE_CXXFLAGS = $(CPPFLAGS) $(__DEBUGFLAG) $(__OPTIMIZEFLAG_2) $(GCCFLAGS) -DHAVE_W32API_H -D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) -I.\..\..\include -I.\..\..\lib\gcc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG) -I.\..\..\src\tiff -I.\..\..\src\jpeg -I.\..\..\src\png -I.\..\..\src\zlib  -I.\..\..\src\regex -I. $(__DLLFLAG_p) $(__MULTILIB_FLAG_p) $(CXXFLAGS)
 
 ### Conditionally set variables: ###
 
+ifeq ($(GCC_VERSION),2.95)
+GCCFLAGS = -fvtable-thunks
+endif
 ifeq ($(USE_GUI),0)
 PORTNAME = base
 endif
@@ -71,6 +74,12 @@ ifeq ($(WXUNIV),1)
 WXUNIVNAME = univ
 endif
 ifeq ($(BUILD),debug)
+__DEBUGFLAG = -g
+endif
+ifeq ($(BUILD),release)
+__DEBUGFLAG = 
+endif
+ifeq ($(BUILD),debug)
 __DEBUG_DEFINE_p = -D__WXDEBUG__
 endif
 ifeq ($(SHARED),1)
@@ -78,6 +87,12 @@ __DLLFLAG_p = -DWXUSINGDLL
 endif
 ifeq ($(MONOLITHIC),0)
 __MULTILIB_FLAG_p = -DwxUSE_GUI=0
+endif
+ifeq ($(BUILD),debug)
+__OPTIMIZEFLAG_2 = -O0
+endif
+ifeq ($(BUILD),release)
+__OPTIMIZEFLAG_2 = -O2
 endif
 ifeq ($(UNICODE),1)
 __UNICODE_DEFINE_p = -DwxUSE_UNICODE=1
@@ -110,7 +125,7 @@ clean:
 	-if exist $(OBJS)\testdata.fc del $(OBJS)\testdata.fc
 
 $(OBJS)\console.exe: $(OBJS)\console_console.o
-	$(CXX) -o $@  $(OBJS)\console_console.o $(LDFLAGS) -L.\..\..\lib\gcc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)     $(__WXLIB_MONO_p) $(__WXLIB_BASE_p) -lwxtiff$(WXDEBUGFLAG) -lwxjpeg$(WXDEBUGFLAG) -lwxpng$(WXDEBUGFLAG) -lwxzlib$(WXDEBUGFLAG)  -lwxregex$(WXDEBUGFLAG)  -lkernel32 -luser32 -lgdi32 -lcomdlg32 -lwinspool -lwinmm -lshell32 -lcomctl32 -lodbc32 -lole32 -loleaut32 -luuid -lrpcrt4 -ladvapi32 -lwsock32
+	$(CXX) -o $@  $(OBJS)\console_console.o $(LDFLAGS) $(__DEBUGFLAG) -mthreads -L.\..\..\lib\gcc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)    $(__WXLIB_MONO_p) $(__WXLIB_BASE_p) -lwxtiff$(WXDEBUGFLAG) -lwxjpeg$(WXDEBUGFLAG) -lwxpng$(WXDEBUGFLAG) -lwxzlib$(WXDEBUGFLAG)  -lwxregex$(WXDEBUGFLAG)  -lkernel32 -luser32 -lgdi32 -lcomdlg32 -lwinspool -lwinmm -lshell32 -lcomctl32 -lodbc32 -lole32 -loleaut32 -luuid -lrpcrt4 -ladvapi32 -lwsock32
 
 data: 
 	if not exist $(OBJS) mkdir $(OBJS)
@@ -120,4 +135,4 @@ install: all
 
 uninstall: 
 
-.PHONY: all
+.PHONY: all clean install uninstall
