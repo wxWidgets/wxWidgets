@@ -1236,25 +1236,6 @@ wxDatagramSocket& wxDatagramSocket::SendTo( wxSockAddress& addr,
 }
 
 // ==========================================================================
-// wxSocketEvent
-// ==========================================================================
-
-wxSocketEvent::wxSocketEvent(int id) : wxEvent(id)
-{
-  SetEventType( (wxEventType)wxEVT_SOCKET );
-}
-
-void wxSocketEvent::CopyObject(wxObject& object_dest) const
-{
-  wxSocketEvent *event = (wxSocketEvent *)&object_dest;
-
-  wxEvent::CopyObject(object_dest);
-
-  event->m_event      = m_event;
-  event->m_clientData = m_clientData;
-}
-
-// ==========================================================================
 // wxSocketModule
 // ==========================================================================
 

@@ -323,10 +323,11 @@ public:
 
 class WXDLLEXPORT wxSocketEvent : public wxEvent
 {
-  DECLARE_DYNAMIC_CLASS(wxSocketEvent)
-
 public:
-  wxSocketEvent(int id = 0);
+  wxSocketEvent(int id = 0)
+      : wxEvent(id, wxEVT_SOCKET)
+      {
+      }
 
   wxSocketNotify  GetSocketEvent() const { return m_event; }
   wxSocketBase   *GetSocket() const      { return (wxSocketBase *) GetEventObject(); }
@@ -338,11 +339,13 @@ public:
   wxSocketBase   *Socket() const         { return (wxSocketBase *) GetEventObject(); }
 #endif // WXWIN_COMPATIBILITY_2
 
-  void CopyObject(wxObject& object_dest) const;
+  virtual wxEvent *Clone() const { return new wxSocketEvent(*this); }
 
 public:
   wxSocketNotify  m_event;
   void           *m_clientData;
+
+  DECLARE_DYNAMIC_CLASS(wxSocketEvent)
 };
 
 
