@@ -652,6 +652,7 @@ public:
         // event handlers
     void OnSysColourChanged( wxSysColourChangedEvent& event );
     void OnInitDialog( wxInitDialogEvent &event );
+    void OnMiddleClick( wxMouseEvent& event );
 
         // get the haqndle of the window for the underlying window system: this
         // is only used for wxWin itself or for user code which wants to call
