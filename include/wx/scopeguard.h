@@ -20,6 +20,8 @@
 
 #include "wx/defs.h"
 
+#include "wx/except.h"
+
 // ----------------------------------------------------------------------------
 // helpers
 // ----------------------------------------------------------------------------
@@ -35,17 +37,11 @@ namespace wxPrivate
         if ( !guard.WasDismissed() )
         {
             // we're called from ScopeGuardImpl dtor and so we must not throw
-#if wxUSE_EXCEPTIONS
-            try
-#endif // wxUSE_EXCEPTIONS
+            wxTRY
             {
                 guard.Execute();
             }
-#if wxUSE_EXCEPTIONS
-            catch ( ... )
-            {
-            }
-#endif // wxUSE_EXCEPTIONS
+            wxCATCH_ALL() // do nothing, just eat the exception
         }
     }
 
@@ -297,27 +293,27 @@ typedef const wxScopeGuardImplBase& wxScopeGuard;
 //     but this results in compiler warnings about unused variables and I
 //     didn't find a way to work around this other than by having different
 //     macros with different names
-#define ON_BLOCK_EXIT0(f) \
+#define wxON_BLOCK_EXIT0(f) \
     wxScopeGuard wxMAKE_UNIQUE_NAME(scopeGuard) = wxMakeGuard(f); \
     wxPrivate::Use(wxMAKE_UNIQUE_NAME(scopeGuard))
 
-#define ON_BLOCK_EXIT_OBJ0(o, m) \
+#define wxON_BLOCK_EXIT_OBJ0(o, m) \
     wxScopeGuard wxMAKE_UNIQUE_NAME(scopeGuard) = wxMakeObjGuard(o, m); \
     wxPrivate::Use(wxMAKE_UNIQUE_NAME(scopeGuard))
 
-#define ON_BLOCK_EXIT1(f, p1) \
+#define wxON_BLOCK_EXIT1(f, p1) \
     wxScopeGuard wxMAKE_UNIQUE_NAME(scopeGuard) = wxMakeGuard(f, p1); \
     wxPrivate::Use(wxMAKE_UNIQUE_NAME(scopeGuard))
 
-#define ON_BLOCK_EXIT_OBJ1(o, m, p1) \
+#define wxON_BLOCK_EXIT_OBJ1(o, m, p1) \
     wxScopeGuard wxMAKE_UNIQUE_NAME(scopeGuard) = wxMakeObjGuard(o, m, p1); \
     wxPrivate::Use(wxMAKE_UNIQUE_NAME(scopeGuard))
 
-#define ON_BLOCK_EXIT2(f, p1, p2) \
+#define wxON_BLOCK_EXIT2(f, p1, p2) \
     wxScopeGuard wxMAKE_UNIQUE_NAME(scopeGuard) = wxMakeGuard(f, p1, p2); \
     wxPrivate::Use(wxMAKE_UNIQUE_NAME(scopeGuard))
 
-#define ON_BLOCK_EXIT_OBJ2(o, m, p1, p2) \
+#define wxON_BLOCK_EXIT_OBJ2(o, m, p1, p2) \
     wxScopeGuard wxMAKE_UNIQUE_NAME(scopeGuard) = wxMakeObjGuard(o, m, p1, p2); \
     wxPrivate::Use(wxMAKE_UNIQUE_NAME(scopeGuard))
 
