@@ -79,9 +79,9 @@ private:
     wxWindowID m_windowID;
     wxString m_currentURL;
     wxString m_pageTitle;
-    objc_object* m_webView;
-    //It should be WebView, but WebView is Cocoa only, so any class which included
-    //this header would have to link to Cocoa, so for now use void* instead.
+    struct objc_object *m_webView;
+    //It should be WebView*, but WebView is an Objective-C class
+    //TODO: look into using DECLARE_WXCOCOA_OBJC_CLASS rather than this.
 };
 
 // ----------------------------------------------------------------------------
