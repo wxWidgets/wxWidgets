@@ -87,7 +87,9 @@ wxProgressDialog::wxProgressDialog(wxString const &title,
                                    int maximum,
                                    wxWindow *parent,
                                    int style)
-                : wxDialog(parent, -1, title)
+                : wxDialog(parent, -1, title,
+                           wxDefaultPosition, wxDefaultSize,
+                           wxDEFAULT_DIALOG_STYLE | wxDIALOG_NO_PARENT)
 {
     m_windowStyle |= style;
 
