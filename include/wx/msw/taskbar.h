@@ -20,7 +20,7 @@
 #include "wx/list.h"
 #include "wx/icon.h"
 
-class wxTaskBarIcon;
+class WXDLLIMPEXP_ADV wxTaskBarIcon;
 
 WX_DECLARE_LIST_WITH_DECL(wxTaskBarIcon, wxTaskBarIconList,
                           class WXDLLIMPEXP_ADV);
