@@ -20,10 +20,10 @@
     #pragma hdrstop
 #endif
 
-// for all others, include the necessary headers (this file is usually all you
-// need because it includes almost all "standard" wxWindows headers
+// for all others, include the necessary headers
 #ifndef WX_PRECOMP
-    #include "wx/wx.h"
+    #include "wx/app.h"
+    #include "wx/log.h"
 #endif
 
 #include "wx/cmdline.h"
