@@ -253,11 +253,42 @@ bool wxDocument::SaveAs()
     if (!docTemplate)
         return FALSE;
 
+#if defined(__WXMSW__) || defined(__WXGTK__) || defined(__WXMAC__)
+    wxString filter = docTemplate->GetDescription() + wxT(" (") + docTemplate->GetFileFilter() + wxT(")|") + docTemplate->GetFileFilter();
+
+    // Now see if there are some other template with identical view and document
+    // classes, whose filters may also be used.
+
+    if (docTemplate->GetViewClassInfo() && docTemplate->GetDocClassInfo())
+    {
+        wxObjectListNode* node = wxDocManager::GetDocumentManager()->GetTemplates().GetFirst();
+        while (node)
+        {
+            wxDocTemplate *t = (wxDocTemplate*) node->GetData();
+            
+            if (t->IsVisible() && t != docTemplate &&
+                t->GetViewClassInfo() == docTemplate->GetViewClassInfo() &&
+                t->GetDocClassInfo() == docTemplate->GetDocClassInfo())
+            {
+                // add a '|' to separate this filter from the previous one
+                if ( !filter.IsEmpty() )
+                    filter << wxT('|');
+                
+                filter << t->GetDescription() << wxT(" (") << t->GetFileFilter() << wxT(") |")
+                       << t->GetFileFilter();
+            }
+
+            node = node->GetNext();
+        }
+    }
+#else
+    wxString filter = docTemplate->GetFileFilter() ;
+#endif
     wxString tmp = wxFileSelector(_("Save as"),
             docTemplate->GetDirectory(),
             wxFileNameFromPath(GetFilename()),
             docTemplate->GetDefaultExtension(),
-            docTemplate->GetFileFilter(),
+            filter,
             wxSAVE | wxOVERWRITE_PROMPT,
             GetDocumentWindow());
 

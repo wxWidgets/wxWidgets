@@ -276,6 +276,9 @@ public:
 
     bool IsVisible() const { return ((m_flags & wxTEMPLATE_VISIBLE) == wxTEMPLATE_VISIBLE); }
 
+    wxClassInfo* GetDocClassInfo() const { return m_docClassInfo; }
+    wxClassInfo* GetViewClassInfo() const { return m_viewClassInfo; }
+
     virtual bool FileMatchesTemplate(const wxString& path);
 
 protected:
