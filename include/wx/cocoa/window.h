@@ -68,6 +68,14 @@ public:
     void CocoaAddChild(wxWindowCocoa *child);
     void CocoaRemoveFromParent(void);
 protected:
+    // enable==false: disables the control
+    // enable==true: enables the control IF it should be enabled
+    bool EnableSelfAndChildren(bool enable);
+    // actually enable/disable the cocoa control, overridden by subclasses
+    virtual void CocoaSetEnabled(bool enable) { }
+    // Reflects the state for THIS window (ignoring disables by parents)
+    bool m_shouldBeEnabled;
+
     void CocoaCreateNSScrollView();
     void InitMouseEvent(wxMouseEvent &event, WX_NSEvent cocoaEvent);
     virtual void Cocoa_FrameChanged(void);
@@ -164,6 +172,7 @@ public:
     // NOTE: typically Close() is not virtual, but we want this for Cocoa
     virtual bool Close( bool force = false );
     virtual bool Show( bool show = true );
+    virtual bool Enable( bool enable = true );
 };
 
 #endif // __WX_COCOA_WINDOW_H__
