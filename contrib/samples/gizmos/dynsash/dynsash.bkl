@@ -11,7 +11,6 @@
         <wx-lib>gizmos</wx-lib>
         <wx-lib>html</wx-lib>
         <wx-lib>core</wx-lib>
-        <wx-lib>net</wx-lib>
         <wx-lib>base</wx-lib>
     </exe>
 

@@ -22,12 +22,11 @@
             settingsdialog.cpp
             utils.cpp
         </sources>
-        
+
         <wx-lib>adv</wx-lib>
         <wx-lib>html</wx-lib>
         <wx-lib>core</wx-lib>
         <wx-lib>xml</wx-lib>
-        <wx-lib>net</wx-lib>
         <wx-lib>base</wx-lib>
     </exe>
 
@@ -36,5 +35,5 @@
         <srcdir>$(SRCDIR)/../configs</srcdir>
         <files>wxwin250.wxs</files>
     </wx-data>
-    
+
 </makefile>

@@ -257,36 +257,34 @@ wxFSFile *wxHtmlWinParser::OpenURL(wxHtmlURLType type,
         {
             wxString myfullurl(myurl);
 
-#if wxUSE_URL
             // consider url as absolute path first
-            wxURL current(wxURL::Unescape(myurl));
-            myfullurl = current.GetURL();
+            wxURI current(myurl);
+            myfullurl = current.BuildUnescapedURI();
 
             // if not absolute then ...
             if( current.IsReference() )
             {
                 wxString basepath = GetFS()->GetPath();
-                wxURI base(wxURL::Unescape(basepath));
+                wxURI base(basepath);
 
-                // try to apply base path if valid ...
+                // ... try to apply base path if valid ...
                 if( !base.IsReference() )
                 {
                     wxURI path(myfullurl);
                     path.Resolve( base );
-                    myfullurl = path.BuildURI();
+                    myfullurl = path.BuildUnescapedURI();
                 }
                 else
                 {
                     // ... or force such addition if not included already
-                    if( !current.GetURL().Contains(basepath) )
+                    if( !current.GetPath().Contains(base.GetPath()) )
                     {
                         basepath += myurl;
-                        wxURL connected( wxURL::Unescape(basepath) );
-                        myfullurl = connected.GetURL();
+                        wxURI connected( basepath );
+                        myfullurl = connected.BuildUnescapedURI();
                     }
                 }
             }
-#endif
 
             wxString redirect;
             status = m_Window->OnOpeningURL(type, myfullurl, &redirect);
