@@ -131,13 +131,10 @@ bool wxSlider::Create(wxWindow *parent, wxWindowID id,
 
     m_adjust = gtk_range_get_adjustment( GTK_RANGE(m_widget) );
 
-    gtk_signal_connect( GTK_OBJECT(m_adjust),
-                        "value_changed",
-                        (GtkSignalFunc) gtk_slider_callback,
-                        (gpointer) this );
-
     SetRange( minValue, maxValue );
     SetValue( value );
+
+    GtkEnableEvents();
 
     m_parent->DoAddChild( this );
 
@@ -166,7 +163,11 @@ void wxSlider::SetValue( int value )
 
     m_adjust->value = fpos;
 
+    GtkDisableEvents();
+    
     gtk_signal_emit_by_name( GTK_OBJECT(m_adjust), "value_changed" );
+    
+    GtkEnableEvents();
 }
 
 void wxSlider::SetRange( int minValue, int maxValue )
@@ -185,7 +186,11 @@ void wxSlider::SetRange( int minValue, int maxValue )
     m_adjust->step_increment = 1.0;
     m_adjust->page_increment = ceil((fmax-fmin) / 10.0);
 
+    GtkDisableEvents();
+    
     gtk_signal_emit_by_name( GTK_OBJECT(m_adjust), "changed" );
+    
+    GtkEnableEvents();
 }
 
 int wxSlider::GetMin() const
@@ -206,7 +211,11 @@ void wxSlider::SetPageSize( int pageSize )
 
     m_adjust->page_increment = fpage;
 
+    GtkDisableEvents();
+    
     gtk_signal_emit_by_name( GTK_OBJECT(m_adjust), "changed" );
+    
+    GtkEnableEvents();
 }
 
 int wxSlider::GetPageSize() const
@@ -222,7 +231,11 @@ void wxSlider::SetThumbLength( int len )
 
     m_adjust->page_size = flen;
 
+    GtkDisableEvents();
+    
     gtk_signal_emit_by_name( GTK_OBJECT(m_adjust), "changed" );
+    
+    GtkEnableEvents();
 }
 
 int wxSlider::GetThumbLength() const
@@ -256,6 +269,21 @@ void wxSlider::ApplyWidgetStyle()
 {
     SetWidgetStyle();
     gtk_widget_set_style( m_widget, m_widgetStyle );
+}
+
+void wxSlider::GtkDisableEvents()
+{
+    gtk_signal_disconnect_by_func( GTK_OBJECT(m_adjust),
+                        GTK_SIGNAL_FUNC(gtk_slider_callback),
+                        (gpointer) this );
+}
+
+void wxSlider::GtkEnableEvents()
+{
+    gtk_signal_connect( GTK_OBJECT (m_adjust),
+                        "value_changed",
+                        GTK_SIGNAL_FUNC(gtk_slider_callback),
+                        (gpointer) this );
 }
 
 #endif
