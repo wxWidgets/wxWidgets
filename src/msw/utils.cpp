@@ -658,7 +658,7 @@ int wxKill(long pid, wxSignal sig, wxKillError *krc, int flags)
 {
     if (flags & wxKILL_CHILDREN)
         wxKillAllChildren(pid, sig, krc);
-    
+
     // get the process handle to operate on
     HANDLE hProcess = ::OpenProcess(SYNCHRONIZE |
                                     PROCESS_TERMINATE |
@@ -816,24 +816,24 @@ int wxKill(long pid, wxSignal sig, wxKillError *krc, int flags)
 HANDLE (WINAPI *lpfCreateToolhelp32Snapshot)(DWORD,DWORD) ;
 BOOL (WINAPI *lpfProcess32First)(HANDLE,LPPROCESSENTRY32) ;
 BOOL (WINAPI *lpfProcess32Next)(HANDLE,LPPROCESSENTRY32) ;
-  
+
 static void InitToolHelp32()
 {
     static bool s_initToolHelpDone = false;
-    
+
     if (s_initToolHelpDone)
         return;
-    
+
     s_initToolHelpDone = true;
 
     lpfCreateToolhelp32Snapshot = NULL;
     lpfProcess32First = NULL;
     lpfProcess32Next = NULL;
-    
+
     HINSTANCE hInstLib = LoadLibrary( wxT("Kernel32.DLL") ) ;
     if( hInstLib == NULL )
         return ;
-    
+
     // Get procedure addresses.
     // We are linking to these functions of Kernel32
     // explicitly, because otherwise a module using
@@ -849,7 +849,7 @@ static void InitToolHelp32()
         "CreateToolhelp32Snapshot"
 #endif
         ) ;
-    
+
     lpfProcess32First=
         (BOOL(WINAPI *)(HANDLE,LPPROCESSENTRY32))
         GetProcAddress( hInstLib,
@@ -877,14 +877,14 @@ static void InitToolHelp32()
 int wxKillAllChildren(long pid, wxSignal sig, wxKillError *krc)
 {
     InitToolHelp32();
-    
+
     if (krc)
         *krc = wxKILL_OK;
-    
+
     // If not implemented for this platform (e.g. NT 4.0), silently ignore
     if (!lpfCreateToolhelp32Snapshot || !lpfProcess32First || !lpfProcess32Next)
         return 0;
-    
+
     // Take a snapshot of all processes in the system.
     HANDLE hProcessSnap = lpfCreateToolhelp32Snapshot(TH32CS_SNAPPROCESS, 0);
     if (hProcessSnap == INVALID_HANDLE_VALUE) {
@@ -892,11 +892,11 @@ int wxKillAllChildren(long pid, wxSignal sig, wxKillError *krc)
             *krc = wxKILL_ERROR;
         return -1;
     }
-    
+
     //Fill in the size of the structure before using it.
     PROCESSENTRY32 pe = {0};
     pe.dwSize = sizeof(PROCESSENTRY32);
-    
+
     // Walk the snapshot of the processes, and for each process,
     // kill it if its parent is pid.
     if (!lpfProcess32First(hProcessSnap, &pe)) {
@@ -906,15 +906,15 @@ int wxKillAllChildren(long pid, wxSignal sig, wxKillError *krc)
         CloseHandle (hProcessSnap);
         return -1;
     }
-    
+
     do {
         if (pe.th32ParentProcessID == (DWORD) pid) {
             if (wxKill(pe.th32ProcessID, sig, krc))
                 return -1;
         }
     } while (lpfProcess32Next (hProcessSnap, &pe));
-    
-    
+
+
     return 0;
 }
 
@@ -1010,15 +1010,20 @@ bool wxShutdown(wxShutdownFlags wFlags)
 // ----------------------------------------------------------------------------
 
 // Get free memory in bytes, or -1 if cannot determine amount (e.g. on UNIX)
-long wxGetFreeMemory()
+wxMemorySize wxGetFreeMemory()
 {
-#if defined(__WIN32__) && !defined(__BORLANDC__)
+#if defined(__WIN64__)
+    MEMORYSTATUSEX memStatex;
+    statex.dwLength = sizeof (statex);
+    GlobalMemoryStatusEx (&statex);
+    return (wxMemorySize)memStatus.ullAvailPhys;
+#elif defined(__WIN32__) && !defined(__BORLANDC__)
     MEMORYSTATUS memStatus;
     memStatus.dwLength = sizeof(MEMORYSTATUS);
     GlobalMemoryStatus(&memStatus);
-    return memStatus.dwAvailPhys;
+    return (wxMemorySize)memStatus.dwAvailPhys;
 #else
-    return (long)GetFreeSpace(0);
+    return (wxMemorySize)GetFreeSpace(0);
 #endif
 }
 

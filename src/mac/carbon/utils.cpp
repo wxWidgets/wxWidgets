@@ -21,9 +21,9 @@
 
 #if wxUSE_GUI
     #include "wx/mac/uma.h"
-	#include "wx/font.h"
+    #include "wx/font.h"
 #else
-	#include "wx/intl.h"
+    #include "wx/intl.h"
 #endif
 
 #include <ctype.h>
@@ -260,7 +260,7 @@ bool wxGetHostName(wxChar *buf, int maxSize)
     else
         buf[0] = 0 ;
 
-  return TRUE;
+    return true;
 }
 
 // Get user ID e.g. jacs
@@ -298,7 +298,7 @@ bool wxGetUserName(wxChar *buf, int maxSize)
     else
         buf[0] = 0 ;
 
-  return TRUE;
+    return true;
 }
 
 int wxKill(long pid, wxSignal sig , wxKillError *rc, int flags)
@@ -313,7 +313,7 @@ WXDLLEXPORT bool wxGetEnv(const wxString& var, wxString *value)
     return false ;
 }
 
-// set the env var name to the given value, return TRUE on success
+// set the env var name to the given value, return true on success
 WXDLLEXPORT bool wxSetEnv(const wxString& var, const wxChar *value)
 {
     // TODO : under classic there is no environement support, under X yes
@@ -326,34 +326,34 @@ WXDLLEXPORT bool wxSetEnv(const wxString& var, const wxChar *value)
 bool wxShell(const wxString& command)
 {
     // TODO
-    return FALSE;
+    return false;
 }
 
 // Shutdown or reboot the PC
 bool wxShutdown(wxShutdownFlags wFlags)
 {
     // TODO
-    return FALSE;
+    return false;
 }
 
 // Get free memory in bytes, or -1 if cannot determine amount (e.g. on UNIX)
-long wxGetFreeMemory()
+wxMemorySize wxGetFreeMemory()
 {
-    return FreeMem() ;
+    return (wxMemorySize)FreeMem() ;
 }
 
 #ifndef __DARWIN__
 
 void wxMicroSleep(unsigned long microseconds)
 {
-	AbsoluteTime wakeup = AddDurationToAbsolute( microseconds * durationMicrosecond , UpTime());
-	MPDelayUntil( & wakeup);
+    AbsoluteTime wakeup = AddDurationToAbsolute( microseconds * durationMicrosecond , UpTime());
+    MPDelayUntil( & wakeup);
 }
 
 void wxMilliSleep(unsigned long milliseconds)
 {
-	AbsoluteTime wakeup = AddDurationToAbsolute( milliseconds, UpTime());
-	MPDelayUntil( & wakeup);
+    AbsoluteTime wakeup = AddDurationToAbsolute( milliseconds, UpTime());
+    MPDelayUntil( & wakeup);
 }
 
 void wxSleep(int nSecs)
@@ -406,7 +406,7 @@ wxToolkitInfo& wxGUIAppTraits::GetToolkitInfo()
 bool wxWriteResource(const wxString& section, const wxString& entry, const wxString& value, const wxString& file)
 {
     // TODO
-    return FALSE;
+    return false;
 }
 
 bool wxWriteResource(const wxString& section, const wxString& entry, float value, const wxString& file)
@@ -436,7 +436,7 @@ bool wxWriteResource(const wxString& section, const wxString& entry, int value, 
 bool wxGetResource(const wxString& section, const wxString& entry, char **value, const wxString& file)
 {
     // TODO
-    return FALSE;
+    return false;
 }
 
 bool wxGetResource(const wxString& section, const wxString& entry, float *value, const wxString& file)
@@ -447,9 +447,9 @@ bool wxGetResource(const wxString& section, const wxString& entry, float *value,
     {
         *value = (float)strtod(s, NULL);
         delete[] s;
-        return TRUE;
+        return true;
     }
-    else return FALSE;
+    else return false;
 }
 
 bool wxGetResource(const wxString& section, const wxString& entry, long *value, const wxString& file)
@@ -460,9 +460,9 @@ bool wxGetResource(const wxString& section, const wxString& entry, long *value, 
     {
         *value = strtol(s, NULL, 10);
         delete[] s;
-        return TRUE;
+        return true;
     }
-    else return FALSE;
+    else return false;
 }
 
 bool wxGetResource(const wxString& section, const wxString& entry, int *value, const wxString& file)
@@ -473,9 +473,9 @@ bool wxGetResource(const wxString& section, const wxString& entry, int *value, c
     {
         *value = (int)strtol(s, NULL, 10);
         delete[] s;
-        return TRUE;
+        return true;
     }
-    else return FALSE;
+    else return false;
 }
 #endif // wxUSE_RESOURCES
 
@@ -507,7 +507,7 @@ void wxEndBusyCursor()
     }
 }
 
-// TRUE if we're between the above two calls
+// true if we're between the above two calls
 bool wxIsBusy()
 {
     return (gs_wxBusyCursorCount > 0);
@@ -521,7 +521,7 @@ wxString wxMacFindFolder( short        vol,
               OSType       folderType,
               Boolean      createFolder)
 {
-    FSRef fsRef ;    
+    FSRef fsRef ;
     wxString strDir ;
 
     if ( FSFindFolder( vol, folderType, createFolder, &fsRef) == noErr)
@@ -539,7 +539,7 @@ wxString wxMacFindFolder( short        vol,
 bool wxCheckForInterrupt(wxWindow *wnd)
 {
     // TODO
-    return FALSE;
+    return false;
 }
 
 void wxGetMousePosition( int* x, int* y )
@@ -552,10 +552,10 @@ void wxGetMousePosition( int* x, int* y )
     *y = pt.v ;
 };
 
-// Return TRUE if we have a colour display
+// Return true if we have a colour display
 bool wxColourDisplay()
 {
-    return TRUE;
+    return true;
 }
 
 // Returns depth of screen
@@ -644,7 +644,7 @@ wxChar *wxGetUserHome (const wxString& user)
 bool wxGetDiskSpace(const wxString& path, wxLongLong *pTotal, wxLongLong *pFree)
 {
     if ( path.empty() )
-        return FALSE;
+        return false;
 
     wxString p = path ;
     if (p[0u] == ':' ) {
@@ -659,7 +659,7 @@ bool wxGetDiskSpace(const wxString& path, wxLongLong *pTotal, wxLongLong *pFree)
     p = p + wxT(":") ;
 
     OSErr err = noErr ;
-    
+
     FSRef fsRef ;
     err = wxMacPathToFSRef( p , &fsRef ) ;
     if ( noErr == err )
@@ -672,14 +672,14 @@ bool wxGetDiskSpace(const wxString& path, wxLongLong *pTotal, wxLongLong *pFree)
             err = FSGetVInfo( vRefNum , NULL , &freeBytes , &totalBytes ) ;
             if ( noErr == err )
             {
-                if ( pTotal ) 
+                if ( pTotal )
                     *pTotal = wxLongLong( totalBytes ) ;
                 if ( pFree )
                     *pFree = wxLongLong( freeBytes ) ;
             }
         }
     }
-    
+
     return err == noErr ;
 }
 #endif // !__DARWIN__
@@ -732,7 +732,7 @@ void wxMacWakeUp()
         if ( err == noErr )
         {
             if ( IsEventInQueue( GetMainEventQueue() , s_wakeupEvent ) )
-                return ;     
+                return ;
             s_wakeupEvent.SetTime(0) ;
             err = PostEventToQueue(GetMainEventQueue(), s_wakeupEvent,
                                   kEventPriorityHigh);
@@ -759,12 +759,12 @@ void wxMacWakeUp()
 
 OSStatus wxMacCarbonEvent::GetParameter(EventParamName inName, EventParamType inDesiredType, UInt32 inBufferSize, void * outData)
 {
-    return ::GetEventParameter( m_eventRef , inName , inDesiredType , NULL , inBufferSize , NULL , outData ) ;   
+    return ::GetEventParameter( m_eventRef , inName , inDesiredType , NULL , inBufferSize , NULL , outData ) ;
 }
 
 OSStatus wxMacCarbonEvent::SetParameter(EventParamName inName, EventParamType inType, UInt32 inBufferSize, const void * inData)
 {
-    return ::SetEventParameter( m_eventRef , inName , inType , inBufferSize , inData ) ;   
+    return ::SetEventParameter( m_eventRef , inName , inType , inBufferSize , inData ) ;
 }
 
 // ----------------------------------------------------------------------------
@@ -777,45 +777,45 @@ void wxMacControl::Dispose()
     m_controlRef = NULL ;
 }
 
-void wxMacControl::SetReference( SInt32 data ) 
+void wxMacControl::SetReference( SInt32 data )
 {
     SetControlReference( m_controlRef , data ) ;
 }
 
 OSStatus wxMacControl::GetData(ControlPartCode inPartCode , ResType inTag , Size inBufferSize , void * inOutBuffer , Size * outActualSize ) const
 {
-    return ::GetControlData( m_controlRef , inPartCode , inTag , inBufferSize , inOutBuffer , outActualSize ) ;   
+    return ::GetControlData( m_controlRef , inPartCode , inTag , inBufferSize , inOutBuffer , outActualSize ) ;
 }
 
 OSStatus wxMacControl::GetDataSize(ControlPartCode inPartCode , ResType inTag , Size * outActualSize ) const
 {
-    return ::GetControlDataSize( m_controlRef , inPartCode , inTag , outActualSize ) ;   
+    return ::GetControlDataSize( m_controlRef , inPartCode , inTag , outActualSize ) ;
 }
 
 OSStatus wxMacControl::SetData(ControlPartCode inPartCode , ResType inTag , Size inSize , const void * inData)
 {
-    return ::SetControlData( m_controlRef , inPartCode , inTag , inSize , inData ) ;   
+    return ::SetControlData( m_controlRef , inPartCode , inTag , inSize , inData ) ;
 }
 
-OSStatus wxMacControl::SendEvent(  EventRef event , OptionBits inOptions ) 
+OSStatus wxMacControl::SendEvent(  EventRef event , OptionBits inOptions )
 {
 #if TARGET_API_MAC_OSX
-    return SendEventToEventTargetWithOptions( event, 
-        HIObjectGetEventTarget(  (HIObjectRef) m_controlRef ), inOptions );        
+    return SendEventToEventTargetWithOptions( event,
+        HIObjectGetEventTarget(  (HIObjectRef) m_controlRef ), inOptions );
 #else
-    #pragma unused(inOptions) 
+    #pragma unused(inOptions)
     return SendEventToEventTarget(event,GetControlEventTarget( m_controlRef ) ) ;
 #endif
 }
 
-OSStatus wxMacControl::SendHICommand( HICommand &command , OptionBits inOptions ) 
+OSStatus wxMacControl::SendHICommand( HICommand &command , OptionBits inOptions )
 {
     wxMacCarbonEvent event( kEventClassCommand , kEventCommandProcess ) ;
     event.SetParameter<HICommand>(kEventParamDirectObject,command) ;
-    return SendEvent( event , inOptions ) ;     
+    return SendEvent( event , inOptions ) ;
 }
 
-OSStatus wxMacControl::SendHICommand( UInt32 commandID , OptionBits inOptions  ) 
+OSStatus wxMacControl::SendHICommand( UInt32 commandID , OptionBits inOptions  )
 {
     HICommand command ;
     memset( &command, 0 , sizeof(command) ) ;
@@ -823,7 +823,7 @@ OSStatus wxMacControl::SendHICommand( UInt32 commandID , OptionBits inOptions  )
     return SendHICommand( command , inOptions ) ;
 }
 
-void wxMacControl::Flash( ControlPartCode part , UInt32 ticks ) 
+void wxMacControl::Flash( ControlPartCode part , UInt32 ticks )
 {
     HiliteControl( m_controlRef , part ) ;
     unsigned long finalTicks ;
@@ -832,86 +832,86 @@ void wxMacControl::Flash( ControlPartCode part , UInt32 ticks )
 }
 
 SInt32 wxMacControl::GetValue() const
-{ 
-    return ::GetControl32BitValue( m_controlRef ) ; 
+{
+    return ::GetControl32BitValue( m_controlRef ) ;
 }
 
 SInt32 wxMacControl::GetMaximum() const
-{ 
-    return ::GetControl32BitMaximum( m_controlRef ) ; 
+{
+    return ::GetControl32BitMaximum( m_controlRef ) ;
 }
 
 SInt32 wxMacControl::GetMinimum() const
-{ 
-    return ::GetControl32BitMinimum( m_controlRef ) ; 
+{
+    return ::GetControl32BitMinimum( m_controlRef ) ;
 }
 
-void wxMacControl::SetValue( SInt32 v ) 
-{ 
-    ::SetControl32BitValue( m_controlRef , v ) ; 
+void wxMacControl::SetValue( SInt32 v )
+{
+    ::SetControl32BitValue( m_controlRef , v ) ;
 }
 
-void wxMacControl::SetMinimum( SInt32 v ) 
-{ 
-    ::SetControl32BitMinimum( m_controlRef , v ) ; 
+void wxMacControl::SetMinimum( SInt32 v )
+{
+    ::SetControl32BitMinimum( m_controlRef , v ) ;
 }
 
-void wxMacControl::SetMaximum( SInt32 v ) 
-{ 
+void wxMacControl::SetMaximum( SInt32 v )
+{
     ::SetControl32BitMaximum( m_controlRef , v ) ;
 }
 
 void wxMacControl::SetValueAndRange( SInt32 value , SInt32 minimum , SInt32 maximum )
 {
     ::SetControl32BitMinimum( m_controlRef , minimum ) ;
-    ::SetControl32BitMaximum( m_controlRef , maximum ) ; 
+    ::SetControl32BitMaximum( m_controlRef , maximum ) ;
     ::SetControl32BitValue( m_controlRef , value ) ;
 }
 
-OSStatus wxMacControl::SetFocus( ControlFocusPart focusPart ) 
+OSStatus wxMacControl::SetFocus( ControlFocusPart focusPart )
 {
-    return SetKeyboardFocus(  GetControlOwner( m_controlRef )  , 
+    return SetKeyboardFocus(  GetControlOwner( m_controlRef )  ,
         m_controlRef , focusPart ) ;
 }
 
-bool wxMacControl::HasFocus() const 
+bool wxMacControl::HasFocus() const
 {
     ControlRef control ;
     GetKeyboardFocus( GetUserFocusWindow() , &control ) ;
     return control == m_controlRef ;
 }
 
-bool wxMacControl::NeedsFocusRect() const 
+bool wxMacControl::NeedsFocusRect() const
 {
     return false ;
 }
 
-void wxMacControl::VisibilityChanged(bool shown) 
+void wxMacControl::VisibilityChanged(bool shown)
 {
 }
 
-void wxMacControl::SetFont( const wxFont & font , const wxColour& foreground , long windowStyle ) 
+void wxMacControl::SetFont( const wxFont & font , const wxColour& foreground , long windowStyle )
 {
     m_font = font ;
-	ControlFontStyleRec	fontStyle;
-	if ( font.MacGetThemeFontID() != kThemeCurrentPortFont )
-	{
-	    switch( font.MacGetThemeFontID() )
-	    {
-	        case kThemeSmallSystemFont :    fontStyle.font = kControlFontSmallSystemFont ;  break ;
-	        case 109 /*mini font */ :       fontStyle.font = -5 ;                           break ;
-	        case kThemeSystemFont :         fontStyle.font = kControlFontBigSystemFont ;    break ;
-	        default :                       fontStyle.font = kControlFontBigSystemFont ;    break ;
-	    }
-	    fontStyle.flags = kControlUseFontMask ; 
-	}
-	else
-	{
-	    fontStyle.font = font.MacGetFontNum() ;
-	    fontStyle.style = font.MacGetFontStyle() ;
-	    fontStyle.size = font.MacGetFontSize() ;
-	    fontStyle.flags = kControlUseFontMask | kControlUseFaceMask | kControlUseSizeMask ;
-	}
+    ControlFontStyleRec fontStyle;
+    if ( font.MacGetThemeFontID() != kThemeCurrentPortFont )
+    {
+        switch( font.MacGetThemeFontID() )
+        {
+            case kThemeSmallSystemFont :    fontStyle.font = kControlFontSmallSystemFont ;  break ;
+            case 109 /*mini font */ :       fontStyle.font = -5 ;                           break ;
+            case kThemeSystemFont :         fontStyle.font = kControlFontBigSystemFont ;    break ;
+            default :                       fontStyle.font = kControlFontBigSystemFont ;    break ;
+        }
+        fontStyle.flags = kControlUseFontMask ;
+    }
+    else
+    {
+        fontStyle.font = font.MacGetFontNum() ;
+        fontStyle.style = font.MacGetFontStyle() ;
+        fontStyle.size = font.MacGetFontSize() ;
+        fontStyle.flags = kControlUseFontMask | kControlUseFaceMask | kControlUseSizeMask ;
+    }
 
     fontStyle.just = teJustLeft ;
     fontStyle.flags |= kControlUseJustMask ;
@@ -920,32 +920,32 @@ void wxMacControl::SetFont( const wxFont & font , const wxColour& foreground , l
     else if ( ( windowStyle & wxALIGN_MASK ) & wxALIGN_RIGHT )
         fontStyle.just = teJustRight ;
 
-    
+
     // we only should do this in case of a non-standard color, as otherwise 'disabled' controls
     // won't get grayed out by the system anymore
-    
+
     if ( foreground != *wxBLACK )
     {
         fontStyle.foreColor = MAC_WXCOLORREF(foreground.GetPixel() ) ;
         fontStyle.flags |= kControlUseForeColorMask ;
     }
-	
-	::SetControlFontStyle( m_controlRef , &fontStyle );
+
+    ::SetControlFontStyle( m_controlRef , &fontStyle );
 }
 
-void wxMacControl::SetBackground( const wxBrush &WXUNUSED(brush) ) 
+void wxMacControl::SetBackground( const wxBrush &WXUNUSED(brush) )
 {
-    // TODO 
+    // TODO
     // setting up a color proc is not recommended anymore
 }
 
 void wxMacControl::SetRange( SInt32 minimum , SInt32 maximum )
 {
     ::SetControl32BitMinimum( m_controlRef , minimum ) ;
-    ::SetControl32BitMaximum( m_controlRef , maximum ) ; 
+    ::SetControl32BitMaximum( m_controlRef , maximum ) ;
 }
 
-short wxMacControl::HandleKey(  SInt16 keyCode,  SInt16 charCode, EventModifiers modifiers ) 
+short wxMacControl::HandleKey(  SInt16 keyCode,  SInt16 charCode, EventModifiers modifiers )
 {
     return HandleControlKey( m_controlRef , keyCode , charCode , modifiers ) ;
 }
@@ -965,17 +965,17 @@ SInt32 wxMacControl::GetViewSize() const
     return GetControlViewSize( m_controlRef ) ;
 }
 
-bool wxMacControl::IsVisible() const 
+bool wxMacControl::IsVisible() const
 {
     return IsControlVisible( m_controlRef ) ;
 }
 
-void wxMacControl::SetVisibility( bool visible , bool redraw ) 
+void wxMacControl::SetVisibility( bool visible , bool redraw )
 {
     SetControlVisibility( m_controlRef , visible , redraw ) ;
 }
 
-bool wxMacControl::IsEnabled() const 
+bool wxMacControl::IsEnabled() const
 {
 #if TARGET_API_MAC_OSX
     return IsControlEnabled( m_controlRef ) ;
@@ -984,12 +984,12 @@ bool wxMacControl::IsEnabled() const
 #endif
 }
 
-bool wxMacControl::IsActive() const 
+bool wxMacControl::IsActive() const
 {
     return IsControlActive( m_controlRef ) ;
 }
 
-void wxMacControl::Enable( bool enable ) 
+void wxMacControl::Enable( bool enable )
 {
 #if TARGET_API_MAC_OSX
     if ( enable )
@@ -1004,14 +1004,14 @@ void wxMacControl::Enable( bool enable )
 #endif
 }
 
-void wxMacControl::SetDrawingEnabled( bool enable ) 
+void wxMacControl::SetDrawingEnabled( bool enable )
 {
 #if TARGET_API_MAC_OSX
     HIViewSetDrawingEnabled( m_controlRef , enable ) ;
 #endif
 }
 
-bool wxMacControl::GetNeedsDisplay() const 
+bool wxMacControl::GetNeedsDisplay() const
 {
 #if TARGET_API_MAC_OSX
     return HIViewGetNeedsDisplay( m_controlRef ) ;
@@ -1020,7 +1020,7 @@ bool wxMacControl::GetNeedsDisplay() const
 #endif
 }
 
-void wxMacControl::SetNeedsDisplay( bool needsDisplay , RgnHandle where ) 
+void wxMacControl::SetNeedsDisplay( bool needsDisplay , RgnHandle where )
 {
 #if TARGET_API_MAC_OSX
     if ( where != NULL )
@@ -1030,7 +1030,7 @@ void wxMacControl::SetNeedsDisplay( bool needsDisplay , RgnHandle where )
 #endif
 }
 
-void  wxMacControl::Convert( wxPoint *pt , wxMacControl *from , wxMacControl *to ) 
+void  wxMacControl::Convert( wxPoint *pt , wxMacControl *from , wxMacControl *to )
 {
 #if TARGET_API_MAC_OSX
     HIPoint hiPoint ;
@@ -1042,11 +1042,11 @@ void  wxMacControl::Convert( wxPoint *pt , wxMacControl *from , wxMacControl *to
 #endif
 }
 
-void wxMacControl::SetRect( Rect *r ) 
+void wxMacControl::SetRect( Rect *r )
 {
 #if TARGET_API_MAC_OSX
-	//A HIRect is actually a CGRect on OSX - which consists of two structures -
-	//CGPoint and CGSize, which have two floats each
+    //A HIRect is actually a CGRect on OSX - which consists of two structures -
+    //CGPoint and CGSize, which have two floats each
     HIRect hir = { { r->left , r->top }, { r->right - r->left , r->bottom - r->top } } ;
     HIViewSetFrame ( m_controlRef , &hir ) ;
 #else
@@ -1055,23 +1055,23 @@ void wxMacControl::SetRect( Rect *r )
 
 }
 
-void wxMacControl::GetRect( Rect *r ) 
+void wxMacControl::GetRect( Rect *r )
 {
     GetControlBounds( m_controlRef , r ) ;
 }
 
-void wxMacControl::GetRectInWindowCoords( Rect *r ) 
+void wxMacControl::GetRectInWindowCoords( Rect *r )
 {
     UMAGetControlBoundsInWindowCoords( m_controlRef , r ) ;
 }
 
-void wxMacControl::GetBestRect( Rect *r ) 
+void wxMacControl::GetBestRect( Rect *r )
 {
     short   baselineoffset ;
     GetBestControlRect( m_controlRef , r , &baselineoffset ) ;
 }
 
-void wxMacControl::SetTitle( const wxString &title ) 
+void wxMacControl::SetTitle( const wxString &title )
 {
     wxFontEncoding encoding;
 
@@ -1079,7 +1079,7 @@ void wxMacControl::SetTitle( const wxString &title )
         encoding = m_font.GetEncoding();
     else
         encoding = wxFont::GetDefaultEncoding();
-    
+
     UMASetControlTitle(  m_controlRef , title , encoding ) ;
 }
 
@@ -1088,15 +1088,15 @@ void wxMacControl::GetFeatures( UInt32 * features )
     GetControlFeatures( m_controlRef , features ) ;
 }
 
-OSStatus wxMacControl::GetRegion( ControlPartCode partCode , RgnHandle region ) 
+OSStatus wxMacControl::GetRegion( ControlPartCode partCode , RgnHandle region )
 {
     return GetControlRegion( m_controlRef , partCode , region ) ;
 }
 
-OSStatus wxMacControl::SetZOrder( bool above , wxMacControl* other ) 
+OSStatus wxMacControl::SetZOrder( bool above , wxMacControl* other )
 {
 #if TARGET_API_MAC_OSX
-    return HIViewSetZOrder( m_controlRef,above ? kHIViewZOrderAbove : kHIViewZOrderBelow, 
+    return HIViewSetZOrder( m_controlRef,above ? kHIViewZOrderAbove : kHIViewZOrderBelow,
        (other != NULL) ? other->m_controlRef : NULL) ;
 #else
     return 0 ;
@@ -1110,7 +1110,7 @@ static void InvalidateControlAndChildren( HIViewRef control )
 {
     HIViewSetNeedsDisplay( control , true ) ;
     UInt16 childrenCount = 0 ;
-    OSStatus err = CountSubControls( control , &childrenCount ) ; 
+    OSStatus err = CountSubControls( control , &childrenCount ) ;
     if ( err == errControlIsNotEmbedder )
         return ;
     wxASSERT_MSG( err == noErr , wxT("Unexpected error when accessing subcontrols") ) ;
@@ -1126,14 +1126,14 @@ static void InvalidateControlAndChildren( HIViewRef control )
 }
 #endif
 
-void wxMacControl::InvalidateWithChildren() 
+void wxMacControl::InvalidateWithChildren()
 {
 #if TARGET_API_MAC_OSX
     InvalidateControlAndChildren( m_controlRef ) ;
 #endif
 }
 
-void wxMacControl::ScrollRect( const wxRect &r , int dx , int dy ) 
+void wxMacControl::ScrollRect( const wxRect &r , int dx , int dy )
 {
 #if TARGET_API_MAC_OSX
     HIRect scrollarea = CGRectMake( r.x , r.y , r.width , r.height) ;
@@ -1148,13 +1148,13 @@ void wxMacControl::ScrollRect( const wxRect &r , int dx , int dy )
 // Databrowser
 //
 
-OSStatus wxMacControl::SetSelectionFlags( DataBrowserSelectionFlags options ) 
+OSStatus wxMacControl::SetSelectionFlags( DataBrowserSelectionFlags options )
 {
     return SetDataBrowserSelectionFlags( m_controlRef , options ) ;
 }
 
 OSStatus wxMacControl::AddListViewColumn( DataBrowserListViewColumnDesc *columnDesc,
-        DataBrowserTableViewColumnIndex position ) 
+        DataBrowserTableViewColumnIndex position )
 {
     return AddDataBrowserListViewColumn( m_controlRef , columnDesc, position ) ;
 }
@@ -1164,7 +1164,7 @@ OSStatus wxMacControl::AutoSizeListViewColumns()
     return AutoSizeDataBrowserListViewColumns(m_controlRef) ;
 }
 
-OSStatus wxMacControl::SetHasScrollBars( bool horiz , bool vert ) 
+OSStatus wxMacControl::SetHasScrollBars( bool horiz , bool vert )
 {
     return SetDataBrowserHasScrollBars( m_controlRef , horiz , vert ) ;
 }
@@ -1174,58 +1174,58 @@ OSStatus wxMacControl::SetTableViewHiliteStyle( DataBrowserTableViewHiliteStyle 
     return SetDataBrowserTableViewHiliteStyle( m_controlRef , hiliteStyle ) ;
 }
 
-OSStatus wxMacControl::SetListViewHeaderBtnHeight(UInt16 height) 
+OSStatus wxMacControl::SetListViewHeaderBtnHeight(UInt16 height)
 {
     return SetDataBrowserListViewHeaderBtnHeight( m_controlRef ,height ) ;
 }
 
-OSStatus wxMacControl::SetCallbacks(const DataBrowserCallbacks *  callbacks) 
+OSStatus wxMacControl::SetCallbacks(const DataBrowserCallbacks *  callbacks)
 {
     return SetDataBrowserCallbacks( m_controlRef , callbacks ) ;
 }
 
 OSStatus wxMacControl::UpdateItems( DataBrowserItemID container, UInt32 numItems,
-        const DataBrowserItemID* items,                
+        const DataBrowserItemID* items,
         DataBrowserPropertyID preSortProperty,
-        DataBrowserPropertyID propertyID ) 
+        DataBrowserPropertyID propertyID )
 {
     return UpdateDataBrowserItems( m_controlRef , container, numItems, items, preSortProperty, propertyID ) ;
 }
 
-bool wxMacControl::IsItemSelected( DataBrowserItemID item ) 
+bool wxMacControl::IsItemSelected( DataBrowserItemID item )
 {
     return IsDataBrowserItemSelected( m_controlRef , item ) ;
 }
 
 OSStatus wxMacControl::AddItems( DataBrowserItemID container, UInt32 numItems,
-            const DataBrowserItemID* items,                
-            DataBrowserPropertyID preSortProperty ) 
+            const DataBrowserItemID* items,
+            DataBrowserPropertyID preSortProperty )
 {
     return AddDataBrowserItems( m_controlRef , container, numItems, items, preSortProperty ) ;
 }
 
 OSStatus wxMacControl::RemoveItems( DataBrowserItemID container, UInt32 numItems,
-            const DataBrowserItemID* items,                
-            DataBrowserPropertyID preSortProperty ) 
+            const DataBrowserItemID* items,
+            DataBrowserPropertyID preSortProperty )
 {
     return RemoveDataBrowserItems( m_controlRef , container, numItems, items, preSortProperty ) ;
 }
 
 OSStatus wxMacControl::RevealItem( DataBrowserItemID item,
             DataBrowserPropertyID propertyID,
-            DataBrowserRevealOptions options ) 
+            DataBrowserRevealOptions options )
 {
     return RevealDataBrowserItem( m_controlRef , item , propertyID , options ) ;
 }
 
 OSStatus wxMacControl::SetSelectedItems(UInt32 numItems,
             const DataBrowserItemID * items,
-            DataBrowserSetOption operation ) 
+            DataBrowserSetOption operation )
 {
     return SetDataBrowserSelectedItems( m_controlRef , numItems , items, operation ) ;
 }
 
-OSStatus wxMacControl::GetSelectionAnchor( DataBrowserItemID * first, DataBrowserItemID * last ) 
+OSStatus wxMacControl::GetSelectionAnchor( DataBrowserItemID * first, DataBrowserItemID * last )
 {
     return GetDataBrowserSelectionAnchor( m_controlRef , first , last ) ;
 }
@@ -1233,11 +1233,11 @@ OSStatus wxMacControl::GetSelectionAnchor( DataBrowserItemID * first, DataBrowse
 //
 // Tab Control
 //
- 
-OSStatus wxMacControl::SetTabEnabled( SInt16 tabNo , bool enable ) 
+
+OSStatus wxMacControl::SetTabEnabled( SInt16 tabNo , bool enable )
 {
     return ::SetTabEnabled( m_controlRef , tabNo , enable ) ;
 }
- 
+
 #endif // wxUSE_GUI
 

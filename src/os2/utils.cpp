@@ -95,7 +95,7 @@ bool wxGetHostName(
         wxStrncpy(zBuf, zSysname, nMaxSize - 1);
     zBuf[nMaxSize] = _T('\0');
 #endif
-    return *zBuf ? TRUE : FALSE;
+    return *zBuf ? true : false;
 }
 
 // Get user ID e.g. jacs
@@ -108,9 +108,9 @@ bool wxGetUserId(
     long                            lrc;
     // UPM procs return 0 on success
     lrc = U32ELOCU((unsigned char*)zBuf, (unsigned long *)&nType);
-    if (lrc == 0) return TRUE;
+    if (lrc == 0) return true;
 #endif
-    return FALSE;
+    return false;
 }
 
 bool wxGetUserName(
@@ -125,7 +125,7 @@ bool wxGetUserName(
 #else
     wxStrncpy(zBuf, _T("Unknown User"), nMaxSize);
 #endif
-    return TRUE;
+    return true;
 }
 
 int wxKill(
@@ -201,11 +201,11 @@ bool wxShell(
 bool wxShutdown(wxShutdownFlags wFlags)
 {
     // TODO
-    return FALSE;
+    return false;
 }
 
 // Get free memory in bytes, or -1 if cannot determine amount (e.g. on UNIX)
-long wxGetFreeMemory()
+wxMemorySize wxGetFreeMemory()
 {
     void*                           pMemptr = NULL;
     ULONG                           lSize;
@@ -215,8 +215,8 @@ long wxGetFreeMemory()
     lMemFlags = PAG_FREE;
     rc = ::DosQueryMem(pMemptr, &lSize, &lMemFlags);
     if (rc != 0)
-        return -1L;
-    return (long)lSize;
+        lSize = -1L;
+    return (wxMemorySize)lSize;
 }
 
 // ----------------------------------------------------------------------------
@@ -228,14 +228,14 @@ bool wxGetEnv(const wxString& var, wxString *value)
     // wxGetenv is defined as getenv()
     wxChar *p = wxGetenv(var);
     if ( !p )
-        return FALSE;
+        return false;
 
     if ( value )
     {
         *value = p;
     }
 
-    return TRUE;
+    return true;
 }
 
 bool wxSetEnv(const wxString& variable, const wxChar *value)
@@ -257,7 +257,7 @@ bool wxSetEnv(const wxString& variable, const wxChar *value)
 
     return putenv(buf) == 0;
 #else // no way to set an env var
-    return FALSE;
+    return false;
 #endif
 }
 
@@ -361,9 +361,9 @@ void wxAppTraits::TerminateGui(unsigned long ulHab)
 
 wxToolkitInfo & wxConsoleAppTraits::GetToolkitInfo()
 {
-    static wxToolkitInfo	    vInfo;
-    ULONG                           ulSysInfo[QSV_MAX] = {0};
-    APIRET                          ulrc;
+    static wxToolkitInfo  vInfo;
+    ULONG                 ulSysInfo[QSV_MAX] = {0};
+    APIRET                ulrc;
 
     vInfo.name = _T("wxBase");
     ulrc = ::DosQuerySysInfo( 1L

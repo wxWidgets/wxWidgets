@@ -315,7 +315,7 @@ the following can be done:
 
 \func{bool}{wxCHECK\_VERSION\_FULL}{\param{}{major, minor, release, subrel}}
 
-Same as \helpref{wxCHECK\_VERSION}{wxcheckversion} but also checks that 
+Same as \helpref{wxCHECK\_VERSION}{wxcheckversion} but also checks that
 \texttt{wxSUBRELEASE\_NUMBER} is at least \arg{subrel}.
 
 
@@ -530,7 +530,7 @@ an array reference.}
 
 \func{long}{wxExecute}{\param{const wxString\& }{command}, \param{wxArrayString\& }{output}, \param{wxArrayString\& }{errors}, \param{int }{flags = 0}}
 
-\perlnote{In wxPerl this function is called \texttt{Wx::ExecuteStdoutStderr} 
+\perlnote{In wxPerl this function is called \texttt{Wx::ExecuteStdoutStderr}
 and it only takes the {\tt command} argument,
 and returns a 3-element list {\tt ( status, output, errors )}, where
 {\tt output} and {\tt errors} are array references.}
@@ -585,7 +585,7 @@ will kill this process as well as all of its children (except those which have
 started their own session).
 
 Finally, you may use the third overloaded version of this function to execute
-a process (always synchronously, the contents of \arg{flags} is or'd with 
+a process (always synchronously, the contents of \arg{flags} is or'd with
 \texttt{wxEXEC\_SYNC}) and capture its output in the array \arg{output}. The
 fourth version adds the possibility to additionally capture the messages from
 standard error output in the \arg{errors} array.
@@ -661,7 +661,7 @@ enum wxSignal
 \end{verbatim}
 
 {\tt wxSIGNONE}, {\tt wxSIGKILL} and {\tt wxSIGTERM} have the same meaning
-under both Unix and Windows but all the other signals are equivalent to 
+under both Unix and Windows but all the other signals are equivalent to
 {\tt wxSIGTERM} under Windows.
 
 Returns 0 on success, -1 on failure. If {\it rc} parameter is not NULL, it will
@@ -771,7 +771,7 @@ to create and use the critical section only when needed.
 
 \func{}{wxCRIT\_SECT\_DECLARE}{\param{}{cs}}
 
-This macro declares a (static) critical section object named {\it cs} if 
+This macro declares a (static) critical section object named {\it cs} if
 {\tt wxUSE\_THREADS} is $1$ and does nothing if it is $0$.
 
 
@@ -780,9 +780,9 @@ This macro declares a (static) critical section object named {\it cs} if
 
 \func{}{wxCRIT\_SECT\_DECLARE}{\param{}{cs}}
 
-This macro declares a critical section object named {\it cs} if 
+This macro declares a critical section object named {\it cs} if
 {\tt wxUSE\_THREADS} is $1$ and does nothing if it is $0$. As it doesn't
-include the {\tt static} keyword (unlike 
+include the {\tt static} keyword (unlike
 \helpref{wxCRIT\_SECT\_DECLARE}{wxcritsectdeclare}), it can be used to declare
 a class or struct member which explains its name.
 
@@ -792,8 +792,8 @@ a class or struct member which explains its name.
 
 \func{}{wxCRIT\_SECT\_LOCKER}{\param{}{name}, \param{}{cs}}
 
-This macro creates a \helpref{critical section lock}{wxcriticalsectionlocker} 
-object named {\it name} and associated with the critical section {\it cs} if 
+This macro creates a \helpref{critical section lock}{wxcriticalsectionlocker}
+object named {\it name} and associated with the critical section {\it cs} if
 {\tt wxUSE\_THREADS} is $1$ and does nothing if it is $0$.
 
 
@@ -802,7 +802,7 @@ object named {\it name} and associated with the critical section {\it cs} if
 
 \func{}{wxCRITICAL\_SECTION}{\param{}{name}}
 
-This macro combines \helpref{wxCRIT\_SECT\_DECLARE}{wxcritsectdeclare} and 
+This macro combines \helpref{wxCRIT\_SECT\_DECLARE}{wxcritsectdeclare} and
 \helpref{wxCRIT\_SECT\_LOCKER}{wxcritsectlocker}: it creates a static critical
 section object and also the lock object associated with it. Because of this, it
 can be only used inside a function, not at global scope. For example:
@@ -820,7 +820,7 @@ int IncCount()
 
 (note that we suppose that the function is called the first time from the main
 thread so that the critical section object is initialized correctly by the time
-other threads start calling it, if this is not the case this approach can 
+other threads start calling it, if this is not the case this approach can
 {\bf not} be used and the critical section must be made a global instead).
 
 
@@ -829,7 +829,7 @@ other threads start calling it, if this is not the case this approach can
 
 \func{}{wxENTER\_CRIT\_SECT}{\param{wxCriticalSection\& }{cs}}
 
-This macro is equivalent to \helpref{cs.Enter()}{wxcriticalsectionenter} if 
+This macro is equivalent to \helpref{cs.Enter()}{wxcriticalsectionenter} if
 {\tt wxUSE\_THREADS} is $1$ and does nothing if it is $0$.
 
 
@@ -847,7 +847,7 @@ Returns {\tt true} if this thread is the main one. Always returns {\tt true} if
 
 \func{}{wxLEAVE\_CRIT\_SECT}{\param{wxCriticalSection\& }{cs}}
 
-This macro is equivalent to \helpref{cs.Leave()}{wxcriticalsectionleave} if 
+This macro is equivalent to \helpref{cs.Leave()}{wxcriticalsectionleave} if
 {\tt wxUSE\_THREADS} is $1$ and does nothing if it is $0$.
 
 
@@ -1244,7 +1244,7 @@ current computer and/or user characteristics.
 
 \membersection{::wxGetFreeMemory}\label{wxgetfreememory}
 
-\func{long}{wxGetFreeMemory}{\void}
+\func{wxMemorySize}{wxGetFreeMemory}{\void}
 
 Returns the amount of free memory in bytes under environments which
 support it, and -1 if not supported. Currently, it is supported only
@@ -1379,7 +1379,7 @@ Gets operating system version information.
 
 \begin{twocollist}\itemsep=0pt
 \twocolitemruled{Platform}{Return types}
-\twocolitem{Mac OS}{Return value is wxMAC when compiled with CodeWarrior under Mac OS 8.x/9.x and Mac OS X, wxMAC\_DARWIN when compiled with the Apple Developer Tools under Mac OS X. 
+\twocolitem{Mac OS}{Return value is wxMAC when compiled with CodeWarrior under Mac OS 8.x/9.x and Mac OS X, wxMAC\_DARWIN when compiled with the Apple Developer Tools under Mac OS X.
 
 Both {\it major} and {\it minor} have to be looked at as hexadecimal numbers. So System 10.2.4 returns 0x10, resp 16 for {\it major} and 0x24, resp 36 for {\it minor}. }
 \twocolitem{GTK}{Return value is wxGTK, For GTK 1.0, {\it major} is 1, {\it minor} is 0. }
@@ -1572,7 +1572,7 @@ enough space.
 
 wxT() is a macro which can be used with character and string literals (in other
 words, {\tt 'x'} or {\tt "foo"}) to automatically convert them to Unicode in
-Unicode build configuration. Please see the 
+Unicode build configuration. Please see the
 \helpref{Unicode overview}{unicode} for more information.
 
 This macro is simply returns the value passed to it without changes in ASCII
@@ -1591,14 +1591,14 @@ build. In fact, its definition is:
 \func{const wxChar *}{wxTRANSLATE}{\param{const char *}{s}}
 
 This macro doesn't do anything in the program code -- it simply expands to the
-value of its argument (except in Unicode build where it is equivalent to 
+value of its argument (except in Unicode build where it is equivalent to
 \helpref{wxT}{wxt} which makes it unnecessary to use both wxTRANSLATE and wxT
 with the same string which would be really unreadable).
 
 However it does have a purpose and it is to mark the literal strings for the
 extraction into the message catalog created by {\tt xgettext} program. Usually
 this is achieved using \helpref{\_()}{underscore} but that macro not only marks
-the string for extraction but also expands into a 
+the string for extraction but also expands into a
 \helpref{wxGetTranslation}{wxgettranslation} function call which means that it
 cannot be used in some situations, notably for static array
 initialization.

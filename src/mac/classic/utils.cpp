@@ -21,9 +21,9 @@
 
 #if wxUSE_GUI
     #include "wx/mac/uma.h"
-	#include "wx/font.h"
+    #include "wx/font.h"
 #else
-	#include "wx/intl.h"
+    #include "wx/intl.h"
 #endif
 
 #include <ctype.h>
@@ -114,7 +114,7 @@ bool wxGetHostName(wxChar *buf, int maxSize)
     else
         buf[0] = 0 ;
 
-  return TRUE;
+    return true;
 }
 
 // Get user ID e.g. jacs
@@ -152,7 +152,7 @@ bool wxGetUserName(wxChar *buf, int maxSize)
     else
         buf[0] = 0 ;
 
-  return TRUE;
+    return true;
 }
 
 int wxKill(long pid, wxSignal sig , wxKillError *rc, int flags)
@@ -167,7 +167,7 @@ WXDLLEXPORT bool wxGetEnv(const wxString& var, wxString *value)
     return false ;
 }
 
-// set the env var name to the given value, return TRUE on success
+// set the env var name to the given value, return true on success
 WXDLLEXPORT bool wxSetEnv(const wxString& var, const wxChar *value)
 {
     // TODO : under classic there is no environement support, under X yes
@@ -180,20 +180,20 @@ WXDLLEXPORT bool wxSetEnv(const wxString& var, const wxChar *value)
 bool wxShell(const wxString& command)
 {
     // TODO
-    return FALSE;
+    return false;
 }
 
 // Shutdown or reboot the PC
 bool wxShutdown(wxShutdownFlags wFlags)
 {
     // TODO
-    return FALSE;
+    return false;
 }
 
 // Get free memory in bytes, or -1 if cannot determine amount (e.g. on UNIX)
-long wxGetFreeMemory()
+wxMemorySize wxGetFreeMemory()
 {
-    return FreeMem() ;
+    return (wxMemorySize)FreeMem() ;
 }
 
 void wxUsleep(unsigned long milliseconds)
@@ -253,7 +253,7 @@ wxToolkitInfo& wxGUIAppTraits::GetToolkitInfo()
 bool wxWriteResource(const wxString& section, const wxString& entry, const wxString& value, const wxString& file)
 {
     // TODO
-    return FALSE;
+    return false;
 }
 
 bool wxWriteResource(const wxString& section, const wxString& entry, float value, const wxString& file)
@@ -283,7 +283,7 @@ bool wxWriteResource(const wxString& section, const wxString& entry, int value, 
 bool wxGetResource(const wxString& section, const wxString& entry, char **value, const wxString& file)
 {
     // TODO
-    return FALSE;
+    return false;
 }
 
 bool wxGetResource(const wxString& section, const wxString& entry, float *value, const wxString& file)
@@ -294,9 +294,9 @@ bool wxGetResource(const wxString& section, const wxString& entry, float *value,
     {
         *value = (float)strtod(s, NULL);
         delete[] s;
-        return TRUE;
+        return true;
     }
-    else return FALSE;
+    else return false;
 }
 
 bool wxGetResource(const wxString& section, const wxString& entry, long *value, const wxString& file)
@@ -307,9 +307,9 @@ bool wxGetResource(const wxString& section, const wxString& entry, long *value, 
     {
         *value = strtol(s, NULL, 10);
         delete[] s;
-        return TRUE;
+        return true;
     }
-    else return FALSE;
+    else return false;
 }
 
 bool wxGetResource(const wxString& section, const wxString& entry, int *value, const wxString& file)
@@ -320,9 +320,9 @@ bool wxGetResource(const wxString& section, const wxString& entry, int *value, c
     {
         *value = (int)strtol(s, NULL, 10);
         delete[] s;
-        return TRUE;
+        return true;
     }
-    else return FALSE;
+    else return false;
 }
 #endif // wxUSE_RESOURCES
 
@@ -354,7 +354,7 @@ void wxEndBusyCursor()
     }
 }
 
-// TRUE if we're between the above two calls
+// true if we're between the above two calls
 bool wxIsBusy()
 {
     return (gs_wxBusyCursorCount > 0);
@@ -392,7 +392,7 @@ wxString wxMacFindFolder( short        vol,
 bool wxCheckForInterrupt(wxWindow *wnd)
 {
     // TODO
-    return FALSE;
+    return false;
 }
 
 void wxGetMousePosition( int* x, int* y )
@@ -405,10 +405,10 @@ void wxGetMousePosition( int* x, int* y )
     *y = pt.v ;
 };
 
-// Return TRUE if we have a colour display
+// Return true if we have a colour display
 bool wxColourDisplay()
 {
-    return TRUE;
+    return true;
 }
 
 // Returns depth of screen
@@ -524,7 +524,7 @@ wxChar *wxGetUserHome (const wxString& user)
 bool wxGetDiskSpace(const wxString& path, wxLongLong *pTotal, wxLongLong *pFree)
 {
     if ( path.empty() )
-        return FALSE;
+        return false;
 
     wxString p = path ;
     if (p[0u] == ':' ) {
@@ -578,147 +578,147 @@ wxString wxMacMakeStringFromPascal( ConstStringPtr from )
 
 
 wxUint32 wxMacGetSystemEncFromFontEnc(wxFontEncoding encoding)
-{    	
-	TextEncodingBase enc = 0 ;
-	if ( encoding == wxFONTENCODING_DEFAULT )
-	{
+{
+    TextEncodingBase enc = 0 ;
+    if ( encoding == wxFONTENCODING_DEFAULT )
+    {
 #if wxUSE_GUI
-		encoding = wxFont::GetDefaultEncoding() ;
+        encoding = wxFont::GetDefaultEncoding() ;
 #else
-		encoding = wxLocale::GetSystemEncoding() ;
+        encoding = wxLocale::GetSystemEncoding() ;
 #endif
-	}
+    }
 
-	switch( encoding)
-	{
-		case wxFONTENCODING_ISO8859_1 :
-    		enc = kTextEncodingISOLatin1 ;
-    		break ;
-		case wxFONTENCODING_ISO8859_2 :
-    		enc = kTextEncodingISOLatin2;
-    		break ;
-		case wxFONTENCODING_ISO8859_3 :
-    		enc = kTextEncodingISOLatin3 ;
-    		break ;
-		case wxFONTENCODING_ISO8859_4 :
-    		enc = kTextEncodingISOLatin4;
-    		break ;
-		case wxFONTENCODING_ISO8859_5 :
-    		enc = kTextEncodingISOLatinCyrillic;
-    		break ;
-		case wxFONTENCODING_ISO8859_6 :
-    		enc = kTextEncodingISOLatinArabic;
-    		break ;
-		case wxFONTENCODING_ISO8859_7 :
-    		enc = kTextEncodingISOLatinGreek;
-    		break ;
-		case wxFONTENCODING_ISO8859_8 :
-    		enc = kTextEncodingISOLatinHebrew;
-    		break ;
-		case wxFONTENCODING_ISO8859_9 :
-    		enc = kTextEncodingISOLatin5;
-    		break ;
-		case wxFONTENCODING_ISO8859_10 :
-    		enc = kTextEncodingISOLatin6;
-    		break ;
-		case wxFONTENCODING_ISO8859_13 :
-    		enc = kTextEncodingISOLatin7;
-    		break ;
-		case wxFONTENCODING_ISO8859_14 :
-    		enc = kTextEncodingISOLatin8;
-    		break ;
-		case wxFONTENCODING_ISO8859_15 :
-    		enc = kTextEncodingISOLatin9;
-    		break ;
+    switch( encoding)
+    {
+        case wxFONTENCODING_ISO8859_1 :
+            enc = kTextEncodingISOLatin1 ;
+            break ;
+        case wxFONTENCODING_ISO8859_2 :
+            enc = kTextEncodingISOLatin2;
+            break ;
+        case wxFONTENCODING_ISO8859_3 :
+            enc = kTextEncodingISOLatin3 ;
+            break ;
+        case wxFONTENCODING_ISO8859_4 :
+            enc = kTextEncodingISOLatin4;
+            break ;
+        case wxFONTENCODING_ISO8859_5 :
+            enc = kTextEncodingISOLatinCyrillic;
+            break ;
+        case wxFONTENCODING_ISO8859_6 :
+            enc = kTextEncodingISOLatinArabic;
+            break ;
+        case wxFONTENCODING_ISO8859_7 :
+            enc = kTextEncodingISOLatinGreek;
+            break ;
+        case wxFONTENCODING_ISO8859_8 :
+            enc = kTextEncodingISOLatinHebrew;
+            break ;
+        case wxFONTENCODING_ISO8859_9 :
+            enc = kTextEncodingISOLatin5;
+            break ;
+        case wxFONTENCODING_ISO8859_10 :
+            enc = kTextEncodingISOLatin6;
+            break ;
+        case wxFONTENCODING_ISO8859_13 :
+            enc = kTextEncodingISOLatin7;
+            break ;
+        case wxFONTENCODING_ISO8859_14 :
+            enc = kTextEncodingISOLatin8;
+            break ;
+        case wxFONTENCODING_ISO8859_15 :
+            enc = kTextEncodingISOLatin9;
+            break ;
 
-		case wxFONTENCODING_KOI8 :
-    		enc = kTextEncodingKOI8_R;
-    		break ;
-		case wxFONTENCODING_ALTERNATIVE : // MS-DOS CP866
-    		enc = kTextEncodingDOSRussian;
-    		break ;
+        case wxFONTENCODING_KOI8 :
+            enc = kTextEncodingKOI8_R;
+            break ;
+        case wxFONTENCODING_ALTERNATIVE : // MS-DOS CP866
+            enc = kTextEncodingDOSRussian;
+            break ;
 /*
-		case wxFONTENCODING_BULGARIAN : 
-    		enc = ;
-    		break ;
-*/	    		
-		case wxFONTENCODING_CP437 : 
-    		enc =kTextEncodingDOSLatinUS ;
-    		break ;
-		case wxFONTENCODING_CP850 :
-    		enc = kTextEncodingDOSLatin1;
-    		break ;
-		case wxFONTENCODING_CP852 : 
-    		enc = kTextEncodingDOSLatin2;
-    		break ;
-		case wxFONTENCODING_CP855 :
-    		enc = kTextEncodingDOSCyrillic;
-    		break ;
-		case wxFONTENCODING_CP866 :
-    		enc =kTextEncodingDOSRussian ;
-    		break ;
-		case wxFONTENCODING_CP874 :
-    		enc = kTextEncodingDOSThai;
-    		break ;
-		case wxFONTENCODING_CP932 : 
-    		enc = kTextEncodingDOSJapanese;
-    		break ;
-		case wxFONTENCODING_CP936 : 
-    		enc =kTextEncodingDOSChineseSimplif ;
-    		break ;
-		case wxFONTENCODING_CP949 : 
-    		enc = kTextEncodingDOSKorean;
-    		break ;
-		case wxFONTENCODING_CP950 : 
-    		enc = kTextEncodingDOSChineseTrad;
-    		break ;
-    		
-		case wxFONTENCODING_CP1250 : 
-    		enc = kTextEncodingWindowsLatin2;
-    		break ;
-		case wxFONTENCODING_CP1251 : 
-    		enc =kTextEncodingWindowsCyrillic ;
-    		break ;
-		case wxFONTENCODING_CP1252 : 
-    		enc =kTextEncodingWindowsLatin1 ;
-    		break ;
-		case wxFONTENCODING_CP1253 : 
-    		enc = kTextEncodingWindowsGreek;
-    		break ;
-		case wxFONTENCODING_CP1254 : 
-    		enc = kTextEncodingWindowsLatin5;
-    		break ;
-		case wxFONTENCODING_CP1255 : 
-    		enc =kTextEncodingWindowsHebrew ;
-    		break ;
-		case wxFONTENCODING_CP1256 : 
-    		enc =kTextEncodingWindowsArabic ;
-    		break ;
-		case wxFONTENCODING_CP1257 : 
-    		enc = kTextEncodingWindowsBalticRim;
-    		break ;
-    		
-		case wxFONTENCODING_UTF7 : 
-    		enc = CreateTextEncoding(kTextEncodingUnicodeDefault,0,kUnicodeUTF7Format) ;
-    		break ;
-		case wxFONTENCODING_UTF8 : 
-    		enc = CreateTextEncoding(kTextEncodingUnicodeDefault,0,kUnicodeUTF8Format) ;
-    		break ;
-		case wxFONTENCODING_EUC_JP : 
-    		enc = kTextEncodingEUC_JP;
-    		break ;
-		case wxFONTENCODING_UTF16BE : 
-    		enc = CreateTextEncoding(kTextEncodingUnicodeDefault,0,kUnicode16BitFormat) ;
-    		break ;
-		case wxFONTENCODING_UTF16LE : 
-    		enc = CreateTextEncoding(kTextEncodingUnicodeDefault,0,kUnicode16BitFormat) ;
-    		break ;
-		case wxFONTENCODING_UTF32BE : 
-    		enc = CreateTextEncoding(kTextEncodingUnicodeDefault,0,kUnicode32BitFormat) ;
-    		break ;
-		case wxFONTENCODING_UTF32LE : 
-    		enc = CreateTextEncoding(kTextEncodingUnicodeDefault,0,kUnicode32BitFormat) ;
-    		break ;
+        case wxFONTENCODING_BULGARIAN :
+            enc = ;
+            break ;
+*/
+        case wxFONTENCODING_CP437 :
+            enc =kTextEncodingDOSLatinUS ;
+            break ;
+        case wxFONTENCODING_CP850 :
+            enc = kTextEncodingDOSLatin1;
+            break ;
+        case wxFONTENCODING_CP852 :
+            enc = kTextEncodingDOSLatin2;
+            break ;
+        case wxFONTENCODING_CP855 :
+            enc = kTextEncodingDOSCyrillic;
+            break ;
+        case wxFONTENCODING_CP866 :
+            enc =kTextEncodingDOSRussian ;
+            break ;
+        case wxFONTENCODING_CP874 :
+            enc = kTextEncodingDOSThai;
+            break ;
+        case wxFONTENCODING_CP932 :
+            enc = kTextEncodingDOSJapanese;
+            break ;
+        case wxFONTENCODING_CP936 :
+            enc =kTextEncodingDOSChineseSimplif ;
+            break ;
+        case wxFONTENCODING_CP949 :
+            enc = kTextEncodingDOSKorean;
+            break ;
+        case wxFONTENCODING_CP950 :
+            enc = kTextEncodingDOSChineseTrad;
+            break ;
+
+        case wxFONTENCODING_CP1250 :
+            enc = kTextEncodingWindowsLatin2;
+            break ;
+        case wxFONTENCODING_CP1251 :
+            enc =kTextEncodingWindowsCyrillic ;
+            break ;
+        case wxFONTENCODING_CP1252 :
+            enc =kTextEncodingWindowsLatin1 ;
+            break ;
+        case wxFONTENCODING_CP1253 :
+            enc = kTextEncodingWindowsGreek;
+            break ;
+        case wxFONTENCODING_CP1254 :
+            enc = kTextEncodingWindowsLatin5;
+            break ;
+        case wxFONTENCODING_CP1255 :
+            enc =kTextEncodingWindowsHebrew ;
+            break ;
+        case wxFONTENCODING_CP1256 :
+            enc =kTextEncodingWindowsArabic ;
+            break ;
+        case wxFONTENCODING_CP1257 :
+            enc = kTextEncodingWindowsBalticRim;
+            break ;
+
+        case wxFONTENCODING_UTF7 :
+            enc = CreateTextEncoding(kTextEncodingUnicodeDefault,0,kUnicodeUTF7Format) ;
+            break ;
+        case wxFONTENCODING_UTF8 :
+            enc = CreateTextEncoding(kTextEncodingUnicodeDefault,0,kUnicodeUTF8Format) ;
+            break ;
+        case wxFONTENCODING_EUC_JP :
+            enc = kTextEncodingEUC_JP;
+            break ;
+        case wxFONTENCODING_UTF16BE :
+            enc = CreateTextEncoding(kTextEncodingUnicodeDefault,0,kUnicode16BitFormat) ;
+            break ;
+        case wxFONTENCODING_UTF16LE :
+            enc = CreateTextEncoding(kTextEncodingUnicodeDefault,0,kUnicode16BitFormat) ;
+            break ;
+        case wxFONTENCODING_UTF32BE :
+            enc = CreateTextEncoding(kTextEncodingUnicodeDefault,0,kUnicode32BitFormat) ;
+            break ;
+        case wxFONTENCODING_UTF32LE :
+            enc = CreateTextEncoding(kTextEncodingUnicodeDefault,0,kUnicode32BitFormat) ;
+            break ;
 
         case wxFONTENCODING_MACROMAN :
             enc = kTextEncodingMacRoman ;
@@ -839,145 +839,145 @@ wxUint32 wxMacGetSystemEncFromFontEnc(wxFontEncoding encoding)
             break ;
         case wxFONTENCODING_MACKEYBOARD :
             enc = kTextEncodingMacKeyboardGlyphs ;
-            break ;    
-		default :
-			// to make gcc happy
-			break ;
-	} ;
-	return enc ;
+            break ;
+        default :
+            // to make gcc happy
+            break ;
+    } ;
+    return enc ;
 }
 
 wxFontEncoding wxMacGetFontEncFromSystemEnc(wxUint32 encoding)
-{    	
-	wxFontEncoding enc = wxFONTENCODING_DEFAULT ;
+{
+    wxFontEncoding enc = wxFONTENCODING_DEFAULT ;
 
-	switch( encoding)
-	{
-		case kTextEncodingISOLatin1  :
-    		enc = wxFONTENCODING_ISO8859_1 ;
-    		break ;
-		case kTextEncodingISOLatin2 :
-    		enc = wxFONTENCODING_ISO8859_2;
-    		break ;
-		case kTextEncodingISOLatin3 :
-    		enc = wxFONTENCODING_ISO8859_3 ;
-    		break ;
-		case kTextEncodingISOLatin4 :
-    		enc = wxFONTENCODING_ISO8859_4;
-    		break ;
-		case kTextEncodingISOLatinCyrillic :
-    		enc = wxFONTENCODING_ISO8859_5;
-    		break ;
-		case kTextEncodingISOLatinArabic :
-    		enc = wxFONTENCODING_ISO8859_6;
-    		break ;
-		case kTextEncodingISOLatinGreek :
-    		enc = wxFONTENCODING_ISO8859_7;
-    		break ;
-		case kTextEncodingISOLatinHebrew :
-    		enc = wxFONTENCODING_ISO8859_8;
-    		break ;
-		case kTextEncodingISOLatin5 :
-    		enc = wxFONTENCODING_ISO8859_9;
-    		break ;
-		case kTextEncodingISOLatin6 :
-    		enc = wxFONTENCODING_ISO8859_10;
-    		break ;
-		case kTextEncodingISOLatin7 :
-    		enc = wxFONTENCODING_ISO8859_13;
-    		break ;
-		case kTextEncodingISOLatin8 :
-    		enc = wxFONTENCODING_ISO8859_14;
-    		break ;
-		case kTextEncodingISOLatin9 :
-    		enc =wxFONTENCODING_ISO8859_15 ;
-    		break ;
+    switch( encoding)
+    {
+        case kTextEncodingISOLatin1  :
+            enc = wxFONTENCODING_ISO8859_1 ;
+            break ;
+        case kTextEncodingISOLatin2 :
+            enc = wxFONTENCODING_ISO8859_2;
+            break ;
+        case kTextEncodingISOLatin3 :
+            enc = wxFONTENCODING_ISO8859_3 ;
+            break ;
+        case kTextEncodingISOLatin4 :
+            enc = wxFONTENCODING_ISO8859_4;
+            break ;
+        case kTextEncodingISOLatinCyrillic :
+            enc = wxFONTENCODING_ISO8859_5;
+            break ;
+        case kTextEncodingISOLatinArabic :
+            enc = wxFONTENCODING_ISO8859_6;
+            break ;
+        case kTextEncodingISOLatinGreek :
+            enc = wxFONTENCODING_ISO8859_7;
+            break ;
+        case kTextEncodingISOLatinHebrew :
+            enc = wxFONTENCODING_ISO8859_8;
+            break ;
+        case kTextEncodingISOLatin5 :
+            enc = wxFONTENCODING_ISO8859_9;
+            break ;
+        case kTextEncodingISOLatin6 :
+            enc = wxFONTENCODING_ISO8859_10;
+            break ;
+        case kTextEncodingISOLatin7 :
+            enc = wxFONTENCODING_ISO8859_13;
+            break ;
+        case kTextEncodingISOLatin8 :
+            enc = wxFONTENCODING_ISO8859_14;
+            break ;
+        case kTextEncodingISOLatin9 :
+            enc =wxFONTENCODING_ISO8859_15 ;
+            break ;
 
-		case kTextEncodingKOI8_R :
-    		enc = wxFONTENCODING_KOI8;
-    		break ;
+        case kTextEncodingKOI8_R :
+            enc = wxFONTENCODING_KOI8;
+            break ;
 /*
-		case  : 
-    		enc = wxFONTENCODING_BULGARIAN;
-    		break ;
-*/	    		
-		case kTextEncodingDOSLatinUS : 
-    		enc = wxFONTENCODING_CP437;
-    		break ;
-		case kTextEncodingDOSLatin1 :
-    		enc = wxFONTENCODING_CP850;
-    		break ;
-		case kTextEncodingDOSLatin2 : 
-    		enc =wxFONTENCODING_CP852 ;
-    		break ;
-		case kTextEncodingDOSCyrillic :
-    		enc = wxFONTENCODING_CP855;
-    		break ;
-		case kTextEncodingDOSRussian :
-    		enc = wxFONTENCODING_CP866;
-    		break ;
-		case kTextEncodingDOSThai :
-    		enc =wxFONTENCODING_CP874 ;
-    		break ;
-		case kTextEncodingDOSJapanese : 
-    		enc = wxFONTENCODING_CP932;
-    		break ;
-		case kTextEncodingDOSChineseSimplif : 
-    		enc = wxFONTENCODING_CP936;
-    		break ;
-		case kTextEncodingDOSKorean : 
-    		enc = wxFONTENCODING_CP949;
-    		break ;
-		case kTextEncodingDOSChineseTrad : 
-    		enc = wxFONTENCODING_CP950;
-    		break ;
-    		
-		case kTextEncodingWindowsLatin2 : 
-    		enc = wxFONTENCODING_CP1250;
-    		break ;
-		case kTextEncodingWindowsCyrillic : 
-    		enc = wxFONTENCODING_CP1251;
-    		break ;
-		case kTextEncodingWindowsLatin1 : 
-    		enc = wxFONTENCODING_CP1252;
-    		break ;
-		case kTextEncodingWindowsGreek : 
-    		enc = wxFONTENCODING_CP1253;
-    		break ;
-		case kTextEncodingWindowsLatin5 : 
-    		enc = wxFONTENCODING_CP1254;
-    		break ;
-		case kTextEncodingWindowsHebrew : 
-    		enc = wxFONTENCODING_CP1255;
-    		break ;
-		case kTextEncodingWindowsArabic : 
-    		enc = wxFONTENCODING_CP1256;
-    		break ;
-		case kTextEncodingWindowsBalticRim : 
-    		enc =wxFONTENCODING_CP1257 ;
-    		break ;
-		case kTextEncodingEUC_JP : 
-    		enc = wxFONTENCODING_EUC_JP;
-    		break ;
-    		/*
-		case wxFONTENCODING_UTF7 : 
-    		enc = CreateTextEncoding(kTextEncodingUnicodeDefault,0,kUnicodeUTF7Format) ;
-    		break ;
-		case wxFONTENCODING_UTF8 : 
-    		enc = CreateTextEncoding(kTextEncodingUnicodeDefault,0,kUnicodeUTF8Format) ;
-    		break ;
-		case wxFONTENCODING_UTF16BE : 
-    		enc = CreateTextEncoding(kTextEncodingUnicodeDefault,0,kUnicode16BitFormat) ;
-    		break ;
-		case wxFONTENCODING_UTF16LE : 
-    		enc = CreateTextEncoding(kTextEncodingUnicodeDefault,0,kUnicode16BitFormat) ;
-    		break ;
-		case wxFONTENCODING_UTF32BE : 
-    		enc = CreateTextEncoding(kTextEncodingUnicodeDefault,0,kUnicode32BitFormat) ;
-    		break ;
-		case wxFONTENCODING_UTF32LE : 
-    		enc = CreateTextEncoding(kTextEncodingUnicodeDefault,0,kUnicode32BitFormat) ;
-    		break ;
+        case  :
+            enc = wxFONTENCODING_BULGARIAN;
+            break ;
+*/
+        case kTextEncodingDOSLatinUS :
+            enc = wxFONTENCODING_CP437;
+            break ;
+        case kTextEncodingDOSLatin1 :
+            enc = wxFONTENCODING_CP850;
+            break ;
+        case kTextEncodingDOSLatin2 :
+            enc =wxFONTENCODING_CP852 ;
+            break ;
+        case kTextEncodingDOSCyrillic :
+            enc = wxFONTENCODING_CP855;
+            break ;
+        case kTextEncodingDOSRussian :
+            enc = wxFONTENCODING_CP866;
+            break ;
+        case kTextEncodingDOSThai :
+            enc =wxFONTENCODING_CP874 ;
+            break ;
+        case kTextEncodingDOSJapanese :
+            enc = wxFONTENCODING_CP932;
+            break ;
+        case kTextEncodingDOSChineseSimplif :
+            enc = wxFONTENCODING_CP936;
+            break ;
+        case kTextEncodingDOSKorean :
+            enc = wxFONTENCODING_CP949;
+            break ;
+        case kTextEncodingDOSChineseTrad :
+            enc = wxFONTENCODING_CP950;
+            break ;
+
+        case kTextEncodingWindowsLatin2 :
+            enc = wxFONTENCODING_CP1250;
+            break ;
+        case kTextEncodingWindowsCyrillic :
+            enc = wxFONTENCODING_CP1251;
+            break ;
+        case kTextEncodingWindowsLatin1 :
+            enc = wxFONTENCODING_CP1252;
+            break ;
+        case kTextEncodingWindowsGreek :
+            enc = wxFONTENCODING_CP1253;
+            break ;
+        case kTextEncodingWindowsLatin5 :
+            enc = wxFONTENCODING_CP1254;
+            break ;
+        case kTextEncodingWindowsHebrew :
+            enc = wxFONTENCODING_CP1255;
+            break ;
+        case kTextEncodingWindowsArabic :
+            enc = wxFONTENCODING_CP1256;
+            break ;
+        case kTextEncodingWindowsBalticRim :
+            enc =wxFONTENCODING_CP1257 ;
+            break ;
+        case kTextEncodingEUC_JP :
+            enc = wxFONTENCODING_EUC_JP;
+            break ;
+            /*
+        case wxFONTENCODING_UTF7 :
+            enc = CreateTextEncoding(kTextEncodingUnicodeDefault,0,kUnicodeUTF7Format) ;
+            break ;
+        case wxFONTENCODING_UTF8 :
+            enc = CreateTextEncoding(kTextEncodingUnicodeDefault,0,kUnicodeUTF8Format) ;
+            break ;
+        case wxFONTENCODING_UTF16BE :
+            enc = CreateTextEncoding(kTextEncodingUnicodeDefault,0,kUnicode16BitFormat) ;
+            break ;
+        case wxFONTENCODING_UTF16LE :
+            enc = CreateTextEncoding(kTextEncodingUnicodeDefault,0,kUnicode16BitFormat) ;
+            break ;
+        case wxFONTENCODING_UTF32BE :
+            enc = CreateTextEncoding(kTextEncodingUnicodeDefault,0,kUnicode32BitFormat) ;
+            break ;
+        case wxFONTENCODING_UTF32LE :
+            enc = CreateTextEncoding(kTextEncodingUnicodeDefault,0,kUnicode32BitFormat) ;
+            break ;
         */
         case kTextEncodingMacRoman :
             enc = wxFONTENCODING_MACROMAN ;
@@ -1098,9 +1098,9 @@ wxFontEncoding wxMacGetFontEncFromSystemEnc(wxUint32 encoding)
             break ;
         case kTextEncodingMacKeyboardGlyphs :
             enc = wxFONTENCODING_MACKEYBOARD ;
-            break ;       
-	} ;
-	return enc ;
+            break ;
+    } ;
+    return enc ;
 }
 
 #endif // wxUSE_BASE
@@ -1117,16 +1117,16 @@ wxFontEncoding wxMacGetFontEncFromSystemEnc(wxUint32 encoding)
 // converts this string into a carbon foundation string with optional pc 2 mac encoding
 void wxMacCFStringHolder::Assign( const wxString &st , wxFontEncoding encoding )
 {
-	Release() ;
+    Release() ;
 
-	wxString str = st ;
+    wxString str = st ;
     wxMacConvertNewlines13To10( &str ) ;
 #if wxUSE_UNICODE
 #if SIZEOF_WCHAR_T == 2
-  	m_cfs = CFStringCreateWithCharacters( kCFAllocatorDefault,
-	 (UniChar*)str.wc_str() , str.Len() );
+    m_cfs = CFStringCreateWithCharacters( kCFAllocatorDefault,
+            (UniChar*)str.wc_str() , str.Len() );
 #else
-	wxMBConvUTF16BE converter ;
+    wxMBConvUTF16BE converter ;
     size_t unicharlen = converter.WC2MB( NULL , str.wc_str() , 0 ) ;
     UniChar *unibuf = new UniChar[ unicharlen / sizeof(UniChar) + 1 ] ;
     converter.WC2MB( (char*)unibuf , str.wc_str() , unicharlen ) ;
@@ -1146,18 +1146,18 @@ wxString wxMacCFStringHolder::AsString(wxFontEncoding encoding)
     Size cflen = CFStringGetLength( m_cfs )  ;
     size_t noChars ;
     wxChar* buf = NULL ;
-    
+
 #if wxUSE_UNICODE
 #if SIZEOF_WCHAR_T == 2
-    buf = new wxChar[ cflen + 1 ] ; 
+    buf = new wxChar[ cflen + 1 ] ;
     CFStringGetCharacters( m_cfs , CFRangeMake( 0 , cflen ) , (UniChar*) buf ) ;
     noChars = cflen ;
 #else
     UniChar* unibuf = new UniChar[ cflen + 1 ] ;
     CFStringGetCharacters( m_cfs , CFRangeMake( 0 , cflen ) , (UniChar*) unibuf ) ;
     unibuf[cflen] = 0 ;
-	wxMBConvUTF16BE converter ;
-	noChars = converter.MB2WC( NULL , (const char*)unibuf , 0 ) ;
+    wxMBConvUTF16BE converter ;
+    noChars = converter.MB2WC( NULL , (const char*)unibuf , 0 ) ;
     buf = new wxChar[ noChars + 1 ] ;
     converter.MB2WC( buf , (const char*)unibuf , noChars ) ;
     delete[] unibuf ;
@@ -1166,7 +1166,7 @@ wxString wxMacCFStringHolder::AsString(wxFontEncoding encoding)
     CFIndex cStrLen ;
     CFStringGetBytes( m_cfs , CFRangeMake(0, cflen) , wxMacGetSystemEncFromFontEnc( encoding ) ,
         '?' , false , NULL , 0 , &cStrLen ) ;
-    buf = new wxChar[ cStrLen + 1 ] ; 
+    buf = new wxChar[ cStrLen + 1 ] ;
     CFStringGetBytes( m_cfs , CFRangeMake(0, cflen) , wxMacGetSystemEncFromFontEnc( encoding ) ,
         '?' , false , (unsigned char*) buf , cStrLen , &cStrLen) ;
     noChars = cStrLen ;
@@ -1181,9 +1181,9 @@ wxString wxMacCFStringHolder::AsString(wxFontEncoding encoding)
 
 #endif //TARGET_CARBON
 
-void wxMacConvertNewlines13To10( char * data ) 
-{        
-	char * buf = data ;
+void wxMacConvertNewlines13To10( char * data )
+{
+    char * buf = data ;
     while( (buf=strchr(buf,0x0d)) != NULL )
     {
         *buf = 0x0a ;
@@ -1192,8 +1192,8 @@ void wxMacConvertNewlines13To10( char * data )
 }
 
 void wxMacConvertNewlines10To13( char * data )
-{        
-	char * buf = data ;
+{
+    char * buf = data ;
     while( (buf=strchr(buf,0x0a)) != NULL )
     {
         *buf = 0x0d ;
@@ -1201,22 +1201,22 @@ void wxMacConvertNewlines10To13( char * data )
     }
 }
 
-void wxMacConvertNewlines13To10( wxString * data ) 
-{        
+void wxMacConvertNewlines13To10( wxString * data )
+{
     size_t len = data->Length() ;
 
     if ( len == 0 || wxStrchr(data->c_str(),0x0d)==NULL)
         return ;
-        
+
     wxString temp(*data) ;
     wxStringBuffer buf(*data,len ) ;
-    memcpy( buf , temp.c_str() , (len+1)*sizeof(wxChar) ) ; 
+    memcpy( buf , temp.c_str() , (len+1)*sizeof(wxChar) ) ;
 
-	wxMacConvertNewlines13To10( buf ) ;
+    wxMacConvertNewlines13To10( buf ) ;
 }
 
 void wxMacConvertNewlines10To13( wxString * data )
-{        
+{
     size_t len = data->Length() ;
 
     if ( data->Length() == 0 || wxStrchr(data->c_str(),0x0a)==NULL)
@@ -1224,15 +1224,15 @@ void wxMacConvertNewlines10To13( wxString * data )
 
     wxString temp(*data) ;
     wxStringBuffer buf(*data,len ) ;
-    memcpy( buf , temp.c_str() , (len+1)*sizeof(wxChar) ) ; 
-	wxMacConvertNewlines10To13( buf ) ;
+    memcpy( buf , temp.c_str() , (len+1)*sizeof(wxChar) ) ;
+    wxMacConvertNewlines10To13( buf ) ;
 }
 
 
 #if wxUSE_UNICODE
-void wxMacConvertNewlines13To10( wxChar * data ) 
-{        
-	wxChar * buf = data ;
+void wxMacConvertNewlines13To10( wxChar * data )
+{
+    wxChar * buf = data ;
     while( (buf=wxStrchr(buf,0x0d)) != NULL )
     {
         *buf = 0x0a ;
@@ -1241,8 +1241,8 @@ void wxMacConvertNewlines13To10( wxChar * data )
 }
 
 void wxMacConvertNewlines10To13( wxChar * data )
-{        
-	wxChar * buf =  data ;
+{
+    wxChar * buf =  data ;
     while( (buf=wxStrchr(buf,0x0a)) != NULL )
     {
         *buf = 0x0d ;

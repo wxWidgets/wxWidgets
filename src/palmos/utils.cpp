@@ -4,7 +4,7 @@
 // Author:      William Osborne
 // Modified by:
 // Created:     10/13/04
-// RCS-ID:      $Id: 
+// RCS-ID:      $Id:
 // Copyright:   (c) William Osborne
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -90,7 +90,7 @@ bool wxGetUserName(wxChar *buf, int maxSize)
 
     wxStrncpy (buf, wxConvertMB2WX(id), maxSize - 1);
 
-    // free the buffer 
+    // free the buffer
     MemPtrUnlock(id);
 
     return true;
@@ -156,7 +156,7 @@ bool wxShutdown(wxShutdownFlags wFlags)
 // ----------------------------------------------------------------------------
 
 // Get free memory in bytes, or -1 if cannot determine amount (e.g. on UNIX)
-long wxGetFreeMemory()
+wxMemorySize wxGetFreeMemory()
 {
     uint32_t freeTotal = 0;
     uint32_t freeHeap;
@@ -171,7 +171,7 @@ long wxGetFreeMemory()
         freeTotal+=freeHeap;
     }
 
-    return freeTotal;
+    return (wxMemorySize)freeTotal;
 }
 
 unsigned long wxGetProcessId()

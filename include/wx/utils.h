@@ -61,6 +61,18 @@ class WXDLLIMPEXP_CORE wxPoint;
 #define wxMax(a,b)            (((a) > (b)) ? (a) : (b))
 #define wxMin(a,b)            (((a) < (b)) ? (a) : (b))
 
+// wxGetFreeMemory can return huge amount of memory on 64-bit platforms
+// define wxMemorySize according to the type which best fits your platform
+#if wxUSE_LONGLONG && defined(__WIN64__)
+    // 64 bit Windowses have sizeof(long) only 32 bit long
+    // we need to use wxLongLong to express memory sizes
+    #define wxMemorySize wxLongLong
+#else
+    // 64 bit UNIX has sizeof(long) = 64
+    // assume 32 bit platforms cannnot return more than 32bits of
+    #define wxMemorySize long
+#endif
+
 // ----------------------------------------------------------------------------
 // String functions (deprecated, use wxString)
 // ----------------------------------------------------------------------------
@@ -283,7 +295,7 @@ wxDEPRECATED( WXDLLIMPEXP_BASE void wxUsleep(unsigned long milliseconds) );
 WXDLLIMPEXP_BASE unsigned long wxGetProcessId();
 
 // Get free memory in bytes, or -1 if cannot determine amount (e.g. on UNIX)
-WXDLLIMPEXP_BASE long wxGetFreeMemory();
+WXDLLIMPEXP_BASE wxMemorySize wxGetFreeMemory();
 
 // should wxApp::OnFatalException() be called?
 WXDLLIMPEXP_BASE bool wxHandleFatalExceptions(bool doit = true);

@@ -259,7 +259,7 @@ long wxExecute( const wxString& command, int flags, wxProcess *process )
     wxString argument;
     const wxChar *cptr = command.c_str();
     wxChar quotechar = wxT('\0'); // is arg quoted?
-    bool escaped = FALSE;
+    bool escaped = false;
 
     // split the command line in arguments
     do
@@ -278,14 +278,14 @@ long wxExecute( const wxString& command, int flags, wxProcess *process )
         {
             if ( *cptr == wxT('\\') && ! escaped )
             {
-                escaped = TRUE;
+                escaped = true;
                 cptr++;
                 continue;
             }
 
             // all other characters:
             argument += *cptr++;
-            escaped = FALSE;
+            escaped = false;
 
             // have we reached the end of the argument?
             if ( (*cptr == quotechar && ! escaped)
@@ -348,7 +348,7 @@ bool wxShell(const wxString& command)
 
 bool wxShell(const wxString& command, wxArrayString& output)
 {
-    wxCHECK_MSG( !!command, FALSE, _T("can't exec shell non interactively") );
+    wxCHECK_MSG( !command.empty(), false, _T("can't exec shell non interactively") );
 
     return wxExecute(wxMakeShellCommand(command), output);
 }
@@ -369,7 +369,7 @@ bool wxShutdown(wxShutdownFlags wFlags)
 
         default:
             wxFAIL_MSG( _T("unknown wxShutdown() flag") );
-            return FALSE;
+            return false;
     }
 
     return system(wxString::Format(_T("init %c"), level).mb_str()) == 0;
@@ -385,7 +385,7 @@ bool wxShutdown(wxShutdownFlags wFlags)
 bool wxPipeInputStream::CanRead() const
 {
     if ( m_lasterror == wxSTREAM_EOF )
-        return FALSE;
+        return false;
 
     // check if there is any input available
     struct timeval tv;
@@ -404,7 +404,7 @@ bool wxPipeInputStream::CanRead() const
             // fall through
 
         case 0:
-            return FALSE;
+            return false;
 
         default:
             wxFAIL_MSG(_T("unexpected select() return value"));
@@ -724,7 +724,7 @@ char *wxGetUserHome( const wxString &user )
 // private use only)
 static bool wxGetHostNameInternal(wxChar *buf, int sz)
 {
-    wxCHECK_MSG( buf, FALSE, wxT("NULL pointer in wxGetHostNameInternal") );
+    wxCHECK_MSG( buf, false, wxT("NULL pointer in wxGetHostNameInternal") );
 
     *buf = wxT('\0');
 
@@ -742,7 +742,7 @@ static bool wxGetHostNameInternal(wxChar *buf, int sz)
 #else // no uname, no gethostname
     wxFAIL_MSG(wxT("don't know host name for this machine"));
 
-    bool ok = FALSE;
+    bool ok = false;
 #endif // uname/gethostname
 
     if ( !ok )
@@ -785,7 +785,7 @@ bool wxGetFullHostName(wxChar *buf, int sz)
             {
                 wxLogSysError(_("Cannot get the official hostname"));
 
-                ok = FALSE;
+                ok = false;
             }
             else
             {
@@ -807,10 +807,10 @@ bool wxGetUserId(wxChar *buf, int sz)
     if ((who = getpwuid(getuid ())) != NULL)
     {
         wxStrncpy (buf, wxConvertMB2WX(who->pw_name), sz - 1);
-        return TRUE;
+        return true;
     }
 
-    return FALSE;
+    return false;
 }
 
 bool wxGetUserName(wxChar *buf, int sz)
@@ -829,10 +829,10 @@ bool wxGetUserName(wxChar *buf, int sz)
 #else // !HAVE_PW_GECOS
        wxStrncpy (buf, wxConvertMB2WX(who->pw_name), sz - 1);
 #endif // HAVE_PW_GECOS/!HAVE_PW_GECOS
-       return TRUE;
+       return true;
     }
 
-    return FALSE;
+    return false;
 }
 
 // this function is in mac/utils.cpp for wxMac
@@ -863,7 +863,7 @@ unsigned long wxGetProcessId()
     return (unsigned long)getpid();
 }
 
-long wxGetFreeMemory()
+wxMemorySize wxGetFreeMemory()
 {
 #if defined(__LINUX__)
     // get it from /proc/meminfo
@@ -881,10 +881,10 @@ long wxGetFreeMemory()
 
         fclose(fp);
 
-        return memFree;
+        return (wxMemorySize)memFree;
     }
 #elif defined(__SUN__) && defined(_SC_AVPHYS_PAGES)
-    return sysconf(_SC_AVPHYS_PAGES)*sysconf(_SC_PAGESIZE);
+    return (wxMemorySize)(sysconf(_SC_AVPHYS_PAGES)*sysconf(_SC_PAGESIZE));
 //#elif defined(__FREEBSD__) -- might use sysctl() to find it out, probably
 #endif
 
@@ -901,7 +901,7 @@ bool wxGetDiskSpace(const wxString& path, wxLongLong *pTotal, wxLongLong *pFree)
     {
         wxLogSysError( wxT("Failed to get file system statistics") );
 
-        return FALSE;
+        return false;
     }
 
     // under Solaris we also have to use f_frsize field instead of f_bsize
@@ -922,9 +922,9 @@ bool wxGetDiskSpace(const wxString& path, wxLongLong *pTotal, wxLongLong *pFree)
         *pFree = wxLongLong(fs.f_bavail) * blockSize;
     }
 
-    return TRUE;
+    return true;
 #else // !HAVE_STATFS && !HAVE_STATVFS
-    return FALSE;
+    return false;
 #endif // HAVE_STATFS
 }
 
@@ -937,14 +937,14 @@ bool wxGetEnv(const wxString& var, wxString *value)
     // wxGetenv is defined as getenv()
     wxChar *p = wxGetenv(var);
     if ( !p )
-        return FALSE;
+        return false;
 
     if ( value )
     {
         *value = p;
     }
 
-    return TRUE;
+    return true;
 }
 
 bool wxSetEnv(const wxString& variable, const wxChar *value)
@@ -994,13 +994,13 @@ extern "C" void wxFatalSignalHandler(wxTYPE_SA_HANDLER)
 bool wxHandleFatalExceptions(bool doit)
 {
     // old sig handlers
-    static bool s_savedHandlers = FALSE;
+    static bool s_savedHandlers = false;
     static struct sigaction s_handlerFPE,
                             s_handlerILL,
                             s_handlerBUS,
                             s_handlerSEGV;
 
-    bool ok = TRUE;
+    bool ok = true;
     if ( doit && !s_savedHandlers )
     {
         // install the signal handler
@@ -1022,7 +1022,7 @@ bool wxHandleFatalExceptions(bool doit)
             wxLogDebug(_T("Failed to install our signal handler."));
         }
 
-        s_savedHandlers = TRUE;
+        s_savedHandlers = true;
     }
     else if ( s_savedHandlers )
     {
@@ -1036,7 +1036,7 @@ bool wxHandleFatalExceptions(bool doit)
             wxLogDebug(_T("Failed to uninstall our signal handler."));
         }
 
-        s_savedHandlers = FALSE;
+        s_savedHandlers = false;
     }
     //else: nothing to do
 
