@@ -271,14 +271,18 @@ void MyCanvas::OnPaint( wxPaintEvent &WXUNUSED(event) )
     }
     dc.SetTextForeground( "BLACK" );
 
-    wxBitmap mono( 30,30,1 );
+    wxBitmap mono( 60,50,1 );
     wxMemoryDC memdc;
     memdc.SelectObject( mono );
     memdc.SetPen( *wxTRANSPARENT_PEN );
-    memdc.SetBrush( *wxBLACK_BRUSH );
-    memdc.DrawRectangle( 0,0,30,30 );
     memdc.SetBrush( *wxWHITE_BRUSH );
-    memdc.DrawRectangle( 5,5,20,20 );
+    memdc.DrawRectangle( 0,0,60,50 );
+    memdc.SetTextForeground( *wxBLACK );
+    memdc.DrawText( "Hi!", 5, 5 );
+    memdc.SetBrush( *wxBLACK_BRUSH );
+    memdc.DrawRectangle( 33,5,20,20 );
+    memdc.SetPen( *wxRED_PEN );
+    memdc.DrawLine( 5, 42, 50, 42 );
     memdc.SelectObject( wxNullBitmap );
     if (mono.Ok())
     {
@@ -390,8 +394,7 @@ void MyFrame::OnQuit( wxCommandEvent &WXUNUSED(event) )
 void MyFrame::OnAbout( wxCommandEvent &WXUNUSED(event) )
 {
   (void)wxMessageBox( "wxImage demo\n"
-                      "\n"
-                      "Robert Roebling (c) 1998",
+                      "Robert Roebling (c) 1998,2000",
                       "About wxImage Demo", wxICON_INFORMATION | wxOK );
 }
 
