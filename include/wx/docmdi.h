@@ -75,7 +75,7 @@ class WXDLLEXPORT wxDocMDIChildFrame: public wxMDIChildFrame
   inline wxView *GetView(void) const { return m_childView; }
   inline void SetDocument(wxDocument *doc) { m_childDocument = doc; }
   inline void SetView(wxView *view) { m_childView = view; }
-  bool Destroy() { m_childView = (wxView *)NULL; return wxFrame::Destroy(); }
+  bool Destroy() { m_childView = (wxView *)NULL; return wxMDIChildFrame::Destroy(); }
  protected:
   wxDocument*       m_childDocument;
   wxView*           m_childView;

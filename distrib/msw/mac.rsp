@@ -44,5 +44,6 @@ src/mac/macsock/*.lib
 src/mac/morefile/*.h
 src/mac/morefile/*.cpp
 
+include/wx_pb.h
 include/wx/mac/*.h
 

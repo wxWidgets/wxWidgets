@@ -23,7 +23,7 @@ class MyCanvas: public wxScrolledWindow
 public:
     wxView *view;
     
-    MyCanvas(wxView *v, wxFrame *frame, const wxPoint& pos, const wxSize& size, long style);
+    MyCanvas(wxView *v, wxMDIChildFrame *frame, const wxPoint& pos, const wxSize& size, long style);
     virtual void OnDraw(wxDC& dc);
     void OnMouseEvent(wxMouseEvent& event);
 
@@ -36,16 +36,16 @@ class MyTextWindow: public wxTextCtrl
 public:
     wxView *view;
     
-    MyTextWindow(wxView *v, wxFrame *frame, const wxPoint& pos, const wxSize& size, long style);
+    MyTextWindow(wxView *v, wxMDIChildFrame *frame, const wxPoint& pos, const wxSize& size, long style);
 };
 
 class DrawingView: public wxView
 {
 public:
-    wxFrame *frame;
+    wxMDIChildFrame *frame;
     MyCanvas *canvas;
   
-    DrawingView() { canvas = (MyCanvas *) NULL; frame = (wxFrame *) NULL; }
+    DrawingView() { canvas = (MyCanvas *) NULL; frame = (wxMDIChildFrame *) NULL; }
     ~DrawingView() {}
 
     bool OnCreate(wxDocument *doc, long flags);
@@ -63,10 +63,10 @@ private:
 class TextEditView: public wxView
 {
 public:
-    wxFrame *frame;
+    wxMDIChildFrame *frame;
     MyTextWindow *textsw;
   
-    TextEditView(): wxView() { frame = (wxFrame *) NULL; textsw = (MyTextWindow *) NULL; }
+    TextEditView(): wxView() { frame = (wxMDIChildFrame *) NULL; textsw = (MyTextWindow *) NULL; }
     ~TextEditView() {}
 
     bool OnCreate(wxDocument *doc, long flags);

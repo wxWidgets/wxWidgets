@@ -275,13 +275,15 @@ void MyFrame::OnNewWindow(wxCommandEvent& WXUNUSED(event) )
     subframe->Show(TRUE);
 }
 
-void MyFrame::OnSize(wxSizeEvent& WXUNUSED(event))
+void MyFrame::OnSize(wxSizeEvent& event)
 {
     int w, h;
     GetClientSize(&w, &h);
 
     textWindow->SetSize(0, 0, 200, h);
     GetClientWindow()->SetSize(200, 0, w - 200, h);
+    
+    event.Skip();
 }
 
 void MyFrame::InitToolBar(wxToolBar* toolBar)

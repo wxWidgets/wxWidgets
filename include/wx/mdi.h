@@ -1,7 +1,9 @@
 #ifndef _WX_MDI_H_BASE_
 #define _WX_MDI_H_BASE_
 
-#if defined(__WXMSW__)
+#if defined(__WXUNIVERSAL__)
+#include "wx/generic/mdig.h"
+#elif defined(__WXMSW__)
 #include "wx/msw/mdi.h"
 #elif defined(__WXMOTIF__)
 #include "wx/motif/mdi.h"

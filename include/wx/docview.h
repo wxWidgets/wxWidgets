@@ -177,8 +177,8 @@ public:
     wxString GetViewName() const { return m_viewTypeName; }
     void SetViewName(const wxString& name) { m_viewTypeName = name; };
 
-    wxFrame *GetFrame() const { return m_viewFrame ; }
-    void SetFrame(wxFrame *frame) { m_viewFrame = frame; }
+    wxWindow *GetFrame() const { return m_viewFrame ; }
+    void SetFrame(wxWindow *frame) { m_viewFrame = frame; }
 
     virtual void OnActivateView(bool activate, wxView *activeView, wxView *deactiveView);
     virtual void OnDraw(wxDC *dc) = 0;
@@ -221,7 +221,7 @@ public:
 protected:
     wxDocument*       m_viewDocument;
     wxString          m_viewTypeName;
-    wxFrame*          m_viewFrame;
+    wxWindow*         m_viewFrame;
 };
 
 // Represents user interface (and other) properties of documents and views

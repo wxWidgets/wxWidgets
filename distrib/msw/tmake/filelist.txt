@@ -90,6 +90,7 @@ imaglist.cpp	Generic	NotWin32
 laywin.cpp	Generic
 listctrl.cpp	Generic	NotWin32
 logg.cpp	Generic
+mdig.cpp	Generic	NotWin32,NotGTK,NotOS2,NotMac
 msgdlgg.cpp	Generic	Generic
 notebook.cpp	Generic	NotWin32,NotGTK,NotOS2,NotMGL,NotX11,NotMac,NotMicro
 numdlgg.cpp	Generic
@@ -1483,6 +1484,7 @@ helphtml.h	GenericH
 imaglist.h	GenericH
 laywin.h	GenericH
 listctrl.h	GenericH	NotWin32
+mdig.cpp	GenericH	NotWin32,NotGTK,NotOS2,NotMac
 msgdlgg.h	GenericH
 notebook.h	GenericH
 paletteg.h	GenericH	NotMSW,NotX,NotX11,NotOS2

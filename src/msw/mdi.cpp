@@ -43,6 +43,8 @@
     #include "wx/log.h"
 #endif
 
+#if wxUSE_MDI_ARCHITECTURE && !defined(__WXUNIVERSAL__)
+
 #include "wx/mdi.h"
 #include "wx/msw/private.h"
 
@@ -1387,3 +1389,7 @@ static void UnpackMDIActivate(WXWPARAM wParam, WXLPARAM lParam,
     *hwndDeact = (WXHWND)HIWORD(lParam);
 #endif // Win32/Win16
 }
+
+#endif
+// wxUSE_MDI_ARCHITECTURE && !defined(__WXUNIVERSAL__)
+

@@ -98,6 +98,7 @@ int wxJoystick::GetPOVPosition() const
 #ifndef NO_JOYGETPOSEX
     JOYINFOEX joyInfo;
     joyInfo.dwFlags = JOY_RETURNPOV;
+    joyInfo.dwSize = sizeof(joyInfo);
     MMRESULT res = joyGetPosEx(m_joystick, & joyInfo);
     if (res == JOYERR_NOERROR )
     {
@@ -115,6 +116,7 @@ int wxJoystick::GetPOVCTSPosition() const
 #ifndef NO_JOYGETPOSEX
     JOYINFOEX joyInfo;
     joyInfo.dwFlags = JOY_RETURNPOVCTS;
+    joyInfo.dwSize = sizeof(joyInfo);
     MMRESULT res = joyGetPosEx(m_joystick, & joyInfo);
     if (res == JOYERR_NOERROR )
     {
@@ -132,6 +134,7 @@ int wxJoystick::GetRudderPosition() const
 #ifndef NO_JOYGETPOSEX
     JOYINFOEX joyInfo;
     joyInfo.dwFlags = JOY_RETURNR;
+    joyInfo.dwSize = sizeof(joyInfo);
     MMRESULT res = joyGetPosEx(m_joystick, & joyInfo);
     if (res == JOYERR_NOERROR )
     {
@@ -149,6 +152,7 @@ int wxJoystick::GetUPosition() const
 #ifndef NO_JOYGETPOSEX
     JOYINFOEX joyInfo;
     joyInfo.dwFlags = JOY_RETURNU;
+    joyInfo.dwSize = sizeof(joyInfo);
     MMRESULT res = joyGetPosEx(m_joystick, & joyInfo);
     if (res == JOYERR_NOERROR )
     {
@@ -166,6 +170,7 @@ int wxJoystick::GetVPosition() const
 #ifndef NO_JOYGETPOSEX
     JOYINFOEX joyInfo;
     joyInfo.dwFlags = JOY_RETURNV;
+    joyInfo.dwSize = sizeof(joyInfo);
     MMRESULT res = joyGetPosEx(m_joystick, & joyInfo);
     if (res == JOYERR_NOERROR )
     {

@@ -16,6 +16,8 @@
 #ifndef __DOCVIEWSAMPLEH__
 #define __DOCVIEWSAMPLEH__
 
+#include "wx/mdi.h"
+#include "wx/docview.h"
 #include "wx/docmdi.h"
 
 class wxDocManager;
@@ -48,7 +50,7 @@ class MyFrame: public wxDocMDIParentFrame
     long type);
 
   void OnAbout(wxCommandEvent& event);
-  MyCanvas *CreateCanvas(wxView *view, wxFrame *parent);
+  MyCanvas *CreateCanvas(wxView *view, wxMDIChildFrame *parent);
 
 DECLARE_EVENT_TABLE()
 };

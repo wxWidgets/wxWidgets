@@ -1,7 +1,4 @@
-include/wx_cw.pch
-include/wx_cw.pch++
-include/wx_cw_d.pch
-include/wx_cw_d.pch++
+include/wx*.pch*
 
 include/wx/wx_cw.h
 include/wx/wx_cw_d.h

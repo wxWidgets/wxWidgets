@@ -29,8 +29,8 @@ program contains the following:
 - All common, generic and MSW-specific wxWindows source;
 - samples;
 - documentation in Windows Help format;
-- makefiles for most Windows compilers, plus BC++ and
-  VC++ IDE files;
+- makefiles for most Windows compilers, plus CodeWarrior,
+  BC++ and VC++ IDE files;
 - JPEG library source;
 - TIFF library source;
 - Object Graphics Library;

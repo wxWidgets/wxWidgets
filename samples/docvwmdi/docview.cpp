@@ -208,7 +208,7 @@ void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event) )
 
 // Creates a canvas. Called from view.cpp when a new drawing
 // view is created.
-MyCanvas *MyFrame::CreateCanvas(wxView *view, wxFrame *parent)
+MyCanvas *MyFrame::CreateCanvas(wxView *view, wxMDIChildFrame *parent)
 {
   int width, height;
   parent->GetClientSize(&width, &height);

@@ -703,6 +703,10 @@ SOURCE=.\generic\logg.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\generic\mdig.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\generic\msgdlgg.cpp
 # End Source File
 # Begin Source File
