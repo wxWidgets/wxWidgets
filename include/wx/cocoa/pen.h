@@ -65,6 +65,7 @@ public:
     wxBitmap *GetStipple() const;
 
     WX_NSColor GetNSColor();
+    int GetCocoaLineDash(const float **pattern);
 };
 
 #endif // __WX_COCOA_PEN_H__

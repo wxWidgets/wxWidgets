@@ -27,27 +27,34 @@ public:
         int width = 1, int style = wxSOLID,
         const wxBitmap& stipple = wxNullBitmap);
     wxPenRefData(const wxPenRefData& data);
-    ~wxPenRefData() { Free(); }
+    ~wxPenRefData() { FreeCocoaNSColor(); FreeCocoaDash(); }
 
     void SetWidth(int Width) { m_width = Width; }
-    void SetStyle(int Style) { m_style = Style; }
+    void SetStyle(int Style)
+    {   FreeCocoaNSColor();
+        FreeCocoaDash();
+        m_style = Style;
+    }
     void SetJoin(int Join) { m_join = Join; }
     void SetCap(int Cap) { m_cap = Cap; }
-    void SetColour(const wxColour& col) { Free(); m_colour = col; }
+    void SetColour(const wxColour& col) { FreeCocoaNSColor(); m_colour = col; }
     void SetDashes(int nb_dashes, const wxDash *Dash)
     {
+        FreeCocoaDash();
         m_nbDash = nb_dashes;
         m_dash = (wxDash *)Dash;
     }
     void SetStipple(const wxBitmap& Stipple)
     {
-        Free();
+        FreeCocoaNSColor();
         m_stipple = Stipple;
         m_style = wxSTIPPLE;
     }
     WX_NSColor GetNSColor();
+    int GetCocoaLineDash(const float **pattern);
 protected:
-    void Free();
+    void FreeCocoaNSColor();
+    void FreeCocoaDash();
 
     int             m_width;
     int             m_style;
@@ -58,9 +65,40 @@ protected:
     wxDash         *m_dash;
     wxBitmap        m_stipple;
     WX_NSColor      m_cocoaNSColor;
+    float          *m_cocoaDash;
+
+    // Predefined dash patterns
+    static const int scm_countDot;
+    static const float scm_patternDot[];
+    static const int scm_countLongDash;
+    static const float scm_patternLongDash[];
+    static const int scm_countShortDash;
+    static const float scm_patternShortDash[];
+    static const int scm_countDotDash;
+    static const float scm_patternDotDash[];
 private:
     // Don't allow assignment
     wxPenRefData& operator=(const wxPenRefData& data);
+};
+
+const int wxPenRefData::scm_countDot = 1;
+const float wxPenRefData::scm_patternDot[] = {
+    1.0
+};
+const int wxPenRefData::scm_countLongDash = 1;
+const float wxPenRefData::scm_patternLongDash[] = {
+    10.0
+};
+const int wxPenRefData::scm_countShortDash = 1;
+const float wxPenRefData::scm_patternShortDash[] = {
+    5.0
+};
+const int wxPenRefData::scm_countDotDash = 4;
+const float wxPenRefData::scm_patternDotDash[] = {
+    1.0
+,   1.0
+,   5.0
+,   1.0
 };
 
 #define M_PENDATA ((wxPenRefData *)m_refData)
@@ -77,6 +115,7 @@ inline wxPenRefData::wxPenRefData(const wxColour& colour,
     m_dash = 0;
     m_stipple = stipple;
     m_cocoaNSColor = nil;
+    m_cocoaDash = NULL;
 }
 
 inline wxPenRefData::wxPenRefData(const wxPenRefData& data)
@@ -92,10 +131,16 @@ inline wxPenRefData::wxPenRefData(const wxPenRefData& data)
     m_cocoaNSColor = [data.m_cocoaNSColor retain];
 }
 
-inline void wxPenRefData::Free()
+inline void wxPenRefData::FreeCocoaNSColor()
 {
     [m_cocoaNSColor release];
     m_cocoaNSColor = nil;
+}
+
+inline void wxPenRefData::FreeCocoaDash()
+{
+    delete m_cocoaDash;
+    m_cocoaDash = NULL;
 }
 
 inline WX_NSColor wxPenRefData::GetNSColor()
@@ -134,6 +179,61 @@ inline WX_NSColor wxPenRefData::GetNSColor()
         }
     }
     return m_cocoaNSColor;
+}
+
+int wxPenRefData::GetCocoaLineDash(const float **pattern)
+{
+    int count;
+    switch( m_style )
+    {
+    case wxDOT:
+        count = scm_countDot;
+        if(pattern)
+            *pattern = scm_patternDot;
+        break;
+    case wxLONG_DASH:
+        count = scm_countLongDash;
+        if(pattern)
+            *pattern = scm_patternLongDash;
+        break;
+    case wxSHORT_DASH:
+        count = scm_countShortDash;
+        if(pattern)
+            *pattern = scm_patternShortDash;
+        break;
+    case wxDOT_DASH:
+        count = scm_countDotDash;
+        if(pattern)
+            *pattern = scm_patternDotDash;
+        break;
+    case wxUSER_DASH:
+        count = m_nbDash;
+        if(pattern)
+        {
+            if(!m_cocoaDash)
+            {
+                m_cocoaDash = new float[count];
+                for(int i=0; i<count; i++)
+                    m_cocoaDash[i] = m_dash[i];
+            }
+            *pattern = m_cocoaDash;
+        }
+        break;
+    case wxTRANSPARENT:
+    case wxSTIPPLE:
+    case wxBDIAGONAL_HATCH:
+    case wxCROSSDIAG_HATCH:
+    case wxFDIAGONAL_HATCH:
+    case wxCROSS_HATCH:
+    case wxHORIZONTAL_HATCH:
+    case wxVERTICAL_HATCH:
+    case wxSOLID:
+    default:
+        count = 0;
+        if(pattern)
+            *pattern = NULL;
+    }
+    return count;
 }
 
 // ========================================================================
@@ -256,5 +356,14 @@ wxBitmap *wxPen::GetStipple() const
 WX_NSColor wxPen::GetNSColor()
 {
     return (M_PENDATA ? M_PENDATA->GetNSColor() : nil);
+}
+
+int wxPen::GetCocoaLineDash(const float **pattern)
+{
+    if(M_PENDATA)
+        return M_PENDATA->GetCocoaLineDash(pattern);
+    if(pattern)
+        *pattern = NULL;
+    return 0;
 }
 
