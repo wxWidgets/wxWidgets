@@ -35,6 +35,7 @@
   #include  <wx/string.h>
 #endif //WX_PRECOMP
 
+#include <wx/app.h>
 #include <wx/log.h>
 #include <wx/config.h>
 #include <wx/msw/registry.h>
@@ -69,6 +70,8 @@ bool TryGetValue(const wxRegKey& key, const wxString& str, long *plVal)
 // ----------------------------------------------------------------------------
 // ctor/dtor
 // ----------------------------------------------------------------------------
+
+#if 0
 wxRegConfig::wxRegConfig(const wxString& strRoot)
            : m_keyLocalRoot(wxRegKey::HKCU, SOFTWARE_KEY + strRoot),
              m_keyLocal(m_keyLocalRoot, ""),
@@ -83,6 +86,57 @@ wxRegConfig::wxRegConfig(const wxString& strRoot)
 
   wxLogNull nolog;
   m_keyGlobalRoot.Open();
+}
+#endif
+
+// TODO: vendor name is ignored, because we can't yet do the test for optional vendor
+// name in the constructor body. We need a wxRegKey::Set that takes the same
+// args as the constructor. Then we'll set m_keyLocalRoot etc. in the constructor body.
+
+wxRegConfig::wxRegConfig(const wxString& appName, const wxString& vendorName,
+      const wxString& strLocal, const wxString& strGlobal, long style)
+            : wxConfigBase(appName, vendorName, strLocal, strGlobal, style),
+
+             m_keyLocalRoot(wxRegKey::HKCU, SOFTWARE_KEY + appName),
+             m_keyLocal(m_keyLocalRoot, ""),
+             m_keyGlobalRoot(wxRegKey::HKLM, SOFTWARE_KEY + appName),
+             m_keyGlobal(m_keyGlobalRoot, "")
+{
+    // TODO: really, we should check and supply an app name if one isn't supplied.
+    // Unfortunately I don't know how to initialise the member wxRegKey
+    // variables from within the constructor body. -- JACS
+    // Vadim - we just need an implementation of wxRegKey::Set,
+    // and then we can uncomment this and remove the constructor lines above.
+/*
+    wxString strRoot(appName);
+    if (appName.IsEmpty() && wxTheApp)
+    {
+        strRoot = wxTheApp->GetAppName();
+    }
+    wxASSERT( !strRoot.IsEmpty() );
+
+    if (!vendorName.IsEmpty())
+    {
+        strRoot += "\\";
+        strRoot += vendorName;
+    }
+
+    m_keyLocalRoot.Set(wxRegKey::HKCU, SOFTWARE_KEY + strRoot),
+    m_keyLocal.Set(m_keyLocalRoot, ""),
+
+    m_keyGlobalRoot.Set(wxRegKey::HKLM, SOFTWARE_KEY + strRoot),
+    m_keyGlobal.Set(m_keyGlobalRoot, "")
+*/
+
+  // Create() will Open() if key already exists
+  m_keyLocalRoot.Create();
+
+  // as it's the same key, Open() shouldn't fail (i.e. no need for Create())
+  m_keyLocal.Open();
+
+  wxLogNull nolog;
+  m_keyGlobalRoot.Open();
+
 }
 
 wxRegConfig::~wxRegConfig()
@@ -252,11 +306,47 @@ bool wxRegConfig::HasEntry(const wxString& strName) const
 // reading/writing
 // ----------------------------------------------------------------------------
 
-bool wxRegConfig::Read(wxString *pStr,
-                       const char *szKey,
-                       const char *szDefault) const
+bool wxRegConfig::Read(const wxString& key, wxString *pStr) const
 {
-  PathChanger path(this, szKey);
+  wxConfigPathChanger path(this, key);
+
+  bool bQueryGlobal = TRUE;
+
+  // if immutable key exists in global key we must check that it's not
+  // overriden by the local key with the same name
+  if ( IsImmutable(path.Name()) ) {
+    if ( TryGetValue(m_keyGlobal, path.Name(), *pStr) ) {
+      if ( m_keyLocal.HasValue(path.Name()) ) {
+        wxLogWarning("User value for immutable key '%s' ignored.",
+                   path.Name().c_str());
+      }
+     *pStr = wxConfigBase::ExpandEnvVars(*pStr);
+      return TRUE;
+    }
+    else {
+      // don't waste time - it's not there anyhow
+      bQueryGlobal = FALSE;
+    }
+  }
+
+  // first try local key
+  if ( TryGetValue(m_keyLocal, path.Name(), *pStr) ||
+       (bQueryGlobal && TryGetValue(m_keyGlobal, path.Name(), *pStr)) ) {
+    // nothing to do
+
+    // TODO: do we return TRUE? Not in original implementation,
+    // but I don't see why not. -- JACS
+    *pStr = wxConfigBase::ExpandEnvVars(*pStr);
+    return TRUE;
+  }
+
+  return FALSE;
+}
+
+bool wxRegConfig::Read(const wxString& key, wxString *pStr,
+                       const wxString& szDefault) const
+{
+  wxConfigPathChanger path(this, key);
 
   bool bQueryGlobal = TRUE;
 
@@ -280,11 +370,12 @@ bool wxRegConfig::Read(wxString *pStr,
   // first try local key
   if ( TryGetValue(m_keyLocal, path.Name(), *pStr) ||
        (bQueryGlobal && TryGetValue(m_keyGlobal, path.Name(), *pStr)) ) {
-    // nothing to do
+    *pStr = wxConfigBase::ExpandEnvVars(*pStr);
+    return TRUE;
   }
   else {
     if ( IsRecordingDefaults() ) {
-      ((wxRegConfig*)this)->Write(szKey, szDefault);
+      ((wxRegConfig*)this)->Write(key, szDefault);
     }
 
     // default value
@@ -296,9 +387,9 @@ bool wxRegConfig::Read(wxString *pStr,
   return FALSE;
 }
 
-bool wxRegConfig::Read(long *plResult, const char *szKey, long lDefault) const
+bool wxRegConfig::Read(const wxString& key, long *plResult) const
 {
-  PathChanger path(this, szKey);
+  wxConfigPathChanger path(this, key);
 
   bool bQueryGlobal = TRUE;
 
@@ -324,15 +415,12 @@ bool wxRegConfig::Read(long *plResult, const char *szKey, long lDefault) const
        (bQueryGlobal && TryGetValue(m_keyGlobal, path.Name(), plResult)) ) {
     return TRUE;
   }
-
-  // default
-  *plResult = lDefault;
   return FALSE;
 }
 
-bool wxRegConfig::Write(const char *szKey, const char *szValue)
+bool wxRegConfig::Write(const wxString& key, const wxString& szValue)
 {
-  PathChanger path(this, szKey);
+  wxConfigPathChanger path(this, key);
 
   if ( IsImmutable(path.Name()) ) {
     wxLogError("Can't change immutable entry '%s'.", path.Name().c_str());
@@ -342,9 +430,9 @@ bool wxRegConfig::Write(const char *szKey, const char *szValue)
   return m_keyLocal.SetValue(path.Name(), szValue);
 }
 
-bool wxRegConfig::Write(const char *szKey, long lValue)
+bool wxRegConfig::Write(const wxString& key, long lValue)
 {
-  PathChanger path(this, szKey);
+  wxConfigPathChanger path(this, key);
 
   if ( IsImmutable(path.Name()) ) {
     wxLogError("Can't change immutable entry '%s'.", path.Name().c_str());
@@ -357,9 +445,9 @@ bool wxRegConfig::Write(const char *szKey, long lValue)
 // ----------------------------------------------------------------------------
 // deleting
 // ----------------------------------------------------------------------------
-bool wxRegConfig::DeleteEntry(const char *szValue, bool bGroupIfEmptyAlso)
+bool wxRegConfig::DeleteEntry(const wxString& value, bool bGroupIfEmptyAlso)
 {
-  PathChanger path(this, szValue);
+  wxConfigPathChanger path(this, value);
 
   if ( !m_keyLocal.DeleteValue(path.Name()) )
     return FALSE;
@@ -373,9 +461,9 @@ bool wxRegConfig::DeleteEntry(const char *szValue, bool bGroupIfEmptyAlso)
   return TRUE;
 }
 
-bool wxRegConfig::DeleteGroup(const char *szKey)
+bool wxRegConfig::DeleteGroup(const wxString& key)
 {
-  PathChanger path(this, szKey);
+  wxConfigPathChanger path(this, key);
 
   return m_keyLocal.DeleteKey(path.Name());
 }

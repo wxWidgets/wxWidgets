@@ -112,6 +112,8 @@ public:
   static wxString GetLocalFileName(const char *szFile);
 
   // ctor & dtor
+
+#if 0
     // the names of local and global (if not disabled) config files are
     // constructed using Get{Local|Global}FileName functions described above
     // (szAppName is just the (short) name of your application)
@@ -123,6 +125,14 @@ public:
     // directory). If either of strings is empty, the corresponding file is not
     // used.
   wxFileConfig(const wxString& strLocal, const wxString& strGlobal);
+#endif
+
+   // New constructor: one size fits all. Specify wxCONFIG_USE_LOCAL_FILE
+   // or wxCONFIG_USE_GLOBAL_FILE to say which files should be used.
+  wxFileConfig(const wxString& appName, const wxString& vendorName = wxEmptyString,
+    const wxString& localFilename = wxEmptyString, const wxString& globalFilename = wxEmptyString,
+    long style = wxCONFIG_USE_LOCAL_FILE);
+
     // dtor will save unsaved data
   virtual ~wxFileConfig();
 
@@ -141,6 +151,7 @@ public:
   virtual bool HasGroup(const wxString& strName) const;
   virtual bool HasEntry(const wxString& strName) const;
 
+#if 0
   virtual bool Read(wxString *pstr, const char *szKey,
                     const char *szDefault = 0) const;
   virtual const char *Read(const char *szKey,
@@ -150,10 +161,31 @@ public:
     { return wxConfigBase::Read(szKey, lDefault); }
   virtual bool Write(const char *szKey, const char *szValue);
   virtual bool Write(const char *szKey, long lValue);
+#endif
+
+  virtual bool Read(const wxString& key, wxString *pStr) const;
+  virtual bool Read(const wxString& key, wxString *pStr, const wxString& defValue) const;
+  virtual bool Read(const wxString& key, long *pl) const;
+
+  // The following are necessary to satisfy the compiler
+  wxString Read(const wxString& key, const wxString& defVal) const
+  { return wxConfigBase::Read(key, defVal); }
+  bool Read(const wxString& key, long *pl, long defVal) const
+  { return wxConfigBase::Read(key, pl, defVal); }
+  long Read(const wxString& key, long defVal) const
+  { return wxConfigBase::Read(key, defVal); }
+  bool Read(const wxString& key, double* val) const
+  { return wxConfigBase::Read(key, val); }
+  bool Read(const wxString& key, double* val, double defVal) const
+  { return wxConfigBase::Read(key, val, defVal); }
+
+  virtual bool Write(const wxString& key, const wxString& szValue);
+  virtual bool Write(const wxString& key, long lValue);
+
   virtual bool Flush(bool bCurrentOnly = FALSE);
 
-  virtual bool DeleteEntry(const char *szKey, bool bGroupIfEmptyAlso);
-  virtual bool DeleteGroup(const char *szKey);
+  virtual bool DeleteEntry(const wxString& key, bool bGroupIfEmptyAlso);
+  virtual bool DeleteGroup(const wxString& szKey);
   virtual bool DeleteAll();
 
 public:

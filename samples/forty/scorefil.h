@@ -13,6 +13,8 @@
 #ifndef _SCOREFILE_H_
 #define _SCOREFILE_H_
 
+#include <wx/config.h>
+
 class wxConfig;
 
 class ScoreFile {
@@ -28,8 +30,8 @@ public:
 
 private:
 	long CalcCheck(const char* name, int p1, int p2, int p3);
-	wxString	m_configFilename;
-	wxConfig*	m_config;
+	wxString	    m_configFilename;
+	wxConfig*	    m_config;
 };
 
 #endif

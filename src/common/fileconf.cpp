@@ -32,6 +32,7 @@
   #include  <wx/intl.h>
 #endif  //WX_PRECOMP
 
+#include  <wx/app.h>
 #include  <wx/dynarray.h>
 #include  <wx/file.h>
 #include  <wx/log.h>
@@ -207,6 +208,7 @@ void wxFileConfig::Init()
   }
 }
 
+#if 0
 wxFileConfig::wxFileConfig(const char *szAppName, bool bLocalOnly)
 {
   wxASSERT( !IsEmpty(szAppName) ); // invent a name for your application!
@@ -222,6 +224,55 @@ wxFileConfig::wxFileConfig(const char *szAppName, bool bLocalOnly)
 wxFileConfig::wxFileConfig(const wxString& strLocal, const wxString& strGlobal)
             : m_strLocalFile(strLocal), m_strGlobalFile(strGlobal)
 {
+  // if the path is not absolute, prepend the standard directory to it
+  if ( !strLocal.IsEmpty() && !wxIsAbsolutePath(strLocal) )
+  {
+     m_strLocalFile = GetLocalDir();
+     m_strLocalFile << strLocal;
+  }
+  
+  if ( !strGlobal.IsEmpty() && !wxIsAbsolutePath(strGlobal) )
+  {
+     m_strGlobalFile = GetGlobalDir();
+     m_strGlobalFile << strGlobal;
+  }
+
+  Init();
+}
+#endif
+
+// New-style constructor
+wxFileConfig::wxFileConfig(const wxString& appName, const wxString& vendorName,
+      const wxString& strLocal, const wxString& strGlobal, long style)
+            : wxConfigBase(appName, vendorName, strLocal, strGlobal, style),
+              m_strLocalFile(strLocal), m_strGlobalFile(strGlobal)
+{
+    // Make up an application name if not supplied
+    if (appName.IsEmpty() && wxTheApp)
+    {
+        SetAppName(wxTheApp->GetAppName());
+    }
+
+    // Make up names for files if empty
+    if (m_strLocalFile.IsEmpty() && (style & wxCONFIG_USE_LOCAL_FILE) && wxTheApp)
+    {
+        m_strLocalFile = wxTheApp->GetAppName();
+    }
+
+    if (m_strGlobalFile.IsEmpty() && (style & wxCONFIG_USE_GLOBAL_FILE))
+    {
+        // TODO: What should the default global filename be?
+        m_strGlobalFile = "global";
+    }
+
+    // Check if styles are not supplied, but filenames are, in which case
+    // add the correct styles.
+    if (!m_strLocalFile.IsEmpty() && ((style & wxCONFIG_USE_LOCAL_FILE) != wxCONFIG_USE_LOCAL_FILE))
+        SetStyle(GetStyle() | wxCONFIG_USE_LOCAL_FILE);
+
+    if (!m_strGlobalFile.IsEmpty() && ((style & wxCONFIG_USE_GLOBAL_FILE) != wxCONFIG_USE_GLOBAL_FILE))
+        SetStyle(GetStyle() | wxCONFIG_USE_GLOBAL_FILE);
+
   // if the path is not absolute, prepend the standard directory to it
   if ( !strLocal.IsEmpty() && !wxIsAbsolutePath(strLocal) )
   {
@@ -509,7 +560,7 @@ size_t wxFileConfig::GetNumberOfGroups(bool bRecursive) const
 
 bool wxFileConfig::HasGroup(const wxString& strName) const
 {
-  PathChanger path(this, strName);
+  wxConfigPathChanger path(this, strName);
 
   ConfigGroup *pGroup = m_pCurrentGroup->FindSubgroup(path.Name());
   return pGroup != NULL;
@@ -517,7 +568,7 @@ bool wxFileConfig::HasGroup(const wxString& strName) const
 
 bool wxFileConfig::HasEntry(const wxString& strName) const
 {
-  PathChanger path(this, strName);
+  wxConfigPathChanger path(this, strName);
 
   ConfigEntry *pEntry = m_pCurrentGroup->FindEntry(path.Name());
   return pEntry != NULL;
@@ -527,50 +578,54 @@ bool wxFileConfig::HasEntry(const wxString& strName) const
 // read/write values
 // ----------------------------------------------------------------------------
 
-bool wxFileConfig::Read(wxString   *pstr,
-                        const char *szKey,
-                        const char *szDefault) const
+bool wxFileConfig::Read(const wxString& key,
+                        wxString* pStr) const
 {
-  PathChanger path(this, szKey);
+  wxConfigPathChanger path(this, key);
+
+  ConfigEntry *pEntry = m_pCurrentGroup->FindEntry(path.Name());
+  if (pEntry == NULL) {
+    return FALSE;
+  }
+  else {
+    *pStr = ExpandEnvVars(pEntry->Value());
+    return TRUE;
+  }
+}
+
+bool wxFileConfig::Read(const wxString& key,
+                        wxString* pStr, const wxString& defVal) const
+{
+  wxConfigPathChanger path(this, key);
 
   ConfigEntry *pEntry = m_pCurrentGroup->FindEntry(path.Name());
   if (pEntry == NULL) {
     if( IsRecordingDefaults() )
-      ((wxFileConfig *)this)->Write(szKey,szDefault);
-    *pstr = ExpandEnvVars(szDefault);
+      ((wxFileConfig *)this)->Write(key,defVal);
+    *pStr = ExpandEnvVars(defVal);
     return FALSE;
   }
   else {
-    *pstr = ExpandEnvVars(pEntry->Value());
+    *pStr = ExpandEnvVars(pEntry->Value());
     return TRUE;
   }
 }
 
-const char *wxFileConfig::Read(const char *szKey,
-                               const char *szDefault) const
-{
-  static wxString s_str;
-  Read(&s_str, szKey, szDefault);
-
-  return s_str.c_str();
-}
-
-bool wxFileConfig::Read(long *pl, const char *szKey, long lDefault) const
+bool wxFileConfig::Read(const wxString& key, long *pl) const
 {
   wxString str;
-  if ( Read(&str, szKey) ) {
+  if ( Read(key, & str) ) {
     *pl = atol(str);
     return TRUE;
   }
   else {
-    *pl = lDefault;
     return FALSE;
   }
 }
 
-bool wxFileConfig::Write(const char *szKey, const char *szValue)
+bool wxFileConfig::Write(const wxString& key, const wxString& szValue)
 {
-  PathChanger path(this, szKey);
+  wxConfigPathChanger path(this, key);
 
   wxString strName = path.Name();
   if ( strName.IsEmpty() ) {
@@ -611,12 +666,12 @@ bool wxFileConfig::Write(const char *szKey, const char *szValue)
   return TRUE;
 }
 
-bool wxFileConfig::Write(const char *szKey, long lValue)
+bool wxFileConfig::Write(const wxString& key, long lValue)
 {
   // ltoa() is not ANSI :-(
   char szBuf[40];   // should be good for sizeof(long) <= 16 (128 bits)
   sprintf(szBuf, "%ld", lValue);
-  return Write(szKey, szBuf);
+  return Write(key, szBuf);
 }
 
 bool wxFileConfig::Flush(bool /* bCurrentOnly */)
@@ -646,9 +701,9 @@ bool wxFileConfig::Flush(bool /* bCurrentOnly */)
 // delete groups/entries
 // ----------------------------------------------------------------------------
 
-bool wxFileConfig::DeleteEntry(const char *szKey, bool bGroupIfEmptyAlso)
+bool wxFileConfig::DeleteEntry(const wxString& key, bool bGroupIfEmptyAlso)
 {
-  PathChanger path(this, szKey);
+  wxConfigPathChanger path(this, key);
 
   if ( !m_pCurrentGroup->DeleteEntry(path.Name()) )
     return FALSE;
@@ -665,9 +720,9 @@ bool wxFileConfig::DeleteEntry(const char *szKey, bool bGroupIfEmptyAlso)
   return TRUE;
 }
 
-bool wxFileConfig::DeleteGroup(const char *szKey)
+bool wxFileConfig::DeleteGroup(const wxString& key)
 {
-  PathChanger path(this, szKey);
+  wxConfigPathChanger path(this, key);
 
   return m_pCurrentGroup->DeleteSubgroupByName(path.Name());
 }

@@ -158,6 +158,7 @@ MSWOBJS = \
   $(MSWDIR)\helpwin.obj \
   $(MSWDIR)\icon.obj \
   $(MSWDIR)\imaglist.obj \
+  $(MSWDIR)\iniconf.obj \
   $(MSWDIR)\joystick.obj \
   $(MSWDIR)\listbox.obj \
   $(MSWDIR)\listctrl.obj \
@@ -783,6 +784,11 @@ $(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
 <<
 
 $(COMMDIR)/gdicmn.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
+<<
+
+$(COMMDIR)/iniconf.obj:     $*.$(SRCSUFF)
         cl @<<
 $(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
 <<

@@ -43,7 +43,8 @@ public:
     // if strAppName doesn't contain the extension and is not an absolute path,
     // ".ini" is appended to it. if strVendor is empty, it's taken to be the
     // same as strAppName.
-  wxIniConfig(const wxString& strAppName, const wxString& strVendor = "");
+  wxIniConfig(const wxString& strAppName = wxEmptyString, const wxString& strVendor = wxEmptyString,
+    const wxString& localFilename = wxEmptyString, const wxString& globalFilename = wxEmptyString, long style = wxCONFIG_USE_LOCAL_FILE);
   virtual ~wxIniConfig();
 
   // implement inherited pure virtual functions
@@ -64,14 +65,26 @@ public:
   // return TRUE if the current group is empty
   bool IsEmpty() const;
 
-  virtual bool Read(wxString *pstr, const char *szKey,
-                    const char *szDefault = 0) const;
-  virtual const char *Read(const char *szKey,
-                           const char *szDefault = 0) const;
-  virtual bool Read(long *pl, const char *szKey, long lDefault) const;
-  virtual long Read(const char *szKey, long lDefault) const;
-  virtual bool Write(const char *szKey, const char *szValue);
-  virtual bool Write(const char *szKey, long lValue);
+  // read/write
+  bool Read(const wxString& key, wxString *pStr) const;
+  bool Read(const wxString& key, wxString *pStr, const wxString& szDefault) const;
+  bool Read(const wxString& key, long *plResult) const;
+
+  // The following are necessary to satisfy the compiler
+  wxString Read(const wxString& key, const wxString& defVal) const
+  { return wxConfigBase::Read(key, defVal); }
+  bool Read(const wxString& key, long *pl, long defVal) const
+  { return wxConfigBase::Read(key, pl, defVal); }
+  long Read(const wxString& key, long defVal) const
+  { return wxConfigBase::Read(key, defVal); }
+  bool Read(const wxString& key, double* val) const
+  { return wxConfigBase::Read(key, val); }
+  bool Read(const wxString& key, double* val, double defVal) const
+  { return wxConfigBase::Read(key, val, defVal); }
+
+  bool Write(const wxString& key, const wxString& szValue);
+  bool Write(const wxString& key, long lValue);
+
   virtual bool Flush(bool bCurrentOnly = FALSE);
 
   virtual bool DeleteEntry(const char *szKey, bool bGroupIfEmptyAlso);
@@ -80,11 +93,10 @@ public:
 
 private:
   // helpers
-  wxString GetPrivateKeyName(const char *szKey) const;
-  wxString GetKeyName(const char *szKey) const;
+  wxString GetPrivateKeyName(const wxString& szKey) const;
+  wxString GetKeyName(const wxString& szKey) const;
 
-  wxString m_strAppName,  // name of the private INI file
-           m_strVendor;   // name of our section in WIN.INI
+  wxString m_strLocalFilename;  // name of the private INI file
   wxString m_strGroup,    // current group in appname.ini file
            m_strPath;     // the rest of the path (no trailing '_'!)
 };

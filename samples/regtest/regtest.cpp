@@ -57,6 +57,10 @@ public:
   RegImageList();
 };
 
+// array of children of the node
+struct TreeNode;
+WX_DEFINE_ARRAY(TreeNode *, TreeChildren);
+
 // ----------------------------------------------------------------------------
 // our control
 // ----------------------------------------------------------------------------
@@ -90,10 +94,7 @@ public:
   DECLARE_EVENT_TABLE();
 
 private:
-  // array of children of the node
-  struct TreeNode;
-  WX_DEFINE_ARRAY(TreeNode *, TreeChildren);
-  
+
   // structure describing a registry key/value
   struct TreeNode
   {

@@ -25,6 +25,7 @@
 #ifndef   WX_PRECOMP
   #include  <wx/string.h>
   #include  <wx/intl.h>
+  #include  <wx/app.h>
 #endif  //WX_PRECOMP
 
 #include  <wx/dynarray.h>
@@ -54,21 +55,47 @@
 // ctor & dtor
 // ----------------------------------------------------------------------------
 
-wxIniConfig::wxIniConfig(const wxString& strAppName, const wxString& strVendor)
-           : m_strAppName(strAppName), m_strVendor(strVendor)
+wxIniConfig::wxIniConfig(const wxString& strAppName, const wxString& strVendor,
+    const wxString& localFilename, const wxString& globalFilename, long style):
+     wxConfigBase(strAppName, strVendor, localFilename, globalFilename, style)
 {
-  if ( strVendor.IsEmpty() )
-    m_strVendor = strAppName;
+    if ( GetAppName().IsEmpty() )
+    {
+        wxString app;
+        if (wxTheApp)
+            app = wxTheApp->GetAppName();
+        wxASSERT( !app.IsEmpty() );
+        SetAppName(app);
+    }
 
-  // append the extension if none given and it's not an absolute file name
-  // (otherwise we assume that they know what they're doing)
-  if ( !wxIsPathSeparator(m_strAppName[0u]) &&
-        m_strAppName.Find('.') == NOT_FOUND ) {
-    m_strAppName << ".ini";
-  }
+    // Vendor name is required in wxIniConfig.
+    // TODO: should it be required? Why isn't appName used instead? -- JACS
+    if ( GetVendorName().IsEmpty() )
+    {
+        wxString vendor;
+        if (wxTheApp)
+            vendor = wxTheApp->GetVendorName();
+        else
+            vendor = strAppName;
+        SetVendorName(vendor);
+    }
 
-  // set root path
-  SetPath("");
+    m_strLocalFilename = localFilename;
+    if (m_strLocalFilename.IsEmpty())
+    {
+        m_strLocalFilename = GetAppName() + ".ini";
+    }
+
+    // append the extension if none given and it's not an absolute file name
+    // (otherwise we assume that they know what they're doing)
+    if ( !wxIsPathSeparator(m_strLocalFilename[0u]) &&
+        m_strLocalFilename.Find('.') == NOT_FOUND )
+    {
+        m_strLocalFilename << ".ini";
+    }
+
+    // set root path
+    SetPath("");
 }
 
 wxIniConfig::~wxIniConfig()
@@ -142,7 +169,7 @@ const wxString& wxIniConfig::GetPath() const
   return s_str;
 }
 
-wxString wxIniConfig::GetPrivateKeyName(const char *szKey) const
+wxString wxIniConfig::GetPrivateKeyName(const wxString& szKey) const
 {
   wxString strKey;
 
@@ -154,7 +181,7 @@ wxString wxIniConfig::GetPrivateKeyName(const char *szKey) const
   return strKey;
 }
 
-wxString wxIniConfig::GetKeyName(const char *szKey) const
+wxString wxIniConfig::GetKeyName(const wxString& szKey) const
 {
   wxString strKey;
 
@@ -240,7 +267,7 @@ bool wxIniConfig::IsEmpty() const
   char szBuf[1024];
 
   GetPrivateProfileString(m_strGroup, NULL, "",
-                          szBuf, WXSIZEOF(szBuf), m_strAppName);
+                          szBuf, WXSIZEOF(szBuf), m_strLocalFilename);
   if ( !::IsEmpty(szBuf) )
     return FALSE;
 
@@ -255,11 +282,9 @@ bool wxIniConfig::IsEmpty() const
 // read/write
 // ----------------------------------------------------------------------------
 
-bool wxIniConfig::Read(wxString *pstr,
-                       const char *szKey,
-                       const char *szDefault) const
+bool wxIniConfig::Read(const wxString& szKey, wxString *pstr) const
 {
-  PathChanger path(this, szKey);
+  wxConfigPathChanger path(this, szKey);
   wxString strKey = GetPrivateKeyName(path.Name());
 
   char szBuf[1024]; // @@ should dynamically allocate memory...
@@ -268,7 +293,34 @@ bool wxIniConfig::Read(wxString *pstr,
 
   // NB: the lpDefault param to GetPrivateProfileString can't be NULL
   GetPrivateProfileString(m_strGroup, strKey, "",
-                          szBuf, WXSIZEOF(szBuf), m_strAppName);
+                          szBuf, WXSIZEOF(szBuf), m_strLocalFilename);
+  if ( ::IsEmpty(szBuf) ) {
+    // now look in win.ini
+    wxString strKey = GetKeyName(path.Name());
+    GetProfileString(m_strGroup, strKey, "", szBuf, WXSIZEOF(szBuf));
+  }
+
+  if ( ::IsEmpty(szBuf) ) {
+    return FALSE;
+  }
+  else {
+    return TRUE;
+  }
+}
+
+bool wxIniConfig::Read(const wxString& szKey, wxString *pstr,
+                       const wxString& szDefault) const
+{
+  wxConfigPathChanger path(this, szKey);
+  wxString strKey = GetPrivateKeyName(path.Name());
+
+  char szBuf[1024]; // @@ should dynamically allocate memory...
+
+  // first look in the private INI file
+
+  // NB: the lpDefault param to GetPrivateProfileString can't be NULL
+  GetPrivateProfileString(m_strGroup, strKey, "",
+                          szBuf, WXSIZEOF(szBuf), m_strLocalFilename);
   if ( ::IsEmpty(szBuf) ) {
     // now look in win.ini
     wxString strKey = GetKeyName(path.Name());
@@ -284,18 +336,9 @@ bool wxIniConfig::Read(wxString *pstr,
   }
 }
 
-const char *wxIniConfig::Read(const char *szKey,
-                              const char *szDefault) const
+bool wxIniConfig::Read(const wxString& szKey, long *pl) const
 {
-  static wxString s_str;
-  Read(&s_str, szKey, szDefault);
-
-  return s_str.c_str();
-}
-
-bool wxIniConfig::Read(long *pl, const char *szKey, long lDefault) const
-{
-  PathChanger path(this, szKey);
+  wxConfigPathChanger path(this, szKey);
   wxString strKey = GetPrivateKeyName(path.Name());
 
   // hack: we have no mean to know if it really found the default value or
@@ -303,7 +346,7 @@ bool wxIniConfig::Read(long *pl, const char *szKey, long lDefault) const
 
   static const int nMagic  = 17; // 17 is some "rare" number
   static const int nMagic2 = 28; // arbitrary number != nMagic
-  long lVal = GetPrivateProfileInt(m_strGroup, strKey, nMagic, m_strAppName);
+  long lVal = GetPrivateProfileInt(m_strGroup, strKey, nMagic, m_strLocalFilename);
   if ( lVal != nMagic ) {
     // the value was read from the file
     *pl = lVal;
@@ -311,7 +354,7 @@ bool wxIniConfig::Read(long *pl, const char *szKey, long lDefault) const
   }
 
   // is it really nMagic?
-  lVal = GetPrivateProfileInt(m_strGroup, strKey, nMagic2, m_strAppName);
+  lVal = GetPrivateProfileInt(m_strGroup, strKey, nMagic2, m_strLocalFilename);
   if ( lVal == nMagic ) {
     // the nMagic it returned was indeed read from the file
     *pl = lVal;
@@ -319,28 +362,18 @@ bool wxIniConfig::Read(long *pl, const char *szKey, long lDefault) const
   }
 
   // no, it was just returning the default value, so now look in win.ini
-  *pl = GetProfileInt(m_strVendor, GetKeyName(szKey), lDefault);
+  *pl = GetProfileInt(GetVendorName(), GetKeyName(szKey), *pl);
 
-  // we're not going to check here whether it read the default or not: it's
-  // not that important
   return TRUE;
 }
 
-long wxIniConfig::Read(const char *szKey, long lDefault) const
+bool wxIniConfig::Write(const wxString& szKey, const wxString& szValue)
 {
-  long lVal;
-  Read(&lVal, szKey, lDefault);
-
-  return lVal;
-}
-
-bool wxIniConfig::Write(const char *szKey, const char *szValue)
-{
-  PathChanger path(this, szKey);
+  wxConfigPathChanger path(this, szKey);
   wxString strKey = GetPrivateKeyName(path.Name());
 
   bool bOk = WritePrivateProfileString(m_strGroup, strKey,
-                                       szValue, m_strAppName) != 0;
+                                       szValue, m_strLocalFilename) != 0;
 
   if ( !bOk )
     wxLogLastError("WritePrivateProfileString");
@@ -348,7 +381,7 @@ bool wxIniConfig::Write(const char *szKey, const char *szValue)
   return bOk;
 }
 
-bool wxIniConfig::Write(const char *szKey, long lValue)
+bool wxIniConfig::Write(const wxString& szKey, long lValue)
 {
   // ltoa() is not ANSI :-(
   char szBuf[40];   // should be good for sizeof(long) <= 16 (128 bits)
@@ -360,7 +393,7 @@ bool wxIniConfig::Write(const char *szKey, long lValue)
 bool wxIniConfig::Flush(bool /* bCurrentOnly */)
 {
   // this is just the way it works
-  return WritePrivateProfileString(NULL, NULL, NULL, m_strAppName) != 0;
+  return WritePrivateProfileString(NULL, NULL, NULL, m_strLocalFilename) != 0;
 }
 
 // ----------------------------------------------------------------------------
@@ -378,7 +411,7 @@ bool wxIniConfig::DeleteEntry(const char *szKey, bool bGroupIfEmptyAlso)
 
   // delete the current group too
   bool bOk = WritePrivateProfileString(m_strGroup, NULL,
-                                       NULL, m_strAppName) != 0;
+                                       NULL, m_strLocalFilename) != 0;
 
   if ( !bOk )
     wxLogLastError("WritePrivateProfileString");
@@ -388,12 +421,12 @@ bool wxIniConfig::DeleteEntry(const char *szKey, bool bGroupIfEmptyAlso)
 
 bool wxIniConfig::DeleteGroup(const char *szKey)
 {
-  PathChanger path(this, szKey);
+  wxConfigPathChanger path(this, szKey);
 
   // passing NULL as section name to WritePrivateProfileString deletes the 
   // whole section according to the docs
   bool bOk = WritePrivateProfileString(path.Name(), NULL,
-                                       NULL, m_strAppName) != 0;
+                                       NULL, m_strLocalFilename) != 0;
 
   if ( !bOk )
     wxLogLastError("WritePrivateProfileString");
@@ -404,7 +437,7 @@ bool wxIniConfig::DeleteGroup(const char *szKey)
 bool wxIniConfig::DeleteAll()
 {
   // first delete our group in win.ini
-  WriteProfileString(m_strVendor, NULL, NULL);
+  WriteProfileString(GetVendorName(), NULL, NULL);
 
   // then delete our own ini file
   char szBuf[MAX_PATH];
@@ -415,7 +448,7 @@ bool wxIniConfig::DeleteAll()
     wxFAIL_MSG("buffer is too small for Windows directory.");
 
   wxString strFile = szBuf;
-  strFile << '\\' << m_strAppName;
+  strFile << '\\' << m_strLocalFilename;
 
   if ( !DeleteFile(strFile) ) {
     wxLogSysError(_("Can't delete the INI file '%s'"), strFile.c_str());

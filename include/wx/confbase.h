@@ -55,6 +55,10 @@
   #define wxCONFIG_WIN32_NATIVE          TRUE
 #endif
 
+// Style flags for constructor style parameter
+#define wxCONFIG_USE_LOCAL_FILE         1
+#define wxCONFIG_USE_GLOBAL_FILE        2
+
 // ----------------------------------------------------------------------------
 // various helper global functions
 // ----------------------------------------------------------------------------
@@ -101,7 +105,17 @@ public:
 
   // ctor & virtual dtor
     // environment variable expansion is on by default
-  wxConfigBase() { m_bExpandEnvVars = TRUE; m_bRecordDefaults = FALSE; }
+//  wxConfigBase() { m_bExpandEnvVars = TRUE; m_bRecordDefaults = FALSE; }
+
+  // ctor
+
+  // Not all args will always be used by derived classes, but
+  // including them all in each class ensures compatibility.
+  // If appName is empty, uses wxApp name
+  wxConfigBase(const wxString& appName = wxEmptyString, const wxString& vendorName = wxEmptyString,
+    const wxString& localFilename = wxEmptyString, const wxString& globalFilename = wxEmptyString,
+    long style = 0);
+
     // empty but ensures that dtor of all derived classes is virtual
   virtual ~wxConfigBase() { }
 
@@ -138,31 +152,44 @@ public:
   // key access: returns TRUE if value was really read, FALSE if default used
   // (and if the key is not found the default value is returned.)
     // read a string from the key
-  virtual bool Read(wxString *pStr, const char *szKey,
-                    const char *szDefault = (const char *) NULL) const = 0;
-    // another version using statis buffer - it means it will be overwritten
-    // after each call to this function!
-  virtual const char *Read(const char *szKey,
-                           const char *szDefault = (const char *) NULL) const;
-    // the same for longs
-  virtual long Read(const char *szKey, long lDefault) const
-    { long l; Read(&l, szKey, lDefault); return l; }
-    // and another version: returns true if default value is returned
-  virtual bool Read(long *pl, const char *szKey, long lDefault = 0) const = 0;
+  virtual bool Read(const wxString& key, wxString *pStr) const = 0;
+  virtual bool Read(const wxString& key, wxString *pStr, const wxString& defVal) const;
+
+  virtual wxString Read(const wxString& key, const wxString& defVal) const;
+
+  virtual bool Read(const wxString& key, long *pl) const = 0;
+  virtual bool Read(const wxString& key, long *pl, long defVal) const;
+
+  virtual long Read(const wxString& strKey, long defVal) const
+    { long l; Read(strKey, &l, defVal); return l; }
+
+  // Convenience functions that are built on other forms
+  // double
+  virtual bool Read(const wxString& key, double* val) const;
+  virtual bool Read(const wxString& key, double* val, double defVal) const;
+
+  // bool
+  virtual bool Read(const wxString& key, bool* val) const;
+  virtual bool Read(const wxString& key, bool* val, bool defVal) const;
 
     // write the value (return true on success)
-  virtual bool Write(const char *szKey, const char *szValue) = 0;
-  virtual bool Write(const char *szKey, long lValue) = 0;
+  virtual bool Write(const wxString& key, const wxString& value) = 0;
+  virtual bool Write(const wxString& key, long value) = 0;
+
+  // Convenience functions
+  virtual bool Write(const wxString& key, double value);
+  virtual bool Write(const wxString& key, bool value);
+
     // permanently writes all changes
   virtual bool Flush(bool bCurrentOnly = FALSE) = 0;
 
   // delete entries/groups
     // deletes the specified entry and the group it belongs to if
     // it was the last key in it and the second parameter is true
-  virtual bool DeleteEntry(const char *szKey,
+  virtual bool DeleteEntry(const wxString& key,
                            bool bDeleteGroupIfEmpty = TRUE) = 0;
     // delete the group (with all subgroups)
-  virtual bool DeleteGroup(const char *szKey) = 0;
+  virtual bool DeleteGroup(const wxString& key) = 0;
     // delete the whole underlying object (disk file, registry key, ...)
     // primarly for use by desinstallation routine.
   virtual bool DeleteAll() = 0;
@@ -186,20 +213,49 @@ public:
         return tmp;
     }
 
+    // misc accessors
+  inline wxString GetAppName() const { return m_appName; }
+  inline wxString GetVendorName() const { return m_vendorName; }
+
+  inline void SetAppName(const wxString& appName) { m_appName = appName; }
+  inline void SetVendorName(const wxString& vendorName) { m_vendorName = vendorName; }
+
+  inline void SetStyle(long style) { m_style; }
+  inline long GetStyle() const { return m_style; }
+
 protected:
-  static bool IsImmutable(const char *szKey)
-    { return *szKey == wxCONFIG_IMMUTABLE_PREFIX; }
+  static bool IsImmutable(const wxString& key)
+    { return key[0] == wxCONFIG_IMMUTABLE_PREFIX; }
+
+private:
+  // are we doing automatic environment variable expansion?
+  bool m_bExpandEnvVars;
+  // do we record default values?
+  bool m_bRecordDefaults;
+  
+  // static variables
+  static wxConfigBase *ms_pConfig;
+  static bool          ms_bAutoCreate;
+
+  // Application name and organisation name
+  wxString          m_appName;
+  wxString          m_vendorName;
+
+  // Style flag
+  long              m_style;
+};
 
   // a handy little class which changes current path to the path of given entry
   // and restores it in dtor: so if you declare a local variable of this type,
   // you work in the entry directory and the path is automatically restored
   // when the function returns
-  class PathChanger
+  // Taken out of wxConfig since not all compilers can cope with nested classes.
+  class wxConfigPathChanger
   {
   public:
     // ctor/dtor do path changing/restorin
-    PathChanger(const wxConfigBase *pContainer, const wxString& strEntry);
-   ~PathChanger();
+    wxConfigPathChanger(const wxConfigBase *pContainer, const wxString& strEntry);
+   ~wxConfigPathChanger();
 
     // get the key name
     const wxString& Name() const { return m_strName; }
@@ -211,16 +267,6 @@ protected:
     bool          m_bChanged;     // was the path changed?
   };
 
-private:
-  // are we doing automatic environment variable expansion?
-  bool m_bExpandEnvVars;
-  // do we record default values?
-  bool m_bRecordDefaults;
-  
-  // static variables
-  static wxConfigBase *ms_pConfig;
-  static bool          ms_bAutoCreate;
-};
 
 // ----------------------------------------------------------------------------
 // the native wxConfigBase implementation
@@ -239,6 +285,8 @@ private:
   #define wxConfig  wxFileConfig
   #define classwxConfig classwxFileConfig
 #endif
+
+
 
 #endif  // _WX_CONFIG_H_
 

@@ -225,8 +225,8 @@ MyFrame::~MyFrame()
   int x, y, w, h;
   GetClientSize(&w, &h);
   GetPosition(&x, &y);
-  pConfig->Write("/MainFrame/x", x);
-  pConfig->Write("/MainFrame/y", y);
-  pConfig->Write("/MainFrame/w", w);
-  pConfig->Write("/MainFrame/h", h);
+  pConfig->Write("/MainFrame/x", (long) x);
+  pConfig->Write("/MainFrame/y", (long) y);
+  pConfig->Write("/MainFrame/w", (long) w);
+  pConfig->Write("/MainFrame/h", (long) h);
 }

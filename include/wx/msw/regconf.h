@@ -28,8 +28,11 @@ class wxRegConfig : public wxConfigBase
 {
 public:
   // ctor & dtor
-    // will store data in HKLM\strRegHive and HKCU\strRegHive
-  wxRegConfig(const wxString& strRegHive);
+    // will store data in HKLM\appName and HKCU\appName
+  wxRegConfig(const wxString& appName = wxEmptyString, const wxString& vendorName = wxEmptyString,
+    const wxString& localFilename = wxEmptyString, const wxString& globalFilename = wxEmptyString,
+    long style = 0);
+
     // dtor will save unsaved data
   virtual ~wxRegConfig();
 
@@ -57,16 +60,30 @@ public:
   virtual size_t GetNumberOfGroups(bool bRecursive = FALSE) const;
 
   // read/write
-  virtual bool Read(wxString *pStr, const char *szKey,
-                    const char *szDefault = 0) const;
-  virtual bool Read(long *result, const char *szKey, long lDefault = 0) const;
-  virtual bool Write(const char *szKey, const char *szValue);
-  virtual bool Write(const char *szKey, long Value);
+  bool Read(const wxString& key, wxString *pStr) const;
+  bool Read(const wxString& key, wxString *pStr, const wxString& szDefault) const;
+  bool Read(const wxString& key, long *plResult) const;
+
+  // The following are necessary to satisfy the compiler
+  wxString Read(const wxString& key, const wxString& defVal) const
+  { return wxConfigBase::Read(key, defVal); }
+  bool Read(const wxString& key, long *pl, long defVal) const
+  { return wxConfigBase::Read(key, pl, defVal); }
+  long Read(const wxString& key, long defVal) const
+  { return wxConfigBase::Read(key, defVal); }
+  bool Read(const wxString& key, double* val) const
+  { return wxConfigBase::Read(key, val); }
+  bool Read(const wxString& key, double* val, double defVal) const
+  { return wxConfigBase::Read(key, val, defVal); }
+
+  bool Write(const wxString& key, const wxString& szValue);
+  bool Write(const wxString& key, long lValue);
+
   virtual bool Flush(bool /* bCurrentOnly = FALSE */ ) { return TRUE; }
 
   // delete
-  virtual bool DeleteEntry(const char *szKey, bool bGroupIfEmptyAlso);
-  virtual bool DeleteGroup(const char *szKey);
+  virtual bool DeleteEntry(const wxString& key, bool bGroupIfEmptyAlso);
+  virtual bool DeleteGroup(const wxString& key);
   virtual bool DeleteAll();
 
 private:

@@ -41,7 +41,7 @@
 
 ScoreFile::ScoreFile(const char* appName)
 {
-#ifdef 0
+#if 0
 	wxString filename;
 	m_configFilename << "/usr/local/share/" << appName << ".scores";
 	if (access(m_configFilename, F_OK) == 0)
@@ -69,11 +69,7 @@ ScoreFile::ScoreFile(const char* appName)
 	}
 #endif
 
-#ifdef __UNIX__
-	m_config = new wxFileConfig( appName, "" );  // only local
-#else
-	m_config = new wxFileConfig( "",appName );   // only global
-#endif
+	m_config = new wxConfig(appName, "wxWindows", appName, "", wxCONFIG_USE_LOCAL_FILE);  // only local
 }
 
 ScoreFile::~ScoreFile()
@@ -132,7 +128,7 @@ wxString ScoreFile::GetPreviousPlayer() const
 {
 	wxString result;
 	m_config->SetPath("/General");
-	m_config->Read(&result, "LastPlayer");
+	m_config->Read("LastPlayer", &result);
 	return result;
 }
 
@@ -149,10 +145,10 @@ void ScoreFile::ReadPlayersScore(
 
 	m_config->SetPath("/Players");
 	m_config->SetPath(player);
-	if (m_config->Read(&myScore, (const char *) "Score",0L) &&
-		m_config->Read(&myGames, (const char *) "Games",0L) &&
-		m_config->Read(&myWins, (const char *) "Wins",0L) &&
-		m_config->Read(&check, (const char *) "Check",0L))
+	if (m_config->Read("Score", &myScore, 0L) &&
+		m_config->Read("Games", &myGames, 0L) &&
+		m_config->Read("Wins",  &myWins, 0L) &&
+		m_config->Read("Check", &check, 0L))
 	{
 	    if (check != CalcCheck(player, myGames, myWins, myScore))
 		{

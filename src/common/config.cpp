@@ -50,6 +50,7 @@
 #endif
 
 #include  <stdlib.h>
+#include  <math.h>
 #include  <ctype.h>       // for isalnum()
 
 // ----------------------------------------------------------------------------
@@ -67,6 +68,15 @@ bool          wxConfigBase::ms_bAutoCreate = TRUE;
 // wxConfigBase
 // ----------------------------------------------------------------------------
 
+// Not all args will always be used by derived classes, but
+// including them all in each class ensures compatibility.
+wxConfigBase::wxConfigBase(const wxString& appName, const wxString& vendorName,
+    const wxString& localFilename, const wxString& globalFilename, long style):
+        m_appName(appName), m_vendorName(vendorName), m_style(style)
+{
+    m_bExpandEnvVars = TRUE; m_bRecordDefaults = FALSE;
+}
+
 wxConfigBase *wxConfigBase::Set(wxConfigBase *pConfig)
 {
   wxConfigBase *pOld = ms_pConfig;
@@ -80,8 +90,7 @@ wxConfigBase *wxConfigBase::Create()
     ms_pConfig =
     #if defined(__WXMSW__) && defined(wxCONFIG_WIN32_NATIVE)
       #ifdef __WIN32__
-        new wxRegConfig(wxTheApp->GetVendorName() + '\\' 
-                        + wxTheApp->GetAppName());
+        new wxRegConfig(wxTheApp->GetAppName(), wxTheApp->GetVendorName());
       #else  //WIN16
         new wxIniConfig(wxTheApp->GetAppName(), wxTheApp->GetVendorName());
       #endif
@@ -93,21 +102,101 @@ wxConfigBase *wxConfigBase::Create()
   return ms_pConfig;
 }
 
-const char *wxConfigBase::Read(const char *szKey, const char *szDefault) const
+wxString wxConfigBase::Read(const wxString& key, const wxString& defVal) const
 {
-  static char s_szBuf[1024];
   wxString s;
-  Read(&s, szKey, szDefault);
-  strncpy(s_szBuf, s, WXSIZEOF(s_szBuf));
-
-  return s_szBuf;
+  Read(key, &s, defVal);
+  return s;
 }
 
+bool wxConfigBase::Read(const wxString& key, wxString *str, const wxString& defVal) const
+{
+    if (!Read(key, str))
+    {
+        *str = ExpandEnvVars(defVal);
+        return FALSE;
+    }
+    else
+        return TRUE;
+}
+
+bool wxConfigBase::Read(const wxString& key, long *pl, long defVal) const
+{
+    if (!Read(key, pl))
+    {
+        *pl = defVal;
+        return FALSE;
+    }
+    else
+        return TRUE;
+}
+
+bool wxConfigBase::Read(const wxString& key, double* val) const
+{
+    wxString str;
+    if (Read(key, str))
+    {
+        *val = atof(str);
+        return TRUE;
+    }
+    else
+        return FALSE;
+}
+
+bool wxConfigBase::Read(const wxString& key, double* val, double defVal) const
+{
+    if (!Read(key, val))
+    {
+        *val = defVal;
+        return FALSE;
+    }
+    else
+        return TRUE;
+}
+
+bool wxConfigBase::Read(const wxString& key, bool* val) const
+{
+    long l;
+    if (Read(key, & l))
+    {
+        *val = (l != 0);
+        return TRUE;
+    }
+    else
+        return FALSE;
+}
+
+bool wxConfigBase::Read(const wxString& key, bool* val, bool defVal) const
+{
+    if (!Read(key, val))
+    {
+        *val = defVal;
+        return FALSE;
+    }
+    else
+        return TRUE;
+}
+
+// Convenience functions
+bool wxConfigBase::Write(const wxString& key, double val)
+{
+    wxString str;
+    str.Printf("%f", val);
+    return Write(key, str);
+}
+
+bool wxConfigBase::Write(const wxString& key, bool value)
+{
+    long l = (value ? 1 : 0);
+    return Write(key, l);
+}
+
+
 // ----------------------------------------------------------------------------
-// Config::PathChanger
+// wxConfigPathChanger
 // ----------------------------------------------------------------------------
 
-wxConfigBase::PathChanger::PathChanger(const wxConfigBase *pContainer,
+wxConfigPathChanger::wxConfigPathChanger(const wxConfigBase *pContainer,
                                  const wxString& strEntry)
 {
   m_pContainer = (wxConfigBase *)pContainer;
@@ -132,7 +221,7 @@ wxConfigBase::PathChanger::PathChanger(const wxConfigBase *pContainer,
   }
 }
 
-wxConfigBase::PathChanger::~PathChanger()
+wxConfigPathChanger::~wxConfigPathChanger()
 {
   // only restore path if it was changed
   if ( m_bChanged ) {
@@ -292,4 +381,5 @@ void wxSplitPath(wxArrayString& aParts, const char *sz)
     pc++;
   }
 }
+
 
