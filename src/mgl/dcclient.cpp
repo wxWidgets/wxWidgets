@@ -1,9 +1,9 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        gtk/dcclient.cpp
+// Name:        dcclient.cpp
 // Purpose:
-// Author:      Robert Roebling
+// Author:      Vaclav Slavik
 // RCS-ID:      $Id$
-// Copyright:   (c) 1998 Robert Roebling, Markus Holzem, Chris Breeze
+// Copyright:   (c) 2001 SciTech Software, Inc. (www.scitechsoft.com)
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 

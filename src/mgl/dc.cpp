@@ -4,7 +4,7 @@
 // Author:      Vaclav Slavik
 // Created:     2001/03/09
 // RCS-ID:      $Id$
-// Copyright:   (c) Vaclav Slavik
+// Copyright:   (c) 2001 SciTech Software, Inc. (www.scitechsoft.com)
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 

@@ -3,7 +3,8 @@
 // Purpose:
 // Author:      Robert Roebling, Vaclav Slavik
 // RCS-ID:      $Id$
-// Copyright:   (c) 1998 Robert Roebling, 2001 Vaclav Slavik
+// Copyright:   (c) 1998 Robert Roebling, 
+//                  2001 SciTech Software, Inc. (www.scitechsoft.com)
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 

@@ -2,7 +2,7 @@
 // Name:        icon.cpp
 // Author:      Vaclav Slavik
 // Id:          $Id$
-// Copyright:   (c) 2001 Vaclav Slavik
+// Copyright:   (c) 2001 SciTech Software, Inc. (www.scitechsoft.com)
 // Licence:   	wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
