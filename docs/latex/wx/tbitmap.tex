@@ -1,4 +1,4 @@
-\section{Bitmaps overview}\label{wxbitmapoverview}
+\section{Bitmaps and icons overview}\label{wxbitmapoverview}
 
 Classes: \helpref{wxBitmap}{wxbitmap}, \helpref{wxBitmapHandler}{wxbitmaphandler}, \helpref{wxIcon}{wxicon}, \helpref{wxCursor}{wxcursor}.
 
@@ -19,40 +19,120 @@ version of the graphic which appears on the main window.
 See \helpref{wxMemoryDC}{wxmemorydc} for an example of drawing onto a bitmap.
 
 The following shows the conditional compilation required to load a
-bitmap in X and in Windows 3. The alternative is to use the string
-version of the bitmap constructor, which loads a file under X and a
-resource under Windows 3, but has the disadvantage of requiring the
-X icon file to be available at run-time.
+bitmap under Unix and in Windows. The alternative is to use the string
+version of the bitmap constructor, which loads a file under Unix and a
+resource or file under Windows, but has the disadvantage of requiring the
+XPM icon file to be available at run-time.
 
 \begin{verbatim}
-#ifdef wx_x
-#include "aiai.xbm"
-#endif
-#ifdef wx_msw
-  wxIcon *icon = new wxBitmap("aiai");
-#endif
-#ifdef wx_x
-  wxIcon *icon = new wxBitmap(aiai_bits, aiai_width, aiai_height);
+#if defined(__WXGTK__) || defined(__WXMOTIF__)
+#include "mondrian.xpm"
 #endif
 \end{verbatim}
 
-\subsection{Loading bitmaps: further information}
+A macro, wxICON, is available which creates an icon using an XPM
+on the appropriate platform, or an icon resource on Windows.
 
-There is provision for a number of bitmap
-formats via the standard wxBitmap class. These facilities can
-be enabled or disabled using settings in wx\_setup.h.
+\begin{verbatim}
+wxIcon icon(wxICON(mondrian));
 
-XPM colour pixmaps may be loaded and saved under Windows and X, with
-some restrictions imposed by the lack of colourmap facility when
-using XPM files. The user may elect to use XPM files as a cross-platform
-stabdard, or translate between XPM and BMP files using a suitable
-utility.
+// Equivalent to:
 
-Also, under Windows, DIBs (device independent bitmaps with extension BMP)
-may be dynamically loaded and saved. Under X, GIF and BMP files may be
-loaded but not saved.
+#if defined(__WXGTK__) || defined(__WXMOTIF__)
+wxIcon icon(mondrian_xpm);
+#endif
 
-\subsection{Bitmap format handlers}
+#if defined(__WXMSW__)
+wxIcon icon("mondrian");
+#endif
+\end{verbatim}
+
+\subsection{Supported bitmap file formats}\label{supportedbitmapformats}
+
+The following lists the formats handled on different platforms. Note
+that missing or partially-implemented formats can be supplemented
+by using \helpref{wxImage}{wximage} to load the data, and then converting
+it to wxBitmap form.
+
+\wxheading{wxBitmap}
+
+Under Windows, wxBitmap may load the following formats:
+
+\begin{itemize}\itemsep=0pt
+\item Windows bitmap resource (wxBITMAP\_TYPE\_BMP\_RESOURCE)
+\item Windows bitmap file (wxBITMAP\_TYPE\_BMP)
+\item PNG file (wxBITMAP\_TYPE\_PNG). Currently 4-bit (16-colour) PNG files do not load properly.
+\item XPM data and file (wxBITMAP\_TYPE\_XPM)
+\end{itemize}
+
+Under wxGTK, wxBitmap may load the following formats:
+
+\begin{itemize}\itemsep=0pt
+\item Windows bitmap file (wxBITMAP\_TYPE\_BMP)
+\item PNG (wxBITMAP\_TYPE\_PNG).
+\item XPM data and file (wxBITMAP\_TYPE\_XPM)
+\end{itemize}
+
+Under wxMotif, wxBitmap may load the following formats:
+
+\begin{itemize}\itemsep=0pt
+%\item Windows bitmap file (wxBITMAP\_TYPE\_BMP)
+%\item PNG (wxBITMAP\_TYPE\_PNG).
+\item XBM data and file (wxBITMAP\_TYPE\_XBM)
+\item XPM data and file (wxBITMAP\_TYPE\_XPM)
+\end{itemize}
+
+\wxheading{wxIcon}
+
+Under Windows, wxIcon may load the following formats:
+
+\begin{itemize}\itemsep=0pt
+\item Windows icon resource (wxBITMAP\_TYPE\_ICO\_RESOURCE)
+\item Windows icon file (wxBITMAP\_TYPE\_ICO)
+\item XPM data and file (wxBITMAP\_TYPE\_XPM)
+\end{itemize}
+
+Under wxGTK, wxIcon may load the following formats:
+
+\begin{itemize}\itemsep=0pt
+\item PNG (wxBITMAP\_TYPE\_PNG).
+\item XPM data and file (wxBITMAP\_TYPE\_XPM)
+\end{itemize}
+
+Under wxMotif, wxIcon may load the following formats:
+
+\begin{itemize}\itemsep=0pt
+%\item Windows bitmap file (wxBITMAP\_TYPE\_BMP)
+%\item PNG (wxBITMAP\_TYPE\_PNG).
+\item XBM data and file (wxBITMAP\_TYPE\_XBM)
+\item XPM data and file (wxBITMAP\_TYPE\_XPM)
+\end{itemize}
+
+\wxheading{wxCursor}
+
+Under Windows, wxCursor may load the following formats:
+
+\begin{itemize}\itemsep=0pt
+\item Windows cursor resource (wxBITMAP\_TYPE\_CUR\_RESOURCE)
+\item Windows cursor file (wxBITMAP\_TYPE\_CUR)
+\item Windows icon file (wxBITMAP\_TYPE\_ICO)
+\item Windows bitmap file (wxBITMAP\_TYPE\_BMP)
+\end{itemize}
+
+Under wxGTK, wxCursor may load the following formats (in additional
+to stock cursors):
+
+\begin{itemize}\itemsep=0pt
+\item None (stock cursors only).
+\end{itemize}
+
+Under wxMotif, wxCursor may load the following formats:
+
+\begin{itemize}\itemsep=0pt
+\item XBM data and file (wxBITMAP\_TYPE\_XBM)
+\end{itemize}
+
+\subsection{Bitmap format handlers}\label{bitmaphandlers}
 
 To provide extensibility, the functionality for loading and saving bitmap formats
 is not implemented in the wxBitmap class, but in a number of handler classes,
@@ -66,20 +146,21 @@ then call the static function \helpref{wxBitmap::AddHandler}{wxbitmapaddhandler}
 
 {\small
 \begin{verbatim}
-  #include "JPEGBitmapHandler.h"
+  #include <wx/pnghand.h>
+  #include <wx/xpmhand.h>
   ...
   // Initialisation
-  wxBitmap::AddHandler(new wxJPEGBitmapHandler);
+  wxBitmap::AddHandler(new wxPNGFileHandler);
+  wxBitmap::AddHandler(new wxXPMFileHandler);
+  wxBitmap::AddHandler(new wxXPMDataHandler);
   ...
 \end{verbatim}
 }
 
-Assuming wxJPEGBitmapHandler has been written correctly, you should now be able to load and save JPEG files
-using the usual wxBitmap API.
+Assuming the handlers have been written correctly, you should now be able to load and save PNG files
+and XPM files using the usual wxBitmap API.
 
-To see how bitmap handlers are implemented, please look at the files {\tt bitmap.h} and {\tt bitmap.cpp}.
-
-\subsection{wxIcon overview}\label{wxiconoverview}
-
-TODO.
+{\bf Note:} bitmap handlers are not implemented on all platforms. Currently, the above is only necessary on
+Windows, to save the extra overhead of formats that may not be necessary (if you don't use them, they
+are not linked into the executable). Unix platforms have PNG and XPM capability built-in (where supported).
 

@@ -34,11 +34,6 @@
 
 #include "assert.h"
 
-#if wxUSE_XPM_IN_MSW
-#define FOR_MSW 1
-#include "../src/xpm/xpm34.h"
-#endif
-
 #if wxUSE_RESOURCE_LOADING_IN_MSW
 #include "wx/msw/curico.h"
 #include "wx/msw/curicop.h"

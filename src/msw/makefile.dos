@@ -210,6 +210,10 @@ MSWOBJS = \
 #  $(OLEDIR)\oleutils.obj \
 #  $(OLEDIR)\uuid.obj
 
+# TODO: Implement XPM and PNG targets in this makefile!
+#  $(OLEDIR)\xpmhand \
+#  $(OLEDIR)\pnghand \
+
 # Not appropriate for 16-bit Windows
 #  $(MSWDIR)\registry.obj \
 #  $(MSWDIR)\dirdlg.obj \

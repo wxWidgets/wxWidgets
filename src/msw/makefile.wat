@@ -196,6 +196,7 @@ MSWOBJS = &
   utilsexc.obj &
   wave.obj &
   window.obj &
+  xpmhand.obj
 
 #  pnghand.obj &
 
@@ -475,6 +476,9 @@ wave.obj:     $(MSWDIR)\wave.cpp
   *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
 
 window.obj:     $(MSWDIR)\window.cpp
+  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+
+xpmhand.obj:     $(MSWDIR)\xpmhand.cpp
   *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
 
 droptgt.obj:     $(OLEDIR)\droptgt.cpp

@@ -129,11 +129,9 @@ public:
   // Initialize with raw data
   wxBitmap(const char bits[], int width, int height, int depth = 1);
 
-#if wxUSE_XPM_IN_MSW
-  class wxItem;
+  class WXDLLEXPORT wxItem;
   // Initialize with XPM data
   wxBitmap(char **data, wxItem *anItem = NULL);
-#endif
 
   // Load a file or resource
   wxBitmap(const wxString& name, long type = wxBITMAP_TYPE_BMP_RESOURCE);

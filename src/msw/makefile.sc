@@ -196,7 +196,8 @@ MSWOBJS = \
   $(MSWDIR)\utils.obj \
   $(MSWDIR)\utilsexc.obj \
   $(MSWDIR)\wave.obj \
-  $(MSWDIR)\window.obj
+  $(MSWDIR)\window.obj \
+  $(MSWDIR)\xpmhand.obj
 
 # Need Win95 support for these
 #  $(MSWDIR)\notebook.obj \

@@ -1,41 +1,32 @@
 \section{\class{wxIcon}}\label{wxicon}
 
 An icon is a small rectangular bitmap usually used for denoting a
-minimized application.
+minimized application. It differs from a wxBitmap in always
+having a mask associated with it for transparent drawing. On some platforms,
+icons and bitmaps are implemented identically, since there is no real distinction between
+a wxBitmap with a mask and an icon; and there is no specific icon format on
+some platforms (X-based applications usually standardize on XPMs for small bitmaps
+and icons). However, some platforms (such as Windows) make the distinction, so
+a separate class is provided.
 
 \wxheading{Remarks}
 
-It is optional (but desirable) to associate a
-pertinent icon with a frame. Obviously icons in X and MS Windows are
-created in a different manner, and colour icons in X are difficult
-to arrange. Therefore, separate icons will be created for the different
+It is usually desirable to associate a pertinent icon with a frame. Icons
+can also be used for other purposes, for example with \helpref{wxTreeCtrl}{wxtreectrl} 
+and \helpref{wxListCtrl}{wxlistctrl}.
+
+Icons have different formats on different platforms.
+Therefore, separate icons will usually be created for the different
 environments.  Platform-specific methods for creating a {\bf wxIcon}\rtfsp
 structure are catered for, and this is an occasion where conditional
 compilation will probably be required.
 
 Note that a new icon must be created for every time the icon is to be
-used for a new window. In X, this will ensure that fresh X resources
-are allocated for this frame. In MS Windows, the icon will not be
+used for a new window. In Windows, the icon will not be
 reloaded if it has already been used. An icon allocated to a frame will
 be deleted when the frame is deleted.
 
-The following shows the conditional compilation required to define an
-icon in X and in MS Windows. The alternative is to use the string
-version of the icon constructor, which loads a file under X and a
-resource under MS Windows, but has the disadvantage of requiring the
-X icon file to be available at run-time.
-
-\begin{verbatim}
-#ifdef wx_x
-#include "aiai.xbm"
-#endif
-#ifdef wx_msw
-  wxIcon *icon = new wxIcon("aiai");
-#endif
-#ifdef wx_x
-  wxIcon *icon = new wxIcon(aiai_bits, aiai_width, aiai_height);
-#endif
-\end{verbatim}
+For more information please see \helpref{Bitmap and icon overview}{wxbitmapoverview}.
 
 \wxheading{Derived from}
 
@@ -45,7 +36,8 @@ X icon file to be available at run-time.
 
 \wxheading{See also}
 
-\helpref{wxIcon overview}{wxiconoverview}, \helpref{wxDC::DrawIcon}{wxdcdrawicon}, \helpref{wxCursor}{wxcursor}
+\helpref{Bitmap and icon overview}{wxbitmapoverview}, \helpref{supported bitmap file formats}{supportedbitmapformats}, 
+\helpref{wxDC::DrawIcon}{wxdcdrawicon}, \helpref{wxCursor}{wxcursor}
 
 \latexignore{\rtfignore{\wxheading{Members}}}
 
@@ -116,8 +108,9 @@ Its meaning is determined by the {\it flags} parameter.}
 \end{twocollist}
 
 The validity of these flags depends on the platform and wxWindows configuration.
-If all possible wxWindows settings are used, the Windows platform supports ICO, ICO\_RESOURCE,
-XPM\_DATA, and XPM. Under X, the available formats are BMP, GIF, XBM, and XPM.}
+If all possible wxWindows settings are used, the Windows platform supports ICO file, ICO resource,
+XPM data, and XPM file. Under wxGTK, the available formats are BMP file, XPM data, XPM file, and PNG file.
+Under wxMotif, the available formats are XBM data, XBM file, XPM data, XPM file.}
 
 \wxheading{Remarks}
 
@@ -151,11 +144,28 @@ of character pointers called mybitmap:
 wxIcon *icon = new wxIcon(mybitmap);
 \end{verbatim}
 
+A macro, wxICON, is available which creates an icon using an XPM
+on the appropriate platform, or an icon resource on Windows.
+
+\begin{verbatim}
+wxIcon icon(wxICON(mondrian));
+
+// Equivalent to:
+
+#if defined(__WXGTK__) || defined(__WXMOTIF__)
+wxIcon icon(mondrian_xpm);
+#endif
+
+#if defined(__WXMSW__)
+wxIcon icon("mondrian");
+#endif
+\end{verbatim}
+
 The eighth form constructs an icon from a file or resource. {\it name} can refer
 to a resource name under MS Windows, or a filename under MS Windows and X.
 
 Under Windows, {\it type} defaults to wxBITMAP\_TYPE\_ICO\_RESOURCE.
-Under X, {\it type} defaults to wxBITMAP\_TYPE\_XBM.
+Under X, {\it type} defaults to wxBITMAP\_TYPE\_XPM.
 
 \wxheading{See also}
 
@@ -174,46 +184,6 @@ If the application omits to delete the icon explicitly, the icon will be
 destroyed automatically by wxWindows when the application exits.
 
 Do not delete an icon that is selected into a memory device context.
-
-\begin{comment}
-\membersection{wxIcon::Create}\label{wxiconcreate}
-
-\func{virtual bool}{Create}{\param{int}{ width}, \param{int}{ height}, \param{int}{ depth = -1}}
-
-Creates a fresh icon. If the final argument is omitted, the display depth of
-the screen is used.
-
-\func{virtual bool}{Create}{\param{void*}{ data}, \param{int}{ type}, \param{int}{ width}, \param{int}{ height}, \param{int}{ depth = -1}}
-
-Creates an icon from the given data, which can be of arbitrary type.
-
-\wxheading{Parameters}
-
-\docparam{width}{The width of the icon in pixels.}
-
-\docparam{height}{The height of the icon in pixels.}
-
-\docparam{depth}{The depth of the icon in pixels. If this is -1, the screen depth is used.}
-
-\docparam{data}{Data whose type depends on the value of {\it type}.}
-
-\docparam{type}{An icon type identifier - see \helpref{wxIcon::wxIcon}{wxiconconstr} for a list
-of possible values.}
-
-\wxheading{Return value}
-
-TRUE if the call succeeded, FALSE otherwise.
-
-\wxheading{Remarks}
-
-The first form works on all platforms. The portability of the second form depends on the
-type of data.
-
-\wxheading{See also}
-
-\helpref{wxIcon::wxIcon}{wxiconconstr}
-
-\end{comment}
 
 \membersection{wxIcon::GetDepth}
 

@@ -23,69 +23,73 @@ LINK_DEBUG_FLAGS="/RELEASE"
 
 all:
         cd $(WXDIR)\samples\splitter
-        nmake -f makefile.nt DEBUG_FLAGS=$(DEBUG_FLAGS) LINK_DEBUG_FLAGS=$(LINK_DEBUG_FLAGS)
+        nmake -f makefile.nt FINAL=$(FINAL)
         cd $(WXDIR)\samples\resource
-        nmake -f makefile.nt DEBUG_FLAGS=$(DEBUG_FLAGS) LINK_DEBUG_FLAGS=$(LINK_DEBUG_FLAGS)
+        nmake -f makefile.nt FINAL=$(FINAL)
         cd $(WXDIR)\samples\controls
-        nmake -f makefile.nt DEBUG_FLAGS=$(DEBUG_FLAGS) LINK_DEBUG_FLAGS=$(LINK_DEBUG_FLAGS)
+        nmake -f makefile.nt FINAL=$(FINAL)
         cd $(WXDIR)\samples\listctrl
-        nmake -f makefile.nt DEBUG_FLAGS=$(DEBUG_FLAGS) LINK_DEBUG_FLAGS=$(LINK_DEBUG_FLAGS)
+        nmake -f makefile.nt FINAL=$(FINAL)
         cd $(WXDIR)\samples\treectrl
-        nmake -f makefile.nt DEBUG_FLAGS=$(DEBUG_FLAGS) LINK_DEBUG_FLAGS=$(LINK_DEBUG_FLAGS)
+        nmake -f makefile.nt FINAL=$(FINAL)
         cd $(WXDIR)\samples\validate
-        nmake -f makefile.nt DEBUG_FLAGS=$(DEBUG_FLAGS) LINK_DEBUG_FLAGS=$(LINK_DEBUG_FLAGS)
+        nmake -f makefile.nt FINAL=$(FINAL)
         cd $(WXDIR)\samples\mdi
-        nmake -f makefile.nt DEBUG_FLAGS=$(DEBUG_FLAGS) LINK_DEBUG_FLAGS=$(LINK_DEBUG_FLAGS)
+        nmake -f makefile.nt FINAL=$(FINAL)
         cd $(WXDIR)\samples\minimal
-        nmake -f makefile.nt DEBUG_FLAGS=$(DEBUG_FLAGS) LINK_DEBUG_FLAGS=$(LINK_DEBUG_FLAGS)
+        nmake -f makefile.nt FINAL=$(FINAL)
         cd $(WXDIR)\samples\layout
-        nmake -f makefile.nt DEBUG_FLAGS=$(DEBUG_FLAGS) LINK_DEBUG_FLAGS=$(LINK_DEBUG_FLAGS)
+        nmake -f makefile.nt FINAL=$(FINAL)
         cd $(WXDIR)\samples\printing
-        nmake -f makefile.nt DEBUG_FLAGS=$(DEBUG_FLAGS) LINK_DEBUG_FLAGS=$(LINK_DEBUG_FLAGS)
+        nmake -f makefile.nt FINAL=$(FINAL)
         cd $(WXDIR)\samples\toolbar
-        nmake -f makefile.nt DEBUG_FLAGS=$(DEBUG_FLAGS) LINK_DEBUG_FLAGS=$(LINK_DEBUG_FLAGS)
+        nmake -f makefile.nt FINAL=$(FINAL)
         cd $(WXDIR)\samples\dialogs
-        nmake -f makefile.nt DEBUG_FLAGS=$(DEBUG_FLAGS) LINK_DEBUG_FLAGS=$(LINK_DEBUG_FLAGS)
+        nmake -f makefile.nt FINAL=$(FINAL)
         cd $(WXDIR)\samples\docview
-        nmake -f makefile.nt DEBUG_FLAGS=$(DEBUG_FLAGS) LINK_DEBUG_FLAGS=$(LINK_DEBUG_FLAGS)
+        nmake -f makefile.nt FINAL=$(FINAL)
         cd $(WXDIR)\samples\docvwmdi
-        nmake -f makefile.nt DEBUG_FLAGS=$(DEBUG_FLAGS) LINK_DEBUG_FLAGS=$(LINK_DEBUG_FLAGS)
+        nmake -f makefile.nt FINAL=$(FINAL)
         cd $(WXDIR)\samples\controls
-        nmake -f makefile.nt DEBUG_FLAGS=$(DEBUG_FLAGS) LINK_DEBUG_FLAGS=$(LINK_DEBUG_FLAGS)
+        nmake -f makefile.nt FINAL=$(FINAL)
         cd $(WXDIR)\samples\nativdlg
-        nmake -f makefile.nt DEBUG_FLAGS=$(DEBUG_FLAGS) LINK_DEBUG_FLAGS=$(LINK_DEBUG_FLAGS)
+        nmake -f makefile.nt FINAL=$(FINAL)
         cd $(WXDIR)\samples\grid
-        nmake -f makefile.nt DEBUG_FLAGS=$(DEBUG_FLAGS) LINK_DEBUG_FLAGS=$(LINK_DEBUG_FLAGS)
+        nmake -f makefile.nt FINAL=$(FINAL)
         cd $(WXDIR)\samples\internat
-        nmake -f makefile.nt DEBUG_FLAGS=$(DEBUG_FLAGS) LINK_DEBUG_FLAGS=$(LINK_DEBUG_FLAGS)
+        nmake -f makefile.nt FINAL=$(FINAL)
         cd $(WXDIR)\samples\dnd
-        nmake -f makefile.nt DEBUG_FLAGS=$(DEBUG_FLAGS) LINK_DEBUG_FLAGS=$(LINK_DEBUG_FLAGS)
+        nmake -f makefile.nt FINAL=$(FINAL)
         cd $(WXDIR)\samples\joytest
-        nmake -f makefile.nt DEBUG_FLAGS=$(DEBUG_FLAGS) LINK_DEBUG_FLAGS=$(LINK_DEBUG_FLAGS)
+        nmake -f makefile.nt FINAL=$(FINAL)
         cd $(WXDIR)\samples\taskbar
-        nmake -f makefile.nt DEBUG_FLAGS=$(DEBUG_FLAGS) LINK_DEBUG_FLAGS=$(LINK_DEBUG_FLAGS)
+        nmake -f makefile.nt FINAL=$(FINAL)
         cd $(WXDIR)\samples\sashtest
-        nmake -f makefile.nt DEBUG_FLAGS=$(DEBUG_FLAGS) LINK_DEBUG_FLAGS=$(LINK_DEBUG_FLAGS)
+        nmake -f makefile.nt FINAL=$(FINAL)
+!if "$(FINAL)" == "0"
         cd $(WXDIR)\samples\memcheck
-        nmake -f makefile.nt DEBUG_FLAGS=$(DEBUG_FLAGS) LINK_DEBUG_FLAGS=$(LINK_DEBUG_FLAGS)
+!endif
+        nmake -f makefile.nt FINAL=$(FINAL)
         cd $(WXDIR)\samples\ownerdrw
-        nmake -f makefile.nt DEBUG_FLAGS=$(DEBUG_FLAGS) LINK_DEBUG_FLAGS=$(LINK_DEBUG_FLAGS)
+        nmake -f makefile.nt FINAL=$(FINAL)
         cd $(WXDIR)\samples\checklst
-        nmake -f makefile.nt DEBUG_FLAGS=$(DEBUG_FLAGS) LINK_DEBUG_FLAGS=$(LINK_DEBUG_FLAGS)
+        nmake -f makefile.nt FINAL=$(FINAL)
         cd $(WXDIR)\samples\minifram
-        nmake -f makefile.nt DEBUG_FLAGS=$(DEBUG_FLAGS) LINK_DEBUG_FLAGS=$(LINK_DEBUG_FLAGS)
+        nmake -f makefile.nt FINAL=$(FINAL)
         cd $(WXDIR)\samples\bombs
-        nmake -f makefile.nt DEBUG_FLAGS=$(DEBUG_FLAGS) LINK_DEBUG_FLAGS=$(LINK_DEBUG_FLAGS)
+        nmake -f makefile.nt FINAL=$(FINAL)
         cd $(WXDIR)\samples\fractal
-        nmake -f makefile.nt DEBUG_FLAGS=$(DEBUG_FLAGS) LINK_DEBUG_FLAGS=$(LINK_DEBUG_FLAGS)
+        nmake -f makefile.nt FINAL=$(FINAL)
         cd $(WXDIR)\samples\wxpoem
-        nmake -f makefile.nt DEBUG_FLAGS=$(DEBUG_FLAGS) LINK_DEBUG_FLAGS=$(LINK_DEBUG_FLAGS)
-        cd $(WXDIR)\samples\types
-        nmake -f makefile.nt DEBUG_FLAGS=$(DEBUG_FLAGS) LINK_DEBUG_FLAGS=$(LINK_DEBUG_FLAGS)
+        nmake -f makefile.nt FINAL=$(FINAL)
+        cd $(WXDIR)\samples\typetest
+        nmake -f makefile.nt FINAL=$(FINAL)
         cd $(WXDIR)\samples\proplist
-        nmake -f makefile.nt DEBUG_FLAGS=$(DEBUG_FLAGS) LINK_DEBUG_FLAGS=$(LINK_DEBUG_FLAGS)
+        nmake -f makefile.nt FINAL=$(FINAL)
+        cd $(WXDIR)\samples\image
+        nmake -f makefile.nt FINAL=$(FINAL)
 #        cd $(WXDIR)\samples\regtest
-#        nmake -f makefile.nt DEBUG_FLAGS=$(DEBUG_FLAGS) LINK_DEBUG_FLAGS=$(LINK_DEBUG_FLAGS)
+#        nmake -f makefile.nt FINAL=$(FINAL)
 
 clean:
         cd $(WXDIR)\samples\splitter
@@ -146,8 +150,10 @@ clean:
         nmake -f makefile.nt clean
         cd $(WXDIR)\samples\wxpoem
         nmake -f makefile.nt clean
-        cd $(WXDIR)\samples\types
+        cd $(WXDIR)\samples\typetest
         nmake -f makefile.nt clean
         cd $(WXDIR)\samples\proplist
+        nmake -f makefile.nt clean
+        cd $(WXDIR)\samples\image
         nmake -f makefile.nt clean
 

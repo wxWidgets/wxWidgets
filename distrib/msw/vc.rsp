@@ -115,8 +115,8 @@ samples/typetest/TypetestVC.dsw
 samples/validate/ValidateVC.dsp
 samples/validate/ValidateVC.dsw
 
-samples/wxsocket/SocketVC.dsp
-samples/wxsocket/SocketVC.dsw
+samples/wxsocket/ClientVC.dsp
+samples/wxsocket/ServerVC.dsw
 
 samples/wxpoem/PoemVC.dsp
 samples/wxpoem/PoemVC.dsw
@@ -129,12 +129,17 @@ utils/wxprop/src/PropSampleVC.dsw
 utils/dialoged/src/DialogEdVC.dsp
 utils/dialoged/src/DialogEdVC.dsw
 
+utils/tex2rtf/src/Tex2RTFVC.dsp
+utils/tex2rtf/src/Tex2RTFVC.dsw
+
 utils/glcanvas/win/GlcanvasVC.dsp
 utils/glcanvas/win/GlcanvasVC.dsw
 utils/glcanvas/samples/cube/CubeVC.dsp
 utils/glcanvas/samples/cube/CubeVC.dsw
 utils/glcanvas/samples/isosurf/IsosurfVC.dsp
 utils/glcanvas/samples/isosurf/IsosurfVC.dsw
+utils/glcanvas/samples/penguin/PenguinVC.dsp
+utils/glcanvas/samples/penguin/PenguinVC.dsw
 
 utils/ogl/src/OglVC.dsp
 utils/ogl/src/OglVC.dsw

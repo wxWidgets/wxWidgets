@@ -233,6 +233,7 @@ MSWOBJS = \
   $(MSWDIR)\utilsexc.obj \
   $(MSWDIR)\wave.obj \
   $(MSWDIR)\window.obj \
+  $(MSWDIR)\xpmhand.obj
 
 # Unfortunately this causes a crash when the oleauto sample starts.
 #  $(MSWDIR)\automtn.obj

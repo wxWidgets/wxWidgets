@@ -13,6 +13,9 @@
 #pragma interface "pnghand.h"
 #endif
 
+#ifndef _WX_PNGHAND_H_
+#define _WX_PNGHAND_H_
+
 class WXDLLEXPORT wxPNGFileHandler: public wxBitmapHandler
 {
   DECLARE_DYNAMIC_CLASS(wxPNGFileHandler)
@@ -28,4 +31,7 @@ public:
       int desiredWidth, int desiredHeight);
   virtual bool SaveFile(wxBitmap *bitmap, const wxString& name, int type, const wxPalette *palette = NULL);
 };
+
+#endif
+  // _WX_PNGHAND_H_
 

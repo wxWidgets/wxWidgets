@@ -110,9 +110,8 @@ dialog, using the EVT\_CLOSE macro. The event handler function might look like t
 
 \wxheading{How do I exit the application gracefully?}
 
-A wxWindows application automatically exits when the top frame (returned
-from \helpref{wxApp::OnInit}{wxapponinit}) is destroyed. This may be modified
-in later versions to exit only when the {\it last} top-level frame is destroyed.
+A wxWindows application automatically exits when the designated top window, or the
+last frame or dialog, is destroyed.
 
 \wxheading{Do child windows get deleted automatically?}
 

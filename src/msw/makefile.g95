@@ -224,7 +224,8 @@ MSWOBJS = \
   utils.$(OBJSUFF) \
   utilsexc.$(OBJSUFF) \
   wave.$(OBJSUFF) \
-  window.$(OBJSUFF)
+  window.$(OBJSUFF) \
+  xpmhand.$(OBJSUFF)
 
 # Native wxDirDlg can't be compiled due to GnuWin32/OLE limitations
 #  dirdlg.$(OBJSUFF) \

@@ -180,7 +180,9 @@ MSWOBJS = \
   $(MSWDIR)\icon.obj \
   $(MSWDIR)\iniconf.obj \
   $(MSWDIR)\joystick.obj \
+  $(MSWDIR)\imaglist.obj \
   $(MSWDIR)\listbox.obj \
+  $(MSWDIR)\listctrl.obj \
   $(MSWDIR)\main.obj \
   $(MSWDIR)\mdi.obj \
   $(MSWDIR)\menu.obj \
@@ -189,6 +191,7 @@ MSWOBJS = \
   $(MSWDIR)\minifram.obj \
   $(MSWDIR)\msgdlg.obj \
   $(MSWDIR)\nativdlg.obj \
+  $(MSWDIR)\notebook.obj \
   $(MSWDIR)\ownerdrw.obj \
   $(MSWDIR)\palette.obj \
   $(MSWDIR)\pen.obj \
@@ -217,38 +220,24 @@ MSWOBJS = \
   $(MSWDIR)\textctrl.obj \
   $(MSWDIR)\thread.obj \
   $(MSWDIR)\timer.obj \
+  $(MSWDIR)\treectrl.obj \
   $(MSWDIR)\utils.obj \
   $(MSWDIR)\utilsexc.obj \
+  $(OLEDIR)\uuid.obj \
   $(MSWDIR)\wave.obj \
   $(MSWDIR)\window.obj \
-  $(MSWDIR)\notebook.obj \
-  $(MSWDIR)\listctrl.obj \
-  $(MSWDIR)\imaglist.obj \
-  $(MSWDIR)\treectrl.obj \
+  $(MSWDIR)\xpmhand.obj \
+  $(OLEDIR)\dataobj.obj \
+  $(OLEDIR)\automtn.obj \
   $(OLEDIR)\droptgt.obj \
   $(OLEDIR)\dropsrc.obj \
-  $(OLEDIR)\dataobj.obj \
-  $(OLEDIR)\oleutils.obj \
-  $(OLEDIR)\uuid.obj \
-  $(OLEDIR)\automtn.obj
-
-XPMOBJECTS = 	$(XPMDIR)\crbuffri.obj\
-		$(XPMDIR)\crdatfri.obj\
-		$(XPMDIR)\create.obj $(XPMDIR)\crifrbuf.obj\
-		$(XPMDIR)\crifrdat.obj\
-		$(XPMDIR)\data.obj\
-		$(XPMDIR)\hashtab.obj $(XPMDIR)\misc.obj\
-		$(XPMDIR)\parse.obj $(XPMDIR)\rdftodat.obj\
-		$(XPMDIR)\rdftoi.obj\
-		$(XPMDIR)\rgb.obj $(XPMDIR)\scan.obj\
-		$(XPMDIR)\simx.obj $(XPMDIR)\wrffrdat.obj\
-		$(XPMDIR)\wrffrp.obj $(XPMDIR)\wrffri.obj
+  $(OLEDIR)\oleutils.obj
 
 # Add $(NONESSENTIALOBJS) if wanting generic dialogs, PostScript etc.
-OBJECTS = $(COMMONOBJS) $(GENERICOBJS) $(MSWOBJS) # $(XPMOBJECTS)
+OBJECTS = $(COMMONOBJS) $(GENERICOBJS) $(MSWOBJS)
 
 # Normal, static library
-all:    $(DUMMYOBJ) $(OBJECTS) $(PERIPH_TARGET) png zlib $(LIBTARGET)
+all:    $(DUMMYOBJ) $(OBJECTS) $(PERIPH_TARGET) png zlib xpm $(LIBTARGET)
 
 # wxWindows library as DLL
 dll:
@@ -574,6 +563,11 @@ $(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
 <<
 
 $(MSWDIR)/pnghand.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
+<<
+
+$(MSWDIR)/xpmhand.obj:     $*.$(SRCSUFF)
         cl @<<
 $(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
 <<
@@ -1201,121 +1195,11 @@ $(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
 
 $(OBJECTS):	$(WXDIR)/include/wx/setup.h
 
-$(XPMDIR)\crbuffri.obj: $(XPMDIR)\crbuffri.c
-	 	cl @<<
-$(CPPFLAGS2) /c $*.c /Fo$@
-<<
-
-$(XPMDIR)\crbuffrp.obj: $(XPMDIR)\crbuffrp.c
-	 	cl @<<
-$(CPPFLAGS2) /c  $*.c /Fo$@
-<<
-
-$(XPMDIR)\crdatfri.obj: $(XPMDIR)\crdatfri.c
-	 	cl @<<
-$(CPPFLAGS2) /c  $*.c /Fo$@
-<<
-
-$(XPMDIR)\crdatfrp.obj: $(XPMDIR)\crdatfrp.c
-	 	cl @<<
-$(CPPFLAGS2) /c $*.c /Fo$@
-<<
-
-$(XPMDIR)\create.obj: $(XPMDIR)\create.c
-	 	cl @<<
-$(CPPFLAGS2) /c $*.c /Fo$@
-<<
-
-$(XPMDIR)\crifrbuf.obj: $(XPMDIR)\crifrbuf.c
-	 	cl @<<
-$(CPPFLAGS2) /c $*.c /Fo$@
-<<
-
-$(XPMDIR)\crifrdat.obj: $(XPMDIR)\crifrdat.c
-	 	cl @<<
-$(CPPFLAGS2) /c $*.c /Fo$@
-<<
-
-$(XPMDIR)\crpfrbuf.obj: $(XPMDIR)\crpfrbuf.c
-	 	cl @<<
-$(CPPFLAGS2) /c $*.c /Fo$@
-<<
-
-$(XPMDIR)\crpfrdat.obj: $(XPMDIR)\crpfrdat.c
-	 	cl @<<
-$(CPPFLAGS2) /c $*.c /Fo$@
-<<
-
-$(XPMDIR)\data.obj: $(XPMDIR)\data.c
-	 	cl @<<
-$(CPPFLAGS2) /c $*.c /Fo$@
-<<
-
-$(XPMDIR)\hashtab.obj: $(XPMDIR)\hashtab.c
-	 	cl @<<
-$(CPPFLAGS2) /c $*.c /Fo$@
-<<
-
-$(XPMDIR)\misc.obj: $(XPMDIR)\misc.c
-	 	cl @<<
-$(CPPFLAGS2) /c $*.c /Fo$@
-<<
-
-$(XPMDIR)\parse.obj: $(XPMDIR)\parse.c
-	 	cl @<<
-$(CPPFLAGS2) /c $*.c /Fo$@
-<<
-
-$(XPMDIR)\rdftodat.obj: $(XPMDIR)\rdftodat.c
-	 	cl @<<
-$(CPPFLAGS2) /c $*.c /Fo$@
-<<
-
-$(XPMDIR)\rdftoi.obj: $(XPMDIR)\rdftoi.c
-	 	cl @<<
-$(CPPFLAGS2) /c $*.c /Fo$@
-<<
-
-$(XPMDIR)\rdftop.obj: $(XPMDIR)\rdftop.c
-	 	cl @<<
-$(CPPFLAGS2) /c $*.c /Fo$@
-<<
-
-$(XPMDIR)\rgb.obj: $(XPMDIR)\rgb.c
-	 	cl @<<
-$(CPPFLAGS2) /c $*.c /Fo$@
-<<
-
-$(XPMDIR)\scan.obj: $(XPMDIR)\scan.c
-	 	cl @<<
-$(CPPFLAGS2) /c $*.c /Fo$@
-<<
-
-$(XPMDIR)\simx.obj: $(XPMDIR)\simx.c
-	 	cl @<<
-$(CPPFLAGS2) /c $*.c /Fo$@
-<<
-
-$(XPMDIR)\wrffrdat.obj: $(XPMDIR)\wrffrdat.c
-	 	cl @<<
-$(CPPFLAGS2) /c $*.c /Fo$@
-<<
-
-$(XPMDIR)\wrffri.obj: $(XPMDIR)\wrffri.c
-	 	cl @<<
-$(CPPFLAGS2) /c $*.c /Fo$@
-<<
-
-$(XPMDIR)\wrffrp.obj: $(XPMDIR)\wrffrp.c
-	 	cl @<<
-$(CPPFLAGS2) /c $*.c /Fo$@
-<<
-
 # Peripheral components
 
 png:
     cd $(WXDIR)\src\png
-    nmake -f makefile.nt FINAL=$(FINAL)
+    nmake -f makefile.nt FINAL=$(FINAL) DLL=$(DLL) WXMAKINGDLL=$(WXMAKINGDLL)
     cd $(WXDIR)\src\msw
 
 clean_png:
@@ -1325,7 +1209,7 @@ clean_png:
 
 zlib:
     cd $(WXDIR)\src\zlib
-    nmake -f makefile.nt FINAL=$(FINAL)
+    nmake -f makefile.nt FINAL=$(FINAL) DLL=$(DLL) WXMAKINGDLL=$(WXMAKINGDLL)
     cd $(WXDIR)\src\msw
 
 clean_zlib:
@@ -1334,12 +1218,12 @@ clean_zlib:
     cd $(WXDIR)\src\msw
 
 xpm:
-    cd $(WXDIR)\src\wxxpm
-    nmake -f makefile.nt FINAL=$(FINAL)
+    cd $(WXDIR)\src\xpm
+    nmake -f makefile.nt FINAL=$(FINAL) DLL=$(DLL) WXMAKINGDLL=$(WXMAKINGDLL)
     cd $(WXDIR)\src\msw
 
 clean_xpm:
-    cd $(WXDIR)\src\wxxpm
+    cd $(WXDIR)\src\xpm
     nmake -f makefile.nt clean
     cd $(WXDIR)\src\msw
 
@@ -1348,22 +1232,7 @@ rcparser:
     nmake -f makefile.nt FINAL=$(FINAL)
     cd $(WXDIR)\src\msw
 
-wxstring:
-    cd $(WXDIR)\contrib\wxstring
-    nmake -f makefile.nt OPTIONS="$(OPTIONS)" DEBUG="$(DEBUG)" FINAL=$(FINAL)
-    cd $(WXDIR)\src\msw
-
-clean_wxstring:
-    cd $(WXDIR)\contrib\wxstring
-    nmake -f makefile.nt clean
-    cd $(WXDIR)\src\msw
-
-clean_rcp:
-    cd $(WXDIR)\utils\rcparser\src
-    nmake -f makefile.nt clean
-    cd $(WXDIR)\src\msw
-
-clean: $(PERIPH_CLEAN_TARGET) clean_png clean_zlib
+clean: $(PERIPH_CLEAN_TARGET) clean_png clean_zlib clean_xpm
         -erase *.obj
         -erase $(LIBTARGET)
         -erase $(WXDIR)\lib\*.pdb

@@ -12,7 +12,11 @@ either monochrome or colour.
 
 \wxheading{See also}
 
-\helpref{wxBitmap overview}{wxbitmapoverview}, \helpref{wxDC::Blit}{wxdcblit}, \helpref{wxIcon}{wxicon}, \helpref{wxCursor}{wxcursor}, \helpref{wxMemoryDC}{wxmemorydc}
+\helpref{wxBitmap overview}{wxbitmapoverview}, 
+\helpref{supported bitmap file formats}{supportedbitmapformats}, 
+\helpref{wxDC::Blit}{wxdcblit}, 
+\helpref{wxIcon}{wxicon}, \helpref{wxCursor}{wxcursor}, \helpref{wxBitmap}{wxbitmap}, 
+\helpref{wxMemoryDC}{wxmemorydc}
 
 \latexignore{\rtfignore{\wxheading{Members}}}
 
@@ -74,8 +78,9 @@ Its meaning is determined by the {\it type} parameter.}
 \end{twocollist}
 
 The validity of these flags depends on the platform and wxWindows configuration.
-If all possible wxWindows settings are used, the Windows platform supports BMP, BMP\_RESOURCE,
-XPM\_DATA, and XPM. Under X, the available formats are BMP, GIF, XBM, and XPM.}
+If all possible wxWindows settings are used, the Windows platform supports BMP file, BMP resource,
+XPM data, and XPM. Under wxGTK, the available formats are BMP file, XPM data, XPM file, and PNG file.
+Under wxMotif, the available formats are XBM data, XBM file, XPM data, XPM file.}
 
 \wxheading{Remarks}
 
@@ -113,7 +118,7 @@ The eighth form constructs a bitmap from a file or resource. {\it name} can refe
 to a resource name under MS Windows, or a filename under MS Windows and X.
 
 Under Windows, {\it type} defaults to wxBITMAP\_TYPE\_BMP\_RESOURCE.
-Under X, {\it type} defaults to wxBITMAP\_TYPE\_XBM.
+Under X, {\it type} defaults to wxBITMAP\_TYPE\_XPM.
 
 \wxheading{See also}
 

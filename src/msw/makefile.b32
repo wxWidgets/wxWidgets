@@ -243,6 +243,7 @@ MSWOBJS = \
   $(MSWDIR)\utilsexc.obj \
   $(MSWDIR)\wave.obj \
   $(MSWDIR)\window.obj \
+  $(MSWDIR)\xpmhand.obj \
   $(MSWDIR)\droptgt.obj \
   $(MSWDIR)\dropsrc.obj \
   $(MSWDIR)\oleutils.obj \

@@ -100,7 +100,7 @@ EXTRADLLFLAGS=$(EXTRADLLFLAGS) /DNOMAIN
 !endif
 
 INC=-I$(WXINC) -I$(WXDIR)/src/png -I$(WXDIR)/src/zlib $(EXTRAINC)
-LIBS = $(EXTRALIBS) $(WXLIB) $(WINLIBS) $(WXDIR)\lib\winpng.lib $(WXDIR)\lib\zlib.lib
+LIBS = $(EXTRALIBS) $(WXLIB) $(WINLIBS) $(WXDIR)\lib\winpng.lib $(WXDIR)\lib\zlib.lib $(WXDIR)\lib\xpm.lib
 
 !ifndef FINAL
 FINAL=0
