@@ -285,7 +285,7 @@ begin
                              'Should I do it?',
                              mbConfirmation, MB_YESNO);
         if ResultCode = IDYES then begin
-            InstExec(FileName, '/SILENT', WizardDirValue()+'\wxPython', True, False, SW_SHOWNORMAL, ResultCode);
+            InstExec(FileName, '/SILENT', WizardDirValue()2, True, False, SW_SHOWNORMAL, ResultCode);
 
         end;
     end;
