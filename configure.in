@@ -3061,7 +3061,7 @@ if test "$wxUSE_THREADS" = "yes"; then
   AC_DEFINE(wxUSE_THREADS)
 
   dnl must define _REENTRANT for multithreaded code except for Darwin/Mac OS X
-  if test "$wxUSE_DARWIN" = "0"; then
+  if test "x$wxUSE_DARWIN" != "x1"; then
     CFLAGS="${CFLAGS} -D_REENTRANT"
     CXXFLAGS="${CXXFLAGS} -D_REENTRANT"
   fi

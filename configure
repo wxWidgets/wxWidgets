@@ -14619,7 +14619,7 @@ if test "$wxUSE_THREADS" = "yes"; then
 EOF
 
 
-    if test "$wxUSE_DARWIN" = "0"; then
+    if test "x$wxUSE_DARWIN" != "x1"; then
     CFLAGS="${CFLAGS} -D_REENTRANT"
     CXXFLAGS="${CXXFLAGS} -D_REENTRANT"
   fi
