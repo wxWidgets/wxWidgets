@@ -41,9 +41,9 @@ public:
           m_fromPrivPos(wxDefaultPosition), m_toPrivPos(wxDefaultPosition),
           m_fromCell(NULL), m_toCell(NULL) {}
 
-    void Set(const wxPoint& fromPos, wxHtmlCell *fromCell,
-             const wxPoint& toPos, wxHtmlCell *toCell);
-    void Set(wxHtmlCell *fromCell, wxHtmlCell *toCell);
+    void Set(const wxPoint& fromPos, const wxHtmlCell *fromCell,
+             const wxPoint& toPos, const wxHtmlCell *toCell);
+    void Set(const wxHtmlCell *fromCell, const wxHtmlCell *toCell);
     
     const wxHtmlCell *GetFromCell() const { return m_fromCell; }
     const wxHtmlCell *GetToCell() const { return m_toCell; }
@@ -57,6 +57,7 @@ public:
     const wxPoint& GetToPrivPos() const { return m_toPrivPos; }
     void SetFromPrivPos(const wxPoint& pos) { m_fromPrivPos = pos; }
     void SetToPrivPos(const wxPoint& pos) { m_toPrivPos = pos; }
+    void ClearPrivPos() { m_toPrivPos = m_fromPrivPos = wxDefaultPosition; }
 
     const bool IsEmpty() const 
         { return m_fromPos == wxDefaultPosition && 
@@ -65,7 +66,7 @@ public:
 private:
     wxPoint m_fromPos, m_toPos;
     wxPoint m_fromPrivPos, m_toPrivPos;
-    wxHtmlCell *m_fromCell, *m_toCell;
+    const wxHtmlCell *m_fromCell, *m_toCell;
 };
 
 
@@ -144,7 +145,7 @@ enum
 {
     wxHTML_FIND_EXACT             = 1,
     wxHTML_FIND_NEAREST_BEFORE    = 2,
-    wxHTML_FIND_NEAREST_AFTER     = 4,
+    wxHTML_FIND_NEAREST_AFTER     = 4
 };
 
 
@@ -283,10 +284,7 @@ public:
     // cells (= as they are read). If cell A is (grand)parent of cell B,
     // then both A.IsBefore(B) and B.IsBefore(A) always return true.
     bool IsBefore(wxHtmlCell *cell) const;
-
-    // Sets cell's private position values in wxHtmlSelection
-    virtual void SetSelectionPrivPos(wxDC& dc, wxHtmlSelection *s) const {}
-
+    
     // Converts the cell into text representation. If sel != NULL then
     // only part of the cell inside the selection is converted.
     virtual wxString ConvertToText(wxHtmlSelection *WXUNUSED(sel)) const
@@ -332,9 +330,9 @@ public:
     void Draw(wxDC& dc, int x, int y, int view_y1, int view_y2,
               wxHtmlRenderingInfo& info);
     wxString ConvertToText(wxHtmlSelection *sel) const;
-    void SetSelectionPrivPos(wxDC& dc, wxHtmlSelection *s) const;
 
 protected:
+    void SetSelectionPrivPos(wxDC& dc, wxHtmlSelection *s) const;
     void Split(wxDC& dc,
                const wxPoint& selFrom, const wxPoint& selTo,
                unsigned& pos1, unsigned& pos2) const;

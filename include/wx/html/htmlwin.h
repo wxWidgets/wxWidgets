@@ -32,6 +32,7 @@ class wxHtmlProcessor;
 class wxHtmlWinModule;
 class wxHtmlHistoryArray;
 class wxHtmlProcessorList;
+class WXDLLEXPORT wxHtmlWinAutoScrollTimer;
 
 
 // wxHtmlWindow flags:
@@ -207,7 +208,8 @@ protected:
     // actual size of window. This method also setup scrollbars
     void CreateLayout();
 
-    void OnDraw(wxDC& dc);
+    void OnEraseBackground(wxEraseEvent& event);
+    void OnPaint(wxPaintEvent& event);
     void OnSize(wxSizeEvent& event);
     void OnMouseMove(wxMouseEvent& event);
     void OnMouseDown(wxMouseEvent& event);
@@ -216,6 +218,8 @@ protected:
 #if wxUSE_CLIPBOARD
     void OnKeyUp(wxKeyEvent& event);
     void OnCopy(wxCommandEvent& event);
+    void OnMouseEnter(wxMouseEvent& event);
+    void OnMouseLeave(wxMouseEvent& event);
 #endif
 
     // Returns new filter (will be stored into m_DefaultFilter variable)
@@ -228,6 +232,7 @@ protected:
     // and wxHW_NO_SELECTION not used)
     bool IsSelectionEnabled() const;
 
+#if wxUSE_CLIPBOARD
     // Convert selection to text:
     wxString SelectionToText();
 
@@ -239,10 +244,12 @@ protected:
     
     // Copies selection to clipboard:
     void CopySelection(ClipboardType t = Secondary);
+    void StopAutoScrolling();
+#endif
 
 protected:
-    // This is pointer to the first cell in parsed data.
-    // (Note: the first cell is usually top one = all other cells are sub-cells of this one)
+    // This is pointer to the first cell in parsed data.  (Note: the first cell
+    // is usually top one = all other cells are sub-cells of this one)
     wxHtmlContainerCell *m_Cell;
     // parser which is used to parse HTML input.
     // Each wxHtmlWindow has it's own parser because sharing one global
@@ -275,7 +282,14 @@ protected:
     // true if the user is dragging mouse to select text
     bool m_makingSelection;
 
+#if wxUSE_CLIPBOARD
+    wxHtmlWinAutoScrollTimer *m_timerAutoScroll;
+#endif
+
 private:
+    // window content for double buffered rendering:
+    wxBitmap *m_backBuffer;
+    
     // variables used when user is selecting text
     wxPoint     m_tmpSelFromPos;
     wxHtmlCell *m_tmpSelFromCell;

@@ -36,8 +36,8 @@
 // Helper classes
 //-----------------------------------------------------------------------------
 
-void wxHtmlSelection::Set(const wxPoint& fromPos, wxHtmlCell *fromCell,
-                          const wxPoint& toPos, wxHtmlCell *toCell)
+void wxHtmlSelection::Set(const wxPoint& fromPos, const wxHtmlCell *fromCell,
+                          const wxPoint& toPos, const wxHtmlCell *toCell)
 {
     m_fromCell = fromCell;
     m_toCell = toCell;
@@ -45,7 +45,7 @@ void wxHtmlSelection::Set(const wxPoint& fromPos, wxHtmlCell *fromCell,
     m_toPos = toPos;
 }
 
-void wxHtmlSelection::Set(wxHtmlCell *fromCell, wxHtmlCell *toCell)
+void wxHtmlSelection::Set(const wxHtmlCell *fromCell, const wxHtmlCell *toCell)
 {
     wxPoint p1 = fromCell ? fromCell->GetAbsPos() : wxDefaultPosition;
     wxPoint p2 = toCell ? toCell->GetAbsPos() : wxDefaultPosition;
@@ -249,7 +249,7 @@ wxHtmlWordCell::wxHtmlWordCell(const wxString& word, wxDC& dc) : wxHtmlCell()
 // Splits m_Word into up to three parts according to selection, returns
 // substring before, in and after selection and the points (in relative coords)
 // where s2 and s3 start:
-void wxHtmlWordCell::Split(wxDC& dc, 
+void wxHtmlWordCell::Split(wxDC& dc,
                            const wxPoint& selFrom, const wxPoint& selTo,
                            unsigned& pos1, unsigned& pos2) const
 {
@@ -356,6 +356,19 @@ void wxHtmlWordCell::Draw(wxDC& dc, int x, int y,
        
         wxPoint priv = (this == s->GetFromCell()) ? 
                            s->GetFromPrivPos() : s->GetToPrivPos();
+
+        // NB: this is quite a hack: in order to compute selection boundaries
+        //     (in word's characters) we must know current font, which is only
+        //     possible inside rendering code. Therefore we update the
+        //     information here and store it in wxHtmlSelection so that
+        //     ConvertToText can use it later:
+        if ( priv == wxDefaultPosition )
+        {
+            SetSelectionPrivPos(dc, s);
+            priv = (this == s->GetFromCell()) ? 
+                    s->GetFromPrivPos() : s->GetToPrivPos();
+        }
+        
         int part1 = priv.x;
         int part2 = priv.y;
 

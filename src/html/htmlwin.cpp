@@ -33,9 +33,85 @@
 #include "wx/html/htmlproc.h"
 #include "wx/list.h"
 #include "wx/clipbrd.h"
+#include "wx/timer.h"
+#include "wx/dcmemory.h"
 
 #include "wx/arrimpl.cpp"
 #include "wx/listimpl.cpp"
+
+
+
+#if wxUSE_CLIPBOARD
+// ----------------------------------------------------------------------------
+// wxHtmlWinAutoScrollTimer: the timer used to generate a stream of scroll
+// events when a captured mouse is held outside the window
+// ----------------------------------------------------------------------------
+
+class wxHtmlWinAutoScrollTimer : public wxTimer
+{
+public:
+    wxHtmlWinAutoScrollTimer(wxScrolledWindow *win,
+                      wxEventType eventTypeToSend,
+                      int pos, int orient)
+    {
+        m_win = win;
+        m_eventType = eventTypeToSend;
+        m_pos = pos;
+        m_orient = orient;
+    }
+
+    virtual void Notify();
+
+private:
+    wxScrolledWindow *m_win;
+    wxEventType m_eventType;
+    int m_pos,
+        m_orient;
+
+    DECLARE_NO_COPY_CLASS(wxHtmlWinAutoScrollTimer)
+};
+
+void wxHtmlWinAutoScrollTimer::Notify()
+{
+    // only do all this as long as the window is capturing the mouse
+    if ( wxWindow::GetCapture() != m_win )
+    {
+        Stop();
+    }
+    else // we still capture the mouse, continue generating events
+    {
+        // first scroll the window if we are allowed to do it
+        wxScrollWinEvent event1(m_eventType, m_pos, m_orient);
+        event1.SetEventObject(m_win);
+        if ( m_win->GetEventHandler()->ProcessEvent(event1) )
+        {
+            // and then send a pseudo mouse-move event to refresh the selection
+            wxMouseEvent event2(wxEVT_MOTION);
+            wxGetMousePosition(&event2.m_x, &event2.m_y);
+
+            // the mouse event coordinates should be client, not screen as
+            // returned by wxGetMousePosition
+            wxWindow *parentTop = m_win;
+            while ( parentTop->GetParent() )
+                parentTop = parentTop->GetParent();
+            wxPoint ptOrig = parentTop->GetPosition();
+            event2.m_x -= ptOrig.x;
+            event2.m_y -= ptOrig.y;
+
+            event2.SetEventObject(m_win);
+
+            // FIXME: we don't fill in the other members - ok?
+            m_win->GetEventHandler()->ProcessEvent(event2);
+        }
+        else // can't scroll further, stop
+        {
+            Stop();
+        }
+    }
+}
+#endif
+
+
 
 //-----------------------------------------------------------------------------
 // wxHtmlHistoryItem
@@ -95,6 +171,10 @@ void wxHtmlWindow::Init()
     SetBorders(10);
     m_selection = NULL;
     m_makingSelection = false;
+#if wxUSE_CLIPBOARD
+    m_timerAutoScroll = NULL;
+#endif
+    m_backBuffer = NULL;
 }
 
 bool wxHtmlWindow::Create(wxWindow *parent, wxWindowID id,
@@ -113,6 +193,9 @@ bool wxHtmlWindow::Create(wxWindow *parent, wxWindowID id,
 
 wxHtmlWindow::~wxHtmlWindow()
 {
+#if wxUSE_CLIPBOARD
+    StopAutoScrolling();
+#endif
     HistoryClear();
 
     if (m_Cell) delete m_Cell;
@@ -121,6 +204,7 @@ wxHtmlWindow::~wxHtmlWindow()
     delete m_FS;
     delete m_History;
     delete m_Processors;
+    delete m_backBuffer;
 }
 
 
@@ -637,6 +721,7 @@ bool wxHtmlWindow::IsSelectionEnabled() const
 }
     
 
+#if wxUSE_CLIPBOARD
 wxString wxHtmlWindow::SelectionToText()
 {
     if ( !m_selection )
@@ -666,7 +751,6 @@ wxString wxHtmlWindow::SelectionToText()
 
 void wxHtmlWindow::CopySelection(ClipboardType t)
 {
-#if wxUSE_CLIPBOARD
     if ( m_selection )
     {
         wxTheClipboard->UsePrimarySelection(t == Primary);
@@ -679,8 +763,8 @@ void wxHtmlWindow::CopySelection(ClipboardType t)
                        _("Copied to clipboard:\"%s\""), txt.c_str());
         }
     }
-#endif
 }
+#endif
 
 
 void wxHtmlWindow::OnLinkClicked(const wxHtmlLinkInfo& link)
@@ -705,25 +789,45 @@ void wxHtmlWindow::OnCellMouseHover(wxHtmlCell * WXUNUSED(cell),
     // do nothing here
 }
 
-void wxHtmlWindow::OnDraw(wxDC& dc)
+void wxHtmlWindow::OnEraseBackground(wxEraseEvent& event)
 {
+}
+
+void wxHtmlWindow::OnPaint(wxPaintEvent& WXUNUSED(event))
+{
+    wxPaintDC dc(this);
+
     if (m_tmpCanDrawLocks > 0 || m_Cell == NULL) return;
 
     int x, y;
-    wxRect rect = GetUpdateRegion().GetBox();
-
-    dc.SetMapMode(wxMM_TEXT);
-    dc.SetBackgroundMode(wxTRANSPARENT);
     GetViewStart(&x, &y);
+    wxRect rect = GetUpdateRegion().GetBox();
+    wxSize sz = GetSize();
 
+    wxMemoryDC dcm;
+    if ( !m_backBuffer )
+        m_backBuffer = new wxBitmap(sz.x, sz.y);
+    dcm.SelectObject(*m_backBuffer);    
+    dcm.SetBackground(wxBrush(GetBackgroundColour(), wxSOLID));
+    dcm.Clear();
+    PrepareDC(dcm);
+    dcm.SetMapMode(wxMM_TEXT);
+    dcm.SetBackgroundMode(wxTRANSPARENT);
+    
     wxHtmlRenderingInfo rinfo;
     wxDefaultHtmlRenderingStyle rstyle;
     rinfo.SetSelection(m_selection);
     rinfo.SetStyle(&rstyle);
-    m_Cell->Draw(dc, 0, 0,
+    m_Cell->Draw(dcm, 0, 0,
                  y * wxHTML_SCROLL_STEP + rect.GetTop(),
                  y * wxHTML_SCROLL_STEP + rect.GetBottom(),
                  rinfo);
+
+    dcm.SetDeviceOrigin(0,0);
+    dc.Blit(0, rect.GetTop(),
+            sz.x, rect.GetBottom() - rect.GetTop() + 1,
+            &dcm,
+            0, rect.GetTop());
 }
 
 
@@ -731,8 +835,19 @@ void wxHtmlWindow::OnDraw(wxDC& dc)
 
 void wxHtmlWindow::OnSize(wxSizeEvent& event)
 {
+    wxDELETE(m_backBuffer);
+
     wxScrolledWindow::OnSize(event);
     CreateLayout();
+
+    // Recompute selection if necessary:
+    if ( m_selection )
+    {
+        m_selection->Set(m_selection->GetFromCell(),
+                         m_selection->GetToCell());
+        m_selection->ClearPrivPos();
+    }
+    
     Refresh();
 }
 
@@ -762,6 +877,7 @@ void wxHtmlWindow::OnMouseDown(wxMouseEvent& event)
 
 void wxHtmlWindow::OnMouseUp(wxMouseEvent& event)
 {
+#if wxUSE_CLIPBOARD
     if ( m_makingSelection )
     {
         ReleaseMouse();
@@ -778,6 +894,7 @@ void wxHtmlWindow::OnMouseUp(wxMouseEvent& event)
             return;
         }
     }
+#endif
     
     SetFocus();
     if ( m_Cell )
@@ -884,14 +1001,8 @@ void wxHtmlWindow::OnIdle(wxIdleEvent& WXUNUSED(event))
                         m_selection->Set(wxPoint(x,y), selcell,
                                          m_tmpSelFromPos, m_tmpSelFromCell);
                     }
-                    {
-                        wxClientDC dc(this);
-                        m_selection->GetFromCell()->SetSelectionPrivPos(
-                                dc, m_selection);
-                        m_selection->GetToCell()->SetSelectionPrivPos(
-                                dc, m_selection);
-                    }
-                    Refresh(); // FIXME - optimize!
+                    m_selection->ClearPrivPos();
+                    Refresh();
                 }
             }
         }
@@ -931,6 +1042,85 @@ void wxHtmlWindow::OnIdle(wxIdleEvent& WXUNUSED(event))
 }
 
 #if wxUSE_CLIPBOARD
+void wxHtmlWindow::StopAutoScrolling()
+{
+    if ( m_timerAutoScroll )
+    {
+        wxDELETE(m_timerAutoScroll);
+    }
+}
+
+void wxHtmlWindow::OnMouseEnter(wxMouseEvent& event)
+{
+    StopAutoScrolling();
+    event.Skip();
+}
+
+void wxHtmlWindow::OnMouseLeave(wxMouseEvent& event)
+{
+    // don't prevent the usual processing of the event from taking place
+    event.Skip();
+
+    // when a captured mouse leave a scrolled window we start generate
+    // scrolling events to allow, for example, extending selection beyond the
+    // visible area in some controls
+    if ( wxWindow::GetCapture() == this )
+    {
+        // where is the mouse leaving?
+        int pos, orient;
+        wxPoint pt = event.GetPosition();
+        if ( pt.x < 0 )
+        {
+            orient = wxHORIZONTAL;
+            pos = 0;
+        }
+        else if ( pt.y < 0 )
+        {
+            orient = wxVERTICAL;
+            pos = 0;
+        }
+        else // we're lower or to the right of the window
+        {
+            wxSize size = GetClientSize();
+            if ( pt.x > size.x )
+            {
+                orient = wxHORIZONTAL;
+                pos = GetVirtualSize().x / wxHTML_SCROLL_STEP;
+            }
+            else if ( pt.y > size.y )
+            {
+                orient = wxVERTICAL;
+                pos = GetVirtualSize().y / wxHTML_SCROLL_STEP;
+            }
+            else // this should be impossible
+            {
+                // but seems to happen sometimes under wxMSW - maybe it's a bug
+                // there but for now just ignore it
+
+                //wxFAIL_MSG( _T("can't understand where has mouse gone") );
+
+                return;
+            }
+        }
+
+        // only start the auto scroll timer if the window can be scrolled in
+        // this direction
+        if ( !HasScrollbar(orient) )
+            return;
+
+        delete m_timerAutoScroll;
+        m_timerAutoScroll = new wxHtmlWinAutoScrollTimer
+                                (
+                                    this,
+                                    pos == 0 ? wxEVT_SCROLLWIN_LINEUP
+                                             : wxEVT_SCROLLWIN_LINEDOWN,
+                                    pos,
+                                    orient
+                                );
+        m_timerAutoScroll->Start(50); // FIXME: make configurable
+    }
+}
+
 void wxHtmlWindow::OnKeyUp(wxKeyEvent& event)
 {
     if ( event.GetKeyCode() == 'C' && event.ControlDown() )
@@ -962,7 +1152,11 @@ BEGIN_EVENT_TABLE(wxHtmlWindow, wxScrolledWindow)
     EVT_RIGHT_UP(wxHtmlWindow::OnMouseUp)
     EVT_MOTION(wxHtmlWindow::OnMouseMove)
     EVT_IDLE(wxHtmlWindow::OnIdle)
+    EVT_ERASE_BACKGROUND(wxHtmlWindow::OnEraseBackground)
+    EVT_PAINT(wxHtmlWindow::OnPaint)
 #if wxUSE_CLIPBOARD
+    EVT_ENTER_WINDOW(wxHtmlWindow::OnMouseEnter)
+    EVT_LEAVE_WINDOW(wxHtmlWindow::OnMouseLeave)
     EVT_KEY_UP(wxHtmlWindow::OnKeyUp)
     EVT_MENU(wxID_COPY, wxHtmlWindow::OnCopy)
 #endif
