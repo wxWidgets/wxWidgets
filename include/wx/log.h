@@ -40,7 +40,9 @@ typedef unsigned long wxLogLevel;
 
 #if wxUSE_LOG
 
+#ifndef __WXWINCE__
 #include <time.h>   // for time_t
+#endif
 
 #include "wx/dynarray.h"
 

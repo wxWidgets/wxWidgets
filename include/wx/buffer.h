@@ -95,6 +95,19 @@ private:                                                                    \
     chartype *m_str;                                                        \
 }
 
+#ifndef strdup
+inline char *strdup(const char *cs)
+{
+    size_t len = 0;
+    while (cs[len] != 0)
+        len++;
+    const size_t siz = (len + 1)*sizeof(char);
+    char *csCopy = (char *)malloc(siz);
+    memcpy(csCopy, cs, siz);
+    return csCopy;
+}
+#endif
+
 DEFINE_BUFFER(wxCharBuffer, char, strdup);
 
 #if wxUSE_WCHAR_T

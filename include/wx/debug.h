@@ -12,7 +12,9 @@
 #ifndef   _WX_DEBUG_H_
 #define   _WX_DEBUG_H_
 
+#ifndef __WXWINCE__
 #include  <assert.h>
+#endif
 #include  <limits.h>            // for CHAR_BIT used below
 
 #include  "wx/wxchar.h"         // for __TFILE__ and wxChar
