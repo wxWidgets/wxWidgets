@@ -132,3 +132,15 @@ References:
      http://agnes.dida.physik.uni-essen.de/~janjaap/mingw32/index.html
  - See also http://web.ukonline.co.uk/julian.smart/wxwin/gnuwin32.htm
 
+Notes
+-----
+
+- Debugging: under Windows 95, debugging output isn't output in
+  the same way that it is under NT or Windows 3.1. Set
+  wxUSE_DBWIN32 to 1 if you wish to enable code to output debugging
+  info to an external debug monitor, such as Andrew Tucker's DBWIN32.
+  You can download DBWIN32 from:
+
+        http://ftp.digital.com/pub/micro/NT/WinSite/programr/dbwin32.zip
+
+  and it's also on the wxWindows CD-ROM.

@@ -195,6 +195,9 @@
 
 #define wxUSE_NATIVE_STATUSBAR        1
                                     // Set to 0 to use cross-platform wxStatusBar
+#define wxUSE_DBWIN32                 1
+                                    // Use Andrew Tucker's OutputDebugString implementation
+                                    // (required on Win95 only). See utils.cpp.
 
 /*
  * Any platform

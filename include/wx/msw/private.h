@@ -162,5 +162,14 @@ inline bool wxStyleHasBorder(long style)
   #define WS_EX_CLIENTEDGE 0
 #endif
 
+#if defined(__WIN95__) && defined(__WXDEBUG__) && wxUSE_DBWIN32
+#ifdef OutputDebugString
+#undef OutputDebugString
+#endif
+
+#define OutputDebugString OutputDebugStringW95
+extern void OutputDebugStringW95(const char*, ...);
+#endif
+
 #endif
     // _WX_PRIVATE_H_

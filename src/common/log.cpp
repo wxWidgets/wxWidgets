@@ -52,6 +52,8 @@
 
 #ifdef  __WXMSW__
   #include  <windows.h>
+  // Redefines OutputDebugString if necessary
+  #include  "wx/msw/private.h"
 #else   //Unix
   #include  <signal.h>
 #endif  //Win/Unix

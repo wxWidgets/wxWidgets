@@ -185,3 +185,6 @@ Perhaps rewrite wxFile to use FILE* descriptors, so Eof and Flush
 can work.
 
 Find out how to set wxFileSelector position.
+
+Maybe bundle Andrew Tucker's DBWIN32 with wxWindows (it's only
+26KB), for viewing debug messages without a debugger.

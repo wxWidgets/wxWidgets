@@ -894,3 +894,130 @@ bool wxMatchWild( const wxString& pat, const wxString& text, bool dot_special )
 
 #endif
 
+#if defined(__WIN95__) && defined(__WXDEBUG__) && wxUSE_DBWIN32
+
+/*
+When I started programming with Visual C++ v4.0, I missed one of my favorite
+tools -- DBWIN.  Finding the code for a simple debug trace utility, DBMON,
+on MSDN was a step in the right direction, but it is a console application
+and thus has limited features and extensibility.  DBWIN32 is my creation
+to solve this problem.
+
+The code is essentially a merging of a stripped down version of the DBWIN code 
+from VC 1.5 and DBMON.C with a few 32 bit changes.
+
+As of version 1.2B, DBWIN32 supports both Win95 and NT.  The NT support is 
+built into the operating system and works just by running DBWIN32.  The Win95
+team decided not to support this hook, so I have provided code that will do
+this for you.  See the file WIN95.TXT for instructions on installing this.
+
+If you have questions, problems or suggestions about DBWIN32, I welcome your
+feedback and plan to actively maintain the code.
+
+Andrew Tucker
+ast@halcyon.com
+
+To download dbwin32, see e.g.:
+
+http://ftp.digital.com/pub/micro/NT/WinSite/programr/dbwin32.zip
+*/
+
+#include <process.h>
+
+void OutputDebugStringW95(const char* lpOutputString, ...)
+{
+    HANDLE heventDBWIN;  /* DBWIN32 synchronization object */
+    HANDLE heventData;   /* data passing synch object */
+    HANDLE hSharedFile;  /* memory mapped file shared data */
+    LPSTR lpszSharedMem;
+    char achBuffer[500];
+
+    /* create the output buffer */
+    va_list args;
+    va_start(args, lpOutputString);
+    vsprintf(achBuffer, lpOutputString, args);
+    va_end(args);
+
+    /* 
+        Do a regular OutputDebugString so that the output is 
+        still seen in the debugger window if it exists.
+
+        This ifdef is necessary to avoid infinite recursion 
+        from the inclusion of W95TRACE.H
+    */
+#ifdef _UNICODE
+    ::OutputDebugStringW(achBuffer);
+#else
+    ::OutputDebugStringA(achBuffer);
+#endif
+
+    /* bail if it's not Win95 */
+    {
+        OSVERSIONINFO VerInfo;
+        VerInfo.dwOSVersionInfoSize = sizeof(OSVERSIONINFO);
+        GetVersionEx(&VerInfo);
+        if ( VerInfo.dwPlatformId != VER_PLATFORM_WIN32_WINDOWS )
+            return;
+    }
+
+    /* make sure DBWIN is open and waiting */
+    heventDBWIN = OpenEvent(EVENT_MODIFY_STATE, FALSE, "DBWIN_BUFFER_READY");
+    if ( !heventDBWIN )
+    {
+        //MessageBox(NULL, "DBWIN_BUFFER_READY nonexistent", NULL, MB_OK);
+        return;            
+    }
+
+    /* get a handle to the data synch object */
+    heventData = OpenEvent(EVENT_MODIFY_STATE, FALSE, "DBWIN_DATA_READY");
+    if ( !heventData )
+    {
+        // MessageBox(NULL, "DBWIN_DATA_READY nonexistent", NULL, MB_OK);
+        CloseHandle(heventDBWIN);
+        return;            
+    }
+    
+    hSharedFile = CreateFileMapping((HANDLE)-1, NULL, PAGE_READWRITE, 0, 4096, "DBWIN_BUFFER");
+    if (!hSharedFile) 
+    {
+        //MessageBox(NULL, "DebugTrace: Unable to create file mapping object DBWIN_BUFFER", "Error", MB_OK);
+        CloseHandle(heventDBWIN);
+        CloseHandle(heventData);
+        return;
+    }
+
+    lpszSharedMem = (LPSTR)MapViewOfFile(hSharedFile, FILE_MAP_WRITE, 0, 0, 512);
+    if (!lpszSharedMem) 
+    {
+        //MessageBox(NULL, "DebugTrace: Unable to map shared memory", "Error", MB_OK);
+        CloseHandle(heventDBWIN);
+        CloseHandle(heventData);
+        return;
+    }
+
+    /* wait for buffer event */
+    WaitForSingleObject(heventDBWIN, INFINITE);
+
+    /* write it to the shared memory */
+#ifdef __BORLANDC__
+    *((LPDWORD)lpszSharedMem) = getpid();
+#else
+    *((LPDWORD)lpszSharedMem) = _getpid();
+#endif
+
+    wsprintf(lpszSharedMem + sizeof(DWORD), "%s", achBuffer);
+
+    /* signal data ready event */
+    SetEvent(heventData);
+
+    /* clean up handles */
+    CloseHandle(hSharedFile);
+    CloseHandle(heventData);
+    CloseHandle(heventDBWIN);
+
+    return;
+}
+
+
+#endif
+

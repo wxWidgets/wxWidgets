@@ -124,8 +124,8 @@ wxPaintDC::~wxPaintDC()
     if ( !--ms_PaintCount ) {
       ::EndPaint((HWND)m_canvas->GetHWND(), &g_paintStruct);
       m_hDCCount--;
-      m_hDC = NULL;
-      ms_PaintHDC = NULL;
+      m_hDC = (WXHDC) NULL;
+      ms_PaintHDC = (WXHDC) NULL;
     }
     else { }//: ms_PaintHDC still in use
   }

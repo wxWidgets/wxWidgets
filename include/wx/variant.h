@@ -21,6 +21,11 @@
 #include "wx/string.h"
 #include "wx/list.h"
 
+#if wxUSE_TIMEDATE
+#include "wx/time.h"
+#include "wx/date.h"
+#endif
+
 #if wxUSE_IOSTREAMH
 #include <iostream.h>
 #else
@@ -79,18 +84,21 @@ public:
 
 // Construction & destruction
     wxVariant();
-    wxVariant(double val);
-    wxVariant(long val);
-    wxVariant(bool val);
-    wxVariant(char val);
-    wxVariant(const wxString& val);
-    wxVariant(const char* val); // Necessary or VC++ assumes bool!
-/* Causes ambiguity
-    wxVariant(const wxStringList& val);
-*/
-    wxVariant(const wxList& val); // List of variants
+    wxVariant(double val, const wxString& name = wxEmptyString);
+    wxVariant(long val, const wxString& name = wxEmptyString);
+    wxVariant(bool val, const wxString& name = wxEmptyString);
+    wxVariant(char val, const wxString& name = wxEmptyString);
+    wxVariant(const wxString& val, const wxString& name = wxEmptyString);
+    wxVariant(const char* val, const wxString& name = wxEmptyString); // Necessary or VC++ assumes bool!
+    wxVariant(const wxStringList& val, const wxString& name = wxEmptyString);
+    wxVariant(const wxList& val, const wxString& name = wxEmptyString); // List of variants
+#if wxUSE_TIMEDATE
+    wxVariant(const wxTime& val, const wxString& name = wxEmptyString); // Time
+    wxVariant(const wxDate& val, const wxString& name = wxEmptyString); // Date
+#endif
+    wxVariant(void* ptr, const wxString& name = wxEmptyString); // void* (general purpose)
+    wxVariant(wxVariantData* data, const wxString& name = wxEmptyString); // User-defined data
     wxVariant(const wxVariant& variant);
-    wxVariant(wxVariantData* data); // User-defined data
     ~wxVariant();
 
 // Generic operators
@@ -126,6 +134,17 @@ public:
     bool operator== (const wxList& value) const;
     bool operator!= (const wxList& value) const;
     void operator= (const wxList& value) ;
+#if wxUSE_TIMEDATE
+    bool operator== (const wxTime& value) const;
+    bool operator!= (const wxTime& value) const;
+    void operator= (const wxTime& value) ;
+    bool operator== (const wxDate& value) const;
+    bool operator!= (const wxDate& value) const;
+    void operator= (const wxDate& value) ;
+#endif
+    bool operator== (void* value) const;
+    bool operator!= (void* value) const;
+    void operator= (void* value) ;
 
     // Treat a list variant as an array
     wxVariant operator[] (size_t idx) const;
@@ -137,10 +156,20 @@ public:
 
     // Other implicit conversions
     inline operator double () const {  return GetDouble(); }
+    inline operator char () const {  return GetChar(); }
     inline operator long () const {  return GetLong(); }
     inline operator bool () const {  return GetBool(); }
+#if wxUSE_TIMEDATE
+    inline operator wxTime () const {  return GetTime(); }
+    inline operator wxDate () const {  return GetDate(); }
+#endif
+    inline operator void* () const {  return GetVoidPtr(); }
 
 // Accessors
+    // Sets/gets name
+    inline void SetName(const wxString& name) { m_name = name; }
+    inline const wxString& GetName() const { return m_name; }
+
     // Tests whether there is data
     inline bool IsNull() const { return (m_data == (wxVariantData*) NULL); }
 
@@ -166,6 +195,11 @@ public:
     wxString GetString() const ;
     wxList& GetList() const ;
     wxStringList& GetStringList() const ;
+#if wxUSE_TIMEDATE
+    wxTime GetTime() const ;
+    wxDate GetDate() const ;
+#endif
+    void* GetVoidPtr() const ;
 
 // Operations
     // Make NULL (i.e. delete the data)
@@ -189,17 +223,26 @@ public:
     // Clear list
     void ClearList();
 
+// Implementation
+protected:
 // Type conversion
     bool Convert(long* value) const;
     bool Convert(bool* value) const;
     bool Convert(double* value) const;
     bool Convert(wxString* value) const;
     bool Convert(char* value) const;
+#if wxUSE_TIMEDATE
+    bool Convert(wxTime* value) const;
+    bool Convert(wxDate* value) const;
+#endif
 
 // Attributes
 protected:
     wxVariantData*  m_data;
+    wxString        m_name;
 };
+
+extern wxVariant wxNullVariant;
 
 #endif
     // _WX_VARIANT_H_
