@@ -51,33 +51,74 @@ extern wxWindowGTK *g_delayedFocus;
 // ----------------------------------------------------------------------------
 
 #ifdef __WXGTK20__
+static void wxGtkTextApplyTagsFromAttr(GtkTextBuffer *text_buffer,
+                                       const wxTextAttr& attr,
+                                       GtkTextIter *start,
+                                       GtkTextIter *end)
+{
+    static gchar buf[1024];
+    GtkTextTag *tag;
+
+    if (attr.HasFont())
+    {
+        char *font_string;
+        PangoFontDescription *font_description = attr.GetFont().GetNativeFontInfo()->description;
+        font_string = pango_font_description_to_string(font_description);
+        g_snprintf(buf, sizeof(buf), "WXFONT %s", font_string);
+        tag = gtk_text_tag_table_lookup( gtk_text_buffer_get_tag_table( text_buffer ),
+                                         buf );
+        if (!tag)
+            tag = gtk_text_buffer_create_tag( text_buffer, buf,
+                                              "font-desc", font_description,
+                                              NULL );
+        gtk_text_buffer_apply_tag (text_buffer, tag, start, end);
+        g_free (font_string);
+    }
+
+    if (attr.HasTextColour())
+    {
+        GdkColor *colFg = attr.GetTextColour().GetColor();
+        g_snprintf(buf, sizeof(buf), "WXFORECOLOR %d %d %d",
+                   colFg->red, colFg->green, colFg->blue);
+        tag = gtk_text_tag_table_lookup( gtk_text_buffer_get_tag_table( text_buffer ),
+                                         buf );
+        if (!tag)
+            tag = gtk_text_buffer_create_tag( text_buffer, buf,
+                                              "foreground-gdk", colFg, NULL );
+        gtk_text_buffer_apply_tag (text_buffer, tag, start, end);
+    }
+
+    if (attr.HasBackgroundColour())
+    {
+        GdkColor *colBg = attr.GetBackgroundColour().GetColor();
+        g_snprintf(buf, sizeof(buf), "WXBACKCOLOR %d %d %d",
+                   colBg->red, colBg->green, colBg->blue);
+        tag = gtk_text_tag_table_lookup( gtk_text_buffer_get_tag_table( text_buffer ),
+                                         buf );
+        if (!tag)
+            tag = gtk_text_buffer_create_tag( text_buffer, buf,
+                                              "background-gdk", colBg, NULL );
+        gtk_text_buffer_apply_tag (text_buffer, tag, start, end);
+    }
+}
+
 static void wxGtkTextInsert(GtkWidget *text,
                             GtkTextBuffer *text_buffer,
                             const wxTextAttr& attr,
                             wxCharBuffer buffer)
 
 {
-    PangoFontDescription *font_description = attr.HasFont()
-                         ? attr.GetFont().GetNativeFontInfo()->description
-                         : NULL;
+    gint start_offset;
+    GtkTextIter iter, start;
 
-    GdkColor *colFg = attr.HasTextColour() ? attr.GetTextColour().GetColor()
-                                           : NULL;
-
-    GdkColor *colBg = attr.HasBackgroundColour()
-                        ? attr.GetBackgroundColour().GetColor()
-                        : NULL;
-
-    GtkTextTag *tag;
-    tag = gtk_text_buffer_create_tag( text_buffer, NULL, "font-desc", font_description,
-                                     "foreground-gdk", colFg,
-                                     "background-gdk", colBg, NULL );
-
-    GtkTextIter iter;
     gtk_text_buffer_get_iter_at_mark( text_buffer, &iter,
                                      gtk_text_buffer_get_insert (text_buffer) );
+    start_offset = gtk_text_iter_get_offset (&iter);
+    gtk_text_buffer_insert( text_buffer, &iter, buffer, strlen(buffer) );
 
-    gtk_text_buffer_insert_with_tags( text_buffer, &iter, buffer, strlen(buffer), tag, NULL );
+    gtk_text_buffer_get_iter_at_offset (text_buffer, &start, start_offset);
+
+    wxGtkTextApplyTagsFromAttr(text_buffer, attr, &start, &iter);
 }
 #else
 static void wxGtkTextInsert(GtkWidget *text,
@@ -1537,22 +1578,7 @@ bool wxTextCtrl::SetStyle( long start, long end, const wxTextAttr& style )
         // colours for the others
         wxTextAttr attr = wxTextAttr::Combine(style, m_defaultStyle, this);
 
-        PangoFontDescription *font_description = attr.HasFont()
-                             ? attr.GetFont().GetNativeFontInfo()->description
-                             : NULL;
-
-        GdkColor *colFg = attr.HasTextColour() ? attr.GetTextColour().GetColor()
-                                               : NULL;
-
-        GdkColor *colBg = attr.HasBackgroundColour()
-                            ? attr.GetBackgroundColour().GetColor()
-                            : NULL;
-
-        GtkTextTag *tag;
-        tag = gtk_text_buffer_create_tag( text_buffer, NULL, "font-desc", font_description,
-                                         "foreground-gdk", colFg,
-                                         "background-gdk", colBg, NULL );
-        gtk_text_buffer_apply_tag( text_buffer, tag, &starti, &endi );
+        wxGtkTextApplyTagsFromAttr( text_buffer, attr, &starti, &endi );
 
          return TRUE;
 #else
