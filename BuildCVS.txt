@@ -35,8 +35,8 @@ and its make.exe).
 -> Set your path so that it includes the directory
    where your compiler and tools reside
 
-b-2) Using Mingw32 with gcc-2.95 and Anders Norlander's 
-	Win32 headers
+b-2) Using Mingw32 with gcc-2.95 and Anders Norlander's
+     Win32 headers
 
 Using the newer gcc-2.95/Noralander header combination
 will allow you to compile more of the MSW code, such
@@ -44,16 +44,16 @@ as OLE and Drag-n-Drop.
 
 Instructions are similar to those for Regular Mingw32 except
 
-->Get the compiler from 
+->Get the compiler from
     ftp://ftp.xraylith.wisc.edu/pub/khan/gnu-win32/mingw32/gcc-2.95/
 
-->patch the gcc headers with info in wxWin\Mingw32-gcc295.patches. 
+->patch the gcc headers with info in wxWin\Mingw32-gcc295.patches.
   PLEASE APPLY THESE PATCHES BY HAND! There are apparently a few
   different versions of the headers floating around.
 
 ->copy wxWin\src\makeg295.env to wxWin\src\makeg95.env
 
-    
+
 c) Build instructions
 
 -> Assumming that you installed the wxWindows sources
@@ -62,7 +62,7 @@ c) Build instructions
    to   c:\wxWin\include\wx\msw\setup.h
 -> Edit c:\wxWin\include\wx\msw\setup.h so that
    most features are enabled (i.e. defined to 1) with
-   #define wxUSE_ODBC          0	
+   #define wxUSE_ODBC          0
    #define wxUSE_SOCKETS       0
    #define wxUSE_HTML          1
    #define wxUSE_THREADS       1
@@ -76,12 +76,12 @@ c) Build instructions
 
    and iostreams ares disabled with
    #define wxUSE_STD_IOSTREAM   0
-   
+
    note: ODBC and SOCKETS can be 1 for gcc-2.95
-   
+
 -> type: cd c:\wxWin\src\msw
 -> type: make -f makefile.g95  (if using GNU tools)
-or type: make -f makefile.g295 (if using Mingw32/gcc-2.95)	
+or type: make -f makefile.g295 (if using Mingw32/gcc-2.95)
 or type: make -f makefile.vc   (if using MS VC++)
 
 
@@ -190,14 +190,37 @@ Type
 and wait, wait, wait. Don't leave the room, because the minute you do there
 will be a compile error :-)
 
+NB: you risk to get quite a few warnings about "ANSI C++ forbids implicit
+    conversion from 'void *'" in all places where va_arg macro is used. This
+    is due to a bug in (some versions of) mingw32 headers which may be
+    corrected by editing the file
+
+    ${install_prefix}/lib/gcc-lib/i586-mingw32/egcs-2.91.57/include/stdarg.h
+
+    (instead of egcs-2.91.57 you may have something different), searching for
+    the lines
+
+/* Define __gnuc_va_list.  */
+
+#ifndef __GNUC_VA_LIST
+#define __GNUC_VA_LIST
+#if defined(__svr4__) || defined(_AIX) || defined(_M_UNIX) || defined(__NetBSD__)
+typedef char *__gnuc_va_list;
+#else
+typedef void *__gnuc_va_list;
+#endif
+#endif
+
+    and adding "|| defined(_WIN32)" to the list of platforms on which
+    __gnuc_va_list is char *.
+
 If this is successful, you end up with a libwx_msw.a in win32/lib.  Now try
 building the minimal sample:
 
 -> cd samples/minimal
 -> make
--> mv minimal minimal.exe
 
-and run it with wine, for example
+and run it with wine, for example (or copy to a Windows box)
 -> wine minimal.exe
 
 If all is well, do an install; from win32
