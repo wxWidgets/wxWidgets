@@ -5157,12 +5157,6 @@ wxPoint wxGetMousePosition()
 {
     POINT pt;
     GetCursorPos( & pt );
-
-    if (thing)
-    {
-        int i, j;
-        
-    }
     
     return wxPoint(pt.x, pt.y);
 }
