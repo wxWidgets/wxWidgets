@@ -865,7 +865,7 @@ XpmCreateImageFromXpmImage(display, image,
 #endif
 {
 #ifdef __OS2__
-     HAB          hab;
+     HAB          hab = WinQueryAnchorBlock(HWND_DESKTOP);
      HPS          hps;
      SIZEL        sizl = {0, 0};
 #endif
@@ -2578,7 +2578,7 @@ ParseAndPutPixels(
 {
     unsigned int a, x, y;
 #ifdef __OS2__
-     HAB          hab;
+     HAB          hab = WinQueryAnchorBlock(HWND_DESKTOP);
      DEVOPENSTRUC dop = {NULL, "DISPLAY", NULL, NULL, NULL, NULL, NULL, NULL, NULL};
      SIZEL        sizl = {0, 0};
      POINTL       point;

@@ -274,10 +274,8 @@ XCreateImage(Display *d, Visual *v,
 {
     XImage *img = (XImage *) XpmMalloc(sizeof(XImage));
 #ifdef __OS2__
-    HPS                  hps;
     BITMAPINFOHEADER2    bmih;
 
-    hps = WinGetScreenPS(HWND_DESKTOP);
     memset(&bmih, 0, sizeof(BITMAPINFOHEADER2));
     bmih.cbFix = sizeof(BITMAPINFOHEADER2);
     bmih.cx = width;
@@ -295,7 +293,7 @@ XCreateImage(Display *d, Visual *v,
 	    img->bitmap = CreateCompatibleBitmap(*d, width, height);
         } else*/ {
 #ifdef __OS2__
-        img->bitmap = GpiCreateBitmap(hps, &bmih, 0L, NULL, NULL);
+        img->bitmap = GpiCreateBitmap(*d, &bmih, 0L, NULL, NULL);
         WinReleasePS(hps);
 #else
 	    img->bitmap = CreateBitmap(width, height, 1 /* plane */ ,

@@ -989,24 +989,24 @@ HBITMAP wxInvertMask(
                                    ,&vBmhdr
                                   );
         nWidth  = (int)vBmhdr.cx;
-        nHeight = (int)vBmhdr.cyt;
+        nHeight = (int)vBmhdr.cy;
     }
 
     BITMAPINFOHEADER2               vBmih;
     SIZEL                           vSize = {0, 0};
     DEVOPENSTRUC                    vDop = {0L, "DISPLAY", NULL, 0L, 0L, 0L, 0L, 0L, 0L};
-    HDC                             hDCSrc = ::DevOpenDC(ghAb, OD_MEMORY, "*", 5L, (PDEVOPENDATA)&vDop, NULLHANDLE);
-    HDC                             hDCDst = ::DevOpenDC(ghAb, OD_MEMORY, "*", 5L, (PDEVOPENDATA)&vDop, NULLHANDLE);
-    HPS                             hPSSrc = ::GpiCreatePS(ghAb, hDCSrc, &vSize, PU_PELS | GPIA_ASSOC);
-    HPS                             hPSDst = ::GpiCreatePS(ghAb, hDCDst, &vSize, PU_PELS | GPIA_ASSOC);
-    POINTL                          vPoint[4] = { 0 ,0, rBitmap.GetWidth(), rBitmap.GetHeight(),
-                                                  0, 0, rBitmap.GetWidth(), rBitmap.GetHeight()
+    HDC                             hDCSrc = ::DevOpenDC(vHabmain, OD_MEMORY, "*", 5L, (PDEVOPENDATA)&vDop, NULLHANDLE);
+    HDC                             hDCDst = ::DevOpenDC(vHabmain, OD_MEMORY, "*", 5L, (PDEVOPENDATA)&vDop, NULLHANDLE);
+    HPS                             hPSSrc = ::GpiCreatePS(vHabmain, hDCSrc, &vSize, PU_PELS | GPIA_ASSOC);
+    HPS                             hPSDst = ::GpiCreatePS(vHabmain, hDCDst, &vSize, PU_PELS | GPIA_ASSOC);
+    POINTL                          vPoint[4] = { 0 ,0, nWidth, nHeight,
+                                                  0, 0, nWidth, nHeight
                                                 };
 
-    memset(&vBmih, NULLC, sizeof(BITMAPINFOHEADER2));
+    memset(&vBmih, '\0', sizeof(BITMAPINFOHEADER2));
     vBmih.cbFix     =  sizeof(BITMAPINFOHEADER2);
-    vBmih.cx        = lWidth;
-    vBmih.cy        = lHeight;
+    vBmih.cx        = nWidth;
+    vBmih.cy        = nHeight;
     vBmih.cPlanes   = 1;
     vBmih.cBitCount = 1;
 
@@ -1023,7 +1023,7 @@ HBITMAP wxInvertMask(
     ::GpiBitBlt( hPSDst
                 ,hPSSrc
                 ,4L
-                ,&vPoint
+                ,vPoint
                 ,ROP_SRCCOPY
                 ,BBO_IGNORE
                );
@@ -1031,7 +1031,7 @@ HBITMAP wxInvertMask(
     ::GpiDestroyPS(hPSSrc);
     ::GpiDestroyPS(hPSDst);
     ::DevCloseDC(hDCSrc);
-    ::DevCloseDC(hDCDtl);
+    ::DevCloseDC(hDCDst);
 
     return hBmpInvMask;
 } // end of WxWinGdi_InvertMask

@@ -96,16 +96,25 @@ LFUNC(AGetImagePixels, int, (XImage *image, unsigned int width,
 			     int (*storeFunc) ()));
 # endif/* AMIGA */
 #else  /* ndef FOR_MSW */
+
+#if defined(__OS2__) && defined(__VISAGECPP30__)
+LFUNC(MSWGetImagePixels, int, (Display* display, XImage* image, unsigned int width,
+                               unsigned int height, PixelsMap* pmap,
+                               int (*storeFunc) (Pixel, PixelsMap*, unsigned int*)));
+#else
 LFUNC(MSWGetImagePixels, int, (Display *d, XImage *image, unsigned int width,
-			       unsigned int height, PixelsMap *pmap,
-			       int (*storeFunc) ()));
+                   unsigned int height, PixelsMap *pmap,
+                   int (*storeFunc) ()));
 #endif
+
+#endif
+
 LFUNC(ScanTransparentColor, int, (XpmColor *color, unsigned int cpp,
-				  XpmAttributes *attributes));
+                  XpmAttributes *attributes));
 
 LFUNC(ScanOtherColors, int, (Display *display, XpmColor *colors, int ncolors,
-			     Pixel *pixels, unsigned int mask,
-			     unsigned int cpp, XpmAttributes *attributes));
+                 Pixel *pixels, unsigned int mask,
+                 unsigned int cpp, XpmAttributes *attributes));
 
 /*
  * This function stores the given pixel in the given arrays which are grown
@@ -1020,7 +1029,7 @@ MSWGetImagePixels(display, image, width, height, pmap, storeFunc)
     unsigned int x, y;
     Pixel pixel;
 #ifdef __OS2__
-     HAB          hab;
+     HAB          hab = WinQueryAnchorBlock(HWND_DESKTOP);
      HDC          shapedc;
      DEVOPENSTRUC dop = {NULL, "DISPLAY", NULL, NULL, NULL, NULL, NULL, NULL, NULL};
      SIZEL        sizl = {0, 0};
