@@ -268,9 +268,10 @@ bool wxTestFontEncoding(const wxNativeEncodingInfo& info);
 
 %inline %{
     wxNativeEncodingInfo* wxGetNativeFontEncoding(wxFontEncoding encoding)
-        { PyErr_SetNone(PyExc_NotImplementedError); }
+        { PyErr_SetNone(PyExc_NotImplementedError); return NULL; }
+    
     bool wxTestFontEncoding(const wxNativeEncodingInfo& info)
-        { PyErr_SetNone(PyExc_NotImplementedError); }
+        { PyErr_SetNone(PyExc_NotImplementedError); return false; }
 %}
 #endif
 
