@@ -269,12 +269,20 @@ void GSocket_destroy(GSocket *socket)
 {
   assert(socket != NULL);
 
+  /* When using CFSocket we MUST invalidate before closing the fd */
+#ifdef __DARWIN__
+  /* Per-socket GUI-specific cleanup */
+  _GSocket_GUI_Destroy_Socket(socket);
+#endif
+
   /* Check that the socket is really shutdowned */
   if (socket->m_fd != INVALID_SOCKET)
     GSocket_Shutdown(socket);
 
+#ifndef __DARWIN__
   /* Per-socket GUI-specific cleanup */
   _GSocket_GUI_Destroy_Socket(socket);
+#endif
 
   /* Destroy private addresses */
   if (socket->m_local)
@@ -792,8 +800,11 @@ int GSocket_Read(GSocket *socket, char *buffer, int size)
 
   assert(socket != NULL);
 
+  /* When using CFSocket we MUST NOT reenable events until we finish reading */
+#ifndef __DARWIN__
   /* Reenable INPUT events */
   _GSocket_Enable(socket, GSOCK_INPUT);
+#endif
 
   if (socket->m_fd == INVALID_SOCKET || socket->m_server)
   {
@@ -819,6 +830,11 @@ int GSocket_Read(GSocket *socket, char *buffer, int size)
       socket->m_error = GSOCK_IOERR;
   }
   
+#ifdef __DARWIN__
+  /* Reenable INPUT events */
+  _GSocket_Enable(socket, GSOCK_INPUT);
+#endif
+
   return ret;
 }
 
