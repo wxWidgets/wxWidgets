@@ -71,7 +71,24 @@ bool wxButton::Create(wxWindow *parent,
     if ( !CreateControl(parent, id, pos, size, style, validator, name) )
         return FALSE;
 
-    return MSWCreateControl(_T("BUTTON"), label, pos, size, style);
+    WXDWORD exstyle;
+    WXDWORD msStyle = MSWGetStyle(style, &exstyle);
+
+#ifdef __WIN32__
+    // if the label contains several lines we must explicitly tell the button
+    // about it or it wouldn't draw it correctly ("\n"s would just appear as
+    // black boxes)
+    //
+    // NB: we do it here and not in MSWGetStyle() because we need the label
+    //     value and m_label is not set yet when MSWGetStyle() is called;
+    //     besides changing BS_MULTILINE during run-time is pointless anyhow
+    if ( label.find(_T('\n')) != wxString::npos )
+    {
+        msStyle |= BS_MULTILINE;
+    }
+#endif // __WIN32__
+
+    return MSWCreateControl(_T("BUTTON"), msStyle, pos, size, label, exstyle);
 }
 
 wxButton::~wxButton()
