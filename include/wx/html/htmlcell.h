@@ -97,7 +97,7 @@ public:
     //
     // Parent is pointer to wxHtmlWindow that generated the event
     // HINT: if this handling is not enough for you you should use
-    //       wxHtmlBinderCell
+    //       wxHtmlWidgetCell
     virtual void OnMouseClick(wxWindow *parent, int x, int y, const wxMouseEvent& event);
 
     // This method used to adjust pagebreak position. The parameter is
