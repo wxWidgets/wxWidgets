@@ -612,12 +612,11 @@ class PrintTable:
 
     def SetPreviewSize(self, position = wxPoint(0, 0), size="Full"):
         if size == "Full":
-            screenWidth = int(wx.wxSystemSettings_GetSystemMetric(wx.wxSYS_SCREEN_X))
-            screenHeight = int(wx.wxSystemSettings_GetSystemMetric(wx.wxSYS_SCREEN_Y))
-            self.preview_frame_size = wxSize(screenWidth, screenHeight)
-            self.preview_frame_pos = position
+            r = wxGetClientDisplayRect()
+            self.preview_frame_size = wxSize(r.width, r.height)
+            self.preview_frame_pos = wxPoint(r.x, r.y)
         else:
-            self.preview_frame_size = size     
+            self.preview_frame_size = size
             self.preview_frame_pos = position
 
     def SetPaperId(self, paper):

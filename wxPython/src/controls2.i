@@ -696,7 +696,7 @@ public:
     int wxCALLBACK wxPyListCtrl_SortItems(long item1, long item2, long funcPtr) {
         int retval = 0;
         PyObject* func = (PyObject*)funcPtr;
-        bool doSave = wxPyRestoreThread();
+        wxPyTState* state = wxPyBeginBlockThreads();
 
         PyObject* args = Py_BuildValue("(ii)", item1, item2);
         PyObject* result = PyEval_CallObject(func, args);
@@ -706,7 +706,7 @@ public:
             Py_DECREF(result);
         }
 
-        wxPySaveThread(doSave);
+        wxPyEndBlockThreads(state);
         return retval;
     }
 
@@ -941,9 +941,9 @@ public:
     }
 
     ~wxPyTreeItemData() {
-        bool doSave = wxPyRestoreThread();
+        wxPyTState* state = wxPyBeginBlockThreads();
         Py_DECREF(m_obj);
-        wxPySaveThread(doSave);
+        wxPyEndBlockThreads(state);
     }
 
     PyObject* GetData() {
@@ -952,9 +952,9 @@ public:
     }
 
     void SetData(PyObject* obj) {
-        bool doSave = wxPyRestoreThread();
+        wxPyTState* state = wxPyBeginBlockThreads();
         Py_DECREF(m_obj);
-        wxPySaveThread(doSave);
+        wxPyEndBlockThreads(state);
         m_obj = obj;
         Py_INCREF(obj);
     }
@@ -1017,15 +1017,16 @@ public:
     int OnCompareItems(const wxTreeItemId& item1,
                        const wxTreeItemId& item2) {
         int rval = 0;
-        bool doSave = wxPyRestoreThread();
-        if (m_myInst.findCallback("OnCompareItems"))
+        bool found;
+        wxPyTState* state = wxPyBeginBlockThreads();
+        if ((found = m_myInst.findCallback("OnCompareItems")))
             rval = m_myInst.callCallback(Py_BuildValue(
                 "(OO)",
                 wxPyConstructObject((void*)&item1, "wxTreeItemId"),
                 wxPyConstructObject((void*)&item2, "wxTreeItemId")));
-        else
+        wxPyEndBlockThreads(state);
+        if (! found)
             rval = wxTreeCtrl::OnCompareItems(item1, item2);
-        wxPySaveThread(doSave);
         return rval;
     }
     PYPRIVATE;
@@ -1139,7 +1140,7 @@ public:
     //size_t GetSelections(wxArrayTreeItemIds& selection);
     %addmethods {
         PyObject* GetSelections() {
-            bool doSave = wxPyRestoreThread();
+            wxPyTState* state = wxPyBeginBlockThreads();
             PyObject*           rval = PyList_New(0);
             wxArrayTreeItemIds  array;
             size_t              num, x;
@@ -1149,7 +1150,7 @@ public:
                 PyObject* item = wxPyConstructObject((void*)tii, "wxTreeItemId", TRUE);
                 PyList_Append(rval, item);
             }
-            wxPySaveThread(doSave);
+            wxPyEndBlockThreads(state);
             return rval;
         }
     }
@@ -1234,10 +1235,10 @@ public:
         PyObject* GetBoundingRect(const wxTreeItemId& item, int textOnly = FALSE) {
             wxRect rect;
             if (self->GetBoundingRect(item, rect, textOnly)) {
-                bool doSave = wxPyRestoreThread();
+                wxPyTState* state = wxPyBeginBlockThreads();
                 wxRect* r = new wxRect(rect);
                 PyObject* val = wxPyConstructObject((void*)r, "wxRect");
-                wxPySaveThread(doSave);
+                wxPyEndBlockThreads(state);
                 return val;
             }
             else {

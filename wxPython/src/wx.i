@@ -161,8 +161,9 @@ static wxPyCoreAPI API = {
     SWIG_addvarlink,
     SWIG_newvarlink,
 
-    wxPySaveThread,
-    wxPyRestoreThread,
+    wxPyBeginBlockThreads,
+    wxPyEndBlockThreads,
+
     wxPyConstructObject,
     wxPy_ConvertList,
 

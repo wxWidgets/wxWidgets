@@ -119,7 +119,7 @@ bool wxPyDataObjectSimple::GetDataHere(void *buf) {
     // C++ version.
 
     bool rval = FALSE;
-    bool doSave = wxPyRestoreThread();
+    wxPyTState* state = wxPyBeginBlockThreads();
     if (m_myInst.findCallback("GetDataHere")) {
         PyObject* ro;
         ro = m_myInst.callCallbackObj(Py_BuildValue("()"));
@@ -130,7 +130,7 @@ bool wxPyDataObjectSimple::GetDataHere(void *buf) {
             Py_DECREF(ro);
         }
     }
-    wxPySaveThread(doSave);
+    wxPyEndBlockThreads(state);
     return rval;
 }
 
@@ -138,13 +138,13 @@ bool wxPyDataObjectSimple::SetData(size_t len, const void *buf) {
     // For this one we simply need to make a string from buf and len
     // and send it to the Python method.
     bool rval = FALSE;
-    bool doSave = wxPyRestoreThread();
+    wxPyTState* state = wxPyBeginBlockThreads();
     if (m_myInst.findCallback("SetData")) {
         PyObject* data = PyString_FromStringAndSize((char*)buf, len);
         rval = m_myInst.callCallback(Py_BuildValue("(O)", data));
         Py_DECREF(data);
     }
-    wxPySaveThread(doSave);
+    wxPyEndBlockThreads(state);
     return rval;
 }
   // Create a new class for wxPython to use
@@ -176,7 +176,7 @@ public:
 
 wxBitmap wxPyBitmapDataObject::GetBitmap() {
     wxBitmap* rval = &wxNullBitmap;
-    bool doSave = wxPyRestoreThread();
+    wxPyTState* state = wxPyBeginBlockThreads();
     if (m_myInst.findCallback("GetBitmap")) {
         PyObject* ro;
         wxBitmap* ptr;
@@ -187,17 +187,17 @@ wxBitmap wxPyBitmapDataObject::GetBitmap() {
             Py_DECREF(ro);
         }
     }
-    wxPySaveThread(doSave);
+    wxPyEndBlockThreads(state);
     return *rval;
 }
 
 void wxPyBitmapDataObject::SetBitmap(const wxBitmap& bitmap) {
-    bool doSave = wxPyRestoreThread();
+    wxPyTState* state = wxPyBeginBlockThreads();
     if (m_myInst.findCallback("SetBitmap")) {
         m_myInst.callCallback(Py_BuildValue("(O)",
                               wxPyConstructObject((void*)&bitmap, "wxBitmap")));
     }
-    wxPySaveThread(doSave);
+    wxPyEndBlockThreads(state);
 }
 
     // See below in the init function...
@@ -293,7 +293,7 @@ public:
 bool wxPyFileDropTarget::OnDropFiles(wxCoord x, wxCoord y,
                                      const wxArrayString& filenames) {
     bool rval = FALSE;
-    bool doSave = wxPyRestoreThread();
+    wxPyTState* state = wxPyBeginBlockThreads();
     PyObject* list = PyList_New(0);
     for (size_t i=0; i<filenames.GetCount(); i++) {
         PyObject* str = PyString_FromString(filenames[i].c_str());
@@ -302,7 +302,7 @@ bool wxPyFileDropTarget::OnDropFiles(wxCoord x, wxCoord y,
     if (m_myInst.findCallback("OnDropFiles"))
         rval = m_myInst.callCallback(Py_BuildValue("(iiO)",x,y,list));
     Py_DECREF(list);
-    wxPySaveThread(doSave);
+    wxPyEndBlockThreads(state);
     return rval;
 }
 

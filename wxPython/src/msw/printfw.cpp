@@ -99,9 +99,10 @@ static PyObject* t_output_helper(PyObject* target, PyObject* o) {
 // Since this one would be tough and ugly to do with the Macros...
 void wxPyPrintout::GetPageInfo(int *minPage, int *maxPage, int *pageFrom, int *pageTo) {
     bool hadErr = FALSE;
+    bool found;
 
-    bool doSave = wxPyRestoreThread();
-    if (m_myInst.findCallback("GetPageInfo")) {
+    wxPyTState* state = wxPyBeginBlockThreads();
+    if ((found = m_myInst.findCallback("GetPageInfo"))) {
         PyObject* result = m_myInst.callCallbackObj(Py_BuildValue("()"));
         if (result && PyTuple_Check(result) && PyTuple_Size(result) == 4) {
             PyObject* val;
@@ -131,10 +132,9 @@ void wxPyPrintout::GetPageInfo(int *minPage, int *maxPage, int *pageFrom, int *p
         }
         Py_DECREF(result);
     }
-    else
+    wxPyEndBlockThreads(state);
+    if (! found)
         wxPrintout::GetPageInfo(minPage, maxPage, pageFrom, pageTo);
-
-    wxPySaveThread(doSave);
 }
 
 void wxPyPrintout::base_GetPageInfo(int *minPage, int *maxPage, int *pageFrom, int *pageTo) {

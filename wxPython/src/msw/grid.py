@@ -185,6 +185,48 @@ class wxGridCellBoolRenderer(wxGridCellBoolRendererPtr):
 
 
 
+class wxGridCellDateTimeRendererPtr(wxGridCellStringRendererPtr):
+    def __init__(self,this):
+        self.this = this
+        self.thisown = 0
+    def __repr__(self):
+        return "<C wxGridCellDateTimeRenderer instance at %s>" % (self.this,)
+class wxGridCellDateTimeRenderer(wxGridCellDateTimeRendererPtr):
+    def __init__(self,*_args,**_kwargs):
+        self.this = apply(gridc.new_wxGridCellDateTimeRenderer,_args,_kwargs)
+        self.thisown = 1
+
+
+
+
+class wxGridCellEnumRendererPtr(wxGridCellStringRendererPtr):
+    def __init__(self,this):
+        self.this = this
+        self.thisown = 0
+    def __repr__(self):
+        return "<C wxGridCellEnumRenderer instance at %s>" % (self.this,)
+class wxGridCellEnumRenderer(wxGridCellEnumRendererPtr):
+    def __init__(self,*_args,**_kwargs):
+        self.this = apply(gridc.new_wxGridCellEnumRenderer,_args,_kwargs)
+        self.thisown = 1
+
+
+
+
+class wxGridCellAutoWrapStringRendererPtr(wxGridCellStringRendererPtr):
+    def __init__(self,this):
+        self.this = this
+        self.thisown = 0
+    def __repr__(self):
+        return "<C wxGridCellAutoWrapStringRenderer instance at %s>" % (self.this,)
+class wxGridCellAutoWrapStringRenderer(wxGridCellAutoWrapStringRendererPtr):
+    def __init__(self,*_args,**_kwargs):
+        self.this = apply(gridc.new_wxGridCellAutoWrapStringRenderer,_args,_kwargs)
+        self.thisown = 1
+
+
+
+
 class wxGridCellEditorPtr :
     def __init__(self,this):
         self.this = this
@@ -366,6 +408,34 @@ class wxGridCellChoiceEditorPtr(wxGridCellEditorPtr):
 class wxGridCellChoiceEditor(wxGridCellChoiceEditorPtr):
     def __init__(self,*_args,**_kwargs):
         self.this = apply(gridc.new_wxGridCellChoiceEditor,_args,_kwargs)
+        self.thisown = 1
+
+
+
+
+class wxGridCellEnumEditorPtr(wxGridCellChoiceEditorPtr):
+    def __init__(self,this):
+        self.this = this
+        self.thisown = 0
+    def __repr__(self):
+        return "<C wxGridCellEnumEditor instance at %s>" % (self.this,)
+class wxGridCellEnumEditor(wxGridCellEnumEditorPtr):
+    def __init__(self,*_args,**_kwargs):
+        self.this = apply(gridc.new_wxGridCellEnumEditor,_args,_kwargs)
+        self.thisown = 1
+
+
+
+
+class wxGridCellAutoWrapStringEditorPtr(wxGridCellTextEditorPtr):
+    def __init__(self,this):
+        self.this = this
+        self.thisown = 0
+    def __repr__(self):
+        return "<C wxGridCellAutoWrapStringEditor instance at %s>" % (self.this,)
+class wxGridCellAutoWrapStringEditor(wxGridCellAutoWrapStringEditorPtr):
+    def __init__(self,*_args,**_kwargs):
+        self.this = apply(gridc.new_wxGridCellAutoWrapStringEditor,_args,_kwargs)
         self.thisown = 1
 
 

@@ -817,6 +817,9 @@ class wxDCPtr(wxObjectPtr):
     def SetClippingRegion(self, *_args, **_kwargs):
         val = apply(gdic.wxDC_SetClippingRegion,(self,) + _args, _kwargs)
         return val
+    def SetClippingRegionAsRegion(self, *_args, **_kwargs):
+        val = apply(gdic.wxDC_SetClippingRegionAsRegion,(self,) + _args, _kwargs)
+        return val
     def SetPalette(self, *_args, **_kwargs):
         val = apply(gdic.wxDC_SetPalette,(self,) + _args, _kwargs)
         return val

@@ -8363,6 +8363,43 @@ static PyObject *_wrap_wxDC_SetClippingRegion(PyObject *self, PyObject *args, Py
     return _resultobj;
 }
 
+#define wxDC_SetClippingRegionAsRegion(_swigobj,_swigarg0)  (_swigobj->SetClippingRegion(_swigarg0))
+static PyObject *_wrap_wxDC_SetClippingRegionAsRegion(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxDC * _arg0;
+    wxRegion * _arg1;
+    PyObject * _argo0 = 0;
+    PyObject * _argo1 = 0;
+    char *_kwnames[] = { "self","region", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxDC_SetClippingRegionAsRegion",_kwnames,&_argo0,&_argo1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxDC_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxDC_SetClippingRegionAsRegion. Expected _wxDC_p.");
+        return NULL;
+        }
+    }
+    if (_argo1) {
+        if (_argo1 == Py_None) { _arg1 = NULL; }
+        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxRegion_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxDC_SetClippingRegionAsRegion. Expected _wxRegion_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxDC_SetClippingRegionAsRegion(_arg0,*_arg1);
+
+    wxPy_END_ALLOW_THREADS;
+    if (PyErr_Occurred()) return NULL;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
 #define wxDC_SetPalette(_swigobj,_swigarg0)  (_swigobj->SetPalette(_swigarg0))
 static PyObject *_wrap_wxDC_SetPalette(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
@@ -11492,6 +11529,7 @@ static PyMethodDef gdicMethods[] = {
 	 { "wxDC_SetFont", (PyCFunction) _wrap_wxDC_SetFont, METH_VARARGS | METH_KEYWORDS },
 	 { "wxDC_SetBrush", (PyCFunction) _wrap_wxDC_SetBrush, METH_VARARGS | METH_KEYWORDS },
 	 { "wxDC_SetPalette", (PyCFunction) _wrap_wxDC_SetPalette, METH_VARARGS | METH_KEYWORDS },
+	 { "wxDC_SetClippingRegionAsRegion", (PyCFunction) _wrap_wxDC_SetClippingRegionAsRegion, METH_VARARGS | METH_KEYWORDS },
 	 { "wxDC_SetClippingRegion", (PyCFunction) _wrap_wxDC_SetClippingRegion, METH_VARARGS | METH_KEYWORDS },
 	 { "wxDC_SetBackgroundMode", (PyCFunction) _wrap_wxDC_SetBackgroundMode, METH_VARARGS | METH_KEYWORDS },
 	 { "wxDC_SetBackground", (PyCFunction) _wrap_wxDC_SetBackground, METH_VARARGS | METH_KEYWORDS },

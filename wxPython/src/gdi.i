@@ -750,6 +750,7 @@ public:
     void SetBackground(const wxBrush& brush);
     void SetBackgroundMode(int mode);
     void SetClippingRegion(long x, long y, long width, long height);
+    %name(SetClippingRegionAsRegion) void SetClippingRegion(const wxRegion& region);
     void SetPalette(const wxPalette& colourMap);
     void SetBrush(const wxBrush& brush);
     void SetFont(const wxFont& font);

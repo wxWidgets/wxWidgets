@@ -41,7 +41,6 @@ class TablePanel(wxPanel):
 
     def ReadData(self):
         test_file = "TestTable.txt"
-        print "**** ", os.getcwd()
         file = open(test_file,'r',1)
         i = 0
 

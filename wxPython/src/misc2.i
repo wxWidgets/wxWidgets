@@ -659,6 +659,7 @@ public:
 };
 
 IMP_PYCALLBACK_VOID_INTINT( wxPyProcess, wxProcess, OnTerminate);
+
 %}
 
 

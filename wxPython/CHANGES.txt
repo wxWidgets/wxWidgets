@@ -42,6 +42,10 @@ Added wxNativeFontInfo and wxFontMapper.
 
 Added pySketch to the samples.
 
+Significantly changed how the Python interpreter lock and thread state
+are managed, which should fix the problem of running on a
+multi-processor machine.
+
 
 
 2.3.1

@@ -101,7 +101,8 @@ void WXDLLEXPORT wxEntryCleanup();
 
 
 #ifdef WXP_WITH_THREAD
-PyThreadState*  wxPyEventThreadState = NULL;
+//PyThreadState*  wxPyEventThreadState = NULL;
+PyInterpreterState* wxPyInterpreter = NULL;
 #endif
 
 
@@ -117,7 +118,8 @@ void __wxPreStart()
 
 #ifdef WXP_WITH_THREAD
     PyEval_InitThreads();
-    wxPyEventThreadState = PyThreadState_Get(); // PyThreadState_New(PyThreadState_Get()->interp);
+//    wxPyEventThreadState = PyThreadState_Get(); // PyThreadState_New(PyThreadState_Get()->interp);
+    wxPyInterpreter = PyThreadState_Get()->interp;
 #endif
 
     // Bail out if there is already windows created.  This means that the
@@ -374,40 +376,69 @@ PyObject* wxPyConstructObject(void* ptr,
 
 //---------------------------------------------------------------------------
 
-static PyThreadState* myPyThreadState_Get() {
-    PyThreadState* current;
-    current = PyThreadState_Swap(NULL);
-    PyThreadState_Swap(current);
-    return current;
-}
+//  static PyThreadState* myPyThreadState_Get() {
+//      PyThreadState* current;
+//      current = PyThreadState_Swap(NULL);
+//      PyThreadState_Swap(current);
+//      return current;
+//  }
 
 
-bool wxPyRestoreThread() {
-    // NOTE: The Python API docs state that if a thread already has the
-    // interpreter lock and calls PyEval_RestoreThread again a deadlock
-    // occurs, so I put in this code as a guard condition since there are
-    // many possibilites for nested events and callbacks in wxPython.  If
-    // The current thread is our thread, then we can assume that we
-    // already have the lock.  (I hope!)
-    //
+//  bool wxPyRestoreThread() {
+//      // NOTE: The Python API docs state that if a thread already has the
+//      // interpreter lock and calls PyEval_RestoreThread again a deadlock
+//      // occurs, so I put in this code as a guard condition since there are
+//      // many possibilites for nested events and callbacks in wxPython.  If
+//      // The current thread is our thread, then we can assume that we
+//      // already have the lock.  (I hope!)
+//      //
+//  #ifdef WXP_WITH_THREAD
+//      if (wxPyEventThreadState != myPyThreadState_Get()) {
+//          PyEval_AcquireThread(wxPyEventThreadState);
+//          return TRUE;
+//      }
+//      else
+//  #endif
+//          return FALSE;
+//  }
+
+
+//  void wxPySaveThread(bool doSave) {
+//  #ifdef WXP_WITH_THREAD
+//      if (doSave) {
+//          PyEval_ReleaseThread(wxPyEventThreadState);
+//      }
+//  #endif
+//  }
+
+
+
+wxPyTState* wxPyBeginBlockThreads() {
+    wxPyTState* state = NULL;
 #ifdef WXP_WITH_THREAD
-    if (wxPyEventThreadState != myPyThreadState_Get()) {
-        PyEval_AcquireThread(wxPyEventThreadState);
-        return TRUE;
+    if (1) {   // Can I check if I've already got the lock?
+        state = new wxPyTState;
+        PyEval_AcquireLock();
+        state->newState = PyThreadState_New(wxPyInterpreter);
+        state->prevState = PyThreadState_Swap(state->newState);
     }
-    else
 #endif
-        return FALSE;
+    return state;
 }
 
 
-void wxPySaveThread(bool doSave) {
+void wxPyEndBlockThreads(wxPyTState* state) {
 #ifdef WXP_WITH_THREAD
-    if (doSave) {
-        PyEval_ReleaseThread(wxPyEventThreadState);
+    if (state) {
+        PyThreadState_Swap(state->prevState);
+        PyThreadState_Clear(state->newState);
+        PyEval_ReleaseLock();
+        PyThreadState_Delete(state->newState);
+        delete state;
     }
 #endif
 }
+
 
 //---------------------------------------------------------------------------
 
@@ -424,9 +455,9 @@ wxPyCallback::wxPyCallback(const wxPyCallback& other) {
 }
 
 wxPyCallback::~wxPyCallback() {
-    bool doSave = wxPyRestoreThread();
+    wxPyTState* state = wxPyBeginBlockThreads();
     Py_DECREF(m_func);
-    wxPySaveThread(doSave);
+    wxPyEndBlockThreads(state);
 }
 
 
@@ -440,7 +471,7 @@ void wxPyCallback::EventThunker(wxEvent& event) {
     PyObject*       tuple;
 
 
-    bool doSave = wxPyRestoreThread();
+    wxPyTState* state = wxPyBeginBlockThreads();
     wxString className = event.GetClassInfo()->GetClassName();
 
     if (className == "wxPyEvent")
@@ -460,7 +491,7 @@ void wxPyCallback::EventThunker(wxEvent& event) {
     } else {
         PyErr_Print();
     }
-    wxPySaveThread(doSave);
+    wxPyEndBlockThreads(state);
 }
 
 
@@ -563,12 +594,12 @@ PyObject* wxPyCBH_callCallbackObj(const wxPyCallbackHelper& cbh, PyObject* argTu
 
 
 void wxPyCBH_delete(wxPyCallbackHelper* cbh) {
-    bool doSave = wxPyRestoreThread();
     if (cbh->m_incRef) {
+        wxPyTState* state = wxPyBeginBlockThreads();
         Py_XDECREF(cbh->m_self);
         Py_XDECREF(cbh->m_class);
+        wxPyEndBlockThreads(state);
     }
-    wxPySaveThread(doSave);
 }
 
 //---------------------------------------------------------------------------
@@ -585,14 +616,14 @@ wxPyEvtSelfRef::wxPyEvtSelfRef() {
 }
 
 wxPyEvtSelfRef::~wxPyEvtSelfRef() {
-    bool doSave = wxPyRestoreThread();
+    wxPyTState* state = wxPyBeginBlockThreads();
     if (m_cloned)
         Py_DECREF(m_self);
-    wxPySaveThread(doSave);
+    wxPyEndBlockThreads(state);
 }
 
 void wxPyEvtSelfRef::SetSelf(PyObject* self, bool clone) {
-    bool doSave = wxPyRestoreThread();
+    wxPyTState* state = wxPyBeginBlockThreads();
     if (m_cloned)
         Py_DECREF(m_self);
     m_self = self;
@@ -600,7 +631,7 @@ void wxPyEvtSelfRef::SetSelf(PyObject* self, bool clone) {
         Py_INCREF(m_self);
         m_cloned = TRUE;
     }
-    wxPySaveThread(doSave);
+    wxPyEndBlockThreads(state);
 }
 
 PyObject* wxPyEvtSelfRef::GetSelf() const {
@@ -653,9 +684,9 @@ wxPyTimer::wxPyTimer(PyObject* callback) {
 }
 
 wxPyTimer::~wxPyTimer() {
-    bool doSave = wxPyRestoreThread();
+    wxPyTState* state = wxPyBeginBlockThreads();
     Py_DECREF(func);
-    wxPySaveThread(doSave);
+    wxPyEndBlockThreads(state);
 }
 
 void wxPyTimer::Notify() {
@@ -663,7 +694,7 @@ void wxPyTimer::Notify() {
         wxTimer::Notify();
     }
     else {
-        bool doSave = wxPyRestoreThread();
+        wxPyTState* state = wxPyBeginBlockThreads();
 
         PyObject*   result;
         PyObject*   args = Py_BuildValue("()");
@@ -677,7 +708,7 @@ void wxPyTimer::Notify() {
             PyErr_Print();
         }
 
-        wxPySaveThread(doSave);
+        wxPyEndBlockThreads(state);
     }
 }
 
@@ -693,7 +724,7 @@ PyObject* wxPy_ConvertList(wxListBase* list, const char* className) {
     wxObject*   wxObj;
     wxNode*     node = list->First();
 
-    bool doSave = wxPyRestoreThread();
+    wxPyTState* state = wxPyBeginBlockThreads();
     pyList = PyList_New(0);
     while (node) {
         wxObj = node->Data();
@@ -701,7 +732,7 @@ PyObject* wxPy_ConvertList(wxListBase* list, const char* className) {
         PyList_Append(pyList, pyObj);
         node = node->Next();
     }
-    wxPySaveThread(doSave);
+    wxPyEndBlockThreads(state);
     return pyList;
 }
 

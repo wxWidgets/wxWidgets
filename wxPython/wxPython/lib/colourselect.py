@@ -20,25 +20,26 @@ from wxPython.wx import *
 # call back to function if changes made
 
 class ColourSelect(wxButton):
-    def __init__(self, parent, position = wxPoint(20, 20), bcolour = [0, 0, 0], size = wxSize(20, 20), callback = None):
+    def __init__(self, parent, ID, bcolour=[0, 0, 0], pos=wxPoint(20, 20), size=wxSize(20, 20), style=0, callback=None):
+        wxButton.__init__(self, parent, ID, "", pos, size, style)
         self.win = parent
         self.callback = callback
-
-        mID = NewId()
-        self.b = b = wxButton(parent, mID, "", position, size)
-        EVT_BUTTON(parent, mID, self.OnClick)
-
+        EVT_BUTTON(self, ID, self.OnClick)
         self.SetColourValue(bcolour)
 
+    def __del__(self):
+        if hasattr(self, "set_colour_val"):
+            del self.set_colour_val
+
     def SetColour(self, bcolour):
-        self.b.SetBackgroundColour(bcolour)
+        self.SetBackgroundColour(bcolour)
 
     def SetColourValue(self, bcolour):
-        self.set_colour_val = wxColor(bcolour[0], bcolour[1], bcolour[2])
+        self.set_colour_val = wxColour(bcolour[0], bcolour[1], bcolour[2])
         self.set_colour = bcolour
 
-        self.b.SetBackgroundColour(self.set_colour_val)
-        self.b.SetForegroundColour(wxWHITE)
+        self.SetBackgroundColour(self.set_colour_val)
+        self.SetForegroundColour(wxWHITE)
 
     def SetValue(self, bcolour):
         self.SetColourValue(bcolour)
@@ -59,7 +60,7 @@ class ColourSelect(wxButton):
             data = dlg.GetColourData()
             self.set_colour = set = data.GetColour().Get()
             self.set_colour_val = bcolour = wxColour(set[0],set[1],set[2])
-            self.b.SetBackgroundColour(bcolour)
+            self.SetBackgroundColour(bcolour)
             self.OnChange()
         dlg.Destroy()
 

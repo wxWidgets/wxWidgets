@@ -175,6 +175,7 @@ public:
 
 IMP_PYCALLBACK_VOID_INTINT( wxPyProcess, wxProcess, OnTerminate);
 
+
 #if !wxUSE_JOYSTICK && !defined(__WXMSW__)
 // A C++ stub class for wxJoystick for platforms that don't have it.
 class wxJoystick : public wxObject {
