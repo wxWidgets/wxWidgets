@@ -251,11 +251,13 @@ wxDialUpManagerImpl::wxDialUpManagerImpl()
    m_BeaconHost = WXDIALUP_MANAGER_DEFAULT_BEACONHOST;
    m_BeaconPort = 80;
    SetConnectCommand("pon", "poff"); // default values for Debian/GNU linux
+#if 0
    wxChar * dial = wxGetenv(_T("WXDIALUP_DIALCMD"));
    wxChar * hup = wxGetenv(_T("WXDIALUP_HUPCMD"));
    if(dial || hup)
       SetConnectCommand(dial ? wxString(dial) : m_ConnectCommand,
                         hup ? wxString(hup) : m_HangUpCommand); 
+#endif
 }
 
 wxDialUpManagerImpl::~wxDialUpManagerImpl()
@@ -332,7 +334,7 @@ wxDialUpManagerImpl::CancelDialing()
 bool
 wxDialUpManagerImpl::EnableAutoCheckOnlineStatus(size_t nSeconds)
 {
-   wxASSERT(m_timer == NULL);
+   DisableAutoCheckOnlineStatus();
    m_timer = new AutoCheckTimer(this);
    bool rc = m_timer->Start(nSeconds*1000);
    if(! rc)
