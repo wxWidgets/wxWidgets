@@ -1,6 +1,5 @@
 #include "wx/defs.h"
 #include "wx/dc.h"
-#include "wx/mac/uma.h"
 #include <MacTextEditor.h>
 
 #ifndef __DARWIN__
@@ -14,6 +13,11 @@
 #    include <Printing.h>
 #  endif
 #endif
+
+#ifndef __DARWIN__
+#include <Scrap.h>
+#endif
+#include "wx/mac/uma.h"
 
 // since we have decided that we only support 8.6 upwards we are
 // checking for these minimum requirements in the startup code of
@@ -827,5 +831,21 @@ wxMacPortStateHelper::~wxMacPortStateHelper()
 		SetThemeDrawingState( m_drawingState , true ) ;
 		SetPort( m_oldPort ) ;
 	}
+}
+
+OSStatus UMAPutScrap( Size size , OSType type , void *data )
+{
+	OSStatus err = noErr ;
+#if !TARGET_CARBON
+    err = PutScrap( size , type , data ) ;
+#else
+    ScrapRef    scrap;
+    err = GetCurrentScrap (&scrap); 
+    if ( !err )
+    {
+        err = PutScrapFlavor (scrap, type , 0, size, data);
+    }
+#endif
+	return err ;
 }
 
