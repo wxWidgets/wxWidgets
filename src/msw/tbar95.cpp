@@ -35,6 +35,7 @@
     #include "wx/dynarray.h"
     #include "wx/settings.h"
     #include "wx/bitmap.h"
+    #include "wx/dcmemory.h"
 #endif
 
 #if wxUSE_TOOLBAR && defined(__WIN95__) && wxUSE_TOOLBAR_NATIVE
