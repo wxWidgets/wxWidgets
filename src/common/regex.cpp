@@ -315,6 +315,15 @@ bool wxRegEx::GetMatch(size_t *start, size_t *len, size_t index) const
     return m_impl->GetMatch(start, len, index);
 }
 
+wxString wxRegEx::GetMatch(const wxString& text, size_t index) const
+{
+    size_t start, len;
+    if ( !GetMatch(&start, &len, index) )
+        return wxEmptyString;
+
+    return text.Mid(start, len);
+}
+
 int wxRegEx::Replace(wxString *pattern, const wxString& replacement) const
 {
     wxCHECK_MSG( IsValid(), -1, _T("must successfully Compile() first") );

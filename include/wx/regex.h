@@ -33,7 +33,7 @@
 // flags for regex compilation: these can be used with Compile()
 enum
 {
-    // use extended regex syntax: default
+    // use extended regex syntax (default)
     wxRE_EXTENDED = 0,
 
     // use basic RE syntax
@@ -51,7 +51,7 @@ enum
     wxRE_NEWLINE  = 16,
 
     // default flags
-    wxRE_DEFAULT  = wxRE_NOSUB | wxRE_EXTENDED
+    wxRE_DEFAULT  = wxRE_EXTENDED
 };
 
 // flags for regex matching: these can be used with Matches()
@@ -97,13 +97,23 @@ public:
     // TRUE if matches and FALSE otherwise
     //
     // flags may be combination of wxRE_NOTBOL and wxRE_NOTEOL
+    //
+    // may only be called after successful call to Compile()
     bool Matches(const wxString& str, int flags = 0) const;
 
     // get the start index and the length of the match of the expression
     // (index 0) or a bracketed subexpression (index != 0)
     //
+    // may only be called after successful call to Matches()
+    //
     // return FALSE if no match or on error
     bool GetMatch(size_t *start, size_t *len, size_t index = 0) const;
+
+    // return the part of string corresponding to the match, empty string is
+    // returned if match failed
+    //
+    // may only be called after successful call to Matches()
+    wxString GetMatch(const wxString& text, size_t index = 0) const;
 
     // replaces the current regular expression in the string pointed to by
     // pattern, with the text in replacement and return number of matches
