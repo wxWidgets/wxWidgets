@@ -213,7 +213,7 @@ int  DBTree::OnPopulate()
   else
    wxLogMessage(_("\n-E-> DBTree::OnPopulate() : Invalid Catalog Pointer : Failed"));
   wxEndBusyCursor();
-  Temp0.Printf(_("-I-> DBTree::OnPopulate(%s) - %6d Tables have been read. - Time needed : %ld ms"),(ct_BrowserDB->pTableInf+x)->tableName,z,sw.Time());
+  Temp0.Printf(_("-I-> DBTree::OnPopulate() - %6d Tables have been read. - Time needed : %ld ms"),z,sw.Time());
   wxLogMessage(Temp0);
   pDoc->p_MainFrame->SetStatusText(Temp0, 0);
  }       // if((pDoc->db_Br+i_Which)->Initialize(FALSE))

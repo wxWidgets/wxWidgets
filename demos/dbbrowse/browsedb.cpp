@@ -28,9 +28,7 @@
 #include "wx/wx.h"
 #endif
 //----------------------------------------------------------------------------------------
-#include <wx/dbtable.h>
 #include "std.h"
-#include <iostream>
 //----------------------------------------------------------------------------------------
 // Global structure for holding ODBC connection information
 // - darf nur einmal im Projekte definiert werden ?? Extra Databasse Klasse ?
@@ -122,8 +120,8 @@ bool BrowserDB::OnStartDB(int Quite)
  //---------------------------------------------------------------------------------------
  // Connect to datasource
  //---------------------------------------------------------------------------------------
- DlgUser *p_Dlg = new DlgUser(pDoc->p_MainFrame,pDoc,"");
- // p_Dlg->pDoc       = pDoc;
+ DlgUser *p_Dlg;
+ p_Dlg = new DlgUser(pDoc->p_MainFrame,pDoc,"");
  p_Dlg->s_DSN      = ODBCSource;
  p_Dlg->s_User     = UserName;
  p_Dlg->s_Password = Password;
