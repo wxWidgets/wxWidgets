@@ -3069,6 +3069,9 @@ void wxListMainWindow::OnArrowChar(size_t newCurrent, const wxKeyEvent& event)
     {
         ChangeCurrent(newCurrent);
 
+	// refresh the old focus to remove it
+	RefreshLine( oldCurrent );
+	
         // select all the items between the old and the new one
         if ( oldCurrent > newCurrent )
         {
@@ -3086,8 +3089,8 @@ void wxListMainWindow::OnArrowChar(size_t newCurrent, const wxKeyEvent& event)
 
         ChangeCurrent(newCurrent);
 
-        // refresh the old focus to remove it
-        RefreshLine( oldCurrent );
+	// refresh the old focus to remove it
+	RefreshLine( oldCurrent );
 
         if ( !event.ControlDown() )
         {
@@ -3095,6 +3098,7 @@ void wxListMainWindow::OnArrowChar(size_t newCurrent, const wxKeyEvent& event)
         }
     }
 
+	
     RefreshLine( m_current );
 
     MoveToFocus();
