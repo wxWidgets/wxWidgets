@@ -25,8 +25,11 @@ void gtk_filedialog_ok_callback( GtkWidget *WXUNUSED(widget), gpointer data )
 {
   wxFileDialog *dialog = (wxFileDialog*)data;
   wxCommandEvent event(wxEVT_NULL);
+  int style;
 
-  if(dialog->GetStyle()&(wxSAVE|wxOVERWRITE_PROMPT))
+  style=dialog->GetStyle();
+
+  if((style&wxSAVE)&&(style&wxOVERWRITE_PROMPT))
 	if(wxFileExists(gtk_file_selection_get_filename(GTK_FILE_SELECTION(dialog->m_widget) ))) {
 	  if(wxMessageBox("File exists. Overwrite?","Confirm",wxYES_NO)!=wxYES)
 		return;
