@@ -44,6 +44,7 @@
 
 #else
 
+#include <nerrno.h>
 #include <ioctl.h>
 #include <select.h>
 
