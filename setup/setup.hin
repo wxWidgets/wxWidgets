@@ -489,6 +489,9 @@
 /* Define if you have <wcstr.h>.  */
 #undef HAVE_WCSTR_H
 
+/* Define if you have wcslen function  */
+#undef HAVE_WCSLEN
+
 /* Define if you have <fnmatch.h>.  */
 #undef HAVE_FNMATCH_H
 
@@ -500,9 +503,6 @@
 
 /* Define if you have the vprintf function.  */
 #undef HAVE_VPRINTF
-
-/* Define if you have the wait3 system call.  */
-#undef HAVE_WAIT3
 
 /* Define as __inline if that's what the C compiler calls it.  */
 #ifndef __cplusplus
