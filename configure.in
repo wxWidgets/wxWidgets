@@ -587,9 +587,29 @@ if test "$USE_BEOS" = 1; then
     INCLUDE_SUBDIRS="$INCLUDE_SUBDIRS be"
 fi
 
-dnl Linux: test for libc5/glibc2: glibc2 has gettext() included
+dnl check for glibc version
 if test "$USE_LINUX" = 1; then
-  AC_CHECK_LIB(c,gettext,AC_DEFINE(wxHAVE_GLIBC2))
+    AC_CACHE_CHECK([for glibc version], wx_lib_glibc21,
+        AC_TRY_COMPILE([#include <features.h>],
+            [
+                #if !__GLIBC_PREREQ(2, 1)
+                    #error not glibc2.1
+                #endif
+            ],
+            [
+                AC_MSG_RESULT(2.1 or later),
+                wx_lib_glibc21=yes
+            ],
+            [
+                AC_MSG_RESULT(less than 2.1),
+                wx_lib_glibc21=no
+            ]
+        )
+    )
+
+    if test "$wx_lib_glibc21" = "yes"; then
+        AC_DEFINE(wxHAVE_GLIBC2))
+    fi
 fi
 
 dnl ---------------------------------------------------------------------------
@@ -3053,6 +3073,12 @@ if test "$wxUSE_THREADS" = "yes" ; then
   dnl pthread_mutexattr_settype(PTHREAD_MUTEX_RECURSIVE) and if it is not
   dnl defined, we do it by directly assigned
   dnl PTHREAD_MUTEX_RECURSIVE_MUTEX_INITIALIZER_NP to attr
+
+  dnl we need to define _XOPEN_SOURCE=500 to get PTHREAD_MUTEX_RECURSIVE
+  dnl with glibc 2.1+, it probably shouldn't hurt elsewhere?
+  if test "x$wx_lib_glibc21" = "xyes"; then
+      CFLAGS="$CFLAGS -D_XOPEN_SOURCE=500"
+  fi
 
   AC_CACHE_CHECK([for pthread_mutexattr_t], wx_cv_type_pthread_mutexattr_t,
   [
