@@ -12,7 +12,7 @@
    TODO
 
    1. we need to implement searching/sorting for virtual controls somehow
-   2. when changing selection the lines are refreshed twice
+  ?2. when changing selection the lines are refreshed twice
  */
 
 // ============================================================================
@@ -264,16 +264,6 @@ protected:
 
 class WXDLLEXPORT wxListHeaderData : public wxObject
 {
-protected:
-    long      m_mask;
-    int       m_image;
-    wxString  m_text;
-    int       m_format;
-    int       m_width;
-    int       m_xpos,
-              m_ypos;
-    int       m_height;
-
 public:
     wxListHeaderData();
     wxListHeaderData( const wxListItem &info );
@@ -295,8 +285,18 @@ public:
     int GetWidth() const;
     int GetFormat() const;
 
+protected:
+    long      m_mask;
+    int       m_image;
+    wxString  m_text;
+    int       m_format;
+    int       m_width;
+    int       m_xpos,
+              m_ypos;
+    int       m_height;
+
 private:
-    DECLARE_DYNAMIC_CLASS(wxListHeaderData);
+    void Init();
 };
 
 //-----------------------------------------------------------------------------
@@ -439,7 +439,6 @@ protected:
 
 public:
     wxListHeaderWindow();
-    virtual ~wxListHeaderWindow();
 
     wxListHeaderWindow( wxWindow *win,
                         wxWindowID id,
@@ -448,6 +447,8 @@ public:
                         const wxSize &size = wxDefaultSize,
                         long style = 0,
                         const wxString &name = "wxlistctrlcolumntitles" );
+
+    virtual ~wxListHeaderWindow();
 
     void DoDrawRect( wxDC *dc, int x, int y, int w, int h );
     void DrawCurrent();
@@ -461,6 +462,9 @@ public:
     bool m_dirty;
 
 private:
+    // common part of all ctors
+    void Init();
+
     DECLARE_DYNAMIC_CLASS(wxListHeaderWindow)
     DECLARE_EVENT_TABLE()
 };
@@ -1162,12 +1166,10 @@ void wxListItemData::GetItem( wxListItem &info ) const
 //  wxListHeaderData
 //-----------------------------------------------------------------------------
 
-IMPLEMENT_DYNAMIC_CLASS(wxListHeaderData,wxObject);
-
-wxListHeaderData::wxListHeaderData()
+void wxListHeaderData::Init()
 {
     m_mask = 0;
-    m_image = 0;
+    m_image = -1;
     m_format = 0;
     m_width = 0;
     m_xpos = 0;
@@ -1175,22 +1177,33 @@ wxListHeaderData::wxListHeaderData()
     m_height = 0;
 }
 
+wxListHeaderData::wxListHeaderData()
+{
+    Init();
+}
+
 wxListHeaderData::wxListHeaderData( const wxListItem &item )
 {
+    Init();
+
     SetItem( item );
-    m_xpos = 0;
-    m_ypos = 0;
-    m_height = 0;
 }
 
 void wxListHeaderData::SetItem( const wxListItem &item )
 {
     m_mask = item.m_mask;
-    m_text = item.m_text;
-    m_image = item.m_image;
-    m_format = item.m_format;
 
-    SetWidth(item.m_width);
+    if ( m_mask & wxLIST_MASK_TEXT )
+        m_text = item.m_text;
+
+    if ( m_mask & wxLIST_MASK_IMAGE )
+        m_image = item.m_image;
+
+    if ( m_mask & wxLIST_MASK_FORMAT )
+        m_format = item.m_format;
+
+    if ( m_mask & wxLIST_MASK_WIDTH )
+        SetWidth(item.m_width);
 }
 
 void wxListHeaderData::SetPosition( int x, int y )
@@ -1209,7 +1222,7 @@ void wxListHeaderData::SetWidth( int w )
     m_width = w;
     if (m_width < 0)
         m_width = WIDTH_COL_DEFAULT;
-    if (m_width < WIDTH_COL_MIN)
+    else if (m_width < WIDTH_COL_MIN)
         m_width = WIDTH_COL_MIN;
 }
 
@@ -1220,7 +1233,7 @@ void wxListHeaderData::SetFormat( int format )
 
 bool wxListHeaderData::HasImage() const
 {
-    return (m_image != 0);
+    return m_image != -1;
 }
 
 bool wxListHeaderData::IsHit( int x, int y ) const
@@ -1228,7 +1241,7 @@ bool wxListHeaderData::IsHit( int x, int y ) const
     return ((x >= m_xpos) && (x <= m_xpos+m_width) && (y >= m_ypos) && (y <= m_ypos+m_height));
 }
 
-void wxListHeaderData::GetItem( wxListItem &item )
+void wxListHeaderData::GetItem( wxListItem& item )
 {
     item.m_mask = m_mask;
     item.m_text = m_text;
@@ -1728,30 +1741,39 @@ BEGIN_EVENT_TABLE(wxListHeaderWindow,wxWindow)
     EVT_SET_FOCUS     (wxListHeaderWindow::OnSetFocus)
 END_EVENT_TABLE()
 
-wxListHeaderWindow::wxListHeaderWindow( void )
+void wxListHeaderWindow::Init()
 {
-    m_owner = (wxListMainWindow *) NULL;
     m_currentCursor = (wxCursor *) NULL;
-    m_resizeCursor = (wxCursor *) NULL;
-    m_isDragging = FALSE;
-}
-
-wxListHeaderWindow::wxListHeaderWindow( wxWindow *win, wxWindowID id, wxListMainWindow *owner,
-      const wxPoint &pos, const wxSize &size,
-      long style, const wxString &name ) :
-  wxWindow( win, id, pos, size, style, name )
-{
-    m_owner = owner;
-//  m_currentCursor = wxSTANDARD_CURSOR;
-    m_currentCursor = (wxCursor *) NULL;
-    m_resizeCursor = new wxCursor( wxCURSOR_SIZEWE );
     m_isDragging = FALSE;
     m_dirty = FALSE;
+}
+
+wxListHeaderWindow::wxListHeaderWindow()
+{
+    Init();
+
+    m_owner = (wxListMainWindow *) NULL;
+    m_resizeCursor = (wxCursor *) NULL;
+}
+
+wxListHeaderWindow::wxListHeaderWindow( wxWindow *win,
+                                        wxWindowID id,
+                                        wxListMainWindow *owner,
+                                        const wxPoint& pos,
+                                        const wxSize& size,
+                                        long style,
+                                        const wxString &name )
+                  : wxWindow( win, id, pos, size, style, name )
+{
+    Init();
+
+    m_owner = owner;
+    m_resizeCursor = new wxCursor( wxCURSOR_SIZEWE );
 
     SetBackgroundColour( wxSystemSettings::GetSystemColour( wxSYS_COLOUR_BTNFACE ) );
 }
 
-wxListHeaderWindow::~wxListHeaderWindow( void )
+wxListHeaderWindow::~wxListHeaderWindow()
 {
     delete m_resizeCursor;
 }
@@ -1861,22 +1883,50 @@ void wxListHeaderWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
     {
         m_owner->GetColumn( i, item );
         int wCol = item.m_width;
-        int cw = wCol - 2; // the width of the rect to draw
 
-        int xEnd = x + wCol;
+        // the width of the rect to draw: make it smaller to fit entirely
+        // inside the column rect
+        int cw = wCol - 2;
 
         dc.SetPen( *wxWHITE_PEN );
 
         DoDrawRect( &dc, x, HEADER_OFFSET_Y, cw, h-2 );
-        wxDCClipper clipper(dc, x, HEADER_OFFSET_Y, cw-5, h-4 );
+
+        // if we have an image, draw it on the right of the label
+        int image = item.m_image;
+        if ( image != -1 )
+        {
+            wxImageList *imageList = m_owner->m_small_image_list;
+            if ( imageList )
+            {
+                int ix, iy;
+                imageList->GetSize(image, ix, iy);
+
+                imageList->Draw
+                           (
+                            image,
+                            dc,
+                            x + cw - ix - 1,
+                            HEADER_OFFSET_Y + (h - 4 - iy)/2,
+                            wxIMAGELIST_DRAW_TRANSPARENT
+                           );
+
+                cw -= ix + 2;
+            }
+            //else: ignore the column image
+        }
+
+        // draw the text clipping it so that it doesn't overwrite the column
+        // boundary
+        wxDCClipper clipper(dc, x, HEADER_OFFSET_Y, cw, h - 4 );
 
         dc.DrawText( item.GetText(),
                      x + EXTRA_WIDTH, HEADER_OFFSET_Y + EXTRA_HEIGHT );
 
-        x += wCol;
-
-        if (xEnd > w+5)
+        if ( x > w - wCol + 5 )
             break;
+
+        x += wCol;
     }
     dc.EndDrawing();
 }
@@ -4322,17 +4372,9 @@ IMPLEMENT_DYNAMIC_CLASS(wxListItem, wxObject)
 
 wxListItem::wxListItem()
 {
-    m_mask = 0;
-    m_itemId = 0;
-    m_col = 0;
-    m_state = 0;
-    m_stateMask = 0;
-    m_image = 0;
-    m_data = 0;
-    m_format = wxLIST_FORMAT_CENTRE;
-    m_width = 0;
-
     m_attr = NULL;
+
+    Clear();
 }
 
 void wxListItem::Clear()
@@ -4342,11 +4384,11 @@ void wxListItem::Clear()
     m_col = 0;
     m_state = 0;
     m_stateMask = 0;
-    m_image = 0;
+    m_image = -1;
     m_data = 0;
     m_format = wxLIST_FORMAT_CENTRE;
     m_width = 0;
-    m_text = _T("");
+    m_text.clear();
 
     ClearAttributes();
 }
