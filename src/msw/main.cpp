@@ -128,6 +128,14 @@ bool wxHandleFatalExceptions(bool doit)
     // if the exception is not handled elsewhere, we have to also call it from
     // a special SEH translator function which is called by VC CRT when a Win32
     // exception occurs
+
+    // this warns that /EHa (async exceptions) should be used when using
+    // _set_se_translator but, in fact, this doesn't seem to change anything
+    // with VC++ up to 7.1 -- to be confirmed with VC++ 8
+    #if _MSC_VER <= 1310
+        #pragma warning(disable:4535)
+    #endif
+
     _set_se_translator(doit ? wxSETranslator : NULL);
 #endif
 
