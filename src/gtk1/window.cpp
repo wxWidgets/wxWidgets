@@ -2790,10 +2790,8 @@ bool wxWindowGTK::PreCreation( wxWindowGTK *parent, const wxPoint &pos,  const w
 {
     wxCHECK_MSG( !m_needParent || parent, FALSE, wxT("Need complete parent.") );
 
-    // This turns -1 into 30 so that a minimal window is
-    // visible even although -1,-1 has been given as the
-    // size of the window. the same trick is used in other
-    // ports and should make debugging easier.
+    // Use either the given size, or the default if -1 is given.
+    // See wxWindowBase for these functions.
     m_width = WidthDefault(size.x) ;
     m_height = HeightDefault(size.y);
 

@@ -1040,9 +1040,8 @@ protected:
     virtual wxBorder GetDefaultBorder() const;
 
     // get the default size for the new window if no explicit size given
-    // FIXME why 20 and not 30, 10 or ...?
-    static int WidthDefault(int w) { return w == -1 ? 20 : w; }
-    static int HeightDefault(int h) { return h == -1 ? 20 : h; }
+    static int WidthDefault(int w) { return w == -1 ? 400 : w; }
+    static int HeightDefault(int h) { return h == -1 ? 250 : h; }
 
     // set the best size for the control if the default size was given:
     // replaces the fields of size == -1 with the best values for them and
