@@ -28,6 +28,7 @@
 #include "wx/notebook.h"
 #include "wx/listbox.h"
 #include "wx/choice.h"
+#include "wx/combobox.h"
 #include "wx/html/htmlwin.h"
 
 
@@ -36,7 +37,8 @@
 #define wxHF_CONTENTS     0x0002
 #define wxHF_INDEX        0x0004
 #define wxHF_SEARCH       0x0008
-#define wxHF_DEFAULTSTYLE (wxHF_TOOLBAR | wxHF_CONTENTS | wxHF_INDEX | wxHF_SEARCH)
+#define wxHF_BOOKMARKS    0x0010
+#define wxHF_DEFAULTSTYLE (wxHF_TOOLBAR | wxHF_CONTENTS | wxHF_INDEX | wxHF_SEARCH | wxHF_BOOKMARKS)
 
 
 // Command IDs :
@@ -46,6 +48,9 @@ enum
     wxID_HTML_BACK,
     wxID_HTML_FORWARD,
     wxID_HTML_OPTIONS,
+    wxID_HTML_BOOKMARKSLIST,
+    wxID_HTML_BOOKMARKSADD,
+    wxID_HTML_BOOKMARKSREMOVE,
     wxID_HTML_TREECTRL,
     wxID_HTML_INDEXPAGE,
     wxID_HTML_INDEXLIST,
@@ -156,6 +161,7 @@ class WXDLLEXPORT wxHtmlHelpFrame : public wxFrame
         void OnIndexSel(wxCommandEvent& event);
         void OnSearchSel(wxCommandEvent& event);
         void OnSearch(wxCommandEvent& event);
+        void OnBookmarksSel(wxCommandEvent& event);
         void OnCloseWindow(wxCloseEvent& event);
 
         // Images:
@@ -181,6 +187,9 @@ class WXDLLEXPORT wxHtmlHelpFrame : public wxFrame
         wxButton *m_SearchButton;
         wxListBox *m_SearchList;
         wxChoice *m_SearchChoice;
+
+        wxComboBox *m_Bookmarks;
+        wxArrayString m_BookmarksNames, m_BookmarksPages;
 
         wxHtmlHelpFrameCfg m_Cfg;
 

@@ -52,6 +52,8 @@
 #include "bitmaps/wpage.xpm"
 #include "bitmaps/whelp.xpm"
 #include "bitmaps/whlproot.xpm"
+#include "bitmaps/wbkadd.xpm"
+#include "bitmaps/wbkdel.xpm"
 #endif
 
 #include "wx/stream.h"
@@ -61,7 +63,7 @@
 #define PROGRESS_STEP 40
 
 //--------------------------------------------------------------------------
-// wxHtmlHelpTreeItemData
+// wxHtmlHelpTreeItemData (private)
 //--------------------------------------------------------------------------
 
 class wxHtmlHelpTreeItemData : public wxTreeItemData
@@ -71,11 +73,14 @@ class wxHtmlHelpTreeItemData : public wxTreeItemData
 
     public:
         wxHtmlHelpTreeItemData(wxHtmlContentsItem *it) : wxTreeItemData()
-        {
-            m_Page = it -> m_Book -> GetBasePath() + it -> m_Page;
-        }
+            {
+                m_Page = it -> m_Book -> GetBasePath() + it -> m_Page;
+            }
         const wxString& GetPage() { return m_Page; }
 };
+
+
+
 
 //---------------------------------------------------------------------------
 // wxHtmlHelpFrame
@@ -115,6 +120,7 @@ void wxHtmlHelpFrame::Init(wxHtmlHelpData* data)
     m_Splitter = NULL;
     m_NavigPan = NULL;
     m_HtmlWin = NULL;
+    m_Bookmarks = NULL;
     m_Config = NULL;
     m_ConfigRoot = wxEmptyString;
 
@@ -172,6 +178,23 @@ bool wxHtmlHelpFrame::Create(wxWindow* parent, wxWindowID id, const wxString& ti
         toolBar -> AddTool(wxID_HTML_FORWARD, wxBITMAP(wforward), wxNullBitmap,
                            FALSE, -1, -1, (wxObject *) NULL,
                            _("Go forward to the next HTML page"));
+        toolBar -> AddSeparator();
+
+        if (style & wxHF_BOOKMARKS) {
+            m_Bookmarks = new wxComboBox(toolBar, wxID_HTML_BOOKMARKSLIST, wxEmptyString, 
+                                         wxDefaultPosition, wxSize(300,200), 0, NULL, wxCB_READONLY | wxCB_SORT);
+            m_Bookmarks -> Append(_("<bookmarks>"));
+            for (unsigned i = 0; i < m_BookmarksNames.GetCount(); i++)
+                m_Bookmarks -> Append(m_BookmarksNames[i]);
+            m_Bookmarks -> SetSelection(0);
+            toolBar -> AddControl(m_Bookmarks);
+            toolBar -> AddTool(wxID_HTML_BOOKMARKSADD, wxBITMAP(wbkadd), wxNullBitmap,
+                               FALSE, -1, -1, (wxObject *) NULL,
+                               _("Add current page to bookmarks"));
+            toolBar -> AddTool(wxID_HTML_BOOKMARKSREMOVE, wxBITMAP(wbkdel), wxNullBitmap,
+                               FALSE, -1, -1, (wxObject *) NULL,
+                               _("Remove current page from bookmarks"));
+        }
 
         toolBar -> AddSeparator();
         toolBar -> AddTool(wxID_HTML_OPTIONS, wxBITMAP(woptions), wxNullBitmap,
@@ -439,7 +462,7 @@ void wxHtmlHelpFrame::CreateContents(bool show_progress)
                 break;
             wxYield();
         }
-        roots[it -> m_Level + 1] = m_ContentsBox -> AppendItem(
+        roots[it -> m_Level + 1] =  m_ContentsBox -> AppendItem(
                                        roots[it -> m_Level], it -> m_Name, IMG_Page, -1,
                                        new wxHtmlHelpTreeItemData(it));
 
@@ -540,6 +563,32 @@ void wxHtmlHelpFrame::ReadCustomization(wxConfigBase *cfg, const wxString& path)
     m_NormalItalic = cfg -> Read("hcNormalItalic", m_NormalItalic);
     m_FixedItalic = cfg -> Read("hcFixedItalic", m_FixedItalic);
 
+    {
+        int i;
+        int cnt;
+        wxString val, s;
+        
+        cnt = cfg -> Read("hcBookmarksCnt", 0L);
+        if (cnt != 0) {
+            m_BookmarksNames.Clear();
+            m_BookmarksPages.Clear();
+            if (m_Bookmarks) {
+                m_Bookmarks -> Clear();
+                m_Bookmarks -> Append(_("<bookmarks>"));
+            }
+                    
+            for (i = 0; i < cnt; i++) {
+                val.Printf("hcBookmark_%i", i);
+                s = cfg -> Read(val);
+                m_BookmarksNames.Add(s);
+                if (m_Bookmarks) m_Bookmarks -> Append(s);
+                val.Printf("hcBookmark_%i_url", i);
+                s = cfg -> Read(val);
+                m_BookmarksPages.Add(s);
+            }
+        }
+    }
+
     if (m_HtmlWin)
         m_HtmlWin->ReadCustomization(cfg, path);
 
@@ -568,6 +617,20 @@ void wxHtmlHelpFrame::WriteCustomization(wxConfigBase *cfg, const wxString& path
     cfg -> Write("hcFontSize", (long)m_FontSize);
     cfg -> Write("hcNormalItalic", (long)m_NormalItalic);
     cfg -> Write("hcFixedItalic", (long)m_FixedItalic);
+    
+    if (m_Bookmarks) {
+        int i;
+        int cnt = m_BookmarksNames.GetCount();
+        wxString val;
+        
+        cfg -> Write("hcBookmarksCnt", (long)cnt);
+        for (i = 0; i < cnt; i++) {
+            val.Printf("hcBookmark_%i", i);
+            cfg -> Write(val, m_BookmarksNames[i]);
+            val.Printf("hcBookmark_%i_url", i);
+            cfg -> Write(val, m_BookmarksPages[i]);
+        }
+    }
 
     if (m_HtmlWin)
         m_HtmlWin->WriteCustomization(cfg, path);
@@ -614,7 +677,13 @@ class wxHtmlHelpFrameOptionsDialog : public wxDialog
                 sizer2 = new wxBoxSizer(wxVERTICAL);
                 sizer2 -> Add(new wxStaticText(this, -1, _("Normal font:")), 
                               0, wxLEFT | wxTOP, 10);
-                sizer2 -> Add(NormalFont = new wxComboBox(this, -1, wxEmptyString, wxDefaultPosition, wxSize(200, -1), 0, NULL, wxCB_DROPDOWN | wxCB_READONLY),
+                sizer2 -> Add(NormalFont = new wxComboBox(this, -1, wxEmptyString, wxDefaultPosition, 
+//#ifdef __WXMSW__
+                              wxSize(200, 200), 
+//#else 
+//                              wxSize(200, -1), 
+//#endif // FIXME: temporarily commented by VS to demonstrate the problem
+                              0, NULL, wxCB_DROPDOWN | wxCB_READONLY),
                               1, wxEXPAND | wxLEFT | wxRIGHT, 10);
 
                 sizer3 = new wxBoxSizer(wxHORIZONTAL);
@@ -629,7 +698,13 @@ class wxHtmlHelpFrameOptionsDialog : public wxDialog
                 sizer2 = new wxBoxSizer(wxVERTICAL);
                 sizer2 -> Add(new wxStaticText(this, -1, _("Fixed font:")), 
                               0, wxLEFT | wxTOP, 10);
-                sizer2 -> Add(FixedFont = new wxComboBox(this, -1, wxEmptyString, wxDefaultPosition, wxSize(200, -1), 0, NULL, wxCB_DROPDOWN | wxCB_READONLY), 
+                sizer2 -> Add(FixedFont = new wxComboBox(this, -1, wxEmptyString, wxDefaultPosition, 
+//#ifdef __WXMSW__
+                              wxSize(200, 200), 
+//#else 
+//                              wxSize(200, -1), 
+//#endif // FIXME: temporarily commented by VS to demonstrate the problem
+                              0, NULL, wxCB_DROPDOWN | wxCB_READONLY), 
                               1, wxEXPAND | wxLEFT | wxRIGHT, 10);
 
                 sizer3 = new wxBoxSizer(wxHORIZONTAL);
@@ -766,12 +841,15 @@ EVENT HANDLING :
 void wxHtmlHelpFrame::OnToolbar(wxCommandEvent& event)
 {
     switch (event.GetId()) {
+
         case wxID_HTML_BACK :
             m_HtmlWin -> HistoryBack();
             break;
+
         case wxID_HTML_FORWARD :
             m_HtmlWin -> HistoryForward();
             break;
+
         case wxID_HTML_PANEL :
             if (! (m_Splitter && m_NavigPan))
                 return ;
@@ -786,8 +864,40 @@ void wxHtmlHelpFrame::OnToolbar(wxCommandEvent& event)
                 m_Cfg.navig_on = TRUE;
             }
             break;
+
         case wxID_HTML_OPTIONS :
             OptionsDialog();
+            break;
+            
+        case wxID_HTML_BOOKMARKSADD : 
+            {
+                wxString item;
+                wxString url;
+                
+                item = m_HtmlWin -> GetOpenedPageTitle();
+                url = m_HtmlWin -> GetOpenedPage();
+                if (item == wxEmptyString) item = url.AfterLast(wxT('/'));
+                if (m_BookmarksPages.Index(url) == wxNOT_FOUND) {
+                    m_Bookmarks -> Append(item);
+                    m_BookmarksNames.Add(item);
+                    m_BookmarksPages.Add(url);
+                }
+            }
+            break;
+            
+        case wxID_HTML_BOOKMARKSREMOVE : 
+            {
+                wxString item;
+                int pos;
+                
+                item = m_Bookmarks -> GetStringSelection();
+                pos = m_BookmarksNames.Index(item);
+                if (pos != wxNOT_FOUND) {
+                    m_BookmarksNames.Remove(pos);
+                    m_BookmarksPages.Remove(pos);
+                    m_Bookmarks -> Delete(m_Bookmarks -> GetSelection());
+                }
+            }
             break;
     }
 }
@@ -825,6 +935,14 @@ void wxHtmlHelpFrame::OnSearch(wxCommandEvent& WXUNUSED(event))
     if (sr != wxEmptyString) KeywordSearch(sr);
 }
 
+void wxHtmlHelpFrame::OnBookmarksSel(wxCommandEvent& WXUNUSED(event))
+{
+    wxString sr = m_Bookmarks -> GetStringSelection();
+
+    if (sr != wxEmptyString && sr != _("<bookmarks>"))
+        m_HtmlWin -> LoadPage(m_BookmarksPages[m_BookmarksNames.Index(sr)]);
+}
+
 void wxHtmlHelpFrame::OnCloseWindow(wxCloseEvent& evt)
 {
     GetSize(&m_Cfg.w, &m_Cfg.h);
@@ -839,13 +957,14 @@ void wxHtmlHelpFrame::OnCloseWindow(wxCloseEvent& evt)
 }
 
 BEGIN_EVENT_TABLE(wxHtmlHelpFrame, wxFrame)
-    EVT_TOOL_RANGE(wxID_HTML_PANEL, wxID_HTML_OPTIONS, wxHtmlHelpFrame::OnToolbar)
+    EVT_TOOL_RANGE(wxID_HTML_PANEL, wxID_HTML_BOOKMARKSREMOVE, wxHtmlHelpFrame::OnToolbar)
     EVT_TREE_SEL_CHANGED(wxID_HTML_TREECTRL, wxHtmlHelpFrame::OnContentsSel)
     EVT_LISTBOX(wxID_HTML_INDEXLIST, wxHtmlHelpFrame::OnIndexSel)
     EVT_LISTBOX(wxID_HTML_SEARCHLIST, wxHtmlHelpFrame::OnSearchSel)
     EVT_BUTTON(wxID_HTML_SEARCHBUTTON, wxHtmlHelpFrame::OnSearch)
     EVT_TEXT_ENTER(wxID_HTML_SEARCHTEXT, wxHtmlHelpFrame::OnSearch)
-    EVT_CLOSE(wxHtmlHelpFrame::OnCloseWindow)
+    EVT_COMBOBOX(wxID_HTML_BOOKMARKSLIST, wxHtmlHelpFrame::OnBookmarksSel)
+    EVT_CLOSE(wxHtmlHelpFrame::OnCloseWindow)    
 END_EVENT_TABLE()
 
 #endif

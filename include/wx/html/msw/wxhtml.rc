@@ -10,6 +10,8 @@ wback     BITMAP "wx/html/msw/wback.bmp"
 wforward  BITMAP "wx/html/msw/wforward.bmp"
 wpanel    BITMAP "wx/html/msw/wpanel.bmp"
 woptions  BITMAP "wx/html/msw/woptions.bmp"
+wbkadd    BITMAP "wx/html/msw/wbkadd.bmp"
+wbkdel    BITMAP "wx/html/msw/wbkdel.bmp"
 
 wbook     ICON "wx/html/msw/wbook.ico"
 wfolder   ICON "wx/html/msw/wfolder.ico"
