@@ -40,7 +40,7 @@ unsigned long wxStringHash::wxCharStringHash( const wxChar* k )
     }
     hash += (hash << 3);
     hash ^= (hash >> 11);
-    
+
     return hash + (hash << 15);
 }
 
@@ -57,7 +57,7 @@ unsigned long wxStringHash::charStringHash( const char* k )
     }
     hash += (hash << 3);
     hash ^= (hash >> 11);
-    
+
     return hash + (hash << 15);
 }
 #endif
@@ -70,7 +70,7 @@ const unsigned long _wxHashTableBase2::s_primes[prime_count] =
     1543ul,       3079ul,       6151ul,      12289ul,     24593ul,
     49157ul,      98317ul,      196613ul,    393241ul,    786433ul,
     1572869ul,    3145739ul,    6291469ul,   12582917ul,  25165843ul,
-    50331653ul,   100663319ul,  201326611ul, 402653189ul, 805306457ul, 
+    50331653ul,   100663319ul,  201326611ul, 402653189ul, 805306457ul,
     1610612741ul, 3221225473ul, 4294967291ul
 };
 
@@ -134,7 +134,7 @@ void _wxHashTableBase2::CopyHashTable( _wxHashTable_NodeBase** srcTable,
     for( size_t i = 0; i < srcBuckets; ++i )
     {
         _wxHashTable_NodeBase* nextnode;
-    
+
         for( _wxHashTable_NodeBase* node = srcTable[i]; node; node = nextnode )
         {
             size_t bucket = func( dst, node );
