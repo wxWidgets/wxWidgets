@@ -1199,7 +1199,7 @@ void wxWindow::DoGetSize(int *x, int *y) const
     Widget widget = (Widget) GetTopWidget();
     Dimension xx, yy;
     XtVaGetValues(widget, XmNwidth, &xx, XmNheight, &yy, NULL);
-    *x = xx; *y = yy;
+    if(x) *x = xx; if(y) *y = yy;
 }
 
 void wxWindow::DoGetPosition(int *x, int *y) const
@@ -1222,7 +1222,7 @@ void wxWindow::DoGetPosition(int *x, int *y) const
         yy -= pt.y;
     }
 
-    *x = xx; *y = yy;
+    if(x) *x = xx; if(y) *y = yy;
 }
 
 void wxWindow::DoScreenToClient(int *x, int *y) const
@@ -1258,7 +1258,7 @@ void wxWindow::DoGetClientSize(int *x, int *y) const
     Widget widget = (Widget) GetClientWidget();
     Dimension xx, yy;
     XtVaGetValues(widget, XmNwidth, &xx, XmNheight, &yy, NULL);
-    *x = xx; *y = yy;
+    if(x) *x = xx; if(y) *y = yy;
 }
 
 void wxWindow::DoSetSize(int x, int y, int width, int height, int sizeFlags)
