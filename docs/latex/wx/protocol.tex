@@ -11,7 +11,6 @@
 % ----------------------------------------------------------------------------
 % Members
 % ----------------------------------------------------------------------------
-
 \latexignore{\rtfignore{\membersection{Members}}}
 
 \membersection{wxProtocol::Reconnect}\label{wxprotoreconnect}
@@ -25,7 +24,6 @@ Tries to reestablish a previous opened connection (close and renegotiate connect
 TRUE, if the connection is established, else FALSE.
 
 % ----------------------------------------------------------------------------
-
 \membersection{wxProtocol::GetInputStream}\label{wxprotogetinput}
 
 \func{wxInputStream *}{GetInputStream}{\param{const wxString\&}{ path}}
@@ -39,7 +37,6 @@ http or ftp streams doesn't deal with it.
 Returns the initialized stream. You will have to delete it yourself.
 
 % ----------------------------------------------------------------------------
-
 \membersection{wxProtocol::Abort}\label{wxprotoabort}
 
 \func{bool}{Abort}{\void}
@@ -53,7 +50,6 @@ Abort the current stream.
 Returns TRUE, if successful, else FALSE.
 
 % ----------------------------------------------------------------------------
-
 \membersection{wxProtocol::GetError}
 
 \func{wxProtocolError}{GetError}{\void}
@@ -72,10 +68,9 @@ Returns the last occured error.
 \twocolitem{{\bf wxPROTO\_ABRT}}{Last action aborted.}
 \twocolitem{{\bf wxPROTO\_RCNCT}}{An error occured during reconnection.}
 \twocolitem{{\bf wxPROTO\_STREAM}}{Someone tried to send a command during a transfer.}
-\end{twocollist}%
+\end{twocollist}
 
 % ----------------------------------------------------------------------------
-
 \membersection{wxProtocol::GetContentType}
 
 \func{wxString}{GetContentType}{\void}
@@ -83,7 +78,6 @@ Returns the last occured error.
 Returns the type of the content of the last opened stream. It is a mime-type.
 
 % ----------------------------------------------------------------------------
-
 \membersection{wxProtocol::SetUser}
 
 \func{void }{SetUser}{\param{const wxString\&}{ user}}

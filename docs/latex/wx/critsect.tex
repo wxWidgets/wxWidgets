@@ -20,22 +20,25 @@ None.
 
 \wxheading{See also}
 
-\helpref{wxThread}{wxthread}, \helpref{wxCondition}{wxcondition},
+\helpref{wxThread}{wxthread}, \helpref{wxCondition}{wxcondition}, 
 \helpref{wxMutexLocker}{wxmutexlocker}, \helpref{wxCriticalSection}{wxcriticalsection}
 
 \latexignore{\rtfignore{\wxheading{Members}}}
 
 \membersection{wxCriticalSection::wxCriticalSection}\label{wxcriticalsectionctor}
+
 \func{}{wxCriticalSection}{\void}
 
 Default constructor initializes critical section object.
 
 \membersection{wxCriticalSection::\destruct{wxCriticalSection}}\label{wxcriticalsectiondtor}
+
 \func{}{\destruct{wxCriticalSection}}{\void}
 
 Destructor frees the ressources.
 
 \membersection{wxCriticalSection::Enter}\label{wxcriticalsectionenter}
+
 \func{void }{Enter}{\void}
 
 Enter the critical section (same as locking a mutex). There is no error return
@@ -43,7 +46,9 @@ for this function. After entering the critical section protecting some global
 data the thread running in critical section may safely use/modify it.
 
 \membersection{wxCriticalSection::Leave}\label{wxcriticalsectionleave}
+
 \func{void }{Leave}{\void}
 
 Leave the critical section allowing other threads use the global data protected
 by it. There is no error return for this function.
+
