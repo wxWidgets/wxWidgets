@@ -156,6 +156,7 @@ int wxPyApp::OnExit() {
 }
 
 
+#ifdef __WXDEBUG__
 void wxPyApp::OnAssert(const wxChar *file,
                      int line,
                      const wxChar *cond,
@@ -218,7 +219,7 @@ void wxPyApp::OnAssert(const wxChar *file,
             wxApp::OnAssert(file, line, cond, msg);
     }
 }
-
+#endif
 
 //---------------------------------------------------------------------
 //----------------------------------------------------------------------

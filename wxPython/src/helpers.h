@@ -424,10 +424,13 @@ public:
 
     virtual bool OnInitGui();
     virtual int OnExit();
+#ifdef __WXDEBUG__
     virtual void OnAssert(const wxChar *file,
                           int line,
                           const wxChar *cond,
                           const wxChar *msg);
+#endif
+
     // virtual int FilterEvent(wxEvent& event); // This one too????
 
     PYPRIVATE;
