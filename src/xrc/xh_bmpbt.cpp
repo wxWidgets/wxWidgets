@@ -44,7 +44,7 @@ wxObject *wxBitmapButtonXmlHandler::DoCreateResource()
 
     button->Create(m_parentAsWindow,
                    GetID(),
-                   GetBitmap(wxT("bitmap")),
+                   GetBitmap(wxT("bitmap"), wxART_BUTTON),
                    GetPosition(), GetSize(),
                    GetStyle(wxT("style"), wxBU_AUTODRAW),
                    wxDefaultValidator,
