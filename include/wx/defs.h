@@ -685,7 +685,8 @@ typedef wxUint16 wxWord;
         typedef int wxInt32;
         typedef unsigned int wxUint32;
 
-        /*  conside that if SIZEOF_INT is defined, all the other ones are too */
+        /* Assume that if SIZEOF_INT is defined that all the other ones except
+           SIZEOF_SIZE_T, are too.  See next #if below.  */
         #ifndef SIZEOF_INT
             #define SIZEOF_INT 4
             #define SIZEOF_LONG 4
@@ -712,6 +713,19 @@ typedef wxUint16 wxWord;
                 #define SIZEOF_VOID_P 4
             #endif /*  Win64/32 */
         #endif /*  !defined(SIZEOF_INT) */
+
+        /*
+          If Python.h was included first, it defines all of the SIZEOF's above
+          except for SIZEOF_SIZE_T, so we need to do it here to avoid
+          triggering the #error in the ssize_t typedefs below...
+        */
+        #ifndef SIZEOF_SIZE_T
+            #ifdef __WIN64__
+                #define SIZEOF_SIZE_T 8
+            #else /* Win32 */
+                #define SIZEOF_SIZE_T 4
+            #endif
+        #endif
     #else
         #error "Unsupported Windows version"
     #endif
