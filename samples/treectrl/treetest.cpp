@@ -174,7 +174,7 @@ void MyFrame::OnDump(wxCommandEvent& WXUNUSED(event))
 
 void MyFrame::DoSetBold(bool bold)
 {
-  m_treeCtrl->SetItemBold(m_treeCtrl->GetSelection(), bold);
+//  m_treeCtrl->SetItemBold(m_treeCtrl->GetSelection(), bold);
 }
 
 void MyFrame::OnDelete(wxCommandEvent& WXUNUSED(event))
@@ -204,8 +204,8 @@ MyTreeCtrl::MyTreeCtrl(wxWindow *parent, const wxWindowID id,
   m_imageListNormal = new wxImageList(16, 16, TRUE);
 
   // should correspond to TreeCtrlIcon_xxx enum
-  m_imageListNormal->Add(wxICON(icon2));
   m_imageListNormal->Add(wxICON(icon1));
+  m_imageListNormal->Add(wxICON(icon2));
 
   SetImageList(m_imageListNormal);
 
@@ -332,6 +332,7 @@ static inline const char *Bool2String(bool b)
 
 void MyTreeItemData::ShowInfo(wxTreeCtrl *tree)
 {
+/*
   wxLogMessage("Item '%s': %sselected, %sexpanded, %sbold,\n"
                "%u children (%u immediately under this item).",
                m_desc.c_str(),
@@ -340,4 +341,5 @@ void MyTreeItemData::ShowInfo(wxTreeCtrl *tree)
                Bool2String(tree->IsBold(GetId())),
                tree->GetChildrenCount(GetId()),
                tree->GetChildrenCount(GetId(), FALSE));
+*/
 }

@@ -231,7 +231,6 @@ void wxGenericTreeItem::SetCross( int x, int y )
 
 void wxGenericTreeItem::GetSize( int &x, int &y )
 {
-  // FIXME what does this all mean??
   if ( y < m_y ) y = m_y;
   int width = m_x +  m_width;
   if (width > x) x = width;
@@ -295,6 +294,7 @@ BEGIN_EVENT_TABLE(wxTreeCtrl,wxScrolledWindow)
   EVT_CHAR           (wxTreeCtrl::OnChar)
   EVT_SET_FOCUS      (wxTreeCtrl::OnSetFocus)
   EVT_KILL_FOCUS     (wxTreeCtrl::OnKillFocus)
+  EVT_IDLE           (wxTreeCtrl::OnIdle)
 END_EVENT_TABLE()
 
 // -----------------------------------------------------------------------------
@@ -305,6 +305,7 @@ void wxTreeCtrl::Init()
   m_current =
   m_anchor = (wxGenericTreeItem *) NULL;
   m_hasFocus = FALSE;
+  m_dirty = FALSE;
 
   m_xScroll = 0;
   m_yScroll = 0;
@@ -591,33 +592,8 @@ wxTreeItemId wxTreeCtrl::DoInsertItem(const wxTreeItemId& parentId,
   }
 
   parent->Insert( item, previous );
-
-  CalculatePositions();
-
-  int cw, ch;
-  GetClientSize( &cw, &ch );
-
-  PrepareDC( dc );
-
-  wxRectangle rect;
-  rect.x = dc.LogicalToDeviceX( 0 );
-  rect.y = 0;
-  rect.width = 10000; // @@@ not very elegant...
-  rect.height = ch;
-
-  if ( previous != 0 )
-  {
-    rect.y = dc.LogicalToDeviceY( parent->GetChildren().Item(previous)->GetY() );
-  }
-  else // it's the 1st child
-  {
-    rect.y = dc.LogicalToDeviceY( parent->GetY() );
-  }
-
-  AdjustMyScrollbars();
-
-  if ( rect.height > 0 )
-    Refresh( FALSE, &rect );
+  
+  m_dirty = TRUE;
 
   return item;
 }
@@ -857,10 +833,6 @@ void wxTreeCtrl::SortChildren( const wxTreeItemId& WXUNUSED(item),
   wxFAIL_MSG("not implemented");
 }
 
-// -----------------------------------------------------------------------------
-// images are not currently supported, but we still provide stubs for these
-// functions
-// -----------------------------------------------------------------------------
 wxImageList *wxTreeCtrl::GetImageList() const
 {
     return m_imageListNormal;
@@ -1027,7 +999,7 @@ void wxTreeCtrl::PaintLevel( wxGenericTreeItem *item, wxDC &dc, int level, int &
 // wxWindows callbacks
 // -----------------------------------------------------------------------------
 
-void wxTreeCtrl::OnPaint( const wxPaintEvent &WXUNUSED(event) )
+void wxTreeCtrl::OnPaint( wxPaintEvent &WXUNUSED(event) )
 {
   if ( !m_anchor )
     return;
@@ -1044,14 +1016,14 @@ void wxTreeCtrl::OnPaint( const wxPaintEvent &WXUNUSED(event) )
   PaintLevel( m_anchor, dc, 0, y );
 }
 
-void wxTreeCtrl::OnSetFocus( const wxFocusEvent &WXUNUSED(event) )
+void wxTreeCtrl::OnSetFocus( wxFocusEvent &WXUNUSED(event) )
 {
   m_hasFocus = TRUE;
   if ( m_current )
     RefreshLine( m_current );
 }
 
-void wxTreeCtrl::OnKillFocus( const wxFocusEvent &WXUNUSED(event) )
+void wxTreeCtrl::OnKillFocus( wxFocusEvent &WXUNUSED(event) )
 {
   m_hasFocus = FALSE;
   if ( m_current )
@@ -1064,7 +1036,7 @@ void wxTreeCtrl::OnChar( wxKeyEvent &event )
   event.Skip();
 }
 
-void wxTreeCtrl::OnMouse( const wxMouseEvent &event )
+void wxTreeCtrl::OnMouse( wxMouseEvent &event )
 {
   if ( !(event.LeftDown() || event.LeftDClick()) )
     return;
@@ -1097,6 +1069,17 @@ void wxTreeCtrl::OnMouse( const wxMouseEvent &event )
   {
     Toggle( item );
   }
+}
+
+void wxTreeCtrl::OnIdle( wxIdleEvent &WXUNUSED(event) )
+{
+  if (!m_dirty) return;
+  
+  m_dirty = FALSE;
+  
+  CalculatePositions();
+
+  AdjustMyScrollbars();
 }
 
 // -----------------------------------------------------------------------------

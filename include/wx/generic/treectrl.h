@@ -386,19 +386,18 @@ public:
     void SortChildren(const wxTreeItemId& item,
                       wxTreeItemCmpFunc *cmpFunction = NULL);
 
-    // implementation
-    // --------------
-        // wxWindows callbacks
-    void OnPaint( const wxPaintEvent &event );
-    void OnSetFocus( const wxFocusEvent &event );
-    void OnKillFocus( const wxFocusEvent &event );
+    void OnPaint( wxPaintEvent &event );
+    void OnSetFocus( wxFocusEvent &event );
+    void OnKillFocus( wxFocusEvent &event );
     void OnChar( wxKeyEvent &event );
-    void OnMouse( const wxMouseEvent &event );
+    void OnMouse( wxMouseEvent &event );
+    void OnIdle( wxIdleEvent &event );
 
 protected:
     wxGenericTreeItem   *m_anchor;
     wxGenericTreeItem   *m_current;
     bool                 m_hasFocus;
+    bool                 m_dirty;
     int                  m_xScroll,m_yScroll;
     unsigned int         m_indent;
     int                  m_lineHeight;

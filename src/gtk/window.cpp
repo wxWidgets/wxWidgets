@@ -1478,13 +1478,13 @@ void wxWindow::SetClientSize( int width, int height )
         dh += 2 * viewport_class->ythickness;
       }
 
-      if (GTK_WIDGET_VISIBLE(vscrollbar))
+      if (scroll_window->vscrollbar_visible)
       {
         dw += vscrollbar->allocation.width;
         dw += scroll_class->scrollbar_spacing;
       }
 
-      if (GTK_WIDGET_VISIBLE(hscrollbar))
+      if (scroll_window->hscrollbar_visible)
       {
         dh += hscrollbar->allocation.height;
         dw += scroll_class->scrollbar_spacing;
@@ -1543,14 +1543,14 @@ void wxWindow::GetClientSize( int *width, int *height ) const
         dh += 2 * viewport_class->ythickness;
       }
 
-      if (GTK_WIDGET_VISIBLE(vscrollbar))
+      if (scroll_window->vscrollbar_visible)
       {
 //        dw += vscrollbar->allocation.width;
         dw += 15;                               // range.slider_width = 11 + 2*2pts edge
         dw += scroll_class->scrollbar_spacing;
       }
 
-      if (GTK_WIDGET_VISIBLE(hscrollbar))
+      if (scroll_window->hscrollbar_visible)
       {
 //        dh += hscrollbar->allocation.height;
         dh += 15;

@@ -347,10 +347,10 @@ void wxListLineData::SetPosition( wxPaintDC *dc, int x, int y, int window_width 
           if (!item->HasText())
           {
             AssignRect( m_bound_hilight, m_bound_icon );
-            m_bound_hilight.x -= 3;
-            m_bound_hilight.y -= 3;
-            m_bound_hilight.width += 7;
-            m_bound_hilight.height += 7;
+            m_bound_hilight.x -= 5;
+            m_bound_hilight.y -= 5;
+            m_bound_hilight.width += 9;
+            m_bound_hilight.height += 9;
           }
         }
         if (item->HasText())
@@ -367,6 +367,10 @@ void wxListLineData::SetPosition( wxPaintDC *dc, int x, int y, int window_width 
           m_bound_label.width = lw;
           m_bound_label.height = lh;
           AssignRect( m_bound_hilight, m_bound_label );
+          m_bound_hilight.x -= 2;
+          m_bound_hilight.y -= 2;
+          m_bound_hilight.width += 4;
+          m_bound_hilight.height += 4;
         }
       }
       break;
@@ -374,6 +378,10 @@ void wxListLineData::SetPosition( wxPaintDC *dc, int x, int y, int window_width 
     case wxLC_LIST:
     {
       AssignRect( m_bound_label, m_bound_all );
+      m_bound_all.x -= 2;
+      m_bound_all.y -= 2;
+      m_bound_all.width += 4;
+      m_bound_all.height += 4;
       AssignRect( m_bound_hilight, m_bound_all );
       AssignRect( m_bound_icon, 0, 0, 0, 0 );
       break;
@@ -382,13 +390,13 @@ void wxListLineData::SetPosition( wxPaintDC *dc, int x, int y, int window_width 
     {
       long lw,lh;
       dc->GetTextExtent( "H", &lw, &lh );
-      m_bound_all.height = lh;
+      m_bound_all.x = 0;
+      m_bound_all.y -= 0;
+      m_bound_all.height = lh+3;
       m_bound_all.width = window_width;
-      AssignRect( m_bound_label, m_bound_all );
       AssignRect( m_bound_hilight, m_bound_all );
+      AssignRect( m_bound_label, 0, 0, 0 ,0 );
       AssignRect( m_bound_icon, 0, 0, 0, 0 );
-      m_bound_hilight.width = window_width-10;
-      m_bound_label.width = window_width-10;
       break;
     }
   }
@@ -401,7 +409,7 @@ void wxListLineData::SetColumnPosition( int index, int x )
   if (node)
   {
     wxListItemData *item = (wxListItemData*)node->Data();
-    item->SetPosition( x, m_bound_all.y );
+    item->SetPosition( x, m_bound_all.y+1 );
   }  
 }
 
@@ -528,8 +536,8 @@ void wxListLineData::DoDraw( wxPaintDC *dc, bool hilight, bool paintBG )
       dc->SetBrush( wxWHITE_BRUSH );
       dc->SetPen( wxTRANSPARENT_PEN );
     }
-    dc->DrawRectangle( m_bound_hilight.x-2, m_bound_hilight.y-2,
-                       m_bound_hilight.width+4, m_bound_hilight.height+4 );
+    dc->DrawRectangle( m_bound_hilight.x, m_bound_hilight.y,
+                       m_bound_hilight.width, m_bound_hilight.height );
   }
   if (m_mode == wxLC_REPORT)
   {
@@ -609,8 +617,8 @@ void wxListLineData::DrawRubberBand( wxPaintDC *dc, bool on )
   {
     dc->SetPen( wxBLACK_PEN );
     dc->SetBrush( wxTRANSPARENT_BRUSH );
-    dc->DrawRectangle( m_bound_hilight.x-2, m_bound_hilight.y-2,
-                       m_bound_hilight.width+4, m_bound_hilight.height+4 );
+    dc->DrawRectangle( m_bound_hilight.x, m_bound_hilight.y,
+                       m_bound_hilight.width, m_bound_hilight.height );
   }
 }
 
@@ -769,7 +777,6 @@ void wxListHeaderWindow::OnMouse( wxMouseEvent &event )
     DrawCurrent();
     if (event.ButtonUp())
     {
-//      wxScreenDC::EndDrawingOnTop();
       ReleaseMouse();
       m_isDraging = FALSE;
       m_owner->SetColumnWidth( m_column, m_currentX-m_minX );
@@ -807,7 +814,6 @@ void wxListHeaderWindow::OnMouse( wxMouseEvent &event )
   {
     m_isDraging = TRUE;
     m_currentX = x;
-//    wxScreenDC::StartDrawingOnTop( m_owner );
     DrawCurrent();
     CaptureMouse();
     return;
@@ -1868,12 +1874,12 @@ void wxListMainWindow::CalculatePositions( void )
     wxListLineData *line = (wxListLineData*)node->Data();
     int dummy = 0;
     line->GetSize( dummy, lineSpacing );
-    lineSpacing += 6;
+    lineSpacing += 4;
   }
   else
   {
     // just in case
-    lineSpacing = 6 + (int)dc.GetCharHeight();  
+    lineSpacing = 4 + (int)dc.GetCharHeight();  
   }
   
   int clientWidth = 0;
@@ -1881,17 +1887,18 @@ void wxListMainWindow::CalculatePositions( void )
   
   if (m_mode & wxLC_REPORT)
   {
-    int x = 5;
-    int y = 6;
+    int x = 4;
+    int y = 3;
     int entireHeight = m_lines.Number() * lineSpacing + 10;
     SetScrollbars( m_xScroll, m_yScroll, 0, (entireHeight+10) / m_yScroll, 0, 0, TRUE );
     GetClientSize( &clientWidth, &clientHeight );
+    
     node = m_lines.First();
     while (node)
     {
       wxListLineData *line = (wxListLineData*)node->Data();
       line->SetPosition( &dc, x, y, clientWidth );
-      int col_x = 3;
+      int col_x = 2;
       for (int i = 0; i < GetColumnCount(); i++)
       {
         line->SetColumnPosition( i, col_x );
@@ -2107,11 +2114,15 @@ void wxListMainWindow::InsertItem( wxListItem &item )
   else 
     line->InitItems( 1 );
   line->SetItem( 0, item );
-  wxNode *node = m_lines.Nth( item.m_itemId );
-  if (node)
-    m_lines.Insert( node, line );
+  if ((item.m_itemId >= 0) && (item.m_itemId < (int)m_lines.GetCount()))
+  {
+     wxNode *node = m_lines.Nth( item.m_itemId );
+     if (node) m_lines.Insert( node, line );
+  }
   else
+  {
     m_lines.Append( line );
+  }
 }
 
 void wxListMainWindow::InsertColumn( long col, wxListItem &item )
@@ -2121,11 +2132,16 @@ void wxListMainWindow::InsertColumn( long col, wxListItem &item )
   {
     if (item.m_width == wxLIST_AUTOSIZE_USEHEADER) item.m_width = GetTextLength( item.m_text );
     wxListHeaderData *column = new wxListHeaderData( item );
-    wxNode *node = m_columns.Nth( col );
-    if (node)
-      m_columns.Insert( node, column );
+    if ((col >= 0) && (col < (int)m_columns.GetCount()))
+    {
+      wxNode *node = m_columns.Nth( col );
+      if (node)
+        m_columns.Insert( node, column );
+    }
     else
+    {
       m_columns.Append( column );
+    }
   }
 }
 
