@@ -8,6 +8,7 @@
         <sources>wxrc.cpp</sources>
         <wx-lib>xml</wx-lib>
         <wx-lib>base</wx-lib>
+        <install-to>$(BINDIR)</install-to>
     </exe>
 
 </makefile>
