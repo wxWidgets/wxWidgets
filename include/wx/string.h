@@ -713,6 +713,10 @@ public:
 #ifdef  wxSTD_STRING_COMPATIBILITY
   // std::string compatibility functions
 
+  // standard types
+  typedef wxChar value_type;
+  typedef const value_type *const_iterator;
+
   // an 'invalid' value for string index
   static const size_t npos;
 
@@ -745,6 +749,11 @@ public:
   wxChar at(size_t n) const { return GetChar(n); }
     // returns the writable character at position n
   wxChar& at(size_t n) { return GetWritableChar(n); }
+
+    // first valid index position
+  const_iterator begin() const { return wx_str(); }
+    // position one after the last valid one
+  const_iterator end() const { return wx_str() + length(); }
 
   // lib.string.modifiers
     // append a string
