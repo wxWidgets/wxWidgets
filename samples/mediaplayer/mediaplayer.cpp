@@ -16,7 +16,7 @@
 // the wxMediaCtrl class in wxWidgets.
 //
 // To use this sample, simply select Open File from the file menu,
-// select the file you want to play - and MediaPlayer will play the file in a 
+// select the file you want to play - and MediaPlayer will play the file in a
 // new notebook page, showing video if neccessary.
 //
 // You can select one of the menu options, or move the slider around
@@ -25,10 +25,10 @@
 
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 // Known bugs with wxMediaCtrl:
-// 
+//
 // 1) Certain backends can't play the same media file at the same time (MCI,
 //    Cocoa NSMovieView-Quicktime).
-// 2) Positioning on Mac Carbon is messed up if put in a sub-control like a 
+// 2) Positioning on Mac Carbon is messed up if put in a sub-control like a
 //    Notebook (like this sample does) on OS versions < 10.2.
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -169,7 +169,7 @@ private:
     // Common open file code
     void OpenFile(bool bNewPage);
     void OpenURL(bool bNewPage);
-    
+
     // Get the media control and slider of current notebook page
     wxMediaCtrl* GetCurrentMediaCtrl();
     wxSlider*    GetCurrentSlider();
@@ -191,13 +191,13 @@ private:
 class MyNotebookPage : public wxPanel
 {
     MyNotebookPage(wxNotebook* book);
-    
+
     // Slider event handlers
     void OnSeek(wxCommandEvent& event);
 
     // Media event handlers
     void OnMediaFinished(wxMediaEvent& event);
-    
+
 public:
     friend class MyFrame;       //make MyFrame able to access private members
     wxMediaCtrl* m_mediactrl;   //Our media control
@@ -319,18 +319,18 @@ MyFrame::MyFrame(const wxString& title)
                      _T("&About...\tF1"),
                      _T("Show about dialog"));
 
-    menuFile->Append(wxID_OPENFILESAMEPAGE, _T("&Open File"), 
+    menuFile->Append(wxID_OPENFILESAMEPAGE, _T("&Open File"),
                         _T("Open a File in the current notebook page"));
-    menuFile->Append(wxID_OPENFILENEWPAGE, _T("&Open File in a new page"), 
+    menuFile->Append(wxID_OPENFILENEWPAGE, _T("&Open File in a new page"),
                         _T("Open a File in a new notebook page"));
 #if wxUSE_UNOFFICIALSTUFF
-    menuFile->Append(wxID_OPENURLSAMEPAGE, _T("&Open URL"), 
+    menuFile->Append(wxID_OPENURLSAMEPAGE, _T("&Open URL"),
                         _T("Open a URL in the current notebook page"));
-    menuFile->Append(wxID_OPENURLNEWPAGE, _T("&Open URL in a new page"), 
+    menuFile->Append(wxID_OPENURLNEWPAGE, _T("&Open URL in a new page"),
                         _T("Open a URL in a new notebook page"));
 #endif
     menuFile->AppendSeparator();
-    menuFile->Append(wxID_CLOSECURRENTPAGE, _T("&Close Current Page"), 
+    menuFile->Append(wxID_CLOSECURRENTPAGE, _T("&Close Current Page"),
                         _T("Close current notebook page"));
     menuFile->AppendSeparator();
     menuFile->Append(wxID_PLAY, _T("&Play"), _T("Resume playback"));
@@ -352,7 +352,7 @@ MyFrame::MyFrame(const wxString& title)
     SetMenuBar(menuBar);
 
     //
-    // Create our notebook - using wxNotebook is luckily pretty 
+    // Create our notebook - using wxNotebook is luckily pretty
     // simple and self-explanatory in most cases
     //
     m_notebook = new wxNotebook(this, wxID_NOTEBOOK);
@@ -481,7 +481,7 @@ MyFrame::MyFrame(const wxString& title)
     this->Connect(wxID_NOTEBOOK, wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGED,
                   (wxObjectEventFunction) (wxEventFunction)
                   (wxNotebookEventFunction) &MyFrame::OnPageChange);
-    
+
     //
     // End of Events
     //
@@ -599,7 +599,7 @@ void MyFrame::OnLoop(wxCommandEvent& WXUNUSED(event))
         return;
     }
 
-    ((MyNotebookPage*)m_notebook->GetCurrentPage())->m_bLoop = 
+    ((MyNotebookPage*)m_notebook->GetCurrentPage())->m_bLoop =
             !((MyNotebookPage*)m_notebook->GetCurrentPage())->m_bLoop;
 }
 
@@ -610,8 +610,8 @@ void MyFrame::OnLoop(wxCommandEvent& WXUNUSED(event))
 // Opens and plays a media file in the current notebook page
 // ----------------------------------------------------------------------------
 void MyFrame::OnOpenFileSamePage(wxCommandEvent& WXUNUSED(event))
-{   
-    OpenFile(false); 
+{
+    OpenFile(false);
 }
 
 // ----------------------------------------------------------------------------
@@ -621,8 +621,8 @@ void MyFrame::OnOpenFileSamePage(wxCommandEvent& WXUNUSED(event))
 // Opens and plays a media file in a new notebook page
 // ----------------------------------------------------------------------------
 void MyFrame::OnOpenFileNewPage(wxCommandEvent& WXUNUSED(event))
-{   
-    OpenFile(true); 
+{
+    OpenFile(true);
 }
 
 // ----------------------------------------------------------------------------
@@ -646,7 +646,7 @@ void MyFrame::OpenFile(bool bNewPage)
     {
         if(bNewPage || !m_notebook->GetCurrentPage())
             m_notebook->AddPage(new MyNotebookPage(m_notebook), fd.GetPath(), true);
-        
+
         if( !GetCurrentMediaCtrl()->Load(fd.GetPath()) )
             wxMessageBox(wxT("Couldn't load file!"));
 
@@ -654,8 +654,8 @@ void MyFrame::OpenFile(bool bNewPage)
             wxMessageBox(wxT("Couldn't play movie!"));
 
         ResetStatus();
-        
-        GetCurrentSlider()->SetRange(0, 
+
+        GetCurrentSlider()->SetRange(0,
                         (int)(GetCurrentMediaCtrl()->Length() / 1000));
 
     }
@@ -668,8 +668,8 @@ void MyFrame::OpenFile(bool bNewPage)
 // Opens and plays a media file from a URL in the current notebook page
 // ----------------------------------------------------------------------------
 void MyFrame::OnOpenURLSamePage(wxCommandEvent& WXUNUSED(event))
-{   
-    OpenURL(false); 
+{
+    OpenURL(false);
 }
 
 // ----------------------------------------------------------------------------
@@ -679,8 +679,8 @@ void MyFrame::OnOpenURLSamePage(wxCommandEvent& WXUNUSED(event))
 // Opens and plays a media file from a URL in a new notebook page
 // ----------------------------------------------------------------------------
 void MyFrame::OnOpenURLNewPage(wxCommandEvent& WXUNUSED(event))
-{   
-    OpenURL(true); 
+{
+    OpenURL(true);
 }
 
 // ----------------------------------------------------------------------------
@@ -710,10 +710,10 @@ void MyFrame::OpenURL(bool bNewPage)
 
         if( !GetCurrentMediaCtrl()->Play() )
             wxMessageBox(wxT("Couldn't play movie!"));
-            
+
         ResetStatus();
 
-        GetCurrentSlider()->SetRange(0, 
+        GetCurrentSlider()->SetRange(0,
                         (int)(GetCurrentMediaCtrl()->Length() / 1000));
     }
 }
@@ -734,7 +734,7 @@ void MyFrame::OnCloseCurrentPage(wxCommandEvent& WXUNUSED(event))
     if (sel != wxNOT_FOUND)
     {
         m_notebook->DeletePage(sel);
-    }    
+    }
 }
 
 // ----------------------------------------------------------------------------
@@ -822,8 +822,8 @@ void MyFrame::OnPageChange(wxNotebookEvent& WXUNUSED(event))
 void MyTimer::Notify()
 {
     if (!m_frame->m_notebook->GetCurrentPage()) return;
-        wxMediaCtrl* m_mediactrl = ((MyNotebookPage*)m_frame->m_notebook->GetCurrentPage())->m_mediactrl; 
-        wxSlider* m_slider = ((MyNotebookPage*)m_frame->m_notebook->GetCurrentPage())->m_slider; 
+        wxMediaCtrl* m_mediactrl = ((MyNotebookPage*)m_frame->m_notebook->GetCurrentPage())->m_mediactrl;
+        wxSlider* m_slider = ((MyNotebookPage*)m_frame->m_notebook->GetCurrentPage())->m_slider;
         if (!m_mediactrl) return;
 
     long lPosition = (long)( m_mediactrl->Tell() / 1000 );
@@ -836,7 +836,7 @@ void MyTimer::Notify()
                      (unsigned int)lPosition,
                      wxGetMediaStateText(m_mediactrl->GetState()),
                     ((MyNotebookPage*)m_frame->m_notebook->GetCurrentPage())->m_nLoops
-                    
+
                                             )
                            );
 #endif
@@ -871,11 +871,12 @@ MyNotebookPage::MyNotebookPage(wxNotebook* theBook) :
     //  Create our media control
     //
     m_mediactrl = new wxMediaCtrl();
-    
+
     //  Make sure creation was successful
     bool bOK = m_mediactrl->Create(this, wxID_MEDIACTRL);
     wxASSERT_MSG(bOK, wxT("Could not create media control!"));
-    
+    wxUnusedVar(bOK);
+
     vertsizer->Add(m_mediactrl, 0, wxALIGN_CENTER_HORIZONTAL|wxALL, 5);
 
     //
@@ -925,8 +926,8 @@ MyNotebookPage::MyNotebookPage(wxNotebook* theBook) :
 // ----------------------------------------------------------------------------
 void MyNotebookPage::OnSeek(wxCommandEvent& WXUNUSED(event))
 {
-    if( m_mediactrl->Seek( 
-            m_slider->GetValue() * 1000 
+    if( m_mediactrl->Seek(
+            m_slider->GetValue() * 1000
                                    ) == wxInvalidOffset )
         wxMessageBox(wxT("Couldn't seek in movie!"));
 }
