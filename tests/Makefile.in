@@ -40,6 +40,7 @@ TEST_OBJECTS =  \
 	test_main.o \
 	test_formatconverter.o \
 	test_regex.o \
+	test_wxregex.o \
 	test_filesys.o \
 	test_arrays.o \
 	test_longlong.o \
@@ -121,6 +122,9 @@ test_formatconverter.o: $(srcdir)/formatconverter/formatconverter.cpp
 	$(CXXC) -c -o $@ $(TEST_CXXFLAGS) $<
 
 test_regex.o: $(srcdir)/regex/regex.cpp
+	$(CXXC) -c -o $@ $(TEST_CXXFLAGS) $<
+
+test_wxregex.o: $(srcdir)/regex/wxregex.cpp
 	$(CXXC) -c -o $@ $(TEST_CXXFLAGS) $<
 
 test_filesys.o: $(srcdir)/filesys/filesys.cpp

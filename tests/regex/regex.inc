@@ -1,7 +1,7 @@
 /*
  * Test data for wxRegEx (UTF-8 encoded)
  * 
- * Generated Fri Mar 5 21:35:22 2004 by regex.pl from the following files:
+ * Generated Tue Apr 20 20:35:05 2004 by regex.pl from the following files:
  * 
  *   reg.test: Copyright (c) 1998, 1999 Henry Spencer. All rights reserved.
  *   wxreg.test: Copyright (c) 2004 Mike Wetherell.
@@ -1186,13 +1186,13 @@ Test *regextest_extra_1::suite()
 {
     RegExTestSuite *suite = new regextest_extra_1;
 
-    suite->add("m", "Bug 230589", "-", "[ ]*(^|[^%])%V", "*%V2", NULL);
+    suite->add("m", "Bug 230589", "o", "[ ]*(^|[^%])%V", "*%V2", NULL);
     suite->add("m", "Bug 504785", "-", "([^_.]*)([^.]*)\\.(..)(.).*", "bbcos_001_c01.q1la", "bbcos_001_c01.q1la", "bbcos", "_001_c01", "q1", "l", NULL);
-    suite->add("m", "Bug 505048", "-", "\\A\\s*[^<]*\\s*<([^>]+)>", "a<a>", NULL);
-    suite->add("m", "Bug 505048", "-", "\\A\\s*([^b]*)b", "ab", NULL);
-    suite->add("m", "Bug 505048", "-", "\\A\\s*[^b]*(b)", "ab", NULL);
-    suite->add("m", "Bug 505048", "-", "\\A(\\s*)[^b]*(b)", "ab", NULL);
-    suite->add("m", "Bug 505048", "-", "\\A\\s*[^b]*b", "ab", NULL);
+    suite->add("m", "Bug 505048", "o", "\\A\\s*[^<]*\\s*<([^>]+)>", "a<a>", NULL);
+    suite->add("m", "Bug 505048", "o", "\\A\\s*([^b]*)b", "ab", NULL);
+    suite->add("m", "Bug 505048", "o", "\\A\\s*[^b]*(b)", "ab", NULL);
+    suite->add("m", "Bug 505048", "o", "\\A(\\s*)[^b]*(b)", "ab", NULL);
+    suite->add("m", "Bug 505048", "o", "\\A\\s*[^b]*b", "ab", NULL);
     suite->add("m", "Bug 505048", "-", "\\A\\s*[^b]*b", "ab", "ab", NULL);
     suite->add("i", "Bug 505048", "-", "\\A\\s*[^b]*b", "ab", "0 1", NULL);
 

@@ -426,7 +426,7 @@ for (@input)
         my $results = $opts =~ /-inline/ && $test ne 'f' ? $extras[$i+2] : '';
 
         # get them all in the right order and print
-        unshift @args, $test, parsetcl($id), '-';
+        unshift @args, $test, parsetcl($id), $results ? '-' : 'o';
         push @args, parsetcl(parsetcl($results)) if $results;
         handle_test @args;
     }

@@ -22,17 +22,12 @@
 //  test --verbose regex
 // 
 // The tests here are for the builtin library, tests for wxRegEx in general
-// should go in another module.
+// should go in wxregex.cpp
 //
 // The tests are generated from Henry Spencer's reg.test, additional test
 // can be added in wxreg.test. These test files are then turned into a C++
 // include file 'regex.inc' (included below) using a script 'regex.pl'.
 // 
-
-#if defined(__GNUG__) && !defined(__APPLE__)
-    #pragma implementation
-    #pragma interface
-#endif
 
 // For compilers that support precompilation, includes "wx/wx.h".
 #include "wx/wxprec.h"
@@ -48,7 +43,6 @@
 
 #include "wx/regex.h"
 #include "wx/cppunit.h"
-#include <iomanip>
 #include <stdexcept>
 
 using namespace std;
@@ -85,7 +79,6 @@ private:
     wxString Conv(const char *str);
     void parseFlags(const wxString& flags);
     void doTest(int flavor);
-    static size_t matchCount(const wxString& expr, int flags);
     static wxString quote(const wxString& arg);
     const wxChar *convError() const { return _T("<cannot convert>"); }
 
@@ -225,9 +218,8 @@ void RegExTestCase::doTest(int flavor)
     wxRegEx re(m_pattern, m_compileFlags | flavor);
 
     // 'e' - test that the pattern fails to compile
-    if (m_mode == 'e')
-    {
-        failIf(re.IsValid(), _T("compile suceeded (should fail)"));
+    if (m_mode == 'e') {
+        failIf(re.IsValid(), _T("compile succeeded (should fail)"));
         return;
     }
     failIf(!re.IsValid(), _T("compile failed"));
@@ -235,20 +227,21 @@ void RegExTestCase::doTest(int flavor)
     bool matches = re.Matches(m_data, m_matchFlags);
 
     // 'f' or 'p' - test that the pattern does not match
-    if (m_mode == 'f' || m_mode == 'p')
-    {
-        failIf(matches, _T("match suceeded (should fail)"));
+    if (m_mode == 'f' || m_mode == 'p') {
+        failIf(matches, _T("match succeeded (should fail)"));
         return;
     }
 
     // otherwise 'm' or 'i' - test the pattern does match
     failIf(!matches, _T("match failed"));
 
-    // Check that wxRegEx is going to allocate a large enough array for the
-    // results we are supposed to get
-    failIf(m_expected.size() > matchCount(m_pattern, m_compileFlags | flavor),
-           _T("wxRegEx has not allocated a large enough array for the ")
-           _T("number of results expected"));
+    if (m_compileFlags & wxRE_NOSUB)
+        return;
+
+    // check wxRegEx has correctly counted the number of subexpressions
+    failIf(m_expected.size() != re.GetMatchCount(),
+           wxString::Format(_T("GetMatchCount() == %d, expected %d"),
+                            re.GetMatchCount(), m_expected.size()));
 
     wxString result;
     size_t start, len;
@@ -321,37 +314,6 @@ wxString RegExTestCase::quote(const wxString& arg)
 
     return str.length() == arg.length() && str.find(' ') == wxString::npos ?
         str : _T("\"") + str + _T("\"");
-}
-
-// Count the number of subexpressions (taken from wxRegExImpl::Compile)
-//
-size_t RegExTestCase::matchCount(const wxString& expr, int flags)
-{
-    // there is always one for the whole expression
-    size_t nMatches = 1;
-
-    // and some more for bracketed subexperessions
-    for ( const wxChar *cptr = expr; *cptr; cptr++ )
-    {
-        if ( *cptr == _T('\\') )
-        {
-            // in basic RE syntax groups are inside \(...\)
-            if ( *++cptr == _T('(') && (flags & wxRE_BASIC) )
-            {
-                nMatches++;
-            }
-        }
-        else if ( *cptr == _T('(') && !(flags & wxRE_BASIC) )
-        {
-            // we know that the previous character is not an unquoted
-            // backslash because it would have been eaten above, so we
-            // have a bar '(' and this indicates a group start for the
-            // extended syntax
-            nMatches++;
-        }
-    }
-
-    return nMatches;
 }
 
 

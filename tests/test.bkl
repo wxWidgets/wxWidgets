@@ -12,6 +12,7 @@
             mbconv/main.cpp
             formatconverter/formatconverter.cpp
             regex/regex.cpp
+            regex/wxregex.cpp
             filesys/filesys.cpp
             arrays/arrays.cpp
             longlong/longlong.cpp

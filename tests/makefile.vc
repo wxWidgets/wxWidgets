@@ -27,6 +27,7 @@ TEST_OBJECTS =  \
 	$(OBJS)\test_main.obj \
 	$(OBJS)\test_formatconverter.obj \
 	$(OBJS)\test_regex.obj \
+	$(OBJS)\test_wxregex.obj \
 	$(OBJS)\test_filesys.obj \
 	$(OBJS)\test_arrays.obj \
 	$(OBJS)\test_longlong.obj \
@@ -228,6 +229,9 @@ $(OBJS)\test_formatconverter.obj: .\formatconverter\formatconverter.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(TEST_CXXFLAGS) $**
 
 $(OBJS)\test_regex.obj: .\regex\regex.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(TEST_CXXFLAGS) $**
+
+$(OBJS)\test_wxregex.obj: .\regex\wxregex.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(TEST_CXXFLAGS) $**
 
 $(OBJS)\test_filesys.obj: .\filesys\filesys.cpp

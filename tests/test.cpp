@@ -143,7 +143,7 @@ void TestApp::List(Test *test, const string& parent /*=""*/) const
     TestSuite *suite = dynamic_cast<TestSuite*>(test);
     string name;
 
-    if (suite || m_longlist) {
+    if (suite) {
         // take the last component of the name and append to the parent
         name = test->getName();
         string::size_type i = name.find_last_of(".:");
@@ -156,9 +156,7 @@ void TestApp::List(Test *test, const string& parent /*=""*/) const
                 cout << "  ";
             cout << "  " << name.substr(i + 1) << "\n";
         }
-    }
 
-    if (suite) {
         typedef const vector<Test*> Tests;
         typedef Tests::const_iterator Iter;
 
@@ -166,5 +164,11 @@ void TestApp::List(Test *test, const string& parent /*=""*/) const
 
         for (Iter it = tests.begin(); it != tests.end(); ++it)
             List(*it, name);
+    }
+    else if (m_longlist) {
+        string::size_type i = 0;
+        while ((i = parent.find('.', i + 1)) != string::npos)
+            cout << "  ";
+        cout << "  " << test->getName() << "\n";
     }
 }
