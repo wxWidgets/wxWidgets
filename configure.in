@@ -2292,10 +2292,6 @@ WX_LIBRARY_LINK2="lib${WX_LIBRARY}.${SO_SUFFIX}"
 WX_LIBRARY_LINK1_GL="lib${WX_LIBRARY_GL}.${SO_SUFFIX}.${WX_CURRENT}"
 WX_LIBRARY_LINK2_GL="lib${WX_LIBRARY_GL}.${SO_SUFFIX}"
 
-dnl the name of the resources file for wxMac
-WX_RESOURCES_MACOSX="lib${WX_LIBRARY}.rsrc"
-WX_RESOURCES_MACOSX_COMPILED="lib${WX_LIBRARY}.r"
-
 case "${host}" in
     *-*-cygwin* | *-*-mingw32* )
 
@@ -2314,7 +2310,17 @@ case "${host}" in
             WX_LIBRARY_NAME_SHARED="lib${WX_LIBRARY}.${SO_SUFFIX}"
             WX_LIBRARY_NAME_SHARED_GL="lib${WX_LIBRARY_GL}.${SO_SUFFIX}"
         fi
+        ;;
 
+    *-*-darwin* )
+        dnl Under Mac OS X, we should build real frameworks instead of simple
+        dnl dynamic shared libraries (in order to embed the resources)
+        if test "$wxUSE_MAC" = 1; then
+            dnl the name of the resources file for wxMac
+            WX_RESOURCES_MACOSX_ASCII="lib${WX_LIBRARY}.r" 
+            WX_RESOURCES_MACOSX_DATA="lib${WX_LIBRARY}.rsrc"
+        fi
+        ;;
 esac
 
 dnl the name of the static library
@@ -2429,12 +2435,14 @@ if test "$wxUSE_SHARED" = "yes"; then
       *-*-darwin* )
         dnl For Unix to MacOS X porting instructions, see:
         dnl http://fink.sourceforge.net/doc/porting/porting.html
-        CFLAGS="$CFLAGS -fno-common -DDYLIB_INIT"
-        CXXFLAGS="$CXXFLAGS -fno-common -DDYLIB_INIT"
+        CFLAGS="$CFLAGS -fno-common -DWXMAKINGDLL"
+        CXXFLAGS="$CXXFLAGS -fno-common -DWXMAKINGDLL"
         dnl Executables must necessarily fully bind the wxWindows library at
         dnl program launch otherwise lazy binding breaks RTTI class info
         LDFLAGS_EXE="$LDFLAGS_EXE -Wl,-bind_at_load"
-        SHARED_LD="$CXX -dynamiclib -init _wxWindowsDylibInit -o"
+        dnl The initialization routine doesn't seem useful with lazy linking solved
+        dnl SHARED_LD="$CXX -dynamiclib -init _wxWindowsDylibInit -o"
+        SHARED_LD="$CXX -dynamiclib -o"
         PIC_FLAG="-dynamic -fPIC"
         SONAME_FLAGS="-compatibility_version ${WX_RELEASE} -current_version ${WX_VERSION}"
         SONAME_FLAGS_GL=${SONAME_FLAGS}
@@ -2528,7 +2536,7 @@ if test "$wxUSE_MAC" = 1; then
     MACOSX_BUNDLE="bundle"
     LIBWXMACRES="\$(top_builddir)/lib/lib${WX_LIBRARY}.r"
     LIBWXMACRESCOMP="\$(RESCOMP) Carbon.r -t APPL ${LIBWXMACRES} -o \$(BIN_PROGRAM)"
-    LIBWXMACRESWXCONFIG="${RESCOMP} Carbon.r -t APPL \${prefix}/lib/${WX_RESOURCES_MACOSX_COMPILED} -o"
+    LIBWXMACRESWXCONFIG="${RESCOMP} Carbon.r -t APPL \${prefix}/lib/${WX_RESOURCES_MACOSX_ASCII} -o"
 else
     if test "$wxUSE_PM" = 1; then
         LIBWXMACRESCOMP="emxbind -ep \$(BIN_PROGRAM)"
@@ -4892,8 +4900,8 @@ dnl additional resurces settings
 AC_SUBST(RESCOMP)
 AC_SUBST(RESFLAGS)
 AC_SUBST(RESPROGRAMOBJ)
-AC_SUBST(WX_RESOURCES_MACOSX)
-AC_SUBST(WX_RESOURCES_MACOSX_COMPILED)
+AC_SUBST(WX_RESOURCES_MACOSX_ASCII)
+AC_SUBST(WX_RESOURCES_MACOSX_DATA)
 
 dnl additional for Mac OS X
 AC_SUBST(DEREZ)

@@ -301,27 +301,27 @@ SONAME_FLAGS_GL = @SONAME_FLAGS_GL@
 
 all: @WX_ALL@
 
-$(build_libdir)/@WX_LIBRARY_NAME_STATIC@:  $(OBJECTS)
+$(build_libdir)/@WX_LIBRARY_NAME_STATIC@: $(OBJECTS)
 	@$(INSTALL) -d $(build_libdir)
 	@$(RM) $@
 	$(AR) $(AROPTIONS) $@ $(OBJECTS)
 	$(RANLIB) $@
 
-$(build_libdir)/@WX_LIBRARY_NAME_STATIC_GL@:  glcanvas.o
+$(build_libdir)/@WX_LIBRARY_NAME_STATIC_GL@: glcanvas.o
 	@$(INSTALL) -d $(build_libdir)
 	@$(RM) $@
 	$(AR) $(AROPTIONS) $@ glcanvas.o
 	$(RANLIB) $@
 
-$(build_libdir)/@WX_LIBRARY_NAME_SHARED@:  $(OBJECTS)
+$(build_libdir)/@WX_LIBRARY_NAME_SHARED@: $(OBJECTS)
 	@$(INSTALL) -d $(build_libdir)
 	$(SHARED_LD) $@ $(SONAME_FLAGS) $(OBJECTS) $(EXTRALIBS)
 
-$(build_libdir)/@WX_LIBRARY_NAME_SHARED_GL@:  glcanvas.o $(build_libdir)/@WX_LIBRARY_NAME_SHARED@
+$(build_libdir)/@WX_LIBRARY_NAME_SHARED_GL@: glcanvas.o $(build_libdir)/@WX_LIBRARY_NAME_SHARED@
 	@$(INSTALL) -d $(build_libdir)
 	$(SHARED_LD) $@ $(SONAME_FLAGS_GL) glcanvas.o -L$(build_libdir) @WXCONFIG_LIBS@ $(EXTRALIBS) $(OPENGLLIBS)
 
-$(build_libdir)/@WX_RESOURCES_MACOSX@: $(MACRESOURCES)
+$(build_libdir)/@WX_RESOURCES_MACOSX_ASCII@: $(MACRESOURCES)
 	@$(INSTALL) -d $(build_libdir)
 	$(RESCOMP) -d __UNIX__ -useDF $^ -o $@
 
@@ -442,12 +442,13 @@ preinstall: $(build_libdir)/@WX_TARGET_LIBRARY@ $(top_builddir)/wx@TOOLCHAIN_NAM
 	  echo "$(INSTALL_DATA) $(top_srcdir)/locale/$$p.mo $(localedir)/$$p/LC_MESSAGES/wxstd.mo"; \
 	done
 
-preinstall_res: $(build_libdir)/@WX_RESOURCES_MACOSX_COMPILED@
+preinstall_res: $(build_libdir)/@WX_RESOURCES_MACOSX_ASCII@ $(build_libdir)/@WX_RESOURCES_MACOSX_DATA@
 	@echo " "
 	@echo " Installing wxWindows Mac resource ..."
 	@echo " "
 	@if test ! -d $(libdir); then $(INSTALL) -d $(libdir); fi
-	$(INSTALL_PROGRAM) $(build_libdir)/@WX_RESOURCES_MACOSX_COMPILED@ $(libdir)/@WX_RESOURCES_MACOSX_COMPILED@
+	$(INSTALL_PROGRAM) $(build_libdir)/@WX_RESOURCES_MACOSX_ASCII@ $(libdir)/@WX_RESOURCES_MACOSX_ASCII@
+	$(INSTALL_PROGRAM) $(build_libdir)/@WX_RESOURCES_MACOSX_DATA@ $(libdir)/@WX_RESOURCES_MACOSX_DATA@
 
 preinstall_gl: $(build_libdir)/@WX_TARGET_LIBRARY_GL@
 	@echo " "
