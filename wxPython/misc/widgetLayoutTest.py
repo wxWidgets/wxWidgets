@@ -273,8 +273,7 @@ class LayoutTestFrame(wx.Frame):
         # make the destroy button be default now
         self.destroyBtn.SetDefault()
 
-
-        if True:
+        if False:
             print 'w size', w.GetSize()
             print 'w minsize', w.GetMinSize()
             print 'w bestsize', w.GetBestSize()
@@ -293,7 +292,8 @@ class LayoutTestFrame(wx.Frame):
         self.testWidget.Destroy()
         self.testWidget = None
         self.testPanel.SetSizer(None, True)
-
+        self.testPanel.Refresh()
+        
         # ensure the panel shrinks again
         self.testPanel.SetSizeHints((20,20)) 
         self.bottomSizer.Layout()
