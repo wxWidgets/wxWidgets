@@ -2664,6 +2664,7 @@ void wxListMainWindow::GetItemRect( long index, wxRect &rect )
     if (index >= 0 && (size_t)index < m_lines.GetCount())
     {
         m_lines[(size_t)index].GetRect( rect );
+        this->CalcScrolledPosition(rect.x,rect.y,&rect.x,&rect.y);
     }
     else
     {
@@ -2676,18 +2677,9 @@ void wxListMainWindow::GetItemRect( long index, wxRect &rect )
 
 bool wxListMainWindow::GetItemPosition(long item, wxPoint& pos)
 {
-    if (item >= 0 && (size_t)item < m_lines.GetCount())
-    {
-        wxRect rect;
-        m_lines[(size_t)item].GetRect( rect );
-        pos.x = rect.x;
-        pos.y = rect.y;
-    }
-    else
-    {
-       pos.x = 0;
-       pos.y = 0;
-    }
+    wxRect rect;
+    this->GetItemRect(item,rect);
+    pos.x=rect.x; pos.y=rect.y;
     return TRUE;
 }
 
