@@ -31,6 +31,14 @@
 #ifndef WX_PRECOMP
 #endif // PCH
 
+#ifdef __X__
+    #include <X11/Xlib.h>
+
+    #include "wx/utils.h"       // for wxGetDisplay()
+#elif defined(__WXGTK__)
+    #include "gdk/gdk.h"
+#endif
+
 #include "wx/fontutil.h"
 #include "wx/fontmap.h"
 #include "wx/tokenzr.h"
@@ -51,8 +59,6 @@
         XFreeFont((Display *)wxGetDisplay(), font);
     }
 #elif defined(__WXGTK__)
-    #include "gdk/gdk.h"
-
     static inline wxNativeFont wxLoadFont(const wxString& fontSpec)
     {
         return gdk_font_load( wxConvertWX2MB(fontSpec) );

@@ -26,6 +26,7 @@
 #include "wx/string.h"
 #include "wx/utils.h"
 
+#include "wx/fontmap.h"
 #include "wx/fontenum.h"
 #include "wx/fontutil.h"
 
@@ -64,6 +65,12 @@ static char **CreateFontList(wxChar spacing,
 {
     wxNativeEncodingInfo info;
     wxGetNativeFontEncoding(encoding, &info);
+
+    if ( !wxTestFontEncoding(info) )
+    {
+        // ask font mapper for a replacement
+        (void)wxTheFontMapper->GetAltForEncoding(encoding, &info);
+    }
 
     wxString pattern;
     pattern.Printf(wxT("-*-*-*-*-*-*-*-*-*-*-%c-*-%s-%s"),

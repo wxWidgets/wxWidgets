@@ -21,13 +21,14 @@
     #pragma implementation "font.h"
 #endif
 
+#include <Xm/Xm.h>
+
 #include "wx/defs.h"
 #include "wx/string.h"
 #include "wx/font.h"
 #include "wx/gdicmn.h"
-#include "wx/utils.h"
-
-#include <Xm/Xm.h>
+#include "wx/utils.h"       // for wxGetDisplay()
+#include "wx/fontutil.h"
 
 #if !USE_SHARED_LIBRARIES
     IMPLEMENT_DYNAMIC_CLASS(wxFont, wxGDIObject)
@@ -39,7 +40,7 @@
 
 // For every wxFont, there must be a font for each display and scale requested.
 // So these objects are stored in wxFontRefData::m_fonts
-class wxXFont: public wxObject
+class wxXFont : public wxObject
 {
 public:
     wxXFont();

@@ -24,6 +24,7 @@
 #include "wx/fontutil.h"    // for wxNativeEncodingInfo
 
 class WXDLLEXPORT wxConfigBase;
+class WXDLLEXPORT wxWindow;
 
 // ----------------------------------------------------------------------------
 // wxFontMapper manages user-definable correspondence between logical font
