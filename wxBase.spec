@@ -1,6 +1,6 @@
 # Note that this is NOT a relocatable package
 %define pref /usr
-%define ver 2.2.2
+%define ver 2.2.3
 %define rel 0
 
 Summary: wxBase library - non-GUI support classes of wxWindows toolkit
