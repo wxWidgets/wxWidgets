@@ -30,7 +30,7 @@ void wxUnregisterSocketCallback(int fd, wxSocketTableType socketType);
 static void _GSocket_X11_Input(int *fid, void* data)
 {
   GSocket *socket = (GSocket *)data;
-
+  
   _GSocket_Detected_Read(socket);
 }
 

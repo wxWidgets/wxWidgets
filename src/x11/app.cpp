@@ -1231,6 +1231,10 @@ bool wxApp::Yield(bool onlyIfNeeded)
             wxEventLoop::SetActive(newEventLoop);
         }
 
+        // Call dispatch at least once so that sockets
+        // can be tested
+        wxTheApp->Dispatch();
+        
         while (wxTheApp && wxTheApp->Pending())
             wxTheApp->Dispatch();
 
