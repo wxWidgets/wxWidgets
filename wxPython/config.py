@@ -27,6 +27,7 @@ from distutils.dir_util  import mkpath
 from distutils.dep_util  import newer
 from distutils.spawn     import spawn
 
+import distutils.command.install
 import distutils.command.install_data
 import distutils.command.install_headers
 import distutils.command.clean
@@ -120,6 +121,21 @@ UNDEF_NDEBUG = 1   # Python 2.2 on Unix/Linux by default defines NDEBUG,
 
 NO_SCRIPTS = 0     # Don't install the tool scripts
 NO_HEADERS = 0     # Don't install the wxPython *.h and *.i files
+
+INSTALL_MULTIVERSION = 1 # Install the packages such that multiple versions
+                   # can co-exist.  When turned on the wx and wxPython
+                   # pacakges will be installed in a versioned subdir
+                   # of site-packages, and a *.pth file will be
+                   # created that adds that dir to the sys.path.  In
+                   # addition, a wxselect.py module will be installed
+                   # to site-pacakges that will allow applications to
+                   # choose a specific version if more than one are
+                   # installed.
+                   
+FLAVOUR = ""       # Optional flavour string to be appended to VERSION
+                   # in MULTIVERSION installs
+                   
+INSTALL_WXRC = 0   # Should the Python version of wxrc be installed?  
 
 WX_CONFIG = None   # Usually you shouldn't need to touch this, but you can set
                    # it to pass an alternate version of wx-config or alternate
@@ -218,7 +234,7 @@ for flag in ['BUILD_GLCANVAS', 'BUILD_OGL', 'BUILD_STC',
              'BUILD_GIZMOS', 'BUILD_DLLWIDGET', 'BUILD_IEWIN', 'BUILD_ACTIVEX',
              'CORE_ONLY', 'PREP_ONLY', 'USE_SWIG', 'UNICODE',
              'UNDEF_NDEBUG', 'NO_SCRIPTS', 'NO_HEADERS', 'BUILD_RENAMERS',
-             'FULL_DOCS', 
+             'FULL_DOCS', 'INSTALL_MULTIVERSION', 'INSTALL_WXRC',
              'FINAL', 'HYBRID', ]:
     for x in range(len(sys.argv)):
         if sys.argv[x].find(flag) == 0:
@@ -229,7 +245,8 @@ for flag in ['BUILD_GLCANVAS', 'BUILD_OGL', 'BUILD_STC',
 
 # String options
 for option in ['WX_CONFIG', 'WXDLLVER', 'BUILD_BASE', 'WXPORT', 'SWIG',
-               'CONTRIBS_INC', 'WXPY_SRC']:
+               'CONTRIBS_INC', 'WXPY_SRC', 'FLAVOUR', 
+               ]:
     for x in range(len(sys.argv)):
         if sys.argv[x].find(option) == 0:
             pos = sys.argv[x].find('=') + 1
@@ -397,6 +414,15 @@ class wx_extra_clean(distutils.command.clean.clean):
 
 
 
+class wx_install(distutils.command.install.install):
+    """
+    Turns off install_path_file
+    """
+    def initialize_options(self):
+        distutils.command.install.install.initialize_options(self)
+        self.install_path_file = 0
+        
+
 class wx_install_headers(distutils.command.install_headers.install_headers):
     """
     Install the header files to the WXPREFIX, with an extra dir per
@@ -508,7 +534,7 @@ def adjustCFLAGS(cflags, defines, includes):
 
 
 def adjustLFLAGS(lfags, libdirs, libs):
-    '''Extrace the -L and -l flags and put them in libdirs and libs as needed'''
+    '''Extract the -L and -l flags and put them in libdirs and libs as needed'''
     newLFLAGS = []
     for flag in lflags:
         if flag[:2] == '-L':
@@ -519,6 +545,31 @@ def adjustLFLAGS(lfags, libdirs, libs):
             newLFLAGS.append(flag)
 
     return newLFLAGS
+
+
+
+def getExtraPath(shortVer=True, addOpts=False):
+    """Get the dirname that wxPython will be installed under."""
+
+    if shortVer:
+        # short version, just Major.Minor
+        ep = "wx-%d.%d" % (VER_MAJOR, VER_MINOR)
+        # plus release if minor is odd
+        if VER_MINOR % 2 == 1:
+            ep += ".%d" % VER_RELEASE
+    else:
+        # long version, full version 
+        ep = "wx-%d.%d.%d.%d" % (VER_MAJOR, VER_MINOR, VER_RELEASE, VER_SUBREL)
+
+    if addOpts:
+        ep += "-%s-%s" % (WXPORT, (UNICODE and 'unicode' or 'ansi'))
+        
+    if FLAVOUR:
+        ep += "-" + FLAVOUR
+
+    return ep
+
+
 
 #----------------------------------------------------------------------
 # sanity checks

@@ -647,16 +647,19 @@ if NO_SCRIPTS:
 else:
     SCRIPTS = [opj('scripts/helpviewer'),
                opj('scripts/img2png'),
-               opj('scripts/img2xpm'),
                opj('scripts/img2py'),
-               opj('scripts/xrced'),
-               opj('scripts/pyshell'),
-               opj('scripts/pycrust'),
-               opj('scripts/pywrap'),
-               opj('scripts/pywrap'),
+               opj('scripts/img2xpm'),
                opj('scripts/pyalacarte'),
                opj('scripts/pyalamode'),
+               opj('scripts/pycrust'),
+               opj('scripts/pyshell'),
+               opj('scripts/pywrap'),
+               opj('scripts/pywrap'),
+               opj('scripts/xrced'),
                ]
+    if INSTALL_WXRC:
+        SCRIPTS += [opj('scripts/wxrc')]
+
 
 
 DATA_FILES += find_data_files('wx/tools/XRCed', '*.txt', '*.xrc')
@@ -676,12 +679,23 @@ else:
               zip(i_files, ["/wxPython/i_files"]*len(i_files))
 
 
+
+if INSTALL_MULTIVERSION:
+    EXTRA_PATH = getExtraPath()
+    open("src/wx.pth", "w").write(EXTRA_PATH)
+    CLEANUP.append("src/wx.pth")
+else:
+    EXTRA_PATH = None
+       
+
+
 #----------------------------------------------------------------------
 # Do the Setup/Build/Install/Whatever
 #----------------------------------------------------------------------
 
 if __name__ == "__main__":
     if not PREP_ONLY:
+        
         setup(name             = 'wxPython',
               version          = VERSION,
               description      = DESCRIPTION,
@@ -716,6 +730,8 @@ if __name__ == "__main__":
                           'wx.tools.XRCed',
                           ],
 
+              extra_path = EXTRA_PATH,
+
               ext_package = PKGDIR,
               ext_modules = wxpExtensions,
 
@@ -726,12 +742,40 @@ if __name__ == "__main__":
               data_files = DATA_FILES,
               headers =    HEADERS,
 
-              cmdclass = { 'install_data':    wx_smart_install_data,
+              # Override some of the default distutils command classes with my own
+              cmdclass = { 'install' :        wx_install,
+                           'install_data':    wx_smart_install_data,
                            'install_headers': wx_install_headers,
                            'clean':           wx_extra_clean,
                            },
               )
 
 
+        if INSTALL_MULTIVERSION:
+            setup(name             = 'wxPython-common',
+                  version          = VERSION,
+                  description      = DESCRIPTION,
+                  long_description = LONG_DESCRIPTION,
+                  author           = AUTHOR,
+                  author_email     = AUTHOR_EMAIL,
+                  url              = URL,
+                  download_url     = DOWNLOAD_URL,
+                  license          = LICENSE,
+                  platforms        = PLATFORMS,
+                  classifiers      = filter(None, CLASSIFIERS.split("\n")),
+                  keywords         = KEYWORDS,
+
+                  package_dir = { '': 'wxversion' },
+                  py_modules = ['wxversion'],
+
+                  data_files = [('', ['src/wx.pth'])],
+                  
+                  options = { 'build'            : { 'build_base' : BUILD_BASE },
+                              },
+                  
+                  cmdclass = { 'install_data':    wx_smart_install_data,
+                               },
+                  )
+            
 #----------------------------------------------------------------------
 #----------------------------------------------------------------------
