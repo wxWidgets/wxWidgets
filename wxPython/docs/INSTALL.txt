@@ -40,18 +40,18 @@ Installing on Unix-like Systems (not OS X)
 		      --enable-debug_flag \
 
    If you are building a private copy of wxWindows (IOW, not installed
-   in a standard library location) the it can be kind of a hassle to
+   in a standard library location) then it can be kind of a hassle to
    always have to set the LD_LIBRARY_PATH variable so wxPython can
    find the wxWindows shared libraries.  You can hard code the library
    path into the binaries by using the rpath option when configuring
-   wxWindows. For example::
+   wxWindows.  For example::
 
                      --enable-rpath=/opt/wx/2.5/lib \
 
    SOLARIS NOTE: The --enable-rpath option may cause problems when
    using wxGTK on Solaris when compiling wxPython as described below.
    The woraround is to not use --enable-rpath flag for configure, but
-   in that case all wxPython applications must have the
+   in that case all wxPython applications *must* have the
    LD_LIBRARY_PATH set to include $WXPREF/lib, or you can use the
    'crle' program to modify the runtime linking environment.  If this
    is the only installation of wxGTK on the system then you can use a
@@ -63,7 +63,7 @@ Installing on Unix-like Systems (not OS X)
 
 
 4. In addition to building wxPython as described in BUILD.txt, you can
-   install it to Python's site-packages dir, as well as some scrpts
+   install it to Python's site-packages dir, as well as some scripts
    into the same bin dir used by Python by using this command::
 
 	python2.3 setup.py install
@@ -85,26 +85,27 @@ Installing on OS X
 Installing wxPython on OS X is nearly the same as the Unix
 instructions above, except for a few small, but important details:
 
-1. The --enable-rpath configure option is not supported.  (At least it
-   didn't the last time I checked...)  If there is a way to do
-   something similar please let me know.
+1. The --enable-rpath configure option is not needed since the path to
+   the wxWindows dynlibs will automatically be encoded into the
+   extension modules when they are built.  If you end up moving the
+   wxWindows dynlibs to some other location (such as inside the .app
+   bundle of your applicaiton, for distribution to other users,) then
+   you will need to set DYLD_LIBRARY_PATH to this location so the
+   dynlibs can be found at runtime.
 
-2. If you don't install wxWindows to a standard location you will need
-   to use the DYLD_LIBRARY_PATH environment variable instead of the
-   LD_LIBRARY_PATH described above.
-
-3. Depending on the version of OS X Python may be installed in
-   differnet locations.  On 10.2 (Jaguar) you need to download and
+2. Depending on the version of OS X Python may be installed in
+   different locations.  On 10.2 (Jaguar) you need to download and
    install MacPython-OSX-2.3 from http://www.python.org/ and the
    Python Framework will then be installed in /Library/Frameworks.  On
    10.3 (Panther) Apple supplies the Python Framework as part of the
-   OS install, but it will located in /System/Library/Frameworks
+   OS install, but it will be located in /System/Library/Frameworks
    instead.  To complicate things further, the Jaguar version, or a
    custom build you do yourself will end up in /Library/Frameworks
    even on Panther...
 
-4. You need to use pythonw at the command line or PythonLauncher app
-   to run wxPython apps.
+3. You need to use pythonw at the command line or PythonLauncher app
+   to run wxPython apps, otherwise the app will not be able to fully
+   use the GUI display.
 
 
 
