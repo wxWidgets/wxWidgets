@@ -125,6 +125,7 @@ void wxMenuBase::Init(long style)
     m_style = style;
     m_clientData = (void *)NULL;
     m_eventHandler = this;
+    m_callback = (wxFunction) NULL;
 }
 
 wxMenuBase::~wxMenuBase()
