@@ -928,6 +928,11 @@ int wxThread::GetCPUCount()
     return -1;
 }
 
+unsigned long wxThread::GetCurrentId()
+{
+    return (unsigned long)pthread_self();
+}
+
 bool wxThread::SetConcurrency(size_t level)
 {
 #ifdef HAVE_THR_SETCONCURRENCY
@@ -986,7 +991,7 @@ wxThreadError wxThread::Create(unsigned int WXUNUSED(stackSize))
 #define sched_get_priority_min(_pol_) \
      (_pol_ == SCHED_OTHER ? PRI_FG_MIN_NP : PRI_FIFO_MIN)
 #endif
-   
+
     int max_prio = sched_get_priority_max(policy),
         min_prio = sched_get_priority_min(policy),
         prio = m_internal->GetPriority();
