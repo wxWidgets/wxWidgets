@@ -106,6 +106,10 @@ long wxTopLevelWindowMSW::MSWGetCreateWindowFlags(long *exflags) const
     long style = GetWindowStyle();
 
     // first select the kind of window being created
+    //
+    // note that if we don't set WS_POPUP, Windows assumes WS_OVERLAPPED and
+    // creates a window with both caption and border, hence we also test it
+    // below in some other cases
     long msflags;
     if ( style & wxFRAME_TOOL_WINDOW )
         msflags = WS_POPUP;
@@ -117,16 +121,13 @@ long wxTopLevelWindowMSW::MSWGetCreateWindowFlags(long *exflags) const
         msflags |= WS_THICKFRAME;
     else if ( !(style & wxBORDER_NONE) )
         msflags |= WS_BORDER;
+    else
+        msflags |= WS_POPUP;
 
     if ( style & wxCAPTION )
         msflags |= WS_CAPTION;
-
-    // if we don't set WS_POPUP, Windows assumes WS_OVERLAPPED and creates a
-    // window with both caption and border
-    if ( msflags & (WS_CAPTION | WS_BORDER) != WS_CAPTION | WS_BORDER )
-    {
+    else
         msflags |= WS_POPUP;
-    }
 
     // next translate the individual flags
     if ( style & wxMINIMIZE_BOX )
