@@ -504,24 +504,10 @@ void wxMenuBar::MacInstallMenuBar()
 
     wxStAppResource resload ;
 
-    Handle menubar = ::GetNewMBar( kwxMacMenuBarResource ) ;
-    wxString message ;
-    wxCHECK_RET( menubar != NULL, wxT("can't read MBAR resource") );
+    MenuBarHandle menubar = NewHandleClear( sizeof( MenuBarHeader ) ) ;
     ::SetMenuBar( menubar ) ;
-#if TARGET_API_MAC_CARBON
-    ::DisposeMenuBar( menubar ) ;
-#else
-    ::DisposeHandle( menubar ) ;
-#endif
-
-#if TARGET_API_MAC_OS8
-    MenuHandle menu = ::GetMenuHandle( kwxMacAppleMenuId ) ;
-    if ( CountMenuItems( menu ) == 2 )
-    {
-        ::AppendResMenu(menu, 'DRVR');
-    }
-#endif
-
+    DisposeMenuBar( menubar ) ;
+        
     // clean-up the help menu before adding new items
     MenuHandle mh = NULL ;
     if ( UMAGetHelpMenu( &mh , &firstUserHelpMenuItem) == noErr )

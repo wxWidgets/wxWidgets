@@ -27,23 +27,154 @@
 IMPLEMENT_DYNAMIC_CLASS(wxCursor, wxBitmap)
 #endif
 
-const short kwxCursorBullseye = 10 ;
-const short kwxCursorBlank = 11 ;
-const short kwxCursorPencil = 12 ;
-const short kwxCursorMagnifier = 13 ;
-const short kwxCursorNoEntry = 14 ;
-const short kwxCursorPaintBrush = 15 ;
-const short kwxCursorPointRight = 16 ;
-const short kwxCursorPointLeft = 17 ;
-const short kwxCursorQuestionArrow = 18 ;
-const short kwxCursorRightArrow = 19 ;
-const short kwxCursorSizeNS = 20 ;
-const short kwxCursorSize = 21 ;
-const short kwxCursorSizeNESW = 22 ;
-const short kwxCursorSizeNWSE = 23 ;
-const short kwxCursorRoller = 24 ;
+const short kwxCursorBullseye = 0 ;
+const short kwxCursorBlank = 1 ;
+const short kwxCursorPencil = 2 ;
+const short kwxCursorMagnifier = 3 ;
+const short kwxCursorNoEntry = 4 ;
+const short kwxCursorPaintBrush = 5 ;
+const short kwxCursorPointRight = 6 ;
+const short kwxCursorPointLeft = 7 ;
+const short kwxCursorQuestionArrow = 8 ;
+const short kwxCursorRightArrow = 9 ;
+const short kwxCursorSizeNS = 10 ;
+const short kwxCursorSize = 11 ;
+const short kwxCursorSizeNESW = 12 ;
+const short kwxCursorSizeNWSE = 13 ;
+const short kwxCursorRoller = 14 ;
+const short kwxCursorLast = kwxCursorRoller ;
+
+Cursor gMacCursors[kwxCursorLast+1] =
+{
+{
+0x0000, 0x03E0, 0x0630, 0x0808, 0x1004, 0x31C6, 0x2362, 0x2222,
+0x2362, 0x31C6, 0x1004, 0x0808, 0x0630, 0x03E0, 0x0000, 0x0000,
+0x0000, 0x03E0, 0x07F0, 0x0FF8, 0x1FFC, 0x3FFE, 0x3FFE, 0x3FFE,
+0x3FFE, 0x3FFE, 0x1FFC, 0x0FF8, 0x07F0, 0x03E0, 0x0000, 0x0000,
+0x0007, 0x0008,
+},
+
+{
+0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000,
+0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000,
+0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000,
+0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000,
+0x0000, 0x0000,
+},
+
+{
+0x00F0, 0x0088, 0x0108, 0x0190, 0x0270, 0x0220, 0x0440, 0x0440,
+0x0880, 0x0880, 0x1100, 0x1E00, 0x1C00, 0x1800, 0x1000, 0x0000,
+0x00F0, 0x00F8, 0x01F8, 0x01F0, 0x03F0, 0x03E0, 0x07C0, 0x07C0,
+0x0F80, 0x0F80, 0x1F00, 0x1E00, 0x1C00, 0x1800, 0x1000, 0x0000,
+0x000E, 0x0003,
+},
+
+{
+0x0000, 0x1E00, 0x2100, 0x4080, 0x4080, 0x4080, 0x4080, 0x2180,
+0x1FC0, 0x00E0, 0x0070, 0x0038, 0x001C, 0x000E, 0x0006, 0x0000,
+0x3F00, 0x7F80, 0xFFC0, 0xFFC0, 0xFFC0, 0xFFC0, 0xFFC0, 0x7FC0,
+0x3FE0, 0x1FF0, 0x00F8, 0x007C, 0x003E, 0x001F, 0x000F, 0x0007,
+0x0004, 0x0004,
+},
+
+{
+0x0000, 0x07E0, 0x1FF0, 0x3838, 0x3C0C, 0x6E0E, 0x6706, 0x6386,
+0x61C6, 0x60E6, 0x7076, 0x303C, 0x1C1C, 0x0FF8, 0x07E0, 0x0000,
+0x0540, 0x0FF0, 0x3FF8, 0x3C3C, 0x7E0E, 0xFF0F, 0x6F86, 0xE7C7,
+0x63E6, 0xE1F7, 0x70FE, 0x707E, 0x3C3C, 0x1FFC, 0x0FF0, 0x0540,
+0x0007, 0x0007,
+},
+
+{
+0x0000, 0x0380, 0x0380, 0x0380, 0x0380, 0x0380, 0x0380, 0x0FE0,
+0x1FF0, 0x1FF0, 0x0000, 0x1FF0, 0x1FF0, 0x1550, 0x1550, 0x1550,
+0x07C0, 0x07C0, 0x07C0, 0x07C0, 0x07C0, 0x07C0, 0x0FE0, 0x1FF0,
+0x3FF8, 0x3FF8, 0x3FF8, 0x3FF8, 0x3FF8, 0x3FF8, 0x3FF8, 0x3FF8,
+0x000B, 0x0007,
+},
+
+{
+0x00C0, 0x0140, 0x0640, 0x08C0, 0x3180, 0x47FE, 0x8001, 0x8001,
+0x81FE, 0x8040, 0x01C0, 0x0040, 0x03C0, 0xC080, 0x3F80, 0x0000,
+0x00C0, 0x01C0, 0x07C0, 0x0FC0, 0x3F80, 0x7FFE, 0xFFFF, 0xFFFF,
+0xFFFE, 0xFFC0, 0xFFC0, 0xFFC0, 0xFFC0, 0xFF80, 0x3F80, 0x0000,
+0x0006, 0x000F,
+},
+
+{
+0x0100, 0x0280, 0x0260, 0x0310, 0x018C, 0x7FE3, 0x8000, 0x8000,
+0x7F80, 0x0200, 0x0380, 0x0200, 0x03C0, 0x0107, 0x01F8, 0x0000,
+0x0100, 0x0380, 0x03E0, 0x03F0, 0x01FC, 0x7FFF, 0xFFFF, 0xFFFF,
+0xFFFF, 0x03FF, 0x03FF, 0x03FF, 0x03FF, 0x01FF, 0x01F8, 0x0000,
+0x0006, 0x0000,
+},
+
+{
+0x0000, 0x4078, 0x60FC, 0x71CE, 0x7986, 0x7C06, 0x7E0E, 0x7F1C,
+0x7FB8, 0x7C30, 0x6C30, 0x4600, 0x0630, 0x0330, 0x0300, 0x0000,
+0xC078, 0xE0FC, 0xF1FE, 0xFBFF, 0xFFCF, 0xFF8F, 0xFF1F, 0xFFBE,
+0xFFFC, 0xFE78, 0xFF78, 0xEFF8, 0xCFF8, 0x87F8, 0x07F8, 0x0300,
+0x0001, 0x0001,
+},
+
+{
+0x0000, 0x0002, 0x0006, 0x000E, 0x001E, 0x003E, 0x007E, 0x00FE,
+0x01FE, 0x003E, 0x0036, 0x0062, 0x0060, 0x00C0, 0x00C0, 0x0000,
+0x0003, 0x0007, 0x000F, 0x001F, 0x003F, 0x007F, 0x00FF, 0x01FF,
+0x03FF, 0x07FF, 0x007F, 0x00F7, 0x00F3, 0x01E1, 0x01E0, 0x01C0,
+0x0001, 0x000E,
+},
+
+{
+0x0000, 0x0080, 0x01C0, 0x03E0, 0x0080, 0x0080, 0x0080, 0x1FFC,
+0x1FFC, 0x0080, 0x0080, 0x0080, 0x03E0, 0x01C0, 0x0080, 0x0000,
+0x0080, 0x01C0, 0x03E0, 0x07F0, 0x0FF8, 0x01C0, 0x3FFE, 0x3FFE,
+0x3FFE, 0x3FFE, 0x01C0, 0x0FF8, 0x07F0, 0x03E0, 0x01C0, 0x0080,
+0x0007, 0x0008,
+},
+
+{
+0x0000, 0x0080, 0x01C0, 0x03E0, 0x0080, 0x0888, 0x188C, 0x3FFE,
+0x188C, 0x0888, 0x0080, 0x03E0, 0x01C0, 0x0080, 0x0000, 0x0000,
+0x0080, 0x01C0, 0x03E0, 0x07F0, 0x0BE8, 0x1DDC, 0x3FFE, 0x7FFF,
+0x3FFE, 0x1DDC, 0x0BE8, 0x07F0, 0x03E0, 0x01C0, 0x0080, 0x0000,
+0x0007, 0x0008,
+},
+
+{
+0x0000, 0x001E, 0x000E, 0x060E, 0x0712, 0x03A0, 0x01C0, 0x00E0,
+0x0170, 0x1238, 0x1C18, 0x1C00, 0x1E00, 0x0000, 0x0000, 0x0000,
+0x007F, 0x003F, 0x0E1F, 0x0F0F, 0x0F97, 0x07E3, 0x03E1, 0x21F0,
+0x31F8, 0x3A7C, 0x3C3C, 0x3E1C, 0x3F00, 0x3F80, 0x0000, 0x0000,
+0x0006, 0x0009,
+},
+
+{
+0x0000, 0x7800, 0x7000, 0x7060, 0x48E0, 0x05C0, 0x0380, 0x0700,
+0x0E80, 0x1C48, 0x1838, 0x0038, 0x0078, 0x0000, 0x0000, 0x0000,
+0xFE00, 0xFC00, 0xF870, 0xF0F0, 0xE9F0, 0xC7E0, 0x87C0, 0x0F84,
+0x1F8C, 0x3E5C, 0x3C3C, 0x387C, 0x00FC, 0x01FC, 0x0000, 0x0000,
+0x0006, 0x0006,
+},
+
+{
+0x0006, 0x000E, 0x001C, 0x0018, 0x0020, 0x0040, 0x00F8, 0x0004,
+0x1FF4, 0x200C, 0x2AA8, 0x1FF0, 0x1F80, 0x3800, 0x6000, 0x8000,
+0x000F, 0x001F, 0x003E, 0x007C, 0x0070, 0x00E0, 0x01FC, 0x3FF6,
+0x7FF6, 0x7FFE, 0x7FFC, 0x7FF8, 0x3FF0, 0x7FC0, 0xF800, 0xE000,
+0x000A, 0x0006,
+},} ;
 
 wxCursor    gMacCurrentCursor ;
+
+CursHandle wxGetStockCursor( int number )
+{
+    wxASSERT_MSG( number >= 0 && number <=kwxCursorLast , wxT("invalid stock cursor id") ) ;
+    CursHandle c = (CursHandle) NewHandle( sizeof(Cursor) ) ;
+    memcpy( *c , &gMacCursors[number] , sizeof( Cursor ) ) ;
+    return c ;    
+}
 
 wxCursorRefData::wxCursorRefData()
 {
@@ -145,54 +276,6 @@ void wxCursor::CreateFromImage(const wxImage & image)
     if (hotSpotY < 0 || hotSpotY >= h)
             hotSpotY = 0;
             
-#if 0
-    // monochrome implementation
-    M_CURSORDATA->m_hCursor = NewHandle( sizeof( Cursor ) ) ;
-    M_CURSORDATA->m_disposeHandle = true ;
-    HLock( (Handle) M_CURSORDATA->m_hCursor ) ;
-    CursPtr cp = *(CursHandle)M_CURSORDATA->m_hCursor ;
-    memset( cp->data , 0 , sizeof( Bits16 ) ) ;
-    memset( cp->mask , 0 , sizeof( Bits16 ) ) ;
-    
-    unsigned char mr = image16.GetMaskRed() ;
-    unsigned char mg = image16.GetMaskGreen() ;
-    unsigned char mb = image16.GetMaskBlue() ;
-    for ( int y = 0 ; y < h ; ++y )
-    {
-        short rowbits = 0 ;
-        short maskbits = 0 ;
-        
-        for ( int x = 0 ; x < w ; ++x )
-        {
-            long pos = (y * w + x) * 3;
-
-            unsigned char r = rgbBits[pos] ;
-            unsigned char g = rgbBits[pos+1] ;
-            unsigned char b = rgbBits[pos+2] ;
-            if ( bHasMask && r==mr && g==mg && b==mb )
-            {
-                // masked area, does not appear anywhere
-            }
-            else
-            {
-                if ( (int)r + (int)g + (int)b < 0x0200 )
-                {
-                    rowbits |= ( 1 << (15-x) ) ;
-                }
-                maskbits |= ( 1 << (15-x) ) ;
-            }
-        }
-        cp->data[y] = rowbits ;
-        cp->mask[y] = maskbits ;
-    }
-    if ( !bHasMask )
-    {
-        memcpy( cp->mask , cp->data , sizeof( Bits16) ) ;
-    }
-    cp->hotSpot.h = hotSpotX ;
-    cp->hotSpot.v = hotSpotY ;
-    HUnlock( (Handle) M_CURSORDATA->m_hCursor ) ;
-#else
     PixMapHandle pm = (PixMapHandle) NewHandleClear( sizeof (PixMap))  ;
     short extent = 16 ;
     short bytesPerPixel = 1 ;
@@ -283,7 +366,6 @@ void wxCursor::CreateFromImage(const wxImage & image)
     HUnlock((Handle) ch) ;
     M_CURSORDATA->m_hCursor = ch ;
     M_CURSORDATA->m_isColorCursor = true ;
-#endif
 }
 
 wxCursor::wxCursor(const wxString& cursor_file, long flags, int hotSpotX, int hotSpotY)
@@ -356,14 +438,12 @@ wxCursor::wxCursor(int cursor_type)
         break;
     case wxCURSOR_SIZENWSE:
         {
-            wxStAppResource resload ;
-            M_CURSORDATA->m_hCursor = ::GetCursor(kwxCursorSizeNWSE);
+            M_CURSORDATA->m_hCursor = wxGetStockCursor(kwxCursorSizeNWSE);
         }
         break;
     case wxCURSOR_SIZENESW:
         {
-            wxStAppResource resload ;
-            M_CURSORDATA->m_hCursor = ::GetCursor(kwxCursorSizeNESW);
+            M_CURSORDATA->m_hCursor = wxGetStockCursor(kwxCursorSizeNESW);
         }
         break;
     case wxCURSOR_SIZEWE:
@@ -373,14 +453,12 @@ wxCursor::wxCursor(int cursor_type)
         break;
     case wxCURSOR_SIZENS:
         {
-            wxStAppResource resload ;
-            M_CURSORDATA->m_hCursor = ::GetCursor(kwxCursorSizeNS);
+            M_CURSORDATA->m_hCursor = wxGetStockCursor(kwxCursorSizeNS);
         }
         break;
     case wxCURSOR_SIZING:
         {
-            wxStAppResource resload ;
-            M_CURSORDATA->m_hCursor = ::GetCursor(kwxCursorSize);
+            M_CURSORDATA->m_hCursor = wxGetStockCursor(kwxCursorSize);
         }
         break;
     case wxCURSOR_HAND:
@@ -390,26 +468,22 @@ wxCursor::wxCursor(int cursor_type)
         break;
     case wxCURSOR_BULLSEYE:
         {
-            wxStAppResource resload ;
-            M_CURSORDATA->m_hCursor = ::GetCursor(kwxCursorBullseye);
+            M_CURSORDATA->m_hCursor = wxGetStockCursor(kwxCursorBullseye);
         }
         break;
     case wxCURSOR_PENCIL:
         {
-            wxStAppResource resload ;
-            M_CURSORDATA->m_hCursor = ::GetCursor(kwxCursorPencil);
+            M_CURSORDATA->m_hCursor = wxGetStockCursor(kwxCursorPencil);
         }
         break;
     case wxCURSOR_MAGNIFIER:
         {
-            wxStAppResource resload ;
-            M_CURSORDATA->m_hCursor = ::GetCursor(kwxCursorMagnifier);
+            M_CURSORDATA->m_hCursor = wxGetStockCursor(kwxCursorMagnifier);
         }
         break;
     case wxCURSOR_NO_ENTRY:
         {
-            wxStAppResource resload ;
-            M_CURSORDATA->m_hCursor = ::GetCursor(kwxCursorNoEntry);
+            M_CURSORDATA->m_hCursor = wxGetStockCursor(kwxCursorNoEntry);
         }
         break;
     case wxCURSOR_WATCH:
@@ -419,44 +493,37 @@ wxCursor::wxCursor(int cursor_type)
         }
     case wxCURSOR_PAINT_BRUSH:
         {
-            wxStAppResource resload ;
-            M_CURSORDATA->m_hCursor = ::GetCursor(kwxCursorPaintBrush);
+            M_CURSORDATA->m_hCursor = wxGetStockCursor(kwxCursorPaintBrush);
             break;
         }
     case wxCURSOR_POINT_LEFT:
         {
-            wxStAppResource resload ;
-            M_CURSORDATA->m_hCursor = ::GetCursor(kwxCursorPointLeft);
+            M_CURSORDATA->m_hCursor = wxGetStockCursor(kwxCursorPointLeft);
             break;
         }
     case wxCURSOR_POINT_RIGHT:
         {
-            wxStAppResource resload ;
-            M_CURSORDATA->m_hCursor = ::GetCursor(kwxCursorPointRight);
+            M_CURSORDATA->m_hCursor = wxGetStockCursor(kwxCursorPointRight);
             break;
         }
     case wxCURSOR_QUESTION_ARROW:
         {
-            wxStAppResource resload ;
-            M_CURSORDATA->m_hCursor = ::GetCursor(kwxCursorQuestionArrow);
+            M_CURSORDATA->m_hCursor = wxGetStockCursor(kwxCursorQuestionArrow);
             break;
         }
     case wxCURSOR_BLANK:
         {
-            wxStAppResource resload ;
-            M_CURSORDATA->m_hCursor = ::GetCursor(kwxCursorBlank);
+            M_CURSORDATA->m_hCursor = wxGetStockCursor(kwxCursorBlank);
             break;
         }
     case wxCURSOR_RIGHT_ARROW:
         {
-            wxStAppResource resload ;
-            M_CURSORDATA->m_hCursor = ::GetCursor(kwxCursorRightArrow);
+            M_CURSORDATA->m_hCursor = wxGetStockCursor(kwxCursorRightArrow);
             break;
         }
     case wxCURSOR_SPRAYCAN:
         {
-            wxStAppResource resload ;
-            M_CURSORDATA->m_hCursor = ::GetCursor(kwxCursorRoller);
+            M_CURSORDATA->m_hCursor = wxGetStockCursor(kwxCursorRoller);
             break;
         }
     case wxCURSOR_CHAR:
