@@ -2427,6 +2427,13 @@ typedef void (wxEvtHandler::*wxMouseCaptureChangedEventFunction)(wxMouseCaptureC
 #define EVT_CUSTOM(event, winid, func) DECLARE_EVENT_TABLE_ENTRY( event, winid, wxID_ANY, (wxObjectEventFunction)  wxStaticCastEvent( wxEventFunction, & func ), (wxObject *) NULL ),
 #define EVT_CUSTOM_RANGE(event, id1, id2, func) DECLARE_EVENT_TABLE_ENTRY( event, id1, id2, (wxObjectEventFunction)  wxStaticCastEvent( wxEventFunction, & func ), (wxObject *) NULL ),
 
+// EVT_COMMAND
+#define EVT_COMMAND(winid, event, fn)  DECLARE_EVENT_TABLE_ENTRY( event, winid, wxID_ANY, (wxObjectEventFunction) (wxEventFunction)  wxStaticCastEvent( wxCommandEventFunction, & fn ), (wxObject *) NULL ),
+#define EVT_COMMAND_RANGE(id1, id2, event, fn)  DECLARE_EVENT_TABLE_ENTRY( event, id1, id2, (wxObjectEventFunction) (wxEventFunction)  wxStaticCastEvent( wxCommandEventFunction, & fn ), (wxObject *) NULL ),
+
+#define EVT_NOTIFY(event, winid, func) DECLARE_EVENT_TABLE_ENTRY( event, winid, wxID_ANY, (wxObjectEventFunction) (wxEventFunction) (wxCommandEventFunction)  wxStaticCastEvent( wxNotifyFunction, & func ), (wxObject *) NULL ),
+#define EVT_NOTIFY_RANGE(event, id1, id2, func) DECLARE_EVENT_TABLE_ENTRY( event, id1, id2, (wxObjectEventFunction) (wxEventFunction) (wxCommandEventFunction)  wxStaticCastEvent( wxNotifyFunction, & func ), (wxObject *) NULL ),
+
 // Miscellaneous
 #define EVT_SIZE(func)  DECLARE_EVENT_TABLE_ENTRY( wxEVT_SIZE, wxID_ANY, wxID_ANY, (wxObjectEventFunction) (wxEventFunction)  wxStaticCastEvent( wxSizeEventFunction, & func ), (wxObject *) NULL ),
 #define EVT_SIZING(func)  DECLARE_EVENT_TABLE_ENTRY( wxEVT_SIZING, wxID_ANY, wxID_ANY, (wxObjectEventFunction) (wxEventFunction)  wxStaticCastEvent( wxSizeEventFunction, & func ), (wxObject *) NULL ),
@@ -2501,10 +2508,6 @@ typedef void (wxEvtHandler::*wxMouseCaptureChangedEventFunction)(wxMouseCaptureC
  DECLARE_EVENT_TABLE_ENTRY( wxEVT_ENTER_WINDOW, wxID_ANY, wxID_ANY, (wxObjectEventFunction) (wxEventFunction)  wxStaticCastEvent( wxMouseEventFunction, & func ), (wxObject *) NULL ),\
  DECLARE_EVENT_TABLE_ENTRY( wxEVT_LEAVE_WINDOW, wxID_ANY, wxID_ANY, (wxObjectEventFunction) (wxEventFunction)  wxStaticCastEvent( wxMouseEventFunction, & func ), (wxObject *) NULL ),\
  DECLARE_EVENT_TABLE_ENTRY( wxEVT_MOUSEWHEEL, wxID_ANY, wxID_ANY, (wxObjectEventFunction) (wxEventFunction)  wxStaticCastEvent( wxMouseEventFunction, & func ), (wxObject *) NULL ),
-
-// EVT_COMMAND
-#define EVT_COMMAND(winid, event, fn)  DECLARE_EVENT_TABLE_ENTRY( event, winid, wxID_ANY, (wxObjectEventFunction) (wxEventFunction)  wxStaticCastEvent( wxCommandEventFunction, & fn ), (wxObject *) NULL ),
-#define EVT_COMMAND_RANGE(id1, id2, event, fn)  DECLARE_EVENT_TABLE_ENTRY( event, id1, id2, (wxObjectEventFunction) (wxEventFunction)  wxStaticCastEvent( wxCommandEventFunction, & fn ), (wxObject *) NULL ),
 
 // Scrolling from wxWindow (sent to wxScrolledWindow)
 #define EVT_SCROLLWIN(func) \

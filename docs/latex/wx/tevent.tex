@@ -356,21 +356,6 @@ you can use identifiers below wxID\_LOWEST.
 
 \subsection{Event macros summary}\label{eventmacros}
 
-\wxheading{Generic event table macros}
-
-\twocolwidtha{8cm}%
-\begin{twocollist}\itemsep=0pt
-\twocolitem{\windowstyle{EVT\_CUSTOM(event, id, func)}}{Allows you to add a custom event table
-entry by specifying the event identifier (such as wxEVT\_SIZE), the window identifier,
-and a member function to call.}
-\twocolitem{\windowstyle{EVT\_CUSTOM\_RANGE(event, id1, id2, func)}}{The same as EVT\_CUSTOM,
-but responds to a range of window identifiers.}
-\twocolitem{\windowstyle{EVT\_COMMAND(id, event, func)}}{The same as EVT\_CUSTOM, but
-expects a member function with a wxCommandEvent argument.}
-\twocolitem{\windowstyle{EVT\_COMMAND\_RANGE(id1, id2, event, func)}}{The same as EVT\_CUSTOM\_RANGE, but
-expects a member function with a wxCommandEvent argument.}
-\end{twocollist}
-
 \wxheading{Macros listed by event class}
 
 The documentation for specific event macros is organised by event class. Please refer
@@ -412,4 +397,171 @@ events informing the application that the user has changed the system colours (W
 update pseudo-events, which are generated to give the application the chance to update the visual state of menus,
 toolbars and controls.}
 \end{twocollist}
+
+\subsection{Custom event summary}\label{customevents}
+
+\wxheading{General approach}
+
+Since version 2.2.x of wxWidgets, each event type is identified by ID which
+is given to the event type {\it at runtime} which makes it possible to add
+new event types to the library or application without risking ID clashes
+(two different event types mistakingly getting the same event ID). This
+event type ID is stored in a struct of type {\bf const wxEventType}.
+
+In order to define a new event type, there are principally two choices.
+One is to define a entirely new event class (typically deriving from
+\helpref{wxEvent}{wxevent} or \helpref{wxCommandEvent}{wxcommandevent}. 
+The other is to use the existing event classes and give them an new event
+type. You'll have to define and declare a new event type using either way,
+and this is done using the following macros:
+
+\begin{verbatim}
+// in the header of the source file
+DECLARE_EVENT_TYPE(name, value)
+
+// in the implementation
+DEFINE_EVENT_TYPE(name)
+\end{verbatim}
+
+You can ignore the {\it value} parameter of the DECLARE\_EVENT\_TYPE macro
+since it used only for backwards compatibility with wxWidgets 2.0.x based
+applications where you have to give the event type ID an explicit value.
+
+\wxheading{Using existing event classes}
+
+If you just want to use a \helpref{wxCommandEvent}{wxcommandevent} with
+a new event type, you can then use one of the generic event table macros
+listed below, without having to define a new macro yourself. This also
+has the advantage that you won't have to define a new \helpref{wxEvent::Clone()}{wxeventclone}
+method for posting events between threads etc. This could look like this
+in your code:
+
+{\small%
+\begin{verbatim}
+DECLARE_EVENT_TYPE(wxEVT_MY_EVENT, -1)
+
+DEFINE_EVENT_TYPE(wxEVT_MY_EVENT)
+
+// user code intercepting the event
+
+BEGIN_EVENT_TABLE(MyFrame, wxFrame)
+  EVT_MENU    (wxID_EXIT, MyFrame::OnExit)
+  // ....
+  EVT_COMMAND  (wxEVT_MY_EVENT, ID_MY_WINDOW,  MyFrame::OnMyEvent)
+END_EVENT_TABLE()
+
+void MyFrame::OnMyEvent( wxCommandEvent &event )
+{
+    // do something
+    wxString text = event.GetText();
+}
+
+
+// user code sending the event
+
+void MyWindow::SendEvent()
+{
+    wxCommandEvent event( wxEVT_MY_EVENT, GetId() );
+    event.SetEventObject( this );
+    // Give it some contents
+    event.SetText( wxT("Hallo") );
+    // Send it
+    GetEventHandler()->ProcessEvent( event );
+}
+\end{verbatim}
+}%
+
+
+\wxheading{Generic event table macros}
+
+\twocolwidtha{8cm}%
+\begin{twocollist}\itemsep=0pt
+\twocolitem{\windowstyle{EVT\_CUSTOM(event, id, func)}}{Allows you to add a custom event table
+entry by specifying the event identifier (such as wxEVT\_SIZE), the window identifier,
+and a member function to call.}
+\twocolitem{\windowstyle{EVT\_CUSTOM\_RANGE(event, id1, id2, func)}}{The same as EVT\_CUSTOM,
+but responds to a range of window identifiers.}
+\twocolitem{\windowstyle{EVT\_COMMAND(id, event, func)}}{The same as EVT\_CUSTOM, but
+expects a member function with a wxCommandEvent argument.}
+\twocolitem{\windowstyle{EVT\_COMMAND\_RANGE(id1, id2, event, func)}}{The same as EVT\_CUSTOM\_RANGE, but
+expects a member function with a wxCommandEvent argument.}
+\twocolitem{\windowstyle{EVT\_NOTIFY(id, event, func)}}{The same as EVT\_CUSTOM, but
+expects a member function with a wxNotifyEvent argument.}
+\twocolitem{\windowstyle{EVT\_NOTIFY\_RANGE(id1, id2, event, func)}}{The same as EVT\_CUSTOM\_RANGE, but
+expects a member function with a wxNotifyEvent argument.}
+\end{twocollist}
+
+
+\wxheading{Defining your own event class}
+
+Under certain circumstances, it will be required to define your own event
+class e.g. for sending more complex data from one place to another. Apart
+from defining your event class, you will also need to define your own
+event table macro (which is quite long). Watch out to put in enough
+casts to the inherited event function. Here is an example, taken mostly
+from the {\it wxPlot} library, which is in the {\it contrib} section of
+the wxWidgets sources.
+
+{\small%
+\begin{verbatim}
+
+// code defining event
+
+class wxPlotEvent: public wxNotifyEvent
+{
+public:
+    wxPlotEvent( wxEventType commandType = wxEVT_NULL, int id = 0 );
+
+    // accessors
+    wxPlotCurve *GetCurve()
+        { return m_curve; }
+
+    // required for sending with wxPostEvent()
+    wxEvent* Clone();
+
+private:
+    wxPlotCurve   *m_curve;
+};
+
+DECLARE_EVENT_MACRO( wxEVT_PLOT_ACTION, -1 )
+
+typedef void (wxEvtHandler::*wxPlotEventFunction)(wxPlotEvent&);
+
+#define EVT_PLOT(id, fn) \
+    DECLARE_EVENT_TABLE_ENTRY( wxEVT_PLOT_ACTION, id, -1, \
+    (wxObjectEventFunction) (wxEventFunction) (wxCommandEventFunction) (wxNotifyEventFunction) \
+    wxStaticCastEvent( wxPlotEventFunction, & fn ), (wxObject *) NULL ),
+
+
+// code implementing the event type and the event class
+
+DEFINE_EVENT_TYPE( wxEVT_PLOT_ACTION )
+
+wxPlotEvent::wxPlotEvent( ...
+
+
+// user code intercepting the event
+
+BEGIN_EVENT_TABLE(MyFrame, wxFrame)
+  EVT_PLOT  (ID_MY_WINDOW,  MyFrame::OnPlot)
+END_EVENT_TABLE()
+
+void MyFrame::OnPlot( wxPlotEvent &event )
+{
+    wxPlotCurve *curve = event.GetCurve();
+}
+
+
+// user code sending the event
+
+void MyWindow::SendEvent()
+{
+    wxPlotEvent event( wxEVT_PLOT_ACTION, GetId() );
+    event.SetEventObject( this );
+    event.SetCurve( m_curve );
+    GetEventHandler()->ProcessEvent( event );
+}
+
+\end{verbatim}
+}%
 
