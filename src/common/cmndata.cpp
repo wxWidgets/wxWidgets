@@ -475,7 +475,7 @@ void wxPrintData::ConvertToNative()
     }
 
     // TODO: I hope it's OK to pass some empty strings to DEVNAMES.
-    hDevNames = wxCreateDevNames("", m_printerName, "");
+    m_devNames = (void*) (long) wxCreateDevNames("", m_printerName, "");
 }
 
 void wxPrintData::ConvertFromNative()
