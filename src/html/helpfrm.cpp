@@ -507,7 +507,7 @@ bool wxHtmlHelpFrame::Create(wxWindow* parent, wxWindowID id,
                                       wxDefaultPosition, wxDefaultSize,
                                       wxTE_PROCESS_ENTER);
         m_SearchChoice = new wxChoice(dummy, wxID_HTML_SEARCHCHOICE,
-                                      wxDefaultPosition, wxDefaultSize);
+                                      wxDefaultPosition, wxSize(125,-1));
         m_SearchCaseSensitive = new wxCheckBox(dummy, wxID_ANY, _("Case sensitive"));
         m_SearchWholeWords = new wxCheckBox(dummy, wxID_ANY, _("Whole words only"));
         m_SearchButton = new wxButton(dummy, wxID_HTML_SEARCHBUTTON, _("Search"));
