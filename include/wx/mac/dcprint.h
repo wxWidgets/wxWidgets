@@ -19,6 +19,8 @@
 #include "wx/dc.h"
 #include "wx/cmndata.h"
 
+class wxNativePrinterDC ;
+
 class WXDLLEXPORT wxPrinterDC: public wxDC
 {
  public:
@@ -33,9 +35,12 @@ class WXDLLEXPORT wxPrinterDC: public wxDC
     virtual void EndDoc(void) ;
     virtual void StartPage(void) ;
     virtual void EndPage(void) ;
+    wxPrintData& GetPrintData() { return m_printData; }
+    virtual void DoGetSize( int *width, int *height ) const;
+    
  protected:
-      void*         m_macPrintSessionPort ;
-      wxPrintData   m_printData ;
+    wxPrintData   m_printData ;
+    wxNativePrinterDC* m_nativePrinterDC ;
 #endif // wxUSE_PRINTING_ARCHITECTURE
 };
 
