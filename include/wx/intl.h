@@ -107,7 +107,6 @@ private:
 // ----------------------------------------------------------------------------
 // global functions
 // ----------------------------------------------------------------------------
-
 WXDLLEXPORT wxLocale* wxGetLocale();
 
 // get the translation of the string in the current locale  

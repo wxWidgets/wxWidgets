@@ -8,7 +8,16 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
+// For compilers that support precompilation, includes "wx.h".
+#include "wx/wxprec.h"
+
+#ifdef __BORLANDC__
+#pragma hdrstop
+#endif
+
 #include "wx/frame.h"
+#include "wx/menu.h"
+#include "wx/menuitem.h"
 
 void wxFrame::OnIdle(wxIdleEvent& WXUNUSED(event) )
 {
