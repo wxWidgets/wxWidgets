@@ -17,8 +17,15 @@ class TestPanel(wx.Panel):
                                         #wx.TR_TWIST_BUTTONS
                                         #| wx.TR_ROW_LINES
                                         #| wx.TR_NO_LINES 
-                                        | wx.TR_FULL_ROW_HIGHLIGHT     
+                                        | wx.TR_FULL_ROW_HIGHLIGHT
+
+                                        # By default the style will be adjusted on
+                                        # Mac to use twisty buttons and no lines.  If
+                                        # you would rather control this yourself then
+                                        # add this style.
+                                        #| wx.TR_DONT_ADJUST_MAC
                                    )
+
         isz = (16,16)
         il = wx.ImageList(isz[0], isz[1])
         fldridx     = il.Add(wx.ArtProvider_GetBitmap(wx.ART_FOLDER,      wx.ART_OTHER, isz))

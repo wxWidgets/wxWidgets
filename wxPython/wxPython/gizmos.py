@@ -63,6 +63,7 @@ wxTL_SEARCH_LEVEL = wx.gizmos.TL_SEARCH_LEVEL
 wxTL_SEARCH_FULL = wx.gizmos.TL_SEARCH_FULL
 wxTL_SEARCH_PARTIAL = wx.gizmos.TL_SEARCH_PARTIAL
 wxTL_SEARCH_NOCASE = wx.gizmos.TL_SEARCH_NOCASE
+wxTR_DONT_ADJUST_MAC = wx.gizmos.TR_DONT_ADJUST_MAC
 wxTreeListColumnInfo = wx.gizmos.TreeListColumnInfo
 wxTreeListColumnInfoPtr = wx.gizmos.TreeListColumnInfoPtr
 wxTreeListCtrl = wx.gizmos.TreeListCtrl

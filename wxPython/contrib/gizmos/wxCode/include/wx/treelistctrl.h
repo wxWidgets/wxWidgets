@@ -44,6 +44,9 @@ typedef void *wxTreeItemIdValue;
 #endif
 #endif
 
+
+#define wxTR_DONT_ADJUST_MAC    0x0100          // Don't adjust the style for the Mac
+
 //-----------------------------------------------------------------------------
 // wxTreeListColumnAttrs
 //-----------------------------------------------------------------------------

@@ -40,8 +40,8 @@
 
 %import windows.i
 %import controls.i
-%pythoncode { wx = _core }
-%pythoncode { __docfilter__ = wx.__DocFilter(globals()) }
+%pythoncode { import wx }
+%pythoncode { __docfilter__ = wx._core.__DocFilter(globals()) }
 
 
 MAKE_CONST_WXSTRING2(DynamicSashNameStr,     wxT("dynamicSashWindow"));
@@ -443,6 +443,11 @@ enum {
     wxTL_SEARCH_NOCASE
 };
 
+enum {
+    // extra tree styles
+    wxTR_DONT_ADJUST_MAC
+};
+%pythoncode { wx.TR_DONT_ADJUST_MAC = TR_DONT_ADJUST_MAC }
 
 
 class wxTreeListColumnInfo: public wxObject {

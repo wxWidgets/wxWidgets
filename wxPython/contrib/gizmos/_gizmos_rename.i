@@ -30,6 +30,7 @@
 %rename(TL_SEARCH_FULL)                     wxTL_SEARCH_FULL;
 %rename(TL_SEARCH_PARTIAL)                  wxTL_SEARCH_PARTIAL;
 %rename(TL_SEARCH_NOCASE)                   wxTL_SEARCH_NOCASE;
+%rename(TR_DONT_ADJUST_MAC)                 wxTR_DONT_ADJUST_MAC;
 %rename(TreeListColumnInfo)                 wxTreeListColumnInfo;
 
 #endif
