@@ -68,6 +68,7 @@ public:
 
 protected:
     virtual void OnSetBitmap();
+    virtual wxSize DoGetBestSize() const;
 
     void Init();
 

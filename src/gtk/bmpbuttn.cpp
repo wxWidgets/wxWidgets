@@ -150,11 +150,11 @@ bool wxBitmapButton::Create( wxWindow *parent,
     if (m_bmpNormal.Ok())
     {
         wxSize newSize = size;
-        int border = (style & wxNO_BORDER) ? 4 : 10;
+        wxSize bestSize = DoGetBestSize();
         if (newSize.x == -1)
-            newSize.x = m_bmpNormal.GetWidth()+border;
+            newSize.x = bestSize.x;
         if (newSize.y == -1)
-            newSize.y = m_bmpNormal.GetHeight()+border;
+            newSize.y = bestSize.y;
         SetSize( newSize.x, newSize.y );
         OnSetBitmap();
     }
@@ -256,6 +256,19 @@ void wxBitmapButton::OnSetBitmap()
         GtkPixmap *g_pixmap = GTK_PIXMAP(child);
         gtk_pixmap_set(g_pixmap, the_one.GetPixmap(), mask);
     }
+}
+
+wxSize wxBitmapButton::DoGetBestSize() const
+{
+    wxSize best;
+    
+    if (m_bmpNormal.Ok())
+    {
+        int border = HasFlag(wxNO_BORDER) ? 4 : 10;
+        best.x = m_bmpNormal.GetWidth()+border;
+        best.y = m_bmpNormal.GetHeight()+border;
+    }
+    return best;
 }
 
 bool wxBitmapButton::Enable( bool enable )
