@@ -74,7 +74,7 @@ enum Transparency
 // return the kind of transparency needed for this image assuming that it does
 // have transparent pixels, i.e. either Transparency_Alpha or Transparency_Mask
 static Transparency
-CheckTransparency(const unsigned char *ptr,
+CheckTransparency(unsigned char **lines,
                   png_uint_32 x, png_uint_32 y, png_uint_32 w, png_uint_32 h,
                   size_t numColBytes);
 
@@ -210,13 +210,13 @@ PNGLINKAGEMODE wx_png_warning(png_structp png_ptr, png_const_charp message)
 // need a full blown alpha channel in wxImage
 //
 // parameters:
-//      ptr             the start of the data to examine
+//      lines           raw PNG data
 //      x, y            starting position
 //      w, h            size of the image
 //      numColBytes     number of colour bytes (1 for grey scale, 3 for RGB)
 //                      (NB: alpha always follows the colour bytes)
 Transparency
-CheckTransparency(const unsigned char *ptr,
+CheckTransparency(unsigned char **lines,
                   png_uint_32 x, png_uint_32 y, png_uint_32 w, png_uint_32 h,
                   size_t numColBytes)
 {
@@ -225,15 +225,16 @@ CheckTransparency(const unsigned char *ptr,
 
     // suppose that a mask will suffice and check all the remaining alpha
     // values to see if it does
-    unsigned const char *ptr2 = ptr;
-    for ( png_uint_32 y2 = y; y2 < h; y2++ )
+    for ( ; y < h; y++ )
     {
+        unsigned const char *ptr = lines[y] + x;
+
         for ( png_uint_32 x2 = x; x2 < w; x2++ )
         {
             // skip the grey or colour byte(s)
-            ptr2 += numColBytes;
+            ptr += numColBytes;
 
-            unsigned char a2 = *ptr2++;
+            unsigned char a2 = *ptr++;
 
             if ( !IsTransparent(a2) && !IsOpaque(a2) )
             {
@@ -365,7 +366,7 @@ void CopyDataFromPNG(wxImage *image,
                     // only, otherwisewe need the latter
                     transparency = CheckTransparency
                                    (
-                                        ptrSrc,
+                                        lines,
                                         x, y,
                                         width, height,
                                         1
@@ -437,7 +438,7 @@ void CopyDataFromPNG(wxImage *image,
                 {
                     transparency = CheckTransparency
                                    (
-                                        ptrSrc,
+                                        lines,
                                         x, y,
                                         width, height,
                                         3
