@@ -354,7 +354,7 @@ WXHRGN wxRegion::GetHRGN() const
 void wxRegionIterator::Init()
 {
     m_current =
-    m_numRects = NULL;
+    m_numRects = 0;
 
     m_rects = NULL;
 }
