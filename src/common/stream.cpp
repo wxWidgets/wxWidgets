@@ -21,6 +21,10 @@
 #pragma hdrstop
 #endif
 
+// ----------------------------------------------------------------------------
+// wxInputStream
+// ----------------------------------------------------------------------------
+
 wxInputStream::wxInputStream()
 {
 }
@@ -44,6 +48,48 @@ wxInputStream& wxInputStream::Read(wxOutputStream& stream_out)
   return *this;
 }
 
+int wxInputStream::Scanf(const wxString& format, ...)
+{
+  va_list params;
+
+  va_start(params, format);
+  va_end(params);
+}
+
+wxInputStream& wxInputStream::operator>>(wxString& line)
+{
+  wxDataInputStream s(*this);
+
+  line = s.ReadLine();
+  return *this;
+}
+
+wxInputStream& wxInputStream::operator>>(char& c)
+{
+  c = GetC();
+}
+
+wxInputStream& wxInputStream::operator>>(short& i)
+{
+  Scanf("%i", &i);
+  return *this;
+}
+
+wxInputStream& wxInputStream::operator>>(long& i)
+{
+  Scanf("%l", &i);
+  return *this;
+}
+
+wxInputStream& wxInputStream::operator>>(float& f)
+{
+  Scanf("%f", &f);
+  return *this;
+}
+
+// ----------------------------------------------------------------------------
+// wxOutputStream
+// ----------------------------------------------------------------------------
 wxOutputStream::wxOutputStream()
 {
 }
@@ -58,6 +104,9 @@ wxOutputStream& wxOutputStream::Write(wxInputStream& stream_in)
    return *this;
 }
 
+// ----------------------------------------------------------------------------
+// wxFilterInputStream
+// ----------------------------------------------------------------------------
 wxFilterInputStream::wxFilterInputStream(wxInputStream& stream)
   : wxInputStream()
 {
@@ -68,6 +117,9 @@ wxFilterInputStream::~wxFilterInputStream()
 {
 }
 
+// ----------------------------------------------------------------------------
+// wxFilterOutputStream
+// ----------------------------------------------------------------------------
 wxFilterOutputStream::wxFilterOutputStream(wxOutputStream& stream)
   : wxOutputStream()
 {

@@ -31,18 +31,15 @@ class wxMemoryInputStream: virtual public wxMemoryStreamBase, public wxInputStre
  public:
   wxMemoryInputStream(const char *data, size_t length);
   virtual ~wxMemoryInputStream();
- 
-  wxInputStream& Read(void *buffer, size_t size);
-  off_t SeekI(off_t pos, wxSeekMode mode);
-  off_t TellI() const { return m_position_i; }
-
-  bool Eof() const { return m_eof; }
-  size_t LastRead() const { return m_lastread; }
 
  protected:
-  bool m_eof;
+ 
+  size_t DoRead(void *buffer, size_t size);
+  off_t DoSeekInput(off_t pos, wxSeekMode mode);
+  off_t DoTellInput() const { return m_position_i; }
+
+ protected:
   off_t m_position_i;
-  size_t m_lastread;
 };
 
 class wxMemoryOutputStream: virtual public wxMemoryStreamBase, public wxOutputStream {
@@ -50,20 +47,17 @@ class wxMemoryOutputStream: virtual public wxMemoryStreamBase, public wxOutputSt
   wxMemoryOutputStream(char *data = NULL, size_t length = 0);
   virtual ~wxMemoryOutputStream();
 
-  wxOutputStream& Write(const void *buffer, size_t size);
-  off_t SeekO(off_t pos, wxSeekMode mode);
-  off_t TellO() const { return m_position_o; }
-
-  bool Bad() const { return m_bad; }
-  size_t LastWrite() const { return m_lastwrite; }
-
-  char *GetData() { return m_buffer; }
-  size_t GetLength() { return m_length; }
+  char *GetData() { Sync(); return m_buffer; }
+  size_t GetLength() { Sync(); return m_length; }
 
  protected:
-  bool m_bad;
+
+  size_t DoWrite(const void *buffer, size_t size);
+  off_t DoSeekOutput(off_t pos, wxSeekMode mode);
+  off_t DoTellOutput() const { return m_position_o; }
+
+ protected:
   off_t m_position_o;
-  size_t m_lastwrite;
 };
 
 class wxMemoryStream: public wxMemoryInputStream, public wxMemoryOutputStream {

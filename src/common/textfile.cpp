@@ -131,7 +131,7 @@ wxTextFile::Type wxTextFile::GuessType() const
   // interpret the results (@@ far from being even 50% fool proof)
   if ( nDos + nUnix + nMac == 0 ) {
     // no newlines at all
-    wxLogWarning(_("'%s' is probably a binary file."), m_strFile.c_str());
+    wxLogWarning("'%s' is probably a binary file.", m_strFile.c_str());
   }
   else {
     #define   GREATER_OF(t1, t2) n##t1 == n##t2 ? typeDefault               \
@@ -164,7 +164,7 @@ bool wxTextFile::Read()
   int n, nRead;
   while ( !m_file.Eof() ) {
     nRead = m_file.Read(buf, WXSIZEOF(buf));
-    if ( nRead == ofsInvalid ) {
+    if ( nRead == wxInvalidOffset ) {
       // read error (error message already given in wxFile::Read)
       m_file.Close();
       return FALSE;
@@ -224,7 +224,7 @@ bool wxTextFile::Write(Type typeNew)
   wxTempFile fileTmp(m_strFile);
 
   if ( !fileTmp.IsOpened() ) {
-    wxLogError(_("can't write file '%s' to disk."), m_strFile.c_str());
+    wxLogError("can't write file '%s' to disk.", m_strFile.c_str());
     return FALSE;
   }
 

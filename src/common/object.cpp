@@ -20,7 +20,10 @@
 #pragma hdrstop
 #endif
 
+#ifndef WX_PRECOMP
 #include "wx/hash.h"
+#include "wx/objstrm.h"
+#endif
 
 #include <string.h>
 #include <assert.h>
@@ -114,36 +117,6 @@ void wxObject::operator delete[] (void * buf)
  * Class info: provides run-time class type information.
  */
 
-#ifdef USE_STORABLE_CLASSES
-
-wxClassInfo::wxClassInfo(char *cName, char *baseName1, char *baseName2, int sz, wxObjectConstructorFn fn,
-     wxStorableConstructorFn stoFn )
-{
-  className = cName;
-  baseClassName1 = baseName1;
-  baseClassName2 = baseName2;
-
-  objectSize = sz;
-  objectConstructor = fn;
-  storableConstructor = stoFn;
-  
-  next = first;
-  first = this;
-
-  baseInfo1 = NULL;
-  baseInfo2 = NULL;
-}
-   
-wxObject* wxClassInfo::CreateObject( istream &stream, char *data )
-{
-  if (storableConstructor)
-    return (wxObject *)(*storableConstructor)( stream, data );
-  else
-    return NULL;
-}
-
-#else
-  
 wxClassInfo::wxClassInfo(char *cName, char *baseName1, char *baseName2, int sz, wxObjectConstructorFn constr)
 {
   className = cName;
@@ -159,8 +132,6 @@ wxClassInfo::wxClassInfo(char *cName, char *baseName1, char *baseName2, int sz, 
   baseInfo1 = NULL;
   baseInfo2 = NULL;
 }
-
-#endif
 
 wxObject *wxClassInfo::CreateObject(void)
 {
@@ -250,16 +221,10 @@ wxObject *wxCreateDynamicObject(char *name)
 
 #ifdef USE_STORABLE_CLASSES
 
-wxObject* wxCreateStoredObject( char *name, istream &stream, char *data )
+wxObject* wxCreateStoredObject( wxInputStream &stream )
 {
-  wxClassInfo *info = wxClassInfo::first;
-  while (info)
-  {
-    if (info->className && strcmp(info->className, name) == 0)
-      return info->CreateObject( stream, data );
-    info = info->next;
-  }
-  return NULL;
+  wxObjectInputStream obj_s(stream);
+  return obj_s.LoadObject();
 };
 
 #endif

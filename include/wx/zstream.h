@@ -16,25 +16,23 @@
 #endif
 
 #include <wx/stream.h>
-#include "../../src/zlib/zlib.h"
+#include "zlib.h"
 
 class wxZlibInputStream: public wxFilterInputStream {
  public:
   wxZlibInputStream(wxInputStream& stream);
   virtual ~wxZlibInputStream();
 
-  wxInputStream& Read(void *buffer, size_t size);
-  off_t SeekI(off_t pos, wxSeekMode mode = wxFromStart);
-  off_t TellI() const;
-
-  size_t LastRead() const { return m_lastread; }
   bool Eof() const;
 
  protected:
-  size_t m_lastread;
+  size_t DoRead(void *buffer, size_t size);
+  off_t DoSeekInput(off_t pos, wxSeekMode WXUNUSED(mode)) { return wxInvalidOffset; }
+  off_t DoTellInput() const { return wxInvalidOffset; }
+
+ protected:
   size_t m_z_size;
   unsigned char *m_z_buffer;
-  bool m_eof;
   struct z_stream_s m_inflate;
 };
 
@@ -43,18 +41,18 @@ class wxZlibOutputStream: public wxFilterOutputStream {
   wxZlibOutputStream(wxOutputStream& stream);
   virtual ~wxZlibOutputStream();
 
-  wxOutputStream& Write(const void *buffer, size_t size);
-  off_t SeekO(off_t pos, wxSeekMode mode = wxFromStart);
-  off_t TellO() const;
+  void Sync();
 
-  size_t LastWrite() const { return m_lastwrite; }
   bool Bad() const;
 
  protected:
-  size_t m_lastwrite;
+  size_t DoWrite(const void *buffer, size_t size);
+  off_t DoSeekOutput(off_t pos, wxSeekMode WXUNUSED(mode)) { return wxInvalidOffset; }
+  off_t DoTellOutput() const { return wxInvalidOffset; }
+
+ protected:
   size_t m_z_size;
   unsigned char *m_z_buffer;
-  bool m_bad;
   struct z_stream_s m_deflate;
 };
 

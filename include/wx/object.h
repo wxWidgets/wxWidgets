@@ -29,19 +29,16 @@ class WXDLLEXPORT wxObject;
 #endif
 
 class WXDLLEXPORT wxClassInfo;
-
-class WXDLLIMPORT istream;
-class WXDLLIMPORT ostream;
+class WXDLLEXPORT ostream;
+class WXDLLEXPORT wxInputStream;
+class WXDLLIMPORT wxObjectInputStream;
+class WXDLLIMPORT wxObjectOutputStream;
 
 /*
  * Dynamic object system declarations
  */
 
 typedef wxObject * (*wxObjectConstructorFn) (void);
-
-#ifdef USE_STORABLE_CLASSES
-typedef wxObject* (*wxStorableConstructorFn) ( istream &stream, char *data );
-#endif
 
 class WXDLLEXPORT wxClassInfo
 {
@@ -52,10 +49,6 @@ class WXDLLEXPORT wxClassInfo
    int objectSize;
    wxObjectConstructorFn objectConstructor;
    
-#ifdef USE_STORABLE_CLASSES
-  wxStorableConstructorFn storableConstructor;
-#endif
-
    // Pointers to base wxClassInfos: set in InitializeClasses
    // called from wx_main.cc
    wxClassInfo *baseInfo1;
@@ -64,19 +57,10 @@ class WXDLLEXPORT wxClassInfo
    static wxClassInfo *first;
    wxClassInfo *next;
 
-#ifdef USE_STORABLE_CLASSES
-   wxClassInfo(char *cName, char *baseName1, char *baseName2, int sz, wxObjectConstructorFn fn,
-     wxStorableConstructorFn stoFn = NULL );
-#else
    wxClassInfo(char *cName, char *baseName1, char *baseName2, int sz, wxObjectConstructorFn fn);
-#endif
 
    wxObject *CreateObject(void);
    
-#ifdef USE_STORABLE_CLASSES
-   wxObject* CreateObject( istream &stream, char *data );
-#endif
-
    inline char *GetClassName(void) const { return className; }
    inline char *GetBaseClassName1(void) const { return baseClassName1; }
    inline char *GetBaseClassName2(void) const { return baseClassName2; }
@@ -91,7 +75,7 @@ class WXDLLEXPORT wxClassInfo
 wxObject* WXDLLEXPORT wxCreateDynamicObject(char *name);
 
 #ifdef USE_STORABLE_CLASSES
-wxObject* WXDLLEXPORT wxCreateStoredObject( char *name, istream &stream, char *data );
+wxObject* WXDLLEXPORT wxCreateStoredObject( wxInputStream& stream );
 #endif
 
 #define DECLARE_DYNAMIC_CLASS(name) \
@@ -102,10 +86,6 @@ wxObject* WXDLLEXPORT wxCreateStoredObject( char *name, istream &stream, char *d
 
 #define DECLARE_ABSTRACT_CLASS(name) DECLARE_DYNAMIC_CLASS(name)
 #define DECLARE_CLASS(name) DECLARE_DYNAMIC_CLASS(name)
-
-#ifdef USE_STORABLE_CLASSES
-#define DECLARE_STORABLECLASS(name) DECLARE_DYNAMIC_CLASS(name)
-#endif
 
 //////
 ////// for concrete classes
@@ -123,30 +103,6 @@ wxObject* WXDLLEXPORT_CTORFN wxConstructorFor##name(void) \
    { return new name; }\
  wxClassInfo name::class##name(#name, #basename1, #basename2, sizeof(name), wxConstructorFor##name);
 
-//////
-////// for storable classes
-//////
-
-#ifdef USE_STORABLE_CLASSES
-
-#define IMPLEMENT_STORABLE_CLASS(name, basename) \
-wxObject* WXDLLEXPORT_CTORFN wxStorableConstructorFor##name( istream* stream, char* data )\
-	{ return new name( stream, data ); }\
-wxObject* WXDLLEXPORT_CTORFN wxConstructorFor##name(void)\
-   { return new name; }\
- wxClassInfo name::class##name(#name, #basename, NULL, sizeof(name), wxConstructorFor##name,\
-   wxStorableConstructorFor##name );
-
-#define IMPLEMENT_STORABLE_CLASS2(name, basename1, basename2) \
-wxObject* WXDLLEXPORT_CTORFN wxStorableConstructorFor##name( istream* stream, char* data )\
-	{ return new name( stream, data ); }\
-wxObject* WXDLLEXPORT_CTORFN wxConstructorFor##name(void)\
-   { return new name; }\
- wxClassInfo name::class##name(#name, #basename1, basename2, sizeof(name), wxConstructorFor##name,\
-   wxStorableConstructorFor##name );
-
-#endif
- 
 //////
 ////// for abstract classes
 //////
@@ -223,7 +179,8 @@ class WXDLLEXPORT wxObject
 #endif
 
 #ifdef USE_STORABLE_CLASSES
-  virtual void StoreObject( ostream &WXUNUSED(stream) ) {};
+  virtual void StoreObject( wxObjectOutputStream &WXUNUSED(stream) ) {};
+  virtual void LoadObject( wxObjectInputStream &WXUNUSED(stream) ) {};
 #endif
 
   // make a 'clone' of the object

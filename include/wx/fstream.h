@@ -16,51 +16,44 @@
 #include <wx/stream.h>
 #include <wx/file.h>
 
-class wxFileInputStream: virtual public wxFile, public wxInputStream {
+class wxFileInputStream: public wxInputStream, virtual public wxFile {
  public:
   wxFileInputStream(const wxString& fileName);
   virtual ~wxFileInputStream();
 
-  wxInputStream& Read(void *buffer, size_t size);
-  off_t SeekI(off_t pos, wxSeekMode mode = wxFromStart);
-  off_t TellI() const;
+  virtual char Peek();
 
-  bool Eof() const { return m_eof; }
-  size_t LastRead() const { return m_lastread; }
+  virtual bool Eof() const { return wxFile::Eof(); }
 
   bool Ok() const { return wxFile::IsOpened(); }
 
  protected:
   wxFileInputStream() {}
 
- protected:
-  bool m_eof;
-  bool m_ok_i;
-  size_t m_lastread;
+  size_t DoRead(void *buffer, size_t size);
+  off_t DoSeekInput(off_t pos, wxSeekMode mode);
+  off_t DoTellInput() const;
 };
 
-class wxFileOutputStream: virtual wxFile, public wxOutputStream {
+class wxFileOutputStream: public wxOutputStream, virtual public wxFile {
  public:
   wxFileOutputStream(const wxString& fileName);
   virtual ~wxFileOutputStream();
 
-  wxOutputStream& Write(const void *buffer, size_t size);
-  off_t SeekO(off_t pos, wxSeekMode mode = wxFromStart);
-  off_t TellO() const;
-
-  bool Bad() const { return m_bad; }
-  size_t LastWrite() const { return m_lastwrite; }
+  // To solve an ambiguity on GCC
+  inline wxOutputStream& Write(const void *buffer, size_t size)
+     { return wxOutputStream::Write(buffer, size); }
 
   void Sync();
 
-  bool IsOpened() const { return wxFile::IsOpened(); }
+  bool Ok() const { return wxFile::IsOpened(); }
 
  protected:
   wxFileOutputStream() {}
 
- protected:
-  bool m_bad;
-  size_t m_lastwrite;
+  size_t DoWrite(const void *buffer, size_t size);
+  off_t DoSeekOutput(off_t pos, wxSeekMode mode);
+  off_t DoTellOutput() const;
 };
 
 class wxFileStream: public wxFileInputStream, public wxFileOutputStream {
