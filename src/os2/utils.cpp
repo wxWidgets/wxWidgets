@@ -342,6 +342,15 @@ void wxBell()
     DosBeep(1000,1000); // 1kHz during 1 sec.
 }
 
+
+void wxAppTraits::InitializeGui(unsigned long &ulHab)
+{
+}
+
+void wxAppTraits::TerminateGui(unsigned long ulHab)
+{
+}
+
 wxToolkitInfo & wxConsoleAppTraits::GetToolkitInfo()
 {
     static wxToolkitInfo	    vInfo;

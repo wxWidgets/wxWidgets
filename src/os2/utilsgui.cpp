@@ -473,6 +473,16 @@ void wxClientDisplayRect(int *x, int *y, int *width, int *height)
     wxDisplaySize(width, height);
 }
 
+void wxGUIAppTraits::InitializeGui(unsigned long &ulHab)
+{
+    ulHab = ::WinInitialize(0);
+}
+
+void wxGUIAppTraits::TerminateGui(unsigned long ulHab)
+{
+    ::WinTerminate(ulHab);
+}
+
 wxToolkitInfo & wxGUIAppTraits::GetToolkitInfo()
 {
     static wxToolkitInfo	    vInfo;
