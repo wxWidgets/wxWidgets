@@ -373,6 +373,9 @@ bool wxSpinCtrl::Create(wxWindow *parent,
     // should have the same font as the other controls
     SetFont(GetParent()->GetFont());
 
+    WXHANDLE hFont = GetFont().GetResourceHandle();
+    (void)::SendMessage(GetBuddyHwnd(), WM_SETFONT, (WPARAM)hFont, TRUE);
+    
     // set the size of the text window - can do it only now, because we
     // couldn't call DoGetBestSize() before as font wasn't set
     if ( sizeText.y <= 0 )
