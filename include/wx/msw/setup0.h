@@ -411,6 +411,13 @@
 #define wxUSE_ODBC                0
 #endif
 
+// With C++Builder we get lots of doubly-defined symbols
+// when including both winsock.h and winsock2.h
+#if defined(__BORLANDC__) && (__BORLANDC__ == 0x530)
+#undef wxUSE_SOCKETS
+#undef wxUSE_SOCKETS 0
+#endif
+
 #if defined(__WXMSW__) && defined(__WATCOMC__)
 #undef wxUSE_LIBJPEG
 #define wxUSE_LIBJPEG 0

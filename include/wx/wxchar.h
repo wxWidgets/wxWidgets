@@ -169,15 +169,19 @@ typedef  _TUCHAR     wxUChar;
 #  endif
    // wchar_t is available
 #  undef wxUSE_WCHAR_T
+// This test is for C++Builder
+#if __BORLANDC__ == 0x530
+#  define wxUSE_WCHAR_T 0
+#elif
 #  define wxUSE_WCHAR_T 1
-
+#  define wxNEED_WCSLEN
+#endif
 #  define wxNEED_WX_CTYPE_H
 // #define  wxStrtok    strtok_r // Borland C++ 4.52 doesn't have strtok_r
 #  define wxNEED_WX_STRING_H
 #  define wxNEED_WX_STDIO_H
 #  define wxNEED_WX_STDLIB_H
 #  define wxNEED_WX_TIME_H
-#  define wxNEED_WCSLEN
 
 #else//!TCHAR-aware compilers
 

@@ -88,6 +88,21 @@ PLATFORMS: wxGTK
 DATE IDENTIFIED: 10/11/1999
 IDENTIFIED BY: Jonathan Brown <jbrown@sso.sytexinc.com>
 
+BUG NUMBER:             5
+SHORT DESCRIPTION: no vertical space inside wxHTML
+DETAILS: We are working on making a demonstration of projects we do here
+using Python & wxWindows & HTML (wxPython/wxHTML thus). We 'd like to
+have the opportunity to specify vertical space, eg <br><br>, or <p><p>
+in HTML. These constructs currently do not work. I looked in the source
+code (nice job btw), but am not sure where to hack the solution. I
+am willing to discuss this in more detail. 
+WORKAROUND: Create a transparent gif of 1x1 pixel and use width & height
+to fool the renderer
+wxWINDOWS VERSION: wxWindows 2.1.11
+PLATFORMS: Windows + Python 1.5
+DATE IDENTIFIED: 10/11/1999
+IDENTIFIED BY: A.T.Hofkamp
+
 
 ---------------------------END OF BUGLIST-------------------------
 
