@@ -737,6 +737,12 @@ class wxTextCtrlPtr(wxControlPtr):
     def SetEditable(self, *_args, **_kwargs):
         val = apply(controlsc.wxTextCtrl_SetEditable,(self,) + _args, _kwargs)
         return val
+    def IsSingleLine(self, *_args, **_kwargs):
+        val = apply(controlsc.wxTextCtrl_IsSingleLine,(self,) + _args, _kwargs)
+        return val
+    def IsMultiLine(self, *_args, **_kwargs):
+        val = apply(controlsc.wxTextCtrl_IsMultiLine,(self,) + _args, _kwargs)
+        return val
     def write(self, *_args, **_kwargs):
         val = apply(controlsc.wxTextCtrl_write,(self,) + _args, _kwargs)
         return val

@@ -1098,6 +1098,13 @@ class wxMenuItemPtr(wxObjectPtr):
     def SetAccel(self, *_args, **_kwargs):
         val = apply(windowsc.wxMenuItem_SetAccel,(self,) + _args, _kwargs)
         return val
+    def SetBitmap(self, *_args, **_kwargs):
+        val = apply(windowsc.wxMenuItem_SetBitmap,(self,) + _args, _kwargs)
+        return val
+    def GetBitmap(self, *_args, **_kwargs):
+        val = apply(windowsc.wxMenuItem_GetBitmap,(self,) + _args, _kwargs)
+        if val: val = wxBitmapPtr(val) 
+        return val
     def __repr__(self):
         return "<C wxMenuItem instance at %s>" % (self.this,)
 class wxMenuItem(wxMenuItemPtr):

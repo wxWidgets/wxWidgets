@@ -348,8 +348,8 @@ class wxListEventPtr(wxNotifyEventPtr):
     def __init__(self,this):
         self.this = this
         self.thisown = 0
-    def GetCode(self, *_args, **_kwargs):
-        val = apply(controls2c.wxListEvent_GetCode,(self,) + _args, _kwargs)
+    def GetKeyCode(self, *_args, **_kwargs):
+        val = apply(controls2c.wxListEvent_GetKeyCode,(self,) + _args, _kwargs)
         return val
     def GetIndex(self, *_args, **_kwargs):
         val = apply(controls2c.wxListEvent_GetIndex,(self,) + _args, _kwargs)
@@ -421,6 +421,7 @@ class wxListEventPtr(wxNotifyEventPtr):
         raise AttributeError,name
     def __repr__(self):
         return "<C wxListEvent instance at %s>" % (self.this,)
+    GetCode = GetKeyCode
 class wxListEvent(wxListEventPtr):
     def __init__(self,*_args,**_kwargs):
         self.this = apply(controls2c.new_wxListEvent,_args,_kwargs)
@@ -624,6 +625,9 @@ class wxListCtrlPtr(wxControlPtr):
         return val
     def SortItems(self, *_args, **_kwargs):
         val = apply(controls2c.wxListCtrl_SortItems,(self,) + _args, _kwargs)
+        return val
+    def GetMainWindow(self, *_args, **_kwargs):
+        val = apply(controls2c.wxListCtrl_GetMainWindow,(self,) + _args, _kwargs)
         return val
     def __repr__(self):
         return "<C wxListCtrl instance at %s>" % (self.this,)
@@ -859,14 +863,15 @@ class wxTreeEventPtr(wxNotifyEventPtr):
         val = apply(controls2c.wxTreeEvent_GetKeyEvent,(self,) + _args, _kwargs)
         if val: val = wxKeyEventPtr(val) 
         return val
-    def GetCode(self, *_args, **_kwargs):
-        val = apply(controls2c.wxTreeEvent_GetCode,(self,) + _args, _kwargs)
+    def GetKeyCode(self, *_args, **_kwargs):
+        val = apply(controls2c.wxTreeEvent_GetKeyCode,(self,) + _args, _kwargs)
         return val
     def GetLabel(self, *_args, **_kwargs):
         val = apply(controls2c.wxTreeEvent_GetLabel,(self,) + _args, _kwargs)
         return val
     def __repr__(self):
         return "<C wxTreeEvent instance at %s>" % (self.this,)
+    GetCode = GetKeyCode
 class wxTreeEvent(wxTreeEventPtr):
     def __init__(self,*_args,**_kwargs):
         self.this = apply(controls2c.new_wxTreeEvent,_args,_kwargs)

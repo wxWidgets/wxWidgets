@@ -252,6 +252,12 @@ class wxRectPtr :
         val = apply(miscc.wxRect_GetSize,(self,) + _args, _kwargs)
         if val: val = wxSizePtr(val) ; val.thisown = 1
         return val
+    def SetPosition(self, *_args, **_kwargs):
+        val = apply(miscc.wxRect_SetPosition,(self,) + _args, _kwargs)
+        return val
+    def SetSize(self, *_args, **_kwargs):
+        val = apply(miscc.wxRect_SetSize,(self,) + _args, _kwargs)
+        return val
     def GetLeft(self, *_args, **_kwargs):
         val = apply(miscc.wxRect_GetLeft,(self,) + _args, _kwargs)
         return val

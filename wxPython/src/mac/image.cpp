@@ -304,7 +304,7 @@ static PyObject *_wrap_wxImageFromStream(PyObject *self, PyObject *args, PyObjec
         _arg0 = temp->m_wxis;
         created = FALSE;
     } else {
-        _arg0 = wxPyCBInputStream::create(_obj0, FALSE);
+        _arg0 = wxPyCBInputStream_create(_obj0, FALSE);
         if (_arg0 == NULL) {
             PyErr_SetString(PyExc_TypeError,"Expected _wxInputStream_p or Python file-like object.");
             return NULL;
@@ -353,7 +353,7 @@ static PyObject *_wrap_wxImageFromStreamMime(PyObject *self, PyObject *args, PyO
         _arg0 = temp->m_wxis;
         created = FALSE;
     } else {
-        _arg0 = wxPyCBInputStream::create(_obj0, FALSE);
+        _arg0 = wxPyCBInputStream_create(_obj0, FALSE);
         if (_arg0 == NULL) {
             PyErr_SetString(PyExc_TypeError,"Expected _wxInputStream_p or Python file-like object.");
             return NULL;
@@ -1943,7 +1943,7 @@ static PyObject *_wrap_wxImage_CanReadStream(PyObject *self, PyObject *args, PyO
         _arg0 = temp->m_wxis;
         created = FALSE;
     } else {
-        _arg0 = wxPyCBInputStream::create(_obj0, FALSE);
+        _arg0 = wxPyCBInputStream_create(_obj0, FALSE);
         if (_arg0 == NULL) {
             PyErr_SetString(PyExc_TypeError,"Expected _wxInputStream_p or Python file-like object.");
             return NULL;
@@ -1994,7 +1994,7 @@ static PyObject *_wrap_wxImage_LoadStream(PyObject *self, PyObject *args, PyObje
         _arg1 = temp->m_wxis;
         created = FALSE;
     } else {
-        _arg1 = wxPyCBInputStream::create(_obj1, FALSE);
+        _arg1 = wxPyCBInputStream_create(_obj1, FALSE);
         if (_arg1 == NULL) {
             PyErr_SetString(PyExc_TypeError,"Expected _wxInputStream_p or Python file-like object.");
             return NULL;
@@ -2046,7 +2046,7 @@ static PyObject *_wrap_wxImage_LoadMimeStream(PyObject *self, PyObject *args, Py
         _arg1 = temp->m_wxis;
         created = FALSE;
     } else {
-        _arg1 = wxPyCBInputStream::create(_obj1, FALSE);
+        _arg1 = wxPyCBInputStream_create(_obj1, FALSE);
         if (_arg1 == NULL) {
             PyErr_SetString(PyExc_TypeError,"Expected _wxInputStream_p or Python file-like object.");
             return NULL;
@@ -2348,6 +2348,7 @@ static void  wxImage_SetData(wxImage *self,PyObject * data) {
             dataPtr = (unsigned char*) malloc(len);
             memcpy(dataPtr, PyString_AsString(data), len);
             self->SetData(dataPtr);
+            // wxImage takes ownership of dataPtr...
         }
 static PyObject *_wrap_wxImage_SetData(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
