@@ -69,7 +69,7 @@ public:
     virtual void Refresh( bool eraseBackground = TRUE,
                           const wxRect *rect = (const wxRect *) NULL );
     virtual void Update();
-    virtual void Clear();
+    virtual void ClearBackground();
 
     virtual bool SetBackgroundColour( const wxColour &colour );
     virtual bool SetForegroundColour( const wxColour &colour );

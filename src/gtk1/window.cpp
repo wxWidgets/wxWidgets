@@ -3862,7 +3862,7 @@ void wxWindowGTK::GtkSendPaintEvents()
     m_updateRegion.Clear();
 }
 
-void wxWindowGTK::Clear()
+void wxWindowGTK::ClearBackground()
 {
     wxCHECK_RET( m_widget != NULL, wxT("invalid window") );
 
