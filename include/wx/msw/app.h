@@ -25,6 +25,10 @@ class WXDLLEXPORT wxApp ;
 class WXDLLEXPORT wxKeyEvent;
 class WXDLLEXPORT wxLog;
 
+#if USE_WXCONFIG
+  class WXDLLEXPORT wxConfig;
+#endif //USE_WXCONFIG 
+
 #define wxPRINT_WINDOWS         1
 #define wxPRINT_POSTSCRIPT      2
 
@@ -42,7 +46,6 @@ bool WXDLLEXPORT wxYield(void);
 
 // Represents the application. Derive OnInit and declare
 // a new App object to start application
-class wxConfig;
 class WXDLLEXPORT wxApp: public wxEvtHandler
 {
   DECLARE_DYNAMIC_CLASS(wxApp)
@@ -70,10 +73,6 @@ class WXDLLEXPORT wxApp: public wxEvtHandler
 
   // No specific tasks to do here.
   virtual bool OnInitGui(void) { return TRUE; }
-
-  // override this function to create a global wxConfig object of different
-  // than default type (right now the default implementation returns NULL)
-  virtual wxConfig *CreateConfig(void) { return NULL; }
 
   // Called to set off the main loop
   virtual int OnRun(void) { return MainLoop(); };
@@ -116,7 +115,13 @@ class WXDLLEXPORT wxApp: public wxEvtHandler
   inline bool GetAuto3D(void) const { return m_auto3D; }
 
   // Creates a log object
-  virtual wxLog* CreateLogTarget(void);
+  virtual wxLog* CreateLogTarget();
+
+#if USE_WXCONFIG
+  // override this function to create a global wxConfig object of different
+  // than default type (right now the default implementation returns NULL)
+  virtual wxConfig* CreateConfig() { return NULL; }
+#endif //USE_WXCONFIG 
 
 public:
 //  void (*work_proc)(wxApp*app); // work procedure;
