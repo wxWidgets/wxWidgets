@@ -122,11 +122,11 @@ public:
     %pythoncode {
     def PySetDate(self, date):
         """takes datetime.datetime or datetime.date object"""
-        self.SetDate(_py2wx(date))
+        self.SetDate(_pydate2wxdate(date))
 
     def PyGetDate(self):
         """returns datetime.date object"""
-        return _wx2py(self.GetDate())
+        return _wxdate2pydate(self.GetDate())
     }
 };
 
@@ -422,19 +422,19 @@ The result codes are:
     %pythoncode {
     def PySetDate(self, date):
         """takes datetime.datetime or datetime.date object"""
-        self.SetDate(_py2wx(date))
+        self.SetDate(_pydate2wxdate(date))
 
     def PyGetDate(self):
         """returns datetime.date object"""
-        return _wx2py(self.GetDate())
+        return _wxdate2pydate(self.GetDate())
 
     def PySetLowerDateLimit(self, date):
         """takes datetime.datetime or datetime.date object"""
-        self.SetLowerDateLimit(_py2wx(date))
+        self.SetLowerDateLimit(_pydate2wxdate(date))
 
     def PySetUpperDateLimit(self, date):
         """takes datetime.datetime or datetime.date object"""
-        self.SetUpperDateLimit(_py2wx(date))
+        self.SetUpperDateLimit(_pydate2wxdate(date))
 
     def PySetDateRange(self, lowerdate, upperdate):
         """takes datetime.datetime or datetime.date objects"""
@@ -443,27 +443,30 @@ The result codes are:
 
     def PyGetLowerDateLimit(self):
         """returns datetime.date object"""
-        return _wx2py(self.GetLowerDateLimit())
+        return _wxdate2pydate(self.GetLowerDateLimit())
 
     def PyGetUpperDateLimit(self):
         """returns datetime.date object"""
-        return _wx2py(self.GetUpperDateLimit())
+        return _wxdate2pydate(self.GetUpperDateLimit())
     }
 };
 
 %pythoncode {
-def _py2wx(date):
+def _pydate2wxdate(date):
     import datetime
     assert isinstance(date, (datetime.datetime, datetime.date))
     tt = date.timetuple()
     dmy = (tt[2], tt[1]-1, tt[0])
     return wx.DateTimeFromDMY(*dmy)
 
-def _wx2py(date):
+def _wxdate2pydate(date):
     import datetime
     assert isinstance(date, wx.DateTime)
-    ymd = map(int, date.FormatISODate().split('-'))
-    return datetime.date(*ymd)
+    if date.IsValid():
+        ymd = map(int, date.FormatISODate().split('-'))
+        return datetime.date(*ymd)
+    else:
+        return None
 }
     
 //---------------------------------------------------------------------------
