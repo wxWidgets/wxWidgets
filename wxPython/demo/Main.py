@@ -1110,6 +1110,7 @@ class wxPythonDemo(wx.Frame):
         self.codePage = None
         self.shell = None
         self.firstTime = True
+        self.finddlg = None
 
         icon = images.getWXPdemoIcon()
         self.SetIcon(icon)
@@ -1196,9 +1197,11 @@ class wxPythonDemo(wx.Frame):
         self.Bind(wx.EVT_MENU, self.OnHelpAbout, helpItem)
         self.Bind(wx.EVT_MENU, self.OnHelpFind,  findItem)
         self.Bind(wx.EVT_MENU, self.OnFindNext,  findnextItem)
-        self.Bind(wx.EVT_COMMAND_FIND, self.OnFind)
-        self.Bind(wx.EVT_COMMAND_FIND_NEXT, self.OnFind)
-        self.Bind(wx.EVT_COMMAND_FIND_CLOSE, self.OnFindClose)
+        self.Bind(wx.EVT_FIND, self.OnFind)
+        self.Bind(wx.EVT_FIND_NEXT, self.OnFind)
+        self.Bind(wx.EVT_FIND_CLOSE, self.OnFindClose)
+        self.Bind(wx.EVT_UPDATE_UI, self.OnUpdateFindItems, findItem)
+        self.Bind(wx.EVT_UPDATE_UI, self.OnUpdateFindItems, findnextItem)
         self.mainmenu.Append(menu, '&Help')
         self.SetMenuBar(self.mainmenu)
 
@@ -1515,12 +1518,20 @@ class wxPythonDemo(wx.Frame):
         about.Destroy()
 
     def OnHelpFind(self, event):
+        if self.finddlg != None:
+            return
+        
         self.nb.SetSelection(1)
         self.finddlg = wx.FindReplaceDialog(self, self.finddata, "Find",
                         wx.FR_NOUPDOWN |
                         wx.FR_NOMATCHCASE |
                         wx.FR_NOWHOLEWORD)
         self.finddlg.Show(True)
+
+
+    def OnUpdateFindItems(self, evt):
+        evt.Enable(self.finddlg == None)
+
 
     def OnFind(self, event):
         editor = self.codePage.editor
@@ -1546,6 +1557,7 @@ class wxPythonDemo(wx.Frame):
                 return
             else:
                 self.finddlg.Destroy()
+                self.finddlg = None
         editor.ShowPosition(loc)
         editor.SetSelection(loc, loc + len(findstring))
 
@@ -1559,6 +1571,7 @@ class wxPythonDemo(wx.Frame):
 
     def OnFindClose(self, event):
         event.GetDialog().Destroy()
+        self.finddlg = None
 
 
     def OnOpenShellWindow(self, evt):
