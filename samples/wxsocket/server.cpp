@@ -111,7 +111,7 @@ void MyFrame::OnSockRequest(wxSocketEvent& evt)
   wxPrintf(_T("OnSockRequest OK\n"));
   wxPrintf(_T("OnSockRequest (event = %d)\n"),evt.SocketEvent());
   switch (evt.SocketEvent()) {
-  case GSOCK_INPUT:
+  case wxSOCKET_INPUT:
     unsigned char c;
 
     sock->Read((char *)&c, 1);
@@ -119,7 +119,7 @@ void MyFrame::OnSockRequest(wxSocketEvent& evt)
       ExecTest1(sock);
 
     break;
-  case GSOCK_LOST:
+  case wxSOCKET_LOST:
     wxPrintf(_T("Destroying socket\n"));
     wxPendingDelete.Append(sock);
     UpdateStatus(-1);
@@ -155,7 +155,7 @@ void MyFrame::OnSockRequestServer(wxSocketEvent& evt)
   sock2->SetFlags(wxSocketBase::NONE);
   sock2->Notify(TRUE);
   sock2->SetEventHandler(*this, SKDEMO_SOCKET);
-  sock2->SetNotify(GSOCK_INPUT_FLAG | GSOCK_LOST_FLAG);
+  sock2->SetNotify(wxSOCKET_INPUT_FLAG | wxSOCKET_LOST_FLAG);
 }
 
 // My frame Constructor
@@ -169,7 +169,7 @@ MyFrame::MyFrame(wxFrame *frame):
   // Init all
 
   sock = new wxSocketServer(addr);
-  sock->SetNotify(GSOCK_CONNECTION_FLAG);
+  sock->SetNotify(wxSOCKET_CONNECTION_FLAG);
   sock->SetEventHandler(*this, SKDEMO_SOCKET_SERV);
   sock->SetFlags(wxSocketBase::SPEED);
   sock->Notify(TRUE);

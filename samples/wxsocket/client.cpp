@@ -143,7 +143,7 @@ MyFrame::MyFrame():
   sock = new MyClient();
   sock->SetFlags((wxSocketBase::wxSockFlags) (wxSocketBase::WAITALL | wxSocketBase::SPEED));
   sock->frame = this;
-  sock->SetNotify(GSOCK_LOST_FLAG);
+  sock->SetNotify(wxSOCKET_LOST_FLAG);
   CreateStatusBar(2);
   UpdateStatus();
 }
@@ -281,7 +281,7 @@ void MyFrame::OnExecTest1(wxCommandEvent& WXUNUSED(evt))
 
   /* No 2 */
   sock->SetEventHandler(*this, SKDEMO_SCK);
-  sock->SetNotify(GSOCK_INPUT_FLAG | GSOCK_LOST_FLAG);
+  sock->SetNotify(wxSOCKET_INPUT_FLAG | wxSOCKET_LOST_FLAG);
   sock->Notify(TRUE);
 
   text_win->WriteText("Test 1B: sending bytes to the server\n");
