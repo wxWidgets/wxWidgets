@@ -410,7 +410,7 @@ bool wxAppConsole::CheckBuildOptions(const char *optionsSignature,
         msg.Printf(_T("Mismatch between the program and library build versions detected.\nThe library used %s,\nand %s used %s."),
                    lib.c_str(), progName.c_str(), prog.c_str());
 
-        wxLogFatalError(msg);
+        wxLogFatalError(msg.c_str());
 
         // normally wxLogFatalError doesn't return
         return FALSE;
