@@ -236,7 +236,7 @@ void ctCustomPropertyDialog::OnPropertyChoiceRemove( wxCommandEvent& event )
     if (listBox->GetSelection() > -1)
     {
         listBox->Delete(listBox->GetSelection());
-        m_choices.Remove(listBox->GetSelection());
+        m_choices.RemoveAt(listBox->GetSelection());
     }
 }
 

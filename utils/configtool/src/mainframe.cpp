@@ -23,6 +23,7 @@
 #include "wx/notebook.h"
 #include "wx/splitter.h"
 #include "wx/clipbrd.h"
+#include "wx/dataobj.h"
 #include "wx/cshelp.h"
 
 #include "wxconfigtool.h"

@@ -144,7 +144,7 @@ public:
     // enabled/disabled
     int GetStateCount() const { return m_maxStates; };
 
-    void SetStateCount(int count) { m_maxStates; }
+    void SetStateCount(int count) { m_maxStates = count; }
     int GetIconId(int state, bool enabled = TRUE) const;
     void SetIconId(int state, bool enabled, int iconId);
 
