@@ -323,8 +323,7 @@ bool wxWizard::ShowPage(wxWizardPage *page, bool goingForward)
 
     // use these labels to determine if we need to change the bitmap
     // for this page
-    wxBitmap   PreviousBitmap = wxNullBitmap;
-    wxBitmap   ThisBitmap = wxNullBitmap;
+    wxBitmap bmpPrev, bmpCur;
 
     // check for previous page
     if ( m_page )
@@ -343,9 +342,9 @@ bool wxWizard::ShowPage(wxWizardPage *page, bool goingForward)
         btnLabelWasNext = m_page->GetNext() != (wxWizardPage *)NULL;
 
         // Get the bitmap of the previous page (if it exists)
-        if(m_page->GetBitmap().Ok())
-    {
-            PreviousBitmap = m_page->GetBitmap();
+        if ( m_page->GetBitmap().Ok() )
+        {
+            bmpPrev = m_page->GetBitmap();
         }
     }
 
@@ -368,12 +367,13 @@ bool wxWizard::ShowPage(wxWizardPage *page, bool goingForward)
     (void)m_page->TransferDataToWindow();
     m_page->SetSize(m_x, m_y, m_width, m_height);
     m_page->Show();
+    m_page->SetFocus();
 
     // check if bitmap needs to be updated
     // update default flag as well
-    if(m_page->GetBitmap().Ok())
+    if ( m_page->GetBitmap().Ok() )
     {
-        ThisBitmap = m_page->GetBitmap();
+        bmpCur = m_page->GetBitmap();
         bmpIsDefault = FALSE;
     }
 
@@ -381,7 +381,7 @@ bool wxWizard::ShowPage(wxWizardPage *page, bool goingForward)
     // 1) a default bitmap was selected in constructor
     // 2) this page was constructed with a bitmap
     // 3) this bitmap is not the previous bitmap
-    if( m_statbmp && (ThisBitmap != PreviousBitmap) )
+    if ( m_statbmp && (bmpCur != bmpPrev) )
     {
         wxBitmap bmp;
         if ( bmpIsDefault )
