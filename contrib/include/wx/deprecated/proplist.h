@@ -78,7 +78,7 @@
 #define wxID_PROP_VALUE_SELECT  3005
 
 // Mediates between a physical panel and the property sheet
-class WXDLLEXPORT wxPropertyListView: public wxPropertyView
+class WXDLLIMPEXP_DEPRECATED wxPropertyListView: public wxPropertyView
 {
 public:
   wxPropertyListView(wxPanel *propPanel = NULL, long flags = wxPROP_BUTTON_DEFAULT);
@@ -195,7 +195,7 @@ private:
         { wxPropertyView::ShowView(propertySheet, window); };
 };
 
-class WXDLLEXPORT wxPropertyTextEdit: public wxTextCtrl
+class WXDLLIMPEXP_DEPRECATED wxPropertyTextEdit: public wxTextCtrl
 {
 public:
     wxPropertyTextEdit(wxPropertyListView *v = NULL,
@@ -222,7 +222,7 @@ private:
  * The type of validator used for property lists (Visual Basic style)
  */
 
-class WXDLLEXPORT wxPropertyListValidator: public wxPropertyValidator
+class WXDLLIMPEXP_DEPRECATED wxPropertyListValidator: public wxPropertyValidator
 {
 public:
    wxPropertyListValidator(long flags = wxPROP_ALLOW_TEXT_EDITING): wxPropertyValidator(flags) { }
@@ -285,7 +285,7 @@ private:
  * A default dialog box class to use.
  */
 
-class WXDLLEXPORT wxPropertyListDialog: public wxDialog
+class WXDLLIMPEXP_DEPRECATED wxPropertyListDialog: public wxDialog
 {
 public:
     wxPropertyListDialog(wxPropertyListView *v = NULL,
@@ -315,7 +315,7 @@ private:
  * A default panel class to use.
  */
 
-class WXDLLEXPORT wxPropertyListPanel: public wxPanel
+class WXDLLIMPEXP_DEPRECATED wxPropertyListPanel: public wxPanel
 {
 public:
     wxPropertyListPanel(wxPropertyListView *v = NULL,
@@ -352,7 +352,7 @@ private:
  * A default frame class to use.
  */
 
-class WXDLLEXPORT wxPropertyListFrame: public wxFrame
+class WXDLLIMPEXP_DEPRECATED wxPropertyListFrame: public wxFrame
 {
 public:
     wxPropertyListFrame(wxPropertyListView *v = NULL,
@@ -388,7 +388,7 @@ private:
  * Some default validators
  */
 
-class WXDLLEXPORT wxRealListValidator: public wxPropertyListValidator
+class WXDLLIMPEXP_DEPRECATED wxRealListValidator: public wxPropertyListValidator
 {
 public:
     // 0.0, 0.0 means no range
@@ -415,7 +415,7 @@ private:
     DECLARE_DYNAMIC_CLASS(wxRealListValidator)
 };
 
-class WXDLLEXPORT wxIntegerListValidator: public wxPropertyListValidator
+class WXDLLIMPEXP_DEPRECATED wxIntegerListValidator: public wxPropertyListValidator
 {
 public:
    // 0, 0 means no range
@@ -444,7 +444,7 @@ private:
     DECLARE_DYNAMIC_CLASS(wxIntegerListValidator)
 };
 
-class WXDLLEXPORT wxBoolListValidator: public wxPropertyListValidator
+class WXDLLIMPEXP_DEPRECATED wxBoolListValidator: public wxPropertyListValidator
 {
 public:
     wxBoolListValidator(long flags = 0):wxPropertyListValidator(flags) {}
@@ -472,7 +472,7 @@ private:
     DECLARE_DYNAMIC_CLASS(wxBoolListValidator)
 };
 
-class WXDLLEXPORT wxStringListValidator: public wxPropertyListValidator
+class WXDLLIMPEXP_DEPRECATED wxStringListValidator: public wxPropertyListValidator
 {
 public:
    wxStringListValidator(wxStringList *list = NULL, long flags = 0);
@@ -508,7 +508,7 @@ private:
     DECLARE_DYNAMIC_CLASS(wxStringListValidator)
 };
 
-class WXDLLEXPORT wxFilenameListValidator: public wxPropertyListValidator
+class WXDLLIMPEXP_DEPRECATED wxFilenameListValidator: public wxPropertyListValidator
 {
 public:
     wxFilenameListValidator(wxString message = wxT("Select a file"), wxString wildcard = wxALL_FILES_PATTERN, long flags = 0);
@@ -539,7 +539,7 @@ private:
     DECLARE_DYNAMIC_CLASS(wxFilenameListValidator)
 };
 
-class WXDLLEXPORT wxColourListValidator: public wxPropertyListValidator
+class WXDLLIMPEXP_DEPRECATED wxColourListValidator: public wxPropertyListValidator
 {
 public:
     wxColourListValidator(long flags = 0);
@@ -560,7 +560,7 @@ private:
     DECLARE_DYNAMIC_CLASS(wxColourListValidator)
 };
 
-class WXDLLEXPORT wxListOfStringsListValidator: public wxPropertyListValidator
+class WXDLLIMPEXP_DEPRECATED wxListOfStringsListValidator: public wxPropertyListValidator
 {
 public:
     wxListOfStringsListValidator(long flags = 0);

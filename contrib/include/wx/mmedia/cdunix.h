@@ -17,10 +17,11 @@
 #include "wx/defs.h"
 #include "wx/object.h"
 #include "wx/string.h"
+#include "wx/mmedia/defs.h"
 #include "wx/mmedia/cdbase.h"
 
 ///
-class WXDLLEXPORT wxCDAudioLinux : public wxCDAudio {
+class WXDLLIMPEXP_MMEDIA wxCDAudioLinux : public wxCDAudio {
   DECLARE_DYNAMIC_CLASS(wxCDAudioLinux)
 protected:
   wxCDtime m_time;

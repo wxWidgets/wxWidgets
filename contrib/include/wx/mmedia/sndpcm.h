@@ -13,6 +13,7 @@
 #endif
 
 #include "wx/defs.h"
+#include "wx/mmedia/defs.h"
 #include "wx/mmedia/sndbase.h"
 
 //

@@ -1,11 +1,7 @@
 /* include platform.h first to get __WIN32__ definition */
 #include "wx/platform.h"
-#if defined(__WIN32__) || defined(__GNUWIN32__)
-/* all Win32 compilers can handle C++ comments, and C++ comments
-   is the only C++ in setup.h */
 #include "wx/setup.h"
 #include "wx/deprecated/setup.h"
-#endif
 
 #if !defined(wxUSE_PROLOGIO) || wxUSE_PROLOGIO
 
@@ -219,11 +215,7 @@ YYSTYPE yyvs[YYSTACKSIZE];
 #define yystacksize YYSTACKSIZE
 #line 118 "parser.y"
 
-#ifdef IDE_INVOKED
 #include "doslex.c"
-#else
-#include "lex_yy.c"
-#endif
 
 /*
 void yyerror(s)
@@ -252,6 +244,7 @@ void yyerror(char *s)
  * to test
  */
 
+#if 0 /* VS: doesn't work... */
 #ifndef __SC__
 #ifdef USE_DEFINE
 #ifndef yywrap
@@ -264,6 +257,8 @@ void yyerror(char *s)
 #  endif
 #endif
 #endif
+#endif
+   
 #line 247 "y_tab.c"
 #define YYABORT goto yyabort
 #define YYACCEPT goto yyaccept

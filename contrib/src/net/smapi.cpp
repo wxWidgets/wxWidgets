@@ -31,7 +31,7 @@
 
 #include "wx/net/smapi.h"
 
-class wxMapiData
+class WXDLLIMPEXP_NETUTILS wxMapiData
 {
 public:
     wxMapiData()

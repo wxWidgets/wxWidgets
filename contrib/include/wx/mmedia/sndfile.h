@@ -10,6 +10,7 @@
 
 #include "wx/defs.h"
 #include "wx/stream.h"
+#include "wx/mmedia/defs.h"
 #include "wx/mmedia/sndbase.h"
 #include "wx/mmedia/sndcodec.h"
 
@@ -19,7 +20,7 @@
 // Codec router class
 //
 
-class WXDLLEXPORT wxSoundRouterStream: public wxSoundStreamCodec {
+class WXDLLIMPEXP_MMEDIA wxSoundRouterStream: public wxSoundStreamCodec {
  public:
   wxSoundRouterStream(wxSoundStream& sndio);
   ~wxSoundRouterStream();

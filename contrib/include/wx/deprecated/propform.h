@@ -23,7 +23,7 @@
 #include "wx/deprecated/prop.h"
 #include "wx/panel.h"
 
-class WXDLLEXPORT wxPropertyFormView;
+class WXDLLIMPEXP_DEPRECATED wxPropertyFormView;
 
 ////
 //// Property form classes: for using an existing dialog or panel
@@ -33,7 +33,7 @@ class WXDLLEXPORT wxPropertyFormView;
 #define wxID_PROP_UPDATE        3101
 
 // Mediates between a physical panel and the property sheet
-class WXDLLEXPORT wxPropertyFormView: public wxPropertyView
+class WXDLLIMPEXP_DEPRECATED wxPropertyFormView: public wxPropertyView
 {
  DECLARE_DYNAMIC_CLASS(wxPropertyFormView)
  public:
@@ -120,7 +120,7 @@ DECLARE_EVENT_TABLE()
  * assocated with a window. It's that kinda thing.
  */
 
-class WXDLLEXPORT wxPropertyFormValidator: public wxPropertyValidator
+class WXDLLIMPEXP_DEPRECATED wxPropertyFormValidator: public wxPropertyValidator
 {
   DECLARE_DYNAMIC_CLASS(wxPropertyFormValidator)
  protected:
@@ -161,7 +161,7 @@ private:
  * Some default validators
  */
 
-class WXDLLEXPORT wxRealFormValidator: public wxPropertyFormValidator
+class WXDLLIMPEXP_DEPRECATED wxRealFormValidator: public wxPropertyFormValidator
 {
   DECLARE_DYNAMIC_CLASS(wxRealFormValidator)
  public:
@@ -182,7 +182,7 @@ class WXDLLEXPORT wxRealFormValidator: public wxPropertyFormValidator
   float         m_realMax;
 };
 
-class WXDLLEXPORT wxIntegerFormValidator: public wxPropertyFormValidator
+class WXDLLIMPEXP_DEPRECATED wxIntegerFormValidator: public wxPropertyFormValidator
 {
   DECLARE_DYNAMIC_CLASS(wxIntegerFormValidator)
  public:
@@ -202,7 +202,7 @@ class WXDLLEXPORT wxIntegerFormValidator: public wxPropertyFormValidator
   long          m_integerMax;
 };
 
-class WXDLLEXPORT wxBoolFormValidator: public wxPropertyFormValidator
+class WXDLLIMPEXP_DEPRECATED wxBoolFormValidator: public wxPropertyFormValidator
 {
   DECLARE_DYNAMIC_CLASS(wxBoolFormValidator)
  protected:
@@ -217,7 +217,7 @@ class WXDLLEXPORT wxBoolFormValidator: public wxPropertyFormValidator
    bool OnDisplayValue(wxProperty *property, wxPropertyFormView *view, wxWindow *parentWindow);
 };
 
-class WXDLLEXPORT wxStringFormValidator: public wxPropertyFormValidator
+class WXDLLIMPEXP_DEPRECATED wxStringFormValidator: public wxPropertyFormValidator
 {
   DECLARE_DYNAMIC_CLASS(wxStringFormValidator)
  public:
@@ -241,7 +241,7 @@ class WXDLLEXPORT wxStringFormValidator: public wxPropertyFormValidator
  * A default dialog box class to use.
  */
 
-class WXDLLEXPORT wxPropertyFormDialog: public wxDialog
+class WXDLLIMPEXP_DEPRECATED wxPropertyFormDialog: public wxDialog
 {
 public:
     wxPropertyFormDialog(wxPropertyFormView *v = NULL,
@@ -270,7 +270,7 @@ private:
  * A default panel class to use.
  */
 
-class WXDLLEXPORT wxPropertyFormPanel: public wxPanel
+class WXDLLIMPEXP_DEPRECATED wxPropertyFormPanel: public wxPanel
 {
 public:
     wxPropertyFormPanel(wxPropertyFormView *v = NULL,
@@ -301,7 +301,7 @@ private:
  * A default frame class to use.
  */
 
-class WXDLLEXPORT wxPropertyFormFrame: public wxFrame
+class WXDLLIMPEXP_DEPRECATED wxPropertyFormFrame: public wxFrame
 {
 public:
     wxPropertyFormFrame(wxPropertyFormView *v = NULL,

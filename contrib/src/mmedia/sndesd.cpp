@@ -20,6 +20,8 @@
     #pragma hdrstop
 #endif
 
+#ifdef HAVE_ESD_H
+
 // --------------------------------------------------------------------------
 // MMedia headers
 // --------------------------------------------------------------------------
@@ -317,3 +319,5 @@ void wxSoundStreamESD::DetectBest(wxSoundFormatPcm *pcm)
     // Finally recopy the new format
     *pcm = best_pcm;
 }
+
+#endif // HAVE_ESD_H

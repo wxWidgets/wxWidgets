@@ -13,6 +13,7 @@
 #endif
 
 #include "wx/defs.h"
+#include "wx/mmedia/defs.h"
 #include "wx/mmedia/sndbase.h"
 #include "wx/mmedia/sndcodec.h"
 
@@ -20,7 +21,7 @@
 // PCM converter class
 //
 
-class WXDLLEXPORT wxSoundStreamPcm: public wxSoundStreamCodec {
+class WXDLLIMPEXP_MMEDIA wxSoundStreamPcm: public wxSoundStreamCodec {
 public:
     typedef void (*ConverterType)(const void *buf_in, void *buf_out,
                                   wxUint32 len);

@@ -372,7 +372,7 @@ bool wxVideoXANIM::CollectInfo()
     wxInputStream *infoStream = xanimProcess->GetInputStream();
     wxString totalOutput;
         
-    while (infoStream->LastError() == wxSTREAM_NOERROR) {
+    while (infoStream->GetLastError() == wxSTREAM_NO_ERROR) {
         char line[100];
 
         infoStream->Read(line, sizeof(line)-1);
@@ -468,8 +468,7 @@ bool wxVideoXANIM::RestartXANIM()
     GtkPizza *pizza = GTK_PIZZA( m_video_output->m_wxwindow );
     GdkWindow *window = pizza->bin_window;
     
-    m_internal->xanim_window =
-        ((GdkWindowPrivate *)window)->xwindow;
+    m_internal->xanim_window = GDK_WINDOW_XWINDOW(window);
 #endif
     // Get the XANIM atom
     m_internal->xanim_atom = XInternAtom(m_internal->xanim_dpy,

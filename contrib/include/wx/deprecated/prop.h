@@ -43,7 +43,7 @@ class wxPropertyValidatorRegistry;
 #define wxPROPERTY_VERSION 2.0
 
 // A storable sheet of values
-class WXDLLEXPORT wxPropertySheet: public wxObject
+class WXDLLIMPEXP_DEPRECATED wxPropertySheet: public wxObject
 {
 public:
     wxPropertySheet(const wxString& name = wxT(""));
@@ -91,7 +91,7 @@ private:
 
 // Base class for property sheet views. There are currently two directly derived
 // classes: wxPropertyListView, and wxPropertyFormView.
-class WXDLLEXPORT wxPropertyView: public wxEvtHandler
+class WXDLLIMPEXP_DEPRECATED wxPropertyView: public wxEvtHandler
 {
 public:
     wxPropertyView(long flags = 0);
@@ -131,7 +131,7 @@ private:
 };
 
 
-class WXDLLEXPORT wxPropertyValidator: public wxEvtHandler
+class WXDLLIMPEXP_DEPRECATED wxPropertyValidator: public wxEvtHandler
 {
 public:
     wxPropertyValidator(long flags = 0);
@@ -161,7 +161,7 @@ private:
 
 // extern wxPropertyValidator *wxDefaultPropertyValidator;
 
-class WXDLLEXPORT wxPropertyValidatorRegistry: public wxHashTable
+class WXDLLIMPEXP_DEPRECATED wxPropertyValidatorRegistry: public wxHashTable
 {
 public:
     wxPropertyValidatorRegistry();
@@ -192,7 +192,7 @@ typedef enum {
     wxPropertyValueStringPtr
 } wxPropertyValueType;
 
-class WXDLLEXPORT wxPropertyValue: public wxObject
+class WXDLLIMPEXP_DEPRECATED wxPropertyValue: public wxObject
 {
   DECLARE_DYNAMIC_CLASS(wxPropertyValue)
 
@@ -307,7 +307,7 @@ class WXDLLEXPORT wxPropertyValue: public wxObject
  * Property class: contains a name and a value.
  */
 
-class WXDLLEXPORT wxProperty: public wxObject
+class WXDLLIMPEXP_DEPRECATED wxProperty: public wxObject
 {
   DECLARE_DYNAMIC_CLASS(wxProperty)
  protected:

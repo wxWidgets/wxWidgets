@@ -13,13 +13,14 @@
 #endif
 
 #include "wx/defs.h"
+#include "wx/mmedia/defs.h"
 #include "wx/mmedia/sndcodec.h"
 #include "wx/mmedia/sndbase.h"
 
 //
 // ULAW format
 //
-class WXDLLEXPORT wxSoundFormatUlaw: public wxSoundFormatBase {
+class WXDLLIMPEXP_MMEDIA wxSoundFormatUlaw: public wxSoundFormatBase {
 public:
     wxSoundFormatUlaw();
     ~wxSoundFormatUlaw();
@@ -47,8 +48,8 @@ protected:
 // ULAW converter class
 //
 
-class WXDLLEXPORT wxSoundRouterStream;
-class WXDLLEXPORT wxSoundStreamUlaw: public wxSoundStreamCodec {
+class WXDLLIMPEXP_MMEDIA wxSoundRouterStream;
+class WXDLLIMPEXP_MMEDIA wxSoundStreamUlaw: public wxSoundStreamCodec {
 public:
     wxSoundStreamUlaw(wxSoundStream& sndio);
     ~wxSoundStreamUlaw();

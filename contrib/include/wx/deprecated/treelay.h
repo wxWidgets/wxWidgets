@@ -28,7 +28,7 @@ class wxMouseEvent;
 
 #if wxUSE_TREELAYOUT
 
-class WXDLLEXPORT wxTreeLayout: public wxObject
+class WXDLLIMPEXP_DEPRECATED wxTreeLayout: public wxObject
 {
 public:
     wxTreeLayout();
@@ -89,7 +89,7 @@ private:
     DECLARE_ABSTRACT_CLASS(wxTreeLayout)
 };
 
-class WXDLLEXPORT wxStoredNode
+class WXDLLIMPEXP_DEPRECATED wxStoredNode
 {
 public:
     wxString      m_name;
@@ -103,7 +103,7 @@ public:
  * A version of wxTreeLayout with storage for nodes
  */
 
-class WXDLLEXPORT wxTreeLayoutStored: public wxTreeLayout
+class WXDLLIMPEXP_DEPRECATED wxTreeLayoutStored: public wxTreeLayout
 {
 public:
     wxTreeLayoutStored(int noNodes = 200);

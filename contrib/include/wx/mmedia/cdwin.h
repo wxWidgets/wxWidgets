@@ -15,6 +15,7 @@
 #endif
 
 #include "wx/wxprec.h"
+#include "wx/mmedia/defs.h"
 #include "cdbase.h"
 
 #ifdef WXMMEDIA_INTERNAL
@@ -26,7 +27,7 @@ typedef struct CDAW_Internal {
 #endif
 
 ///
-class WXDLLEXPORT wxCDAudioWin : public wxCDAudio {
+class WXDLLIMPEXP_MMEDIA wxCDAudioWin : public wxCDAudio {
   DECLARE_DYNAMIC_CLASS(wxCDAudioWin)
 protected:
   struct CDAW_Internal *m_internal;

@@ -18,10 +18,10 @@
 
 #include "wx/net/msg.h"
 
-class wxMapiData;
+class WXDLLIMPEXP_NETUTILS wxMapiData;
 
 //The class which encapsulates the MAPI connection
-class wxMapiSession
+class WXDLLIMPEXP_NETUTILS wxMapiSession
 {
 public:
     //Constructors / Destructors

@@ -121,11 +121,7 @@ wxSoundStreamWin::~wxSoundStreamWin()
 // -----------------------------------------------------------------------
 // _wxSoundHandlerWndProc: Window callback to handle buffer completion
 // -----------------------------------------------------------------------
-/*
-LRESULT APIENTRY _EXPORT
-*/
-
-LRESULT WXDLLEXPORT APIENTRY _EXPORT 
+LRESULT APIENTRY _EXPORT 
 
  _wxSoundHandlerWndProc(HWND hWnd, UINT message,
                  WPARAM wParam, LPARAM lParam)
@@ -160,7 +156,9 @@ void wxSoundStreamWin::CreateSndWindow()
                                   wxGetInstance());
   int error;
 
-  m_internal->m_sndWin = ::CreateWindow(wxCanvasClassName, NULL, 0,
+  // NB: class name must be kept in sync with wxCanvasClassName in 
+  // src/msw/app.cpp!
+  m_internal->m_sndWin = ::CreateWindow(wxT("wxWindowClass"), NULL, 0,
 					0, 0, 0, 0, NULL, (HMENU) NULL,
                                         wxGetInstance(), NULL);
 
@@ -764,7 +762,7 @@ bool wxSoundStreamWin::QueueFilled() const
 // wxSoundWinModule
 // --------------------------------------------------------------------------
 
-class WXDLLEXPORT wxSoundWinModule : public wxModule {
+class wxSoundWinModule : public wxModule {
    DECLARE_DYNAMIC_CLASS(wxSoundWinModule)
  public:
    bool OnInit();

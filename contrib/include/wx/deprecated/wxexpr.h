@@ -52,7 +52,7 @@
 // carry on processing.
 typedef bool (*wxExprErrorHandler) (int errorType, char *msg);
 
-WXDLLEXPORT_DATA(extern wxExprErrorHandler) currentwxExprErrorHandler;
+WXDLLIMPEXP_DATA_DEPRECATED(extern wxExprErrorHandler) currentwxExprErrorHandler;
 
 
 typedef enum {
@@ -64,9 +64,9 @@ typedef enum {
     wxExprList
 } wxExprType;
 
-class WXDLLEXPORT wxExprDatabase;
+class WXDLLIMPEXP_DEPRECATED wxExprDatabase;
 
-class WXDLLEXPORT wxExpr
+class WXDLLIMPEXP_DEPRECATED wxExpr
 {
  public:
   wxObject *client_data;
@@ -196,7 +196,7 @@ class WXDLLEXPORT wxExpr
     DECLARE_NO_COPY_CLASS(wxExpr)
 };
 
-class WXDLLEXPORT wxExprDatabase: public wxList
+class WXDLLIMPEXP_DEPRECATED wxExprDatabase: public wxList
 {
 private:
     wxNode *position;              // Where we are in a search
@@ -262,7 +262,7 @@ private:
 // Function call-style interface - some more convenience wrappers/unwrappers
 
 // Make a call
-WXDLLEXPORT wxExpr* wxExprMakeCall(const wxString& functor ...);
+WXDLLIMPEXP_DEPRECATED wxExpr* wxExprMakeCall(const wxString& functor ...);
 
 #define wxExprMakeInteger(x) (new wxExpr((long)x))
 #define wxExprMakeReal(x) (new wxExpr((double)x))
@@ -271,13 +271,13 @@ WXDLLEXPORT wxExpr* wxExprMakeCall(const wxString& functor ...);
 #define wxExprMake(x)       (new wxExpr(x))
 
 // Checks functor
-WXDLLEXPORT bool wxExprIsFunctor(wxExpr *expr, const wxString& functor);
+WXDLLIMPEXP_DEPRECATED bool wxExprIsFunctor(wxExpr *expr, const wxString& functor);
 
 // Temporary variable for communicating between wxexpr.cpp and YACC/LEX
-WXDLLEXPORT_DATA(extern wxExprDatabase*) thewxExprDatabase;
+WXDLLIMPEXP_DATA_DEPRECATED(extern wxExprDatabase*) thewxExprDatabase;
 
 // YACC/LEX can leave memory lying around...
-extern "C" WXDLLEXPORT int wxExprCleanUp();
+extern "C" WXDLLIMPEXP_DEPRECATED int wxExprCleanUp();
 
 #endif // wxUSE_PROLOGIO
 

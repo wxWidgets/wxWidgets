@@ -51,7 +51,7 @@ wxUint32 wxSoundStreamPcm::GetBestSize() const
 // -----------------------------------------------------------------------
 
 #define DEFINE_CONV(name, input_type, output_type, convert) \
-static void Convert_##name##(const void *buf_in, void *buf_out, wxUint32 len) \
+static void Convert_##name(const void *buf_in, void *buf_out, wxUint32 len) \
 {\
   register input_type src; \
   register const input_type *t_buf_in = (input_type *)buf_in; \

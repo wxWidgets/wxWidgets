@@ -16,18 +16,19 @@
 
 #include "wx/defs.h"
 #include "wx/object.h"
+#include "wx/mmedia/defs.h"
 
 typedef struct wxCDtime {
   wxUint8 track;
   wxUint8 hour, min, sec;
 } wxCDtime;
 
-class WXDLLEXPORT wxCDAudio : public wxObject {
+class WXDLLIMPEXP_MMEDIA wxCDAudio : public wxObject {
   DECLARE_ABSTRACT_CLASS(wxCDAudio)
 public:
   typedef enum { PLAYING, PAUSED, STOPPED } CDstatus;
   // Table of contents manager
-  class WXDLLEXPORT CDtoc {
+  class WXDLLIMPEXP_MMEDIA CDtoc {
   protected:
     wxCDtime *tracks_time, *tracks_pos;
     wxCDtime total_time;

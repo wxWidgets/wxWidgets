@@ -43,6 +43,8 @@
 // Implementation
 // ---------------------------------------------------------------------------
 
+IMPLEMENT_DYNAMIC_CLASS(wxCDAudioWin, wxCDAudio)
+    
 wxCDAudioWin::wxCDAudioWin(void)
   : wxCDAudio(), m_trksize(NULL), m_trkpos(NULL), m_ok(TRUE), m_toc(NULL)
 {

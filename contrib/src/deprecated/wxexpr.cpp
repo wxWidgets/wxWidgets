@@ -104,8 +104,8 @@ extern "C" void LexFromString(char *buf);
 #define yytext PROIO_yytext
 #endif
 
-extern "C" WXDLLEXPORT_DATA(FILE*) yyin;
-extern "C" WXDLLEXPORT int yyparse(void);
+extern "C" WXDLLIMPEXP_DATA_DEPRECATED(FILE*) yyin;
+extern "C" WXDLLIMPEXP_DEPRECATED int yyparse(void);
 
 
 wxExprDatabase *thewxExprDatabase = NULL;

@@ -14,6 +14,7 @@
 
 #include "wx/defs.h"
 #include "wx/stream.h"
+#include "wx/mmedia/defs.h"
 #include "wx/mmedia/sndbase.h"
 #include "wx/mmedia/sndcodec.h"
 #include "wx/mmedia/sndfile.h"
@@ -22,7 +23,7 @@
 // AIFF codec
 //
 
-class WXDLLEXPORT wxSoundAiff: public wxSoundFileStream {
+class WXDLLIMPEXP_MMEDIA wxSoundAiff: public wxSoundFileStream {
 public:
     wxSoundAiff(wxInputStream& stream, wxSoundStream& io_sound);
     wxSoundAiff(wxOutputStream& stream, wxSoundStream& io_sound);

@@ -70,6 +70,9 @@
 #include "wx/combobox.h"
 #endif
 
+#include "wx/splitter.h"
+#include "wx/toolbar.h"
+
 #include "wx/validate.h"
 #include "wx/log.h"
 #include "wx/module.h"

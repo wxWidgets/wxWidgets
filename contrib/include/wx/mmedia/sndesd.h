@@ -14,6 +14,7 @@
 
 #include "wx/defs.h"
 #include "wx/string.h"
+#include "wx/mmedia/defs.h"
 #include "wx/mmedia/sndbase.h"
 #include "wx/mmedia/sndpcm.h"
 

@@ -59,7 +59,7 @@ class WXDLLEXPORT wxInputStream;
  * Internal format for control/panel item
  */
 
-class WXDLLEXPORT wxItemResource: public wxObject
+class WXDLLIMPEXP_DEPRECATED wxItemResource: public wxObject
 {
   DECLARE_DYNAMIC_CLASS(wxItemResource)
 
@@ -139,7 +139,7 @@ class WXDLLEXPORT wxItemResource: public wxObject
  * Resource table (normally only one of these)
  */
  
-class WXDLLEXPORT wxResourceTable: public wxHashTable
+class WXDLLIMPEXP_DEPRECATED wxResourceTable: public wxHashTable
 {
   DECLARE_DYNAMIC_CLASS(wxResourceTable)
 
@@ -169,37 +169,37 @@ class WXDLLEXPORT wxResourceTable: public wxHashTable
     virtual void ClearTable();
 };
 
-WXDLLEXPORT extern void wxInitializeResourceSystem();
-WXDLLEXPORT extern void wxCleanUpResourceSystem();
+WXDLLIMPEXP_DEPRECATED extern void wxInitializeResourceSystem();
+WXDLLIMPEXP_DEPRECATED extern void wxCleanUpResourceSystem();
 
-WXDLLEXPORT_DATA(extern wxResourceTable*) wxDefaultResourceTable;
-WXDLLEXPORT extern long wxParseWindowStyle(const wxString& style);
+WXDLLIMPEXP_DATA_DEPRECATED(extern wxResourceTable*) wxDefaultResourceTable;
+WXDLLIMPEXP_DEPRECATED extern long wxParseWindowStyle(const wxString& style);
 
 class WXDLLEXPORT wxMenuBar;
 class WXDLLEXPORT wxMenu;
 class WXDLLEXPORT wxBitmap;
 class WXDLLEXPORT wxIcon;
-WXDLLEXPORT extern wxBitmap wxResourceCreateBitmap(const wxString& resource, wxResourceTable *table = (wxResourceTable *) NULL);
-WXDLLEXPORT extern wxIcon wxResourceCreateIcon(const wxString& resource, wxResourceTable *table = (wxResourceTable *) NULL);
-WXDLLEXPORT extern wxMenuBar* wxResourceCreateMenuBar(const wxString& resource, wxResourceTable *table = (wxResourceTable *) NULL, wxMenuBar *menuBar = (wxMenuBar *) NULL);
-WXDLLEXPORT extern wxMenu* wxResourceCreateMenu(const wxString& resource, wxResourceTable *table = (wxResourceTable *) NULL);
-WXDLLEXPORT extern bool wxResourceParseData(const wxString& resource, wxResourceTable *table = (wxResourceTable *) NULL);
-WXDLLEXPORT extern bool wxResourceParseData(const char* resource, wxResourceTable *table = (wxResourceTable *) NULL);
-WXDLLEXPORT extern bool wxResourceParseFile(const wxString& filename, wxResourceTable *table = (wxResourceTable *) NULL);
-WXDLLEXPORT extern bool wxResourceParseString(char* s, wxResourceTable *table = (wxResourceTable *) NULL);
-WXDLLEXPORT extern bool wxResourceParseString(const wxString& s, wxResourceTable *table = (wxResourceTable *) NULL);
-WXDLLEXPORT extern void wxResourceClear(wxResourceTable *table = (wxResourceTable *) NULL);
+WXDLLIMPEXP_DEPRECATED extern wxBitmap wxResourceCreateBitmap(const wxString& resource, wxResourceTable *table = (wxResourceTable *) NULL);
+WXDLLIMPEXP_DEPRECATED extern wxIcon wxResourceCreateIcon(const wxString& resource, wxResourceTable *table = (wxResourceTable *) NULL);
+WXDLLIMPEXP_DEPRECATED extern wxMenuBar* wxResourceCreateMenuBar(const wxString& resource, wxResourceTable *table = (wxResourceTable *) NULL, wxMenuBar *menuBar = (wxMenuBar *) NULL);
+WXDLLIMPEXP_DEPRECATED extern wxMenu* wxResourceCreateMenu(const wxString& resource, wxResourceTable *table = (wxResourceTable *) NULL);
+WXDLLIMPEXP_DEPRECATED extern bool wxResourceParseData(const wxString& resource, wxResourceTable *table = (wxResourceTable *) NULL);
+WXDLLIMPEXP_DEPRECATED extern bool wxResourceParseData(const char* resource, wxResourceTable *table = (wxResourceTable *) NULL);
+WXDLLIMPEXP_DEPRECATED extern bool wxResourceParseFile(const wxString& filename, wxResourceTable *table = (wxResourceTable *) NULL);
+WXDLLIMPEXP_DEPRECATED extern bool wxResourceParseString(char* s, wxResourceTable *table = (wxResourceTable *) NULL);
+WXDLLIMPEXP_DEPRECATED extern bool wxResourceParseString(const wxString& s, wxResourceTable *table = (wxResourceTable *) NULL);
+WXDLLIMPEXP_DEPRECATED extern void wxResourceClear(wxResourceTable *table = (wxResourceTable *) NULL);
 // Register XBM/XPM data
-WXDLLEXPORT extern bool wxResourceRegisterBitmapData(const wxString& name, char bits[], int width, int height, wxResourceTable *table = (wxResourceTable *) NULL);
-WXDLLEXPORT extern bool wxResourceRegisterBitmapData(const wxString& name, char **data, wxResourceTable *table = (wxResourceTable *) NULL);
+WXDLLIMPEXP_DEPRECATED extern bool wxResourceRegisterBitmapData(const wxString& name, char bits[], int width, int height, wxResourceTable *table = (wxResourceTable *) NULL);
+WXDLLIMPEXP_DEPRECATED extern bool wxResourceRegisterBitmapData(const wxString& name, char **data, wxResourceTable *table = (wxResourceTable *) NULL);
 #define wxResourceRegisterIconData wxResourceRegisterBitmapData
 
 /*
  * Resource identifer code: #define storage
  */
 
-WXDLLEXPORT extern bool wxResourceAddIdentifier(const wxString& name, int value, wxResourceTable *table = (wxResourceTable *) NULL);
-WXDLLEXPORT extern int wxResourceGetIdentifier(const wxString& name, wxResourceTable *table = (wxResourceTable *) NULL);
+WXDLLIMPEXP_DEPRECATED extern bool wxResourceAddIdentifier(const wxString& name, int value, wxResourceTable *table = (wxResourceTable *) NULL);
+WXDLLIMPEXP_DEPRECATED extern int wxResourceGetIdentifier(const wxString& name, wxResourceTable *table = (wxResourceTable *) NULL);
 
 // Used to be wxWindowBase::LoadFromResource
 bool wxLoadFromResource(wxWindow* thisWindow, wxWindow *parent, const wxString& resourceName, const wxResourceTable *table = (const wxResourceTable *) NULL);

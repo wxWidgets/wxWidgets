@@ -16,12 +16,24 @@
 #ifndef _WX_MSG_H_
 #define _WX_MSG_H_
 
+#ifdef WXMAKINGDLL_NETUTILS
+    #define WXDLLIMPEXP_NETUTILS WXEXPORT
+    #define WXDLLIMPEXP_DATA_NETUTILS(type) WXEXPORT type
+#elif defined(WXUSINGDLL)
+    #define WXDLLIMPEXP_NETUTILS WXIMPORT
+    #define WXDLLIMPEXP_DATA_NETUTILS(type) WXIMPORT type
+#else // not making nor using DLL
+    #define WXDLLIMPEXP_NETUTILS
+    #define WXDLLIMPEXP_DATA_NETUTILS(type) type
+#endif
+
+
 /*
  * wxMailMessage
  * Encapsulates an email message
  */
 
-class wxMailMessage
+class WXDLLIMPEXP_NETUTILS wxMailMessage
 {
 public:
 
