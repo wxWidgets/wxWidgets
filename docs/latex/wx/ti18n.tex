@@ -31,14 +31,16 @@ The program i18n involves several steps:
 
 \begin{enumerate}\itemsep=0pt
 \item Translating the strings in the program text using 
-\helpref{wxGetTranslation}{wxgettranslation} or equivalently the \_() macro.
+\helpref{wxGetTranslation}{wxgettranslation} or equivalently the 
+\helpref{\_()}{underscore} macro.
 \item Extracting the strings to be translated from the program: this uses the
-work done in the previous step because {\it xgettext} program used for string
-extraction may be told (using its -k option) to recognise \_() and
-wxGetTranslation and extract all strings inside the calls to these functions.
-Alternatively, you may use -a option to extract all the strings, but it will
-usually result in many strings being found which don't have to be translated at
-all. This will create a text message catalog - a .po file.
+work done in the previous step because {\tt xgettext} program used for string
+extraction recognises the standard \_() as well as (using its {\tt -k} option)
+our wxGetTranslation and extracts all strings inside the calls to these
+functions. Alternatively, you may use {\tt -a} option to extract all the
+strings, but it will usually result in many strings being found which don't
+have to be translated at all. This will create a text message catalog -- a .po
+file.
 \item Translating the strings extracted in the previous step to other
 language(s). It involves editing the .po file.
 \item Compiling the .po file into .mo file to be used by the program.

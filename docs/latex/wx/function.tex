@@ -216,6 +216,7 @@ the corresponding topic.
 \helpref{wxStrlen}{wxstrlen}\\
 \helpref{wxSysErrorCode}{wxsyserrorcode}\\
 \helpref{wxSysErrorMsg}{wxsyserrormsg}\\
+\helpref{wxT}{wxt}\\
 \helpref{wxToLower}{wxtolower}\\
 \helpref{wxToUpper}{wxtoupper}\\
 \helpref{wxTraceLevel}{wxtracelevel}\\
@@ -230,7 +231,9 @@ the corresponding topic.
 \helpref{wxVsnprintf}{wxvsnprintf}\\
 \helpref{wxWakeUpIdle}{wxwakeupidle}\\
 \helpref{wxWriteResource}{wxwriteresource}\\
-\helpref{wxYield}{wxyield}
+\helpref{wxYield}{wxyield}\\
+\helpref{\_}{underscore}\\
+\helpref{\_T}{underscoret}
 
 \section{Version macros}\label{versionfunctions}
 
@@ -1189,6 +1192,19 @@ deleted with the {\it delete} operator.
 
 This function is deprecated, use \helpref{wxString}{wxstring} class instead.
 
+\membersection{::wxGetTranslation}\label{wxgettranslation}
+
+\func{const char *}{wxGetTranslation}{\param{const char * }{str}}
+
+This function returns the translation of string {\it str} in the current
+\helpref{locale}{wxlocale}. If the string is not found in any of the loaded
+message catalogs (see \helpref{internationalization overview}{internationalization}), the
+original string is returned. In debug build, an error message is logged -- this
+should help to find the strings which were not yet translated. As this function
+is used very often, an alternative (and also common in Unix world) syntax is
+provided: the \helpref{\_()}{underscore} macro is defined to do the same thing
+as wxGetTranslation.
+
 \membersection{::wxIsEmpty}\label{wxisempty}
 
 \func{bool}{wxIsEmpty}{\param{const char *}{ p}}
@@ -1237,18 +1253,6 @@ This is a safe version of standard function {\it strlen()}: it does exactly the
 same thing (i.e. returns the length of the string) except that it returns 0 if
 {\it p} is the {\tt NULL} pointer.
 
-\membersection{::wxGetTranslation}\label{wxgettranslation}
-
-\func{const char *}{wxGetTranslation}{\param{const char * }{str}}
-
-This function returns the translation of string {\it str} in the current
-\helpref{locale}{wxlocale}. If the string is not found in any of the loaded
-message catalogs (see \helpref{internationalization overview}{internationalization}), the
-original string is returned. In debug build, an error message is logged - this
-should help to find the strings which were not yet translated. As this function
-is used very often, an alternative syntax is provided: the \_() macro is
-defined as wxGetTranslation().
-
 \membersection{::wxSnprintf}\label{wxsnprintf}
 
 \func{int}{wxSnprintf}{\param{wxChar *}{buf}, \param{size\_t }{len}, \param{const wxChar *}{format}, \param{}{...}}
@@ -1264,6 +1268,69 @@ enough space.
 \wxheading{See also}
 
 \helpref{wxVsnprintf}{wxvsnprintf}, \helpref{wxString::Printf}{wxstringprintf}
+
+\membersection{wxT}\label{wxt}
+
+\func{wxChar}{wxT}{\param{char }{ch}}
+
+\func{const wxChar *}{wxT}{\param{const char *}{s}}
+
+wxT() is a macro which can be used with character and string literals (in other
+words, {\tt 'x'} or {\tt "foo"}) to automatically convert them to Unicode in
+Unicode build configuration. Please see the 
+\helpref{Unicode overview}{unicode} for more information.
+
+This macro is simply returns the value passed to it without changes in ASCII
+build. In fact, its definition is:
+\begin{verbatim}
+#ifdef UNICODE
+#define wxT(x) L ## x
+#else // !Unicode
+#define wxT(x) x
+#endif
+\end{verbatim}
+
+\membersection{wxTRANSLATE}\label{wxtranslate}
+
+\func{const wxChar *}{wxTRANSLATE}{\param{const char *}{s}}
+
+This macro doesn't do anything in the program code -- it simply expands to the
+value of its argument (expand in Unicode build where it is equivalent to 
+\helpref{wxT}{wxt} which makes it unnecessary to use both wxTRANSLATE and wxT
+with the same string which would be really unreadable).
+
+However it does have a purpose and it is to mark the literal strings for the
+extraction into the message catalog created by {\tt xgettext} program. Usually
+this is achieved using \helpref{\_()}{underscore} but that macro not only marks
+the string for extraction but also expands into 
+\helpref{wxGetTranslation}{wxgettranslation} function call which means that it
+cannot be used in some situations, notably for the static arrays
+initialization.
+
+Here is an example which should make it more clear: suppose that you have a
+static array of strings containing the weekday names and which have to be
+translated (note that it is a bad example, really, as
+\helpref{wxDateTime}{wxdatetime} already can be used to get the localized week
+day names already). If you write
+\begin{verbatim}
+static const wxChar * const weekdays[] = { _("Mon"), ..., _("Sun") };
+...
+// use weekdays[n] as usual
+\end{verbatim}
+the code wouldn't compile because the function calls are forbidden in the array
+initializer. So instead you should do
+\begin{verbatim}
+static const wxChar * const weekdays[] = { wxTRANSLATE("Mon"), ..., wxTRANSLATE("Sun") };
+...
+// use wxGetTranslation(weekdays[n])
+\end{verbatim}
+here.
+
+Note that although the code {\bf would} compile if you simply omit
+wxTRANSLATE() in the above, it wouldn't work as expected because there would be
+no translations for the weekday names in the program message catalog and
+wxGetTranslation wouldn't find them.
+
 
 \membersection{::wxToLower}\label{wxtolower}
 
@@ -1295,6 +1362,34 @@ argument instead of arbitrary number of parameters.
 \wxheading{See also}
 
 \helpref{wxSnprintf}{wxsnprintf}, \helpref{wxString::PrintfV}{wxstringprintfv}
+
+
+\membersection{\_}\label{underscore}
+
+\func{const wxChar *}{\_}{\param{const char *}{s}}
+
+This macro expands into a call to \helpref{wxGetTranslation}{wxgettranslation} 
+function, so it marks the message for the extraction by {\tt xgettext} just as
+\helpref{wxTRANSLATE}{wxtranslate} does, but also returns the translation of
+the string for the current locale during execution.
+
+Don't confuse this macro with \helpref{\_T()}{underscoret}!
+
+
+\membersection{\_T}\label{underscoret}
+
+\func{wxChar}{\_T}{\param{char }{ch}}
+
+\func{const wxChar *}{\_T}{\param{const wxChar }{ch}}
+
+This macro is exactly the same as \helpref{wxT}{wxt} and is defined in
+wxWindows simply because it may be more intuitive for Windows programmers as
+the standard Win32 headers also define it (as well as yet another name for the
+same macro which is {\tt \_TEXT()}).
+
+Don't confuse this macro with \helpref{\_()}{underscore}!
+
+\membersection{\_}\label{underscore}
 
 \section{Dialog functions}\label{dialogfunctions}
 

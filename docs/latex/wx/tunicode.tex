@@ -130,25 +130,25 @@ a separate type for strings though, because the standard
 \helpref{wxString}{wxstring} supports Unicode, i.e. it stores either ANSI or
 Unicode strings depending on the compile mode.
 
-Finally, there is a special {\tt wxT()} macro which should enclose all literal
-strings in the program. As it is easy to see comparing the last fragment with
-the one above, this macro expands to nothing in the (usual) ANSI mode and
-prefixes {\tt 'L'} to its argument in the Unicode mode.
+Finally, there is a special \helpref{wxT()}{wxt} macro which should enclose all
+literal strings in the program. As it is easy to see comparing the last
+fragment with the one above, this macro expands to nothing in the (usual) ANSI
+mode and prefixes {\tt 'L'} to its argument in the Unicode mode.
 
 The important conclusion is that if you use {\tt wxChar} instead of 
 {\tt char}, avoid using C style strings and use {\tt wxString} instead and
-don't forget to enclose all string literals inside {\tt wxT()} macro, your
+don't forget to enclose all string literals inside \helpref{wxT()}{wxt} macro, your
 program automatically becomes (almost) Unicode compliant!
 
 Just let us state once again the rules:
 
 \begin{itemize}
 \item Always use {\tt wxChar} instead of {\tt char}
-\item Always enclose literal string constants in {\tt wxT()} macro unless
-they're already converted to the right representation (another standard
-wxWindows macro {\tt \_()} does it, so there is no need for {\tt wxT()} in this
-case) or you intend to pass the constant directly to an external function
-which doesn't accept wide-character strings.
+\item Always enclose literal string constants in \helpref{wxT()}{wxt} macro
+unless they're already converted to the right representation (another standard
+wxWindows macro \helpref{\_()}{underscore} does it, for example, so there is no
+need for {\tt wxT()} in this case) or you intend to pass the constant directly
+to an external function which doesn't accept wide-character strings.
 \item Use {\tt wxString} instead of C style strings.
 \end{itemize}
 
