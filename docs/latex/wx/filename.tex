@@ -94,8 +94,7 @@ does.
 
 Other functions returning information about the file format provided by this
 class are \helpref{GetVolumeSeparator}{wxfilenamegetvolumeseparator},\rtfsp
-\helpref{IsPathSeparator}{wxfilenameispathseparator} and\rtfsp
-\helpref{IsWild}{wxfilenameiswild}.
+\helpref{IsPathSeparator}{wxfilenameispathseparator}.
 
 \helpref{IsRelative}{wxfilenameisrelative}
 
@@ -477,11 +476,15 @@ Returns {\tt TRUE} if the char is a path separator for this format.
 
 Returns {\tt TRUE} if this filename is not absolute.
 
-\membersection{wxFileName::IsWild}\label{wxfilenameiswild}
+\membersection{wxFileName::IsDir}\label{wxfilenameisdir}
 
-\func{bool}{IsWild}{\param{wxPathFormat }{format = wxPATH\_NATIVE}}
+\constfunc{bool}{IsDir}{\void}
 
-FIXME: what exactly does this do?
+Returns {\tt TRUE} if this object represents a directory, {\tt FALSE} otherwise
+(i.e. if it is a file). Note that this method doesn't test whether the
+directory or file really exists, you should use 
+\helpref{DirExists}{wxfilenamedirexists} or 
+\helpref{FileExists}{wxfilenamefileexists} for this.
 
 \membersection{wxFileName::MakeRelativeTo}\label{wxfilenamemakerelativeto}
 

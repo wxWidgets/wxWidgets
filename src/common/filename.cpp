@@ -955,6 +955,17 @@ bool wxFileName::MakeRelativeTo(const wxString& pathBase, wxPathFormat format)
         m_dirs.Insert(wxT(".."), 0u);
     }
 
+    if ( format == wxPATH_UNIX || format == wxPATH_DOS )
+    {
+        // a directory made relative with respect to itself is '.' under Unix
+        // and DOS, by definition (but we don't have to insert "./" for the
+        // files)
+        if ( m_dirs.IsEmpty() && IsDir() )
+        {
+            m_dirs.Add(_T('.'));
+        }   
+    }
+
     m_relative = TRUE;
 
     // we were modified
@@ -1046,13 +1057,6 @@ bool wxFileName::IsPathSeparator(wxChar ch, wxPathFormat format)
     wxASSERT_MSG( ch != _T('\0'), _T("shouldn't be called with NUL") );
 
     return GetPathSeparators(format).Find(ch) != wxNOT_FOUND;
-}
-
-bool wxFileName::IsWild( wxPathFormat WXUNUSED(format) )
-{
-    // FIXME: this is probably false for Mac and this is surely wrong for most
-    //        of Unix shells (think about "[...]")
-    return m_name.find_first_of(_T("*?")) != wxString::npos;
 }
 
 // ----------------------------------------------------------------------------

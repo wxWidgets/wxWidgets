@@ -296,9 +296,6 @@ public:
     // is the char a path separator for this format?
     static bool IsPathSeparator(wxChar ch, wxPathFormat format = wxPATH_NATIVE);
 
-    // FIXME: what exactly does this do?
-    bool IsWild( wxPathFormat format = wxPATH_NATIVE );
-
     // Dir accessors
     void AppendDir( const wxString &dir );
     void PrependDir( const wxString &dir );
@@ -343,6 +340,9 @@ public:
 
     // Return the long form of the path (returns identity on non-Windows platforms)
     wxString GetLongPath() const;
+
+    // Is this a file or directory (not necessarily an existing one)
+    bool IsDir() const { return m_name.empty() && m_ext.empty(); }
 
     // various helpers
 

@@ -91,7 +91,7 @@
     #undef TEST_ALL
     static const bool TEST_ALL = TRUE;
 #else
-    #define TEST_THREADS
+    #define TEST_FILENAME
 
     static const bool TEST_ALL = FALSE;
 #endif
@@ -802,7 +802,7 @@ static struct FileNameInfo
     { _T("c:\\Windows\\command.com"), _T("c"), _T("\\Windows"), _T("command"), _T("com"), TRUE, wxPATH_DOS },
     { _T("\\\\server\\foo.bar"), _T("server"), _T("\\"), _T("foo"), _T("bar"), TRUE, wxPATH_DOS },
 
-    // wxFileName support for Mac file names is broken crurently
+    // wxFileName support for Mac file names is broken currently
 #if 0
     // Mac file names
     { _T("Volume:Dir:File"), _T("Volume"), _T("Dir"), _T("File"), _T(""), TRUE, wxPATH_MAC },
@@ -900,7 +900,12 @@ static void TestFileNameTemp()
     for ( size_t n = 0; n < WXSIZEOF(tmpprefixes); n++ )
     {
         wxString path = wxFileName::CreateTempFileName(tmpprefixes[n]);
-        if ( !path.empty() )
+        if ( path.empty() )
+        {
+            // "error" is not in upper case because it may be ok
+            printf("Prefix '%s'\t-> error\n", tmpprefixes[n]);
+        }
+        else
         {
             printf("Prefix '%s'\t-> temp file '%s'\n",
                    tmpprefixes[n], path.c_str());
