@@ -104,7 +104,7 @@ class ColourSelect(wx.BitmapButton):
 
 
     def MakeBitmap(self):
-        bdr = 10
+        bdr = 8
         width, height = self.GetSize()
 
         # yes, this is weird, but it appears to work around a bug in wxMac
