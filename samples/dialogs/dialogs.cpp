@@ -299,7 +299,7 @@ void MyFrame::NumericEntry(wxCommandEvent& WXUNUSED(event) )
 void MyFrame::PasswordEntry(wxCommandEvent& WXUNUSED(event))
 {
     wxString pwd = wxGetPasswordFromUser("Enter password:",
-                                         "Passowrd entry dialog",
+                                         "Password entry dialog",
                                          "",
                                          this);
     if ( !!pwd )
