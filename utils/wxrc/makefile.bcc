@@ -56,6 +56,9 @@ WXUNIVNAME = univ
 !if "$(SHARED)" == "1"
 WXDLLFLAG = dll
 !endif
+!if "$(USE_XRC)" == "1"
+__wxrc___depname = $(OBJS)\wxrc.exe
+!endif
 !if "$(BUILD)" == "debug"
 __OPTIMIZEFLAG_2 = -Od
 !endif
@@ -139,7 +142,7 @@ $(OBJS):
 
 ### Targets: ###
 
-all: $(OBJS)\wxrc.exe
+all: $(__wxrc___depname)
 
 clean: 
 	-if exist $(OBJS)\*.obj del $(OBJS)\*.obj
@@ -151,10 +154,12 @@ clean:
 	-if exist $(OBJS)\wxrc.ilf del $(OBJS)\wxrc.ilf
 	-if exist $(OBJS)\wxrc.ils del $(OBJS)\wxrc.ils
 
+!if "$(USE_XRC)" == "1"
 $(OBJS)\wxrc.exe: $(WXRC_OBJECTS)
 	ilink32 -Tpe -q $(LDFLAGS) -L$(BCCDIR)\lib -L$(BCCDIR)\lib\psdk $(__DEBUGINFO)  -L$(LIBDIRNAME) -ap @&&|
-	c0x32.obj $(WXRC_OBJECTS),$@,, $(__WXLIB_XML_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) wxzlib$(WXDEBUGFLAG)$(WX_RELEASE_NODOT).lib  wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_RELEASE_NODOT).lib wxexpat$(WXDEBUGFLAG)$(WX_RELEASE_NODOT).lib  $(__UNICOWS_LIB_p) ole2w32.lib oleacc.lib odbc32.lib  import32.lib cw32mt$(__RUNTIME_LIBS_7).lib,,
+	c0x32.obj $(WXRC_OBJECTS),$@,, $(__WXLIB_XML_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) wxzlib$(WXDEBUGFLAG)$(WX_RELEASE_NODOT).lib  wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_RELEASE_NODOT).lib wxexpat$(WXDEBUGFLAG)$(WX_RELEASE_NODOT).lib  $(__UNICOWS_LIB_p) ole2w32.lib oleacc.lib odbc32.lib import32.lib cw32mt$(__RUNTIME_LIBS_7).lib,,
 |
+!endif
 
 $(OBJS)\wxrc_wxrc.obj: .\wxrc.cpp
 	$(CXX) -q -c -P -o$@ $(WXRC_CXXFLAGS) $**

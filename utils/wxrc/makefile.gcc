@@ -52,6 +52,9 @@ endif
 ifeq ($(SHARED),1)
 WXDLLFLAG = dll
 endif
+ifeq ($(USE_XRC),1)
+__wxrc___depname = $(OBJS)\wxrc.exe
+endif
 ifeq ($(BUILD),debug)
 __OPTIMIZEFLAG_2 = -O0
 endif
@@ -141,14 +144,16 @@ $(OBJS):
 
 ### Targets: ###
 
-all: $(OBJS)\wxrc.exe
+all: $(__wxrc___depname)
 
 clean: 
 	-if exist $(OBJS)\*.o del $(OBJS)\*.o
 	-if exist $(OBJS)\wxrc.exe del $(OBJS)\wxrc.exe
 
+ifeq ($(USE_XRC),1)
 $(OBJS)\wxrc.exe: $(WXRC_OBJECTS)
 	$(CXX) -o $@ $(WXRC_OBJECTS) $(LDFLAGS) $(__DEBUGINFO) -mthreads -L$(LIBDIRNAME)   $(__WXLIB_XML_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) -lwxzlib$(WXDEBUGFLAG)$(WX_RELEASE_NODOT)  -lwxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_RELEASE_NODOT) -lwxexpat$(WXDEBUGFLAG)$(WX_RELEASE_NODOT)  $(__UNICOWS_LIB_p) -lkernel32 -luser32 -lgdi32 -lcomdlg32 -lwinspool -lwinmm -lshell32 -lcomctl32 -lole32 -loleaut32 -luuid -lrpcrt4 -ladvapi32 -lwsock32 -lodbc32
+endif
 
 $(OBJS)\wxrc_wxrc.o: ./wxrc.cpp
 	$(CXX) -c -o $@ $(WXRC_CXXFLAGS) $<

@@ -55,6 +55,10 @@ WXDLLFLAG =
 !ifeq SHARED 1
 WXDLLFLAG = dll
 !endif
+__wxrc___depname =
+!ifeq USE_XRC 1
+__wxrc___depname = $(OBJS)\wxrc.exe
+!endif
 __DEBUGINFO_0 =
 !ifeq BUILD debug
 !ifeq DEBUG_INFO default
@@ -187,7 +191,7 @@ $(OBJS) :
 
 ### Targets: ###
 
-all : .SYMBOLIC $(OBJS)\wxrc.exe
+all : .SYMBOLIC $(__wxrc___depname)
 
 clean : .SYMBOLIC 
 	-if exist $(OBJS)\*.obj del $(OBJS)\*.obj
@@ -196,6 +200,7 @@ clean : .SYMBOLIC
 	-if exist $(OBJS)\*.ilk del $(OBJS)\*.ilk
 	-if exist $(OBJS)\wxrc.exe del $(OBJS)\wxrc.exe
 
+!ifeq USE_XRC 1
 $(OBJS)\wxrc.exe :  $(WXRC_OBJECTS)
 	@%create $(OBJS)\wxrc.lbc
 	@%append $(OBJS)\wxrc.lbc option quiet
@@ -203,9 +208,10 @@ $(OBJS)\wxrc.exe :  $(WXRC_OBJECTS)
 	@%append $(OBJS)\wxrc.lbc option caseexact
 	@%append $(OBJS)\wxrc.lbc $(LDFLAGS) $(__DEBUGINFO_1)  libpath $(LIBDIRNAME) system nt ref 'main_'
 	@for %i in ($(WXRC_OBJECTS)) do @%append $(OBJS)\wxrc.lbc file %i
-	@for %i in ( $(__WXLIB_XML_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) wxzlib$(WXDEBUGFLAG)$(WX_RELEASE_NODOT).lib  wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_RELEASE_NODOT).lib wxexpat$(WXDEBUGFLAG)$(WX_RELEASE_NODOT).lib   kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib odbc32.lib ) do @%append $(OBJS)\wxrc.lbc library %i
+	@for %i in ( $(__WXLIB_XML_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) wxzlib$(WXDEBUGFLAG)$(WX_RELEASE_NODOT).lib  wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_RELEASE_NODOT).lib wxexpat$(WXDEBUGFLAG)$(WX_RELEASE_NODOT).lib   kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib odbc32.lib) do @%append $(OBJS)\wxrc.lbc library %i
 	@%append $(OBJS)\wxrc.lbc
 	wlink @$(OBJS)\wxrc.lbc
+!endif
 
 $(OBJS)\wxrc_wxrc.obj :  .AUTODEPEND .\wxrc.cpp
 	$(CXX) -zq -fo=$^@ $(WXRC_CXXFLAGS) $<
