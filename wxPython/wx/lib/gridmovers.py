@@ -74,7 +74,7 @@ def _ColToRect(self,col):
     if self.GetNumberRows() > 0:
         rect = self.CellToRect(0,col)
     else:
-        rect = wxRect()
+        rect = wx.Rect()
         rect.height = self.GetColLabelSize()
         rect.width = self.GetColSize(col)
 
@@ -91,7 +91,7 @@ def _RowToRect(self,row):
     if self.GetNumberCols() > 0:
         rect = self.CellToRect(row,0)
     else:
-        rect = wxRect()
+        rect = wx.Rect()
         rect.width = self.GetRowLabelSize()
         rect.height = self.GetRowSize(row)
 
