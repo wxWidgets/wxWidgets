@@ -503,6 +503,8 @@ void wxChoice::DoSetSize(int x, int y,
             SendMessage(GetHwnd(), CB_SETITEMHEIGHT, (WPARAM)-1, h + delta);
         }
     }
+#else
+    wxUnusedVar(heightOrig);
 #endif
 }
 
