@@ -47,14 +47,15 @@
 //#define TEST_FILENAME
 //#define TEST_FTP
 //#define TEST_HASH
+//#define TEST_INFO_FUNCTIONS
 //#define TEST_LIST
 //#define TEST_LOG
 //#define TEST_LONGLONG
 //#define TEST_MIME
-//#define TEST_INFO_FUNCTIONS
+#define TEST_PATHLIST
 //#define TEST_REGISTRY
 //#define TEST_SOCKETS
-#define TEST_STREAMS
+//#define TEST_STREAMS
 //#define TEST_STRINGS
 //#define TEST_THREADS
 //#define TEST_TIMER
@@ -809,15 +810,13 @@ static void TestListCtor()
 
 #include <wx/mimetype.h>
 
-static wxMimeTypesManager g_mimeManager;
-
 static void TestMimeEnum()
 {
     wxPuts(_T("*** Testing wxMimeTypesManager::EnumAllFileTypes() ***\n"));
 
     wxArrayString mimetypes;
 
-    size_t count = g_mimeManager.EnumAllFileTypes(mimetypes);
+    size_t count = wxTheMimeTypesManager->EnumAllFileTypes(mimetypes);
 
     printf("*** All %u known filetypes: ***\n", count);
 
@@ -826,7 +825,8 @@ static void TestMimeEnum()
 
     for ( size_t n = 0; n < count; n++ )
     {
-        wxFileType *filetype = g_mimeManager.GetFileTypeFromMimeType(mimetypes[n]);
+        wxFileType *filetype =
+            wxTheMimeTypesManager->GetFileTypeFromMimeType(mimetypes[n]);
         if ( !filetype )
         {
             printf("nothing known about the filetype '%s'!\n",
@@ -850,21 +850,34 @@ static void TestMimeEnum()
         printf("\t%s: %s (%s)\n",
                mimetypes[n].c_str(), desc.c_str(), extsAll.c_str());
     }
+
+    puts("");
 }
 
 static void TestMimeOverride()
 {
     wxPuts(_T("*** Testing wxMimeTypesManager additional files loading ***\n"));
 
-    wxString mailcap = _T("/tmp/mailcap"),
-             mimetypes = _T("/tmp/mime.types");
+    static const wxChar *mailcap = _T("/tmp/mailcap");
+    static const wxChar *mimetypes = _T("/tmp/mime.types");
 
-    wxPrintf(_T("Loading mailcap from '%s': %s\n"),
-             mailcap.c_str(),
-             g_mimeManager.ReadMailcap(mailcap) ? _T("ok") : _T("ERROR"));
-    wxPrintf(_T("Loading mime.types from '%s': %s\n"),
-             mimetypes.c_str(),
-             g_mimeManager.ReadMimeTypes(mimetypes) ? _T("ok") : _T("ERROR"));
+    if ( wxFile::Exists(mailcap) )
+        wxPrintf(_T("Loading mailcap from '%s': %s\n"),
+                 mailcap,
+                 wxTheMimeTypesManager->ReadMailcap(mailcap) ? _T("ok") : _T("ERROR"));
+    else
+        wxPrintf(_T("WARN: mailcap file '%s' doesn't exist, not loaded.\n"),
+                 mailcap);
+
+    if ( wxFile::Exists(mimetypes) )
+        wxPrintf(_T("Loading mime.types from '%s': %s\n"),
+                 mimetypes,
+                 wxTheMimeTypesManager->ReadMimeTypes(mimetypes) ? _T("ok") : _T("ERROR"));
+    else
+        wxPrintf(_T("WARN: mime.types file '%s' doesn't exist, not loaded.\n"),
+                 mimetypes);
+
+    puts("");
 }
 
 static void TestMimeFilename()
@@ -882,7 +895,7 @@ static void TestMimeFilename()
     {
         const wxString fname = filenames[n];
         wxString ext = fname.AfterLast(_T('.'));
-        wxFileType *ft = g_mimeManager.GetFileTypeFromExtension(ext);
+        wxFileType *ft = wxTheMimeTypesManager->GetFileTypeFromExtension(ext);
         if ( !ft )
         {
             wxPrintf(_T("WARNING: extension '%s' is unknown.\n"), ext.c_str());
@@ -904,6 +917,8 @@ static void TestMimeFilename()
             delete ft;
         }
     }
+
+    puts("");
 }
 
 static void TestMimeAssociate()
@@ -920,7 +935,7 @@ static void TestMimeAssociate()
                          );
     ftInfo.SetShortDesc(_T("XYZFile")); // used under Win32 only
 
-    wxFileType *ft = g_mimeManager.Associate(ftInfo);
+    wxFileType *ft = wxTheMimeTypesManager->Associate(ftInfo);
     if ( !ft )
     {
         wxPuts(_T("ERROR: failed to create association!"));
@@ -930,6 +945,8 @@ static void TestMimeAssociate()
         // TODO: read it back
         delete ft;
     }
+
+    puts("");
 }
 
 #endif // TEST_MIME
@@ -1261,6 +1278,31 @@ static void TestLongLongComparison()
 #undef RAND_LL
 
 #endif // TEST_LONGLONG
+
+// ----------------------------------------------------------------------------
+// path list
+// ----------------------------------------------------------------------------
+
+#ifdef TEST_PATHLIST
+
+static void TestPathList()
+{
+    puts("*** Testing wxPathList ***\n");
+
+    wxPathList pathlist;
+    pathlist.AddEnvList("PATH");
+    wxString path = pathlist.FindValidPath("ls");
+    if ( path.empty() )
+    {
+        printf("ERROR: command not found in the path.\n");
+    }
+    else
+    {
+        printf("Command found in the path as '%s'.\n", path.c_str());
+    }
+}
+
+#endif // TEST_PATHLIST
 
 // ----------------------------------------------------------------------------
 // registry
@@ -4251,6 +4293,10 @@ int main(int argc, char **argv)
     TestOsInfo();
     TestUserInfo();
 #endif // TEST_INFO_FUNCTIONS
+
+#ifdef TEST_PATHLIST
+    TestPathList();
+#endif // TEST_PATHLIST
 
 #ifdef TEST_REGISTRY
     if ( 0 )
