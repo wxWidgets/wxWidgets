@@ -132,7 +132,11 @@ public:
     
     wxLayoutConstraints();
 
-    bool SatisfyConstraints(wxWindow *win, int *OUTPUT);
+    
+    DocDeclA(
+        bool, SatisfyConstraints(wxWindow *win, int *OUTPUT),
+        "SatisfyConstraints(Window win) -> (areSatisfied, noChanges)");
+
     bool AreSatisfied() const;
 };
 

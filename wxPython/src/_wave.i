@@ -63,7 +63,7 @@ public:
     ~wxWave();
 
     bool  IsOk() const;
-    bool  Play(bool async = True, bool looped = False) const;
+    bool  Play(bool async = True, bool looped = False);
 
     %pythoncode { def __nonzero__(self): return self.IsOk() }
 };

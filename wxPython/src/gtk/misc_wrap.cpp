@@ -10496,7 +10496,7 @@ static PyObject *_wrap_Wave_Play(PyObject *self, PyObject *args, PyObject *kwarg
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
-        result = (bool)((wxWave const *)arg1)->Play(arg2,arg3);
+        result = (bool)(arg1)->Play(arg2,arg3);
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;

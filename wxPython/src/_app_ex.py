@@ -2,51 +2,71 @@
 #----------------------------------------------------------------------
 
 class PyOnDemandOutputWindow:
+    """
+    A class that can be used for redirecting Python's stdout and
+    stderr streams.  It will do nothing until something is wrriten to
+    the stream at which point it will create a Frame with a text area
+    and write the text there.
+    """
     def __init__(self, title = "wxPython: stdout/stderr"):
         self.frame  = None
         self.title  = title
         self.parent = None
 
     def SetParent(self, parent):
+        """Set the window to be used as the popup Frame's parent."""
         self.parent = parent
 
+
+    def CreateOutputWindow(self, st):
+        self.frame = wx.Frame(self.parent, -1, self.title,
+                              style=wx.DEFAULT_FRAME_STYLE | wx.NO_FULL_REPAINT_ON_RESIZE)
+        self.text  = wxTextCtrl(self.frame, -1, "",
+                                style = wx.TE_MULTILINE | wx.TE_READONLY)
+        self.frame.SetSize((450, 300))
+        self.frame.Show(True)
+        EVT_CLOSE(self.frame, self.OnCloseWindow)
+        
+
+    # These methods provide the file-like output behaviour.
+    def write(self, text):
+        """
+        Create the output window if needed and write the string to it.
+        If not called in the context of the gui thread then uses
+        CallAfter to do the work there.
+        """        
+        if self.frame is None:
+            if not wx.Thread_IsMain():
+                wx.CallAfter(self.CreateOutputWindow, text)
+            else:
+                self.CreateOutputWindow(text)
+        else:
+            if not wx.Thread_IsMain():
+                wx.CallAfter(self.text.AppendText, text)
+            else:
+                self.text.AppendText(text)
+
+
+    def close(self):
+        if self.frame is not None:
+            wx.CallAfter(self.frame.Close)
+
+
     def OnCloseWindow(self, event):
-        if self.frame != None:
+        if self.frame is not None:
             self.frame.Destroy()
         self.frame = None
         self.text  = None
 
-    # These methods provide the file-like output behaviour.
-    def write(self, str):
-        if not wx.Thread_IsMain():
-            # Aquire the GUI mutex before making GUI calls.  Mutex is released
-            # when locker is deleted at the end of this function.
-            locker = wx.MutexGuiLocker()
-
-        if not self.frame:
-            self.frame = wx.Frame(self.parent, -1, self.title,
-                                 style=wx.DEFAULT_FRAME_STYLE | wx.NO_FULL_REPAINT_ON_RESIZE)
-            self.text  = wxTextCtrl(self.frame, -1, "",
-                                    style = wx.TE_MULTILINE | wx.TE_READONLY)
-            self.frame.SetSize((450, 300))
-            self.frame.Show(True)
-            EVT_CLOSE(self.frame, self.OnCloseWindow)
-        self.text.AppendText(str)
-
-    def close(self):
-        if self.frame != None:
-            if not wx.Thread_IsMain():
-                locker = wx.MutexGuiLocker()
-            self.frame.Close()
-
-
 #----------------------------------------------------------------------
-# The main application class.  Derive from this and implement an OnInit
-# method that creates a frame and then calls self.SetTopWindow(frame)
 
 _defRedirect = (wx.Platform == '__WXMSW__' or wx.Platform == '__WXMAC__')
 
 class App(wx.PyApp):
+    """
+    The main application class.  Derive from this and implement an OnInit
+    method that creates a frame and then calls self.SetTopWindow(frame)
+    """
     outputWindowClass = PyOnDemandOutputWindow
 
     def __init__(self, redirect=_defRedirect, filename=None, useBestVisual=False):
@@ -137,13 +157,20 @@ App_GetComCtl32Version           = _core.PyApp_GetComCtl32Version
 #----------------------------------------------------------------------------
 
 class PySimpleApp(wx.App):
-    def __init__(self, redirect=False, filename=None):
-        wx.App.__init__(self, redirect, filename)
+    """
+    A simple application class.  You can just create one of these and
+    then then make your top level windows later, and not have to worry
+    about OnInit."""
+
+    def __init__(self, redirect=False, filename=None, useBestVisual=False):
+        wx.App.__init__(self, redirect, filename, useBestVisual)
+        
     def OnInit(self):
         wx.InitAllImageHandlers()
         return True
 
 
+# Is anybody using this one?
 class PyWidgetTester(wx.App):
     def __init__(self, size = (250, 100)):
         self.size = size

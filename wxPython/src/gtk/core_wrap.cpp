@@ -17740,36 +17740,6 @@ static PyObject *_wrap_PyApp_SendIdleEvents(PyObject *self, PyObject *args, PyOb
 }
 
 
-static PyObject *_wrap_PyApp_OnIdle(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject *resultobj;
-    wxPyApp *arg1 = (wxPyApp *) 0 ;
-    wxIdleEvent *arg2 = 0 ;
-    PyObject * obj0 = 0 ;
-    PyObject * obj1 = 0 ;
-    char *kwnames[] = {
-        (char *) "self",(char *) "event", NULL 
-    };
-    
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:PyApp_OnIdle",kwnames,&obj0,&obj1)) goto fail;
-    if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxPyApp,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
-    if ((SWIG_ConvertPtr(obj1,(void **) &arg2, SWIGTYPE_p_wxIdleEvent,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
-    if (arg2 == NULL) {
-        PyErr_SetString(PyExc_TypeError,"null reference"); SWIG_fail; 
-    }
-    {
-        PyThreadState* __tstate = wxPyBeginAllowThreads();
-        (arg1)->OnIdle(*arg2);
-        
-        wxPyEndAllowThreads(__tstate);
-        if (PyErr_Occurred()) SWIG_fail;
-    }
-    Py_INCREF(Py_None); resultobj = Py_None;
-    return resultobj;
-    fail:
-    return NULL;
-}
-
-
 static PyObject *_wrap_PyApp_IsActive(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPyApp *arg1 = (wxPyApp *) 0 ;
@@ -18005,31 +17975,6 @@ static PyObject *_wrap_PyApp_GetPrintMode(PyObject *self, PyObject *args, PyObje
 }
 
 
-static PyObject *_wrap_PyApp_GetAssertMode(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject *resultobj;
-    wxPyApp *arg1 = (wxPyApp *) 0 ;
-    int result;
-    PyObject * obj0 = 0 ;
-    char *kwnames[] = {
-        (char *) "self", NULL 
-    };
-    
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:PyApp_GetAssertMode",kwnames,&obj0)) goto fail;
-    if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxPyApp,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
-    {
-        PyThreadState* __tstate = wxPyBeginAllowThreads();
-        result = (int)(arg1)->GetAssertMode();
-        
-        wxPyEndAllowThreads(__tstate);
-        if (PyErr_Occurred()) SWIG_fail;
-    }
-    resultobj = PyInt_FromLong((long)result);
-    return resultobj;
-    fail:
-    return NULL;
-}
-
-
 static PyObject *_wrap_PyApp_SetAssertMode(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPyApp *arg1 = (wxPyApp *) 0 ;
@@ -18049,6 +17994,31 @@ static PyObject *_wrap_PyApp_SetAssertMode(PyObject *self, PyObject *args, PyObj
         if (PyErr_Occurred()) SWIG_fail;
     }
     Py_INCREF(Py_None); resultobj = Py_None;
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_PyApp_GetAssertMode(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxPyApp *arg1 = (wxPyApp *) 0 ;
+    int result;
+    PyObject * obj0 = 0 ;
+    char *kwnames[] = {
+        (char *) "self", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:PyApp_GetAssertMode",kwnames,&obj0)) goto fail;
+    if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxPyApp,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = (int)(arg1)->GetAssertMode();
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    resultobj = PyInt_FromLong((long)result);
     return resultobj;
     fail:
     return NULL;
@@ -35612,7 +35582,6 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"PyApp_Dispatch", (PyCFunction) _wrap_PyApp_Dispatch, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"PyApp_ProcessIdle", (PyCFunction) _wrap_PyApp_ProcessIdle, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"PyApp_SendIdleEvents", (PyCFunction) _wrap_PyApp_SendIdleEvents, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"PyApp_OnIdle", (PyCFunction) _wrap_PyApp_OnIdle, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"PyApp_IsActive", (PyCFunction) _wrap_PyApp_IsActive, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"PyApp_SetTopWindow", (PyCFunction) _wrap_PyApp_SetTopWindow, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"PyApp_GetTopWindow", (PyCFunction) _wrap_PyApp_GetTopWindow, METH_VARARGS | METH_KEYWORDS },
@@ -35622,8 +35591,8 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"PyApp_GetUseBestVisual", (PyCFunction) _wrap_PyApp_GetUseBestVisual, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"PyApp_SetPrintMode", (PyCFunction) _wrap_PyApp_SetPrintMode, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"PyApp_GetPrintMode", (PyCFunction) _wrap_PyApp_GetPrintMode, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"PyApp_GetAssertMode", (PyCFunction) _wrap_PyApp_GetAssertMode, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"PyApp_SetAssertMode", (PyCFunction) _wrap_PyApp_SetAssertMode, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"PyApp_GetAssertMode", (PyCFunction) _wrap_PyApp_GetAssertMode, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"PyApp_GetMacSupportPCMenuShortcuts", (PyCFunction) _wrap_PyApp_GetMacSupportPCMenuShortcuts, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"PyApp_GetMacAboutMenuItemId", (PyCFunction) _wrap_PyApp_GetMacAboutMenuItemId, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"PyApp_GetMacPreferencesMenuItemId", (PyCFunction) _wrap_PyApp_GetMacPreferencesMenuItemId, METH_VARARGS | METH_KEYWORDS },
