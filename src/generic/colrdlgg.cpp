@@ -32,6 +32,11 @@
 #include "wx/layout.h"
 #include "wx/dcclient.h"
 #include "wx/slider.h"
+#include "wx/sizer.h"
+#endif
+
+#if wxUSE_STATLINE
+    #include "wx/statline.h"
 #endif
 
 #include "wx/generic/colrdlgg.h"
@@ -111,7 +116,7 @@ static wxString wxColourDialogNames[NUM_COLS]={_T("ORANGE"),
             _T("WHITE")
             };
 
-wxGenericColourDialog::wxGenericColourDialog(void)
+wxGenericColourDialog::wxGenericColourDialog()
 {
   dialogParent = NULL;
   whichKind = 1;
@@ -126,7 +131,7 @@ wxGenericColourDialog::wxGenericColourDialog(wxWindow *parent, wxColourData *dat
   Create(parent, data);
 }
 
-wxGenericColourDialog::~wxGenericColourDialog(void)
+wxGenericColourDialog::~wxGenericColourDialog()
 {
 }
 
@@ -149,7 +154,7 @@ bool wxGenericColourDialog::Create(wxWindow *parent, wxColourData *data)
   return TRUE;
 }
 
-int wxGenericColourDialog::ShowModal(void)
+int wxGenericColourDialog::ShowModal()
 {
   return wxDialog::ShowModal();
 }
@@ -196,7 +201,7 @@ void wxGenericColourDialog::OnPaint(wxPaintEvent& event)
   PaintHighlight(dc, TRUE);
 }
 
-void wxGenericColourDialog::CalculateMeasurements(void)
+void wxGenericColourDialog::CalculateMeasurements()
 {
   smallRectangleSize.x = 18;
   smallRectangleSize.y = 14;
@@ -226,40 +231,50 @@ void wxGenericColourDialog::CalculateMeasurements(void)
   buttonY = customColoursRect.y + customColoursRect.height + 10;
 }
 
-void wxGenericColourDialog::CreateWidgets(void)
+void wxGenericColourDialog::CreateWidgets()
 {
-  wxBeginBusyCursor();
+    wxBeginBusyCursor();
 
-  wxButton *okButton = new wxButton(this, wxID_OK, _("OK"), wxPoint(okButtonX, buttonY), wxSize(75,-1) );
-  int bw, bh;
-  okButton->GetSize(&bw, &bh);
-
-  (void) new wxButton(this, wxID_CANCEL, _("Cancel"), wxPoint(okButtonX + bw + 20, buttonY), wxSize(75,-1));
-  (void) new wxButton(this, wxID_ADD_CUSTOM, _("Add to custom colours"),
-     wxPoint(customButtonX, buttonY));
-
-  int sliderX = singleCustomColourRect.x + singleCustomColourRect.width + sectionSpacing;
-#ifdef __X__
-  int sliderSpacing = 75;
-  int sliderHeight = 160;
+    int sliderX = singleCustomColourRect.x + singleCustomColourRect.width + sectionSpacing;
+#if defined(__WXMOTIF__)
+    int sliderSpacing = 65;
+    int sliderHeight = 160;
 #else
-  int sliderSpacing = 45;
-  int sliderHeight = 160;
+    int sliderSpacing = 45;
+    int sliderHeight = 160;
 #endif
 
-  redSlider = new wxSlider(this, wxID_RED_SLIDER, 0, 0, 255,
-   wxPoint(sliderX, 10), wxSize(-1, sliderHeight), wxVERTICAL|wxSL_LABELS);
-  greenSlider = new wxSlider(this, wxID_GREEN_SLIDER, 0, 0, 255,
-   wxPoint(sliderX + sliderSpacing, 10), wxSize(-1, sliderHeight), wxVERTICAL|wxSL_LABELS);
-  blueSlider = new wxSlider(this, wxID_BLUE_SLIDER, 0, 0, 255,
-   wxPoint(sliderX + 2*sliderSpacing, 10), wxSize(-1, sliderHeight), wxVERTICAL|wxSL_LABELS);
+    redSlider = new wxSlider(this, wxID_RED_SLIDER, 0, 0, 255,
+        wxPoint(sliderX, 10), wxSize(-1, sliderHeight), wxVERTICAL|wxSL_LABELS);
+    greenSlider = new wxSlider(this, wxID_GREEN_SLIDER, 0, 0, 255,
+        wxPoint(sliderX + sliderSpacing, 10), wxSize(-1, sliderHeight), wxVERTICAL|wxSL_LABELS);
+    blueSlider = new wxSlider(this, wxID_BLUE_SLIDER, 0, 0, 255,
+        wxPoint(sliderX + 2*sliderSpacing, 10), wxSize(-1, sliderHeight), wxVERTICAL|wxSL_LABELS);
 
-  SetClientSize(sliderX + 3*sliderSpacing, buttonY + bh + 20);
-  okButton->SetDefault();
+    wxBoxSizer *topsizer = new wxBoxSizer( wxVERTICAL );
 
-  Centre(wxBOTH);
+    // 1) space for explicitly layouted controls
+    topsizer->Add( sliderX + 3*sliderSpacing, sliderHeight+25 );
+    
+#if wxUSE_STATLINE
+    // 2) static line
+    topsizer->Add( new wxStaticLine( this, -1 ), 0, wxEXPAND | wxLEFT|wxRIGHT|wxTOP, 10 );
+#endif
 
-  wxEndBusyCursor();
+    // 3) buttons
+    wxSizer *buttonsizer = CreateButtonSizer( wxOK|wxCANCEL );
+    buttonsizer->Add( new wxButton(this, wxID_ADD_CUSTOM, _("Add to custom colours") ), 0, wxLEFT|wxRIGHT, 10 );
+    topsizer->Add( buttonsizer, 0, wxCENTRE | wxALL, 10 );
+
+    SetAutoLayout( TRUE );
+    SetSizer( topsizer );
+    
+    topsizer->SetSizeHints( this );
+    topsizer->Fit( this );
+
+    Centre( wxBOTH );
+
+    wxEndBusyCursor();
 }
 
 void wxGenericColourDialog::InitializeColours(void)

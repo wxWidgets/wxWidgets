@@ -58,7 +58,7 @@ colrdlgg.cpp	G	G
 dcpsg.cpp	G	U
 dirdlgg.cpp	G	16
 fontdlgg.cpp	G	G
-filedlgg.cpp	G	U
+filedlgg.cpp	G	U,X
 gridg.cpp	G
 helphtml.cpp	G	G
 helpwxht.cpp	G	G

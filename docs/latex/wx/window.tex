@@ -1,8 +1,15 @@
 \section{\class{wxWindow}}\label{wxwindow}
 
-wxWindow is the base class for all windows.  Any
-children of the window will be deleted automatically by the destructor
-before the window itself is deleted.
+wxWindow is the base class for all windows. Any children of the window will be deleted 
+automatically by the destructor before the window itself is deleted.
+
+Please note that we documented a number of handler functions (OnChar(), OnMouse() etc.) in this 
+help text. These must not be called by a user program and are documented only for illustration. 
+On several platforms, only a few of these handlers are actually written (they are not always
+needed) and if you are uncertain on how to add a certain behaviour to a window class, intercept
+the respective event as usual and call \helpref{wxEvent::Skip}{wxeventskip} so that the native
+platform can implement its native behaviour or just ignore the event if nothing needs to be
+done.
 
 \wxheading{Derived from}
 
@@ -16,7 +23,7 @@ before the window itself is deleted.
 \wxheading{Window styles}
 
 The following styles can apply to all windows, although they will not always make sense for a particular
-window class.
+window class or on all platforms.
 
 \twocolwidtha{5cm}%
 \begin{twocollist}\itemsep=0pt
@@ -38,7 +45,7 @@ this style}
 \twocolitem{\windowstyle{wxNO\_FULLREPAINT\_ON\_RESIZE}}{Disables repainting
 the window completely when its size is changed - you will have to repaint the
 new window area manually if you use style. Currently only has effect for
-wxMSW.}
+Windows.}
 \twocolitem{\windowstyle{wxVSCROLL}}{Use this style to enable a vertical scrollbar. (Still used?) }
 \twocolitem{\windowstyle{wxHSCROLL}}{Use this style to enable a horizontal scrollbar. (Still used?) }
 \twocolitem{\windowstyle{wxCLIP\_CHILDREN}}{Use this style to eliminate flicker caused by the background being
@@ -792,7 +799,7 @@ Returns TRUE if the window is enabled for input, FALSE otherwise.
 
 Returns TRUE if the given point or rectange area has been exposed since the
 last repaint. Call this in an paint event handler to optimize redrawing by
-only redrawing those area, which have been exposed.
+only redrawing those areas, which have been exposed.
 
 \membersection{wxWindow::IsRetained}\label{wxwindowisretained}
 

@@ -8,12 +8,14 @@ Classes: \helpref{wxStreamBase}{wxstreambase},
 
 \wxheading{Purpose of wxStream}
 
-We went into troubles with c++ std streams on some platform:
+We went into troubles with C++ std streams on several platforms:
 they react quite well in most cases, but in multi-threaded case, for example,
-they have a LOT of problems.
+they have many problems. Some Borland Compilers refuse to work at all
+with them and using iostreams on Linux makes writing programs, that are
+binary compatible across different Linux distributions, impossible.
 
-Then, wxStreams have been built in wxWindows because an application should compile
-and run on all supported platforms and we don't want users depend on release
+Therefore, wxStreams have been added to wxWindows because an application should 
+compile and run on all supported platforms and we don't want users depend on release
 X.XX of libg++ or some other compiler to run the program.
 
 wxStreams is divided in two main parts:
@@ -55,29 +57,29 @@ code:
  ...
  // The constructor initializes the stream buffer and open the file descriptor
  // associated to the name of the file.
- wxFileInputStream in\_stream("the\_file\_to\_be\_read");
+ wxFileInputStream in_stream("the_file_to_be_read");
 
- // Ok, read some bytes ... nb\_datas is expressed in bytes.
- in\_stream.Read(data, nb\_datas);
- if (in\_stream.LastError() != wxStream\_NOERROR) {
+ // Ok, read some bytes ... nb_datas is expressed in bytes.
+ in_stream.Read(data, nb_datas);
+ if (in_stream.LastError() != wxStream_NOERROR) {
    // Oh oh, something bad happens.
    // For a complete list, look into the documentation at wxStreamBase.
  }
 
  // You can also inline all like this.
- if (in\_stream.Read(data, nb\_datas).LastError() != wxStream\_NOERROR) {
+ if (in_stream.Read(data, nb_datas).LastError() != wxStream_NOERROR) {
    // Do something.
  }
 
  // You can also get the last number of bytes REALLY put into the buffer.
- size\_t really\_read = in\_stream.LastRead();
+ size_t really_read = in_stream.LastRead();
 
  // Ok, moves to the beginning of the stream. SeekI returns the last position 
  // in the stream counted from the beginning.
- off\_t old_position = in\_stream.SeekI(0, wxFromBeginning);
+ off_t old_position = in_stream.SeekI(0, wxFromBeginning);
  
  // What is my current position ?
- off\_t position = in\_stream.TellI();
+ off_t position = in_stream.TellI();
 
  // wxFileInputStream will close the file descriptor on the destruction.
 \end{verbatim}

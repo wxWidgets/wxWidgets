@@ -54,6 +54,21 @@ have no meaning in the wxSizer class itself, but as there currently is only one 
 deriving directly from wxSizer and this class does not override these methods, the meaning
 of the paramters is described here:
 
+\docparam{window}{The window to be added to the sizer. Its initial size (either set explicitly by the
+user or calculated internally when using wxDefaultSize) is interpreted as the minimal and in many
+cases also the initial size. This is particularly useful in connection with \helpref{SetSizeHint}{wxsizersetsizehints}. }
+
+\docparam{sizer}{The (child-)sizer to be added to the sizer. This allows placing a child sizer in a
+sizer and thus to create hierarchies of sizers (typically a vertical box as the top sizer and several
+horizontal boxes on the level beneath).}
+
+\docparam{width and height}{The dimension of a spacer to be added to the sizer. Adding spacers to sizers
+gives more flexilibilty in the design of dialogs; imagine for example a vertical box with two buttons at the
+bottom of a dialog: you might want to insert a space between the two buttons and make that space stretchable
+using the {\it option} flag and the result will be that the left button will be aligned with the left
+side of the dialog and the right button with the right side - the space in between will shrink and grow with
+the dialog.}
+
 \membersection{wxSizer::Prepend}\label{wxsizerprepend}
 
 \func{void}{Prepend}{\param{wxWindow* }{window}, \param{int }{option = 0}, \param{int }{flag = 0}, \param{int }{border = 0}}
@@ -63,7 +78,7 @@ of the paramters is described here:
 \func{void}{Prepend}{\param{int }{width}, \param{int }{height}, \param{int }{option = 0}, \param{int }{flag = 0}, \param{int }{border = 0}}
 
 Same as \helpref{wxSizer::Add}{wxsizeradd}, but prepends the items to the beginning of the
-list of items (windows, subsizers or spaces) own by this sizer.
+list of items (windows, subsizers or spaces) owned by this sizer.
 
 \membersection{wxSizer::Remove}\label{wxsizerremove}
 
