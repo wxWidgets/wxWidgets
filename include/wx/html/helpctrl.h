@@ -84,8 +84,8 @@ public:
                                wxPoint *pos = NULL,
                                bool *newFrameEachTime = NULL);
 
-    // Sets the specified book or all books to have the given base path
-    virtual void SetBookBasePath(const wxString& basePath, int which = -1);
+    // Get direct access to help data:
+    wxHtmlHelpData *GetHelpData() { return &m_helpData; }
 
     virtual bool Quit() ;
     virtual void OnQuit() {};
