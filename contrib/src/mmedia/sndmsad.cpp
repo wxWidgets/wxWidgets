@@ -77,7 +77,7 @@ void wxSoundFormatMSAdpcm::SetCoefs(wxInt16 **coefs, wxUint16 ncoefs,
         delete[] m_coefs;
     }
     // TODO: Add some memory checking here
-    m_coefs = new (wxInt16 *)[ncoefs];
+    m_coefs = new wxInt16 *[ncoefs];
 
     for (i=0;i<ncoefs;i++)
        m_coefs[i] = new wxInt16[coefs_len];

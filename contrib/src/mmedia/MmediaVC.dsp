@@ -134,6 +134,10 @@ SOURCE=.\sndg72x.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\sndmsad.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\sndpcm.cpp
 # End Source File
 # Begin Source File
