@@ -1180,8 +1180,8 @@ bool wxWindowMac::MacGetBoundsForControl(const wxPoint& pos,
     x = (int)pos.x;
     y = (int)pos.y;
     // todo the default calls may be used as soon as PostCreateControl Is moved here
-    w = size.x ; // WidthDefault( size.x );
-    h = size.y ; // HeightDefault( size.y ) ;
+    w = wxMax(size.x,0) ; // WidthDefault( size.x );
+    h = wxMax(size.y,0) ; // HeightDefault( size.y ) ;
 #if !TARGET_API_MAC_OSX
     GetParent()->MacWindowToRootWindow( &x , &y ) ;
 #endif
@@ -1769,8 +1769,8 @@ void wxWindowMac::DoMoveWindow(int x, int y, int width, int height)
         former_y += pt.y ;
     }
 
-    int actualWidth = wxMax( width , 0 ) ;
-    int actualHeight = wxMax( height , 0 ) ;
+    int actualWidth = width ;
+    int actualHeight = height ;
     int actualX = x;
     int actualY = y;
 
