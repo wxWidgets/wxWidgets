@@ -37,6 +37,9 @@ else:
 #----------------------------------------------------------------------
 
 class PythonSTC(wxStyledTextCtrl):
+
+    fold_symbols = 2
+    
     def __init__(self, parent, ID):
         wxStyledTextCtrl.__init__(self, parent, ID,
                                   style = wxNO_FULL_REPAINT_ON_RESIZE)
@@ -65,23 +68,46 @@ class PythonSTC(wxStyledTextCtrl):
         self.SetMarginSensitive(2, True)
         self.SetMarginWidth(2, 12)
 
-        if 0: # simple folder marks, like the old version
-            self.MarkerDefine(wxSTC_MARKNUM_FOLDER, wxSTC_MARK_ARROW, "navy", "navy")
-            self.MarkerDefine(wxSTC_MARKNUM_FOLDEROPEN, wxSTC_MARK_ARROWDOWN, "navy", "navy")
-            # Set these to an invisible mark
-            self.MarkerDefine(wxSTC_MARKNUM_FOLDEROPENMID, wxSTC_MARK_BACKGROUND, "white", "black")
-            self.MarkerDefine(wxSTC_MARKNUM_FOLDERMIDTAIL, wxSTC_MARK_BACKGROUND, "white", "black")
-            self.MarkerDefine(wxSTC_MARKNUM_FOLDERSUB, wxSTC_MARK_BACKGROUND, "white", "black")
-            self.MarkerDefine(wxSTC_MARKNUM_FOLDERTAIL, wxSTC_MARK_BACKGROUND, "white", "black")
 
-        else: # more involved "outlining" folder marks
-            self.MarkerDefine(wxSTC_MARKNUM_FOLDEREND,     wxSTC_MARK_BOXPLUSCONNECTED,  "white", "black")
-            self.MarkerDefine(wxSTC_MARKNUM_FOLDEROPENMID, wxSTC_MARK_BOXMINUSCONNECTED, "white", "black")
-            self.MarkerDefine(wxSTC_MARKNUM_FOLDERMIDTAIL, wxSTC_MARK_TCORNER,  "white", "black")
-            self.MarkerDefine(wxSTC_MARKNUM_FOLDERTAIL,    wxSTC_MARK_LCORNER,  "white", "black")
-            self.MarkerDefine(wxSTC_MARKNUM_FOLDERSUB,     wxSTC_MARK_VLINE,    "white", "black")
-            self.MarkerDefine(wxSTC_MARKNUM_FOLDER,        wxSTC_MARK_BOXPLUS,  "white", "black")
-            self.MarkerDefine(wxSTC_MARKNUM_FOLDEROPEN,    wxSTC_MARK_BOXMINUS, "white", "black")
+        if self.fold_symbols == 0:
+            # Arrow pointing right for contracted folders, arrow pointing down for expanded
+            self.MarkerDefine(wxSTC_MARKNUM_FOLDEROPEN,    wxSTC_MARK_ARROWDOWN, "black", "black");
+            self.MarkerDefine(wxSTC_MARKNUM_FOLDER,        wxSTC_MARK_ARROW,     "black", "black");
+            self.MarkerDefine(wxSTC_MARKNUM_FOLDERSUB,     wxSTC_MARK_EMPTY,     "black", "black");
+            self.MarkerDefine(wxSTC_MARKNUM_FOLDERTAIL,    wxSTC_MARK_EMPTY,     "black", "black");
+            self.MarkerDefine(wxSTC_MARKNUM_FOLDEREND,     wxSTC_MARK_EMPTY,     "white", "black");
+            self.MarkerDefine(wxSTC_MARKNUM_FOLDEROPENMID, wxSTC_MARK_EMPTY,     "white", "black");
+            self.MarkerDefine(wxSTC_MARKNUM_FOLDERMIDTAIL, wxSTC_MARK_EMPTY,     "white", "black");
+            
+        elif self.fold_symbols == 1:
+            # Plus for contracted folders, minus for expanded
+            self.MarkerDefine(wxSTC_MARKNUM_FOLDEROPEN,    wxSTC_MARK_MINUS, "white", "black");
+            self.MarkerDefine(wxSTC_MARKNUM_FOLDER,        wxSTC_MARK_PLUS,  "white", "black");
+            self.MarkerDefine(wxSTC_MARKNUM_FOLDERSUB,     wxSTC_MARK_EMPTY, "white", "black");
+            self.MarkerDefine(wxSTC_MARKNUM_FOLDERTAIL,    wxSTC_MARK_EMPTY, "white", "black");
+            self.MarkerDefine(wxSTC_MARKNUM_FOLDEREND,     wxSTC_MARK_EMPTY, "white", "black");
+            self.MarkerDefine(wxSTC_MARKNUM_FOLDEROPENMID, wxSTC_MARK_EMPTY, "white", "black");
+            self.MarkerDefine(wxSTC_MARKNUM_FOLDERMIDTAIL, wxSTC_MARK_EMPTY, "white", "black");
+
+	elif self.fold_symbols == 2:
+            # Like a flattened tree control using circular headers and curved joins
+            self.MarkerDefine(wxSTC_MARKNUM_FOLDEROPEN,    wxSTC_MARK_CIRCLEMINUS,          "white", "#404040");
+            self.MarkerDefine(wxSTC_MARKNUM_FOLDER,        wxSTC_MARK_CIRCLEPLUS,           "white", "#404040");
+            self.MarkerDefine(wxSTC_MARKNUM_FOLDERSUB,     wxSTC_MARK_VLINE,                "white", "#404040");
+            self.MarkerDefine(wxSTC_MARKNUM_FOLDERTAIL,    wxSTC_MARK_LCORNERCURVE,         "white", "#404040");
+            self.MarkerDefine(wxSTC_MARKNUM_FOLDEREND,     wxSTC_MARK_CIRCLEPLUSCONNECTED,  "white", "#404040");
+            self.MarkerDefine(wxSTC_MARKNUM_FOLDEROPENMID, wxSTC_MARK_CIRCLEMINUSCONNECTED, "white", "#404040");
+            self.MarkerDefine(wxSTC_MARKNUM_FOLDERMIDTAIL, wxSTC_MARK_TCORNERCURVE,         "white", "#404040");
+
+        elif self.fold_symbols == 3:
+            # Like a flattened tree control using square headers
+            self.MarkerDefine(wxSTC_MARKNUM_FOLDEROPEN,    wxSTC_MARK_BOXMINUS,          "white", "#808080")
+            self.MarkerDefine(wxSTC_MARKNUM_FOLDER,        wxSTC_MARK_BOXPLUS,           "white", "#808080")
+            self.MarkerDefine(wxSTC_MARKNUM_FOLDERSUB,     wxSTC_MARK_VLINE,             "white", "#808080")
+            self.MarkerDefine(wxSTC_MARKNUM_FOLDERTAIL,    wxSTC_MARK_LCORNER,           "white", "#808080")
+            self.MarkerDefine(wxSTC_MARKNUM_FOLDEREND,     wxSTC_MARK_BOXPLUSCONNECTED,  "white", "#808080")
+            self.MarkerDefine(wxSTC_MARKNUM_FOLDEROPENMID, wxSTC_MARK_BOXMINUSCONNECTED, "white", "#808080")
+            self.MarkerDefine(wxSTC_MARKNUM_FOLDERMIDTAIL, wxSTC_MARK_TCORNER,           "white", "#808080")
 
 
         EVT_STC_UPDATEUI(self,    ID, self.OnUpdateUI)
@@ -93,10 +119,10 @@ class PythonSTC(wxStyledTextCtrl):
         # just have to define what each style looks like.  This set is adapted from
         # Scintilla sample property files.
 
-        self.StyleClearAll()
-
         # Global default styles for all languages
         self.StyleSetSpec(wxSTC_STYLE_DEFAULT,     "face:%(helv)s,size:%(size)d" % faces)
+        self.StyleClearAll()  # Reset all to be like the default
+
         self.StyleSetSpec(wxSTC_STYLE_LINENUMBER,  "back:#C0C0C0,face:%(helv)s,size:%(size2)d" % faces)
         self.StyleSetSpec(wxSTC_STYLE_CONTROLCHAR, "face:%(other)s" % faces)
         self.StyleSetSpec(wxSTC_STYLE_BRACELIGHT,  "fore:#FFFFFF,back:#0000FF,bold")
