@@ -140,12 +140,11 @@ void wxWindowDC::Init()
     m_currentFill = -1;
     m_colour = wxColourDisplay();
     m_display = (WXDisplay*) NULL;
-    m_currentRegion = (WXRegion) 0;
-    m_userRegion = (WXRegion) 0;
     m_pixmap = (WXPixmap) 0;
     m_autoSetting = 0;
     m_oldFont = (WXFont) 0;
     m_ok = false;
+    m_clipRegion = (WXRegion) 0;
 }
 
 wxWindowDC::wxWindowDC()
@@ -215,13 +214,9 @@ wxWindowDC::~wxWindowDC()
         XFreeGC ((Display*) m_display, (GC) m_gcBacking);
     m_gcBacking = (WXGC) 0;
 
-    if (m_currentRegion)
-        XDestroyRegion ((Region) m_currentRegion);
-    m_currentRegion = (WXRegion) 0;
-
-    if (m_userRegion)
-        XDestroyRegion ((Region) m_userRegion);
-    m_userRegion = (WXRegion) 0;
+    if (m_clipRegion)
+        XDestroyRegion ((Region) m_clipRegion);
+    m_clipRegion = (WXRegion) 0;
 }
 
 extern bool wxDoFloodFill(wxDC *dc, wxCoord x, wxCoord y, 
@@ -788,9 +783,12 @@ bool wxWindowDC::CanDrawBitmap() const
     return TRUE;
 }
 
-// TODO: use scaled Blit e.g. as per John Price's implementation in Contrib/Utilities
-bool wxWindowDC::DoBlit( wxCoord xdest, wxCoord ydest, wxCoord width, wxCoord height,
-                         wxDC *source, wxCoord xsrc, wxCoord ysrc, int rop, bool useMask,
+// TODO: use scaled Blit e.g. as per John Price's implementation 
+// in Contrib/Utilities
+bool wxWindowDC::DoBlit( wxCoord xdest, wxCoord ydest,
+                         wxCoord width, wxCoord height,
+                         wxDC *source, wxCoord xsrc, wxCoord ysrc,
+                         int rop, bool useMask,
                          wxCoord xsrcMask, wxCoord ysrcMask )
 {
     wxCHECK_MSG( Ok(), FALSE, "invalid dc" );
@@ -912,7 +910,12 @@ bool wxWindowDC::DoBlit( wxCoord xdest, wxCoord ydest, wxCoord width, wxCoord he
 
             if ( useMask )
             {
-                XSetClipMask   ((Display*) m_display, (GC) m_gc, None);
+                if ( m_clipRegion )
+                    XSetRegion ((Display*) m_display, (GC) m_gc,
+                                (Region) m_clipRegion);
+                else
+                    XSetClipMask   ((Display*) m_display, (GC) m_gc, None);
+
                 XSetClipOrigin ((Display*) m_display, (GC) m_gc, 0, 0);
             }
 
@@ -976,7 +979,12 @@ bool wxWindowDC::DoBlit( wxCoord xdest, wxCoord ydest, wxCoord width, wxCoord he
             }
             if ( useMask )
             {
-                XSetClipMask   ((Display*) m_display, (GC) m_gc, None);
+                if ( m_clipRegion )
+                    XSetRegion ((Display*) m_display, (GC) m_gc,
+                                (Region) m_clipRegion);
+                else
+                    XSetClipMask   ((Display*) m_display, (GC) m_gc, None);
+
                 XSetClipOrigin ((Display*) m_display, (GC) m_gc, 0, 0);
             }
 
@@ -2077,57 +2085,54 @@ void wxWindowDC::SetPalette( const wxPalette& palette )
     }
 }
 
-// Helper function
-void wxWindowDC::SetDCClipping()
+static void wxCopyRegion( WXRegion src, WXRegion& dst )
 {
-    // m_userRegion is the region set by calling SetClippingRegion
-
-    if (m_currentRegion)
-        XDestroyRegion ((Region) m_currentRegion);
-
-    // We need to take into account
-    // clipping imposed on a window by a repaint.
-    // We'll combine it with the user region. But for now,
-    // just use the currently-defined user clipping region.
-    if (m_userRegion || (m_window && m_window->GetUpdateRegion().Ok()) )
-        m_currentRegion = (WXRegion) XCreateRegion ();
-    else
-        m_currentRegion = (WXRegion) NULL;
-
-    if ((m_window && m_window->GetUpdateRegion().Ok()) && m_userRegion)
-        XIntersectRegion ((Region) m_window->GetUpdateRegion().GetXRegion(), (Region) m_userRegion, (Region) m_currentRegion);
-    else if (m_userRegion)
-        XIntersectRegion ((Region) m_userRegion, (Region) m_userRegion, (Region) m_currentRegion);
-    else if (m_window && m_window->GetUpdateRegion().Ok())
-        XIntersectRegion ((Region) m_window->GetUpdateRegion().GetXRegion(), (Region) m_window->GetUpdateRegion().GetXRegion(),
-        (Region) m_currentRegion);
-
-    if (m_currentRegion)
-    {
-        XSetRegion ((Display*) m_display, (GC) m_gc, (Region) m_currentRegion);
-    }
-    else
-    {
-        XSetClipMask ((Display*) m_display, (GC) m_gc, None);
-    }
-
+    if( !dst )
+        dst = XCreateRegion();
+    XUnionRegion( (Region)src, (Region)src, (Region)dst );
 }
 
-void wxWindowDC::DoSetClippingRegion( wxCoord x, wxCoord y, wxCoord width, wxCoord height )
+// Helper function; userRegion is the region set by calling SetClippingRegion
+void wxWindowDC::SetDCClipping( WXRegion userRegion )
+{
+    bool hasUpdateRegion = m_window && m_window->GetUpdateRegion().Ok();
+    // this means that we should start the clip region from scratch,
+    // or from the update region, if any
+    if( !userRegion )
+    {
+        if( m_clipRegion )
+            XDestroyRegion( (Region)m_clipRegion );
+        m_clipRegion = (WXRegion)NULL;
+
+        if( hasUpdateRegion )
+            wxCopyRegion( m_window->GetUpdateRegion().GetX11Region(),
+                          m_clipRegion );
+    }
+    // intersect the user region, if any, with the
+    // exisiting clip region
+    else // if( userRegion )
+    {
+        if( !m_clipRegion )
+            wxCopyRegion( userRegion, m_clipRegion );
+        else
+            XIntersectRegion( (Region)m_clipRegion,
+                              (Region)userRegion, (Region)m_clipRegion );
+    }
+
+    if( m_clipRegion )
+        XSetRegion( (Display*)m_display, (GC)m_gc, (Region)m_clipRegion );
+    else
+        XSetClipMask( (Display*)m_display, (GC)m_gc, None );
+}
+
+void wxWindowDC::DoSetClippingRegion( wxCoord x, wxCoord y,
+                                      wxCoord width, wxCoord height )
 {
     wxDC::DoSetClippingRegion( x, y, width, height );
 
-    if (m_userRegion)
-        XDestroyRegion ((Region) m_userRegion);
-    m_userRegion = (WXRegion) XCreateRegion ();
-    XRectangle r;
-    r.x = XLOG2DEV (x);
-    r.y = YLOG2DEV (y);
-    r.width = XLOG2DEVREL(width);
-    r.height = YLOG2DEVREL(height);
-    XUnionRectWithRegion (&r, (Region) m_userRegion, (Region) m_userRegion);
+    wxRegion temp(x, y, width, height);
 
-    SetDCClipping ();
+    SetDCClipping(temp.GetX11Region());
 
     // Needs to work differently for Pixmap: without this,
     // there's a nasty (Display*) m_display bug. 8/12/94
@@ -2138,7 +2143,8 @@ void wxWindowDC::DoSetClippingRegion( wxCoord x, wxCoord y, wxCoord width, wxCoo
         rects[0].y = YLOG2DEV_2(y);
         rects[0].width = XLOG2DEVREL(width);
         rects[0].height = YLOG2DEVREL(height);
-        XSetClipRectangles((Display*) m_display, (GC) m_gcBacking, 0, 0, rects, 1, Unsorted);
+        XSetClipRectangles((Display*) m_display, (GC) m_gcBacking,
+                           0, 0, rects, 1, Unsorted);
     }
 }
 
@@ -2148,13 +2154,7 @@ void wxWindowDC::DoSetClippingRegionAsRegion( const wxRegion& region )
 
     wxDC::DoSetClippingRegion( box.x, box.y, box.width, box.height );
 
-    if (m_userRegion)
-        XDestroyRegion ((Region) m_userRegion);
-    m_userRegion = (WXRegion) XCreateRegion ();
-
-    XUnionRegion((Region) m_userRegion, (Region) region.GetXRegion(), (Region) m_userRegion);
-
-    SetDCClipping ();
+    SetDCClipping(region.GetX11Region());
 
     // Needs to work differently for Pixmap: without this,
     // there's a nasty (Display*) m_display bug. 8/12/94
@@ -2165,7 +2165,8 @@ void wxWindowDC::DoSetClippingRegionAsRegion( const wxRegion& region )
         rects[0].y = YLOG2DEV_2(box.y);
         rects[0].width = XLOG2DEVREL(box.width);
         rects[0].height = YLOG2DEVREL(box.height);
-        XSetClipRectangles((Display*) m_display, (GC) m_gcBacking, 0, 0, rects, 1, Unsorted);
+        XSetClipRectangles((Display*) m_display, (GC) m_gcBacking,
+                           0, 0, rects, 1, Unsorted);
     }
 }
 
@@ -2174,21 +2175,16 @@ void wxWindowDC::DestroyClippingRegion()
 {
     wxDC::DestroyClippingRegion();
 
-    if (m_userRegion)
-        XDestroyRegion ((Region) m_userRegion);
-    m_userRegion = NULL;
+    SetDCClipping(NULL);
 
-    SetDCClipping ();
-
-    XGCValues gc_val;
-    gc_val.clip_mask = None;
     if (m_window && m_window->GetBackingPixmap())
-        XChangeGC((Display*) m_display, (GC) m_gcBacking, GCClipMask, &gc_val);
+        XSetClipMask ((Display*) m_display, (GC) m_gcBacking, None);
 }
 
 // Resolution in pixels per logical inch
 wxSize wxWindowDC::GetPPI() const
 {
+    // TODO
     return wxSize(100, 100);
 }
 
@@ -2207,51 +2203,15 @@ int wxWindowDC::GetDepth() const
 
 wxPaintDC::wxPaintDC(wxWindow* win) : wxWindowDC(win)
 {
-    wxRegion* region = NULL;
-
-    // Combine all the update rects into a region
-    const wxRectList& updateRects(win->GetUpdateRects());
-    if ( updateRects.GetCount() != 0 )
-    {
-        for ( wxRectList::Node *node = updateRects.GetFirst();
-              node;
-              node = node->GetNext() )
-        {
-            wxRect* rect = node->GetData();
-
-            if (!region)
-                region = new wxRegion(*rect);
-            else
-                // TODO: is this correct? In SetDCClipping above,
-                // XIntersectRegion is used to combine paint and user
-                // regions. XIntersectRegion appears to work in that case...
-                region->Union(*rect);
-        }
-    }
-    else
-    {
-        int cw, ch;
-        win->GetClientSize(&cw, &ch);
-        region = new wxRegion(wxRect(0, 0, cw, ch));
-    }
-
-    win->SetUpdateRegion(*region);
-
-    wxRegion& theRegion(win->GetUpdateRegion());
-    theRegion.SetRects(updateRects); // We also store in terms of rects, for iteration to work.
-
-    // Set the clipping region. Any user-defined region will be combined with this
-    // one in SetDCClipping.
-    XSetRegion ((Display*) m_display, (GC) m_gc, (Region) region->GetXRegion());
-
-    delete region;
+    // Set the clipping region.to the update region
+    SetDCClipping((WXRegion)NULL);   
 }
 
 wxPaintDC::~wxPaintDC()
 {
-    XSetClipMask ((Display*) m_display, (GC) m_gc, None);
     if (m_window)
         m_window->ClearUpdateRegion();
+    SetDCClipping((WXRegion)NULL);
 }
 
 // ----------------------------------------------------------------------------

@@ -375,8 +375,6 @@ wxWindow::~wxWindow()
         DetachWidget(wMain);
     }
 
-    ClearUpdateRects();
-
     if ( m_parent )
         m_parent->RemoveChild( this );
 
@@ -456,120 +454,107 @@ wxWindow::~wxWindow()
 // scrollbar management
 // ----------------------------------------------------------------------------
 
+WXWidget wxWindow::DoCreateScrollBar(WXWidget parent,
+                                     wxOrientation orientation,
+                                     void (*callback)())
+{
+    int orient = ( orientation & wxHORIZONTAL ) ? XmHORIZONTAL : XmVERTICAL;
+    Widget sb =
+        XtVaCreateManagedWidget( "scrollBarWidget",
+                                 xmScrollBarWidgetClass, (Widget)parent,
+                                 XmNorientation, orient,
+                                 XmNincrement, 1,
+                                 XmNvalue, 0,
+                                 NULL );
+
+    XtPointer o = (XtPointer)orientation;
+    XtCallbackProc cb = (XtCallbackProc)callback;
+
+    XtAddCallback( sb, XmNvalueChangedCallback, cb, o );
+    XtAddCallback( sb, XmNdragCallback, cb, o );
+    XtAddCallback( sb, XmNincrementCallback, cb, o );
+    XtAddCallback( sb, XmNdecrementCallback, cb, o );
+    XtAddCallback( sb, XmNpageIncrementCallback, cb, o );
+    XtAddCallback( sb, XmNpageDecrementCallback, cb, o );
+    XtAddCallback( sb, XmNtoTopCallback, cb, o );
+    XtAddCallback( sb, XmNtoBottomCallback, cb, o );
+
+    return (WXWidget)sb;
+}
+
 // Helper function
 void wxWindow::CreateScrollbar(wxOrientation orientation)
 {
     wxCHECK_RET( m_drawingArea, "this window can't have scrollbars" );
 
-    XtVaSetValues((Widget) m_scrolledWindow, XmNresizePolicy, XmRESIZE_NONE, NULL);
+    XtVaSetValues( (Widget) m_scrolledWindow,
+                   XmNresizePolicy, XmRESIZE_NONE,
+                   NULL );
 
+    wxColour backgroundColour = wxSystemSettings::GetColour(wxSYS_COLOUR_3DFACE);
     // Add scrollbars if required
     if (orientation == wxHORIZONTAL)
     {
-        Widget hScrollBar = XtVaCreateManagedWidget ("hsb",
-            xmScrollBarWidgetClass, (Widget) m_scrolledWindow,
-            XmNorientation, XmHORIZONTAL,
-            NULL);
-        XtAddCallback (hScrollBar, XmNvalueChangedCallback, (XtCallbackProc) wxScrollBarCallback, (XtPointer) XmHORIZONTAL);
-        XtAddCallback (hScrollBar, XmNdragCallback, (XtCallbackProc) wxScrollBarCallback, (XtPointer) XmHORIZONTAL);
-        XtAddCallback (hScrollBar, XmNincrementCallback, (XtCallbackProc) wxScrollBarCallback, (XtPointer) XmHORIZONTAL);
-        XtAddCallback (hScrollBar, XmNdecrementCallback, (XtCallbackProc) wxScrollBarCallback, (XtPointer) XmHORIZONTAL);
-        XtAddCallback (hScrollBar, XmNpageIncrementCallback, (XtCallbackProc) wxScrollBarCallback, (XtPointer) XmHORIZONTAL);
-        XtAddCallback (hScrollBar, XmNpageDecrementCallback, (XtCallbackProc) wxScrollBarCallback, (XtPointer) XmHORIZONTAL);
-        XtAddCallback (hScrollBar, XmNtoTopCallback, (XtCallbackProc) wxScrollBarCallback, (XtPointer) XmHORIZONTAL);
-        XtAddCallback (hScrollBar, XmNtoBottomCallback, (XtCallbackProc) wxScrollBarCallback, (XtPointer) XmHORIZONTAL);
+        m_hScrollBar = DoCreateScrollBar( m_scrolledWindow, wxHORIZONTAL,
+                                          (void (*)())wxScrollBarCallback );
 
-        XtVaSetValues (hScrollBar,
-            XmNincrement, 1,
-            XmNvalue, 0,
-            NULL);
-
-        m_hScrollBar = (WXWidget) hScrollBar;
-
-        wxColour backgroundColour = wxSystemSettings::GetColour(wxSYS_COLOUR_3DFACE);
         wxDoChangeBackgroundColour(m_hScrollBar, backgroundColour, TRUE);
 
-        XtRealizeWidget(hScrollBar);
+        XtRealizeWidget( (Widget)m_hScrollBar );
 
         XtVaSetValues((Widget) m_scrolledWindow,
             XmNhorizontalScrollBar, (Widget) m_hScrollBar,
             NULL);
 
-        wxAddWindowToTable( hScrollBar, this );
+        wxAddWindowToTable( (Widget)m_hScrollBar, this );
     }
-
-    if (orientation == wxVERTICAL)
+    else if (orientation == wxVERTICAL)
     {
-        Widget vScrollBar = XtVaCreateManagedWidget ("vsb",
-            xmScrollBarWidgetClass, (Widget) m_scrolledWindow,
-            XmNorientation, XmVERTICAL,
-            NULL);
-        XtAddCallback (vScrollBar, XmNvalueChangedCallback, (XtCallbackProc) wxScrollBarCallback, (XtPointer) XmVERTICAL);
-        XtAddCallback (vScrollBar, XmNdragCallback, (XtCallbackProc) wxScrollBarCallback, (XtPointer) XmVERTICAL);
-        XtAddCallback (vScrollBar, XmNincrementCallback, (XtCallbackProc) wxScrollBarCallback, (XtPointer) XmVERTICAL);
-        XtAddCallback (vScrollBar, XmNdecrementCallback, (XtCallbackProc) wxScrollBarCallback, (XtPointer) XmVERTICAL);
-        XtAddCallback (vScrollBar, XmNpageIncrementCallback, (XtCallbackProc) wxScrollBarCallback, (XtPointer) XmVERTICAL);
-        XtAddCallback (vScrollBar, XmNpageDecrementCallback, (XtCallbackProc) wxScrollBarCallback, (XtPointer) XmVERTICAL);
-        XtAddCallback (vScrollBar, XmNtoTopCallback, (XtCallbackProc) wxScrollBarCallback, (XtPointer) XmVERTICAL);
-        XtAddCallback (vScrollBar, XmNtoBottomCallback, (XtCallbackProc) wxScrollBarCallback, (XtPointer) XmVERTICAL);
+        m_vScrollBar = DoCreateScrollBar( m_scrolledWindow, wxVERTICAL,
+                                          (void (*)())wxScrollBarCallback );
 
-        XtVaSetValues (vScrollBar,
-            XmNincrement, 1,
-            XmNvalue, 0,
-            NULL);
-
-        m_vScrollBar = (WXWidget) vScrollBar;
-        wxColour backgroundColour = wxSystemSettings::GetColour(wxSYS_COLOUR_3DFACE);
         wxDoChangeBackgroundColour(m_vScrollBar, backgroundColour, TRUE);
 
-        XtRealizeWidget(vScrollBar);
+        XtRealizeWidget((Widget)m_vScrollBar);
 
         XtVaSetValues((Widget) m_scrolledWindow,
             XmNverticalScrollBar, (Widget) m_vScrollBar,
             NULL);
 
-        wxAddWindowToTable( vScrollBar, this );
+        wxAddWindowToTable( (Widget)m_vScrollBar, this );
     }
 
-    XtVaSetValues((Widget) m_scrolledWindow, XmNresizePolicy, XmRESIZE_ANY, NULL);
+    XtVaSetValues( (Widget) m_scrolledWindow,
+                   XmNresizePolicy, XmRESIZE_ANY,
+                   NULL );
 }
 
 void wxWindow::DestroyScrollbar(wxOrientation orientation)
 {
     wxCHECK_RET( m_drawingArea, "this window can't have scrollbars" );
 
-    XtVaSetValues((Widget) m_scrolledWindow, XmNresizePolicy, XmRESIZE_NONE, NULL);
-    // Add scrollbars if required
-    if (orientation == wxHORIZONTAL)
+    XtVaSetValues((Widget) m_scrolledWindow,
+                  XmNresizePolicy, XmRESIZE_NONE,
+                  NULL);
+    String stringSB = orientation == wxHORIZONTAL ?
+        XmNhorizontalScrollBar : XmNverticalScrollBar;
+    WXWidget* widgetSB = orientation == wxHORIZONTAL ?
+        &m_hScrollBar : &m_vScrollBar;
+
+    if( *widgetSB )
     {
-        if (m_hScrollBar)
-        {
-            wxDeleteWindowFromTable((Widget)m_hScrollBar);
-            XtDestroyWidget((Widget) m_hScrollBar);
-        }
-        m_hScrollBar = (WXWidget) 0;
-
-        XtVaSetValues((Widget) m_scrolledWindow,
-            XmNhorizontalScrollBar, (Widget) 0,
-            NULL);
-
+        wxDeleteWindowFromTable( (Widget)*widgetSB );
+        XtDestroyWidget( (Widget)*widgetSB );
+        *widgetSB = (WXWidget)NULL;
     }
 
-    if (orientation == wxVERTICAL)
-    {
-        if (m_vScrollBar)
-        {
-            wxDeleteWindowFromTable((Widget)m_vScrollBar);
-            XtDestroyWidget((Widget) m_vScrollBar);
-        }
-        m_vScrollBar = (WXWidget) 0;
+    XtVaSetValues( (Widget)m_scrolledWindow,
+                   stringSB, (Widget) 0,
+                   NULL );
 
-        XtVaSetValues((Widget) m_scrolledWindow,
-            XmNverticalScrollBar, (Widget) 0,
-            NULL);
-
-    }
-    XtVaSetValues((Widget) m_scrolledWindow, XmNresizePolicy, XmRESIZE_ANY, NULL);
+    XtVaSetValues((Widget) m_scrolledWindow,
+                  XmNresizePolicy, XmRESIZE_ANY,
+                  NULL);
 }
 
 // ---------------------------------------------------------------------------
@@ -1544,6 +1529,11 @@ void wxWindow::GetTextExtent(const wxString& string,
 // painting
 // ----------------------------------------------------------------------------
 
+void wxWindow::AddUpdateRect(int x, int y, int w, int h)
+{
+    m_updateRegion.Union( x, y, w, h );
+}
+
 void wxWindow::Refresh(bool eraseBack, const wxRect *rect)
 {
     m_needsRefresh = TRUE;
@@ -1594,19 +1584,6 @@ void wxWindow::Clear()
     wxBrush brush(GetBackgroundColour(), wxSOLID);
     dc.SetBackground(brush);
     dc.Clear();
-}
-
-void wxWindow::ClearUpdateRects()
-{
-    wxRectList::Node* node = m_updateRects.GetFirst();
-    while (node)
-    {
-        wxRect* rect = node->GetData();
-        delete rect;
-        node = node->GetNext();
-    }
-
-    m_updateRects.Clear();
 }
 
 void wxWindow::DoPaint()
@@ -1975,11 +1952,10 @@ static void wxCanvasRepaintProc(Widget drawingArea,
         {
             win->AddUpdateRect(event->xexpose.x, event->xexpose.y,
                                event->xexpose.width, event->xexpose.height);
-            
+
             if (event -> xexpose.count == 0)
             {
                 win->DoPaint();
-                win->ClearUpdateRects();
             }
             break;
         }
@@ -2144,7 +2120,7 @@ static void wxScrollBarCallback(Widget scrollbar,
                                 XmScrollBarCallbackStruct *cbs)
 {
     wxWindow *win = wxGetWindowFromTable(scrollbar);
-    int orientation = (int) clientData;
+    wxOrientation orientation = (wxOrientation)(int)clientData;
 
     wxEventType eventType = wxEVT_NULL;
     switch (cbs->reason)
@@ -2199,8 +2175,7 @@ static void wxScrollBarCallback(Widget scrollbar,
 
     wxScrollWinEvent event(eventType,
                            cbs->value,
-                           ((orientation == XmHORIZONTAL) ?
-                            wxHORIZONTAL : wxVERTICAL));
+                           orientation);
     event.SetEventObject( win );
     win->GetEventHandler()->ProcessEvent(event);
 }
@@ -2222,16 +2197,12 @@ void wxUniversalRepaintProc(Widget w, XtPointer WXUNUSED(c_data), XEvent *event,
             window = (Window) win -> GetXWindow();
             display = (Display *) win -> GetXDisplay();
 
+            win->AddUpdateRect(event->xexpose.x, event->xexpose.y,
+                               event->xexpose.width, event->xexpose.height);
+
             if (event -> xexpose.count == 0)
             {
                 win->DoPaint();
-
-                win->ClearUpdateRects();
-            }
-            else
-            {
-                win->AddUpdateRect(event->xexpose.x, event->xexpose.y,
-                                   event->xexpose.width, event->xexpose.height);
             }
 
             break;

@@ -4,7 +4,7 @@
 #if defined(__WXMSW__)
 #include "wx/msw/region.h"
 #elif defined(__WXMOTIF__)
-#include "wx/motif/region.h"
+#include "wx/x11/region.h"
 #elif defined(__WXGTK__)
 #include "wx/gtk/region.h"
 #elif defined(__WXX11__)

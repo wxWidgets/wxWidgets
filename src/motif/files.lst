@@ -216,7 +216,6 @@ ALL_SOURCES = \
 		motif/palette.cpp \
 		motif/radiobox.cpp \
 		motif/radiobut.cpp \
-		motif/region.cpp \
 		motif/scrolbar.cpp \
 		motif/settings.cpp \
 		motif/slider.cpp \
@@ -233,6 +232,7 @@ ALL_SOURCES = \
 		x11/bitmap.cpp \
 		x11/brush.cpp \
 		x11/pen.cpp \
+		x11/region.cpp \
 		x11/utilsx.cpp \
 		unix/dialup.cpp \
 		unix/dir.cpp \
@@ -545,7 +545,6 @@ ALL_HEADERS = \
 		motif/private.h \
 		motif/radiobox.h \
 		motif/radiobut.h \
-		motif/region.h \
 		motif/scrolbar.h \
 		motif/settings.h \
 		motif/slider.h \
@@ -624,7 +623,8 @@ ALL_HEADERS = \
 		x11/bitmap.h \
 		x11/brush.h \
 		x11/pen.h \
-		x11/privx.h
+		x11/privx.h \
+		x11/region.h
 
 COMMONOBJS = \
 		accesscmn.o \
@@ -847,7 +847,6 @@ GUIOBJS = \
 		palette.o \
 		radiobox.o \
 		radiobut.o \
-		region.o \
 		scrolbar.o \
 		settings.o \
 		slider.o \
@@ -864,6 +863,7 @@ GUIOBJS = \
 		bitmap.o \
 		brush.o \
 		pen.o \
+		region.o \
 		utilsx.o
 
 UNIXOBJS = \

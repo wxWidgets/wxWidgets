@@ -652,7 +652,6 @@ msgdlg.cpp	Motif
 palette.cpp	Motif
 radiobox.cpp	Motif
 radiobut.cpp	Motif
-region.cpp	Motif
 scrolbar.cpp	Motif
 settings.cpp	Motif
 slider.cpp	Motif
@@ -693,7 +692,7 @@ minifram.cpp	X11
 palette.cpp	X11
 pen.cpp	X11	Motif
 popupwin.cpp	X11
-region.cpp	X11
+region.cpp	X11	Motif
 reparent.cpp	X11
 settings.cpp	X11
 toplevel.cpp	X11
@@ -1273,7 +1272,6 @@ print.h	MotifH
 private.h	MotifH
 radiobox.h	MotifH
 radiobut.h	MotifH
-region.h	MotifH
 scrolbar.h	MotifH
 settings.h	MotifH
 slider.h	MotifH
@@ -1314,7 +1312,7 @@ pen.h	X11H	Motif
 print.h	X11H
 private.h	X11H
 privx.h	X11H	Motif
-region.h	X11H
+region.h	X11H	Motif
 reparent.h	X11H
 textctrl.h	X11H
 toplevel.h	X11H

@@ -78,7 +78,7 @@ public:
     virtual void DestroyClippingRegion();
     
     // Helper function for setting clipping
-    void SetDCClipping();
+    void SetDCClipping(WXRegion region);
     
     // implementation from now on
     // --------------------------
@@ -150,15 +150,15 @@ protected:
     WXGC         m_gcBacking;
     WXDisplay*   m_display;
     wxWindow*    m_window;
-    // Current clipping region (incl. paint clip region)
-    WXRegion     m_currentRegion; 
-    WXRegion     m_userRegion;    // User-defined clipping region
-    WXPixmap     m_pixmap;        // Pixmap for drawing on
-    
+    // Pixmap for drawing on
+    WXPixmap     m_pixmap;
+    // Last clipping region set on th GC, this is the combination
+    // of paint clipping region and all user-defined clipping regions
+    WXRegion     m_clipRegion;
+
     // Not sure if we'll need all of these
     int          m_backgroundPixel;
     wxColour     m_currentColour;
-    //    int          m_currentBkMode;
     int          m_currentPenWidth ;
     int          m_currentPenJoin ;
     int          m_currentPenCap ;

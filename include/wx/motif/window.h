@@ -142,15 +142,8 @@ public:
     // (for wxWindowDC and Motif callbacks only)
     // -----------------------------------------
     
-    // read/write access to the update rect list
-    const wxRectList& GetUpdateRects() const { return m_updateRects; }
-    
     // Adds a recangle to the updates list
-    void AddUpdateRect(int x, int y, int w, int h)
-    { m_updateRects.Append(new wxRect(x, y, w, h)); }
-    
-    // Empties the m_updateRects list
-    void ClearUpdateRects();
+    void AddUpdateRect(int x, int y, int w, int h);
     
     void ClearUpdateRegion() { m_updateRegion.Clear(); }
     void SetUpdateRegion(const wxRegion& region) { m_updateRegion = region; }
@@ -189,6 +182,10 @@ protected:
 
     void DoMoveWindowIntr(int x, int y, int width, int height,
                           int flags);
+
+    // helper function, to remove duplicate code, used in wxScrollBar
+    WXWidget DoCreateScrollBar(WXWidget parent, wxOrientation orientation,
+                               void (*callback)());
 public:
     WXPixmap GetBackingPixmap() const { return m_backingPixmap; }
     void SetBackingPixmap(WXPixmap pixmap) { m_backingPixmap = pixmap; }
@@ -264,9 +261,6 @@ protected:
     // For double-click detection
     long                  m_lastTS;           // last timestamp
     unsigned              m_lastButton:2;     // last pressed button
-    
-    // List of wxRects representing damaged region
-    wxRectList m_updateRects;
     
 protected:
     WXWidget              m_mainWidget;
