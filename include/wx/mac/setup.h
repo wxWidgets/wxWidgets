@@ -1,8 +1,8 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        setup.h
 // Purpose:     Configuration for the library
-// Author:      AUTHOR
-// Modified by:
+// Author:      Stefan Csomor
+// Modified by: Stefan Csomor
 // Created:     ??/??/98
 // RCS-ID:      $Id$
 // Copyright:   (c) AUTHOR
@@ -199,7 +199,7 @@
                                   // if enabled, compiles built-in OS independent wxConfig
                                   // class and it's file (any platform) and registry (Win)
                                   // based implementations
-#define wxUSE_THREADS       0
+#define wxUSE_THREADS       1
                                   // support for multithreaded applications: if
                                   // 1, compile in thread classes (thread.h)
                                   // and make the library thread safe

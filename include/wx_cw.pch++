@@ -23,5 +23,6 @@
 #pragma once on
 #define WX_PRECOMP
 #define wxUSE_GUI 1
+#define OLDP2C 1
 #include "wx/wx_cw_cm.h"
 #include "wx/wxprec.h"

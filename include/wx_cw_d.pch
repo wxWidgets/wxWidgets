@@ -18,6 +18,7 @@
 #undef WX_PRECOMP
 #define __WXDEBUG__ 1
 #define wxUSE_GUI 1
+#define OLDP2C 1
 #include "wx/wx_cw_cm.h"
 #ifdef __WXMSW__
     #include <windows.h>

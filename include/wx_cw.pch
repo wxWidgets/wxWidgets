@@ -23,4 +23,9 @@
 #pragma once on
 #undef WX_PRECOMP
 #define wxUSE_GUI 1
+#define OLDP2C 1
 #include "wx/wx_cw_cm.h"
+#ifdef __WXMSW__
+    #include <windows.h>
+    #include "wx/msw/winundef.h"
+#endif

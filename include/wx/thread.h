@@ -150,11 +150,11 @@ class WXDLLEXPORT wxCriticalSectionInternal;
 
 // in order to avoid any overhead under platforms where critical sections are
 // just mutexes make all wxCriticalSection class functions inline
-#if !defined(__WXMSW__) && !defined(__WXPM__) && !defined(__WXMAC__)
+#if !defined(__WXMSW__) && !defined(__WXPM__)
     #define WXCRITICAL_INLINE   inline
 
     #define wxCRITSECT_IS_MUTEX 1
-#else // MSW || Mac || OS2
+#else // MSW || OS2
     #define WXCRITICAL_INLINE
 
     #define wxCRITSECT_IS_MUTEX 0
@@ -471,7 +471,7 @@ public:
     // wxApp then should block all "dangerous" messages
     extern bool WXDLLEXPORT wxIsWaitingForThread();
 #elif defined(__WXMAC__)
-    extern void WXDLLEXPORT wxMutexGuiLeaveOrEnter();
+   extern void WXDLLEXPORT wxMutexGuiLeaveOrEnter();
 
     // returns TRUE if the main thread has GUI lock
     extern bool WXDLLEXPORT wxGuiOwnedByMainThread();
@@ -482,6 +482,13 @@ public:
     // return TRUE if the main thread is waiting for some other to terminate:
     // wxApp then should block all "dangerous" messages
     extern bool WXDLLEXPORT wxIsWaitingForThread();
+
+    // implement wxCriticalSection using mutexes
+    inline wxCriticalSection::wxCriticalSection() { }
+    inline wxCriticalSection::~wxCriticalSection() { }
+
+    inline void wxCriticalSection::Enter() { (void)m_mutex.Lock(); }
+    inline void wxCriticalSection::Leave() { (void)m_mutex.Unlock(); }
 #elif defined(__WXPM__)
     // unlock GUI if there are threads waiting for and lock it back when
     // there are no more of them - should be called periodically by the main
