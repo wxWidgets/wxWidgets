@@ -580,7 +580,6 @@ GSocket *GSocket::WaitConnection()
   err = _GAddress_translate_from(connection->m_peer, &from, fromlen);
   if (err != GSOCK_NOERROR)
   {
-    GAddress_destroy(connection->m_peer);
     delete connection;
     m_error = err;
     return NULL;
