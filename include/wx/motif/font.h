@@ -13,120 +13,93 @@
 #define _WX_FONT_H_
 
 #ifdef __GNUG__
-#pragma interface "font.h"
+    #pragma interface "font.h"
 #endif
 
-#include "wx/gdiobj.h"
-#include "wx/list.h"
-
-class WXDLLEXPORT wxFont;
-
-// For every wxFont, there must be a font for each display and scale requested.
-// So these objects are stored in wxFontRefData::m_fonts
-class WXDLLEXPORT wxXFont: public wxObject
-{
-public:
-    wxXFont();
-    ~wxXFont();
-
-    WXFontStructPtr     m_fontStruct;   // XFontStruct
-    WXFontList          m_fontList;     // Motif XmFontList
-    WXDisplay*          m_display;      // XDisplay
-    int                 m_scale;        // Scale * 100
-};
-
-class WXDLLEXPORT wxFontRefData: public wxGDIRefData
-{
-    friend class WXDLLEXPORT wxFont;
-public:
-    wxFontRefData();
-    wxFontRefData(const wxFontRefData& data);
-    ~wxFontRefData();
-protected:
-  int           m_pointSize;
-  int           m_family;
-  int           m_style;
-  int           m_weight;
-  bool          m_underlined;
-  wxString      m_faceName;
-
-  // A list of wxXFonts
-  wxList        m_fonts;
-};
-
-#define M_FONTDATA ((wxFontRefData *)m_refData)
-
-WXDLLEXPORT_DATA(extern const char*) wxEmptyString;
-
 // Font
-class WXDLLEXPORT wxFont: public wxGDIObject
+class wxFont : public wxFontBase
 {
-  DECLARE_DYNAMIC_CLASS(wxFont)
 public:
-  wxFont();
-  wxFont(int pointSize, int family, int style, int weight, bool underlined = FALSE, const wxString& faceName = wxEmptyString);
-  inline wxFont(const wxFont& font) { Ref(font); }
+    // ctors and such
+    wxFont() { Init(); }
+    wxFont(const wxFont& font) { Init(); Ref(font); }
 
-  ~wxFont();
+    wxFont(int size,
+           int family,
+           int style,
+           int weight,
+           bool underlined = FALSE,
+           const wxString& face = wxEmptyString,
+           wxFontEncoding encoding = wxFONTENCODING_DEFAULT)
+    {
+        Init();
 
-  bool Create(int pointSize, int family, int style, int weight, bool underlined = FALSE, const wxString& faceName = wxEmptyString);
+        (void)Create(size, family, style, weight, underlined, face, encoding);
+    }
 
-  virtual bool Ok() const { return (m_refData != NULL) ; }
+    bool Create(int size,
+                int family,
+                int style,
+                int weight,
+                bool underlined = FALSE,
+                const wxString& face = wxEmptyString,
+                wxFontEncoding encoding = wxFONTENCODING_DEFAULT);
 
-  inline int GetPointSize() const { return M_FONTDATA->m_pointSize; }
-  inline int GetFamily() const { return M_FONTDATA->m_family; }
-  inline int GetStyle() const { return M_FONTDATA->m_style; }
-  inline int GetWeight() const { return M_FONTDATA->m_weight; }
-  wxString GetFamilyString() const ;
-  wxString GetFaceName() const ;
-  wxString GetStyleString() const ;
-  wxString GetWeightString() const ;
-  inline bool GetUnderlined() const { return M_FONTDATA->m_underlined; }
+    virtual ~wxFont();
 
-  void SetPointSize(int pointSize);
-  void SetFamily(int family);
-  void SetStyle(int style);
-  void SetWeight(int weight);
-  void SetFaceName(const wxString& faceName);
-  void SetUnderlined(bool underlined);
+    // assignment
+    wxFont& operator=(const wxFont& font);
 
-  inline wxFont& operator = (const wxFont& font) { if (*this == font) return (*this); Ref(font); return *this; }
-  inline bool operator == (const wxFont& font) const { return m_refData == font.m_refData; }
-  inline bool operator != (const wxFont& font) const { return m_refData != font.m_refData; }
+    // implement base class pure virtuals
+    virtual int GetPointSize() const;
+    virtual int GetFamily() const;
+    virtual int GetStyle() const;
+    virtual int GetWeight() const;
+    virtual bool GetUnderlined() const;
+    virtual wxString GetFaceName() const;
+    virtual wxFontEncoding GetEncoding() const;
 
-// Implementation
+    virtual void SetPointSize(int pointSize);
+    virtual void SetFamily(int family);
+    virtual void SetStyle(int style);
+    virtual void SetWeight(int weight);
+    virtual void SetFaceName(const wxString& faceName);
+    virtual void SetUnderlined(bool underlined);
+    virtual void SetEncoding(wxFontEncoding encoding);
 
-  // Find an existing, or create a new, XFontStruct
-  // based on this wxFont and the given scale. Append the
-  // font to list in the private data for future reference.
+    // Implementation
 
-  // TODO This is a fairly basic implementation, that doesn't
-  // allow for different facenames, and also doesn't do a mapping
-  // between 'standard' facenames (e.g. Arial, Helvetica, Times Roman etc.)
-  // and the fonts that are available on a particular system.
-  // Maybe we need to scan the user's machine to build up a profile
-  // of the fonts and a mapping file.
+    // Find an existing, or create a new, XFontStruct
+    // based on this wxFont and the given scale. Append the
+    // font to list in the private data for future reference.
 
-  // Return font struct, and optionally the Motif font list
-  wxXFont* GetInternalFont(double scale = 1.0, WXDisplay* display = NULL) const;
+    // TODO This is a fairly basic implementation, that doesn't
+    // allow for different facenames, and also doesn't do a mapping
+    // between 'standard' facenames (e.g. Arial, Helvetica, Times Roman etc.)
+    // and the fonts that are available on a particular system.
+    // Maybe we need to scan the user's machine to build up a profile
+    // of the fonts and a mapping file.
 
-  // These two are helper functions for convenient access of the above.
-  inline WXFontStructPtr GetFontStruct(double scale = 1.0, WXDisplay* display = NULL) const
-  {
-    wxXFont* f = GetInternalFont(scale, display);
-    return (f ? f->m_fontStruct : (WXFontStructPtr) 0);
-  }
-  WXFontList GetFontList(double scale = 1.0, WXDisplay* display = NULL) const
-  {
-    wxXFont* f = GetInternalFont(scale, display);
-    return (f ? f->m_fontList : (WXFontList) 0);
-  }
+    // Return font struct, and optionally the Motif font list
+    class wxXFont* GetInternalFont(double scale = 1.0,
+                                   WXDisplay* display = NULL) const;
 
-  WXFontStructPtr LoadQueryFont(int pointSize, int family, int style,
-   int weight, bool underlined) const;
+    // These two are helper functions for convenient access of the above.
+    WXFontStructPtr GetFontStruct(double scale = 1.0,
+                                  WXDisplay* display = NULL) const;
+    WXFontList GetFontList(double scale = 1.0,
+                           WXDisplay* display = NULL) const;
+
 protected:
-  bool RealizeResource();
-  void Unshare();
+    // common part of all ctors
+    void Init();
+
+    // VZ: IMHO, we don't need it at all...
+    bool RealizeResource() { return TRUE; }
+    void Unshare();
+
+private:
+    DECLARE_DYNAMIC_CLASS(wxFont)
 };
 
 #endif

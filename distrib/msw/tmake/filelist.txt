@@ -334,7 +334,7 @@ utilsres.cpp	R
 wave.cpp	R
 window.cpp	R
 
-gsockmot.cpp	X
+gsockmot.c	X	S
 accel.cpp	X
 app.cpp	X
 bitmap.cpp	X
