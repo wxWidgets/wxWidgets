@@ -167,7 +167,9 @@ void wxGenericFontDialog::Init()
 {
   m_useEvents = FALSE;
   m_previewer = NULL;
+#ifdef __WXMAC__
   Create( m_parent ) ;
+#endif
 }
 
 wxGenericFontDialog::~wxGenericFontDialog()
