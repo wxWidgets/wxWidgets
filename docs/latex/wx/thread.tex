@@ -26,17 +26,24 @@ None.
 
 \func{}{wxThread}{\void}
 
-Default constructor: it doesn't create nor starts the thread.
+Constructor creates a new detached (default) or joinable C++ thread object. It
+does not create (or starts execution of) the real thread - for this you should
+use \helpref{Create}{wxthreadcreate} and \helpref{Run}{wxthreadrun} methods.
 
 \membersection{wxThread::\destruct{wxThread}}
 
 \func{}{\destruct{wxThread}}{\void}
 
-wxThread destructor is private, so you can not call it directly - i.e., deleting
-wxThread objects is forbidden. Instead, you should use \helpref{Delete}{wxthreaddelete} or
-\helpref{Kill}{wxthreadkill} methods. This also means that thread objects should
-eb {\bf always} allocated on the heap (i.e. with {\it new}) because the functions
-mentioned above will try to reclaim the storage from the heap.
+Destructor frees the ressources associated with the thread. Notice that you
+should never delete a detached thread - you may only call 
+\helpref{Delete}{wxthreaddelete} on it or wait until it terminates (and auto
+destructs) itself. Because the detached threads delete themselves, they can
+only be allocated on the heap.
+
+The joinable threads, however, may and should be deleted explicitly and 
+\helpref{Delete}{wxthreaddelete} and \helpref{Kill}{wxthreadkill} functions
+will not delete the C++ thread object. It is also safe to allocate them on
+stack.
 
 \membersection{wxThread::Create}\label{wxthreadcreate}
 
@@ -60,29 +67,44 @@ One of:
 
 \func{void}{Delete}{\void}
 
-This function should be called to terminate this thread. Unlike \helpref{Kill}{wxthreadkill}, it
-gives the target thread the time to terminate gracefully. Because of this, however, this function
-may not return immediately and if the thread is "hung" won't return at all. Also, message processing
-is not stopped during this function execution, so the message handlers may be called from inside
-it.
+Calling \helpref{Delete}{wxthreaddelete} is a graceful way to terminate the
+thread. It asks the thread to terminate and, if the thread code is well
+written, the thread will terminate after the next call to 
+\helpref{TestDestroy}{wxthreadtestdestroy} which should happen quiet soon.
 
-Delete() may be called for thread in any state: running, paused or even not yet created. Moreover,
-it must be called if \helpref{Create}{wxthreadcreate} or \helpref{Run}{wxthreadrun} fail to free
-the memory occupied by the thread object.
+However, if the thread doesn't call \helpref{TestDestroy}{wxthreadtestdestroy} 
+often enough (or at all), the function will not return immediately, but wait
+until the thread terminates. As it may take a long time, the message processing
+is not stopped during this function execution, so the message handlers may be
+called from inside it!
+
+Delete() may be called for thread in any state: running, paused or even not yet
+created. Moreover, it must be called if \helpref{Create}{wxthreadcreate} or
+\helpref{Run}{wxthreadrun} failed for a detached thread to free the memory
+occupied by the thread object (it will be done in the destructor for joinable
+threads).
+
+For detached threads Delete() will also delete the C++ thread object, but it
+will not do this for joinable ones.
+
+This function can only be called from another thread context.
 
 \membersection{wxThread::Entry}\label{wxthreadentry}
 
-\func{virtual void *}{Entry}{\void}
+\func{virtual ExitCode}{Entry}{\void}
 
 This is the entry point of the thread. This function is pure virtual and must
 be implemented by any derived class. The thread execution will start here.
 
-The returned value is the thread exit code but is currently ignored in
-wxWindows implementation (this will change in near future).
+The returned value is the thread exit code which is only useful for the
+joinable threads and is the value returned by \helpref{Wait}{wxthreadwait}.
 
-\membersection{wxThread::GetID}\label{wxthreadgetid}
+This function is called by wxWindows itself and should never be called
+directly.
 
-\constfunc{unsigned long}{GetID}{\void}
+\membersection{wxThread::GetId}\label{wxthreadgetid}
+
+\constfunc{unsigned long}{GetId}{\void}
 
 Gets the thread identifier: this is a platform dependent number which uniquely identifies the
 thread throughout the system during its existence (i.e. the thread identifiers may be reused).
@@ -93,7 +115,7 @@ thread throughout the system during its existence (i.e. the thread identifiers m
 
 Gets the priority of the thread, between zero and 100.
 
-The following priorities are already defined:
+The following priorities are defined:
 
 \twocolwidtha{7cm}
 \begin{twocollist}\itemsep=0pt
@@ -108,9 +130,15 @@ The following priorities are already defined:
 
 Returns TRUE if the thread is alive (i.e. started and not terminating).
 
+\membersection{wxThread::IsDetached}\label{wxthreadisdetached}
+
+\constfunc{bool}{IsDetached}{\void}
+
+Returns TRUE if the thread is of detached kind, FALSE if it is a joinable one.
+
 \membersection{wxThread::IsMain}\label{wxthreadismain}
 
-\constfunc{bool}{IsMain}{\void}
+\func{static bool}{IsMain}{\void}
 
 Returns TRUE if the calling thread is the main application thread.
 
@@ -135,6 +163,10 @@ be used with extreme care (and not used at all whenever possible)!} The resource
 allocated to the thread will not be freed and the state of the C runtime library
 may become inconsistent. Use \helpref{Delete()}{wxthreaddelete} instead.
 
+For detached threads Kill() will also delete the associated C++ object.
+
+This function can only be called from another thread context.
+
 \membersection{wxThread::OnExit}\label{wxthreadonexit}
 
 \func{void}{OnExit}{\void}
@@ -142,11 +174,27 @@ may become inconsistent. Use \helpref{Delete()}{wxthreaddelete} instead.
 Called when the thread exits. This function is called in the context of the thread
 associated with the wxThread object, not in the context of the main thread.
 
+This function should never be called directly.
+
+\membersection{wxThread::Pause}\label{wxthreadpause}
+
+\func{wxThreadError}{Pause}{\void}
+
+Suspends the thread. Under some implementations (Win32), the thread is
+suspended immediately, under others it will only be suspended when it calls 
+\helpref{TestDestroy}{wxthreadtestdestroy} for the next time (hence, if the
+thread doesn't call it at all, it won't be suspended).
+
+This function can only be called from another thread context.
+
 \membersection{wxThread::Run}\label{wxthreadrun}
 
 \func{wxThreadError}{Run}{\void}
 
-Runs the thread.
+Starts the thread execution. Should be called after 
+\helpref{Create}{wxthreadcreate}.
+
+This function can only be called from another thread context.
 
 \membersection{wxThread::SetPriority}\label{wxthreadsetpriority}
 
@@ -165,16 +213,32 @@ The following priorities are already defined:
 
 \membersection{wxThread::Sleep}\label{wxthreadsleep}
 
-\func{\void}{Sleep}{\param{unsigned long }{milliseconds}}
+\func{static void}{Sleep}{\param{unsigned long }{milliseconds}}
 
 Pauses the thread execution for the given amount of time.
 
 This function should be used instead of \helpref{wxSleep}{wxsleep} by all worker
 (i.e. all except the main one) threads.
 
+\membersection{wxThread::Resume}\label{wxthreadresume}
+
+\func{wxThreadError}{Resume}{\void}
+
+Resumes a thread suspended by the call to \helpref{Pause}{wxthreadpause}.
+
+This function can only be called from another thread context.
+
+\membersection{wxThread::TestDestroy}\label{wxthreadtestdestroy}
+
+\func{bool}{TestDestroy}{\void}
+
+This function should be periodically called by the thread to ensure that calls
+to \helpref{Pause}{wxthreadpause} and \helpref{Delete}{wxthreaddelete} will
+work. If it returns TRUE, the thread should exit as soon as possible.
+
 \membersection{wxThread::This}\label{wxthreadthis}
 
-\func{wxThread *}{This}{\void}
+\func{static wxThread *}{This}{\void}
 
 Return the thread object for the calling thread. NULL is returned if the calling thread
 is the main (GUI) thread, but \helpref{IsMain}{wxthreadismain} should be used to test
@@ -184,8 +248,18 @@ is undefined.
 
 \membersection{wxThread::Yield}\label{wxthreadyield}
 
-\func{\void}{Yield}{\void}
+\func{void}{Yield}{\void}
 
 Give the rest of the thread time slice to the system allowing the other threads to run.
 See also \helpref{Sleep()}{wxthreadsleep}.
 
+\membersection{wxThread::Wait}\label{wxthreadwait}
+
+\constfunc{ExitCode}{Wait}{\void}
+
+Waits until the thread terminates and returns its exit code or {\tt
+(ExitCode)-1} on error.
+
+You can only Wait() for joinable (not detached) threads.
+
+This function can only be called from another thread context.

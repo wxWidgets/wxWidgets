@@ -6,18 +6,17 @@ next release (2.1.12 or 2.2?)
 
 all:
 
+- wxThread class modified to support both detached and joinable threads
+- wxLog functions are now MT-safe
 - wxStopWatch class, timer functions have more chances to return correct
   results for your platform (use ANSI function where available)
-
 - buffer overflows in wxString and wxLog classes fixed (if snprintf() function
   is available)
-
 - wxArray::RemoveAt() replaces deprectaed wxArray::Remove(index)
 
 wxMSW:
 
 - tooltips work with wxRadioBox
-
 - arbitrary controls (and not only buttons) can be put into a toolbar
 
 wxGTK:
