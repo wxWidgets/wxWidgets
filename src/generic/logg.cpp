@@ -71,6 +71,10 @@
     #include "wx/msgdlg.h"
 #endif // wxUSE_LOG_DIALOG/!wxUSE_LOG_DIALOG
 
+#if defined(__MWERKS__) && wxUSE_UNICODE
+    #include <wtime.h>
+#endif
+
 // the suffix we add to the button to show that the dialog can be expanded
 #define EXPAND_SUFFIX _T(" >>")
 
