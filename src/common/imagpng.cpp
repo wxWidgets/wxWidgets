@@ -189,14 +189,24 @@ PNGLINKAGEMODE wx_png_warning(png_structp png_ptr, png_const_charp message)
 // LoadFile() helpers
 // ----------------------------------------------------------------------------
 
+// determine the kind of transparency we need for this image: if the only alpha
+// values it has are 0 and 0xff then we can simply create a mask for it, we
+// should be ok with a simple mask but otherwise we need a full blown alpha
+// channel in wxImage
+//
+// parameters:
+//      ptr             the start of the data to examine
+//      x, y            starting position
+//      w, h            size of the image
+//      numColBytes     number of colour bytes (1 for grey scale, 3 for RGB)
+//                      (NB: alpha always follows the colour bytes)
 Transparency
 CheckTransparency(const unsigned char *ptr,
-                  png_uint_32 x, png_uint_32 y, png_uint_32 w, png_uint_32 h)
+                  png_uint_32 x, png_uint_32 y, png_uint_32 w, png_uint_32 h,
+                  size_t numColBytes)
 {
-    // suppose that a mask will suffice
-    Transparency transparency = Transparency_Mask;
-
-    // and check all the remaining alpha values to see if it does
+    // suppose that a mask will suffice and check all the remaining alpha
+    // values to see if it does
     unsigned char a2;
     unsigned const char *ptr2 = ptr;
     for ( png_uint_32 y2 = y; y2 < h; y2++ )
@@ -204,26 +214,19 @@ CheckTransparency(const unsigned char *ptr,
         for ( png_uint_32 x2 = x + 1; x2 < w; x2++ )
         {
             // skip the grey byte
-            a2 = *++ptr2;
+            ptr2 += numColBytes;
+            a2 = *ptr2++;
 
             if ( a2 && a2 != 0xff )
             {
-                // not fully opeaque nor fully transparent, hence need alpha
-                transparency = Transparency_Alpha;
-                break;
+                // not fully opaque nor fully transparent, hence need alpha
+                return Transparency_Alpha;
             }
-
-            ++ptr2;
-        }
-
-        if ( transparency == Transparency_Alpha )
-        {
-            // no need to continue
-            break;
         }
     }
 
-    return transparency;
+    // mask will be enough
+    return Transparency_Mask;
 }
 
 unsigned char *InitAlpha(wxImage *image, png_uint_32 x, png_uint_32 y)
@@ -341,8 +344,13 @@ void CopyDataFromPNG(wxImage *image,
                     // maybe even full alpha channel info: the former is
                     // only enough if we have alpha values of 0 and 0xff
                     // only, otherwisewe need the latter
-                    transparency = CheckTransparency(ptrSrc, x, y,
-                                                     width, height);
+                    transparency = CheckTransparency
+                                   (
+                                        ptrSrc,
+                                        x, y,
+                                        width, height,
+                                        1
+                                   );
 
                     if ( transparency == Transparency_Mask )
                     {
@@ -396,8 +404,13 @@ void CopyDataFromPNG(wxImage *image,
                 // where noted
                 if ( a != 0xff && transparency == Transparency_None )
                 {
-                    transparency = CheckTransparency(ptrSrc, x, y,
-                                                     width, height);
+                    transparency = CheckTransparency
+                                   (
+                                        ptrSrc,
+                                        x, y,
+                                        width, height,
+                                        3
+                                   );
 
                     if ( transparency == Transparency_Mask )
                     {
