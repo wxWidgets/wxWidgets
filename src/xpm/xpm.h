@@ -103,9 +103,10 @@ typedef unsigned long Pixel;	/* Index into colormap */
 
 /* DW: bug in makefile seems to not want to define these, but they are needed! */
 /* Guillermo, maybe you can look at it */
-
+#ifdef FOR_MSW
 #  define FUNC(f, t, p) extern t f p
 #  define LFUNC(f, t, p) static t f p
+#endif
 
 /* Return ErrorStatus codes:
  * null     if full success
