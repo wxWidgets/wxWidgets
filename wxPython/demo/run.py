@@ -84,7 +84,7 @@ class RunDemoApp(wxApp):
 
 
 def main(argv):
-    if len(argv) != 2:
+    if len(argv) < 2:
         print "Please specify a demo module name on the command-line"
         raise SystemExit
 

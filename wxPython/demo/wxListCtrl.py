@@ -92,21 +92,44 @@ class TestListCtrlPanel(wxPanel, wxColumnSorterMixin):
 
         self.il = wxImageList(16, 16)
 
-        idx1 = self.il.Add(images.getSmilesBitmap())
+        self.idx1 = self.il.Add(images.getSmilesBitmap())
         self.sm_up = self.il.Add(images.getSmallUpArrowBitmap())
         self.sm_dn = self.il.Add(images.getSmallDnArrowBitmap())
-
-        #idx1 = self.il.AddIcon(wxIconFromXPMData(images.getSmilesData()))
-        #self.sm_up = self.il.AddIcon(wxIconFromXPMData(images.getSmallUpArrowData()))
-        #self.sm_dn = self.il.AddIcon(wxIconFromXPMData(images.getSmallDnArrowData()))
 
         self.list = TestListCtrl(self, tID,
                                style=wxLC_REPORT|wxSUNKEN_BORDER)#|wxLC_VRULES|wxLC_HRULES)
         self.list.SetImageList(self.il, wxIMAGE_LIST_SMALL)
 
-        #  Why doesn't this show up on MSW???
-        #self.list.SetToolTip(wxToolTip("This is a ToolTip!"))
+        self.PopulateList()
 
+        # Now that the list exists we can init the other base class,
+        # see wxPython/lib/mixins/listctrl.py
+        self.itemDataMap = musicdata
+        wxColumnSorterMixin.__init__(self, 3)
+        #self.SortListItems(0, true)
+
+        EVT_SIZE(self, self.OnSize)
+        EVT_LIST_ITEM_SELECTED(self, tID, self.OnItemSelected)
+        EVT_LIST_ITEM_DESELECTED(self, tID, self.OnItemDeselected)
+        EVT_LIST_ITEM_ACTIVATED(self, tID, self.OnItemActivated)
+        EVT_LIST_DELETE_ITEM(self, tID, self.OnItemDelete)
+        EVT_LIST_COL_CLICK(self, tID, self.OnColClick)
+        EVT_LIST_COL_RIGHT_CLICK(self, tID, self.OnColRightClick)
+        EVT_LIST_COL_BEGIN_DRAG(self, tID, self.OnColBeginDrag)
+        EVT_LIST_COL_DRAGGING(self, tID, self.OnColDragging)
+        EVT_LIST_COL_END_DRAG(self, tID, self.OnColEndDrag)
+
+        EVT_LEFT_DCLICK(self.list, self.OnDoubleClick)
+        EVT_RIGHT_DOWN(self.list, self.OnRightDown)
+
+        # for wxMSW
+        EVT_COMMAND_RIGHT_CLICK(self.list, tID, self.OnRightClick)
+
+        # for wxGTK
+        EVT_RIGHT_UP(self.list, self.OnRightClick)
+
+
+    def PopulateList(self):
         if 0:
             # for normal, simple columns, you can add them like this:
             self.list.InsertColumn(0, "Artist")
@@ -129,21 +152,13 @@ class TestListCtrlPanel(wxPanel, wxColumnSorterMixin):
             info.m_text = "Genre"
             self.list.InsertColumnInfo(2, info)
 
-
-
         items = musicdata.items()
         for x in range(len(items)):
             key, data = items[x]
-            self.list.InsertImageStringItem(x, data[0], idx1)
+            self.list.InsertImageStringItem(x, data[0], self.idx1)
             self.list.SetStringItem(x, 1, data[1])
             self.list.SetStringItem(x, 2, data[2])
             self.list.SetItemData(x, key)
-
-        # Now that the list exists we can init the other base class,
-        # see wxPython/lib/mixins/listctrl.py
-        self.itemDataMap = musicdata
-        wxColumnSorterMixin.__init__(self, 3)
-        #self.SortListItems(0, true)
 
         self.list.SetColumnWidth(0, wxLIST_AUTOSIZE)
         self.list.SetColumnWidth(1, wxLIST_AUTOSIZE)
@@ -161,25 +176,6 @@ class TestListCtrlPanel(wxPanel, wxColumnSorterMixin):
         self.list.SetItem(item)
 
         self.currentItem = 0
-        EVT_SIZE(self, self.OnSize)
-        EVT_LIST_ITEM_SELECTED(self, tID, self.OnItemSelected)
-        EVT_LIST_ITEM_DESELECTED(self, tID, self.OnItemDeselected)
-        EVT_LIST_ITEM_ACTIVATED(self, tID, self.OnItemActivated)
-        EVT_LIST_DELETE_ITEM(self, tID, self.OnItemDelete)
-        EVT_LIST_COL_CLICK(self, tID, self.OnColClick)
-        EVT_LIST_COL_RIGHT_CLICK(self, tID, self.OnColRightClick)
-        EVT_LIST_COL_BEGIN_DRAG(self, tID, self.OnColBeginDrag)
-        EVT_LIST_COL_DRAGGING(self, tID, self.OnColDragging)
-        EVT_LIST_COL_END_DRAG(self, tID, self.OnColEndDrag)
-
-        EVT_LEFT_DCLICK(self.list, self.OnDoubleClick)
-        EVT_RIGHT_DOWN(self.list, self.OnRightDown)
-
-        # for wxMSW
-        EVT_COMMAND_RIGHT_CLICK(self.list, tID, self.OnRightClick)
-
-        # for wxGTK
-        EVT_RIGHT_UP(self.list, self.OnRightClick)
 
 
     # Used by the wxColumnSorterMixin, see wxPython/lib/mixins/listctrl.py
@@ -189,7 +185,6 @@ class TestListCtrlPanel(wxPanel, wxColumnSorterMixin):
     # Used by the wxColumnSorterMixin, see wxPython/lib/mixins/listctrl.py
     def GetSortImages(self):
         return (self.sm_dn, self.sm_up)
-
 
 
     def OnRightDown(self, event):
@@ -274,7 +269,7 @@ class TestListCtrlPanel(wxPanel, wxColumnSorterMixin):
 
         menu.AppendItem(item)
         menu.Append(tPopupID2, "Two")
-        menu.Append(tPopupID3, "Three")
+        menu.Append(tPopupID3, "ClearAll and repopulate")
         menu.Append(tPopupID4, "DeleteAllItems")
         menu.Append(tPopupID5, "GetItem")
         EVT_MENU(self, tPopupID1, self.OnPopupOne)
@@ -296,6 +291,10 @@ class TestListCtrlPanel(wxPanel, wxColumnSorterMixin):
 
     def OnPopupThree(self, event):
         self.log.WriteText("Popup three\n")
+        self.list.ClearAll()
+        wxCallAfter(self.PopulateList)
+        #wxYield()
+        #self.PopulateList()
 
     def OnPopupFour(self, event):
         self.list.DeleteAllItems()
