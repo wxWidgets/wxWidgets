@@ -30,7 +30,7 @@
 #include "wx/protocol/file.h"
 
 IMPLEMENT_DYNAMIC_CLASS(wxFileProto, wxProtocol)
-IMPLEMENT_PROTOCOL(wxFileProto, wxT("file"), NULL, FALSE)
+IMPLEMENT_PROTOCOL(wxFileProto, wxT("file"), NULL, false)
 
 wxFileProto::wxFileProto()
   : wxProtocol()

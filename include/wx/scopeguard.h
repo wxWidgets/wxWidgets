@@ -32,7 +32,7 @@ namespace wxPrivate
     // ScopeGuardImplBase but gcc 2.8 which is still used for OS/2 doesn't
     // support member templates and so we must make it global
     template <typename ScopeGuardImpl>
-    void OnScopeExit(ScopeGuardImpl& guard) 
+    void OnScopeExit(ScopeGuardImpl& guard)
     {
         if ( !guard.WasDismissed() )
         {
@@ -51,7 +51,7 @@ namespace wxPrivate
     {
     }
 } // namespace wxPrivate
-    
+
 // ============================================================================
 // wxScopeGuard for functions and functors
 // ============================================================================
@@ -73,7 +73,7 @@ public:
 protected:
     ~wxScopeGuardImplBase() { }
 
-    wxScopeGuardImplBase(const wxScopeGuardImplBase& other) 
+    wxScopeGuardImplBase(const wxScopeGuardImplBase& other)
         : m_wasDismissed(other.m_wasDismissed)
     {
         other.Dismiss();
@@ -111,7 +111,7 @@ protected:
     wxScopeGuardImpl0& operator=(const wxScopeGuardImpl0&);
 };
 
-template <typename F> 
+template <typename F>
 inline wxScopeGuardImpl0<F> wxMakeGuard(F fun)
 {
     return wxScopeGuardImpl0<F>::MakeGuard(fun);
@@ -143,7 +143,7 @@ protected:
     wxScopeGuardImpl1& operator=(const wxScopeGuardImpl1&);
 };
 
-template <typename F, typename P1> 
+template <typename F, typename P1>
 inline wxScopeGuardImpl1<F, P1> wxMakeGuard(F fun, P1 p1)
 {
     return wxScopeGuardImpl1<F, P1>::MakeGuard(fun, p1);
@@ -233,7 +233,7 @@ public:
     void Execute() { (m_obj.*m_memfun)(m_p1); }
 
 protected:
-    wxObjScopeGuardImpl1(Obj& obj, MemFun memFun, P1 p1) 
+    wxObjScopeGuardImpl1(Obj& obj, MemFun memFun, P1 p1)
         : m_obj(obj), m_memfun(memFun), m_p1(p1) { }
 
     Obj& m_obj;
@@ -263,7 +263,7 @@ public:
     void Execute() { (m_obj.*m_memfun)(m_p1, m_p2); }
 
 protected:
-    wxObjScopeGuardImpl2(Obj& obj, MemFun memFun, P1 p1, P2 p2) 
+    wxObjScopeGuardImpl2(Obj& obj, MemFun memFun, P1 p1, P2 p2)
         : m_obj(obj), m_memfun(memFun), m_p1(p1), m_p2(p2) { }
 
     Obj& m_obj;

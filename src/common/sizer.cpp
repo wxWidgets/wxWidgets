@@ -595,9 +595,9 @@ wxSize wxSizer::FitSize( wxWindow *window )
 
     // Limit the size if sizeMax != wxDefaultSize
 
-    if ( size.x > sizeMax.x && sizeMax.x != -1 )
+    if ( size.x > sizeMax.x && sizeMax.x != wxDefaultCoord )
         size.x = sizeMax.x;
-    if ( size.y > sizeMax.y && sizeMax.y != -1 )
+    if ( size.y > sizeMax.y && sizeMax.y != wxDefaultCoord )
         size.y = sizeMax.y;
 
     return size;
@@ -631,9 +631,9 @@ wxSize wxSizer::VirtualFitSize( wxWindow *window )
 
     // Limit the size if sizeMax != wxDefaultSize
 
-    if ( size.x > sizeMax.x && sizeMax.x != -1 )
+    if ( size.x > sizeMax.x && sizeMax.x != wxDefaultCoord )
         size.x = sizeMax.x;
-    if ( size.y > sizeMax.y && sizeMax.y != -1 )
+    if ( size.y > sizeMax.y && sizeMax.y != wxDefaultCoord )
         size.y = sizeMax.y;
 
     return size;

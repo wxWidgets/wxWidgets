@@ -79,8 +79,8 @@ public:
   virtual bool Disconnect(void);
 
   // Callbacks to BOTH - override at will
-  // Default behaviour is to delete connection and return TRUE
-  virtual bool OnDisconnect(void) { delete this; return TRUE; }
+  // Default behaviour is to delete connection and return true
+  virtual bool OnDisconnect(void) { delete this; return true; }
 
   // To enable the compressor (NOTE: not implemented!)
   void Compress(bool on);
@@ -116,7 +116,7 @@ public:
   wxTCPServer();
   virtual ~wxTCPServer();
 
-  // Returns FALSE on error (e.g. port number is already in use)
+  // Returns false on error (e.g. port number is already in use)
   virtual bool Create(const wxString& serverName);
 
   // Callbacks to SERVER - override at will

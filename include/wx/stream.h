@@ -159,7 +159,7 @@ public:
     // all the requested data or not
     virtual size_t LastRead() const { return wxStreamBase::m_lastcount; }
 
-    // returns TRUE if some data is available in the stream right now, so that
+    // returns true if some data is available in the stream right now, so that
     // calling Read() wouldn't block
     virtual bool CanRead() const;
 
@@ -181,7 +181,7 @@ public:
 
     // put back the specified character in the stream
     //
-    // returns TRUE if ok, FALSE on error
+    // returns true if ok, false on error
     bool Ungetch(char c);
 
 
@@ -284,7 +284,7 @@ public:
     wxCountingOutputStream();
 
     size_t GetSize() const;
-    bool Ok() const { return TRUE; }
+    bool Ok() const { return true; }
 
 protected:
     virtual size_t OnSysWrite(const void *buffer, size_t size);
@@ -375,9 +375,9 @@ public:
     void ResetBuffer();
 
     // NB: the buffer must always be allocated with malloc() if takeOwn is
-    //     TRUE as it will be deallocated by free()
-    void SetBufferIO(void *start, void *end, bool takeOwnership = FALSE);
-    void SetBufferIO(void *start, size_t len, bool takeOwnership = FALSE);
+    //     true as it will be deallocated by free()
+    void SetBufferIO(void *start, void *end, bool takeOwnership = false);
+    void SetBufferIO(void *start, size_t len, bool takeOwnership = false);
     void SetBufferIO(size_t bufsize);
     void *GetBufferStart() const { return m_buffer_start; }
     void *GetBufferEnd() const { return m_buffer_end; }

@@ -16,28 +16,28 @@
 #define WX_DECLARE_STACK(obj, cls)\
 class cls : public wxVectorBase\
 {\
-	WX_DECLARE_VECTORBASE(obj, cls);\
+    WX_DECLARE_VECTORBASE(obj, cls);\
 public:\
-	void push(const obj& o)\
-	{\
-		bool rc = Alloc(size() + 1);\
-		wxASSERT(rc);\
-		Append(new obj(o));\
-	};\
+    void push(const obj& o)\
+    {\
+        bool rc = Alloc(size() + 1);\
+        wxASSERT(rc);\
+        Append(new obj(o));\
+    };\
 \
-	void pop()\
-	{\
-		RemoveAt(size() - 1);\
-	};\
+    void pop()\
+    {\
+        RemoveAt(size() - 1);\
+    };\
 \
-	obj& top()\
-	{\
-		return *(obj *) GetItem(size() - 1);\
-	};\
-	const obj& top() const\
-	{\
-		return *(obj *) GetItem(size() - 1);\
-	};\
+    obj& top()\
+    {\
+        return *(obj *) GetItem(size() - 1);\
+    };\
+    const obj& top() const\
+    {\
+        return *(obj *) GetItem(size() - 1);\
+    };\
 }
 
 #endif // _WX_STACK_H_

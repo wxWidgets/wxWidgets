@@ -698,7 +698,7 @@ public:
   size_t Len() const { return length(); }
     // string contains any characters?
   bool IsEmpty() const { return empty(); }
-    // empty string is "FALSE", so !str will return TRUE
+    // empty string is "false", so !str will return true
   bool operator!() const { return IsEmpty(); }
     // truncate the string to given length
   wxString& Truncate(size_t uiLen);
@@ -978,10 +978,10 @@ public:
   int CmpNoCase(const wxChar *psz) const { return wxStricmp(c_str(), psz); }
     // test for the string equality, either considering case or not
     // (if compareWithCase then the case matters)
-  bool IsSameAs(const wxChar *psz, bool compareWithCase = TRUE) const
+  bool IsSameAs(const wxChar *psz, bool compareWithCase = true) const
     { return (compareWithCase ? Cmp(psz) : CmpNoCase(psz)) == 0; }
-    // comparison with a signle character: returns TRUE if equal
-  bool IsSameAs(wxChar c, bool compareWithCase = TRUE) const
+    // comparison with a signle character: returns true if equal
+  bool IsSameAs(wxChar c, bool compareWithCase = true) const
     {
       return (length() == 1) && (compareWithCase ? GetChar(0u) == c
                               : wxToupper(GetChar(0u)) == wxToupper(c));
@@ -998,7 +998,7 @@ public:
 
       // check that the string starts with prefix and return the rest of the
       // string in the provided pointer if it is not NULL, otherwise return
-      // FALSE
+      // false
   bool StartsWith(const wxChar *prefix, wxString *rest = NULL) const;
 
       // get first nCount characters
@@ -1035,25 +1035,25 @@ public:
 
   // trimming/padding whitespace (either side) and truncating
       // remove spaces from left or from right (default) side
-  wxString& Trim(bool bFromRight = TRUE);
+  wxString& Trim(bool bFromRight = true);
       // add nCount copies chPad in the beginning or at the end (default)
-  wxString& Pad(size_t nCount, wxChar chPad = wxT(' '), bool bFromRight = TRUE);
+  wxString& Pad(size_t nCount, wxChar chPad = wxT(' '), bool bFromRight = true);
 
   // searching and replacing
       // searching (return starting index, or -1 if not found)
-  int Find(wxChar ch, bool bFromEnd = FALSE) const;   // like strchr/strrchr
+  int Find(wxChar ch, bool bFromEnd = false) const;   // like strchr/strrchr
       // searching (return starting index, or -1 if not found)
   int Find(const wxChar *pszSub) const;               // like strstr
       // replace first (or all of bReplaceAll) occurences of substring with
       // another string, returns the number of replacements made
   size_t Replace(const wxChar *szOld,
                  const wxChar *szNew,
-                 bool bReplaceAll = TRUE);
+                 bool bReplaceAll = true);
 
     // check if the string contents matches a mask containing '*' and '?'
   bool Matches(const wxChar *szMask) const;
 
-    // conversion to numbers: all functions return TRUE only if the whole
+    // conversion to numbers: all functions return true only if the whole
     // string is a number and put the value of this number into the pointer
     // provided, the base is the numeric base in which the conversion should be
     // done and must be comprised between 2 and 36 or be 0 in which case the
@@ -1136,8 +1136,8 @@ public:
   int First( const wxChar ch ) const { return Find(ch); }
   int First( const wxChar* psz ) const { return Find(psz); }
   int First( const wxString &str ) const { return Find(str); }
-  int Last( const wxChar ch ) const { return Find(ch, TRUE); }
-  bool Contains(const wxString& str) const { return Find(str) != -1; }
+  int Last( const wxChar ch ) const { return Find(ch, true); }
+  bool Contains(const wxString& str) const { return Find(str) != wxNOT_FOUND; }
 
     // use IsEmpty()
   bool IsNull() const { return IsEmpty(); }

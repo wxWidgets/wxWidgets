@@ -107,7 +107,7 @@ public:
 
   virtual int Type() { return wxSockAddress::IPV4; }
   virtual wxSockAddress *Clone() const;
-  
+
   bool operator==(wxIPV4address& addr);
 
 private:
@@ -131,7 +131,7 @@ public:
   // IPV6 name formats
   //
   //                          hostname
-  //                          3ffe:ffff:0100:f101:0210:a4ff:fee3:9566 
+  //                          3ffe:ffff:0100:f101:0210:a4ff:fee3:9566
   // compact (base85)         Itu&-ZQ82s>J%s99FJXT
   // compressed format        ::1
   // ipv4 mapped              ::ffff:1.2.3.4
@@ -148,7 +148,7 @@ public:
   // any (0000:0000:0000:0000:0000:0000:0000:0000 (::))
   virtual bool AnyAddress();
 
-  // 3ffe:ffff:0100:f101:0210:a4ff:fee3:9566 
+  // 3ffe:ffff:0100:f101:0210:a4ff:fee3:9566
   virtual wxString IPAddress() const;
 
   virtual wxString Hostname() const;

@@ -99,7 +99,7 @@ void wxStatusBarBase::SetFieldsCount(int number, const int *widths)
 {
     wxCHECK_RET( number > 0, _T("invalid field number in SetFieldsCount") );
 
-    bool refresh = FALSE;
+    bool refresh = false;
 
     if ( number != m_nFields )
     {
@@ -152,7 +152,7 @@ void wxStatusBarBase::SetFieldsCount(int number, const int *widths)
 
         ReinitWidths();
 
-        refresh = TRUE;
+        refresh = true;
     }
     //else: keep the old m_statusWidths if we had them
 
@@ -161,7 +161,7 @@ void wxStatusBarBase::SetFieldsCount(int number, const int *widths)
         SetStatusWidths(number, widths);
 
         // already done from SetStatusWidths()
-        refresh = FALSE;
+        refresh = false;
     }
 
     if ( refresh )

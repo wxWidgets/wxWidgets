@@ -44,7 +44,7 @@ public:
     // path is optional and is ignored under Win32 and used as the directory to
     // create the lock file in under Unix (default is wxGetHomeDir())
     //
-    // returns FALSE if initialization failed, it doesn't mean that another
+    // returns false if initialization failed, it doesn't mean that another
     // instance is running - use IsAnotherRunning() to check it
     bool Create(const wxString& name, const wxString& path = wxEmptyString);
 

@@ -1121,7 +1121,7 @@ size_t wxMBConv_iconv::WC2MB(char *buf, const wchar_t *psz, size_t n) const
 #ifdef wxHAVE_WIN32_MB2WC
 
 // from utils.cpp
-#if wxUSE_FONTMAP 
+#if wxUSE_FONTMAP
 extern WXDLLIMPEXP_BASE long wxCharsetToCodepage(const wxChar *charset);
 extern WXDLLIMPEXP_BASE long wxEncodingToCodepage(wxFontEncoding encoding);
 #endif
@@ -1177,7 +1177,7 @@ public:
             quality approximations such as turning "1/2" symbol (U+00BD) into
             "1" for the code pages which don't have it and we, obviously, want
             to avoid this at any price
-        
+
             the trouble is that this function does it _silently_, i.e. it won't
             even tell us whether it did or not... Win98/2000 and higher provide
             WC_NO_BEST_FIT_CHARS but it doesn't work for the older systems and
@@ -1302,127 +1302,127 @@ public:
 
     wxMBConv_mac(const wxChar* name)
     {
-    	Init( wxMacGetSystemEncFromFontEnc(wxFontMapper::Get()->CharsetToEncoding(name, FALSE) ) ) ;
+        Init( wxMacGetSystemEncFromFontEnc(wxFontMapper::Get()->CharsetToEncoding(name, false) ) ) ;
     }
 
     wxMBConv_mac(wxFontEncoding encoding)
     {
-    	Init( wxMacGetSystemEncFromFontEnc(encoding) );
+        Init( wxMacGetSystemEncFromFontEnc(encoding) );
     }
-    
-	~wxMBConv_mac()
-	{
-	    OSStatus status = noErr ;
-	    status = TECDisposeConverter(m_MB2WC_converter);
-	    status = TECDisposeConverter(m_WC2MB_converter);		
-	}
-	
-    
-	void Init( TextEncodingBase encoding)
-	{
-	    OSStatus status = noErr ;
-		m_char_encoding = encoding ;
-		m_unicode_encoding = CreateTextEncoding(kTextEncodingUnicodeDefault,0,kUnicode16BitFormat) ;
 
-	    status = TECCreateConverter(&m_MB2WC_converter,
-	                                m_char_encoding,
-	                                m_unicode_encoding);
-	    status = TECCreateConverter(&m_WC2MB_converter,
-	                                m_unicode_encoding,
-	                                m_char_encoding);
-	}
-	
+    ~wxMBConv_mac()
+    {
+        OSStatus status = noErr ;
+        status = TECDisposeConverter(m_MB2WC_converter);
+        status = TECDisposeConverter(m_WC2MB_converter);
+    }
+
+
+    void Init( TextEncodingBase encoding)
+    {
+        OSStatus status = noErr ;
+        m_char_encoding = encoding ;
+        m_unicode_encoding = CreateTextEncoding(kTextEncodingUnicodeDefault,0,kUnicode16BitFormat) ;
+
+        status = TECCreateConverter(&m_MB2WC_converter,
+                                    m_char_encoding,
+                                    m_unicode_encoding);
+        status = TECCreateConverter(&m_WC2MB_converter,
+                                    m_unicode_encoding,
+                                    m_char_encoding);
+    }
+
     size_t MB2WC(wchar_t *buf, const char *psz, size_t n) const
     {
-	    OSStatus status = noErr ;
-	    ByteCount byteOutLen ;
-	    ByteCount byteInLen = strlen(psz) ;
-		wchar_t *tbuf = NULL ;
-		UniChar* ubuf = NULL ;
-		size_t res = 0 ;
-		
-		if (buf == NULL)
-		{
-			n = byteInLen ;
-			tbuf = (wchar_t*) malloc( n * SIZEOF_WCHAR_T) ;
-		}
-	    ByteCount byteBufferLen = n * sizeof( UniChar ) ; 
+        OSStatus status = noErr ;
+        ByteCount byteOutLen ;
+        ByteCount byteInLen = strlen(psz) ;
+        wchar_t *tbuf = NULL ;
+        UniChar* ubuf = NULL ;
+        size_t res = 0 ;
+
+        if (buf == NULL)
+        {
+            n = byteInLen ;
+            tbuf = (wchar_t*) malloc( n * SIZEOF_WCHAR_T) ;
+        }
+        ByteCount byteBufferLen = n * sizeof( UniChar ) ;
 #if SIZEOF_WCHAR_T == 4
-		ubuf = (UniChar*) malloc( byteBufferLen + 2 ) ;
+        ubuf = (UniChar*) malloc( byteBufferLen + 2 ) ;
 #else
-		ubuf = (UniChar*) (buf ? buf : tbuf) ;
+        ubuf = (UniChar*) (buf ? buf : tbuf) ;
 #endif
-	    status = TECConvertText(m_MB2WC_converter, (ConstTextPtr) psz , byteInLen, &byteInLen,
-	      (TextPtr) ubuf , byteBufferLen, &byteOutLen);
+        status = TECConvertText(m_MB2WC_converter, (ConstTextPtr) psz , byteInLen, &byteInLen,
+          (TextPtr) ubuf , byteBufferLen, &byteOutLen);
 #if SIZEOF_WCHAR_T == 4
         // we have to terminate here, because n might be larger for the trailing zero, and if UniChar
         // is not properly terminated we get random characters at the end
         ubuf[byteOutLen / sizeof( UniChar ) ] = 0 ;
-		wxMBConvUTF16BE converter ;
-		res = converter.MB2WC( (buf ? buf : tbuf) , (const char*)ubuf , n ) ;
-		free( ubuf ) ;
+        wxMBConvUTF16BE converter ;
+        res = converter.MB2WC( (buf ? buf : tbuf) , (const char*)ubuf , n ) ;
+        free( ubuf ) ;
 #else
-		res = byteOutLen / sizeof( UniChar ) ;
+        res = byteOutLen / sizeof( UniChar ) ;
 #endif
-		if ( buf == NULL )
-			free(tbuf) ;
+        if ( buf == NULL )
+             free(tbuf) ;
 
         if ( buf  && res < n)
             buf[res] = 0;
 
-		return res ;
+        return res ;
     }
 
     size_t WC2MB(char *buf, const wchar_t *psz, size_t n) const
-    {    	
-	    OSStatus status = noErr ;
-	    ByteCount byteOutLen ;
-	    ByteCount byteInLen = wxWcslen(psz) * SIZEOF_WCHAR_T ;
+    {
+        OSStatus status = noErr ;
+        ByteCount byteOutLen ;
+        ByteCount byteInLen = wxWcslen(psz) * SIZEOF_WCHAR_T ;
 
-		char *tbuf = NULL ;
-		
-		if (buf == NULL)
-		{
-			// worst case
-			n = byteInLen * 2 ;
-			tbuf = (char*) malloc( n ) ;
-		}
+        char *tbuf = NULL ;
 
-	    ByteCount byteBufferLen = n ;
-		UniChar* ubuf = NULL ;
+        if (buf == NULL)
+        {
+            // worst case
+            n = byteInLen * 2 ;
+            tbuf = (char*) malloc( n ) ;
+        }
+
+        ByteCount byteBufferLen = n ;
+        UniChar* ubuf = NULL ;
 #if SIZEOF_WCHAR_T == 4
-		wxMBConvUTF16BE converter ;
-		size_t unicharlen = converter.WC2MB( NULL , psz , 0 ) ;
-		byteInLen = unicharlen ;
-		ubuf = (UniChar*) malloc( byteInLen + 2 ) ;
-		converter.WC2MB( (char*) ubuf , psz, unicharlen + 2 ) ;
+        wxMBConvUTF16BE converter ;
+        size_t unicharlen = converter.WC2MB( NULL , psz , 0 ) ;
+        byteInLen = unicharlen ;
+        ubuf = (UniChar*) malloc( byteInLen + 2 ) ;
+        converter.WC2MB( (char*) ubuf , psz, unicharlen + 2 ) ;
 #else
-		ubuf = (UniChar*) psz ;
+        ubuf = (UniChar*) psz ;
 #endif
-	    status = TECConvertText(m_WC2MB_converter, (ConstTextPtr) ubuf , byteInLen, &byteInLen,
-	       (TextPtr) (buf ? buf : tbuf) , byteBufferLen, &byteOutLen);
+        status = TECConvertText(m_WC2MB_converter, (ConstTextPtr) ubuf , byteInLen, &byteInLen,
+            (TextPtr) (buf ? buf : tbuf) , byteBufferLen, &byteOutLen);
 #if SIZEOF_WCHAR_T == 4
-		free( ubuf ) ;
+        free( ubuf ) ;
 #endif
-		if ( buf == NULL )
-			free(tbuf) ;
+        if ( buf == NULL )
+            free(tbuf) ;
 
-		size_t res = byteOutLen ;
+        size_t res = byteOutLen ;
         if ( buf  && res < n)
             buf[res] = 0;
 
-		return res ;
+        return res ;
     }
 
     bool IsOk() const
         { return m_MB2WC_converter !=  NULL && m_WC2MB_converter != NULL  ; }
 
 private:
-	TECObjectRef m_MB2WC_converter ;
-	TECObjectRef m_WC2MB_converter ;
-	
-	TextEncodingBase m_char_encoding ;
-	TextEncodingBase m_unicode_encoding ;
+    TECObjectRef m_MB2WC_converter ;
+    TECObjectRef m_WC2MB_converter ;
+
+    TextEncodingBase m_char_encoding ;
+    TextEncodingBase m_unicode_encoding ;
 };
 
 #endif // defined(__WXMAC__) && defined(TARGET_CARBON)
@@ -1626,18 +1626,18 @@ wxMBConv *wxCSConv::DoCreate() const
 #endif
     }
 #endif // wxHAVE_WIN32_MB2WC
-#if defined(__WXMAC__) 
+#if defined(__WXMAC__)
     {
-    	if ( m_name || ( m_encoding < wxFONTENCODING_UTF16BE ) )
-    	{
-	    		
-	        wxMBConv_mac *conv = m_name ? new wxMBConv_mac(m_name)
-	                                    : new wxMBConv_mac(m_encoding);
-	        if ( conv->IsOk() )
-	            return conv;
+        if ( m_name || ( m_encoding < wxFONTENCODING_UTF16BE ) )
+        {
 
-	        delete conv;
-    	}
+            wxMBConv_mac *conv = m_name ? new wxMBConv_mac(m_name)
+                                        : new wxMBConv_mac(m_encoding);
+            if ( conv->IsOk() )
+                 return conv;
+
+            delete conv;
+        }
     }
 #endif
     // step (2)

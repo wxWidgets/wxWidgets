@@ -37,7 +37,7 @@ public:
     virtual void SetThumbPosition(int viewStart) = 0;
     virtual void SetScrollbar(int position, int thumbSize,
                               int range, int pageSize,
-                              bool refresh = TRUE) = 0;
+                              bool refresh = true) = 0;
 
 private:
     DECLARE_NO_COPY_CLASS(wxScrollBarBase)

@@ -136,7 +136,7 @@ public:
   wxSocketBase& Write(const void *buffer, wxUint32 nbytes);
   wxSocketBase& WriteMsg(const void *buffer, wxUint32 nbytes);
 
-  void InterruptWait() { m_interrupt = TRUE; };
+  void InterruptWait() { m_interrupt = true; };
   bool Wait(long seconds = -1, long milliseconds = 0);
   bool WaitForRead(long seconds = -1, long milliseconds = 0);
   bool WaitForWrite(long seconds = -1, long milliseconds = 0);
@@ -153,7 +153,7 @@ public:
   // event handling
   void *GetClientData() const { return m_clientData; }
   void SetClientData(void *data) { m_clientData = data; }
-  void SetEventHandler(wxEvtHandler& handler, int id = -1);
+  void SetEventHandler(wxEvtHandler& handler, int id = wxID_ANY);
   void SetNotify(wxSocketEventFlags flags);
   void Notify(bool notify);
 
@@ -236,8 +236,8 @@ class WXDLLIMPEXP_NET wxSocketServer : public wxSocketBase
 public:
   wxSocketServer(wxSockAddress& addr, wxSocketFlags flags = wxSOCKET_NONE);
 
-  wxSocketBase* Accept(bool wait = TRUE);
-  bool AcceptWith(wxSocketBase& socket, bool wait = TRUE);
+  wxSocketBase* Accept(bool wait = true);
+  bool AcceptWith(wxSocketBase& socket, bool wait = true);
 
   bool WaitForAccept(long seconds = -1, long milliseconds = 0);
 
@@ -257,7 +257,7 @@ public:
   wxSocketClient(wxSocketFlags flags = wxSOCKET_NONE);
   virtual ~wxSocketClient();
 
-  virtual bool Connect(wxSockAddress& addr, bool wait = TRUE);
+  virtual bool Connect(wxSockAddress& addr, bool wait = true);
 
   bool WaitOnConnect(long seconds = -1, long milliseconds = 0);
 
@@ -321,7 +321,7 @@ public:
 typedef void (wxEvtHandler::*wxSocketEventFunction)(wxSocketEvent&);
 
 #define EVT_SOCKET(id, func) \
-    DECLARE_EVENT_TABLE_ENTRY( wxEVT_SOCKET, id, -1, \
+    DECLARE_EVENT_TABLE_ENTRY( wxEVT_SOCKET, id, wxID_ANY, \
         (wxObjectEventFunction) (wxEventFunction)  wxStaticCastEvent( wxSocketEventFunction, & func ), \
         (wxObject *) NULL ),
 

@@ -73,7 +73,7 @@ void WXDLLIMPEXP_BASE wxStartTimer();
 
 // Gets elapsed milliseconds since last wxStartTimer or wxGetElapsedTime
 // -- DEPRECATED: use wxStopWatch instead
-long WXDLLIMPEXP_BASE wxGetElapsedTime(bool resetTimer = TRUE);
+long WXDLLIMPEXP_BASE wxGetElapsedTime(bool resetTimer = true);
 
 #endif // wxUSE_LONGLONG
 

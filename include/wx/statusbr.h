@@ -76,8 +76,8 @@ public:
     // field styles
     // ------------
 
-    // Set the field style. Use either wxSB_NORMAL (default) for a standard 3D 
-    // border around a field, wxSB_FLAT for no border around a field, so that it 
+    // Set the field style. Use either wxSB_NORMAL (default) for a standard 3D
+    // border around a field, wxSB_FLAT for no border around a field, so that it
     // appears flat or wxSB_POPOUT to make the field appear raised.
     // Setting field styles only works on wxMSW
     virtual void SetStatusStyles(int n, const int styles[]);
@@ -96,7 +96,7 @@ public:
     virtual int GetBorderY() const = 0;
 
     // don't want status bars to accept the focus at all
-    virtual bool AcceptsFocus() const { return FALSE; }
+    virtual bool AcceptsFocus() const { return false; }
 
 protected:
     // set the widths array to NULL
@@ -132,7 +132,7 @@ protected:
     // width otherwise
     int       *m_statusWidths;
 
-    // the styles of the fields 
+    // the styles of the fields
     int       *m_statusStyles;
 
     // stacks of previous values for PushStatusText/PopStatusText

@@ -58,12 +58,12 @@ protected:
         wxSize sizeReal(size);
         if ( IsVertical() )
         {
-            if ( size.x == -1 )
+            if ( size.x == wxDefaultCoord )
                 sizeReal.x = GetDefaultSize();
         }
         else
         {
-            if ( size.y == -1 )
+            if ( size.y == wxDefaultCoord )
                 sizeReal.y = GetDefaultSize();
         }
 

@@ -48,7 +48,7 @@ public:
     void SetItemCount(size_t count) { m_count = count; }
 
     // special case of SetItemCount(0)
-    void Clear() { m_itemsSel.Clear(); m_count = 0; m_defaultState = FALSE; }
+    void Clear() { m_itemsSel.Clear(); m_count = 0; m_defaultState = false; }
 
     // must be called when a new item is inserted/added
     void OnItemAdd(size_t WXUNUSED(item)) { wxFAIL_MSG( _T("TODO") ); }
@@ -59,7 +59,7 @@ public:
     // select one item, use SelectRange() insted if possible!
     //
     // returns true if the items selection really changed
-    bool SelectItem(size_t item, bool select = TRUE);
+    bool SelectItem(size_t item, bool select = true);
 
     // select the range of items
     //
@@ -68,7 +68,7 @@ public:
     // (meaning that too many items changed state to bother counting them
     // individually)
     bool SelectRange(size_t itemFrom, size_t itemTo,
-                     bool select = TRUE,
+                     bool select = true,
                      wxArrayInt *itemsChanged = NULL);
 
     // return true if the given item is selected
@@ -83,12 +83,12 @@ public:
 
 private:
     // (re)init
-    void Init() { m_defaultState = FALSE; }
+    void Init() { m_defaultState = false; }
 
     // the total number of items we handle
     size_t m_count;
 
-    // the default state: normally, FALSE (i.e. off) but maybe set to TRUE if
+    // the default state: normally, false (i.e. off) but maybe set to true if
     // there are more selected items than non selected ones - this allows to
     // handle selection of all items efficiently
     bool m_defaultState;

@@ -6,7 +6,7 @@
 // Created:     2004/02/01
 // RCS-ID:      $Id$
 // Copyright:   (c) 2004, Vaclav Slavik
-// Licence:   	wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef _WX_SOUND_H_BASE_
@@ -27,7 +27,7 @@
 // ----------------------------------------------------------------------------
 
 // Flags for wxSound::Play
-    
+
 // NB: We can't use enum because there would be ambiguity between the
 //     two Play() prototypes when called without explicit parameters
 //     if WXWIN_COMPATIBILITY_2_4.
@@ -56,7 +56,7 @@ public:
 
     // Plays sound from filename:
     static bool Play(const wxString& filename, unsigned flags = wxSOUND_ASYNC);
-    
+
 protected:
     virtual bool DoPlay(unsigned flags) const = 0;
 };

@@ -49,16 +49,16 @@ wxSystemScreenType wxSystemSettings::GetScreenType()
         int x = GetMetric( wxSYS_SCREEN_X );
 
         ms_screen = wxSYS_SCREEN_DESKTOP;
-            
+
         if (x < 800)
             ms_screen = wxSYS_SCREEN_SMALL;
-            
+
         if (x < 640)
             ms_screen = wxSYS_SCREEN_PDA;
-            
+
         if (x < 200)
             ms_screen = wxSYS_SCREEN_TINY;
-            
+
         // This is probably a bug, but VNC seems to report 0
         if (x < 10)
             ms_screen = wxSYS_SCREEN_DESKTOP;
@@ -66,7 +66,7 @@ wxSystemScreenType wxSystemSettings::GetScreenType()
 
     return ms_screen;
 }
-    
+
 void wxSystemSettings::SetScreenType( wxSystemScreenType screen )
 {
     ms_screen = screen;

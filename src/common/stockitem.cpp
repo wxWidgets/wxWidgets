@@ -158,7 +158,7 @@ wxString wxGetStockLabel(wxWindowID id)
     };
 
     #undef STOCKITEM
-    
+
     return wxEmptyString;
 }
 
@@ -171,11 +171,11 @@ bool wxIsStockLabel(wxWindowID id, const wxString& label)
 
     if (label == stock)
         return true;
-    
+
     stock.Replace(_T("&"), wxEmptyString);
     if (label == stock)
         return true;
-    
+
     return false;
 }
 
@@ -189,7 +189,7 @@ const char *wxGetStockGtkID(wxWindowID id)
     #define STOCKITEM(wx,gtk)      \
         case wx:                   \
             return gtk;
-    
+
     #define STOCKITEM_MISSING(wx)  \
         case wx:                 \
             return NULL;
@@ -259,7 +259,7 @@ const char *wxGetStockGtkID(wxWindowID id)
     };
 
     #undef STOCKITEM
-    
+
     return NULL;
 }
 

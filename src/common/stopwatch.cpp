@@ -222,7 +222,7 @@ wxLongLong wxGetLocalTimeMillis()
     wxLongLong now( nowft.dwHighDateTime, nowft.dwLowDateTime );   // time in 100 nanoseconds
 
     return ( now - then ) / 10000.0;  // time from 00:00:00 Jan 1st 1970 to now in milliseconds
-    
+
 #elif defined(HAVE_GETTIMEOFDAY)
     struct timeval tp;
     if ( wxGetTimeOfDay(&tp, (struct timezone *)NULL) != -1 )
@@ -244,7 +244,7 @@ wxLongLong wxGetLocalTimeMillis()
     val *= tp.time;
     return (val + tp.millitm);
 #elif defined(__WXMAC__)
-    
+
     static UInt64 gMilliAtStart = 0;
 
     Nanoseconds upTime = AbsoluteToNanoseconds( UpTime() );

@@ -70,14 +70,14 @@ void wxStreamBuffer::InitBuffer()
     m_buffer_size = 0;
 
     // if we are going to allocate the buffer, we should free it later as well
-    m_destroybuf = TRUE;
+    m_destroybuf = true;
 }
 
 void wxStreamBuffer::Init()
 {
     InitBuffer();
 
-    m_fixed = TRUE;
+    m_fixed = true;
 }
 
 wxStreamBuffer::wxStreamBuffer(BufMode mode)
@@ -87,7 +87,7 @@ wxStreamBuffer::wxStreamBuffer(BufMode mode)
     m_stream = NULL;
     m_mode = mode;
 
-    m_flushable = FALSE;
+    m_flushable = false;
 }
 
 wxStreamBuffer::wxStreamBuffer(wxStreamBase& stream, BufMode mode)
@@ -97,7 +97,7 @@ wxStreamBuffer::wxStreamBuffer(wxStreamBase& stream, BufMode mode)
     m_stream = &stream;
     m_mode = mode;
 
-    m_flushable = TRUE;
+    m_flushable = true;
 }
 
 wxStreamBuffer::wxStreamBuffer(const wxStreamBuffer& buffer)
@@ -115,7 +115,7 @@ wxStreamBuffer::wxStreamBuffer(const wxStreamBuffer& buffer)
     m_flushable = buffer.m_flushable;
     m_stream = buffer.m_stream;
     m_mode = buffer.m_mode;
-    m_destroybuf = FALSE;
+    m_destroybuf = false;
 }
 
 void wxStreamBuffer::FreeBuffer()
@@ -172,7 +172,7 @@ void wxStreamBuffer::SetBufferIO(size_t bufsize)
 
     if ( bufsize )
     {
-        SetBufferIO(malloc(bufsize), bufsize, TRUE /* take ownership */);
+        SetBufferIO(malloc(bufsize), bufsize, true /* take ownership */);
     }
     else // no buffer size => no buffer
     {
@@ -198,41 +198,41 @@ bool wxStreamBuffer::FillBuffer()
 {
     wxInputStream *inStream = GetInputStream();
 
-    // It's legal to have no stream, so we don't complain about it just return FALSE
+    // It's legal to have no stream, so we don't complain about it just return false
     if ( !inStream )
-        return FALSE;
+        return false;
 
     size_t count = inStream->OnSysRead(m_buffer_start, m_buffer_size);
     if ( !count )
-        return FALSE;
+        return false;
 
     m_buffer_end = m_buffer_start + count;
     m_buffer_pos = m_buffer_start;
 
-    return TRUE;
+    return true;
 }
 
 // write the buffer contents to the stream (only for write buffers)
 bool wxStreamBuffer::FlushBuffer()
 {
-    wxCHECK_MSG( m_flushable, FALSE, _T("can't flush this buffer") );
+    wxCHECK_MSG( m_flushable, false, _T("can't flush this buffer") );
 
     // FIXME: what is this check for? (VZ)
     if ( m_buffer_pos == m_buffer_start )
-        return FALSE;
+        return false;
 
     wxOutputStream *outStream = GetOutputStream();
 
-    wxCHECK_MSG( outStream, FALSE, _T("should have a stream in wxStreamBuffer") );
+    wxCHECK_MSG( outStream, false, _T("should have a stream in wxStreamBuffer") );
 
     size_t current = m_buffer_pos - m_buffer_start;
     size_t count = outStream->OnSysWrite(m_buffer_start, current);
     if ( count != current )
-        return FALSE;
+        return false;
 
     m_buffer_pos = m_buffer_start;
 
-    return TRUE;
+    return true;
 }
 
 size_t wxStreamBuffer::GetDataLeft()
@@ -767,7 +767,7 @@ size_t wxInputStream::Ungetch(const void *buf, size_t bufsize)
     if (!ptrback)
         return 0;
 
-    // Eof() shouldn't return TRUE any longer
+    // Eof() shouldn't return true any longer
     if ( m_lasterror == wxSTREAM_EOF )
         m_lasterror = wxSTREAM_NO_ERROR;
 

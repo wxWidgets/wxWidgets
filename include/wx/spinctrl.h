@@ -70,7 +70,7 @@ protected:
 #endif // platform
 
 #define EVT_SPINCTRL(id, fn) \
-    DECLARE_EVENT_TABLE_ENTRY( wxEVT_COMMAND_SPINCTRL_UPDATED, id, -1, (wxObjectEventFunction) (wxEventFunction)  wxStaticCastEvent( wxSpinEventFunction, & fn ), (wxObject *) NULL ),
+    DECLARE_EVENT_TABLE_ENTRY( wxEVT_COMMAND_SPINCTRL_UPDATED, id, wxID_ANY, (wxObjectEventFunction) (wxEventFunction)  wxStaticCastEvent( wxSpinEventFunction, & fn ), (wxObject *) NULL ),
 
 #endif // _WX_SPINCTRL_H_
 

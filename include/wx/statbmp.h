@@ -34,14 +34,14 @@ class WXDLLEXPORT wxStaticBitmapBase : public wxControl
 public:
     wxStaticBitmapBase() { }
     virtual ~wxStaticBitmapBase();
-    
+
     // our interface
     virtual void SetIcon(const wxIcon& icon) = 0;
     virtual void SetBitmap(const wxBitmap& bitmap) = 0;
     virtual wxBitmap GetBitmap() const = 0;
 
     // overriden base class virtuals
-    virtual bool AcceptsFocus() const { return FALSE; }
+    virtual bool AcceptsFocus() const { return false; }
 
 protected:
     virtual wxSize DoGetBestSize() const;

@@ -35,7 +35,7 @@ public:
     virtual void SetScrollbars(int pixelsPerUnitX, int pixelsPerUnitY,
                                int noUnitsX, int noUnitsY,
                                int xPos = 0, int yPos = 0,
-                               bool noRefresh = FALSE );
+                               bool noRefresh = false );
 
     // scroll to the given (in logical coords) position
     virtual void Scroll(int x, int y);
@@ -51,9 +51,9 @@ public:
     virtual void GetScrollPixelsPerUnit(int *pixelsPerUnitX,
                                         int *pixelsPerUnitY) const;
 
-    // Enable/disable Windows scrolling in either direction. If TRUE, wxWidgets
+    // Enable/disable Windows scrolling in either direction. If true, wxWidgets
     // scrolls the canvas and only a bit of the canvas is invalidated; no
-    // Clear() is necessary. If FALSE, the whole canvas is invalidated and a
+    // Clear() is necessary. If false, the whole canvas is invalidated and a
     // Clear() is necessary. Disable for when the scroll increment is used to
     // actually scroll a non-constant distance
     virtual void EnableScrolling(bool x_scrolling, bool y_scrolling);
@@ -121,7 +121,7 @@ public:
     // stop the timer, so it will be called repeatedly and will typically
     // return different values depending on the current mouse position
     //
-    // the base class version just returns TRUE
+    // the base class version just returns true
     virtual bool SendAutoScrollEvents(wxScrollWinEvent& event) const;
 
     // the methods to be called from the window event handlers
@@ -219,7 +219,7 @@ protected:
     public:
         wxScrolledWindow() { }
         wxScrolledWindow(wxWindow *parent,
-                         wxWindowID winid = -1,
+                         wxWindowID winid = wxID_ANY,
                          const wxPoint& pos = wxDefaultPosition,
                          const wxSize& size = wxDefaultSize,
                          long style = wxScrolledWindowStyle,
