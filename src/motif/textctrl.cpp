@@ -107,24 +107,14 @@ bool wxTextCtrl::Create(wxWindow *parent,
                         const wxValidator& validator,
                         const wxString& name)
 {
+    if( !CreateControl( parent, id, pos, size, style, validator, name ) )
+        return false;
+
     m_tempCallbackStruct = (void*) NULL;
     m_modified = FALSE;
     m_processedDefault = FALSE;
-    //    m_backgroundColour = parent->GetBackgroundColour();
-    m_backgroundColour = * wxWHITE;
-    m_foregroundColour = parent->GetForegroundColour();
 
-    SetName(name);
-    SetValidator(validator);
-    if (parent)
-        parent->AddChild(this);
-
-    m_windowStyle = style;
-
-    if ( id == -1 )
-        m_windowId = (int)NewControlId();
-    else
-        m_windowId = id;
+    m_backgroundColour = *wxWHITE;
 
     Widget parentWidget = (Widget) parent->GetClientWidget();
 
@@ -180,20 +170,13 @@ bool wxTextCtrl::Create(wxWindow *parent,
                       NULL);
     }
 
-    if ( !!value )
+    if ( !value.empty() )
     {
-#if 0
-        // don't do this because it is just linking the text to a source
-        // string which is unsafe. MB
-        //
-        XmTextSetString ((Widget) m_mainWidget, (char*)value.c_str());
-#else
         // do this instead... MB
         //
         XtVaSetValues( (Widget) m_mainWidget,
                        XmNvalue, (char *)value.c_str(),
                        NULL);
-#endif
     }
     
     // install callbacks
@@ -208,11 +191,15 @@ bool wxTextCtrl::Create(wxWindow *parent,
     XtAddCallback((Widget) m_mainWidget, XmNlosingFocusCallback, (XtCallbackProc)wxTextWindowLoseFocusProc, (XtPointer)this);
 
     // font
-    m_font = parent->GetFont();
     ChangeFont(FALSE);
 
+    wxSize best = GetBestSize();
+    if( size.x != -1 ) best.x = size.x;
+    if( size.y != -1 ) best.y = size.y;
+
     SetCanAddEventHandler(TRUE);
-    AttachWidget (parent, m_mainWidget, (WXWidget) NULL, pos.x, pos.y, size.x, size.y);
+    AttachWidget (parent, m_mainWidget, (WXWidget) NULL,
+                  pos.x, pos.y, best.x, best.y);
 
     ChangeBackgroundColour();
 
@@ -260,18 +247,11 @@ void wxTextCtrl::SetValue(const wxString& value)
 {
     m_inSetValue = TRUE;
 
-#if 0
-    // don't do this because it is just linking the text to a source
-    // string which is unsafe. MB
-    //
-    XmTextSetString ((Widget) m_mainWidget, (char*)value.c_str());
-#else
     // do this instead... MB
     //
     XtVaSetValues( (Widget) m_mainWidget,
                    XmNvalue, (char *)value.c_str(),
                    NULL);
-#endif
 
     m_inSetValue = FALSE;
 }
@@ -733,6 +713,38 @@ void wxTextCtrl::DoSendEvents(void *wxcbs, long keycode)
     // do it after the (user) event handlers processed the events because
     // otherwise GetValue() would return incorrect (not yet updated value)
     m_tempCallbackStruct = NULL;
+}
+
+wxSize wxDoGetSingleTextCtrlBestSize( Widget textWidget,
+                                      const wxWindow* window )
+{
+    Dimension xmargin, ymargin, highlight, shadow;
+    char* value;
+
+    XtVaGetValues( textWidget,
+                   XmNmarginWidth, &xmargin,
+                   XmNmarginHeight, &ymargin,
+                   XmNvalue, &value,
+                   XmNhighlightThickness, &highlight,
+                   XmNshadowThickness, &shadow,
+                   NULL );
+    if( !value )
+        value = "|";
+
+    int x, y;
+    window->GetTextExtent( value, &x, &y );
+
+    return wxSize( x + 2 * xmargin + 2 * highlight + 2 * shadow,
+                   // MBN: +2 necessary: Lesstif bug or mine?
+                   y + 2 * ymargin + 2 * highlight + 2 * shadow + 2 ); 
+}
+
+wxSize wxTextCtrl::DoGetBestSize() const
+{
+    if( IsSingleLine() )
+        return wxDoGetSingleTextCtrlBestSize( (Widget)m_mainWidget, this );
+    else
+        return wxWindow::DoGetBestSize();
 }
 
 // ----------------------------------------------------------------------------

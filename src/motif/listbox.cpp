@@ -92,17 +92,30 @@ bool wxListBox::Create(wxWindow *parent, wxWindowID id,
 
     Widget parentWidget = (Widget) parent->GetClientWidget();
 
-    Arg args[3];
+    XmFontList fontList = (XmFontList)NULL;
+
+    if( m_font.Ok() )
+    {
+        fontList = (XmFontList)m_font.GetFontList(1.0,
+                                                  XtDisplay(parentWidget));
+    }
+
+    Arg args[4];
     int count = 0;
-    XtSetArg( args[0], XmNlistSizePolicy, XmCONSTANT ); ++count;
-    XtSetArg( args[1], XmNselectionPolicy,
+    XtSetArg( args[count], XmNlistSizePolicy, XmCONSTANT ); ++count;
+    XtSetArg( args[count], XmNselectionPolicy,
               ( m_windowStyle & wxLB_MULTIPLE ) ? XmMULTIPLE_SELECT :
               ( m_windowStyle & wxLB_EXTENDED ) ? XmEXTENDED_SELECT :
                                                   XmBROWSE_SELECT );
     ++count;
+    if( fontList )
+    {
+        XtSetArg( args[count], XmNfontList, fontList );
+        ++count;
+    }
     if( m_windowStyle & wxLB_ALWAYS_SB )
     {
-        XtSetArg( args[2], XmNscrollBarDisplayPolicy, XmSTATIC );
+        XtSetArg( args[count], XmNscrollBarDisplayPolicy, XmSTATIC );
         ++count;
     }
 
@@ -115,12 +128,9 @@ bool wxListBox::Create(wxWindow *parent, wxWindowID id,
 
     XtManageChild (listWidget);
 
-    long width = size.x;
-    long height = size.y;
-    if (width == -1)
-        width = 150;
-    if (height == -1)
-        height = 80;
+    wxSize best = GetBestSize();
+    if( size.x != -1 ) best.x = size.x;
+    if( size.y != -1 ) best.y = size.y;
 
     XtAddCallback (listWidget,
                    XmNbrowseSelectionCallback,
@@ -139,11 +149,9 @@ bool wxListBox::Create(wxWindow *parent, wxWindowID id,
                    (XtCallbackProc) wxListBoxCallback,
                    (XtPointer) this);
 
-    ChangeFont(FALSE);
-
     SetCanAddEventHandler(TRUE);
     AttachWidget (parent, m_mainWidget, (WXWidget) NULL,
-                  pos.x, pos.y, width, height);
+                  pos.x, pos.y, best.x, best.y);
 
     ChangeBackgroundColour();
 
@@ -443,26 +451,23 @@ int wxListBox::GetSelection() const
 }
 
 // Find string for position
-wxString wxListBox::GetString(int N) const
+wxString wxDoGetStringInList( Widget listBox, int n )
 {
-    Widget listBox = (Widget) m_mainWidget;
     XmString *strlist;
-    int n;
-    XtVaGetValues (listBox, XmNitemCount, &n, XmNitems, &strlist, NULL);
-    if (N <= n && N >= 0)
-    {
-        char *txt;
-        if (XmStringGetLtoR (strlist[N], XmSTRING_DEFAULT_CHARSET, &txt))
-        {
-            wxString str(txt);
-            XtFree (txt);
-            return str;
-        }
-        else
-            return wxEmptyString;
-    }
+    int count;
+    XtVaGetValues( listBox,
+                   XmNitemCount, &count,
+                   XmNitems, &strlist,
+                   NULL );
+    if( n <= count && n >= 0 )
+        return wxXmStringToString( strlist[n] );
     else
         return wxEmptyString;
+}
+
+wxString wxListBox::GetString( int n ) const
+{
+    return wxDoGetStringInList( (Widget)m_mainWidget, n );
 }
 
 void wxListBox::DoInsertItems(const wxArrayString& items, int pos)
@@ -653,3 +658,51 @@ int wxListBox::GetCount() const
 {
     return m_noItems;
 }
+
+#define LIST_SCROLL_SPACING 6
+
+wxSize wxDoGetListBoxBestSize( Widget listWidget, const wxWindow* window )
+{
+    int max;
+    Dimension spacing, highlight, xmargin, ymargin, shadow;
+    int width = 0;
+    int x, y;
+
+    XtVaGetValues( listWidget,
+                   XmNitemCount, &max,
+                   XmNlistSpacing, &spacing,
+                   XmNhighlightThickness, &highlight,
+                   XmNlistMarginWidth, &xmargin,
+                   XmNlistMarginHeight, &ymargin,
+                   XmNshadowThickness, &shadow,
+                   NULL );
+
+    for( size_t i = 0; i < (size_t)max; ++i )
+    {
+        window->GetTextExtent( wxDoGetStringInList( listWidget, i ), &x, &y );
+        width = wxMax( width, x );
+    }
+
+    // use some arbitrary value if there are no strings
+    if( width == 0 )
+        width = 100;
+
+    // get my
+    window->GetTextExtent( "v", &x, &y );
+
+    // make it a little larger than widest string, plus the scrollbar
+    width += wxSystemSettings::GetMetric( wxSYS_VSCROLL_X )
+        + 2 * highlight + LIST_SCROLL_SPACING + 2 * xmargin + 2 * shadow;
+
+    // at least 3 items, at most 10
+    int height = wxMax( 3, wxMin( 10, max ) ) *
+        ( y + spacing + 2 * highlight ) + 2 * ymargin + 2 * shadow;
+
+    return wxSize( width, height );
+}
+
+wxSize wxListBox::DoGetBestSize() const
+{
+    return wxDoGetListBoxBestSize( (Widget)m_mainWidget, this );
+}
+

@@ -83,6 +83,8 @@ bool wxComboBox::Create(wxWindow *parent, wxWindowID id,
                   ( style & wxCB_DROPDOWN ) ? XmDROP_DOWN_COMBO_BOX :
     // default to wxCB_DROPDOWN
                                               XmDROP_DOWN_COMBO_BOX;
+    if( cb_type == XmDROP_DOWN_COMBO_BOX )
+        SetWindowStyle( style | wxCB_DROPDOWN );
 
     Widget buttonWidget= XtVaCreateManagedWidget(name.c_str(),
         xmComboBoxWidgetClass, parentWidget,
@@ -108,17 +110,34 @@ bool wxComboBox::Create(wxWindow *parent, wxWindowID id,
                    (XtCallbackProc) wxComboBoxCallback,
                    (XtPointer) this);
 
+    wxSize best = GetBestSize();
+    if( size.x != -1 ) best.x = size.x;
+    if( size.y != -1 ) best.y = size.y;
+
     SetCanAddEventHandler(true);
     AttachWidget (parent, m_mainWidget, (WXWidget) NULL,
-                  pos.x, pos.y, size.x, size.y);
-
-    XtVaSetValues (GetXmList(this),
-                   XmNvisibleItemCount, 10,
-                   NULL);
+                  pos.x, pos.y, best.x, best.y);
 
     ChangeBackgroundColour();
 
     return true;
+}
+
+void wxComboBox::AdjustDropDownListSize()
+{
+    int newListCount = -1, itemCount = GetCount();
+    const int MAX = 12;
+
+    if( !itemCount )
+        newListCount = 1;
+    else if( itemCount < MAX )
+        newListCount = itemCount;
+    else
+        newListCount = MAX;
+
+    XtVaSetValues( GetXmList(this),
+                   XmNvisibleItemCount, newListCount,
+                   NULL );
 }
 
 wxComboBox::~wxComboBox()
@@ -171,8 +190,8 @@ int wxComboBox::DoAppend(const wxString& item)
 {
     wxXmString str( item.c_str() );
     XmComboBoxAddItem((Widget) m_mainWidget, str(), 0, False);
-    m_stringList.Add(item);
     m_noStrings ++;
+    AdjustDropDownListSize();
 
     return GetCount() - 1;
 }
@@ -185,14 +204,10 @@ void wxComboBox::Delete(int n)
     XmComboBoxDeletePos((Widget) m_mainWidget, n+1);
 #endif
 
-    wxStringList::Node *node = m_stringList.Item(n);
-    if (node)
-    {
-        delete[] node->GetData();
-        delete node;
-    }
     m_clientDataDict.Delete(n, HasClientObjectData());
     m_noStrings--;
+
+    AdjustDropDownListSize();
 }
 
 void wxComboBox::Clear()
@@ -204,13 +219,12 @@ void wxComboBox::Clear()
     {
     	XmComboBoxDeletePos((Widget) m_mainWidget, m_noStrings--);
     }
- #endif
-
-    m_stringList.Clear();
+#endif
 
     if ( HasClientObjectData() )
         m_clientDataDict.DestroyData();
     m_noStrings = 0;
+    AdjustDropDownListSize();
 }
 
 void wxComboBox::SetSelection (int n)
@@ -237,11 +251,7 @@ int wxComboBox::GetSelection (void) const
 
 wxString wxComboBox::GetString(int n) const
 {
-    wxStringList::Node *node = m_stringList.Item(n);
-    if (node)
-        return wxString(node->GetData ());
-    else
-        return wxEmptyString;
+    return wxDoGetStringInList( GetXmList(this), n );
 }
 
 int wxComboBox::FindString(const wxString& s) const
@@ -356,6 +366,12 @@ void  wxComboBoxCallback (Widget WXUNUSED(w), XtPointer clientData,
 
 void wxComboBox::ChangeFont(bool keepOriginalSize)
 {
+    if( m_font.Ok() )
+    {
+        wxDoChangeFont( GetXmText(this), m_font );
+        wxDoChangeFont( GetXmList(this), m_font );
+    }
+
     // Don't use the base class wxChoice's ChangeFont
     wxWindow::ChangeFont(keepOriginalSize);
 }
@@ -372,7 +388,31 @@ void wxComboBox::ChangeForegroundColour()
 
 wxSize wxComboBox::DoGetBestSize() const
 {
-   return wxWindow::DoGetBestSize();
+    if( (GetWindowStyle() & wxCB_DROPDOWN) == wxCB_DROPDOWN ||
+        (GetWindowStyle() & wxCB_READONLY) == wxCB_READONLY )
+    {
+        Dimension arrowW, arrowS, highlight, xmargin, ymargin, shadow;
+
+        XtVaGetValues( (Widget)m_mainWidget,
+                       XmNarrowSize, &arrowW,
+                       XmNarrowSpacing, &arrowS,
+                       XmNhighlightThickness, &highlight,
+                       XmNmarginWidth, &xmargin,
+                       XmNmarginHeight, &ymargin,
+                       XmNshadowThickness, &shadow,
+                       NULL );
+
+        wxSize listSize = wxDoGetListBoxBestSize( GetXmList(this), this );
+        wxSize textSize = wxDoGetSingleTextCtrlBestSize( GetXmText(this),
+                                                         this );
+
+        // FIXME arbitrary constants
+        return wxSize( listSize.x + arrowW + arrowS + 2 * highlight
+                                  + 2 * shadow + 2 * xmargin ,
+                       textSize.y + 2 * highlight + 2 * ymargin + 2 * shadow );
+    }
+    else
+        return wxWindow::DoGetBestSize();
 }
 
 #endif // XmVersion >= 2000

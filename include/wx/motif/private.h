@@ -64,6 +64,7 @@ extern void wxDoChangeForegroundColour(WXWidget widget,
 extern void wxDoChangeBackgroundColour(WXWidget widget,
                                        wxColour& backgroundColour,
                                        bool changeArmColour = FALSE);
+extern void wxDoChangeFont(WXWidget widget, wxFont& font);
 
 #define wxNO_COLORS   0x00
 #define wxBACK_COLORS 0x01
@@ -107,13 +108,20 @@ private:
     XmString m_string;
 };
 
+wxString wxXmStringToString( const XmString& xmString );
+
 // ----------------------------------------------------------------------------
 // Routines used in both wxTextCtrl/wxListBox and nativa wxComboBox
 // (defined in src/motif/listbox.cpp or src/motif/textctrl.cpp
 // ----------------------------------------------------------------------------
 
 int wxDoFindStringInList( Widget listWidget, const wxString& str );
-int wxDoGetSelectionInList(Widget listWidget);
+int wxDoGetSelectionInList( Widget listWidget );
+wxString wxDoGetStringInList( Widget listWidget, int n );
+wxSize wxDoGetListBoxBestSize( Widget listWidget, const wxWindow* window );
+
+wxSize wxDoGetSingleTextCtrlBestSize( Widget textWidget,
+                                      const wxWindow* window );
 
 // ----------------------------------------------------------------------------
 // executes one main loop iteration (implemented in src/motif/evtloop.cpp)

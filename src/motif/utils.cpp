@@ -1247,6 +1247,21 @@ void wxDoChangeBackgroundColour(WXWidget widget, wxColour& backgroundColour, boo
         NULL);
 }
 
+extern void wxDoChangeFont(WXWidget widget, wxFont& font)
+{
+    // lesstif 0.87 hangs here, but 0.93 does not
+#if !defined(LESSTIF_VERSION) \
+    || (defined(LesstifVersion) && LesstifVersion >= 93)
+
+    Widget w = (Widget)widget;
+    XmFontList fontList = (XmFontList)font.GetFontList(1.0, XtDisplay(w));
+    XtVaSetValues( w,
+                   XmNfontList, fontList,
+                   NULL );
+#endif
+
+}
+
 #endif
     // __WXMOTIF__
 
@@ -1257,3 +1272,17 @@ bool wxWindowIsVisible(Window win)
 
     return (wa.map_state == IsViewable);
 }
+
+wxString wxXmStringToString( const XmString& xmString )
+{
+    char *txt;
+    if( XmStringGetLtoR( xmString, XmSTRING_DEFAULT_CHARSET, &txt ) )
+    {
+        wxString str(txt);
+        XtFree (txt);
+        return str;
+    }
+
+    return wxEmptyString;
+}
+

@@ -91,6 +91,9 @@ protected:
     virtual void DoSetSize(int x, int y,
         int width, int height,
         int sizeFlags = wxSIZE_AUTO);
+private:
+    // only implemented for native combo box
+    void AdjustDropDownListSize();
 };
 
 #endif

@@ -176,10 +176,8 @@ int wxChoice::DoAppend(const wxString& item)
 
     DoChangeBackgroundColour((WXWidget) w, m_backgroundColour);
 
-    if (m_font.Ok())
-        XtVaSetValues (w,
-        XmNfontList, (XmFontList) m_font.GetFontList(1.0, XtDisplay((Widget) m_formWidget)),
-        NULL);
+    if( m_font.Ok() )
+        wxDoChangeFont( w, m_font );
 
     m_widgetArray.Add(w);
 

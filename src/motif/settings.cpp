@@ -181,6 +181,9 @@ int wxSystemSettingsNative::GetMetric(wxSystemMetric index)
 {
     switch ( index)
     {
+        case wxSYS_HSCROLL_Y:
+        case wxSYS_VSCROLL_X:
+            return 15;
         case wxSYS_MOUSE_BUTTONS:
             // TODO
         case wxSYS_BORDER_X:
@@ -232,10 +235,6 @@ int wxSystemSettingsNative::GetMetric(wxSystemMetric index)
         case wxSYS_SMALLICON_X:
             // TODO
         case wxSYS_SMALLICON_Y:
-            // TODO
-        case wxSYS_HSCROLL_Y:
-            // TODO
-        case wxSYS_VSCROLL_X:
             // TODO
         case wxSYS_VSCROLL_ARROW_X:
             // TODO

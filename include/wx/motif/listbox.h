@@ -88,6 +88,8 @@ public:
     virtual void DoToggleItem(int item, int x) {};
 #endif
 protected:
+    virtual wxSize DoGetBestSize() const;
+
     int       m_noItems;
     
     // List mapping positions->client data

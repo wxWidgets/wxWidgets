@@ -2914,41 +2914,17 @@ void wxWindow::ChangeForegroundColour()
 }
 
 // Change a widget's foreground and background colours.
-void wxWindow::DoChangeForegroundColour(WXWidget widget, wxColour& foregroundColour)
+void wxWindow::DoChangeForegroundColour(WXWidget widget,
+                                        wxColour& foregroundColour)
 {
-    // When should we specify the foreground, if it's calculated
-    // by wxComputeColours?
-    // Solution: say we start with the default (computed) foreground colour.
-    // If we call SetForegroundColour explicitly for a control or window,
-    // then the foreground is changed.
-    // Therefore SetBackgroundColour computes the foreground colour, and
-    // SetForegroundColour changes the foreground colour. The ordering is
-    // important.
-
-    Widget w = (Widget)widget;
-    XtVaSetValues(
-                  w,
-                  XmNforeground, foregroundColour.AllocColour(XtDisplay(w)),
-                  NULL
-                 );
+    wxDoChangeForegroundColour( widget, foregroundColour );
 }
 
-void wxWindow::DoChangeBackgroundColour(WXWidget widget, wxColour& backgroundColour, bool changeArmColour)
+void wxWindow::DoChangeBackgroundColour(WXWidget widget,
+                                        wxColour& backgroundColour,
+                                        bool changeArmColour)
 {
-    wxComputeColours (XtDisplay((Widget) widget), & backgroundColour,
-        (wxColour*) NULL);
-
-    XtVaSetValues ((Widget) widget,
-        XmNbackground, g_itemColors[wxBACK_INDEX].pixel,
-        XmNtopShadowColor, g_itemColors[wxTOPS_INDEX].pixel,
-        XmNbottomShadowColor, g_itemColors[wxBOTS_INDEX].pixel,
-        XmNforeground, g_itemColors[wxFORE_INDEX].pixel,
-        NULL);
-
-    if (changeArmColour)
-        XtVaSetValues ((Widget) widget,
-        XmNarmColor, g_itemColors[wxSELE_INDEX].pixel,
-        NULL);
+    wxDoChangeBackgroundColour( widget, backgroundColour, changeArmColour );
 }
 
 bool wxWindow::SetBackgroundColour(const wxColour& col)
@@ -2982,13 +2958,7 @@ void wxWindow::ChangeFont(bool keepOriginalSize)
         int width, height, width1, height1;
         GetSize(& width, & height);
 
-        // lesstif 0.87 hangs here, but 0.93 does not
-#if !defined(LESSTIF_VERSION) \
-    || (defined(LesstifVersion) && LesstifVersion >= 93)
-        XtVaSetValues (w,
-            XmNfontList, (XmFontList) m_font.GetFontList(1.0, XtDisplay(w)),
-            NULL);
-#endif
+        wxDoChangeFont( GetLabelWidget(), m_font );
 
         GetSize(& width1, & height1);
         if (keepOriginalSize && (width != width1 || height != height1))
