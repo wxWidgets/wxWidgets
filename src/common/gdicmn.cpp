@@ -115,6 +115,11 @@ wxRect& wxRect::Inflate(wxCoord dx, wxCoord dy)
     width += 2*dx;
     height += 2*dy;
 
+    // check that we didn't make the rectangle invalid by accident (you almost
+    // never want to have negative coords and never want negative size)
+    wxASSERT_MSG( x >= 0 && y >= 0 && width >= 0 && height >= 0,
+                  _T("wxRect::Inflate() resulted in an invalid rectangle!") );
+
     return *this;
 }
 

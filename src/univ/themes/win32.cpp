@@ -56,6 +56,10 @@
 
 static const int BORDER_THICKNESS = 2;
 
+// the offset between the label and focus rect around it
+static const int FOCUS_RECT_OFFSET_X = 1;
+static const int FOCUS_RECT_OFFSET_Y = 1;
+
 enum IndicatorType
 {
     IndicatorType_Check,
@@ -270,6 +274,17 @@ public:
                                       wxOrientation orient) const;
 
 protected:
+    // helper of DrawLabel() and DrawCheckOrRadioButton()
+    void DoDrawLabel(wxDC& dc,
+                     const wxString& label,
+                     const wxRect& rect,
+                     int flags = 0,
+                     int alignment = wxALIGN_LEFT | wxALIGN_TOP,
+                     int indexAccel = -1,
+                     wxRect *rectBounds = NULL,
+                     const wxPoint& focusOffset
+                        = wxPoint(FOCUS_RECT_OFFSET_X, FOCUS_RECT_OFFSET_Y));
+
     // common part of DrawLabel() and DrawItem()
     void DrawFocusRect(wxDC& dc, const wxRect& rect);
 
@@ -324,7 +339,8 @@ protected:
                                 const wxRect& rect,
                                 int flags,
                                 wxAlignment align,
-                                int indexAccel);
+                                int indexAccel,
+                                wxCoord focusOffsetY);
 
     // draw a normal or transposed line (useful for using the same code fo both
     // horizontal and vertical widgets)
@@ -1542,7 +1558,10 @@ void wxWin32Renderer::DrawFocusRect(wxDC& dc, const wxRect& rect)
             y2 = rect.GetBottom();
 
     dc.SetPen(wxPen(*wxBLACK, 0, wxSOLID));
-    dc.SetLogicalFunction(wxINVERT);
+
+    // this seems to be closer than what Windows does than wxINVERT although
+    // I'm still not sure if it's correct
+    dc.SetLogicalFunction(wxAND_REVERSE);
 
     wxCoord z;
     for ( z = x1 + 1; z < x2; z += 2 )
@@ -1587,6 +1606,24 @@ void wxWin32Renderer::DrawLabel(wxDC& dc,
                                 int indexAccel,
                                 wxRect *rectBounds)
 {
+    DoDrawLabel(dc, label, rect, flags, alignment, indexAccel, rectBounds);
+}
+
+void wxWin32Renderer::DoDrawLabel(wxDC& dc,
+                                  const wxString& label,
+                                  const wxRect& rect,
+                                  int flags,
+                                  int alignment,
+                                  int indexAccel,
+                                  wxRect *rectBounds,
+                                  const wxPoint& focusOffset)
+{
+    // the underscores are not drawn for focused controls in wxMSW
+    if ( flags & wxCONTROL_FOCUSED )
+    {
+        indexAccel = -1;
+    }
+
     if ( flags & wxCONTROL_DISABLED )
     {
         DrawLabelShadow(dc, label, rect, alignment, indexAccel);
@@ -1597,7 +1634,19 @@ void wxWin32Renderer::DrawLabel(wxDC& dc,
 
     if ( flags & wxCONTROL_FOCUSED )
     {
-        rectLabel.Inflate(1);
+        if ( focusOffset.x || focusOffset.y )
+        {
+            // before calling Inflate(), ensure that we will have a valid rect
+            // afterwards
+            if ( rectLabel.x < focusOffset.x )
+                rectLabel.x = focusOffset.x;
+
+            if ( rectLabel.y < focusOffset.y )
+                rectLabel.y = focusOffset.y;
+
+            rectLabel.Inflate(focusOffset.x, focusOffset.y);
+        }
+
         DrawFocusRect(dc, rectLabel);
     }
 
@@ -1614,6 +1663,12 @@ void wxWin32Renderer::DrawButtonLabel(wxDC& dc,
                                       int indexAccel,
                                       wxRect *rectBounds)
 {
+    // the underscores are not drawn for focused controls in wxMSW
+    if ( flags & wxCONTROL_PRESSED )
+    {
+        indexAccel = -1;
+    }
+
     wxRect rectLabel = rect;
     if ( !label.empty() )
     {
@@ -1745,7 +1800,8 @@ void wxWin32Renderer::DrawCheckOrRadioButton(wxDC& dc,
                                              const wxRect& rect,
                                              int flags,
                                              wxAlignment align,
-                                             int indexAccel)
+                                             int indexAccel,
+                                             wxCoord focusOffsetY)
 {
     // calculate the position of the bitmap and of the label
     wxCoord heightBmp = bitmap.GetHeight();
@@ -1775,8 +1831,15 @@ void wxWin32Renderer::DrawCheckOrRadioButton(wxDC& dc,
 
     dc.DrawBitmap(bitmap, xBmp, yBmp, TRUE /* use mask */);
 
-    DrawLabel(dc, label, rectLabel, flags,
-              wxALIGN_LEFT | wxALIGN_TOP, indexAccel);
+    DoDrawLabel(
+                dc, label, rectLabel,
+                flags,
+                wxALIGN_LEFT | wxALIGN_TOP,
+                indexAccel,
+                NULL,         // we don't need bounding rect
+                // use custom vert focus rect offset
+                wxPoint(FOCUS_RECT_OFFSET_X, focusOffsetY)
+               );
 }
 
 void wxWin32Renderer::DrawRadioButton(wxDC& dc,
@@ -1789,7 +1852,8 @@ void wxWin32Renderer::DrawRadioButton(wxDC& dc,
 {
     DrawCheckOrRadioButton(dc, label,
                            bitmap.Ok() ? bitmap : GetRadioBitmap(flags),
-                           rect, flags, align, indexAccel);
+                           rect, flags, align, indexAccel,
+                           FOCUS_RECT_OFFSET_Y); // default focus rect offset
 }
 
 void wxWin32Renderer::DrawCheckButton(wxDC& dc,
@@ -1802,7 +1866,8 @@ void wxWin32Renderer::DrawCheckButton(wxDC& dc,
 {
     DrawCheckOrRadioButton(dc, label,
                            bitmap.Ok() ? bitmap : GetCheckBitmap(flags),
-                           rect, flags, align, indexAccel);
+                           rect, flags, align, indexAccel,
+                           0); // no focus rect offset for checkboxes
 }
 
 // ----------------------------------------------------------------------------
@@ -2381,9 +2446,17 @@ static inline int GetTextBorderWidth()
 wxRect wxWin32Renderer::GetTextTotalArea(const wxTextCtrl *text,
                                          const wxRect& rect)
 {
-    // this is what Windows does
     wxRect rectTotal = rect;
-    rectTotal.Inflate(GetTextBorderWidth());
+
+    wxCoord widthBorder = GetTextBorderWidth();
+    if ( rectTotal.x < widthBorder )
+        rectTotal.x = widthBorder;
+    if ( rectTotal.y < widthBorder )
+        rectTotal.y = widthBorder;
+
+    rectTotal.Inflate(widthBorder);
+
+    // this is what Windows does
     rectTotal.height++;
 
     return rectTotal;
@@ -2393,10 +2466,19 @@ wxRect wxWin32Renderer::GetTextClientArea(const wxTextCtrl *text,
                                           const wxRect& rect,
                                           wxCoord *extraSpaceBeyond)
 {
-    // undo GetTextTotalArea()
     wxRect rectText = rect;
-    rectText.height--;
-    rectText.Inflate(-GetTextBorderWidth());
+
+    // undo GetTextTotalArea()
+    if ( rectText.height > 0 )
+        rectText.height--;
+
+    wxCoord widthBorder = GetTextBorderWidth();
+    if ( rectText.width < 2*widthBorder )
+        rectText.width = 2*widthBorder;
+    if ( rectText.height < 2*widthBorder )
+        rectText.height = 2*widthBorder;
+
+    rectText.Inflate(-widthBorder);
 
     if ( extraSpaceBeyond )
         *extraSpaceBeyond = 0;
@@ -2410,6 +2492,7 @@ wxRect wxWin32Renderer::GetTextClientArea(const wxTextCtrl *text,
 
 void wxWin32Renderer::AdjustSize(wxSize *size, const wxWindow *window)
 {
+#if wxUSE_SCROLLBAR
     if ( wxDynamicCast(window, wxScrollBar) )
     {
         // we only set the width of vert scrollbars and height of the
@@ -2418,8 +2501,14 @@ void wxWin32Renderer::AdjustSize(wxSize *size, const wxWindow *window)
             size->y = m_sizeScrollbarArrow.y;
         else
             size->x = m_sizeScrollbarArrow.x;
+
+        // skip border width adjustments, they don't make sense for us
+        return;
     }
-    else if ( wxDynamicCast(window, wxButton) )
+#endif // wxUSE_SCROLLBAR/!wxUSE_SCROLLBAR
+
+#if wxUSE_BUTTON
+    if ( wxDynamicCast(window, wxButton) )
     {
         // TODO
         size->x += 3*window->GetCharWidth();
@@ -2434,14 +2523,16 @@ void wxWin32Renderer::AdjustSize(wxSize *size, const wxWindow *window)
             size->y = heightBtn;
         else
             size->y += 9;
+
+        // no border width adjustments for buttons
+        return;
     }
-    else
-    {
-        // take into account the border width
-        wxRect rectBorder = GetBorderDimensions(window->GetBorder());
-        size->x += rectBorder.x + rectBorder.width;
-        size->y += rectBorder.y + rectBorder.height;
-    }
+#endif // wxUSE_BUTTON
+
+    // take into account the border width
+    wxRect rectBorder = GetBorderDimensions(window->GetBorder());
+    size->x += rectBorder.x + rectBorder.width;
+    size->y += rectBorder.y + rectBorder.height;
 }
 
 // ============================================================================

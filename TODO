@@ -10,18 +10,25 @@ TODO
 
 *   problems with large fonts!
 
-wxComboBox
+wxRadioBox:
 
-+   draw the button correctly
-+   position popup inside the screen
+*   updating moves buttons around several times???
+*   focus rect drawing broken
+*   layout completely wrong (numbering ordering should be changed)
+*   no kbd interface?
 
-samples:
+widgets sample:
 
-    add SetString button to lboxtest
+    add SetString button to listbox page
+    add wxCheckListBox to listbox page
+
+wxRadioBox
+
+*   the direction of layout is different from MSW???
+*   arrows don't work
 
 wxTextCtrl
 
-*   PageUp/Down keys support
 *   caret leaves traces under wxGTK
 ?   text ctrl display pb when text is truncated
 ?   too much is refreshed when double clicking (word select)
@@ -71,6 +78,11 @@ All
 +   remember selection when losing/gaining activation
 +   scrolling by dragging mouse outside the window
 +   display corrupted when typing text in quickly (single line only)
+
++   draw the button correctly
++   position popup inside the screen
+
++   PageUp/Down keys support in wxTextCtrl
 
 MSW
 

@@ -113,7 +113,8 @@ bool wxRadioBox::Create(wxWindow *parent,
 
     Append(n, choices);
 
-    SetMajorDim(majorDim);
+    // majorDim default value is 0 which means make one row/column
+    SetMajorDim(majorDim == 0 ? n : majorDim);
 
     if ( size == wxDefaultSize )
     {
@@ -290,10 +291,6 @@ wxSize wxRadioBox::GetMaxButtonSize() const
             heightMax = height;
     }
 
-    // add a intra button border
-    widthMax += BUTTON_BORDER_X;
-    heightMax += BUTTON_BORDER_Y;
-
     return wxSize(widthMax, heightMax);
 }
 
@@ -306,8 +303,13 @@ wxSize wxRadioBox::GetMaxButtonSize() const
 wxSize wxRadioBox::DoGetBestClientSize() const
 {
     wxSize sizeBtn = GetMaxButtonSize();
+
     sizeBtn.x *= m_numCols;
     sizeBtn.y *= m_numRows;
+
+    // add an intra button border
+    sizeBtn.x += (m_numCols - 1) * BUTTON_BORDER_X;
+    sizeBtn.y += (m_numRows - 1) * BUTTON_BORDER_Y;
 
     // add a border around all buttons
     sizeBtn.x += 2*BOX_BORDER_X;
@@ -345,12 +347,12 @@ void wxRadioBox::DoMoveWindow(int x0, int y0, int width, int height)
             if ( (n + 1) % m_numRows )
             {
                 // continue in this column
-                y += sizeBtn.y;
+                y += sizeBtn.y + BUTTON_BORDER_Y;
             }
             else
             {
                 // start a new column
-                x += sizeBtn.x;
+                x += sizeBtn.x + BUTTON_BORDER_X;
                 y = y0;
             }
         }
@@ -360,12 +362,12 @@ void wxRadioBox::DoMoveWindow(int x0, int y0, int width, int height)
             if ( (n + 1) % m_numCols )
             {
                 // continue in this row
-                x += sizeBtn.x;
+                x += sizeBtn.x + BUTTON_BORDER_X;
             }
             else
             {
                 // start a new row
-                y += sizeBtn.y;
+                y += sizeBtn.y + BUTTON_BORDER_Y;
                 x = x0;
             }
         }

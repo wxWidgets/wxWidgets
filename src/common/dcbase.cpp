@@ -375,7 +375,7 @@ void wxDCBase::DrawLabel(const wxString& text,
     // return bounding rect if requested
     if ( rectBounding )
     {
-        *rectBounding = wxRect(x, y, widthText, heightText);
+        *rectBounding = wxRect(x, y - heightText, widthText, heightText);
     }
 
     CalcBoundingBox(x0, y0);

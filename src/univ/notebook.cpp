@@ -421,7 +421,11 @@ void wxNotebook::RefreshTab(int page)
     if ( (size_t)page == m_sel )
     {
         const wxSize indent = GetRenderer()->GetTabIndent();
-        r.Inflate(2*indent.x, indent.y);
+
+        if ( r.x >= 2*indent.x && r.y >= indent.y )
+        {
+            r.Inflate(2*indent.x, indent.y);
+        }
     }
 
     Refresh(TRUE, &r);

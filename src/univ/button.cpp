@@ -85,7 +85,7 @@ bool wxButton::Create(wxWindow *parent,
 
     SetLabel(label);
     SetImageLabel(bitmap);
-    SetBestSize(size);
+    // SetBestSize(size); -- called by SetImageLabel()
 
     CreateInputHandler(wxINP_HANDLER_BUTTON);
 
@@ -223,14 +223,16 @@ bool wxButton::PerformAction(const wxControlAction& action,
 void wxButton::SetImageLabel(const wxBitmap& bitmap)
 {
     m_bitmap = bitmap;
-    m_marginBmpX = DEFAULT_BTN_MARGIN_X;
-    m_marginBmpY = DEFAULT_BTN_MARGIN_Y;
+
+    SetImageMargins(DEFAULT_BTN_MARGIN_X, DEFAULT_BTN_MARGIN_Y);
 }
 
 void wxButton::SetImageMargins(wxCoord x, wxCoord y)
 {
     m_marginBmpX = x;
     m_marginBmpY = y;
+
+    SetBestSize(wxDefaultSize);
 }
 
 void wxButton::SetDefault()

@@ -494,6 +494,10 @@ void wxWindow::DoGetClientSize(int *width, int *height) const
 
         // and always account for the left border
         *width = w - rectBorder.x;
+
+        // we shouldn't return invalid width
+        if ( *width < 0 )
+            *width = 0;
     }
 
     if ( height )
@@ -505,6 +509,10 @@ void wxWindow::DoGetClientSize(int *width, int *height) const
             h -= rectBorder.height;
 
         *height = h - rectBorder.y;
+
+        // we shouldn't return invalid height
+        if ( *height < 0 )
+            *height = 0;
     }
 }
 
