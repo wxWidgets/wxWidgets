@@ -63,6 +63,12 @@ public:
     inline int GetFilterIndex() const { return m_filterIndex ; }
 
     int ShowModal();
+    
+    // not supported for file dialog, RR
+    virtual void DoSetSize(int x, int y,
+                           int width, int height,
+                           int sizeFlags = wxSIZE_AUTO) {}
+
 };
 
 #define wxOPEN              0x0001
