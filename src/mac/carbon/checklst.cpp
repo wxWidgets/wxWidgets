@@ -106,7 +106,9 @@ static pascal  void DataBrowserItemNotificationProc(ControlRef browser, DataBrow
                     event.SetString( list->GetString(i) );
                     event.SetInt(i) ;
                     event.SetExtraLong( list->HasMultipleSelection() ? message == kDataBrowserItemSelected : TRUE );
-                    list->GetEventHandler()->ProcessEvent(event) ;
+                    wxPostEvent( list->GetEventHandler() , event ) ;
+                    // direct notification is not always having the listbox GetSelection() having in synch with event
+                    // list->GetEventHandler()->ProcessEvent(event) ; 
                 } 
 
                 break ;
