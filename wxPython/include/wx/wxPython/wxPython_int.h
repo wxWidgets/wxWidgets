@@ -86,6 +86,9 @@
 typedef unsigned char byte;
 typedef wxPoint2DDouble wxPoint2D;    
 
+#ifndef SWIG_TYPE_TABLE
+#define SWIG_TYPE_TABLE wxPython_type_table
+#endif
 
 #ifndef wxPyUSE_EXPORTED_API
 
