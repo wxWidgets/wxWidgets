@@ -102,8 +102,6 @@ protected:
     bool m_parentFrameActive;
 
 private:
-    friend class WXDLLEXPORT wxMDIChildFrame;
-
     DECLARE_EVENT_TABLE()
 };
 
