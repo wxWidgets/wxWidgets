@@ -254,7 +254,7 @@ wxFont wxCreateFontFromStockObject(int index)
 
 wxFont wxSystemSettingsNative::GetFont(wxSystemFont index)
 {
-#ifdef __WXWINCE__
+#ifndef __WXWINCE__
     // this one is special: we don't get it from GetStockObject()
     if ( index == wxSYS_ICONTITLE_FONT )
     {
