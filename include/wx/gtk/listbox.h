@@ -12,7 +12,7 @@
 #define __GTKLISTBOXH__
 
 #ifdef __GNUG__
-#pragma interface
+#pragma interface "listbox.h"
 #endif
 
 #include "wx/list.h"
