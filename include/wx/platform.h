@@ -209,6 +209,9 @@
 
 #    ifdef __EMX__
 #        define OS2EMX_PLAIN_CHAR
+#      ifdef __INNOTEK_LIBC__
+#        define wxSIZE_T_IS_UINT
+#      endif
 #    endif
 
     /* define __HPUX__ for HP-UX where standard macro is __hpux */

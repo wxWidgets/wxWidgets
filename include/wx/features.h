@@ -58,6 +58,10 @@
 
 /*  wxRE_ADVANCED is not always available, depending on regex library used
  *  (it's unavailable only if compiling via configure against system library) */
+#ifdef __INNOTEK_LIBC__
+    #define WX_NO_REGEX_ADVANCED
+#endif
+
 #ifndef WX_NO_REGEX_ADVANCED
     #define wxHAS_REGEX_ADVANCED
 #else
