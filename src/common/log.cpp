@@ -527,6 +527,10 @@ END_EVENT_TABLE()
 wxLogFrame::wxLogFrame(const char *szTitle)
           : wxFrame(NULL, -1, szTitle)
 {
+  // we don't want to be a top-level frame because it would prevent the
+  // application termination when all other frames are closed
+  wxTopLevelWindows.DeleteObject(this);
+
   // @@ kludge: wxSIMPLE_BORDER is simply to prevent wxWindows from creating
   //    a rich edit control instead of a normal one we want
   m_pTextCtrl = new wxTextCtrl(this, -1, wxEmptyString, wxDefaultPosition,
@@ -608,8 +612,10 @@ void wxLogFrame::OnSave(wxCommandEvent& event)
   // retrieve text and save it
   // -------------------------
   
+#ifdef __GTK__
   // @@@@ TODO: no GetNumberOfLines and GetLineText in wxGTK yet
-#ifndef __GTK__
+  wxLogError("Sorry, this function is not implemented under GTK");
+#else
   int nLines = m_pTextCtrl->GetNumberOfLines();
   for ( int nLine = 0; bOk && nLine < nLines; nLine++ ) {
     bOk = file.Write(m_pTextCtrl->GetLineText(nLine) + wxTextFile::GetEOL());
@@ -630,10 +636,13 @@ void wxLogFrame::OnClear(wxCommandEvent& event)
   m_pTextCtrl->Clear();
 }
 
-wxLogWindow::wxLogWindow(const wxTString& strTitle)
+wxLogWindow::wxLogWindow(const wxTString& strTitle, bool bShow)
 {
   m_pOldLog = wxLog::GetActiveTarget();
   m_pLogFrame = new wxLogFrame(strTitle);
+  
+  if ( bShow )
+    m_pLogFrame->Show(TRUE);
 }
 
 void wxLogWindow::Show(bool bShow)
@@ -662,8 +671,10 @@ void wxLogWindow::DoLogString(const char *szString)
   wxTextCtrl *pText = m_pLogFrame->TextCtrl();
 
   // remove selection (WriteText is in fact ReplaceSelection)
-  long nLen = pText->GetLastPosition();
-  pText->SetSelection(nLen, nLen);
+  #ifdef __WINDOWS__
+    long nLen = pText->GetLastPosition();
+    pText->SetSelection(nLen, nLen);
+  #endif // Windows
 
   pText->WriteText(szString);
   pText->WriteText("\n"); // "\n" ok here (_not_ "\r\n")
