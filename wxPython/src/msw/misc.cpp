@@ -1325,6 +1325,44 @@ static PyObject *_wrap_wxSize_asTuple(PyObject *self, PyObject *args, PyObject *
     return _resultobj;
 }
 
+static int  wxSize___cmp__(wxSize *self,const wxSize * sz) {
+            if (! sz) return 1;
+            if (*self == *sz) return 0;
+            return -1;
+        }
+static PyObject *_wrap_wxSize___cmp__(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    int  _result;
+    wxSize * _arg0;
+    wxSize * _arg1;
+    wxSize  temp;
+    PyObject * _obj0 = 0;
+    wxSize  temp0;
+    PyObject * _obj1 = 0;
+    char *_kwnames[] = { "self","sz", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxSize___cmp__",_kwnames,&_obj0,&_obj1)) 
+        return NULL;
+{
+    _arg0 = &temp;
+    if (! wxSize_helper(_obj0, &_arg0))
+        return NULL;
+}
+{
+    _arg1 = &temp0;
+    if (! wxSize_helper(_obj1, &_arg1))
+        return NULL;
+}
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (int )wxSize___cmp__(_arg0,_arg1);
+
+    wxPy_END_ALLOW_THREADS;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
 #define wxRealPoint_x_set(_swigobj,_swigval) (_swigobj->x = _swigval,_swigval)
 static PyObject *_wrap_wxRealPoint_x_set(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
@@ -1627,8 +1665,9 @@ static PyObject *_wrap_wxRealPoint___sub__(PyObject *self, PyObject *args, PyObj
 }
 
 static int  wxRealPoint___cmp__(wxRealPoint *self,const wxRealPoint * p) {
-            if (! p) return 0;
-            return *self == *p;
+            if (! p) return 1;
+            if (*self == *p) return 0;
+            return -1;
         }
 static PyObject *_wrap_wxRealPoint___cmp__(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
@@ -1965,8 +2004,9 @@ static PyObject *_wrap_wxPoint___sub__(PyObject *self, PyObject *args, PyObject 
 }
 
 static int  wxPoint___cmp__(wxPoint *self,const wxPoint * p) {
-            if (! p) return 0;
-            return *self == *p;
+            if (! p) return 1;
+            if (*self == *p) return 0;
+            return -1;
         }
 static PyObject *_wrap_wxPoint___cmp__(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
@@ -2879,8 +2919,9 @@ static PyObject *_wrap_wxRect___add__(PyObject *self, PyObject *args, PyObject *
 }
 
 static int  wxRect___cmp__(wxRect *self,const wxRect * rect) {
-            if (! rect) return 0;
-            return *self == *rect;
+            if (! rect) return 1;
+            if (*self == *rect) return 0;
+            return -1;
         }
 static PyObject *_wrap_wxRect___cmp__(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
@@ -3990,6 +4031,7 @@ static PyMethodDef misccMethods[] = {
 	 { "wxRealPoint_y_set", (PyCFunction) _wrap_wxRealPoint_y_set, METH_VARARGS | METH_KEYWORDS },
 	 { "wxRealPoint_x_get", (PyCFunction) _wrap_wxRealPoint_x_get, METH_VARARGS | METH_KEYWORDS },
 	 { "wxRealPoint_x_set", (PyCFunction) _wrap_wxRealPoint_x_set, METH_VARARGS | METH_KEYWORDS },
+	 { "wxSize___cmp__", (PyCFunction) _wrap_wxSize___cmp__, METH_VARARGS | METH_KEYWORDS },
 	 { "wxSize_asTuple", (PyCFunction) _wrap_wxSize_asTuple, METH_VARARGS | METH_KEYWORDS },
 	 { "wxSize_SetHeight", (PyCFunction) _wrap_wxSize_SetHeight, METH_VARARGS | METH_KEYWORDS },
 	 { "wxSize_SetWidth", (PyCFunction) _wrap_wxSize_SetWidth, METH_VARARGS | METH_KEYWORDS },

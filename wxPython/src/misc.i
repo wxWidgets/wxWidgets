@@ -75,6 +75,12 @@ public:
             PyTuple_SET_ITEM(tup, 1, PyInt_FromLong(self->y));
             return tup;
         }
+
+        int __cmp__(const wxSize* sz) {
+            if (! sz) return 1;
+            if (*self == *sz) return 0;
+            return -1;
+        }
     }
 
     %pragma(python) addtoclass = "
@@ -122,8 +128,9 @@ public:
         }
 
         int __cmp__(const wxRealPoint* p) {
-            if (! p) return 0;
-            return *self == *p;
+            if (! p) return 1;
+            if (*self == *p) return 0;
+            return -1;
         }
     }
     %pragma(python) addtoclass = "
@@ -169,8 +176,9 @@ public:
         }
 
         int __cmp__(const wxPoint* p) {
-            if (! p) return 0;
-            return *self == *p;
+            if (! p) return 1;
+            if (*self == *p) return 0;
+            return -1;
         }
     }
     %pragma(python) addtoclass = "
@@ -237,8 +245,9 @@ public:
         }
 
         int __cmp__(const wxRect* rect) {
-            if (! rect) return 0;
-            return *self == *rect;
+            if (! rect) return 1;
+            if (*self == *rect) return 0;
+            return -1;
         }
     }
 

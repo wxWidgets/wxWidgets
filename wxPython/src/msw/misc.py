@@ -50,6 +50,9 @@ class wxSizePtr :
     def asTuple(self, *_args, **_kwargs):
         val = apply(miscc.wxSize_asTuple,(self,) + _args, _kwargs)
         return val
+    def __cmp__(self, *_args, **_kwargs):
+        val = apply(miscc.wxSize___cmp__,(self,) + _args, _kwargs)
+        return val
     def __setattr__(self,name,value):
         if name == "x" :
             miscc.wxSize_x_set(self,value)

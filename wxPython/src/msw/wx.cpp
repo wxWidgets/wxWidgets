@@ -3000,6 +3000,8 @@ SWIGEXPORT(void) initwxc() {
 	 PyDict_SetItemString(d,"wxEVT_MEASURE_ITEM", PyInt_FromLong((long) wxEVT_MEASURE_ITEM));
 	 PyDict_SetItemString(d,"wxEVT_COMPARE_ITEM", PyInt_FromLong((long) wxEVT_COMPARE_ITEM));
 	 PyDict_SetItemString(d,"wxEVT_INIT_DIALOG", PyInt_FromLong((long) wxEVT_INIT_DIALOG));
+	 PyDict_SetItemString(d,"wxEVT_HELP", PyInt_FromLong((long) wxEVT_HELP));
+	 PyDict_SetItemString(d,"wxEVT_DETAILED_HELP", PyInt_FromLong((long) wxEVT_DETAILED_HELP));
 	 PyDict_SetItemString(d,"wxEVT_IDLE", PyInt_FromLong((long) wxEVT_IDLE));
 	 PyDict_SetItemString(d,"wxEVT_UPDATE_UI", PyInt_FromLong((long) wxEVT_UPDATE_UI));
 	 PyDict_SetItemString(d,"wxEVT_COMMAND_LEFT_CLICK", PyInt_FromLong((long) wxEVT_COMMAND_LEFT_CLICK));
