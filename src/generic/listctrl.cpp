@@ -212,7 +212,7 @@ class WXDLLEXPORT wxListItemData
 {
 public:
     wxListItemData(wxListMainWindow *owner);
-    ~wxListItemData() { delete m_attr; delete m_rect; }
+    ~wxListItemData();
 
     void SetItem( const wxListItem &info );
     void SetImage( int image ) { m_image = image; }
@@ -983,6 +983,18 @@ void wxSelectionStore::OnItemDelete(size_t item)
 //  wxListItemData
 //-----------------------------------------------------------------------------
 
+wxListItemData::~wxListItemData()
+{
+    // in the virtual list control the attributes are managed by the main
+    // program, so don't delete them
+    if ( !m_owner->IsVirtual() )
+    {
+        delete m_attr;
+    }
+
+    delete m_rect;
+}
+
 void wxListItemData::Init()
 {
     m_image = -1;
@@ -997,7 +1009,7 @@ wxListItemData::wxListItemData(wxListMainWindow *owner)
 
     m_owner = owner;
 
-    if ( owner->HasFlag(wxLC_REPORT) )
+    if ( owner->InReportView() )
     {
         m_rect = NULL;
     }
@@ -3527,6 +3539,8 @@ void wxListMainWindow::SetItemCount(long count)
     m_selStore.SetItemCount(count);
     m_countVirt = count;
 
+    ResetVisibleLinesRange();
+
     Refresh();
 }
 
@@ -3825,8 +3839,6 @@ void wxListMainWindow::DeleteAllItems()
         return;
     }
 
-    m_dirty = TRUE;
-
     ResetCurrent();
 
     // to make the deletion of all items faster, we don't send the
@@ -3842,7 +3854,7 @@ void wxListMainWindow::DeleteAllItems()
     {
         m_countVirt = 0;
 
-        ResetVisibleLinesRange();
+        m_selStore.Clear();
     }
 
     if ( InReportView() )
@@ -3852,7 +3864,10 @@ void wxListMainWindow::DeleteAllItems()
 
     m_lines.Clear();
 
-    m_selStore.Clear();
+    // NB: don't just set m_dirty to TRUE here as RecalculatePositions()
+    //     doesn't do anything if the control is empty and so we won't be
+    //     refreshed
+    Refresh();
 }
 
 void wxListMainWindow::DeleteEverything()
