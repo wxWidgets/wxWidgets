@@ -56,7 +56,14 @@
             return (void *)0;
     }
 #elif defined(__WINDOWS__)
-    #define wxDllOpen(lib)                  ::LoadLibrary(lib)
+    #include <windows.h>
+
+    // using LoadLibraryEx under Win32 to avoid name clash with LoadLibrary
+    #ifdef __WIN32__
+        #define wxDllOpen(lib)                  ::LoadLibraryEx(lib, 0, 0)
+    #else   // Win16
+        #define wxDllOpen(lib)                  ::LoadLibrary(lib)
+    #endif  // Win32/16
     #define wxDllGetSymbol(handle, name)    ::GetProcAddress(handle, name)
     #define wxDllClose                      ::FreeLibrary
 #else
