@@ -18,6 +18,96 @@
  * Boston, MA 02111-1307, USA.
  */
 
+/* 
+
+Permission to use this file under wxWindows license given by
+copyright holder:
+--------
+From andersca@gnu.org Tue Dec  9 13:01:56 2003
+Return-path: <andersca@gnu.org>
+Envelope-to: vasek@localhost
+Delivery-date: Tue, 09 Dec 2003 13:04:35 +0100
+Received: from localhost
+	([127.0.0.1] helo=amavis ident=amavis)
+	by armitage with esmtp (Exim 3.35 #1)
+	id 1ATgbS-0001Gs-00
+	for vasek@localhost; Tue, 09 Dec 2003 13:04:35 +0100
+Received: from armitage ([127.0.0.1])
+	by amavis (armitage [127.0.0.1]) (amavisd-new, port 10024) with ESMTP
+	id 04227-09 for <vasek@localhost>;
+	Tue, 9 Dec 2003 13:04:11 +0100 (CET)
+Received: from localhost ([127.0.0.1] ident=fetchmail)
+	by armitage with esmtp (Exim 3.35 #1)
+	id 1ATgb5-0001GY-00
+	for vasek@localhost; Tue, 09 Dec 2003 13:04:11 +0100
+Delivered-To: alias-email-slavikvaclav@seznam.cz
+Received: from pop3.seznam.cz [212.80.76.45]
+	by localhost with POP3 (fetchmail-5.9.11)
+	for vasek@localhost (single-drop); Tue, 09 Dec 2003 13:04:11 +0100 (CET)
+Received: (qmail 9861 invoked from network); 9 Dec 2003 12:02:17 -0000
+Received: from unknown (HELO maxipes.logix.cz) (81.0.234.97)
+  by buster.go.seznam.cz with SMTP; 9 Dec 2003 12:02:17 -0000
+Received: by maxipes.logix.cz (Postfix, from userid 604)
+	id 37E6D29A51; Tue,  9 Dec 2003 13:02:16 +0100 (CET)
+X-Original-To: vaclav.slavik@matfyz.cz
+Received: from mail.csbnet.se (glutus.csbnet.se [193.11.248.2])
+	by maxipes.logix.cz (Postfix) with ESMTP id 90D6A29A51
+	for <vaclav.slavik@matfyz.cz>; Tue,  9 Dec 2003 13:02:15 +0100 (CET)
+Received: by mail.csbnet.se (Postfix, from userid 8)
+	id 7AA7F10A6D7; Tue,  9 Dec 2003 13:02:14 +0100 (CET)
+Received: from carbon.csbnet.se (carbon.csbnet.se [193.11.248.180])
+	by mail.csbnet.se (Postfix) with ESMTP id A190F10A71D
+	for <vaclav.slavik@matfyz.cz>; Tue,  9 Dec 2003 13:01:56 +0100 (CET)
+Subject: Re: eggtrayicon.{c,h} licensing
+From: Anders Carlsson <andersca@gnu.org>
+To: Vaclav Slavik <vaclav.slavik@matfyz.cz>
+In-Reply-To: <200312091142.54542.vaclav.slavik@matfyz.cz>
+References: <200312091142.54542.vaclav.slavik@matfyz.cz>
+Content-Type: text/plain
+Message-Id: <1070971316.30989.0.camel@carbon.csbnet.se>
+Mime-Version: 1.0
+X-Mailer: Ximian Evolution 1.5 
+Date: Tue, 09 Dec 2003 13:01:56 +0100
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: CLAM (openantivirus DB) antivirus scanner at mail.csbnet.se
+X-Virus-Scanned: by amavisd-new-20030616-p5 (Debian) at armitage
+X-Spam-Status: No, hits=-4.9 tagged_above=-999.0 required=6.3 tests=BAYES_00
+X-Spam-Level: 
+Status: R 
+X-Status: N
+X-KMail-EncryptionState:  
+X-KMail-SignatureState:  
+
+On tis, 2003-12-09 at 11:42 +0100, Vaclav Slavik wrote:
+> Hi,
+> 
+> I'm working on the wxWindows cross-platform GUI toolkit 
+> (http://www.wxwindows.org) which uses GTK+ and it would save me a lot 
+> of time if I could use your eggtrayicon code to implement tray icons 
+> on X11. Unfortunately I can't use it right now because it is not part 
+> of any library we could depend on (as we do depend on GTK+) and would 
+> have to be included in our sources and it is under the LGPL license. 
+> The problem is that wxWindows' license is more permissive (see 
+> http://www.opensource.org/licenses/wxwindows.php for details) and so 
+> I can't take your code and put it under wxWindows License. And I 
+> can't put code that can't be used under the terms of wxWindows 
+> License into wxWindows either. Do you think it would be possible to 
+> get permission to include eggtrayicon under wxWindows license?
+> 
+> Thanks,
+> Vaclav
+> 
+
+Sure, that's fine by me.
+
+Anders
+--------
+*/
+
+#include "wx/platform.h"
+
+#ifdef __WXGTK20__
+
 #include <string.h>
 #include <gdk/gdkx.h>
 #include "eggtrayicon.h"
@@ -343,3 +433,5 @@ egg_tray_icon_cancel_message (EggTrayIcon *icon,
 				      (Window)gtk_plug_get_id (GTK_PLUG (icon)),
 				      id, 0, 0);
 }
+
+#endif /* __WXGTK20__ */
