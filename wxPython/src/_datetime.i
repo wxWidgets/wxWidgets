@@ -507,6 +507,17 @@ public:
     bool SetToTheWeek(wxDateTime_t numWeek, WeekDay weekday = Mon, WeekFlags flags = Monday_First);
     wxDateTime GetWeek(wxDateTime_t numWeek, WeekDay weekday = Mon, WeekFlags flags = Monday_First);
 
+    %pythoncode {
+        SetToTheWeek = wx._deprecated(SetToTheWeek, "SetToTheWeek is deprecated, use (static) SetToWeekOfYear instead")
+        GetWeek = wx._deprecated(GetWeek, "GetWeek is deprecated, use GetWeekOfYear instead")
+    }
+            
+        // returns the date corresponding to the given week day of the given
+        // week (in ISO notation) of the specified year
+    static wxDateTime SetToWeekOfYear(int year,
+                                      wxDateTime_t numWeek,
+                                      WeekDay weekday = Mon);
+    
         // sets the date to the last day of the given (or current) month or the
         // given (or current) year
     wxDateTime& SetToLastMonthDay(Month month = Inv_Month,
