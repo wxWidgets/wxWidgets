@@ -139,7 +139,7 @@ bool wxComboBox::Create( wxWindow *parent, wxWindowID id, const wxString& value,
            inserting the first item */
         m_alreadySent = TRUE;
 
-        GtkWidget *list_item = gtk_list_item_new_with_label( choices[i].mbc_str() );
+        GtkWidget *list_item = gtk_list_item_new_with_label( wxGTK_CONV( choices[i] ) );
 
         m_clientDataList.Append( (wxObject*)NULL );
         m_clientObjectList.Append( (wxObject*)NULL );
@@ -213,7 +213,7 @@ void wxComboBox::AppendCommon( const wxString &item )
 
     GtkWidget *list = GTK_COMBO(m_widget)->list;
 
-    GtkWidget *list_item = gtk_list_item_new_with_label( item.mbc_str() );
+    GtkWidget *list_item = gtk_list_item_new_with_label( wxGTK_CONV( item ) );
 
     gtk_container_add( GTK_CONTAINER(list), list_item );
 
@@ -483,7 +483,7 @@ void wxComboBox::SetValue( const wxString& value )
     GtkWidget *entry = GTK_COMBO(m_widget)->entry;
     wxString tmp = wxT("");
     if (!value.IsNull()) tmp = value;
-    gtk_entry_set_text( GTK_ENTRY(entry), tmp.mbc_str() );
+    gtk_entry_set_text( GTK_ENTRY(entry), wxGTK_CONV( tmp ) );
 }
 
 void wxComboBox::Copy()
@@ -541,6 +541,7 @@ void wxComboBox::Replace( long from, long to, const wxString& value )
 {
     wxCHECK_RET( m_widget != NULL, wxT("invalid combobox") );
     // FIXME: not quite sure how to do this method right in multibyte mode
+    // FIXME GTK 2.0
 
     GtkWidget *entry = GTK_COMBO(m_widget)->entry;
     gtk_editable_delete_text( GTK_EDITABLE(entry), (gint)from, (gint)to );
@@ -713,7 +714,7 @@ wxSize wxComboBox::DoGetBestSize() const
         size_t count = Number();
         for ( size_t n = 0; n < count; n++ )
         {
-            width = (wxCoord)gdk_string_width(font, GetString(n).mbc_str());
+            width = (wxCoord)gdk_string_width(font, wxGTK_CONV( GetString(n) ) );
             if ( width > ret.x )
                 ret.x = width;
         }

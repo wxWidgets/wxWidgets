@@ -94,7 +94,7 @@ bool wxCheckBox::Create(wxWindow *parent,
         //     left of it
         m_widgetCheckbox = gtk_check_button_new();
 
-        m_widgetLabel = gtk_label_new(m_label.mbc_str());
+        m_widgetLabel = gtk_label_new( wxGTK_CONV( m_label ) );
         gtk_misc_set_alignment(GTK_MISC(m_widgetLabel), 0.0, 0.5);
 
         m_widget = gtk_hbox_new(FALSE, 0);
@@ -106,7 +106,7 @@ bool wxCheckBox::Create(wxWindow *parent,
     }
     else
     {
-        m_widgetCheckbox = gtk_check_button_new_with_label( m_label.mbc_str() );
+        m_widgetCheckbox = gtk_check_button_new_with_label( wxGTK_CONV( m_label ) );
         m_widgetLabel = BUTTON_CHILD( m_widgetCheckbox );
         m_widget = m_widgetCheckbox;
     }
@@ -166,7 +166,7 @@ void wxCheckBox::SetLabel( const wxString& label )
 
     wxControl::SetLabel( label );
 
-    gtk_label_set( GTK_LABEL(m_widgetLabel), GetLabel().mbc_str() );
+    gtk_label_set( GTK_LABEL(m_widgetLabel), wxGTK_CONV( GetLabel() ) );
 }
 
 bool wxCheckBox::Enable( bool enable )

@@ -54,6 +54,7 @@
 #endif
 
 #include <math.h>
+#include <ctype.h>
 
 #include "wx/gtk/private.h"
 #include <gdk/gdkprivate.h>
@@ -3139,7 +3140,7 @@ void wxWindowGTK::GetTextExtent( const wxString& string,
     wxCHECK_RET( fontToUse.Ok(), wxT("invalid font") );
 
     GdkFont *font = fontToUse.GetInternalFont( 1.0 );
-    if (x) (*x) = gdk_string_width( font, string.mbc_str() );
+    if (x) (*x) = gdk_string_width( font, wxGTK_CONV( string ) );
     if (y) (*y) = font->ascent + font->descent;
     if (descent) (*descent) = font->descent;
     if (externalLeading) (*externalLeading) = 0;  // ??
@@ -3411,7 +3412,8 @@ void wxWindowGTK::GtkSendPaintEvents()
             
     // Clip to paint region in wxClientDC
     m_clipPaintRegion = TRUE;
-    
+
+#ifndef __WXGTK20__    
     if (GetThemeEnabled())
     {
         // find ancestor from which to steal background
@@ -3443,7 +3445,10 @@ void wxWindowGTK::GtkSendPaintEvents()
         }
     }
     else
-    // if (!m_clearRegion.IsEmpty())   // always send an erase event
+#endif
+#ifdef __WXGTK20__    
+    if (!m_clearRegion.IsEmpty())   // Always send an erase event under GTK 1.2
+#endif
     {
         wxWindowDC dc( (wxWindow*)this );
         if (m_clearRegion.IsEmpty())
@@ -3456,6 +3461,7 @@ void wxWindowGTK::GtkSendPaintEvents()
 
         if (!GetEventHandler()->ProcessEvent(erase_event))
         {
+#ifndef __WXGTK20__    
             if (!g_eraseGC)
             {
                 g_eraseGC = gdk_gc_new( pizza->bin_window );
@@ -3470,6 +3476,7 @@ void wxWindowGTK::GtkSendPaintEvents()
                                     upd.GetX(), upd.GetY(), upd.GetWidth(), upd.GetHeight() );
                 upd ++;
             }
+#endif
         }
         m_clearRegion.Clear();
     }

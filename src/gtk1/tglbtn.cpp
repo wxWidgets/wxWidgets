@@ -63,7 +63,7 @@ bool wxToggleButton::Create(wxWindow *parent, wxWindowID id,
    wxControl::SetLabel(label);
 
    // Create the gtk widget.
-   m_widget = gtk_toggle_button_new_with_label(m_label.mbc_str());
+   m_widget = gtk_toggle_button_new_with_label( wxGTK_CONV( m_label ) );
 
    gtk_signal_connect(GTK_OBJECT(m_widget), "clicked",
                       GTK_SIGNAL_FUNC(gtk_togglebutton_clicked_callback),
@@ -123,7 +123,7 @@ void wxToggleButton::SetLabel(const wxString& label)
 
     wxControl::SetLabel(label);
 
-    gtk_label_set(GTK_LABEL(BUTTON_CHILD(m_widget)), GetLabel().mbc_str());
+    gtk_label_set(GTK_LABEL(BUTTON_CHILD(m_widget)), wxGTK_CONV( GetLabel() ) );
 }
 
 bool wxToggleButton::Enable(bool enable /*=TRUE*/)

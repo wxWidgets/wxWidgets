@@ -208,7 +208,7 @@ void wxSpinCtrl::SetValue( const wxString& value )
     {
         // invalid number - set text as is (wxMSW compatible)
         GtkDisableEvents();
-        gtk_entry_set_text( GTK_ENTRY(m_widget), value.mbc_str() );
+        gtk_entry_set_text( GTK_ENTRY(m_widget), wxGTK_CONV( value ) );
         GtkEnableEvents();
     }
 }

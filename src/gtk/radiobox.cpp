@@ -180,7 +180,7 @@ bool wxRadioBox::Create( wxWindow *parent, wxWindowID id, const wxString& title,
         return FALSE;
     }
 
-    m_widget = gtk_frame_new( title.mbc_str() );
+    m_widget = gtk_frame_new( wxGTK_CONV( title ) );
 
     // majorDim may be 0 if all trailing parameters were omitted, so don't
     // assert here but just use the correct value for it
@@ -202,7 +202,7 @@ bool wxRadioBox::Create( wxWindow *parent, wxWindowID id, const wxString& title,
                 label += *pc;
         }
 
-        m_radio = GTK_RADIO_BUTTON( gtk_radio_button_new_with_label( radio_button_group, label.mbc_str() ) );
+        m_radio = GTK_RADIO_BUTTON( gtk_radio_button_new_with_label( radio_button_group, wxGTK_CONV( label ) ) );
 
         gtk_signal_connect( GTK_OBJECT(m_radio), "key_press_event",
            GTK_SIGNAL_FUNC(gtk_radiobox_keypress_callback), (gpointer)this );
@@ -514,7 +514,7 @@ void wxRadioBox::SetLabel( const wxString& label )
 
     wxControl::SetLabel( label );
 
-    gtk_frame_set_label( GTK_FRAME(m_widget), wxControl::GetLabel().mbc_str() );
+    gtk_frame_set_label( GTK_FRAME(m_widget), wxGTK_CONV( wxControl::GetLabel() ) );
 }
 
 void wxRadioBox::SetString( int item, const wxString& label )
@@ -527,7 +527,7 @@ void wxRadioBox::SetString( int item, const wxString& label )
 
     GtkLabel *g_label = GTK_LABEL( BUTTON_CHILD(node->Data()) );
 
-    gtk_label_set( g_label, label.mbc_str() );
+    gtk_label_set( g_label, wxGTK_CONV( label ) );
 }
 
 bool wxRadioBox::Enable( bool enable )

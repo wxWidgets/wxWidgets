@@ -16,6 +16,7 @@
 #if wxUSE_CHECKLISTBOX
 
 #include "wx/checklst.h"
+#include "wx/gtk/private.h"
 
 #include <gdk/gdk.h>
 #include <gtk/gtk.h>
@@ -54,7 +55,7 @@ bool wxCheckListBox::IsChecked( int index ) const
         GtkBin *bin = GTK_BIN( child->data );
         GtkLabel *label = GTK_LABEL( bin->child );
 
-        wxString str = wxString(label->label,*wxConvCurrent);
+        wxString str( wxGTK_CONV_BACK( label->label ) );
 
         return str.GetChar(1) == wxCHECKLBOX_CHECKED;
     }
@@ -73,14 +74,14 @@ void wxCheckListBox::Check( int index, bool check )
         GtkBin *bin = GTK_BIN( child->data );
         GtkLabel *label = GTK_LABEL( bin->child );
 
-        wxString str = wxString(label->label,*wxConvCurrent);
+        wxString str( wxGTK_CONV_BACK( label->label ) );
 
         if (check == (str.GetChar(1) == wxCHECKLBOX_CHECKED))
             return;
 
         str.SetChar( 1, check ? wxCHECKLBOX_CHECKED : wxCHECKLBOX_UNCHECKED );
 
-        gtk_label_set( label, str.mbc_str() );
+        gtk_label_set( label, wxGTK_CONV( str ) );
 
         return;
     }

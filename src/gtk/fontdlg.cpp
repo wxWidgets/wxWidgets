@@ -57,7 +57,6 @@ bool gtk_fontdialog_delete_callback( GtkWidget *WXUNUSED(widget), GdkEvent *WXUN
 // "clicked" for OK-button
 //-----------------------------------------------------------------------------
 
-#ifdef __WXGTK12__
 static
 void gtk_fontdialog_ok_callback( GtkWidget *WXUNUSED(widget), wxFontDialog *dialog )
 {
@@ -84,7 +83,6 @@ void gtk_fontdialog_ok_callback( GtkWidget *WXUNUSED(widget), wxFontDialog *dial
     event.SetEventObject( dialog );
     dialog->GetEventHandler()->ProcessEvent( event );
 }
-#endif // GTK+ 1.2 and later only
 
 //-----------------------------------------------------------------------------
 // "clicked" for Cancel-button
@@ -120,7 +118,7 @@ bool wxFontDialog::DoCreate(wxWindow *parent)
     }
 
     wxString m_message( _("Choose font") );
-    m_widget = gtk_font_selection_dialog_new( m_message.mbc_str() );
+    m_widget = gtk_font_selection_dialog_new( wxGTK_CONV( m_message ) );
 
     int x = (gdk_screen_width () - 400) / 2;
     int y = (gdk_screen_height () - 400) / 2;
@@ -131,14 +129,18 @@ bool wxFontDialog::DoCreate(wxWindow *parent)
     gtk_signal_connect( GTK_OBJECT(sel->ok_button), "clicked",
       GTK_SIGNAL_FUNC(gtk_fontdialog_ok_callback), (gpointer*)this );
 
+#ifndef __WXGTK20__
     // strange way to internationalize
-    gtk_label_set( GTK_LABEL( BUTTON_CHILD(sel->ok_button) ), wxConvCurrent->cWX2MB(_("OK")) );
+    gtk_label_set( GTK_LABEL( BUTTON_CHILD(sel->ok_button) ), _("OK") );
+#endif
 
     gtk_signal_connect( GTK_OBJECT(sel->cancel_button), "clicked",
       GTK_SIGNAL_FUNC(gtk_fontdialog_cancel_callback), (gpointer*)this );
 
+#ifndef __WXGTK20__
     // strange way to internationalize
-    gtk_label_set( GTK_LABEL( BUTTON_CHILD(sel->cancel_button) ), wxConvCurrent->cWX2MB(_("Cancel")) );
+    gtk_label_set( GTK_LABEL( BUTTON_CHILD(sel->cancel_button) ), _("Cancel") );
+#endif
 
     gtk_signal_connect( GTK_OBJECT(m_widget), "delete_event",
         GTK_SIGNAL_FUNC(gtk_fontdialog_delete_callback), (gpointer)this );

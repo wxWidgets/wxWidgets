@@ -109,10 +109,8 @@ bool wxButton::Create(  wxWindow *parent, wxWindowID id, const wxString &label,
 
     SetLabel( label );
 
-#if (GTK_MINOR_VERSION > 0)
     if (style & wxNO_BORDER)
        gtk_button_set_relief( GTK_BUTTON(m_widget), GTK_RELIEF_NONE );
-#endif
 
     gtk_signal_connect( GTK_OBJECT(m_widget), "clicked",
       GTK_SIGNAL_FUNC(gtk_button_clicked_callback), (gpointer*)this );
@@ -162,7 +160,7 @@ void wxButton::SetLabel( const wxString &label )
 
     wxControl::SetLabel( label );
 
-    gtk_label_set( GTK_LABEL( BUTTON_CHILD(m_widget) ), GetLabel().mbc_str() );
+    gtk_label_set( GTK_LABEL( BUTTON_CHILD(m_widget) ), wxGTK_CONV( GetLabel() ) );
 }
 
 bool wxButton::Enable( bool enable )

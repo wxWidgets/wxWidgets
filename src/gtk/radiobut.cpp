@@ -118,7 +118,7 @@ bool wxRadioButton::Create( wxWindow *parent,
         }
     }
 
-    m_widget = gtk_radio_button_new_with_label( m_radioButtonGroup, label.mbc_str() );
+    m_widget = gtk_radio_button_new_with_label( m_radioButtonGroup, wxGTK_CONV( label ) );
       
     SetLabel(label);
 
@@ -154,7 +154,7 @@ void wxRadioButton::SetLabel( const wxString& label )
   
     wxControl::SetLabel( label );
     GtkLabel *g_label = GTK_LABEL( BUTTON_CHILD(m_widget) );
-    gtk_label_set( g_label, GetLabel().mbc_str() );
+    gtk_label_set( g_label, wxGTK_CONV( GetLabel() ) );
 }
 
 void wxRadioButton::SetValue( bool val )

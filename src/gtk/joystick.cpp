@@ -39,9 +39,9 @@ wxJoystick::wxJoystick(int joystick)
 {
   wxString dev_name;
   // Assume it's the same device name on all Linux systems ...
-  dev_name.Printf("/dev/js%d", (joystick == wxJOYSTICK1) ? 0 : 1);
+  dev_name.Printf( wxT("/dev/js%d"), (joystick == wxJOYSTICK1) ? 0 : 1);  // FIXME Unicode?
 
-  m_joystick = open(dev_name, O_RDWR);
+  m_joystick = open(dev_name.fn_str(), O_RDWR);
   m_lastposition = wxPoint(-1, -1);
   for (int i=0;i<15;i++)
     m_axe[i] = 0;
@@ -186,8 +186,8 @@ int wxJoystick::GetNumberJoysticks(void) const
   int fd, j;
 
   for (j=0;j<2;j++) {
-    dev_name.Printf("/dev/js%d", j);
-    fd = open(dev_name, O_RDONLY);
+    dev_name.Printf(wxT("/dev/js%d"), j);
+    fd = open(dev_name.fn_str(), O_RDONLY);
     if (fd == -1)
       return j;
     close(fd);

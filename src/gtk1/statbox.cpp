@@ -16,6 +16,7 @@
 #if wxUSE_STATBOX
 
 #include "wx/statbox.h"
+#include "wx/gtk/private.h"
 
 #include "gdk/gdk.h"
 #include "gtk/gtk.h"
@@ -60,7 +61,7 @@ bool wxStaticBox::Create( wxWindow *parent,
 
     wxControl::SetLabel(label);
 
-    m_widget = gtk_frame_new(m_label.empty() ? (char *)NULL : m_label.mbc_str());
+    m_widget = gtk_frame_new(m_label.empty() ? (char *)NULL : (const char*) wxGTK_CONV( m_label ) );
 
     m_parent->DoAddChild( this );
 
@@ -90,7 +91,7 @@ void wxStaticBox::SetLabel( const wxString &label )
     wxControl::SetLabel( label );
 
     gtk_frame_set_label( GTK_FRAME( m_widget ),
-                         m_label.empty() ? (char *)NULL : m_label.mbc_str() );
+                         m_label.empty() ? (char *)NULL : (const char*) wxGTK_CONV( m_label ) );
 }
 
 void wxStaticBox::ApplyWidgetStyle()

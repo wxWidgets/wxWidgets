@@ -445,10 +445,10 @@ bool wxToolBar::DoInsertTool(size_t pos, wxToolBarToolBase *toolBase)
                                   widget,
                                   tool->GetLabel().empty()
                                     ? NULL
-                                    : tool->GetLabel().mbc_str(),
+                                    : (const char*) wxGTK_CONV( tool->GetLabel() ),
                                   tool->GetShortHelp().empty()
                                     ? NULL
-                                    : tool->GetShortHelp().mbc_str(),
+                                    : (const char*) wxGTK_CONV( tool->GetShortHelp() ),
                                   "", // tooltip_private_text (?)
                                   tool->m_pixmap,
                                   (GtkSignalFunc)gtk_toolbar_callback,
@@ -526,14 +526,12 @@ bool wxToolBar::DoDeleteTool(size_t WXUNUSED(pos), wxToolBarToolBase *toolBase)
 
 void wxToolBar::DoEnableTool(wxToolBarToolBase *toolBase, bool enable)
 {
-#if (GTK_MINOR_VERSION > 0)
     wxToolBarTool *tool = (wxToolBarTool *)toolBase;
 
-    /* we don't disable the tools for GTK 1.0 as the bitmaps don't get
-       greyed anyway and this also disables tooltips */
     if (tool->m_item)
+    {
         gtk_widget_set_sensitive( tool->m_item, enable );
-#endif
+    }
 }
 
 void wxToolBar::DoToggleTool( wxToolBarToolBase *toolBase, bool toggle ) 
@@ -611,7 +609,7 @@ void wxToolBar::SetToolShortHelp( int id, const wxString& helpString )
     {
         (void)tool->SetShortHelp(helpString);
         gtk_tooltips_set_tip(m_toolbar->tooltips, tool->m_item,
-                             helpString.mbc_str(), "");
+                             wxGTK_CONV( helpString ), "");
     }
 }
 

@@ -394,7 +394,7 @@ bool wxNotebook::SetPageText( int page, const wxString &text )
 
     nb_page->m_text = text;
 
-    gtk_label_set( nb_page->m_label, nb_page->m_text.mbc_str() );
+    gtk_label_set( nb_page->m_label, wxGTK_CONV( nb_page->m_text ) );
 
     return TRUE;
 }
@@ -617,7 +617,7 @@ bool wxNotebook::InsertPage( int position,
     page->m_text = text;
     if (page->m_text.IsEmpty()) page->m_text = wxT("");
 
-    page->m_label = GTK_LABEL( gtk_label_new(page->m_text.mbc_str()) );
+    page->m_label = GTK_LABEL( gtk_label_new( wxGTK_CONV( page->m_text ) ) );
     gtk_box_pack_end( GTK_BOX(page->m_box), GTK_WIDGET(page->m_label), FALSE, FALSE, 3 );
 
     /* show the label */

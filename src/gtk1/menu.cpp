@@ -241,14 +241,12 @@ static void wxMenubarUnsetInvokingWindow( wxMenu *menu, wxWindow *win )
 {
     menu->SetInvokingWindow( (wxWindow*) NULL );
 
-#if GTK_CHECK_VERSION(1, 2, 0)
     wxWindow *top_frame = win;
     while (top_frame->GetParent() && !(top_frame->IsTopLevel()))
         top_frame = top_frame->GetParent();
 
-    /* support for native hot keys  */
+    /* support for native hot keys */
     gtk_accel_group_detach( menu->m_accel, ACCEL_OBJ_CAST(top_frame->m_widget) );
-#endif
 
     wxMenuItemList::Node *node = menu->GetMenuItems().GetFirst();
     while (node)
@@ -347,12 +345,12 @@ bool wxMenuBar::GtkAppend(wxMenu *menu, const wxString& title)
     /* GTK 1.2.0 doesn't have gtk_item_factory_get_item(), but GTK 1.2.1 has. */
 #if GTK_CHECK_VERSION(1, 2, 1)
 
-    /* local buffer in multibyte form */
     wxString buf;
     buf << wxT('/') << str.c_str();
 
-    char *cbuf = new char[buf.Length()+1];
-    strcpy(cbuf, buf.mbc_str());
+    /* local buffer in multibyte form */
+    char cbuf[400]; 
+    strcpy(cbuf, wxGTK_CONV(buf) );
 
     GtkItemFactoryEntry entry;
     entry.path = (gchar *)cbuf;  // const_cast
@@ -374,12 +372,11 @@ bool wxMenuBar::GtkAppend(wxMenu *menu, const wxString& title)
            pc++;
        tmp << *pc;
     }
-    menu->m_owner = gtk_item_factory_get_item( m_factory, tmp.mb_str() );
+    menu->m_owner = gtk_item_factory_get_item( m_factory, wxGTK_CONV( tmp ) );
     gtk_menu_item_set_submenu( GTK_MENU_ITEM(menu->m_owner), menu->m_menu );
-    delete [] cbuf;
 #else
 
-    menu->m_owner = gtk_menu_item_new_with_label( str.mb_str() );
+    menu->m_owner = gtk_menu_item_new_with_label( wxGTK_CONV( str ) );
     gtk_widget_show( menu->m_owner );
     gtk_menu_item_set_submenu( GTK_MENU_ITEM(menu->m_owner), menu->m_menu );
 
@@ -400,7 +397,6 @@ bool wxMenuBar::Insert(size_t pos, wxMenu *menu, const wxString& title)
     if ( !wxMenuBarBase::Insert(pos, menu, title) )
         return FALSE;
 
-#if __WXGTK12__
     // GTK+ doesn't have a function to insert a menu using GtkItemFactory (as
     // of version 1.2.6), so we first append the item and then change its
     // index
@@ -416,14 +412,6 @@ bool wxMenuBar::Insert(size_t pos, wxMenu *menu, const wxString& title)
     menu_shell->children = g_list_insert(menu_shell->children, data, pos);
 
     return TRUE;
-#else  // GTK < 1.2
-    // this should be easy to do with GTK 1.0 - can use standard functions for
-    // this and don't need any hacks like above, but as I don't have GTK 1.0
-    // any more I can't do it
-    wxFAIL_MSG( wxT("TODO") );
-
-    return FALSE;
-#endif // GTK 1.2/1.0
 }
 
 wxMenu *wxMenuBar::Replace(size_t pos, wxMenu *menu, const wxString& title)
@@ -564,7 +552,6 @@ wxString wxMenuBar::GetLabelTop( size_t pos ) const
 
     wxString label;
     wxString text( menu->GetTitle() );
-#if GTK_CHECK_VERSION(1, 2, 0)
     for ( const wxChar *pc = text.c_str(); *pc; pc++ )
     {
         if ( *pc == wxT('_') || *pc == wxT('&') )
@@ -576,9 +563,6 @@ wxString wxMenuBar::GetLabelTop( size_t pos ) const
 
         label += *pc;
     }
-#else // GTK+ 1.0
-    label = text;
-#endif // GTK+ 1.2/1.0
 
     return label;
 }
@@ -600,10 +584,10 @@ void wxMenuBar::SetLabelTop( size_t pos, const wxString& label )
         GtkLabel *label = GTK_LABEL( GTK_BIN(menu->m_owner)->child );
 
         /* set new text */
-        gtk_label_set( label, str.mb_str());
+        gtk_label_set( label, wxGTK_CONV( str ) );
 
         /* reparse key accel */
-        (void)gtk_label_parse_uline (GTK_LABEL(label), str.mb_str() );
+        (void)gtk_label_parse_uline (GTK_LABEL(label), wxGTK_CONV( str ) );
         gtk_accel_label_refetch( GTK_ACCEL_LABEL(label) );
     }
 
@@ -805,10 +789,10 @@ void wxMenuItem::SetText( const wxString& str )
           label = GTK_LABEL( GTK_BIN(m_menuItem)->child );
 
         /* set new text */
-        gtk_label_set( label, m_text.mb_str());
+        gtk_label_set( label, wxGTK_CONV( m_text ) );
 
         /* reparse key accel */
-        (void)gtk_label_parse_uline (GTK_LABEL(label), m_text.mb_str() );
+        (void)gtk_label_parse_uline (GTK_LABEL(label), wxGTK_CONV( m_text ) );
         gtk_accel_label_refetch( GTK_ACCEL_LABEL(label) );
     }
 }
@@ -854,16 +838,13 @@ void wxMenuItem::DoSetText( const wxString& str )
             m_text << *pc;
     }
 
-    /* only GTK 1.2 knows about hot keys */
     m_hotKey = wxT("");
 
-#if GTK_CHECK_VERSION(1, 2, 0)
     if(*pc == wxT('\t'))
     {
        pc++;
        m_hotKey = pc;
     }
-#endif // GTK+ 1.2.0+
 }
 
 #if wxUSE_ACCEL
@@ -952,17 +933,12 @@ IMPLEMENT_DYNAMIC_CLASS(wxMenu,wxEvtHandler)
 
 void wxMenu::Init()
 {
-#if GTK_CHECK_VERSION(1, 2, 0)
     m_accel = gtk_accel_group_new();
     m_factory = gtk_item_factory_new( GTK_TYPE_MENU, "<main>", m_accel );
     m_menu = gtk_item_factory_get_widget( m_factory, "<main>" );
-#else
-    m_menu = gtk_menu_new();  // Do not show!
-#endif
 
     m_owner = (GtkWidget*) NULL;
 
-#if GTK_CHECK_VERSION(1, 2, 0)
     /* Tearoffs are entries, just like separators. So if we want this
        menu to be a tear-off one, we just append a tearoff entry
        immediately. */
@@ -977,7 +953,6 @@ void wxMenu::Init()
        gtk_item_factory_create_item( m_factory, &entry, (gpointer) this, 2 );  /* what is 2 ? */
        //GtkWidget *menuItem = gtk_item_factory_get_widget( m_factory, "<main>/tearoff" );
     }
-#endif // GTK+ 1.2.0+
 
     // append the title as the very first entry if we have it
     if ( !!m_title )
@@ -1004,14 +979,11 @@ bool wxMenu::GtkAppend(wxMenuItem *mitem)
     bool appended = FALSE;
 #endif
 
-#if GTK_CHECK_VERSION(1, 2, 0)
     // does this item terminate the current radio group?
     bool endOfRadioGroup = TRUE;
-#endif // GTK+ >= 1.2
 
     if ( mitem->IsSeparator() )
     {
-#if GTK_CHECK_VERSION(1, 2, 0)
         GtkItemFactoryEntry entry;
         entry.path = (char *)"/sep";
         entry.callback = (GtkItemFactoryCallback) NULL;
@@ -1026,20 +998,16 @@ bool wxMenu::GtkAppend(wxMenuItem *mitem)
 
         // we might have a separator inside a radio group
         endOfRadioGroup = FALSE;
-#else // GTK+ 1.0
-        menuItem = gtk_menu_item_new();
-#endif // GTK 1.2/1.0
     }
     else if ( mitem->IsSubMenu() )
     {
-#if GTK_CHECK_VERSION(1, 2, 0)
         /* text has "_" instead of "&" after mitem->SetText() */
         wxString text( mitem->GetText() );
 
         /* local buffer in multibyte form */
         char buf[200];
         strcpy( buf, "/" );
-        strcat( buf, text.mb_str() );
+        strcat( buf, wxGTK_CONV( text ) );
 
         GtkItemFactoryEntry entry;
         entry.path = buf;
@@ -1051,10 +1019,7 @@ bool wxMenu::GtkAppend(wxMenuItem *mitem)
         gtk_item_factory_create_item( m_factory, &entry, (gpointer) this, 2 );  /* what is 2 ? */
 
         wxString path( mitem->GetFactoryPath() );
-        menuItem = gtk_item_factory_get_item( m_factory, path.mb_str() );
-#else // GTK+ 1.0
-        menuItem = gtk_menu_item_new_with_label(mitem->GetText().mbc_str());
-#endif // GTK 1.2/1.0
+        menuItem = gtk_item_factory_get_item( m_factory, wxGTK_CONV( path ) );
 
         gtk_menu_item_set_submenu( GTK_MENU_ITEM(menuItem), mitem->GetSubMenu()->m_menu );
 
@@ -1071,10 +1036,10 @@ bool wxMenu::GtkAppend(wxMenuItem *mitem)
         const wxBitmap *bitmap = &mitem->GetBitmap();
 
         menuItem = gtk_pixmap_menu_item_new ();
-        GtkWidget *label = gtk_accel_label_new (text.mb_str());
+        GtkWidget *label = gtk_accel_label_new ( wxGTK_CONV( text ) );
         gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
         gtk_container_add (GTK_CONTAINER (menuItem), label);
-        guint accel_key = gtk_label_parse_uline (GTK_LABEL(label), text.mb_str() );
+        guint accel_key = gtk_label_parse_uline (GTK_LABEL(label), wxGTK_CONV( text ) );
         gtk_accel_label_set_accel_widget (GTK_ACCEL_LABEL (label), menuItem);
         if (accel_key != GDK_VoidSymbol)
 	    {
@@ -1103,14 +1068,13 @@ bool wxMenu::GtkAppend(wxMenuItem *mitem)
 #endif // USE_MENU_BITMAPS
     else // a normal item
     {
-#if GTK_CHECK_VERSION(1, 2, 0)
         /* text has "_" instead of "&" after mitem->SetText() */
         wxString text( mitem->GetText() );
 
         /* local buffer in multibyte form */
         char buf[200];
         strcpy( buf, "/" );
-        strncat( buf, text.mb_str(), WXSIZEOF(buf) - 2 );
+        strncat( buf, wxGTK_CONV(text), WXSIZEOF(buf) - 2 );
         buf[WXSIZEOF(buf) - 1] = '\0';
 
         GtkItemFactoryEntry entry;
@@ -1119,6 +1083,7 @@ bool wxMenu::GtkAppend(wxMenuItem *mitem)
         entry.callback_action = 0;
 
         wxString pathRadio;
+        char buf2[200];
         const char *item_type;
         switch ( mitem->GetKind() )
         {
@@ -1136,9 +1101,11 @@ bool wxMenu::GtkAppend(wxMenuItem *mitem)
                 else // continue the radio group
                 {
                     pathRadio = m_pathLastRadio;
-                    pathRadio.Replace("_", "");
-                    pathRadio.Prepend("<main>/");
-                    item_type = pathRadio;
+                    pathRadio.Replace(wxT("_"), wxT(""));
+                    pathRadio.Prepend(wxT("<main>/"));
+                    strncat( buf2, wxGTK_CONV(pathRadio), WXSIZEOF(buf2) - 2 );
+                    buf2[WXSIZEOF(buf2) - 1] = '\0';
+                    item_type = buf2;
                 }
 
                 // continue the existing radio group, if any
@@ -1161,9 +1128,9 @@ bool wxMenu::GtkAppend(wxMenuItem *mitem)
         // due to an apparent bug in GTK+, we have to use a static buffer here -
         // otherwise GTK+ 1.2.2 manages to override the memory we pass to it
         // somehow! (VZ)
-        static char s_accel[50]; // must be big enougg
+        static char s_accel[50]; // must be big enough
         wxString tmp( GetHotKey(*mitem) );
-        strncpy(s_accel, tmp.mb_str(), WXSIZEOF(s_accel));
+        strncpy(s_accel, wxGTK_CONV( tmp ), WXSIZEOF(s_accel));
         entry.accelerator = s_accel;
 #else // !wxUSE_ACCEL
         entry.accelerator = (char*) NULL;
@@ -1172,15 +1139,7 @@ bool wxMenu::GtkAppend(wxMenuItem *mitem)
         gtk_item_factory_create_item( m_factory, &entry, (gpointer) this, 2 );  /* what is 2 ? */
 
         wxString path( mitem->GetFactoryPath() );
-        menuItem = gtk_item_factory_get_widget( m_factory, path.mb_str() );
-#else // GTK+ 1.0
-        menuItem = checkable ? gtk_check_menu_item_new_with_label( mitem->GetText().mb_str() )
-                             : gtk_menu_item_new_with_label( mitem->GetText().mb_str() );
-
-        gtk_signal_connect( GTK_OBJECT(menuItem), "activate",
-                            GTK_SIGNAL_FUNC(gtk_menu_clicked_callback),
-                            (gpointer)this );
-#endif // GTK+ 1.2/1.0
+        menuItem = gtk_item_factory_get_widget( m_factory, wxGTK_CONV( path ) );
     }
 
     if ( !mitem->IsSeparator() )
@@ -1194,22 +1153,12 @@ bool wxMenu::GtkAppend(wxMenuItem *mitem)
                             (gpointer)this );
     }
 
-#if !GTK_CHECK_VERSION(1, 2, 0)
-    if (!appended)
-    {
-        gtk_menu_append( GTK_MENU(m_menu), menuItem );
-        gtk_widget_show( menuItem );
-    }
-#endif // GTK+ 1.0
-
     mitem->SetMenuItem(menuItem);
 
-#if GTK_CHECK_VERSION(1, 2, 0)
     if ( endOfRadioGroup )
     {
         m_pathLastRadio.clear();
     }
-#endif // GTK+ >= 1.2
 
     return TRUE;
 }

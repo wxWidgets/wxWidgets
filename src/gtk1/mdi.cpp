@@ -18,6 +18,7 @@
 #include "wx/dialog.h"
 #include "wx/menu.h"
 #include "wx/intl.h"
+#include "wx/gtk/private.h"
 
 #include <glib.h>
 #include <gdk/gdk.h>
@@ -399,7 +400,7 @@ void wxMDIChildFrame::SetTitle( const wxString &title )
 
     wxMDIParentFrame* parent = (wxMDIParentFrame*) GetParent();
     GtkNotebook* notebook = GTK_NOTEBOOK(parent->m_widget);
-    gtk_notebook_set_tab_label_text(notebook, m_widget, title.mbc_str());
+    gtk_notebook_set_tab_label_text(notebook, m_widget, wxGTK_CONV( title ) );
 }
 
 //-----------------------------------------------------------------------------

@@ -29,6 +29,7 @@
 #include "wx/control.h"
 #include "wx/app.h"
 #include "wx/dcclient.h"
+#include "wx/gtk/private.h"
 
 #include <glib.h>
 #include <gdk/gdk.h>
@@ -368,9 +369,9 @@ bool wxTopLevelWindowGTK::Create( wxWindow *parent,
     }
 
     if (!name.IsEmpty())
-        gtk_window_set_wmclass( GTK_WINDOW(m_widget), name.mb_str(), name.mb_str() );
+        gtk_window_set_wmclass( GTK_WINDOW(m_widget), wxGTK_CONV( name ), wxGTK_CONV( name ) );
 
-    gtk_window_set_title( GTK_WINDOW(m_widget), title.mbc_str() );
+    gtk_window_set_title( GTK_WINDOW(m_widget), wxGTK_CONV( title ) );
     GTK_WIDGET_UNSET_FLAGS( m_widget, GTK_CAN_FOCUS );
 
     gtk_signal_connect( GTK_OBJECT(m_widget), "delete_event",
@@ -517,37 +518,38 @@ static Atom gs_XA_WIN_LAYER = 0;
 
 static void wx_win_hints_set_layer(GtkWidget *window, int layer)
 {
-  XEvent xev;
-  GdkWindowPrivate *priv;
-  gint prev_error;
+#ifndef __WXGTK20__
+    XEvent xev;
+    GdkWindowPrivate *priv;
+    gint prev_error;
   
-  prev_error = gdk_error_warnings;
-  gdk_error_warnings = 0;
-  priv = (GdkWindowPrivate*)(GTK_WIDGET(window)->window);
+    prev_error = gdk_error_warnings;
+    gdk_error_warnings = 0;
+    priv = (GdkWindowPrivate*)(GTK_WIDGET(window)->window);
   
-  if (GTK_WIDGET_MAPPED(window))
+    if (GTK_WIDGET_MAPPED(window))
     {
-      xev.type = ClientMessage;
-      xev.xclient.type = ClientMessage;
-      xev.xclient.window = priv->xwindow;
-      xev.xclient.message_type = gs_XA_WIN_LAYER;
-      xev.xclient.format = 32;
-      xev.xclient.data.l[0] = (long)layer;
-      xev.xclient.data.l[1] = gdk_time_get();
+        xev.type = ClientMessage;
+        xev.xclient.type = ClientMessage;
+        xev.xclient.window = priv->xwindow;
+        xev.xclient.message_type = gs_XA_WIN_LAYER;
+        xev.xclient.format = 32;
+        xev.xclient.data.l[0] = (long)layer;
+        xev.xclient.data.l[1] = gdk_time_get();
       
-      XSendEvent(GDK_DISPLAY(), GDK_ROOT_WINDOW(), False,
-         SubstructureNotifyMask, (XEvent*) &xev);
+        XSendEvent(GDK_DISPLAY(), GDK_ROOT_WINDOW(), False,
+            SubstructureNotifyMask, (XEvent*) &xev);
     }
-  else
+    else
     {
-      long data[1];
+        long data[1];
       
-      data[0] = layer;
-      XChangeProperty(GDK_DISPLAY(), priv->xwindow, gs_XA_WIN_LAYER,
-              XA_CARDINAL, 32, PropModeReplace, (unsigned char *)data,
-              1);
+        data[0] = layer;
+        XChangeProperty(GDK_DISPLAY(), priv->xwindow, gs_XA_WIN_LAYER,
+              XA_CARDINAL, 32, PropModeReplace, (unsigned char *)data, 1);
     }
-  gdk_error_warnings = prev_error;
+    gdk_error_warnings = prev_error;
+#endif
 }
 
 bool wxTopLevelWindowGTK::ShowFullScreen(bool show, long style )
@@ -860,7 +862,7 @@ void wxTopLevelWindowGTK::SetTitle( const wxString &title )
     wxASSERT_MSG( (m_widget != NULL), wxT("invalid frame") );
 
     m_title = title;
-    gtk_window_set_title( GTK_WINDOW(m_widget), title.mbc_str() );
+    gtk_window_set_title( GTK_WINDOW(m_widget), wxGTK_CONV( title ) );
 }
 
 void wxTopLevelWindowGTK::DoSetIcon( const wxIcon &icon )

@@ -544,7 +544,7 @@ bool wxApp::SendIdleEvents( wxWindow* win )
     event.SetEventObject(win);
 
     win->GetEventHandler()->ProcessEvent(event);
-
+    
     if (event.MoreRequested())
         needMore = TRUE;
 

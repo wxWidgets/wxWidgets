@@ -19,6 +19,7 @@
 
 #include "gtk/gtk.h"
 #include "wx/gtk/win_gtk.h"
+#include "wx/gtk/private.h"
 
 #include <gdk/gdk.h>
 #include <gdk/gdkprivate.h>
@@ -100,7 +101,7 @@ static void gtk_window_own_expose_callback( GtkWidget *widget, GdkEventExpose *g
         gdk_draw_string( pizza->bin_window, font, gc,
                          6,
                          3+font->ascent,
-                         win->m_title.mb_str() );
+                         wxGTK_CONV( win->m_title ) );
 
         gdk_gc_unref( gc );
     }
@@ -144,7 +145,7 @@ static void gtk_window_own_draw_callback( GtkWidget *widget, GdkRectangle *WXUNU
         gdk_draw_string( pizza->bin_window, font, gc,
                          6,
                          3+font->ascent,
-                         win->m_title.mb_str() );
+                         wxGTK_CONV( win->m_title ) );
 
         gdk_gc_unref( gc );
     }

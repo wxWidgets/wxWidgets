@@ -21,6 +21,7 @@
 #include "wx/intl.h"
 #include "wx/checklst.h"
 #include "wx/settings.h"
+#include "wx/gtk/private.h"
 
 #if wxUSE_TOOLTIPS
 #include "wx/tooltip.h"
@@ -537,7 +538,7 @@ void wxListBox::GtkAddItem( const wxString &item, int pos )
     }
 #endif // wxUSE_CHECKLISTBOX
 
-    list_item = gtk_list_item_new_with_label( label.mbc_str() );
+    list_item = gtk_list_item_new_with_label( wxGTK_CONV( label ) );
 
     GList *gitem_list = g_list_alloc ();
     gitem_list->data = list_item;
@@ -737,7 +738,7 @@ void wxListBox::SetString( int n, const wxString &string )
 #endif // wxUSE_CHECKLISTBOX
         str += string;
 
-        gtk_label_set( label, str.mbc_str() );
+        gtk_label_set( label, wxGTK_CONV( str ) );
     }
     else
     {
@@ -755,7 +756,7 @@ wxString wxListBox::GetString( int n ) const
         GtkBin *bin = GTK_BIN( child->data );
         GtkLabel *label = GTK_LABEL( bin->child );
 
-        wxString str = wxString(GET_REAL_LABEL(label->label),*wxConvCurrent);
+        wxString str = wxGTK_CONV_BACK(  GET_REAL_LABEL(label->label) );
 
         return str;
     }
@@ -784,7 +785,7 @@ int wxListBox::FindString( const wxString &item ) const
         GtkBin *bin = GTK_BIN( child->data );
         GtkLabel *label = GTK_LABEL( bin->child );
 
-        wxString str = wxString(GET_REAL_LABEL(label->label),*wxConvCurrent);
+        wxString str = wxGTK_CONV_BACK( GET_REAL_LABEL(label->label) );
 
         if (str == item)
             return count;

@@ -214,9 +214,9 @@ wxFontRefData::wxFontRefData(const wxString& fontname)
     {
         // the test below catches all of BOLD, EXTRABOLD, DEMIBOLD, ULTRABOLD
         // and BLACK
-        if ( ((w[0u] == _T('B') && (!strcmp(w.c_str() + 1, _T("OLD")) ||
-                                   !strcmp(w.c_str() + 1, _T("LACK"))))) ||
-             strstr(w.c_str() + 1, _T("BOLD")) )
+        if ( ((w[0u] == _T('B') && (!wxStrcmp(w.c_str() + 1, wxT("OLD")) ||
+                                   !wxStrcmp(w.c_str() + 1, wxT("LACK"))))) ||
+             wxStrstr(w.c_str() + 1, _T("BOLD")) )
         {
             m_weight = wxFONTWEIGHT_BOLD;
         }

@@ -256,8 +256,9 @@ int wxChoice::FindString( const wxString &string ) const
             label = GTK_LABEL( BUTTON_CHILD(m_widget) );
 
         wxASSERT_MSG( label != NULL , wxT("wxChoice: invalid label") );
-
-        if (string == wxString(label->label,*wxConvCurrent))
+        
+        wxString tmp( wxGTK_CONV_BACK( label->label ) );
+        if (string == tmp)
             return count;
 
         child = child->next;
@@ -312,7 +313,7 @@ wxString wxChoice::GetString( int n ) const
 
             wxASSERT_MSG( label != NULL , wxT("wxChoice: invalid label") );
 
-            return wxString(label->label,*wxConvCurrent);
+            return wxString( wxGTK_CONV_BACK(label->label) );
         }
         child = child->next;
         count++;
@@ -375,7 +376,7 @@ void wxChoice::ApplyWidgetStyle()
 
 size_t wxChoice::GtkAppendHelper(GtkWidget *menu, const wxString& item)
 {
-    GtkWidget *menu_item = gtk_menu_item_new_with_label( item.mbc_str() );
+    GtkWidget *menu_item = gtk_menu_item_new_with_label( wxGTK_CONV( item ) );
 
     size_t index;
     if ( m_strings )
@@ -439,7 +440,8 @@ wxSize wxChoice::DoGetBestSize() const
         size_t count = GetCount();
         for ( size_t n = 0; n < count; n++ )
         {
-            width = (wxCoord)gdk_string_width(font, GetString(n).mbc_str());
+            // FIXME GTK 2.0
+            width = (wxCoord)gdk_string_width(font, wxGTK_CONV( GetString(n) ) );
             if ( width > ret.x )
                 ret.x = width;
         }
@@ -461,7 +463,7 @@ wxSize wxChoice::DoGetBestSize() const
     if ( ret.x < 80 )
         ret.x = 80;
 
-    ret.y = 16 + gdk_char_height(GET_STYLE_FONT( m_widget->style ), 'H');
+    ret.y = 16 + gdk_char_height(GET_STYLE_FONT( m_widget->style ), 'H' );
 
     return ret;
 }

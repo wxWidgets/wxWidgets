@@ -17,6 +17,7 @@
 #if wxUSE_STATTEXT
 
 #include "wx/stattext.h"
+#include "wx/gtk/private.h"
 
 #include "gdk/gdk.h"
 #include "gtk/gtk.h"
