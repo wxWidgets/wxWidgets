@@ -1,0 +1,18 @@
+# Purpose: makefile for console sample (VC++ 32bit)
+# Created: 2000-01-03
+
+# Set WXDIR for your system
+WXDIR = $(WXWIN)
+wxUSE_GUI = 0
+
+PROGRAM=console 
+OBJECTS = $(PROGRAM).obj
+
+!if "$(FINAL)" == "1"
+EXTRALIBS=$(WXDIR)\lib\zlib.lib
+!else
+EXTRALIBS=$(WXDIR)\lib\zlibd.lib
+!endif
+
+!include $(WXDIR)\src\makeprog.vc
+
