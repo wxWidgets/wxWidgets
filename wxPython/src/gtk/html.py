@@ -227,6 +227,10 @@ class HtmlWinParser(HtmlParser):
         """SetFonts(self, String normal_face, String fixed_face, PyObject sizes=None)"""
         return _html.HtmlWinParser_SetFonts(*args, **kwargs)
 
+    def NormalizeFontSizes(*args, **kwargs):
+        """NormalizeFontSizes(self, int size=-1)"""
+        return _html.HtmlWinParser_NormalizeFontSizes(*args, **kwargs)
+
     def GetContainer(*args, **kwargs):
         """GetContainer(self) -> HtmlContainerCell"""
         return _html.HtmlWinParser_GetContainer(*args, **kwargs)
@@ -1008,6 +1012,10 @@ class HtmlWindow(_windows.ScrolledWindow):
         """SetFonts(self, String normal_face, String fixed_face, PyObject sizes=None)"""
         return _html.HtmlWindow_SetFonts(*args, **kwargs)
 
+    def NormalizeFontSizes(*args, **kwargs):
+        """NormalizeFontSizes(self, int size=-1)"""
+        return _html.HtmlWindow_NormalizeFontSizes(*args, **kwargs)
+
     def SetTitle(*args, **kwargs):
         """SetTitle(self, String title)"""
         return _html.HtmlWindow_SetTitle(*args, **kwargs)
@@ -1187,6 +1195,10 @@ class HtmlDCRenderer(_core.Object):
         """SetFonts(self, String normal_face, String fixed_face, PyObject sizes=None)"""
         return _html.HtmlDCRenderer_SetFonts(*args, **kwargs)
 
+    def NormalizeFontSizes(*args, **kwargs):
+        """NormalizeFontSizes(self, int size=-1)"""
+        return _html.HtmlDCRenderer_NormalizeFontSizes(*args, **kwargs)
+
     def Render(*args, **kwargs):
         """
         Render(self, int x, int y, int from=0, int dont_render=False, int to=INT_MAX, 
@@ -1237,6 +1249,10 @@ class HtmlPrintout(_windows.Printout):
     def SetFonts(*args, **kwargs):
         """SetFonts(self, String normal_face, String fixed_face, PyObject sizes=None)"""
         return _html.HtmlPrintout_SetFonts(*args, **kwargs)
+
+    def NormalizeFontSizes(*args, **kwargs):
+        """NormalizeFontSizes(self, int size=-1)"""
+        return _html.HtmlPrintout_NormalizeFontSizes(*args, **kwargs)
 
     def SetMargins(*args, **kwargs):
         """
@@ -1321,6 +1337,10 @@ class HtmlEasyPrinting(_core.Object):
     def SetFonts(*args, **kwargs):
         """SetFonts(self, String normal_face, String fixed_face, PyObject sizes=None)"""
         return _html.HtmlEasyPrinting_SetFonts(*args, **kwargs)
+
+    def NormalizeFontSizes(*args, **kwargs):
+        """NormalizeFontSizes(self, int size=-1)"""
+        return _html.HtmlEasyPrinting_NormalizeFontSizes(*args, **kwargs)
 
     def GetPrintData(*args, **kwargs):
         """GetPrintData(self) -> PrintData"""
