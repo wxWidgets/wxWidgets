@@ -158,8 +158,7 @@ LockResult wxSingleInstanceCheckerImpl::CreateLockFile()
     if ( m_fdLock != -1 )
     {
         // try to lock it
-        int rc = wxLockFile(m_fdLock, LOCK);
-        if ( rc == 0 )
+        if ( wxLockFile(m_fdLock, LOCK) == 0 )
         {
             // fine, we have the exclusive lock to the file, write our PID
             // into it
@@ -188,7 +187,7 @@ LockResult wxSingleInstanceCheckerImpl::CreateLockFile()
             close(m_fdLock);
             m_fdLock = -1;
 
-            if ( rc != EACCES && rc != EAGAIN )
+            if ( errno != EACCES && errno != EAGAIN )
             {
                 wxLogSysError(_("Failed to lock the lock file '%s'"),
                               m_nameLock.c_str());
@@ -332,7 +331,12 @@ bool wxSingleInstanceChecker::Create(const wxString& name,
     wxString fullname = path;
     if ( fullname.empty() )
     {
-        fullname << wxGetHomeDir() << _T('/');
+        fullname = wxGetHomeDir();
+    }
+
+    if ( fullname.Last() != _T('/') )
+    {
+        fullname += _T('/');
     }
 
     fullname << name;
