@@ -1,13 +1,9 @@
-#
-# Makefile for WATCOM
-#
-# Created by Julian Smart, January 1999
-# 
-#
+# Purpose: makefile for wizard example (Watcom)
+# Created: 2000-03-15
 
 WXDIR = $(%WXWIN)
 
-PROGRAM = wiztest
+PROGRAM = wizard
 OBJECTS = $(PROGRAM).obj
 
 !include $(WXDIR)\src\makeprog.wat

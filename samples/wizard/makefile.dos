@@ -1,16 +1,9 @@
-#
-# File:		makefile.dos
-# Author:	Julian Smart
-# Created:	1998
-# Updated:	
-#
-# Makefile : Builds 16-bit sample, VC++ 1.5
-# Use FINAL=1 argument to nmake to build final version with no debugging
-# info
+# Purpose: makefile for wizard example (VC++ 1.5x)
+# Created: 2000-03-15
 
 WXDIR = $(WXWIN)
 
-TARGET=wiztest
+TARGET=wizard
 OBJECTS=$(TARGET).obj
 
 !include $(WXDIR)\src\makeprog.msc

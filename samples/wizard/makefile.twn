@@ -1,0 +1,35 @@
+# Purpose: makefile for wizard example (TWIN)
+# Created: 2000-03-15
+
+WXDIR = ../..
+
+# All common UNIX compiler flags and options are now in
+# this central makefile.
+include $(WXDIR)/src/maketwin.env
+
+OBJECTS = $(OBJDIR)/wizard.$(OBJSUFF) $(OBJDIR)/wizard.$(OBJSUFF)
+
+all:    $(OBJDIR) wizard$(GUISUFFIX)$(EXESUFF)
+
+wx:
+
+$(OBJDIR):
+	mkdir $(OBJDIR)
+
+wizard$(GUISUFFIX)$(EXESUFF):	$(OBJECTS) $(WXLIB)
+	$(CC) $(LDFLAGS) -o wizard$(GUISUFFIX)$(EXESUFF) $(OBJECTS) $(LDLIBS)
+
+$(OBJDIR)/wizard.$(OBJSUFF):	wizard.$(SRCSUFF)
+	$(CC) -c $(CPPFLAGS) -o $@ wizard.$(SRCSUFF)
+
+wizard.c:  wizard.rc
+	$(RESCOMP) $(RCINPUTSWITCH) wizard.rc $(RCOUTPUTSWITCH) wizard.c $(RESFLAGS)
+
+$(OBJDIR)/wizard.$(OBJSUFF):	wizard.c
+	$(CC) -c $(CPPFLAGS) -o $@ wizard.c
+
+#$(OBJDIR)/wizard.o:  wizard.rc
+#	$(RESCOMP) $(RCINPUTSWITCH) wizard.rc $(RCOUTPUTSWITCH) $(OBJDIR)/wizard.o $(RESFLAGS)
+
+clean:
+	rm -f $(OBJECTS) wizard$(GUISUFFIX).exe core *.rsc *.res

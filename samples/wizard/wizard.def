@@ -1,5 +1,5 @@
-NAME         Wiztest
-DESCRIPTION  'Wiztest wxWindows application'
+NAME         Wizard
+DESCRIPTION  'wxWizard sample application'
 EXETYPE      WINDOWS
 CODE         PRELOAD MOVEABLE DISCARDABLE
 DATA         PRELOAD MOVEABLE MULTIPLE

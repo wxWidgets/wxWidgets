@@ -1,13 +1,5 @@
-#
-# File:		makefile.unx
-# Author:	Julian Smart
-# Created:	1998
-# Updated:	
-# Copyright:	(c) 1998 Julian Smart
-#
-# "%W% %G%"
-#
-# Makefile for wiztest example (UNIX).
+# Purpose: makefile for wizard example (UNIX).
+# Created: 2000-03-15
 
 top_srcdir = @top_srcdir@/..
 top_builddir = ../..
@@ -15,7 +7,7 @@ program_dir = samples/wizard
 
 PROGRAM=wizard
 
-OBJECTS=wiztest.o
+OBJECTS=$(PROGRAM).o
 
 include ../../src/makeprog.env
 

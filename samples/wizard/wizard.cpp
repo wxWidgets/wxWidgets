@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        wiztest.cpp
+// Name:        wizard.cpp
 // Purpose:     wxWindows sample demonstrating wxWizard control
 // Author:      Vadim Zeitlin
 // Modified by:
@@ -18,8 +18,8 @@
 // ----------------------------------------------------------------------------
 
 #ifdef __GNUG__
-    #pragma implementation "wiztest.cpp"
-    #pragma interface "wiztest.cpp"
+    #pragma implementation "wizard.cpp"
+    #pragma interface "wizard.cpp"
 #endif
 
 // For compilers that support precompilation, includes "wx/wx.h".
