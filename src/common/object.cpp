@@ -33,9 +33,6 @@
 #endif
 
 #if defined(__WXDEBUG__) || wxUSE_DEBUG_CONTEXT
-    // for wxObject::Dump
-    #include "wx/ioswrap.h"
-
     #if defined(__VISAGECPP__)
         #define DEBUG_PRINTF(NAME) { static int raz=0; \
             printf( #NAME " %i\n",raz); fflush(stdout); raz++; }
@@ -100,17 +97,6 @@ bool wxObject::IsKindOf(wxClassInfo *info) const
     wxClassInfo *thisInfo = GetClassInfo();
     return (thisInfo) ? thisInfo->IsKindOf(info) : FALSE ;
 }
-
-#if wxUSE_STD_IOSTREAM && (defined(__WXDEBUG__) || wxUSE_DEBUG_CONTEXT)
-void wxObject::Dump(wxSTD ostream& str)
-{
-    if (GetClassInfo() && GetClassInfo()->GetClassName())
-        str << GetClassInfo()->GetClassName();
-    else
-        str << _T("unknown object class");
-}
-#endif
-
 
 #if defined(__WXDEBUG__) && wxUSE_MEMORY_TRACING && defined( new )
 	#undef new

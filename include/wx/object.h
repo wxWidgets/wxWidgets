@@ -415,11 +415,6 @@ inline void wxCheckCast(void *ptr)
 
 #endif // WXDEBUG && wxUSE_MEMORY_TRACING
 
-#if wxUSE_STD_IOSTREAM && (defined(__WXDEBUG__) || wxUSE_DEBUG_CONTEXT)
-// needed by wxObject::Dump
-#include "wx/iosfwrap.h"
-#endif
-
 // ----------------------------------------------------------------------------
 // wxObject: the root class of wxWindows object hierarchy
 // ----------------------------------------------------------------------------
@@ -481,11 +476,6 @@ public:
 
 #ifdef _WX_WANT_ARRAY_DELETE_VOID_WXCHAR_INT
     void operator delete[] (void* buf, const wxChar*, int );
-#endif
-
-
-#if wxUSE_STD_IOSTREAM && (defined(__WXDEBUG__) || wxUSE_DEBUG_CONTEXT)
-    virtual void Dump(wxSTD ostream& str);
 #endif
 
     // ref counted data handling methods
