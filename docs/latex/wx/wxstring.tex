@@ -905,27 +905,42 @@ Same as \helpref{Mid}{wxstringmid}.
 
 \membersection{wxString::ToDouble}\label{wxstringtodouble}
 
-\constfunc{bool}{To}{\param{double}{ *val}}
+\constfunc{bool}{ToDouble}{\param{double}{ *val}}
 
 Attempts to convert the string to a floating point number. Returns TRUE on
 success (the number is stored in the location pointed to by {\it val}) or FALSE
 if the string does not represent such number.
 
+\wxheading{See also}
+
+\helpref{wxString::ToLong}{wxstringtolong},\\
+\helpref{wxString::ToULong}{wxstringtoulong}
+
 \membersection{wxString::ToLong}\label{wxstringtolong}
 
-\constfunc{bool}{To}{\param{long}{ *val}}
+\constfunc{bool}{ToLong}{\param{long}{ *val}}
 
 Attempts to convert the string to a signed integer. Returns TRUE on success
 (the number is stored in the location pointed to by {\it val}) or FALSE if the
 string does not represent such number.
 
+\wxheading{See also}
+
+\helpref{wxString::ToDouble}{wxstringtodouble},\\
+\helpref{wxString::ToULong}{wxstringtoulong}
+
 \membersection{wxString::ToULong}\label{wxstringtoulong}
 
-\constfunc{bool}{To}{\param{unsigned long}{ *val}}
+\constfunc{bool}{ToULong}{\param{unsigned long}{ *val}}
 
 Attempts to convert the string to an unsigned integer. Returns TRUE on success
 (the number is stored in the location pointed to by {\it val}) or FALSE if the
 string does not represent such number.
+
+\wxheading{See also}
+
+\helpref{wxString::ToDouble}{wxstringtodouble},\\
+\helpref{wxString::ToLong}{wxstringtolong}
 
 \membersection{wxString::Trim}\label{wxstringtrim}
 
