@@ -267,6 +267,7 @@ samples/help/*.hhc
 samples/help/*.hpj
 samples/help/*.tex
 samples/help/*.ini
+samples/help/cshelp.txt
 samples/help/doc/*.html
 samples/help/doc/*.htm
 samples/help/doc/*.class
