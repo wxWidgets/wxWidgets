@@ -1,6 +1,7 @@
 # makefile
 
-CC = g++
+CXXFLAGS = `wx-config --cxxflags`
+LDFLAGS = `wx-config --libs`
 
 PROGRAM = tex2rtf
 
@@ -11,12 +12,12 @@ OBJECTS = tex2rtf.o tex2any.o texutils.o rtfutils.o xlputils.o htmlutil.o readsh
 .SUFFIXES:	.o .cpp
 
 .cpp.o :
-	$(CXX) -c `wx-config --cxxflags` -o $@ $<
+	$(CXX) -c $(CXXFLAGS)  -o $@ $<
 
 all:    $(PROGRAM)
 
 $(PROGRAM):	$(OBJECTS)
-	$(CXX) -o $(PROGRAM) $(OBJECTS) `wx-config --libs`
+	$(CXX) -o $(PROGRAM) $(OBJECTS) $(LDFLAGS) 
 
 clean:
 	rm -f *.o $(PROGRAM)
