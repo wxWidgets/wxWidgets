@@ -69,6 +69,8 @@ public:
         // lay out the window and its children
     virtual bool Layout();
 
+    virtual void DoSetVirtualSize( int x, int y );
+
 protected:
     // this is needed for wxEVT_PAINT processing hack described in
     // wxScrollHelperEvtHandler::ProcessEvent()
@@ -91,3 +93,5 @@ private:
 
 #endif
     // _WX_GENERIC_SCROLLWIN_H_
+
+// vi:sts=4:sw=4:et

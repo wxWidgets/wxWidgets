@@ -2,7 +2,7 @@
 // Name:        wx/window.h
 // Purpose:     wxWindowBase class - the interface of wxWindow
 // Author:      Vadim Zeitlin
-// Modified by:
+// Modified by: Ron Lee
 // Created:     01/02/97
 // RCS-ID:      $Id$
 // Copyright:   (c) wxWindows team
@@ -293,6 +293,9 @@ public:
                                int maxW = -1, int maxH = -1,
                                int incW = -1, int incH = -1 );
 
+    virtual void SetVirtualSizeHints( int minW, int minH,
+                                      int maxW = -1, int maxH = -1 );
+
     virtual int GetMinWidth() const { return m_minWidth; }
     virtual int GetMinHeight() const { return m_minHeight; }
     int GetMaxWidth() const { return m_maxWidth; }
@@ -300,6 +303,33 @@ public:
 
         // Override this method to control the values given to Sizers etc.
     virtual wxSize GetMaxSize() const { return wxSize( m_maxWidth, m_maxHeight ); }
+
+        // Methods for accessing the virtual size of a window.  For most
+        // windows this is just the client area of the window, but for
+        // some like scrolled windows it is more or less independent of
+        // the screen window size.  You may override the DoXXXVirtual
+        // methods below for classes where that is is the case.
+
+    void SetVirtualSize( const wxSize &size ) { DoSetVirtualSize( size.x, size.y ); }
+    void SetVirtualSize( int x, int y ) { DoSetVirtualSize( x, y ); }
+
+    wxSize GetVirtualSize() const { return DoGetVirtualSize(); }
+    void GetVirtualSize( int *x, int *y ) const
+    {
+        wxSize s( DoGetVirtualSize() );
+
+        if( x )
+            *x = s.GetWidth();
+        if( y )
+            *y = s.GetHeight();
+    }
+
+        // Override these methods for windows that have a virtual size
+        // independent of their client size.  eg. the virtual area of a
+        // wxScrolledWindow.  Default is to alias VirtualSize to ClientSize.
+
+    virtual void DoSetVirtualSize( int x, int y );
+    virtual wxSize DoGetVirtualSize() const; // { return m_virtualSize; }
 
     // window state
     // ------------
@@ -740,6 +770,8 @@ public:
 
         // sizers
     void SetSizer(wxSizer *sizer, bool deleteOld = TRUE );
+    void SetSizerAndFit( wxSizer *sizer, bool deleteOld = TRUE );
+
     wxSizer *GetSizer() const { return m_windowSizer; }
 
     // Track if this window is a member of a sizer
@@ -790,6 +822,7 @@ public:
 #endif // wxUSE_PALETTE
 
 protected:
+
     // the window id - a number which uniquely identifies a window among
     // its siblings unless it is -1
     wxWindowID           m_windowId;
@@ -878,7 +911,13 @@ protected:
     bool                 m_hasCustomPalette;
 #endif // wxUSE_PALETTE
 
-protected:
+    // Virtual size (scrolling)
+    wxSize                m_virtualSize;
+
+    int                   m_minVirtualWidth;    // VirtualSizeHints
+    int                   m_minVirtualHeight;
+    int                   m_maxVirtualWidth;
+    int                   m_maxVirtualHeight;
 
     // common part of all ctors: it is not virtual because it is called from
     // ctor

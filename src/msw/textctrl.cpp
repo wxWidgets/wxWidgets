@@ -701,8 +701,8 @@ bool wxTextCtrl::EmulateKeyPress(const wxKeyEvent& event)
     size_t lenOld = GetValue().length();
 
     wxUint32 code = event.GetRawKeyCode();
-    ::keybd_event(code, 0, 0 /* key press */, NULL);
-    ::keybd_event(code, 0, KEYEVENTF_KEYUP, NULL);
+    ::keybd_event(code, 0, 0 /* key press */, 0);
+    ::keybd_event(code, 0, KEYEVENTF_KEYUP, 0);
 
     // assume that any alphanumeric key changes the total number of characters
     // in the control - this should work in 99% of cases

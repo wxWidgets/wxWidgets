@@ -97,6 +97,7 @@ arg	:	WORD EQUALS arg1
                          free($1); }
 	|	arg1
 			{$$ = $1; }
+	;
 
 arg1	:	WORD
 			{$$ = wxmake_word($1); free($1);}

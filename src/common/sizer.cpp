@@ -2,7 +2,7 @@
 // Name:        sizer.cpp
 // Purpose:     provide new wxSizer class for layout
 // Author:      Robert Roebling and Robin Dunn
-// Modified by:
+// Modified by: Ron Lee
 // Created:
 // RCS-ID:      $Id$
 // Copyright:   (c) Robin Dunn, Dirk Holtwick and Robert Roebling
@@ -412,6 +412,17 @@ void wxSizer::Fit( wxWindow *window )
     window->SetSize( size );
 }
 
+void wxSizer::FitInside( wxWindow *window )
+{
+    wxSize size;
+    if (window->IsTopLevel())
+        size = VirtualFitSize( window );
+    else
+        size = GetMinClientSize( window );
+
+    window->SetVirtualSize( size );
+}
+
 void wxSizer::Layout()
 {
     CalcMin();
@@ -423,11 +434,25 @@ void wxSizer::SetSizeHints( wxWindow *window )
     // Preserve the window's max size hints, but set the
     // lower bound according to the sizer calculations.
 
-    wxSize size = FitSize( window );
+    Fit( window );
+    wxSize  size( window->GetSize() );
     window->SetSizeHints( size.x,
                           size.y,
                           window->GetMaxWidth(),
                           window->GetMaxHeight() );
+}
+
+void wxSizer::SetVirtualSizeHints( wxWindow *window )
+{
+    // Preserve the window's max size hints, but set the
+    // lower bound according to the sizer calculations.
+
+    FitInside( window );
+    wxSize size( window->GetVirtualSize() );
+    window->SetVirtualSizeHints( size.x,
+                                 size.y,
+                                 window->GetMaxWidth(),
+                                 window->GetMaxHeight() );
 }
 
 wxSize wxSizer::GetMaxWindowSize( wxWindow *window )
@@ -449,6 +474,42 @@ wxSize wxSizer::FitSize( wxWindow *window )
 {
     wxSize size     = GetMinWindowSize( window );
     wxSize sizeMax  = GetMaxWindowSize( window );
+
+    // Limit the size if sizeMax != wxDefaultSize
+
+    if ( size.x > sizeMax.x && sizeMax.x != -1 )
+        size.x = sizeMax.x;
+    if ( size.y > sizeMax.y && sizeMax.y != -1 )
+        size.y = sizeMax.y;
+
+    return size;
+}
+
+wxSize wxSizer::GetMaxClientSize( wxWindow *window )
+{
+    wxSize maxSize( window->GetMaxSize() );
+
+    if( maxSize != wxDefaultSize )
+    {
+        wxSize size( window->GetSize() );
+        wxSize client_size( window->GetClientSize() );
+
+        return wxSize( maxSize.x + client_size.x - size.x,
+                       maxSize.y + client_size.y - size.y );
+    }
+    else
+        return wxDefaultSize;
+}
+
+wxSize wxSizer::GetMinClientSize( wxWindow *window )
+{
+    return GetMinSize();  // Already returns client size.
+}
+
+wxSize wxSizer::VirtualFitSize( wxWindow *window )
+{
+    wxSize size     = GetMinClientSize( window );
+    wxSize sizeMax  = GetMaxClientSize( window );
 
     // Limit the size if sizeMax != wxDefaultSize
 

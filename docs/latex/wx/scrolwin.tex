@@ -358,11 +358,22 @@ scroll steps may be variable according to the position in the document, it will 
 necessary to derive a new class from wxWindow, overriding {\bf OnSize} and
 adjusting the scrollbars appropriately.
 
+\wxheading{See also}
+
+\helpref{wxWindow::SetVirtualSize}{wxwindowsetvirtualsize}
+
+\membersection{wxScrolledWindow::SetScrollRate}\label{wxscrolledwindowsetscrollrate}
+
+\func{void}{SetScrollRate}{\param{int}{xstep}, \param{int}{ystep}}
+
+Set the horizontal and vertical scrolling increment only.  See the pixelsPerUnit
+parameter in SetScrollbars.
+
 \membersection{wxScrolledWindow::SetTargetWindow}\label{wxscrolledwindowsettargetwindow}
 
 \func{void}{SetTargetWindow}{\param{wxWindow* }{window}}
 
-Call this function to tell wxScrolledWindow to perform the actually scrolling on
+Call this function to tell wxScrolledWindow to perform the actual scrolling on
 a different window (not on itself).
 
 \membersection{wxScrolledWindow::GetViewStart}\label{wxscrolledwindowgetviewstart}

@@ -2,7 +2,7 @@
 // Name:        sizer.h
 // Purpose:     provide wxSizer class for layouting
 // Author:      Robert Roebling and Robin Dunn
-// Modified by:
+// Modified by: Ron Lee
 // Created:
 // RCS-ID:      $Id$
 // Copyright:   (c) Robin Dunn, Dirk Holtwick and Robert Roebling
@@ -185,7 +185,9 @@ public:
     virtual void Layout();
 
     void Fit( wxWindow *window );
+    void FitInside( wxWindow *window );
     void SetSizeHints( wxWindow *window );
+    void SetVirtualSizeHints( wxWindow *window );
 
     wxList& GetChildren()
         { return m_children; }
@@ -200,7 +202,10 @@ protected:
 
     wxSize GetMaxWindowSize( wxWindow *window );
     wxSize GetMinWindowSize( wxWindow *window );
+    wxSize GetMaxClientSize( wxWindow *window );
+    wxSize GetMinClientSize( wxWindow *window );
     wxSize FitSize( wxWindow *window );
+    wxSize VirtualFitSize( wxWindow *window );
 
     virtual void DoSetMinSize( int width, int height );
     virtual bool DoSetItemMinSize( wxWindow *window, int width, int height );

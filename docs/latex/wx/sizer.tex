@@ -131,6 +131,20 @@ Tell the sizer to resize the {\it window} to match the sizer's minimal size. Thi
 is commonly done in the constructor of the window itself, see sample in the description
 of \helpref{wxBoxSizer}{wxboxsizer}.
 
+\membersection{wxSizer::FitInside}\label{wxsizerfitinside}
+
+\func{void}{FitInside}{\param{wxWindow* }{window}}
+
+Tell the sizer to resize the virtual size of the {\it window} to match the sizer's
+minimal size.  This will not alter the on screen size of the window, but may cause
+the addition/removal/alteration of scrollbars required to view the virtual area in
+windows which manage it.
+
+\wxheading{See also}
+
+\helpref{wxScrolledWindow::SetScrollbars}{wxscrolledwindowsetscrollbars},\rtfsp
+\helpref{wxSizer::SetVirtualSizeHints}{wxsizersetvirtualsizehints}
+
 \membersection{wxSizer::GetSize}\label{wxsizergetsize}
 
 \func{wxSize}{GetSize}{\void}
@@ -230,8 +244,19 @@ after initial creation.
 
 \func{void}{SetSizeHints}{\param{wxWindow* }{window}}
 
-Tell the sizer to set the minimal size of the {\it window} to match the sizer's minimal size.
-This is commonly done in the constructor of the window itself, see sample in the description
-of \helpref{wxBoxSizer}{wxboxsizer} if the window is resizable (as are many dialogs under Unix and
-frames on probably all platforms).
+Tell the sizer to set (and \helpref{Fit}{wxsizerfit}) the minimal size of the {\it window} to
+match the sizer's minimal size.  This is commonly done in the constructor of the window itself,
+see sample in the description of \helpref{wxBoxSizer}{wxboxsizer} if the window is resizable
+(as are many dialogs under Unix and frames on probably all platforms).
+
+\membersection{wxSizer::SetVirtualSizeHints}\label{wxsizersetvirtualsizehints}
+
+\func{void}{SetVirtualSizeHints}{\param{wxWindow* }{window}}
+
+Tell the sizer to set the minimal size of the {\it window} virtual area to match the sizer's
+minimal size.  For windows with managed scrollbars this will set them appropriately.
+
+\wxheading{See also}
+
+\helpref{wxScrolledWindow::SetScrollbars}{wxscrolledwindowsetscrollbars}
 

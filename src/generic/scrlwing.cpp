@@ -2,7 +2,8 @@
 // Name:        generic/scrolwin.cpp
 // Purpose:     wxGenericScrolledWindow implementation
 // Author:      Julian Smart
-// Modified by: Vadim Zeitlin on 31.08.00: wxScrollHelper allows to implement
+// Modified by: Vadim Zeitlin on 31.08.00: wxScrollHelper allows to implement.
+//              Ron Lee on 10.4.02:  virtual size / auto scrollbars et al.
 // Created:     01/02/97
 // RCS-ID:      $Id$
 // Copyright:   (c) wxWindows team
@@ -326,10 +327,10 @@ void wxScrollHelper::SetScrollbars(int pixelsPerUnitX,
     bool do_refresh =
     (
       (noUnitsX != 0 && m_xScrollLines == 0) ||
-      (noUnitsX < m_xScrollLines && xpos > pixelsPerUnitX*noUnitsX) ||
+      (noUnitsX < m_xScrollLines && xpos > pixelsPerUnitX * noUnitsX) ||
 
       (noUnitsY != 0 && m_yScrollLines == 0) ||
-      (noUnitsY < m_yScrollLines && ypos > pixelsPerUnitY*noUnitsY) ||
+      (noUnitsY < m_yScrollLines && ypos > pixelsPerUnitY * noUnitsY) ||
       (xPos != m_xScrollPosition) ||
       (yPos != m_yScrollPosition)
     );
@@ -338,43 +339,8 @@ void wxScrollHelper::SetScrollbars(int pixelsPerUnitX,
     m_yScrollPixelsPerLine = pixelsPerUnitY;
     m_xScrollPosition = xPos;
     m_yScrollPosition = yPos;
-    m_xScrollLines = noUnitsX;
-    m_yScrollLines = noUnitsY;
 
-#ifdef __WXMOTIF__
-    // Sorry, some Motif-specific code to implement a backing pixmap
-    // for the wxRETAINED style. Implementing a backing store can't
-    // be entirely generic because it relies on the wxWindowDC implementation
-    // to duplicate X drawing calls for the backing pixmap.
-
-    if ( m_targetWindow->GetWindowStyle() & wxRETAINED )
-    {
-        Display* dpy = XtDisplay((Widget)m_targetWindow->GetMainWidget());
-
-        int totalPixelWidth = m_xScrollLines * m_xScrollPixelsPerLine;
-        int totalPixelHeight = m_yScrollLines * m_yScrollPixelsPerLine;
-        if (m_targetWindow->GetBackingPixmap() &&
-           !((m_targetWindow->GetPixmapWidth() == totalPixelWidth) &&
-             (m_targetWindow->GetPixmapHeight() == totalPixelHeight)))
-        {
-            XFreePixmap (dpy, (Pixmap) m_targetWindow->GetBackingPixmap());
-            m_targetWindow->SetBackingPixmap((WXPixmap) 0);
-        }
-
-        if (!m_targetWindow->GetBackingPixmap() &&
-           (noUnitsX != 0) && (noUnitsY != 0))
-        {
-            int depth = wxDisplayDepth();
-            m_targetWindow->SetPixmapWidth(totalPixelWidth);
-            m_targetWindow->SetPixmapHeight(totalPixelHeight);
-            m_targetWindow->SetBackingPixmap((WXPixmap) XCreatePixmap (dpy, RootWindow (dpy, DefaultScreen (dpy)),
-              m_targetWindow->GetPixmapWidth(), m_targetWindow->GetPixmapHeight(), depth));
-        }
-
-    }
-#endif // Motif
-
-    AdjustScrollbars();
+    m_targetWindow->SetVirtualSizeHints( noUnitsX * pixelsPerUnitX, noUnitsY * pixelsPerUnitY );
 
     if (do_refresh && !noRefresh)
         m_targetWindow->Refresh(TRUE, GetRect());
@@ -615,64 +581,116 @@ void wxScrollHelper::AdjustScrollbars()
     m_targetWindow->MacUpdateImmediately();
 #endif
 
-    int w, h;
-    GetTargetSize(&w, &h);
+    int w = 0, h = 0;
+    int oldw, oldh;
 
     int oldXScroll = m_xScrollPosition;
     int oldYScroll = m_yScrollPosition;
 
-    if (m_xScrollLines > 0)
+    do {
+        GetTargetSize(&w, 0);
+
+        if (m_xScrollPixelsPerLine == 0)
+        {
+            m_xScrollLines = 0;
+            m_xScrollPosition = 0;
+            m_win->SetScrollbar (wxHORIZONTAL, 0, 0, 0, FALSE);
+        }
+        else
+        {
+            m_xScrollLines = m_targetWindow->GetVirtualSize().GetWidth() / m_xScrollPixelsPerLine;
+
+            // Calculate page size i.e. number of scroll units you get on the
+            // current client window
+            int noPagePositions = (int) ( (w/(double)m_xScrollPixelsPerLine) + 0.5 );
+            if (noPagePositions < 1) noPagePositions = 1;
+            if ( noPagePositions > m_xScrollLines )
+                noPagePositions = m_xScrollLines;
+
+            // Correct position if greater than extent of canvas minus
+            // the visible portion of it or if below zero
+            m_xScrollPosition = wxMin( m_xScrollLines - noPagePositions, m_xScrollPosition);
+            m_xScrollPosition = wxMax( 0, m_xScrollPosition );
+
+            m_win->SetScrollbar(wxHORIZONTAL, m_xScrollPosition, noPagePositions, m_xScrollLines);
+            // The amount by which we scroll when paging
+            SetScrollPageSize(wxHORIZONTAL, noPagePositions);
+        }
+
+        GetTargetSize(0, &h);
+
+        if (m_yScrollPixelsPerLine == 0)
+        {
+            m_yScrollLines = 0;
+            m_yScrollPosition = 0;
+            m_win->SetScrollbar (wxVERTICAL, 0, 0, 0, FALSE);
+        }
+        else
+        {
+            m_yScrollLines = m_targetWindow->GetVirtualSize().GetHeight() / m_yScrollPixelsPerLine;
+
+            // Calculate page size i.e. number of scroll units you get on the
+            // current client window
+            int noPagePositions = (int) ( (h/(double)m_yScrollPixelsPerLine) + 0.5 );
+            if (noPagePositions < 1) noPagePositions = 1;
+            if ( noPagePositions > m_yScrollLines )
+                noPagePositions = m_yScrollLines;
+
+            // Correct position if greater than extent of canvas minus
+            // the visible portion of it or if below zero
+            m_yScrollPosition = wxMin( m_yScrollLines - noPagePositions, m_yScrollPosition );
+            m_yScrollPosition = wxMax( 0, m_yScrollPosition );
+
+            m_win->SetScrollbar(wxVERTICAL, m_yScrollPosition, noPagePositions, m_yScrollLines);
+            // The amount by which we scroll when paging
+            SetScrollPageSize(wxVERTICAL, noPagePositions);
+        }
+
+        // If a scrollbar (dis)appeared as a result of this, adjust them again.
+
+        oldw = w;
+        oldh = h;
+
+        GetTargetSize( &w, &h );
+    } while ( w != oldw && h != oldh );
+
+#ifdef __WXMOTIF__
+    // Sorry, some Motif-specific code to implement a backing pixmap
+    // for the wxRETAINED style. Implementing a backing store can't
+    // be entirely generic because it relies on the wxWindowDC implementation
+    // to duplicate X drawing calls for the backing pixmap.
+
+    if ( m_targetWindow->GetWindowStyle() & wxRETAINED )
     {
-        // Calculate page size i.e. number of scroll units you get on the
-        // current client window
-        int noPagePositions = (int) ( (w/(double)m_xScrollPixelsPerLine) + 0.5 );
-        if (noPagePositions < 1) noPagePositions = 1;
-        if ( noPagePositions > m_xScrollLines )
-            noPagePositions = m_xScrollLines;
+        Display* dpy = XtDisplay((Widget)m_targetWindow->GetMainWidget());
 
-        // Correct position if greater than extent of canvas minus
-        // the visible portion of it or if below zero
-        m_xScrollPosition = wxMin( m_xScrollLines-noPagePositions, m_xScrollPosition);
-        m_xScrollPosition = wxMax( 0, m_xScrollPosition );
+        int totalPixelWidth = m_xScrollLines * m_xScrollPixelsPerLine;
+        int totalPixelHeight = m_yScrollLines * m_yScrollPixelsPerLine;
+        if (m_targetWindow->GetBackingPixmap() &&
+           !((m_targetWindow->GetPixmapWidth() == totalPixelWidth) &&
+             (m_targetWindow->GetPixmapHeight() == totalPixelHeight)))
+        {
+            XFreePixmap (dpy, (Pixmap) m_targetWindow->GetBackingPixmap());
+            m_targetWindow->SetBackingPixmap((WXPixmap) 0);
+        }
 
-        m_win->SetScrollbar(wxHORIZONTAL, m_xScrollPosition, noPagePositions, m_xScrollLines);
-        // The amount by which we scroll when paging
-        SetScrollPageSize(wxHORIZONTAL, noPagePositions);
+        if (!m_targetWindow->GetBackingPixmap() &&
+           (noUnitsX != 0) && (noUnitsY != 0))
+        {
+            int depth = wxDisplayDepth();
+            m_targetWindow->SetPixmapWidth(totalPixelWidth);
+            m_targetWindow->SetPixmapHeight(totalPixelHeight);
+            m_targetWindow->SetBackingPixmap((WXPixmap) XCreatePixmap (dpy, RootWindow (dpy, DefaultScreen (dpy)),
+              m_targetWindow->GetPixmapWidth(), m_targetWindow->GetPixmapHeight(), depth));
+        }
+
     }
-    else
-    {
-        m_xScrollPosition = 0;
-        m_win->SetScrollbar (wxHORIZONTAL, 0, 0, 0, FALSE);
-    }
-
-    if (m_yScrollLines > 0)
-    {
-        // Calculate page size i.e. number of scroll units you get on the
-        // current client window
-        int noPagePositions = (int) ( (h/(double)m_yScrollPixelsPerLine) + 0.5 );
-        if (noPagePositions < 1) noPagePositions = 1;
-        if ( noPagePositions > m_yScrollLines )
-            noPagePositions = m_yScrollLines;
-
-        // Correct position if greater than extent of canvas minus
-        // the visible portion of it or if below zero
-        m_yScrollPosition = wxMin( m_yScrollLines-noPagePositions, m_yScrollPosition );
-        m_yScrollPosition = wxMax( 0, m_yScrollPosition );
-
-        m_win->SetScrollbar(wxVERTICAL, m_yScrollPosition, noPagePositions, m_yScrollLines);
-        // The amount by which we scroll when paging
-        SetScrollPageSize(wxVERTICAL, noPagePositions);
-    }
-    else
-    {
-        m_yScrollPosition = 0;
-        m_win->SetScrollbar (wxVERTICAL, 0, 0, 0, FALSE);
-    }
+#endif // Motif
 
     if (oldXScroll != m_xScrollPosition)
     {
        if (m_xScrollingEnabled)
-            m_targetWindow->ScrollWindow( m_xScrollPixelsPerLine * (oldXScroll-m_xScrollPosition), 0,
+            m_targetWindow->ScrollWindow( m_xScrollPixelsPerLine * (oldXScroll - m_xScrollPosition), 0,
                                           GetRect() );
        else
             m_targetWindow->Refresh(TRUE, GetRect());
@@ -698,6 +716,24 @@ void wxScrollHelper::DoPrepareDC(wxDC& dc)
     dc.SetDeviceOrigin( pt.x - m_xScrollPosition * m_xScrollPixelsPerLine,
                         pt.y - m_yScrollPosition * m_yScrollPixelsPerLine );
     dc.SetUserScale( m_scaleX, m_scaleY );
+}
+
+void wxScrollHelper::SetScrollRate( int xstep, int ystep )
+{
+    int old_x = m_xScrollPixelsPerLine * m_xScrollPosition;
+    int old_y = m_yScrollPixelsPerLine * m_yScrollPosition;
+
+    m_xScrollPixelsPerLine = xstep;
+    m_yScrollPixelsPerLine = ystep;
+
+    int new_x = m_xScrollPixelsPerLine * m_xScrollPosition;
+    int new_y = m_yScrollPixelsPerLine * m_yScrollPosition;
+
+    m_win->SetScrollPos( wxHORIZONTAL, m_xScrollPosition );
+    m_win->SetScrollPos( wxVERTICAL, m_yScrollPosition );
+    m_targetWindow->ScrollWindow( old_x - new_x, old_y - new_y );
+
+    AdjustScrollbars();
 }
 
 void wxScrollHelper::GetScrollPixelsPerUnit (int *x_unit, int *y_unit) const
@@ -797,28 +833,6 @@ void wxScrollHelper::EnableScrolling (bool x_scroll, bool y_scroll)
     m_yScrollingEnabled = y_scroll;
 }
 
-void wxScrollHelper::GetVirtualSize (int *x, int *y) const
-{
-    wxSize sz(0, 0);
-    if (m_targetWindow)
-        sz = m_targetWindow->GetClientSize();
-
-    if ( x )
-    {
-        if (m_xScrollPixelsPerLine == 0)
-            *x = sz.x;
-        else
-            *x = m_xScrollPixelsPerLine * m_xScrollLines;
-    }
-    if ( y )
-    {
-        if (m_yScrollPixelsPerLine == 0)
-            *y = sz.y;
-        else
-            *y = m_yScrollPixelsPerLine * m_yScrollLines;
-    }
-}
-
 // Where the current view starts from
 void wxScrollHelper::GetViewStart (int *x, int *y) const
 {
@@ -851,7 +865,15 @@ void wxScrollHelper::DoCalcUnscrolledPosition(int x, int y, int *xx, int *yy) co
 // Default OnSize resets scrollbars, if any
 void wxScrollHelper::HandleOnSize(wxSizeEvent& WXUNUSED(event))
 {
-    AdjustScrollbars();
+    if( m_targetWindow != m_win )
+        m_targetWindow->SetVirtualSize( m_targetWindow->GetClientSize() );
+
+    m_win->SetVirtualSize( m_win->GetClientSize() );
+
+#if wxUSE_CONSTRAINTS
+    if (m_win->GetAutoLayout())
+        m_win->Layout();
+#endif
 }
 
 // This calls OnDraw, having adjusted the origin according to the current
@@ -877,7 +899,7 @@ void wxScrollHelper::HandleOnChar(wxKeyEvent& event)
 
     GetViewStart(&stx, &sty);
     GetTargetSize(&clix, &cliy);
-    GetVirtualSize(&szx, &szy);
+    m_targetWindow->GetVirtualSize(&szx, &szy);
 
     if( m_xScrollPixelsPerLine )
     {
@@ -1121,9 +1143,11 @@ wxGenericScrolledWindow::~wxGenericScrolledWindow()
 
 bool wxGenericScrolledWindow::Layout()
 {
-    if (GetSizer())
+    if (GetSizer() && m_targetWindow == this)
     {
-        // Take into account the virtual size and scrolled position of the window
+        // If we're the scroll target, take into account the
+        // virtual size and scrolled position of the window.
+
         int x, y, w, h;
         CalcScrolledPosition(0,0, &x,&y);
         GetVirtualSize(&w, &h);
@@ -1133,6 +1157,12 @@ bool wxGenericScrolledWindow::Layout()
 
     // fall back to default for LayoutConstraints
     return wxPanel::Layout();
+}
+
+void wxGenericScrolledWindow::DoSetVirtualSize( int x, int y )
+{
+    wxPanel::DoSetVirtualSize( x, y );
+    AdjustScrollbars();
 }
 
 void wxGenericScrolledWindow::OnPaint(wxPaintEvent& event)
@@ -1183,3 +1213,4 @@ void wxGenericScrolledWindow::CalcUnscrolledPosition(int x, int y, float *xx, fl
 
 #endif // !wxGTK
 
+// vi:sts=4:sw=4:et

@@ -174,6 +174,12 @@ void wxWindowBase::InitBase()
     m_hasCustomPalette = FALSE;
 #endif // wxUSE_PALETTE
 
+    m_virtualSize = wxDefaultSize;
+    m_minVirtualWidth = -1;
+    m_minVirtualHeight = -1;
+    m_maxVirtualWidth = -1;
+    m_maxVirtualHeight = -1;
+
     // Whether we're using the current theme for this window (wxGTK only for now)
     m_themeEnabled = FALSE;
 }
@@ -520,6 +526,40 @@ void wxWindowBase::SetSizeHints(int minW, int minH,
     m_maxWidth = maxW;
     m_minHeight = minH;
     m_maxHeight = maxH;
+}
+
+void wxWindowBase::SetVirtualSizeHints( int minW, int minH,
+                                        int maxW, int maxH )
+{
+    m_minVirtualWidth = minW;
+    m_maxVirtualWidth = maxW;
+    m_minVirtualHeight = minH;
+    m_maxVirtualHeight = maxH;
+
+    SetVirtualSize( GetClientSize() );
+}
+
+void wxWindowBase::DoSetVirtualSize( int x, int y )
+{
+    if( m_minVirtualWidth != -1 && m_minVirtualWidth > x )   x = m_minVirtualWidth;
+    if( m_maxVirtualWidth != -1 && m_maxVirtualWidth < x )   x = m_maxVirtualWidth;
+    if( m_minVirtualHeight != -1 && m_minVirtualHeight > y ) y = m_minVirtualHeight;
+    if( m_maxVirtualHeight != -1 && m_maxVirtualHeight < y ) y = m_maxVirtualHeight;
+
+    m_virtualSize.SetWidth( x );
+    m_virtualSize.SetHeight( y );
+}
+
+wxSize wxWindowBase::DoGetVirtualSize() const
+{
+    wxSize  s( GetClientSize() );
+
+    if( m_virtualSize.GetWidth() != -1 )
+        s.SetWidth( m_virtualSize.GetWidth() );
+    if( m_virtualSize.GetHeight() != -1 )
+        s.SetHeight( m_virtualSize.GetHeight() );
+
+    return s;
 }
 
 // ----------------------------------------------------------------------------
@@ -1190,6 +1230,14 @@ void wxWindowBase::SetSizer(wxSizer *sizer, bool deleteOld)
     if (m_windowSizer && deleteOld) delete m_windowSizer;
 
     m_windowSizer = sizer;
+
+    SetAutoLayout( sizer != 0 );
+}
+
+void wxWindowBase::SetSizerAndFit(wxSizer *sizer, bool deleteOld)
+{
+    SetSizer( sizer, deleteOld );
+    sizer->SetSizeHints( (wxWindow*) this );
 }
 
 bool wxWindowBase::Layout()
@@ -1198,8 +1246,7 @@ bool wxWindowBase::Layout()
     if ( GetSizer() )
     {
         int w, h;
-        GetClientSize(&w, &h);
-
+        GetVirtualSize(&w, &h);
         GetSizer()->SetDimension( 0, 0, w, h );
     }
 #if wxUSE_CONSTRAINTS

@@ -44,6 +44,9 @@ public:
     int GetScrollPageSize(int orient) const;
     void SetScrollPageSize(int orient, int pageSize);
 
+    // Set the x, y scrolling increments.
+    void SetScrollRate( int xstep, int ystep );
+
     // get the size of one logical unit in physical ones
     virtual void GetScrollPixelsPerUnit(int *pixelsPerUnitX,
                                         int *pixelsPerUnitY) const;
@@ -57,9 +60,6 @@ public:
 
     // Get the view start
     virtual void GetViewStart(int *x, int *y) const;
-
-    // Actual size in pixels when scrolling is taken into account
-    virtual void GetVirtualSize(int *x, int *y) const;
 
     // Set the scale factor, used in PrepareDC
     void SetScale(double xs, double ys) { m_scaleX = xs; m_scaleY = ys; }
@@ -230,3 +230,5 @@ protected:
 
 #endif
     // _WX_SCROLWIN_H_BASE_
+
+// vi:sts=4:sw=4:et

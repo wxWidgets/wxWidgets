@@ -570,6 +570,7 @@ implements the following methods:\par
 \wxheading{See also}
 
 \helpref{GetSize}{wxwindowgetsize}
+\helpref{GetVirtualSize}{wxwindowgetvirtualsize}
 
 \membersection{wxWindow::GetConstraints}\label{wxwindowgetconstraints}
 
@@ -826,7 +827,8 @@ method:\par
 
 \wxheading{See also}
 
-\helpref{GetClientSize}{wxwindowgetclientsize}
+\helpref{GetClientSize}{wxwindowgetclientsize},\rtfsp
+\helpref{GetVirtualSize}{wxwindowgetvirtualsize}
 
 \membersection{wxWindow::GetSizer}\label{wxwindowgetsizer}
 
@@ -901,6 +903,23 @@ only be called within an \helpref{wxPaintEvent}{wxpaintevent} handler.
 \constfunc{wxValidator*}{GetValidator}{\void}
 
 Returns a pointer to the current validator for the window, or NULL if there is none.
+
+\membersection{wxWindow::GetVirtualSize}\label{wxwindowgetvirtualsize}
+
+\constfunc{void}{GetVirtualSize}{\param{int* }{width}, \param{int* }{height}}
+
+\constfunc{wxSize}{GetVirtualSize}{\void}
+
+This gets the virtual size of the window in pixels.
+
+\wxheading{Parameters}
+
+\docparam{width}{Receives the window virtual width.}
+
+\docparam{height}{Receives the window virtual height.}
+
+\helpref{GetSize}{wxwindowgetsize},\rtfsp
+\helpref{GetClientSize}{wxwindowgetclientsize}
 
 \membersection{wxWindow::GetWindowStyleFlag}\label{wxwindowgetwindowstyleflag}
 
@@ -2405,10 +2424,20 @@ Pass FALSE if you wish to handle deleting the old sizer yourself.}
 
 \wxheading{Remarks}
 
+SetSizer now enables and disables Layout automatically, but prior to wxWindows 2.3.3
+the following applied:
+
 You must call \helpref{wxWindow::SetAutoLayout}{wxwindowsetautolayout} to tell a window to use
 the sizer automatically in OnSize; otherwise, you must override OnSize and call Layout()
 explicitly. When setting both a wxSizer and a \helpref{wxLayoutConstraints}{wxlayoutconstraints},
 only the sizer will have effect.
+
+\membersection{wxWindow::SetSizerAndFit}\label{wxwindowsetsizerandfit}
+
+\func{void}{SetSizerAndFit}{\param{wxSizer* }{sizer}, \param{bool }{deleteOld=TRUE}}
+
+The same as \helpref{SetSizer}{wxwindowsetsizer}, except it also sets the size hints
+for the window based on the sizer's minimum size.
 
 \membersection{wxWindow::SetTitle}\label{wxwindowsettitle}
 
@@ -2450,6 +2479,37 @@ See also: \helpref{GetToolTip}{wxwindowgettooltip},
 Get the associated tooltip or NULL if none.
 
 
+\membersection{wxWindow::SetVirtualSize}\label{wxwindowsetvirtualsize}
+
+\func{void}{SetVirtualSize}{\param{int}{ width}, \param{int}{ height}}
+
+\func{void}{SetVirtualSize}{\param{const wxSize\&}{ size}}
+
+Sets the virtual size of the window in pixels.
+
+
+\membersection{wxWindow::SetVirtualSizeHints}\label{wxwindowsetvirtualsizehints}
+
+\func{virtual void}{SetVirtualSizeHints}{\param{int}{ minW},\param{int}{ minH}, \param{int}{ maxW=-1}, \param{int}{ maxH=-1}}
+
+Allows specification of minimum and maximum virtual window sizes.
+If a pair of values is not set (or set to -1), the default values
+will be used.
+
+\wxheading{Parameters}
+
+\docparam{minW}{Specifies the minimum width allowable.}
+
+\docparam{minH}{Specifies the minimum height allowable.}
+
+\docparam{maxW}{Specifies the maximum width allowable.}
+
+\docparam{maxH}{Specifies the maximum height allowable.}
+
+\wxheading{Remarks}
+
+If this function is called, the user will not be able to size the virtual area
+of the window outside the given bounds.
 
 \membersection{wxWindow::SetWindowStyle}\label{wxwindowsetwindowstyle}
 

@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        wx/generic/scrolwin.h
+// Name:        wx/gtk/scrolwin.h
 // Purpose:     wxScrolledWindow class
 // Author:      Robert Roebling
 // Modified by:
@@ -65,9 +65,17 @@ public:
     virtual void SetTargetWindow( wxWindow *target, bool pushEventHandler = FALSE );
     virtual wxWindow *GetTargetWindow();
 
+    // Set the scrolled area of the window.
+    virtual void DoSetVirtualSize( int x, int y );
+
+    // Set the x, y scrolling increments.
+    void SetScrollRate( int xstep, int ystep );
+
     // Number of pixels per user unit (0 or -1 for no scrollbar)
     // Length of virtual canvas in user units
     // Length of page in user units
+    // Default action is to set the virtual size and alter scrollbars
+    // accordingly.
     virtual void SetScrollbars(int pixelsPerUnitX, int pixelsPerUnitY,
                              int noUnitsX, int noUnitsY,
                              int xPos = 0, int yPos = 0,
@@ -94,9 +102,6 @@ public:
     // Compatibility
     void ViewStart(int *x, int *y) const
        { GetViewStart( x, y ); }
-
-    // Actual size in pixels when scrolling is taken into account
-    virtual void GetVirtualSize(int *x, int *y) const;
 
     // translate between scrolled and unscrolled coordinates
     void CalcScrolledPosition(int x, int y, int *xx, int *yy) const
@@ -163,10 +168,12 @@ protected:
     int                   m_yScrollPixelsPerLine;
     bool                  m_xScrollingEnabled;
     bool                  m_yScrollingEnabled;
+
+    // FIXME: these next four members are duplicated in the GtkAdjustment
+    //        members of wxWindow.  Can they be safely removed from here?
+
     int                   m_xScrollPosition;
     int                   m_yScrollPosition;
-    int                   m_xScrollLines;
-    int                   m_yScrollLines;
     int                   m_xScrollLinesPerPage;
     int                   m_yScrollLinesPerPage;
 
@@ -179,3 +186,5 @@ private:
 
 #endif
     // _WX_GTK_SCROLLWIN_H_
+
+// vi:sts=4:sw=4:et

@@ -2,7 +2,7 @@
 // Name:        gtk/scrolwin.cpp
 // Purpose:     wxScrolledWindow implementation
 // Author:      Julian Smart
-// Modified by:
+// Modified by: Ron Lee
 // Created:     01/02/97
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart and Markus Holzem
@@ -202,8 +202,6 @@ void wxScrolledWindow::Init()
     m_yScrollingEnabled = TRUE;
     m_xScrollPosition = 0;
     m_yScrollPosition = 0;
-    m_xScrollLines = 0;
-    m_yScrollLines = 0;
     m_xScrollLinesPerPage = 0;
     m_yScrollLinesPerPage = 0;
     m_targetWindow = (wxWindow*) NULL;
@@ -323,51 +321,47 @@ bool wxScrolledWindow::Create(wxWindow *parent,
 // setting scrolling parameters
 // ----------------------------------------------------------------------------
 
+void wxScrolledWindow::DoSetVirtualSize( int x, int y )
+{
+    wxPanel::DoSetVirtualSize( x, y );
+    AdjustScrollbars();
+}
+
 /*
  * pixelsPerUnitX/pixelsPerUnitY: number of pixels per unit (e.g. pixels per text line)
  * noUnitsX/noUnitsY:        : no. units per scrollbar
  */
-void wxScrolledWindow::SetScrollbars (int pixelsPerUnitX, int pixelsPerUnitY,
-               int noUnitsX, int noUnitsY,
-               int xPos, int yPos, bool noRefresh )
+void wxScrolledWindow::SetScrollbars( int pixelsPerUnitX, int pixelsPerUnitY,
+                                      int noUnitsX, int noUnitsY,
+                                      int xPos, int yPos, bool noRefresh )
 {
     int old_x = m_xScrollPixelsPerLine * m_xScrollPosition;
     int old_y = m_yScrollPixelsPerLine * m_yScrollPosition;
 
     m_xScrollPixelsPerLine = pixelsPerUnitX;
     m_yScrollPixelsPerLine = pixelsPerUnitY;
-    m_xScrollLines = noUnitsX;
-    m_yScrollLines = noUnitsY;
-    m_xScrollPosition = xPos;
-    m_yScrollPosition = yPos;
 
-    m_hAdjust->lower = 0.0;
-    m_hAdjust->upper = noUnitsX;
-    m_hAdjust->value = xPos;
-    m_hAdjust->step_increment = 1.0;
-    m_hAdjust->page_increment = 2.0;
+    m_hAdjust->value = m_xScrollPosition = xPos;
+    m_vAdjust->value = m_yScrollPosition = yPos;
 
-    m_vAdjust->lower = 0.0;
-    m_vAdjust->upper = noUnitsY;
-    m_vAdjust->value = yPos;
-    m_vAdjust->step_increment = 1.0;
-    m_vAdjust->page_increment = 2.0;
-
-    AdjustScrollbars();
+    m_targetWindow->SetVirtualSizeHints( noUnitsX * pixelsPerUnitX, noUnitsY * pixelsPerUnitY );
 
     if (!noRefresh)
     {
         int new_x = m_xScrollPixelsPerLine * m_xScrollPosition;
         int new_y = m_yScrollPixelsPerLine * m_yScrollPosition;
 
-        m_targetWindow->ScrollWindow( old_x-new_x, old_y-new_y );
+        m_targetWindow->ScrollWindow( old_x - new_x, old_y - new_y );
     }
 }
 
 void wxScrolledWindow::AdjustScrollbars()
 {
     int w, h;
+    int vw, vh;
+
     m_targetWindow->GetClientSize( &w, &h );
+    m_targetWindow->GetVirtualSize( &vw, &vh );
 
     if (m_xScrollPixelsPerLine == 0)
     {
@@ -376,21 +370,18 @@ void wxScrolledWindow::AdjustScrollbars()
     }
     else
     {
+        m_hAdjust->upper = vw / m_xScrollPixelsPerLine;
         m_hAdjust->page_size = (w / m_xScrollPixelsPerLine);
 
-        int max = (int)(m_hAdjust->upper - m_hAdjust->page_size + 0.5);
-        if (max < 0) max = 0;
-        
-        int x_pos = m_xScrollPosition;
-        if (x_pos > max) x_pos = max;
-        if (x_pos < 0) x_pos = 0;
+        // If the scrollbar hits the right side, move the window
+        // right to keep it from over extending.
 
-        int old_x = m_xScrollPosition;
-        m_xScrollPosition = x_pos;
-        m_hAdjust->value = x_pos;
-
-        if (x_pos != old_x)
-            m_targetWindow->ScrollWindow( (old_x-m_xScrollPosition)*m_xScrollPixelsPerLine, 0 );
+        if( m_hAdjust->value + m_hAdjust->page_size > m_hAdjust->upper )
+        {
+            m_hAdjust->value = m_hAdjust->upper - m_hAdjust->page_size;
+            m_targetWindow->ScrollWindow( (m_xScrollPosition - m_hAdjust->value) * m_xScrollPixelsPerLine, 0 );
+            m_xScrollPosition = (int)m_hAdjust->value;
+        }
     }
 
     if (m_yScrollPixelsPerLine == 0)
@@ -400,21 +391,15 @@ void wxScrolledWindow::AdjustScrollbars()
     }
     else
     {
+        m_vAdjust->upper = vh / m_yScrollPixelsPerLine;
         m_vAdjust->page_size = (h / m_yScrollPixelsPerLine);
 
-        int max = (int)(m_vAdjust->upper - m_vAdjust->page_size + 0.5);
-        if (max < 0) max = 0;
-        
-        int y_pos = m_yScrollPosition;
-        if (y_pos > max) y_pos = max;
-        if (y_pos < 0) y_pos = 0;
-
-        int old_y = m_yScrollPosition;
-        m_yScrollPosition = y_pos;
-        m_vAdjust->value = y_pos;
-
-        if (y_pos != old_y)
-            m_targetWindow->ScrollWindow( 0, (old_y-m_yScrollPosition)*m_yScrollPixelsPerLine );
+        if( m_vAdjust->value + m_vAdjust->page_size > m_vAdjust->upper )
+        {
+            m_vAdjust->value = m_vAdjust->upper - m_vAdjust->page_size;
+            m_targetWindow->ScrollWindow( 0, (m_yScrollPosition - m_vAdjust->value) * m_yScrollPixelsPerLine );
+            m_yScrollPosition = (int)m_vAdjust->value;
+        }
     }
 
     m_xScrollLinesPerPage = (int)(m_hAdjust->page_size + 0.5);
@@ -423,6 +408,7 @@ void wxScrolledWindow::AdjustScrollbars()
     gtk_signal_emit_by_name( GTK_OBJECT(m_vAdjust), "changed" );
     gtk_signal_emit_by_name( GTK_OBJECT(m_hAdjust), "changed" );
 }
+
 
 // ----------------------------------------------------------------------------
 // target window handling
@@ -445,6 +431,22 @@ void wxScrolledWindow::PrepareDC(wxDC& dc)
 {
     dc.SetDeviceOrigin( -m_xScrollPosition * m_xScrollPixelsPerLine,
                         -m_yScrollPosition * m_yScrollPixelsPerLine );
+}
+
+void wxScrolledWindow::SetScrollRate( int xstep, int ystep )
+{
+    int old_x = m_xScrollPixelsPerLine * m_xScrollPosition;
+    int old_y = m_yScrollPixelsPerLine * m_yScrollPosition;
+
+    m_xScrollPixelsPerLine = xstep;
+    m_yScrollPixelsPerLine = ystep;
+
+    int new_x = m_xScrollPixelsPerLine * m_xScrollPosition;
+    int new_y = m_yScrollPixelsPerLine * m_yScrollPosition;
+
+    m_targetWindow->ScrollWindow( old_x - new_x, old_y - new_y );
+
+    AdjustScrollbars();
 }
 
 void wxScrolledWindow::GetScrollPixelsPerUnit (int *x_unit, int *y_unit) const
@@ -516,8 +518,7 @@ void wxScrolledWindow::OnScroll(wxScrollWinEvent& event)
 
 void wxScrolledWindow::Scroll( int x_pos, int y_pos )
 {
-    if (!m_targetWindow)
-        return;
+    wxASSERT_MSG( m_targetWindow != 0, _T("No target window") );
 
     if (((x_pos == -1) || (x_pos == m_xScrollPosition)) &&
         ((y_pos == -1) || (y_pos == m_yScrollPosition))) return;
@@ -565,8 +566,7 @@ void wxScrolledWindow::Scroll( int x_pos, int y_pos )
 
 void wxScrolledWindow::GtkVScroll( float value, unsigned int scroll_type )
 {
-    if (!m_targetWindow)
-        return;
+    wxASSERT_MSG( m_targetWindow != 0, _T("No target window") );
 
     if (m_yScrollPixelsPerLine == 0)
         return;
@@ -585,8 +585,7 @@ void wxScrolledWindow::GtkVScroll( float value, unsigned int scroll_type )
 
 void wxScrolledWindow::GtkHScroll( float value, unsigned int scroll_type )
 {
-    if (!m_targetWindow)
-        return;
+    wxASSERT_MSG( m_targetWindow != 0, _T("No target window") );
 
     if (m_xScrollPixelsPerLine == 0)
         return;
@@ -607,28 +606,6 @@ void wxScrolledWindow::EnableScrolling (bool x_scroll, bool y_scroll)
 {
     m_xScrollingEnabled = x_scroll;
     m_yScrollingEnabled = y_scroll;
-}
-
-void wxScrolledWindow::GetVirtualSize (int *x, int *y) const
-{
-    wxSize sz(0, 0);
-    if (m_targetWindow)
-        sz = m_targetWindow->GetClientSize();
-
-    if ( x )
-    {
-        if (m_xScrollPixelsPerLine == 0)
-            *x = sz.x;
-        else
-            *x = m_xScrollPixelsPerLine * m_xScrollLines;
-    }
-    if ( y )
-    {
-        if (m_yScrollPixelsPerLine == 0)
-            *y = sz.y;
-        else
-            *y = m_yScrollPixelsPerLine * m_yScrollLines;
-    }
 }
 
 // Where the current view starts from
@@ -672,9 +649,9 @@ int wxScrolledWindow::CalcScrollInc(wxScrollWinEvent& event)
     if (event.GetEventType() == wxEVT_SCROLLWIN_BOTTOM)
     {
             if (orient == wxHORIZONTAL)
-                nScrollInc = m_xScrollLines - m_xScrollPosition;
+                nScrollInc = GetVirtualSize().GetWidth() / m_xScrollPixelsPerLine - m_xScrollPosition;
             else
-                nScrollInc = m_yScrollLines - m_yScrollPosition;
+                nScrollInc = GetVirtualSize().GetHeight() / m_yScrollPixelsPerLine - m_yScrollPosition;
     } else
     if (event.GetEventType() == wxEVT_SCROLLWIN_LINEUP)
     {
@@ -813,12 +790,13 @@ void wxScrolledWindow::GtkVDisconnectEvent()
         (GtkSignalFunc) gtk_scrolled_window_vscroll_callback, (gpointer) this );
 }
 
-
 bool wxScrolledWindow::Layout()
 {
-    if (GetSizer())
+    if (GetSizer() && m_targetWindow == this)
     {
-        // Take into account the virtual size and scrolled position of the window
+        // If we're the scroll target, take into account the
+        // virtual size and scrolled position of the window.
+
         int x, y, w, h;
         CalcScrolledPosition(0,0, &x,&y);
         GetVirtualSize(&w, &h);
@@ -836,12 +814,15 @@ bool wxScrolledWindow::Layout()
 // Default OnSize resets scrollbars, if any
 void wxScrolledWindow::OnSize(wxSizeEvent& WXUNUSED(event))
 {
+    if( m_targetWindow != this )
+        m_targetWindow->SetVirtualSize( m_targetWindow->GetClientSize() );
+
+    SetVirtualSize( GetClientSize() );
+
 #if wxUSE_CONSTRAINTS
     if (GetAutoLayout())
         Layout();
 #endif
-
-    AdjustScrollbars();
 }
 
 // This calls OnDraw, having adjusted the origin according to the current
@@ -955,3 +936,5 @@ void wxScrolledWindow::OnChar(wxKeyEvent& event)
     }
 }
 
+
+// vi:sts=4:sw=4:et

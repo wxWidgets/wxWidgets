@@ -210,7 +210,18 @@ MyTopLabels::MyTopLabels( wxScrolledWindow *parent, wxWindowID id, const wxPoint
 void MyTopLabels::OnPaint( wxPaintEvent &event )
 {
     wxPaintDC dc(this);
-    m_owner->PrepareDC( dc );
+
+    // This is wrong..  it will translate both x and y if the
+    // window is scrolled, the label windows are active in one
+    // direction only.  Do the action below instead -- RL.
+    //m_owner->PrepareDC( dc );
+
+    int xScrollUnits, xOrigin;
+
+    m_owner->GetViewStart( &xOrigin, 0 );
+    m_owner->GetScrollPixelsPerUnit( &xScrollUnits, 0 );
+    dc.SetDeviceOrigin( -xOrigin * xScrollUnits, 0 );
+
     dc.DrawText( "Column 1", 5, 5 );
     dc.DrawText( "Column 2", 105, 5 );
     dc.DrawText( "Column 3", 205, 5 );
@@ -233,7 +244,18 @@ MyRightLabels::MyRightLabels( wxScrolledWindow *parent, wxWindowID id, const wxP
 void MyRightLabels::OnPaint( wxPaintEvent &event )
 {
     wxPaintDC dc(this);
-    m_owner->PrepareDC( dc );
+
+    // This is wrong..  it will translate both x and y if the
+    // window is scrolled, the label windows are active in one
+    // direction only.  Do the action below instead -- RL.
+    //m_owner->PrepareDC( dc );
+
+    int yScrollUnits, yOrigin;
+
+    m_owner->GetViewStart( 0, &yOrigin );
+    m_owner->GetScrollPixelsPerUnit( 0, &yScrollUnits );
+    dc.SetDeviceOrigin( 0, -yOrigin * yScrollUnits );
+
     dc.DrawText( "Row 1", 5, 5 );
     dc.DrawText( "Row 2", 5, 30 );
     dc.DrawText( "Row 3", 5, 55 );
