@@ -1,9 +1,0 @@
-wxwindows2.2 (2.2.1) unstable; urgency=low
-
-  * Repackaged to build from cvs.
-
- -- Ron Lee <ron@debian.org>  Sun, 13 Feb 2000 18:40:00 +1030
-
-Local variables:
-mode: debian-changelog
-End:

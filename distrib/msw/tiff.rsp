@@ -1,9 +1,0 @@
-src/tiff/make*
-src/tiff/TiffVC.dsp
-src/tiff/TiffVC.dsw
-src/tiff/*.c
-src/tiff/*.h
-src/tiff/README
-src/tiff/COPYRIGHT
-src/tiff/VERSION
-src/tiff/TODO
