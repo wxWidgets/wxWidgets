@@ -7,21 +7,24 @@
 # "%W% %G%"
 #
 # Makefile : Builds wxSock library for Windows NT / Win95
-!include <..\..\..\src\ntwxwin.mak>
+
+EXTRALIBS=wsock32.lib
+
+!include <..\..\src\ntwxwin.mak>
 
 # Change WXDIR or WXWIN to wherever wxWindows is found
 #WXWIN = $(WX)
-WXDIR = $(WXWIN)
-WXINC = $(WXDIR)\include\msw
+#WXDIR = $(WXWIN)
+#WXINC = $(WXDIR)\include\msw
 
-WXSOCKDIR = $(WXDIR)\contrib\wxsock
-WXSOCKINC = $(WXSOCKDIR)
-WXSOCKLIB = $(WXSOCKDIR)\lib\wxsock.lib $(WXSOCKDIR)\lib\zlib.lib
-INC=-I$(WXBASEINC) -I$(WXINC) -I$(WXSOCKINC)
+#WXSOCKDIR = $(WXDIR)\contrib\wxsock
+#WXSOCKINC = $(WXSOCKDIR)
+#WXSOCKLIB = $(WXSOCKDIR)\lib\wxsock.lib $(WXSOCKDIR)\lib\zlib.lib
 
-WXLIB = $(WXDIR)\lib\wx.lib
-
-LIBS=$(WXSOCKLIB) wsock32.lib $(LIBS)
+#INC=-I$(WXBASEINC) -I$(WXINC) # -I$(WXSOCKINC)
+#WXLIB = $(WXDIR)\lib\wx.lib
+#LIBS=$(WXSOCKLIB) wsock32.lib $(LIBS)
+#LIBS=$(WXSOCKLIB) wsock32.lib $(LIBS)
 #LIBS=$(WXLIB) $(WXSTRINGLIB) oldnames libw llibcew llibce commdlg shell
 
 all: client.exe server.exe
@@ -31,19 +34,19 @@ wx:
         nmake -f makefile.nt
 	cd $(ITSYDIR)
 
-client.exe:      $(WXDIR)\src\msw\dummy.obj $(WXLIB) $(WXSTRINGLIB) client.obj\
+client.exe:      $(WXDIR)\src\msw\dummy.obj $(WXLIB) client.obj\
                  client.res
 	$(link) -out:client.exe $(LINKFLAGS) $(DUMMYOBJ) client.obj \
                                 client.res $(LIBS)
 
-server.exe:      $(WXDIR)\src\msw\dummy.obj $(WXLIB) $(WXSTRINGLIB) server.obj
+server.exe:      $(WXDIR)\src\msw\dummy.obj $(WXLIB) server.obj
 	$(link) -out:server.exe $(LINKFLAGS) $(DUMMYOBJ) server.obj $(LIBS)
 
 client.obj:      client.$(SRCSUFF)
 	$(cc) $(CPPFLAGS2) /c /Tp $*.$(SRCSUFF)
 
-client.res:      client.rc $(WXDIR)\include\msw\wx.rc
-        $(rc) -r /i$(WXDIR)\include\msw /i$(WXDIR)\contrib\fafa -fo$@ client.rc
+client.res:      client.rc $(WXDIR)\include\wx\msw\wx.rc
+        $(rc) -r /i$(WXDIR)\include -fo$@ client.rc
 
 
 server.obj:      server.$(SRCSUFF)

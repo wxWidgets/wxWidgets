@@ -15,6 +15,13 @@
 #pragma implementation "socket.cpp"
 #endif
 
+// For compilers that support precompilation, includes "wx.h".
+#include "wx/wxprec.h"
+
+#ifdef __BORLANDC__
+#pragma hdrstop
+#endif
+
 /////////////////////////////////////////////////////////////////////////////
 // wxWindows headers
 /////////////////////////////////////////////////////////////////////////////
@@ -52,6 +59,10 @@
 #include <signal.h>
 #include <errno.h>
 
+#ifdef _MSC_VER
+#include <io.h>
+#endif
+
 #if defined(__WXMOTIF__) || defined(__WXXT__)
 #include <X11/Intrinsic.h>
 
@@ -74,10 +85,6 @@
 #define WXSOCK_INTERNAL
 #include "wx/sckaddr.h"
 #include "wx/socket.h"
-
-#ifdef __BORLANDC__
-#pragma hdrstop
-#endif
 
 /////////////////////////////////////////////////////////////////////////////
 // Some patch ///// BEGIN

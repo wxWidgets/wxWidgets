@@ -363,12 +363,14 @@ wxInputStream& wxInputStream::operator>>(float& f)
   return *this;
 }
 
+#if USE_SERIAL
 wxInputStream& wxInputStream::operator>>(wxObject *& obj)
 {
   wxObjectInputStream obj_s(*this);
   obj = obj_s.LoadObject();
   return *this;
 }
+#endif
 
 off_t wxInputStream::SeekI(off_t pos, wxSeekMode mode)
 {
@@ -542,12 +544,14 @@ wxOutputStream& wxOutputStream::operator<<(double f)
   return Write(strfloat, strfloat.Len());
 }
 
+#if USE_SERIAL
 wxOutputStream& wxOutputStream::operator<<(wxObject& obj)
 {
   wxObjectOutputStream obj_s(*this);
   obj_s.SaveObject(obj);
   return *this;
 }
+#endif
 
 // ----------------------------------------------------------------------------
 // wxStream

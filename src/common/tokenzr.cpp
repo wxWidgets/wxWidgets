@@ -13,6 +13,16 @@
 #pragma implementation "tokenzr.h"
 #endif
 
+// For compilers that support precompilation, includes "wx.h".
+#include "wx/wxprec.h"
+
+#ifdef __BORLANDC__
+#pragma hdrstop
+#endif
+
+#ifndef WX_PRECOMP
+#endif
+
 #include "wx/object.h"
 #include "wx/string.h"
 #include "wx/tokenzr.h"

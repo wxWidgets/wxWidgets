@@ -13,14 +13,18 @@
 #pragma implementation "sckipc.h"
 #endif
 
+// For compilers that support precompilation, includes "wx.h".
+#include "wx/wxprec.h"
+
+#ifdef __BORLANDC__
+#pragma hdrstop
+#endif
+
+#ifndef WX_PRECOMP
+#endif
+
 #include <stdlib.h>
 #include <stdio.h>
-
-#ifdef WXPREC
-#include <wx/wxprec.h>
-#else
-#include <wx/wx.h>
-#endif
 
 #include "wx/socket.h"
 #include "wx/sckipc.h"

@@ -11,14 +11,21 @@
 #ifdef __GNUG__
 #pragma implementation "sckfile.h"
 #endif
-#include <stdio.h>
-#include <stdlib.h>
-#include <wx/fstream.h>
-#include "wx/protocol/file.h"
+
+// For compilers that support precompilation, includes "wx.h".
+#include "wx/wxprec.h"
 
 #ifdef __BORLANDC__
 #pragma hdrstop
 #endif
+
+#ifndef WX_PRECOMP
+#endif
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <wx/fstream.h>
+#include "wx/protocol/file.h"
 
 #if !USE_SHARED_LIBRARY
 IMPLEMENT_DYNAMIC_CLASS(wxFileProto, wxProtocol)

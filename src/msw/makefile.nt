@@ -108,7 +108,16 @@ COMMONOBJS = \
   $(COMMDIR)\hash.obj \
   $(COMMDIR)\list.obj \
   $(COMMDIR)\string.obj \
+  $(COMMDIR)\socket.obj \
+  $(COMMDIR)\sckaddr.obj \
+  $(COMMDIR)\sckfile.obj \
+  $(COMMDIR)\sckipc.obj \
+  $(COMMDIR)\sckstrm.obj \
+  $(COMMDIR)\url.obj \
+  $(COMMDIR)\http.obj \
+  $(COMMDIR)\protocol.obj \
   $(COMMDIR)\time.obj \
+  $(COMMDIR)\tokenzr.obj \
   $(COMMDIR)\wxexpr.obj \
   $(COMMDIR)\y_tab.obj \
   $(COMMDIR)\extended.obj \
@@ -118,6 +127,7 @@ COMMONOBJS = \
   $(COMMDIR)\zstream.obj \
   $(COMMDIR)\stream.obj \
   $(COMMDIR)\datstrm.obj \
+  $(COMMDIR)\objstrm.obj \
   $(COMMDIR)\wincmn.obj
 
 MSWOBJS = \
@@ -914,6 +924,51 @@ $(COMMDIR)/string.obj:     $*.$(SRCSUFF)
 $(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
 <<
 
+$(COMMDIR)/socket.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
+<<
+
+$(COMMDIR)/sckaddr.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
+<<
+
+$(COMMDIR)/sckfile.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
+<<
+
+$(COMMDIR)/sckipc.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
+<<
+
+$(COMMDIR)/sckstrm.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
+<<
+
+$(COMMDIR)/url.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
+<<
+
+$(COMMDIR)/http.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
+<<
+
+$(COMMDIR)/protocol.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
+<<
+
+$(COMMDIR)/tokenzr.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
+<<
+
 $(COMMDIR)/matrix.obj:     $*.$(SRCSUFF)
         cl @<<
 $(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
@@ -959,9 +1014,14 @@ $(COMMDIR)\datstrm.obj:     $*.$(SRCSUFF)
 $(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
 <<
 
+$(COMMDIR)\objstrm.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
+<<
+
 $(COMMDIR)/extended.obj:     $*.c
         cl @<<
-$(CPPFLAGS2) /c /Tp $*.c /Fo$@
+$(CPPFLAGS2) /c $*.c /Fo$@
 <<
 
 $(COMMDIR)/process.obj:     $*.$(SRCSUFF)

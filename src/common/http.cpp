@@ -13,6 +13,16 @@
 #pragma implementation "http.h"
 #endif
 
+// For compilers that support precompilation, includes "wx.h".
+#include "wx/wxprec.h"
+
+#ifdef __BORLANDC__
+#pragma hdrstop
+#endif
+
+#ifndef WX_PRECOMP
+#endif
+
 #include <stdio.h>
 #include <stdlib.h>
 #include "wx/string.h"
@@ -21,10 +31,6 @@
 #include "wx/protocol/protocol.h"
 #include "wx/protocol/http.h"
 #include "wx/sckstrm.h"
-
-#ifdef __BORLANDC__
-#pragma hdrstop
-#endif
 
 #if !USE_SHARED_LIBRARY
 IMPLEMENT_DYNAMIC_CLASS(wxHTTP, wxProtocol)

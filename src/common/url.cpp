@@ -12,6 +12,17 @@
 #ifdef __GNUG__
 #pragma implementation "url.h"
 #endif
+
+// For compilers that support precompilation, includes "wx.h".
+#include "wx/wxprec.h"
+
+#ifdef __BORLANDC__
+#pragma hdrstop
+#endif
+
+#ifndef WX_PRECOMP
+#endif
+
 #include <string.h>
 #include <ctype.h>
 
@@ -22,10 +33,6 @@
 
 // wxSocket header
 #include "wx/url.h"
-
-#ifdef __BORLANDC__
-#pragma hdrstop
-#endif
 
 #if !USE_SHARED_LIBRARY
 IMPLEMENT_CLASS(wxProtoInfo, wxObject)
@@ -133,7 +140,7 @@ bool wxURL::PrepHost(wxString& url)
 {
   int pos, pos2;
 
-  if ((url[0UL] != '/') || (url[1UL] != '/'))
+  if ((url.GetChar(0) != '/') || (url.GetChar(1) != '/'))
     return FALSE;
 
   url = url(2, url.Length());

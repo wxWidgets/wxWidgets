@@ -13,6 +13,16 @@
 #pragma implementation "sckaddr.h"
 #endif
 
+// For compilers that support precompilation, includes "wx.h".
+#include "wx/wxprec.h"
+
+#ifdef __BORLANDC__
+#pragma hdrstop
+#endif
+
+#ifndef WX_PRECOMP
+#endif
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <ctype.h>
@@ -41,10 +51,6 @@
 #endif // __UNIX__
 
 #include "wx/sckaddr.h"
-
-#ifdef __BORLANDC__
-#pragma hdrstop
-#endif
 
 #define CHECK_ADDRTYPE(var, type)
 

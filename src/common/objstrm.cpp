@@ -12,6 +12,20 @@
 #pragma implementation "objstrm.h"
 #endif
 
+// For compilers that support precompilation, includes "wx.h".
+#include "wx/wxprec.h"
+
+#ifdef __BORLANDC__
+#pragma hdrstop
+#endif
+
+#ifndef WX_PRECOMP
+#include "wx/defs.h"
+#include "wx/setup.h"
+#endif
+
+#if USE_SERIAL
+
 #include "wx/object.h"
 #include "wx/objstrm.h"
 #include "wx/datstrm.h"
@@ -310,3 +324,6 @@ wxObject *wxObjectInputStream::LoadObject()
 
   return object;
 }
+
+#endif
+
