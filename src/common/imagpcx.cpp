@@ -142,14 +142,17 @@ int ReadPCX(wxImage *image, wxInputStream& stream)
     // palette at the end of the file. Read it now before
     // proceeding.
     //
-    pos = stream.TellI();
-    stream.SeekI(-769, wxFromEnd);
+    if (format == IMAGE_8BIT)
+    {
+        pos = stream.TellI();
+        stream.SeekI(-769, wxFromEnd);
 
-    if (stream.GetC() != 12)
-        return E_FORMATO;
+        if (stream.GetC() != 12)
+            return E_FORMATO;
 
-    stream.Read(pal, 768);
-    stream.SeekI(pos, wxFromStart);
+        stream.Read(pal, 768);
+        stream.SeekI(pos, wxFromStart);
+    }
 
     // Allocate memory for a scanline and resize the image.
     //
