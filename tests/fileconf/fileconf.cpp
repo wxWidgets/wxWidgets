@@ -49,6 +49,7 @@ public:
 private:
     CPPUNIT_TEST_SUITE( FileConfigTestCase );
         CPPUNIT_TEST( Path );
+        CPPUNIT_TEST( AddEntries );
         CPPUNIT_TEST( GetEntries );
         CPPUNIT_TEST( GetGroups );
         CPPUNIT_TEST( HasEntry );
@@ -62,6 +63,7 @@ private:
     CPPUNIT_TEST_SUITE_END();
 
     void Path();
+    void AddEntries();
     void GetEntries();
     void GetGroups();
     void HasEntry();
@@ -116,6 +118,28 @@ void FileConfigTestCase::Path()
     CPPUNIT_ASSERT( ChangePath(fc, _T("/root")) == _T("/root") );
     CPPUNIT_ASSERT( ChangePath(fc, _T("/root/group1/subgroup")) == _T("/root/group1/subgroup") );
     CPPUNIT_ASSERT( ChangePath(fc, _T("/root/group2")) == _T("/root/group2") );
+}
+
+void FileConfigTestCase::AddEntries()
+{
+    wxFileConfig fc;
+
+    CPPUNIT_ASSERT( Dump(fc) == _T("") );
+
+    fc.Write(_T("/Foo"), _T("foo"));
+    CPPUNIT_ASSERT( Dump(fc) == _T("Foo=foo\n") );
+
+    fc.Write(_T("/Bar/Baz"), _T("baz"));
+    CPPUNIT_ASSERT( Dump(fc) == _T("Foo=foo\n[Bar]\nBaz=baz\n") );
+
+    fc.DeleteAll();
+    CPPUNIT_ASSERT( Dump(fc) == _T("") );
+
+    fc.Write(_T("/Bar/Baz"), _T("baz"));
+    CPPUNIT_ASSERT( Dump(fc) == _T("[Bar]\nBaz=baz\n") );
+
+    fc.Write(_T("/Foo"), _T("foo"));
+    CPPUNIT_ASSERT( Dump(fc) == _T("Foo=foo\n[Bar]\nBaz=baz\n") );
 }
 
 void
