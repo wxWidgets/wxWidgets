@@ -1362,6 +1362,7 @@ UTILS_DIST: ALL_GUI_DIST
 	cp $(UTILSDIR)/emulator/src/*.in $(DISTDIR)/utils/emulator/src
 	cp $(UTILSDIR)/emulator/src/*.cpp $(DISTDIR)/utils/emulator/src
 	cp $(UTILSDIR)/emulator/src/*.jpg $(DISTDIR)/utils/emulator/src
+	cp $(UTILSDIR)/emulator/src/*.xpm $(DISTDIR)/utils/emulator/src
 	cp $(UTILSDIR)/emulator/src/*.wxe $(DISTDIR)/utils/emulator/src
 	cp $(UTILSDIR)/emulator/docs/*.txt $(DISTDIR)/utils/emulator/docs
 	cp $(UTILSDIR)/emulator/docs/*.jpg $(DISTDIR)/utils/emulator/docs
