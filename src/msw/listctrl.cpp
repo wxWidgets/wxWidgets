@@ -2437,13 +2437,13 @@ static void wxDeleteInternalData(wxListCtrl* ctl, long itemId)
     wxListItemInternalData *data = wxGetInternalData(ctl, itemId);
     if (data)
     {
-        delete data;
         LV_ITEM item;
         memset(&item, 0, sizeof(item));
         item.iItem = itemId;
         item.mask = LVIF_PARAM;
         item.lParam = (LPARAM) 0;
         ListView_SetItem((HWND)ctl->GetHWND(), &item);
+        delete data;
     }
 }
 
