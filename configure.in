@@ -1434,6 +1434,9 @@ fi
 dnl do other tests only if we are using threads
 if test "$wxUSE_THREADS" = "1"; then
   THREADS_LINK2=""
+
+  AC_CHECK_HEADERS(sched.h)
+
   AC_CHECK_LIB($THREADS_LINK, sched_yield,
                AC_DEFINE(HAVE_SCHED_YIELD),
                [AC_CHECK_LIB("posix4", sched_yield,

@@ -362,6 +362,9 @@
 /* Define if you don't have vprintf but do have _doprnt.  */
 #undef HAVE_DOPRNT
 
+/* Define if you have sched.h */
+#undef HAVE_SCHED_H
+
 /* Define if you have vprintf() */
 #undef HAVE_VPRINTF
 
