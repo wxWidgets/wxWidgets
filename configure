@@ -18732,11 +18732,6 @@ if test "$wxUSE_DRAG_AND_DROP" = "yes" ; then
         wxUSE_DRAG_AND_DROP=no
     fi
 
-    if test "$wxUSE_MAC" = 1; then
-        echo "configure: warning: Drag and drop not yet supported under Mac OS X... disabled" 1>&2
-        wxUSE_DRAG_AND_DROP=no
-    fi
-
     if test "$wxUSE_DRAG_AND_DROP" = "yes"; then
         cat >> confdefs.h <<\EOF
 #define wxUSE_DRAG_AND_DROP 1
@@ -19570,7 +19565,7 @@ SAMPLES_SUBDIRS="`echo $SAMPLES_SUBDIRS | tr -s ' ' | tr ' ' '\n' | sort | uniq 
 
 
 echo $ac_n "checking whether ${MAKE-make} sets \${MAKE}""... $ac_c" 1>&6
-echo "configure:19574: checking whether ${MAKE-make} sets \${MAKE}" >&5
+echo "configure:19569: checking whether ${MAKE-make} sets \${MAKE}" >&5
 set dummy ${MAKE-make}; ac_make=`echo "$2" | sed 'y%./+-%__p_%'`
 if eval "test \"`echo '$''{'ac_cv_prog_make_${ac_make}_set'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6

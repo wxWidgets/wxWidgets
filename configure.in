@@ -4328,11 +4328,6 @@ if test "$wxUSE_DRAG_AND_DROP" = "yes" ; then
         wxUSE_DRAG_AND_DROP=no
     fi
 
-    if test "$wxUSE_MAC" = 1; then
-        AC_MSG_WARN([Drag and drop not yet supported under Mac OS X... disabled])
-        wxUSE_DRAG_AND_DROP=no
-    fi
-
     if test "$wxUSE_DRAG_AND_DROP" = "yes"; then
         AC_DEFINE(wxUSE_DRAG_AND_DROP)
         SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS dnd"
