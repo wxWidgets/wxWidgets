@@ -90,7 +90,9 @@ class TestListBox(wxPanel):
 
 
     def EvtListBox(self, event):
-        self.log.WriteText('EvtListBox: %s\n' % event.GetString())
+        self.log.WriteText('EvtListBox: %s, %s, %s\n' %
+                           (event.GetString(), event.IsSelection(), event.GetSelection()))
+
         lb = event.GetEventObject()
         data = lb.GetClientData(lb.GetSelection())
         if data is not None:
@@ -127,14 +129,19 @@ def runTest(frame, nb, log):
 
 
 
-
-
-
-
-
-
-
-overview = """\
-A listbox is used to select one or more of a list of strings. The strings are displayed in a scrolling box, with the selected string(s) marked in reverse video. A listbox can be single selection (if an item is selected, the previous selection is removed) or multiple selection (clicking an item toggles the item on or off independently of other selections).
-
+overview = """<html><body>
+A listbox is used to select one or more of a list of
+strings. The strings are displayed in a scrolling box, with the
+selected string(s) marked in reverse video. A listbox can be single
+selection (if an item is selected, the previous selection is removed)
+or multiple selection (clicking an item toggles the item on or off
+independently of other selections).
+</body></html>
 """
+
+
+if __name__ == '__main__':
+    import sys,os
+    import run
+    run.main(['', os.path.basename(sys.argv[0])])
+
