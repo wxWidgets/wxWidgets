@@ -99,12 +99,6 @@ protected:
     /// The application directory.
     wxString                m_appDir;
 
-    /// Global print data, to remember settings during the session.
-    wxPrintData             m_printData;
-
-    /// Global page setup data.
-    wxPageSetupDialogData   m_pageSetupData;
-
     /// Notebook window.
     wxNotebook*             m_notebookWindow;
 

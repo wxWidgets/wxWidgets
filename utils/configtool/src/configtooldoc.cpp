@@ -1039,4 +1039,210 @@ bool ctConfigCommand::DoAndUndo(bool doCmd)
     return TRUE;
 }
 
+IMPLEMENT_CLASS(ctConfiguration, wxObject)
+
+ctConfiguration::ctConfiguration()
+{
+    m_treeItemId = wxTreeItemId();
+    m_parent = NULL;
+    m_topItem = NULL;
+}
+
+ctConfiguration::ctConfiguration(ctConfiguration* parent, const wxString& name)
+{
+    m_treeItemId = wxTreeItemId();
+    SetName(name);
+    m_parent = parent;
+    if (parent)
+        parent->AddChild(this);
+}
+
+ctConfiguration::~ctConfiguration()
+{
+/*
+    ctConfigTreeCtrl* treeCtrl = wxGetApp().GetMainFrame()->GetConfigTreeCtrl();
+    if (m_treeItemId.IsOk() && treeCtrl)
+    {
+        ctTreeItemData* data = (ctTreeItemData*) treeCtrl->GetItemData(m_treeItemId);
+        if (data)
+            data->SetConfigItem(NULL);
+    }
+    if (GetParent())
+        GetParent()->RemoveChild(this);
+    else
+    {
+        if (wxGetApp().GetMainFrame()->GetDocument() &&
+            wxGetApp().GetMainFrame()->GetDocument()->GetTopItem() == this)
+            wxGetApp().GetMainFrame()->GetDocument()->SetTopItem(NULL);
+    }
+*/
+    
+    Clear();
+}
+
+/// Assignment operator.
+void ctConfiguration::operator= (const ctConfiguration& configuration)
+{
+    m_name = configuration.m_name;
+    m_description = configuration.m_description;
+}
+
+/// Clear children
+void ctConfiguration::Clear()
+{
+    wxNode* node = m_children.GetFirst();
+    while (node)
+    {
+        wxNode* next = node->GetNext();
+        ctConfiguration* child = (ctConfiguration*) node->GetData();
+
+        // This should delete 'node' too, assuming
+        // child's m_parent points to 'this'. If not,
+        // it'll be cleaned up by m_children.Clear().
+        delete child;
+
+        node = next;
+    }
+    m_children.Clear();
+}
+
+// Get the nth child
+ctConfiguration* ctConfiguration::GetChild(int n) const
+{
+    wxASSERT ( n < GetChildCount() && n > -1 );
+
+    if ( n < GetChildCount() && n > -1 )
+    {
+        ctConfiguration* child = wxDynamicCast(m_children.Item(n)->GetData(), ctConfiguration);
+        return child;
+    }
+    else
+        return NULL;
+}
+
+// Get the child count
+int ctConfiguration::GetChildCount() const
+{
+    return m_children.GetCount();
+}
+
+/// Add a child
+void ctConfiguration::AddChild(ctConfiguration* configuration)
+{
+    m_children.Append(configuration);
+    configuration->SetParent(this);
+}
+
+/// Remove (but don't delete) a child
+void ctConfiguration::RemoveChild(ctConfiguration* configuration)
+{
+    m_children.DeleteObject(configuration);
+    configuration->SetParent(NULL);
+}
+
+/// Get the associated document (currently, assumes
+/// there's only ever one document active)
+ctConfigToolDoc* ctConfiguration::GetDocument()
+{
+    ctConfigToolDoc* doc = wxGetApp().GetMainFrame()->GetDocument();
+    return doc;
+}
+
+/// Find an item in this hierarchy
+// TODO: ensure that names are unique, somehow.
+ctConfiguration* ctConfiguration::FindConfiguration(const wxString& name)
+{
+    if (GetName() == name)
+        return this;
+
+    for ( wxNode* node = GetChildren().GetFirst(); node; node = node->GetNext() )
+    {
+        ctConfiguration* child = (ctConfiguration*) node->GetData();
+        ctConfiguration* found = child->FindConfiguration(name);
+        if (found)
+            return found;
+    }
+    return NULL;
+}
+
+/// Find the next sibling
+ctConfiguration* ctConfiguration::FindNextSibling()
+{
+    if (!GetParent())
+        return NULL;
+    wxNode* node = GetParent()->GetChildren().Member(this);
+    if (node && node->GetNext())
+    {
+        return (ctConfiguration*) node->GetNext()->GetData();
+    }
+    return NULL;
+}
+
+/// Find the previous sibling
+ctConfiguration* ctConfiguration::FindPreviousSibling()
+{
+    if (!GetParent())
+        return NULL;
+    wxNode* node = GetParent()->GetChildren().Member(this);
+    if (node && node->GetPrevious())
+    {
+        return (ctConfiguration*) node->GetPrevious()->GetData();
+    }
+    return NULL;
+}
+
+/// Create a clone of this and children
+ctConfiguration* ctConfiguration::DeepClone()
+{
+    ctConfiguration* newItem = Clone();
+
+    for ( wxNode* node = GetChildren().GetFirst(); node; node = node->GetNext() )
+    {
+        ctConfiguration* child = (ctConfiguration*) node->GetData();
+        ctConfiguration* newChild = child->DeepClone();
+        newItem->AddChild(newChild);
+    }
+    return newItem;
+}
+
+/// Detach: remove from parent, and remove tree items
+void ctConfiguration::Detach()
+{
+    // TODO
+    if (GetParent())
+        GetParent()->RemoveChild(this);
+    else
+        GetDocument()->SetTopItem(NULL);
+    SetParent(NULL);
+
+/*
+    wxTreeItemId treeItem = GetTreeItemId();
+
+    DetachFromTree();
+
+    // Will delete the branch, but not the config items.
+    wxGetApp().GetMainFrame()->GetConfigTreeCtrl()->Delete(treeItem);
+*/
+}
+
+/// Hide from tree: make sure tree deletions won't delete
+/// the config items
+void ctConfiguration::DetachFromTree()
+{
+    wxTreeItemId item = GetTreeItemId();
+
+    // TODO
+/*
+    ctTreeItemData* data = (ctTreeItemData*) wxGetApp().GetMainFrame()->GetConfigTreeCtrl()->GetItemData(item);
+    data->SetConfigItem(NULL);
+    m_treeItemId = wxTreeItemId();
+
+    for ( wxNode* node = GetChildren().GetFirst(); node; node = node->GetNext() )
+    {
+        ctConfiguration* child = (ctConfiguration*) node->GetData();
+        child->DetachFromTree();
+    }
+*/
+}
+
         

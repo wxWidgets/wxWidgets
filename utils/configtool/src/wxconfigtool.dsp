@@ -159,8 +159,7 @@ LINK32=link.exe
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /MDd /W3 /Gm /GX /ZI /Od /I "$(WXWINDEV)\include" /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "__WINDOWS__" /D "__WXMSW__" /D DEBUG=1 /D "__WXDEBUG__" /D "__WIN95__" /D "__WIN32__" /D WINVER=0x0400 /D "STRICT" /YX /FD /c
-# ADD CPP /nologo /MDd /W3 /Gm /GX /ZI /Od /I "$(WXWINDEV)/include" /I "$(WXWINDEV)/lib/mswd" /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "__WINDOWS__" /D "__WXMSW__" /D DEBUG=1 /D "__WXDEBUG__" /D "__WIN95__" /D "__WIN32__" /D WINVER=0x0400 /D "STRICT" /FD /c
-# SUBTRACT CPP /YX
+# ADD CPP /nologo /MDd /W3 /Gm /GX /ZI /Od /I "$(WXWIN)/include" /I "$(WXWIN)/lib/mswd" /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "__WINDOWS__" /D "__WXMSW__" /D DEBUG=1 /D "__WXDEBUG__" /D "__WIN95__" /D "__WIN32__" /D WINVER=0x0400 /D "STRICT" /FD /c
 # ADD BASE MTL /nologo /D "_DEBUG" /mktyplib203 /o "NUL" /win32
 # ADD MTL /nologo /D "_DEBUG" /mktyplib203 /o "NUL" /win32
 # ADD BASE RSC /l 0x809 /d "_DEBUG"
@@ -187,7 +186,7 @@ LINK32=link.exe
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /MD /W3 /GX /O1 /Ob2 /I "$(WXWINDEV)\include" /D "NDEBUG" /D "WIN32" /D "_WINDOWS" /D "__WINDOWS__" /D "__WXMSW__" /D "__WIN95__" /D "__WIN32__" /D WINVER=0x0400 /D "STRICT" /YX /FD /c
-# ADD CPP /nologo /MD /W3 /GX /O1 /Ob2 /I "$(WXWINDEV)/include" /I "$(WXWINDEV)/lib/mswd" /D "NDEBUG" /D "WIN32" /D "_WINDOWS" /D "__WINDOWS__" /D "__WXMSW__" /D "__WIN95__" /D "__WIN32__" /D WINVER=0x0400 /D "STRICT" /FD /c
+# ADD CPP /nologo /MD /W3 /GX /O1 /Ob2 /I "$(WXWIN)/include" /I "$(WXWIN)/lib/mswd" /D "NDEBUG" /D "WIN32" /D "_WINDOWS" /D "__WINDOWS__" /D "__WXMSW__" /D "__WIN95__" /D "__WIN32__" /D WINVER=0x0400 /D "STRICT" /FD /c
 # SUBTRACT CPP /YX
 # ADD BASE MTL /nologo /D "NDEBUG" /mktyplib203 /o "NUL" /win32
 # ADD MTL /nologo /D "NDEBUG" /mktyplib203 /o "NUL" /win32
@@ -219,6 +218,10 @@ LINK32=link.exe
 # Begin Source File
 
 SOURCE=.\appsettings.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\configbrowser.h
 # End Source File
 # Begin Source File
 
@@ -280,6 +283,10 @@ SOURCE=.\wxconfigtool.h
 # Begin Source File
 
 SOURCE=.\appsettings.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\configbrowser.cpp
 # End Source File
 # Begin Source File
 
@@ -366,12 +373,12 @@ SOURCE=.\wxconfigtool.rc
 !ELSEIF  "$(CFG)" == "wxconfigtool - Win32 DebugDev"
 
 # ADD BASE RSC /l 0x809
-# ADD RSC /l 0x809 /i "$(WXWINDEV)\include"
+# ADD RSC /l 0x809 /i "$(WXWIN)\include"
 
 !ELSEIF  "$(CFG)" == "wxconfigtool - Win32 ReleaseDev"
 
 # ADD BASE RSC /l 0x809
-# ADD RSC /l 0x809 /i "$(WXWINDEV)\include"
+# ADD RSC /l 0x809 /i "$(WXWIN)\include"
 
 !ENDIF 
 

@@ -22,6 +22,7 @@
 #include "configitem.h"
 
 class wxSimpleHtmlTag;
+class ctConfiguration;
 
 /*!
  * ctConfigToolDoc
@@ -110,6 +111,135 @@ public:
 protected:
     ctConfigItem*   m_topItem;
     ctConfigItem*   m_clipboardItem;
+};
+
+/*!
+ * ctConfiguration is a configuration or a place-holder node within the
+ * hierarchy of configurations.
+ */
+
+class ctConfiguration: public wxObject
+{
+public:
+    /// Ctor and dtor
+    ctConfiguration(ctConfiguration* parent, const wxString& name);
+    ctConfiguration();
+    ~ctConfiguration();
+
+    /// Copy constructor.
+    ctConfiguration(const ctConfiguration& configuration)
+    {
+        (*this) = configuration;
+    }
+
+/// Operations
+
+    /// Assignment operator.
+    void operator= (const ctConfiguration& configuration);
+
+    /// Create a clone
+    ctConfiguration* Clone()
+    {
+        ctConfiguration* configuration = new ctConfiguration;
+        *configuration = *this;
+        return configuration;
+    }
+
+    /// Create a clone of this and children
+    ctConfiguration* DeepClone();
+
+    /// Clear children
+    void Clear();
+
+    /// Add a child
+    void AddChild(ctConfiguration* config);
+
+    /// Remove (but don't delete) a child
+    void RemoveChild(ctConfiguration* config);
+
+    /// Find an item in this hierarchy
+    ctConfiguration* FindConfiguration(const wxString& name);
+
+    /// Find the next sibling
+    ctConfiguration* FindNextSibling();
+
+    /// Find the previous sibling
+    ctConfiguration* FindPreviousSibling();
+
+    /// Detach: remove from parent, and remove tree items
+    void Detach();
+
+    /// Attach: insert before the given position
+    void Attach(ctConfiguration* parent, ctConfiguration* insertbefore);
+
+    void DetachFromTree();
+
+/// Accessors
+
+    /// Returns the top-level item.
+    ctConfigItem* GetTopItem() const { return m_topItem; }
+
+    /// Sets the top-level item.
+    void SetTopItem(ctConfigItem* item) { m_topItem = item; }
+
+    /// Returns the name.
+    wxString GetName() const { return m_name; }
+
+    /// Sets the name.
+    void SetName(const wxString& name ) { m_name = name; }
+
+    /// Get description.
+    wxString GetDescription() const { return m_description; }
+
+    /// Set description.
+    void SetDescription(const wxString& descr) { m_description = descr; }
+
+    /// Set the tree item id
+    void SetTreeItem(wxTreeItemId id) { m_treeItemId = id; }
+
+    // Get the type
+    wxTreeItemId GetTreeItemId() const { return m_treeItemId ; }
+
+    /// Get the list of children
+    wxList& GetChildren() { return m_children; }
+
+    /// Get the nth child
+    ctConfiguration* GetChild(int n) const;
+
+    /// Get the child count
+    int GetChildCount() const;
+
+    /// Get the parent
+    ctConfiguration* GetParent() const { return m_parent; }
+
+    /// Set the parent
+    void SetParent(ctConfiguration* parent) { m_parent = parent; }
+
+    /// Get the associated document (currently, assumes
+    /// there's only ever one document active)
+    ctConfigToolDoc* GetDocument() ;
+
+protected:
+
+    /// The corresponding tree item
+    wxTreeItemId    m_treeItemId;
+
+    /// The list of children.
+    wxList          m_children;
+
+    /// The parent config item
+    ctConfiguration* m_parent;
+
+    /// The name
+    wxString        m_name;
+
+    /// The description
+    wxString        m_description;
+
+    /// The top-level item of this description, if any
+    ctConfigItem*   m_topItem;
+
+DECLARE_CLASS(ctConfiguration)
 };
 
 

@@ -27,6 +27,7 @@ class ctConfigTreeCtrl;
 class ctPropertyEditor;
 class ctOutputWindow;
 class ctFindReplaceDialog;
+class ctConfigurationBrowserWindow;
 
 /*!
  * \brief The main window of the application.
@@ -152,6 +153,10 @@ protected:
     wxNotebook*             m_mainNotebook;
     ctOutputWindow*         m_setupPage;
     ctOutputWindow*         m_configurePage;
+
+    // The control panel for browsing, adding and removing
+    // configurations.
+    ctConfigurationBrowserWindow*   m_configBrowserPage;
 
     ctFindReplaceDialog*    m_findDialog;
 };

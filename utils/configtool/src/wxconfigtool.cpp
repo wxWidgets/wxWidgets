@@ -122,7 +122,7 @@ bool ctApp::OnInit(void)
     
     ctMainFrame* frame = new ctMainFrame(m_docManager, NULL, -1, wxGetApp().GetSettings().GetAppName(),
         GetSettings().m_frameSize.GetPosition(), GetSettings().m_frameSize.GetSize(),
-        wxDEFAULT_FRAME_STYLE);
+        wxDEFAULT_FRAME_STYLE|wxNO_FULL_REPAINT_ON_RESIZE|wxCLIP_CHILDREN);
     SetTopWindow(frame);
 
     switch (wxGetApp().GetSettings().m_frameStatus)

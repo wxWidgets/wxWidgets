@@ -33,6 +33,7 @@
 #include "propeditor.h"
 #include "configtooldoc.h"
 #include "configtoolview.h"
+#include "configbrowser.h"
 
 #include "bitmaps/wxconfigtool.xpm"
 
@@ -96,24 +97,35 @@ ctMainFrame::ctMainFrame(wxDocManager *manager, wxFrame *parent, wxWindowID id, 
     m_editMenu = NULL;
     m_configurePage = NULL;
     m_setupPage = NULL;
+    m_configBrowserPage = NULL;
     m_mainNotebook = NULL;
     m_findDialog = NULL;
 
     m_treeSplitterWindow = new wxSplitterWindow(this, -1, wxDefaultPosition, wxSize(400, 300),
-        wxSP_3DSASH|wxSP_3DBORDER);
+        wxSP_3DSASH|wxSP_3DBORDER|wxNO_FULL_REPAINT_ON_RESIZE|wxCLIP_CHILDREN);
 
     m_configTreeCtrl = new ctConfigTreeCtrl(m_treeSplitterWindow, -1, wxDefaultPosition, wxDefaultSize,
-        wxTR_HAS_BUTTONS|wxNO_BORDER);
+        wxTR_HAS_BUTTONS|wxNO_BORDER|wxNO_FULL_REPAINT_ON_RESIZE|wxCLIP_CHILDREN);
 
-    m_mainNotebook = new wxNotebook(m_treeSplitterWindow, -1, wxDefaultPosition, wxSize(300, 300));
+    m_mainNotebook = new wxNotebook(m_treeSplitterWindow, -1, wxDefaultPosition, wxSize(300, 300),
+        wxNO_FULL_REPAINT_ON_RESIZE|wxCLIP_CHILDREN);
 
     m_propertyEditor = new ctPropertyEditor(m_mainNotebook, -1, wxDefaultPosition, wxSize(300, 200),
-        wxNO_BORDER);
+        wxNO_BORDER|wxNO_FULL_REPAINT_ON_RESIZE|wxCLIP_CHILDREN);
     m_setupPage = new ctOutputWindow(m_mainNotebook, -1, wxDefaultPosition, wxSize(300, 200),
-        wxNO_BORDER);
+        wxNO_BORDER|wxNO_FULL_REPAINT_ON_RESIZE|wxCLIP_CHILDREN);
     m_configurePage = new ctOutputWindow(m_mainNotebook, -1, wxDefaultPosition, wxSize(300, 200),
-        wxNO_BORDER);
+        wxNO_BORDER|wxNO_FULL_REPAINT_ON_RESIZE|wxCLIP_CHILDREN);
+
+#if 0
+    m_configBrowserPage = new ctConfigurationBrowserWindow(m_mainNotebook, -1, wxDefaultPosition, wxSize(300, 200),
+        wxNO_BORDER|wxNO_FULL_REPAINT_ON_RESIZE|wxCLIP_CHILDREN);
+#endif
+
     m_mainNotebook->AddPage(m_propertyEditor, _T("Properties"));
+#if 0
+    m_mainNotebook->AddPage(m_configBrowserPage, _T("Configuration Browser"));
+#endif
     m_mainNotebook->AddPage(m_setupPage, _T("setup.h"));
     m_mainNotebook->AddPage(m_configurePage, _T("configure"));
 
@@ -131,7 +143,7 @@ ctMainFrame::ctMainFrame(wxDocManager *manager, wxFrame *parent, wxWindowID id, 
     wxMenuBar* menuBar = CreateMenuBar();
     SetMenuBar(menuBar);
 
-    CreateToolBar(wxNO_BORDER|wxTB_FLAT|wxTB_HORIZONTAL);
+    CreateToolBar(wxNO_BORDER|wxTB_FLAT|wxTB_HORIZONTAL|wxNO_FULL_REPAINT_ON_RESIZE|wxCLIP_CHILDREN);
     InitToolBar(GetToolBar());
 
     if (wxGetApp().GetSettings().m_showToolBar)
