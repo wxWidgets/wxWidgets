@@ -1250,9 +1250,11 @@ wxPoint wxWindowBase::ConvertPixelsToDialog(const wxPoint& pt)
 {
     int charWidth = GetCharWidth();
     int charHeight = GetCharHeight();
-    wxPoint pt2;
-    pt2.x = (int) ((pt.x * 4) / charWidth) ;
-    pt2.y = (int) ((pt.y * 8) / charHeight) ;
+    wxPoint pt2(-1, -1);
+    if (pt.x != -1)
+        pt2.x = (int) ((pt.x * 4) / charWidth) ;
+    if (pt.y != -1)
+        pt2.y = (int) ((pt.y * 8) / charHeight) ;
 
     return pt2;
 }
@@ -1261,9 +1263,11 @@ wxPoint wxWindowBase::ConvertDialogToPixels(const wxPoint& pt)
 {
     int charWidth = GetCharWidth();
     int charHeight = GetCharHeight();
-    wxPoint pt2;
-    pt2.x = (int) ((pt.x * charWidth) / 4) ;
-    pt2.y = (int) ((pt.y * charHeight) / 8) ;
+    wxPoint pt2(-1, -1);
+    if (pt.x != -1)
+        pt2.x = (int) ((pt.x * charWidth) / 4) ;
+    if (pt.y != -1)
+        pt2.y = (int) ((pt.y * charHeight) / 8) ;
 
     return pt2;
 }
