@@ -2,3 +2,6 @@ system.list
 bin
 .gdb_history
 Test
+config.cashe
+config.status
+system.list

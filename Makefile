@@ -53,6 +53,12 @@ user::
 	@echo "entering directory user building all"
 	@cd user; ${MAKE} all
 
+install::
+	@echo "entering directory src for installing"
+	@cd src; ${MAKE} install
+	@echo "entering directory utils for installing"
+	@cd utils; ${MAKE} install
+	
 # the following ones recreate all Makefiles.
 
 makefiles:: recreate

@@ -642,11 +642,11 @@ dnl ------------------------------------------------------------------------
 
 AC_OVERRIDES_PREPARE
 
-DEFAULT_USE_GTK=0
+DEFAULT_USE_GTK=1
 DEFAULT_USE_QT=0
 DEFAULT_USE_MOTIF=0
 
-DEFAULT_USE_SHARED=0
+DEFAULT_USE_SHARED=1
 DEFAULT_USE_OPTIMISE=1
 DEFAULT_USE_PROFILE=0
 DEFAULT_USE_DEBUG_FLAG=0
@@ -1546,7 +1546,7 @@ dnl ------------------------------------------------------------------------
 dnl add OS to list of configured
 echo $OS >> system.list
 
-AC_CONFIG_HEADER(./setup/setup.h:./setup/setup.hin)
+AC_CONFIG_HEADER(./include/wx/gtk/setup.h:./setup/setup.hin)
 AC_OUTPUT(./setup/substit,./setup/general/createall)
 
 AC_OVERRIDES_DONE

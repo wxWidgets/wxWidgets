@@ -9,7 +9,7 @@ RULE=gslib
 # define common stuff
 
 # define library name
-LIB_TARGET=wxserial
+LIB_TARGET=wx_serial_gtk
 LIB_MAJOR=2
 LIB_MINOR=0
 # define library sources
@@ -23,3 +23,26 @@ sermain.o sercore.o sergdi.o serwnd.o serctrl.o serext.o
 
 # include the definitions now
 include ../../../template.mak
+
+install::
+	@echo "Installing library files and headers for libwx_serial_gtk.."
+	@echo "  Creating directory.."
+	@$(WXBASEDIR)/mkinstalldirs /usr/local/include/wx_serial
+	@echo "  Copying headers from /include/wx"
+	@cd $(WXBASEDIR)/utils/serialize ; \
+	for f in *.h ; do \
+	  rm -f /usr/local/include/wx_serial/$$f ; \
+	  $(INSTALL_DATA) $$f /usr/local/include/wx_serial/$$f ; \
+	done
+	@echo "  Copying static library files to /usr/local/lib"
+	@cd $(WXBASEDIR)/lib/$(OS) ; \
+	for f in libwx_serial_gtk.a ; do \
+	  rm -f /usr/local/lib/$$f ; \
+	  $(INSTALL_DATA) $$f /usr/local/lib/$$f ; \
+	done
+	@echo "  Copying shared libraries to /usr/local/lib"
+	@cd $(WXBASEDIR)/lib/$(OS) ; \
+	for f in libwx_serial_gtk.so* ; do \
+	  rm -f /usr/local/lib/$$f ; \
+	  $(INSTALL_PROGRAM) $$f /usr/local/lib/$$f ; \
+	done

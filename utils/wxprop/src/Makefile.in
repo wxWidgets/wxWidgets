@@ -37,6 +37,30 @@ all::
 
 clean::
 
+install::
+	@echo "Installing library files and headers for libwx_prop_gtk.."
+	@echo "  Creating directory.."
+	@$(WXBASEDIR)/mkinstalldirs /usr/local/include/wx_prop 
+	@echo "  Copying headers from /include/wx"
+	@cd $(WXBASEDIR)/utils/wxprop/src ; \
+	for f in *.h ; do \
+	  rm -f /usr/local/include/wx_prop/$$f ; \
+	  $(INSTALL_DATA) $$f /usr/local/include/wx_prop/$$f ; \
+	done
+	@echo "  Copying static library files to /usr/local/lib"
+	@cd $(WXBASEDIR)/lib/$(OS) ; \
+	for f in libwx_prop_gtk.a ; do \
+	  rm -f /usr/local/lib/$$f ; \
+	  $(INSTALL_DATA) $$f /usr/local/lib/$$f ; \
+	done
+	@echo "  Copying shared libraries to /usr/local/lib"
+	@cd $(WXBASEDIR)/lib/$(OS) ; \
+	for f in libwx_prop_gtk.so* ; do \
+	  rm -f /usr/local/lib/$$f ; \
+	  $(INSTALL_PROGRAM) $$f /usr/local/lib/$$f ; \
+	done
+
+
 #additional things needed for compile
 ADD_COMPILE= 
 

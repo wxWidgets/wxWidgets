@@ -38,6 +38,45 @@ all::
 	@if test ! -d gdk_imlib; then mkdir gdk_imlib; fi
 	@if test ! -d iodbc; then mkdir iodbc; fi
 
+install::
+	@echo "Installing library files and headers.."
+	@echo "  Creating directories.."
+	@$(WXBASEDIR)/mkinstalldirs \
+	   /usr/local/include/wx \
+	   /usr/local/include/wx/gtk \
+	   /usr/local/include/wx/common \
+	   /usr/local/include/wx/generic
+	@echo "  Copying headers from /include/wx"
+	@cd $(WXBASEDIR)/include/wx ; \
+	for f in *.h ; do \
+	  rm -f /usr/local/include/wx/$$f ; \
+	  $(INSTALL_DATA) $$f /usr/local/include/wx/$$f ; \
+	done
+	@echo "  Copying headers from /include/wx/gtk"
+	@cd $(WXBASEDIR)/include/wx/gtk ; \
+	for f in *.h ; do \
+	  rm -f /usr/local/include/wx/gtk/$$f ; \
+	  $(INSTALL_DATA) $$f /usr/local/include/wx/gtk/$$f ; \
+	done
+	@echo "  Copying headers from /include/wx/generic"
+	@cd $(WXBASEDIR)/include/wx/generic ; \
+	for f in *.h ; do \
+	  rm -f /usr/local/include/wx/generic/$$f ; \
+	  $(INSTALL_DATA) $$f /usr/local/include/wx/generic/$$f ; \
+	done
+	@echo "  Copying static libraries files to /usr/local/lib"
+	@cd $(WXBASEDIR)/lib/$(OS) ; \
+	for f in libwx_gtk.a ; do \
+	  rm -f /usr/local/lib/$$f ; \
+	  $(INSTALL_DATA) $$f /usr/local/lib/$$f ; \
+	done
+	@echo "  Copying shared libraries to /usr/local/lib"
+	@cd $(WXBASEDIR)/lib/$(OS) ; \
+	for f in libwx_gtk.so* ; do \
+	  rm -f /usr/local/lib/$$f ; \
+	  $(INSTALL_PROGRAM) $$f /usr/local/lib/$$f ; \
+	done
+	
 clean::
 	$(RM) -rf gtk
 	$(RM) -rf qt

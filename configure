@@ -4199,11 +4199,11 @@ touch ${OSTYPE}.system.cache.tmp
 touch ${OSTYPE}.system.cache
 
 
-DEFAULT_USE_GTK=0
+DEFAULT_USE_GTK=1
 DEFAULT_USE_QT=0
 DEFAULT_USE_MOTIF=0
 
-DEFAULT_USE_SHARED=0
+DEFAULT_USE_SHARED=1
 DEFAULT_USE_OPTIMISE=1
 DEFAULT_USE_PROFILE=0
 DEFAULT_USE_DEBUG_FLAG=0
@@ -6881,7 +6881,7 @@ done
 ac_given_srcdir=$srcdir
 ac_given_INSTALL="$INSTALL"
 
-trap 'rm -fr `echo "./setup/substit ./setup/setup.h:./setup/setup.hin" | sed "s/:[^ ]*//g"` conftest*; exit 1' 1 2 15
+trap 'rm -fr `echo "./setup/substit ./include/wx/gtk/setup.h:./setup/setup.hin" | sed "s/:[^ ]*//g"` conftest*; exit 1' 1 2 15
 EOF
 cat >> $CONFIG_STATUS <<EOF
 
@@ -7087,7 +7087,7 @@ ac_eD='%g'
 if test "${CONFIG_HEADERS+set}" != set; then
 EOF
 cat >> $CONFIG_STATUS <<EOF
-  CONFIG_HEADERS="./setup/setup.h:./setup/setup.hin"
+  CONFIG_HEADERS="./include/wx/gtk/setup.h:./setup/setup.hin"
 EOF
 cat >> $CONFIG_STATUS <<\EOF
 fi

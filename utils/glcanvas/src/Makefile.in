@@ -42,3 +42,26 @@ ADD_COMPILE=
 # include the definitions now
 include ../../../../template.mak
 
+install::
+	@echo "Installing library files and headers for libwx_opengl_gtk.."
+	@echo "  Creating directory.."
+	@$(WXBASEDIR)/mkinstalldirs /usr/local/include/wx_opengl
+	@echo "  Copying headers from /include/wx"
+	@cd $(WXBASEDIR)/utils/glcanvas/src ; \
+	for f in *.h ; do \
+	  rm -f /usr/local/include/wx_opengl/$$f ; \
+	  $(INSTALL_DATA) $$f /usr/local/include/wx_opengl/$$f ; \
+	done
+	@echo "  Copying static library files to /usr/local/lib"
+	@cd $(WXBASEDIR)/lib/$(OS) ; \
+	for f in libwx_opengl_gtk.a ; do \
+	  rm -f /usr/local/lib/$$f ; \
+	  $(INSTALL_DATA) $$f /usr/local/lib/$$f ; \
+	done
+	@echo "  Copying shared libraries to /usr/local/lib"
+	@cd $(WXBASEDIR)/lib/$(OS) ; \
+	for f in libwx_opengl_gtk.so* ; do \
+	  rm -f /usr/local/lib/$$f ; \
+	  $(INSTALL_PROGRAM) $$f /usr/local/lib/$$f ; \
+	done
+
