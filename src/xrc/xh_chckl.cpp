@@ -19,7 +19,7 @@
     #pragma hdrstop
 #endif
 
-#if wxUSE_OWNER_DRAWN
+#if wxUSE_OWNER_DRAWN || !defined(__WXMSW__)
 
 #include "wx/xrc/xh_chckl.h"
 #include "wx/checklst.h"
