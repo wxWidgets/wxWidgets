@@ -11,10 +11,14 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 // ============================================================================
-// headers
+// declarations
 // ============================================================================
+
+// ----------------------------------------------------------------------------
+// headers
+// ----------------------------------------------------------------------------
 #ifdef __GNUG__
-#pragma implementation "app.h"
+  #pragma implementation "config.h"
 #endif
 
 #include  "wx/wxprec.h"
@@ -23,15 +27,25 @@
   #pragma hdrstop
 #endif  //__BORLANDC__
 
-#include  <wx/string.h>
-#include  <wx/intl.h>
+#ifndef WX_PRECOMP
+  #include  <wx/string.h>
+  #include  <wx/intl.h>
+#endif //WX_PRECOMP
+
+#include  <wx/app.h>
 #include  <wx/file.h>
 #include  <wx/log.h>
 #include  <wx/textfile.h>
 #include  <wx/config.h>
+#include  <wx/fileconf.h>
 
-#include <stdlib.h>
-#include <ctype.h>
+#include  <ctype.h>       // for isalnum()
+
+// ----------------------------------------------------------------------------
+// global and class static variables
+// ----------------------------------------------------------------------------
+
+wxConfig *wxConfig::ms_pConfig = NULL;
 
 // ============================================================================
 // implementation
@@ -42,6 +56,65 @@
 // ----------------------------------------------------------------------------
 wxConfig::~wxConfig()
 {
+}
+
+wxConfig *wxConfig::Set(wxConfig *pConfig)
+{
+  wxConfig *pOld = ms_pConfig;
+  ms_pConfig = pConfig;
+  return pOld;
+}
+
+void wxConfig::Create()
+{
+  ms_pConfig = wxTheApp->CreateConfig();
+}
+
+const char *wxConfig::Read(const char *szKey, const char *szDefault) const
+{
+  static char s_szBuf[1024];
+  wxString s;
+  Read(&s, szKey, szDefault);
+  strncpy(s_szBuf, s, WXSIZEOF(s_szBuf));
+
+  return s_szBuf;
+}
+
+// ----------------------------------------------------------------------------
+// Config::PathChanger
+// ----------------------------------------------------------------------------
+
+wxConfig::PathChanger::PathChanger(const wxConfig *pContainer,
+                                 const wxString& strEntry)
+{
+  m_pContainer = (wxConfig *)pContainer;
+  wxString strPath = strEntry.Before(APPCONF_PATH_SEPARATOR);
+
+  // special case of "/keyname" when there is nothing before "/"
+  if ( strPath.IsEmpty() && strEntry[0] == APPCONF_PATH_SEPARATOR )
+    strPath = APPCONF_PATH_SEPARATOR;
+
+  if ( !strPath.IsEmpty() ) {
+    // do change the path
+    m_bChanged = TRUE;
+    m_strName = strEntry.Right(APPCONF_PATH_SEPARATOR);
+    m_strOldPath = m_pContainer->GetPath();
+    m_strOldPath += APPCONF_PATH_SEPARATOR;
+    m_pContainer->SetPath(strPath);
+  }
+  else {
+    // it's a name only, without path - nothing to do
+    m_bChanged = FALSE;
+    m_strName = strEntry;
+  }
+}
+
+wxConfig::PathChanger::~PathChanger()
+{
+  // only restore path if it was changed
+  if ( m_bChanged ) {
+    m_pContainer->SetPath(m_strOldPath);
+  }
 }
 
 // ----------------------------------------------------------------------------
@@ -151,3 +224,40 @@ wxString ExpandEnvVars(const wxString& str)
 
   return strResult;
 }
+
+// this function is used to properly interpret '..' in path
+void SplitPath(wxArrayString& aParts, const char *sz)
+{
+  aParts.Empty();
+
+  wxString strCurrent;
+  const char *pc = sz;
+  for ( ;; ) {
+    if ( *pc == '\0' || *pc == APPCONF_PATH_SEPARATOR ) {
+      if ( strCurrent == "." ) {
+        // ignore
+      }
+      else if ( strCurrent == ".." ) {
+        // go up one level
+        if ( aParts.IsEmpty() )
+          wxLogWarning("'%s' has extra '..', ignored.", sz);
+        else
+          aParts.Remove(aParts.Count() - 1);
+      }
+      else if ( !strCurrent.IsEmpty() ) {
+        aParts.Add(strCurrent);
+        strCurrent.Empty();
+      }
+      //else:
+        // could log an error here, but we prefer to ignore extra '/'
+
+      if ( *pc == '\0' )
+        return;
+    }
+    else
+      strCurrent += *pc;
+
+    pc++;
+  }
+}
+

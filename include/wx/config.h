@@ -19,7 +19,7 @@
 
 /// shall we be case sensitive in parsing variable names?
 #ifndef APPCONF_CASE_SENSITIVE
-  #define  APPCONF_CASE_SENSITIVE       FALSE
+  #define  APPCONF_CASE_SENSITIVE       false
 #endif
 
 /// separates group and entry names
@@ -34,19 +34,24 @@
 
 /// should we use registry instead of configuration files under Win32?
 #ifndef   APPCONF_WIN32_NATIVE
-  #define APPCONF_WIN32_NATIVE          TRUE
+  #define APPCONF_WIN32_NATIVE          true
 #endif
 
 // ----------------------------------------------------------------------------
-// global functions
+// various helper global functions
 // ----------------------------------------------------------------------------
 
 /*
   Replace environment variables ($SOMETHING) with their values. The format is
   $VARNAME or ${VARNAME} where VARNAME contains alphanumeric characters and
   '_' only. '$' must be escaped ('\$') in order to be taken literally.
-*/
-wxString ExpandEnvVars(const wxString& str);
+ */
+extern wxString ExpandEnvVars(const wxString& str);
+
+/*
+  Split path into parts removing '..' in progress
+ */
+extern void SplitPath(wxArrayString& aParts, const char *sz);
 
 // ----------------------------------------------------------------------------
 // abstract base class wxConfig which defines the interface for derived classes
@@ -61,6 +66,14 @@ wxString ExpandEnvVars(const wxString& str);
 class wxConfig
 {
 public:
+  // static functions
+    // sets the config object, returns the previous pointer
+  static wxConfig *Set(wxConfig *pConfig);
+    // get the config object, creates it on demand
+  static wxConfig *Get() { if ( !ms_pConfig ) Create(); return ms_pConfig; }
+    // create a new config object
+  static void Create();
+
   // ctor & virtual dtor
   wxConfig() { }
   virtual ~wxConfig();
@@ -82,24 +95,32 @@ public:
   virtual bool GetFirstEntry(wxString& str, long& lIndex) = 0;
   virtual bool GetNextEntry (wxString& str, long& lIndex) = 0;
 
-  // key access
-    // read a string or long value from the key. If the key is not
-    // found the default value is returned.
-    virtual const char *Read(const char *szKey,
-                             const char *szDefault = NULL) const = 0;
-    virtual long Read(const char *szKey, long lDefault) const = 0;
+  // key access: returns TRUE if value was really read, FALSE if default used
+  // (and if the key is not found the default value is returned.)
+    // read a string from the key
+  virtual bool Read(wxString *pStr, const char *szKey,
+                    const char *szDefault = NULL) const = 0;
+    // another version using statis buffer - it means it will be overwritten
+    // after each call to this function!
+  virtual const char *Read(const char *szKey,
+                           const char *szDefault = NULL) const;
+    // the same for longs
+  long Read(const char *szKey, long lDefault) const
+    { long l; Read(&l, szKey, lDefault); return l; }
+    // and another version: returns true if default value is returned
+  virtual bool Read(long *pl, const char *szKey, long lDefault = 0) const = 0;
 
     // write the value (return true on success)
   virtual bool Write(const char *szKey, const char *szValue) = 0;
   virtual bool Write(const char *szKey, long lValue) = 0;
     // permanently writes all changes
-  virtual bool Flush(bool bCurrentOnly = FALSE) = 0;
+  virtual bool Flush(bool bCurrentOnly = false) = 0;
 
   // delete entries/groups
     // deletes the specified entry and the group it belongs to if
     // it was the last key in it and the second parameter is true
   virtual bool DeleteEntry(const char *szKey,
-                           bool bDeleteGroupIfEmpty = TRUE) = 0;
+                           bool bDeleteGroupIfEmpty = true) = 0;
     // delete the group (with all subgroups)
   virtual bool DeleteGroup(const char *szKey) = 0;
     // delete the whole underlying object (disk file, registry key, ...)
@@ -107,15 +128,36 @@ public:
   virtual bool DeleteAll() = 0;
 
 protected:
-  // true if environment variables are to be auto-expanded
+  static bool IsImmutable(const char *szKey) 
+    { return *szKey == APPCONF_IMMUTABLE_PREFIX; }
+
+  // a handy little class which changes current path to the path of given entry
+  // and restores it in dtor: so if you declare a local variable of this type,
+  // you work in the entry directory and the path is automatically restored
+  // when function returns
+  class PathChanger
+  {
+  public:
+    // ctor/dtor do path changing/restorin
+    PathChanger(const wxConfig *pContainer, const wxString& strEntry);
+   ~PathChanger();
+
+    // get the key name
+   const wxString& Name() const { return m_strName; }
+
+  private:
+    wxConfig *m_pContainer;   // object we live in
+    wxString  m_strName,      // name of entry (i.e. name only)
+              m_strOldPath;   // saved path
+    bool      m_bChanged;     // was the path changed?
+  };
+
+  // are we doing automatic environment variable expansion?
   bool m_bExpandEnvVars;
+
+  // static variables
+  static wxConfig *ms_pConfig;
 };
-
-// ----------------------------------------------------------------------------
-// functions to create different config implementations
-// ----------------------------------------------------------------------------
-
-wxConfig *CreateFileConfig(const wxString& strFile, bool bLocalOnly = FALSE);
 
 #endif  //_APPCONF_H
 
