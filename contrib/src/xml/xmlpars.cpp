@@ -77,7 +77,6 @@ static void ReleaseLibxml()
 {
     if (gs_libxmlLoaded)
     {
-        wxLogDebug("Releasing libxml.so.2");
         wxDllLoader::UnloadLibrary(gs_libxmlDLL.Handle);
     }
     gs_libxmlLoaded = FALSE;
@@ -91,7 +90,6 @@ static bool LoadLibxml()
     if (gs_libxmlLoadFailed) return FALSE;
     gs_libxmlLoadFailed = TRUE;
 
-    wxLogDebug("Loading libxml.so.2...");
     {
     wxLogNull lg;
 #ifdef __UNIX__
@@ -145,7 +143,6 @@ static bool LoadLibxml()
 
     gs_libxmlLoadFailed = FALSE;
 
-    wxLogDebug("...succeed");
     return TRUE;
 }
 

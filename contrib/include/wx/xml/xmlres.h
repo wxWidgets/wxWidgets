@@ -32,13 +32,6 @@ class WXDLLEXPORT wxXmlResourceHandler;
 
 #include "wx/xml/xml.h"
 
-enum 
-{
-    wxXML_BINARY,
-    wxXML_ARCHIVE
-};
-
-
 
 class WXDLLEXPORT wxXmlResourceDataRecord
 {
@@ -61,20 +54,12 @@ class WXDLLEXPORT wxXmlResource : public wxObject
 {
     public:
         wxXmlResource();
-        wxXmlResource(const wxString& filemask, int type);
+        wxXmlResource(const wxString& filemask);
         ~wxXmlResource();
 
         // Loads resources from XML files that match given filemask.
-        // This method understands VFS (see filesys.h). Type is one of
-        // wxXML_TEXT, wxXML_BINARY, wxXML_ARCHIVE and specifies type of
-        // data to be expected: 
-        //    wxXML_BINARY     - binary version of .xml file, as produced
-        //                       by wxXmlDocument::SaveBinary
-        //    wxXML_ARCHIVE    - ZIP archive that contains arbitrary number
-        //                       of files with .xmb extension
-        //                       (this kind of ZIP archive is produced by
-        //                       XML resources compiler that ships with wxWin)
-        bool Load(const wxString& filemask, int type = wxXML_ARCHIVE);
+        // This method understands VFS (see filesys.h).
+        bool Load(const wxString& filemask);
         
         // Initialize handlers for all supported controls/windows. This will
         // make the executable quite big because it forces linking against

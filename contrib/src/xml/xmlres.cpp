@@ -40,10 +40,10 @@ wxXmlResource::wxXmlResource()
     m_Handlers.DeleteContents(TRUE);
 }
     
-wxXmlResource::wxXmlResource(const wxString& filemask, int type)
+wxXmlResource::wxXmlResource(const wxString& filemask)
 {
     m_Handlers.DeleteContents(TRUE);
-    Load(filemask, type);
+    Load(filemask);
 }
 
 wxXmlResource::~wxXmlResource()
@@ -52,10 +52,11 @@ wxXmlResource::~wxXmlResource()
 }
 
 
-bool wxXmlResource::Load(const wxString& filemask, int type)
+bool wxXmlResource::Load(const wxString& filemask)
 {
     wxString fnd;
     wxXmlResourceDataRecord *drec;
+    bool iswild = wxIsWild(filemask);
     
 #if wxUSE_FILESYSTEM
     wxFileSystem fsys;
@@ -64,13 +65,16 @@ bool wxXmlResource::Load(const wxString& filemask, int type)
 #else
 #   define wxXmlFindFirst  wxFindFirstFile(filemask, wxFILE)
 #   define wxXmlFindNext   wxFindNextFile()
-    wxASSERT_MSG(type != wxXML_ARCHIVE, wxT("ZIP archive XML resources supported only with wxUSE_FILESYSTEM set to 1!"));
 #endif
-    fnd = wxXmlFindFirst;
+    if (iswild)
+        fnd = wxXmlFindFirst;
+    else
+        fnd = filemask;
     while (!!fnd)
     {
 #if wxUSE_FILESYSTEM
-        if (type == wxXML_ARCHIVE)
+        if (filemask.Lower().Matches("*.zip") ||
+            filemask.Lower().Matches("*.rsc"))
         {
             wxFileSystem fs2;
             wxString fnd2;
@@ -91,7 +95,11 @@ bool wxXmlResource::Load(const wxString& filemask, int type)
             drec->File = fnd;
             m_Data.Add(drec);
         }
-        fnd = wxXmlFindNext;
+
+        if (iswild)
+            fnd = wxXmlFindNext;
+        else
+            fnd = wxEmptyString;
     }
 #   undef wxXmlFindFirst
 #   undef wxXmlFindNext
@@ -249,12 +257,19 @@ void wxXmlResource::UpdateResources()
                 m_Data[i].Doc = new wxXmlDocument;
             }
             if (!stream || !m_Data[i].Doc->Load(*stream))
+            {
                 wxLogError(_("Cannot load resources from file '%s'."), m_Data[i].File.c_str());
-
-            if (m_Data[i].Doc->GetRoot()->GetName() != _T("resource")) 
+                delete m_Data[i].Doc;
+                m_Data[i].Doc = NULL;
+            }
+            else if (m_Data[i].Doc->GetRoot()->GetName() != _T("resource")) 
+            {
                 wxLogError(_("Invalid XML resource '%s': doesn't have root node 'resource'."), m_Data[i].File.c_str());
-
-            ProcessPlatformProperty(m_Data[i].Doc->GetRoot());
+                delete m_Data[i].Doc;
+                m_Data[i].Doc = NULL;
+            }
+            else
+                ProcessPlatformProperty(m_Data[i].Doc->GetRoot());
 
 #           if wxUSE_FILESYSTEM
             delete file;
@@ -274,6 +289,7 @@ wxXmlNode *wxXmlResource::FindResource(const wxString& name, const wxString& typ
     wxString dummy;   
     for (size_t f = 0; f < m_Data.GetCount(); f++)
     {
+        if (m_Data[f].Doc == NULL || m_Data[f].Doc->GetRoot() == NULL) continue;
         for (wxXmlNode *node = m_Data[f].Doc->GetRoot()->GetChildren(); 
                                       node; node = node->GetNext())
             if (    node->GetType() == wxXML_ELEMENT_NODE &&
