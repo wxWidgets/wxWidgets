@@ -776,13 +776,13 @@
 #define wxUSE_SPLINES 0
 
 /*
+ * Use MDI.
+ */
+#define wxUSE_MDI 0
+/*
  * Use the mdi architecture
  */
 #define wxUSE_MDI_ARCHITECTURE 0
-/*
- * Use MDI
- */
-#define wxUSE_MDI 0
 /*
  * Use the document/view architecture
  */

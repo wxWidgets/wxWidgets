@@ -795,6 +795,10 @@
 #define wxUSE_SPLINES 1
 
 /*
+ * Use MDI.
+ */
+#define wxUSE_MDI 1
+/*
  * Use the mdi architecture
  */
 #define wxUSE_MDI_ARCHITECTURE 1
