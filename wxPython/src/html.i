@@ -443,10 +443,19 @@ public:
         : wxHtmlWindow(parent, id, pos, size, style, name)  {};
     wxPyHtmlWindow() : wxHtmlWindow() {};
 
+    bool ScrollToAnchor(const wxString& anchor) {
+        return wxHtmlWindow::ScrollToAnchor(anchor);
+    }
+
+    bool HasAnchor(const wxString& anchor) {
+        const wxHtmlCell *c = m_Cell->Find(wxHTML_COND_ISANCHOR, &anchor);
+        return c!=NULL;
+    }
+
     void OnLinkClicked(const wxHtmlLinkInfo& link);
     void base_OnLinkClicked(const wxHtmlLinkInfo& link);
 
-     wxHtmlOpeningStatus OnOpeningURL(wxHtmlURLType type,
+    wxHtmlOpeningStatus OnOpeningURL(wxHtmlURLType type,
                                       const wxString& url,
                                       wxString *redirect) const;
 
@@ -572,6 +581,9 @@ public:
     void HistoryClear();
     wxHtmlContainerCell* GetInternalRepresentation();
     wxHtmlWinParser* GetParser();
+
+    bool ScrollToAnchor(const wxString& anchor);
+    bool HasAnchor(const wxString& anchor);
 
     void base_OnLinkClicked(const wxHtmlLinkInfo& link);
     void base_OnSetTitle(const char* title);
