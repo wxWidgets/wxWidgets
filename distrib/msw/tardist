@@ -2,8 +2,28 @@
 # tardist: make up a tar.gz distribution of wxWindows 2
 # Supply a source (e.g. ~/wx2) and destination (e.g. ~/wx2/deliver)
 
+# We can't use e.g. this:
+# ls `cat $SRC/distrib/msw/makefile.rsp` zip -@ -u $DEST/wxWindows-$VERSION-gen.zip
+# because there's not enough space on the command line, plus we need to ignore the
+# blank lines.
+
+expandlines()
+{
+    toexpand=$1
+    outputfile=$2
+
+    rm -f $outputfile
+    touch $outputfile
+    for line in `cat $toexpand` ; do
+      if [ $line != "" ]; then
+        ls $line >> $outputfile
+      fi
+    done
+}
+
+
 init=""
-WXVER=2.1.16
+WXVER=2.2.0
 if [ $1 = "" ]
 then
   exit

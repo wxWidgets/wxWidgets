@@ -347,8 +347,8 @@ void wxHtmlImageCell::Draw(wxDC& dc, int x, int y, int view_y1, int view_y2)
         dc.SetUserScale(us_x * m_Scale, us_y * m_Scale);
     
 //      dc.DrawBitmap(*m_Image, x + m_PosX, y + m_PosY, (m_Image->GetMask() != (wxMask*) 0));
-        dc.DrawBitmap(*m_Image, (x + m_PosX) / m_Scale, 
-                                (y + m_PosY) / m_Scale, TRUE);
+        dc.DrawBitmap(*m_Image, (int) ((x + m_PosX) / m_Scale), 
+                                (int) ((y + m_PosY) / m_Scale), TRUE);
         dc.SetUserScale(us_x, us_y);
     }
     wxHtmlCell::Draw(dc, x, y, view_y1, view_y2);

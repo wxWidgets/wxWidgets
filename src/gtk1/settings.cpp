@@ -155,9 +155,9 @@ wxColour wxSystemSettings::GetSystemColour( int index )
             {
                 wxColour faceColour(GetSystemColour(wxSYS_COLOUR_3DFACE));
                 g_systemBtnShadowColour =
-                   new wxColour(faceColour.Red() * 0.666,
-                                faceColour.Green() * 0.666,
-                                faceColour.Blue() * 0.666);
+                   new wxColour((unsigned char) (faceColour.Red() * 0.666),
+                                (unsigned char) (faceColour.Green() * 0.666),
+                                (unsigned char) (faceColour.Blue() * 0.666));
 	    }
   /*
             if (!g_systemBtnShadowColour)

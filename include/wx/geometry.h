@@ -276,7 +276,7 @@ public:
     inline wxPoint2DDouble GetPosition() 
         { return wxPoint2DDouble(m_x, m_y); }
     inline wxSize GetSize()
-        { return wxSize(m_width, m_height); }
+        { return wxSize((int) m_width, (int) m_height); }
 
     // for the edge and corner accessors there are two setters conterparts, the Set.. functions keep the other corners at their
         // position whenever sensible, the Move.. functions keep the size of the rect and move the other corners apropriately
@@ -593,7 +593,7 @@ inline wxPoint2DInt operator*(wxInt32 n , const wxPoint2DInt& pt)
 
 inline wxPoint2DInt operator*(wxDouble n , const wxPoint2DInt& pt) 
 {
-    return wxPoint2DInt( pt.m_x * n , pt.m_y * n ) ;
+    return wxPoint2DInt( (int) (pt.m_x * n) , (int) (pt.m_y * n) ) ;
 }
 
 inline wxPoint2DInt operator*(const wxPoint2DInt& pt , wxInt32 n) 
@@ -603,7 +603,7 @@ inline wxPoint2DInt operator*(const wxPoint2DInt& pt , wxInt32 n)
 
 inline wxPoint2DInt operator*(const wxPoint2DInt& pt , wxDouble n) 
 {
-    return wxPoint2DInt( pt.m_x * n , pt.m_y * n ) ;
+    return wxPoint2DInt( (int) (pt.m_x * n) , (int) (pt.m_y * n) ) ;
 }
 
 inline wxPoint2DInt operator/(const wxPoint2DInt& pt1 , const wxPoint2DInt& pt2) 
@@ -618,7 +618,7 @@ inline wxPoint2DInt operator/(const wxPoint2DInt& pt , wxInt32 n)
 
 inline wxPoint2DInt operator/(const wxPoint2DInt& pt , wxDouble n) 
 {
-    return wxPoint2DInt( pt.m_x / n , pt.m_y / n ) ;
+    return wxPoint2DInt( (int) (pt.m_x / n) , (int) (pt.m_y / n) ) ;
 }
 
 // wxRect2Ds are a axis-aligned rectangles, each side of the rect is parallel to the x- or m_y- axis. The rectangle is either defined by the 

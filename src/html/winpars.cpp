@@ -299,7 +299,7 @@ wxFont* wxHtmlWinParser::CreateCurrentFont()
         *faceptr = face;
         *encptr = m_OutputEnc;
         *fontptr = new wxFont(
-                       m_FontsSizes[fs] * m_PixelScale,
+                       (int) (m_FontsSizes[fs] * m_PixelScale),
                        ff ? wxMODERN : wxSWISS,
                        fi ? wxITALIC : wxNORMAL,
                        fb ? wxBOLD : wxNORMAL,
