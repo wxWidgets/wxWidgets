@@ -211,6 +211,7 @@ int parse_ini(char *filename)
 			InstCond->Wait(*test);
 #endif
 			install_thread(NULL);
+            create_wps_objects();
 			parse_ini(finishedscript);
 			}
 			else if(stricmp(entry, "mleview") == 0)

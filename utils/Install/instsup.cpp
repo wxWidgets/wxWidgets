@@ -18,11 +18,18 @@
 #include <process.h>
 #endif
 #include <sys/types.h>
+#ifdef WIN32
+#include <shlobj.h>
+#endif
 #include "install.h"
 #include "instsup.h"
 
 extern char *INSTALLER_TITLE;
-extern char tempPath[], installdir[], csfile[], bufile[], bootdrive[], instlog[];
+extern char *INSTALLER_PROGRAM;
+extern char *INSTALLER_FOLDER;
+extern char *INSTALLER_SHADOW;
+extern char *INSTALLER_OBJECT;
+extern char tempPath[], installdir[], csfile[], bufile[], bootdrive[], instlog[], installdir2[];
 extern int installstate, success;
 
 extern FILE *self;
@@ -64,7 +71,7 @@ void DoGUI(void)
 /* This should return the current color depth */
 unsigned long color_depth(void)
 {
-#if 0	
+#if __OS2__
 	HDC hdc = WinOpenWindowDC(HWND_DESKTOP);
 	LONG colors;
 
@@ -80,7 +87,7 @@ unsigned long color_depth(void)
  */
 void sysreboot(void)
 {
-#if 0	
+#if __OS2__
 #define SYSFUNC               0xD5
 #define REBOOT                0xAB
 #define REBOOTDEV             "\\DEV\\DOS$"
@@ -191,75 +198,6 @@ char *decode(char *input)
 }
 
 /*
- * Opens a Window which contains the text specfied by given filename.
- */
-void viewfile(char *filename)
-{
-#if 0	
-	HWND hwndFrame, /*hwndMLE,*/ hwndClient;
-	ULONG flStyle = FCF_MINMAX | FCF_SYSMENU | FCF_TITLEBAR |
-		FCF_SIZEBORDER | FCF_SHELLPOSITION | FCF_TASKLIST;
-	PPRESPARAMS ppp;
-	char deffont[] = "9.Warpsans";
-
-	WinRegisterClass(localhab, "VIEW", ViewWndProc, CS_SIZEREDRAW, 32);
-
-	hwndFrame = WinCreateStdWindow(HWND_DESKTOP,
-								   WS_VISIBLE | WS_MAXIMIZED,
-								   &flStyle,
-								   "VIEW",
-								   filename,
-								   0L,
-								   NULLHANDLE,
-								   0L,
-								   &hwndClient);
-
-	ppp = malloc((sizeof(ULONG) * 3) + strlen(deffont) + 1);
-	ppp->cb = (sizeof(ULONG) * 2) + strlen(deffont) + 1;
-	ppp->aparam[0].id = PP_FONTNAMESIZE;
-	ppp->aparam[0].cb = strlen(deffont)+1;
-	memcpy(&ppp->aparam[0].ab, deffont, strlen(deffont)+1);
-
-	hwndMLE = WinCreateWindow(hwndFrame,
-							  WC_MLE,
-							  "",
-							  WS_VISIBLE | MLS_VSCROLL | MLS_WORDWRAP | MLS_READONLY | MLS_BORDER,
-							  0,0,100,100,
-							  hwndFrame,
-							  HWND_TOP,
-							  999L,
-							  NULL,
-							  ppp);
-
-	WinSetWindowPos(hwndFrame, HWND_TOP, 0,0,0,0,SWP_MAXIMIZE | SWP_ZORDER);
-	WinSetWindowPos(hwndMLE, HWND_TOP, 0,0,0,0,SWP_SHOW);
-
-	if(!hwndMLE)
-	{
-		mesg("Error %lu while creating MLE window.", WinGetLastError(localhab));
-	}
-	else
-	{
-		FILE *f;
-		char buffer[1024];
-		ULONG bytes, point = -1;
-
-		if((f = fopen(filename, "rb")) != NULL)
-		{
-			WinSendMsg(hwndMLE, MLM_SETIMPORTEXPORT, MPFROMP(buffer), MPFROMLONG(1024L));
-			while(!feof(f))
-			{
-				bytes = fread(buffer, 1, 1024, f);
-				WinSendMsg(hwndMLE, MLM_IMPORT, MPFROMP(&point), MPFROMLONG(bytes));
-			}
-			fclose(f);
-		}
-
-}
-#endif
-}
-
-/*
  * Removes any carriage returns or line feeds from the buffer.
  */
 void stripcrlf(char *buffer)
@@ -281,7 +219,7 @@ void stripcrlf(char *buffer)
  */
 unsigned long drivefree(int drive)
 {
-#if 0	
+#if __OS2__
 	ULONG   aulFSInfoBuf[40] = {0};
 	APIRET  rc               = NO_ERROR;
 	double	bytesFree;
@@ -334,6 +272,7 @@ void setdrivedir(char *drivedir)
 void settempdir(void)
 {
 #if defined(__EMX__) || defined(__OS2__) || defined(WIN32) || defined(WINNT)
+    /* Windows or OS/2 */
 	char *envdir = getenv("TMP");
 	int len;
 
@@ -348,6 +287,7 @@ void settempdir(void)
 	strupr(tempPath);
 	setdrivedir(tempPath);
 #else
+    /* Unix */
 	setdrivedir("/tmp");
 #endif
 }
@@ -356,61 +296,6 @@ void getbootdrive(void)
 {
 	/* On windows I don't think you can boot from anything
 	   except C: drive.  So I am not going to do anything here. */
-}
-/*
- * Start an application using CMD.EXE.
- */
-int cmdrun(char *progname)
-{
-#if 0	
-	STARTDATA SData       = {0};
-	PSZ       PgmTitle    = "",
-		      PgmName     = "CMD.EXE";
-	APIRET    rc          = NO_ERROR;
-	PID       pid         = 0;
-	ULONG     ulSessID    = 0;
-	CHAR      achObjBuf[256] = {0};
-	HQUEUE hqQueue;
-	REQUESTDATA rdRequest;
-	ULONG ulSzData;
-	BYTE bPriority;
-	PVOID pvData;
-
-	SData.Length  = sizeof(STARTDATA);
-	SData.Related = SSF_RELATED_CHILD;
-	SData.FgBg    = SSF_FGBG_BACK;
-	SData.TraceOpt = SSF_TRACEOPT_NONE;
-	SData.PgmTitle = PgmTitle;
-	SData.PgmName = PgmName;
-	SData.PgmInputs = progname;
-
-	SData.TermQ = "\\QUEUES\\CHILD.QUE";
-	SData.Environment = 0;
-	SData.InheritOpt = SSF_INHERTOPT_SHELL;
-	SData.SessionType = SSF_TYPE_WINDOWABLEVIO;
-    SData.IconFile = 0;
-	SData.PgmHandle = 0;
-
-	SData.PgmControl = SSF_CONTROL_INVISIBLE;
-	SData.Reserved = 0;
-	SData.ObjectBuffer = achObjBuf;
-	SData.ObjectBuffLen = (ULONG) sizeof(achObjBuf);
-
-	if(!(rc = DosCreateQueue(&hqQueue, QUE_FIFO | QUE_CONVERT_ADDRESS,"\\QUEUES\\CHILD.QUE")))
-	{
-		if(!(rc = DosStartSession(&SData, &ulSessID, &pid)))
-			if(!(rc=DosReadQueue(hqQueue, &rdRequest, &ulSzData, &pvData, 0, 0, &bPriority, 0)))
-				DosFreeMem(pvData);
-		DosCloseQueue(hqQueue);
-	}
-
-	if (rc != NO_ERROR) {
-		mesg("Error %d while attempting to run %s!", rc, progname);
-		return 1;
-	}
-	return NO_ERROR;
-#endif	
-	return 0;
 }
 
 void PM_backslash(char *s)
@@ -421,6 +306,413 @@ void PM_backslash(char *s)
 		s[pos+1] = '\0';
 	}
 }
+
+/*
+ * Makes a folder on the desktop.
+ */
+void MakeFolder(char Title[], char Icon[], char dest[], char id[], char setup[])
+{
+#ifdef __OS2__
+	char szArg[200];
+
+	memset(szArg,0,sizeof(szArg));
+
+	if ((Icon != NULL) && (strlen(Icon) != 0))
+	{
+		strcat(szArg,"ICONFILE=");
+		strcat(szArg,Icon);
+	}
+
+	if ((id != NULL) && (strlen(id) != 0))
+	{
+		strcat(szArg,";OBJECTID=");
+		strcat(szArg,id);
+	}
+
+	if ((setup != NULL) && (strlen(setup) != 0))
+	{
+		strcat(szArg,";");
+		strcat(szArg,setup);
+	}
+
+	WinCreateObject("WPFolder",Title,szArg,dest,CO_REPLACEIFEXISTS);
+#elif defined(WIN32)
+	char startpath[MAX_PATH];
+	LPITEMIDLIST  pidl;
+
+	if(!SHGetSpecialFolderLocation(NULL, CSIDL_PROGRAMS, &pidl))
+	{
+		SHGetPathFromIDList(pidl, startpath);
+
+		if(startpath[strlen(startpath)-1] != '\\')
+			strcat(startpath, "\\");
+		strcat(startpath, Title);
+		CreateDirectory(startpath, NULL);
+	}
+#else
+    /* Unix? */
+#endif
+}
+
+#ifdef WIN32
+HRESULT CreateLink(LPCSTR lpszPathObj, 
+    LPSTR lpszPathLink, LPSTR lpszDesc) 
+{ 
+	HRESULT hres;
+	IShellLink* psl;
+
+	// Get a pointer to the IShellLink interface.
+	hres = CoCreateInstance(CLSID_ShellLink, NULL,
+							CLSCTX_INPROC_SERVER, IID_IShellLink, (void **)&psl);
+	if (SUCCEEDED(hres)) {
+		IPersistFile* ppf;
+
+		// Set the path to the shortcut target, and add the
+		// description.
+		psl->SetPath(lpszPathObj);
+
+        psl->SetDescription(lpszDesc);
+ 
+       // Query IShellLink for the IPersistFile interface for saving the 
+       // shortcut in persistent storage. 
+        hres = psl->QueryInterface(IID_IPersistFile,
+            (void **)&ppf);
+ 
+        if (SUCCEEDED(hres)) { 
+            WCHAR wsz[MAX_PATH];
+ 
+            // Ensure that the string is ANSI. 
+            MultiByteToWideChar(CP_ACP, 0, lpszPathLink, -1, 
+                wsz, MAX_PATH); 
+
+ 
+            // Save the link by calling IPersistFile::Save. 
+            hres = ppf->Save(wsz, TRUE);
+            ppf->Release();
+        } 
+        psl->Release();
+    } 
+    return hres; 
+}
+#endif
+
+/*
+ * Makes a Program object on the desktop.
+ */
+void MakeProgram(char Title[], char Program[], char Icon[], char dest[], char id[], char setup[])
+{
+#ifdef __OS2__
+	char szArg[200];
+
+	memset(szArg,0,sizeof(szArg));
+
+	strcat(szArg,"EXENAME=");
+	strcat(szArg,Program);
+
+	if ((Icon != NULL) && (strlen(Icon) != 0))
+	{
+		strcat(szArg,";ICONFILE=");
+		strcat(szArg,Icon);
+	}
+
+	if ((id != NULL) && (strlen(id) != 0))
+	{
+		strcat(szArg,";OBJECTID=");
+		strcat(szArg,id);
+	}
+
+	if ((setup != NULL) && (strlen(setup) != 0))
+	{
+		strcat(szArg,";");
+		strcat(szArg,setup);
+	}
+
+	WinCreateObject("WPProgram",Title,szArg,dest,CO_REPLACEIFEXISTS);
+#elif defined(WIN32)
+	char startpath[MAX_PATH];
+	LPITEMIDLIST  pidl;
+
+	if(!SHGetSpecialFolderLocation(NULL, CSIDL_PROGRAMS, &pidl))
+	{
+		SHGetPathFromIDList(pidl, startpath);
+
+		if(startpath[strlen(startpath)-1] != '\\')
+			strcat(startpath, "\\");
+		strcat(startpath, dest);
+		strcat(startpath, "\\");
+		strcat(startpath, Title);
+		strcat(startpath, ".lnk");
+
+		CoInitialize(NULL);
+        mesg("CreateLink(\"%s\",\"%s\",\"%s\"", Program, startpath, Title);
+		CreateLink(Program, startpath, Title);
+		CoUninitialize();
+	}
+
+
+#else
+	/* Unix? */
+#endif
+}
+/*
+ * Makes a user defined object on the desktop.
+ */
+void MakeObject(char Title[], char oclass[], char dest[], char id[], char setup[])
+{
+#ifdef __OS2__
+	char szArg[200];
+
+	memset(szArg,0,sizeof(szArg));
+
+	if ((oclass == NULL) || (strlen(oclass) == 0))
+		return;
+
+	if ((id != NULL) && (strlen(id) != 0))
+	{
+		strcat(szArg,"OBJECTID=");
+		strcat(szArg,id);
+	}
+
+	if ((setup != NULL) && (strlen(setup) != 0))
+	{
+		if ((id != NULL) && (strlen(id) != 0))
+			strcat(szArg,";");
+		strcat(szArg,setup);
+	}
+
+	WinCreateObject(oclass,Title,szArg,dest,CO_REPLACEIFEXISTS);
+#elif defined(WIN32)
+    /* Not sure if there is an equivilent on Windows */
+#else
+	/* Unix? */
+#endif
+}
+/*
+ * Makes a shadow on the desktop.
+ */
+void MakeShadow(char Title[], char reference[], char dest[], char id[])
+{
+#ifdef __OS2__
+	char szArg[400];
+
+	memset(szArg,0,sizeof(szArg));
+
+	strcpy(szArg,"SHADOWID=");
+	strcat(szArg,reference);
+	if ((id != NULL) && (strlen(id) != 0))
+	{
+		strcat(szArg,";OBJECTID=");
+		strcat(szArg,id);
+	}
+    strcat(szArg,";");
+	WinCreateObject("WPShadow",Title,szArg,dest,CO_REPLACEIFEXISTS);
+#elif defined(WIN32)
+    /* Nothing like this on Windows9x anyway */
+#else
+	/* Unix? */
+#endif
+}
+
+/* This creates program objects on the desktop, it was originally designed
+ * for the OS/2 Workplace Shell so it may be somewhat different in use on
+ * other platforms.
+ */
+void create_wps_objects(void)
+{
+	char *arg1, *arg2, *arg3, *arg4, *arg5, *arg6;
+	char temp[5000];
+	char zerotext[2] = "";
+	int z, argn, len;
+
+    /* No distinction for the moment... this may change.. */
+	strcpy(installdir2, installdir);
+
+	/* Create Folder Objects */
+	if(strlen(INSTALLER_FOLDER)>0)
+	{
+		strcpy(temp, replaceem(INSTALLER_FOLDER));
+		argn=0;
+		arg1=&temp[0];
+		arg2=arg3=arg4=arg5=&zerotext[0];
+        len = strlen(temp);
+		for(z=0;z<len;z++)
+		{
+			if(temp[z]==',')
+			{
+				argn++;
+				temp[z]=0;
+				switch(argn)
+				{
+				case 1:
+					arg2=&temp[z+1];
+					break;
+				case 2:
+					arg3=&temp[z+1];
+					break;
+				case 3:
+					arg4=&temp[z+1];
+					break;
+				case 4:
+					arg5=&temp[z+1];
+					break;
+				case 5:
+					argn=0;
+					MakeFolder(arg1, arg2, arg3, arg4, arg5);
+#ifdef ENABLE_LOGGING
+					fprintf(logfile, "<WPSFolderAdd>,%s,%s,%s,%s,%s\r\n", arg1, arg2,arg3,arg4,arg5);
+#endif
+					arg1=&temp[z+1];
+					arg2=arg3=arg4=arg5=&zerotext[0];
+					break;
+				}
+			}
+		}
+		MakeFolder(arg1, arg2, arg3, arg4, arg5);
+#ifdef ENABLE_LOGGING
+		fprintf(logfile, "<WPSFolderAdd>,%s,%s,%s,%s,%s\r\n", arg1, arg2,arg3,arg4,arg5);
+#endif
+	}
+
+	/* Create Program Objects */
+	if(strlen(INSTALLER_PROGRAM)>0)
+	{
+		strcpy(temp, replaceem(INSTALLER_PROGRAM));
+		argn=0;
+		arg1=&temp[0];
+		arg2=arg3=arg4=arg5=arg6=&zerotext[0];
+        len = strlen(temp);
+		for(z=0;z<len;z++)
+		{
+			if(temp[z]==',')
+			{
+				argn++;
+				temp[z]=0;
+				switch(argn)
+				{
+				case 1:
+					arg2=&temp[z+1];
+					break;
+				case 2:
+					arg3=&temp[z+1];
+					break;
+				case 3:
+					arg4=&temp[z+1];
+					break;
+				case 4:
+					arg5=&temp[z+1];
+					break;
+				case 5:
+					arg6=&temp[z+1];
+					break;
+				case 6:
+					argn=0;
+					MakeProgram(arg1, arg2, arg3, arg4, arg5, arg6);
+#ifdef ENABLE_LOGGING
+					fprintf(logfile, "<WPSProgramAdd>,%s,%s,%s,%s,%s,%s\r\n", arg1,arg2,arg3,arg4,arg5,arg6);
+#endif
+					arg1=&temp[z+1];
+					arg2=arg3=arg4=arg5=arg6=&zerotext[0];
+					break;
+				}
+			}
+		}
+		MakeProgram(arg1, arg2, arg3, arg4, arg5, arg6);
+#ifdef ENABLE_LOGGING
+		fprintf(logfile, "<WPSProgramAdd>,%s,%s,%s,%s,%s,%s\r\n", arg1, arg2,arg3,arg4,arg5,arg6);
+#endif
+	}
+
+	/* Create Shadow Objects */
+	if(strlen(INSTALLER_SHADOW)>0)
+	{
+		strcpy(temp, replaceem(INSTALLER_SHADOW));
+		argn=0;
+		arg1=&temp[0];
+		arg2=arg3=arg4=&zerotext[0];
+        len = strlen(temp);
+		for(z=0;z<len;z++)
+		{
+			if(temp[z]==',')
+			{
+				argn++;
+				temp[z]=0;
+				switch(argn)
+				{
+				case 1:
+					arg2=&temp[z+1];
+					break;
+				case 2:
+					arg3=&temp[z+1];
+					break;
+				case 3:
+					arg4=&temp[z+1];
+					break;
+				case 4:
+					argn=0;
+					MakeShadow(arg1, arg2, arg3, arg4);
+#ifdef ENABLE_LOGGING
+					fprintf(logfile, "<WPSShadowAdd>,%s,%s,%s,%s\r\n", arg1,arg2,arg3,arg4);
+#endif
+					arg1=&temp[z+1];
+					arg2=arg3=arg4=&zerotext[0];
+					break;
+				}
+			}
+		}
+		MakeShadow(arg1, arg2, arg3, arg4);
+#ifdef ENABLE_LOGGING
+		fprintf(logfile, "<WPSShadowAdd>,%s,%s,%s,%s\r\n", arg1,arg2,arg3,arg4);
+#endif
+	}
+
+	/* Create Generic Objects */
+	if(strlen(INSTALLER_OBJECT)>0)
+	{
+		strcpy(temp, replaceem(INSTALLER_OBJECT));
+		argn=0;
+		arg1=&temp[0];
+		arg2=arg3=arg4=arg5=&zerotext[0];
+        len = strlen(temp);
+		for(z=0;z<len;z++)
+		{
+			if(temp[z]==',')
+			{
+				argn++;
+				temp[z]=0;
+				switch(argn)
+				{
+				case 1:
+					arg2=&temp[z+1];
+					break;
+				case 2:
+					arg3=&temp[z+1];
+					break;
+				case 3:
+					arg4=&temp[z+1];
+					break;
+				case 4:
+					arg5=&temp[z+1];
+					break;
+				case 5:
+					argn=0;
+					MakeObject(arg1, arg2, arg3, arg4, arg5);
+#ifdef ENABLE_LOGGING
+					fprintf(logfile, "<WPSObjectAdd>,%s,%s,%s,%s,%s\r\n", arg1,arg2,arg3,arg4,arg5);
+#endif
+					arg1=&temp[z+1];
+					arg2=arg3=arg4=arg5=&zerotext[0];
+					break;
+				}
+			}
+		}
+		MakeObject(arg1, arg2, arg3, arg4, arg5);
+#ifdef ENABLE_LOGGING
+		fprintf(logfile, "<WPSObjectAdd>,%s,%s,%s,%s,%s\r\n", arg1, arg2,arg3,arg4,arg5);
+#endif
+	}
+}
+
+
 #ifdef __cplusplus
 }
 #endif
