@@ -3336,6 +3336,11 @@ bool wxWindowGTK::Show( bool show )
     else
         gtk_widget_hide( m_widget );
 
+    wxShowEvent eventShow(GetId(), show);
+    eventShow.m_eventObject = this;
+
+    GetEventHandler()->ProcessEvent(eventShow);
+
     return TRUE;
 }
 

@@ -151,15 +151,15 @@ bool wxWindowX11::Create(wxWindow *parent, wxWindowID id,
     // Note: The Xlib manual doesn't mention this restriction of XCreateWindow.
     wxSize size2(size);
     if (size2.x <= 0)
-	    size2.x = 20;
+        size2.x = 20;
     if (size2.y <= 0)
-	    size2.y = 20;
+        size2.y = 20;
 
     wxPoint pos2(pos);
     if (pos2.x == -1)
-	    pos2.x = 0;
+        pos2.x = 0;
     if (pos2.y == -1)
-	    pos2.y = 0;
+        pos2.y = 0;
         
 #if wxUSE_TWO_WINDOWS
     bool need_two_windows =
@@ -340,7 +340,7 @@ bool wxWindowX11::Create(wxWindow *parent, wxWindowID id,
 wxWindowX11::~wxWindowX11()
 {
     if (g_captureWindow == this)
-	g_captureWindow = NULL;
+        g_captureWindow = NULL;
     
     m_isBeingDeleted = TRUE;
     
@@ -490,7 +490,7 @@ void wxWindowX11::DoCaptureMouse()
             FALSE,
             ButtonPressMask | ButtonReleaseMask | ButtonMotionMask | EnterWindowMask | LeaveWindowMask | PointerMotionMask,
             GrabModeAsync,
-	        GrabModeAsync,
+            GrabModeAsync,
             None,
             None, /* cursor */ // TODO: This may need to be set to the cursor of this window
             CurrentTime );
@@ -1474,23 +1474,23 @@ bool wxTranslateKeyEvent(wxKeyEvent& wxevent, wxWindow *win, Window WXUNUSED(win
             KeySym keySym;
             (void) XLookupString ((XKeyEvent *) xevent, buf, 20, &keySym, NULL);
             int id = wxCharCodeXToWX (keySym);
+            // id may be WXK_xxx code - these are outside ASCII range, so we
+            // can't just use toupper() on id
+            if (id >= 'a' && id <= 'z')
+                id = toupper(id);
 
             wxevent.m_shiftDown = XKeyEventShiftIsDown(xevent);
             wxevent.m_controlDown = XKeyEventCtrlIsDown(xevent);
             wxevent.m_altDown = XKeyEventAltIsDown(xevent);
             wxevent.m_metaDown = XKeyEventMetaIsDown(xevent);
             wxevent.SetEventObject(win);
-            wxevent.m_keyCode = wxToupper(id);
+            wxevent.m_keyCode = id;
             wxevent.SetTimestamp(XKeyEventGetTime(xevent));
 
             wxevent.m_x = XKeyEventGetX(xevent);
             wxevent.m_y = XKeyEventGetY(xevent);
 
-            if (id > -1)
-                return TRUE;
-            else
-                return FALSE;
-            break;
+            return id > -1;
         }
     default:
         break;
@@ -1566,8 +1566,8 @@ wxPoint wxGetMousePosition()
     unsigned int maskReturn;
 
     XQueryPointer (display,
-		   rootWindow,
-		   &rootReturn,
+                   rootWindow,
+                   &rootReturn,
                    &childReturn,
                    &rootX, &rootY, &winX, &winY, &maskReturn);
     return wxPoint(rootX, rootY);
