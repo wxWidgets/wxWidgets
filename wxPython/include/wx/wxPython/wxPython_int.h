@@ -328,8 +328,6 @@ class wxPyCallbackHelper;
 struct swig_type_info;
 struct swig_const_info;
 
-typedef double (*py_objasdbl_conv)(PyObject *obj);
-
 // Make SunCC happy and make typedef's for these that are extern "C"
 typedef swig_type_info* (*p_SWIG_Python_TypeRegister_t)(swig_type_info *);
 typedef swig_type_info* (*p_SWIG_Python_TypeCheck_t)(char *c, swig_type_info *);
