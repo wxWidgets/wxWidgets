@@ -36,7 +36,7 @@
 #endif
 
 #if defined(_WIN32_WCE)
-    #include "wx\msw\wince\wince.rc"
+    #include "wx/msw/wince/wince.rc"
 #endif
 
 //////////////////////////////////////////////////////////////////////////////
