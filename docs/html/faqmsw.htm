@@ -25,13 +25,13 @@ See also <a href="faq.htm">top-level FAQ page</a>.
 
 <h3>Which Windows platforms are supported?</h3>
 
-wxWindows can be used to develop and deliver applications on Windows 3.1, Win32s,
+wxWindows 2 can be used to develop and deliver applications on Windows 3.1, Win32s,
 Windows 95, Windows 98, and Windows NT. A Windows CE version is being looked into (see below).<P>
 
 wxWindows 2 is designed to make use of WIN32 features and controls. However, unlike Microsoft,
 we have not forgotten users of 16-bit Windows. Most features
 work under Windows 3.1, including wxTreeCtrl and wxListCtrl using the generic implementation.
-However, don't expect very Windows-specific classes to work, such as wxTaskBarIcon. The wxRegConfig
+However, don't expect very Windows-95-specific classes to work, such as wxTaskBarIcon. The wxRegConfig
 class doesn't work either because the Windows 3.1 registry is very simplistic. Check out the 16-bit
 makefiles to see what other files have been left out.
 <P>
@@ -101,13 +101,13 @@ Watcom C++ is a little slow and the debugger is not really up to today's standar
 
 <h3>Is Unicode supported?</h3>
 
-No, although there are other internationalisation features.<P>
+Not yet, although there are other internationalisation features.<P>
 
 However, the issues surrounding Unicode support have been looked into so we know
 what we need to do, and have some header files ready to use containing appropriate
 type definitions. Just about every file in wxWindows will need changes, due to the
 pervasive nature of characters and character arrays. Unicode support is needed
-for the port to Windows CE (see above).<P>
+for the port to Windows CE (see above), and will probably be added in time for version 2.1.<P>
 
 <h3>Can you compile wxWindows 2 as a DLL?</h3>
 
@@ -125,7 +125,8 @@ wxWindows!
 <H3>How can I reduce executable size?</H3>
 
 You can compile wxWindows as a DLL (see above, VC++/BC++ only at present). You should also
-compile your programs for release using non-debugging and space-optimisation options.<P>
+compile your programs for release using non-debugging and space-optimisation options, but
+take with VC++ 5/6 space optimisation: it can sometimes cause problems.<P>
 
 Statically-linked wxWindows 2 programs are smaller than wxWindows 1.xx programs, because of the way
 wxWindows 2 has been designed to reduce dependencies between classes, and other
@@ -139,8 +140,7 @@ by Ian Luck. This nifty utility compresses Windows executables by around 50%, so
 will shrink to a mere 250KB. With this sort of size, there is reduced incentive to
 use DLLs.<P>
 
-
-<H3>Will wxWindows be compatible with MFC?</H3>
+<H3>Is wxWindows compatible with MFC?</H3>
 
 There is a sample which demonstrates MFC and wxWindows code co-existing in the same
 application. However, don't expect to be able to enable wxWindows windows with OLE-2

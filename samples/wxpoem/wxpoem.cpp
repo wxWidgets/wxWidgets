@@ -137,10 +137,6 @@ void PopupFunction(wxMenu& menu, wxCommandEvent& event);
 
 wxHelpController *HelpController = NULL;
 
-// A macro needed for some compilers (AIX) that need 'main' to be defined
-// in the application itself.
-IMPLEMENT_WXWIN_MAIN
-
 IMPLEMENT_APP(MyApp)
 
 MainWindow *TheMainWindow = NULL;

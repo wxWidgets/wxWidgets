@@ -27,7 +27,7 @@ See also <a href="faq.htm">top-level FAQ page</a>.
 
 You will need version 1.2 or above. Version 2 should also be fine. Some people
 have had a positive experience with <a href="www.lesstif.org" target=_top>Lesstif</a>,
-a free Motif clone. (Note from Julian Smart - I use the Linux version of MetroLink Motif).
+a free Motif clone. (Note from Julian Smart - I use the Linux version of MetroLink Motif 1.2.4).
 
 <P>
 
@@ -39,22 +39,16 @@ wxGLCanvas.<P>
 The following classes are not likely to be implemented because there is no sensible
 equivalent on Motif: wxMiniFrame, wxTaskBar.<P>
 
-wxNotebook works for smaller dialogs (see notebook sample) but has some problems
-with a more complex situation (see the controls sample: initial resizing is very apparent).
-<P>
-
 These features are not yet implemented:<P>
 
 <ul>
-<li>Clipboard and drag and drop support are currently under development. Motif clipboard support
-should work, but currently for text only.
+<li>Clipboard and drag and drop support are currently under development.
 <li>Support for selection of specific visuals.
 <li>Wide character support (but when Unicode is supported under Windows, this support will
 be relatively easy to add).
 <li>Configurable colour/font settings (they are currently hard-wired in wxSystemSettings).
-<li>OnEraseBackground.
-<li>OnPaint optimization and backing pixmap.
-<li>A help system (please use wxHelpController and Netscape instead).
+<li>A help system (please use wxHelpController and Netscape instead). An HTML widget and help
+system is in preparation.
 </ul>
 
 <p>

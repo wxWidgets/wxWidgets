@@ -222,10 +222,17 @@ int wxFileDialog::ShowModal(void)
     of.lpstrFileTitle    = titleBuffer;
     of.nMaxFileTitle     = MAXFILE + 1 + MAXEXT;    // Windows 3.0 and 3.1
 
+    // Convert forward slashes to backslashes (file selector doesn't like
+    // forward slashes)
+    size_t i = 0;
+    size_t len = m_dir.Length();
+    for (i = 0; i < len; i++)
+        if (m_dir[i] == '/')
+            m_dir[i] = '\\';
+
     of.lpstrInitialDir   = (const char *) m_dir;
 
     of.Flags             = msw_flags;
-
 
 
     //=== Like Alejandro Sierra's wildcard modification >>===================
@@ -259,7 +266,7 @@ int wxFileDialog::ShowModal(void)
 
     filterBuffer += "|";
     // Replace | with \0
-    for ( unsigned int i = 0; i < filterBuffer.Len(); i++ ) {
+    for (i = 0; i < filterBuffer.Len(); i++ ) {
         if ( filterBuffer.GetChar(i) == '|' ) {
             filterBuffer[i] = '\0';
         }

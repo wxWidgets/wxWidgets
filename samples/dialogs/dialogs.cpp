@@ -44,10 +44,6 @@ IMPLEMENT_APP(MyApp)
 
 MyCanvas *myCanvas = (MyCanvas *) NULL;
 
-// A macro needed for some compilers (AIX) that need 'main' to be defined
-// in the application itself.
-IMPLEMENT_WXWIN_MAIN
-
 // `Main program' equivalent, creating windows and returning main app frame
 bool MyApp::OnInit(void)
 {

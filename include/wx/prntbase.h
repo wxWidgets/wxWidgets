@@ -49,8 +49,8 @@ public:
 
   virtual wxWindow *CreateAbortWindow(wxWindow *parent, wxPrintout *printout);
   virtual void ReportError(wxWindow *parent, wxPrintout *printout, char *message);
-  inline wxPrintData& GetPrintData() { return m_printData; };
-  inline bool GetAbort() { return sm_abortIt; }
+  inline wxPrintData& GetPrintData() const { return (wxPrintData&) m_printData; };
+  inline bool GetAbort() const { return sm_abortIt; }
 
   ///////////////////////////////////////////////////////////////////////////
   // OVERRIDES
@@ -96,21 +96,21 @@ public:
   virtual bool OnPrintPage(int page) = 0;
   virtual void GetPageInfo(int *minPage, int *maxPage, int *pageFrom, int *pageTo);
 
-  inline virtual wxString GetTitle() { return m_printoutTitle; }
+  inline virtual wxString GetTitle() const { return m_printoutTitle; }
 
-  inline wxDC *GetDC() { return m_printoutDC; }
+  inline wxDC *GetDC() const { return m_printoutDC; }
   inline void SetDC(wxDC *dc) { m_printoutDC = dc; }
   inline void SetPageSizePixels(int w, int  h) { m_pageWidthPixels = w; m_pageHeightPixels = h; }
-  inline void GetPageSizePixels(int *w, int  *h) { *w = m_pageWidthPixels; *h = m_pageHeightPixels; }
+  inline void GetPageSizePixels(int *w, int  *h) const { *w = m_pageWidthPixels; *h = m_pageHeightPixels; }
   inline void SetPageSizeMM(int w, int  h) { m_pageWidthMM = w; m_pageHeightMM = h; }
-  inline void GetPageSizeMM(int *w, int  *h) { *w = m_pageWidthMM; *h = m_pageHeightMM; }
+  inline void GetPageSizeMM(int *w, int  *h) const { *w = m_pageWidthMM; *h = m_pageHeightMM; }
 
   inline void SetPPIScreen(int x, int y) { m_PPIScreenX = x; m_PPIScreenY = y; }
-  inline void GetPPIScreen(int *x, int *y) { *x = m_PPIScreenX; *y = m_PPIScreenY; }
+  inline void GetPPIScreen(int *x, int *y) const { *x = m_PPIScreenX; *y = m_PPIScreenY; }
   inline void SetPPIPrinter(int x, int y) { m_PPIPrinterX = x; m_PPIPrinterY = y; }
-  inline void GetPPIPrinter(int *x, int *y) { *x = m_PPIPrinterX; *y = m_PPIPrinterY; }
+  inline void GetPPIPrinter(int *x, int *y) const { *x = m_PPIPrinterX; *y = m_PPIPrinterY; }
 
-  inline virtual bool IsPreview() { return m_isPreview; }
+  inline virtual bool IsPreview() const { return m_isPreview; }
 
   inline virtual void SetIsPreview(bool p) { m_isPreview = p; }
 

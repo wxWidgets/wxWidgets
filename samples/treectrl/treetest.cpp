@@ -135,7 +135,6 @@ MyFrame::MyFrame(const wxString& title, int x, int y, int w, int h)
   menu_bar->Append(tree_menu, "&Tree");
   SetMenuBar(menu_bar);
 
-  // Make a panel with a message
   m_treeCtrl = new MyTreeCtrl(this, TreeTest_Ctrl,
                               wxDefaultPosition, wxDefaultSize,
                               wxTR_HAS_BUTTONS | wxSUNKEN_BORDER);

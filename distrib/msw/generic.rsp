@@ -3,6 +3,9 @@ distrib/msw/*.bat
 distrib/msw/tardist
 distrib/gtk/*
 
+locale/*.po
+locale/*.mo
+
 docs/readme.txt
 docs/install.txt
 docs/release.txt

@@ -42,6 +42,8 @@ wx200gen.zip            Generic source code and samples (required)
 wx200msw.zip            Windows-specific source code
 wx200mot.zip            Motif-specific source code
 wx200gtk.zip            GTK-specific source code
+wx200stubs.zip          Stubs ('empty port') source. Needs
+                        wx200gen.zip/wxgen.tgz.
 wx200doc.zip            Documentation source code (not required)
 wx200hlp.zip            WinHelp documentation
 wx200pdf.zip            Acrobat PDF documentation
@@ -49,6 +51,19 @@ wx200htm.zip            HTML documentation
 wx200vc.zip             MS VC++ 5/6 project files
 wx200bc.zip             Borland C++ 5 project files
 wx200cw.zip             Metrowerks CodeWarrior 4.1 project files
+
+The tarred, gzip archive comprises the following (or similar
+names). Not all of these files are available in all distributions, due
+to space restrictions.
+
+wxgtk.tgz               All wxGTK source and samples
+wxmotif.tgz             All wxMotif source and samples
+wxstubs.tgz             Stubs ('empty port') source. Needs
+                        wx200gen.zip/wxgen.tgz.
+wxgen.tgz               Generic code and samples (common to all ports)
+wxpdf.tgz               Acrobat PDF documentation
+wxhtml.tgz              HTML documentation
+wxdocsrc.tgz            Documentation source
 
 Installation
 ------------

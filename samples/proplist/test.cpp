@@ -26,10 +26,6 @@
 
 #include "test.h"
 
-// A macro needed for some compilers (AIX) that need 'main' to be defined
-// in the application itself.
-IMPLEMENT_WXWIN_MAIN
-
 IMPLEMENT_APP(MyApp)
 
 wxPropertyValidatorRegistry myListValidatorRegistry;
