@@ -507,12 +507,18 @@ void wxPyPtrTypeMap_Add(const char* commonName, const char* ptrName) {
 
 PyObject* wxPyClassExists(const wxString& className) {
 
+    PyObject* item;
+    wxString  name(className);
+    char      buff[64];               // should always be big enough...
+
     if (!className)
         return NULL;
 
-    char    buff[64];               // should always be big enough...
+    if ((item = PyDict_GetItemString(wxPyPtrTypeMap, (char*)(const char*)name.mbc_str())) != NULL) {
+        name = wxString(PyString_AsString(item), *wxConvCurrent);
+    }
 
-    sprintf(buff, "%sPtr", (const char*)className.mbc_str());
+    sprintf(buff, "%sPtr", (const char*)name.mbc_str());
     PyObject* classobj = PyDict_GetItemString(wxPython_dict, buff);
 
     return classobj;  // returns NULL if not found
