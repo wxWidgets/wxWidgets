@@ -105,6 +105,7 @@ enum wxFontEncoding
     wxFONTENCODING_CP855,           // another cyrillic encoding
     wxFONTENCODING_CP866,           // and another one
         // and for Windows
+    wxFONTENCODING_CP874,           // WinThai
     wxFONTENCODING_CP1250,          // WinLatin2
     wxFONTENCODING_CP1251,          // WinCyrillic
     wxFONTENCODING_CP1252,          // WinLatin1

@@ -120,7 +120,7 @@ SOURCE=.\common\ctrlsub.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\common\date.cpp
+SOURCE=.\common\datetime.cpp
 # End Source File
 # Begin Source File
 
@@ -407,10 +407,6 @@ SOURCE=.\common\textcmn.cpp
 # Begin Source File
 
 SOURCE=.\common\textfile.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\common\time.cpp
 # End Source File
 # Begin Source File
 

@@ -143,6 +143,10 @@ bool wxGetNativeFontEncoding(wxFontEncoding encoding,
         case wxFONTENCODING_CP1257:
             info->charset = BALTIC_CHARSET;
             break;
+
+        case wxFONTENCODING_CP874:
+            info->charset = THAI_CHARSET;
+            break;
 #endif // !Win16
 
         case wxFONTENCODING_CP437:
@@ -424,6 +428,10 @@ wxFont wxCreateFontFromLogFont(const LOGFONT *logFont)
 
         case TURKISH_CHARSET:
             fontEncoding = wxFONTENCODING_CP1254;
+            break;
+
+        case THAI_CHARSET:
+            fontEncoding = wxFONTENCODING_CP437;
             break;
 #endif
 

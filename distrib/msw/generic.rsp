@@ -116,6 +116,7 @@ src/zlib/*.3
 src/zlib/*.mms
 
 include/wx/*.h
+include/wx/*.inl
 include/wx/*.cpp
 include/wx/protocol/*.h
 include/wx/wx_setup.vms
