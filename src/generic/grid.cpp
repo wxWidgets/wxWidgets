@@ -1072,7 +1072,8 @@ void wxGridCellFloatEditor::StartingKey(wxKeyEvent& event)
     char tmpbuf[2];
     tmpbuf[0] = (char) keycode;
     tmpbuf[1] = '\0';
-    bool is_decimal_point = ( wxString(tmpbuf, *wxConvCurrent) ==
+    wxString strbuf(tmpbuf, *wxConvCurrent);
+    bool is_decimal_point = ( strbuf ==
       wxLocale::GetInfo(wxLOCALE_DECIMAL_POINT, wxLOCALE_CAT_NUMBER) );
         if ( wxIsdigit(keycode) || keycode == '+' || keycode == '-'
             || is_decimal_point
@@ -8909,7 +8910,7 @@ void wxGrid::SetDefaultEditor(wxGridCellEditor *editor)
 {
     RegisterDataType(wxGRID_VALUE_STRING,
                      GetDefaultRendererForType(wxGRID_VALUE_STRING),
-                     editor);                     
+                     editor);
 }
 
 // ----------------------------------------------------------------------------
@@ -9891,7 +9892,7 @@ wxSize wxGrid::DoGetBestSize() const
 
     if (!width) width=100;
     if (!height) height=80;
-    
+
     // Round up to a multiple the scroll rate NOTE: this still doesn't get rid
     // of the scrollbars, is there any magic incantaion for that?
     int xpu, ypu;
@@ -9900,16 +9901,16 @@ wxSize wxGrid::DoGetBestSize() const
         width  += 1 + xpu - (width  % xpu);
     if (ypu)
         height += 1 + ypu - (height % ypu);
-    
+
     // limit to 1/4 of the screen size
     int maxwidth, maxheight;
     wxDisplaySize( & maxwidth, & maxheight );
     maxwidth /= 2;
-    maxheight /= 2;    
+    maxheight /= 2;
     if ( width > maxwidth ) width = maxwidth;
     if ( height > maxheight ) height = maxheight;
 
-    
+
     wxSize best(width, height);
     // NOTE: This size should be cached, but first we need to add calls to
     // InvalidateBestSize everywhere that could change the results of this

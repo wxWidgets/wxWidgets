@@ -1674,7 +1674,7 @@ void wxHtmlHelpFrame::OnIndexFind(wxCommandEvent& event)
                 // other items, show them as well, because they are refinements
                 // of the displayed index entry (i.e. it is implicitly contained
                 // in them: "foo" with parent "bar" reads as "bar, foo"):
-                short int level = index[i].items[0]->level;
+                int level = index[i].items[0]->level;
                 i++;
                 while (i < cnt && index[i].items[0]->level > level)
                 {

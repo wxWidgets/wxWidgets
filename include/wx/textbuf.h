@@ -165,7 +165,7 @@ public:
                wxMBConv& conv = wxConvUTF8);
 
     // dtor
-    virtual ~wxTextBuffer();
+    virtual ~wxTextBuffer(){};
 
 protected:
     // ctors

@@ -73,10 +73,6 @@ wxConfigBase::wxConfigBase(const wxString& appName,
     m_bRecordDefaults = false;
 }
 
-wxConfigBase::~wxConfigBase()
-{
-}
-
 wxConfigBase *wxConfigBase::Set(wxConfigBase *pConfig)
 {
   wxConfigBase *pOld = ms_pConfig;

@@ -1351,7 +1351,7 @@ void wxBoxSizer::RecalcSizes()
                 }
 
                 wxPoint child_pos( pt );
-                wxSize  child_size( wxSize( size.x, height) );
+                wxSize  child_size( size.x, height );
 
                 if (item->GetFlag() & (wxEXPAND | wxSHAPED))
                     child_size.x = m_size.x;
@@ -1377,7 +1377,7 @@ void wxBoxSizer::RecalcSizes()
                 }
 
                 wxPoint child_pos( pt );
-                wxSize  child_size( wxSize(width, size.y) );
+                wxSize  child_size( width, size.y );
 
                 if (item->GetFlag() & (wxEXPAND | wxSHAPED))
                     child_size.y = m_size.y;

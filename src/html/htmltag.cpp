@@ -90,7 +90,7 @@ wxHtmlTagsCache::wxHtmlTagsCache(const wxString& source)
                   src[pos] != wxT('>') && !wxIsspace(src[pos]);
                   i++, pos++ )
             {
-                tagBuffer[i] = wxToupper(src[pos]);
+                tagBuffer[i] = (wxChar)wxToupper(src[pos]);
             }
             tagBuffer[i] = _T('\0');
 
