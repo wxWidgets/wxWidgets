@@ -97,6 +97,8 @@ public:
     void OnComboButtons( wxCommandEvent &event );
     void OnRadio( wxCommandEvent &event );
     void OnRadioButtons( wxCommandEvent &event );
+    void OnRadioButton1( wxCommandEvent &event );
+    void OnRadioButton2( wxCommandEvent &event );
     void OnSetFont( wxCommandEvent &event );
     void OnPageChanged( wxNotebookEvent &event );
     void OnPageChanging( wxNotebookEvent &event );
@@ -464,6 +466,8 @@ EVT_BUTTON    (ID_RADIOBOX_SEL_NUM,     MyPanel::OnRadioButtons)
 EVT_BUTTON    (ID_RADIOBOX_SEL_STR,     MyPanel::OnRadioButtons)
 EVT_BUTTON    (ID_RADIOBOX_FONT,        MyPanel::OnRadioButtons)
 EVT_CHECKBOX  (ID_RADIOBOX_ENABLE,      MyPanel::OnRadioButtons)
+EVT_RADIOBUTTON(ID_RADIOBUTTON_1,       MyPanel::OnRadioButton1)
+EVT_RADIOBUTTON(ID_RADIOBUTTON_2,       MyPanel::OnRadioButton2)
 EVT_BUTTON    (ID_SET_FONT,             MyPanel::OnSetFont)
 EVT_SLIDER    (ID_SLIDER,               MyPanel::OnSliderUpdate)
 #if wxUSE_SPINBTN
@@ -1288,6 +1292,16 @@ void MyPanel::OnRadio( wxCommandEvent &event )
     m_text->AppendText( _T("RadioBox selection string is: ") );
     m_text->AppendText( event.GetString() );
     m_text->AppendText( _T("\n") );
+}
+
+void MyPanel::OnRadioButton1( wxCommandEvent & WXUNUSED(event) )
+{
+    wxMessageBox(_T("First wxRadioButton selected."), _T("wxControl sample"));
+}
+
+void MyPanel::OnRadioButton2( wxCommandEvent & WXUNUSED(event) )
+{
+    m_text->AppendText(_T("Second wxRadioButton selected.\n"));
 }
 
 void MyPanel::OnRadioButtons( wxCommandEvent &event )
