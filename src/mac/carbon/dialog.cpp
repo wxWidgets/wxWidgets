@@ -209,9 +209,13 @@ void wxDialog::DoShowModal()
 // Replacement for Show(TRUE) for modal dialogs - returns return code
 int wxDialog::ShowModal()
 {
-  m_windowStyle |= wxDIALOG_MODAL;
-  Show(TRUE);
-  return GetReturnCode();
+	if ( !IsModal() )
+	{
+	    SetModal(TRUE);
+	}
+
+	Show(TRUE);
+	return GetReturnCode();
 }
 
 // NB: this function (surprizingly) may be called for both modal and modeless
