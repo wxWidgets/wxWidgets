@@ -492,7 +492,7 @@ inline const wxMB2WXbuf wxGetTranslation(const wxChar *sz)
 
 // Note: use of 'inline' here can cause this symbol not to be found when compiled with gcc
 //const wxChar *wxGetTranslation(const wxChar *sz);
-#define wxGetTranslation(sz) sz
+#define wxGetTranslation(sz) (sz)
 
 #endif // wxUSE_INTL/!wxUSE_INTL
 
