@@ -8,7 +8,7 @@
 %{?_with_unicode: %{expand: %%define unicode 1}}
 %{?_without_unicode: %{expand: %%define unicode 0}}
 
-%define gtk2 0
+%define gtk2 1
 %{?_with_gtk2: %{expand: %%define gtk2 1}}
 %{?_without_gtk2: %{expand: %%define gtk2 0}}
 
@@ -29,9 +29,11 @@
 %endif
 
 %if %{unicode}
-%define wxconfigname wx%{portname}u-%{ver2}-config
+%define wxconfigname %{portname}-unicode-release-%{ver2}
+%define wxconfiglinkname wx%{portname}u-%{ver2}-config
 %else
-%define wxconfigname wx%{portname}-%{ver2}-config
+%define wxconfigname %{portname}-ansi-release-%{ver2}
+%define wxconfiglinkname wx%{portname}-%{ver2}-config
 %endif
 
 Name:    %{name}
@@ -125,8 +127,8 @@ cd obj-shared
 %else
              --with-odbc \
 %endif
-%if %{gtk2}
-             --enable-gtk2 \
+%if ! %{gtk2}
+             --disable-gtk2 \
 %endif
              --with-opengl
 $MAKE
@@ -142,8 +144,8 @@ cd obj-static
 %else
              --with-odbc \
 %endif
-%if %{gtk2}
-             --enable-gtk2 \
+%if ! %{gtk2}
+             --disable-gtk2 \
 %endif
              --with-opengl
 $MAKE
@@ -298,7 +300,7 @@ for f in `cat wxbase-headers-list` ; do
 done
 
 # list of all core headers:
-find $RPM_BUILD_ROOT/usr/include/wx -type f | sed -e "s,$RPM_BUILD_ROOT,,g" >core-headers.files
+find $RPM_BUILD_ROOT/usr/include/wx-* -type f | sed -e "s,$RPM_BUILD_ROOT,,g" >core-headers.files
 
 # contrib stuff:
 (cd obj-shared/contrib/src; make prefix=$RPM_BUILD_ROOT%{pref} install)
@@ -306,6 +308,7 @@ find $RPM_BUILD_ROOT/usr/include/wx -type f | sed -e "s,$RPM_BUILD_ROOT,,g" >cor
 
 # remove wxBase files so that RPM doesn't complain about unpackaged files:
 rm -f $RPM_BUILD_ROOT%{_libdir}/libwx_base*
+rm -f $RPM_BUILD_ROOT%{_libdir}/libwxregexu-%{ver2}.a
 rm -f $RPM_BUILD_ROOT%{_datadir}/aclocal/*
 rm -f $RPM_BUILD_ROOT%{_datadir}/locale/*/*/*
 
@@ -324,6 +327,22 @@ rm -rf $RPM_BUILD_ROOT
 %postun gl
 /sbin/ldconfig
 
+%post devel
+# link wx-config when you install RPM.
+ln -sf %{_libdir}/wx/config/%{wxconfigname} %{_bindir}/wx-config
+# link wx-config with explicit name.
+ln -sf %{_libdir}/wx/config/%{wxconfigname} %{_bindir}/%{wxconfiglinkname}
+                                                                                   
+%preun devel
+if test -f %{_bindir}/wx-config -a -f /usr/bin/md5sum ; then
+  SUM1=`md5sum %{_libdir}/wx/config/%{wxconfigname} | cut -c 0-32`
+  SUM2=`md5sum %{_bindir}/wx-config | cut -c 0-32`
+  if test "x$SUM1" = "x$SUM2" ; then
+    rm -f %{_bindir}/wx-config
+  fi
+fi
+                                                                                   
+rm -f %{_bindir}/%{wxconfiglinkname}
 
 %files
 %defattr(-,root,root)
@@ -333,6 +352,7 @@ rm -rf $RPM_BUILD_ROOT
 %{_libdir}/libwx_%{portname}*_core*.so.*
 %{_libdir}/libwx_%{portname}*_html*.so.*
 %{_libdir}/libwx_%{portname}*_adv*.so.*
+%{_libdir}/libwx_%{portname}*_media*.so.*
 %if !%{unicode}
 %{_libdir}/libwx_%{portname}*_dbgrid*.so.*
 %endif
@@ -342,13 +362,13 @@ rm -rf $RPM_BUILD_ROOT
 %{_libdir}/libwx_%{portname}*_core*.so
 %{_libdir}/libwx_%{portname}*_html*.so
 %{_libdir}/libwx_%{portname}*_adv*.so
+%{_libdir}/libwx_%{portname}*_media*.so
 %if !%{unicode}
 %{_libdir}/libwx_%{portname}*_dbgrid*.so
 %endif
 %{_libdir}/libwx_%{portname}*_gl*.so
 %dir %{_libdir}/wx
 %{_libdir}/wx/*
-%{_bindir}/%{wxconfigname}
 
 %files gl
 %defattr(-,root,root)
@@ -373,7 +393,7 @@ rm -rf $RPM_BUILD_ROOT
 
 %files contrib-devel
 %defattr(-,root,root)
-%{_bindir}/wxrc
+%{_bindir}/wxrc*
 %dir %{_includedir}/wx-*/wx/animate
 %{_includedir}/wx-*/wx/animate/*
 %{_libdir}/libwx_%{portname}*_animate*.so
