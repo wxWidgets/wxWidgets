@@ -223,16 +223,6 @@ const wxDateTime wxDefaultDateTime;
 wxDateTime::Country wxDateTime::ms_country = wxDateTime::Country_Unknown;
 
 // ----------------------------------------------------------------------------
-// private globals
-// ----------------------------------------------------------------------------
-
-// a critical section is needed to protect GetTimeZone() static
-// variable in MT case
-#if wxUSE_THREADS
-    static wxCriticalSection gs_critsectTimezone;
-#endif // wxUSE_THREADS
-
-// ----------------------------------------------------------------------------
 // private functions
 // ----------------------------------------------------------------------------
 
@@ -272,8 +262,6 @@ static int GetTimeZone()
 #ifdef WX_GMTOFF_IN_TM
     static long gmtoffset = LONG_MAX; // invalid timezone
 #endif
-
-    wxCRIT_SECT_LOCKER(lock, gs_critsectTimezone);
 
     // ensure that the timezone variable is set by calling localtime
     if ( !s_timezoneSet )
