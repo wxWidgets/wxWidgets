@@ -34725,10 +34725,23 @@ fi
           ac_config_commands="$ac_config_commands default"
 
 
+if test "$wxUSE_GUI" = "yes"; then
+    SUBDIRS="samples demos utils contrib"
+else         SUBDIRS="samples utils"
+fi
 
-for subdir in samples demos utils contrib ; do
+for subdir in `echo $SUBDIRS`; do
     if test -d ${srcdir}/${subdir} ; then
-        makefiles=`(cd $srcdir ; find $subdir -name Makefile.in)`
+        if test "$wxUSE_GUI" = "yes"; then
+            makefiles=`(cd $srcdir ; find $subdir -name Makefile.in)`
+        else                                     if test ${subdir} = "samples"; then
+                makefiles="samples/console/Makefile.in"
+            else                 makefiles="utils/HelpGen/Makefile.in \
+                           utils/HelpGen/src/Makefile.in \
+                           utils/makegen/Makefile.in"
+            fi
+        fi
+
         for mkin in $makefiles ; do
             mk=`echo $mkin | sed 's/Makefile\.in/Makefile/g'`
                       ac_config_files="$ac_config_files $mk"
@@ -34736,7 +34749,6 @@ for subdir in samples demos utils contrib ; do
         done
     fi
 done
-
 
 cat >confcache <<\_ACEOF
 # This file is a shell script that caches the results of configure

@@ -5793,9 +5793,29 @@ AC_CONFIG_COMMANDS([default],
 
 
 dnl Configure samples, contrib etc. directories, but only if they are present:
-for subdir in samples demos utils contrib ; do
+if test "$wxUSE_GUI" = "yes"; then
+    SUBDIRS="samples demos utils contrib"
+else dnl we build wxBase only
+    dnl there are no wxBase programs in contrib nor demos
+    SUBDIRS="samples utils"
+fi
+
+for subdir in echo `$SUBDIRS`; do
     if test -d ${srcdir}/${subdir} ; then
-        makefiles=`(cd $srcdir ; find $subdir -name Makefile.in)`
+        if test "$wxUSE_GUI" = "yes"; then
+            makefiles=`(cd $srcdir ; find $subdir -name Makefile.in)`
+        else dnl we build wxBase only
+            dnl don't take all samples/utils, just those which build with
+            dnl wxBase
+            if test ${subdir} = "samples"; then
+                makefiles="samples/console/Makefile.in"
+            else dnl utils
+                makefiles="utils/HelpGen/Makefile.in \
+                           utils/HelpGen/src/Makefile.in \
+                           utils/makegen/Makefile.in"
+            fi
+        fi
+
         for mkin in $makefiles ; do
             mk=`echo $mkin | sed 's/Makefile\.in/Makefile/g'`
             AC_CONFIG_FILES([$mk])
