@@ -76,33 +76,15 @@ a handle to a loaded DLLs on the given platform.
 
 \latexignore{\rtfignore{\wxheading{Members}}}
 
-\membersection{wxDllLoader::LoadLibrary}\label{wxdllloaderloadlibrary}
+\membersection{wxDllLoader::GetDllExt}\label{wxdllloadergetdllext}
 
-\func{wxDllType}{LoadLibrary}{\param{const wxString \& }{libname}, \param{bool* }{success = NULL}}
+\func{static wxString}{GetDllExt}{\void}
 
-This function loads a shared library into memory, with {\it libname} being the
-name of the library: it may be either the full name including path and
-(platform-dependent) extenesion, just the basename (no path and no extension)
-or a basename with extentsion. In the last two cases, the library will be
-searched in all standard locations.
+Returns the string containing the usual extension for shared libraries for the
+given systems (including the leading dot if not empty).
 
-Returns a handle to the loaded DLL. Use {\it success} parameter to test if it
-is valid. If the handle is valid, the library must be unloaded later with 
-\helpref{UnloadLibrary}{wxdllloaderunloadlibrary}.
-
-\wxheading{Parameters}
-
-\docparam{libname}{Name of the shared object to load.}
-
-\docparam{success}{May point to a bool variable which will be set to TRUE or
-FALSE; may also be {\tt NULL}.}
-
-\membersection{wxDllLoader::UnloadLibrary}\label{wxdllloaderunloadlibrary}
-
-\func{void}{UnloadLibrary}{\param{wxDllType }{dllhandle}}
-
-This function unloads the shared library. The handle {\it dllhandle} must have
-been returned by \helpref{LoadLibrary}{wxdllloaderloadlibrary} previously.
+For example, this function will return {\tt ".dll"} under Windows or (usually) 
+{\tt ".so"} under Unix.
 
 \membersection{wxDllLoader::GetProgramHandle}\label{wxdllloadergetprogramhandle}
 
@@ -131,4 +113,33 @@ an error occured.
 \helpref{LoadLibrary}{wxdllloaderloadlibrary}}
 
 \docparam{name}{Name of the symbol.}
+
+\membersection{wxDllLoader::LoadLibrary}\label{wxdllloaderloadlibrary}
+
+\func{wxDllType}{LoadLibrary}{\param{const wxString \& }{libname}, \param{bool* }{success = NULL}}
+
+This function loads a shared library into memory, with {\it libname} being the
+name of the library: it may be either the full name including path and
+(platform-dependent) extenesion, just the basename (no path and no extension)
+or a basename with extentsion. In the last two cases, the library will be
+searched in all standard locations.
+
+Returns a handle to the loaded DLL. Use {\it success} parameter to test if it
+is valid. If the handle is valid, the library must be unloaded later with 
+\helpref{UnloadLibrary}{wxdllloaderunloadlibrary}.
+
+\wxheading{Parameters}
+
+\docparam{libname}{Name of the shared object to load.}
+
+\docparam{success}{May point to a bool variable which will be set to TRUE or
+FALSE; may also be {\tt NULL}.}
+
+\membersection{wxDllLoader::UnloadLibrary}\label{wxdllloaderunloadlibrary}
+
+\func{void}{UnloadLibrary}{\param{wxDllType }{dllhandle}}
+
+This function unloads the shared library. The handle {\it dllhandle} must have
+been returned by \helpref{LoadLibrary}{wxdllloaderloadlibrary} previously.
+
 
