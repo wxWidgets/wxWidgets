@@ -113,6 +113,7 @@ $(OUTPUTDIR):
 	@if not exist $^@ mkdir $^@
 
 $(SETUP_H): $(WXDIR)\include\wx\msw\setup.h $(ARCHINCDIR)\wx
+    if not exist $(WXDIR)\include\wx\msw\setup.h copy $(WXDIR)\include\wx\msw\setup0.h $(WXDIR)\include\wx\msw\setup.h
 	copy $(WXDIR)\include\wx\msw\setup.h $@
 
 LBCFILE=wx$(TOOLKIT).lbc
