@@ -53,8 +53,8 @@ MywxCanvasImage::MywxCanvasImage( const wxImage &image, double x, double y, doub
 void MywxCanvasImage::OnMouse(wxMouseEvent &event)
 {
     static bool first=false;
-    static dx=0;
-    static dy=0;
+    static int dx=0;
+    static int dy=0;
 
     int x = event.GetX();
     int y = event.GetY();
@@ -155,8 +155,6 @@ MyFrame::MyFrame()
 
     m_canvas = new wxCanvas( this, -1, wxPoint(0,0), wxSize(10,10) );
 
-    m_canvas->Freeze();
-
     m_canvas->SetArea( 400, 600 );
     m_canvas->SetColour( 255, 255, 255 );
 
@@ -194,8 +192,6 @@ MyFrame::MyFrame()
     m_sm4 = new MywxCanvasImage( image, 0,270,64,32 );
     m_canvas->Append( m_sm4 );
 
-    m_canvas->Thaw();
-
     m_log = new wxTextCtrl( this, -1, "", wxPoint(0,0), wxSize(100,100), wxTE_MULTILINE );
     wxLog *old_log = wxLog::SetActiveTarget( new wxLogTextCtrl( m_log ) );
     delete old_log;
@@ -228,6 +224,7 @@ void MyFrame::OnTimer( wxTimerEvent &WXUNUSED(event) )
     m_sm2->Move( m_sm2->GetX()+1, m_sm2->GetY() );
     m_sm3->Move( m_sm3->GetX()+1, m_sm3->GetY() );
     m_sm4->Move( m_sm4->GetX()+1, m_sm4->GetY() );
+    
     wxWakeUpIdle();
 }
 

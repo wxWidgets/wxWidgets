@@ -222,7 +222,7 @@ public:
 
     virtual void SetArea( int width, int height );
     virtual void SetColour( unsigned char red, unsigned char green, unsigned char blue );
-    virtual void Update( int x, int y, int width, int height );
+    virtual void Update( int x, int y, int width, int height, bool blit = TRUE );
     virtual void UpdateNow();
 
     virtual void Freeze();
@@ -242,7 +242,12 @@ public:
     // ... and call this to tell all objets to recreate then
     virtual void Recreate();
 
-    wxImage *GetBuffer()         { return &m_buffer; }
+    inline wxImage *GetBuffer()  { return &m_buffer; }
+    inline int GetBufferX()      { return m_bufferX; }
+    inline int GetBufferY()      { return m_bufferY; }
+    inline int GetBufferWidth()  { return m_buffer.GetWidth(); }
+    inline int GetBufferHeight() { return m_buffer.GetHeight(); }
+    
     bool NeedUpdate()            { return m_needUpdate; }
     bool IsFrozen()              { return m_frozen; }
 
@@ -250,14 +255,19 @@ public:
 
     void SetCaptureMouse( wxCanvasObject *obj );
 
+    virtual void ScrollWindow( int dx, int dy,
+                               const wxRect* rect = (wxRect *) NULL );
 
 private:
     wxImage          m_buffer;
+    int              m_bufferX;
+    int              m_bufferY;
     bool             m_needUpdate;
     wxList           m_updateRects;
     wxList           m_objects;
     unsigned char    m_green,m_red,m_blue;
     bool             m_frozen;
+    bool             m_requestNewBuffer;
     wxCanvasObject  *m_lastMouse;
     wxCanvasObject  *m_captureMouse;
 
