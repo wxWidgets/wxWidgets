@@ -575,9 +575,16 @@ void MyFrame::OnRightDown(wxMouseEvent &event )
     menu.AppendSeparator();
     menu.Append(Menu_File_Quit, "E&xit");
 
-    //menu.Delete(Menu_Popup_ToBeDeleted);
+    menu.Delete(Menu_Popup_ToBeDeleted);
     menu.Check(Menu_Popup_ToBeChecked, TRUE);
     menu.Enable(Menu_Popup_ToBeGreyed, FALSE);
 
     PopupMenu( &menu, event.GetX(), event.GetY() );
+
+    // test for destroying items in popup menus
+#if 0
+    menu.Destroy(Menu_Popup_Submenu);
+
+    PopupMenu( &menu, event.GetX(), event.GetY() );
+#endif // 0
 }
