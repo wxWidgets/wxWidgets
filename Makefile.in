@@ -1492,7 +1492,7 @@ PYTHON_DIST:
 		wxPython/wxPython/py/wxd \
 		; do \
 			echo "Copying dir: $$dir..."; \
-			mkdir $(DISTDIR)/$$dir; \
+			mkdir -p $(DISTDIR)/$$dir; \
 			cp $(WXDIR)/$$dir/* $(DISTDIR)/$$dir > /dev/null 2>&1; \
 		done; \
 		\
