@@ -29,6 +29,8 @@
 #elif defined(WIN32_PLATFORM_PSPC)
     // DoDragDrop:
     #pragma comment(lib,"ceshell.lib")
+
+    #pragma comment(lib,"aygshell.lib")
 #else
     #error "Unknown SDK, please fill-in missing pieces"
 #endif
