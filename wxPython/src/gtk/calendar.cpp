@@ -585,18 +585,12 @@ static PyObject *_wrap_wxCalendarDateAttr_GetTextColour(PyObject *self, PyObject
     }
 {
     wxPy_BEGIN_ALLOW_THREADS;
-        const wxColour & _result_ref = wxCalendarDateAttr_GetTextColour(_arg0);
-    _result = (wxColour *) &_result_ref;
+        _result = new wxColour (wxCalendarDateAttr_GetTextColour(_arg0));
 
     wxPy_END_ALLOW_THREADS;
     if (PyErr_Occurred()) return NULL;
-}    if (_result) {
-        SWIG_MakePtr(_ptemp, (char *) _result,"_wxColour_p");
-        _resultobj = Py_BuildValue("s",_ptemp);
-    } else {
-        Py_INCREF(Py_None);
-        _resultobj = Py_None;
-    }
+}    SWIG_MakePtr(_ptemp, (void *) _result,"_wxColour_p");
+    _resultobj = Py_BuildValue("s",_ptemp);
     return _resultobj;
 }
 
@@ -621,18 +615,12 @@ static PyObject *_wrap_wxCalendarDateAttr_GetBackgroundColour(PyObject *self, Py
     }
 {
     wxPy_BEGIN_ALLOW_THREADS;
-        const wxColour & _result_ref = wxCalendarDateAttr_GetBackgroundColour(_arg0);
-    _result = (wxColour *) &_result_ref;
+        _result = new wxColour (wxCalendarDateAttr_GetBackgroundColour(_arg0));
 
     wxPy_END_ALLOW_THREADS;
     if (PyErr_Occurred()) return NULL;
-}    if (_result) {
-        SWIG_MakePtr(_ptemp, (char *) _result,"_wxColour_p");
-        _resultobj = Py_BuildValue("s",_ptemp);
-    } else {
-        Py_INCREF(Py_None);
-        _resultobj = Py_None;
-    }
+}    SWIG_MakePtr(_ptemp, (void *) _result,"_wxColour_p");
+    _resultobj = Py_BuildValue("s",_ptemp);
     return _resultobj;
 }
 
@@ -657,18 +645,12 @@ static PyObject *_wrap_wxCalendarDateAttr_GetBorderColour(PyObject *self, PyObje
     }
 {
     wxPy_BEGIN_ALLOW_THREADS;
-        const wxColour & _result_ref = wxCalendarDateAttr_GetBorderColour(_arg0);
-    _result = (wxColour *) &_result_ref;
+        _result = new wxColour (wxCalendarDateAttr_GetBorderColour(_arg0));
 
     wxPy_END_ALLOW_THREADS;
     if (PyErr_Occurred()) return NULL;
-}    if (_result) {
-        SWIG_MakePtr(_ptemp, (char *) _result,"_wxColour_p");
-        _resultobj = Py_BuildValue("s",_ptemp);
-    } else {
-        Py_INCREF(Py_None);
-        _resultobj = Py_None;
-    }
+}    SWIG_MakePtr(_ptemp, (void *) _result,"_wxColour_p");
+    _resultobj = Py_BuildValue("s",_ptemp);
     return _resultobj;
 }
 
@@ -693,18 +675,12 @@ static PyObject *_wrap_wxCalendarDateAttr_GetFont(PyObject *self, PyObject *args
     }
 {
     wxPy_BEGIN_ALLOW_THREADS;
-        const wxFont & _result_ref = wxCalendarDateAttr_GetFont(_arg0);
-    _result = (wxFont *) &_result_ref;
+        _result = new wxFont (wxCalendarDateAttr_GetFont(_arg0));
 
     wxPy_END_ALLOW_THREADS;
     if (PyErr_Occurred()) return NULL;
-}    if (_result) {
-        SWIG_MakePtr(_ptemp, (char *) _result,"_wxFont_p");
-        _resultobj = Py_BuildValue("s",_ptemp);
-    } else {
-        Py_INCREF(Py_None);
-        _resultobj = Py_None;
-    }
+}    SWIG_MakePtr(_ptemp, (void *) _result,"_wxFont_p");
+    _resultobj = Py_BuildValue("s",_ptemp);
     return _resultobj;
 }
 
@@ -1473,18 +1449,12 @@ static PyObject *_wrap_wxCalendarCtrl_GetHeaderColourFg(PyObject *self, PyObject
     }
 {
     wxPy_BEGIN_ALLOW_THREADS;
-        const wxColour & _result_ref = wxCalendarCtrl_GetHeaderColourFg(_arg0);
-    _result = (wxColour *) &_result_ref;
+        _result = new wxColour (wxCalendarCtrl_GetHeaderColourFg(_arg0));
 
     wxPy_END_ALLOW_THREADS;
     if (PyErr_Occurred()) return NULL;
-}    if (_result) {
-        SWIG_MakePtr(_ptemp, (char *) _result,"_wxColour_p");
-        _resultobj = Py_BuildValue("s",_ptemp);
-    } else {
-        Py_INCREF(Py_None);
-        _resultobj = Py_None;
-    }
+}    SWIG_MakePtr(_ptemp, (void *) _result,"_wxColour_p");
+    _resultobj = Py_BuildValue("s",_ptemp);
     return _resultobj;
 }
 
@@ -1509,18 +1479,12 @@ static PyObject *_wrap_wxCalendarCtrl_GetHeaderColourBg(PyObject *self, PyObject
     }
 {
     wxPy_BEGIN_ALLOW_THREADS;
-        const wxColour & _result_ref = wxCalendarCtrl_GetHeaderColourBg(_arg0);
-    _result = (wxColour *) &_result_ref;
+        _result = new wxColour (wxCalendarCtrl_GetHeaderColourBg(_arg0));
 
     wxPy_END_ALLOW_THREADS;
     if (PyErr_Occurred()) return NULL;
-}    if (_result) {
-        SWIG_MakePtr(_ptemp, (char *) _result,"_wxColour_p");
-        _resultobj = Py_BuildValue("s",_ptemp);
-    } else {
-        Py_INCREF(Py_None);
-        _resultobj = Py_None;
-    }
+}    SWIG_MakePtr(_ptemp, (void *) _result,"_wxColour_p");
+    _resultobj = Py_BuildValue("s",_ptemp);
     return _resultobj;
 }
 
@@ -1589,18 +1553,12 @@ static PyObject *_wrap_wxCalendarCtrl_GetHighlightColourFg(PyObject *self, PyObj
     }
 {
     wxPy_BEGIN_ALLOW_THREADS;
-        const wxColour & _result_ref = wxCalendarCtrl_GetHighlightColourFg(_arg0);
-    _result = (wxColour *) &_result_ref;
+        _result = new wxColour (wxCalendarCtrl_GetHighlightColourFg(_arg0));
 
     wxPy_END_ALLOW_THREADS;
     if (PyErr_Occurred()) return NULL;
-}    if (_result) {
-        SWIG_MakePtr(_ptemp, (char *) _result,"_wxColour_p");
-        _resultobj = Py_BuildValue("s",_ptemp);
-    } else {
-        Py_INCREF(Py_None);
-        _resultobj = Py_None;
-    }
+}    SWIG_MakePtr(_ptemp, (void *) _result,"_wxColour_p");
+    _resultobj = Py_BuildValue("s",_ptemp);
     return _resultobj;
 }
 
@@ -1625,18 +1583,12 @@ static PyObject *_wrap_wxCalendarCtrl_GetHighlightColourBg(PyObject *self, PyObj
     }
 {
     wxPy_BEGIN_ALLOW_THREADS;
-        const wxColour & _result_ref = wxCalendarCtrl_GetHighlightColourBg(_arg0);
-    _result = (wxColour *) &_result_ref;
+        _result = new wxColour (wxCalendarCtrl_GetHighlightColourBg(_arg0));
 
     wxPy_END_ALLOW_THREADS;
     if (PyErr_Occurred()) return NULL;
-}    if (_result) {
-        SWIG_MakePtr(_ptemp, (char *) _result,"_wxColour_p");
-        _resultobj = Py_BuildValue("s",_ptemp);
-    } else {
-        Py_INCREF(Py_None);
-        _resultobj = Py_None;
-    }
+}    SWIG_MakePtr(_ptemp, (void *) _result,"_wxColour_p");
+    _resultobj = Py_BuildValue("s",_ptemp);
     return _resultobj;
 }
 
@@ -1705,18 +1657,12 @@ static PyObject *_wrap_wxCalendarCtrl_GetHolidayColourFg(PyObject *self, PyObjec
     }
 {
     wxPy_BEGIN_ALLOW_THREADS;
-        const wxColour & _result_ref = wxCalendarCtrl_GetHolidayColourFg(_arg0);
-    _result = (wxColour *) &_result_ref;
+        _result = new wxColour (wxCalendarCtrl_GetHolidayColourFg(_arg0));
 
     wxPy_END_ALLOW_THREADS;
     if (PyErr_Occurred()) return NULL;
-}    if (_result) {
-        SWIG_MakePtr(_ptemp, (char *) _result,"_wxColour_p");
-        _resultobj = Py_BuildValue("s",_ptemp);
-    } else {
-        Py_INCREF(Py_None);
-        _resultobj = Py_None;
-    }
+}    SWIG_MakePtr(_ptemp, (void *) _result,"_wxColour_p");
+    _resultobj = Py_BuildValue("s",_ptemp);
     return _resultobj;
 }
 
@@ -1741,18 +1687,12 @@ static PyObject *_wrap_wxCalendarCtrl_GetHolidayColourBg(PyObject *self, PyObjec
     }
 {
     wxPy_BEGIN_ALLOW_THREADS;
-        const wxColour & _result_ref = wxCalendarCtrl_GetHolidayColourBg(_arg0);
-    _result = (wxColour *) &_result_ref;
+        _result = new wxColour (wxCalendarCtrl_GetHolidayColourBg(_arg0));
 
     wxPy_END_ALLOW_THREADS;
     if (PyErr_Occurred()) return NULL;
-}    if (_result) {
-        SWIG_MakePtr(_ptemp, (char *) _result,"_wxColour_p");
-        _resultobj = Py_BuildValue("s",_ptemp);
-    } else {
-        Py_INCREF(Py_None);
-        _resultobj = Py_None;
-    }
+}    SWIG_MakePtr(_ptemp, (void *) _result,"_wxColour_p");
+    _resultobj = Py_BuildValue("s",_ptemp);
     return _resultobj;
 }
 

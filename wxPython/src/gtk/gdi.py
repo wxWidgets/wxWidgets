@@ -672,11 +672,11 @@ class wxDCPtr(wxObjectPtr):
         return val
     def GetBackground(self, *_args, **_kwargs):
         val = apply(gdic.wxDC_GetBackground,(self,) + _args, _kwargs)
-        if val: val = wxBrushPtr(val) 
+        if val: val = wxBrushPtr(val) ; val.thisown = 1
         return val
     def GetBrush(self, *_args, **_kwargs):
         val = apply(gdic.wxDC_GetBrush,(self,) + _args, _kwargs)
-        if val: val = wxBrushPtr(val) 
+        if val: val = wxBrushPtr(val) ; val.thisown = 1
         return val
     def GetCharHeight(self, *_args, **_kwargs):
         val = apply(gdic.wxDC_GetCharHeight,(self,) + _args, _kwargs)
@@ -689,7 +689,7 @@ class wxDCPtr(wxObjectPtr):
         return val
     def GetFont(self, *_args, **_kwargs):
         val = apply(gdic.wxDC_GetFont,(self,) + _args, _kwargs)
-        if val: val = wxFontPtr(val) 
+        if val: val = wxFontPtr(val) ; val.thisown = 1
         return val
     def GetLogicalFunction(self, *_args, **_kwargs):
         val = apply(gdic.wxDC_GetLogicalFunction,(self,) + _args, _kwargs)
@@ -705,7 +705,7 @@ class wxDCPtr(wxObjectPtr):
         return val
     def GetPen(self, *_args, **_kwargs):
         val = apply(gdic.wxDC_GetPen,(self,) + _args, _kwargs)
-        if val: val = wxPenPtr(val) 
+        if val: val = wxPenPtr(val) ; val.thisown = 1
         return val
     def GetPixel(self, *_args, **_kwargs):
         val = apply(gdic.wxDC_GetPixel,(self,) + _args, _kwargs)
@@ -1294,6 +1294,16 @@ wxFONTENCODING_UTF7 = gdic.wxFONTENCODING_UTF7
 wxFONTENCODING_UTF8 = gdic.wxFONTENCODING_UTF8
 wxFONTENCODING_UNICODE = gdic.wxFONTENCODING_UNICODE
 wxFONTENCODING_MAX = gdic.wxFONTENCODING_MAX
+wxIMAGELIST_DRAW_NORMAL = gdic.wxIMAGELIST_DRAW_NORMAL
+wxIMAGELIST_DRAW_TRANSPARENT = gdic.wxIMAGELIST_DRAW_TRANSPARENT
+wxIMAGELIST_DRAW_SELECTED = gdic.wxIMAGELIST_DRAW_SELECTED
+wxIMAGELIST_DRAW_FOCUSED = gdic.wxIMAGELIST_DRAW_FOCUSED
+wxIMAGE_LIST_NORMAL = gdic.wxIMAGE_LIST_NORMAL
+wxIMAGE_LIST_SMALL = gdic.wxIMAGE_LIST_SMALL
+wxIMAGE_LIST_STATE = gdic.wxIMAGE_LIST_STATE
+wxOutRegion = gdic.wxOutRegion
+wxPartRegion = gdic.wxPartRegion
+wxInRegion = gdic.wxInRegion
 cvar = gdic.cvar
 wxNORMAL_FONT = wxFontPtr(gdic.cvar.wxNORMAL_FONT)
 wxSMALL_FONT = wxFontPtr(gdic.cvar.wxSMALL_FONT)
@@ -1341,13 +1351,3 @@ wxTheFontList = wxFontListPtr(gdic.cvar.wxTheFontList)
 wxThePenList = wxPenListPtr(gdic.cvar.wxThePenList)
 wxTheBrushList = wxBrushListPtr(gdic.cvar.wxTheBrushList)
 wxTheColourDatabase = wxColourDatabasePtr(gdic.cvar.wxTheColourDatabase)
-wxIMAGELIST_DRAW_NORMAL = gdic.wxIMAGELIST_DRAW_NORMAL
-wxIMAGELIST_DRAW_TRANSPARENT = gdic.wxIMAGELIST_DRAW_TRANSPARENT
-wxIMAGELIST_DRAW_SELECTED = gdic.wxIMAGELIST_DRAW_SELECTED
-wxIMAGELIST_DRAW_FOCUSED = gdic.wxIMAGELIST_DRAW_FOCUSED
-wxIMAGE_LIST_NORMAL = gdic.wxIMAGE_LIST_NORMAL
-wxIMAGE_LIST_SMALL = gdic.wxIMAGE_LIST_SMALL
-wxIMAGE_LIST_STATE = gdic.wxIMAGE_LIST_STATE
-wxOutRegion = gdic.wxOutRegion
-wxPartRegion = gdic.wxPartRegion
-wxInRegion = gdic.wxInRegion

@@ -230,14 +230,14 @@ class wxHtmlWinParserPtr(wxHtmlParserPtr):
         return val
     def GetLinkColor(self, *_args, **_kwargs):
         val = apply(htmlc.wxHtmlWinParser_GetLinkColor,(self,) + _args, _kwargs)
-        if val: val = wxColourPtr(val) 
+        if val: val = wxColourPtr(val) ; val.thisown = 1
         return val
     def SetLinkColor(self, *_args, **_kwargs):
         val = apply(htmlc.wxHtmlWinParser_SetLinkColor,(self,) + _args, _kwargs)
         return val
     def GetActualColor(self, *_args, **_kwargs):
         val = apply(htmlc.wxHtmlWinParser_GetActualColor,(self,) + _args, _kwargs)
-        if val: val = wxColourPtr(val) 
+        if val: val = wxColourPtr(val) ; val.thisown = 1
         return val
     def SetActualColor(self, *_args, **_kwargs):
         val = apply(htmlc.wxHtmlWinParser_SetActualColor,(self,) + _args, _kwargs)
@@ -511,6 +511,9 @@ class wxHtmlWindowPtr(wxScrolledWindowPtr):
     def __init__(self,this):
         self.this = this
         self.thisown = 0
+    def Create(self, *_args, **_kwargs):
+        val = apply(htmlc.wxHtmlWindow_Create,(self,) + _args, _kwargs)
+        return val
     def _setCallbackInfo(self, *_args, **_kwargs):
         val = apply(htmlc.wxHtmlWindow__setCallbackInfo,(self,) + _args, _kwargs)
         return val
@@ -601,6 +604,12 @@ class wxHtmlWindow(wxHtmlWindowPtr):
         self._setOORInfo(self)
 
 
+
+def wxPreHtmlWindow(*_args,**_kwargs):
+    val = wxHtmlWindowPtr(apply(htmlc.new_wxPreHtmlWindow,_args,_kwargs))
+    val.thisown = 1
+    val._setOORInfo(val)
+    return val
 
 
 class wxHtmlDCRendererPtr(wxObjectPtr):

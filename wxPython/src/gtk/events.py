@@ -574,6 +574,23 @@ class wxFocusEvent(wxFocusEventPtr):
 
 
 
+class wxChildFocusEventPtr(wxCommandEventPtr):
+    def __init__(self,this):
+        self.this = this
+        self.thisown = 0
+    def GetWindow(self, *_args, **_kwargs):
+        val = apply(eventsc.wxChildFocusEvent_GetWindow,(self,) + _args, _kwargs)
+        return val
+    def __repr__(self):
+        return "<C wxChildFocusEvent instance at %s>" % (self.this,)
+class wxChildFocusEvent(wxChildFocusEventPtr):
+    def __init__(self,*_args,**_kwargs):
+        self.this = apply(eventsc.new_wxChildFocusEvent,_args,_kwargs)
+        self.thisown = 1
+
+
+
+
 class wxActivateEventPtr(wxEventPtr):
     def __init__(self,this):
         self.this = this

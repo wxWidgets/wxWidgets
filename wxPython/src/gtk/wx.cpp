@@ -674,6 +674,7 @@ static wxPyCoreAPI API = {
     wxPyMake_wxObject,
     wxPyMake_wxSizer,
     wxPyPtrTypeMap_Add,
+    wxArrayString2PyList_helper
 };
 
 
@@ -2448,6 +2449,7 @@ SWIGEXPORT(void) initwxc() {
 	 PyDict_SetItemString(d,"wxEVT_COMMAND_TOOL_ENTER", PyInt_FromLong((long) wxEVT_COMMAND_TOOL_ENTER));
 	 PyDict_SetItemString(d,"wxEVT_SET_FOCUS", PyInt_FromLong((long) wxEVT_SET_FOCUS));
 	 PyDict_SetItemString(d,"wxEVT_KILL_FOCUS", PyInt_FromLong((long) wxEVT_KILL_FOCUS));
+	 PyDict_SetItemString(d,"wxEVT_CHILD_FOCUS", PyInt_FromLong((long) wxEVT_CHILD_FOCUS));
 	 PyDict_SetItemString(d,"wxEVT_MOUSEWHEEL", PyInt_FromLong((long) wxEVT_MOUSEWHEEL));
 	 PyDict_SetItemString(d,"wxEVT_LEFT_DOWN", PyInt_FromLong((long) wxEVT_LEFT_DOWN));
 	 PyDict_SetItemString(d,"wxEVT_LEFT_UP", PyInt_FromLong((long) wxEVT_LEFT_UP));

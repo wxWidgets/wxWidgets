@@ -1831,18 +1831,12 @@ static PyObject *_wrap_wxWindow_GetFont(PyObject *self, PyObject *args, PyObject
     }
 {
     wxPy_BEGIN_ALLOW_THREADS;
-        wxFont & _result_ref = wxWindow_GetFont(_arg0);
-    _result = (wxFont *) &_result_ref;
+        _result = new wxFont (wxWindow_GetFont(_arg0));
 
     wxPy_END_ALLOW_THREADS;
     if (PyErr_Occurred()) return NULL;
-}    if (_result) {
-        SWIG_MakePtr(_ptemp, (char *) _result,"_wxFont_p");
-        _resultobj = Py_BuildValue("s",_ptemp);
-    } else {
-        Py_INCREF(Py_None);
-        _resultobj = Py_None;
-    }
+}    SWIG_MakePtr(_ptemp, (void *) _result,"_wxFont_p");
+    _resultobj = Py_BuildValue("s",_ptemp);
     return _resultobj;
 }
 
@@ -4538,13 +4532,13 @@ static PyObject *_wrap_wxWindow_Show(PyObject *self, PyObject *args, PyObject *k
     PyObject * _resultobj;
     bool  _result;
     wxWindow * _arg0;
-    bool  _arg1;
+    bool  _arg1 = (bool ) TRUE;
     PyObject * _argo0 = 0;
-    int tempbool1;
+    int tempbool1 = (int) TRUE;
     char *_kwnames[] = { "self","show", NULL };
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxWindow_Show",_kwnames,&_argo0,&tempbool1)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O|i:wxWindow_Show",_kwnames,&_argo0,&tempbool1)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }

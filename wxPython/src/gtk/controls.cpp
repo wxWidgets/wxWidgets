@@ -1482,18 +1482,12 @@ static PyObject *_wrap_wxBitmapButton_GetBitmapLabel(PyObject *self, PyObject *a
     }
 {
     wxPy_BEGIN_ALLOW_THREADS;
-        wxBitmap & _result_ref = wxBitmapButton_GetBitmapLabel(_arg0);
-    _result = (wxBitmap *) &_result_ref;
+        _result = new wxBitmap (wxBitmapButton_GetBitmapLabel(_arg0));
 
     wxPy_END_ALLOW_THREADS;
     if (PyErr_Occurred()) return NULL;
-}    if (_result) {
-        SWIG_MakePtr(_ptemp, (char *) _result,"_wxBitmap_p");
-        _resultobj = Py_BuildValue("s",_ptemp);
-    } else {
-        Py_INCREF(Py_None);
-        _resultobj = Py_None;
-    }
+}    SWIG_MakePtr(_ptemp, (void *) _result,"_wxBitmap_p");
+    _resultobj = Py_BuildValue("s",_ptemp);
     return _resultobj;
 }
 
@@ -1518,18 +1512,12 @@ static PyObject *_wrap_wxBitmapButton_GetBitmapDisabled(PyObject *self, PyObject
     }
 {
     wxPy_BEGIN_ALLOW_THREADS;
-        wxBitmap & _result_ref = wxBitmapButton_GetBitmapDisabled(_arg0);
-    _result = (wxBitmap *) &_result_ref;
+        _result = new wxBitmap (wxBitmapButton_GetBitmapDisabled(_arg0));
 
     wxPy_END_ALLOW_THREADS;
     if (PyErr_Occurred()) return NULL;
-}    if (_result) {
-        SWIG_MakePtr(_ptemp, (char *) _result,"_wxBitmap_p");
-        _resultobj = Py_BuildValue("s",_ptemp);
-    } else {
-        Py_INCREF(Py_None);
-        _resultobj = Py_None;
-    }
+}    SWIG_MakePtr(_ptemp, (void *) _result,"_wxBitmap_p");
+    _resultobj = Py_BuildValue("s",_ptemp);
     return _resultobj;
 }
 
@@ -1554,18 +1542,12 @@ static PyObject *_wrap_wxBitmapButton_GetBitmapFocus(PyObject *self, PyObject *a
     }
 {
     wxPy_BEGIN_ALLOW_THREADS;
-        wxBitmap & _result_ref = wxBitmapButton_GetBitmapFocus(_arg0);
-    _result = (wxBitmap *) &_result_ref;
+        _result = new wxBitmap (wxBitmapButton_GetBitmapFocus(_arg0));
 
     wxPy_END_ALLOW_THREADS;
     if (PyErr_Occurred()) return NULL;
-}    if (_result) {
-        SWIG_MakePtr(_ptemp, (char *) _result,"_wxBitmap_p");
-        _resultobj = Py_BuildValue("s",_ptemp);
-    } else {
-        Py_INCREF(Py_None);
-        _resultobj = Py_None;
-    }
+}    SWIG_MakePtr(_ptemp, (void *) _result,"_wxBitmap_p");
+    _resultobj = Py_BuildValue("s",_ptemp);
     return _resultobj;
 }
 
@@ -1590,18 +1572,12 @@ static PyObject *_wrap_wxBitmapButton_GetBitmapSelected(PyObject *self, PyObject
     }
 {
     wxPy_BEGIN_ALLOW_THREADS;
-        wxBitmap & _result_ref = wxBitmapButton_GetBitmapSelected(_arg0);
-    _result = (wxBitmap *) &_result_ref;
+        _result = new wxBitmap (wxBitmapButton_GetBitmapSelected(_arg0));
 
     wxPy_END_ALLOW_THREADS;
     if (PyErr_Occurred()) return NULL;
-}    if (_result) {
-        SWIG_MakePtr(_ptemp, (char *) _result,"_wxBitmap_p");
-        _resultobj = Py_BuildValue("s",_ptemp);
-    } else {
-        Py_INCREF(Py_None);
-        _resultobj = Py_None;
-    }
+}    SWIG_MakePtr(_ptemp, (void *) _result,"_wxBitmap_p");
+    _resultobj = Py_BuildValue("s",_ptemp);
     return _resultobj;
 }
 
@@ -6166,18 +6142,12 @@ static PyObject *_wrap_wxTextAttr_GetTextColour(PyObject *self, PyObject *args, 
     }
 {
     wxPy_BEGIN_ALLOW_THREADS;
-        const wxColour & _result_ref = wxTextAttr_GetTextColour(_arg0);
-    _result = (wxColour *) &_result_ref;
+        _result = new wxColour (wxTextAttr_GetTextColour(_arg0));
 
     wxPy_END_ALLOW_THREADS;
     if (PyErr_Occurred()) return NULL;
-}    if (_result) {
-        SWIG_MakePtr(_ptemp, (char *) _result,"_wxColour_p");
-        _resultobj = Py_BuildValue("s",_ptemp);
-    } else {
-        Py_INCREF(Py_None);
-        _resultobj = Py_None;
-    }
+}    SWIG_MakePtr(_ptemp, (void *) _result,"_wxColour_p");
+    _resultobj = Py_BuildValue("s",_ptemp);
     return _resultobj;
 }
 
@@ -6202,18 +6172,12 @@ static PyObject *_wrap_wxTextAttr_GetBackgroundColour(PyObject *self, PyObject *
     }
 {
     wxPy_BEGIN_ALLOW_THREADS;
-        const wxColour & _result_ref = wxTextAttr_GetBackgroundColour(_arg0);
-    _result = (wxColour *) &_result_ref;
+        _result = new wxColour (wxTextAttr_GetBackgroundColour(_arg0));
 
     wxPy_END_ALLOW_THREADS;
     if (PyErr_Occurred()) return NULL;
-}    if (_result) {
-        SWIG_MakePtr(_ptemp, (char *) _result,"_wxColour_p");
-        _resultobj = Py_BuildValue("s",_ptemp);
-    } else {
-        Py_INCREF(Py_None);
-        _resultobj = Py_None;
-    }
+}    SWIG_MakePtr(_ptemp, (void *) _result,"_wxColour_p");
+    _resultobj = Py_BuildValue("s",_ptemp);
     return _resultobj;
 }
 
@@ -6238,18 +6202,12 @@ static PyObject *_wrap_wxTextAttr_GetFont(PyObject *self, PyObject *args, PyObje
     }
 {
     wxPy_BEGIN_ALLOW_THREADS;
-        const wxFont & _result_ref = wxTextAttr_GetFont(_arg0);
-    _result = (wxFont *) &_result_ref;
+        _result = new wxFont (wxTextAttr_GetFont(_arg0));
 
     wxPy_END_ALLOW_THREADS;
     if (PyErr_Occurred()) return NULL;
-}    if (_result) {
-        SWIG_MakePtr(_ptemp, (char *) _result,"_wxFont_p");
-        _resultobj = Py_BuildValue("s",_ptemp);
-    } else {
-        Py_INCREF(Py_None);
-        _resultobj = Py_None;
-    }
+}    SWIG_MakePtr(_ptemp, (void *) _result,"_wxFont_p");
+    _resultobj = Py_BuildValue("s",_ptemp);
     return _resultobj;
 }
 
@@ -8924,18 +8882,12 @@ static PyObject *_wrap_wxStaticBitmap_GetBitmap(PyObject *self, PyObject *args, 
     }
 {
     wxPy_BEGIN_ALLOW_THREADS;
-        const wxBitmap & _result_ref = wxStaticBitmap_GetBitmap(_arg0);
-    _result = (wxBitmap *) &_result_ref;
+        _result = new wxBitmap (wxStaticBitmap_GetBitmap(_arg0));
 
     wxPy_END_ALLOW_THREADS;
     if (PyErr_Occurred()) return NULL;
-}    if (_result) {
-        SWIG_MakePtr(_ptemp, (char *) _result,"_wxBitmap_p");
-        _resultobj = Py_BuildValue("s",_ptemp);
-    } else {
-        Py_INCREF(Py_None);
-        _resultobj = Py_None;
-    }
+}    SWIG_MakePtr(_ptemp, (void *) _result,"_wxBitmap_p");
+    _resultobj = Py_BuildValue("s",_ptemp);
     return _resultobj;
 }
 

@@ -765,6 +765,7 @@ wxEVT_COMMAND_TOOL_RCLICKED = wxc.wxEVT_COMMAND_TOOL_RCLICKED
 wxEVT_COMMAND_TOOL_ENTER = wxc.wxEVT_COMMAND_TOOL_ENTER
 wxEVT_SET_FOCUS = wxc.wxEVT_SET_FOCUS
 wxEVT_KILL_FOCUS = wxc.wxEVT_KILL_FOCUS
+wxEVT_CHILD_FOCUS = wxc.wxEVT_CHILD_FOCUS
 wxEVT_MOUSEWHEEL = wxc.wxEVT_MOUSEWHEEL
 wxEVT_LEFT_DOWN = wxc.wxEVT_LEFT_DOWN
 wxEVT_LEFT_UP = wxc.wxEVT_LEFT_UP
@@ -872,7 +873,6 @@ wxDefaultSize = wxSizePtr(wxc.cvar.wxDefaultSize)
 # Author:       Robin Dunn
 #
 # Created:      6/30/97
-# RCS-ID:       $Id$
 # Copyright:    (c) 1998 by Total Control Software
 # Licence:      wxWindows license
 #----------------------------------------------------------------------------
@@ -940,6 +940,9 @@ def EVT_SET_FOCUS(win, func):
 
 def EVT_KILL_FOCUS(win, func):
     win.Connect(-1, -1, wxEVT_KILL_FOCUS, func)
+
+def EVT_CHILD_FOCUS(win, func):
+    win.Connect(-1, -1, wxEVT_CHILD_FOCUS, func)
 
 def EVT_ACTIVATE(win, func):
     win.Connect(-1, -1, wxEVT_ACTIVATE, func)

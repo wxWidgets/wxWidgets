@@ -473,18 +473,12 @@ static PyObject *_wrap_wxTopLevelWindow_GetIcon(PyObject *self, PyObject *args, 
     }
 {
     wxPy_BEGIN_ALLOW_THREADS;
-        const wxIcon & _result_ref = wxTopLevelWindow_GetIcon(_arg0);
-    _result = (wxIcon *) &_result_ref;
+        _result = new wxIcon (wxTopLevelWindow_GetIcon(_arg0));
 
     wxPy_END_ALLOW_THREADS;
     if (PyErr_Occurred()) return NULL;
-}    if (_result) {
-        SWIG_MakePtr(_ptemp, (char *) _result,"_wxIcon_p");
-        _resultobj = Py_BuildValue("s",_ptemp);
-    } else {
-        Py_INCREF(Py_None);
-        _resultobj = Py_None;
-    }
+}    SWIG_MakePtr(_ptemp, (void *) _result,"_wxIcon_p");
+    _resultobj = Py_BuildValue("s",_ptemp);
     return _resultobj;
 }
 

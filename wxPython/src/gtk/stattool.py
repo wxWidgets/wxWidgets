@@ -104,15 +104,15 @@ class wxToolBarToolBasePtr(wxObjectPtr):
         return val
     def GetBitmap1(self, *_args, **_kwargs):
         val = apply(stattoolc.wxToolBarToolBase_GetBitmap1,(self,) + _args, _kwargs)
-        if val: val = wxBitmapPtr(val) 
+        if val: val = wxBitmapPtr(val) ; val.thisown = 1
         return val
     def GetBitmap2(self, *_args, **_kwargs):
         val = apply(stattoolc.wxToolBarToolBase_GetBitmap2,(self,) + _args, _kwargs)
-        if val: val = wxBitmapPtr(val) 
+        if val: val = wxBitmapPtr(val) ; val.thisown = 1
         return val
     def GetBitmap(self, *_args, **_kwargs):
         val = apply(stattoolc.wxToolBarToolBase_GetBitmap,(self,) + _args, _kwargs)
-        if val: val = wxBitmapPtr(val) 
+        if val: val = wxBitmapPtr(val) ; val.thisown = 1
         return val
     def GetShortHelp(self, *_args, **_kwargs):
         val = apply(stattoolc.wxToolBarToolBase_GetShortHelp,(self,) + _args, _kwargs)
