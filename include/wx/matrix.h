@@ -122,11 +122,7 @@ public:
     //!code:           | -1     0      0 |
     //!code: matrix' = |  0    -1      0 | x matrix
     //!code:           |  0     0      1 |
-#if defined(__WXPM__)
     wxTransformMatrix&  Mirror(bool x=TRUE, bool y=FALSE);
-#else
-    wxTransformMatrix&  Mirror(bool x=true, bool y=false);
-#endif
     // Translate by dx, dy:
     //!ex:
     //!code:           | 1  0 dx |

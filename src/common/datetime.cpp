@@ -194,7 +194,11 @@ static const wxDateTime::wxDateTime_t gs_cumulatedDays[2][MONTHS_IN_YEAR] =
 
 // in the fine tradition of ANSI C we use our equivalent of (time_t)-1 to
 // indicate an invalid wxDateTime object
+#ifdef __WIN16__
+static const wxDateTime gs_dtDefault;
+#else
 static const wxDateTime gs_dtDefault = wxLongLong((long)ULONG_MAX, ULONG_MAX);
+#endif
 
 const wxDateTime& wxDefaultDateTime = gs_dtDefault;
 

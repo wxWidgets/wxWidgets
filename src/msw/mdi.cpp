@@ -1266,7 +1266,10 @@ static void MDISetMenu(wxWindow *win, HMENU hmenuFrame, HMENU hmenuWindow)
     wxWindow *parent = win->GetParent();
     wxCHECK_RET( parent, wxT("MDI client without parent frame? weird...") );
 
+#ifndef __WIN16__
     ::SendMessage(GetWinHwnd(win), WM_MDIREFRESHMENU, 0, 0L);
+#endif
+
     ::DrawMenuBar(GetWinHwnd(parent));
 }
 

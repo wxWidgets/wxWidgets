@@ -228,6 +228,7 @@ void MyApp::GenerateSamples(const wxString& dir)
     GenerateSample("DynamicVC", "dynamic", dir + wxString("/samples/dynamic"), wxStringList("dynamic.cpp", 0));
     GenerateSample("DrawingVC", "drawing", dir + wxString("/samples/drawing"), wxStringList("drawing.cpp", 0));
     GenerateSample("ExecVC", "exec", dir + wxString("/samples/exec"), wxStringList("exec.cpp", 0));
+    GenerateSample("EventVC", "event", dir + wxString("/samples/event"), wxStringList("event.cpp", 0));
     GenerateSample("GridVC", "grid", dir + wxString("/samples/grid"), wxStringList("grid.cpp", 0));
     GenerateSample("NewGridVC", "griddemo", dir + wxString("/samples/newgrid"), wxStringList("griddemo.cpp", 0));
     GenerateSample("HelpVC", "demo", dir + wxString("/samples/help"), wxStringList("demo.cpp", 0));

@@ -316,7 +316,11 @@ int setdrive(int drive)
 	newdrive[1] = ':';
 	newdrive[2] = '\0';
 #if defined(__WXMSW__)
+#ifdef __WIN16__
+    if (wxSetWorkingDirectory(newdrive))
+#else
 	if (SetCurrentDirectory((LPSTR)newdrive))
+#endif
 #else
     // VA doesn't know what LPSTR is and has its own set
 	if (DosSetCurrentDir((PSZ)newdrive))

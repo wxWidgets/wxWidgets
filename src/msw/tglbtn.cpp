@@ -81,6 +81,10 @@ bool wxToggleButton::Create(wxWindow *parent, wxWindowID id,
    m_backgroundColour = parent->GetBackgroundColour();
    m_foregroundColour = parent->GetForegroundColour();
 
+#ifndef BS_PUSHLIKE
+#define BS_PUSHLIKE 0x00001000L
+#endif
+
    long msStyle = BS_AUTOCHECKBOX | BS_PUSHLIKE | WS_TABSTOP | WS_CHILD | WS_VISIBLE;
 #ifdef __WIN32__
    if(m_windowStyle & wxBU_LEFT)

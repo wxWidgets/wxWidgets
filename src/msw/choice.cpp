@@ -339,9 +339,16 @@ bool wxChoice::MSWCommand(WXUINT param, WXWORD WXUNUSED(id))
 }
 
 WXHBRUSH wxChoice::OnCtlColor(WXHDC pDC, WXHWND WXUNUSED(pWnd), WXUINT WXUNUSED(nCtlColor),
+#if wxUSE_CTL3D
+                               WXUINT message,
+                               WXWPARAM wParam,
+                               WXLPARAM lParam
+#else
                                WXUINT WXUNUSED(message),
                                WXWPARAM WXUNUSED(wParam),
-                               WXLPARAM WXUNUSED(lParam))
+                               WXLPARAM WXUNUSED(lParam)
+#endif
+     )
 {
 #if wxUSE_CTL3D
     if ( m_useCtl3D )

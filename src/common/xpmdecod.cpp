@@ -222,7 +222,11 @@ wxImage wxXPMDecoder::ReadFile(wxInputStream& stream)
     wxImage img = ReadData(xpm_lines);
 
     delete[] xpm_buffer;
+#ifdef __WIN16__
+    delete[] (char**) xpm_lines;
+#else
     delete[] xpm_lines;
+#endif
     return img;
 }
 #endif // wxUSE_STREAMS

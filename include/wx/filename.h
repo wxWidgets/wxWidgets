@@ -102,14 +102,6 @@ public:
                wxPathFormat format = wxPATH_NATIVE)
         { Assign(path, name, ext, format); }
 
-        // assorted assignment operators
-
-    wxFileName& operator=(const wxFileName& filename)
-        { Assign(filename); return *this; }
-
-    wxFileName& operator=(const wxString& filename)
-        { Assign(filename); return *this; }
-
         // the same for delayed initialization
 
         // VZ: wouldn't it be better to call this Create() for consistency with
@@ -127,6 +119,14 @@ public:
                 wxPathFormat format = wxPATH_NATIVE);
     void AssignDir(const wxString& dir, wxPathFormat format = wxPATH_NATIVE)
         { Assign(dir, _T(""), format); }
+
+        // assorted assignment operators
+
+    wxFileName& operator=(const wxFileName& filename)
+        { Assign(filename); return *this; }
+
+    wxFileName& operator=(const wxString& filename)
+        { Assign(filename); return *this; }
 
         // reset all components to default, uninitialized state
     void Clear();
@@ -191,14 +191,14 @@ public:
 
     // Comparison
 
+        // compares with the rules of this platform
+    bool SameAs(const wxFileName &filepath,
+                wxPathFormat format = wxPATH_NATIVE);
+
         // uses the current platform settings
     bool operator==(const wxFileName& filename) { return SameAs(filename); }
     bool operator==(const wxString& filename)
         { return *this == wxFileName(filename); }
-
-        // compares with the rules of this platform
-    bool SameAs(const wxFileName &filepath,
-                wxPathFormat format = wxPATH_NATIVE);
 
     // Tests
     static bool IsCaseSensitive( wxPathFormat format = wxPATH_NATIVE );

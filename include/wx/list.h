@@ -187,6 +187,9 @@ class WXDLLEXPORT wxListBase : public wxObject
 {
 friend class wxNodeBase;        // should be able to call DetachNode()
 friend class wxHashTableBase;   // should be able to call untyped Find()
+private:
+        // common part of all ctors
+    void Init(wxKeyType keyType = wxKEY_NONE); // Must be declared before it's used (for VC++ 1.5)
 public:
     // default ctor & dtor
     wxListBase(wxKeyType keyType = wxKEY_NONE) { Init(keyType); }
@@ -308,8 +311,6 @@ protected:
 
 private:
     // helpers
-        // common part of all ctors
-    void Init(wxKeyType keyType = wxKEY_NONE);
         // common part of copy ctor and assignment operator
     void DoCopy(const wxListBase& list);
         // common part of all Append()s

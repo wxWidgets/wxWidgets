@@ -463,6 +463,16 @@ bool wxDirExists(const wxString& dir)
 
 bool wxGetEnv(const wxString& var, wxString *value)
 {
+#ifdef __WIN16__
+    const wxChar* ret = wxGetenv(var);
+    if (ret)
+    {
+        *value = ret;
+        return TRUE;
+    }
+    else
+        return FALSE;
+#else
     // first get the size of the buffer
     DWORD dwRet = ::GetEnvironmentVariable(var, NULL, 0);
     if ( !dwRet )
@@ -478,6 +488,7 @@ bool wxGetEnv(const wxString& var, wxString *value)
     }
 
     return TRUE;
+#endif
 }
 
 bool wxSetEnv(const wxString& var, const wxChar *value)
@@ -1034,14 +1045,20 @@ void wxDisplaySizeMM(int *width, int *height)
 
 void wxClientDisplayRect(int *x, int *y, int *width, int *height)
 {
+#ifdef __WIN16__
+    *x = 0; *y = 0;
+    wxDisplaySize(width, height);
+#else
     // Determine the desktop dimensions minus the taskbar and any other
     // special decorations...
     RECT r;
+
     SystemParametersInfo(SPI_GETWORKAREA, 0, &r, 0);
     if (x)      *x = r.left;
     if (y)      *y = r.top;
     if (width)  *width = r.right - r.left;
     if (height) *height = r.bottom - r.top;
+#endif
 }
 
 
