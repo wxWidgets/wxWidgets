@@ -15,7 +15,13 @@
 Load color names/values from the rgb.txt file on my system...
 """
 
+
 def getColourList():
+    return map(lambda x: x[0], getColourInfoList())
+
+
+
+def getColourInfoList():
     return [
         ("SNOW", 255, 250, 250),
         ("GHOST WHITE", 248, 248, 255),
@@ -64,7 +70,7 @@ def getColourList():
         ("DIMGREY", 105, 105, 105),
         ("SLATE GREY", 112, 128, 144),
         ("SLATEGREY", 112, 128, 144),
-        ("LIGHT SLATE grey", 119, 136, 153),
+        ("LIGHT SLATE GREY", 119, 136, 153),
         ("LIGHTSLATEGREY", 119, 136, 153),
         ("GREY", 190, 190, 190),
         ("LIGHT GREY", 211, 211, 211),
@@ -82,7 +88,7 @@ def getColourList():
         ("SLATEBLUE", 106,  90, 205),
         ("MEDIUM SLATE BLUE", 123, 104, 238),
         ("MEDIUMSLATEBLUE", 123, 104, 238),
-        ("LIGHT SLATE blue", 132, 112, 255),
+        ("LIGHT SLATE BLUE", 132, 112, 255),
         ("LIGHTSLATEBLUE", 132, 112, 255),
         ("MEDIUM BLUE",   0,   0, 205),
         ("MEDIUMBLUE",   0,   0, 205),
@@ -124,7 +130,7 @@ def getColourList():
         ("DARKGREEN",   0, 100,   0),
         ("DARK OLIVE GREEN",  85, 107,  47),
         ("DARKOLIVEGREEN",  85, 107,  47),
-        ("DARK SEA green", 143, 188, 143),
+        ("DARK SEA GREEN", 143, 188, 143),
         ("DARKSEAGREEN", 143, 188, 143),
         ("SEA GREEN",  46, 139,  87),
         ("SEAGREEN",  46, 139,  87),
@@ -652,7 +658,7 @@ def getColourList():
 
 def updateColourDB():
     from wxPython.wx import wxTheColourDatabase
-    cl = getColourList()
+    cl = getColourInfoList()
     for info in cl:
         apply(wxTheColourDatabase.Append, info)
 
