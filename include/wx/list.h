@@ -388,6 +388,9 @@ private:
         name(size_t count, T *elements[])                                   \
             : wxListBase(count, (void **)elements) { }                      \
                                                                             \
+        name& operator=(const name& list)                                   \
+            { return (name&)wxListBase::operator=(list); }                  \
+                                                                            \
         nodetype *GetFirst() const                                          \
             { return (nodetype *)wxListBase::GetFirst(); }                  \
         nodetype *GetLast() const                                           \
@@ -481,6 +484,9 @@ class WXDLLEXPORT wxList : public wxObjectList
 {
 public:
     wxList(int key_type = wxKEY_NONE) : wxObjectList((wxKeyType)key_type) { }
+
+    wxList& operator=(const wxList& list)
+        { return (wxList&)wxListBase::operator=(list); }
 
     // compatibility methods
     void Sort(wxSortCompareFunction compfunc) { wxListBase::Sort(compfunc); }
