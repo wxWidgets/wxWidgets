@@ -35,6 +35,7 @@
     #include "wx/icon.h"
     #include "wx/cursor.h"
     #include "wx/settings.h"
+    #include "wx/intl.h"
 #endif
 
 #include "wx/module.h"
