@@ -35,6 +35,10 @@ bool wxGauge::Create( wxWindow *parent, wxWindowID id,  int range,
   
   m_widget = gtk_progress_bar_new();
   
+  m_parent->AddChild( this );
+
+  (m_parent->m_insertCallback)( m_parent, this );
+  
   PostCreation();
   
   Show( TRUE );

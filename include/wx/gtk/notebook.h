@@ -8,11 +8,11 @@
 // Licence:     wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef __NOTEBOOKH__
-#define __NOTEBOOKH__
+#ifndef __GTKNOTEBOOKH__
+#define __GTKNOTEBOOKH__
 
 #ifdef __GNUG__
-#pragma interface "notebook.h"
+#pragma interface
 #endif
 
 #include "wx/defs.h"
@@ -137,15 +137,13 @@ public:
     // get the panel which represents the given page
   wxWindow *GetPage(int nPage) const;
 
+  
   // implementation
   
-  void AddChild(wxWindow *child);
   void SetConstraintSizes(bool recurse);
   bool DoPhase(int phase);
   void ApplyWidgetStyle();
-  
 
-private:
   // common part of all ctors
   void Init();
 
@@ -183,4 +181,4 @@ typedef void (wxEvtHandler::*wxNotebookEventFunction)(wxNotebookEvent&);
   },
 
 #endif
-    // __NOTEBOOKH__
+    // __GTKNOTEBOOKH__

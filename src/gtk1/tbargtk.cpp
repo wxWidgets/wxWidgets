@@ -118,6 +118,10 @@ bool wxToolBar::Create( wxWindow *parent, wxWindowID id,
 					    
   gtk_toolbar_set_tooltips( GTK_TOOLBAR(m_toolbar), TRUE );
 
+  m_parent->AddChild( this );
+
+  (m_parent->m_insertCallback)( m_parent, this );
+  
   PostCreation();
 
   Show( TRUE );

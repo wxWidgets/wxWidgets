@@ -126,6 +126,10 @@ bool wxScrollBar::Create(wxWindow *parent, wxWindowID id,
   gtk_signal_connect( GTK_OBJECT(m_widget), "button_release_event",
           (GtkSignalFunc)gtk_scrollbar_button_release_callback, (gpointer) this );
 
+  m_parent->AddChild( this );
+
+  (m_parent->m_insertCallback)( m_parent, this );
+  
   PostCreation();
   
   SetBackgroundColour( parent->GetBackgroundColour() );

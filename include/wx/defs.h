@@ -21,6 +21,7 @@
 #include "glib.h"
 #include "gdk/gdk.h"
 #include "gtk/gtk.h"
+#include "wx/gtk/win_gtk.h"
 
 #endif
 

@@ -7,9 +7,9 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-
 #ifdef __GNUG__
 #pragma implementation "menu.h"
+#pragma implementation "menuitem.h"
 #endif
 
 #include "wx/menu.h"

@@ -71,6 +71,10 @@ bool wxButton::Create(  wxWindow *parent, wxWindowID id, const wxString &label,
   gtk_signal_connect( GTK_OBJECT(m_widget), "clicked",
     GTK_SIGNAL_FUNC(gtk_button_clicked_callback), (gpointer*)this );
 
+  m_parent->AddChild( this );
+
+  (m_parent->m_insertCallback)( m_parent, this );
+  
   PostCreation();
   
   SetBackgroundColour( parent->GetBackgroundColour() );

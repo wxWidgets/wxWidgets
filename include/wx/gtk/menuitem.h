@@ -1,95 +1,90 @@
 ///////////////////////////////////////////////////////////////////////////////
 // Name:        menuitem.h
 // Purpose:     wxMenuItem class
-// Author:      Vadim Zeitlin
-// Modified by: 
-// Created:     11.11.97
+// Author:      Robert Roebling
 // RCS-ID:      $Id$
-// Copyright:   (c) 1998 Vadim Zeitlin <zeitlin@dptmaths.ens-cachan.fr>
+// Copyright:   (c) 1998 Robert Roebling
 // Licence:     wxWindows license
 ///////////////////////////////////////////////////////////////////////////////
 
-#ifndef   _MENUITEM_H
-#define   _MENUITEM_H
+#ifndef __GTKMENUITEMH__
+#define __GTKMENUITEMH__
 
 #ifdef __GNUG__
-#pragma interface "menuitem.h"
+#pragma interface
 #endif
 
-// ----------------------------------------------------------------------------
-// headers
-// ----------------------------------------------------------------------------
-
-#include "wx/setup.h"
-
-// an exception to the general rule that a normal header doesn't include other
-// headers - only because ownerdrw.h is not always included and I don't want
-// to write #ifdef's everywhere...
-#if wxUSE_OWNER_DRAWN
-#include  "wx/ownerdrw.h"
-#endif
+#include "wx/defs.h"
+#include "wx/string.h"
 
 // ----------------------------------------------------------------------------
 // constants
 // ----------------------------------------------------------------------------
 
-// id for a separator line in the menu (invalid for normal item)
 #define   ID_SEPARATOR    (-1)
 
-// ----------------------------------------------------------------------------
-// wxMenuItem: an item in the menu, optionally implements owner-drawn behaviour
-// ----------------------------------------------------------------------------
-class WXDLLEXPORT wxMenuItem: public wxObject
-#if wxUSE_OWNER_DRAWN
-                            , public wxOwnerDrawn
-#endif
+//-----------------------------------------------------------------------------
+// classes
+//-----------------------------------------------------------------------------
+
+class wxMenuItem;
+
+class wxMenu;
+
+//-----------------------------------------------------------------------------
+// wxMenuItem
+//-----------------------------------------------------------------------------
+
+class wxMenuItem: public wxObject
 {
 DECLARE_DYNAMIC_CLASS(wxMenuItem)
 
 public:
-  // ctor & dtor
-  wxMenuItem(wxMenu *pParentMenu = NULL, int id = ID_SEPARATOR,
-             const wxString& strName = "", const wxString& wxHelp = "",
-             bool bCheckable = FALSE, wxMenu *pSubMenu = NULL);
-  virtual ~wxMenuItem();
+  wxMenuItem();
 
-  // accessors (some more are inherited from wxOwnerDrawn or are below)
-  bool              IsSeparator() const { return m_idItem == ID_SEPARATOR;  }
-  bool              IsEnabled()   const { return m_bEnabled;  }
-  bool              IsChecked()   const { return m_bChecked;  }
+  // accessors
+    // id
+  void SetId(int id) { m_id = id; }
+  int  GetId() const { return m_id; }
+  bool IsSeparator() const { return m_id == ID_SEPARATOR; }
 
-  int               GetId()       const { return m_idItem;    }
-  const wxString&   GetHelp()     const { return m_strHelp;   }
-  wxMenu           *GetSubMenu()  const { return m_pSubMenu;  }
+    // the item's text
+  void SetText(const wxString& str);
+  const wxString& GetText() const { return m_text; }
 
-  // operations
-  void SetName(const wxString& strName) { m_strName = strName; }
-  void SetHelp(const wxString& strHelp) { m_strHelp = strHelp; }
+    // what kind of menu item we are
+  void SetCheckable(bool checkable) { m_isCheckMenu = checkable; }
+  bool IsCheckable() const { return m_isCheckMenu; }
+  void SetSubMenu(wxMenu *menu) { m_subMenu = menu; }
+  wxMenu *GetSubMenu() const { return m_subMenu; }
+  bool IsSubMenu() const { return m_subMenu != NULL; }
 
-  void Enable(bool bDoEnable = TRUE);
-  void Check(bool bDoCheck = TRUE);
+    // state
+  void Enable( bool enable = TRUE ); 
+  bool IsEnabled() const { return m_isEnabled; }
+  void Check( bool check = TRUE );
+  bool IsChecked() const;
 
-  void DeleteSubMenu();
+    // help string (displayed in the status bar by default)
+  void SetHelp(const wxString& str) { m_helpStr = str; }
+  const wxString& GetHelp() const { return m_helpStr; }
+
+  // implementation
+  void SetMenuItem(GtkWidget *menuItem) { m_menuItem = menuItem; }
+  GtkWidget *GetMenuItem() const { return m_menuItem; }
 
 private:
-  int         m_idItem;         // numeric id of the item
-  wxString    m_strHelp;        // associated help string
-  wxMenu     *m_pSubMenu,       // may be NULL
-             *m_pParentMenu;    // menu this item is contained in
-  bool        m_bEnabled,       // enabled or greyed?
-              m_bChecked;       // checked? (only if checkable)
+  int           m_id;
+  wxString      m_text;
+  bool          m_isCheckMenu;
+  bool          m_isChecked;
+  bool          m_isEnabled;
+  wxMenu       *m_subMenu;
+  wxString      m_helpStr;
 
-#if wxUSE_OWNER_DRAWN
-  // wxOwnerDrawn base class already has these variables - nothing to do
-
-#else   //!owner drawn
-  bool        m_bCheckable;     // can be checked?
-  wxString    m_strName;        // name or label of the item
-
-public:
-  const wxString&   GetName()     const { return m_strName;    }
-  bool              IsCheckable() const { return m_bCheckable; }
-#endif  //owner drawn
+  GtkWidget    *m_menuItem;  // GtkMenuItem
 };
 
-#endif  //_MENUITEM_H
+
+#endif  
+        //__GTKMENUITEMH__

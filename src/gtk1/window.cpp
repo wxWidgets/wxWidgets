@@ -23,12 +23,9 @@
 #include "wx/msgdlg.h"
 #include "wx/dcclient.h"
 #include "wx/dnd.h"
-#include "wx/mdi.h"
 #include "wx/menu.h"
-#include "wx/notebook.h"
 #include "wx/statusbr.h"
 #include "wx/intl.h"
-#include "wx/gtk/win_gtk.h"
 #include "gdk/gdkprivate.h"
 #include "gdk/gdkkeysyms.h"
 
@@ -863,6 +860,29 @@ static void gtk_window_drop_callback( GtkWidget *widget, GdkEventDropDataAvailab
 }
 
 //-----------------------------------------------------------------------------
+// InsertChild for wxWindow.
+//-----------------------------------------------------------------------------
+
+// Callback for wxWindow. This very strange beast has to be used because
+// C++ has no virtual methods in a constructor. We have to emulate a 
+// virtual function here as wxNotebook requires a different way to insert
+// a child in it. I had opted for creating a wxNotebookPage window class
+// which would have made this superflouus (such in the MDI window system),
+// but no-one is listening to me...
+
+static void wxInsertChildInWindow( wxWindow* parent, wxWindow* child )
+{
+  gtk_myfixed_put( GTK_MYFIXED(parent->m_wxwindow), 
+                   GTK_WIDGET(child->m_widget), 
+		   child->m_x, 
+		   child->m_y );
+
+  gtk_widget_set_usize( GTK_WIDGET(child->m_widget), 
+                        child->m_width, 
+			child->m_height );
+}
+
+//-----------------------------------------------------------------------------
 // wxWindow
 //-----------------------------------------------------------------------------
 
@@ -917,8 +937,17 @@ wxWindow::wxWindow()
   m_resizing = FALSE;
   m_scrollGC = (GdkGC*) NULL;
   m_widgetStyle = (GtkStyle*) NULL;
+  m_insertCallback = wxInsertChildInWindow;
 }
 
+wxWindow::wxWindow( wxWindow *parent, wxWindowID id,
+      const wxPoint &pos, const wxSize &size,
+      long style, const wxString &name  )
+{
+  m_insertCallback = wxInsertChildInWindow;
+  Create( parent, id, pos, size, style, name );
+}
+  
 bool wxWindow::Create( wxWindow *parent, wxWindowID id,
       const wxPoint &pos, const wxSize &size,
       long style, const wxString &name  )
@@ -926,8 +955,6 @@ bool wxWindow::Create( wxWindow *parent, wxWindowID id,
   m_isShown = FALSE;
   m_isEnabled = TRUE;
   m_needParent = TRUE;
-
-  m_cursor = (wxCursor *) NULL;
 
   PreCreation( parent, id, pos, size, style, name );
 
@@ -1016,7 +1043,11 @@ bool wxWindow::Create( wxWindow *parent, wxWindowID id,
   gtk_signal_emit_by_name( GTK_OBJECT(m_hAdjust), "changed" );
 
   gtk_widget_show( m_wxwindow );
+  
+  if (m_parent) m_parent->AddChild( this );
 
+  (m_parent->m_insertCallback)( m_parent, this );
+  
   PostCreation();
   
   Show( TRUE );
@@ -1081,17 +1112,34 @@ void wxWindow::PreCreation( wxWindow *parent, wxWindowID id,
 {
   if (m_needParent && (parent == NULL))
     wxFatalError( "Need complete parent.", name );
-
+    
   m_widget = (GtkWidget *) NULL;
   m_hasVMT = FALSE;
   m_parent = parent;
   m_children.DeleteContents( FALSE );
-  m_x = (int)pos.x;
-  m_y = (int)pos.y;
+  
   m_width = size.x;
   if (m_width == -1) m_width = 20;
   m_height = size.y;
   if (m_height == -1) m_height = 20;
+  
+  m_x = (int)pos.x;
+  m_y = (int)pos.y;
+  
+  if (!m_needParent)  // some reasonable defaults
+  {
+    if (m_x == -1)
+    {
+      m_x = (gdk_screen_width () - m_width) / 2;
+      if (m_x < 10) m_x = 10;
+    }
+    if (m_y == -1)
+    {
+      m_y = (gdk_screen_height () - m_height) / 2;
+      if (m_y < 10) m_y = 10;
+    }
+  }
+  
   m_minWidth = -1;
   m_minHeight = -1;
   m_maxWidth = -1;
@@ -1123,8 +1171,6 @@ void wxWindow::PreCreation( wxWindow *parent, wxWindowID id,
 
 void wxWindow::PostCreation()
 {
-  if (m_parent) m_parent->AddChild( this );
-
   if (m_wxwindow)
   {
     gtk_signal_connect( GTK_OBJECT(m_wxwindow), "expose_event",
@@ -1220,6 +1266,21 @@ void wxWindow::PrepareDC( wxDC &WXUNUSED(dc) )
   // are we to set fonts here ?
 }
 
+wxPoint wxWindow::GetClientAreaOrigin() const
+{
+  return wxPoint(0,0);
+}
+
+void wxWindow::AdjustForParentClientOrigin( int& x, int& y, int sizeFlags )
+{
+  if (((sizeFlags & wxSIZE_NO_ADJUSTMENTS) == 0) && GetParent())
+  {
+      wxPoint pt(GetParent()->GetClientAreaOrigin());
+      x += pt.x; 
+      y += pt.y;
+  }
+}
+
 void wxWindow::ImplementSetSize()
 {
   if ((m_minWidth != -1) && (m_width < m_minWidth)) m_width = m_minWidth;
@@ -1231,13 +1292,6 @@ void wxWindow::ImplementSetSize()
 
 void wxWindow::ImplementSetPosition()
 {
-  if (IS_KIND_OF(this,wxFrame) || IS_KIND_OF(this,wxDialog))
-  {
-    if ((m_x != -1) || (m_y != -1))
-      gtk_widget_set_uposition( m_widget, m_x, m_y );
-    return;
-  }
-
   if (!m_parent)
   {
     wxFAIL_MSG( "wxWindow::SetSize error.\n" );
@@ -1280,12 +1334,15 @@ void wxWindow::SetSize( int x, int y, int width, int height, int sizeFlags )
     if (newH == -1) newH = 26;
   }
 
+  AdjustForParentClientOrigin( newX, newY, sizeFlags );
+  
   if ((m_x != newX) || (m_y != newY) || (!m_sizeSet))
   {
     m_x = newX;
     m_y = newY;
     ImplementSetPosition();
   }
+  
   if ((m_width != newW) || (m_height != newH) || (!m_sizeSet))
   {
     m_width = newW;
@@ -1445,8 +1502,18 @@ void wxWindow::GetPosition( int *x, int *y ) const
 {
   wxASSERT_MSG( (m_widget != NULL), "invalid window" );
 
-  if (x) (*x) = m_x;
-  if (y) (*y) = m_y;
+  int xx = m_x;
+  int yy = m_y;
+  
+  if (GetParent())
+  {
+    wxPoint pt(GetParent()->GetClientAreaOrigin());
+    xx -= pt.x;
+    yy -= pt.y;
+  }
+  
+  if (x) (*x) = xx;
+  if (y) (*y) = yy;
 }
 
 void wxWindow::ClientToScreen( int *x, int *y )
@@ -1472,6 +1539,10 @@ void wxWindow::ClientToScreen( int *x, int *y )
     }
   }
 
+  wxPoint pt(GetClientAreaOrigin());
+  org_x += pt.x;
+  org_y += pt.y;
+  
   if (x) *x += org_x;
   if (y) *y += org_y;
 }
@@ -1499,6 +1570,10 @@ void wxWindow::ScreenToClient( int *x, int *y )
     }
   }
 
+  wxPoint pt(GetClientAreaOrigin());
+  org_x -= pt.x;
+  org_y -= pt.y;
+  
   if (x) *x -= org_x;
   if (y) *y -= org_y;
 }
@@ -1676,72 +1751,9 @@ bool wxWindow::OnClose()
 void wxWindow::AddChild( wxWindow *child )
 {
   wxASSERT_MSG( (m_widget != NULL), "invalid window" );
-  wxASSERT_MSG( (m_wxwindow != NULL), "window need client area" );
   wxASSERT_MSG( (child != NULL), "invalid child" );
-  wxASSERT_MSG( (child->m_widget != NULL), "invalid child" );
-
-  // Addchild is (often) called before the program
-  // has left the parents constructor so that no
-  // virtual tables work yet. The approach below
-  // practically imitates virtual tables, i.e. it
-  // implements a different AddChild() behaviour
-  // for wxFrame, wxDialog, wxWindow and
-  // wxMDIParentFrame.
-
-  // wxFrame and wxDialog as children aren't placed into the parents
-
-  if (( IS_KIND_OF(child,wxFrame) || IS_KIND_OF(child,wxDialog) ) /*&&
-      (!IS_KIND_OF(child,wxMDIChildFrame))*/)
-  {
-    m_children.Append( child );
-
-    if ((child->m_x != -1) && (child->m_y != -1))
-      gtk_widget_set_uposition( child->m_widget, child->m_x, child->m_y );
-
-    return;
-  }
-
-  // In the case of an wxMDIChildFrame descendant, we use the
-  // client windows's AddChild()
-
-  if (IS_KIND_OF(this,wxMDIParentFrame))
-  {
-    if (IS_KIND_OF(child,wxMDIChildFrame))
-    {
-      wxMDIClientWindow *client = ((wxMDIParentFrame*)this)->GetClientWindow();
-      if (client)
-      {
-        client->AddChild( child );
-        return;
-      }
-    }
-  }
-  
-  // wxNotebook is very special, so it has a private AddChild()
-
-  if (IS_KIND_OF(this,wxNotebook))
-  {
-    wxNotebook *tab = (wxNotebook*)this;
-    tab->AddChild( child );
-    return;
-  }
-
-  // wxFrame has a private AddChild
-
-  if (IS_KIND_OF(this,wxFrame) && !IS_KIND_OF(this,wxMDIChildFrame))
-  {
-    wxFrame *frame = (wxFrame*)this;
-    frame->AddChild( child );
-    return;
-  }
-
-  // All the rest
 
   m_children.Append( child );
-  if (m_wxwindow) gtk_myfixed_put( GTK_MYFIXED(m_wxwindow), child->m_widget,
-    child->m_x, child->m_y );
-
-  gtk_widget_set_usize( child->m_widget, child->m_width, child->m_height );
 }
 
 wxList *wxWindow::GetChildren()
@@ -1751,8 +1763,7 @@ wxList *wxWindow::GetChildren()
 
 void wxWindow::RemoveChild( wxWindow *child )
 {
-  if (GetChildren())
-  GetChildren()->DeleteObject( child );
+  if (GetChildren()) GetChildren()->DeleteObject( child );
   child->m_parent = (wxWindow *) NULL;
 }
 

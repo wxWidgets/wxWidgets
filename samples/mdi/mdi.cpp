@@ -54,7 +54,7 @@ bool MyApp::OnInit(void)
 {
   // Create the main frame window
 
-  frame = new MyFrame((wxFrame *) NULL, -1, (char *) "MDI Demo", wxPoint(0, 0), wxSize(500, 400),
+  frame = new MyFrame((wxFrame *) NULL, -1, (char *) "MDI Demo", wxPoint(-1, -1), wxSize(500, 400),
    wxDEFAULT_FRAME | wxHSCROLL | wxVSCROLL);
 
   // Give it an icon (this is ignored in MDI mode: uses resources)
@@ -331,7 +331,7 @@ void MyFrame::InitToolBar(wxToolBar* toolBar)
 #endif
   int currentX = 5;
 
-  toolBar->AddTool(0, *(bitmaps[0]), wxNullBitmap, FALSE, currentX, -1, (wxObject *) NULL, "New file");
+  toolBar->AddTool( MDI_NEW_WINDOW, *(bitmaps[0]), wxNullBitmap, FALSE, currentX, -1, (wxObject *) NULL, "New file");
   currentX += width + 5;
   toolBar->AddTool(1, *bitmaps[1], wxNullBitmap, FALSE, currentX, -1, (wxObject *) NULL, "Open file");
   currentX += width + 5;

@@ -93,6 +93,10 @@ bool wxComboBox::Create(wxWindow *parent, wxWindowID id, const wxString& value,
       GTK_SIGNAL_FUNC(gtk_combo_clicked_callback), (gpointer)this );
   }
   
+  m_parent->AddChild( this );
+
+  (m_parent->m_insertCallback)( m_parent, this );
+  
   PostCreation();
 
   ConnectWidget( GTK_COMBO(m_widget)->button );

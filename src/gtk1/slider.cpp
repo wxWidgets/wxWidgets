@@ -99,10 +99,13 @@ bool wxSlider::Create(wxWindow *parent, wxWindowID id,
   SetRange( minValue, maxValue );
   SetValue( value );
   
+  m_parent->AddChild( this );
+
+  (m_parent->m_insertCallback)( m_parent, this );
+  
   PostCreation();
   
   SetBackgroundColour( parent->GetBackgroundColour() );
-  SetForegroundColour( parent->GetForegroundColour() );
 
   Show( TRUE );
     

@@ -40,6 +40,10 @@ bool wxStaticBox::Create( wxWindow *parent, wxWindowID id, const wxString &label
 
   m_widget = gtk_frame_new(m_label);
 
+  m_parent->AddChild( this );
+
+  (m_parent->m_insertCallback)( m_parent, this );
+  
   PostCreation();
 
   SetLabel(label);

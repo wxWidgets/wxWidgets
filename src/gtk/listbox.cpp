@@ -121,6 +121,10 @@ bool wxListBox::Create( wxWindow *parent, wxWindowID id,
     gtk_widget_show( list_item );
   }
 
+  m_parent->AddChild( this );
+
+  (m_parent->m_insertCallback)( m_parent, this );
+  
   PostCreation();
 
   gtk_widget_realize( GTK_WIDGET(m_list) );

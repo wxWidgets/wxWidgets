@@ -324,8 +324,10 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h ) :
   panel->SetBackgroundColour("cadet blue");
   panel->SetForegroundColour("blue");
   wxTextCtrl *tc = new wxTextCtrl( panel, ID_TEXT, "Write text here.", wxPoint(10,10), wxSize(350,28));
+  (*tc) << " More text.";
   tc->SetBackgroundColour("wheat");
   tc = new wxTextCtrl( panel, ID_TEXT, "And here.", wxPoint(10,50), wxSize(350,160), wxTE_MULTILINE  );
+  (*tc) << " More text.";
   tc->SetBackgroundColour("wheat");
   m_notebook->AddPage(panel, "wxTextCtrl" , FALSE, Image_Text);
   

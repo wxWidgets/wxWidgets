@@ -59,7 +59,6 @@ public:
   bool Destroy();
 
   virtual bool Show( bool show );
-  virtual void Enable( bool enable );
   virtual void Centre( int direction = wxHORIZONTAL );
 
   virtual void GetClientSize( int *width, int *height ) const;
@@ -98,28 +97,17 @@ public:
   void OnCloseWindow( wxCloseEvent& event );
   void OnIdle(wxIdleEvent& event);
 
-  void AddChild( wxWindow *child );
-  
   // implementation
   
   virtual void GtkOnSize( int x, int y, int width, int height );
-
-private:
-  friend  wxWindow;
-  friend  wxMDIChildFrame;
-  friend  wxMDIClientWindow;
-
-  // update frame's menus (called from OnIdle)
+  virtual void ImplementSetPosition();
+  virtual wxPoint GetClientAreaOrigin() const;
   void DoMenuUpdates();
   void DoMenuUpdates(wxMenu* menu);
-  virtual void ImplementSetPosition();
 
-  GtkWidget    *m_mainWindow;
   wxMenuBar    *m_frameMenuBar;
   wxStatusBar  *m_frameStatusBar;
   wxToolBar    *m_frameToolBar;
-  int           m_toolBarHeight;
-  bool          m_addPrivateChild;   // for toolbar (and maybe menubar)
   wxString      m_title;
   wxIcon        m_icon;
 

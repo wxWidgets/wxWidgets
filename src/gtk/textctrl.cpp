@@ -119,6 +119,10 @@ bool wxTextCtrl::Create( wxWindow *parent, wxWindowID id, const wxString &value,
   if (newSize.y == -1) newSize.y = 26;
   SetSize( newSize.x, newSize.y );
 
+  m_parent->AddChild( this );
+
+  (m_parent->m_insertCallback)( m_parent, this );
+  
   PostCreation();
 
   if (bMultiLine) 
@@ -136,6 +140,7 @@ bool wxTextCtrl::Create( wxWindow *parent, wxWindowID id, const wxString &value,
   {
     gint tmp = 0;
     gtk_editable_insert_text( GTK_EDITABLE(m_text), value, value.Length(), &tmp );
+    SetInsertionPointEnd();
   }
 
   if (style & wxTE_READONLY)

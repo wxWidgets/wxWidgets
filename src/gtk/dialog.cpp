@@ -98,6 +98,9 @@ bool wxDialog::Create( wxWindow *parent,
      
   gtk_widget_set_usize( m_widget, m_width, m_height );
      
+  if (m_parent) m_parent->AddChild( this );
+  
+  
   PostCreation();
   
   return TRUE;

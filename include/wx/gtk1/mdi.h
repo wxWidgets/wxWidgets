@@ -178,7 +178,6 @@ class wxMDIClientWindow: public wxWindow
     wxMDIClientWindow( wxMDIParentFrame *parent, long style = 0 );
     ~wxMDIClientWindow(void);
     virtual bool CreateClient( wxMDIParentFrame *parent, long style = wxVSCROLL | wxHSCROLL );
-    void AddChild( wxWindow *child );
 };
 
 #endif // __MDIH__

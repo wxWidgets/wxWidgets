@@ -36,7 +36,6 @@ public:
     m_box = (GtkWidget *) NULL;
   }
 
-//private:
   int                m_id;
   wxString           m_text;
   int                m_image;
@@ -88,6 +87,40 @@ static void gtk_page_size_callback( GtkWidget *WXUNUSED(widget), GtkAllocation* 
 }
 
 //-----------------------------------------------------------------------------
+// InsertChild callback for wxNotebook
+//-----------------------------------------------------------------------------
+
+static void wxInsertChildInNotebook( wxNotebook* parent, wxWindow* child )
+{
+  wxNotebookPage *page = new wxNotebookPage();
+
+  page->m_id = parent->GetPageCount();
+
+  page->m_box = gtk_hbox_new (FALSE, 0);
+  gtk_container_border_width(GTK_CONTAINER(page->m_box), 2);
+
+  GtkNotebook *notebook = GTK_NOTEBOOK(parent->m_widget);
+  
+  page->m_client = child;
+  gtk_notebook_append_page( notebook, child->m_widget, page->m_box );
+
+  page->m_page = (GtkNotebookPage*) (g_list_last(notebook->children)->data);
+
+  page->m_parent = notebook;
+
+  gtk_signal_connect( GTK_OBJECT(child->m_widget), "size_allocate",
+    GTK_SIGNAL_FUNC(gtk_page_size_callback), (gpointer)child );
+
+  if (!page->m_page)
+  {
+     wxLogFatalError( "Notebook page creation error" );
+     return;
+  }
+
+  parent->m_pages.Append( page );
+}
+
+//-----------------------------------------------------------------------------
 // wxNotebook
 //-----------------------------------------------------------------------------
 
@@ -127,6 +160,7 @@ bool wxNotebook::Create(wxWindow *parent, wxWindowID id,
       long style, const wxString& name )
 {
   m_needParent = TRUE;
+  m_insertCallback = (wxInsertChildFunction)wxInsertChildInNotebook;
 
   PreCreation( parent, id, pos, size, style, name );
 
@@ -141,6 +175,10 @@ bool wxNotebook::Create(wxWindow *parent, wxWindowID id,
                   (gpointer)this
                 );
 
+  m_parent->AddChild( this );
+
+  (m_parent->m_insertCallback)( m_parent, this );
+  
   PostCreation();
 
   Show( TRUE );
@@ -409,39 +447,6 @@ wxWindow *wxNotebook::GetPage( int page ) const
     return (wxWindow *) NULL;
   else
     return nb_page->m_client;
-}
-
-void wxNotebook::AddChild( wxWindow *win )
-{
-  wxCHECK_RET( m_widget != NULL, "invalid notebook" );
-
-  m_children.Append(win);
-
-  wxNotebookPage *page = new wxNotebookPage();
-
-  page->m_id = GetPageCount();
-
-  page->m_box = gtk_hbox_new (FALSE, 0);
-  gtk_container_border_width(GTK_CONTAINER(page->m_box), 2);
-
-  page->m_client = win;
-  gtk_notebook_append_page( GTK_NOTEBOOK(m_widget), win->m_widget, page->m_box );
-
-  page->m_page =
-    (GtkNotebookPage*) (g_list_last(GTK_NOTEBOOK(m_widget)->children)->data);
-
-  page->m_parent = GTK_NOTEBOOK(m_widget);
-
-  gtk_signal_connect( GTK_OBJECT(win->m_widget), "size_allocate",
-    GTK_SIGNAL_FUNC(gtk_page_size_callback), (gpointer)win );
-
-  if (!page->m_page)
-  {
-     wxLogFatalError( "Notebook page creation error" );
-     return;
-  }
-
-  m_pages.Append( page );
 }
 
 // override these 2 functions to do nothing: everything is done in OnSize

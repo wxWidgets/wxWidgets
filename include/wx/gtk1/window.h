@@ -47,6 +47,12 @@ class wxWindow;
 class wxCanvas;
 
 //-----------------------------------------------------------------------------
+// callback definition for inserting a window
+//-----------------------------------------------------------------------------
+
+typedef void (*wxInsertChildFunction)( wxWindow*, wxWindow* );
+
+//-----------------------------------------------------------------------------
 // global data
 //-----------------------------------------------------------------------------
 
@@ -64,14 +70,11 @@ class wxWindow: public wxEvtHandler
   
 public:
   wxWindow();
-  inline wxWindow(wxWindow *parent, wxWindowID id,
+  wxWindow(wxWindow *parent, wxWindowID id,
            const wxPoint& pos = wxDefaultPosition,
            const wxSize& size = wxDefaultSize,
            long style = 0,
-           const wxString& name = wxPanelNameStr)
-  {
-      Create(parent, id, pos, size, style, name);
-  }
+           const wxString& name = wxPanelNameStr);
   bool Create(wxWindow *parent, wxWindowID id,
            const wxPoint& pos = wxDefaultPosition,
            const wxSize& size = wxDefaultSize,
@@ -230,21 +233,27 @@ public:
 
   // implementation
   
-  virtual GtkWidget* GetConnectWidget(void);
-  virtual bool IsOwnGtkWindow( GdkWindow *window );
-  void ConnectWidget( GtkWidget *widget );
-  void ConnectDnDWidget( GtkWidget *widget );
-  void DisconnectDnDWidget( GtkWidget *widget );
+  virtual GtkWidget  *GetConnectWidget(void);
+  virtual bool        IsOwnGtkWindow( GdkWindow *window );
+          void        ConnectWidget( GtkWidget *widget );
+          void        ConnectDnDWidget( GtkWidget *widget );
+          void        DisconnectDnDWidget( GtkWidget *widget );
   
-  void PreCreation( wxWindow *parent, wxWindowID id, const wxPoint &pos,
-    const wxSize &size, long style, const wxString &name );
-  void PostCreation();
-  bool HasVMT();
-  virtual void ImplementSetSize();
-  virtual void ImplementSetPosition();
-  GtkStyle    *GetWidgetStyle();
-  void         SetWidgetStyle();
-  virtual void ApplyWidgetStyle();
+          void        PreCreation( wxWindow *parent, wxWindowID id, const wxPoint &pos,
+                                   const wxSize &size, long style, const wxString &name );
+          void        PostCreation();
+          bool        HasVMT();
+  
+  virtual void        ImplementSetSize();
+  virtual void        ImplementSetPosition();
+  
+  virtual wxPoint     GetClientAreaOrigin() const;
+  virtual void        AdjustForParentClientOrigin( int& x, int& y, int sizeFlags );
+
+          GtkStyle   *GetWidgetStyle();
+          void        SetWidgetStyle();
+  virtual void        ApplyWidgetStyle();
+  
 
   wxWindow            *m_parent;
   wxList               m_children;
@@ -281,6 +290,8 @@ public:
   bool                 m_resizing;
   GdkGC               *m_scrollGC;
   GtkStyle            *m_widgetStyle;
+  
+  wxInsertChildFunction  m_insertCallback;
 
 public:
 

@@ -674,6 +674,7 @@ wxListHeaderWindow::wxListHeaderWindow( wxWindow *win, wxWindowID id, wxListMain
 //  m_currentCursor = wxSTANDARD_CURSOR;
   m_currentCursor = (wxCursor *) NULL;
   m_resizeCursor = new wxCursor( wxCURSOR_SIZEWE );
+  m_isDraging = FALSE;
 }
 
 void wxListHeaderWindow::DoDrawRect( wxPaintDC *dc, int x, int y, int w, int h )

@@ -92,6 +92,10 @@ bool wxStaticText::Create( wxWindow *parent, wxWindowID id, const wxString &labe
   
   SetSize( newSize.x, newSize.y );
   
+  m_parent->AddChild( this );
+
+  (m_parent->m_insertCallback)( m_parent, this );
+  
   PostCreation();
   
   SetBackgroundColour( parent->GetBackgroundColour() );

@@ -57,6 +57,10 @@ bool wxStaticBitmap::Create( wxWindow *parent, wxWindowID id, const wxBitmap &bi
     m_widget = gtk_label_new( "Bitmap" );
   }
   
+  m_parent->AddChild( this );
+
+  (m_parent->m_insertCallback)( m_parent, this );
+  
   PostCreation();
   
   Show( TRUE );

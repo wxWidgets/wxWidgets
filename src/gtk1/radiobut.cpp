@@ -60,6 +60,9 @@ bool wxRadioButton::Create( wxWindow *parent, wxWindowID id, const wxString& lab
   gtk_signal_connect( GTK_OBJECT(m_widget), "clicked", 
     GTK_SIGNAL_FUNC(gtk_radiobutton_clicked_callback), (gpointer*)this );
        
+  gtk_myfixed_put( GTK_MYFIXED(m_parent->m_wxwindow), m_widget, m_x, m_y );
+  gtk_widget_set_usize( m_widget, m_width, m_height );
+  
   PostCreation();
 
   SetBackgroundColour( parent->GetBackgroundColour() );

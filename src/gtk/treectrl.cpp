@@ -132,6 +132,10 @@ printf("5\n");
   SetName(name);
   SetValidator(validator);
 
+printf("Robert's new insertion code :-)\n");
+  m_parent->AddChild( this );
+  (m_parent->m_insertCallback)( m_parent, this );
+  
 printf("postcreate\n");
   PostCreation();
 

@@ -82,6 +82,10 @@ bool wxChoice::Create( wxWindow *parent, wxWindowID id,
   }
   gtk_option_menu_set_menu( GTK_OPTION_MENU(m_widget), menu );
   
+  m_parent->AddChild( this );
+
+  (m_parent->m_insertCallback)( m_parent, this );
+  
   PostCreation();
   
   SetBackgroundColour( parent->GetBackgroundColour() );
