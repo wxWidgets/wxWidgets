@@ -364,7 +364,7 @@ Metrowerks CodeWarrior compilation
 ----------------------------------
 
 1. CodeWarrior Pro7 project files in XML format are already 
-   included in wxMSW-x.y.z.zip and the setup version.
+   included in wxMSW-2.3.3.zip and the setup version.
 2. Review the file include\wx\msw\setup.h (or include\wx\msw\setup0.h if 
    you are working from the CVS version) to make sure the settings reflect 
    what you want.  If you aren't sure, leave it alone and go with the 
@@ -386,7 +386,7 @@ Metrowerks CodeWarrior compilation
       (2) Create the directories lib\cw7mswd\include\wx and copy the file 
           include\wx\msw\setup.h (or include\wx\msw\setup0.h if you are 
           working from the CVS version) to lib\cw7mswd\include\wx\setup.h
-5. Import srcwxWindows.xml to create the project file wxWindows.mcp.
+5. Import src\wxWindowsW7.xml to create the project file wxWindowsW7.mcp.
    Store this project file in directory src.  You may get warnings about 
    not being able to find certain project paths; ignore these warnings, the 
    appropriate paths will be created during the build by the Batch File Runner.
@@ -404,9 +404,16 @@ Metrowerks CodeWarrior compilation
    Volunteers for this are welcome (as neither DLLs nor unicode builds are 
    big priorities for me ;).
 9. CodeWarrior Pro7 project files (in XML format) are also provided for some 
-   of the samples.  In particular, for the minimal, controls, dialogs, dnd, 
-   and docview samples.  You can use these project files as templates for 
-   the other samples and for your own projects.
+   of the samples.  In particular, there are project files for the minimal, 
+   controls, dialogs, dnd, nd docview samples.  You can use these project 
+   files as templates for the other samples and for your own projects.  
+       - For example, to make a project file for the "newgrid" sample, 
+         just copy the project file for the "minimal" sample, minimalW7.mcp 
+         (made by importing minimalW7.xml into CodeWarrior), into the 
+         sample/newgrid directory, calling it newgridW7.mcp.  Open 
+         newgridW7.mcp and revise the project by deleting the files 
+         minimal.rc and minimal.cpp and adding the files griddemo.rc and 
+         griddemo.cpp.  Build and run....
 
 
 Symantec C++ compilation
