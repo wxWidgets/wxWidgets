@@ -2553,6 +2553,7 @@ void wxListMainWindow::SortItems( wxListCtrlCompare fn, long data )
     list_ctrl_compare_func_2 = fn;
     list_ctrl_compare_data = data;
     m_lines.Sort( list_ctrl_compare_func_1 );
+    m_dirty = TRUE;
 }
 
 void wxListMainWindow::OnScroll(wxScrollWinEvent& event)
