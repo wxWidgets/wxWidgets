@@ -50,4 +50,5 @@ void wxInitAllImageHandlers()
 #if wxUSE_PCX
   wxImage::AddHandler( new wxPCXHandler );
 #endif
+  wxImage::AddHandler( new wxXPMHandler );
 }

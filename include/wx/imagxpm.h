@@ -21,7 +21,6 @@
 // wxXPMHandler
 //-----------------------------------------------------------------------------
 
-#if wxUSE_XPM
 class WXDLLEXPORT wxXPMHandler : public wxImageHandler
 {
   DECLARE_DYNAMIC_CLASS(wxXPMHandler)
@@ -42,7 +41,6 @@ public:
   virtual bool DoCanRead( wxInputStream& stream );
 #endif
 };
-#endif // wxUSE_XPM
 
 
 #endif
