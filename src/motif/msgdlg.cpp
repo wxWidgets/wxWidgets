@@ -71,6 +71,13 @@ static void msgboxCallBackCancel(Widget w,
     msgboxCallBack(w, client_data, wxID_CANCEL);
 }
 
+static void msgboxCallBackHelp(Widget w,
+                               int client_data,
+                               XmAnyCallbackStruct *call_data)
+{
+    msgboxCallBack(w, client_data, wxID_HELP);
+}
+
 static void msgboxCallBackClose(Widget w,
                                 int client_data,
                                 XmAnyCallbackStruct *call_data)
@@ -101,9 +108,6 @@ int wxMessageDialog::ShowModal()
     {
         // if we have [Yes], it must be a question
         dialogCreateFunction = XmCreateQuestionDialog;
-
-        // TODO we could support this by using the help button...
-        wxASSERT_MSG( !(m_dialogStyle & wxCANCEL), "not supported" );
     }
     else if ( m_dialogStyle & wxICON_STOP )
     {
@@ -149,30 +153,42 @@ int wxMessageDialog::ShowModal()
 
     wxCHECK_MSG( wMsgBox, wxID_CANCEL, "msg box creation failed" );
 
-    // remove the [Help] button which wouldn't do anything anyhow
-    XtUnmanageChild(XmMessageBoxGetChild(wMsgBox, XmDIALOG_HELP_BUTTON));
+    // get the buttons which we might either remove or rename
+    // depending on the requested style
+    //
+    Widget wBtnOk = XmMessageBoxGetChild(wMsgBox, XmDIALOG_OK_BUTTON);
+    Widget wBtnHelp = XmMessageBoxGetChild(wMsgBox, XmDIALOG_HELP_BUTTON);
+    Widget wBtnCancel = XmMessageBoxGetChild(wMsgBox, XmDIALOG_CANCEL_BUTTON);
 
-    // and the [Cancel] button too if we were not asked for it
-    if ( !(m_dialogStyle & wxCANCEL) )
+    if ( m_dialogStyle & wxYES_NO )
     {
-        Widget wBtnCancel = XmMessageBoxGetChild(wMsgBox,
-                                                 XmDIALOG_CANCEL_BUTTON);
+        wxXmString yes(_("Yes")), no(_("No")), cancel(_("Cancel"));            
 
-        // ... unless it's a wxYES_NO dialog in which case we just rename
-        // [Cancel] to [No] instead
-        if ( m_dialogStyle & wxYES_NO )
+        if ( m_dialogStyle & wxCANCEL )
         {
-            Widget wBtnOk = XmMessageBoxGetChild(wMsgBox,
-                                                 XmDIALOG_OK_BUTTON);
-
-            wxXmString yes(_("Yes")), no(_("No"));
+            // use the cancel button for No and the help button for
+            // Cancel  Yuk :-)  MB
+            //
             XtVaSetValues(wBtnOk, XmNlabelString, yes(), NULL);
             XtVaSetValues(wBtnCancel, XmNlabelString, no(), NULL);
+            XtVaSetValues(wBtnHelp, XmNlabelString, cancel(), NULL);
         }
         else
         {
-            XtUnmanageChild(wBtnCancel);
+            // no cancel button requested...
+            // remove the help button and use cancel for no
+            //
+            XtVaSetValues(wBtnCancel, XmNlabelString, no(), NULL);
+            XtUnmanageChild(wBtnHelp);
         }
+    }
+    else
+    {
+        // remove the help button and the cancel button (unless it was
+        // requested)
+        //
+        XtUnmanageChild(wBtnHelp);
+        if ( !(m_dialogStyle & wxCANCEL ) ) XtUnmanageChild(wBtnCancel);
     }
 
     // set the callbacks for the message box buttons
@@ -180,7 +196,8 @@ int wxMessageDialog::ShowModal()
                   (XtCallbackProc)msgboxCallBackOk, (XtPointer)this);
     XtAddCallback(wMsgBox, XmNcancelCallback,
                   (XtCallbackProc)msgboxCallBackCancel, (XtPointer)this);
-
+    XtAddCallback(wMsgBox, XmNhelpCallback,
+                  (XtCallbackProc)msgboxCallBackHelp, (XtPointer)this);
     XtAddCallback(wMsgBox, XmNunmapCallback,
                   (XtCallbackProc)msgboxCallBackClose, (XtPointer)this);
 
@@ -207,6 +224,8 @@ int wxMessageDialog::ShowModal()
             m_result = wxID_YES;
         else if ( m_result == wxID_CANCEL )
             m_result = wxID_NO;
+        else if ( m_result == wxID_HELP )
+            m_result = wxID_CANCEL;
     }
 
     return m_result;
