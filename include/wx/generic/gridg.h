@@ -186,7 +186,7 @@ public:
     void UpdateDimensions();
 
     void SetCurrentRect (int Row, int Column, int canvasW = -1, int canvasH = -1);
-    void HighlightCell (wxDC *dc);
+    void HighlightCell(wxDC *dc, bool doHighlight);
     void DrawCellText();
     void SetGridClippingRegion(wxDC *dc);
 
@@ -247,6 +247,7 @@ protected:
     bool                      m_editable;
     bool                      m_editInPlace;
     bool                      m_inOnTextInPlace;
+    bool                      m_inScroll;
 
     int                       m_totalRows;
     int                       m_totalCols;
@@ -283,6 +284,7 @@ protected:
     wxBrush                   m_labelBackgroundBrush;
     wxFont                    m_labelTextFont;
     wxPen                     m_divisionPen;
+    wxPen                     m_highlightPen;
     wxBitmap*                 m_doubleBufferingBitmap;
 
     // Position of Edit control

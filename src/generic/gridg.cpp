@@ -39,12 +39,38 @@
 
 #include "wx/generic/gridg.h"
 
-// Set to zero to use no double-buffering
+
+// Values used to adjust the size of the in-place-edit control, and other
+// goodies.  Per-platform tweaks should be done here.
 #ifdef __WXMSW__
-    #define wxUSE_DOUBLE_BUFFERING 1
-#else
-    #define wxUSE_DOUBLE_BUFFERING 0
+#define wxIPE_ADJUST            -2
+#define wxIPE_STYLE             wxNO_BORDER
+#define wxIPE_HIGHLIGHT         1
+#define wxUSE_DOUBLE_BUFFERING  1
 #endif
+
+#ifdef __WXGTK__
+#define wxIPE_ADJUST            -1
+#define wxIPE_STYLE             wxNO_BORDER
+#define wxIPE_HIGHLIGHT         0
+#define wxUSE_DOUBLE_BUFFERING  1
+#endif
+
+#ifdef __WXMOTIF__
+#define wxIPE_ADJUST            2
+#define wxIPE_STYLE             wxNO_BORDER
+#define wxIPE_HIGHLIGHT         0
+#define wxUSE_DOUBLE_BUFFERING  0
+#endif
+
+#ifndef wxIPE_ADJUST
+#define wxIPE_ADJUST            2
+#define wxIPE_STYLE             wxNO_BORDER
+#define wxIPE_HIGHLIGHT         0
+#define wxUSE_DOUBLE_BUFFERING  0
+#endif
+
+
 
 #define wxGRID_DRAG_NONE       0
 #define wxGRID_DRAG_LEFT_RIGHT 1
@@ -100,6 +126,7 @@ wxGenericGrid::wxGenericGrid()
 
   m_editInPlace = FALSE;
   m_inOnTextInPlace = FALSE;
+  m_inScroll = FALSE;
 
 #if defined(__WIN95__)
   m_scrollWidth = wxSystemSettings::GetSystemMetric(wxSYS_VSCROLL_X);
@@ -113,6 +140,7 @@ wxGenericGrid::wxGenericGrid()
   m_dragStartPosition = 0;
   m_dragLastPosition = 0;
   m_divisionPen = wxNullPen;
+  m_highlightPen = wxNullPen;
   m_leftOfSheet = wxGRID_DEFAULT_SHEET_LEFT;
   m_topOfSheet = wxGRID_DEFAULT_SHEET_TOP;
   m_cellHeight = wxGRID_DEFAULT_CELL_HEIGHT;
@@ -167,6 +195,7 @@ bool wxGenericGrid::Create(wxWindow *parent,
   m_editable = TRUE;
   m_editInPlace = FALSE;
   m_inOnTextInPlace = FALSE;
+  m_inScroll = FALSE;
 #if defined(__WIN95__)
   m_scrollWidth = wxSystemSettings::GetSystemMetric(wxSYS_VSCROLL_X);
 #elif defined(__WXGTK__)
@@ -179,6 +208,7 @@ bool wxGenericGrid::Create(wxWindow *parent,
   m_dragStartPosition = 0;
   m_dragLastPosition = 0;
   m_divisionPen = * wxThePenList->FindOrCreatePen("LIGHT GREY", 1, wxSOLID);
+  m_highlightPen = * wxBLACK_PEN;
   m_doubleBufferingBitmap = (wxBitmap *) NULL;
 
   if (!m_horizontalSashCursor.Ok())
@@ -249,8 +279,8 @@ bool wxGenericGrid::Create(wxWindow *parent,
 //  SetSize(pos.x, pos.y, size.x, size.y);
 
   m_inPlaceTextItem = new wxTextCtrl( (wxPanel*)this, wxGRID_EDIT_IN_PLACE_TEXT_CTRL, "",
-                                      wxPoint( m_currentRect.x-2, m_currentRect.y-2 ),
-                                      wxSize( m_currentRect.width+4, m_currentRect.height+4 ),
+                                      wxPoint( m_currentRect.x-wxIPE_ADJUST, m_currentRect.y-wxIPE_ADJUST ),
+                                      wxSize( m_currentRect.width+wxIPE_ADJUST*2, m_currentRect.height+wxIPE_ADJUST*2 ),
                                       wxNO_BORDER | wxTE_PROCESS_ENTER );
   m_inPlaceTextItem->Show(m_editInPlace);
   if ( m_editInPlace )
@@ -546,8 +576,8 @@ void wxGenericGrid::PaintGrid(wxDC& dc)
 
     /* Hilight present cell */
     SetCurrentRect(m_wCursorRow, m_wCursorColumn);
-    if (m_currentRectVisible && !(m_editable && m_editInPlace))
-      HighlightCell(& dc);
+    if (m_currentRectVisible && (wxIPE_HIGHLIGHT || !(m_editable && m_editInPlace)))
+      HighlightCell(& dc, TRUE);
 
     dc.DestroyClippingRegion();
     dc.SetOptimization(TRUE);
@@ -1426,9 +1456,9 @@ void wxGenericGrid::OnSelectCellImplementation(wxDC *dc, int row, int col)
   SetGridClippingRegion(dc);
 
   // Remove the highlight from the old cell
-  if ( m_currentRectVisible && !(m_editable && m_editInPlace) )
+  if ( m_currentRectVisible && (wxIPE_HIGHLIGHT || !(m_editable && m_editInPlace)))
     {
-      HighlightCell(dc);
+      HighlightCell(dc, FALSE);
     }
 
 
@@ -1452,42 +1482,44 @@ void wxGenericGrid::OnSelectCellImplementation(wxDC *dc, int row, int col)
       if ( m_currentRect.x <= 0 )
         {
           x = 0;
-          width = m_currentRect.width + 2;
+          width = m_currentRect.width + wxIPE_ADJUST;
         }
       else
         {
-          x = m_currentRect.x - 2;
-          width = m_currentRect.width + 4;
+          x = m_currentRect.x - wxIPE_ADJUST;
+          width = m_currentRect.width + wxIPE_ADJUST*2;
         }
 
       if ( m_currentRect.y <= 0 )
         {
           y = 0;
-          height = m_currentRect.height + 2;
+          height = m_currentRect.height + wxIPE_ADJUST;
         }
       else
         {
-          y = m_currentRect.y - 2;
-          height = m_currentRect.height + 4;
+          y = m_currentRect.y - wxIPE_ADJUST;
+          height = m_currentRect.height + wxIPE_ADJUST*2;
         }
 
       m_inPlaceTextItem->SetSize( x, y, width, height );
 
-      if ( cell )
-        {
-          if ( cell->GetTextValue().IsNull() )
-            {
+      if ( cell ) {
+          m_inPlaceTextItem->SetFont( cell->GetFont() );
+          m_inPlaceTextItem->SetBackgroundColour(cell->GetBackgroundColour());
+          m_inPlaceTextItem->SetForegroundColour(cell->GetTextColour());
+
+          if ( cell->GetTextValue().IsNull() ) {
               m_inPlaceTextItem->SetValue( "" );
-            }
-          else
-            {
-              m_inPlaceTextItem->SetFont( cell->GetFont() );
+          }
+          else {
               m_inPlaceTextItem->SetValue( cell->GetTextValue() );
-            }
-        }
+          }
+      }
 
       m_inPlaceTextItem->Show(TRUE);
       m_inPlaceTextItem->SetFocus();
+      if (wxIPE_HIGHLIGHT)
+          HighlightCell(dc, TRUE);
     }
   else
     {
@@ -1498,9 +1530,9 @@ void wxGenericGrid::OnSelectCellImplementation(wxDC *dc, int row, int col)
       //
       // 3) It *is* needed for Motif - michael
       //
-#ifdef __WXMOTIF__
-      if ( !(m_editable && m_editInPlace) )
-          HighlightCell(dc);
+#if defined(__WXMOTIF__)
+      if ((wxIPE_HIGHLIGHT || !(m_editable && m_editInPlace)))
+          HighlightCell(dc, TRUE);
 #endif
     }
 
@@ -1557,9 +1589,13 @@ void wxGenericGrid::OnChangeSelectionLabel()
   }
 }
 
-void wxGenericGrid::HighlightCell(wxDC *dc)
+void wxGenericGrid::HighlightCell(wxDC *dc, bool doHighlight)
 {
-  dc->SetLogicalFunction(wxINVERT);
+  wxPen savePen = dc->GetPen();
+  if (doHighlight)
+      dc->SetPen(m_highlightPen);
+  else
+      dc->SetPen(*wxThePenList->FindOrCreatePen(m_cellBackgroundColour, 1, wxSOLID));
 
   // Top
   dc->DrawLine( m_currentRect.x + 1,
@@ -1570,7 +1606,7 @@ void wxGenericGrid::HighlightCell(wxDC *dc)
   dc->DrawLine( m_currentRect.x + m_currentRect.width - 1,
                 m_currentRect.y + 1,
                 m_currentRect.x + m_currentRect.width - 1,
-                m_currentRect.y +m_currentRect.height - 1 );
+                m_currentRect.y + m_currentRect.height - 1 );
   // Bottom
   dc->DrawLine( m_currentRect.x + m_currentRect.width - 1,
                 m_currentRect.y + m_currentRect.height - 1,
@@ -1582,7 +1618,7 @@ void wxGenericGrid::HighlightCell(wxDC *dc)
                 m_currentRect.x + 1,
                 m_currentRect.y + 1);
 
-  dc->SetLogicalFunction(wxCOPY);
+  dc->SetPen(savePen);
 }
 
 void wxGenericGrid::DrawCellText()
@@ -2094,23 +2130,25 @@ void wxGenericGrid::SetEditInPlace(bool edit)
         {
           if ( m_currentRectVisible && m_editable )
             {
-              m_inPlaceTextItem->SetSize( m_currentRect.x-2, m_currentRect.y-2,
-                                          m_currentRect.width+4, m_currentRect.height+4 );
+              m_inPlaceTextItem->SetSize( m_currentRect.x-wxIPE_ADJUST,
+                                          m_currentRect.y-wxIPE_ADJUST,
+                                          m_currentRect.width+wxIPE_ADJUST*2,
+                                          m_currentRect.height+wxIPE_ADJUST*2 );
 
               wxGridCell *cell = GetCell(m_wCursorRow, m_wCursorColumn);
 
-              if ( cell )
-                {
-                  if ( cell->GetTextValue().IsNull() )
-                    {
+              if ( cell ) {
+                  m_inPlaceTextItem->SetFont( cell->GetFont() );
+                  m_inPlaceTextItem->SetBackgroundColour(cell->GetBackgroundColour());
+                  m_inPlaceTextItem->SetForegroundColour(cell->GetTextColour());
+
+                  if ( cell->GetTextValue().IsNull() ) {
                       m_inPlaceTextItem->SetValue( "" );
-                    }
-                  else
-                    {
-                      m_inPlaceTextItem->SetFont( cell->GetFont() );
+                  }
+                  else {
                       m_inPlaceTextItem->SetValue( cell->GetTextValue() );
-                    }
-                }
+                  }
+              }
 
               m_inPlaceTextItem->Show( TRUE );
               m_inPlaceTextItem->SetFocus();
@@ -2524,8 +2562,8 @@ void wxGenericGrid::SetGridCursor(int row, int col)
 
   SetGridClippingRegion(& dc);
 
-  if (m_currentRectVisible && !(m_editable && m_editInPlace) )
-    HighlightCell(& dc);
+  if (m_currentRectVisible && (wxIPE_HIGHLIGHT || !(m_editable && m_editInPlace)))
+      HighlightCell(& dc, FALSE);
 
   m_wCursorRow = row;
   m_wCursorColumn = col;
@@ -2535,8 +2573,8 @@ void wxGenericGrid::SetGridCursor(int row, int col)
 
   SetCurrentRect(row, col, cw, ch);
 
-  if (m_currentRectVisible && !(m_editable && m_editInPlace) )
-    HighlightCell(& dc);
+  if (m_currentRectVisible && (wxIPE_HIGHLIGHT || !(m_editable && m_editInPlace)))
+      HighlightCell(& dc, TRUE);
 
   dc.DestroyClippingRegion();
   dc.EndDrawing();
@@ -2603,15 +2641,17 @@ void wxGenericGrid::OnText(wxCommandEvent& WXUNUSED(ev) )
               m_inPlaceTextItem->SetValue( grid->GetTextItem()->GetValue() );
             }
 
-          wxClientDC dc(grid);
+          if (!m_editInPlace) {
+              wxClientDC dc(grid);
 
-          dc.BeginDrawing();
-          grid->SetGridClippingRegion(& dc);
-          grid->DrawCellBackground(& dc, &grid->GetCurrentRect(), grid->GetCursorRow(), grid->GetCursorColumn());
-          grid->DrawCellValue(& dc, &grid->GetCurrentRect(), grid->GetCursorRow(), grid->GetCursorColumn());
-          if ( !(m_editable && m_editInPlace ) ) grid->HighlightCell(& dc);
-          dc.DestroyClippingRegion();
-          dc.EndDrawing();
+              dc.BeginDrawing();
+              grid->SetGridClippingRegion(& dc);
+              grid->DrawCellBackground(& dc, &grid->GetCurrentRect(), grid->GetCursorRow(), grid->GetCursorColumn());
+              grid->DrawCellValue(& dc, &grid->GetCurrentRect(), grid->GetCursorRow(), grid->GetCursorColumn());
+              grid->HighlightCell(& dc, TRUE);
+              dc.DestroyClippingRegion();
+              dc.EndDrawing();
+          }
 
           //grid->OnCellChange(grid->GetCursorRow(), grid->GetCursorColumn());
           wxGridEvent g_evt(GetId(), wxEVT_GRID_CELL_CHANGE, grid,
@@ -2679,14 +2719,12 @@ void wxGenericGrid::OnTextInPlaceEnter(wxCommandEvent& WXUNUSED(ev) )
 
 void wxGenericGrid::OnGridScroll(wxScrollEvent& ev)
 {
-  static bool inScroll = FALSE;
-
-  if ( inScroll )
+  if ( m_inScroll )
         return;
 
   if ( m_editInPlace ) m_inPlaceTextItem->Show(FALSE);
 
-  inScroll = TRUE;
+  m_inScroll = TRUE;
   wxGenericGrid *win = this;
 
   bool change = FALSE;
@@ -2715,13 +2753,15 @@ void wxGenericGrid::OnGridScroll(wxScrollEvent& ev)
 
   if ( m_editInPlace && m_currentRectVisible )
     {
-      m_inPlaceTextItem->SetSize( m_currentRect.x-2, m_currentRect.y-2,
-                                  m_currentRect.width+4, m_currentRect.height+4 );
+      m_inPlaceTextItem->SetSize( m_currentRect.x-wxIPE_ADJUST,
+                                  m_currentRect.y-wxIPE_ADJUST,
+                                  m_currentRect.width+wxIPE_ADJUST*2,
+                                  m_currentRect.height+wxIPE_ADJUST*2 );
       m_inPlaceTextItem->Show( TRUE );
       m_inPlaceTextItem->SetFocus();
     }
 
-  inScroll = FALSE;
+  m_inScroll = FALSE;
 
 }
 
