@@ -1769,8 +1769,8 @@ void wxWindowMac::DoMoveWindow(int x, int y, int width, int height)
         former_y += pt.y ;
     }
 
-    int actualWidth = width;
-    int actualHeight = height;
+    int actualWidth = wxMax( width , 0 ) ;
+    int actualHeight = wxMax( height , 0 ) ;
     int actualX = x;
     int actualY = y;
 
@@ -1781,7 +1781,7 @@ void wxWindowMac::DoMoveWindow(int x, int y, int width, int height)
     if ((m_maxWidth != -1) && (actualWidth > m_maxWidth))
         actualWidth = m_maxWidth;
     if ((m_maxHeight != -1) && (actualHeight > m_maxHeight))
-        actualHeight = m_maxHeight;
+        actualHeight = m_maxHeight;    
 
     bool doMove = false ;
     bool doResize = false ;
