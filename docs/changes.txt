@@ -209,6 +209,9 @@ wxMSW:
 - fix for wxTreeCtrl label editing in wxTR_MULTIPLE mode
 - wxFrame::Maximize(FALSE) would maximize the window if
   called before showing it
+- use ES_DISABLENOSCROLL to work around the vertical scrollbar bug in
+  wxTE_RICH2 text control
+
 
 wxMotif:
 
