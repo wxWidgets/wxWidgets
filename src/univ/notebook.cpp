@@ -212,14 +212,20 @@ int wxNotebook::SetSelection(int nPage)
         return m_sel;
     }
 
-    if ( m_sel != INVALID_PAGE )
-    {
-        RefreshTab(m_sel);
-
-        m_pages[m_sel]->Hide();
-    }
+    // we need to change m_sel first, before calling RefreshTab() below as
+    // otherwise the previously selected tab wouldn't be redrawn properly under
+    // wxGTK which calls Refresh() immediately and not during the next event
+    // loop iteration as wxMSW does and as it should
+    size_t selOld = m_sel;
 
     m_sel = nPage;
+
+    if ( selOld != INVALID_PAGE )
+    {
+        RefreshTab(selOld, TRUE /* this tab was selected */);
+
+        m_pages[selOld]->Hide();
+    }
 
     if ( m_sel != INVALID_PAGE ) // this is impossible - but test nevertheless
     {
@@ -421,12 +427,12 @@ void wxNotebook::RefreshCurrent()
     }
 }
 
-void wxNotebook::RefreshTab(int page)
+void wxNotebook::RefreshTab(int page, bool forceSelected)
 {
     wxCHECK_RET( IS_VALID_PAGE(page), _T("invalid notebook page") );
 
     wxRect rect = GetTabRect(page);
-    if ( (size_t)page == m_sel )
+    if ( forceSelected || ((size_t)page == m_sel) )
     {
         const wxSize indent = GetRenderer()->GetTabIndent();
         rect.Inflate(indent.x, indent.y);
