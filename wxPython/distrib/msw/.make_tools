@@ -1,5 +1,6 @@
 #!/bin/bash
 
+mkdir -p $WXWIN/lib/vc_lib/msw/wx
 nmake -f .makesetup.mk $WXWIN/lib/vc_lib/msw/wx/setup.h 
 nmake -f makefile.vc BUILD=release $@
 
