@@ -35,8 +35,8 @@ END_EVENT_TABLE()
 #include "wx/geometry.h"
 
 #ifdef __WXMAC_OSX__
-const short kwxMacToolBarToolDefaultWidth = 24 ;
-const short kwxMacToolBarToolDefaultHeight = 24 ;
+const short kwxMacToolBarToolDefaultWidth = 16 ;
+const short kwxMacToolBarToolDefaultHeight = 16 ;
 const short kwxMacToolBarTopMargin = 4 ;
 const short kwxMacToolBarLeftMargin = 4 ;
 const short kwxMacToolBorder = 0 ;
