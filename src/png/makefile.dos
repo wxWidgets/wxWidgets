@@ -16,7 +16,7 @@ WXINC = $(WXDIR)\include
 
 WINPNGDIR = $(WXDIR)\utils\imatest\png
 WINPNGINC = $(WINPNGDIR)
-WINPNGLIB = ..\..\..\lib\winpng.lib
+WINPNGLIB = ..\..\lib\winpng.lib
 
 INC = /I..\zlib
 

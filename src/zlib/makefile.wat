@@ -19,7 +19,7 @@ LD=wcl386
 LIB=wlib -b -c 
 LDFLAGS= 
 O=.obj
-LIBTARGET=..\..\..\lib\zlib.lib
+LIBTARGET=..\..\lib\zlib.lib
 
 # variables
 OBJ1=adler32$(O) compress$(O) crc32$(O) gzio$(O) uncompr$(O) deflate$(O) 

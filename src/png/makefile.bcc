@@ -24,7 +24,7 @@ BLATW16_winpngdlib =
 LEAT_winpngdlib = $(LLATW16_winpngdlib)
 REAT_winpngdlib = $(RLATW16_winpngdlib)
 BEAT_winpngdlib = $(BLATW16_winpngdlib)
-ZLIB=..\..\..\lib\zlib.lib
+ZLIB=..\..\lib\zlib.lib
 LOBJECTS = png.obj pngrcb.obj pngread.obj pngrtran.obj pngrutil.obj pngstub.obj\
 	pngtrans.obj pngwrite.obj pngwtran.obj pngwutil.obj
 
@@ -32,7 +32,7 @@ LOBJECTS = png.obj pngrcb.obj pngread.obj pngrtran.obj pngrutil.obj pngstub.obj\
 # Dependency List
 #
 Dep_winpng = \
-	..\..\..\lib\winpng.lib
+	..\..\lib\winpng.lib
 
 winpng : BccW16.cfg $(Dep_winpng)
   echo MakeNode winpng
