@@ -9,10 +9,13 @@
 // Licence:     wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
-#if defined(__GNUG__) && !defined(__APPLE__)
-#pragma implementation
-#pragma interface
-#endif
+// ============================================================================
+// declarations
+// ============================================================================
+
+// ----------------------------------------------------------------------------
+// headers
+// ----------------------------------------------------------------------------
 
 // For compilers that support precompilation, includes "wx/wx.h".
 #include "wx/wxprec.h"
@@ -33,6 +36,10 @@
 #include "mondrian.xpm"
 #endif
 
+// ----------------------------------------------------------------------------
+// private classes
+// ----------------------------------------------------------------------------
+
 // Define a new application type
 class MyApp: public wxApp
 {
@@ -47,8 +54,7 @@ protected:
 class MyFrame: public wxFrame
 {
 public:
-    MyFrame(wxFrame *frame, const wxChar *title,
-        const wxPoint& pos, const wxSize& size, wxLocale& m_locale);
+    MyFrame(wxLocale& m_locale);
 
 public:
     void OnQuit(wxCommandEvent& event);
@@ -61,44 +67,73 @@ public:
     wxLocale& m_locale;
 };
 
+// ----------------------------------------------------------------------------
+// constants
+// ----------------------------------------------------------------------------
+
 // ID for the menu commands
 enum
 {
-    MINIMAL_QUIT = 1,
-    MINIMAL_TEXT,
-    MINIMAL_TEST,
-    MINIMAL_OPEN
+    INTERNAT_QUIT = 1,
+    INTERNAT_TEXT,
+    INTERNAT_TEST,
+    INTERNAT_OPEN
 };
 
+// ----------------------------------------------------------------------------
+// wxWindows macros
+// ----------------------------------------------------------------------------
+
 BEGIN_EVENT_TABLE(MyFrame, wxFrame)
-    EVT_MENU(MINIMAL_QUIT, MyFrame::OnQuit)
+    EVT_MENU(INTERNAT_QUIT, MyFrame::OnQuit)
     EVT_MENU(wxID_ABOUT, MyFrame::OnAbout)
-    EVT_MENU(MINIMAL_TEST, MyFrame::OnPlay)
-    EVT_MENU(MINIMAL_OPEN, MyFrame::OnOpen)
+    EVT_MENU(INTERNAT_TEST, MyFrame::OnPlay)
+    EVT_MENU(INTERNAT_OPEN, MyFrame::OnOpen)
 END_EVENT_TABLE()
 
 IMPLEMENT_APP(MyApp)
 
+// ============================================================================
+// implementation
+// ============================================================================
+
+// ----------------------------------------------------------------------------
+// MyApp
+// ----------------------------------------------------------------------------
 
 // `Main program' equivalent, creating windows and returning main app frame
 bool MyApp::OnInit()
 {
-    const wxString langs[] =
+    long lng = -1;
+
+    if ( argc == 2 )
     {
-        _T("(System default)"),
-        _T("French"),
-        _T("German"),
-        _T("Russian"),
-        _T("English"),
-        _T("English (U.S.)")
-    };
+        // the parameter must be the lang index
+        wxString(argv[1]).ToLong(&lng);
+    }
 
-    SetExitOnFrameDelete(FALSE);
-    int lng = wxGetSingleChoiceIndex(_T("Please choose language:"), _T("Language"), 
-                                   WXSIZEOF(langs), langs);
-    SetExitOnFrameDelete(TRUE);
+    if ( lng == -1 )
+    {
+        const wxString langs[] =
+        {
+            _T("(System default)"),
+            _T("French"),
+            _T("German"),
+            _T("Russian"),
+            _T("English"),
+            _T("English (U.S.)")
+        };
 
-    switch (lng)
+        lng = wxGetSingleChoiceIndex
+              (
+                _T("Please choose language:"),
+                _T("Language"), 
+                WXSIZEOF(langs),
+                langs
+              );
+    }
+
+    switch ( lng )
     {
         case 0 : m_locale.Init(wxLANGUAGE_DEFAULT); break;
         case 1 : m_locale.Init(wxLANGUAGE_FRENCH); break;
@@ -109,25 +144,23 @@ bool MyApp::OnInit()
         case 5 : m_locale.Init(wxLANGUAGE_ENGLISH_US); break;
     }
 
+
     // Initialize the catalogs we'll be using
-    /* not needed any more, done in wxLocale ctor
-    m_locale.AddCatalog("wxstd");      // 1) for library messages
-    */
-    m_locale.AddCatalog(wxT("internat"));      // 2) our private one
-    /* this catalog is installed in standard location on Linux systems,
-     it might not be installed on yours - just ignore the errrors
-     or comment out this line then */
+    m_locale.AddCatalog(wxT("internat"));
+
+    // this catalog is installed in standard location on Linux systems and
+    // shows that you may make use of the standard message catalogs as well
+    //
+    // if it's not installed on your system, it is just silently ignored
 #ifdef __LINUX__
     {
-    wxLogNull noLog;
-    m_locale.AddCatalog(_T("fileutils"));  // 3) and another just for testing
+        wxLogNull noLog;
+        m_locale.AddCatalog(_T("fileutils"));
     }
 #endif
 
     // Create the main frame window
-    MyFrame *frame = new MyFrame( (wxFrame *) NULL,
-        _("International wxWindows App"), wxPoint(50, 50), wxSize(350, 60),
-        m_locale);
+    MyFrame *frame = new MyFrame(m_locale);
 
     // Give it an icon
     frame->SetIcon(wxICON(mondrian));
@@ -136,11 +169,11 @@ bool MyApp::OnInit()
     wxMenu *file_menu = new wxMenu;
     file_menu->Append(wxID_ABOUT, _("&About..."));
     file_menu->AppendSeparator();
-    file_menu->Append(MINIMAL_QUIT, _("E&xit"));
+    file_menu->Append(INTERNAT_QUIT, _("E&xit"));
 
     wxMenu *test_menu = new wxMenu;
-    test_menu->Append(MINIMAL_OPEN, _("&Open bogus file"));
-    test_menu->Append(MINIMAL_TEST, _("&Play a game"));
+    test_menu->Append(INTERNAT_OPEN, _("&Open bogus file"));
+    test_menu->Append(INTERNAT_TEST, _("&Play a game"));
 
     wxMenuBar *menu_bar = new wxMenuBar;
     menu_bar->Append(file_menu, _("&File"));
@@ -154,11 +187,18 @@ bool MyApp::OnInit()
     return TRUE;
 }
 
-// My frame constructor
-MyFrame::MyFrame(wxFrame *frame, const wxChar *title,
-    const wxPoint& pos, const wxSize& size, wxLocale& l)
-       : wxFrame(frame, -1, title, pos, size),
-         m_locale(l)
+// ----------------------------------------------------------------------------
+// MyFrame
+// ----------------------------------------------------------------------------
+
+// main frame constructor
+MyFrame::MyFrame(wxLocale& locale)
+       : wxFrame(NULL,
+                 -1,
+                 _("International wxWindows App"),
+                 wxPoint(50, 50),
+                 wxSize(350, 60)),
+         m_locale(locale)
 {
     // Empty
 }
