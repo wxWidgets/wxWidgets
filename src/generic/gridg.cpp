@@ -405,7 +405,6 @@ void wxGenericGrid::SetGridClippingRegion(wxDC *dc)
 
 void wxGenericGrid::OnPaint(wxPaintEvent& WXUNUSED(event))
 {
-  wxRectangle rect;
   int w, h;
   GetClientSize(&w, &h);
 

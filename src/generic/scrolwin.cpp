@@ -96,6 +96,8 @@ void wxScrolledWindow::SetScrollbars (int pixelsPerUnitX, int pixelsPerUnitY,
       
       m_xScrollPixelsPerLine = pixelsPerUnitX;
       m_yScrollPixelsPerLine = pixelsPerUnitY;
+      m_xScrollPosition = xPos;
+      m_yScrollPosition = yPos;
       m_xScrollLines = noUnitsX;
       m_yScrollLines = noUnitsY;
 
