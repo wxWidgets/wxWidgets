@@ -23,8 +23,6 @@
 #if wxUSE_TIMER
 
 #ifndef WX_PRECOMP
-    #include "wx/hashmap.h"
-    #include "wx/setup.h"
     #include "wx/window.h"
     #include "wx/list.h"
     #include "wx/event.h"
@@ -32,6 +30,8 @@
     #include "wx/intl.h"
     #include "wx/log.h"
 #endif
+
+#include "wx/hashmap.h"
 
 #include "wx/timer.h"
 
@@ -42,7 +42,7 @@
 // ----------------------------------------------------------------------------
 
 WX_DECLARE_HASH_MAP( long,
-                     wxTimer*,
+                     wxTimer *,
                      wxIntegerHash,
                      wxIntegerEqual,
                      wxTimerMap );
