@@ -2711,7 +2711,8 @@ bool wxWindow::HandleDropFiles(WXWPARAM wParam)
 
     wxDropFilesEvent event(wxEVT_DROP_FILES, gwFilesDropped, files);
     event.m_eventObject = this;
-    event.m_pos.x = dropPoint.x; event.m_pos.x = dropPoint.y;
+    event.m_pos.x = dropPoint.x;
+    event.m_pos.y = dropPoint.y;
 
     bool rc = GetEventHandler()->ProcessEvent(event);
 
