@@ -471,7 +471,9 @@ bool wxHtmlEasyPrinting::PrintFile(const wxString &htmlfile)
 {
     wxHtmlPrintout *p = CreatePrintout();
     p->SetHtmlFile(htmlfile);
-    return DoPrint(p);
+    bool ret = DoPrint(p);
+    delete p;
+    return ret;
 }
 
 
@@ -480,7 +482,9 @@ bool wxHtmlEasyPrinting::PrintText(const wxString &htmltext, const wxString &bas
 {
     wxHtmlPrintout *p = CreatePrintout();
     p->SetHtmlText(htmltext, basepath, TRUE);
-    return DoPrint(p);
+    bool ret = DoPrint(p);
+    delete p;
+    return ret;
 }
 
 
