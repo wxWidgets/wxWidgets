@@ -22,38 +22,43 @@ WXDLLEXPORT_DATA(extern const char*) wxRadioButtonNameStr;
 
 class WXDLLEXPORT wxRadioButton: public wxControl
 {
-  DECLARE_DYNAMIC_CLASS(wxRadioButton)
- protected:
- public:
-  inline wxRadioButton() {}
-  inline wxRadioButton(wxWindow *parent, wxWindowID id,
+public:
+    inline wxRadioButton() {}
+    inline wxRadioButton(wxWindow *parent, wxWindowID id,
            const wxString& label,
            const wxPoint& pos = wxDefaultPosition,
            const wxSize& size = wxDefaultSize, long style = 0,
            const wxValidator& validator = wxDefaultValidator,
            const wxString& name = wxRadioButtonNameStr)
-  {
-      Create(parent, id, label, pos, size, style, validator, name);
-  }
+    {
+        Create(parent, id, label, pos, size, style, validator, name);
+    }
 
-  bool Create(wxWindow *parent, wxWindowID id,
+    bool Create(wxWindow *parent, wxWindowID id,
            const wxString& label,
            const wxPoint& pos = wxDefaultPosition,
            const wxSize& size = wxDefaultSize, long style = 0,
            const wxValidator& validator = wxDefaultValidator,
            const wxString& name = wxRadioButtonNameStr);
 
-  virtual void SetValue(bool val);
-  virtual bool GetValue() const ;
+    virtual void SetValue(bool val);
+    virtual bool GetValue() const ;
 
+    // implementation 
+    
   	virtual void MacHandleControlClick( ControlHandle control , SInt16 controlpart ); 
-  void Command(wxCommandEvent& event);
-  wxRadioButton *AddInCycle(wxRadioButton *cycle);
-  inline wxRadioButton *NextInCycle() {return m_cycle;}
+    void Command(wxCommandEvent& event);
+    wxRadioButton *AddInCycle(wxRadioButton *cycle);
+    inline wxRadioButton *NextInCycle() {return m_cycle;}
+    
+    void OnIdle( wxIdleEvent &event );
 
-  protected:
-  
-  wxRadioButton *m_cycle;  
+protected:
+    wxRadioButton *m_cycle;
+
+private:      
+    DECLARE_EVENT_TABLE()
+    DECLARE_DYNAMIC_CLASS(wxRadioButton)
 };
 
 // Not implemented

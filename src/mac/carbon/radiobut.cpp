@@ -15,9 +15,12 @@
 
 #include "wx/radiobut.h"
 
-#if !USE_SHARED_LIBRARY
+
 IMPLEMENT_DYNAMIC_CLASS(wxRadioButton, wxControl)
-#endif
+
+BEGIN_EVENT_TABLE(wxRadioButton, wxControl)
+   EVT_IDLE( wxRadioButton::OnIdle )
+END_EVENT_TABLE()
 
 #include <wx/mac/uma.h>
 
@@ -40,7 +43,53 @@ bool wxRadioButton::Create(wxWindow *parent, wxWindowID id,
 	
 	MacPostControlCreate() ;
 
-  return TRUE;
+    return TRUE;
+}
+
+void wxRadioButton::OnIdle( wxIdleEvent &event )
+{
+    if (!m_cycle && HasFlag(wxRB_GROUP))
+    {
+        // we are a stand-alone radiobutton and have
+        // the group flag indicating we have to collect
+        // the other radiobuttons belonging to this one
+        
+        bool reached_this = FALSE;
+        wxRadioButton *m_radioButtonCycle = NULL;
+        m_radioButtonCycle = AddInCycle( m_radioButtonCycle );
+        
+        wxWindow *parent = GetParent();
+        wxNode *node = parent->GetChildren().First();
+        while (node)
+        {
+            wxWindow *child = (wxWindow*) node->Data();
+            
+            node = node->Next();
+            
+            // start searching behind current radiobutton
+            if (!reached_this)
+            {
+                reached_this = (this == child);
+                continue;
+            }
+            
+            if (child->IsKindOf( CLASSINFO ( wxRadioButton ) ))
+            {
+                wxRadioButton *rb = (wxRadioButton*) child;
+                
+                // already reached next group
+                if (rb->HasFlag(wxRB_GROUP)) break;
+                
+                // part of a radiobox
+                if (rb->NextInCycle()) break;
+                
+                m_radioButtonCycle = rb->AddInCycle( m_radioButtonCycle );
+            } 
+        }
+    
+    }
+    
+    event.Skip( TRUE );
 }
 
 void wxRadioButton::SetValue(bool val)
