@@ -96,6 +96,9 @@ IMPLEMENT_DYNAMIC_CLASS(wxWindowDC, wxDC)
     #define IS_HATCH(s)    ((s)>=wxFIRST_HATCH && (s)<=wxLAST_HATCH)
 #endif
 
+// FIXME: left over after removal of wxDC::GetOptimization()
+#define GET_OPTIMIZATION false
+
 // ----------------------------------------------------------------------------
 // prototypes
 // ----------------------------------------------------------------------------
@@ -1085,7 +1088,7 @@ void wxWindowDC::DoDrawText( const wxString &text, wxCoord x, wxCoord y )
         sameColour = (sameColour &&
             (oldPenColour.GetPixel() == m_textBackgroundColour.GetPixel()));
 
-        if (!sameColour || !GetOptimization())
+        if (!sameColour || !GET_OPTIMIZATION)
         {
             int pixel = m_textBackgroundColour.AllocColour(m_display);
             m_currentColour = m_textBackgroundColour;
@@ -1118,7 +1121,7 @@ void wxWindowDC::DoDrawText( const wxString &text, wxCoord x, wxCoord y )
             (oldPenColour.Green () == m_currentColour.Green ()) &&
             (oldPenColour.GetPixel() == m_currentColour.GetPixel()));
 
-        if (!sameColour || !GetOptimization())
+        if (!sameColour || !GET_OPTIMIZATION)
         {
             int pixel = CalculatePixel(m_textForegroundColour,
                                        m_currentColour, false);
@@ -1592,7 +1595,7 @@ void wxWindowDC::SetPen( const wxPen &pen )
         (oldPenColour.Green () == m_currentColour.Green ()) &&
         (oldPenColour.GetPixel() == m_currentColour.GetPixel()));
 
-    if (!sameStyle || !GetOptimization())
+    if (!sameStyle || !GET_OPTIMIZATION)
     {
         int scaled_width = (int) XLOG2DEVREL (m_pen.GetWidth ());
         if (scaled_width < 0)
@@ -1705,7 +1708,7 @@ void wxWindowDC::SetPen( const wxPen &pen )
             XSetLineAttributes ((Display*) m_display,(GC) m_gcBacking, scaled_width, style, cap, join);
     }
 
-    if (IS_HATCH(m_currentFill) && ((m_currentFill != oldFill) || !GetOptimization()))
+    if (IS_HATCH(m_currentFill) && ((m_currentFill != oldFill) || !GET_OPTIMIZATION))
     {
         Pixmap myStipple;
 
@@ -1763,7 +1766,7 @@ void wxWindowDC::SetPen( const wxPen &pen )
             XSetStipple ((Display*) m_display,(GC) m_gcBacking, myStipple);
     }
     else if (m_currentStipple.Ok()
-        && ((m_currentStipple != oldStipple) || !GetOptimization()))
+        && ((m_currentStipple != oldStipple) || !GET_OPTIMIZATION))
     {
         XSetStipple ((Display*) m_display, (GC) m_gc, (Pixmap) m_currentStipple.GetDrawable());
 
@@ -1771,7 +1774,7 @@ void wxWindowDC::SetPen( const wxPen &pen )
             XSetStipple ((Display*) m_display,(GC) m_gcBacking, (Pixmap) m_currentStipple.GetDrawable());
     }
 
-    if ((m_currentFill != oldFill) || !GetOptimization())
+    if ((m_currentFill != oldFill) || !GET_OPTIMIZATION)
     {
         int fill_style;
 
@@ -1787,7 +1790,7 @@ void wxWindowDC::SetPen( const wxPen &pen )
     }
 
     // must test m_logicalFunction, because it involves background!
-    if (!sameColour || !GetOptimization()
+    if (!sameColour || !GET_OPTIMIZATION
         || ((m_logicalFunction == wxXOR) || (m_autoSetting & 0x2)))
     {
         int pixel = -1;
@@ -1837,7 +1840,7 @@ void wxWindowDC::SetBrush( const wxBrush &brush )
 
     int stippleDepth = -1;
 
-    if ((oldFill != m_brush.GetStyle ()) || !GetOptimization())
+    if ((oldFill != m_brush.GetStyle ()) || !GET_OPTIMIZATION)
     {
         switch (brush.GetStyle ())
         {
@@ -1876,7 +1879,7 @@ void wxWindowDC::SetBrush( const wxBrush &brush )
         }
     }
 
-    if (IS_HATCH(m_currentFill) && ((m_currentFill != oldFill) || !GetOptimization()))
+    if (IS_HATCH(m_currentFill) && ((m_currentFill != oldFill) || !GET_OPTIMIZATION))
     {
         Pixmap myStipple;
 
@@ -1955,7 +1958,7 @@ void wxWindowDC::SetBrush( const wxBrush &brush )
     }
 
     // must test m_logicalFunction, because it involves background!
-    if (!sameColour || !GetOptimization() || m_logicalFunction == wxXOR)
+    if (!sameColour || !GET_OPTIMIZATION || m_logicalFunction == wxXOR)
     {
         int pixel = CalculatePixel(m_brush.GetColour(), m_currentColour, true);
 

@@ -169,7 +169,7 @@ The arc is drawn in an anticlockwise direction from the start point to the end p
 
 \func{void}{DrawBitmap}{\param{const wxBitmap\&}{ bitmap}, \param{wxCoord}{ x}, \param{wxCoord}{ y}, \param{bool}{ transparent}}
 
-Draw a bitmap on the device context at the specified point. If {\it transparent} is TRUE and the bitmap has
+Draw a bitmap on the device context at the specified point. If {\it transparent} is true and the bitmap has
 a transparency mask, the bitmap will be drawn transparently.
 
 When drawing a mono-bitmap, the current text foreground colour will be used to draw the foreground
@@ -433,12 +433,6 @@ Gets the current logical function (see \helpref{wxSVGFileDC::SetLogicalFunction}
 
 Gets the {\it mapping mode} for the device context (see \helpref{wxSVGFileDC::SetMapMode}{wxdcsetmapmode}).
 
-\membersection{wxSVGFileDC::GetOptimization}\label{wxdcgetoptimization}
-
-\func{bool}{GetOptimization}{\void}
-
-Always returns TRUE, with an assertion in debug mode that optimisation is not implemented
-
 \membersection{wxSVGFileDC::GetPen}\label{wxdcgetpen}
 
 \func{wxPen\&}{GetPen}{\void}
@@ -561,7 +555,7 @@ Gets the minimum vertical extent used in drawing commands so far.
 
 \func{bool}{Ok}{\void}
 
-Returns TRUE if the DC is ok to use; False values arise from being unable to 
+Returns true if the DC is ok to use; False values arise from being unable to 
 write the file
 
 \membersection{wxSVGFileDC::ResetBoundingBox}\label{wxdcresetboundingbox}
@@ -694,12 +688,6 @@ The mapping mode can be one of the following:
 \twocolitem{wxMM\_LOMETRIC}{Each logical unit is 1/10 of a mm.}
 \twocolitem{wxMM\_TEXT}{Each logical unit is 1 pixel.}
 \end{twocollist}
-
-\membersection{wxSVGFileDC::SetOptimization}\label{wxsetoptimization}
-
-\func{void}{SetOptimization}{\param{bool }{optimize}}
-
-Does nothing
 
 \membersection{wxSVGFileDC::SetPen}\label{wxdcsetpen}
 

@@ -277,7 +277,7 @@ bool wxWriteResource(const wxString& section, const wxString& entry, const wxStr
     strcat (resName, entry.c_str());
 
     XrmPutStringResource (&database, resName, value);
-    return TRUE;
+    return true;
 }
 
 bool wxWriteResource(const wxString& section, const wxString& entry, float value, const wxString& file)
@@ -354,7 +354,7 @@ bool wxGetResource(const wxString& section, const wxString& entry, char **value,
 
         *value = new char[xvalue.size + 1];
         strncpy (*value, xvalue.addr, (int) xvalue.size);
-        return TRUE;
+        return true;
     }
     return FALSE;
 }
@@ -367,7 +367,7 @@ bool wxGetResource(const wxString& section, const wxString& entry, float *value,
     {
         *value = (float)strtod(s, NULL);
         delete[] s;
-        return TRUE;
+        return true;
     }
     else return FALSE;
 }
@@ -380,7 +380,7 @@ bool wxGetResource(const wxString& section, const wxString& entry, long *value, 
     {
         *value = strtol(s, NULL, 10);
         delete[] s;
-        return TRUE;
+        return true;
     }
     else return FALSE;
 }
@@ -402,7 +402,7 @@ bool wxGetResource(const wxString& section, const wxString& entry, int *value, c
         else
             *value = (int) strtol (s, NULL, 10);
         delete[] s;
-        return TRUE;
+        return true;
     }
     else
         return FALSE;
@@ -528,7 +528,7 @@ void wxGetMousePosition( int* x, int* y )
 #endif
 };
 
-// Return TRUE if we have a colour display
+// Return true if we have a colour display
 bool wxColourDisplay()
 {
     return wxDisplayDepth() > 1;
@@ -592,11 +592,11 @@ bool wxSetDisplay(const wxString& display_name)
 {
     gs_displayName = display_name;
 
-    if ( display_name.IsEmpty() )
+    if ( display_name.empty() )
     {
         gs_currentDisplay = NULL;
 
-        return TRUE;
+        return true;
     }
     else
     {
@@ -617,7 +617,7 @@ bool wxSetDisplay(const wxString& display_name)
         if (display)
         {
             gs_currentDisplay = (WXDisplay*) display;
-            return TRUE;
+            return true;
         }
         else
             return FALSE;
@@ -757,22 +757,22 @@ wxString wxGetXEventName(XEvent& event)
     return str;
 #else
     int type = event.xany.type;
-	    static char* event_name[] = {
-		"", "unknown(-)",                                         // 0-1
-		"KeyPress", "KeyRelease", "ButtonPress", "ButtonRelease", // 2-5
-		"MotionNotify", "EnterNotify", "LeaveNotify", "FocusIn",  // 6-9
-		"FocusOut", "KeymapNotify", "Expose", "GraphicsExpose",   // 10-13
-		"NoExpose", "VisibilityNotify", "CreateNotify",           // 14-16
-		"DestroyNotify", "UnmapNotify", "MapNotify", "MapRequest",// 17-20
-		"ReparentNotify", "ConfigureNotify", "ConfigureRequest",  // 21-23
-		"GravityNotify", "ResizeRequest", "CirculateNotify",      // 24-26
-		"CirculateRequest", "PropertyNotify", "SelectionClear",   // 27-29
-		"SelectionRequest", "SelectionNotify", "ColormapNotify",  // 30-32
-		"ClientMessage", "MappingNotify",                         // 33-34
-		"unknown(+)"};                                            // 35
-	    type = wxMin(35, type); type = wxMax(1, type);
-        wxString str(event_name[type]);
-        return str;
+    static char* event_name[] = {
+        "", "unknown(-)",                                         // 0-1
+        "KeyPress", "KeyRelease", "ButtonPress", "ButtonRelease", // 2-5
+        "MotionNotify", "EnterNotify", "LeaveNotify", "FocusIn",  // 6-9
+        "FocusOut", "KeymapNotify", "Expose", "GraphicsExpose",   // 10-13
+        "NoExpose", "VisibilityNotify", "CreateNotify",           // 14-16
+        "DestroyNotify", "UnmapNotify", "MapNotify", "MapRequest",// 17-20
+        "ReparentNotify", "ConfigureNotify", "ConfigureRequest",  // 21-23
+        "GravityNotify", "ResizeRequest", "CirculateNotify",      // 24-26
+        "CirculateRequest", "PropertyNotify", "SelectionClear",   // 27-29
+        "SelectionRequest", "SelectionNotify", "ColormapNotify",  // 30-32
+        "ClientMessage", "MappingNotify",                         // 33-34
+        "unknown(+)"};                                            // 35
+    type = wxMin(35, type); type = wxMax(1, type);
+    wxString str(event_name[type]);
+    return str;
 #endif
 }
 #endif
@@ -976,11 +976,10 @@ wxBitmap wxCreateMaskedBitmap(const wxBitmap& bitmap, wxColour& colour)
     destDC.SelectObject(newBitmap);
 
     wxBrush brush(colour, wxSOLID);
-    // destDC.SetOptimization(FALSE);
     destDC.SetBackground(brush);
     destDC.Clear();
     destDC.Blit(0, 0, bitmap.GetWidth(), bitmap.GetHeight(),
-                &srcDC, 0, 0, wxCOPY, TRUE);
+                &srcDC, 0, 0, wxCOPY, true);
 
     return newBitmap;
 }

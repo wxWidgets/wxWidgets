@@ -534,12 +534,10 @@ public:
     int GetLogicalFunction() const { return m_logicalFunction; }
     virtual void SetLogicalFunction(int function) = 0;
 
-    // Sometimes we need to override optimization, e.g. if other software is
-    // drawing onto our surface and we can't be sure of who's done what.
-    //
-    // FIXME: is this (still) used?
+#if WXWIN_COMPATIBILITY_2_4
     virtual void SetOptimization(bool WXUNUSED(opt)) { }
     virtual bool GetOptimization() { return false; }
+#endif
 
     // bounding box
     // ------------

@@ -664,14 +664,6 @@ Gets the current logical function (see \helpref{wxDC::SetLogicalFunction}{wxdcse
 Gets the {\it mapping mode} for the device context (see \helpref{wxDC::SetMapMode}{wxdcsetmapmode}).
 
 
-\membersection{wxDC::GetOptimization}\label{wxdcgetoptimization}
-
-\func{bool}{GetOptimization}{\void}
-
-Returns true if device context optimization is on.
-See \helpref{wxDC::SetOptimization}{wxsetoptimization} for details.
-
-
 \membersection{wxDC::GetPartialTextExtents}\label{wxdcgetpartialtextextents}
 
 \constfunc{bool}{GetPartialTextExtents}{\param{const wxString\&  }{text}, 
@@ -1057,21 +1049,6 @@ The mapping mode can be one of the following:
 \twocolitem{wxMM\_LOMETRIC}{Each logical unit is 1/10 of a mm.}
 \twocolitem{wxMM\_TEXT}{Each logical unit is 1 pixel.}
 \end{twocollist}
-
-
-\membersection{wxDC::SetOptimization}\label{wxsetoptimization}
-
-\func{void}{SetOptimization}{\param{bool }{optimize}}
-
-If {\it optimize} is true (the default), this function sets optimization mode on.
-This currently means that under X, the device context will not try to set a pen or brush
-property if it is known to be set already. This approach can fall down
-if non-wxWidgets code is using the same device context or window, for example
-when the window is a panel on which the windowing system draws panel items.
-The wxWidgets device context 'memory' will now be out of step with reality.
-
-Setting optimization off, drawing, then setting it back on again, is a trick
-that must occasionally be employed.
 
 
 \membersection{wxDC::SetPalette}\label{wxdcsetpalette}
