@@ -18,7 +18,7 @@
 #include "wx/xml/xmlres.h"
 
 
-class WXDLLEXPORT wxBitmapXmlHandler : public wxXmlResourceHandler
+class WXXMLDLLEXPORT wxBitmapXmlHandler : public wxXmlResourceHandler
 {
 public:
     wxBitmapXmlHandler();
@@ -26,7 +26,7 @@ public:
     virtual bool CanHandle(wxXmlNode *node);
 };
 
-class WXDLLEXPORT wxIconXmlHandler : public wxXmlResourceHandler
+class WXXMLDLLEXPORT wxIconXmlHandler : public wxXmlResourceHandler
 {
 public:
     wxIconXmlHandler();

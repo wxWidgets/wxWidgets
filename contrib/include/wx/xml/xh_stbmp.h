@@ -18,7 +18,7 @@
 #include "wx/xml/xmlres.h"
 
 
-class WXDLLEXPORT wxStaticBitmapXmlHandler : public wxXmlResourceHandler
+class WXXMLDLLEXPORT wxStaticBitmapXmlHandler : public wxXmlResourceHandler
 {
 public:
     wxStaticBitmapXmlHandler();

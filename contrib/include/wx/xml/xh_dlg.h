@@ -17,7 +17,7 @@
 
 #include "wx/xml/xmlres.h"
 
-class WXDLLEXPORT wxDialogXmlHandler : public wxXmlResourceHandler
+class WXXMLDLLEXPORT wxDialogXmlHandler : public wxXmlResourceHandler
 {
 public:
     wxDialogXmlHandler();

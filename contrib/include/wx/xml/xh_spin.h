@@ -19,9 +19,9 @@
 #include "wx/defs.h"
 
 #if wxUSE_SPINBTN
-class WXDLLEXPORT wxSpinButtonXmlHandler : public wxXmlResourceHandler
+class WXXMLDLLEXPORT wxSpinButtonXmlHandler : public wxXmlResourceHandler
 {
-    enum 
+    enum
     {
         wxSP_DEFAULT_VALUE = 0,
         wxSP_DEFAULT_MIN = 0,
@@ -36,9 +36,9 @@ public:
 #endif
 
 #if wxUSE_SPINCTRL
-class WXDLLEXPORT wxSpinCtrlXmlHandler : public wxXmlResourceHandler
+class WXXMLDLLEXPORT wxSpinCtrlXmlHandler : public wxXmlResourceHandler
 {
-    enum 
+    enum
     {
         wxSP_DEFAULT_VALUE = 0,
         wxSP_DEFAULT_MIN = 0,

@@ -19,7 +19,7 @@
 
 #if wxUSE_STATLINE
 
-class WXDLLEXPORT wxStaticLineXmlHandler : public wxXmlResourceHandler
+class WXXMLDLLEXPORT wxStaticLineXmlHandler : public wxXmlResourceHandler
 {
 public:
     wxStaticLineXmlHandler();

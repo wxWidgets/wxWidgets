@@ -20,11 +20,16 @@
 #include "wx/object.h"
 #include "wx/list.h"
 
+#ifdef WXXMLISDLL
+#define WXXMLDLLEXPORT WXDLLEXPORT
+#else
+#define WXXMLDLLEXPORT
+#endif
 
-class WXDLLEXPORT wxXmlNode;
-class WXDLLEXPORT wxXmlProperty;
-class WXDLLEXPORT wxXmlDocument;
-class WXDLLEXPORT wxXmlIOHandler;
+class WXXMLDLLEXPORT wxXmlNode;
+class WXXMLDLLEXPORT wxXmlProperty;
+class WXXMLDLLEXPORT wxXmlDocument;
+class WXXMLDLLEXPORT wxXmlIOHandler;
 class WXDLLEXPORT wxInputStream;
 class WXDLLEXPORT wxOutputStream;
 
@@ -65,11 +70,11 @@ enum wxXmlIOType
 // Example: in <img src="hello.gif" id="3"/> "src" is property with value
 //          "hello.gif" and "id" is prop. with value "3".
 
-class WXDLLEXPORT wxXmlProperty
+class WXXMLDLLEXPORT wxXmlProperty
 {
 public:
     wxXmlProperty() : m_next(NULL) {}
-    wxXmlProperty(const wxString& name, const wxString& value, 
+    wxXmlProperty(const wxString& name, const wxString& value,
                   wxXmlProperty *next)
             : m_name(name), m_value(value), m_next(next) {}
     ~wxXmlProperty() { delete m_next; }
@@ -97,18 +102,18 @@ private:
 // with content="hi").
 //
 // If wxUSE_UNICODE is 0, all strings are encoded in UTF-8 encoding (same as
-// ASCII for characters 0-127). You can use wxMBConvUTF8 to convert then to 
+// ASCII for characters 0-127). You can use wxMBConvUTF8 to convert then to
 // desired encoding:
 //
 //     wxCSConv myConv("iso8859-2");
 //     wxString s(cMB2WC(node->GetContent().c_str()), myConv);
 
-class WXDLLEXPORT wxXmlNode
+class WXXMLDLLEXPORT wxXmlNode
 {
 public:
-    wxXmlNode() : m_properties(NULL), m_parent(NULL), 
+    wxXmlNode() : m_properties(NULL), m_parent(NULL),
                   m_children(NULL), m_next(NULL) {}
-    wxXmlNode(wxXmlNode *parent,wxXmlNodeType type, 
+    wxXmlNode(wxXmlNode *parent,wxXmlNodeType type,
               const wxString& name, const wxString& content,
               wxXmlProperty *props, wxXmlNode *next);
     ~wxXmlNode() { delete m_properties; delete m_next; delete m_children; }
@@ -121,7 +126,7 @@ public:
     wxXmlNode& operator=(const wxXmlNode& node);
 
     // user-friendly creation:
-    wxXmlNode(wxXmlNodeType type, const wxString& name, 
+    wxXmlNode(wxXmlNodeType type, const wxString& name,
               const wxString& content = wxEmptyString);
     void AddChild(wxXmlNode *child);
     void InsertChild(wxXmlNode *child, wxXmlNode *before_node);
@@ -140,7 +145,7 @@ public:
 
     wxXmlProperty *GetProperties() const { return m_properties; }
     bool GetPropVal(const wxString& propName, wxString *value) const;
-    wxString GetPropVal(const wxString& propName, 
+    wxString GetPropVal(const wxString& propName,
                         const wxString& defaultVal) const;
     bool HasProp(const wxString& propName) const;
 
@@ -171,17 +176,17 @@ private:
 
 
 
-// This class holds XML data/document as parsed by libxml. Note that 
-// internal representation is independant on libxml and you can use 
+// This class holds XML data/document as parsed by libxml. Note that
+// internal representation is independant on libxml and you can use
 // it without libxml (see Load/SaveBinary).
 
-class WXDLLEXPORT wxXmlDocument : public wxObject
+class WXXMLDLLEXPORT wxXmlDocument : public wxObject
 {
 public:
     wxXmlDocument() : wxObject(), m_version(wxT("1.0")), m_root(NULL)  {}
-    wxXmlDocument(const wxString& filename, 
+    wxXmlDocument(const wxString& filename,
                   wxXmlIOType io_type = wxXML_IO_AUTO);
-    wxXmlDocument(wxInputStream& stream, 
+    wxXmlDocument(wxInputStream& stream,
                   wxXmlIOType io_type = wxXML_IO_AUTO);
     ~wxXmlDocument() { delete m_root; }
 
@@ -189,16 +194,16 @@ public:
     wxXmlDocument& operator=(const wxXmlDocument& doc);
 
     // Parses .xml file and loads data. Returns TRUE on success, FALSE
-    // otherwise. 
+    // otherwise.
     // NOTE: Any call to this method will result into linking against libxml
     //       and app's binary size will grow by ca. 250kB
     bool Load(const wxString& filename, wxXmlIOType io_type = wxXML_IO_AUTO);
     bool Load(wxInputStream& stream, wxXmlIOType io_type = wxXML_IO_AUTO);
 
     // Saves document as .xml file.
-    bool Save(const wxString& filename, 
+    bool Save(const wxString& filename,
               wxXmlIOType io_type = wxXML_IO_TEXT_OUTPUT) const;
-    bool Save(wxOutputStream& stream, 
+    bool Save(wxOutputStream& stream,
               wxXmlIOType io_type = wxXML_IO_TEXT_OUTPUT) const;
 
     bool IsOk() const { return m_root != NULL; }
@@ -211,7 +216,7 @@ public:
     // Returns encoding of document (may be empty).
     // Note: this is the encoding original fail was saved in, *not* the
     // encoding of in-memory representation! Data in wxXmlNode are always
-    // stored in wchar_t (in Unicode build) or UTF-8 encoded 
+    // stored in wchar_t (in Unicode build) or UTF-8 encoded
     // (if wxUSE_UNICODE is 0).
     wxString GetEncoding() const { return m_encoding; }
 
@@ -239,21 +244,21 @@ private:
 // wxXmlIOHandler takes care of loading and/or saving XML data.
 // see xmlio.h for available handlers
 
-class WXDLLEXPORT wxXmlIOHandler : public wxObject
+class WXXMLDLLEXPORT wxXmlIOHandler : public wxObject
 {
     public:
         wxXmlIOHandler() {}
-        
+
         virtual wxXmlIOType GetType() = 0;
         virtual bool CanLoad(wxInputStream& stream) = 0;
         virtual bool CanSave() = 0;
-        
+
         virtual bool Load(wxInputStream& stream, wxXmlDocument& doc) = 0;
         virtual bool Save(wxOutputStream& stream, const wxXmlDocument& doc) = 0;
 };
 
 
 
-
+void wxXmlInitXmlModule();
 
 #endif // _WX_XML_H_

@@ -20,7 +20,7 @@
 
 #if wxUSE_RADIOBOX
 
-class WXDLLEXPORT wxRadioButtonXmlHandler : public wxXmlResourceHandler
+class WXXMLDLLEXPORT wxRadioButtonXmlHandler : public wxXmlResourceHandler
 {
 public:
     wxRadioButtonXmlHandler();

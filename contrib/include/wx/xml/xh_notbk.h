@@ -20,7 +20,7 @@
 
 class WXDLLEXPORT wxNotebook;
 
-class WXDLLEXPORT wxNotebookXmlHandler : public wxXmlResourceHandler
+class WXXMLDLLEXPORT wxNotebookXmlHandler : public wxXmlResourceHandler
 {
 public:
     wxNotebookXmlHandler();

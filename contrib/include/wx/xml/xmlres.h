@@ -25,6 +25,8 @@
 #include "wx/bitmap.h"
 #include "wx/icon.h"
 
+#include "wx/xml/xml.h"
+
 class WXDLLEXPORT wxMenu;
 class WXDLLEXPORT wxMenuBar;
 class WXDLLEXPORT wxDialog;
@@ -33,9 +35,8 @@ class WXDLLEXPORT wxWindow;
 class WXDLLEXPORT wxFrame;
 class WXDLLEXPORT wxToolBar;
 
-class WXDLLEXPORT wxXmlResourceHandler;
+class WXXMLDLLEXPORT wxXmlResourceHandler;
 
-#include "wx/xml/xml.h"
 
 // These macros indicate current version of XML resources (this information is
 // encoded in root node of XRC file as "version" property).
@@ -61,7 +62,7 @@ class WXDLLEXPORT wxXmlResourceHandler;
                  WX_XMLRES_CURRENT_VERSION_RELEASE * 256 + \
                  WX_XMLRES_CURRENT_VERSION_REVISION)
 
-class WXDLLEXPORT wxXmlResourceDataRecord
+class WXXMLDLLEXPORT wxXmlResourceDataRecord
 {
 public:
     wxXmlResourceDataRecord() : Doc(NULL), Time(wxDateTime::Now()) {}
@@ -72,13 +73,19 @@ public:
     wxDateTime Time;
 };
 
+
+#ifdef WXXMLISDLL
 WX_DECLARE_EXPORTED_OBJARRAY(wxXmlResourceDataRecord, wxXmlResourceDataRecords);
+#else
+WX_DECLARE_OBJARRAY(wxXmlResourceDataRecord, wxXmlResourceDataRecords);
+#endif
 
-// This class holds XML resources from one or more .xml files 
+
+// This class holds XML resources from one or more .xml files
 // (or derived forms, either binary or zipped -- see manual for
-// details). 
+// details).
 
-class WXDLLEXPORT wxXmlResource : public wxObject
+class WXXMLDLLEXPORT wxXmlResource : public wxObject
 {
 public:
     // Ctor. If use_locale is TRUE, translatable strings are
@@ -100,7 +107,7 @@ public:
     // Initialize only specific handler (or custom handler). Convention says
     // that handler name is equal to control's name plus 'XmlHandler', e.g.
     // wxTextCtrlXmlHandler, wxHtmlWindowXmlHandler. XML resource compiler
-    // (xmlres) can create include file that contains initialization code for 
+    // (xmlres) can create include file that contains initialization code for
     // all controls used within the resource.
     void AddHandler(wxXmlResourceHandler *handler);
 
@@ -138,7 +145,7 @@ public:
     // Loads bitmap or icon resource from file:
     wxBitmap LoadBitmap(const wxString& name);
     wxIcon LoadIcon(const wxString& name);
-    
+
     // Attaches unknown control into given panel/window/dialog:
     // (unknown controls are used in conjunction with <object class="unknown">)
     bool AttachUnknownControl(const wxString& name, wxWindow *control,
@@ -148,14 +155,14 @@ public:
     // resource. To be used in event tables
     // Macro XMLID is provided for convenience
     static int GetXMLID(const char *str_id);
-    
+
     // Returns version info (a.b.c.d = d+ 256*c + 256^2*b + 256^3*a)
     long GetVersion() const { return m_version; }
-    
+
     // Compares resources version to argument. Returns -1 if resources version
     // is less than the argument, +1 if greater and 0 if they equal.
     int CompareVersion(int major, int minor, int release, int revision) const
-        { return GetVersion() - 
+        { return GetVersion() -
                  (major*256*256*256 + minor*256*256 + release*256 + revision); }
 
 protected:
@@ -177,7 +184,7 @@ protected:
 
 private:
     long m_version;
-    
+
     bool m_useLocale;
     wxList m_handlers;
     wxXmlResourceDataRecords m_data;
@@ -202,7 +209,7 @@ extern wxXmlResource *wxTheXmlResource;
 //       EVT_MENU(XMLID("about"), MyFrame::OnAbout)
 //       EVT_MENU(XMLID("new"), MyFrame::OnNew)
 //       EVT_MENU(XMLID("open"), MyFrame::OnOpen)
-//    END_EVENT_TABLE()    
+//    END_EVENT_TABLE()
 
 #define XMLID(str_id) \
     wxXmlResource::GetXMLID(wxT(str_id))
@@ -225,7 +232,7 @@ extern wxXmlResource *wxTheXmlResource;
 #endif
 
 
-class WXDLLEXPORT wxXmlResourceHandler : public wxObject
+class WXXMLDLLEXPORT wxXmlResourceHandler : public wxObject
 {
 public:
     wxXmlResourceHandler();
@@ -237,7 +244,7 @@ public:
     // that is often neccessary to create resource
     // if instance != NULL it should not create new instance via 'new' but
     // rather use this one and call its Create method
-    wxObject *CreateResource(wxXmlNode *node, wxObject *parent, 
+    wxObject *CreateResource(wxXmlNode *node, wxObject *parent,
                              wxObject *instance);
 
     // This one is called from CreateResource after variables
@@ -273,12 +280,12 @@ protected:
     // Gets node content from wxXML_ENTITY_NODE
     // (the problem is, <tag>content<tag> is represented as
     // wxXML_ENTITY_NODE name="tag", content=""
-    //    |-- wxXML_TEXT_NODE or 
+    //    |-- wxXML_TEXT_NODE or
     //        wxXML_CDATA_SECTION_NODE name="" content="content"
     wxString GetNodeContent(wxXmlNode *node);
 
     // Check to see if a param exists
-    bool HasParam(const wxString& param);      
+    bool HasParam(const wxString& param);
 
     // Finds the node or returns NULL
     wxXmlNode *GetParamNode(const wxString& param);
@@ -335,7 +342,7 @@ protected:
 
     void CreateChildren(wxObject *parent, bool this_hnd_only = FALSE);
     void CreateChildrenPrivately(wxObject *parent, wxXmlNode *rootnode = NULL);
-    wxObject *CreateResFromNode(wxXmlNode *node, 
+    wxObject *CreateResFromNode(wxXmlNode *node,
                                 wxObject *parent, wxObject *instance = NULL)
         { return m_resource->CreateResFromNode(node, parent, instance); }
 
@@ -346,5 +353,6 @@ protected:
 #define ADD_STYLE(style) AddStyle(wxT(#style), style)
 
 
+void wxXmlInitResourceModule();
 
 #endif // _WX_XMLRES_H_

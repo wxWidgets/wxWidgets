@@ -18,7 +18,7 @@
 #include "wx/xml/xmlres.h"
 
 
-class WXDLLEXPORT wxUnknownWidgetXmlHandler : public wxXmlResourceHandler
+class WXXMLDLLEXPORT wxUnknownWidgetXmlHandler : public wxXmlResourceHandler
 {
 public:
     wxUnknownWidgetXmlHandler();

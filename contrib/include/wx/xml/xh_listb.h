@@ -19,7 +19,7 @@
 
 #if wxUSE_LISTBOX
 
-class WXDLLEXPORT wxListBoxXmlHandler : public wxXmlResourceHandler
+class WXXMLDLLEXPORT wxListBoxXmlHandler : public wxXmlResourceHandler
 {
 public:
     wxListBoxXmlHandler();

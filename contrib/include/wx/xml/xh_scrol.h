@@ -20,9 +20,9 @@
 
 
 
-class WXDLLEXPORT wxScrollBarXmlHandler : public wxXmlResourceHandler
+class WXXMLDLLEXPORT wxScrollBarXmlHandler : public wxXmlResourceHandler
 {
-    enum 
+    enum
     {
         wxSL_DEFAULT_VALUE = 0,
         wxSL_DEFAULT_MIN = 0,

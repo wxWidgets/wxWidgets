@@ -17,7 +17,7 @@
 
 #include "wx/xml/xmlres.h"
 
-class WXDLLEXPORT wxCalendarCtrlXmlHandler : public wxXmlResourceHandler
+class WXXMLDLLEXPORT wxCalendarCtrlXmlHandler : public wxXmlResourceHandler
 {
 public:
     wxCalendarCtrlXmlHandler();

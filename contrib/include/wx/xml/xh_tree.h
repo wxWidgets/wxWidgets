@@ -17,7 +17,7 @@
 
 #include "wx/xml/xmlres.h"
 
-class WXDLLEXPORT wxTreeCtrlXmlHandler : public wxXmlResourceHandler
+class WXXMLDLLEXPORT wxTreeCtrlXmlHandler : public wxXmlResourceHandler
 {
 public:
     wxTreeCtrlXmlHandler();

@@ -20,7 +20,7 @@
 
 class WXDLLEXPORT wxSizer;
 
-class WXDLLEXPORT wxSizerXmlHandler : public wxXmlResourceHandler
+class WXXMLDLLEXPORT wxSizerXmlHandler : public wxXmlResourceHandler
 {
 public:
     wxSizerXmlHandler();
@@ -30,7 +30,7 @@ public:
 private:
     bool m_isInside;
     wxSizer *m_parentSizer;
-        
+
     bool IsSizerNode(wxXmlNode *node);
 };
 

@@ -20,9 +20,9 @@
 
 #if wxUSE_SLIDER
 
-class WXDLLEXPORT wxSliderXmlHandler : public wxXmlResourceHandler
+class WXXMLDLLEXPORT wxSliderXmlHandler : public wxXmlResourceHandler
 {
-    enum 
+    enum
     {
         wxSL_DEFAULT_VALUE = 0,
         wxSL_DEFAULT_MIN = 0,

@@ -20,7 +20,7 @@
 #include "wx/xml/xml.h"
 
 
-class WXDLLEXPORT wxXmlIOHandlerExpat : public wxXmlIOHandler
+class WXXMLDLLEXPORT wxXmlIOHandlerExpat : public wxXmlIOHandler
 {
 public:
     virtual wxXmlIOType GetType() { return wxXML_IO_EXPAT; }
@@ -32,7 +32,7 @@ public:
 };
 
 
-class WXDLLEXPORT wxXmlIOHandlerWriter : public wxXmlIOHandler
+class WXXMLDLLEXPORT wxXmlIOHandlerWriter : public wxXmlIOHandler
 {
 public:
     virtual wxXmlIOType GetType() { return wxXML_IO_TEXT_OUTPUT; }
@@ -44,7 +44,7 @@ public:
 };
 
 
-class WXDLLEXPORT wxXmlIOHandlerBin : public wxXmlIOHandler
+class WXXMLDLLEXPORT wxXmlIOHandlerBin : public wxXmlIOHandler
 {
 public:
     wxXmlIOHandlerBin() {}
@@ -56,7 +56,7 @@ public:
     virtual bool Load(wxInputStream& stream, wxXmlDocument& doc);
     virtual bool Save(wxOutputStream& stream, const wxXmlDocument& doc);
 
-protected: 
+protected:
     wxString ReadHeader(wxInputStream& stream);
     void WriteHeader(wxOutputStream& stream, const wxString& header);
 };
@@ -65,7 +65,7 @@ protected:
 
 #if wxUSE_ZLIB
 
-class WXDLLEXPORT wxXmlIOHandlerBinZ : public wxXmlIOHandlerBin
+class WXXMLDLLEXPORT wxXmlIOHandlerBinZ : public wxXmlIOHandlerBin
 {
 public:
     wxXmlIOHandlerBinZ() {}

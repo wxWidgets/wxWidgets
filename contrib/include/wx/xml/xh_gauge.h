@@ -22,9 +22,9 @@
 #include "wx/xml/xmlres.h"
 
 
-class WXDLLEXPORT wxGaugeXmlHandler : public wxXmlResourceHandler
+class WXXMLDLLEXPORT wxGaugeXmlHandler : public wxXmlResourceHandler
 {
-    enum 
+    enum
     {
         wxGAUGE_DEFAULT_RANGE = 100
     };

@@ -17,7 +17,7 @@
 
 #include "wx/xml/xmlres.h"
 
-class WXDLLEXPORT wxButtonXmlHandler : public wxXmlResourceHandler
+class WXXMLDLLEXPORT wxButtonXmlHandler : public wxXmlResourceHandler
 {
 public:
     wxButtonXmlHandler();
