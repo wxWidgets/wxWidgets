@@ -36,11 +36,17 @@ wxMSW:
 - wxMSW focus handling problems (notable with toolbars and splitters) fixed
 - wxListCtrl attributes are handled correctly when inserting/deleting/sorting
 - wxPrinterDC resource leak fixed
+- fixed paper size handling when printer device driver reports DM_PAPERSIZE with 
+  dmPaperSize >= DMPAPER_USER
 - implemented renaming of wxRegConfig groups
 
 wxGTK:
 
 - wxToolbar::InsertSeparator() fixed
+
+wxHTML:
+
+- fixed parsing of &agrave;
 
 2.2.6
 -----
