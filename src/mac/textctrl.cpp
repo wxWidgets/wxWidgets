@@ -460,10 +460,7 @@ static pascal ControlPartCode TPPaneFocusProc(ControlHandle theControl, ControlF
                 kControlFocusNoPart, otherwise return a non-zero part code.
             kUserClickedToFocusPart - is a constant defined for this example.  You should
                 define your own value for handling click-to-focus type events. */
-            /* save the drawing state */
-        SetPort((**tpvars).fDrawingEnvironment);
-        wxMacWindowClipper clipper( wxFindControlFromMacControl(theControl ) ) ;
-            /* calculate the next highlight state */
+             /* calculate the next highlight state */
         switch (action) {
             default:
             case kControlFocusNoPart:
@@ -485,6 +482,9 @@ static pascal ControlPartCode TPPaneFocusProc(ControlHandle theControl, ControlF
         new focus state */
         if ( IsControlVisible( theControl ) )
         {
+           /* save the drawing state */
+        	SetPort((**tpvars).fDrawingEnvironment);
+        	wxMacWindowClipper clipper( wxFindControlFromMacControl(theControl ) ) ;
             DrawThemeEditTextFrame(&varsp->fRTextOutline, varsp->fIsActive ? kThemeStateActive: kThemeStateInactive);
             DrawThemeFocusRect(&varsp->fRFocusOutline, varsp->fIsActive && varsp->fInFocus);
         }
