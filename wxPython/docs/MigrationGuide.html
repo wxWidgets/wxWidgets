@@ -358,7 +358,7 @@ class MyDialog(wx.Dialog):
 <div class="section" id="sizers">
 <h1><a name="sizers">Sizers</a></h1>
 <p>The hack allowing the old &quot;option&quot; keyword parameter has been removed.
-If you use keyword args with w.xSizer Add, Insert, or Prepend methods
+If you use keyword args with wx.Sizer Add, Insert, or Prepend methods
 then you will need to use the <tt class="literal"><span class="pre">proportion</span></tt> name instead of
 <tt class="literal"><span class="pre">option</span></tt>.  (The <tt class="literal"><span class="pre">proportion</span></tt> keyword was also allowed in 2.4.2.4.)</p>
 <p>When adding a spacer to a sizer you now need to use a wx.Size or a
@@ -393,7 +393,7 @@ flag then when layout was calculated the item's <tt class="literal"><span class=
 would be used to reset the minimal size that the sizer used.</li>
 </ul>
 </blockquote>
-<p>The main thrust of the new Sizer changes was to make behaviour like
+<p>The main thrust of the new Sizer changes was to make behavior like
 <tt class="literal"><span class="pre">wx.ADJUST_MINSIZE</span></tt> be the default, and also to push the tracking of
 the minimal size to the window itself (since it knows its own needs)
 instead of having the sizer take care of it.  Consequently these
@@ -401,7 +401,7 @@ changes were made:</p>
 <blockquote>
 <ul class="simple">
 <li>The <tt class="literal"><span class="pre">wx.FIXED_MINSIZE</span></tt> flag was added to allow for the old
-behaviour.  When this flag is used the size a window has when
+behavior.  When this flag is used the size a window has when
 added to the sizer will be treated as its minimal size and it
 will not be readjusted on each layout.</li>
 <li>The min size stored in <tt class="literal"><span class="pre">wx.Window</span></tt> and settable with
@@ -603,9 +603,7 @@ mask and the rest would be made fully opaque.</p>
 channel and will now only create a mask when all the pixels in the
 image are either fully transparent or fully opaque.  In addition, the
 wx.DC.DrawBitmap and wx.DC.Blit methods are able to correctly blend
-the pixels in the image with partially transparent alpha values.
-(Currently only on MSW and Mac, if anybody knows how to do it for GTK
-then please submit a patch!)</p>
+the pixels in the image with partially transparent alpha values.</p>
 <p>If you are using a PNG with an alpha channel but you need to have a
 wx.Mask like you automatically got in 2.4 then you can do one of the
 following:</p>
@@ -761,9 +759,9 @@ if &quot;unicode&quot; in wx.PlatformInfo:
 <div class="section" id="multi-version-installs">
 <h1><a name="multi-version-installs">Multi-Version Installs</a></h1>
 <p><strong>[Changed in 2.5.3.x]</strong></p>
-<p>Starting with 2.5.3.0 the wx and wxPython pacakge directories will be
+<p>Starting with 2.5.3.0 the wx and wxPython package directories will be
 installed in a subdirectory of the site-packages directory, instead of
-directly in site-pacakges.  This is done to help facilitate having
+directly in site-packages.  This is done to help facilitate having
 multiple versions of wxPython installed side-by-side.  Why would you
 want to do this?  One possible scenario is you have an app that
 requires wxPython 2.4 but you want to use the newest 2.5 to do your
@@ -785,7 +783,7 @@ statement.  Of course you can always manipulate that by editing the
 wx.pth file, or by setting PYTHONPATH in the environment, or by the
 method described in the next paragraph.</p>
 <p>Finally, a new module named wxversion.py is installed to the
-site-pacakges directory.  It can be used to manipulate the sys.path at
+site-packages directory.  It can be used to manipulate the sys.path at
 runtime so your applications can select which version of wxPython they
 would like to to have imported.  You use it like this:</p>
 <pre class="literal-block">

@@ -403,7 +403,7 @@ Sizers
 ------
 
 The hack allowing the old "option" keyword parameter has been removed.
-If you use keyword args with w.xSizer Add, Insert, or Prepend methods
+If you use keyword args with wx.Sizer Add, Insert, or Prepend methods
 then you will need to use the ``proportion`` name instead of
 ``option``.  (The ``proportion`` keyword was also allowed in 2.4.2.4.)
 
@@ -441,14 +441,14 @@ First a bit about how things used to work:
       flag then when layout was calculated the item's ``GetBestSize``
       would be used to reset the minimal size that the sizer used.
 
-The main thrust of the new Sizer changes was to make behaviour like
+The main thrust of the new Sizer changes was to make behavior like
 ``wx.ADJUST_MINSIZE`` be the default, and also to push the tracking of
 the minimal size to the window itself (since it knows its own needs)
 instead of having the sizer take care of it.  Consequently these
 changes were made:
 
     * The ``wx.FIXED_MINSIZE`` flag was added to allow for the old
-      behaviour.  When this flag is used the size a window has when
+      behavior.  When this flag is used the size a window has when
       added to the sizer will be treated as its minimal size and it
       will not be readjusted on each layout.
 
@@ -843,9 +843,9 @@ Multi-Version Installs
 
 **[Changed in 2.5.3.x]** 
 
-Starting with 2.5.3.0 the wx and wxPython pacakge directories will be
+Starting with 2.5.3.0 the wx and wxPython package directories will be
 installed in a subdirectory of the site-packages directory, instead of
-directly in site-pacakges.  This is done to help facilitate having
+directly in site-packages.  This is done to help facilitate having
 multiple versions of wxPython installed side-by-side.  Why would you
 want to do this?  One possible scenario is you have an app that
 requires wxPython 2.4 but you want to use the newest 2.5 to do your
@@ -869,7 +869,7 @@ wx.pth file, or by setting PYTHONPATH in the environment, or by the
 method described in the next paragraph.
 
 Finally, a new module named wxversion.py is installed to the
-site-pacakges directory.  It can be used to manipulate the sys.path at
+site-packages directory.  It can be used to manipulate the sys.path at
 runtime so your applications can select which version of wxPython they
 would like to to have imported.  You use it like this::
 
