@@ -19,6 +19,7 @@
 #include "wx/stubs/glcanvas.h"
 #endif
 
+#include "wx/app.h"
 class WXDLLEXPORT wxGLApp : public wxApp
 {
 public:
