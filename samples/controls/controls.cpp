@@ -760,8 +760,9 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
     wxStaticBitmap *bmpStatic = new wxStaticBitmap(panel, -1, icon,
                                                    wxPoint(10, 10));
 
-    bmpStatic = new wxStaticBitmap(panel, -1, wxNullIcon, wxPoint(50, 10));
-    bmpStatic->SetIcon(wxArtProvider::GetIcon(wxART_QUESTION));
+    // VZ: don't leak memory
+    // bmpStatic = new wxStaticBitmap(panel, -1, wxNullIcon, wxPoint(50, 10));
+    // bmpStatic->SetIcon(wxArtProvider::GetIcon(wxART_QUESTION));
 #endif // !Motif
 
     wxBitmap bitmap( 100, 100 );
