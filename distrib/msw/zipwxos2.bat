@@ -49,6 +49,8 @@ if direxist %dest%\wxWindows-%version% erase /sxyz %dirname%\wxWindows-%version%
 mkdir %dest%\wxWindows-%version%
 cd %dest%\wxWindows-%version%
 unzip32 ..\wxOS2-%version%.zip
+echo Overwriting with OS2-specific versions of configure files...
+unzip32 -o %src%\distrib\os2\os2-specific.zip
 erase /Y src\gtk\descrip.mms src\motif\descrip.mms docs\pdf\*.pdf
 erase /Y src\tiff\*.mcp src\jpeg\*.mcp src\png\*.mcp src\zlib\*.mcp
 erase /SXY docs\html\dialoged docs\html\tex2rtf
