@@ -60,7 +60,7 @@ $(CPPFLAGS) /Fo$@ /c /Tp $<
 
 {..\common}.c{..\common\$D}.obj:
 	cl @<<
-$(CPPFLAGS) /Fo$@ /c /Tc $<
+$(CPPFLAGS2) /Fo$@ /c /Tc $<
 <<
 
 {..\msw}.cpp{..\msw\$D}.obj:
