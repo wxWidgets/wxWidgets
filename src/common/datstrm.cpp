@@ -204,6 +204,11 @@ void wxDataStream::WriteDouble(double d)
   if (!m_ostream)
     return;
 
+#if USE_APPLE_IEEE
   ConvertToIeeeExtended(d, (unsigned char *)buf);
+#else
+#	pragma warning "wxDataStream::WriteDouble() not using IeeeExtended - will not work!"
+ buf[0] = '\0';
+#endif
   m_ostream->write(buf, 10);
 }
