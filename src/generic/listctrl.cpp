@@ -2361,6 +2361,8 @@ wxRect wxListMainWindow::GetLineHighlightRect(size_t line) const
 
 long wxListMainWindow::HitTestLine(size_t line, int x, int y) const
 {
+    wxASSERT_MSG( line < GetItemCount(), _T("invalid line in HitTestLine") );
+
     wxListLineData *ld = GetLine(line);
 
     if ( ld->HasImage() && GetLineIconRect(line).Inside(x, y) )
@@ -4105,18 +4107,22 @@ long wxListMainWindow::HitTest( int x, int y, int &flags )
 {
     CalcUnscrolledPosition( x, y, &x, &y );
 
+    size_t count = GetItemCount();
+
     if ( HasFlag(wxLC_REPORT) )
     {
         size_t current = y / GetLineHeight();
-        flags = HitTestLine(current, x, y);
-        if ( flags )
-            return current;
+        if ( current < count )
+        {
+            flags = HitTestLine(current, x, y);
+            if ( flags )
+                return current;
+        }
     }
     else // !report
     {
         // TODO: optimize it too! this is less simple than for report view but
         //       enumerating all items is still not a way to do it!!
-        size_t count = GetItemCount();
         for ( size_t current = 0; current < count; current++ )
         {
             flags = HitTestLine(current, x, y);
