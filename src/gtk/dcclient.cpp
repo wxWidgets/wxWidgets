@@ -427,7 +427,7 @@ void wxWindowDC::DoFloodFill( wxCoord x, wxCoord y,
     memdc.SelectObject(wxNullBitmap);
 
     wxImage image = bitmap.ConvertToImage();
-    image.DoFloodFill (x,y, GetBrush(), col, style, GetLogicalFunction());
+    //image.DoFloodFill (x,y, GetBrush(), col, style, GetLogicalFunction());
     bitmap = wxBitmap(image);
     memdc.SelectObject(bitmap);
     Blit(0, 0, width, height, &memdc, 0, 0);
