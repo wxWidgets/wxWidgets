@@ -693,7 +693,7 @@ DnDFrame::DnDFrame(wxFrame *frame, char *title, int x, int y, int w, int h)
     file_menu->Append(Menu_Quit, "E&xit");
 
     wxMenu *log_menu = new wxMenu;
-    log_menu->Append(Menu_Clear, "Clear\tDel");
+    log_menu->Append(Menu_Clear, "Clear\tCtrl-L");
 
     wxMenu *help_menu = new wxMenu;
     help_menu->Append(Menu_Help, "&Help...");
@@ -869,6 +869,8 @@ void DnDFrame::OnHelp(wxCommandEvent& /* event */)
 void DnDFrame::OnLogClear(wxCommandEvent& /* event */ )
 {
     m_ctrlLog->Clear();
+    m_ctrlText->Clear();
+    m_ctrlFile->Clear();
 }
 
 void DnDFrame::OnLeftDown(wxMouseEvent &WXUNUSED(event) )
@@ -879,16 +881,16 @@ void DnDFrame::OnLeftDown(wxMouseEvent &WXUNUSED(event) )
         wxTextDataObject textData(m_strText);
 /*
         wxFileDataObject textData;
-	textData.AddFile( "/file1.txt" );
-	textData.AddFile( "/file2.txt" );
+        textData.AddFile( "/file1.txt" );
+        textData.AddFile( "/file2.txt" );
 */
         wxDropSource source(textData, this
 #ifdef __WXMSW__
-                            ,wxCURSOR_PENCIL,            // for copy
+                            ,wxCURSOR_PENCIL,           // for copy
                             wxCURSOR_SPRAYCAN,          // for move
-                            wxCURSOR_QUESTION_ARROW   // for nothing
+                            wxCURSOR_QUESTION_ARROW     // for nothing
 #endif
-			    );
+                            );
 
         const char *pc;
 

@@ -126,12 +126,14 @@ void wxDataFormat::SetId( const wxChar *id )
 
 void wxDataFormat::PrepareFormats()
 {
+    // VZ: GNOME included in RedHat 6.1 uses the MIME types below and not the
+    //     atoms STRING and file:ALL as the old code was
     if (!g_textAtom)
-        g_textAtom = gdk_atom_intern( "STRING", FALSE );
+        g_textAtom = gdk_atom_intern( "text/plain", FALSE );
     if (!g_pngAtom)
         g_pngAtom = gdk_atom_intern( "image/png", FALSE );
     if (!g_fileAtom)
-        g_fileAtom = gdk_atom_intern( "file:ALL", FALSE );
+        g_fileAtom = gdk_atom_intern( "text/uri-list", FALSE );
 }
 
 //-------------------------------------------------------------------------
@@ -199,21 +201,51 @@ size_t wxFileDataObject::GetDataSize() const
 
 bool wxFileDataObject::SetData(size_t size, const void *buf)
 {
+    // VZ: old format
+#if 0
     // filenames are stores as a string with #0 as deliminators
-
     const char *filenames = (const char*) buf;
     size_t pos = 0;
     for(;;)
     {
         if (filenames[0] == 0)
-	    break;
-	if (pos >= size)
-	    break;
+            break;
+        if (pos >= size)
+            break;
         wxString file( filenames );  // this returns the first file
         AddFile( file );
-	pos += file.Len()+1;
-	filenames += file.Len()+1;
+        pos += file.Len()+1;
+        filenames += file.Len()+1;
     }
+#else // 1
+    m_filenames.Empty();
+
+    // the text/uri-list format is a sequence of URIs (filenames prefixed by
+    // "file:" as far as I see) delimited by "\r\n" of total length size
+    // (I wonder what happens if the file has '\n' in its filename??)
+    wxString filename;
+    for ( const char *p = (const char *)buf; *p; p++ )
+    {
+        if ( *p == '\r' && *(p+1) == '\n' )
+        {
+            static const int lenPrefix = 5; // strlen("file:")
+            if ( filename.Left(lenPrefix).MakeLower() == _T("file:") )
+            {
+                filename.erase(0, lenPrefix);
+            }
+
+            AddFile(filename);
+            filename.Empty();
+
+            // skip '\r'
+            p++;
+        }
+        else
+        {
+            filename += *p;
+        }
+    }
+#endif // 0/1
 
     return TRUE;
 }

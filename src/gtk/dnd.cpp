@@ -359,7 +359,7 @@ wxDragResult wxDropTarget::OnDragOver( wxCoord WXUNUSED(x),
 
     // disable the debug message from GetMatchingPair() - there are too many
     // of them otherwise
-#ifdef __WXDEBUG__
+#if 0 //def __WXDEBUG__
     wxLogNull noLog;
 #endif // Debug
 
