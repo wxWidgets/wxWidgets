@@ -1,6 +1,6 @@
 # Note that this is NOT a relocatable package
 %define pref /usr
-%define ver 2.5.3
+%define ver 2.5.4
 %define rel 1
 
 Summary: The WINE port of the wxWindows library

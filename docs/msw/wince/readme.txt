@@ -1,9 +1,9 @@
 
   =================================================
-  Welcome to wxWidgets/CE 2.5.3
+  Welcome to wxWidgets/CE 2.5.4
   =================================================
 
-You have downloaded version 2.5.3 of the Windows CE port of
+You have downloaded version 2.5.4 of the Windows CE port of
 the wxWidgets GUI library. This runs on PocketPC 2002,
 SmartPhone 2002, and Windows CE .NET 4.x.
 

@@ -1,4 +1,4 @@
-wxWidgets 2.5.3
+wxWidgets 2.5.4
 ---------------
 
 *** Please note that this is an UNSTABLE DEVELOPMENT SNAPSHOT.

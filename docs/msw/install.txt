@@ -1,7 +1,7 @@
-Installing wxWidgets 2.5.3
+Installing wxWidgets 2.5.4
 --------------------------
 
-This is wxWidgets 2.5.3 for Microsoft Windows 9x/ME, Windows NT, Windows 2000
+This is wxWidgets 2.5.4 for Microsoft Windows 9x/ME, Windows NT, Windows 2000
 and Windows XP. This is an unstable development release. Note that unstable in
 this context doesn't mean that it crashes a lot, just that the library API may
 change in backwards incompatible way during the 2.5 branch lifetime.
@@ -263,7 +263,7 @@ Metrowerks CodeWarrior compilation
 ----------------------------------
 
 1. CodeWarrior Pro7 project files in XML format are already
-   included in wxMSW-2.5.3.zip and the setup version.
+   included in wxMSW-2.5.4.zip and the setup version.
 
 2. Review the file include\wx\msw\setup.h (or include\wx\msw\setup0.h if
    you are working from the CVS version) to make sure the settings reflect
