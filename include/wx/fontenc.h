@@ -22,7 +22,7 @@ enum wxFontEncoding
     wxFONTENCODING_ISO8859_1,       // West European (Latin1)
     wxFONTENCODING_ISO8859_2,       // Central and East European (Latin2)
     wxFONTENCODING_ISO8859_3,       // Esperanto (Latin3)
-    wxFONTENCODING_ISO8859_4,       // Baltic languages (Estonian) (Latin4)
+    wxFONTENCODING_ISO8859_4,       // Baltic (old) (Latin4)
     wxFONTENCODING_ISO8859_5,       // Cyrillic
     wxFONTENCODING_ISO8859_6,       // Arabic
     wxFONTENCODING_ISO8859_7,       // Greek
@@ -33,7 +33,7 @@ enum wxFontEncoding
     wxFONTENCODING_ISO8859_12,      // doesn't exist currently, but put it
                                     // here anyhow to make all ISO8859
                                     // consecutive numbers
-    wxFONTENCODING_ISO8859_13,      // Latin7
+    wxFONTENCODING_ISO8859_13,      // Baltic (Latin7)
     wxFONTENCODING_ISO8859_14,      // Latin8
     wxFONTENCODING_ISO8859_15,      // Latin9 (a.k.a. Latin0, includes euro)
     wxFONTENCODING_ISO8859_MAX,
