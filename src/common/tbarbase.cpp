@@ -611,8 +611,10 @@ void wxToolBarBase::OnMouseEnter(int id)
     wxFrame *frame = wxDynamicCast(GetParent(), wxFrame);
     if( frame )
     {
-        wxToolBarToolBase* tool = id == wxID_ANY ? (wxToolBarToolBase*)0 : FindById(id);
-        wxString help = tool ? tool->GetLongHelp() : wxString();
+        wxString help;
+        wxToolBarToolBase* tool = id == wxID_ANY ? (wxToolBarToolBase*)NULL : FindById(id);
+        if(tool)
+            help = tool->GetLongHelp();
         frame->DoGiveHelp( help, id != wxID_ANY );
     }
 
