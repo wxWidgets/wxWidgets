@@ -98,7 +98,7 @@ bool wxStatusBarGeneric::Create(wxWindow *parent,
   return success;
 }
 
-void wxStatusBarGeneric::SetFieldsCount(int number, const int widths[])
+void wxStatusBarGeneric::SetFieldsCount(int number, const int *widths)
 {
   m_nFields = number;
 
