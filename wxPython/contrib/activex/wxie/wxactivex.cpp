@@ -415,7 +415,7 @@ void wxActiveX::CreateActiveX(REFCLSID clsid)
         // Update by GBR to resize older controls
         wxSizeEvent szEvent;
         szEvent.m_size = wxSize(w, h) ;
-        AddPendingEvent(szEvent);
+        GetEventHandler()->AddPendingEvent(szEvent);
     };
 }
 
@@ -909,7 +909,7 @@ public:
         if (func.hasOut)
         {
             int nArg = min(func.params.size(), pDispParams->cArgs);
-            m_activeX->GetParent()->ProcessEvent(event);
+            m_activeX->GetEventHandler()->ProcessEvent(event);
             for (int i = 0; i < nArg; i++)
             {
                 VARIANTARG& va = pDispParams->rgvarg[i];
@@ -924,7 +924,7 @@ public:
             };
         }
         else
-            m_activeX->GetParent()->AddPendingEvent(event);
+            m_activeX->GetEventHandler()->AddPendingEvent(event);
 
     };
 
