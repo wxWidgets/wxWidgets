@@ -417,23 +417,23 @@ bool wxUpdateUIEvent::CanUpdate(wxWindowBase *win)
 
     if (sm_updateInterval == -1)
         return false;
-    else if (sm_updateInterval == 0)
+
+    if (sm_updateInterval == 0)
         return true;
-    else
-    {
+
 #if wxUSE_STOPWATCH && wxUSE_LONGLONG
-        wxLongLong now = wxGetLocalTimeMillis();
-        if (now > (sm_lastUpdate + sm_updateInterval))
-        {
-            return true;
-        }
-#else
-        // If we don't have wxStopWatch or wxLongLong, we
-        // should err on the safe side and update now anyway.
+    wxLongLong now = wxGetLocalTimeMillis();
+    if (now > (sm_lastUpdate + sm_updateInterval))
+    {
         return true;
-#endif
     }
+
     return false;
+#else
+    // If we don't have wxStopWatch or wxLongLong, we
+    // should err on the safe side and update now anyway.
+    return true;
+#endif
 }
 
 // Reset the update time to provide a delay until the next
