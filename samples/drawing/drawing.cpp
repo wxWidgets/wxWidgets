@@ -1262,3 +1262,4 @@ wxColour MyFrame::SelectColour()
 
     return col;
 }
+
