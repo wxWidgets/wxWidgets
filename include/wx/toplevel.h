@@ -140,9 +140,9 @@ protected:
     virtual bool IsOneOfBars(const wxWindow *WXUNUSED(win)) const
         { return FALSE; }
 
-    // check if we should exit the program after deleting another top level
+    // check if we should exit the program after deleting this top level
     // window (this is used in common dtor and wxMSW code)
-    static bool IsLastBeforeExit();
+    bool IsLastBeforeExit() const;
 
     // send the iconize event, return TRUE if processed
     bool SendIconizeEvent(bool iconized = TRUE);

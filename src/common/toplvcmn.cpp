@@ -86,12 +86,12 @@ bool wxTopLevelWindowBase::Destroy()
     return TRUE;
 }
 
-/* static */
-bool wxTopLevelWindowBase::IsLastBeforeExit()
+bool wxTopLevelWindowBase::IsLastBeforeExit() const
 {
     // we exit the application if there are no more top level windows left
     // normally but wxApp can prevent this from happening
-    return (wxTopLevelWindows.GetCount() == 1) &&
+    return wxTopLevelWindows.GetCount() == 1 &&
+            wxTopLevelWindows.GetFirst()->GetData() == (wxWindow *)this &&
             wxTheApp && wxTheApp->GetExitOnFrameDelete();
 }
 
