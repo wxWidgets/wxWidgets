@@ -127,6 +127,12 @@ $  ass $disk2:[joukj.public.gtk.gtk.glib],-
  -Many thanks for testing and reporting problems to:
     -Walter Braeu
 
+
+ -Known problems :
+   -The calendar sample in wxMOTIF puts the boxes of the month and year
+     selection on top of each other.
+     
+     
 Finally :
  I like the idea of Robert Roebling that CD's with classical music should be
 send to the authors.
