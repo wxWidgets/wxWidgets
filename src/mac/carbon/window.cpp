@@ -46,7 +46,9 @@
 
 #define wxWINDOW_HSCROLL 5998
 #define wxWINDOW_VSCROLL 5997
-#define MAC_SCROLLBAR_SIZE 16
+
+#define MAC_SCROLLBAR_SIZE 15
+#define MAC_SMALL_SCROLLBAR_SIZE 11
 
 #include "wx/mac/uma.h"
 #ifndef __DARWIN__
@@ -513,10 +515,13 @@ pascal OSStatus wxMacSetupControlBackground( ControlRef iControl , SInt16 iMessa
                 wxWindow*  wx = (wxWindow*) wxFindControlFromMacControl( iControl ) ;
                 if ( wx != NULL )
                 {
+                    /*
                     const wxBrush &brush = wx->MacGetBackgroundBrush() ;
                     if  ( brush.Ok() )
                     {
                         wxDC::MacSetupBackgroundForCurrentPort( brush ) ;
+                        */
+                        // this clipping is only needed for non HIView
                         
                         RgnHandle clip = NewRgn() ;
                         int x = 0 , y = 0;
@@ -528,6 +533,7 @@ pascal OSStatus wxMacSetupControlBackground( ControlRef iControl , SInt16 iMessa
                         DisposeRgn( clip ) ;
 
                         status = noErr ;
+                        /*
                     }
                     else if ( wx->MacIsUserPane() )
                     {
@@ -535,6 +541,7 @@ pascal OSStatus wxMacSetupControlBackground( ControlRef iControl , SInt16 iMessa
                         // setup of our parent ourselves
                         status = SetUpControlBackground( (ControlRef) wx->GetParent()->GetHandle() , iDepth , iIsColor ) ;
                     }
+                    */
                 }
             }
             break ;
@@ -897,6 +904,8 @@ bool wxWindowMac::SetBackgroundColour(const wxColour& col )
     }
     MacSetBackgroundBrush( brush ) ;
         
+    MacUpdateControlFont() ;
+    
     return true ;
 }
 
@@ -1347,6 +1356,7 @@ void wxWindowMac::DoGetClientSize(int *x, int *y) const
     ww -= MacGetLeftBorderSize(  )  + MacGetRightBorderSize(  ) ;
     hh -= MacGetTopBorderSize(  ) + MacGetBottomBorderSize( );
     */
+    /*
     if ( (m_vScrollBar && m_vScrollBar->IsShown()) || (m_hScrollBar  && m_hScrollBar->IsShown()) )
     {
         int x1 = 0 ;
@@ -1374,7 +1384,7 @@ void wxWindowMac::DoGetClientSize(int *x, int *y) const
 
         if (m_hScrollBar  && m_hScrollBar->IsShown() )
         {
-            hh -= MAC_SCROLLBAR_SIZE;
+            hh -= m_hScrollBar->GetSize().y ; // MAC_SCROLLBAR_SIZE ;
             if ( h-y1 >= totH )
             {
                 hh += 1 ;
@@ -1382,12 +1392,21 @@ void wxWindowMac::DoGetClientSize(int *x, int *y) const
         }
         if (m_vScrollBar  && m_vScrollBar->IsShown() )
         {
-            ww -= MAC_SCROLLBAR_SIZE;
+            ww -= m_vScrollBar->GetSize().x ; // MAC_SCROLLBAR_SIZE;
             if ( w-x1 >= totW )
             {
                 ww += 1 ;
             }
         }
+    }
+    */
+    if (m_hScrollBar  && m_hScrollBar->IsShown() )
+    {
+        hh -= m_hScrollBar->GetSize().y ; // MAC_SCROLLBAR_SIZE ;
+    }
+    if (m_vScrollBar  && m_vScrollBar->IsShown() )
+    {
+        ww -= m_vScrollBar->GetSize().x ; // MAC_SCROLLBAR_SIZE;
     }
     if(x)   *x = ww;
     if(y)   *y = hh;
@@ -1500,17 +1519,20 @@ void wxWindowMac::DoSetToolTip(wxToolTip *tooltip)
 
 void wxWindowMac::DoMoveWindow(int x, int y, int width, int height)
 {
+    // this is never called for a toplevel window, so we know we have a parent
     int former_x , former_y , former_w, former_h ;
-#if !TARGET_API_MAC_OSX
+
+    // Get true coordinates of former position
     DoGetPosition( &former_x , &former_y ) ;
     DoGetSize( &former_w , &former_h ) ;
-#else
-    MacGetPositionAndSizeFromControl( former_x , former_y , former_w , former_h ) ;
-    former_x -= MacGetLeftBorderSize() ;
-    former_y -= MacGetTopBorderSize() ;
-    former_w += MacGetLeftBorderSize() + MacGetRightBorderSize() ;
-    former_h += MacGetTopBorderSize() + MacGetBottomBorderSize() ;
-#endif
+
+    wxWindow *parent = GetParent();
+    if ( parent )
+    {
+        wxPoint pt(parent->GetClientAreaOrigin());
+        former_x += pt.x ;
+        former_y += pt.y ;
+    }
 
     int actualWidth = width;
     int actualHeight = height;
@@ -1542,6 +1564,16 @@ void wxWindowMac::DoMoveWindow(int x, int y, int width, int height)
     {
         // we don't adjust twice for the origin
         Rect r = wxMacGetBoundsForControl(this , wxPoint( actualX,actualY), wxSize( actualWidth, actualHeight ) , false ) ;
+#if TARGET_API_MAC_OSX
+        // this is in window relative coordinate, as this parent may have a border, its physical position is offset by this border
+        if ( ! GetParent()->IsTopLevel() )
+        {
+            r.left -= GetParent()->MacGetLeftBorderSize() ;
+            r.top -= GetParent()->MacGetTopBorderSize() ;
+            r.right -= GetParent()->MacGetLeftBorderSize() ;
+            r.bottom -= GetParent()->MacGetTopBorderSize() ;
+        }
+#endif
         bool vis = m_peer->IsVisible();
 
         // the HIViewSetFrame call itself should invalidate the areas, but when testing with the UnicodeTextCtrl it does not !
@@ -1925,6 +1957,9 @@ void wxWindowMac::Refresh(bool eraseBack, const wxRect *rect)
         SectRgn( (RgnHandle) MacGetVisibleRegion().GetWXHRGN() , update , update ) ;
         wxPoint origin = GetClientAreaOrigin() ;
         OffsetRgn( update, origin.x , origin.y ) ;    
+        // right now this is wx' window coordinates, as our native peer does not have borders, this is
+        // inset
+        OffsetRgn( update , -MacGetLeftBorderSize() , -MacGetTopBorderSize() ) ;
         m_peer->SetNeedsDisplay( true , update) ;    
     }
 #else
@@ -2572,6 +2607,7 @@ wxRegion wxWindowMac::MacGetVisibleRegion( bool includeOuterStructures )
         if ( includeOuterStructures )
             InsetRect( &r , -3 , -3 ) ;
         RectRgn( visRgn , &r ) ;
+
         if ( !IsTopLevel() )
         {
             wxWindow* child = this ;
@@ -2716,50 +2752,25 @@ void wxWindowMac::MacCreateScrollBars( long style )
 {
     wxASSERT_MSG( m_vScrollBar == NULL && m_hScrollBar == NULL , wxT("attempt to create window twice") ) ;
 
-#if 0
-
-    bool hasBoth = ( style & wxVSCROLL ) && ( style & wxHSCROLL ) ;
-    int adjust = hasBoth ? MAC_SCROLLBAR_SIZE - 1: 0 ;
-    int width, height ;
-    GetClientSize( &width , &height ) ;
-
-    wxPoint vPoint(width-MAC_SCROLLBAR_SIZE, 0) ;
-    wxSize vSize(MAC_SCROLLBAR_SIZE, height - adjust) ;
-    wxPoint hPoint(0 , height-MAC_SCROLLBAR_SIZE ) ;
-    wxSize hSize( width - adjust, MAC_SCROLLBAR_SIZE) ;
-
-    m_vScrollBar = new wxScrollBar(this, wxWINDOW_VSCROLL, vPoint,
-        vSize , wxVERTICAL);
-
-    if ( style & wxVSCROLL )
-    {
-
-    }
-    else
-    {
-        m_vScrollBar->Show(false) ;
-    }
-    m_hScrollBar = new wxScrollBar(this, wxWINDOW_HSCROLL, hPoint,
-        hSize , wxHORIZONTAL);
-    if ( style  & wxHSCROLL )
-    {
-    }
-    else
-    {
-        m_hScrollBar->Show(false) ;
-    }
-#else  
     if ( style & ( wxVSCROLL | wxHSCROLL ) )
     {
         bool hasBoth = ( style & wxVSCROLL ) && ( style & wxHSCROLL ) ;
-        int adjust = hasBoth ? MAC_SCROLLBAR_SIZE - 1: 0 ;
+        int scrlsize = MAC_SCROLLBAR_SIZE ;
+    	wxWindowVariant variant = wxWINDOW_VARIANT_NORMAL ;
+    	if ( GetWindowVariant() == wxWINDOW_VARIANT_SMALL || GetWindowVariant() == wxWINDOW_VARIANT_MINI )
+    	{
+    		scrlsize = MAC_SMALL_SCROLLBAR_SIZE ;
+    		variant = wxWINDOW_VARIANT_SMALL ;
+    	}
+
+        int adjust = hasBoth ? scrlsize - 1: 0 ;
         int width, height ;
         GetClientSize( &width , &height ) ;
 
-        wxPoint vPoint(width-MAC_SCROLLBAR_SIZE, 0) ;
-        wxSize vSize(MAC_SCROLLBAR_SIZE, height - adjust) ;
-        wxPoint hPoint(0 , height-MAC_SCROLLBAR_SIZE ) ;
-        wxSize hSize( width - adjust, MAC_SCROLLBAR_SIZE) ;
+        wxPoint vPoint(width-scrlsize, 0) ;
+        wxSize vSize(scrlsize, height - adjust) ;
+        wxPoint hPoint(0 , height-scrlsize ) ;
+        wxSize hSize( width - adjust, scrlsize) ;
 
 
         if ( style & wxVSCROLL )
@@ -2774,7 +2785,6 @@ void wxWindowMac::MacCreateScrollBars( long style )
                 hSize , wxHORIZONTAL);
         }
     }
-#endif
 
 
     // because the create does not take into account the client area origin
@@ -2787,7 +2797,8 @@ void wxWindowMac::MacRepositionScrollBars()
         return ;
     
     bool hasBoth = ( m_hScrollBar && m_hScrollBar->IsShown()) && ( m_vScrollBar && m_vScrollBar->IsShown()) ;
-    int adjust = hasBoth ? MAC_SCROLLBAR_SIZE - 1 : 0 ;
+    int scrlsize = m_hScrollBar ? m_hScrollBar->GetSize().y : ( m_vScrollBar ? m_vScrollBar->GetSize().x : MAC_SCROLLBAR_SIZE ) ;
+    int adjust = hasBoth ? scrlsize - 1 : 0 ;
 
     // get real client area
 
@@ -2802,7 +2813,7 @@ void wxWindowMac::MacRepositionScrollBars()
     wxSize vSize(MAC_SCROLLBAR_SIZE, height - adjust) ;
     wxPoint hPoint(0 , height-MAC_SCROLLBAR_SIZE ) ;
     wxSize hSize( width - adjust, MAC_SCROLLBAR_SIZE) ;
-
+/*
     int x = 0 ;
     int y = 0 ;
     int w ;
@@ -2848,7 +2859,7 @@ void wxWindowMac::MacRepositionScrollBars()
         vSize.y += 1 ;
         hPoint.y += 1 ;
     }
-
+*/
     if ( m_vScrollBar )
     {
         m_vScrollBar->SetSize( vPoint.x , vPoint.y, vSize.x, vSize.y , wxSIZE_ALLOW_MINUS_ONE);
