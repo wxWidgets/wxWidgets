@@ -88,24 +88,17 @@ class WXDLLEXPORT wxTreeTextCtrl: public wxTextCtrl
 public:
     wxTreeTextCtrl(wxGenericTreeCtrl *owner, wxGenericTreeItem *item);
 
-    // wxGenericTreeCtrl can use this one to abandon editing the given item,
-    // it's not an error to call it if this item is not being edited
-    void StopEditing(wxGenericTreeItem *item)
+    void StopEditing()
     {
-        if ( item == m_itemEdited )
-            DoStopEditing();
+        Finish();
+        m_owner->OnRenameCancelled(m_itemEdited);
     }
+    const wxGenericTreeItem* item() const { return m_itemEdited; }
 
 protected:
     void OnChar( wxKeyEvent &event );
     void OnKeyUp( wxKeyEvent &event );
     void OnKillFocus( wxFocusEvent &event );
-
-    void DoStopEditing()
-    {
-        Finish();
-        m_owner->OnRenameCancelled(m_itemEdited);
-    }
 
     bool AcceptChanges();
     void Finish();
@@ -302,7 +295,7 @@ static void EventFlagsToSelType(long style,
 }
 
 // check if the given item is under another one
-static bool IsDescendantOf(wxGenericTreeItem *parent, wxGenericTreeItem *item)
+static bool IsDescendantOf(const wxGenericTreeItem *parent, const wxGenericTreeItem *item)
 {
     while ( item )
     {
@@ -440,7 +433,7 @@ void wxTreeTextCtrl::OnChar( wxKeyEvent &event )
             break;
 
         case WXK_ESCAPE:
-            DoStopEditing();
+            StopEditing();
             break;
 
         default:
@@ -1505,11 +1498,30 @@ void wxGenericTreeCtrl::SendDeleteEvent(wxGenericTreeItem *item)
     ProcessEvent( event );
 }
 
+// Don't leave edit or selection on a child which is about to disappear
+void wxGenericTreeCtrl::ChildrenClosing(wxGenericTreeItem* item)
+{
+    if (m_textCtrl != NULL && item != m_textCtrl->item() && IsDescendantOf(item, m_textCtrl->item())) {
+        m_textCtrl->StopEditing();
+    }
+    if (item != m_key_current && IsDescendantOf(item, m_key_current)) {
+        m_key_current = NULL;
+    }
+    if (IsDescendantOf(item, m_select_me)) {
+        m_select_me = item;
+    }
+    if (item != m_current && IsDescendantOf(item, m_current)) {
+        m_current = NULL;
+        m_select_me = item;
+    }
+}
+
 void wxGenericTreeCtrl::DeleteChildren(const wxTreeItemId& itemId)
 {
     m_dirty = true;     // do this first so stuff below doesn't cause flicker
 
     wxGenericTreeItem *item = (wxGenericTreeItem*) itemId.m_pItem;
+    ChildrenClosing(item);
     item->DeleteChildren(this);
 }
 
@@ -1519,10 +1531,10 @@ void wxGenericTreeCtrl::Delete(const wxTreeItemId& itemId)
 
     wxGenericTreeItem *item = (wxGenericTreeItem*) itemId.m_pItem;
 
-    if ( m_textCtrl )
+    if (m_textCtrl != NULL && IsDescendantOf(item, m_textCtrl->item()))
     {
         // can't delete the item being edited, cancel editing it first
-        m_textCtrl->StopEditing(item);
+        m_textCtrl->StopEditing();
     }
 
     wxGenericTreeItem *parent = item->GetParent();
@@ -1656,6 +1668,7 @@ void wxGenericTreeCtrl::Collapse(const wxTreeItemId& itemId)
         return;
     }
 
+    ChildrenClosing(item);
     item->Collapse();
 
 #if 0  // TODO why should items be collapsed recursively?

@@ -503,6 +503,7 @@ protected:
     bool TagAllChildrenUntilLast(wxGenericTreeItem *crt_item, wxGenericTreeItem *last_item, bool select);
     bool TagNextChildren(wxGenericTreeItem *crt_item, wxGenericTreeItem *last_item, bool select);
     void UnselectAllChildren( wxGenericTreeItem *item );
+    void ChildrenClosing(wxGenericTreeItem* item);
 
 private:
     DECLARE_EVENT_TABLE()
