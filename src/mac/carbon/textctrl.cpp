@@ -2616,6 +2616,28 @@ OSStatus wxMacMLTEClassicControl::DoCreate()
                               kTXNSystemDefaultEncoding,
                               &m_txn, &m_txnFrameID, NULL ) );
 
+    TXNCarbonEventInfo cInfo ;
+    
+    cInfo.useCarbonEvents = false ;
+    cInfo.filler = 0 ;
+    cInfo.flags = 0 ;
+    cInfo.fDictionary = NULL ;
+
+    TXNControlTag iControlTags[] = 
+        { 
+            kTXNUseCarbonEvents ,
+        };
+    TXNControlData iControlData[] = 
+        { 
+            {(UInt32) &cInfo },
+        };
+        
+    int toptag = WXSIZEOF( iControlTags ) ;
+
+    verify_noerr( TXNSetTXNObjectControls( m_txn, false , toptag,
+                                        iControlTags, iControlData )) ;
+
+
 #ifdef __WXMAC_OSX__
     TXNRegisterScrollInfoProc( m_txn, gTXNScrollInfoProc, (SInt32) this);
 #endif
