@@ -232,11 +232,11 @@ bool wxHTTP::BuildRequest(const wxString& path, wxHTTP_Req req)
     SetHeader(wxT("User-Agent"), wxT("wxWidgets 2.x"));
 
   SaveState();
-#if wxUSE_THREADS
-  SetFlags( wxThread::IsMain() ? wxSOCKET_NONE : wxSOCKET_BLOCK );
-#else
-  SetFlags( wxSOCKET_NONE );
-#endif
+
+  // we may use non blocking sockets only if we can dispatch events from them
+  SetFlags( wxIsMainThread() && (wxTheApp && wxTheApp->IsMainLoopRunning())
+                ? wxSOCKET_NONE
+                : wxSOCKET_BLOCK );
   Notify(false);
 
   wxString buf;
