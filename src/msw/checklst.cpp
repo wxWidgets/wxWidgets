@@ -144,16 +144,14 @@ bool wxCheckListBoxItem::OnDrawItem(wxDC& dc, const wxRect& rc,
       HBITMAP hbmpOld = (HBITMAP)SelectObject(hdcMem, hbmpCheck);
 
       // then draw a check mark into it
-      RECT rect ;
-      rect.left   = 0 ;
-      rect.top    = 0 ;
-      rect.right  = nCheckWidth ;
-      rect.bottom = nCheckHeight ;
+#if defined(__WIN32__) && !defined(__SC__)
+      RECT rect;
+      rect.left   = 0;
+      rect.top    = 0;
+      rect.right  = nCheckWidth;
+      rect.bottom = nCheckHeight;
 
-#ifdef __WIN32__
-#ifndef __SC__
       DrawFrameControl(hdcMem, &rect, DFC_MENU, DFCS_MENUCHECK);
-#endif
 #else
       // In WIN16, draw a cross
       HPEN blackPen = CreatePen(PS_SOLID, 1, RGB(0, 0, 0));

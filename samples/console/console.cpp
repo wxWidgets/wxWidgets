@@ -33,10 +33,11 @@
 //#define TEST_CMDLINE
 //#define TEST_DIR
 //#define TEST_EXECUTE
+#define TEST_FILECONF
 //#define TEST_LOG
 //#define TEST_LONGLONG
 //#define TEST_MIME
-#define TEST_STRINGS
+//#define TEST_STRINGS
 //#define TEST_THREADS
 //#define TEST_TIME
 
@@ -188,6 +189,69 @@ static void TestExecute()
 }
 
 #endif // TEST_EXECUTE
+
+// ----------------------------------------------------------------------------
+// wxFileConfig
+// ----------------------------------------------------------------------------
+
+#ifdef TEST_FILECONF
+
+#include <wx/confbase.h>
+#include <wx/fileconf.h>
+
+static const struct FileConfTestData
+{
+    const wxChar *name;      // value name
+    const wxChar *value;     // the value from the file
+} fcTestData[] =
+{
+    { _T("value1"),                       _T("one") },
+    { _T("value2"),                       _T("two") },
+    { _T("novalue"),                      _T("default") },
+};
+
+static void TestFileConfRead()
+{
+    puts("*** testing wxFileConfig loading/reading ***");
+
+    wxFileConfig fileconf(_T("test"), wxEmptyString,
+                          _T("testdata.fc"), wxEmptyString,
+                          wxCONFIG_USE_RELATIVE_PATH);
+
+    // test simple reading
+    puts("\nReading config file:");
+    wxString defValue(_T("default")), value;
+    for ( size_t n = 0; n < WXSIZEOF(fcTestData); n++ )
+    {
+        const FileConfTestData& data = fcTestData[n];
+        value = fileconf.Read(data.name, defValue);
+        printf("\t%s = %s ", data.name, value.c_str());
+        if ( value == data.value )
+        {
+            puts("(ok)");
+        }
+        else
+        {
+            printf("(ERROR: should be %s)\n", data.value);
+        }
+    }
+
+    // test enumerating the entries
+    puts("\nEnumerating all root entries:");
+    long dummy;
+    wxString name;
+    bool cont = fileconf.GetFirstEntry(name, dummy);
+    while ( cont )
+    {
+        printf("\t%s = %s\n",
+               name.c_str(),
+               fileconf.Read(name.c_str(), _T("ERROR")).c_str());
+
+        cont = fileconf.GetNextEntry(name, dummy);
+    }
+}
+
+#endif // TEST_FILECONF
 
 // ----------------------------------------------------------------------------
 // MIME types
@@ -2048,8 +2112,8 @@ int main(int argc, char **argv)
         TestStringSub();
         TestStringFormat();
         TestStringFind();
-    }
         TestStringTokenizer();
+    }
 #endif // TEST_STRINGS
 
 #ifdef TEST_ARRAYS
@@ -2091,6 +2155,10 @@ int main(int argc, char **argv)
 #ifdef TEST_EXECUTE
     TestExecute();
 #endif // TEST_EXECUTE
+
+#ifdef TEST_FILECONF
+    TestFileConfRead();
+#endif // TEST_FILECONF
 
 #ifdef TEST_LOG
     wxString s;
