@@ -97,7 +97,6 @@ static HTREEITEM GetItemFromPoint(HWND hwndTV, int x, int y)
     tvht.pt.x = x;
     tvht.pt.y = y;
 
-    // TreeView_HitTest() doesn't do the right cast in mingw32 headers
     return (HTREEITEM)TreeView_HitTest(hwndTV, &tvht);
 }
 
@@ -152,7 +151,7 @@ static void SelectRange(HWND hwndTV,
 {
     // find the first (or last) item and select it
     bool cont = TRUE;
-    HTREEITEM htItem = TreeView_GetRoot(hwndTV);
+    HTREEITEM htItem = (HTREEITEM)TreeView_GetRoot(hwndTV);
     while ( htItem && cont )
     {
         if ( (htItem == htFirst) || (htItem == htLast) )
@@ -172,7 +171,7 @@ static void SelectRange(HWND hwndTV,
             }
         }
 
-        htItem = TreeView_GetNextVisible(hwndTV, htItem);
+        htItem = (HTREEITEM)TreeView_GetNextVisible(hwndTV, htItem);
     }
 
     // select the items in range
@@ -186,7 +185,7 @@ static void SelectRange(HWND hwndTV,
 
         cont = (htItem != htFirst) && (htItem != htLast);
 
-        htItem = TreeView_GetNextVisible(hwndTV, htItem);
+        htItem = (HTREEITEM)TreeView_GetNextVisible(hwndTV, htItem);
     }
 
     // unselect the rest
@@ -199,7 +198,7 @@ static void SelectRange(HWND hwndTV,
                 UnselectItem(hwndTV, htItem);
             }
 
-            htItem = TreeView_GetNextVisible(hwndTV, htItem);
+            htItem = (HTREEITEM)TreeView_GetNextVisible(hwndTV, htItem);
         }
     }
 
@@ -214,7 +213,7 @@ static void SelectRange(HWND hwndTV,
 static void SetFocus(HWND hwndTV, HTREEITEM htItem)
 {
     // the current focus
-    HTREEITEM htFocus = TreeView_GetSelection(hwndTV);
+    HTREEITEM htFocus = (HTREEITEM)TreeView_GetSelection(hwndTV);
 
     if ( htItem )
     {
@@ -1838,7 +1837,7 @@ long wxTreeCtrl::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
         // we handle.arrows and space, but not page up/down and home/end: the
         // latter should be easy, but not the former
 
-        HTREEITEM htSel = TreeView_GetSelection(GetHwnd());
+        HTREEITEM htSel = (HTREEITEM)TreeView_GetSelection(GetHwnd());
         if ( !m_htSelStart )
         {
             m_htSelStart = (WXHTREEITEM)htSel;
@@ -1871,9 +1870,9 @@ long wxTreeCtrl::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
             {
                 (void)wxControl::MSWWindowProc(nMsg, wParam, lParam);
 
-                HTREEITEM htNext =
-                    wParam == VK_UP ? TreeView_GetPrevVisible(GetHwnd(), htSel)
-                                    : TreeView_GetNextVisible(GetHwnd(), htSel);
+                HTREEITEM htNext = (HTREEITEM)(wParam == VK_UP
+                                    ? TreeView_GetPrevVisible(GetHwnd(), htSel)
+                                    : TreeView_GetNextVisible(GetHwnd(), htSel));
 
                 if ( !htNext )
                 {

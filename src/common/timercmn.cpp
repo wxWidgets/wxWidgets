@@ -224,11 +224,16 @@ long wxGetUTCTime()
 
             if (t0 != (time_t)-1 )
                 return (long)difftime(t1, t0) + (60 * 60 * 24 * 4);
-            wxLogSysError(_("Failed 2nd mktime"));
+            wxLogSysError(_("mktime() failed"));
         }
-        wxLogSysError(_("Failed gmtime"));
+        else
+        {
+            wxLogSysError(_("gmtime() failed"));
+        }
     }
-    wxLogSysError(_("Failed to get the UTC system time"));
+
+    wxLogError(_("Failed to get the UTC system time."));
+
     return -1;
 }
 
@@ -248,14 +253,15 @@ wxLongLong wxGetLocalTimeMillis()
         val *= tp.tv_sec;
         return (val + (tp.tv_usec / 1000));
     }
-   return 0;
+    return 0;
 #elif defined(HAVE_FTIME)
     struct timeb tp;
-    if ( ftime(&tp) == 0 )
-    {
-        val *= tp.time;
-        return (val + tp.millitm);
-    }
+
+    // ftime() is void and not int in some mingw32 headers, so don't test the
+    // return code (well, it shouldn't fail anyhow...)
+    (void)ftime(&tp);
+    val *= tp.time;
+    return (val + tp.millitm);
 #else
     // We use wxGetLocalTime() to get the seconds since
     // 00:00:00 Jan 1st 1970 and then whatever is available
@@ -279,6 +285,5 @@ wxLongLong wxGetLocalTimeMillis()
 #endif
 
     return val;
-
 #endif
 }

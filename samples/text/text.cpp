@@ -572,7 +572,9 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
     m_horizontal = new MyTextCtrl( this, -1, "Multiline text control with a horizontal scrollbar.",
       wxPoint(10,170), wxSize(140,70), wxTE_MULTILINE | wxHSCROLL );
     m_horizontal->SetFont(wxFont(18, wxSWISS, wxNORMAL, wxNORMAL,
-                                 FALSE, "", wxFONTENCODING_KOI8));
+                                 FALSE, "", wxFONTENCODING_ISO8859_2)); //wxFONTENCODING_KOI8));
+    //m_horizontal->SetValue("ËÁÖÅÔÓÑ ÕÄÁÞÎÙÍ");
+    m_horizontal->SetValue("®lu»ouèký kùò zbìsile èe¹tina «»");
 
     m_multitext = new MyTextCtrl( this, -1, "Multi line.",
       wxPoint(180,10), wxSize(240,70), wxTE_MULTILINE );

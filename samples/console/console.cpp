@@ -32,11 +32,13 @@
 //#define TEST_ARRAYS
 //#define TEST_CMDLINE
 //#define TEST_DIR
-//#define TEST_EXECUTE
-#define TEST_FILECONF
+#define TEST_EXECUTE
+//#define TEST_FILECONF
+//#define TEST_HASH
 //#define TEST_LOG
 //#define TEST_LONGLONG
 //#define TEST_MIME
+//#define TEST_SOCKETS
 //#define TEST_STRINGS
 //#define TEST_THREADS
 //#define TEST_TIME
@@ -176,16 +178,55 @@ static void TestExecute()
 
 #ifdef __UNIX__
     #define COMMAND "echo hi"
+    #define SHELL_COMMAND "echo hi from shell"
+    #define REDIRECT_COMMAND "date"
 #elif defined(__WXMSW__)
     #define COMMAND "command.com -c 'echo hi'"
+    #define SHELL_COMMAND "echo hi"
+    #define REDIRECT_COMMAND COMMAND
 #else
     #error "no command to exec"
 #endif // OS
 
-    if ( wxExecute(COMMAND) == 0 )
-        puts("\nOk.");
+    printf("Testing wxShell: ");
+    fflush(stdout);
+    if ( wxShell(SHELL_COMMAND) )
+        puts("Ok.");
     else
-        puts("\nError.");
+        puts("ERROR.");
+
+    printf("Testing wxExecute: ");
+    fflush(stdout);
+    if ( wxExecute(COMMAND, TRUE /* sync */) == 0 )
+        puts("Ok.");
+    else
+        puts("ERROR.");
+
+#if 0 // no, it doesn't work (yet?)
+    printf("Testing async wxExecute: ");
+    fflush(stdout);
+    if ( wxExecute(COMMAND) != 0 )
+        puts("Ok (command launched).");
+    else
+        puts("ERROR.");
+#endif // 0
+
+    printf("Testing wxExecute with redirection:\n");
+    wxArrayString output;
+    if ( wxExecute(REDIRECT_COMMAND, output) != 0 )
+    {
+        puts("ERROR.");
+    }
+    else
+    {
+        size_t count = output.GetCount();
+        for ( size_t n = 0; n < count; n++ )
+        {
+            printf("\t%s\n", output[n].c_str());
+        }
+
+        puts("Ok.");
+    }
 }
 
 #endif // TEST_EXECUTE
@@ -252,6 +293,92 @@ static void TestFileConfRead()
 }
 
 #endif // TEST_FILECONF
+
+// ----------------------------------------------------------------------------
+// wxHashTable
+// ----------------------------------------------------------------------------
+
+#ifdef TEST_HASH
+
+#include <wx/hash.h>
+
+struct Foo
+{
+    Foo(int n_) { n = n_; count++; }
+    ~Foo() { count--; }
+
+    int n;
+
+    static size_t count;
+};
+
+size_t Foo::count = 0;
+
+WX_DECLARE_LIST(Foo, wxListFoos);
+WX_DECLARE_HASH(Foo, wxListFoos, wxHashFoos);
+
+#include <wx/listimpl.cpp>
+
+WX_DEFINE_LIST(wxListFoos);
+
+static void TestHash()
+{
+    puts("*** Testing wxHashTable ***\n");
+
+    {
+        wxHashFoos hash;
+        hash.DeleteContents(TRUE);
+
+        printf("Hash created: %u foos in hash, %u foos totally\n",
+               hash.GetCount(), Foo::count);
+
+        static const int hashTestData[] =
+        {
+            0, 1, 17, -2, 2, 4, -4, 345, 3, 3, 2, 1,
+        };
+
+        size_t n;
+        for ( n = 0; n < WXSIZEOF(hashTestData); n++ )
+        {
+            hash.Put(hashTestData[n], n, new Foo(n));
+        }
+
+        printf("Hash filled: %u foos in hash, %u foos totally\n",
+               hash.GetCount(), Foo::count);
+
+        puts("Hash access test:");
+        for ( n = 0; n < WXSIZEOF(hashTestData); n++ )
+        {
+            printf("\tGetting element with key %d, value %d: ",
+                   hashTestData[n], n);
+            Foo *foo = hash.Get(hashTestData[n], n);
+            if ( !foo )
+            {
+                printf("ERROR, not found.\n");
+            }
+            else
+            {
+                printf("%d (%s)\n", foo->n,
+                       (size_t)foo->n == n ? "ok" : "ERROR");
+            }
+        }
+
+        printf("\nTrying to get an element not in hash: ");
+
+        if ( hash.Get(1234) || hash.Get(1, 0) )
+        {
+            puts("ERROR: found!");
+        }
+        else
+        {
+            puts("ok (not found)");
+        }
+    }
+
+    printf("Hash destroyed: %u foos left\n", Foo::count);
+}
+
+#endif // TEST_HASH
 
 // ----------------------------------------------------------------------------
 // MIME types
@@ -554,6 +681,39 @@ static void TestBitOperations()
 #undef RAND_LL
 
 #endif // TEST_LONGLONG
+
+// ----------------------------------------------------------------------------
+// sockets
+// ----------------------------------------------------------------------------
+
+#ifdef TEST_SOCKETS
+
+#include <wx/socket.h>
+
+static void TestSocketClient()
+{
+    puts("*** Testing wxSocketClient ***\n");
+
+    wxIPV4address addrDst;
+    addrDst.Hostname("www.wxwindows.org");
+    addrDst.Service(80);
+
+    wxSocketClient client;
+    if ( !client.Connect(addrDst) )
+    {
+        printf("ERROR: failed to connect to %s\n", addrDst.Hostname().c_str());
+    }
+    else
+    {
+        char buf[8192];
+
+        client.Write("get /front.htm\n", 17);
+        client.Read(buf, WXSIZEOF(buf));
+        printf("Server replied:\n%s", buf);
+    }
+}
+
+#endif // TEST_SOCKETS
 
 // ----------------------------------------------------------------------------
 // date time
@@ -2217,9 +2377,17 @@ int main(int argc, char **argv)
     }
 #endif // TEST_LONGLONG
 
+#ifdef TEST_HASH
+    TestHash();
+#endif // TEST_HASH
+
 #ifdef TEST_MIME
     TestMimeEnum();
 #endif // TEST_MIME
+
+#ifdef TEST_SOCKETS
+    TestSocketClient();
+#endif // TEST_SOCKETS
 
 #ifdef TEST_TIME
     if ( 0 )

@@ -205,15 +205,37 @@ long wxExecute( const wxString& command, bool sync, wxProcess *process )
     return lRc;
 }
 
-bool wxShell(const wxString& command)
+// ----------------------------------------------------------------------------
+// wxShell
+// ----------------------------------------------------------------------------
+
+static wxString wxMakeShellCommand(const wxString& command)
 {
     wxString cmd;
     if ( !command )
+    {
+        // just an interactive shell
         cmd = _T("xterm");
+    }
     else
-        cmd = command;
+    {
+        // execute command in a shell
+        cmd << _T("/bin/sh -c '") << command << _T('\'');
+    }
 
-    return wxExecute(cmd) != 0;
+    return cmd;
+}
+
+bool wxShell(const wxString& command)
+{
+    return wxExecute(wxMakeShellCommand(command), TRUE /* sync */) == 0;
+}
+
+bool wxShell(const wxString& command, wxArrayString& output)
+{
+    wxCHECK_MSG( !!command, FALSE, _T("can't exec shell non interactively") );
+
+    return wxExecute(wxMakeShellCommand(command), output);
 }
 
 #if wxUSE_GUI

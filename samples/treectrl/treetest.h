@@ -13,7 +13,15 @@
 class MyApp : public wxApp
 {
 public:
+    MyApp() { m_showImages = TRUE; }
+
     bool OnInit();
+
+    void SetShowImages(bool show) { m_showImages = show; }
+    bool ShowImages() const { return m_showImages; }
+
+private:
+    bool m_showImages;
 };
 
 class MyTreeItemData : public wxTreeItemData
@@ -65,6 +73,8 @@ public:
     void OnRMouseDClick(wxMouseEvent& event);
 
     void GetItemsRecursively(const wxTreeItemId& idParent, long cookie);
+
+    void CreateImageList(int size = 32);
 
     void AddTestItemsToTree(size_t numChildren, size_t depth);
 
@@ -125,7 +135,10 @@ public:
     void OnDelete(wxCommandEvent& event);
     void OnDeleteChildren(wxCommandEvent& event);
     void OnDeleteAll(wxCommandEvent& event);
+
     void OnRecreate(wxCommandEvent& event);
+    void OnToggleImages(wxCommandEvent& event);
+    void OnSetImageSize(wxCommandEvent& event);
     void OnCollapseAndReset(wxCommandEvent& event);
 
     void OnSetBold(wxCommandEvent& WXUNUSED(event)) { DoSetBold(TRUE); }
@@ -184,6 +197,8 @@ enum
     TreeTest_DeleteChildren,
     TreeTest_DeleteAll,
     TreeTest_Recreate,
+    TreeTest_ToggleImages,
+    TreeTest_SetImageSize,
     TreeTest_ToggleSel,
     TreeTest_CollapseAndReset,
     TreeTest_EnsureVisible,

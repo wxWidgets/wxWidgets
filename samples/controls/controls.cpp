@@ -1148,6 +1148,7 @@ void MyPanel::OnShowProgress( wxCommandEvent& WXUNUSED(event) )
                             max,    // range
                             this,   // parent
                             wxPD_CAN_ABORT |
+                            wxPD_AUTO_HIDE |
                             wxPD_APP_MODAL |
                             wxPD_ELAPSED_TIME |
                             wxPD_ESTIMATED_TIME |

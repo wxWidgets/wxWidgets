@@ -1496,10 +1496,12 @@ void wxTreeCtrl::SetImageList(wxImageList *imageList)
 {
     m_imageListNormal = imageList;
 
+    if ( !m_imageListNormal )
+        return;
+
     // Calculate a m_lineHeight value from the image sizes.
     // May be toggle off. Then wxTreeCtrl will spread when
     // necessary (which might look ugly).
-#if 1
     wxClientDC dc(this);
     m_lineHeight = (int)(dc.GetCharHeight() + 4);
     int width = 0, height = 0,
@@ -1515,7 +1517,6 @@ void wxTreeCtrl::SetImageList(wxImageList *imageList)
         m_lineHeight += 2;                 // at least 2 pixels
     else
         m_lineHeight += m_lineHeight/10;   // otherwise 10% extra spacing
-#endif
 }
 
 void wxTreeCtrl::SetStateImageList(wxImageList *imageList)
@@ -1571,8 +1572,15 @@ void wxTreeCtrl::PaintItem(wxGenericTreeItem *item, wxDC& dc)
     int image = item->GetCurrentImage();
     if ( image != NO_IMAGE )
     {
-        m_imageListNormal->GetSize( image, image_w, image_h );
-        image_w += 4;
+        if ( m_imageListNormal )
+        {
+            m_imageListNormal->GetSize( image, image_w, image_h );
+            image_w += 4;
+        }
+        else
+        {
+            image = NO_IMAGE;
+        }
     }
 
     int total_h = GetLineHeight(item);
@@ -2062,8 +2070,15 @@ void wxTreeCtrl::Edit( const wxTreeItemId& item )
     int image = m_currentEdit->GetCurrentImage();
     if ( image != NO_IMAGE )
     {
-        m_imageListNormal->GetSize( image, image_w, image_h );
-        image_w += 4;
+        if ( m_imageListNormal )
+        {
+            m_imageListNormal->GetSize( image, image_w, image_h );
+            image_w += 4;
+        }
+        else
+        {
+            wxFAIL_MSG(_T("you must create an image list to use images!"));
+        }
     }
     x += image_w;
     w -= image_w + 4; // I don't know why +4 is needed
@@ -2304,8 +2319,11 @@ void wxTreeCtrl::CalculateSize( wxGenericTreeItem *item, wxDC &dc )
     int image = item->GetCurrentImage();
     if ( image != NO_IMAGE )
     {
-        m_imageListNormal->GetSize( image, image_w, image_h );
-        image_w += 4;
+        if ( m_imageListNormal )
+        {
+            m_imageListNormal->GetSize( image, image_w, image_h );
+            image_w += 4;
+        }
     }
 
     int total_h = (image_h > text_h) ? image_h : text_h;

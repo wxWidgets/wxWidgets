@@ -176,9 +176,13 @@ enum wxSignal
 // the argument is ignored under Windows - the process is always killed
 WXDLLEXPORT int wxKill(long pid, wxSignal sig = wxSIGTERM);
 
-// Execute a command in an interactive shell window
+// Execute a command in an interactive shell window (always synchronously)
 // If no command then just the shell
 WXDLLEXPORT bool wxShell(const wxString& command = wxEmptyString);
+
+// As wxShell(), but must give a (non interactive) command and its output will
+// be returned in output array
+WXDLLEXPORT bool wxShell(const wxString& command, wxArrayString& output);
 
 // Sleep for nSecs seconds
 WXDLLEXPORT void wxSleep(int nSecs);

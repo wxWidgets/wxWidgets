@@ -33,27 +33,21 @@
 
 #include "math.h"
 
-#ifdef __WXMSW__
-    // this is not supported at all under MSW
+#ifdef __WIN32__
+    // this is not supported by native control
     #define NO_VARIABLE_HEIGHT
-
-    #define NO_MULTIPLE_SELECTION
-
-    // this is supported (so the next line may be uncommented) but not very
-    // well :-(
-    #undef NO_MULTIPLE_SELECTION
 #endif
 
 #include "treetest.h"
 
 // under Windows the icons are in the .rc file
 #ifndef __WXMSW__
-  #include "icon1.xpm"
-  #include "icon2.xpm"
-  #include "icon3.xpm"
-  #include "icon4.xpm"
-  #include "icon5.xpm"
-  #include "mondrian.xpm"
+    #include "icon1.xpm"
+    #include "icon2.xpm"
+    #include "icon3.xpm"
+    #include "icon4.xpm"
+    #include "icon5.xpm"
+    #include "mondrian.xpm"
 #endif
 
 // verify that the item is ok and insult the user if it is not
@@ -88,6 +82,8 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(TreeTest_DeleteChildren, MyFrame::OnDeleteChildren)
     EVT_MENU(TreeTest_DeleteAll, MyFrame::OnDeleteAll)
     EVT_MENU(TreeTest_Recreate, MyFrame::OnRecreate)
+    EVT_MENU(TreeTest_ToggleImages, MyFrame::OnToggleImages)
+    EVT_MENU(TreeTest_SetImageSize, MyFrame::OnSetImageSize)
     EVT_MENU(TreeTest_CollapseAndReset, MyFrame::OnCollapseAndReset)
     EVT_MENU(TreeTest_EnsureVisible, MyFrame::OnEnsureVisible)
     EVT_MENU(TreeTest_AddItem, MyFrame::OnAddItem)
@@ -161,6 +157,8 @@ MyFrame::MyFrame(const wxString& title, int x, int y, int w, int h)
 #ifndef NO_MULTIPLE_SELECTION
     tree_menu->Append(TreeTest_ToggleSel, "&Toggle selection mode");
 #endif // NO_MULTIPLE_SELECTION
+    tree_menu->Append(TreeTest_ToggleImages, "&Show images", "", TRUE);
+    tree_menu->Append(TreeTest_SetImageSize, "Set image si&ze...");
     tree_menu->Append(TreeTest_Recreate, "&Recreate the tree");
     tree_menu->Append(TreeTest_CollapseAndReset, "C&ollapse and reset");
     tree_menu->AppendSeparator();
@@ -205,6 +203,8 @@ MyFrame::MyFrame(const wxString& title, int x, int y, int w, int h)
     menu_bar->Append(tree_menu, "&Tree");
     menu_bar->Append(item_menu, "&Item");
     SetMenuBar(menu_bar);
+
+    menu_bar->Check(TreeTest_ToggleImages, TRUE);
 
     m_treeCtrl = new MyTreeCtrl(this, TreeTest_Ctrl,
                                 wxDefaultPosition, wxDefaultSize,
@@ -412,6 +412,27 @@ void MyFrame::OnRecreate(wxCommandEvent& event)
     m_treeCtrl->AddTestItemsToTree(3, 2);
 }
 
+void MyFrame::OnSetImageSize(wxCommandEvent& event)
+{
+    long size = wxGetNumberFromUser("Enter the size for the images to use",
+                                    "Size: ",
+                                    "TreeCtrl sample",
+                                    32);
+    if ( size == -1 )
+        return;
+
+    m_treeCtrl->CreateImageList((int)size);
+
+    OnRecreate(event);
+}
+
+void MyFrame::OnToggleImages(wxCommandEvent& event)
+{
+    wxGetApp().SetShowImages(!wxGetApp().ShowImages());
+
+    OnRecreate(event);
+}
+
 void MyFrame::OnCollapseAndReset(wxCommandEvent& event)
 {
     m_treeCtrl->CollapseAndReset(m_treeCtrl->GetRootItem());
@@ -424,7 +445,8 @@ void MyFrame::OnEnsureVisible(wxCommandEvent& event)
 
 void MyFrame::OnInsertItem(wxCommandEvent& WXUNUSED(event))
 {
-    m_treeCtrl->InsertItem(m_treeCtrl->GetRootItem(), 1, "2nd item");
+    int image = wxGetApp().ShowImages() ? MyTreeCtrl::TreeCtrlIcon_File : -1;
+    m_treeCtrl->InsertItem(m_treeCtrl->GetRootItem(), image, "2nd item");
 }
 
 void MyFrame::OnAddItem(wxCommandEvent& WXUNUSED(event))
@@ -484,49 +506,59 @@ MyTreeCtrl::MyTreeCtrl(wxWindow *parent, const wxWindowID id,
                        long style)
           : wxTreeCtrl(parent, id, pos, size, style)
 {
-#ifndef NO_VARIABLE_HEIGHT
-#if wxUSE_LIBJPEG
-    wxImage::AddHandler(new wxJPEGHandler);
-    wxImage image;
-
-    image.LoadFile(wxString("horse.jpg"), wxBITMAP_TYPE_JPEG );
-#endif
-#endif
-
     m_reverseSort = FALSE;
 
+    CreateImageList();
+
+    // Add some items to the tree
+    AddTestItemsToTree(3, 2);
+}
+
+void MyTreeCtrl::CreateImageList(int size)
+{
+    delete m_imageListNormal;
+
+    if ( size == -1 )
+    {
+        m_imageListNormal = NULL;
+
+        return;
+    }
+
     // Make an image list containing small icons
-    m_imageListNormal = new wxImageList(16, 16, TRUE);
+    m_imageListNormal = new wxImageList(size, size, TRUE);
 
     // should correspond to TreeCtrlIcon_xxx enum
 #if defined(__WXMSW__) && defined(__WIN16__)
-    // This is required in 16-bit Windows mode only because we can't load a specific (16x16)
-    // icon image, so it comes out stretched
-#  ifndef NO_VARIABLE_HEIGHT
-    m_imageListNormal->Add(image.ConvertToBitmap());
-#  else
     m_imageListNormal->Add(wxBitmap("bitmap1", wxBITMAP_TYPE_BMP_RESOURCE));
-#  endif
     m_imageListNormal->Add(wxBitmap("bitmap2", wxBITMAP_TYPE_BMP_RESOURCE));
     m_imageListNormal->Add(wxBitmap("bitmap3", wxBITMAP_TYPE_BMP_RESOURCE));
     m_imageListNormal->Add(wxBitmap("bitmap4", wxBITMAP_TYPE_BMP_RESOURCE));
     m_imageListNormal->Add(wxBitmap("bitmap5", wxBITMAP_TYPE_BMP_RESOURCE));
 #else
-#  ifndef NO_VARIABLE_HEIGHT
-    m_imageListNormal->Add(image.ConvertToBitmap());
-#  else
-    m_imageListNormal->Add(wxICON(icon1));
-#  endif
-    m_imageListNormal->Add(wxICON(icon2));
-    m_imageListNormal->Add(wxICON(icon3));
-    m_imageListNormal->Add(wxICON(icon4));
-    m_imageListNormal->Add(wxICON(icon5));
+    wxIcon icons[5];
+    icons[0] = wxICON(icon1);
+    icons[1] = wxICON(icon2);
+    icons[2] = wxICON(icon3);
+    icons[3] = wxICON(icon4);
+    icons[4] = wxICON(icon5);
+
+    int sizeOrig = icons[0].GetWidth();
+    for ( size_t i = 0; i < WXSIZEOF(icons); i++ )
+    {
+        if ( size == sizeOrig )
+        {
+            m_imageListNormal->Add(icons[i]);
+        }
+        else
+        {
+            m_imageListNormal->Add(wxImage(icons[i]).Rescale(size, size).
+                                    ConvertToBitmap());
+        }
+    }
 #endif
 
     SetImageList(m_imageListNormal);
-
-    // Add some items to the tree
-    AddTestItemsToTree(3, 2);
 }
 
 MyTreeCtrl::~MyTreeCtrl()
@@ -568,12 +600,21 @@ void MyTreeCtrl::AddItemsRecursively(const wxTreeItemId& idParent,
 
             // here we pass to AppendItem() normal and selected item images (we
             // suppose that selected image follows the normal one in the enum)
-            int image = depth == 1 ? TreeCtrlIcon_File : TreeCtrlIcon_Folder;
-            wxTreeItemId id = AppendItem(idParent, str, image, image + 1,
+            int image, imageSel;
+            if ( wxGetApp().ShowImages() )
+            {
+                image = depth == 1 ? TreeCtrlIcon_File : TreeCtrlIcon_Folder;
+                imageSel = image + 1;
+            }
+            else
+            {
+                image = imageSel = -1;
+            }
+            wxTreeItemId id = AppendItem(idParent, str, image, imageSel,
                                          new MyTreeItemData(str));
 
             // and now we also set the expanded one (only for the folders)
-            if ( hasChildren )
+            if ( hasChildren && wxGetApp().ShowImages() )
             {
                 SetItemImage(id, TreeCtrlIcon_FolderOpened,
                              wxTreeItemIcon_Expanded);
@@ -594,10 +635,14 @@ void MyTreeCtrl::AddItemsRecursively(const wxTreeItemId& idParent,
 void MyTreeCtrl::AddTestItemsToTree(size_t numChildren,
                                     size_t depth)
 {
+    int image = wxGetApp().ShowImages() ? MyTreeCtrl::TreeCtrlIcon_Folder : -1;
     wxTreeItemId rootId = AddRoot("Root",
-                                  TreeCtrlIcon_Folder, TreeCtrlIcon_Folder,
+                                  image, image,
                                   new MyTreeItemData("Root item"));
-    SetItemImage(rootId, TreeCtrlIcon_FolderOpened, wxTreeItemIcon_Expanded);
+    if ( image != -1 )
+    {
+        SetItemImage(rootId, TreeCtrlIcon_FolderOpened, wxTreeItemIcon_Expanded);
+    }
 
     AddItemsRecursively(rootId, numChildren, depth, 0);
 
@@ -714,7 +759,8 @@ void MyTreeCtrl::OnEndDrag(wxTreeEvent& event)
     //
     // Finally, we only copy one item here but we might copy the entire tree if
     // we were dragging a folder.
-    AppendItem(itemDst, text, TreeCtrlIcon_File);
+    int image = wxGetApp().ShowImages() ? TreeCtrlIcon_File : -1;
+    AppendItem(itemDst, text, image);
 }
 
 void MyTreeCtrl::OnBeginLabelEdit(wxTreeEvent& event)
