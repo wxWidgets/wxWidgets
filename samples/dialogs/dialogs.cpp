@@ -905,7 +905,14 @@ void MyFrame::ModelessDlg(wxCommandEvent& event)
     }
     else // hide
     {
-        m_dialog->Hide();
+        // If m_dialog is NULL, then possibly the system
+        // didn't report the checked menu item status correctly.
+        // It should be true just after the menu item was selected,
+        // if there was no modeless dialog yet.
+
+        wxASSERT( m_dialog != NULL );
+        if (m_dialog)
+            m_dialog->Hide();
     }
 }
 #endif // USE_MODAL_PRESENTATION
