@@ -1623,7 +1623,7 @@ bool wxResourceReadOneResource(FILE *fd, wxExprDatabase& db, bool *eof, wxResour
     wxChar *name = copystring(wxConvCurrent->cMB2WX(wxResourceBuffer));
     wxGetResourceToken(fd);
     wxChar *value = copystring(wxConvCurrent->cMB2WX(wxResourceBuffer));
-    if (wxIsalpha(value[0]))
+    if (wxIsdigit(value[0]))
     {
       int val = (int)wxAtol(value);
       wxResourceAddIdentifier(name, val, table);
@@ -2704,7 +2704,7 @@ bool wxResourceReadOneResourceString(char *s, wxExprDatabase& db, bool *eof, wxR
     wxChar *name = copystring(wxConvCurrent->cMB2WX(wxResourceBuffer));
     wxGetResourceTokenString(s);
     wxChar *value = copystring(wxConvCurrent->cMB2WX(wxResourceBuffer));
-    if (wxIsalpha(value[0]))
+    if (wxIsdigit(value[0]))
     {
       int val = (int)wxAtol(value);
       wxResourceAddIdentifier(name, val, table);
