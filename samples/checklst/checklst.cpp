@@ -51,14 +51,17 @@ public:
     virtual ~CheckListBoxFrame();
 
     // notifications
-    void OnQuit           (wxCommandEvent& event);
-    void OnAbout          (wxCommandEvent& event);
+    void OnQuit(wxCommandEvent& event);
+    void OnAbout(wxCommandEvent& event);
+    void OnCheckFirstItem(wxCommandEvent& event);
+    void OnUncheckFirstItem(wxCommandEvent& event);
+    void OnToggleFirstItem(wxCommandEvent& event);
     void OnToggleSelection(wxCommandEvent& event);
-    void OnListboxSelect  (wxCommandEvent& event);
-    void OnCheckboxToggle (wxCommandEvent& event);
+    void OnListboxSelect(wxCommandEvent& event);
+    void OnCheckboxToggle(wxCommandEvent& event);
     void OnListboxDblClick(wxCommandEvent& event);
-    void OnButtonUp       (wxCommandEvent& event);
-    void OnButtonDown     (wxCommandEvent& event);
+    void OnButtonUp(wxCommandEvent& event);
+    void OnButtonDown(wxCommandEvent& event);
 
 private:
     void CreateCheckListbox(long flags = 0);
@@ -78,6 +81,10 @@ enum
 {
     Menu_About = 100,
     Menu_Quit,
+
+    Menu_CheckFirst,
+    Menu_UncheckFirst,
+    Menu_ToggleFirst,
     Menu_Selection,
 
     Control_First = 1000,
@@ -90,6 +97,9 @@ BEGIN_EVENT_TABLE(CheckListBoxFrame, wxFrame)
     EVT_MENU(Menu_About, CheckListBoxFrame::OnAbout)
     EVT_MENU(Menu_Quit, CheckListBoxFrame::OnQuit)
 
+    EVT_MENU(Menu_CheckFirst, CheckListBoxFrame::OnCheckFirstItem)
+    EVT_MENU(Menu_UncheckFirst, CheckListBoxFrame::OnUncheckFirstItem)
+    EVT_MENU(Menu_ToggleFirst, CheckListBoxFrame::OnToggleFirstItem)
     EVT_MENU(Menu_Selection, CheckListBoxFrame::OnToggleSelection)
 
     EVT_LISTBOX(Control_Listbox, CheckListBoxFrame::OnListboxSelect)
@@ -139,6 +149,10 @@ CheckListBoxFrame::CheckListBoxFrame(wxFrame *frame,
 
     // listbox submenu
     wxMenu *menuList = new wxMenu;
+    menuList->Append(Menu_CheckFirst, _T("Check the first item\tCtrl-C"));
+    menuList->Append(Menu_UncheckFirst, _T("Uncheck the first item\tCtrl-U"));
+    menuList->Append(Menu_ToggleFirst, _T("Toggle the first item\tCtrl-T"));
+    menuList->AppendSeparator();
     menuList->AppendCheckItem(Menu_Selection, _T("Multiple selection\tCtrl-M"));
 
     // put it all together
@@ -233,6 +247,24 @@ void CheckListBoxFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
     wxMessageBox(wxT("Demo of wxCheckListBox control\n© Vadim Zeitlin 1998-2002"),
                  wxT("About wxCheckListBox"),
                  wxICON_INFORMATION, this);
+}
+
+void CheckListBoxFrame::OnCheckFirstItem(wxCommandEvent& event)
+{
+    if ( !m_pListBox->IsEmpty() )
+        m_pListBox->Check(0);
+}
+
+void CheckListBoxFrame::OnUncheckFirstItem(wxCommandEvent& event)
+{
+    if ( !m_pListBox->IsEmpty() )
+        m_pListBox->Check(0, FALSE);
+}
+
+void CheckListBoxFrame::OnToggleFirstItem(wxCommandEvent& event)
+{
+    if ( !m_pListBox->IsEmpty() )
+        m_pListBox->Check(0, !m_pListBox->IsChecked(0));
 }
 
 void CheckListBoxFrame::OnToggleSelection(wxCommandEvent& event)
