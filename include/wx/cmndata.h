@@ -149,6 +149,28 @@ class wxNativePrintData ;
 
 #endif
 
+enum wxPrintBin
+{
+    wxPRINTBIN_DEFAULT,
+
+    wxPRINTBIN_ONLYONE,
+    wxPRINTBIN_LOWER,
+    wxPRINTBIN_MIDDLE,
+    wxPRINTBIN_MANUAL,
+    wxPRINTBIN_ENVELOPE,
+    wxPRINTBIN_ENVMANUAL,
+    wxPRINTBIN_AUTO,
+    wxPRINTBIN_TRACTOR,
+    wxPRINTBIN_SMALLFMT,
+    wxPRINTBIN_LARGEFMT,
+    wxPRINTBIN_LARGECAPACITY,
+    wxPRINTBIN_CASSETTE,
+    wxPRINTBIN_FORMSOURCE,
+
+    wxPRINTBIN_USER,
+};
+
+
 class WXDLLEXPORT wxPrintData: public wxObject
 {
 public:
@@ -170,6 +192,7 @@ public:
     const wxSize& GetPaperSize() const { return m_paperSize; } // Not used yet: confusable with paper size
                                                                       // in wxPageSetupDialogData
     wxPrintQuality GetQuality() const { return m_printQuality; }
+    wxPrintBin GetBin() const { return m_bin; }
 
     void SetNoCopies(int v) { m_printNoCopies = v; };
     void SetCollate(bool flag) { m_printCollate = flag; };
@@ -181,6 +204,7 @@ public:
     void SetPaperId(wxPaperSize sizeId) { m_paperId = sizeId; }
     void SetPaperSize(const wxSize& sz) { m_paperSize = sz; }
     void SetQuality(wxPrintQuality quality) { m_printQuality = quality; }
+    void SetBin(wxPrintBin bin) { m_bin = bin; }
 
     // PostScript-specific data
     const wxString& GetPrinterCommand() const { return m_printerCommand; }
@@ -239,6 +263,7 @@ public:
 #endif
 
 private:
+    wxPrintBin      m_bin;
 
     int             m_printNoCopies;
     int             m_printOrientation;

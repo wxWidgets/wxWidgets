@@ -171,6 +171,7 @@ wxPrintData::wxPrintData()
 #elif defined( __WXMAC__ )
     m_nativePrintData = wxNativePrintData::Create() ;
 #endif
+    m_bin = wxPRINTBIN_DEFAULT;
     m_printOrientation = wxPORTRAIT;
     m_printNoCopies = 1;
     m_printCollate = false;
@@ -479,6 +480,32 @@ void wxPrintData::ConvertToNative()
         devMode->dmPrintQuality = quality;
         devMode->dmFields |= DM_PRINTQUALITY;
 
+        if ( m_bin != wxPRINTBIN_DEFAULT )
+        {
+            switch ( m_bin )
+            {
+                case wxPRINTBIN_ONLYONE:        devMode->dmDefaultSource = DMBIN_ONLYONE;       break;
+                case wxPRINTBIN_LOWER:          devMode->dmDefaultSource = DMBIN_LOWER;         break;
+                case wxPRINTBIN_MIDDLE:         devMode->dmDefaultSource = DMBIN_MIDDLE;        break;
+                case wxPRINTBIN_MANUAL:         devMode->dmDefaultSource = DMBIN_MANUAL;        break;
+                case wxPRINTBIN_ENVELOPE:       devMode->dmDefaultSource = DMBIN_ENVELOPE;      break;
+                case wxPRINTBIN_ENVMANUAL:      devMode->dmDefaultSource = DMBIN_ENVMANUAL;     break;
+                case wxPRINTBIN_AUTO:           devMode->dmDefaultSource = DMBIN_AUTO,;         break;
+                case wxPRINTBIN_TRACTOR:        devMode->dmDefaultSource = DMBIN_TRACTOR;       break;
+                case wxPRINTBIN_SMALLFMT:       devMode->dmDefaultSource = DMBIN_SMALLFMT;      break;
+                case wxPRINTBIN_LARGEFMT:       devMode->dmDefaultSource = DMBIN_LARGEFMT;      break;
+                case wxPRINTBIN_LARGECAPACITY:  devMode->dmDefaultSource = DMBIN_LARGECAPACITY; break;
+                case wxPRINTBIN_CASSETTE:       devMode->dmDefaultSource = DMBIN_CASSETTE;      break;
+                case wxPRINTBIN_FORMSOURCE:     devMode->dmDefaultSource = DMBIN_FORMSOURCE;    break;
+
+                default:
+                    devMode->dmDefaultSource = DMBIN_USER + m_bin - wxPRINTBIN_USER;
+                    break;
+            }
+
+            devMode->dmFields |= DM_DEFAULTSOURCE;
+        }
+
         GlobalUnlock(hDevMode);
     }
 
@@ -523,6 +550,11 @@ void wxPrintData::ConvertFromNative()
         if (devMode->dmFields & DM_COPIES)
         {
             m_printNoCopies = devMode->dmCopies;
+        }
+
+        if (devMode->dmFields & DM_DEFAULTSOURCE)
+        {
+            m_bin = devMode->dmDefaultSource;
         }
 
         //// Printer name
@@ -708,6 +740,7 @@ void wxPrintData::operator=(const wxPrintData& data)
     m_printQuality = data.m_printQuality;
     m_paperId = data.m_paperId;
     m_paperSize = data.m_paperSize;
+    m_bin = data.m_bin;
 #ifdef wxUSE_STREAMS
     m_outputstream = data.m_outputstream;
 #endif
