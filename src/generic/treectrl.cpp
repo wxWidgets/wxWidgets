@@ -1407,14 +1407,19 @@ void wxTreeCtrl::FillArray(wxGenericTreeItem *item,
         wxArrayGenericTreeItems& children = item->GetChildren();
         size_t count = children.GetCount();
         for ( size_t n = 0; n < count; ++n )
-            FillArray(children[n],array);
+            FillArray(children[n], array);
     }
 }
 
 size_t wxTreeCtrl::GetSelections(wxArrayTreeItemIds &array) const
 {
   array.Empty();
-  FillArray(GetRootItem().m_pItem, array);
+  wxTreeItemId idRoot = GetRootItem();
+  if ( idRoot.IsOk() )
+  {
+      FillArray(idRoot.m_pItem, array);
+  }
+  //else: the tree is empty, so no selections
 
   return array.Count();
 }
