@@ -1636,7 +1636,6 @@ void wxTextCtrl::OnChar(wxKeyEvent& event)
         if ( m_macUsesTXN && wxTheApp->MacGetCurrentEvent() != NULL && wxTheApp->MacGetCurrentEventHandlerCallRef() != NULL )
             CallNextEventHandler((EventHandlerCallRef)wxTheApp->MacGetCurrentEventHandlerCallRef() , (EventRef) wxTheApp->MacGetCurrentEvent() ) ;
         else 
-#endif
         {
             EventRecord rec ;
             if ( wxMacConvertEventToRecord(  (EventRef) wxTheApp->MacGetCurrentEvent() , &rec ) )
@@ -1650,6 +1649,15 @@ void wxTextCtrl::OnChar(wxKeyEvent& event)
                 ::HandleControlKey( (ControlHandle) m_macControl , keycode , keychar , ev->modifiers ) ;
             }
         }
+#else
+        EventRecord *ev = (EventRecord*) wxTheApp->MacGetCurrentEvent() ;
+        short keycode ;
+        short keychar ;
+        keychar = short(ev->message & charCodeMask);
+        keycode = short(ev->message & keyCodeMask) >> 8 ;
+
+        ::HandleControlKey( (ControlHandle) m_macControl , keycode , keychar , ev->modifiers ) ;
+#endif
     }
     if ( ( key >= 0x20 && key < WXK_START ) ||
          key == WXK_RETURN ||
