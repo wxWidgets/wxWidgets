@@ -20,82 +20,57 @@
 #include "wx/colour.h"
 #include "wx/bitmap.h"
 
-typedef char wxMOTIFDash;
+//-----------------------------------------------------------------------------
+// classes
+//-----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxPen;
+class wxPen;
 
-class WXDLLEXPORT wxPenRefData: public wxGDIRefData
+typedef char wxX11Dash;
+
+//-----------------------------------------------------------------------------
+// wxPen
+//-----------------------------------------------------------------------------
+
+class wxPen: public wxGDIObject
 {
-    friend class WXDLLEXPORT wxPen;
 public:
-    wxPenRefData();
-    wxPenRefData(const wxPenRefData& data);
-    ~wxPenRefData();
+    wxPen() { }
     
-protected:
-    int           m_width;
-    int           m_style;
-    int           m_join ;
-    int           m_cap ;
-    wxBitmap      m_stipple ;
-    int           m_nbDash ;
-    wxMOTIFDash  *m_dash ;
-    wxColour      m_colour;
-};
-
-#define M_PENDATA ((wxPenRefData *)m_refData)
-
-// Pen
-class WXDLLEXPORT wxPen: public wxGDIObject
-{
-    DECLARE_DYNAMIC_CLASS(wxPen)
-public:
-    wxPen();
-    wxPen(const wxColour& col, int width, int style);
-    wxPen(const wxBitmap& stipple, int width);
-    inline wxPen(const wxPen& pen) { Ref(pen); }
+    wxPen( const wxColour &colour, int width, int style );
     ~wxPen();
     
-    inline wxPen& operator = (const wxPen& pen) { if (*this == pen) return (*this); Ref(pen); return *this; }
-    inline bool operator == (const wxPen& pen) const { return m_refData == pen.m_refData; }
-    inline bool operator != (const wxPen& pen) const { return m_refData != pen.m_refData; }
+    wxPen( const wxPen& pen ) { Ref(pen); }
+    wxPen& operator = ( const wxPen& pen ) { Ref(pen); return *this; }
     
-    virtual bool Ok() const { return (m_refData != NULL) ; }
+    bool Ok() const { return m_refData != NULL; }
     
-    // Override in order to recreate the pen
-    void SetColour(const wxColour& col) ;
-    void SetColour(unsigned char r, unsigned char g, unsigned char b)  ;
+    bool operator == ( const wxPen& pen ) const;
+    bool operator != (const wxPen& pen) const { return !(*this == pen); }
+
+    void SetColour( const wxColour &colour );
+    void SetColour( int red, int green, int blue );
+    void SetCap( int capStyle );
+    void SetJoin( int joinStyle );
+    void SetStyle( int style );
+    void SetWidth( int width );
+    void SetDashes( int number_of_dashes, const wxDash *dash );
     
-    void SetWidth(int width)  ;
-    void SetStyle(int style)  ;
-    void SetStipple(const wxBitmap& stipple)  ;
-    void SetDashes(int nb_dashes, const wxDash *dash)  ;
-    void SetJoin(int join)  ;
-    void SetCap(int cap)  ;
+    wxColour &GetColour() const;
+    int GetCap() const;
+    int GetJoin() const;
+    int GetStyle() const;
+    int GetWidth() const;
+    int GetDashes(wxDash **ptr) const;
+    int GetDashCount() const;
+    wxDash* GetDash() const;
+
+private:    
+    // ref counting code
+    virtual wxObjectRefData *CreateRefData() const;
+    virtual wxObjectRefData *CloneRefData(const wxObjectRefData *data) const;
     
-    inline wxColour& GetColour() const { return (M_PENDATA ? M_PENDATA->m_colour : wxNullColour); };
-    inline int GetWidth() const { return (M_PENDATA ? M_PENDATA->m_width : 0); };
-    inline int GetStyle() const { return (M_PENDATA ? M_PENDATA->m_style : 0); };
-    inline int GetJoin() const { return (M_PENDATA ? M_PENDATA->m_join : 0); };
-    inline int GetCap() const { return (M_PENDATA ? M_PENDATA->m_cap : 0); };
-    inline int GetDashes(wxDash **ptr) const
-    {
-        *ptr = (M_PENDATA ? (wxDash*)M_PENDATA->m_dash : (wxDash*) NULL);
-        return (M_PENDATA ? M_PENDATA->m_nbDash : 0);
-    }
-    inline int GetDashCount() const { return (M_PENDATA->m_nbDash); }
-    inline wxDash* GetDash() const { return (wxDash*)M_PENDATA->m_dash; }
-    
-    inline wxBitmap *GetStipple() const { return (M_PENDATA ? (& M_PENDATA->m_stipple) : (wxBitmap*) NULL); };
-    
-    // Implementation
-    
-    // Useful helper: create the brush resource
-    bool RealizeResource();
-    
-    // When setting properties, we must make sure we're not changing
-    // another object
-    void Unshare();
+    DECLARE_DYNAMIC_CLASS(wxPen)
 };
 
 #endif

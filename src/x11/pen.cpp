@@ -17,166 +17,191 @@
 #include "wx/utils.h"
 #include "wx/pen.h"
 
-IMPLEMENT_DYNAMIC_CLASS(wxPen, wxGDIObject)
+//-----------------------------------------------------------------------------
+// wxPen
+//-----------------------------------------------------------------------------
 
-wxPenRefData::wxPenRefData()
+class wxPenRefData: public wxObjectRefData
 {
-    m_style = wxSOLID;
-    m_width = 1;
-    m_join = wxJOIN_ROUND ;
-    m_cap = wxCAP_ROUND ;
-    m_nbDash = 0 ;
-    m_dash = (wxMOTIFDash*)NULL;
-}
+public:
+    wxPenRefData()
+    {
+        m_width = 1;
+        m_style = wxSOLID;
+        m_joinStyle = wxJOIN_ROUND;
+        m_capStyle = wxCAP_ROUND;
+        m_dash = (wxX11Dash*) NULL;
+        m_countDashes = 0;
+    }
+    
+    wxPenRefData( const wxPenRefData& data )
+    {
+        m_style = data.m_style;
+        m_width = data.m_width;
+        m_joinStyle = data.m_joinStyle;
+        m_capStyle = data.m_capStyle;
+        m_colour = data.m_colour;
+        m_countDashes = data.m_countDashes;
+/*
+        if (data.m_dash)  TODO
+            m_dash = new
+*/
+        m_dash = data.m_dash;
+    }
 
-wxPenRefData::wxPenRefData(const wxPenRefData& data)
+    bool operator == (const wxPenRefData& data) const
+    {
+        return (m_style == data.m_style &&
+                m_width == data.m_width &&
+                m_joinStyle == data.m_joinStyle &&
+                m_capStyle == data.m_capStyle &&
+                m_colour == data.m_colour);
+    }
+            
+    int        m_width;
+    int        m_style;
+    int        m_joinStyle;
+    int        m_capStyle;
+    wxColour   m_colour;
+    int        m_countDashes;
+    wxX11Dash *m_dash;
+};
+
+//-----------------------------------------------------------------------------
+
+#define M_PENDATA ((wxPenRefData *)m_refData)
+
+IMPLEMENT_DYNAMIC_CLASS(wxPen,wxGDIObject)
+
+wxPen::wxPen( const wxColour &colour, int width, int style )
 {
-    m_style = data.m_style;
-    m_width = data.m_width;
-    m_join = data.m_join;
-    m_cap = data.m_cap;
-    m_nbDash = data.m_nbDash;
-    m_dash = data.m_dash;
-    m_colour = data.m_colour;
-}
-
-wxPenRefData::~wxPenRefData()
-{
-}
-
-// Pens
-
-wxPen::wxPen()
-{
+    m_refData = new wxPenRefData();
+    M_PENDATA->m_width = width;
+    M_PENDATA->m_style = style;
+    M_PENDATA->m_colour = colour;
 }
 
 wxPen::~wxPen()
 {
+    // m_refData unrefed in ~wxObject
 }
 
-// Should implement Create
-wxPen::wxPen(const wxColour& col, int Width, int Style)
+wxObjectRefData *wxPen::CreateRefData() const
 {
-    m_refData = new wxPenRefData;
-
-    M_PENDATA->m_colour = col;
-    M_PENDATA->m_width = Width;
-    M_PENDATA->m_style = Style;
-    M_PENDATA->m_join = wxJOIN_ROUND ;
-    M_PENDATA->m_cap = wxCAP_ROUND ;
-    M_PENDATA->m_nbDash = 0 ;
-    M_PENDATA->m_dash = (wxMOTIFDash*)NULL;
-
-    RealizeResource();
+    return new wxPenRefData;
 }
 
-wxPen::wxPen(const wxBitmap& stipple, int Width)
+wxObjectRefData *wxPen::CloneRefData(const wxObjectRefData *data) const
 {
-    m_refData = new wxPenRefData;
-
-    M_PENDATA->m_stipple = stipple;
-    M_PENDATA->m_width = Width;
-    M_PENDATA->m_style = wxSTIPPLE;
-    M_PENDATA->m_join = wxJOIN_ROUND ;
-    M_PENDATA->m_cap = wxCAP_ROUND ;
-    M_PENDATA->m_nbDash = 0 ;
-    M_PENDATA->m_dash = (wxMOTIFDash*)NULL;
-
-    RealizeResource();
+    return new wxPenRefData(*(wxPenRefData *)data);
 }
 
-void wxPen::Unshare()
+bool wxPen::operator == ( const wxPen& pen ) const
 {
-    // Don't change shared data
-    if (!m_refData)
-    {
-        m_refData = new wxPenRefData();
-    }
-    else
-    {
-        wxPenRefData* ref = new wxPenRefData(*(wxPenRefData*)m_refData);
-        UnRef();
-        m_refData = ref;
-    }
+    if (m_refData == pen.m_refData) return TRUE;
+    
+    if (!m_refData || !pen.m_refData) return FALSE;
+    
+    return ( *(wxPenRefData*)m_refData == *(wxPenRefData*)pen.m_refData );
 }
 
-void wxPen::SetColour(const wxColour& col)
+void wxPen::SetColour( const wxColour &colour )
 {
-    Unshare();
-
-    M_PENDATA->m_colour = col;
-
-    RealizeResource();
+    AllocExclusive();
+    
+    M_PENDATA->m_colour = colour;
 }
 
-void wxPen::SetColour(unsigned char r, unsigned char g, unsigned char b)
+void wxPen::SetDashes( int number_of_dashes, const wxDash *dash )
 {
-    Unshare();
-
-    M_PENDATA->m_colour.Set(r, g, b);
-
-    RealizeResource();
+    AllocExclusive();
+    
+    M_PENDATA->m_countDashes = number_of_dashes;
+    M_PENDATA->m_dash = (wxX11Dash *)dash; // TODO
 }
 
-void wxPen::SetWidth(int Width)
+void wxPen::SetColour( int red, int green, int blue )
 {
-    Unshare();
-
-    M_PENDATA->m_width = Width;
-
-    RealizeResource();
+    AllocExclusive();
+    
+    M_PENDATA->m_colour.Set( red, green, blue );
 }
 
-void wxPen::SetStyle(int Style)
+void wxPen::SetCap( int capStyle )
 {
-    Unshare();
-
-    M_PENDATA->m_style = Style;
-
-    RealizeResource();
+    AllocExclusive();
+    
+    M_PENDATA->m_capStyle = capStyle;
 }
 
-void wxPen::SetStipple(const wxBitmap& Stipple)
+void wxPen::SetJoin( int joinStyle )
 {
-    Unshare();
-
-    M_PENDATA->m_stipple = Stipple;
-    M_PENDATA->m_style = wxSTIPPLE;
-
-    RealizeResource();
+    AllocExclusive();
+    
+    M_PENDATA->m_joinStyle = joinStyle;
 }
 
-void wxPen::SetDashes(int nb_dashes, const wxDash *Dash)
+void wxPen::SetStyle( int style )
 {
-    Unshare();
-
-    M_PENDATA->m_nbDash = nb_dashes;
-    M_PENDATA->m_dash = (wxMOTIFDash *)Dash;
-
-    RealizeResource();
+    AllocExclusive();
+    
+    M_PENDATA->m_style = style;
 }
 
-void wxPen::SetJoin(int Join)
+void wxPen::SetWidth( int width )
 {
-    Unshare();
-
-    M_PENDATA->m_join = Join;
-
-    RealizeResource();
+    AllocExclusive();
+    
+    M_PENDATA->m_width = width;
 }
 
-void wxPen::SetCap(int Cap)
+int wxPen::GetDashes( wxDash **ptr ) const
 {
-    Unshare();
-
-    M_PENDATA->m_cap = Cap;
-
-    RealizeResource();
+     *ptr = (M_PENDATA ? (wxDash*)M_PENDATA->m_dash : (wxDash*) NULL);
+     return (M_PENDATA ? M_PENDATA->m_countDashes : 0);
 }
 
-bool wxPen::RealizeResource()
+int wxPen::GetDashCount() const
 {
-    // Nothing more to do
-    return TRUE;
+    return (M_PENDATA->m_countDashes);
 }
 
+wxDash* wxPen::GetDash() const
+{
+    return (wxDash*)M_PENDATA->m_dash;
+}
+
+int wxPen::GetCap() const
+{
+    wxCHECK_MSG( Ok(), -1, wxT("invalid pen") );
+
+    return M_PENDATA->m_capStyle;
+}
+
+int wxPen::GetJoin() const
+{
+    wxCHECK_MSG( Ok(), -1, wxT("invalid pen") );
+
+    return M_PENDATA->m_joinStyle;
+}
+
+int wxPen::GetStyle() const
+{
+    wxCHECK_MSG( Ok(), -1, wxT("invalid pen") );
+
+    return M_PENDATA->m_style;
+}
+
+int wxPen::GetWidth() const
+{
+    wxCHECK_MSG( Ok(), -1, wxT("invalid pen") );
+
+    return M_PENDATA->m_width;
+}
+
+wxColour &wxPen::GetColour() const
+{
+    wxCHECK_MSG( Ok(), wxNullColour, wxT("invalid pen") );
+
+    return M_PENDATA->m_colour;
+}
