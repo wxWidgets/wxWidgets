@@ -3,9 +3,9 @@
 // Purpose:
 // Author:      Robert Roebling
 // Created:     01/02/97
-// Id:
+// Id:          $Id$
 // Copyright:   (c) 1998 Robert Roebling, Julian Smart and Markus Holzem
-// Licence:   	wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 
@@ -14,6 +14,7 @@
 #endif
 
 #include "wx/menu.h"
+#include "wx/log.h"
 
 //-----------------------------------------------------------------------------
 // wxMenuBar
@@ -21,22 +22,22 @@
 
 IMPLEMENT_DYNAMIC_CLASS(wxMenuBar,wxWindow)
 
-wxMenuBar::wxMenuBar(void)
+wxMenuBar::wxMenuBar()
 {
   m_needParent = FALSE; // hmmm
-  
+
   PreCreation( NULL, -1, wxDefaultPosition, wxDefaultSize, 0, "menu" );
 
   m_menus.DeleteContents( TRUE );
-  
+
   m_widget = gtk_handle_box_new();
-  
+
   m_menubar = gtk_menu_bar_new();
-  
+
   gtk_container_add( GTK_CONTAINER(m_widget), m_menubar );
-  
+
   gtk_widget_show( m_menubar );
-  
+
   PostCreation();
 
   Show( TRUE );
@@ -46,21 +47,21 @@ void wxMenuBar::Append( wxMenu *menu, const wxString &title )
 {
   m_menus.Append( menu );
   menu->m_title = title;    // ??????
-  
+
   size_t pos;
   do {
     pos = menu->m_title.First( '&' );
     if (pos != wxString::npos) menu->m_title.Remove( pos, 1 );
   } while (pos != wxString::npos);
-  
+
   GtkWidget *root_menu;
   root_menu = gtk_menu_item_new_with_label( WXSTRINGCAST(menu->m_title) );
   gtk_widget_show( root_menu );
   gtk_menu_item_set_submenu( GTK_MENU_ITEM(root_menu), menu->m_menu );
-  
+
   gtk_menu_bar_append( GTK_MENU_BAR(m_menubar), root_menu );
 };
-    
+
 static int FindMenuItemRecursive( const wxMenu *menu, const wxString &menuString, const wxString &itemString )
 {
   if (menu->m_title == menuString)
@@ -72,7 +73,8 @@ static int FindMenuItemRecursive( const wxMenu *menu, const wxString &menuString
   while (node)
   {
     wxMenuItem *item = (wxMenuItem*)node->Data();
-    if (item->m_subMenu) return FindMenuItemRecursive( item->m_subMenu, menuString, itemString );
+    if (item->IsSubMenu())
+      return FindMenuItemRecursive(item->GetSubMenu(), menuString, itemString);
     node = node->Next();
   };
   return -1;
@@ -92,17 +94,18 @@ int wxMenuBar::FindMenuItem( const wxString &menuString, const wxString &itemStr
 };
 
 // Find a wxMenuItem using its id. Recurses down into sub-menus
-static wxMenuItem* FindMenuItemByIdRecursive( const wxMenu* menu, int id )
+static wxMenuItem* FindMenuItemByIdRecursive(const wxMenu* menu, int id)
 {
-  wxMenuItem* result = menu->FindItemForId( id );
+  wxMenuItem* result = menu->FindItem(id);
 
   wxNode *node = menu->m_items.First();
-  while (node && result == 0)
-  {
+  while ( node && result == NULL ) {
     wxMenuItem *item = (wxMenuItem*)node->Data();
-    if (item->m_subMenu) result = FindMenuItemByIdRecursive( item->m_subMenu, id );
+    if ( item->IsSubMenu() )
+      result = FindMenuItemByIdRecursive( item->GetSubMenu(), id );
     node = node->Next();
   };
+
   return result;
 };
 
@@ -141,9 +144,12 @@ void gtk_menu_clicked_callback( GtkWidget *widget, gpointer data )
 {
   wxMenu *menu = (wxMenu*)data;
   int id = menu->FindMenuIdByMenuItem(widget);
-  
-  if (!menu->Enabled(id)) return;
-  
+
+  wxASSERT( id != -1 ); // should find it!
+
+  if (!menu->IsEnabled(id))
+    return;
+
   wxCommandEvent event( wxEVENT_TYPE_MENU_COMMAND, id );
   event.SetEventObject( menu );
   event.SetInt(id );
@@ -152,40 +158,44 @@ void gtk_menu_clicked_callback( GtkWidget *widget, gpointer data )
 };
 
 IMPLEMENT_DYNAMIC_CLASS(wxMenuItem,wxObject)
-  
-wxMenuItem::wxMenuItem(void)
+
+wxMenuItem::wxMenuItem()
 {
-  m_id = 0;
-  m_text = "";
+  m_id = ID_SEPARATOR;
   m_isCheckMenu = FALSE;
-  m_checked = FALSE;
-  m_isSubMenu = FALSE; 
+  m_isChecked = FALSE;
+  m_isEnabled = TRUE;
   m_subMenu = NULL;
-  m_helpStr = "";
   m_menuItem = NULL;
 };
 
+void wxMenuItem::SetText(const wxString& str)
+{
+  for ( const char *pc = str; *pc != '\0'; pc++ ) {
+    if ( *pc == '&' )
+      pc++; // skip it
+
+    m_text << *pc;
+  }
+}
+
 void wxMenuItem::Check( bool check )
 {
-  if ( IsCheckable() )
-  {
-    m_checked = check;
-    gtk_check_menu_item_set_state( (GtkCheckMenuItem*)m_menuItem, (gint)check );
-  }
+  wxCHECK_RET( IsCheckable(), "can't check uncheckable item!" )
+
+  m_isChecked = check;
+  gtk_check_menu_item_set_state( (GtkCheckMenuItem*)m_menuItem, (gint)check );
 }
 
 bool wxMenuItem::IsChecked() const
 {
-  if ( IsCheckable() )
-  {
-    return ((GtkCheckMenuItem*)m_menuItem)->active != 0;
-  }
-  return FALSE;
-}
+  wxCHECK( IsCheckable(), FALSE ); // can't get state of uncheckable item!
 
-void wxMenuItem::Enable( bool enable )
-{
-  m_isEnabled = enable;
+  bool bIsChecked = ((GtkCheckMenuItem*)m_menuItem)->active != 0;
+
+  wxASSERT( bIsChecked == m_isChecked ); // consistency check
+
+  return bIsChecked;
 }
 
 IMPLEMENT_DYNAMIC_CLASS(wxMenu,wxEvtHandler)
@@ -198,156 +208,115 @@ wxMenu::wxMenu( const wxString &title )
   m_menu = gtk_menu_new();  // Do not show!
 };
 
-void wxMenu::AppendSeparator(void)
+void wxMenu::AppendSeparator()
 {
   wxMenuItem *mitem = new wxMenuItem();
-  mitem->m_id = ID_SEPARATOR;
-  mitem->m_text = "";
-  mitem->m_helpStr = "";
-  mitem->m_isCheckMenu = FALSE;
-  mitem->m_isEnabled = TRUE;
-  mitem->m_menuItem = gtk_menu_item_new();
-  gtk_menu_append( GTK_MENU(m_menu), mitem->m_menuItem );
-  gtk_widget_show( mitem->m_menuItem );
+  mitem->SetId(ID_SEPARATOR);
+
+  GtkWidget *menuItem = gtk_menu_item_new();
+  gtk_menu_append( GTK_MENU(m_menu), menuItem );
+  gtk_widget_show( menuItem );
+  mitem->SetMenuItem(menuItem);
   m_items.Append( mitem );
 };
 
 void wxMenu::Append( int id, const wxString &item, const wxString &helpStr, bool checkable )
 {
   wxMenuItem *mitem = new wxMenuItem();
-  mitem->m_id = id;
-  
-  mitem->m_text = item;
-  size_t pos;
-  do {
-    pos = mitem->m_text.First( '&' );
-    if (pos != wxString::npos) mitem->m_text.Remove( pos, 1 );
-  } while (pos != wxString::npos);
-  
-  mitem->m_helpStr = helpStr;
-  mitem->m_isCheckMenu = checkable;
-  mitem->m_isEnabled = TRUE;
-  if (checkable)
-    mitem->m_menuItem = gtk_check_menu_item_new_with_label( WXSTRINGCAST(mitem->m_text) );
-  else
-    mitem->m_menuItem = gtk_menu_item_new_with_label( WXSTRINGCAST(mitem->m_text) );
-    
-  gtk_signal_connect( GTK_OBJECT(mitem->m_menuItem), "activate", 
-    GTK_SIGNAL_FUNC(gtk_menu_clicked_callback), (gpointer*)this );
-  
-  gtk_menu_append( GTK_MENU(m_menu), mitem->m_menuItem );
-  gtk_widget_show( mitem->m_menuItem );
+  mitem->SetId(id);
+  mitem->SetText(item);
+  mitem->SetHelpString(helpStr);
+  mitem->SetCheckable(checkable);
+  const char *text = mitem->GetText();
+  GtkWidget *menuItem = checkable ? gtk_check_menu_item_new_with_label(text)
+                                  : gtk_menu_item_new_with_label(text);
+  mitem->SetMenuItem(menuItem);
+
+  gtk_signal_connect( GTK_OBJECT(menuItem), "activate",
+                      GTK_SIGNAL_FUNC(gtk_menu_clicked_callback),
+                      (gpointer*)this );
+
+  gtk_menu_append( GTK_MENU(m_menu), menuItem );
+  gtk_widget_show( menuItem );
   m_items.Append( mitem );
 };
 
-void wxMenu::Append( int id, const wxString &item, wxMenu *subMenu, const wxString &helpStr )
+void wxMenu::Append( int id, const wxString &text, wxMenu *subMenu, const wxString &helpStr )
 {
   wxMenuItem *mitem = new wxMenuItem();
-  mitem->m_id = id;
-  mitem->m_text = item;
-  mitem->m_isEnabled = TRUE;
-  
-  size_t pos;
-  do {
-    pos = mitem->m_text.First( '&' );
-    if (pos != wxString::npos) mitem->m_text.Remove( pos, 1 );
-  } while (pos != wxString::npos);
-  
-  mitem->m_helpStr = helpStr;
-  mitem->m_menuItem = gtk_menu_item_new_with_label( WXSTRINGCAST(mitem->m_text) );
-  
-  mitem->m_subMenu = subMenu;
-  gtk_menu_item_set_submenu( GTK_MENU_ITEM(mitem->m_menuItem), subMenu->m_menu );
-  gtk_menu_append( GTK_MENU(m_menu), mitem->m_menuItem );
-  gtk_widget_show( mitem->m_menuItem );
+  mitem->SetId(id);
+  mitem->SetText(text);
+
+  GtkWidget *menuItem = gtk_menu_item_new_with_label(mitem->GetText());
+  mitem->SetHelpString(helpStr);
+  mitem->SetMenuItem(menuItem);
+  mitem->SetSubMenu(subMenu);
+
+  gtk_menu_item_set_submenu( GTK_MENU_ITEM(menuItem), subMenu->m_menu );
+  gtk_menu_append( GTK_MENU(m_menu), menuItem );
+  gtk_widget_show( menuItem );
   m_items.Append( mitem );
 };
 
 int wxMenu::FindItem( const wxString itemString ) const
 {
   wxString s( itemString );
-  
+
   size_t pos;
   do {
     pos = s.First( '&' );
     if (pos != wxString::npos) s.Remove( pos, 1 );
   } while (pos != wxString::npos);
-  
+
   wxNode *node = m_items.First();
   while (node)
   {
     wxMenuItem *item = (wxMenuItem*)node->Data();
-    if (item->m_text == s) return item->m_id;
+    if (item->GetText() == s)
+      return item->GetId();
     node = node->Next();
   };
+
   return -1;
-};
-
-wxMenuItem* wxMenu::FindItemForId( int id ) const
-{
-  wxNode *node = m_items.First();
-  while (node)
-  {
-    wxMenuItem *item = (wxMenuItem*)node->Data();
-    if (item->m_id == id) return item;
-    node = node->Next();
-  }
-  return NULL;
-}
-
-void wxMenu::Check( int id, bool Flag )
-{
-  wxMenuItem* item = FindItemForId( id );
-  if (item) item->Check(Flag);
 };
 
 void wxMenu::Enable( int id, bool enable )
 {
-  wxNode *node = m_items.First();
-  while (node)
-  {
-    wxMenuItem *item = (wxMenuItem*)node->Data();
-    if (item->m_id == id)
-    {
-      item->m_isEnabled = enable;
-      return;
-    };
-    node = node->Next();
-  };
+  wxMenuItem *item = FindItem(id);
+  if ( item )
+    item->Enable(enable);
 };
 
-bool wxMenu::Enabled( int id ) const
+bool wxMenu::IsEnabled( int id ) const
 {
-  wxNode *node = m_items.First();
-  while (node)
-  {
-    wxMenuItem *item = (wxMenuItem*)node->Data();
-    if (item->m_id == id) return item->m_isEnabled;
-    node = node->Next();
-  };
-  return FALSE;
+  wxMenuItem *item = FindItem(id);
+  if ( item )
+    return item->IsEnabled();
+  else
+    return FALSE;
+};
+
+void wxMenu::Check( int id, bool enable )
+{
+  wxMenuItem *item = FindItem(id);
+  if ( item )
+    item->Check(enable);
+};
+
+bool wxMenu::IsChecked( int id ) const
+{
+  wxMenuItem *item = FindItem(id);
+  if ( item )
+    return item->IsChecked();
+  else
+    return FALSE;
 };
 
 void wxMenu::SetLabel( int id, const wxString &label )
 {
-  wxString s( label );
-  size_t pos;
-  do {
-    pos = s.First( '&' );
-    if (pos != wxString::npos) s.Remove( pos, 1 );
-  } while (pos != wxString::npos);
-  
-  wxNode *node = m_items.First();
-  while (node)
-  {
-    wxMenuItem *item = (wxMenuItem*)node->Data();
-    item->m_text = s;
-    if (item->m_id == id)
-    {
-      gtk_label_set( GTK_LABEL( GTK_BIN(item->m_menuItem)->child ), WXSTRINGCAST(s) );
-    };
-    node = node->Next();
-  };
+  wxMenuItem *item = FindItem(id);
+  if ( item )
+    item->SetText(label);
 };
 
 int wxMenu::FindMenuIdByMenuItem( GtkWidget *menuItem ) const
@@ -356,18 +325,35 @@ int wxMenu::FindMenuIdByMenuItem( GtkWidget *menuItem ) const
   while (node)
   {
     wxMenuItem *item = (wxMenuItem*)node->Data();
-    if (item->m_menuItem == menuItem) return item->m_id;
+    if (item->GetMenuItem() == menuItem)
+      return item->GetId();
     node = node->Next();
   };
+
   return -1;
 };
+
+wxMenuItem *wxMenu::FindItem(int id) const
+{
+  wxNode *node = m_items.First();
+  while (node) {
+    wxMenuItem *item = (wxMenuItem*)node->Data();
+    if ( item->GetId() == id )
+      return item;
+    node = node->Next();
+  };
+
+  wxLogDebug("wxMenu::FindItem: item %d not found.", id);
+
+  return NULL;
+}
 
 void wxMenu::SetInvokingWindow( wxWindow *win )
 {
   m_invokingWindow = win;
 };
 
-wxWindow *wxMenu::GetInvokingWindow(void)
+wxWindow *wxMenu::GetInvokingWindow()
 {
   return m_invokingWindow;
 };
