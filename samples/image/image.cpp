@@ -145,6 +145,10 @@ MyFrame::MyFrame(void) :
   
   SetMenuBar( menu_bar );
   
+  CreateStatusBar(2);
+  int widths[] = { -1, 100 };
+  SetStatusWidths( 2, widths );
+  
   m_canvas = new MyCanvas( this, -1, wxPoint(2,62), wxSize(300-4,120-4) );
   m_canvas->SetScrollbars( 10, 10, 50, 50 );
 }
