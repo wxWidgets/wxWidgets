@@ -1616,8 +1616,10 @@ GSocketError GAddress_INET_SetHostName(GAddress *address, const char *hostname)
   {
 #else
   /* Use gethostbyname by default */
+#ifndef __WXMAC__
   int val = 1;  /* VA doesn't like constants in conditional expressions */
   if (val)
+#endif
   {
 #endif
     struct in_addr *array_addr;
