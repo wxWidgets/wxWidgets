@@ -94,41 +94,31 @@ bool wxApp::s_macSupportPCMenuShortcuts = true ;
 long wxApp::s_macAboutMenuItemId = wxID_ABOUT ;
 wxString wxApp::s_macHelpMenuTitleName = "&Help" ;
 
-#if defined(UNIVERSAL_INTERFACES_VERSION) && (UNIVERSAL_INTERFACES_VERSION >= 0x0340)
+pascal OSErr AEHandleODoc( const AppleEvent *event , AppleEvent *reply , long refcon ) ;
+pascal OSErr AEHandleOApp( const AppleEvent *event , AppleEvent *reply , long refcon ) ;
+pascal OSErr AEHandlePDoc( const AppleEvent *event , AppleEvent *reply , long refcon ) ;
+pascal OSErr AEHandleQuit( const AppleEvent *event , AppleEvent *reply , long refcon ) ;
+
+
 pascal OSErr AEHandleODoc( const AppleEvent *event , AppleEvent *reply , long refcon )
-#else
-pascal OSErr AEHandleODoc( const AppleEvent *event , AppleEvent *reply , unsigned long refcon )
-#endif
 {
     wxApp* app = (wxApp*) refcon ;
     return wxTheApp->MacHandleAEODoc( (AppleEvent*) event , reply) ;
 }
 
-#if defined(UNIVERSAL_INTERFACES_VERSION) && (UNIVERSAL_INTERFACES_VERSION >= 0x0340)
 pascal OSErr AEHandleOApp( const AppleEvent *event , AppleEvent *reply , long refcon )
-#else
-pascal OSErr AEHandleOApp( const AppleEvent *event , AppleEvent *reply , unsigned long refcon )
-#endif
 {
     wxApp* app = (wxApp*) refcon ;
     return wxTheApp->MacHandleAEOApp( (AppleEvent*) event , reply ) ;
 }
 
-#if defined(UNIVERSAL_INTERFACES_VERSION) && (UNIVERSAL_INTERFACES_VERSION >= 0x0340)
 pascal OSErr AEHandlePDoc( const AppleEvent *event , AppleEvent *reply , long refcon )
-#else
-pascal OSErr AEHandlePDoc( const AppleEvent *event , AppleEvent *reply , unsigned long refcon )
-#endif
 {
     wxApp* app = (wxApp*) refcon ;
     return wxTheApp->MacHandleAEPDoc( (AppleEvent*) event , reply ) ;
 }
 
-#if defined(UNIVERSAL_INTERFACES_VERSION) && (UNIVERSAL_INTERFACES_VERSION >= 0x0340)
 pascal OSErr AEHandleQuit( const AppleEvent *event , AppleEvent *reply , long refcon )
-#else
-pascal OSErr AEHandleQuit( const AppleEvent *event , AppleEvent *reply , unsigned long refcon )
-#endif
 {
     wxApp* app = (wxApp*) refcon ;
     return wxTheApp->MacHandleAEQuit( (AppleEvent*) event , reply) ;
@@ -430,7 +420,7 @@ bool wxApp::Initialize()
     {
         error = kMacSTROldSystem  ;
     }
-    else if ( theSystem < 0x0750 )
+    else if ( theSystem < 0x0860 )
     {
         error = kMacSTROldSystem  ;
     }
@@ -976,7 +966,7 @@ void wxApp::MacSuspend( bool convertClipboard )
             MacConvertPrivateToPublicScrap() ;
         }
 
-        UMAHideFloatingWindows() ;
+        ::HideFloatingWindows() ;
 }
 
 void wxApp::MacResume( bool convertClipboard )
@@ -987,7 +977,7 @@ void wxApp::MacResume( bool convertClipboard )
             MacConvertPublicToPrivateScrap() ;
         }
 
-        UMAShowFloatingWindows() ;
+        ::ShowFloatingWindows() ;
 }
 
 void wxApp::MacConvertPrivateToPublicScrap()
@@ -1011,9 +1001,9 @@ void wxApp::MacDoOneEvent()
     else
     {
         // idlers
-        WindowPtr window = UMAFrontWindow() ;
+        WindowPtr window = ::FrontWindow() ;
         if ( window )
-            UMAIdleControls( window ) ;
+            ::IdleControls( window ) ;
 
         wxTheApp->ProcessIdle() ;
     }
@@ -1093,10 +1083,10 @@ void wxApp::MacHandleMouseDownEvent( EventRecord *ev )
     wxToolTip::RemoveToolTips() ;
 
     WindowRef window;
-    WindowRef frontWindow = UMAFrontNonFloatingWindow() ;
+    WindowRef frontWindow = ::FrontNonFloatingWindow() ;
     WindowAttributes frontWindowAttributes = NULL ;
     if ( frontWindow )
-        UMAGetWindowAttributes( frontWindow , &frontWindowAttributes ) ;
+        ::GetWindowAttributes( frontWindow , &frontWindowAttributes ) ;
 
     short windowPart = ::FindWindow(ev->where, &window);
     wxWindow* win = wxFindWinFromMacWindow( window ) ;
@@ -1233,7 +1223,7 @@ void wxApp::MacHandleMouseDownEvent( EventRecord *ev )
                     {
                         if ( win )
                             win->MacMouseDown( ev , windowPart ) ;
-                        UMASelectWindow( window ) ;
+                        ::SelectWindow( window ) ;
                     }
                 }
                 else
@@ -1270,6 +1260,7 @@ void wxApp::MacHandleMouseUpEvent( EventRecord *ev )
     }
 }
 
+long wxMacTranslateKey(unsigned char key, unsigned char code) ;
 long wxMacTranslateKey(unsigned char key, unsigned char code)
 {
     long retval = key ;
@@ -1517,11 +1508,11 @@ void wxApp::MacHandleActivateEvent( EventRecord *ev )
     {
         bool activate = (ev->modifiers & activeFlag ) ;
         WindowClass wclass ;
-        UMAGetWindowClass ( window , &wclass ) ;
+        ::GetWindowClass ( window , &wclass ) ;
         if ( wclass == kFloatingWindowClass )
         {
             // if it is a floater we activate/deactivate the front non-floating window instead
-            window = UMAFrontNonFloatingWindow() ;
+            window = ::FrontNonFloatingWindow() ;
         }
         wxWindow* win = wxFindWinFromMacWindow( window ) ;
         if ( win )
@@ -1585,11 +1576,11 @@ void wxApp::MacHandleOSEvent( EventRecord *ev )
                     // our idea of the active window with the process manager's - which it already activated
 
                     if ( !doesActivate )
-                        oldFrontWindow = UMAFrontNonFloatingWindow() ;
+                        oldFrontWindow = ::FrontNonFloatingWindow() ;
 
                     MacResume( convertClipboard ) ;
 
-                    newFrontWindow = UMAFrontNonFloatingWindow() ;
+                    newFrontWindow = ::FrontNonFloatingWindow() ;
 
                     if ( oldFrontWindow )
                     {
@@ -1611,13 +1602,15 @@ void wxApp::MacHandleOSEvent( EventRecord *ev )
                     // in case this suspending did close an active window, another one might
                     // have surfaced -> lets deactivate that one
 
-                    WindowRef newActiveWindow = UMAGetActiveNonFloatingWindow() ;
+/* TODO : find out what to do on systems < 10 , perhaps FrontNonFloatingWindow
+                    WindowRef newActiveWindow = ::ActiveNonFloatingWindow() ;
                     if ( newActiveWindow )
                     {
                         wxWindow* win = wxFindWinFromMacWindow( newActiveWindow ) ;
                         if ( win )
                             win->MacActivate( ev , false ) ;
                     }
+*/
                 }
             }
             break ;

@@ -11,7 +11,7 @@ resource 'STR#' ( 128 , "Simple Alert Messages" )
 	"This application needs at least a MacPlus" ,
 	"This application needs more memory" ,
 	"This application is out of memory" ,
-	"This application needs at least System 7.5" ,
+	"This application needs at least System 8.6" ,
 	"About this wxWindows Application" ,
 	"This application needs Appearance extension (built in with System 8) - this restriction will be relieved in the final release"
 	}

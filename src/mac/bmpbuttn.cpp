@@ -21,8 +21,7 @@ IMPLEMENT_DYNAMIC_CLASS(wxBitmapButton, wxButton)
 #endif
 
 #include "wx/mac/uma.h"
-
-PicHandle MakePict(GWorldPtr wp, GWorldPtr mask ) ;
+#include "wx/bitmap.h"
 
 bool wxBitmapButton::Create(wxWindow *parent, wxWindowID id, const wxBitmap& bitmap,
            const wxPoint& pos,
@@ -58,7 +57,7 @@ bool wxBitmapButton::Create(wxWindow *parent, wxWindowID id, const wxBitmap& bit
 	
 	MacPreControlCreate( parent , id ,  "" , pos , wxSize( width , height ) ,style, validator , name , &bounds , title ) ;
 
-	m_macControl = UMANewControl( parent->GetMacRootWindow() , &bounds , title , false , 0 , 
+	m_macControl = ::NewControl( parent->GetMacRootWindow() , &bounds , title , false , 0 , 
 		kControlBehaviorOffsetContents + 
 		    ( bmap->m_bitmapType == kMacBitmapTypeIcon ? kControlContentCIconHandle : kControlContentPictHandle ) , 0, 
 	  	(( style & wxBU_AUTODRAW ) ? kControlBevelButtonSmallBevelProc : kControlBevelButtonNormalBevelProc ), (long) this ) ;
@@ -70,19 +69,22 @@ bool wxBitmapButton::Create(wxWindow *parent, wxWindowID id, const wxBitmap& bit
 	if ( m_buttonBitmap.Ok() )
 	{
 		if ( bmap->m_bitmapType == kMacBitmapTypePict ) {
-	        info.contentType = kControlContentPictHandle ;
-	        info.u.picture = bmap->m_hPict ;
+	    info.contentType = kControlContentPictHandle ;
+			info.u.picture = bmap->m_hPict ;
 		}
 		else if ( bmap->m_bitmapType == kMacBitmapTypeGrafWorld )
 		{
-	        info.contentType = kControlContentPictHandle ;
 			if ( m_buttonBitmap.GetMask() )
 			{
-				info.u.picture = MakePict( bmap->m_hBitmap , m_buttonBitmap.GetMask()->GetMaskBitmap() ) ;
+		    info.contentType = kControlContentCIconHandle ;
+				info.u.cIconHandle = wxMacCreateCIcon( bmap->m_hBitmap , m_buttonBitmap.GetMask()->GetMaskBitmap() ,
+				    8 , 16 ) ;
 			}
 			else
 			{
-				info.u.picture = MakePict( bmap->m_hBitmap , NULL ) ;
+		    info.contentType = kControlContentCIconHandle ;
+				info.u.cIconHandle = wxMacCreateCIcon( bmap->m_hBitmap , NULL ,
+				    8 , 16 ) ;
 			}
 		}
 		else if ( bmap->m_bitmapType == kMacBitmapTypeIcon )
@@ -92,7 +94,7 @@ bool wxBitmapButton::Create(wxWindow *parent, wxWindowID id, const wxBitmap& bit
 		}
 	}
 	
-	UMASetControlData( m_macControl , kControlButtonPart , kControlBevelButtonContentTag , sizeof(info) , (char*) &info ) ;
+	::SetControlData( m_macControl , kControlButtonPart , kControlBevelButtonContentTag , sizeof(info) , (char*) &info ) ;
 
 	MacPostControlCreate() ;
 
@@ -107,21 +109,23 @@ void wxBitmapButton::SetBitmapLabel(const wxBitmap& bitmap)
 	if ( m_buttonBitmap.Ok() )
 	{
 		wxBitmapRefData * bmap = (wxBitmapRefData*) ( m_buttonBitmap.GetRefData()) ;
-		if ( bmap->m_bitmapType == kMacBitmapTypePict )
-		{
-	        info.contentType = kControlContentPictHandle ;
-	        info.u.picture = bmap->m_hPict ;
+		if ( bmap->m_bitmapType == kMacBitmapTypePict ) {
+	    info.contentType = kControlContentPictHandle ;
+			info.u.picture = bmap->m_hPict ;
 		}
 		else if ( bmap->m_bitmapType == kMacBitmapTypeGrafWorld )
 		{
-	        info.contentType = kControlContentPictHandle ;
 			if ( m_buttonBitmap.GetMask() )
 			{
-				info.u.picture = MakePict( bmap->m_hBitmap , m_buttonBitmap.GetMask()->GetMaskBitmap() ) ;
+		    info.contentType = kControlContentCIconHandle ;
+				info.u.cIconHandle = wxMacCreateCIcon( bmap->m_hBitmap , m_buttonBitmap.GetMask()->GetMaskBitmap() ,
+				    8 , 16 ) ;
 			}
 			else
 			{
-				info.u.picture = MakePict( bmap->m_hBitmap , NULL ) ;
+		    info.contentType = kControlContentCIconHandle ;
+				info.u.cIconHandle = wxMacCreateCIcon( bmap->m_hBitmap , NULL ,
+				    8 , 16 ) ;
 			}
 		}
 		else if ( bmap->m_bitmapType == kMacBitmapTypeIcon )
@@ -129,8 +133,9 @@ void wxBitmapButton::SetBitmapLabel(const wxBitmap& bitmap)
 	        info.contentType = kControlContentCIconHandle ;
 	        info.u.cIconHandle = bmap->m_hIcon ;
 		}
+
 		
-	    UMASetControlData( m_macControl , kControlButtonPart , kControlBevelButtonContentTag , sizeof(info) , (char*) &info ) ;
+	    ::SetControlData( m_macControl , kControlButtonPart , kControlBevelButtonContentTag , sizeof(info) , (char*) &info ) ;
     }
 }
 

@@ -99,10 +99,10 @@ bool wxListBox::Create(wxWindow *parent, wxWindowID id,
 #else
     long	result ;
 
-    m_macControl = UMANewControl( parent->GetMacRootWindow() , &bounds , title , false ,
+    m_macControl = ::NewControl( parent->GetMacRootWindow() , &bounds , title , false ,
 				  kwxMacListWithVerticalScrollbar , 0 , 0, 
 				  kControlListBoxProc , (long) this ) ;
-    UMAGetControlData( m_macControl , kControlNoPart , kControlListBoxListHandleTag ,
+    ::GetControlData( m_macControl , kControlNoPart , kControlListBoxListHandleTag ,
 		       sizeof( ListHandle ) , (char*) &m_macList  , &result ) ;
 
     HLock( (Handle) m_macList ) ;
@@ -664,7 +664,7 @@ void wxListBox::MacHandleControlClick( ControlHandle control , SInt16 controlpar
 	Boolean wasDoubleClick = false ;
 	long	result ;
 
-	UMAGetControlData( m_macControl , kControlNoPart , kControlListBoxDoubleClickTag , sizeof( wasDoubleClick ) , (char*) &wasDoubleClick  , &result ) ;
+	::GetControlData( m_macControl , kControlNoPart , kControlListBoxDoubleClickTag , sizeof( wasDoubleClick ) , (char*) &wasDoubleClick  , &result ) ;
 	if ( !wasDoubleClick )
 	{
 		MacDoClick() ;

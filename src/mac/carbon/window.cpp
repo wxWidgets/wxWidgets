@@ -774,8 +774,8 @@ bool wxWindowMac::Show(bool show)
 	{
 	  if (show)
 	  {
-	  	UMAShowWindow( m_macWindowData->m_macWindow ) ;
-	  	UMASelectWindow( m_macWindowData->m_macWindow ) ;
+	  	::ShowWindow( m_macWindowData->m_macWindow ) ;
+	  	::SelectWindow( m_macWindowData->m_macWindow ) ;
 		// no need to generate events here, they will get them triggered by macos
 		// actually they should be , but apparently they are not
 	    wxSize size(m_width, m_height);
@@ -785,7 +785,7 @@ bool wxWindowMac::Show(bool show)
 	  }
 	  else
 	  {
-	  	UMAHideWindow( m_macWindowData->m_macWindow ) ;
+	  	::HideWindow( m_macWindowData->m_macWindow ) ;
 	  }
 	}
 	MacSuperShown( show ) ;
@@ -1179,7 +1179,7 @@ void  wxWindowMac::MacCreateRealWindow( const wxString& title,
 		attr |= kWindowCloseBoxAttribute ;
 	}
 	
-	UMACreateNewWindow( wclass , attr , &theBoundsRect , &m_macWindowData->m_macWindow ) ;
+	::CreateNewWindow( wclass , attr , &theBoundsRect , &m_macWindowData->m_macWindow ) ;
 	wxAssociateWinWithMacWindow( m_macWindowData->m_macWindow , this ) ;
 	wxString label ;
 	if( wxApp::s_macDefaultEncodingIsPC )
@@ -1187,7 +1187,7 @@ void  wxWindowMac::MacCreateRealWindow( const wxString& title,
 	else
 		label = title ;
 	UMASetWTitleC( m_macWindowData->m_macWindow , label ) ;
-	UMACreateRootControl( m_macWindowData->m_macWindow , &m_macWindowData->m_macRootControl ) ;
+	::CreateRootControl( m_macWindowData->m_macWindow , &m_macWindowData->m_macRootControl ) ;
 
 	m_macWindowData->m_macFocus = NULL ;
 	m_macWindowData->m_macHasReceivedFirstActivate = true ;
@@ -1496,7 +1496,7 @@ void wxWindowMac::Clear()
 		int w ,h ;
 		wxPoint origin = GetClientAreaOrigin() ;
 		GetClientSize( &w , &h ) ;
-		UMASetThemeWindowBackground( m_macWindowData->m_macWindow , m_macWindowData->m_macWindowBackgroundTheme , false ) ;
+		::SetThemeWindowBackground( m_macWindowData->m_macWindow , m_macWindowData->m_macWindowBackgroundTheme , false ) ;
 		Rect r = { origin.y , origin.x, origin.y+h , origin.x+w } ;
 		EraseRect( &r ) ;
 	}
@@ -1543,7 +1543,7 @@ void wxWindowMac::Raise()
 {
     if ( m_macWindowData )
     {
-        UMABringToFront( m_macWindowData->m_macWindow ) ;
+        ::BringToFront( m_macWindowData->m_macWindow ) ;
     }
 }
 
@@ -1552,7 +1552,7 @@ void wxWindowMac::Lower()
 {
     if ( m_macWindowData )
     {
-        UMASendBehind( m_macWindowData->m_macWindow , NULL ) ;
+        ::SendBehind( m_macWindowData->m_macWindow , NULL ) ;
     }
 }
 
@@ -1848,7 +1848,7 @@ void wxWindowMac::MacRedraw( RgnHandle updatergn , long time)
 				eraseBackground = true ;
 			if ( m_backgroundColour == wxSystemSettings::GetSystemColour(wxSYS_COLOUR_APPWORKSPACE) )
 			{
-					UMASetThemeWindowBackground( window , kThemeBrushDocumentWindowBackground , false ) ;
+					::SetThemeWindowBackground( window , kThemeBrushDocumentWindowBackground , false ) ;
 			}
 			else if (  m_backgroundColour == wxSystemSettings::GetSystemColour(wxSYS_COLOUR_3DFACE ) )
 			{
@@ -1880,7 +1880,7 @@ void wxWindowMac::MacRedraw( RgnHandle updatergn , long time)
 							{
 								Rect box ;
 								GetRegionBounds( updatergn , &box) ;
-								UMAApplyThemeBackground(kThemeBackgroundTabPane, &box , kThemeStateActive,8,true);
+								::ApplyThemeBackground(kThemeBackgroundTabPane, &box , kThemeStateActive,8,true);
 								break ;
 							}
 						}
@@ -1894,7 +1894,7 @@ void wxWindowMac::MacRedraw( RgnHandle updatergn , long time)
 					if ( !parent )
 					{
 						// if there is nothing special -> use default
-						UMASetThemeWindowBackground( window , kThemeBrushDialogBackgroundActive , false ) ;
+						::SetThemeWindowBackground( window , kThemeBrushDialogBackgroundActive , false ) ;
 					}
 			}
 			else
@@ -2233,7 +2233,7 @@ bool wxWindowMac::MacSetPortDrawingParams( const Point & localOrigin, const Rect
 	Pattern whiteColor ;
 	
 	::BackPat( GetQDGlobalsWhite( &whiteColor) ) ;
-	::UMASetThemeWindowBackground(  win->m_macWindowData->m_macWindow , win->m_macWindowData->m_macWindowBackgroundTheme ,  false ) ;
+	::SetThemeWindowBackground(  win->m_macWindowData->m_macWindow , win->m_macWindowData->m_macWindowBackgroundTheme ,  false ) ;
 	return true;			
 }
 

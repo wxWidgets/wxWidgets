@@ -37,7 +37,7 @@ bool wxButton::Create(wxWindow *parent, wxWindowID id, const wxString& label,
 	
 	MacPreControlCreate( parent , id ,  label , pos , size ,style, validator , name , &bounds , title ) ;
 
-	m_macControl = UMANewControl( parent->GetMacRootWindow() , &bounds , title , false , 0 , 0 , 1, 
+	m_macControl = ::NewControl( parent->GetMacRootWindow() , &bounds , title , false , 0 , 0 , 1, 
 	  	kControlPushButtonProc , (long) this ) ;
 	wxASSERT_MSG( m_macControl != NULL , "No valid mac control" ) ;
 	
@@ -58,32 +58,19 @@ void wxButton::SetDefault()
         panel->SetDefaultItem(this);
     }
 
-#ifdef __DARWIN__
 	Boolean inData;
 	if ( btnOldDefault && btnOldDefault->m_macControl )
 	{
   		inData = 0;
-		UMASetControlData( btnOldDefault->m_macControl , kControlButtonPart ,
+		::SetControlData( btnOldDefault->m_macControl , kControlButtonPart ,
 						   kControlPushButtonDefaultTag , sizeof( Boolean ) , (char*)(&inData) ) ;
 	}
 	if ( m_macControl )
 	{
   		inData = 1;
-		UMASetControlData( m_macControl , kControlButtonPart ,
+		::SetControlData( m_macControl , kControlButtonPart ,
 						   kControlPushButtonDefaultTag , sizeof( Boolean ) , (char*)(&inData) ) ;
 	}
-#else
-	if ( btnOldDefault && btnOldDefault->m_macControl )
-	{
-		UMASetControlData( btnOldDefault->m_macControl , kControlButtonPart ,
-						   kControlPushButtonDefaultTag , sizeof( Boolean ) , (char*)((Boolean)0) ) ;
-	}
-	if ( m_macControl )
-	{
-		UMASetControlData( m_macControl , kControlButtonPart ,
-						   kControlPushButtonDefaultTag , sizeof( Boolean ) , (char*)((Boolean)1) ) ;
-	}
-#endif
 }
 
 wxSize wxButton::DoGetBestSize() const

@@ -71,7 +71,7 @@ void wxMenu::Init()
 	wxMenuItem::MacBuildMenuString( label, NULL , NULL , m_title , false );
 	m_macMenuId = s_macNextMenuId++; 
     wxCHECK_RET( s_macNextMenuId < 236 , "menu ids > 235 cannot be used for submenus on mac" );
-	m_hMenu = UMANewMenu(m_macMenuId, label);
+	m_hMenu = ::NewMenu(m_macMenuId, label);
 
     if ( !m_hMenu )
     {
@@ -89,7 +89,7 @@ void wxMenu::Init()
 wxMenu::~wxMenu()
 {
 	if (m_hMenu)
-		UMADisposeMenu(m_hMenu);
+		::DisposeMenu(m_hMenu);
 
 #if wxUSE_ACCEL
     // delete accels
@@ -183,7 +183,7 @@ bool wxMenu::DoInsertOrAppend(wxMenuItem *pItem, size_t pos)
 		
 			if (wxMenuBar::MacGetInstalledMenuBar() == m_menuBar) 
 			{
-				UMAInsertMenu( pSubMenu->m_hMenu , -1 ) ;
+				::InsertMenu( pSubMenu->m_hMenu , -1 ) ;
 			}
 			
 			if ( pos == (size_t)-1 )
@@ -683,7 +683,7 @@ void wxMenuBar::MacInstallMenuBar()
 							}
 							if ( item->GetId() == wxApp::s_macAboutMenuItemId )
 							{ 
-									UMASetMenuItemText( GetMenuHandle( kwxMacAppleMenuId ) , 1 , label );
+									::SetMenuItemText( GetMenuHandle( kwxMacAppleMenuId ) , 1 , label );
 									UMAEnableMenuItem( GetMenuHandle( kwxMacAppleMenuId ) , 1 );
 	 						}
 							else
@@ -707,7 +707,7 @@ void wxMenuBar::MacInstallMenuBar()
 		 			subMenu = item->GetSubMenu() ;
 					if (subMenu)	 		
 					{
-						UMAInsertMenu( subMenu->GetHMenu() , -1 ) ;
+						::InsertMenu( subMenu->GetHMenu() , -1 ) ;
 					}
 					else
 					{
@@ -717,12 +717,12 @@ void wxMenuBar::MacInstallMenuBar()
 							UInt8 modifiers ;
 							SInt16 key ;
 							wxMenuItem::MacBuildMenuString( label, &key , &modifiers  , item->GetText(), item->GetId() != wxApp::s_macAboutMenuItemId); // no shortcut in about menu
-							UMASetMenuItemText( GetMenuHandle( kwxMacAppleMenuId ) , 1 , label );
+							::SetMenuItemText( GetMenuHandle( kwxMacAppleMenuId ) , 1 , label );
 							UMAEnableMenuItem( GetMenuHandle( kwxMacAppleMenuId ) , 1 );
  						}
 					}
 				}
-				UMAInsertMenu(m_menus[i]->GetHMenu(), 0);
+				::InsertMenu(m_menus[i]->GetHMenu(), 0);
 			}
 #endif
 			else
@@ -735,13 +735,13 @@ void wxMenuBar::MacInstallMenuBar()
 		 			subMenu = item->GetSubMenu() ;
 					if (subMenu)	 		
 					{
-						UMAInsertMenu( subMenu->GetHMenu() , -1 ) ;
+						::InsertMenu( subMenu->GetHMenu() , -1 ) ;
 					}
 				}
-				UMAInsertMenu(m_menus[i]->GetHMenu(), 0);
+				::InsertMenu(m_menus[i]->GetHMenu(), 0);
 			}
 		}
-		UMADrawMenuBar() ;
+		::DrawMenuBar() ;
 
 	s_macInstalledMenuBar = this;
 }
@@ -816,18 +816,18 @@ wxMenu *wxMenuBar::Replace(size_t pos, wxMenu *menu, const wxString& title)
     {
 		if (s_macInstalledMenuBar == this)
 		{
-			UMADeleteMenu( menuOld->MacGetMenuId() /* m_menus[pos]->MacGetMenuId() */ ) ;
+			::DeleteMenu( menuOld->MacGetMenuId() /* m_menus[pos]->MacGetMenuId() */ ) ;
 			{
 				Str255 	label;
 				wxMenuItem::MacBuildMenuString( label, NULL , NULL , title , false );
 				UMASetMenuTitle( menu->GetHMenu() , label ) ;
 				if ( pos == m_menus.GetCount() - 1)
 				{
-					UMAInsertMenu( menu->GetHMenu() , 0 ) ;
+					::InsertMenu( menu->GetHMenu() , 0 ) ;
 				}
 				else
 				{
-					UMAInsertMenu( menu->GetHMenu() , m_menus[pos+1]->MacGetMenuId() ) ;
+					::InsertMenu( menu->GetHMenu() , m_menus[pos+1]->MacGetMenuId() ) ;
 				}
 			}
 		}

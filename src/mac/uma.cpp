@@ -1,19 +1,16 @@
 #include "wx/defs.h"
 #include "wx/dc.h"
 #include "wx/mac/uma.h"
-#include "wx/mac/aga.h"
 
 #ifndef __DARWIN__
   #include <Navigation.h>
 #endif
 
-// init
-
-#if !TARGET_CARBON
-#define	GetControlOwner( control ) (**control).contrlOwner
-// since we always call this in the right context we don't have to set and reset the port
-#define InvalWindowRgn( window , rgn ) InvalRgn( rgn )
-#endif
+// since we have decided that we only support 8.6 upwards we are
+// checking for these minimum requirements in the startup code of
+// the application so all wxWindows code can safely assume that appearance 1.1
+// windows manager, control manager, navigation services etc. are 
+// present
 
 static bool	sUMAHasAppearance = false ;
 static long sUMAAppearanceVersion = 0 ;
@@ -26,14 +23,13 @@ static long sUMAWindowManagerAttr = 0 ;
 
 bool UMAHasWindowManager() { return sUMAHasWindowManager ; }
 long UMAGetWindowManagerAttr() { return sUMAWindowManagerAttr ; }
+
 void UMACleanupToolbox()
 {
-#if UMA_USE_APPEARANCE
 	if ( sUMAHasAppearance )
 	{
 		UnregisterAppearanceClient() ;
 	}
-#endif
 	if ( NavServicesAvailable() )
 	{
 		NavUnload() ;
@@ -59,7 +55,6 @@ void UMAInitToolbox( UInt16 inMoreMastersCalls )
 	InitCursor();
 #endif
 
-#if UMA_USE_APPEARANCE
 	long theAppearance ;
 	if ( Gestalt( gestaltAppearanceAttr, &theAppearance ) == noErr )
 	{
@@ -74,15 +69,10 @@ void UMAInitToolbox( UInt16 inMoreMastersCalls )
 			sUMAAppearanceVersion = 0x0100 ;
 		}
 	}
-#endif // UMA_USE_APPEARANCE
-#if UMA_USE_8_6
-#if UMA_USE_WINDOWMGR
 	if ( Gestalt( gestaltWindowMgrAttr, &sUMAWindowManagerAttr ) == noErr )
 	{
 		sUMAHasWindowManager = sUMAWindowManagerAttr & gestaltWindowMgrPresent ;
 	}
-#endif // UMA_USE_WINDOWMGR
-#endif
 		
 #ifndef __DARWIN__
 #if TARGET_CARBON
@@ -156,38 +146,17 @@ void UMASetMenuTitle( MenuRef menu , StringPtr title )
 
 UInt32 UMAMenuEvent( EventRecord *inEvent )
 {
-#if UMA_USE_APPEARANCE
-	if ( UMAHasAppearance() )
-	{
 		return MenuEvent( inEvent ) ;
-	}
-	else
-#endif
-	{
-			if ( inEvent->what == keyDown && inEvent->modifiers & cmdKey)
-			{
-				return MenuKey( inEvent->message & charCodeMask ) ;
-			}
-		return NULL ;
-	}
 }
 
 void 			UMAEnableMenuItem( MenuRef inMenu , MenuItemIndex inItem ) 
 {
-#if UMA_USE_8_6 || TARGET_CARBON
 	EnableMenuItem( inMenu , inItem ) ;
-#else
-	EnableItem( inMenu , inItem ) ;
-#endif
 }
 
 void 			UMADisableMenuItem( MenuRef inMenu , MenuItemIndex inItem ) 
 {
-#if UMA_USE_8_6 || TARGET_CARBON
 	DisableMenuItem( inMenu , inItem ) ;
-#else
-	DisableItem( inMenu , inItem ) ;
-#endif
 }
 
 void UMAAppendSubMenuItem( MenuRef menu , StringPtr l , SInt16 id ) 
@@ -253,37 +222,6 @@ void UMAInsertMenuItem( MenuRef menu , StringPtr l , MenuItemIndex item , SInt16
 	}
 	MacInsertMenuItem( menu , label , item) ;
 }
-
-void UMADrawMenuBar() 
-{
-	DrawMenuBar() ;
-}
-
-
-void UMASetMenuItemText( MenuRef menu , MenuItemIndex item , StringPtr label ) 
-{
-	::SetMenuItemText( menu , item , label ) ;
-}
-
-MenuRef	UMANewMenu( SInt16 menuid , StringPtr label ) 
-{
-	return ::NewMenu(menuid, label);
-}
-
-void UMADisposeMenu( MenuRef menu )
-{
-	DisposeMenu( menu ) ;
-}
-void UMADeleteMenu( SInt16 menuId ) 
-{
-	::DeleteMenu( menuId ) ;
-}
-
-void UMAInsertMenu( MenuRef insertMenu , SInt16 afterId ) 
-{
-	::InsertMenu( insertMenu , afterId ) ;
-}
-
 
 // quickdraw
 
@@ -357,6 +295,7 @@ OSStatus UMAPrClose()
 
 #if !TARGET_CARBON
 
+pascal QDGlobalsPtr GetQDGlobalsPtr (void) ;
 pascal QDGlobalsPtr GetQDGlobalsPtr (void)
 {
 	return QDGlobalsPtr (* (Ptr*) LMGetCurrentA5 ( ) - 0xCA);
@@ -375,11 +314,12 @@ void UMAShowWatchCursor()
 	else
 	{
 	#if TARGET_CARBON
-		Cursor preservedArrow;
-		GetQDGlobalsArrow (&preservedArrow);
-		SetQDGlobalsArrow (*watchFob);
-		InitCursor ( );
-		SetQDGlobalsArrow (&preservedArrow);
+//		Cursor preservedArrow;
+//		GetQDGlobalsArrow (&preservedArrow);
+//		SetQDGlobalsArrow (*watchFob);
+//		InitCursor ( );
+//		SetQDGlobalsArrow (&preservedArrow);
+		SetCursor (*watchFob);	
 	#else
 		SetCursor (*watchFob);	
 	#endif
@@ -437,48 +377,11 @@ void 			UMAGetWTitleC( WindowRef inWindowRef , char *title )
 #endif
 }
 
-void			UMAShowWindow( WindowRef inWindowRef ) 
-{
-	ShowWindow( inWindowRef ) ;
-
-}
-
-void			UMAHideWindow( WindowRef inWindowRef ) 
-{
-	HideWindow( inWindowRef) ;
-}
-
-void 			UMASelectWindow( WindowRef inWindowRef ) 
-{
-	SelectWindow( inWindowRef ) ;
-}
-
-void			UMABringToFront( WindowRef inWindowRef ) 
-{
-	BringToFront( inWindowRef ) ;
-}
-
-void			UMASendBehind( WindowRef inWindowRef , WindowRef behindWindow ) 
-{
-	SendBehind( inWindowRef , behindWindow ) ;
-}
-
-void			UMACloseWindow(WindowRef inWindowRef) 
-{
-#if TARGET_CARBON
-#else
-	CloseWindow( inWindowRef ) ;
-#endif
-}
-
 // appearance additions
 
 void UMAActivateControl( ControlHandle inControl ) 
 {
-#if UMA_USE_APPEARANCE
-    if ( UMAHasAppearance() )
-    { 
-      if ( !UMAIsControlActive( inControl ) )
+      if ( !IsControlActive( inControl ) )
       {
         bool visible = IsControlVisible( inControl ) ;
         if ( visible )
@@ -490,375 +393,76 @@ void UMAActivateControl( ControlHandle inControl )
           InvalWindowRect(GetControlOwner(inControl),GetControlBounds(inControl,&ctrlBounds) ) ;
         }
        }
-    }
-    else
-#endif
-#if !TARGET_CARBON
-    {
-        AGAActivateControl( inControl ) ;
-    }
-#else
-    {
-    }
-#endif
 }
 
 void UMADrawControl( ControlHandle inControl ) 
 {
     WindowRef theWindow = GetControlOwner(inControl) ;
     RgnHandle updateRgn = NewRgn() ;
-#if TARGET_CARBON
-    GetWindowRegion( theWindow , kWindowUpdateRgn, updateRgn ) ;
-#else
     GetWindowUpdateRgn( theWindow , updateRgn ) ;
-#endif
 	Point zero = { 0 , 0 } ;
 	LocalToGlobal( &zero ) ;
 	OffsetRgn( updateRgn , -zero.h , -zero.v ) ;
-#if UMA_USE_APPEARANCE
-    if ( UMAHasAppearance() )
-    {
-        ::DrawControlInCurrentPort( inControl ) ;
-    }
-    else
-#endif
-#if !TARGET_CARBON
-    {
-        AGADrawControl( inControl ) ;
-    }
-#else
-    {
-    }
-#endif
-#if defined(UNIVERSAL_INTERFACES_VERSION) && (UNIVERSAL_INTERFACES_VERSION >= 0x0332)
-    InvalWindowRgn( theWindow, updateRgn) ;
-#else
-    InvalRgn( updateRgn ) ;
-#endif
+  ::DrawControlInCurrentPort( inControl ) ;
+  InvalWindowRgn( theWindow, updateRgn) ;
 	DisposeRgn( updateRgn ) ;
 
 }
 
 void UMAMoveControl( ControlHandle inControl , short x , short y ) 
 {
-    if ( UMAHasAppearance() )
-    {
-        bool visible = UMAIsControlVisible( inControl ) ;
-        if ( visible ) {
-          SetControlVisibility( inControl , false , false ) ;
-          Rect ctrlBounds ;
-          InvalWindowRect(GetControlOwner(inControl),GetControlBounds(inControl,&ctrlBounds) ) ;
-        }
-        ::MoveControl( inControl , x , y ) ;
-        if ( visible ) {
-          SetControlVisibility( inControl , true , false ) ;
-          Rect ctrlBounds ;
-          InvalWindowRect(GetControlOwner(inControl),GetControlBounds(inControl,&ctrlBounds) ) ;
-        }
-    }
+  bool visible = IsControlVisible( inControl ) ;
+  if ( visible ) {
+    SetControlVisibility( inControl , false , false ) ;
+    Rect ctrlBounds ;
+    InvalWindowRect(GetControlOwner(inControl),GetControlBounds(inControl,&ctrlBounds) ) ;
+  }
+  ::MoveControl( inControl , x , y ) ;
+  if ( visible ) {
+    SetControlVisibility( inControl , true , false ) ;
+    Rect ctrlBounds ;
+    InvalWindowRect(GetControlOwner(inControl),GetControlBounds(inControl,&ctrlBounds) ) ;
+  }
 }
 
 void UMASizeControl( ControlHandle inControl , short x , short y ) 
 {
-    if ( UMAHasAppearance() )
-    {
-        bool visible = UMAIsControlVisible( inControl ) ;
-        if ( visible ) {
-          SetControlVisibility( inControl , false , false ) ;
-          Rect ctrlBounds ;
-          InvalWindowRect(GetControlOwner(inControl),GetControlBounds(inControl,&ctrlBounds) ) ;
-        }
-        ::SizeControl( inControl , x , y ) ;
-        if ( visible ) {
-          SetControlVisibility( inControl , true , false ) ;
-          Rect ctrlBounds ;
-          InvalWindowRect(GetControlOwner(inControl),GetControlBounds(inControl,&ctrlBounds) ) ;
-        }
-    }
+  bool visible = IsControlVisible( inControl ) ;
+  if ( visible ) {
+    SetControlVisibility( inControl , false , false ) ;
+    Rect ctrlBounds ;
+    InvalWindowRect(GetControlOwner(inControl),GetControlBounds(inControl,&ctrlBounds) ) ;
+  }
+  ::SizeControl( inControl , x , y ) ;
+  if ( visible ) {
+    SetControlVisibility( inControl , true , false ) ;
+    Rect ctrlBounds ;
+    InvalWindowRect(GetControlOwner(inControl),GetControlBounds(inControl,&ctrlBounds) ) ;
+  }
 }
 
 void UMADeactivateControl( ControlHandle inControl ) 
 {
-    if ( UMAHasAppearance() )
-    {
-      if ( UMAIsControlActive( inControl ) )
-      {
-        bool visible = IsControlVisible( inControl ) ;
-        if ( visible )
-          SetControlVisibility( inControl , false , false ) ;
-        ::DeactivateControl( inControl ) ;
-        if ( visible ) {
-          SetControlVisibility( inControl , true , false ) ;
-          Rect ctrlBounds ;
-          InvalWindowRect(GetControlOwner(inControl),GetControlBounds(inControl,&ctrlBounds) ) ;
-        }
-       }
-    }
-}
-
-void UMASetThemeWindowBackground	       (WindowRef 				inWindow,
-						ThemeBrush 			inBrush,
-						Boolean 				inUpdate)
-{
-#if UMA_USE_APPEARANCE
-    if ( UMAHasAppearance() )
-    {
-        ::SetThemeWindowBackground( inWindow ,inBrush , inUpdate ) ;
-    }
-    else
-#endif
-#if !TARGET_CARBON
-    {
-        AGASetThemeWindowBackground( inWindow , inBrush , inUpdate ) ;
-    }
-#else
-    {
-    }
-#endif
-}
-
-void			UMAApplyThemeBackground			(ThemeBackgroundKind 	inKind,
-								 const Rect *			bounds,
-								 ThemeDrawState 		inState,
-								 SInt16 				inDepth,
-								 Boolean 				inColorDev)
-{
-#if UMA_USE_APPEARANCE
-	if ( UMAHasAppearance() )
-	{
-	/*
-		if ( sUMAAppearanceVersion >= 0x0110 )
-   			::ApplyThemeBackground( inKind ,bounds , inState , inDepth , inColorDev ) ;
-   */
-   }
-   else
-#endif
-#if !TARGET_CARBON
+   if ( IsControlActive( inControl ) )
    {
-   	AGAApplyThemeBackground( inKind ,bounds , inState , inDepth , inColorDev ) ;
-   }
-#else
-	{
-	}
-#endif
-}
-
-ControlHandle UMANewControl(WindowPtr 			owningWindow,
-			    const Rect *	        boundsRect,
-			    ConstStr255Param 		controlTitle,
-			    Boolean 			initiallyVisible,
-			    SInt16 			initialValue,
-			    SInt16 			minimumValue,
-			    SInt16 			maximumValue,
-			    SInt16 			procID,
-			    SInt32 			controlReference)
-{
-	ControlHandle theControl = NULL ;
-#if UMA_USE_APPEARANCE
-	if ( UMAHasAppearance() )
-	{
-   theControl =  NewControl( owningWindow , boundsRect , controlTitle , initiallyVisible ,
-   		initialValue , minimumValue , maximumValue , procID , controlReference ) ;
-	}
-	else
-#endif
-#if !TARGET_CARBON
-	{
-		theControl = AGANewControl( owningWindow , boundsRect , controlTitle , initiallyVisible ,
-   		initialValue , minimumValue , maximumValue , procID , controlReference ) ;
-	}
-#else
-	{
-	}
-#endif
-	return theControl ;
-}
-
-void UMADisposeControl (ControlHandle 			theControl)
-{
-    if ( UMAHasAppearance() )
-    {
-        ::DisposeControl( theControl ) ;
-    }
-    else
-    {
-        ::DisposeControl( theControl ) ;
+     bool visible = IsControlVisible( inControl ) ;
+     if ( visible )
+       SetControlVisibility( inControl , false , false ) ;
+     ::DeactivateControl( inControl ) ;
+     if ( visible ) {
+       SetControlVisibility( inControl , true , false ) ;
+       Rect ctrlBounds ;
+       InvalWindowRect(GetControlOwner(inControl),GetControlBounds(inControl,&ctrlBounds) ) ;
+     }
     }
 }
-
-void UMAHiliteControl	(ControlHandle 			inControl,
-			 ControlPartCode 		hiliteState)
-{
-    if ( UMAHasAppearance() )
-    {
-        ::HiliteControl( inControl , hiliteState ) ;
-    }
-    else
-    {
-        ::HiliteControl( inControl , hiliteState ) ;
-    }
-}
-
 // shows the control and adds the region to the update region
 void UMAShowControl						(ControlHandle 			inControl)
 {
-    if ( UMAHasAppearance() )
-    {
         SetControlVisibility( inControl , true , false ) ;
         Rect ctrlBounds ;
         InvalWindowRect(GetControlOwner(inControl),GetControlBounds(inControl,&ctrlBounds) ) ;
-    }
 }
-
-// Hides the control and adds the region to the update region
-void UMAHideControl						(ControlHandle 			inControl)
-{
-    if ( UMAHasAppearance() )
-    {
-        ::HideControl( inControl ) ;
-    }
-    else
-    {
-        ::HideControl( inControl ) ;
-    }
-}
-
-
-void UMASetControlVisibility			(ControlHandle 			inControl,
-								 Boolean 				inIsVisible,
-								 Boolean 				inDoDraw)
-{
-    if ( UMAHasAppearance() )
-    {
-#if UMA_USE_APPEARANCE
-        ::SetControlVisibility( inControl , inIsVisible, inDoDraw ) ;
-#endif
-    }
-}
-
-
-
-bool UMAIsControlActive					(ControlHandle 			inControl)
-{
-#if TARGET_CARBON
-   	return IsControlActive( inControl ) ;
-#else
-#if UMA_USE_APPEARANCE
-	if ( UMAHasAppearance() )
-	{
-   	return IsControlActive( inControl ) ;
-   }
-  else
-#endif
-  	return (**inControl).contrlHilite == 0 ;
-#endif
-}
-
-
-bool UMAIsControlVisible				(ControlHandle 			inControl)
-{
-#if UMA_USE_APPEARANCE
-	if ( UMAHasAppearance() )
-	{
-   	return IsControlVisible( inControl ) ;
-   }
-   else
-#endif
-  {
-#if !TARGET_CARBON
-    return (**inControl).contrlVis == 255 ;
-#endif
-  }
-  	return true ;
-}
-
-OSErr UMAGetBestControlRect				(ControlHandle 			inControl,
-								 Rect *					outRect,
-								 SInt16 *				outBaseLineOffset)
-{
-#if UMA_USE_APPEARANCE
-	if ( UMAHasAppearance() )
-	{
-   	return GetBestControlRect( inControl , outRect , outBaseLineOffset ) ;
-   }
-  else
-#endif
-#if !TARGET_CARBON
-  {
-  	return AGAGetBestControlRect( inControl , outRect , outBaseLineOffset ) ;
-  }
-#else
-	{
-		return noErr ;
-	}
-#endif
-}
-
-
-OSErr UMASetControlFontStyle				(ControlHandle 			inControl,
-								 const ControlFontStyleRec * inStyle)	
-{
-#if UMA_USE_APPEARANCE
-	if ( UMAHasAppearance() )
-	{
-		return ::SetControlFontStyle( inControl , inStyle ) ;
-	}
-	else
-#endif
-#if !TARGET_CARBON
-		return AGASetControlFontStyle( inControl , inStyle ) ;
-#else
-	{
-		return noErr ;
-	}
-#endif
-}
-
-
-
-// control hierarchy
-
-OSErr UMACreateRootControl				(WindowPtr 				inWindow,
-								 ControlHandle *		outControl)
-{
-#if UMA_USE_APPEARANCE
-	if ( UMAHasAppearance() )
-	{
-   	return CreateRootControl( inWindow , outControl  ) ;
-   }
-  else
-#endif
-#if !TARGET_CARBON
-  	return AGACreateRootControl( inWindow , outControl ) ;
-#else
-	{
-		return noErr ;
-	}
-#endif
-}
-
-
-
-OSErr UMAEmbedControl					(ControlHandle 			inControl,
-								 ControlHandle 			inContainer)
-{
-#if UMA_USE_APPEARANCE
-	if ( UMAHasAppearance() )
-	{
-   	return EmbedControl( inControl , inContainer ) ;
-   }
-  else
-#endif
-#if !TARGET_CARBON
-  	return AGAEmbedControl( inControl , inContainer ) ; ;
-#else
-	{
-		return noErr ;
-	}
-#endif
-}
-
-
 
 // keyboard focus
 OSErr UMASetKeyboardFocus				(WindowPtr 				inWindow,
@@ -868,25 +472,11 @@ OSErr UMASetKeyboardFocus				(WindowPtr 				inWindow,
 	OSErr err = noErr;
 	GrafPtr port ;
 	GetPort( &port ) ;
-#if TARGET_CARBON
-	SetPort( GetWindowPort( inWindow ) ) ;
-#else
-	SetPort( inWindow ) ;
-#endif
+
+	SetPortWindowPort( inWindow ) ;
+
 	SetOrigin( 0 , 0 ) ;
-#if UMA_USE_APPEARANCE
-	if ( UMAHasAppearance() )
-	{
-   	err = SetKeyboardFocus( inWindow , inControl , inPart ) ;
-   }
-  else
-#endif
-#if !TARGET_CARBON
-  	err = AGASetKeyboardFocus( inWindow , inControl , inPart ) ;
-#else
-	{
-	}
-#endif
+  err = SetKeyboardFocus( inWindow , inControl , inPart ) ;
 	SetPort( port ) ;
 	return err ;
 }
@@ -895,520 +485,26 @@ OSErr UMASetKeyboardFocus				(WindowPtr 				inWindow,
 
 
 // events
-
-ControlPartCode UMAHandleControlClick				(ControlHandle 			inControl,
-								 Point 					inWhere,
-								 SInt16 				inModifiers,
-								 ControlActionUPP 		inAction)		 
-{
-#if UMA_USE_APPEARANCE
-	if ( UMAHasAppearance() )
-	{
-   	return HandleControlClick( inControl , inWhere , inModifiers , inAction ) ;
-   }
-   else
-#endif
-#if !TARGET_CARBON
-   {
-   	return AGAHandleControlClick( inControl , inWhere , inModifiers , inAction ) ;
-   }
-#else
-	{
-		return noErr ;
-	}
-#endif
-}
-
-
-SInt16 UMAHandleControlKey				(ControlHandle 			inControl,
-								 SInt16 				inKeyCode,
-								 SInt16 				inCharCode,
-								 SInt16 				inModifiers)
-{
-#if UMA_USE_APPEARANCE
-	if ( UMAHasAppearance() )
-	{
-   	return HandleControlKey( inControl , inKeyCode , inCharCode , inModifiers ) ;
-   }
-   else
-#endif
-#if !TARGET_CARBON
-   {
-   	return AGAHandleControlKey(inControl , inKeyCode , inCharCode , inModifiers ) ;
-   }
-#else
-	{
-		return noErr ;
-	}
-#endif
-}
-
-
-								 
-void UMAIdleControls					(WindowPtr 				inWindow)
-{
-#if UMA_USE_APPEARANCE
-	if ( UMAHasAppearance() )
-	{
-   		IdleControls( inWindow ) ;
-   }
-   else
-#endif
-#if !TARGET_CARBON
-   {
-   		AGAIdleControls( inWindow ) ;
-   }
-#else
-	{
-	}
-#endif
-}
-
 void UMAUpdateControls( WindowPtr inWindow , RgnHandle inRgn ) 
 {
-    RgnHandle updateRgn = NewRgn() ;
-#if TARGET_CARBON
-    GetWindowRegion( inWindow , kWindowUpdateRgn, updateRgn ) ;
-#else
-    GetWindowUpdateRgn( inWindow , updateRgn ) ;
-#endif
+  RgnHandle updateRgn = NewRgn() ;
+  GetWindowUpdateRgn( inWindow , updateRgn ) ;
+
 	Point zero = { 0 , 0 } ;
 	LocalToGlobal( &zero ) ;
 	OffsetRgn( updateRgn , -zero.h , -zero.v ) ;
-#if UMA_USE_APPEARANCE
-    if ( UMAHasAppearance() )
-    {
-        UpdateControls( inWindow , inRgn ) ;
-    }
-    else
-#endif
-#if !TARGET_CARBON
-    {
-        AGAUpdateControls( inWindow , inRgn ) ;
-    }
-#else
-    {
-    }
-#endif
-#if defined(UNIVERSAL_INTERFACES_VERSION) && (UNIVERSAL_INTERFACES_VERSION >= 0x0332)
-    InvalWindowRgn( inWindow, updateRgn) ;
-#else
-    InvalRgn( updateRgn ) ;
-#endif
+
+  UpdateControls( inWindow , inRgn ) ;
+  InvalWindowRgn( inWindow, updateRgn) ;
 	DisposeRgn( updateRgn ) ;
 
-}
-
-OSErr UMAGetRootControl( WindowPtr inWindow , ControlHandle *outControl ) 
-{
-#if UMA_USE_APPEARANCE
-	if ( UMAHasAppearance() )
-	{
-		return GetRootControl( inWindow , outControl ) ;
-	}
-	else
-#endif
-#if !TARGET_CARBON
-	{
-		return AGAGetRootControl( inWindow , outControl ) ;
-	}
-#else
-	{
-		return noErr ;
-	}
-#endif
-}
-
-
-// handling control data
-
-OSErr UMASetControlData					(ControlHandle 			inControl,
-								 ControlPartCode 		inPart,
-								 ResType 				inTagName,
-								 Size 					inSize,
-								 Ptr 					inData)
-{
-#if UMA_USE_APPEARANCE
-	if ( UMAHasAppearance() )
-	{
-   	 return SetControlData( inControl , inPart , inTagName , inSize , inData ) ;
-   }
-   else
-#endif
-#if !TARGET_CARBON
-		return AGASetControlData( inControl , inPart , inTagName , inSize , inData ) ;
-#else
-	{
-		return noErr ;
-	}
-#endif
-}
-
-
-
-OSErr UMAGetControlData					(ControlHandle 			inControl,
-								 ControlPartCode 		inPart,
-								 ResType 				inTagName,
-								 Size 					inBufferSize,
-								 Ptr 					outBuffer,
-								 Size *					outActualSize)
-{
-#if UMA_USE_APPEARANCE
-	if ( UMAHasAppearance() )
-	{
-		return ::GetControlData( inControl , inPart , inTagName , inBufferSize , outBuffer , outActualSize ) ;
-	}
-	else
-#endif
-#if !TARGET_CARBON
-	{
-		return AGAGetControlData( inControl , inPart , inTagName , inBufferSize , outBuffer , outActualSize ) ;
-	}
-#else
-	{
-		return noErr ;
-	}
-#endif
-}
-
-
-OSErr UMAGetControlDataSize				(ControlHandle 			inControl,
-								 ControlPartCode 		inPart,
-								 ResType 				inTagName,
-								 Size *					outMaxSize)
-{
-#if UMA_USE_APPEARANCE
-	if ( UMAHasAppearance() )
-	{
-		return GetControlDataSize( inControl , inPart , inTagName , outMaxSize ) ;
-	}
-	else
-#endif
-#if !TARGET_CARBON
-	{
-		return AGAGetControlDataSize( inControl , inPart , inTagName , outMaxSize ) ;
-	}
-#else
-	{
-		return noErr ;
-	}
-#endif
-}
-
-
-
-
-
-// system 8.0 changes
-
-short UMAFindWindow( Point inPoint , WindowRef *outWindow )
-{
-	// todo add the additional area codes
-	return FindWindow( inPoint , outWindow ) ;
-}
-
-OSStatus UMAGetWindowFeatures( WindowRef inWindowRef , UInt32 *outFeatures )
-{
-#if UMA_USE_WINDOWMGR
-	return GetWindowFeatures( inWindowRef , outFeatures ) ;
-#else
-	return 0 ;
-#endif
-}
-
-OSStatus UMAGetWindowRegion( WindowRef inWindowRef , WindowRegionCode inRegionCode , RgnHandle ioWinRgn )
-{
-#if UMA_USE_WINDOWMGR
-	return GetWindowRegion( inWindowRef , inRegionCode , ioWinRgn ) ;
-#else
-	return 0 ;
-#endif
-}
-
-void UMADrawGrowIcon( WindowRef inWindowRef )
-{
-	DrawGrowIcon( inWindowRef ) ;
-}
-
-OSStatus UMACollapseWindow( WindowRef inWindowRef , Boolean inCollapseIt )
-{
-	return CollapseWindow( inWindowRef , inCollapseIt ) ;
-}
-
-OSStatus UMACollapseAllWindows( Boolean inCollapseEm )
-{
-	return CollapseAllWindows( inCollapseEm ) ;
-}
-
-Boolean UMAIsWindowCollapsed( WindowRef inWindowRef )
-{
-	return IsWindowCollapsed( inWindowRef ) ;
-}
-
-Boolean UMAIsWindowCollapsable( WindowRef inWindowRef )
-{
-	return IsWindowCollapsable( inWindowRef ) ;
-}
-
-// system 8.5 changes<MacWindows.h>
-OSStatus 	UMACreateNewWindow( WindowClass windowClass , WindowAttributes attributes , const Rect *bounds,  WindowRef *outWindow ) 
-{
-#if UMA_USE_WINDOWMGR
-	if ( UMAHasWindowManager() )
-	{
-		return CreateNewWindow( windowClass , attributes, bounds, outWindow ) ;
-	}
-	else
-#endif
-	{
-		short procID ;
-		if ( UMAHasAppearance() )
-		{
-			switch( windowClass )
-			{
-				case kMovableModalWindowClass :
-					procID = kWindowMovableModalDialogProc;
-					break ;
-				case kModalWindowClass :
-					procID = kWindowShadowDialogProc;
-					break ;
-				case kFloatingWindowClass :
-					if ( attributes & kWindowSideTitlebarAttribute )
-					{
-						if( ( attributes & kWindowResizableAttribute ) &&  
-							( attributes & kWindowFullZoomAttribute ) )
-						{
-							procID = kWindowFloatSideFullZoomGrowProc ;
-						}
-						else if( attributes & kWindowFullZoomAttribute )
-						{
-							procID = kWindowFloatSideFullZoomProc;
-						}
-						else if ( attributes & kWindowResizableAttribute )
-						{
-							procID = kWindowFloatSideGrowProc;
-						}
-						else
-						{
-							procID = kWindowFloatSideProc;
-						}
-					}
-					else
-					{
-						if( ( attributes & kWindowResizableAttribute ) &&  
-							( attributes & kWindowFullZoomAttribute ) )
-						{
-							procID = kWindowFloatFullZoomGrowProc ;
-						}
-						else if( attributes & kWindowFullZoomAttribute )
-						{
-							procID = kWindowFloatFullZoomProc;
-						}
-						else if ( attributes & kWindowResizableAttribute )
-						{
-							procID = kWindowFloatGrowProc;
-						}
-						else
-						{
-							procID = kWindowFloatProc;
-						}
-					}
-					break ;
-				case kDocumentWindowClass :
-				default :
-					if( ( attributes & kWindowResizableAttribute ) &&  
-						( attributes & kWindowFullZoomAttribute ) )
-					{
-						procID = kWindowFullZoomGrowDocumentProc;
-					}
-					else if( attributes & kWindowFullZoomAttribute )
-					{
-						procID = kWindowFullZoomDocumentProc;
-					}
-					else if ( attributes & kWindowResizableAttribute )
-					{
-						procID = kWindowGrowDocumentProc;
-					}
-					else
-					{
-						procID = kWindowDocumentProc;
-					}
-					break ;
-			}
-		}
-		else
-		{
-			switch( windowClass )
-			{
-				case kMovableModalWindowClass :
-					procID = movableDBoxProc;
-					break ;
-				case kModalWindowClass :
-					procID = altDBoxProc;
-					break ;
-				case kFloatingWindowClass :
-					if ( attributes & kWindowSideTitlebarAttribute )
-					{
-						if( ( attributes & kWindowResizableAttribute ) &&  
-							( attributes & kWindowFullZoomAttribute ) )
-						{
-							procID = floatSideZoomGrowProc ;
-						}
-						else if( attributes & kWindowFullZoomAttribute )
-						{
-							procID = floatSideZoomProc;
-						}
-						else if ( attributes & kWindowResizableAttribute )
-						{
-							procID = floatSideGrowProc;
-						}
-						else
-						{
-							procID = floatSideProc;
-						}
-					}
-					else
-					{
-						if( ( attributes & kWindowResizableAttribute ) &&  
-							( attributes & kWindowFullZoomAttribute ) )
-						{
-							procID = floatZoomGrowProc ;
-						}
-						else if( attributes & kWindowFullZoomAttribute )
-						{
-							procID = floatZoomProc;
-						}
-						else if ( attributes & kWindowResizableAttribute )
-						{
-							procID = floatGrowProc;
-						}
-						else
-						{
-							procID = floatProc;
-						}
-					}
-					break ;
-				case kDocumentWindowClass :
-				default :
-					if( ( attributes & kWindowResizableAttribute ) &&  
-						( attributes & kWindowFullZoomAttribute ) )
-					{
-						procID = zoomDocProc;
-					}
-					else if( attributes & kWindowFullZoomAttribute )
-					{
-						procID = zoomNoGrow;
-					}
-					else if ( attributes & kWindowResizableAttribute )
-					{
-						procID = documentProc;
-					}
-					else
-					{
-						procID = noGrowDocProc;
-					}
-					break ;
-					break ;
-			}
-		}
-		*outWindow = NewCWindow(nil, bounds, "\p", false, procID,  (WindowRef) -1 /*behind*/,
-				attributes & kWindowCloseBoxAttribute , (long)NULL);
-		return noErr ;		
-	}
-}
-
-OSStatus 	UMAGetWindowClass( WindowRef inWindowRef , WindowClass *outWindowClass ) 
-{
-#if UMA_USE_WINDOWMGR
-	if ( UMAHasWindowManager() )
-	{
-		return GetWindowClass( inWindowRef , outWindowClass ) ;
-	}
-	else
-#endif
-		return kDocumentWindowClass ;
-}
-
-OSStatus	UMAGetWindowAttributes( WindowRef inWindowRef , WindowAttributes *outAttributes ) 
-{
-#if UMA_USE_WINDOWMGR
-	if ( UMAHasWindowManager() )
-	{
-		return GetWindowAttributes( inWindowRef , outAttributes ) ;
-	}
-#endif
-	return kWindowNoAttributes ;
-}
-
-void UMAShowFloatingWindows() 
-{
-#if UMA_USE_WINDOWMGR
-	if ( UMAHasWindowManager() )
-	{
-		ShowFloatingWindows() ;
-	}
-#endif
-}
-
-void UMAHideFloatingWindows() 
-{
-#if UMA_USE_WINDOWMGR
-	if ( UMAHasWindowManager() )
-	{
-		HideFloatingWindows() ;
-	}
-#endif
-}
-
-Boolean 	UMAAreFloatingWindowsVisible() 
-{
-#if UMA_USE_WINDOWMGR
-	if ( UMAHasWindowManager() )
-	{
-		return AreFloatingWindowsVisible() ;
-	}
-#endif
-	return false ;
-}
-
-WindowRef UMAFrontNonFloatingWindow()
-{
-#if UMA_USE_WINDOWMGR
-	if ( UMAHasWindowManager() )
-	{
-		return FrontNonFloatingWindow() ;
-	}
-	else
-#endif
-	{
-		return FrontWindow() ;
-	}
-}
-
-WindowRef UMAFrontWindow()
-{
-#if UMA_USE_WINDOWMGR
-	if ( UMAHasWindowManager() )
-	{
-		return FrontWindow() ;
-	}
-	else
-#endif
-	{
-		return FrontWindow() ;
-	}
-}
-
-WindowRef UMAGetActiveNonFloatingWindow()
-{
-	return NULL ;
 }
 
 bool UMAIsWindowFloating( WindowRef inWindow ) 
 {
 	WindowClass cl ;
 	
-	UMAGetWindowClass( inWindow , &cl ) ;
+	GetWindowClass( inWindow , &cl ) ;
 	return cl == kFloatingWindowClass ;
 }
 
@@ -1416,7 +512,7 @@ bool UMAIsWindowModal( WindowRef inWindow )
 {
 	WindowClass cl ;
 	
-	UMAGetWindowClass( inWindow , &cl ) ;
+	GetWindowClass( inWindow , &cl ) ;
 	return cl < kFloatingWindowClass ;
 }
 
@@ -1430,15 +526,11 @@ void UMAHighlightAndActivateWindow( WindowRef inWindowRef , bool inActivate )
 //		if ( inActivate != isHightlited )
 		GrafPtr port ;
 		GetPort( &port ) ;
-#if TARGET_CARBON
-		SetPort( GetWindowPort( inWindowRef ) ) ;
-#else
-		SetPort( inWindowRef ) ;
-#endif
+		SetPortWindowPort( inWindowRef ) ;
 		SetOrigin( 0 , 0 ) ;
 		HiliteWindow( inWindowRef , inActivate ) ;
 		ControlHandle control = NULL ;
-		UMAGetRootControl( inWindowRef , & control ) ;
+		::GetRootControl( inWindowRef , & control ) ;
 		if ( control )
 		{
 			if ( inActivate )
@@ -1451,20 +543,6 @@ void UMAHighlightAndActivateWindow( WindowRef inWindowRef , bool inActivate )
 }
 OSStatus UMADrawThemePlacard( const Rect *inRect , ThemeDrawState inState ) 
 {
-#if UMA_USE_APPEARANCE
-  if ( UMAHasAppearance() )
-  {
-    ::DrawThemePlacard( inRect , inState ) ;
-  }
-  else
-#endif
-#if !TARGET_CARBON
-  {
-  }
-#else
-  {
-  }
-#endif
-  return noErr ;
+  return ::DrawThemePlacard( inRect , inState ) ;
 }
 

@@ -271,12 +271,12 @@ void wxMacToolTip::Draw()
 				   NULL);
 
 		ClosePicture();
-		RGBColor yellow = { 0xFFFF  , 0xFFFF , (153<<8)+153 } ;
-		RGBBackColor( &yellow ) ;
-		EraseRect( &m_rect ) ;
+    PenNormal() ;
+		SetThemeBackground(kThemeBrushNotificationWindowBackground,32,true) ;
+		BackColor( yellowColor ) ;
+		ForeColor(magentaColor ) ;
+//		EraseRect( &m_rect ) ;
 		FrameRect( &m_rect ) ;
-		BackColor( whiteColor ) ;
-		ForeColor(blackColor ) ;
 		::MoveTo( m_rect.left + kTipBorder , m_rect.top + fontInfo.ascent + kTipBorder);
 
 		i = 0 ;

@@ -115,7 +115,7 @@ bool wxNotebook::Create(wxWindow *parent,
 	
 	MacPreControlCreate( parent , id ,  "" , pos , size ,style, wxDefaultValidator , name , &bounds , title ) ;
 
-	m_macControl = UMANewControl( parent->GetMacRootWindow() , &bounds , title , false , 0 , 0 , 1, 
+	m_macControl = ::NewControl( parent->GetMacRootWindow() , &bounds , title , false , 0 , 0 , 1, 
 	  	kControlTabSmallProc , (long) this ) ;
 	
 	MacPostControlCreate() ;

@@ -111,7 +111,7 @@ wxControl::~wxControl()
     }
     if ( m_macControl )
     {
-    	UMADisposeControl( m_macControl ) ;
+    	::DisposeControl( m_macControl ) ;
     	m_macControl = NULL ;
     }
 }
@@ -146,7 +146,7 @@ wxSize wxControl::DoGetBestSize() const
 	Rect 	bestsize = { 0 , 0 , 0 , 0 } ;
 	short	baselineoffset ;
 	int bestWidth, bestHeight ;
-	UMAGetBestControlRect( m_macControl , &bestsize , &baselineoffset ) ;
+	::GetBestControlRect( m_macControl , &bestsize , &baselineoffset ) ;
 
 	if ( EmptyRect( &bestsize ) )
 	{
@@ -297,7 +297,7 @@ void wxControl::MacPostControlCreate()
 		controlstyle.flags = kControlUseFontMask ;
 		controlstyle.font = kControlFontSmallBoldSystemFont ;
 		
-		::UMASetControlFontStyle( m_macControl , &controlstyle ) ;
+		::SetControlFontStyle( m_macControl , &controlstyle ) ;
 	}
 	else
 	{
@@ -305,11 +305,11 @@ void wxControl::MacPostControlCreate()
 		controlstyle.flags = kControlUseFontMask ;
 		controlstyle.font = kControlFontSmallSystemFont ;
 		
-		::UMASetControlFontStyle( m_macControl , &controlstyle ) ;
+		::SetControlFontStyle( m_macControl , &controlstyle ) ;
 	}
 	ControlHandle container = GetParent()->MacGetContainerForEmbedding() ;
 	wxASSERT_MSG( container != NULL , wxT("No valid mac container control") ) ;
-	::UMAEmbedControl( m_macControl , container ) ;
+	::EmbedControl( m_macControl , container ) ;
 	m_macControlIsShown  = true ;
 
 	wxAssociateControlWithMacControl( m_macControl , this ) ;
@@ -342,7 +342,7 @@ void wxControl::MacAdjustControlRect()
 		Rect 	bestsize = { 0 , 0 , 0 , 0 } ;
 		short	baselineoffset ;
 		
-		UMAGetBestControlRect( m_macControl , &bestsize , &baselineoffset ) ;
+		::GetBestControlRect( m_macControl , &bestsize , &baselineoffset ) ;
 
 		if ( EmptyRect( &bestsize ) )
 		{
@@ -415,7 +415,7 @@ void wxControl::MacSuperChangedPosition()
 		
 		WindowRef rootwindow = GetMacRootWindow() ;
 		wxWindow* wxrootwindow = wxFindWinFromMacWindow( rootwindow ) ;
-		UMASetThemeWindowBackground( rootwindow , kThemeBrushDialogBackgroundActive , false ) ;
+		::SetThemeWindowBackground( rootwindow , kThemeBrushDialogBackgroundActive , false ) ;
 		wxMacDrawingHelper focus( wxrootwindow ) ;
 	
 		if ( mac_x != former_mac_x || mac_y != former_mac_y )
@@ -435,7 +435,7 @@ void wxControl::MacSuperChangedPosition()
 		}
 		else
 		{
-			UMASetThemeWindowBackground( rootwindow , kThemeBrushDocumentWindowBackground , false ) ;
+			::SetThemeWindowBackground( rootwindow , kThemeBrushDocumentWindowBackground , false ) ;
 		}
 	}
 
@@ -484,7 +484,7 @@ void  wxControl::MacSuperShown( bool show )
 		{
 			if ( m_macControlIsShown )
 			{
-				::UMAHideControl( m_macControl ) ;
+				::HideControl( m_macControl ) ;
 				m_macControlIsShown = false ;
 			}
 		}
@@ -619,7 +619,7 @@ void  wxControl::DoSetSize(int x, int y,
          wxWindow* wxrootwindow = wxFindWinFromMacWindow( rootwindow ) ;
          wxMacDrawingHelper focus( wxrootwindow );
  
-         UMASetThemeWindowBackground( rootwindow , kThemeBrushDialogBackgroundActive , false ) ;
+         ::SetThemeWindowBackground( rootwindow , kThemeBrushDialogBackgroundActive , false ) ;
          // Update window at old and new positions
          SetRect(&newbounds, m_x, m_y, m_x + m_width, m_y + m_height);
          InvalWindowRect( rootwindow , &oldbounds );
@@ -629,7 +629,7 @@ void  wxControl::DoSetSize(int x, int y,
  
          if ( !wxrootwindow->IsKindOf( CLASSINFO( wxDialog ) ) )
          {
-             UMASetThemeWindowBackground( rootwindow, kThemeBrushDocumentWindowBackground, false );
+             ::SetThemeWindowBackground( rootwindow, kThemeBrushDocumentWindowBackground, false );
          }
      }
 }
@@ -645,7 +645,7 @@ bool  wxControl::Show(bool show)
 		{
 			if ( m_macControlIsShown )
 			{
-				::UMAHideControl( m_macControl ) ;
+				::HideControl( m_macControl ) ;
 				m_macControlIsShown = false ;
 			}
 		}
@@ -707,7 +707,7 @@ void wxControl::MacRedrawControl()
 				{
 					if( parent->MacGetWindowData() )
 					{
-						UMASetThemeWindowBackground( win->MacGetWindowData()->m_macWindow , kThemeBrushDialogBackgroundActive , false ) ;
+						::SetThemeWindowBackground( win->MacGetWindowData()->m_macWindow , kThemeBrushDialogBackgroundActive , false ) ;
 						break ;
 					}
 					
@@ -722,7 +722,7 @@ void wxControl::MacRedrawControl()
 				} 
 				
 				UMADrawControl( m_macControl ) ;
-				UMASetThemeWindowBackground( win->MacGetWindowData()->m_macWindow , win->MacGetWindowData()->m_macWindowBackgroundTheme , false ) ;
+				::SetThemeWindowBackground( win->MacGetWindowData()->m_macWindow , win->MacGetWindowData()->m_macWindowBackgroundTheme , false ) ;
 			}
 		}
 	}
@@ -747,7 +747,7 @@ void wxControl::OnPaint(wxPaintEvent& event)
 				{
 					if( parent->MacGetWindowData() )
 					{
-						UMASetThemeWindowBackground( win->MacGetWindowData()->m_macWindow , kThemeBrushDialogBackgroundActive , false ) ;
+						::SetThemeWindowBackground( win->MacGetWindowData()->m_macWindow , kThemeBrushDialogBackgroundActive , false ) ;
 						break ;
 					}
 					
@@ -762,7 +762,7 @@ void wxControl::OnPaint(wxPaintEvent& event)
 				} 
 
 				UMADrawControl( m_macControl ) ;
-				UMASetThemeWindowBackground( win->MacGetWindowData()->m_macWindow , win->MacGetWindowData()->m_macWindowBackgroundTheme , false ) ;
+				::SetThemeWindowBackground( win->MacGetWindowData()->m_macWindow , win->MacGetWindowData()->m_macWindowBackgroundTheme , false ) ;
 			}
 		}
 	}
@@ -791,7 +791,7 @@ void  wxControl::OnKeyDown( wxKeyEvent &event )
 	keychar = short(ev->message & charCodeMask);
 	keycode = short(ev->message & keyCodeMask) >> 8 ;
 
-	UMAHandleControlKey( m_macControl , keycode , keychar , ev->modifiers ) ;
+	::HandleControlKey( m_macControl , keycode , keychar , ev->modifiers ) ;
 }
 
 void  wxControl::OnMouseEvent( wxMouseEvent &event ) 
@@ -848,13 +848,13 @@ void  wxControl::OnMouseEvent( wxMouseEvent &event )
 				SetFocus() ;
 			}
 		*/
-			if ( control && UMAIsControlActive( control ) )
+			if ( control && ::IsControlActive( control ) )
 			{
 				{
 					if ( controlpart == kControlIndicatorPart && !UMAHasAppearance() )
-						controlpart = UMAHandleControlClick( control , localwhere , modifiers , (ControlActionUPP) NULL ) ;
+						controlpart = ::HandleControlClick( control , localwhere , modifiers , (ControlActionUPP) NULL ) ;
 					else
-						controlpart = UMAHandleControlClick( control , localwhere , modifiers , (ControlActionUPP) -1 ) ;
+						controlpart = ::HandleControlClick( control , localwhere , modifiers , (ControlActionUPP) -1 ) ;
 					wxTheApp->s_lastMouseDown = 0 ;
 					if ( control && ! ( ( UMAHasAppearance() || (controlpart != kControlIndicatorPart) ) 
 						&& (IsKindOf( CLASSINFO( wxScrollBar ) ) ) ) ) // otherwise we will get the event twice

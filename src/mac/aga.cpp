@@ -2,7 +2,7 @@
 #include "wx/mac/uma.h"
 #include "wx/mac/aga.h"
 
-#if !TARGET_CARBON
+#if 0 // TO BE REMOVED SOON
 
 #include <extcdef.h>
 #include <PictUtils.h>

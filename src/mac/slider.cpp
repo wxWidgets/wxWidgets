@@ -84,7 +84,7 @@ bool wxSlider::Create(wxWindow *parent, wxWindowID id,
     }
   
 
-     m_macControl = UMANewControl( parent->GetMacRootWindow(), &bounds, title, false,
+     m_macControl = ::NewControl( parent->GetMacRootWindow(), &bounds, title, false,
                                    value, minValue, maxValue, procID, (long) this);
  
      wxASSERT_MSG( m_macControl != NULL , "No valid mac control" ) ;

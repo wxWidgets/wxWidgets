@@ -93,95 +93,204 @@ void wxMacDestroyGWorld( GWorldPtr gw )
 		DisposeGWorld( gw ) ;
 }
 
+#define kDefaultRes 0x00480000 /* Default resolution is 72 DPI; Fixed type */
+
+OSErr SetupCIconHandlePixMap( CIconHandle icon , short depth , Rect  *bounds , CTabHandle colors )
+{
+    CTabHandle newColors;   	/* Color table used for the off-screen PixMap */
+    Ptr        offBaseAddr; 	/* Pointer to the off-screen pixel image */
+    OSErr      error;       	/* Returns error code */
+    short      bytesPerRow;		/* Number of bytes per row in the PixMap */
+
+
+    error = noErr;
+    newColors = nil;
+    offBaseAddr = nil;
+
+  	bytesPerRow = ((depth * (bounds->right - bounds->left) + 31) / 32) * 4;
+
+   /* Clone the clut if indexed color; allocate a dummy clut if direct color*/
+    if (depth <= 8)
+        {
+        newColors = colors;
+        error = HandToHand((Handle *) &newColors);
+        }
+    else
+        {
+        newColors = (CTabHandle) NewHandle(sizeof(ColorTable) -
+                sizeof(CSpecArray));
+        error = MemError();
+        }
+    if (error == noErr)
+        {
+        /* Allocate pixel image; long integer multiplication avoids overflow */
+        (**icon).iconData = NewHandle((unsigned long) bytesPerRow * (bounds->bottom -
+                bounds->top));
+        if ((**icon).iconData != nil)
+            {
+            /* Initialize fields common to indexed and direct PixMaps */
+            (**icon).iconPMap.baseAddr = 0;  /* Point to image */
+            (**icon).iconPMap.rowBytes = bytesPerRow | /* MSB set for PixMap */
+                    0x8000;
+            (**icon).iconPMap.bounds = *bounds;        /* Use given bounds */
+            (**icon).iconPMap.pmVersion = 0;           /* No special stuff */
+            (**icon).iconPMap.packType = 0;            /* Default PICT pack */
+            (**icon).iconPMap.packSize = 0;            /* Always zero in mem */
+            (**icon).iconPMap.hRes = kDefaultRes;      /* 72 DPI default res */
+            (**icon).iconPMap.vRes = kDefaultRes;      /* 72 DPI default res */
+            (**icon).iconPMap.pixelSize = depth;       /* Set # bits/pixel */
+
+            /* Initialize fields specific to indexed and direct PixMaps */
+            if (depth <= 8)
+                {
+                /* PixMap is indexed */
+                (**icon).iconPMap.pixelType = 0;       /* Indicates indexed */
+                (**icon).iconPMap.cmpCount = 1;        /* Have 1 component */
+                (**icon).iconPMap.cmpSize = depth;     /* Component size=depth */
+                (**icon).iconPMap.pmTable = newColors; /* Handle to CLUT */
+                }
+            else
+                {
+                /* PixMap is direct */
+                (**icon).iconPMap.pixelType = RGBDirect; /* Indicates direct */
+                (**icon).iconPMap.cmpCount = 3;          /* Have 3 components */
+                if (depth == 16)
+                    (**icon).iconPMap.cmpSize = 5;       /* 5 bits/component */
+                else
+                    (**icon).iconPMap.cmpSize = 8;       /* 8 bits/component */
+                (**newColors).ctSeed = 3 * (**icon).iconPMap.cmpSize;
+                (**newColors).ctFlags = 0;
+                (**newColors).ctSize = 0;
+                (**icon).iconPMap.pmTable = newColors;
+                }
+            }
+        else
+            error = MemError();
+        }
+    else
+        newColors = nil;
+
+    /* If no errors occured, return a handle to the new off-screen PixMap */
+    if (error != noErr)
+        {
+        if (newColors != nil)
+            DisposeCTable(newColors);
+        }
+
+    /* Return the error code */
+    return error;
+}
+
+CIconHandle wxMacCreateCIcon(GWorldPtr image , GWorldPtr mask , short dstDepth , short iconSize  )
+{
+	GWorldPtr		saveWorld;
+	GDHandle		saveHandle;
+
+	GetGWorld(&saveWorld,&saveHandle);		// save Graphics env state
+	SetGWorld(image,nil);
+
+    Rect frame = { 0 , 0 , iconSize , iconSize } ;
+    Rect imageBounds = frame ;
+	GetPortBounds( image , &imageBounds ) ;
+
+    int bwSize = iconSize / 8 * iconSize ;
+    CIconHandle icon = (CIconHandle) NewHandleClear( sizeof ( CIcon ) + 2 * bwSize) ;
+    HLock((Handle)icon) ;
+    SetupCIconHandlePixMap( icon , dstDepth , &frame,GetCTable(dstDepth)) ;
+    HLock( (**icon).iconData ) ;
+    (**icon).iconPMap.baseAddr = *(**icon).iconData ;
+
+	LockPixels(GetGWorldPixMap(image));
+			
+	CopyBits(GetPortBitMapForCopyBits(image),
+				(BitMapPtr)&((**icon).iconPMap),
+				&imageBounds,
+				&imageBounds,
+				srcCopy | ditherCopy, nil);
+ 
+ 
+	UnlockPixels(GetGWorldPixMap(image));
+    HUnlock( (**icon).iconData ) ;
+    
+    (**icon).iconMask.rowBytes = iconSize / 8 ;
+    (**icon).iconMask.bounds = frame ;
+
+    (**icon).iconBMap.rowBytes = iconSize / 8 ;
+    (**icon).iconBMap.bounds = frame ;
+    (**icon).iconMask.baseAddr = (char*) &(**icon).iconMaskData ;
+    (**icon).iconBMap.baseAddr = (char*) &(**icon).iconMaskData + bwSize ;
+
+    if ( mask )
+    {
+      LockPixels(GetGWorldPixMap(mask) ) ;
+      CopyBits(GetPortBitMapForCopyBits(mask) ,
+          &(**icon).iconBMap , &imageBounds , &imageBounds, srcCopy , nil ) ;
+      CopyBits(GetPortBitMapForCopyBits(mask) ,
+          &(**icon).iconMask , &imageBounds , &imageBounds, srcCopy , nil ) ;
+      UnlockPixels(GetGWorldPixMap( mask ) ) ;
+    }
+    else
+    {
+	    LockPixels(GetGWorldPixMap(image));
+      CopyBits(GetPortBitMapForCopyBits(image) ,
+          &(**icon).iconBMap , &imageBounds , &imageBounds, srcCopy , nil ) ;
+      CopyBits(GetPortBitMapForCopyBits(image) ,
+          &(**icon).iconMask , &imageBounds , &imageBounds, srcCopy , nil ) ;
+	    UnlockPixels(GetGWorldPixMap(image));
+    }
+    
+    (**icon).iconMask.baseAddr = NULL ;
+    (**icon).iconBMap.baseAddr = NULL ;
+    (**icon).iconPMap.baseAddr = NULL ;
+    HUnlock((Handle)icon) ;
+	SetGWorld(saveWorld,saveHandle);
+	
+	return icon;
+}
+
 PicHandle wxMacCreatePict(GWorldPtr wp, GWorldPtr mask)
 {
-   CGrafPtr    origPort ;
-   GDHandle    origDev ;
+  CGrafPtr       origPort ;
+  GDHandle       origDev ;
 
-   PicHandle      pict;          // this is the Picture we give back
+  PicHandle      pict;         
 
-   RGBColor    gray = { 0xCCCC ,0xCCCC , 0xCCCC } ;
-   RGBColor    white = { 0xffff ,0xffff , 0xffff } ;
-   RGBColor    black = { 0x0000 ,0x0000 , 0x0000 } ;
+  RGBColor       white = { 0xffff ,0xffff , 0xffff } ;
+  RGBColor       black = { 0x0000 ,0x0000 , 0x0000 } ;
 
-   unsigned char *maskimage = NULL ;
-   Rect portRect ;
-   GetPortBounds( wp , &portRect ) ;
-   int width = portRect.right - portRect.left ;
-   int height = portRect.bottom - portRect.top ;
+  GetGWorld( &origPort , &origDev ) ;
 
-   LockPixels( GetGWorldPixMap( wp ) ) ;
-   GetGWorld( &origPort , &origDev ) ;
+  RgnHandle clipRgn = NULL ;
 
-   if ( mask )
-   {
-      maskimage = (unsigned char*) malloc( width * height ) ;
-      SetGWorld( mask , NULL ) ;
-      LockPixels( GetGWorldPixMap( mask ) ) ;
-      for ( int y = 0 ; y < height ; y++ )
-      {
-         for( int x = 0 ; x < width ; x++ )
-         {
-            RGBColor col ;
+  if ( mask )
+  {
+    clipRgn = NewRgn() ;
+    LockPixels( GetGWorldPixMap( mask ) ) ;
+    BitMapToRegion( clipRgn , (BitMap*) *GetGWorldPixMap( mask ) ) ;
+    UnlockPixels( GetGWorldPixMap( mask ) ) ;
+  }
+	
+  SetGWorld( wp , NULL ) ;
+  Rect portRect ;
+  GetPortBounds( wp , &portRect ) ;
 
-            GetCPixel( x + portRect.left , y + portRect.top , &col ) ;
-            maskimage[y*width + x] = ( col.red == 0 ) ; // for monochrome masks
-         }
-      }
-      UnlockPixels( GetGWorldPixMap( mask ) ) ;
-   }
+  pict = OpenPicture(&portRect);   
+  if(pict)	
+  {
+    RGBForeColor( &black ) ;
+    RGBBackColor( &white ) ;
 
-   SetGWorld( wp , NULL ) ;
-
-   pict = OpenPicture(&portRect);   // open a picture, this disables drawing
-   if(!pict)
-      return NULL;
-
-   if ( maskimage )
-   {
-      RGBForeColor( &black ) ;
-      RGBBackColor( &white ) ;
-      PenMode(transparent);
-
-      for ( int y = 0 ; y < height ; ++y )
-      {
-         for( int x = 0 ; x < width ; ++x )
-         {
-            if ( maskimage[y*width + x] )
-            {
-               RGBColor col ;
-
-               GetCPixel( x + portRect.left , y + portRect.top , &col ) ;
-               SetCPixel( x + portRect.left , y + portRect.top , &col ) ;
-            }
-            else {
-                // With transparency set this sets a blank pixel not a white one
-                SetCPixel( x + portRect.left , y + portRect.top , &white);
-            }
-         }
-      }
-      free( maskimage ) ;
-      maskimage = NULL ;
-   }
-   else
-   {
-      RGBBackColor( &gray ) ;
-      EraseRect(&portRect);
-      RGBForeColor( &black ) ;
-      RGBBackColor( &white ) ;
-
-      CopyBits(GetPortBitMapForCopyBits(wp), /* src PixMap - we copy image over
-                                              * itself - */
-               GetPortBitMapForCopyBits(wp), //  dst PixMap - no drawing occurs
-               &portRect,    // srcRect - it will be recorded and compressed -
-               &portRect,    // dstRect - into the picture that is open -
-               srcCopy,NULL); // copyMode and no clip region
-   }
-   ClosePicture();                  // We are done recording the picture
-   UnlockPixels( GetGWorldPixMap( wp ) ) ;
-   SetGWorld( origPort , origDev ) ;
-
-   return pict;                  // return our groovy pict handle
+    LockPixels( GetGWorldPixMap( wp ) ) ;
+    CopyBits(GetPortBitMapForCopyBits(wp),			
+    		GetPortBitMapForCopyBits(wp),		
+    		&portRect,			
+    		&portRect,			
+    		srcCopy,clipRgn);		
+    UnlockPixels( GetGWorldPixMap( wp ) ) ;
+    ClosePicture();					
+  }
+  SetGWorld( origPort , origDev ) ;
+  return pict;					
 }
 
 wxBitmapRefData::wxBitmapRefData()

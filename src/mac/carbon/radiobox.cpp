@@ -117,7 +117,7 @@ bool wxRadioBox::Create(wxWindow *parent, wxWindowID id, const wxString& label,
 	
 	MacPreControlCreate( parent , id ,  label , pos , size ,style, val , name , &bounds , title ) ;
 
-	m_macControl = UMANewControl( parent->GetMacRootWindow() , &bounds , title , false , 0 , 0 , 1, 
+	m_macControl = ::NewControl( parent->GetMacRootWindow() , &bounds , title , false , 0 , 0 , 1, 
 	  	kControlGroupBoxTextTitleProc , (long) this ) ;
 	
     for (i = 0; i < n; i++)

@@ -319,7 +319,7 @@ void wxMenuItem::SetText(const wxString& text)
    	 	{
  			Str255 label;
 			MacBuildMenuString( label , NULL , NULL , text ,false);
-   	 		UMASetMenuItemText( m_parentMenu->GetHMenu() , index , label ) ; // checkmark
+   	 		::SetMenuItemText( m_parentMenu->GetHMenu() , index , label ) ; // checkmark
   	 	}
   	}
 

@@ -41,7 +41,7 @@ bool wxGauge::Create(wxWindow *parent, wxWindowID id,
 	
 	MacPreControlCreate( parent , id ,  "" , pos , size ,style & 0xE0FFFFFF /* no borders on mac */ , validator , name , &bounds , title ) ;
 
-	m_macControl = UMANewControl( parent->GetMacRootWindow() , &bounds , title , false , 0 , 0 , range, 
+	m_macControl = ::NewControl( parent->GetMacRootWindow() , &bounds , title , false , 0 , 0 , range, 
 	  	kControlProgressBarProc , (long) this ) ;
 	
 	MacPostControlCreate() ;

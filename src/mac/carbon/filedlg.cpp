@@ -93,7 +93,7 @@ NavEventProc(
 	}
 }
 
-char * gfilters[] =
+const char * gfilters[] =
 {
 	"*.TXT" ,
 	"*.TIF" ,
