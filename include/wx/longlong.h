@@ -57,7 +57,7 @@
     #define wxLongLong_t __int64
 #elif defined(SIZEOF_LONG_LONG) && SIZEOF_LONG_LONG >= 8
     #define wxLongLong_t long long
-#elif defined(__MINGW32__)
+#elif defined(__MINGW32__) || defined(__CYGWIN__)
     #define wxLongLong_t long long
 #elif defined(__MWERKS__)
     #if __option(longlong)
