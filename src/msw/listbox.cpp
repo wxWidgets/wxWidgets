@@ -102,7 +102,7 @@ wxListBoxItem::wxListBoxItem(const wxString& str) : wxOwnerDrawn(str, FALSE)
     SetMarginWidth(0);
 }
 
-wxOwnerDrawn *wxListBox::CreateItem(size_t WXUNUSED(n))
+wxOwnerDrawn *wxListBox::CreateLboxItem(size_t WXUNUSED(n))
 {
     return new wxListBoxItem();
 }

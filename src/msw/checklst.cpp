@@ -329,7 +329,7 @@ bool wxCheckListBox::SetFont( const wxFont &font )
 // --------------------
 
 // create a check list box item
-wxOwnerDrawn *wxCheckListBox::CreateItem(size_t nIndex)
+wxOwnerDrawn *wxCheckListBox::CreateLboxItem(size_t nIndex)
 {
   wxCheckListBoxItem *pItem = new wxCheckListBoxItem(this, nIndex);
   return pItem;
