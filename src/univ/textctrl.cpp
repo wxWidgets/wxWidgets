@@ -184,25 +184,6 @@ bool wxTextCtrl::Create(wxWindow *parent,
     return TRUE;
 }
 
-bool wxTextCtrl::SetFont(const wxFont& font)
-{
-    if ( !wxControl::SetFont(font) )
-        return FALSE;
-
-    // recreate it, in fact
-    CreateCaret();
-
-    // and refresh everything, of course
-    InitInsertionPoint();
-    ClearSelection();
-
-    m_widthMax = -1;
-
-    Refresh();
-
-    return TRUE;
-}
-
 // ----------------------------------------------------------------------------
 // set/get the value
 // ----------------------------------------------------------------------------
@@ -2279,6 +2260,33 @@ void wxTextCtrl::DoDraw(wxControlRenderer *renderer)
 // ----------------------------------------------------------------------------
 // caret
 // ----------------------------------------------------------------------------
+
+bool wxTextCtrl::SetFont(const wxFont& font)
+{
+    if ( !wxControl::SetFont(font) )
+        return FALSE;
+
+    // recreate it, in fact
+    CreateCaret();
+
+    // and refresh everything, of course
+    InitInsertionPoint();
+    ClearSelection();
+
+    m_widthMax = -1;
+
+    Refresh();
+
+    return TRUE;
+}
+
+bool wxTextCtrl::Enable(bool enable)
+{
+    if ( !wxTextCtrlBase::Enable(enable) )
+        return FALSE;
+
+    ShowCaret(enable);
+}
 
 void wxTextCtrl::CreateCaret()
 {

@@ -227,8 +227,9 @@ public:
                                long numArg = -1,
                                const wxString& strArg = wxEmptyString);
 
-    // override this to recreate the caret here
+    // override these methods to handle the caret
     virtual bool SetFont(const wxFont &font);
+    virtual bool Enable(bool enable = TRUE);
 
 protected:
     // draw the text
