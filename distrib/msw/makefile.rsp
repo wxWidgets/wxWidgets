@@ -127,6 +127,8 @@ contrib/samples/fl/fl_demo2/Makefile.in
 contrib/samples/fl/fl_sample1/Makefile.in
 contrib/samples/fl/fl_sample2/Makefile.in
 contrib/samples/fl/fl_sample3/Makefile.in
+contrib/samples/svg/Makefile.in
+contrib/src/svg/Makefile.in
 
 contrib/utils/Makefile.in
 

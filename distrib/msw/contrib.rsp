@@ -253,3 +253,17 @@ contrib/src/net/NetVC.dsp
 contrib/src/net/NetVC.dsw
 contrib/include/wx/net/*.h
 
+contrib/src/svg/*.cpp
+contrib/src/svg/make*
+contrib/src/svg/wxSVGVC.dsp
+contrib/src/svg/wxSVGVC.dsw
+contrib/src/svg/README.TXT
+contrib/include/wx/svg/*.h
+contrib/samples/svg/make*
+contrib/samples/svg/*.cpp
+contrib/samples/svg/*.h
+contrib/samples/svg/*.ico
+contrib/samples/svg/*.xpm
+contrib/samples/svg/*.bmp
+contrib/samples/svg/bitmaps/*.xpm
+
