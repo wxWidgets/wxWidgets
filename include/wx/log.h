@@ -313,7 +313,7 @@ class WXDLLEXPORT wxLogChain : public wxLog
 {
 public:
     wxLogChain(wxLog *logger);
-    virtual ~wxLogChain() { delete m_logOld; }
+    virtual ~wxLogChain();
 
     // change the new log target
     void SetLog(wxLog *logger);
