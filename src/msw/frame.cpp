@@ -683,6 +683,12 @@ void wxFrame::MSWOnSize(int x, int y, WXUINT id)
   switch (id)
   {
     case SIZENORMAL:
+      // only do it it if we were iconized before, otherwise resizing the
+      // parent frame has a curious side effect of bringing it under it's
+      // children
+      if ( !m_iconized )
+        break;
+
       // restore all child frames too
       IconizeChildFrames(FALSE);
 
@@ -690,14 +696,14 @@ void wxFrame::MSWOnSize(int x, int y, WXUINT id)
 
     case SIZEFULLSCREEN:
       m_iconized = FALSE;
-    break;
+      break;
 
     case SIZEICONIC:
       // iconize all child frames too
       IconizeChildFrames(TRUE);
 
       m_iconized = TRUE;
-    break;
+      break;
   }
 
  if (!m_iconized)
