@@ -212,7 +212,7 @@ int DBTree::OnPopulate()
                             SQL_TYPE += DB_TYPE;
                             Funkt = AppendItem(Docu,SQL_TYPE,TreeIc_DocClosed,TreeIc_DocOpen,new DBTreeData(SQL_TYPE));
                             SQL_TYPE.Printf(_T("%10s %d,%d"),((ct_BrowserDB->pTableInf+x)->pColInf+y)->typeName,
-                                ((ct_BrowserDB->pTableInf+x)->pColInf+y)->columnSize,((ct_BrowserDB->pTableInf+x)->pColInf+y)->decimalDigits);
+                                ((ct_BrowserDB->pTableInf+x)->pColInf+y)->columnLength,((ct_BrowserDB->pTableInf+x)->pColInf+y)->decimalDigits);
                             Funkt = AppendItem(Docu,SQL_TYPE,TreeIc_DocClosed,TreeIc_DocOpen,new DBTreeData(SQL_TYPE));
                         }  // for (y=0;y<(ct_BrowserDB->pTableInf+x)->numCols;y++)
                     }   // if ((ct_BrowserDB->pTableInf+x)->pColInf)

@@ -431,7 +431,7 @@ wxDbColInf* BrowserDB::OnGetColumns(wxChar *tableName, UWORD numCols, int WXUNUS
         (cl_BrowserDB+i)->pColFor->Format(1,
                                         (cl_BrowserDB+i)->dbDataType,
                                         (cl_BrowserDB+i)->sqlDataType,
-                                        (cl_BrowserDB+i)->columnSize,
+                                        (cl_BrowserDB+i)->columnLength,
                                         (cl_BrowserDB+i)->decimalDigits);
     }
     return cl_BrowserDB;
