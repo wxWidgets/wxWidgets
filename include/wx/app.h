@@ -26,7 +26,7 @@
 #include "wx/build.h"
 #include "wx/init.h"        // we must declare wxEntry()
 
-class WXDLLIMPEXP_CORE wxApp;
+class WXDLLIMPEXP_BASE wxAppConsole;
 class WXDLLIMPEXP_BASE wxAppTraits;
 class WXDLLIMPEXP_BASE wxCmdLineParser;
 class WXDLLIMPEXP_BASE wxLog;
@@ -37,7 +37,7 @@ class WXDLLIMPEXP_BASE wxMessageOutput;
 // ----------------------------------------------------------------------------
 
 // the type of the function used to create a wxApp object on program start up
-typedef wxApp* (*wxAppInitializerFunction)();
+typedef wxAppConsole* (*wxAppInitializerFunction)();
 
 // ----------------------------------------------------------------------------
 // constants
@@ -512,10 +512,7 @@ protected:
         #include "wx/os2/app.h"
     #endif
 #else // !GUI
-    // can't use typedef because wxApp forward declared as a class
-    class WXDLLIMPEXP_BASE wxApp : public wxAppConsole
-    {
-    };
+    typedef wxAppConsole wxApp;
 #endif // GUI/!GUI
 
 // ----------------------------------------------------------------------------
@@ -600,9 +597,9 @@ public:
 // Use this macro if you want to define your own main() or WinMain() function
 // and call wxEntry() from there.
 #define IMPLEMENT_APP_NO_MAIN(appname)                                      \
-    wxApp *wxCreateApp()                                                    \
+    wxAppConsole *wxCreateApp()                                             \
     {                                                                       \
-        wxApp::CheckBuildOptions(wxBuildOptions());                         \
+        wxAppConsole::CheckBuildOptions(wxBuildOptions());                  \
         return new appname;                                                 \
     }                                                                       \
     wxAppInitializer                                                        \

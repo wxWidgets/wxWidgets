@@ -245,7 +245,11 @@ bool wxEntryStart(int& argc, wxChar **argv)
         if ( fnCreate )
         {
             // he did, try to create the custom wxApp object
-            app.Set((*fnCreate)());
+            // 
+            // NB: cast is needed because for the backwards-compatibility
+            //     reasons wxTheApp is really a wxApp and not just 
+            //     wxAppConsole...
+            app.Set((wxApp*)(*fnCreate)());
         }
     }
 
