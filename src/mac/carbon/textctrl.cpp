@@ -791,6 +791,16 @@ void wxTextCtrl::OnChar(wxKeyEvent& event)
         return ;
     }
 
+    // Check if we have reached the max # of chars, but still allow navigation and deletion
+    if ( !IsMultiLine() && GetValue().Length() >= m_maxLength &&
+        key != WXK_LEFT && key != WXK_RIGHT && key != WXK_TAB &&
+        key != WXK_BACK && !( key == WXK_RETURN && (m_windowStyle & wxPROCESS_ENTER) )
+       )
+    {
+        // eat it, we don't want to add more than allowed # of characters
+        return;
+    }
+
     // assume that any key not processed yet is going to modify the control
     m_dirty = true;
 
