@@ -187,31 +187,27 @@ wxIEnumFORMATETC::wxIEnumFORMATETC(const wxDataFormat *formats, ULONG nCount)
 
 STDMETHODIMP wxIEnumFORMATETC::Next(ULONG      celt,
                                     FORMATETC *rgelt,
-                                    ULONG     *WXUNUSED(pceltFetched))
+                                    ULONG     *pceltFetched)
 {
     wxLogTrace(wxTRACE_OleCalls, wxT("wxIEnumFORMATETC::Next"));
 
-    if ( celt > 1 ) {
-        // we only return 1 element at a time - mainly because I'm too lazy to
-        // implement something which you're never asked for anyhow
-        return S_FALSE;
-    }
-
-    if ( m_nCurrent < m_nCount ) {
+    ULONG numFetched = 0;
+    while (m_nCurrent < m_nCount && numFetched < celt) {
         FORMATETC format;
         format.cfFormat = m_formats[m_nCurrent++];
         format.ptd      = NULL;
         format.dwAspect = DVASPECT_CONTENT;
         format.lindex   = -1;
         format.tymed    = TYMED_HGLOBAL;
-        *rgelt = format;
 
-        return S_OK;
+        *rgelt++ = format;
+        numFetched++;
     }
-    else {
-        // bad index
-        return S_FALSE;
-    }
+
+    if (pceltFetched)
+        *pceltFetched = numFetched;
+
+    return numFetched == celt ? S_OK : S_FALSE;
 }
 
 STDMETHODIMP wxIEnumFORMATETC::Skip(ULONG celt)
