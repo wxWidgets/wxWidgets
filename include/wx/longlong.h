@@ -68,6 +68,8 @@
     #endif
 #elif defined(__VISAGECPP__) && __IBMCPP__ >= 400
         #define wxLongLong_t long long
+#elif defined(__DJGPP__) && __DJGPP__ >= 2
+    #define wxLongLong_t long long
 #else // no native long long type
     // both warning and pragma warning are not portable, but at least an
     // unknown pragma should never be an error - except that, actually, some
