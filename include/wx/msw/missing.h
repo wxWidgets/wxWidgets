@@ -430,6 +430,11 @@ typedef struct {
     #define TVM_SETTEXTCOLOR        (TV_FIRST + 30)
 #endif
 
+#ifndef TVN_GETINFOTIPA
+    #define TVN_GETINFOTIPA	(TVN_FIRST-13)
+    #define TVN_GETINFOTIPW	(TVN_FIRST-14) 
+#endif
+
 #ifndef TVN_GETINFOTIP
     #ifdef UNICODE
         #define TVN_GETINFOTIP TVN_GETINFOTIPW
