@@ -1318,16 +1318,24 @@ dnl ---------------------------------------------------------------------------
 dnl Optional libraries
 dnl ---------------------------------------------------------------------------
 
+ZLIB_INCLUDE=
 if test "$wxUSE_ZLIB" = "yes" ; then
   AC_DEFINE(wxUSE_ZLIB)
-  EXTRA_VPATH="$EXTRA_VPATH:\$(srcdir)/../zlib"
-  LTLIBOBJS="$LTLIBOBJS adler32.lo compress.lo crc32.lo gzio.lo uncompr.lo deflate.lo trees.lo zutil.lo inflate.lo infblock.lo inftrees.lo infcodes.lo infutil.lo inffast.lo"
+  EXTRA_VPATH="$EXTRA_VPATH:\${srcdir}/../zlib"
+  ZLIB_INCLUDE="-I\${srcdir}/../zlib"
+  LTLIBOBJS="$LTLIBOBJS adler32.lo compress.lo crc32.lo gzio.lo uncompr.lo deflate.lo \
+                        trees.lo zutil.lo inflate.lo infblock.lo inftrees.lo infcodes.lo \
+			infutil.lo inffast.lo"
 fi
 
+PNG_INCLUDE=
 if test "$wxUSE_LIBPNG" = "yes" ; then
   AC_DEFINE(wxUSE_LIBPNG)
-  LTLIBOBJS="$LTLIBOBJS png.lo pngset.lo pngget.lo pngrutil.lo pngtrans.lo pngwutil.lo pngread.lo pngrio.lo pngwio.lo pngwrite.lo pngrtran.lo pngwtran.lo pngmem.lo pngerror.lo pngpread.lo"
-  EXTRA_VPATH="$EXTRA_VPATH:\$(srcdir)/../png"
+  LTLIBOBJS="$LTLIBOBJS png.lo pngset.lo pngget.lo pngrutil.lo pngtrans.lo pngwutil.lo \
+                        pngread.lo pngrio.lo pngwio.lo pngwrite.lo pngrtran.lo pngwtran.lo \
+			pngmem.lo pngerror.lo pngpread.lo"
+  EXTRA_VPATH="$EXTRA_VPATH:\${srcdir}/../png"
+  PNG_INCLUDE="-I\${srcdir}/../png"
   SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS png"
 fi
 
@@ -1335,9 +1343,11 @@ if test "$wxUSE_LIBGIF" = "yes" ; then
   AC_DEFINE(wxUSE_LIBGIF)
 fi
 
+JPEG_INCLUDE=
 if test "$wxUSE_LIBJPEG" = "yes" ; then
   AC_DEFINE(wxUSE_LIBJPEG)
   EXTRA_VPATH="$EXTRA_VPATH:\${srcdir}/../jpeg"
+  JPEG_INCLUDE="-I\${srcdir}/../jpeg"
   LTLIBOBJS="$LTLIBOBJS \
              jcomapi.lo jutils.lo jerror.lo jmemmgr.lo jmemnobs.lo \
              jcapimin.lo jcapistd.lo jctrans.lo jcparam.lo jdatadst.lo \
@@ -1847,7 +1857,7 @@ dnl yet installed)
 LIBS="\${top_builddir}/src/${TOOLKIT_DIR}/${WX_LIBRARY_NAME} $EXTRA_LIBS"
 
 dnl all -I options we must pass to the compiler
-INCLUDES="-I. -I\${top_builddir}/include -I\${top_srcdir}/include $TOOLKIT_INCLUDE $ZLIB_INCLUDE $LIBPNG_INCLUDE"
+INCLUDES="-I. -I\${top_builddir}/include -I\${top_srcdir}/include $ZLIB_INCLUDE $PNG_INCLUDE $JPEG_INCLUDE $TOOLKIT_INCLUDE"
 
 dnl C/C++ compiler options used to compile wxWindows
 if test "$ac_cv_prog_gcc" = "yes"; then
