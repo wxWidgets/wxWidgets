@@ -26,6 +26,7 @@
 
 #ifndef WX_PRECOMP
     #include "wx/intl.h"
+    #include "wx/log.h"
     #include "wx/dc.h"
     #include "wx/window.h"
 
@@ -37,6 +38,9 @@
 #include "wx/univ/inphand.h"
 #include "wx/univ/colschem.h"
 #include "wx/univ/theme.h"
+
+// define this for tons of debugging messages
+#undef DEBUG_MOUSE
 
 // ----------------------------------------------------------------------------
 // wxGTKRenderer: draw the GUI elements in GTK style
@@ -81,13 +85,22 @@ public:
                                int thumbPosStart,
                                int thumbPosEnd,
                                const wxRect& rect,
-                               int flags = 0,
-                               int extraFlags = 0);
+                               const int *flags = NULL);
 
     virtual void AdjustSize(wxSize *size, const wxWindow *window);
 
+    // hit testing for the input handlers
+    virtual wxHitTest HitTestScrollbar(wxScrollBar *scrollbar,
+                                       const wxPoint& pt) const;
+    
 protected:
-    // DrawBackground() helper
+    // DrawBackground() helpers
+
+    // get the colour to use for background
+    wxColour GetBackgroundColour(int flags) const
+        { return m_scheme->Get(wxColourScheme::CONTROL, flags); }
+
+    // draw the background with any colour, not only the default one(s)
     void DoDrawBackground(wxDC& dc,
                           const wxColour& col,
                           const wxRect& rect);
@@ -136,17 +149,30 @@ private:
 class wxGTKInputHandler : public wxInputHandler
 {
 public:
-    virtual wxControlActions Map(const wxKeyEvent& event, bool pressed);
-    virtual wxControlActions Map(const wxMouseEvent& event);
+    wxGTKInputHandler(wxGTKRenderer *renderer);
+
+    virtual wxControlActions Map(wxControl *control,
+                                 const wxKeyEvent& event,
+                                 bool pressed);
+    virtual wxControlActions Map(wxControl *control,
+                                 const wxMouseEvent& event);
+    virtual bool OnMouseMove(wxControl *control, const wxMouseEvent& event);
+
+protected:
+    wxGTKRenderer *m_renderer;
 };
 
 class wxGTKButtonInputHandler : public wxGTKInputHandler
 {
 public:
-    wxGTKButtonInputHandler();
+    wxGTKButtonInputHandler(wxGTKRenderer *renderer);
 
-    virtual wxControlActions Map(const wxKeyEvent& event, bool pressed);
-    virtual wxControlActions Map(const wxMouseEvent& event);
+    virtual wxControlActions Map(wxControl *control,
+                                 const wxKeyEvent& event,
+                                 bool pressed);
+    virtual wxControlActions Map(wxControl *control,
+                                 const wxMouseEvent& event);
+    virtual bool OnMouseMove(wxControl *control, const wxMouseEvent& event);
 
 private:
     wxWindow *m_winCapture;
@@ -156,14 +182,33 @@ private:
 class wxGTKScrollBarInputHandler : public wxGTKInputHandler
 {
 public:
-    wxGTKScrollBarInputHandler();
+    wxGTKScrollBarInputHandler(wxGTKRenderer *renderer);
 
-    virtual wxControlActions Map(const wxKeyEvent& event, bool pressed);
-    virtual wxControlActions Map(const wxMouseEvent& event);
+    virtual wxControlActions Map(wxControl *control,
+                                 const wxKeyEvent& event,
+                                 bool pressed);
+    virtual wxControlActions Map(wxControl *control,
+                                 const wxMouseEvent& event);
+    virtual bool OnMouseMove(wxControl *control, const wxMouseEvent& event);
 
 private:
+    // set or clear the specified flag on the scrollbar element corresponding
+    // to m_htLast
+    void SetElementState(wxScrollBar *scrollbar, int flag, bool doIt);
+
+    // [un]highlight the scrollbar element corresponding to m_htLast
+    void Highlight(wxScrollBar *scrollbar, bool doIt)
+        { SetElementState(scrollbar, wxCONTROL_CURRENT, doIt); }
+
+    // [un]press the scrollbar element corresponding to m_htLast
+    void Press(wxScrollBar *scrollbar, bool doIt)
+        { SetElementState(scrollbar, wxCONTROL_PRESSED, doIt); }
+
     wxWindow *m_winCapture;
+    int       m_btnCapture;  // the mouse button which was captured mouse
     bool      m_winHasMouse;
+
+    wxHitTest m_htLast;
 };
 
 // ----------------------------------------------------------------------------
@@ -190,7 +235,8 @@ public:
 
     virtual wxRenderer *GetRenderer() { return m_renderer; }
     virtual wxInputHandler *GetInputHandler(const wxString& control);
-    virtual wxColourScheme *GetColourScheme(const wxString& control) { return m_scheme; }
+    virtual wxColourScheme *GetColourScheme(const wxString& control)
+        { return m_scheme; }
 
 private:
     wxGTKRenderer *m_renderer;
@@ -235,17 +281,12 @@ wxInputHandler *wxGTKTheme::GetInputHandler(const wxString& control)
         // create a new handler
         n = m_handlerNames.Add(control);
 
-        if ( control == wxCONTROL_BUTTON )
-            handler = new wxGTKButtonInputHandler;
-        else if ( control == wxCONTROL_SCROLLBAR )
-            handler = new wxGTKScrollBarInputHandler;
+        if ( control == wxButtonNameStr )
+            handler = new wxGTKButtonInputHandler(m_renderer);
+        else if ( control == wxScrollBarNameStr )
+            handler = new wxGTKScrollBarInputHandler(m_renderer);
         else
-        {
-            wxASSERT_MSG( control == wxCONTROL_DEFAULT,
-                          _T("no input handler defined for this control") );
-
-            handler = new wxGTKInputHandler;
-        }
+            handler = new wxGTKInputHandler(m_renderer);
 
         m_handlers.Insert(handler, n);
     }
@@ -475,8 +516,7 @@ void wxGTKRenderer::DrawButtonBorder(wxDC& dc,
         // now draw a normal button
         DrawShadedRect(dc, &rect, m_penHighlight, m_penBlack);
         DrawAntiShadedRect(dc, &rect,
-                           flags & wxCONTROL_CURRENT ? m_penHighlight
-                                                    : m_penLightGrey,
+                           wxPen(GetBackgroundColour(flags), 0, wxSOLID),
                            m_penDarkGrey);
     }
 
@@ -580,7 +620,7 @@ void wxGTKRenderer::DrawBackground(wxDC& dc,
                                    const wxRect& rect,
                                    int flags)
 {
-    DoDrawBackground(dc, m_scheme->Get(wxColourScheme::CONTROL, flags), rect);
+    DoDrawBackground(dc, GetBackgroundColour(flags), rect);
 }
 
 // ----------------------------------------------------------------------------
@@ -604,6 +644,23 @@ void wxGTKRenderer::DrawArrow(wxDC& dc,
 
     wxPoint ptArrow[Point_Max];
 
+    wxColour colInside = m_scheme->Get(wxColourScheme::CONTROL, flags);
+    wxPen penShadow[4];
+    if ( flags & wxCONTROL_PRESSED )
+    {
+        penShadow[0] = m_penDarkGrey;
+        penShadow[1] = m_penHighlight;
+        penShadow[2] = wxNullPen;
+        penShadow[3] = m_penBlack;
+    }
+    else // normal arrow
+    {
+        penShadow[0] = m_penHighlight;
+        penShadow[1] = m_penBlack;
+        penShadow[2] = m_penDarkGrey;
+        penShadow[3] = wxNullPen;
+    }
+
     wxCoord middle;
     if ( dir == wxUP || dir == wxDOWN )
     {
@@ -617,7 +674,7 @@ void wxGTKRenderer::DrawArrow(wxDC& dc,
 
     // draw the arrow interior
     dc.SetPen(*wxTRANSPARENT_PEN);
-    dc.SetBrush(wxBrush(m_scheme->Get(wxColourScheme::CONTROL), wxSOLID));
+    dc.SetBrush(wxBrush(colInside, wxSOLID));
 
     switch ( dir )
     {
@@ -663,33 +720,45 @@ void wxGTKRenderer::DrawArrow(wxDC& dc,
     dc.DrawPolygon(WXSIZEOF(ptArrow), ptArrow);
 
     // draw the arrow border
-    dc.SetPen(m_penHighlight);
+    dc.SetPen(penShadow[0]);
     switch ( dir )
     {
         case wxUP:
             dc.DrawLine(ptArrow[Point_Second], ptArrow[Point_First]);
             dc.DrawPoint(ptArrow[Point_First]);
-            dc.SetPen(m_penBlack);
+            if ( penShadow[3].Ok() )
+            {
+                dc.SetPen(penShadow[3]);
+                dc.DrawLine(ptArrow[Point_First].x + 1, ptArrow[Point_First].y,
+                            ptArrow[Point_Second].x, ptArrow[Point_Second].y);
+            }
+            dc.SetPen(penShadow[1]);
             dc.DrawLine(ptArrow[Point_Second].x + 1, ptArrow[Point_Second].y + 1,
                         ptArrow[Point_Third].x, ptArrow[Point_Third].y);
             dc.DrawPoint(ptArrow[Point_Third]);
             dc.DrawLine(ptArrow[Point_Third].x - 2, ptArrow[Point_Third].y,
                         ptArrow[Point_First].x + 1, ptArrow[Point_First].y);
-            dc.SetPen(m_penDarkGrey);
-            dc.DrawLine(ptArrow[Point_Third].x - 1, ptArrow[Point_Third].y,
-                        ptArrow[Point_Second].x, ptArrow[Point_Second].y + 1);
-            dc.DrawLine(ptArrow[Point_Third].x - 1, ptArrow[Point_Third].y - 1,
-                        ptArrow[Point_First].x + 2, ptArrow[Point_First].y - 1);
+            if ( penShadow[2].Ok() )
+            {
+                dc.SetPen(penShadow[2]);
+                dc.DrawLine(ptArrow[Point_Third].x - 1, ptArrow[Point_Third].y,
+                            ptArrow[Point_Second].x, ptArrow[Point_Second].y + 1);
+                dc.DrawLine(ptArrow[Point_Third].x - 1, ptArrow[Point_Third].y - 1,
+                            ptArrow[Point_First].x + 2, ptArrow[Point_First].y - 1);
+            }
             break;
 
         case wxDOWN:
             dc.DrawLine(ptArrow[Point_First], ptArrow[Point_Second]);
             dc.DrawLine(ptArrow[Point_First].x + 2, ptArrow[Point_First].y,
                         ptArrow[Point_Third].x - 1, ptArrow[Point_Third].y);
-            dc.SetPen(m_penDarkGrey);
-            dc.DrawLine(ptArrow[Point_Second].x, ptArrow[Point_Second].y - 1,
-                        ptArrow[Point_Third].x - 1, ptArrow[Point_Third].y - 1);
-            dc.SetPen(m_penBlack);
+            if ( penShadow[2].Ok() )
+            {
+                dc.SetPen(penShadow[2]);
+                dc.DrawLine(ptArrow[Point_Second].x, ptArrow[Point_Second].y - 1,
+                            ptArrow[Point_Third].x - 1, ptArrow[Point_Third].y - 1);
+            }
+            dc.SetPen(penShadow[1]);
             dc.DrawLine(ptArrow[Point_Second], ptArrow[Point_Third]);
             dc.DrawPoint(ptArrow[Point_Third]);
             break;
@@ -697,12 +766,15 @@ void wxGTKRenderer::DrawArrow(wxDC& dc,
         case wxLEFT:
             dc.DrawLine(ptArrow[Point_Second], ptArrow[Point_First]);
             dc.DrawPoint(ptArrow[Point_First]);
-            dc.SetPen(m_penDarkGrey);
-            dc.DrawLine(ptArrow[Point_Third].x - 1, ptArrow[Point_Third].y,
-                        ptArrow[Point_First].x - 1, ptArrow[Point_First].y + 2);
-            dc.DrawLine(ptArrow[Point_Third].x, ptArrow[Point_Third].y,
-                        ptArrow[Point_Second].x + 2, ptArrow[Point_Second].y + 1);
-            dc.SetPen(m_penBlack);
+            if ( penShadow[2].Ok() )
+            {
+                dc.SetPen(penShadow[2]);
+                dc.DrawLine(ptArrow[Point_Third].x - 1, ptArrow[Point_Third].y,
+                            ptArrow[Point_First].x - 1, ptArrow[Point_First].y + 2);
+                dc.DrawLine(ptArrow[Point_Third].x, ptArrow[Point_Third].y,
+                            ptArrow[Point_Second].x + 2, ptArrow[Point_Second].y + 1);
+            }
+            dc.SetPen(penShadow[1]);
             dc.DrawLine(ptArrow[Point_Third].x, ptArrow[Point_Third].y,
                         ptArrow[Point_First].x, ptArrow[Point_First].y + 1);
             dc.DrawLine(ptArrow[Point_Second].x + 1, ptArrow[Point_Second].y + 1,
@@ -713,7 +785,7 @@ void wxGTKRenderer::DrawArrow(wxDC& dc,
             dc.DrawLine(ptArrow[Point_First], ptArrow[Point_Third]);
             dc.DrawLine(ptArrow[Point_First].x + 2, ptArrow[Point_First].y + 1,
                         ptArrow[Point_Second].x, ptArrow[Point_Second].y);
-            dc.SetPen(m_penBlack);
+            dc.SetPen(penShadow[1]);
             dc.DrawLine(ptArrow[Point_Second], ptArrow[Point_Third]);
             dc.DrawPoint(ptArrow[Point_Third]);
             break;
@@ -729,25 +801,20 @@ void wxGTKRenderer::DrawScrollbar(wxDC& dc,
                                   int thumbPosStart,
                                   int thumbPosEnd,
                                   const wxRect& rect,
-                                  int flags,
-                                  int extraFlags)
+                                  const int *flags)
 {
-    // handling of wxCONTROL_CURRENT flag is complicated for the scrollbar
-    // because, though it's only one window, either an arrow or a thumb may be
-    // highlighted depending on where exactly the mouse is
-    int flagsArrows[2], flagsThumb;
-    flagsArrows[0] =
-    flagsArrows[1] =
-    flagsThumb = flags & ~wxCONTROL_CURRENT;
-    if ( flags & wxCONTROL_CURRENT )
-    {
-        if ( extraFlags & wxScrollBar::Highlight_Arrow1 )
-            flagsArrows[0] |= wxCONTROL_CURRENT;
-        if ( extraFlags & wxScrollBar::Highlight_Arrow2 )
-            flagsArrows[1] |= wxCONTROL_CURRENT;
-        if ( extraFlags & wxScrollBar::Highlight_Thumb )
-            flagsThumb |= wxCONTROL_CURRENT;
-    }
+#ifdef DEBUG_MOUSE
+    wxLogDebug("Drawing the scrollbar (orientation = %s):\n"
+               "\tarrow 1: 0x%04x\n"
+               "\tarrow 2: 0x%04x\n"
+               "\tthumb:   0x%04x\n"
+               "\tthumb from %d to %d",
+               orient == wxVERTICAL ? "vertical" : "horizontal",
+               flags[wxScrollBar::Element_Arrow_Line_1],
+               flags[wxScrollBar::Element_Arrow_Line_2],
+               flags[wxScrollBar::Element_Thumb],
+               thumbPosStart, thumbPosEnd);
+#endif // DEBUG_MOUSE
 
     // first draw the scrollbar area background
     wxRect rectBar = rect;
@@ -782,7 +849,8 @@ void wxGTKRenderer::DrawScrollbar(wxDC& dc,
 
     for ( size_t nArrow = 0; nArrow < 2; nArrow++ )
     {
-        DrawArrow(dc, arrowDir[nArrow], rectArrow[nArrow], flags);
+        DrawArrow(dc, arrowDir[nArrow], rectArrow[nArrow],
+                  flags[wxScrollBar::Element_Arrow_Line_1 + nArrow]);
     }
 
     // and, finally, the thumb, if any
@@ -804,9 +872,71 @@ void wxGTKRenderer::DrawScrollbar(wxDC& dc,
             rectThumb.width = (rectBar.width*(thumbPosEnd - thumbPosStart))/100;
         }
 
-        // the thumb never has focus border under GTK
-        DrawButtonBorder(dc, rectThumb, flags & ~wxCONTROL_FOCUSED, &rectThumb);
-        DrawBackground(dc, rectThumb, flags);
+        // the thumb is never pressed never has focus border under GTK and the
+        // scrollbar background never changes at all
+        int flagsThumb = flags[wxScrollBar::Element_Thumb] &
+                            ~(wxCONTROL_PRESSED | wxCONTROL_FOCUSED);
+        DrawButtonBorder(dc, rectThumb, flagsThumb, &rectThumb);
+        DrawBackground(dc, rectThumb, flagsThumb);
+    }
+}
+
+wxHitTest wxGTKRenderer::HitTestScrollbar(wxScrollBar *scrollbar,
+                                          const wxPoint& pt) const
+{
+    // we only need to work with tiehr x or y coord depending on the
+    // orientation, choose one
+    wxCoord coord, sizeArrow, sizeTotal;
+    if ( scrollbar->GetWindowStyle() & wxVERTICAL )
+    {
+        coord = pt.y;
+        sizeArrow = m_sizeScrollbarArrow.y;
+        sizeTotal = scrollbar->GetSize().y;
+    }
+    else // horizontal
+    {
+        coord = pt.x;
+        sizeArrow = m_sizeScrollbarArrow.x;
+        sizeTotal = scrollbar->GetSize().x;
+    }
+
+    // test for the arrows first as it's faster
+    if ( coord < sizeArrow )
+    {
+        return wxHT_SCROLLBAR_ARROW_LINE_1;
+    }
+    else if ( coord > sizeTotal - sizeArrow )
+    {
+        return wxHT_SCROLLBAR_ARROW_LINE_2;
+    }
+    else
+    {
+        // calculate the thumb position in pixels
+        sizeTotal -= 2*sizeArrow;
+        wxCoord thumbStart, thumbEnd;
+        int range = scrollbar->GetRange();
+        if ( !range )
+        {
+            thumbStart =
+            thumbEnd = 0;
+        }
+        else
+        {
+            int posThumb = scrollbar->GetThumbPosition(),
+                sizeThumb = scrollbar->GetThumbSize();
+
+            thumbStart = (sizeTotal*posThumb) / range;
+            thumbEnd = (sizeTotal*(posThumb + sizeThumb)) / range;
+        }
+
+        // now compare with the thumb position
+        coord -= sizeArrow;
+        if ( coord < thumbStart )
+            return wxHT_SCROLLBAR_BAR_1;
+        else if ( coord > thumbEnd )
+            return wxHT_SCROLLBAR_BAR_2;
+        else
+            return wxHT_SCROLLBAR_THUMB;
     }
 }
 
@@ -874,31 +1004,62 @@ void wxGTKRenderer::AdjustSize(wxSize *size, const wxWindow *window)
 // wxGTKInputHandler
 // ----------------------------------------------------------------------------
 
-wxControlActions wxGTKInputHandler::Map(const wxKeyEvent& event, bool pressed)
+wxGTKInputHandler::wxGTKInputHandler(wxGTKRenderer *renderer)
+{
+    m_renderer = renderer;
+}
+
+wxControlActions wxGTKInputHandler::Map(wxControl *control,
+                                        const wxKeyEvent& event,
+                                        bool pressed)
 {
     return wxACTION_NONE;
 }
 
-wxControlActions wxGTKInputHandler::Map(const wxMouseEvent& event)
+wxControlActions wxGTKInputHandler::Map(wxControl *control,
+                                        const wxMouseEvent& event)
 {
-    if ( event.Entering() )
-        return wxACTION_HIGHLIGHT;
-    else if ( event.Leaving() )
-        return wxACTION_UNHIGHLIGHT;
+    // clicking on the control gives it focus
+    if ( event.ButtonDown() )
+    {
+        return wxACTION_FOCUS;
+    }
 
     return wxACTION_NONE;
+}
+
+bool wxGTKInputHandler::OnMouseMove(wxControl *control,
+                                    const wxMouseEvent& event)
+{
+    if ( event.Entering() )
+    {
+        control->SetCurrent(TRUE);
+    }
+    else if ( event.Leaving() )
+    {
+        control->SetCurrent(FALSE);
+    }
+    else
+    {
+        return FALSE;
+    }
+
+    // highlighting changed
+    return TRUE;
 }
 
 // ----------------------------------------------------------------------------
 // wxGTKButtonInputHandler
 // ----------------------------------------------------------------------------
 
-wxGTKButtonInputHandler::wxGTKButtonInputHandler()
+wxGTKButtonInputHandler::wxGTKButtonInputHandler(wxGTKRenderer *renderer)
+                       : wxGTKInputHandler(renderer)
 {
     m_winCapture = NULL;
 }
 
-wxControlActions wxGTKButtonInputHandler::Map(const wxKeyEvent& event,
+wxControlActions wxGTKButtonInputHandler::Map(wxControl *control,
+                                              const wxKeyEvent& event,
                                               bool pressed)
 {
     int keycode = event.GetKeyCode();
@@ -907,95 +1068,280 @@ wxControlActions wxGTKButtonInputHandler::Map(const wxKeyEvent& event,
         return wxACTION_BUTTON_TOGGLE;
     }
 
-    return wxGTKInputHandler::Map(event, pressed);
+    return wxGTKInputHandler::Map(control, event, pressed);
 }
 
-wxControlActions wxGTKButtonInputHandler::Map(const wxMouseEvent& event)
+wxControlActions wxGTKButtonInputHandler::Map(wxControl *control,
+                                              const wxMouseEvent& event)
 {
-    if ( event.IsButton() )
+    // the button has 2 states: pressed and normal with the following
+    // transitions between them:
+    //
+    //      normal -> left down -> capture mouse and go to pressed state
+    //      pressed -> left up inside -> generate click -> go to normal
+    //                         outside ------------------>
+    //
+    // the other mouse buttons are ignored
+    if ( event.Button(1) )
     {
-        if ( event.ButtonDown() )
+        if ( event.ButtonDown(1) )
         {
-            m_winCapture = wxWindow::FindFocus();
+            m_winCapture = control;
             m_winCapture->CaptureMouse();
             m_winHasMouse = TRUE;
+
+            return wxACTION_BUTTON_PRESS;
         }
         else // up
         {
             m_winCapture->ReleaseMouse();
             m_winCapture = NULL;
 
-            if ( !m_winHasMouse )
+            if ( m_winHasMouse )
             {
-                // the mouse was released outside the window, this doesn't
-                // count as a click
-                return wxGTKInputHandler::Map(event);
+                // this will generate a click event
+                return wxACTION_BUTTON_TOGGLE;
             }
+            //else: the mouse was released outside the window, this doesn't
+            //      count as a click
         }
-
-        return wxACTION_BUTTON_TOGGLE;
     }
 
+    return wxGTKInputHandler::Map(control, event);
+}
+
+bool wxGTKButtonInputHandler::OnMouseMove(wxControl *control,
+                                          const wxMouseEvent& event)
+{
     // leaving the button should remove its pressed state
     if ( event.Leaving() )
     {
-        wxControlActions actions;
         if ( m_winCapture )
         {
-            // we do have a pressed button
-            actions.Add(wxACTION_BUTTON_RELEASE);
+            // we do have a pressed button, so release it
+            control->PerformAction(wxACTION_BUTTON_RELEASE, event);
 
             // remember that the mouse is now outside
             m_winHasMouse = FALSE;
         }
-
-        actions.Add(wxGTKInputHandler::Map(event));
-
-        return actions;
     }
-
-    // entering it back should make it pressed again if it had been pressed
-    if ( event.Entering() )
+    // and entering it back should make it pressed again if it had been
+    // pressed
+    else if ( event.Entering() )
     {
-        wxControlActions actions;
         if ( m_winCapture )
         {
-            // we do have a pressed button
-            actions.Add(wxACTION_BUTTON_PRESS);
+            // we did have a pressed button which we released when leaving the
+            // window, press it again
+            control->PerformAction(wxACTION_BUTTON_PRESS, event);
 
             // and the mouse is (back) inside it
             m_winHasMouse = TRUE;
         }
-
-        actions.Add(wxGTKInputHandler::Map(event));
-
-        return actions;
     }
 
-    return wxGTKInputHandler::Map(event);
+    return wxGTKInputHandler::OnMouseMove(control, event);
 }
 
 // ----------------------------------------------------------------------------
 // wxGTKScrollBarInputHandler
 // ----------------------------------------------------------------------------
 
-wxGTKScrollBarInputHandler::wxGTKScrollBarInputHandler()
+wxGTKScrollBarInputHandler::wxGTKScrollBarInputHandler(wxGTKRenderer *renderer)
+                          : wxGTKInputHandler(renderer)
 {
     m_winCapture = NULL;
+    m_htLast = wxHT_NOWHERE;
 }
 
-wxControlActions wxGTKScrollBarInputHandler::Map(const wxKeyEvent& event,
-                                                 bool pressed)
+void wxGTKScrollBarInputHandler::SetElementState(wxScrollBar *control,
+                                                 int flag,
+                                                 bool doIt)
 {
-    return wxGTKInputHandler::Map(event, pressed);
-}
-
-wxControlActions wxGTKScrollBarInputHandler::Map(const wxMouseEvent& event)
-{
-    if ( event.Moving() )
+    wxScrollBar::Element elem;
+    switch ( m_htLast )
     {
-        // determin which part of the window mouse is in
+        case wxHT_SCROLLBAR_ARROW_LINE_1:
+            elem = wxScrollBar::Element_Arrow_Line_1;
+            break;
+
+        case wxHT_SCROLLBAR_ARROW_LINE_2:
+            elem = wxScrollBar::Element_Arrow_Line_2;
+            break;
+
+        case wxHT_SCROLLBAR_THUMB:
+            elem = wxScrollBar::Element_Thumb;
+            break;
+
+            /*
+               we don't highlight nor press the bar
+
+        case wxHT_SCROLLBAR_BAR_1:
+        case wxHT_SCROLLBAR_BAR_2:
+            */
+
+        default:
+            elem = wxScrollBar::Element_Max;
     }
 
-    return wxGTKInputHandler::Map(event);
+    if ( elem != wxScrollBar::Element_Max )
+    {
+        int flags = control->GetState(elem);
+        if ( doIt )
+            flags |= flag;
+        else
+            flags &= ~flag;
+        control->SetState(elem, flags);
+    }
+}
+
+wxControlActions wxGTKScrollBarInputHandler::Map(wxControl *control,
+                                                 const wxKeyEvent& event,
+                                                 bool pressed)
+{
+    // weirdly enough, GTK+ scrollbars don't have keyboard support - maybe we
+    // should still have it though (TODO)?
+    return wxGTKInputHandler::Map(control, event, pressed);
+}
+
+wxControlActions wxGTKScrollBarInputHandler::Map(wxControl *control,
+                                                 const wxMouseEvent& event)
+{
+    if ( event.IsButton() )
+    {
+        // determine which part of the window mouse is in
+        wxScrollBar *scrollbar = wxStaticCast(control, wxScrollBar);
+        wxHitTest ht = m_renderer->HitTestScrollbar
+                                   (
+                                    scrollbar,
+                                    event.GetPosition()
+                                   );
+
+        // when the mouse is pressed on any scrollbar element, we capture it
+        // and hold capture until the same mouse button is released
+        if ( event.ButtonDown() )
+        {
+            if ( !m_winCapture )
+            {
+                m_btnCapture = -1;
+                for ( int i = 1; i <= 3; i++ )
+                {
+                    if ( event.ButtonDown(i) )
+                    {
+                        m_btnCapture = i;
+                        break;
+                    }
+                }
+
+                wxASSERT_MSG( m_btnCapture != -1, _T("unknown mouse button") );
+
+                m_winCapture = control;
+                m_winCapture->CaptureMouse();
+
+                // generate the command
+                bool hasAction = TRUE;
+                wxControlAction action;
+                switch ( ht )
+                {
+                    case wxHT_SCROLLBAR_ARROW_LINE_1:
+                        action = wxACTION_SCROLL_LINE_UP;
+                        break;
+
+                    case wxHT_SCROLLBAR_ARROW_LINE_2:
+                        action = wxACTION_SCROLL_LINE_DOWN;
+                        break;
+
+                    case wxHT_SCROLLBAR_BAR_1:
+                        action = wxACTION_SCROLL_PAGE_UP;
+                        break;
+
+                    case wxHT_SCROLLBAR_BAR_2:
+                        action = wxACTION_SCROLL_PAGE_DOWN;
+                        break;
+
+                    default:
+                        hasAction = FALSE;
+                }
+
+                if ( hasAction )
+                {
+                    control->PerformAction(action, event);
+                }
+
+                // remove highlighting and press the arrow instead
+                Highlight(scrollbar, FALSE);
+                m_htLast = ht;
+                Press(scrollbar, TRUE);
+            }
+            //else: mouse already captured, nothing to do
+        }
+        // release mouse if the *same* button went up
+        else if ( event.ButtonUp(m_btnCapture) )
+        {
+            if ( m_winCapture )
+            {
+                m_winCapture->ReleaseMouse();
+                m_winCapture = NULL;
+
+                // unpress the arrow and highlight the current element
+                Press(scrollbar, TRUE);
+                m_htLast = ht;
+                Highlight(scrollbar, TRUE);
+
+                control->Refresh();
+            }
+            else
+            {
+                // this is not supposed to happen as the button can't go up
+                // without going down previously and then we'd have
+                // m_winCapture by now
+                wxFAIL_MSG( _T("logic error in mouse capturing code") );
+            }
+        }
+    }
+
+    return wxGTKInputHandler::Map(control, event);
+}
+
+bool wxGTKScrollBarInputHandler::OnMouseMove(wxControl *control,
+                                             const wxMouseEvent& event)
+{
+    if ( m_winCapture )
+    {
+        // everything is locked while the mouse is captured, so don't do
+        // anything
+        return FALSE;
+    }
+
+    wxScrollBar *scrollbar = wxStaticCast(control, wxScrollBar);
+
+    if ( event.Moving() )
+    {
+        wxHitTest ht = m_renderer->HitTestScrollbar
+                                   (
+                                    scrollbar,
+                                    event.GetPosition()
+                                   );
+        if ( ht == m_htLast )
+        {
+            // nothing changed
+            return FALSE;
+        }
+
+#ifdef DEBUG_MOUSE
+        wxLogDebug("Scrollbar::OnMouseMove: ht = %d", ht);
+#endif // DEBUG_MOUSE
+
+        Highlight(scrollbar, FALSE);
+        m_htLast = ht;
+        Highlight(scrollbar, TRUE);
+    }
+    else if ( event.Leaving() )
+    {
+        Highlight(scrollbar, FALSE);
+        m_htLast = wxHT_NOWHERE;
+    }
+
+    // highlighting changed
+    return TRUE;
 }

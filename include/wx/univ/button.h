@@ -31,9 +31,6 @@ class WXDLLEXPORT wxInputHandler;
 // wxButton: a push button
 // ----------------------------------------------------------------------------
 
-// class name
-#define wxCONTROL_BUTTON _T("button")
-
 class WXDLLEXPORT wxButton : public wxButtonBase
 {
 public:
@@ -75,7 +72,6 @@ public:
     void Click();
 
 protected:
-    virtual wxInputHandler *CreateInputHandler() const;
     virtual bool PerformAction(const wxControlAction& action,
                                const wxEvent& event);
     virtual wxSize DoGetBestSize() const;

@@ -37,6 +37,12 @@
 // implementation
 // ============================================================================
 
+bool wxInputHandler::OnMouseMove(wxControl * WXUNUSED(control),
+                                 const wxMouseEvent& WXUNUSED(event))
+{
+    return FALSE;
+}
+
 wxInputHandler::~wxInputHandler()
 {
 }

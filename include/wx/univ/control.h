@@ -69,16 +69,12 @@ public:
 // the list of actions which apply to all controls (other actions are defined
 // in the controls headers)
 
-#define wxACTION_NONE        _T("")           // no action to perform
-#define wxACTION_HIGHLIGHT   _T("focus")      // highlight the control
-#define wxACTION_UNHIGHLIGHT _T("unfocus")    // remove highlight
+#define wxACTION_NONE   _T("")           // no action to perform
+#define wxACTION_FOCUS  _T("focus")      // make control focused
 
 // ----------------------------------------------------------------------------
 // wxControl: the base class for all GUI controls
 // ----------------------------------------------------------------------------
-
-// class name
-#define wxCONTROL_DEFAULT _T("")
 
 class WXDLLEXPORT wxControl : public wxControlBase
 {
@@ -140,6 +136,12 @@ public:
         return m_indexAccel == -1 ? _T('\0') : m_label[m_indexAccel];
     }
 
+    // perform the action which resulted from the translation of the event
+    // (the exact event type depends on the action), return TRUE if the
+    // control must be updated
+    virtual bool PerformAction(const wxControlAction& action,
+                               const wxEvent& event);
+
 protected:
     // create the event translator object for this control: the base class
     // action creates the default one which doesn't do anything
@@ -150,12 +152,6 @@ protected:
 
     // draw the controls contents
     virtual void DoDraw(wxControlRenderer *renderer);
-
-    // perform the action which resulted from the translation of the event
-    // (the exact event type depends on the action), return TRUE if the
-    // control must be updated
-    virtual bool PerformAction(const wxControlAction& action,
-                               const wxEvent& event);
 
     // event handlers
     void OnMouse(wxMouseEvent& event);

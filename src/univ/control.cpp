@@ -271,22 +271,32 @@ void wxControl::OnFocus(wxFocusEvent& event)
 
 wxInputHandler *wxControl::CreateInputHandler() const
 {
-    return wxTheme::Get()->GetInputHandler(wxCONTROL_DEFAULT);
+    return wxTheme::Get()->GetInputHandler(GetName());
 }
 
 void wxControl::OnKeyDown(wxKeyEvent& event)
 {
-    PerformActions(m_handler->Map(event, TRUE), event);
+    PerformActions(m_handler->Map(this, event, TRUE), event);
 }
 
 void wxControl::OnKeyUp(wxKeyEvent& event)
 {
-    PerformActions(m_handler->Map(event, FALSE), event);
+    PerformActions(m_handler->Map(this, event, FALSE), event);
 }
 
 void wxControl::OnMouse(wxMouseEvent& event)
 {
-    PerformActions(m_handler->Map(event), event);
+    if ( event.Moving() || event.Entering() || event.Leaving() )
+    {
+        // don't process it at all for static controls which are not supposed
+        // to react to the mouse in any way at all
+        if ( AcceptsFocus() && m_handler->OnMouseMove(this, event) )
+            Refresh();
+    }
+    else // a click action
+    {
+        PerformActions(m_handler->Map(this, event), event);
+    }
 }
 
 // ----------------------------------------------------------------------------
@@ -311,17 +321,14 @@ void wxControl::PerformActions(const wxControlActions& actions,
 bool wxControl::PerformAction(const wxControlAction& action,
                               const wxEvent& event)
 {
-    if ( (action == wxACTION_NONE) || !AcceptsFocus() )
-        return FALSE;
+    if ( (action == wxACTION_FOCUS) && AcceptsFocus() )
+    {
+        SetFocus();
 
-    if ( action == wxACTION_HIGHLIGHT )
-        SetCurrent(TRUE);
-    else if ( action == wxACTION_UNHIGHLIGHT )
-        SetCurrent(FALSE);
-    else
-        return FALSE;
+        return TRUE;
+    }
 
-    return TRUE;
+    return FALSE;
 }
 
 #endif // wxUSE_CONTROLS

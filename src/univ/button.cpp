@@ -118,11 +118,6 @@ void wxButton::DoDraw(wxControlRenderer *renderer)
 // input processing
 // ----------------------------------------------------------------------------
 
-wxInputHandler *wxButton::CreateInputHandler() const
-{
-    return wxTheme::Get()->GetInputHandler(wxCONTROL_BUTTON);
-}
-
 void wxButton::Press()
 {
     m_isPressed = TRUE;

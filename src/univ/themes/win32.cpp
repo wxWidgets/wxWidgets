@@ -101,9 +101,12 @@ public:
                                int thumbPosStart,
                                int thumbPosEnd,
                                const wxRect& rect,
-                               int flags = 0);
+                               const int *flags = NULL);
 
     virtual void AdjustSize(wxSize *size, const wxWindow *window);
+
+    virtual wxHitTest HitTestScrollbar(wxScrollBar *scrollbar,
+                                       const wxPoint& pt) const;
 
 protected:
     // DrawButtonBorder() helper
@@ -167,8 +170,11 @@ private:
 class wxWin32InputHandler : public wxInputHandler
 {
 public:
-    virtual wxControlActions Map(const wxKeyEvent& event, bool pressed);
-    virtual wxControlActions Map(const wxMouseEvent& event);
+    virtual wxControlActions Map(wxControl *control,
+                                 const wxKeyEvent& event,
+                                 bool pressed);
+    virtual wxControlActions Map(wxControl *control,
+                                 const wxMouseEvent& event);
 };
 
 class wxWin32ButtonInputHandler : public wxWin32InputHandler
@@ -176,8 +182,11 @@ class wxWin32ButtonInputHandler : public wxWin32InputHandler
 public:
     wxWin32ButtonInputHandler();
 
-    virtual wxControlActions Map(const wxKeyEvent& event, bool pressed);
-    virtual wxControlActions Map(const wxMouseEvent& event);
+    virtual wxControlActions Map(wxControl *control,
+                                 const wxKeyEvent& event,
+                                 bool pressed);
+    virtual wxControlActions Map(wxControl *control,
+                                 const wxMouseEvent& event);
 
 private:
     wxWindow *m_winCapture;
@@ -255,17 +264,12 @@ wxInputHandler *wxWin32Theme::GetInputHandler(const wxString& control)
         // create a new handler
         n = m_handlerNames.Add(control);
 
-        if ( control == wxCONTROL_BUTTON )
+        if ( control == wxButtonNameStr )
             handler = new wxWin32ButtonInputHandler;
-        else if ( control == wxCONTROL_SCROLLBAR )
+        else if ( control == wxScrollBarNameStr )
             handler = new wxWin32InputHandler; // TODO
         else
-        {
-            wxASSERT_MSG( control == wxCONTROL_DEFAULT,
-                          _T("no input handler defined for this control") );
-
             handler = new wxWin32InputHandler;
-        }
 
         m_handlers.Insert(handler, n);
     }
@@ -893,10 +897,11 @@ void wxWin32Renderer::DrawScrollbar(wxDC& dc,
                                     int thumbPosStart,
                                     int thumbPosEnd,
                                     const wxRect& rect,
-                                    int flags)
+                                    const int *flags)
 {
-    wxArrowStyle arrowStyle = flags & wxCONTROL_DISABLED ? Arrow_Disabled
-                                                         : Arrow_Normal;
+    int flagsSb = flags ? flags[0] : 0;
+    wxArrowStyle arrowStyle = flagsSb & wxCONTROL_DISABLED ? Arrow_Disabled
+                                                           : Arrow_Normal;
 
     // first, draw the arrows at the ends
     wxRect rectArrow[2];
@@ -955,6 +960,12 @@ void wxWin32Renderer::DrawScrollbar(wxDC& dc,
         DrawArrowBorder(dc, &rectThumb);
         DrawBackground(dc, rectThumb);
     }
+}
+
+wxHitTest wxWin32Renderer::HitTestScrollbar(wxScrollBar *scrollbar,
+                                            const wxPoint& pt) const
+{
+    return wxHT_NOWHERE;
 }
 
 // ----------------------------------------------------------------------------
@@ -1020,12 +1031,15 @@ void wxWin32Renderer::AdjustSize(wxSize *size, const wxWindow *window)
 // wxWin32InputHandler
 // ----------------------------------------------------------------------------
 
-wxControlActions wxWin32InputHandler::Map(const wxKeyEvent& event, bool pressed)
+wxControlActions wxWin32InputHandler::Map(wxControl *control,
+                                          const wxKeyEvent& event,
+                                          bool pressed)
 {
     return wxACTION_NONE;
 }
 
-wxControlActions wxWin32InputHandler::Map(const wxMouseEvent& event)
+wxControlActions wxWin32InputHandler::Map(wxControl *control,
+                                          const wxMouseEvent& event)
 {
     return wxACTION_NONE;
 }
@@ -1039,7 +1053,8 @@ wxWin32ButtonInputHandler::wxWin32ButtonInputHandler()
     m_winCapture = NULL;
 }
 
-wxControlActions wxWin32ButtonInputHandler::Map(const wxKeyEvent& event,
+wxControlActions wxWin32ButtonInputHandler::Map(wxControl *control,
+                                                const wxKeyEvent& event,
                                                 bool pressed)
 {
     int keycode = event.GetKeyCode();
@@ -1048,10 +1063,11 @@ wxControlActions wxWin32ButtonInputHandler::Map(const wxKeyEvent& event,
         return wxACTION_BUTTON_TOGGLE;
     }
 
-    return wxWin32InputHandler::Map(event, pressed);
+    return wxWin32InputHandler::Map(control, event, pressed);
 }
 
-wxControlActions wxWin32ButtonInputHandler::Map(const wxMouseEvent& event)
+wxControlActions wxWin32ButtonInputHandler::Map(wxControl *control,
+                                                const wxMouseEvent& event)
 {
     if ( event.IsButton() )
     {
@@ -1068,5 +1084,5 @@ wxControlActions wxWin32ButtonInputHandler::Map(const wxMouseEvent& event)
         return wxACTION_BUTTON_TOGGLE;
     }
 
-    return wxWin32InputHandler::Map(event);
+    return wxWin32InputHandler::Map(control, event);
 }

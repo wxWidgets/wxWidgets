@@ -31,6 +31,7 @@
 #ifndef WX_PRECOMP
     #include "wx/app.h"
     #include "wx/control.h"
+    #include "wx/scrolbar.h"
     #include "wx/dc.h"
 #endif // WX_PRECOMP
 
@@ -176,12 +177,34 @@ void wxControlRenderer::DrawBackgroundBitmap()
     m_dc.DrawBitmap(bmp, x, y);
 }
 
-void wxControlRenderer::DrawScrollbar(int thumbStart, int thumbEnd)
+void wxControlRenderer::DrawScrollbar(wxScrollBar *scrollbar)
 {
+    int thumbStart, thumbEnd;
+    int range = scrollbar->GetRange();
+    if ( range )
+    {
+        int thumbPos = scrollbar->GetThumbPosition(),
+            thumbSize = scrollbar->GetThumbSize();
+
+        thumbStart = (100*thumbPos) / range;
+        thumbEnd = (100*(thumbPos + thumbSize)) / range;
+    }
+    else // no range
+    {
+        thumbStart =
+        thumbEnd = 0;
+    }
+
+    int flags[wxScrollBar::Element_Max];
+    for ( size_t n = 0; n < WXSIZEOF(flags); n++ )
+    {
+        flags[n] = scrollbar->GetState((wxScrollBar::Element)n);
+    }
+
     m_renderer->DrawScrollbar(m_dc,
                               m_ctrl->GetWindowStyle() & wxVERTICAL
                                 ? wxVERTICAL
                                 : wxHORIZONTAL,
                               thumbStart, thumbEnd, m_rect,
-                              m_ctrl->GetStateFlags());
+                              flags);
 }

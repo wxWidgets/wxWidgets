@@ -24,10 +24,32 @@
 
 class WXDLLEXPORT wxControl;
 class WXDLLEXPORT wxDC;
+class WXDLLEXPORT wxScrollBar;
 class WXDLLEXPORT wxWindow;
 
 #include "wx/string.h"
 #include "wx/gdicmn.h"
+
+// ----------------------------------------------------------------------------
+// constants
+// ----------------------------------------------------------------------------
+
+// hit test results
+enum wxHitTest
+{
+    wxHT_NOWHERE,
+
+    // scrollbar
+    wxHT_SCROLLBAR_ARROW_LINE_1,    // left or upper arrow to scroll by line
+    wxHT_SCROLLBAR_ARROW_LINE_2,    // right or down
+    wxHT_SCROLLBAR_ARROW_PAGE_1,    // left or upper arrow to scroll by page
+    wxHT_SCROLLBAR_ARROW_PAGE_2,    // right or down
+    wxHT_SCROLLBAR_THUMB,           // on the thumb
+    wxHT_SCROLLBAR_BAR_1,           // bar to the left/above the thumb
+    wxHT_SCROLLBAR_BAR_2,           // bar to the right/below the thumb
+
+    wxHT_MAX
+};
 
 // ----------------------------------------------------------------------------
 // wxRenderer: abstract renderers interface
@@ -36,6 +58,9 @@ class WXDLLEXPORT wxWindow;
 class WXDLLEXPORT wxRenderer
 {
 public:
+    // drawing functions
+    // -----------------
+
     // draw the controls background
     virtual void DrawBackground(wxDC& dc,
                                 const wxRect& rect,
@@ -79,14 +104,14 @@ public:
                            int flags = 0) = 0;
 
     // draw a scrollbar: thumb positions are in percent of the full scrollbar
-    // length
+    // length and the flags array contains the flags corresponding to each of
+    // wxScrollBar::Elements
     virtual void DrawScrollbar(wxDC& dc,
                                wxOrientation orient,
                                int thumbPosStart,
                                int thumbPosEnd,
                                const wxRect& rect,
-                               int flags = 0,
-                               int extraFlags = 0) = 0;
+                               const int *flags = NULL) = 0;
 
     // TODO: having this is ugly but I don't see how to solve GetBestSize()
     //       problem without something like this
@@ -96,6 +121,13 @@ public:
     // example) it is more complicated - the result being, in any case, that
     // the control looks "nice" if it uses the adjusted rectangle
     virtual void AdjustSize(wxSize *size, const wxWindow *window) = 0;
+
+    // hit testing functions
+    // ---------------------
+
+    // returns one of wxHT_SCROLLBAR_XXX constants
+    virtual wxHitTest HitTestScrollbar(wxScrollBar *scrollbar,
+                                       const wxPoint& pt) const = 0;
 
     // virtual dtor for any base class
     virtual ~wxRenderer();
@@ -152,13 +184,16 @@ public:
                                int thumbPosStart,
                                int thumbPosEnd,
                                const wxRect& rect,
-                               int flags = 0,
-                               int extraFlags = 0)
+                               const int *flags = NULL)
         { m_renderer->DrawScrollbar(dc, orient, thumbPosStart,
-                                    thumbPosEnd, rect, flags, extraFlags); }
+                                    thumbPosEnd, rect, flags); }
 
     virtual void AdjustSize(wxSize *size, const wxWindow *window)
         { m_renderer->AdjustSize(size, window); }
+
+    virtual wxHitTest HitTestScrollbar(wxScrollBar *scrollbar,
+                                       const wxPoint& pt) const
+        { return m_renderer->HitTestScrollbar(scrollbar, pt); }
 
 protected:
     wxRenderer *m_renderer;
@@ -181,7 +216,7 @@ public:
     void DrawButtonBorder();
     void DrawFrame();
     void DrawBackgroundBitmap();
-    void DrawScrollbar(int thumbStart, int thumbEnd, int extraFlags = 0);
+    void DrawScrollbar(wxScrollBar *scrollbar);
 
     // accessors
     wxRenderer *GetRenderer() const { return m_renderer; }

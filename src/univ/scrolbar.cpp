@@ -55,6 +55,11 @@ void wxScrollBar::Init()
     m_thumbSize =
     m_thumbPos =
     m_pageSize = 0;
+
+    for ( size_t n = 0; n < Element_Max; n++ )
+    {
+        m_elementsState[n] = 0;
+    }
 }
 
 bool wxScrollBar::Create(wxWindow *parent,
@@ -90,6 +95,21 @@ wxScrollBar::~wxScrollBar()
 // scrollbar API
 // ----------------------------------------------------------------------------
 
+void wxScrollBar::DoSetThumb(int pos)
+{
+    // don't do checks here, we're a private function
+    if ( pos < 0 )
+    {
+        pos = 0;
+    }
+    else if ( pos > m_range - m_thumbSize )
+    {
+        pos = m_range - m_thumbSize;
+    }
+
+    m_thumbPos = pos;
+}
+
 int wxScrollBar::GetThumbPosition() const
 {
     return m_thumbPos;
@@ -114,12 +134,9 @@ void wxScrollBar::SetThumbPosition(int pos)
 {
     wxCHECK_RET( pos >= 0 && pos <= m_range, _T("thumb position out of range") );
 
-    if ( pos >= m_range - m_thumbSize )
-    {
-        pos = m_range - m_thumbSize;
-    }
+    DoSetThumb(pos);
 
-    m_thumbPos = pos;
+    Refresh();
 }
 
 void wxScrollBar::SetScrollbar(int position, int thumbSize,
@@ -156,34 +173,53 @@ wxSize wxScrollBar::DoGetBestSize() const
 
 void wxScrollBar::DoDraw(wxControlRenderer *renderer)
 {
-    int thumbStart, thumbEnd;
-    if ( m_range )
-    {
-        thumbStart = (100*m_thumbPos) / m_range;
-        thumbEnd = (100*(m_thumbPos + m_thumbSize)) / m_range;
-    }
-    else // no range
-    {
-        thumbStart =
-        thumbEnd = 0;
-    }
-
-    renderer->DrawScrollbar(thumbStart, thumbEnd);
+    renderer->DrawScrollbar(this);
 }
 
 // ----------------------------------------------------------------------------
 // input processing
 // ----------------------------------------------------------------------------
 
-wxInputHandler *wxScrollBar::CreateInputHandler() const
-{
-    return wxTheme::Get()->GetInputHandler(wxCONTROL_SCROLLBAR);
-}
-
 bool wxScrollBar::PerformAction(const wxControlAction& action,
                                 const wxEvent& event)
 {
-    return wxControl::PerformAction(action, event);
+    if ( action == wxACTION_SCROLL_START )
+        ScrollToStart();
+    else if ( action == wxACTION_SCROLL_END )
+        ScrollToEnd();
+    else if ( action == wxACTION_SCROLL_LINE_UP )
+        ScrollLines(-1);
+    else if ( action == wxACTION_SCROLL_LINE_DOWN )
+        ScrollLines(1);
+    else if ( action == wxACTION_SCROLL_PAGE_UP )
+        ScrollPages(-1);
+    else if ( action == wxACTION_SCROLL_PAGE_DOWN )
+        ScrollPages(1);
+    else
+        return wxControl::PerformAction(action, event);
+
+    // scrollbar position changed - update
+    return TRUE;
+}
+
+void wxScrollBar::ScrollToStart()
+{
+    DoSetThumb(0);
+}
+
+void wxScrollBar::ScrollToEnd()
+{
+    DoSetThumb(m_range - m_thumbSize);
+}
+
+void wxScrollBar::ScrollLines(int nLines)
+{
+    DoSetThumb(m_thumbPos + nLines);
+}
+
+void wxScrollBar::ScrollPages(int nPages)
+{
+    DoSetThumb(m_thumbPos + nPages*m_pageSize);
 }
 
 #endif // wxUSE_SCROLLBAR

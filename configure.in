@@ -2016,7 +2016,7 @@ if test "$wxUSE_GUI" = "yes"; then
     fi
 
     if test "$wxUSE_UNIVERSAL" = "yes"; then
-        ALL_DEPFILES="\$(GUI_LOWLEVEL_DEPS)"
+        ALL_DEPFILES="\$(GUI_LOWLEVEL_DEPS) \$(UNIVDEPS)"
     else
         ALL_DEPFILES="\$(GUIDEPS)"
     fi

@@ -22,12 +22,6 @@ class WXDLLEXPORT wxInputHandler;
 // the actions supported by this control
 // ----------------------------------------------------------------------------
 
-// various parts of scrollbar may be highlighted
-#define wxACTION_SCROLL_HIGHLIGHT_ARROW_UP _T("focusarrowup")
-#define wxACTION_SCROLL_HIGHLIGHT_ARROW_DOWN _T("focusarrowdown")
-#define wxACTION_SCROLL_HIGHLIGHT_THUMB _T("focusthumb")
-#define wxACTION_SCROLL_HIGHLIGHT_BAR _T("focusbar")
-
 // scroll the bar
 #define wxACTION_SCROLL_START       _T("start")     // to the beginning
 #define wxACTION_SCROLL_END         _T("end")       // to the end
@@ -45,19 +39,19 @@ class WXDLLEXPORT wxInputHandler;
 // wxScrollBar
 // ----------------------------------------------------------------------------
 
-// class name
-#define wxCONTROL_SCROLLBAR _T("scrollbar")
-
 class WXDLLEXPORT wxScrollBar : public wxScrollBarBase
 {
 public:
-    enum
+    // the parts of the scrollbar
+    enum Element
     {
-        // which part of scrollbar is currently highlighted?
-        Highlight_Arrow1 = 0x0001,
-        Highlight_Arrow2 = 0x0002,
-        Highlight_Thumb  = 0x0004,
-        Highlight_Bar    = 0x0008
+        Element_Arrow_Line_1,
+        Element_Arrow_Line_2,
+        Element_Arrow_Page_1,
+        Element_Arrow_Page_2,
+        Element_Thumb,
+        Element_Bar,
+        Element_Max
     };
 
     wxScrollBar() { Init(); }
@@ -84,26 +78,39 @@ public:
 
     virtual ~wxScrollBar();
 
-    // implementate base class pure virtuals
+    // implement base class pure virtuals
     virtual int GetThumbPosition() const;
     virtual int GetThumbSize() const;
     virtual int GetPageSize() const;
     virtual int GetRange() const;
 
-    virtual void SetThumbPosition(int viewStart);
+    virtual void SetThumbPosition(int thumbPos);
     virtual void SetScrollbar(int position, int thumbSize,
                               int range, int pageSize,
                               bool refresh = TRUE);
 
     // wxScrollBar actions
+    void ScrollToStart();
+    void ScrollToEnd();
+    void ScrollLines(int nLines);
+    void ScrollPages(int nPages);
 
-protected:
-    virtual wxInputHandler *CreateInputHandler() const;
     virtual bool PerformAction(const wxControlAction& action,
                                const wxEvent& event);
+
+    // wxScrollBar sub elements state (combination of wxCONTROL_XXX)
+    void SetState(Element elem, int flags)
+        { m_elementsState[elem] = flags; }
+    int GetState(Element elem) const
+        { return m_elementsState[elem]; }
+
+protected:
     virtual wxSize DoGetBestSize() const;
     virtual void DoDraw(wxControlRenderer *renderer);
 
+    // SetThumbPosition() helper
+    void DoSetThumb(int thumbPos);
+    
     // common part of all ctors
     void Init();
 
@@ -119,6 +126,9 @@ private:
     // the page size, i.e. the number of lines by which to scroll when page
     // up/down action is performed
     int m_pageSize;
+
+    // the state of the sub elements
+    int m_elementsState[Element_Max];
 
     DECLARE_DYNAMIC_CLASS(wxScrollBar)
 };
