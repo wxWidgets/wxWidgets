@@ -8,12 +8,13 @@ the data source to which the user has sufficient privileges.
 
 \wxheading{Include files}
 
-<wx/version.h>
-<wx/iodbc.h>
-<wx/isqlext.h>
+<wx/version.h>\\
+<wx/iodbc.h>\\
+<wx/isqlext.h>\\
 <wx/db.h>
 
 \latexignore{\rtfignore{\wxheading{Members}}}
+
 \wxheading{Enumerated types}
 
 \label{wxdbenumsqllogstate}\docparam{enum {\bf wxDbSqlLogState}}{sqlLogOFF, sqlLogON}
@@ -45,7 +46,7 @@ each of these database engines.
 \docparam{SWORD {\bf wxDb::cbErrorMsg}}{This member variable is populated as a result of
 calling \helpref{wxDb::GetNextError}{wxdbgetnexterror}.  Contains the count of bytes in the wxDb::errorMsg string.}
 
-\label{wxdbdbstatus}\docparam{int {\bf wxDb::DB_STATUS}}{The last ODBC error that occured on this data connection.  Possible codes are:}
+\label{wxdbdbstatus}\docparam{int {\bf wxDb::DB\_STATUS}}{The last ODBC error that occured on this data connection.  Possible codes are:}
 
 \begin{verbatim}
    DB_ERR_GENERAL_WARNING                     // SqlState = '01000'
