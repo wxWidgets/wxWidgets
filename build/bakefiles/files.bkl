@@ -643,11 +643,13 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/unix/fontenum.cpp
     src/unix/fontutil.cpp
     src/unix/utilsx11.cpp
+    src/unix/displayx11.cpp
 </set>
 <set var="XWIN_LOWLEVEL_HDR" hints="files">
     wx/generic/caret.h
     wx/unix/fontutil.h
     wx/unix/utilsx11.h
+    wx/unix/displayx11.h
 </set>
 
 
