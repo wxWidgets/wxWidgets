@@ -224,21 +224,21 @@ void wxHtmlListBox::OnDrawItem(wxDC& dc, const wxRect& rect, size_t n) const
     wxHtmlCell *cell = m_cache->Get(n);
     wxCHECK_RET( cell, _T("this cell should be cached!") );
 
-    wxHtmlRenderingState htmlRendState;
+    wxHtmlRenderingInfo htmlRendInfo;
 
     // draw the selected cell in selected state
     if ( IsSelected(n) )
     {
         wxHtmlSelection htmlSel;
         htmlSel.Set(wxPoint(0, 0), cell, wxPoint(INT_MAX, INT_MAX), cell);
-        htmlRendState.SetSelection(&htmlSel);
-        htmlRendState.SetSelectionState(wxHTML_SEL_IN);
+        htmlRendInfo.SetSelection(&htmlSel);
+        //htmlRendInfo.SetSelectionState(wxHTML_SEL_IN);
     }
 
     // note that we can't stop drawing exactly at the window boundary as then
     // even the visible cells part could be not drawn, so always draw the
     // entire cell
-    cell->Draw(dc, rect.x, rect.y, 0, INT_MAX, htmlRendState);
+    cell->Draw(dc, rect.x, rect.y, 0, INT_MAX, htmlRendInfo);
 }
 
 wxCoord wxHtmlListBox::OnMeasureItem(size_t n) const
