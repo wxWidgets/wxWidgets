@@ -124,7 +124,7 @@ wxProgressDialog::wxProgressDialog(wxString const &title,
     {
         m_gauge = new wxGauge(this, -1, maximum,
                 wxDefaultPosition, wxDefaultSize,
-                wxGA_HORIZONTAL | wxRAISED_BORDER);
+                wxGA_HORIZONTAL | wxRAISED_BORDER | (style & wxGA_SMOOTH));
         c = new wxLayoutConstraints;
         c->left.SameAs(this, wxLeft, 2*LAYOUT_X_MARGIN);
         c->top.Below(m_msg, 2*LAYOUT_Y_MARGIN);

@@ -1138,7 +1138,8 @@ enum wxStretch
 #define wxPD_AUTO_HIDE          0x0004
 #define wxPD_ELAPSED_TIME       0x0008
 #define wxPD_ESTIMATED_TIME     0x0010
-#define wxPD_REMAINING_TIME     0x0020
+// wxGA_SMOOTH = 0x0020 may also be used with wxProgressDialog
+#define wxPD_REMAINING_TIME     0x0040
 
 /*
  * wxHtmlWindow flags
