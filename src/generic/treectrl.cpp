@@ -607,7 +607,8 @@ void wxTreeCtrl::Init()
 
     m_dragCount = 0;
     m_isDragging = FALSE;
-    m_dropTarget = (wxGenericTreeItem *)NULL;
+    m_dropTarget =
+    m_oldSelection = (wxGenericTreeItem *)NULL;
 
     m_renameTimer = new wxTreeRenameTimer( this );
 
@@ -2143,6 +2144,22 @@ void wxTreeCtrl::OnMouse( wxMouseEvent &event )
             // we're going to drag this item
             m_isDragging = TRUE;
 
+            // remember the old cursor because we will change it while
+            // dragging
+            m_oldCursor = m_cursor;
+
+            // in a single selection control, hide the selection temporarily
+            if ( !(GetWindowStyleFlag() & wxTR_MULTIPLE) )
+            {
+                m_oldSelection = GetSelection().m_pItem;
+
+                if ( m_oldSelection )
+                {
+                    m_oldSelection->SetHilight(FALSE);
+                    RefreshLine(m_oldSelection);
+                }
+            }
+
             CaptureMouse();
         }
     }
@@ -2178,9 +2195,16 @@ void wxTreeCtrl::OnMouse( wxMouseEvent &event )
         m_isDragging = FALSE;
         m_dropTarget = (wxGenericTreeItem *)NULL;
 
+        if ( m_oldSelection )
+        {
+            m_oldSelection->SetHilight(TRUE);
+            RefreshLine(m_oldSelection);
+            m_oldSelection = (wxGenericTreeItem *)NULL;
+        }
+
         ReleaseMouse();
 
-        SetCursor(wxCURSOR_DEFAULT);
+        SetCursor(m_oldCursor);
 
         wxYield();
     }

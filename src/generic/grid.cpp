@@ -1939,6 +1939,7 @@ void wxGridWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
 #if WXGRID_DRAW_LINES
     m_owner->DrawAllGridLines( dc, reg );
 #endif
+    m_owner->DrawHighlight( dc );
 }
 
 
@@ -3947,6 +3948,11 @@ void wxGrid::OnKeyDown( wxKeyEvent& event )
                     attr->GetEditor()->StartingKey(event);
                     attr->DecRef();
                 }
+                else
+                {
+                    // let others process char events for readonly cells
+                    event.Skip();
+                }
                 break;
         }
     }
@@ -4098,11 +4104,6 @@ void wxGrid::DrawCell( wxDC& dc, const wxGridCellCoords& coords )
         // but all the rest is drawn by the cell renderer and hence may be
         // customized
         attr->GetRenderer()->Draw(*this, *attr, dc, rect, row, col, IsInSelection(coords));
-
-        if ( isCurrent )
-        {
-            DrawCellHighlight(dc, attr);
-        }
     }
 
     attr->DecRef();
@@ -4122,26 +4123,18 @@ void wxGrid::DrawCellHighlight( wxDC& dc, const wxGridCellAttr *attr )
     rect.width = m_colWidths[col] - 1;
     rect.height = m_rowHeights[row] - 1;
 
-    if ( attr->IsReadOnly() )
-    {
-        // hmmm... what could we do here to show that the cell is disabled?
-        // for now, I just draw a thinner border than for the other ones, but
-        // it doesn't look really good
-        dc.SetPen(wxPen(m_gridLineColour, 2, wxSOLID));
-        dc.SetBrush(*wxTRANSPARENT_BRUSH);
+    // hmmm... what could we do here to show that the cell is disabled?
+    // for now, I just draw a thinner border than for the other ones, but
+    // it doesn't look really good
+    dc.SetPen(wxPen(m_gridLineColour, attr->IsReadOnly() ? 1 : 3, wxSOLID));
+    dc.SetBrush(*wxTRANSPARENT_BRUSH);
 
-        dc.DrawRectangle(rect);
-    }
-    else
-    {
-        // VZ: my experiments with 3d borders...
+    dc.DrawRectangle(rect);
+
 #if 0
-        dc.SetPen(wxPen(m_gridLineColour, 3, wxSOLID));
-        dc.SetBrush(*wxTRANSPARENT_BRUSH);
+        // VZ: my experiments with 3d borders...
 
-        dc.DrawRectangle(rect);
-#else //1
-        // FIXME we should properly set colours for arbitrary bg
+        // how to properly set colours for arbitrary bg?
         wxCoord x1 = rect.x,
                 y1 = rect.y,
                 x2 = rect.x + rect.width -1,
@@ -4157,8 +4150,7 @@ void wxGrid::DrawCellHighlight( wxDC& dc, const wxGridCellAttr *attr )
         dc.SetPen(*wxBLACK_PEN);
         dc.DrawLine(x1, y2, x2, y2);
         dc.DrawLine(x2, y1, x2, y2+1);
-#endif // 0/1
-    }
+#endif // 0
 }
 
 void wxGrid::DrawCellBorder( wxDC& dc, const wxGridCellCoords& coords )
@@ -4181,6 +4173,23 @@ void wxGrid::DrawCellBorder( wxDC& dc, const wxGridCellCoords& coords )
                  m_colRights[col], m_rowBottoms[row] );
 }
 
+void wxGrid::DrawHighlight(wxDC& dc)
+{
+    // if the active cell was repainted, repaint its highlight too because it
+    // might have been damaged by the grid lines
+    size_t count = m_cellsExposed.GetCount();
+    for ( size_t n = 0; n < count; n++ )
+    {
+        if ( m_cellsExposed[n] == m_currentCellCoords )
+        {
+            wxGridCellAttr* attr = GetCellAttr(m_currentCellCoords);
+            DrawCellHighlight(dc, attr);
+            attr->DecRef();
+
+            break;
+        }
+    }
+}
 
 // TODO: remove this ???
 // This is used to redraw all grid lines e.g. when the grid line colour

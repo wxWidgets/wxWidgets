@@ -462,8 +462,7 @@ void wxRegionIterator::Reset(const wxRegion& region)
             m_numRects = count;
             m_rects = new wxRect[m_numRects];
 
-            int i = 0;
-            for (i = 0; i < m_numRects; i++)
+            for (size_t i = 0; i < m_numRects; i++)
                m_rects[i] = rects[i];
 
 	    /*
