@@ -1184,7 +1184,7 @@ void HTMLOnMacro(int macroId, int no_args, bool start)
   {
     if (start)
     {
-      if (inVerbatim)
+      if (TRUE) // (inVerbatim)
         TexOutput(_T("~"));
       else
         TexOutput(_T(" "));

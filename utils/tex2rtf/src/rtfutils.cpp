@@ -429,22 +429,22 @@ void WriteHeadingStyle(FILE *fd, int heading)
   {
     case 1:
     {
-      wxFprintf(fd, _T("\\b\\fs%d"), chapterFont*2);
+      wxFprintf(fd, _T("\\sb300\\sa260\\f2\\b\\fs%d"), chapterFont*2);
       break;
     }
     case 2:
     {
-      wxFprintf(fd, _T("\\b\\fs%d"), sectionFont*2);
+      wxFprintf(fd, _T("\\sb200\\sa240\\f2\\b\\fs%d"), sectionFont*2);
       break;
     }
     case 3:
     {
-      wxFprintf(fd, _T("\\b\\fs%d"), subsectionFont*2);
+      wxFprintf(fd, _T("\\sb120\\sa240\\f2\\b\\fs%d"), subsectionFont*2);
       break;
     }
     case 4:
     {
-      wxFprintf(fd, _T("\\b\\fs%d"), subsectionFont*2);
+      wxFprintf(fd, _T("\\sb120\\sa240\\f2\\b\\fs%d"), subsectionFont*2);
       break;
     }
     default:
@@ -460,12 +460,17 @@ void WriteRTFHeader(FILE *fd)
   /*
    * Style sheet
    */
-  wxFprintf(fd, _T("{\\stylesheet{\\f2\\fs20 \\snext0 Normal;}\n"));
+  wxFprintf(fd, _T("{\\stylesheet{\\f2\\fs22\\sa200 \\snext0 Normal;}\n"));
   // Headings
   wxFprintf(fd, _T("{\\s1 ")); WriteHeadingStyle(fd, 1); wxFprintf(fd, _T("\\sbasedon0\\snext0 heading 1;}\n"));
   wxFprintf(fd, _T("{\\s2 ")); WriteHeadingStyle(fd, 2); wxFprintf(fd, _T("\\sbasedon0\\snext0 heading 2;}\n"));
   wxFprintf(fd, _T("{\\s3 ")); WriteHeadingStyle(fd, 3); wxFprintf(fd, _T("\\sbasedon0\\snext0 heading 3;}\n"));
   wxFprintf(fd, _T("{\\s4 ")); WriteHeadingStyle(fd, 4); wxFprintf(fd, _T("\\sbasedon0\\snext0 heading 4;}\n"));
+
+  // Code style
+  wxFprintf(fd, _T("{\\s10\\ql \\li720\\ri0\\nowidctlpar\\faauto\\rin0\\lin720\\itap0 \\cbpat17\
+\\f2\\fs20 \\sbasedon0 \\snext24 Code;}\n"));
+
   // Table of contents styles
   wxFprintf(fd, _T("{\\s20\\sb300\\tqr\\tldot\\tx8640 \\b\\f2 \\sbasedon0\\snext0 toc 1;}\n"));
   
@@ -603,6 +608,7 @@ void ProcessText2RTF(TexChunk *chunk)
       if (inVerbatim)
       {
         BigBuffer[ptr] = 0; wxStrcat(BigBuffer, _T("\\par\n")); ptr += 5;
+//        BigBuffer[ptr] = 0; wxStrcat(BigBuffer, _T("\\par{\\v this was verbatim}\n")); ptr += 5;
         i ++;
         changed = TRUE;
       }
@@ -1221,9 +1227,10 @@ void RTFOnMacro(int macroId, int no_args, bool start)
         }
       }
       OutputCurrentSection();
-      TexOutput(_T("\\par\\pard}\\par\n"));
+      TexOutput(_T("\\par\\pard}\n"));
       }
-      issuedNewParagraph = 2;
+      issuedNewParagraph = 1;
+      WriteEnvironmentStyles();
     }
     break;
   }
@@ -1409,9 +1416,12 @@ void RTFOnMacro(int macroId, int no_args, bool start)
         }
       }
       OutputCurrentSection();
-      TexOutput(_T("\\par\\pard}\\par\n"));
+      TexOutput(_T("\\par\\pard}\n"));
+//      TexOutput(_T("\\par\\pard}\\par\n"));
       }
-      issuedNewParagraph = 2;
+      issuedNewParagraph = 1;
+      WriteEnvironmentStyles();
+//      issuedNewParagraph = 2;
     }
     break;
   }
@@ -1469,8 +1479,11 @@ void RTFOnMacro(int macroId, int no_args, bool start)
           if (!InPopups())
             wxFprintf(Subsections, _T("\\page\n"));
         }
+        // Experimental JACS 2004-02-21
+#if 0
         else
           wxFprintf(Chapters, _T("\\par\n"));
+#endif        
       }
       startedSections = TRUE;
 
@@ -1562,9 +1575,13 @@ void RTFOnMacro(int macroId, int no_args, bool start)
         }
       }
       OutputCurrentSection(); // Repeat section header
-      TexOutput(_T("\\par\\pard}\\par\n"));
+      
+      // Experimental JACS
+      TexOutput(_T("\\par\\pard}\n"));
+      // TexOutput(_T("\\par\\pard}\\par\n"));
       }
-      issuedNewParagraph = 2;
+      issuedNewParagraph = 1;
+      WriteEnvironmentStyles();
     }
     }
     break;
@@ -1619,8 +1636,11 @@ void RTFOnMacro(int macroId, int no_args, bool start)
       {
         if (winHelp)
           wxFprintf(Subsubsections, _T("\\page\n"));
+        // Experimental JACS 2004-02-21
+#if 0
         else
           wxFprintf(Chapters, _T("\\par\n"));
+#endif        
       }
 
       startedSections = TRUE;
@@ -1705,9 +1725,11 @@ void RTFOnMacro(int macroId, int no_args, bool start)
         }
       }
       OutputCurrentSection(); // Repeat section header
-      TexOutput(_T("\\par\\pard}\\par\n"));
-      issuedNewParagraph = 2;
-//      if (winHelp) TexOutput(_T("\\pard"));
+      TexOutput(_T("\\par\\pard}\n"));
+      issuedNewParagraph = 1;
+      WriteEnvironmentStyles();
+//      TexOutput(_T("\\par\\pard}\\par\n"));
+//      issuedNewParagraph = 2;
     }
     }
     break;
@@ -1943,7 +1965,7 @@ void RTFOnMacro(int macroId, int no_args, bool start)
   {
     if (start)
     {
-      if (inVerbatim)
+      if (TRUE) // (inVerbatim)
         TexOutput(_T("~"));
       else
         TexOutput(_T(" "));
@@ -1998,8 +2020,11 @@ void RTFOnMacro(int macroId, int no_args, bool start)
     {
       if (indentLevel > 0)
       {
-        TexOutput(_T("\\par\\par\n"));
-        issuedNewParagraph = 2;
+        // Experimental JACS 2004-02-21
+        TexOutput(_T("\\par\n"));
+        issuedNewParagraph = 1;
+//        TexOutput(_T("\\par\\par\n"));
+//        issuedNewParagraph = 2;
       }
       else
       {
@@ -2034,7 +2059,7 @@ void RTFOnMacro(int macroId, int no_args, bool start)
       ItemizeStruc *struc = new ItemizeStruc(listType, indentSize2, indentSize1);
       itemizeStack.Insert(struc);
       
-      wxSprintf(buf, _T("\\tx%d\\tx%d\\li%d"), indentSize1, indentSize2, indentSize2);
+      wxSprintf(buf, _T("\\tx%d\\tx%d\\li%d\\sa200"), indentSize1, indentSize2, indentSize2);
       PushEnvironmentStyle(buf);
     }
     else
@@ -2076,7 +2101,7 @@ void RTFOnMacro(int macroId, int no_args, bool start)
       itemizeStack.Insert(struc);
       
 //      wxSprintf(buf, _T("\\tx%d\\li%d\\ri%d"), indentSize, indentSize, TwoColWidthA+TwoColWidthB+oldIndent);
-      wxSprintf(buf, _T("\\tx%d\\li%d"), indentSize, indentSize);
+      wxSprintf(buf, _T("\\tx%d\\li%d\\sa200"), indentSize, indentSize);
       PushEnvironmentStyle(buf);
     }
     else
@@ -2095,12 +2120,16 @@ void RTFOnMacro(int macroId, int no_args, bool start)
       WriteEnvironmentStyles();
 */
 /* why do we need this? */
+// Experimental
+      TexOutput(_T("\\pard\n"));
+#if 0
       if (itemizeStack.GetCount() == 0)
       {
         issuedNewParagraph = 0;
         OnMacro(ltPAR, 0, TRUE);
         OnMacro(ltPAR, 0, FALSE);
       }
+#endif      
     }
     break;
   }
@@ -2119,12 +2148,14 @@ void RTFOnMacro(int macroId, int no_args, bool start)
         int indentSize2 = struc->indentation;
 
         TexOutput(_T("\n"));
-        if (struc->currentItem > 1)
+        if (struc->currentItem > 1 && issuedNewParagraph == 0)
         {
-          if (currentItemSep > 0)
-            TexOutput(_T("\\par"));
+            // JACS
+//          if (currentItemSep > 0)
+//            TexOutput(_T("\\par"));
 
           TexOutput(_T("\\par"));
+          issuedNewParagraph = 1;
 //          WriteEnvironmentStyles();
         }
 
@@ -2212,6 +2243,8 @@ void RTFOnMacro(int macroId, int no_args, bool start)
           oldIndent = ((ItemizeStruc *)node2->GetData())->indentation;
 
         TexOutput(_T("\n"));
+        // JACS
+#if 0
         if (struc->currentItem > 1)
         {
           if (currentItemSep > 0)
@@ -2219,6 +2252,7 @@ void RTFOnMacro(int macroId, int no_args, bool start)
 
 //          WriteEnvironmentStyles();
         }
+#endif        
 
 //        wxSprintf(buf, _T("\\tx%d\\li%d\\fi-%d\\ri%d\n"), TwoColWidthA,
 //             TwoColWidthA, TwoColWidthA, TwoColWidthA+TwoColWidthB+oldIndent);
@@ -2238,6 +2272,8 @@ void RTFOnMacro(int macroId, int no_args, bool start)
   {
     if (start)
     {
+        // JACS
+#if 0
       if (macroId == ltVERBATIM)
       {
         if (!issuedNewParagraph)
@@ -2248,7 +2284,12 @@ void RTFOnMacro(int macroId, int no_args, bool start)
         }
         else issuedNewParagraph = 0;
       }
-      wxSprintf(buf, _T("{\\f3\\fs20 "));
+#endif
+      
+      if (macroId == ltVERBATIM)
+        wxSprintf(buf, _T("{\\f3\\s10\\fs20\\li720\\sa0 "));
+      else
+        wxSprintf(buf, _T("{\\f3\\fs20 "));
       TexOutput(buf);
     }
     else
@@ -2257,8 +2298,12 @@ void RTFOnMacro(int macroId, int no_args, bool start)
       if (macroId == ltVERBATIM)
       {
         TexOutput(_T("\\pard\n"));
-//        issuedNewParagraph = 1;
         WriteEnvironmentStyles();
+        // JACS
+#if 0
+        TexOutput(_T("\\par\n"));
+        issuedNewParagraph = 1;
+#endif        
       }
     }
     break;
@@ -2268,9 +2313,9 @@ void RTFOnMacro(int macroId, int no_args, bool start)
   {
     if (start)
     {
-      TexOutput(_T("\\fi0\\qc "));
+      TexOutput(_T("\\qc "));
       forbidParindent ++;
-      PushEnvironmentStyle(_T("\\qc"));
+      PushEnvironmentStyle(_T("\\qc\\sa200"));
     }
     else
     {
@@ -2286,7 +2331,7 @@ void RTFOnMacro(int macroId, int no_args, bool start)
   {
     if (start)
     {
-      TexOutput(_T("\\fi0\\ql "));
+      TexOutput(_T("\\ql\\sa200 "));
       forbidParindent ++;
       PushEnvironmentStyle(_T("\\ql"));
     }
@@ -2304,7 +2349,7 @@ void RTFOnMacro(int macroId, int no_args, bool start)
   {
     if (start)
     {
-      TexOutput(_T("\\fi0\\qr "));
+      TexOutput(_T("\\qr\\sa200 "));
       forbidParindent ++;
       PushEnvironmentStyle(_T("\\qr"));
     }
@@ -2526,9 +2571,11 @@ void RTFOnMacro(int macroId, int no_args, bool start)
 		{
           TexOutput(_T("\\par\\pard"));
           issuedNewParagraph ++;
-
+          
           // Extra par if parskip is more than zero (usually looks best.)
-          if (!inTabular && (ParSkip > 0))
+          // N.B. JACS 2004-02-21: shouldn't need this for linear RTF if
+          // we have a suitable set of styles.
+          if (winHelp && !inTabular && (ParSkip > 0))
 		  {
             TexOutput(_T("\\par"));
             issuedNewParagraph ++;
@@ -2543,7 +2590,7 @@ void RTFOnMacro(int macroId, int no_args, bool start)
 		  // and ParSkip == 0.
 
           // Extra par if parskip is more than zero (usually looks best.)
-          if (!inTabular && (ParSkip > 0))
+          if (winHelp && !inTabular && (ParSkip > 0))
 		  {
             TexOutput(_T("\\par"));
             issuedNewParagraph ++;
@@ -3707,7 +3754,7 @@ bool RTFOnArgument(int macroId, int arg_no, bool start)
     {
       TexOutput(_T("\\li360\n"));
       forbidParindent ++;
-      PushEnvironmentStyle(_T("\\li360"));
+      PushEnvironmentStyle(_T("\\li360\\sa200"));
     }
     else
     {
@@ -3723,7 +3770,7 @@ bool RTFOnArgument(int macroId, int arg_no, bool start)
     if (start)
     {
       TexOutput(_T("\\li360\n"));
-      PushEnvironmentStyle(_T("\\li360"));
+      PushEnvironmentStyle(_T("\\li360\\sa200"));
     }
     else
     {
@@ -3741,7 +3788,7 @@ bool RTFOnArgument(int macroId, int arg_no, bool start)
   {
     if (start)
     {
-      wxSprintf(buf, _T("\\box\\trgaph108%s\n"), ((macroId == ltNORMALBOXD) ? _T("\\brdrdb") : _T("\\brdrs")));
+      wxSprintf(buf, _T("\\sa200\\box\\trgaph108%s\n"), ((macroId == ltNORMALBOXD) ? _T("\\brdrdb") : _T("\\brdrs")));
       TexOutput(buf);
       PushEnvironmentStyle(buf);
     }
@@ -4496,8 +4543,8 @@ bool RTFOnArgument(int macroId, int arg_no, bool start)
     {
       if (winHelp)
       {
-        TexOutput(_T("\\box\n"));
-        PushEnvironmentStyle(_T("\\box"));
+        TexOutput(_T("\\sa200\\box\n"));
+        PushEnvironmentStyle(_T("\\sa200\\box"));
       }
       else
       {
@@ -4526,8 +4573,8 @@ bool RTFOnArgument(int macroId, int arg_no, bool start)
     {
       if (winHelp)
       {
-        TexOutput(_T("\\box\n"));
-        PushEnvironmentStyle(_T("\\box"));
+        TexOutput(_T("\\sa200\\box\n"));
+        PushEnvironmentStyle(_T("\\sa200\\box"));
       }
       else
       {
@@ -4687,7 +4734,7 @@ bool RTFOnArgument(int macroId, int arg_no, bool start)
       ItemizeStruc *struc = new ItemizeStruc(LATEX_INDENT, indentSize);
       itemizeStack.Insert(struc);
       
-      wxSprintf(buf, _T("\\tx%d\\li%d "), indentSize, indentSize);
+      wxSprintf(buf, _T("\\tx%d\\li%d\\sa200 "), indentSize, indentSize);
       PushEnvironmentStyle(buf);
       TexOutput(buf);
       return FALSE;
@@ -4730,7 +4777,7 @@ bool RTFOnArgument(int macroId, int arg_no, bool start)
       ItemizeStruc *struc = new ItemizeStruc(LATEX_INDENT, indentSize);
       itemizeStack.Insert(struc);
       
-      wxSprintf(buf, _T("\\tx%d\\li%d\\lr%d\\box%s "), indentSize, indentSize, indentSizeRight,
+      wxSprintf(buf, _T("\\tx%d\\li%d\\lr%d\\sa200\\box%s "), indentSize, indentSize, indentSizeRight,
         ((macroId == ltCENTEREDBOX) ? _T("\\brdrs") : _T("\\brdrdb")));
       PushEnvironmentStyle(buf);
       TexOutput(buf);
@@ -5154,8 +5201,10 @@ bool RTFGo(void)
     wxFprintf(Contents, _T("{\\b\\fs%d %s}\\par\\par\\pard\n\n"),
       (winHelp ? titleFont : chapterFont)*2, ContentsNameString);
 
-    // By default, Swiss, 10 point.
-    wxFprintf(Chapters, _T("\\f2\\fs20\n"));
+    // By default, Swiss, 11 point.
+    wxFprintf(Chapters, _T("\\f2\\fs22\n"));
+    
+    PushEnvironmentStyle(_T("\\f2\\fs22\\sa200"));
 
     SetCurrentOutput(Chapters);
 
@@ -5174,6 +5223,8 @@ bool RTFGo(void)
     }
     WriteRTFHeader(Header);
     fclose(Header);
+
+    PopEnvironmentStyle();
     
     Tex2RTFYield(TRUE);
     if (winHelp)
