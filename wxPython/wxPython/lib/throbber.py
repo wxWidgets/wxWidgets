@@ -217,6 +217,8 @@ class Throbber(wxPanel):
 
     def Stop(self):
         """Stop the animation"""
+        if self.event.isSet():
+            return
         self.event.set()
 
 
