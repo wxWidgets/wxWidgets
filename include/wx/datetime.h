@@ -115,7 +115,7 @@ class WXDLLEXPORT wxDateSpan;
 // wxInvalidDateTime)
 class WXDLLEXPORT wxDateTime;
 
-WXDLLEXPORT_DATA(extern const wxDateTime&) wxDefaultDateTime;
+WXDLLEXPORT_DATA(extern const wxDateTime) wxDefaultDateTime;
 #define wxInvalidDateTime wxDefaultDateTime
 
 // ----------------------------------------------------------------------------
