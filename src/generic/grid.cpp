@@ -132,6 +132,7 @@ private:
 
     void OnPaint( wxPaintEvent& event );
     void OnMouseEvent( wxMouseEvent& event );
+    void OnMouseWheel( wxMouseEvent& event );
     void OnKeyDown( wxKeyEvent& event );
     void OnKeyUp( wxKeyEvent& );
 
@@ -152,6 +153,7 @@ private:
 
     void OnPaint( wxPaintEvent &event );
     void OnMouseEvent( wxMouseEvent& event );
+    void OnMouseWheel( wxMouseEvent& event );
     void OnKeyDown( wxKeyEvent& event );
     void OnKeyUp( wxKeyEvent& );
 
@@ -171,6 +173,7 @@ private:
     wxGrid *m_owner;
 
     void OnMouseEvent( wxMouseEvent& event );
+    void OnMouseWheel( wxMouseEvent& event );
     void OnKeyDown( wxKeyEvent& event );
     void OnKeyUp( wxKeyEvent& );
     void OnPaint( wxPaintEvent& event );
@@ -203,6 +206,7 @@ private:
     wxGridColLabelWindow     *m_colLabelWin;
 
     void OnPaint( wxPaintEvent &event );
+    void OnMouseWheel( wxMouseEvent& event );
     void OnMouseEvent( wxMouseEvent& event );
     void OnKeyDown( wxKeyEvent& );
     void OnKeyUp( wxKeyEvent& );
@@ -377,7 +381,12 @@ wxRect           wxGridNoCellRect( -1, -1, -1, -1 );
 // TODO: this doesn't work at all, grid cells have different sizes and approx
 //       calculations don't work as because of the size mismatch scrollbars
 //       sometimes fail to be shown when they should be or vice versa
-static const size_t GRID_SCROLL_LINE = 1;
+//
+//       The scroll bars may be a little flakey once in a while, but that is
+//       surely much less horrible than having scroll lines of only 1!!!
+//       -- Robin
+static const size_t GRID_SCROLL_LINE = 15;  // 1;
+
 
 // the size of hash tables used a bit everywhere (the max number of elements
 // in these hash tables is the number of rows/columns)
@@ -1412,7 +1421,7 @@ void wxGridCellEditorEvtHandler::OnKeyDown(wxKeyEvent& event)
             break;
 
         case WXK_TAB:
-            event.Skip( m_grid->GetEventHandler()->ProcessEvent( event ) );
+            m_grid->GetEventHandler()->ProcessEvent( event );
             break;
 
         case WXK_RETURN:
@@ -3102,6 +3111,7 @@ IMPLEMENT_DYNAMIC_CLASS( wxGridRowLabelWindow, wxWindow )
 
 BEGIN_EVENT_TABLE( wxGridRowLabelWindow, wxWindow )
     EVT_PAINT( wxGridRowLabelWindow::OnPaint )
+    EVT_MOUSEWHEEL( wxGridRowLabelWindow::OnMouseWheel)
     EVT_MOUSE_EVENTS( wxGridRowLabelWindow::OnMouseEvent )
     EVT_KEY_DOWN( wxGridRowLabelWindow::OnKeyDown )
     EVT_KEY_UP( wxGridRowLabelWindow::OnKeyUp )
@@ -3140,6 +3150,12 @@ void wxGridRowLabelWindow::OnMouseEvent( wxMouseEvent& event )
 }
 
 
+void wxGridRowLabelWindow::OnMouseWheel( wxMouseEvent& event )
+{
+    m_owner->GetEventHandler()->ProcessEvent(event);
+}
+
+
 // This seems to be required for wxMotif otherwise the mouse
 // cursor must be in the cell edit control to get key events
 //
@@ -3161,6 +3177,7 @@ IMPLEMENT_DYNAMIC_CLASS( wxGridColLabelWindow, wxWindow )
 
 BEGIN_EVENT_TABLE( wxGridColLabelWindow, wxWindow )
     EVT_PAINT( wxGridColLabelWindow::OnPaint )
+    EVT_MOUSEWHEEL( wxGridColLabelWindow::OnMouseWheel)
     EVT_MOUSE_EVENTS( wxGridColLabelWindow::OnMouseEvent )
     EVT_KEY_DOWN( wxGridColLabelWindow::OnKeyDown )
     EVT_KEY_UP( wxGridColLabelWindow::OnKeyUp )
@@ -3198,6 +3215,11 @@ void wxGridColLabelWindow::OnMouseEvent( wxMouseEvent& event )
     m_owner->ProcessColLabelMouseEvent( event );
 }
 
+void wxGridColLabelWindow::OnMouseWheel( wxMouseEvent& event )
+{
+    m_owner->GetEventHandler()->ProcessEvent(event);
+}
+
 
 // This seems to be required for wxMotif otherwise the mouse
 // cursor must be in the cell edit control to get key events
@@ -3219,6 +3241,7 @@ void wxGridColLabelWindow::OnKeyUp( wxKeyEvent& event )
 IMPLEMENT_DYNAMIC_CLASS( wxGridCornerLabelWindow, wxWindow )
 
 BEGIN_EVENT_TABLE( wxGridCornerLabelWindow, wxWindow )
+    EVT_MOUSEWHEEL( wxGridCornerLabelWindow::OnMouseWheel)
     EVT_MOUSE_EVENTS( wxGridCornerLabelWindow::OnMouseEvent )
     EVT_PAINT( wxGridCornerLabelWindow::OnPaint)
     EVT_KEY_DOWN( wxGridCornerLabelWindow::OnKeyDown )
@@ -3257,6 +3280,11 @@ void wxGridCornerLabelWindow::OnMouseEvent( wxMouseEvent& event )
 }
 
 
+void wxGridCornerLabelWindow::OnMouseWheel( wxMouseEvent& event )
+{
+    m_owner->GetEventHandler()->ProcessEvent(event);
+}
+
 // This seems to be required for wxMotif otherwise the mouse
 // cursor must be in the cell edit control to get key events
 //
@@ -3278,6 +3306,7 @@ IMPLEMENT_DYNAMIC_CLASS( wxGridWindow, wxPanel )
 
 BEGIN_EVENT_TABLE( wxGridWindow, wxPanel )
     EVT_PAINT( wxGridWindow::OnPaint )
+    EVT_MOUSEWHEEL( wxGridWindow::OnMouseWheel)
     EVT_MOUSE_EVENTS( wxGridWindow::OnMouseEvent )
     EVT_KEY_DOWN( wxGridWindow::OnKeyDown )
     EVT_KEY_UP( wxGridWindow::OnKeyUp )
@@ -3330,6 +3359,10 @@ void wxGridWindow::OnMouseEvent( wxMouseEvent& event )
     m_owner->ProcessGridCellMouseEvent( event );
 }
 
+void wxGridWindow::OnMouseWheel( wxMouseEvent& event )
+{
+    m_owner->GetEventHandler()->ProcessEvent(event);
+}
 
 // This seems to be required for wxMotif/wxGTK otherwise the mouse
 // cursor must be in the cell edit control to get key events
