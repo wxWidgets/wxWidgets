@@ -354,7 +354,7 @@ The next step is to configure and build Python such that it uses pycc
 as it's compiler.  You can do that by setting CC in your environment
 before running configure, like this in bash:
 
-    exoprt CC=pycc
+    export CC=pycc
     configure
 
 After making and installing Python with this configuration you should
