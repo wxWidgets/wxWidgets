@@ -155,6 +155,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/common/filesys.cpp
     src/common/fmapbase.cpp
     src/common/fs_zip.cpp
+    src/common/gzstream.cpp
     src/common/hash.cpp
     src/common/hashmap.cpp
     src/common/init.cpp
@@ -233,6 +234,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/fontmap.h
     wx/fs_mem.h
     wx/fs_zip.h
+    wx/gzstream.h
     wx/hash.h
     wx/hashmap.h
     wx/hashset.h

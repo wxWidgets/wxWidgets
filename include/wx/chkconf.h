@@ -765,6 +765,17 @@
 #   endif
 #endif /* wxUSE_PROTOCOL */
 
+#if wxUSE_GZSTREAM
+#   if !wxUSE_ZLIB
+#       ifdef wxABORT_ON_CONFIG_ERROR
+#           error "wxUSE_GZSTREAM requires wxUSE_ZLIB"
+#       else
+#           undef wxUSE_ZLIB
+#           define wxUSE_ZLIB 1
+#       endif
+#   endif
+#endif /* wxUSE_GZSTREAM */
+
 /* have to test for wxUSE_HTML before wxUSE_FILESYSTEM */
 #if wxUSE_HTML
 #   if !wxUSE_FILESYSTEM

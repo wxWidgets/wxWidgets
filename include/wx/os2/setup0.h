@@ -238,6 +238,9 @@
                                   // and make the library thread safe
 #define wxUSE_ZLIB          1
                                   // Use zlib for compression in streams and PNG code
+#define wxUSE_GZSTREAM      1
+                                  // Set to 1 to compile wxGzipInput/OutputStream classes.
+                                  // Requires wxUSE_ZLIB.
 #define wxUSE_IMAGE         1
                                   // Set to 1 for wxImage support (recommended).
 #define wxUSE_LIBPNG        1

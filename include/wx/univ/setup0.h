@@ -424,8 +424,11 @@
 #define wxUSE_ZIPSTREAM 1
 
 // Set to 1 to compile wxZlibInput/OutputStream classes. Also required by
-// wxUSE_LIBPNG.
-#define wxUSE_ZLIB 1
+// wxUSE_LIBPNG and wxUSE_GZSTREAM.
+#define wxUSE_ZLIB          1
+
+// Set to 1 to compile wxGzipInput/OutputStream classes. Requires wxUSE_ZLIB.
+#define wxUSE_GZSTREAM      1
 
 // Set to 1 to enable virtual Internet filesystem (requires wxUSE_FILESYSTEM)
 #define wxUSE_FS_INET 1
