@@ -375,6 +375,9 @@ void _XsMotifCorner::_expose (XEvent*)
 {
    Dimension   w, h;
 
+   if (_topShadowGC == 0) // JACS
+     return;
+
 // Get the size of the corner
 
    XtVaGetValues (_base, XmNwidth, &w, XmNheight, &h, NULL);
@@ -612,6 +615,8 @@ const char *_XsMotifSide::className ( ) const
 
 void _XsMotifSide::_expose (XEvent *event)
 {
+   if (_topShadowGC == 0) // JACS
+     return;
 
 // Clear out the window first
 
@@ -847,6 +852,9 @@ const char *_XsMotifButton::className ( ) const
 
 void _XsMotifButton::_expose (XEvent *event)
 {
+   if (_topShadowGC == 0) // JACS
+     return;
+
    Dimension   w, h;
 
 // Get the size of the button
@@ -1152,6 +1160,8 @@ void _XsMotifTitle::_redraw ( )
 
 void _XsMotifTitle::_expose (XEvent *event)
 {
+   if (_topShadowGC == 0) // JACS
+     return;
 
 // Clear out the window first
 
@@ -1646,6 +1656,9 @@ void _XsMotifIcon::_input (XEvent *event)
 
 void _XsMotifIcon::_expose (XEvent *)
 {
+   if (_topShadowGC == 0) // JACS
+     return;
+
    Dimension   iconHeight;
    Dimension   iconWidth;
 

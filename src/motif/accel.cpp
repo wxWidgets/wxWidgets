@@ -16,6 +16,8 @@
 #include "wx/setup.h"
 #include "wx/accel.h"
 #include "wx/string.h"
+#include "wx/utils.h"
+#include <ctype.h>
 
 #if !USE_SHARED_LIBRARIES
 IMPLEMENT_DYNAMIC_CLASS(wxAcceleratorTable, wxObject)
@@ -28,66 +30,89 @@ public:
     wxAcceleratorRefData();
     ~wxAcceleratorRefData();
 
-/* TODO: implementation
-    inline HACCEL GetHACCEL() const { return m_hAccel; }
-protected:
-    HACCEL      m_hAccel;
-*/
+public:
+    int m_count;
+    wxAcceleratorEntry* m_entries;
 };
 
 #define M_ACCELDATA ((wxAcceleratorRefData *)m_refData)
 
 wxAcceleratorRefData::wxAcceleratorRefData()
 {
-    // TODO
-/*
-    HACCEL      m_hAccel;
-*/
+    m_count = 0;
+    m_entries = (wxAcceleratorEntry*) NULL;
 }
 
 wxAcceleratorRefData::~wxAcceleratorRefData()
 {
-/*
-  if (m_hAccel)
-  {
-    DestroyAcceleratorTable((HACCEL) m_hAccel);
-  }
-  m_hAccel = 0 ;
-*/
+    delete[] m_entries;
+    m_entries = (wxAcceleratorEntry*) NULL;
+    m_count = 0;
 }
 
 wxAcceleratorTable::wxAcceleratorTable()
 {
-  m_refData = NULL;
+    m_refData = (wxAcceleratorRefData*) NULL;
 }
 
 wxAcceleratorTable::~wxAcceleratorTable()
 {
+    // Data deleted in ~wxObject
 }
 
 // Load from .rc resource
 wxAcceleratorTable::wxAcceleratorTable(const wxString& resource)
 {
     m_refData = new wxAcceleratorRefData;
-
-/* TODO: load acelerator from resource, if appropriate for your platform
-    M_ACCELDATA->m_hAccel = hAccel;
-    M_ACCELDATA->m_ok = (hAccel != 0);
-*/
 }
 
 // Create from an array
 wxAcceleratorTable::wxAcceleratorTable(int n, wxAcceleratorEntry entries[])
 {
-    m_refData = new wxAcceleratorRefData;
+    wxAcceleratorRefData* data = new wxAcceleratorRefData;
+    m_refData = data;
 
-/* TODO: create table from entries
- */
+    data->m_count = n;
+    data->m_entries = new wxAcceleratorEntry[n];
+    int i;
+    for (i = 0; i < n; i++)
+        data->m_entries[i] = entries[i];
+
 }
 
 bool wxAcceleratorTable::Ok() const
 {
-    // TODO
-    return FALSE;
+    return (m_refData != (wxAcceleratorRefData*) NULL);
+}
+
+int wxAcceleratorTable::GetCount() const
+{
+    return M_ACCELDATA->m_count;
+}
+
+wxAcceleratorEntry* wxAcceleratorTable::GetEntries() const
+{
+    return M_ACCELDATA->m_entries;
+}
+
+// Implementation use only
+bool wxAcceleratorEntry::MatchesEvent(const wxKeyEvent& event) const
+{
+    bool eventAltDown = event.AltDown();
+    bool eventCtrlDown = event.ControlDown();
+    bool eventShiftDown = event.ShiftDown();
+    int  eventKeyCode = event.KeyCode();
+
+    bool accAltDown = ((GetFlags() & wxACCEL_ALT) == wxACCEL_ALT);
+    bool accCtrlDown = ((GetFlags() & wxACCEL_CTRL) == wxACCEL_CTRL);
+    bool accShiftDown = ((GetFlags() & wxACCEL_SHIFT) == wxACCEL_SHIFT);
+    int  accKeyCode = GetKeyCode();
+    int  accKeyCode2 = GetKeyCode();
+    if (isascii(accKeyCode2))
+      accKeyCode2 = wxToLower(accKeyCode2);
+
+    return ((eventAltDown == accAltDown) && (eventCtrlDown == accCtrlDown) &&
+            (eventShiftDown == accShiftDown) &&
+              ((eventKeyCode == accKeyCode || eventKeyCode == accKeyCode2))) ;
 }
 

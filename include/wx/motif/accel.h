@@ -18,6 +18,7 @@
 
 #include "wx/object.h"
 #include "wx/string.h"
+#include "wx/event.h"
 
 class WXDLLEXPORT wxAcceleratorTable;
 
@@ -31,11 +32,15 @@ class WXDLLEXPORT wxAcceleratorTable;
 #define wxACCEL_SHIFT   0x04
 
  // Hold no key down
-#define wxACCEL_NONE    0x00
+#define wxACCEL_NORMAL  0x00
 
 class WXDLLEXPORT wxAcceleratorEntry
 {
 public:
+    wxAcceleratorEntry(const wxAcceleratorEntry& entry)
+    {
+        m_flags = entry.m_flags; m_keyCode = entry.m_keyCode; m_command = entry.m_command;
+    }
     wxAcceleratorEntry(int flags = 0, int keyCode = 0, int cmd = 0)
     {
         m_flags = flags; m_keyCode = keyCode; m_command = cmd;
@@ -48,6 +53,15 @@ public:
     inline int GetKeyCode() const { return m_keyCode; }
     inline int GetCommand() const { return m_command; }
 
+    void operator = (const wxAcceleratorEntry& entry)
+    {
+        m_flags = entry.m_flags; m_keyCode = entry.m_keyCode; m_command = entry.m_command;
+    }
+
+    // Implementation use only
+    bool MatchesEvent(const wxKeyEvent& event) const;
+
+public:
     int             m_flags;
     int			    m_keyCode; // ASCII or virtual keycode
     int			    m_command; // Command id to generate
@@ -72,6 +86,10 @@ public:
     inline bool operator != (const wxAcceleratorTable& accel) { return m_refData != accel.m_refData; }
 
     bool Ok() const;
+
+// Implementation only
+    int GetCount() const;
+    wxAcceleratorEntry* GetEntries() const;
 };
 
 WXDLLEXPORT_DATA(extern wxAcceleratorTable) wxNullAcceleratorTable;

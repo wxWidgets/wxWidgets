@@ -50,7 +50,17 @@ class WXDLLEXPORT wxComboBox: public wxChoice
            const wxValidator& validator = wxDefaultValidator,
            const wxString& name = wxComboBoxNameStr);
 
-  // List functions: see wxChoice
+  // List functions
+  virtual void Append(const wxString& item);
+  virtual void Delete(int n);
+  virtual void Clear();
+  virtual int GetSelection() const ;
+  virtual void SetSelection(int n);
+  virtual int FindString(const wxString& s) const;
+  virtual wxString GetString(int n) const ;
+  virtual wxString GetStringSelection() const ;
+  virtual bool SetStringSelection(const wxString& sel);
+  virtual inline int Number() const { return m_noStrings; }
   
   // Text field functions
   virtual wxString GetValue() const ;
@@ -66,10 +76,6 @@ class WXDLLEXPORT wxComboBox: public wxChoice
   virtual long GetLastPosition() const ;
   virtual void Replace(long from, long to, const wxString& value);
   virtual void Remove(long from, long to);
-  virtual void SetSelection(int n)
-  {
-    wxChoice::SetSelection(n);
-  }
   virtual void SetSelection(long from, long to);
   virtual void SetEditable(bool editable);
 };

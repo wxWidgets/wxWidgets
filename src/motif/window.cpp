@@ -52,7 +52,7 @@ void wxCanvasRepaintProc (Widget, XtPointer, XmDrawingAreaCallbackStruct * cbs);
 void wxCanvasInputEvent (Widget drawingArea, XtPointer data, XmDrawingAreaCallbackStruct * cbs);
 void wxCanvasMotionEvent (Widget, XButtonEvent * event);
 void wxCanvasEnterLeave (Widget drawingArea, XtPointer clientData, XCrossingEvent * event);
-void wxScrollBarCallback(Widget widget, XtPointer clientData,
+static void wxScrollBarCallback(Widget widget, XtPointer clientData,
                         XmScaleCallbackStruct *cbs);
 void wxPanelItemEventHandler (Widget    wid,
                               XtPointer client_data,
@@ -2735,7 +2735,7 @@ void wxPanelItemEventHandler (Widget    wid,
   *continueToDispatch = True;
 }
 
-void wxScrollBarCallback(Widget scrollbar, XtPointer clientData,
+static void wxScrollBarCallback(Widget scrollbar, XtPointer clientData,
                         XmScaleCallbackStruct *cbs)
 {
     Widget scrolledWindow = XtParent (scrollbar);
@@ -3111,3 +3111,72 @@ void wxWindow::ClearUpdateRects()
     }
     m_updateRects.Clear();
 }
+
+bool wxWindow::ProcessAccelerator(wxKeyEvent& event)
+{
+    if (!m_acceleratorTable.Ok())
+        return FALSE;
+
+    int count = m_acceleratorTable.GetCount();
+    wxAcceleratorEntry* entries = m_acceleratorTable.GetEntries();
+    int i;
+    for (i = 0; i < count; i++)
+    {
+        wxAcceleratorEntry* entry = & (entries[i]);
+        if (entry->MatchesEvent(event))
+        {
+            // Bingo, we have a match. Now find a control
+            // that matches the entry command id.
+
+            // Need to go up to the top of the window hierarchy,
+            // since it might be e.g. a menu item
+            wxWindow* parent = this;
+            while (parent && !parent->IsKindOf(CLASSINFO(wxFrame)) && !parent->IsKindOf(CLASSINFO(wxDialog)))
+                parent = parent->GetParent();
+
+            if (!parent)
+                return FALSE;
+
+            if (parent->IsKindOf(CLASSINFO(wxFrame)))
+            {
+                // Try for a menu command
+                wxFrame* frame = (wxFrame*) parent;
+                if (frame->GetMenuBar())
+                {
+                    wxMenuItem* item = frame->GetMenuBar()->FindItemForId(entry->GetCommand());
+                    if (item)
+                    {
+                        wxCommandEvent commandEvent(wxEVT_COMMAND_MENU_SELECTED, entry->GetCommand());
+                        commandEvent.SetEventObject(frame);
+
+                        // If ProcessEvent returns TRUE (it was handled), then
+                        // the calling code will skip the event handling.
+                        return frame->GetEventHandler()->ProcessEvent(commandEvent);
+                    }
+                }
+            }
+
+            // Find a child matching the command id
+            wxWindow* child = parent->FindWindow(entry->GetCommand());
+
+            // No such child
+            if (!child)
+                return FALSE;
+
+            // Now we process those kinds of windows that we can.
+            // For now, only buttons.
+            if (child->IsKindOf(CLASSINFO(wxButton)))
+            {
+                wxCommandEvent commandEvent (wxEVT_COMMAND_BUTTON_CLICKED, child->GetId());
+                commandEvent.SetEventObject(child);
+                return child->GetEventHandler()->ProcessEvent(commandEvent);
+            }
+
+            return FALSE;
+        } // matches event
+    }// for
+
+    // We didn't match the key event against an accelerator.
+    return FALSE;
+}
+

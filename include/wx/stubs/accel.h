@@ -31,7 +31,7 @@ class WXDLLEXPORT wxAcceleratorTable;
 #define wxACCEL_SHIFT   0x04
 
  // Hold no key down
-#define wxACCEL_NONE    0x00
+#define wxACCEL_NORMAL  0x00
 
 class WXDLLEXPORT wxAcceleratorEntry
 {

@@ -1,7 +1,7 @@
 wxMotif TODO
 ------------
 
-Updated: 9/11/98
+Updated: 12/11/98
 
          -------------------------------o-------------------------
 
@@ -21,10 +21,10 @@ High Priority
   so maybe have wxSystemSettings value for scrollbar colour, and/or
   ability to set scrollbar colour independently.
 
-- Make wxDialog OnPaint work.
-
-- Optimize wxWindow OnPaint, clipping the damaged
-  region.
+- Optimize wxWindow OnPaint to avoid flicker, collapsing Expose events
+  as per flicker fix in 1.68. It will be tricky to avoid
+  interfering with non-wxScrolledWindow widgets except by
+  explicitly testing for wxScrolledWindow.
 
 - Implementation of OnEraseBackground. How? Call OnEraseBackground
   just before OnPaint? Will duplicate Xlib's own erase of the background.
@@ -34,6 +34,8 @@ High Priority
   background, no flicker will be seen. If it does something else, such as
   painting a tiled bitmap, then a slight flicker might be seen unless
   X can be persuaded not to repaint the window background by default.
+
+- Finish wxNotebook.
 
 - wxSpinButton
 
@@ -49,7 +51,7 @@ High Priority
 
 - wxThread (hopefully, similar to wxGTK)
 
-- wxAcceleratorTable.
+- wxGrid: scrollbars don't hide; problem with cell selection.
 
 - Miscellaneous events.
 
@@ -92,10 +94,6 @@ Low Priority
     probably make the cache and history facilities part of the class.
   - add the driver code to src/motif/helphtml.cpp (a frame, toolbar,
     history list).
-
-  Note that a quicker route to a help system may be to use the
-  code in the contrib dir of XmHTML to control a Netscape session --
-  but Netscape can be a colour resource hog.
 
 - Optimize screen refresh for non-native widgets, e.g. wxWindow
   created with Create(), using technique in flicker patch for 1.68

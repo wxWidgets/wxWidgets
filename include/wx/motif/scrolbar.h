@@ -66,7 +66,7 @@ protected:
     int m_viewSize;
     int m_objectSize;
 
-DECLARE_EVENT_TABLE()
+// DECLARE_EVENT_TABLE()
 };
 
 #endif

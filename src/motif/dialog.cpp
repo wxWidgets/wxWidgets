@@ -480,7 +480,10 @@ int wxDialog::ShowModal()
     // Loop until we signal that the dialog should be closed
     while ((wxModalShowingStack.Number() > 0) && (bool)wxModalShowingStack.First()->Data())
     {
-        XtAppProcessEvent((XtAppContext) wxTheApp->GetAppContext(), XtIMAll);
+//        XtAppProcessEvent((XtAppContext) wxTheApp->GetAppContext(), XtIMAll);
+
+        XtAppNextEvent((XtAppContext) wxTheApp->GetAppContext(), &event);
+        wxTheApp->ProcessXEvent((WXEvent*) &event);
     }
 
     // Remove modal dialog flag from stack
@@ -494,7 +497,8 @@ int wxDialog::ShowModal()
     {
         XFlush(XtDisplay((Widget) wxTheApp->GetTopLevelWidget()));
         XtAppNextEvent((XtAppContext) wxTheApp->GetAppContext(), &event);
-        XtDispatchEvent(&event);
+
+        wxTheApp->ProcessXEvent((WXEvent*) &event);
     }
 
     // TODO: is it safe to call this, if the dialog may have been deleted

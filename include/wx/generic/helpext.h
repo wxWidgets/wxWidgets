@@ -14,6 +14,8 @@
 #   pragma interface "wxexthlp.h"
 #endif
 
+#include "wx/helpbase.h"
+
 /// Name for map file.
 #define WXEXTHELP_MAPFILE   "wxhelp.map"
 /// Path separator.

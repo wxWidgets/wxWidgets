@@ -281,34 +281,53 @@ int wxApp::MainLoop()
     while (m_keepGoing)
     {
       XtAppNextEvent( (XtAppContext) wxTheApp->GetAppContext(), &event);
-      if(event.type == PropertyNotify)
-      {
-        HandlePropertyChange((WXEvent*) &event);
-      } else
-      {
-        // Terry Gitnick <terryg@scientech.com> - 1/21/98
-         /* if resize event, don't resize until the last resize event for this
-            window is recieved. Prevents flicker as windows are resized. */
-        if (event.type == ResizeRequest)
-        {
-           Display *disp = XtDisplay((Widget) wxTheApp->GetTopLevelWidget());
-           Window win = event.xany.window;
-           XEvent report;
- 
-           //  to avoid flicker
-           report = event;
-           while( XCheckTypedWindowEvent (disp, win, ResizeRequest, &report));
-        }
-        // TODO: when implementing refresh optimization, we can use
-        // XtAddExposureToRegion to expand the window's paint region.
 
-        XtDispatchEvent(&event);
-
-	ProcessIdle();
-      }
+      ProcessXEvent((WXEvent*) & event);
+      ProcessIdle();
     }
 
     return 0;
+}
+
+// Processes an X event.
+void wxApp::ProcessXEvent(WXEvent* _event)
+{
+    XEvent* event = (XEvent*) _event;
+
+    if (CheckForAccelerator(_event))
+    {
+        // Do nothing! We intercepted and processed the event as an accelerator.
+        return;
+    }
+    else if (event->type == PropertyNotify)
+    {
+        HandlePropertyChange(_event);
+        return;
+    }
+    else if (event->type == ResizeRequest)
+    {
+        /* Terry Gitnick <terryg@scientech.com> - 1/21/98
+         * If resize event, don't resize until the last resize event for this
+         * window is recieved. Prevents flicker as windows are resized.
+         */
+
+        Display *disp = XtDisplay((Widget) wxTheApp->GetTopLevelWidget());
+        Window win = event->xany.window;
+        XEvent report;
+ 
+        //  to avoid flicker
+        report = * event;
+        while( XCheckTypedWindowEvent (disp, win, ResizeRequest, &report));
+
+        // TODO: when implementing refresh optimization, we can use
+        // XtAddExposureToRegion to expand the window's paint region.
+
+        XtDispatchEvent(event);
+    }
+    else
+    {
+        XtDispatchEvent(event);
+    }
 }
 
 // Returns TRUE if more time is needed.
@@ -330,13 +349,20 @@ void wxApp::ExitMainLoop()
 bool wxApp::Pending()
 {
     XFlush(XtDisplay( (Widget) wxTheApp->GetTopLevelWidget() ));
-    return (XtAppPending( (XtAppContext) wxTheApp->GetAppContext() ) != 0) ;
+
+    // Fix by Doug from STI, to prevent a stall if non-X event
+    // is found.
+    return ((XtAppPending( (XtAppContext) GetAppContext() ) & XtIMXEvent) != 0) ;
 }
 
 // Dispatch a message.
 void wxApp::Dispatch()
 {
-    XtAppProcessEvent( (XtAppContext) wxTheApp->GetAppContext(), XtIMAll);
+//    XtAppProcessEvent( (XtAppContext) wxTheApp->GetAppContext(), XtIMAll);
+
+    XEvent event;
+    XtAppNextEvent((XtAppContext) GetAppContext(), &event);
+    ProcessXEvent((WXEvent*) & event);
 }
 
 // This should be redefined in a derived class for
@@ -494,6 +520,41 @@ WXColormap wxApp::GetMainColormap(WXDisplay* display)
       m_mainColormap = (WXColormap) c;
 
     return (WXColormap) c;
+}
+
+// Returns TRUE if an accelerator has been processed
+bool wxApp::CheckForAccelerator(WXEvent* event)
+{
+    XEvent* xEvent = (XEvent*) event;
+    if (xEvent->xany.type == KeyPress)
+    {
+        // Find a wxWindow for this window
+        // TODO: should get display for the window, not the current display
+        Widget widget = XtWindowToWidget((Display*) wxGetDisplay(), xEvent->xany.window);
+        wxWindow* win = NULL;
+
+        // Find the first wxWindow that corresponds to this event window
+        while (widget && !(win = wxGetWindowFromTable(widget)))
+            widget = XtParent(widget);
+
+        if (!widget || !win)
+            return FALSE;
+
+        wxKeyEvent keyEvent(wxEVT_CHAR);
+        wxTranslateKeyEvent(keyEvent, win, (Widget) 0, xEvent);
+
+        // Now we have a wxKeyEvent and we have a wxWindow.
+        // Go up the hierarchy until we find a matching accelerator,
+        // or we get to the top.
+        while (win)
+        {
+            if (win->ProcessAccelerator(keyEvent))
+                return TRUE;
+            win = win->GetParent();
+        }
+        return FALSE;
+    }
+    return FALSE;
 }
 
 void wxExit()

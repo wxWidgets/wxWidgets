@@ -107,6 +107,14 @@ class WXDLLEXPORT wxApp: public wxEvtHandler
   // Creates a log object
   virtual wxLog* CreateLogTarget();
 
+// Motif implementation.
+
+  // Processes an X event.
+  virtual void ProcessXEvent(WXEvent* event);
+
+  // Returns TRUE if an accelerator has been processed
+  virtual bool CheckForAccelerator(WXEvent* event);
+
 public:
   // Will always be set to the appropriate, main-style values.
   int                   argc;

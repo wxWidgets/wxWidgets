@@ -11,3 +11,26 @@ Julian:
 - First go at wxApp, wxWindow, wxDialog, wxPen, wxBrush, wxFont,
   wxColour, wxButton, wxCheckBox, wxTextCtrl, wxStaticText,
   wxMenu, wxMenuItem, wxMenuBar
+
+12/11/98
+--------
+
+It's a long time since I updated this file. Previously done:
+
+- wxFrame, wxDialog done.
+- wxScrolledWindow done (but backing pixmap not used at present).
+- wxBitmap done though could be tidied it up at some point.
+- Most basic controls are there, if not rigorously tested.
+- Some MDI support (menus appear on child frames at present).
+- wxNotebook almost done.
+- wxToolBar done (horizontal only, which would be easy to extend
+  to vertical toolbars).
+
+More recently:
+
+- Colour and font changing done (question mark over what happens
+  to scrollbars).
+- Accelerators done (for menu items and buttons). Also event loop
+  tidied up in wxApp so that events are filtered through ProcessXEvent.
+- wxWindow::GetUpdateRegion should now work.
+

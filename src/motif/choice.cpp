@@ -145,14 +145,17 @@ wxChoice::~wxChoice()
     if (m_widgetList)
         delete[] m_widgetList;
 
-    DetachWidget(GetMainWidget()); // Removes event handlers
+    if (GetMainWidget())
+    {
+        DetachWidget(GetMainWidget()); // Removes event handlers
 
-    XtDestroyWidget((Widget) m_formWidget);
-    m_formWidget = (WXWidget) 0;
+        XtDestroyWidget((Widget) m_formWidget);
+        m_formWidget = (WXWidget) 0;
 
-    // Presumably the other widgets have been deleted now, via the form
-    m_mainWidget = (WXWidget) 0;
-    m_buttonWidget = (WXWidget) 0;
+        // Presumably the other widgets have been deleted now, via the form
+        m_mainWidget = (WXWidget) 0;
+        m_buttonWidget = (WXWidget) 0;
+    }
 }
 
 void wxChoice::Append(const wxString& item)

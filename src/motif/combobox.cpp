@@ -94,6 +94,19 @@ bool wxComboBox::Create(wxWindow *parent, wxWindowID id,
     return TRUE;
 }
 
+wxComboBox::~wxComboBox()
+{
+    DetachWidget((Widget) m_mainWidget); // Removes event handlers
+    XtDestroyWidget((Widget) m_mainWidget);
+    m_mainWidget = (WXWidget) 0;
+}
+
+void wxComboBox::SetSize(int x, int y, int width, int height, int sizeFlags)
+{
+    // Necessary so it doesn't call wxChoice::SetSize
+    wxWindow::SetSize(x, y, width, height, sizeFlags);
+}
+
 wxString wxComboBox::GetValue() const
 {
     char *s = XmComboBoxGetString ((Widget) m_mainWidget);
@@ -113,6 +126,97 @@ void wxComboBox::SetValue(const wxString& value)
     if (!value.IsNull())
         XmComboBoxSetString ((Widget) m_mainWidget, (char*) (const char*) value);
     m_inSetValue = FALSE;
+}
+
+void wxComboBox::Append(const wxString& item)
+{
+    XmString str = XmStringCreateLtoR((char*) (const char*) item, XmSTRING_DEFAULT_CHARSET);
+    XmComboBoxAddItem((Widget) m_mainWidget, str, 0);
+    m_stringList.Add(item);
+    XmStringFree(str);
+    m_noStrings ++;
+}
+
+void wxComboBox::Delete(int n)
+{
+    XmComboBoxDeletePos((Widget) m_mainWidget, n-1);
+    wxNode *node = m_stringList.Nth(n);
+    if (node)
+    {
+      delete[] (char *)node->Data();
+      delete node;
+    }
+    m_noStrings--;
+}
+
+void wxComboBox::Clear()
+{
+    XmComboBoxDeleteAllItems((Widget) m_mainWidget);
+    m_stringList.Clear();
+}
+
+void wxComboBox::SetSelection (int n)
+{
+    XmComboBoxSelectPos((Widget) m_mainWidget, n+1, False);
+}
+
+int wxComboBox::GetSelection (void) const
+{
+  int sel = XmComboBoxGetSelectedPos((Widget) m_mainWidget);
+  if (sel == 0)
+    return -1;
+  else
+    return sel - 1;
+}
+
+wxString wxComboBox::GetString(int n) const
+{
+    wxNode *node = m_stringList.Nth (n);
+    if (node)
+      return wxString((char *) node->Data ());
+    else
+      return wxEmptyString;
+}
+
+wxString wxComboBox::GetStringSelection() const
+{
+    int sel = GetSelection();
+    if (sel == -1)
+        return wxEmptyString;
+    else
+        return GetString(sel);
+}
+
+bool wxComboBox::SetStringSelection(const wxString& sel)
+{
+    int n = FindString(sel);
+    if (n == -1)
+        return FALSE;
+    else
+    {
+        SetSelection(n);
+        return TRUE;
+    }
+}
+
+int wxComboBox::FindString(const wxString& s) const
+{
+  int *pos_list = NULL;
+  int count = 0;
+  XmString text = XmStringCreateSimple ((char*) (const char*) s);
+  bool found = (XmComboBoxGetMatchPos((Widget) m_mainWidget,
+   text, &pos_list, &count) != 0);
+
+  XmStringFree(text);
+
+  if (found && count > 0)
+  {
+    int pos = pos_list[0] - 1;
+    free(pos_list);
+    return pos;
+  }
+
+  return -1;
 }
 
 // Clipboard operations

@@ -539,6 +539,20 @@ public:
   // Generates a paint event
   virtual void DoPaint();
 
+  // How to implement accelerators. If we find a key event,
+  // translate to wxWindows wxKeyEvent form. Find a widget for the window.
+  // Now find a wxWindow for the widget. If there isn't one, go up the widget hierarchy
+  // trying to find one. Once one is found, call ProcessAccelerator for the
+  // window. If it returns TRUE (processed the event), skip the X event,
+  // otherwise carry on up the wxWindows window hierarchy calling ProcessAccelerator.
+  // If all return FALSE, process the X event as normal.
+  // Eventually we can implement OnCharHook the same way, but concentrate on accelerators
+  // for now.
+  // ProcessAccelerator must look at the current accelerator table, and try to find
+  // what menu id or window (beneath it) has this ID. Then construct an appropriate command
+  // event and send it.
+  virtual bool ProcessAccelerator(wxKeyEvent& event);
+
   ////////////////////////////////////////////////////////////////////////
   //// PROTECTED DATA
 protected:

@@ -114,3 +114,52 @@ void wxComboBox::SetSelection(long from, long to)
     // TODO
 }
 
+void wxComboBox::Append(const wxString& item)
+{
+    // TODO
+}
+
+void wxComboBox::Delete(int n)
+{
+    // TODO
+}
+
+void wxComboBox::Clear()
+{
+    // TODO
+}
+
+int wxComboBox::GetSelection() const
+{
+    // TODO
+    return -1;
+}
+
+void wxComboBox::SetSelection(int n)
+{
+    // TODO
+}
+
+int wxComboBox::FindString(const wxString& s) const
+{
+    // TODO
+    return -1;
+}
+
+wxString wxComboBox::GetString(int n) const
+{
+    // TODO
+    return wxString("");
+}
+
+wxString wxComboBox::GetStringSelection() const
+{
+    // TODO
+    return wxString("");
+}
+
+bool wxComboBox::SetStringSelection(const wxString& sel)
+{
+    // TODO
+    return FALSE;
+}

@@ -28,6 +28,7 @@ class WXDLLEXPORT wxComboBox: public wxChoice
 
  public:
   inline wxComboBox() {}
+  ~wxComboBox();
 
   inline wxComboBox(wxWindow *parent, wxWindowID id,
            const wxString& value = wxEmptyString,
@@ -50,8 +51,20 @@ class WXDLLEXPORT wxComboBox: public wxChoice
            const wxValidator& validator = wxDefaultValidator,
            const wxString& name = wxComboBoxNameStr);
 
-  // List functions: see wxChoice
-  
+  virtual void SetSize(int x, int y, int width, int height, int sizeFlags = wxSIZE_AUTO);
+
+  // List functions
+  virtual void Append(const wxString& item);
+  virtual void Delete(int n);
+  virtual void Clear();
+  virtual int GetSelection() const ;
+  virtual void SetSelection(int n);
+  virtual int FindString(const wxString& s) const;
+  virtual wxString GetString(int n) const ;
+  virtual wxString GetStringSelection() const ;
+  virtual bool SetStringSelection(const wxString& sel);
+  virtual inline int Number() const { return m_noStrings; }
+
   // Text field functions
   virtual wxString GetValue() const ;
   virtual void SetValue(const wxString& value);
@@ -66,10 +79,6 @@ class WXDLLEXPORT wxComboBox: public wxChoice
   virtual long GetLastPosition() const ;
   virtual void Replace(long from, long to, const wxString& value);
   virtual void Remove(long from, long to);
-  virtual void SetSelection(int n)
-  {
-    wxChoice::SetSelection(n);
-  }
   virtual void SetSelection(long from, long to);
   virtual void SetEditable(bool editable);
 
@@ -77,6 +86,8 @@ class WXDLLEXPORT wxComboBox: public wxChoice
   virtual void ChangeFont(bool keepOriginalSize = TRUE);
   virtual void ChangeBackgroundColour();
   virtual void ChangeForegroundColour();
+  WXWidget GetTopWidget() const { return m_mainWidget; }
+  WXWidget GetMainWidget() const { return m_mainWidget; }
 };
 
 #endif

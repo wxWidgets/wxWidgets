@@ -45,10 +45,10 @@
 IMPLEMENT_DYNAMIC_CLASS(wxGenericGrid, wxPanel)
 
 BEGIN_EVENT_TABLE(wxGenericGrid, wxPanel)
-	EVT_SIZE(wxGenericGrid::OnSize)
-	EVT_PAINT(wxGenericGrid::OnPaint)
-	EVT_ERASE_BACKGROUND(wxGenericGrid::OnEraseBackground)
-	EVT_MOUSE_EVENTS(wxGenericGrid::OnMouseEvent)
+    EVT_SIZE(wxGenericGrid::OnSize)
+    EVT_PAINT(wxGenericGrid::OnPaint)
+    EVT_ERASE_BACKGROUND(wxGenericGrid::OnEraseBackground)
+    EVT_MOUSE_EVENTS(wxGenericGrid::OnMouseEvent)
     EVT_TEXT(wxGRID_TEXT_CTRL, wxGenericGrid::OnText)
     EVT_COMMAND_SCROLL(wxGRID_HSCROLL, wxGenericGrid::OnGridScroll)
     EVT_COMMAND_SCROLL(wxGRID_VSCROLL, wxGenericGrid::OnGridScroll)
@@ -898,15 +898,6 @@ void wxGenericGrid::AdjustScrollbars(void)
   int cw, ch;
   GetClientSize(&cw, &ch);
   
-  // To calculate the number of steps for each scrollbar,
-  // we need to see how much will fit onto the canvas
-  // at the present size. So:
-  // 1) Find the *last* row r1 such that when it's at the top of the
-  //    window, all the remaining rows are visible.
-  // 2) There should therefore be r1 - 1 steps in the scrollbar.
-  // Similarly with columns.
-
-  // IGNORE THE ABOVE, it's crap.
   // We find the view size by seeing how many rows/cols fit on
   // the current view.
   // BUT... this means that the scrollbar should be adjusted every time
@@ -933,10 +924,6 @@ void wxGenericGrid::AdjustScrollbars(void)
   {
     noHorizSteps = 0;
     int widthCount = 0;
-/*
-    if (GetLabelSize(wxVERTICAL) > 0)
-      noHorizSteps ++;
-*/
 
     int i;
 	int nx = 0;
@@ -960,10 +947,6 @@ void wxGenericGrid::AdjustScrollbars(void)
   {
     noVertSteps = 0;
     int heightCount = 0;
-/*
-    if (GetLabelSize(wxHORIZONTAL) > 0)
-      noVertSteps ++;
-*/
 
     int i;
 	int ny = 0;
@@ -989,20 +972,20 @@ void wxGenericGrid::AdjustScrollbars(void)
   }
   else
   {
-	if ( m_hScrollBar )
-    	m_hScrollBar->Show(TRUE);
+      if ( m_hScrollBar )
+          m_hScrollBar->Show(TRUE);
   }
 
   if (m_totalGridHeight + horizScrollBarHeight <= ch)
   {
-	if ( m_vScrollBar )
-    	m_vScrollBar->Show(FALSE);
-    SetScrollPosY(0);
+      if ( m_vScrollBar )
+          m_vScrollBar->Show(FALSE);
+      SetScrollPosY(0);
   }
   else
   {
-	if ( m_vScrollBar )
-    	m_vScrollBar->Show(TRUE);
+      if ( m_vScrollBar )
+          m_vScrollBar->Show(TRUE);
   }
 
   UpdateDimensions(); // Necessary in case m_scrollPosX/Y changed
@@ -1017,12 +1000,7 @@ void wxGenericGrid::AdjustScrollbars(void)
   if (m_hScrollBar)
   {
     int nCols = GetCols();
-/*
-    m_hScrollBar->SetPageSize(wxMax(noHorizSteps, 1));
-    m_hScrollBar->SetViewLength(wxMax(noHorizSteps, 1));
-    m_hScrollBar->SetObjectLength(nCols);
-*/
-    m_hScrollBar->SetScrollbar(m_hScrollBar->GetPosition(), wxMax(noHorizSteps, 1), nCols, wxMax(noHorizSteps, 1));
+    m_hScrollBar->SetScrollbar(m_hScrollBar->GetPosition(), wxMax(noHorizSteps, 1), (noHorizSteps == 0) ? 1 : nCols, wxMax(noHorizSteps, 1));
 
     m_hScrollBar->SetSize(m_leftOfSheet, ch - m_scrollWidth -2,
       cw - vertScrollBarWidth - m_leftOfSheet, m_scrollWidth);
@@ -1031,13 +1009,8 @@ void wxGenericGrid::AdjustScrollbars(void)
   if (m_vScrollBar)
   {
     int nRows = GetRows();
-/*
-    m_vScrollBar->SetPageSize(wxMax(noVertSteps, 1));
-    m_vScrollBar->SetViewLength(wxMax(noVertSteps, 1));
-    m_vScrollBar->SetObjectLength(nRows);
-*/
 
-    m_vScrollBar->SetScrollbar(m_vScrollBar->GetPosition(), wxMax(noVertSteps, 1), nRows, wxMax(noVertSteps, 1));
+    m_vScrollBar->SetScrollbar(m_vScrollBar->GetPosition(), wxMax(noVertSteps, 1), (noVertSteps == 0) ? 1 : nRows, wxMax(noVertSteps, 1));
     m_vScrollBar->SetSize(cw - m_scrollWidth, m_topOfSheet,
        m_scrollWidth, ch - m_topOfSheet - horizScrollBarHeight);
   }
@@ -2444,6 +2417,7 @@ void wxGenericGrid::OnGridScroll(wxScrollEvent& ev)
   }
 
   win->UpdateDimensions();
+
   win->SetCurrentRect(win->GetCursorRow(), win->GetCursorColumn());
 
   // Because rows and columns can be arbitrary sizes,

@@ -181,7 +181,9 @@ wxString wxTextCtrl::GetValue() const
 
 void wxTextCtrl::SetValue(const wxString& value)
 {
-    wxASSERT_MSG( (!value.IsNull()), "Must not pass a null string to wxTextCtrl::SetValue." ) ;
+  // This assert is wrong -- means that you can't set an empty
+  // string (IsNull == IsEmpty).
+  //    wxASSERT_MSG( (!value.IsNull()), "Must not pass a null string to wxTextCtrl::SetValue." ) ;
     m_inSetValue = TRUE;
 
     XmTextSetString ((Widget) m_mainWidget, (char*) (const char*) value);

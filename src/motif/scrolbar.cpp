@@ -22,7 +22,7 @@
 
 #include <wx/motif/private.h>
 
-void wxScrollBarCallback(Widget widget, XtPointer clientData,
+static void wxScrollBarCallback(Widget widget, XtPointer clientData,
                         XmScaleCallbackStruct *cbs);
 
 #if !USE_SHARED_LIBRARY
@@ -167,7 +167,7 @@ void wxScrollBar::ChangeForegroundColour()
     // TODO
 }
 
-void wxScrollBarCallback(Widget widget, XtPointer clientData,
+static void wxScrollBarCallback(Widget widget, XtPointer clientData,
                         XmScaleCallbackStruct *cbs)
 {
     wxScrollBar *scrollBar = (wxScrollBar *)clientData;
