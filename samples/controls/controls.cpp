@@ -219,7 +219,9 @@ bool MyApp::OnInit()
     // Create the main frame window
     MyFrame *frame = new MyFrame((wxFrame *) NULL,
             "Controls wxWindows App",
-            x, y, 530, 420);
+            x, y, 540, 430);
+    
+    frame->SetSizeHints( 500, 425 );
 
     // Give it an icon
     // The wxICON() macros loads an icon from a resource under Windows

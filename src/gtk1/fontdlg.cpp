@@ -17,7 +17,7 @@
 #include "wx/debug.h"
 #include "wx/msgdlg.h"
 
-#include "gtk/gtk.h"
+#include <gtk/gtk.h>
 
 //-----------------------------------------------------------------------------
 // idle system
