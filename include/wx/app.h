@@ -351,6 +351,27 @@ extern bool WXDLLEXPORT wxInitialize();
 // wxUninitialize()
 extern void WXDLLEXPORT wxUninitialize();
 
+// create an object of this class on stack to initialize/cleanup thel ibrary
+// automatically
+class WXDLLEXPORT wxInitializer
+{
+public:
+    // initialize the library
+    wxInitializer() { m_ok = wxInitialize(); }
+
+    // has the initialization been successful? (explicit test)
+    bool IsOk() const { return m_ok; }
+
+    // has the initialization been successful? (implicit test)
+    operator bool() const { return m_ok; }
+
+    // dtor only does clean up if we initialized the library properly
+    ~wxInitializer() { if ( m_ok ) wxUninitialize(); }
+
+private:
+    bool m_ok;
+};
+
 #endif // !wxUSE_GUI
 
 // ----------------------------------------------------------------------------
