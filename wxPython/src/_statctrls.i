@@ -101,8 +101,8 @@ public:
 
 class wxStaticBitmap : public wxControl {
 public:
-    %pythonAppend wxStaticText         "self._setOORInfo(self)"
-    %pythonAppend wxStaticText()       ""
+    %pythonAppend wxStaticBitmap         "self._setOORInfo(self)"
+    %pythonAppend wxStaticBitmap()       ""
 
     wxStaticBitmap(wxWindow* parent, wxWindowID id,
                    const wxBitmap& bitmap,
