@@ -134,7 +134,7 @@ def main(args):
 
 def GetAttr(node, name):
     path = "./attributelist/attribute[@name='%s']/@value" % name
-    n = node.xpathEval(path)
+    n = node.xpathEval2(path)
     if len(n):
         return n[0].content
     else:
@@ -148,7 +148,7 @@ def processXML(xmlfile, modname, swigFile, pyFile):
     topnode = libxml2.parseFile(xmlfile).children
 
     # remove any import nodes as we don't need to do renamers for symbols found therein
-    imports = topnode.xpathEval("*/import")
+    imports = topnode.xpathEval2("*/import")
     for n in imports:
         n.unlinkNode()
         n.freeNode()

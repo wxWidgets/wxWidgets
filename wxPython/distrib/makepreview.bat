@@ -10,14 +10,20 @@ mkdir %BASE%\wx
 mkdir %BASE%\wxPython
 mkdir %BASE%\demo
 mkdir %BASE%\scripts
+mkdir %BASE%\docs
+mkdir %BASE%\docs\xml
+
 
 rem *** copy files
 copy /s wx %BASE%\wx
 copy /s wxPython %BASE%\wxPython
 copy /s demo %BASE%\demo
 copy /s scripts %BASE%\scripts
-copy ..\BIN\*h_*.dll %BASE%\wx
 
+copy ..\BIN\*h_*.dll %BASE%\wx
+copy docs\MigrationGuide.* %BASE%\docs
+copy docs\CHANGES.txt %BASE%\docs
+copy docs\xml\wxPython-metadata.xml %BASE%\docs\xml
 
 
 
