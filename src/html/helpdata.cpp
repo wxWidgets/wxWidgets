@@ -439,25 +439,6 @@ static wxString SafeFileName(const wxString& s)
     return res;
 }
 
-bool wxHtmlHelpData::AlreadyHasBook(wxHtmlBookRecord * bookr)
-{
-    size_t bookCount = m_BookRecords.GetCount();
-    if (bookCount == 0) return FALSE ;
-    
-    wxHtmlBookRecord currentBook(wxEmptyString,wxEmptyString,wxEmptyString);
-    size_t i;
-    for (i=0; i<bookCount; i++)
-        {
-        currentBook = m_BookRecords.Item(i) ;
-        if (currentBook.GetBasePath().IsSameAs(bookr->GetBasePath()) &&
-            currentBook.GetTitle().IsSameAs(bookr->GetTitle()) &&
-            currentBook.GetStart().IsSameAs(bookr->GetStart()) )
-          return TRUE ;  
-            
-        }
-    return FALSE ;    
-}
-
 bool wxHtmlHelpData::AddBookParam(const wxFSFile& bookfile,
                                   wxFontEncoding encoding,
                                   const wxString& title, const wxString& contfile,
@@ -471,12 +452,17 @@ bool wxHtmlHelpData::AddBookParam(const wxFSFile& bookfile,
     int IndexOld = m_IndexCnt,
         ContentsOld = m_ContentsCnt;
 
-    if (! path.IsEmpty())
+    if (!path.IsEmpty())
         fsys.ChangePathTo(path, TRUE);
 
-    bookr = new wxHtmlBookRecord(fsys.GetPath(), title, deftopic);
-    // return TRUE to indicate book is loaded
-    if (AlreadyHasBook(bookr)) return TRUE ; 
+    size_t booksCnt = m_BookRecords.GetCount();
+    for (size_t i = 0; i < booksCnt; i++)
+    {
+        if ( m_BookRecords[i].GetBookFile() == bookfile.GetLocation() )
+            return TRUE; // book is (was) loaded
+    }
+
+    bookr = new wxHtmlBookRecord(bookfile.GetLocation(), fsys.GetPath(), title, deftopic);
     
     if (m_ContentsCnt % wxHTML_REALLOC_STEP == 0)
         m_Contents = (wxHtmlContentsItem*) realloc(m_Contents, (m_ContentsCnt + wxHTML_REALLOC_STEP) * sizeof(wxHtmlContentsItem));

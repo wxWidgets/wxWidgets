@@ -35,15 +35,17 @@ class WXDLLEXPORT wxHtmlHelpData;
 class WXDLLEXPORT wxHtmlBookRecord : public wxObject
 {
 public:
-    wxHtmlBookRecord(const wxString& basepath, const wxString& title,
-                     const wxString& start)
+    wxHtmlBookRecord(const wxString& bookfile, const wxString& basepath, 
+                     const wxString& title, const wxString& start)
     {
+        m_BookFile = bookfile;
         m_BasePath = basepath;
         m_Title = title;
         m_Start = start;
         // for debugging, give the contents index obvious default values
         m_ContentsStart = m_ContentsEnd = -1;
     }
+    wxString GetBookFile() const { return m_BookFile; }
     wxString GetTitle() const { return m_Title; }
     wxString GetStart() const { return m_Start; }
     wxString GetBasePath() const { return m_BasePath; }
@@ -66,6 +68,7 @@ public:
     wxString GetFullPath(const wxString &page) const;
 
 protected:
+    wxString m_BookFile;
     wxString m_BasePath;
     wxString m_Title;
     wxString m_Start;
@@ -171,7 +174,6 @@ public:
                       const wxString& deftopic = wxEmptyString,
                       const wxString& path = wxEmptyString);
 
-    bool AlreadyHasBook(wxHtmlBookRecord * bookr) ;
     // Some accessing stuff:
 
     // returns URL of page on basis of (file)name
