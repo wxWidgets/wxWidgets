@@ -41,10 +41,10 @@
 
 #include <stdio.h>                  /* Included strictly for reading the text file with the database parameters */
 
-#include <wx/db.h>                  /* Required in the file which will get the data source connection */
-#include <wx/dbtable.h>             /* Has the wxDbTable object from which all data objects will inherit their data table functionality */
+//#include <wx/db.h>                  /* Required in the file which will get the data source connection */
+//#include <wx/dbtable.h>             /* Has the wxDbTable object from which all data objects will inherit their data table functionality */
 
-extern wxDbList WXDLLEXPORT *PtrBegDbList;    /* from db.cpp, used in getting back error results from db connections */
+//extern wxDbList WXDLLEXPORT *PtrBegDbList;    /* from db.cpp, used in getting back error results from db connections */
 
 #include "dbtest.h"                 /* Header file for this demonstration program */
 #include "listdb.h"                 /* Code to support the "Lookup" button on the editor dialog */
@@ -94,6 +94,222 @@ const char *GetExtendedDBErrorMsg(wxDb *pDb, char *ErrFile, int ErrLine)
 }  // GetExtendedDBErrorMsg
 
 
+bool DataTypeSupported(wxDb *pDb, SWORD datatype)
+{
+    wxDbSqlTypeInfo sqlTypeInfo;
+
+    bool breakpoint = FALSE;
+
+    if (pDb->GetDataTypeInfo(datatype, sqlTypeInfo))
+        breakpoint = TRUE;
+
+    return breakpoint;
+
+}  // GetDataTypesSupported();
+
+
+
+void CheckSupportForAllDataTypes(wxDb *pDb)
+{
+    bool supported;
+#ifdef SQL_C_BINARY
+    supported = DataTypeSupported(pDb,SQL_C_BINARY);
+#endif
+#ifdef SQL_C_BIT
+    supported = DataTypeSupported(pDb,SQL_C_BIT);
+#endif
+#ifdef SQL_C_BOOKMARK
+    supported = DataTypeSupported(pDb,SQL_C_BOOKMARK);
+#endif
+#ifdef SQL_C_CHAR
+    supported = DataTypeSupported(pDb,SQL_C_CHAR);
+#endif
+#ifdef SQL_C_DATE
+    supported = DataTypeSupported(pDb,SQL_C_DATE);
+#endif
+#ifdef SQL_C_DEFAULT
+    supported = DataTypeSupported(pDb,SQL_C_DEFAULT);
+#endif
+#ifdef SQL_C_DOUBLE
+    supported = DataTypeSupported(pDb,SQL_C_DOUBLE);
+#endif
+#ifdef SQL_C_FLOAT
+    supported = DataTypeSupported(pDb,SQL_C_FLOAT);
+#endif
+#ifdef SQL_C_GUID
+    supported = DataTypeSupported(pDb,SQL_C_GUID);
+#endif
+#ifdef SQL_C_INTERVAL_DAY
+    supported = DataTypeSupported(pDb,SQL_C_INTERVAL_DAY);
+#endif
+#ifdef SQL_C_INTERVAL_DAY_TO_HOUR
+    supported = DataTypeSupported(pDb,SQL_C_INTERVAL_DAY_TO_HOUR);
+#endif
+#ifdef SQL_C_INTERVAL_DAY_TO_MINUTE
+    supported = DataTypeSupported(pDb,SQL_C_INTERVAL_DAY_TO_MINUTE);
+#endif
+#ifdef SQL_C_INTERVAL_DAY_TO_SECOND
+    supported = DataTypeSupported(pDb,SQL_C_INTERVAL_DAY_TO_SECOND);
+#endif
+#ifdef SQL_C_INTERVAL_HOUR
+    supported = DataTypeSupported(pDb,SQL_C_INTERVAL_HOUR);
+#endif
+#ifdef SQL_C_INTERVAL_HOUR_TO_MINUTE
+    supported = DataTypeSupported(pDb,SQL_C_INTERVAL_HOUR_TO_MINUTE);
+#endif
+#ifdef SQL_C_INTERVAL_HOUR_TO_SECOND
+    supported = DataTypeSupported(pDb,SQL_C_INTERVAL_HOUR_TO_SECOND);
+#endif
+#ifdef SQL_C_INTERVAL_MINUTE
+    supported = DataTypeSupported(pDb,SQL_C_INTERVAL_MINUTE);
+#endif
+#ifdef SQL_C_INTERVAL_MINUTE_TO_SECOND
+    supported = DataTypeSupported(pDb,SQL_C_INTERVAL_MINUTE_TO_SECOND);
+#endif
+#ifdef SQL_C_INTERVAL_MONTH
+    supported = DataTypeSupported(pDb,SQL_C_INTERVAL_MONTH);
+#endif
+#ifdef SQL_C_INTERVAL_SECOND
+    supported = DataTypeSupported(pDb,SQL_C_INTERVAL_SECOND);
+#endif
+#ifdef SQL_C_INTERVAL_YEAR
+    supported = DataTypeSupported(pDb,SQL_C_INTERVAL_YEAR);
+#endif
+#ifdef SQL_C_INTERVAL_YEAR_TO_MONTH
+    supported = DataTypeSupported(pDb,SQL_C_INTERVAL_YEAR_TO_MONTH);
+#endif
+#ifdef SQL_C_LONG
+    supported = DataTypeSupported(pDb,SQL_C_LONG);
+#endif
+#ifdef SQL_C_NUMERIC
+    supported = DataTypeSupported(pDb,SQL_C_NUMERIC);
+#endif
+#ifdef SQL_C_SBIGINT
+    supported = DataTypeSupported(pDb,SQL_C_SBIGINT);
+#endif
+#ifdef SQL_C_SHORT
+    supported = DataTypeSupported(pDb,SQL_C_SHORT);
+#endif
+#ifdef SQL_C_SLONG
+    supported = DataTypeSupported(pDb,SQL_C_SLONG);
+#endif
+#ifdef SQL_C_SSHORT
+    supported = DataTypeSupported(pDb,SQL_C_SSHORT);
+#endif
+#ifdef SQL_C_STINYINT
+    supported = DataTypeSupported(pDb,SQL_C_STINYINT);
+#endif
+#ifdef SQL_C_TIME
+    supported = DataTypeSupported(pDb,SQL_C_TIME);
+#endif
+#ifdef SQL_C_TIMESTAMP
+    supported = DataTypeSupported(pDb,SQL_C_TIMESTAMP);
+#endif
+#ifdef SQL_C_TINYINT
+    supported = DataTypeSupported(pDb,SQL_C_TINYINT);
+#endif
+#ifdef SQL_C_TYPE_DATE
+    supported = DataTypeSupported(pDb,SQL_C_TYPE_DATE);
+#endif
+#ifdef SQL_C_TYPE_TIME
+    supported = DataTypeSupported(pDb,SQL_C_TYPE_TIME);
+#endif
+#ifdef SQL_C_TYPE_TIMESTAMP
+    supported = DataTypeSupported(pDb,SQL_C_TYPE_TIMESTAMP);
+#endif
+#ifdef SQL_C_UBIGINT
+    supported = DataTypeSupported(pDb,SQL_C_UBIGINT);
+#endif
+#ifdef SQL_C_ULONG
+    supported = DataTypeSupported(pDb,SQL_C_ULONG);
+#endif
+#ifdef SQL_C_USHORT
+    supported = DataTypeSupported(pDb,SQL_C_USHORT);
+#endif
+#ifdef SQL_C_UTINYINT
+    supported = DataTypeSupported(pDb,SQL_C_UTINYINT);
+#endif
+#ifdef SQL_C_VARBOOKMARK
+    supported = DataTypeSupported(pDb,SQL_C_VARBOOKMARK);
+#endif
+
+// Extended SQL types
+#ifdef SQL_DATE
+    supported = DataTypeSupported(pDb,SQL_DATE);
+#endif
+#ifdef SQL_INTERVAL
+    supported = DataTypeSupported(pDb,SQL_INTERVAL);
+#endif
+#ifdef SQL_TIME
+    supported = DataTypeSupported(pDb,SQL_TIME);
+#endif
+#ifdef SQL_TIMESTAMP
+    supported = DataTypeSupported(pDb,SQL_TIMESTAMP);
+#endif
+#ifdef SQL_LONGVARCHAR
+    supported = DataTypeSupported(pDb,SQL_LONGVARCHAR);
+#endif
+#ifdef SQL_BINARY
+    supported = DataTypeSupported(pDb,SQL_BINARY);
+#endif
+#ifdef SQL_VARBINARY
+    supported = DataTypeSupported(pDb,SQL_VARBINARY);
+#endif
+#ifdef SQL_LONGVARBINARY
+    supported = DataTypeSupported(pDb,SQL_LONGVARBINARY);
+#endif
+#ifdef SQL_BIGINT
+    supported = DataTypeSupported(pDb,SQL_BIGINT);
+#endif
+#ifdef SQL_TINYINT
+    supported = DataTypeSupported(pDb,SQL_TINYINT);
+#endif
+#ifdef SQL_BIT
+    supported = DataTypeSupported(pDb,SQL_BIT);
+#endif
+#ifdef SQL_GUID
+    supported = DataTypeSupported(pDb,SQL_GUID);
+#endif
+
+#ifdef SQL_CHAR
+    supported = DataTypeSupported(pDb,SQL_CHAR);
+#endif
+#ifdef SQL_INTEGER
+    supported = DataTypeSupported(pDb,SQL_INTEGER);
+#endif
+#ifdef SQL_SMALLINT
+    supported = DataTypeSupported(pDb,SQL_SMALLINT);
+#endif
+#ifdef SQL_REAL
+    supported = DataTypeSupported(pDb,SQL_REAL);
+#endif
+#ifdef SQL_DOUBLE
+    supported = DataTypeSupported(pDb,SQL_DOUBLE);
+#endif
+#ifdef SQL_NUMERIC
+    supported = DataTypeSupported(pDb,SQL_NUMERIC);
+#endif
+#ifdef SQL_DATE
+    supported = DataTypeSupported(pDb,SQL_DATE);
+#endif
+#ifdef SQL_TIME
+    supported = DataTypeSupported(pDb,SQL_TIME);
+#endif
+#ifdef SQL_TIMESTAMP
+    supported = DataTypeSupported(pDb,SQL_TIMESTAMP);
+#endif
+#ifdef SQL_VARCHAR
+    supported = DataTypeSupported(pDb,SQL_VARCHAR);
+#endif
+
+
+// UNICODE
+#ifdef SQL_C_TCHAR
+    supported = DataTypeSupported(pDb,SQL_C_TCHAR);
+#endif
+}  // CheckSupportForAllDataTypes()
+
+
 bool DatabaseDemoApp::OnInit()
 {
     DbConnectInf = NULL;
@@ -131,8 +347,6 @@ bool DatabaseDemoApp::OnInit()
     // Show the frame
     DemoFrame->Show(TRUE);
 
-    ReadParamFile(params);
-
     // Passing NULL for the SQL environment handle causes
     // the wxDbConnectInf constructor to obtain a handle
     // for you.
@@ -148,6 +362,20 @@ bool DatabaseDemoApp::OnInit()
         wxMessageBox(wxT("Unable to define data source connection info."), wxT("DB CONNECTION ERROR..."),wxOK | wxICON_EXCLAMATION);
         delete DbConnectInf;
     }
+
+    if (!ReadParamFile(params))
+        DemoFrame->BuildParameterDialog(NULL);
+
+    if (!wxStrlen(params.ODBCSource))
+    {
+        delete DbConnectInf;
+        return(FALSE);
+    }
+
+    DbConnectInf->SetDsn(params.ODBCSource);
+    DbConnectInf->SetUserID(params.UserName);
+    DbConnectInf->SetPassword(params.Password);
+    DbConnectInf->SetDefaultDir(params.DirPath);
 
     READONLY_DB = wxDbGetConnection(DbConnectInf);
     if (READONLY_DB == 0)
@@ -177,9 +405,7 @@ bool DatabaseDemoApp::ReadParamFile(Cparameters &params)
         tStr.Printf(wxT("Unable to open the parameter file '%s' for reading.\n\nYou must specify the data source, user name, and\npassword that will be used and save those settings."),PARAM_FILENAME);
         wxMessageBox(tStr,wxT("File I/O Error..."),wxOK | wxICON_EXCLAMATION);
 
-        DemoFrame->BuildParameterDialog(NULL);
-        if ((paramFile = fopen(PARAM_FILENAME, wxT("r"))) == NULL)
-            return FALSE;
+        return FALSE;
     }
 
     wxChar buffer[1000+1];
@@ -452,6 +678,9 @@ Ccontact::Ccontact (wxDb *pwxDb) : wxDbTable(pwxDb ? pwxDb : wxDbGetConnection(w
     // released when the last database instance using the connection is deleted
     freeDbConn = !pwxDb;
     
+    if (GetDb())
+        GetDb()->SetSqlLogging(sqlLogON);
+
     SetupColumns();
 
 }  // Ccontact Constructor
@@ -516,6 +745,9 @@ void Ccontact::SetupColumns()
     SetColDefs ( 9,wxT("CONTRIBS"),   DB_DATA_TYPE_INTEGER,    &Contributions,  SQL_C_USHORT,               sizeof(Contributions),  FALSE,TRUE);
     SetColDefs (10,wxT("LINE_CNT"),   DB_DATA_TYPE_INTEGER,    &LinesOfCode,    SQL_C_ULONG,                sizeof(LinesOfCode),    FALSE,TRUE);
     SetColDefs (11,wxT("LANGUAGE"),   DB_DATA_TYPE_INTEGER,    &NativeLanguage, SQL_C_ENUM,                 sizeof(NativeLanguage), FALSE,TRUE);
+#if wxODBC_BLOB_EXPERIMENT > 0
+    SetColDefs (12,wxT("PICTURE"),    DB_DATA_TYPE_BLOB,        Picture,        SQL_LONGVARBINARY,          sizeof(Picture),        FALSE,TRUE);
+#endif
 }  // Ccontact::SetupColumns
 
 
@@ -592,6 +824,8 @@ CeditorDlg::CeditorDlg(wxWindow *parent) : wxPanel (parent, 0, 0, 537, 480)
 
     initialized = FALSE;
 
+    SetMode(mView);
+
     Contact = NULL;
 
     Show(FALSE);
@@ -654,10 +888,13 @@ void CeditorDlg::OnCommand(wxWindow& win, wxCommandEvent& event)
 
     if (widgetName == pCopyBtn->GetName())
     {
+
+        CheckSupportForAllDataTypes(wxGetApp().READONLY_DB);
+/*
         SetMode(mCreate);
         pNameTxt->SetValue(wxT(""));
         pNameTxt->SetFocus();
-
+*/
         return;
     }
 
@@ -929,25 +1166,29 @@ bool CeditorDlg::Initialize()
         // Table does exist, or there was some problem opening it.  Currently this should
         // never fail, except in the case of the table not exisiting or the current
         // user has insufficent privileges to access the table
-#if 0
+#if 1
 // This code is experimenting with a new function that will hopefully be available
 // in the 2.4 release.  This check will determine whether the open failing was due
 // to the table not existing, or the users privileges being insufficient to
 // open the table.
-        if (!Contact->GetDb()->TablePrivileges(CONTACT_TABLE_NAME,wxT("SELECT"),Contact->GetDb()->GetUsername(),Contact->GetDb()->GetUsername(),DbConnectInf->GetDefaultDir()))
+        if (!Contact->GetDb()->TablePrivileges(CONTACT_TABLE_NAME, wxT("SELECT"),
+                                               Contact->GetDb()->GetUsername(),
+															  Contact->GetDb()->GetUsername(),
+															  wxGetApp().DbConnectInf->GetDefaultDir()))
         {
             wxString tStr;
-            tStr.Printf(wxT("Unable to open the table '%s'.\n\n"),CONTACT_TABLE_NAME);
+            tStr.Printf(wxT("Unable to open the table '%s' (likely due to\ninsufficient privileges of the logged in user).\n\n"),CONTACT_TABLE_NAME);
             tStr += GetExtendedDBErrorMsg(Contact->GetDb(),__FILE__,__LINE__);
             wxMessageBox(tStr,wxT("ODBC Error..."),wxOK | wxICON_EXCLAMATION);
         }
         else 
 #endif
-        if (Contact->GetDb()->TableExists(CONTACT_TABLE_NAME, Contact->GetDb()->GetUsername(),
-                                          wxGetApp().DbConnectInf->GetDefaultDir()))
+        if (!Contact->GetDb()->TableExists(CONTACT_TABLE_NAME,
+                                           Contact->GetDb()->GetUsername(),
+                                           wxGetApp().DbConnectInf->GetDefaultDir()))
         {
             wxString tStr;
-            tStr.Printf(wxT("Unable to open the table '%s'.\n\n"),CONTACT_TABLE_NAME);
+            tStr.Printf(wxT("Unable to open the table '%s' as the table\ndoes not appear to exist in the tablespace available\nto the currently logged in user.\n\n"),CONTACT_TABLE_NAME);
             tStr += GetExtendedDBErrorMsg(Contact->GetDb(),__FILE__,__LINE__);
             wxMessageBox(tStr,wxT("ODBC Error..."),wxOK | wxICON_EXCLAMATION);
         }
@@ -1066,6 +1307,9 @@ bool CeditorDlg::Initialize()
 
 void CeditorDlg::FieldsEditable()
 {
+    if (!widgetPtrsSet)
+        return;
+
     pNameTxt->Enable((mode == mCreate) || (mode == mEdit));
     pAddress1Txt->Enable((mode == mCreate) || (mode == mEdit));
     pAddress2Txt->Enable((mode == mCreate) || (mode == mEdit));
@@ -1643,7 +1887,7 @@ void CparameterDlg::FillDataSourceList()
         pParamODBCSourceList->Append(p[i]);
 
     delete [] p;
-}  // CparameterDlg::CparameterDlg::FillDataSourceList()
+}  // CparameterDlg::FillDataSourceList()
 
 
 BEGIN_EVENT_TABLE(CqueryDlg, wxDialog)
@@ -2121,11 +2365,12 @@ void CqueryDlg::ProcessCountBtn()
     if (!ValidateWhereClause())
         return;
 
-    if (dbTable == 0)  // wxDbTable object needs to be created and opened
+    if (!dbTable)  // wxDbTable object needs to be created and opened
     {
-        if (!(dbTable = new wxDbTable(pDB, masterTableName, 0, wxT(""),
-                                      !wxDB_QUERY_ONLY, 
-                                      wxGetApp().DbConnectInf->GetDefaultDir())))
+        dbTable = new wxDbTable(pDB, masterTableName, 0, wxT(""),
+                                !wxDB_QUERY_ONLY, 
+                                wxGetApp().DbConnectInf->GetDefaultDir());
+        if (!dbTable)
         {
             wxMessageBox(wxT("Memory allocation failed creating a wxDbTable object."),wxT("Error..."),wxOK | wxICON_EXCLAMATION);
             return;

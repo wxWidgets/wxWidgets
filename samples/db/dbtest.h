@@ -14,7 +14,6 @@
 #endif
 
 #include <wx/string.h>
-#include <wx/db.h>
 #include <wx/dbtable.h>
 
 enum    DialogModes {mView,mCreate,mEdit,mSearch};
@@ -39,10 +38,17 @@ enum    DialogModes {mView,mCreate,mEdit,mSearch};
 // Name of the table to be created/opened
 const wxChar     CONTACT_TABLE_NAME[]       = "contacts";
 
-// Number of columns in the CONTACT table
-const int        CONTACT_NO_COLS            = 12;        // 0-11
 
-const wxChar     PARAM_FILENAME[]            = "dbtest.cfg";
+#define wxODBC_BLOB_EXPERIMENT 0
+
+// Number of columns in the CONTACT table
+#if wxODBC_BLOB_EXPERIMENT > 0
+const int        CONTACT_NO_COLS            = 13;        // 0-12
+#else
+const int        CONTACT_NO_COLS            = 12;        // 0-11
+#endif
+
+const wxChar     PARAM_FILENAME[]           = "dbtest.cfg";
 
 
 enum Language {langENGLISH, langFRENCH, langGERMAN, langSPANISH, langOTHER};
@@ -70,6 +76,9 @@ class CstructContact : public wxObject
         wxChar             Country[20+1];
         TIMESTAMP_STRUCT   JoinDate;            // Date on which this person joined the wxWindows project
         Language           NativeLanguage;      // Enumerated type indicating person's native language
+#if wxODBC_BLOB_EXPERIMENT > 0
+        wxChar             Picture[50000];
+#endif
         bool               IsDeveloper;         // Is this person a developer for wxWindows, or just a subscriber
         UCHAR              Contributions;       // Something to show off an integer field
         ULONG              LinesOfCode;         // Something to show off a 'long' field

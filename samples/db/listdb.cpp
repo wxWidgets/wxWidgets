@@ -89,10 +89,10 @@ extern wxApp *DatabaseDemoApp;
  * NOTE: The value returned by this function is for temporary use only and
  *       should be copied for long term use
  */
-const wxChar *GetExtendedDBErrorMsg2(wxChar *ErrFile, int ErrLine)
+const char *GetExtendedDBErrorMsg2(wxDb *pDb, char *ErrFile, int ErrLine)
 {
     static wxString msg;
-    msg.Empty();
+    msg = wxT("");
 
     wxString tStr;
 
@@ -102,40 +102,31 @@ const wxChar *GetExtendedDBErrorMsg2(wxChar *ErrFile, int ErrLine)
         msg += ErrFile;
         msg += wxT("   Line: ");
         tStr.Printf(wxT("%d"),ErrLine);
-        msg += tStr;
+        msg += tStr.c_str();
         msg += wxT("\n");
     }
 
     msg.Append (wxT("\nODBC errors:\n"));
     msg += wxT("\n");
     
-    /* Scan through each database connection displaying 
-     * any ODBC errors that have occured. */
-    wxDbList *pDbList;
-    for (pDbList = PtrBegDbList; pDbList; pDbList = pDbList->PtrNext)
+    // Display errors for this connection
+    int i;
+    for (i = 0; i < DB_MAX_ERROR_HISTORY; i++)
     {
-        // Skip over any free connections
-        if (pDbList->Free)
-            continue;
-        // Display errors for this connection
-        for (int i = 0; i < DB_MAX_ERROR_HISTORY; i++)
+        if (pDb->errorList[i])
         {
-            if (pDbList->PtrDb->errorList[i])
-            {
-                msg.Append(pDbList->PtrDb->errorList[i]);
-                if (wxStrcmp(pDbList->PtrDb->errorList[i],wxT("")) != 0)
-                    msg.Append(wxT("\n"));
-                // Clear the errmsg buffer so the next error will not
-                // end up showing the previous error that have occurred
-                wxStrcpy(pDbList->PtrDb->errorList[i],wxT(""));
-            }
+            msg.Append(pDb->errorList[i]);
+            if (wxStrcmp(pDb->errorList[i],wxT("")) != 0)
+                msg.Append(wxT("\n"));
+            // Clear the errmsg buffer so the next error will not
+            // end up showing the previous error that have occurred
+            wxStrcpy(pDb->errorList[i],wxT(""));
         }
     }
     msg += wxT("\n");
 
-    return /*(wxChar*) (const wxChar*) msg*/msg.c_str();
+    return msg.c_str();
 }  // GetExtendedDBErrorMsg
-
 
 
 // Clookup constructor
@@ -199,7 +190,8 @@ ClookUpDlg::ClookUpDlg(wxWindow *parent, wxChar *windowTitle, wxChar *tableName,
     widgetPtrsSet = TRUE;
 
     // Query the lookup table and display the result set
-    if (!(lookup = new Clookup(tableName, colName, pDb, defDir)))
+	 lookup = new Clookup(tableName, colName, pDb, defDir);
+    if (!lookup)
     {
         wxMessageBox(wxT("Error allocating memory for 'Clookup'object."),wxT("Error..."));
         Close();
@@ -303,7 +295,8 @@ ClookUpDlg::ClookUpDlg(wxWindow *parent, wxChar *windowTitle, wxChar *tableName,
     widgetPtrsSet = TRUE;
 
     // Query the lookup table and display the result set
-    if (!(lookup2 = new Clookup2(tableName, dispCol1, dispCol2, pDb, defDir)))
+	 lookup2 = new Clookup2(tableName, dispCol1, dispCol2, pDb, defDir);
+    if (!lookup2)
     {
         wxMessageBox(wxT("Error allocating memory for 'Clookup2' object."),wxT("Error..."));
         Close();
@@ -314,7 +307,7 @@ ClookUpDlg::ClookUpDlg(wxWindow *parent, wxChar *windowTitle, wxChar *tableName,
     {
         wxString tStr;
         tStr.Printf(wxT("Unable to open the table '%s'."),tableName);
-        tStr += GetExtendedDBErrorMsg2(__FILE__,__LINE__);
+        tStr += GetExtendedDBErrorMsg2(pDb,__FILE__,__LINE__);
         wxMessageBox(tStr,wxT("ODBC Error..."));
         Close();
         return;
