@@ -565,7 +565,7 @@ wxBitmap wxBitmap::GetSubBitmap(const wxRect &rect) const
            RGBColor  color;
 
            mask = (GWorldPtr) GetMask()->GetMaskBitmap();
-           submask = wxMacCreateGWorld(rect.width, rect.height, 1);
+           submask = wxMacCreateGWorld(rect.width, rect.height, GetMask()->GetDepth() );
            LockPixels(GetGWorldPixMap(mask));
            LockPixels(GetGWorldPixMap(submask));
 
@@ -755,7 +755,33 @@ wxBitmap::wxBitmap(const wxImage& image, int depth)
         destinationBase += ((**pixMap).rowBytes & 0x7fff);  
         destination = (unsigned char*) destinationBase ;    
     }  
-    if ( image.HasMask() )
+    if ( image.HasAlpha() )
+    {
+      unsigned char *alpha = image.GetAlpha(); 
+      
+      wxColour maskcolor(image.GetMaskRed(), image.GetMaskGreen(), image.GetMaskBlue());
+      RGBColor color ;
+      wxBitmap maskBitmap ;
+
+      maskBitmap.Create( width, height, 24);
+      LockPixels( GetGWorldPixMap( (GWorldPtr) maskBitmap.GetHBITMAP()) );
+      SetGWorld( (GWorldPtr) maskBitmap.GetHBITMAP(), NULL);
+
+      for (int y = 0; y < height; y++)
+      {
+          for (int x = 0; x < width; x++)
+          {
+              memset( &color , 255 - *alpha , sizeof( color ) );
+              SetCPixel(x,y, &color);
+
+              alpha += 1 ;
+          }
+      }  // for height
+      SetGWorld( (GWorldPtr) GetHBITMAP(), NULL);
+      SetMask(new wxMask( maskBitmap ));
+      UnlockPixels( GetGWorldPixMap( (GWorldPtr) maskBitmap.GetHBITMAP()) );
+    }
+    else if ( image.HasMask() )
     {
       data = image.GetData(); 
       
@@ -777,7 +803,7 @@ wxBitmap::wxBitmap(const wxImage& image, int depth)
                 SetCPixel(x,y, &white);
               }
               else {
-                      SetCPixel(x,y, &black);
+                SetCPixel(x,y, &black);
               }
               data += 3 ;
           }
@@ -1122,10 +1148,8 @@ bool wxMask::Create(const wxBitmap& bitmap)
 
    wxCHECK_MSG( bitmap.Ok(), false, wxT("Invalid bitmap"));
 
-   wxCHECK_MSG(bitmap.GetDepth() == 1, false,
-               wxT("Cannot create mask from colour bitmap"));
-
-   m_maskBitmap = wxMacCreateGWorld(bitmap.GetWidth(), bitmap.GetHeight(), 1);
+    m_depth = bitmap.GetDepth() ;
+   m_maskBitmap = wxMacCreateGWorld(bitmap.GetWidth(), bitmap.GetHeight(), bitmap.GetDepth() );
    Rect rect = { 0,0, bitmap.GetHeight(), bitmap.GetWidth() };
 
    LockPixels( GetGWorldPixMap( (GWorldPtr) m_maskBitmap) );
@@ -1163,7 +1187,8 @@ bool wxMask::Create(const wxBitmap& bitmap, const wxColour& colour)
     
     wxCHECK_MSG( bitmap.Ok(), false, wxT("Illigal bitmap"));
 
-    m_maskBitmap = wxMacCreateGWorld( bitmap.GetWidth() , bitmap.GetHeight() , 1 ); 
+    m_maskBitmap = wxMacCreateGWorld( bitmap.GetWidth() , bitmap.GetHeight() , 1 );
+    m_depth = 1 ; 
     LockPixels( GetGWorldPixMap(  (GWorldPtr) m_maskBitmap ) );
     LockPixels( GetGWorldPixMap(  (GWorldPtr) bitmap.GetHBITMAP() ) );
     RGBColor maskColor = MAC_WXCOLORREF(colour.GetPixel());
