@@ -28,14 +28,20 @@ class WXDLLEXPORT wxDateTime;
 class WXDLLEXPORT wxTimeSpan;
 class WXDLLEXPORT wxDateSpan;
 
-// don't use inline functions in debug builds - we don't care about
+// a hack: don't use inline functions in debug builds - we don't care about
 // performances and this only leads to increased rebuild time (because every
 // time an inline method is changed, all files including the header must be
 // rebuilt)
-// For Mingw32, causes a link error.
+
+// For Mingw32, causes a link error. (VZ: why?)
 #if defined( __WXDEBUG__) && !defined(__MINGW32__)
+    #define wxDATETIME_DONT_INLINE
+
     #undef inline
     #define inline
+#else
+    // just in case
+    #undef wxDATETIME_DONT_INLINE
 #endif // Debug
 
 // not all c-runtimes are based on 1/1/1970 being (time_t) 0
@@ -1336,14 +1342,16 @@ protected:
 // else than datetime.cpp in debug builds: this minimizes rebuilds if we change
 // some inline function and the performance doesn't matter in the debug builds.
 
-#if !defined(__WXDEBUG__) || defined(wxDEFINE_TIME_CONSTANTS)
+#if !defined(wxDATETIME_DONT_INLINE) || defined(wxDEFINE_TIME_CONSTANTS)
     #define INCLUDED_FROM_WX_DATETIME_H
         #include "wx/datetime.inl"
     #undef INCLUDED_FROM_WX_DATETIME_H
 #endif
 
 // if we defined it to be empty above, restore it now
-#undef inline
+#ifdef wxDATETIME_DONT_INLINE
+    #undef inline
+#endif
 
 // ============================================================================
 // binary operators
