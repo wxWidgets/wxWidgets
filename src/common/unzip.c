@@ -14,7 +14,7 @@ $Id$
 
 
 
-#include "wx/setup.h"
+#include "wx/defs.h"
 
 #if wxUSE_ZLIB && wxUSE_ZIPSTREAM
 

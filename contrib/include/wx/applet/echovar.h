@@ -44,7 +44,7 @@ public:
     wxEchoVariable() : wxObject() {}
     ~wxEchoVariable() {}
 	
-	/****************************************************************************
+    /****************************************************************************
     RETURNS:
     The boolean value of the variable
 
@@ -65,8 +65,8 @@ public:
 
 public:
     // static function to retrieve any variable avaliable
-    static wxString GetValue(const wxString &cls, const char *parms = NULL);
-};
+    static wxString FindValue(const wxString &cls, const char *parms = NULL);
+    };
 	
 /*--------------------------------- MACROS --------------------------------*/
 
@@ -83,13 +83,13 @@ public:
     wxString wxEchoVariable##name :: GetValue(const char *parms) const {    \
     wxString _BEV_parm = wxString(parms);
 
-#define END_ECHO_VARIABLE(name, returnval)                                  \
+#define END_ECHO_VARIABLE(returnval)                                        \
     return returnval;                                                       \
     }
 
 #define STRING_ECHO_VARIABLE(name, string)                                  \
     BEGIN_ECHO_VARIABLE(##name##);                                          \
-    END_ECHO_VARIABLE(##name##, wxString(##string##))
+    END_ECHO_VARIABLE(wxString(##string##))
 	
 #endif // __WX_ECHOVAR_H
 

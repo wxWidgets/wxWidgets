@@ -475,7 +475,7 @@ bool wxPrinterDC::DoBlit(wxCoord xdest, wxCoord ydest,
                          wxDC *source,
                          wxCoord xsrc, wxCoord ysrc,
                          int WXUNUSED(rop), bool useMask,
-                         wxCoord xsrcMask, wxCoord ysrcMask)
+                         wxCoord WXUNUSED(xsrcMask), wxCoord WXUNUSED(ysrcMask))
 {
     bool success = TRUE;
 

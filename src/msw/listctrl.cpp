@@ -1101,7 +1101,7 @@ wxTextCtrl* wxListCtrl::EditLabel(long item, wxClassInfo* textControlClass)
 {
     wxASSERT( (textControlClass->IsKindOf(CLASSINFO(wxTextCtrl))) );
 
-    // VS: ListView_EditLabel requires that the list has focus.  
+    // VS: ListView_EditLabel requires that the list has focus.
     SetFocus();
     HWND hWnd = (HWND) ListView_EditLabel(GetHwnd(), item);
 
@@ -1881,7 +1881,7 @@ void wxListCtrl::OnPaint(wxPaintEvent& event)
 // virtual list controls
 // ----------------------------------------------------------------------------
 
-wxString wxListCtrl::OnGetItemText(long item, long col) const
+wxString wxListCtrl::OnGetItemText(long WXUNUSED(item), long WXUNUSED(col)) const
 {
     // this is a pure virtual function, in fact - which is not really pure
     // because the controls which are not virtual don't need to implement it
@@ -1890,7 +1890,7 @@ wxString wxListCtrl::OnGetItemText(long item, long col) const
     return wxEmptyString;
 }
 
-int wxListCtrl::OnGetItemImage(long item) const
+int wxListCtrl::OnGetItemImage(long WXUNUSED(item)) const
 {
     // same as above
     wxFAIL_MSG( _T("not supposed to be called") );
@@ -1898,7 +1898,7 @@ int wxListCtrl::OnGetItemImage(long item) const
     return -1;
 }
 
-wxListItemAttr *wxListCtrl::OnGetItemAttr(long item) const
+wxListItemAttr *wxListCtrl::OnGetItemAttr(long WXUNUSED_UNLESS_DEBUG(item)) const
 {
     wxASSERT_MSG( item >= 0 && item < GetItemCount(),
                   _T("invalid item index in OnGetItemAttr()") );

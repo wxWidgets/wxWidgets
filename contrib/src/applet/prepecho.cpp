@@ -97,7 +97,7 @@ wxString wxEchoPrep::Process(
             cname = tag.Mid(10, n);
 
             // grab the value from the class, put it in tag since the data is no longer needed
-            tag = wxEchoVariable::GetValue(cname, NULL);
+            tag = wxEchoVariable::FindValue(cname, NULL);
             }
         else {
             // Find the parms
@@ -114,7 +114,7 @@ wxString wxEchoPrep::Process(
             cname = tag.Mid(10, n);
 
             // grab the value from the class, put it in tag since the data is no longer needed
-            tag = wxEchoVariable::GetValue(cname, parms.c_str());
+            tag = wxEchoVariable::FindValue(cname, parms.c_str());
             }
 
 

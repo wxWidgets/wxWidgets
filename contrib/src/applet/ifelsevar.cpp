@@ -59,7 +59,7 @@ where these are used.
 SEE ALSO:
 wxIfElsePrep
 ****************************************************************************/
-static bool wxIfElseVariable::GetValue(
+static bool wxIfElseVariable::FindValue(
     const wxString &cls)
 {
     wxObject * tmpclass;

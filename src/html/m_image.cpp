@@ -337,7 +337,7 @@ wxHtmlImageCell::wxHtmlImageCell(wxFSFile *input, int w, int h, double scale, in
 
 
 
-void wxHtmlImageCell::Draw(wxDC& dc, int x, int y, int view_y1, int view_y2)
+void wxHtmlImageCell::Draw(wxDC& dc, int x, int y, int WXUNUSED(view_y1), int WXUNUSED(view_y2))
 {
     if (m_Image)
     {

@@ -43,12 +43,12 @@ class wxHtmlLineCell : public wxHtmlCell
     public:
         wxHtmlLineCell(int size) : wxHtmlCell() {m_Height = size;}
         void Draw(wxDC& dc, int x, int y, int view_y1, int view_y2);
-        void Layout(int w) 
+        void Layout(int w)
             { m_Width = w; wxHtmlCell::Layout(w); }
 };
 
 
-void wxHtmlLineCell::Draw(wxDC& dc, int x, int y, int view_y1, int view_y2)
+void wxHtmlLineCell::Draw(wxDC& dc, int x, int y, int WXUNUSED(view_y1), int WXUNUSED(view_y2))
 {
     wxBrush mybrush("BLACK", wxSOLID);
     wxPen mypen("BLACK", 1, wxSOLID);

@@ -136,7 +136,7 @@ void wxHtmlParser::CreateDOMSubTree(wxHtmlTag *cur,
     wxChar c;
     int i = begin_pos;
     int textBeginning = begin_pos;
-    
+
     while (i < end_pos)
     {
         c = m_Source.GetChar(i);
@@ -160,7 +160,7 @@ void wxHtmlParser::CreateDOMSubTree(wxHtmlTag *cur,
                 while (i < end_pos)
                 {
                     c = m_Source.GetChar(i++);
-                    if ((c == wxT(' ') || c == wxT('\n') || 
+                    if ((c == wxT(' ') || c == wxT('\n') ||
                         c == wxT('\r') || c == wxT('\t')) && dashes >= 2) {}
                     else if (c == wxT('>') && dashes >= 2)
                     {
@@ -169,31 +169,31 @@ void wxHtmlParser::CreateDOMSubTree(wxHtmlTag *cur,
                     }
                     else if (c == wxT('-'))
                         dashes++;
-                    else    
+                    else
                         dashes = 0;
                 }
             }
-        
+
             // add another tag to the tree:
             else if (i < end_pos-1 && m_Source.GetChar(i+1) != wxT('/'))
 	        {
                 wxHtmlTag *chd;
-                if (cur) 
-                    chd = new wxHtmlTag(cur, m_Source, 
+                if (cur)
+                    chd = new wxHtmlTag(cur, m_Source,
                                         i, end_pos, cache, m_entitiesParser);
-                else 
+                else
                 {
                     chd = new wxHtmlTag(NULL, m_Source,
                                         i, end_pos, cache, m_entitiesParser);
-                    if (!m_Tags) 
+                    if (!m_Tags)
                     {
-                        // if this is the first tag to be created make the root 
+                        // if this is the first tag to be created make the root
                         // m_Tags point to it:
                         m_Tags = chd;
                     }
                     else
                     {
-                        // if there is already a root tag add this tag as 
+                        // if there is already a root tag add this tag as
                         // the last sibling:
                         chd->m_Prev = m_Tags->GetLastSibling();
                         chd->m_Prev->m_Next = chd;
@@ -203,7 +203,7 @@ void wxHtmlParser::CreateDOMSubTree(wxHtmlTag *cur,
                 if (chd->HasEnding())
                 {
                     CreateDOMSubTree(chd,
-                                     chd->GetBeginPos(), chd->GetEndPos1(), 
+                                     chd->GetBeginPos(), chd->GetEndPos1(),
                                      cache);
                     i = chd->GetEndPos2();
                 }
@@ -213,7 +213,7 @@ void wxHtmlParser::CreateDOMSubTree(wxHtmlTag *cur,
             }
 
             // ... or skip ending tag:
-            else 
+            else
             {
                 while (i < end_pos && m_Source.GetChar(i) != wxT('>')) i++;
                 textBeginning = i+1;
@@ -244,36 +244,36 @@ void wxHtmlParser::DestroyDOMTree()
     m_TextPieces = NULL;
 }
 
-void wxHtmlParser::DoParsing() 
+void wxHtmlParser::DoParsing()
 {
     m_CurTag = m_Tags;
     m_CurTextPiece = 0;
-    DoParsing(0, m_Source.Length()); 
+    DoParsing(0, m_Source.Length());
 }
 
 void wxHtmlParser::DoParsing(int begin_pos, int end_pos)
 {
     if (end_pos <= begin_pos) return;
-    
+
     wxHtmlTextPieces& pieces = *m_TextPieces;
     size_t piecesCnt = pieces.GetCount();
-    
+
     while (begin_pos < end_pos)
     {
         while (m_CurTag && m_CurTag->GetBeginPos() < begin_pos)
             m_CurTag = m_CurTag->GetNextTag();
-        while (m_CurTextPiece < piecesCnt && 
+        while (m_CurTextPiece < piecesCnt &&
                pieces[m_CurTextPiece].m_pos < begin_pos)
             m_CurTextPiece++;
 
-        if (m_CurTextPiece < piecesCnt && 
-            (!m_CurTag || 
+        if (m_CurTextPiece < piecesCnt &&
+            (!m_CurTag ||
              pieces[m_CurTextPiece].m_pos < m_CurTag->GetBeginPos()))
         {
             // Add text:
             AddText(m_Source.Mid(pieces[m_CurTextPiece].m_pos,
                                  pieces[m_CurTextPiece].m_lng));
-            begin_pos = pieces[m_CurTextPiece].m_pos + 
+            begin_pos = pieces[m_CurTextPiece].m_pos +
                         pieces[m_CurTextPiece].m_lng;
             m_CurTextPiece++;
         }
@@ -284,7 +284,7 @@ void wxHtmlParser::DoParsing(int begin_pos, int end_pos)
             {
                 if (m_CurTag->HasEnding())
                     begin_pos = m_CurTag->GetEndPos2();
-                else 
+                else
                     begin_pos = m_CurTag->GetBeginPos();
             }
             wxHtmlTag *t = m_CurTag;
@@ -377,23 +377,23 @@ void wxHtmlParser::SetSourceAndSaveState(const wxString& src)
     m_TextPieces = NULL;
     m_CurTextPiece = 0;
     m_Source = wxEmptyString;
-    
+
     SetSource(src);
 }
 
 bool wxHtmlParser::RestoreState()
 {
     if (!m_SavedStates) return FALSE;
-    
+
     wxHtmlParserState *s = m_SavedStates;
     m_SavedStates = s->m_nextState;
-    
+
     m_CurTag = s->m_curTag;
     m_Tags = s->m_tags;
     m_TextPieces = s->m_textPieces;
     m_CurTextPiece = s->m_curTextPiece;
     m_Source = s->m_source;
-    
+
     delete s;
     return TRUE;
 }
@@ -434,6 +434,8 @@ void wxHtmlEntitiesParser::SetEncoding(wxFontEncoding encoding)
     m_encoding = encoding;
     if (m_encoding != wxFONTENCODING_SYSTEM)
         m_conv = new wxCSConv(wxFontMapper::GetEncodingName(m_encoding));
+#else
+    (void) encoding;
 #endif
 }
 

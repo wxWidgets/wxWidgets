@@ -91,13 +91,13 @@ void wxHtmlCell::SetLink(const wxHtmlLinkInfo& link)
 
 
 
-void wxHtmlCell::Layout(int w)
+void wxHtmlCell::Layout(int WXUNUSED(w))
 {
     SetPos(0, 0);
 }
 
 
-const wxHtmlCell* wxHtmlCell::Find(int condition, const void* param) const
+const wxHtmlCell* wxHtmlCell::Find(int WXUNUSED(condition), const void* WXUNUSED(param)) const
 {
     return NULL;
 }
@@ -117,7 +117,7 @@ wxHtmlWordCell::wxHtmlWordCell(const wxString& word, wxDC& dc) : wxHtmlCell()
 
 
 
-void wxHtmlWordCell::Draw(wxDC& dc, int x, int y, int view_y1, int view_y2)
+void wxHtmlWordCell::Draw(wxDC& dc, int x, int y, int WXUNUSED(view_y1), int WXUNUSED(view_y2))
 {
     dc.DrawText(m_Word, x + m_PosX, y + m_PosY);
 }
@@ -208,11 +208,11 @@ bool wxHtmlContainerCell::AdjustPagebreak(int *pagebreak) const
 
         while (c)
 	    {
-            if (c->AdjustPagebreak(&pbrk)) 
+            if (c->AdjustPagebreak(&pbrk))
                 rt = TRUE;
             c = c->GetNext();
         }
-        if (rt) 
+        if (rt)
             *pagebreak = pbrk + m_PosY;
         return rt;
     }
@@ -406,7 +406,7 @@ void wxHtmlContainerCell::Draw(wxDC& dc, int x, int y, int view_y1, int view_y2)
             dc.DrawLine(x + m_PosX, y + m_PosY + m_Height - 1, x + m_PosX + m_Width - 1, y + m_PosY + m_Height - 1);
         }
 
-        if (m_Cells) 
+        if (m_Cells)
         {
             for (wxHtmlCell *cell = m_Cells; cell; cell = cell->GetNext())
                 cell->Draw(dc, x + m_PosX, y + m_PosY, view_y1, view_y2);
@@ -415,7 +415,7 @@ void wxHtmlContainerCell::Draw(wxDC& dc, int x, int y, int view_y1, int view_y2)
     // container invisible, just proceed font+color changing:
     else
     {
-        if (m_Cells) 
+        if (m_Cells)
         {
             for (wxHtmlCell *cell = m_Cells; cell; cell = cell->GetNext())
                 cell->DrawInvisible(dc, x + m_PosX, y + m_PosY);
@@ -427,7 +427,7 @@ void wxHtmlContainerCell::Draw(wxDC& dc, int x, int y, int view_y1, int view_y2)
 
 void wxHtmlContainerCell::DrawInvisible(wxDC& dc, int x, int y)
 {
-    if (m_Cells) 
+    if (m_Cells)
     {
         for (wxHtmlCell *cell = m_Cells; cell; cell = cell->GetNext())
             cell->DrawInvisible(dc, x + m_PosX, y + m_PosY);
@@ -515,7 +515,7 @@ void wxHtmlContainerCell::SetWidthFloat(const wxHtmlTag& tag, double pixel_scale
 const wxHtmlCell* wxHtmlContainerCell::Find(int condition, const void* param) const
 {
     if (m_Cells)
-    {   
+    {
         const wxHtmlCell *r = NULL;
 
         for (wxHtmlCell *cell = m_Cells; cell; cell = cell->GetNext())
@@ -557,7 +557,7 @@ void wxHtmlContainerCell::OnMouseClick(wxWindow *parent, int x, int y, const wxM
 // wxHtmlColourCell
 //--------------------------------------------------------------------------------
 
-void wxHtmlColourCell::Draw(wxDC& dc, int x, int y, int view_y1, int view_y2)
+void wxHtmlColourCell::Draw(wxDC& dc, int WXUNUSED(x), int WXUNUSED(y), int WXUNUSED(view_y1), int WXUNUSED(view_y2))
 {
     if (m_Flags & wxHTML_CLR_FOREGROUND)
         dc.SetTextForeground(m_Colour);
@@ -568,7 +568,7 @@ void wxHtmlColourCell::Draw(wxDC& dc, int x, int y, int view_y1, int view_y2)
     }
 }
 
-void wxHtmlColourCell::DrawInvisible(wxDC& dc, int x, int y)
+void wxHtmlColourCell::DrawInvisible(wxDC& dc, int WXUNUSED(x), int WXUNUSED(y))
 {
     if (m_Flags & wxHTML_CLR_FOREGROUND)
         dc.SetTextForeground(m_Colour);
@@ -586,12 +586,12 @@ void wxHtmlColourCell::DrawInvisible(wxDC& dc, int x, int y)
 // wxHtmlFontCell
 //--------------------------------------------------------------------------------
 
-void wxHtmlFontCell::Draw(wxDC& dc, int x, int y, int view_y1, int view_y2)
+void wxHtmlFontCell::Draw(wxDC& dc, int WXUNUSED(x), int WXUNUSED(y), int WXUNUSED(view_y1), int WXUNUSED(view_y2))
 {
     dc.SetFont(m_Font);
 }
 
-void wxHtmlFontCell::DrawInvisible(wxDC& dc, int x, int y)
+void wxHtmlFontCell::DrawInvisible(wxDC& dc, int WXUNUSED(x), int WXUNUSED(y))
 {
     dc.SetFont(m_Font);
 }
@@ -617,7 +617,7 @@ wxHtmlWidgetCell::wxHtmlWidgetCell(wxWindow *wnd, int w)
 }
 
 
-void wxHtmlWidgetCell::Draw(wxDC& dc, int x, int y, int view_y1, int view_y2)
+void wxHtmlWidgetCell::Draw(wxDC& WXUNUSED(dc), int WXUNUSED(x), int WXUNUSED(y), int WXUNUSED(view_y1), int WXUNUSED(view_y2))
 {
     int absx = 0, absy = 0, stx, sty;
     wxHtmlCell *c = this;
@@ -635,7 +635,7 @@ void wxHtmlWidgetCell::Draw(wxDC& dc, int x, int y, int view_y1, int view_y2)
 
 
 
-void wxHtmlWidgetCell::DrawInvisible(wxDC& dc, int x, int y)
+void wxHtmlWidgetCell::DrawInvisible(wxDC& WXUNUSED(dc), int WXUNUSED(x), int WXUNUSED(y))
 {
     int absx = 0, absy = 0, stx, sty;
     wxHtmlCell *c = this;

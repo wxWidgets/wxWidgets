@@ -98,11 +98,11 @@ wxString wxIncludePrep::Process(
 #ifdef CHECKED		
 			wxMessageBox(wxString("wxHTML #include error: File not Found ") + fname + wxString("."),"Error",wxICON_ERROR);
 #endif
+            delete file;
             continue;
 			}			
 							
 		wxString tmp;
-
     	
         do {
 			char tmp2[257];

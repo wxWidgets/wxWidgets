@@ -130,7 +130,7 @@ wxString wxIfElsePrep::Process(
 	    if (c != -1) cname = cname.Mid(0, c);
 
         // Grab the value from the variable class identified by cname
-        value = wxIfElseVariable::GetValue(cname);
+        value = wxIfElseVariable::FindValue(cname);
 
         // Find the end of the tag (<!--#endif-->) and copy it all into the variable code
         end = ((output.Mid(b)).Lower()).Find("<!--#endif-->");

@@ -60,7 +60,7 @@ where these are used.
 SEE ALSO:
 wxEchoPrep
 ****************************************************************************/
-static wxString wxEchoVariable::GetValue(
+static wxString wxEchoVariable::FindValue(
     const wxString &cls,
     const char *parms)
 {

@@ -5,19 +5,23 @@
 *               Copyright (C) 1991-2001 SciTech Software, Inc.
 *                            All rights reserved.
 *
-*  ========================================================================
-*
-*    The contents of this file are subject to the wxWindows License
-*    Version 3.0 (the "License"); you may not use this file except in
-*    compliance with the License. You may obtain a copy of the License at
-*    http://www.wxwindows.org/licence3.txt
-*
-*    Software distributed under the License is distributed on an
-*    "AS IS" basis, WITHOUT WARRANTY OF ANY KIND, either express or
-*    implied. See the License for the specific language governing
-*    rights and limitations under the License.
-*
-*  ========================================================================
+*  ======================================================================
+*  |REMOVAL OR MODIFICATION OF THIS HEADER IS STRICTLY PROHIBITED BY LAW|
+*  |                                                                    |
+*  |This copyrighted computer code is a proprietary trade secret of     |
+*  |SciTech Software, Inc., located at 505 Wall Street, Chico, CA 95928 |
+*  |USA (www.scitechsoft.com).  ANY UNAUTHORIZED POSSESSION, USE,       |
+*  |VIEWING, COPYING, MODIFICATION OR DISSEMINATION OF THIS CODE IS     |
+*  |STRICTLY PROHIBITED BY LAW.  Unless you have current, express       |
+*  |written authorization from SciTech to possess or use this code, you |
+*  |may be subject to civil and/or criminal penalties.                  |
+*  |                                                                    |
+*  |If you received this code in error or you would like to report      |
+*  |improper use, please immediately contact SciTech Software, Inc. at  |
+*  |530-894-8400.                                                       |
+*  |                                                                    |
+*  |REMOVAL OR MODIFICATION OF THIS HEADER IS STRICTLY PROHIBITED BY LAW|
+*  ======================================================================
 *
 * Language:     ANSI C++
 * Environment:  Any
@@ -28,6 +32,9 @@
 
 // For compilers that support precompilation
 #include "wx/wxprec.h"
+#include "wx/utils.h"
+#include "wx/process.h"
+#include "wx/spawnbrowser.h"
 #include "wx/html/forcelnk.h"
 
 // Include private headers
@@ -39,7 +46,6 @@
 #include "wx/applet/prepinclude.h"
 #include "wx/applet/prepecho.h"
 #include "wx/applet/prepifelse.h"
-
 
 /*---------------------------- Global variables ---------------------------*/
 
@@ -75,7 +81,8 @@ wxHtmlAppletWindow::wxHtmlAppletWindow(
     const wxPoint& pos,
     const wxSize& size,
     long style,
-    const wxString& name)
+    const wxString& name,
+    const wxString& docroot )
     : wxHtmlWindow(parent,id,pos,size,style,name)
 {
     // Init our locks
@@ -91,10 +98,15 @@ wxHtmlAppletWindow::wxHtmlAppletWindow(
         m_NavBar = NULL;
         }
 
+    // Set up docroot
+    m_DocRoot = docroot;
+
     // Add HTML preprocessors
     // deleting preprocessors is done by the code within the window
 
     incPreprocessor = new wxIncludePrep(); // #include preprocessor
+    incPreprocessor->ChangeDirectory(m_DocRoot);
+
     wxEchoPrep * echoPreprocessor = new wxEchoPrep(); // #echo preprocessor
     wxIfElsePrep * ifPreprocessor = new wxIfElsePrep();
 
@@ -206,21 +218,21 @@ bool wxHtmlAppletWindow::LoadPage(
 {
     wxString    href(link);
 
+    // Check for abs path. If it is not then tack on the path
+    // supplied at creation.
+    if (!wxIsAbsolutePath(href))
+        href = m_DocRoot + href;
+
     // TODO: This needs to be made platform inde if possible.
     if (link.GetChar(0) == '?'){
         wxString cmd = link.BeforeFirst('=');
         wxString cmdValue = link.AfterFirst('=');
-
         if(!(cmd.CmpNoCase("?EXTERNAL"))){
-#ifdef  __WINDOWS__
-                ShellExecute(this ? (HWND)this->GetHWND() : NULL,NULL,cmdValue.c_str(),NULL,"",SW_SHOWNORMAL);
-#else
-                #error Platform not implemented yet!
-#endif
-            return true;
+            return wxSpawnBrowser(this, cmdValue.c_str());
             }
         if (!(cmd.CmpNoCase("?EXECUTE"))){
-            wxMessageBox(cmdValue);
+            wxProcess *child = new AppletProcess(this);
+            wxExecute(cmdValue, false, child);
             return true;
             }
         if (!(cmd.CmpNoCase("?VIRTUAL"))){
@@ -230,27 +242,19 @@ bool wxHtmlAppletWindow::LoadPage(
                 }
             else {
 #ifdef CHECKED
-                wxMessageBox("VIRTUAL LINK ERROR: " + cmdValue + " does not exist.");
+                wxLogError(_T("VIRTUAL LINK ERROR: '%s' does not exist."), cmdValue.c_str());
 #endif
                 return true;
                 }
             }
         }
 
-    // Make a copy of the current path the translate for <!-- include files from what will be the new path
-    // we cannot just grab this value from the base class since it is not correct until after LoadPage is
-    // called. And we need the incPreprocessor to know the right path before LoadPage.
-    wxFileSystem fs;
-    fs.ChangePathTo(m_FS->GetPath(), true);
-    fs.ChangePathTo(link);
-    incPreprocessor->ChangeDirectory(fs.GetPath());
-
     // Inform all the applets that the new page is being loaded
     for (wxAppletList::Node *node = m_AppletList.GetFirst(); node; node = node->GetNext())
         (node->GetData())->OnLinkClicked(wxHtmlLinkInfo(href));
+    Show(false);
     bool stat = wxHtmlWindow::LoadPage(href);
-
-
+    Show(true);
 
     // Enable/Dis the navbar tools
     if (m_NavBar) {
@@ -426,12 +430,9 @@ need to change the page for the current window to a new window.
 void wxHtmlAppletWindow::OnLoadPage(
     wxLoadPageEvent &event)
 {
-    // Test the mutex lock. We have to do this here because wxHTML constantly
-    // calls wxYield which processes the message queue. This in turns means
-    // that we may end up processing a new 'loadPage' event while the new
-    // page is still loading! We need to avoid this so we use a simple
-    // lock to avoid loading a page while presently loading another page.
-    if (TryLock()) {
+    // Test the mutex lock.
+    if (!(IsLocked())){
+        Lock();
         if (event.GetHtmlWindow() == this){
             if (LoadPage(event.GetHRef())){
                 // wxPageLoadedEvent evt;
@@ -491,6 +492,18 @@ VirtualData::VirtualData(
     m_name = name;
     m_group = group;
     m_href = href;
+}
+
+/****************************************************************************
+PARAMETERS:
+REMARKS:
+****************************************************************************/
+void AppletProcess::OnTerminate(
+    int,
+    int )
+{
+    // we're not needed any more
+    delete this;
 }
 
 #include "wx/html/m_templ.h"

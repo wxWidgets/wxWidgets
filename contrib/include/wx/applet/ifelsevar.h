@@ -66,8 +66,8 @@ public:
 
 public:
     // static function to retrieve any variable avaliable
-    static bool GetValue(const wxString &cls);
-};
+    static bool FindValue(const wxString &cls);
+    };
 
 /*--------------------------------- MACROS --------------------------------*/
 
@@ -82,14 +82,13 @@ public:
     IMPLEMENT_DYNAMIC_CLASS(wxIfElseVariable##name##, wxIfElseVariable);    \
     bool wxIfElseVariable##name :: GetValue() const {
 
-#define END_IFELSE_VARIABLE(name, returnval)                                \
+#define END_IFELSE_VARIABLE(returnval)                                      \
     return returnval;                                                       \
     }
 
 #define IFELSE_VARIABLE(name, state)                                        \
     BEGIN_IFELSE_VARIABLE(##name##);                                        \
-    END_IFELSE_VARIABLE(##name##, bool (state))
-
+    END_IFELSE_VARIABLE(bool (state))
 
 #endif // __WX_IFELSEVAR_H
 

@@ -45,10 +45,10 @@ class WXDLLEXPORT wxButtonBase : public wxControl
 {
 public:
     // show the image in the button in addition to the label
-    virtual void SetImageLabel(const wxBitmap& bitmap) { }
+    virtual void SetImageLabel(const wxBitmap& WXUNUSED(bitmap)) { }
 
     // set the margins around the image
-    virtual void SetImageMargins(wxCoord x, wxCoord y) { }
+    virtual void SetImageMargins(wxCoord WXUNUSED(x), wxCoord WXUNUSED(y)) { }
 
     // this wxButton method is called when the button becomes the default one
     // on its panel

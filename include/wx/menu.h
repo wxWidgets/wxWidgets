@@ -353,7 +353,7 @@ public:
     virtual void EnableTop(size_t pos, bool enable) = 0;
 
     // is the menu enabled?
-    virtual bool IsEnabledTop(size_t pos) const { return TRUE; }
+    virtual bool IsEnabledTop(size_t WXUNUSED(pos)) const { return TRUE; }
 
     // get or change the label of the menu at given position
     virtual void SetLabelTop(size_t pos, const wxString& label) = 0;
