@@ -6,7 +6,7 @@ import os
 import re
 import formatter
 
-__doc__ = """This is wxSlash 1.0
+__doc__ = """This is wxSlash 1.1
 
     It's the obligatory Slashdot.org headlines reader that any modern
 widget set/library must have in order to be taken seriously :-)
@@ -17,7 +17,7 @@ friendly format. It then displays said headlines in a wxWindows list control.
 
     You can read articles using either Python's html library or an external
 browser. Uncheck the 'browser->internal' menu item to use the latter option.
-Use the settings dialog box to set how external browser is started.
+Use the settings dialog box to set which external browser is started.
 
     This code is available under the wxWindows license, see elsewhere. If you
 modify this code, be aware of the fact that slashdot.org's maintainer,
@@ -148,30 +148,20 @@ class AppStatusBar(wxStatusBar):
     def __init__(self, parent):
         wxStatusBar.__init__(self,parent, -1)
         self.SetFieldsCount(2)
-        self.SetStatusWidths([100,-1])
+        self.SetStatusWidths([-1, 100])
         self.but = wxButton(self, 1001, "Refresh")
         EVT_BUTTON(self, 1001, parent.OnViewRefresh)
         self.OnSize(None)
 
     def logprint(self,x):
-        self.SetStatusText(x,1)
+        self.SetStatusText(x,0)
 
     def OnSize(self, event):
-        rect = self.GetFieldRect(0)
+        rect = self.GetFieldRect(1)
         self.but.SetPosition(wxPoint(rect.x+2, rect.y+2))
-	# The width/height we get is false. Why? Now I use a stupid trick:
-	rect2 = self.GetFieldRect(1)
-	rect.width = rect2.x - 8;
-	rect.height = 25;
         self.but.SetSize(wxSize(rect.width-4, rect.height-4))
 
 # This is a simple timer class to start a function after a short delay;
-# For example, if you're about to perform function f which may take a long
-# time, write "Please wait" in the statusbar, then create a QuickTimer(f)
-# object to automatically call f after a short delay. That way, wxWindows
-# will get a chance to update the statusbar before the long function is
-# called.
-# FIXME: can this be done better using an OnIdle kind of thing?
 class QuickTimer(wxTimer):
     def __init__(self, func, wait=100):
 	wxTimer.__init__(self)
@@ -219,8 +209,16 @@ class AppFrame(wxFrame):
 
         self.SetMenuBar(self.mainmenu)
 
-        self.BrowserSettings = "netscape -remote 'OpenURL(%s, new_window)'"
-
+	if wxPlatform == '__WXGTK__':
+	    # I like lynx. Also Netscape 4.5 doesn't react to my cmdline opts
+	    self.BrowserSettings = "xterm -e lynx %s &"
+	elif wxPlatform == '__WXMSW__':
+	    # netscape 4.x likes to hang out here...
+	    self.BrowserSettings = '\progra~1\Netscape\Communicator\Program\netscape.exe %s'
+	else:
+	    # a wild guess...
+	    self.BrowserSettings = 'netscape %s'
+	    
 	# A status bar to tell people what's happening
 	self.sb = AppStatusBar(self)
         self.SetStatusBar(self.sb)
@@ -239,7 +237,9 @@ class AppFrame(wxFrame):
         EVT_LIST_ITEM_SELECTED(self, 1100, self.OnItemSelected)
 
 	self.logprint("Connecting to slashdot... Please wait.")
-	# Need a longer time here. Don't really know why
+	# wxYield doesn't yet work here. That's why we use a timer
+	# to make sure that we see some GUI stuff before the slashdot
+	# file is transfered.
 	self.timer = QuickTimer(self.DoRefresh, 1000)
 
     def logprint(self, x):
@@ -257,16 +257,17 @@ class AppFrame(wxFrame):
         i = 0;
         for article in art_list:
             self.list.InsertStringItem(i, article[0])
-            self.list.SetItemString(i, 1, article[2])
-            self.list.SetItemString(i, 2, article[3])
-            self.list.SetItemString(i, 3, article[6])
+            self.list.SetStringItem(i, 1, article[2])
+            self.list.SetStringItem(i, 2, article[3])
+            self.list.SetStringItem(i, 3, article[6])
             self.url.append(article[1])
             i = i + 1
 	self.logprint("File retrieved OK.")
 
     def OnViewRefresh(self, event):
-	self.timer = QuickTimer(self.DoRefresh)
 	self.logprint("Connecting to slashdot... Please wait.");
+	wxYield()
+	self.DoRefresh()
 
     def DoViewIndex(self):
         if self.UseInternal:
@@ -280,7 +281,8 @@ class AppFrame(wxFrame):
 
     def OnViewIndex(self, event):
 	self.logprint("Starting browser... Please wait.")
-	self.timer = QuickTimer(self.DoViewIndex)
+	wxYield()
+	self.DoViewIndex()
 
     def DoViewArticle(self):
         if self.current<0: return
@@ -295,7 +297,8 @@ class AppFrame(wxFrame):
 
     def OnViewArticle(self, event):
 	self.logprint("Starting browser... Please wait.")
-	self.timer = QuickTimer(self.DoViewArticle)
+	wxYield()
+	self.DoViewArticle()
 
     def OnBrowserInternal(self, event):
         if self.mainmenu.Checked(220):
