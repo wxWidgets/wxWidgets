@@ -104,6 +104,6 @@ test: example.exe minigzip.exe
 	echo hello world | minigzip | minigzip -d 
 
 clean:
-	erase *.obj
-	erase *.exe
-    erase $(LIBTARGET)
+	-erase *.obj
+	-erase *.exe
+   -erase $(LIBTARGET)
