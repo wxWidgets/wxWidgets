@@ -37,9 +37,12 @@ IMPLEMENT_CLASS(wxBoxSizer, wxSizer)
 #if wxUSE_STATBOX
 IMPLEMENT_CLASS(wxStaticBoxSizer, wxBoxSizer)
 #endif
+#if wxUSE_BOOKCTRL
+IMPLEMENT_CLASS(wxBookCtrlSizer, wxSizer)
 #if wxUSE_NOTEBOOK
-IMPLEMENT_CLASS(wxNotebookSizer, wxSizer)
-#endif
+IMPLEMENT_CLASS(wxNotebookSizer, wxBookCtrlSizer)
+#endif // wxUSE_NOTEBOOK
+#endif // wxUSE_BOOKCTRL
 
 WX_DEFINE_EXPORTED_LIST( wxSizerItemList );
 
@@ -1555,31 +1558,31 @@ wxSize wxStaticBoxSizer::CalcMin()
 
 #endif // wxUSE_STATBOX
 
-//---------------------------------------------------------------------------
+// ----------------------------------------------------------------------------
 // wxNotebookSizer
-//---------------------------------------------------------------------------
+// ----------------------------------------------------------------------------
 
-#if wxUSE_NOTEBOOK
+#if wxUSE_BOOKCTRL
 
-wxNotebookSizer::wxNotebookSizer( wxNotebook *nb )
-    : m_notebook( nb )
+wxBookCtrlSizer::wxBookCtrlSizer(wxBookCtrl *bookctrl)
+               : m_bookctrl(bookctrl)
 {
-    wxASSERT_MSG( nb, wxT("wxNotebookSizer needs a notebook") );
+    wxASSERT_MSG( bookctrl, wxT("wxBookCtrlSizer needs a control") );
 }
 
-void wxNotebookSizer::RecalcSizes()
+void wxBookCtrlSizer::RecalcSizes()
 {
-    m_notebook->SetSize( m_position.x, m_position.y, m_size.x, m_size.y );
+    m_bookctrl->SetSize( m_position.x, m_position.y, m_size.x, m_size.y );
 }
 
-wxSize wxNotebookSizer::CalcMin()
+wxSize wxBookCtrlSizer::CalcMin()
 {
-    wxSize sizeBorder = m_notebook->CalcSizeFromPage(wxSize(0, 0));
+    wxSize sizeBorder = m_bookctrl->CalcSizeFromPage(wxSize(0, 0));
 
     sizeBorder.x += 5;
     sizeBorder.y += 5;
 
-    if (m_notebook->GetChildren().GetCount() == 0)
+    if ( m_bookctrl->GetPageCount() == 0 )
     {
         return wxSize(sizeBorder.x + 10, sizeBorder.y + 10);
     }
@@ -1587,7 +1590,8 @@ wxSize wxNotebookSizer::CalcMin()
     int maxX = 0;
     int maxY = 0;
 
-    wxWindowList::compatibility_iterator node = m_notebook->GetChildren().GetFirst();
+    wxWindowList::compatibility_iterator
+        node = m_bookctrl->GetChildren().GetFirst();
     while (node)
     {
         wxWindow *item = node->GetData();
@@ -1609,6 +1613,5 @@ wxSize wxNotebookSizer::CalcMin()
     return wxSize( maxX, maxY ) + sizeBorder;
 }
 
-#endif // wxUSE_NOTEBOOK
+#endif // wxUSE_BOOKCTRL
 
-// vi:sts=4:sw=4:et

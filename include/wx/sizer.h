@@ -499,27 +499,47 @@ private:
 
 #endif // wxUSE_STATBOX
 
-//---------------------------------------------------------------------------
-// wxNotebookSizer
-//---------------------------------------------------------------------------
+// ----------------------------------------------------------------------------
+// wxBookCtrlSizer
+// ----------------------------------------------------------------------------
+
+#if wxUSE_BOOKCTRL
+
+// this sizer works with wxNotebook/wxListbook/... and sizes the control to
+// fit its pages
+class WXDLLEXPORT wxBookCtrl;
+
+class WXDLLEXPORT wxBookCtrlSizer : public wxSizer
+{
+public:
+    wxBookCtrlSizer(wxBookCtrl *bookctrl);
+
+    virtual void RecalcSizes();
+    virtual wxSize CalcMin();
+
+    wxBookCtrl *GetControl() const { return m_bookctrl; }
+
+protected:
+    wxBookCtrl *m_bookctrl;
+
+private:
+    DECLARE_CLASS(wxBookCtrlSizer)
+    DECLARE_NO_COPY_CLASS(wxBookCtrlSizer)
+};
+
 
 #if wxUSE_NOTEBOOK
 
+// before wxBookCtrl we only had wxNotebookSizer, keep it for backwards
+// compatibility
 class WXDLLEXPORT wxNotebook;
 
-class WXDLLEXPORT wxNotebookSizer: public wxSizer
+class WXDLLEXPORT wxNotebookSizer : public wxBookCtrlSizer
 {
 public:
-    wxNotebookSizer( wxNotebook *nb );
+    wxNotebookSizer(wxNotebook *nb);
 
-    void RecalcSizes();
-    wxSize CalcMin();
-
-    wxNotebook *GetNotebook() const
-        { return m_notebook; }
-
-protected:
-    wxNotebook   *m_notebook;
+    wxNotebook *GetNotebook() const { return (wxNotebook *)m_bookctrl; }
 
 private:
     DECLARE_CLASS(wxNotebookSizer)
@@ -528,6 +548,7 @@ private:
 
 #endif // wxUSE_NOTEBOOK
 
+#endif // wxUSE_BOOKCTRL
 
-#endif
-  // __WXSIZER_H__
+#endif // __WXSIZER_H__
+
