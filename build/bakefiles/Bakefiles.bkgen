@@ -44,6 +44,9 @@
     <add-flags files="wx.bkl" formats="borland">
         -o../msw/makefile.bcc
     </add-flags>
+    <add-flags files="wx.bkl" formats="dmars">
+        -o../msw/makefile.dmc
+    </add-flags>
     <add-flags files="wx.bkl" formats="mingw">
         -o../msw/makefile.gcc
     </add-flags>
@@ -60,7 +63,7 @@
         -o../../contrib/src/$(INPUT_FILE_BASENAME_NOEXT)/Makefile.in
     </add-flags>
     <add-flags files="../../contrib/build/*/*.bkl"
-               formats="mingw,borland,watcom,msvc,msvc6prj">
+               formats="mingw,borland,dmars,watcom,msvc,msvc6prj">
         -DSRCDIR=../../src/$(INPUT_FILE_BASENAME_NOEXT)
     </add-flags>
 
@@ -81,7 +84,7 @@
 
     <!-- Makefile specific settings: -->
 
-    <add-flags formats="borland,mingw,msvc,watcom">
+    <add-flags formats="borland,dmars,mingw,msvc,watcom">
         -DWRITE_OPTIONS_FILE=0
     </add-flags>
     <del-flags files="wx.bkl">

@@ -159,8 +159,8 @@ where object files are stored as well as the location of
 compiled .lib files and setup.h under the lib/ toplevel directory.
         </description>
     </option>
-
-
+    
+    
     <!-- ================================================================== -->
     <!--                             Autoconf                               -->
     <!-- ================================================================== -->
@@ -188,7 +188,7 @@ compiled .lib files and setup.h under the lib/ toplevel directory.
 
     
     <!-- ================================================================== -->
-    <!--                         Windows compilers                          -->
+    <!--                         windows compilers                          -->
     <!-- ================================================================== -->
 
     <if cond="FORMAT!='autoconf'">
@@ -243,8 +243,6 @@ Set the version of your Mingw installation here.
         <set var="EXTRACFLAGS">$(GCCFLAGS) -DHAVE_W32API_H</set>
     </if>
 
-    
-
     <!-- ================================================================== -->
     <!--            Project files - hardcode some defaults                  -->
     <!-- ================================================================== -->
@@ -261,6 +259,17 @@ Set the version of your Mingw installation here.
         <set var="DEBUG_INFO">default</set>
         <set var="DEBUG_FLAG">default</set>
         <set var="MSLU">0</set>
+    </if>
+
+
+    <!-- DigitalMars make is braindead, it doesn't have conditional
+         processing: -->
+    <if cond="FORMAT=='dmars'">
+        <set var="RUNTIME_LIBS">static</set>
+        <set var="BUILD">debug</set>
+        <set var="SHARED">0</set>
+        <set var="WXUNIV">0</set>
+        <set var="UNICODE">0</set>
     </if>
 
 </makefile>
