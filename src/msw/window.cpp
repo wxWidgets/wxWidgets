@@ -304,9 +304,11 @@ bool wxWindow::Create(wxWindow *parent, wxWindowID id,
     DWORD msflags = 0;
     if ( style & wxBORDER )
         msflags |= WS_BORDER;
+/* Not appropriate for non-frame/dialog windows, and
+   may clash with other window styles.
     if ( style & wxTHICK_FRAME )
         msflags |= WS_THICKFRAME;
-
+*/
     //msflags |= WS_CHILD /* | WS_CLIPSIBLINGS */  | WS_VISIBLE;
     msflags |= WS_CHILD | WS_VISIBLE;
     if ( style & wxCLIP_CHILDREN )
