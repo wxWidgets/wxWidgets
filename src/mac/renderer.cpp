@@ -244,11 +244,40 @@ wxRendererMac::DrawSplitterSash(wxWindow *win,
     //     a brushed metal one as they look quite differently... this is
     //     completely bogus anyhow, of course (TODO)
 
+#if 0
     dc.SetPen(*wxLIGHT_GREY_PEN);
     dc.SetBrush(*wxWHITE_BRUSH);
     if ( orient == wxVERTICAL )
         dc.DrawRectangle(position, 0, 7, size.y);
     else
         dc.DrawRectangle(0, position, size.x, 7);
+#else
+    // Do the gradient fill:
+    static int grayValues[] = 
+    {
+        0xA0, 0xF6, 0xED, 0xE4, 0xE2, 0xD0, 0xA0
+    };
+    dc.SetBrush( *wxTRANSPARENT_BRUSH );
+    if ( orient == wxVERTICAL )
+    {
+        int i;
+        for (i=0; i < (int)WXSIZEOF(grayValues); i++) 
+        {
+            dc.SetPen( wxPen( wxColour( grayValues[i] , grayValues[i] , grayValues[i] ),
+                            1 , wxSOLID ) );
+            dc.DrawRectangle( position+i, 0, 1, size.y );
+        }
+    }
+    else
+    {
+        int i;
+        for (i=0; i < (int)WXSIZEOF(grayValues); i++) 
+        {
+            dc.SetPen( wxPen( wxColour( grayValues[i] , grayValues[i] , grayValues[i] ),
+                            1 , wxSOLID ) );
+            dc.DrawRectangle( 0, position+i, size.x, 1 );
+        }
+    }
+#endif
 }
 
