@@ -106,3 +106,5 @@ Checking in configure.in;
 /pack/cvsroots/wxwindows/wxWindows/configure.in,v  <--  configure.in
 new revision: 1.666; previous revision: 1.665
 
+11. Ukrainian translation (locale/uk.po)
+

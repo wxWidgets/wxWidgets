@@ -23,6 +23,7 @@ All:
 - bug in wxDateTime with timezones on systems with tm_gmtoff in struct tm fixed
 - added wx/math.h (John Labenski)
 - added Catalan translations (Pau Bosch i Crespo)
+- added Ukrainian translations (Eugene Manko)
 - fixed bug with deleting entries at root level in wxFileConfig
 
 wxBase:
