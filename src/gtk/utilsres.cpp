@@ -153,10 +153,10 @@ static void wxXMergeDatabases()
         environment = GetIniFile(filename, (const wxChar *) NULL);
         size_t len = wxStrlen(environment);
 
-        char hostbuf[1024];
+        wxChar hostbuf[1024];
         (void)wxGetHostName(hostbuf, WXSIZEOF(hostbuf) - len);
 
-        wxStrcat(environment, wxConvCurrent->cMB2WX(hostbuf));
+        wxStrcat(environment, hostbuf);
     }
 
     if ((homeDB = XrmGetFileDatabase(wxConvCurrent->cWX2MB(environment))))
