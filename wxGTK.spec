@@ -180,6 +180,7 @@ wx/datetime.inl
 wx/datstrm.h
 wx/dde.h
 wx/debug.h
+wx/debugrpt.h
 wx/defs.h
 wx/dir.h
 wx/dlimpexp.h
@@ -203,6 +204,7 @@ wx/fs_zip.h
 wx/hash.h
 wx/hashmap.h
 wx/hashset.h
+wx/html/forcelnk.h
 wx/iconloc.h
 wx/init.h
 wx/intl.h
