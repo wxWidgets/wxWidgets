@@ -1,8 +1,8 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        uri.h
-// Purpose:     wxURI - Class for parsing URIs 
+// Purpose:     wxURI - Class for parsing URIs
 // Author:      Ryan Norton
-// Modified By: 
+// Modified By:
 // Created:     07/01/2004
 // RCS-ID:      $Id$
 // Licence:     wxWindows
@@ -22,10 +22,10 @@
 // Host Type that the server component can be
 enum wxURIHostType
 {
-    wxURI_REGNAME,		// Host is a normal register name (www.mysite.com etc.)
-    wxURI_IPV4ADDRESS,	// Host is a version 4 ip address (192.168.1.100)
+    wxURI_REGNAME,      // Host is a normal register name (www.mysite.com etc.)
+    wxURI_IPV4ADDRESS,  // Host is a version 4 ip address (192.168.1.100)
     wxURI_IPV6ADDRESS,  // Host is a version 6 ip address [aa:aa:aa:aa::aa:aa]:5050
-    wxURI_IPVFUTURE		// Host is a future ip address (wxURI is unsure what kind)
+    wxURI_IPVFUTURE     // Host is a future ip address (wxURI is unsure what kind)
 };
 
 // Component Flags
@@ -70,7 +70,7 @@ public:
     bool HasPath() const        {   return (m_fields & wxURI_PATH) == wxURI_PATH;           }
     bool HasQuery() const       {   return (m_fields & wxURI_QUERY) == wxURI_QUERY;         }
     bool HasFragment() const    {   return (m_fields & wxURI_FRAGMENT) == wxURI_FRAGMENT;   }
-    
+
     const wxString& GetScheme() const           {   return m_scheme;    }
     const wxString& GetPath() const             {   return m_path;      }
     const wxString& GetQuery() const            {   return m_query;     }
@@ -83,7 +83,7 @@ public:
     //Note that the following two get functions are explicitly depreciated by RFC 2396
     wxString GetUser() const;
     wxString GetPassword() const;
-    
+
     wxString BuildURI() const;
     wxString BuildUnescapedURI() const;
 
@@ -95,7 +95,7 @@ public:
     bool operator == (const wxURI& uri) const;
 
     static wxString Unescape (const wxString& szEscapedURI);
-    
+
 protected:
     wxURI& Assign(const wxURI& uri);
 
