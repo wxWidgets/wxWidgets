@@ -796,7 +796,7 @@ void wxImage::SetAlpha(int x, int y, unsigned char alpha)
     M_IMGDATA->m_alpha[y*w + x] = alpha;
 }
 
-unsigned char wxImage::GetAlpha(int x, int y)
+unsigned char wxImage::GetAlpha(int x, int y) const
 {
     wxCHECK_MSG( Ok() && HasAlpha(), 0, wxT("invalid image or no alpha channel") );
 

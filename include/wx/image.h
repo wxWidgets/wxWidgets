@@ -198,7 +198,7 @@ public:
     unsigned char GetBlue( int x, int y ) const;
 
     void SetAlpha(int x, int y, unsigned char alpha);
-    unsigned char GetAlpha(int x, int y);
+    unsigned char GetAlpha(int x, int y) const;
 
     // find first colour that is not used in the image and has higher
     // RGB values than <startR,startG,startB>
