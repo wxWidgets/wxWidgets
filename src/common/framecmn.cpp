@@ -284,29 +284,7 @@ void wxFrameBase::OnCloseWindow(wxCloseEvent& WXUNUSED(event))
 void wxFrameBase::OnMenuHighlight(wxMenuEvent& event)
 {
 #if wxUSE_STATUSBAR
-    if ( GetStatusBar() )
-    {
-        // if no help string found, we will clear the status bar text
-        wxString helpString;
-
-        int menuId = event.GetMenuId();
-        if ( menuId != wxID_SEPARATOR && menuId != -2 /* wxID_TITLE */ )
-        {
-            wxMenuBar *menuBar = GetMenuBar();
-            if ( menuBar )
-            {
-                // it's ok if we don't find the item because it might belong
-                // to the popup menu
-                wxMenuItem *item = menuBar->FindItem(menuId);
-                if ( item )
-                    helpString = item->GetHelp();
-            }
-        }
-
-        // set status text even if the string is empty - this will at least
-        // remove the string from the item which was previously selected
-        SetStatusText(helpString);
-    }
+    (void)ShowMenuHelp(GetStatusBar(), event.GetMenuId());
 #endif // wxUSE_STATUSBAR
 }
 
@@ -370,6 +348,34 @@ void wxFrameBase::SetStatusWidths(int n, const int widths_field[] )
     m_frameStatusBar->SetStatusWidths(n, widths_field);
 
     PositionStatusBar();
+}
+
+bool wxFrameBase::ShowMenuHelp(wxStatusBar *statbar, int menuId)
+{
+    if ( !statbar )
+        return FALSE;
+
+    // if no help string found, we will clear the status bar text
+    wxString helpString;
+
+    if ( menuId != wxID_SEPARATOR && menuId != -2 /* wxID_TITLE */ )
+    {
+        wxMenuBar *menuBar = GetMenuBar();
+        if ( menuBar )
+        {
+            // it's ok if we don't find the item because it might belong
+            // to the popup menu
+            wxMenuItem *item = menuBar->FindItem(menuId);
+            if ( item )
+                helpString = item->GetHelp();
+        }
+    }
+
+    // set status text even if the string is empty - this will at least
+    // remove the string from the item which was previously selected
+    statbar->SetStatusText(helpString);
+
+    return !helpString.IsEmpty();
 }
 
 #endif // wxUSE_STATUSBAR

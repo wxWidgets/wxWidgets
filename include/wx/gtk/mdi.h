@@ -152,9 +152,10 @@ public:
     
     virtual bool IsTopLevel() const { return FALSE; }
     
-    void OnActivate( wxActivateEvent &event );
+    void OnActivate( wxActivateEvent& event );
+    void OnMenuHighlight( wxMenuEvent& event );
     
-  // implementation
+    // implementation
   
     wxMenuBar         *m_menuBar;
     GtkNotebookPage   *m_page;

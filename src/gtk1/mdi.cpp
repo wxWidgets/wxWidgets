@@ -303,6 +303,7 @@ IMPLEMENT_DYNAMIC_CLASS(wxMDIChildFrame,wxFrame)
 
 BEGIN_EVENT_TABLE(wxMDIChildFrame, wxFrame)
     EVT_ACTIVATE(wxMDIChildFrame::OnActivate)
+    EVT_MENU_HIGHLIGHT_ALL(wxMDIChildFrame::OnMenuHighlight)
 END_EVENT_TABLE()
 
 wxMDIChildFrame::wxMDIChildFrame()
@@ -388,8 +389,21 @@ void wxMDIChildFrame::Activate()
 #endif
 }
 
-void wxMDIChildFrame::OnActivate( wxActivateEvent &WXUNUSED(event) )
+void wxMDIChildFrame::OnActivate( wxActivateEvent& WXUNUSED(event) )
 {
+}
+
+void wxMDIChildFrame::OnMenuHighlight( wxMenuEvent& event )
+{
+#if wxUSE_STATUSBAR
+    wxMDIParentFrame *mdi_frame = (wxMDIParentFrame*)m_parent->GetParent();
+    if ( !ShowMenuHelp(mdi_frame->GetStatusBar(), event.GetMenuId()) )
+    {
+        // we don't have any help text for this item, but may be the MDI frame
+        // does?
+        mdi_frame->OnMenuHighlight(event);
+    }
+#endif // wxUSE_STATUSBAR
 }
 
 //-----------------------------------------------------------------------------
