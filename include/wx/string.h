@@ -1031,6 +1031,62 @@ public:
 // wxStringBuffer: a tiny class allowing to get a writable pointer into string
 // ----------------------------------------------------------------------------
 
+#if wxUSE_STL
+
+class WXDLLIMPEXP_BASE wxStringBuffer
+{
+public:
+    wxStringBuffer(wxString& str, size_t lenWanted = 1024)
+        : m_str(str), m_buf(lenWanted), m_len(lenWanted)
+        { }
+
+    ~wxStringBuffer() { m_str.assign(m_buf.data(), m_len); }
+
+    operator wxChar*() { return m_buf.data(); }
+
+private:
+    wxString& m_str;
+#if wxUSE_UNICODE
+    wxWCharBuffer m_buf;
+#else
+    wxCharBuffer m_buf;
+#endif
+    size_t m_len;
+
+    DECLARE_NO_COPY_CLASS(wxStringBuffer)
+};
+
+class WXDLLIMPEXP_BASE wxStringBufferLength
+{
+public:
+    wxStringBufferLength(wxString& str, size_t lenWanted = 1024)
+        : m_str(str), m_buf(lenWanted), m_len(0), m_lenSet(false)
+        { }
+
+    ~wxStringBufferLength()
+    {
+        wxASSERT(m_lenSet);
+        m_str.assign(m_buf.data(), m_len);
+    }
+
+    operator wxChar*() { return m_buf.data(); }
+    void SetLength(size_t length) { m_len = length; m_lenSet = true; }
+
+private:
+    wxString& m_str;
+#if wxUSE_UNICODE
+    wxWCharBuffer m_buf;
+#else
+    wxCharBuffer  m_buf;
+#endif
+    size_t        m_len;
+    bool          m_lenSet;
+
+    DECLARE_NO_COPY_CLASS(wxStringBufferLength)
+};
+
+#else // if !wxUSE_STL
+
 class WXDLLIMPEXP_BASE wxStringBuffer
 {
 public:
@@ -1048,6 +1104,33 @@ private:
 
     DECLARE_NO_COPY_CLASS(wxStringBuffer)
 };
+
+class WXDLLIMPEXP_BASE wxStringBufferLength
+{
+public:
+    wxStringBufferLength(wxString& str, size_t lenWanted = 1024)
+        : m_str(str), m_buf(NULL), m_len(0), m_lenSet(false)
+        { m_buf = m_str.GetWriteBuf(lenWanted); }
+
+    ~wxStringBufferLength()
+    {
+        wxASSERT(m_lenSet);
+        m_str.UngetWriteBuf(m_len);
+    }
+
+    operator wxChar*() const { return m_buf; }
+    void SetLength(size_t length) { m_len = length; m_lenSet = true; }
+
+private:
+    wxString& m_str;
+    wxChar   *m_buf;
+    size_t    m_len;
+    bool      m_lenSet;
+
+    DECLARE_NO_COPY_CLASS(wxStringBufferLength)
+};
+
+#endif // !wxUSE_STL
 
 // ---------------------------------------------------------------------------
 // wxString comparison functions: operator versions are always case sensitive
