@@ -206,14 +206,16 @@ void wxDbConnectInf::SetDsn(const wxString &dsn)
 {
     wxASSERT(dsn.Length() < sizeof(Dsn));
 
-    wxStrcpy(Dsn,dsn);
+    wxStrncpy(Dsn, dsn, sizeof(Dsn)-1);
+    Dsn[sizeof(Dsn)-1] = 0;  // Prevent buffer overrun
 }  // wxDbConnectInf::SetDsn()
 
 
 void wxDbConnectInf::SetUserID(const wxString &uid)
 {
     wxASSERT(uid.Length() < sizeof(Uid));
-    wxStrcpy(Uid, uid);
+    wxStrncpy(Uid, uid, sizeof(Uid)-1);
+    Uid[sizeof(Uid)-1] = 0;  // Prevent buffer overrun
 }  // wxDbConnectInf::SetUserID()
 
 
@@ -221,7 +223,8 @@ void wxDbConnectInf::SetPassword(const wxString &password)
 {
     wxASSERT(password.Length() < sizeof(AuthStr));
 
-    wxStrcpy(AuthStr, password);
+    wxStrncpy(AuthStr, password, sizeof(AuthStr)-1);
+    AuthStr[sizeof(AuthStr)-1] = 0;  // Prevent buffer overrun
 }  // wxDbConnectInf::SetPassword()
 
 void wxDbConnectInf::SetConnectionStr(const wxString &connectStr)
@@ -230,7 +233,8 @@ void wxDbConnectInf::SetConnectionStr(const wxString &connectStr)
 
     useConnectionStr = wxStrlen(connectStr) > 0;
 
-    wxStrcpy(ConnectionStr, connectStr);
+    wxStrncpy(ConnectionStr, connectStr, sizeof(ConnectionStr)-1);
+    ConnectionStr[sizeof(ConnectionStr)-1] = 0;  // Prevent buffer overrun
 }  // wxDbConnectInf::SetConnectionStr()
 
 
@@ -1860,7 +1864,8 @@ void wxDb::logError(const wxString &errMsg, const wxString &SQLState)
         pLast--;
     }
 
-    wxStrcpy(errorList[pLast], errMsg);
+    wxStrncpy(errorList[pLast], errMsg, DB_MAX_ERROR_MSG_LEN);
+    errorList[pLast][DB_MAX_ERROR_MSG_LEN] = 0;
 
     if (SQLState.Length())
         if ((dbStatus = TranslateSqlState(SQLState)) != DB_ERR_FUNCTION_SEQUENCE_ERROR)
@@ -2241,7 +2246,7 @@ bool wxDb::ExecSql(const wxString &pSqlStmt, wxDbColInf** columns, short& numcol
     SDWORD Sdword;
     wxDbColInf* pColInf = new wxDbColInf[noCols];
 
-    //fill in column information (name, datatype)
+    // Fill in column information (name, datatype)
     for (colNum = 0; colNum < noCols; colNum++)
     {
         if (SQLColAttributes(hstmt, (UWORD)(colNum+1), SQL_COLUMN_NAME,
@@ -2254,6 +2259,7 @@ bool wxDb::ExecSql(const wxString &pSqlStmt, wxDbColInf** columns, short& numcol
         }
 
         wxStrncpy(pColInf[colNum].colName, name, DB_MAX_COLUMN_NAME_LEN);
+        pColInf[colNum].colName[DB_MAX_COLUMN_NAME_LEN] = 0;  // Prevent buffer overrun
 
         if (SQLColAttributes(hstmt, (UWORD)(colNum+1), SQL_COLUMN_TYPE,
             NULL, 0, &Sword, &Sdword) != SQL_SUCCESS)
@@ -2427,7 +2433,10 @@ int wxDb::GetKeyFields(const wxString &tableName, wxDbColInf* colInf, UWORD noCo
         for (i=0; i<noCols; i++)
         {   // Find the Column name
             if (!wxStrcmp(colInf[i].colName, szPkCol))           // We have found the Column, store the Information
-                wxStrcpy(colInf[i].PkTableName, tempStr.c_str());  // Name of the Tables where this Primary Key is used as a Foreign Key
+            {
+                wxStrncpy(colInf[i].PkTableName, tempStr.c_str(), DB_MAX_TABLE_NAME_LEN);  // Name of the Tables where this Primary Key is used as a Foreign Key
+                colInf[i].PkTableName[DB_MAX_TABLE_NAME_LEN] = 0;  // Prevent buffer overrun
+            }
         }
     }  // if
 
@@ -2463,7 +2472,8 @@ int wxDb::GetKeyFields(const wxString &tableName, wxDbColInf* colInf, UWORD noCo
                 if (!wxStrcmp(colInf[i].colName,szFkCol))       // We have found the (Foreign Key) Column
                 {
                     colInf[i].FkCol = iKeySeq;                  // Which Foreign Key is this (first, second usw.) ?
-                    wxStrcpy(colInf[i].FkTableName,szPkTable);  // Name of the Table where this Foriegn is the Primary Key
+                    wxStrncpy(colInf[i].FkTableName, szFkTable, DB_MAX_TABLE_NAME_LEN);  // Name of the Table where this Foriegn is the Primary Key
+                    colInf[i].FkTableName[DB_MAX_TABLE_NAME_LEN] = 0;  // Prevent buffer overrun
                 } // if
             }  // for
         }  // if
@@ -2532,8 +2542,8 @@ wxDbColInf *wxDb::GetColumns(wxChar *tableName[], const wxChar *userID)
             if (!colInf)
                 break;
             // Mark the end of the array
-            wxStrcpy(colInf[noCols].tableName,wxEmptyString);
-            wxStrcpy(colInf[noCols].colName,wxEmptyString);
+            wxStrcpy(colInf[noCols].tableName, wxEmptyString);
+            wxStrcpy(colInf[noCols].colName, wxEmptyString);
             colInf[noCols].sqlDataType = 0;
         }
         // Loop through each table name
@@ -2693,7 +2703,7 @@ wxDbColInf *wxDb::GetColumns(const wxString &tableName, UWORD *numCols, const wx
             // Mark the end of the array
             wxStrcpy(colInf[noCols].tableName, wxEmptyString);
             wxStrcpy(colInf[noCols].colName, wxEmptyString);
-            colInf[noCols].sqlDataType  = 0;
+            colInf[noCols].sqlDataType = 0;
         }
 
         TableName = tableName;
@@ -2886,7 +2896,7 @@ wxDbColInf *wxDb::GetColumns(wxChar *tableName[], const wxChar *userID)
     // Mark the end of the array
     wxStrcpy(colInf[noCols].tableName, wxEmptyString);
     wxStrcpy(colInf[noCols].colName, wxEmptyString);
-    colInf[noCols].sqlDataType  = 0;
+    colInf[noCols].sqlDataType = 0;
 
     // Merge ...
     int offset = 0;
@@ -4234,11 +4244,11 @@ const wxChar WXDLLIMPEXP_ODBC *wxDbLogExtendedErrorMsg(const wxChar *userText,
         if (pDb->errorList[i])
         {
             msg.Append(pDb->errorList[i]);
-            if (wxStrcmp(pDb->errorList[i],wxT("")) != 0)
+            if (wxStrcmp(pDb->errorList[i], wxEmptyString)) != 0)
                 msg.Append(wxT("\n"));
             // Clear the errmsg buffer so the next error will not
             // end up showing the previous error that have occurred
-            wxStrcpy(pDb->errorList[i],wxT(""));
+            wxStrcpy(pDb->errorList[i], wxEmptyString);
         }
     }
     msg += wxT("\n");
