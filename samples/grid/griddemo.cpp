@@ -347,7 +347,6 @@ GridFrame::GridFrame()
     SetSizer( topSizer );
 
     topSizer->Fit( this );
-    topSizer->SetSizeHints( this );
 
     Centre();
     SetDefaults();
