@@ -254,7 +254,9 @@ bool wxToolBar95::CreateTools()
     replaceBitmap.nIDNew = (UINT) (HBITMAP) m_hBitmap;
     replaceBitmap.nButtons = noButtons;
     if (::SendMessage((HWND) GetHWND(), TB_REPLACEBITMAP, (WPARAM) 0, (LPARAM) &replaceBitmap) == -1)
+    {
       wxFAIL_MSG(_T("Could not add bitmap to toolbar"));
+    }
 
     ::DeleteObject((HBITMAP) oldToolBarBitmap);
 
@@ -273,7 +275,9 @@ bool wxToolBar95::CreateTools()
     addBitmap.hInst = 0;
     addBitmap.nID = (UINT)m_hBitmap;
     if (::SendMessage((HWND) GetHWND(), TB_ADDBITMAP, (WPARAM) noButtons, (LPARAM) &addBitmap) == -1)
+    {
       wxFAIL_MSG(_T("Could not add bitmap to toolbar"));
+    }
   }
 
   // Now add the buttons.
