@@ -21,6 +21,7 @@
         <wx-lib>ogl</wx-lib>
         <wx-lib>deprecated</wx-lib>
         <wx-lib>adv</wx-lib>
+        <wx-lib>html</wx-lib>
         <wx-lib>core</wx-lib>
         <wx-lib>base</wx-lib>
         <win32-res>studio.rc</win32-res>
