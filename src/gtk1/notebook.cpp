@@ -74,34 +74,12 @@ public:
         m_box = (GtkWidget *) NULL;
     }
     
-    bool SetFont(const wxFont& font);
-
     wxString           m_text;
     int                m_image;
     GtkNotebookPage   *m_page;
     GtkLabel          *m_label;
     GtkWidget         *m_box;     // in which the label and image are packed
 };
-
-
-bool wxGtkNotebookPage::SetFont(const wxFont& font)
-{
-    if (!m_label)
-		return false;
-
-#ifdef __WXGTK20__
-    gtk_widget_modify_font(GTK_WIDGET(m_label),
-                           font.GetNativeFontInfo()->description);
-#else
-    GtkRcStyle *style = gtk_rc_style_new();
-    style->fontset_name = 
-        g_strdup(font.GetNativeFontInfo()->GetXFontName().c_str());
-    gtk_widget_modify_style(GTK_WIDGET(m_label), style);
-    gtk_rc_style_unref(style);
-#endif
-
-	return true;
-}
 
 
 #include "wx/listimpl.cpp"
@@ -690,6 +668,14 @@ bool wxNotebook::InsertPage( size_t position,
     nb_page->m_label = GTK_LABEL( gtk_label_new(wxGTK_CONV(nb_page->m_text)) );
     gtk_box_pack_end( GTK_BOX(nb_page->m_box), GTK_WIDGET(nb_page->m_label), FALSE, FALSE, m_padding );
 
+    /* apply current style */
+    GtkRcStyle *style = CreateWidgetStyle();
+    if ( style )
+    {
+        gtk_widget_modify_style(GTK_WIDGET(nb_page->m_label), style);
+        gtk_rc_style_unref(style);
+    }    
+    
     /* show the label */
     gtk_widget_show( GTK_WIDGET(nb_page->m_label) );
     if (select && (m_pagesData.GetCount() > 1))
@@ -811,27 +797,16 @@ bool wxNotebook::DoPhase( int WXUNUSED(nPhase) )
 
 void wxNotebook::DoApplyWidgetStyle(GtkRcStyle *style)
 {
-    // TODO, font for labels etc
-    gtk_widget_modify_style( m_widget, style );
+    gtk_widget_modify_style(m_widget, style);
+    size_t cnt = m_pagesData.GetCount();
+    for (size_t i = 0; i < cnt; i++)
+        gtk_widget_modify_style(GTK_WIDGET(GetNotebookPage(i)->m_label), style);
 }
 
 bool wxNotebook::IsOwnGtkWindow( GdkWindow *window )
 {
     return ((m_widget->window == window) ||
             (NOTEBOOK_PANEL(m_widget) == window));
-}
-
-bool  wxNotebook::SetFont(const wxFont& font)
-{
-	bool rc=wxNotebookBase::SetFont(font);
-
-	if (rc)
-	{
-		size_t i;
-		for (i=0 ; i < m_pagesData.GetCount() ; i++)
-			GetNotebookPage(i)->SetFont(font);
-	}
-	return rc;
 }
 
 // static
