@@ -673,8 +673,18 @@ void wxWindowMac::MacUpdateControlFont()
 	    fontStyle.size = m_font.MacGetFontSize() ;
 	    fontStyle.flags = kControlUseFontMask | kControlUseFaceMask | kControlUseSizeMask ;
 	}
+
+    fontStyle.just = teJustLeft ;
+    fontStyle.flags |= kControlUseJustMask ;
+    if ( ( GetWindowStyle() & wxALIGN_MASK ) & wxALIGN_CENTER_HORIZONTAL )
+        fontStyle.just = teJustCenter ;
+    else if ( ( GetWindowStyle() & wxALIGN_MASK ) & wxALIGN_RIGHT )
+        fontStyle.just = teJustRight ;
+
+    
     fontStyle.foreColor = MAC_WXCOLORREF(GetForegroundColour().GetPixel() ) ;
     fontStyle.flags |= kControlUseForeColorMask ;
+	
 	::SetControlFontStyle( (ControlRef) m_macControl , &fontStyle );
 	Refresh() ;
 }
