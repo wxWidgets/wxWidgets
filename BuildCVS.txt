@@ -56,8 +56,8 @@ as ~/wxWindows
 Edit ~/wxWindows/src/make.env as you wish.
 -> type: cd ~/wxWindows/src/gtk
 -> type: cp ./setup0.h setup.h
--> type: make -f makefile.unx gtk
--> pray
+-> type: make
+
 
 III) Windows using configure
 ----------------------------------------

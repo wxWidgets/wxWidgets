@@ -13,64 +13,9 @@
 #
 # Makefile for libwx_gtk.a
 
-# GUI
-GUI = gtk
-
-# Replace this with your own path if necessary
 WXDIR = ../..
 
-# C++ compiler
-CC          = gcc
-
-# C compiler
-CCC         = gcc
-
-# Compiler for lex/yacc .c programs
-CCLEX       = $(CCC)
-
-LEX         = lex
-YACC        = yacc
-# Note: if using bison, use -y option for yacc compatibility
-# YACC      = bison -y
-MAKE        = make
-AROPTIONS   = ruv
-RANLIB      = ranlib
-
-# Debug/trace mode. 1 or more for debugging.
-DEBUG       = 1
-
-# Misc options
-CPPOPTIONS  = -D__WXGTK__ -D__WXDEBUG__ -D_REENTRANT -fno-rtti -fno-exceptions
-COPTIONS    = -D__WXGTK__ -D__WXDEBUG__ -D_REENTRANT
-CPPWARN     = -Wall
-CWARN       =
-OPTIMISE    = -O2 -fno-strength-reduce
-
-# object file suffix
-OBJSUFF     =o
-
-# no changes below this line
-
-GUIINCLUDES  = `gtk-config --cflags`
-
-WXINC       = -I$(WXDIR)/include
-WXLIB       = $(WXDIR)/lib/libwx_$(GUI).a
-INCLUDES    = $(WXINC) $(GUIINCLUDES) -I$(WXDIR)/src/png -I$(WXDIR)/src/jpeg -I$(WXDIR)/src/zlib
-
-CPPFLAGS    = $(INCLUDES) $(CPPOPTIONS) $(CPPWARN) $(OPTIMISE)
-CFLAGS      = $(INCLUDES) $(COPTIONS) $(CWARN) $(OPTIMISE)
-
-# Clears all default suffixes
-.SUFFIXES:	.o .cpp .c
-
-.c.o :
-	$(CCC) -c $(CFLAGS) -o $@ $<
-
-.cpp.o :
-	$(CC) -c $(CPPFLAGS) -o $@ $<
-
-.C.o :
-	$(CC) -c $(CPPFLAGS) -o $@ $<
+include $(WXDIR)/src/gtk.env
 
 # Subordinate library possibilities
 

@@ -4,8 +4,10 @@
 /*                                                                         */
 /* Version: $Id$                                                           */
 
-#ifndef __GTKSETUPH__
-#define __GTKSETUPH__
+/* This define (__WX_SETUP_H__) is used both to insure setup.h is included 
+ * only once and to indicate that we are building using configure. */
+#ifndef __WX_SETUP_H__
+#define __WX_SETUP_H__
 
 #ifdef __GNUG__
     #pragma interface
@@ -85,6 +87,7 @@
 /* #undef __WIN95__ */
 /* #undef __WIN32__ */
 /* #undef __GNUWIN32__ */
+/* #undef WINVER */
 
 /*
  * Supports bool type
@@ -280,7 +283,7 @@
  */
 #define wxUSE_TOOLBAR 1
 
-#ifdef __WXWINE__
+#if defined(__WXWINE__) || defined(__GNUWIN32__)
   #if wxUSE_TOOLBAR
     #define wxUSE_BUTTONBAR 1
   #endif
@@ -340,7 +343,7 @@
  * Use standard C++ streams if 1. If 0, use wxWin
  * streams implementation.
  */
-#define wxUSE_STD_IOSTREAM  0
+#define wxUSE_STD_IOSTREAM  1
 /*
  * wxLibrary class
  */
@@ -455,21 +458,21 @@
  * Use Apple Ieee-double converter
  */
 #define wxUSE_APPLE_IEEE 1
-/* 
+/*
  * Compatibility with 1.66 API.
  * Level 0: no backward compatibility, all new features
  * Level 1: wxDC, OnSize (etc.) compatibility, but
- * some new features such as event tables 
+ * some new features such as event tables
  */
 #define WXWIN_COMPATIBILITY 0
-/* 
- * Compatibility with 2.0 API. 
+/*
+ * Compatibility with 2.0 API.
  */
 #define WXWIN_COMPATIBILITY_2 1
 /*
  * Enables debugging: memory tracing, assert, etc., contains debug level
  */
-#define WXDEBUG 0
+#define WXDEBUG 1
 /*
  * Enables debugging version of wxObject::new and wxObject::delete (IF WXDEBUG)
  * WARNING: this code may not work with all architectures, especially
@@ -515,6 +518,29 @@
 #define wxUSE_MINIFRAME 1
 
 /*
+ * wxHTML
+ */
+#define wxUSE_HTML 1
+
+/*
+ * (virtual) filesystems code
+ */
+#define wxUSE_FS_INET 1
+#define wxUSE_FS_ZIP 1
+
+/*
+ * A class that shows info window when app is busy
+ * (works exactly like wxBusyCursor)
+ */
+#define wxUSE_BUSYINFO 1 
+
+/*
+ * Zip stream for accessing files stored inside .zip archives
+ */
+#define wxUSE_ZIPSTREAM 1
+
+ 
+/*
  * Disable this if your compiler can't cope
  * with omission of prototype parameters.
  */
@@ -524,9 +550,9 @@
  * You can use this setting to maintain backward compatibility.
  * If 0: will use const wherever possible.
  * If 1: will use const only where necessary
- *              for precompiled headers to work.
+ *       for precompiled headers to work.
  * If 2: will be totally backward compatible, but precompiled
- * headers may not work and program size will be larger.
+ *       headers may not work and program size will be larger.
  */
 #define CONST_COMPATIBILITY 0
 
@@ -605,6 +631,9 @@
 /* Define if you have the vsnprintf function.  */
 #define HAVE_VSNPRINTF 1
 
+/* Define if you have the vsscanf function.  */
+#define HAVE_VSSCANF 1
+
 /* Define if you have the <X11/XKBlib.h> header file.  */
 #define HAVE_X11_XKBLIB_H 1
 
@@ -639,4 +668,4 @@
 #define VERSION "2.1.0"
 
 
-#endif /* __GTKSETUPH__ */
+#endif /* __WX_SETUP_H__ */

@@ -888,7 +888,53 @@ dnl DLLs under Win32.
 dnl AC_LIBTOOL_WIN32_DLL
 
 dnl disable static libs by default, this takes too much time...
-AM_DISABLE_STATIC
+dnl libtool doesn't work on anything but Linux and maybe
+dnl ***BSD
+
+case "${host}" in
+  *-hp-hpux* )
+    AM_DISABLE_SHARED
+  ;;
+  *-*-linux* )
+    AM_DISABLE_STATIC
+  ;;
+  *-*-irix5* | *-*-irix6* )
+    AM_DISABLE_SHARED
+  ;;
+  *-*-solaris2* )
+    AM_DISABLE_SHARED
+  ;;
+  *-*-sunos4* )
+    AM_DISABLE_SHARED
+  ;;
+  *-*-freebsd* | *-*-netbsd*)
+    AM_DISABLE_STATIC
+  ;;
+  *-*-osf* )
+    AM_DISABLE_SHARED
+  ;;
+  *-*-dgux5* )
+    AM_DISABLE_SHARED
+  ;;
+  *-*-sysv5* )
+    AM_DISABLE_SHARED
+  ;;
+  *-*-aix* )
+    AM_DISABLE_SHARED
+  ;;
+  *-*-cygwin32* )
+    AM_DISABLE_STATIC
+  ;;
+  *-*-mingw32* )
+    AM_DISABLE_STATIC
+  ;;
+  *-pc-os2_emx )
+    AM_DISABLE_SHARED
+  ;;
+  *)
+    AC_MSG_ERROR(unknown system type ${host}.)
+esac
+
 AM_PROG_LIBTOOL
 
 dnl ---------------------------------------------------------------------------

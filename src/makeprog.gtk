@@ -1,0 +1,13 @@
+# Make environment for making samples for wxGTK
+
+WXDIR       = $(WXWIN)
+
+include $(WXDIR)/src/gtk.env
+
+all:    $(PROGRAM)
+
+$(PROGRAM):	$(OBJECTS) $(WXLIB)
+	$(CC) $(LDFLAGS) -o $(PROGRAM) $(OBJECTS) $(LDLIBS)
+
+clean:
+	rm -f $(OBJECTS) $(PROGRAM) core
