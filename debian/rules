@@ -78,9 +78,11 @@ objdirs=$(objdir_wxbase_shared) $(objdir_wxbase_static) $(objdir_wxbase_debug) \
 build_arch_stamps=build-wxbase-shared-stamp build-wxbase-static-stamp \
                   build-wxbase-debug-stamp build-gtk-shared-stamp \
                   build-gtk-static-stamp build-gtk-debug-stamp \
-                  build-gtk-univ-stamp \
                   build-contrib-shared-stamp build-contrib-static-stamp \
                   build-gtk-py-stamp build-i18n-stamp
+
+# disable gtk-univ build, we'll  replace it with x11-univ later.
+#		  build-gtk-univ-stamp
 
 build_indep_stamps=build-examples-stamp build-doc-stamp
 
@@ -95,9 +97,11 @@ build_stamps=$(build_stamps_native) $(build_cross_stamps)
 # Install targets:
 install_all_arch=install-wxbase-lib install-wxbase-dev install-wxbase-dbg \
                  install-gtk-lib install-gtk-dev install-gtk-dbg \
-                 install-gtk-univ \
                  install-gtk-contrib install-gtk-contrib-dev install-gtk-py \
                  install-headers install-i18n
+
+# disable gtk-univ build, we'll  replace it with x11-univ later.
+#                install-gtk-univ
 
 install_all_indep=install-examples install-doc
 
@@ -631,10 +635,10 @@ install-headers: install-gtk-lib
 # them.  Do that in a scratch dirs, and move the gtk ones last, so at least
 # they win in the result of any uncaught conflict.
 
-	cd $(objdir_gtk_univ) \
-		&& $(MAKE) install prefix=`pwd`/../$(objdir_univ_install)/usr
+#	cd $(objdir_gtk_univ) \
+#		&& $(MAKE) install prefix=`pwd`/../$(objdir_univ_install)/usr
 
-	dh_movefiles --sourcedir=$(objdir_univ_install)
+#	dh_movefiles --sourcedir=$(objdir_univ_install)
 	dh_movefiles --sourcedir=debian/$(package_gtk_lib)
 
 	dh_installmanpages \
@@ -759,13 +763,13 @@ binary-common:
 # building the arch specific package files needed to create them.
 binary-indep: build_all install
 	$(MAKE) -f debian/rules \
-		DH_OPTIONS="-i -N$(package_wxbase_msw_dev) -N$(package_wxbase_msw_dbg) -N$(package_msw_dev) -N$(package_msw_dbg) -N$(package_headers_msw)" \
+		DH_OPTIONS="-i -N$(package_wxbase_msw_dev) -N$(package_wxbase_msw_dbg) -N$(package_msw_dev) -N$(package_msw_dbg) -N$(package_headers_msw) -N$(package_gtk_univ)" \
 		binary-common
 
 # Build just the architecture-dependent files here.
 binary-arch: build_arch install_arch
 	$(MAKE) -f debian/rules \
-		DH_OPTIONS="-a -N$(package_wxbase_msw_dev) -N$(package_wxbase_msw_dbg) -N$(package_msw_dev) -N$(package_msw_dbg) -N$(package_headers_msw)" \
+		DH_OPTIONS="-a -N$(package_wxbase_msw_dev) -N$(package_wxbase_msw_dbg) -N$(package_msw_dev) -N$(package_msw_dbg) -N$(package_headers_msw) -N$(package_gtk_univ)" \
 		binary-common
 
 # Build all packages target.
