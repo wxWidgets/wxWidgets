@@ -4,6 +4,11 @@ wxWindows 2 Change Log
 INCOMPATIBLE CHANGES SINCE 2.2.x
 ================================
 
+All (GUI):
+
+- wxGridCellAttrProvider class API changed, you will need to update your code
+  if you derived any classes from it
+
 wxMSW:
 
 - child frames appear in the taskbar by default now, use wxFRAME_NO_TASKBAR
@@ -27,6 +32,7 @@ All (GUI):
 - wxFindReplaceDialog added (based on work of Markus Greither)
 - wxTextCtrl::SetMaxLength() added (wxMSW/wxGTK)
 - polygon support in wxRegion (Klaas Holwerda)
+- wxStreamToTextRedirector to allow easily redirect cout to wxTextCtrl added
 - fixed bug with using wxExecute() to capture huge amounts of output
 
 wxHTML:

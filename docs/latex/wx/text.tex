@@ -45,10 +45,10 @@ it to always show it. It doesn't do anything under other platforms.}
 See also \helpref{window styles overview}{windowstyles} and 
 \helpref{wxTextCtrl::wxTextCtrl}{wxtextctrlconstr}.
 
-\wxheading{Remarks}
+\wxheading{wxTextCtrl and C++ streams}
 
-This class multiply-inherits from {\bf streambuf} where compilers allow, allowing code such as 
-the following:
+This class multiply-inherits from {\bf streambuf} where compilers allow,
+allowing code such as the following:
 
 {\small%
 \begin{verbatim}
@@ -61,13 +61,62 @@ the following:
 \end{verbatim}
 }%
 
-If your compiler does not support derivation from {\bf streambuf} and gives a compile error, define the symbol 
-{\bf NO\_TEXT\_WINDOW\_STREAM} in the wxTextCtrl header file.
+If your compiler does not support derivation from {\bf streambuf} and gives a
+compile error, define the symbol {\bf NO\_TEXT\_WINDOW\_STREAM} in the
+wxTextCtrl header file.
 
-% VZ: it is wrong to say that C++ iostreams are deprecated, we need a better
-%     wording here - disabling this for now
-%Note that any use of C++ iostreams (including this one) is deprecated and might
-%get completely removed in the future.
+Note that independently of this setting you can always use wxTextCtrl itself
+in a stream-like manner:
+
+{\small%
+\begin{verbatim}
+  wxTextCtrl *control = new wxTextCtrl(...);
+
+  *control << 123.456 << " some text\n";
+\end{verbatim}
+}%
+
+always works. However the possibility to create an ostream associated with
+wxTextCtrl may be useful if you need to redirect the output of a function
+taking an ostream as parameter to a text control.
+
+Another commonly requested need is to redirect {\bf std::cout} to the text
+control. This could be done in the following way:
+
+{\small%
+\begin{verbatim}
+  #include <iostream>
+
+  wxTextCtrl *control = new wxTextCtrl(...);
+
+  std::streambuf *sbOld = std::cout.rdbuf();
+  std::cout.rdbuf(*control);
+
+  // use cout as usual, the output appears in the text control
+  ...
+
+  std::cout.rdbuf(sbOld);
+\end{verbatim}
+}%
+
+But wxWindows provides a convenient class to make it even simpler so instead
+you may just do
+
+{\small%
+\begin{verbatim}
+  #include <iostream>
+
+  wxTextCtrl *control = new wxTextCtrl(...);
+
+  wxStreamToTextRedirector redirect(control);
+
+  // all output to cout goes into the text control until the exit from current
+  // scope
+\end{verbatim}
+}%
+
+See \helpref{wxStreamToTextRedirector}{wxstreamtotextredirector} for more
+details.
 
 \wxheading{Event handling}
 
@@ -93,10 +142,6 @@ into the control than the limit set by
 \helpref{SetMaxLength}{wxtextctrlsetmaxlength}.}
 \end{twocollist}%
 
-%\wxheading{See also}
-%
-%\helpref{wxRichTextCtrl}{wxrichtextctrl}
-%
 \latexignore{\rtfignore{\wxheading{Members}}}
 
 \membersection{wxTextCtrl::wxTextCtrl}\label{wxtextctrlconstr}

@@ -59,24 +59,10 @@ DEFINE_EVENT_TYPE(wxEVT_COMMAND_TEXT_MAXLEN)
 
 wxTextCtrlBase::wxTextCtrlBase()
 {
-#ifndef NO_TEXT_WINDOW_STREAM
-    #if wxUSE_IOSTREAMH
-        if (allocate())
-            setp(base(),ebuf());
-    #else
-        m_streambuf = new char[64];
-        setp(m_streambuf, m_streambuf + 64);
-    #endif //wxUSE_IOSTREAMH
-#endif // NO_TEXT_WINDOW_STREAM
 }
 
 wxTextCtrlBase::~wxTextCtrlBase()
 {
-#ifndef NO_TEXT_WINDOW_STREAM
-#if !wxUSE_IOSTREAMH
-  delete[] m_streambuf;
-#endif
-#endif
 }
 
 // ----------------------------------------------------------------------------
@@ -215,33 +201,12 @@ wxTextCtrl& wxTextCtrlBase::operator<<(const wxChar c)
 
 #ifndef NO_TEXT_WINDOW_STREAM
 
-int wxTextCtrlBase::overflow( int WXUNUSED(c) )
+int wxTextCtrlBase::overflow(int c)
 {
-    int len = pptr() - pbase();
-    char *txt = new char[len+1];
-    strncpy(txt, pbase(), len);
-    txt[len] = '\0';
-    (*this) << txt;
-    setp(pbase(), epptr());
-    delete[] txt;
-    return EOF;
-}
+    AppendText((wxChar)c);
 
-int wxTextCtrlBase::sync()
-{
-    int len = pptr() - pbase();
-    char *txt = new char[len+1];
-    strncpy(txt, pbase(), len);
-    txt[len] = '\0';
-    (*this) << txt;
-    setp(pbase(), epptr());
-    delete[] txt;
+    // return something different from EOF
     return 0;
-}
-
-int wxTextCtrlBase::underflow()
-{
-    return EOF;
 }
 
 #endif // NO_TEXT_WINDOW_STREAM

@@ -30,14 +30,8 @@
 // and streambuf: it complains about deriving a huge class from the huge class
 // streambuf. !! Also, can't use streambuf if making or using a DLL :-(
 
-#if (defined(__BORLANDC__)) || defined(__MWERKS__) || defined(_WINDLL) || defined(WXUSINGDLL) || defined(WXMAKINGDLL)
-    #define NO_TEXT_WINDOW_STREAM
-#endif
-
-// the streambuf which is used in the declaration of wxTextCtrlBase below is not compatible
-// with the standard-conforming implementation found in newer egcs versions
-// (that is, the libstdc++ v3 that is shipped with it)
-#if defined(__GNUC__)&&( (__GNUC__>2) ||( (__GNUC__==2)&&(__GNUC_MINOR__>97) ) )
+#if (defined(__BORLANDC__)) || defined(__MWERKS__) || \
+    defined(WXUSINGDLL) || defined(WXMAKINGDLL)
     #define NO_TEXT_WINDOW_STREAM
 #endif
 
@@ -228,11 +222,9 @@ public:
     virtual void SelectAll();
     virtual void SetEditable(bool editable) = 0;
 
-    // streambuf methods
+    // override streambuf method
 #ifndef NO_TEXT_WINDOW_STREAM
     int overflow(int i);
-    int sync();
-    int underflow();
 #endif // NO_TEXT_WINDOW_STREAM
 
     // stream-like insertion operators: these are always available, whether we
@@ -256,13 +248,6 @@ protected:
 
     // the text style which will be used for any new text added to the control
     wxTextAttr m_defaultStyle;
-
-private:
-#ifndef NO_TEXT_WINDOW_STREAM
-#if !wxUSE_IOSTREAMH
-    char *m_streambuf;
-#endif
-#endif
 };
 
 // ----------------------------------------------------------------------------
@@ -340,6 +325,38 @@ typedef void (wxEvtHandler::*wxTextUrlEventFunction)(wxTextUrlEvent&);
 #define EVT_TEXT_ENTER(id, fn) DECLARE_EVENT_TABLE_ENTRY( wxEVT_COMMAND_TEXT_ENTER, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxCommandEventFunction) & fn, (wxObject *) NULL ),
 #define EVT_TEXT_URL(id, fn) DECLARE_EVENT_TABLE_ENTRY( wxEVT_COMMAND_TEXT_URL, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxCommandEventFunction) (wxTextUrlEventFunction) & fn, (wxObject *) NULL ),
 #define EVT_TEXT_MAXLEN(id, fn) DECLARE_EVENT_TABLE_ENTRY( wxEVT_COMMAND_TEXT_MAXLEN, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxCommandEventFunction) & fn, (wxObject *) NULL ),
+
+#ifndef NO_TEXT_WINDOW_STREAM
+
+// ----------------------------------------------------------------------------
+// wxStreamToTextRedirector: this class redirects all data sent to the given
+// C++ stream to the wxTextCtrl given to its ctor during its lifetime.
+// ----------------------------------------------------------------------------
+
+class WXDLLEXPORT wxStreamToTextRedirector
+{
+public:
+    wxStreamToTextRedirector(wxTextCtrl *text, wxSTD ostream *ostr = NULL)
+        : m_ostr(ostr ? *ostr : wxSTD::cout)
+    {
+        m_sbufOld = m_ostr.rdbuf();
+        m_ostr.rdbuf(text);
+    }
+
+    ~wxStreamToTextRedirector()
+    {
+        m_ostr.rdbuf(m_sbufOld);
+    }
+
+private:
+    // the stream we're redirecting
+    wxSTD ostream&   m_ostr;
+
+    // the old streambuf (before we changed it)
+    wxSTD streambuf *m_sbufOld;
+};
+
+#endif // !NO_TEXT_WINDOW_STREAM
 
 #endif // wxUSE_TEXTCTRL
 
