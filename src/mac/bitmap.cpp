@@ -592,7 +592,7 @@ wxBitmap::wxBitmap(const wxImage& image, int depth)
 
     // Create mask
     if ( image.HasMask() ) {
-//        SetMask(new wxMask( maskBitmap ));
+        SetMask(new wxMask( maskBitmap ));
     }
     
     UnlockPixels( GetGWorldPixMap(GetHBITMAP()) );

@@ -84,8 +84,10 @@ void wxStaticText::OnDraw( wxDC &dc )
 					if ( ((wxControl*)parent)->GetMacControl() ) {
 						Rect rect = { -32767 , -32767 , 32767 , 32767 } ;
 						if ( DrawThemeTabPane != (void*)kUnresolvedCFragSymbolAddress )
+						{
 						  DrawThemeTabPane ( &rect, kThemeStateActive);
-						doClear = false ;
+						  doClear = false ;
+						}
 					}
 					break ;
 				}
