@@ -1,1 +1,1 @@
-include ../../src/gtk/setup/general/makeapp
+include ../../setup/general/makeapp
