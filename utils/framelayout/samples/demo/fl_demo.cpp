@@ -813,11 +813,11 @@ void MyFrame::AddSearchToolbars( wxFrameLayout& layout, wxWindow* pParent )
     pTBar4->EnableTool( 4, FALSE );
 
 #else
-    pTBar2->AddTool( 2, search_xpm );
+    pTBar2->AddTool( 2, search_xpm, "" );
     //pTBar2->AddSeparator();
-    pTBar2->AddTool( 3, bookmarks_xpm );
-    pTBar2->AddTool( 4, nextmark_xpm );
-    pTBar2->AddTool( 5, prevmark_xpm );
+    pTBar2->AddTool( 3, bookmarks_xpm, "" );
+    pTBar2->AddTool( 4, nextmark_xpm, "" );
+    pTBar2->AddTool( 5, prevmark_xpm, "" );
 
     wxDynamicToolBar* pTBar3 = new wxDynamicToolBar( mpInternalFrm, -1 );
 
@@ -1091,13 +1091,13 @@ void MyFrame::DropInSomeBars( int layoutNo )
 		pToolBar->AddTool( 1005, wxBitmap("copy_icon") );
 		pToolBar->AddTool( 1006, wxBitmap("paste_icon") );
 #else
-		pToolBar->AddTool( 1001, wxBitmap(new_xpm) );
-		pToolBar->AddTool( 1002, wxBitmap(open_xpm) );
-		pToolBar->AddTool( 1003, wxBitmap(save_xpm) );
+		pToolBar->AddTool( 1001, wxBitmap(new_xpm), "" );
+		pToolBar->AddTool( 1002, wxBitmap(open_xpm), "" );
+		pToolBar->AddTool( 1003, wxBitmap(save_xpm), "" );
 
-		pToolBar->AddTool( 1004, wxBitmap(cut_xpm) );
-		pToolBar->AddTool( 1005, wxBitmap(copy_xpm) );
-		pToolBar->AddTool( 1006, wxBitmap(paste_xpm) );
+		pToolBar->AddTool( 1004, wxBitmap(cut_xpm), "" );
+		pToolBar->AddTool( 1005, wxBitmap(copy_xpm), "" );
+		pToolBar->AddTool( 1006, wxBitmap(paste_xpm), "" );
 #endif
 		layout.AddBar( pToolBar,  // bar window (can be NULL)
 					   sizes10, wxTOP,         // alignment ( 0-top,1-bottom, etc)
