@@ -68,28 +68,16 @@ static void wxGtkTextInsert(GtkWidget *text,
                         ? attr.GetBackgroundColour().GetColor()
                         : NULL;
 
-    GtkTextIter start, end;
-    GtkTextMark *mark;
-    // iterators are invalidated by any mutation that affects 'indexable' buffer contents,
-    // so we save current position in a mark
-    // we need a mark of left gravity, so we cannot use
-    // mark = gtk_text_buffer_get_insert (text_buffer)
-
-    gtk_text_buffer_get_iter_at_mark( text_buffer, &start,
-                                     gtk_text_buffer_get_insert (text_buffer) );
-    mark = gtk_text_buffer_create_mark( text_buffer, NULL, &start, TRUE/*left gravity*/ );
-
-    gtk_text_buffer_insert_at_cursor( text_buffer, buffer, strlen(buffer) );
-
-    gtk_text_buffer_get_iter_at_mark( text_buffer, &end,
-                                     gtk_text_buffer_get_insert (text_buffer) );
-    gtk_text_buffer_get_iter_at_mark( text_buffer, &start, mark );
-
     GtkTextTag *tag;
     tag = gtk_text_buffer_create_tag( text_buffer, NULL, "font-desc", font_description,
                                      "foreground-gdk", colFg,
                                      "background-gdk", colBg, NULL );
-    gtk_text_buffer_apply_tag( text_buffer, tag, &start, &end );
+
+    GtkTextIter iter;
+    gtk_text_buffer_get_iter_at_mark( text_buffer, &iter,
+                                     gtk_text_buffer_get_insert (text_buffer) );
+
+    gtk_text_buffer_insert_with_tags( text_buffer, &iter, buffer, strlen(buffer), tag, NULL );
 }
 #else
 static void wxGtkTextInsert(GtkWidget *text,
