@@ -24,9 +24,9 @@
 ##
 
 """\
-Masked Edit Overview:
-=====================
-  wxMaskedTextCtrl
+<b>Masked Edit Overview:
+=====================</b>
+  <b>wxMaskedTextCtrl</b>
       is a sublassed text control that can carefully control
       the user's input based on a mask string you provide.
 
@@ -37,20 +37,20 @@ Masked Edit Overview:
   be entered and then only in the positions indicated in the mask by the #
   character.
 
-  wxMaskedComboBox
+  <b>wxMaskedComboBox</b>
       is a similar subclass of wxComboBox that allows the
       same sort of masking, but also can do auto-complete of values, and can
       require the value typed to be in the list of choices to be colored
       appropriately.
 
-  wxIpAddrCtrl
+  <b>wxIpAddrCtrl</b>
       is a special subclass of wxMaskedTextCtrl that handles
       cursor movement and natural typing of IP addresses.
 
 
-INITILIZATION PARAMETERS
+<b>INITILIZATION PARAMETERS
 ========================
-mask=
+mask=</b>
 Allowed mask characters and function:
     Character   Function
             #       Allow numeric only (0-9)
@@ -61,7 +61,6 @@ Allowed mask characters and function:
             X       Allow string.letters, string.punctuation, string.digits
 
 
-  Note:
     These controls define these sets of characters using string.letters,
     string.uppercase, etc.  These sets are affected by the system locale
     setting, so in order to have the masked controls accept characters
@@ -81,33 +80,52 @@ Allowed mask characters and function:
   than mask characters, they can be escaped with \, ie. \N means "literal N".
   (use \\ for literal backslash, as in: r'CCC\\NNN'.)
 
-  Note: Changing the mask for a control deletes any previous field classes
-        (and any associated validation or formatting constraints) for them.
 
+  <b>Note:</b>
+      Masks containing only # characters and one optional decimal point
+      character are handled specially, as "numeric" controls.  Such
+      controls have special handling for typing the '-' key, handling
+      the "decimal point" character as truncating the ordinal portion,
+      optionally allowing grouping characters and so forth.
+      There are several parameters and format codes that only make sense
+      when combined with such masks, eg. groupChar, decimalChar, and so
+      forth (see below).  These allow you to construct reasonable
+      numeric entry controls.
 
-useFixedWidthFont=
+  <b>Note:</b>
+      Changing the mask for a control deletes any previous field classes
+      (and any associated validation or formatting constraints) for them.
+
+<b>useFixedWidthFont=</b>
   By default, masked edit controls use a fixed width font, so that
   the mask characters are fixed within the control, regardless of
   subsequent modifications to the value.  Set to False if having
   the control font be the same as other controls is required.
 
 
-formatcodes=
+<b>formatcodes=</b>
   These other properties can be passed to the class when instantiating it:
-    formatcodes     A string of formatting codes that modify behavior of the control:
+    Formatcodes are specified as a string of single character formatting
+    codes that modify  behavior of the control:
             _  Allow spaces
             !  Force upper
             ^  Force lower
             R  right-align field(s)
             r  right-insert in field(s) (implies R)
             &lt;  stay in field until explicit navigation out of it
-            ,  Allow comma to be typed as grouping character; auto-group/regroup
-               digits in integer fields (if result fits) when leaving such a field.
-               (If used, .SetValue() will attempt to auto-group as well.)
-               Note: typing '.' in such fields will clip the value to that left
-               of the cursor for integer fields of controls with "integer" or
-               "floating point" masks.  If the ',' format code is specified, this
-               will also cause the resulting digits to be regrouped properly.
+            ,  Allow grouping character in integer fields of numeric controls
+               and auto-group/regroup digits (if the result fits) when leaving
+               such a field.  (If specified, .SetValue() will attempt to
+               auto-group as well.)
+               ',' is also the default grouping character.  To change the
+               grouping character and/or decimal character, use the groupChar
+               and decimalChar parameters, respectively.
+               Note: typing the "decimal point" character in such fields will
+               clip the value to that left of the cursor for integer
+               fields of controls with "integer" or "floating point" masks.
+               If the ',' format code is specified, this will also cause the
+               resulting digits to be regrouped properly, using the current
+               grouping character.
             -  Prepend and reserve leading space for sign to mask and allow
                signed values (negative #s shown in red by default)
             0  integer fields get leading zeros
@@ -121,8 +139,8 @@ formatcodes=
                (See USSTATE autoformat demo for how this can be used.)
             S  select entire field when navigating to new field
 
-fillChar=
-defaultValue=
+<b>fillChar=
+defaultValue=</b>
   These controls have two options for the initial state of the control.
   If a blank control with just the non-editable characters showing
   is desired, simply leave the constructor variable fillChar as its
@@ -136,8 +154,23 @@ defaultValue=
   This value must satisfy the non-editable characters of the mask,
   but need not conform to the replaceable characters.
 
+<b>groupChar=
+decimalChar=</b>
+  These parameters govern what character is used to group numbers
+  and is used to indicate the decimal point for numeric format controls.
+  The default groupChar is ',', the default decimalChar is '.'
+  By changing these, you can customize the presentation of numbers
+  for your location.
+  eg: formatcodes = ',', groupChar="'"                   allows  12'345.34
+      formatcodes = ',', groupChar='.', decimalChar=','  allows  12.345,34
 
-autoCompleteKeycodes=[]
+<b>shiftDecimalChar=</b>
+  The default "shiftDecimalChar" (used for "backwards-tabbing" until
+  shift-tab is fixed in wxPython) is '>' (for QUERTY keyboards.) for
+  other keyboards, you may want to customize this, eg '?' for shift ',' on
+  AZERTY keyboards, ':' or ';' for other European keyboards, etc.
+
+<b>autoCompleteKeycodes=[]</b>
   By default, DownArrow, PageUp and PageDown will auto-complete a
   partially entered field.  Shift-DownArrow, Shift-UpArrow, PageUp
   and PageDown will also auto-complete, but if the field already
@@ -151,8 +184,8 @@ autoCompleteKeycodes=[]
 
 
 
-Validating User Input:
-======================
+<b>Validating User Input:
+======================</b>
   There are a variety of initialization parameters that are used to validate
   user input.  These parameters can apply to the control as a whole, and/or
   to individual fields:
@@ -187,11 +220,11 @@ Validating User Input:
                         controls.
 
 
-Coloring Behavior:
-==================
+<b>Coloring Behavior:
+==================</b>
   The following parameters have been provided to allow you to change the default
   coloring behavior of the control.   These can be set at construction, or via
-  the .SetMaskParameters() function.  Pass a color as string e.g. 'Yellow':
+  the .SetCtrlParameters() function.  Pass a color as string e.g. 'Yellow':
 
         emptyBackgroundColor=       Control Background color when identified as empty. Default=White
         invalidBackgroundColor=     Control Background color when identified as Not valid. Default=Yellow
@@ -200,18 +233,18 @@ Coloring Behavior:
 
   The following parameters control the default foreground color coloring behavior of the
   control. Pass a color as string e.g. 'Yellow':
-        foregroundColor=            Control foreground color when value is not negative.  Default=Black
+        foregroundColor=             Control foreground color when value is not negative.  Default=Black
         signedForegroundColor=      Control foreground color when value is negative. Default=Red
 
 
-Fields:
-=======
+<b>Fields:
+=======</b>
   Each part of the mask that allows user input is considered a field.  The fields
   are represented by their own class instances.  You can specify field-specific
   constraints by constructing or accessing the field instances for the control
   and then specifying those constraints via parameters.
 
-fields=
+<b>fields=</b>
   This parameter allows you to specify Field instances containing
   constraints for the individual fields of a control, eg: local
   choice lists, validation rules, functions, regexps, etc.
@@ -235,6 +268,7 @@ fields=
   same semantics as for the whole control but applied to the field in question:
 
     fillChar        # if set for a field, it will override the control's fillChar for that field
+    groupChar       # if set for a field, it will override the control's default
     defaultValue    # sets field-specific default value; overrides any default from control
     compareNoCase   # overrides control's settings
     emptyInvalid    # determines whether field is required to be filled at all times
@@ -255,21 +289,26 @@ fields=
 
 
 
-Control Class Functions:
+<b>Control Class Functions:
 ========================
-  .GetPlainValue(value=None)
+  .GetPlainValue(value=None)</b>
                     Returns the value specified (or the control's text value
                     not specified) without the formatting text.
                     In the example above, might return phone no='3522640075',
                     whereas control.GetValue() would return '(352) 264-0075'
-  .ClearValue()     Returns the control's value to its default, and places the
+  <b>.ClearValue()</b>
+                    Returns the control's value to its default, and places the
                     cursor at the beginning of the control.
-  .SetValue()       Does "smart replacement" of passed value into the control, as does
+  <b>.SetValue()</b>
+                    Does "smart replacement" of passed value into the control, as does
                     the .Paste() method.  As with other text entry controls, the
                     .SetValue() text replacement begins at left-edge of the control,
                     with missing mask characters inserted as appropriate.
                     .SetValue will also adjust integer, float or date mask entry values,
                     adding commas, auto-completing years, etc. as appropriate.
+                    For "right-aligned" numeric controls, it will also now automatically
+                    right-adjust any value whose length is less than the width of the
+                    control before attempting to set the value.
                     If a value does not follow the format of the control's mask, or will
                     not fit into the control, a ValueError exception will be raised.
                     Eg:
@@ -279,45 +318,51 @@ Control Class Functions:
                           .SetValue('(123)456-7890')        => '(123) 456-7890'
                           .SetValue('123/4567-890')         => illegal paste; ValueError
 
-                      mask = '#{6}.#{2}', formatcode = '_,-',
+                      mask = '#{6}.#{2}', formatcodes = '_,-',
                           .SetValue('111')                  => ' 111   .  '
                           .SetValue(' %9.2f' % -111.12345 ) => '   -111.12'
                           .SetValue(' %9.2f' % 1234.00 )    => '  1,234.00'
                           .SetValue(' %9.2f' % -1234567.12345 ) => insufficient room; ValueError
 
+                      mask = '#{6}.#{2}', formatcodes = '_,-R'  # will right-adjust value for right-aligned control
+                          .SetValue('111')                  => padded value misalignment ValueError: "       111" will not fit
+                          .SetValue('%.2f' % 111 )          => '    111.00'
+                          .SetValue('%.2f' % -111.12345 )   => '   -111.12'
 
-  .IsValid(value=None)
+
+  <b>.IsValid(value=None)</b>
                     Returns True if the value specified (or the value of the control
                     if not specified) passes validation tests
-  .IsEmpty(value=None)
+  <b>.IsEmpty(value=None)</b>
                     Returns True if the value specified (or the value of the control
                     if not specified) is equal to an "empty value," ie. all
                     editable characters == the fillChar for their respective fields.
-  .IsDefault(value=None)
+  <b>.IsDefault(value=None)</b>
                     Returns True if the value specified (or the value of the control
                     if not specified) is equal to the initial value of the control.
 
-  .Refresh()        Recolors the control as appropriate to its current settings.
+  <b>.Refresh()</b>
+                    Recolors the control as appropriate to its current settings.
 
-  .SetMaskParameters(**kwargs)
+  <b>.SetCtrlParameters(**kwargs)</b>
                     This function allows you to set up and/or change the control parameters
                     after construction; it takes a list of key/value pairs as arguments,
                     where the keys can be any of the mask-specific parameters in the constructor.
                     Eg:
                         ctl = wxMaskedTextCtrl( self, -1 )
-                        ctl.SetMaskParameters( mask='###-####',
+                        ctl.SetCtrlParameters( mask='###-####',
                                                defaultValue='555-1212',
                                                formatcodes='F')
 
-  .GetMaskParameter(parametername)
+  <b>.GetCtrlParameter(parametername)</b>
                     This function allows you to retrieve the current value of a parameter
                     from the control.
 
-  .SetFieldParameters(field_index, **kwargs)
+  <b>.SetFieldParameters(field_index, **kwargs)</b>
                     This function allows you to specify change individual field
                     parameters after construction. (Indices are 0-based.)
 
-  .GetFieldParameter(field_index, parametername)
+  <b>.GetFieldParameter(field_index, parametername)</b>
                     Allows the retrieval of field parameters after construction
 
 
@@ -684,6 +729,9 @@ class Field:
               'extent': (),                     ## (edit start, edit_end) of field; set by parent control.
               'formatcodes':  "",               ## codes indicating formatting options for the control
               'fillChar':     ' ',              ## used as initial value for each mask position if initial value is not given
+              'groupChar':    ',',              ## used with numeric fields; indicates what char groups 3-tuple digits
+              'decimalChar':  '.',              ## used with numeric fields; indicates what char separates ordinal from fraction
+              'shiftDecimalChar': '>',          ## used with numeric fields, indicates what is above the decimal point char on keyboard
               'defaultValue': "",               ## use if you want different positional defaults vs. all the same fillChar
               'excludeChars': "",               ## optional string of chars to exclude even if main mask type does
               'includeChars': "",               ## optional string of chars to allow even if main mask type doesn't
@@ -715,8 +763,6 @@ class Field:
             setattr(self, '_' + key, copy.copy(value))
             if not kwargs.has_key(key):
                 kwargs[key] = copy.copy(value)
-
-        self._groupchar   = ','     # (this might be changable in a future version, but for now is constant)
 
         self._SetParameters(**kwargs)
 
@@ -767,6 +813,14 @@ class Field:
             self._alignRight  = 'R' in self._formatcodes or 'r' in self._formatcodes
             self._moveOnFieldFull = not '<' in self._formatcodes
             self._selectOnFieldEntry = 'S' in self._formatcodes
+
+            if self._groupdigits:
+                if kwargs.has_key('groupChar'):
+                    self._groupChar = kwargs['groupChar']
+            if kwargs.has_key('decimalChar'):
+                self._decimalChar = kwargs['decimalChar']
+            if kwargs.has_key('shiftDecimalChar'):
+                self._shiftDecimalChar = kwargs['shiftDecimalChar']
 
         if kwargs.has_key('formatcodes') or kwargs.has_key('validRegex'):
             self._regexMask   = 'V' in self._formatcodes and self._validRegex
@@ -907,16 +961,16 @@ class Field:
             intStr = intStr.replace(' ', '')                        # drop extra spaces
             intStr = string.replace(intStr,self._fillChar,"")       # drop extra fillchars
             intStr = string.replace(intStr,"-","")                  # drop sign, if any
-            intStr = string.replace(intStr, self._groupchar, "")    # lose commas
+            intStr = string.replace(intStr, self._groupChar, "")    # lose commas/dots
             if self._groupdigits:
                 new = ''
                 cnt = 1
                 for i in range(len(intStr)-1, -1, -1):
                     new = intStr[i] + new
                     if (cnt) % 3 == 0:
-                        new = self._groupchar + new
+                        new = self._groupChar + new
                     cnt += 1
-                if new and new[0] == self._groupchar:
+                if new and new[0] == self._groupChar:
                     new = new[1:]
                 if len(new) <= length:
                     # expanded string will still fit and leave room for sign:
@@ -1055,16 +1109,16 @@ class wxMaskedEditMixin:
 
         # Create a "field" that holds global parameters for control constraints
         self._ctrl_constraints = self._fields[-1] = Field(index=-1)
-        self.SetMaskParameters(**kwargs)
+        self.SetCtrlParameters(**kwargs)
 
 
 
-    def SetMaskParameters(self, **kwargs):
+    def SetCtrlParameters(self, **kwargs):
         """
         This public function can be used to set individual or multiple masked edit
         parameters after construction.
         """
-        dbg('wxMaskedEditMixin::SetMaskParameters', indent=1)
+        dbg('wxMaskedEditMixin::SetCtrlParameters', indent=1)
         dbg('kwargs:', indent=1)
         for key, value in kwargs.items():
             dbg(key, '=', value)
@@ -1158,7 +1212,7 @@ class wxMaskedEditMixin:
         if not self._retainFieldValidation:
             # Build dictionary of any changing parameters which should be propagated to the
             # component fields:
-            for arg in ('fillChar', 'compareNoCase', 'defaultValue', 'validRequired'):
+            for arg in ('fillChar', 'groupChar', 'compareNoCase', 'defaultValue', 'validRequired'):
                 dbg('kwargs.has_key(%s)?' % arg, kwargs.has_key(arg))
                 dbg('getattr(self._ctrl_constraints, _%s)?' % arg, getattr(self._ctrl_constraints, '_'+arg))
                 reset_args[arg] = kwargs.has_key(arg) and kwargs[arg] != getattr(self._ctrl_constraints, '_'+arg)
@@ -1213,8 +1267,12 @@ class wxMaskedEditMixin:
             self._applyFormatting()
         dbg(indent=0)
 
+    def SetMaskParameters(self, **kwargs):
+        """ old name for this function """
+        return self.SetCtrlParameters(**kwargs)
 
-    def GetMaskParameter(self, paramname):
+
+    def GetCtrlParameter(self, paramname):
         """
         Routine for retrieving the value of any given parameter
         """
@@ -1223,8 +1281,11 @@ class wxMaskedEditMixin:
         elif Field.valid_params.has_key(paramname):
             return self._ctrl_constraints._GetParameter(paramname)
         else:
-            TypeError('%s.GetMaskParameter: invalid parameter "%s"' % (self.name, paramname))
+            TypeError('%s.GetCtrlParameter: invalid parameter "%s"' % (self.name, paramname))
 
+    def GetMaskParameter(self, paramname):
+        """ old name for this function """
+        return self.GetCtrlParameter(paramname)
 
     def SetFieldParameters(self, field_index, **kwargs):
         """
@@ -1262,7 +1323,7 @@ class wxMaskedEditMixin:
         elif Field.valid_params.has_key(paramname):
             return self._fields[field_index]._GetParameter(paramname)
         else:
-            TypeError('%s.GetMaskParameter: invalid parameter "%s"' % (self.name, paramname))
+            TypeError('%s.GetFieldParameter: invalid parameter "%s"' % (self.name, paramname))
 
 
     def _SetKeycodeHandler(self, keycode, func):
@@ -1340,10 +1401,14 @@ class wxMaskedEditMixin:
             s = s[:match.start(1)] + replacement + s[match.end(2)+1:]   #account for trailing '}'
             match = rex.search(s)                               # look for another such entry in mask
 
-        self._isDec      = isDecimal(s) and not self._ctrl_constraints._validRegex
+        self._decimalChar = self._ctrl_constraints._decimalChar
+        self._shiftDecimalChar = self._ctrl_constraints._shiftDecimalChar
+
+        self._isDec      = isDecimal(s, self._decimalChar) and not self._ctrl_constraints._validRegex
         self._isInt      = isInteger(s) and not self._ctrl_constraints._validRegex
         self._signOk     = '-' in self._ctrl_constraints._formatcodes and (self._isDec or self._isInt)
-##        dbg('isDecimal(%s)?' % s, isDecimal(s), 'ctrl regex:', self._ctrl_constraints._validRegex)
+        dbg('isDecimal(%s, %c)?' % (s, self._decimalChar), isDecimal(s, self._decimalChar),
+            'ctrl regex:', self._ctrl_constraints._validRegex)
 
         if self._signOk and s[0] != ' ':
             s = ' ' + s
@@ -1402,8 +1467,7 @@ class wxMaskedEditMixin:
                 if not self._fields.has_key(1):
                     self._fields[1] = Field()
 
-
-                self._decimalpos = string.find( self._mask, '.')
+                self._decimalpos = string.find( self._mask, self._decimalChar)
                 dbg('decimal pos =', self._decimalpos)
 
                 formatcodes = self._fields[0]._GetParameter('formatcodes')
@@ -1632,9 +1696,9 @@ class wxMaskedEditMixin:
             if reset_args.has_key('defaultValue') and reset_args['defaultValue']:
                 inherit_args['defaultValue'] = ""   # (reset for field)
 
-            for param in ['fillChar', 'compareNoCase', 'emptyInvalid', 'validRequired']:
+            for param in ['fillChar', 'groupChar', 'compareNoCase', 'emptyInvalid', 'validRequired']:
                 if reset_args.has_key(param) and reset_args[param]:
-                    inherit_args[param] = self.GetMaskParameter(param)
+                    inherit_args[param] = self.GetCtrlParameter(param)
 
             if inherit_args:
                 field._SetParameters(**inherit_args)
@@ -1674,7 +1738,7 @@ class wxMaskedEditMixin:
         the field extents of the mask if changed, resetting parameters as appropriate,
         determining the overall template value for the control, etc.
 
-        reset_args is supplied if called from control's .SetMaskParameters()
+        reset_args is supplied if called from control's .SetCtrlParameters()
         routine, and indicates which if any parameters which can be
         overridden by individual fields have been reset by request for the
         whole control.
@@ -1712,6 +1776,12 @@ class wxMaskedEditMixin:
         # field if they don't already have them:
         self._propagateConstraints(**reset_args)
 
+
+
+        if self._isDec and self._fields[0]._groupChar == self._decimalChar:
+            raise AttributeError('groupChar (%s) and decimalChar (%s) must be distinct.' %
+                                 (self._fields[0]._groupChar, self._decimalChar) )
+
         # Validate that all choices for given fields are at least of the
         # necessary length, and that they all would be valid pastes if pasted
         # into their respective fields:
@@ -1739,11 +1809,11 @@ class wxMaskedEditMixin:
 
             # On ., truncate contents right of cursor to decimal point (if any)
             # leaves cusor after decimal point if dec, otherwise at 0.
-            self._SetKeyHandler('.', self._OnDecimalPoint)
-            self._SetKeyHandler('>', self._OnChangeField)   # (Shift-'.')
+            self._SetKeyHandler(self._decimalChar, self._OnDecimalPoint)
+            self._SetKeyHandler(self._shiftDecimalChar, self._OnChangeField)   # (Shift-'.' == '>' on US keyboards)
 
-            # Allow selective insert of commas in numbers:
-            self._SetKeyHandler(',', self._OnGroupChar)
+            # Allow selective insert of groupchar in numbers:
+            self._SetKeyHandler(self._fields[0]._groupChar, self._OnGroupChar)
 
         dbg(indent=0)
 
@@ -2478,7 +2548,7 @@ class wxMaskedEditMixin:
             dbg('key == Decimal tab; decimal pos:', self._decimalpos)
             value = self._GetValue()
             if pos < self._decimalpos:
-                clipped_text = value[0:pos] + '.' + value[self._decimalpos+1:]
+                clipped_text = value[0:pos] + self._decimalChar + value[self._decimalpos+1:]
                 dbg('value: "%s"' % self._GetValue(), 'clipped_text:', clipped_text)
                 newstr = self._adjustDec(clipped_text)
             else:
@@ -2552,13 +2622,13 @@ class wxMaskedEditMixin:
     def _OnGroupChar(self, event):
         """
         This handler is only registered if the mask is a numeric mask.
-        It allows the insertion of ',' if appropriate.
+        It allows the insertion of ',' or '.' if appropriate.
         """
         dbg('wxMaskedEditMixin::_OnGroupChar', indent=1)
         keep_processing = True
         pos = self._adjustPos(self._GetInsertionPoint(), event.GetKeyCode())
         sel_start, sel_to = self._GetSelection()
-        groupchar = self._fields[0]._groupchar
+        groupchar = self._fields[0]._groupChar
         if not self._isCharAllowed(groupchar, pos, checkRegex=True):
             keep_processing = False
             if not wxValidator_IsSilent():
@@ -2829,13 +2899,13 @@ class wxMaskedEditMixin:
         'Fixes' an floating point control. Collapses spaces, right-justifies, etc.
         """
         dbg('wxMaskedEditMixin::_adjustDec, candidate = "%s"' % candidate, indent=1)
-        lenOrd,lenDec  = self._mask.split('.')  ## Get ordinal, decimal lengths
+        lenOrd,lenDec  = self._mask.split(self._decimalChar)  ## Get ordinal, decimal lengths
         lenOrd = len(lenOrd)
         lenDec = len(lenDec)
         if candidate is None: value = self._GetValue()
         else: value = candidate
         dbg('value = "%(value)s"' % locals(), 'len(value):', len(value))
-        ordStr,decStr = value.split('.')
+        ordStr,decStr = value.split(self._decimalChar)
 
         ordStr = self._fields[0]._AdjustField(ordStr)
         dbg('adjusted ordStr: "%s"' % ordStr)
@@ -2847,7 +2917,7 @@ class wxMaskedEditMixin:
 
         ordStr = string.rjust( ordStr[-lenOrd:], lenOrd)
         dbg('right-justifed ordStr = "%(ordStr)s"' % locals())
-        newvalue = ordStr + '.' + decStr
+        newvalue = ordStr + self._decimalChar + decStr
         if self._signOk:
             if len(newvalue) < len(self._mask):
                 newvalue = ' ' + newvalue
@@ -2856,7 +2926,7 @@ class wxMaskedEditMixin:
 
         # Finally, align string with decimal position, left-padding with
         # fillChar:
-        newdecpos = newvalue.find('.')
+        newdecpos = newvalue.find(self._decimalChar)
         if newdecpos < self._decimalpos:
             padlen = self._decimalpos - newdecpos
             newvalue = string.join([' ' * padlen] + [newvalue] ,'')
@@ -3044,7 +3114,7 @@ class wxMaskedEditMixin:
         if self._isMaskChar( pos ):
             okChars  = self._getAllowedChars(pos)
             if self._fields[0]._groupdigits and (self._isInt or (self._isDec and pos < self._decimalpos)):
-                okChars += self._fields[0]._groupchar
+                okChars += self._fields[0]._groupChar
             if self._signOk and (self._isInt or (self._isDec and pos < self._decimalpos)):
                 okChars += '-'
 ##            dbg('%s in %s?' % (char, okChars), char in okChars)
@@ -3138,7 +3208,7 @@ class wxMaskedEditMixin:
             else:
                 signpos = 0
                 text = self._template[0] + text[1:]
-            groupchar = self._fields[0]._groupchar
+            groupchar = self._fields[0]._groupChar
             try:
                 value = long(text.replace(groupchar,''))
             except:
@@ -3147,8 +3217,8 @@ class wxMaskedEditMixin:
 
         else:   # decimal value
             try:
-                groupchar = self._fields[0]._groupchar
-                value = float(text.replace(groupchar,''))
+                groupchar = self._fields[0]._groupChar
+                value = float(text.replace(groupchar,'').replace(self._decimalChar, '.'))
                 if value < 0:
                     signpos = text.find('-')
                     text = text[:signpos] + self._template[signpos] + text[signpos+1:]
@@ -3434,9 +3504,9 @@ class wxMaskedEditMixin:
         if candidate is None: value = self._GetValue()
         else: value = candidate
         try:
-            groupchar = self._fields[0]._groupchar
+            groupchar = self._fields[0]._groupChar
             if self._isDec:
-                number = float(value.replace(groupchar, ''))
+                number = float(value.replace(groupchar, '').replace(self._decimalChar, '.'))
             else:
                 number = int( value.replace(groupchar, ''))
             dbg('number:', number)
@@ -3846,7 +3916,7 @@ class wxMaskedEditMixin:
                 if new_text == '':
                     self.ClearValue()
                 else:
-                    wxCallAfter(self._SetValue, )
+                    wxCallAfter(self._SetValue, new_text)
                     new_pos = sel_start + len(replacement_text)
                     wxCallAfter(self._SetInsertionPoint, new_pos)
             else:
@@ -3962,6 +4032,13 @@ class wxMaskedTextCtrl( wxTextCtrl, wxMaskedEditMixin ):
         # empty previous contents, replacing entire value:
         self._SetInsertionPoint(0)
         self._SetSelection(0, len(self._mask))
+
+        if( len(value) < len(self._mask)                # value shorter than control
+            and (self._isDec or self._isInt)            # and it's a numeric control
+            and self._ctrl_constraints._alignRight ):   # and it's a right-aligned control
+            # try to intelligently "pad out" the value to the right size:
+            value = self._template[0:len(self._mask) - len(value)] + value
+            dbg('padded value = "%s"' % value)
 
         # make SetValue behave the same as if you had typed the value in:
         try:
@@ -4215,6 +4292,13 @@ class wxMaskedComboBox( wxComboBox, wxMaskedEditMixin ):
         self._SetInsertionPoint(0)
         self._SetSelection(0, len(self._mask))
 
+        if( len(value) < len(self._mask)                # value shorter than control
+            and (self._isDec or self._isInt)            # and it's a numeric control
+            and self._ctrl_constraints._alignRight ):   # and it's a right-aligned control
+            # try to intelligently "pad out" the value to the right size:
+            value = self._template[0:len(self._mask) - len(value)] + value
+            dbg('padded value = "%s"' % value)
+
         # make SetValue behave the same as if you had typed the value in:
         try:
             value = self._Paste(value, raise_on_invalid=True, just_return_value=True)
@@ -4312,7 +4396,7 @@ class wxMaskedComboBox( wxComboBox, wxMaskedEditMixin ):
         """
         self._choices = []
         if self._ctrl_constraints._choices:
-            self.SetMaskParameters(choices=[])
+            self.SetCtrlParameters(choices=[])
         wxComboBox.Clear(self)
 
 
@@ -4576,8 +4660,8 @@ def isTimeType( fmtstring ):
     return False
 
 
-def isDecimal( fmtstring ):
-    filter = re.compile("[ ]?[#]+\.[#]+\n")
+def isDecimal( fmtstring, decimalchar ):
+    filter = re.compile("[ ]?[#]+\%c[#]+\n" % decimalchar)
     if re.match(filter,fmtstring+"\n"): return True
     return False
 
@@ -4734,7 +4818,7 @@ Try entering nonsensical or partial values in validated fields to see what happe
                                                     choices      = control[6],
                                                     defaultValue = control[7],
                                                     demo         = True)
-                    if control[6]: newControl.SetMaskParameters(choiceRequired = True)
+                    if control[6]: newControl.SetCtrlParameters(choiceRequired = True)
                 else:
                     newControl = wxMaskedComboBox(  self.panel, -1, "",
                                                     choices = control[7],
@@ -4773,11 +4857,11 @@ Try entering nonsensical or partial values in validated fields to see what happe
             value = event.Checked()
             if value:
                 for control in self.editList:
-                    control.SetMaskParameters(emptyInvalid=True)
+                    control.SetCtrlParameters(emptyInvalid=True)
                     control.Refresh()
             else:
                 for control in self.editList:
-                    control.SetMaskParameters(emptyInvalid=False)
+                    control.SetCtrlParameters(emptyInvalid=False)
                     control.Refresh()
             self.panel.Refresh()
 
@@ -4786,11 +4870,11 @@ Try entering nonsensical or partial values in validated fields to see what happe
             value = event.Checked()
             if value:
                 for control in self.editList:
-                    control.SetMaskParameters( emptyBackgroundColor = 'Aquamarine')
+                    control.SetCtrlParameters( emptyBackgroundColor = 'Aquamarine')
                     control.Refresh()
             else:
                 for control in self.editList:
-                    control.SetMaskParameters( emptyBackgroundColor = 'White')
+                    control.SetCtrlParameters( emptyBackgroundColor = 'White')
                     control.Refresh()
             self.panel.Refresh()
 
@@ -4936,10 +5020,7 @@ i=1
 ##  2. Allow optional monetary symbols (eg. $, pounds, etc.) at front of a "decimal"
 ##     control.
 ##  3. Fix shift-left selection for wxMaskedComboBox.
-##  4. Make .SetValue do a right-justified paste if the control is right justified or
-##     right-insert.  (making numeric controls easier to populate.)
-##  5. Allow for european conventions of , for "decimal point" and . for "group char".
-##  6. Transform notion of "decimal control" to be less "entire control"-centric,
+##  5. Transform notion of "decimal control" to be less "entire control"-centric,
 ##     so that monetary symbols can be included and still have the appropriate
 ##     semantics.  (Big job, as currently written, but would make control even
 ##     more useful for business applications.)
@@ -4947,6 +5028,17 @@ i=1
 
 ## CHANGELOG:
 ## ====================
+##  Version 1.3
+##   1. Made it possible to configure grouping, decimal and shift-decimal characters,
+##      to make controls more usable internationally.
+##   2. Added code to smart "adjust" value strings presented to .SetValue()
+##      for right-aligned numeric format controls if they are shorter than
+##      than the control width,  prepending the missing portion, prepending control
+##      template left substring for the missing characters, so that setting
+##      numeric values is easier.
+##   3. Renamed SetMaskParameters SetCtrlParameters() (with old name preserved
+##      for b-c), as this makes more sense.
+##
 ##  Version 1.2
 ##   1. Fixed .SetValue() to replace the current value, rather than the current
 ##      selection. Also changed it to generate ValueError if presented with

@@ -58,7 +58,7 @@ class demoMixin:
         else:               value = notchecked_value
         kwargs = {parameter: value}
         for control in self.editList:
-            control.SetMaskParameters(**kwargs)
+            control.SetCtrlParameters(**kwargs)
             control.Refresh()
         self.Refresh()
 
@@ -470,8 +470,14 @@ the value of the above float control:""")
 
     def OnNumberSelect( self, event ):
         value = event.GetString()
+
         # Format choice to fit into format for #{9}.#{2}, with sign position reserved:
         # (ordinal + fraction == 11 + decimal point + sign == 13)
+        #
+        # Note: since self.floatctrl a right-aligned control, you could also just use
+        #   "%.2f", but this wouldn't work properly for a left-aligned control.
+        #   (See .SetValue() documentation in Overview.)
+        #
         if value:
             floattext = "%13.2f" % float(value)
         else:
