@@ -3982,9 +3982,7 @@ void wxWindowGTK::GtkSendPaintEvents()
     if (GetThemeEnabled() && (GetBackgroundStyle() == wxBG_STYLE_SYSTEM))
     {
         // find ancestor from which to steal background
-        wxWindow *parent = IsTopLevel() ? this : GetParent();
-        while (parent && !parent->IsTopLevel())
-            parent = parent->GetParent();
+        wxWindow *parent = wxGetTopLevelParent((wxWindow *)this);
         if (!parent)
             parent = (wxWindow*)this;
 
