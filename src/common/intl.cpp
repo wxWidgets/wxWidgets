@@ -801,7 +801,7 @@ void wxLocale::AddCatalogLookupPathPrefix(const wxString& prefix)
         return wxLANGUAGE_ENGLISH;
     }
 
-    if ( langFull == _T("C") )
+    if ( langFull == _T("C") || langFull == _T("POSIX") )
     {
         // default C locale
         return wxLANGUAGE_ENGLISH;
@@ -809,18 +809,31 @@ void wxLocale::AddCatalogLookupPathPrefix(const wxString& prefix)
 
     // the language string has the following form
     //
-    //      lang[_LANG[.encoding]]
+    //      lang[_LANG][.encoding][@modifier]
     //
-    // where lang is the primary language, LANG is a sublang
+    // (see environ(5) in the Open Unix specification)
+    //
+    // where lang is the primary language, LANG is a sublang/territory,
+    // encoding is the charset to use and modifier "allows the user to select
+    // a specific instance of localization data within a single category"
     //
     // for example, the following strings are valid:
     //      fr
     //      fr_FR
     //      de_DE.iso88591
+    //      de_DE@euro
+    //      de_DE.iso88591@euro
 
     // for now we don't use the encoding, although we probably should (doing
     // translations of the msg catalogs on the fly as required) (TODO)
-    langFull = langFull.BeforeFirst(_T('.'));
+    //
+    // we don't use the modifiers neither but we probably should translate
+    // "euro" into iso885915
+    size_t posEndLang = langFull.find_first_of(_T("@."));
+    if ( posEndLang != wxString::npos )
+    {
+        langFull.Truncate(posEndLang);
+    }
 
     // in addition to the format above, we also can have full language names
     // in LANG env var - for example, SuSE is known to use LANG="german" - so
