@@ -576,6 +576,9 @@ class wxListCtrlPtr(wxControlPtr):
     def ClearAll(self, *_args, **_kwargs):
         val = apply(controls2c.wxListCtrl_ClearAll,(self,) + _args, _kwargs)
         return val
+    def EditLabel(self, *_args, **_kwargs):
+        val = apply(controls2c.wxListCtrl_EditLabel,(self,) + _args, _kwargs)
+        return val
     def EnsureVisible(self, *_args, **_kwargs):
         val = apply(controls2c.wxListCtrl_EnsureVisible,(self,) + _args, _kwargs)
         return val
