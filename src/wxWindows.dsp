@@ -1202,6 +1202,10 @@ SOURCE=.\msw\data.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\msw\datectrl.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\msw\dc.cpp
 # End Source File
 # Begin Source File
@@ -1247,6 +1251,10 @@ SOURCE=.\msw\dirdlg.cpp
 # Begin Source File
 
 SOURCE=.\msw\display.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\msw\dlmsw.cpp
 # End Source File
 # Begin Source File
 
@@ -2032,6 +2040,14 @@ SOURCE=..\include\wx\cursor.h
 # Begin Source File
 
 SOURCE=..\include\wx\dataobj.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\datectrl.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\dateevt.h
 # End Source File
 # Begin Source File
 
@@ -3216,6 +3232,10 @@ SOURCE=..\include\wx\msw\crashrpt.h
 # Begin Source File
 
 SOURCE=..\include\wx\msw\cursor.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\msw\datectrl.h
 # End Source File
 # Begin Source File
 

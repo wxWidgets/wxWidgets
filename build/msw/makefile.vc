@@ -252,6 +252,7 @@ MONODLL_OBJECTS =  \
 	$(OBJS)\monodll_crashrpt.obj \
 	$(OBJS)\monodll_dde.obj \
 	$(OBJS)\monodll_dir.obj \
+	$(OBJS)\monodll_dlmsw.obj \
 	$(OBJS)\monodll_mimetype.obj \
 	$(OBJS)\monodll_regconf.obj \
 	$(OBJS)\monodll_registry.obj \
@@ -360,6 +361,7 @@ MONOLIB_OBJECTS =  \
 	$(OBJS)\monolib_crashrpt.obj \
 	$(OBJS)\monolib_dde.obj \
 	$(OBJS)\monolib_dir.obj \
+	$(OBJS)\monolib_dlmsw.obj \
 	$(OBJS)\monolib_mimetype.obj \
 	$(OBJS)\monolib_regconf.obj \
 	$(OBJS)\monolib_registry.obj \
@@ -469,6 +471,7 @@ BASEDLL_OBJECTS =  \
 	$(OBJS)\basedll_crashrpt.obj \
 	$(OBJS)\basedll_dde.obj \
 	$(OBJS)\basedll_dir.obj \
+	$(OBJS)\basedll_dlmsw.obj \
 	$(OBJS)\basedll_mimetype.obj \
 	$(OBJS)\basedll_regconf.obj \
 	$(OBJS)\basedll_registry.obj \
@@ -562,6 +565,7 @@ BASELIB_OBJECTS =  \
 	$(OBJS)\baselib_crashrpt.obj \
 	$(OBJS)\baselib_dde.obj \
 	$(OBJS)\baselib_dir.obj \
+	$(OBJS)\baselib_dlmsw.obj \
 	$(OBJS)\baselib_mimetype.obj \
 	$(OBJS)\baselib_regconf.obj \
 	$(OBJS)\baselib_registry.obj \
@@ -685,6 +689,7 @@ ADVDLL_OBJECTS =  \
 	$(OBJS)\advdll_tipdlg.obj \
 	$(OBJS)\advdll_wizard.obj \
 	$(OBJS)\advdll_taskbarcmn.obj \
+	$(OBJS)\advdll_datectrl.obj \
 	$(OBJS)\advdll_sound.obj \
 	$(OBJS)\advdll_taskbar.obj \
 	$(OBJS)\advdll_joystick.obj
@@ -710,6 +715,7 @@ ADVLIB_OBJECTS =  \
 	$(OBJS)\advlib_tipdlg.obj \
 	$(OBJS)\advlib_wizard.obj \
 	$(OBJS)\advlib_taskbarcmn.obj \
+	$(OBJS)\advlib_datectrl.obj \
 	$(OBJS)\advlib_sound.obj \
 	$(OBJS)\advlib_taskbar.obj \
 	$(OBJS)\advlib_joystick.obj
@@ -1203,6 +1209,7 @@ ____MONOLIB_GUI_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_tipdlg.obj \
 	$(OBJS)\monodll_wizard.obj \
 	$(OBJS)\monodll_taskbarcmn.obj \
+	$(OBJS)\monodll_datectrl.obj \
 	$(OBJS)\monodll_sound.obj \
 	$(OBJS)\monodll_taskbar.obj \
 	$(OBJS)\monodll_joystick.obj \
@@ -1700,6 +1707,7 @@ ____MONOLIB_GUI_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_tipdlg.obj \
 	$(OBJS)\monolib_wizard.obj \
 	$(OBJS)\monolib_taskbarcmn.obj \
+	$(OBJS)\monolib_datectrl.obj \
 	$(OBJS)\monolib_sound.obj \
 	$(OBJS)\monolib_taskbar.obj \
 	$(OBJS)\monolib_joystick.obj \
@@ -4437,6 +4445,9 @@ $(OBJS)\monodll_dde.obj: ..\..\src\msw\dde.cpp
 $(OBJS)\monodll_dir.obj: ..\..\src\msw\dir.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) $**
 
+$(OBJS)\monodll_dlmsw.obj: ..\..\src\msw\dlmsw.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) $**
+
 $(OBJS)\monodll_mimetype.obj: ..\..\src\msw\mimetype.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) $**
 
@@ -4684,6 +4695,9 @@ $(OBJS)\monodll_wizard.obj: ..\..\src\generic\wizard.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) $**
 
 $(OBJS)\monodll_taskbarcmn.obj: ..\..\src\common\taskbarcmn.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) $**
+
+$(OBJS)\monodll_datectrl.obj: ..\..\src\msw\datectrl.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) $**
 
 $(OBJS)\monodll_sound.obj: ..\..\src\msw\sound.cpp
@@ -6054,6 +6068,9 @@ $(OBJS)\monolib_dde.obj: ..\..\src\msw\dde.cpp
 $(OBJS)\monolib_dir.obj: ..\..\src\msw\dir.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) $**
 
+$(OBJS)\monolib_dlmsw.obj: ..\..\src\msw\dlmsw.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) $**
+
 $(OBJS)\monolib_mimetype.obj: ..\..\src\msw\mimetype.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) $**
 
@@ -6301,6 +6318,9 @@ $(OBJS)\monolib_wizard.obj: ..\..\src\generic\wizard.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) $**
 
 $(OBJS)\monolib_taskbarcmn.obj: ..\..\src\common\taskbarcmn.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) $**
+
+$(OBJS)\monolib_datectrl.obj: ..\..\src\msw\datectrl.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) $**
 
 $(OBJS)\monolib_sound.obj: ..\..\src\msw\sound.cpp
@@ -7671,6 +7691,9 @@ $(OBJS)\basedll_dde.obj: ..\..\src\msw\dde.cpp
 $(OBJS)\basedll_dir.obj: ..\..\src\msw\dir.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(BASEDLL_CXXFLAGS) $**
 
+$(OBJS)\basedll_dlmsw.obj: ..\..\src\msw\dlmsw.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(BASEDLL_CXXFLAGS) $**
+
 $(OBJS)\basedll_mimetype.obj: ..\..\src\msw\mimetype.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(BASEDLL_CXXFLAGS) $**
 
@@ -7894,6 +7917,9 @@ $(OBJS)\baselib_dde.obj: ..\..\src\msw\dde.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(BASELIB_CXXFLAGS) $**
 
 $(OBJS)\baselib_dir.obj: ..\..\src\msw\dir.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(BASELIB_CXXFLAGS) $**
+
+$(OBJS)\baselib_dlmsw.obj: ..\..\src\msw\dlmsw.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(BASELIB_CXXFLAGS) $**
 
 $(OBJS)\baselib_mimetype.obj: ..\..\src\msw\mimetype.cpp
@@ -10323,6 +10349,9 @@ $(OBJS)\advdll_wizard.obj: ..\..\src\generic\wizard.cpp
 $(OBJS)\advdll_taskbarcmn.obj: ..\..\src\common\taskbarcmn.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(ADVDLL_CXXFLAGS) $**
 
+$(OBJS)\advdll_datectrl.obj: ..\..\src\msw\datectrl.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(ADVDLL_CXXFLAGS) $**
+
 $(OBJS)\advdll_sound.obj: ..\..\src\msw\sound.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(ADVDLL_CXXFLAGS) $**
 
@@ -10366,6 +10395,9 @@ $(OBJS)\advlib_wizard.obj: ..\..\src\generic\wizard.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(ADVLIB_CXXFLAGS) $**
 
 $(OBJS)\advlib_taskbarcmn.obj: ..\..\src\common\taskbarcmn.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(ADVLIB_CXXFLAGS) $**
+
+$(OBJS)\advlib_datectrl.obj: ..\..\src\msw\datectrl.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(ADVLIB_CXXFLAGS) $**
 
 $(OBJS)\advlib_sound.obj: ..\..\src\msw\sound.cpp
@@ -10832,4 +10864,3 @@ $(OBJS)\gllib_dummy.obj: ..\..\src\msw\dummy.cpp
 
 $(OBJS)\gllib_glcanvas.obj: ..\..\src\msw\glcanvas.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(GLLIB_CXXFLAGS) $**
-
