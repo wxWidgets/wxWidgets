@@ -19,6 +19,8 @@ All:
 - wxStopWatch::Start() resumes the stop watch if paused, as per the docs
 - added wxDirTraverser::OnOpenError() to customize the error handling
 - added wxArray::SetCount()
+- wxFile, wxFFile, wxTextFile and wxTempFile now all use UTF-8 encoding
+  by default in Unicode mode
 
 wxBase:
 
