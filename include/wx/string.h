@@ -182,7 +182,7 @@ struct WXDLLEXPORT wxStringData
   {
 #endif  //WXSTRING_IS_WXOBJECT
 
-friend class wxArrayString;
+friend class WXDLLEXPORT wxArrayString;
 
   // NB: special care was taken in arrangin the member functions in such order
   //     that all inline functions can be effectively inlined
@@ -788,7 +788,7 @@ public:
     @memo probably the most commonly used array type - array of strings
  */
 // ----------------------------------------------------------------------------
-class wxArrayString
+class WXDLLEXPORT wxArrayString
 {
 public:
   /** @name ctors and dtor */

@@ -64,7 +64,7 @@ typedef int (CMPFUNC_CONV *CMPFUNC)(const void* pItem1, const void* pItem2);
   @memo Base class for template array and list classes
 */
 // ----------------------------------------------------------------------------
-class wxBaseArray
+class WXDLLEXPORT wxBaseArray
 {
 public:
   /** @name ctors and dtor */
@@ -163,7 +163,7 @@ private:
 // ----------------------------------------------------------------------------
 #define  _WX_DEFINE_ARRAY(T, name)                                  \
 typedef int (CMPFUNC_CONV *CMPFUNC##T)(T *pItem1, T *pItem2);       \
-class name : public wxBaseArray                                     \
+class WXDLLEXPORTLOCAL name : public wxBaseArray                                     \
 {                                                                   \
 public:                                                             \
   name()                                                            \
@@ -217,7 +217,7 @@ public:                                                             \
 // ----------------------------------------------------------------------------
 #define  _WX_DEFINE_SORTED_ARRAY(T, name)                           \
 typedef int (CMPFUNC_CONV *SCMPFUNC##T)(T pItem1, T pItem2);        \
-class name : public wxBaseArray                                     \
+class WXDLLEXPORTLOCAL  name : public wxBaseArray                                     \
 {                                                                   \
 public:                                                             \
   name(SCMPFUNC##T fn)                                              \
@@ -257,7 +257,7 @@ private:                                                            \
 // ----------------------------------------------------------------------------
 #define _WX_DECLARE_LIST(T, name)                                   \
 typedef int (CMPFUNC_CONV *CMPFUNC##T)(T** pItem1, T** pItem2);     \
-class name : public wxBaseArray                                     \
+class WXDLLEXPORTLOCAL  name : public wxBaseArray                                     \
 {                                                                   \
 public:                                                             \
   name() { }                                                        \
@@ -393,6 +393,8 @@ private:                                                            \
 // # overhead if not used?
 // ----------------------------------------------------------------------------
 
+#define WXDLLEXPORTLOCAL WXDLLEXPORT
+
 //@{
   /** @name ArrayInt */
 WX_DEFINE_ARRAY(int,    wxArrayInt);
@@ -403,6 +405,9 @@ WX_DEFINE_ARRAY(void *, wxArrayPtrVoid);
 //@}
 
 //@}
+
+#undef  WXDLLEXPORTLOCAL
+#define WXDLLEXPORTLOCAL
 
 #endif // _DYNARRAY_H
 

@@ -228,7 +228,7 @@ MSWOBJS = \
 OBJECTS = $(COMMONOBJS) $(GENERICOBJS) $(MSWOBJS)
 
 # Normal, static library
-all:    $(DUMMYOBJ) $(OBJECTS) $(PERIPH_TARGET) $(LIBTARGET)
+all:    $(DUMMYOBJ) $(OBJECTS) $(PERIPH_TARGET) png zlib $(LIBTARGET)
 
 # wxWindows library as DLL
 dll:
@@ -279,7 +279,7 @@ $(WXDIR)\lib\wx200.dll: $(DUMMYOBJ) $(OBJECTS) $(WXDIR)\lib\wx200.lib
     $(link) @<<
     $(LINKFLAGS)
     -out:$(WXDIR)\lib\wx200.dll
-    $(DUMMYOBJ) $(OBJECTS) $(guilibsdll) shell32.lib comctl32.lib ctl3d32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib
+    $(DUMMYOBJ) $(OBJECTS) $(guilibsdll) shell32.lib comctl32.lib ctl3d32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib odbc32.lib advapi32.lib winmm.lib $(WXDIR)\lib\winpng.lib $(WXDIR)\lib\zlib.lib
 <<
 
 ########################################################
@@ -1140,13 +1140,33 @@ $(OBJECTS):	$(WXDIR)/include/wx/setup.h
 
 # Peripheral components
 
+png:
+    cd $(WXDIR)\src\png
+    nmake -f makefile.nt FINAL=$(FINAL)
+    cd $(WXDIR)\src\msw
+
+clean_png:
+    cd $(WXDIR)\src\png
+    nmake -f makefile.nt clean
+    cd $(WXDIR)\src\msw
+
+zlib:
+    cd $(WXDIR)\src\zlib
+    nmake -f makefile.nt FINAL=$(FINAL)
+    cd $(WXDIR)\src\msw
+
+clean_zlib:
+    cd $(WXDIR)\src\zlib
+    nmake -f makefile.nt clean
+    cd $(WXDIR)\src\msw
+
 xpm:
-    cd $(WXDIR)\contrib\wxxpm
+    cd $(WXDIR)\src\wxxpm
     nmake -f makefile.nt FINAL=$(FINAL)
     cd $(WXDIR)\src\msw
 
 clean_xpm:
-    cd $(WXDIR)\contrib\wxxpm
+    cd $(WXDIR)\src\wxxpm
     nmake -f makefile.nt clean
     cd $(WXDIR)\src\msw
 
@@ -1170,7 +1190,7 @@ clean_rcp:
     nmake -f makefile.nt clean
     cd $(WXDIR)\src\msw
 
-clean: $(PERIPH_CLEAN_TARGET)
+clean: $(PERIPH_CLEAN_TARGET) clean_png clean_zlib
         -erase *.obj
         -erase $(LIBTARGET)
         -erase $(WXDIR)\lib\*.pdb

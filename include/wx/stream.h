@@ -190,7 +190,7 @@ class WXDLLEXPORT wxOutputStream {
   wxStreamBuffer *m_o_streambuf;
 };
 
-class wxStream: public virtual wxInputStream,
+class WXDLLEXPORT wxStream: public virtual wxInputStream,
 		public virtual wxOutputStream
 {
  public:
