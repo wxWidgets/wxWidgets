@@ -25,7 +25,7 @@
 
 class WXDLLEXPORT wxWindow;
 
-#ifndef __WXMAC_X__
+#ifndef __DARWIN__
 class WXDLLEXPORT wxDataObject;
 class WXDLLEXPORT wxTextDataObject;
 class WXDLLEXPORT wxFileDataObject;
@@ -37,7 +37,7 @@ class WXDLLEXPORT wxFileDropTarget;
 
 class WXDLLEXPORT wxDropSource;
 
-#ifndef __WXMAC_X__
+#ifndef __DARWIN__
 //-------------------------------------------------------------------------
 // wxDataObject
 //-------------------------------------------------------------------------
@@ -168,7 +168,7 @@ class WXDLLEXPORT wxDropTarget: public wxObject
     virtual wxDataFormat GetFormat(size_t n) const = 0;
 };
 
-#ifndef __WXMAC_X__
+#ifndef __DARWIN__
 //-------------------------------------------------------------------------
 // wxTextDropTarget
 //-------------------------------------------------------------------------

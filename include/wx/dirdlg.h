@@ -24,7 +24,7 @@ WXDLLEXPORT_DATA(extern const wxChar*) wxEmptyString;
 #elif defined(__WXQT__)
 #include "wx/qt/dirdlg.h"
 #elif defined(__WXMAC__)
-#ifdef __WXMAC_X__
+#ifdef __DARWIN__
 #include "wx/generic/dirdlgg.h"
 #else
 #include "wx/mac/dirdlg.h"
