@@ -53,7 +53,6 @@ bool wxCheckListBox::Create(wxWindow *parent, wxWindowID winid,
 
 wxCheckListBox::~wxCheckListBox()
 {
-    CocoaRemoveFromParent();
 }
 
 bool wxCheckListBox::IsChecked(size_t item) const

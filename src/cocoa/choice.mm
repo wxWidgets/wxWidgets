@@ -112,8 +112,6 @@ wxChoice::~wxChoice()
             delete (wxClientData*)m_itemsClientData.Item(i);
     }
     m_itemsClientData.Clear();
-
-    CocoaRemoveFromParent();
 }
 
 void wxChoice::CocoaNotification_menuDidSendAction(WX_NSNotification notification)
