@@ -84,8 +84,8 @@ public:
             );
 
     // Initialize with XPM data
-    wxBitmap(const char** ppData);
-    wxBitmap(char** ppData);
+    wxBitmap(const char** ppData) { CreateFromXpm(ppData); }
+    wxBitmap(char** ppData) { CreateFromXpm((const char**)ppData); }
 
     // Load a file or resource
     wxBitmap( const wxString& rName
@@ -106,7 +106,7 @@ public:
              ,int nDepth = -1
             );
 
-    wxBitmap( const wxImage& image, int depth = -1 ) 
+    wxBitmap( const wxImage& image, int depth = -1 )
                          { (void)CreateFromImage(image, depth); }
 
     // we must have this, otherwise icons are silently copied into bitmaps using
@@ -136,7 +136,7 @@ public:
 
     virtual ~wxBitmap();
 
-    wxImage ConvertToImage() const;  
+    wxImage ConvertToImage() const;
 
     // get the given part of bitmap
     wxBitmap GetSubBitmap(const wxRect& rRect) const;
@@ -231,7 +231,7 @@ protected:
         { return new wxBitmapRefData; }
 
     // creates the bitmap from XPM data, supposed to be called from ctor
-    bool CreateFromXpm(const char **bits);
+    bool CreateFromXpm(const char** ppData);
     bool CreateFromImage(const wxImage& image, int depth);
 
 private:
