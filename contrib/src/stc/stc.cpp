@@ -1477,7 +1477,7 @@ void wxStyledTextCtrl::HomeDisplay() {
     SendMsg(2345, 0, 0);
 }
 
-// Move caret to first position on display line extending selection to 
+// Move caret to first position on display line extending selection to
 // new caret position.
 void wxStyledTextCtrl::HomeDisplayExtend() {
     SendMsg(2346, 0, 0);
@@ -1488,7 +1488,7 @@ void wxStyledTextCtrl::LineEndDisplay() {
     SendMsg(2347, 0, 0);
 }
 
-// Move caret to last position on display line extending selection to new 
+// Move caret to last position on display line extending selection to new
 // caret position.
 void wxStyledTextCtrl::LineEndDisplayExtend() {
     SendMsg(2348, 0, 0);
@@ -2081,6 +2081,20 @@ void wxStyledTextCtrl::NotifyChange() {
     GetEventHandler()->ProcessEvent(evt);
 }
 
+
+static void SetEventText(wxStyledTextEvent& evt, const char* text,
+                         size_t length) {
+    if(!text) return;
+
+    // The unicode conversion MUST have a null byte to terminate the
+    // string so move it into a buffer first and give it one.
+    wxMemoryBuffer buf(length+1);
+    buf.AppendData((void*)text, length);
+    buf.AppendByte(0);
+    evt.SetText(stc2wx(buf));
+}
+
+
 void wxStyledTextCtrl::NotifyParent(SCNotification* _scn) {
     SCNotification& scn = *_scn;
     wxStyledTextEvent evt(0, GetId());
@@ -2126,14 +2140,7 @@ void wxStyledTextCtrl::NotifyParent(SCNotification* _scn) {
     case SCN_MODIFIED:
         evt.SetEventType(wxEVT_STC_MODIFIED);
         evt.SetModificationType(scn.modificationType);
-        if (scn.text) {
-            // The unicode conversion MUST have a null byte to terminate the
-            // string so move it into a buffer first and give it one.
-            wxMemoryBuffer buf(scn.length+1);
-            buf.AppendData((void*)scn.text, scn.length);
-            buf.AppendByte(0);
-            evt.SetText(stc2wx(buf));
-        }
+        SetEventText(evt, scn.text, scn.length);
         evt.SetLength(scn.length);
         evt.SetLinesAdded(scn.linesAdded);
         evt.SetLine(scn.line);
@@ -2165,12 +2172,12 @@ void wxStyledTextCtrl::NotifyParent(SCNotification* _scn) {
     case SCN_USERLISTSELECTION:
         evt.SetEventType(wxEVT_STC_USERLISTSELECTION);
         evt.SetListType(scn.listType);
-        evt.SetText(scn.text);
+        SetEventText(evt, scn.text, strlen(scn.text));
         break;
 
     case SCN_URIDROPPED:
         evt.SetEventType(wxEVT_STC_URIDROPPED);
-        evt.SetText(scn.text);
+        SetEventText(evt, scn.text, strlen(scn.text));
         break;
 
     case SCN_DWELLSTART:
