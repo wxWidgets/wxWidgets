@@ -330,16 +330,23 @@ wxDropTarget::~wxDropTarget()
 
 bool wxDropTarget::Register(WXHWND hwnd)
 {
-    HRESULT hr = ::CoLockObjectExternal(m_pIDropTarget, TRUE, FALSE);
+    HRESULT hr;
+
+    // May exist in later WinCE versions
+#ifndef __WXWINCE__
+    hr = ::CoLockObjectExternal(m_pIDropTarget, TRUE, FALSE);
     if ( FAILED(hr) ) {
         wxLogApiError(wxT("CoLockObjectExternal"), hr);
         return FALSE;
     }
+#endif
 
     hr = ::RegisterDragDrop((HWND) hwnd, m_pIDropTarget);
     if ( FAILED(hr) ) {
+    // May exist in later WinCE versions
+#ifndef __WXWINCE__
         ::CoLockObjectExternal(m_pIDropTarget, FALSE, FALSE);
-
+#endif
         wxLogApiError(wxT("RegisterDragDrop"), hr);
         return FALSE;
     }
@@ -358,7 +365,10 @@ void wxDropTarget::Revoke(WXHWND hwnd)
         wxLogApiError(wxT("RevokeDragDrop"), hr);
     }
 
+    // May exist in later WinCE versions
+#ifndef __WXWINCE__
     ::CoLockObjectExternal(m_pIDropTarget, FALSE, TRUE);
+#endif
 
     m_pIDropTarget->SetHwnd(0);
 }

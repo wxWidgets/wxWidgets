@@ -762,18 +762,27 @@ const wxChar *wxDataObject::GetFormatName(wxDataFormat format)
 
 size_t wxBitmapDataObject::GetDataSize() const
 {
+#if wxUSE_WXDIB
     return wxDIB::ConvertFromBitmap(NULL, GetHbitmapOf(GetBitmap()));
+#else
+    return 0;
+#endif
 }
 
 bool wxBitmapDataObject::GetDataHere(void *buf) const
 {
+#if wxUSE_WXDIB
     BITMAPINFO * const pbi = (BITMAPINFO *)buf;
 
     return wxDIB::ConvertFromBitmap(pbi, GetHbitmapOf(GetBitmap())) != 0;
+#else
+    return FALSE;
+#endif
 }
 
 bool wxBitmapDataObject::SetData(size_t WXUNUSED(len), const void *buf)
 {
+#if wxUSE_WXDIB
     const BITMAPINFO * const pbmi = (const BITMAPINFO *)buf;
 
     HBITMAP hbmp = wxDIB::ConvertToBitmap(pbmi);
@@ -789,6 +798,9 @@ bool wxBitmapDataObject::SetData(size_t WXUNUSED(len), const void *buf)
     SetBitmap(bitmap);
 
     return TRUE;
+#else
+    return FALSE;
+#endif
 }
 
 // ----------------------------------------------------------------------------
