@@ -520,7 +520,7 @@ GSocketGUIFunctionsTable* wxGUIAppTraitsBase::GetSocketGUIFunctionsTable()
     // NB: wxMac does not have any GUI-specific functions in gsocket.c and
     //     so it doesn't need this table at all
     return NULL;
-#else
+#else // !__WXMAC__
     static GSocketGUIFunctionsTable table =
     {
         _GSocket_GUI_Init,
@@ -535,7 +535,7 @@ GSocketGUIFunctionsTable* wxGUIAppTraitsBase::GetSocketGUIFunctionsTable()
         _GSocket_Disable_Events
     };
     return &table;
-#endif
+#endif // __WXMAC__/!__WXMAC__
 }
 
 #endif
