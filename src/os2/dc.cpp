@@ -22,6 +22,7 @@
     #include "wx/dcmemory.h"
     #include "wx/log.h"
     #include "wx/icon.h"
+    #include "wx/msgdlg.h"
 #endif
 
 #include "wx/dcprint.h"
