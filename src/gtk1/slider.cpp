@@ -98,11 +98,12 @@ bool wxSlider::Create(wxWindow *parent, wxWindowID id,
     m_acceptsFocus = TRUE;
     m_needParent = TRUE;
   
-    PreCreation( parent, id, pos, size, style, name );
-  
-#if wxUSE_VALIDATORS
-    SetValidator( validator );
-#endif
+    if (!PreCreation( parent, pos, size ) ||
+        !CreateBase( parent, id, pos, size, style, validator, name ))
+    {
+        wxFAIL_MSG( _T("wxSlider creation failed") );
+	return FALSE;
+    }
 
     m_oldPos = 0.0;
 

@@ -11,18 +11,19 @@
 #define __HTMLHELP_H__
 
 #ifdef __GNUG__
-#pragma interface
+#pragma interface "htmlhelp.h"
 #endif
 
 #include "wx/defs.h"
+
 #if wxUSE_HTML
 
-#include <wx/window.h>
-#include <wx/config.h>
-#include <wx/splitter.h>
-#include <wx/notebook.h>
-#include <wx/listctrl.h>
-#include <wx/html/htmlwin.h>
+#include "wx/window.h"
+#include "wx/config.h"
+#include "wx/splitter.h"
+#include "wx/notebook.h"
+#include "wx/listctrl.h"
+#include "wx/html/htmlwin.h"
 
 
 

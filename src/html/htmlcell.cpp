@@ -6,14 +6,12 @@
 // Licence:     wxWindows Licence
 /////////////////////////////////////////////////////////////////////////////
 
-
 #ifdef __GNUG__
-#pragma implementation
+#pragma implementation "htmlcell.h"
 #endif
 
-#include <wx/wxprec.h>
+#include "wx/wxprec.h"
 
-#include "wx/defs.h"
 #if wxUSE_HTML
 
 #ifdef __BORDLANDC__
@@ -21,14 +19,12 @@
 #endif
 
 #ifndef WXPRECOMP
-#include <wx/wx.h>
+#include "wx/wx.h"
 #endif
 
-#include <wx/html/htmlcell.h>
-#include <wx/html/htmlwin.h>
+#include "wx/html/htmlcell.h"
+#include "wx/html/htmlwin.h"
 #include <stdlib.h>
-
-
 
 
 //-----------------------------------------------------------------------------
@@ -68,10 +64,6 @@ void wxHtmlWordCell::Draw(wxDC& dc, int x, int y, int view_y1, int view_y2)
     dc.DrawText(m_Word, x + m_PosX, y + m_PosY);
     wxHtmlCell::Draw(dc, x, y, view_y1, view_y2);
 }
-
-
-
-
 
 
 

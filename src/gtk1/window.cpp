@@ -1821,7 +1821,12 @@ bool wxWindow::Create( wxWindow *parent, wxWindowID id,
                        const wxPoint &pos, const wxSize &size,
                        long style, const wxString &name  )
 {
-    PreCreation( parent, id, pos, size, style, name );
+    if (!PreCreation( parent, pos, size ) ||
+        !CreateBase( parent, id, pos, size, style, wxDefaultValidator, name ))
+    {
+        wxFAIL_MSG( _T("wxWindow creation failed") );
+	return FALSE;
+    }
 
     m_insertCallback = wxInsertChildInWindow;
 
@@ -2002,27 +2007,22 @@ wxWindow::~wxWindow()
     }
 }
 
-void wxWindow::PreCreation( wxWindow *parent,
-                            wxWindowID id,
-                            const wxPoint &pos,
-                            const wxSize &size,
-                            long style,
-                            const wxString &name )
+bool wxWindow::PreCreation( wxWindow *parent, const wxPoint &pos,  const wxSize &size )
 {
-    wxASSERT_MSG( !m_needParent || parent, _T("Need complete parent.") );
+    wxCHECK_MSG( !m_needParent || parent, FALSE, _T("Need complete parent.") );
 
-    if ( !CreateBase(parent, id, pos, size, style, wxDefaultValidator, name) )
-    {
-        wxFAIL_MSG(_T("window creation failed"));
-    }
-
+    /* this turns -1 into 20 so that a minimal window is
+       visible even although -1,-1 has been given as the
+       size of the window. the same trick is used in other
+       ports and should make debugging easier */
     m_width = WidthDefault(size.x);
     m_height = HeightDefault(size.y);
 
     m_x = (int)pos.x;
     m_y = (int)pos.y;
 
-    if (!parent)  /* some reasonable defaults */
+    /* some reasonable defaults */
+    if (!parent)  
     {
         if (m_x == -1)
         {
@@ -2035,6 +2035,8 @@ void wxWindow::PreCreation( wxWindow *parent,
             if (m_y < 10) m_y = 10;
         }
     }
+    
+    return TRUE;
 }
 
 void wxWindow::PostCreation()

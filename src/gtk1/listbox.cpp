@@ -244,11 +244,12 @@ bool wxListBox::Create( wxWindow *parent, wxWindowID id,
     m_needParent = TRUE;
     m_acceptsFocus = TRUE;
 
-    PreCreation( parent, id, pos, size, style, name );
-
-#if wxUSE_VALIDATORS
-    SetValidator( validator );
-#endif
+    if (!PreCreation( parent, pos, size ) ||
+        !CreateBase( parent, id, pos, size, style, validator, name ))
+    {
+        wxFAIL_MSG( _T("wxListBox creation failed") );
+	return FALSE;
+    }
 
     m_widget = gtk_scrolled_window_new( (GtkAdjustment*) NULL, (GtkAdjustment*) NULL );
     if (style & wxLB_ALWAYS_SB)

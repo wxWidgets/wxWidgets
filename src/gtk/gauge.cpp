@@ -28,59 +28,60 @@ bool wxGauge::Create( wxWindow *parent, wxWindowID id,  int range,
     const wxPoint& pos, const wxSize& size,
     long style, const wxValidator& validator, const wxString& name )
 {
-  m_needParent = TRUE;
+    m_needParent = TRUE;
   
-  PreCreation( parent, id, pos, size, style, name );
-  
-#if wxUSE_VALIDATORS
-    SetValidator( validator );
-#endif
+    if (!PreCreation( parent, pos, size ) ||
+        !CreateBase( parent, id, pos, size, style, validator, name ))
+    {
+        wxFAIL_MSG( _T("wxGauge creation failed") );
+	return FALSE;
+    }
 
-  m_rangeMax = range;
-  m_gaugePos = 0;
-  m_useProgressBar = TRUE;
+    m_rangeMax = range;
+    m_gaugePos = 0;
+    m_useProgressBar = TRUE;
   
-  m_widget = gtk_progress_bar_new();
+    m_widget = gtk_progress_bar_new();
   
-  m_parent->DoAddChild( this );
+    m_parent->DoAddChild( this );
   
-  PostCreation();
+    PostCreation();
   
-  Show( TRUE );
+    Show( TRUE );
     
-  return TRUE;
+    return TRUE;
 }
 
 void wxGauge::SetRange( int r )
 {
-  m_rangeMax = r;
-  if (m_gaugePos > m_rangeMax) m_gaugePos = m_rangeMax;
+    m_rangeMax = r;
+    if (m_gaugePos > m_rangeMax) m_gaugePos = m_rangeMax;
   
-  gtk_progress_bar_update( GTK_PROGRESS_BAR(m_widget), ((float)m_gaugePos)/m_rangeMax );
+    gtk_progress_bar_update( GTK_PROGRESS_BAR(m_widget), ((float)m_gaugePos)/m_rangeMax );
 }
 
 void wxGauge::SetValue( int pos )
 {
-  m_gaugePos = pos;
-  if (m_gaugePos > m_rangeMax) m_gaugePos = m_rangeMax;
+    m_gaugePos = pos;
+    if (m_gaugePos > m_rangeMax) m_gaugePos = m_rangeMax;
   
-  gtk_progress_bar_update( GTK_PROGRESS_BAR(m_widget), ((float)m_gaugePos)/m_rangeMax );
+    gtk_progress_bar_update( GTK_PROGRESS_BAR(m_widget), ((float)m_gaugePos)/m_rangeMax );
 }
 
-int wxGauge::GetRange(void) const
+int wxGauge::GetRange() const
 {
-  return m_rangeMax;
+    return m_rangeMax;
 }
 
-int wxGauge::GetValue(void) const
+int wxGauge::GetValue() const
 {
-  return m_gaugePos;
+    return m_gaugePos;
 }
 
 void wxGauge::ApplyWidgetStyle()
 {
-  SetWidgetStyle();
-  gtk_widget_set_style( m_widget, m_widgetStyle );
+    SetWidgetStyle();
+    gtk_widget_set_style( m_widget, m_widgetStyle );
 }
 
 #endif

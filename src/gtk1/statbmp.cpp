@@ -58,14 +58,19 @@ bool wxStaticBitmap::Create( wxWindow *parent, wxWindowID id, const wxBitmap &bi
 {
     m_needParent = TRUE;
 
-    wxSize newSize = size;
-
-    PreCreation( parent, id, pos, size, style, name );
+    if (!PreCreation( parent, pos, size ) ||
+        !CreateBase( parent, id, pos, size, style, wxDefaultValidator, name ))
+    {
+        wxFAIL_MSG( _T("wxXX creation failed") );
+	return FALSE;
+    }
 
     m_bitmap = bitmap;
 
     if (m_bitmap.Ok())
     {
+       wxSize newSize = size;
+
         GdkBitmap *mask = (GdkBitmap *) NULL;
         if ( m_bitmap.GetMask() )
             mask = m_bitmap.GetMask()->GetBitmap();

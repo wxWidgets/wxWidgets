@@ -75,13 +75,13 @@ bool wxButton::Create(  wxWindow *parent, wxWindowID id, const wxString &label,
     m_needParent = TRUE;
     m_acceptsFocus = TRUE;
 
-    wxSize newSize = size;
+    if (!PreCreation( parent, pos, size ) ||
+        !CreateBase( parent, id, pos, size, style, validator, name ))
+    {
+        wxFAIL_MSG( _T("wxButton creation failed") );
+	return FALSE;
+    }
 
-    PreCreation( parent, id, pos, newSize, style, name );
-  
-#if wxUSE_VALIDATORS
-    SetValidator( validator );
-#endif // wxUSE_VALIDATORS
 
     m_widget = gtk_button_new_with_label( "" );
     
@@ -92,6 +92,7 @@ bool wxButton::Create(  wxWindow *parent, wxWindowID id, const wxString &label,
 
     SetLabel(label);
 
+    wxSize newSize = size;
     if (newSize.x == -1) newSize.x = 15+gdk_string_measure( m_widget->style->font, label.mbc_str() );
     if (newSize.y == -1) newSize.y = 26;
     SetSize( newSize.x, newSize.y );

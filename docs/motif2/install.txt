@@ -16,6 +16,26 @@ make install
 ldconfig
 exit
 
+On all other Unices (maybe except *BSD), shared libraries are not supported
+out of the box due to the utter stupidity of libtool, so you'll have to do
+this instead:
+
+./configure --enable-static --disable-shared
+make
+su <type root password>
+make install
+ldconfig
+exit
+
+You may also want to try to edit the wrongly created libtool script
+in your build directory, if you need shared libraries on Unix. The
+wrong entries are something like
+  archive_cmds="\$LD -shared ....
+  archive_expsym_cmds="\$LD -shared ....
+which should be something like
+  archive_cmds="\$CC -shared ....
+  archive_expsym_cmds="\$CC -shared ....
+
 If you want to remove wxWindows on Unix you can do this:
 
 su <type root password>

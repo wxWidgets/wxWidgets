@@ -147,7 +147,12 @@ bool wxToolBar::Create( wxWindow *parent, wxWindowID id,
 {
     m_needParent = TRUE;
 
-    PreCreation( parent, id, pos, size, style, name );
+    if (!PreCreation( parent, pos, size ) ||
+        !CreateBase( parent, id, pos, size, style, wxDefaultValidator, name ))
+    {
+        wxFAIL_MSG( _T("wxToolBar creation failed") );
+	return FALSE;
+    }
 
     m_tools.DeleteContents( TRUE );
 

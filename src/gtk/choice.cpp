@@ -38,7 +38,8 @@ extern bool   g_blockEventsOnDrag;
 
 static void gtk_choice_clicked_callback( GtkWidget *WXUNUSED(widget), wxChoice *choice )
 {
-    if (g_isIdle) wxapp_install_idle_handler();
+    if (g_isIdle) 
+      wxapp_install_idle_handler();
 
     if (!choice->m_hasVMT) return;
 
@@ -71,11 +72,12 @@ bool wxChoice::Create( wxWindow *parent, wxWindowID id,
     m_acceptsFocus = TRUE;
 #endif
 
-    PreCreation( parent, id, pos, size, style, name );
-
-#if wxUSE_VALIDATORS
-    SetValidator( validator );
-#endif
+    if (!PreCreation( parent, pos, size ) ||
+        !CreateBase( parent, id, pos, size, style, validator, name ))
+    {
+        wxFAIL_MSG( _T("wxChoice creation failed") );
+	return FALSE;
+    }
 
     m_widget = gtk_option_menu_new();
 

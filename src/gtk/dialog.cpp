@@ -248,7 +248,12 @@ bool wxDialog::Create( wxWindow *parent,
 
     m_needParent = FALSE;
 
-    PreCreation( parent, id, pos, size, style, name );
+    if (!PreCreation( parent, pos, size ) ||
+        !CreateBase( parent, id, pos, size, style, wxDefaultValidator, name ))
+    {
+        wxFAIL_MSG( _T("wxDialog creation failed") );
+	return FALSE;
+    }
 
     m_insertCallback = (wxInsertChildFunction) wxInsertChildInDialog;
     

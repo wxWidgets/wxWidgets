@@ -13,6 +13,7 @@
 #endif
 
 #include "wx/cursor.h"
+#include "wx/utils.h"
 
 #include "gdk/gdk.h"
 
@@ -170,6 +171,8 @@ void wxBeginBusyCursor( wxCursor *WXUNUSED(cursor) )
     gs_savedCursor = g_globalCursor;
     
     wxSetCursor( wxCursor(wxCURSOR_WATCH) );
+    
+    wxYield();
 }
 
 bool wxIsBusy()

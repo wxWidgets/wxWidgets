@@ -120,9 +120,8 @@ public:
     /* For compatibility across platforms (not in event table) */
     void OnIdle(wxIdleEvent& WXUNUSED(event)) {};
 
-    /* used by all classes in the widget creation process */
-    void PreCreation( wxWindow *parent, wxWindowID id, const wxPoint &pos,
-            const wxSize &size, long style, const wxString &name );
+    /* used by all window classes in the widget creation process */
+    bool PreCreation( wxWindow *parent, const wxPoint &pos, const wxSize &size );
     void PostCreation();
 
     /* internal addition of child windows. differs from class

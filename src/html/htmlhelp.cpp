@@ -7,12 +7,11 @@
 
 
 #ifdef __GNUG__
-#pragma implementation
+#pragma implementation "htmlhelp.h"
 #endif
 
-#include <wx/wxprec.h>
+#include "wx/wxprec.h"
 
-#include "wx/defs.h"
 #if wxUSE_HTML
 
 #ifdef __BORDLANDC__

@@ -11,13 +11,14 @@
 #define __HTMLFILTER_H__
 
 #ifdef __GNUG__
-#pragma interface
+#pragma interface "htmlfilter.h"
 #endif
 
 #include "wx/defs.h"
+
 #if wxUSE_HTML
 
-#include <wx/filesys.h>
+#include "wx/filesys.h"
 
 
 //--------------------------------------------------------------------------------

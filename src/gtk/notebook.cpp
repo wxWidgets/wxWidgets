@@ -220,7 +220,13 @@ bool wxNotebook::Create(wxWindow *parent, wxWindowID id,
     m_acceptsFocus = TRUE;
     m_insertCallback = (wxInsertChildFunction)wxInsertChildInNotebook;
 
-    PreCreation( parent, id, pos, size, style, name );
+    if (!PreCreation( parent, pos, size ) ||
+        !CreateBase( parent, id, pos, size, style, wxDefaultValidator, name ))
+    {
+        wxFAIL_MSG( _T("wxNoteBook creation failed") );
+	return FALSE;
+    }
+
 
     m_widget = gtk_notebook_new();
 

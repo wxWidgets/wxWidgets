@@ -163,6 +163,8 @@ static gint gtk_window_button_press_callback( GtkWidget *widget, GdkEventButton 
 
     if (win->m_isDragging) return TRUE;
 
+    gdk_window_raise( win->m_widget->window );
+    
     gdk_pointer_grab( widget->window, FALSE,
                       (GdkEventMask)
                          (GDK_BUTTON_PRESS_MASK |

@@ -409,7 +409,12 @@ bool wxMDIClientWindow::CreateClient( wxMDIParentFrame *parent, long style )
 
     m_insertCallback = (wxInsertChildFunction)wxInsertChildInMDI;
 
-    PreCreation( parent, -1, wxPoint(10,10), wxSize(100,100), style, "wxMDIClientWindow" );
+    if (!PreCreation( parent, wxDefaultPosition, wxDefaultSize ) ||
+        !CreateBase( parent, -1, wxDefaultPosition, wxDefaultSize, style, wxDefaultValidator, _T("wxMDIClientWindow") ))
+    {
+        wxFAIL_MSG( _T("wxMDIClientWindow creation failed") );
+	return FALSE;
+    }
 
     m_widget = gtk_notebook_new();
 

@@ -63,17 +63,14 @@ bool wxRadioButton::Create( wxWindow *parent, wxWindowID id, const wxString& lab
 {
     m_acceptsFocus = TRUE;
     m_needParent = TRUE;
-
-    wxSize newSize = size;
-
-    PreCreation( parent, id, pos, newSize, style, name );
-    
     m_isRadioButton = TRUE;
-  
-#if wxUSE_VALIDATORS
-    SetValidator( validator );
-#endif
 
+    if (!PreCreation( parent, pos, size ) ||
+        !CreateBase( parent, id, pos, size, style, validator, name ))
+    {
+        wxFAIL_MSG( _T("wxRadioButton creation failed") );
+	return FALSE;
+    }
 
     if (HasFlag(wxRB_GROUP))
     {
@@ -111,6 +108,7 @@ bool wxRadioButton::Create( wxWindow *parent, wxWindowID id, const wxString& lab
       
     SetLabel(label);
 
+    wxSize newSize = size;
     if (newSize.x == -1) newSize.x = 22+gdk_string_measure( m_widget->style->font, label.mbc_str() );
     if (newSize.y == -1) newSize.y = 26;
     SetSize( newSize.x, newSize.y );

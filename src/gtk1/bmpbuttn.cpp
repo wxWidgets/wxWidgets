@@ -118,13 +118,12 @@ bool wxBitmapButton::Create( wxWindow *parent, wxWindowID id, const wxBitmap &bi
     m_needParent = TRUE;
     m_acceptsFocus = TRUE;
   
-    wxSize newSize = size;
-
-    PreCreation( parent, id, pos, newSize, style, name );
-  
-#if wxUSE_VALIDATORS
-    SetValidator( validator );
-#endif
+    if (!PreCreation( parent, pos, size ) ||
+        !CreateBase( parent, id, pos, size, style, validator, name ))
+    {
+        wxFAIL_MSG( _T("wxBitmapButton creation failed") );
+	return FALSE;
+    }
 
     m_bitmap   = bitmap;
     m_disabled = bitmap;
@@ -142,6 +141,8 @@ bool wxBitmapButton::Create( wxWindow *parent, wxWindowID id, const wxBitmap &bi
 
     if (m_bitmap.Ok())
     {
+        wxSize newSize = size;
+
         GdkBitmap *mask = (GdkBitmap *) NULL;
         if (m_bitmap.GetMask()) mask = m_bitmap.GetMask()->GetBitmap();
         GtkWidget *pixmap = gtk_pixmap_new( m_bitmap.GetPixmap(), mask );

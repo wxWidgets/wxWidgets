@@ -8,12 +8,11 @@
 
 
 #ifdef __GNUG__
-#pragma implementation
+#pragma implementation "htmlfilter.h"
 #endif
 
-#include <wx/wxprec.h>
+#include "wx/wxprec.h"
 
-#include "wx/defs.h"
 #if wxUSE_HTML
 
 #ifdef __BORDLANDC__
@@ -21,11 +20,11 @@
 #endif
 
 #ifndef WXPRECOMP
-#include <wx/wx.h>
+#include "wx/wx.h"
 #endif
 
-#include <wx/html/htmlfilter.h>
-#include <wx/html/htmlwin.h>
+#include "wx/html/htmlfilter.h"
+#include "wx/html/htmlwin.h"
 
 
 /*

@@ -116,7 +116,13 @@ wxFileDialog::wxFileDialog( wxWindow *parent, const wxString& message,
 {
     m_needParent = FALSE;
 
-    PreCreation( parent, -1, pos, wxDefaultSize, style | wxDIALOG_MODAL, "filedialog" );
+    if (!PreCreation( parent, pos, wxDefaultSize ) ||
+        !CreateBase( parent, -1, pos, wxDefaultSize, style | wxDIALOG_MODAL, wxDefaultValidator, _T("filedialog") ))
+    {
+        wxFAIL_MSG( _T("wxXX creation failed") );
+	return;
+    }
+    
     m_message = message;
     m_path = _T("");
     m_fileName = defaultFileName;

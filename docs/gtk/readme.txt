@@ -26,7 +26,8 @@ at Julian Smart's homepage at:
   
 Information on how to install can be found in the file 
 INSTALL.txt, but if you cannot wait, this should work on
-many systems (when using GTK 1.0 read the INSTALL.txt):
+many systems (when using GTK 1.0 or when not using Linux
+read the INSTALL.txt):
 
 ./configure
 make

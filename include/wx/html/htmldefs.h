@@ -11,8 +11,8 @@
 #define __HTMLDEFS_H__
 
 #include "wx/defs.h"
-#if wxUSE_HTML
 
+#if wxUSE_HTML
 
 //--------------------------------------------------------------------------------
 // ALIGNMENTS

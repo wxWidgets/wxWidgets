@@ -39,7 +39,12 @@ wxMenuBar::wxMenuBar( long style )
     m_needParent = FALSE;
     m_style = style;
 
-    PreCreation( (wxWindow *) NULL, -1, wxDefaultPosition, wxDefaultSize, style, "menu" );
+    if (!PreCreation( (wxWindow*) NULL, wxDefaultPosition, wxDefaultSize ) ||
+        !CreateBase( (wxWindow*) NULL, -1, wxDefaultPosition, wxDefaultSize, style, wxDefaultValidator, _T("menubar") ))
+    {
+        wxFAIL_MSG( _T("wxMenuBar creation failed") );
+	return;
+    }
 
     m_menus.DeleteContents( TRUE );
 
@@ -72,8 +77,13 @@ wxMenuBar::wxMenuBar()
     m_needParent = FALSE;
     m_style = 0;
 
-    PreCreation( (wxWindow *) NULL, -1, wxDefaultPosition, wxDefaultSize, 0, "menu" );
-
+    if (!PreCreation( (wxWindow*) NULL, wxDefaultPosition, wxDefaultSize ) ||
+        !CreateBase( (wxWindow*) NULL, -1, wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("menubar") ))
+    {
+        wxFAIL_MSG( _T("wxMenuBar creation failed") );
+	return;
+    }
+    
     m_menus.DeleteContents( TRUE );
 
     /* GTK 1.2.0 doesn't have gtk_item_factory_get_item(), but GTK 1.2.1 has. */

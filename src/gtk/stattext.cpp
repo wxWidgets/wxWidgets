@@ -48,9 +48,12 @@ bool wxStaticText::Create(wxWindow *parent,
 {
     m_needParent = TRUE;
 
-    wxSize newSize = size;
-
-    PreCreation( parent, id, pos, size, style, name );
+    if (!PreCreation( parent, pos, size ) ||
+        !CreateBase( parent, id, pos, size, style, wxDefaultValidator, name ))
+    {
+        wxFAIL_MSG( _T("wxXX creation failed") );
+	return FALSE;
+    }
 
     // notice that we call the base class version which will just remove the
     // '&' characters from the string, but not set the label's text to it
@@ -77,9 +80,9 @@ bool wxStaticText::Create(wxWindow *parent,
     GtkRequisition req;
     (* GTK_WIDGET_CLASS( GTK_OBJECT(m_widget)->klass )->size_request ) (m_widget, &req );
 
+    wxSize newSize = size;
     if (newSize.x == -1) newSize.x = req.width;
     if (newSize.y == -1) newSize.y = req.height;
-
     SetSize( newSize.x, newSize.y );
 
     m_parent->DoAddChild( this );

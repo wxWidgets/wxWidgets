@@ -224,7 +224,6 @@ gtk_frame_realized_callback( GtkWidget *widget, wxFrame *win )
        decor |= GDK_DECOR_RESIZEH;
     }
 
-
     gdk_window_set_decorations( win->m_widget->window, (GdkWMDecoration)decor);
     gdk_window_set_functions( win->m_widget->window, (GdkWMFunction)func);
 
@@ -361,7 +360,12 @@ bool wxFrame::Create( wxWindow *parent, wxWindowID id, const wxString &title,
 
     m_needParent = FALSE;
 
-    PreCreation( parent, id, pos, size, style, name );
+    if (!PreCreation( parent, pos, size ) ||
+        !CreateBase( parent, id, pos, size, style, wxDefaultValidator, name ))
+    {
+        wxFAIL_MSG( _T("wxFrame creation failed") );
+	return FALSE;
+    }
 
     m_title = title;
 

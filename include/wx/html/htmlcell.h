@@ -12,16 +12,16 @@
 #define __HTMLCELL_H__
 
 #ifdef __GNUG__
-#pragma interface
+#pragma interface "htmlcell.h"
 #endif
 
 #include "wx/defs.h"
+
 #if wxUSE_HTML
 
-
-#include <wx/html/htmltag.h>
-#include <wx/html/htmldefs.h>
-#include <wx/window.h>
+#include "wx/html/htmltag.h"
+#include "wx/html/htmldefs.h"
+#include "wx/window.h"
 
 class wxHtmlCell;
 class wxHtmlContainerCell;

@@ -101,11 +101,12 @@ bool wxComboBox::Create( wxWindow *parent, wxWindowID id, const wxString& value,
     m_needParent = TRUE;
     m_acceptsFocus = TRUE;
 
-    PreCreation( parent, id, pos, size, style, name );
-
-#if wxUSE_VALIDATORS
-    SetValidator( validator );
-#endif
+    if (!PreCreation( parent, pos, size ) ||
+        !CreateBase( parent, id, pos, size, style, validator, name ))
+    {
+        wxFAIL_MSG( _T("wxComboBox creation failed") );
+	return FALSE;
+    }
 
     m_widget = gtk_combo_new();
 

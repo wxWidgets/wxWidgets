@@ -72,11 +72,12 @@ bool wxCheckBox::Create(wxWindow *parent,
     m_needParent = TRUE;
     m_acceptsFocus = TRUE;
 
-    PreCreation( parent, id, pos, size, style, name );
-
-#if wxUSE_VALIDATORS
-    SetValidator( validator );
-#endif
+    if (!PreCreation( parent, pos, size ) ||
+        !CreateBase( parent, id, pos, size, style, validator, name ))
+    {
+        wxFAIL_MSG( _T("wxCheckBox creation failed") );
+	return FALSE;
+    }
 
     wxControl::SetLabel( label );
 

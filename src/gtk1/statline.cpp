@@ -41,7 +41,12 @@ bool wxStaticLine::Create( wxWindow *parent, wxWindowID id,
 {
     m_needParent = TRUE;
 
-    PreCreation( parent, id, pos, size, style, name );
+    if (!PreCreation( parent, pos, size ) ||
+        !CreateBase( parent, id, pos, size, style, wxDefaultValidator, name ))
+    {
+        wxFAIL_MSG( _T("wxStaticLine creation failed") );
+	return FALSE;
+    }
 
     if ( IsVertical() )
         m_widget = gtk_vseparator_new();
