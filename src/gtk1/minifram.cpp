@@ -303,7 +303,7 @@ bool wxMiniFrame::Create( wxWindow *parent, wxWindowID id, const wxString &title
       const wxPoint &pos, const wxSize &size,
       long style, const wxString &name )
 {
-    style = style | wxSIMPLE_BORDER;
+//    style = style | wxSIMPLE_BORDER;
     style = style | wxCAPTION;
 
     if ((style & wxCAPTION) || (style & wxTINY_CAPTION_HORIZ) || (style & wxTINY_CAPTION_VERT))

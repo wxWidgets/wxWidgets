@@ -216,7 +216,7 @@ gtk_frame_configure_callback( GtkWidget *WXUNUSED(widget), GdkEventConfigure *ev
 
     if (!win->m_hasVMT)
         return FALSE;
-
+    
 #if (GTK_MINOR_VERSION > 0)
     int x = 0;
     int y = 0;
@@ -253,36 +253,45 @@ gtk_frame_realized_callback( GtkWidget *widget, wxFrame *win )
        position in "realize" */
     gtk_widget_set_uposition( widget, win->m_x, win->m_y );
 
-    /* all this is for Motif Window Manager "hints" and is supposed to be
-       recognized by other WM as well. not tested. */
-    long decor = (long) GDK_DECOR_BORDER;
-    long func = (long) GDK_FUNC_MOVE;
+    if (win->m_miniEdge > 0)
+    {
+        /* This is a mini-frame. */
+        gdk_window_set_decorations( win->m_widget->window, (GdkWMDecoration)0 );
+        gdk_window_set_functions( win->m_widget->window, (GdkWMFunction)0 );
+    }
+    else
+    {
+        /* All this is for Motif Window Manager "hints" and is supposed to be
+           recognized by other WM as well. Not tested. */
+        long decor = (long) GDK_DECOR_BORDER;
+        long func = (long) GDK_FUNC_MOVE;
 
-    if ((win->GetWindowStyle() & wxCAPTION) != 0)
-        decor |= GDK_DECOR_TITLE;
-    if ((win->GetWindowStyle() & wxSYSTEM_MENU) != 0)
-    {
-       decor |= GDK_DECOR_MENU;
-       func |= GDK_FUNC_CLOSE;
+        if ((win->GetWindowStyle() & wxCAPTION) != 0)
+            decor |= GDK_DECOR_TITLE;
+        if ((win->GetWindowStyle() & wxSYSTEM_MENU) != 0)
+        {
+            decor |= GDK_DECOR_MENU;
+            func |= GDK_FUNC_CLOSE;
+        }
+        if ((win->GetWindowStyle() & wxMINIMIZE_BOX) != 0)
+        {
+            func |= GDK_FUNC_MINIMIZE;
+            decor |= GDK_DECOR_MINIMIZE;
+        }
+        if ((win->GetWindowStyle() & wxMAXIMIZE_BOX) != 0)
+        {
+            func |= GDK_FUNC_MAXIMIZE;
+            decor |= GDK_DECOR_MAXIMIZE;
+        }
+        if ((win->GetWindowStyle() & wxRESIZE_BORDER) != 0)
+        {
+           func |= GDK_FUNC_RESIZE;
+           decor |= GDK_DECOR_RESIZEH;
+        }
+        
+        gdk_window_set_decorations( win->m_widget->window, (GdkWMDecoration)decor);
+        gdk_window_set_functions( win->m_widget->window, (GdkWMFunction)func);
     }
-    if ((win->GetWindowStyle() & wxMINIMIZE_BOX) != 0)
-    {
-        func |= GDK_FUNC_MINIMIZE;
-        decor |= GDK_DECOR_MINIMIZE;
-    }
-    if ((win->GetWindowStyle() & wxMAXIMIZE_BOX) != 0)
-    {
-        func |= GDK_FUNC_MAXIMIZE;
-        decor |= GDK_DECOR_MAXIMIZE;
-    }
-    if ((win->GetWindowStyle() & wxRESIZE_BORDER) != 0)
-    {
-       func |= GDK_FUNC_RESIZE;
-       decor |= GDK_DECOR_RESIZEH;
-    }
-
-    gdk_window_set_decorations( win->m_widget->window, (GdkWMDecoration)decor);
-    gdk_window_set_functions( win->m_widget->window, (GdkWMFunction)func);
 
     /* GTK's shrinking/growing policy */
     if ((win->GetWindowStyle() & wxRESIZE_BORDER) == 0)
