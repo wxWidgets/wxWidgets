@@ -57,8 +57,11 @@ WX_IMPLEMENT_POSER(wxPoserNSButton);
 
 void wxCocoaNSButton::AssociateNSButton(WX_NSButton cocoaNSButton)
 {
-    sm_cocoaHash.insert(wxCocoaNSButtonHash::value_type(cocoaNSButton,this));
-    [cocoaNSButton setTarget: cocoaNSButton];
-    [cocoaNSButton setAction: @selector(wxNSButtonAction:)];
+    if(cocoaNSButton)
+    {
+        sm_cocoaHash.insert(wxCocoaNSButtonHash::value_type(cocoaNSButton,this));
+        [cocoaNSButton setTarget: cocoaNSButton];
+        [cocoaNSButton setAction: @selector(wxNSButtonAction:)];
+    }
 }
 

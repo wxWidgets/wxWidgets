@@ -25,7 +25,8 @@ public:
     void AssociateNSWindow(WX_NSWindow cocoaNSWindow);
     inline void DisassociateNSWindow(WX_NSWindow cocoaNSWindow)
     {
-        sm_cocoaHash.erase(cocoaNSWindow);
+        if(cocoaNSWindow)
+            sm_cocoaHash.erase(cocoaNSWindow);
     }
     virtual void Cocoa_close(void) = 0;
     virtual bool Cocoa_windowShouldClose(void) = 0;

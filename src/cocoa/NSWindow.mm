@@ -35,8 +35,11 @@ WX_IMPLEMENT_OBJC_INTERFACE_HASHMAP(NSWindow)
 
 void wxCocoaNSWindow::AssociateNSWindow(WX_NSWindow cocoaNSWindow)
 {
-    [cocoaNSWindow setReleasedWhenClosed: NO];
-    sm_cocoaHash.insert(wxCocoaNSWindowHash::value_type(cocoaNSWindow,this));
+    if(cocoaNSWindow)
+    {
+        [cocoaNSWindow setReleasedWhenClosed: NO];
+        sm_cocoaHash.insert(wxCocoaNSWindowHash::value_type(cocoaNSWindow,this));
+    }
 }
 
 // ============================================================================

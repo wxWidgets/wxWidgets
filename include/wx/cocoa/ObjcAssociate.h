@@ -45,11 +45,13 @@ WX_DECLARE_OBJC_INTERFACE_HASHMAP(ObjcClass) \
 public: \
     inline void Associate##ObjcClass(WX_##ObjcClass cocoaObjcClass) \
     { \
-        sm_cocoaHash.insert(wxCocoa##ObjcClass##Hash::value_type(cocoaObjcClass,this)); \
+        if(cocoaObjcClass) \
+            sm_cocoaHash.insert(wxCocoa##ObjcClass##Hash::value_type(cocoaObjcClass,this)); \
     } \
     inline void Disassociate##ObjcClass(WX_##ObjcClass cocoaObjcClass) \
     { \
-        sm_cocoaHash.erase(cocoaObjcClass); \
+        if(cocoaObjcClass) \
+            sm_cocoaHash.erase(cocoaObjcClass); \
     }
 
 #define WX_IMPLEMENT_OBJC_INTERFACE(ObjcClass) \
@@ -68,11 +70,9 @@ protected: \
 #define WX_IMPLEMENT_COCOA_OWNER(wxClass,ObjcClass,ObjcBase,ObjcRoot) \
 void wxClass::Set##ObjcClass(WX_##ObjcClass cocoaObjcClass) \
 { \
-    if(m_cocoa##ObjcRoot) \
-        Disassociate##ObjcClass((WX_##ObjcClass)m_cocoa##ObjcRoot); \
+    Disassociate##ObjcClass((WX_##ObjcClass)m_cocoa##ObjcRoot); \
     Set##ObjcBase(cocoaObjcClass); \
-    if(m_cocoa##ObjcRoot) \
-        Associate##ObjcClass((WX_##ObjcClass)m_cocoa##ObjcRoot); \
+    Associate##ObjcClass((WX_##ObjcClass)m_cocoa##ObjcRoot); \
 }
 
 #endif // __WX_COCOA_OBJC_ASSOCIATE_H__

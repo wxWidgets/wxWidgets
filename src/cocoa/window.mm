@@ -108,13 +108,11 @@ void wxWindowCocoa::SetNSView(WX_NSView cocoaNSView)
 {
     bool need_debug = cocoaNSView || m_cocoaNSView;
     if(need_debug) wxLogDebug("wxWindowCocoa=%p::SetNSView [m_cocoaNSView=%p retainCount]=%d",this,m_cocoaNSView,[m_cocoaNSView retainCount]);
-    if(m_cocoaNSView)
-        DisassociateNSView(m_cocoaNSView);
+    DisassociateNSView(m_cocoaNSView);
     [cocoaNSView retain];
     [m_cocoaNSView release];
     m_cocoaNSView = cocoaNSView;
-    if(m_cocoaNSView)
-        AssociateNSView(m_cocoaNSView);
+    AssociateNSView(m_cocoaNSView);
     if(need_debug) wxLogDebug("wxWindowCocoa=%p::SetNSView [cocoaNSView=%p retainCount]=%d",this,cocoaNSView,[cocoaNSView retainCount]);
 }
 

@@ -24,7 +24,8 @@ public:
     void AssociateNSButton(WX_NSButton cocoaNSButton);
     inline void DisassociateNSButton(WX_NSButton cocoaNSButton)
     {
-        sm_cocoaHash.erase(cocoaNSButton);
+        if(cocoaNSButton)
+            sm_cocoaHash.erase(cocoaNSButton);
     }
 
 public:

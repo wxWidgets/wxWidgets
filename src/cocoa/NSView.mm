@@ -36,15 +36,21 @@ WX_IMPLEMENT_OBJC_INTERFACE_HASHMAP(NSView)
 
 void wxCocoaNSView::AssociateNSView(WX_NSView cocoaNSView)
 {
-    sm_cocoaHash.insert(wxCocoaNSViewHash::value_type(cocoaNSView,this));
-    [[NSNotificationCenter defaultCenter] addObserver:(id)sm_cocoaObserver selector:@selector(notificationFrameChanged:) name:@"NSViewFrameDidChangeNotification" object:cocoaNSView];
-    [cocoaNSView setPostsFrameChangedNotifications: YES];
+    if(cocoaNSView)
+    {
+        sm_cocoaHash.insert(wxCocoaNSViewHash::value_type(cocoaNSView,this));
+        [[NSNotificationCenter defaultCenter] addObserver:(id)sm_cocoaObserver selector:@selector(notificationFrameChanged:) name:@"NSViewFrameDidChangeNotification" object:cocoaNSView];
+        [cocoaNSView setPostsFrameChangedNotifications: YES];
+    }
 }
 
 void wxCocoaNSView::DisassociateNSView(WX_NSView cocoaNSView)
 {
-    sm_cocoaHash.erase(cocoaNSView);
-    [[NSNotificationCenter defaultCenter] removeObserver:(id)sm_cocoaObserver name:@"NSViewFrameDidChangeNotification" object:cocoaNSView];
+    if(cocoaNSView)
+    {
+        sm_cocoaHash.erase(cocoaNSView);
+        [[NSNotificationCenter defaultCenter] removeObserver:(id)sm_cocoaObserver name:@"NSViewFrameDidChangeNotification" object:cocoaNSView];
+    }
 }
 
 // ============================================================================
