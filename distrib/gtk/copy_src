@@ -378,16 +378,16 @@ cp *.h ~/wxgtk_dist/wxGTK/samples/db
 cp *.xpm ~/wxgtk_dist/wxGTK/samples/db
 cd ..
 
-#echo DDE sample..
-#
-#cd dde
-#mkdir ~/wxgtk_dist/wxGTK/samples/dde
-#cp Makefile ~/wxgtk_dist/wxGTK/samples/dde
-#cp Makefile.in ~/wxgtk_dist/wxGTK/samples/dde
-#cp *.cpp ~/wxgtk_dist/wxGTK/samples/dde
-#cp *.h ~/wxgtk_dist/wxGTK/samples/dde
-#cp *.xpm ~/wxgtk_dist/wxGTK/samples/dde
-#cd ..
+echo DDE sample..
+
+cd dde
+mkdir ~/wxgtk_dist/wxGTK/samples/dde
+cp Makefile ~/wxgtk_dist/wxGTK/samples/dde
+cp Makefile.in ~/wxgtk_dist/wxGTK/samples/dde
+cp *.cpp ~/wxgtk_dist/wxGTK/samples/dde
+cp *.h ~/wxgtk_dist/wxGTK/samples/dde
+cp *.xpm ~/wxgtk_dist/wxGTK/samples/dde
+cd ..
 
 echo Dialogs sample..
 
@@ -633,6 +633,16 @@ cp Makefile ~/wxgtk_dist/wxGTK/samples/sashtest
 cp Makefile.in ~/wxgtk_dist/wxGTK/samples/sashtest
 cp *.cpp ~/wxgtk_dist/wxGTK/samples/sashtest
 cp *.h ~/wxgtk_dist/wxGTK/samples/sashtest
+cd ..
+
+echo Scroll sample..
+
+cd sashtest
+mkdir ~/wxgtk_dist/wxGTK/samples/scroll
+cp Makefile ~/wxgtk_dist/wxGTK/samples/scroll
+cp Makefile.in ~/wxgtk_dist/wxGTK/samples/scroll
+cp *.cpp ~/wxgtk_dist/wxGTK/samples/scroll
+cp *.h ~/wxgtk_dist/wxGTK/samples/scroll
 cd ..
 
 echo Splitter sample..

@@ -210,7 +210,8 @@ are
         --without-wxresources   Disables the use of *.wxr type
 	                        resources.
 		
-	--without-threads       Disables threads.
+	--without-threads       Disables threads. Will also
+	                        disable sockets.
 
 	--without-sockets       Disables sockets.
 
