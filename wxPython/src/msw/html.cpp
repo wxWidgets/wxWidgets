@@ -1495,18 +1495,18 @@ static PyObject *_wrap_wxHtmlWinParser_GetWindow(PyObject *self, PyObject *args,
 }
 
 static void  wxHtmlWinParser_SetFonts(wxHtmlWinParser *self,wxString  normal_face,wxString  fixed_face,PyObject * sizes) {
-            int* temp = int_LIST_helper(sizes);
-            if (temp) {
-                self->SetFonts(normal_face, fixed_face, temp);
+            int* temp = NULL;
+            if (sizes) temp = int_LIST_helper(sizes);
+            self->SetFonts(normal_face, fixed_face, temp);
+            if (temp)
                 delete [] temp;
-            }
         }
 static PyObject *_wrap_wxHtmlWinParser_SetFonts(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxHtmlWinParser * _arg0;
     wxString * _arg1;
     wxString * _arg2;
-    PyObject * _arg3;
+    PyObject * _arg3 = (PyObject *) NULL;
     PyObject * _argo0 = 0;
     PyObject * _obj1 = 0;
     PyObject * _obj2 = 0;
@@ -1514,7 +1514,7 @@ static PyObject *_wrap_wxHtmlWinParser_SetFonts(PyObject *self, PyObject *args, 
     char *_kwnames[] = { "self","normal_face","fixed_face","sizes", NULL };
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OOOO:wxHtmlWinParser_SetFonts",_kwnames,&_argo0,&_obj1,&_obj2,&_obj3)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OOO|O:wxHtmlWinParser_SetFonts",_kwnames,&_argo0,&_obj1,&_obj2,&_obj3)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -1533,6 +1533,7 @@ static PyObject *_wrap_wxHtmlWinParser_SetFonts(PyObject *self, PyObject *args, 
     if (_arg2 == NULL)
         return NULL;
 }
+    if (_obj3)
 {
   _arg3 = _obj3;
 }
@@ -4464,6 +4465,45 @@ static PyObject *_wrap_wxHtmlWindow_LoadPage(PyObject *self, PyObject *args, PyO
     return _resultobj;
 }
 
+#define wxHtmlWindow_LoadFile(_swigobj,_swigarg0)  (_swigobj->LoadFile(_swigarg0))
+static PyObject *_wrap_wxHtmlWindow_LoadFile(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    bool  _result;
+    wxPyHtmlWindow * _arg0;
+    wxString * _arg1;
+    PyObject * _argo0 = 0;
+    PyObject * _obj1 = 0;
+    char *_kwnames[] = { "self","filename", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxHtmlWindow_LoadFile",_kwnames,&_argo0,&_obj1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPyHtmlWindow_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxHtmlWindow_LoadFile. Expected _wxPyHtmlWindow_p.");
+        return NULL;
+        }
+    }
+{
+    _arg1 = wxString_in_helper(_obj1);
+    if (_arg1 == NULL)
+        return NULL;
+}
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    _result = (bool )wxHtmlWindow_LoadFile(_arg0,*_arg1);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    _resultobj = Py_BuildValue("i",_result);
+{
+    if (_obj1)
+        delete _arg1;
+}
+    return _resultobj;
+}
+
 #define wxHtmlWindow_AppendToPage(_swigobj,_swigarg0)  (_swigobj->AppendToPage(_swigarg0))
 static PyObject *_wrap_wxHtmlWindow_AppendToPage(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
@@ -4720,18 +4760,18 @@ static PyObject *_wrap_wxHtmlWindow_SetRelatedStatusBar(PyObject *self, PyObject
 }
 
 static void  wxPyHtmlWindow_SetFonts(wxPyHtmlWindow *self,wxString  normal_face,wxString  fixed_face,PyObject * sizes) {
-            int* temp = int_LIST_helper(sizes);
-            if (temp) {
-                self->SetFonts(normal_face, fixed_face, temp);
+            int* temp = NULL;
+            if (sizes) temp = int_LIST_helper(sizes);
+            self->SetFonts(normal_face, fixed_face, temp);
+            if (temp)
                 delete [] temp;
-            }
         }
 static PyObject *_wrap_wxHtmlWindow_SetFonts(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxPyHtmlWindow * _arg0;
     wxString * _arg1;
     wxString * _arg2;
-    PyObject * _arg3;
+    PyObject * _arg3 = (PyObject *) NULL;
     PyObject * _argo0 = 0;
     PyObject * _obj1 = 0;
     PyObject * _obj2 = 0;
@@ -4739,7 +4779,7 @@ static PyObject *_wrap_wxHtmlWindow_SetFonts(PyObject *self, PyObject *args, PyO
     char *_kwnames[] = { "self","normal_face","fixed_face","sizes", NULL };
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OOOO:wxHtmlWindow_SetFonts",_kwnames,&_argo0,&_obj1,&_obj2,&_obj3)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OOO|O:wxHtmlWindow_SetFonts",_kwnames,&_argo0,&_obj1,&_obj2,&_obj3)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -4758,6 +4798,7 @@ static PyObject *_wrap_wxHtmlWindow_SetFonts(PyObject *self, PyObject *args, PyO
     if (_arg2 == NULL)
         return NULL;
 }
+    if (_obj3)
 {
   _arg3 = _obj3;
 }
@@ -5606,6 +5647,68 @@ static PyObject *_wrap_wxHtmlDCRenderer_SetHtmlText(PyObject *self, PyObject *ar
     return _resultobj;
 }
 
+static void  wxHtmlDCRenderer_SetFonts(wxHtmlDCRenderer *self,wxString  normal_face,wxString  fixed_face,PyObject * sizes) {
+            int* temp = NULL;
+            if (sizes) temp = int_LIST_helper(sizes);
+            self->SetFonts(normal_face, fixed_face, temp);
+            if (temp)
+                delete [] temp;
+        }
+static PyObject *_wrap_wxHtmlDCRenderer_SetFonts(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxHtmlDCRenderer * _arg0;
+    wxString * _arg1;
+    wxString * _arg2;
+    PyObject * _arg3 = (PyObject *) NULL;
+    PyObject * _argo0 = 0;
+    PyObject * _obj1 = 0;
+    PyObject * _obj2 = 0;
+    PyObject * _obj3 = 0;
+    char *_kwnames[] = { "self","normal_face","fixed_face","sizes", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OOO|O:wxHtmlDCRenderer_SetFonts",_kwnames,&_argo0,&_obj1,&_obj2,&_obj3)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxHtmlDCRenderer_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxHtmlDCRenderer_SetFonts. Expected _wxHtmlDCRenderer_p.");
+        return NULL;
+        }
+    }
+{
+    _arg1 = wxString_in_helper(_obj1);
+    if (_arg1 == NULL)
+        return NULL;
+}
+{
+    _arg2 = wxString_in_helper(_obj2);
+    if (_arg2 == NULL)
+        return NULL;
+}
+    if (_obj3)
+{
+  _arg3 = _obj3;
+}
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    wxHtmlDCRenderer_SetFonts(_arg0,*_arg1,*_arg2,_arg3);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+{
+    if (_obj1)
+        delete _arg1;
+}
+{
+    if (_obj2)
+        delete _arg2;
+}
+    return _resultobj;
+}
+
 #define wxHtmlDCRenderer_Render(_swigobj,_swigarg0,_swigarg1,_swigarg2,_swigarg3)  (_swigobj->Render(_swigarg0,_swigarg1,_swigarg2,_swigarg3))
 static PyObject *_wrap_wxHtmlDCRenderer_Render(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
@@ -5889,6 +5992,68 @@ static PyObject *_wrap_wxHtmlPrintout_SetFooter(PyObject *self, PyObject *args, 
 {
     if (_obj1)
         delete _arg1;
+}
+    return _resultobj;
+}
+
+static void  wxHtmlPrintout_SetFonts(wxHtmlPrintout *self,wxString  normal_face,wxString  fixed_face,PyObject * sizes) {
+            int* temp = NULL;
+            if (sizes) temp = int_LIST_helper(sizes);
+            self->SetFonts(normal_face, fixed_face, temp);
+            if (temp)
+                delete [] temp;
+        }
+static PyObject *_wrap_wxHtmlPrintout_SetFonts(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxHtmlPrintout * _arg0;
+    wxString * _arg1;
+    wxString * _arg2;
+    PyObject * _arg3 = (PyObject *) NULL;
+    PyObject * _argo0 = 0;
+    PyObject * _obj1 = 0;
+    PyObject * _obj2 = 0;
+    PyObject * _obj3 = 0;
+    char *_kwnames[] = { "self","normal_face","fixed_face","sizes", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OOO|O:wxHtmlPrintout_SetFonts",_kwnames,&_argo0,&_obj1,&_obj2,&_obj3)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxHtmlPrintout_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxHtmlPrintout_SetFonts. Expected _wxHtmlPrintout_p.");
+        return NULL;
+        }
+    }
+{
+    _arg1 = wxString_in_helper(_obj1);
+    if (_arg1 == NULL)
+        return NULL;
+}
+{
+    _arg2 = wxString_in_helper(_obj2);
+    if (_arg2 == NULL)
+        return NULL;
+}
+    if (_obj3)
+{
+  _arg3 = _obj3;
+}
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    wxHtmlPrintout_SetFonts(_arg0,*_arg1,*_arg2,_arg3);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+{
+    if (_obj1)
+        delete _arg1;
+}
+{
+    if (_obj2)
+        delete _arg2;
 }
     return _resultobj;
 }
@@ -6409,6 +6574,7 @@ static PyMethodDef htmlcMethods[] = {
 	 { "delete_wxHtmlEasyPrinting", (PyCFunction) _wrap_delete_wxHtmlEasyPrinting, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxHtmlEasyPrinting", (PyCFunction) _wrap_new_wxHtmlEasyPrinting, METH_VARARGS | METH_KEYWORDS },
 	 { "wxHtmlPrintout_SetMargins", (PyCFunction) _wrap_wxHtmlPrintout_SetMargins, METH_VARARGS | METH_KEYWORDS },
+	 { "wxHtmlPrintout_SetFonts", (PyCFunction) _wrap_wxHtmlPrintout_SetFonts, METH_VARARGS | METH_KEYWORDS },
 	 { "wxHtmlPrintout_SetFooter", (PyCFunction) _wrap_wxHtmlPrintout_SetFooter, METH_VARARGS | METH_KEYWORDS },
 	 { "wxHtmlPrintout_SetHeader", (PyCFunction) _wrap_wxHtmlPrintout_SetHeader, METH_VARARGS | METH_KEYWORDS },
 	 { "wxHtmlPrintout_SetHtmlFile", (PyCFunction) _wrap_wxHtmlPrintout_SetHtmlFile, METH_VARARGS | METH_KEYWORDS },
@@ -6416,6 +6582,7 @@ static PyMethodDef htmlcMethods[] = {
 	 { "new_wxHtmlPrintout", (PyCFunction) _wrap_new_wxHtmlPrintout, METH_VARARGS | METH_KEYWORDS },
 	 { "wxHtmlDCRenderer_GetTotalHeight", (PyCFunction) _wrap_wxHtmlDCRenderer_GetTotalHeight, METH_VARARGS | METH_KEYWORDS },
 	 { "wxHtmlDCRenderer_Render", (PyCFunction) _wrap_wxHtmlDCRenderer_Render, METH_VARARGS | METH_KEYWORDS },
+	 { "wxHtmlDCRenderer_SetFonts", (PyCFunction) _wrap_wxHtmlDCRenderer_SetFonts, METH_VARARGS | METH_KEYWORDS },
 	 { "wxHtmlDCRenderer_SetHtmlText", (PyCFunction) _wrap_wxHtmlDCRenderer_SetHtmlText, METH_VARARGS | METH_KEYWORDS },
 	 { "wxHtmlDCRenderer_SetSize", (PyCFunction) _wrap_wxHtmlDCRenderer_SetSize, METH_VARARGS | METH_KEYWORDS },
 	 { "wxHtmlDCRenderer_SetDC", (PyCFunction) _wrap_wxHtmlDCRenderer_SetDC, METH_VARARGS | METH_KEYWORDS },
@@ -6447,6 +6614,7 @@ static PyMethodDef htmlcMethods[] = {
 	 { "wxHtmlWindow_GetOpenedAnchor", (PyCFunction) _wrap_wxHtmlWindow_GetOpenedAnchor, METH_VARARGS | METH_KEYWORDS },
 	 { "wxHtmlWindow_GetOpenedPage", (PyCFunction) _wrap_wxHtmlWindow_GetOpenedPage, METH_VARARGS | METH_KEYWORDS },
 	 { "wxHtmlWindow_AppendToPage", (PyCFunction) _wrap_wxHtmlWindow_AppendToPage, METH_VARARGS | METH_KEYWORDS },
+	 { "wxHtmlWindow_LoadFile", (PyCFunction) _wrap_wxHtmlWindow_LoadFile, METH_VARARGS | METH_KEYWORDS },
 	 { "wxHtmlWindow_LoadPage", (PyCFunction) _wrap_wxHtmlWindow_LoadPage, METH_VARARGS | METH_KEYWORDS },
 	 { "wxHtmlWindow_SetPage", (PyCFunction) _wrap_wxHtmlWindow_SetPage, METH_VARARGS | METH_KEYWORDS },
 	 { "wxHtmlWindow__setCallbackInfo", (PyCFunction) _wrap_wxHtmlWindow__setCallbackInfo, METH_VARARGS | METH_KEYWORDS },
