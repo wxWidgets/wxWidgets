@@ -230,8 +230,10 @@ wxBitmapDataObject::wxBitmapDataObject(
 : wxBitmapDataObjectBase(rBitmap)
 {
     Init();
-
-    DoConvertToPng();
+    if ( m_bitmap.Ok() )
+    {
+		m_pictHandle = m_bitmap.GetPict( &m_pictCreated ) ;
+	}
 }
 
 wxBitmapDataObject::~wxBitmapDataObject()
@@ -243,22 +245,45 @@ void wxBitmapDataObject::SetBitmap(
   const wxBitmap&                   rBitmap
 )
 {
-    ClearAll();
+    Clear();
     wxBitmapDataObjectBase::SetBitmap(rBitmap);
-    DoConvertToPng();
+    if ( m_bitmap.Ok() )
+    {
+		m_pictHandle = m_bitmap.GetPict( &m_pictCreated ) ;
+	}
+}
+
+void wxBitmapDataObject::Init() 
+{ 
+	m_pictHandle = NULL ;
+	m_pictCreated = false ;
+} 
+
+void wxBitmapDataObject::Clear() 
+{
+	if ( m_pictCreated && m_pictHandle )
+	{
+		KillPicture( (PicHandle) m_pictHandle ) ;
+	}
+	m_pictHandle = NULL ;
 }
 
 bool wxBitmapDataObject::GetDataHere(
   void*                             pBuf
 ) const
 {
-    if (!m_pngSize)
+    if (!m_pictHandle)
     {
         wxFAIL_MSG(wxT("attempt to copy empty bitmap failed"));
         return FALSE;
     }
-    memcpy(pBuf, m_pngData, m_pngSize);
+    memcpy(pBuf, *(Handle)m_pictHandle, GetHandleSize((Handle)m_pictHandle));
     return TRUE;
+}
+
+size_t wxBitmapDataObject::GetDataSize() const
+{
+	return GetHandleSize((Handle)m_pictHandle) ;
 }
 
 bool wxBitmapDataObject::SetData(
@@ -267,41 +292,14 @@ bool wxBitmapDataObject::SetData(
 )
 {
     Clear();
-    m_pngSize = nSize;
-    m_pngData = malloc(m_pngSize);
-
-    memcpy(m_pngData, pBuf, m_pngSize);
-
-    wxMemoryInputStream             vMstream((char*)m_pngData, m_pngSize);
-    wxImage                         vImage;
-    wxPNGHandler                    vHandler;
-
-    if (!vHandler.LoadFile(&vImage, vMstream))
-    {
-        return FALSE;
-    }
-
-    m_bitmap = wxBitmap( vImage ) ; 
+    PicHandle picHandle = (PicHandle) NewHandle( nSize ) ;
+    memcpy( *picHandle , pBuf , nSize ) ;
+    m_pictHandle = picHandle ;
+    m_pictCreated = false ;
+    Rect frame = (**picHandle).picFrame ;
+    
+    m_bitmap.SetPict( picHandle ) ;
+	m_bitmap.SetWidth( frame.right - frame.left ) ;
+	m_bitmap.SetHeight( frame.bottom - frame.top ) ;
     return m_bitmap.Ok();
 }
-
-void wxBitmapDataObject::DoConvertToPng()
-{
-    if (!m_bitmap.Ok())
-        return;
-
-    wxCHECK_RET( wxImage::FindHandler(wxBITMAP_TYPE_PNG) != NULL,
-                 wxT("You must call wxImage::AddHandler(new wxPNGHandler); to be able to use clipboard with bitmaps!") );
-
-    wxImage image = m_bitmap.ConvertToImage();
-
-    wxCountingOutputStream count;
-    image.SaveFile(count, wxBITMAP_TYPE_PNG);
-
-    m_pngSize = count.GetSize() + 100; // sometimes the size seems to vary ???
-    m_pngData = malloc(m_pngSize);
-
-    wxMemoryOutputStream mstream((char*) m_pngData, m_pngSize);
-    image.SaveFile(mstream, wxBITMAP_TYPE_PNG);
-}
-

@@ -369,43 +369,46 @@ wxBitmapRefData::wxBitmapRefData()
 // TODO move this to a public function of Bitmap Ref
 static void DisposeBitmapRefData(wxBitmapRefData *data)
 {
-    switch (data->m_bitmapType)
-    {
-        case kMacBitmapTypePict :
-            {
-                if ( data->m_hPict )
-                {
-                    KillPicture( MAC_WXHMETAFILE( data->m_hPict ) ) ;
-                    data->m_hPict = NULL ;
-                }
-            }
-            break ;
-        case kMacBitmapTypeGrafWorld :
-            {
-                if ( data->m_hBitmap )
-                {
-                    wxMacDestroyGWorld( MAC_WXHBITMAP(data->m_hBitmap) ) ;
-                    data->m_hBitmap = NULL ;
-                }
-            }
-            break ;
-        case kMacBitmapTypeIcon :
-            if ( data->m_hIcon )
-            {
-                DisposeCIcon( MAC_WXHICON(data->m_hIcon) ) ;
-                data->m_hIcon = NULL ;
-            }
-        
-        default :
-            // unkown type ?
-            break ;
-    }
+	if ( !data )
+		return ;
+		
+	switch (data->m_bitmapType)
+	{
+	    case kMacBitmapTypePict :
+	        {
+	            if ( data->m_hPict )
+	            {
+	                KillPicture( MAC_WXHMETAFILE( data->m_hPict ) ) ;
+	                data->m_hPict = NULL ;
+	            }
+	        }
+	        break ;
+	    case kMacBitmapTypeGrafWorld :
+	        {
+	            if ( data->m_hBitmap )
+	            {
+	                wxMacDestroyGWorld( MAC_WXHBITMAP(data->m_hBitmap) ) ;
+	                data->m_hBitmap = NULL ;
+	            }
+	        }
+	        break ;
+	    case kMacBitmapTypeIcon :
+	        if ( data->m_hIcon )
+	        {
+	            DisposeCIcon( MAC_WXHICON(data->m_hIcon) ) ;
+	            data->m_hIcon = NULL ;
+	        }
+	    
+	    default :
+	        // unkown type ?
+	        break ;
+	}
     
-  if (data->m_bitmapMask)
-  {
-    delete data->m_bitmapMask;
-    data->m_bitmapMask = NULL;
-  }
+	if (data->m_bitmapMask)
+	{
+		delete data->m_bitmapMask;
+		data->m_bitmapMask = NULL;
+	}
 }
 
 wxBitmapRefData::~wxBitmapRefData()
@@ -637,11 +640,38 @@ int wxBitmap::GetBitmapType() const
 
 void wxBitmap::SetHBITMAP(WXHBITMAP bmp)
 {
-    DisposeBitmapRefData( M_BITMAPDATA ) ;
+    if (!M_BITMAPDATA)
+        m_refData = new wxBitmapRefData;
+	else
+    	DisposeBitmapRefData( M_BITMAPDATA ) ;
     
     M_BITMAPDATA->m_bitmapType = kMacBitmapTypeGrafWorld ;
     M_BITMAPDATA->m_hBitmap = bmp ;
-      M_BITMAPDATA->m_ok = ( M_BITMAPDATA->m_hBitmap != NULL ) ;
+    M_BITMAPDATA->m_ok = ( M_BITMAPDATA->m_hBitmap != NULL ) ;
+}
+
+void wxBitmap::SetHICON(WXHICON ico)
+{
+    if (!M_BITMAPDATA)
+        m_refData = new wxBitmapRefData;
+	else
+    	DisposeBitmapRefData( M_BITMAPDATA ) ;
+    
+    M_BITMAPDATA->m_bitmapType = kMacBitmapTypeIcon ;
+    M_BITMAPDATA->m_hIcon = ico ;
+    M_BITMAPDATA->m_ok = ( M_BITMAPDATA->m_hIcon != NULL ) ;
+}
+
+void wxBitmap::SetPict(WXHMETAFILE pict)
+{
+    if (!M_BITMAPDATA)
+        m_refData = new wxBitmapRefData;
+	else
+    	DisposeBitmapRefData( M_BITMAPDATA ) ;
+    
+    M_BITMAPDATA->m_bitmapType = kMacBitmapTypePict ;
+    M_BITMAPDATA->m_hPict = pict ;
+    M_BITMAPDATA->m_ok = ( M_BITMAPDATA->m_hPict != NULL ) ;
 }
 
 bool wxBitmap::LoadFile(const wxString& filename, wxBitmapType type)
@@ -1006,96 +1036,35 @@ WXHBITMAP wxBitmap::GetHBITMAP() const
    return MAC_WXHBITMAP(M_BITMAPDATA->m_hBitmap);
 }
 
-WXHMETAFILE wxBitmap::GetPict() const
+WXHMETAFILE wxBitmap::GetPict( bool *created ) const
 {
-   wxCHECK_MSG( Ok(), NULL, wxT("invalid bitmap") );
+	wxCHECK_MSG( Ok(), NULL, wxT("invalid bitmap") );
    
-   PicHandle picture;       // This is the returned picture
-
-   // If bitmap already in Pict format return pointer
-   if(M_BITMAPDATA->m_bitmapType == kMacBitmapTypePict) {
-       return M_BITMAPDATA->m_hPict;
-   }
-   else if(M_BITMAPDATA->m_bitmapType != kMacBitmapTypeGrafWorld) {
-       // Invalid bitmap
-       return NULL;
-   }
-
-   RGBColor  gray = { 0xCCCC ,0xCCCC , 0xCCCC } ;
-   RGBColor  white = { 0xffff ,0xffff , 0xffff } ;
-   RGBColor  black = { 0x0000 ,0x0000 , 0x0000 } ;
-   CGrafPtr  origPort;
-   GDHandle  origDev ;
-   wxMask   *mask;
-   Rect      portRect ;
-
-   GetPortBounds(  (GWorldPtr) GetHBITMAP() , &portRect ) ;
-   int width = portRect.right - portRect.left ;
-   int height = portRect.bottom - portRect.top ;
-
-   LockPixels( GetGWorldPixMap(  (GWorldPtr) GetHBITMAP() ) ) ;
-   GetGWorld( &origPort , &origDev ) ;
-
-   mask = GetMask();
-
-   SetGWorld(  (GWorldPtr) GetHBITMAP() , NULL ) ;
-
-   picture = OpenPicture(&portRect);   // open a picture, this disables drawing
-   if(!picture) {
-       return NULL;
-   }
-
-   if( mask )
-   {
-#ifdef __DARWIN__
-       RGBColor trans = white;
-#else
-       RGBBackColor( &gray );
-       EraseRect( &portRect );
-       RGBColor trans = gray;
-#endif
-       RGBForeColor( &black ) ;
-       RGBBackColor( &white ) ;
-       PenMode(transparent);
-
-       for ( int y = 0 ; y < height ; ++y )
-       {
-           for( int x = 0 ; x < width ; ++x )
-           {
-               if ( !mask->PointMasked(x,y) )
-               {
-                   RGBColor col ;
-
-                   GetCPixel( x + portRect.left , y + portRect.top , &col ) ;
-                   SetCPixel( x + portRect.left , y + portRect.top , &col ) ;
-               }
-               else {
-                   // With transparency this sets a blank pixel
-                   SetCPixel( x + portRect.left , y + portRect.top , &trans);
-               }
-           }
-       }
-   }
-   else
-   {
-       RGBBackColor( &gray ) ;
-       EraseRect(&portRect);
-       RGBForeColor( &black ) ;
-       RGBBackColor( &white ) ;
-
-       CopyBits(GetPortBitMapForCopyBits( (GWorldPtr) GetHBITMAP()), 
-                // src PixMap - we copy image over itself -
-                GetPortBitMapForCopyBits( (GWorldPtr) GetHBITMAP()),
-                //  dst PixMap - no drawing occurs
-                &portRect,    // srcRect - it will be recorded and compressed -
-                &portRect,    // dstRect - into the picture that is open -
-                srcCopy,NULL); // copyMode and no clip region
-   }
-   ClosePicture();                  // We are done recording the picture
-   UnlockPixels( GetGWorldPixMap(  (GWorldPtr) GetHBITMAP() ) ) ;
-   SetGWorld( origPort , origDev ) ;
-
-   return picture;                  // return our groovy pict handle
+	PicHandle picture = NULL ;       // This is the returned picture
+	if ( created )
+		(*created) = false ;
+	// If bitmap already in Pict format return pointer
+	if(M_BITMAPDATA->m_bitmapType == kMacBitmapTypePict) {
+	   return M_BITMAPDATA->m_hPict;
+	}
+	else if(M_BITMAPDATA->m_bitmapType != kMacBitmapTypeGrafWorld) {
+	   // Invalid bitmap
+	   return NULL;
+	}
+	else
+	{
+		if ( GetMask() )
+		{
+		    picture = wxMacCreatePict( MAC_WXHBITMAP(M_BITMAPDATA->m_hBitmap) , MAC_WXHBITMAP(GetMask()->GetMaskBitmap() ) ) ;
+		}
+		else
+		{
+		    picture = wxMacCreatePict( MAC_WXHBITMAP(M_BITMAPDATA->m_hBitmap) , NULL ) ;
+		}
+		if ( created && picture )
+			(*created) = true ;
+    }
+ 	return picture ;
 }
 
 /*
