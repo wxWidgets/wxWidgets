@@ -30,13 +30,13 @@
 // This one can be used to add a check for an existing wxApp before the real
 // work is done.  An exception is raised if there isn't one.
 %define MustHaveApp(name)
-    %exception name {
-        if (!wxPyCheckForApp()) SWIG_fail;
-        PyThreadState* __tstate = wxPyBeginAllowThreads();
-        $action
-        wxPyEndAllowThreads(__tstate);
-        if (PyErr_Occurred()) SWIG_fail;    
-    }
+%exception name {
+    if (!wxPyCheckForApp()) SWIG_fail;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    $action
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+}
 %enddef
 
     
