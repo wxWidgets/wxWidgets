@@ -24,7 +24,6 @@
 #include <wx/colordlg.h>
 #include <wx/config.h>
 #include <wx/cshelp.h>
-#include <wx/dcbuffer.h>
 #include <wx/dcmirror.h>
 #include <wx/dcps.h>
 #include <wx/dirctrl.h>
