@@ -56,7 +56,9 @@ public:
     virtual void SetLabel(const wxString& label);
 
     virtual bool HasTransparentBackground() { return TRUE; }
-    
+
+    virtual bool IsFocused() const { return FALSE; }
+
 protected:
     // calculate the optimal size for the label
     virtual wxSize DoGetBestClientSize() const;
