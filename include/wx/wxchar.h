@@ -927,6 +927,14 @@ WXDLLIMPEXP_BASE int      wxSystem(const wxChar *psz);
                                   const wxChar *fmt, const struct tm *tm);
 #endif // wxNEED_WX_TIME_H
 
+// missing functions in WinCE
+#ifdef __WXWINCE__
+WXDLLIMPEXP_BASE char* strdup(const char* s);
+WXDLLIMPEXP_BASE void *calloc( size_t num, size_t size );
+WXDLLIMPEXP_BASE int isspace(int c);
+WXDLLIMPEXP_BASE int isascii( int c );
+#endif
+
 // ----------------------------------------------------------------------------
 // multibyte to wide char conversion functions and macros
 // ----------------------------------------------------------------------------

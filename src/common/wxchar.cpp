@@ -1408,3 +1408,31 @@ int isascii( int c )
 }
 #endif // __MWERKS__
 
+#ifdef __WXWINCE__
+char* strdup(const char* s)
+{
+    char *dest = (char*) malloc( strlen( s ) + 1 ) ;
+    if ( dest )
+        strcpy( dest , s ) ;
+    return dest ;
+}
+
+void *calloc( size_t num, size_t size )
+{
+    void** ptr = (void **)malloc(num * size);
+    memset( ptr, 0, num * size);
+    return ptr;
+}
+
+int isspace(int c)
+{
+    return (c == ' ');
+}
+
+int isascii( int c )
+{
+        return ( c >= 0 && c < 128 ) ;
+}
+#endif
+
+
