@@ -35,9 +35,9 @@
     #include "wx/string.h"
     #include "wx/log.h"
     #include "wx/intl.h"
-    #include "wx/file.h"
 #endif //WX_PRECOMP
 
+#include "wx/file.h"
 #include "wx/utils.h"           // wxGetHomeDir()
 
 #include "wx/snglinst.h"
