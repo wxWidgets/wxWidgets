@@ -11,15 +11,22 @@ MDEPS = common.bkl config.bkl files.bkl monolithic.bkl multilib.bkl opengl.bkl w
 DSWFLAGS = -DRUNTIME_LIBS=dynamic -DOFFICIAL_BUILD=0 -DUSE_HTML=1 \
            -DUSE_OPENGL=1 -DUSE_ODBC=1 -DMONOLITHIC=0 -DUSE_GUI=1 \
            -DDEBUG_INFO=default -DDEBUG_FLAG=default
+
+COMPAT_TARGETS = ../../src/wxWindows.dsp
+
 AUTOCONF_ALL = \
 	../../Makefile.in \
 	../../contrib/samples/animate/Makefile.in \
 	../../contrib/samples/svg/Makefile.in \
 	../../contrib/samples/xrc/Makefile.in \
 	../../contrib/src/animate/Makefile.in \
+	../../contrib/src/deprecated/Makefile.in \
 	../../contrib/src/fl/Makefile.in \
 	../../contrib/src/gizmos/Makefile.in \
+	../../contrib/src/mmedia/Makefile.in \
+	../../contrib/src/net/Makefile.in \
 	../../contrib/src/ogl/Makefile.in \
+	../../contrib/src/plot/Makefile.in \
 	../../contrib/src/stc/Makefile.in \
 	../../contrib/src/svg/Makefile.in \
 	../../contrib/src/xrc/Makefile.in \
@@ -109,9 +116,13 @@ AUTOCONF_ALL = \
 	../../samples/wxtest/Makefile.in
 BORLAND_ALL = \
 	../../contrib/build/animate/makefile.bcc \
+	../../contrib/build/deprecated/makefile.bcc \
 	../../contrib/build/fl/makefile.bcc \
 	../../contrib/build/gizmos/makefile.bcc \
+	../../contrib/build/mmedia/makefile.bcc \
+	../../contrib/build/net/makefile.bcc \
 	../../contrib/build/ogl/makefile.bcc \
+	../../contrib/build/plot/makefile.bcc \
 	../../contrib/build/stc/makefile.bcc \
 	../../contrib/build/svg/makefile.bcc \
 	../../contrib/build/xrc/makefile.bcc \
@@ -205,9 +216,13 @@ BORLAND_ALL = \
 	../makefile.bcc
 MINGW_ALL = \
 	../../contrib/build/animate/makefile.gcc \
+	../../contrib/build/deprecated/makefile.gcc \
 	../../contrib/build/fl/makefile.gcc \
 	../../contrib/build/gizmos/makefile.gcc \
+	../../contrib/build/mmedia/makefile.gcc \
+	../../contrib/build/net/makefile.gcc \
 	../../contrib/build/ogl/makefile.gcc \
+	../../contrib/build/plot/makefile.gcc \
 	../../contrib/build/stc/makefile.gcc \
 	../../contrib/build/svg/makefile.gcc \
 	../../contrib/build/xrc/makefile.gcc \
@@ -301,9 +316,13 @@ MINGW_ALL = \
 	../makefile.gcc
 MSVC_ALL = \
 	../../contrib/build/animate/makefile.vc \
+	../../contrib/build/deprecated/makefile.vc \
 	../../contrib/build/fl/makefile.vc \
 	../../contrib/build/gizmos/makefile.vc \
+	../../contrib/build/mmedia/makefile.vc \
+	../../contrib/build/net/makefile.vc \
 	../../contrib/build/ogl/makefile.vc \
+	../../contrib/build/plot/makefile.vc \
 	../../contrib/build/stc/makefile.vc \
 	../../contrib/build/svg/makefile.vc \
 	../../contrib/build/xrc/makefile.vc \
@@ -397,9 +416,13 @@ MSVC_ALL = \
 	../makefile.vc
 MSVC6PRJ_ALL = \
 	../../contrib/build/animate/animate.dsw \
+	../../contrib/build/deprecated/deprecated.dsw \
 	../../contrib/build/fl/fl.dsw \
 	../../contrib/build/gizmos/gizmos.dsw \
+	../../contrib/build/mmedia/mmedia.dsw \
+	../../contrib/build/net/netutils.dsw \
 	../../contrib/build/ogl/ogl.dsw \
+	../../contrib/build/plot/plot.dsw \
 	../../contrib/build/stc/stc.dsw \
 	../../contrib/build/svg/svg.dsw \
 	../../contrib/build/xrc/xrc.dsw \
@@ -490,9 +513,13 @@ MSVC6PRJ_ALL = \
 	../wx.dsw
 WATCOM_ALL = \
 	../../contrib/build/animate/makefile.wat \
+	../../contrib/build/deprecated/makefile.wat \
 	../../contrib/build/fl/makefile.wat \
 	../../contrib/build/gizmos/makefile.wat \
+	../../contrib/build/mmedia/makefile.wat \
+	../../contrib/build/net/makefile.wat \
 	../../contrib/build/ogl/makefile.wat \
+	../../contrib/build/plot/makefile.wat \
 	../../contrib/build/stc/makefile.wat \
 	../../contrib/build/svg/makefile.wat \
 	../../contrib/build/xrc/makefile.wat \
@@ -584,7 +611,8 @@ WATCOM_ALL = \
 	../../samples/wizard/makefile.wat \
 	../../samples/wxtest/makefile.wat \
 	../makefile.wat
-all: autoconf borland mingw msvc msvc6prj watcom
+
+all: $(COMPAT_TARGETS) autoconf borland mingw msvc msvc6prj watcom
 
 autoconf: $(AUTOCONF_ALL)
 borland: $(BORLAND_ALL)
@@ -595,14 +623,19 @@ watcom: $(WATCOM_ALL)
 
 clean:
 	rm -f ../../autoconf_inc.m4
+	rm -f $(COMPAT_TARGETS)
 	rm -f ../../Makefile.in
 	rm -f ../../contrib/samples/animate/Makefile.in
 	rm -f ../../contrib/samples/svg/Makefile.in
 	rm -f ../../contrib/samples/xrc/Makefile.in
 	rm -f ../../contrib/src/animate/Makefile.in
+	rm -f ../../contrib/src/deprecated/Makefile.in
 	rm -f ../../contrib/src/fl/Makefile.in
 	rm -f ../../contrib/src/gizmos/Makefile.in
+	rm -f ../../contrib/src/mmedia/Makefile.in
+	rm -f ../../contrib/src/net/Makefile.in
 	rm -f ../../contrib/src/ogl/Makefile.in
+	rm -f ../../contrib/src/plot/Makefile.in
 	rm -f ../../contrib/src/stc/Makefile.in
 	rm -f ../../contrib/src/svg/Makefile.in
 	rm -f ../../contrib/src/xrc/Makefile.in
@@ -691,9 +724,13 @@ clean:
 	rm -f ../../samples/wizard/Makefile.in
 	rm -f ../../samples/wxtest/Makefile.in
 	rm -f ../../contrib/build/animate/makefile.bcc
+	rm -f ../../contrib/build/deprecated/makefile.bcc
 	rm -f ../../contrib/build/fl/makefile.bcc
 	rm -f ../../contrib/build/gizmos/makefile.bcc
+	rm -f ../../contrib/build/mmedia/makefile.bcc
+	rm -f ../../contrib/build/net/makefile.bcc
 	rm -f ../../contrib/build/ogl/makefile.bcc
+	rm -f ../../contrib/build/plot/makefile.bcc
 	rm -f ../../contrib/build/stc/makefile.bcc
 	rm -f ../../contrib/build/svg/makefile.bcc
 	rm -f ../../contrib/build/xrc/makefile.bcc
@@ -786,9 +823,13 @@ clean:
 	rm -f ../../samples/wxtest/makefile.bcc
 	rm -f ../makefile.bcc
 	rm -f ../../contrib/build/animate/makefile.gcc
+	rm -f ../../contrib/build/deprecated/makefile.gcc
 	rm -f ../../contrib/build/fl/makefile.gcc
 	rm -f ../../contrib/build/gizmos/makefile.gcc
+	rm -f ../../contrib/build/mmedia/makefile.gcc
+	rm -f ../../contrib/build/net/makefile.gcc
 	rm -f ../../contrib/build/ogl/makefile.gcc
+	rm -f ../../contrib/build/plot/makefile.gcc
 	rm -f ../../contrib/build/stc/makefile.gcc
 	rm -f ../../contrib/build/svg/makefile.gcc
 	rm -f ../../contrib/build/xrc/makefile.gcc
@@ -881,9 +922,13 @@ clean:
 	rm -f ../../samples/wxtest/makefile.gcc
 	rm -f ../makefile.gcc
 	rm -f ../../contrib/build/animate/makefile.vc
+	rm -f ../../contrib/build/deprecated/makefile.vc
 	rm -f ../../contrib/build/fl/makefile.vc
 	rm -f ../../contrib/build/gizmos/makefile.vc
+	rm -f ../../contrib/build/mmedia/makefile.vc
+	rm -f ../../contrib/build/net/makefile.vc
 	rm -f ../../contrib/build/ogl/makefile.vc
+	rm -f ../../contrib/build/plot/makefile.vc
 	rm -f ../../contrib/build/stc/makefile.vc
 	rm -f ../../contrib/build/svg/makefile.vc
 	rm -f ../../contrib/build/xrc/makefile.vc
@@ -976,9 +1021,13 @@ clean:
 	rm -f ../../samples/wxtest/makefile.vc
 	rm -f ../makefile.vc
 	rm -f ../../contrib/build/animate/animate.dsw
+	rm -f ../../contrib/build/deprecated/deprecated.dsw
 	rm -f ../../contrib/build/fl/fl.dsw
 	rm -f ../../contrib/build/gizmos/gizmos.dsw
+	rm -f ../../contrib/build/mmedia/mmedia.dsw
+	rm -f ../../contrib/build/net/netutils.dsw
 	rm -f ../../contrib/build/ogl/ogl.dsw
+	rm -f ../../contrib/build/plot/plot.dsw
 	rm -f ../../contrib/build/stc/stc.dsw
 	rm -f ../../contrib/build/svg/svg.dsw
 	rm -f ../../contrib/build/xrc/xrc.dsw
@@ -1068,9 +1117,13 @@ clean:
 	rm -f ../../samples/wxtest/wxtest.dsw
 	rm -f ../wx.dsw
 	rm -f ../../contrib/build/animate/makefile.wat
+	rm -f ../../contrib/build/deprecated/makefile.wat
 	rm -f ../../contrib/build/fl/makefile.wat
 	rm -f ../../contrib/build/gizmos/makefile.wat
+	rm -f ../../contrib/build/mmedia/makefile.wat
+	rm -f ../../contrib/build/net/makefile.wat
 	rm -f ../../contrib/build/ogl/makefile.wat
+	rm -f ../../contrib/build/plot/makefile.wat
 	rm -f ../../contrib/build/stc/makefile.wat
 	rm -f ../../contrib/build/svg/makefile.wat
 	rm -f ../../contrib/build/xrc/makefile.wat
@@ -1168,6 +1221,9 @@ library: ../../Makefile.in ../makefile.bcc ../makefile.vc ../makefile.wat ../mak
 
 ../../autoconf_inc.m4: ../../Makefile.in
 
+../../src/wxWindows.dsp: monolithic.bkl files.bkl
+	$(BAKEFILE) -Icompat -fwx24dsp -DUSE_GUI=1 -DWXUNIV=0 -o$@ wx.bkl
+
 Makefile: regenMakefile.py
 	./regenMakefile.py
 	@echo
@@ -1195,6 +1251,26 @@ Makefile: regenMakefile.py
 	touch $@
 ../../contrib/build/animate/animate.dsw: $(CDEPS) ../../contrib/build/animate/animate.bkl
 	$(BAKEFILE) -fmsvc6prj -o$@  $(DSWFLAGS) -DSRCDIR=../../src/animate -DWXTOPDIR=../../../ ../../contrib/build/animate/animate.bkl
+	touch $@
+
+
+../../contrib/src/deprecated/Makefile.in: $(CDEPS) ../../contrib/build/deprecated/deprecated.bkl
+	$(BAKEFILE) -fautoconf -o$@  -DAUTOCONF_MACROS_FILE=../../autoconf_inc.m4 ../../contrib/build/deprecated/deprecated.bkl
+	touch $@
+../../contrib/build/deprecated/makefile.bcc: $(CDEPS) ../../contrib/build/deprecated/deprecated.bkl
+	$(BAKEFILE) -fborland -o$@  -DOPTIONS_FILE=../../../build/config.bcc -DWRITE_OPTIONS_FILE=0 -DSRCDIR=../../src/deprecated -DWXTOPDIR=../../../ ../../contrib/build/deprecated/deprecated.bkl
+	touch $@
+../../contrib/build/deprecated/makefile.vc: $(CDEPS) ../../contrib/build/deprecated/deprecated.bkl
+	$(BAKEFILE) -fmsvc -o$@  -DOPTIONS_FILE=../../../build/config.vc -DWRITE_OPTIONS_FILE=0 -DSRCDIR=../../src/deprecated -DWXTOPDIR=../../../ ../../contrib/build/deprecated/deprecated.bkl
+	touch $@
+../../contrib/build/deprecated/makefile.gcc: $(CDEPS) ../../contrib/build/deprecated/deprecated.bkl
+	$(BAKEFILE) -fmingw -o$@  -DOPTIONS_FILE=../../../build/config.gcc -DWRITE_OPTIONS_FILE=0 -DSRCDIR=../../src/deprecated -DWXTOPDIR=../../../ ../../contrib/build/deprecated/deprecated.bkl
+	touch $@
+../../contrib/build/deprecated/makefile.wat: $(CDEPS) ../../contrib/build/deprecated/deprecated.bkl
+	$(BAKEFILE) -fwatcom -o$@  -DOPTIONS_FILE=../../../build/config.wat -DWRITE_OPTIONS_FILE=0 -DSRCDIR=../../src/deprecated -DWXTOPDIR=../../../ ../../contrib/build/deprecated/deprecated.bkl
+	touch $@
+../../contrib/build/deprecated/deprecated.dsw: $(CDEPS) ../../contrib/build/deprecated/deprecated.bkl
+	$(BAKEFILE) -fmsvc6prj -o$@  $(DSWFLAGS) -DSRCDIR=../../src/deprecated -DWXTOPDIR=../../../ ../../contrib/build/deprecated/deprecated.bkl
 	touch $@
 
 
@@ -1238,6 +1314,46 @@ Makefile: regenMakefile.py
 	touch $@
 
 
+../../contrib/src/mmedia/Makefile.in: $(CDEPS) ../../contrib/build/mmedia/mmedia.bkl
+	$(BAKEFILE) -fautoconf -o$@  -DAUTOCONF_MACROS_FILE=../../autoconf_inc.m4 ../../contrib/build/mmedia/mmedia.bkl
+	touch $@
+../../contrib/build/mmedia/makefile.bcc: $(CDEPS) ../../contrib/build/mmedia/mmedia.bkl
+	$(BAKEFILE) -fborland -o$@  -DOPTIONS_FILE=../../../build/config.bcc -DWRITE_OPTIONS_FILE=0 -DSRCDIR=../../src/mmedia -DWXTOPDIR=../../../ ../../contrib/build/mmedia/mmedia.bkl
+	touch $@
+../../contrib/build/mmedia/makefile.vc: $(CDEPS) ../../contrib/build/mmedia/mmedia.bkl
+	$(BAKEFILE) -fmsvc -o$@  -DOPTIONS_FILE=../../../build/config.vc -DWRITE_OPTIONS_FILE=0 -DSRCDIR=../../src/mmedia -DWXTOPDIR=../../../ ../../contrib/build/mmedia/mmedia.bkl
+	touch $@
+../../contrib/build/mmedia/makefile.gcc: $(CDEPS) ../../contrib/build/mmedia/mmedia.bkl
+	$(BAKEFILE) -fmingw -o$@  -DOPTIONS_FILE=../../../build/config.gcc -DWRITE_OPTIONS_FILE=0 -DSRCDIR=../../src/mmedia -DWXTOPDIR=../../../ ../../contrib/build/mmedia/mmedia.bkl
+	touch $@
+../../contrib/build/mmedia/makefile.wat: $(CDEPS) ../../contrib/build/mmedia/mmedia.bkl
+	$(BAKEFILE) -fwatcom -o$@  -DOPTIONS_FILE=../../../build/config.wat -DWRITE_OPTIONS_FILE=0 -DSRCDIR=../../src/mmedia -DWXTOPDIR=../../../ ../../contrib/build/mmedia/mmedia.bkl
+	touch $@
+../../contrib/build/mmedia/mmedia.dsw: $(CDEPS) ../../contrib/build/mmedia/mmedia.bkl
+	$(BAKEFILE) -fmsvc6prj -o$@  $(DSWFLAGS) -DSRCDIR=../../src/mmedia -DWXTOPDIR=../../../ ../../contrib/build/mmedia/mmedia.bkl
+	touch $@
+
+
+../../contrib/src/net/Makefile.in: $(CDEPS) ../../contrib/build/net/netutils.bkl
+	$(BAKEFILE) -fautoconf -o$@  -DAUTOCONF_MACROS_FILE=../../autoconf_inc.m4 ../../contrib/build/net/netutils.bkl
+	touch $@
+../../contrib/build/net/makefile.bcc: $(CDEPS) ../../contrib/build/net/netutils.bkl
+	$(BAKEFILE) -fborland -o$@  -DOPTIONS_FILE=../../../build/config.bcc -DWRITE_OPTIONS_FILE=0 -DSRCDIR=../../src/net -DWXTOPDIR=../../../ ../../contrib/build/net/netutils.bkl
+	touch $@
+../../contrib/build/net/makefile.vc: $(CDEPS) ../../contrib/build/net/netutils.bkl
+	$(BAKEFILE) -fmsvc -o$@  -DOPTIONS_FILE=../../../build/config.vc -DWRITE_OPTIONS_FILE=0 -DSRCDIR=../../src/net -DWXTOPDIR=../../../ ../../contrib/build/net/netutils.bkl
+	touch $@
+../../contrib/build/net/makefile.gcc: $(CDEPS) ../../contrib/build/net/netutils.bkl
+	$(BAKEFILE) -fmingw -o$@  -DOPTIONS_FILE=../../../build/config.gcc -DWRITE_OPTIONS_FILE=0 -DSRCDIR=../../src/net -DWXTOPDIR=../../../ ../../contrib/build/net/netutils.bkl
+	touch $@
+../../contrib/build/net/makefile.wat: $(CDEPS) ../../contrib/build/net/netutils.bkl
+	$(BAKEFILE) -fwatcom -o$@  -DOPTIONS_FILE=../../../build/config.wat -DWRITE_OPTIONS_FILE=0 -DSRCDIR=../../src/net -DWXTOPDIR=../../../ ../../contrib/build/net/netutils.bkl
+	touch $@
+../../contrib/build/net/netutils.dsw: $(CDEPS) ../../contrib/build/net/netutils.bkl
+	$(BAKEFILE) -fmsvc6prj -o$@  $(DSWFLAGS) -DSRCDIR=../../src/net -DWXTOPDIR=../../../ ../../contrib/build/net/netutils.bkl
+	touch $@
+
+
 ../../contrib/src/ogl/Makefile.in: $(CDEPS) ../../contrib/build/ogl/ogl.bkl
 	$(BAKEFILE) -fautoconf -o$@  -DAUTOCONF_MACROS_FILE=../../autoconf_inc.m4 ../../contrib/build/ogl/ogl.bkl
 	touch $@
@@ -1255,6 +1371,26 @@ Makefile: regenMakefile.py
 	touch $@
 ../../contrib/build/ogl/ogl.dsw: $(CDEPS) ../../contrib/build/ogl/ogl.bkl
 	$(BAKEFILE) -fmsvc6prj -o$@  $(DSWFLAGS) -DSRCDIR=../../src/ogl -DWXTOPDIR=../../../ ../../contrib/build/ogl/ogl.bkl
+	touch $@
+
+
+../../contrib/src/plot/Makefile.in: $(CDEPS) ../../contrib/build/plot/plot.bkl
+	$(BAKEFILE) -fautoconf -o$@  -DAUTOCONF_MACROS_FILE=../../autoconf_inc.m4 ../../contrib/build/plot/plot.bkl
+	touch $@
+../../contrib/build/plot/makefile.bcc: $(CDEPS) ../../contrib/build/plot/plot.bkl
+	$(BAKEFILE) -fborland -o$@  -DOPTIONS_FILE=../../../build/config.bcc -DWRITE_OPTIONS_FILE=0 -DSRCDIR=../../src/plot -DWXTOPDIR=../../../ ../../contrib/build/plot/plot.bkl
+	touch $@
+../../contrib/build/plot/makefile.vc: $(CDEPS) ../../contrib/build/plot/plot.bkl
+	$(BAKEFILE) -fmsvc -o$@  -DOPTIONS_FILE=../../../build/config.vc -DWRITE_OPTIONS_FILE=0 -DSRCDIR=../../src/plot -DWXTOPDIR=../../../ ../../contrib/build/plot/plot.bkl
+	touch $@
+../../contrib/build/plot/makefile.gcc: $(CDEPS) ../../contrib/build/plot/plot.bkl
+	$(BAKEFILE) -fmingw -o$@  -DOPTIONS_FILE=../../../build/config.gcc -DWRITE_OPTIONS_FILE=0 -DSRCDIR=../../src/plot -DWXTOPDIR=../../../ ../../contrib/build/plot/plot.bkl
+	touch $@
+../../contrib/build/plot/makefile.wat: $(CDEPS) ../../contrib/build/plot/plot.bkl
+	$(BAKEFILE) -fwatcom -o$@  -DOPTIONS_FILE=../../../build/config.wat -DWRITE_OPTIONS_FILE=0 -DSRCDIR=../../src/plot -DWXTOPDIR=../../../ ../../contrib/build/plot/plot.bkl
+	touch $@
+../../contrib/build/plot/plot.dsw: $(CDEPS) ../../contrib/build/plot/plot.bkl
+	$(BAKEFILE) -fmsvc6prj -o$@  $(DSWFLAGS) -DSRCDIR=../../src/plot -DWXTOPDIR=../../../ ../../contrib/build/plot/plot.bkl
 	touch $@
 
 

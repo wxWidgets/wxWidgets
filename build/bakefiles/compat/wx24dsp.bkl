@@ -1,0 +1,58 @@
+<?xml version="1.0" ?>
+<!-- $Id$ -->
+
+<makefile>
+
+    <include file="win32.bkl"/>
+    <set var="COMPILER">vc</set>
+
+    <define-rule name="__fake">
+        <define-tag name="sources"/>
+        <define-tag name="libname"/>
+        <define-tag name="dllname"/>
+        <define-tag name="dirname"/>
+        <define-tag name="dependency-of"/>
+        <define-tag name="debug-info"/>
+        <define-tag name="debug-runtime-libs"/>
+        <define-tag name="runtime-libs"/>
+        <define-tag name="optimize"/>
+        <define-tag name="threading"/>
+        <define-tag name="cppflags"/>
+        <define-tag name="cflags"/>
+        <define-tag name="cxxflags"/>
+        <define-tag name="ldflags"/>
+        <define-tag name="ldlibs"/>
+        <define-tag name="define"/>
+        <define-tag name="include"/>
+        <define-tag name="install-to"/>
+        <define-tag name="lib-path"/>
+        <define-tag name="precomp-headers"/>
+        <define-tag name="precomp-headers-gen"/>
+        <define-tag name="precomp-headers-header"/>        
+        <define-tag name="precomp-headers-file"/>
+        <define-tag name="precomp-headers-exclude"/>
+        <define-tag name="version"/>
+        <define-tag name="so_version"/>
+        <define-tag name="mac_version"/>
+        <define-tag name="depends"/>
+        <define-tag name="sys-lib"/>
+        <define-tag name="library"/>
+        <define-tag name="command"/>
+    </define-rule>
+
+    <define-rule name="exe" extends="__fake"/>
+    <define-rule name="dll" extends="__fake"/>
+    <define-rule name="lib" extends="__fake"/>
+    <define-rule name="action" extends="__fake"/>
+    <define-rule name="phony" extends="__fake"/>
+
+    <set var="ALL_SOURCES" eval="0">
+        $(MONOLIB_SRC) src/msw/dummy.cpp $(OPENGL_SRC)
+    </set>
+    
+    <output file="$(OUTPUT_FILE)" writer="wx24dsp.empy"/>
+    <set var="FORMAT_OUTPUT_VARIABLES">
+        ALL_SOURCES,ALL_HEADERS
+    </set>   
+    
+</makefile>

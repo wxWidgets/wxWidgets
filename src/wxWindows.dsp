@@ -313,6 +313,10 @@ SOURCE=.\common\artstd.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\common\bmpbase.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\common\choiccmn.cpp
 # End Source File
 # Begin Source File
@@ -891,6 +895,14 @@ SOURCE=.\generic\gridsel.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\generic\helpext.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\generic\htmllbox.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\generic\laywin.cpp
 # End Source File
 # Begin Source File
@@ -960,6 +972,14 @@ SOURCE=.\generic\tipwin.cpp
 # Begin Source File
 
 SOURCE=.\generic\treectlg.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\generic\vlbox.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\generic\vscroll.cpp
 # End Source File
 # Begin Source File
 
@@ -1053,38 +1073,6 @@ SOURCE=.\html\winpars.cpp
 # Begin Group "MSW Files"
 
 # PROP Default_Filter ""
-# Begin Group "OLE Files"
-
-# PROP Default_Filter ""
-# Begin Source File
-
-SOURCE=.\msw\ole\access.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\msw\ole\automtn.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\msw\ole\dataobj.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\msw\ole\dropsrc.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\msw\ole\droptgt.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\msw\ole\oleutils.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\msw\ole\uuid.cpp
-# End Source File
-# End Group
 # Begin Source File
 
 SOURCE=.\msw\accel.cpp
@@ -1362,6 +1350,34 @@ SOURCE=.\msw\notebook.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\msw\ole\access.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\msw\ole\automtn.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\msw\ole\dataobj.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\msw\ole\dropsrc.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\msw\ole\droptgt.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\msw\ole\oleutils.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\msw\ole\uuid.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\msw\ownerdrw.cpp
 # End Source File
 # Begin Source File
@@ -1525,6 +1541,14 @@ SOURCE=.\msw\wave.cpp
 SOURCE=.\msw\window.cpp
 # End Source File
 # End Group
+# Begin Group "Other Sources"
+
+# PROP Default_Filter ""
+# Begin Source File
+
+SOURCE=.\xml\xml.cpp
+# End Source File
+# End Group
 # Begin Group "Headers"
 
 # PROP Default_Filter ""
@@ -1642,6 +1666,10 @@ SOURCE=..\include\wx\access.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\include\wx\afterstd.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\include\wx\app.h
 # End Source File
 # Begin Source File
@@ -1650,7 +1678,15 @@ SOURCE=..\include\wx\apptrait.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\include\wx\arrstr.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\include\wx\artprov.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\beforestd.h
 # End Source File
 # Begin Source File
 
@@ -1778,10 +1814,6 @@ SOURCE=..\include\wx\datetime.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\include\wx\datetime.inl
-# End Source File
-# Begin Source File
-
 SOURCE=..\include\wx\datstrm.h
 # End Source File
 # Begin Source File
@@ -1815,6 +1847,10 @@ SOURCE=..\include\wx\dcclient.h
 # Begin Source File
 
 SOURCE=..\include\wx\dcmemory.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\dcmirror.h
 # End Source File
 # Begin Source File
 
@@ -1903,6 +1939,10 @@ SOURCE=..\include\wx\encconv.h
 # Begin Source File
 
 SOURCE=..\include\wx\event.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\evtloop.h
 # End Source File
 # Begin Source File
 
@@ -2034,7 +2074,15 @@ SOURCE=..\include\wx\helpbase.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\include\wx\helphtml.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\include\wx\helpwin.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\htmllbox.h
 # End Source File
 # Begin Source File
 
@@ -2043,6 +2091,10 @@ SOURCE=..\include\wx\icon.h
 # Begin Source File
 
 SOURCE=..\include\wx\iconbndl.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\iconloc.h
 # End Source File
 # Begin Source File
 
@@ -2087,6 +2139,10 @@ SOURCE=..\include\wx\imagtiff.h
 # Begin Source File
 
 SOURCE=..\include\wx\imagxpm.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\init.h
 # End Source File
 # Begin Source File
 
@@ -2210,6 +2266,10 @@ SOURCE=..\include\wx\msgout.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\include\wx\msgout.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\include\wx\mstream.h
 # End Source File
 # Begin Source File
@@ -2270,6 +2330,26 @@ SOURCE=..\include\wx\progdlg.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\include\wx\protocol\file.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\protocol\ftp.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\protocol\http.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\protocol\protocol.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\ptr_scpd.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\include\wx\quantize.h
 # End Source File
 # Begin Source File
@@ -2294,6 +2374,10 @@ SOURCE=..\include\wx\region.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\include\wx\renderer.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\include\wx\sashwin.h
 # End Source File
 # Begin Source File
@@ -2307,6 +2391,14 @@ SOURCE=..\include\wx\sckipc.h
 # Begin Source File
 
 SOURCE=..\include\wx\sckstrm.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\scopeguard.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\scrolbar.h
 # End Source File
 # Begin Source File
 
@@ -2379,6 +2471,10 @@ SOURCE=..\include\wx\stattext.h
 # Begin Source File
 
 SOURCE=..\include\wx\statusbr.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\stopwatch.h
 # End Source File
 # Begin Source File
 
@@ -2518,7 +2614,19 @@ SOURCE=..\include\wx\version.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\include\wx\vlbox.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\vms_x_fix.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\include\wx\volume.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\vscroll.h
 # End Source File
 # Begin Source File
 
@@ -2542,18 +2650,6 @@ SOURCE=..\include\wx\wx.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\include\wx\wx_cw.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\include\wx\wx_cw_cm.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\include\wx\wx_cw_d.h
-# End Source File
-# Begin Source File
-
 SOURCE=..\include\wx\wxchar.h
 # End Source File
 # Begin Source File
@@ -2566,7 +2662,15 @@ SOURCE=..\include\wx\wxprec.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\include\wx\xml\xml.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\include\wx\xpmdecod.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\xpmhand.h
 # End Source File
 # Begin Source File
 
@@ -2586,19 +2690,7 @@ SOURCE=..\include\wx\msw\accel.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\include\wx\msw\access.h
-# End Source File
-# Begin Source File
-
 SOURCE=..\include\wx\msw\app.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\include\wx\msw\apptbase.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\include\wx\msw\apptrait.h
 # End Source File
 # Begin Source File
 
@@ -2630,6 +2722,10 @@ SOURCE=..\include\wx\msw\checklst.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\include\wx\msw\chkconf.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\include\wx\msw\choice.h
 # End Source File
 # Begin Source File
@@ -2651,6 +2747,10 @@ SOURCE=..\include\wx\msw\combobox.h
 # Begin Source File
 
 SOURCE=..\include\wx\msw\control.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\msw\crashrpt.h
 # End Source File
 # Begin Source File
 
@@ -2742,6 +2842,14 @@ SOURCE=..\include\wx\msw\glcanvas.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\include\wx\msw\gnuwin32\winresrc.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\msw\gsockmsw.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\include\wx\msw\helpbest.h
 # End Source File
 # Begin Source File
@@ -2822,6 +2930,42 @@ SOURCE=..\include\wx\msw\notebook.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\include\wx\msw\ole\access.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\msw\ole\automtn.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\msw\ole\dataform.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\msw\ole\dataobj.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\msw\ole\dataobj2.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\msw\ole\dropsrc.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\msw\ole\droptgt.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\msw\ole\oleutils.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\msw\ole\uuid.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\include\wx\msw\palette.h
 # End Source File
 # Begin Source File
@@ -2863,6 +3007,10 @@ SOURCE=..\include\wx\msw\registry.h
 # Begin Source File
 
 SOURCE=..\include\wx\msw\scrolbar.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\msw\setup0.h
 # End Source File
 # Begin Source File
 
@@ -2952,6 +3100,10 @@ SOURCE=..\include\wx\msw\window.h
 
 SOURCE=..\include\wx\msw\winundef.h
 # End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\msw\wrapwin.h
+# End Source File
 # End Group
 # Begin Group "Generic"
 
@@ -2963,10 +3115,6 @@ SOURCE=..\include\wx\generic\accel.h
 # Begin Source File
 
 SOURCE=..\include\wx\generic\calctrl.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\include\wx\generic\caret.h
 # End Source File
 # Begin Source File
 
@@ -2986,15 +3134,7 @@ SOURCE=..\include\wx\generic\dirctrlg.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\include\wx\generic\dirdlgg.h
-# End Source File
-# Begin Source File
-
 SOURCE=..\include\wx\generic\dragimgg.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\include\wx\generic\fdrepdlg.h
 # End Source File
 # Begin Source File
 
@@ -3014,7 +3154,7 @@ SOURCE=..\include\wx\generic\gridctrl.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\include\wx\generic\gridg.h
+SOURCE=..\include\wx\generic\gridsel.h
 # End Source File
 # Begin Source File
 
@@ -3030,11 +3170,7 @@ SOURCE=..\include\wx\generic\laywin.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\include\wx\generic\listctrl.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\include\wx\generic\mdig.h
+SOURCE=..\include\wx\generic\logg.h
 # End Source File
 # Begin Source File
 
@@ -3046,15 +3182,7 @@ SOURCE=..\include\wx\generic\notebook.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\include\wx\generic\paletteg.h
-# End Source File
-# Begin Source File
-
 SOURCE=..\include\wx\generic\panelg.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\include\wx\generic\printps.h
 # End Source File
 # Begin Source File
 
@@ -3083,18 +3211,6 @@ SOURCE=..\include\wx\generic\splash.h
 # Begin Source File
 
 SOURCE=..\include\wx\generic\splitter.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\include\wx\generic\statline.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\include\wx\generic\statusbr.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\include\wx\generic\tabg.h
 # End Source File
 # Begin Source File
 
@@ -3147,6 +3263,10 @@ SOURCE=..\include\wx\html\htmlfilt.h
 # Begin Source File
 
 SOURCE=..\include\wx\html\htmlpars.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\html\htmlproc.h
 # End Source File
 # Begin Source File
 

@@ -23,6 +23,9 @@ MDEPS = common.bkl config.bkl files.bkl monolithic.bkl multilib.bkl opengl.bkl w
 DSWFLAGS = -DRUNTIME_LIBS=dynamic -DOFFICIAL_BUILD=0 -DUSE_HTML=1 \\
            -DUSE_OPENGL=1 -DUSE_ODBC=1 -DMONOLITHIC=0 -DUSE_GUI=1 \\
            -DDEBUG_INFO=default -DDEBUG_FLAG=default
+
+COMPAT_TARGETS = ../../src/wxWindows.dsp
+
 """)
 
 lines = {}
@@ -170,7 +173,7 @@ for f in allK:
     var = '%s_ALL' % f.upper()
     file.write('%s = \\\n\t%s\n' % (var,' \\\n\t'.join(all[f])))
 
-file.write('all:')
+file.write('\nall: $(COMPAT_TARGETS)')
 for f in allK:
     file.write(' %s' % f)
 file.write('\n\n')
@@ -180,11 +183,15 @@ for f in allK:
 file.write("""
 clean:
 \trm -f ../../autoconf_inc.m4
+\trm -f $(COMPAT_TARGETS)
 %s
 
 library: ../../Makefile.in ../makefile.bcc ../makefile.vc ../makefile.wat ../makefile.gcc
 
 ../../autoconf_inc.m4: ../../Makefile.in
+
+../../src/wxWindows.dsp: monolithic.bkl files.bkl
+\t$(BAKEFILE) -Icompat -fwx24dsp -DUSE_GUI=1 -DWXUNIV=0 -o$@ wx.bkl
 
 Makefile: regenMakefile.py
 \t./regenMakefile.py
