@@ -168,13 +168,13 @@ WXDLLEXPORT void wxDos2UnixFilename(wxChar *s);
 WXDLLEXPORT void wxUnix2DosFilename(wxChar *s);
 #define Unix2DosFilename wxUnix2DosFilename
 
-#if defined(__WXMAC__)
-  WXDLLEXPORT wxString wxMacFSSpec2MacFilename( const FSSpec *spec ) ;
-  WXDLLEXPORT void wxMacFilename2FSSpec( const char *path , FSSpec *spec ) ;
-  WXDLLEXPORT wxString wxMacFSSpec2UnixFilename( const FSSpec *spec ) ;
-  WXDLLEXPORT void wxUnixFilename2FSSpec( const char *path , FSSpec *spec ) ;
-  WXDLLEXPORT wxString wxMac2UnixFilename( const char *s) ;
-  WXDLLEXPORT wxString wxUnix2MacFilename( const char *s);
+#ifdef __WXMAC__
+WXDLLEXPORT wxString wxMacFSSpec2MacFilename( const FSSpec *spec ) ;
+WXDLLEXPORT void wxMacFilename2FSSpec( const char *path , FSSpec *spec ) ;
+WXDLLEXPORT wxString wxMacFSSpec2UnixFilename( const FSSpec *spec ) ;
+WXDLLEXPORT void wxUnixFilename2FSSpec( const char *path , FSSpec *spec ) ;
+WXDLLEXPORT wxString wxMac2UnixFilename( const char *s) ;
+WXDLLEXPORT wxString wxUnix2MacFilename( const char *s);
 #endif
 
 // Strip the extension, in situ
