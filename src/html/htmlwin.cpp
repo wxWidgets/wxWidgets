@@ -45,7 +45,7 @@ wxHtmlWindow::wxHtmlWindow(wxWindow *parent, wxWindowID id, const wxPoint& pos, 
 {
     m_tmpMouseMoved = FALSE;
     m_tmpLastLink = wxEmptyString;
-    m_tmpCanDraw = TRUE;
+    m_tmpCanDrawLocks = 0;
     m_FS = new wxFileSystem();
     m_RelatedStatusBar = -1;
     m_RelatedFrame = NULL;
@@ -113,15 +113,15 @@ bool wxHtmlWindow::SetPage(const wxString& source)
     m_OpenedPage = m_OpenedAnchor = m_OpenedPageTitle = wxEmptyString;
     m_Parser -> SetDC(dc);
     if (m_Cell) {
-      delete m_Cell;
-      m_Cell = NULL;
+        delete m_Cell;
+        m_Cell = NULL;
     }
     m_Cell = (wxHtmlContainerCell*) m_Parser -> Parse(source);
     delete dc;
     m_Cell -> SetIndent(m_Borders, wxHTML_INDENT_ALL, wxHTML_UNITS_PIXELS);
     m_Cell -> SetAlignHor(wxHTML_ALIGN_CENTER);
     CreateLayout();
-    Refresh();
+    if (m_tmpCanDrawLocks == 0) Refresh();
     return TRUE;
 }
 
@@ -134,7 +134,7 @@ bool wxHtmlWindow::LoadPage(const wxString& location)
     SetCursor(*wxHOURGLASS_CURSOR);
     wxYield();
 
-    m_tmpCanDraw = FALSE;
+    m_tmpCanDrawLocks++;
     if (m_HistoryOn && (m_HistoryPos != -1)) { // store scroll position into history item
         int x, y;
         ViewStart(&x, &y);
@@ -143,7 +143,7 @@ bool wxHtmlWindow::LoadPage(const wxString& location)
 
     if (location[0] == '#') { // local anchor
         wxString anch = location.Mid(1) /*1 to end*/;
-        m_tmpCanDraw = TRUE;
+        m_tmpCanDrawLocks--;
         rt_val = ScrollToAnchor(anch);
     }
 
@@ -159,7 +159,7 @@ bool wxHtmlWindow::LoadPage(const wxString& location)
             wxString err;
 
             err.Printf(_("The browser is unable to open requested location :\n\n%s"), WXSTRINGCAST location);
-            m_tmpCanDraw = TRUE;
+            m_tmpCanDrawLocks--;
             Refresh();
             wxMessageBox(err, "Error");
 
@@ -187,17 +187,17 @@ bool wxHtmlWindow::LoadPage(const wxString& location)
                 node = node -> GetNext();
             }
             if (src == wxEmptyString) {
-	        if (m_DefaultFilter == NULL) m_DefaultFilter = GetDefaultFilter();
-	        src = m_DefaultFilter -> ReadFile(*f);
-	    }
+                if (m_DefaultFilter == NULL) m_DefaultFilter = GetDefaultFilter();
+                src = m_DefaultFilter -> ReadFile(*f);
+            }
 
             m_FS -> ChangePathTo(f -> GetLocation());
             rt_val = SetPage(src);
             m_OpenedPage = f -> GetLocation();
             if (f -> GetAnchor() != wxEmptyString) {
-                m_tmpCanDraw = TRUE;
+//                m_tmpCanDrawLocks--;
                 ScrollToAnchor(f -> GetAnchor());
-                m_tmpCanDraw = FALSE;
+//                m_tmpCanDrawLocks++;
             }
 
             delete f;
@@ -217,7 +217,8 @@ bool wxHtmlWindow::LoadPage(const wxString& location)
 
     SetCursor(*wxSTANDARD_CURSOR);
 
-    m_tmpCanDraw = TRUE;
+    wxYield();
+    m_tmpCanDrawLocks--;
     Refresh();
     return rt_val;
 }
@@ -273,17 +274,17 @@ void wxHtmlWindow::CreateLayout()
 #endif
         GetClientSize(&ClientWidth, &ClientHeight);
         m_Cell -> Layout(ClientWidth);
-     	if (ClientHeight < m_Cell -> GetHeight()) {
+        if (ClientHeight < m_Cell -> GetHeight()) {
             SetScrollbars(wxHTML_SCROLL_STEP, wxHTML_SCROLL_STEP,
                           m_Cell -> GetWidth() / wxHTML_SCROLL_STEP,
                           m_Cell -> GetHeight() / wxHTML_SCROLL_STEP
                           /*cheat: top-level frag is always container*/);
         }
-	    else { /* we fit into window, no need for scrollbars */
-	        SetScrollbars(1, 1, 0, 0); // disable...
-                GetClientSize(&ClientWidth, &ClientHeight);
-	        m_Cell -> Layout(ClientWidth); // ...and relayout
-	    }
+        else { /* we fit into window, no need for scrollbars */
+            SetScrollbars(1, 1, 0, 0); // disable...
+            GetClientSize(&ClientWidth, &ClientHeight);
+            m_Cell -> Layout(ClientWidth); // ...and relayout
+        }
     }
 }
 
@@ -356,10 +357,13 @@ bool wxHtmlWindow::HistoryBack()
     l = m_History[m_HistoryPos].GetPage();
     a = m_History[m_HistoryPos].GetAnchor();
     m_HistoryOn = FALSE;
+    m_tmpCanDrawLocks++;
     if (a == wxEmptyString) LoadPage(l);
     else LoadPage(l + "#" + a);
     m_HistoryOn = TRUE;
     Scroll(0, m_History[m_HistoryPos].GetPos());
+//    wxYield();
+    m_tmpCanDrawLocks--;
     Refresh();
     return TRUE;
 }
@@ -379,10 +383,13 @@ bool wxHtmlWindow::HistoryForward()
     l = m_History[m_HistoryPos].GetPage();
     a = m_History[m_HistoryPos].GetAnchor();
     m_HistoryOn = FALSE;
+    m_tmpCanDrawLocks++;
     if (a == wxEmptyString) LoadPage(l);
     else LoadPage(l + "#" + a);
     m_HistoryOn = TRUE;
     Scroll(0, m_History[m_HistoryPos].GetPos());
+//    wxYield();
+    m_tmpCanDrawLocks--;
     Refresh();
     return TRUE;
 }
@@ -432,7 +439,7 @@ void wxHtmlWindow::OnDraw(wxDC& dc)
     wxRegionIterator upd(GetUpdateRegion()); // get the update rect list
     int v_y, v_h;
 
-    if (!m_tmpCanDraw) return;
+    if (m_tmpCanDrawLocks > 0) return;
     dc.SetMapMode(wxMM_TEXT);
 #if defined(_MSC_VER) && (_MSC_VER == 1200)
     ::SetMapMode((HDC)dc.GetHDC(), MM_TEXT);

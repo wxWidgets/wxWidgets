@@ -202,8 +202,8 @@ class WXDLLEXPORT wxHtmlWindow : public wxScrolledWindow
                 // (if TRUE we will try to change cursor in last call to OnIdle)
         wxString m_tmpLastLink;
                 // contains last link name
-        bool m_tmpCanDraw;
-                // if FALSE contents of the window is not redrawn
+        int m_tmpCanDrawLocks;
+                // if >0 contents of the window is not redrawn
                 // (in order to avoid ugly bliking)
 
         static wxList m_Filters;
