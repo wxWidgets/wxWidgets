@@ -48,7 +48,7 @@
 #undef GetClassName
 #endif
 
-#if     wxUSE_NATIVE_STATUSBAR
+#if wxUSE_NATIVE_STATUSBAR
 
 #if     !USE_SHARED_LIBRARY
   IMPLEMENT_DYNAMIC_CLASS(wxStatusBar95, wxStatusBar);
@@ -236,7 +236,9 @@ void wxStatusBar95::OnSize(wxSizeEvent& event)
   SetFieldsWidth();
 }
 
-#endif
-  // __WIN95__
-#endif
-  // wxUSE_NATIVE_STATUSBAR
+#endif  // wxUSE_NATIVE_STATUSBAR
+
+#else
+    #error "wxStatusBar95 is only available under Windows 95 and later."
+#endif // __WIN95__
+  

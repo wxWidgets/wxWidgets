@@ -80,7 +80,7 @@ static const struct
 } g_strEmpty = { {-1, 0, 0}, '\0' };
 
 // empty C style string: points to 'string data' byte of g_strEmpty
-extern const char *g_szNul = &g_strEmpty.dummy;
+extern const char WXDLLEXPORT *g_szNul = &g_strEmpty.dummy;
 
 // ----------------------------------------------------------------------------
 // conditional compilation

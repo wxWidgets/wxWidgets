@@ -279,7 +279,7 @@ bool WXDLLEXPORT operator != (const wxDate &dt1, const wxDate &dt2)
 // Ostream operations
 ////////////////////////////////////////////////////////////////
 
-ostream& WXDLLEXPORT operator << (ostream &os, const wxDate &dt)
+ostream WXDLLEXPORT & operator << (ostream &os, const wxDate &dt)
 {
 	return os << (const char *) dt.FormatDate();
 }

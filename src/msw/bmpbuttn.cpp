@@ -97,8 +97,8 @@ void wxBitmapButton::SetBitmapLabel(const wxBitmap& bitmap)
 
 bool wxBitmapButton::MSWOnDraw(WXDRAWITEMSTRUCT *item)
 {
-    long style = GetWindowLong((HWND) GetHWND(), GWL_STYLE);
 #if defined(__WIN95__)
+    long style = GetWindowLong((HWND) GetHWND(), GWL_STYLE);
     if (style & BS_BITMAP)
     {
         // Should we call Default() here?

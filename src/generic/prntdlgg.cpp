@@ -156,14 +156,14 @@ void wxGenericPrintDialog::OnOK(wxCommandEvent& WXUNUSED(event))
   {
     wxThePrintSetupData->SetPrinterMode(PS_FILE);
 
-    char *f = wxFileSelector(_("PostScript file"),
-        wxPathOnly(wxThePrintSetupData->GetPrinterFile()),
-        wxFileNameFromPath(wxThePrintSetupData->GetPrinterFile()),
-        "ps", "*.ps", 0, this);
-    if (f)
-      wxThePrintSetupData->SetPrinterFile(f);
-    else
-      return;
+    wxString f = wxFileSelector(_("PostScript file"),
+                                wxPathOnly(wxThePrintSetupData->GetPrinterFile()),
+                                wxFileNameFromPath(wxThePrintSetupData->GetPrinterFile()),
+                                "ps", "*.ps", 0, this);
+    if ( f.IsEmpty() )
+        return;
+
+    wxThePrintSetupData->SetPrinterFile(f);
   }
   else
     wxThePrintSetupData->SetPrinterMode(PS_PRINTER);
@@ -425,7 +425,7 @@ void wxGenericPageSetupDialog::OnPrinter(wxCommandEvent& WXUNUSED(event))
     wxPrintData data;
     data.SetSetupDialog(TRUE);
     wxPrintDialog *printDialog = new wxPrintDialog(this, & data);
-    int ret = printDialog->ShowModal();
+    printDialog->ShowModal();
 
     printDialog->Destroy();
 

@@ -194,18 +194,21 @@ bool wxDocument::Save(void)
 	
 bool wxDocument::SaveAs(void)
 {
-  wxDocTemplate *docTemplate = GetDocumentTemplate();
-  if (!docTemplate)
-    return FALSE;
-  
-  char *tmp = wxFileSelector(_("Save as"), docTemplate->GetDirectory(), GetFilename(),
-    docTemplate->GetDefaultExtension(), docTemplate->GetFileFilter(),
-    wxSAVE|wxOVERWRITE_PROMPT, GetDocumentWindow());
+    wxDocTemplate *docTemplate = GetDocumentTemplate();
+    if (!docTemplate)
+        return FALSE;
     
-  if (!tmp)
-    return FALSE;
-  else
-  {
+    wxString tmp = wxFileSelector(_("Save as"),
+                                  docTemplate->GetDirectory(),
+                                  GetFilename(),
+                                  docTemplate->GetDefaultExtension(),
+                                  docTemplate->GetFileFilter(),
+                                  wxSAVE | wxOVERWRITE_PROMPT,
+                                  GetDocumentWindow());
+    
+    if (tmp.IsEmpty())
+        return FALSE;
+
     wxString fileName(tmp);
     wxString path("");
     wxString name("");
@@ -231,8 +234,8 @@ bool wxDocument::SaveAs(void)
       view->OnChangeFilename();
       node = node->Next();
     }
-  }
-  return OnSaveDocument(m_documentFile);
+
+    return OnSaveDocument(m_documentFile);
 }
 	
 bool wxDocument::OnSaveDocument(const wxString& file)
@@ -1144,33 +1147,30 @@ wxDocTemplate *wxDocManager::SelectDocumentPath(wxDocTemplate **WXUNUSED(templat
 {
   // We can only have multiple filters in Windows
 #ifdef __WXMSW__
-  char *descrBuf = new char[1000];  // FIXME static buffer
-  descrBuf[0] = 0;
-  int i;
-  for (i = 0; i < noTemplates; i++)
-  {
-    if (templates[i]->IsVisible())
+    wxString descrBuf;
+
+    int i;
+    for (i = 0; i < noTemplates; i++)
     {
-      strcat(descrBuf, templates[i]->GetDescription());
-      strcat(descrBuf, " (");
-      strcat(descrBuf, templates[i]->GetFileFilter());
-      strcat(descrBuf, ") ");
-      strcat(descrBuf, "|");
-      strcat(descrBuf, templates[i]->GetFileFilter());
-      strcat(descrBuf, "|");
+        if (templates[i]->IsVisible())
+        {
+            // add a '|' to separate this filter from the previous one
+            if ( !descrBuf.IsEmpty() )
+                descrBuf << '|';
+
+            descrBuf << templates[i]->GetDescription()
+                     << " (" << templates[i]->GetFileFilter() << ") |"
+                     << templates[i]->GetFileFilter();
+        }
     }
-  }
-  int len = strlen(descrBuf);
-  if (len > 0)
-    // Omit final "|"
-    descrBuf[len-1] = 0;
 #else
-  char* descrBuf = copystring("*.*");
+  wxString descrBuf = "*.*";
 #endif
 
-  char *pathTmp = wxFileSelector(_("Select a file"), "", "", "", descrBuf, 0, wxTheApp->GetTopWindow());
-  delete[] descrBuf;
-  if (pathTmp)
+  wxString pathTmp = wxFileSelector(_("Select a file"), "", "", "",
+                                    descrBuf, 0, wxTheApp->GetTopWindow());
+
+  if (!pathTmp.IsEmpty())
   {
     path = pathTmp;
     char *theExt = FindExtension((char *)(const char *)path);

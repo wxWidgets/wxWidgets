@@ -335,12 +335,13 @@ bool wxPostScriptDC::PrinterDialog(wxWindow *parent)
     }
     else if ((m_filename == "") && (wxThePrintSetupData->GetPrinterMode() == PS_FILE))
     {
-      char *file = wxSaveFileSelector (_("PostScript"), "ps");
-      if (!file)
+      wxString file = wxSaveFileSelector (_("PostScript"), "ps");
+      if ( file.IsEmpty() )
       {
         m_ok = FALSE;
         return FALSE;
       }
+
       wxThePrintSetupData->SetPrinterFile(file);
       m_filename = file;
       m_ok = TRUE;

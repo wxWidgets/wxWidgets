@@ -439,6 +439,11 @@ wxSocketBase& wxSocketBase::WriteMsg(const char *buffer, size_t nbytes)
 {
   SockMsg msg;
 
+  // warning about 'cast truncates constant value'
+#ifdef _MSC_VER
+    #pragma warning(disable: 4310)
+#endif // _MSC_VER
+
   msg.sig[0] = (char) 0xad;
   msg.sig[1] = (char) 0xde;
   msg.sig[2] = (char) 0xed;
@@ -462,6 +467,10 @@ wxSocketBase& wxSocketBase::WriteMsg(const char *buffer, size_t nbytes)
   Write((char *)&msg, sizeof(msg));
 
   return *this;
+
+#ifdef _MSC_VER
+    #pragma warning(default: 4310)
+#endif // _MSC_VER
 }
 
 wxSocketBase& wxSocketBase::Unread(const char *buffer, size_t nbytes)
@@ -1602,7 +1611,12 @@ LRESULT APIENTRY _EXPORT wxSocketHandlerWndProc(HWND hWnd, UINT message,
   case FD_CONNECT:
     sk_req = wxSocketBase::EVT_CONNECT;
     break;
+
+  default:
+      wxFAIL_MSG("invalid socket event");
+      return (LRESULT)0;
   }
+
   sock->OnRequest(sk_req);
 
   return (LRESULT)0;
