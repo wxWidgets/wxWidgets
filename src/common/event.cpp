@@ -1106,6 +1106,9 @@ void wxEvtHandler::ProcessPendingEvents()
     wxENTER_CRIT_SECT( *m_eventsLocker);
 #endif
 
+    // remember last event to process during this iteration
+    wxList::compatibility_iterator lastPendingNode = m_pendingEvents->GetLast();
+
     wxList::compatibility_iterator node = m_pendingEvents->GetFirst();
     while ( node )
     {
@@ -1126,6 +1129,13 @@ void wxEvtHandler::ProcessPendingEvents()
 #else
         wxENTER_CRIT_SECT( *m_eventsLocker);
 #endif
+
+        // leave the loop once we have processed all events that were present
+        // at the start of ProcessPendingEvents because otherwise we could get
+        // into infinite loop if the pending event handler execution resulted
+        // in another event being posted
+        if ( node == lastPendingNode )
+            break;
 
         node = m_pendingEvents->GetFirst();
     }
