@@ -29,13 +29,16 @@ wxclean:
         nmake -f makefile.vc clean
 #        cd $(THISDIR)
 
-$(PROGRAM).exe:      $(DUMMYOBJ) $(WXLIB) $(OBJECTS) 
+$(PROGRAM).exe:      $(DUMMYOBJ) $(WXLIB) $(OBJECTS) $(PROGRAM).res
 	$(link) @<<
 -out:$(PROGRAM).exe
 $(LINKFLAGS)
-$(DUMMYOBJ) $(OBJECTS)
+$(DUMMYOBJ) $(OBJECTS) $(PROGRAM).res
 $(LIBS)
 <<
+
+$(PROGRAM).res :      $(PROGRAM).rc $(WXDIR)\include\wx\msw\wx.rc
+    $(rc) -r /i$(WXDIR)\include -fo$@ $(PROGRAM).rc
 
 clean:
         -erase $(OBJECTS)

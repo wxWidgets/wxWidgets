@@ -79,6 +79,15 @@ IDENTIFIED BY:          Julian Smart <julian.smart@ukonline.co.uk>
 DATE FIXED:
 FIXED BY:
 
+BUG NUMBER:             4
+SHORT DESCRIPTION: Appending a menuitem with negative id causes menu not to be shown
+DETAILS: I haven't tested it throughly, though it happens when appending a submenu
+WORKAROUND: Add dummy id number even for menuitems which don't require them (submenus for example)
+wxWINDOWS VERSION: 2.1.11
+PLATFORMS: wxGTK
+DATE IDENTIFIED: 10/11/1999
+IDENTIFIED BY: Jonathan Brown <jbrown@sso.sytexinc.com>
+
 
 ---------------------------END OF BUGLIST-------------------------
 
