@@ -149,7 +149,23 @@ extern wxXmlResource *wxTheXmlResource;
 //       EVT_MENU(XMLID("new"), MyFrame::OnNew)
 //       EVT_MENU(XMLID("open"), MyFrame::OnOpen)
 //    END_EVENT_TABLE()    
-#define XMLID(str_id) wxXmlResource::GetXMLID(str_id)
+
+#define XMLID(str_id) \
+    wxXmlResource::GetXMLID(_T(str_id))
+
+
+
+// This macro returns pointer to particular control in dialog
+// created using XML resources. You can use it to set/get values from
+// controls.
+// Example:
+//    wxDialog dlg;
+//    wxTheXmlResource->LoadDialog(&dlg, mainFrame, "my_dialog");
+//    XMLCTRL(dlg, "my_textctrl", wxTextCtrl)->SetValue(_T("default value"));
+
+#define XMLCTRL(window, id, type) \
+    ((type*)((window).FindWindow(XMLID(id))))
+
 
 
 class WXDLLEXPORT wxXmlResourceHandler : public wxObject
