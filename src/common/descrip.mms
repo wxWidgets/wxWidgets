@@ -165,7 +165,7 @@ OBJECTS2=utilscmn.obj,\
 		zipstrm.obj,\
 		zstream.obj
 
-OBJECTS_MOTIF=bmpbase.obj
+OBJECTS_MOTIF=bmpbase.obj,gaugecmn.obj
 
 SOURCES = \
 		appcmn.cpp,\
@@ -212,6 +212,7 @@ SOURCES = \
 		fs_inet.cpp,\
 		fs_zip.cpp,\
 		ftp.cpp,\
+		gaugecmn.cpp,\
 		gdicmn.cpp,\
 		gifdecod.cpp,\
 		hash.cpp,\
@@ -356,6 +357,7 @@ framecmn.obj : framecmn.cpp
 fs_inet.obj : fs_inet.cpp
 fs_zip.obj : fs_zip.cpp
 ftp.obj : ftp.cpp
+gaugecmn.obj : gaugecmn.cpp
 gdicmn.obj : gdicmn.cpp
 gifdecod.obj : gifdecod.cpp
 hash.obj : hash.cpp

@@ -411,7 +411,7 @@ bool wxDbTable::bindParams(bool forUpdate)
         return(FALSE);
 
     SWORD   fSqlType    = 0;
-    UDWORD  precision   = 0;
+    SDWORD  precision   = 0;
     SWORD   scale       = 0;
 
     // Bind each column of the table that should be bound

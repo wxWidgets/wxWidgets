@@ -15,6 +15,7 @@
 
 #ifdef __VMS
 #define XtParent XTPARENT
+#define XtDisplay XTDISPLAY
 #endif
 
 #include "wx/defs.h"

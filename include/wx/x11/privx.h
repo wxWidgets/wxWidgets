@@ -16,9 +16,15 @@
 #include "wx/utils.h"
 #include "wx/colour.h"
 
+#if defined( __cplusplus ) && defined( __VMS )
+#pragma message disable nosimpint
+#endif
 #include "X11/Xlib.h"
 #include "X11/Xatom.h"
 #include "X11/Xutil.h"
+#if defined( __cplusplus ) && defined( __VMS )
+#pragma message enable nosimpint
+#endif
 
 class wxMouseEvent;
 class wxKeyEvent;

@@ -9,10 +9,19 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
+#ifdef __VMS
+#define XShapeQueryExtension XSHAPEQUERYEXTENSION
+#define XtDisplay XTDISPLAY
+#endif
+
 #include "wx/x11/privx.h"
 
 #ifdef HAVE_XSHAPE
-#include <X11/extensions/shape.h>
+#ifdef __VMS
+# include <X11/shape.h>
+#else
+# include <X11/extensions/shape.h>
+#endif
 #include "wx/region.h"
 #include "wx/bitmap.h"
 #include "wx/dcmemory.h"

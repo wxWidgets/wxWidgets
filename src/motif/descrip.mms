@@ -83,7 +83,7 @@ SOURCES = \
 		accel.cpp,\
 		app.cpp,\
 		bmpbuttn.cpp,\
-		bmpmotif.cpp,
+		bmpmotif.cpp,\
 		button.cpp,\
 		checkbox.cpp,\
 		checklst.cpp,\

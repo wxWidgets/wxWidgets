@@ -1572,9 +1572,10 @@ bool wxXBMDataHandler::Create( wxBitmap *bitmap, void *bits,
     M_BMPHANDLERDATA->m_bpp = 1;
 
     return TRUE;
-#endif
-    wxCHECK_MSG( M_BMPHANDLERDATA->m_bitmap, FALSE,
+#else
+   wxCHECK_MSG( M_BMPHANDLERDATA->m_bitmap, FALSE,
                  wxT("couldn't create bitmap") );
+#endif
 }
 
 void wxBitmap::InitStandardHandlers()
