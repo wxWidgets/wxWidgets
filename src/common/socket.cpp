@@ -141,7 +141,7 @@ class _wxSocketInternalTimer: public wxTimer {
 
 int wxSocketBase::DeferRead(char *buffer, size_t nbytes)
 {
-  GSocketEventFlags old_event_flags;
+  wxSocketEventFlags old_event_flags;
   bool old_notify_state;
   // Timer for timeout
   _wxSocketInternalTimer timer;
@@ -300,7 +300,7 @@ wxSocketBase& wxSocketBase::Peek(char* buffer, size_t nbytes)
 
 int wxSocketBase::DeferWrite(const char *buffer, size_t nbytes)
 {
-  GSocketEventFlags old_event_flags;
+  wxSocketEventFlags old_event_flags;
   bool old_notify_state;
   // Timer for timeout
   _wxSocketInternalTimer timer;
@@ -417,11 +417,11 @@ bool wxSocketBase::IsData() const
   return (GSocket_DataAvailable(m_socket));
 }
 
-void wxSocketBase::DoDefer(GSocketEvent req_evt)
+void wxSocketBase::DoDefer(wxSocketNotify req_evt)
 {
   int ret;
 
-  if (req_evt == GSOCK_LOST) {
+  if (req_evt == wxSOCKET_LOST) {
     Close();
     m_defer_buffer = NULL;
     return;
@@ -706,21 +706,21 @@ void wxSocketBase::Notify(bool notify)
 void wxSocketBase::OnRequest(wxSocketNotify req_evt)
 {
   wxSocketEvent event(m_id);
-  GSocketEventFlags notify = EventToNotify(req_evt);
+  wxSocketEventFlags notify = EventToNotify(req_evt);
 
   if (m_defering != NO_DEFER) {
-    DoDefer((GSocketEvent)req_evt);
+    DoDefer(req_evt);
     return;
   }
 
   if ((m_neededreq & notify) == notify) {
     event.m_socket = this;
-    event.m_skevt = (GSocketEvent) req_evt;
+    event.m_skevt  = req_evt;
     ProcessEvent(event);
     OldOnNotify(req_evt);
   }
 
-  if ((GSocketEvent)req_evt == GSOCK_LOST)
+  if (req_evt == wxSOCKET_LOST)
     Close();
 }
 

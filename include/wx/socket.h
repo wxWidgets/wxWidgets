@@ -88,7 +88,7 @@ protected:
   GSocket *m_socket;			// wxSocket socket
   wxSockFlags m_flags;			// wxSocket flags
   wxSockType m_type;			// wxSocket type
-  GSocketEventFlags m_neededreq;	// Specify which requet signals we need
+  wxSocketEventFlags m_neededreq;	// Specify which requet signals we need
   size_t m_lcount;			// Last IO request size
   unsigned long m_timeout;		// IO timeout value
 
@@ -204,7 +204,7 @@ protected:
 
   int DeferRead(char *buffer, size_t nbytes);
   int DeferWrite(const char *buffer, size_t nbytes);
-  void DoDefer(GSocketEvent evt);
+  void DoDefer(wxSocketNotify evt);
 
   // Pushback library
   size_t GetPushback(char *buffer, size_t size, bool peek);
@@ -247,13 +247,13 @@ class WXDLLEXPORT wxSocketEvent : public wxEvent {
 public:
   wxSocketEvent(int id = 0);
 
-  wxSocketNotify SocketEvent() const { return (wxSocketNotify)m_skevt; }
+  wxSocketNotify SocketEvent() const { return m_skevt; }
   wxSocketBase *Socket() const { return m_socket; }
 
   void CopyObject(wxObject& obj_d) const;
 
 public:
-  GSocketEvent m_skevt;
+  wxSocketNotify m_skevt;
   wxSocketBase *m_socket;
 };
 
