@@ -311,6 +311,9 @@ elif os.name == 'posix' and sys.platform[:6] == "darwin":
     cflags = string.split(cflags)
     if UNDEF_NDEBUG:
         cflags.append('-UNDEBUG')
+    if debug:
+        cflags.append('-g')
+        cflags.append('-O0')
 
     lflags = os.popen(WX_CONFIG + ' --libs', 'r').read()[:-1]
     lflags = string.split(lflags)
@@ -338,6 +341,9 @@ elif os.name == 'posix':
     cflags = string.split(cflags)
     if UNDEF_NDEBUG:
         cflags.append('-UNDEBUG')
+    if debug:
+        cflags.append('-g')
+        cflags.append('-O0')
 
     lflags = os.popen(WX_CONFIG + ' --libs', 'r').read()[:-1]
     lflags = string.split(lflags)

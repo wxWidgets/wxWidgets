@@ -38,7 +38,7 @@ Release:   %{release}
 Source0:   %{tarname}-%{version}.tar.gz
 License:   wxWindows Library Licence, Version 3
 URL:       http://wxPython.org/
-Packager:  Robin Dunn <robind@alldunn.com>
+Packager:  Robin Dunn <robin@alldunn.com>
 Group:     Development/Python
 BuildRoot: %{_tmppath}/%{name}-buildroot
 Prefix:    %{pref}
@@ -153,7 +153,7 @@ cd wxPython
 
 #----------------------------------------------------------------
 %clean
-#[ "$RPM_BUILD_ROOT" != "/" ] && rm -rf $RPM_BUILD_ROOT
+[ "$RPM_BUILD_ROOT" != "/" ] && rm -rf $RPM_BUILD_ROOT
 
 
 #----------------------------------------------------------------

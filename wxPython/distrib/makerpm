@@ -150,6 +150,7 @@ if [ -z "${skipcvs}" ]; then
 #     rm -rf src/motif
 #     rm -rf src/os2
     rm -rf wxPython/wxSWIG
+    rm -rf wxPython/tests
 
     popd > /dev/null
     popd > /dev/null
