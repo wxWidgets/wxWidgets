@@ -2426,6 +2426,7 @@ typedef void *          WXHBRUSH;
 typedef void *          WXHPALETTE;
 typedef void *          WXHCURSOR;
 typedef void *          WXHRGN;
+typedef void *          WXRECTPTR;
 typedef void *          WXHACCEL;
 typedef void WXFAR  *   WXHINSTANCE;
 typedef void *          WXHBITMAP;

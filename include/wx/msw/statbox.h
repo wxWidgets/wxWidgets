@@ -49,7 +49,7 @@ protected:
     virtual WXLRESULT MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam);
 
     virtual WXHRGN MSWCalculateClippingRegion();
-    virtual void MSWClipBoxRegion(HRGN hrgn, const RECT *rc);
+    virtual void MSWClipBoxRegion(WXHRGN hrgn, const WXRECTPTR rc);
     void OnPaint(wxPaintEvent& event);
 
     DECLARE_DYNAMIC_CLASS_NO_COPY(wxStaticBox)

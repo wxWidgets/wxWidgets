@@ -199,28 +199,28 @@ void wxStaticBox::GetBordersForSizer(int *borderTop, int *borderOther) const
 }
 
 // rc must be in client coords!
-void wxStaticBox::MSWClipBoxRegion(HRGN hrgn, const RECT *rc)
+void wxStaticBox::MSWClipBoxRegion(WXHRGN hrgn, const WXRECTPTR rc)
 {
     HRGN hrgnchild;
 
     // top
-    hrgnchild = ::CreateRectRgn(0, 0, rc->right, 14);
-    ::CombineRgn(hrgn, hrgn, hrgnchild, RGN_DIFF);
+    hrgnchild = ::CreateRectRgn(0, 0, ((const RECT*) rc)->right, 14);
+    ::CombineRgn((HRGN) hrgn, (HRGN) hrgn, hrgnchild, RGN_DIFF);
     ::DeleteObject(hrgnchild);
 
     // bottom
-    hrgnchild = ::CreateRectRgn(0, rc->bottom - 7, rc->right, rc->bottom);
-    ::CombineRgn(hrgn, hrgn, hrgnchild, RGN_DIFF);
+    hrgnchild = ::CreateRectRgn(0, ((const RECT*) rc)->bottom - 7, ((const RECT*) rc)->right, ((const RECT*) rc)->bottom);
+    ::CombineRgn((HRGN) hrgn, (HRGN) hrgn, hrgnchild, RGN_DIFF);
     ::DeleteObject(hrgnchild);
 
     // left
-    hrgnchild = ::CreateRectRgn(0, 0, 7, rc->bottom);
-    ::CombineRgn(hrgn, hrgn, hrgnchild, RGN_DIFF);
+    hrgnchild = ::CreateRectRgn(0, 0, 7, ((const RECT*) rc)->bottom);
+    ::CombineRgn((HRGN) hrgn, (HRGN) hrgn, hrgnchild, RGN_DIFF);
     ::DeleteObject(hrgnchild);
 
     // right
-    hrgnchild = ::CreateRectRgn(rc->right - 7, 0, rc->right, rc->bottom);
-    ::CombineRgn(hrgn, hrgn, hrgnchild, RGN_DIFF);
+    hrgnchild = ::CreateRectRgn(((const RECT*) rc)->right - 7, 0, ((const RECT*) rc)->right, ((const RECT*) rc)->bottom);
+    ::CombineRgn((HRGN) hrgn, (HRGN) hrgn, hrgnchild, RGN_DIFF);
     ::DeleteObject(hrgnchild);
 }
 
@@ -308,7 +308,7 @@ void wxStaticBox::OnPaint(wxPaintEvent& WXUNUSED(event))
     // paint the inner
     HRGN hrgn = (HRGN)MSWCalculateClippingRegion();
     // now remove the box itself
-    MSWClipBoxRegion(hrgn, &rc);
+    MSWClipBoxRegion((WXHRGN) hrgn, (const WXRECTPTR) &rc);
 
     hbr = DoMSWControlColor(GetHdcOf(dc), wxNullColour);
     if ( !hbr )
