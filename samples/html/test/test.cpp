@@ -44,6 +44,20 @@ public:
     virtual bool OnInit();
 };
 
+// Define a new html window type: this is a wrapper for handling wxHtmlWindow events
+class MyHtmlWindow : public wxHtmlWindow
+{
+public:
+    MyHtmlWindow(wxWindow *parent) : wxHtmlWindow( parent ) { }
+
+    virtual wxHtmlOpeningStatus OnOpeningURL(wxHtmlURLType WXUNUSED(type),
+                                             const wxString& WXUNUSED(url),
+                                             wxString *WXUNUSED(redirect)) const;
+
+private:
+    DECLARE_NO_COPY_CLASS(MyHtmlWindow)
+};
+
 // Define a new frame type: this is going to be our main frame
 class MyFrame : public wxFrame
 {
@@ -59,7 +73,7 @@ public:
     void OnProcessor(wxCommandEvent& event);
 
 private:
-    wxHtmlWindow *m_Html;
+    MyHtmlWindow *m_Html;
     wxHtmlProcessor *m_Processor;
 
     // Any class wishing to process wxWidgets events must use this macro
@@ -185,12 +199,12 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
 #endif // wxUSE_ACCEL
 
 #if wxUSE_STATUSBAR
-    CreateStatusBar(1);
+    CreateStatusBar(2);
 #endif // wxUSE_STATUSBAR
 
     m_Processor = new BoldProcessor;
     m_Processor->Enable(false);
-    m_Html = new wxHtmlWindow(this);
+    m_Html = new MyHtmlWindow(this);
     m_Html->SetRelatedFrame(this, _("HTML : %s"));
 #if wxUSE_STATUSBAR
     m_Html->SetRelatedStatusBar(0);
@@ -241,4 +255,12 @@ void MyFrame::OnProcessor(wxCommandEvent& WXUNUSED(event))
 {
     m_Processor->Enable(!m_Processor->IsEnabled());
     m_Html->LoadPage(m_Html->GetOpenedPage());
+}
+
+wxHtmlOpeningStatus MyHtmlWindow::OnOpeningURL(wxHtmlURLType WXUNUSED(type),
+                                               const wxString& url,
+                                               wxString *WXUNUSED(redirect)) const
+{
+    GetRelatedFrame()->SetStatusText(url + _T(" lately opened"),1);
+    return wxHTML_OPEN;
 }

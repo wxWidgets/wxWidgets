@@ -17,6 +17,7 @@
         <wx-lib>html</wx-lib>
         <wx-lib>adv</wx-lib>
         <wx-lib>core</wx-lib>
+        <wx-lib>net</wx-lib>
         <wx-lib>base</wx-lib>
         <win32-res>forty.rc</win32-res>
     </exe>

@@ -32,6 +32,7 @@
 #include "wx/fontmap.h"
 #include "wx/log.h"
 #include "wx/settings.h"
+#include "wx/url.h"
 
 
 //-----------------------------------------------------------------------------
@@ -248,16 +249,47 @@ wxObject* wxHtmlWinParser::GetProduct()
 wxFSFile *wxHtmlWinParser::OpenURL(wxHtmlURLType type,
                                    const wxString& url) const
 {
-    // FIXME - normalize the URL to full path before passing to
-    //         OnOpeningURL!!
     if ( m_Window )
     {
         wxString myurl(url);
         wxHtmlOpeningStatus status;
         for (;;)
         {
+            wxString myfullurl(myurl);
+
+#if wxUSE_URL
+            // consider url as absolute path first
+            wxURL current(wxURL::Unescape(myurl));
+            myfullurl = current.GetURL();
+
+            // if not absolute then ...
+            if( current.IsReference() )
+            {
+                wxString basepath = GetFS()->GetPath();
+                wxURI base(wxURL::Unescape(basepath));
+
+                // try to apply base path if valid ...
+                if( !base.IsReference() )
+                {
+                    wxURI path(myfullurl);
+                    path.Resolve( base );
+                    myfullurl = path.BuildURI();
+                }
+                else
+                {
+                    // ... or force such addition if not included already
+                    if( !current.GetURL().Contains(basepath) )
+                    {
+                        basepath += myurl;
+                        wxURL connected( wxURL::Unescape(basepath) );
+                        myfullurl = connected.GetURL();
+                    }
+                }
+            }
+#endif
+
             wxString redirect;
-            status = m_Window->OnOpeningURL(type, myurl, &redirect);
+            status = m_Window->OnOpeningURL(type, myfullurl, &redirect);
             if ( status != wxHTML_REDIRECT )
                 break;
 
