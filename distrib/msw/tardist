@@ -265,8 +265,9 @@ cp $WXSRC/include/wx/os2/*.H include/wx/os2
 cp $WXSRC/src/os2/*.CPP $WXSRC/src/os2/*.I src/os2
 
 # Make all OS/2 files lower case
-$WXSRC/distrib/msw/namedown include/wx/os2/*.H
-$WXSRC/distrib/msw/namedown src/os2/*.CPP src/os2/*.I
+# No longer necessary.
+# $WXSRC/distrib/msw/namedown include/wx/os2/*.H
+# $WXSRC/distrib/msw/namedown src/os2/*.CPP src/os2/*.I
 
 echo Copying readme files...
 cp $WXSRC/docs/readme.txt README.txt

@@ -508,39 +508,43 @@ ps:     wxps
 wxps:	$(WXDIR)\docs\ps\wx.ps
 
 allhlp: wxhlp
-        cd $(WXDIR)\utils\dialoged\src
-        nmake -f makefile.vc hlp
-        cd $(WXDIR)\utils\tex2rtf\src
-        nmake -f makefile.vc hlp
-        cd $(WXDIR)\contrib\src\fl
-        nmake -f makefile.vc hlp
-        cd $(THISDIR)
+
+#        cd $(WXDIR)\utils\dialoged\src
+#        nmake -f makefile.vc hlp
+#        cd $(WXDIR)\utils\tex2rtf\src
+#        nmake -f makefile.vc hlp
+#        cd $(WXDIR)\contrib\src\fl
+#        nmake -f makefile.vc hlp
+#        cd $(THISDIR)
 
 allhtml: wxhtml
-        cd $(WXDIR)\utils\dialoged\src
-        nmake -f makefile.vc html
-        cd $(WXDIR)\utils\tex2rtf\src
-        nmake -f makefile.vc html
-        cd $(WXDIR)\contrib\src\fl
-        cd $(THISDIR)
+
+#        cd $(WXDIR)\utils\dialoged\src
+#        nmake -f makefile.vc html
+#        cd $(WXDIR)\utils\tex2rtf\src
+#        nmake -f makefile.vc html
+#        cd $(WXDIR)\contrib\src\fl
+#        cd $(THISDIR)
 
 allhtmlhelp: htmlhelp
-        cd $(WXDIR)\utils\dialoged\src
-        nmake -f makefile.vc htmlhelp
-        cd $(WXDIR)\utils\tex2rtf\src
-        nmake -f makefile.vc htmlhelp
-        cd $(WXDIR)\contrib\src\fl
-        nmake -f makefile.vc htmlhelp
-        cd $(THISDIR)
+ 
+#       cd $(WXDIR)\utils\dialoged\src
+#        nmake -f makefile.vc htmlhelp
+#        cd $(WXDIR)\utils\tex2rtf\src
+#        nmake -f makefile.vc htmlhelp
+#        cd $(WXDIR)\contrib\src\fl
+#        nmake -f makefile.vc htmlhelp
+#        cd $(THISDIR)
 
 allhtb: htb
-        cd $(WXDIR)\utils\dialoged\src
-        nmake -f makefile.vc htb
-        cd $(WXDIR)\utils\tex2rtf\src
-        nmake -f makefile.vc htb
-        cd $(WXDIR)\contrib\src\fl
-        nmake -f makefile.vc htb
-        cd $(THISDIR)
+
+#        cd $(WXDIR)\utils\dialoged\src
+#        nmake -f makefile.vc htb
+#        cd $(WXDIR)\utils\tex2rtf\src
+#        nmake -f makefile.vc htb
+#        cd $(WXDIR)\contrib\src\fl
+#        nmake -f makefile.vc htb
+#        cd $(THISDIR)
 
 allps: wxps referencps
         cd $(WXDIR)\utils\dialoged\src
@@ -552,13 +556,13 @@ allps: wxps referencps
         cd $(THISDIR)
 
 allpdfrtf: pdfrtf
-        cd $(WXDIR)\utils\dialoged\src
-        nmake -f makefile.vc pdfrtf
-        cd $(WXDIR)\utils\tex2rtf\src
-        nmake -f makefile.vc pdfrtf
-        cd $(WXDIR)\contrib\src\fl
-        nmake -f makefile.vc pdfrtf
-        cd $(THISDIR)
+#        cd $(WXDIR)\utils\dialoged\src
+#        nmake -f makefile.vc pdfrtf
+#        cd $(WXDIR)\utils\tex2rtf\src
+#        nmake -f makefile.vc pdfrtf
+#        cd $(WXDIR)\contrib\src\fl
+#        nmake -f makefile.vc pdfrtf
+#        cd $(THISDIR)
 
 $(DOCDIR)/winhelp/wx.hlp:         $(DOCDIR)/latex/wx/wx.rtf $(DOCDIR)/latex/wx/wx.hpj
         cd $(DOCDIR)/latex/wx

@@ -130,10 +130,10 @@ dospinos2()
     rm -f src/tiff/*.mcp src/jpeg/*.mcp src/png/*.mcp src/zlib/*.mcp
     rm -f -r docs/html/dialoged docs/html/tex2rtf
 
-    echo Making OS/2 files lower case...
-
-    $SCRIPTDIR/namedown include/wx/os2/*.H
-    $SCRIPTDIR/namedown src/os2/*.CPP src/os2/*.I
+    # echo Making OS/2 files lower case...
+    # no longer necessary
+    # $SCRIPTDIR/namedown include/wx/os2/*.H
+    # $SCRIPTDIR/namedown src/os2/*.CPP src/os2/*.I
 
     echo Copying readme files...
     cp $APPDIR/docs/os2/install.txt INSTALL-OS2.txt
