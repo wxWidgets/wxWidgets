@@ -461,28 +461,28 @@ public:
 
 
 
-class wxToolBarSimple : public wxToolBarBase {
-public:
-    wxToolBarSimple(wxWindow *parent,
-                    wxWindowID id,
-                    const wxPoint& pos = wxDefaultPosition,
-                    const wxSize& size = wxDefaultSize,
-                    long style = wxNO_BORDER | wxTB_HORIZONTAL,
-                    const wxString& name = wxPyToolBarNameStr);
-    %name(wxPreToolBarSimple)wxToolBarSimple();
+// class wxToolBarSimple : public wxToolBarBase {
+// public:
+//     wxToolBarSimple(wxWindow *parent,
+//                     wxWindowID id,
+//                     const wxPoint& pos = wxDefaultPosition,
+//                     const wxSize& size = wxDefaultSize,
+//                     long style = wxNO_BORDER | wxTB_HORIZONTAL,
+//                     const wxString& name = wxPyToolBarNameStr);
+//     %name(wxPreToolBarSimple)wxToolBarSimple();
 
-    bool Create(wxWindow *parent,
-                    wxWindowID id,
-                    const wxPoint& pos = wxDefaultPosition,
-                    const wxSize& size = wxDefaultSize,
-                    long style = wxNO_BORDER | wxTB_HORIZONTAL,
-                    const wxString& name = wxPyToolBarNameStr);
+//     bool Create(wxWindow *parent,
+//                     wxWindowID id,
+//                     const wxPoint& pos = wxDefaultPosition,
+//                     const wxSize& size = wxDefaultSize,
+//                     long style = wxNO_BORDER | wxTB_HORIZONTAL,
+//                     const wxString& name = wxPyToolBarNameStr);
 
-    %pragma(python) addtomethod = "__init__:self._setOORInfo(self)"
-    %pragma(python) addtomethod = "wxPreToolBarSimple:val._setOORInfo(val)"
+//     %pragma(python) addtomethod = "__init__:self._setOORInfo(self)"
+//     %pragma(python) addtomethod = "wxPreToolBarSimple:val._setOORInfo(val)"
 
-    wxToolBarToolBase *FindToolForPosition(wxCoord x, wxCoord y);
-};
+//     wxToolBarToolBase *FindToolForPosition(wxCoord x, wxCoord y);
+// };
 
 //---------------------------------------------------------------------------
 //---------------------------------------------------------------------------
