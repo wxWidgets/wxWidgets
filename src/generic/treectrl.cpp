@@ -313,13 +313,15 @@ wxGenericTreeItem *wxGenericTreeItem::HitTest( const wxPoint& point,
 
     if ((point.x >= m_x) && (point.x <= m_x+m_width))
     {
-      int image_w,image_h;
-      
+      int image_w = -1;
+      int image_h;
+
       // assuming every image (normal and selected ) has the same size !
-      theTree->m_imageListNormal->GetSize(m_image, image_w, image_h);
-      if (point.x<=m_x+image_w+1)
+      if (theTree->m_imageListNormal)
+          theTree->m_imageListNormal->GetSize(m_image, image_w, image_h);
+      if ((image_w != -1) && (point.x <= m_x + image_w + 1))
 	flags|=wxTREE_HITTEST_ONITEMICON;
-      else 
+      else
 	flags|=wxTREE_HITTEST_ONITEMLABEL;
 
       return this;
@@ -369,7 +371,7 @@ END_EVENT_TABLE()
 
 void wxTreeCtrl::Init()
 {
-  m_current = 
+  m_current =
   m_key_current =
   m_anchor = (wxGenericTreeItem *) NULL;
   m_hasFocus = FALSE;
@@ -925,7 +927,7 @@ void wxTreeCtrl::UnselectAllChildren(wxGenericTreeItem *item)
 {
   item->SetHilight(FALSE);
   RefreshLine(item);
-  
+
   if (item->HasChildren())
     {
       wxArrayGenericTreeItems& children = item->GetChildren();
@@ -944,7 +946,7 @@ void wxTreeCtrl::UnselectAll()
 // To stop we must have crt_item<last_item
 // Algorithm :
 // Tag all next children, when no more children,
-// Move to parent (not to tag) 
+// Move to parent (not to tag)
 // Keep going... if we found last_item, we stop.
 bool wxTreeCtrl::TagNextChildren(wxGenericTreeItem *crt_item, wxGenericTreeItem *last_item, bool select)
 {
@@ -968,7 +970,7 @@ bool wxTreeCtrl::TagAllChildrenUntilLast(wxGenericTreeItem *crt_item, wxGenericT
 {
   crt_item->SetHilight(select);
   RefreshLine(crt_item);
-  
+
   if (crt_item==last_item) return TRUE;
 
   if (crt_item->HasChildren())
@@ -978,7 +980,7 @@ bool wxTreeCtrl::TagAllChildrenUntilLast(wxGenericTreeItem *crt_item, wxGenericT
       for ( size_t n = 0; n < count; ++n )
 	if (TagAllChildrenUntilLast(children[n], last_item, select)) return TRUE;
     }
-	
+
   return FALSE;
 }
 
@@ -988,48 +990,48 @@ void wxTreeCtrl::SelectItemRange(wxGenericTreeItem *item1, wxGenericTreeItem *it
   wxGenericTreeItem *first=NULL, *last=NULL;
 
   // choice first' and 'last' between item1 and item2
-  if (item1->GetY()<item2->GetY()) 
+  if (item1->GetY()<item2->GetY())
     {
       first=item1;
       last=item2;
     }
-  else 
+  else
     {
       first=item2;
       last=item1;
     }
 
   bool select=m_current->HasHilight();
-  
+
   if (TagAllChildrenUntilLast(first,last,select)) return;
 
-  TagNextChildren(first,last,select);  
+  TagNextChildren(first,last,select);
 }
 
-void wxTreeCtrl::SelectItem(const wxTreeItemId& itemId, 
-			    bool unselect_others, 
+void wxTreeCtrl::SelectItem(const wxTreeItemId& itemId,
+			    bool unselect_others,
 			    bool extended_select)
-{ 
+{
     bool is_single=!(GetWindowStyleFlag() & wxTR_MULTIPLE);
 
     //wxCHECK_RET( ( (!unselect_others) && is_single),
     //           _T("this is a single selection tree") );
 
     // to keep going anyhow !!!
-    if (is_single) 
+    if (is_single)
     {
         unselect_others=TRUE;
         extended_select=FALSE;
     }
 
     wxGenericTreeItem *item = itemId.m_pItem;
-    
+
     wxTreeEvent event( wxEVT_COMMAND_TREE_SEL_CHANGING, GetId() );
     event.m_item = item;
     event.m_itemOld = m_current;
     event.SetEventObject( this );
     // TODO : Here we don't send any selection mode yet !
-    
+
     if ( GetEventHandler()->ProcessEvent( event ) && event.WasVetoed() )
       return;
 
@@ -1041,7 +1043,7 @@ void wxTreeCtrl::SelectItem(const wxTreeItemId& itemId,
     }
 
     // shift press
-    if (extended_select) 
+    if (extended_select)
     {
         if (m_current == NULL) m_current=m_key_current=GetRootItem().m_pItem;
         // don't change the mark (m_current)
@@ -1086,7 +1088,7 @@ size_t wxTreeCtrl::GetSelections(wxArrayTreeItemIds &array) const
 }
 
 void wxTreeCtrl::EnsureVisible(const wxTreeItemId& item)
-{  
+{
     if (!item.IsOk()) return;
 
     wxGenericTreeItem *gitem = item.m_pItem;
@@ -1234,7 +1236,7 @@ void wxTreeCtrl::SetImageList(wxImageList *imageList)
    {
       m_imageListNormal->GetSize(i, width, height);
       if(height > m_lineHeight) m_lineHeight = height;
-   }  
+   }
 
    if (m_lineHeight<40) m_lineHeight+=4; // at least 4 pixels (odd such that a line can be drawn in between)
    else m_lineHeight+=m_lineHeight/10;   // otherwise 10% extra spacing
@@ -1275,7 +1277,7 @@ int wxTreeCtrl::GetLineHeight(wxGenericTreeItem *item) const
   if (GetWindowStyleFlag() & wxTR_HAS_VARIABLE_ROW_HIGHT)
     return item->GetHeight();
   else
-    return m_lineHeight;  
+    return m_lineHeight;
 }
 
 void wxTreeCtrl::PaintItem(wxGenericTreeItem *item, wxDC& dc)
@@ -1422,7 +1424,7 @@ void wxTreeCtrl::PaintLevel( wxGenericTreeItem *item, wxDC &dc, int level, int &
             dc.SetPen( *wxBLACK_PEN );
         }
     }
-    
+
     y = oldY+GetLineHeight(item);
 
     if (item->IsExpanded())
@@ -1477,7 +1479,7 @@ void wxTreeCtrl::DrawLine(wxTreeItemId &item, bool below)
     wxPaintDC dc(this);
     PrepareDC( dc );
     dc.SetLogicalFunction(wxINVERT);
-    
+
     int w,h,y;
     GetSize(&w,&h);
 
@@ -1721,7 +1723,7 @@ wxTreeItemId wxTreeCtrl::HitTest(const wxPoint& point, int& flags)
     if (point.x>w) flags|=wxTREE_HITTEST_TORIGHT;
     if (point.y<0) flags|=wxTREE_HITTEST_ABOVE;
     if (point.y>h) flags|=wxTREE_HITTEST_BELOW;
-    
+
     return m_anchor->HitTest( wxPoint(x, y), this, flags);
 }
 
@@ -1800,7 +1802,7 @@ void wxTreeCtrl::OnIdle( wxIdleEvent &WXUNUSED(event) )
 }
 
 void wxTreeCtrl::CalculateSize( wxGenericTreeItem *item, wxDC &dc )
-{  
+{
     long text_w = 0;
     long text_h = 0;
     // TODO : check for boldness. Here with suppose that font normal and bold
@@ -1841,7 +1843,7 @@ void wxTreeCtrl::CalculateLevel( wxGenericTreeItem *item, wxDC &dc, int level, i
     int horizX = level*m_indent;
 
     CalculateSize( item, dc );
-  
+
     // set its position
     item->SetX( horizX+m_indent+m_spacing );
     item->SetY( y );
