@@ -627,6 +627,14 @@ bool wxTreeCtrl::ExpandItem( long item, int action )
   return TRUE;
 };
 
+void wxTreeCtrl::DeleteItem( long item )
+{
+  wxGenericTreeItem *pItem = FindItem( item );
+  wxCHECK_RET( pItem != NULL, "wxTreeCtrl::DeleteItem: no such pItem." );
+  pItem->m_parent->m_children.DeleteObject(pItem);
+  Refresh();
+}
+
 bool wxTreeCtrl::DeleteAllItems()
 {
   delete m_anchor;
