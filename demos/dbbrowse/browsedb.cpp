@@ -34,7 +34,7 @@
 // - darf nur einmal im Projekte definiert werden ?? Extra Databasse Klasse ?
 wxDbConnectInf ConnectInf;      // Für DBase
 //----------------------------------------------------------------------------------------
-extern WXDLLEXPORT wxDbList* PtrBegDbList;    /* from db.cpp, used in getting back error results from db connections */
+extern WXDLLEXPORT_DATA(wxDbList*) PtrBegDbList;    /* from db.cpp, used in getting back error results from db connections */
 //----------------------------------------------------------------------------------------
 char *GetExtendedDBErrorMsg(char *ErrFile, int ErrLine)
 {
