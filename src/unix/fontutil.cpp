@@ -57,7 +57,8 @@ void wxNativeFontInfo::Init()
     description = NULL;
 }
 
-wxNativeFontInfo::wxNativeFontInfo(const wxNativeFontInfo& info)
+void
+wxNativeFontInfo::Init(const wxNativeFontInfo& info)
 {
     if (info.description)
         description = pango_font_description_copy(info.description);
@@ -65,7 +66,7 @@ wxNativeFontInfo::wxNativeFontInfo(const wxNativeFontInfo& info)
         description = NULL;            
 }
 
-wxNativeFontInfo::~wxNativeFontInfo()
+wxNativeFontInfo::Free()
 {
     if (description)
         pango_font_description_free(description);

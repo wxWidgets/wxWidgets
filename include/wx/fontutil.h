@@ -136,9 +136,21 @@ public:
     wxNativeFontInfo() { Init(); }
 
 #if wxUSE_PANGO
-    wxNativeFontInfo(const wxNativeFontInfo& info);
-    ~wxNativeFontInfo();
-#endif
+private:
+    void Init(const wxNativeFontInfo& info);
+    void Free();
+
+public:
+    wxNativeFontInfo(const wxNativeFontInfo& info) { Init(info); }
+    ~wxNativeFontInfo() { Free(); }
+
+    wxNativeFontInfo& operator=(const wxNativeFontInfo& info)
+    {
+        Free();
+        Init(info);
+        return *this;
+    }
+#endif // wxUSE_PANGO
 
     // reset to the default state
     void Init();
