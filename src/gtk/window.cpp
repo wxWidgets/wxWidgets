@@ -73,11 +73,6 @@
 #include <pango/pangox.h>
 #endif
 
-#ifdef __WXGTK20__
-    #define SET_CONTAINER_FOCUS(w, d) gtk_widget_child_focus((w), (d))
-#else
-    #define SET_CONTAINER_FOCUS(w, d) gtk_container_focus(GTK_CONTAINER(w), (d))
-#endif
 
 #ifdef __WXGTK20__
     #ifdef HAVE_XIM
@@ -3626,8 +3621,16 @@ void wxWindowGTK::SetFocus()
     }
     else if (m_widget)
     {
+#ifdef __WXGTK20__
+        if (GTK_IS_CONTAINER(m_widget))
+        {
+            gtk_widget_child_focus( m_widget, GTK_DIR_TAB_FORWARD );
+        }
+        else
+#endif
         if (GTK_WIDGET_CAN_FOCUS(m_widget) && !GTK_WIDGET_HAS_FOCUS (m_widget) )
         {
+        
             if (!GTK_WIDGET_REALIZED(m_widget))
             {
                 // we can't set the focus to the widget now so we remember that
@@ -3648,11 +3651,14 @@ void wxWindowGTK::SetFocus()
                 gtk_widget_grab_focus (m_widget);
             }
         }
-        else if (GTK_IS_CONTAINER(m_widget))
+        else 
+#ifndef __WXGTK20__
+        if (GTK_IS_CONTAINER(m_widget))
         {
-            SET_CONTAINER_FOCUS( m_widget, GTK_DIR_TAB_FORWARD );
+            gtk_container_focus( GTK_CONTAINER(w), GTK_DIR_TAB_FORWARD );
         }
         else
+#endif
         {
            wxLogTrace(TRACE_FOCUS,
                       _T("Can't set focus to %s(%s)"),
