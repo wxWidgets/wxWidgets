@@ -6,8 +6,7 @@ between threads and processes is that memory spaces of different processes are
 separated while all threads share the same address space. While it makes it
 much easier to share common data between several threads, it also makes much
 easier to shoot oneself in a leg, so careful use of synchronization objects
-such as \helpref{mutexes}{wxmutex} and/or \helpref{critical 
-sections}{wxcriticalsection} is recommended.
+such as \helpref{mutexes}{wxmutex} and/or \helpref{critical sections}{wxcriticalsection} is recommended.
 
 \wxheading{Derived from}
 
@@ -15,27 +14,32 @@ None.
 
 \wxheading{See also}
 
-\helpref{wxMutex}{wxmutex}, \helpref{wxCondition}{wxcondition}
+\helpref{wxMutex}{wxmutex}, \helpref{wxCondition}{wxcondition}, \helpref{wxCriticalSection}{wxarraywxcriticalsection}
 
 \latexignore{\rtfignore{\wxheading{Members}}}
 
-\membersection{wxThread::wxThread}\label{wxthreadconstr}
+\membersection{wxThread::wxThread}\label{wxthreadctor}
 
 \func{}{wxThread}{\void}
 
-Default constructor.
+Default constructor: it doesn't create nor starts the thread.
 
 \membersection{wxThread::\destruct{wxThread}}
 
 \func{}{\destruct{wxThread}}{\void}
 
-Destroys the wxThread object.
+wxThread destructor is private, so you can not call it directly - i.e., deleting
+wxThread objects is forbidden. Instead, you should use \helpref{Delete}{wxthreaddelete} or
+\helpref{Kill}{wxthreadkill} methods. This also means that thread objects should
+eb {\bf always} allocated on the heap (i.e. with {\it new}) because the functions
+mentioned above will try to reclaim the storage from the heap.
 
 \membersection{wxThread::Create}\label{wxthreadcreate}
 
 \func{wxThreadError}{Create}{\void}
 
-Creates a thread control.
+Creates a new thread. The thread object is created in the suspended state, you
+should call \helpref{Run}{wxthreadrun} to start running it.
 
 \wxheading{Return value}
 
@@ -48,34 +52,26 @@ One of:
 \twocolitem{{\bf wxTHREAD\_RUNNING}}{The thread is already running.}
 \end{twocollist}
 
-\membersection{wxThread::DeferDestroy}\label{wxthreaddeferdestroy}
+\membersection{wxThread::Delete}\label{wxthreaddelete}
 
-\func{void}{DeferDestroy}{\param{bool}{ defer}}
+\func{\void}{Delete}{\void}
 
-If {\it defer} is TRUE, defers thread destruction. This function affects the
-calling thread.
+This function should be called to terminate this thread. Unlike \helpref{Kill}{wxthreadkill}, it
+gives the target thread the time to terminate gracefully. Because of this, however, this function
+may not return immediately and if the thread is "hung" won't return at all. Also, message processing
+is not stopped during this function execution, so the message handlers may be called from inside
+it.
 
-\membersection{wxThread::Destroy}\label{wxthreaddestroy}
-
-\func{wxThreadError}{Destroy}{\void}
-
-Destroys the thread immediately unless the application has specified deferral via \helpref{wxThread::DeferDestroy}{wxthreaddeferdestroy}.
-
-\wxheading{Return value}
-
-One of:
-
-\twocolwidtha{7cm}
-\begin{twocollist}\itemsep=0pt
-\twocolitem{{\bf wxTHREAD\_NO\_ERROR}}{There was no error.}
-\twocolitem{{\bf wxTHREAD\_NOT\_RUNNING}}{The thread is not running.}
-\end{twocollist}
+Delete() may be called for thread in any state: running, paused or even not yet created. Moreover,
+it must be called if \helpref{Create}{wxthreadcreate} or \helpref{Run}{wxthreadrun} fail to free
+the memory occupied by the thread object.
 
 \membersection{wxThread::GetID}\label{wxthreadgetid}
 
 \constfunc{unsigned long}{GetID}{\void}
 
-Gets the thread identifier.
+Gets the thread identifier: this is a platform dependent number which uniquely identifies the
+thread throughout the system during its existence (i.e. the thread identifiers may be reused).
 
 \membersection{wxThread::GetPriority}\label{wxthreadgetpriority}
 
@@ -96,7 +92,7 @@ The following priorities are already defined:
 
 \constfunc{bool}{IsAlive}{\void}
 
-Returns TRUE if the thread is alive.
+Returns TRUE if the thread is alive (i.e. started and not terminating).
 
 \membersection{wxThread::IsMain}\label{wxthreadismain}
 
@@ -104,17 +100,33 @@ Returns TRUE if the thread is alive.
 
 Returns TRUE if the calling thread is the main application thread.
 
-\membersection{wxThread::Join}\label{wxthreadjoin}
+\membersection{wxThread::IsPaused}\label{wxthreadispaused}
 
-\func{void*}{Join}{\void}
+\constfunc{bool}{IsPaused}{\void}
 
-Waits for the termination of the thread. Returns a platform-specific exit code. TODO
+Returns TRUE if the thread is paused.
+
+\membersection{wxThread::IsRunning}\label{wxthreadisrunning}
+
+\constfunc{bool}{IsRunning}{\void}
+
+Returns TRUE if the thread is running.
+
+\membersection{wxThread::Kill}\label{wxthreadkill}
+
+\func{wxThreadError}{Kill}{\void}
+
+Immediately terminates the target thread. {\bf This function is dangerous and should
+be used with extreme care (and not used at all whenever possible)!} The resources
+allocated to the thread will not be freed and the state of the C runtime library
+may become inconsistent. Use \helpref{Delete()}{wxthreaddelete} instead.
 
 \membersection{wxThread::OnExit}\label{wxthreadonexit}
 
 \func{void}{OnExit}{\void}
 
-Called when the thread exits. The default implementation calls \helpref{wxThread::Join}{wxthreadjoin}.
+Called when the thread exits. This function is called in the context of the thread
+associated with the wxThread object, not in the context of the main thread.
 
 \membersection{wxThread::SetPriority}\label{wxthreadsetpriority}
 
@@ -130,3 +142,29 @@ The following priorities are already defined:
 \twocolitem{{\bf WXTHREAD\_DEFAULT\_PRIORITY}}{50}
 \twocolitem{{\bf WXTHREAD\_MAX\_PRIORITY}}{100}
 \end{twocollist}
+
+\membersection{wxThread::Sleep}\label{wxthreadsleep}
+
+\func{\void}{Sleep}{\param{unsigned long }{milliseconds}}
+
+Pauses the thread execution for the given amount of time.
+
+This function should be used instead of \helpref{wxSleep}{wxsleep} by all worker
+(i.e. all except the main one) threads.
+
+\membersection{wxThread::This}\label{wxthreadthis}
+
+\func{wxThread *}{This}{\void}
+
+Return the thread object for the calling thread. NULL is returned if the calling thread
+is the main (GUI) thread, but \helpref{IsMain}{wxthreadismain} should be used to test
+whether the thread is really the main one because NULL may also be returned for the thread
+not created with wxThread class. Generally speaking, the return value for such thread
+is undefined.
+
+\membersection{wxThread::Yield}\label{wxthreadyield}
+
+\func{\void}{Yield}{\void}
+
+Give the rest of the thread time slice to the system allowing the other threads to run.
+See also \helpref{Sleep()}{wxthreadsleep}.
