@@ -90,10 +90,12 @@ void wxMemoryDC::SelectObject( const wxBitmap& bitmap )
                 initWithSize:NSMakeSize(m_selectedBitmap.GetWidth(),
                     m_selectedBitmap.GetHeight())];
         [nsimage addRepresentation: const_cast<wxBitmap&>(m_selectedBitmap).GetNSBitmapImageRep()];
+        [m_cocoaNSImage lockFocus];
         [nsimage drawAtPoint: NSMakePoint(0,0)
             fromRect: NSMakeRect(0.0,0.0,m_selectedBitmap.GetWidth(),m_selectedBitmap.GetHeight())
             operation: NSCompositeCopy
             fraction: 1.0];
+        [m_cocoaNSImage unlockFocus];
         
         [nsimage release];
     }
