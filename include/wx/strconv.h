@@ -23,6 +23,7 @@
 #if defined(__VISAGECPP__) && __IBMCPP__ >= 400
 #  undef __BSEXCPT__
 #endif
+
 #include <stdlib.h>
 
 #if wxUSE_WCHAR_T
@@ -133,6 +134,8 @@ public:
 private:
     void SetName(const wxChar *charset);
 
+    // note that we can't use wxString here because of compilation
+    // dependencies: we're included from wx/string.h
     wxChar *m_name;
     wxCharacterSet *m_cset;
     bool m_deferred;

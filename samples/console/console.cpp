@@ -39,7 +39,7 @@
 //#define TEST_CHARSET
 //#define TEST_CMDLINE
 //#define TEST_DATETIME
-#define TEST_DIR
+//#define TEST_DIR
 //#define TEST_DLLLOADER
 //#define TEST_ENVIRON
 //#define TEST_EXECUTE
@@ -50,7 +50,7 @@
 //#define TEST_HASH
 //#define TEST_INFO_FUNCTIONS
 //#define TEST_LIST
-//#define TEST_LOCALE
+#define TEST_LOCALE
 //#define TEST_LOG
 //#define TEST_LONGLONG
 //#define TEST_MIME
@@ -1173,11 +1173,19 @@ static void TestDefaultLang()
         _T("klingonese"),   // I bet on some systems it does exist...
     };
 
+    wxPrintf(_T("The default system encoding is %s (%d)\n"),
+             wxLocale::GetSystemEncodingName().c_str(),
+             wxLocale::GetSystemEncoding());
+
     for ( size_t n = 0; n < WXSIZEOF(langStrings); n++ )
     {
         const char *langStr = langStrings[n];
         if ( langStr )
+        {
+            // FIXME: this doesn't do anything at all under Windows, we need
+            //        to create a new wxLocale!
             wxSetEnv(_T("LC_ALL"), langStr);
+        }
 
         int lang = gs_localeDefault.GetSystemLanguage();
         printf("Locale for '%s' is %s.\n",

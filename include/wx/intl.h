@@ -9,8 +9,8 @@
 // Licence:     wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef   __INTLH__
-#define   __INTLH__
+#ifndef _WX_INTL_H_
+#define _WX_INTL_H_
 
 #ifdef __GNUG__
     #pragma interface "intl.h"
@@ -20,6 +20,8 @@
 #include "wx/string.h"
 
 #if wxUSE_INTL
+
+#include "wx/fontenc.h"
 
 // ============================================================================
 // global decls
@@ -301,8 +303,6 @@ enum wxLanguage
 
 // --- --- --- generated code ends here --- --- ---
 
-
-
 // ----------------------------------------------------------------------------
 // wxLanguageInfo: encapsulates wxLanguage to OS native lang.desc.
 //                 translation information
@@ -313,8 +313,9 @@ struct WXDLLEXPORT wxLanguageInfo
     int Language;                   // wxLanguage id
     wxString CanonicalName;         // Canonical name, e.g. fr_FR
 #ifdef __WIN32__
-    wxUint32 WinLang, WinSublang;   // Win32 language identifiers
-#endif
+    wxUint32 WinLang,               // Win32 language identifiers
+             WinSublang;
+#endif // __WIN32__
     wxString Description;           // human-readable name of the language
 };
 
@@ -328,7 +329,6 @@ enum wxLocaleInitFlags
     wxLOCALE_LOAD_DEFAULT  = 0x0001,     // load wxwin.mo?
     wxLOCALE_CONV_ENCODING = 0x0002      // convert encoding on the fly?
 };
-
 
 class WXDLLEXPORT wxLocale
 {
@@ -369,6 +369,14 @@ public:
     // Try to get user's (or OS's) prefered language setting.
     // Return wxLANGUAGE_UNKNOWN if language-guessing algorithm failed
     static int GetSystemLanguage();
+
+    // get the encoding used by default for text on this system, returns
+    // wxFONTENCODING_SYSTEM if it couldn't be determined
+    static wxFontEncoding GetSystemEncoding();
+
+    // get the string describing the system encoding, return empty string if
+    // couldn't be determined
+    static wxString GetSystemEncodingName();
 
     // return TRUE if the locale was set successfully
     bool IsOk() const { return m_pszOldLocale != NULL; }
@@ -492,5 +500,5 @@ inline const wxChar *wxGetTranslation(const wxChar *sz) { return sz; }
     #define gettext_noop(str) _T(str)
 #endif
 
-#endif
-    // _WX_INTLH__
+#endif // _WX_INTL_H_
+

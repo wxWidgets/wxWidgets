@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        intl.cpp
+// Name:        src/common/intl.cpp
 // Purpose:     Internationalization and localisation for wxWindows
 // Author:      Vadim Zeitlin
 // Modified by:
@@ -31,26 +31,29 @@
 #if wxUSE_INTL
 
 // standard headers
-#include  <locale.h>
-#include  <ctype.h>
+#include <locale.h>
+#include <ctype.h>
+#include <stdlib.h>
 
 // wxWindows
-#include "wx/defs.h"
-#include "wx/string.h"
-#include "wx/tokenzr.h"
-#include "wx/intl.h"
+#ifndef WX_PRECOMP
+    #include "wx/string.h"
+    #include "wx/intl.h"
+    #include "wx/log.h"
+    #include "wx/debug.h"
+    #include "wx/utils.h"
+    #include "wx/dynarray.h"
+#endif // WX_PRECOMP
+
 #include "wx/file.h"
-#include "wx/log.h"
-#include "wx/debug.h"
-#include "wx/utils.h"
-#include "wx/dynarray.h"
+#include "wx/tokenzr.h"
 #include "wx/module.h"
+
 #ifdef __WIN32__
-#include "wx/msw/private.h"
+    #include "wx/msw/private.h"
+#elif defined(__UNIX_LIKE__)
+    #include "wx/fontmap.h"         // for CharsetToEncoding()
 #endif
-
-
-#include <stdlib.h>
 
 // ----------------------------------------------------------------------------
 // simple types
@@ -928,6 +931,87 @@ void wxLocale::AddCatalogLookupPathPrefix(const wxString& prefix)
 
     // no info about this language in the database
     return wxLANGUAGE_UNKNOWN;
+}
+
+// ----------------------------------------------------------------------------
+// encoding stuff
+// ----------------------------------------------------------------------------
+
+// this is a bit strange as under Windows we get the encoding name using its
+// numeric value and under Unix we do it the other way round, but this just
+// reflects the way different systems provide he encoding info
+
+/* static */
+wxString wxLocale::GetSystemEncodingName()
+{
+    wxString encname;
+
+#ifdef __WIN32__
+    // FIXME: what is the error return value for GetACP()?
+    UINT codepage = ::GetACP();
+    encname.Printf(_T("cp%u"), codepage);
+#elif defined(__UNIX_LIKE__)
+
+#if defined(HAVE_LANGINFO_H) && defined(CODESET)
+    // GNU libc provides current character set this way (this conforms
+    // to Unix98)
+    char *alang = nl_langinfo(CODESET);
+    if (alang)
+    {
+        encname = wxConvLibc.cMB2WX(alang);
+    }
+    else
+#endif // HAVE_LANGINFO_H
+    {
+        // if we can't get at the character set directly, try to see if it's in
+        // the environment variables (in most cases this won't work, but I was
+        // out of ideas)
+        wxChar *lang = wxGetenv(wxT("LC_ALL"));
+        wxChar *dot = lang ? wxStrchr(lang, wxT('.')) : (wxChar *)NULL;
+        if (!dot)
+        {
+            lang = wxGetenv(wxT("LC_CTYPE"));
+            if ( lang )
+                dot = wxStrchr(lang, wxT('.'));
+        }
+        if (!dot)
+        {
+            lang = wxGetenv(wxT("LANG"));
+            if ( lang )
+                dot = wxStrchr(lang, wxT('.'));
+        }
+
+        if ( dot )
+        {
+            encname = dot+1;
+        }
+    }
+#endif // Win32/Unix
+
+    return encname;
+}
+
+/* static */
+wxFontEncoding wxLocale::GetSystemEncoding()
+{
+#ifdef __WIN32__
+    UINT codepage = ::GetACP();
+
+    // wxWindows only knows about CP1250-1257
+    if ( codepage >= 1250 && codepage <= 1257 )
+    {
+        return (wxFontEncoding)(wxFONTENCODING_CP1250 + codepage - 1250);
+    }
+#elif defined(__UNIX_LIKE__)
+    wxString encname = GetSystemEncodingName();
+    if ( !encname.empty() )
+    {
+        return wxFontMapper::CharsetToEncoding(encname,
+                                               FALSE /* not interactive */);
+    }
+#endif // Win32/Unix
+
+    return wxFONTENCODING_SYSTEM;
 }
 
 /*static*/ void wxLocale::AddLanguage(const wxLanguageInfo& info)

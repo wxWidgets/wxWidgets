@@ -438,6 +438,26 @@ Returns current platform-specific locale name as passed to setlocale().
 Compare \helpref{GetCanonicalName}{wxlocalegetcanonicalname}.
 
 
+\membersection{wxLocale::GetSystemEncoding}\label{wxlocalegetsystemencoding}
+
+\constfunc{static wxFontEncoding}{GetSystemEncoding}{\void}
+
+Tries to detect the user's default font encoding.
+Returns \helpref{wxFontEncoding}{wxfont} value or 
+{\bf wxFONTENCODING\_SYSTEM} if it couldn't be determined.
+
+\membersection{wxLocale::GetSystemEncodingName}\label{wxlocalegetsystemencodingname}
+
+\constfunc{static wxString}{GetSystemEncodingName}{\void}
+
+Tries to detect the name of the user's default font encoding. This string isn't
+particularly useful for the application as its form is platform-dependent and
+so you should probably use 
+\helpref{GetSystemEncoding}{wxlocalegetsystemencoding} instead.
+
+Returns a user-readable string value or an empty string if it couldn't be
+determined.
+
 \membersection{wxLocale::GetSystemLanguage}\label{wxlocalegetsystemlanguage}
 
 \constfunc{static int}{GetSystemLanguage}{\void}
