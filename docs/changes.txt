@@ -13,12 +13,12 @@ OTHER CHANGES
 
 All:
 
-- Implemented GetEditControl for wxGenericTreeCtrl (Peter Stieber)
-- Improved contrib/utils/convertrc parsing (David J. Cooke)
-- Fixed handling of URLs and filenames in wxFileSystem
-- Implemented alignment for wxGrid bool editor and renderer
-- Support wxListCtrl columns alignment for all platforms and not just MSW
-- Added wxDateSpan::operator==() and !=() (Lukasz Michalski)
+- implemented GetEditControl for wxGenericTreeCtrl (Peter Stieber)
+- improved contrib/utils/convertrc parsing (David J. Cooke)
+- fixed handling of URLs and filenames in wxFileSystem
+- implemented alignment for wxGrid bool editor and renderer
+- support wxListCtrl columns alignment for all platforms and not just MSW
+- added wxDateSpan::operator==() and !=() (Lukasz Michalski)
 - use true/false throughout the library instead of TRUE/FALSE
 
 Unix:
@@ -29,6 +29,8 @@ wxGTK:
 
 - fixed wxMenu::Remove (John Skiff and Benjamin Williams)
 - made wxTextCtrl::EmulateKeyPress() work for Delete and Backspace
+- fixed wxTopLevelWindow::ShowFullScreen to work with kwin, IceWM and
+  window managers that support _NET_WM_STATE_FULLSCREEN
 
 wxMSW:
 
