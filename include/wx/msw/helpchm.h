@@ -16,23 +16,19 @@
 #pragma interface "helpchm.h"
 #endif
 
-#include "wx/wx.h"
-
-#if wxUSE_HELP
+#if wxUSE_MS_HTML_HELP
 
 #include "wx/helpbase.h"
 
-class WXDLLEXPORT wxCHMHelpController: public wxHelpControllerBase
+class WXDLLEXPORT wxCHMHelpController : public wxHelpControllerBase
 {
-    DECLARE_CLASS(wxCHMHelpController)
-        
 public:
-    wxCHMHelpController() {}
-    ~wxCHMHelpController() {}
-    
+    wxCHMHelpController() { }
+    virtual ~wxCHMHelpController();
+
     // Must call this to set the filename
     virtual bool Initialize(const wxString& file);
-    
+
     // If file is "", reloads file given in Initialize
     virtual bool LoadFile(const wxString& file = wxEmptyString);
     virtual bool DisplayContents();
@@ -44,16 +40,19 @@ public:
     virtual bool KeywordSearch(const wxString& k);
     virtual bool Quit();
 
-    inline wxString GetHelpFile() const { return m_helpFile; }
-    
+    wxString GetHelpFile() const { return m_helpFile; }
+
 protected:
     // Append extension if necessary.
     wxString GetValidFilename(const wxString& file) const;
-    
+
 protected:
     wxString m_helpFile;
+
+    DECLARE_CLASS(wxCHMHelpController)
 };
 
-#endif // wxUSE_HELP
+#endif // wxUSE_MS_HTML_HELP
+
 #endif
 // _WX_HELPCHM_H_

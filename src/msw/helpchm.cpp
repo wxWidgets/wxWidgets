@@ -10,73 +10,117 @@
 /////////////////////////////////////////////////////////////////////////////
 
 #ifdef __GNUG__
-#pragma implementation "helpchm.h"
+    #pragma implementation "helpchm.h"
 #endif
 
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
 #ifdef __BORLANDC__
-#pragma hdrstop
+    #pragma hdrstop
 #endif
-
-#ifndef WX_PRECOMP
-#include "wx/defs.h"
-#endif
-
-#include "wx/filefn.h"
 
 #if wxUSE_HELP && wxUSE_MS_HTML_HELP && defined(__WIN95__)
+
+#include "wx/filefn.h"
 #include "wx/msw/helpchm.h"
 
 #include "wx/dynlib.h"
 
-#ifndef WX_PRECOMP
-#include <windows.h>
-#endif
-
-// This is found in the HTML Help Workshop installation,
-// along with htmlhelp.lib.
-#include <htmlhelp.h>
-
-#include <time.h>
-
-#ifdef __WXMSW__
 #include "wx/msw/private.h"
-#endif
 
-#include <string.h>
+// instead of including htmlhelp.h, duplicate the things from it we need here
 
+enum
+{
+    HH_DISPLAY_TOPIC,
+    HH_DISPLAY_TOC,
+    HH_DISPLAY_INDEX,
+    HH_DISPLAY_SEARCH,
+    HH_SET_WIN_TYPE,
+    HH_GET_WIN_TYPE,
+    HH_GET_WIN_HANDLE,
+    HH_ENUM_INFO_TYPE,
+    HH_SET_INFO_TYPE,
+    HH_SYNC,
+    HH_RESERVED1,
+    HH_RESERVED2,
+    HH_RESERVED3,
+    HH_KEYWORD_LOOKUP,
+    HH_DISPLAY_TEXT_POPUP,
+    HH_HELP_CONTEXT,
+    HH_TP_HELP_CONTEXTMENU,
+    HH_TP_HELP_WM_HELP,
+    HH_CLOSE_ALL,
+    HH_ALINK_LOOKUP,
+    HH_GET_LAST_ERROR,
+    HH_ENUM_CATEGORY,
+    HH_ENUM_CATEGORY_IT,
+    HH_RESET_IT_FILTER,
+    HH_SET_INCLUSIVE_FILTER,
+    HH_SET_EXCLUSIVE_FILTER
+};
+
+struct HH_POPUP
+{
+    int       cbStruct;
+    HINSTANCE hinst;
+    UINT      idString;
+    LPCTSTR   pszText;
+    POINT     pt;
+    COLORREF  clrForeground;
+    COLORREF  clrBackground;
+    RECT      rcMargins;
+    LPCTSTR   pszFont;
+};
+
+struct HH_AKLINK
+{
+    int       cbStruct;
+    BOOL      fReserved;
+    LPCTSTR   pszKeywords;
+    LPCTSTR   pszUrl;
+    LPCTSTR   pszMsgText;
+    LPCTSTR   pszMsgTitle;
+    LPCTSTR   pszWindow;
+    BOOL      fIndexOnFail;
+};
+
+// ----------------------------------------------------------------------------
 // utility functions to manage the loading/unloading
 // of hhctrl.ocx
+// ----------------------------------------------------------------------------
+
 #ifndef UNICODE
-typedef HWND ( WINAPI * HTMLHELP )( HWND, LPCSTR, UINT, DWORD );
-#define HTMLHELP_NAME "HtmlHelpA"
-#else
-typedef HWND ( WINAPI * HTMLHELP )( HWND, LPCWSTR, UINT, DWORD );
-#define HTMLHELP_NAME "HtmlHelpW"
+    typedef HWND ( WINAPI * HTMLHELP )( HWND, LPCSTR, UINT, DWORD );
+    #define HTMLHELP_NAME "HtmlHelpA"
+#else // ANSI
+    typedef HWND ( WINAPI * HTMLHELP )( HWND, LPCWSTR, UINT, DWORD );
+    #define HTMLHELP_NAME "HtmlHelpW"
 #endif
+
 // dll symbol handle
 static HTMLHELP gs_htmlHelp = 0;
+static wxPluginLibrary *gs_libHtmlHelp = NULL;
 
 static bool LoadHtmlHelpLibrary()
 {
-    wxPluginLibrary *lib = wxPluginManager::LoadLibrary( _T("HHCTRL.OCX"), wxDL_DEFAULT | wxDL_VERBATIM );
+    gs_libHtmlHelp = wxPluginManager::LoadLibrary( _T("HHCTRL.OCX"), wxDL_DEFAULT | wxDL_VERBATIM );
 
-    if( !lib->IsLoaded() )
+    if( !gs_libHtmlHelp )
     {
         wxLogError(_("MS HTML Help functions are unavailable because the MS HTML Help library is not installed on this machine. Please install it."));
         return FALSE;
     }
     else
     {
-        gs_htmlHelp = (HTMLHELP)lib->GetSymbol( HTMLHELP_NAME );
+        gs_htmlHelp = (HTMLHELP)gs_libHtmlHelp->GetSymbol( HTMLHELP_NAME );
 
         if( !gs_htmlHelp )
         {
             wxLogError(_("Failed to initialize MS HTML Help."));
 
-            lib->UnrefLib();
+            gs_libHtmlHelp->UnrefLib();
             return FALSE ;
         }
     }
@@ -89,6 +133,8 @@ static void UnloadHtmlHelpLibrary()
     if( gs_htmlHelp )
     {
         wxPluginManager::UnloadLibrary( _T("HHCTRL.OCX") );
+        gs_libHtmlHelp->UnrefLib();
+
         gs_htmlHelp = 0;
     }
 }
@@ -126,7 +172,7 @@ bool wxCHMHelpController::DisplayContents()
 
     wxString str = GetValidFilename(m_helpFile);
 
-    gs_htmlHelp(GetSuitableHWND(), (const wxChar*) str, HH_HELP_FINDER, 0L);
+    gs_htmlHelp(GetSuitableHWND(), (const wxChar*) str, HH_DISPLAY_TOPIC, 0L);
     return TRUE;
 }
 
@@ -228,7 +274,6 @@ bool wxCHMHelpController::KeywordSearch(const wxString& k)
 bool wxCHMHelpController::Quit()
 {
     gs_htmlHelp(GetSuitableHWND(), 0, HH_CLOSE_ALL, 0L);
-    UnloadHtmlHelpLibrary();
 
     return TRUE;
 }
@@ -249,6 +294,10 @@ wxString wxCHMHelpController::GetValidFilename(const wxString& file) const
     return fullName;
 }
 
+wxCHMHelpController::~wxCHMHelpController()
+{
+    UnloadHtmlHelpLibrary();
+}
+
 #endif // wxUSE_HELP
 
-// vi:sts=4:sw=4:et
