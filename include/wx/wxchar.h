@@ -48,8 +48,6 @@
 
 #  include <tchar.h>
 
-#  define T(x)       _T(x)
-
 #  if wxUSE_UNICODE // temporary - preserve binary compatibility
 typedef  _TCHAR      wxChar;
 typedef  _TSCHAR     wxSChar;
@@ -233,7 +231,7 @@ typedef __WCHAR_TYPE__          wxChar;
 typedef signed __WCHAR_TYPE__   wxSChar;
 typedef unsigned __WCHAR_TYPE__ wxUChar;
 
-#      define T(x)                   L##x
+#      define _T(x)                   L##x
 
        // ctype.h functions (wctype.h)
 #      define  wxIsalnum   iswalnum
@@ -303,9 +301,9 @@ typedef unsigned __WCHAR_TYPE__ wxUChar;
 #   endif
 
 #   ifdef __FreeBSD__
-#     undef T
+#     undef _T
 #   endif
-#   define T(x)           x
+#   define _T(x)           x
 
      // ctype.h functions
 #   define  wxIsalnum   isalnum
@@ -563,6 +561,11 @@ WXDLLEXPORT int      wxSystem(const wxChar *psz);
 #ifdef wxNEED_WX_TIME_H
 WXDLLEXPORT size_t   wxStrftime(wxChar *s, size_t max, const wxChar *fmt, const struct tm *tm);
 #endif
+
+// although global macros with such names are really bad, we want to have
+// another name for _T() which should be used to avoid confusion between _T()
+// and _() in wxWindows sources
+#define T(x)       _T(x)
 
 // a Unicode-friendly __FILE__ analog
 #ifndef __TFILE__
