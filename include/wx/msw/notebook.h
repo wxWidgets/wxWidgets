@@ -159,6 +159,7 @@ public:
   void OnSelChange(wxNotebookEvent& event);
   void OnSetFocus(wxFocusEvent& event);
   void OnNavigationKey(wxNavigationKeyEvent& event);
+  void OnEraseBackground(wxEraseEvent& event);
 
   // base class virtuals
   // -------------------

@@ -634,6 +634,17 @@ samples/tab/*.xpm
 samples/tab/*.ico
 samples/tab/*.txt
 
+samples/notebook/*.cpp
+samples/notebook/*.h
+samples/notebook/makefile*
+samples/notebook/*.rc
+samples/notebook/*.def
+samples/notebook/*.bmp
+samples/notebook/*.xbm
+samples/notebook/*.xpm
+samples/notebook/*.ico
+samples/notebook/*.txt
+
 samples/png/*.cpp
 samples/png/*.h
 samples/png/makefile*

@@ -63,6 +63,7 @@
     EVT_NOTEBOOK_PAGE_CHANGED(-1, wxNotebook::OnSelChange)
 
     EVT_SIZE(wxNotebook::OnSize)
+    EVT_ERASE_BACKGROUND(wxNotebook::OnEraseBackground)
     EVT_SET_FOCUS(wxNotebook::OnSetFocus)
     EVT_NAVIGATION_KEY(wxNotebook::OnNavigationKey)
   END_EVENT_TABLE()
@@ -476,3 +477,9 @@ void wxNotebook::ChangePage(int nOldSel, int nSel)
 
   m_nSelection = nSel;
 }
+
+void wxNotebook::OnEraseBackground(wxEraseEvent& event)
+{
+    Default();
+}
+

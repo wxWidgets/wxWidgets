@@ -143,7 +143,7 @@ public:
 
     // accessors: set/get the item associated with this node
     void SetId(const wxTreeItemId& id) { m_itemId = id; }
-    const wxTreeItemId& GetId() const { return m_itemId; }
+    const wxTreeItemId& GetId() const { return (wxTreeItemId&) m_itemId; }
 };
 
 // ----------------------------------------------------------------------------
