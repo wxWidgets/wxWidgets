@@ -92,7 +92,7 @@
     #include "wx/db.h"
 #endif
 
-wxDbList WXDLLEXPORT *PtrBegDbList = 0;
+WXDLLEXPORT wxDbList* PtrBegDbList = 0;
 
 char const *SQL_LOG_FILENAME         = "sqllog.txt";
 char const *SQL_CATALOG_FILENAME     = "catalog.txt";
