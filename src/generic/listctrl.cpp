@@ -1645,12 +1645,20 @@ void wxListMainWindow::OnChar( wxKeyEvent &event )
     m_usedKeys = TRUE;
 }
 
+#ifdef __WXGTK__
+extern wxWindow *g_focusWindow;
+#endif
+
 void wxListMainWindow::OnSetFocus( wxFocusEvent &WXUNUSED(event) )
 {
     m_hasFocus = TRUE;
     RefreshLine( m_current );
 
     if (!GetParent()) return;
+    
+#ifdef __WXGTK__
+    g_focusWindow = GetParent();
+#endif
 
     wxFocusEvent event( wxEVT_SET_FOCUS, GetParent()->GetId() );
     event.SetEventObject( GetParent() );

@@ -31,6 +31,7 @@
 #include "wx/msgdlg.h"
 #include "wx/sizer.h"
 #include "wx/bmpbuttn.h"
+#include "wx/tokenzr.h"
 
 #if wxUSE_TOOLTIPS
     #include "wx/tooltip.h"
@@ -344,8 +345,8 @@ void wxFileCtrl::Update()
         item.m_itemId++;
     }
 
-    wxString res = m_dirName + _T("/") + m_wild;
-    wxString f( wxFindFirstFile( res.GetData(), 0 ) );
+    wxString res = m_dirName + _T("/*");
+    wxString f( wxFindFirstFile( res.GetData(), wxDIR ) );
     while (!f.IsEmpty())
     {
         res = wxFileNameFromPath( f );
@@ -358,6 +359,22 @@ void wxFileCtrl::Update()
         }
         f = wxFindNextFile();
     }
+    
+    res = m_dirName + _T("/") + m_wild;
+    f = wxFindFirstFile( res.GetData(), wxFILE );
+    while (!f.IsEmpty())
+    {
+        res = wxFileNameFromPath( f );
+        fd = new wxFileData( res, f );
+        wxString s = fd->GetName();
+        if (m_showHidden || (s[0] != _T('.')))
+        {
+	    Add( fd, item );
+            item.m_itemId++;
+        }
+        f = wxFindNextFile();
+    }
+    
     SortItems( ListCompare, 0 );
 }
 
@@ -505,12 +522,14 @@ void wxFileCtrl::OnListEndLabelEdit( wxListEvent &event )
 // wxFileDialog
 //-----------------------------------------------------------------------------
 
-#define  ID_LIST_CTRL     5010
 #define  ID_LIST_MODE     5000
 #define  ID_REPORT_MODE   5001
 #define  ID_UP_DIR        5005
 #define  ID_PARENT_DIR    5006
 #define  ID_NEW_DIR       5007
+#define  ID_CHOICE        5008
+#define  ID_TEXT          5009
+#define  ID_LIST_CTRL     5010
 
 IMPLEMENT_DYNAMIC_CLASS(wxFileDialog,wxDialog)
 
@@ -523,6 +542,8 @@ BEGIN_EVENT_TABLE(wxFileDialog,wxDialog)
         EVT_BUTTON(wxID_OK, wxFileDialog::OnListOk)
         EVT_LIST_ITEM_SELECTED(ID_LIST_CTRL, wxFileDialog::OnSelected)
 	EVT_LIST_ITEM_ACTIVATED(ID_LIST_CTRL, wxFileDialog::OnActivated)
+	EVT_CHOICE(ID_CHOICE,wxFileDialog::OnChoice)
+	EVT_TEXT_ENTER(ID_TEXT,wxFileDialog::OnTextEnter)
 END_EVENT_TABLE()
 
 wxFileDialog::wxFileDialog(wxWindow *parent,
@@ -546,6 +567,28 @@ wxFileDialog::wxFileDialog(wxWindow *parent,
     m_fileName = defaultFile;
     m_wildCard = wildCard;
     m_filterIndex = 0;
+    
+    // interpret wildcards
+    
+    if (m_wildCard.IsEmpty())
+        m_wildCard = _("All files (*)|*");
+    
+    wxStringTokenizer tokens( m_wildCard, _T("|") );
+    wxString firstWild;
+    wxString firstWildText;
+    if (tokens.CountTokens() == 1)
+    {
+        firstWildText = tokens.GetNextToken();
+        firstWild = firstWildText;
+    }
+    else
+    {
+        wxASSERT_MSG( tokens.CountTokens() % 2 == 0, _T("Wrong file type descripition") );
+        firstWildText = tokens.GetNextToken();
+        firstWild = tokens.GetNextToken();
+    }
+
+    // layout
     
     wxBoxSizer *mainsizer = new wxBoxSizer( wxVERTICAL );
     
@@ -589,22 +632,30 @@ wxFileDialog::wxFileDialog(wxWindow *parent,
     
     mainsizer->Add( buttonsizer, 0, wxALL | wxEXPAND, 5 );
     
-    m_list = new wxFileCtrl( this, ID_LIST_CTRL, m_dir, "*", wxDefaultPosition, wxSize(440,180), 
+    m_list = new wxFileCtrl( this, ID_LIST_CTRL, m_dir, firstWild, wxDefaultPosition, wxSize(440,180), 
       wxLC_LIST | wxSUNKEN_BORDER | wxLC_SINGLE_SEL );
     mainsizer->Add( m_list, 1, wxEXPAND | wxLEFT|wxRIGHT, 10 );
     
     wxBoxSizer *textsizer = new wxBoxSizer( wxHORIZONTAL );
-    m_text = new wxTextCtrl( this, -1, m_fileName );
+    m_text = new wxTextCtrl( this, ID_TEXT, m_fileName, wxDefaultPosition, wxDefaultSize, wxPROCESS_ENTER );
     textsizer->Add( m_text, 1, wxCENTER | wxLEFT|wxRIGHT|wxTOP, 10 );
     textsizer->Add( new wxButton( this, wxID_OK, _("OK") ), 0, wxCENTER | wxLEFT|wxRIGHT|wxTOP, 10 );
     mainsizer->Add( textsizer, 0, wxEXPAND );
 
     wxBoxSizer *choicesizer = new wxBoxSizer( wxHORIZONTAL );
-    m_choice = new wxChoice( this, -1 );
-    m_choice->Append( "*.txt" );
+    m_choice = new wxChoice( this, ID_CHOICE );
     choicesizer->Add( m_choice, 1, wxCENTER|wxALL, 10 );
     choicesizer->Add( new wxButton( this, wxID_CANCEL, _("Cancel") ), 0, wxCENTER | wxALL, 10 );
     mainsizer->Add( choicesizer, 0, wxEXPAND );
+    
+    m_choice->Append( firstWildText, (void*) new wxString( firstWild ) );
+    while (tokens.HasMoreTokens())
+    {
+        firstWildText = tokens.GetNextToken();
+        firstWild = tokens.GetNextToken();
+        m_choice->Append( firstWildText, (void*) new wxString( firstWild ) );
+    }
+    m_choice->SetSelection( 0 );
 
     SetAutoLayout( TRUE );
     SetSizer( mainsizer );
@@ -619,7 +670,24 @@ wxFileDialog::wxFileDialog(wxWindow *parent,
     wxEndBusyCursor();
 }
 
+wxFileDialog::~wxFileDialog()
+{
+}
+
+void wxFileDialog::OnChoice( wxCommandEvent &event )
+{
+    wxString *str = (wxString*) m_choice->GetClientData( event.GetInt() );
+    m_list->SetWild( *str );
+}
+
 void wxFileDialog::OnActivated( wxListEvent &WXUNUSED(event) )
+{
+    wxCommandEvent cevent(wxEVT_COMMAND_BUTTON_CLICKED, wxID_OK);
+    cevent.SetEventObject( this );
+    GetEventHandler()->ProcessEvent( cevent );
+}
+
+void wxFileDialog::OnTextEnter( wxCommandEvent &WXUNUSED(event) )
 {
     wxCommandEvent cevent(wxEVT_COMMAND_BUTTON_CLICKED, wxID_OK);
     cevent.SetEventObject( this );
@@ -628,7 +696,8 @@ void wxFileDialog::OnActivated( wxListEvent &WXUNUSED(event) )
 
 void wxFileDialog::OnSelected( wxListEvent &event )
 {
-    m_text->SetValue( event.m_item.m_text );
+    if (FindFocus() == m_list)
+        m_text->SetValue( event.m_item.m_text );
 }
 
 void wxFileDialog::OnListOk( wxCommandEvent &event )
@@ -637,11 +706,24 @@ void wxFileDialog::OnListOk( wxCommandEvent &event )
     wxString dir;
     m_list->GetDir( dir );
     if (filename.IsEmpty()) return;
+    if (filename == _T(".")) return;
     
     if (filename == _T(".."))
     {
         m_list->GoToParentDir();
         m_list->SetFocus();
+	return;
+    }
+
+    if ((filename.Find(_T('*')) != wxNOT_FOUND) ||
+        (filename.Find(_T('?')) != wxNOT_FOUND))
+    {
+        if (filename.Find(_T('/')) != wxNOT_FOUND)
+	{
+            wxMessageBox(_("Illegal file specification."), _("Error"), wxOK | wxICON_ERROR );	
+	    return;
+	}
+	m_list->SetWild( filename );
 	return;
     }
 
@@ -672,8 +754,7 @@ void wxFileDialog::OnListOk( wxCommandEvent &event )
     {
         if ( !wxFileExists( filename ) )
         {
-            wxMessageBox(_("Please choose an existing file."), _("Error"), wxOK);
-
+            wxMessageBox(_("Please choose an existing file."), _("Error"), wxOK | wxICON_ERROR );
             return;
         }
     }

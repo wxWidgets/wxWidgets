@@ -132,6 +132,7 @@ public:
                  const wxString& wildCard = wxFileSelectorDefaultWildcardStr,
                  long style = 0,
                  const wxPoint& pos = wxDefaultPosition);
+    ~wxFileDialog();
 
     void SetMessage(const wxString& message) { m_message = message; }
     void SetPath(const wxString& path);
@@ -157,6 +158,8 @@ public:
     void OnHome( wxCommandEvent &event );
     void OnListOk( wxCommandEvent &event );
     void OnNew( wxCommandEvent &event );
+    void OnChoice( wxCommandEvent &event );
+    void OnTextEnter( wxCommandEvent &event );
     
 protected:    
     wxString    m_message;
