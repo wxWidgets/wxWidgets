@@ -939,7 +939,13 @@ void wxSplitterWindow::OnUnsplitEvent(wxSplitterEvent& event)
     OnUnsplit(win);
 }
 
-void wxSplitterWindow::OnSetCursor(wxSetCursorEvent& event)
+#if defined(__WXMSW__)
+    #define WXUNUSED_UNLESS_MSW(identifier)    identifier
+#else
+    #define WXUNUSED_UNLESS_MSW(identifier)    WXUNUSED(identifier)
+#endif
+
+void wxSplitterWindow::OnSetCursor(wxSetCursorEvent& WXUNUSED_UNLESS_MSW(event))
 {
     // this is currently called (and needed) under MSW only...
 #ifdef __WXMSW__

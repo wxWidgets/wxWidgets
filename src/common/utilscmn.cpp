@@ -1047,7 +1047,7 @@ wxWindowDisabler::~wxWindowDisabler()
 // the given one
 bool wxSafeYield(wxWindow *win)
 {
-    wxWindowDisabler wd;
+    wxWindowDisabler wd(win);
 
     bool rc = wxYield();
 

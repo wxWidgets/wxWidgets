@@ -183,7 +183,10 @@ bool wxGenericDragImage::Create(const wxListCtrl& listCtrl, long id)
 }
 
 // Begin drag
-bool wxGenericDragImage::BeginDrag(const wxPoint& hotspot, wxWindow* window, bool fullScreen, wxRect* rect)
+bool wxGenericDragImage::BeginDrag(const wxPoint& WXUNUSED(hotspot),
+                                   wxWindow* window,
+                                   bool fullScreen,
+                                   wxRect* rect)
 {
     wxASSERT_MSG( (window != 0), wxT("Window must not be null in BeginDrag."));
 

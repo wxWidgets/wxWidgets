@@ -722,7 +722,8 @@ void wxListLineData::CalculateSize( wxDC *dc, int spacing )
     }
 }
 
-void wxListLineData::SetPosition( wxDC *dc, int x, int y, int window_width )
+void wxListLineData::SetPosition( wxDC * WXUNUSED(dc),
+                                  int x, int y, int window_width )
 {
     m_bound_all.x = x;
     m_bound_all.y = y;

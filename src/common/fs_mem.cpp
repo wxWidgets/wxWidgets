@@ -112,9 +112,11 @@ wxFSFile* wxMemoryFSHandler::OpenFile(wxFileSystem& WXUNUSED(fs), const wxString
 
 
 
-wxString wxMemoryFSHandler::FindFirst(const wxString& spec, int flags)
+wxString wxMemoryFSHandler::FindFirst(const wxString& WXUNUSED(spec),
+                                      int WXUNUSED(flags))
 {
-    wxLogWarning(wxT("wxMemoryFSHandler::FindFirst not implemented"));
+    wxFAIL_MSG(wxT("wxMemoryFSHandler::FindFirst not implemented"));
+
     return wxEmptyString;
 }
 
@@ -122,10 +124,10 @@ wxString wxMemoryFSHandler::FindFirst(const wxString& spec, int flags)
 
 wxString wxMemoryFSHandler::FindNext()
 {
-    wxLogWarning(wxT("wxMemoryFSHandler::FindNext not implemented"));
+    wxFAIL_MSG(wxT("wxMemoryFSHandler::FindNext not implemented"));
+
     return wxEmptyString;
 }
-
 
 
 bool wxMemoryFSHandler::CheckHash(const wxString& filename)
