@@ -2145,6 +2145,9 @@ else
         TOOLKIT_VPATH="\${top_srcdir}/src/unix"
     fi
 
+    ALL_SOURCES="\$(ALL_SOURCES)"
+    ALL_HEADERS="\$(ALL_HEADERS)"
+
     PORT_FILES="\${top_srcdir}/src/files.lst"
 
     dnl distribute only wxBase sources/headers
