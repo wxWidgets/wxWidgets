@@ -12,7 +12,7 @@
 #include "wx/setup.h"
 
 #ifdef __GNUG__
-    #pragma implementation "dialup.h"
+#   pragma implementation "dialup.h"
 #endif
 
 #if wxUSE_DIALUP_MANAGER
@@ -109,6 +109,12 @@ public:
          return m_IsOnline != 0;
       }
 
+   /// do we have a constant net connection? -- GUESS!
+   bool IsAlwaysOnline() const
+      {
+         ((wxDialUpManagerImpl *) this)->HangUp(); // brutal but necessary
+         return IsOnline();
+      }
    /// returns TRUE if (async) dialing is in progress
    inline virtual bool IsDialing() const
       { return m_DialProcess != NULL; }
@@ -117,6 +123,9 @@ public:
    // NB: this won't result in DISCONNECTED event being sent
    virtual bool CancelDialing();
 
+   unsigned int GetISPNames(class wxArrayString &) const
+      { return 0; }
+   
    // sometimes the built-in logic for determining the online status may fail,
    // so, in general, the user should be allowed to override it. This function
    // allows to forcefully set the online status - whatever our internal
@@ -477,13 +486,13 @@ wxDialUpManagerImpl::CheckStatusInternal(void)
       //  sys_error("cannot create socket for gw");
       return;
    }
-#if 0
    // PING method:
 
-   if(sendto(sockfd, "hello", strlen("hello"), /* flags */ 0, &serv_addr,
+   if(sendto(sockfd, "hello", strlen("hello"), /* flags */ 0,
+             (struct sockaddr *)&serv_addr,
              sizeof(serv_addr)) == -1)
       return;
-#endif
+#if 0
 
    if( connect(sockfd, (struct sockaddr *) &serv_addr, sizeof(serv_addr)) < 0)
    {
@@ -492,6 +501,7 @@ wxDialUpManagerImpl::CheckStatusInternal(void)
    }
    //connected!
    close(sockfd);
+#endif
    m_IsOnline = TRUE;
 }
 
