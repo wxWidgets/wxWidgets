@@ -649,9 +649,12 @@ class wxHtmlDCRendererPtr(wxObjectPtr):
     def __init__(self,this):
         self.this = this
         self.thisown = 0
-    def __del__(self,delfunc=htmlc.delete_wxHtmlDCRenderer):
+    def __del__(self, delfunc=htmlc.delete_wxHtmlDCRenderer):
         if self.thisown == 1:
-            delfunc(self)
+            try:
+                delfunc(self)
+            except:
+                pass
     def SetDC(self, *_args, **_kwargs):
         val = apply(htmlc.wxHtmlDCRenderer_SetDC,(self,) + _args, _kwargs)
         return val
@@ -710,9 +713,12 @@ class wxHtmlEasyPrintingPtr(wxObjectPtr):
     def __init__(self,this):
         self.this = this
         self.thisown = 0
-    def __del__(self,delfunc=htmlc.delete_wxHtmlEasyPrinting):
+    def __del__(self, delfunc=htmlc.delete_wxHtmlEasyPrinting):
         if self.thisown == 1:
-            delfunc(self)
+            try:
+                delfunc(self)
+            except:
+                pass
     def PreviewFile(self, *_args, **_kwargs):
         val = apply(htmlc.wxHtmlEasyPrinting_PreviewFile,(self,) + _args, _kwargs)
         return val
