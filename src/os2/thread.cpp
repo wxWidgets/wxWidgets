@@ -823,6 +823,28 @@ void WXDLLEXPORT wxWakeUpMainThread()
 {
 }
 
+void WXDLLEXPORT wxMutexGuiEnter()
+{
+    // this would dead lock everything...
+    wxASSERT_MSG( !wxThread::IsMain(),
+                  wxT("main thread doesn't want to block in wxMutexGuiEnter()!") );
+
+    // the order in which we enter the critical sections here is crucial!!
+
+    // set the flag telling to the main thread that we want to do some GUI
+    {
+        wxCriticalSectionLocker enter(*gs_pCritsectWaitingForGui);
+
+        gs_nWaitingForGui++;
+    }
+
+    wxWakeUpMainThread();
+
+    // now we may block here because the main thread will soon let us in
+    // (during the next iteration of OnIdle())
+    gs_pCritsectGui->Enter();
+}
+
 void WXDLLEXPORT wxMutexGuiLeave()
 {
     wxCriticalSectionLocker enter(*gs_pCritsectWaitingForGui);
