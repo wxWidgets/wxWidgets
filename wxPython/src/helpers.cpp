@@ -1165,13 +1165,19 @@ size_t wxPyCBInputStream::OnSysWrite(const void *buffer, size_t bufsize) {
 
 off_t wxPyCBInputStream::OnSysSeek(off_t off, wxSeekMode mode) {
     wxPyBeginBlockThreads();
+#ifdef _LARGE_FILES
+    // off_t is a 64-bit value...
+    PyObject* arglist = Py_BuildValue("(Li)", off, mode);
+#else
     PyObject* arglist = Py_BuildValue("(ii)", off, mode);
+#endif
     PyObject* result = PyEval_CallObject(m_seek, arglist);
     Py_DECREF(arglist);
     Py_XDECREF(result);
     wxPyEndBlockThreads();
     return OnSysTell();
 }
+
 
 off_t wxPyCBInputStream::OnSysTell() const {
     wxPyBeginBlockThreads();
@@ -1180,7 +1186,13 @@ off_t wxPyCBInputStream::OnSysTell() const {
     Py_DECREF(arglist);
     off_t o = 0;
     if (result != NULL) {
+#ifdef _LARGE_FILES
+        if (PyLong_Check(result))
+            o = PyLong_AsLongLong(result);
+        else
+#else
         o = PyInt_AsLong(result);
+#endif
         Py_DECREF(result);
     };
     wxPyEndBlockThreads();
