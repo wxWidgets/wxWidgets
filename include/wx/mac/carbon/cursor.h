@@ -68,8 +68,8 @@ public:
   virtual bool Ok() const { return (m_refData != NULL && ( M_CURSORDATA->m_hCursor != NULL || M_CURSORDATA->m_themeCursor != -1 ) ) ; }
 
   inline wxCursor& operator = (const wxCursor& cursor) { if (*this == cursor) return (*this); Ref(cursor); return *this; }
-  inline bool operator == (const wxCursor& cursor) { return m_refData == cursor.m_refData; }
-  inline bool operator != (const wxCursor& cursor) { return m_refData != cursor.m_refData; }
+  inline bool operator == (const wxCursor& cursor) const { return m_refData == cursor.m_refData; }
+  inline bool operator != (const wxCursor& cursor) const { return m_refData != cursor.m_refData; }
 
     void MacInstall() const ;
 
