@@ -11,6 +11,8 @@
 #include "wx/qt/dde.h"
 #elif defined(__WXMAC__)
 #include "wx/mac/dde.h"
+#elif defined(__WXPM__)
+#include "wx/os2/dde.h"
 #elif defined(__WXSTUBS__)
 #include "wx/stubs/dde.h"
 #endif

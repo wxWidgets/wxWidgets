@@ -114,6 +114,8 @@
 #include "wx/qt/settings.h"
 #elif defined(__WXMAC__)
 #include "wx/mac/settings.h"
+#elif defined(__WXPM__)
+#include "wx/os2/settings.h"
 #elif defined(__WXSTUBS__)
 #include "wx/stubs/settings.h"
 #endif

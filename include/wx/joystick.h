@@ -9,6 +9,8 @@
 #include "wx/gtk/joystick.h"
 #elif defined(__WXMAC__)
 #include "wx/mac/joystick.h"
+#elif defined(__WXPM__)
+#include "wx/os2/joystick.h"
 #elif defined(__WXSTUBS__)
 #include "wx/stubs/joystick.h"
 #endif

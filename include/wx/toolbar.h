@@ -19,6 +19,8 @@
 #   include "wx/qt/tbarqt.h"
 #elif defined(__WXMAC__)
 #   include "wx/mac/toolbar.h"
+#elif defined(__WXPM__)
+#   include "wx/os2/toolbar.h"
 #elif defined(__WXSTUBS__)
 #   include "wx/stubs/toolbar.h"
 #endif

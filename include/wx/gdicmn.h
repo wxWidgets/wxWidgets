@@ -131,6 +131,9 @@ enum wxStockCursor
 #ifdef __WXMSW__
     // Load from a resource
     #define wxICON(X) wxIcon("" #X "")
+#elif defined(__WXPM__)
+    // Load from a resource
+    #define wxICON(X) wxIcon("" #X "")
 #elif defined(__WXGTK__)
     // Initialize from an included XPM
     #define wxICON(X) wxIcon( (const char**) X##_xpm )

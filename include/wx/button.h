@@ -11,6 +11,8 @@
 #include "wx/qt/button.h"
 #elif defined(__WXMAC__)
 #include "wx/mac/button.h"
+#elif defined(__WXPM__)
+#include "wx/os2/button.h"
 #elif defined(__WXSTUBS__)
 #include "wx/stubs/button.h"
 #endif

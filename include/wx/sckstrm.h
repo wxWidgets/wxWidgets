@@ -56,7 +56,7 @@ class WXDLLEXPORT wxSocketInputStream : public wxInputStream
 };
 
 class WXDLLEXPORT wxSocketStream : public wxSocketInputStream,
-				   public wxSocketOutputStream
+                   public wxSocketOutputStream
 {
  public:
   wxSocketStream(wxSocketBase& s);

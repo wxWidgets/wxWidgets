@@ -11,6 +11,8 @@
 #include "wx/qt/checkbox.h"
 #elif defined(__WXMAC__)
 #include "wx/mac/checkbox.h"
+#elif defined(__WXPM__)
+#include "wx/os2/checkbox.h"
 #elif defined(__WXSTUBS__)
 #include "wx/stubs/checkbox.h"
 #endif

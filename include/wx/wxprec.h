@@ -13,7 +13,7 @@
 #include "wx/defs.h"    // compiler definitions
 
 // check if to use precompiled headers
-#if (defined(__BORLANDC__) || defined(__VISUALC__) || defined(__WATCOMC__)) && defined(__WXMSW__)
+#if ((defined(__BORLANDC__) || defined(__VISUALC__) || defined(__WATCOMC__)) && defined(__WXMSW__)) || defined(__WXPM__)
     #if !defined(NOPCH)
         #define WX_PRECOMP
     #endif
@@ -30,6 +30,11 @@
 #ifdef __WXMSW__
 #include <windows.h>
 #include "wx/msw/winundef.h"
+#endif
+
+#ifdef __WXPM__
+#define INCL_OS2
+#include <os2.h>
 #endif
 
 #include "wx/wx.h"

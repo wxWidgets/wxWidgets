@@ -7,6 +7,8 @@
 #include "wx/motif/tbarmsw.h"
 #elif defined(__WXGTK__)
 #include "wx/gtk/tbarmsw.h"
+#elif defined(__WXPM__)
+#include "wx/os2/tbarmsw.h"
 #endif
 
 #endif

@@ -44,8 +44,10 @@
  must return negative value, 0 or positive value if pItem1 <, = or > pItem2
  */
 
-#ifdef  __VISUALC__
+#if defined(__VISUALC__)
   #define   CMPFUNC_CONV    _cdecl
+#elif defined(__VISAGECPP__)
+  #define   CMPFUNC_CONV    _Optlink
 #else   // !Visual C++
   #define   CMPFUNC_CONV
 #endif  // compiler

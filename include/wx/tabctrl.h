@@ -8,6 +8,8 @@
 #elif defined(__WXGTK__)
 #elif defined(__WXMAC__)
 #include "wx/mac/tabctrl.h"
+#elif defined(__WXPM__)
+#include "wx/os2/tabctrl.h"
 #elif defined(__WXSTUBS__)
 #include "wx/stubs/tabctrl.h"
 #endif

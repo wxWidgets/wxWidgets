@@ -11,6 +11,8 @@
 #include "wx/qt/frame.h"
 #elif defined(__WXMAC__)
 #include "wx/mac/frame.h"
+#elif defined(__WXPM__)
+#include "wx/os2/frame.h"
 #elif defined(__WXSTUBS__)
 #include "wx/stubs/frame.h"
 #endif

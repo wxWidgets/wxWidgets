@@ -160,7 +160,7 @@ private:
     wxCriticalSection(const wxCriticalSection&);
     wxCriticalSection& operator=(const wxCriticalSection&);
 
-#ifdef __WXMSW__
+#if defined(__WXMSW__) || defined(__WXPM__)
     wxCriticalSectionInternal *m_critsect;
 #else // !MSW
     wxMutex m_mutex;
@@ -372,7 +372,7 @@ public:
 // implementation only until the end of file
 // -----------------------------------------------------------------------------
 #if wxUSE_THREADS
-#ifdef __WXMSW__
+#if defined(__WXMSW__) || defined(__WXPM__)
     // unlock GUI if there are threads waiting for and lock it back when
     // there are no more of them - should be called periodically by the main
     // thread

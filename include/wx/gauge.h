@@ -11,6 +11,8 @@
 #include "wx/qt/gauge.h"
 #elif defined(__WXMAC__)
 #include "wx/mac/gauge.h"
+#elif defined(__WXPM__)
+#include "wx/os2/gauge.h"
 #elif defined(__WXSTUBS__)
 #include "wx/stubs/gauge.h"
 #endif

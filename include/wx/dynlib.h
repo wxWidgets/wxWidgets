@@ -42,6 +42,10 @@
 #elif defined(__WINDOWS__)
 #   include <windows.h>
     typedef HMODULE wxDllType;
+#elif defined(__OS2__)
+#   define INCL_DOS
+#   include <os2.h>
+    typedef HMODULE wxDllType;
 #elif defined(__WXMAC__)
     typedef CFragConnectionID wxDllType;
 #else

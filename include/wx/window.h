@@ -819,6 +819,8 @@ private:
     #include "wx/qt/window.h"
 #elif defined(__WXMAC__)
     #include "wx/mac/window.h"
+#elif defined(__WXPM__)
+    #include "wx/os2/window.h"
 #endif
 
 // ----------------------------------------------------------------------------

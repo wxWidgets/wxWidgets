@@ -15,6 +15,8 @@
 #include "wx/generic/imaglist.h"
 #elif defined(__WXMAC__)
 #include "wx/generic/imaglist.h"
+#elif defined(__WXPM__)
+#include "wx/generic/imaglist.h"
 #elif defined(__WXSTUBS__)
 #include "wx/generic/imaglist.h"
 #endif

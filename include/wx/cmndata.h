@@ -21,7 +21,7 @@
 #include "wx/colour.h"
 #include "wx/gdicmn.h"
 
-#if (defined(__WXMOTIF__) || defined(__WXGTK__)) && wxUSE_POSTSCRIPT
+#if (defined(__WXMOTIF__) || defined(__WXGTK__) || defined(__WXPM__)) && wxUSE_POSTSCRIPT
 class WXDLLEXPORT wxPrintSetupData;
 #endif
 
@@ -156,7 +156,7 @@ class WXDLLEXPORT wxPrintData: public wxObject
     void operator=(const wxPrintData& data);
 
     // For compatibility
-#if (defined(__WXMOTIF__) || defined(__WXGTK__)) && wxUSE_POSTSCRIPT
+#if (defined(__WXMOTIF__) || defined(__WXGTK__) || defined(__WXPM__)) && wxUSE_POSTSCRIPT
     void operator=(const wxPrintSetupData& setupData);
 #endif
 

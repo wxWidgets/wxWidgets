@@ -11,6 +11,8 @@
 #include "wx/qt/bmpbuttn.h"
 #elif defined(__WXMAC__)
 #include "wx/mac/bmpbuttn.h"
+#elif defined(__WXPM__)
+#include "wx/os2/bmpbuttn.h"
 #elif defined(__WXSTUBS__)
 #include "wx/stubs/bmpbuttn.h"
 #endif

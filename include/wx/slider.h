@@ -11,6 +11,8 @@
 #include "wx/qt/slider.h"
 #elif defined(__WXMAC__)
 #include "wx/mac/slider.h"
+#elif defined(__WXPM__)
+#include "wx/os2/slider.h"
 #elif defined(__WXSTUBS__)
 #include "wx/stubs/slider.h"
 #endif

@@ -11,6 +11,8 @@
 #include "wx/qt/pen.h"
 #elif defined(__WXMAC__)
 #include "wx/mac/pen.h"
+#elif defined(__WXPM__)
+#include "wx/os2/pen.h"
 #elif defined(__WXSTUBS__)
 #include "wx/stubs/pen.h"
 #endif

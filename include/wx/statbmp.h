@@ -11,6 +11,8 @@
 #include "wx/qt/statbmp.h"
 #elif defined(__WXMAC__)
 #include "wx/mac/statbmp.h"
+#elif defined(__WXPM__)
+#include "wx/os2/statbmp.h"
 #elif defined(__WXSTUBS__)
 #include "wx/stubs/statbmp.h"
 #endif

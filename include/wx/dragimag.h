@@ -15,6 +15,8 @@
 #include "wx/generic/dragimag.h"
 #elif defined(__WXMAC__)
 #include "wx/generic/dragimag.h"
+#elif defined(__WXPM__)
+#include "wx/generic/dragimag.h"
 #elif defined(__WXSTUBS__)
 #include "wx/generic/dragimag.h"
 #endif

@@ -11,6 +11,8 @@
 #include "wx/qt/colour.h"
 #elif defined(__WXMAC__)
 #include "wx/mac/colour.h"
+#elif defined(__WXPM__)
+#include "wx/os2/colour.h"
 #elif defined(__WXSTUBS__)
 #include "wx/stubs/colour.h"
 #endif

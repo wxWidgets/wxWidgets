@@ -4,6 +4,9 @@
 #if defined(__WXMSW__)
 #include "wx/msw/dcprint.h"
 #endif
+#if defined(__WXPM__)
+#include "wx/os2/dcprint.h"
+#endif
 
 #endif
     // _WX_DCPRINT_H_BASE_

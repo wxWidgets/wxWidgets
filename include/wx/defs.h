@@ -68,6 +68,17 @@
 
 #elif defined(applec) || defined(THINK_C) || ( defined( __MWERKS__ ) && !defined(__INTEL__) )
         // MacOS
+#elif defined(__OS2__)
+    #if defined(__IBMCPP__)
+        #define __VISAGEAVER__ __IBMCPP__
+    #endif
+    #ifndef __WXOS2__
+        #define __WXOS2__
+    #endif
+    #ifndef __WXPM__
+        #define __WXPM__
+    #endif
+    // Place other OS/2 compiler environment defines here
 #else   // Windows
     #ifndef __WINDOWS__
         #define __WINDOWS__
@@ -175,9 +186,9 @@
 // Make sure the environment is set correctly
 #if defined(__WXMSW__) && defined(__X__)
     #error "Target can't be both X and Windows"
-#elif !defined(__WXMOTIF__) && !defined(__WXMSW__) && !defined(__WXGTK__) && \
+#elif !defined(__WXMOTIF__) && !defined(__WXMSW__) && !defined(__WXGTK__) && !defined(__WXPM__) && \
       !defined(__WXMAC__) && !defined(__X__) && !defined(__WXQT__) && !defined(__WXSTUBS__)
-    #error "No Target! Use -D[__WXMOTIF__|__WXGTK__|__WXMSW__|__WXMAC__|__WXQT__|__WXSTUBS__]"
+    #error "No Target! Use -D[__WXMOTIF__|__WXGTK__|__WXMSW__|__WXMAC__|__WXQT__|__WXPM__|__WXSTUBS__]"
 #endif
 
 // ============================================================================
@@ -188,7 +199,7 @@
 // check for native bool type and TRUE/FALSE constants
 // ----------------------------------------------------------------------------
 
-#if defined(__WXMOTIF__) || defined(__WXGTK__) || defined(__WXQT__) || defined(__WXSTUBS__)
+#if defined(__WXMOTIF__) || defined(__WXGTK__) || defined(__WXQT__) || defined(__WXPM__) || defined(__WXSTUBS__)
     // Bool is now obsolete, use bool instead
     // typedef int Bool;
 
@@ -233,6 +244,9 @@
     #elif defined(__GNUWIN32__)
         // Cygwin supports bool
         #define HAVE_BOOL
+    #elif defined(__VISAGECPP__)
+        typedef unsigned long bool;
+        #define HAVE_BOOL
     #endif // compilers
 #endif // HAVE_BOOL
 
@@ -263,7 +277,7 @@ typedef int wxWindowID;
  * Making or using wxWindows as a Windows DLL
  */
 
-#ifdef __WXMSW__
+#if defined(__WXMSW__)
 
 // _declspec works in BC++ 5 and later, as well as VC++
 #if defined(__VISUALC__) || defined(__BORLANDC__)
@@ -275,6 +289,22 @@ typedef int wxWindowID;
 #  elif defined(WXUSINGDLL)
 #    define WXDLLEXPORT _declspec( dllimport )
 #    define WXDLLEXPORT_DATA(type) _declspec( dllimport ) type
+#    define WXDLLEXPORT_CTORFN
+#  else
+#    define WXDLLEXPORT
+#    define WXDLLEXPORT_DATA(type) type
+#    define WXDLLEXPORT_CTORFN
+#  endif
+
+#elif defined(__WXPM__)
+
+#  ifdef WXMAKINGDLL
+#    define WXDLLEXPORT _Export
+#    define WXDLLEXPORT_DATA(type) _Export type
+#    define WXDLLEXPORT_CTORFN
+#  elif defined(WXUSINGDLL)
+#    define WXDLLEXPORT _Export
+#    define WXDLLEXPORT_DATA(type) _Export type
 #    define WXDLLEXPORT_CTORFN
 #  else
 #    define WXDLLEXPORT

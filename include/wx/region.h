@@ -11,6 +11,8 @@
 #include "wx/qt/region.h"
 #elif defined(__WXMAC__)
 #include "wx/mac/region.h"
+#elif defined(__WXPM__)
+#include "wx/os2/region.h"
 #elif defined(__WXSTUBS__)
 #include "wx/stubs/region.h"
 #endif

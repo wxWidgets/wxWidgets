@@ -75,6 +75,8 @@ protected:
     #include "wx/qt/dialog.h"
 #elif defined(__WXMAC__)
     #include "wx/mac/dialog.h"
+#elif defined(__WXPM__)
+    #include "wx/os2/dialog.h"
 #elif defined(__WXSTUBS__)
     #include "wx/stubs/dialog.h"
 #endif

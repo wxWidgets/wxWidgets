@@ -11,6 +11,8 @@
 #include "wx/qt/mdi.h"
 #elif defined(__WXMAC__)
 #include "wx/mac/mdi.h"
+#elif defined(__WXPM__)
+#include "wx/os2/mdi.h"
 #elif defined(__WXSTUBS__)
 #include "wx/stubs/mdi.h"
 #endif

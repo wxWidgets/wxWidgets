@@ -11,6 +11,8 @@
 #include "wx/qt/statbox.h"
 #elif defined(__WXMAC__)
 #include "wx/mac/statbox.h"
+#elif defined(__WXPM__)
+#include "wx/os2/statbox.h"
 #elif defined(__WXSTUBS__)
 #include "wx/stubs/statbox.h"
 #endif

@@ -11,6 +11,8 @@
 #include "wx/qt/listbox.h"
 #elif defined(__WXMAC__)
 #include "wx/mac/listbox.h"
+#elif defined(__WXPM__)
+#include "wx/os2/listbox.h"
 #elif defined(__WXSTUBS__)
 #include "wx/stubs/listbox.h"
 #endif

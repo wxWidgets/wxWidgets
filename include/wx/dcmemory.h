@@ -11,6 +11,8 @@
 #include "wx/qt/dcmemory.h"
 #elif defined(__WXMAC__)
 #include "wx/mac/dcmemory.h"
+#elif defined(__WXPM__)
+#include "wx/os2/dcmemory.h"
 #elif defined(__WXSTUBS__)
 #include "wx/stubs/dcmemory.h"
 #endif

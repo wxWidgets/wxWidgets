@@ -173,7 +173,7 @@ WXDLLEXPORT bool wxRmdir(const wxString& dir, int flags = 0);
 #ifdef  __UNIX__
   #define wxFILE_SEP_PATH     wxFILE_SEP_PATH_UNIX
   #define wxPATH_SEP          wxPATH_SEP_UNIX
-#else   // Windows
+#else   // Windows and OS/2
   #define wxFILE_SEP_PATH     wxFILE_SEP_PATH_DOS
   #define wxPATH_SEP          wxPATH_SEP_DOS
 #endif  // Unix/Windows
@@ -182,7 +182,7 @@ WXDLLEXPORT bool wxRmdir(const wxString& dir, int flags = 0);
 // filename1.IsSameAs(filename2, wxARE_FILENAMES_CASE_SENSITIVE)
 #ifdef  __UNIX__
   #define wxARE_FILENAMES_CASE_SENSITIVE  TRUE
-#else   // Windows
+#else   // Windows and OS/2
   #define wxARE_FILENAMES_CASE_SENSITIVE  FALSE
 #endif  // Unix/Windows
 

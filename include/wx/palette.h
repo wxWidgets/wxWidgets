@@ -11,6 +11,8 @@
 #include "wx/qt/palette.h"
 #elif defined(__WXMAC__)
 #include "wx/mac/palette.h"
+#elif defined(__WXPM__)
+#include "wx/os2/palette.h"
 #elif defined(__WXSTUBS__)
 #include "wx/stubs/palette.h"
 #endif

@@ -11,6 +11,8 @@
 #include "wx/qt/menuitem.h"
 #elif defined(__WXMAC__)
 #include "wx/mac/menuitem.h"
+#elif defined(__WXPM__)
+#include "wx/os2/menuitem.h"
 #elif defined(__WXSTUBS__)
 #include "wx/stubs/menuitem.h"
 #endif

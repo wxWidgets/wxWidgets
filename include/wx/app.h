@@ -246,6 +246,8 @@ protected:
     #include "wx/gtk/app.h"
 #elif defined(__WXMAC__)
     #include "wx/mac/app.h"
+#elif defined(__WXPM__)
+    #include "wx/os2/app.h"
 #elif defined(__WXSTUBS__)
     #include "wx/stubs/app.h"
 #endif

@@ -11,6 +11,8 @@
 #include "wx/qt/checklst.h"
 #elif defined(__WXMAC__)
 #include "wx/mac/checklst.h"
+#elif defined(__WXPM__)
+#include "wx/os2/checklst.h"
 #elif defined(__WXSTUBS__)
 #include "wx/stubs/checklst.h"
 #endif
