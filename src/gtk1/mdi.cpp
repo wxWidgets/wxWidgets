@@ -311,6 +311,17 @@ wxMenuBar *wxMDIChildFrame::GetMenuBar() const
 
 void wxMDIChildFrame::Activate()
 {
+#if( GTK_MINOR_VERSION>0 )
+    wxMDIParentFrame* parent = (wxMDIParentFrame*)GetParent();
+    GtkNotebook* notebook = GTK_NOTEBOOK(parent->m_widget);
+    gint pageno = gtk_notebook_page_num(notebook,m_page->child);
+    gtk_notebook_set_page(notebook,pageno);
+#else
+    // the only way I can see to do this under gtk+ 1.0.X would
+    // be to keep track of page numbers, start at first and 
+    // do "next" enough times to get to this page number - messy
+    // - J. Russell Smyth
+#endif
 }
 
 void wxMDIChildFrame::OnActivate( wxActivateEvent &WXUNUSED(event) )
