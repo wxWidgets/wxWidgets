@@ -694,7 +694,7 @@ trap 'rm -fr `echo "
             mobile/wxedit/Makefile
             mobile/styles/Makefile
             multimon/Makefile
-            nativedlg/Makefile
+            nativdlg/Makefile
             newgrid/Makefile
             notebook/Makefile
             oleauto/Makefile
@@ -854,7 +854,7 @@ CONFIG_FILES=\${CONFIG_FILES-"Makefile
             mobile/wxedit/Makefile
             mobile/styles/Makefile
             multimon/Makefile
-            nativedlg/Makefile
+            nativdlg/Makefile
             newgrid/Makefile
             notebook/Makefile
             oleauto/Makefile
