@@ -112,7 +112,7 @@ methodOverrideMap = {
                     '''wxString %s(int* linePos) {
                        wxString text;
                        int len = LineLength(GetCurrentLine());
-                       char* buf = text.GetWriteBuf(len+1);
+                       char* buf = text.GetWriteBuf(len);
 
                        int pos = SendMsg(%s, len, (long)buf);
                        text.UngetWriteBuf();
@@ -280,7 +280,7 @@ methodOverrideMap = {
                     '''wxString %s(int line) {
                        wxString text;
                        int len = LineLength(line);
-                       char* buf = text.GetWriteBuf(len+1);
+                       char* buf = text.GetWriteBuf(len);
 
                        int pos = SendMsg(%s, line, (long)buf);
                        text.UngetWriteBuf();

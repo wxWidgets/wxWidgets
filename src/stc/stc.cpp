@@ -319,7 +319,7 @@ void wxStyledTextCtrl::SetAnchor(int posAnchor) {
 wxString wxStyledTextCtrl::GetCurLine(int* linePos) {
                        wxString text;
                        int len = LineLength(GetCurrentLine());
-                       char* buf = text.GetWriteBuf(len+1);
+                       char* buf = text.GetWriteBuf(len);
 
                        int pos = SendMsg(2027, len, (long)buf);
                        text.UngetWriteBuf();
@@ -921,7 +921,7 @@ int wxStyledTextCtrl::GetFirstVisibleLine() {
 wxString wxStyledTextCtrl::GetLine(int line) {
                        wxString text;
                        int len = LineLength(line);
-                       char* buf = text.GetWriteBuf(len+1);
+                       char* buf = text.GetWriteBuf(len);
 
                        int pos = SendMsg(2153, line, (long)buf);
                        text.UngetWriteBuf();
