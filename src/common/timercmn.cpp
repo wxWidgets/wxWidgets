@@ -238,6 +238,9 @@ wxLongLong wxGetLocalTimeMillis()
 {
     wxLongLong val = 1000l;
 
+    // If possible, use a functin which avoids conversions from
+    // broken-up time structures to milliseconds,
+
 #if defined(HAVE_GETTIMEOFDAY)
     struct timeval tp;
     if ( wxGetTimeOfDay(&tp, (struct timezone *)NULL) != -1 )
@@ -245,35 +248,36 @@ wxLongLong wxGetLocalTimeMillis()
         val *= tp.tv_sec;
         return (val + (tp.tv_usec / 1000));
     }
-#else
-
-    // We use wxGetLocalTime() to get the seconds since
-    // 00:00:00 Jan 1st 1970 and then whatever is available
-    // to get millisecond resolution.
-    // THIS LEADS TO A BUG SINCE REFERENCE TIME ARE DIFFERENT
-    val *= wxGetLocalTime();
-
-    // If we got here, do not fail even if we can't get
-    // millisecond resolution.
-    //
-#if defined(__WIN32__)
-    SYSTEMTIME st;
-    ::GetLocalTime(&st);
-    return (val + st.wMilliseconds);
-#elif defined(__VISAGECPP__)
-    DATETIME    dt;
-    ::DosGetDateTime(&dt);
-    return (val + dt.hundredths*10);
 #elif defined(HAVE_FTIME)
     struct timeb tp;
     if ( ftime(&tp) == 0 )
     {
+        val *= tp.time;
         return (val + tp.millitm);
     }
-#elif !defined(__BORLANDC__) && !(defined(__VISUALC__) && defined(__WIN16__))
-    #warning "wxStopWatch will be up to second resolution!"
-#endif
+#else
+    // We use wxGetLocalTime() to get the seconds since
+    // 00:00:00 Jan 1st 1970 and then whatever is available
+    // to get millisecond resolution.
+    //
+    // TODO: This might lead to a problem if the clocks use
+    //       different sources.
+
+    val *= wxGetLocalTime();
+
+#if defined (__WIN32__)
+    SYSTEMTIME st;
+    ::GetLocalTime(&st);
+    val += st.wMilliseconds;
+#elif defined(__VISAGECPP__)
+    DATETIME dt;
+    ::DosGetDateTime(&dt);
+    val += (dt.hundredths*10);
+#else
+#warning "wxStopWatch will be up to second resolution!"
 #endif
 
     return val;
+
+#endif
 }
