@@ -1399,16 +1399,23 @@ bool wxDbTable::CreateTable(bool attemptDrop)
     }
     if (j && pDb->Dbms() != dbmsDBASE)  // Found a keyfield
     {
-        if (pDb->Dbms() != dbmsMY_SQL)
+        switch (pDb->Dbms())
         {
-            sqlStmt += wxT(",CONSTRAINT ");
-            sqlStmt += tableName;
-            sqlStmt += wxT("_PIDX PRIMARY KEY (");
-        }
-        else
-        {
-            /* MySQL goes out on this one. We also declare the relevant key NON NULL above */
-            sqlStmt += wxT(", PRIMARY KEY (");
+            case dbmsSYBASE_ASA:
+            case dbmsSYBASE_ASE:
+            case dbmsMY_SQL:
+            {
+                /* MySQL goes out on this one. We also declare the relevant key NON NULL above */
+                sqlStmt += wxT(",PRIMARY KEY (");
+                break;
+            }
+            default:
+            {
+                sqlStmt += wxT(",CONSTRAINT ");
+                sqlStmt += tableName;
+                sqlStmt += wxT("_PIDX PRIMARY KEY (");
+                break;
+            }
         }
 
         // List column name(s) of column(s) comprising the primary key
@@ -1422,6 +1429,14 @@ bool wxDbTable::CreateTable(bool attemptDrop)
             }
         }
        sqlStmt += wxT(")");
+
+       if (pDb->Dbms() == dbmsSYBASE_ASA ||
+           pDb->Dbms() == dbmsSYBASE_ASE)
+       {
+        sqlStmt += wxT(" CONSTRAINT ");
+        sqlStmt += tableName;
+        sqlStmt += wxT("_PIDX");
+       }
     }
     // Append the closing parentheses for the create table statement
     sqlStmt += wxT(")");
@@ -1504,7 +1519,8 @@ bool wxDbTable::DropTable()
 
 
 /********** wxDbTable::CreateIndex() **********/
-bool wxDbTable::CreateIndex(const wxString &idxName, bool unique, int noIdxCols, wxDbIdxDef *pIdxDefs, bool attemptDrop)
+bool wxDbTable::CreateIndex(const wxString &idxName, bool unique, UWORD noIdxCols,
+									 wxDbIdxDef *pIdxDefs, bool attemptDrop)
 {
     wxString sqlStmt;
 
@@ -2040,7 +2056,7 @@ bool wxDbTable::SetQueryTimeout(UDWORD nSeconds)
 
 
 /********** wxDbTable::SetColDefs() **********/
-void wxDbTable::SetColDefs(int index, const wxString &fieldName, int dataType, void *pData,
+void wxDbTable::SetColDefs(UWORD index, const wxString &fieldName, int dataType, void *pData,
                            SWORD cType, int size, bool keyField, bool upd,
                            bool insAllow, bool derivedCol)
 {
@@ -2079,14 +2095,14 @@ void wxDbTable::SetColDefs(int index, const wxString &fieldName, int dataType, v
 
 
 /********** wxDbTable::SetColDefs() **********/
-wxDbColDataPtr* wxDbTable::SetColDefs(wxDbColInf *pColInfs, ULONG numCols)
+wxDbColDataPtr* wxDbTable::SetColDefs(wxDbColInf *pColInfs, UWORD numCols)
 {
     wxASSERT(pColInfs);
     wxDbColDataPtr *pColDataPtrs = NULL;
 
     if (pColInfs)
     {
-        ULONG index;
+        UWORD index;
        
         pColDataPtrs = new wxDbColDataPtr[numCols+1];
 
