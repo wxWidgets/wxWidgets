@@ -75,7 +75,8 @@ enum {
   wxSOCKET_BLOCK = 4
 };
 
-typedef int wxSockFlags;
+// this is ugly but necessary for backwards compatibility
+#define wxSockFlags wxSocketBase::wxSockFlags
 
 // ------------------------------------------------------------------------
 // wxSocket base
@@ -96,6 +97,7 @@ public:
   };
 
   // Type of request
+  typedef int wxSockFlags;
 
   enum wxSockType { SOCK_CLIENT, SOCK_SERVER, SOCK_INTERNAL, SOCK_UNINIT };
   typedef void (*wxSockCbk)(wxSocketBase& sock, wxSocketNotify evt, char *cdata);
