@@ -5163,9 +5163,9 @@ static void TestArrayOf ## name ## s()                                        \
                                                                               \
     wxArray##name a;                                                          \
     a.Add(1);                                                                 \
-    a.Add(17);                                                                \
-    a.Add(5);                                                                 \
-    a.Add(3);                                                                 \
+    a.Add(17,2);                                                              \
+    a.Add(5,3);                                                               \
+    a.Add(3,4);                                                               \
                                                                               \
     puts("Initially:");                                                       \
     PrintArray("a", a);                                                       \
@@ -5197,15 +5197,21 @@ static void TestArrayOfObjects()
 
     {
         ArrayBars bars;
-        Bar bar("second bar");
+        Bar bar("second bar (two copies!)");
 
         printf("Initially: %u objects in the array, %u objects total.\n",
                bars.GetCount(), Bar::GetNumber());
 
         bars.Add(new Bar("first bar"));
-        bars.Add(bar);
+        bars.Add(bar,2);
 
         printf("Now: %u objects in the array, %u objects total.\n",
+               bars.GetCount(), Bar::GetNumber());
+
+	bars.RemoveAt(1, bars.GetCount() - 1);
+
+        printf("After removing all but first element: %u objects in the "
+	       "array, %u objects total.\n",
                bars.GetCount(), Bar::GetNumber());
 
         bars.Empty();
@@ -5724,7 +5730,7 @@ int main(int argc, char **argv)
         wxArrayString a1;
         a1.Add("tiger");
         a1.Add("cat");
-        a1.Add("lion");
+        a1.Add("lion", 3);
         a1.Add("dog");
         a1.Add("human");
         a1.Add("ape");
@@ -5739,8 +5745,8 @@ int main(int argc, char **argv)
         wxSortedArrayString a3(a1);
         PrintArray("a3", a3);
 
-        puts("*** After deleting a string from a1");
-        a1.Remove(2);
+        puts("*** After deleting three strings from a1");
+        a1.Remove(2,3);
 
         PrintArray("a1", a1);
         PrintArray("a2", a2);
