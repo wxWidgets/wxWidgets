@@ -424,6 +424,24 @@ PyObject *wxListBox_GetSelections(wxListBox *self){
           }
           return tup;
       }
+void wxListBox_SetItemForegroundColour(wxListBox *self,int item,wxColour const &c){
+            #ifdef __WXMSW__
+                 if (self->GetWindowStyle() & wxLB_OWNERDRAW)
+                     self->GetItem(item)->SetTextColour(c);
+            #endif
+        }
+void wxListBox_SetItemBackgroundColour(wxListBox *self,int item,wxColour const &c){
+            #ifdef __WXMSW__
+                 if (self->GetWindowStyle() & wxLB_OWNERDRAW)
+                     self->GetItem(item)->SetBackgroundColour(c);
+            #endif
+        }
+void wxListBox_SetItemFont(wxListBox *self,int item,wxFont const &f){
+            #ifdef __WXMSW__
+                 if (self->GetWindowStyle() & wxLB_OWNERDRAW)
+                     self->GetItem(item)->SetFont(f);
+            #endif
+        }
  static const wxString wxPyTextCtrlNameStr(wxTextCtrlNameStr); 
 
 static PyObject* t_output_helper(PyObject* target, PyObject* o) {
@@ -5743,6 +5761,116 @@ static PyObject *_wrap_ListBox_IsSorted(PyObject *self, PyObject *args, PyObject
         if (PyErr_Occurred()) SWIG_fail;
     }
     resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_ListBox_SetItemForegroundColour(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxListBox *arg1 = (wxListBox *) 0 ;
+    int arg2 ;
+    wxColour *arg3 = 0 ;
+    wxColour temp3 ;
+    PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
+    PyObject * obj2 = 0 ;
+    char *kwnames[] = {
+        (char *) "self",(char *) "item",(char *) "c", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO:ListBox_SetItemForegroundColour",kwnames,&obj0,&obj1,&obj2)) goto fail;
+    if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxListBox,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    {
+        arg2 = (int) SWIG_PyObj_AsInt(obj1);  
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    {
+        arg3 = &temp3;
+        if ( ! wxColour_helper(obj2, &arg3)) SWIG_fail;
+    }
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        wxListBox_SetItemForegroundColour(arg1,arg2,(wxColour const &)*arg3);
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    Py_INCREF(Py_None); resultobj = Py_None;
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_ListBox_SetItemBackgroundColour(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxListBox *arg1 = (wxListBox *) 0 ;
+    int arg2 ;
+    wxColour *arg3 = 0 ;
+    wxColour temp3 ;
+    PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
+    PyObject * obj2 = 0 ;
+    char *kwnames[] = {
+        (char *) "self",(char *) "item",(char *) "c", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO:ListBox_SetItemBackgroundColour",kwnames,&obj0,&obj1,&obj2)) goto fail;
+    if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxListBox,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    {
+        arg2 = (int) SWIG_PyObj_AsInt(obj1);  
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    {
+        arg3 = &temp3;
+        if ( ! wxColour_helper(obj2, &arg3)) SWIG_fail;
+    }
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        wxListBox_SetItemBackgroundColour(arg1,arg2,(wxColour const &)*arg3);
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    Py_INCREF(Py_None); resultobj = Py_None;
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_ListBox_SetItemFont(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxListBox *arg1 = (wxListBox *) 0 ;
+    int arg2 ;
+    wxFont *arg3 = 0 ;
+    PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
+    PyObject * obj2 = 0 ;
+    char *kwnames[] = {
+        (char *) "self",(char *) "item",(char *) "f", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO:ListBox_SetItemFont",kwnames,&obj0,&obj1,&obj2)) goto fail;
+    if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxListBox,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    {
+        arg2 = (int) SWIG_PyObj_AsInt(obj1);  
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    if ((SWIG_ConvertPtr(obj2,(void **) &arg3, SWIGTYPE_p_wxFont,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    if (arg3 == NULL) {
+        PyErr_SetString(PyExc_TypeError,"null reference"); SWIG_fail; 
+    }
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        wxListBox_SetItemFont(arg1,arg2,(wxFont const &)*arg3);
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    Py_INCREF(Py_None); resultobj = Py_None;
     return resultobj;
     fail:
     return NULL;
@@ -29361,6 +29489,9 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"ListBox_EnsureVisible", (PyCFunction) _wrap_ListBox_EnsureVisible, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"ListBox_AppendAndEnsureVisible", (PyCFunction) _wrap_ListBox_AppendAndEnsureVisible, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"ListBox_IsSorted", (PyCFunction) _wrap_ListBox_IsSorted, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"ListBox_SetItemForegroundColour", (PyCFunction) _wrap_ListBox_SetItemForegroundColour, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"ListBox_SetItemBackgroundColour", (PyCFunction) _wrap_ListBox_SetItemBackgroundColour, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"ListBox_SetItemFont", (PyCFunction) _wrap_ListBox_SetItemFont, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"ListBox_swigregister", ListBox_swigregister, METH_VARARGS },
 	 { (char *)"new_CheckListBox", (PyCFunction) _wrap_new_CheckListBox, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"new_PreCheckListBox", (PyCFunction) _wrap_new_PreCheckListBox, METH_VARARGS | METH_KEYWORDS },

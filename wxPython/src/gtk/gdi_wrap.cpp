@@ -1952,7 +1952,7 @@ static PyObject *_wrap_Pen___eq__(PyObject *self, PyObject *args, PyObject *kwar
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
-        result = (bool)((wxPen const *)arg1)->operator ==((wxPen const &)*arg2);
+        result = (bool)(arg1)->operator ==((wxPen const &)*arg2);
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
