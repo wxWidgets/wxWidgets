@@ -33,7 +33,7 @@ class wxListItem;
 class wxStaticText;
 class wxTextCtrl;
 
-#if defined(__WXUNIVERSAL__)||defined(__WXGTK__)||defined(__WXX11__)||defined(__WXMGL__)
+#if defined(__WXUNIVERSAL__)||defined(__WXGTK__)||defined(__WXX11__)||defined(__WXMGL__)||defined(__WXCOCOA__)
     #define USE_GENERIC_FILEDIALOG
 #endif
 
