@@ -53,6 +53,24 @@
 
 #include "wx/msw/missing.h"
 
+
+// ----------------------------------------------------------------------------
+// private globals (yuck!)
+// ----------------------------------------------------------------------------
+
+// Some versions of comctl32.dll don't do what MSDN says it should and still
+// sends LVN_DELETEITEM after LVN_DELETEALLITEMS has returned TRUE.  This flag
+// will be used to enable us to ignore the LVN_DELETEITEM message in these cases.
+// Also note that sometimes when there are large numbers of items in the listctrl
+// and items have attribute data then when the data is being deleted a
+// LVN_ITEMCHANGING message can be sent that will have a bogus value, causing a
+// memory fault.  This flag will also be used to ignore those change messages.
+//
+// 2.5 will have a better fix that avoids the use of a global.  It was unavoidable
+// for 2.4.x because of binary compatibility concerns.
+static bool gs_ignoreChangeDeleteItem = FALSE;
+
+
 // ----------------------------------------------------------------------------
 // private functions
 // ----------------------------------------------------------------------------
@@ -388,7 +406,9 @@ void wxListCtrl::FreeAllInternalData()
 
 wxListCtrl::~wxListCtrl()
 {
+    gs_ignoreChangeDeleteItem = TRUE;
     FreeAllInternalData();
+    gs_ignoreChangeDeleteItem = FALSE;
 
     if ( m_textCtrl )
     {
@@ -1233,7 +1253,11 @@ bool wxListCtrl::DeleteItem(long item)
 // Deletes all items
 bool wxListCtrl::DeleteAllItems()
 {
-    return ListView_DeleteAllItems(GetHwnd()) != 0;
+    gs_ignoreChangeDeleteItem = TRUE;
+    FreeAllInternalData();
+    bool rval = ListView_DeleteAllItems(GetHwnd()) != 0;
+    gs_ignoreChangeDeleteItem = FALSE;
+    return rval;
 }
 
 // Deletes all items
@@ -1641,10 +1665,6 @@ bool wxListCtrl::MSWCommand(WXUINT cmd, WXWORD id)
 }
 
 
-// Prevent fetching item data when in the process of deleting it.  See
-// wxDeleteInternalData below.
-static bool gs_deletingItemData = FALSE;
-
 bool wxListCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
 {
     // prepare the event
@@ -1787,7 +1807,7 @@ bool wxListCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
             case LVN_ITEMCHANGING:
                 if ( iItem != -1 )
                 {
-                    if ( iItem >= GetItemCount() || gs_deletingItemData )
+                    if ( iItem >= GetItemCount() || gs_ignoreChangeDeleteItem )
                     {
                         // there is apparently a bug in comctl32.dll version
                         // 5.50.4704.1100 (note that the MS DLL database
@@ -1896,6 +1916,9 @@ bool wxListCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
                 break;
 
             case LVN_DELETEITEM:
+                if ( gs_ignoreChangeDeleteItem )
+                    return FALSE;
+
                 eventType = wxEVT_COMMAND_LIST_DELETE_ITEM;
                 event.m_itemIndex = iItem;
                 // delete the assoicated internal data
@@ -2444,9 +2467,7 @@ static void wxDeleteInternalData(wxListCtrl* ctl, long itemId)
         item.iItem = itemId;
         item.mask = LVIF_PARAM;
         item.lParam = (LPARAM) 0;
-        gs_deletingItemData = TRUE;
         ListView_SetItem((HWND)ctl->GetHWND(), &item);
-        gs_deletingItemData = FALSE;
     }
 }
 
