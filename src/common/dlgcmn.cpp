@@ -46,13 +46,13 @@
 wxSizer *wxDialogBase::CreateTextSizer( const wxString &message )
 {
     wxBoxSizer *box = new wxBoxSizer( wxVERTICAL );
-    
+
     // get line height for empty lines
     int y = 0;
     wxFont new_font( GetFont() );
     if (!new_font.Ok()) new_font = *wxSWISS_FONT;
     GetTextExtent( "H", (int*)NULL, &y, (int*)NULL, (int*)NULL, &new_font );
-    
+
     wxString line;
     for (size_t pos = 0; pos < message.Len(); pos++)
     {
@@ -74,17 +74,17 @@ wxSizer *wxDialogBase::CreateTextSizer( const wxString &message )
             line += message[pos];
         }
     }
-    
+
     // remaining text behind last '\n'
     if (!line.IsEmpty())
     {
         wxStaticText *s2 = new wxStaticText( this, -1, line );
 	box->Add( s2 );
     }
-    
+
     return box;
 }
-    
+
 wxSizer *wxDialogBase::CreateButtonSizer( long flags )
 {
     wxBoxSizer *box = new wxBoxSizer( wxHORIZONTAL );
@@ -102,53 +102,61 @@ wxSizer *wxDialogBase::CreateButtonSizer( long flags )
 
     // always show an OK button, unless only YES_NO is given
     if ((flags & wxYES_NO) == 0) flags = flags | wxOK;
-    
-    if (flags & wxYES_NO) 
+
+    if (flags & wxYES_NO)
     {
         yes = new wxButton( this, wxID_YES, _("Yes") );
         box->Add( yes, 0, wxLEFT|wxRIGHT, margin );
         no = new wxButton( this, wxID_NO, _("No") );
         box->Add( no, 0, wxLEFT|wxRIGHT, margin );
-    } else 
-    if (flags & wxYES) 
+    } else
+    if (flags & wxYES)
     {
         yes = new wxButton( this, wxID_YES, _("Yes") );
         box->Add( yes, 0, wxLEFT|wxRIGHT, margin );
-    } else 
-    if (flags & wxNO) 
+    } else
+    if (flags & wxNO)
     {
         no = new wxButton( this, wxID_NO, _("No") );
         box->Add( no, 0, wxLEFT|wxRIGHT, margin );
     }
 
-    if (flags & wxOK) 
+    if (flags & wxOK)
     {
         ok = new wxButton( this, wxID_OK, _("OK") );
         box->Add( ok, 0, wxLEFT|wxRIGHT, margin );
     }
 
-    if (flags & wxFORWARD) 
-        box->Add( new wxButton( this, wxID_FORWARD, _("Forward")  ), 0, wxLEFT|wxRIGHT, margin ); 
+    if (flags & wxFORWARD)
+        box->Add( new wxButton( this, wxID_FORWARD, _("Forward")  ), 0, wxLEFT|wxRIGHT, margin );
 
-    if (flags & wxBACKWARD) 
+    if (flags & wxBACKWARD)
         box->Add( new wxButton( this, wxID_BACKWARD, _("Backward")  ), 0, wxLEFT|wxRIGHT, margin );
 
-    if (flags & wxSETUP) 
+    if (flags & wxSETUP)
         box->Add( new wxButton( this, wxID_SETUP, _("Setup")  ), 0, wxLEFT|wxRIGHT, margin );
 
-    if (flags & wxMORE) 
+    if (flags & wxMORE)
         box->Add( new wxButton( this, wxID_MORE, _("More...")  ), 0, wxLEFT|wxRIGHT, margin );
 
     if (flags & wxHELP)
         box->Add( new wxButton( this, wxID_HELP, _("Help")  ), 0, wxLEFT|wxRIGHT, margin );
 
-    if (flags & wxCANCEL) 
+    if (flags & wxCANCEL)
     {
         cancel = new wxButton( this, wxID_CANCEL, _("Cancel") );
         box->Add( cancel, 0, wxLEFT|wxRIGHT, margin );
     }
 
-    if ((flags & wxNO_DEFAULT) == 0)
+    if (flags & wxNO_DEFAULT)
+    {
+        if (no)
+        {
+            no->SetDefault();
+            no->SetFocus();
+        }
+    }
+    else
     {
         if (ok)
         {
@@ -161,7 +169,7 @@ wxSizer *wxDialogBase::CreateButtonSizer( long flags )
             yes->SetFocus();
         }
     }
-    
+
     return box;
 }
 
