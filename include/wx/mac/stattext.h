@@ -20,7 +20,7 @@
 
 WXDLLEXPORT_DATA(extern const char*) wxStaticTextNameStr;
 
-class WXDLLEXPORT wxStaticText: public wxControl
+class WXDLLEXPORT wxStaticText: public wxStaticTextBase
 {
   DECLARE_DYNAMIC_CLASS(wxStaticText)
  public:
