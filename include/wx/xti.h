@@ -42,6 +42,17 @@
 #include "wx/string.h"
 #include "wx/arrstr.h"
 
+// some compilers have troubles getting the correct wxPropertyAccessorT constructor
+// set this to 1 to make things work for these, too
+
+#define WX_XTI_TEMPLATE_FIX 0
+
+#if WX_XTI_TEMPLATE_FIX
+#define WX_XTI_PARAM_FIX(a,b) a,b
+#else
+#define WX_XTI_PARAM_FIX(a,b)
+#endif
+
 class WXDLLIMPEXP_BASE wxObject;
 class WXDLLIMPEXP_BASE wxClassInfo;
 class WXDLLIMPEXP_BASE wxHashTable;
@@ -466,12 +477,14 @@ private :
 class WXDLLIMPEXP_BASE wxPropertyAccessor
 {
 public :
+#if WX_XTI_TEMPLATE_FIX
     class SetByRef ;
 	class SetByRefRetBool ;
 	class SetRetBool ;
     class SetAndGetByRef ;
     class SetAndGetByRefRetBool ;
     class GetByRef ;
+#endif
     virtual void SetProperty(wxObject *object, const wxxVariant &value) const = 0 ;
     virtual wxxVariant GetProperty(const wxObject *object) const = 0 ;
     virtual bool HasSetter() const = 0 ;
@@ -503,34 +516,23 @@ public:
     wxPropertyAccessorT( getter_t getter, const wxChar *g)
         : m_setter_bool( NULL ) , m_setter_ref_bool( NULL ) , m_setter(NULL), m_setter_ref(NULL), m_getter(getter) ,m_getter_ref(NULL) {m_setterName = "";m_getterName=g ;}
 
-    wxPropertyAccessorT(SetRetBool*, setter_bool_t setter, getter_t getter, const wxChar *g, const wxChar *s)
+    wxPropertyAccessorT(WX_XTI_PARAM_FIX(SetRetBool*,) setter_bool_t setter, getter_t getter, const wxChar *g, const wxChar *s)
     	: m_setter_bool( setter ) , m_setter_ref_bool( NULL ) , m_setter(NULL), m_setter_ref(NULL), m_getter(getter) , m_getter_ref(NULL){m_setterName = s;m_getterName=g ;}
 
-    wxPropertyAccessorT(SetByRef*, setter_ref_t setter, getter_t getter, const wxChar *g, const wxChar *s)
+    wxPropertyAccessorT(WX_XTI_PARAM_FIX(SetByRef*,) setter_ref_t setter, getter_t getter, const wxChar *g, const wxChar *s)
     	: m_setter_bool( NULL ) , m_setter_ref_bool( NULL ) , m_setter(NULL), m_setter_ref(setter), m_getter(getter) , m_getter_ref(NULL){m_setterName = s;m_getterName=g ;}
 
-    wxPropertyAccessorT(SetByRefRetBool*, setter_ref_bool_t setter, getter_t getter, const wxChar *g, const wxChar *s)
+    wxPropertyAccessorT(WX_XTI_PARAM_FIX(SetByRefRetBool*,) setter_ref_bool_t setter, getter_t getter, const wxChar *g, const wxChar *s)
     	: m_setter_bool( NULL ) , m_setter_ref_bool( setter ) , m_setter(NULL), m_setter_ref(NULL), m_getter(getter) , m_getter_ref(NULL){m_setterName = s;m_getterName=g ;}
- //   wxPropertyAccessorT(setter_ref_t setter, getter_t getter, const wxChar *g, const wxChar *s)
- //       : m_setter(NULL), m_setter_ref(setter), m_getter(getter) , m_getter_ref(NULL){m_setterName = s;m_getterName=g ;}
 
-    wxPropertyAccessorT(SetAndGetByRef*, setter_ref_t setter, getter_ref_t getter, const wxChar *g, const wxChar *s)
+    wxPropertyAccessorT(WX_XTI_PARAM_FIX(SetAndGetByRef*,) setter_ref_t setter, getter_ref_t getter, const wxChar *g, const wxChar *s)
     	: m_setter_bool( NULL ) , m_setter_ref_bool( NULL ) , m_setter(NULL), m_setter_ref(setter), m_getter(NULL) , m_getter_ref(getter){m_setterName = s;m_getterName=g ;}
 
-    wxPropertyAccessorT(SetAndGetByRefRetBool*, setter_ref_bool_t setter, getter_ref_t getter, const wxChar *g, const wxChar *s)
+    wxPropertyAccessorT(WX_XTI_PARAM_FIX(SetAndGetByRefRetBool*,) setter_ref_bool_t setter, getter_ref_t getter, const wxChar *g, const wxChar *s)
     	: m_setter_bool( NULL ) , m_setter_ref_bool( setter ) , m_setter(NULL), m_setter_ref(NULL), m_getter(NULL) , m_getter_ref(getter){m_setterName = s;m_getterName=g ;}
 
- //   wxPropertyAccessorT(setter_ref_t setter, getter_ref_t getter, const wxChar *g, const wxChar *s)
- //       : m_setter(NULL), m_setter_ref(setter), m_getter(NULL) , m_getter_ref(getter){m_setterName = s;m_getterName=g ;}
-
- //   wxPropertyAccessorT(setter_t setter, getter_ref_t getter, const wxChar *g, const wxChar *s)
- //       : m_setter(NULL), m_setter(setter), m_getter(NULL) ,  m_getter_ref(getter){m_setterName = s;m_getterName=g ;}
-
-    wxPropertyAccessorT(GetByRef*, setter_t setter, getter_ref_t getter, const wxChar *g, const wxChar *s)
+    wxPropertyAccessorT(WX_XTI_PARAM_FIX(GetByRef*,) setter_t setter, getter_ref_t getter, const wxChar *g, const wxChar *s)
     	: m_setter_bool( NULL ) , m_setter_ref_bool( NULL ) , m_setter(NULL), m_setter(setter), m_getter(NULL) ,  m_getter_ref(getter){m_setterName = s;m_getterName=g ;}
-
- //   wxPropertyAccessorT( getter_ref_t getter, const wxChar *g)
- //       : m_setter(NULL), m_setter(NULL), m_getter(NULL) ,  m_getter_ref(getter){m_setterName = "";m_getterName=g ;}
 
     // returns true if this accessor has a setter
     bool HasSetter() const { return m_setter != NULL || m_setter_ref != NULL ; }
@@ -658,6 +660,9 @@ private :
 #define WX_END_PROPERTIES_TABLE() \
         return first ; }
 
+
+#if WX_XTI_TEMPLATE_FIX 
+
 #define WX_PROPERTY( name , type , setter , getter ,defaultValue ) \
 	static wxPropertyAccessorT<class_t , type> _accessor##name( &setter , &getter , #setter , #getter ) ; \
 	static wxPropertyInfo _propertyInfo##name( first , #name , #type , wxGetTypeInfo( (type*) NULL ) ,&_accessor##name , wxxVariant(defaultValue) ) ;
@@ -677,6 +682,26 @@ private :
 #define WX_PROPERTY_SET_AND_GET_BY_REF_RET_BOOL( name , type , setter , getter ,defaultValue ) \
         static wxPropertyAccessorT<class_t , type> _accessor##name( (wxPropertyAccessor::SetAndGetByRefRetBool*)NULL, &setter , &getter , #setter , #getter ) ; \
         static wxPropertyInfo _propertyInfo##name( first , #name , #type , wxGetTypeInfo( (type*) NULL ) ,&_accessor##name , wxxVariant(defaultValue) ) ;
+
+#else
+
+#define WX_PROPERTY( name , type , setter , getter ,defaultValue ) \
+	static wxPropertyAccessorT<class_t , type> _accessor##name( &setter , &getter , #setter , #getter ) ; \
+	static wxPropertyInfo _propertyInfo##name( first , #name , #type , wxGetTypeInfo( (type*) NULL ) ,&_accessor##name , wxxVariant(defaultValue) ) ;
+
+#define WX_PROPERTY_SET_RET_BOOL( name , type , setter , getter ,defaultValue ) \
+    WX_PROPERTY( name , type , setter , getter , defaultValue )
+
+#define WX_PROPERTY_SET_BY_REF( name , type , setter , getter ,defaultValue ) \
+    WX_PROPERTY( name , type , setter , getter , defaultValue )
+
+#define WX_PROPERTY_SET_BY_REF_RET_BOOL( name , type , setter , getter ,defaultValue ) \
+    WX_PROPERTY( name , type , setter , getter , defaultValue )
+
+#define WX_PROPERTY_SET_AND_GET_BY_REF_RET_BOOL( name , type , setter , getter ,defaultValue ) \
+    WX_PROPERTY( name , type , setter , getter , defaultValue )
+
+#endif
 
 #define WX_READONLY_PROPERTY( name , type , getter ,defaultValue ) \
     static wxPropertyAccessorT<class_t , type> _accessor##name( &getter , #getter ) ; \
