@@ -149,6 +149,7 @@ class MyCellEditor(wxPyGridCellEditor):
             # For this example, replace the text.  Normally we would append it.
             #self._tc.AppendText(ch)
             self._tc.SetValue(ch)
+            self._tc.SetInsertionPointEnd()
         else:
             evt.Skip()
 

@@ -68,9 +68,9 @@ class TestPanel(wxPanel):
 
 
         bsizer = wxBoxSizer(wxVERTICAL)
-        bsizer.Add(b, 0, wxGROW)
-        bsizer.Add(b2, 0, wxGROW)
-        bsizer.Add(b3, 0, wxGROW)
+        bsizer.Add(b, 0, wxGROW|wxALL, 4)
+        bsizer.Add(b2, 0, wxGROW|wxALL, 4)
+        bsizer.Add(b3, 0, wxGROW|wxALL, 4)
 
         sizer = wxFlexGridSizer(cols=3, hgap=6, vgap=6)
         sizer.AddMany([ l1, t1, (0,0),
