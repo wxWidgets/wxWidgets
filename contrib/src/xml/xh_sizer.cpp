@@ -90,13 +90,22 @@ wxObject *wxSizerXmlHandler::DoCreateResource()
                 m_ParentSizer = old_par;
                 wxSizer *sizer = wxDynamicCast(item, wxSizer);
                 wxWindow *wnd = wxDynamicCast(item, wxWindow);
+                wxSize minsize = GetSize(_T("minsize"));
                 
                 if (sizer)
+                {
                     m_ParentSizer->Add(sizer, GetLong(_T("option")), 
                                        GetStyle(_T("flag")), GetLong(_T("border")));
+                    if (!(minsize == wxDefaultSize))
+                        m_ParentSizer->SetItemMinSize(sizer, minsize.x, minsize.y);
+                }
                 else if (wnd)
+                {
                     m_ParentSizer->Add(wnd, GetLong(_T("option")), 
                                        GetStyle(_T("flag")), GetLong(_T("border")));
+                    if (!(minsize == wxDefaultSize))
+                        m_ParentSizer->SetItemMinSize(wnd, minsize.x, minsize.y);
+                }
                 else 
                     wxLogError(_T("Error in resource."));
                 
@@ -146,6 +155,11 @@ wxObject *wxSizerXmlHandler::DoCreateResource()
         else if (m_Node->GetName() == _T("flexgridsizer"))
             sizer = new wxFlexGridSizer(GetLong(_T("rows")), GetLong(_T("cols")),
                                     GetLong(_T("vgap")), GetLong(_T("hgap")));
+
+        wxSize minsize = GetSize(_T("minsize"));
+        if (!(minsize == wxDefaultSize))
+            sizer->SetMinSize(minsize);
+
 
         wxSizer *old_par = m_ParentSizer;
         m_ParentSizer = sizer;

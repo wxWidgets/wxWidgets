@@ -7,3 +7,4 @@ var rows of integer
 var cols of integer
 var vgap of integer
 var hgap of integer
+var minsize of coord
