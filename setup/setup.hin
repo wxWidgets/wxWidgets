@@ -474,6 +474,12 @@
 /* Define if you have <unistd.h>.  */
 #undef HAVE_UNISTD_H
 
+/* Define if you have <wchar.h>.  */
+#undef HAVE_WCHAR_H
+
+/* Define if you have <wcstr.h>.  */
+#undef HAVE_WCSTR_H
+
 /* Define if you have <fnmatch.h>.  */
 #undef HAVE_FNMATCH_H
 

@@ -443,6 +443,10 @@ AC_CHECK_HEADERS(sys/time.h)
 dnl   defines HAVE_SYS_TIME_H
 AC_CHECK_HEADERS(unistd.h)
 dnl   defines HAVE_UNISTD_H
+AC_CHECK_HEADERS(wchar.h)
+dnl defines HAVE_WCHAR_H
+AC_CHECK_HEADERS(wcstr.h)
+dnl defines HAVE_WCSTR_H
 AC_CHECK_HEADERS(fnmatch.h)
 dnl   defines HAVE_FNMATCH_H
 dnl As it needs Linux 2.1.x for the moment: check whether the file exists (GL).
