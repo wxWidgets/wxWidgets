@@ -77,16 +77,20 @@ wxRemotelyScrolledTreeCtrl::~wxRemotelyScrolledTreeCtrl()
 
 void wxRemotelyScrolledTreeCtrl::HideVScrollbar()
 {
-#if defined(__WXMSW__) && USE_GENERIC_TREECTRL
+#if defined(__WXMSW__)
+#if USE_GENERIC_TREECTRL
     if (!IsKindOf(CLASSINFO(wxGenericTreeCtrl)))
+#endif
     {
         ::ShowScrollBar((HWND) GetHWND(), SB_VERT, FALSE);
     }
+#if USE_GENERIC_TREECTRL
     else
-#endif
     {
         // Implicit in overriding SetScrollbars
     }
+#endif
+#endif
 }
 
 // Number of pixels per user unit (0 or -1 for no scrollbar)
