@@ -33,19 +33,11 @@ END_EVENT_TABLE()
 bool wxStaticBitmap::Create(wxWindow *parent, wxWindowID id,
            const wxBitmap& bitmap,
            const wxPoint& pos,
-           const wxSize& s,
+           const wxSize& size,
            long style,
            const wxString& name)
 {
     SetName(name);
-    wxSize size = s ;
-    if ( bitmap.Ok() )
-    {
-        if ( size.x == -1 )
-            size.x = bitmap.GetWidth() ;
-        if ( size.y == -1 )
-            size.y = bitmap.GetHeight() ;
-    }
 
     m_backgroundColour = parent->GetBackgroundColour() ;
     m_foregroundColour = parent->GetForegroundColour() ;
@@ -67,7 +59,7 @@ bool wxStaticBitmap::Create(wxWindow *parent, wxWindowID id,
 void wxStaticBitmap::SetBitmap(const wxBitmap& bitmap)
 {
     m_bitmap = bitmap;
-    SetSize(wxSize(bitmap.GetWidth(), bitmap.GetHeight()));
+    SetSize(GetBestSize());
     Refresh() ;
 }
 
@@ -81,6 +73,6 @@ void wxStaticBitmap::OnPaint( wxPaintEvent& WXUNUSED(event) )
 
 wxSize wxStaticBitmap::DoGetBestSize() const
 {
-    return wxWindow::DoGetBestSize() ;
+    return DoGetSizeFromClientSize( wxSize( m_bitmap.GetWidth() , m_bitmap.GetHeight() ) ) ;
 }
 
