@@ -82,7 +82,7 @@ public:
         "Select the n'th item (zero based) in the list.");
     
     DocDeclStr(
-        void , SetStringSelection(const wxString& string),
+        bool , SetStringSelection(const wxString& string),
         "Select the item with the specifed string");
     
     DocDeclStr(

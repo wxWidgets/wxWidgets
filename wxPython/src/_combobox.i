@@ -138,10 +138,21 @@ public:
     
     DocDeclStr(
         void , SetSelection(int n),
-        "Selects the text between the two positions, in the combobox text field.");
+        "Sets the item at index 'n' to be the selected item.");
     
-    %name(SetMark) virtual void SetSelection(long from, long to);
+    DocDeclStrName(
+        virtual void , SetSelection(long from, long to),
+        "Selects the text between the two positions in the combobox text field."
+        SetMark);    
 
+    DocDeclStr(
+        bool , SetStringSelection(const wxString& string),
+        "Select the item with the specifed string");
+    
+    DocDeclStr(
+        void , SetString(int n, const wxString& string),
+        "Set the label for the n'th item (zero based) in the list.");
+    
     DocDeclStr(
         virtual void , SetEditable(bool editable),
         "");
