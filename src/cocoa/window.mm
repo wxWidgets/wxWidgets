@@ -414,17 +414,27 @@ bool wxWindowCocoa::Cocoa_mouseUp(WX_NSEvent theEvent)
 
 bool wxWindowCocoa::Cocoa_rightMouseDown(WX_NSEvent theEvent)
 {
-    return false;
+    wxMouseEvent event([theEvent clickCount]<2?wxEVT_RIGHT_DOWN:wxEVT_RIGHT_DCLICK);
+    InitMouseEvent(event,theEvent);
+    wxLogDebug(wxT("Mouse Down @%d,%d num clicks=%d"),event.m_x,event.m_y,[theEvent clickCount]);
+    return GetEventHandler()->ProcessEvent(event);
 }
 
 bool wxWindowCocoa::Cocoa_rightMouseDragged(WX_NSEvent theEvent)
 {
-    return false;
+    wxMouseEvent event(wxEVT_MOTION);
+    InitMouseEvent(event,theEvent);
+    event.m_rightDown = true;
+    wxLogDebug(wxT("Mouse Drag @%d,%d"),event.m_x,event.m_y);
+    return GetEventHandler()->ProcessEvent(event);
 }
 
 bool wxWindowCocoa::Cocoa_rightMouseUp(WX_NSEvent theEvent)
 {
-    return false;
+    wxMouseEvent event(wxEVT_RIGHT_UP);
+    InitMouseEvent(event,theEvent);
+    wxLogDebug(wxT("Mouse Up @%d,%d"),event.m_x,event.m_y);
+    return GetEventHandler()->ProcessEvent(event);
 }
 
 bool wxWindowCocoa::Cocoa_otherMouseDown(WX_NSEvent theEvent)
