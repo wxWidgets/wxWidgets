@@ -37,6 +37,7 @@
 #include "wx/tokenzr.h"
 #include "wx/config.h"          // for wxExpandEnvVars
 #include "wx/utils.h"
+#include "wx/dynlib.h"
 
 // For GetShort/LongPathName
 #ifdef __WIN32__
@@ -521,22 +522,91 @@ wxString wxFileName::GetLongPath() const
 #if defined(__WXMSW__) && defined(__WIN32__)
     wxString path(GetFullPath());
     wxString pathOut;
-    DWORD sz = ::GetLongPathName(path, NULL, 0);
-    bool ok = sz != 0;
-    if ( ok )
+    bool success = FALSE;
+
+    typedef DWORD (*GET_LONG_PATH_NAME)(const wxChar *, wxChar *, DWORD);
+
+    static bool s_triedToLoad = FALSE;
+    static GET_LONG_PATH_NAME s_pfnGetLongPathName = NULL;
+
+    if ( !s_triedToLoad )
     {
-        ok = ::GetLongPathName
-               (
-                path,
-                pathOut.GetWriteBuf(sz),
-                sz
-               ) != 0;
-        pathOut.UngetWriteBuf();
+        s_triedToLoad = TRUE;
+
+        wxDllType dllKernel = wxDllLoader::LoadLibrary(_T("kernel32"));
+        if ( dllKernel )
+        {
+            // may succeed or fail depending on the Windows version
+            s_pfnGetLongPathName = (GET_LONG_PATH_NAME) wxDllLoader::GetSymbol(dllKernel, _T("GetLongPathName"));
+
+            wxDllLoader::UnloadLibrary(dllKernel);
+
+            if ( s_pfnGetLongPathName )
+            {
+                DWORD dwSize = (*s_pfnGetLongPathName)(path, NULL, 0);
+                bool ok = dwSize > 0;
+
+                if ( ok )
+                {
+                    DWORD sz = (*s_pfnGetLongPathName)(path, NULL, 0);
+                    ok = sz != 0;
+                    if ( ok )
+                    {
+                        ok = (*s_pfnGetLongPathName)
+                                (
+                                path,
+                                pathOut.GetWriteBuf(sz),
+                                sz
+                                ) != 0;
+                        pathOut.UngetWriteBuf();
+
+                        success = TRUE;
+                    }
+                }
+            }
+        }
     }
-    if (ok)
+    if (success)
         return pathOut;
-    else
-        return path;
+
+    if (!success)
+    {
+        // The OS didn't support GetLongPathName, or some other error.
+        // We need to call FindFirstFile on each component in turn.
+
+        WIN32_FIND_DATA findFileData;
+        HANDLE hFind;
+        pathOut = wxEmptyString;
+
+        size_t count = m_dirs.GetCount();
+        size_t i;
+        wxString tmpPath;
+        for ( i = 0; i < count; i++ )
+        {
+            // We're using pathOut to collect the long-name path,
+            // but using a temporary for appending the last path component which may be short-name
+            tmpPath = pathOut + m_dirs[i];
+
+            if (tmpPath.Last() == wxT(':'))
+                tmpPath += wxFILE_SEP_PATH;
+
+            hFind = ::FindFirstFile(tmpPath, &findFileData);
+            if (hFind == INVALID_HANDLE_VALUE)
+            {
+                // Error: return immediately with the original path
+                return path;
+            }
+            else
+            {
+                pathOut += findFileData.cFileName;
+                if ( (i < count) )
+                    pathOut += wxFILE_SEP_PATH;
+
+                ::FindClose(hFind);
+            }
+        }
+    }
+    return pathOut;
 #else
     return GetFullPath();
 #endif
