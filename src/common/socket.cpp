@@ -905,5 +905,22 @@ void wxSocketEvent::CopyObject(wxObject& obj_d) const
   event->m_socket = m_socket;
 }
 
+// --------------------------------------------------------------------------
+// wxSocketModule
+// --------------------------------------------------------------------------
+class WXDLLEXPORT wxSocketModule: public wxModule {
+  DECLARE_DYNAMIC_CLASS(wxSocketModule)
+ public:
+  bool OnInit() {
+    GSocket_Init();
+    return TRUE;
+  }
+  void OnExit() {
+    GSocket_Done();
+  }
+};
+
+IMPLEMENT_DYNAMIC_CLASS(wxSocketModule, wxModule)
+
 #endif
   // wxUSE_SOCKETS

@@ -52,6 +52,16 @@
 
 #endif
 
+/* Global initialisers */
+
+void GSocket_Init()
+{
+}
+
+void GSocket_Cleanup()
+{
+}
+
 /* Constructors / Destructors */
 
 GSocket *GSocket_new()

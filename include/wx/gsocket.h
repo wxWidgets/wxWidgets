@@ -73,6 +73,13 @@ typedef void (*GSocketFallback)(GSocket *socket, GSocketEvent event,
 extern "C" {
 #endif
 
+/* Global initialisers */
+
+/* GSocket_Init() must be called at the beginning */
+void GSocket_Init();
+/* GSocket_Cleanup() must be called at the ending */
+void GSocket_Cleanup();
+
 /* Constructors / Destructors */
 
 GSocket *GSocket_new();

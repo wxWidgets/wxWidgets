@@ -38,7 +38,8 @@ public:
 
 protected:
   typedef enum {
-    wxHTTP_GET
+    wxHTTP_GET,
+    wxHTTP_HEAD
   } wxHTTP_Req;
   bool BuildRequest(const wxString& path, wxHTTP_Req req);
   void SendHeaders();
