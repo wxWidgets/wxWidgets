@@ -1,6 +1,13 @@
 \section{\class{wxTextDataObject}}\label{wxtextdataobject}
 
- wxTextDataObject is a specialization of wxDataObject for text data.
+wxTextDataObject is a specialization of wxDataObject for text data. It can be
+used without change to paste data into the \helpref{wxClipboard}{wxclipboard}
+or a \helpref{wxDropSource}{wxdropsource}. A user may wish to derive a new class
+from this class for providing text on-demand in order to minimize memory consumption
+when offering data in several formats, such as plain text and RTF.
+
+In order to offer text data on-demand \helpref{GetSize}{wxtextdataobjectgetsize} 
+and \helpref{WriteData}{wxtextdataobjectwritedata} will have to be overridden.
 
 \wxheading{Derived from}
 
@@ -16,27 +23,57 @@
 
 \func{}{wxTextDataObject}{\void}
 
-Default constructor.
+Default constructor. Call \helpref{SetText}{wxtextdataobjectsettext} later
+or override \helpref{WriteData}{wxtextdataobjectwritedata} and 
+\helpref{GetSize}{wxtextdataobjectgetsize} for providing data on-demand.
 
 \func{}{wxTextDataObject}{\param{const wxString\& }{strText}}
 
 Constructor, passing text.
 
-\membersection{wxTextDataObject::GetFormat}\label{wxtextdataobjectgetformat}
+\membersection{wxTextDataObject::GetSize}\label{wxtextdataobjectgetsize}
 
-\constfunc{virtual wxDataFormat}{GetFormat}{\void}
+\constfunc{virtual size\_t}{GetSize}{\void}
 
-Returns wxDF\_TEXT.
-
-\membersection{wxTextDataObject::SetText}\label{wxtextdataobjectsettext}
-
-\func{virtual void}{SetText}{\param{const wxString\& }{strText}}
-
-Sets the text associated with the data object.
+Returns the data size. By default, returns the size of the text data
+set in the constructor or using \helpref{SetText}{wxtextdataobjectsettext}.
+This can be overridden to provide text size data on-demand. It is recommended
+to return the text length plus 1 for a trailing zero, but this is not
+strictly required.
 
 \membersection{wxTextDataObject::GetText}\label{wxtextdataobjectgettext}
 
 \constfunc{virtual wxString}{GetText}{\void}
 
-Returns the text associated with the data object.
+Returns the text associated with the data object. You may wish to override
+this method when offering data on-demand, but this is not required by
+wxWindows' internals. Use this method to get data in text form from
+the \helpref{wxClipboard}{wxclipboard}.
+
+\membersection{wxTextDataObject::SetText}\label{wxtextdataobjectsettext}
+
+\func{virtual void}{SetText}{\param{const wxString\& }{strText}}
+
+Sets the text associated with the data object. This method is called
+internally when retrieving data from the \helpref{wxClipboard}{wxclipboard}
+and may be used to paste data to the clipboard directly (instead of
+on-demand).
+
+\membersection{wxTextDataObject::WriteData}\label{wxtextdataobjectwritedata}
+
+\constfunc{virtual void}{WriteData}{\param{void}{*dest} }
+
+Write the data owned by this class to {\it dest}. By default, this
+calls \helpref{WriteString}{wxtextobjectwritestring} with the string
+set in the constructor or using \helpref{SetText}{wxtextdataobjectsettext}.
+This can be overridden to provide text data on-demand; in this case
+\helpref{WriteString}{wxtextobjectwritestring} must be called from
+within the overriding WriteData() method.
+
+\membersection{wxTextDataObject::WriteString}\label{wxtextdataobjectwritestring}
+
+\constfunc{void}{WriteString}{\param{const wxString\& }{str}\param{void}{*dest} }
+
+Writes the the string {\it str} to {\it dest}. This method must be called
+from \helpref{WriteData}{wxtextdataobjectwritedata}.
 

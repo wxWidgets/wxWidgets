@@ -7,10 +7,18 @@ Classes: \helpref{wxDataObject}{wxdataobject},
 \helpref{wxTextDropTarget}{wxtextdroptarget}, 
 \helpref{wxFileDropTarget}{wxfiledroptarget}
 
-Samples: see the dnd sample.
+It has to be noted that the API for drag and drop in wxWindows is not
+yet finnished which is mostly due to the fact that DnD support under
+GTK 1.0 is very rudimentary and entirely different from the XDnD
+protocoll used by GTK 1.2. This also entails that not all of the documentation
+concerning DnD might be correct and some of the code might get broken
+in the future. The next release of wxWindows will be based on GTK 1.2
+and will hopefully include a much improved DnD support. The general
+design on the wxDropSource side will be the same but especially the
+wxDropTarget is almost certain to change.
 
-Headers: <wx/dataobj.h>, <wx/dropsrc.h and <wx/droptgt.h> or <wx/dnd.h>
-(note that wxUSE\_DRAG\_AND\_DROP must be defined in setup.h)
+Note that wxUSE\_DRAG\_AND\_DROP must be defined in setup.h in order
+to use Drag'n'Drop in wxWindows.
 
 This overview describes wxWindows support for drag and drop and clipboard
 operations. Both of these topics are discussed here because, in fact, they're
@@ -34,31 +42,23 @@ user elsewhere, you should implement the following steps:
 initialized with the data you wish to drag. For example:
 
 \begin{verbatim}
-	wxTextDataObject data("This string will be dragged.");
+	wxDataObject *my_data = new wxTextDataObject data("This string will be dragged.");
 \end{verbatim}
-
-Of course, the data object may contain arbitrary data of any type, but for
-this you should derive your own class from \helpref{wxDataObject}{wxdataobject} overriding all of its pure virtual
-functions.
 
 \item{\bf Drag start:} To start dragging process (typically in response to a
 mouse click) you must call \helpref{DoDragDrop}{wxdropsourcedodragdrop} function
 of wxDropSource object which should be constructed like this:
 
 \begin{verbatim}
-	wxDropSource dragSource(data, this);
-
-	// or also:
-
-	wxDropSource dragSource(this);
-	dragSource.SetData(data);
+	wxDropSource dragSource( this );
+	dragSource.SetData( my_data );
 \end{verbatim}
 
 \item {\bf Dragging:} The call to DoDragDrop() blocks until the user release the
 mouse button (unless you override \helpref{GiveFeedback}{wxdropsourcegivefeedback} function
 to do something special). When the mouse moves in a window of a program which understands the
-same drag-and-drop protocol (any program under Windows or any program supporting XDnD protocol
-under X Windows), the corresponding \helpref{wxDropTarget}{wxdroptarget} methods
+same drag-and-drop protocol (any program under Windows or any program supporting GTK 1.0
+DnD protocol under X Windows), the corresponding \helpref{wxDropTarget}{wxdroptarget} methods
 are called - see below.
 
 \item {\bf Processing the result:} DoDragDrop() returns an {\it effect code} which

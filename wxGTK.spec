@@ -1,6 +1,6 @@
 Summary: The GTK+ 1.0 port of wxWindows library
 Name: wxGTK
-Version: 2.0.1
+Version: 1.99.3
 Release: 1
 Copyright: wxWindows Licence
 Group: X11/Libraries
