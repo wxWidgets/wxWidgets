@@ -73,23 +73,17 @@ public:
                 const wxValidator& validator = wxDefaultValidator,
                 const wxString& name = wxListBoxNameStr);
 
-  // items may be checked
-  bool  IsChecked(size_t uiIndex) const;
-  void  Check(size_t uiIndex, bool bCheck = TRUE);
-  void OnChar(wxKeyEvent& event) ;
-  void OnLeftClick(wxMouseEvent& event) ;
+    // items may be checked
+    bool  IsChecked(size_t uiIndex) const;
+    void  Check(size_t uiIndex, bool bCheck = TRUE);
 
-    // metrics
-    wxInt32 m_checkBoxWidth;
-    wxInt32 m_checkBoxHeight;
-    wxInt32    m_TextBaseLineOffset;
-
-    // the array containing the checked status of the items
-    wxArrayInt m_checks;
 
     // override all methods which add/delete items to update m_checks array as
     // well
     virtual void Delete(int n);
+    // the array containing the checked status of the items
+    wxArrayInt m_checks;
+
 protected:
     virtual int DoAppend(const wxString& item);
     virtual void DoInsertItems(const wxArrayString& items, int pos);
@@ -98,7 +92,8 @@ protected:
     // common part of all ctors
     void Init();
 private:
-  DECLARE_EVENT_TABLE()
+
+    DECLARE_EVENT_TABLE()
 };
 
 #endif
