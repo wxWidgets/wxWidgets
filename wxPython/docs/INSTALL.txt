@@ -101,8 +101,8 @@ instructions above, except for a few small, but important details:
    Python Framework will then be installed in /Library/Frameworks.  On
    10.3 (Panther) Apple supplies the Python Framework as part of the
    OS install, but it will be located in /System/Library/Frameworks
-   instead.  However, on Panther the site-pacakges dir is sym-linked
-   to /Library/Python/2.3 so the wxPython pacakges will end up there,
+   instead.  However, on Panther the site-packages dir is sym-linked
+   to /Library/Python/2.3 so the wxPython packages will end up there,
    although they will still be visible from site-packages.  If you are
    building distributions of wxPython to be installed on other
    machines be careful to install to /Library/Python/2.3.  To
@@ -127,7 +127,8 @@ Installing on Windows
    "hybrid" when building wxWidgets and add "FINAL=1" to the setup.py
    command line.
 
-2. Install wxPython like this::
+2. Install wxPython like this.  Remember to add any additional flags
+   you added for the build such as UNICODE or USE_SWIG::
 
       python setup.py install
 
@@ -136,6 +137,6 @@ Installing on Windows
    found at runtime by the extension modules without requiring that
    they be installed on the PATH::
 
-	copy %WXWIN%\lib\vc_dll\wx*h_*.dll c:\Python23\Lib\site-pacakges\wx
+	copy %WXWIN%\lib\vc_dll\wx*h_*.dll c:\Python23\Lib\site-packages\wx
 
 

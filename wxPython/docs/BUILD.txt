@@ -42,6 +42,16 @@ the wxPythonSrc tarball to.  You can either substitute the $WXDIR text
 below with your actual dir, or set the value in the environment and
 use it just like you see it below.
 
+If you run into what appears to be compatibility issues between
+wxWidgets and wxPython while building wxPython, be sure you are using
+the wxWidgets sources included with the wxPythonSrc tarball or the CVS
+snapshot, and not a previously installed version or a version
+installed from one of the standard wxWidgets installers.  With the
+"unstable" releases (have a odd-numbered minor release value, where
+the APIs are allowed to change) there are often significant
+differences between the W.X.Y release of wxWidgets and the W.X.Y.Z
+release of wxPython.
+
 
 
 Building on Unix-like Systems (e.g. Linux and OS X)
@@ -241,7 +251,7 @@ to use my scripts you'll need to get a copy or 4DOS or 4NT from
 http://www.jpsoft.com/ and also a copy of unix-like cat and sed
 programs.  You can also do by hand what my scripts are doing, but
 there are alot of steps involved and I won't be going into details
-here.  There is a copy of my build scripts in %WXDIR%\wxPython\distrib\msw
+here.  There is a copy of my build scripts in %WXDIR%\\wxPython\\distrib\\msw
 that you can use for reference (if you don't use them directly) for
 adapting these instructions to your specific needs.  The directions
 below assume that you are using my scripts.
@@ -252,13 +262,13 @@ below assume that you are using my scripts.
 
          set WXWIN=%WXDIR%
 
-2. Copy setup0.h to setup.h
+2. Copy setup0.h to setup.h::
 
          cd %WXDIR%\include\wx\msw
          copy setup0.h setup.h
 
 
-3. Edit %WXDIR%\include\wx\msw\setup.h and change a few settings.
+3. Edit %WXDIR%\\include\\wx\\msw\\setup.h and change a few settings.
    Some of them are changed by my build scripts depending on the type
    of build (debug/hybrid, unicode/ansi). I change a few of the other
    defaults to have these values::
@@ -273,13 +283,13 @@ below assume that you are using my scripts.
          wxUSE_DISPLAY                  1
          
 
-4. Make sure that %WXDIR%\lib\vc_dll directory is on the PATH.  The
+4. Make sure that %WXDIR%\\lib\\vc_dll directory is on the PATH.  The
    wxWidgets DLLs will end up there as part of the build and so you'll
    need it on the PATH for them to be found at runtime.
 
 
-5. Change to the %WXDIR%\build\msw directory and copy my build scripts
-   there from their default location in %WXDIR%\wxPython\distrib\msw
+5. Change to the %WXDIR%\\build\\msw directory and copy my build scripts
+   there from their default location in %WXDIR%\\wxPython\\distrib\\msw
    if they are not present already.
 
 
@@ -306,9 +316,8 @@ below assume that you are using my scripts.
 
 
 7.  When that is done it will have built the main wxWidgets DLLs and
-    also some of the contribs DLLs.  There should be a ton of DLLs in
-    %WXDIR%\bin and lots of lib files and other stuff in
-    %WXDIR%\lib\vc_dll.
+    also some of the contribs DLLs.  There should be a ton of DLLs and
+    lots of lib files and other stuff in %WXDIR%\\lib\\vc_dll.
 
 
 8. Building wxPython on Windows is very similar to doing it for the
@@ -319,7 +328,7 @@ below assume that you are using my scripts.
    version the rest of the time.  If you ever do want to install the
    development verison please refer to INSTALL.txt.
 
-   Change to the %WXDIR%\wxPython dir and run the this command,
+   Change to the %WXDIR%\\wxPython dir and run the this command,
    makeing sure that you use the version of python that you want to
    build for (if you have more than one on your system)::
 
