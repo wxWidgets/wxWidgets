@@ -26,8 +26,12 @@ class WXDLLEXPORT wxInputHandler;
 
 typedef wxString wxControlAction;
 
-// no action to perform (other actions are defined in the controls headers)
-#define wxACTION_NONE _T("")
+// the list of actions which apply to all controls (other actions are defined
+// in the controls headers)
+
+#define wxACTION_NONE        _T("")           // no action to perform
+#define wxACTION_HIGHLIGHT   _T("focus")      // highlight the control
+#define wxACTION_UNHIGHLIGHT _T("unfocus")    // remove highlight
 
 // ----------------------------------------------------------------------------
 // wxControl: the base class for all GUI controls
@@ -36,7 +40,7 @@ typedef wxString wxControlAction;
 class WXDLLEXPORT wxControl : public wxControlBase
 {
 public:
-    wxControl();
+    wxControl() { Init(); }
 
     wxControl(wxWindow *parent,
               wxWindowID id,
@@ -45,6 +49,8 @@ public:
               const wxValidator& validator = wxDefaultValidator,
               const wxString& name = wxControlNameStr)
     {
+        Init();
+
         Create(parent, id, pos, size, style, validator, name);
     }
 
@@ -62,8 +68,12 @@ public:
 
     // get the state information
     virtual bool IsFocused() const;
+    virtual bool IsHighlighted() const;
     virtual bool IsPressed() const;
     virtual bool IsDefault() const;
+
+    // operations
+    void Highlight(bool doit = TRUE);
 
     // implementation only from now on
 
@@ -94,12 +104,18 @@ protected:
     void OnPaint(wxPaintEvent& event);
 
 private:
+    // common part of all ctors
+    void Init();
+
     // input processor
     wxInputHandler *m_handler;
 
     // label with accel into
     wxString   m_label;
     int        m_indexAccel;
+
+    // state
+    bool m_isHighlighted;
 
     DECLARE_DYNAMIC_CLASS(wxControl)
     DECLARE_EVENT_TABLE()

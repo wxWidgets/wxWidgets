@@ -85,6 +85,8 @@ wxTheme::wxThemeInfo::wxThemeInfo(wxTheme::Constructor c,
 
 #if defined(__WXMSW__)
     ms_theme = Create(_T("win32"));
+#elif defined(__WXGTK__)
+    ms_theme = Create(_T("gtk"));
 #endif
 
     // fallback to the first one in the list

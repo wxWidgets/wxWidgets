@@ -73,6 +73,8 @@ int wxControlRenderer::GetStateFlags() const
     // it is not, even our default/focused controls shouldn't appear as such
     if ( wxTheApp->IsActive() )
     {
+        if ( m_ctrl->IsHighlighted() )
+            flags |= wxRENDER_HIGHLIGHT;
         if ( m_ctrl->IsFocused() )
             flags |= wxRENDER_FOCUSED;
         if ( m_ctrl->IsPressed() )
@@ -84,22 +86,17 @@ int wxControlRenderer::GetStateFlags() const
     return flags;
 }
 
-void wxControlRenderer::PaintBackground()
-{
-    wxBrush brush(m_ctrl->GetBackgroundColour(), wxSOLID);
-    m_dc.SetBrush(brush);
-    m_dc.SetPen(*wxTRANSPARENT_PEN);
-    m_dc.DrawRectangle(m_rect);
-}
-
 void wxControlRenderer::DrawBorder()
 {
+    int flags = GetStateFlags();
+
     // draw outline
     m_renderer->DrawBorder(m_dc, m_ctrl->GetBorder(),
-                           m_rect, GetStateFlags(), &m_rect);
+                           m_rect, flags, &m_rect);
 
     // fill the inside
-    PaintBackground();
+    m_renderer->DrawBackground(m_dc,
+                               m_ctrl->GetBackgroundColour(), m_rect, flags);
 }
 
 void wxControlRenderer::DrawLabel()
@@ -139,7 +136,10 @@ void wxControlRenderer::DrawFrame()
 
 void wxControlRenderer::DrawButtonBorder()
 {
-    m_renderer->DrawButtonBorder(m_dc, m_rect, GetStateFlags(), &m_rect);
+    int flags = GetStateFlags();
 
-    PaintBackground();
+    m_renderer->DrawButtonBorder(m_dc, m_rect, flags, &m_rect);
+
+    m_renderer->DrawBackground(m_dc, m_ctrl->GetBackgroundColour(),
+                               m_rect, flags);
 }

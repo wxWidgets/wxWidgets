@@ -36,12 +36,13 @@ class WXDLLEXPORT wxWindow;
 // control state flags used in wxRenderer
 enum
 {
-    wxRENDER_ENABLED = 0x00000001,
-    wxRENDER_FOCUSED = 0x00000002,
-    wxRENDER_PRESSED = 0x00000004,
-    wxRENDER_DEFAULT = 0x00000008,      // button...
+    wxRENDER_ENABLED    = 0x00000001,
+    wxRENDER_FOCUSED    = 0x00000002,
+    wxRENDER_PRESSED    = 0x00000004,
+    wxRENDER_DEFAULT    = 0x00000008,      // button...
+    wxRENDER_HIGHLIGHT  = 0x00000010,
 
-    wxRENDER_FLAGS_MASK = 0x0000000f
+    wxRENDER_FLAGS_MASK = 0x0000001f
 };
 
 // ----------------------------------------------------------------------------
@@ -51,6 +52,12 @@ enum
 class WXDLLEXPORT wxRenderer
 {
 public:
+    // draw the controls background
+    virtual void DrawBackground(wxDC& dc,
+                                const wxColour& col,
+                                const wxRect& rect,
+                                int flags) = 0;
+
     // draw the label inside the given rectangle with the specified alignment
     // and optionally emphasize the character with the given index
     virtual void DrawLabel(wxDC& dc,
@@ -107,6 +114,11 @@ class WXDLLEXPORT wxDelegateRenderer : public wxRenderer
 public:
     wxDelegateRenderer(wxRenderer *renderer) : m_renderer(renderer) { }
 
+    virtual void DrawBackground(wxDC& dc,
+                                const wxColour& col,
+                                const wxRect& rect,
+                                int flags)
+        { m_renderer->DrawBackground(dc, col, rect, flags); }
     virtual void DrawLabel(wxDC& dc,
                            const wxString& label,
                            const wxRect& rect,
@@ -168,9 +180,6 @@ public:
 protected:
     // the current window state
     int GetStateFlags() const;
-
-    // paint the control background
-    void PaintBackground();
 
 private:
     wxControl *m_ctrl;

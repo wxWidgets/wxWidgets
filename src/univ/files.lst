@@ -6,6 +6,7 @@ UNIVOBJS = \
            statbox.o \
            stattext.o \
            theme.o \
+           gtk.o \
            win32.o
 
 # winuniv.o

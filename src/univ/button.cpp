@@ -123,18 +123,50 @@ wxInputHandler *wxButton::CreateInputHandler() const
     return wxTheme::Get()->GetInputHandler(wxCONTROL_BUTTON);
 }
 
+void wxButton::Press()
+{
+    m_isPressed = TRUE;
+}
+
+void wxButton::Release()
+{
+    m_isPressed = FALSE;
+}
+
+void wxButton::Toggle()
+{
+    m_isPressed = !m_isPressed;
+
+    if ( !m_isPressed )
+    {
+        // releasing button after it had been pressed generates a click event
+        Click();
+    }
+}
+
+void wxButton::Click()
+{
+    wxCommandEvent event(wxEVT_COMMAND_BUTTON_CLICKED, GetId());
+    InitCommandEvent(event);
+    Command(event);
+}
+
 bool wxButton::PerformAction(const wxControlAction& action)
 {
-    if ( action == wxACTION_BUTTON_TOGGLE )
-    {
-        m_isPressed = !m_isPressed;
-    }
-    else
-    {
-        return wxControl::PerformAction(action);
-    }
+    bool wasPressed = IsPressed();
 
-    return TRUE;
+    if ( action == wxACTION_BUTTON_TOGGLE )
+        Toggle();
+    else if ( action == wxACTION_BUTTON_CLICK )
+        Click();
+    else if ( action == wxACTION_BUTTON_PRESS )
+        Press();
+    else if ( action == wxACTION_BUTTON_RELEASE )
+        Release();
+    else
+        return wxControl::PerformAction(action);
+
+    return wasPressed != IsPressed();
 }
 
 // ----------------------------------------------------------------------------

@@ -1,6 +1,6 @@
 ///////////////////////////////////////////////////////////////////////////////
-// Name:        univ/themes/win32.cpp
-// Purpose:     wxUniversal theme implementing Win32-like LNF
+// Name:        univ/themes/gtk.cpp
+// Purpose:     wxUniversal theme implementing GTK-like LNF
 // Author:      Vadim Zeitlin
 // Modified by:
 // Created:     06.08.00
@@ -36,13 +36,13 @@
 #include "wx/univ/theme.h"
 
 // ----------------------------------------------------------------------------
-// wxWin32Renderer: draw the GUI elements in Win32 style
+// wxGTKRenderer: draw the GUI elements in GTK style
 // ----------------------------------------------------------------------------
 
-class wxWin32Renderer : public wxRenderer
+class wxGTKRenderer : public wxRenderer
 {
 public:
-    wxWin32Renderer();
+    wxGTKRenderer();
 
     // implement the base class pure virtuals
     virtual void DrawBackground(wxDC& dc,
@@ -88,6 +88,11 @@ protected:
     void DrawShadedRect(wxDC& dc, wxRect *rect,
                         const wxPen& pen1, const wxPen& pen2);
 
+    // as DrawShadedRect() but the pixels in the bottom left and upper right
+    // border are drawn with the pen1, not pen2
+    void DrawAntiShadedRect(wxDC& dc, wxRect *rect,
+                            const wxPen& pen1, const wxPen& pen2);
+
     // draw the normal 3D border
     void DrawRaisedBorder(wxDC& dc, wxRect *rect);
 
@@ -100,21 +105,21 @@ private:
 };
 
 // ----------------------------------------------------------------------------
-// wxWin32InputHandler and derived classes: process the keyboard and mouse
-// messages according to Windows standards
+// wxGTKInputHandler and derived classes: process the keyboard and mouse
+// messages according to GTK standards
 // ----------------------------------------------------------------------------
 
-class wxWin32InputHandler : public wxInputHandler
+class wxGTKInputHandler : public wxInputHandler
 {
 public:
     virtual wxControlAction Map(const wxKeyEvent& event, bool pressed);
     virtual wxControlAction Map(const wxMouseEvent& event);
 };
 
-class wxWin32ButtonInputHandler : public wxWin32InputHandler
+class wxGTKButtonInputHandler : public wxGTKInputHandler
 {
 public:
-    wxWin32ButtonInputHandler();
+    wxGTKButtonInputHandler();
 
     virtual wxControlAction Map(const wxKeyEvent& event, bool pressed);
     virtual wxControlAction Map(const wxMouseEvent& event);
@@ -124,38 +129,38 @@ private:
 };
 
 // ----------------------------------------------------------------------------
-// wxWin32ColourScheme
+// wxGTKColourScheme
 // ----------------------------------------------------------------------------
 
-class wxWin32ColourScheme : public wxColourScheme
+class wxGTKColourScheme : public wxColourScheme
 {
 };
 
 // ----------------------------------------------------------------------------
-// wxWin32Theme
+// wxGTKTheme
 // ----------------------------------------------------------------------------
 
 WX_DEFINE_ARRAY(wxInputHandler *, wxArrayHandlers);
 
-class wxWin32Theme : public wxTheme
+class wxGTKTheme : public wxTheme
 {
 public:
-    wxWin32Theme();
-    virtual ~wxWin32Theme();
+    wxGTKTheme();
+    virtual ~wxGTKTheme();
 
     virtual wxRenderer *GetRenderer() { return m_renderer; }
     virtual wxInputHandler *GetInputHandler(const wxString& control);
     virtual wxColourScheme *GetColourScheme() { return m_scheme; }
 
 private:
-    wxWin32Renderer *m_renderer;
+    wxGTKRenderer *m_renderer;
 
     // the names of the already created handlers and the handlers themselves
     // (these arrays are synchronized)
     wxSortedArrayString m_handlerNames;
     wxArrayHandlers m_handlers;
 
-    wxWin32ColourScheme *m_scheme;
+    wxGTKColourScheme *m_scheme;
 
     WX_DECLARE_THEME();
 };
@@ -164,24 +169,24 @@ private:
 // implementation
 // ============================================================================
 
-WX_IMPLEMENT_THEME(wxWin32Theme, win32, wxTRANSLATE("Win32 theme"));
+WX_IMPLEMENT_THEME(wxGTKTheme, gtk, wxTRANSLATE("GTK+ theme"));
 
 // ----------------------------------------------------------------------------
-// wxWin32Theme
+// wxGTKTheme
 // ----------------------------------------------------------------------------
 
-wxWin32Theme::wxWin32Theme()
+wxGTKTheme::wxGTKTheme()
 {
-    m_renderer = new wxWin32Renderer;
+    m_renderer = new wxGTKRenderer;
     m_scheme = NULL;
 }
 
-wxWin32Theme::~wxWin32Theme()
+wxGTKTheme::~wxGTKTheme()
 {
     WX_CLEAR_ARRAY(m_handlers);
 }
 
-wxInputHandler *wxWin32Theme::GetInputHandler(const wxString& control)
+wxInputHandler *wxGTKTheme::GetInputHandler(const wxString& control)
 {
     wxInputHandler *handler;
     int n = m_handlerNames.Index(control);
@@ -191,13 +196,13 @@ wxInputHandler *wxWin32Theme::GetInputHandler(const wxString& control)
         n = m_handlerNames.Add(control);
 
         if ( control == wxCONTROL_BUTTON )
-            handler = new wxWin32ButtonInputHandler;
+            handler = new wxGTKButtonInputHandler;
         else
         {
             wxASSERT_MSG( control == wxCONTROL_DEFAULT,
                           _T("no input handler defined for this control") );
 
-            handler = new wxWin32InputHandler;
+            handler = new wxGTKInputHandler;
         }
 
         m_handlers.Insert(handler, n);
@@ -211,14 +216,14 @@ wxInputHandler *wxWin32Theme::GetInputHandler(const wxString& control)
 }
 
 // ============================================================================
-// wxWin32Renderer
+// wxGTKRenderer
 // ============================================================================
 
 // ----------------------------------------------------------------------------
 // construction
 // ----------------------------------------------------------------------------
 
-wxWin32Renderer::wxWin32Renderer()
+wxGTKRenderer::wxGTKRenderer()
                : m_penBlack(*wxBLACK_PEN),
                  m_penDarkGrey(wxColour(0x7f7f7f), 0, wxSOLID),
                  m_penLightGrey(wxColour(0xc0c0c0), 0, wxSOLID),
@@ -232,7 +237,7 @@ wxWin32Renderer::wxWin32Renderer()
 // ----------------------------------------------------------------------------
 
 /*
-   The raised border in Win32 looks like this:
+   The raised border in GTK looks like this:
 
    IIIIIIIIIIIIIIIIIIIIIIB
    I                    GB
@@ -298,7 +303,7 @@ wxWin32Renderer::wxWin32Renderer()
    BBBBBBBBBBBBBBBBBBBBBBB
 */
 
-void wxWin32Renderer::DrawRect(wxDC& dc, wxRect *rect, const wxPen& pen)
+void wxGTKRenderer::DrawRect(wxDC& dc, wxRect *rect, const wxPen& pen)
 {
     // draw
     dc.SetPen(pen);
@@ -309,7 +314,7 @@ void wxWin32Renderer::DrawRect(wxDC& dc, wxRect *rect, const wxPen& pen)
     rect->Inflate(-1);
 }
 
-void wxWin32Renderer::DrawHalfRect(wxDC& dc, wxRect *rect, const wxPen& pen)
+void wxGTKRenderer::DrawHalfRect(wxDC& dc, wxRect *rect, const wxPen& pen)
 {
     // draw the bottom and right sides
     dc.SetPen(pen);
@@ -323,8 +328,8 @@ void wxWin32Renderer::DrawHalfRect(wxDC& dc, wxRect *rect, const wxPen& pen)
     rect->height--;
 }
 
-void wxWin32Renderer::DrawShadedRect(wxDC& dc, wxRect *rect,
-                                     const wxPen& pen1, const wxPen& pen2)
+void wxGTKRenderer::DrawShadedRect(wxDC& dc, wxRect *rect,
+                                   const wxPen& pen1, const wxPen& pen2)
 {
     // draw the rectangle
     dc.SetPen(pen1);
@@ -342,13 +347,32 @@ void wxWin32Renderer::DrawShadedRect(wxDC& dc, wxRect *rect,
     rect->Inflate(-1);
 }
 
-void wxWin32Renderer::DrawRaisedBorder(wxDC& dc, wxRect *rect)
+void wxGTKRenderer::DrawAntiShadedRect(wxDC& dc, wxRect *rect,
+                                       const wxPen& pen1, const wxPen& pen2)
+{
+    // draw the rectangle
+    dc.SetPen(pen1);
+    dc.DrawLine(rect->GetLeft(), rect->GetTop(),
+                rect->GetLeft(), rect->GetBottom() + 1);
+    dc.DrawLine(rect->GetLeft() + 1, rect->GetTop(),
+                rect->GetRight() + 1, rect->GetTop());
+    dc.SetPen(pen2);
+    dc.DrawLine(rect->GetRight(), rect->GetTop() + 1,
+                rect->GetRight(), rect->GetBottom());
+    dc.DrawLine(rect->GetLeft() + 1, rect->GetBottom(),
+                rect->GetRight() + 1, rect->GetBottom());
+
+    // adjust the rect
+    rect->Inflate(-1);
+}
+
+void wxGTKRenderer::DrawRaisedBorder(wxDC& dc, wxRect *rect)
 {
     DrawShadedRect(dc, rect, m_penHighlight, m_penBlack);
     DrawShadedRect(dc, rect, m_penLightGrey, m_penDarkGrey);
 }
 
-void wxWin32Renderer::DrawBorder(wxDC& dc,
+void wxGTKRenderer::DrawBorder(wxDC& dc,
                                  wxBorder border,
                                  const wxRect& rectTotal,
                                  int WXUNUSED(flags),
@@ -398,32 +422,36 @@ void wxWin32Renderer::DrawBorder(wxDC& dc,
 // button border
 // ----------------------------------------------------------------------------
 
-void wxWin32Renderer::DrawButtonBorder(wxDC& dc,
-                                       const wxRect& rectTotal,
-                                       int flags,
-                                       wxRect *rectIn)
+void wxGTKRenderer::DrawButtonBorder(wxDC& dc,
+                                     const wxRect& rectTotal,
+                                     int flags,
+                                     wxRect *rectIn)
 {
     wxRect rect = rectTotal;
 
     if ( flags & wxRENDER_PRESSED )
     {
-        // button pressed: draw a double border around it
+        // button pressed: draw a black border around it and an inward shade
         DrawRect(dc, &rect, m_penBlack);
-        DrawRect(dc, &rect, m_penDarkGrey);
+        DrawAntiShadedRect(dc, &rect, m_penDarkGrey, m_penHighlight);
+        DrawAntiShadedRect(dc, &rect, m_penBlack, m_penDarkGrey);
     }
     else
     {
         // button not pressed
 
-        if ( flags & (wxRENDER_FOCUSED | wxRENDER_DEFAULT) )
+        if ( flags & wxRENDER_DEFAULT )
         {
-            // button either default or focused (or both): add an extra border around it
+            // button is currently default: add an extra border around it
             DrawRect(dc, &rect, m_penBlack);
         }
 
         // now draw a normal button
         DrawShadedRect(dc, &rect, m_penHighlight, m_penBlack);
-        DrawHalfRect(dc, &rect, m_penDarkGrey);
+        DrawAntiShadedRect(dc, &rect,
+                           flags & wxRENDER_HIGHLIGHT ? m_penHighlight
+                                                      : m_penLightGrey,
+                           m_penDarkGrey);
     }
 
     if ( rectIn )
@@ -436,7 +464,7 @@ void wxWin32Renderer::DrawButtonBorder(wxDC& dc,
 // frame
 // ----------------------------------------------------------------------------
 
-void wxWin32Renderer::DrawFrame(wxDC& dc,
+void wxGTKRenderer::DrawFrame(wxDC& dc,
                                 const wxString& label,
                                 const wxRect& rect,
                                 int flags,
@@ -487,7 +515,7 @@ void wxWin32Renderer::DrawFrame(wxDC& dc,
 // label
 // ----------------------------------------------------------------------------
 
-void wxWin32Renderer::DrawLabel(wxDC& dc,
+void wxGTKRenderer::DrawLabel(wxDC& dc,
                                 const wxString& label,
                                 const wxRect& rect,
                                 int flags,
@@ -505,59 +533,34 @@ void wxWin32Renderer::DrawLabel(wxDC& dc,
         dc.SetTextForeground(0x7f7f7f);
     }
 
-    wxRect rectText = rect;
-    if ( flags & wxRENDER_FOCUSED )
-    {
-        rectText.Inflate(-2);
-    }
-
-    dc.DrawLabel(label, rectText, alignment, indexAccel);
-
-    if ( flags & wxRENDER_FOCUSED )
-    {
-        // VZ: this doesn't work under Windows, the dotted pen has dots of 3
-        //     pixels each while we really need dots here... PS_ALTERNATE might
-        //     work, but it is for NT 5 only
-#if 0
-        DrawRect(dc, &rectText, wxPen(*wxBLACK, 0, wxDOT));
-#else
-        // draw the pixels manually
-        dc.SetPen(wxPen(*wxBLACK, 0, wxSOLID));
-
-        // Windows quirk: appears to draw them like this, from right to left
-        // (and I don't have Hebrew windows to see what happens there)
-        for ( wxCoord x = rectText.GetRight(); x >= rectText.GetLeft(); x -= 2 )
-        {
-            dc.DrawPoint(x, rectText.GetTop());
-            dc.DrawPoint(x, rectText.GetBottom());
-        }
-
-        wxCoord shift = rectText.width % 2 ? 0 : 1;
-        for ( wxCoord y = rectText.GetTop() + 2; y <= rectText.GetBottom(); y+= 2 )
-        {
-            dc.DrawPoint(rectText.GetLeft(), y - shift);
-            dc.DrawPoint(rectText.GetRight(), y);
-        }
-
-        if ( shift )
-        {
-            dc.DrawPoint(rectText.GetLeft(), rectText.GetBottom() - 1);
-        }
-#endif // 0/1
-    }
+    dc.DrawLabel(label, rect, alignment, indexAccel);
 }
 
 // ----------------------------------------------------------------------------
 // background
 // ----------------------------------------------------------------------------
 
-void wxWin32Renderer::DrawBackground(wxDC& dc,
-                                     const wxColour& col,
-                                     const wxRect& rect,
-                                     int flags)
+void wxGTKRenderer::DrawBackground(wxDC& dc,
+                                   const wxColour& col,
+                                   const wxRect& rect,
+                                   int flags)
 {
-    // just fill it with the current colour
-    wxBrush brush(col, wxSOLID);
+    // what colour should we use?
+    wxColour colBg;
+    if ( flags & wxRENDER_PRESSED )
+    {
+        colBg = wxColour(0x7f7f7f);
+    }
+    else if ( flags & wxRENDER_HIGHLIGHT )
+    {
+        colBg = wxColour(0xe0e0e0);
+    }
+    else
+    {
+        colBg = col;
+    }
+
+    wxBrush brush(colBg, wxSOLID);
     dc.SetBrush(brush);
     dc.SetPen(*wxTRANSPARENT_PEN);
     dc.DrawRectangle(rect);
@@ -567,7 +570,7 @@ void wxWin32Renderer::DrawBackground(wxDC& dc,
 // size adjustments
 // ----------------------------------------------------------------------------
 
-void wxWin32Renderer::AdjustSize(wxSize *size, const wxWindow *window)
+void wxGTKRenderer::AdjustSize(wxSize *size, const wxWindow *window)
 {
     if ( wxDynamicCast(window, wxButton) )
     {
@@ -614,29 +617,34 @@ void wxWin32Renderer::AdjustSize(wxSize *size, const wxWindow *window)
 // ============================================================================
 
 // ----------------------------------------------------------------------------
-// wxWin32InputHandler
+// wxGTKInputHandler
 // ----------------------------------------------------------------------------
 
-wxControlAction wxWin32InputHandler::Map(const wxKeyEvent& event, bool pressed)
+wxControlAction wxGTKInputHandler::Map(const wxKeyEvent& event, bool pressed)
 {
     return wxACTION_NONE;
 }
 
-wxControlAction wxWin32InputHandler::Map(const wxMouseEvent& event)
+wxControlAction wxGTKInputHandler::Map(const wxMouseEvent& event)
 {
+    if ( event.Entering() )
+        return wxACTION_HIGHLIGHT;
+    else if ( event.Leaving() )
+        return wxACTION_UNHIGHLIGHT;
+
     return wxACTION_NONE;
 }
 
 // ----------------------------------------------------------------------------
-// wxWin32ButtonInputHandler
+// wxGTKButtonInputHandler
 // ----------------------------------------------------------------------------
 
-wxWin32ButtonInputHandler::wxWin32ButtonInputHandler()
+wxGTKButtonInputHandler::wxGTKButtonInputHandler()
 {
     m_winCapture = NULL;
 }
 
-wxControlAction wxWin32ButtonInputHandler::Map(const wxKeyEvent& event,
+wxControlAction wxGTKButtonInputHandler::Map(const wxKeyEvent& event,
                                                bool pressed)
 {
     int keycode = event.GetKeyCode();
@@ -645,25 +653,21 @@ wxControlAction wxWin32ButtonInputHandler::Map(const wxKeyEvent& event,
         return wxACTION_BUTTON_TOGGLE;
     }
 
-    return wxWin32InputHandler::Map(event, pressed);
+    return wxGTKInputHandler::Map(event, pressed);
 }
 
-wxControlAction wxWin32ButtonInputHandler::Map(const wxMouseEvent& event)
+wxControlAction wxGTKButtonInputHandler::Map(const wxMouseEvent& event)
 {
     if ( event.IsButton() )
     {
-        if ( event.ButtonDown() )
-        {
-            m_winCapture = wxWindow::FindFocus();
-            m_winCapture->CaptureMouse();
-        }
-        else // up
-        {
-            m_winCapture->ReleaseMouse();
-        }
-
         return wxACTION_BUTTON_TOGGLE;
     }
+#if 0 // TODO
+    else if ( event.Leaving() )
+    {
+        return wxACTION_BUTTON_RELEASE;
+    }
+#endif // 0
 
-    return wxWin32InputHandler::Map(event);
+    return wxGTKInputHandler::Map(event);
 }

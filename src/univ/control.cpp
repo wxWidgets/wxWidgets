@@ -64,9 +64,10 @@ END_EVENT_TABLE()
 // creation
 // ----------------------------------------------------------------------------
 
-wxControl::wxControl()
+void wxControl::Init()
 {
     m_indexAccel = -1;
+    m_isHighlighted = FALSE;
 }
 
 bool wxControl::Create(wxWindow *parent,
@@ -105,6 +106,16 @@ bool wxControl::IsPressed() const
 bool wxControl::IsDefault() const
 {
     return FALSE;
+}
+
+bool wxControl::IsHighlighted() const
+{
+    return m_isHighlighted;
+}
+
+void wxControl::Highlight(bool doit)
+{
+    m_isHighlighted = doit;
 }
 
 // ----------------------------------------------------------------------------
@@ -209,8 +220,17 @@ void wxControl::OnMouse(wxMouseEvent& event)
 
 bool wxControl::PerformAction(const wxControlAction& action)
 {
-    // nothing to do
-    return FALSE;
+    if ( (action == wxACTION_NONE) || !AcceptsFocus() )
+        return FALSE;
+
+    if ( action == wxACTION_HIGHLIGHT )
+        Highlight(TRUE);
+    else if ( action == wxACTION_UNHIGHLIGHT )
+        Highlight(FALSE);
+    else
+        return FALSE;
+
+    return TRUE;
 }
 
 #endif // wxUSE_CONTROLS
