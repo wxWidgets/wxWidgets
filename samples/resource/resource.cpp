@@ -24,6 +24,10 @@
 #include "wx/wx.h"
 #endif
 
+#if !wxUSE_RESOURCES
+    #error "You should set wxUSE_RESOURCES to 1 to compile this sample"
+#endif
+
 #if wxUSE_UNICODE
     #error "This sample can't be compiled in Unicode mode."
 #endif // wxUSE_UNICODE
