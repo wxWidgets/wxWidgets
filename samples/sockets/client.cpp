@@ -18,8 +18,8 @@
 // --------------------------------------------------------------------------
 
 #if defined(__GNUG__) && !defined(__APPLE__)
-#  pragma implementation "client.cpp"
-#  pragma interface "client.cpp"
+    #pragma implementation
+    #pragma interface
 #endif
 
 // For compilers that support precompilation, includes "wx/wx.h".

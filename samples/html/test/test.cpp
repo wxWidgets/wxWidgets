@@ -9,8 +9,8 @@
 /////////////////////////////////////////////////////////////////////////////
 
 #if defined(__GNUG__) && !defined(__APPLE__)
-    #pragma implementation "test.cpp"
-    #pragma interface "test.cpp"
+    #pragma implementation
+    #pragma interface
 #endif
 
 // For compilers that support precompilation, includes "wx/wx.h".
@@ -191,7 +191,7 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
     SetMenuBar(menuBar);
 
     SetIcon(wxIcon(sample_xpm));
-    
+
 #if wxUSE_ACCEL
     // Create convenient accelerators for Back and Forward navigation
     wxAcceleratorEntry entries[2];

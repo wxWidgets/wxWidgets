@@ -18,8 +18,8 @@
 // ----------------------------------------------------------------------------
 
 #if defined(__GNUG__) && !defined(__APPLE__)
-    #pragma implementation "exec.cpp"
-    #pragma interface "exec.cpp"
+    #pragma implementation
+    #pragma interface
 #endif
 
 // For compilers that support precompilation, includes "wx/wx.h".
@@ -1028,7 +1028,7 @@ void MyPipedProcess::OnTerminate(int pid, int status)
 
 bool MyPipedProcess2::HasInput()
 {
-    if ( !!m_input )
+    if ( !m_input.empty() )
     {
         wxTextOutputStream os(*GetOutputStream());
         os.WriteString(m_input);

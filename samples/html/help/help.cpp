@@ -4,8 +4,8 @@
 /////////////////////////////////////////////////////////////////////////////
 
 #if defined(__GNUG__) && !defined(__APPLE__)
-    #pragma implementation "help.cpp"
-    #pragma interface "help.cpp"
+    #pragma implementation
+    #pragma interface
 #endif
 
 // For compilers that support precompilation, includes "wx/wx.h".
@@ -60,7 +60,7 @@
       void OnClose(wxCloseEvent& event);
    private:
       wxHtmlHelpController help;
-   
+
     // any class wishing to process wxWidgets events must use this macro
     DECLARE_EVENT_TABLE()
    };
@@ -108,11 +108,11 @@
    bool MyApp::OnInit()
    {
       wxInitAllImageHandlers();
-#if wxUSE_STREAMS && wxUSE_ZIPSTREAM && wxUSE_ZLIB 
+#if wxUSE_STREAMS && wxUSE_ZIPSTREAM && wxUSE_ZLIB
       wxFileSystem::AddHandler(new wxZipFSHandler);
 #endif
       SetVendorName(wxT("wxWidgets"));
-      SetAppName(wxT("wxHTMLHelp")); 
+      SetAppName(wxT("wxHTMLHelp"));
 
     // Create the main application window
       MyFrame *frame = new MyFrame(_("HTML Help Sample"),
@@ -137,7 +137,7 @@
 
 // frame constructor
    MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
-   : wxFrame((wxFrame *)NULL, wxID_ANY, title, pos, size), 
+   : wxFrame((wxFrame *)NULL, wxID_ANY, title, pos, size),
      help(wxHF_DEFAULT_STYLE | wxHF_OPEN_FILES)
    {
     // create a menu bar
@@ -185,7 +185,7 @@
        if ( help.GetFrame() ) // returns NULL if no help frame active
            help.GetFrame()->Close(true);
        // now we can safely delete the config pointer
-       event.Skip();   
+       event.Skip();
        delete wxConfig::Set(NULL);
    }
 

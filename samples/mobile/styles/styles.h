@@ -8,7 +8,7 @@
 #define __styles_H__
 
 #if defined(__GNUG__) && !defined(__APPLE__)
-    #pragma interface "styles.cpp"
+    #pragma interface "styles.h"
 #endif
 
 // Include wxWidgets' headers

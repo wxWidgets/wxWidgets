@@ -6,7 +6,7 @@
 /////////////////////////////////////////////////////////////////////////////
 
 #ifdef __GNUG__
-    #pragma implementation "styles.cpp"
+    #pragma implementation "styles.h"
 #endif
 
 // For compilers that support precompilation

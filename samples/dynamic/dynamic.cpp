@@ -10,8 +10,8 @@
 /////////////////////////////////////////////////////////////////////////////
 
 #if defined(__GNUG__) && !defined(__APPLE__)
-#pragma implementation "dynamic.cpp"
-#pragma interface "dynamic.cpp"
+#pragma implementation
+#pragma interface
 #endif
 
 // For compilers that support precompilation, includes "wx/wx.h".
@@ -60,9 +60,9 @@ bool MyApp::OnInit(void)
   MyFrame *frame = new MyFrame(NULL, _T("Dynamic wxWidgets App"), 50, 50, 450, 340);
 
   // You used to have to do some casting for param 4, but now there are type-safe handlers
-  frame->Connect( DYNAMIC_QUIT,  wxID_ANY, 
+  frame->Connect( DYNAMIC_QUIT,  wxID_ANY,
                     wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler(MyFrame::OnQuit) );
-  frame->Connect( DYNAMIC_ABOUT, wxID_ANY, 
+  frame->Connect( DYNAMIC_ABOUT, wxID_ANY,
                     wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler(MyFrame::OnAbout) );
 
   // Give it an icon

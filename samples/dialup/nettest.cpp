@@ -18,8 +18,8 @@
 // ----------------------------------------------------------------------------
 
 #if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
-    #pragma implementation "nettest.cpp"
-    #pragma interface "nettest.cpp"
+    #pragma implementation
+    #pragma interface
 #endif
 
 // For compilers that support precompilation, includes "wx/wx.h".

@@ -18,8 +18,8 @@
 // ----------------------------------------------------------------------------
 
 #if defined(__GNUG__) && !defined(__APPLE__)
-    #pragma implementation "drawing.cpp"
-    #pragma interface "drawing.cpp"
+    #pragma implementation
+    #pragma interface
 #endif
 
 // For compilers that support precompilation, includes "wx/wx.h".
@@ -523,7 +523,7 @@ void MyCanvas::DrawDefault(wxDC& dc)
     dc.GetPixel(1,1, &tmpColour);
     dc.FloodFill(1,1, tmpColour, wxFLOOD_SURFACE);
 #endif
-    
+
     dc.DrawCheckMark(5, 80, 15, 15);
     dc.DrawCheckMark(25, 80, 30, 30);
     dc.DrawCheckMark(60, 80, 60, 60);

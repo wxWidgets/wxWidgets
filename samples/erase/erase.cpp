@@ -18,8 +18,8 @@
 // ----------------------------------------------------------------------------
 
 #if defined(__GNUG__) && !defined(__APPLE__)
-    #pragma implementation "erase.cpp"
-    #pragma interface "erase.cpp"
+    #pragma implementation
+    #pragma interface
 #endif
 
 // For compilers that support precompilation, includes "wx/wx.h".
@@ -213,7 +213,7 @@ MyCanvas::MyCanvas( wxFrame *parent )
     m_bitmap = wxBitmap( wxICON(mondrian) );
 
     new wxStaticBitmap( this, wxID_ANY, m_bitmap, wxPoint(80,20) );
-    
+
     SetFocusIgnoringChildren();
 }
 
@@ -341,7 +341,7 @@ void MyCanvas::OnEraseBackground( wxEraseEvent& event )
     dc.SetPen(*wxGREEN_PEN);
 
     PrepareDC( dc );
-    
+
     // clear any junk currently displayed
     dc.Clear();
 

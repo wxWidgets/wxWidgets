@@ -6,7 +6,7 @@
 /////////////////////////////////////////////////////////////////////////////
 
 #ifdef __GNUG__
-    #pragma implementation "wxedit.cpp"
+    #pragma implementation "wxedit.h"
 #endif
 
 // For compilers that support precompilation
