@@ -17,9 +17,7 @@ class MyCanvas(wxScrolledWindow):
         EVT_LEFT_DOWN(self, self.OnLeftButtonEvent)
         EVT_LEFT_UP(self,   self.OnLeftButtonEvent)
         EVT_MOTION(self,    self.OnLeftButtonEvent)
-
         EVT_PAINT(self, self.OnPaint)
-
 
         self.SetCursor(wxStockCursor(wxCURSOR_PENCIL))
         bmp = images.getTest2Bitmap()
@@ -28,6 +26,7 @@ class MyCanvas(wxScrolledWindow):
         self.bmp = bmp
 
         self.SetScrollbars(20, 20, self.maxWidth/20, self.maxHeight/20)
+
 
     def getWidth(self):
         return self.maxWidth
