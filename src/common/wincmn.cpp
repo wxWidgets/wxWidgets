@@ -402,7 +402,14 @@ void wxWindowBase::Fit()
 {
     if ( GetChildren().GetCount() > 0 )
     {
-        SetClientSize(DoGetBestSize());
+        wxSize size = DoGetBestSize();
+
+        // for compatibility with the old versions and because it really looks
+        // slightly more pretty like this, add a pad
+        size.x += 7;
+        size.y += 14;
+
+        SetClientSize(size);
     }
     //else: do nothing if we have no children
 }
@@ -446,8 +453,7 @@ wxSize wxWindowBase::DoGetBestSize() const
                 maxY = wy + wh;
         }
 
-        // leave a margin
-        return wxSize(maxX + 7, maxY + 14);
+        return wxSize(maxX, maxY);
     }
     else
     {
