@@ -210,7 +210,8 @@ BEGIN_EVENT_TABLE( wxNewBitmapButton, wxPanel )
 
     EVT_LEFT_DOWN   ( wxNewBitmapButton::OnLButtonDown   )
     EVT_LEFT_UP     ( wxNewBitmapButton::OnLButtonUp     )
-    EVT_LEFT_DCLICK ( wxNewBitmapButton::OnLButtonDClick )
+//    EVT_LEFT_DCLICK ( wxNewBitmapButton::OnLButtonDClick )
+    EVT_LEFT_DCLICK ( wxNewBitmapButton::OnLButtonDown )
     EVT_ENTER_WINDOW( wxNewBitmapButton::OnMouseEnter    )
     EVT_LEAVE_WINDOW( wxNewBitmapButton::OnMouseLeave    )
 
@@ -673,21 +674,6 @@ void wxNewBitmapButton::OnLButtonUp( wxMouseEvent& event )
         // within the bounds of button
         wxCommandEvent cmd( mFiredEventType, GetId() );
         GetParent()->ProcessEvent( cmd );
-    }
-}
-
-void wxNewBitmapButton::OnLButtonDClick( wxMouseEvent& event )
-{
-    if ( IsInWindow( event.m_x, event.m_y ) ) 
-    {
-        // fire event, if mouse was released
-        // within the bounds of button
-        wxCommandEvent cmd( mFiredEventType, GetId() );
-        GetParent()->ProcessEvent( cmd );
-
-        mDragStarted = FALSE;
-        mIsPressed   = FALSE;
-        Refresh();
     }
 }
 

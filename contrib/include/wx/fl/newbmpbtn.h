@@ -176,9 +176,6 @@ public:
         // Responds to a left mouse button up event.
     void OnLButtonUp( wxMouseEvent& event );
 
-        // Responds to a left mouse button double click.
-    void OnLButtonDClick( wxMouseEvent& event );
-
         // Responds to mouse enter to window.
     void OnMouseEnter( wxMouseEvent& event );
 
