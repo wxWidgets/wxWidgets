@@ -335,7 +335,11 @@ WXHBRUSH wxControl::MSWControlColorSolid(WXHDC pDC, wxColour colBg)
 {
     HDC hdc = (HDC)pDC;
     if ( m_hasFgCol )
+    {
         ::SetTextColor(hdc, wxColourToRGB(GetForegroundColour()));
+        if ( !colBg.Ok() )
+            colBg = GetBackgroundColour();
+    }
 
     if ( colBg.Ok() )
     {
