@@ -205,9 +205,11 @@ void wxFontRefData::Init(int pointSize,
             case wxFONTFAMILY_TELETYPE:
                pango_font_description_set_family( m_nativeFontInfo.description, "monospace" );
                break;
-            case wxFONTFAMILY_SWISS:
+            case wxFONTFAMILY_ROMAN:
                pango_font_description_set_family( m_nativeFontInfo.description, "serif" );
                break;
+            case wxFONTFAMILY_SWISS:
+               // SWISS = sans serif
             default:
                pango_font_description_set_family( m_nativeFontInfo.description, "sans" );
                break;
@@ -275,6 +277,10 @@ void wxFontRefData::InitFromNative()
     else if (m_faceName == wxT("sans"))
     {
         m_family = wxFONTFAMILY_SWISS;
+    }
+    else if (m_faceName == wxT("serif"))
+    {
+        m_family = wxFONTFAMILY_ROMAN;
     }
     else
     {
