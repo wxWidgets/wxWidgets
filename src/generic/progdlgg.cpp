@@ -128,7 +128,8 @@ wxProgressDialog::wxProgressDialog(wxString const &title,
     c->height.AsIs();
     m_msg->SetConstraints(c);
 
-    wxSize sizeDlg, sizeLabel = m_msg->GetSize();
+    wxSize sizeDlg,
+           sizeLabel = m_msg->GetSize();
     sizeDlg.y = 2*LAYOUT_Y_MARGIN + sizeLabel.y;
 
     wxWindow *lastWindow = m_msg;
@@ -160,11 +161,17 @@ wxProgressDialog::wxProgressDialog(wxString const &title,
     // create the estimated/remaining/total time zones if requested
     m_elapsed = m_estimated = m_remaining = (wxStaticText*)NULL;
 
-    int nTimeLabels = 0;
+    // if we are going to have at least one label, remmeber it in this var
+    wxStaticText *label = NULL;
+
+    // also count how many labels we really have
+    size_t nTimeLabels = 0;
+
     if ( style & wxPD_ELAPSED_TIME )
     {
         nTimeLabels++;
 
+        label =
         m_elapsed = CreateLabel(_("Elapsed time : "), &lastWindow);
     }
 
@@ -172,6 +179,7 @@ wxProgressDialog::wxProgressDialog(wxString const &title,
     {
         nTimeLabels++;
 
+        label =
         m_estimated = CreateLabel(_("Estimated time : "), &lastWindow);
     }
 
@@ -179,6 +187,7 @@ wxProgressDialog::wxProgressDialog(wxString const &title,
     {
         nTimeLabels++;
 
+        label =
         m_remaining = CreateLabel(_("Remaining time : "), &lastWindow);
     }
 
@@ -186,7 +195,7 @@ wxProgressDialog::wxProgressDialog(wxString const &title,
     {
         // set it to the current time
         m_timeStart = wxGetCurrentTime();
-        sizeDlg.y += nTimeLabels * (sizeLabel.y + LAYOUT_Y_MARGIN);
+        sizeDlg.y += nTimeLabels * (label->GetSize().y + LAYOUT_Y_MARGIN);
     }
 
     if ( hasAbortButton )
