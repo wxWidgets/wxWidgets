@@ -43,7 +43,7 @@
 #ifdef __WXMSW__
     #include "wx/msw/registry.h"
     #include "windows.h"
-#elif defined(__UNIX__)
+#elif defined(__UNIX__)  || defined(__WXPM__)
     #include "wx/ffile.h"
     #include "wx/textfile.h"
     #include "wx/dir.h"
@@ -1339,7 +1339,7 @@ void wxGNOMEIconHandler::Init()
 {
     wxArrayString dirs;
     dirs.Add(_T("/usr/share"));
-    
+
     wxString gnomedir;
     wxGetHomeDir( &gnomedir );
     gnomedir += _T("/.gnome");
