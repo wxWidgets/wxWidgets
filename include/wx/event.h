@@ -115,10 +115,12 @@ BEGIN_DECLARE_EVENT_TYPES()
     DECLARE_EVENT_TYPE(wxEVT_COMMAND_LISTBOX_SELECTED, 4)
     DECLARE_EVENT_TYPE(wxEVT_COMMAND_LISTBOX_DOUBLECLICKED, 5)
     DECLARE_EVENT_TYPE(wxEVT_COMMAND_CHECKLISTBOX_TOGGLED, 6)
-    /* now in wx/textctrl.h
+    // now they are in wx/textctrl.h
+#if WXWIN_COMPATIBILITY_EVENT_TYPES
     DECLARE_EVENT_TYPE(wxEVT_COMMAND_TEXT_UPDATED, 7)
     DECLARE_EVENT_TYPE(wxEVT_COMMAND_TEXT_ENTER, 8)
-    */
+    DECLARE_EVENT_TYPE(wxEVT_COMMAND_TEXT_URL, 13)
+#endif // WXWIN_COMPATIBILITY_EVENT_TYPES
     DECLARE_EVENT_TYPE(wxEVT_COMMAND_MENU_SELECTED, 9)
     DECLARE_EVENT_TYPE(wxEVT_COMMAND_SLIDER_UPDATED, 10)
     DECLARE_EVENT_TYPE(wxEVT_COMMAND_RADIOBOX_SELECTED, 11)
@@ -258,7 +260,17 @@ END_DECLARE_EVENT_TYPES()
 // these 2 events are the same
 #define wxEVT_COMMAND_TOOL_CLICKED wxEVT_COMMAND_MENU_SELECTED
 
+// ----------------------------------------------------------------------------
 // Compatibility
+// ----------------------------------------------------------------------------
+
+// this event is also used by wxComboBox and wxSpinCtrl which don't include
+// wx/textctrl.h in all ports [yet], so declare it here as well
+//
+// still, any new code using it should include wx/textctrl.h explicitly
+#if !WXWIN_COMPATIBILITY_EVENT_TYPES
+    extern const wxEventType WXDLLEXPORT wxEVT_COMMAND_TEXT_UPDATED;
+#endif
 
 #if WXWIN_COMPATIBILITY
 

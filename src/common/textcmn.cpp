@@ -278,5 +278,13 @@ void wxTextCtrlBase::SelectAll()
     SetSelection(0, GetLastPosition());
 }
 
-#endif // wxUSE_TEXTCTRL
+#else // !wxUSE_TEXTCTRL
+
+// define this one even if !wxUSE_TEXTCTRL because it is also used by other
+// controls (wxComboBox and wxSpinCtrl)
+#include "wx/event.h"
+
+DEFINE_EVENT_TYPE(wxEVT_COMMAND_TEXT_UPDATED)
+
+#endif // wxUSE_TEXTCTRL/!wxUSE_TEXTCTRL
 
