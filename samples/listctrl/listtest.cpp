@@ -672,6 +672,13 @@ void MyListCtrl::LogColEvent(const wxListEvent& event, const wxChar *name)
 void MyListCtrl::OnColBeginDrag(wxListEvent& event)
 {
     LogColEvent( event, wxT("OnColBeginDrag") );
+
+    if ( event.GetColumn() == 0 )
+    {
+        wxLogMessage(_T("Resizing this column shouldn't work."));
+
+        event.Veto();
+    }
 }
 
 void MyListCtrl::OnColDragging(wxListEvent& event)

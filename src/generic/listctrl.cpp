@@ -495,7 +495,9 @@ private:
     // common part of all ctors
     void Init();
 
-    void SendListEvent(wxEventType type, wxPoint pos);
+    // generate and process the list event of the given type, return true if
+    // it wasn't vetoed, i.e. if we should proceed
+    bool SendListEvent(wxEventType type, wxPoint pos);
 
     DECLARE_DYNAMIC_CLASS(wxListHeaderWindow)
     DECLARE_EVENT_TABLE()
@@ -2130,8 +2132,7 @@ void wxListHeaderWindow::OnMouse( wxMouseEvent &event )
 
     if (m_isDragging)
     {
-        SendListEvent(wxEVT_COMMAND_LIST_COL_DRAGGING,
-                      event.GetPosition());
+        SendListEvent(wxEVT_COMMAND_LIST_COL_DRAGGING, event.GetPosition());
 
         // we don't draw the line beyond our window, but we allow dragging it
         // there
@@ -2150,8 +2151,7 @@ void wxListHeaderWindow::OnMouse( wxMouseEvent &event )
             m_isDragging = FALSE;
             m_dirty = TRUE;
             m_owner->SetColumnWidth( m_column, m_currentX - m_minX );
-            SendListEvent(wxEVT_COMMAND_LIST_COL_END_DRAG,
-                          event.GetPosition());
+            SendListEvent(wxEVT_COMMAND_LIST_COL_END_DRAG, event.GetPosition());
         }
         else
         {
@@ -2204,12 +2204,15 @@ void wxListHeaderWindow::OnMouse( wxMouseEvent &event )
         {
             if (hit_border && event.LeftDown())
             {
-                m_isDragging = TRUE;
-                m_currentX = x;
-                DrawCurrent();
-                CaptureMouse();
-                SendListEvent(wxEVT_COMMAND_LIST_COL_BEGIN_DRAG,
-                              event.GetPosition());
+                if ( SendListEvent(wxEVT_COMMAND_LIST_COL_BEGIN_DRAG,
+                                   event.GetPosition()) )
+                {
+                    m_isDragging = TRUE;
+                    m_currentX = x;
+                    DrawCurrent();
+                    CaptureMouse();
+                }
+                //else: column resizing was vetoed by the user code
             }
             else // click on a column
             {
@@ -2244,7 +2247,7 @@ void wxListHeaderWindow::OnSetFocus( wxFocusEvent &WXUNUSED(event) )
     m_owner->SetFocus();
 }
 
-void wxListHeaderWindow::SendListEvent(wxEventType type, wxPoint pos)
+bool wxListHeaderWindow::SendListEvent(wxEventType type, wxPoint pos)
 {
     wxWindow *parent = GetParent();
     wxListEvent le( type, parent->GetId() );
@@ -2258,7 +2261,7 @@ void wxListHeaderWindow::SendListEvent(wxEventType type, wxPoint pos)
     le.m_pointDrag.y -= GetSize().y;
 
     le.m_col = m_column;
-    parent->GetEventHandler()->ProcessEvent( le );
+    return !parent->GetEventHandler()->ProcessEvent( le ) || le.IsAllowed();
 }
 
 //-----------------------------------------------------------------------------
