@@ -210,6 +210,14 @@ wxLayoutWindow::Clear(int family,
    DoPaint((wxRect *)NULL);
 }
 
+void wxLayoutWindow::Refresh(bool eraseBackground, const wxRect *rect)
+{
+   wxScrolledWindow::Refresh(eraseBackground, rect);
+
+   ResizeScrollbars();
+   ScrollToCursor();
+}
+
 void
 wxLayoutWindow::OnMouse(int eventId, wxMouseEvent& event)
 {
@@ -288,7 +296,16 @@ wxLayoutWindow::OnMouse(int eventId, wxMouseEvent& event)
       case WXLOWIN_MENU_LDOWN:
          {
              // always move cursor to mouse click:
-             m_llist->MoveCursorTo(cursorPos);
+             if ( obj )
+             {
+                // we have found the real position
+                m_llist->MoveCursorTo(cursorPos);
+             }
+             else
+             {
+                // click beyond the end of the text
+                m_llist->MoveCursorTo(m_llist->GetSize());
+             }
 
              // clicking a mouse removes the selection
              if ( m_llist->HasSelection() )

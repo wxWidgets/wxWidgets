@@ -68,6 +68,11 @@ public:
               int underline=0,
               wxColour *fg=NULL,
               wxColour *bg=NULL);
+
+   /// override base class virtual to also refresh the scrollbar position
+   virtual void Refresh(bool eraseBackground = TRUE,
+                        const wxRect *rect = (const wxRect *)NULL);
+
    /** Sets a background image, only used on screen, not on printouts.
        @param bitmap a pointer to a wxBitmap or NULL to remove it
    */

@@ -1852,8 +1852,11 @@ wxLayoutList::MoveCursorWord(int n, bool untilNext)
             }
             else // backwards
             {
-               if ( isspace(*p) )
+               // in these 2 cases we took 1 char too much
+               if ( (p < start) || isspace(*p) )
+               {
                   p++;
+               }
             }
 
             n > 0 ? n-- : n++;
@@ -1964,7 +1967,7 @@ wxLayoutList::LineBreak(void)
    if(prev)
       height += prev->GetHeight();
    height += m_CursorLine->GetHeight();
-   
+
    m_movedCursor = true;
 
    SetUpdateRect(position);
@@ -2172,7 +2175,8 @@ wxLayoutList::Layout(wxDC &dc, CoordType bottom, bool forceAll,
             if(cpos && line ->GetLineNumber() == cpos->y)
             {
                *cpos = m_CursorScreenPos;
-               *csize = m_CursorSize;
+               if ( csize )
+                  *csize = m_CursorSize;
             }
          }
          else
