@@ -209,8 +209,8 @@ public:
         { return m_appInitFn; }
 
     // access to the command line arguments
-    int     argc;
-    char  **argv;
+    int      argc;
+    wxChar **argv;
 
 //private:
 protected:
