@@ -46,8 +46,6 @@ public:
     virtual int GetValue() const;
     virtual void SetValue(int);
 
-    void GetSize(int *w, int *h) const;
-
     void GetPosition(int *x, int *y) const;
 
     bool Show(bool show = TRUE);

@@ -395,11 +395,6 @@ void wxSlider95::SetValue(int value)
 
 void wxSlider95::DoGetSize(int *width, int *height) const
 {
-    GetSize(width, height);
-}
-
-void wxSlider95::GetSize(int *width, int *height) const
-{
     RECT rect;
     rect.left = -1; rect.right = -1; rect.top = -1; rect.bottom = -1;
 
@@ -414,8 +409,10 @@ void wxSlider95::GetSize(int *width, int *height) const
     if (m_staticValue)
         wxFindMaxSize(m_staticValue, &rect);
 
-    *width = rect.right - rect.left;
-    *height = rect.bottom - rect.top;
+    if ( width )
+        *width = rect.right - rect.left;
+    if ( height )
+        *height = rect.bottom - rect.top;
 }
 
 void wxSlider95::GetPosition(int *x, int *y) const
