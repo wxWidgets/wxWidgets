@@ -59,7 +59,9 @@ class MyFrame: public wxFrame
     void OnIconTextView(wxCommandEvent& event);
     void OnSmallIconView(wxCommandEvent& event);
     void OnSmallIconTextView(wxCommandEvent& event);
-	bool OnClose(void) { return TRUE; }
+    bool OnClose(void) { return TRUE; }
+    void OnDeselectAll(wxCommandEvent& event);
+    void OnSelectAll(wxCommandEvent& event);
 
    DECLARE_EVENT_TABLE()
 };
@@ -73,6 +75,8 @@ class MyFrame: public wxFrame
 #define LIST_SMALL_ICON_VIEW        5
 #define LIST_SMALL_ICON_TEXT_VIEW   6
 #define LIST_REPORT_VIEW            7
+#define LIST_DESELECT_ALL           8
+#define LIST_SELECT_ALL             9
 #define LIST_ABOUT                  102
 
 #define LIST_CTRL                   1000

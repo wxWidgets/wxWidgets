@@ -37,6 +37,8 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
 	EVT_MENU(LIST_ICON_TEXT_VIEW, MyFrame::OnIconTextView)
 	EVT_MENU(LIST_SMALL_ICON_VIEW, MyFrame::OnSmallIconView)
 	EVT_MENU(LIST_SMALL_ICON_TEXT_VIEW, MyFrame::OnSmallIconTextView)
+	EVT_MENU(LIST_DESELECT_ALL, MyFrame::OnDeselectAll)
+	EVT_MENU(LIST_DESELECT_ALL, MyFrame::OnSelectAll)
 END_EVENT_TABLE()
 
 BEGIN_EVENT_TABLE(MyListCtrl, wxListCtrl)
@@ -125,6 +127,8 @@ bool MyApp::OnInit(void)
   file_menu->Append(LIST_ICON_TEXT_VIEW, 	"Icon view with &text");
   file_menu->Append(LIST_SMALL_ICON_VIEW, 	"&Small icon view");
   file_menu->Append(LIST_SMALL_ICON_TEXT_VIEW, 	"Small icon &view with text");
+  file_menu->Append(LIST_DESELECT_ALL, "&Deselect All");
+  file_menu->Append(LIST_SELECT_ALL, "S&elect All");
   file_menu->AppendSeparator();
   file_menu->Append(LIST_ABOUT, "&About");
   file_menu->Append(LIST_QUIT, "E&xit");
@@ -196,6 +200,22 @@ void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
   	"About list test", wxOK|wxCANCEL);
 
   dialog.ShowModal();
+}
+
+void MyFrame::OnDeselectAll(wxCommandEvent& WXUNUSED(event))
+{
+   int n = m_listCtrl->GetItemCount();
+   int i;
+   for(i = 0; i < n; i++)
+      m_listCtrl->SetItemState(i,0,wxLIST_STATE_SELECTED);
+}
+
+void MyFrame::OnSelectAll(wxCommandEvent& WXUNUSED(event))
+{
+   int n = m_listCtrl->GetItemCount();
+   int i;
+   for(i = 0; i < n; i++)
+      m_listCtrl->SetItemState(i,wxLIST_STATE_SELECTED, wxLIST_STATE_SELECTED);
 }
 
 void MyFrame::OnListView(wxCommandEvent& WXUNUSED(event))
