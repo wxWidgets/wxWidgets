@@ -75,6 +75,7 @@ bool MyApp::OnInit(void)
 
 #endif
   file_menu->AppendSeparator();
+  file_menu->Append(DIALOGS_LOG_DIALOG, "&Log dialog\tCtrl-L");
   file_menu->Append(DIALOGS_MESSAGE_BOX, "&Message box\tCtrl-M");
   file_menu->Append(DIALOGS_TEXT_ENTRY,  "Text &entry\tCtrl-E");
   file_menu->Append(DIALOGS_NUM_ENTRY, "&Numeric entry\tCtrl-N");
@@ -96,7 +97,7 @@ bool MyApp::OnInit(void)
   myCanvas->SetBackgroundColour(*wxWHITE);
 
   frame->Centre(wxBOTH);
-  
+
   // Show the frame
   frame->Show(TRUE);
 
@@ -119,7 +120,7 @@ void MyFrame::ChooseColour(wxCommandEvent& WXUNUSED(event) )
         wxColour colour(i*16, i*16, i*16);
         data.SetCustomColour(i, colour);
       }
-      
+
       wxColourDialog *dialog = new wxColourDialog(this, &data);
       if (dialog->ShowModal() == wxID_OK)
       {
@@ -138,7 +139,7 @@ void MyFrame::ChooseFont(wxCommandEvent& WXUNUSED(event) )
       wxFontData data;
       data.SetInitialFont(wxGetApp().m_canvasFont);
       data.SetColour(wxGetApp().m_canvasTextColour);
-      
+
       wxFontDialog *dialog = new wxFontDialog(this, &data);
       if (dialog->ShowModal() == wxID_OK)
       {
@@ -160,7 +161,7 @@ void MyFrame::ChooseColourGeneric(wxCommandEvent& WXUNUSED(event))
         wxColour colour(i*16, i*16, i*16);
         data.SetCustomColour(i, colour);
       }
-      
+
       wxGenericColourDialog *dialog = new wxGenericColourDialog(this, &data);
       if (dialog->ShowModal() == wxID_OK)
       {
@@ -190,7 +191,16 @@ void MyFrame::ChooseFontGeneric(wxCommandEvent& WXUNUSED(event) )
       }
       dialog->Destroy();
 }
-#endif
+#endif // wxTEST_GENERIC_DIALOGS_IN_MSW
+
+void MyFrame::LogDialog(wxCommandEvent& event)
+{
+    wxLogMessage("This is some message - everything is ok so far.");
+    wxLogMessage("Another message...");
+    wxLogWarning("And then something went wrong!");
+    wxLogError("Intermediary error handler decided to abort.");
+    wxLogError("The top level caller detected an error.");
+}
 
 void MyFrame::MessageBox(wxCommandEvent& WXUNUSED(event) )
 {
@@ -204,7 +214,7 @@ void MyFrame::NumericEntry(wxCommandEvent& WXUNUSED(event) )
 {
     long res = wxGetNumberFromUser( "This is some text, actually a lot of text.\n"
                                     "Even two rows of text.",
-				    "Enter a number:", "Numeric input test",
+                                    "Enter a number:", "Numeric input test",
                                      50, 0, 100, this );
 
     wxString msg;
@@ -215,8 +225,8 @@ void MyFrame::NumericEntry(wxCommandEvent& WXUNUSED(event) )
         icon = wxICON_HAND;
     }
     else
-    {            
-	msg.Printf(_T("You've entered %lu"), res );
+    {
+        msg.Printf(_T("You've entered %lu"), res );
         icon = wxICON_INFORMATION;
     }
 
@@ -378,6 +388,7 @@ END_EVENT_TABLE()
 BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(DIALOGS_CHOOSE_COLOUR,                MyFrame::ChooseColour)
     EVT_MENU(DIALOGS_CHOOSE_FONT,                MyFrame::ChooseFont)
+    EVT_MENU(DIALOGS_LOG_DIALOG,                MyFrame::LogDialog)
     EVT_MENU(DIALOGS_MESSAGE_BOX,                MyFrame::MessageBox)
     EVT_MENU(DIALOGS_TEXT_ENTRY,                MyFrame::TextEntry)
     EVT_MENU(DIALOGS_NUM_ENTRY,                MyFrame::NumericEntry)

@@ -31,6 +31,7 @@ public:
 
     void ChooseColour(wxCommandEvent& event);
     void ChooseFont(wxCommandEvent& event);
+    void LogDialog(wxCommandEvent& event);
     void MessageBox(wxCommandEvent& event);
     void SingleChoice(wxCommandEvent& event);
     void TextEntry(wxCommandEvent& event);
@@ -76,6 +77,7 @@ public:
 #define DIALOGS_DIR_CHOOSE                  11
 #define DIALOGS_TIP                         12
 #define DIALOGS_NUM_ENTRY                   13
+#define DIALOGS_LOG_DIALOG                  14
 
 #endif
 

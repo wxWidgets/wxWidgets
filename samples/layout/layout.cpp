@@ -275,7 +275,9 @@ void MyFrame::Draw(wxDC& dc, bool WXUNUSED(draw_bitmaps) )
   dc.DrawRoundedRectangle(150, 150, 100, 50, 20);
 
   dc.DrawEllipse(250, 250, 100, 50);
+#if wxUSE_SPLINES
   dc.DrawSpline(50, 200, 50, 100, 200, 10);
+#endif // wxUSE_SPLINES
   dc.DrawLine(50, 230, 200, 230);
 
   dc.SetPen(* wxBLACK_PEN);

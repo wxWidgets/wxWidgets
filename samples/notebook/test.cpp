@@ -99,7 +99,8 @@ void MyApp::InitTabView(wxNotebook* notebook, wxPanel* window)
 
   wxString animals[] = { "Fox", "Hare", "Rabbit", "Sabre-toothed tiger", "T Rex" };
   wxRadioBox *radiobox = new wxRadioBox(panel2, -1, "Choose one",
-                                        wxDefaultPosition, wxDefaultSize, 5, animals);
+                                        wxDefaultPosition, wxDefaultSize, 5, animals,
+                                        2, wxRA_SPECIFY_ROWS);
 
   c = new wxLayoutConstraints;
   c->left.SameAs(panel2, wxLeft, 4);

@@ -42,6 +42,10 @@
 
 #include "wx/process.h"
 
+#ifdef __WINDOWS__
+    #include "wx/dde.h"
+#endif // __WINDOWS__
+
 // ----------------------------------------------------------------------------
 // private classes
 // ----------------------------------------------------------------------------
@@ -72,6 +76,7 @@ public:
     void OnSyncExec(wxCommandEvent& event);
     void OnAsyncExec(wxCommandEvent& event);
     void OnShell(wxCommandEvent& event);
+    void OnDDEExec(wxCommandEvent& event);
 
     void OnAbout(wxCommandEvent& event);
 
@@ -114,8 +119,11 @@ enum
     Exec_SyncExec = 200,
     Exec_AsyncExec,
     Exec_Shell,
+    Exec_DDEExec,
     Exec_About = 300
 };
+
+static const wxChar *DIALOG_TITLE = _T("Exec sample");
 
 // ----------------------------------------------------------------------------
 // event tables and other macros for wxWindows
@@ -130,6 +138,7 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(Exec_SyncExec, MyFrame::OnSyncExec)
     EVT_MENU(Exec_AsyncExec, MyFrame::OnAsyncExec)
     EVT_MENU(Exec_Shell, MyFrame::OnShell)
+    EVT_MENU(Exec_DDEExec, MyFrame::OnDDEExec)
 
     EVT_MENU(Exec_About, MyFrame::OnAbout)
 END_EVENT_TABLE()
@@ -195,6 +204,11 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
     execMenu->Append(Exec_Shell, _T("Execute &shell command...\tCtrl-S"),
                      _T("Launch a shell and execute a command in it"));
 
+#ifdef __WINDOWS__
+    execMenu->AppendSeparator();
+    execMenu->Append(Exec_DDEExec, _T("Execute command via &DDE...\tCtrl-D"));
+#endif
+
     wxMenu *helpMenu = new wxMenu(_T(""), wxMENU_TEAROFF);
     helpMenu->Append(Exec_About, _T("&About...\tF1"), _T("Show about dialog"));
 
@@ -232,7 +246,7 @@ void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
 void MyFrame::OnSyncExec(wxCommandEvent& WXUNUSED(event))
 {
     wxString cmd = wxGetTextFromUser(_T("Enter the command: "),
-                                     _T("Exec sample"),
+                                     DIALOG_TITLE,
                                      m_cmdLast);
 
     if ( !cmd )
@@ -247,7 +261,7 @@ void MyFrame::OnSyncExec(wxCommandEvent& WXUNUSED(event))
 void MyFrame::OnAsyncExec(wxCommandEvent& WXUNUSED(event))
 {
     wxString cmd = wxGetTextFromUser(_T("Enter the command: "),
-                                     _T("Exec sample"),
+                                     DIALOG_TITLE,
                                      m_cmdLast);
 
     if ( !cmd )
@@ -269,7 +283,7 @@ void MyFrame::OnAsyncExec(wxCommandEvent& WXUNUSED(event))
 void MyFrame::OnShell(wxCommandEvent& WXUNUSED(event))
 {
     wxString cmd = wxGetTextFromUser(_T("Enter the command: "),
-                                     _T("Exec sample"),
+                                     DIALOG_TITLE,
                                      m_cmdLast);
 
     if ( !cmd )
@@ -279,6 +293,48 @@ void MyFrame::OnShell(wxCommandEvent& WXUNUSED(event))
     wxLogStatus(_T("Shell command '%s' terminated with exit code %d."),
                 cmd.c_str(), code);
     m_cmdLast = cmd;
+}
+
+void MyFrame::OnDDEExec(wxCommandEvent& WXUNUSED(event))
+{
+#ifdef __WINDOWS__
+    wxString server = wxGetTextFromUser(_T("Server to connect to:"),
+                                        DIALOG_TITLE, _T("IExplore"));
+    if ( !server )
+        return;
+
+    wxString topic = wxGetTextFromUser(_T("DDE topic:"),
+                                       DIALOG_TITLE, _T("WWW_OpenURL"));
+    if ( !topic )
+        return;
+
+    wxString cmd = wxGetTextFromUser(_T("DDE command:"),
+                                     DIALOG_TITLE,
+                                     _T("\"file:F:\\wxWindows\\samples\\"
+                                        "image\\horse.gif\",,-1,,,,,"));
+    if ( !cmd )
+        return;
+
+    wxDDEClient client;
+    wxConnectionBase *conn = client.MakeConnection("", server, topic);
+    if ( !conn )
+    {
+        wxLogError(_T("Failed to connect to the DDE server '%s'."),
+                   server.c_str());
+    }
+    else
+    {
+        if ( !conn->Execute(cmd) )
+        {
+            wxLogError(_T("Failed to execute command '%s' via DDE."),
+                       cmd.c_str());
+        }
+        else
+        {
+            wxLogStatus(_T("Successfully executed DDE command"));
+        }
+    }
+#endif // __WINDOWS__
 }
 
 // ----------------------------------------------------------------------------

@@ -42,6 +42,30 @@
 #endif
 
 // ----------------------------------------------------------------------------
+// constants
+// ----------------------------------------------------------------------------
+
+// ids for menu items
+enum
+{
+    Wizard_Quit = 100,
+    Wizard_Run,
+    Wizard_About = 1000
+};
+
+// ----------------------------------------------------------------------------
+// ressources
+// ----------------------------------------------------------------------------
+
+#ifdef __WXMSW__
+    #define BMP_WIZARD_1 wxBitmap("wiztest.bmp", wxBITMAP_TYPE_BMP)
+    #define BMP_WIZARD_2 wxBitmap("wiztest2.bmp", wxBITMAP_TYPE_BMP)
+#else
+    #define BMP_WIZARD_1 wxBitmap(wizimage)
+    #define BMP_WIZARD_2 wxBitmap(wizimage)
+#endif
+
+// ----------------------------------------------------------------------------
 // private classes
 // ----------------------------------------------------------------------------
 
@@ -53,7 +77,22 @@ public:
     virtual bool OnInit();
 };
 
-IMPLEMENT_APP(MyApp)
+class MyFrame : public wxFrame
+{
+public:
+    // ctor(s)
+    MyFrame(const wxString& title);
+
+    // event handlers (these functions should _not_ be virtual)
+    void OnQuit(wxCommandEvent& event);
+    void OnAbout(wxCommandEvent& event);
+    void OnRunWizard(wxCommandEvent& event);
+    void OnWizardCancel(wxWizardEvent& event);
+
+private:
+    // any class wishing to process wxWindows events must use this macro
+    DECLARE_EVENT_TABLE()
+};
 
 // ----------------------------------------------------------------------------
 // some pages for our wizard
@@ -63,11 +102,15 @@ IMPLEMENT_APP(MyApp)
 // overriding TransferDataFromWindow() - of course, in a real program, the
 // check wouldn't be so trivial and the data will be probably saved somewhere
 // too
+//
+// it also shows how to use a different bitmap for one of the pages
 class wxValidationPage : public wxWizardPageSimple
 {
 public:
     wxValidationPage(wxWizard *parent) : wxWizardPageSimple(parent)
     {
+        m_bitmap = BMP_WIZARD_2;
+
         m_checkbox = new wxCheckBox(this, -1, "&Check me");
     }
 
@@ -185,10 +228,24 @@ private:
 // implementation
 // ============================================================================
 
+// ----------------------------------------------------------------------------
+// event tables and such
+// ----------------------------------------------------------------------------
+
+BEGIN_EVENT_TABLE(MyFrame, wxFrame)
+    EVT_MENU(Wizard_Quit,  MyFrame::OnQuit)
+    EVT_MENU(Wizard_About, MyFrame::OnAbout)
+    EVT_MENU(Wizard_Run,   MyFrame::OnRunWizard)
+
+    EVT_WIZARD_CANCEL(-1, MyFrame::OnWizardCancel)
+END_EVENT_TABLE()
+
 BEGIN_EVENT_TABLE(wxRadioboxPage, wxWizardPageSimple)
     EVT_WIZARD_PAGE_CHANGING(-1, wxRadioboxPage::OnWizardPageChanging)
     EVT_WIZARD_CANCEL(-1, wxRadioboxPage::OnWizardCancel)
 END_EVENT_TABLE()
+
+IMPLEMENT_APP(MyApp)
 
 // ----------------------------------------------------------------------------
 // the application class
@@ -197,15 +254,62 @@ END_EVENT_TABLE()
 // `Main program' equivalent: the program execution "starts" here
 bool MyApp::OnInit()
 {
-#ifdef __WXMSW__
-    wxBitmap bmpWizard("wiztest.bmp", wxBITMAP_TYPE_BMP);
-#else
-    wxBitmap bmpWizard(wizimage);
-#endif
+    MyFrame *frame = new MyFrame("wxWizard Sample");
 
-    wxWizard *wizard = wxWizard::Create(NULL, -1,
+    // and show it (the frames, unlike simple controls, are not shown when
+    // created initially)
+    frame->Show(TRUE);
+
+    // we're done
+    return TRUE;
+}
+
+// ----------------------------------------------------------------------------
+// MyFrame
+// ----------------------------------------------------------------------------
+
+MyFrame::MyFrame(const wxString& title)
+       : wxFrame((wxFrame *)NULL, -1, title,
+                  wxDefaultPosition, wxSize(250, 150))  // small frame
+{
+    wxMenu *menuFile = new wxMenu;
+    menuFile->Append(Wizard_Run, "&Run wizard...\tCtrl-R");
+    menuFile->AppendSeparator();
+    menuFile->Append(Wizard_Quit, "E&xit\tAlt-X", "Quit this program");
+
+    wxMenu *helpMenu = new wxMenu;
+    helpMenu->Append(Wizard_About, "&About...\tF1", "Show about dialog");
+
+    // now append the freshly created menu to the menu bar...
+    wxMenuBar *menuBar = new wxMenuBar();
+    menuBar->Append(menuFile, "&File");
+    menuBar->Append(helpMenu, "&Help");
+
+    // ... and attach this menu bar to the frame
+    SetMenuBar(menuBar);
+
+    // also create status bar which we use in OnWizardCancel
+    CreateStatusBar();
+}
+
+void MyFrame::OnQuit(wxCommandEvent& WXUNUSED(event))
+{
+    // TRUE is to force the frame to close
+    Close(TRUE);
+}
+
+void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
+{
+    wxMessageBox("Demo of wxWizard class\n"
+                 "© 1999, 2000 Vadim Zeitlin",
+                 "About wxWizard sample", wxOK | wxICON_INFORMATION, this);
+}
+
+void MyFrame::OnRunWizard(wxCommandEvent& WXUNUSED(event))
+{
+    wxWizard *wizard = wxWizard::Create(this, -1,
                                         "Absolutely Useless Wizard",
-                                        bmpWizard);
+                                        BMP_WIZARD_1);
 
     // a wizard page may be either an object of predefined class
     wxWizardPageSimple *page1 = new wxWizardPageSimple(wizard);
@@ -237,8 +341,9 @@ bool MyApp::OnInit()
     }
 
     wizard->Destroy();
-
-    // we're done
-    return FALSE;
 }
 
+void MyFrame::OnWizardCancel(wxWizardEvent& WXUNUSED(event))
+{
+    wxLogStatus(this, "The wizard was cancelled.");
+}

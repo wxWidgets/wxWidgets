@@ -32,12 +32,13 @@
 //#define TEST_ARRAYS
 //#define TEST_CMDLINE
 //#define TEST_DIR
+#define TEST_EXECUTE
 //#define TEST_LOG
 //#define TEST_LONGLONG
 //#define TEST_MIME
 //#define TEST_STRINGS
 //#define TEST_THREADS
-#define TEST_TIME
+//#define TEST_TIME
 
 // ============================================================================
 // implementation
@@ -159,6 +160,34 @@ static void TestDirEnum()
 }
 
 #endif // TEST_DIR
+
+// ----------------------------------------------------------------------------
+// wxExecute
+// ----------------------------------------------------------------------------
+
+#ifdef TEST_EXECUTE
+
+#include <wx/utils.h>
+
+static void TestExecute()
+{
+    puts("*** testing wxExecute ***");
+
+#ifdef __UNIX__
+    #define COMMAND "echo hi"
+#elif defined(__WXMSW__)
+    #define COMMAND "command.com -c 'echo hi'"
+#else
+    #error "no command to exec"
+#endif // OS
+
+    if ( wxExecute(COMMAND) == 0 )
+        puts("\nOk.");
+    else
+        puts("\nError.");
+}
+
+#endif // TEST_EXECUTE
 
 // ----------------------------------------------------------------------------
 // MIME types
@@ -1850,6 +1879,10 @@ int main(int argc, char **argv)
 #ifdef TEST_DIR
     TestDirEnum();
 #endif // TEST_DIR
+
+#ifdef TEST_EXECUTE
+    TestExecute();
+#endif // TEST_EXECUTE
 
 #ifdef TEST_LOG
     wxString s;
