@@ -134,7 +134,7 @@ bool MyApp::OnInit()
             _T("French"),
             _T("German"),
             _T("Russian"),
-            _T("Japanese"),
+            _T("Japanese"),         // this will only work in Unicode build
             _T("English"),
             _T("English (U.S.)")
         };
@@ -226,35 +226,63 @@ void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
     wxString sysname = m_locale.GetSysName();
     wxString canname = m_locale.GetCanonicalName();
 
-    localeInfo.Printf( _("Language: %s\nSystem locale name: %s\nCanonical locale name: %s\n"),
+    localeInfo.Printf(_("Language: %s\nSystem locale name: %s\nCanonical locale name: %s\n"),
         locale.c_str(), sysname.c_str(), canname.c_str() );
 
-    wxMessageDialog(this, wxString(_("I18n sample\n(c) 1998, 1999 Vadim Zeitlin and Julian Smart"))
-        + wxT("\n\n") + localeInfo,
-        _("About Internat"), wxOK | wxICON_INFORMATION).ShowModal();
+    wxMessageDialog
+    (
+        this,
+        wxString(_("I18n sample\n(c) 1998, 1999 Vadim Zeitlin and Julian Smart"))
+            + wxT("\n\n")
+            + localeInfo,
+        _("About Internat"), 
+        wxOK | wxICON_INFORMATION
+    ).ShowModal();
 }
 
 void MyFrame::OnPlay(wxCommandEvent& WXUNUSED(event))
 {
-    wxString str = wxGetTextFromUser(_("Enter your number:"),
-        _("Try to guess my number!"), wxEmptyString, this);
+    wxString str = wxGetTextFromUser
+                   (
+                    _("Enter your number:"),
+                    _("Try to guess my number!"),
+                    wxEmptyString,
+                    this
+                   );
 
-    if ( str.IsEmpty() ) return;
-
-    int num;
-    wxSscanf(str, wxT("%d"), &num);
-    if ( num == 0 )
-        str = _("You've probably entered an invalid number.");
-    else if ( num == 9 )  // this message is not translated (not in catalog)
-        str = _T("You've found a bug in this program!");
-    else if ( num != 17 ) // a more implicit way to write _()
-        str = wxGetTranslation(wxT("Bad luck! try again..."));
-    else
+    if ( str.empty() )
     {
-        str.Empty();
-        // string must be split in two -- otherwise the translation won't be found
+        // cancelled
+        return;
+    }
+
+    long num;
+    if ( !str.ToLong(&num) || num < 0 )
+    {
+        str = _("You've probably entered an invalid number.");
+    }
+    else if ( num == 9 )
+    {
+        // this message is not translated (not in catalog) because we used _T()
+        // and not _() around it
+        str = _T("You've found a bug in this program!");
+    }
+    else if ( num == 17 )
+    {
+        str.clear();
+
+        // string must be split in two -- otherwise the translation would't be
+        // found
         str << _("Congratulations! you've won. Here is the magic phrase:")
             << _("cannot create fifo `%s'");
+    }
+    else
+    {
+        // this is a more implicit way to write _() but note that if you use it
+        // you must ensure that the strings get extracted in the message
+        // catalog as by default xgettext won't do it (it only knows of _(),
+        // not wxGetTranslation())
+        str = wxGetTranslation(_T("Bad luck! try again..."));
     }
 
     wxMessageBox(str, _("Result"), wxOK | wxICON_INFORMATION);
@@ -266,3 +294,4 @@ void MyFrame::OnOpen(wxCommandEvent&)
     // got wxstd.mo somewhere in the search path
     wxFile file(wxT("NOTEXIST.ING"));
 }
+

@@ -77,5 +77,6 @@ msgstr "не могу создать fifo `%s'"
 msgid "Result"
 msgstr "Результат"
 
-#~ msgid "Bad luck! try again..."
-#~ msgstr "Не везет! Попробуй снова..."
+msgid "Bad luck! try again..."
+msgstr "Не везет! Попробуй снова..."
+

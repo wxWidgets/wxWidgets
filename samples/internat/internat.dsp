@@ -19,6 +19,7 @@ CFG=internat - Win32 Debug
 !MESSAGE 
 !MESSAGE "internat - Win32 Release Unicode DLL" (based on "Win32 (x86) Application")
 !MESSAGE "internat - Win32 Debug Unicode DLL" (based on "Win32 (x86) Application")
+!MESSAGE "internat - Win32 Release Unicode" (based on "Win32 (x86) Application")
 !MESSAGE "internat - Win32 Debug Unicode" (based on "Win32 (x86) Application")
 !MESSAGE "internat - Win32 Release DLL" (based on "Win32 (x86) Application")
 !MESSAGE "internat - Win32 Debug DLL" (based on "Win32 (x86) Application")
@@ -59,7 +60,7 @@ LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib comctl32.lib rpcrt4.lib wsock32.lib /nologo /subsystem:windows /machine:I386
 # ADD LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib comctl32.lib rpcrt4.lib wsock32.lib /nologo /subsystem:windows /machine:I386 ..\..\lib\wxmsw233u.lib
 
-!IF "$(CFG)" == "internat - Win32 Debug Unicode DLL"
+!ELSEIF "$(CFG)" == "internat - Win32 Debug Unicode DLL"
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 1
@@ -85,7 +86,7 @@ LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib comctl32.lib rpcrt4.lib wsock32.lib /nologo /subsystem:windows /debug /machine:I386 /pdbtype:sept
 # ADD LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib comctl32.lib rpcrt4.lib wsock32.lib /nologo /subsystem:windows /debug /machine:I386 /pdbtype:sept ..\..\lib\wxmsw233ud.lib
 
-!IF "$(CFG)" == "internat - Win32 Release Unicode"
+!ELSEIF "$(CFG)" == "internat - Win32 Release Unicode"
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 0
@@ -111,7 +112,7 @@ LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib comctl32.lib rpcrt4.lib wsock32.lib /nologo /subsystem:windows /machine:I386
 # ADD LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib comctl32.lib rpcrt4.lib wsock32.lib /nologo /subsystem:windows /machine:I386 ..\..\lib\zlib.lib ..\..\lib\regex.lib ..\..\lib\png.lib ..\..\lib\jpeg.lib ..\..\lib\tiff.lib ..\..\lib\wxmswu.lib
 
-!IF "$(CFG)" == "internat - Win32 Debug Unicode"
+!ELSEIF "$(CFG)" == "internat - Win32 Debug Unicode"
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 1
@@ -137,7 +138,7 @@ LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib comctl32.lib rpcrt4.lib wsock32.lib /nologo /subsystem:windows /debug /machine:I386 /pdbtype:sept
 # ADD LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib comctl32.lib rpcrt4.lib wsock32.lib /nologo /subsystem:windows /debug /machine:I386 /pdbtype:sept ..\..\lib\zlibd.lib ..\..\lib\regexd.lib ..\..\lib\pngd.lib ..\..\lib\jpegd.lib ..\..\lib\tiffd.lib ..\..\lib\wxmswud.lib
 
-!IF "$(CFG)" == "internat - Win32 Release DLL"
+!ELSEIF "$(CFG)" == "internat - Win32 Release DLL"
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 0
@@ -163,7 +164,7 @@ LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib comctl32.lib rpcrt4.lib wsock32.lib /nologo /subsystem:windows /machine:I386
 # ADD LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib comctl32.lib rpcrt4.lib wsock32.lib /nologo /subsystem:windows /machine:I386 ..\..\lib\wxmsw233.lib
 
-!IF "$(CFG)" == "internat - Win32 Debug DLL"
+!ELSEIF "$(CFG)" == "internat - Win32 Debug DLL"
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 1
@@ -189,7 +190,7 @@ LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib comctl32.lib rpcrt4.lib wsock32.lib /nologo /subsystem:windows /debug /machine:I386 /pdbtype:sept
 # ADD LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib comctl32.lib rpcrt4.lib wsock32.lib /nologo /subsystem:windows /debug /machine:I386 /pdbtype:sept ..\..\lib\wxmsw233d.lib
 
-!IF "$(CFG)" == "internat - Win32 Release"
+!ELSEIF "$(CFG)" == "internat - Win32 Release"
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 0
@@ -215,7 +216,7 @@ LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib comctl32.lib rpcrt4.lib wsock32.lib /nologo /subsystem:windows /machine:I386
 # ADD LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib comctl32.lib rpcrt4.lib wsock32.lib /nologo /subsystem:windows /machine:I386 ..\..\lib\zlib.lib ..\..\lib\regex.lib ..\..\lib\png.lib ..\..\lib\jpeg.lib ..\..\lib\tiff.lib ..\..\lib\wxmsw.lib
 
-!IF "$(CFG)" == "internat - Win32 Debug"
+!ELSEIF "$(CFG)" == "internat - Win32 Debug"
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 1
@@ -247,6 +248,7 @@ LINK32=link.exe
 
 # Name "internat - Win32 Release Unicode DLL"
 # Name "internat - Win32 Debug Unicode DLL"
+# Name "internat - Win32 Release Unicode"
 # Name "internat - Win32 Debug Unicode"
 # Name "internat - Win32 Release DLL"
 # Name "internat - Win32 Debug DLL"
