@@ -1331,13 +1331,16 @@ public:
 		}
 	    ByteCount byteBufferLen = n * sizeof( UniChar ) ; 
 #if SIZEOF_WCHAR_T == 4
-		ubuf = (UniChar*) malloc( byteBufferLen ) ;
+		ubuf = (UniChar*) malloc( byteBufferLen + 2 ) ;
 #else
 		ubuf = (UniChar*) (buf ? buf : tbuf) ;
 #endif
 	    status = TECConvertText(m_MB2WC_converter, (ConstTextPtr) psz , byteInLen, &byteInLen,
 	      (TextPtr) ubuf , byteBufferLen, &byteOutLen);
 #if SIZEOF_WCHAR_T == 4
+        // we have to terminate here, because n might be larger for the trailing zero, and if UniChar
+        // is not properly terminated we get random characters at the end
+        ubuf[byteOutLen / sizeof( UniChar ) ] = 0 ;
 		wxMBConvUTF16BE converter ;
 		res = converter.MB2WC( (buf ? buf : tbuf) , (const char*)ubuf , n ) ;
 		free( ubuf ) ;
