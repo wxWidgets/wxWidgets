@@ -6,7 +6,7 @@
 // Created:     04/01/98
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart and Markus Holzem
-// Licence:   	wxWindows license
+// Licence:     wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
 #ifdef __GNUG__
@@ -60,8 +60,8 @@ wxIconRefData::wxIconRefData(void)
 
 wxIconRefData::~wxIconRefData(void)
 {
-	if ( m_hIcon )
-		::DestroyIcon((HICON) m_hIcon);
+  if ( m_hIcon )
+    ::DestroyIcon((HICON) m_hIcon);
 }
 
 wxIcon::wxIcon(void)
@@ -88,7 +88,7 @@ bool wxIcon::FreeResource(bool force)
   if (M_ICONDATA && M_ICONDATA->m_hIcon)
   {
     DestroyIcon((HICON) M_ICONDATA->m_hIcon);
-	M_ICONDATA->m_hIcon = (WXHICON) NULL;
+  M_ICONDATA->m_hIcon = (WXHICON) NULL;
   }
   return TRUE;
 }
@@ -103,15 +103,15 @@ bool wxIcon::LoadFile(const wxString& filename, long type,
   wxBitmapHandler *handler = FindHandler(type);
 
   if ( handler )
-	return handler->LoadFile(this, filename, type, desiredWidth, desiredHeight);
+  return handler->LoadFile(this, filename, type, desiredWidth, desiredHeight);
   else
-	return FALSE;
+  return FALSE;
 }
 
 void wxIcon::SetHICON(WXHICON ico)
 {
   if ( !M_ICONDATA )
-	m_refData = new wxIconRefData;
+  m_refData = new wxIconRefData;
 
   M_ICONDATA->m_hIcon = ico;
 }
@@ -120,28 +120,28 @@ bool wxICOFileHandler::LoadFile(wxBitmap *bitmap, const wxString& name, long fla
     int desiredWidth, int desiredHeight)
 {
 #if USE_RESOURCE_LOADING_IN_MSW
-	if ( bitmap->IsKindOf(CLASSINFO(wxIcon)) )
-	{
-		wxIcon *icon = (wxIcon *)bitmap;
-        int width, height;
-        WXHICON hIcon = (WXHICON) ReadIconFile((char *)(const char *)name, wxGetInstance(), &width, &height);
+  if ( bitmap->IsKindOf(CLASSINFO(wxIcon)) )
+  {
+    wxIcon *icon = (wxIcon *)bitmap;
+    wxIconRefData *data = (wxIconRefData *)icon->GetRefData();
+    data->m_hIcon = (WXHICON)ReadIconFile((char *)name.c_str(), wxGetInstance(),
+                                          &data->m_width, &data->m_height);
 
-    	((wxIconRefData *)icon->GetRefData())->m_hIcon = hIcon;
-    	((wxIconRefData *)icon->GetRefData())->m_ok = (((wxIconRefData *)icon->GetRefData())->m_hIcon != 0);
-    	return ((wxIconRefData *)icon->GetRefData())->m_ok;
-	}
-	else
-		return FALSE;
+    data->m_ok = data->m_hIcon != 0;
+    return data->m_ok;
+  }
+  else
+    return FALSE;
 #else
-	return FALSE;
+  return FALSE;
 #endif
 }
 
 bool wxICOResourceHandler::LoadFile(wxBitmap *bitmap, const wxString& name, long flags,
     int desiredWidth, int desiredHeight)
 {
-	if ( bitmap->IsKindOf(CLASSINFO(wxIcon)) )
-	{
+  if ( bitmap->IsKindOf(CLASSINFO(wxIcon)) )
+  {
 #if defined(__WIN32__)
     if (desiredWidth > -1 && desiredHeight > -1)
     {
@@ -150,38 +150,38 @@ bool wxICOResourceHandler::LoadFile(wxBitmap *bitmap, const wxString& name, long
     else
 #endif
     {
-    	M_ICONHANDLERDATA->m_hIcon = (WXHICON) ::LoadIcon(wxGetInstance(), name);
+      M_ICONHANDLERDATA->m_hIcon = (WXHICON) ::LoadIcon(wxGetInstance(), name);
     }
 
 #ifdef __WIN32__
-    	// Win32s doesn't have GetIconInfo function...
-    	if (M_ICONHANDLERDATA->m_hIcon && wxGetOsVersion()!=wxWIN32S)
-    	{
-      		ICONINFO info ;
-      		if (::GetIconInfo((HICON) M_ICONHANDLERDATA->m_hIcon, &info))
-      		{
-        		HBITMAP ms_bitmap = info.hbmMask ;
-        		if (ms_bitmap)
-        		{
-          			BITMAP bm;
-          			::GetObject(ms_bitmap, sizeof(BITMAP), (LPSTR) &bm);
-          			M_ICONHANDLERDATA->m_width = bm.bmWidth;
-          			M_ICONHANDLERDATA->m_height = bm.bmHeight;
-        		}
-        		if (info.hbmMask)
-          			::DeleteObject(info.hbmMask) ;
-        		if (info.hbmColor)
-          			::DeleteObject(info.hbmColor) ;
-      		}
-    	}
+      // Win32s doesn't have GetIconInfo function...
+      if (M_ICONHANDLERDATA->m_hIcon && wxGetOsVersion()!=wxWIN32S)
+      {
+          ICONINFO info ;
+          if (::GetIconInfo((HICON) M_ICONHANDLERDATA->m_hIcon, &info))
+          {
+            HBITMAP ms_bitmap = info.hbmMask ;
+            if (ms_bitmap)
+            {
+                BITMAP bm;
+                ::GetObject(ms_bitmap, sizeof(BITMAP), (LPSTR) &bm);
+                M_ICONHANDLERDATA->m_width = bm.bmWidth;
+                M_ICONHANDLERDATA->m_height = bm.bmHeight;
+            }
+            if (info.hbmMask)
+                ::DeleteObject(info.hbmMask) ;
+            if (info.hbmColor)
+                ::DeleteObject(info.hbmColor) ;
+          }
+      }
 #else
-    	M_ICONHANDLERDATA->m_width = 32;
-    	M_ICONHANDLERDATA->m_height = 32;
+      M_ICONHANDLERDATA->m_width = 32;
+      M_ICONHANDLERDATA->m_height = 32;
 #endif
-    	M_ICONHANDLERDATA->m_ok = (M_ICONHANDLERDATA->m_hIcon != 0);
-    	return M_ICONHANDLERDATA->m_ok;
-	}
-	else
-	    return FALSE;
+      M_ICONHANDLERDATA->m_ok = (M_ICONHANDLERDATA->m_hIcon != 0);
+      return M_ICONHANDLERDATA->m_ok;
+  }
+  else
+      return FALSE;
 }
 

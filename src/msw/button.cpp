@@ -149,8 +149,10 @@ void wxButton::SetDefault(void)
 
   if (parent)
   {
-    SendMessage((HWND) parent->GetHWND(), DM_SETDEFID, m_windowId, 0L);
+    SendMessage((HWND)parent->GetHWND(), DM_SETDEFID, m_windowId, 0L);
   }
+
+  SendMessage((HWND)GetHWND(), BM_SETSTYLE, BS_DEFPUSHBUTTON, 1L);
 }
 
 wxString wxButton::GetLabel(void) const

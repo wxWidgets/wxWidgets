@@ -84,8 +84,6 @@ wxList wxBitmap::sm_handlers;
 
 wxBitmap::wxBitmap(void)
 {
-  m_refData = NULL; // new wxBitmapRefData;
-
   if ( wxTheBitmapList )
     wxTheBitmapList->AddBitmap(this);
 }
