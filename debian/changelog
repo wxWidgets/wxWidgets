@@ -1,3 +1,9 @@
+wxwindows2.2 (2.2.8.1) unstable; urgency=low
+
+  * Rebuild for python2.1  Closes: #119226, #118835
+
+ -- Ron Lee <ron@debian.org>  Mon, 12 Nov 2001 21:47:38 -0800
+
 wxwindows2.2 (2.2.8) unstable; urgency=medium
 
   * Fixed bogus samples makefile. Closes: #110061
