@@ -39,16 +39,16 @@ bool wxChoice::Create(
 {
     long                            lSstyle;
 
-    if (!OS2CreateControl( pParent
-                          ,vId
-                          ,rPos
-                          ,rSize
-                          ,lStyle
+    if (!CreateControl( pParent
+                       ,vId
+                       ,rPos
+                       ,rSize
+                       ,lStyle
 #if wxUSE_VALIDATORS
-                          ,rValidator
+                       ,rValidator
 #endif
-                          ,rsName
-                         ))
+                       ,rsName
+                      ))
         return FALSE;
     lSstyle = CBS_DROPDOWNLIST |
               WS_TABSTOP       |

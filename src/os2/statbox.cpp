@@ -34,16 +34,16 @@ bool wxStaticBox::Create(
 , const wxString&                   rsName
 )
 {
-    if(!OS2CreateControl( pParent
-                         ,vId
-                         ,rPos
-                         ,rSize
-                         ,lStyle
+    if(!CreateControl( pParent
+                      ,vId
+                      ,rPos
+                      ,rSize
+                      ,lStyle
 #if wxUSE_VALIDATORS
-                         ,wxDefaultValidator
+                      ,wxDefaultValidator
 #endif
-                         ,rsName
-                        ))
+                      ,rsName
+                     ))
     {
         return FALSE;
     }
@@ -60,6 +60,11 @@ bool wxStaticBox::Create(
     {
         return FALSE;
     }
+
+    //
+    // To be transparent we should have the same colour as the parent as well
+    //
+    SetBackgroundColour(GetParent()->GetBackgroundColour());
 
     wxColour                        vColour;
 

@@ -23,6 +23,7 @@
 #endif
 
 #include "wx/os2/private.h"
+#include "wx/image.h"
 
 #include "assert.h"
 
@@ -51,6 +52,39 @@ wxCursor::wxCursor(const char WXUNUSED(bits)[], int WXUNUSED(width), int WXUNUSE
     int WXUNUSED(hotSpotX), int WXUNUSED(hotSpotY), const char WXUNUSED(maskBits)[])
 {
 }
+
+wxCursor::wxCursor(
+  const wxImage&                    rImage
+)
+{
+    wxImage                         vImage32 = rImage.Scale(32,32);
+    int                             nWidth   = vImage32.GetWidth();
+    int                             nHeight  = vImage32.GetHeight();
+
+    //
+    // Need a bitmap handle somehow
+    //
+    HBITMAP                      hBitmap = wxBitmap(vImage32).GetHBITMAP();
+    int                          nHotSpotX = vImage32.GetOptionInt(wxCUR_HOTSPOT_X);
+    int                          nHotSpotY = vImage32.GetOptionInt(wxCUR_HOTSPOT_Y);
+
+    if (nHotSpotX < 0 || nHotSpotX >= nWidth)
+            nHotSpotX = 0;
+    if (nHotSpotY < 0 || nHotSpotY >= nHeight)
+            nHotSpotY = 0;
+
+
+    wxCursorRefData*                pRefData = new wxCursorRefData;
+
+    m_refData = pRefData;
+    pRefData->m_hCursor = (WXHCURSOR) ::WinCreatePointer( HWND_DESKTOP
+                                                         ,hBitmap
+                                                         ,TRUE
+                                                         ,nHotSpotY
+                                                         ,nHotSpotX
+                                                        );
+
+} // end of wxCursor::wxCursor
 
 wxCursor::wxCursor(const wxString& cursor_file, long flags, int hotSpotX, int hotSpotY)
 {

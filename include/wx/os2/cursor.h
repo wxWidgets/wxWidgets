@@ -39,6 +39,7 @@ public:
 
   // Copy constructors
   inline wxCursor(const wxCursor& cursor) { Ref(cursor); }
+         wxCursor(const wxImage& rImage);
 
   wxCursor(const char bits[], int width, int height, int hotSpotX = -1, int hotSpotY = -1,
     const char maskBits[] = NULL);

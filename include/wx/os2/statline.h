@@ -74,6 +74,13 @@ protected:
 
     inline wxSize DoGetBestSize(void) const { return (AdjustSize(wxDefaultSize)); }
 
+    //
+    // Usually overridden base class virtuals
+    //
+    virtual WXDWORD OS2GetStyle( long     lStyle
+                                ,WXDWORD* pdwExstyle
+                               ) const;
+
 private:
     DECLARE_DYNAMIC_CLASS(wxStaticLine)
 }; // end of CLASS wxStaticLine

@@ -106,6 +106,7 @@ public:
     virtual void     Freeze(void);
     virtual void     Update(void);
     virtual void     Thaw(void);
+    virtual void     SetWindowStyleFlag(long lStyle);
     virtual bool     SetCursor(const wxCursor& rCursor);
     virtual bool     SetFont(const wxFont& rFont);
     virtual int      GetCharHeight(void) const;
@@ -252,6 +253,23 @@ public:
 
     // PM only: TRUE if this control is part of the main control
     virtual bool ContainsHWND(WXHWND WXUNUSED(hWnd)) const { return FALSE; };
+
+    // translate wxWindows style flags for this control into the PM style
+    // and optional extended style for the corresponding native control
+    //
+    // this is the function that should be overridden in the derived classes,
+    // but you will mostly use OS2GetCreateWindowFlags() below
+    virtual WXDWORD OS2GetStyle( long     lFlags
+                                ,WXDWORD* pdwExstyle = NULL
+                               ) const;
+
+    // get the MSW window flags corresponding to wxWindows ones
+    //
+    // the functions returns the flags (WS_XXX) directly and puts the ext
+    // (WS_EX_XXX) flags into the provided pointer if not NULL
+    WXDWORD OS2GetCreateWindowFlags(WXDWORD* pdwExflags = NULL) const
+        { return OS2GetStyle(GetWindowStyle(), pdwExflags); }
+
 
     // returns TRUE if the window has been created
     bool         OS2Create( PSZ            zClass
@@ -526,7 +544,7 @@ protected:
 
     virtual void     DoCaptureMouse(void);
     virtual void     DoReleaseMouse(void);
-    
+
     // move the window to the specified location and resize it: this is called
     // from both DoSetSize() and DoSetClientSize() and would usually just call
     // ::WinSetWindowPos() except for composite controls which will want to arrange

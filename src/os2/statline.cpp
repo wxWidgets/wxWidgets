@@ -49,46 +49,42 @@ bool wxStaticLine::Create(
 , const wxString&                   rsName
 )
 {
-    if (!CreateBase( pParent
-                    ,vId
-                    ,rPos
-                    ,rSize
-                    ,lStyle
-                    ,wxDefaultValidator
-                    ,rsName
-                   ))
+    wxSize                          vSize = AdjustSize(rSize);
+
+    if ( !CreateControl( pParent
+                        ,vId
+                        ,rPos
+                        ,vSize
+                        ,lStyle
+                        ,wxDefaultValidator
+                        ,rsName
+                       ))
         return FALSE;
-
-    pParent->AddChild(this);
-
-    wxSize                          vSizeReal = AdjustSize(rSize);
-
-    m_hWnd = (WXHWND)::WinCreateWindow( GetWinHwnd(pParent)
-                                       ,WC_STATIC
-                                       ,""
-                                       ,WS_VISIBLE | SS_TEXT | DT_VCENTER | DT_CENTER
-                                       ,0
-                                       ,0
-                                       ,0
-                                       ,0
-                                       ,GetWinHwnd(pParent)
-                                       ,HWND_TOP
-                                       ,(ULONG)m_windowId
-                                       ,NULL
-                                       ,NULL
-                                      );
-    if ( !m_hWnd )
-    {
-        wxLogDebug(wxT("Failed to create static control"));
-        return FALSE;
-    }
-    SubclassWin(m_hWnd);
-    SetSize( rPos.x
-            ,rPos.y
-            ,rSize.x
-            ,rSize.y
-           );
-    return TRUE;
+    return OS2CreateControl( _T("STATIC")
+                            ,_T("")
+                            ,rPos
+                            ,vSize
+                            ,lStyle
+                           );
 } // end of wxStaticLine::Create
 
+WXDWORD wxStaticLine::OS2GetStyle(
+  long                              lStyle
+, WXDWORD*                          pdwExstyle
+) const
+{
+    //
+    // We never have border
+    //
+    lStyle &= ~wxBORDER_MASK;
+    lStyle |= wxBORDER_NONE;
+
+    WXDWORD                         dwStyle = wxControl::OS2GetStyle( lStyle
+                                                                     ,pdwExstyle
+                                                                    );
+    //
+    // Add our default styles
+    //
+    return dwStyle | WS_CLIPSIBLINGS;
+}
 #endif // wxUSE_STATLINE

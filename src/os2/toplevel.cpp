@@ -112,22 +112,24 @@ void wxTopLevelWindowOS2::Init()
     memset(&m_vSwpClient, 0, sizeof(SWP));
 } // end of wxTopLevelWindowIOS2::Init
 
-long wxTopLevelWindowOS2::OS2GetCreateWindowFlags(
-  long*                             plExflags
+WXDWORD wxTopLevelWindowOS2::OS2GetStyle(
+  long                              lStyle
+, WXDWORD*                          pdwExflags
 ) const
 {
-    long                            lStyle = GetWindowStyle();
-    long                            lMsflags = 0;
+    long                            lMsflags = wxWindow::OS2GetStyle( (lStyle & ~wxBORDER_MASK) | wxBORDER_NONE
+                                                                     ,pdwExflags
+                                                                    );
 
     if (lStyle == wxDEFAULT_FRAME_STYLE)
-        lMsflags = FCF_SIZEBORDER | FCF_TITLEBAR | FCF_SYSMENU |
-                        FCF_MINMAX | FCF_TASKLIST;
+        lMsflags |= FCF_SIZEBORDER | FCF_TITLEBAR | FCF_SYSMENU |
+                    FCF_MINMAX | FCF_TASKLIST;
     else
     {
         if ((lStyle & wxCAPTION) == wxCAPTION)
-            lMsflags = FCF_TASKLIST;
+            lMsflags |= FCF_TASKLIST;
         else
-            lMsflags = FCF_NOMOVEWITHOWNER;
+            lMsflags |= FCF_NOMOVEWITHOWNER;
 
         if ((lStyle & wxVSCROLL) == wxVSCROLL)
             lMsflags |= FCF_VERTSCROLL;
@@ -156,7 +158,7 @@ long wxTopLevelWindowOS2::OS2GetCreateWindowFlags(
         if ((lStyle & wxTHICK_FRAME) == 0)
             lMsflags |= FCF_BORDER;
         if (lStyle & wxFRAME_TOOL_WINDOW)
-            *plExflags = kFrameToolWindow;
+            *pdwExflags = kFrameToolWindow;
 
         if (lStyle & wxSTAY_ON_TOP)
             lMsflags |= FCF_SYSMODAL;
@@ -303,8 +305,8 @@ bool wxTopLevelWindowOS2::CreateFrame(
 , const wxSize&                     rSize
 )
 {
-    long                            lExflags;
-    long                            lFlags = OS2GetCreateWindowFlags(&lExflags);
+    WXDWORD                         lExflags;
+    WXDWORD                         lFlags = OS2GetCreateWindowFlags(&lExflags);
     long                            lStyle = GetWindowStyleFlag();
     int                             nX = rPos.x;
     int                             nY = rPos.y;

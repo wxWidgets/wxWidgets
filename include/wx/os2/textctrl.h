@@ -117,6 +117,7 @@ public:
                               ,long lTo
                              );
     virtual void SetEditable(bool bEditable);
+    virtual void SetWindowStyleFlag(long lStyle);
 
     //
     // Implementation from now on
@@ -171,6 +172,9 @@ protected:
     virtual wxSize DoGetBestSize(void) const;
     virtual bool   OS2ShouldPreProcessMessage(WXMSG* pMsg);
 
+    virtual WXDWORD OS2GetStyle( long     lStyle
+                                ,WXDWORD* dwExstyle
+                               ) const;
 private:
     bool                            m_bIsMLE;
     DECLARE_EVENT_TABLE()

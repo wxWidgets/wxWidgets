@@ -74,35 +74,25 @@ wxControl::~wxControl()
 }
 
 bool wxControl::OS2CreateControl(
-  wxWindow*                         pParent
-, wxWindowID                        vId
+  const wxChar*                     zClassname
+, const wxString&                   rsLabel
 , const wxPoint&                    rPos
 , const wxSize&                     rSize
 , long                              lStyle
-#if wxUSE_VALIDATORS
-, const wxValidator&                rValidator
-#endif
-, const wxString&                   rsName
 )
 {
-    //
-    // Even if it's possible to create controls without parents in some port,
-    // it should surely be discouraged because it doesn't work at all under
-    // Windows
-    //
-    if (!CreateBase( pParent
-                    ,vId
-                    ,rPos
-                    ,rSize
-                    ,lStyle
-#if wxUSE_VALIDATORS
-                    ,rValidator
-#endif
-                    ,rsName
-                   ))
-        return FALSE;
-    pParent->AddChild(this);
-    return TRUE;
+    WXDWORD                         dwExstyle;
+    WXDWORD                         dwStyle = OS2GetStyle( lStyle
+                                                          ,&dwExstyle
+                                                         );
+
+    return OS2CreateControl( zClassname
+                            ,dwStyle
+                            ,rPos
+                            ,rSize
+                            ,rsLabel
+                            ,dwExstyle
+                           );
 } // end of wxControl::OS2CreateControl
 
 bool wxControl::OS2CreateControl(
@@ -114,17 +104,23 @@ bool wxControl::OS2CreateControl(
 , WXDWORD                           dwExstyle
 )
 {
-    int                          nX = rPos.x == -1 ? 0 : rPos.x;
-    int                          nY = rPos.y == -1 ? 0 : rPos.y;
-    int                          nW = rSize.x == -1 ? 0 : rSize.x;
-    int                          nH = rSize.y == -1 ? 0 : rSize.y;
+    bool                            bWant3D = FALSE;
+    int                             nX = rPos.x == -1 ? 0 : rPos.x;
+    int                             nY = rPos.y == -1 ? 0 : rPos.y;
+    int                             nW = rSize.x == -1 ? 0 : rSize.x;
+    int                             nH = rSize.y == -1 ? 0 : rSize.y;
     //
     // Doesn't do anything at all under OS/2
     //
     if (dwExstyle == (WXDWORD)-1)
     {
-        dwExstyle = GetExStyle(dwStyle);
+        dwExstyle = Determine3DEffects(WS_EX_CLIENTEDGE, &bWant3D);
     }
+    //
+    // All controls should have these styles (wxWindows creates all controls
+    // visible by default)
+    //
+    dwStyle |= WS_VISIBLE;
 
     wxWindow*                       pParent = GetParent();
     PSZ                             zClass;
@@ -237,17 +233,21 @@ void wxControl::OnEraseBackground(
     ::WinFillRect(hPS, &vRect, GetBackgroundColour().GetPixel());
 } // end of wxControl::OnEraseBackground
 
-WXDWORD wxControl::GetExStyle(
-  WXDWORD&                          rStyle
+WXDWORD wxControl::OS2GetStyle(
+  long                              lStyle
+, WXDWORD*                          pdwExstyle
 ) const
 {
-    //
-    // Meaningless under OS/2, just return what was sent
-    //
-    WXDWORD                         exStyle = rStyle;
+    long                            dwStyle = wxWindow::OS2GetStyle( lStyle
+                                                                    ,pdwExstyle
+                                                                   );
 
-    return exStyle;
-} // end of wxControl::GetExStyle
+    if (AcceptsFocus())
+    {
+        dwStyle |= WS_TABSTOP;
+    }
+    return dwStyle;
+} // end of wxControl::OS2GetStyle
 
 // ---------------------------------------------------------------------------
 // global functions

@@ -131,18 +131,6 @@ void      wxAssociateWinWithHandle( HWND         hWnd
 wxWindow* wxFindWinFromHandle(WXHWND hWnd);
 
 //
-// This magical function is used to translate VK_APPS key presses to right
-// mouse clicks
-//
-// Unused?
-#if 0
-static void TranslateKbdEventToMouse( wxWindow* pWin
-                                     ,int*      pX
-                                     ,int*      pY
-                                     ,MPARAM*   pFlags
-                                    );
-#endif
-//
 // get the current state of SHIFT/CTRL keys
 //
 static inline bool IsShiftDown() { return (::WinGetKeyState(HWND_DESKTOP, VK_SHIFT) & 0x8000) != 0; }
@@ -376,6 +364,19 @@ bool wxWindowOS2::Create(
 
     wxCHECK_MSG(pParent, FALSE, wxT("can't create wxWindow without parent"));
 
+#if wxUSE_STATBOX
+    //
+    // wxGTK doesn't allow to create controls with static box as the parent so
+    // this will result in a crash when the program is ported to wxGTK - warn
+    // about it
+    //
+    // the correct solution is to create the controls as siblings of the
+    // static box
+    //
+    wxASSERT_MSG( !wxDynamicCast(pParent, wxStaticBox),
+                  _T("wxStaticBox can't be used as a window parent!") );
+#endif // wxUSE_STATBOX
+
     if ( !CreateBase( pParent
                      ,vId
                      ,rPos
@@ -404,39 +405,16 @@ bool wxWindowOS2::Create(
     // set in those class create procs.  PM's basic windows styles are
     // very limited.
     //
-    ulCreateFlags |=  WS_VISIBLE;
+    ulCreateFlags |=  WS_VISIBLE | OS2GetCreateWindowFlags(&dwExStyle);
 
 
 #ifdef __WXUNIVERSAL__
     // no 3d effects, we draw them ourselves
     WXDWORD exStyle = 0;
-#else // !wxUniversal
-    if (lStyle & wxCLIP_SIBLINGS)
-        ulCreateFlags |= WS_CLIPSIBLINGS;
-
-    if (lStyle & wxCLIP_CHILDREN )
-        ulCreateFlags |= WS_CLIPCHILDREN;
-
-    //
-    //
-    //
-    bool                            bWant3D;
-    dwExStyle = Determine3DEffects(WS_EX_CLIENTEDGE, &bWant3D);
-
-#endif
-
-    //
-    // Add the simple border style as we'll use this to draw borders
-    //
-    if (lStyle & wxSIMPLE_BORDER)
-        dwExStyle |= wxSIMPLE_BORDER;
-
+#endif // !wxUniversal
     if (lStyle & wxPOPUP_WINDOW)
     {
         // a popup window floats on top of everything
-//TODO: fix this...
-//        exStyle |= WS_EX_TOPMOST | WS_EX_TOOLWINDOW;
-
         // it is also created hidden as other top level windows
         ulCreateFlags &= ~WS_VISIBLE;
         m_isShown = FALSE;
@@ -1049,6 +1027,69 @@ bool wxCheckWindowWndProc(
     ::WinQueryClassInfo(wxGetInstance(), (PSZ)zBuffer, &vCls);
     return(fnWndProc == (WXFARPROC)vCls.pfnWindowProc);
 } // end of WinGuiBase_CheckWindowWndProc
+
+void wxWindowOS2::SetWindowStyleFlag(
+  long                              lFlags
+)
+{
+    long                            lFlagsOld = GetWindowStyleFlag();
+
+    if (lFlags == lFlagsOld)
+        return;
+
+    //
+    // Update the internal variable
+    //
+    wxWindowBase::SetWindowStyleFlag(lFlags);
+
+    //
+    // Now update the Windows style as well if needed - and if the window had
+    // been already created
+    //
+    if (!GetHwnd())
+        return;
+
+    WXDWORD                         dwExstyle;
+    WXDWORD                         dwExstyleOld;
+    long                            lStyle = OS2GetStyle( lFlags
+                                                         ,&dwExstyle
+                                                        );
+    long                            lStyleOld = OS2GetStyle( lFlagsOld
+                                                            ,&dwExstyleOld
+                                                           );
+
+    if (lStyle != lStyleOld)
+    {
+        //
+        // Some flags (e.g. WS_VISIBLE or WS_DISABLED) should not be changed by
+        // this function so instead of simply setting the style to the new
+        // value we clear the bits which were set in styleOld but are set in
+        // the new one and set the ones which were not set before
+        //
+        long                        lStyleReal = ::WinQueryWindowULong(GetHwnd(), QWL_STYLE);
+
+        lStyleReal &= ~lStyleOld;
+        lStyleReal |= lStyle;
+
+        ::WinSetWindowULong(GetHwnd(), QWL_STYLE, lStyleReal);
+    }
+} // end of wxWindowOS2::SetWindowStyleFlag
+
+WXDWORD wxWindowOS2::OS2GetStyle(
+  long                              lFlags
+, WXDWORD*                          pdwExstyle
+) const
+{
+    WXDWORD                         dwStyle = 0L;
+
+    if (lFlags & wxCLIP_CHILDREN )
+        dwStyle |= WS_CLIPCHILDREN;
+
+    if (lFlags & wxCLIP_SIBLINGS )
+        dwStyle |= WS_CLIPSIBLINGS;
+
+    return dwStyle;
+} // end of wxWindowMSW::MSWGetStyle
 
 //
 // Make a Windows extended style from the given wxWindows window style

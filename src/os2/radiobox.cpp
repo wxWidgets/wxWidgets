@@ -283,16 +283,16 @@ bool wxRadioBox::Create(
     //
     // Common initialization
     //
-    if (!OS2CreateControl( pParent
-                          ,vId
-                          ,rPos
-                          ,rSize
-                          ,lStyle
+    if (!CreateControl( pParent
+                       ,vId
+                       ,rPos
+                       ,rSize
+                       ,lStyle
 #if wxUSE_VALIDATORS
-                          ,rVal
+                       ,rVal
 #endif
-                          ,rsName
-                         ))
+                       ,rsName
+                      ))
 
 
 

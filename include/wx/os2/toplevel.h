@@ -124,13 +124,11 @@ protected:
                                 ) const;
 
     //
-    // Get the OS/2 window flags corresponding to wxWindows ones
+    // Translate wxWindows flags into OS flags
     //
-    // The functions returns the flags (WS_XXX) directly and puts the ext
-    // (WS_EX_XXX) flags into the provided pointer if not NULL
-    //
-    long OS2GetCreateWindowFlags(long* lExflags) const;
-
+    virtual WXDWORD OS2GetStyle( long     lFlag
+                                ,WXDWORD* pdwExstyle
+                               ) const;
     //
     // Is the frame currently iconized?
     //

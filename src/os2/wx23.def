@@ -4,7 +4,7 @@ DATA MULTIPLE NONSHARED READWRITE LOADONCALL
 CODE LOADONCALL
 
 EXPORTS
-;From library:  F:\DEV\WX2\WXWINDOWS\LIB\wx.lib
+;From library:  H:\Dev\Wx2\WxWindows\lib\wx.lib
   ;From object file:  dummy.cpp
     ;PUBDEFs (Symbols available from object file):
       wxDummyChar
@@ -856,6 +856,147 @@ EXPORTS
       __ls__18wxDataOutputStreamFi
       ;wxDataOutputStream::operator<<(const wxString&)
       __ls__18wxDataOutputStreamFRC8wxString
+  ;From object file:  ..\common\dbtable.cpp
+    ;PUBDEFs (Symbols available from object file):
+      ;wxDbTable::bindParams(unsigned long)
+      bindParams__9wxDbTableFUl
+      ;wxDbTable::ClearMemberVar(unsigned short,unsigned long)
+      ClearMemberVar__9wxDbTableFUsUl
+      ;wxDbTable::BuildSelectStmt(char*,int,unsigned long)
+      BuildSelectStmt__9wxDbTableFPciUl
+      ;wxDbTable::GetNewCursor(unsigned long,unsigned long)
+      GetNewCursor__9wxDbTableFUlT1
+      __vft9wxDbTable
+      ;wxDbTable::operator--(int)
+      __mm__9wxDbTableFi
+      ;wxDbTable::GetCol(const int) const
+      GetCol__9wxDbTableCFCi
+      ;wxDbTable::wxDbTable(wxDb*,const wxString&,const unsigned short,const wxString&,unsigned long,const wxString&)
+      __ct__9wxDbTableFP4wxDbRC8wxStringCUsT2UlT2
+      ;wxDbTable::SetCursor(void**)
+      SetCursor__9wxDbTableFPPv
+      ;wxDbTable::CreateIndex(const wxString&,unsigned long,unsigned short,wxDbIdxDef*,unsigned long)
+      CreateIndex__9wxDbTableFRC8wxStringUlUsP10wxDbIdxDefT2
+      ;wxDbTable::query(int,unsigned long,unsigned long,const wxString&)
+      query__9wxDbTableFiUlT2RC8wxString
+      ;wxDbTable::SetRowMode(const wxDbTable::rowmode_t)
+      SetRowMode__9wxDbTableFCQ2_9wxDbTable9rowmode_t
+      ;wxDbTable::Open(unsigned long,unsigned long)
+      Open__9wxDbTableFUlT1
+      TablesInUse
+      ;wxDbTable::Query(unsigned long,unsigned long)
+      Query__9wxDbTableFUlT1
+      ;wxDbTable::QueryMatching(unsigned long,unsigned long)
+      QueryMatching__9wxDbTableFUlT1
+      ;wxDbColDef::wxDbColDef()
+      __ct__10wxDbColDefFv
+      ;wxDbTable::cleanup()
+      cleanup__9wxDbTableFv
+      ;wxDbTable::~wxDbTable()
+      __dt__9wxDbTableFv
+      ;wxDbTable::GetLast()
+      GetLast__9wxDbTableFv
+      ;wxDbTable::DeleteMatching()
+      DeleteMatching__9wxDbTableFv
+      ;wxDbTable::CanUpdByROWID()
+      CanUpdByROWID__9wxDbTableFv
+      ;wxDbTable::BuildDeleteStmt(char*,int,const wxString&)
+      BuildDeleteStmt__9wxDbTableFPciRC8wxString
+      ;wxDbTable::Update(const wxString&)
+      Update__9wxDbTableFRC8wxString
+      ;wxDbTable::UpdateWhere(const wxString&)
+      UpdateWhere__9wxDbTableFRC8wxString
+      ;wxDbTable::SetColDefs(unsigned short,const wxString&,int,void*,short,int,unsigned long,unsigned long,unsigned long,unsigned long)
+      SetColDefs__9wxDbTableFUsRC8wxStringiPvsT3UlN37
+      ;wxDbTable::SetColDefs(wxDbColInf*,unsigned short)
+      SetColDefs__9wxDbTableFP10wxDbColInfUs
+      ;wxDbTable::DeleteWhere(const wxString&)
+      DeleteWhere__9wxDbTableFRC8wxString
+      ;wxDbTable::BuildSelectStmt(wxString&,int,unsigned long)
+      BuildSelectStmt__9wxDbTableFR8wxStringiUl
+      ;wxDbTable::SetColNull(const wxString&,unsigned long)
+      SetColNull__9wxDbTableFRC8wxStringUl
+      ;wxDbTable::CreateTable(unsigned long)
+      CreateTable__9wxDbTableFUl
+      ;wxDbTable::ClearMemberVars(unsigned long)
+      ClearMemberVars__9wxDbTableFUl
+      ;wxDbTable::QueryOnKeyFields(unsigned long,unsigned long)
+      QueryOnKeyFields__9wxDbTableFUlT1
+      ;wxDbTable::SetKey(const GenericKey&)
+      SetKey__9wxDbTableFRC10GenericKey
+      ;wxDbColDef::Initialize()
+      Initialize__10wxDbColDefFv
+      ;wxDbTable::initialize(wxDb*,const wxString&,const unsigned short,const wxString&,unsigned long,const wxString&)
+      initialize__9wxDbTableFP4wxDbRC8wxStringCUsT2UlT2
+      ;wxDbTable::bindCols(void*)
+      bindCols__9wxDbTableFPv
+      ;wxDbTable::Update()
+      Update__9wxDbTableFv
+      ;wxDbTable::IsCursorClosedOnCommit()
+      IsCursorClosedOnCommit__9wxDbTableFv
+      ;wxDbTable::GetRowNum()
+      GetRowNum__9wxDbTableFv
+      ;wxDbTable::GetPrev()
+      GetPrev__9wxDbTableFv
+      ;wxDbTable::execUpdate(const wxString&)
+      execUpdate__9wxDbTableFRC8wxString
+      ;wxDbTable::IsColNull(unsigned short) const
+      IsColNull__9wxDbTableCFUs
+      ;wxDbTable::DropIndex(const wxString&)
+      DropIndex__9wxDbTableFRC8wxString
+      ;wxDbTable::SetColNull(unsigned short,unsigned long)
+      SetColNull__9wxDbTableFUsUl
+      lastTableID
+      ;wxDbTable::SetCol(const int,const wxVariant)
+      SetCol__9wxDbTableFCiC9wxVariant
+      ;wxDbTable::SetOrderByColNums(unsigned short,...)
+      SetOrderByColNums__9wxDbTableFUse
+      ;wxDbTable::wxDbTable(wxDb*,const wxString&,const unsigned short,const char*,unsigned long,const wxString&)
+      __ct__9wxDbTableFP4wxDbRC8wxStringCUsPCcUlT2
+      ;wxDbTable::bindUpdateParams()
+      bindUpdateParams__9wxDbTableFv
+      ;wxDbTable::Refresh()
+      Refresh__9wxDbTableFv
+      ;wxDbTable::Insert()
+      Insert__9wxDbTableFv
+      ;wxDbTable::DeleteCursor(void**)
+      DeleteCursor__9wxDbTableFPPv
+      ;wxDbTable::CanSelectForUpdate()
+      CanSelectForUpdate__9wxDbTableFv
+      ;wxDbTable::BuildDeleteStmt(wxString&,int,const wxString&)
+      BuildDeleteStmt__9wxDbTableFR8wxStringiRC8wxString
+      ;wxDbTable::Count(const wxString&)
+      Count__9wxDbTableFRC8wxString
+      ;wxDbTable::BuildUpdateStmt(char*,int,const wxString&)
+      BuildUpdateStmt__9wxDbTableFPciRC8wxString
+      ;wxDbTable::BuildWhereClause(wxString&,int,const wxString&,unsigned long)
+      BuildWhereClause__9wxDbTableFR8wxStringiRC8wxStringUl
+      ;wxDbTable::SetQueryTimeout(unsigned long)
+      SetQueryTimeout__9wxDbTableFUl
+      ;wxDbTable::BuildWhereClause(char*,int,const wxString&,unsigned long)
+      BuildWhereClause__9wxDbTableFPciRC8wxStringUl
+      ;csstrncpyt(char*,const char*,int)
+      csstrncpyt__FPcPCci
+      ;wxDbTable::bindInsertParams()
+      bindInsertParams__9wxDbTableFv
+      ;wxDbTable::GetKey()
+      GetKey__9wxDbTableFv
+      ;wxDbTable::GetFirst()
+      GetFirst__9wxDbTableFv
+      ;wxDbTable::DropTable()
+      DropTable__9wxDbTableFv
+      ;wxDbTable::Delete()
+      Delete__9wxDbTableFv
+      ;wxDbTable::CloseCursor(void*)
+      CloseCursor__9wxDbTableFPv
+      ;wxDbTable::getRec(unsigned short)
+      getRec__9wxDbTableFUs
+      ;wxDbTable::execDelete(const wxString&)
+      execDelete__9wxDbTableFRC8wxString
+      ;wxDbTable::QueryBySqlStmt(const wxString&)
+      QueryBySqlStmt__9wxDbTableFRC8wxString
+      ;wxDbTable::BuildUpdateStmt(wxString&,int,const wxString&)
+      BuildUpdateStmt__9wxDbTableFR8wxStringiRC8wxString
   ;From object file:  ..\common\dcbase.cpp
     ;PUBDEFs (Symbols available from object file):
       ;wxDCBase::DoDrawCheckMark(int,int,int,int)
@@ -1777,7 +1918,7 @@ EXPORTS
       wxEVT_NC_LEFT_DCLICK
       wxEVT_INIT_DIALOG
       wxEVT_COMMAND_SET_FOCUS
-  ;From object file:  F:\DEV\WX2\WXWINDOWS\src\common\extended.c
+  ;From object file:  H:\DEV\WX2\WXWINDOWS\src\common\extended.c
     ;PUBDEFs (Symbols available from object file):
       ConvertToIeeeExtended
       ConvertFromIeeeExtended
@@ -4612,10 +4753,10 @@ EXPORTS
   ;From object file:  ..\common\sckaddr.cpp
     ;PUBDEFs (Symbols available from object file):
       __vft13wxSockAddress8wxObject
-      ;wxIPV4address::AnyAddress()
-      AnyAddress__13wxIPV4addressFv
       ;wxIPV4address::Hostname()
       Hostname__13wxIPV4addressFv
+      ;wxIPV4address::AnyAddress()
+      AnyAddress__13wxIPV4addressFv
       ;wxSockAddress::SetAddress(_GAddress*)
       SetAddress__13wxSockAddressFP9_GAddress
       ;wxSockAddress::operator=(const wxSockAddress&)
@@ -4642,6 +4783,8 @@ EXPORTS
       __ct__13wxIPV4addressFv
       ;wxIPV4address::Service()
       Service__13wxIPV4addressFv
+      ;wxIPV4address::Clone() const
+      Clone__13wxIPV4addressCFv
       ;wxSockAddress::wxSockAddress(const wxSockAddress&)
       __ct__13wxSockAddressFRC13wxSockAddress
       __vft13wxIPV4address8wxObject
@@ -5810,7 +5953,7 @@ EXPORTS
       Read32__17wxTextInputStreamFv
       ;wxTextInputStream::SkipIfEndOfLine(char)
       SkipIfEndOfLine__17wxTextInputStreamFc
-  ;From object file:  F:\DEV\WX2\WXWINDOWS\src\common\unzip.c
+  ;From object file:  H:\DEV\WX2\WXWINDOWS\src\common\unzip.c
     ;PUBDEFs (Symbols available from object file):
       unzReadCurrentFile
       unzGetCurrentFileInfo
@@ -9025,6 +9168,8 @@ EXPORTS
       Thaw__10wxListCtrlFv
       ;wxListCtrl::SetItem(long,int,const wxString&,int)
       SetItem__10wxListCtrlFliRC8wxStringT2
+      ;wxListMainWindow::SetFocus()
+      SetFocus__16wxListMainWindowFv
       ;wxListMainWindow::InitScrolling()
       InitScrolling__16wxListMainWindowFv
       ;wxListItemData::GetY() const
@@ -9717,8 +9862,6 @@ EXPORTS
     ;PUBDEFs (Symbols available from object file):
       ;wxSplitterWindow::OnNavigationKey(wxNavigationKeyEvent&)
       OnNavigationKey__16wxSplitterWindowFR20wxNavigationKeyEvent
-      ;wxSplitterWindow::OnUnsplitEvent(wxSplitterEvent&)
-      OnUnsplitEvent__16wxSplitterWindowFR15wxSplitterEvent
       ;wxSplitterWindow::OnSize(wxSizeEvent&)
       OnSize__16wxSplitterWindowFR11wxSizeEvent
       ;wxSplitterWindow::OnChildFocus(wxChildFocusEvent&)
@@ -9739,12 +9882,12 @@ EXPORTS
       OnFocus__16wxSplitterWindowFR12wxFocusEvent
       wxEVT_COMMAND_SPLITTER_UNSPLIT
       __vft16wxSplitterWindow8wxObject
-      ;wxSplitterWindow::OnSetCursor(wxSetCursorEvent&)
-      OnSetCursor__16wxSplitterWindowFR16wxSetCursorEvent
       ;wxSplitterWindow::DoSplit(wxSplitMode,wxWindow*,wxWindow*,int)
       DoSplit__16wxSplitterWindowF11wxSplitModeP8wxWindowT2i
       ;wxSplitterWindow::SetMinimumPaneSize(int)
       SetMinimumPaneSize__16wxSplitterWindowFi
+      ;wxSplitterWindow::OnSashPositionChange(int)
+      OnSashPositionChange__16wxSplitterWindowFi
       ;wxSplitterWindow::DrawSashTracker(int,int)
       DrawSashTracker__16wxSplitterWindowFiT1
       ;wxConstructorForwxSplitterWindow()
@@ -9754,16 +9897,14 @@ EXPORTS
       ;wxSplitterWindow::SetFocus()
       SetFocus__16wxSplitterWindowFv
       wxEVT_COMMAND_SPLITTER_SASH_POS_CHANGING
-      ;wxSplitterWindow::OnSashPosChanged(wxSplitterEvent&)
-      OnSashPosChanged__16wxSplitterWindowFR15wxSplitterEvent
       ;wxSplitterEvent::sm_classwxSplitterEvent
       sm_classwxSplitterEvent__15wxSplitterEvent
+      ;wxSplitterWindow::OnDoubleClickSash(int,int)
+      OnDoubleClickSash__16wxSplitterWindowFiT1
       ;wxSplitterWindow::GetWindowSize() const
       GetWindowSize__16wxSplitterWindowCFv
       ;wxSplitterWindow::SizeWindows()
       SizeWindows__16wxSplitterWindowFv
-      ;wxSplitterWindow::SendUnsplitEvent(wxWindow*)
-      SendUnsplitEvent__16wxSplitterWindowFP8wxWindow
       ;wxSplitterWindow::sm_eventTableEntries
       sm_eventTableEntries__16wxSplitterWindow
       ;wxSplitterWindow::OnPaint(wxPaintEvent&)
@@ -9771,12 +9912,14 @@ EXPORTS
       wxEVT_COMMAND_SPLITTER_SASH_POS_CHANGED
       ;wxSplitterWindow::OnIdle(wxIdleEvent&)
       OnIdle__16wxSplitterWindowFR11wxIdleEvent
-      ;wxSplitterWindow::OnDoubleClick(wxSplitterEvent&)
-      OnDoubleClick__16wxSplitterWindowFR15wxSplitterEvent
       ;wxSplitterWindow::DoSetSashPosition(int)
       DoSetSashPosition__16wxSplitterWindowFi
+      ;wxSplitterWindow::ConvertSashPosition(int) const
+      ConvertSashPosition__16wxSplitterWindowCFi
       ;wxSplitterWindow::Init()
       Init__16wxSplitterWindowFv
+      ;wxSplitterWindow::SetResizeCursor()
+      SetResizeCursor__16wxSplitterWindowFv
       ;wxSplitterWindow::GetEventTable() const
       GetEventTable__16wxSplitterWindowCFv
       ;wxSplitterWindow::Create(wxWindow*,int,const wxPoint&,const wxSize&,long,const wxString&)
@@ -9796,12 +9939,16 @@ EXPORTS
       SetSashPosition__16wxSplitterWindowFiUl
       ;wxSplitterWindow::SashHitTest(int,int,int)
       SashHitTest__16wxSplitterWindowFiN21
+      ;wxSplitterWindow::OnSashPositionChanging(int)
+      OnSashPositionChanging__16wxSplitterWindowFi
       ;wxConstructorForwxSplitterEvent()
       wxConstructorForwxSplitterEvent__Fv
       ;wxSplitterWindow::DrawSash(wxDC&)
       DrawSash__16wxSplitterWindowFR4wxDC
       ;wxSplitterWindow::Unsplit(wxWindow*)
       Unsplit__16wxSplitterWindowFP8wxWindow
+      ;wxSplitterWindow::OnUnsplit(wxWindow*)
+      OnUnsplit__16wxSplitterWindowFP8wxWindow
   ;From object file:  ..\generic\statusbr.cpp
     ;PUBDEFs (Symbols available from object file):
       ;wxStatusBar::GetFieldRect(int,wxRect&) const
@@ -9967,6 +10114,8 @@ EXPORTS
       OnOK__17wxTextEntryDialogFR14wxCommandEvent
       ;wxTextEntryDialog::sm_classwxTextEntryDialog
       sm_classwxTextEntryDialog__17wxTextEntryDialog
+      ;wxTextEntryDialog::SetValue(const wxString&)
+      SetValue__17wxTextEntryDialogFRC8wxString
       ;wxTextEntryDialog::GetEventTable() const
       GetEventTable__17wxTextEntryDialogCFv
       ;wxTextEntryDialog::sm_eventTableEntries
@@ -11629,16 +11778,16 @@ EXPORTS
     ;PUBDEFs (Symbols available from object file):
       ;wxControl::OnEraseBackground(wxEraseEvent&)
       OnEraseBackground__9wxControlFR12wxEraseEvent
+      ;wxControl::OS2GetStyle(long,unsigned long*) const
+      OS2GetStyle__9wxControlCFlPUl
       ;wxControl::sm_eventTable
       sm_eventTable__9wxControl
       ;wxControl::OS2CreateControl(const char*,unsigned long,const wxPoint&,const wxSize&,const wxString&,unsigned long)
       OS2CreateControl__9wxControlFPCcUlRC7wxPointRC6wxSizeRC8wxStringT2
-      ;wxControl::GetExStyle(unsigned long&) const
-      GetExStyle__9wxControlCFRUl
-      ;wxControl::sm_eventTableEntries
-      sm_eventTableEntries__9wxControl
       ;wxControl::sm_classwxControl
       sm_classwxControl__9wxControl
+      ;wxControl::sm_eventTableEntries
+      sm_eventTableEntries__9wxControl
       ;wxControl::DoGetBestSize() const
       DoGetBestSize__9wxControlCFv
       ;wxControl::Create(wxWindow*,int,const wxPoint&,const wxSize&,long,const wxValidator&,const wxString&)
@@ -11651,15 +11800,17 @@ EXPORTS
       __ct__9wxControlFv
       ;wxControl::GetEventTable() const
       GetEventTable__9wxControlCFv
+      ;wxControl::OS2CreateControl(const char*,const wxString&,const wxPoint&,const wxSize&,long)
+      OS2CreateControl__9wxControlFPCcRC8wxStringRC7wxPointRC6wxSizel
       ;wxFindMaxSize(unsigned long,_RECTL*)
       wxFindMaxSize__FUlP6_RECTL
       __vft9wxControl8wxObject
       ;wxControl::~wxControl()
       __dt__9wxControlFv
-      ;wxControl::OS2CreateControl(wxWindow*,int,const wxPoint&,const wxSize&,long,const wxValidator&,const wxString&)
-      OS2CreateControl__9wxControlFP8wxWindowiRC7wxPointRC6wxSizelRC11wxValidatorRC8wxString
   ;From object file:  ..\os2\cursor.cpp
     ;PUBDEFs (Symbols available from object file):
+      ;wxCursor::wxCursor(const wxImage&)
+      __ct__8wxCursorFRC7wxImage
       ;wxCursorRefData::~wxCursorRefData()
       __dt__15wxCursorRefDataFv
       ;wxCursor::wxCursor(const wxString&,long,int,int)
@@ -13866,8 +14017,11 @@ EXPORTS
     ;PUBDEFs (Symbols available from object file):
       ;wxStaticLine::sm_classwxStaticLine
       sm_classwxStaticLine__12wxStaticLine
+      ;wxStaticLine::OS2GetStyle(long,unsigned long*) const
+      OS2GetStyle__12wxStaticLineCFlPUl
       ;wxConstructorForwxStaticLine()
       wxConstructorForwxStaticLine__Fv
+      __vft12wxStaticLine8wxObject
       ;wxStaticLine::Create(wxWindow*,int,const wxPoint&,const wxSize&,long,const wxString&)
       Create__12wxStaticLineFP8wxWindowiRC7wxPointRC6wxSizelRC8wxString
   ;From object file:  ..\os2\tabctrl.cpp
@@ -14039,13 +14193,17 @@ EXPORTS
       SetStyle__10wxTextCtrlFlT1RC10wxTextAttr
       ;wxTextCtrl::CanRedo() const
       CanRedo__10wxTextCtrlCFv
-      ;wxTextCtrl::SetEditable(unsigned long)
-      SetEditable__10wxTextCtrlFUl
+      ;wxTextCtrl::OS2GetStyle(long,unsigned long*) const
+      OS2GetStyle__10wxTextCtrlCFlPUl
       ;wxTextCtrl::sm_classwxTextCtrl
       sm_classwxTextCtrl__10wxTextCtrl
       __vft10wxTextCtrl8wxObject
       ;wxTextCtrl::ShowPosition(long)
       ShowPosition__10wxTextCtrlFl
+      ;wxTextCtrl::SetWindowStyleFlag(long)
+      SetWindowStyleFlag__10wxTextCtrlFl
+      ;wxTextCtrl::SetEditable(unsigned long)
+      SetEditable__10wxTextCtrlFUl
       ;wxTextCtrl::OnUpdateCopy(wxUpdateUIEvent&)
       OnUpdateCopy__10wxTextCtrlFR15wxUpdateUIEvent
       ;wxTextCtrl::OnCut(wxCommandEvent&)
@@ -14348,6 +14506,8 @@ EXPORTS
       hwndTT__9wxToolTip
   ;From object file:  ..\os2\toplevel.cpp
     ;PUBDEFs (Symbols available from object file):
+      ;wxTopLevelWindowOS2::OS2GetStyle(long,unsigned long*) const
+      OS2GetStyle__19wxTopLevelWindowOS2CFlPUl
       __vft19wxTopLevelWindowOS28wxObject
       ;wxTopLevelWindowOS2::CreateFrame(const wxString&,const wxPoint&,const wxSize&)
       CreateFrame__19wxTopLevelWindowOS2FRC8wxStringRC7wxPointRC6wxSize
@@ -14363,8 +14523,6 @@ EXPORTS
       Init__19wxTopLevelWindowOS2Fv
       ;wxTopLevelWindowOS2::m_sbInitialized
       m_sbInitialized__19wxTopLevelWindowOS2
-      ;wxTopLevelWindowOS2::OS2GetCreateWindowFlags(long*) const
-      OS2GetCreateWindowFlags__19wxTopLevelWindowOS2CFPl
       ;wxTopLevelWindowOS2::Iconize(unsigned long)
       Iconize__19wxTopLevelWindowOS2FUl
       ;wxTopLevelWindowOS2::DoSetClientSize(int,int)
@@ -14517,6 +14675,8 @@ EXPORTS
       UnpackActivate__8wxWindowFPvT1PUsPUl
       ;wxWindow::SubclassWin(unsigned long)
       SubclassWin__8wxWindowFUl
+      ;wxWindow::SetWindowStyleFlag(long)
+      SetWindowStyleFlag__8wxWindowFl
       ;wxWindow::HandleInitDialog(unsigned long)
       HandleInitDialog__8wxWindowFUl
       ;wxWindow::HandleGetMinMaxInfo(_SWP*)
@@ -14743,6 +14903,8 @@ EXPORTS
       ScrollWindow__8wxWindowFiT1PC6wxRect
       ;wxWindow::OnIdle(wxIdleEvent&)
       OnIdle__8wxWindowFR11wxIdleEvent
+      ;wxWindow::OS2GetStyle(long,unsigned long*) const
+      OS2GetStyle__8wxWindowCFlPUl
       ;wxWindow::HandleActivate(int,unsigned long)
       HandleActivate__8wxWindowFiUl
       ;wxWindow::FindItemByHWND(unsigned long,unsigned long) const

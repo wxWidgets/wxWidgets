@@ -112,15 +112,14 @@ public:
 
     virtual wxSize DoGetBestSize(void) const;
 
-    bool OS2CreateControl( wxWindow*          pParent
-                          ,wxWindowID         lId
-                          ,const wxPoint&     rPos
-                          ,const wxSize&      rSize
-                          ,long               lStyle
-#if wxUSE_VALIDATORS
-                          ,const wxValidator& rValidator
-#endif
-                          ,const wxString&    rsName
+    //
+    // Create the control of the given PM class
+    //
+    bool OS2CreateControl( const wxChar*   zClassname
+                          ,const wxString& rsLabel
+                          ,const wxPoint&  rPos
+                          ,const wxSize&   rSize
+                          ,long            lStyle
                          );
     //
     // Create the control of the given class with the given style, returns FALSE
@@ -135,10 +134,11 @@ public:
                          );
 
     //
-    // Determine the extended styles combination for this window (may slightly
-    // modify styl parameter)
+    // Default style for the control include WS_TABSTOP if it AcceptsFocus()
     //
-    WXDWORD GetExStyle(WXDWORD& rStyle) const;
+    virtual WXDWORD OS2GetStyle( long     lStyle
+                                ,WXDWORD* pdwExstyle
+                               ) const;
 
     inline int  GetXComp(void) const {return m_nXComp;}
     inline int  GetYComp(void) const {return m_nYComp;}

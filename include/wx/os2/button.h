@@ -80,8 +80,11 @@ class WXDLLEXPORT wxButton: public wxButtonBase
 
 protected:
 
-    bool           SendClickEvent(void);
-    virtual wxSize DoGetBestSize(void) const;
+    bool            SendClickEvent(void);
+    virtual wxSize  DoGetBestSize(void) const;
+    virtual WXDWORD OS2GetStyle( long     style
+                                ,WXDWORD* exstyle
+                               ) const;
 private:
   DECLARE_DYNAMIC_CLASS(wxButton)
 }; // end of CLASS wxButton

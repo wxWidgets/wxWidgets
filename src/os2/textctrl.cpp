@@ -252,6 +252,58 @@ void wxTextCtrl::AdoptAttributesFromHWND()
     }
 } // end of wxTextCtrl::AdoptAttributesFromHWND
 
+WXDWORD wxTextCtrl::OS2GetStyle(
+  long                              lStyle
+, WXDWORD*                          pdwExstyle
+) const
+{
+    //
+    // Default border for the text controls is the sunken one
+    //
+    if ((lStyle & wxBORDER_MASK) == wxBORDER_DEFAULT )
+    {
+        lStyle |= wxBORDER_SUNKEN;
+    }
+
+    long                            dwStyle = wxControl::OS2GetStyle( lStyle
+                                                                     ,pdwExstyle
+                                                                    );
+
+    dwStyle = WS_VISIBLE | WS_TABSTOP;
+
+    //
+    // Single and multiline edit fields are two different controls in PM
+    //
+    if ( m_windowStyle & wxTE_MULTILINE )
+    {
+        dwStyle |= MLS_BORDER | MLS_WORDWRAP;
+        if ((m_windowStyle & wxTE_NO_VSCROLL) == 0)
+            dwStyle |= MLS_VSCROLL;
+        if (m_windowStyle & wxHSCROLL)
+            dwStyle |= MLS_HSCROLL;
+        if (m_windowStyle & wxTE_READONLY)
+            dwStyle |= MLS_READONLY;
+    }
+    else
+    {
+        dwStyle |= ES_LEFT | ES_AUTOSCROLL | ES_MARGIN;
+        if (m_windowStyle & wxHSCROLL)
+            dwStyle |=  ES_AUTOSCROLL;
+        if (m_windowStyle & wxTE_READONLY)
+            dwStyle |= ES_READONLY;
+        if (m_windowStyle & wxTE_PASSWORD) // hidden input
+            dwStyle |= ES_UNREADABLE;
+    }
+    return dwStyle;
+} // end of wxTextCtrl::OS2GetStyle
+
+void wxTextCtrl::SetWindowStyleFlag(
+  long                              lStyle
+)
+{
+    wxControl::SetWindowStyleFlag(lStyle);
+} // end of wxTextCtrl::SetWindowStyleFlag
+
 void wxTextCtrl::SetupColours()
 {
     wxColour                        vBkgndColour;

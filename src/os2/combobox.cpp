@@ -102,7 +102,7 @@ bool wxComboBox::Create(
 )
 {
 
-    if (!OS2CreateControl( pParent
+    if (!CreateControl( pParent
                        ,vId
                        ,rPos
                        ,rSize
