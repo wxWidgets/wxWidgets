@@ -191,6 +191,9 @@ bool MyApp::OnInit()
 MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
        : wxFrame((wxFrame *)NULL, -1, title, pos, size)
 {
+    // init members
+    m_nPush = 0;
+
     // create a menu bar
     wxMenu *menuFile = new wxMenu;
 
