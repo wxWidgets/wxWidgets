@@ -38,8 +38,11 @@
 // ----------------------------------------------------------------------------
 
 BEGIN_EVENT_TABLE(wxTopLevelWindow, wxTopLevelWindowNative)
+    WX_EVENT_TABLE_INPUT_CONSUMER(wxTopLevelWindow)
     EVT_NC_PAINT(wxTopLevelWindow::OnNcPaint)
 END_EVENT_TABLE()
+
+WX_FORWARD_TO_INPUT_CONSUMER(wxTopLevelWindow)
 
 
 // ============================================================================
@@ -51,6 +54,7 @@ int wxTopLevelWindow::ms_drawDecorations = -1;
 void wxTopLevelWindow::Init()
 {
     m_isActive = FALSE;
+    m_windowStyle = 0;
 }
 
 bool wxTopLevelWindow::Create(wxWindow *parent,
@@ -72,14 +76,16 @@ bool wxTopLevelWindow::Create(wxWindow *parent,
 
     if ( ms_drawDecorations )
     {
+        CreateInputHandler(wxINP_HANDLER_TOPLEVEL);
+
         styleOrig = style;
         exstyleOrig = GetExtraStyle();
-        style &= ~(wxCAPTION | wxMINIMIZE_BOX | wxMAXIMIZE_BOX | 
-                   wxSYSTEM_MENU | wxRESIZE_BORDER | wxFRAME_TOOL_WINDOW | 
-                   wxTHICK_FRAME);
-        style = wxSIMPLE_BORDER;
-        SetExtraStyle(exstyleOrig & 
-                      ~(wxFRAME_EX_CONTEXTHELP | wxDIALOG_EX_CONTEXTHELP));
+//        style &= ~(wxCAPTION | wxMINIMIZE_BOX | wxMAXIMIZE_BOX | 
+//                   wxSYSTEM_MENU | wxRESIZE_BORDER | wxFRAME_TOOL_WINDOW | 
+//                   wxTHICK_FRAME);
+//        style = wxSIMPLE_BORDER;
+//        SetExtraStyle(exstyleOrig & 
+//                      ~(wxFRAME_EX_CONTEXTHELP | wxDIALOG_EX_CONTEXTHELP));
     }
 
     if ( !wxTopLevelWindowNative::Create(parent, id, title, pos, 
@@ -97,17 +103,25 @@ bool wxTopLevelWindow::Create(wxWindow *parent,
 
 bool wxTopLevelWindow::ShowFullScreen(bool show, long style)
 {
-    // VZ: doesn't compile
-#if 0
     if ( show == IsFullScreen() ) return FALSE;
     
-    return wxTopLevelWindowNative::ShowFullScreen(show, style);
-    
-    // FIXME_MGL -- must handle caption hiding here if not in
-    //              native decorations mode
-#endif // 0
+    if ( ms_drawDecorations )
+    {
+        if ( show )
+        {
+            m_fsSavedStyle = m_windowStyle;
+            if ( style & wxFULLSCREEN_NOBORDER )
+                m_windowStyle |= wxSIMPLE_BORDER;
+            if ( style & wxFULLSCREEN_NOCAPTION )
+                m_windowStyle &= ~wxCAPTION;
+        }
+        else
+        {
+            m_windowStyle = m_fsSavedStyle;
+        }
+    }
 
-    return FALSE;
+    return wxTopLevelWindowNative::ShowFullScreen(show, style);
 }
 
 long wxTopLevelWindow::GetDecorationsStyle() const
@@ -116,13 +130,13 @@ long wxTopLevelWindow::GetDecorationsStyle() const
 
     if ( m_windowStyle & wxCAPTION )
     {
-        style |= wxTOPLEVEL_TITLEBAR | wxTOPLEVEL_CLOSE_BUTTON;
+        style |= wxTOPLEVEL_TITLEBAR | wxTOPLEVEL_BUTTON_CLOSE;
         if ( m_windowStyle & wxMINIMIZE_BOX )
-            style |= wxTOPLEVEL_MINIMIZE_BUTTON;
+            style |= wxTOPLEVEL_BUTTON_MINIMIZE;
         if ( m_windowStyle & wxMAXIMIZE_BOX )
-            style |= wxTOPLEVEL_MAXIMIZE_BUTTON;
+            style |= wxTOPLEVEL_BUTTON_MAXIMIZE;
         if ( m_exStyle & (wxFRAME_EX_CONTEXTHELP | wxDIALOG_EX_CONTEXTHELP))
-            style |= wxTOPLEVEL_HELP_BUTTON;
+            style |= wxTOPLEVEL_BUTTON_HELP;
     }
     if ( (m_windowStyle & (wxSIMPLE_BORDER | wxNO_BORDER)) == 0 )
         style |= wxTOPLEVEL_BORDER;
@@ -133,7 +147,7 @@ long wxTopLevelWindow::GetDecorationsStyle() const
         style |= wxTOPLEVEL_MAXIMIZED;
     if ( GetIcon().Ok() )
         style |= wxTOPLEVEL_ICON;
-    if ( /*m_isActive*/ 1 /* FIXME_MGL*/ )
+    if ( m_isActive )
         style |= wxTOPLEVEL_ACTIVE;
 
     return style;
@@ -238,7 +252,61 @@ void wxTopLevelWindow::SetIcon(const wxIcon& icon)
         {
             wxImage img = bmp1.ConvertToImage();
             img.Rescale(size.x, size.y);
-             m_titlebarIcon.CopyFromBitmap(wxBitmap(img));
+            m_titlebarIcon.CopyFromBitmap(wxBitmap(img));
         }
     }
+}
+
+// ----------------------------------------------------------------------------
+// actions
+// ----------------------------------------------------------------------------
+
+bool wxTopLevelWindow::PerformAction(const wxControlAction& action,
+                                     long numArg,
+                                     const wxString& strArg)
+{
+    if ( action == wxACTION_TOPLEVEL_ACTIVATE )
+    {
+        if ( m_isActive != (bool)numArg )
+        {
+            Refresh();
+            m_isActive = (bool)numArg;
+            wxNcPaintEvent event(GetId());
+            event.SetEventObject(this);
+            GetEventHandler()->ProcessEvent(event);
+            printf("activation: %i\n", m_isActive);
+        }
+        return TRUE;
+    }
+    else
+        return FALSE;
+}
+
+
+// ============================================================================
+// wxStdFrameInputHandler: handles focus, resizing and titlebar buttons clicks
+// ============================================================================
+
+wxStdFrameInputHandler::wxStdFrameInputHandler(wxInputHandler *inphand)
+            : wxStdInputHandler(inphand)
+{
+}
+
+bool wxStdFrameInputHandler::HandleMouse(wxInputConsumer *consumer,
+                                         const wxMouseEvent& event)
+{
+    return wxStdInputHandler::HandleMouse(consumer, event);
+}
+
+bool wxStdFrameInputHandler::HandleMouseMove(wxInputConsumer *consumer, 
+                                             const wxMouseEvent& event)
+{
+    return wxStdInputHandler::HandleMouseMove(consumer, event);
+}
+
+bool wxStdFrameInputHandler::HandleActivation(wxInputConsumer *consumer, 
+                                              bool activated)
+{
+    consumer->PerformAction(wxACTION_TOPLEVEL_ACTIVATE, activated);
+    return FALSE;
 }
