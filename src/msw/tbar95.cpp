@@ -264,11 +264,8 @@ wxToolBar::~wxToolBar()
 {
     // we must refresh the frame size when the toolbar is deleted but the frame
     // is not - otherwise toolbar leaves a hole in the place it used to occupy
-    //
-    // NB: a frame is being deleted only if it is not any longer in
-    //     wxTopLevelWindows list
     wxFrame *frame = wxDynamicCast(GetParent(), wxFrame);
-    if ( frame && wxTopLevelWindows.Find(frame) )
+    if ( frame && !frame->IsBeingDeleted() )
     {
         frame->SendSizeEvent();
     }
