@@ -359,7 +359,7 @@ WXHBRUSH wxControl::MSWControlColor(WXHDC pDC)
 {
     // by default consider that the controls text shouldn't erase the
     // background under it (this is true for all static controls, check boxes,
-    // radio buttons, ...
+    // radio buttons, ...)
     ::SetBkMode((HDC)pDC, TRANSPARENT);
 
     return DoMSWControlColor(pDC, wxNullColour);
