@@ -205,7 +205,7 @@ void wxFindReplaceDialogImpl::SubclassDialog(HWND hwnd)
         // from wxFindReplaceWindowProc
         m_oldParentWndProc = wxSetWindowProc(hwnd, wxFindReplaceWindowProc);
 
-        wxSetWindowUserData(hwnd, m_oldParentWndProc);
+        wxSetWindowUserData(hwnd, (void *)m_oldParentWndProc);
     }
 }
 
