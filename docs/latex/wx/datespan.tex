@@ -39,7 +39,7 @@ function.
 Equality operators are defined for wxDateSpans. Two datespans are equal if
 and only if they both give the same target date when added to {\bf every}
 source date. Thus wxDateSpan::Months(1) is not equal to wxDateSpan::Days(30),
-because they not give the same date when added to 1 Feb. But
+because they don't give the same date when added to 1 Feb. But
 wxDateSpan::Days(14) is equal to wxDateSpan::Weeks(2)
 
 Finally, notice that for adding hours, minutes and so on you don't need this
