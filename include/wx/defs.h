@@ -967,19 +967,10 @@ enum wxBorder
 #define wxSTATIC_BORDER         wxBORDER_STATIC
 #define wxNO_BORDER             wxBORDER_NONE
 
-// Override CTL3D etc. control colour processing to allow own background
-// colour.
-// Override CTL3D or native 3D styles for children
-#define wxNO_3D                 0x00800000
-
-// OBSOLETE - use wxNO_3D instead
-#define wxUSER_COLOURS          wxNO_3D
-
 // wxALWAYS_SHOW_SB: instead of hiding the scrollbar when it is not needed,
 // disable it - but still show (see also wxLB_ALWAYS_SB style)
 //
-// NB: as this style is only supported by wxUniversal so far as it doesn't use
-//     wxUSER_COLOURS/wxNO_3D, we reuse the same style value
+// NB: as this style is only supported by wxUniversal and wxMSW so far
 #define wxALWAYS_SHOW_SB        0x00800000
 
 // Clip children when painting, which reduces flicker in e.g. frames and
@@ -1075,7 +1066,10 @@ enum wxBorder
 
 // obsolete styles, unused any more
 #define wxDIALOG_MODAL          0x0020  // free flag value 0x0020
-#define wxDIALOG_MODELESS       0x0000
+#define wxDIALOG_MODELESS       0
+#define wxNO_3D                 0
+#define wxUSER_COLOURS          0
+
 
 /*
  * MDI parent frame style flags
