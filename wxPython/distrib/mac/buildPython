@@ -1,8 +1,0 @@
-#!/bin/sh -e
-#
-# build binary package and put it on a disk image
-#
-
-
-prog="`dirname \"$0\"`/_`basename \"$0\"`"
-sudo "$prog" "${USER?'USER not set.'}" "$@"
