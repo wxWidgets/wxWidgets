@@ -335,6 +335,43 @@ int wxVsprintf( wxChar *str, const wxChar *format, va_list ap )
 }
 #endif
 
+// we want to find out if the current platform supports vsnprintf()-like
+// function: for Unix this is done with configure, for Windows we test the
+// compiler explicitly.
+//
+// FIXME currently, this is only for ANSI (!Unicode) strings, so we call this
+//       function wxVsnprintfA (A for ANSI), should also find one for Unicode
+//       strings in Unicode build
+#ifdef __WXMSW__
+    #if defined(__VISUALC__) || (defined(__MINGW32__) && wxUSE_NORLANDER_HEADERS)
+        #define wxVsnprintfA     _vsnprintf
+    #endif
+#elif defined(__WXMAC__)
+    #define wxVsnprintfA       vsnprintf
+#else   // !Windows
+    #ifdef HAVE_VSNPRINTF
+        #define wxVsnprintfA       vsnprintf
+    #endif
+#endif  // Windows/!Windows
+
+#ifndef wxVsnprintfA
+    // in this case we'll use vsprintf() (which is ANSI and thus should be
+    // always available), but it's unsafe because it doesn't check for buffer
+    // size - so give a warning
+    #define wxVsnprintfA(buf, len, format, arg) vsprintf(buf, format, arg)
+
+    #if defined(__VISUALC__)
+        #pragma message("Using sprintf() because no snprintf()-like function defined")
+    #elif defined(__GNUG__)
+        #warning "Using sprintf() because no snprintf()-like function defined"
+    #endif //compiler
+#endif // no vsnprintf
+
+#if defined(_AIX)
+  // AIX has vsnprintf, but there's no prototype in the system headers.
+  extern "C" int vsnprintf(char* str, size_t n, const char* format, va_list ap);
+#endif
+
 #if !defined(wxVsnprintf) && !defined(wxHAS_VSNPRINTF)
 int WXDLLEXPORT wxVsnprintf(wxChar *buf, size_t len,
                             const wxChar *format, va_list argptr)
