@@ -115,7 +115,17 @@ pascal OSStatus wxMacSetupControlBackground( ControlRef iControl , SInt16 iMessa
 	        	if ( wx != NULL && wx->IsKindOf( CLASSINFO( wxControl ) ) )
 	        	{
 	        		wxDC::MacSetupBackgroundForCurrentPort( wx->MacGetBackgroundBrush() ) ;
-	//				SetThemeBackground( iDepth , iIsColor ) ;
+#if TARGET_CARBON
+					// under classic this would lead to partial redraws
+					RgnHandle clip = NewRgn() ;
+			        int x = 0 , y = 0;
+
+			        wx->MacWindowToRootWindow( &x,&y ) ;
+			        CopyRgn( (RgnHandle) wx->MacGetVisibleRegion(false).GetWXHRGN() , clip ) ;
+			        OffsetRgn( clip , x , y ) ;
+			        SetClip( clip ) ;
+			    	DisposeRgn( clip ) ;
+#endif
 				}
 				else
 				{
@@ -594,6 +604,23 @@ void  wxControl::DoSetSize(int x, int y,
             int sizeFlags )
 {
     wxWindow::DoSetSize( x , y ,width , height ,sizeFlags ) ;
+#if 0
+    {
+    	Rect meta , control ;
+    	GetControlBounds( (ControlHandle) m_macControl , &control ) ;
+    	RgnHandle rgn = NewRgn() ;
+    	GetControlRegion( (ControlHandle) m_macControl , kControlStructureMetaPart , rgn ) ;
+    	GetRegionBounds( rgn , &meta ) ;
+    	if ( !EmptyRect( &meta ) )
+    	{
+			wxASSERT( meta.left >= control.left - m_macHorizontalBorder ) ;
+			wxASSERT( meta.right <= control.right + m_macHorizontalBorder ) ;
+			wxASSERT( meta.top >= control.top - m_macVerticalBorder ) ;
+			wxASSERT( meta.bottom <= control.bottom + m_macVerticalBorder ) ;
+		}
+    	DisposeRgn( rgn ) ;
+    }
+#endif
     return ;
 /*
 
