@@ -1584,22 +1584,17 @@ void  wxDC::DoGetTextExtent( const wxString &string, wxCoord *width, wxCoord *he
 
 	if ( theFont )
 	{
-		wxFontRefData * font = (wxFontRefData*) m_font.GetRefData() ;
+	    // work around the constness
+       *((wxFont*)(&m_font)) = *theFont ;
+	}
 
-		if ( font )
-		{
-			::TextFont( font->m_macFontNum ) ;
-			::TextSize( YLOG2DEVREL( font->m_macFontSize) ) ;
-			::TextFace( font->m_macFontStyle ) ;
-		}
-	}
-	else
-	{
-		MacInstallFont() ;
-	}
+	MacInstallFont() ;
 
 	FontInfo fi ;
 	::GetFontInfo( &fi ) ;
+#if TARGET_CARBON	
+	bool useGetThemeText = ( GetThemeTextDimensions != (void*) kUnresolvedCFragSymbolAddress ) ;
+#endif
 
 	if ( height )
 		*height = YDEV2LOGREL( fi.descent + fi.ascent ) ;
@@ -1636,21 +1631,59 @@ void  wxDC::DoGetTextExtent( const wxString &string, wxCoord *width, wxCoord *he
 			{
 				if ( height )
 					*height += YDEV2LOGREL( fi.descent + fi.ascent + fi.leading ) ;
-				curwidth = ::TextWidth( text , laststop , i - laststop ) ;
+#if TARGET_CARBON
+                if ( useGetThemeText )
+                {
+                    Point bounds={0,0} ;
+                    CFStringRef mString = CFStringCreateWithBytes( NULL , (UInt8*) text + laststop , i - laststop , CFStringGetSystemEncoding(), false ) ;
+            		::GetThemeTextDimensions( mString,
+            							kThemeCurrentPortFont,
+            							kThemeStateActive,
+            							true,
+            							&bounds,
+            							nil );
+            	    CFRelease( mString ) ;
+            	    curwidth = bounds.h ;
+                }
+                else
+#endif
+                {
+				    curwidth = ::TextWidth( text , laststop , i - laststop ) ;
+				}
 				if ( curwidth > *width )
 					*width = XDEV2LOGREL( curwidth ) ;
 				laststop = i+1 ;
 			}
 			i++ ;
 		}
-
-		curwidth = ::TextWidth( text , laststop , i - laststop ) ;
+				
+#if TARGET_CARBON
+        if ( useGetThemeText )
+        {
+            Point bounds={0,0} ;
+            CFStringRef mString = CFStringCreateWithBytes( NULL , (UInt8*) text + laststop , i - laststop , CFStringGetSystemEncoding(), false ) ;
+    		::GetThemeTextDimensions( mString,
+    							kThemeCurrentPortFont,
+    							kThemeStateActive,
+    							true,
+    							&bounds,
+    							nil );
+    	    CFRelease( mString ) ;
+    	    curwidth = bounds.h ;
+        }
+        else
+#endif
+        {
+		    curwidth = ::TextWidth( text , laststop , i - laststop ) ;
+		}
 		if ( curwidth > *width )
 			*width = XDEV2LOGREL( curwidth ) ;
 	}
 
 	if ( theFont )
 	{
+	    // work around the constness
+       *((wxFont*)(&m_font)) = formerFont ;
 		m_macFontInstalled = false ;
 	}
 }
