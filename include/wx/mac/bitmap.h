@@ -13,11 +13,9 @@
 #define _WX_BITMAP_H_
 
 #ifdef __GNUG__
-#pragma interface "bitmap.h"
+  #pragma interface "bitmap.h"
 #endif
 
-#include "wx/gdiobj.h"
-#include "wx/gdicmn.h"
 #include "wx/palette.h"
 
 // Bitmap
@@ -209,7 +207,6 @@ public:
   static void InitStandardHandlers();
   static void CleanUpHandlers();
 protected:
-  static wxList sm_handlers;
 
   // TODO: Implementation
 public:

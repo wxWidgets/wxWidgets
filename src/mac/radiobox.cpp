@@ -14,7 +14,8 @@
 //-------------------------------------------------------------------------------------
 
 #ifdef __GNUG__
-#pragma implementation "radiobox.h"
+  #pragma implementation "radioboxbase.h"
+  #pragma implementation "radiobox.h"
 #endif
 
 #include "wx/defs.h"

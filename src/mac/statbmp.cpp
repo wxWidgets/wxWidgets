@@ -10,7 +10,7 @@
 /////////////////////////////////////////////////////////////////////////////
 
 #ifdef __GNUG__
-#pragma implementation "statbmp.h"
+  #pragma implementation "statbmp.h"
 #endif
 
 #include "wx/defs.h"

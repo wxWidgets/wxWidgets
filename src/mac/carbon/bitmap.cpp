@@ -10,13 +10,12 @@
 /////////////////////////////////////////////////////////////////////////////
 
 #ifdef __GNUG__
+#pragma implementation "bitmapbase.h"
 #pragma implementation "bitmap.h"
 #endif
 
-#include "wx/wx.h"
-#include "wx/setup.h"
-#include "wx/utils.h"
-#include "wx/palette.h"
+#include "wx/defs.h"
+
 #include "wx/bitmap.h"
 #include "wx/icon.h"
 #include "wx/log.h"
@@ -241,7 +240,7 @@ wxBitmapRefData::~wxBitmapRefData()
   }
 }
 
-wxList wxBitmap::sm_handlers;
+wxList wxBitmapBase::sm_handlers;
 
 
 bool wxBitmap::CopyFromIcon(const wxIcon& icon)

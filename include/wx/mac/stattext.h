@@ -16,10 +16,6 @@
 #pragma interface "stattext.h"
 #endif
 
-#include "wx/control.h"
-
-WXDLLEXPORT_DATA(extern const char*) wxStaticTextNameStr;
-
 class WXDLLEXPORT wxStaticText: public wxStaticTextBase
 {
   DECLARE_DYNAMIC_CLASS(wxStaticText)

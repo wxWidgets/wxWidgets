@@ -29,7 +29,11 @@ WXDLLEXPORT_DATA(extern const wxChar*) wxStaticBitmapNameStr;
 // a control showing an icon or a bitmap
 class WXDLLEXPORT wxStaticBitmapBase : public wxControl
 {
-public:
+ public:
+#ifdef __WXMAC_X__
+    ~wxStaticBitmapBase() { }
+#endif
+    
     // our interface
     virtual void SetIcon(const wxIcon& icon) = 0;
     virtual void SetBitmap(const wxBitmap& bitmap) = 0;

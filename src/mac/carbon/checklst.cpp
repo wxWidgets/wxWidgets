@@ -17,9 +17,11 @@
 #pragma implementation "checklst.h"
 #endif
 
-#include "wx/checklst.h"
+#include "wx/defs.h"
 
 #if wxUSE_CHECKLISTBOX
+
+#include "wx/checklst.h"
 
 // ============================================================================
 // implementation
