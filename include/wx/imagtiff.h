@@ -40,7 +40,7 @@ public:
   virtual bool LoadFile( wxImage *image, wxInputStream& stream, bool verbose=TRUE, int index=0 );
   virtual bool SaveFile( wxImage *image, wxOutputStream& stream, bool verbose=TRUE );
   virtual bool DoCanRead( wxInputStream& stream );
-  virtual int GetImageCount( wxInputStream& stream );
+  virtual int GetImagesCount( wxInputStream& stream );
 #endif
 };
 #endif

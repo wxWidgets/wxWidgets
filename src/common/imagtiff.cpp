@@ -157,6 +157,9 @@ TIFFwxOpen(wxOutputStream &stream, const char* name, const char* mode)
 
 bool wxTIFFHandler::LoadFile( wxImage *image, wxInputStream& stream, bool verbose, int index )
 {
+    if (index == -1)
+        index = 0;
+
     image->Destroy();
 
     TIFF *tif = TIFFwxOpen( stream, "image", "r" );
@@ -268,7 +271,7 @@ bool wxTIFFHandler::LoadFile( wxImage *image, wxInputStream& stream, bool verbos
     return TRUE;
 }
 
-int wxTIFFHandler::GetImageCount( wxInputStream& stream )
+int wxTIFFHandler::GetImagesCount( wxInputStream& stream )
 {
     TIFF *tif = TIFFwxOpen( stream, "image", "r" );
 

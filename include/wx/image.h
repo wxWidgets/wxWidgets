@@ -46,7 +46,7 @@ public:
     virtual bool LoadFile( wxImage *image, wxInputStream& stream, bool verbose=TRUE, int index=0 );
     virtual bool SaveFile( wxImage *image, wxOutputStream& stream, bool verbose=TRUE );
 
-    virtual int GetImageCount( wxInputStream& stream );
+    virtual int GetImagesCount( wxInputStream& stream );
 
     bool CanRead( wxInputStream& stream ) { return DoCanRead(stream); }
     bool CanRead( const wxString& name );
@@ -92,12 +92,12 @@ public:
     wxImage();
     wxImage( int width, int height );
     wxImage( int width, int height, unsigned char* data, bool static_data = FALSE );
-    wxImage( const wxString& name, long type = wxBITMAP_TYPE_ANY );
-    wxImage( const wxString& name, const wxString& mimetype );
+    wxImage( const wxString& name, long type = wxBITMAP_TYPE_ANY, int index = -1 );
+    wxImage( const wxString& name, const wxString& mimetype, int index = -1 );
 
 #if wxUSE_STREAMS
-    wxImage( wxInputStream& stream, long type = wxBITMAP_TYPE_ANY );
-    wxImage( wxInputStream& stream, const wxString& mimetype );
+    wxImage( wxInputStream& stream, long type = wxBITMAP_TYPE_ANY, int index = -1 );
+    wxImage( wxInputStream& stream, const wxString& mimetype, int index = -1 );
 #endif // wxUSE_STREAMS
 
     wxImage( const wxImage& image );
@@ -164,13 +164,15 @@ public:
                           unsigned char mr, unsigned char mg, unsigned char mb);
 
     static bool CanRead( const wxString& name );
-    virtual bool LoadFile( const wxString& name, long type = wxBITMAP_TYPE_ANY );
-    virtual bool LoadFile( const wxString& name, const wxString& mimetype );
+    static int GetImagesCount( const wxString& name, long type = wxBITMAP_TYPE_ANY );
+    virtual bool LoadFile( const wxString& name, long type = wxBITMAP_TYPE_ANY, int index = -1 );
+    virtual bool LoadFile( const wxString& name, const wxString& mimetype, int index = -1 );
 
 #if wxUSE_STREAMS
     static bool CanRead( wxInputStream& stream );
-    virtual bool LoadFile( wxInputStream& stream, long type = wxBITMAP_TYPE_ANY );
-    virtual bool LoadFile( wxInputStream& stream, const wxString& mimetype );
+    static int GetImagesCount( wxInputStream& stream, long type = wxBITMAP_TYPE_ANY );
+    virtual bool LoadFile( wxInputStream& stream, long type = wxBITMAP_TYPE_ANY, int index = -1 );
+    virtual bool LoadFile( wxInputStream& stream, const wxString& mimetype, int index = -1 );
 #endif
 
     virtual bool SaveFile( const wxString& name, int type );

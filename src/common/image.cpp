@@ -108,25 +108,25 @@ wxImage::wxImage( int width, int height, unsigned char* data, bool static_data )
     Create( width, height, data, static_data );
 }
 
-wxImage::wxImage( const wxString& name, long type )
+wxImage::wxImage( const wxString& name, long type, int index )
 {
-    LoadFile( name, type );
+    LoadFile( name, type, index );
 }
 
-wxImage::wxImage( const wxString& name, const wxString& mimetype )
+wxImage::wxImage( const wxString& name, const wxString& mimetype, int index )
 {
-    LoadFile( name, mimetype );
+    LoadFile( name, mimetype, index );
 }
 
 #if wxUSE_STREAMS
-wxImage::wxImage( wxInputStream& stream, long type )
+wxImage::wxImage( wxInputStream& stream, long type, int index )
 {
-    LoadFile( stream, type );
+    LoadFile( stream, type, index );
 }
 
-wxImage::wxImage( wxInputStream& stream, const wxString& mimetype )
+wxImage::wxImage( wxInputStream& stream, const wxString& mimetype, int index )
 {
-    LoadFile( stream, mimetype );
+    LoadFile( stream, mimetype, index );
 }
 #endif // wxUSE_STREAMS
 
@@ -890,14 +890,14 @@ bool wxImage::HasOption(const wxString& name) const
     return (M_IMGDATA->m_optionNames.Index(name, FALSE) != wxNOT_FOUND);
 }
 
-bool wxImage::LoadFile( const wxString& filename, long type )
+bool wxImage::LoadFile( const wxString& filename, long type, int index )
 {
 #if wxUSE_STREAMS
     if (wxFileExists(filename))
     {
         wxFileInputStream stream(filename);
         wxBufferedInputStream bstream( stream );
-        return LoadFile(bstream, type);
+        return LoadFile(bstream, type, index);
     }
     else
     {
@@ -910,14 +910,14 @@ bool wxImage::LoadFile( const wxString& filename, long type )
 #endif // wxUSE_STREAMS
 }
 
-bool wxImage::LoadFile( const wxString& filename, const wxString& mimetype )
+bool wxImage::LoadFile( const wxString& filename, const wxString& mimetype, int index )
 {
 #if wxUSE_STREAMS
     if (wxFileExists(filename))
     {
         wxFileInputStream stream(filename);
         wxBufferedInputStream bstream( stream );
-        return LoadFile(bstream, mimetype);
+        return LoadFile(bstream, mimetype, index);
     }
     else
     {
@@ -970,23 +970,72 @@ bool wxImage::CanRead( const wxString &name )
 #endif
 }
 
+int wxImage::GetImagesCount( const wxString &name, long type )
+{
+#if wxUSE_STREAMS
+  wxFileInputStream stream(name);
+  return GetImagesCount(stream, type);
+#else
+  return 0;
+#endif
+}
+
 #if wxUSE_STREAMS
 
 bool wxImage::CanRead( wxInputStream &stream )
 {
-  wxList &list=GetHandlers();
+    wxList &list=GetHandlers();
 
-  for ( wxList::Node *node = list.GetFirst(); node; node = node->GetNext() )
+    for ( wxList::Node *node = list.GetFirst(); node; node = node->GetNext() )
     {
-      wxImageHandler *handler=(wxImageHandler*)node->GetData();
-      if (handler->CanRead( stream ))
-        return TRUE;
+        wxImageHandler *handler=(wxImageHandler*)node->GetData();
+        if (handler->CanRead( stream ))
+            return TRUE;
     }
 
-  return FALSE;
+    return FALSE;
 }
 
-bool wxImage::LoadFile( wxInputStream& stream, long type )
+int wxImage::GetImagesCount( wxInputStream &stream, long type )
+{
+    wxImageHandler *handler;
+
+    if ( type == wxBITMAP_TYPE_ANY )
+    {
+        wxList &list=GetHandlers();
+
+        for (wxList::Node *node = list.GetFirst(); node; node = node->GetNext())
+        {
+             handler=(wxImageHandler*)node->GetData();
+             if ( handler->CanRead(stream) )
+                 return handler->GetImagesCount(stream);
+
+        }
+
+        wxLogWarning(_("No handler found for image type."));
+        return 0;
+    }
+
+    handler = FindHandler(type);
+
+    if ( !handler )
+    {
+        wxLogWarning(_("No image handler for type %d defined."), type);
+        return FALSE;
+    }
+
+    if ( handler->CanRead(stream) )
+    {
+        return handler->GetImagesCount(stream);
+    }
+    else
+    {
+        wxLogError(_("Image file is not of type %d."), type);
+        return 0;
+    }
+}
+
+bool wxImage::LoadFile( wxInputStream& stream, long type, int index )
 {
     UnRef();
 
@@ -994,15 +1043,15 @@ bool wxImage::LoadFile( wxInputStream& stream, long type )
 
     wxImageHandler *handler;
 
-    if (type==wxBITMAP_TYPE_ANY)
+    if ( type == wxBITMAP_TYPE_ANY )
     {
         wxList &list=GetHandlers();
 
         for ( wxList::Node *node = list.GetFirst(); node; node = node->GetNext() )
         {
              handler=(wxImageHandler*)node->GetData();
-             if (handler->CanRead( stream ))
-                 return handler->LoadFile( this, stream );
+             if ( handler->CanRead(stream) )
+                 return handler->LoadFile(this, stream, TRUE/*verbose*/, index);
 
         }
 
@@ -1019,10 +1068,10 @@ bool wxImage::LoadFile( wxInputStream& stream, long type )
         return FALSE;
     }
 
-    return handler->LoadFile( this, stream );
+    return handler->LoadFile(this, stream, TRUE/*verbose*/, index);
 }
 
-bool wxImage::LoadFile( wxInputStream& stream, const wxString& mimetype )
+bool wxImage::LoadFile( wxInputStream& stream, const wxString& mimetype, int index )
 {
     UnRef();
 
@@ -1037,7 +1086,7 @@ bool wxImage::LoadFile( wxInputStream& stream, const wxString& mimetype )
         return FALSE;
     }
 
-    return handler->LoadFile( this, stream );
+    return handler->LoadFile( this, stream, index );
 }
 
 bool wxImage::SaveFile( wxOutputStream& stream, int type )
@@ -1190,7 +1239,7 @@ bool wxImageHandler::SaveFile( wxImage *WXUNUSED(image), wxOutputStream& WXUNUSE
     return FALSE;
 }
 
-int wxImageHandler::GetImageCount( wxInputStream& WXUNUSED(stream) )
+int wxImageHandler::GetImagesCount( wxInputStream& WXUNUSED(stream) )
 {
     return 1;
 }
