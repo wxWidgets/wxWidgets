@@ -355,7 +355,7 @@ bool wxToolMenuBar::DoDeleteTool(size_t pos, wxToolBarToolBase *tool)
     return true;
 }
 
-bool wxToolMenuBar::Realize()
+bool wxToolMenuBar:Realize()
 {
     const size_t nTools = GetToolsCount();
     if ( nTools == 0 )
@@ -526,6 +526,27 @@ bool wxToolMenuBar::MSWCommand(WXUINT WXUNUSED(cmd), WXWORD id)
 
     return true;
 }
+
+WXLRESULT wxToolMenuBar::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
+{
+    switch ( nMsg )
+    {
+        case WM_SIZE:
+            break;
+
+        case WM_MOUSEMOVE:
+            // we don't handle mouse moves, so always pass the message to
+            // wxControl::MSWWindowProc
+            HandleMouseMove(wParam, lParam);
+            break;
+
+        case WM_PAINT:
+            break;
+    }
+
+    return wxControl::MSWWindowProc(nMsg, wParam, lParam);
+}
+
 
 #else
 

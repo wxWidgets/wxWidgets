@@ -260,7 +260,22 @@ Here are some links that may help.
 \item Miscellaneous Windows CE resources can be found at \urlref{http://www.orbworks.com/pcce/resources.html}{http://www.orbworks.com/pcce/resources.html}.
 \item Installer creation instructions with a setup.exe for installing to PPC can be found at \urlref{http://www.pocketpcdn.com/articles/creatingsetup.html}{http://www.pocketpcdn.com/articles/creatingsetup.html}.
 \item Microsoft instructions are at \urlref{http://msdn.microsoft.com/library/default.asp?url=/library/en-us/dnce30/html/appinstall30.asp?frame=true&hidetoc=true}{http://msdn.microsoft.com/library/default.asp?url=/library/en-us/dnce30/html/appinstall30.asp?frame=true&hidetoc=true}.
+\item Troubleshooting WinCE application installations: \urlref{http://support.microsoft.com/default.aspx?scid=KB;en-us;q181007}{http://support.microsoft.com/default.aspx?scid=KB;en-us;q181007}
 \end{itemize}
+
+You may also check out {\tt demos/life/setup/wince} which contains
+scripts to create a PocketPC installation for ARM-based
+devices. In particular, {\tt build.bat} builds the distribution and
+copies it to a directory called {\tt Deliver}.
+
+\subsubsection{wxFileDialog in PocketPC}
+
+Allowing the user to access files on memory cards, or on arbitrary
+parts of the filesystem, is a pain; the standard file dialog only
+shows folders under My Documents or folders on memory cards
+(not the system or card root directory, for example). This is
+a known problem for PocketPC developers, and a wxFileDialog
+replacement will need to be written.
 
 \subsubsection{Remaining issues}
 
@@ -290,6 +305,8 @@ missing styles are implemented with WM\_PAINT.
 \item {\bf wxCheckListBox.} This class needs to be implemented in terms of a wxListCtrl
 in report mode, using icons for checkbox states. This is necessary because owner-draw listboxes
 are not supported on Windows CE.
+\item {\bf wxFileDialog.} A more flexible dialog needs to be written (probably using wxGenericFileDialog)
+that can access arbitrary locations.
 \item {\bf OK button.} We should allow the OK button on a dialog to be optional, perhaps
 by using wxCLOSE\_BOX to indicate when the OK button should be displayed.
 \item {\bf Dynamic adaptation.} We should probably be using run-time tests more

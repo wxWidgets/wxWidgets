@@ -116,6 +116,9 @@ public:
     // implementation only from now on
     // -------------------------------
 
+    // Override in order to bypass wxToolBar's overridden function
+    virtual WXLRESULT MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam);
+
     virtual bool MSWCommand(WXUINT param, WXWORD id);
 
     // Return HMENU for the menu associated with the commandbar
