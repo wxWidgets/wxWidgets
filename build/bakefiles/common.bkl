@@ -217,6 +217,11 @@
 
     <template id="3rdparty_lib" template="common_settings,anylib">
         <libname>$(id)$(WXDEBUGFLAG)$(HOST_SUFFIX)</libname>
+        <!--
+        we want to install 3rd party libs system-wide only with static
+        version of wxWindows; otherwise they are embedded in shared libs:
+        -->
+        <install-if>SHARED=='0'</install-if>
     </template>
 
 
