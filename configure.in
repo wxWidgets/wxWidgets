@@ -475,6 +475,8 @@ DEFAULT_DEFAULT_wxUSE_MSW=0
 DEFAULT_DEFAULT_wxUSE_WINE=0
 DEFAULT_DEFAULT_wxUSE_PM=0
 
+PROGRAM_EXT=
+
 dnl to support a new system, you need to add its canonical name (as determined
 dnl by config.sub or specified by the configure command line) to this "case"
 dnl and also define the shared library flags below - search for
@@ -1214,7 +1216,6 @@ case "${host}" in
   *)
     PATH_IFS=':'
     LEX_STEM="lex.yy"
-    PROGRAM_EXT=
   ;;
 esac
 
@@ -3132,14 +3133,15 @@ if test "$wxUSE_GAUGE" = "yes"; then
   AC_DEFINE(wxUSE_GAUGE)
 fi
 
+if test "$wxUSE_NEW_GRID" = "yes"; then
+  wxUSE_GRID="yes"
+  AC_DEFINE(wxUSE_NEW_GRID)
+  SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS newgrid"
+fi
+
 if test "$wxUSE_GRID" = "yes"; then
   AC_DEFINE(wxUSE_GRID)
   SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS grid"
-fi
-
-if test "$wxUSE_NEW_GRID" = "yes"; then
-  AC_DEFINE(wxUSE_NEW_GRID)
-  SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS newgrid"
 fi
 
 if test "$wxUSE_IMAGLIST" = "yes"; then
@@ -3371,8 +3373,7 @@ dnl C/C++ compiler options used to compile wxWindows
 if test "$GXX" = yes ; then
     dnl CXXWARNINGS="-Wall -W -Wcast-qual -Werror"
     CXXWARNINGS="-Wall"
-    dnl FIXME: there is one weird warning in docview.h:71 which prevents me from
-    dnl        doing this... (VZ)
+    dnl should enable this one day...
     dnl CXXWARNINGS="-Wall -Werror"
 fi
 EXTRA_CFLAGS="$WXDEBUG $WXODBCFLAG $PROFILE $OPTIMISE $INCLUDES"
@@ -3401,7 +3402,8 @@ dnl for convenience, sort the samples in alphabetical order
 dnl
 dnl FIXME For some mysterious reasons, sometimes the directories are duplicated
 dnl       in this list - hence uniq. But normally, this shouldn't be needed!
-dnl       Unfortunately, there is a bug in OS/2's tr, such that 
+dnl
+dnl       Unfortunately, there is a bug in OS/2's tr, such that
 dnl       tr ' ' '\n' introduces DOS-like line breaks, whereas tr '\n' ' '
 dnl       only removes the Unix-like part of the introduced line break.
 SAMPLES_SUBDIRS="`echo $SAMPLES_SUBDIRS | tr -s ' ' | tr ' ' '\n' | sort | uniq | tr '\n' ' '| tr -d '\r'`"
