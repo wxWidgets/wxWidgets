@@ -5253,7 +5253,7 @@ class MaskedEditMixin:
                     if not valid:
 ##                        dbg('cannot convert string to valid time')
                         pass
-        if valid: dbg('valid date')
+##        if valid: dbg('valid date')
 ##        dbg(indent=0)
         return valid
 
