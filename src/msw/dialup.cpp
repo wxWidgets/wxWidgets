@@ -1250,16 +1250,25 @@ static DWORD wxRasMonitorThread(wxRasThreadData *data)
 static LRESULT APIENTRY wxRasStatusWindowProc(HWND hWnd, UINT message,
                                               WPARAM wParam, LPARAM lParam)
 {
-    if ( message == wxWM_RAS_STATUS_CHANGED )
+    switch ( message )
     {
-        wxRasThreadData *data = (wxRasThreadData *)lParam;
-        data->dialUpManager->OnConnectStatusChange();
-    }
-    else if ( message == wxWM_RAS_DIALING_PROGRESS )
-    {
-        wxDialUpManagerMSW *dialUpManager = wxDialUpManagerMSW::GetDialer();
+        case wxWM_RAS_STATUS_CHANGED:
+            {
+                wxRasThreadData *data = (wxRasThreadData *)lParam;
+                data->dialUpManager->OnConnectStatusChange();
+            }
+            break;
 
-        dialUpManager->OnDialProgress((RASCONNSTATE)wParam, lParam);
+        case wxWM_RAS_DIALING_PROGRESS:
+            {
+                wxDialUpManagerMSW *dialMan = wxDialUpManagerMSW::GetDialer();
+
+                dialMan->OnDialProgress((RASCONNSTATE)wParam, lParam);
+            }
+            break;
+
+        default:
+            return ::DefWindowProc(hWnd, message, wParam, lParam);
     }
 
     return 0;
