@@ -178,6 +178,7 @@ COMMONOBJS = &
 	$(OUTPUTDIR)\radiocmn.obj &
 	$(OUTPUTDIR)\regex.obj &
 	$(OUTPUTDIR)\resource.obj &
+	$(OUTPUTDIR)\rgncmn.obj &
 	$(OUTPUTDIR)\sckaddr.obj &
 	$(OUTPUTDIR)\sckfile.obj &
 	$(OUTPUTDIR)\sckipc.obj &
@@ -1000,6 +1001,9 @@ $(OUTPUTDIR)\regex.obj:     $(COMMDIR)\regex.cpp
   *$(CXX) $(CXXFLAGS) $<
 
 $(OUTPUTDIR)\resource.obj:     $(COMMDIR)\resource.cpp
+  *$(CXX) $(CXXFLAGS) $<
+
+$(OUTPUTDIR)\rgncmn.obj:     $(COMMDIR)\rgncmn.cpp
   *$(CXX) $(CXXFLAGS) $<
 
 $(OUTPUTDIR)\sckaddr.obj:     $(COMMDIR)\sckaddr.cpp

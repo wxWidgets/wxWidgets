@@ -433,10 +433,6 @@ SOURCE=.\common\object.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\common\odbc.cpp
-# End Source File
-# Begin Source File
-
 SOURCE=.\common\paper.cpp
 # End Source File
 # Begin Source File
@@ -470,6 +466,10 @@ SOURCE=.\common\regex.cpp
 # Begin Source File
 
 SOURCE=.\common\resource.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\common\rgncmn.cpp
 # End Source File
 # Begin Source File
 
@@ -1475,10 +1475,6 @@ SOURCE=..\include\wx\dataobj.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\include\wx\date.h
-# End Source File
-# Begin Source File
-
 SOURCE=..\include\wx\datetime.h
 # End Source File
 # Begin Source File
@@ -1931,10 +1927,6 @@ SOURCE=..\include\wx\object.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\include\wx\odbc.h
-# End Source File
-# Begin Source File
-
 SOURCE=..\include\wx\ownerdrw.h
 # End Source File
 # Begin Source File
@@ -2164,10 +2156,6 @@ SOURCE=..\include\wx\tglbtn.h
 # Begin Source File
 
 SOURCE=..\include\wx\thread.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\include\wx\time.h
 # End Source File
 # Begin Source File
 

@@ -236,6 +236,7 @@ COMMONOBJS  = \
 		$(COMMDIR)/quantize.$(OBJSUFF) \
 		$(COMMDIR)/radiocmn.$(OBJSUFF) \
 		$(COMMDIR)/resource.$(OBJSUFF) \
+		$(COMMDIR)/rgncmn.$(OBJSUFF) \
 		$(COMMDIR)/settcmn.$(OBJSUFF) \
 		$(COMMDIR)/sizer.$(OBJSUFF) \
 		$(COMMDIR)/statbar.$(OBJSUFF) \
