@@ -1679,7 +1679,7 @@ wxCoord   wxDC::GetCharWidth(void) const
     if ( UMAGetSystemVersion() < 0x1000 || ((wxFont*)&m_font)->GetNoAntiAliasing() )
         useGetThemeText = false ;
 #endif
-    char text[] = "H" ;
+    char text[] = "g" ;
 #if TARGET_CARBON
     if ( useGetThemeText )
     {

@@ -3371,7 +3371,7 @@ int wxWindowGTK::GetCharWidth() const
     PangoFontDescription *desc = m_font.GetNativeFontInfo()->description;
     PangoLayout *layout = pango_layout_new(context);
     pango_layout_set_font_description(layout, desc);
-    pango_layout_set_text(layout, "H", 1);
+    pango_layout_set_text(layout, "g", 1);
     PangoLayoutLine *line = (PangoLayoutLine *)pango_layout_get_lines(layout)->data;
 
     PangoRectangle rect;
@@ -3383,7 +3383,7 @@ int wxWindowGTK::GetCharWidth() const
 #else
     GdkFont *font = m_font.GetInternalFont( 1.0 );
 
-    return gdk_string_width( font, "H" );
+    return gdk_string_width( font, "g" );
 #endif
 }
 
