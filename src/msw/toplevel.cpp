@@ -517,7 +517,10 @@ bool wxTopLevelWindowMSW::Show(bool show)
         }
         else // just show
         {
-            nShowCmd = SW_SHOW;
+           if ( GetWindowStyle() & wxFRAME_TOOL_WINDOW )
+               nShowCmd = SW_SHOWNA;
+           else
+               nShowCmd = SW_SHOW;
         }
     }
     else // hide
