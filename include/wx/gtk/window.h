@@ -48,6 +48,9 @@ public:
 
     // implement base class (pure) virtual methods
     // -------------------------------------------
+    virtual void SetTitle( const wxString& title ) { m_title = title; }
+    virtual wxString GetTitle() const { return m_title; }
+
     virtual bool Destroy();
 
     virtual void Raise();
@@ -211,6 +214,9 @@ public:
     // different methods of inserting a child window into a wxFrame,
     // wxMDIFrame, wxNotebook etc. this is the callback that will get used.
     wxInsertChildFunction  m_insertCallback;
+
+    // the window label
+    wxString               m_title;
 
     // implement the base class pure virtuals
     virtual void DoClientToScreen( int *x, int *y ) const;
