@@ -100,13 +100,6 @@ int XmlResApp::OnRun()
         { wxCMD_LINE_NONE }
     };
 
-#if wxUSE_GUI && !defined(__WXMSW__)
-    // VS: I need reasonable output to console from wxCmdLineParser
-    //     - temporary, will hopefully be fixed in future in wxWin
-    wxLog::SetTimestamp(NULL);
-    delete wxLog::SetActiveTarget(new wxLogStderr);
-#endif
-
     wxCmdLineParser parser(cmdLineDesc, argc, argv);
 
     switch (parser.Parse())
