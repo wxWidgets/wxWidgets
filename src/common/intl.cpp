@@ -610,8 +610,11 @@ bool wxLocale::Init(const wxChar *szName,
     // the argument to setlocale()
     szLocale = szShort;
   }
+
   m_pszOldLocale = wxSetlocale(LC_ALL, szLocale);
-  if ( m_pszOldLocale == NULL )
+  if ( m_pszOldLocale )
+    m_pszOldLocale = wxStrdup(m_pszOldLocale);
+  else
     wxLogError(_("locale '%s' can not be set."), szLocale);
 
   // the short name will be used to look for catalog files as well,
@@ -638,6 +641,39 @@ bool wxLocale::Init(const wxChar *szName,
 
   return bOk;
 }
+
+
+#if defined(__UNIX__) && wxUSE_UNICODE
+static wxWCharBuffer wxSetlocaleTryUTF(int c, const wxChar *lc)
+{
+    wxMB2WXbuf l = wxSetlocale(c, lc);
+    if ( !l && lc && lc[0] != 0 )
+    {
+    	wxString buf(lc);
+        wxString buf2;
+    	buf2 = buf + wxT(".UTF-8");
+    	l = wxSetlocale(c, buf2.c_str());
+        if ( !l )
+        {
+            buf2 = buf + wxT(".utf-8");
+    	    l = wxSetlocale(c, buf2.c_str());
+        }
+        if ( !l )
+        {
+            buf2 = buf + wxT(".UTF8");
+    	    l = wxSetlocale(c, buf2.c_str());
+        }
+        if ( !l )
+        {
+            buf2 = buf + wxT(".utf8");
+    	    l = wxSetlocale(c, buf2.c_str());
+        }
+    }
+    return l;
+}
+#else
+#define wxSetlocaleTryUTF(c, lc)  wxSetlocale(c, lc)
+#endif
 
 bool wxLocale::Init(int language, int flags)
 {
@@ -674,12 +710,12 @@ bool wxLocale::Init(int language, int flags)
     else
         locale = info->CanonicalName;
 
-    wxMB2WXbuf retloc = wxSetlocale(LC_ALL, locale);
+    wxMB2WXbuf retloc = wxSetlocaleTryUTF(LC_ALL, locale);
 
     if ( !retloc )
     {
         // Some C libraries don't like xx_YY form and require xx only
-        retloc = wxSetlocale(LC_ALL, locale.Mid(0,2));
+        retloc = wxSetlocaleTryUTF(LC_ALL, locale.Mid(0,2));
     }
     if ( !retloc )
     {
@@ -697,13 +733,13 @@ bool wxLocale::Init(int language, int flags)
         else if (mid == wxT("nn"))
             locale = wxT("no_NY");
 
-        retloc = wxSetlocale(LC_ALL, locale);
+        retloc = wxSetlocaleTryUTF(LC_ALL, locale);
     }
     if ( !retloc )
     {
         // (This time, we changed locale in previous if-branch, so try again.)
         // Some C libraries don't like xx_YY form and require xx only
-        retloc = wxSetlocale(LC_ALL, locale.Mid(0,2));
+        retloc = wxSetlocaleTryUTF(LC_ALL, locale.Mid(0,2));
     }
     if ( !retloc )
     {
@@ -711,6 +747,17 @@ bool wxLocale::Init(int language, int flags)
         return FALSE;
     }
 #elif defined(__WIN32__)
+
+    #if wxUSE_UNICODE && (defined(__VISUALC__) || defined(__MINGW32__))
+        // NB: setlocale() from msvcrt.dll (used by VC++ and Mingw)
+        //     can't set locale to language that can only be written using
+        //     Unicode.  Therefore wxSetlocale call failed, but we don't want
+        //     to report it as an error -- so that at least message catalogs
+        //     can be used. Watch for code marked with
+        //     #ifdef SETLOCALE_FAILS_ON_UNICODE_LANGS bellow.
+        #define SETLOCALE_FAILS_ON_UNICODE_LANGS
+    #endif
+    
     wxMB2WXbuf retloc = wxT("C");
     if (language != wxLANGUAGE_DEFAULT)
     {
@@ -721,42 +768,58 @@ bool wxLocale::Init(int language, int flags)
         }
         else
         {
+            int codepage = -1;
             wxUint32 lcid = MAKELCID(MAKELANGID(info->WinLang, info->WinSublang),
                                      SORT_DEFAULT);
-            if (SetThreadLocale(lcid))
+            SetThreadLocale(lcid);
+            // NB: we must translate LCID to CRT's setlocale string ourselves,
+            //     because SetThreadLocale does not modify change the
+            //     interpretation of setlocale(LC_ALL, "") call:
+            wxChar buffer[256];
+            buffer[0] = wxT('\0');
+            GetLocaleInfo(lcid, LOCALE_SENGLANGUAGE, buffer, 256);
+            locale << buffer;
+            if (GetLocaleInfo(lcid, LOCALE_SENGCOUNTRY, buffer, 256) > 0)
+                locale << wxT("_") << buffer;
+            if (GetLocaleInfo(lcid, LOCALE_IDEFAULTANSICODEPAGE, buffer, 256) > 0)
             {
-                retloc = wxSetlocale(LC_ALL, wxEmptyString);
+                codepage = wxAtoi(buffer);
+                if (codepage != 0)
+                    locale << wxT(".") << buffer;
+            }
+            if (locale.IsEmpty())
+            {
+                wxLogLastError(wxT("SetThreadLocale"));
+                wxLogError(wxT("Cannot set locale to language %s."), name.c_str());
+                return FALSE;
             }
             else
             {
-                // Windows9X doesn't support SetThreadLocale, so we must
-                // translate LCID to CRT's setlocale string ourselves
-                locale.Empty();
-                if (GetLastError() == ERROR_CALL_NOT_IMPLEMENTED)
+                retloc = wxSetlocale(LC_ALL, locale);
+#ifdef SETLOCALE_FAILS_ON_UNICODE_LANGS
+                if (codepage == 0 && (const wxChar*)retloc == NULL)
                 {
-                    wxChar buffer[256];
-                    buffer[0] = wxT('\0');
-                    GetLocaleInfo(lcid, LOCALE_SENGLANGUAGE, buffer, 256);
-                    locale << buffer;
-                    if (GetLocaleInfo(lcid, LOCALE_SENGCOUNTRY, buffer, 256) > 0)
-                        locale << wxT("_") << buffer;
+                    retloc = wxT("C");
                 }
-                if (locale.IsEmpty())
-                {
-                    wxLogLastError(wxT("SetThreadLocale"));
-                    wxLogError(wxT("Cannot set locale to language %s."), name.c_str());
-                    return FALSE;
-                }
-                else
-                {
-                    retloc = wxSetlocale(LC_ALL, locale);
-                }
+#endif
             }
         }
     }
     else
     {
         retloc = wxSetlocale(LC_ALL, wxEmptyString);
+#ifdef SETLOCALE_FAILS_ON_UNICODE_LANGS
+        if ((const wxChar*)retloc == NULL)
+        {
+            wxChar buffer[16];
+            if (GetLocaleInfo(LOCALE_USER_DEFAULT,
+                              LOCALE_IDEFAULTANSICODEPAGE, buffer, 16) > 0 &&
+                 wxStrcmp(buffer, wxT("0")) == 0)
+            {
+                retloc = wxT("C");
+            }
+        }
+#endif
     }
 
     if ( !retloc )
@@ -778,6 +841,8 @@ bool wxLocale::Init(int language, int flags)
                     (flags & wxLOCALE_CONV_ENCODING) != 0);
     if (szLocale)
         free(szLocale);
+    if ( ret )
+        m_language = lang;
     return ret;
 #endif
 }
@@ -1432,6 +1497,7 @@ wxLocale::~wxLocale()
     // restore old locale
     wxSetLocale(m_pOldLocale);
     wxSetlocale(LC_ALL, m_pszOldLocale);
+    free((wxChar *)m_pszOldLocale);     // const_cast
 }
 
 // get the translation of given string in current locale

@@ -208,7 +208,7 @@ Unix:
 - changed wxNativeFontInfo::FromXFontName to treat names with all
   components being empty or '*' as default font (since default font is
   converted to such a string by GetXFontName).
-
+- wxLocale::Init now tries to set .utf8 locale in Unicode mode (Andreas Pflug)
 
 wxGTK
 
