@@ -90,7 +90,7 @@ void wxBitmapRefData::Free()
 
     if ( m_hBitmap)
     {
-	//	printf("About to delete bitmap %d\n", (int) (HBITMAP) m_hBitmap);
+        //        printf("About to delete bitmap %d\n", (int) (HBITMAP) m_hBitmap);
 #if 1
         if ( !::DeleteObject((HBITMAP)m_hBitmap) )
         {
@@ -395,7 +395,7 @@ bool wxBitmap::CreateFromImage( const wxImage& image, int depth )
     // Initial attempt at a simple-minded implementation.
     // The bitmap will always be created at the screen depth,
     // so the 'depth' argument is ignored.
-    
+
     HDC hScreenDC = ::GetDC(NULL);
     //    printf("Screen planes = %d, bpp = %d\n", hScreenDC->psd->planes, hScreenDC->psd->bpp);
     int screenDepth = ::GetDeviceCaps(hScreenDC, BITSPIXEL);
@@ -412,7 +412,7 @@ bool wxBitmap::CreateFromImage( const wxImage& image, int depth )
     if (hBitmap == NULL)
     {
         ::ReleaseDC(NULL, hScreenDC);
-	return FALSE;
+        return FALSE;
     }
     HDC hMemDC = ::CreateCompatibleDC(hScreenDC);
 
@@ -439,7 +439,7 @@ bool wxBitmap::CreateFromImage( const wxImage& image, int depth )
         if (!hMaskBitmap)
         {
             hasMask = FALSE;
-	}
+        }
         else
         {
             hScreenDC = ::GetDC(NULL);
@@ -447,7 +447,7 @@ bool wxBitmap::CreateFromImage( const wxImage& image, int depth )
            ::ReleaseDC(NULL, hScreenDC);
 
             hOldMaskBitmap = ::SelectObject( hMaskDC, hMaskBitmap);
-	}
+        }
 #else
         hasMask = FALSE;
 #endif
@@ -456,13 +456,13 @@ bool wxBitmap::CreateFromImage( const wxImage& image, int depth )
     int i, j;
     for (i = 0; i < image.GetWidth(); i++)
     {
-	for (j = 0; j < image.GetHeight(); j++)
-	{
-	    unsigned char red = image.GetRed(i, j);
-	    unsigned char green = image.GetGreen(i, j);
-	    unsigned char blue = image.GetBlue(i, j);
+        for (j = 0; j < image.GetHeight(); j++)
+        {
+            unsigned char red = image.GetRed(i, j);
+            unsigned char green = image.GetGreen(i, j);
+            unsigned char blue = image.GetBlue(i, j);
 
-	    ::SetPixel(hMemDC, i, j, PALETTERGB(red, green, blue));
+            ::SetPixel(hMemDC, i, j, PALETTERGB(red, green, blue));
 
             if (hasMask)
             {
@@ -472,8 +472,8 @@ bool wxBitmap::CreateFromImage( const wxImage& image, int depth )
                     ::SetPixel(hMaskDC, i, j, PALETTERGB(0, 0, 0));
                 else
                     ::SetPixel(hMaskDC, i, j, PALETTERGB(255, 255, 255));
-	    }
-	}
+            }
+        }
     }
 
     ::SelectObject(hMemDC, hOldBitmap);
@@ -481,16 +481,16 @@ bool wxBitmap::CreateFromImage( const wxImage& image, int depth )
     if (hasMask)
     {
         ::SelectObject(hMaskDC, hOldMaskBitmap);
-	::DeleteDC(hMaskDC);
+        ::DeleteDC(hMaskDC);
 
         ((wxBitmapRefData*)m_refData)->m_bitmapMask = new wxMask((WXHBITMAP) hMaskBitmap);
     }
-    
+
     SetWidth(image.GetWidth());
     SetHeight(image.GetHeight());
     SetDepth(screenDepth);
     SetHBITMAP( (WXHBITMAP) hBitmap );
-    
+
 #if wxUSE_PALETTE
     // Copy the palette from the source image
     SetPalette(image.GetPalette());
@@ -747,7 +747,7 @@ wxImage wxBitmap::ConvertToImage() const
     if (!Ok())
     {
         wxFAIL_MSG( wxT("bitmap is invalid") );
-	return wxNullImage;
+        return wxNullImage;
     }
 
     wxImage image;
@@ -764,33 +764,33 @@ wxImage wxBitmap::ConvertToImage() const
         wxFAIL_MSG( wxT("could not allocate data for image") );
         return wxNullImage;
     }
-    
+
     HDC hScreenDC = ::GetDC(NULL);
 
     HDC hMemDC = ::CreateCompatibleDC(hScreenDC);
     ::ReleaseDC(NULL, hScreenDC);
 
     HBITMAP hBitmap = (HBITMAP) GetHBITMAP();
-    
+
     HBITMAP hOldBitmap = ::SelectObject(hMemDC, hBitmap);
 
     int i, j;
     for (i = 0; i < GetWidth(); i++)
     {
-	for (j = 0; j < GetHeight(); j++)
-	{
-	    COLORREF color = ::GetPixel(hMemDC, i, j);
-	    unsigned char red = GetRValue(color);
-	    unsigned char green = GetGValue(color);
-	    unsigned char blue = GetBValue(color);
+        for (j = 0; j < GetHeight(); j++)
+        {
+            COLORREF color = ::GetPixel(hMemDC, i, j);
+            unsigned char red = GetRValue(color);
+            unsigned char green = GetGValue(color);
+            unsigned char blue = GetBValue(color);
 
-	    image.SetRGB(i, j, red, green, blue);
-	}
+            image.SetRGB(i, j, red, green, blue);
+        }
     }
 
     ::SelectObject(hMemDC, hOldBitmap);
     ::DeleteDC(hMemDC);
-    
+
 #if wxUSE_PALETTE
     // Copy the palette from the source image
     if (GetPalette())
@@ -1007,7 +1007,6 @@ bool wxBitmap::SaveFile(const wxString& filename,
 
 wxBitmap wxBitmap::GetSubBitmap( const wxRect& rect) const
 {
-#ifndef __WXMICROWIN__
     wxCHECK_MSG( Ok() &&
                  (rect.x >= 0) && (rect.y >= 0) &&
                  (rect.x+rect.width <= GetWidth()) &&
@@ -1017,35 +1016,41 @@ wxBitmap wxBitmap::GetSubBitmap( const wxRect& rect) const
     wxBitmap ret( rect.width, rect.height, GetDepth() );
     wxASSERT_MSG( ret.Ok(), wxT("GetSubBitmap error") );
 
+#ifndef __WXMICROWIN__
     // copy bitmap data
-    HDC dcSrc = ::CreateCompatibleDC(NULL);
-    HDC dcDst = ::CreateCompatibleDC(NULL);
-    SelectObject(dcSrc, (HBITMAP) GetHBITMAP());
-    SelectObject(dcDst, (HBITMAP) ret.GetHBITMAP());
-    BitBlt(dcDst, 0, 0, rect.width, rect.height, dcSrc, rect.x, rect.y, SRCCOPY);
+    MemoryHDC dcSrc, dcDst;
+
+    {
+        SelectInHDC selectSrc(dcSrc, GetHbitmap()),
+                    selectDst(dcDst, GetHbitmapOf(ret));
+
+        if ( !::BitBlt(dcDst, 0, 0, rect.width, rect.height,
+                       dcSrc, rect.x, rect.y, SRCCOPY) )
+        {
+            wxLogLastError(_T("BitBlt"));
+        }
+    }
 
     // copy mask if there is one
-    if (GetMask())
+    if ( GetMask() )
     {
         HBITMAP hbmpMask = ::CreateBitmap(rect.width, rect.height, 1, 1, 0);
 
-        SelectObject(dcSrc, (HBITMAP) GetMask()->GetMaskBitmap());
-        SelectObject(dcDst, (HBITMAP) hbmpMask);
-        BitBlt(dcDst, 0, 0, rect.width, rect.height, dcSrc, rect.x, rect.y, SRCCOPY);
+        SelectInHDC selectSrc(dcSrc, (HBITMAP) GetMask()->GetMaskBitmap()),
+                    selectDst(dcDst, hbmpMask);
+
+        if ( !::BitBlt(dcDst, 0, 0, rect.width, rect.height,
+                       dcSrc, rect.x, rect.y, SRCCOPY) )
+        {
+            wxLogLastError(_T("BitBlt"));
+        }
 
         wxMask *mask = new wxMask((WXHBITMAP) hbmpMask);
         ret.SetMask(mask);
     }
-
-    SelectObject(dcDst, NULL);
-    SelectObject(dcSrc, NULL);
-    DeleteDC(dcDst);
-    DeleteDC(dcSrc);
+#endif // !__WXMICROWIN__
 
     return ret;
-#else
-    return wxBitmap();
-#endif
 }
 
 // ----------------------------------------------------------------------------
