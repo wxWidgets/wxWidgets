@@ -417,36 +417,32 @@ The frame takes a `copy' of {\it icon}, but since it uses reference
 counting, the copy is very quick. It is safe to delete {\it icon} after
 calling this function.
 
-Under Windows, instead of using {\bf SetIcon}, you can add the
-following lines to your MS Windows resource file:
-
-\begin{verbatim}
-wxSTD_MDIPARENTFRAME ICON icon1.ico
-wxSTD_MDICHILDFRAME  ICON icon2.ico
-wxSTD_FRAME          ICON icon3.ico
-\end{verbatim}
-
-where icon1.ico will be used for the MDI parent frame, icon2.ico
-will be used for MDI child frames, and icon3.ico will be used for
-non-MDI frames.
-
-If these icons are not supplied, and {\bf SetIcon} is not called either,
-then the following defaults apply if you have included wx.rc.
-
-\begin{verbatim}
-wxDEFAULT_FRAME               ICON std.ico
-wxDEFAULT_MDIPARENTFRAME      ICON mdi.ico
-wxDEFAULT_MDICHILDFRAME       ICON child.ico
-\end{verbatim}
-
-You can replace std.ico, mdi.ico and child.ico with your own defaults
-for all your wxWindows application. Currently they show the same icon.
-
-{\it Note:} a wxWindows application linked with subsystem equal to 4.0
-(i.e. marked as a Windows 95 application) doesn't respond properly
-to wxFrame::SetIcon. To work around this until a solution is found,
-mark your program as a 3.5 application. This will also ensure
-that Windows provides small icons for the application automatically.
+% VZ: we don't have all this any more (18.08.00) 
+%
+%Under Windows, instead of using {\bf SetIcon}, you can add the
+%following lines to your MS Windows resource file:
+%
+%\begin{verbatim}
+%wxSTD_MDIPARENTFRAME ICON icon1.ico
+%wxSTD_MDICHILDFRAME  ICON icon2.ico
+%wxSTD_FRAME          ICON icon3.ico
+%\end{verbatim}
+%
+%where icon1.ico will be used for the MDI parent frame, icon2.ico
+%will be used for MDI child frames, and icon3.ico will be used for
+%non-MDI frames.
+%
+%If these icons are not supplied, and {\bf SetIcon} is not called either,
+%then the following defaults apply if you have included wx.rc.
+%
+%\begin{verbatim}
+%wxDEFAULT_FRAME               ICON std.ico
+%wxDEFAULT_MDIPARENTFRAME      ICON mdi.ico
+%wxDEFAULT_MDICHILDFRAME       ICON child.ico
+%\end{verbatim}
+%
+%You can replace std.ico, mdi.ico and child.ico with your own defaults
+%for all your wxWindows application. Currently they show the same icon.
 
 See also \helpref{wxIcon}{wxicon}.
 
