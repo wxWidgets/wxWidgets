@@ -20,6 +20,8 @@
 #pragma hdrstop
 #endif
 
+#include "wx/log.h"
+
 #include "wx/gdicmn.h"
 #include "wx/brush.h"
 #include "wx/pen.h"
@@ -437,7 +439,7 @@ wxBitmapList::wxBitmapList ()
 
 wxBitmapList::~wxBitmapList ()
 {
-  printf( "Count: %d.\n", Number() );
+  wxLogDebug("~wxBitmapList: count = %d", Number());
 
   wxNode *node = First ();
   while (node)
