@@ -513,7 +513,7 @@ wxString wxListBox::GetString(int N) const
 
     // +1 for terminating NUL
     wxString result;
-    ListBox_GetText(GetHwnd(), N, wxStringBuffer(result, len + 1));
+    ListBox_GetText(GetHwnd(), N, (wxChar*)wxStringBuffer(result, len + 1));
 
     return result;
 }
@@ -616,7 +616,7 @@ void wxListBox::SetHorizontalExtent(const wxString& s)
         return;
     TEXTMETRIC lpTextMetric;
 
-    if ( !s.IsEmpty() )
+    if ( !s.empty() )
     {
         int existingExtent = (int)SendMessage(GetHwnd(), LB_GETHORIZONTALEXTENT, 0, 0L);
         HDC dc = GetWindowDC(GetHwnd());
