@@ -63,17 +63,17 @@ class EventManager:
         """
         Registers a listener function (or any callable object) to
         receive events of type event coming from the source window.
-        For example:
-
+        For example::
             eventManager.Register(self.OnButton, EVT_BUTTON, theButton)
 
         Alternatively, the specific window where the event is
         delivered, and/or the ID of the event source can be specified.
-        For example:
-
+        For example::
             eventManager.Register(self.OnButton, EVT_BUTTON, win=self, id=ID_BUTTON)
-        or
+            
+        or::
             eventManager.Register(self.OnButton, EVT_BUTTON, theButton, self)
+            
         """
 
         # 1. Check if the 'event' is actually one of the multi-

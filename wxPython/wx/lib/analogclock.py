@@ -735,21 +735,23 @@ class AnalogClockWindow(wx.PyWindow):
 
     def SetClockStyle(self, style):
         """
-        Set the clock style, acording to the options:
+        Set the clock style, acording to these options:
 
-            SHOW_QUARTERS_TICKS - Show marks for hours 3, 6, 9, 12
-            SHOW_HOURS_TICKS    - Show marks for all hours
-            SHOW_MINUTES_TICKS  - Show marks for minutes
+            ====================  ================================
+            SHOW_QUARTERS_TICKS   Show marks for hours 3, 6, 9, 12
+            SHOW_HOURS_TICKS      Show marks for all hours
+            SHOW_MINUTES_TICKS    Show marks for minutes
 
-            SHOW_HOURS_HAND     - Show hours hand
-            SHOW_MINUTES_HAND   - Show minutes hand
-            SHOW_SECONDS_HAND   - Show seconds hand
+            SHOW_HOURS_HAND       Show hours hand
+            SHOW_MINUTES_HAND     Show minutes hand
+            SHOW_SECONDS_HAND     Show seconds hand
 
-            SHOW_SHADOWS        - Show hands and marks shadows
+            SHOW_SHADOWS          Show hands and marks shadows
 
-            ROTATE_TICKS        - Align tick marks to watch
-            OVERLAP_TICKS       - Draw tick marks for minutes even
+            ROTATE_TICKS          Align tick marks to watch
+            OVERLAP_TICKS         Draw tick marks for minutes even
                                   when they match the hours marks.
+            ====================  ================================
         """
 
         self.clockStyle = style
@@ -759,14 +761,17 @@ class AnalogClockWindow(wx.PyWindow):
         """
         Set the ticks styles, acording to the options below.
 
-            TICKS_NONE          = Don't show tick marks.
-            TICKS_SQUARE        = Use squares as tick marks.
-            TICKS_CIRCLE        = Use circles as tick marks.
-            TICKS_POLY          = Use a polygon as tick marks. The polygon
-                                  must be passed using SetTickShapes,
-                                  otherwise the default polygon will be used.
-            TICKS_DECIMAL       = Use decimal numbers.
-            TICKS_ROMAN         = Use Roman numbers.
+            =================   =====================================
+            TICKS_NONE          Don't show tick marks.
+            TICKS_SQUARE        Use squares as tick marks.
+            TICKS_CIRCLE        Use circles as tick marks.
+            TICKS_POLY          Use a polygon as tick marks. The
+                                polygon must be passed using
+                                SetTickShapes, otherwise the default
+                                polygon will be used.
+            TICKS_DECIMAL       Use decimal numbers.
+            TICKS_ROMAN         Use Roman numbers.
+            =================   =====================================
         """
 
         if h:

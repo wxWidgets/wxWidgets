@@ -3,42 +3,40 @@
 # o Updated for 2.5 compatability.
 #
 
-"""<font weight="bold" size="16">FancyText</font> -- <font style="italic" size="16">methods for rendering XML specified text</font>
-<font family="swiss" size="12">
+"""
+FancyText -- methods for rendering XML specified text
+
 This module exports four main methods::
-<font family="fixed" style="slant">
+
     def GetExtent(str, dc=None, enclose=True)
     def GetFullExtent(str, dc=None, enclose=True)
     def RenderToBitmap(str, background=None, enclose=True)
     def RenderToDC(str, dc, x, y, enclose=True)
-</font>
-In all cases, 'str' is an XML string. Note that start and end tags
-are only required if *enclose* is set to False. In this case the 
-text should be wrapped in FancyText tags.
+
+In all cases, 'str' is an XML string. Note that start and end tags are
+only required if *enclose* is set to False. In this case the text
+should be wrapped in FancyText tags.
 
 In addition, the module exports one class::
-<font family="fixed" style="slant">
+
     class StaticFancyText(self, window, id, text, background, ...)
-</font>
-This class works similar to StaticText except it interprets its text 
+
+This class works similar to StaticText except it interprets its text
 as FancyText.
 
-The text can support<sup>superscripts</sup> and <sub>subscripts</sub>, text
-in different <font size="20">sizes</font>, <font color="blue">colors</font>, <font style="italic">styles</font>, <font weight="bold">weights</font> and
-<font family="script">families</font>. It also supports a limited set of symbols,
-currently <times/>, <infinity/>, <angle/> as well as greek letters in both
-upper case (<Alpha/><Beta/>...<Omega/>) and lower case (<alpha/><beta/>...<omega/>).
+The text can support superscripts and subscripts, text in different
+sizes, colors, styles, weights and families. It also supports a
+limited set of symbols, currently *times*, *infinity*, *angle* as well
+as greek letters in both upper case (*Alpha* *Beta*... *Omega*) and
+lower case (*alpha* *beta*... *omega*).
 
-We can use doctest/guitest to display this string in all its marked up glory.
-<font family="fixed">
 >>> frame = wx.Frame(wx.NULL, -1, "FancyText demo", wx.DefaultPosition)
->>> sft = StaticFancyText(frame, -1, __doc__, wx.Brush("light grey", wx.SOLID))
+>>> sft = StaticFancyText(frame, -1, testText, wx.Brush("light grey", wx.SOLID))
 >>> frame.SetClientSize(sft.GetSize())
 >>> didit = frame.Show()
 >>> from guitest import PauseTests; PauseTests()
 
-</font></font>
-The End"""
+"""
 
 # Copyright 2001-2003 Timothy Hochberg
 # Use as you see fit. No warantees, I cannot be held responsible, etc.
@@ -403,11 +401,49 @@ renderToDC = RenderToDC
 # Test Driver
 
 def test():
+    testText = 
+"""<font weight="bold" size="16">FancyText</font> -- <font style="italic" size="16">methods for rendering XML specified text</font>
+<font family="swiss" size="12">
+This module exports four main methods::
+<font family="fixed" style="slant">
+    def GetExtent(str, dc=None, enclose=True)
+    def GetFullExtent(str, dc=None, enclose=True)
+    def RenderToBitmap(str, background=None, enclose=True)
+    def RenderToDC(str, dc, x, y, enclose=True)
+</font>
+In all cases, 'str' is an XML string. Note that start and end tags
+are only required if *enclose* is set to False. In this case the 
+text should be wrapped in FancyText tags.
+
+In addition, the module exports one class::
+<font family="fixed" style="slant">
+    class StaticFancyText(self, window, id, text, background, ...)
+</font>
+This class works similar to StaticText except it interprets its text 
+as FancyText.
+
+The text can support<sup>superscripts</sup> and <sub>subscripts</sub>, text
+in different <font size="20">sizes</font>, <font color="blue">colors</font>, <font style="italic">styles</font>, <font weight="bold">weights</font> and
+<font family="script">families</font>. It also supports a limited set of symbols,
+currently <times/>, <infinity/>, <angle/> as well as greek letters in both
+upper case (<Alpha/><Beta/>...<Omega/>) and lower case (<alpha/><beta/>...<omega/>).
+
+We can use doctest/guitest to display this string in all its marked up glory.
+<font family="fixed">
+>>> frame = wx.Frame(wx.NULL, -1, "FancyText demo", wx.DefaultPosition)
+>>> sft = StaticFancyText(frame, -1, __doc__, wx.Brush("light grey", wx.SOLID))
+>>> frame.SetClientSize(sft.GetSize())
+>>> didit = frame.Show()
+>>> from guitest import PauseTests; PauseTests()
+
+</font></font>
+The End"""
+
     app = wx.PySimpleApp()
     box = wx.BoxSizer(wx.VERTICAL)
     frame = wx.Frame(None, -1, "FancyText demo", wx.DefaultPosition)
     frame.SetBackgroundColour("light grey")
-    sft = StaticFancyText(frame, -1, __doc__)
+    sft = StaticFancyText(frame, -1, testText)
     box.Add(sft, 1, wx.EXPAND)
     frame.SetSizer(box)
     frame.SetAutoLayout(True)

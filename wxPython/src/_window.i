@@ -829,7 +829,6 @@ by pressing <Enter> such as the OK button on a wx.Dialog.", "");
         "Set this child as temporary default", "");
     
 
-    // Navigates in the specified direction by sending a wxNavigationKeyEvent
     DocDeclAStr(
         virtual bool , Navigate(int flags = wxNavigationKeyEvent::IsForward),
         "Navigate(self, int flags=NavigationKeyEvent.IsForward) -> bool",
@@ -837,14 +836,13 @@ by pressing <Enter> such as the OK button on a wx.Dialog.", "");
 `wx.NavigationKeyEvent`.", "
  
     :param flags: A combination of the ``IsForward`` and ``WinChange``
-                  values in the `wx.NavigationKeyEvent` class, which
-                  determine if the navigation should be in forward or
-                  reverse order, and if it should be able to cross
-                  parent window boundaries, such as between notebook
-                  pages or MDI child frames.  Typically the status of
-                  the Shift key (for forward or reverse) or the
-                  Control key (for WinChange) would be used to
-                  determine how to set the flags.
+        values in the `wx.NavigationKeyEvent` class, which determine
+        if the navigation should be in forward or reverse order, and
+        if it should be able to cross parent window boundaries, such
+        as between notebook pages or MDI child frames.  Typically the
+        status of the Shift key (for forward or reverse) or the
+        Control key (for WinChange) would be used to determine how to
+        set the flags.
 
 One situation in which you may wish to call this method is from a text
 control custom keypress handler to do the default navigation behaviour

@@ -24,42 +24,37 @@ import  wx
 #----------------------------------------------------------------------
 
 class FileBrowseButton(wx.Panel):
-    """ A control to allow the user to type in a filename
-    or browse with the standard file dialog to select file
-
-    __init__ (
-        parent, id, pos, size -- passed directly to wxPanel initialisation
-        style = wxTAB_TRAVERSAL -- passed directly to wxPanel initialisation
-        labelText -- Text for label to left of text field
-        buttonText -- Text for button which launches the file dialog
-        toolTip -- Help text
-        dialogTitle -- Title used in file dialog
-        startDirectory -- Default directory for file dialog startup
-        fileMask -- File mask (glob pattern, such as *.*) to use in file dialog
-        fileMode -- wxOPEN or wxSAVE, indicates type of file dialog to use
-        changeCallback -- callback receives all > > changes in value of control
-    )
-    GetValue() -- retrieve current value of text control
-    SetValue(string) -- set current value of text control
-    label -- pointer to internal label widget
-    textControl -- pointer to internal text control
-    browseButton -- pointer to button
+    """
+    A control to allow the user to type in a filename or browse with
+    the standard file dialog to select file
     """
     def __init__ (self, parent, id= -1,
-              pos = wx.DefaultPosition, size = wx.DefaultSize,
-              style = wx.TAB_TRAVERSAL,
-              labelText= "File Entry:",
-              buttonText= "Browse",
-              toolTip= "Type filename or click browse to choose file",
-              # following are the values for a file dialog box
-              dialogTitle = "Choose a file",
-              startDirectory = ".",
-              initialValue = "",
-              fileMask = "*.*",
-              fileMode = wx.OPEN,
-              # callback for when value changes (optional)
-              changeCallback= lambda x:x
+                  pos = wx.DefaultPosition,
+                  size = wx.DefaultSize,
+                  style = wx.TAB_TRAVERSAL,
+                  labelText= "File Entry:",
+                  buttonText= "Browse",
+                  toolTip= "Type filename or click browse to choose file",
+                  # following are the values for a file dialog box
+                  dialogTitle = "Choose a file",
+                  startDirectory = ".",
+                  initialValue = "",
+                  fileMask = "*.*",
+                  fileMode = wx.OPEN,
+                  # callback for when value changes (optional)
+                  changeCallback= lambda x:x
         ):
+        """
+        :param labelText:      Text for label to left of text field
+        :param buttonText:     Text for button which launches the file dialog
+        :param toolTip:        Help text
+        :param dialogTitle:    Title used in file dialog
+        :param startDirectory: Default directory for file dialog startup
+        :param fileMask:       File mask (glob pattern, such as *.*) to use in file dialog
+        :param fileMode:       wx.OPEN or wx.SAVE, indicates type of file dialog to use
+        :param changeCallback: callback receives all changes in value of control
+        """
+      
         # store variables
         self.labelText = labelText
         self.buttonText = buttonText
@@ -176,11 +171,13 @@ class FileBrowseButton(wx.Panel):
 
 
     def GetValue (self):
-        """ Convenient access to text control value """
+        """
+        retrieve current value of text control
+        """
         return self.textControl.GetValue()
 
     def SetValue (self, value, callBack=1):
-        """ Convenient setting of text control value """
+        """set current value of text control"""
         save = self.callCallback
         self.callCallback = callBack
         self.textControl.SetValue(value)
@@ -207,27 +204,34 @@ class FileBrowseButton(wx.Panel):
 
 
 class FileBrowseButtonWithHistory( FileBrowseButton ):
-    """ with following additions:
+    """
+    with following additions:
         __init__(..., history=None)
 
             history -- optional list of paths for initial history drop-down
                 (must be passed by name, not a positional argument)
                 If history is callable it will must return a list used
                 for the history drop-down
+
             changeCallback -- as for FileBrowseButton, but with a work-around
                 for win32 systems which don't appear to create wx.EVT_COMBOBOX
                 events properly.  There is a (slight) chance that this work-around
                 will cause some systems to create two events for each Combobox
                 selection. If you discover this condition, please report it!
+
             As for a FileBrowseButton.__init__ otherwise.
+            
         GetHistoryControl()
             Return reference to the control which implements interfaces
             required for manipulating the history list.  See GetHistoryControl
             documentation for description of what that interface is.
+            
         GetHistory()
             Return current history list
+            
         SetHistory( value=(), selectionIndex = None )
             Set current history list, if selectionIndex is not None, select that index
+            
         """
     def __init__( self, *arguments, **namedarguments):
         self.history = namedarguments.get( "history" )
@@ -257,12 +261,15 @@ class FileBrowseButtonWithHistory( FileBrowseButton ):
 
 
     def GetHistoryControl( self ):
-        """Return a pointer to the control which provides (at least)
-        the following methods for manipulating the history list.:
+        """
+        Return a pointer to the control which provides (at least)
+        the following methods for manipulating the history list:
+        
             Append( item ) -- add item
             Clear() -- clear all items
             Delete( index ) -- 0-based index to delete from list
             SetSelection( index ) -- 0-based index to select in list
+            
         Semantics of the methods follow those for the wxComboBox control
         """
         return self.textControl

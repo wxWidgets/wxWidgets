@@ -19,19 +19,19 @@
 import  wx
 
 class LayoutAnchors(wx.LayoutConstraints):
-    """ A class that implements Delphi's Anchors with wx.LayoutConstraints.
+    """
+    A class that implements Delphi's Anchors with wx.LayoutConstraints.
 
-        Anchored sides maintain the distance from the edge of the
-        control to the same edge of the parent.
-        When neither side is selected, the control keeps the same
-        relative position to both sides.
+    Anchored sides maintain the distance from the edge of the control
+    to the same edge of the parent.  When neither side is selected,
+    the control keeps the same relative position to both sides.
 
-        The current position and size of the control and it's parent
-        is used when setting up the constraints. To change the size or
-        position of an already anchored control, set the constraints to
-        None, reposition or resize and reapply the anchors.
+    The current position and size of the control and it's parent is
+    used when setting up the constraints. To change the size or
+    position of an already anchored control, set the constraints to
+    None, reposition or resize and reapply the anchors.
 
-        Examples:
+    Examples::
 
         Let's anchor the right and bottom edge of a control and
         resize it's parent.
@@ -59,6 +59,7 @@ class LayoutAnchors(wx.LayoutConstraints):
                             | +-------*-------+ |
                             +-------------------+
         * = anchored edge
+        
     """
     def __init__(self, control, left=1, top=1, right=0, bottom=0):
         wx.LayoutConstraints.__init__(self)

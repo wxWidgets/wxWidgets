@@ -942,18 +942,22 @@ class ScaledText(DrawObject, TextObjectMixin, XYObjectMixin):
 
     Family:
         Font family, a generic way of referring to fonts without
-        specifying actual facename. One of:
+        specifying actual facename. One of::
             wx.DEFAULT:  Chooses a default font. 
             wx.DECORATI: A decorative font. 
             wx.ROMAN: A formal, serif font. 
             wx.SCRIPT: A handwriting font. 
             wx.SWISS: A sans-serif font. 
             wx.MODERN: A fixed pitch font.
+            
         NOTE: these are only as good as the wxWindows defaults, which aren't so good.
+        
     Style:
         One of wx.NORMAL, wx.SLANT and wx.ITALIC.
+        
     Weight:
         One of wx.NORMAL, wx.LIGHT and wx.BOLD.
+        
     Underline:
         The value can be True or False. At present this may have an an
         effect on Windows only.
@@ -1952,8 +1956,8 @@ def _makeFloatCanvasAddMethods(): ## lrk's code for doing this in module __init_
         addshapemethod = getaddshapemethod()
         methodname = "Add" + classname
         setattr(FloatCanvas, methodname, addshapemethod)
-        docstring = "Creates %s and adds its reference to the canvas.\n" % classname
-        docstring += "Argument protocol same as %s class" % classname
+        docstring = "        Creates %s and adds its reference to the canvas.\n" % classname
+        docstring += "        Argument protocol same as %s class" % classname
         if klass.__doc__:
             docstring += ", whose docstring is:\n%s" % klass.__doc__
         FloatCanvas.__dict__[methodname].__doc__ = docstring
