@@ -3,7 +3,7 @@ Microsoft Developer Studio Workspace File, Format Version 6.00
 
 ###############################################################################
 
-Project: "zlib"=.\zlib.dsp - Package Owner=<4>
+Project: "zlib"=.\ZlibVC.dsp - Package Owner=<4>
 
 Package=<5>
 {{{
