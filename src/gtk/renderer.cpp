@@ -107,19 +107,19 @@ wxRendererGTK::DrawHeaderButton(wxWindow *win,
     if (s_button == NULL)
     {
         s_window = gtk_window_new( GTK_WINDOW_POPUP );
-	gtk_widget_realize( s_window );
-	s_button = gtk_button_new();
-	gtk_container_add( GTK_CONTAINER(s_window), s_button );
-	gtk_widget_realize( s_button );
+    gtk_widget_realize( s_window );
+    s_button = gtk_button_new();
+    gtk_container_add( GTK_CONTAINER(s_window), s_button );
+    gtk_widget_realize( s_button );
     }
 
     gtk_paint_box
     (
-	s_button->style,
+    s_button->style,
         GTK_PIZZA(win->m_wxwindow)->bin_window,
         flags & wxCONTROL_DISABLED ? GTK_STATE_INSENSITIVE : GTK_STATE_NORMAL,
         GTK_SHADOW_OUT,
-	NULL,
+    NULL,
         s_button,
         "button",
         dc.XLOG2DEV(rect.x) -1, rect.y -1, rect.width +2, rect.height +2
@@ -143,6 +143,8 @@ wxRendererGTK::DrawTreeItemButton(wxWindow* win,
     GtkStyle *style = win->m_widget->style;
     int x = rect.x;
     int y = rect.y;
+    y = dc.LogicalToDeviceY( y );
+    x = dc.LogicalToDeviceX( x );
 
 #if 1
     // This draws the GTK+ 2.2.4 triangle
@@ -165,7 +167,7 @@ wxRendererGTK::DrawTreeItemButton(wxWindow* win,
         points[1].x = points[0].x;
         points[1].y = points[0].y + (PM_SIZE + 2);
         points[2].x = (points[0].x +
-			 (2 * (PM_SIZE + 2) / 3 - 1));
+             (2 * (PM_SIZE + 2) / 3 - 1));
         points[2].y = points[0].y + (PM_SIZE + 2) / 2;
     }
 
@@ -189,8 +191,8 @@ wxRendererGTK::DrawTreeItemButton(wxWindow* win,
     if ( flags & wxCONTROL_EXPANDED )
     {
         gdk_draw_line( pizza->bin_window, style->fg_gc[GTK_STATE_NORMAL],
-		       x + PM_SIZE / 2, y + 2,
-		       x + PM_SIZE / 2, y + PM_SIZE - 2);
+               x + PM_SIZE / 2, y + 2,
+               x + PM_SIZE / 2, y + PM_SIZE - 2);
     }
 #endif    
     
@@ -294,13 +296,13 @@ wxRendererGTK::DrawSplitterSash(wxWindow *win,
     GdkRectangle erase_rect;
     if ( isVert )
     {
-	int h = win->GetClientSize().GetHeight();
+    int h = win->GetClientSize().GetHeight();
     
         rect.x = position;
         rect.y = h/2 - 14/2;
         rect.width = SASH_FULL_SIZE;
         rect.height = 14;
-	
+    
         erase_rect.x = position;
         erase_rect.y = 0;
         erase_rect.width = SASH_FULL_SIZE;
@@ -308,13 +310,13 @@ wxRendererGTK::DrawSplitterSash(wxWindow *win,
     }
     else // horz
     {
-	int w = win->GetClientSize().GetWidth();
+    int w = win->GetClientSize().GetWidth();
     
         rect.x = w/2 - 14/2;
         rect.y = position;
         rect.height = SASH_FULL_SIZE;
         rect.width = 14;
-	
+    
         erase_rect.y = position;
         erase_rect.x = 0;
         erase_rect.height = SASH_FULL_SIZE;
