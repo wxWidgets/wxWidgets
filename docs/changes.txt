@@ -147,6 +147,7 @@ wxMSW:
   recursion any more
 - wxTextCtrl with wxTE_RICH flag scrolls to the end when text is appended to it
 - the separators are not seen behind the controls added to the toolbar any more
+- wxLB_SORT style can be used with wxCheckListBox
 - wxWindowDC and wxClientDC::GetSize() works correctly now
 
 wxGTK:

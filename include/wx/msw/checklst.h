@@ -43,7 +43,6 @@ public:
 
   // override base class virtuals
   virtual void Delete(int n);
-  virtual void InsertItems(int nItems, const wxString items[], int pos);
 
   virtual bool SetFont( const wxFont &font );
 

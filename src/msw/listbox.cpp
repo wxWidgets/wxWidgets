@@ -284,11 +284,11 @@ int wxListBox::DoAppend(const wxString& item)
     if ( m_windowStyle & wxLB_OWNERDRAW ) {
         wxOwnerDrawn *pNewItem = CreateItem(index); // dummy argument
         pNewItem->SetName(item);
-        m_aItems.Add(pNewItem);
+        m_aItems.Insert(pNewItem, index);
         ListBox_SetItemData(GetHwnd(), index, pNewItem);
         pNewItem->SetFont(GetFont());
     }
-#endif
+#endif // wxUSE_OWNER_DRAWN
 
     SetHorizontalExtent(item);
 
@@ -329,14 +329,10 @@ void wxListBox::DoSetItems(const wxArrayString& choices, void** clientData)
 #if wxUSE_OWNER_DRAWN
     if ( m_windowStyle & wxLB_OWNERDRAW ) {
         // first delete old items
-        size_t ui = m_aItems.Count();
-        while ( ui-- != 0 ) {
-            delete m_aItems[ui];
-        }
-        m_aItems.Empty();
+        WX_CLEAR_ARRAY(m_aItems);
 
         // then create new ones
-        for ( ui = 0; ui < (size_t)m_noItems; ui++ ) {
+        for ( size_t ui = 0; ui < (size_t)m_noItems; ui++ ) {
             wxOwnerDrawn *pNewItem = CreateItem(ui);
             pNewItem->SetName(choices[ui]);
             m_aItems.Add(pNewItem);
@@ -378,12 +374,7 @@ void wxListBox::Free()
 #if wxUSE_OWNER_DRAWN
     if ( m_windowStyle & wxLB_OWNERDRAW )
     {
-        size_t uiCount = m_aItems.Count();
-        while ( uiCount-- != 0 ) {
-            delete m_aItems[uiCount];
-        }
-
-        m_aItems.Clear();
+        WX_CLEAR_ARRAY(m_aItems);
     }
     else
 #endif // wxUSE_OWNER_DRAWN
@@ -521,7 +512,19 @@ wxListBox::DoInsertItems(const wxArrayString& items, int pos)
 
     int nItems = items.GetCount();
     for ( int i = 0; i < nItems; i++ )
-        ListBox_InsertString(GetHwnd(), i + pos, items[i]);
+    {
+        int idx = ListBox_InsertString(GetHwnd(), i + pos, items[i]);
+
+#if wxUSE_OWNER_DRAWN
+        wxOwnerDrawn *pNewItem = CreateItem(idx);
+        pNewItem->SetName(items[i]);
+        pNewItem->SetFont(GetFont());
+        m_aItems.Insert(pNewItem, idx);
+
+        ListBox_SetItemData(GetHwnd(), idx, pNewItem);
+#endif // wxUSE_OWNER_DRAWN
+    }
+
     m_noItems += nItems;
 
     SetHorizontalExtent();
@@ -566,6 +569,7 @@ void wxListBox::SetString(int N, const wxString& s)
     {
         // update item's text
         m_aItems[N]->SetName(s);
+
         // reassign the item's data
         ListBox_SetItemData(GetHwnd(), N, m_aItems[N]);
     }

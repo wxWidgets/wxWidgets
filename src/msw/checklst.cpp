@@ -60,7 +60,7 @@
 // implementation
 // ============================================================================
 
-  IMPLEMENT_DYNAMIC_CLASS(wxCheckListBox, wxListBox)
+IMPLEMENT_DYNAMIC_CLASS(wxCheckListBox, wxListBox)
 
 // ----------------------------------------------------------------------------
 // declaration and implementation of wxCheckListBoxItem class
@@ -298,26 +298,6 @@ void wxCheckListBox::Delete(int N)
 
     m_aItems.RemoveAt(N);
 }
-
-void wxCheckListBox::InsertItems(int nItems, const wxString items[], int pos)
-{
-    wxCHECK_RET( pos >= 0 && pos <= m_noItems,
-                 wxT("invalid index in wxCheckListBox::InsertItems") );
-
-    wxListBox::InsertItems(nItems, items, pos);
-
-    int i;
-    for ( i = 0; i < nItems; i++ ) {
-        wxOwnerDrawn *pNewItem = CreateItem((size_t)(pos + i));
-        pNewItem->SetName(items[i]);
-        pNewItem->SetFont(GetFont());
-
-        m_aItems.Insert(pNewItem, (size_t)(pos + i));
-
-        ListBox_SetItemData((HWND)GetHWND(), i + pos, pNewItem);
-    }
-}
-
 
 bool wxCheckListBox::SetFont( const wxFont &font )
 {
