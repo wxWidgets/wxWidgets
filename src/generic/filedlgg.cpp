@@ -1005,6 +1005,7 @@ BEGIN_EVENT_TABLE(wxFileDialog,wxDialog)
         EVT_LIST_ITEM_ACTIVATED(ID_LIST_CTRL, wxFileDialog::OnActivated)
         EVT_CHOICE(ID_CHOICE,wxFileDialog::OnChoiceFilter)
         EVT_TEXT_ENTER(ID_TEXT,wxFileDialog::OnTextEnter)
+        EVT_TEXT(ID_TEXT,wxFileDialog::OnTextChange)
         EVT_CHECKBOX(ID_CHECK,wxFileDialog::OnCheck)
 END_EVENT_TABLE()
 
@@ -1285,6 +1286,27 @@ void wxFileDialog::OnTextEnter( wxCommandEvent &WXUNUSED(event) )
     GetEventHandler()->ProcessEvent( cevent );
 }
 
+static bool ignoreChanges = FALSE;
+
+void wxFileDialog::OnTextChange( wxCommandEvent &WXUNUSED(event) )
+{
+    if (!ignoreChanges)
+    {
+        // Clear selections.  Otherwise when the user types in a value they may
+        // not get the file whose name they typed.
+        if (m_list->GetSelectedItemCount() > 0)
+        {
+    	    long item = m_list->GetNextItem(-1, wxLIST_NEXT_ALL,
+                wxLIST_STATE_SELECTED);
+            while ( item != -1 )
+    	    {
+                m_list->SetItemState(item,0, wxLIST_STATE_SELECTED);
+                item = m_list->GetNextItem(item, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED);
+    	    }
+        }
+    }
+}
+
 void wxFileDialog::OnSelected( wxListEvent &event )
 {
     wxString filename( event.m_item.m_text );
@@ -1297,7 +1319,9 @@ void wxFileDialog::OnSelected( wxListEvent &event )
     dir += filename;
     if (wxDirExists(dir)) return;
 
+    ignoreChanges = TRUE;
     m_text->SetValue( filename );
+    ignoreChanges = FALSE;
 }
 
 void wxFileDialog::HandleAction( const wxString &fn )
