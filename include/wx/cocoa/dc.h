@@ -12,6 +12,9 @@
 #ifndef __WX_COCOA_DC_H__
 #define __WX_COCOA_DC_H__
 
+class WXDLLEXPORT wxDC;
+WX_DECLARE_LIST(wxDC, wxCocoaDCStack);
+
 //=========================================================================
 // wxDC
 //=========================================================================
@@ -19,17 +22,44 @@ class WXDLLEXPORT wxDC: public wxDCBase
 {
     DECLARE_DYNAMIC_CLASS(wxDC)
     DECLARE_NO_COPY_CLASS(wxDC)
+//-------------------------------------------------------------------------
+// Initialization
+//-------------------------------------------------------------------------
 public:
     wxDC();
     ~wxDC();
     
+//-------------------------------------------------------------------------
+// wxCocoa specifics
+//-------------------------------------------------------------------------
+public:
     static void CocoaInitializeTextSystem();
     static void CocoaShutdownTextSystem();
-    static wxDC *sm_focusedDC;
     static WX_NSTextStorage sm_cocoaNSTextStorage;
     static WX_NSLayoutManager sm_cocoaNSLayoutManager;
     static WX_NSTextContainer sm_cocoaNSTextContainer;
-
+protected:
+// DC stack
+    static wxCocoaDCStack sm_cocoaDCStack;
+    virtual bool CocoaLockFocus();
+    virtual bool CocoaUnlockFocus();
+    bool CocoaUnwindStackAndTakeFocus();
+    inline bool CocoaTakeFocus()
+    {
+        wxCocoaDCStack::Node *node = sm_cocoaDCStack.GetFirst();
+        if(node && (node->GetData() == this))
+            return true;
+        return CocoaUnwindStackAndTakeFocus();
+    }
+    void CocoaUnwindStackAndLoseFocus();
+// DC flipping/transformation
+    void CocoaApplyTransformations();
+    float m_cocoaHeight;
+    bool m_cocoaFlipped;
+//-------------------------------------------------------------------------
+// Implementation
+//-------------------------------------------------------------------------
+public:
     // implement base class pure virtuals
     // ----------------------------------
 
@@ -126,7 +156,6 @@ protected:
     virtual void DoDrawPolygon(int n, wxPoint points[],
                                wxCoord xoffset, wxCoord yoffset,
                                int fillStyle = wxODDEVEN_RULE);
-
 };
 
 #endif // __WX_COCOA_DC_H__

@@ -41,6 +41,10 @@ public:
     // Create a DC corresponding to a window
     wxClientDC(wxWindow *win);
     ~wxClientDC(void);
+protected:
+// DC stack
+    virtual bool CocoaLockFocus();
+    virtual bool CocoaUnlockFocus();
 };
 
 class wxPaintDC: public wxWindowDC
@@ -51,6 +55,10 @@ public:
     // Create a DC corresponding to a window
     wxPaintDC(wxWindow *win);
     ~wxPaintDC(void);
+protected:
+// DC stack
+    virtual bool CocoaLockFocus();
+    virtual bool CocoaUnlockFocus();
 };
 
 #endif // __WX_COCOA_DCCLIENT_H__

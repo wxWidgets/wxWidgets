@@ -24,11 +24,14 @@
 #import <AppKit/NSTypeSetter.h>
 #import <AppKit/NSImage.h>
 
+#include <wx/listimpl.cpp>
+WX_DEFINE_LIST(wxCocoaDCStack);
+
 IMPLEMENT_ABSTRACT_CLASS(wxDC, wxObject)
-wxDC *wxDC::sm_focusedDC = NULL;
 WX_NSTextStorage wxDC::sm_cocoaNSTextStorage = nil;
 WX_NSLayoutManager wxDC::sm_cocoaNSLayoutManager = nil;
 WX_NSTextContainer wxDC::sm_cocoaNSTextContainer = nil;
+wxCocoaDCStack wxDC::sm_cocoaDCStack;
 
 void wxDC::CocoaInitializeTextSystem()
 {
@@ -57,16 +60,93 @@ void wxDC::CocoaShutdownTextSystem()
     [sm_cocoaNSTextStorage release]; sm_cocoaNSTextStorage = nil;
 }
 
+void wxDC::CocoaUnwindStackAndLoseFocus()
+{
+    wxCocoaDCStack::Node *ourNode=sm_cocoaDCStack.Find(this);
+    if(ourNode)
+    {
+        wxCocoaDCStack::Node *node=sm_cocoaDCStack.GetFirst();
+        for(;node!=ourNode; node=sm_cocoaDCStack.GetFirst())
+        {
+            wxDC *dc = node->GetData();
+            wxASSERT(dc);
+            wxASSERT(dc!=this);
+            if(!dc->CocoaUnlockFocus())
+            {
+                wxFAIL_MSG("Unable to unlock focus on higher-level DC!");
+            }
+            sm_cocoaDCStack.DeleteNode(node);
+        }
+        wxASSERT(node==ourNode);
+        wxASSERT(ourNode->GetData() == this);
+        ourNode->GetData()->CocoaUnlockFocus();
+        sm_cocoaDCStack.DeleteNode(ourNode);
+    }
+}
+
+bool wxDC::CocoaUnwindStackAndTakeFocus()
+{
+    wxCocoaDCStack::Node *node=sm_cocoaDCStack.GetFirst();
+    for(;node;node = sm_cocoaDCStack.GetFirst())
+    {
+        wxDC *dc = node->GetData();
+        wxASSERT(dc);
+        // If we're on the stack, then it's unwound enough and we have focus
+        if(dc==this)
+            return true;
+        // If unable to unlockFocus (e.g. wxPaintDC) stop here
+        if(!dc->CocoaUnlockFocus())
+            break;
+        sm_cocoaDCStack.DeleteNode(node);
+    }
+    return CocoaLockFocus();
+}
+
 wxDC::wxDC(void)
 {
+    m_cocoaFlipped = false;
+    m_cocoaHeight = 0.0;
 }
 
 wxDC::~wxDC(void)
 {
 }
 
+bool wxDC::CocoaLockFocus()
+{
+    return false;
+}
+
+bool wxDC::CocoaUnlockFocus()
+{
+    return false;
+}
+
+void wxDC::CocoaApplyTransformations()
+{
+    // This transform flips the graphics since wxDC uses top-left origin
+    if(!m_cocoaFlipped)
+    {
+        // The transform is auto released
+        NSAffineTransform *transform = [NSAffineTransform transform];
+        /*  x' = 1x + 0y + 0
+            y' = 0x + -1y + window's height
+        */
+        NSAffineTransformStruct matrix = {
+            1,  0
+        ,   0, -1
+        ,   0, m_cocoaHeight
+        };
+        [transform setTransformStruct: matrix];
+        // Apply the transform 
+        [transform concat];
+    }
+    // TODO: Apply scaling transformation
+}
+
 void wxDC::DoDrawRectangle(wxCoord x, wxCoord y, wxCoord width, wxCoord height)
 {
+    if(!CocoaTakeFocus()) return;
     NSBezierPath *bezpath = [NSBezierPath bezierPathWithRect:NSMakeRect(x,y,width,height)];
     [m_textForegroundColour.GetNSColor() set];
     [bezpath stroke];
@@ -76,6 +156,7 @@ void wxDC::DoDrawRectangle(wxCoord x, wxCoord y, wxCoord width, wxCoord height)
 
 void wxDC::DoDrawLine(wxCoord x1, wxCoord y1, wxCoord x2, wxCoord y2)
 {
+    if(!CocoaTakeFocus()) return;
     NSBezierPath *bezpath = [NSBezierPath bezierPath];
     [bezpath moveToPoint:NSMakePoint(x1,y1)];
     [bezpath lineToPoint:NSMakePoint(x2,y2)];
@@ -108,6 +189,7 @@ void wxDC::DoGetTextExtent(const wxString& text, wxCoord *x, wxCoord *y, wxCoord
 
 void wxDC::DoDrawText(const wxString& text, wxCoord x, wxCoord y)
 {
+    if(!CocoaTakeFocus()) return;
     wxASSERT_MSG(sm_cocoaNSTextStorage && sm_cocoaNSLayoutManager && sm_cocoaNSTextContainer, "Text system has not been initialized.  BAD PROGRAMMER!");
     NSAttributedString *attributedString = [[NSAttributedString alloc]
             initWithString:[NSString stringWithCString:text.c_str()]];
@@ -309,6 +391,7 @@ void wxDC::DoDrawEllipse(wxCoord x, wxCoord y, wxCoord width, wxCoord height)
 
 void wxDC::DoDrawBitmap(const wxBitmap &bmp, wxCoord x, wxCoord y, bool useMask)
 {
+    if(!CocoaTakeFocus()) return;
     if(!bmp.Ok())
         return;
 

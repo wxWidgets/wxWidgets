@@ -23,6 +23,9 @@ public:
     ~wxMemoryDC(void);
     virtual void SelectObject(const wxBitmap& bitmap);
     virtual void DoGetSize(int *width, int *height) const;
+// DC stack
+    virtual bool CocoaLockFocus();
+    virtual bool CocoaUnlockFocus();
 };
 
 #endif // __WX_COCOA_DCMEMORY_H__

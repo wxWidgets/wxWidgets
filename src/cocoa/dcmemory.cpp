@@ -31,6 +31,16 @@ wxMemoryDC::~wxMemoryDC(void)
 {
 }
 
+bool wxMemoryDC::CocoaLockFocus()
+{
+    return false;
+}
+
+bool wxMemoryDC::CocoaUnlockFocus()
+{
+    return false;
+}
+
 void wxMemoryDC::SelectObject( const wxBitmap& bitmap )
 {
 }

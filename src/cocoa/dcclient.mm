@@ -11,12 +11,14 @@
 
 #include "wx/dcclient.h"
 #include "wx/window.h"
+#include "wx/log.h"
 
 #import <AppKit/NSView.h>
 #import <AppKit/NSAffineTransform.h>
 #import <AppKit/NSColor.h>
 #import <AppKit/NSGraphicsContext.h>
 #import <AppKit/NSBezierPath.h>
+#import <AppKit/NSWindow.h>
 
 /*
  * wxWindowDC
@@ -67,7 +69,31 @@ wxClientDC::wxClientDC( wxWindow *window )
 
 wxClientDC::~wxClientDC(void)
 {
+    CocoaUnwindStackAndLoseFocus();
 };
+
+bool wxClientDC::CocoaLockFocus()
+{
+    wxLogDebug("Locking focus on wxClientDC=%p, NSView=%p",this, m_window->GetNSView());
+    if([m_window->GetNSView() lockFocusIfCanDraw])
+    {
+        sm_cocoaDCStack.Insert(this);
+        m_cocoaFlipped = [m_window->GetNSView() isFlipped];
+        m_cocoaHeight = [m_window->GetNSView() bounds].size.height;
+        CocoaApplyTransformations();
+        return true;
+    }
+    wxLogDebug("focus lock failed!");
+    return false;
+}
+
+bool wxClientDC::CocoaUnlockFocus()
+{
+    wxLogDebug("Unlocking focus on wxClientDC=%p, NSView=%p",this, m_window->GetNSView());
+    [[m_window->GetNSView() window] flushWindow];
+    [m_window->GetNSView() unlockFocus];
+    return true;
+}
 
 /*
  * wxPaintDC
@@ -82,27 +108,26 @@ wxPaintDC::wxPaintDC( wxWindow *window )
 {
     m_window = window;
     wxASSERT_MSG([NSView focusView]==window->GetNSView(), "PaintDC's NSView does not have focus.  Please use wxPaintDC only as the first DC created in a paint handler");
-    // This transform flips the graphics since wxDC uses top-left origin
-    if(![window->GetNSView() isFlipped])
-    {
-        // The transform is auto released
-        NSAffineTransform *transform = [NSAffineTransform transform];
-        /*  x' = 1x + 0y + 0
-            y' = 0x + -1y + window's height
-        */
-        NSAffineTransformStruct matrix = {
-            1,  0
-        ,   0, -1
-        ,   0, [window->GetNSView() bounds].size.height
-        };
-        [transform setTransformStruct: matrix];
-        // Apply the transform 
-        [transform concat];
-    }
-    // TODO: Apply scaling transformation
+    sm_cocoaDCStack.Insert(this);
+    m_cocoaFlipped = [window->GetNSView() isFlipped];
+    m_cocoaHeight = [window->GetNSView() bounds].size.height;
+    CocoaApplyTransformations();
 };
 
 wxPaintDC::~wxPaintDC(void)
 {
+    CocoaUnwindStackAndLoseFocus();
 };
+
+bool wxPaintDC::CocoaLockFocus()
+{
+    wxFAIL_MSG("wxPaintDC cannot be asked to lock focus!");
+    return false;
+}
+
+bool wxPaintDC::CocoaUnlockFocus()
+{
+    // wxPaintDC focus can never be unlocked.
+    return false;
+}
 
