@@ -254,6 +254,17 @@ wxCursor::wxCursor( const wxImage & image )
                              (unsigned char)(colNextMostFreq >> 8),
                              (unsigned char)(colNextMostFreq) );
 
+    int fg_intensity = fg.Red() + fg.Green() + fg.Blue();
+    int bg_intensity = bg.Red() + bg.Green() + bg.Blue();
+	
+	if (bg_intensity > fg_intensity)
+	{
+        //swap fg and bg
+        wxColour tmp = fg;
+        fg = bg;
+        bg = tmp;
+	}							 
+
     int hotSpotX;
     int hotSpotY;
 
