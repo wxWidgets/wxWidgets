@@ -107,10 +107,8 @@ protected:
     #include "wx/motif/timer.h"
 #elif defined(__WXGTK__)
     #include "wx/gtk/timer.h"
-#elif defined(__WXX11__)
-    #include "wx/x11/timer.h"
-#elif defined(__WXMGL__)
-    #include "wx/mgl/timer.h"
+#elif defined(__WXX11__) || defined(__WXMGL__)
+    #include "wx/generic/timer.h"
 #elif defined(__WXMAC__)
     #include "wx/mac/timer.h"
 #elif defined(__WXPM__)
