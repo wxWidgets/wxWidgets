@@ -72,11 +72,11 @@ for KOI8 encoding (only for WinCyrillic one which is quite different), so
 \helpref{wxFontEnumerator}{wxfontenumerator} will never return one, even if
 the user has installed a KOI8 font on his system.
 
-To solve this problem, \helpref{wxFontMapper}{wxfontmapper} class is provided.
+To solve this problem, a \helpref{wxFontMapper}{wxfontmapper} class is provided.
 This class stores the mapping between the encodings and the font face
-names which support them in a \helpref{wxConfig}{wxconfigoverview} object. Of
+names which support them in \helpref{wxConfig}{wxconfigoverview} object. Of
 course, it would be fairly useless if it tried to determine these mappings by
-itself, so, instead, it may (optionally) ask the user and remember his answers
+itself, so, instead, it (optionally) ask the user and remember his answers
 so that the next time the program will automatically choose the correct font.
 
 All these topics are illustrated by the \helpref{font sample}{samplefont},
