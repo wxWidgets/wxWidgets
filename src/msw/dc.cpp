@@ -40,6 +40,7 @@
     #include "wx/icon.h"
 #endif
 
+#include "wx/settings.h"
 #include "wx/dcprint.h"
 
 #include <string.h>
