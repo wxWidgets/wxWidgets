@@ -231,17 +231,17 @@ wxProgressDialog::Update(int value, const wxString& newmsg)
 
       if (m_elapsed) 
       {
-         s.Printf("%i:%02i:%02i", diff.GetHour(), diff.GetMinute(), diff.GetSecond());
+         s.Printf(_T("%i:%02i:%02i"), diff.GetHour(), diff.GetMinute(), diff.GetSecond());
          if (s != m_elapsed->GetLabel()) m_elapsed->SetLabel(s);
       }
       if (m_estimated) 
       {
-         s.Printf("%i:%02i:%02i", estim / (60 * 60), (estim / 60) % 60, estim % 60);
+         s.Printf(_T("%i:%02i:%02i"), estim / (60 * 60), (estim / 60) % 60, estim % 60);
          if (s != m_estimated->GetLabel()) m_estimated->SetLabel(s);
       }
       if (m_remaining) 
       {
-         s.Printf("%i:%02i:%02i", remai / (60 * 60), (remai / 60) % 60, remai % 60);
+         s.Printf(_T("%i:%02i:%02i"), remai / (60 * 60), (remai / 60) % 60, remai % 60);
          if (s != m_remaining->GetLabel()) m_remaining->SetLabel(s);
       }
    }

@@ -25,12 +25,28 @@ class wxMemoryInputStream: public wxInputStream {
   virtual size_t StreamSize() const { return m_length; }
 
   char Peek();
+
+ protected:
+  wxStreamBuffer *m_i_streambuf;
+
+ protected:
+  size_t OnSysRead(void *buffer, size_t nbytes);
+  off_t OnSysSeek(off_t pos, wxSeekMode mode);
+  off_t OnSysTell() const;
 };
 
 class wxMemoryOutputStream:  public wxOutputStream {
  public:
   wxMemoryOutputStream(char *data = NULL, size_t length = 0);
   virtual ~wxMemoryOutputStream();
+
+ protected:
+  wxStreamBuffer *m_o_streambuf;
+
+ protected:
+  size_t OnSysWrite(const void *buffer, size_t nbytes);
+  off_t OnSysSeek(off_t pos, wxSeekMode mode);
+  off_t OnSysTell() const;
 };
 
 #endif

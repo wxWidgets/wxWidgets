@@ -212,10 +212,13 @@ void wxMenuBar::Append( wxMenu *menu, const wxString &title )
 
     /* local buffer in multibyte form */
     wxString buf;
-    buf << '/' << str.mb_str();
+    buf << _T('/') << str.c_str();
+
     char *cbuf = new char[buf.Length()];
+    strcpy(cbuf, buf.mbc_str());
+
     GtkItemFactoryEntry entry;
-    entry.path = (gchar *)buf.c_str();  // const_cast
+    entry.path = (gchar *)cbuf;  // const_cast
     entry.accelerator = (gchar*) NULL;
     entry.callback = (GtkItemFactoryCallback) NULL;
     entry.callback_action = 0;

@@ -105,7 +105,7 @@ void MyApp::DoStreamDemo(wxCommandEvent& WXUNUSED(event))
     wxTextCtrl& textCtrl = * GetTextCtrl();
     
     textCtrl.Clear();
-    textCtrl << "\nTest fstream vs. wxFileStream:\n\n";
+    textCtrl << _T("\nTest fstream vs. wxFileStream:\n\n");
 
     textCtrl.WriteText( "Writing to ofstream and wxFileOutputStream:\n" );
     
@@ -116,31 +116,31 @@ void MyApp::DoStreamDemo(wxCommandEvent& WXUNUSED(event))
 
     wxString tmp;
     signed int si = 0xFFFFFFFF;
-    tmp.Printf( "Signed int: %d\n", si );
+    tmp.Printf( _T("Signed int: %d\n"), si );
     textCtrl.WriteText( tmp );
     text_output << si << "\n";
     std_file_output << si << "\n";
     
     unsigned int ui = 0xFFFFFFFF;
-    tmp.Printf( "Unsigned int: %u\n", ui );
+    tmp.Printf( _T("Unsigned int: %u\n"), ui );
     textCtrl.WriteText( tmp );
     text_output << ui << "\n";
     std_file_output << ui << "\n";
     
     double d = 2.01234567890123456789;
-    tmp.Printf( "Double: %f\n", d );
+    tmp.Printf( _T("Double: %f\n"), d );
     textCtrl.WriteText( tmp );
     text_output << d << "\n";
     std_file_output << d << "\n";
     
     float f = 0.00001;
-    tmp.Printf( "Float: %f\n", f );
+    tmp.Printf( _T("Float: %f\n"), f );
     textCtrl.WriteText( tmp );
     text_output << f << "\n";
     std_file_output << f << "\n";
     
-    wxString str( "Hello!" );
-    tmp.Printf( "String: %s\n", str.c_str() );
+    wxString str( _T("Hello!") );
+    tmp.Printf( _T("String: %s\n"), str.c_str() );
     textCtrl.WriteText( tmp );
     text_output << str << "\n";
     std_file_output << str.c_str() << "\n";
@@ -150,23 +150,23 @@ void MyApp::DoStreamDemo(wxCommandEvent& WXUNUSED(event))
     ifstream std_file_input( "test_std.dat" );
 
     std_file_input >> si;
-    tmp.Printf( "Signed int: %d\n", si );
+    tmp.Printf( _T("Signed int: %d\n"), si );
     textCtrl.WriteText( tmp );
     
     std_file_input >> ui;
-    tmp.Printf( "Unsigned int: %u\n", ui );
+    tmp.Printf( _T("Unsigned int: %u\n"), ui );
     textCtrl.WriteText( tmp );
     
     std_file_input >> d;
-    tmp.Printf( "Double: %f\n", d );
+    tmp.Printf( _T("Double: %f\n"), d );
     textCtrl.WriteText( tmp );
     
     std_file_input >> f;
-    tmp.Printf( "Float: %f\n", f );
+    tmp.Printf( _T("Float: %f\n"), f );
     textCtrl.WriteText( tmp );
     
     std_file_input >> str;
-    tmp.Printf( "String: %s\n", str.c_str() );
+    tmp.Printf( _T("String: %s\n"), str.c_str() );
     textCtrl.WriteText( tmp );
     
     textCtrl.WriteText( "\nReading from wxFileInputStream:\n" );
@@ -178,23 +178,23 @@ void MyApp::DoStreamDemo(wxCommandEvent& WXUNUSED(event))
     wxTextInputStream text_input( buf_input );
     
     text_input >> si;
-    tmp.Printf( "Signed int: %d\n", si );
+    tmp.Printf( _T("Signed int: %d\n"), si );
     textCtrl.WriteText( tmp );
     
     text_input >> ui;
-    tmp.Printf( "Unsigned int: %u\n", ui );
+    tmp.Printf( _T("Unsigned int: %u\n"), ui );
     textCtrl.WriteText( tmp );
     
     text_input >> d;
-    tmp.Printf( "Double: %f\n", d );
+    tmp.Printf( _T("Double: %f\n"), d );
     textCtrl.WriteText( tmp );
     
     text_input >> f;
-    tmp.Printf( "Float: %f\n", f );
+    tmp.Printf( _T("Float: %f\n"), f );
     textCtrl.WriteText( tmp );
     
     text_input >> str;
-    tmp.Printf( "String: %s\n", str.c_str() );
+    tmp.Printf( _T("String: %s\n"), str.c_str() );
     textCtrl.WriteText( tmp );
     
 
@@ -206,22 +206,22 @@ void MyApp::DoStreamDemo(wxCommandEvent& WXUNUSED(event))
     wxDataOutputStream data_output( buf_output );
 
     wxInt16 i16 = 0xFFFF;
-    tmp.Printf( "Signed int16: %d\n", (int)i16 );
+    tmp.Printf( _T("Signed int16: %d\n"), (int)i16 );
     textCtrl.WriteText( tmp );
     data_output.Write16( i16 );
     
     wxUint16 ui16 = 0xFFFF;
-    tmp.Printf( "Unsigned int16: %u\n", (unsigned int) ui16 );
+    tmp.Printf( _T("Unsigned int16: %u\n"), (unsigned int) ui16 );
     textCtrl.WriteText( tmp );
     data_output.Write16( ui16 );
     
     d = 2.01234567890123456789;
-    tmp.Printf( "Double: %f\n", d );
+    tmp.Printf( _T("Double: %f\n"), d );
     textCtrl.WriteText( tmp );
     data_output.WriteDouble( d );
     
     str = "Hello!";
-    tmp.Printf( "String: %s\n", str.c_str() );
+    tmp.Printf( _T("String: %s\n"), str.c_str() );
     textCtrl.WriteText( tmp );
     data_output.WriteString( str );
     
@@ -233,19 +233,19 @@ void MyApp::DoStreamDemo(wxCommandEvent& WXUNUSED(event))
     wxDataInputStream data_input( buf_input );
 
     i16 = data_input.Read16();
-    tmp.Printf( "Signed int16: %d\n", (int)i16 );
+    tmp.Printf( _T("Signed int16: %d\n"), (int)i16 );
     textCtrl.WriteText( tmp );
     
     ui16 = data_input.Read16();
-    tmp.Printf( "Unsigned int16: %u\n", (unsigned int) ui16 );
+    tmp.Printf( _T("Unsigned int16: %u\n"), (unsigned int) ui16 );
     textCtrl.WriteText( tmp );
 
     d = data_input.ReadDouble();
-    tmp.Printf( "Double: %f\n", d );
+    tmp.Printf( _T("Double: %f\n"), d );
     textCtrl.WriteText( tmp );
     
     str = data_input.ReadString();
-    tmp.Printf( "String: %s\n", str.c_str() );
+    tmp.Printf( _T("String: %s\n"), str.c_str() );
     textCtrl.WriteText( tmp );
 }
 

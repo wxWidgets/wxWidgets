@@ -181,7 +181,7 @@ bool wxHTTP::BuildRequest(const wxString& path, wxHTTP_Req req)
 {
   wxChar *tmp_buf;
   wxChar buf[200];
-  const wxWX2MBbuf pathbuf;
+  wxWX2MBbuf pathbuf(200);
   wxString tmp_str;
 
   switch (req) {

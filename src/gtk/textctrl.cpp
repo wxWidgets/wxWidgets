@@ -390,7 +390,7 @@ void wxTextCtrl::AppendText( const wxString &text )
                               m_font.GetInternalFont(),
                               m_foregroundColour.GetColor(),
                               m_backgroundColour.GetColor(),
-                              text, text.length());
+                              text.mbc_str(), text.length());
 
         }
         else

@@ -194,8 +194,9 @@ void wxDataOutputStream::Write8(wxUint8 i)
 
 void wxDataOutputStream::WriteString(const wxString& string)
 {
+  const wxWX2MBbuf buf = string.mb_str();
   Write32(string.Length());
-  m_output->Write((const wxChar *) string, string.Length()*sizeof(wxChar));
+  m_output->Write(buf, string.Len());
 }
 
 // Must be at global scope for VC++ 5

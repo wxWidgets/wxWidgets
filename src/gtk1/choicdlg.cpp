@@ -138,7 +138,7 @@ wxChar *wxGetSingleChoiceData( const wxString& message, const wxString& caption,
 {
     wxSingleChoiceDialog dialog(parent, message, caption, n, choices, client_data);
     if ( dialog.ShowModal() == wxID_OK )
-        return dialog.GetSelectionClientData();
+        return (wxChar *)dialog.GetSelectionClientData();
     else
         return NULL;
 }

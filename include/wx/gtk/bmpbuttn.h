@@ -34,7 +34,7 @@ class wxBitmapButton;
 // global data
 //-----------------------------------------------------------------------------
 
-extern const char *wxButtonNameStr;
+extern const wxChar *wxButtonNameStr;
 
 //-----------------------------------------------------------------------------
 // wxBitmapButton

@@ -23,6 +23,7 @@
 #if wxUSE_STREAMS
 
 #include "wx/txtstrm.h"
+#include <ctype.h>
 
 wxTextInputStream::wxTextInputStream(wxInputStream& s)
   : m_input(&s)
@@ -300,7 +301,7 @@ wxTextOutputStream& wxTextOutputStream::operator<<(const wxString& string)
 wxTextOutputStream& wxTextOutputStream::operator<<(wxChar c)
 {
   wxString tmp_str;
-  tmp_str.Printf("%c", c);
+  tmp_str.Printf(_T("%c"), c);
   WriteString(tmp_str);
   return *this;
 }

@@ -1297,7 +1297,7 @@ wxDocTemplate *wxDocManager::SelectDocumentType(wxDocTemplate **templates,
     }
 
     wxDocTemplate *theTemplate = (wxDocTemplate *)wxGetSingleChoiceData(_("Select a document template"), _("Templates"), n,
-            strings, data);
+            strings, (char **)data);
     delete[] strings;
     delete[] data;
     return theTemplate;
@@ -1320,7 +1320,7 @@ wxDocTemplate *wxDocManager::SelectViewType(wxDocTemplate **templates,
         }
     }
     wxDocTemplate *theTemplate = (wxDocTemplate *)wxGetSingleChoiceData(_("Select a document view"), _("Views"), n,
-            strings, data);
+            strings, (char **)data);
     delete[] strings;
     delete[] data;
     return theTemplate;

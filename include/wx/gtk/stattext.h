@@ -30,7 +30,7 @@ class wxStaticText;
 // global data
 //-----------------------------------------------------------------------------
 
-extern const char *wxStaticTextNameStr;
+extern const wxChar *wxStaticTextNameStr;
 
 //-----------------------------------------------------------------------------
 // wxStaticText

@@ -30,7 +30,7 @@ class wxButton;
 // global data
 //-----------------------------------------------------------------------------
 
-extern const char *wxButtonNameStr;
+extern const wxChar *wxButtonNameStr;
 
 //-----------------------------------------------------------------------------
 // wxButton
