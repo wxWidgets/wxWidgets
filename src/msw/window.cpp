@@ -194,7 +194,7 @@ END_EVENT_TABLE()
 wxWindow *wxWindowMSW::FindItem(long id) const
 {
 #if wxUSE_CONTROLS
-    wxControl *item = wxDynamicThisCast(this, wxControl);
+    wxControl *item = wxDynamicCastThis(wxControl);
     if ( item )
     {
         // is it we or one of our "internal" children?
@@ -353,6 +353,17 @@ bool wxWindowMSW::Create(wxWindow *parent,
                          const wxString& name)
 {
     wxCHECK_MSG( parent, FALSE, wxT("can't create wxWindow without parent") );
+
+#if wxUSE_STATBOX
+    // wxGTK doesn't allow to create controls with static box as the parent so
+    // this will result in a crash when the program is ported to wxGTK - warn
+    // about it
+    //
+    // the correct solution is to create the controls as siblings of the
+    // static box
+    wxASSERT_MSG( !wxDynamicCastThis(wxStaticBox),
+                  _T("wxStaticBox can't be used as a window parent!") );
+#endif // wxUSE_STATBOX
 
     if ( !CreateBase(parent, id, pos, size, style, wxDefaultValidator, name) )
         return FALSE;
@@ -1777,7 +1788,7 @@ bool wxWindowMSW::MSWProcessMessage(WXMSG* pMsg)
 #if wxUSE_BUTTON
                         else
                         {
-                            wxPanel *panel = wxDynamicThisCast(this, wxPanel);
+                            wxPanel *panel = wxDynamicCastThis(wxPanel);
                             wxButton *btn = NULL;
                             if ( panel )
                             {

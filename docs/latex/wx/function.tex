@@ -2437,7 +2437,7 @@ avoid using {\tt \#ifdef}s when creating bitmaps.
 
 \membersection{wxConstCast}\label{wxconstcast}
 
-\func{}{wxConstCast}{ptr, classname}
+\func{classname *}{wxConstCast}{ptr, classname}
 
 This macro expands into {\tt const\_cast<classname *>(ptr)} if the compiler
 supports {\it const\_cast} or into an old, C-style cast, otherwise.
@@ -2466,14 +2466,15 @@ In non-debug mode, this is defined as the normal new operator.
 
 \membersection{wxDynamicCast}\label{wxdynamiccast}
 
-\func{}{wxDynamicCast}{ptr, classname}
+\func{classname *}{wxDynamicCast}{ptr, classname}
 
 This macro returns the pointer {\it ptr} cast to the type {\it classname *} if
-the pointer is of this type (the check is done during the run-time) or NULL
-otherwise. Usage of this macro is preferred over obsoleted wxObject::IsKindOf()
-function.
+the pointer is of this type (the check is done during the run-time) or 
+{\tt NULL} otherwise. Usage of this macro is preferred over obsoleted
+wxObject::IsKindOf() function.
 
-The {\it ptr} argument may be NULL, in which case NULL will be returned.
+The {\it ptr} argument may be {\tt NULL}, in which case {\tt NULL} will be
+returned.
 
 Example:
 
@@ -2493,8 +2494,22 @@ Example:
 \wxheading{See also}
 
 \helpref{RTTI overview}{runtimeclassoverview}\\
+\helpref{wxDynamicCastThis}{wxdynamiccastthis}\\
 \helpref{wxConstCast}{wxconstcast}\\
 \helpref{wxStatiicCast}{wxstaticcast}
+
+\membersection{wxDynamicCastThis}\label{wxdynamiccastthis}
+
+\func{classname *}{wxDynamicCastThis}{classname}
+
+This macro is equivalent to {\tt wxDynamicCast(this, classname)} but the
+latter provokes spurious compilation warnings from some compilers (because it
+tests whether {\tt this} pointer is non {\tt NULL} which is always true), so
+this macro should be used to avoid them.
+
+\wxheading{See also}
+
+\helpref{wxDynamicCast}{wxdynamiccast}
 
 \membersection{wxICON}\label{wxiconmacro}
 
@@ -2515,7 +2530,7 @@ avoid using {\tt \#ifdef}s when creating icons.
 
 \membersection{wxStaticCast}\label{wxstaticcast}
 
-\func{}{wxStaticCast}{ptr, classname}
+\func{classname *}{wxStaticCast}{ptr, classname}
 
 This macro checks that the cast is valid in debug mode (an assert failure will
 result if {\tt wxDynamicCast(ptr, classname) == NULL}) and then returns the
