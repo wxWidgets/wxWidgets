@@ -86,7 +86,7 @@ CleanUp() {
     # Kill result in case of failure as there is just to many stupid make/nmake
     # things out there which doesn't do this.
     if [ $# -eq 0 ]; then
-        rm -f $arcFile $defFile $dllFile
+        rm -f $arcFile $arcFile2 $defFile $dllFile
     fi
 }
 
@@ -265,6 +265,7 @@ for file in $inputFiles ; do
         *.lib)
             suffix=".lib"
             AR="emxomfar"
+            EXTRA_CFLAGS="$EXTRA_CFLAGS -Zomf"
             ;;
         *)
             ;;
@@ -281,12 +282,12 @@ for file in $inputFiles ; do
         doCommand "cd $dirname; $AR x ../$file"
         cd $curDir
         found=0;
-        for subfile in $dirname/*.o ; do
+        for subfile in $dirname/*.o* ; do
             if [ -f $subfile ]; then
                 found=1
                 if [ -s $subfile ]; then
 	            # FIXME: This should be: is file size > 32 byte, _not_ > 0!
-                    newInputFiles="$newInputFiles $subname"
+                    newInputFiles="$newInputFiles $subfile"
                 fi
             fi
         done
@@ -340,6 +341,7 @@ case $outFile in
 esac
 defFile="${outFile}.def"
 arcFile="${outFile}.a"
+arcFile2="${outFile}.lib"
 
 #create $dllFile as something matching 8.3 restrictions,
 dllFile="$outFile"
@@ -356,8 +358,13 @@ esac
 dllFile="`echo $dllFile | sed 's/\.//' | sed 's/_//' | sed 's/-//'`"
 
 
-if [ $do_backup -ne 0 -a -f $arcFile ] ; then
-    doCommand "mv $arcFile ${outFile}_s.a"
+if [ $do_backup -ne 0 ] ; then
+    if [ -f $arcFile ] ; then
+        doCommand "mv $arcFile ${outFile}_s.a"
+    fi
+    if [ -f $arcFile2 ] ; then
+        doCommand "mv $arcFile2 ${outFile}_s.lib"
+    fi
 fi
 
 # Extract public symbols from all the object files.
