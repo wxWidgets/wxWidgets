@@ -601,7 +601,9 @@ void wxApp::CleanUp()
 #if wxUSE_THREADS
     delete wxPendingEventsLocker;
     // If we don't do the following, we get an apparent memory leak.
+#if wxUSE_VALIDATORS
     ((wxEvtHandler&) wxDefaultValidator).ClearEventLocker();
+#endif
 #endif
 
     wxClassInfo::CleanUpClasses();
