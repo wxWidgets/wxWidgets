@@ -26,10 +26,20 @@
 wxTreeCtrlXmlHandler::wxTreeCtrlXmlHandler() 
 : wxXmlResourceHandler() 
 {
-    XRC_ADD_STYLE(wxTR_HIDE_ROOT);
-    XRC_ADD_STYLE(wxTR_HAS_BUTTONS);
     XRC_ADD_STYLE(wxTR_EDIT_LABELS);
+    XRC_ADD_STYLE(wxTR_NO_BUTTONS);
+    XRC_ADD_STYLE(wxTR_HAS_BUTTONS);
+    XRC_ADD_STYLE(wxTR_TWIST_BUTTONS);
+    XRC_ADD_STYLE(wxTR_NO_LINES);
+    XRC_ADD_STYLE(wxTR_FULL_ROW_HIGHLIGHT);
+    XRC_ADD_STYLE(wxTR_LINES_AT_ROOT);
+    XRC_ADD_STYLE(wxTR_HIDE_ROOT);
+    XRC_ADD_STYLE(wxTR_ROW_LINES);
+    XRC_ADD_STYLE(wxTR_HAS_VARIABLE_ROW_HEIGHT);
+    XRC_ADD_STYLE(wxTR_SINGLE);
     XRC_ADD_STYLE(wxTR_MULTIPLE);
+    XRC_ADD_STYLE(wxTR_EXTENDED);
+    XRC_ADD_STYLE(wxTR_DEFAULT_STYLE);
     AddWindowStyles();
 }
 
@@ -40,7 +50,7 @@ wxObject *wxTreeCtrlXmlHandler::DoCreateResource()
     tree->Create(m_parentAsWindow,
                 GetID(),
                 GetPosition(), GetSize(),
-                GetStyle(),
+                GetStyle(_T("style"), wxTR_DEFAULT_STYLE),
                 wxDefaultValidator,
                 GetName());
 
