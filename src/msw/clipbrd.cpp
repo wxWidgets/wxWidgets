@@ -778,25 +778,6 @@ bool wxClipboard::GetData( wxDataObject *data )
 #endif // wxUSE_DATAOBJ/!wxUSE_DATAOBJ
 }
 
-//-----------------------------------------------------------------------------
-// wxClipboardModule
-//-----------------------------------------------------------------------------
-
-IMPLEMENT_DYNAMIC_CLASS(wxClipboardModule,wxModule)
-
-bool wxClipboardModule::OnInit()
-{
-    wxTheClipboard = new wxClipboard();
-
-    return TRUE;
-}
-
-void wxClipboardModule::OnExit()
-{
-    if (wxTheClipboard) delete wxTheClipboard;
-    wxTheClipboard = (wxClipboard*) NULL;
-}
-
 #else
     #error "Please turn wxUSE_CLIPBOARD on to compile this file."
 #endif // wxUSE_CLIPBOARD

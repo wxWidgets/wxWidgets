@@ -363,26 +363,6 @@ bool wxClipboard::GetData( wxDataObject *data )
     return FALSE;
 }
 
-//-----------------------------------------------------------------------------
-// wxClipboardModule
-//-----------------------------------------------------------------------------
-
-IMPLEMENT_DYNAMIC_CLASS(wxClipboardModule,wxModule)
-
-bool wxClipboardModule::OnInit()
-{
-    wxTheClipboard = new wxClipboard();
-  
-    return TRUE;
-}
-
-void wxClipboardModule::OnExit()
-{
-    if (wxTheClipboard) delete wxTheClipboard;
-    wxTheClipboard = (wxClipboard*) NULL;
-}
-
-
 #if 0
 
 /*

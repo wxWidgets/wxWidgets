@@ -1244,6 +1244,7 @@ typedef enum
 #define    wxTOOL_RIGHT       4
 
 
+// tyhe ids of standard data formats
 enum wxDataFormatId
 {
   wxDF_INVALID =          0,

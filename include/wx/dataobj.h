@@ -1,7 +1,7 @@
 ///////////////////////////////////////////////////////////////////////////////
-// Name:        dataobj.h
+// Name:        wx/dataobj.h
 // Purpose:     common data object classes
-// Author:      Robert Roebling, Vadim Zeitlin
+// Author:      Vadim Zeitlin, Robert Roebling
 // Modified by:
 // Created:     26.05.99
 // RCS-ID:      $Id$
@@ -11,6 +11,135 @@
 
 #ifndef _WX_DATAOBJ_H_BASE_
 #define _WX_DATAOBJ_H_BASE_
+
+#ifdef __GNUG__
+    #pragma interface "dataobjbase.h"
+#endif
+
+// ----------------------------------------------------------------------------
+// headers
+// ----------------------------------------------------------------------------
+
+#include "wx/defs.h"
+#include "wx/string.h"
+#include "wx/bitmap.h"
+#include "wx/list.h"
+
+// ============================================================================
+/*
+   Generic data transfer related classes. The class hierarchy is as follows:
+
+                                - wxDataObject-
+                               /               \
+                              /                 \
+            wxDataObjectSimple                  wxDataObjectComposite
+           /           |      \
+          /            |       \
+   wxTextDataObject    |     wxBitmapDataObject
+                       |
+               wxCustomDataObject
+
+*/
+// ============================================================================
+
+// ----------------------------------------------------------------------------
+// wxDataFormat class is declared in platform-specific headers: it represents
+// a format for data which may be either one of the standard ones (text,
+// bitmap, ...) or a custom one which is then identified by a unique string.
+// ----------------------------------------------------------------------------
+
+/* the class interface looks like this (pseudo code):
+
+class wxDataFormat
+{
+public:
+    typedef <integral type> NativeFormat;
+
+    wxDataFormat(NativeFormat format = wxDF_INVALID);
+    wxDataFormat(const wxChar *format);
+
+    wxDataFormat& operator=(NativeFormat format);
+    wxDataFormat& operator=(const wxDataFormat& format);
+
+    bool operator==(NativeFormat format) const;
+    bool operator!=(NativeFormat format) const;
+
+    void SetType(NativeFormat format);
+    NativeFormat GetType() const;
+
+    wxString GetId() const;
+    void SetId(const wxChar *format);
+};
+
+*/
+
+#if defined(__WXMSW__)
+    #include "wx/msw/ole/dataform.h"
+#elif defined(__WXMOTIF__)
+    #include "wx/motif/dataform.h"
+#elif defined(__WXGTK__)
+    #include "wx/gtk/dataform.h"
+#endif
+
+// ----------------------------------------------------------------------------
+// wxDataObject represents a piece of data which knows which formats it
+// supports and knows how to render itself in each of them - GetDataHere(),
+// and how to restore data from the buffer (SetData()).
+//
+// Although this class may be used directly (i.e. custom classes may be
+// derived from it), in many cases it might be simpler to use either
+// wxDataObjectSimple or wxDataObjectComposite classes.
+//
+// A data object may be "read only", i.e. support only GetData() functions or
+// "read-write", i.e. support both GetData() and SetData() (in principle, it
+// might be "write only" too, but this is rare). Moreover, it doesn't have to
+// support the same formats in Get() and Set() directions: for example, a data
+// object containing JPEG image might accept BMPs in GetData() because JPEG
+// image may be easily transformed into BMP but not in SetData(). Accordingly,
+// all methods dealing with formats take an additional "direction" argument
+// which is either SET or GET and which tells the function if the format needs
+// to be supported by SetData() or GetDataHere().
+// ----------------------------------------------------------------------------
+
+class WXDLLEXPORT wxDataObjectBase
+{
+public:
+    enum Direction
+    {
+        Get  = 0x01,    // format is supported by GetDataHere()
+        Set  = 0x02,    // format is supported by SetData()
+        Both = 0x03     // format is supported by both (unused currently)
+    };
+
+    // this class is polymorphic, hence it needs a virtual dtor
+    virtual ~wxDataObjectBase();
+
+    // get the best suited format for rendering our data
+    virtual wxDataFormat GetPreferredFormat(Direction dir = Get) const = 0;
+
+    // get the number of formats we support
+    virtual size_t GetFormatCount(Direction dir = Get) const = 0;
+
+    // return all formats in the provided array (of size GetFormatCount())
+    virtual void GetAllFormats(wxDataFormat *formats,
+                               Direction dir = Get) const = 0;
+
+    // get the (total) size of data for the given format
+    virtual size_t GetDataSize(const wxDataFormat& format) const = 0;
+
+    // copy raw data (in the specified format) to the provided buffer, return
+    // TRUE if data copied successfully, FALSE otherwise
+    virtual bool GetDataHere(const wxDataFormat& format, void *buf) const = 0;
+
+    // get data from the buffer of specified length (in the given format),
+    // return TRUE if the data was read successfully, FALSE otherwise
+    virtual bool SetData(const wxDataFormat& format,
+                         size_t len, const void *buf) = 0;
+};
+
+// ----------------------------------------------------------------------------
+// include the platform-specific declarations of wxDataObject
+// ----------------------------------------------------------------------------
 
 #if defined(__WXMSW__)
     #include "wx/msw/ole/dataobj.h"
@@ -28,71 +157,267 @@
     #include "wx/stubs/dnd.h"
 #endif
 
-// ---------------------------------------------------------------------------
-// wxPrivateDataObject is a specialization of wxDataObject for app specific
-// data (of some given kind, derive directly from wxDataObject if you wish to
-// efficiently support multiple formats)
-// ---------------------------------------------------------------------------
+// ----------------------------------------------------------------------------
+// wxDataObjectSimple is a wxDataObject which only supports one format (in
+// both Get and Set directions, but you may return FALSE from GetDataHere() or
+// SetData() if one of them is not supported). This is the simplest possible
+// wxDataObject implementation.
+//
+// This is still an "abstract base class" (although it doesn't have any pure
+// virtual functions), to use it you should derive from it and implement
+// GetDataSize(), GetDataHere() and SetData() functions because the base class
+// versions don't do anything - they just return "not implemented".
+//
+// This class should be used when you provide data in only one format (no
+// conversion to/from other formats), either a standard or a custom one.
+// Otherwise, you should use wxDataObjectComposite or wxDataObject directly.
+// ----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxPrivateDataObject : public wxDataObject
+class WXDLLEXPORT wxDataObjectSimple : public wxDataObject
 {
-#if defined(__WXGTK__) || defined(__WXMOTIF__)
-    DECLARE_CLASS( wxPrivateDataObject )
-#endif
-
 public:
-    wxPrivateDataObject();
-    virtual ~wxPrivateDataObject() { Free(); }
+    // ctor takes the format we support, but it can also be set later with
+    // SetFormat()
+    wxDataObjectSimple(const wxDataFormat& format = wxDF_INVALID)
+        : m_format(format)
+        {
+        }
 
-    // get the format object - it is used to decide whether we support the
-    // given output format or not
-    wxDataFormat& GetFormat() { return m_format; }
+    // get/set the format we support
+    const wxDataFormat& GetFormat() const { return m_format; }
+    void SetFormat(const wxDataFormat& format) { m_format = format; }
 
-    // set data. will make copy of the data
-    void SetData( const void *data, size_t size );
+    // virtual functions to override in derived class (the base class versions
+    // just return "not implemented")
+    // -----------------------------------------------------------------------
 
-    // returns pointer to data
-    void *GetData() const { return m_data; }
-
-    // get the size of the data
-    virtual size_t GetSize() const;
-
-    // copy data to the given buffer
-    virtual void WriteData( void *dest ) const;
-
-    // these functions are provided for wxGTK compatibility, their usage is
-    // deprecated - use GetFormat().SetId() instead
-    void SetId( const wxString& id ) { m_format.SetId(id); }
-    wxString GetId() const { return m_format.GetId(); }
-
-    // implement the base class pure virtuals
-    virtual wxDataFormat GetPreferredFormat() const
-        { return m_format; }
-    virtual bool IsSupportedFormat(wxDataFormat format) const
-        { return m_format == format; }
+    // get the size of our data
     virtual size_t GetDataSize() const
-        { return m_size; }
-    virtual void GetDataHere(void *dest) const
-        { WriteData(dest); }
+        { return 0; }
 
-    // the function which really copies the data - called by WriteData() above
-    // and uses GetSize() to get the size of the data
-    void WriteData( const void *data, void *dest ) const;
+    // copy our data to the buffer
+    virtual bool GetDataHere(void *WXUNUSED(buf)) const
+        { return FALSE; }
+
+    // copy data from buffer to our data
+    virtual bool SetData(size_t len, const void *WXUNUSED(buf))
+        { return FALSE; }
+
+    // implement base class pure virtuals
+    // ----------------------------------
+    virtual wxDataFormat GetPreferredFormat(Direction WXUNUSED(dir) = Get) const
+        { return m_format; }
+    virtual size_t GetFormatCount(Direction WXUNUSED(dir) = Get) const
+        { return 1; }
+    virtual void GetAllFormats(wxDataFormat *formats,
+                               Direction WXUNUSED(dir) = Get) const
+        { *formats = m_format; }
+    virtual size_t GetDataSize(const wxDataFormat& WXUNUSED(format)) const
+        { return GetDataSize(); }
+    virtual bool GetDataHere(const wxDataFormat& WXUNUSED(format),
+                             void *buf) const
+        { return GetDataHere(buf); }
+    virtual bool SetData(const wxDataFormat& WXUNUSED(format),
+                         size_t len, const void *buf)
+        { return SetData(len, buf); }
 
 private:
-    // free the data
-    void Free();
-
-    // the data
-    size_t     m_size;
-    void      *m_data;
-
-#if !defined(__WXMOTIF__)
-    // the data format
+    // the one and only format we support
     wxDataFormat m_format;
-#endif
 };
 
+// ----------------------------------------------------------------------------
+// wxDataObjectComposite is the simplest way to implement wxDataObject
+// supporting multiple formats. It contains several wxDataObjectSimple and
+// supports all formats supported by any of them.
+//
+// This class shouldn't be (normally) derived from, but may be used directly.
+// If you need more flexibility than what it provides, you should probably use
+// wxDataObject directly.
+// ----------------------------------------------------------------------------
 
+WX_DECLARE_LIST(wxDataObjectSimple, wxSimpleDataObjectList);
+
+class WXDLLEXPORT wxDataObjectComposite : public wxDataObject
+{
+public:
+    // ctor
+    wxDataObjectComposite() { m_preferred = 0; }
+
+    // add data object (it will be deleted by wxDataObjectComposite, hence it
+    // must be allocated on the heap) whose format will become the preferred
+    // one if preferred == TRUE
+    void Add(wxDataObjectSimple *dataObject, bool preferred = FALSE);
+
+    // implement base class pure virtuals
+    // ----------------------------------
+    virtual wxDataFormat GetPreferredFormat(Direction dir = Get) const;
+    virtual size_t GetFormatCount(Direction dir = Get) const;
+    virtual void GetAllFormats(wxDataFormat *formats, Direction dir = Get) const;
+    virtual size_t GetDataSize(const wxDataFormat& format) const;
+    virtual bool GetDataHere(const wxDataFormat& format, void *buf) const;
+    virtual bool SetData(const wxDataFormat& format, size_t len, const void *buf);
+
+protected:
+    // returns the pointer to the object which supports this format or NULL
+    wxDataObjectSimple *GetObject(const wxDataFormat& format) const;
+
+private:
+    // the list of all (simple) data objects whose formats we support
+    wxSimpleDataObjectList m_dataObjects;
+
+    // the index of the preferred one (0 initially, so by default the first
+    // one is the preferred)
+    size_t m_preferred;
+};
+
+// ============================================================================
+// Standard implementations of wxDataObjectSimple which can be used directly
+// (i.e. without having to derive from them) for standard data type transfers.
+//
+// Note that although all of them can work with provided data, you can also
+// override their virtual GetXXX() functions to only provide data on demand.
+// ============================================================================
+
+// ----------------------------------------------------------------------------
+// wxTextDataObject contains text data
+// ----------------------------------------------------------------------------
+
+class WXDLLEXPORT wxTextDataObject : public wxDataObjectSimple
+{
+public:
+    // ctor: you can specify the text here or in SetText(), or override
+    // GetText()
+    wxTextDataObject(const wxString& text = wxEmptyString)
+        : wxDataObjectSimple(wxDF_TEXT), m_text(text)
+        {
+        }
+
+    // virtual functions which you may override if you want to provide text on
+    // demand only - otherwise, the trivial default versions will be used
+    virtual size_t GetTextLength() const { return m_text.Len() + 1; }
+    virtual wxString GetText() const { return m_text; }
+    virtual void SetText(const wxString& text) { m_text = text; }
+
+    // implement base class pure virtuals
+    // ----------------------------------
+    virtual size_t GetDataSize() const;
+    virtual bool GetDataHere(void *buf) const;
+    virtual bool SetData(size_t len, const void *buf);
+
+private:
+    wxString m_text;
+};
+
+// ----------------------------------------------------------------------------
+// wxBitmapDataObject contains a bitmap
+// ----------------------------------------------------------------------------
+
+class WXDLLEXPORT wxBitmapDataObjectBase : public wxDataObjectSimple
+{
+public:
+    // ctor: you can specify the bitmap here or in SetBitmap(), or override
+    // GetBitmap()
+    wxBitmapDataObjectBase(const wxBitmap& bitmap = wxNullBitmap)
+        : wxDataObjectSimple(wxDF_BITMAP), m_bitmap(bitmap)
+        {
+        }
+
+    // virtual functions which you may override if you want to provide data on
+    // demand only - otherwise, the trivial default versions will be used
+    virtual wxBitmap GetBitmap() const { return m_bitmap; }
+    virtual void SetBitmap(const wxBitmap& bitmap) { m_bitmap = bitmap; }
+
+private:
+    wxBitmap m_bitmap;
+};
+
+// ----------------------------------------------------------------------------
+// wxFileDataObject contains a list of filenames
+// ----------------------------------------------------------------------------
+
+class WXDLLEXPORT wxFileDataObjectBase : public wxDataObjectSimple
+{
+public:
+    // ctor: you can specify the bitmap here or in SetBitmap(), or override
+    // GetBitmap()
+    wxFileDataObjectBase() : wxDataObjectSimple(wxDF_FILENAME) { }
+
+    // get a reference to our array - you may modify it (i.e. add/remove
+    // filenames to it then)
+    wxArrayString& GetFilenames() { return m_filenames; }
+
+    // a helper function
+    void AddFile(const wxString& filename) { m_filenames.Add(filename); }
+
+    // virtual functions which you may override if you want to provide data on
+    // demand only - otherwise, the trivial default versions will be used.
+    //
+    // they work with a NUL-separated string of filenames, the base class
+    // versions concatenate/extract filenames from this string
+    virtual wxString GetFilenames() const;
+    virtual void SetFilenames(const wxChar* filenames);
+
+private:
+    wxArrayString m_filenames;
+};
+
+// ----------------------------------------------------------------------------
+// wxCustomDataObject contains arbitrary untyped user data.
+//
+// It is understood that this data can be copied bitwise.
+// ----------------------------------------------------------------------------
+
+class WXDLLEXPORT wxCustomDataObject : public wxDataObjectSimple
+{
+public:
+    // if you don't specify the format in the ctor, you can still use
+    // SetFormat() later
+    wxCustomDataObject(const wxDataFormat& format = wxDF_INVALID);
+
+    // the dtor calls Free()
+    virtual ~wxCustomDataObject();
+
+    // you can call SetData() to set m_data: it will make a copy of the data
+    // you pass - or you can use TakeData() which won't copy anything, but
+    // will take ownership of data (i.e. will call Free() on it later)
+    void TakeData(size_t size, void *data);
+
+    // this function is called to allocate "size" bytes of memory from
+    // SetData(). The default version uses operator new[].
+    virtual void *Alloc(size_t size);
+
+    // this function is called when the data is freed, you may override it to
+    // anything you want (or may be nothing at all). The default version calls
+    // operator delete[] on m_data
+    virtual void Free();
+
+    // get data: you may override these functions if you wish to provide data
+    // only when it's requested
+    virtual size_t GetSize() const { return m_size; }
+    virtual void *GetData() const { return m_data; }
+
+    // implement base class pure virtuals
+    // ----------------------------------
+    virtual size_t GetDataSize() const;
+    virtual bool GetDataHere(void *buf) const;
+    virtual bool SetData(size_t size, const void *buf);
+
+private:
+    size_t m_size;
+    void  *m_data;
+};
+
+// ----------------------------------------------------------------------------
+// include platform-specific declarations of wxXXXBase classes
+// ----------------------------------------------------------------------------
+
+#if defined(__WXMSW__)
+    #include "wx/msw/ole/dataobj2.h"
+#elif defined(__WXMOTIF__)
+    #include "wx/motif/dataobj2.h"
+#elif defined(__WXGTK__)
+    #include "wx/gtk/dataobj2.h"
 #endif
-    // _WX_DATAOBJ_H_BASE_
+
+#endif // _WX_DATAOBJ_H_BASE_

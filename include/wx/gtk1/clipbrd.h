@@ -15,8 +15,6 @@
 #pragma interface
 #endif
 
-#include "wx/defs.h"
-
 #if wxUSE_CLIPBOARD
 
 #include "wx/object.h"
@@ -25,24 +23,11 @@
 #include "wx/control.h"
 #include "wx/module.h"
 
-//-----------------------------------------------------------------------------
-// classes
-//-----------------------------------------------------------------------------
-
-class wxClipboard;
-class wxClipboardModule;
-
-//-----------------------------------------------------------------------------
-// global data
-//-----------------------------------------------------------------------------
-
-extern wxClipboard* wxTheClipboard;
-
-//-----------------------------------------------------------------------------
+// ----------------------------------------------------------------------------
 // wxClipboard
-//-----------------------------------------------------------------------------
+// ----------------------------------------------------------------------------
 
-class wxClipboard : public wxObject
+class wxClipboard : public wxClipboardBase
 {
 public:
     wxClipboard();
@@ -61,22 +46,20 @@ public:
     virtual bool AddData( wxDataObject *data );
 
     // ask if data in correct format is available
-    virtual bool IsSupported( wxDataFormat format );
+    virtual bool IsSupported( const wxDataFormat& format );
 
     // fill data with data on the clipboard (if available)
-    virtual bool GetData( wxDataObject *data );
+    virtual bool GetData( wxDataObject& data );
 
     // clears wxTheClipboard and the system's clipboard if possible
     virtual void Clear();
 
-    // flushes the clipboard: not available under GTK
-    virtual bool Flush() { return FALSE; }
+    // If primary == TRUE, use primary selection in all further ops,
+    // primary == FALSE resets it.
+    virtual void UsePrimarySelection(bool primary = TRUE)
+        { m_usePrimary = primary; }
     
-    /// If primary == TRUE, use primary selection in all further ops,
-    /// primary=FALSE resets it.
-    inline void UsePrimarySelection(bool primary = TRUE) { m_usePrimary = primary; }
-    
-  // implementation
+    // implementation from now on
     bool              m_open;
     bool              m_ownsClipboard;
     bool              m_ownsPrimarySelection;
@@ -89,29 +72,13 @@ public:
     bool              m_formatSupported;
     GdkAtom           m_targetRequested;
     bool              m_usePrimary;
-    wxDataObject      *m_receivedData;
-    
+    wxDataObject     *m_receivedData;
+
 private:
     DECLARE_DYNAMIC_CLASS(wxClipboard)
 };
 
-//-----------------------------------------------------------------------------
-// wxClipboardModule
-//-----------------------------------------------------------------------------
-
-class wxClipboardModule: public wxModule
-{
-public:
-    wxClipboardModule() {}
-    bool OnInit();
-    void OnExit();
-    
-private:
-    DECLARE_DYNAMIC_CLASS(wxClipboardModule)
-};
-
 #endif
-
    // wxUSE_CLIPBOARD
 
 #endif

@@ -2,7 +2,7 @@
 // Name:        ole/dropsrc.h
 // Purpose:     declaration of the wxDropSource class
 // Author:      Vadim Zeitlin
-// Modified by: 
+// Modified by:
 // Created:     06.03.98
 // RCS-ID:      $Id$
 // Copyright:   (c) 1998 Vadim Zeitlin <zeitlin@dptmaths.ens-cachan.fr>
@@ -29,19 +29,6 @@ class WXDLLEXPORT wxDataObject;
 class WXDLLEXPORT wxWindow;
 
 // ----------------------------------------------------------------------------
-// constants
-// ----------------------------------------------------------------------------
-
-enum wxDragResult
-{
-    wxDragError,    // error prevented the d&d operation from completing
-    wxDragNone,     // drag target didn't accept the data
-    wxDragCopy,     // the data was successfully copied
-    wxDragMove,     // the data was successfully moved
-    wxDragCancel    // the operation was cancelled by user (not an error)
-};
-
-// ----------------------------------------------------------------------------
 // wxDropSource is used to start the drag-&-drop operation on associated
 // wxDataObject object. It's responsible for giving UI feedback while dragging.
 // ----------------------------------------------------------------------------
@@ -49,37 +36,34 @@ enum wxDragResult
 class WXDLLEXPORT wxDropSource
 {
 public:
-  // ctors: if you use default ctor you must call SetData() later!
-  // NB: the "wxWindow *win" parameter is unused and is here only for wxGTK
-  //     compatibility, as well as both icon parameters
-  wxDropSource(wxWindow *win = NULL,
-               const wxIcon &go = wxNullIcon,
-               const wxIcon &stop = wxNullIcon );
-  wxDropSource(wxDataObject& data,
-               wxWindow *win = NULL,
-               const wxIcon &go = wxNullIcon,
-               const wxIcon &stop = wxNullIcon );
+    // ctors: if you use default ctor you must call SetData() later!
+    //
+    // NB: the "wxWindow *win" parameter is unused and is here only for wxGTK
+    //     compatibility, as well as both icon parameters
+    wxDropSource(wxWindow *win = NULL,
+            const wxIcon &go = wxNullIcon,
+            const wxIcon &stop = wxNullIcon );
+    wxDropSource(wxDataObject& data,
+            wxWindow *win = NULL,
+            const wxIcon &go = wxNullIcon,
+            const wxIcon &stop = wxNullIcon );
 
-  void SetData(wxDataObject& data);
+    virtual ~wxDropSource();
 
-  virtual ~wxDropSource();
+    // do it (call this in response to a mouse button press, for example)
+    // params: if bAllowMove is false, data can be only copied
+    virtual wxDragResult DoDragDrop(bool bAllowMove = FALSE);
 
-  // do it (call this in response to a mouse button press, for example)
-  // params: if bAllowMove is false, data can be only copied
-  wxDragResult DoDragDrop(bool bAllowMove = FALSE);
-
-  // overridable: you may give some custom UI feedback during d&d operation
-  // in this function (it's called on each mouse move, so it shouldn't be too
-  // slow). Just return false if you want default feedback.
-  virtual bool GiveFeedback(wxDragResult effect, bool bScrolling);
+    // overridable: you may give some custom UI feedback during d&d operation
+    // in this function (it's called on each mouse move, so it shouldn't be
+    // too slow). Just return false if you want default feedback.
+    virtual bool GiveFeedback(wxDragResult effect, bool bScrolling);
 
 protected:
-  void Init();
-
-  wxDataObject  *m_pData;         // pointer to associated data object
+    void Init();
 
 private:
-  wxIDropSource *m_pIDropSource;  // the pointer to COM interface
+    wxIDropSource *m_pIDropSource;  // the pointer to COM interface
 };
 
 #endif  //_WX_OLEDROPSRC_H

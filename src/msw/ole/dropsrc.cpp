@@ -177,11 +177,6 @@ wxDropSource::wxDropSource(wxDataObject& data,
   SetData(data);
 }
 
-void wxDropSource::SetData(wxDataObject& data)
-{
-  m_pData = &data;
-}
-
 wxDropSource::~wxDropSource()
 {
   m_pIDropSource->Release();

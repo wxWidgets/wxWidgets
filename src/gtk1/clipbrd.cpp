@@ -15,6 +15,7 @@
 
 #if wxUSE_CLIPBOARD
 
+#include "wx/dataobj.h"
 #include "wx/utils.h"
 
 #include "glib.h"
@@ -548,7 +549,7 @@ void wxClipboard::Close()
     m_open = FALSE;
 }
 
-bool wxClipboard::IsSupported( wxDataFormat format )
+bool wxClipboard::IsSupported( const wxDataFormat& format )
 {
     /* store requested format to be asked for by callbacks */
     
@@ -580,7 +581,7 @@ bool wxClipboard::IsSupported( wxDataFormat format )
     return TRUE;
 }    
     
-bool wxClipboard::GetData( wxDataObject *data )
+bool wxClipboard::GetData( wxDataObject& data )
 {
     wxCHECK_MSG( m_open, FALSE, wxT("clipboard not open") );
     
@@ -627,26 +628,6 @@ bool wxClipboard::GetData( wxDataObject *data )
     return TRUE;
 }
 
-//-----------------------------------------------------------------------------
-// wxClipboardModule
-//-----------------------------------------------------------------------------
-
-IMPLEMENT_DYNAMIC_CLASS(wxClipboardModule,wxModule)
-
-bool wxClipboardModule::OnInit()
-{
-    wxTheClipboard = new wxClipboard();
-  
-    return TRUE;
-}
-
-void wxClipboardModule::OnExit()
-{
-    if (wxTheClipboard) delete wxTheClipboard;
-    wxTheClipboard = (wxClipboard*) NULL;
-}
-
 #endif
-
   // wxUSE_CLIPBOARD
 

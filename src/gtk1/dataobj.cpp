@@ -19,7 +19,6 @@
 
 #include "gdk/gdk.h"
 
-
 //-------------------------------------------------------------------------
 // global data
 //-------------------------------------------------------------------------
@@ -117,11 +116,11 @@ void wxDataFormat::SetId( const wxChar *id )
 
 void wxDataFormat::PrepareFormats()
 {
-    if (!g_textAtom) 
+    if (!g_textAtom)
         g_textAtom = gdk_atom_intern( "STRING", FALSE );
-    if (!g_pngAtom) 
+    if (!g_pngAtom)
         g_pngAtom = gdk_atom_intern( "image/png", FALSE );
-    if (!g_fileAtom) 
+    if (!g_fileAtom)
         g_fileAtom = gdk_atom_intern( "file:ALL", FALSE );
 }
 
@@ -162,85 +161,27 @@ bool wxDataObject::IsSupportedFormat(const wxDataFormat& format) const
     }
 }
 
-
-// ----------------------------------------------------------------------------
-// wxTextDataObject
-// ----------------------------------------------------------------------------
-
-IMPLEMENT_DYNAMIC_CLASS( wxTextDataObject, wxDataObject )
-
-wxTextDataObject::wxTextDataObject() 
-{ 
-}
-
-wxTextDataObject::wxTextDataObject(const wxString& strText) 
-    : m_strText(strText) 
-{ 
-}
-
-size_t wxTextDataObject::GetDataSize(const wxDataFormat& format) const
-{ 
-    return m_strText.Len() + 1;   // +1 for trailing '\0'of course
-}
-
-bool wxTextDataObject::GetDataHere(const wxDataFormat& format, void *buf) const
-{ 
-    memcpy(buf, m_strText.c_str(), GetDataSize(format)); 
-    return TRUE; 
-}
-
-bool wxTextDataObject::SetData(const wxDataFormat& format, const void *buf)
-{ 
-    m_strText = (const wxChar *)buf; 
-    return TRUE;
-}
-
 // ----------------------------------------------------------------------------
 // wxFileDataObject
 // ----------------------------------------------------------------------------
 
-IMPLEMENT_DYNAMIC_CLASS( wxFileDataObject, wxDataObject )
-
-wxFileDataObject::wxFileDataObject()
+bool wxFileDataObject::GetDataHere(void *buf) const
 {
+    const wxString& filenames = GetFilenames();
+    memcpy( buf, filenames.mbc_str(), filenames.Len() + 1 );
+
+    return TRUE;
 }
 
-void wxFileDataObject::AddFile( const wxString &file )
+size_t wxFileDataObject::GetDataSize() const
 {
-    m_files += file;
-    m_files += (wxChar)0;
+    return GetFilenames().Len() + 1;
 }
 
-wxString wxFileDataObject::GetFiles() const
+bool wxFileDataObject::SetData(const void *buf)
 {
-    return m_files;
-}
+    SetFilenames((const wxChar *)buf);
 
-bool wxFileDataObject::GetDataHere(const wxDataFormat& format, void *buf) const
-{
-    if (format == wxDF_FILENAME)
-    {
-        memcpy( buf, m_files.mbc_str(), m_files.Len() + 1 );
-	return TRUE;
-    }
-    
-    return FALSE;
-}
-
-size_t wxFileDataObject::GetDataSize(const wxDataFormat& format) const
-{
-    if (format != wxDF_FILENAME) return 0;
-    
-    return m_files.Len() + 1;
-}
-
-bool wxFileDataObject::SetData(const wxDataFormat& format, const void *buf)
-{
-    if (format != wxDF_FILENAME)
-        return FALSE;
-	
-    m_files = (char*)(buf);  // this is so ugly, I cannot look at it
-    
     return TRUE;
 }
 
@@ -248,96 +189,81 @@ bool wxFileDataObject::SetData(const wxDataFormat& format, const void *buf)
 // wxBitmapDataObject
 // ----------------------------------------------------------------------------
 
-IMPLEMENT_DYNAMIC_CLASS( wxBitmapDataObject, wxDataObject )
-
 wxBitmapDataObject::wxBitmapDataObject()
 {
-    m_pngData = (void*)NULL;
-    m_pngSize = 0;
+    Init();
 }
 
 wxBitmapDataObject::wxBitmapDataObject( const wxBitmap& bitmap )
+                  : wxBitmapDataObjectBase(bitmap)
 {
-    m_pngData = (void*)NULL;
-    m_pngSize = 0;
-    m_bitmap = bitmap;
+    Init();
+
     DoConvertToPng();
 }
 
 wxBitmapDataObject::~wxBitmapDataObject()
 {
-    if (m_pngData) 
-        delete[] m_pngData;
+    Clear();
 }
 
 void wxBitmapDataObject::SetBitmap( const wxBitmap &bitmap )
 {
-    if (m_pngData) 
-        delete[] m_pngData;
-    m_pngData = (void*)NULL;
-    m_pngSize = 0;
-	
-    m_bitmap = bitmap;
+    ClearAll();
+
+    wxBitmapDataObjectBase::SetBitmap(bitmap);
+
     DoConvertToPng();
 }
 
-size_t wxBitmapDataObject::GetDataSize(const wxDataFormat& format) const
+bool wxBitmapDataObject::GetDataHere(void *buf) const
 {
-    if (format != wxDF_BITMAP) return 0;
-    
-    return m_pngSize;
-}
-
-bool wxBitmapDataObject::GetDataHere(const wxDataFormat& format, void *buf) const
-{
-    if (format != wxDF_BITMAP) return FALSE;
-    
-    if (m_pngSize > 0)
+    if ( !m_pngSize )
     {
-        memcpy(buf, m_pngData, m_pngSize); 
-        return TRUE;
+        wxFAIL_MSG( wxT("attempt to copy empty bitmap failed") );
+
+        return FALSE;
     }
-    
-    return FALSE;
+
+    memcpy(buf, m_pngData, m_pngSize);
+
+    return TRUE;
 }
 
-bool wxBitmapDataObject::SetData(const wxDataFormat& format, const void *buf)
+bool wxBitmapDataObject::SetData(size_t size, const void *buf)
 {
-    if (m_pngData) delete[] m_pngData;
-    m_pngData = (void*) NULL;
-    m_pngSize = 0;
-    m_bitmap = wxNullBitmap;
-    
-    return FALSE;
-}
+    Clear();
 
-void wxBitmapDataObject::SetPngData(const void *buf, size_t size)
-{
-    if (m_pngData) delete[] m_pngData;
     m_pngSize = size;
-    m_pngData = (void*) new char[m_pngSize];
-    
+    m_pngData = malloc(m_pngSize);
+
     memcpy( m_pngData, buf, m_pngSize );
-    
+
     wxMemoryInputStream mstream( (char*) m_pngData, m_pngSize );
     wxImage image;
     wxPNGHandler handler;
-    handler.LoadFile( &image, mstream );
+    if ( !handler.LoadFile( &image, mstream ) )
+    {
+        return FALSE;
+    }
+
     m_bitmap = image.ConvertToBitmap();
 }
 
 void wxBitmapDataObject::DoConvertToPng()
 {
-    if (!m_bitmap.Ok()) return;
-    
+    if (!m_bitmap.Ok())
+        return;
+
     wxImage image( m_bitmap );
     wxPNGHandler handler;
-    
+
     wxCountingOutputStream count;
     handler.SaveFile( &image, count );
+
     m_pngSize = count.GetSize() + 100; // sometimes the size seems to vary ???
-    m_pngData = (void*) new char[m_pngSize];
-    
+    m_pngData = malloc(m_pngSize);
+
     wxMemoryOutputStream mstream( (char*) m_pngData, m_pngSize );
     handler.SaveFile( &image, mstream );
 }

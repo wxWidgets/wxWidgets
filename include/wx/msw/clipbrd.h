@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        clipbrd.h
-// Purpose:     Clipboard functionality
+// Name:        wx/msw/clipbrd.h
+// Purpose:     wxClipboad class and clipboard functions for MSW
 // Author:      Julian Smart
 // Modified by:
 // Created:     01/02/97
@@ -15,9 +15,6 @@
 #ifdef __GNUG__
 #pragma interface "clipbrd.h"
 #endif
-
-#include "wx/defs.h"
-#include "wx/setup.h"
 
 #if wxUSE_CLIPBOARD
 
@@ -94,25 +91,6 @@ public:
 
 private:
     bool m_clearOnExit;
-};
-
-// The global clipboard object
-WXDLLEXPORT_DATA(extern wxClipboard*) wxTheClipboard;
-
-//-----------------------------------------------------------------------------
-// wxClipboardModule: module responsible for initializing the global clipboard
-// object
-//-----------------------------------------------------------------------------
-
-class wxClipboardModule : public wxModule
-{
-    DECLARE_DYNAMIC_CLASS(wxClipboardModule)
-
-public:
-    wxClipboardModule() { }
-
-    bool OnInit();
-    void OnExit();
 };
 
 #endif // wxUSE_CLIPBOARD
