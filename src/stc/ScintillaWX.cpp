@@ -246,12 +246,12 @@ void ScintillaWX::Paste() {
     ClearSelection();
 
     wxTextDataObject data;
-    bool canPaste;
+    bool gotData;
 
     wxTheClipboard->Open();
-    canPaste = wxTheClipboard->GetData(data);
+    gotData = wxTheClipboard->GetData(data);
     wxTheClipboard->Close();
-    if (canPaste) {
+    if (gotData) {
         wxString str = data.GetText();
         int      len = str.Length();
         pdoc->InsertString(currentPos, str.c_str(), len);
@@ -265,11 +265,10 @@ void ScintillaWX::Paste() {
 
 
 bool ScintillaWX::CanPaste() {
-    wxTextDataObject data;
     bool canPaste;
 
     wxTheClipboard->Open();
-    canPaste = wxTheClipboard->GetData(data);
+    canPaste = wxTheClipboard->IsSupported( wxDF_TEXT );
     wxTheClipboard->Close();
 
     return canPaste;
