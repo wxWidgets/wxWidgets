@@ -20,7 +20,9 @@ class WXDLLEXPORT wxIcon;
 class WXDLLEXPORT wxFrame;
 class WXDLLEXPORT wxWindow;
 
-class WXDLLEXPORT wxTaskBarIcon: public wxTaskBarIconBase
+class WXDLLIMPEXP_ADV wxTaskBarIconArea;
+
+class WXDLLIMPEXP_ADV wxTaskBarIcon: public wxTaskBarIconBase
 {
 public:
     wxTaskBarIcon();
@@ -36,8 +38,7 @@ public:
     bool PopupMenu(wxMenu *menu);
 
 protected:
-    wxFrame *m_iconWnd;
-    wxWindow *m_iconArea;
+    wxTaskBarIconArea *m_iconWnd;
 
     DECLARE_DYNAMIC_CLASS(wxTaskBarIcon)
 };
