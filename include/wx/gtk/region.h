@@ -103,10 +103,7 @@ class wxRegion : public wxGDIObject
 
 class wxRegionIterator: public wxObject 
 {
-  DECLARE_DYNAMIC_CLASS(wxRegionIterator);
-  
-  public:
-  
+public:
     wxRegionIterator();
     wxRegionIterator(const wxRegion& region);
 
@@ -127,10 +124,12 @@ class wxRegionIterator: public wxObject
     long GetHeight() const { return GetH(); }
     wxRect GetRect() const { return wxRect(GetX(), GetY(), GetWidth(), GetHeight()); }
 
-  private:
-  
-   long       m_current;
-   wxRegion   m_region;
+private:
+    long       m_current;
+    wxRegion   m_region;
+
+private:
+    DECLARE_DYNAMIC_CLASS(wxRegionIterator);
 };
 
 

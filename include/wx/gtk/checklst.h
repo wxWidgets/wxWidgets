@@ -36,8 +36,6 @@ class wxCheckListBox;
 
 class wxCheckListBox : public wxListBox
 {
-DECLARE_DYNAMIC_CLASS(wxCheckListBox)
-
 public:
     wxCheckListBox();
     wxCheckListBox(wxWindow *parent, wxWindowID id,
@@ -53,6 +51,9 @@ public:
     void Check( int index, bool check = TRUE );
 
     int GetItemHeight() const;
+    
+private:
+    DECLARE_DYNAMIC_CLASS(wxCheckListBox)
 };
 
 #endif

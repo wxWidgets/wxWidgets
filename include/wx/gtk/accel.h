@@ -56,8 +56,7 @@ extern wxAcceleratorTable wxNullAcceleratorTable;
 
 class wxAcceleratorEntry: public wxObject
 {
-  public:
-
+public:
     wxAcceleratorEntry(int flags = 0, int keyCode = 0, int cmd = 0)
       { m_flags = flags; m_keyCode = keyCode; m_command = cmd; }
 

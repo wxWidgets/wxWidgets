@@ -33,10 +33,7 @@ class wxBrush;
 
 class wxBrush: public wxGDIObject
 {
-  DECLARE_DYNAMIC_CLASS(wxBrush)
-
-  public:
-
+public:
     wxBrush();
     wxBrush( const wxColour &colour, int style );
     wxBrush( const wxBitmap &stippleBitmap );
@@ -58,7 +55,8 @@ class wxBrush: public wxGDIObject
 
     void Unshare();
 
-    // no data :-)
+private:
+    DECLARE_DYNAMIC_CLASS(wxBrush)
 };
 
 #endif // __GTKBRUSHH__

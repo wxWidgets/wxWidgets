@@ -7,7 +7,6 @@
 // Licence:   	wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-
 #ifndef __GTKBUTTONH__
 #define __GTKBUTTONH__
 
@@ -38,10 +37,7 @@ extern const wxChar *wxButtonNameStr;
 
 class wxButton: public wxControl
 {
-  DECLARE_DYNAMIC_CLASS(wxButton)
-
-  public:
-
+public:
     wxButton();
     inline wxButton(wxWindow *parent, wxWindowID id, const wxString& label,
            const wxPoint& pos = wxDefaultPosition,
@@ -66,6 +62,9 @@ class wxButton: public wxControl
   // implementation        
   
     void ApplyWidgetStyle();    
+    
+private:
+    DECLARE_DYNAMIC_CLASS(wxButton)
 };
 
 #endif // __GTKBUTTONH__

@@ -233,6 +233,19 @@ gtk_frame_realized_callback( GtkWidget *WXUNUSED(widget), wxFrame *win )
     else
         gtk_window_set_policy(GTK_WINDOW(win->m_widget), 1, 1, 1);
 
+    /* set size hints */
+    gint flag =	GDK_HINT_POS;
+    if ((win->GetMinWidth() != -1) || (win->GetMinHeight() != -1)) flag |= GDK_HINT_MIN_SIZE;
+    if ((win->GetMaxWidth() != -1) || (win->GetMaxHeight() != -1)) flag |= GDK_HINT_MAX_SIZE;
+    if (flag)
+    {
+        gdk_window_set_hints( win->m_widget->window, 
+	                      win->m_x, win->m_y,
+			      win->GetMinWidth(), win->GetMinHeight(),
+			      win->GetMaxWidth(), win->GetMaxHeight(),
+			      flag );
+    }
+    
     /* reset the icon */
     if (win->m_icon != wxNullIcon)
     {

@@ -80,6 +80,7 @@ private:
     /// Set to TRUE while we are in wxYield().
     bool m_suppressIdleEvents;
 
+private:
     DECLARE_DYNAMIC_CLASS(wxApp)
     DECLARE_EVENT_TABLE()
 };

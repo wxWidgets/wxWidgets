@@ -38,33 +38,6 @@ extern bool g_isIdle;
 
 extern wxList wxPendingDelete;
 
-/*
-//-----------------------------------------------------------------------------
-// instruct X to set the WM hint for positioning
-//-----------------------------------------------------------------------------
-
-extern "C" {
-
-static void gdk_window_set_position_hint( GdkWindow *window, gint x, gint y )
-{
-  GdkWindowPrivate *priv;
-  XSizeHints size_hints;
-  
-  g_return_if_fail (window != NULL);
-  
-  priv = (GdkWindowPrivate*) window;
-  if (priv->destroyed) return;
-  
-  size_hints.flags = PPosition;
-  size_hints.x = x;
-  size_hints.y = y;
-   
-  XSetWMNormalHints (priv->xdisplay, priv->xwindow, &size_hints);
-}
-
-}
-*/
-
 //-----------------------------------------------------------------------------
 // "delete_event"
 //-----------------------------------------------------------------------------
@@ -150,9 +123,18 @@ gtk_dialog_realized_callback( GtkWidget *widget, wxDialog *win )
        position in "realize" and "map" */
     gtk_widget_set_uposition( widget, win->m_x, win->m_y );
 
-/*
-    gdk_window_set_position_hint( widget->window, win->m_x, win->m_y );
-*/
+    /* set size hints */
+    gint flag =	GDK_HINT_POS;
+    if ((win->GetMinWidth() != -1) || (win->GetMinHeight() != -1)) flag |= GDK_HINT_MIN_SIZE;
+    if ((win->GetMaxWidth() != -1) || (win->GetMaxHeight() != -1)) flag |= GDK_HINT_MAX_SIZE;
+    if (flag)
+    {
+        gdk_window_set_hints( win->m_widget->window, 
+	                      win->m_x, win->m_y,
+			      win->GetMinWidth(), win->GetMinHeight(),
+			      win->GetMaxWidth(), win->GetMaxHeight(),
+			      flag );
+    }
 
     /* reset the icon */
     if (win->m_icon != wxNullIcon)

@@ -35,7 +35,7 @@ extern bool g_isIdle;
 
 extern bool   g_blockEventsOnDrag;
 
-static const float sensitivity = 0.2;
+static const float sensitivity = 0.02;
 
 //-----------------------------------------------------------------------------
 // "value_changed"
@@ -101,7 +101,7 @@ bool wxSpinButton::Create(wxWindow *parent,
     wxSize new_size = size;
     new_size.x = 15;
     if (new_size.y == -1)
-        new_size.y = 30;
+        new_size.y = 26;
 
     if (!PreCreation( parent, pos, new_size ) ||
         !CreateBase( parent, id, pos, new_size, style, wxDefaultValidator, name ))
@@ -132,10 +132,6 @@ bool wxSpinButton::Create(wxWindow *parent,
     Show( TRUE );
 
     return TRUE;
-}
-
-wxSpinButton::~wxSpinButton()
-{
 }
 
 int wxSpinButton::GetMin() const

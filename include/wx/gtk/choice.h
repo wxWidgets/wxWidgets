@@ -38,8 +38,6 @@ extern const wxChar *wxChoiceNameStr;
 
 class wxChoice : public wxControl
 {
-    DECLARE_DYNAMIC_CLASS(wxChoice)
-
 public:
     wxChoice();
     wxChoice( wxWindow *parent, wxWindowID id,
@@ -97,6 +95,9 @@ public:
     void EnableEvents();
     void AppendCommon( const wxString &item );
     void ApplyWidgetStyle();
+    
+private:
+    DECLARE_DYNAMIC_CLASS(wxChoice)
 };
 
 

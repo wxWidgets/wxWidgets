@@ -484,16 +484,16 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
     s << initialSpinValue;
     m_spintext = new wxTextCtrl( panel, -1, s, wxPoint(20,160), wxSize(80,-1) );
 #if wxUSE_SPINBUTTON
-    m_spinbutton = new wxSpinButton( panel, ID_SPIN, wxPoint(103,159), wxSize(80, -1) );
+    m_spinbutton = new wxSpinButton( panel, ID_SPIN, wxPoint(103,160), wxSize(80, -1) );
     m_spinbutton->SetRange(-10,30);
     m_spinbutton->SetValue(initialSpinValue);
 
     m_btnProgress = new wxButton( panel, ID_BTNPROGRESS, "Show progress dialog",
-                                  wxPoint(408, 159) );
+                                  wxPoint(300, 160) );
 #endif // wxUSE_SPINBUTTON
 
 #if wxUSE_SPINCTRL
-    m_spinctrl = new wxSpinCtrl( panel, -1, wxPoint(200, 159), wxSize(80, 20) );
+    m_spinctrl = new wxSpinCtrl( panel, -1, wxPoint(200, 160), wxSize(80, -1) );
     m_spinctrl->SetRange(10,30);
     m_spinctrl->SetValue(15);
 #endif // wxUSE_SPINCTRL

@@ -7,7 +7,6 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-
 #ifndef __GTKCHECKBOXH__
 #define __GTKCHECKBOXH__
 
@@ -41,8 +40,6 @@ extern const char *wxCheckBoxNameStr;
 
 class wxCheckBox: public wxControl
 {
-DECLARE_DYNAMIC_CLASS(wxCheckBox)
-
 public:
     wxCheckBox();
     wxCheckBox( wxWindow *parent, wxWindowID id, const wxString& label,
@@ -73,6 +70,9 @@ public:
 
     GtkWidget *m_widgetCheckbox;
     GtkWidget *m_widgetLabel;
+    
+private:
+    DECLARE_DYNAMIC_CLASS(wxCheckBox)
 };
 
 #endif

@@ -31,8 +31,6 @@ class wxControl;
 
 class wxControl : public wxWindow
 {
-    DECLARE_DYNAMIC_CLASS(wxControl)
-
 public:
     wxControl();
     wxControl( wxWindow *parent,
@@ -50,6 +48,9 @@ public:
 protected:
     wxString   m_label;
     char       m_chAccel;  // enabled to avoid breaking binary compatibility later on
+    
+private:
+    DECLARE_DYNAMIC_CLASS(wxControl)
 };
 
 #endif // __GTKCONTROLH__

@@ -44,8 +44,6 @@ extern wxClipboard* wxTheClipboard;
 
 class wxClipboard : public wxObject
 {
-    DECLARE_DYNAMIC_CLASS(wxClipboard)
-
 public:
     wxClipboard();
     ~wxClipboard();
@@ -91,6 +89,9 @@ public:
     GdkAtom           m_targetRequested;
     bool              m_usePrimary;
     wxDataObject      *m_receivedData;
+    
+private:
+    DECLARE_DYNAMIC_CLASS(wxClipboard)
 };
 
 //-----------------------------------------------------------------------------
@@ -99,12 +100,13 @@ public:
 
 class wxClipboardModule: public wxModule
 {
-  DECLARE_DYNAMIC_CLASS(wxClipboardModule)
-
 public:
     wxClipboardModule() {}
     bool OnInit();
     void OnExit();
+    
+private:
+    DECLARE_DYNAMIC_CLASS(wxClipboardModule)
 };
 
 #endif

@@ -8,7 +8,7 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef __GTKSPINPUTTH__
+#ifndef __GTKSPINBUTTH__
 #define __GTKSPINBUTTH__
 
 #ifdef __GNUG__
@@ -21,8 +21,6 @@
 
 class wxSpinButton : public wxSpinButtonBase
 {
-    DECLARE_DYNAMIC_CLASS(wxSpinButton)
-
 public:
     wxSpinButton() { }
     wxSpinButton( wxWindow *parent, wxWindowID id = -1,
@@ -31,7 +29,6 @@ public:
     {
         Create(parent, id, pos, size, style, name);
     }
-    ~wxSpinButton();
 
     bool Create( wxWindow *parent, wxWindowID id = -1,
             const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize,
@@ -54,6 +51,7 @@ public:
 
 private:
     DECLARE_EVENT_TABLE()
+    DECLARE_DYNAMIC_CLASS(wxSpinButton)
 };
 
 #endif

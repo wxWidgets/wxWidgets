@@ -326,6 +326,7 @@ scrolbar.cpp	R
 settings.cpp	R
 slider.cpp	R
 spinbutt.cpp	R
+spinctrl.cpp	R
 statbmp.cpp	R
 statbox.cpp	R
 statline.cpp	R
