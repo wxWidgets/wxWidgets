@@ -80,7 +80,7 @@
     #define TEST_REGCONF
     #define TEST_REGEX
     #define TEST_REGISTRY
-    #define TEST_SCOPEGUARD
+//    #define TEST_SCOPEGUARD
     #define TEST_SNGLINST
 //    #define TEST_SOCKETS
     #define TEST_STREAMS
