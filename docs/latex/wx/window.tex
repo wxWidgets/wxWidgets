@@ -1685,18 +1685,15 @@ implements the following methods:\par
 
 \func{virtual void}{SetCursor}{\param{const wxCursor\&}{cursor}}
 
-Sets the window's cursor.
+Sets the window's cursor. Notice that setting the cursor for this window also
+sets it for all the children of the window unless they have their own cursor
+(either explicitly set with the same function, or, in the case of Windows, a
+standard one for some of standard controls).
 
 \wxheading{Parameters}
 
 \docparam{cursor}{Specifies the cursor that the window should normally display.}
 
-%\wxheading{Remarks}
-%
-%Under Windows, you sometimes need to call ::wxSetCursor in addition to this
-%function if you want the cursor to change immediately, because under Windows,
-%wxWindows only sets the global cursor when it detects mouse movement.
-%
 \wxheading{See also}
 
 \helpref{::wxSetCursor}{wxsetcursor}, \helpref{wxCursor}{wxcursor}

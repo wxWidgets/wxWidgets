@@ -258,6 +258,24 @@ three of them may be empty if the corresponding component is. The old contents o
 strings pointed to by these parameters will be overwritten in any case (if the pointers
 are not NULL).
 
+\membersection{::wxTransferFileToStream}\label{wxtransferfiletostream}
+
+\func{bool}{wxTransferFileToStream}{\param{const wxString\& }{filename}, \param{ostream\& }{stream}}
+
+Copies the given file to {\it stream}. Useful when converting an old application to
+use streams (within the document/view framework, for example).
+
+Use of this function requires the file wx\_doc.h to be included.
+
+\membersection{::wxTransferStreamToFile}\label{wxtransferstreamtofile}
+
+\func{bool}{wxTransferStreamToFile}{\param{istream\& }{stream} \param{const wxString\& }{filename}}
+
+Copies the given stream to the file {\it filename}. Useful when converting an old application to
+use streams (within the document/view framework, for example).
+
+Use of this function requires the file wx\_doc.h to be included.
+
 \section{String functions}
 
 \membersection{::copystring}
@@ -286,23 +304,42 @@ A macro defined as:
 #define wxStringEq(s1, s2) (s1 && s2 && (strcmp(s1, s2) == 0))
 \end{verbatim}
 
-\membersection{::wxTransferFileToStream}\label{wxtransferfiletostream}
+\membersection{::IsEmpty}\label{isempty}
 
-\func{bool}{wxTransferFileToStream}{\param{const wxString\& }{filename}, \param{ostream\& }{stream}}
+\func{bool}{IsEmpty}{\param{const char *}{ p}}
 
-Copies the given file to {\it stream}. Useful when converting an old application to
-use streams (within the document/view framework, for example).
+Returns TRUE if the string is empty, FALSE otherwise. It is safe to pass NULL
+pointer to this function and it will return TRUE for it.
 
-Use of this function requires the file wx\_doc.h to be included.
+\membersection{::Stricmp}\label{stricmp}
 
-\membersection{::wxTransferStreamToFile}\label{wxtransferstreamtofile}
+\func{int}{Stricmp}{\param{const char *}{p1}, \param{const char *}{p2}}
 
-\func{bool}{wxTransferStreamToFile}{\param{istream\& }{stream} \param{const wxString\& }{filename}}
+Returns a negative value, 0, or positive value if {\it p1} is less than, equal
+to or greater than {\it p2}. The comparison is case-insensitive.
 
-Copies the given stream to the file {\it filename}. Useful when converting an old application to
-use streams (within the document/view framework, for example).
+This function complements the standard C function {\it strcmp()} which performs
+case-sensitive comparison.
 
-Use of this function requires the file wx\_doc.h to be included.
+\membersection{::Strlen}\label{strlen}
+
+\func{size\_t}{Strlen}{\param{const char *}{ p}}
+
+This is a safe version of standard function {\it strlen()}: it does exactly the
+same thing (i.e. returns the length of the string) except that it returns 0 if
+{\it p} is the NULL pointer.
+
+\membersection{::wxGetTranslation}\label{wxgettranslation}
+
+\func{const char *}{wxGetTranslation}{\param{const char * }{str}}
+
+This function returns the translation of string {\it str} in the current 
+\helpref{locale}{wxlocale}. If the string is not found in any of the loaded
+message catalogs (see \helpref{i18n overview}{internationalization}), the
+original string is returned. In debug build, an error message is logged - this
+should help to find the strings which were not yet translated. As this function
+is used very often, an alternative syntax is provided: the \_() macro is
+defined as wxGetTranslation().
 
 \section{Dialog functions}\label{dialogfunctions}
 

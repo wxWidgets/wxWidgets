@@ -188,7 +188,7 @@ functions instead of them (or, even better, std::string compatible variants).
 \helpref{IsNumber}{wxstringisnumber}\\
 \helpref{IsWord}{wxstringisword}
 
-\membersection{std::string compatibility functions}
+\membersection{std::string compatibility functions}\label{wxstringat}
 
 The supported functions are only listed here, please see any STL reference for
 their documentation.
@@ -457,6 +457,20 @@ Returns the whole string if {\it ch} is not found.
 Gets all characters before the last occurence of {\it ch}.
 Returns the empty string if {\it ch} is not found.
 
+\membersection{wxString::c\_str}\label{wxstringcstr}
+
+\constfunc{const char *}{c\_str}{\void}
+
+Returns a pointer to the string data.
+
+\membersection{wxString::Clear}\label{wxstringclear}
+
+\func{void}{Clear}{\void}
+
+Empties the string and frees memory occupied by it.
+
+See also: \helpref{Empty}{wxstringempty}
+
 \membersection{wxString::Cmp}\label{wxstringcmp}
 
 \constfunc{int}{Cmp}{\param{const char*}{ psz}}
@@ -487,7 +501,7 @@ See also \helpref{Cmp}{wxstringcmp}, \helpref{IsSameAs}{wxstringissameas}.
 #define NO_POS ((int)(-1)) // undefined position
 enum caseCompare {exact, ignoreCase};
 \end{verbatim}
-  
+
 \constfunc{int}{CompareTo}{\param{const char*}{ psz}, \param{caseCompare}{ cmp = exact}}
 
 Case-sensitive comparison. Returns 0 if equal, 1 if greater or -1 if less.
@@ -502,7 +516,9 @@ Returns 1 if target appears anyhere in wxString; else 0.
 
 \func{void}{Empty}{\void}
 
-Reinitializes the string and frees the data.
+Makes the string empty, but doesn't free memory occupied by the string.
+
+See also: \helpref{Clear()}{wxstringclear}.
 
 \membersection{wxString::Find}\label{wxstringfind}
 

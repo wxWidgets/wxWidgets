@@ -26,8 +26,9 @@ for a list of all functions.
 The advantages of using a special string class instead of working directly with
 C strings are so obvious that there is a huge number of such classes available.
 The most important advantage is the need to always
-remember to allocate/free memory for C strings; working with fixed size buffers almost inevitably leads to buffer overflows).
-At last, C++ has a standard string class (std::string). So why the need for wxString?
+remember to allocate/free memory for C strings; working with fixed size buffers almost
+inevitably leads to buffer overflows. At last, C++ has a standard string class
+(std::string). So why the need for wxString?
 
 There are several advantages:
 
@@ -137,9 +138,9 @@ string with a NULL) and are in general not very safe (passing NULL to them will
 probably lead to program crash). Moreover, some very useful functions are not
 standard at all. This is why in addition to all wxString functions, there are
 also a few global string functions which try to correct these problems: 
-\helpref{IsEmpty()}{wxstringisempty} verifies whether the string is empty (returning
-TRUE for NULL pointers), \helpref{Strlen()}{wxstringstrlen} also handles NULLs correctly
-and returns 0 for them and \helpref{Stricmp()}{wxstringstricmp} is just a
+\helpref{IsEmpty()}{IsEmpty} verifies whether the string is empty (returning
+TRUE for NULL pointers), \helpref{Strlen()}{Strlen} also handles NULLs correctly
+and returns 0 for them and \helpref{Stricmp()}{Stricmp} is just a
 platform-independent version of case-insensitive string comparison function
 known either as stricmp() or strcasecmp() on different platforms.
 
@@ -175,7 +176,7 @@ Probably the unique case when you might want to think about reference
 counting is when a string character is taken from a string which is not a
 constant (or a constant reference). In this case, due to C++ rules, the
 "read-only" {\it operator[]} (which is the same as 
-\helpref{GetChar()}{wxstringgetchar}) cannot be chosen and the "read/write"
+\helpref{GetChar()}{wxstringgetchar}) cannot be chosen and the "read/write" 
 {\it operator[]} (the same as 
 \helpref{GetWritableChar()}{wxstringgetwritablechar}) is used instead. As the
 call to this operator may modify the string, its data is unshared (COW is done)
@@ -195,7 +196,7 @@ never arise because for constant references the correct operator is called autom
 absolutely not necessary to read for using wxString class. Please skip it unless
 you feel familiar with profilers and relative tools. If you do read it, please
 also read the preceding section about 
-\helpref{reference counting}{wxstringrefcounting}.}
+\helpref{reference counting}{wxstringrefcount}.}
 
 For the performance reasons wxString doesn't allocate exactly the amount of
 memory needed for each string. Instead, it adds a small amount of space to each

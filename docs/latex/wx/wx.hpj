@@ -1,9 +1,14 @@
+; This file is maintained by HCW. Do not modify this file directly.
+
 
 [OPTIONS]
-COMPRESS=HIGH
+COMPRESS=60 Hall Zeck
+LCID=0x409 0x0 0x0 ; English (United States)
+REPORT=Yes
 CONTENTS=Contents
 TITLE=wxWindows Manual
-BMROOT=..\..\..\..\wxwind~1\docs\latex\wx
+BMROOT=.
+HLP=wx.hlp
 
 [FILES]
 wx.rtf

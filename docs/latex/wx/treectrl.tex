@@ -225,7 +225,7 @@ to make these functions reentrant (i.e. allow more than one
 enumeration on one and the same object simultaneously). The cookie passed to
 GetFirstChild and GetNextChild should be the same.
 
-Returns 0 if there are no further children.
+Returns an invalid tree item if there are no further children.
 
 \wxheading{See also}
 
@@ -282,7 +282,7 @@ Returns the item label.
 
 \constfunc{wxTreeItemId}{GetLastChild}{\param{const wxTreeItemId\&}{ item}}
 
-Returns the last child of the item (or 0 if this item has no children).
+Returns the last child of the item (or an invalid tree item if this item has no children).
 
 \wxheading{See also}
 
@@ -301,7 +301,7 @@ to make these functions reentrant (i.e. allow more than one
 enumeration on one and the same object simultaneously). The cookie passed to
 GetFirstChild and GetNextChild should be the same.
 
-Returns 0 if there are no further children.
+Returns an invalid tree item if there are no further children.
 
 \wxheading{See also}
 
@@ -313,7 +313,7 @@ Returns 0 if there are no further children.
 
 Returns the next sibling of the specified item; call \helpref{wxTreeCtrl::GetPrevSibling}{wxtreectrlgetprevsibling} for the previous sibling.
 
-Returns 0 if there are no further siblings.
+Returns an invalid tree item if there are no further siblings.
 
 \wxheading{See also}
 
@@ -337,7 +337,7 @@ Returns the item's parent.
 
 Returns the previous sibling of the specified item; call \helpref{wxTreeCtrl::GetNextSibling}{wxtreectrlgetnextsibling} for the next sibling.
 
-Returns 0 if there are no further children.
+Returns an invalid tree item if there are no further children.
 
 \wxheading{See also}
 
@@ -355,9 +355,9 @@ Returns the previous visible item.
 
 Returns the root item for the tree control.
 
-\membersection{wxTreeCtrl::GetSelectedItemImage}\label{wxtreectrlgetselecteditemimage}
+\membersection{wxTreeCtrl::GetItemSelectedImage}\label{wxtreectrlgetitemselectedimage}
 
-\constfunc{int}{GetSelectedItemImage}{\param{const wxTreeItemId\& }{item}}
+\constfunc{int}{GetItemSelectedImage}{\param{const wxTreeItemId\& }{item}}
 
 Gets the selected item image.
 
@@ -365,7 +365,7 @@ Gets the selected item image.
 
 \constfunc{wxTreeItemId}{GetSelection}{\void}
 
-Returns the selection, or 0 if there is no selection.
+Returns the selection, or an invalid item if there is no selection.
 
 \membersection{wxTreeCtrl::HitTest}\label{wxtreectrlhittest}
 
@@ -399,6 +399,14 @@ Inserts an item after a given one.
 If {\it image} > -1 and {\it selImage} is -1, the same image is used for
 both selected and unselected items.
 
+\membersection{wxTreeCtrl::IsBold}\label{wxtreectrlisbold}
+
+\constfunc{bool}{IsBold}{\param{const wxTreeItemId\& }{item}}
+
+Returns TRUE if the given item is in bold state.
+
+See also: \helpref{SetItemBold}{wxtreectrlsetitembold}
+
 \membersection{wxTreeCtrl::IsExpanded}\label{wxtreectrlisexpanded}
 
 \constfunc{bool}{IsExpanded}{\param{const wxTreeItemId\&}{ item}}
@@ -422,6 +430,19 @@ Returns TRUE if the item is visible (it might be outside the view, or not expand
 \constfunc{bool}{ItemHasChildren}{\param{const wxTreeItemId\&}{ item}}
 
 Returns TRUE if the item has children.
+
+\membersection{wxTreeCtrl::OnCompareItems}\label{wxtreectrloncompareitems}
+
+\func{int}{OnCompareItems}{\param{const wxTreeItemId\& }{item1}, \param{const wxTreeItemId\& }{item2}}
+
+Override this function in the derived class to change the sort order of the
+items in the tree control. The function should return a negative, zero or
+positive value if the first item is less than, equal to or greater than the
+second one.
+
+The base class version compares items alphabetically.
+
+See also: \helpref{SortChildren}{wxtreectrlsortchildren}
 
 \membersection{wxTreeCtrl::PrependItem}\label{wxtreectrlprependitem}
 
@@ -458,6 +479,15 @@ Sets the indentation for the tree control.
 Sets the image list. {\it which} should be one of wxIMAGE\_LIST\_NORMAL, wxIMAGE\_LIST\_SMALL and
 wxIMAGE\_LIST\_STATE.
 
+\membersection{wxTreeCtrl::SetItemBold}\label{wxtreectrlsetitembold}
+
+\func{void}{SetItemBold}{\param{const wxTreeItemId\& }{item}, \param{bool}{ bold = TRUE}}
+
+Makes item appear in bold font if {\it bold} parameter is TRUE or resets it to
+the normal state.
+
+See also: \helpref{IsBold}{wxtreectrlisbold}
+
 \membersection{wxTreeCtrl::SetItemData}\label{wxtreectrlsetitemdata}
 
 \func{void}{SetItemData}{\param{const wxTreeItemId\&}{ item}, \param{wxTreeItemData* }{data}}
@@ -493,24 +523,16 @@ Sets the item label.
 
 \membersection{wxTreeCtrl::SortChildren}\label{wxtreectrlsortchildren}
 
-\func{void}{SortChildren}{\param{const wxTreeItemId\&}{ item}, \param{wxTreeItemCmpFunc*}{ cmpFunction = NULL}}
+\func{void}{SortChildren}{\param{const wxTreeItemId\&}{ item}}
 
-Sorts the children of the given item. If {\it cmpFunction} is NULL, sorts in ascending alphabetical order;
-otherwise the custom sort function is used, as follows:
-
-{\small
-\begin{verbatim}
-// a callback function used for sorting tree items, it should return -1 if the
-// first item precedes the second, +1 if the second precedes the first or 0 if
-// they're equivalent
-class wxTreeItemData;
-typedef int (*wxTreeItemCmpFunc)(wxTreeItemData *item1, wxTreeItemData *item2);
-\end{verbatim}
-}
+Sorts the children of the given item using 
+\helpref{OnCompareItems}{wxtreectrloncompareitems} method of wxTreeCtrl. You
+should override that method to change the sort order (default is ascending
+alphabetical order).
 
 \wxheading{See also}
 
-\helpref{wxTreeItemData}{wxtreeitemdata}
+\helpref{wxTreeItemData}{wxtreeitemdata}, \helpref{OnCompareItems}{wxtreectrloncompareitems}
 
 \membersection{wxTreeCtrl::Toggle}\label{wxtreectrltoggle}
 
