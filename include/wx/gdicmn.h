@@ -417,23 +417,32 @@ class WXDLLEXPORT wxColourDatabase
 {
 public:
     wxColourDatabase();
-    ~wxColourDatabase() ;
+    ~wxColourDatabase();
 
-    // Not const because it may add a name to the database
-    wxColour *FindColour(const wxString& colour) ;
-    wxColour *FindColourNoAdd(const wxString& colour) const;
+    // find colour by name or name for the given colour
+    wxColour Find(const wxString& name) const;
     wxString FindName(const wxColour& colour) const;
-    void AddColour(const wxString& name, wxColour* colour);
-    void Initialize();
+
+    // add a new colour to the database
+    void AddColour(const wxString& name, const wxColour& colour);
+
+    // deprecated, use Find()/Add() instead
+    wxColour *FindColour(const wxString& name);
+    void AddColour(const wxString& name, wxColour *colour);
+
+
 #ifdef __WXPM__
     // PM keeps its own type of colour table
     long*                           m_palTable;
     size_t                          m_nSize;
 #endif
-private:
-    wxColour* FindColour(const wxString& colour, bool add);
 
-    wxStringToColourHashMap* m_map;
+private:
+    // load the database with the built in colour values when called for the
+    // first time, do nothing after this
+    void Initialize();
+
+    wxStringToColourHashMap *m_map;
 };
 
 class WXDLLEXPORT wxBitmapList : public wxList

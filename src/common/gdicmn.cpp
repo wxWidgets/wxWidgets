@@ -213,27 +213,47 @@ bool wxRect::Intersects(const wxRect& rect) const
     return r.width != 0;
 }
 
-WX_DECLARE_STRING_HASH_MAP( wxColour*, wxStringToColourHashMap );
+// ============================================================================
+// wxColourDatabase
+// ============================================================================
+
+WX_DECLARE_STRING_HASH_MAP( wxColour *, wxStringToColourHashMap );
+
+// ----------------------------------------------------------------------------
+// wxColourDatabase ctor/dtor
+// ----------------------------------------------------------------------------
 
 wxColourDatabase::wxColourDatabase ()
 {
-    m_map = new wxStringToColourHashMap;
+    // will be created on demand in Initialize()
+    m_map = NULL;
 }
 
 wxColourDatabase::~wxColourDatabase ()
 {
-    WX_CLEAR_HASH_MAP(wxStringToColourHashMap, *m_map);
+    if ( m_map )
+    {
+        WX_CLEAR_HASH_MAP(wxStringToColourHashMap, *m_map);
 
-    delete m_map;
-    m_map = NULL;
+        delete m_map;
+    }
+
 #ifdef __WXPM__
     delete [] m_palTable;
 #endif
 }
 
 // Colour database stuff
-void wxColourDatabase::Initialize ()
+void wxColourDatabase::Initialize()
 {
+    if ( m_map )
+    {
+        // already initialized
+        return;
+    }
+
+    m_map = new wxStringToColourHashMap;
+
     static const struct wxColourDesc
     {
         const wxChar *name;
@@ -315,13 +335,14 @@ void wxColourDatabase::Initialize ()
         {wxT("YELLOW GREEN"), 153, 204, 50}
     };
 
-    size_t      n;
+    size_t n;
 
     for ( n = 0; n < WXSIZEOF(wxColourTable); n++ )
     {
         const wxColourDesc& cc = wxColourTable[n];
-        AddColour(cc.name, new wxColour(cc.r,cc.g,cc.b));
+        (*m_map)[cc.name] = new wxColour(cc.r, cc.g, cc.b);
     }
+
 #ifdef __WXPM__
     m_palTable = new long[n];
     for ( n = 0; n < WXSIZEOF(wxColourTable); n++ )
@@ -333,99 +354,74 @@ void wxColourDatabase::Initialize ()
 #endif
 }
 
-/*
- * Changed by Ian Brown, July 1994.
- *
- * When running under X, the Colour Database starts off empty. The X server
- * is queried for the colour first time after which it is entered into the
- * database. This allows our client to use the server colour database which
- * is hopefully gamma corrected for the display being used.
- */
+// ----------------------------------------------------------------------------
+// wxColourDatabase operations
+// ----------------------------------------------------------------------------
 
-wxColour *wxColourDatabase::FindColour(const wxString& colour)
+void wxColourDatabase::AddColour(const wxString& name, const wxColour& colour)
 {
-    return FindColour(colour, true);
-}
+    Initialize();
 
-wxColour *wxColourDatabase::FindColourNoAdd(const wxString& colour) const
-{
-    return ((wxColourDatabase*)this)->FindColour(colour, false);
-}
-
-void wxColourDatabase::AddColour (const wxString& name, wxColour* colour)
-{
+    // canonicalize the colour names before using them as keys: they should be
+    // in upper case
     wxString colName = name;
     colName.MakeUpper();
-    wxString colName2 = colName;
-    if ( !colName2.Replace(_T("GRAY"), _T("GREY")) )
-        colName2.clear();
 
-    wxStringToColourHashMap::iterator it = m_map->find(colName);
-    if ( it == m_map->end() )
-        it = m_map->find(colName2);
-    if ( it != m_map->end() )
+    // ... and we also allow both grey/gray
+    wxString colNameAlt = colName;
+    if ( !colNameAlt.Replace(_T("GRAY"), _T("GREY")) )
     {
-        delete it->second;
-        it->second = colour;
+        // but in this case it is not necessary so avoid extra search below
+        colNameAlt.clear();
     }
 
-    (*m_map)[name] = colour;
+    wxStringToColourHashMap::iterator it = m_map->find(colName);
+    if ( it == m_map->end() && !colNameAlt.empty() )
+        it = m_map->find(colNameAlt);
+    if ( it != m_map->end() )
+    {
+        *(it->second) = colour;
+    }
+    else // new colour
+    {
+        (*m_map)[name] = new wxColour(colour);
+    }
 }
 
-wxColour *wxColourDatabase::FindColour(const wxString& colour, bool add)
+wxColour wxColourDatabase::Find(const wxString& colour) const
 {
-    // VZ: make the comparaison case insensitive and also match both grey and
-    //     gray
+    wxColourDatabase * const self = wxConstCast(this, wxColourDatabase);
+    self->Initialize();
+
+    // first look among the existing colours
+
+    // make the comparaison case insensitive and also match both grey and gray
     wxString colName = colour;
     colName.MakeUpper();
-    wxString colName2 = colName;
-    if ( !colName2.Replace(_T("GRAY"), _T("GREY")) )
-        colName2.clear();
+    wxString colNameAlt = colName;
+    if ( !colNameAlt.Replace(_T("GRAY"), _T("GREY")) )
+        colNameAlt.clear();
 
     wxStringToColourHashMap::iterator it = m_map->find(colName);
-    if ( it == m_map->end() )
-        it = m_map->find(colName2);
+    if ( it == m_map->end() && !colNameAlt.empty() )
+        it = m_map->find(colNameAlt);
     if ( it != m_map->end() )
-        return it->second;
+        return *(it->second);
 
-    if ( !add )
-        return NULL;
-
-#ifdef __WXMSW__
-  return NULL;
-#endif
-#ifdef __WXPM__
-  return NULL;
-#endif
-#ifdef __WXMGL__
-  return NULL;
-#endif
-
-// TODO for other implementations. This should really go into
-// platform-specific directories.
-#ifdef __WXMAC__
-  return NULL;
-#endif
-#ifdef __WXCOCOA__
-  return NULL;
-#endif
-#ifdef __WXSTUBS__
-  return NULL;
-#endif
-
+    // if we didn't find it,query the system, maybe it knows about it
+    //
+    // TODO: move this into platform-specific files
 #ifdef __WXGTK__
-  wxColour *col = new wxColour( colour );
+    wxColour col( colour );
 
-  if (!(col->Ok()))
-  {
-      delete col;
-      return (wxColour *) NULL;
-  }
-  AddColour(colour, col);
-  return col;
-#endif
+    if ( col.Ok() )
+    {
+        // cache it
+        self->AddColour(colour, col);
+    }
 
-#ifdef __X__
+    return col;
+#elif defined(__X__)
     XColor xcolour;
 
 #ifdef __WXMOTIF__
@@ -436,7 +432,7 @@ wxColour *wxColourDatabase::FindColour(const wxString& colour, bool add)
 #endif
     /* MATTHEW: [4] Use wxGetMainColormap */
     if (!XParseColor(display, (Colormap) wxTheApp->GetMainColormap((WXDisplay*) display), colour.ToAscii() ,&xcolour))
-      return NULL;
+        return NULL;
 
 #if wxUSE_NANOX
     unsigned char r = (unsigned char)(xcolour.red);
@@ -448,36 +444,58 @@ wxColour *wxColourDatabase::FindColour(const wxString& colour, bool add)
     unsigned char b = (unsigned char)(xcolour.blue >> 8);
 #endif
 
-    wxColour *col = new wxColour(r, g, b);
+    wxColour col(r, g, b);
     AddColour(colour, col);
 
     return col;
-#endif // __X__
+#else // other platform
+    return wxNullColour;
+#endif // platforms
 }
 
-wxString wxColourDatabase::FindName (const wxColour& colour) const
+wxString wxColourDatabase::FindName(const wxColour& colour) const
 {
-    unsigned char red = colour.Red ();
-    unsigned char green = colour.Green ();
-    unsigned char blue = colour.Blue ();
+    wxColourDatabase * const self = wxConstCast(this, wxColourDatabase);
+    self->Initialize();
 
     typedef wxStringToColourHashMap::iterator iterator;
 
-    for (iterator it = m_map->begin(), en = m_map->end(); it != en; ++it )
+    for ( iterator it = m_map->begin(), en = m_map->end(); it != en; ++it )
     {
-        wxColour *col = it->second;
-
-        if (col->Red () == red && col->Green () == green && col->Blue () == blue)
+        if ( *(it->second) == colour )
             return it->first;
     }
 
     return wxEmptyString;
 }
 
+// ----------------------------------------------------------------------------
+// deprecated wxColourDatabase methods
+// ----------------------------------------------------------------------------
+
+wxColour *wxColourDatabase::FindColour(const wxString& name)
+{
+    wxColour col = Find(name);
+    if ( !col.Ok() )
+        return NULL;
+
+    return new wxColour(col);
+}
+
+void wxColourDatabase::AddColour(const wxString& name, wxColour *colour)
+{
+    wxCHECK_RET( colour, _T("NULL pointer in wxColourDatabase::AddColour") );
+
+    AddColour(name, wxColour(*colour));
+}
+
+// ============================================================================
+// stock objects
+// ============================================================================
+
 void wxInitializeStockLists()
 {
     wxTheColourDatabase = new wxColourDatabase;
-    wxTheColourDatabase->Initialize();
 
     wxTheBrushList = new wxBrushList;
     wxThePenList = new wxPenList;

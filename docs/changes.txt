@@ -87,6 +87,7 @@ All (GUI):
 - status text is now restored after wxMenu help is shown in it
 - bug in wxWindow::RemoveEventHandler() fixed (Yingjun Zhang)
 - make it possible to use wxRTTI macros with namespaces (Benjamin I. Williams)
+- wxColourDatabase API now uses objects instead of pointers
 
 wxMSW:
 

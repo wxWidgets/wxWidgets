@@ -40,6 +40,7 @@ wxLIGHT\_GREY}
 
 \latexignore{\rtfignore{\wxheading{Members}}}
 
+
 \membersection{wxColour::wxColour}\label{wxcolourconstr}
 
 \func{}{wxColour}{\void}
@@ -83,11 +84,13 @@ Copy constructor.
 }
 
 
+
 \membersection{wxColour::Blue}\label{wxcolourblue}
 
 \constfunc{unsigned char}{Blue}{\void}
 
 Returns the blue intensity.
+
 
 \membersection{wxColour::GetPixel}\label{wxcolourgetpixel}
 
@@ -98,17 +101,20 @@ On X, an allocated pixel value is returned.
 
 -1 is returned if the pixel is invalid (on X, unallocated).
 
+
 \membersection{wxColour::Green}\label{wxcolourgreen}
 
 \constfunc{unsigned char}{Green}{\void}
 
 Returns the green intensity.
 
+
 \membersection{wxColour::Ok}\label{wxcolourok}
 
 \constfunc{bool}{Ok}{\void}
 
-Returns true if the colour object is valid (the colour has been initialised with RGB values).
+Returns \true if the colour object is valid (the colour has been initialised with RGB values).
+
 
 \membersection{wxColour::Red}\label{wxcolourred}
 
@@ -116,11 +122,13 @@ Returns true if the colour object is valid (the colour has been initialised with
 
 Returns the red intensity.
 
+
 \membersection{wxColour::Set}\label{wxcolourset}
 
 \func{void}{Set}{\param{const unsigned char}{ red}, \param{const unsigned char}{ green}, \param{const unsigned char}{ blue}}
 
 Sets the RGB intensity values.
+
 
 \membersection{wxColour::operator $=$}\label{wxcolourassign}
 
@@ -136,11 +144,13 @@ Assignment operator, using a colour name to be found in the colour database.
 
 \helpref{wxColourDatabase}{wxcolourdatabase}
 
+
 \membersection{wxColour::operator $==$}\label{wxcolourequality}
 
 \func{bool}{operator $==$}{\param{const wxColour\&}{ colour}}
 
 Tests the equality of two colours by comparing individual red, green blue colours.
+
 
 \membersection{wxColour::operator $!=$}\label{wxcolourinequality}
 
@@ -166,6 +176,7 @@ This class holds a variety of information related to colour dialogs.
 
 \latexignore{\rtfignore{\wxheading{Members}}}
 
+
 \membersection{wxColourData::wxColourData}\label{wxcolourdataconstr}
 
 \func{}{wxColourData}{\void}
@@ -173,11 +184,13 @@ This class holds a variety of information related to colour dialogs.
 Constructor. Initializes the custom colours to white, the {\it data colour} setting
 to black, and the {\it choose full} setting to true.
 
+
 \membersection{wxColourData::\destruct{wxColourData}}
 
 \func{}{\destruct{wxColourData}}{\void}
 
 Destructor.
+
 
 \membersection{wxColourData::GetChooseFull}\label{wxcolourdatagetchoosefull}
 
@@ -188,6 +201,7 @@ with custom colour selection controls. Has no meaning under other platforms.
 
 The default value is true.
 
+
 \membersection{wxColourData::GetColour}\label{wxcolourdatagetcolour}
 
 \constfunc{wxColour\&}{GetColour}{\void}
@@ -195,6 +209,7 @@ The default value is true.
 Gets the current colour associated with the colour dialog.
 
 The default colour is black.
+
 
 \membersection{wxColourData::GetCustomColour}\label{wxcolourdatagetcustomcolour}
 
@@ -205,6 +220,7 @@ be an integer between 0 and 15.
 
 The default custom colours are all white.
 
+
 \membersection{wxColourData::SetChooseFull}\label{wxcolourdatasetchoosefull}
 
 \func{void}{SetChooseFull}{\param{const bool }{flag}}
@@ -214,6 +230,7 @@ with custom colour selection controls. Under other platforms, has no effect.
 
 The default value is true.
 
+
 \membersection{wxColourData::SetColour}\label{wxcolourdatasetcolour}
 
 \func{void}{SetColour}{\param{const wxColour\&}{ colour}}
@@ -221,6 +238,7 @@ The default value is true.
 Sets the default colour for the colour dialog.
 
 The default colour is black.
+
 
 \membersection{wxColourData::SetCustomColour}\label{wxcolourdatasetcustomcolour}
 
@@ -231,18 +249,27 @@ be an integer between 0 and 15.
 
 The default custom colours are all white.
 
+
 \membersection{wxColourData::operator $=$}\label{wxcolourdataassign}
 
 \func{void}{operator $=$}{\param{const wxColourData\&}{ data}}
 
 Assignment operator for the colour data.
 
+
+
+
 \section{\class{wxColourDatabase}}\label{wxcolourdatabase}
 
 wxWindows maintains a database of standard RGB colours for a predefined
 set of named colours (such as ``BLACK'', ``LIGHT GREY''). The
-application may add to this set if desired by using {\it Append}.  There
-is only one instance of this class: {\bf wxTheColourDatabase}.
+application may add to this set if desired by using 
+\helpref{AddColour}{wxcolourdatabaseaddcolour} and may use it to look up
+colours by names using \helpref{Find}{wxcolourdatabasefind} or find the names
+for the standard colour suing \helpref{FindName}{wxcolourdatabasefindname}.
+
+There is one predefined instance of this class called 
+{\bf wxTheColourDatabase}.
 
 \wxheading{Derived from}
 
@@ -254,7 +281,7 @@ None
 
 \wxheading{Remarks}
 
-The colours in the standard database are as follows:
+The standard database contains at least the following colours:
 
 AQUAMARINE, BLACK, BLUE, BLUE VIOLET, BROWN, CADET BLUE, CORAL,
 CORNFLOWER BLUE, CYAN, DARK GREY, DARK GREEN, DARK OLIVE GREEN, DARK
@@ -275,36 +302,53 @@ YELLOW GREEN.
 
 \latexignore{\rtfignore{\wxheading{Members}}}
 
+
 \membersection{wxColourDatabase::wxColourDatabase}\label{wxcolourdatabaseconstr}
 
 \func{}{wxColourDatabase}{\void}
 
-Constructs the colour database.
+Constructs the colour database. It will be initialized at the first use.
+
 
 \membersection{wxColourDatabase::AddColour}\label{wxcolourdatabaseaddcolour}
+
+\func{void}{AddColour}{\param{const wxString\& }{colourName}, \param{const wxColour\&}{colour}}
 
 \func{void}{AddColour}{\param{const wxString\& }{colourName}, \param{wxColour* }{colour}}
 
 Adds a colour to the database. If a colour with the same name already exists,
 it is replaced.
 
+Please note that the overload taking a pointer is deprecated and will be
+removed in the next wxWindows version, please don't use it.
+
+
+\membersection{wxColourDatabase::Find}\label{wxcolourdatabasefind}
+
+\func{wxColour}{FindColour}{\param{const wxString\& }{colourName}}
+
+Finds a colour given the name. Returns an invalid colour object (that is, such
+that its \helpref{Ok()}{wxcolourok} method returns \false) if the colour wasn't
+found in the database.
+
+
 \membersection{wxColourDatabase::FindColour}\label{wxcolourdatabasefindcolour}
 
 \func{wxColour*}{FindColour}{\param{const wxString\& }{colourName}}
 
-Finds a colour given the name. Returns NULL if not found.
+Finds a colour given the name. Returns \NULL if not found or a pointer which
+must be deleted by the caller otherwise.
+
+Please note that this method is deprecated and will be removed in the next
+wxWindows version, please use \helpref{Find}{wxcolourdatabasefind} instead of
+it.
+
 
 \membersection{wxColourDatabase::FindName}\label{wxcolourdatabasefindname}
 
 \constfunc{wxString}{FindName}{\param{const wxColour\&}{ colour}}
 
-Finds a colour name given the colour. Returns NULL if not found.
-
-\membersection{wxColourDatabase::Initialize}\label{wxcolourdatabaseinitialize}
-
-\func{void}{Initialize}{\void}
-
-Initializes the database with a number of stock colours.  Called by wxWindows
-on start-up.
+Finds a colour name given the colour. Returns an empty string if the colour is
+not found in the database.
 
 
