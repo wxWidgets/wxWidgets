@@ -51,12 +51,6 @@
 
 #if wxUSE_GUI
 
-// ----------------------------------------------------------------------------
-// function prototypes
-// ----------------------------------------------------------------------------
-
-static wxChar **ConvertToStandardCommandArgs(const wxChar *p, int& argc);
-
 // ============================================================================
 // implementation: various entry points
 // ============================================================================
@@ -67,16 +61,36 @@ static wxChar **ConvertToStandardCommandArgs(const wxChar *p, int& argc);
 
 WXDLLEXPORT int wxEntry(HINSTANCE hInstance,
                         HINSTANCE WXUNUSED(hPrevInstance),
-                        char *pCmdLine,
+                        char * WXUNUSED(pCmdLine),
                         int nCmdShow)
 {
     // remember the parameters Windows gave us
     wxSetInstance(hInstance);
     wxApp::m_nCmdShow = nCmdShow;
 
-    // parse the command line
-    int argc;
-    wxChar **argv = ConvertToStandardCommandArgs(wxConvertMB2WX(pCmdLine), argc);
+    // parse the command line: we can't use pCmdLine in Unicode build so it is
+    // simpler to never use it at all (this also results in a more correct
+    // argv[0])
+
+    // break the command line in words
+    wxArrayString args;
+    const wxChar *cmdLine = ::GetCommandLine();
+    if ( cmdLine )
+    {
+        args = wxCmdLineParser::ConvertStringToArgs(cmdLine);
+    }
+
+    int argc = args.GetCount();
+
+    // +1 here for the terminating NULL
+    wxChar **argv = new wxChar *[argc + 1];
+    for ( int i = 0; i < argc; i++ )
+    {
+        argv[i] = wxStrdup(args[i]);
+    }
+
+    // argv[] must be NULL-terminated
+    argv[argc] = NULL;
 
     return wxEntry(argc, argv);
 }
@@ -129,42 +143,6 @@ DllMain(HANDLE hModule, DWORD fdwReason, LPVOID WXUNUSED(lpReserved))
 } // extern "C"
 
 #endif // !NOMAIN
-
-// ---------------------------------------------------------------------------
-// Convert Windows to argc, argv style
-// ---------------------------------------------------------------------------
-
-wxChar **ConvertToStandardCommandArgs(const wxChar *p, int& argc)
-{
-    // break the command line in words
-    wxArrayString args;
-    if ( p )
-    {
-        args = wxCmdLineParser::ConvertStringToArgs(p);
-    }
-
-    // +1 here for the program name
-    argc = args.GetCount() + 1;
-
-    // and +1 here for the terminating NULL
-    wxChar **argv = new wxChar *[argc + 1];
-
-    // as we use wxStrdup below we must allocate the first argument using
-    // malloc(), not new[], as well
-    argv[0] = (wxChar *)malloc(MAX_PATH * sizeof(wxChar));
-    ::GetModuleFileName(wxhInstance, argv[0], MAX_PATH);
-
-    // copy all the other arguments to wxApp::argv[]
-    for ( int i = 1; i < argc; i++ )
-    {
-        argv[i] = wxStrdup(args[i - 1]);
-    }
-
-    // argv[] must be NULL-terminated
-    argv[argc] = NULL;
-
-    return argv;
-}
 
 #endif // wxUSE_GUI
 
