@@ -6,20 +6,26 @@ from Main import opj
 #----------------------------------------------------------------------
 
 class TestPanel(wx.Panel):
-    def __init__(self, parent):
+    def __init__(self, parent, log):
         wx.Panel.__init__(self, parent, -1)
-
-        b = wx.Button(self, -1, "Play Sound 1", (25, 25))
+        self.log = log
+        
+        b = wx.Button(self, -1, "Play Sound 1 (sync)", (25, 25))
         self.Bind(wx.EVT_BUTTON, self.OnButton1, b)
 
-        b = wx.Button(self, -1, "Play Sound 2", (25, 65))
+        b = wx.Button(self, -1, "Play Sound 2 (async)", (25, 65))
         self.Bind(wx.EVT_BUTTON, self.OnButton2, b)
+
+        b = wx.Button(self, -1, "Select .WAV file", (25, 105))
+        self.Bind(wx.EVT_BUTTON, self.OnSelectSound, b)
 
 
     def OnButton1(self, evt):
         try:
             sound = wx.Sound(opj('data/anykey.wav'))
-            sound.Play()
+            self.log.write("before Play...\n")
+            sound.Play(wx.SOUND_SYNC)
+            self.log.write("...after Play\n")
         except NotImplementedError, v:
             wx.MessageBox(str(v), "Exception Message")
 
@@ -27,14 +33,32 @@ class TestPanel(wx.Panel):
     def OnButton2(self, evt):
         try:
             sound = wx.Sound(opj('data/plan.wav'))
-            sound.Play()
+            self.log.write("before Play...\n")
+            sound.Play(wx.SOUND_ASYNC)
+            wx.YieldIfNeeded()
+            self.log.write("...after Play\n")
         except NotImplementedError, v:
             wx.MessageBox(str(v), "Exception Message")
+
+
+    def OnSelectSound(self, evt):
+        dlg = wx.FileDialog(wx.GetTopLevelParent(self),
+                            "Choose a sound file",
+                            wildcard="WAV files (*.wav)|*.wav",
+                            style=wx.OPEN)
+        if dlg.ShowModal() == wx.ID_OK:
+            try:
+                sound = wx.Sound(dlg.GetPath())
+                sound.Play()
+            except NotImplementedError, v:
+                wx.MessageBox(str(v), "Exception Message")
+        dlg.Destroy()
+            
 
 #----------------------------------------------------------------------
 
 def runTest(frame, nb, log):
-    win = TestPanel(nb)
+    win = TestPanel(nb, log)
     return win
 
 #----------------------------------------------------------------------
