@@ -1234,10 +1234,8 @@ long wxWindow::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam)
     case WM_KEYDOWN:
         // If this has been processed by an event handler,
         // return 0 now (we've handled it).
-        if (MSWOnKeyDown((WORD) wParam, lParam))
-        {
-            return 0;
-        }
+        if ( MSWOnKeyDown((WORD) wParam, lParam) )
+            break;
 
         // we consider these message "not interesting" to OnChar
         if ( wParam == VK_SHIFT || wParam == VK_CONTROL )
@@ -1245,31 +1243,29 @@ long wxWindow::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam)
             return Default();
         }
 
-        // Avoid duplicate messages to OnChar for these special keys
         switch ( wParam )
         {
+            // avoid duplicate messages to OnChar for these ASCII keys: they
+            // will be translated by TranslateMessage() and received in WM_CHAR
             case VK_ESCAPE:
             case VK_SPACE:
             case VK_RETURN:
             case VK_BACK:
             case VK_TAB:
-            case VK_LEFT:
-            case VK_RIGHT:
-            case VK_DOWN:
-            case VK_UP:
                 return Default();
 
 #ifdef VK_APPS
+
+            // normally these macros would be defined in windows.h
+#ifndef GET_X_LPARAM
+    #define GET_X_LPARAM(lp) ((int)(short)LOWORD(lp))
+    #define GET_Y_LPARAM(lp) ((int)(short)HIWORD(lp))
+#endif
+
             // special case of VK_APPS: treat it the same as right mouse click
             // because both usually pop up a context menu
             case VK_APPS:
                 {
-
-#ifndef GET_X_LPARAM
-#define GET_X_LPARAM(lp)                        ((int)(short)LOWORD(lp))
-#define GET_Y_LPARAM(lp)                        ((int)(short)HIWORD(lp))
-#endif
-
                     // construct the key mask
                     WPARAM fwKeys = MK_RBUTTON;
                     if ( (::GetKeyState(VK_CONTROL) & 0x100) != 0 )
@@ -1288,27 +1284,29 @@ long wxWindow::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam)
                 break;
 #endif // VK_APPS
 
+            case VK_LEFT:
+            case VK_RIGHT:
+            case VK_DOWN:
+            case VK_UP:
             default:
-                if (!MSWOnChar((WORD)wParam, lParam))
+                if ( !MSWOnChar((WORD)wParam, lParam) )
                 {
                     return Default();
                 }
                 break;
         }
-
         break;
+
     case WM_KEYUP:
-    {
-        if (!MSWOnKeyUp((WORD) wParam, lParam))
+        if ( !MSWOnKeyUp((WORD) wParam, lParam) )
             return Default();
         break;
-    }
+
     case WM_CHAR: // Always an ASCII character
-        {
-            if (!MSWOnChar((WORD)wParam, lParam, TRUE))
-                return Default();
-            break;
-        }
+        if ( !MSWOnChar((WORD)wParam, lParam, TRUE) )
+            return Default();
+        break;
+
     case WM_HSCROLL:
         {
 #ifdef __WIN32__
@@ -2565,6 +2563,8 @@ void wxWindow::MSWOnMouseLeave(int x, int y, WXUINT flags)
     GetEventHandler()->ProcessEvent(event);
 }
 
+// isASCII is TRUE only when we're called from WM_CHAR handler and not from
+// WM_KEYDOWN one
 bool wxWindow::MSWOnChar(WXWORD wParam, WXLPARAM lParam, bool isASCII)
 {
     int id;
@@ -2636,7 +2636,7 @@ bool wxWindow::MSWOnChar(WXWORD wParam, WXLPARAM lParam, bool isASCII)
         return FALSE;
 }
 
-bool wxWindow::MSWOnKeyDown(WXWORD wParam, WXLPARAM lParam, bool isASCII)
+bool wxWindow::MSWOnKeyDown(WXWORD wParam, WXLPARAM lParam)
 {
     int id;
 
@@ -2677,7 +2677,7 @@ bool wxWindow::MSWOnKeyDown(WXWORD wParam, WXLPARAM lParam, bool isASCII)
     }
 }
 
-bool wxWindow::MSWOnKeyUp(WXWORD wParam, WXLPARAM lParam, bool isASCII)
+bool wxWindow::MSWOnKeyUp(WXWORD wParam, WXLPARAM lParam)
 {
     int id;
 
