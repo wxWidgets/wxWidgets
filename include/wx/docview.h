@@ -316,6 +316,20 @@ public:
     void OnUndo(wxCommandEvent& event);
     void OnRedo(wxCommandEvent& event);
 
+    // Handlers for UI update commands
+    void OnUpdateFileOpen(wxUpdateUIEvent& event);
+    void OnUpdateFileClose(wxUpdateUIEvent& event);
+    void OnUpdateFileRevert(wxUpdateUIEvent& event);
+    void OnUpdateFileNew(wxUpdateUIEvent& event);
+    void OnUpdateFileSave(wxUpdateUIEvent& event);
+    void OnUpdateFileSaveAs(wxUpdateUIEvent& event);
+    void OnUpdateUndo(wxUpdateUIEvent& event);
+    void OnUpdateRedo(wxUpdateUIEvent& event);
+
+    void OnUpdatePrint(wxUpdateUIEvent& event);
+    void OnUpdatePrintSetup(wxUpdateUIEvent& event);
+    void OnUpdatePreview(wxUpdateUIEvent& event);
+
     // Extend event processing to search the view's event table
     virtual bool ProcessEvent(wxEvent& event);
 
@@ -357,6 +371,9 @@ public:
     // Make a default document name
     virtual bool MakeDefaultName(wxString& buf);
 
+    // Make a frame title (override this to do something different)
+    virtual wxString MakeFrameTitle(wxDocument* doc);
+
     virtual wxFileHistory *OnCreateFileHistory();
     virtual wxFileHistory *GetFileHistory() const { return m_fileHistory; }
 
@@ -378,6 +395,9 @@ public:
     inline wxString GetLastDirectory() const { return m_lastDirectory; }
     inline void SetLastDirectory(const wxString& dir) { m_lastDirectory = dir; }
 
+    // Get the current document manager
+    static wxDocManager* GetDocumentManager() { return sm_docManager; }
+
 protected:
     long              m_flags;
     int               m_defaultDocumentNameCounter;
@@ -387,6 +407,7 @@ protected:
     wxView*           m_currentView;
     wxFileHistory*    m_fileHistory;
     wxString          m_lastDirectory;
+    static wxDocManager* sm_docManager;
 
     DECLARE_EVENT_TABLE()
 };

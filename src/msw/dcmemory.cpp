@@ -169,11 +169,13 @@ static void wxDrawRectangle(wxDC& dc, wxCoord x, wxCoord y, wxCoord width, wxCoo
 
 void wxMemoryDC::DoDrawRectangle(wxCoord x, wxCoord y, wxCoord width, wxCoord height)
 {
-// Set this to 0 to demonstrate strange rectangle behaviour in the Drawing sample.
+    // Set this to 1 to work around an apparent video driver bug
+    // (visible with e.g. 70x70 rectangle on a memory DC; see Drawing sample)
 #if 0
     if (m_brush.Ok() && m_pen.Ok() &&
         (m_brush.GetStyle() == wxSOLID || m_brush.GetStyle() == wxTRANSPARENT) &&
-        (m_pen.GetStyle() == wxSOLID || m_pen.GetStyle() == wxTRANSPARENT))
+        (m_pen.GetStyle() == wxSOLID || m_pen.GetStyle() == wxTRANSPARENT) &&
+        (GetLogicalFunction() == wxCOPY))
     {
         wxDrawRectangle(* this, x, y, width, height);
     }

@@ -2789,17 +2789,35 @@ wxImage wxImage::Rotate(double angle, const wxPoint & centre_of_rotation, bool i
             {
                 wxRealPoint src = rotated_point (x + x1, y + y1, cos_angle, -sin_angle, p0);
 
-                if (0 < src.x && src.x < GetWidth() - 1 &&
-                    0 < src.y && src.y < GetHeight() - 1)
+                if (-0.25 < src.x && src.x < GetWidth() - 0.75 &&
+                    -0.25 < src.y && src.y < GetHeight() - 0.75)
                 {
                     // interpolate using the 4 enclosing grid-points.  Those
                     // points can be obtained using floor and ceiling of the
                     // exact coordinates of the point
+                        // C.M. 2000-02-17:  when the point is near the border, special care is required.
 
-                    const int x1 = wxCint(floor(src.x));
-                    const int y1 = wxCint(floor(src.y));
-                    const int x2 = wxCint(ceil(src.x));
-                    const int y2 = wxCint(ceil(src.y));
+                    int x1, y1, x2, y2;
+
+                    if (0 < src.x && src.x < GetWidth() - 1)
+                    {
+                        x1 = wxCint(floor(src.x));
+                        x2 = wxCint(ceil(src.x));
+                    }
+                    else    // else means that x is near one of the borders (0 or width-1)
+                    {
+                        x1 = x2 = wxCint (src.x);
+                    }
+
+                    if (0 < src.y && src.y < GetHeight() - 1)
+                    {
+                        y1 = wxCint(floor(src.y));
+                        y2 = wxCint(ceil(src.y));
+                    }
+                    else
+                    {
+                        y1 = y2 = wxCint (src.y);
+                    }
 
                     // get four points and the distances (square of the distance,
                     // for efficiency reasons) for the interpolation formula

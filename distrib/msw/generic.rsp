@@ -255,6 +255,9 @@ utils/wxMMedia2/sample/makefile*
 utils/wxMMedia2/sample/*.xbm
 utils/wxMMedia2/sample/*.xpm
 utils/wxMMedia2/sample/*.txt
+utils/wxMMedia2/board/*.cpp
+utils/wxMMedia2/board/*.def
+utils/wxMMedia2/board/make*
 
 samples/*.txt
 samples/makefile*

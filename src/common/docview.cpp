@@ -562,10 +562,11 @@ void wxView::OnChangeFilename()
 {
     if (GetFrame() && GetDocument())
     {
-        wxString name;
-        GetDocument()->GetPrintableName(name);
+        wxString title;
 
-        GetFrame()->SetTitle(name);
+        GetDocument()->GetPrintableName(title);
+
+        GetFrame()->SetTitle(title);
     }
 }
 
@@ -696,12 +697,28 @@ BEGIN_EVENT_TABLE(wxDocManager, wxEvtHandler)
     EVT_MENU(wxID_SAVEAS, wxDocManager::OnFileSaveAs)
     EVT_MENU(wxID_UNDO, wxDocManager::OnUndo)
     EVT_MENU(wxID_REDO, wxDocManager::OnRedo)
+
+    EVT_UPDATE_UI(wxID_OPEN, wxDocManager::OnUpdateFileOpen)
+    EVT_UPDATE_UI(wxID_CLOSE, wxDocManager::OnUpdateFileClose)
+    EVT_UPDATE_UI(wxID_REVERT, wxDocManager::OnUpdateFileRevert)
+    EVT_UPDATE_UI(wxID_NEW, wxDocManager::OnUpdateFileNew)
+    EVT_UPDATE_UI(wxID_SAVE, wxDocManager::OnUpdateFileSave)
+    EVT_UPDATE_UI(wxID_SAVEAS, wxDocManager::OnUpdateFileSaveAs)
+    EVT_UPDATE_UI(wxID_UNDO, wxDocManager::OnUpdateUndo)
+    EVT_UPDATE_UI(wxID_REDO, wxDocManager::OnUpdateRedo)
+
 #if wxUSE_PRINTING_ARCHITECTURE
     EVT_MENU(wxID_PRINT, wxDocManager::OnPrint)
     EVT_MENU(wxID_PRINT_SETUP, wxDocManager::OnPrintSetup)
     EVT_MENU(wxID_PREVIEW, wxDocManager::OnPreview)
+
+    EVT_UPDATE_UI(wxID_PRINT, wxDocManager::OnUpdatePrint)
+    EVT_UPDATE_UI(wxID_PRINT_SETUP, wxDocManager::OnUpdatePrintSetup)
+    EVT_UPDATE_UI(wxID_PREVIEW, wxDocManager::OnUpdatePreview)
 #endif
 END_EVENT_TABLE()
+
+wxDocManager* wxDocManager::sm_docManager = (wxDocManager*) NULL;
 
 wxDocManager::wxDocManager(long flags, bool initialize)
 {
@@ -712,6 +729,7 @@ wxDocManager::wxDocManager(long flags, bool initialize)
     m_fileHistory = (wxFileHistory *) NULL;
     if (initialize)
         Initialize();
+    sm_docManager = this;
 }
 
 wxDocManager::~wxDocManager()
@@ -719,6 +737,7 @@ wxDocManager::~wxDocManager()
     Clear();
     if (m_fileHistory)
         delete m_fileHistory;
+    sm_docManager = (wxDocManager*) NULL;
 }
 
 bool wxDocManager::Clear(bool force)
@@ -887,6 +906,71 @@ void wxDocManager::OnRedo(wxCommandEvent& WXUNUSED(event))
         return;
     if (doc->GetCommandProcessor())
         doc->GetCommandProcessor()->Redo();
+}
+
+// Handlers for UI update commands
+
+void wxDocManager::OnUpdateFileOpen(wxUpdateUIEvent& event)
+{
+    event.Enable( TRUE );
+}
+
+void wxDocManager::OnUpdateFileClose(wxUpdateUIEvent& event)
+{
+    wxDocument *doc = GetCurrentDocument();
+    event.Enable( (doc != (wxDocument*) NULL) );
+}
+
+void wxDocManager::OnUpdateFileRevert(wxUpdateUIEvent& event)
+{
+    wxDocument *doc = GetCurrentDocument();
+    event.Enable( (doc != (wxDocument*) NULL) );
+}
+
+void wxDocManager::OnUpdateFileNew(wxUpdateUIEvent& event)
+{
+    event.Enable( TRUE );
+}
+
+void wxDocManager::OnUpdateFileSave(wxUpdateUIEvent& event)
+{
+    wxDocument *doc = GetCurrentDocument();
+    event.Enable( (doc != (wxDocument*) NULL) );
+}
+
+void wxDocManager::OnUpdateFileSaveAs(wxUpdateUIEvent& event)
+{
+    wxDocument *doc = GetCurrentDocument();
+    event.Enable( (doc != (wxDocument*) NULL) );
+}
+
+void wxDocManager::OnUpdateUndo(wxUpdateUIEvent& event)
+{
+    wxDocument *doc = GetCurrentDocument();
+    event.Enable( (doc && doc->GetCommandProcessor() && doc->GetCommandProcessor()->CanUndo()) );
+}
+
+void wxDocManager::OnUpdateRedo(wxUpdateUIEvent& event)
+{
+    wxDocument *doc = GetCurrentDocument();
+    event.Enable( (doc && doc->GetCommandProcessor() && doc->GetCommandProcessor()->CanRedo()) );
+}
+
+void wxDocManager::OnUpdatePrint(wxUpdateUIEvent& event)
+{
+    wxDocument *doc = GetCurrentDocument();
+    event.Enable( (doc != (wxDocument*) NULL) );
+}
+
+void wxDocManager::OnUpdatePrintSetup(wxUpdateUIEvent& event)
+{
+    event.Enable( TRUE );
+}
+
+void wxDocManager::OnUpdatePreview(wxUpdateUIEvent& event)
+{
+    wxDocument *doc = GetCurrentDocument();
+    event.Enable( (doc != (wxDocument*) NULL) );
 }
 
 wxView *wxDocManager::GetCurrentView() const
@@ -1092,6 +1176,24 @@ bool wxDocManager::MakeDefaultName(wxString& name)
 
     return TRUE;
 }
+
+// Make a frame title (override this to do something different)
+// If docName is empty, a document is not currently active.
+wxString wxDocManager::MakeFrameTitle(wxDocument* doc)
+{
+    wxString appName = wxTheApp->GetAppName();
+    wxString title;
+    if (!doc)
+        title = appName;
+    else
+    {
+        wxString docName;
+        doc->GetPrintableName(docName);
+        title = docName + wxString(_(" - ")) + appName;
+    }
+    return title;
+}
+
 
 // Not yet implemented
 wxDocTemplate *wxDocManager::MatchTemplate(const wxString& WXUNUSED(path))
