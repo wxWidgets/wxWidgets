@@ -435,6 +435,7 @@ private:
     wxArrayString   m_choices;
     bool            m_allowOthers;
 };
+
 // ----------------------------------------------------------------------------
 // wxGridCellAttr: this class can be used to alter the cells appearance in
 // the grid by changing their colour/font/... from default. An object of this
@@ -464,7 +465,10 @@ public:
         SetAlignment(hAlign, vAlign);
     }
 
-    // default copy ctor ok
+    // creates a new copy of this object: warning, this is destructive copy
+    // (this is why it's non const), the renderer and editor are "given to"
+    // the new object
+    wxGridCellAttr *Clone();
 
     // this class is ref counted: it is created with ref count of 1, so
     // calling DecRef() once will delete it. Calling IncRef() allows to lock
@@ -539,6 +543,9 @@ private:
     wxGridCellAttr*     m_defGridAttr;
 
     bool m_isReadOnly;
+
+    // use Clone() instead
+    DECLARE_NO_COPY_CLASS(wxGridCellAttr);
 
     // suppress the stupid gcc warning about the class having private dtor and
     // no friends

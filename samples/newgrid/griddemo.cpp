@@ -698,10 +698,50 @@ void MyGridCellRenderer::Draw(wxGrid& grid,
     dc.DrawEllipse(rect);
 }
 
+// ----------------------------------------------------------------------------
+// MyGridCellAttrProvider
+// ----------------------------------------------------------------------------
 
-// ----------------------------------------------------------------------------
+MyGridCellAttrProvider::MyGridCellAttrProvider()
+{
+    m_attrForOddRows = new wxGridCellAttr;
+    m_attrForOddRows->SetBackgroundColour(*wxLIGHT_GREY);
+}
+
+MyGridCellAttrProvider::~MyGridCellAttrProvider()
+{
+    m_attrForOddRows->DecRef();
+}
+
+wxGridCellAttr *MyGridCellAttrProvider::GetAttr(int row, int col) const
+{
+    wxGridCellAttr *attr = wxGridCellAttrProvider::GetAttr(row, col);
+
+    if ( row % 2 )
+    {
+        if ( !attr )
+        {
+            attr = m_attrForOddRows;
+            attr->IncRef();
+        }
+        else
+        {
+            if ( !attr->HasBackgroundColour() )
+            {
+                wxGridCellAttr *attrNew = attr->Clone();
+                attr->DecRef();
+                attr = attrNew;
+                attr->SetBackgroundColour(*wxLIGHT_GREY);
+            }
+        }
+    }
+
+    return attr;
+}
+
+// ============================================================================
 // BigGridFrame and BigGridTable:  Sample of a non-standard table
-// ----------------------------------------------------------------------------
+// ============================================================================
 
 BigGridFrame::BigGridFrame(long sizeGrid)
             : wxFrame(NULL, -1, "Plugin Virtual Table",
@@ -709,6 +749,11 @@ BigGridFrame::BigGridFrame(long sizeGrid)
 {
     m_grid = new wxGrid(this, -1, wxDefaultPosition, wxDefaultSize);
     m_table = new BigGridTable(sizeGrid);
+
+    // VZ: I don't understand why this slows down the display that much,
+    //     must profile it...
+    //m_table->SetAttrProvider(new MyGridCellAttrProvider);
+
     m_grid->SetTable(m_table, TRUE);
 
 #if defined __WXMOTIF__
@@ -719,8 +764,12 @@ BigGridFrame::BigGridFrame(long sizeGrid)
 #endif
 }
 
-// ----------------------------------------------------------------------------
+// ============================================================================
 // BugsGridFrame: a "realistic" table
+// ============================================================================
+
+// ----------------------------------------------------------------------------
+// bugs table data
 // ----------------------------------------------------------------------------
 
 enum Columns
@@ -788,6 +837,10 @@ static const wxChar *headers[Col_Max] =
     _T("Platform"),
     _T("Opened?"),
 };
+
+// ----------------------------------------------------------------------------
+// BugsGridTable
+// ----------------------------------------------------------------------------
 
 wxString BugsGridTable::GetTypeName(int WXUNUSED(row), int col)
 {
@@ -992,12 +1045,17 @@ BugsGridTable::BugsGridTable()
 {
 }
 
+// ----------------------------------------------------------------------------
+// BugsGridFrame
+// ----------------------------------------------------------------------------
+
 BugsGridFrame::BugsGridFrame()
              : wxFrame(NULL, -1, "Bugs table",
                        wxDefaultPosition, wxSize(500, 300))
 {
     wxGrid *grid = new wxGrid(this, -1, wxDefaultPosition);
     wxGridTableBase *table = new BugsGridTable();
+    table->SetAttrProvider(new MyGridCellAttrProvider);
     grid->SetTable(table, TRUE);
 
     wxGridCellAttr *attrRO = new wxGridCellAttr,

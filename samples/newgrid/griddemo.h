@@ -159,6 +159,22 @@ private:
 };
 
 // ----------------------------------------------------------------------------
+// an example of custom attr provider: this one makes all odd rows appear grey
+// ----------------------------------------------------------------------------
+
+class MyGridCellAttrProvider : public wxGridCellAttrProvider
+{
+public:
+    MyGridCellAttrProvider();
+    virtual ~MyGridCellAttrProvider();
+
+    virtual wxGridCellAttr *GetAttr(int row, int col) const;
+
+private:
+    wxGridCellAttr *m_attrForOddRows;
+};
+
+// ----------------------------------------------------------------------------
 // another, more realistic, grid example: shows typed columns and more
 // ----------------------------------------------------------------------------
 

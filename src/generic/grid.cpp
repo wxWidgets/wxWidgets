@@ -1354,6 +1354,37 @@ void wxGridCellBoolRenderer::Draw(wxGrid& grid,
 // wxGridCellAttr
 // ----------------------------------------------------------------------------
 
+wxGridCellAttr *wxGridCellAttr::Clone()
+{
+    wxGridCellAttr *attr = new wxGridCellAttr;
+    if ( HasTextColour() )
+        attr->SetTextColour(GetTextColour());
+    if ( HasBackgroundColour() )
+        attr->SetBackgroundColour(GetBackgroundColour());
+    if ( HasFont() )
+        attr->SetFont(GetFont());
+    if ( HasAlignment() )
+        attr->SetAlignment(m_hAlign, m_vAlign);
+
+    if ( m_renderer )
+    {
+        attr->SetRenderer(m_renderer);
+        m_renderer = NULL;
+    }
+    if ( m_editor )
+    {
+        attr->SetEditor(m_editor);
+        m_editor = NULL;
+    }
+
+    if ( IsReadOnly() )
+        attr->SetReadOnly();
+
+    attr->SetDefAttr(m_defGridAttr);
+
+    return attr;
+}
+
 const wxColour& wxGridCellAttr::GetTextColour() const
 {
     if (HasTextColour())
