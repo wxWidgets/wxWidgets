@@ -415,10 +415,10 @@ bool wxHtmlHelpFrame::Create(wxWindow* parent, wxWindowID id,
             wxBitmapButton *bmpbt1, *bmpbt2;
             bmpbt1 = new wxBitmapButton(dummy, wxID_HTML_BOOKMARKSADD,
                                  wxArtProvider::GetBitmap(wxART_ADD_BOOKMARK,
-                                                          wxART_HELP_BROWSER));
+                                                          wxART_BUTTON));
             bmpbt2 = new wxBitmapButton(dummy, wxID_HTML_BOOKMARKSREMOVE,
                                  wxArtProvider::GetBitmap(wxART_DEL_BOOKMARK,
-                                                          wxART_HELP_BROWSER));
+                                                          wxART_BUTTON));
 #if wxUSE_TOOLTIPS
             bmpbt1->SetToolTip(_("Add current page to bookmarks"));
             bmpbt2->SetToolTip(_("Remove current page from bookmarks"));
@@ -587,23 +587,23 @@ wxHtmlHelpFrame::~wxHtmlHelpFrame()
 void wxHtmlHelpFrame::AddToolbarButtons(wxToolBar *toolBar, int style)
 {
     wxBitmap wpanelBitmap =
-        wxArtProvider::GetBitmap(wxART_HELP_SIDE_PANEL, wxART_HELP_BROWSER);
+        wxArtProvider::GetBitmap(wxART_HELP_SIDE_PANEL, wxART_TOOLBAR);
     wxBitmap wbackBitmap =
-        wxArtProvider::GetBitmap(wxART_GO_BACK, wxART_HELP_BROWSER);
+        wxArtProvider::GetBitmap(wxART_GO_BACK, wxART_TOOLBAR);
     wxBitmap wforwardBitmap =
-        wxArtProvider::GetBitmap(wxART_GO_FORWARD, wxART_HELP_BROWSER);
+        wxArtProvider::GetBitmap(wxART_GO_FORWARD, wxART_TOOLBAR);
     wxBitmap wupnodeBitmap =
-        wxArtProvider::GetBitmap(wxART_GO_TO_PARENT, wxART_HELP_BROWSER);
+        wxArtProvider::GetBitmap(wxART_GO_TO_PARENT, wxART_TOOLBAR);
     wxBitmap wupBitmap =
-        wxArtProvider::GetBitmap(wxART_GO_UP, wxART_HELP_BROWSER);
+        wxArtProvider::GetBitmap(wxART_GO_UP, wxART_TOOLBAR);
     wxBitmap wdownBitmap =
-        wxArtProvider::GetBitmap(wxART_GO_DOWN, wxART_HELP_BROWSER);
+        wxArtProvider::GetBitmap(wxART_GO_DOWN, wxART_TOOLBAR);
     wxBitmap wopenBitmap =
-        wxArtProvider::GetBitmap(wxART_FILE_OPEN, wxART_HELP_BROWSER);
+        wxArtProvider::GetBitmap(wxART_FILE_OPEN, wxART_TOOLBAR);
     wxBitmap wprintBitmap =
-        wxArtProvider::GetBitmap(wxART_PRINT, wxART_HELP_BROWSER);
+        wxArtProvider::GetBitmap(wxART_PRINT, wxART_TOOLBAR);
     wxBitmap woptionsBitmap =
-        wxArtProvider::GetBitmap(wxART_HELP_SETTINGS, wxART_HELP_BROWSER);
+        wxArtProvider::GetBitmap(wxART_HELP_SETTINGS, wxART_TOOLBAR);
 
     wxASSERT_MSG( (wpanelBitmap.Ok() && wbackBitmap.Ok() &&
                    wforwardBitmap.Ok() && wupnodeBitmap.Ok() &&
