@@ -454,8 +454,8 @@ void wxLogGui::DoLog(wxLogLevel level, const char *szString)
           OutputDebugString("\n\r");
         #else   //!WIN32
           // send them to stderr
-          printf(stderr, level == Trace ? "Trace: %s\n" 
-                                        : "Debug: %s\n", szString);
+          fprintf(stderr, level == wxLOG_Trace ? "Trace: %s\n" 
+                                               : "Debug: %s\n", szString);
           fflush(stderr);
         #endif  // WIN32
       #endif
