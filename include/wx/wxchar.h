@@ -63,8 +63,7 @@
         #define wxHAVE_TCHAR_FUNCTIONS
     #elif defined(__BORLANDC__) && (__BORLANDC__ >= 0x520)
         #define wxHAVE_TCHAR_FUNCTIONS
-    // w32api isn't yet tchar safe, will be soon, this is a placeholder
-    #elif defined(__GNUWIN32__) && wxCHECK_W32API_VERSION( 10, 0 )
+    #elif defined(__GNUWIN32__) && wxCHECK_W32API_VERSION( 1, 0 )
         #define wxHAVE_TCHAR_FUNCTIONS
         #include <stddef.h>
         #include <string.h>
