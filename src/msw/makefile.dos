@@ -139,7 +139,7 @@ MSWOBJS = \
   $(MSWDIR)\font.obj \
   $(MSWDIR)\fontdlg.obj \
   $(MSWDIR)\frame.obj \
-  $(MSWDIR)\gauge.obj \
+  $(MSWDIR)\gaugemsw.obj \
   $(MSWDIR)\gdiobj.obj \
   $(MSWDIR)\helpwin.obj \
   $(MSWDIR)\icon.obj \
@@ -166,12 +166,11 @@ MSWOBJS = \
   $(MSWDIR)\region.obj \
   $(MSWDIR)\scrolbar.obj \
   $(MSWDIR)\settings.obj \
-  $(MSWDIR)\slider.obj \
+  $(MSWDIR)\slidrmsw.obj \
   $(MSWDIR)\spinbutt.obj \
   $(MSWDIR)\statbmp.obj \
   $(MSWDIR)\statbox.obj \
   $(MSWDIR)\stattext.obj \
-  $(MSWDIR)\tbar95.obj \
   $(MSWDIR)\tbarmsw.obj \
   $(MSWDIR)\textctrl.obj \
   $(MSWDIR)\timer.obj \
@@ -394,7 +393,7 @@ $(MSWDIR)/frame.obj:     $*.$(SRCSUFF)
 $(CPPFLAGS) /Fo$@ /c /Tp $*.$(SRCSUFF)
 <<
 
-$(MSWDIR)/gauge.obj:     $*.$(SRCSUFF)
+$(MSWDIR)/gaugemsw.obj:     $*.$(SRCSUFF)
         cl @<<
 $(CPPFLAGS) /Fo$@ /c /Tp $*.$(SRCSUFF)
 <<
@@ -534,7 +533,7 @@ $(MSWDIR)/settings.obj:     $*.$(SRCSUFF)
 $(CPPFLAGS) /Fo$@ /c /Tp $*.$(SRCSUFF)
 <<
 
-$(MSWDIR)/slider.obj:     $*.$(SRCSUFF)
+$(MSWDIR)/slidrmsw.obj:     $*.$(SRCSUFF)
         cl @<<
 $(CPPFLAGS) /Fo$@ /c /Tp $*.$(SRCSUFF)
 <<
@@ -555,11 +554,6 @@ $(CPPFLAGS) /Fo$@ /c /Tp $*.$(SRCSUFF)
 <<
 
 $(MSWDIR)/stattext.obj:     $*.$(SRCSUFF)
-        cl @<<
-$(CPPFLAGS) /Fo$@ /c /Tp $*.$(SRCSUFF)
-<<
-
-$(MSWDIR)/tbar95.obj:     $*.$(SRCSUFF)
         cl @<<
 $(CPPFLAGS) /Fo$@ /c /Tp $*.$(SRCSUFF)
 <<

@@ -228,6 +228,12 @@ int wxTabCtrl::GetSelection() const
     return (int) TabCtrl_GetCurSel( (HWND) GetHWND() );
 }
 
+// Get the tab with the current keyboard focus
+int wxTabCtrl::GetCurFocus() const
+{
+    return (int) TabCtrl_GetCurFocus( (HWND) GetHWND() );
+}
+
 // Get the associated image list
 wxImageList* wxTabCtrl::GetImageList() const
 {

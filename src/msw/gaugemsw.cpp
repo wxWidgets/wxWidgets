@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        gauge.cpp
-// Purpose:     wxGauge class
+// Name:        gaugemsw.cpp
+// Purpose:     wxGaugeMSW class
 // Author:      Julian Smart
 // Modified by:
 // Created:     01/02/97
@@ -26,7 +26,7 @@
 
 #if USE_GAUGE 
 
-#include "wx/gauge.h"
+#include "wx/msw/gaugemsw.h"
 #include "wx/msw/private.h"
 
 /* gas gauge graph control messages--class "zYzGauge" */
@@ -53,24 +53,17 @@
 #define ZYZG_ORIENT_BOTTOMTOTOP     2
 #define ZYZG_ORIENT_TOPTOBOTTOM     3
 
-
 /* gauge styles */
 #define ZYZGS_3D        0x8000L     /* control will be 3D       */
 
 /* public function prototypes */
 BOOL FAR PASCAL gaugeInit(HINSTANCE hInstance);
 
-#define USE_PROGRESS_BAR 1
-
-#if defined(__WIN95__) && !defined(__GNUWIN32__)
-#include <commctrl.h>
-#endif
-
 #if !USE_SHARED_LIBRARY
-IMPLEMENT_DYNAMIC_CLASS(wxGauge, wxControl)
+IMPLEMENT_DYNAMIC_CLASS(wxGaugeMSW, wxControl)
 #endif
 
-bool wxGauge::Create(wxWindow *parent, const wxWindowID id,
+bool wxGaugeMSW::Create(wxWindow *parent, const wxWindowID id,
            const int range,
            const wxPoint& pos,
            const wxSize& size,
@@ -78,13 +71,13 @@ bool wxGauge::Create(wxWindow *parent, const wxWindowID id,
            const wxValidator& validator,
            const wxString& name)
 {
-  static bool wxGaugeInitialised = FALSE;
+  static bool wxGaugeMSWInitialised = FALSE;
 
-  if ( !wxGaugeInitialised )
+  if ( !wxGaugeMSWInitialised )
   {
     if (!gaugeInit((HWND) wxGetInstance()))
     	wxFatalError("Cannot initalize Gauge library");
-	wxGaugeInitialised = TRUE;
+	wxGaugeMSWInitialised = TRUE;
   }
 
   SetName(name);
@@ -96,7 +89,6 @@ bool wxGauge::Create(wxWindow *parent, const wxWindowID id,
   SetBackgroundColour(parent->GetDefaultBackgroundColour()) ;
   SetForegroundColour(parent->GetDefaultForegroundColour()) ;
 
-  m_useProgressBar = FALSE;
   m_windowStyle = style;
 
   if ( id == -1 )
@@ -109,60 +101,31 @@ bool wxGauge::Create(wxWindow *parent, const wxWindowID id,
   int width = size.x;
   int height = size.y;
 
-  // Use the Win95 progress bar if possible, but not if
-  // we request a vertical gauge.
-#if defined(__WIN95__) && USE_PROGRESS_BAR
-  if ((m_windowStyle & wxGA_PROGRESSBAR) && ((m_windowStyle & wxGA_HORIZONTAL) == wxGA_HORIZONTAL))
-	m_useProgressBar = TRUE;
-#endif
+  long msFlags = WS_CHILD | WS_VISIBLE | WS_TABSTOP;
+  msFlags |= ZYZGS_3D;
 
-  if (m_useProgressBar)
-  {
-#if defined(__WIN95__) && USE_PROGRESS_BAR
-    long msFlags = WS_CHILD | WS_VISIBLE | WS_TABSTOP;
-
-    HWND wx_button =
-      CreateWindowEx(MakeExtendedStyle(m_windowStyle), PROGRESS_CLASS, NULL, msFlags,
-                    0, 0, 0, 0, (HWND) parent->GetHWND(), (HMENU)m_windowId,
-                    wxGetInstance(), NULL);
-
-    m_hWnd = (WXHWND)wx_button;
-
-    // Subclass again for purposes of dialog editing mode
-    SubclassWin((WXHWND) wx_button);
-
-    SendMessage((HWND) GetHWND(), PBM_SETRANGE, 0, MAKELPARAM(0, range));
-#endif
-  }
-  else
-  {
-    long msFlags = WS_CHILD | WS_VISIBLE | WS_TABSTOP;
-/*  if (m_windowStyle & wxTHREED) */
-    msFlags |= ZYZGS_3D;
-
-    HWND wx_button =
+  HWND wx_button =
       CreateWindowEx(MakeExtendedStyle(m_windowStyle), "zYzGauge", NULL, msFlags,
                     0, 0, 0, 0, (HWND) parent->GetHWND(), (HMENU)m_windowId,
                     wxGetInstance(), NULL);
 
-    m_hWnd = (WXHWND)wx_button;
+  m_hWnd = (WXHWND)wx_button;
 
-    // Subclass again for purposes of dialog editing mode
-    SubclassWin((WXHWND)wx_button);
+  // Subclass again for purposes of dialog editing mode
+  SubclassWin((WXHWND)wx_button);
 
-    int wOrient = 0;
+  int wOrient = 0;
 
-    if (m_windowStyle & wxGA_HORIZONTAL)
-      wOrient = ZYZG_ORIENT_LEFTTORIGHT;
-    else
-      wOrient = ZYZG_ORIENT_BOTTOMTOTOP;
+  if (m_windowStyle & wxGA_HORIZONTAL)
+    wOrient = ZYZG_ORIENT_LEFTTORIGHT;
+  else
+    wOrient = ZYZG_ORIENT_BOTTOMTOTOP;
   
-    SendMessage(wx_button, ZYZG_SETORIENTATION, wOrient, 0);
-    SendMessage(wx_button, ZYZG_SETRANGE, range, 0);
+  SendMessage(wx_button, ZYZG_SETORIENTATION, wOrient, 0);
+  SendMessage(wx_button, ZYZG_SETRANGE, range, 0);
 
-    SendMessage((HWND) GetHWND(), ZYZG_SETFGCOLOR, 0, RGB(GetForegroundColour().Red(), GetForegroundColour().Green(), GetForegroundColour().Blue()));
-    SendMessage((HWND) GetHWND(), ZYZG_SETBKCOLOR, 0, RGB(GetBackgroundColour().Red(), GetBackgroundColour().Green(), GetBackgroundColour().Blue()));
-  }
+  SendMessage((HWND) GetHWND(), ZYZG_SETFGCOLOR, 0, RGB(GetForegroundColour().Red(), GetForegroundColour().Green(), GetForegroundColour().Blue()));
+  SendMessage((HWND) GetHWND(), ZYZG_SETBKCOLOR, 0, RGB(GetBackgroundColour().Red(), GetBackgroundColour().Green(), GetBackgroundColour().Blue()));
 
   SetFont(* parent->GetFont());
 
@@ -177,7 +140,7 @@ bool wxGauge::Create(wxWindow *parent, const wxWindowID id,
   return TRUE;
 }
 
-void wxGauge::SetSize(const int x, const int y, const int width, const int height, const int sizeFlags)
+void wxGaugeMSW::SetSize(const int x, const int y, const int width, const int height, const int sizeFlags)
 {
   int currentX, currentY;
   GetPosition(&currentX, &currentY);
@@ -215,98 +178,60 @@ void wxGauge::SetSize(const int x, const int y, const int width, const int heigh
 #endif
 }
 
-void wxGauge::SetShadowWidth(const int w)
+void wxGaugeMSW::SetShadowWidth(const int w)
 {
-  if (m_useProgressBar)
-  {
-  }
-  else
-    SendMessage((HWND) GetHWND(), ZYZG_SETWIDTH3D, w, 0);
+  SendMessage((HWND) GetHWND(), ZYZG_SETWIDTH3D, w, 0);
 }
 
-void wxGauge::SetBezelFace(const int w)
+void wxGaugeMSW::SetBezelFace(const int w)
 {
-  if (m_useProgressBar)
-  {
-  }
-  else
-    SendMessage((HWND) GetHWND(), ZYZG_SETBEZELFACE, w, 0);
+  SendMessage((HWND) GetHWND(), ZYZG_SETBEZELFACE, w, 0);
 }
 
-void wxGauge::SetRange(const int r)
+void wxGaugeMSW::SetRange(const int r)
 {
   m_rangeMax = r;
 
-#if defined(__WIN95__) && USE_PROGRESS_BAR
-  if (m_useProgressBar)
-    SendMessage((HWND) GetHWND(), PBM_SETRANGE, 0, MAKELPARAM(0, r));
-  else
-#endif
-    SendMessage((HWND) GetHWND(), ZYZG_SETRANGE, r, 0);
+  SendMessage((HWND) GetHWND(), ZYZG_SETRANGE, r, 0);
 }
 
-void wxGauge::SetValue(const int pos)
+void wxGaugeMSW::SetValue(const int pos)
 {
   m_gaugePos = pos;
 
-#if defined(__WIN95__) && USE_PROGRESS_BAR
-  if (m_useProgressBar)
-    SendMessage((HWND) GetHWND(), PBM_SETPOS, pos, 0);
-  else
-#endif
-    SendMessage((HWND) GetHWND(), ZYZG_SETPOSITION, pos, 0);
+  SendMessage((HWND) GetHWND(), ZYZG_SETPOSITION, pos, 0);
 }
 
-int wxGauge::GetShadowWidth(void) const
+int wxGaugeMSW::GetShadowWidth(void) const
 {
-  if (m_useProgressBar)
-    return 0;
-  else
-    return (int) SendMessage((HWND) GetHWND(), ZYZG_GETWIDTH3D, 0, 0);
+  return (int) SendMessage((HWND) GetHWND(), ZYZG_GETWIDTH3D, 0, 0);
 }
 
-int wxGauge::GetBezelFace(void) const
+int wxGaugeMSW::GetBezelFace(void) const
 {
-  if (m_useProgressBar)
-    return 0;
-  else
-    return (int) SendMessage((HWND) GetHWND(), ZYZG_GETBEZELFACE, 0, 0);
+  return (int) SendMessage((HWND) GetHWND(), ZYZG_GETBEZELFACE, 0, 0);
 }
 
-int wxGauge::GetRange(void) const
+int wxGaugeMSW::GetRange(void) const
 {
-  if (m_useProgressBar)
-    return m_rangeMax;
-  else
-    return (int) SendMessage((HWND) GetHWND(), ZYZG_GETRANGE, 0, 0);
+  return (int) SendMessage((HWND) GetHWND(), ZYZG_GETRANGE, 0, 0);
 }
 
-int wxGauge::GetValue(void) const
+int wxGaugeMSW::GetValue(void) const
 {
-  if (m_useProgressBar)
-    return m_gaugePos;
-  else
-    return (int) SendMessage((HWND) GetHWND(), ZYZG_GETPOSITION, 0, 0);
+  return (int) SendMessage((HWND) GetHWND(), ZYZG_GETPOSITION, 0, 0);
 }
 
-void wxGauge::SetForegroundColour(const wxColour& col)
+void wxGaugeMSW::SetForegroundColour(const wxColour& col)
 {
-	m_foregroundColour = col ;
-  if (m_useProgressBar)
-  {
-  }
-  else
-    SendMessage((HWND) GetHWND(), ZYZG_SETFGCOLOR, 0, RGB(col.Red(), col.Green(), col.Blue()));
+  m_foregroundColour = col ;
+  SendMessage((HWND) GetHWND(), ZYZG_SETFGCOLOR, 0, RGB(col.Red(), col.Green(), col.Blue()));
 }
 
-void wxGauge::SetBackgroundColour(const wxColour& col)
+void wxGaugeMSW::SetBackgroundColour(const wxColour& col)
 {
-	m_backgroundColour = col ;
-  if (m_useProgressBar)
-  {
-  }
-  else
-    SendMessage((HWND) GetHWND(), ZYZG_SETBKCOLOR, 0, RGB(col.Red(), col.Green(), col.Blue()));
+  m_backgroundColour = col ;
+  SendMessage((HWND) GetHWND(), ZYZG_SETBKCOLOR, 0, RGB(col.Red(), col.Green(), col.Blue()));
 }
 
 

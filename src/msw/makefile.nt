@@ -143,7 +143,8 @@ MSWOBJS = \
   $(MSWDIR)\font.obj \
   $(MSWDIR)\fontdlg.obj \
   $(MSWDIR)\frame.obj \
-  $(MSWDIR)\gauge.obj \
+  $(MSWDIR)\gauge95.obj \
+  $(MSWDIR)\gaugemsw.obj \
   $(MSWDIR)\gdiobj.obj \
   $(MSWDIR)\helpwin.obj \
   $(MSWDIR)\icon.obj \
@@ -172,7 +173,8 @@ MSWOBJS = \
   $(MSWDIR)\registry.obj \
   $(MSWDIR)\scrolbar.obj \
   $(MSWDIR)\settings.obj \
-  $(MSWDIR)\slider.obj \
+  $(MSWDIR)\slidrmsw.obj \
+  $(MSWDIR)\slider95.obj \
   $(MSWDIR)\spinbutt.obj \
   $(MSWDIR)\statbmp.obj \
   $(MSWDIR)\statbox.obj \
@@ -414,7 +416,12 @@ $(MSWDIR)/frame.obj:     $*.$(SRCSUFF)
 $(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
 <<
 
-$(MSWDIR)/gauge.obj:     $*.$(SRCSUFF)
+$(MSWDIR)/gauge95.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
+<<
+
+$(MSWDIR)/gaugemsw.obj:     $*.$(SRCSUFF)
         cl @<<
 $(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
 <<
@@ -559,7 +566,12 @@ $(MSWDIR)/settings.obj:     $*.$(SRCSUFF)
 $(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
 <<
 
-$(MSWDIR)/slider.obj:     $*.$(SRCSUFF)
+$(MSWDIR)/slidrmsw.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
+<<
+
+$(MSWDIR)/slider95.obj:     $*.$(SRCSUFF)
         cl @<<
 $(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
 <<

@@ -1,11 +1,18 @@
-#ifndef __TOOLBARH_BASE__
-#define __TOOLBARH_BASE__
+#ifndef _TOOLBAR_H_BASE_
+#define _TOOLBAR_H_BASE_
 
-#if defined(__WINDOWS__)
-#include "wx/tbar95.h"
+#if defined(__WINDOWS__) && defined(__WIN95__)
+#   include "wx/tbar95.h"
+#   define wxToolBar wxToolBar95
+#   define classwxToolBar classwxToolBar95
+#elif defined(__WINDOWS__)
+#   include "wx/tbarmsw.h"
+#   define wxToolBar wxToolBarMSW
+#   define classwxToolBar classwxToolBarMSW
 #elif defined(__GTK__)
-#include "wx/gtk/tbargtk.h"
+#   include "wx/gtk/tbargtk.h"
+#   define classwxToolBar wxToolBarGTK
 #endif
 
 #endif
-    // __TOOLBARH_BASE__
+    // _TOOLBAR_H_BASE_

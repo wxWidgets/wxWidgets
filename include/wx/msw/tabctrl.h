@@ -51,6 +51,9 @@ class WXDLLEXPORT wxTabCtrl: public wxControl
     // Get the selection
     int GetSelection() const;
 
+    // Get the tab with the current keyboard focus
+    int GetCurFocus() const;
+
     // Get the associated image list
     wxImageList* GetImageList() const;
 

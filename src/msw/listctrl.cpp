@@ -902,8 +902,6 @@ long wxListCtrl::HitTest(const wxPoint& point, int& flags)
 
 // Inserts an item, returning the index of the new item if successful,
 // -1 otherwise.
-// TOD: Should also have some further convenience functions
-// which don't require setting a wxListItem object
 long wxListCtrl::InsertItem(wxListItem& info)
 {
 	LV_ITEM item;

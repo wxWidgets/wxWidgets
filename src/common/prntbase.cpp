@@ -20,9 +20,11 @@
 #pragma hdrstop
 #endif
 
-// #define __GOOD_COMPILER__
-
 #include "wx/defs.h"
+
+#ifdef __WINDOWS__
+#define __GOOD_COMPILER__
+#endif
 
 #ifndef WX_PRECOMP
 #include "wx/utils.h"

@@ -144,7 +144,8 @@ MSWOBJS = \
   font.$(OBJSUFF) \
   fontdlg.$(OBJSUFF) \
   frame.$(OBJSUFF) \
-  gauge.$(OBJSUFF) \
+  gaugemsw.$(OBJSUFF) \
+  gauge95.$(OBJSUFF) \
   gdiobj.$(OBJSUFF) \
   helpwin.$(OBJSUFF) \
   icon.$(OBJSUFF) \
@@ -172,7 +173,8 @@ MSWOBJS = \
   registry.$(OBJSUFF) \
   scrolbar.$(OBJSUFF) \
   settings.$(OBJSUFF) \
-  slider.$(OBJSUFF) \
+  slidrmsw.$(OBJSUFF) \
+  slider95.$(OBJSUFF) \
   spinbutt.$(OBJSUFF) \
   statbmp.$(OBJSUFF) \
   statbox.$(OBJSUFF) \

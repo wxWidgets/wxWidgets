@@ -139,6 +139,8 @@ MSWOBJS = \
   $(MSWDIR)\fontdlg.obj \
   $(MSWDIR)\frame.obj \
   $(MSWDIR)\gauge.obj \
+  $(MSWDIR)\gauge95.obj \
+  $(MSWDIR)\gaugemsw.obj \
   $(MSWDIR)\gdiobj.obj \
   $(MSWDIR)\helpwin.obj \
   $(MSWDIR)\icon.obj \
@@ -166,7 +168,8 @@ MSWOBJS = \
   $(MSWDIR)\registry.obj \
   $(MSWDIR)\scrolbar.obj \
   $(MSWDIR)\settings.obj \
-  $(MSWDIR)\slider.obj \
+  $(MSWDIR)\slidrmsw.obj \
+  $(MSWDIR)\slider95.obj \
   $(MSWDIR)\spinbutt.obj \
   $(MSWDIR)\statbmp.obj \
   $(MSWDIR)\statbox.obj \
@@ -278,7 +281,9 @@ $(MSWDIR)\fontdlg.obj:     $(MSWDIR)\fontdlg.$(SRCSUFF)
 
 $(MSWDIR)\frame.obj:     $(MSWDIR)\frame.$(SRCSUFF)
 
-$(MSWDIR)\gauge.obj:     $(MSWDIR)\gauge.$(SRCSUFF)
+$(MSWDIR)\gaugemsw.obj:     $(MSWDIR)\gaugemsw.$(SRCSUFF)
+
+$(MSWDIR)\gauge95.obj:     $(MSWDIR)\gauge95.$(SRCSUFF)
 
 $(MSWDIR)\gdiobj.obj:     $(MSWDIR)\gdiobj.$(SRCSUFF)
 
@@ -332,7 +337,9 @@ $(MSWDIR)\scrolbar.obj:     $(MSWDIR)\scrolbar.$(SRCSUFF)
 
 $(MSWDIR)\settings.obj:     $(MSWDIR)\settings.$(SRCSUFF)
 
-$(MSWDIR)\slider.obj:     $(MSWDIR)\slider.$(SRCSUFF)
+$(MSWDIR)\slidrmsw.obj:     $(MSWDIR)\slidrmsw.$(SRCSUFF)
+
+$(MSWDIR)\slider95.obj:     $(MSWDIR)\slider95.$(SRCSUFF)
 
 $(MSWDIR)\spinbutt.obj:     $(MSWDIR)\spinbutt.$(SRCSUFF)
 
