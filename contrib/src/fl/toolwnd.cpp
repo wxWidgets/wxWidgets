@@ -572,7 +572,7 @@ void wxToolWindow::OnMotion( wxMouseEvent& event )
 			DrawHintRect( mPrevHintRect );
 			DrawHintRect( finalRect );
 
-            ::wxLogTrace(wxT("%d,%d / %d,%d\n"), finalRect.x, finalRect.y, finalRect.width, finalRect.height);
+            ::wxLogTrace(wxT("wxToolWindow"),wxT("%d,%d / %d,%d\n"), finalRect.x, finalRect.y, finalRect.width, finalRect.height);
 		}
 
 		mPrevHintRect = finalRect;
