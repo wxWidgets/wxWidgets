@@ -2274,57 +2274,45 @@ void wxWindowMac::ScrollWindow(int dx, int dy, const wxRect *rect)
         
 
     {
-        wxClientDC dc(this) ;
-        wxMacPortSetter helper(&dc) ;
-
         int width , height ;
         GetClientSize( &width , &height ) ;
 
-
         wxPoint pos;
         pos.x = pos.y = 0; 
- 
+
         Rect scrollrect;
-        // TODO take out the boundaries
-        GetControlBounds( (ControlRef) m_macControl, &scrollrect);
-        
         RgnHandle updateRgn = NewRgn() ;
-        if ( rect )
+
         {
-            Rect r = { dc.YLOG2DEVMAC(rect->y) , dc.XLOG2DEVMAC(rect->x) , dc.YLOG2DEVMAC(rect->y + rect->height) ,
-                dc.XLOG2DEVMAC(rect->x + rect->width) } ;
-            SectRect( &scrollrect , &r , &scrollrect ) ;
+            wxClientDC dc(this) ;
+            wxMacPortSetter helper(&dc) ;
+        
+            GetControlBounds( (ControlRef) m_macControl, &scrollrect);
+#if TARGET_API_MAC_OSX
+            GetParent()->MacWindowToRootWindow( &scrollrect.left , &scrollrect.top ) ;
+#endif
+            scrollrect.top += MacGetTopBorderSize() ;
+            scrollrect.left += MacGetLeftBorderSize() ;
+            scrollrect.bottom = scrollrect.top + height ;
+            scrollrect.right = scrollrect.left + width ;
+            
+            if ( rect )
+            {
+                Rect r = { dc.YLOG2DEVMAC(rect->y) , dc.XLOG2DEVMAC(rect->x) , dc.YLOG2DEVMAC(rect->y + rect->height) ,
+                    dc.XLOG2DEVMAC(rect->x + rect->width) } ;
+                SectRect( &scrollrect , &r , &scrollrect ) ;
+            }
+            ScrollRect( &scrollrect , dx , dy , updateRgn ) ;
         }
-        ScrollRect( &scrollrect , dx , dy , updateRgn ) ;
-#if TARGET_CARBON
-        //KO: The docs say ScrollRect creates an update region, which thus calls an update event
-        // but it seems the update only refreshes the background of the control, rather than calling 
-        // kEventControlDraw, so we need to force a proper update here. There has to be a better 
-        // way of doing this... (Note that code below under !TARGET_CARBON does not work either...)
-        Update();
-#endif        
-        // we also have to scroll the update rgn in this rectangle 
-        // in order not to loose updates
-#if !TARGET_CARBON
-        WindowRef rootWindow = (WindowRef) MacGetTopLevelWindowRef() ;
-        RgnHandle formerUpdateRgn = NewRgn() ;
-        RgnHandle scrollRgn = NewRgn() ;
-        RectRgn( scrollRgn , &scrollrect ) ;
-        GetWindowUpdateRgn( rootWindow , formerUpdateRgn ) ;
-        Point pt = {0,0} ;
-        LocalToGlobal( &pt ) ;
-        OffsetRgn( formerUpdateRgn , -pt.h , -pt.v ) ;
-        SectRgn( formerUpdateRgn , scrollRgn , formerUpdateRgn ) ;
-        if ( !EmptyRgn( formerUpdateRgn ) )
-        {
-            MacOffsetRgn( formerUpdateRgn , dx , dy ) ;
-            SectRgn( formerUpdateRgn , scrollRgn , formerUpdateRgn ) ;
-            InvalWindowRgn(rootWindow  ,  formerUpdateRgn ) ;
-        }
-        InvalWindowRgn(rootWindow  ,  updateRgn ) ;
-        DisposeRgn( updateRgn ) ;
-        DisposeRgn( formerUpdateRgn ) ;
-        DisposeRgn( scrollRgn ) ;
+        // ScrollWindowRect( (WindowRef) MacGetTopLevelWindowRef() , &scrollrect , dx , dy ,  kScrollWindowInvalidate, updateRgn ) ;
+#if TARGET_API_MAC_OSX
+        Rect before,after ;
+        GetRegionBounds( updateRgn , &before ) ;
+        HIViewConvertRegion( updateRgn , (ControlRef) MacGetTopLevelWindow()->GetHandle() , (ControlRef) m_macControl ) ;
+        GetRegionBounds( updateRgn , &after ) ;
+        HIViewSetNeedsDisplayInRegion( (ControlRef) m_macControl , updateRgn , true ) ;
+#else
+        // TODO TEST
 #endif
     }
 
@@ -2491,6 +2479,35 @@ void wxWindowMac::Update()
 {
 #if TARGET_API_MAC_OSX
     HIViewSetNeedsDisplay( (ControlRef) m_macControl , true ) ;
+    WindowRef window = (WindowRef)MacGetTopLevelWindowRef() ;
+#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_3
+    // for composited windows this also triggers a redraw of all
+    // invalid views in the window
+    if( UMAGetSystemVersion() >= 0x1030 )
+        HIWindowFlush(window) ;       
+    else                   
+#endif
+    {
+        // the only way to trigger the redrawing on earlier systems is to call
+        // ReceiveNextEvent
+
+        EventRef currentEvent = (EventRef) wxTheApp->MacGetCurrentEvent() ;
+        UInt32 currentEventClass = 0 ;
+        UInt32 currentEventKind = 0 ;
+        if ( currentEvent != NULL )
+        {
+            currentEventClass = ::GetEventClass( currentEvent ) ;
+            currentEventKind = ::GetEventKind( currentEvent ) ;
+        }       
+        if ( currentEventClass != kEventClassMenu )
+        {
+            // when tracking a menu, strange redraw errors occur if we flush now, so leave..
+
+            EventRef theEvent;
+            OSStatus status = noErr ;
+            status = ReceiveNextEvent( 0 , NULL , kEventDurationNoWait , false , &theEvent ) ;
+        }
+    }
 #else
     ::Draw1Control( (ControlRef) m_macControl ) ;
 #endif
