@@ -243,18 +243,13 @@ void wxFrame::DoGetClientSize(
 {
     RECTL                           vRect;
     ::WinQueryWindowRect(GetHwnd(), &vRect);
-#if 0 // not needed for OS/2 wxUSE_STATUSBAR
-    if ( GetStatusBar() && GetStatusBar()->IsShown() )
-    {
-        int                         nStatusX;
-        int                         nStatusY;
 
-        GetStatusBar()->GetClientSize( &nStatusX
-                                      ,&nStatusY
-                                     );
-        vRect.yBottom += nStatusY;
-    }
-#endif // wxUSE_STATUSBAR
+    //
+    // No need to use statusbar code as in WIN32 as the FORMATFRAME
+    // window procedure ensures PM knows about the new frame client
+    // size internally.  A ::WinQueryWindowRect is all that is needed!
+    //
+
     if (pX)
         *pX = vRect.xRight - vRect.xLeft;
     if (pY)
