@@ -299,7 +299,8 @@ void wxFileDialog::GetPaths(wxArrayString& paths) const
             if (gpaths)
                 g_slist_free(gpaths);
         }
-        else
+
+        if ( paths.IsEmpty() )
         {
             paths.Add(m_fileName);
         }
