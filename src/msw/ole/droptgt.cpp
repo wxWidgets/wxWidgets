@@ -136,7 +136,7 @@ STDMETHODIMP wxIDropTarget::DragEnter(IDataObject *pIDataSource,
                                       POINTL       pt,
                                       DWORD       *pdwEffect)
 {
-  wxLogDebug("IDropTarget::DragEnter");
+  wxLogDebug(_T("IDropTarget::DragEnter"));
 
   wxASSERT( m_pIDataObject == NULL );
 
@@ -187,7 +187,7 @@ STDMETHODIMP wxIDropTarget::DragOver(DWORD   grfKeyState,
 // Notes   : good place to do any clean-up
 STDMETHODIMP wxIDropTarget::DragLeave()
 {
-  wxLogDebug("IDropTarget::DragLeave");
+  wxLogDebug(_T("IDropTarget::DragLeave"));
 
   // remove the UI feedback
   m_pTarget->OnLeave();
@@ -212,7 +212,7 @@ STDMETHODIMP wxIDropTarget::Drop(IDataObject *pIDataSource,
                                  POINTL       pt,
                                  DWORD       *pdwEffect)
 {
-  wxLogDebug("IDropTarget::Drop");
+  wxLogDebug(_T("IDropTarget::Drop"));
 
   // TODO I don't know why there is this parameter, but so far I assume
   //      that it's the same we've already got in DragEnter
@@ -344,7 +344,7 @@ bool wxDropTarget::IsAcceptedData(IDataObject *pIDataSource) const
 
 bool wxTextDropTarget::OnDrop(long x, long y, const void *pData)
 {
-  return OnDropText(x, y, (const char *)pData);
+  return OnDropText(x, y, (const wxChar *)pData);
 }
 
 size_t wxTextDropTarget::GetFormatCount() const
@@ -375,22 +375,22 @@ bool wxFileDropTarget::OnDrop(long x, long y, const void *pData)
   UINT nFiles = ::DragQueryFile(hdrop, (unsigned)-1, NULL, 0u);
 
   // for each file get the length, allocate memory and then get the name
-  char **aszFiles = new char *[nFiles];
+  wxChar **aszFiles = new wxChar *[nFiles];
   UINT len, n;
   for ( n = 0; n < nFiles; n++ ) {
     // +1 for terminating NUL
     len = ::DragQueryFile(hdrop, n, NULL, 0) + 1;
 
-    aszFiles[n] = new char[len];
+    aszFiles[n] = new wxChar[len];
 
     UINT len2 = ::DragQueryFile(hdrop, n, aszFiles[n], len);
     if ( len2 != len - 1 ) {
-      wxLogDebug("In wxFileDropTarget::OnDrop DragQueryFile returned %d "
-                 "characters, %d expected.", len2, len - 1);
+      wxLogDebug(_T("In wxFileDropTarget::OnDrop DragQueryFile returned %d "
+                    "characters, %d expected."), len2, len - 1);
     }
   }
 
-  bool bResult = OnDropFiles(x, y, nFiles, (const char**) aszFiles);
+  bool bResult = OnDropFiles(x, y, nFiles, (const wxChar**) aszFiles);
 
   // free memory
   for ( n = 0; n < nFiles; n++ ) {

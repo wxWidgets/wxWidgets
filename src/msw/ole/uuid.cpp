@@ -50,12 +50,16 @@ Uuid::Uuid(const Uuid& uuid)
 
   // force the string to be allocated by RPC
   // (we free it later with RpcStringFree)
+#ifdef _UNICODE
+  UuidToString(&m_uuid, (unsigned short **)&m_pszUuid);
+#else
   UuidToString(&m_uuid, &m_pszUuid);
+#endif
 
   // allocate new buffer
-  m_pszCForm = new char[UUID_CSTRLEN];
+  m_pszCForm = new wxChar[UUID_CSTRLEN];
   // and fill it
-  memcpy(m_pszCForm, uuid.m_pszCForm, UUID_CSTRLEN);
+  memcpy(m_pszCForm, uuid.m_pszCForm, UUID_CSTRLEN*sizeof(wxChar));
 }
 
 // assignment operator
@@ -65,14 +69,18 @@ Uuid& Uuid::operator=(const Uuid& uuid)
 
   // force the string to be allocated by RPC
   // (we free it later with RpcStringFree)
+#ifdef _UNICODE
+  UuidToString(&m_uuid, (unsigned short **)&m_pszUuid);
+#else
   UuidToString(&m_uuid, &m_pszUuid);
+#endif
 
   // allocate new buffer if not done yet
   if ( !m_pszCForm )
-    m_pszCForm = new char[UUID_CSTRLEN];
+    m_pszCForm = new wxChar[UUID_CSTRLEN];
 
   // and fill it
-  memcpy(m_pszCForm, uuid.m_pszCForm, UUID_CSTRLEN);
+  memcpy(m_pszCForm, uuid.m_pszCForm, UUID_CSTRLEN*sizeof(wxChar));
 
   return *this;
 }
@@ -83,7 +91,11 @@ Uuid::~Uuid()
   // this string must be allocated by RPC!
   // (otherwise you get a debug breakpoint deep inside RPC DLL)
   if ( m_pszUuid ) 
+#ifdef _UNICODE
+    RpcStringFree((unsigned short **)&m_pszUuid);
+#else
     RpcStringFree(&m_pszUuid);
+#endif
 
   // perhaps we should just use a static buffer and not bother
   // with new and delete?
@@ -97,7 +109,11 @@ void Uuid::Set(const UUID &uuid)
   m_uuid = uuid;
 
   // get string representation
+#ifdef _UNICODE
+  UuidToString(&m_uuid, (unsigned short **)&m_pszUuid);
+#else
   UuidToString(&m_uuid, &m_pszUuid);
+#endif
 
   // cache UUID in C format
   UuidToCForm();
@@ -115,15 +131,23 @@ void Uuid::Create()
 }
 
 // set the value
-bool Uuid::Set(const char *pc)
+bool Uuid::Set(const wxChar *pc)
 {
   // get UUID from string
-  if ( UuidFromString((uchar *)pc, &m_uuid) != RPC_S_OK)
+#ifdef _UNICODE
+  if ( UuidFromString((unsigned short *)pc, &m_uuid) != RPC_S_OK)
+#else
+  if ( UuidFromString((wxUChar *)pc, &m_uuid) != RPC_S_OK)
+#endif
     // failed: probably invalid string
     return FALSE;
 
   // transform it back to string to normalize it
+#ifdef _UNICODE
+  UuidToString(&m_uuid, (unsigned short **)&m_pszUuid);
+#else
   UuidToString(&m_uuid, &m_pszUuid);
+#endif
 
   // update m_pszCForm
   UuidToCForm();
@@ -139,10 +163,10 @@ bool Uuid::Set(const char *pc)
 void Uuid::UuidToCForm()
 {
   if ( m_pszCForm == NULL )
-    m_pszCForm = new char[UUID_CSTRLEN];
+    m_pszCForm = new wxChar[UUID_CSTRLEN];
 
-  wsprintf(m_pszCForm, "0x%8.8X,0x%4.4X,0x%4.4X,0x%2.2X,0x2.2%X,"
-           "0x2.2%X,0x2.2%X,0x2.2%X,0x2.2%X,0x2.2%X,0x2.2%X",
+  wsprintf(m_pszCForm, _T("0x%8.8X,0x%4.4X,0x%4.4X,0x%2.2X,0x2.2%X,"
+           "0x2.2%X,0x2.2%X,0x2.2%X,0x2.2%X,0x2.2%X,0x2.2%X"),
            m_uuid.Data1, m_uuid.Data2, m_uuid.Data3,
            m_uuid.Data4[1], m_uuid.Data4[2], m_uuid.Data4[3], m_uuid.Data4[4],
            m_uuid.Data4[5], m_uuid.Data4[6], m_uuid.Data4[7], m_uuid.Data4[8]);
