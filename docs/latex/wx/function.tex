@@ -92,7 +92,6 @@ a directory.
 
 Returns time of last modification of given file.
 
-
 \membersection{::wxFileNameFromPath}
 
 \func{wxString}{wxFileNameFromPath}{\param{const wxString\& }{path}}
@@ -1548,6 +1547,12 @@ Under Windows, this returns ``unknown''.
 \wxheading{Include files}
 
 <wx/utils.h>
+
+\membersection{::wxHandleFatalExceptions}\label{wxhandlefatalexceptions}
+
+\func{bool}{wxHandleFatalExceptions}{\param{bool}{ doIt = TRUE}}
+
+Call this from e.g. \helpref{wxApp::OnFatalException}{wxapponfatalexception}.
 
 \membersection{::wxKill}\label{wxkill}
 
