@@ -41,8 +41,6 @@
 #define _EXPORT _export
 #endif
 
-#include <windows.h>
-
 wxList wxTimerList(wxKEY_INTEGER);
 UINT WINAPI _EXPORT wxTimerProc(HWND hwnd, WORD, int idTimer, DWORD);
 
