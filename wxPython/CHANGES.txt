@@ -159,7 +159,10 @@ on failure, and the index where parsing stopped otherwise.
 
 Moved tools to be a Python package in wxPython.tools, added scripts to
 import and launch each tool.  This will let you import and use the
-tools in your own scripts or apps as needed.
+tools in your own scripts or apps as needed.  On Linux and OS X the
+tool scripts are installed to {prefix}/bin so you should be able to
+easily launch them from the command line.  For example, PyCrust can be
+started with just the "pycrust" command.
 
 Added a sample to the demo that catches various key events and
 displays the details of the event.
