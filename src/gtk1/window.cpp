@@ -2334,6 +2334,9 @@ bool wxWindow::Create( wxWindow *parent, wxWindowID id,
 
 wxWindow::~wxWindow()
 {
+    if (g_focusWindow == this)
+        g_focusWindow = NULL;
+
     m_isBeingDeleted = TRUE;
     m_hasVMT = FALSE;
 
