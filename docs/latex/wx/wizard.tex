@@ -160,6 +160,32 @@ Get the current page while the wizard is running. {\tt NULL} is returned if
 
 Returns the size available for the pages.
 
+\membersection{wxWizard::HasNextPage}\label{wxwizardhasnextpage}
+
+\func{virtual bool}{HasNextPage}{\param{wxWizardPage *}{page}}
+
+Return {\tt TRUE} if this page is not the last one in the wizard. The base
+class version implements this by calling 
+\helpref{page->GetNext}{wxwizardpagegetnext} but this could be undesirable if,
+for example, the pages are created on demand only.
+
+\wxheading{See also}
+
+\helpref{HasPrevPage}{wxwizardhasprevpage}
+
+\membersection{wxWizard::HasPrevPage}\label{wxwizardhasprevpage}
+
+\func{virtual bool}{HasPrevPage}{\param{wxWizardPage *}{page}}
+
+Return {\tt TRUE} if this page is not the last one in the wizard. The base
+class version implements this by calling 
+\helpref{page->GetPrev}{wxwizardpagegetprev} but this could be undesirable if,
+for example, the pages are created on demand only.
+
+\wxheading{See also}
+
+\helpref{HasNextPage}{wxwizardhasnextpage}
+
 \membersection{wxWizard::RunWizard}\label{wxwizardrunwizard}
 
 \func{bool}{RunWizard}{\param{wxWizardPage* }{firstPage}}

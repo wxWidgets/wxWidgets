@@ -348,7 +348,7 @@ bool wxWizard::ShowPage(wxWizardPage *page, bool goingForward)
 
         m_page->Hide();
 
-        btnLabelWasNext = m_page->GetNext() != (wxWizardPage *)NULL;
+        btnLabelWasNext = HasNextPage(m_page);
 
         // Get the bitmap of the previous page (if it exists)
         if ( m_page->GetBitmap().Ok() )
@@ -395,9 +395,9 @@ bool wxWizard::ShowPage(wxWizardPage *page, bool goingForward)
     }
 
     // and update the buttons state
-    m_btnPrev->Enable(m_page->GetPrev() != (wxWizardPage *)NULL);
+    m_btnPrev->Enable(HasPrevPage(m_page));
 
-    bool hasNext = m_page->GetNext() != (wxWizardPage *)NULL;
+    bool hasNext = HasNextPage(m_page);
     if ( btnLabelWasNext != hasNext )
     {
         // need to update
