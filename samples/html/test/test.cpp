@@ -120,10 +120,13 @@
     // Create the main application window
       MyFrame *frame = new MyFrame("wxHtmlWindow testing application",
          wxPoint(50, 50), wxSize(640, 480));
+      MyFrame *frame2 = new MyFrame("wxHtmlWindow testing application",
+         wxPoint(150, 50), wxSize(640, 480));
    
     // Show it and tell the application that it's our main window
     // @@@ what does it do exactly, in fact? is it necessary here?
       frame->Show(TRUE);
+      frame2->Show(TRUE);
       SetTopWindow(frame);
 
    
@@ -141,7 +144,7 @@ wxHtmlWindow *html;
 
 // frame constructor
    MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
-   : wxFrame((wxFrame *)NULL, -1, title, pos, size)
+   : wxFrame((wxFrame *)NULL, -1, title, pos, size, wxDEFAULT_FRAME_STYLE, "html_test_app")
    {
     // create a menu bar
       wxMenu *menuFile = new wxMenu;
