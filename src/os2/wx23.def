@@ -12650,6 +12650,8 @@ EXPORTS
       __ct__12wxFileDialogFP8wxWindowRC8wxStringN32lRC7wxPoint
       ;wxFileDialog::ShowModal()
       ShowModal__12wxFileDialogFv
+      ;wxFileDialog::GetPaths(wxArrayString&) const
+      GetPaths__12wxFileDialogCFR13wxArrayString
       __vft12wxFileDialog8wxObject
       ;wxFileDialog::sm_classwxFileDialog
       sm_classwxFileDialog__12wxFileDialog

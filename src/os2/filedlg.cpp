@@ -227,12 +227,14 @@ int wxFileDialog::ShowModal()
 {
     wxString                        sTheFilter;
     wxString                        sFilterBuffer;
+    wxChar*                         pzFilterBuffer;
     static wxChar                   zFileNameBuffer[wxMAXPATH];           // the file-name
     HWND                            hWnd = 0;
     wxChar                          zTitleBuffer[wxMAXFILE + 1 + wxMAXEXT];  // the file-name, without path
-    wxString 	                    sDir;
-    size_t 	                        i;
+    wxString                        sDir;
+    size_t                          i;
     size_t                          nLen = m_sDir.length();
+    int                             nCount = 0;
     FILEDLG                         vFileDlg;
     ULONG                           lFlags = 0L;
 
@@ -246,9 +248,11 @@ int wxFileDialog::ShowModal()
     *zFileNameBuffer = wxT('\0');
     *zTitleBuffer    = wxT('\0');
 
-    m_lDialogStyle & wxSAVE ? lFlags != FDS_SAVEAS_DIALOG
-                                      : FDS_OPEN_DIALOG
-                                      ;
+    if (m_lDialogStyle & wxSAVE)
+        lFlags = FDS_SAVEAS_DIALOG;
+    else
+        lFlags = FDS_OPEN_DIALOG;
+
     if ((m_lDialogStyle & wxHIDE_READONLY) || (m_lDialogStyle & wxSAVE))
         lFlags |= FDS_SAVEAS_DIALOG;
     if (m_lDialogStyle & wxMULTIPLE )
@@ -309,42 +313,27 @@ int wxFileDialog::ShowModal()
     if ( wxStrlen(m_sWildCard) == 0 )
         sTheFilter = "";
     else
-        sTheFilter = m_sWildCard ;
+        sTheFilter = m_sWildCard;
 
-    if (!wxStrchr(sTheFilter, wxT('|') ) )
+    pzFilterBuffer = strtok((char*)sTheFilter.c_str(), "|");
+    while(pzFilterBuffer != NULL)
     {
-        //
-        // Only one filter ==> default text
-        //
-        sFilterBuffer.Printf( _("Files (%s)|%s")
-                             ,sTheFilter.c_str()
-                             ,sTheFilter.c_str()
-                            );
-    }
-    else
-    {                                // more then one filter
-        sFilterBuffer = sTheFilter;
-    }
-
-    sFilterBuffer += wxT("|");
-
-    //
-    // Replace | with \0
-    //
-    for (i = 0; i < sFilterBuffer.Len(); i++ )
-    {
-        if (sFilterBuffer.GetChar(i) == wxT('|'))
+        if (nCount > 0 && !(nCount % 2))
+            sDir += wxT(";");
+        if (nCount % 2)
         {
-            sFilterBuffer[i] = wxT('\0');
+            sDir += pzFilterBuffer;
         }
+        pzFilterBuffer = strtok(NULL, "|");
+        nCount++;
     }
-    if (!sTheFilter.IsEmpty())
-        sDir += sTheFilter;
-    else
+    if (nCount == 0)
         sDir += m_sFileName;
+    if (sDir.IsEmpty())
+        sDir = "*.*";
     wxStrcpy(vFileDlg.szFullFile, sDir.c_str());
 
-    hWnd = ::WinFileDlg( GetHwndOf(m_pParent)
+    hWnd = ::WinFileDlg( HWND_DESKTOP
                         ,GetHwndOf(m_pParent)
                         ,&vFileDlg
                        );
@@ -357,14 +346,15 @@ int wxFileDialog::ShowModal()
             {
                 if (i == 0)
                 {
-                    m_sDir = wxPathOnly(wxString((const char*)vFileDlg.papszFQFilename[i]));
-                    m_sPath = (const char*)vFileDlg.papszFQFilename[i];
+                    m_sDir = wxPathOnly(wxString((const char*)*vFileDlg.papszFQFilename[0]));
+                    m_sPath = (const char*)*vFileDlg.papszFQFilename[0];
                 }
-                m_sFileName = wxFileNameFromPath(wxString((const char*)vFileDlg.papszFQFilename[i]));
+                m_sFileName = wxFileNameFromPath(wxString((const char*)*vFileDlg.papszFQFilename[i]));
                 m_asFileNames.Add(m_sFileName);
             }
+            ::WinFreeFileDlgList(vFileDlg.papszFQFilename);
         }
-        else if (!m_lDialogStyle & wxSAVE)
+        else if (!(m_lDialogStyle & wxSAVE))
         {
             m_sPath = vFileDlg.szFullFile;
             m_sFileName = wxFileNameFromPath(vFileDlg.szFullFile);
