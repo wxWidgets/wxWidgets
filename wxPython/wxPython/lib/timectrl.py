@@ -573,8 +573,13 @@ class wxTimeCtrl(wxMaskedTextCtrl):
 
     def GetMxDateTime(self, value=None):
         if value is None:
-            value = self.GetValue()
-        t = DateTime.DateTime(1970,1,1) + DateTime.Parser.TimeFromString(value)
+            t = self.GetValue(as_mxDateTime=True)
+        else:
+            # Convert string 1st to wxDateTime, then use components, since
+            # mx' DateTime.Parser.TimeFromString() doesn't handle AM/PM:
+            wxdt = self.GetWxDateTime(value)
+            hour, minute, second = wxdt.GetHour(), wxdt.GetMinute(), wxdt.GetSecond()
+            t = DateTime.DateTime(1970,1,1) + DateTimeDelta(0, hour, minute, second)
         return t
 
 
