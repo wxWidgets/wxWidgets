@@ -67,26 +67,26 @@
 //----------------------------------------------------------------------
 
 
-// wxStringPtrList* to python list of strings typemap
-%typemap(python, out) wxStringPtrList* {
-    if ($source) {
-        $target = PyList_New($source->GetCount());
-        wxStringPtrList::Node *node = $source->GetFirst();
-        for (int i=0; node; i++) {
-            wxString *s = node->GetData();
-#if wxUSE_UNICODE
-            PyList_SetItem($target, i, PyUnicode_FromUnicode(s->c_str(), s->Len()));
-#else
-            PyList_SetItem($target, i, PyString_FromStringAndSize(s->c_str(), s->Len()));
-#endif
-            node = node->GetNext();
-            delete s;
-        }
-        delete $source;
-    }
-    else
-        $target=0;
-}
+//  // wxStringPtrList* to python list of strings typemap
+//  %typemap(python, out) wxStringPtrList* {
+//      if ($source) {
+//          $target = PyList_New($source->GetCount());
+//          wxStringPtrList::Node *node = $source->GetFirst();
+//          for (int i=0; node; i++) {
+//              wxString *s = node->GetData();
+//  #if wxUSE_UNICODE
+//              PyList_SetItem($target, i, PyUnicode_FromUnicode(s->c_str(), s->Len()));
+//  #else
+//              PyList_SetItem($target, i, PyString_FromStringAndSize(s->c_str(), s->Len()));
+//  #endif
+//              node = node->GetNext();
+//              delete s;
+//          }
+//          delete $source;
+//      }
+//      else
+//          $target=0;
+//  }
 
 
 
@@ -105,9 +105,9 @@ public:
     void close();
     void flush();
     bool eof();
-    wxString* read(int size=-1);
-    wxString* readline(int size=-1);
-    wxStringPtrList* readlines(int sizehint=-1);
+    PyObject* read(int size=-1);
+    PyObject* readline(int size=-1);
+    PyObject* readlines(int sizehint=-1);
     void seek(int offset, int whence=0);
     int tell();
 
@@ -141,8 +141,16 @@ public:
     */
 
     %addmethods {
-        void write(const wxString& str) {
-            self->Write(str.c_str(), str.Length());
+        void write(PyObject* obj) {
+            // We use only strings for the streams, not unicode
+            PyObject* str = PyObject_Str(obj);
+            if (! str) {
+                PyErr_SetString(PyExc_TypeError, "Unable to convert to string");
+                return;
+            }
+            self->Write(PyString_AS_STRING(str),
+                        PyString_GET_SIZE(str));
+            Py_DECREF(str);
         }
     }
 };

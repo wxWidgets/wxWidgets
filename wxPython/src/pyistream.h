@@ -37,9 +37,9 @@ public:
     void close();
     void flush();
     bool eof();
-    wxString* read(int size=-1);
-    wxString* readline(int size=-1);
-    wxStringPtrList* readlines(int sizehint=-1);
+    PyObject* read(int size=-1);
+    PyObject* readline(int size=-1);
+    PyObject* readlines(int sizehint=-1);
     void seek(int offset, int whence=0);
     int tell();
 

@@ -125,39 +125,42 @@ int  wxPyApp::MainLoop() {
 //---------------------------------------------------------------------
 //----------------------------------------------------------------------
 
+
+static char* wxPyCopyCString(const wxChar* src)
+{
+    wxWX2MBbuf buff = (wxWX2MBbuf)wxConvCurrent->cWX2MB(src);
+    size_t len = strlen(buff);
+    char*  dest = new char[len+1];
+    strcpy(dest, buff);
+    return dest;
+}
+
 #if wxUSE_UNICODE
-// TODO:  Is this really the right way to do these????
-static char* copyUniString(const wxChar *s)
+static char* wxPyCopyCString(const char* src)   // we need a char version too
 {
-    if (s == NULL) s = wxT("");
-    wxString tmpStr = wxString(s);
-    char *news = new char[tmpStr.Len()+1];
-    for (unsigned int i=0; i<tmpStr.Len(); i++)
-      news[i] = tmpStr[i];
-    news[i] = '\0';
-    return news;
-}
-
-static char* copyCString(const char *s)
-{
-    if (s == NULL) s = "";
-    int len = strlen(s);
-    char *news = new char[len+1];
-    memcpy(news, s, len+1);
-    return news;
-}
-
-static wxChar* wCharFromCStr(const char *s)
-{
-  if (s == NULL) s = "";
-  size_t len = strlen(s) + 1;
-  wxChar *news = new wxChar[len];
-  for (size_t i=0; i<len; i++) {
-    news[i] = (wxChar)s[i];
-  }
-  return news;
+    size_t len = strlen(src);
+    char*  dest = new char[len+1];
+    strcpy(dest, src);
+    return dest;
 }
 #endif
+
+static wxChar* wxPyCopyWString(const char *src)
+{
+    //wxMB2WXbuf buff = wxConvCurrent->cMB2WX(src);
+    wxString str(src, *wxConvCurrent);
+    return copystring(str);
+}
+
+#if wxUSE_UNICODE
+static wxChar* wxPyCopyWString(const wxChar *src)
+{
+    return copystring(src);
+}
+#endif
+
+
+//----------------------------------------------------------------------
 
 // This is where we pick up the first part of the wxEntry functionality...
 // The rest is in __wxStart and  __wxCleanup.  This function is called when
@@ -193,12 +196,10 @@ void __wxPreStart()
 	    PyObject *item = PyList_GetItem(sysargv, x);
 #if wxUSE_UNICODE
 	    if (PyUnicode_Check(item))
-	        argv[x] = copyUniString(PyUnicode_AS_UNICODE(item));
-	    else
-		argv[x] = copyCString(PyString_AsString(item));
-#else
-	    argv[x] = copystring(PyString_AsString(item));
+	        argv[x] = wxPyCopyCString(PyUnicode_AS_UNICODE(item));
+            else
 #endif
+                argv[x] = wxPyCopyCString(PyString_AsString(item));
 	}
         argv[argc] = NULL;
     }
@@ -238,15 +239,11 @@ PyObject* __wxStart(PyObject* /* self */, PyObject* args)
         for(x=0; x<argc; x++) {
             PyObject *pyArg = PyList_GetItem(sysargv, x);
 #if wxUSE_UNICODE
-            if (PyUnicode_Check(pyArg)) {
-                argv[x] = copystring(PyUnicode_AS_UNICODE(pyArg));
-            } else {
-                assert(PyString_Check(pyArg));
-                argv[x] = wCharFromCStr(PyString_AsString(pyArg));
-            }
-#else
-            argv[x] = copystring(PyString_AsString(pyArg));
+            if (PyUnicode_Check(pyArg))
+                argv[x] = wxPyCopyWString(PyUnicode_AS_UNICODE(pyArg));
+            else
 #endif
+                argv[x] = wxPyCopyWString(PyString_AsString(pyArg));
         }
         argv[argc] = NULL;
     }
@@ -333,7 +330,6 @@ PyObject* __wxSetDictionary(PyObject* /* self */, PyObject* args)
     PyDict_SetItemString(wxPython_dict, "wxPlatform", PyString_FromString(wxPlatform));
     PyDict_SetItemString(wxPython_dict, "wxUSE_UNICODE", PyInt_FromLong(wxUSE_UNICODE));
 
-
     Py_INCREF(Py_None);
     return Py_None;
 }
@@ -358,40 +354,18 @@ void wxPyPtrTypeMap_Add(const char* commonName, const char* ptrName) {
 
 
 
-PyObject* wxPyClassExists(const char* className) {
+PyObject* wxPyClassExists(const wxString& className) {
 
     if (!className)
         return NULL;
 
     char    buff[64];               // should always be big enough...
 
-    sprintf(buff, "%sPtr", className);
+    sprintf(buff, "%sPtr", className.mbc_str());
     PyObject* classobj = PyDict_GetItemString(wxPython_dict, buff);
 
     return classobj;  // returns NULL if not found
 }
-
-
-#if wxUSE_UNICODE
-void unicodeToChar(const wxString *src, char *dest)
-{
-    for (unsigned int i=0; i<src->Len(); i++) {
-      dest[i] = (char)(*src)[i];
-    }
-    dest[i] = '\0';
-}
-PyObject* wxPyClassExistsUnicode(const wxString *className) {
-    if (!className->Len())
-        return NULL;
-    char    buff[64];               // should always be big enough...
-    char *nameBuf = new char[className->Len()+1];
-    unicodeToChar(className, nameBuf);
-    sprintf(buff, "%sPtr", nameBuf);
-    PyObject* classobj = PyDict_GetItemString(wxPython_dict, buff);
-    delete [] nameBuf;
-    return classobj;  // returns NULL if not found
-}
-#endif
 
 
 PyObject*  wxPyMake_wxObject(wxObject* source, bool checkEvtHandler) {
@@ -412,7 +386,6 @@ PyObject*  wxPyMake_wxObject(wxObject* source, bool checkEvtHandler) {
             }
         }
 
-        // TODO: unicode fix
         if (! target) {
             // Otherwise make it the old fashioned way by making a
             // new shadow object and putting this pointer in it.
@@ -431,7 +404,7 @@ PyObject*  wxPyMake_wxObject(wxObject* source, bool checkEvtHandler) {
             } else {
                 wxString msg("wxPython class not found for ");
                 msg += source->GetClassInfo()->GetClassName();
-                PyErr_SetString(PyExc_NameError, msg.c_str());
+                PyErr_SetString(PyExc_NameError, msg.mbc_str());
                 target = NULL;
             }
         }
@@ -469,20 +442,21 @@ PyObject*  wxPyMake_wxSizer(wxSizer* source) {
 //---------------------------------------------------------------------------
 
 PyObject* wxPyConstructObject(void* ptr,
-                              const char* className,
+                              const wxString& className,
                               PyObject* klass,
                               int setThisOwn) {
 
     PyObject* obj;
     PyObject* arg;
     PyObject* item;
+    wxString  name(className);
     char      swigptr[64];      // should always be big enough...
     char      buff[64];
 
-    if ((item = PyDict_GetItemString(wxPyPtrTypeMap, (char*)className)) != NULL) {
-        className = PyString_AsString(item);
+    if ((item = PyDict_GetItemString(wxPyPtrTypeMap, (char*)(const char*)name.mbc_str())) != NULL) {
+        name = wxString(PyString_AsString(item), *wxConvCurrent);
     }
-    sprintf(buff, "_%s_p", className);
+    sprintf(buff, "_%s_p", (const char*)name.mbc_str());
     SWIG_MakePtr(swigptr, ptr, buff);
 
     arg = Py_BuildValue("(s)", swigptr);
@@ -500,7 +474,7 @@ PyObject* wxPyConstructObject(void* ptr,
 
 
 PyObject* wxPyConstructObject(void* ptr,
-                              const char* className,
+                              const wxString& className,
                               int setThisOwn) {
     PyObject* obj;
 
@@ -510,9 +484,9 @@ PyObject* wxPyConstructObject(void* ptr,
     }
 
     char    buff[64];               // should always be big enough...
-    sprintf(buff, "%sPtr", className);
+    sprintf(buff, "%sPtr", (const char*)className.mbc_str());
 
-    wxASSERT_MSG(wxPython_dict, "wxPython_dict is not set yet!!");
+    wxASSERT_MSG(wxPython_dict, wxT("wxPython_dict is not set yet!!"));
 
     PyObject* classobj = PyDict_GetItemString(wxPython_dict, buff);
     if (! classobj) {
@@ -526,6 +500,7 @@ PyObject* wxPyConstructObject(void* ptr,
 
     return wxPyConstructObject(ptr, className, classobj, setThisOwn);
 }
+
 
 //---------------------------------------------------------------------------
 
@@ -554,7 +529,7 @@ PyThreadState* wxPyGetThreadState() {
         }
     }
     wxPyTMutex->Unlock();
-    wxASSERT_MSG(tstate, "PyThreadState should not be NULL!");
+    wxASSERT_MSG(tstate, wxT("PyThreadState should not be NULL!"));
     return tstate;
 }
 
@@ -625,16 +600,13 @@ void wxPyEndBlockThreads() {
 //---------------------------------------------------------------------------
 // wxPyInputStream and wxPyCBInputStream methods
 
-#include <wx/listimpl.cpp>
-WX_DEFINE_LIST(wxStringPtrList);
-
 
 void wxPyInputStream::close() {
-    /* do nothing */
+    /* do nothing for now */
 }
 
 void wxPyInputStream::flush() {
-    /* do nothing */
+    /* do nothing for now */
 }
 
 bool wxPyInputStream::eof() {
@@ -648,8 +620,12 @@ wxPyInputStream::~wxPyInputStream() {
     /* do nothing */
 }
 
-wxString* wxPyInputStream::read(int size) {
-    wxString* s = NULL;
+
+
+
+PyObject* wxPyInputStream::read(int size) {
+    PyObject* obj = NULL;
+    wxMemoryBuffer buf;
     const int BUFSIZE = 1024;
 
     // check if we have a real wxInputStream to work with
@@ -659,88 +635,62 @@ wxString* wxPyInputStream::read(int size) {
     }
 
     if (size < 0) {
-        // init buffers
-        char * buf = new char[BUFSIZE];
-        if (!buf) {
-            PyErr_NoMemory();
-            return NULL;
-        }
-
-        s = new wxString();
-        if (!s) {
-            delete buf;
-            PyErr_NoMemory();
-            return NULL;
-        }
-
         // read until EOF
         while (! m_wxis->Eof()) {
-            m_wxis->Read(buf, BUFSIZE);
-            s->Append(buf, m_wxis->LastRead());
-        }
-        delete buf;
-
-        // error check
-        if (m_wxis->LastError() == wxSTREAM_READ_ERROR) {
-            delete s;
-            PyErr_SetString(PyExc_IOError,"IOError in wxInputStream");
-            return NULL;
+            m_wxis->Read(buf.GetAppendBuf(BUFSIZE), BUFSIZE);
+            buf.UngetAppendBuf(m_wxis->LastRead());
         }
 
     } else {  // Read only size number of characters
-        s = new wxString;
-        if (!s) {
-            PyErr_NoMemory();
-            return NULL;
-        }
-
-        // read size bytes
-        m_wxis->Read(s->GetWriteBuf(size+1), size);
-        s->UngetWriteBuf(m_wxis->LastRead());
-
-        // error check
-        if (m_wxis->LastError() == wxSTREAM_READ_ERROR) {
-            delete s;
-            PyErr_SetString(PyExc_IOError,"IOError in wxInputStream");
-            return NULL;
-        }
+        m_wxis->Read(buf.GetWriteBuf(size), size);
+        buf.UngetWriteBuf(m_wxis->LastRead());
     }
-    return s;
+
+    // error check
+    if (m_wxis->LastError() == wxSTREAM_READ_ERROR) {
+        PyErr_SetString(PyExc_IOError,"IOError in wxInputStream");
+    }
+    else {
+        // We use only strings for the streams, not unicode
+        obj = PyString_FromStringAndSize(buf, buf.GetDataLen());
+    }
+    return obj;
 }
 
 
-wxString* wxPyInputStream::readline (int size) {
+PyObject* wxPyInputStream::readline(int size) {
+    PyObject* obj = NULL;
+    wxMemoryBuffer buf;
+    int i;
+    char ch;
+
     // check if we have a real wxInputStream to work with
     if (!m_wxis) {
         PyErr_SetString(PyExc_IOError,"no valid C-wxInputStream");
         return NULL;
     }
 
-    // init buffer
-    int i;
-    char ch;
-    wxString* s = new wxString;
-    if (!s) {
-        PyErr_NoMemory();
-        return NULL;
-    }
-
     // read until \n or byte limit reached
     for (i=ch=0; (ch != '\n') && (!m_wxis->Eof()) && ((size < 0) || (i < size)); i++) {
-        *s += ch = m_wxis->GetC();
+        ch = m_wxis->GetC();
+        buf.AppendByte(ch);
     }
 
     // errorcheck
     if (m_wxis->LastError() == wxSTREAM_READ_ERROR) {
-        delete s;
         PyErr_SetString(PyExc_IOError,"IOError in wxInputStream");
-        return NULL;
     }
-    return s;
+    else {
+        // We use only strings for the streams, not unicode
+        obj = PyString_FromStringAndSize((char*)buf.GetData(), buf.GetDataLen());
+    }
+    return obj;
 }
 
 
-wxStringPtrList* wxPyInputStream::readlines (int sizehint) {
+PyObject* wxPyInputStream::readlines(int sizehint) {
+    PyObject* pylist;
+
     // check if we have a real wxInputStream to work with
     if (!m_wxis) {
         PyErr_SetString(PyExc_IOError,"no valid C-wxInputStream below");
@@ -748,8 +698,8 @@ wxStringPtrList* wxPyInputStream::readlines (int sizehint) {
     }
 
     // init list
-    wxStringPtrList* l = new wxStringPtrList();
-    if (!l) {
+    pylist = PyList_New(0);
+    if (!pylist) {
         PyErr_NoMemory();
         return NULL;
     }
@@ -757,24 +707,23 @@ wxStringPtrList* wxPyInputStream::readlines (int sizehint) {
     // read sizehint bytes or until EOF
     int i;
     for (i=0; (!m_wxis->Eof()) && ((sizehint < 0) || (i < sizehint));) {
-        wxString* s = readline();
+        PyObject* s = this->readline();
         if (s == NULL) {
-            l->DeleteContents(TRUE);
-            l->Clear();
+            Py_DECREF(pylist);
             return NULL;
         }
-        l->Append(s);
-        i = i + s->Length();
+        PyList_Append(pylist, s);
+        i += PyString_Size(s);
     }
 
     // error check
     if (m_wxis->LastError() == wxSTREAM_READ_ERROR) {
-        l->DeleteContents(TRUE);
-        l->Clear();
+        Py_DECREF(pylist);
         PyErr_SetString(PyExc_IOError,"IOError in wxInputStream");
         return NULL;
     }
-    return l;
+
+    return pylist;
 }
 
 
@@ -861,13 +810,13 @@ size_t wxPyCBInputStream::OnSysRead(void *buffer, size_t bufsize) {
     Py_DECREF(arglist);
 
     size_t o = 0;
-    if ((result != NULL) && PyString_Check(result)) {  // TODO: unicode?
+    if ((result != NULL) && PyString_Check(result)) {
         o = PyString_Size(result);
         if (o == 0)
             m_lasterror = wxSTREAM_EOF;
         if (o > bufsize)
             o = bufsize;
-        memcpy((char*)buffer, PyString_AsString(result), o);
+        memcpy((char*)buffer, PyString_AsString(result), o);  // strings only, not unicode...
         Py_DECREF(result);
 
     }
@@ -946,16 +895,7 @@ void wxPyCallback::EventThunker(wxEvent& event) {
     else if (className == "wxPyCommandEvent")
         arg = ((wxPyCommandEvent*)&event)->GetSelf();
     else {
-
-// TODO:  get rid of this ifdef by changing wxPyConstructObject to take a wxString
-#if wxUSE_UNICODE
-        char *classNameAsChrStr = new char[className.Len()+1];
-	unicodeToChar(&className, classNameAsChrStr);
-	arg = wxPyConstructObject((void*)&event, classNameAsChrStr);
-	delete [] classNameAsChrStr;
-#else
-	arg = wxPyConstructObject((void*)&event, className);
-#endif
+        arg = wxPyConstructObject((void*)&event, className);
     }
 
     tuple = PyTuple_New(1);
@@ -1340,10 +1280,10 @@ wxString* wxString_in_helper(PyObject* source) {
     if (PyUnicode_Check(source)) {
         target = new wxString(PyUnicode_AS_UNICODE(source));
     } else {
-        // It is a string, transform to unicode
-        PyObject *tempUniStr = PyObject_Unicode(source);
-        target = new wxString(PyUnicode_AS_UNICODE(tempUniStr));
-        Py_DECREF(tempUniStr);
+        // It is a string, get pointers to it and transform to unicode
+        char* tmpPtr; int tmpSize;
+        PyString_AsStringAndSize(source, &tmpPtr, &tmpSize);
+        target = new wxString(tmpPtr, *wxConvCurrent, tmpSize);
     }
 #else
     char* tmpPtr; int tmpSize;
@@ -1364,6 +1304,64 @@ wxString* wxString_in_helper(PyObject* source) {
     return target;
 }
 
+
+// Similar to above except doesn't use "new" and doesn't set an exception
+wxString Py2wxString(PyObject* source)
+{
+    wxString target;
+    bool     doDecRef = FALSE;
+
+#if PYTHON_API_VERSION >= 1009  // Have Python unicode API
+    if (!PyString_Check(source) && !PyUnicode_Check(source)) {
+        // Convert to String if not one already...  (TODO: Unicode too?)
+        source = PyObject_Str(source);
+        doDecRef = TRUE;
+    }
+
+#if wxUSE_UNICODE
+    if (PyUnicode_Check(source)) {
+        target = PyUnicode_AS_UNICODE(source);
+    } else {
+        // It is a string, get pointers to it and transform to unicode
+        char* tmpPtr; int tmpSize;
+        PyString_AsStringAndSize(source, &tmpPtr, &tmpSize);
+        target = wxString(tmpPtr, *wxConvCurrent, tmpSize);
+    }
+#else
+    char* tmpPtr; int tmpSize;
+    PyString_AsStringAndSize(source, &tmpPtr, &tmpSize);
+    target = wxString(tmpPtr, tmpSize);
+#endif // wxUSE_UNICODE
+
+#else  // No Python unicode API (1.5.2)
+    if (!PyString_Check(source)) {
+        // Convert to String if not one already...
+        source = PyObject_Str(source);
+        doDecRef = TRUE;
+    }
+    target = wxString(PyString_AS_STRING(source), PyString_GET_SIZE(source));
+#endif
+
+    if (doDecRef)
+        Py_DECREF(source);
+    return target;
+}
+
+
+// Make either a Python String or Unicode object, depending on build mode
+PyObject* wx2PyString(const wxString& src)
+{
+    PyObject* str;
+#if wxUSE_UNICODE
+    str = PyUnicode_FromUnicode(src.c_str(), src.Len());
+#else
+    str = PyString_FromStringAndSize(src.c_str(), src.Len());
+#endif
+    return str;
+}
+
+
+//----------------------------------------------------------------------
 
 
 byte* byte_LIST_helper(PyObject* source) {
@@ -1618,25 +1616,16 @@ wxString* wxString_LIST_helper(PyObject* source) {
             PyErr_SetString(PyExc_TypeError, "Expected a list of string or unicode objects.");
             return NULL;
         }
-
-        char* buff;
-        int   length;
-        if (PyString_AsStringAndSize(o, &buff, &length) == -1)
-            return NULL;
-#if wxUSE_UNICODE  // TODO:  unicode fix.  this is wrong!
-	wxChar *uniBuff = wCharFromCStr(buff);
-        temp[x] = wxString(uniBuff, length);
-	delete [] uniBuff;
-#else
-        temp[x] = wxString(buff, length);
-#endif //wxUSE_UNICODE
 #else
         if (! PyString_Check(o)) {
             PyErr_SetString(PyExc_TypeError, "Expected a list of strings.");
             return NULL;
         }
-        temp[x] = PyString_AsString(o);
 #endif
+
+        wxString* pStr = wxString_in_helper(o);
+        temp[x] = *pStr;
+        delete pStr;
     }
     return temp;
 }
@@ -1895,25 +1884,15 @@ bool wxColour_helper(PyObject* source, wxColour** obj) {
     }
     // otherwise a string is expected
     else if (PyString_Check(source)) {
-        wxString spec = PyString_AS_STRING(source);
-        if (spec[0U] == '#' && spec.Length() == 7) {  // It's  #RRGGBB
-            char* junk;
-#if wxUSE_UNICODE  // TODO: unicode fix.
-            // This ifdef can be removed by using wxString methods to
-            // convert to long instead of strtol
-	    char *tmpAsChar = new char[spec.Len()+1];
-	    unicodeToChar(&spec.Mid(1,2), tmpAsChar);
-            int red   = strtol(tmpAsChar, &junk, 16);
-	    unicodeToChar(&spec.Mid(3,2), tmpAsChar);
-            int green = strtol(tmpAsChar, &junk, 16);
-	    unicodeToChar(&spec.Mid(5,2), tmpAsChar);
-            int blue  = strtol(tmpAsChar, &junk, 16);
-	    delete [] tmpAsChar;
-#else
-            int red   = strtol(spec.Mid(1,2), &junk, 16);
-            int green = strtol(spec.Mid(3,2), &junk, 16);
-            int blue  = strtol(spec.Mid(5,2), &junk, 16);
-#endif
+        wxString spec(PyString_AS_STRING(source), *wxConvCurrent);
+        if (spec.GetChar(0) == '#' && spec.Length() == 7) {  // It's  #RRGGBB
+            long red, green, blue;
+            red = green = blue = 0;
+
+            spec.Mid(1,2).ToLong(&red,   16);
+            spec.Mid(3,2).ToLong(&green, 16);
+            spec.Mid(5,2).ToLong(&blue,  16);
+
             **obj = wxColour(red, green, blue);
             return TRUE;
         }
@@ -1924,7 +1903,9 @@ bool wxColour_helper(PyObject* source, wxColour** obj) {
     }
 
  error:
-    PyErr_SetString(PyExc_TypeError, "Expected a wxColour object or a string containing a colour name or '#RRGGBB'.");
+    PyErr_SetString(PyExc_TypeError,
+                    "Expected a wxColour object or a string containing a colour "
+                    "name or '#RRGGBB'.");
     return FALSE;
 }
 

@@ -209,7 +209,7 @@ class wxpTagHandler(wxHtmlWinTagHandler):
             except:
                 pass
 
-        self.ctx.kwargs[name] = value
+        self.ctx.kwargs[str(name)] = value
         return false
 
 

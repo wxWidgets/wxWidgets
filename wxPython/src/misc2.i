@@ -53,7 +53,6 @@
 //---------------------------------------------------------------------------
 // Dialog Functions
 
-#ifdef wxUSE_UNICODE
 wxString wxFileSelector(const wxChar* message = wxFileSelectorPromptStr,
                         const wxChar* default_path = NULL,
                         const wxChar* default_filename = NULL,
@@ -62,16 +61,18 @@ wxString wxFileSelector(const wxChar* message = wxFileSelectorPromptStr,
                         int flags = 0,
                         wxWindow *parent = NULL,
                         int x = -1, int y = -1);
-#else
-wxString wxFileSelector(const char* message = wxFileSelectorPromptStr,
-                        const char* default_path = NULL,
-                        const char* default_filename = NULL,
-                        const char* default_extension = NULL,
-                        const char* wildcard = wxFileSelectorDefaultWildcardStr,
-                        int flags = 0,
-                        wxWindow *parent = NULL,
-                        int x = -1, int y = -1);
-#endif
+
+// Ask for filename to load
+wxString wxLoadFileSelector(const wxChar *what,
+                            const wxChar *extension,
+                            const wxChar *default_name = NULL,
+                            wxWindow *parent = NULL);
+
+// Ask for filename to save
+wxString wxSaveFileSelector(const wxChar *what,
+                            const wxChar *extension,
+                            const wxChar *default_name = NULL,
+                            wxWindow *parent = NULL);
 
 wxString wxGetTextFromUser(const wxString& message,
                            const wxString& caption = wxEmptyString,
@@ -702,7 +703,8 @@ public:
         bool found;
         wxPyBeginBlockThreads();
         if ((found = wxPyCBH_findCallback(m_myInst, "DoLog")))
-            wxPyCBH_callCallback(m_myInst, Py_BuildValue("(isi)", level, szString, t));  // TODO: unicode fix
+            wxPyCBH_callCallback(m_myInst, Py_BuildValue("(iOi)", level,
+                                                         wx2PyString(szString), t));
         wxPyEndBlockThreads();
         if (! found)
             wxLog::DoLog(level, szString, t);
@@ -712,7 +714,8 @@ public:
         bool found;
         wxPyBeginBlockThreads();
         if ((found = wxPyCBH_findCallback(m_myInst, "DoLogString")))
-            wxPyCBH_callCallback(m_myInst, Py_BuildValue("(si)", szString, t));  // TODO: unicode fix
+            wxPyCBH_callCallback(m_myInst, Py_BuildValue("(Oi)",
+                                                         wx2PyString(szString), t));
         wxPyEndBlockThreads();
         if (! found)
             wxLog::DoLogString(szString, t);

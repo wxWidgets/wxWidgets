@@ -176,6 +176,9 @@ static wxPyCoreAPI API = {
     wxPy_ConvertList,
 
     wxString_in_helper,
+    Py2wxString,
+    wx2PyString,
+
     byte_LIST_helper,
     int_LIST_helper,
     long_LIST_helper,

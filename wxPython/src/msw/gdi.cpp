@@ -5631,7 +5631,7 @@ static void  wxColourDatabase_Append(wxColourDatabase *self,const wxString & nam
             wxString cName = name;
             cName.MakeUpper();
             wxString cName2 = cName;
-            if ( !cName2.Replace("GRAY", "GREY") )
+            if ( !cName2.Replace(wxT("GRAY"), wxT("GREY")) )
                 cName2.clear();
 
             wxNode *node = self->First();

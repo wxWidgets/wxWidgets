@@ -25,12 +25,13 @@ class TestPanel(wxPanel):
         mask = wxMaskColour(bmp, wxBLUE)
         bmp.SetMask(mask)
 
-        ##print bmp.GetWidth(), bmp.GetHeight()
-
         wxBitmapButton(self, 30, bmp, wxPoint(140, 20),
                        wxSize(bmp.GetWidth()+10, bmp.GetHeight()+10))
         EVT_BUTTON(self, 30, self.OnClick)
 
+        if wxUSE_UNICODE:
+            label = unichr(21514) + unichr(26984) + unichr(8307) + unichr(29545)
+            wxButton(self, -1, label+" (I have no idea what that says...)", (20, 150))
 
     def OnClick(self, event):
         self.log.WriteText("Click! (%d)\n" % event.GetId())

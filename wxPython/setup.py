@@ -47,8 +47,9 @@ GL_ONLY = 0        # Only used when making the -gl RPM.  See the "b" script
 USE_SWIG = 0       # Should we actually execute SWIG, or just use the
                    # files already in the distribution?
 
-USE_UNICODE = 0    # This will pass the 'wxUSE_UNICODE' flag to SWIG.
-                   # At the moment only tested for 'CORE_ONLY = 1'
+UNICODE = 0        # This will pass the 'wxUSE_UNICODE' flag to SWIG and
+                   # will ensure that the right headers are found and the
+                   # right libs are linked.
 
 IN_CVS_TREE = 0    # Set to true if building in a full wxWindows CVS
                    # tree, otherwise will assume all needed files are
@@ -58,6 +59,8 @@ WX_CONFIG = "wx-config"    # Usually you shouldn't need to touch this,
                            # but you can set it to pass an alternate
                            # version of wx-config or alternate flags,
                            # eg. as required by the .deb in-tree build.
+
+BUILD_BASE = "build"
 
 # Some MSW build settings
 
@@ -72,7 +75,7 @@ HYBRID = 0         # If set and not debug or FINAL, then build a
                    # wxWindows must have been built with /MD, not /MDd
                    # (using FINAL=hybrid will do it.)
 
-WXDLLVER = '233'   # Version part of DLL name
+WXDLLVER = '233'   # Version part of wxWindows DLL name
 
 
 #----------------------------------------------------------------------
@@ -81,9 +84,11 @@ def msg(text):
     if __name__ == "__main__":
         print text
 
+
 def opj(*args):
     path = apply(os.path.join, args)
     return os.path.normpath(path)
+
 
 def libFlag():
     if FINAL:
@@ -92,7 +97,7 @@ def libFlag():
         rv = 'h'
     else:
         rv = 'd'
-    if USE_UNICODE:
+    if UNICODE:
         rv = 'u' + rv
     return rv
 
@@ -123,7 +128,7 @@ if bcpp_compiling:
 
 for flag in ['BUILD_GLCANVAS', 'BUILD_OGL', 'BUILD_STC', 'BUILD_XRC',
              'BUILD_GIZMOS', 'BUILD_DLLWIDGET',
-             'CORE_ONLY', 'USE_SWIG', 'IN_CVS_TREE', 'USE_UNICODE',
+             'CORE_ONLY', 'USE_SWIG', 'IN_CVS_TREE', 'UNICODE',
              'FINAL', 'HYBRID', ]:
     for x in range(len(sys.argv)):
         if string.find(sys.argv[x], flag) == 0:
@@ -156,9 +161,14 @@ if CORE_ONLY:
     BUILD_DLLWIDGET = 0
 
 
-if USE_UNICODE and os.name != 'nt':
+if UNICODE and os.name != 'nt':
     print "UNICODE is currently only supported on Win32"
     sys.exit()
+
+
+if UNICODE:
+    BUILD_BASE = BUILD_BASE + '.unicode'
+
 
 #----------------------------------------------------------------------
 # Setup some platform specific stuff
@@ -166,9 +176,13 @@ if USE_UNICODE and os.name != 'nt':
 
 if os.name == 'nt':
     # Set compile flags and such for MSVC.  These values are derived
-    # from the wxWindows makefiles for MSVC, others will probably
-    # vary...
-    WXDIR = os.environ['WXWIN']
+    # from the wxWindows makefiles for MSVC, other compilers settings
+    # will probably vary...
+    if os.environ.has_key('WXWIN'):
+        WXDIR = os.environ['WXWIN']
+    else:
+        msg("WARNING: WXWIN not set in environment.")
+        WXDIR = '..'  # assumes in CVS tree
     WXPLAT = '__WXMSW__'
     GENDIR = 'msw'
 
@@ -327,7 +341,7 @@ swig_args = ['-c++', '-shadow', '-python', '-keyword',
              #'-docstring', '-Sbefore',
              '-I./src', '-D'+WXPLAT,
              ]
-if USE_UNICODE:
+if UNICODE:
     swig_args.append('-DwxUSE_UNICODE')
 
 swig_deps = ['src/my_typemaps.i']
@@ -872,6 +886,8 @@ if __name__ == "__main__":
 
               ext_package = PKGDIR,
               ext_modules = wxpExtensions,
+
+              options = { 'build' : { 'build_base' : BUILD_BASE }}
 
               ##data_files = TOOLS,
               )

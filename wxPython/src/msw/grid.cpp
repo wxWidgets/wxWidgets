@@ -173,50 +173,46 @@ static PyObject* t_output_helper(PyObject* target, PyObject* o) {
     }
 
 
-// TODO: unicode fix
 #define PYCALLBACK_STRING_INTINT_pure(CBNAME)                                   \
     wxString CBNAME(int a, int b) {                                             \
-        wxPyBeginBlockThreads();                            \
+        wxPyBeginBlockThreads();                                                \
         wxString rval;                                                          \
         if (wxPyCBH_findCallback(m_myInst, #CBNAME)) {                          \
             PyObject* ro;                                                       \
             ro = wxPyCBH_callCallbackObj(m_myInst, Py_BuildValue("(ii)",a,b));  \
             if (ro) {                                                           \
-                PyObject* str = PyObject_Str(ro);                               \
-                rval = PyString_AsString(str);                                  \
-                Py_DECREF(ro);  Py_DECREF(str);                                 \
+                rval = Py2wxString(ro);                                         \
+                Py_DECREF(ro);                                                  \
             }                                                                   \
         }                                                                       \
-        wxPyEndBlockThreads();                                             \
+        wxPyEndBlockThreads();                                                  \
         return rval;                                                            \
     }
 
 
-// TODO: unicode fix
 #define PYCALLBACK__INTINTSTRING_pure(CBNAME)                                   \
     void CBNAME(int a, int b, const wxString& c) {                              \
-        wxPyBeginBlockThreads();                            \
+        wxPyBeginBlockThreads();                                                \
         if (wxPyCBH_findCallback(m_myInst, #CBNAME))                            \
-            wxPyCBH_callCallback(m_myInst, Py_BuildValue("(iis)",a,b,c.c_str()));\
-        wxPyEndBlockThreads();                                             \
+            wxPyCBH_callCallback(m_myInst, Py_BuildValue("(iiO)",a,b,wx2PyString(c)));\
+        wxPyEndBlockThreads();                                                  \
     }
 
-// TODO: unicode fix
+
 #define PYCALLBACK_STRING_INTINT(PCLASS, CBNAME)                                \
     wxString CBNAME(int a, int b) {                                             \
         bool found;                                                             \
-        wxPyBeginBlockThreads();                            \
+        wxPyBeginBlockThreads();                                                \
         wxString rval;                                                          \
         if ((found = wxPyCBH_findCallback(m_myInst, #CBNAME))) {                \
             PyObject* ro;                                                       \
             ro = wxPyCBH_callCallbackObj(m_myInst, Py_BuildValue("(ii)",a,b));  \
             if (ro) {                                                           \
-                PyObject* str = PyObject_Str(ro);                               \
-                rval = PyString_AsString(str);                                  \
-                Py_DECREF(ro);  Py_DECREF(str);                                 \
+                rval = Py2wxString(ro);                                         \
+                Py_DECREF(ro);                                                  \
             }                                                                   \
         }                                                                       \
-        wxPyEndBlockThreads();                                             \
+        wxPyEndBlockThreads();                                                  \
         if (! found)                                                            \
             rval = PCLASS::CBNAME(a, b);                                        \
         return rval;                                                            \
@@ -226,15 +222,14 @@ static PyObject* t_output_helper(PyObject* target, PyObject* o) {
     }
 
 
-// TODO: unicode fix
 #define PYCALLBACK_BOOL_INTINTSTRING(PCLASS, CBNAME)                            \
     bool CBNAME(int a, int b, const wxString& c)  {                             \
         bool rval = 0;                                                          \
         bool found;                                                             \
-        wxPyBeginBlockThreads();                            \
+        wxPyBeginBlockThreads();                                                \
         if ((found = wxPyCBH_findCallback(m_myInst, #CBNAME)))                  \
-            rval = wxPyCBH_callCallback(m_myInst, Py_BuildValue("(iis)", a,b,c.c_str()));\
-        wxPyEndBlockThreads();                                             \
+            rval = wxPyCBH_callCallback(m_myInst, Py_BuildValue("(iiO)", a,b,wx2PyString(c)));\
+        wxPyEndBlockThreads();                                                  \
         if (! found)                                                            \
             rval = PCLASS::CBNAME(a,b,c);                                       \
         return rval;                                                            \
@@ -359,22 +354,20 @@ static PyObject* t_output_helper(PyObject* target, PyObject* o) {
     }
 
 
-// TODO: unicode fix
 #define PYCALLBACK_STRING_INT(PCLASS, CBNAME)                                   \
     wxString CBNAME(int a) {                                                    \
         bool found;                                                             \
-        wxPyBeginBlockThreads();                            \
+        wxPyBeginBlockThreads();                                                \
         wxString rval;                                                          \
         if ((found = wxPyCBH_findCallback(m_myInst, #CBNAME))) {                \
             PyObject* ro;                                                       \
             ro = wxPyCBH_callCallbackObj(m_myInst, Py_BuildValue("(i)",a));     \
             if (ro) {                                                           \
-                PyObject* str = PyObject_Str(ro);                               \
-                rval = PyString_AsString(str);                                  \
-                Py_DECREF(ro);   Py_DECREF(str);                                \
+                rval = Py2wxString(ro);                                         \
+                Py_DECREF(ro);                                                  \
             }                                                                   \
         }                                                                       \
-        wxPyEndBlockThreads();                                             \
+        wxPyEndBlockThreads();                                                  \
         if (! found)                                                            \
             rval = PCLASS::CBNAME(a);                                           \
         return rval;                                                            \
@@ -384,14 +377,13 @@ static PyObject* t_output_helper(PyObject* target, PyObject* o) {
     }
 
 
-// TODO: unicode fix
 #define PYCALLBACK__INTSTRING(PCLASS, CBNAME)                                   \
     void CBNAME(int a, const wxString& c)  {                                    \
         bool found;                                                             \
-        wxPyBeginBlockThreads();                            \
+        wxPyBeginBlockThreads();                                                \
         if ((found = wxPyCBH_findCallback(m_myInst, #CBNAME)))                  \
-            wxPyCBH_callCallback(m_myInst, Py_BuildValue("(is)", a,c.c_str())); \
-        wxPyEndBlockThreads();                                             \
+            wxPyCBH_callCallback(m_myInst, Py_BuildValue("(iO)", a, wx2PyString(c))); \
+        wxPyEndBlockThreads();                                                  \
         if (! found)                                                            \
             PCLASS::CBNAME(a,c);                                                \
     }                                                                           \
@@ -406,10 +398,10 @@ static PyObject* t_output_helper(PyObject* target, PyObject* o) {
     bool CBNAME()  {                                                            \
         bool rval = 0;                                                          \
         bool found;                                                             \
-        wxPyBeginBlockThreads();                            \
+        wxPyBeginBlockThreads();                                                \
         if ((found = wxPyCBH_findCallback(m_myInst, #CBNAME)))                  \
             rval = wxPyCBH_callCallback(m_myInst, Py_BuildValue("()"));         \
-        wxPyEndBlockThreads();                                             \
+        wxPyEndBlockThreads();                                                  \
         if (! found)                                                            \
             rval = PCLASS::CBNAME();                                            \
         return rval;                                                            \
@@ -423,10 +415,10 @@ static PyObject* t_output_helper(PyObject* target, PyObject* o) {
 #define PYCALLBACK__SIZETINT(PCLASS, CBNAME)                                    \
     void CBNAME(size_t a, int b)  {                                             \
         bool found;                                                             \
-        wxPyBeginBlockThreads();                            \
+        wxPyBeginBlockThreads();                                                \
         if ((found = wxPyCBH_findCallback(m_myInst, #CBNAME)))                  \
             wxPyCBH_callCallback(m_myInst, Py_BuildValue("(ii)", a,b));         \
-        wxPyEndBlockThreads();                                             \
+        wxPyEndBlockThreads();                                                  \
         if (! found)                                                            \
             PCLASS::CBNAME(a,b);                                                \
     }                                                                           \
@@ -440,10 +432,10 @@ static PyObject* t_output_helper(PyObject* target, PyObject* o) {
 #define PYCALLBACK__INTINTLONG(PCLASS, CBNAME)                                  \
     void CBNAME(int a, int b, long c)  {                                        \
         bool found;                                                             \
-        wxPyBeginBlockThreads();                            \
+        wxPyBeginBlockThreads();                                                \
         if ((found = wxPyCBH_findCallback(m_myInst, #CBNAME)))                  \
             wxPyCBH_callCallback(m_myInst, Py_BuildValue("(iii)", a,b,c));      \
-        wxPyEndBlockThreads();                                             \
+        wxPyEndBlockThreads();                                                  \
         if (! found)                                                            \
             PCLASS::CBNAME(a,b,c);                                              \
     }                                                                           \
@@ -457,10 +449,10 @@ static PyObject* t_output_helper(PyObject* target, PyObject* o) {
 #define PYCALLBACK__INTINTDOUBLE(PCLASS, CBNAME)                                \
     void CBNAME(int a, int b, double c)  {                                      \
         bool found;                                                             \
-        wxPyBeginBlockThreads();                            \
+        wxPyBeginBlockThreads();                                                \
         if ((found = wxPyCBH_findCallback(m_myInst, #CBNAME)))                  \
             wxPyCBH_callCallback(m_myInst, Py_BuildValue("(iif)", a,b,c));      \
-        wxPyEndBlockThreads();                                             \
+        wxPyEndBlockThreads();                                                  \
         if (! found)                                                            \
             PCLASS::CBNAME(a,b,c);                                              \
     }                                                                           \
@@ -473,10 +465,10 @@ static PyObject* t_output_helper(PyObject* target, PyObject* o) {
 #define PYCALLBACK__INTINTBOOL(PCLASS, CBNAME)                                  \
     void CBNAME(int a, int b, bool c)  {                                        \
         bool found;                                                             \
-        wxPyBeginBlockThreads();                            \
+        wxPyBeginBlockThreads();                                                \
         if ((found = wxPyCBH_findCallback(m_myInst, #CBNAME)))                  \
             wxPyCBH_callCallback(m_myInst, Py_BuildValue("(iii)", a,b,c));      \
-        wxPyEndBlockThreads();                                             \
+        wxPyEndBlockThreads();                                                  \
         if (! found)                                                            \
             PCLASS::CBNAME(a,b,c);                                              \
     }                                                                           \
@@ -724,15 +716,8 @@ public:
             PyObject* ro;
             ro = wxPyCBH_callCallbackObj(m_myInst, Py_BuildValue("(ii)",row,col));
             if (ro) {
-#if wxUSE_UNICODE
-	      PyObject* str = PyObject_Unicode(ro);
-	      rval = PyUnicode_AS_UNICODE(str);
-#else
-	      PyObject* str = PyObject_Str(ro);
-	      rval = PyString_AsString(str);
-#endif
+                rval = Py2wxString(ro);
                 Py_DECREF(ro);
-                Py_DECREF(str);
             }
         }
         wxPyEndBlockThreads();
@@ -742,11 +727,7 @@ public:
     void SetValue(int row, int col, const wxString& val) {
         wxPyBeginBlockThreads();
         if (wxPyCBH_findCallback(m_myInst, "SetValue")) {
-#if wxUSE_UNICODE
-	  wxPyCBH_callCallback(m_myInst, Py_BuildValue("(iiu)",row,col,val.c_str()));
-#else
-	  wxPyCBH_callCallback(m_myInst, Py_BuildValue("(iis)",row,col,val.c_str()));
-#endif
+            wxPyCBH_callCallback(m_myInst, Py_BuildValue("(iiO)",row,col,wx2PyString(val)));
 	}
         wxPyEndBlockThreads();
     }

@@ -156,7 +156,8 @@ public:
         bool found;
         wxPyBeginBlockThreads();
         if ((found = wxPyCBH_findCallback(m_myInst, "DoLog")))
-            wxPyCBH_callCallback(m_myInst, Py_BuildValue("(isi)", level, szString, t));  // TODO: unicode fix
+            wxPyCBH_callCallback(m_myInst, Py_BuildValue("(iOi)", level,
+                                                         wx2PyString(szString), t));
         wxPyEndBlockThreads();
         if (! found)
             wxLog::DoLog(level, szString, t);
@@ -166,7 +167,8 @@ public:
         bool found;
         wxPyBeginBlockThreads();
         if ((found = wxPyCBH_findCallback(m_myInst, "DoLogString")))
-            wxPyCBH_callCallback(m_myInst, Py_BuildValue("(si)", szString, t));  // TODO: unicode fix
+            wxPyCBH_callCallback(m_myInst, Py_BuildValue("(Oi)",
+                                                         wx2PyString(szString), t));
         wxPyEndBlockThreads();
         if (! found)
             wxLog::DoLogString(szString, t);
@@ -287,11 +289,11 @@ extern "C" {
 static PyObject *_wrap_wxFileSelector(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxString * _result;
-    char * _arg0 = (char *) wxFileSelectorPromptStr;
-    char * _arg1 = (char *) NULL;
-    char * _arg2 = (char *) NULL;
-    char * _arg3 = (char *) NULL;
-    char * _arg4 = (char *) wxFileSelectorDefaultWildcardStr;
+    wxChar * _arg0 = (wxChar *) wxFileSelectorPromptStr;
+    wxChar * _arg1 = (wxChar *) NULL;
+    wxChar * _arg2 = (wxChar *) NULL;
+    wxChar * _arg3 = (wxChar *) NULL;
+    wxChar * _arg4 = (wxChar *) wxFileSelectorDefaultWildcardStr;
     int  _arg5 = (int ) 0;
     wxWindow * _arg6 = (wxWindow *) NULL;
     int  _arg7 = (int ) -1;
@@ -312,6 +314,84 @@ static PyObject *_wrap_wxFileSelector(PyObject *self, PyObject *args, PyObject *
 {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
     _result = new wxString (wxFileSelector(_arg0,_arg1,_arg2,_arg3,_arg4,_arg5,_arg6,_arg7,_arg8));
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}{
+#if wxUSE_UNICODE
+    _resultobj = PyUnicode_FromUnicode(_result->c_str(), _result->Len());
+#else
+    _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
+#endif
+}
+{
+    delete _result;
+}
+    return _resultobj;
+}
+
+static PyObject *_wrap_wxLoadFileSelector(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxString * _result;
+    wxChar * _arg0;
+    wxChar * _arg1;
+    wxChar * _arg2 = (wxChar *) NULL;
+    wxWindow * _arg3 = (wxWindow *) NULL;
+    PyObject * _argo3 = 0;
+    char *_kwnames[] = { "what","extension","default_name","parent", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"ss|sO:wxLoadFileSelector",_kwnames,&_arg0,&_arg1,&_arg2,&_argo3)) 
+        return NULL;
+    if (_argo3) {
+        if (_argo3 == Py_None) { _arg3 = NULL; }
+        else if (SWIG_GetPtrObj(_argo3,(void **) &_arg3,"_wxWindow_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 4 of wxLoadFileSelector. Expected _wxWindow_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    _result = new wxString (wxLoadFileSelector(_arg0,_arg1,_arg2,_arg3));
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}{
+#if wxUSE_UNICODE
+    _resultobj = PyUnicode_FromUnicode(_result->c_str(), _result->Len());
+#else
+    _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
+#endif
+}
+{
+    delete _result;
+}
+    return _resultobj;
+}
+
+static PyObject *_wrap_wxSaveFileSelector(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxString * _result;
+    wxChar * _arg0;
+    wxChar * _arg1;
+    wxChar * _arg2 = (wxChar *) NULL;
+    wxWindow * _arg3 = (wxWindow *) NULL;
+    PyObject * _argo3 = 0;
+    char *_kwnames[] = { "what","extension","default_name","parent", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"ss|sO:wxSaveFileSelector",_kwnames,&_arg0,&_arg1,&_arg2,&_argo3)) 
+        return NULL;
+    if (_argo3) {
+        if (_argo3 == Py_None) { _arg3 = NULL; }
+        else if (SWIG_GetPtrObj(_argo3,(void **) &_arg3,"_wxWindow_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 4 of wxSaveFileSelector. Expected _wxWindow_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    _result = new wxString (wxSaveFileSelector(_arg0,_arg1,_arg2,_arg3));
 
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
@@ -10091,6 +10171,8 @@ static PyMethodDef misc2cMethods[] = {
 	 { "wxGetSingleChoice", (PyCFunction) _wrap_wxGetSingleChoice, METH_VARARGS | METH_KEYWORDS },
 	 { "wxGetPasswordFromUser", (PyCFunction) _wrap_wxGetPasswordFromUser, METH_VARARGS | METH_KEYWORDS },
 	 { "wxGetTextFromUser", (PyCFunction) _wrap_wxGetTextFromUser, METH_VARARGS | METH_KEYWORDS },
+	 { "wxSaveFileSelector", (PyCFunction) _wrap_wxSaveFileSelector, METH_VARARGS | METH_KEYWORDS },
+	 { "wxLoadFileSelector", (PyCFunction) _wrap_wxLoadFileSelector, METH_VARARGS | METH_KEYWORDS },
 	 { "wxFileSelector", (PyCFunction) _wrap_wxFileSelector, METH_VARARGS | METH_KEYWORDS },
 	 { NULL, NULL }
 };

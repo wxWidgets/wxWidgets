@@ -371,7 +371,7 @@ public:
     void SetToolTip(wxToolTip *tooltip);
     wxToolTip* GetToolTip();
 
-    void SetSizer(wxSizer* sizer);
+    void SetSizer(wxSizer* sizer, bool deleteOld=TRUE);
     wxSizer* GetSizer();
 
         // Track if this window is a member of a sizer
@@ -388,6 +388,7 @@ public:
 #endif
 
     wxSize GetBestSize();
+    wxSize GetMaxSize();
 
     void SetCaret(wxCaret *caret);
     wxCaret *GetCaret();

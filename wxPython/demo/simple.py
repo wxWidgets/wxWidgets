@@ -9,7 +9,7 @@ from wxPython.wx import *
 
 class MyFrame(wxFrame):
     """
-    This is MyFrame.  It just shows a few controls on a wxPanel, 
+    This is MyFrame.  It just shows a few controls on a wxPanel,
     and has a simple menu.
     """
     def __init__(self, parent, title):
@@ -24,7 +24,7 @@ class MyFrame(wxFrame):
 
         panel = wxPanel(self, -1)
         if wxPlatform == "__WXMAC__":
-            text = wxStaticText(panel, -1, 
+            text = wxStaticText(panel, -1,
                                 "Hello World!\nWhere is my menu?")
         else:
             text = wxStaticText(panel, -1, "Hello World!")

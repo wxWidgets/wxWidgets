@@ -19,7 +19,7 @@ class TestPanel(wxPanel):
 
         # Make the controls
         prompt = wxStaticText(self, -1, 'Command line:')
-        self.cmd = wxTextCtrl(self, -1, 'python data/echo.py')
+        self.cmd = wxTextCtrl(self, -1, 'python -u data/echo.py')
         self.exBtn = wxButton(self, -1, 'Execute')
 
         self.out = wxTextCtrl(self, -1, '', style=wxTE_MULTILINE|wxTE_READONLY)
@@ -91,9 +91,9 @@ class TestPanel(wxPanel):
 
     def OnCloseStream(self, evt):
         self.log.write('OnCloseStream\n')
-        print "b4 CloseOutput"
+        #print "b4 CloseOutput"
         self.process.CloseOutput()
-        print "after CloseOutput"
+        #print "after CloseOutput"
 
     def OnIdle(self, evt):
         if self.process is not None:
