@@ -57,6 +57,7 @@ OBJECTS = \
 		dbgrid.obj,\
 		dbtable.obj,\
 		dcbase.obj,\
+		dircmn.obj,\
 		dlgcmn.obj,\
 		dobjcmn.obj,\
 		docmdi.obj,\
@@ -171,6 +172,7 @@ SOURCES = \
 		dbgrid.cpp,\
 		dbtable.cpp,\
 		dcbase.cpp,\
+		dircmn.cpp,\
 		dlgcmn.cpp,\
 		dobjcmn.cpp,\
 		docmdi.cpp,\
@@ -316,6 +318,7 @@ db.obj : db.cpp
 dbgrid.obj : dbgrid.cpp
 dbtable.obj : dbtable.cpp
 dcbase.obj : dcbase.cpp
+dircmn.obj : dircmn.cpp
 dlgcmn.obj : dlgcmn.cpp
 dobjcmn.obj : dobjcmn.cpp
 docmdi.obj : docmdi.cpp
