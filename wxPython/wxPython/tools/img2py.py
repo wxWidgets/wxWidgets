@@ -156,7 +156,7 @@ def main(args):
                   % (imgName, data))
     else:
         out.write("def get%sData():\n"
-                  "    return %s\n\n"
+                  "    return \\\n%s\n\n"
                   % (imgName, data))
 
 
