@@ -273,6 +273,8 @@ wxScrollHelper::~wxScrollHelper()
 
     if ( m_targetWindow )
         m_targetWindow->PopEventHandler(TRUE /* do delete it */);
+    if ( m_win && m_win != m_targetWindow)
+        m_win->PopEventHandler(TRUE /* do delete it */);
 }
 
 // ----------------------------------------------------------------------------
@@ -358,7 +360,17 @@ void wxScrollHelper::SetScrollbars(int pixelsPerUnitX,
 void wxScrollHelper::SetTargetWindow( wxWindow *target )
 {
     wxASSERT_MSG( target, wxT("target window must not be NULL") );
+    // FIXME: There is a potential problem with this way of deleting
+    // event handlers, basically you can not be sure that you delete
+    // the event handler that was create by this wxScrollHelper.
+    // Remove the old event handler from the previous target scroll window.
+    if (m_targetWindow && m_targetWindow != m_win)
+        m_targetWindow->PopEventHandler(TRUE /* Delete old event handler*/);
     m_targetWindow = target;
+    // Install a new event handler, which will intercept the events we're
+    // interested in from the target scroll window.
+    if (m_targetWindow != m_win)
+        m_targetWindow->PushEventHandler(new wxScrollHelperEvtHandler(this));
 }
 
 wxWindow *wxScrollHelper::GetTargetWindow() const
@@ -980,7 +992,7 @@ void wxScrollHelper::HandleOnMouseWheel(wxMouseEvent& event)
 
         wxScrollWinEvent newEvent;
 
-        newEvent.SetPosition(m_xScrollPosition - lines);
+        newEvent.SetPosition(0);
         newEvent.SetOrientation(wxVERTICAL);
         newEvent.m_eventObject = m_win;
         if (lines > 0)
@@ -995,7 +1007,7 @@ void wxScrollHelper::HandleOnMouseWheel(wxMouseEvent& event)
         /* Old Way */
         // int vsx, vsy;
         // GetViewStart(&vsx, &vsy);
-        // Scroll(-1, vsy - lines);    
+        // Scroll(-1, vsy - lines);
     }
 }
 
