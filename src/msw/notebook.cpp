@@ -313,15 +313,13 @@ bool wxNotebook::Create(wxWindow *parent,
     if ( !MSWCreateControl(className, wxEmptyString, pos, size) )
         return false;
 
-    if (HasFlag(wxNB_NOPAGETHEME) || (wxSystemOptions::HasOption(wxT("msw.notebook.themed-background")) &&
-                                      wxSystemOptions::GetOptionInt(wxT("msw.notebook.themed-background")) == 0))
+#if wxUSE_UXTHEME
+    if ( HasFlag(wxNB_NOPAGETHEME) ||
+            wxSystemOptions::IsFalse(wxT("msw.notebook.themed-background")) )
     {
-        wxColour col = GetThemeBackgroundColour();
-        if (col.Ok())
-        {
-            SetBackgroundColour(col);
-        }
+        SetBackgroundColour(GetThemeBackgroundColour());
     }
+#endif // wxUSE_UXTHEME
 
     // Undocumented hack to get flat notebook style
     // In fact, we should probably only do this in some
@@ -756,12 +754,12 @@ int wxNotebook::HitTest(const wxPoint& pt, long *flags) const
 
 void wxNotebook::OnSize(wxSizeEvent& event)
 {
-    // update the background brush
 #if wxUSE_UXTHEME
+    // background bitmap size has changed, update the brush using it too
     UpdateBgBrush();
 #endif // wxUSE_UXTHEME
 
-    if (GetPageCount() == 0)
+    if ( GetPageCount() == 0 )
     {
         // Prevents droppings on resize, but does cause some flicker
         // when there are no pages.
@@ -1060,12 +1058,8 @@ wxNotebook::MSWPrintChild(wxWindow *win,
                           WXLPARAM WXUNUSED(lParam))
 {
     // Don't paint the theme for the child if we have a solid background
-    if ( m_hasBgCol ||
-            wxSystemOptions::IsFalse(wxT("msw.notebook.themed-background")) ||
-                HasFlag(wxNB_NOPAGETHEME) )
-    {
+    if ( m_hasBgCol )
         return false;
-    }
 
 
     RECT rc;
@@ -1135,8 +1129,7 @@ wxColour wxNotebook::GetThemeBackgroundColour() const
                                             &themeColor);
             }
 
-            wxColour colour(GetRValue(themeColor), GetGValue(themeColor), GetBValue(themeColor));
-            return colour;
+            return wxRGBToColour(themeColor);
         }
     }
 #endif // wxUSE_UXTHEME
