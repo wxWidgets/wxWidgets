@@ -31,6 +31,7 @@
     #include "wx/utils.h"
     #include "wx/dialog.h"
     #include "wx/dirdlg.h"
+    #include "wx/log.h"
 #endif
 
 #include "wx/msw/private.h"
