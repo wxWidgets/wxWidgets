@@ -1746,7 +1746,7 @@ void wxListHeaderWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
                                     dc,
                                     wxRect(x, HEADER_OFFSET_Y, cw, h - 2),
                                     m_parent->IsEnabled() ? 0
-                                                          : wxCONTROL_DISABLED
+                                                          : (int)wxCONTROL_DISABLED
                                 );
 
         // see if we have enough space for the column label
@@ -2882,7 +2882,7 @@ void wxListMainWindow::OnMouse( wxMouseEvent &event )
         return;
     }
 #endif
-    
+
     if ( !HasCurrent() || IsEmpty() )
         return;
 
