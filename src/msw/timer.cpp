@@ -83,7 +83,7 @@ bool wxTimer::Start(int milliseconds, bool oneShot)
 {
     (void)wxTimerBase::Start(milliseconds, oneShot);
 
-    wxCHECK_MSG( m_milli > 0, false, wxT("invalid value for timer timeour") );
+    wxCHECK_MSG( m_milli > 0, false, wxT("invalid value for timer timeout") );
 
     m_id = ::SetTimer
              (
