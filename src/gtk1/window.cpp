@@ -1156,12 +1156,12 @@ static gint gtk_window_key_press_callback( GtkWidget *widget,
         {
             if ( gdk_event->length == 1 )
             {
-                key_code = gdk_event->string[0];
+                key_code = (unsigned char)gdk_event->string[0];
             }
-            else if ((keysym & 0xFF) == keysym)
+            else if ( wxIsAsciiKeysym(keysym) )
             {
                 // ASCII key
-                key_code = (guint)keysym;
+                key_code = (unsigned char)keysym;
             }
         }
 
