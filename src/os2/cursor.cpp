@@ -23,6 +23,7 @@
 #endif
 
 #include "wx/os2/private.h"
+#include "wx/os2/wxrsc.h"
 #include "wx/image.h"
 
 #include "assert.h"
