@@ -93,17 +93,14 @@ bool wxIsStockID(wxWindowID id)
     };
 }
 
-wxString wxGetStockLabel(wxWindowID id)
+wxString wxGetStockLabel(wxWindowID id, bool withCodes, wxString accelerator)
 {
-#if defined(__SMARTPHONE__) || defined(__WXPALMOS__)
+    wxString stockLabel;
+
     #define STOCKITEM(stockid, label) \
         case stockid:                 \
-            return wxStripMenuCodes(label);
-#else
-    #define STOCKITEM(stockid, label) \
-        case stockid:                 \
-            return label;
-#endif
+            stockLabel = label;       \
+            break;
 
     switch (id)
     {
@@ -165,7 +162,17 @@ wxString wxGetStockLabel(wxWindowID id)
 
     #undef STOCKITEM
 
-    return wxEmptyString;
+    if(!withCodes)
+    {
+        stockLabel = wxStripMenuCodes( stockLabel );
+    }
+    else if (!stockLabel.empty() && !accelerator.empty())
+    {
+        stockLabel += _T("\t");
+        stockLabel += accelerator;
+    }
+
+    return stockLabel;
 }
 
 bool wxIsStockLabel(wxWindowID id, const wxString& label)

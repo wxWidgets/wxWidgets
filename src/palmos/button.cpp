@@ -40,8 +40,9 @@
     #include "wx/dcscreen.h"
     #include "wx/frame.h"
     #include "wx/dialog.h"
-    #include "wx/stockitem.h"
 #endif
+
+#include "wx/stockitem.h"
 
 // ----------------------------------------------------------------------------
 // macros
@@ -168,7 +169,7 @@ bool wxButton::Create(wxWindow *parent,
     // take the stock label
     wxString palmLabel = label;
     if( palmLabel.empty() && wxIsStockID(id) )
-        palmLabel = wxGetStockLabel(id);
+        palmLabel = wxGetStockLabel(id, false);
 
     if(!wxControl::Create(parent, id, palmPos, palmSize, style, validator, name))
         return false;
