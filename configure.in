@@ -1259,9 +1259,12 @@ dnl install checks
 dnl   defines INSTALL with the appropriate command
 AC_PROG_INSTALL
 
-dnl   make install path absolute (if not already); will fail with MSDOS paths
+dnl   make install path absolute (if not already);
+dnl   will fail with (some) MSDOS paths
 case ${INSTALL} in
   /* ) # Absolute
+     ;;
+  ?:* ) # Drive letter, considered as absolute.
      ;;
   *)
      INSTALL=`pwd`/${INSTALL} ;;
@@ -1415,6 +1418,15 @@ fi
 dnl defines HAVE_LANGINFO_H (GNU libc locale parameters)
 AC_CHECK_HEADERS(langinfo.h)
 
+case "${host}" in
+  *-pc-os2_emx | *-pc-os2-emx )
+      dnl Explicitly link -lintl if langinfo.h is available.
+      if test $ac_cv_header_langinfo_h = "yes"; then
+          LIBS="$LIBS -lintl"
+      fi
+  ;;
+esac
+ 
 if test "$wxUSE_GUI" = "yes"; then
     if test "$wxUSE_UNIX" = "yes"; then
         dnl defines HAVE_X11_XKBLIB_H
