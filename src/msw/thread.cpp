@@ -454,7 +454,9 @@ bool wxThreadInternal::Create(wxThread *thread)
     // for compilers which have it, we should use C RTL function for thread
     // creation instead of Win32 API one because otherwise we will have memory
     // leaks if the thread uses C RTL (and most threads do)
-#if defined(__VISUALC__) || (defined(__BORLANDC__) && (__BORLANDC__ >= 0x500))
+#if defined(__VISUALC__) || \
+    (defined(__BORLANDC__) && (__BORLANDC__ >= 0x500)) \\
+    (defined(__GNUG__) && defined(__MSVCRT__)
     typedef unsigned (__stdcall *RtlThreadStart)(void *);
 
     m_hThread = (HANDLE)_beginthreadex(NULL, 0,
@@ -462,7 +464,7 @@ bool wxThreadInternal::Create(wxThread *thread)
                                        wxThreadInternal::WinThreadStart,
                                        thread, CREATE_SUSPENDED,
                                        (unsigned int *)&m_tid);
-#else // !VC++
+#else // compiler doesn't have _beginthreadex
     m_hThread = ::CreateThread
                   (
                     NULL,                               // default security
@@ -473,7 +475,7 @@ bool wxThreadInternal::Create(wxThread *thread)
                     CREATE_SUSPENDED,                   // flags
                     &m_tid                              // [out] thread id
                   );
-#endif // VC++/!VC++
+#endif // _beginthreadex/CreateThread
 
     if ( m_hThread == NULL )
     {
