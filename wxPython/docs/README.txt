@@ -22,7 +22,7 @@ are willing to help you learn, answer questions and solve problems.
 To join the mail list just go to this web page and follow the
 instructions there:
 
-	     http://wxpython.org/maillist.php
+             http://wxpython.org/maillist.php
 
 There is also a good set of class reference documentation available
 for wxPython, but currently it is geared for the C++ user.  This may
@@ -36,23 +36,20 @@ available in Python, but most of the GUI related classes are.
 Other Info
 ----------
 
-Please also see the following files in this directory:
+Please also see the following files:
 
-       CHANGES.txt         Information about new features, fixes,
+   docs/CHANGES.txt        Information about new features, fixes,
                            etc. in each release.
 
-       ../README.1st.txt   Instructions for building wxGTK and
-                           wxPython on Unix-like platforms the
-			   "new way."
+   docs/BUILD.txt          Instructions for building wxPython on
+                           various Unix-like platforms, OS X or
+                           Windows.
 
-       BUILD.unix.txt	   Instructions for building wxPython on
-			   various Unix-like platforms the "old way."
+   docs/MigrationGuide.txt Information about some big changes from 2.4
+                           to 2.5 that require changes to your
+                           applications
 
-       BUILD.win32.txt     Instructions for building wxPython on Windows.
-
-       BUILD.osx.txt       Instructions for building wxPython on Mac OS X.
-
-       licence/*           Text of the wxWindows license.
+   licence/*               Text of the wxWindows license.
 
 
 
