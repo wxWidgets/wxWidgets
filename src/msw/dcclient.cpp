@@ -13,11 +13,6 @@
 #pragma implementation "dcclient.h"
 #endif
 
-#ifdef __GNUG__
-#pragma implementation
-#pragma implementation "dcclient.h"
-#endif
-
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 

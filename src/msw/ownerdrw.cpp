@@ -9,15 +9,15 @@
 // Licence:     wxWindows license
 ///////////////////////////////////////////////////////////////////////////////
 
-// ============================================================================
-// headers & declarations
-// ============================================================================
+#ifdef __GNUG__
+#pragma implementation
+#endif
 
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
 #ifdef __BORLANDC__
-  #pragma hdrstop
+#pragma hdrstop
 #endif
 
 #ifndef WX_PRECOMP

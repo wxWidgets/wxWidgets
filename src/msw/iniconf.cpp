@@ -9,18 +9,16 @@
 // Licence:     wxWindows license
 ///////////////////////////////////////////////////////////////////////////////
 
-// ============================================================================
-// declarations
-// ============================================================================
+#ifdef __GNUG__
+#pragma implementation "iniconf.h"
+#endif
 
-// ----------------------------------------------------------------------------
-// headers
-// ----------------------------------------------------------------------------
-#include  "wx/wxprec.h"
+// For compilers that support precompilation, includes "wx.h".
+#include "wx/wxprec.h"
 
-#ifdef    __BORLANDC__
-  #pragma hdrstop
-#endif  //__BORLANDC__
+#ifdef __BORLANDC__
+#pragma hdrstop
+#endif
 
 #ifndef   WX_PRECOMP
   #include  <wx/string.h>

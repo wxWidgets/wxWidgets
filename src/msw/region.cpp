@@ -1,7 +1,8 @@
 /////////////////////////////////////////////////////////////////////////////
-// File:      region.cpp
+// Name:        msw/region.cpp
 // Purpose:   Region handling for wxWindows/X11
 // Author:    Markus Holzem
+// Modified by:
 // Created:   Fri Oct 24 10:46:34 MET 1997
 // RCS-ID:	  $Id$
 // Copyright: (c) 1997 Julian Smart and Markus Holzem
@@ -12,6 +13,7 @@
 #pragma implementation "region.h"
 #endif
 
+// For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
 #ifdef __BORLANDC__

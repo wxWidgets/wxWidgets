@@ -13,6 +13,7 @@
 #pragma implementation "thread.h"
 #endif
 
+// For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
 #if defined(__BORLANDC__)

@@ -10,14 +10,14 @@
 /////////////////////////////////////////////////////////////////////////////
 
 #ifdef __GNUG__
-  #pragma implementation "app.h"
+#pragma implementation "app.h"
 #endif
 
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
 #if defined(__BORLANDC__)
-  #pragma hdrstop
+#pragma hdrstop
 #endif
 
 #ifndef WX_PRECOMP

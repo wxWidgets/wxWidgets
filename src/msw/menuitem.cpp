@@ -9,9 +9,9 @@
 // Licence:     wxWindows license
 ///////////////////////////////////////////////////////////////////////////////
 
-// ============================================================================
-// headers & declarations
-// ============================================================================
+#ifdef __GNUG__
+#pragma implementation "menuitem.h"
+#endif
 
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
