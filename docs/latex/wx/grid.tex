@@ -23,10 +23,13 @@ the previous implementation.
 
 \wxheading{Derived from}
 
+% UNCOMMENT THIS BEFORE COMMITTING TO CVS
+\begin{comment}
 \helpref{wxScrolledWindow}{wxscrolledwindow}\\
 \helpref{wxWindow}{wxwindow}\\
 \helpref{wxEvtHandler}{wxevthandler}\\
 \helpref{wxObject}{wxobject}
+\end{comment}
 
 \wxheading{Include files}
 
@@ -55,6 +58,13 @@ There are presently no specific window styles for wxGrid.
 \membersection{Display format}
 
 \membersection{Selection functions}
+
+\helpref{wxGrid::ClearSelection}{wxgridclearselection} \\
+\helpref{wxGrid::IsSelection}{wxgridisselection} \\
+\helpref{wxGrid::SelectAll}{wxgridselectall} \\
+\helpref{wxGrid::SelectBlock}{wxgridselectblock} \\
+\helpref{wxGrid::SelectCol}{wxgridselectcol} \\
+\helpref{wxGrid::SelectRow}{wxgridselectrow}
 
 %%%%%%%%% MEMBER FUNCTIONS %%%%%%%%%%
 \helponly{\insertatlevel{2}{
@@ -216,6 +226,12 @@ coordinates.
 Clears all data in the underlying grid table and repaints the grid. The table is not deleted by
 this function. If you are using a derived table class then you need to override 
 \helpref{wxGridTableBase::Clear}{wxgridtablebaseclear} for this function to have any effect.
+
+\membersection{wxGrid::ClearSelection}\label{wxgridclearselection}
+
+\func{void}{ClearSelection}{\void}
+
+Deselects all cells that are currently selected.
 
 \membersection{wxGrid::CreateGrid}\label{wxgridcreategrid}
 
@@ -397,6 +413,23 @@ the \helpref{wxGrid overview}{gridoverview} for more information about cell edit
 \func{wxColour}{GetCellTextColour}{\param{int }{row}, \param{int }{col}}
 
 Returns the text colour for the grid cell at the specified location.
+
+\membersection{wxGrid::GetCellValue}\label{wxgridgetcellvalue}
+
+\func{wxString}{GetCellValue}{\param{int }{row}, \param{int }{col}}
+
+\func{wxString}{GetCellValue}{\param{const wxGridCellCoords\&}{coords}}
+
+Returns the string contained in the cell at the specified location. For simple applications where a
+grid object automatically uses a default grid table of string values you use this function together
+with \helpref{wxGrid::SetCellValue}{wxgridsetcellvalue} to access cell values. 
+
+For more complex applications where you have derived your own grid table class that contains
+various data types (e.g. numeric, boolean or user-defined custom types) then you only use this
+function for those cells that contain string values. 
+
+See \helpref{wxGridTableBase::CanGetValueAs}{wxgridtablebasecangetvalueas}
+and the \helpref{wxGrid overview}{gridoverview} for more information.
 
 \membersection{wxGrid::GetColLabelAlignment}\label{wxgridgetcollabelalignment}
 
@@ -650,6 +683,19 @@ Returns FALSE if the whole grid has been set as read-only or TRUE otherwise.
 See \helpref{wxGrid::EnableEditing}{wxgridenableediting} for more information about
 controlling the editing status of grid cells.
 
+\membersection{wxGrid::IsReadOnly}\label{wxgridisreadonly}
+
+\constfunc{bool}{IsReadOnly}{\param{int }{row}, \param{int }{col}}
+
+Returns TRUE if the cell at the specified location can't be edited.
+See also \helpref{wxGrid::IsReadOnly}{wxgridisreadonly}.
+
+\membersection{wxGrid::IsSelection}\label{wxgridisselection}
+
+\func{bool}{IsSelection}{\void}
+
+Returns TRUE if there are currently rows, columns or blocks of cells selected.
+
 \membersection{wxGrid::IsVisible}\label{wxgridisvisible}
 
 \func{bool}{IsVisible}{\param{int }{row}, \param{int }{col}, 
@@ -783,6 +829,41 @@ This is called automatically when the grid cursor moves from the current cell to
 new cell. It is also a good idea to call this function when closing a grid since
 any edits to the final cell location will not be saved otherwise.
 
+\membersection{wxGrid::SelectAll}\label{wxgridselectall}
+
+\func{void}{SelectAll}{\void}
+
+Selects all cells in the grid.
+
+\membersection{wxGrid::SelectBlock}\label{wxgridselectblock}
+
+\func{void}{SelectBlock}{\param{int }{topRow}, \param{int }{leftCol}, \param{int }{bottomRow}, \param{int }{rightCol}}
+
+\func{void}{SelectBlock}{\param{const wxGridCellCoords\& }{topLeft}, \param{const wxGridCellCoords\& }{bottomRight}}
+
+Highlights a rectangular block of cells but does not select it !
+
+\wxheading{Note} \\ This is obviously inconsistent with the other wxGrid::SelectXXX functions, each
+of which call the corresponding wxGridSelection function whereas wxGrid::SelectBlock is only
+responsible for highlighting a block of cells. There is presently no way to add a block to the
+selection programmatically. This will probably be changed soon so that the existing SelectBlock
+function is renamed to HighlightBlock and a new SelectBlock function introduced to call
+wxGridSelection::SelectBlock. 
+
+\membersection{wxGrid::SelectCol}\label{wxgridselectcol}
+
+\func{void}{SelectCol}{\param{int }{col}, \param{bool }{addToSelected = FALSE}}
+
+Selects the specified column. If addToSelected is FALSE then any existing selection will be
+deselected; if TRUE the column will be added to the existing selection.
+
+\membersection{wxGrid::SelectRow}\label{wxgridselectrow}
+
+\func{void}{SelectRow}{\param{int }{row}, \param{bool }{addToSelected = FALSE}}
+
+Selects the specified row. If addToSelected is FALSE then any existing selection will be
+deselected; if TRUE the row will be added to the existing selection.
+
 \membersection{wxGrid::SetCellAlignment}\label{wxgridsetcellalignment}
 
 \func{void}{SetCellAlignment}{\param{int }{row}, \param{int }{col}, \param{int }{horiz}, \param{int }{vert}}
@@ -823,6 +904,23 @@ the \helpref{wxGrid overview}{gridoverview} for more information about cell edit
 \func{void}{SetCellTextColour}{\param{int }{row}, \param{int }{col}, \param{const }{wxColour\&}}
 
 Sets the text colour for the grid cell at the specified location.
+
+\membersection{wxGrid::SetCellValue}\label{wxgridsetcellvalue}
+
+\func{void}{SetCellValue}{\param{int }{row}, \param{int }{col}, \param{const wxString\& }{s}}
+
+\func{void}{SetCellValue}{\param{const wxGridCellCoords\& }{coords}, \param{const wxString\& }{s}}
+
+Sets the string value for the cell at the specified location. For simple applications where a
+grid object automatically uses a default grid table of string values you use this function together
+with \helpref{wxGrid::GetCellValue}{wxgridgetcellvalue} to access cell values. 
+
+For more complex applications where you have derived your own grid table class that contains
+various data types (e.g. numeric, boolean or user-defined custom types) then you only use this
+function for those cells that contain string values. 
+
+See \helpref{wxGridTableBase::CanSetValueAs}{wxgridtablebasecangetvalueas}
+and the \helpref{wxGrid overview}{gridoverview} for more information.
 
 \membersection{wxGrid::SetColAttr}\label{wxgridsetcolattr}
 
@@ -990,6 +1088,13 @@ Sets the font for row and column labels.
 
 Sets the colour for row and column label text.
 
+\membersection{wxGrid::SetReadOnly}\label{wxgridsetreadonly}
+
+\func{void}{SetReadOnly}{\param{int }{row}, \param{int }{col}, \param{bool }{isReadOnly = TRUE}}
+
+Makes the cell at the specified location read-only or editable.
+See also \helpref{wxGrid::IsReadOnly}{wxgridisreadonly}.
+
 \membersection{wxGrid::SetRowAttr}\label{wxgridsetrowattr}
 
 \func{void}{SetRowAttr}{\param{int }{row}, \param{wxGridCellAttr* }{attr}}
@@ -1104,68 +1209,6 @@ If no row edge is near to this position wxNOT_FOUND is returned.
 Returns the grid row that corresponds to the logical y coordinate. Returns
 wxNOT_FOUND if there is no row at the y position.
 
-
-
-\membersection{wxGrid::GetCellValue}\label{wxgridgetcellvalue}
-
-\func{wxString}{GetCellValue}{\param{int }{row}, \param{int }{col}}
-
-\func{wxString}{GetCellValue}{\param{const wxGridCellCoords\& }{coords}}
-
-
-\membersection{wxGrid::SetCellValue}\label{wxgridsetcellvalue}
-
-\func{void}{SetCellValue}{\param{int }{row}, \param{int }{col}, \param{const wxString\& }{s}}
-
-\func{void}{SetCellValue}{\param{const wxGridCellCoords\& }{coords}, \param{const wxString\& }{s}}
-
-
-\membersection{wxGrid::IsReadOnly}\label{wxgridisreadonly}
-
-\constfunc{bool}{IsReadOnly}{\param{int }{row}, \param{int }{col}}
-
-returns TRUE if the cell can't be edited
-
-
-\membersection{wxGrid::SetReadOnly}\label{wxgridsetreadonly}
-
-\func{void}{SetReadOnly}{\param{int }{row}, \param{int }{col}, \param{bool }{isReadOnly = TRUE}}
-
-make the cell editable/readonly
-
-
-\membersection{wxGrid::SelectRow}\label{wxgridselectrow}
-
-\func{void}{SelectRow}{\param{int }{row}, \param{bool }{addToSelected = FALSE}}
-
------- selections of blocks of cells
-
-
-\membersection{wxGrid::SelectCol}\label{wxgridselectcol}
-
-\func{void}{SelectCol}{\param{int }{col}, \param{bool }{addToSelected = FALSE}}
-
-
-\membersection{wxGrid::SelectBlock}\label{wxgridselectblock}
-
-\func{void}{SelectBlock}{\param{int }{topRow}, \param{int }{leftCol}, \param{int }{bottomRow}, \param{int }{rightCol}}
-
-\func{void}{SelectBlock}{\param{const wxGridCellCoords\& }{topLeft}, \param{const wxGridCellCoords\& }{bottomRight}}
-
-
-\membersection{wxGrid::SelectAll}\label{wxgridselectall}
-
-\func{void}{SelectAll}{\void}
-
-
-\membersection{wxGrid::IsSelection}\label{wxgridisselection}
-
-\func{bool}{IsSelection}{\void}
-
-
-\membersection{wxGrid::ClearSelection}\label{wxgridclearselection}
-
-\func{void}{ClearSelection}{\void}
 
 
 \membersection{wxGrid::IsInSelection}\label{wxgridisinselection}
