@@ -1385,8 +1385,14 @@ void wxListMainWindow::OnChar( wxKeyEvent &event )
 {
   wxListEvent le( wxEVT_COMMAND_LIST_KEY_DOWN, GetParent()->GetId() );
   le.m_code = event.KeyCode();
-  le.SetEventObject( GetParent() );
-  GetParent()->GetEventHandler()->ProcessEvent( le );
+
+  wxWindow *parent = GetParent();
+  le.SetEventObject( parent );
+  wxEvtHandler *handler = parent->GetEventHandler();
+  handler->ProcessEvent( le );
+
+  // pass the original CHAR event to the ctrl too
+  handler->ProcessEvent( event );
   
 /*
   if (event.KeyCode() == WXK_TAB)
