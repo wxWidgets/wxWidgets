@@ -136,14 +136,17 @@ long wxGetElapsedTime(bool resetTimer)
 #ifndef __VMS__
 bool wxGetLocalTime(long *timeZone, int *dstObserved)
 {
-#if defined(__MINGW32__) && defined(__EGCS__)
+#if defined(__MINGW32__) 
   time_t t0;
   struct tm *tp;
   time(&t0);
   tp = localtime(&t0);
   *timeZone = _timezone; // tp->tm_gmtoff; // ???
   *dstObserved = tp->tm_isdst;
-#elif defined(__MINGW32__)
+#elif 0
+  /* HH: This code apparently was needed by very old Mingw-gcc versions
+   * Modern mingw's don't need it. Since old gcc isn't supported anyway,
+   * I think this stuff can go */
   time_t t0;
   struct tm *tp;
   time(&t0);
