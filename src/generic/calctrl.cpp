@@ -104,7 +104,20 @@ BEGIN_EVENT_TABLE(wxYearSpinCtrl, wxSpinCtrl)
     EVT_SPINCTRL(-1, wxYearSpinCtrl::OnYearChange)
 END_EVENT_TABLE()
 
+#if wxUSE_EXTENDED_RTTI
+IMPLEMENT_DYNAMIC_CLASS_XTI(wxCalendarCtrl, wxControl,"wx/calctrl.h")
+
+WX_BEGIN_PROPERTIES_TABLE(wxCalendarCtrl)
+	WX_PROPERTY( Date,wxDateTime, SetDate , GetDate, )
+WX_END_PROPERTIES_TABLE()
+
+WX_BEGIN_HANDLERS_TABLE(wxCalendarCtrl)
+WX_END_HANDLERS_TABLE()
+
+WX_CONSTRUCTOR_6( wxCalendarCtrl , wxWindow* , Parent , wxWindowID , Id , wxDateTime , Date , wxPoint , Position , wxSize , Size , long , WindowStyle ) 
+#else
 IMPLEMENT_DYNAMIC_CLASS(wxCalendarCtrl, wxControl)
+#endif
 IMPLEMENT_DYNAMIC_CLASS(wxCalendarEvent, wxCommandEvent)
 
 // ----------------------------------------------------------------------------

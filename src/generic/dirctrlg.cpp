@@ -428,14 +428,24 @@ bool wxDirItemData::HasFiles(const wxString& WXUNUSED(spec)) const
 // wxGenericDirCtrl
 //-----------------------------------------------------------------------------
 
-IMPLEMENT_DYNAMIC_CLASS(wxGenericDirCtrl, wxControl)
 
-/*
-TODO PROPERTIES
-	defaultfolder string
-	filter string
-	(long) defaultfilter)
-*/
+#if wxUSE_EXTENDED_RTTI
+IMPLEMENT_DYNAMIC_CLASS_XTI(wxGenericDirCtrl, wxControl,"wx/dirctrl.h")
+
+WX_BEGIN_PROPERTIES_TABLE(wxGenericDirCtrl)
+	WX_PROPERTY( DefaultPath , wxString , SetDefaultPath , GetDefaultPath  , )
+	WX_PROPERTY( Filter , wxString , SetFilter , GetFilter  , )
+	WX_PROPERTY( DefaultFilter , int , SetFilterIndex, GetFilterIndex, )
+WX_END_PROPERTIES_TABLE()
+
+WX_BEGIN_HANDLERS_TABLE(wxGenericDirCtrl)
+WX_END_HANDLERS_TABLE()
+
+WX_CONSTRUCTOR_8( wxGenericDirCtrl , wxWindow* , Parent , wxWindowID , Id , wxString , DefaultPath , 
+                 wxPoint , Position , wxSize , Size , long , WindowStyle , wxString , Filter , int , DefaultFilter ) 
+#else
+IMPLEMENT_DYNAMIC_CLASS(wxGenericDirCtrl, wxControl)
+#endif
 
 BEGIN_EVENT_TABLE(wxGenericDirCtrl, wxControl)
   EVT_TREE_ITEM_EXPANDING     (-1, wxGenericDirCtrl::OnExpandItem)

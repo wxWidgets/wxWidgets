@@ -3759,7 +3759,23 @@ static int CoordToRowOrCol(int coord, int defaultDist, int minDist,
                                           m_rowBottoms, m_numRows, TRUE)
 /////////////////////////////////////////////////////////////////////
 
+#if wxUSE_EXTENDED_RTTI
+IMPLEMENT_DYNAMIC_CLASS_XTI(wxGrid, wxScrolledWindow,"wx/grid.h")
+
+WX_BEGIN_PROPERTIES_TABLE(wxGrid)
+WX_END_PROPERTIES_TABLE()
+
+WX_BEGIN_HANDLERS_TABLE(wxGrid)
+WX_END_HANDLERS_TABLE()
+
+WX_CONSTRUCTOR_5( wxGrid , wxWindow* , Parent , wxWindowID , Id , wxPoint , Position , wxSize , Size , long , WindowStyle ) 
+
+/*
+ TODO : Expose more information of a list's layout etc. via appropriate objects (à la NotebookPageInfo)
+*/
+#else
 IMPLEMENT_DYNAMIC_CLASS( wxGrid, wxScrolledWindow )
+#endif
 
 BEGIN_EVENT_TABLE( wxGrid, wxScrolledWindow )
     EVT_PAINT( wxGrid::OnPaint )
@@ -3768,6 +3784,16 @@ BEGIN_EVENT_TABLE( wxGrid, wxScrolledWindow )
     EVT_KEY_UP( wxGrid::OnKeyUp )
     EVT_ERASE_BACKGROUND( wxGrid::OnEraseBackground )
 END_EVENT_TABLE()
+
+wxGrid::wxGrid()
+{
+    // in order to make sure that a size event is not
+    // trigerred in a unfinished state
+    m_cornerLabelWin = NULL ;
+    m_rowLabelWin = NULL ;
+    m_colLabelWin = NULL ;
+    m_gridWin = NULL ;
+}
 
 wxGrid::wxGrid( wxWindow *parent,
                  wxWindowID id,
@@ -3780,6 +3806,23 @@ wxGrid::wxGrid( wxWindow *parent,
     m_rowMinHeights(GRID_HASH_SIZE)
 {
     Create();
+}
+
+bool wxGrid::Create(wxWindow *parent, wxWindowID id,
+                          const wxPoint& pos, const wxSize& size,
+                          long style, const wxString& name)
+{
+    if (!wxScrolledWindow::Create(parent, id, pos, size,
+                                  style | wxWANTS_CHARS , name))
+        return FALSE;
+
+    m_colMinWidths =GRID_HASH_SIZE ;
+    m_rowMinHeights = GRID_HASH_SIZE ;
+
+    Create() ;
+
+
+    return TRUE;
 }
 
 
@@ -4191,6 +4234,11 @@ void wxGrid::CalcDimensions()
 
 void wxGrid::CalcWindowSizes()
 {
+    // escape if the window is has not been fully created yet
+
+    if ( m_cornerLabelWin == NULL )
+        return ;
+
     int cw, ch;
     GetClientSize( &cw, &ch );
 
