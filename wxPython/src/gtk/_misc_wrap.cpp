@@ -1714,15 +1714,9 @@ SWIGINTERNSHORT PyObject*
 #endif
     }
 
-
-    int wxCaret_GetBlinkTime() {
-        return wxCaret::GetBlinkTime();
-    }
-
-    void wxCaret_SetBlinkTime(int milliseconds) {
-        wxCaret::SetBlinkTime(milliseconds);
-    }
-
+static void wxCaret_Destroy(wxCaret *self){
+            delete self;
+        }
 
 #include <wx/snglinst.h>
 
@@ -6270,7 +6264,7 @@ static PyObject *_wrap_new_Caret(PyObject *, PyObject *args, PyObject *kwargs) {
 }
 
 
-static PyObject *_wrap_delete_Caret(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Caret_Destroy(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxCaret *arg1 = (wxCaret *) 0 ;
     PyObject * obj0 = 0 ;
@@ -6278,12 +6272,12 @@ static PyObject *_wrap_delete_Caret(PyObject *, PyObject *args, PyObject *kwargs
         (char *) "self", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:delete_Caret",kwnames,&obj0)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:Caret_Destroy",kwnames,&obj0)) goto fail;
     SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxCaret, SWIG_POINTER_EXCEPTION | 0);
     if (SWIG_arg_fail(1)) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
-        delete arg1;
+        wxCaret_Destroy(arg1);
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
@@ -6709,13 +6703,6 @@ static PyObject *_wrap_Caret_Hide(PyObject *, PyObject *args, PyObject *kwargs) 
 }
 
 
-static PyObject * Caret_swigregister(PyObject *, PyObject *args) {
-    PyObject *obj;
-    if (!PyArg_ParseTuple(args,(char*)"O", &obj)) return NULL;
-    SWIG_TypeClientData(SWIGTYPE_p_wxCaret, obj);
-    Py_INCREF(obj);
-    return Py_BuildValue((char *)"");
-}
 static PyObject *_wrap_Caret_GetBlinkTime(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     int result;
@@ -6726,7 +6713,7 @@ static PyObject *_wrap_Caret_GetBlinkTime(PyObject *, PyObject *args, PyObject *
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)":Caret_GetBlinkTime",kwnames)) goto fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
-        result = (int)wxCaret_GetBlinkTime();
+        result = (int)wxCaret::GetBlinkTime();
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
@@ -6755,7 +6742,7 @@ static PyObject *_wrap_Caret_SetBlinkTime(PyObject *, PyObject *args, PyObject *
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
-        wxCaret_SetBlinkTime(arg1);
+        wxCaret::SetBlinkTime(arg1);
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
@@ -6767,6 +6754,13 @@ static PyObject *_wrap_Caret_SetBlinkTime(PyObject *, PyObject *args, PyObject *
 }
 
 
+static PyObject * Caret_swigregister(PyObject *, PyObject *args) {
+    PyObject *obj;
+    if (!PyArg_ParseTuple(args,(char*)"O", &obj)) return NULL;
+    SWIG_TypeClientData(SWIGTYPE_p_wxCaret, obj);
+    Py_INCREF(obj);
+    return Py_BuildValue((char *)"");
+}
 static PyObject *_wrap_new_BusyCursor(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxCursor *arg1 = (wxCursor *) wxHOURGLASS_CURSOR ;
@@ -31020,7 +31014,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"ToolTip_SetDelay", (PyCFunction) _wrap_ToolTip_SetDelay, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"ToolTip_swigregister", ToolTip_swigregister, METH_VARARGS, NULL},
 	 { (char *)"new_Caret", (PyCFunction) _wrap_new_Caret, METH_VARARGS | METH_KEYWORDS, NULL},
-	 { (char *)"delete_Caret", (PyCFunction) _wrap_delete_Caret, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"Caret_Destroy", (PyCFunction) _wrap_Caret_Destroy, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"Caret_IsOk", (PyCFunction) _wrap_Caret_IsOk, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"Caret_IsVisible", (PyCFunction) _wrap_Caret_IsVisible, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"Caret_GetPosition", (PyCFunction) _wrap_Caret_GetPosition, METH_VARARGS | METH_KEYWORDS, NULL},
@@ -31034,9 +31028,9 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"Caret_SetSize", (PyCFunction) _wrap_Caret_SetSize, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"Caret_Show", (PyCFunction) _wrap_Caret_Show, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"Caret_Hide", (PyCFunction) _wrap_Caret_Hide, METH_VARARGS | METH_KEYWORDS, NULL},
-	 { (char *)"Caret_swigregister", Caret_swigregister, METH_VARARGS, NULL},
 	 { (char *)"Caret_GetBlinkTime", (PyCFunction) _wrap_Caret_GetBlinkTime, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"Caret_SetBlinkTime", (PyCFunction) _wrap_Caret_SetBlinkTime, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"Caret_swigregister", Caret_swigregister, METH_VARARGS, NULL},
 	 { (char *)"new_BusyCursor", (PyCFunction) _wrap_new_BusyCursor, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"delete_BusyCursor", (PyCFunction) _wrap_delete_BusyCursor, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"BusyCursor_swigregister", BusyCursor_swigregister, METH_VARARGS, NULL},

@@ -658,11 +658,13 @@ class Caret(object):
         self.this = newobj.this
         self.thisown = 1
         del newobj.thisown
-    def __del__(self, destroy=_misc_.delete_Caret):
-        """__del__(self)"""
-        try:
-            if self.thisown: destroy(self)
-        except: pass
+    def Destroy(*args, **kwargs):
+        """
+        Destroy(self)
+
+        Deletes the C++ object this Python object is a proxy for.
+        """
+        return _misc_.Caret_Destroy(*args, **kwargs)
 
     def IsOk(*args, **kwargs):
         """IsOk(self) -> bool"""
@@ -717,6 +719,16 @@ class Caret(object):
         return _misc_.Caret_Hide(*args, **kwargs)
 
     def __nonzero__(self): return self.IsOk() 
+    def GetBlinkTime(*args, **kwargs):
+        """GetBlinkTime() -> int"""
+        return _misc_.Caret_GetBlinkTime(*args, **kwargs)
+
+    GetBlinkTime = staticmethod(GetBlinkTime)
+    def SetBlinkTime(*args, **kwargs):
+        """SetBlinkTime(int milliseconds)"""
+        return _misc_.Caret_SetBlinkTime(*args, **kwargs)
+
+    SetBlinkTime = staticmethod(SetBlinkTime)
 
 class CaretPtr(Caret):
     def __init__(self, this):
@@ -725,7 +737,6 @@ class CaretPtr(Caret):
         self.__class__ = Caret
 _misc_.Caret_swigregister(CaretPtr)
 
-
 def Caret_GetBlinkTime(*args, **kwargs):
     """Caret_GetBlinkTime() -> int"""
     return _misc_.Caret_GetBlinkTime(*args, **kwargs)
@@ -733,6 +744,7 @@ def Caret_GetBlinkTime(*args, **kwargs):
 def Caret_SetBlinkTime(*args, **kwargs):
     """Caret_SetBlinkTime(int milliseconds)"""
     return _misc_.Caret_SetBlinkTime(*args, **kwargs)
+
 class BusyCursor(object):
     """Proxy of C++ BusyCursor class"""
     def __repr__(self):

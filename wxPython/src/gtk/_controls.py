@@ -3107,6 +3107,7 @@ NB_LEFT = _controls_.NB_LEFT
 NB_RIGHT = _controls_.NB_RIGHT
 NB_BOTTOM = _controls_.NB_BOTTOM
 NB_MULTILINE = _controls_.NB_MULTILINE
+NB_NOPAGETHEME = _controls_.NB_NOPAGETHEME
 NB_HITTEST_NOWHERE = _controls_.NB_HITTEST_NOWHERE
 NB_HITTEST_ONICON = _controls_.NB_HITTEST_ONICON
 NB_HITTEST_ONLABEL = _controls_.NB_HITTEST_ONLABEL
@@ -3157,6 +3158,10 @@ class Notebook(BookCtrlBase):
     def CalcSizeFromPage(*args, **kwargs):
         """CalcSizeFromPage(self, Size sizePage) -> Size"""
         return _controls_.Notebook_CalcSizeFromPage(*args, **kwargs)
+
+    def GetThemeBackgroundColour(*args, **kwargs):
+        """GetThemeBackgroundColour(self) -> Colour"""
+        return _controls_.Notebook_GetThemeBackgroundColour(*args, **kwargs)
 
     def GetClassDefaultAttributes(*args, **kwargs):
         """

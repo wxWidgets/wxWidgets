@@ -17492,6 +17492,36 @@ static PyObject *_wrap_Notebook_CalcSizeFromPage(PyObject *, PyObject *args, PyO
 }
 
 
+static PyObject *_wrap_Notebook_GetThemeBackgroundColour(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxNotebook *arg1 = (wxNotebook *) 0 ;
+    wxColour result;
+    PyObject * obj0 = 0 ;
+    char *kwnames[] = {
+        (char *) "self", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:Notebook_GetThemeBackgroundColour",kwnames,&obj0)) goto fail;
+    SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxNotebook, SWIG_POINTER_EXCEPTION | 0);
+    if (SWIG_arg_fail(1)) SWIG_fail;
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = ((wxNotebook const *)arg1)->GetThemeBackgroundColour();
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    {
+        wxColour * resultptr;
+        resultptr = new wxColour((wxColour &)(result));
+        resultobj = SWIG_NewPointerObj((void *)(resultptr), SWIGTYPE_p_wxColour, 1);
+    }
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
 static PyObject *_wrap_Notebook_GetClassDefaultAttributes(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWindowVariant arg1 = (wxWindowVariant) wxWINDOW_VARIANT_NORMAL ;
@@ -34832,6 +34862,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"Notebook_SetTabSize", (PyCFunction) _wrap_Notebook_SetTabSize, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"Notebook_HitTest", (PyCFunction) _wrap_Notebook_HitTest, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"Notebook_CalcSizeFromPage", (PyCFunction) _wrap_Notebook_CalcSizeFromPage, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"Notebook_GetThemeBackgroundColour", (PyCFunction) _wrap_Notebook_GetThemeBackgroundColour, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"Notebook_GetClassDefaultAttributes", (PyCFunction) _wrap_Notebook_GetClassDefaultAttributes, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"Notebook_swigregister", Notebook_swigregister, METH_VARARGS, NULL},
 	 { (char *)"new_NotebookEvent", (PyCFunction) _wrap_new_NotebookEvent, METH_VARARGS | METH_KEYWORDS, NULL},
@@ -37143,6 +37174,9 @@ SWIGEXPORT(void) SWIG_init(void) {
     }
     {
         PyDict_SetItemString(d,"NB_MULTILINE", SWIG_From_int((int)(wxNB_MULTILINE))); 
+    }
+    {
+        PyDict_SetItemString(d,"NB_NOPAGETHEME", SWIG_From_int((int)(wxNB_NOPAGETHEME))); 
     }
     {
         PyDict_SetItemString(d,"NB_HITTEST_NOWHERE", SWIG_From_int((int)(wxNB_HITTEST_NOWHERE))); 

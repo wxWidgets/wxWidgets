@@ -109,6 +109,7 @@
 %rename(NB_RIGHT)                           wxNB_RIGHT;
 %rename(NB_BOTTOM)                          wxNB_BOTTOM;
 %rename(NB_MULTILINE)                       wxNB_MULTILINE;
+%rename(NB_NOPAGETHEME)                     wxNB_NOPAGETHEME;
 %rename(NB_HITTEST_NOWHERE)                 wxNB_HITTEST_NOWHERE;
 %rename(NB_HITTEST_ONICON)                  wxNB_HITTEST_ONICON;
 %rename(NB_HITTEST_ONLABEL)                 wxNB_HITTEST_ONLABEL;

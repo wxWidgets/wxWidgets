@@ -1194,9 +1194,24 @@ class Rect(object):
         """
         Inflate(self, int dx, int dy) -> Rect
 
-        Increase the rectangle size by dx in x direction and dy in y
-        direction. Both (or one of) parameters may be negative to decrease the
-        rectangle size.
+        Increases the size of the rectangle.
+
+        The left border is moved farther left and the right border is moved
+        farther right by ``dx``. The upper border is moved farther up and the
+        bottom border is moved farther down by ``dy``. (Note the the width and
+        height of the rectangle thus change by ``2*dx`` and ``2*dy``,
+        respectively.) If one or both of ``dx`` and ``dy`` are negative, the
+        opposite happens: the rectangle size decreases in the respective
+        direction.
+
+        The change is made to the rectangle inplace, if instead you need a
+        copy that is inflated, preserving the original then make the copy
+        first::
+
+            copy = wx.Rect(*original)
+            copy.Inflate(10,15)
+
+
         """
         return _core_.Rect_Inflate(*args, **kwargs)
 
@@ -1204,9 +1219,9 @@ class Rect(object):
         """
         Deflate(self, int dx, int dy) -> Rect
 
-        Decrease the rectangle size by dx in x direction and dy in y
-        direction. Both (or one of) parameters may be negative to increase the
-        rectngle size. This method is the opposite of Inflate.
+        Decrease the rectangle size. This method is the opposite of `Inflate`
+        in that Deflate(a,b) is equivalent to Inflate(-a,-b).  Please refer to
+        `Inflate` for a full description.
         """
         return _core_.Rect_Deflate(*args, **kwargs)
 
