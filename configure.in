@@ -6162,8 +6162,8 @@ else
             dnl pragmas:
             GCC_PRAGMA_FLAGS="-DNO_GCC_PRAGMA"
             ;;
-        *-*-mingw32* | *-pc-os2_emx | *-pc-os2-emx )
-            dnl MinGW and Innotek's GCC versions >= 3.2 have problems with
+        *-*-mingw32* )
+            dnl MinGW GCC versions >= 3.2 have problems with
             dnl static member of classes derived from templates
             dnl in combination with #pragma interface/implementation
             dnl (the test case uses 4 files)
@@ -6172,7 +6172,23 @@ else
             if test "$wxUSE_STL" = "yes" -o \
                     "$wxUSE_NO_EXCEPTIONS" != "yes" -o \
                     "$wxUSE_NO_RTTI" != "yes"; then
-               AC_MSG_CHECKING([if this compiler version needs -DNO_GCC_PRAGMA])
+               AC_MSG_CHECKING([if this MinGW version needs -DNO_GCC_PRAGMA])
+               AC_TRY_COMPILE([],
+                              [#if !(__GNUC__ > 3 || (__GNUC__ == 3 && __GNUC_MINOR__ >= 2))
+                               #error "Not GCC 3.2 or greater"
+                               #endif
+                               ],
+                              [GCC_PRAGMA_FLAGS="-DNO_GCC_PRAGMA"
+                               AC_MSG_RESULT([yes])],
+                              [AC_MSG_RESULT([no])])
+            fi
+            ;;
+	*-pc-os2_emx | *-pc-os2-emx )
+            dnl GCC versions ported to OS/2 have similar problems with
+            dnl static member of classes in combination with STL and
+            dnl pragma interface/implementation
+            if test "$wxUSE_STL" = "yes"; then
+               AC_MSG_CHECKING([if this gcc version needs -DNO_GCC_PRAGMA])
                AC_TRY_COMPILE([],
                               [#if !(__GNUC__ > 3 || (__GNUC__ == 3 && __GNUC_MINOR__ >= 2))
                                #error "Not GCC 3.2 or greater"
