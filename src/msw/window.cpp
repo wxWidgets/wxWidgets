@@ -4102,19 +4102,24 @@ void wxWindowMSW::OnEraseBackground(wxEraseEvent& event)
 
 
     // do default background painting
-    wxDC& dc = *event.GetDC();
-    HBRUSH hBrush = (HBRUSH)MSWGetBgBrush(dc.GetHDC());
-    if ( hBrush )
-    {
-        RECT rc;
-        ::GetClientRect(GetHwnd(), &rc);
-        ::FillRect(GetHdcOf(dc), &rc, hBrush);
-    }
-    else
+    if ( !DoEraseBackground(*event.GetDC()) )
     {
         // let the system paint the background
         event.Skip();
     }
+}
+
+bool wxWindowMSW::DoEraseBackground(wxDC& dc)
+{
+    HBRUSH hBrush = (HBRUSH)MSWGetBgBrush(dc.GetHDC());
+    if ( !hBrush )
+        return false;
+
+    RECT rc;
+    ::GetClientRect(GetHwnd(), &rc);
+    ::FillRect(GetHdcOf(dc), &rc, hBrush);
+
+    return true;
 }
 
 WXHBRUSH wxWindowMSW::MSWGetSolidBgBrushForChild(wxWindow *child)
