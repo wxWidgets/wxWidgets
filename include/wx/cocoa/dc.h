@@ -46,7 +46,7 @@ protected:
     bool CocoaUnwindStackAndTakeFocus();
     inline bool CocoaTakeFocus()
     {
-        wxCocoaDCStack::Node *node = sm_cocoaDCStack.GetFirst();
+        wxCocoaDCStack::compatibility_iterator node = sm_cocoaDCStack.GetFirst();
         if(node && (node->GetData() == this))
             return true;
         return CocoaUnwindStackAndTakeFocus();

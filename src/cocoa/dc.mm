@@ -98,10 +98,10 @@ void wxDC::CocoaShutdownTextSystem()
 
 void wxDC::CocoaUnwindStackAndLoseFocus()
 {
-    wxCocoaDCStack::Node *ourNode=sm_cocoaDCStack.Find(this);
+    wxCocoaDCStack::compatibility_iterator ourNode=sm_cocoaDCStack.Find(this);
     if(ourNode)
     {
-        wxCocoaDCStack::Node *node=sm_cocoaDCStack.GetFirst();
+        wxCocoaDCStack::compatibility_iterator node=sm_cocoaDCStack.GetFirst();
         for(;node!=ourNode; node=sm_cocoaDCStack.GetFirst())
         {
             wxDC *dc = node->GetData();
@@ -111,18 +111,18 @@ void wxDC::CocoaUnwindStackAndLoseFocus()
             {
                 wxFAIL_MSG(wxT("Unable to unlock focus on higher-level DC!"));
             }
-            sm_cocoaDCStack.DeleteNode(node);
+            sm_cocoaDCStack.Erase(node);
         }
         wxASSERT(node==ourNode);
         wxASSERT(ourNode->GetData() == this);
         ourNode->GetData()->CocoaUnlockFocus();
-        sm_cocoaDCStack.DeleteNode(ourNode);
+        sm_cocoaDCStack.Erase(ourNode);
     }
 }
 
 bool wxDC::CocoaUnwindStackAndTakeFocus()
 {
-    wxCocoaDCStack::Node *node=sm_cocoaDCStack.GetFirst();
+    wxCocoaDCStack::compatibility_iterator node=sm_cocoaDCStack.GetFirst();
     for(;node;node = sm_cocoaDCStack.GetFirst())
     {
         wxDC *dc = node->GetData();
@@ -133,7 +133,7 @@ bool wxDC::CocoaUnwindStackAndTakeFocus()
         // If unable to unlockFocus (e.g. wxPaintDC) stop here
         if(!dc->CocoaUnlockFocus())
             break;
-        sm_cocoaDCStack.DeleteNode(node);
+        sm_cocoaDCStack.Erase(node);
     }
     return CocoaLockFocus();
 }
