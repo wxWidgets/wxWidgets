@@ -131,27 +131,19 @@ protected:
 // Because the objects of this class are deleted by the tree, they should
 // always be allocated on the heap!
 // ----------------------------------------------------------------------------
-class WXDLLEXPORT wxTreeItemData
+class WXDLLEXPORT wxTreeItemData : private wxTreeItemId
 {
-friend class wxTreeCtrl;
 public:
-    // creation/destruction
-    // --------------------
-        // default ctor
-    wxTreeItemData() { }
+    // default ctor/copy ctor/assignment operator are ok
 
-        // default copy ctor/assignment operator are ok
-
-        // dtor is virtual and all the items are deleted by the tree control
-        // when it's deleted, so you normally don't have to care about freeing
-        // memory allocated in your wxTreeItemData-derived class
+    // dtor is virtual and all the items are deleted by the tree control when
+    // it's deleted, so you normally don't have to care about freeing memory
+    // allocated in your wxTreeItemData-derived class
     virtual ~wxTreeItemData() { }
 
-    // accessor: get the item associated with us
-    const wxTreeItemId& GetItemId() const { return m_itemId; }
-
-protected:
-    wxTreeItemId m_itemId;
+    // accessors: set/get the item associated with this node
+    void SetId(const wxTreeItemId& id) { m_itemId = id; }
+    const wxTreeItemId& GetId() const { return m_itemId; }
 };
 
 // ----------------------------------------------------------------------------
@@ -239,6 +231,12 @@ public:
     void SetItemSelectedImage(const wxTreeItemId& item, int image);
         // associate some data with the item
     void SetItemData(const wxTreeItemId& item, wxTreeItemData *data);
+
+        // force appearance of [+] button near the item. This is useful to
+        // allow the user to expand the items which don't have any children now
+        // - but instead add them only when needed, thus minimizing memory
+        // usage and loading time.
+    void SetItemHasChildren(const wxTreeItemId& item, bool has = TRUE);
 
     // item status inquiries
     // ---------------------

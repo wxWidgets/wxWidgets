@@ -319,20 +319,20 @@ wxTreeItemData *wxTreeCtrl::GetItemData(const wxTreeItemId& item) const
         return NULL;
     }
 
-    wxTreeItemData *data = (wxTreeItemData *)tvItem.lParam;
-    if ( data != NULL )
-    {
-        // the data object should know about its id
-        data->m_itemId = item;
-    }
-
-    return data;
+    return (wxTreeItemData *)tvItem.lParam;
 }
 
 void wxTreeCtrl::SetItemData(const wxTreeItemId& item, wxTreeItemData *data)
 {
     wxTreeViewItem tvItem(item, TVIF_PARAM);
     tvItem.lParam = (LPARAM)data;
+    DoSetItem(&tvItem);
+}
+
+void wxTreeCtrl::SetItemHasChildren(const wxTreeItemId& item, bool has)
+{
+    wxTreeViewItem tvItem(item, TVIF_CHILDREN);
+    tvItem.cChildren = (int)has;
     DoSetItem(&tvItem);
 }
 
@@ -466,6 +466,12 @@ wxTreeItemId wxTreeCtrl::DoInsertItem(const wxTreeItemId& parent,
     {
         mask |= TVIF_IMAGE;
         tvIns.item.iImage = image;
+
+        if ( selectedImage = -1 )
+        {
+            // take the same image for selected icon if not specified
+            selectedImage = image;
+        }
     }
 
     if ( selectedImage != -1 )
