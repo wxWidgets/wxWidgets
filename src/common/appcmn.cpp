@@ -32,6 +32,9 @@
     #include "wx/app.h"
     #include "wx/intl.h"
     #include "wx/list.h"
+    #if wxUSE_LOG
+        #include "wx/log.h"
+    #endif // wxUSE_LOG
     #if wxUSE_GUI
         #include "wx/msgdlg.h"
     #endif // wxUSE_GUI
@@ -153,7 +156,47 @@ int wxAppBase::OnExit()
     delete wxTheme::Set(NULL);
 #endif // __WXUNIVERSAL__
 
+    // use Set(NULL) and not Get() to avoid creating a message output object on
+    // demand when we just want to delete it
+    delete wxMessageOutput::Set(NULL);
+
     return 0;
+}
+
+// ----------------------------------------------------------------------------
+// customization hooks
+// ----------------------------------------------------------------------------
+
+#if wxUSE_LOG
+
+wxLog *wxAppBase::CreateLogTarget()
+{
+#if wxUSE_GUI && wxUSE_LOGGUI && !defined(__WXMICROWIN__)
+    return new wxLogGui;
+#else // !GUI
+    return new wxLogStderr;
+#endif // wxUSE_GUI
+}
+
+#endif // wxUSE_LOG
+
+wxMessageOutput *wxAppBase::CreateMessageOutput()
+{
+    // The standard way of printing help on command line arguments (app --help)
+    // is (according to common practice):
+    //     - console apps: to stderr (on any platform)
+    //     - GUI apps: stderr on Unix platforms (!)
+    //                 message box under Windows and others
+#if wxUSE_GUI && !defined(__UNIX__)
+    // wxMessageOutputMessageBox doesn't work under Motif
+    #ifdef __WXMOTIF__
+        return new wxMessageOutputLog;
+    #else
+        return new wxMessageOutputMessageBox;
+    #endif
+#else // !wxUSE_GUI || __UNIX__
+    return new wxMessageOutputStderr;
+#endif
 }
 
 // ---------------------------------------------------------------------------
@@ -217,34 +260,12 @@ int wxAppBase::FilterEvent(wxEvent& WXUNUSED(event))
     return -1;
 }
 
-void wxAppBase::DoInit()
-{
-    if (wxMessageOutput::Get())
-        return;
-        
-    // NB: The standard way of printing help on command line arguments (app --help)
-    //     is (according to common practice):
-    //     - console apps: to stderr (on any platform)
-    //     - GUI apps: stderr on Unix platforms (!)
-    //                 message box under Windows and others
-#if wxUSE_GUI && !defined(__UNIX__)
-    #ifdef __WXMOTIF__
-    wxMessageOutput::Set(new wxMessageOutputLog);
-    #else
-    wxMessageOutput::Set(new wxMessageOutputMessageBox);
-    #endif
-#else
-    wxMessageOutput::Set(new wxMessageOutputStderr);
-#endif
-}
-
 // ----------------------------------------------------------------------------
 // cmd line parsing
 // ----------------------------------------------------------------------------
 
 bool wxAppBase::OnInit()
 {
-    DoInit();
 #if wxUSE_CMDLINE_PARSER
     wxCmdLineParser parser(argc, argv);
 

@@ -91,7 +91,7 @@ All (GUI):
 - wxGridCellAttrProvider class API changed, you will need to update your code
   if you derived any classes from it
 
-- wxImage::ComputeHistogram()'s signature changed to 
+- wxImage::ComputeHistogram()'s signature changed to
   unsigned long ComputeHistogram(wxImageHistogram&) const
 
 - wxEvtHandler cannot be copied/assigned any longer - this never worked but
@@ -120,8 +120,11 @@ wxMSW:
   where <toolkit> is of the form (msw|univ)[dll][u][d]. You'll need to update
   the include path in your make/project files appropriately. Furthermore,
   xpm.lib is no longer used by wxMSW, it was superseded by the wxXPMDecoder
-  class. You'll need to remove all references to xpm.lib from your 
-  make/project files.
+  class. You'll need to remove all references to xpm.lib from your
+  make/project files. Finally, the library names have changed as well and now
+  use the following consistent naming convention: wxmsw[u][d][ver].(lib|dll)
+  where 'u' appears for Unicode version, 'd' -- for the debug one and version
+  is only present for the DLLs builds.
 
 - child frames appear in the taskbar by default now, use wxFRAME_NO_TASKBAR
   style to avoid it
@@ -226,12 +229,12 @@ All (GUI):
 - Added wxMouseCaptureChangedEvent
 - Added custom character filtering to wxTextValidator
 - wxTreeCtrl now supports incremental keyboard search
+- wxMessageOutput class added
 - wxHelpProvider::RemoveHelp added and called from ~wxWindowBase
   so that erroneous help strings are no longer found as the hash
   table fills up
 - updated libpng from 1.0.3 to 1.2.4
-- Added wxView::OnClosingDocument so the application can do
-  cleanup.
+- Added wxView::OnClosingDocument so the application can do cleanup.
 - generic wxListCtrl renamed to wxGenericListCtrl, wxImageList
   renamed to wxGenericImageList, so they can be used on wxMSW
   (Rene Rivera).
@@ -280,7 +283,7 @@ wxGTK:
 - wxButton now honours wxBU_EXACTFIT
 - wxStaticBox now honours wxALIGN_XXX styles
 - added support for non alphanumeric simple character accelerators ('-', '=')
-- new behaviour for wxWindow::Refresh() as it now produces a delayed refresh. 
+- new behaviour for wxWindow::Refresh() as it now produces a delayed refresh.
   Call the new wxWindow::Update() to force an immediate update
 - support for more SGI hardware (12-bit mode among others)
 - fixed wxDC::Blit() to honour source DC's logical coordinates

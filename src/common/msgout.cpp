@@ -50,16 +50,11 @@ wxMessageOutput* wxMessageOutput::ms_msgOut = 0;
 
 wxMessageOutput* wxMessageOutput::Get()
 {
-    // FIXME this is an hack
-    static bool inGet = FALSE;
-
-    if(!ms_msgOut && wxTheApp && !inGet)
+    if ( !ms_msgOut && wxTheApp )
     {
-        inGet = TRUE;
-        wxTheApp->DoInit();
+        ms_msgOut = wxTheApp->CreateMessageOutput();
     }
 
-    inGet = FALSE;
     return ms_msgOut;
 }
 
@@ -115,15 +110,15 @@ void wxMessageOutputMessageBox::Printf(const wxChar* format, ...)
 
 void wxMessageOutputLog::Printf(const wxChar* format, ...)
 {
+    wxString out;
+
     va_list args;
     va_start(args, format);
-    wxString out;
 
     out.PrintfV(format, args);
     va_end(args);
 
     out.Replace(wxT("\t"),wxT("        "));
-    // under Motif, wxMessageDialog needs a parent window, so we use
-    // wxLog, which is better than nothing
+
     ::wxLogMessage(wxT("%s"), out.c_str());
 }

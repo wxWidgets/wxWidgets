@@ -43,15 +43,14 @@ class WXDLLEXPORT wxCmdLineParser;
     #include "wx/window.h"  // for wxTopLevelWindows
 #endif // wxUSE_GUI
 
-#if wxUSE_LOG
-    #include "wx/log.h"
-#endif
-
 #if WXWIN_COMPATIBILITY_2_2
     #include "wx/icon.h"
 #endif
 
 #include "wx/build.h"
+
+class WXDLLEXPORT wxLog;
+class WXDLLEXPORT wxMessageOutput;
 
 // ----------------------------------------------------------------------------
 // constants
@@ -72,9 +71,9 @@ class WXDLLEXPORT wxDisplayModeInfo
 {
 public:
     wxDisplayModeInfo() : m_ok(FALSE) {}
-    wxDisplayModeInfo(unsigned width, unsigned height, unsigned depth) 
+    wxDisplayModeInfo(unsigned width, unsigned height, unsigned depth)
         : m_width(width), m_height(height), m_depth(depth), m_ok(TRUE) {}
-    
+
     unsigned GetWidth() const { return m_width; }
     unsigned GetHeight() const { return m_height; }
     unsigned GetDepth() const { return m_depth; }
@@ -93,7 +92,7 @@ private:
 class WXDLLEXPORT wxAppBase : public wxEvtHandler
 {
     DECLARE_NO_COPY_CLASS(wxAppBase)
-        
+
 public:
     wxAppBase();
     virtual ~wxAppBase();
@@ -107,10 +106,6 @@ public:
         //
         // Override: always in GUI application, rarely in console ones.
     virtual bool OnInit();
-
-        // initializes wxMessageOutput; other responsibilities
-        // may be added later
-    virtual void DoInit();
 
 #if wxUSE_GUI
         // a platform-dependent version of OnInit(): the code here is likely to
@@ -282,22 +277,21 @@ public:
         // user-defined class (default implementation creates a wxLogGui
         // object) - this log object is used by default by all wxLogXXX()
         // functions.
-    virtual wxLog *CreateLogTarget()
-        #if wxUSE_GUI && wxUSE_LOGGUI && !defined(__WXMICROWIN__)
-            { return new wxLogGui; }
-        #else // !GUI
-            { return new wxLogStderr; }
-        #endif // wxUSE_GUI
+    virtual wxLog *CreateLogTarget();
 #endif // wxUSE_LOG
+
+        // similar to CreateLogTarget() but for the global wxMessageOutput
+        // object
+    virtual wxMessageOutput *CreateMessageOutput();
 
 #if wxUSE_GUI
 
-  #if WXWIN_COMPATIBILITY_2_2
+#if WXWIN_COMPATIBILITY_2_2
         // get the standard icon used by wxWin dialogs - this allows the user
         // to customize the standard dialogs. The 'which' parameter is one of
         // wxICON_XXX values
     virtual wxIcon GetStdIcon(int WXUNUSED(which)) const { return wxNullIcon; }
-  #endif
+#endif
 
         // Get display mode that is used use. This is only used in framebuffer wxWin ports
         // (such as wxMGL).
@@ -389,7 +383,7 @@ protected:
     wxString m_vendorName,      // vendor name (ACME Inc)
              m_appName,         // app name
              m_className;       // class name
-             
+
 #if wxUSE_GUI
     // the main top level window - may be NULL
     wxWindow *m_topWindow;
