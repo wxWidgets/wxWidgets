@@ -849,26 +849,31 @@ void wxWindowOS2::SetScrollbar(
             // owner in terms of the parent frame.
             // The horz bar is the same width as the owner and 20 pels high.
             //
-            ::WinSetWindowPos( m_hWndScrollBarHorz
-                              ,HWND_TOP
-                              ,vSwp.x + vSwpOwner.x
-                              ,(vSwp.y + vSwpOwner.y) - 20
-                              ,vSwpOwner.cx
-                              ,20
-                              ,SWP_MOVE | SWP_SIZE | SWP_SHOW | SWP_ACTIVATE | SWP_ZORDER
-                             );
-            ::WinSendMsg( m_hWndScrollBarHorz
-                         ,SBM_SETSCROLLBAR
-                         ,(MPARAM)nPos
-                         ,MPFROM2SHORT(0, (SHORT)nRange1)
-                        );
-            ::WinSendMsg( m_hWndScrollBarHorz
-                         ,SBM_SETTHUMBSIZE
-                         ,MPFROM2SHORT( (SHORT)nThumbVisible
-                                       ,(SHORT)nRange1
-                                      )
-                         ,(MPARAM)0
-                        );
+            if (nRange1 >= nThumbVisible)
+            {
+                ::WinSetWindowPos( m_hWndScrollBarHorz
+                                  ,HWND_TOP
+                                  ,vSwp.x + vSwpOwner.x
+                                  ,(vSwp.y + vSwpOwner.y) - 20
+                                  ,vSwpOwner.cx
+                                  ,20
+                                  ,SWP_MOVE | SWP_SIZE | SWP_SHOW | SWP_ACTIVATE | SWP_ZORDER
+                                 );
+                ::WinSendMsg( m_hWndScrollBarHorz
+                             ,SBM_SETSCROLLBAR
+                             ,(MPARAM)nPos
+                             ,MPFROM2SHORT(0, (SHORT)nRange1)
+                            );
+                ::WinSendMsg( m_hWndScrollBarHorz
+                             ,SBM_SETTHUMBSIZE
+                             ,MPFROM2SHORT( (SHORT)nThumbVisible
+                                           ,(SHORT)nRange1
+                                          )
+                             ,(MPARAM)0
+                            );
+            }
+            else
+                ::WinShowWindow(m_hWndScrollBarHorz, FALSE);
         }
     }
     else
@@ -920,26 +925,31 @@ void wxWindowOS2::SetScrollbar(
             // owner window).
             // It is 20 pels wide and the same height as the owner.
             //
-            ::WinSetWindowPos( m_hWndScrollBarVert
-                              ,HWND_TOP
-                              ,vSwp.x + vSwpOwner.x + vSwpOwner.cx
-                              ,vSwp.y + vSwpOwner.y
-                              ,20
-                              ,vSwpOwner.cy
-                              ,SWP_ACTIVATE | SWP_MOVE | SWP_SIZE | SWP_SHOW
-                             );
-            ::WinSendMsg( m_hWndScrollBarVert
-                         ,SBM_SETSCROLLBAR
-                         ,(MPARAM)nPos
-                         ,MPFROM2SHORT(0, (SHORT)nRange1)
-                        );
-            ::WinSendMsg( m_hWndScrollBarVert
-                         ,SBM_SETTHUMBSIZE
-                         ,MPFROM2SHORT( (SHORT)nThumbVisible
-                                       ,(SHORT)nRange1
-                                      )
-                         ,(MPARAM)0
-                        );
+            if (nRange1 >= nThumbVisible)
+            {
+                ::WinSetWindowPos( m_hWndScrollBarVert
+                                  ,HWND_TOP
+                                  ,vSwp.x + vSwpOwner.x + vSwpOwner.cx
+                                  ,vSwp.y + vSwpOwner.y
+                                  ,20
+                                  ,vSwpOwner.cy
+                                  ,SWP_ACTIVATE | SWP_MOVE | SWP_SIZE | SWP_SHOW
+                                 );
+                ::WinSendMsg( m_hWndScrollBarVert
+                             ,SBM_SETSCROLLBAR
+                             ,(MPARAM)nPos
+                             ,MPFROM2SHORT(0, (SHORT)nRange1)
+                            );
+                ::WinSendMsg( m_hWndScrollBarVert
+                             ,SBM_SETTHUMBSIZE
+                             ,MPFROM2SHORT( (SHORT)nThumbVisible
+                                           ,(SHORT)nRange1
+                                          )
+                             ,(MPARAM)0
+                            );
+            }
+            else
+                ::WinShowWindow(m_hWndScrollBarVert, FALSE);
         }
         m_nYThumbSize = nThumbVisible;
     }
@@ -1609,9 +1619,15 @@ void wxWindowOS2::DoMoveWindow(
             int                     nAdjustHeight = 0;
             SWP                     vSwpScroll;
 
-            if (GetScrollBarHorz() != NULLHANDLE)
+            if (GetScrollBarHorz() == NULLHANDLE ||
+                !WinIsWindowShowing(GetScrollBarHorz()))
+                nAdjustHeight = 0L;
+            else
                 nAdjustHeight = 20L;
-            if (GetScrollBarVert() != NULLHANDLE)
+            if (GetScrollBarVert() == NULLHANDLE ||
+                !WinIsWindowShowing(GetScrollBarVert()))
+                nAdjustWidth = 0L;
+            else
                 nAdjustWidth = 20L;
             ::WinQueryWindowPos(GetHWND(), &vSwpScroll);
             ::WinSetWindowPos( GetHWND()
@@ -1622,7 +1638,7 @@ void wxWindowOS2::DoMoveWindow(
                               ,vSwpScroll.cy - nAdjustHeight
                               ,SWP_MOVE | SWP_SIZE
                              );
-            nYDiff += 20;
+            nYDiff += nAdjustHeight;
         }
         MoveChildren(nYDiff);
         ::WinQueryWindowPos(GetHwnd(), &m_vWinSwp);
@@ -3574,7 +3590,71 @@ bool wxWindowOS2::HandlePaint()
     vEvent.SetEventObject(this);
     bProcessed = GetEventHandler()->ProcessEvent(vEvent);
 
-    return GetEventHandler()->ProcessEvent(vEvent); //bProcessed;
+    if (!bProcessed &&
+         IsKindOf(CLASSINFO(wxPanel)) &&
+         GetChildren().GetCount() == 0
+       )
+    {
+        //
+        // OS/2 needs to process this right here, not by the default proc
+        // Window's default proc correctly paints everything, OS/2 does not!
+        //
+        HPS                         hPS;
+        RECTL                       vRect;
+        wxFrame*                    pFrame;
+        wxWindow*                   pParent;
+
+        hPS = ::WinBeginPaint( GetHwnd()
+                              ,NULLHANDLE
+                              ,&vRect
+                             );
+        if(hPS)
+        {
+            ::GpiCreateLogColorTable( hPS
+                                     ,0L
+                                     ,LCOLF_CONSECRGB
+                                     ,0L
+                                     ,(LONG)wxTheColourDatabase->m_nSize
+                                     ,(PLONG)wxTheColourDatabase->m_palTable
+                                    );
+            ::GpiCreateLogColorTable( hPS
+                                     ,0L
+                                     ,LCOLF_RGB
+                                     ,0L
+                                     ,0L
+                                     ,NULL
+                                    );
+
+            ::WinFillRect(hPS, &vRect,  GetBackgroundColour().GetPixel());
+            if (m_dwExStyle)
+            {
+                LINEBUNDLE                      vLineBundle;
+
+                vLineBundle.lColor     = 0x00000000; // Black
+                vLineBundle.usMixMode  = FM_OVERPAINT;
+                vLineBundle.fxWidth    = 1;
+                vLineBundle.lGeomWidth = 1;
+                vLineBundle.usType     = LINETYPE_SOLID;
+                vLineBundle.usEnd      = 0;
+                vLineBundle.usJoin     = 0;
+                ::GpiSetAttrs( hPS
+                              ,PRIM_LINE
+                              ,LBB_COLOR | LBB_MIX_MODE | LBB_WIDTH | LBB_GEOM_WIDTH | LBB_TYPE
+                              ,0L
+                              ,&vLineBundle
+                             );
+                ::WinQueryWindowRect(GetHwnd(), &vRect);
+                wxDrawBorder( hPS
+                             ,vRect
+                             ,m_dwExStyle
+                            );
+            }
+            ::WinEndPaint(hPS);
+        }
+        bProcessed = TRUE;
+    }
+
+    return bProcessed;
 } // end of wxWindowOS2::HandlePaint
 
 bool wxWindowOS2::HandleEraseBkgnd(
