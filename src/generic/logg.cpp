@@ -311,6 +311,7 @@ void wxLogGui::DoLog(wxLogLevel level, const wxChar *szString, time_t t)
         case wxLOG_FatalError:
             // show this one immediately
             wxMessageBox(szString, _("Fatal error"), wxICON_HAND);
+            wxExit();
             break;
 
         case wxLOG_Error:
