@@ -380,25 +380,8 @@ typedef int wxWindowID;
 
 #if defined(__WXMSW__)
 
-// _declspec works in BC++ 5 and later, as well as VC++
-#if defined(__VISUALC__) || defined(__BORLANDC__)
-
-#  ifdef WXMAKINGDLL
-#    define WXDLLEXPORT _declspec( dllexport )
-#    define WXDLLEXPORT_DATA(type) _declspec( dllexport ) type
-#    define WXDLLEXPORT_CTORFN
-#  elif defined(WXUSINGDLL)
-#    define WXDLLEXPORT _declspec( dllimport )
-#    define WXDLLEXPORT_DATA(type) _declspec( dllimport ) type
-#    define WXDLLEXPORT_CTORFN
-#  else
-#    define WXDLLEXPORT
-#    define WXDLLEXPORT_DATA(type) type
-#    define WXDLLEXPORT_CTORFN
-#  endif
-
-#elif defined(__GNUC__)
-
+// __declspec works in BC++ 5 and later, as well as VC++ and gcc
+#if defined(__VISUALC__) || defined(__BORLANDC__) || defined(__GNUC__)
 #  ifdef WXMAKINGDLL
 #    define WXDLLEXPORT __declspec( dllexport )
 #    define WXDLLEXPORT_DATA(type) __declspec( dllexport ) type
@@ -412,6 +395,7 @@ typedef int wxWindowID;
 #    define WXDLLEXPORT_DATA(type) type
 #    define WXDLLEXPORT_CTORFN
 #  endif
+#endif
 
 #elif defined(__WXPM__)
 
@@ -429,17 +413,14 @@ typedef int wxWindowID;
 #    define WXDLLEXPORT_CTORFN
 #  endif
 
-#else
+#else  // !(MSW or OS2)
+
 #  define WXDLLEXPORT
 #  define WXDLLEXPORT_DATA(type) type
 #  define WXDLLEXPORT_CTORFN
+
 #endif
 
-#else // !Windows
-#  define WXDLLEXPORT
-#  define WXDLLEXPORT_DATA(type) type
-#  define WXDLLEXPORT_CTORFN
-#endif // Win/!Win
 
 // For ostream, istream ofstream
 #if defined(__BORLANDC__) && defined( _RTLDLL )
@@ -1678,27 +1659,27 @@ typedef enum {
 #ifdef __WXMAC__
 
 typedef WindowPtr       WXHWND;
-typedef Handle               WXHANDLE;
-typedef CIconHandle        WXHICON;
+typedef Handle          WXHANDLE;
+typedef CIconHandle     WXHICON;
 //typedef unsigned long   WXHFONT;
-typedef MenuHandle       WXHMENU;
+typedef MenuHandle      WXHMENU;
 //typedef unsigned long   WXHPEN;
 //typedef unsigned long   WXHBRUSH;
 //typedef unsigned long   WXHPALETTE;
-typedef CursHandle       WXHCURSOR;
+typedef CursHandle      WXHCURSOR;
 typedef RgnHandle       WXHRGN;
 //typedef unsigned long   WXHACCEL;
 //typedef unsigned long   WXHINSTANCE;
-typedef GWorldPtr   WXHBITMAP;
+typedef GWorldPtr       WXHBITMAP;
 //typedef unsigned long   WXHIMAGELIST;
 //typedef unsigned long   WXHGLOBAL;
-typedef GrafPtr           WXHDC;
+typedef GrafPtr         WXHDC;
 typedef unsigned int    WXUINT;
 typedef unsigned long   WXDWORD;
 typedef unsigned short  WXWORD;
 //typedef unsigned int    WXWPARAM;
 //typedef long            WXLPARAM;
-typedef RGBColor           WXCOLORREF;
+typedef RGBColor        WXCOLORREF;
 //typedef void *          WXRGNDATA;
 //typedef void *          WXMSG;
 //typedef unsigned long   WXHCONV;
@@ -1708,12 +1689,26 @@ typedef RGBColor           WXCOLORREF;
 //typedef void *          WXLPCREATESTRUCT;
 typedef int (*WXFARPROC)();
 
-typedef WindowPtr           WXWindow;
-typedef ControlHandle       WXWidget;
+typedef WindowPtr       WXWindow;
+typedef ControlHandle   WXWidget;
 
 #endif
 
 #if defined(__WXMSW__) || defined(__WXPM__)
+
+// the keywords needed for WinMain() declaration
+#ifdef __WIN16__
+#  ifdef __VISUALC__
+#    define WXFAR __far
+#  else
+#    define WXFAR _far
+#  endif
+#else  // Win32
+#  ifndef WXFAR
+#    define WXFAR
+#  endif
+#endif // Win16/32
+
 // Stand-ins for Windows types or OS/2, to avoid #including all of windows.h or os2.h
 typedef unsigned long   WXHWND;
 typedef unsigned long   WXHANDLE;
@@ -1726,7 +1721,7 @@ typedef unsigned long   WXHPALETTE;
 typedef unsigned long   WXHCURSOR;
 typedef unsigned long   WXHRGN;
 typedef unsigned long   WXHACCEL;
-typedef unsigned long   WXHINSTANCE;
+typedef void WXFAR *    WXHINSTANCE;
 typedef unsigned long   WXHBITMAP;
 typedef unsigned long   WXHIMAGELIST;
 typedef unsigned long   WXHGLOBAL;
@@ -1814,29 +1809,15 @@ typedef struct tagLOGPALETTE
 typedef WXHWND WXWidget;
 
 #if defined(__BORLANDC__) && !defined(__WIN32__)
-#ifndef LPTSTR
-#define LPTSTR LPSTR
-#endif
-#ifndef LPCTSTR
-#define LPCTSTR LPSTR
-#endif
+#  ifndef LPTSTR
+#    define LPTSTR LPSTR
+#  endif
+#  ifndef LPCTSTR
+#    define LPCTSTR LPSTR
+#  endif
 #endif
 
-// the keywords needed for WinMain() declaration
-
-#ifdef __WIN16__
-        #ifdef __VISUALC__
-            #define WXFAR __far
-        #else // !VC++
-            #define WXFAR _far
-        #endif
-#else // Win32
-    #ifndef WXFAR
-        #define WXFAR
-    #endif
-#endif // Win16/32
-
-#endif // MSW
+#endif // MSW or OS2
 
 #ifdef __WXMOTIF__
 /* Stand-ins for X/Xt/Motif types */
