@@ -95,7 +95,7 @@ public:
     int             m_children;
     long            m_data;
 
-    wxTreeItem(void);
+    wxTreeItem();
 
 // Accessors
     inline long GetMask() const { return m_mask; }
@@ -110,7 +110,7 @@ public:
 
     inline void SetMask(long mask) { m_mask = mask; }
     inline void SetItemId(long id) { m_itemId = m_itemId = id; }
-    inline void GetState(long state) { m_state = state; }
+    inline void SetState(long state) { m_state = state; }
     inline void SetStateMask(long stateMask) { m_stateMask = stateMask; }
     inline void GetText(const wxString& text) { m_text = text; }
     inline void SetImage(int image) { m_image = image; }
@@ -121,85 +121,121 @@ public:
 
 class WXDLLEXPORT wxTreeCtrl: public wxControl
 {
-  DECLARE_DYNAMIC_CLASS(wxTreeCtrl)
- public:
-  /*
-   * Public interface
-   */
+public:
+   /*
+    * Public interface
+    */
+    
+    // creation
+    // --------
+    wxTreeCtrl();
+    
+    inline wxTreeCtrl(wxWindow *parent, wxWindowID id = -1,
+        const wxPoint& pos = wxDefaultPosition,
+        const wxSize& size = wxDefaultSize,
+        long style = wxTR_HAS_BUTTONS|wxTR_LINES_AT_ROOT,
+        const wxValidator& validator = wxDefaultValidator,
+        const wxString& name = "wxTreeCtrl")
+    {
+        Create(parent, id, pos, size, style, validator, name);
+    }
+    ~wxTreeCtrl();
+    
+    bool Create(wxWindow *parent, wxWindowID id = -1,
+                const wxPoint& pos = wxDefaultPosition,
+                const wxSize& size = wxDefaultSize,
+                long style = wxTR_HAS_BUTTONS|wxTR_LINES_AT_ROOT,
+                const wxValidator& validator = wxDefaultValidator,
+                const wxString& name = "wxTreeCtrl");
+    
+    // accessors
+    // ---------
+      //
+    int GetCount() const;
 
-  wxTreeCtrl(void);
+      // indent
+    int GetIndent() const;
+    void SetIndent(int indent);
+      // image list
+    wxImageList *GetImageList(int which = wxIMAGE_LIST_NORMAL) const;
+    void SetImageList(wxImageList *imageList, int which = wxIMAGE_LIST_NORMAL);
 
-  inline wxTreeCtrl(wxWindow *parent, wxWindowID id = -1,
-            const wxPoint& pos = wxDefaultPosition,
-            const wxSize& size = wxDefaultSize,
-            long style = wxTR_HAS_BUTTONS|wxTR_LINES_AT_ROOT,
-            const wxValidator& validator = wxDefaultValidator,
-            const wxString& name = "wxTreeCtrl")
-  {
-    Create(parent, id, pos, size, style, validator, name);
-  }
-  ~wxTreeCtrl(void);
+      // navigation inside the tree
+    long GetNextItem(long item, int code) const;
+    bool ItemHasChildren(long item) const;
+    long GetChild(long item) const;
+    long GetParent(long item) const;
+    long GetFirstVisibleItem() const;
+    long GetNextVisibleItem(long item) const;
+    long GetSelection() const;
+    long GetRootItem() const;
 
-  bool Create(wxWindow *parent, wxWindowID id = -1,
-            const wxPoint& pos = wxDefaultPosition,
-            const wxSize& size = wxDefaultSize,
-            long style = wxTR_HAS_BUTTONS|wxTR_LINES_AT_ROOT,
-            const wxValidator& validator = wxDefaultValidator,
-            const wxString& name = "wxTreeCtrl");
+      // generic function for (g|s)etting item attributes
+    bool GetItem(wxTreeItem& info) const;
+    bool SetItem(wxTreeItem& info);
+      // item state
+    int  GetItemState(long item, long stateMask) const;
+    bool SetItemState(long item, long state, long stateMask);
+      // item image
+    bool SetItemImage(long item, int image, int selImage);
+      // item text
+    wxString GetItemText(long item) const;
+    void SetItemText(long item, const wxString& str);
+      // custom data associated with the item
+    long GetItemData(long item) const;
+    bool SetItemData(long item, long data);
+      // convenience function
+    bool IsItemExpanded(long item) 
+    { 
+      return (GetItemState(item, wxTREE_STATE_EXPANDED) & 
+                           wxTREE_STATE_EXPANDED) != 0;
+    }
 
-  // Attributes
-  int GetCount(void) const ;
-  int GetIndent(void) const ;
-  void SetIndent(int indent) ;
-  wxImageList *GetImageList(int which = wxIMAGE_LIST_NORMAL) const ;
-  void SetImageList(wxImageList *imageList, int which = wxIMAGE_LIST_NORMAL) ;
-  long GetNextItem(long item, int code) const ;
-  bool ItemHasChildren(long item) const ;
-  long GetChild(long item) const ;
-  long GetParent(long item) const ;
-  long GetFirstVisibleItem(void) const ;
-  long GetNextVisibleItem(long item) const ;
-  long GetSelection(void) const ;
-  long GetRootItem(void) const ;
-  bool GetItem(wxTreeItem& info) const ;
-  bool SetItem(wxTreeItem& info) ;
-  int  GetItemState(long item, long stateMask) const ;
-  bool SetItemState(long item, long state, long stateMask) ;
-  bool SetItemImage(long item, int image, int selImage) ;
-  wxString GetItemText(long item) const ;
-  void SetItemText(long item, const wxString& str) ;
-  long GetItemData(long item) const ;
-  bool SetItemData(long item, long data) ;
-  bool GetItemRect(long item, wxRectangle& rect, bool textOnly = FALSE) const;
-  wxTextCtrl& GetEditControl(void) const;
+      // bounding rect
+    bool GetItemRect(long item, wxRectangle& rect, bool textOnly = FALSE) const;
+      //
+    wxTextCtrl& GetEditControl() const;
+    
+    // operations
+    // ----------
+      // adding/deleting items
+    bool DeleteItem(long item);
+    long InsertItem(long parent, wxTreeItem& info,
+                    long insertAfter = wxTREE_INSERT_LAST);
+      // If image > -1 and selImage == -1, the same image is used for
+      // both selected and unselected items.
+    long InsertItem(long parent, const wxString& label,
+                    int image = -1, int selImage = -1, 
+                    long insertAfter = wxTREE_INSERT_LAST);
 
-  // Operations
-  bool DeleteItem(long item);
-  bool ExpandItem(long item, int action);
-  long InsertItem(long parent, wxTreeItem& info, long insertAfter = wxTREE_INSERT_LAST);
-
-  // If image > -1 and selImage == -1, the same image is used for
-  // both selected and unselected items.
-  long InsertItem(long parent, const wxString& label, int image = -1, int selImage = -1, long insertAfter = wxTREE_INSERT_LAST);
-  bool SelectItem(long item);
-  bool ScrollTo(long item);
-  bool DeleteAllItems(void) ;
-  wxTextCtrl& Edit(long item) ;
-  long HitTest(const wxPoint& point, int& flags);
-//  wxImageList *CreateDragImage(long item) ;
-  bool SortChildren(long item) ;
-  bool EnsureVisible(long item) ;
-
-  void Command(wxCommandEvent& event) { ProcessCommand(event); };
-
-  // IMPLEMENTATION
-  bool MSWCommand(WXUINT param, WXWORD id);
-  bool MSWNotify(WXWPARAM wParam, WXLPARAM lParam);
-
+      // changing item state
+    bool ExpandItem(long item)   { return ExpandItem(item, wxTREE_EXPAND_EXPAND);   }
+    bool CollapseItem(long item) { return ExpandItem(item, wxTREE_EXPAND_COLLAPSE); }
+    bool ToggleItem(long item)   { return ExpandItem(item, wxTREE_EXPAND_TOGGLE);   }
+      // common interface for {Expand|Collapse|Toggle}Item
+    bool ExpandItem(long item, int action);
+    
+      // 
+    bool SelectItem(long item);
+    bool ScrollTo(long item);
+    bool DeleteAllItems();
+    wxTextCtrl& Edit(long item);
+    long HitTest(const wxPoint& point, int& flags);
+    //  wxImageList *CreateDragImage(long item);
+    bool SortChildren(long item);
+    bool EnsureVisible(long item);
+    
+    // IMPLEMENTATION
+    void Command(wxCommandEvent& event) { ProcessCommand(event); };
+    bool MSWCommand(WXUINT param, WXWORD id);
+    bool MSWNotify(WXWPARAM wParam, WXLPARAM lParam);
+    
 protected:
-  wxTextCtrl m_textCtrl;
-  wxImageList *m_imageListNormal;
-  wxImageList *m_imageListState;
+    wxTextCtrl m_textCtrl;
+    wxImageList *m_imageListNormal;
+    wxImageList *m_imageListState;
+
+    DECLARE_DYNAMIC_CLASS(wxTreeCtrl)
 };
 
 /*
@@ -212,6 +248,8 @@ protected:
  wxEVT_COMMAND_TREE_SET_INFO,
  wxEVT_COMMAND_TREE_ITEM_EXPANDED,
  wxEVT_COMMAND_TREE_ITEM_EXPANDING,
+ wxEVT_COMMAND_TREE_ITEM_COLLAPSED,
+ wxEVT_COMMAND_TREE_ITEM_COLLAPSING,
  wxEVT_COMMAND_TREE_SEL_CHANGED,
  wxEVT_COMMAND_TREE_SEL_CHANGING,
  wxEVT_COMMAND_TREE_KEY_DOWN
@@ -246,6 +284,8 @@ typedef void (wxEvtHandler::*wxTreeEventFunction)(wxTreeEvent&);
 #define EVT_TREE_SET_INFO(id, fn) { wxEVT_COMMAND_TREE_SET_INFO, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxTreeEventFunction) & fn, NULL },
 #define EVT_TREE_ITEM_EXPANDED(id, fn) { wxEVT_COMMAND_TREE_ITEM_EXPANDED, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxTreeEventFunction) & fn, NULL },
 #define EVT_TREE_ITEM_EXPANDING(id, fn) { wxEVT_COMMAND_TREE_ITEM_EXPANDING, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxTreeEventFunction) & fn, NULL },
+#define EVT_TREE_ITEM_COLLAPSED(id, fn) { wxEVT_COMMAND_TREE_ITEM_COLLAPSED, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxTreeEventFunction) & fn, NULL },
+#define EVT_TREE_ITEM_COLLAPSING(id, fn) { wxEVT_COMMAND_TREE_ITEM_COLLAPSING, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxTreeEventFunction) & fn, NULL },
 #define EVT_TREE_SEL_CHANGED(id, fn) { wxEVT_COMMAND_TREE_SEL_CHANGED, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxTreeEventFunction) & fn, NULL },
 #define EVT_TREE_SEL_CHANGING(id, fn) { wxEVT_COMMAND_TREE_SEL_CHANGING, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxTreeEventFunction) & fn, NULL },
 #define EVT_TREE_KEY_DOWN(id, fn) { wxEVT_COMMAND_TREE_KEY_DOWN, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxTreeEventFunction) & fn, NULL },
