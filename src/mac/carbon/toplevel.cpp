@@ -59,10 +59,6 @@ wxWindowList       wxModelessWindows;
 static   Point     gs_lastWhere;
 static   long      gs_lastWhen = 0;
 
-// cursor stuff
-extern   int       wxBusyCursorCount;
-
-
 // ============================================================================
 // wxTopLevelWindowMac implementation
 // ============================================================================
@@ -535,7 +531,7 @@ void wxTopLevelWindowMac::MacFireMouseEvent( WXEVENTREF evr )
         if ( ev->what == mouseUp )
         {
             wxTheApp->s_captureWindow = NULL ;
-            if ( wxBusyCursorCount == 0 )
+            if ( !wxIsBusy() )
             {
                 m_cursor.MacInstall() ;
             }

@@ -317,49 +317,38 @@ bool wxGetResource(const wxString& section, const wxString& entry, int *value, c
 }
 #endif // wxUSE_RESOURCES
 
-int wxBusyCursorCount = 0;
-extern CursHandle	gMacCurrentCursor ;
-CursHandle			gMacStoredActiveCursor = NULL ;
+int gs_wxBusyCursorCount = 0;
+extern wxCursor	gMacCurrentCursor ;
+wxCursor		gMacStoredActiveCursor ;
 
 // Set the cursor to the busy cursor for all windows
 void wxBeginBusyCursor(wxCursor *cursor)
 {
-  wxBusyCursorCount ++;
-  if (wxBusyCursorCount == 1)
+  if (gs_wxBusyCursorCount++ == 0)
   {
   	gMacStoredActiveCursor = gMacCurrentCursor ;
-		::SetCursor( *::GetCursor( watchCursor ) ) ;
+	cursor->MacInstall() ;
   }
-  else
-  {
-        // TODO
-  }
+  //else: nothing to do, already set
 }
 
 // Restore cursor to normal
 void wxEndBusyCursor()
 {
-  if (wxBusyCursorCount == 0)
-    return;
+    wxCHECK_RET( gs_wxBusyCursorCount > 0,
+                 wxT("no matching wxBeginBusyCursor() for wxEndBusyCursor()") );
 
-  wxBusyCursorCount --;
-  if (wxBusyCursorCount == 0)
+  if (--gs_wxBusyCursorCount == 0)
   {
-    if ( gMacStoredActiveCursor )
-    	::SetCursor( *gMacStoredActiveCursor ) ;
-    else
-    {
-		Cursor 		MacArrow ;
-    	::SetCursor( GetQDGlobalsArrow( &MacArrow ) ) ;
-    }
-   	gMacStoredActiveCursor = NULL ;
+	gMacStoredActiveCursor.MacInstall() ;
+	gMacStoredActiveCursor = wxNullCursor ;
   }
 }
 
 // TRUE if we're between the above two calls
 bool wxIsBusy()
 {
-  return (wxBusyCursorCount > 0);
+  return (gs_wxBusyCursorCount > 0);
 }
 
 wxString wxMacFindFolder( short        vol,

@@ -1478,7 +1478,6 @@ bool wxWindowMac::MacGetWindowFromPoint( const wxPoint &screenpoint , wxWindowMa
     return FALSE ;
 }
 
-extern int wxBusyCursorCount ;
 static wxWindow *gs_lastWhich = NULL;
 
 bool wxWindowMac::MacSetupCursor( const wxPoint& pt) 
