@@ -993,6 +993,16 @@ void wxMimeTypesManagerImpl::ReadMimeTypes(const wxString& strFileName)
             }
         }
 
+        // although it doesn't seem to be covered by RFCs, some programs
+        // (notably Netscape) create their entries with several comma
+        // separated extensions (RFC mention the spaces only)
+        strExtensions.Replace(",", " ");
+
+        // also deal with the leading dot
+        if ( !strExtensions.IsEmpty() && strExtensions[0] == '.' ) {
+            strExtensions.erase(0, 1);
+        }
+
         int index = m_aTypes.Index(strMimeType);
         if ( index == wxNOT_FOUND ) {
             // add a new entry
