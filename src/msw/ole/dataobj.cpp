@@ -1260,8 +1260,15 @@ wxBitmap wxConvertDIBToBitmap(const LPBITMAPINFO pbmi)
     // BITMAPINFO starts with BITMAPINFOHEADER followed by colour info
     const BITMAPINFOHEADER *pbmih = &pbmi->bmiHeader;
 
+    // biClrUsed has the number of colors, unless it's 0
+    int numColors = pbmih->biClrUsed;
+    if (numColors==0)
+    {
+        numColors = wxGetNumOfBitmapColors(pbmih->biBitCount);
+    }
+
     // offset of image from the beginning of the header
-    DWORD ofs = wxGetNumOfBitmapColors(pbmih->biBitCount) * sizeof(RGBQUAD);
+    DWORD ofs = numColors * sizeof(RGBQUAD);
     void *image = (char *)pbmih + sizeof(BITMAPINFOHEADER) + ofs;
 
     ScreenHDC hdc;

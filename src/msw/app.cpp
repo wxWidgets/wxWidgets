@@ -779,7 +779,7 @@ int wxEntry(WXHINSTANCE hInstance,
         wxCHECK_MSG( wxTheApp, 0, wxT("You have to define an instance of wxApp!") );
 
         // save the WinMain() parameters
-        if (lpCmdLine) // MicroWindows pass NULL for this
+        if (lpCmdLine) // MicroWindows passes NULL
             wxTheApp->ConvertToStandardCommandArgs(lpCmdLine);
         wxTheApp->m_nCmdShow = nCmdShow;
 
