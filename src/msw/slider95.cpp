@@ -518,7 +518,9 @@ void wxSlider95::DoSetSize(int x, int y, int width, int height, int sizeFlags)
                 (int) min_len, cy, TRUE);
             x_offset += (int)(min_len + cx);
 
-            int slider_length = (int)(w1 - x_offset - max_len - cx);
+            // slider_length = (total width available) - (width used so far)
+            //                   - (width of max label) - (border)
+            int slider_length = (int)(w1 - (x_offset-x) - max_len - cx);
 
             int slider_height = h1;
             if (slider_height < 0 )
@@ -573,13 +575,6 @@ void wxSlider95::DoSetSize(int x, int y, int width, int height, int sizeFlags)
             {
                 int new_width = (int)(wxMax(min_len, max_len));
                 int valueHeight = (int)cyf;
-/*** Suggested change by George Tasker - remove this block...
-#ifdef __WIN32__
-      // For some reason, under Win95, the text edit control has
-      // a lot of space before the first character
-      new_width += 3*cx;
-#endif
- ... and replace with following line: */
                 new_width += cx;
 
                 // The height needs to be a bit bigger under Win95 if
@@ -595,7 +590,9 @@ void wxSlider95::DoSetSize(int x, int y, int width, int height, int sizeFlags)
                 (int) min_len, cy, TRUE);
             y_offset += cy;
 
-            int slider_length = (int)(h1 - y_offset - cy - cy);
+            //  slider_length = (total height available) - (height used so far) 
+            //                              - (height of max label) - (border)
+            int slider_length = (int)(h1 - (y_offset-y) - cy - cy);
 
             int slider_width = w1;
             if (slider_width < 0 )
