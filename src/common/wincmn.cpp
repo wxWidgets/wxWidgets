@@ -1708,10 +1708,7 @@ void wxWindowBase::CaptureMouse()
     wxWindow *winOld = GetCapture();
     if ( winOld )
     {
-	// I think this is correct, but not compatible with some ports
-#if defined(__WXX11__) || defined(__WXMGL__)
-	((wxWindowBase*) winOld)->DoReleaseMouse();
-#endif
+        ((wxWindowBase*) winOld)->DoReleaseMouse();
 	
         // save it on stack
         wxWindowNext *item = new wxWindowNext;
@@ -1734,12 +1731,7 @@ void wxWindowBase::ReleaseMouse()
 
     if ( ms_winCaptureNext )
     {
-	// I think this is correct, but not compatible with some ports
-#if defined(__WXX11__) || defined(__WXMGL__)
         ((wxWindowBase*)ms_winCaptureNext->win)->DoCaptureMouse();
-#else
-        ms_winCaptureNext->win->CaptureMouse();
-#endif
 	
         wxWindowNext *item = ms_winCaptureNext;
         ms_winCaptureNext = item->next;
