@@ -1216,6 +1216,7 @@ bool wxMenu::GtkAppend(wxMenuItem *mitem)
                     }
 #endif
                 }
+                break;
             }
 
             default:
