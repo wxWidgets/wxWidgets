@@ -55,6 +55,14 @@ enum
 // wxWindow
 // ----------------------------------------------------------------------------
 
+#if defined(__WXMSW__)
+#define wxWindowNative wxWindowMSW
+#elif defined(__WXGTK__)
+#define wxWindowNative wxWindowGTK
+#elif defined(__WXMGL__)
+#define wxWindowNative wxWindowMGL
+#endif
+
 class WXDLLEXPORT wxWindow : public wxWindowNative
 {
 public:

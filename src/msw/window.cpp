@@ -2415,7 +2415,7 @@ long wxWindowMSW::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam
                 // Don't yet process menu help events, just windows
                 if (info->iContextType == HELPINFO_WINDOW)
                 {
-                    wxWindow* subjectOfHelp = this;
+                    wxWindowMSW* subjectOfHelp = this;
                     bool eventProcessed = FALSE;
                     while (subjectOfHelp && !eventProcessed)
                     {
@@ -3526,7 +3526,7 @@ bool wxWindowMSW::HandleCommand(WXWORD id, WXWORD cmd, WXHWND control)
 
         return GetEventHandler()->ProcessEvent(event);
     }
-#if wxUSE_SPINCTRL
+#if wxUSE_SPINCTRL && !defined(__WXUNIVERSAL__)
     else
     {
         // the text ctrl which is logically part of wxSpinCtrl sends WM_COMMAND
@@ -3651,7 +3651,7 @@ bool wxWindowMSW::HandleMouseMove(int x, int y, WXUINT flags)
 }
 
 
-bool wxWindow::HandleMouseWheel(WXWPARAM wParam, WXLPARAM lParam)
+bool wxWindowMSW::HandleMouseWheel(WXWPARAM wParam, WXLPARAM lParam)
 {
 #if wxUSE_MOUSEWHEEL
     wxMouseEvent event(wxEVT_MOUSEWHEEL);
@@ -4224,7 +4224,7 @@ extern wxWindow *wxGetWindowFromHWND(WXHWND hWnd)
 
             // spin control text buddy window should be mapped to spin ctrl
             // itself so try it too
-#if wxUSE_SPINCTRL
+#if wxUSE_SPINCTRL && !defined(__WXUNIVERSAL__)
             if ( !win )
             {
                 win = wxSpinCtrl::GetSpinForTextCtrl((WXHWND)hwnd);

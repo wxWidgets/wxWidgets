@@ -38,7 +38,7 @@
 #define wxUSE_TIMER      1
 #define wxUSE_STOPWATCH  1
 #define wxUSE_TIMEDATE      0
-#define wxUSE_DATETIME      0
+#define wxUSE_DATETIME      1
 #define wxUSE_CONFIG           0
 #define wxUSE_CONFIG_NATIVE   0
 #define wxUSE_DIALUP_MANAGER   0
@@ -66,6 +66,7 @@
 #define wxUSE_NOTEBOOK 1
 #define wxUSE_FONTMAP 0
 #define wxUSE_MIMETYPE 0
+#define wxUSE_IMAGE        1
 
 #define wxUSE_CONTROLS     1
 #define wxUSE_POPUPWIN     1

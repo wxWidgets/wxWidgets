@@ -242,7 +242,9 @@ wxScrollHelper::wxScrollHelper(wxWindow *win)
 
     m_scaleX =
     m_scaleY = 1.0;
+#if wxUSE_MOUSEWHEEL
     m_wheelRotation = 0;
+#endif
 
     m_win =
     m_targetWindow = (wxWindow *)NULL;
