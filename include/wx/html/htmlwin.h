@@ -162,7 +162,6 @@ class WXDLLEXPORT wxHtmlWindow : public wxScrolledWindow
         void OnSize(wxSizeEvent& event);
         void OnMouseEvent(wxMouseEvent& event);
         void OnIdle(wxIdleEvent& event);
-        void OnKeyDown(wxKeyEvent& event);
 
         virtual wxHtmlFilter *GetDefaultFilter() {return new wxHtmlFilterPlainText;}
 	        // returns new filter (will be stored into m_DefaultFilter variable)
