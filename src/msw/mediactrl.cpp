@@ -368,7 +368,7 @@ bool wxAMMediaBackend::CreateControl(wxControl* ctrl, wxWindow* parent,
     // is a child window, it refereshes properly
     //
     if ( !ctrl->wxControl::Create(parent, id, pos, size,
-                            (style | wxNO_BORDER) | wxCLIP_CHILDREN,
+                            (style & ~wxBORDER_MASK) | wxBORDER_NONE | wxCLIP_CHILDREN,
                             validator, name) )
         return false;
 
@@ -882,7 +882,7 @@ bool wxMCIMediaBackend::CreateControl(wxControl* ctrl, wxWindow* parent,
     // is a child window, it refereshes properly
     //
     if ( !ctrl->wxControl::Create(parent, id, pos, size,
-                            (style & ~wxBORDER_MASK) | wxCLIP_CHILDREN,
+                            (style & ~wxBORDER_MASK) | wxBORDER_NONE | wxCLIP_CHILDREN,
                             validator, name) )
         return false;
 
@@ -1384,7 +1384,7 @@ bool wxQTMediaBackend::CreateControl(wxControl* ctrl, wxWindow* parent,
     // backends, we don't need wxCLIP_CHILDREN
     //
     if ( !ctrl->wxControl::Create(parent, id, pos, size,
-                            (style & ~wxBORDER_MASK),
+                            (style & ~wxBORDER_MASK) | wxBORDER_NONE,
                             validator, name) )
         return false;
 
