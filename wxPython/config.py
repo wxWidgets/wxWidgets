@@ -135,7 +135,7 @@ INSTALL_MULTIVERSION = 1 # Install the packages such that multiple versions
 FLAVOUR = ""       # Optional flavour string to be appended to VERSION
                    # in MULTIVERSION installs
 
-EP_ADD_OPTS = 0    # When doing MULTIVERSION installs the wx port and
+EP_ADD_OPTS = 1    # When doing MULTIVERSION installs the wx port and
                    # ansi/unicode settings can optionally be added to the
                    # subdir path used in site-packages
                    
