@@ -757,23 +757,29 @@ const wxChar *wxDataObject::GetFormatName(wxDataFormat format)
 
 size_t wxBitmapDataObject::GetDataSize() const
 {
-    return wxConvertBitmapToDIB(NULL, GetBitmap());
+    return wxDIB::ConvertFromBitmap(NULL, GetHbitmapOf(GetBitmap()));
 }
 
 bool wxBitmapDataObject::GetDataHere(void *buf) const
 {
-    return wxConvertBitmapToDIB((LPBITMAPINFO)buf, GetBitmap()) != 0;
+    BITMAPINFO * const pbi = (BITMAPINFO *)buf;
+
+    return wxDIB::ConvertFromBitmap(pbi, GetHbitmapOf(GetBitmap())) != 0;
 }
 
 bool wxBitmapDataObject::SetData(size_t WXUNUSED(len), const void *buf)
 {
-    wxBitmap bitmap(wxConvertDIBToBitmap((const LPBITMAPINFO)buf));
+    const BITMAPINFO * const pbmi = (const BITMAPINFO *)buf;
 
-    if ( !bitmap.Ok() ) {
-        wxFAIL_MSG(wxT("pasting/dropping invalid bitmap"));
+    HBITMAP hbmp = wxDIB::ConvertToBitmap(pbmi);
 
-        return FALSE;
-    }
+    wxCHECK_MSG( hbmp, FALSE, wxT("pasting/dropping invalid bitmap") );
+
+    const BITMAPINFOHEADER * const pbmih = &pbmi->bmiHeader;
+    wxBitmap bitmap(pbmih->biWidth, pbmih->biHeight, pbmih->biBitCount);
+    bitmap.SetHBITMAP((WXHBITMAP)hbmp);
+
+    // TODO: create wxPalette if the bitmap has any
 
     SetBitmap(bitmap);
 
@@ -1156,140 +1162,6 @@ void wxURLDataObject::SetURL(const wxString& url)
 // ----------------------------------------------------------------------------
 // private functions
 // ----------------------------------------------------------------------------
-
-static size_t wxGetNumOfBitmapColors(size_t bitsPerPixel)
-{
-    switch ( bitsPerPixel )
-    {
-        case 1:
-            // monochrome bitmap, 2 entries
-            return 2;
-
-        case 4:
-            return 16;
-
-        case 8:
-            return 256;
-
-        case 24:
-            // may be used with 24bit bitmaps, but we don't use it here - fall
-            // through
-
-        case 16:
-        case 32:
-            // bmiColors not used at all with these bitmaps
-            return 0;
-
-        default:
-            wxFAIL_MSG( wxT("unknown bitmap format") );
-            return 0;
-    }
-}
-
-size_t wxConvertBitmapToDIB(LPBITMAPINFO pbi, const wxBitmap& bitmap)
-{
-    wxASSERT_MSG( bitmap.Ok(), wxT("invalid bmp can't be converted to DIB") );
-
-    // shouldn't be selected into a DC or GetDIBits() would fail
-    wxASSERT_MSG( !bitmap.GetSelectedInto(),
-                  wxT("can't copy bitmap selected into wxMemoryDC") );
-
-    // prepare all the info we need
-    BITMAP bm;
-    HBITMAP hbmp = (HBITMAP)bitmap.GetHBITMAP();
-    if ( !GetObject(hbmp, sizeof(bm), &bm) )
-    {
-        wxLogLastError(wxT("GetObject(bitmap)"));
-
-        return 0;
-    }
-
-    // calculate the number of bits per pixel and the number of items in
-    // bmiColors array (whose meaning depends on the bitmap format)
-    WORD biBits = bm.bmPlanes * bm.bmBitsPixel;
-    WORD biColors = (WORD)wxGetNumOfBitmapColors(biBits);
-
-    BITMAPINFO bi2;
-
-    bool wantSizeOnly = pbi == NULL;
-    if ( wantSizeOnly )
-        pbi = &bi2;
-
-    // just for convenience
-    BITMAPINFOHEADER& bi = pbi->bmiHeader;
-
-    bi.biSize = sizeof(BITMAPINFOHEADER);
-    bi.biWidth = bm.bmWidth;
-    bi.biHeight = bm.bmHeight;
-    bi.biPlanes = 1;
-    bi.biBitCount = biBits;
-    bi.biCompression = BI_RGB;
-    bi.biSizeImage = 0;
-    bi.biXPelsPerMeter = 0;
-    bi.biYPelsPerMeter = 0;
-    bi.biClrUsed = 0;
-    bi.biClrImportant = 0;
-
-    // memory we need for BITMAPINFO only
-    DWORD dwLen = bi.biSize + biColors * sizeof(RGBQUAD);
-
-    // first get the image size
-    ScreenHDC hdc;
-    if ( !GetDIBits(hdc, hbmp, 0, bi.biHeight, NULL, pbi, DIB_RGB_COLORS) )
-    {
-        wxLogLastError(wxT("GetDIBits(NULL)"));
-
-        return 0;
-    }
-
-    if ( wantSizeOnly )
-    {
-        // size of the header + size of the image
-        return dwLen + bi.biSizeImage;
-    }
-
-    // and now copy the bits
-    void *image = (char *)pbi + dwLen;
-    if ( !GetDIBits(hdc, hbmp, 0, bi.biHeight, image, pbi, DIB_RGB_COLORS) )
-    {
-        wxLogLastError(wxT("GetDIBits"));
-
-        return 0;
-    }
-
-    return dwLen + bi.biSizeImage;
-}
-
-wxBitmap wxConvertDIBToBitmap(const LPBITMAPINFO pbmi)
-{
-    // here we get BITMAPINFO struct followed by the actual bitmap bits and
-    // BITMAPINFO starts with BITMAPINFOHEADER followed by colour info
-    const BITMAPINFOHEADER *pbmih = &pbmi->bmiHeader;
-
-    // biClrUsed has the number of colors, unless it's 0
-    int numColors = pbmih->biClrUsed;
-    if (numColors==0)
-    {
-        numColors = wxGetNumOfBitmapColors(pbmih->biBitCount);
-    }
-
-    // offset of image from the beginning of the header
-    DWORD ofs = numColors * sizeof(RGBQUAD);
-    void *image = (char *)pbmih + sizeof(BITMAPINFOHEADER) + ofs;
-
-    ScreenHDC hdc;
-    HBITMAP hbmp = CreateDIBitmap(hdc, pbmih, CBM_INIT,
-                                  image, pbmi, DIB_RGB_COLORS);
-    if ( !hbmp )
-    {
-        wxLogLastError(wxT("CreateDIBitmap"));
-    }
-
-    wxBitmap bitmap(pbmih->biWidth, pbmih->biHeight, pbmih->biBitCount);
-    bitmap.SetHBITMAP((WXHBITMAP)hbmp);
-
-    return bitmap;
-}
 
 #ifdef __WXDEBUG__
 

@@ -46,6 +46,19 @@
 #include "wx/image.h"
 #include "wx/msw/dib.h"
 
+// ----------------------------------------------------------------------------
+// private functions
+// ----------------------------------------------------------------------------
+
+// calculate the number of palette entries needed for the bitmap with this
+// number of bits per pixel
+static WORD wxGetNumOfBitmapColors(WORD bitsPerPixel)
+{
+    // only 1, 4 and 8bpp bitmaps use palettes (well, they could be used with
+    // 24bpp ones too but we don't support this as I think it's quite uncommon)
+    return bitsPerPixel <= 8 ? 1 << bitsPerPixel : 0;
+}
+
 // ============================================================================
 // implementation
 // ============================================================================
@@ -79,11 +92,8 @@ bool wxDIB::Create(int width, int height, int depth)
 
     info->bmiHeader.biPlanes = 1;
     info->bmiHeader.biBitCount = depth;
-    info->bmiHeader.biCompression = BI_RGB;
     info->bmiHeader.biSizeImage = GetLineSize(width, depth)*height;
 
-    // No need to report an error here.  If it fails, we just won't use a
-    // file mapping and CreateDIBSection will just allocate memory for us.
     m_handle = ::CreateDIBSection
                  (
                     0,              // hdc (unused with DIB_RGB_COLORS)
@@ -165,6 +175,10 @@ void wxDIB::DoGetObject() const
     }
 }
 
+// ----------------------------------------------------------------------------
+// DDB <-> DIB conversions
+// ----------------------------------------------------------------------------
+
 HBITMAP wxDIB::CreateDDB(HDC hdc) const
 {
     wxCHECK_MSG( m_handle, 0, _T("wxDIB::CreateDDB(): invalid object") );
@@ -177,44 +191,125 @@ HBITMAP wxDIB::CreateDDB(HDC hdc) const
         return 0;
     }
 
-    HBITMAP hbitmap = ::CreateCompatibleBitmap
-                        (
-                            hdc ? hdc : ScreenHDC(),
-                            ds.dsBm.bmWidth,
-                            ds.dsBm.bmHeight
-                        );
-    if ( !hbitmap )
-    {
-        wxLogLastError(_T("CreateCompatibleBitmap()"));
-
-        return 0;
-    }
-
-    MemoryHDC hdcMem;
-    SelectInHDC select(hdcMem, hbitmap);
-    if ( !select )
-    {
-        wxLogLastError(_T("SelectObjct(hBitmap)"));
-    }
-
-    if ( !::SetDIBits
-            (
-                hdcMem,
-                hbitmap,
-                0,
-                ds.dsBm.bmHeight,
-                ds.dsBm.bmBits,
-                (BITMAPINFO *)&ds.dsBmih,
-                DIB_RGB_COLORS
-            ) )
-    {
-        wxLogLastError(_T("SetDIBits"));
-
-        return 0;
-    }
-
-    return hbitmap;
+    return ConvertToBitmap((BITMAPINFO *)&ds.dsBmih, hdc, ds.dsBm.bmBits);
 }
+
+/* static */
+HBITMAP wxDIB::ConvertToBitmap(const BITMAPINFO *pbmi, HDC hdc, void *bits)
+{
+    wxCHECK_MSG( pbmi, 0, _T("invalid DIB in ConvertToBitmap") );
+
+    // here we get BITMAPINFO struct followed by the actual bitmap bits and
+    // BITMAPINFO starts with BITMAPINFOHEADER followed by colour info
+    const BITMAPINFOHEADER *pbmih = &pbmi->bmiHeader;
+
+    // get the pointer to the start of the real image data if we have a plain
+    // DIB and not a DIB section (in the latter case the pointer must be passed
+    // to us by the caller)
+    if ( !bits )
+    {
+        // we must skip over the colour table to get to the image data
+
+        // biClrUsed has the number of colors but it may be not initialized at
+        // all
+        int numColors = pbmih->biClrUsed;
+        if ( !numColors )
+        {
+            numColors = wxGetNumOfBitmapColors(pbmih->biBitCount);
+        }
+
+        bits = (char *)pbmih + sizeof(*pbmih) + numColors*sizeof(RGBQUAD);
+    }
+
+    HBITMAP hbmp = ::CreateDIBitmap
+                     (
+                        hdc ? hdc           // create bitmap compatible
+                            : ScreenHDC(),  //  with this DC
+                        pbmih,              // used to get size &c
+                        CBM_INIT,           // initialize bitmap bits too
+                        bits,               // ... using this data
+                        pbmi,               // this is used for palette only
+                        DIB_RGB_COLORS      // direct or indexed palette?
+                     );
+
+    if ( !hbmp )
+    {
+        wxLogLastError(wxT("CreateDIBitmap"));
+    }
+
+    return hbmp;
+}
+
+/* static */
+size_t wxDIB::ConvertFromBitmap(BITMAPINFO *pbi, HBITMAP hbmp)
+{
+    wxASSERT_MSG( hbmp, wxT("invalid bmp can't be converted to DIB") );
+
+    // prepare all the info we need
+    BITMAP bm;
+    if ( !::GetObject(hbmp, sizeof(bm), &bm) )
+    {
+        wxLogLastError(wxT("GetObject(bitmap)"));
+
+        return 0;
+    }
+
+    // calculate the number of bits per pixel and the number of items in
+    // bmiColors array (whose meaning depends on the bitmap format)
+    WORD biBits = bm.bmPlanes * bm.bmBitsPixel;
+    WORD biColors = wxGetNumOfBitmapColors(biBits);
+
+    // we need a BITMAPINFO anyhow and if we're not given a pointer to it we
+    // use this one
+    BITMAPINFO bi2;
+
+    bool wantSizeOnly = pbi == NULL;
+    if ( wantSizeOnly )
+        pbi = &bi2;
+
+    // just for convenience
+    const int h = bm.bmHeight;
+
+    // init the header
+    BITMAPINFOHEADER& bi = pbi->bmiHeader;
+    wxZeroMemory(bi);
+    bi.biSize = sizeof(BITMAPINFOHEADER);
+    bi.biWidth = bm.bmWidth;
+    bi.biHeight = h;
+    bi.biPlanes = 1;
+    bi.biBitCount = biBits;
+
+    // memory we need for BITMAPINFO only
+    DWORD dwLen = bi.biSize + biColors * sizeof(RGBQUAD);
+
+    // first get the image size
+    ScreenHDC hdc;
+    if ( !::GetDIBits(hdc, hbmp, 0, h, NULL, pbi, DIB_RGB_COLORS) )
+    {
+        wxLogLastError(wxT("GetDIBits(NULL)"));
+
+        return 0;
+    }
+
+    if ( !wantSizeOnly )
+    {
+        // and now copy the bits
+        void *image = (char *)pbi + dwLen;
+        if ( !::GetDIBits(hdc, hbmp, 0, h, image, pbi, DIB_RGB_COLORS) )
+        {
+            wxLogLastError(wxT("GetDIBits"));
+
+            return 0;
+        }
+    }
+
+    // return the total size
+    return dwLen + bi.biSizeImage;
+}
+
+// ----------------------------------------------------------------------------
+// palette support
+// ----------------------------------------------------------------------------
 
 #if wxUSE_PALETTE
 

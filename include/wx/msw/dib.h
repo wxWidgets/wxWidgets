@@ -55,7 +55,7 @@ public:
     // create a bitmap compatiblr with the given HDC (or screen by default) and
     // return its handle, the caller is responsible for freeing it (using
     // DeleteObject())
-    HBITMAP CreateDDB(HDC hdc = NULL) const;
+    HBITMAP CreateDDB(HDC hdc = 0) const;
 
     // get the handle from the DIB and reset it, i.e. this object won't destroy
     // the DIB after this (but the caller should do it)
@@ -88,6 +88,25 @@ public:
     // decide to use it
     void *GetData() const { DoGetObject(); return m_data; }
 
+
+    // HBITMAP conversion
+    // ------------------
+
+    // these functions are only used by wxBitmapDataObject implementation in
+    // src/msw/ole/dataobj.cpp, don't use them directly if possible
+
+    // creates a DDB compatible with the given (or screen) DC from either
+    // a plain DIB or a DIB section (in which case the last parameter must be
+    // non NULL)
+    static HBITMAP ConvertToBitmap(const BITMAPINFO *pbi,
+                                   HDC hdc = 0,
+                                   void *bits = NULL);
+
+    // creates a DIB from the given DDB or calculates the space needed by it:
+    // if pbi is NULL, only the space is calculated, otherwise pbi is supposed
+    // to point at BITMAPINFO of the correct size which is filled by this
+    // function
+    static size_t ConvertFromBitmap(BITMAPINFO *pbi, HBITMAP hbmp);
 
     // wxImage conversion
     // ------------------
@@ -180,31 +199,10 @@ inline wxDIB::~wxDIB()
     Free();
 }
 
-// ----------------------------------------------------------------------------
-// Functions for working with DIBs
-// ----------------------------------------------------------------------------
-
-// WARNING: these functions are private to wxWindows and shouldn't be used
-//          by the user code, they risk to disappear in the next versions!
-
-// VZ: we have 3 different sets of functions: from bitmap.cpp (wxCreateDIB and
-//     wxFreeDIB), from dib.cpp and from dataobj.cpp - surely there is some
-//     redundancy between them? (FIXME)
-
-// defined in ole/dataobj.cpp
-extern WXDLLEXPORT size_t wxConvertBitmapToDIB(LPBITMAPINFO pbi, const wxBitmap& bitmap);
-extern WXDLLEXPORT wxBitmap wxConvertDIBToBitmap(const LPBITMAPINFO pbi);
-
 // the rest is defined in dib.cpp
 
 // Save (device dependent) wxBitmap as a DIB
 bool wxSaveBitmap(wxChar *filename, wxBitmap *bitmap, wxPalette *palette = NULL);
-
-// Load device independent bitmap into device dependent bitmap
-wxBitmap *wxLoadBitmap(wxChar *filename, wxPalette **palette = NULL);
-
-// Load into existing bitmap;
-bool wxLoadIntoBitmap(wxChar *filename, wxBitmap *bitmap, wxPalette **pal = NULL);
 
 HANDLE wxBitmapToDIB (HBITMAP hBitmap, HPALETTE hPal);
 bool   wxReadDIB(LPTSTR lpFileName, HBITMAP *bitmap, HPALETTE *palette);
