@@ -14,9 +14,13 @@
 #include <wx/stream.h>
 
 class wxMemoryInputStream: public wxInputStream {
+ private:
+  size_t m_length;
+  
  public:
   wxMemoryInputStream(const char *data, size_t length);
   virtual ~wxMemoryInputStream();
+  virtual size_t StreamSize() const { return m_length; }
 
   char Peek();
 };

@@ -31,7 +31,9 @@ wxMemoryInputStream::wxMemoryInputStream(const char *data, size_t len)
   : wxInputStream()
 {
   m_i_streambuf->SetBufferIO((char*) data, (char*) (data+len));
+  m_i_streambuf->SetIntPosition(0); // seek to start pos
   m_i_streambuf->Fixed(TRUE);
+  m_length = len;
 }
 
 wxMemoryInputStream::~wxMemoryInputStream()
