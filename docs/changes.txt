@@ -16,9 +16,20 @@ OTHER CHANGES
 2.2.8
 -----
 
+All:
+
+ - fixed a bug in wxStream classes
+
+wxGTK:
+
+ - fixed tree control invalid pointer after drag bug
+
 wxMSW:
 
 - fixed bug in wxFrame::SetClientSize() for the frames with toolbars
+- Compilation fixes for Mingw32/JPEG code
+- fixed wxListBox memory leak (WM_DESTROY should always be
+  passed to DefWindowProc)
 
 2.2.7
 -----

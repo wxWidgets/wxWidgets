@@ -678,7 +678,7 @@ bool wxFrame::MSWCreate(int id, wxWindow *parent, const wxChar *wclass, wxWindow
   if ((style & wxTHICK_FRAME) == 0)
     msflags |= WS_BORDER;
 
-  WXDWORD extendedStyle = MakeExtendedStyle(style);
+  WXDWORD extendedStyle = MakeExtendedStyle(style, FALSE);
 
 #if !defined(__WIN16__) && !defined(__SC__)
   if (style & wxFRAME_TOOL_WINDOW)

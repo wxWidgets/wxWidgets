@@ -1,4 +1,4 @@
-wxWindows 2.2.7
+wxWindows 2.2.8
 ---------------
 
 README
@@ -231,5 +231,5 @@ web site) or contact Julian Smart <julian.smart@ukonline.co.uk>.
 
 Good luck!
 
-The wxWindows Team, 18th May, 2001
+The wxWindows Team, September, 2001
 
