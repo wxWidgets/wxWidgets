@@ -110,6 +110,10 @@
 #define wxUSE_OWNER_DRAWN 1
 #endif
 
+#if defined(__WXPM__)
+#define wxUSE_OWNER_DRAWN 1
+#endif
+
 /* enable rich edit under Win32 */
 #if defined(__WIN95__) && !defined(__TWIN32__) && !defined(__GNUWIN32_OLD__)
 #define wxUSE_RICHEDIT 1
