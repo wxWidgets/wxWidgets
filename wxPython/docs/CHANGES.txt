@@ -155,7 +155,7 @@ ID's.  Then call `Finalize` and the sizer will take care of the rest.
 wxMSW Toolbar: pass correct tool id (and not always -1) to the
 EVT_TOOL_RCLICKED handler
 
-wxGTK: Applied patched for combo box SELECTED events (no longer get
+wxGTK: Applied patch for combo box SELECTED events (no longer get
 lots of surplus events)
 
 wxGTK: Applied patch for proper menu highlight colour detection in
