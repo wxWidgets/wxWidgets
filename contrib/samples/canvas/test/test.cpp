@@ -322,7 +322,6 @@ void MyFrame::OnAbout( wxCommandEvent &WXUNUSED(event) )
 bool MyApp::OnInit()
 {
   m_fontpath = getenv("TRUETYPE");
-   m_fontpath = "c:\WINNT\Fonts\times.ttf";
   if ( !m_fontpath )
   {
       wxLogError("Please set env var TRUETYPE to the path where times.ttf lives.");
