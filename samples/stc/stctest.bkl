@@ -15,4 +15,10 @@
         <wx-lib>base</wx-lib>
     </exe>
 
+    <wx-data id="data">   
+        <files>   
+             stctest.cpp   
+        </files>   
+    </wx-data>   
+  
 </makefile>

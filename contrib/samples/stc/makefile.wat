@@ -109,6 +109,13 @@ __DLLFLAG_p =
 !ifeq SHARED 1
 __DLLFLAG_p = -dWXUSINGDLL
 !endif
+__EXCEPTIONSFLAG_7 =
+!ifeq USE_EXCEPTIONS 0
+__EXCEPTIONSFLAG_7 = 
+!endif
+!ifeq USE_EXCEPTIONS 1
+__EXCEPTIONSFLAG_7 = -xs
+!endif
 __LIB_JPEG_p =
 !ifeq USE_GUI 1
 __LIB_JPEG_p = wxjpeg$(WXDEBUGFLAG).lib
@@ -167,7 +174,8 @@ SETUPHDIR = &
 STCTEST_CXXFLAGS = $(CPPFLAGS) $(__DEBUGINFO_0) $(__OPTIMIZEFLAG_2) -bm &
 	$(__RUNTIME_LIBS_5) -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) &
 	$(__UNICODE_DEFINE_p) -i=.\..\..\..\include -i=$(SETUPHDIR) -i=. &
-	$(__DLLFLAG_p) -i=.\..\..\..\samples -i=.\..\..\include $(CXXFLAGS)
+	$(__DLLFLAG_p) -i=.\..\..\..\samples -i=.\..\..\include $(CXXFLAGS) &
+	$(__EXCEPTIONSFLAG_7)
 STCTEST_OBJECTS =  &
 	$(OBJS)\stctest_stctest.obj &
 	$(OBJS)\stctest_edit.obj &
@@ -180,7 +188,7 @@ $(OBJS) :
 
 ### Targets: ###
 
-all : .SYMBOLIC $(OBJS)\stctest.exe
+all : .SYMBOLIC $(OBJS)\stctest.exe data
 
 $(OBJS)\stctest_edit.obj :  .AUTODEPEND .\edit.cpp
 	$(CXX) -zq -fo=$^@ $(STCTEST_CXXFLAGS) $<
@@ -200,6 +208,10 @@ clean : .SYMBOLIC
 	-if exist $(OBJS)\*.lbc del $(OBJS)\*.lbc
 	-if exist $(OBJS)\*.ilk del $(OBJS)\*.ilk
 	-if exist $(OBJS)\stctest.exe del $(OBJS)\stctest.exe
+
+data : .SYMBOLIC 
+	if not exist $(OBJS) mkdir $(OBJS)
+	for %f in (stctest.cpp) do if not exist $(OBJS)\%f copy .\%f $(OBJS)
 
 $(OBJS)\stctest.exe :  $(STCTEST_OBJECTS) $(OBJS)\stctest_sample.res
 	@%create $(OBJS)\stctest.lbc

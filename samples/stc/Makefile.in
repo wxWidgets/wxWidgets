@@ -34,6 +34,7 @@ top_srcdir = @top_srcdir@
 
 ### Variables: ###
 
+DESTDIR = 
 LIBDIRNAME = $(top_builddir)lib
 STCTEST_CXXFLAGS = $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
 	-I$(top_srcdir)/include -I$(srcdir) $(__DLLFLAG_p) \
@@ -104,13 +105,21 @@ COND_PLATFORM_OS2_1___stctest___os2_emxbindcmd = $(NM) stctest$(EXEEXT) | if \
 
 ### Targets: ###
 
-all: stctest$(EXEEXT) $(__stctest_bundle___depname)
+all: stctest$(EXEEXT) $(__stctest_bundle___depname) data
 
 clean: 
 	rm -rf ./.deps ./.pch
 	rm -f ./*.o
 	rm -f stctest$(EXEEXT)
 	rm -rf stctest.app
+
+data: 
+	@mkdir -p .
+	@for f in stctest.cpp; do \
+	if test \( ! -s ./$$f \) -o \( $(srcdir)/$$f -nt ./$$f  \) ; then \
+	cp -pRf $(srcdir)/$$f . ; \
+	fi; \
+	done
 
 distclean: clean
 	rm -f configure config.cache config.log config.status bk-deps bk-make-pch shared-ld-sh Makefile
@@ -167,4 +176,4 @@ uninstall:
 # Include dependency info, if present:
 @IF_GNU_MAKE@-include .deps/*.d
 
-.PHONY: all clean distclean install stctest_bundle uninstall
+.PHONY: all clean data distclean install stctest_bundle uninstall

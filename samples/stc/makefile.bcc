@@ -154,7 +154,7 @@ $(OBJS):
 
 ### Targets: ###
 
-all: $(OBJS)\stctest.exe
+all: $(OBJS)\stctest.exe data
 
 $(OBJS)\stctest_edit.obj: .\edit.cpp
 	$(CXX) -q -c -P -o$@ $(STCTEST_CXXFLAGS) $**
@@ -177,6 +177,10 @@ clean:
 	-if exist $(OBJS)\stctest.ild del $(OBJS)\stctest.ild
 	-if exist $(OBJS)\stctest.ilf del $(OBJS)\stctest.ilf
 	-if exist $(OBJS)\stctest.ils del $(OBJS)\stctest.ils
+
+data: 
+	if not exist $(OBJS) mkdir $(OBJS)
+	for %f in (stctest.cpp) do if not exist $(OBJS)\%f copy .\%f $(OBJS)
 
 $(OBJS)\stctest.exe: $(STCTEST_OBJECTS)  $(OBJS)\stctest_sample.res
 	ilink32 -Tpe -q $(LDFLAGS) -L$(BCCDIR)\lib $(__DEBUGINFO)  -L$(LIBDIRNAME) -aa @&&|

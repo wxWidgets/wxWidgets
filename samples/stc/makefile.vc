@@ -21,7 +21,7 @@ STCTEST_CXXFLAGS = $(CPPFLAGS) /M$(__RUNTIME_LIBS_7)$(__DEBUGRUNTIME_3) \
 	$(__OPTIMIZEFLAG_4) $(__NO_VC_CRTDBG_p) /D__WXMSW__ $(__WXUNIV_DEFINE_p) \
 	$(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) /I.\..\..\..\include \
 	/I$(SETUPHDIR) /W4 /I. $(__DLLFLAG_p) /D_WINDOWS /I.\..\..\..\samples \
-	/I.\..\..\include $(CXXFLAGS) /GR /GX
+	/I.\..\..\include $(CXXFLAGS) $(__EXCEPTIONSFLAG_8) $(__EXCEPTIONSFLAG_9)
 STCTEST_OBJECTS =  \
 	$(OBJS)\stctest_sample.res \
 	$(OBJS)\stctest_stctest.obj \
@@ -119,6 +119,18 @@ __DLLFLAG_p = /DWXUSINGDLL
 !endif
 !if "$(SHARED)" == "1"
 __DLLFLAG_p_1 = /d WXUSINGDLL
+!endif
+!if "$(USE_EXCEPTIONS)" == "0"
+__EXCEPTIONSFLAG_8 = 
+!endif
+!if "$(USE_EXCEPTIONS)" == "1"
+__EXCEPTIONSFLAG_8 = /GR
+!endif
+!if "$(USE_EXCEPTIONS)" == "0"
+__EXCEPTIONSFLAG_9 = 
+!endif
+!if "$(USE_EXCEPTIONS)" == "1"
+__EXCEPTIONSFLAG_9 = /GX
 !endif
 !if "$(USE_GUI)" == "1"
 __LIB_JPEG_p = wxjpeg$(WXDEBUGFLAG).lib
@@ -229,7 +241,7 @@ $(OBJS):
 
 ### Targets: ###
 
-all: $(OBJS)\stctest.exe
+all: $(OBJS)\stctest.exe data
 
 $(OBJS)\stctest_edit.obj: .\edit.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(STCTEST_CXXFLAGS) $**
@@ -249,6 +261,10 @@ clean:
 	-if exist $(OBJS)\stctest.exe del $(OBJS)\stctest.exe
 	-if exist $(OBJS)\stctest.ilk del $(OBJS)\stctest.ilk
 	-if exist $(OBJS)\stctest.pdb del $(OBJS)\stctest.pdb
+
+data: 
+	if not exist $(OBJS) mkdir $(OBJS)
+	for %f in (stctest.cpp) do if not exist $(OBJS)\%f copy .\%f $(OBJS)
 
 $(OBJS)\stctest.exe: $(STCTEST_OBJECTS) $(OBJS)\stctest_sample.res
 	link /NOLOGO /OUT:$@ $(LDFLAGS) $(__DEBUGINFO_1)  /LIBPATH:$(LIBDIRNAME) /SUBSYSTEM:WINDOWS @<<

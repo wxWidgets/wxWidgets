@@ -675,6 +675,7 @@ void Window::SetCursor(Cursor curs) {
         break;
     case cursorHand:
         cursorId = wxCURSOR_HAND;
+        break;
     default:
         cursorId = wxCURSOR_ARROW;
         break;
@@ -888,7 +889,7 @@ PRectangle ListBoxImpl::GetDesiredRect() {
     // wxListCtrl doesn't have a DoGetBestSize, so instead we kept track of
     // the max size in Append and calculate it here...
     int maxw = maxStrWidth;
-    int maxh = 0;
+    int maxh ;
 
     // give it a default if there are no lines, and/or add a bit more
     if (maxw == 0) maxw = 100;

@@ -2142,7 +2142,7 @@ bool wxStyledTextCtrl::LoadFile(const wxString& filename)
             void *bufptr = buffer.GetWriteBuf(len);
             success = (file.Read(bufptr, len) == len);
             buffer.UngetWriteBuf(len);
-#if #wxUSE_UNICODE
+#if wxUSE_UNICODE
             contents = wxString(buffer, *wxConvCurrent);
 #else
             contents = buffer;
