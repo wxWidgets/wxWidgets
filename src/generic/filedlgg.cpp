@@ -200,7 +200,13 @@ void wxFileData::ReadData()
     lstat( m_filePath.fn_str(), &buff );
     m_type |= S_ISLNK( buff.st_mode ) != 0 ? is_link : 0;
 #else // no lstat()
+    // only translate to file charset if we don't go by our
+    // wxStat implementation
+#ifndef wxNEED_WX_UNISTD_H
+    wxStat( m_filePath.fn_str() , &buff );
+#else
     wxStat( m_filePath, &buff );
+#endif
 #endif
 
     m_type |= (buff.st_mode & S_IFDIR) != 0 ? is_dir : 0;

@@ -298,7 +298,11 @@ wxFileExists (const wxString& filename)
     return (ret != (DWORD)-1) && !(ret & FILE_ATTRIBUTE_DIRECTORY);
 #else // !__WIN32__
     wxStructStat st;
-    return wxStat(filename, &st) == 0 && (st.st_mode & S_IFREG);
+#ifndef wxNEED_WX_UNISTD_H
+    return wxStat( filename.fn_str() , &st) == 0 && (st.st_mode & S_IFREG);
+#else
+    return wxStat( filename , &st) == 0 && (st.st_mode & S_IFREG);
+#endif
 #endif // __WIN32__/!__WIN32__
 }
 
