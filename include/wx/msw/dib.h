@@ -59,10 +59,12 @@ public:
     // operations
     // ----------
 
+#ifndef __WXWINCE__
     // create a bitmap compatiblr with the given HDC (or screen by default) and
     // return its handle, the caller is responsible for freeing it (using
     // DeleteObject())
     HBITMAP CreateDDB(HDC hdc = 0) const;
+#endif // !__WXWINCE__
 
     // get the handle from the DIB and reset it, i.e. this object won't destroy
     // the DIB after this (but the caller should do it)
@@ -105,6 +107,7 @@ public:
     // these functions are only used by wxWindows internally right now, please
     // don't use them directly if possible as they're subject to change
 
+#ifndef __WXWINCE__
     // creates a DDB compatible with the given (or screen) DC from either
     // a plain DIB or a DIB section (in which case the last parameter must be
     // non NULL)
@@ -122,6 +125,7 @@ public:
     // function (this overload is needed for wxBitmapDataObject code in
     // src/msw/ole/dataobj.cpp)
     static size_t ConvertFromBitmap(BITMAPINFO *pbi, HBITMAP hbmp);
+#endif // __WXWINCE__
 
 
     // wxImage conversion
@@ -157,6 +161,11 @@ private:
 
     // free resources
     void Free();
+
+    // initialize the contents from the provided DDB (Create() must have been
+    // already called)
+    bool CopyFromDDB(HBITMAP hbmp);
+
 
     // the DIB section handle, 0 if invalid
     HBITMAP m_handle;

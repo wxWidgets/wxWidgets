@@ -71,7 +71,7 @@ public:
     // Create a bitmap compatible with the given DC
     wxBitmap(int width, int height, const wxDC& dc);
 
-#if wxUSE_IMAGE
+#if wxUSE_IMAGE && wxUSE_WXDIB
     // Convert from wxImage
     wxBitmap(const wxImage& image, int depth = -1)
         { (void)CreateFromImage(image, depth); }
@@ -108,7 +108,7 @@ public:
 
     virtual ~wxBitmap();
 
-#if wxUSE_IMAGE
+#if wxUSE_IMAGE && wxUSE_WXDIB
     wxImage ConvertToImage() const;
 #endif // wxUSE_IMAGE
 
@@ -186,7 +186,7 @@ protected:
     // creates an uninitialized bitmap, called from Create()s above
     bool DoCreate(int w, int h, int depth, WXHDC hdc);
 
-#if wxUSE_IMAGE
+#if wxUSE_IMAGE && wxUSE_WXDIB
     // creates the bitmap from wxImage, supposed to be called from ctor
     bool CreateFromImage(const wxImage& image, int depth);
 

@@ -761,9 +761,11 @@ const wxChar *wxDataObject::GetFormatName(wxDataFormat format)
 // wxBitmapDataObject supports CF_DIB format
 // ----------------------------------------------------------------------------
 
+// TODO: support CF_DIB under Windows CE as well
+
 size_t wxBitmapDataObject::GetDataSize() const
 {
-#if wxUSE_WXDIB
+#if wxUSE_WXDIB && !defined(__WXWINCE__)
     return wxDIB::ConvertFromBitmap(NULL, GetHbitmapOf(GetBitmap()));
 #else
     return 0;
@@ -772,7 +774,7 @@ size_t wxBitmapDataObject::GetDataSize() const
 
 bool wxBitmapDataObject::GetDataHere(void *buf) const
 {
-#if wxUSE_WXDIB
+#if wxUSE_WXDIB && !defined(__WXWINCE__)
     BITMAPINFO * const pbi = (BITMAPINFO *)buf;
 
     return wxDIB::ConvertFromBitmap(pbi, GetHbitmapOf(GetBitmap())) != 0;
@@ -783,7 +785,7 @@ bool wxBitmapDataObject::GetDataHere(void *buf) const
 
 bool wxBitmapDataObject::SetData(size_t WXUNUSED(len), const void *buf)
 {
-#if wxUSE_WXDIB
+#if wxUSE_WXDIB && !defined(__WXWINCE__)
     const BITMAPINFO * const pbmi = (const BITMAPINFO *)buf;
 
     HBITMAP hbmp = wxDIB::ConvertToBitmap(pbmi);
