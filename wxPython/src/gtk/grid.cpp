@@ -7066,16 +7066,22 @@ static PyObject *_wrap_wxGrid_GetTextBoxSize(PyObject *self, PyObject *args, PyO
     wxDC * _arg1;
     wxArrayString * _arg2;
     long * _arg3;
+    long  temp;
     long * _arg4;
+    long  temp0;
     PyObject * _argo0 = 0;
     PyObject * _argo1 = 0;
     PyObject * _argo2 = 0;
-    PyObject * _argo3 = 0;
-    PyObject * _argo4 = 0;
-    char *_kwnames[] = { "self","dc","lines","width","height", NULL };
+    char *_kwnames[] = { "self","dc","lines", NULL };
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OOOOO:wxGrid_GetTextBoxSize",_kwnames,&_argo0,&_argo1,&_argo2,&_argo3,&_argo4)) 
+{
+  _arg3 = &temp;
+}
+{
+  _arg4 = &temp0;
+}
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OOO:wxGrid_GetTextBoxSize",_kwnames,&_argo0,&_argo1,&_argo2)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -7098,20 +7104,6 @@ static PyObject *_wrap_wxGrid_GetTextBoxSize(PyObject *self, PyObject *args, PyO
         return NULL;
         }
     }
-    if (_argo3) {
-        if (_argo3 == Py_None) { _arg3 = NULL; }
-        else if (SWIG_GetPtrObj(_argo3,(void **) &_arg3,"_long_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 4 of wxGrid_GetTextBoxSize. Expected _long_p.");
-        return NULL;
-        }
-    }
-    if (_argo4) {
-        if (_argo4 == Py_None) { _arg4 = NULL; }
-        else if (SWIG_GetPtrObj(_argo4,(void **) &_arg4,"_long_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 5 of wxGrid_GetTextBoxSize. Expected _long_p.");
-        return NULL;
-        }
-    }
 {
     wxPy_BEGIN_ALLOW_THREADS;
         wxGrid_GetTextBoxSize(_arg0,*_arg1,*_arg2,_arg3,_arg4);
@@ -7119,6 +7111,16 @@ static PyObject *_wrap_wxGrid_GetTextBoxSize(PyObject *self, PyObject *args, PyO
     wxPy_END_ALLOW_THREADS;
 }    Py_INCREF(Py_None);
     _resultobj = Py_None;
+{
+    PyObject *o;
+    o = PyInt_FromLong((long) (*_arg3));
+    _resultobj = t_output_helper(_resultobj, o);
+}
+{
+    PyObject *o;
+    o = PyInt_FromLong((long) (*_arg4));
+    _resultobj = t_output_helper(_resultobj, o);
+}
     return _resultobj;
 }
 

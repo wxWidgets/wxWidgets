@@ -208,8 +208,21 @@ class wxRectPtr :
     def SetBottom(self, *_args, **_kwargs):
         val = apply(miscc.wxRect_SetBottom,(self,) + _args, _kwargs)
         return val
+    def Inflate(self, *_args, **_kwargs):
+        val = apply(miscc.wxRect_Inflate,(self,) + _args, _kwargs)
+        return val
+    def Inside(self, *_args, **_kwargs):
+        val = apply(miscc.wxRect_Inside,(self,) + _args, _kwargs)
+        return val
     def asTuple(self, *_args, **_kwargs):
         val = apply(miscc.wxRect_asTuple,(self,) + _args, _kwargs)
+        return val
+    def __add__(self, *_args, **_kwargs):
+        val = apply(miscc.wxRect___add__,(self,) + _args, _kwargs)
+        if val: val = wxRectPtr(val) ; val.thisown = 1
+        return val
+    def __cmp__(self, *_args, **_kwargs):
+        val = apply(miscc.wxRect___cmp__,(self,) + _args, _kwargs)
         return val
     def __setattr__(self,name,value):
         if name == "x" :

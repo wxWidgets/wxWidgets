@@ -2,6 +2,8 @@
 import eventsc
 
 from misc import *
+
+from gdi import *
 class wxEventPtr :
     def __init__(self,this):
         self.this = this

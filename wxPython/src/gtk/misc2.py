@@ -179,6 +179,48 @@ class wxPyTipProvider(wxPyTipProviderPtr):
 
 
 
+class wxDragImagePtr :
+    def __init__(self,this):
+        self.this = this
+        self.thisown = 0
+    def __del__(self,misc2c=misc2c):
+        if self.thisown == 1 :
+            misc2c.delete_wxDragImage(self)
+    def BeginDrag(self, *_args, **_kwargs):
+        val = apply(misc2c.wxDragImage_BeginDrag,(self,) + _args, _kwargs)
+        return val
+    def BeginDrag2(self, *_args, **_kwargs):
+        val = apply(misc2c.wxDragImage_BeginDrag2,(self,) + _args, _kwargs)
+        return val
+    def EndDrag(self, *_args, **_kwargs):
+        val = apply(misc2c.wxDragImage_EndDrag,(self,) + _args, _kwargs)
+        return val
+    def Move(self, *_args, **_kwargs):
+        val = apply(misc2c.wxDragImage_Move,(self,) + _args, _kwargs)
+        return val
+    def Show(self, *_args, **_kwargs):
+        val = apply(misc2c.wxDragImage_Show,(self,) + _args, _kwargs)
+        return val
+    def Hide(self, *_args, **_kwargs):
+        val = apply(misc2c.wxDragImage_Hide,(self,) + _args, _kwargs)
+        return val
+    def GetImageRect(self, *_args, **_kwargs):
+        val = apply(misc2c.wxDragImage_GetImageRect,(self,) + _args, _kwargs)
+        if val: val = wxRectPtr(val) ; val.thisown = 1
+        return val
+    def RedrawImage(self, *_args, **_kwargs):
+        val = apply(misc2c.wxDragImage_RedrawImage,(self,) + _args, _kwargs)
+        return val
+    def __repr__(self):
+        return "<C wxDragImage instance at %s>" % (self.this,)
+class wxDragImage(wxDragImagePtr):
+    def __init__(self,*_args,**_kwargs):
+        self.this = apply(misc2c.new_wxDragImage,_args,_kwargs)
+        self.thisown = 1
+
+
+
+
 
 
 #-------------- FUNCTION WRAPPERS ------------------
@@ -274,6 +316,26 @@ wxShowTip = misc2c.wxShowTip
 def wxCreateFileTipProvider(*_args, **_kwargs):
     val = apply(misc2c.wxCreateFileTipProvider,_args,_kwargs)
     if val: val = wxTipProviderPtr(val); val.thisown = 1
+    return val
+
+def wxDragIcon(*_args, **_kwargs):
+    val = apply(misc2c.wxDragIcon,_args,_kwargs)
+    if val: val = wxDragImagePtr(val); val.thisown = 1
+    return val
+
+def wxDragString(*_args, **_kwargs):
+    val = apply(misc2c.wxDragString,_args,_kwargs)
+    if val: val = wxDragImagePtr(val); val.thisown = 1
+    return val
+
+def wxDragTreeItem(*_args, **_kwargs):
+    val = apply(misc2c.wxDragTreeItem,_args,_kwargs)
+    if val: val = wxDragImagePtr(val); val.thisown = 1
+    return val
+
+def wxDragListItem(*_args, **_kwargs):
+    val = apply(misc2c.wxDragListItem,_args,_kwargs)
+    if val: val = wxDragImagePtr(val); val.thisown = 1
     return val
 
 
