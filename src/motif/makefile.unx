@@ -165,7 +165,6 @@ LIB_CPP_SRC=\
 # treectrl.cpp \
 # listctrl.cpp \
 # imaglist.cpp \
-# statusbr.cpp \
 
 ZLIB_SRC=\
   ../zlib/adler32.c ../zlib/deflate.c ../zlib/infblock.c\
