@@ -1324,7 +1324,7 @@ wxPyCBInputStream::wxPyCBInputStream(PyObject *r, PyObject *s, PyObject *t, bool
 
 
 wxPyCBInputStream::~wxPyCBInputStream() {
-    bool blocked;
+    bool blocked=false;
     if (m_block) blocked = wxPyBeginBlockThreads();
     Py_XDECREF(m_read);
     Py_XDECREF(m_seek);
@@ -1334,7 +1334,7 @@ wxPyCBInputStream::~wxPyCBInputStream() {
 
 
 wxPyCBInputStream* wxPyCBInputStream::create(PyObject *py, bool block) {
-    bool blocked;
+    bool blocked=false;
     if (block) blocked = wxPyBeginBlockThreads();
 
     PyObject* read = getMethod(py, "read");
