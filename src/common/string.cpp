@@ -88,14 +88,6 @@ extern const char *g_szNul = &g_strEmpty.dummy;
 // iostream ones.
 //
 // ATTN: you can _not_ use both of these in the same program!
-#if 0 // def  _MSC_VER
-  #include  <iostream>
-  #define   NAMESPACE   std::
-#else
-  #include  <iostream.h>
-  #define   NAMESPACE
-#endif  //Visual C++
-
 #if wxUSE_IOSTREAMH
 #include <iostream.h>
 #define   NAMESPACE
@@ -104,6 +96,8 @@ extern const char *g_szNul = &g_strEmpty.dummy;
 #  ifdef _MSC_VER
       using namespace std;
 #  endif
+// for msvc (bcc50+ also) you don't need these NAMESPACE defines,
+// using namespace std; takes care of that.
 #define   NAMESPACE   std::
 #endif
 
