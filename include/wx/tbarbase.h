@@ -120,9 +120,9 @@ public:
     wxToolBarBase *GetToolBar() const { return m_tbar; }
 
     // style
-    int IsButton() const { return m_toolStyle == wxTOOL_STYLE_BUTTON; }
-    int IsControl() const { return m_toolStyle == wxTOOL_STYLE_CONTROL; }
-    int IsSeparator() const { return m_toolStyle == wxTOOL_STYLE_SEPARATOR; }
+    bool IsButton() const { return m_toolStyle == wxTOOL_STYLE_BUTTON; }
+    bool IsControl() const { return m_toolStyle == wxTOOL_STYLE_CONTROL; }
+    bool IsSeparator() const { return m_toolStyle == wxTOOL_STYLE_SEPARATOR; }
     int GetStyle() const { return m_toolStyle; }
 
     // state
