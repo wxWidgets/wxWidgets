@@ -1087,7 +1087,7 @@ public:
     %name(XorRect)bool Xor(const wxRect& rect);
     %name(XorRegion)bool Xor(const wxRegion& region);
 
-    // Convert the region to a B&W bitmap with the black pixels being inside
+    // Convert the region to a B&W bitmap with the white pixels being inside
     // the region.
     wxBitmap ConvertToBitmap();
 
