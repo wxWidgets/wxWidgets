@@ -20,6 +20,9 @@ default: $(TARGETDIR)\$(TARGET).pyd pycfiles
 
 all:    $(TARGET)
 
+# for generating the html.cpp file
+$(GENCODEDIR)/html.cpp : html.i
+
 #----------------------------------------------------------------------
 
 $(TARGETDIR)\$(TARGET).pyd : $(DUMMYOBJ) $(WXLIB) $(OBJECTS) # $(TARGET).res

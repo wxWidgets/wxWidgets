@@ -5,7 +5,7 @@ TARGET = samplec
 
 OBJECTS = sample.obj mywidget.obj
 
-PYMODULES = $(TARGETDIR)\sample.py $(TARGETDIR)\sample.py 
+PYMODULES = $(TARGETDIR)\sample.py 
 
 SOURCES = $(GENCODEDIR)\sample.cpp mywidget.cpp
 
@@ -19,6 +19,9 @@ SOURCES = $(GENCODEDIR)\sample.cpp mywidget.cpp
 default: $(TARGETDIR)\$(TARGET).pyd pycfiles
 
 all:    $(TARGET)
+
+# dependency to automatically generate swig files
+$(GENCODEDIR)/sample.cpp : sample.i
 
 #----------------------------------------------------------------------
 

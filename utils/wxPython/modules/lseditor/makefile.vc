@@ -1,22 +1,22 @@
 
 #----------------------------------------------------------------------
 
-TARGET = glcanvasc
+TARGET = lseditorc
 
-OBJECTS = glcanvas.obj
+OBJECTS = lseditor.obj finddlg.obj lseditorpl.obj markup.obj \
+	plugin.obj sourcepainter.obj tdefs.objhtml.obj
 
-PYMODULES = $(TARGETDIR)\html.py $(TARGETDIR)\htmlhelper.py 
+PYMODULES = $(TARGETDIR)\lseditor.py 
 
-SOURCES = $(GENCODEDIR)\html.cpp 
+SOURCES = $(GENCODEDIR)/lseditor.cpp finddlg.cpp lseditorpl.cpp markup.cpp \
+	plugin.cpp sourcepainter.cpp tdefs.cpp
 
 
 #----------------------------------------------------------------------
 
 !include ..\makeinc.vc
-
-# override this
-EXTRAINC = $(EXTRAINC) -I$(WXDIR)\utils\glcanvas\win
-GLLIBS=$(WXDIR)\lib\glcanvas.lib glu32.lib opengl32.lib
+# undo overrideflags /GX- ...
+OVERRIDEFLAGS=$(OTHERCFLAGS)
 
 #----------------------------------------------------------------------
 
@@ -24,7 +24,8 @@ default: $(TARGETDIR)\$(TARGET).pyd pycfiles
 
 all:    $(TARGET)
 
-$(GENCODEDIR)/glcanvas.cpp : glcanvas.i
+# for generating the html.cpp file
+$(GENCODEDIR)/lseditor.cpp : lseditor.i
 
 #----------------------------------------------------------------------
 
@@ -33,8 +34,9 @@ $(TARGETDIR)\$(TARGET).pyd : $(DUMMYOBJ) $(WXLIB) $(OBJECTS) # $(TARGET).res
 /out:$@ /dll
 $(LFLAGS) /def:$(TARGET).def /implib:./$(TARGET).lib
 $(DUMMYOBJ) $(OBJECTS) 
-$(LIBS) $(GLLIBS)
+$(LIBS)
 <<
+
 
 #----------------------------------------------------------------------
 
