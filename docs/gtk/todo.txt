@@ -1,26 +1,26 @@
 
 -------------------- High priority ---------------------
 
+-------------------- Medium priority ---------------------
+
+Show accelerator in menus and control labels and actually implement them
+  -> Changed in GTK 1.2 (so let's do it for 1.2). Postponed.
+  
 -------------------- Low priority ---------------------
     
+Right aligned checkboxes: focus highlighting is wrong, tooltips can't be set
+
 OwnerDraw for wxListCtrl and others
   -> Postponed.
   
 DnD
   -> Must be rewritten for GTK+ 1.2
  
-wxDebugContext <-> wxLogXXX functions
-  -> Remove either
-
 Implement wxPalette
   -> I never understood that. Postponed.
   
 Implement different visuals and displays
   -> I never understood that. Postponed.
   
-Show accelerator in menus
-  -> Changed in GTK 1.2. Postponed.
-  
 Cooperation with Qt
   -> Would be nice.
-  
