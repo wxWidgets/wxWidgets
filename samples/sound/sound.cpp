@@ -164,12 +164,12 @@ MyFrame::MyFrame(const wxString& title)
     wxMenu *helpMenu = new wxMenu;
     wxMenu *playMenu = new wxMenu;
     helpMenu->Append(Sound_About, _T("&About...\tF1"), _T("Show about dialog"));
-    menuFile->Append(Sound_SelectFile, _T("&Select WAV file"), _T("Select a new wav file to play"));
+    menuFile->Append(Sound_SelectFile, _T("&Select WAV file\tCtrl+O"), _T("Select a new wav file to play"));
     menuFile->Append(Sound_Quit, _T("E&xit\tAlt-X"), _T("Quit this program"));
-    playMenu->Append(Sound_PlaySync, _T("Play sound &synchronously"));
-    playMenu->Append(Sound_PlayAsync, _T("Play sound &asynchronously"));
-    playMenu->Append(Sound_PlayAsyncOnStack, _T("Play sound asynchronously (&object on stack)"));
-    playMenu->Append(Sound_PlayLoop, _T("&Loop sound"));
+    playMenu->Append(Sound_PlaySync, _T("Play sound &synchronously\tCtrl+S"));
+    playMenu->Append(Sound_PlayAsync, _T("Play sound &asynchronously\tCtrl+A"));
+    playMenu->Append(Sound_PlayAsyncOnStack, _T("Play sound asynchronously (&object on stack)\tCtrl+T"));
+    playMenu->Append(Sound_PlayLoop, _T("&Loop sound\tCtrl+L"));
 
     // now append the freshly created menu to the menu bar...
     wxMenuBar *menuBar = new wxMenuBar();
