@@ -15,6 +15,7 @@ cross_compiling="@cross_compiling@"
 target="@host_alias@"
 static_flag="@STATIC_FLAG@"
 inplace_flag="no"
+nogui_flag="no"
 
 # Misc configuration variables:
 
@@ -188,7 +189,7 @@ Note that any other options supplied must come *after* the prefix
 specification for it to take effect.
 
 --static must come before --cppflags, --cflags, --cxxflags,
---libs and --gl-libs.
+--libs and --gl-libs and --libs must come before the other ones.
 
 --libs can take optional argument that contains comma-separated list of
 wxWidgets libraries to link against. This list can include both core
@@ -245,11 +246,16 @@ cppflags()
         includes="$includes -I${prefix}/contrib/include"
     fi
 
-    if test $static_flag = yes ; then
-        echo $includes ${WXDEBUG_DEFINE} ${TOOLCHAIN_DEFS} ${WXCONFIG_INCLUDE} ${WX_LARGEFILE_FLAGS} ${GCC_PRAGMA_FLAGS}
-    else
-        echo $includes ${WXDEBUG_DEFINE} ${TOOLCHAIN_DEFS} ${TOOLCHAIN_DLL_DEFS} ${WXCONFIG_INCLUDE} ${WX_LARGEFILE_FLAGS} ${GCC_PRAGMA_FLAGS}
+    flags="$includes ${WXDEBUG_DEFINE} ${TOOLCHAIN_DEFS}"
+    if test $static_flag != yes ; then
+        flags="$flags ${TOOLCHAIN_DLL_DEFS}"
     fi
+
+    if [ $nogui_flag = "yes" ]; then
+        flags="$flags-DwxUSE_GUI=0"
+    fi
+
+    echo "$flags${WXCONFIG_INCLUDE} ${WX_LARGEFILE_FLAGS} ${GCC_PRAGMA_FLAGS}"
 }
 
 if test $# -eq 0; then
@@ -337,7 +343,7 @@ while test $# -gt 0; do
           libs="-L${libdir}"
       fi
 
-      # it's simpler to avoid handling "bae" itself at all as we add it in the
+      # it's simpler to avoid handling "base" itself at all as we add it in the
       # end to the list of libraries anyhow
       # in monolithic build, link against the main library:
       if test "$is_monolithic" = "1" ; then
@@ -363,9 +369,11 @@ while test $# -gt 0; do
           # we may need to replace "std" alias with its expansion
           newlist=
           hadstd=0
+          hadgui=0
           for i in $libs_list; do
               case $i in
                   std)
+                    hadgui=1
                     hadstd=1
                     ;;
 
@@ -373,11 +381,16 @@ while test $# -gt 0; do
                     # if we have std, we're going to add base anyhow, avoid
                     # having it twice in the end
                     if [ $hadstd = 0 ]; then
-                        newlist="$newlist $i";
+                        newlist="$newlist $i"
                     fi
                     ;;
 
+                  net)
+                    newlist="$newlist $i"
+                    ;;
+
                   *)
+                    hadgui=1
                     newlist="$newlist $i"
                     ;;
               esac
@@ -385,6 +398,10 @@ while test $# -gt 0; do
           libs_list="$newlist"
           if [ $hadstd = 1 ]; then
               libs_list="$libs_list $CORE_GUI_LIBS $CORE_BASE_LIBS"
+          fi
+
+          if [ $hadgui = 0 ]; then
+              nogui_flag="yes"
           fi
 
           # in multilib mode, link against all sublibraries:
