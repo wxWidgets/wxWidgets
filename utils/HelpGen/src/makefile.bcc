@@ -141,28 +141,28 @@ $(OBJS):
 
 all: $(OBJS)\HelpGen.exe
 
-$(OBJS)\HelpGen_HelpGen.obj: .\src\HelpGen.cpp
+$(OBJS)\HelpGen_HelpGen.obj: .\HelpGen.cpp
 	$(CXX) -q -c -P -o$@ $(HELPGEN_CXXFLAGS) $**
 
-$(OBJS)\HelpGen_cjparser.obj: .\src\cjparser.cpp
+$(OBJS)\HelpGen_cjparser.obj: .\cjparser.cpp
 	$(CXX) -q -c -P -o$@ $(HELPGEN_CXXFLAGS) $**
 
-$(OBJS)\HelpGen_docripper.obj: .\src\docripper.cpp
+$(OBJS)\HelpGen_docripper.obj: .\docripper.cpp
 	$(CXX) -q -c -P -o$@ $(HELPGEN_CXXFLAGS) $**
 
-$(OBJS)\HelpGen_ifcontext.obj: .\src\ifcontext.cpp
+$(OBJS)\HelpGen_ifcontext.obj: .\ifcontext.cpp
 	$(CXX) -q -c -P -o$@ $(HELPGEN_CXXFLAGS) $**
 
-$(OBJS)\HelpGen_markup.obj: .\src\markup.cpp
+$(OBJS)\HelpGen_markup.obj: .\markup.cpp
 	$(CXX) -q -c -P -o$@ $(HELPGEN_CXXFLAGS) $**
 
-$(OBJS)\HelpGen_scriptbinder.obj: .\src\scriptbinder.cpp
+$(OBJS)\HelpGen_scriptbinder.obj: .\scriptbinder.cpp
 	$(CXX) -q -c -P -o$@ $(HELPGEN_CXXFLAGS) $**
 
-$(OBJS)\HelpGen_sourcepainter.obj: .\src\sourcepainter.cpp
+$(OBJS)\HelpGen_sourcepainter.obj: .\sourcepainter.cpp
 	$(CXX) -q -c -P -o$@ $(HELPGEN_CXXFLAGS) $**
 
-$(OBJS)\HelpGen_srcparser.obj: .\src\srcparser.cpp
+$(OBJS)\HelpGen_srcparser.obj: .\srcparser.cpp
 	$(CXX) -q -c -P -o$@ $(HELPGEN_CXXFLAGS) $**
 
 $(OBJS)\HelpGen.exe: $(HELPGEN_OBJECTS)

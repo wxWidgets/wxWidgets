@@ -435,35 +435,35 @@ LINK32=link.exe
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=.\src\HelpGen.cpp
+SOURCE=.\HelpGen.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\src\cjparser.cpp
+SOURCE=.\cjparser.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\src\docripper.cpp
+SOURCE=.\docripper.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\src\ifcontext.cpp
+SOURCE=.\ifcontext.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\src\markup.cpp
+SOURCE=.\markup.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\src\scriptbinder.cpp
+SOURCE=.\scriptbinder.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\src\sourcepainter.cpp
+SOURCE=.\sourcepainter.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\src\srcparser.cpp
+SOURCE=.\srcparser.cpp
 # End Source File
 # End Group
 # End Target

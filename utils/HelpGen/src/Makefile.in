@@ -87,28 +87,28 @@ HelpGen$(EXEEXT): $(HELPGEN_OBJECTS)
 	
 	$(__HelpGen___mac_setfilecmd)
 
-HelpGen_HelpGen.o: $(srcdir)/src/HelpGen.cpp
+HelpGen_HelpGen.o: $(srcdir)/HelpGen.cpp
 	$(CXXC) -c -o $@ $(HELPGEN_CXXFLAGS) $<
 
-HelpGen_cjparser.o: $(srcdir)/src/cjparser.cpp
+HelpGen_cjparser.o: $(srcdir)/cjparser.cpp
 	$(CXXC) -c -o $@ $(HELPGEN_CXXFLAGS) $<
 
-HelpGen_docripper.o: $(srcdir)/src/docripper.cpp
+HelpGen_docripper.o: $(srcdir)/docripper.cpp
 	$(CXXC) -c -o $@ $(HELPGEN_CXXFLAGS) $<
 
-HelpGen_ifcontext.o: $(srcdir)/src/ifcontext.cpp
+HelpGen_ifcontext.o: $(srcdir)/ifcontext.cpp
 	$(CXXC) -c -o $@ $(HELPGEN_CXXFLAGS) $<
 
-HelpGen_markup.o: $(srcdir)/src/markup.cpp
+HelpGen_markup.o: $(srcdir)/markup.cpp
 	$(CXXC) -c -o $@ $(HELPGEN_CXXFLAGS) $<
 
-HelpGen_scriptbinder.o: $(srcdir)/src/scriptbinder.cpp
+HelpGen_scriptbinder.o: $(srcdir)/scriptbinder.cpp
 	$(CXXC) -c -o $@ $(HELPGEN_CXXFLAGS) $<
 
-HelpGen_sourcepainter.o: $(srcdir)/src/sourcepainter.cpp
+HelpGen_sourcepainter.o: $(srcdir)/sourcepainter.cpp
 	$(CXXC) -c -o $@ $(HELPGEN_CXXFLAGS) $<
 
-HelpGen_srcparser.o: $(srcdir)/src/srcparser.cpp
+HelpGen_srcparser.o: $(srcdir)/srcparser.cpp
 	$(CXXC) -c -o $@ $(HELPGEN_CXXFLAGS) $<
 
 clean: 

@@ -8,14 +8,14 @@
     <exe id="HelpGen" template="wx_util_console"
                       template_append="wx_append_base">
         <sources>
-            src/HelpGen.cpp
-            src/cjparser.cpp
-            src/docripper.cpp
-            src/ifcontext.cpp
-            src/markup.cpp
-            src/scriptbinder.cpp
-            src/sourcepainter.cpp
-            src/srcparser.cpp
+            HelpGen.cpp
+            cjparser.cpp
+            docripper.cpp
+            ifcontext.cpp
+            markup.cpp
+            scriptbinder.cpp
+            sourcepainter.cpp
+            srcparser.cpp
         </sources>
         <wx-lib>base</wx-lib>
     </exe>

@@ -182,28 +182,28 @@ $(OBJS) :
 
 all : .SYMBOLIC $(OBJS)\HelpGen.exe
 
-$(OBJS)\HelpGen_HelpGen.obj :  .AUTODEPEND .\src\HelpGen.cpp
+$(OBJS)\HelpGen_HelpGen.obj :  .AUTODEPEND .\HelpGen.cpp
 	$(CXX) -zq -fo=$^@ $(HELPGEN_CXXFLAGS) $<
 
-$(OBJS)\HelpGen_cjparser.obj :  .AUTODEPEND .\src\cjparser.cpp
+$(OBJS)\HelpGen_cjparser.obj :  .AUTODEPEND .\cjparser.cpp
 	$(CXX) -zq -fo=$^@ $(HELPGEN_CXXFLAGS) $<
 
-$(OBJS)\HelpGen_docripper.obj :  .AUTODEPEND .\src\docripper.cpp
+$(OBJS)\HelpGen_docripper.obj :  .AUTODEPEND .\docripper.cpp
 	$(CXX) -zq -fo=$^@ $(HELPGEN_CXXFLAGS) $<
 
-$(OBJS)\HelpGen_ifcontext.obj :  .AUTODEPEND .\src\ifcontext.cpp
+$(OBJS)\HelpGen_ifcontext.obj :  .AUTODEPEND .\ifcontext.cpp
 	$(CXX) -zq -fo=$^@ $(HELPGEN_CXXFLAGS) $<
 
-$(OBJS)\HelpGen_markup.obj :  .AUTODEPEND .\src\markup.cpp
+$(OBJS)\HelpGen_markup.obj :  .AUTODEPEND .\markup.cpp
 	$(CXX) -zq -fo=$^@ $(HELPGEN_CXXFLAGS) $<
 
-$(OBJS)\HelpGen_scriptbinder.obj :  .AUTODEPEND .\src\scriptbinder.cpp
+$(OBJS)\HelpGen_scriptbinder.obj :  .AUTODEPEND .\scriptbinder.cpp
 	$(CXX) -zq -fo=$^@ $(HELPGEN_CXXFLAGS) $<
 
-$(OBJS)\HelpGen_sourcepainter.obj :  .AUTODEPEND .\src\sourcepainter.cpp
+$(OBJS)\HelpGen_sourcepainter.obj :  .AUTODEPEND .\sourcepainter.cpp
 	$(CXX) -zq -fo=$^@ $(HELPGEN_CXXFLAGS) $<
 
-$(OBJS)\HelpGen_srcparser.obj :  .AUTODEPEND .\src\srcparser.cpp
+$(OBJS)\HelpGen_srcparser.obj :  .AUTODEPEND .\srcparser.cpp
 	$(CXX) -zq -fo=$^@ $(HELPGEN_CXXFLAGS) $<
 
 $(OBJS)\HelpGen.exe :  $(HELPGEN_OBJECTS)
