@@ -383,7 +383,7 @@ public:
 
 // wxGTK's wxComboBox doesn't derive from wxChoice like wxMSW, or even
 // wxControlWithItems, so we have to duplicate the methods here... <blech!>
-// wcMac's inheritace is weird too so we'll fake it with this one too.
+// wxMac's inheritace is weird too so we'll fake it with this one too.
 
 #ifndef __WXMSW__
 class wxComboBox : public wxControl
