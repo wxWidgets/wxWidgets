@@ -267,7 +267,7 @@ Package=<4>
 
 ###############################################################################
 
-Project: "griddemo"=.\grid\griddemo.dsp - Package Owner=<4>
+Project: "grid"=.\grid\grid.dsp - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -411,7 +411,7 @@ Package=<4>
 
 ###############################################################################
 
-Project: "ipcclient"=.\ipc\client.dsp - Package Owner=<4>
+Project: "ipcclient"=.\ipc\ipc_client.dsp - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -423,7 +423,7 @@ Package=<4>
 
 ###############################################################################
 
-Project: "ipcserver"=.\ipc\server.dsp - Package Owner=<4>
+Project: "ipcserver"=.\ipc\ipc_server.dsp - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -687,7 +687,7 @@ Package=<4>
 
 ###############################################################################
 
-Project: "socketclient"=.\sockets\client.dsp - Package Owner=<4>
+Project: "socketclient"=.\sockets\sockets_client.dsp - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -699,7 +699,7 @@ Package=<4>
 
 ###############################################################################
 
-Project: "socketserver"=.\sockets\server.dsp - Package Owner=<4>
+Project: "socketserver"=.\sockets\sockets_server.dsp - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -783,7 +783,7 @@ Package=<4>
 
 ###############################################################################
 
-Project: "treetest"=.\treectrl\treetest.dsp - Package Owner=<4>
+Project: "treectrl"=.\treectrl\treectrl.dsp - Package Owner=<4>
 
 Package=<5>
 {{{
