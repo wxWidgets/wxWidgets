@@ -391,23 +391,20 @@ void MyFrame::InitWithReportItems()
 {
     m_listCtrl->SetImageList(m_imageListSmall, wxIMAGE_LIST_SMALL);
 
-    // under MSW for SetColumnWidth() to work we need to create the items with
-    // images initially
-#if 1
+    // note that under MSW for SetColumnWidth() to work we need to create the
+    // items with images initially even if we specify dummy image id
     wxListItem itemCol;
-    itemCol.m_mask = wxLIST_MASK_TEXT | wxLIST_MASK_IMAGE;
-    itemCol.m_text = _T("Column 1");
-    itemCol.m_image = -1;
+    itemCol.SetText(_T("Column 1"));
+    itemCol.SetImage(-1);
     m_listCtrl->InsertColumn(0, itemCol);
-    itemCol.m_text = _T("Column 2");
+
+    itemCol.SetText(_T("Column 2"));
+    itemCol.SetAlign(wxLIST_FORMAT_CENTRE);
     m_listCtrl->InsertColumn(1, itemCol);
-    itemCol.m_text = _T("Column 3");
+
+    itemCol.SetText(_T("Column 3"));
+    itemCol.SetAlign(wxLIST_FORMAT_RIGHT);
     m_listCtrl->InsertColumn(2, itemCol);
-#else
-    m_listCtrl->InsertColumn(0, _T("Column 1")); // , wxLIST_FORMAT_LEFT, 140);
-    m_listCtrl->InsertColumn(1, _T("Column 2")); // , wxLIST_FORMAT_LEFT, 140);
-    m_listCtrl->InsertColumn(2, _T("One More Column (2)")); // , wxLIST_FORMAT_LEFT, 140);
-#endif
 
     // to speed up inserting we hide the control temporarily
     m_listCtrl->Hide();
