@@ -144,6 +144,9 @@ BEGIN_EVENT_TABLE(MyTreeCtrl, wxTreeCtrl)
     EVT_TREE_SEL_CHANGING(TreeTest_Ctrl, MyTreeCtrl::OnSelChanging)
     EVT_TREE_KEY_DOWN(TreeTest_Ctrl, MyTreeCtrl::OnTreeKeyDown)
     EVT_TREE_ITEM_ACTIVATED(TreeTest_Ctrl, MyTreeCtrl::OnItemActivated)
+
+    EVT_RIGHT_DOWN(MyTreeCtrl::OnRMouseDown)
+    EVT_RIGHT_UP(MyTreeCtrl::OnRMouseUp)
     EVT_RIGHT_DCLICK(MyTreeCtrl::OnRMouseDClick)
 END_EVENT_TABLE()
 
@@ -1216,6 +1219,20 @@ void MyTreeCtrl::ShowMenu(wxTreeItemId id, const wxPoint& pt)
 #endif // wxUSE_MENUS
 }
 
+void MyTreeCtrl::OnRMouseDown(wxMouseEvent& event)
+{
+    wxLogMessage(wxT("Right mouse button down"));
+
+    event.Skip();
+}
+
+void MyTreeCtrl::OnRMouseUp(wxMouseEvent& event)
+{
+    wxLogMessage(wxT("Right mouse button up"));
+
+    event.Skip();
+}
+
 void MyTreeCtrl::OnRMouseDClick(wxMouseEvent& event)
 {
     wxTreeItemId id = HitTest(event.GetPosition());
@@ -1227,6 +1244,8 @@ void MyTreeCtrl::OnRMouseDClick(wxMouseEvent& event)
         if ( item )
             wxLogMessage(wxT("Item '%s' under mouse"), item->GetDesc());
     }
+
+    event.Skip();
 }
 
 static inline const wxChar *Bool2String(bool b)
