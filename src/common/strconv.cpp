@@ -436,7 +436,7 @@ size_t wxMBConvUTF7::MB2WC(wchar_t *buf, const char *psz, size_t n) const
                 d += cc;
                 for (l += 6; l >= 8; lsb = !lsb)
                 {
-                    c = (d >> (l -= 8)) % 256;
+                    c = (unsigned char)((d >> (l -= 8)) % 256);
                     if (lsb)
                     {
                         if (buf)
@@ -445,7 +445,7 @@ size_t wxMBConvUTF7::MB2WC(wchar_t *buf, const char *psz, size_t n) const
                     }
                     else
                         if (buf)
-                            *buf = c << 8;
+                            *buf = (wchar_t)(c << 8);
                 }
             }
             if (*psz == '-')

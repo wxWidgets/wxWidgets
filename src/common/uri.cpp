@@ -118,7 +118,7 @@ wxChar wxURI::TranslateEscape(const wxChar* s)
     wxASSERT_MSG(IsHex(*s) && IsHex(*(s+1)), wxT("Invalid escape!"));
 
     //<<4 == 16
-    return ( CharToHex(*s) << 4 ) | CharToHex(*++s);
+    return (wxChar)( CharToHex(*s) << 4 ) | CharToHex(*++s);
 }
 
 wxString wxURI::Unescape(const wxString& uri)
