@@ -229,7 +229,12 @@ wxRendererGTK::DrawSplitterSash(wxWindow *win,
     typedef void (*GtkPaintLineFunc)(GtkStyle *, GdkWindow *,
                                                 GtkStateType,
                                                 GdkRectangle *, GtkWidget *,
-                                                gchar *, gint, gint, gint);
+#ifdef __WXGTK20__
+                                                const gchar *,
+#else
+                                                gchar *,
+#endif
+                                                gint, gint, gint);
 
     GtkPaintLineFunc func = isVert ? gtk_paint_vline : gtk_paint_hline;
 
