@@ -205,7 +205,11 @@ WXDLLEXPORT const wxChar* wxGetHomeDir(wxString *pstr);
 
 // Get the user's home dir (caller must copy --- volatile)
 // returns NULL is no HOME dir is known
+#if defined(__UNIX__) && wxUSE_UNICODE
+WXDLLEXPORT const wxMB2WXbuf wxGetUserHome(const wxString& user = wxEmptyString);
+#else
 WXDLLEXPORT wxChar* wxGetUserHome(const wxString& user = wxEmptyString);
+#endif
 
 // ----------------------------------------------------------------------------
 // Strip out any menu codes
