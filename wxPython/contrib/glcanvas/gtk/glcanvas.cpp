@@ -210,12 +210,13 @@ static PyObject *_wrap_wxGLContext_SetCurrent(PyObject *self, PyObject *args, Py
 static PyObject *_wrap_wxGLContext_SetColour(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxGLContext * _arg0;
-    char * _arg1;
+    wxString * _arg1;
     PyObject * _argo0 = 0;
+    PyObject * _obj1 = 0;
     char *_kwnames[] = { "self","colour", NULL };
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Os:wxGLContext_SetColour",_kwnames,&_argo0,&_arg1)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxGLContext_SetColour",_kwnames,&_argo0,&_obj1)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -225,13 +226,22 @@ static PyObject *_wrap_wxGLContext_SetColour(PyObject *self, PyObject *args, PyO
         }
     }
 {
+    _arg1 = wxString_in_helper(_obj1);
+    if (_arg1 == NULL)
+        return NULL;
+}
+{
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-    wxGLContext_SetColour(_arg0,_arg1);
+    wxGLContext_SetColour(_arg0,*_arg1);
 
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    Py_INCREF(Py_None);
     _resultobj = Py_None;
+{
+    if (_obj1)
+        delete _arg1;
+}
     return _resultobj;
 }
 
@@ -673,12 +683,13 @@ static PyObject *_wrap_wxGLCanvas_SetCurrent(PyObject *self, PyObject *args, PyO
 static PyObject *_wrap_wxGLCanvas_SetColour(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxGLCanvas * _arg0;
-    char * _arg1;
+    wxString * _arg1;
     PyObject * _argo0 = 0;
+    PyObject * _obj1 = 0;
     char *_kwnames[] = { "self","colour", NULL };
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Os:wxGLCanvas_SetColour",_kwnames,&_argo0,&_arg1)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxGLCanvas_SetColour",_kwnames,&_argo0,&_obj1)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -688,13 +699,22 @@ static PyObject *_wrap_wxGLCanvas_SetColour(PyObject *self, PyObject *args, PyOb
         }
     }
 {
+    _arg1 = wxString_in_helper(_obj1);
+    if (_arg1 == NULL)
+        return NULL;
+}
+{
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-    wxGLCanvas_SetColour(_arg0,_arg1);
+    wxGLCanvas_SetColour(_arg0,*_arg1);
 
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    Py_INCREF(Py_None);
     _resultobj = Py_None;
+{
+    if (_obj1)
+        delete _arg1;
+}
     return _resultobj;
 }
 
