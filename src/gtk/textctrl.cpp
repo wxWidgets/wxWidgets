@@ -288,7 +288,11 @@ wxString wxTextCtrl::GetValue() const
     {
         gint len = gtk_text_get_length( GTK_TEXT(m_text) );
         char *text = gtk_editable_get_chars( GTK_EDITABLE(m_text), 0, len );
+#if wxUSE_UNICODE
         tmp = wxString(text,*wxConv_current);
+#else
+        tmp = text;
+#endif
         g_free( text );
     }
     else
