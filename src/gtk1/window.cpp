@@ -711,8 +711,6 @@ static int gtk_window_expose_callback( GtkWidget *widget, GdkEventExpose *gdk_ev
         eevent.SetEventObject( win );
         win->GetEventHandler()->ProcessEvent(eevent);
 
-        if (!win->m_isFrame) printf( "OnExpose\n" );
-
         wxPaintEvent event( win->GetId() );
         event.SetEventObject( win );
         win->GetEventHandler()->ProcessEvent( event );
@@ -820,8 +818,6 @@ static void gtk_window_draw_callback( GtkWidget *widget, GdkRectangle *rect, wxW
     wxEraseEvent eevent( win->GetId() );
     eevent.SetEventObject( win );
     win->GetEventHandler()->ProcessEvent(eevent);
-
-    if (!win->m_isFrame) printf( "OnDraw\n" );
 
     wxPaintEvent event( win->GetId() );
     event.SetEventObject( win );
