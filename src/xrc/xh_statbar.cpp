@@ -61,6 +61,8 @@ wxObject *wxStatusBarXmlHandler::DoCreateResource()
         statbar->SetFieldsCount(fields, width);
         delete[] width;
     }
+    else
+        statbar->SetFieldsCount(fields);
 
     if (m_parentAsWindow)
     {
