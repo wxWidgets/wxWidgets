@@ -235,9 +235,16 @@ dnl ------------------------------------------------------------------------
 dnl search path for includes and libraries
 dnl ------------------------------------------------------------------------
 
+dnl VZ: added standard locations for Xm.h for Irix, HP-UX and SunOS (19.02.99)
 SEARCH_INCLUDE="\
+    /usr/Motif-1.2/include    \
+    /usr/Motif-2.1/include    \
+                              \
+    /usr/include/Motif1.2     \
+    /opt/xpm/include/X11      \
+                              \
     /usr/Motif1.2/include     \
-    /usr/dt/include/Xm        \
+    /usr/dt/include           \
 			      \
     /usr/X11R6/include        \
     /usr/X11R5/include        \
@@ -279,19 +286,14 @@ SEARCH_INCLUDE="\
     /usr/lpp/Xamples/include  \
                               \
     /usr/local/include/gtk    \
-    /usr/local/include/Xm     \
     /usr/local/include/qt     \
-    /usr/X11R6/include/Xm     \
-    /usr/X11/include/Xm       \
     /usr/include/qt           \
                               \
     /usr/openwin/include      \
     /usr/openwin/share/include \
     "
 
-SEARCH_LIB="`echo "$SEARCH_INCLUDE" | sed s/include/lib/g` \
-    /usr/dt/lib \
-    "
+SEARCH_LIB="`echo "$SEARCH_INCLUDE" | sed s/include/lib/g` "
 
 dnl ------------------------------------------------------------------------
 dnl standard checks
@@ -1042,7 +1044,7 @@ fi
 
 if test "$wxUSE_MOTIF" = 1; then
    AC_MSG_CHECKING(for Motif/Lesstif includes)
-   AC_PATH_FIND_INCLUDES($SEARCH_INCLUDE,Xm.h)
+   AC_PATH_FIND_INCLUDES($SEARCH_INCLUDE,Xm/Xm.h)
    if test "$ac_find_includes" != "" ; then
      AC_MSG_RESULT(found $ac_find_includes)
      AC_MSG_CHECKING(for Motif/Lesstif library)
