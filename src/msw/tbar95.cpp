@@ -612,19 +612,18 @@ bool wxToolBar::Realize()
     // ------------------------------
 
     // adjust the controls size to fit nicely in the toolbar
+    int y = 0;
     size_t index = 0;
     for ( node = m_tools.GetFirst(); node; node = node->GetNext(), index++ )
     {
         wxToolBarToolBase *tool = node->GetData();
-        if ( !tool->IsControl() )
+
+        // we calculate the running y coord for vertical toolbars so we need to
+        // get the items size for all items but for the horizontal ones we
+        // don't need to deal with the non controls
+        bool isControl = tool->IsControl();
+        if ( !isControl && !isVertical )
             continue;
-
-        wxControl *control = tool->GetControl();
-
-        wxSize size = control->GetSize();
-
-        // the position of the leftmost controls corner
-        int left = -1;
 
         // note that we use TB_GETITEMRECT and not TB_GETRECT because the
         // latter only appeared in v4.70 of comctl32.dll
@@ -635,60 +634,75 @@ bool wxToolBar::Realize()
             wxLogLastError(wxT("TB_GETITEMRECT"));
         }
 
+        if ( !isControl )
+        {
+            // can only be control if isVertical
+            y += r.bottom - r.top;
+
+            continue;
+        }
+
+        wxControl *control = tool->GetControl();
+
+        wxSize size = control->GetSize();
+
+        // the position of the leftmost controls corner
+        int left = -1;
+
         // TB_SETBUTTONINFO message is only supported by comctl32.dll 4.71+
-        #if defined(_WIN32_IE) && (_WIN32_IE >= 0x400 )
-            // available in headers, now check whether it is available now
-            // (during run-time)
-            if ( wxTheApp->GetComCtl32Version() >= 471 )
+#if defined(_WIN32_IE) && (_WIN32_IE >= 0x400 )
+        // available in headers, now check whether it is available now
+        // (during run-time)
+        if ( wxTheApp->GetComCtl32Version() >= 471 )
+        {
+            // set the (underlying) separators width to be that of the
+            // control
+            TBBUTTONINFO tbbi;
+            tbbi.cbSize = sizeof(tbbi);
+            tbbi.dwMask = TBIF_SIZE;
+            tbbi.cx = size.x;
+            if ( !SendMessage(GetHwnd(), TB_SETBUTTONINFO,
+                              tool->GetId(), (LPARAM)&tbbi) )
             {
-                // set the (underlying) separators width to be that of the
-                // control
-                TBBUTTONINFO tbbi;
-                tbbi.cbSize = sizeof(tbbi);
-                tbbi.dwMask = TBIF_SIZE;
-                tbbi.cx = size.x;
-                if ( !SendMessage(GetHwnd(), TB_SETBUTTONINFO,
-                                  tool->GetId(), (LPARAM)&tbbi) )
-                {
-                    // the id is probably invalid?
-                    wxLogLastError(wxT("TB_SETBUTTONINFO"));
-                }
+                // the id is probably invalid?
+                wxLogLastError(wxT("TB_SETBUTTONINFO"));
             }
-            else
-        #endif // comctl32.dll 4.71
-            // TB_SETBUTTONINFO unavailable
+        }
+        else
+#endif // comctl32.dll 4.71
+        // TB_SETBUTTONINFO unavailable
+        {
+            // try adding several separators to fit the controls width
+            int widthSep = r.right - r.left;
+            left = r.left;
+
+            TBBUTTON tbb;
+            wxZeroMemory(tbb);
+            tbb.idCommand = 0;
+            tbb.fsState = TBSTATE_ENABLED;
+            tbb.fsStyle = TBSTYLE_SEP;
+
+            size_t nSeparators = size.x / widthSep;
+            for ( size_t nSep = 0; nSep < nSeparators; nSep++ )
             {
-                // try adding several separators to fit the controls width
-                int widthSep = r.right - r.left;
-                left = r.left;
-
-                TBBUTTON tbb;
-                wxZeroMemory(tbb);
-                tbb.idCommand = 0;
-                tbb.fsState = TBSTATE_ENABLED;
-                tbb.fsStyle = TBSTYLE_SEP;
-
-                size_t nSeparators = size.x / widthSep;
-                for ( size_t nSep = 0; nSep < nSeparators; nSep++ )
+                if ( !SendMessage(GetHwnd(), TB_INSERTBUTTON,
+                                  index, (LPARAM)&tbb) )
                 {
-                    if ( !SendMessage(GetHwnd(), TB_INSERTBUTTON,
-                                      index, (LPARAM)&tbb) )
-                    {
-                        wxLogLastError(wxT("TB_INSERTBUTTON"));
-                    }
-
-                    index++;
+                    wxLogLastError(wxT("TB_INSERTBUTTON"));
                 }
 
-                // remember the number of separators we used - we'd have to
-                // delete all of them later
-                ((wxToolBarTool *)tool)->SetSeparatorsCount(nSeparators);
-
-                // adjust the controls width to exactly cover the separators
-                control->SetSize((nSeparators + 1)*widthSep, -1);
+                index++;
             }
 
-        // and position the control itself correctly vertically
+            // remember the number of separators we used - we'd have to
+            // delete all of them later
+            ((wxToolBarTool *)tool)->SetSeparatorsCount(nSeparators);
+
+            // adjust the controls width to exactly cover the separators
+            control->SetSize((nSeparators + 1)*widthSep, -1);
+        }
+
+        // position the control itself correctly vertically
         int height = r.bottom - r.top;
         int diff = height - size.y;
         if ( diff < 0 )
@@ -699,7 +713,23 @@ bool wxToolBar::Realize()
             diff = 2;
         }
 
-        control->Move(left == -1 ? r.left : left, r.top + (diff + 1) / 2);
+        int top;
+        if ( isVertical )
+        {
+            left = 0;
+            top = y;
+
+            y += height + 2*GetMargins().y;
+        }
+        else // horizontal toolbar
+        {
+            if ( left == -1 )
+                left = r.left;
+
+            top = r.top;
+        }
+
+        control->Move(left, top + (diff + 1) / 2);
     }
 
     // the max index is the "real" number of buttons - i.e. counting even the
