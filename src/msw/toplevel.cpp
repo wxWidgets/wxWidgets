@@ -152,6 +152,10 @@ WXDWORD wxTopLevelWindowMSW::MSWGetStyle(long style, WXDWORD *exflags) const
                         (style & ~wxBORDER_MASK) | wxBORDER_NONE, exflags
                       ) & ~WS_CHILD & ~WS_VISIBLE;
 
+#if defined(__WXWINCE__) && _WIN32_WCE < 400
+    msflags |= WS_VISIBLE;
+#endif
+
     // first select the kind of window being created
     //
     // note that if we don't set WS_POPUP, Windows assumes WS_OVERLAPPED and
