@@ -72,7 +72,7 @@
             <dependency-of>all</dependency-of>
             <set var="__targetname">$(MACOS_R)</set>
             <command>
-                $(RESCOMP) -d __UNIX__ -useDF $(top_srcdir)/src/mac/apprsrc.r $(top_srcdir)/src/mac/carbrsrc.r ../src/mac/corersrc.r -o $(MACOS_RSRC)
+                $(RESCOMP) -d __UNIX__ -useDF $(top_srcdir)/src/mac/apprsrc.r $(top_srcdir)/src/mac/carbrsrc.r $(top_srcdir)/src/mac/corersrc.r -o $(MACOS_RSRC)
                 $(DEREZ) $(MACOS_RSRC) Carbon.r -useDF >$(MACOS_R)
             </command>
             <clean-files>$(MACOS_RSRC) $(MACOS_R)</clean-files>
