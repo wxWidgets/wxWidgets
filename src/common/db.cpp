@@ -6,7 +6,7 @@
 // Author:      Doug Card
 // Modified by: George Tasker
 //              Bart Jourquin
-//              Mark Johnson
+//              Mark Johnson, wxWindows@mj10777.de
 // Mods:        Dec, 1998:
 //                -Added support for SQL statement logging and database cataloging
 // Mods:        April, 1999
@@ -227,9 +227,9 @@ wxDbInf::wxDbInf()
 /********** wxDbInf Destructor *************/
 wxDbInf::~wxDbInf()
 {
-	if (pTableInf)
-		delete [] pTableInf;
-	pTableInf = NULL;
+  if (pTableInf)
+    delete [] pTableInf;
+  pTableInf = NULL;
 }  // wxDbInf::~wxDbInf()
 
 
@@ -239,7 +239,7 @@ wxDbInf::~wxDbInf()
 int wxDbColFor::Format(int Nation,int dbDataType,SWORD sqlDataType,short columnSize,short decimalDigits)
 {
     // ----------------------------------------------------------------------------------------
-    // -- 19991224 : mj10777@gmx.net : Create
+    // -- 19991224 : mj10777 : Create
     // There is still a lot of work to do here, but it is a start
     // It handles all the basic data-types that I have run into up to now
     // The main work will have be with Dates and float Formatting 
@@ -1538,7 +1538,7 @@ int wxDb::GetKeyFields(char *tableName, wxDbColInf* colInf, int noCols)
     wxString     Temp0;
     /*
      * ---------------------------------------------------------------------
-     * -- 19991224 : mj10777@gmx.net : Create                         ------
+     * -- 19991224 : mj10777 : Create                         ------
      * --          : Three things are done and stored here :          ------
      * --          : 1) which Column(s) is/are Primary Key(s)         ------
      * --          : 2) which tables use this Key as a Foreign Key    ------
@@ -2478,7 +2478,7 @@ int wxDb::GetColumnCount(char *tableName, const char *userID)
 wxDbInf *wxDb::GetCatalog(char *userID)
 /*
  * ---------------------------------------------------------------------
- * -- 19991203 : mj10777@gmx.net : Create                         ------
+ * -- 19991203 : mj10777 : Create                                 ------
  * --          : Creates a wxDbInf with Tables / Cols Array       ------
  * --          : uses SQLTables and fills pTableInf;              ------
  * --          : pColInf is set to NULL and numCols to 0;         ------
