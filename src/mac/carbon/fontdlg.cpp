@@ -36,11 +36,10 @@ pascal OSStatus wxFontDialogEventHandler(	EventHandlerCallRef inHandlerCallRef,
    
     OSStatus status = noErr;
     
-    ATSUFontID fontid;
-    Fixed fontsize;
-    RGBColor fontcolor;
-    FMFontStyle fontstyle;
     FMFontFamily fontfamily;
+    FMFontStyle fontstyle;
+    FMFontSize fontsize;
+    RGBColor fontcolor;
         
     status = GetEventParameter (event, kEventParamFMFontFamily,
                                     typeFMFontFamily, NULL,
@@ -54,15 +53,9 @@ pascal OSStatus wxFontDialogEventHandler(	EventHandlerCallRef inHandlerCallRef,
                                     NULL, &(fontstyle)); 
     check_noerr (status); 
 
-    status = GetEventParameter (event, kEventParamATSUFontID,
-                                    typeATSUFontID, NULL,
-                                    sizeof (ATSUFontID), 
-                                    NULL, &(fontid)); 
-    check_noerr (status); 
-
-    status = GetEventParameter (event, kEventParamATSUFontSize,
-                                    typeATSUSize, NULL,
-                                    sizeof (Fixed), 
+    status = GetEventParameter (event, kEventParamFMFontSize,
+                                    typeFMFontSize, NULL,
+                                    sizeof (FMFontSize), 
                                     NULL, &(fontsize)); 
 
     check_noerr (status);
@@ -72,66 +65,19 @@ pascal OSStatus wxFontDialogEventHandler(	EventHandlerCallRef inHandlerCallRef,
                                     sizeof( RGBColor ), NULL, &fontcolor); 
     check_noerr (status);
     
-    //TODO:
-    //TODO:	Make a utility function for converting ATSU to WX font (what we're doing :))
-    //TODO:
-        
     //now do the conversion to the wx font data
     wxFontData theFontData;
     wxFont 	   theFont;
  
-    //first, the easy part - set the color
+    //set color
     wxColour theColor;
     theColor.Set(&(WXCOLORREF&)fontcolor);
     theFontData.SetColour(theColor);
+        
+    //set size
+    theFont.SetPointSize(fontsize);
     
-    //
-    //now the hard part - convert the atsu font to a wx font
-    //
-    
-    //point size - fixed, but straight conversion, I think
-    theFont.SetPointSize(fontsize >> 16);
-    
-    //font name - first get length, then allocate/copy/deallocate name buffer
-    FontNameCode 		theNameCode;
-    FontPlatformCode	thePlatformCode; 	
-    FontScriptCode		theScriptCode;
-    FontLanguageCode	theLanguageCode;    
-    //the above have types in SFNTTypes.h
-
-    ByteCount 			theActualLength;
-    ItemCount numFontFaces;
-    
-/*
-    ATSUCountFontNames(fontid,
-                       &numFontFaces);
-                       
-    ATSUGetIndFontName(fontid, 
-                       numFontFaces-1, //first font in index array
-                       0, //need to get length first
-                       NULL, //nothin'
-                       &theActualLength,
-                       &theNameCode,
-                       &thePlatformCode,
-                       &theScriptCode,
-                       &theLanguageCode);
-    
-    Ptr szBuffer = NewPtr(theActualLength);
-    ATSUGetIndFontName(fontid, 
-                       numFontFaces-1, //first font in index array
-                       theActualLength, 
-                       szBuffer, 
-                       &theActualLength,
-                       &theNameCode,
-                       &thePlatformCode,
-                       &theScriptCode,
-                       &theLanguageCode);
-    
-    //its unicode - convert it to wx's char value and put it in there
-    theFont.SetFaceName(wxConvLocal.cMB2WX((char*)szBuffer));
-    DisposePtr(szBuffer);
-*/
-
+    //set name
     Str255 theFontName;
     GetFontName(fontfamily, theFontName);
     theFont.SetFaceName(wxMacMakeStringFromPascal(theFontName));
@@ -139,15 +85,11 @@ pascal OSStatus wxFontDialogEventHandler(	EventHandlerCallRef inHandlerCallRef,
     //TODOTODO: Get font family - mayby by the script code?
     theFont.SetFamily(wxDEFAULT);  
 
-    //TODOTODO: Get other styles?  Font weight?
+    //TODOTODO: Get other styles?
     theFont.SetStyle(((fontstyle & italic) ? wxFONTSTYLE_ITALIC : 0));
     theFont.SetWeight((fontstyle & bold) ? wxBOLD : wxNORMAL);   
     theFont.SetUnderlined(((fontstyle & underline) ? true : false));
-    
-    //for debugging
-    //wxPrintf(wxT("FaceName:%s\nSize:%i\nStyle:%i\n"), theFont.GetFaceName().c_str(), theFont.GetPointSize(),
-    //theFont.GetStyle());
-    
+        
     //phew!!  We're done - set the chosen font
     theFontData.SetChosenFont(theFont);
     ((wxFontDialog*)pData)->SetData(theFontData);
