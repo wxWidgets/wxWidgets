@@ -107,7 +107,11 @@ bool wxMovieCtrl::Load(const wxString& fileName)
     //get the _actual_ size of the movie & remember it
     long nX, nY, nSX, nSY;
     if (FAILED(pVW->GetWindowPosition(&nX,&nY,&nSX,&nSY)))
+    {
         m_bVideo = false;
+
+        nSX = nSY = 0;
+    }
     else 
     {
         m_bVideo = true;
@@ -124,7 +128,7 @@ bool wxMovieCtrl::Load(const wxString& fileName)
     {
         wxDSVERIFY( pVW->put_Owner((OAHWND)this->GetHandle()) );
         wxDSVERIFY( pVW->put_WindowStyle(WS_CHILD | WS_CLIPSIBLINGS) );
-    //    wxDSVERIFY( pME->SetNotifyWindow((OAHWND)this->GetHandle(), WM_GRAPHNOTIFY, 0) );
+        wxDSVERIFY( pME->SetNotifyWindow((OAHWND)this->GetHandle(), WM_GRAPHNOTIFY, 0) );
         wxDSVERIFY( pVW->put_Visible(OATRUE) ); //OATRUE actually == -1 :)
     }
 
@@ -173,7 +177,7 @@ bool wxMovieCtrl::Stop()
 bool wxMovieCtrl::Seek(const wxTimeSpan& where)
 {
     //DS uses 100 nanos - so we need a 10 mult
-    LONGLONG pos = ((size_t)where.GetMilliseconds().ToLong()) * 10;
+    LONGLONG pos = (where.GetMilliseconds() * ((wxLongLong)10000)).GetValue();
 
     return SUCCEEDED( ((IMediaSeeking*&)m_pMS)->SetPositions(
                                 &pos, 
@@ -188,7 +192,8 @@ wxTimeSpan wxMovieCtrl::Tell()
     LONGLONG outCur, outStop;
     wxDSVERIFY( ((IMediaSeeking*&)m_pMS)->GetPositions(&outCur, &outStop) );
 
-    return outCur;
+    //h,m,s,milli - outdur is in 100 nanos
+    return wxTimeSpan(0,0,0,outCur/10000);
 }
 
 wxTimeSpan wxMovieCtrl::Length()
@@ -196,7 +201,8 @@ wxTimeSpan wxMovieCtrl::Length()
     LONGLONG outDuration;
     wxDSVERIFY( ((IMediaSeeking*&)m_pMS)->GetDuration(&outDuration) );
 
-    return outDuration;
+    //h,m,s,milli - outdur is in 100 nanos
+    return wxTimeSpan(0,0, 0,outDuration/10000);
 }
 
 #endif // wxUSE_DATETIME
