@@ -66,13 +66,13 @@ protected:
 
 #if WXWIN_COMPATIBILITY_2_4
     // non-virtual default event handlers to forward events to the virtuals
-    void _OnMouseMove(wxEvent&);
-    void _OnLButtonDown(wxEvent&);
-    void _OnLButtonUp(wxEvent&);
-    void _OnRButtonDown(wxEvent&);
-    void _OnRButtonUp(wxEvent&);
-    void _OnLButtonDClick(wxEvent&);
-    void _OnRButtonDClick(wxEvent&);
+    void _OnMouseMove(wxTaskBarIconEvent&);
+    void _OnLButtonDown(wxTaskBarIconEvent&);
+    void _OnLButtonUp(wxTaskBarIconEvent&);
+    void _OnRButtonDown(wxTaskBarIconEvent&);
+    void _OnRButtonUp(wxTaskBarIconEvent&);
+    void _OnLButtonDClick(wxTaskBarIconEvent&);
+    void _OnRButtonDClick(wxTaskBarIconEvent&);
 
     DECLARE_EVENT_TABLE()
 #endif

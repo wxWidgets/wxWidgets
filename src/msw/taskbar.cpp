@@ -239,13 +239,20 @@ void wxTaskBarIcon::OnRButtonUp(wxEvent&)         {}
 void wxTaskBarIcon::OnLButtonDClick(wxEvent&)     {}
 void wxTaskBarIcon::OnRButtonDClick(wxEvent&)     {}
 
-void wxTaskBarIcon::_OnMouseMove(wxEvent& e)      { OnMouseMove(e);     }
-void wxTaskBarIcon::_OnLButtonDown(wxEvent& e)    { OnLButtonDown(e);   }
-void wxTaskBarIcon::_OnLButtonUp(wxEvent& e)      { OnLButtonUp(e);     }
-void wxTaskBarIcon::_OnRButtonDown(wxEvent& e)    { OnRButtonDown(e);   }
-void wxTaskBarIcon::_OnRButtonUp(wxEvent& e)      { OnRButtonUp(e);     }
-void wxTaskBarIcon::_OnLButtonDClick(wxEvent& e)  { OnLButtonDClick(e); }
-void wxTaskBarIcon::_OnRButtonDClick(wxEvent& e)  { OnRButtonDClick(e); }
+void wxTaskBarIcon::_OnMouseMove(wxTaskBarIconEvent& e)
+    { OnMouseMove(e);     }
+void wxTaskBarIcon::_OnLButtonDown(wxTaskBarIconEvent& e)
+    { OnLButtonDown(e);   }
+void wxTaskBarIcon::_OnLButtonUp(wxTaskBarIconEvent& e)
+    { OnLButtonUp(e);     }
+void wxTaskBarIcon::_OnRButtonDown(wxTaskBarIconEvent& e)
+    { OnRButtonDown(e);   }
+void wxTaskBarIcon::_OnRButtonUp(wxTaskBarIconEvent& e)
+    { OnRButtonUp(e);     }
+void wxTaskBarIcon::_OnLButtonDClick(wxTaskBarIconEvent& e)
+    { OnLButtonDClick(e); }
+void wxTaskBarIcon::_OnRButtonDClick(wxTaskBarIconEvent& e)
+    { OnRButtonDClick(e); }
 #endif
 
 void wxTaskBarIcon::RegisterWindowMessages()

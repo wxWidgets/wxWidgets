@@ -25,6 +25,7 @@
 WX_CHECK_BUILD_OPTIONS("wxAdvanced")
 
 
+#include "wx/menu.h"
 #include "wx/taskbar.h"
 
 DEFINE_EVENT_TYPE( wxEVT_TASKBAR_MOVE )
@@ -40,7 +41,7 @@ BEGIN_EVENT_TABLE(wxTaskBarIconBase, wxEvtHandler)
     EVT_TASKBAR_RIGHT_DOWN(wxTaskBarIconBase::OnRightButtonDown)
 END_EVENT_TABLE()
 
-void wxTaskBarIconBase::OnRightButtonDown(wxEvent& WXUNUSED(event))
+void wxTaskBarIconBase::OnRightButtonDown(wxTaskBarIconEvent& WXUNUSED(event))
 {
     wxMenu *menu = CreatePopupMenu();
     if (menu)
