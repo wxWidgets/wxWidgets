@@ -9,3 +9,47 @@ from misc import *
 
 # Cleanup this one.
 del wx
+
+
+# Make some to help backawrds compatibility for the old namespace.
+# This is only for code that is using tthe wxPython.wx package and
+# using names and classes in the old way.  New code should use the wx
+# namespace and the new names.
+
+wxPyDefaultPosition = wxDefaultPosition
+wxPyDefaultSize = wxDefaultSize
+wxNoRefBitmap = wxBitmap
+wxSystemSettings_GetSystemColour = wxSystemSettings_GetColour
+wxSystemSettings_GetSystemFont   = wxSystemSettings_GetFont
+wxSystemSettings_GetSystemMetric = wxSystemSettings_GetMetric
+wxColor = wxColour
+wxNamedColor = wxNamedColour    
+
+NULL = None
+TRUE  = true  = True
+FALSE = false = False
+
+def wxPyTypeCast(obj, typeStr):
+    return obj
+
+wxPy_isinstance = isinstance
+
+wxDC.FloodFill = wxDC.FloodFillXY
+wxDC.GetPixel = wxDC.GetPixelXY
+wxDC.DrawLine = wxDC.DrawLineXY
+wxDC.CrossHair = wxDC.CrossHairXY
+wxDC.DrawArc = wxDC.DrawArcXY
+wxDC.DrawCheckMark = wxDC.DrawCheckMarkXY
+wxDC.DrawEllipticArc = wxDC.DrawEllipticArcXY
+wxDC.DrawPoint = wxDC.DrawPointXY
+wxDC.DrawRectangle = wxDC.DrawRectangleXY
+wxDC.DrawRoundedRectangle = wxDC.DrawRoundedRectangleXY
+wxDC.DrawCircle = wxDC.DrawCircleXY
+wxDC.DrawEllipse = wxDC.DrawEllipseXY
+wxDC.DrawIcon = wxDC.DrawIconXY
+wxDC.DrawBitmap = wxDC.DrawBitmapXY
+wxDC.DrawText = wxDC.DrawTextXY
+wxDC.DrawRotatedText = wxDC.DrawRotatedTextXY
+wxDC.Blit = wxDC.BlitXY
+wxDC.SetClippingRegion = wxDC.SetClippingRegionXY 
+
