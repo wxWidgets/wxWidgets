@@ -422,10 +422,6 @@
 %rename(IMAGE_LIST_SMALL)                   wxIMAGE_LIST_SMALL;
 %rename(IMAGE_LIST_STATE)                   wxIMAGE_LIST_STATE;
 %rename(ImageList)                          wxImageList;
-%rename(PenList)                            wxPenList;
-%rename(BrushList)                          wxBrushList;
-%rename(ColourDatabase)                     wxColourDatabase;
-%rename(FontList)                           wxFontList;
 %rename(NORMAL_FONT)                        wxNORMAL_FONT;
 %rename(SMALL_FONT)                         wxSMALL_FONT;
 %rename(ITALIC_FONT)                        wxITALIC_FONT;
@@ -468,6 +464,10 @@
 %rename(NullPalette)                        wxNullPalette;
 %rename(NullFont)                           wxNullFont;
 %rename(NullColour)                         wxNullColour;
+%rename(PenList)                            wxPenList;
+%rename(BrushList)                          wxBrushList;
+%rename(ColourDatabase)                     wxColourDatabase;
+%rename(FontList)                           wxFontList;
 %rename(TheFontList)                        wxTheFontList;
 %rename(ThePenList)                         wxThePenList;
 %rename(TheBrushList)                       wxTheBrushList;

@@ -650,9 +650,10 @@ class SplitterWindow(core.Window):
         return "<%s.%s; proxy of C++ wxSplitterWindow instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
         """
-        __init__(Window parent, int id, Point point=DefaultPosition, 
-            Size size=DefaultSize, long style=SP_3D, String name=SplitterNameStr) -> SplitterWindow
+        __init__(Window parent, int id, Point pos=DefaultPosition, Size size=DefaultSize, 
+            long style=SP_3D, String name=SplitterNameStr) -> SplitterWindow
         """
+        if kwargs.has_key('point'): kwargs['pos'] = kwargs['point']
         newobj = _windows.new_SplitterWindow(*args, **kwargs)
         self.this = newobj.this
         self.thisown = 1
@@ -661,8 +662,8 @@ class SplitterWindow(core.Window):
 
     def Create(*args, **kwargs):
         """
-        Create(Window parent, int id, Point point=DefaultPosition, 
-            Size size=DefaultSize, long style=SP_3D, String name=SplitterNameStr) -> bool
+        Create(Window parent, int id, Point pos=DefaultPosition, Size size=DefaultSize, 
+            long style=SP_3D, String name=SplitterNameStr) -> bool
         """
         return _windows.SplitterWindow_Create(*args, **kwargs)
 

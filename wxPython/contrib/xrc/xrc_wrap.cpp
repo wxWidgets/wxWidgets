@@ -121,7 +121,6 @@ SWIGIMPORT(char *)           SWIG_UnpackData(char *, void *, int);
 
 #ifdef __cplusplus
 }
-
 #endif
 
 
@@ -136,178 +135,6 @@ SWIGIMPORT(char *)           SWIG_UnpackData(char *, void *, int);
  ************************************************************************/
 
 #include "Python.h"
-
-#include <limits.h>
-#include <float.h>
-
-#ifdef __cplusplus
-#define SWIG_STATIC_INLINE static inline 
-#else
-#define SWIG_STATIC_INLINE static 
-#endif 
-
-SWIG_STATIC_INLINE long
-SPyObj_AsLong(PyObject * obj)
-{
-  return PyInt_Check(obj) ?  PyInt_AsLong(obj) : PyLong_AsLong(obj);
-}
-
-SWIG_STATIC_INLINE unsigned long
-SPyObj_AsUnsignedLong(PyObject * obj) 
-{
-  if (PyLong_Check(obj)) {
-    return PyLong_AsUnsignedLong(obj);
-  } else {
-    long i = PyInt_AsLong(obj);
-    if ( !PyErr_Occurred() && (i < 0)) {
-      PyErr_SetString(PyExc_TypeError, "negative value for unsigned type");
-    }
-    return i;
-  }
-}
-
-#if !defined(_MSC_VER)
-SWIG_STATIC_INLINE PyObject* 
-SPyObj_FromLongLong(long long value)
-{
-  return (value > (long)(LONG_MAX)) ?
-    PyLong_FromLongLong(value) : PyInt_FromLong((long)value); 
-}
-#endif
-
-SWIG_STATIC_INLINE PyObject* 
-SPyObj_FromUnsignedLong(unsigned long value)
-{
-  return (value > (unsigned long)(LONG_MAX)) ?
-    PyLong_FromUnsignedLong(value) : PyInt_FromLong((long)value); 
-}
-
-#if !defined(_MSC_VER)
-SWIG_STATIC_INLINE PyObject* 
-SPyObj_FromUnsignedLongLong(unsigned long long value)
-{
-  return (value > (unsigned long long)(LONG_MAX)) ?
-    PyLong_FromUnsignedLongLong(value) : PyInt_FromLong((long)value); 
-}
-#endif
-
-SWIG_STATIC_INLINE long
-SPyObj_AsLongInRange(PyObject * obj, long min_value, long max_value)
-{
-  long value = SPyObj_AsLong(obj);
-  if (!PyErr_Occurred()) {
-    if (value < min_value) {
-      PyErr_SetString(PyExc_OverflowError,"value is smaller than type minimum");
-    } else if (value > max_value) {
-      PyErr_SetString(PyExc_OverflowError,"value is greater than type maximum");
-    }
-  }
-  return value;
-}
-
-SWIG_STATIC_INLINE unsigned long
-SPyObj_AsUnsignedLongInRange(PyObject *obj, unsigned long max_value) 
-{
-  unsigned long value = SPyObj_AsUnsignedLong(obj);
-  if (!PyErr_Occurred()) {
-    if (value > max_value) {     
-      PyErr_SetString(PyExc_OverflowError,"value is greater than type maximum");
-    }
-  }
-  return value;
-}
-
-SWIG_STATIC_INLINE signed char
-SPyObj_AsSignedChar(PyObject *obj) { 
-  return (signed char)SPyObj_AsLongInRange(obj, SCHAR_MIN, SCHAR_MAX);
-}
-
-SWIG_STATIC_INLINE short
-SPyObj_AsShort(PyObject *obj) { 
-  return (short)SPyObj_AsLongInRange(obj, SHRT_MIN, SHRT_MAX);
-}
-
-SWIG_STATIC_INLINE int
-SPyObj_AsInt(PyObject *obj) { 
-  return SPyObj_AsLongInRange(obj, INT_MIN, INT_MAX);
-}
-
-SWIG_STATIC_INLINE unsigned char
-SPyObj_AsUnsignedChar(PyObject *obj) { 
-  return (unsigned char)SPyObj_AsUnsignedLongInRange(obj, UCHAR_MAX);
-}
-
-SWIG_STATIC_INLINE unsigned short 
-SPyObj_AsUnsignedShort(PyObject *obj) { 
-  return (unsigned short)SPyObj_AsUnsignedLongInRange(obj, USHRT_MAX);
-}
-
-SWIG_STATIC_INLINE unsigned int
-SPyObj_AsUnsignedInt(PyObject *obj) { 
-  return SPyObj_AsUnsignedLongInRange(obj, UINT_MAX);
-}
-
-#if !defined(_MSC_VER)
-SWIG_STATIC_INLINE long long
-SPyObj_AsLongLong(PyObject *obj) {
-  return PyInt_Check(obj) ?
-    PyInt_AsLong(obj) : PyLong_AsLongLong(obj);
-}
-
-SWIG_STATIC_INLINE unsigned long long
-SPyObj_AsUnsignedLongLong(PyObject *obj) {
-  return PyLong_Check(obj) ?
-    PyLong_AsUnsignedLongLong(obj) : SPyObj_AsUnsignedLong(obj);
-}
-#endif
-
-SWIG_STATIC_INLINE double
-SPyObj_AsDouble(PyObject *obj) {
-  return (PyFloat_Check(obj)) ? PyFloat_AsDouble(obj) :
-    (double)((PyInt_Check(obj)) ? PyInt_AsLong(obj) : PyLong_AsLongLong(obj));
-}
-
-SWIG_STATIC_INLINE float
-SPyObj_AsFloat(PyObject *obj) {
-  double value = SPyObj_AsDouble(obj);
-  if (!PyErr_Occurred()) {
-    if (value < FLT_MIN) {
-      PyErr_SetString(PyExc_OverflowError,"float is smaller than flt_min");
-    } else if (value > FLT_MAX) {     
-      PyErr_SetString(PyExc_OverflowError,"float is greater than flt_max");
-    }
-  }
-  return (float) value;
-}
-
-SWIG_STATIC_INLINE char
-SPyObj_AsChar(PyObject *obj) { 
-  char c = (PyString_Check(obj) && PyString_Size(obj) == 1) ?
-    PyString_AsString(obj)[0] 
-    : (char) SPyObj_AsLongInRange(obj, CHAR_MIN, CHAR_MAX);
-  if (PyErr_Occurred()) {
-    PyErr_Clear();
-    PyErr_SetString(PyExc_TypeError, "a char is required");
-  }
-  return c;
-}
-
-SWIG_STATIC_INLINE PyObject *
-SPyObj_FromChar(char c) { 
-  return PyString_FromStringAndSize(&c,1);
-}
-
-SWIG_STATIC_INLINE PyObject *
-SPyObj_FromCharPtr(const char* cptr) { 
-  return cptr ? PyString_FromString(cptr) : Py_BuildValue((char*)"");
-}
- 
-SWIG_STATIC_INLINE int
-SPyObj_AsBool(PyObject *obj) {
-    return SPyObj_AsLong/*Long*/(obj) ?  1 : 0;
-}
-
-
 
 #ifdef __cplusplus
 extern "C" {
@@ -357,6 +184,7 @@ typedef struct swig_const_info {
 #define SWIG_InstallConstants(d, constants) \
   SWIG_Python_InstallConstants(d, constants)
 
+typedef double (*py_objasdbl_conv)(PyObject *obj);
 
 SWIGIMPORT(int)               SWIG_Python_ConvertPtr(PyObject *, void **, swig_type_info *, int);
 SWIGIMPORT(PyObject *)        SWIG_Python_NewPointerObj(void *, swig_type_info *,int own);
@@ -367,6 +195,27 @@ SWIGIMPORT(int)               SWIG_Python_ConvertPacked(PyObject *, void *, int 
 SWIGIMPORT(PyObject *)        SWIG_Python_NewPackedObj(void *, int sz, swig_type_info *);
 SWIGIMPORT(void)              SWIG_Python_InstallConstants(PyObject *d, swig_const_info constants[]);
 
+/* -----------------------------------------------------------------------------
+ *  the needed conversions between C++ and python
+ * ----------------------------------------------------------------------------- */
+/* basic types */
+/*
+  utilities
+*/
+SWIGIMPORT(char* )         SWIG_PyObj_AsCharPtr(PyObject *obj, swig_type_info* pchar_info);
+SWIGIMPORT(PyObject *)     SWIG_PyObj_FromCharPtr(const char* cptr);
+SWIGIMPORT(unsigned long)  SWIG_PyObj_AsUnsignedLong(PyObject * obj);
+SWIGIMPORT(long)           SWIG_PyObj_AsLongInRange(PyObject * obj, const char* type,
+						    long min_value, long max_value);
+SWIGIMPORT(unsigned long)  SWIG_PyObj_AsUnsignedLongInRange(PyObject *obj, const char* type,
+							    unsigned long max_value);
+SWIGIMPORT(char *)         SWIG_PyObj_AsNewCharPtr(PyObject *obj, swig_type_info* pchar_info);
+SWIGIMPORT(void)           SWIG_PyObj_AsCharPtrAndSize(PyObject *obj, swig_type_info* pchar_info,
+						       char** cptr, size_t* size);
+SWIGIMPORT(void)           SWIG_PyObj_AsCharArray(PyObject *obj, swig_type_info* pchar_info,
+						  char* carray, size_t size);
+SWIGIMPORT(PyObject *)     SWIG_PyObj_FromCharArray(const char* carray, size_t size);
+SWIGIMPORT(float)          SWIG_PyObj_AsFloatConv(PyObject *obj,  py_objasdbl_conv pyconv);
 
 
 /* Contract support */
@@ -390,20 +239,21 @@ SWIGIMPORT(void)              SWIG_Python_InstallConstants(PyObject *d, swig_con
 #define  SWIGTYPE_p_wxArtClient swig_types[6] 
 #define  SWIGTYPE_p_wxBitmap swig_types[7] 
 #define  SWIGTYPE_p_wxPyXmlSubclassFactory swig_types[8] 
-#define  SWIGTYPE_p_wxPoint swig_types[9] 
-#define  SWIGTYPE_p_wxXmlNode swig_types[10] 
-#define  SWIGTYPE_p_wxInputStream swig_types[11] 
-#define  SWIGTYPE_p_wxOutputStream swig_types[12] 
-#define  SWIGTYPE_p_wxString swig_types[13] 
-#define  SWIGTYPE_p_wxPyXmlResourceHandler swig_types[14] 
-#define  SWIGTYPE_p_wxFileSystem swig_types[15] 
-#define  SWIGTYPE_p_wxXmlProperty swig_types[16] 
-#define  SWIGTYPE_p_wxFont swig_types[17] 
-#define  SWIGTYPE_p_wxXmlResource swig_types[18] 
-#define  SWIGTYPE_p_wxXmlDocument swig_types[19] 
+#define  SWIGTYPE_p_char swig_types[9] 
+#define  SWIGTYPE_p_wxPoint swig_types[10] 
+#define  SWIGTYPE_p_wxXmlNode swig_types[11] 
+#define  SWIGTYPE_p_wxInputStream swig_types[12] 
+#define  SWIGTYPE_p_wxOutputStream swig_types[13] 
+#define  SWIGTYPE_p_wxString swig_types[14] 
+#define  SWIGTYPE_p_wxPyXmlResourceHandler swig_types[15] 
+#define  SWIGTYPE_p_wxFileSystem swig_types[16] 
+#define  SWIGTYPE_p_wxXmlProperty swig_types[17] 
+#define  SWIGTYPE_p_wxFont swig_types[18] 
+#define  SWIGTYPE_p_wxXmlResource swig_types[19] 
 #define  SWIGTYPE_p_wxPanel swig_types[20] 
-#define  SWIGTYPE_p_wxSize swig_types[21] 
-static swig_type_info *swig_types[23];
+#define  SWIGTYPE_p_wxXmlDocument swig_types[21] 
+#define  SWIGTYPE_p_wxSize swig_types[22] 
+static swig_type_info *swig_types[24];
 
 /* -------- TYPES TABLE (END) -------- */
 
@@ -414,6 +264,44 @@ static swig_type_info *swig_types[23];
 #define SWIG_init    init_xrc
 
 #define SWIG_name    "_xrc"
+
+#include <limits.h>
+#include <float.h>
+#include <string.h>
+
+#ifndef SWIGSTATIC
+#ifdef __cplusplus
+#define SWIGSTATIC(a) static inline a
+#else
+#define SWIGSTATIC(a) static a
+#endif
+#endif
+
+#ifndef numeric_cast
+#ifdef __cplusplus
+#ifdef HAVE_NUMERIC_CAST
+#define numeric_cast(type,a) numeric_cast<type>(a)
+#else
+#define numeric_cast(type,a) static_cast<type>(a)
+#endif
+#else
+#define numeric_cast(type,a) (type)(a)
+#endif
+#endif
+
+
+
+#define SWIG_PyObj_FromSignedChar     PyInt_FromLong
+#define SWIG_PyObj_FromUnsignedChar   PyInt_FromLong
+#define SWIG_PyObj_FromShort         PyInt_FromLong
+#define SWIG_PyObj_FromUnsignedShort  PyInt_FromLong
+#define SWIG_PyObj_FromInt           PyInt_FromLong
+#define SWIG_PyObj_FromLong          PyInt_FromLong
+#define SWIG_PyObj_FromFloat         PyFloat_FromDouble
+#define SWIG_PyObj_FromDouble        PyFloat_FromDouble
+#define SWIG_PyObj_FromFloat         PyFloat_FromDouble
+#define SWIG_PyObj_FromDouble        PyFloat_FromDouble
+
 
 #include "wx/wxPython/wxPython.h"
 #include "wx/wxPython/pyclasses.h"
@@ -431,6 +319,23 @@ static swig_type_info *swig_types[23];
  static const wxString wxPyBitmapString(wxT("bitmap")); 
  static const wxString wxPyIconString(wxT("icon")); 
  static const wxString wxPyFontString(wxT("font")); 
+
+SWIGSTATIC(int)
+SWIG_PyObj_AsInt(PyObject *obj)
+{ 
+  return numeric_cast(int,
+    SWIG_PyObj_AsLongInRange(obj, "int", INT_MIN, INT_MAX));
+}
+
+
+SWIGSTATIC(PyObject*)
+SWIG_PyObj_FromBool(bool value)
+{
+  PyObject *obj = value ? Py_True : Py_False;
+  Py_INCREF(obj);
+  return obj;
+}
+
 bool wxXmlResource_LoadFromString(wxXmlResource *self,wxString const &data){
             static int s_memFileIdx = 0;
 
@@ -582,6 +487,20 @@ IMP_PYCALLBACK_OBJECT__pure(wxPyXmlResourceHandler, wxXmlResourceHandler, DoCrea
 IMP_PYCALLBACK_BOOL_NODE_pure(wxPyXmlResourceHandler, wxXmlResourceHandler, CanHandle);
 
 
+
+SWIGSTATIC(bool)
+SWIG_PyObj_AsBool(PyObject *obj)
+{
+  return PyObject_IsTrue(obj) ? true : false;
+}
+
+
+SWIGSTATIC(long)
+SWIG_PyObj_AsLong(PyObject * obj)
+{
+  return PyInt_Check(obj) ? PyInt_AsLong(obj) : PyLong_AsLong(obj);
+}
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -732,15 +651,22 @@ static PyObject *_wrap_new_XmlResource(PyObject *self, PyObject *args, PyObject 
     wxXmlResource *result;
     bool temp1 = False ;
     PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
     char *kwnames[] = {
         (char *) "filemask",(char *) "flags", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O|i:new_XmlResource",kwnames,&obj0,&arg2)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O|O:new_XmlResource",kwnames,&obj0,&obj1)) goto fail;
     {
         arg1 = wxString_in_helper(obj0);
         if (arg1 == NULL) SWIG_fail;
         temp1 = True;
+    }
+    if (obj1) {
+        {
+            arg2 = (int) SWIG_PyObj_AsInt(obj1);  
+            if (PyErr_Occurred()) SWIG_fail;
+        }
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -768,11 +694,18 @@ static PyObject *_wrap_new_EmptyXmlResource(PyObject *self, PyObject *args, PyOb
     PyObject *resultobj;
     int arg1 = (int) wxXRC_USE_LOCALE ;
     wxXmlResource *result;
+    PyObject * obj0 = 0 ;
     char *kwnames[] = {
         (char *) "flags", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"|i:new_EmptyXmlResource",kwnames,&arg1)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"|O:new_EmptyXmlResource",kwnames,&obj0)) goto fail;
+    if (obj0) {
+        {
+            arg1 = (int) SWIG_PyObj_AsInt(obj0);  
+            if (PyErr_Occurred()) SWIG_fail;
+        }
+    }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         result = (wxXmlResource *)new wxXmlResource(arg1);
@@ -837,7 +770,7 @@ static PyObject *_wrap_XmlResource_Load(PyObject *self, PyObject *args, PyObject
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromBool((bool)result);
     {
         if (temp2)
         delete arg2;
@@ -878,7 +811,7 @@ static PyObject *_wrap_XmlResource_LoadFromString(PyObject *self, PyObject *args
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromBool((bool)result);
     {
         if (temp2)
         delete arg2;
@@ -1273,7 +1206,7 @@ static PyObject *_wrap_XmlResource_LoadOnDialog(PyObject *self, PyObject *args, 
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromBool((bool)result);
     {
         if (temp4)
         delete arg4;
@@ -1364,7 +1297,7 @@ static PyObject *_wrap_XmlResource_LoadOnPanel(PyObject *self, PyObject *args, P
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromBool((bool)result);
     {
         if (temp4)
         delete arg4;
@@ -1457,7 +1390,7 @@ static PyObject *_wrap_XmlResource_LoadOnFrame(PyObject *self, PyObject *args, P
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromBool((bool)result);
     {
         if (temp4)
         delete arg4;
@@ -1574,7 +1507,7 @@ static PyObject *_wrap_XmlResource_LoadOnObject(PyObject *self, PyObject *args, 
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromBool((bool)result);
     {
         if (temp4)
         delete arg4;
@@ -1721,7 +1654,7 @@ static PyObject *_wrap_XmlResource_AttachUnknownControl(PyObject *self, PyObject
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromBool((bool)result);
     {
         if (temp2)
         delete arg2;
@@ -1759,7 +1692,7 @@ static PyObject *_wrap_XmlResource_GetXRCID(PyObject *self, PyObject *args, PyOb
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromInt((int)result);
     {
         if (temp1)
         delete arg1;
@@ -1792,7 +1725,7 @@ static PyObject *_wrap_XmlResource_GetVersion(PyObject *self, PyObject *args, Py
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromLong((long)result);
     return resultobj;
     fail:
     return NULL;
@@ -1808,12 +1741,32 @@ static PyObject *_wrap_XmlResource_CompareVersion(PyObject *self, PyObject *args
     int arg5 ;
     int result;
     PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
+    PyObject * obj2 = 0 ;
+    PyObject * obj3 = 0 ;
+    PyObject * obj4 = 0 ;
     char *kwnames[] = {
         (char *) "self",(char *) "major",(char *) "minor",(char *) "release",(char *) "revision", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"Oiiii:XmlResource_CompareVersion",kwnames,&obj0,&arg2,&arg3,&arg4,&arg5)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOOOO:XmlResource_CompareVersion",kwnames,&obj0,&obj1,&obj2,&obj3,&obj4)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxXmlResource,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    {
+        arg2 = (int) SWIG_PyObj_AsInt(obj1);  
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    {
+        arg3 = (int) SWIG_PyObj_AsInt(obj2);  
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    {
+        arg4 = (int) SWIG_PyObj_AsInt(obj3);  
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    {
+        arg5 = (int) SWIG_PyObj_AsInt(obj4);  
+        if (PyErr_Occurred()) SWIG_fail;
+    }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         result = (int)((wxXmlResource const *)arg1)->CompareVersion(arg2,arg3,arg4,arg5);
@@ -1821,7 +1774,7 @@ static PyObject *_wrap_XmlResource_CompareVersion(PyObject *self, PyObject *args
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromInt((int)result);
     return resultobj;
     fail:
     return NULL;
@@ -1893,7 +1846,7 @@ static PyObject *_wrap_XmlResource_GetFlags(PyObject *self, PyObject *args, PyOb
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromInt((int)result);
     return resultobj;
     fail:
     return NULL;
@@ -1905,12 +1858,17 @@ static PyObject *_wrap_XmlResource_SetFlags(PyObject *self, PyObject *args, PyOb
     wxXmlResource *arg1 = (wxXmlResource *) 0 ;
     int arg2 ;
     PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
     char *kwnames[] = {
         (char *) "self",(char *) "flags", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"Oi:XmlResource_SetFlags",kwnames,&obj0,&arg2)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:XmlResource_SetFlags",kwnames,&obj0,&obj1)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxXmlResource,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    {
+        arg2 = (int) SWIG_PyObj_AsInt(obj1);  
+        if (PyErr_Occurred()) SWIG_fail;
+    }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         (arg1)->SetFlags(arg2);
@@ -2271,6 +2229,7 @@ static PyObject *_wrap_new_XmlNode(PyObject *self, PyObject *args, PyObject *kwa
     bool temp3 = False ;
     bool temp4 = False ;
     PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
     PyObject * obj2 = 0 ;
     PyObject * obj3 = 0 ;
     PyObject * obj4 = 0 ;
@@ -2279,9 +2238,15 @@ static PyObject *_wrap_new_XmlNode(PyObject *self, PyObject *args, PyObject *kwa
         (char *) "parent",(char *) "type",(char *) "name",(char *) "content",(char *) "props",(char *) "next", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"|OiOOOO:new_XmlNode",kwnames,&obj0,&arg2,&obj2,&obj3,&obj4,&obj5)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"|OOOOOO:new_XmlNode",kwnames,&obj0,&obj1,&obj2,&obj3,&obj4,&obj5)) goto fail;
     if (obj0) {
         if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxXmlNode,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    }
+    if (obj1) {
+        {
+            arg2 = (wxXmlNodeType) SWIG_PyObj_AsInt(obj1);  
+            if (PyErr_Occurred()) SWIG_fail;
+        }
     }
     if (obj2) {
         {
@@ -2366,13 +2331,18 @@ static PyObject *_wrap_new_XmlNodeEasy(PyObject *self, PyObject *args, PyObject 
     wxXmlNode *result;
     bool temp2 = False ;
     bool temp3 = False ;
+    PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     PyObject * obj2 = 0 ;
     char *kwnames[] = {
         (char *) "type",(char *) "name",(char *) "content", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"iO|O:new_XmlNodeEasy",kwnames,&arg1,&obj1,&obj2)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO|O:new_XmlNodeEasy",kwnames,&obj0,&obj1,&obj2)) goto fail;
+    {
+        arg1 = (wxXmlNodeType) SWIG_PyObj_AsInt(obj0);  
+        if (PyErr_Occurred()) SWIG_fail;
+    }
     {
         arg2 = wxString_in_helper(obj1);
         if (arg2 == NULL) SWIG_fail;
@@ -2493,7 +2463,7 @@ static PyObject *_wrap_XmlNode_RemoveChild(PyObject *self, PyObject *args, PyObj
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromBool((bool)result);
     return resultobj;
     fail:
     return NULL;
@@ -2609,7 +2579,7 @@ static PyObject *_wrap_XmlNode_DeleteProperty(PyObject *self, PyObject *args, Py
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromBool((bool)result);
     {
         if (temp2)
         delete arg2;
@@ -2642,7 +2612,7 @@ static PyObject *_wrap_XmlNode_GetType(PyObject *self, PyObject *args, PyObject 
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromInt((int)result);
     return resultobj;
     fail:
     return NULL;
@@ -2900,7 +2870,7 @@ static PyObject *_wrap_XmlNode_HasProp(PyObject *self, PyObject *args, PyObject 
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromBool((bool)result);
     {
         if (temp2)
         delete arg2;
@@ -2920,12 +2890,17 @@ static PyObject *_wrap_XmlNode_SetType(PyObject *self, PyObject *args, PyObject 
     wxXmlNode *arg1 = (wxXmlNode *) 0 ;
     int arg2 ;
     PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
     char *kwnames[] = {
         (char *) "self",(char *) "type", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"Oi:XmlNode_SetType",kwnames,&obj0,&arg2)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:XmlNode_SetType",kwnames,&obj0,&obj1)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxXmlNode,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    {
+        arg2 = (wxXmlNodeType) SWIG_PyObj_AsInt(obj1);  
+        if (PyErr_Occurred()) SWIG_fail;
+    }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         (arg1)->SetType((wxXmlNodeType )arg2);
@@ -3342,7 +3317,7 @@ static PyObject *_wrap_XmlDocument_Load(PyObject *self, PyObject *args, PyObject
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromBool((bool)result);
     {
         if (temp2)
         delete arg2;
@@ -3412,7 +3387,7 @@ static PyObject *_wrap_XmlDocument_LoadFromStream(PyObject *self, PyObject *args
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromBool((bool)result);
     {
         if (created2)
         delete arg2;
@@ -3461,7 +3436,7 @@ static PyObject *_wrap_XmlDocument_Save(PyObject *self, PyObject *args, PyObject
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromBool((bool)result);
     {
         if (temp2)
         delete arg2;
@@ -3500,7 +3475,7 @@ static PyObject *_wrap_XmlDocument_SaveToStream(PyObject *self, PyObject *args, 
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromBool((bool)result);
     return resultobj;
     fail:
     return NULL;
@@ -3525,7 +3500,7 @@ static PyObject *_wrap_XmlDocument_IsOk(PyObject *self, PyObject *args, PyObject
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromBool((bool)result);
     return resultobj;
     fail:
     return NULL;
@@ -4066,7 +4041,7 @@ static PyObject *_wrap_XmlResourceHandler_IsOfClass(PyObject *self, PyObject *ar
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromBool((bool)result);
     {
         if (temp3)
         delete arg3;
@@ -4141,7 +4116,7 @@ static PyObject *_wrap_XmlResourceHandler_HasParam(PyObject *self, PyObject *arg
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromBool((bool)result);
     {
         if (temp2)
         delete arg2;
@@ -4252,16 +4227,21 @@ static PyObject *_wrap_XmlResourceHandler_AddStyle(PyObject *self, PyObject *arg
     bool temp2 = False ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
+    PyObject * obj2 = 0 ;
     char *kwnames[] = {
         (char *) "self",(char *) "name",(char *) "value", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOi:XmlResourceHandler_AddStyle",kwnames,&obj0,&obj1,&arg3)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO:XmlResourceHandler_AddStyle",kwnames,&obj0,&obj1,&obj2)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxPyXmlResourceHandler,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
     {
         arg2 = wxString_in_helper(obj1);
         if (arg2 == NULL) SWIG_fail;
         temp2 = True;
+    }
+    {
+        arg3 = (int) SWIG_PyObj_AsInt(obj2);  
+        if (PyErr_Occurred()) SWIG_fail;
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -4319,17 +4299,24 @@ static PyObject *_wrap_XmlResourceHandler_GetStyle(PyObject *self, PyObject *arg
     bool temp2 = False ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
+    PyObject * obj2 = 0 ;
     char *kwnames[] = {
         (char *) "self",(char *) "param",(char *) "defaults", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O|Oi:XmlResourceHandler_GetStyle",kwnames,&obj0,&obj1,&arg3)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O|OO:XmlResourceHandler_GetStyle",kwnames,&obj0,&obj1,&obj2)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxPyXmlResourceHandler,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
     if (obj1) {
         {
             arg2 = wxString_in_helper(obj1);
             if (arg2 == NULL) SWIG_fail;
             temp2 = True;
+        }
+    }
+    if (obj2) {
+        {
+            arg3 = (int) SWIG_PyObj_AsInt(obj2);  
+            if (PyErr_Occurred()) SWIG_fail;
         }
     }
     {
@@ -4339,7 +4326,7 @@ static PyObject *_wrap_XmlResourceHandler_GetStyle(PyObject *self, PyObject *arg
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromInt((int)result);
     {
         if (temp2)
         delete arg2;
@@ -4377,7 +4364,7 @@ static PyObject *_wrap_XmlResourceHandler_GetText(PyObject *self, PyObject *args
     }
     if (obj2) {
         {
-            arg3 = (bool) SPyObj_AsBool(obj2);  
+            arg3 = (bool) SWIG_PyObj_AsBool(obj2);  
             if (PyErr_Occurred()) SWIG_fail;
         }
     }
@@ -4427,7 +4414,7 @@ static PyObject *_wrap_XmlResourceHandler_GetID(PyObject *self, PyObject *args, 
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromInt((int)result);
     return resultobj;
     fail:
     return NULL;
@@ -4488,7 +4475,7 @@ static PyObject *_wrap_XmlResourceHandler_GetBool(PyObject *self, PyObject *args
     }
     if (obj2) {
         {
-            arg3 = (bool) SPyObj_AsBool(obj2);  
+            arg3 = (bool) SWIG_PyObj_AsBool(obj2);  
             if (PyErr_Occurred()) SWIG_fail;
         }
     }
@@ -4499,7 +4486,7 @@ static PyObject *_wrap_XmlResourceHandler_GetBool(PyObject *self, PyObject *args
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromBool((bool)result);
     {
         if (temp2)
         delete arg2;
@@ -4523,16 +4510,23 @@ static PyObject *_wrap_XmlResourceHandler_GetLong(PyObject *self, PyObject *args
     bool temp2 = False ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
+    PyObject * obj2 = 0 ;
     char *kwnames[] = {
         (char *) "self",(char *) "param",(char *) "defaultv", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO|l:XmlResourceHandler_GetLong",kwnames,&obj0,&obj1,&arg3)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO|O:XmlResourceHandler_GetLong",kwnames,&obj0,&obj1,&obj2)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxPyXmlResourceHandler,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
     {
         arg2 = wxString_in_helper(obj1);
         if (arg2 == NULL) SWIG_fail;
         temp2 = True;
+    }
+    if (obj2) {
+        {
+            arg3 = (long) SWIG_PyObj_AsLong(obj2);  
+            if (PyErr_Occurred()) SWIG_fail;
+        }
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -4541,7 +4535,7 @@ static PyObject *_wrap_XmlResourceHandler_GetLong(PyObject *self, PyObject *args
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromLong((long)result);
     {
         if (temp2)
         delete arg2;
@@ -4706,16 +4700,23 @@ static PyObject *_wrap_XmlResourceHandler_GetDimension(PyObject *self, PyObject 
     bool temp2 = False ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
+    PyObject * obj2 = 0 ;
     char *kwnames[] = {
         (char *) "self",(char *) "param",(char *) "defaultv", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO|i:XmlResourceHandler_GetDimension",kwnames,&obj0,&obj1,&arg3)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO|O:XmlResourceHandler_GetDimension",kwnames,&obj0,&obj1,&obj2)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxPyXmlResourceHandler,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
     {
         arg2 = wxString_in_helper(obj1);
         if (arg2 == NULL) SWIG_fail;
         temp2 = True;
+    }
+    if (obj2) {
+        {
+            arg3 = (int) SWIG_PyObj_AsInt(obj2);  
+            if (PyErr_Occurred()) SWIG_fail;
+        }
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -4724,7 +4725,7 @@ static PyObject *_wrap_XmlResourceHandler_GetDimension(PyObject *self, PyObject 
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromInt((int)result);
     {
         if (temp2)
         delete arg2;
@@ -4959,7 +4960,7 @@ static PyObject *_wrap_XmlResourceHandler_CreateChildren(PyObject *self, PyObjec
     if ((SWIG_ConvertPtr(obj1,(void **) &arg2, SWIGTYPE_p_wxObject,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
     if (obj2) {
         {
-            arg3 = (bool) SPyObj_AsBool(obj2);  
+            arg3 = (bool) SWIG_PyObj_AsBool(obj2);  
             if (PyErr_Occurred()) SWIG_fail;
         }
     }
@@ -5458,6 +5459,7 @@ static swig_type_info _swigt__p_wxWindow[] = {{"_p_wxWindow", 0, "wxWindow *", 0
 static swig_type_info _swigt__p_wxArtClient[] = {{"_p_wxArtClient", 0, "wxArtClient *", 0},{"_p_wxArtClient"},{0}};
 static swig_type_info _swigt__p_wxBitmap[] = {{"_p_wxBitmap", 0, "wxBitmap *", 0},{"_p_wxBitmap"},{0}};
 static swig_type_info _swigt__p_wxPyXmlSubclassFactory[] = {{"_p_wxPyXmlSubclassFactory", 0, "wxPyXmlSubclassFactory *", 0},{"_p_wxPyXmlSubclassFactory"},{0}};
+static swig_type_info _swigt__p_char[] = {{"_p_char", 0, "char *", 0},{"_p_char"},{0}};
 static swig_type_info _swigt__p_wxPoint[] = {{"_p_wxPoint", 0, "wxPoint *", 0},{"_p_wxPoint"},{0}};
 static swig_type_info _swigt__p_wxXmlNode[] = {{"_p_wxXmlNode", 0, "wxXmlNode *", 0},{"_p_wxXmlNode"},{0}};
 static swig_type_info _swigt__p_wxInputStream[] = {{"_p_wxInputStream", 0, "wxInputStream *", 0},{"_p_wxInputStream"},{0}};
@@ -5468,8 +5470,8 @@ static swig_type_info _swigt__p_wxFileSystem[] = {{"_p_wxFileSystem", 0, "wxFile
 static swig_type_info _swigt__p_wxXmlProperty[] = {{"_p_wxXmlProperty", 0, "wxXmlProperty *", 0},{"_p_wxXmlProperty"},{0}};
 static swig_type_info _swigt__p_wxFont[] = {{"_p_wxFont", 0, "wxFont *", 0},{"_p_wxFont"},{0}};
 static swig_type_info _swigt__p_wxXmlResource[] = {{"_p_wxXmlResource", 0, "wxXmlResource *", 0},{"_p_wxXmlResource"},{0}};
-static swig_type_info _swigt__p_wxXmlDocument[] = {{"_p_wxXmlDocument", 0, "wxXmlDocument *", 0},{"_p_wxXmlDocument"},{0}};
 static swig_type_info _swigt__p_wxPanel[] = {{"_p_wxPanel", 0, "wxPanel *", 0},{"_p_wxPanel"},{0}};
+static swig_type_info _swigt__p_wxXmlDocument[] = {{"_p_wxXmlDocument", 0, "wxXmlDocument *", 0},{"_p_wxXmlDocument"},{0}};
 static swig_type_info _swigt__p_wxSize[] = {{"_p_wxSize", 0, "wxSize *", 0},{"_p_wxSize"},{0}};
 
 static swig_type_info *swig_types_initial[] = {
@@ -5482,6 +5484,7 @@ _swigt__p_wxWindow,
 _swigt__p_wxArtClient, 
 _swigt__p_wxBitmap, 
 _swigt__p_wxPyXmlSubclassFactory, 
+_swigt__p_char, 
 _swigt__p_wxPoint, 
 _swigt__p_wxXmlNode, 
 _swigt__p_wxInputStream, 
@@ -5492,8 +5495,8 @@ _swigt__p_wxFileSystem,
 _swigt__p_wxXmlProperty, 
 _swigt__p_wxFont, 
 _swigt__p_wxXmlResource, 
-_swigt__p_wxXmlDocument, 
 _swigt__p_wxPanel, 
+_swigt__p_wxXmlDocument, 
 _swigt__p_wxSize, 
 0
 };
@@ -5502,25 +5505,6 @@ _swigt__p_wxSize,
 /* -------- TYPE CONVERSION AND EQUIVALENCE RULES (END) -------- */
 
 static swig_const_info swig_const_table[] = {
-{ SWIG_PY_INT,     (char *)"WX_XMLRES_CURRENT_VERSION_MAJOR", (long) WX_XMLRES_CURRENT_VERSION_MAJOR, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"WX_XMLRES_CURRENT_VERSION_MINOR", (long) WX_XMLRES_CURRENT_VERSION_MINOR, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"WX_XMLRES_CURRENT_VERSION_RELEASE", (long) WX_XMLRES_CURRENT_VERSION_RELEASE, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"WX_XMLRES_CURRENT_VERSION_REVISION", (long) WX_XMLRES_CURRENT_VERSION_REVISION, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"XRC_USE_LOCALE", (long) wxXRC_USE_LOCALE, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"XRC_NO_SUBCLASSING", (long) wxXRC_NO_SUBCLASSING, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"XML_ELEMENT_NODE", (long) wxXML_ELEMENT_NODE, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"XML_ATTRIBUTE_NODE", (long) wxXML_ATTRIBUTE_NODE, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"XML_TEXT_NODE", (long) wxXML_TEXT_NODE, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"XML_CDATA_SECTION_NODE", (long) wxXML_CDATA_SECTION_NODE, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"XML_ENTITY_REF_NODE", (long) wxXML_ENTITY_REF_NODE, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"XML_ENTITY_NODE", (long) wxXML_ENTITY_NODE, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"XML_PI_NODE", (long) wxXML_PI_NODE, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"XML_COMMENT_NODE", (long) wxXML_COMMENT_NODE, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"XML_DOCUMENT_NODE", (long) wxXML_DOCUMENT_NODE, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"XML_DOCUMENT_TYPE_NODE", (long) wxXML_DOCUMENT_TYPE_NODE, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"XML_DOCUMENT_FRAG_NODE", (long) wxXML_DOCUMENT_FRAG_NODE, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"XML_NOTATION_NODE", (long) wxXML_NOTATION_NODE, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"XML_HTML_DOCUMENT_NODE", (long) wxXML_HTML_DOCUMENT_NODE, 0, 0, 0},
 {0}};
 
 #ifdef __cplusplus
@@ -5555,6 +5539,25 @@ SWIGEXPORT(void) SWIG_init(void) {
     SWIG_addvarlink(SWIG_globals,(char*)"BitmapString",_wrap_BitmapString_get, _wrap_BitmapString_set);
     SWIG_addvarlink(SWIG_globals,(char*)"IconString",_wrap_IconString_get, _wrap_IconString_set);
     SWIG_addvarlink(SWIG_globals,(char*)"FontString",_wrap_FontString_get, _wrap_FontString_set);
+    PyDict_SetItemString(d,"WX_XMLRES_CURRENT_VERSION_MAJOR", SWIG_PyObj_FromInt((int)WX_XMLRES_CURRENT_VERSION_MAJOR));
+    PyDict_SetItemString(d,"WX_XMLRES_CURRENT_VERSION_MINOR", SWIG_PyObj_FromInt((int)WX_XMLRES_CURRENT_VERSION_MINOR));
+    PyDict_SetItemString(d,"WX_XMLRES_CURRENT_VERSION_RELEASE", SWIG_PyObj_FromInt((int)WX_XMLRES_CURRENT_VERSION_RELEASE));
+    PyDict_SetItemString(d,"WX_XMLRES_CURRENT_VERSION_REVISION", SWIG_PyObj_FromInt((int)WX_XMLRES_CURRENT_VERSION_REVISION));
+    PyDict_SetItemString(d,"XRC_USE_LOCALE", SWIG_PyObj_FromInt((int)wxXRC_USE_LOCALE));
+    PyDict_SetItemString(d,"XRC_NO_SUBCLASSING", SWIG_PyObj_FromInt((int)wxXRC_NO_SUBCLASSING));
+    PyDict_SetItemString(d,"XML_ELEMENT_NODE", SWIG_PyObj_FromInt((int)wxXML_ELEMENT_NODE));
+    PyDict_SetItemString(d,"XML_ATTRIBUTE_NODE", SWIG_PyObj_FromInt((int)wxXML_ATTRIBUTE_NODE));
+    PyDict_SetItemString(d,"XML_TEXT_NODE", SWIG_PyObj_FromInt((int)wxXML_TEXT_NODE));
+    PyDict_SetItemString(d,"XML_CDATA_SECTION_NODE", SWIG_PyObj_FromInt((int)wxXML_CDATA_SECTION_NODE));
+    PyDict_SetItemString(d,"XML_ENTITY_REF_NODE", SWIG_PyObj_FromInt((int)wxXML_ENTITY_REF_NODE));
+    PyDict_SetItemString(d,"XML_ENTITY_NODE", SWIG_PyObj_FromInt((int)wxXML_ENTITY_NODE));
+    PyDict_SetItemString(d,"XML_PI_NODE", SWIG_PyObj_FromInt((int)wxXML_PI_NODE));
+    PyDict_SetItemString(d,"XML_COMMENT_NODE", SWIG_PyObj_FromInt((int)wxXML_COMMENT_NODE));
+    PyDict_SetItemString(d,"XML_DOCUMENT_NODE", SWIG_PyObj_FromInt((int)wxXML_DOCUMENT_NODE));
+    PyDict_SetItemString(d,"XML_DOCUMENT_TYPE_NODE", SWIG_PyObj_FromInt((int)wxXML_DOCUMENT_TYPE_NODE));
+    PyDict_SetItemString(d,"XML_DOCUMENT_FRAG_NODE", SWIG_PyObj_FromInt((int)wxXML_DOCUMENT_FRAG_NODE));
+    PyDict_SetItemString(d,"XML_NOTATION_NODE", SWIG_PyObj_FromInt((int)wxXML_NOTATION_NODE));
+    PyDict_SetItemString(d,"XML_HTML_DOCUMENT_NODE", SWIG_PyObj_FromInt((int)wxXML_HTML_DOCUMENT_NODE));
     
     
     wxXmlInitResourceModule();

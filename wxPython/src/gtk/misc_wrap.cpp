@@ -121,7 +121,6 @@ SWIGIMPORT(char *)           SWIG_UnpackData(char *, void *, int);
 
 #ifdef __cplusplus
 }
-
 #endif
 
 
@@ -136,178 +135,6 @@ SWIGIMPORT(char *)           SWIG_UnpackData(char *, void *, int);
  ************************************************************************/
 
 #include "Python.h"
-
-#include <limits.h>
-#include <float.h>
-
-#ifdef __cplusplus
-#define SWIG_STATIC_INLINE static inline 
-#else
-#define SWIG_STATIC_INLINE static 
-#endif 
-
-SWIG_STATIC_INLINE long
-SPyObj_AsLong(PyObject * obj)
-{
-  return PyInt_Check(obj) ?  PyInt_AsLong(obj) : PyLong_AsLong(obj);
-}
-
-SWIG_STATIC_INLINE unsigned long
-SPyObj_AsUnsignedLong(PyObject * obj) 
-{
-  if (PyLong_Check(obj)) {
-    return PyLong_AsUnsignedLong(obj);
-  } else {
-    long i = PyInt_AsLong(obj);
-    if ( !PyErr_Occurred() && (i < 0)) {
-      PyErr_SetString(PyExc_TypeError, "negative value for unsigned type");
-    }
-    return i;
-  }
-}
-
-#if !defined(_MSC_VER)
-SWIG_STATIC_INLINE PyObject* 
-SPyObj_FromLongLong(long long value)
-{
-  return (value > (long)(LONG_MAX)) ?
-    PyLong_FromLongLong(value) : PyInt_FromLong((long)value); 
-}
-#endif
-
-SWIG_STATIC_INLINE PyObject* 
-SPyObj_FromUnsignedLong(unsigned long value)
-{
-  return (value > (unsigned long)(LONG_MAX)) ?
-    PyLong_FromUnsignedLong(value) : PyInt_FromLong((long)value); 
-}
-
-#if !defined(_MSC_VER)
-SWIG_STATIC_INLINE PyObject* 
-SPyObj_FromUnsignedLongLong(unsigned long long value)
-{
-  return (value > (unsigned long long)(LONG_MAX)) ?
-    PyLong_FromUnsignedLongLong(value) : PyInt_FromLong((long)value); 
-}
-#endif
-
-SWIG_STATIC_INLINE long
-SPyObj_AsLongInRange(PyObject * obj, long min_value, long max_value)
-{
-  long value = SPyObj_AsLong(obj);
-  if (!PyErr_Occurred()) {
-    if (value < min_value) {
-      PyErr_SetString(PyExc_OverflowError,"value is smaller than type minimum");
-    } else if (value > max_value) {
-      PyErr_SetString(PyExc_OverflowError,"value is greater than type maximum");
-    }
-  }
-  return value;
-}
-
-SWIG_STATIC_INLINE unsigned long
-SPyObj_AsUnsignedLongInRange(PyObject *obj, unsigned long max_value) 
-{
-  unsigned long value = SPyObj_AsUnsignedLong(obj);
-  if (!PyErr_Occurred()) {
-    if (value > max_value) {     
-      PyErr_SetString(PyExc_OverflowError,"value is greater than type maximum");
-    }
-  }
-  return value;
-}
-
-SWIG_STATIC_INLINE signed char
-SPyObj_AsSignedChar(PyObject *obj) { 
-  return (signed char)SPyObj_AsLongInRange(obj, SCHAR_MIN, SCHAR_MAX);
-}
-
-SWIG_STATIC_INLINE short
-SPyObj_AsShort(PyObject *obj) { 
-  return (short)SPyObj_AsLongInRange(obj, SHRT_MIN, SHRT_MAX);
-}
-
-SWIG_STATIC_INLINE int
-SPyObj_AsInt(PyObject *obj) { 
-  return SPyObj_AsLongInRange(obj, INT_MIN, INT_MAX);
-}
-
-SWIG_STATIC_INLINE unsigned char
-SPyObj_AsUnsignedChar(PyObject *obj) { 
-  return (unsigned char)SPyObj_AsUnsignedLongInRange(obj, UCHAR_MAX);
-}
-
-SWIG_STATIC_INLINE unsigned short 
-SPyObj_AsUnsignedShort(PyObject *obj) { 
-  return (unsigned short)SPyObj_AsUnsignedLongInRange(obj, USHRT_MAX);
-}
-
-SWIG_STATIC_INLINE unsigned int
-SPyObj_AsUnsignedInt(PyObject *obj) { 
-  return SPyObj_AsUnsignedLongInRange(obj, UINT_MAX);
-}
-
-#if !defined(_MSC_VER)
-SWIG_STATIC_INLINE long long
-SPyObj_AsLongLong(PyObject *obj) {
-  return PyInt_Check(obj) ?
-    PyInt_AsLong(obj) : PyLong_AsLongLong(obj);
-}
-
-SWIG_STATIC_INLINE unsigned long long
-SPyObj_AsUnsignedLongLong(PyObject *obj) {
-  return PyLong_Check(obj) ?
-    PyLong_AsUnsignedLongLong(obj) : SPyObj_AsUnsignedLong(obj);
-}
-#endif
-
-SWIG_STATIC_INLINE double
-SPyObj_AsDouble(PyObject *obj) {
-  return (PyFloat_Check(obj)) ? PyFloat_AsDouble(obj) :
-    (double)((PyInt_Check(obj)) ? PyInt_AsLong(obj) : PyLong_AsLongLong(obj));
-}
-
-SWIG_STATIC_INLINE float
-SPyObj_AsFloat(PyObject *obj) {
-  double value = SPyObj_AsDouble(obj);
-  if (!PyErr_Occurred()) {
-    if (value < FLT_MIN) {
-      PyErr_SetString(PyExc_OverflowError,"float is smaller than flt_min");
-    } else if (value > FLT_MAX) {     
-      PyErr_SetString(PyExc_OverflowError,"float is greater than flt_max");
-    }
-  }
-  return (float) value;
-}
-
-SWIG_STATIC_INLINE char
-SPyObj_AsChar(PyObject *obj) { 
-  char c = (PyString_Check(obj) && PyString_Size(obj) == 1) ?
-    PyString_AsString(obj)[0] 
-    : (char) SPyObj_AsLongInRange(obj, CHAR_MIN, CHAR_MAX);
-  if (PyErr_Occurred()) {
-    PyErr_Clear();
-    PyErr_SetString(PyExc_TypeError, "a char is required");
-  }
-  return c;
-}
-
-SWIG_STATIC_INLINE PyObject *
-SPyObj_FromChar(char c) { 
-  return PyString_FromStringAndSize(&c,1);
-}
-
-SWIG_STATIC_INLINE PyObject *
-SPyObj_FromCharPtr(const char* cptr) { 
-  return cptr ? PyString_FromString(cptr) : Py_BuildValue((char*)"");
-}
- 
-SWIG_STATIC_INLINE int
-SPyObj_AsBool(PyObject *obj) {
-    return SPyObj_AsLong/*Long*/(obj) ?  1 : 0;
-}
-
-
 
 #ifdef __cplusplus
 extern "C" {
@@ -357,6 +184,7 @@ typedef struct swig_const_info {
 #define SWIG_InstallConstants(d, constants) \
   SWIG_Python_InstallConstants(d, constants)
 
+typedef double (*py_objasdbl_conv)(PyObject *obj);
 
 SWIGIMPORT(int)               SWIG_Python_ConvertPtr(PyObject *, void **, swig_type_info *, int);
 SWIGIMPORT(PyObject *)        SWIG_Python_NewPointerObj(void *, swig_type_info *,int own);
@@ -367,6 +195,27 @@ SWIGIMPORT(int)               SWIG_Python_ConvertPacked(PyObject *, void *, int 
 SWIGIMPORT(PyObject *)        SWIG_Python_NewPackedObj(void *, int sz, swig_type_info *);
 SWIGIMPORT(void)              SWIG_Python_InstallConstants(PyObject *d, swig_const_info constants[]);
 
+/* -----------------------------------------------------------------------------
+ *  the needed conversions between C++ and python
+ * ----------------------------------------------------------------------------- */
+/* basic types */
+/*
+  utilities
+*/
+SWIGIMPORT(char* )         SWIG_PyObj_AsCharPtr(PyObject *obj, swig_type_info* pchar_info);
+SWIGIMPORT(PyObject *)     SWIG_PyObj_FromCharPtr(const char* cptr);
+SWIGIMPORT(unsigned long)  SWIG_PyObj_AsUnsignedLong(PyObject * obj);
+SWIGIMPORT(long)           SWIG_PyObj_AsLongInRange(PyObject * obj, const char* type,
+						    long min_value, long max_value);
+SWIGIMPORT(unsigned long)  SWIG_PyObj_AsUnsignedLongInRange(PyObject *obj, const char* type,
+							    unsigned long max_value);
+SWIGIMPORT(char *)         SWIG_PyObj_AsNewCharPtr(PyObject *obj, swig_type_info* pchar_info);
+SWIGIMPORT(void)           SWIG_PyObj_AsCharPtrAndSize(PyObject *obj, swig_type_info* pchar_info,
+						       char** cptr, size_t* size);
+SWIGIMPORT(void)           SWIG_PyObj_AsCharArray(PyObject *obj, swig_type_info* pchar_info,
+						  char* carray, size_t size);
+SWIGIMPORT(PyObject *)     SWIG_PyObj_FromCharArray(const char* carray, size_t size);
+SWIGIMPORT(float)          SWIG_PyObj_AsFloatConv(PyObject *obj,  py_objasdbl_conv pyconv);
 
 
 /* Contract support */
@@ -407,12 +256,12 @@ SWIGIMPORT(void)              SWIG_Python_InstallConstants(PyObject *d, swig_con
 #define  SWIGTYPE_p_wxLogTextCtrl swig_types[23] 
 #define  SWIGTYPE_p_wxTextCtrl swig_types[24] 
 #define  SWIGTYPE_p_wxBusyCursor swig_types[25] 
-#define  SWIGTYPE_p_wxFileDataObject swig_types[26] 
-#define  SWIGTYPE_p_wxPyBitmapDataObject swig_types[27] 
-#define  SWIGTYPE_p_wxPyTextDataObject swig_types[28] 
-#define  SWIGTYPE_p_wxBitmapDataObject swig_types[29] 
-#define  SWIGTYPE_p_wxTextDataObject swig_types[30] 
-#define  SWIGTYPE_p_wxDataObject swig_types[31] 
+#define  SWIGTYPE_p_wxPyBitmapDataObject swig_types[26] 
+#define  SWIGTYPE_p_wxPyTextDataObject swig_types[27] 
+#define  SWIGTYPE_p_wxBitmapDataObject swig_types[28] 
+#define  SWIGTYPE_p_wxTextDataObject swig_types[29] 
+#define  SWIGTYPE_p_wxDataObject swig_types[30] 
+#define  SWIGTYPE_p_wxFileDataObject swig_types[31] 
 #define  SWIGTYPE_p_wxCustomDataObject swig_types[32] 
 #define  SWIGTYPE_p_wxURLDataObject swig_types[33] 
 #define  SWIGTYPE_p_wxMetafileDataObject swig_types[34] 
@@ -429,41 +278,42 @@ SWIGIMPORT(void)              SWIG_Python_InstallConstants(PyObject *d, swig_con
 #define  SWIGTYPE_p_wxDataObjectSimple swig_types[45] 
 #define  SWIGTYPE_p_wxEvtHandler swig_types[46] 
 #define  SWIGTYPE_p_wxRect swig_types[47] 
-#define  SWIGTYPE_p_wxSingleInstanceChecker swig_types[48] 
-#define  SWIGTYPE_p_wxFileTypeInfo swig_types[49] 
-#define  SWIGTYPE_p_wxFrame swig_types[50] 
-#define  SWIGTYPE_p_wxTimer swig_types[51] 
-#define  SWIGTYPE_p_wxMimeTypesManager swig_types[52] 
-#define  SWIGTYPE_p_wxPyArtProvider swig_types[53] 
-#define  SWIGTYPE_p_wxPyTipProvider swig_types[54] 
-#define  SWIGTYPE_p_wxTipProvider swig_types[55] 
-#define  SWIGTYPE_p_wxJoystick swig_types[56] 
-#define  SWIGTYPE_p_wxSystemOptions swig_types[57] 
-#define  SWIGTYPE_p_wxPoint swig_types[58] 
-#define  SWIGTYPE_p_wxJoystickEvent swig_types[59] 
-#define  SWIGTYPE_p_wxCursor swig_types[60] 
-#define  SWIGTYPE_p_wxObject swig_types[61] 
-#define  SWIGTYPE_p_wxOutputStream swig_types[62] 
-#define  SWIGTYPE_p_wxDateTime swig_types[63] 
-#define  SWIGTYPE_p_wxPyDropSource swig_types[64] 
-#define  SWIGTYPE_p_wxWindow swig_types[65] 
-#define  SWIGTYPE_p_wxString swig_types[66] 
-#define  SWIGTYPE_p_wxPyProcess swig_types[67] 
-#define  SWIGTYPE_p_wxBitmap swig_types[68] 
-#define  SWIGTYPE_p_wxConfig swig_types[69] 
-#define  SWIGTYPE_p_wxChar swig_types[70] 
-#define  SWIGTYPE_p_wxBusyInfo swig_types[71] 
-#define  SWIGTYPE_p_wxPyDropTarget swig_types[72] 
-#define  SWIGTYPE_p_wxPyTextDropTarget swig_types[73] 
-#define  SWIGTYPE_p_wxPyFileDropTarget swig_types[74] 
-#define  SWIGTYPE_p_wxProcessEvent swig_types[75] 
-#define  SWIGTYPE_p_wxPyLog swig_types[76] 
-#define  SWIGTYPE_p_wxLogNull swig_types[77] 
-#define  SWIGTYPE_p_wxColour swig_types[78] 
-#define  SWIGTYPE_p_wxConfigPathChanger swig_types[79] 
-#define  SWIGTYPE_p_wxPyTimer swig_types[80] 
-#define  SWIGTYPE_p_wxDateSpan swig_types[81] 
-static swig_type_info *swig_types[83];
+#define  SWIGTYPE_p_char swig_types[48] 
+#define  SWIGTYPE_p_wxSingleInstanceChecker swig_types[49] 
+#define  SWIGTYPE_p_wxFileTypeInfo swig_types[50] 
+#define  SWIGTYPE_p_wxFrame swig_types[51] 
+#define  SWIGTYPE_p_wxTimer swig_types[52] 
+#define  SWIGTYPE_p_wxMimeTypesManager swig_types[53] 
+#define  SWIGTYPE_p_wxPyArtProvider swig_types[54] 
+#define  SWIGTYPE_p_wxPyTipProvider swig_types[55] 
+#define  SWIGTYPE_p_wxTipProvider swig_types[56] 
+#define  SWIGTYPE_p_wxJoystick swig_types[57] 
+#define  SWIGTYPE_p_wxSystemOptions swig_types[58] 
+#define  SWIGTYPE_p_wxPoint swig_types[59] 
+#define  SWIGTYPE_p_wxJoystickEvent swig_types[60] 
+#define  SWIGTYPE_p_wxCursor swig_types[61] 
+#define  SWIGTYPE_p_wxObject swig_types[62] 
+#define  SWIGTYPE_p_wxOutputStream swig_types[63] 
+#define  SWIGTYPE_p_wxDateTime swig_types[64] 
+#define  SWIGTYPE_p_wxPyDropSource swig_types[65] 
+#define  SWIGTYPE_p_wxWindow swig_types[66] 
+#define  SWIGTYPE_p_wxString swig_types[67] 
+#define  SWIGTYPE_p_wxPyProcess swig_types[68] 
+#define  SWIGTYPE_p_wxBitmap swig_types[69] 
+#define  SWIGTYPE_p_wxConfig swig_types[70] 
+#define  SWIGTYPE_p_wxChar swig_types[71] 
+#define  SWIGTYPE_p_wxBusyInfo swig_types[72] 
+#define  SWIGTYPE_p_wxPyDropTarget swig_types[73] 
+#define  SWIGTYPE_p_wxPyTextDropTarget swig_types[74] 
+#define  SWIGTYPE_p_wxPyFileDropTarget swig_types[75] 
+#define  SWIGTYPE_p_wxProcessEvent swig_types[76] 
+#define  SWIGTYPE_p_wxPyLog swig_types[77] 
+#define  SWIGTYPE_p_wxLogNull swig_types[78] 
+#define  SWIGTYPE_p_wxColour swig_types[79] 
+#define  SWIGTYPE_p_wxConfigPathChanger swig_types[80] 
+#define  SWIGTYPE_p_wxPyTimer swig_types[81] 
+#define  SWIGTYPE_p_wxDateSpan swig_types[82] 
+static swig_type_info *swig_types[84];
 
 /* -------- TYPES TABLE (END) -------- */
 
@@ -475,6 +325,44 @@ static swig_type_info *swig_types[83];
 
 #define SWIG_name    "_misc"
 
+#include <limits.h>
+#include <float.h>
+#include <string.h>
+
+#ifndef SWIGSTATIC
+#ifdef __cplusplus
+#define SWIGSTATIC(a) static inline a
+#else
+#define SWIGSTATIC(a) static a
+#endif
+#endif
+
+#ifndef numeric_cast
+#ifdef __cplusplus
+#ifdef HAVE_NUMERIC_CAST
+#define numeric_cast(type,a) numeric_cast<type>(a)
+#else
+#define numeric_cast(type,a) static_cast<type>(a)
+#endif
+#else
+#define numeric_cast(type,a) (type)(a)
+#endif
+#endif
+
+
+
+#define SWIG_PyObj_FromSignedChar     PyInt_FromLong
+#define SWIG_PyObj_FromUnsignedChar   PyInt_FromLong
+#define SWIG_PyObj_FromShort         PyInt_FromLong
+#define SWIG_PyObj_FromUnsignedShort  PyInt_FromLong
+#define SWIG_PyObj_FromInt           PyInt_FromLong
+#define SWIG_PyObj_FromLong          PyInt_FromLong
+#define SWIG_PyObj_FromFloat         PyFloat_FromDouble
+#define SWIG_PyObj_FromDouble        PyFloat_FromDouble
+#define SWIG_PyObj_FromFloat         PyFloat_FromDouble
+#define SWIG_PyObj_FromDouble        PyFloat_FromDouble
+
+
 #include "wx/wxPython/wxPython.h"
 #include "wx/wxPython/pyclasses.h"
 #include "wx/wxPython/pyistream.h"
@@ -483,9 +371,40 @@ static swig_type_info *swig_types[83];
  static const wxString wxPyEmptyString(wxEmptyString); 
 
 
+
+SWIGSTATIC(int)
+SWIG_PyObj_AsInt(PyObject *obj)
+{ 
+  return numeric_cast(int,
+    SWIG_PyObj_AsLongInRange(obj, "int", INT_MIN, INT_MAX));
+}
+
+
+SWIGSTATIC(PyObject*)
+SWIG_PyObj_FromBool(bool value)
+{
+  PyObject *obj = value ? Py_True : Py_False;
+  Py_INCREF(obj);
+  return obj;
+}
+
  static const wxString wxPyFileSelectorPromptStr(wxFileSelectorPromptStr); 
  static const wxString wxPyFileSelectorDefaultWildcardStr(wxFileSelectorDefaultWildcardStr); 
  static const wxString wxPyDirSelectorPromptStr(wxDirSelectorPromptStr); 
+
+SWIGSTATIC(long)
+SWIG_PyObj_AsLong(PyObject * obj)
+{
+  return PyInt_Check(obj) ? PyInt_AsLong(obj) : PyLong_AsLong(obj);
+}
+
+
+SWIGSTATIC(bool)
+SWIG_PyObj_AsBool(PyObject *obj)
+{
+  return PyObject_IsTrue(obj) ? true : false;
+}
+
 
 static PyObject* t_output_helper(PyObject* target, PyObject* o) {
     PyObject*   o2;
@@ -516,6 +435,14 @@ static PyObject* t_output_helper(PyObject* target, PyObject* o) {
 
     long wxGetFreeMemory()
         { wxPyRaiseNotImplemented(); return 0; }
+
+
+SWIGSTATIC(PyObject* )
+SWIG_PyObj_FromUnsignedLong(unsigned long value)
+{
+  return (value > (unsigned long)(LONG_MAX)) ?
+    PyLong_FromUnsignedLong(value) : PyInt_FromLong((long)value); 
+}
 
 
     bool wxGetKeyState(wxKeyCode key)
@@ -646,6 +573,14 @@ IMP_PYCALLBACK_STRING_STRING(wxPyTipProvider, wxTipProvider, PreprocessTip);
 
 
 IMP_PYCALLBACK__(wxPyTimer, wxTimer, Notify);
+
+
+SWIGSTATIC(unsigned int)
+SWIG_PyObj_AsUnsignedInt(PyObject *obj)
+{ 
+  return numeric_cast(unsigned int,
+    SWIG_PyObj_AsUnsignedLongInRange(obj, "unsigned int", UINT_MAX));
+}
 
 wxString Log_TimeStamp(){
             wxString msg;
@@ -1008,6 +943,22 @@ long wxConfigBase_ReadInt(wxConfigBase *self,wxString const &key,long defaultVal
             self->Read(key, &rv, defaultVal);
             return rv;
         }
+
+SWIGSTATIC(double)
+SWIG_PyObj_AsDouble(PyObject *obj)
+{
+  return (PyFloat_Check(obj)) ? PyFloat_AsDouble(obj) :
+#if HAVE_LONG_LONG
+    (double)((PyInt_Check(obj)) ? PyInt_AsLong(obj) : PyLong_AsLongLong(obj));
+#else
+    (double)((PyInt_Check(obj)) ? PyInt_AsLong(obj) : PyLong_AsLong(obj));
+#endif
+  if (PyErr_Occurred()) {
+    PyErr_Clear();
+    PyErr_SetString(PyExc_TypeError, "a double is expected");
+  }
+}
+
 double wxConfigBase_ReadFloat(wxConfigBase *self,wxString const &key,double defaultVal){
             double rv;
             self->Read(key, &rv, defaultVal);
@@ -1026,6 +977,9 @@ bool wxConfigBase_ReadBool(wxConfigBase *self,wxString const &key,bool defaultVa
  static const wxString wxPyTimeSpanFormatStr(wxT("%H:%M:%S")); 
 
 #define LOCAL_TZ wxDateTime::Local
+
+
+#define SWIG_PyObj_FromUnsignedInt    SWIG_PyObj_FromUnsignedLong  
 
 wxDateTime wxDateTime___add____SWIG_0(wxDateTime *self,wxTimeSpan const &other){ return *self + other; }
 wxDateTime wxDateTime___add____SWIG_1(wxDateTime *self,wxDateSpan const &other){ return *self + other; }
@@ -1309,11 +1263,16 @@ static PyObject *_wrap_SystemSettings_GetColour(PyObject *self, PyObject *args, 
     PyObject *resultobj;
     int arg1 ;
     wxColour result;
+    PyObject * obj0 = 0 ;
     char *kwnames[] = {
         (char *) "index", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"i:SystemSettings_GetColour",kwnames,&arg1)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:SystemSettings_GetColour",kwnames,&obj0)) goto fail;
+    {
+        arg1 = (wxSystemColour) SWIG_PyObj_AsInt(obj0);  
+        if (PyErr_Occurred()) SWIG_fail;
+    }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         result = wxSystemSettings::GetColour((wxSystemColour )arg1);
@@ -1336,11 +1295,16 @@ static PyObject *_wrap_SystemSettings_GetFont(PyObject *self, PyObject *args, Py
     PyObject *resultobj;
     int arg1 ;
     wxFont result;
+    PyObject * obj0 = 0 ;
     char *kwnames[] = {
         (char *) "index", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"i:SystemSettings_GetFont",kwnames,&arg1)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:SystemSettings_GetFont",kwnames,&obj0)) goto fail;
+    {
+        arg1 = (wxSystemFont) SWIG_PyObj_AsInt(obj0);  
+        if (PyErr_Occurred()) SWIG_fail;
+    }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         result = wxSystemSettings::GetFont((wxSystemFont )arg1);
@@ -1363,11 +1327,16 @@ static PyObject *_wrap_SystemSettings_GetMetric(PyObject *self, PyObject *args, 
     PyObject *resultobj;
     int arg1 ;
     int result;
+    PyObject * obj0 = 0 ;
     char *kwnames[] = {
         (char *) "index", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"i:SystemSettings_GetMetric",kwnames,&arg1)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:SystemSettings_GetMetric",kwnames,&obj0)) goto fail;
+    {
+        arg1 = (wxSystemMetric) SWIG_PyObj_AsInt(obj0);  
+        if (PyErr_Occurred()) SWIG_fail;
+    }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         result = (int)wxSystemSettings::GetMetric((wxSystemMetric )arg1);
@@ -1375,7 +1344,7 @@ static PyObject *_wrap_SystemSettings_GetMetric(PyObject *self, PyObject *args, 
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromInt((int)result);
     return resultobj;
     fail:
     return NULL;
@@ -1386,11 +1355,16 @@ static PyObject *_wrap_SystemSettings_HasFeature(PyObject *self, PyObject *args,
     PyObject *resultobj;
     int arg1 ;
     bool result;
+    PyObject * obj0 = 0 ;
     char *kwnames[] = {
         (char *) "index", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"i:SystemSettings_HasFeature",kwnames,&arg1)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:SystemSettings_HasFeature",kwnames,&obj0)) goto fail;
+    {
+        arg1 = (wxSystemFeature) SWIG_PyObj_AsInt(obj0);  
+        if (PyErr_Occurred()) SWIG_fail;
+    }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         result = (bool)wxSystemSettings::HasFeature((wxSystemFeature )arg1);
@@ -1398,7 +1372,7 @@ static PyObject *_wrap_SystemSettings_HasFeature(PyObject *self, PyObject *args,
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromBool((bool)result);
     return resultobj;
     fail:
     return NULL;
@@ -1420,7 +1394,7 @@ static PyObject *_wrap_SystemSettings_GetScreenType(PyObject *self, PyObject *ar
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromInt((int)result);
     return resultobj;
     fail:
     return NULL;
@@ -1430,11 +1404,16 @@ static PyObject *_wrap_SystemSettings_GetScreenType(PyObject *self, PyObject *ar
 static PyObject *_wrap_SystemSettings_SetScreenType(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     int arg1 ;
+    PyObject * obj0 = 0 ;
     char *kwnames[] = {
         (char *) "screen", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"i:SystemSettings_SetScreenType",kwnames,&arg1)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:SystemSettings_SetScreenType",kwnames,&obj0)) goto fail;
+    {
+        arg1 = (wxSystemScreenType) SWIG_PyObj_AsInt(obj0);  
+        if (PyErr_Occurred()) SWIG_fail;
+    }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         wxSystemSettings::SetScreenType((wxSystemScreenType )arg1);
@@ -1537,15 +1516,20 @@ static PyObject *_wrap_SystemOptions_SetOptionInt(PyObject *self, PyObject *args
     int arg2 ;
     bool temp1 = False ;
     PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
     char *kwnames[] = {
         (char *) "name",(char *) "value", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"Oi:SystemOptions_SetOptionInt",kwnames,&obj0,&arg2)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:SystemOptions_SetOptionInt",kwnames,&obj0,&obj1)) goto fail;
     {
         arg1 = wxString_in_helper(obj0);
         if (arg1 == NULL) SWIG_fail;
         temp1 = True;
+    }
+    {
+        arg2 = (int) SWIG_PyObj_AsInt(obj1);  
+        if (PyErr_Occurred()) SWIG_fail;
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -1636,7 +1620,7 @@ static PyObject *_wrap_SystemOptions_GetOptionInt(PyObject *self, PyObject *args
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromInt((int)result);
     {
         if (temp1)
         delete arg1;
@@ -1674,7 +1658,7 @@ static PyObject *_wrap_SystemOptions_HasOption(PyObject *self, PyObject *args, P
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromBool((bool)result);
     {
         if (temp1)
         delete arg1;
@@ -1771,7 +1755,7 @@ static PyObject *_wrap_NewId(PyObject *self, PyObject *args, PyObject *kwargs) {
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromLong((long)result);
     return resultobj;
     fail:
     return NULL;
@@ -1781,11 +1765,16 @@ static PyObject *_wrap_NewId(PyObject *self, PyObject *args, PyObject *kwargs) {
 static PyObject *_wrap_RegisterId(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     long arg1 ;
+    PyObject * obj0 = 0 ;
     char *kwnames[] = {
         (char *) "id", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"l:RegisterId",kwnames,&arg1)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:RegisterId",kwnames,&obj0)) goto fail;
+    {
+        arg1 = (long) SWIG_PyObj_AsLong(obj0);  
+        if (PyErr_Occurred()) SWIG_fail;
+    }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         wxRegisterId(arg1);
@@ -1815,7 +1804,7 @@ static PyObject *_wrap_GetCurrentId(PyObject *self, PyObject *args, PyObject *kw
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromLong((long)result);
     return resultobj;
     fail:
     return NULL;
@@ -1876,7 +1865,7 @@ static PyObject *_wrap_GetElapsedTime(PyObject *self, PyObject *args, PyObject *
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"|O:GetElapsedTime",kwnames,&obj0)) goto fail;
     if (obj0) {
         {
-            arg1 = (bool) SPyObj_AsBool(obj0);  
+            arg1 = (bool) SWIG_PyObj_AsBool(obj0);  
             if (PyErr_Occurred()) SWIG_fail;
         }
     }
@@ -1887,7 +1876,7 @@ static PyObject *_wrap_GetElapsedTime(PyObject *self, PyObject *args, PyObject *
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromLong((long)result);
     return resultobj;
     fail:
     return NULL;
@@ -1944,7 +1933,7 @@ static PyObject *_wrap_IsBusy(PyObject *self, PyObject *args, PyObject *kwargs) 
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromBool((bool)result);
     return resultobj;
     fail:
     return NULL;
@@ -2005,7 +1994,7 @@ static PyObject *_wrap_Shell(PyObject *self, PyObject *args, PyObject *kwargs) {
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromBool((bool)result);
     {
         if (temp1)
         delete arg1;
@@ -2062,7 +2051,7 @@ static PyObject *_wrap_GetOsVersion(PyObject *self, PyObject *args, PyObject *kw
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromInt((int)result);
     {
         PyObject *o = PyInt_FromLong((long) (*arg1));
         resultobj = t_output_helper(resultobj,o);
@@ -2120,7 +2109,7 @@ static PyObject *_wrap_GetFreeMemory(PyObject *self, PyObject *args, PyObject *k
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromLong((long)result);
     return resultobj;
     fail:
     return NULL;
@@ -2131,11 +2120,16 @@ static PyObject *_wrap_Shutdown(PyObject *self, PyObject *args, PyObject *kwargs
     PyObject *resultobj;
     int arg1 ;
     bool result;
+    PyObject * obj0 = 0 ;
     char *kwnames[] = {
         (char *) "wFlags", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"i:Shutdown",kwnames,&arg1)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:Shutdown",kwnames,&obj0)) goto fail;
+    {
+        arg1 = (wxShutdownFlags) SWIG_PyObj_AsInt(obj0);  
+        if (PyErr_Occurred()) SWIG_fail;
+    }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         result = (bool)wxShutdown((wxShutdownFlags )arg1);
@@ -2143,7 +2137,7 @@ static PyObject *_wrap_Shutdown(PyObject *self, PyObject *args, PyObject *kwargs
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromBool((bool)result);
     return resultobj;
     fail:
     return NULL;
@@ -2153,11 +2147,16 @@ static PyObject *_wrap_Shutdown(PyObject *self, PyObject *args, PyObject *kwargs
 static PyObject *_wrap_Sleep(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     int arg1 ;
+    PyObject * obj0 = 0 ;
     char *kwnames[] = {
         (char *) "secs", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"i:Sleep",kwnames,&arg1)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:Sleep",kwnames,&obj0)) goto fail;
+    {
+        arg1 = (int) SWIG_PyObj_AsInt(obj0);  
+        if (PyErr_Occurred()) SWIG_fail;
+    }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         wxSleep(arg1);
@@ -2182,7 +2181,7 @@ static PyObject *_wrap_Usleep(PyObject *self, PyObject *args, PyObject *kwargs) 
     
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:Usleep",kwnames,&obj0)) goto fail;
     {
-        arg1 = (unsigned long) SPyObj_AsUnsignedLong(obj0);  
+        arg1 = (unsigned long) SWIG_PyObj_AsUnsignedLong(obj0);  
         if (PyErr_Occurred()) SWIG_fail;
     }
     {
@@ -2209,7 +2208,7 @@ static PyObject *_wrap_EnableTopLevelWindows(PyObject *self, PyObject *args, PyO
     
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:EnableTopLevelWindows",kwnames,&obj0)) goto fail;
     {
-        arg1 = (bool) SPyObj_AsBool(obj0);  
+        arg1 = (bool) SWIG_PyObj_AsBool(obj0);  
         if (PyErr_Occurred()) SWIG_fail;
     }
     {
@@ -2500,7 +2499,7 @@ static PyObject *_wrap_GetProcessId(PyObject *self, PyObject *args, PyObject *kw
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SPyObj_FromUnsignedLong((unsigned long)result);
+    resultobj = SWIG_PyObj_FromUnsignedLong((unsigned long)result);
     return resultobj;
     fail:
     return NULL;
@@ -2555,12 +2554,15 @@ static PyObject *_wrap_FileSelector(PyObject *self, PyObject *args, PyObject *kw
     PyObject * obj2 = 0 ;
     PyObject * obj3 = 0 ;
     PyObject * obj4 = 0 ;
+    PyObject * obj5 = 0 ;
     PyObject * obj6 = 0 ;
+    PyObject * obj7 = 0 ;
+    PyObject * obj8 = 0 ;
     char *kwnames[] = {
         (char *) "message",(char *) "default_path",(char *) "default_filename",(char *) "default_extension",(char *) "wildcard",(char *) "flags",(char *) "parent",(char *) "x",(char *) "y", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"|OOOOOiOii:FileSelector",kwnames,&obj0,&obj1,&obj2,&obj3,&obj4,&arg6,&obj6,&arg8,&arg9)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"|OOOOOOOOO:FileSelector",kwnames,&obj0,&obj1,&obj2,&obj3,&obj4,&obj5,&obj6,&obj7,&obj8)) goto fail;
     if (obj0) {
         {
             arg1 = wxString_in_helper(obj0);
@@ -2596,8 +2598,26 @@ static PyObject *_wrap_FileSelector(PyObject *self, PyObject *args, PyObject *kw
             temp5 = True;
         }
     }
+    if (obj5) {
+        {
+            arg6 = (int) SWIG_PyObj_AsInt(obj5);  
+            if (PyErr_Occurred()) SWIG_fail;
+        }
+    }
     if (obj6) {
         if ((SWIG_ConvertPtr(obj6,(void **) &arg7, SWIGTYPE_p_wxWindow,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    }
+    if (obj7) {
+        {
+            arg8 = (int) SWIG_PyObj_AsInt(obj7);  
+            if (PyErr_Occurred()) SWIG_fail;
+        }
+    }
+    if (obj8) {
+        {
+            arg9 = (int) SWIG_PyObj_AsInt(obj8);  
+            if (PyErr_Occurred()) SWIG_fail;
+        }
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -2843,13 +2863,14 @@ static PyObject *_wrap_DirSelector(PyObject *self, PyObject *args, PyObject *kwa
     wxPoint temp4 ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
+    PyObject * obj2 = 0 ;
     PyObject * obj3 = 0 ;
     PyObject * obj4 = 0 ;
     char *kwnames[] = {
         (char *) "message",(char *) "defaultPath",(char *) "style",(char *) "pos",(char *) "parent", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"|OOlOO:DirSelector",kwnames,&obj0,&obj1,&arg3,&obj3,&obj4)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"|OOOOO:DirSelector",kwnames,&obj0,&obj1,&obj2,&obj3,&obj4)) goto fail;
     if (obj0) {
         {
             arg1 = wxString_in_helper(obj0);
@@ -2862,6 +2883,12 @@ static PyObject *_wrap_DirSelector(PyObject *self, PyObject *args, PyObject *kwa
             arg2 = wxString_in_helper(obj1);
             if (arg2 == NULL) SWIG_fail;
             temp2 = True;
+        }
+    }
+    if (obj2) {
+        {
+            arg3 = (long) SWIG_PyObj_AsLong(obj2);  
+            if (PyErr_Occurred()) SWIG_fail;
         }
     }
     if (obj3) {
@@ -2928,12 +2955,14 @@ static PyObject *_wrap_GetTextFromUser(PyObject *self, PyObject *args, PyObject 
     PyObject * obj1 = 0 ;
     PyObject * obj2 = 0 ;
     PyObject * obj3 = 0 ;
+    PyObject * obj4 = 0 ;
+    PyObject * obj5 = 0 ;
     PyObject * obj6 = 0 ;
     char *kwnames[] = {
         (char *) "message",(char *) "caption",(char *) "default_value",(char *) "parent",(char *) "x",(char *) "y",(char *) "centre", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O|OOOiiO:GetTextFromUser",kwnames,&obj0,&obj1,&obj2,&obj3,&arg5,&arg6,&obj6)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O|OOOOOO:GetTextFromUser",kwnames,&obj0,&obj1,&obj2,&obj3,&obj4,&obj5,&obj6)) goto fail;
     {
         arg1 = wxString_in_helper(obj0);
         if (arg1 == NULL) SWIG_fail;
@@ -2956,9 +2985,21 @@ static PyObject *_wrap_GetTextFromUser(PyObject *self, PyObject *args, PyObject 
     if (obj3) {
         if ((SWIG_ConvertPtr(obj3,(void **) &arg4, SWIGTYPE_p_wxWindow,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
     }
+    if (obj4) {
+        {
+            arg5 = (int) SWIG_PyObj_AsInt(obj4);  
+            if (PyErr_Occurred()) SWIG_fail;
+        }
+    }
+    if (obj5) {
+        {
+            arg6 = (int) SWIG_PyObj_AsInt(obj5);  
+            if (PyErr_Occurred()) SWIG_fail;
+        }
+    }
     if (obj6) {
         {
-            arg7 = (bool) SPyObj_AsBool(obj6);  
+            arg7 = (bool) SWIG_PyObj_AsBool(obj6);  
             if (PyErr_Occurred()) SWIG_fail;
         }
     }
@@ -3112,12 +3153,16 @@ static PyObject *_wrap_GetSingleChoice(PyObject *self, PyObject *args, PyObject 
     PyObject * obj1 = 0 ;
     PyObject * obj2 = 0 ;
     PyObject * obj3 = 0 ;
+    PyObject * obj4 = 0 ;
+    PyObject * obj5 = 0 ;
     PyObject * obj6 = 0 ;
+    PyObject * obj7 = 0 ;
+    PyObject * obj8 = 0 ;
     char *kwnames[] = {
         (char *) "message",(char *) "caption",(char *) "choices",(char *) "parent",(char *) "x",(char *) "y",(char *) "centre",(char *) "width",(char *) "height", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO|OiiOii:GetSingleChoice",kwnames,&obj0,&obj1,&obj2,&obj3,&arg6,&arg7,&obj6,&arg9,&arg10)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO|OOOOOO:GetSingleChoice",kwnames,&obj0,&obj1,&obj2,&obj3,&obj4,&obj5,&obj6,&obj7,&obj8)) goto fail;
     {
         arg1 = wxString_in_helper(obj0);
         if (arg1 == NULL) SWIG_fail;
@@ -3136,9 +3181,33 @@ static PyObject *_wrap_GetSingleChoice(PyObject *self, PyObject *args, PyObject 
     if (obj3) {
         if ((SWIG_ConvertPtr(obj3,(void **) &arg5, SWIGTYPE_p_wxWindow,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
     }
+    if (obj4) {
+        {
+            arg6 = (int) SWIG_PyObj_AsInt(obj4);  
+            if (PyErr_Occurred()) SWIG_fail;
+        }
+    }
+    if (obj5) {
+        {
+            arg7 = (int) SWIG_PyObj_AsInt(obj5);  
+            if (PyErr_Occurred()) SWIG_fail;
+        }
+    }
     if (obj6) {
         {
-            arg8 = (bool) SPyObj_AsBool(obj6);  
+            arg8 = (bool) SWIG_PyObj_AsBool(obj6);  
+            if (PyErr_Occurred()) SWIG_fail;
+        }
+    }
+    if (obj7) {
+        {
+            arg9 = (int) SWIG_PyObj_AsInt(obj7);  
+            if (PyErr_Occurred()) SWIG_fail;
+        }
+    }
+    if (obj8) {
+        {
+            arg10 = (int) SWIG_PyObj_AsInt(obj8);  
             if (PyErr_Occurred()) SWIG_fail;
         }
     }
@@ -3203,12 +3272,16 @@ static PyObject *_wrap_GetSingleChoiceIndex(PyObject *self, PyObject *args, PyOb
     PyObject * obj1 = 0 ;
     PyObject * obj2 = 0 ;
     PyObject * obj3 = 0 ;
+    PyObject * obj4 = 0 ;
+    PyObject * obj5 = 0 ;
     PyObject * obj6 = 0 ;
+    PyObject * obj7 = 0 ;
+    PyObject * obj8 = 0 ;
     char *kwnames[] = {
         (char *) "message",(char *) "caption",(char *) "choices",(char *) "parent",(char *) "x",(char *) "y",(char *) "centre",(char *) "width",(char *) "height", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO|OiiOii:GetSingleChoiceIndex",kwnames,&obj0,&obj1,&obj2,&obj3,&arg6,&arg7,&obj6,&arg9,&arg10)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO|OOOOOO:GetSingleChoiceIndex",kwnames,&obj0,&obj1,&obj2,&obj3,&obj4,&obj5,&obj6,&obj7,&obj8)) goto fail;
     {
         arg1 = wxString_in_helper(obj0);
         if (arg1 == NULL) SWIG_fail;
@@ -3227,9 +3300,33 @@ static PyObject *_wrap_GetSingleChoiceIndex(PyObject *self, PyObject *args, PyOb
     if (obj3) {
         if ((SWIG_ConvertPtr(obj3,(void **) &arg5, SWIGTYPE_p_wxWindow,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
     }
+    if (obj4) {
+        {
+            arg6 = (int) SWIG_PyObj_AsInt(obj4);  
+            if (PyErr_Occurred()) SWIG_fail;
+        }
+    }
+    if (obj5) {
+        {
+            arg7 = (int) SWIG_PyObj_AsInt(obj5);  
+            if (PyErr_Occurred()) SWIG_fail;
+        }
+    }
     if (obj6) {
         {
-            arg8 = (bool) SPyObj_AsBool(obj6);  
+            arg8 = (bool) SWIG_PyObj_AsBool(obj6);  
+            if (PyErr_Occurred()) SWIG_fail;
+        }
+    }
+    if (obj7) {
+        {
+            arg9 = (int) SWIG_PyObj_AsInt(obj7);  
+            if (PyErr_Occurred()) SWIG_fail;
+        }
+    }
+    if (obj8) {
+        {
+            arg10 = (int) SWIG_PyObj_AsInt(obj8);  
             if (PyErr_Occurred()) SWIG_fail;
         }
     }
@@ -3240,7 +3337,7 @@ static PyObject *_wrap_GetSingleChoiceIndex(PyObject *self, PyObject *args, PyOb
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromInt((int)result);
     {
         if (temp1)
         delete arg1;
@@ -3283,12 +3380,15 @@ static PyObject *_wrap_MessageBox(PyObject *self, PyObject *args, PyObject *kwar
     bool temp2 = False ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
+    PyObject * obj2 = 0 ;
     PyObject * obj3 = 0 ;
+    PyObject * obj4 = 0 ;
+    PyObject * obj5 = 0 ;
     char *kwnames[] = {
         (char *) "message",(char *) "caption",(char *) "style",(char *) "parent",(char *) "x",(char *) "y", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O|OiOii:MessageBox",kwnames,&obj0,&obj1,&arg3,&obj3,&arg5,&arg6)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O|OOOOO:MessageBox",kwnames,&obj0,&obj1,&obj2,&obj3,&obj4,&obj5)) goto fail;
     {
         arg1 = wxString_in_helper(obj0);
         if (arg1 == NULL) SWIG_fail;
@@ -3301,8 +3401,26 @@ static PyObject *_wrap_MessageBox(PyObject *self, PyObject *args, PyObject *kwar
             temp2 = True;
         }
     }
+    if (obj2) {
+        {
+            arg3 = (int) SWIG_PyObj_AsInt(obj2);  
+            if (PyErr_Occurred()) SWIG_fail;
+        }
+    }
     if (obj3) {
         if ((SWIG_ConvertPtr(obj3,(void **) &arg4, SWIGTYPE_p_wxWindow,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    }
+    if (obj4) {
+        {
+            arg5 = (int) SWIG_PyObj_AsInt(obj4);  
+            if (PyErr_Occurred()) SWIG_fail;
+        }
+    }
+    if (obj5) {
+        {
+            arg6 = (int) SWIG_PyObj_AsInt(obj5);  
+            if (PyErr_Occurred()) SWIG_fail;
+        }
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -3311,7 +3429,7 @@ static PyObject *_wrap_MessageBox(PyObject *self, PyObject *args, PyObject *kwar
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromInt((int)result);
     {
         if (temp1)
         delete arg1;
@@ -3353,13 +3471,16 @@ static PyObject *_wrap_GetNumberFromUser(PyObject *self, PyObject *args, PyObjec
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     PyObject * obj2 = 0 ;
+    PyObject * obj3 = 0 ;
+    PyObject * obj4 = 0 ;
+    PyObject * obj5 = 0 ;
     PyObject * obj6 = 0 ;
     PyObject * obj7 = 0 ;
     char *kwnames[] = {
         (char *) "message",(char *) "prompt",(char *) "caption",(char *) "value",(char *) "min",(char *) "max",(char *) "parent",(char *) "pos", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOOl|llOO:GetNumberFromUser",kwnames,&obj0,&obj1,&obj2,&arg4,&arg5,&arg6,&obj6,&obj7)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOOO|OOOO:GetNumberFromUser",kwnames,&obj0,&obj1,&obj2,&obj3,&obj4,&obj5,&obj6,&obj7)) goto fail;
     {
         arg1 = wxString_in_helper(obj0);
         if (arg1 == NULL) SWIG_fail;
@@ -3374,6 +3495,22 @@ static PyObject *_wrap_GetNumberFromUser(PyObject *self, PyObject *args, PyObjec
         arg3 = wxString_in_helper(obj2);
         if (arg3 == NULL) SWIG_fail;
         temp3 = True;
+    }
+    {
+        arg4 = (long) SWIG_PyObj_AsLong(obj3);  
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    if (obj4) {
+        {
+            arg5 = (long) SWIG_PyObj_AsLong(obj4);  
+            if (PyErr_Occurred()) SWIG_fail;
+        }
+    }
+    if (obj5) {
+        {
+            arg6 = (long) SWIG_PyObj_AsLong(obj5);  
+            if (PyErr_Occurred()) SWIG_fail;
+        }
     }
     if (obj6) {
         if ((SWIG_ConvertPtr(obj6,(void **) &arg7, SWIGTYPE_p_wxWindow,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
@@ -3391,7 +3528,7 @@ static PyObject *_wrap_GetNumberFromUser(PyObject *self, PyObject *args, PyObjec
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromLong((long)result);
     {
         if (temp1)
         delete arg1;
@@ -3437,7 +3574,7 @@ static PyObject *_wrap_ColourDisplay(PyObject *self, PyObject *args, PyObject *k
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromBool((bool)result);
     return resultobj;
     fail:
     return NULL;
@@ -3459,7 +3596,7 @@ static PyObject *_wrap_DisplayDepth(PyObject *self, PyObject *args, PyObject *kw
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromInt((int)result);
     return resultobj;
     fail:
     return NULL;
@@ -3481,7 +3618,7 @@ static PyObject *_wrap_GetDisplayDepth(PyObject *self, PyObject *args, PyObject 
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromInt((int)result);
     return resultobj;
     fail:
     return NULL;
@@ -3855,11 +3992,16 @@ static PyObject *_wrap_GetKeyState(PyObject *self, PyObject *args, PyObject *kwa
     PyObject *resultobj;
     int arg1 ;
     bool result;
+    PyObject * obj0 = 0 ;
     char *kwnames[] = {
         (char *) "key", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"i:GetKeyState",kwnames,&arg1)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:GetKeyState",kwnames,&obj0)) goto fail;
+    {
+        arg1 = (wxKeyCode) SWIG_PyObj_AsInt(obj0);  
+        if (PyErr_Occurred()) SWIG_fail;
+    }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         result = (bool)wxGetKeyState((wxKeyCode )arg1);
@@ -3867,7 +4009,7 @@ static PyObject *_wrap_GetKeyState(PyObject *self, PyObject *args, PyObject *kwa
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromBool((bool)result);
     return resultobj;
     fail:
     return NULL;
@@ -4005,7 +4147,7 @@ static PyObject *_wrap_Thread_IsMain(PyObject *self, PyObject *args, PyObject *k
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromBool((bool)result);
     return resultobj;
     fail:
     return NULL;
@@ -4160,7 +4302,7 @@ static PyObject *_wrap_ToolTip_Enable(PyObject *self, PyObject *args, PyObject *
     
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:ToolTip_Enable",kwnames,&obj0)) goto fail;
     {
-        arg1 = (bool) SPyObj_AsBool(obj0);  
+        arg1 = (bool) SWIG_PyObj_AsBool(obj0);  
         if (PyErr_Occurred()) SWIG_fail;
     }
     {
@@ -4180,11 +4322,16 @@ static PyObject *_wrap_ToolTip_Enable(PyObject *self, PyObject *args, PyObject *
 static PyObject *_wrap_ToolTip_SetDelay(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     long arg1 ;
+    PyObject * obj0 = 0 ;
     char *kwnames[] = {
         (char *) "milliseconds", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"l:ToolTip_SetDelay",kwnames,&arg1)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:ToolTip_SetDelay",kwnames,&obj0)) goto fail;
+    {
+        arg1 = (long) SWIG_PyObj_AsLong(obj0);  
+        if (PyErr_Occurred()) SWIG_fail;
+    }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         wxToolTip::SetDelay(arg1);
@@ -4280,7 +4427,7 @@ static PyObject *_wrap_Caret_IsOk(PyObject *self, PyObject *args, PyObject *kwar
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromBool((bool)result);
     return resultobj;
     fail:
     return NULL;
@@ -4305,7 +4452,7 @@ static PyObject *_wrap_Caret_IsVisible(PyObject *self, PyObject *args, PyObject 
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromBool((bool)result);
     return resultobj;
     fail:
     return NULL;
@@ -4479,12 +4626,22 @@ static PyObject *_wrap_Caret_MoveXY(PyObject *self, PyObject *args, PyObject *kw
     int arg2 ;
     int arg3 ;
     PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
+    PyObject * obj2 = 0 ;
     char *kwnames[] = {
         (char *) "self",(char *) "x",(char *) "y", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"Oii:Caret_MoveXY",kwnames,&obj0,&arg2,&arg3)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO:Caret_MoveXY",kwnames,&obj0,&obj1,&obj2)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxCaret,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    {
+        arg2 = (int) SWIG_PyObj_AsInt(obj1);  
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    {
+        arg3 = (int) SWIG_PyObj_AsInt(obj2);  
+        if (PyErr_Occurred()) SWIG_fail;
+    }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         (arg1)->Move(arg2,arg3);
@@ -4536,12 +4693,22 @@ static PyObject *_wrap_Caret_SetSizeWH(PyObject *self, PyObject *args, PyObject 
     int arg2 ;
     int arg3 ;
     PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
+    PyObject * obj2 = 0 ;
     char *kwnames[] = {
         (char *) "self",(char *) "width",(char *) "height", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"Oii:Caret_SetSizeWH",kwnames,&obj0,&arg2,&arg3)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO:Caret_SetSizeWH",kwnames,&obj0,&obj1,&obj2)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxCaret,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    {
+        arg2 = (int) SWIG_PyObj_AsInt(obj1);  
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    {
+        arg3 = (int) SWIG_PyObj_AsInt(obj2);  
+        if (PyErr_Occurred()) SWIG_fail;
+    }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         (arg1)->SetSize(arg2,arg3);
@@ -4592,12 +4759,19 @@ static PyObject *_wrap_Caret_Show(PyObject *self, PyObject *args, PyObject *kwar
     wxCaret *arg1 = (wxCaret *) 0 ;
     int arg2 = (int) True ;
     PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
     char *kwnames[] = {
         (char *) "self",(char *) "show", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O|i:Caret_Show",kwnames,&obj0,&arg2)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O|O:Caret_Show",kwnames,&obj0,&obj1)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxCaret,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    if (obj1) {
+        {
+            arg2 = (int) SWIG_PyObj_AsInt(obj1);  
+            if (PyErr_Occurred()) SWIG_fail;
+        }
+    }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         (arg1)->Show(arg2);
@@ -4658,7 +4832,7 @@ static PyObject *_wrap_Caret_GetBlinkTime(PyObject *self, PyObject *args, PyObje
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromInt((int)result);
     return resultobj;
     fail:
     return NULL;
@@ -4668,11 +4842,16 @@ static PyObject *_wrap_Caret_GetBlinkTime(PyObject *self, PyObject *args, PyObje
 static PyObject *_wrap_Caret_SetBlinkTime(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     int arg1 ;
+    PyObject * obj0 = 0 ;
     char *kwnames[] = {
         (char *) "milliseconds", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"i:Caret_SetBlinkTime",kwnames,&arg1)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:Caret_SetBlinkTime",kwnames,&obj0)) goto fail;
+    {
+        arg1 = (int) SWIG_PyObj_AsInt(obj0);  
+        if (PyErr_Occurred()) SWIG_fail;
+    }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         wxCaret_SetBlinkTime(arg1);
@@ -4899,12 +5078,19 @@ static PyObject *_wrap_StopWatch_Start(PyObject *self, PyObject *args, PyObject 
     wxStopWatch *arg1 = (wxStopWatch *) 0 ;
     long arg2 = (long) 0 ;
     PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
     char *kwnames[] = {
         (char *) "self",(char *) "t0", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O|l:StopWatch_Start",kwnames,&obj0,&arg2)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O|O:StopWatch_Start",kwnames,&obj0,&obj1)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxStopWatch,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    if (obj1) {
+        {
+            arg2 = (long) SWIG_PyObj_AsLong(obj1);  
+            if (PyErr_Occurred()) SWIG_fail;
+        }
+    }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         (arg1)->Start(arg2);
@@ -4985,7 +5171,7 @@ static PyObject *_wrap_StopWatch_Time(PyObject *self, PyObject *args, PyObject *
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromLong((long)result);
     return resultobj;
     fail:
     return NULL;
@@ -5003,11 +5189,18 @@ static PyObject *_wrap_new_FileHistory(PyObject *self, PyObject *args, PyObject 
     PyObject *resultobj;
     int arg1 = (int) 9 ;
     wxFileHistory *result;
+    PyObject * obj0 = 0 ;
     char *kwnames[] = {
         (char *) "maxFiles", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"|i:new_FileHistory",kwnames,&arg1)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"|O:new_FileHistory",kwnames,&obj0)) goto fail;
+    if (obj0) {
+        {
+            arg1 = (int) SWIG_PyObj_AsInt(obj0);  
+            if (PyErr_Occurred()) SWIG_fail;
+        }
+    }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         result = (wxFileHistory *)new wxFileHistory(arg1);
@@ -5091,12 +5284,17 @@ static PyObject *_wrap_FileHistory_RemoveFileFromHistory(PyObject *self, PyObjec
     wxFileHistory *arg1 = (wxFileHistory *) 0 ;
     int arg2 ;
     PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
     char *kwnames[] = {
         (char *) "self",(char *) "i", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"Oi:FileHistory_RemoveFileFromHistory",kwnames,&obj0,&arg2)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:FileHistory_RemoveFileFromHistory",kwnames,&obj0,&obj1)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxFileHistory,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    {
+        arg2 = (int) SWIG_PyObj_AsInt(obj1);  
+        if (PyErr_Occurred()) SWIG_fail;
+    }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         (arg1)->RemoveFileFromHistory(arg2);
@@ -5129,7 +5327,7 @@ static PyObject *_wrap_FileHistory_GetMaxFiles(PyObject *self, PyObject *args, P
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromInt((int)result);
     return resultobj;
     fail:
     return NULL;
@@ -5307,12 +5505,17 @@ static PyObject *_wrap_FileHistory_GetHistoryFile(PyObject *self, PyObject *args
     int arg2 ;
     wxString result;
     PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
     char *kwnames[] = {
         (char *) "self",(char *) "i", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"Oi:FileHistory_GetHistoryFile",kwnames,&obj0,&arg2)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:FileHistory_GetHistoryFile",kwnames,&obj0,&obj1)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxFileHistory,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    {
+        arg2 = (int) SWIG_PyObj_AsInt(obj1);  
+        if (PyErr_Occurred()) SWIG_fail;
+    }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         result = ((wxFileHistory const *)arg1)->GetHistoryFile(arg2);
@@ -5351,7 +5554,7 @@ static PyObject *_wrap_FileHistory_GetCount(PyObject *self, PyObject *args, PyOb
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromInt((int)result);
     return resultobj;
     fail:
     return NULL;
@@ -5505,7 +5708,7 @@ static PyObject *_wrap_SingleInstanceChecker_Create(PyObject *self, PyObject *ar
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromBool((bool)result);
     {
         if (temp2)
         delete arg2;
@@ -5546,7 +5749,7 @@ static PyObject *_wrap_SingleInstanceChecker_IsAnotherRunning(PyObject *self, Py
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromBool((bool)result);
     return resultobj;
     fail:
     return NULL;
@@ -5567,15 +5770,20 @@ static PyObject *_wrap_DrawWindowOnDC(PyObject *self, PyObject *args, PyObject *
     int arg3 ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
+    PyObject * obj2 = 0 ;
     char *kwnames[] = {
         (char *) "window",(char *) "dc",(char *) "method", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOi:DrawWindowOnDC",kwnames,&obj0,&obj1,&arg3)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO:DrawWindowOnDC",kwnames,&obj0,&obj1,&obj2)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxWindow,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
     if ((SWIG_ConvertPtr(obj1,(void **) &arg2, SWIGTYPE_p_wxDC,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
     if (arg2 == NULL) {
         PyErr_SetString(PyExc_TypeError,"null reference"); SWIG_fail; 
+    }
+    {
+        arg3 = (int) SWIG_PyObj_AsInt(obj2);  
+        if (PyErr_Occurred()) SWIG_fail;
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -5664,7 +5872,7 @@ static PyObject *_wrap_TipProvider_GetCurrentTip(PyObject *self, PyObject *args,
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SPyObj_FromUnsignedLong((unsigned long)result);
+    resultobj = SWIG_PyObj_FromUnsignedLong((unsigned long)result);
     return resultobj;
     fail:
     return NULL;
@@ -5736,7 +5944,7 @@ static PyObject *_wrap_new_PyTipProvider(PyObject *self, PyObject *args, PyObjec
     
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:new_PyTipProvider",kwnames,&obj0)) goto fail;
     {
-        arg1 = (size_t) SPyObj_AsUnsignedLong(obj0);  
+        arg1 = (size_t) SWIG_PyObj_AsUnsignedLong(obj0);  
         if (PyErr_Occurred()) SWIG_fail;
     }
     {
@@ -5808,7 +6016,7 @@ static PyObject *_wrap_ShowTip(PyObject *self, PyObject *args, PyObject *kwargs)
     if ((SWIG_ConvertPtr(obj1,(void **) &arg2, SWIGTYPE_p_wxTipProvider,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
     if (obj2) {
         {
-            arg3 = (bool) SPyObj_AsBool(obj2);  
+            arg3 = (bool) SWIG_PyObj_AsBool(obj2);  
             if (PyErr_Occurred()) SWIG_fail;
         }
     }
@@ -5819,7 +6027,7 @@ static PyObject *_wrap_ShowTip(PyObject *self, PyObject *args, PyObject *kwargs)
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromBool((bool)result);
     return resultobj;
     fail:
     return NULL;
@@ -5845,7 +6053,7 @@ static PyObject *_wrap_CreateFileTipProvider(PyObject *self, PyObject *args, PyO
         temp1 = True;
     }
     {
-        arg2 = (size_t) SPyObj_AsUnsignedLong(obj1);  
+        arg2 = (size_t) SWIG_PyObj_AsUnsignedLong(obj1);  
         if (PyErr_Occurred()) SWIG_fail;
     }
     {
@@ -5876,13 +6084,20 @@ static PyObject *_wrap_new_Timer(PyObject *self, PyObject *args, PyObject *kwarg
     int arg2 = (int) -1 ;
     wxPyTimer *result;
     PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
     char *kwnames[] = {
         (char *) "owner",(char *) "id", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"|Oi:new_Timer",kwnames,&obj0,&arg2)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"|OO:new_Timer",kwnames,&obj0,&obj1)) goto fail;
     if (obj0) {
         if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxEvtHandler,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    }
+    if (obj1) {
+        {
+            arg2 = (int) SWIG_PyObj_AsInt(obj1);  
+            if (PyErr_Occurred()) SWIG_fail;
+        }
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -5959,13 +6174,20 @@ static PyObject *_wrap_Timer_SetOwner(PyObject *self, PyObject *args, PyObject *
     int arg3 = (int) -1 ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
+    PyObject * obj2 = 0 ;
     char *kwnames[] = {
         (char *) "self",(char *) "owner",(char *) "id", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO|i:Timer_SetOwner",kwnames,&obj0,&obj1,&arg3)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO|O:Timer_SetOwner",kwnames,&obj0,&obj1,&obj2)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxPyTimer,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
     if ((SWIG_ConvertPtr(obj1,(void **) &arg2, SWIGTYPE_p_wxEvtHandler,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    if (obj2) {
+        {
+            arg3 = (int) SWIG_PyObj_AsInt(obj2);  
+            if (PyErr_Occurred()) SWIG_fail;
+        }
+    }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         (arg1)->SetOwner(arg2,arg3);
@@ -5987,16 +6209,23 @@ static PyObject *_wrap_Timer_Start(PyObject *self, PyObject *args, PyObject *kwa
     bool arg3 = (bool) False ;
     bool result;
     PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
     PyObject * obj2 = 0 ;
     char *kwnames[] = {
         (char *) "self",(char *) "milliseconds",(char *) "oneShot", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O|iO:Timer_Start",kwnames,&obj0,&arg2,&obj2)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O|OO:Timer_Start",kwnames,&obj0,&obj1,&obj2)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxPyTimer,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    if (obj1) {
+        {
+            arg2 = (int) SWIG_PyObj_AsInt(obj1);  
+            if (PyErr_Occurred()) SWIG_fail;
+        }
+    }
     if (obj2) {
         {
-            arg3 = (bool) SPyObj_AsBool(obj2);  
+            arg3 = (bool) SWIG_PyObj_AsBool(obj2);  
             if (PyErr_Occurred()) SWIG_fail;
         }
     }
@@ -6007,7 +6236,7 @@ static PyObject *_wrap_Timer_Start(PyObject *self, PyObject *args, PyObject *kwa
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromBool((bool)result);
     return resultobj;
     fail:
     return NULL;
@@ -6056,7 +6285,7 @@ static PyObject *_wrap_Timer_IsRunning(PyObject *self, PyObject *args, PyObject 
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromBool((bool)result);
     return resultobj;
     fail:
     return NULL;
@@ -6081,7 +6310,7 @@ static PyObject *_wrap_Timer_GetInterval(PyObject *self, PyObject *args, PyObjec
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromInt((int)result);
     return resultobj;
     fail:
     return NULL;
@@ -6106,7 +6335,7 @@ static PyObject *_wrap_Timer_IsOneShot(PyObject *self, PyObject *args, PyObject 
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromBool((bool)result);
     return resultobj;
     fail:
     return NULL;
@@ -6131,7 +6360,7 @@ static PyObject *_wrap_Timer_GetId(PyObject *self, PyObject *args, PyObject *kwa
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromInt((int)result);
     return resultobj;
     fail:
     return NULL;
@@ -6150,11 +6379,25 @@ static PyObject *_wrap_new_TimerEvent(PyObject *self, PyObject *args, PyObject *
     int arg1 = (int) 0 ;
     int arg2 = (int) 0 ;
     wxTimerEvent *result;
+    PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
     char *kwnames[] = {
         (char *) "timerid",(char *) "interval", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"|ii:new_TimerEvent",kwnames,&arg1,&arg2)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"|OO:new_TimerEvent",kwnames,&obj0,&obj1)) goto fail;
+    if (obj0) {
+        {
+            arg1 = (int) SWIG_PyObj_AsInt(obj0);  
+            if (PyErr_Occurred()) SWIG_fail;
+        }
+    }
+    if (obj1) {
+        {
+            arg2 = (int) SWIG_PyObj_AsInt(obj1);  
+            if (PyErr_Occurred()) SWIG_fail;
+        }
+    }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         result = (wxTimerEvent *)new wxTimerEvent(arg1,arg2);
@@ -6187,7 +6430,7 @@ static PyObject *_wrap_TimerEvent_GetInterval(PyObject *self, PyObject *args, Py
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromInt((int)result);
     return resultobj;
     fail:
     return NULL;
@@ -6233,16 +6476,21 @@ static PyObject *_wrap_new_TimerRunner__SWIG_1(PyObject *self, PyObject *args) {
     bool arg3 = (bool) False ;
     wxTimerRunner *result;
     PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
     PyObject * obj2 = 0 ;
     
-    if(!PyArg_ParseTuple(args,(char *)"Oi|O:new_TimerRunner",&obj0,&arg2,&obj2)) goto fail;
+    if(!PyArg_ParseTuple(args,(char *)"OO|O:new_TimerRunner",&obj0,&obj1,&obj2)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxTimer,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
     if (arg1 == NULL) {
         PyErr_SetString(PyExc_TypeError,"null reference"); SWIG_fail; 
     }
+    {
+        arg2 = (int) SWIG_PyObj_AsInt(obj1);  
+        if (PyErr_Occurred()) SWIG_fail;
+    }
     if (obj2) {
         {
-            arg3 = (bool) SPyObj_AsBool(obj2);  
+            arg3 = (bool) SWIG_PyObj_AsBool(obj2);  
             if (PyErr_Occurred()) SWIG_fail;
         }
     }
@@ -6297,7 +6545,7 @@ static PyObject *_wrap_new_TimerRunner(PyObject *self, PyObject *args) {
         }
         if (_v) {
             {
-                SPyObj_AsInt(argv[1]);
+                SWIG_PyObj_AsInt(argv[1]);
                 if (PyErr_Occurred()) {
                     _v = 0;
                     PyErr_Clear();
@@ -6310,7 +6558,7 @@ static PyObject *_wrap_new_TimerRunner(PyObject *self, PyObject *args) {
                     return _wrap_new_TimerRunner__SWIG_1(self,args);
                 }
                 {
-                    SPyObj_AsBool(argv[2]);
+                    SWIG_PyObj_AsBool(argv[2]);
                     if (PyErr_Occurred()) {
                         _v = 0;
                         PyErr_Clear();
@@ -6360,16 +6608,21 @@ static PyObject *_wrap_TimerRunner_Start(PyObject *self, PyObject *args, PyObjec
     int arg2 ;
     bool arg3 = (bool) False ;
     PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
     PyObject * obj2 = 0 ;
     char *kwnames[] = {
         (char *) "self",(char *) "milli",(char *) "oneShot", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"Oi|O:TimerRunner_Start",kwnames,&obj0,&arg2,&obj2)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO|O:TimerRunner_Start",kwnames,&obj0,&obj1,&obj2)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxTimerRunner,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    {
+        arg2 = (int) SWIG_PyObj_AsInt(obj1);  
+        if (PyErr_Occurred()) SWIG_fail;
+    }
     if (obj2) {
         {
-            arg3 = (bool) SPyObj_AsBool(obj2);  
+            arg3 = (bool) SWIG_PyObj_AsBool(obj2);  
             if (PyErr_Occurred()) SWIG_fail;
         }
     }
@@ -6431,7 +6684,7 @@ static PyObject *_wrap_Log_IsEnabled(PyObject *self, PyObject *args, PyObject *k
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromBool((bool)result);
     return resultobj;
     fail:
     return NULL;
@@ -6450,7 +6703,7 @@ static PyObject *_wrap_Log_EnableLogging(PyObject *self, PyObject *args, PyObjec
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"|O:Log_EnableLogging",kwnames,&obj0)) goto fail;
     if (obj0) {
         {
-            arg1 = (bool) SPyObj_AsBool(obj0);  
+            arg1 = (bool) SWIG_PyObj_AsBool(obj0);  
             if (PyErr_Occurred()) SWIG_fail;
         }
     }
@@ -6461,7 +6714,7 @@ static PyObject *_wrap_Log_EnableLogging(PyObject *self, PyObject *args, PyObjec
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromBool((bool)result);
     return resultobj;
     fail:
     return NULL;
@@ -6482,12 +6735,12 @@ static PyObject *_wrap_Log_OnLog(PyObject *self, PyObject *args, PyObject *kwarg
     
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO:Log_OnLog",kwnames,&obj0,&obj1,&obj2)) goto fail;
     {
-        arg1 = (wxLogLevel) SPyObj_AsUnsignedLong(obj0);  
+        arg1 = (wxLogLevel) SWIG_PyObj_AsUnsignedLong(obj0);  
         if (PyErr_Occurred()) SWIG_fail;
     }
     if ((SWIG_ConvertPtr(obj1,(void **) &arg2, SWIGTYPE_p_wxChar,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
     {
-        arg3 = (time_t) SPyObj_AsUnsignedInt(obj2);  
+        arg3 = (time_t) SWIG_PyObj_AsUnsignedInt(obj2);  
         if (PyErr_Occurred()) SWIG_fail;
     }
     {
@@ -6649,7 +6902,7 @@ static PyObject *_wrap_Log_SetVerbose(PyObject *self, PyObject *args, PyObject *
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"|O:Log_SetVerbose",kwnames,&obj0)) goto fail;
     if (obj0) {
         {
-            arg1 = (bool) SPyObj_AsBool(obj0);  
+            arg1 = (bool) SWIG_PyObj_AsBool(obj0);  
             if (PyErr_Occurred()) SWIG_fail;
         }
     }
@@ -6677,7 +6930,7 @@ static PyObject *_wrap_Log_SetLogLevel(PyObject *self, PyObject *args, PyObject 
     
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:Log_SetLogLevel",kwnames,&obj0)) goto fail;
     {
-        arg1 = (wxLogLevel) SPyObj_AsUnsignedLong(obj0);  
+        arg1 = (wxLogLevel) SWIG_PyObj_AsUnsignedLong(obj0);  
         if (PyErr_Occurred()) SWIG_fail;
     }
     {
@@ -6725,7 +6978,7 @@ static PyObject *_wrap_Log_SetTraceMask(PyObject *self, PyObject *args, PyObject
     
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:Log_SetTraceMask",kwnames,&obj0)) goto fail;
     {
-        arg1 = (wxTraceMask) SPyObj_AsUnsignedLong(obj0);  
+        arg1 = (wxTraceMask) SWIG_PyObj_AsUnsignedLong(obj0);  
         if (PyErr_Occurred()) SWIG_fail;
     }
     {
@@ -6903,7 +7156,7 @@ static PyObject *_wrap_Log_GetVerbose(PyObject *self, PyObject *args, PyObject *
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromBool((bool)result);
     return resultobj;
     fail:
     return NULL;
@@ -6925,7 +7178,7 @@ static PyObject *_wrap_Log_GetTraceMask(PyObject *self, PyObject *args, PyObject
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SPyObj_FromUnsignedLong((unsigned long)result);
+    resultobj = SWIG_PyObj_FromUnsignedLong((unsigned long)result);
     return resultobj;
     fail:
     return NULL;
@@ -6950,7 +7203,7 @@ static PyObject *_wrap_Log_IsAllowedTraceMask(PyObject *self, PyObject *args, Py
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromBool((bool)result);
     return resultobj;
     fail:
     return NULL;
@@ -6972,7 +7225,7 @@ static PyObject *_wrap_Log_GetLogLevel(PyObject *self, PyObject *args, PyObject 
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SPyObj_FromUnsignedLong((unsigned long)result);
+    resultobj = SWIG_PyObj_FromUnsignedLong((unsigned long)result);
     return resultobj;
     fail:
     return NULL;
@@ -7175,13 +7428,13 @@ static PyObject *_wrap_new_LogWindow(PyObject *self, PyObject *args, PyObject *k
     }
     if (obj2) {
         {
-            arg3 = (bool) SPyObj_AsBool(obj2);  
+            arg3 = (bool) SWIG_PyObj_AsBool(obj2);  
             if (PyErr_Occurred()) SWIG_fail;
         }
     }
     if (obj3) {
         {
-            arg4 = (bool) SPyObj_AsBool(obj3);  
+            arg4 = (bool) SWIG_PyObj_AsBool(obj3);  
             if (PyErr_Occurred()) SWIG_fail;
         }
     }
@@ -7221,7 +7474,7 @@ static PyObject *_wrap_LogWindow_Show(PyObject *self, PyObject *args, PyObject *
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxLogWindow,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
     if (obj1) {
         {
-            arg2 = (bool) SPyObj_AsBool(obj1);  
+            arg2 = (bool) SWIG_PyObj_AsBool(obj1);  
             if (PyErr_Occurred()) SWIG_fail;
         }
     }
@@ -7309,7 +7562,7 @@ static PyObject *_wrap_LogWindow_IsPassingMessages(PyObject *self, PyObject *arg
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromBool((bool)result);
     return resultobj;
     fail:
     return NULL;
@@ -7329,7 +7582,7 @@ static PyObject *_wrap_LogWindow_PassMessages(PyObject *self, PyObject *args, Py
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:LogWindow_PassMessages",kwnames,&obj0,&obj1)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxLogWindow,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
     {
-        arg2 = (bool) SPyObj_AsBool(obj1);  
+        arg2 = (bool) SWIG_PyObj_AsBool(obj1);  
         if (PyErr_Occurred()) SWIG_fail;
     }
     {
@@ -7418,7 +7671,7 @@ static PyObject *_wrap_LogChain_PassMessages(PyObject *self, PyObject *args, PyO
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:LogChain_PassMessages",kwnames,&obj0,&obj1)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxLogChain,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
     {
-        arg2 = (bool) SPyObj_AsBool(obj1);  
+        arg2 = (bool) SWIG_PyObj_AsBool(obj1);  
         if (PyErr_Occurred()) SWIG_fail;
     }
     {
@@ -7453,7 +7706,7 @@ static PyObject *_wrap_LogChain_IsPassingMessages(PyObject *self, PyObject *args
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromBool((bool)result);
     return resultobj;
     fail:
     return NULL;
@@ -7507,7 +7760,7 @@ static PyObject *_wrap_SysErrorCode(PyObject *self, PyObject *args, PyObject *kw
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SPyObj_FromUnsignedLong((unsigned long)result);
+    resultobj = SWIG_PyObj_FromUnsignedLong((unsigned long)result);
     return resultobj;
     fail:
     return NULL;
@@ -7526,7 +7779,7 @@ static PyObject *_wrap_SysErrorMsg(PyObject *self, PyObject *args, PyObject *kwa
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"|O:SysErrorMsg",kwnames,&obj0)) goto fail;
     if (obj0) {
         {
-            arg1 = (unsigned long) SPyObj_AsUnsignedLong(obj0);  
+            arg1 = (unsigned long) SWIG_PyObj_AsUnsignedLong(obj0);  
             if (PyErr_Occurred()) SWIG_fail;
         }
     }
@@ -7933,7 +8186,7 @@ static PyObject *_wrap_LogTrace__SWIG_0(PyObject *self, PyObject *args) {
     
     if(!PyArg_ParseTuple(args,(char *)"OO:LogTrace",&obj0,&obj1)) goto fail;
     {
-        arg1 = (unsigned long) SPyObj_AsUnsignedLong(obj0);  
+        arg1 = (unsigned long) SWIG_PyObj_AsUnsignedLong(obj0);  
         if (PyErr_Occurred()) SWIG_fail;
     }
     {
@@ -8051,7 +8304,7 @@ static PyObject *_wrap_LogTrace(PyObject *self, PyObject *args) {
     if (argc == 2) {
         int _v;
         {
-            SPyObj_AsUnsignedLong(argv[0]);
+            SWIG_PyObj_AsUnsignedLong(argv[0]);
             if (PyErr_Occurred()) {
                 _v = 0;
                 PyErr_Clear();
@@ -8093,7 +8346,7 @@ static PyObject *_wrap_LogGeneric(PyObject *self, PyObject *args, PyObject *kwar
     
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:LogGeneric",kwnames,&obj0,&obj1)) goto fail;
     {
-        arg1 = (unsigned long) SPyObj_AsUnsignedLong(obj0);  
+        arg1 = (unsigned long) SWIG_PyObj_AsUnsignedLong(obj0);  
         if (PyErr_Occurred()) SWIG_fail;
     }
     {
@@ -8293,11 +8546,23 @@ static PyObject *_wrap_Process_Kill(PyObject *self, PyObject *args, PyObject *kw
     int arg1 ;
     int arg2 = (int) wxSIGTERM ;
     int result;
+    PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
     char *kwnames[] = {
         (char *) "pid",(char *) "sig", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"i|i:Process_Kill",kwnames,&arg1,&arg2)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O|O:Process_Kill",kwnames,&obj0,&obj1)) goto fail;
+    {
+        arg1 = (int) SWIG_PyObj_AsInt(obj0);  
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    if (obj1) {
+        {
+            arg2 = (wxSignal) SWIG_PyObj_AsInt(obj1);  
+            if (PyErr_Occurred()) SWIG_fail;
+        }
+    }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         result = (int)wxPyProcess::Kill(arg1,(wxSignal )arg2);
@@ -8305,7 +8570,7 @@ static PyObject *_wrap_Process_Kill(PyObject *self, PyObject *args, PyObject *kw
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromInt((int)result);
     return resultobj;
     fail:
     return NULL;
@@ -8316,11 +8581,16 @@ static PyObject *_wrap_Process_Exists(PyObject *self, PyObject *args, PyObject *
     PyObject *resultobj;
     int arg1 ;
     bool result;
+    PyObject * obj0 = 0 ;
     char *kwnames[] = {
         (char *) "pid", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"i:Process_Exists",kwnames,&arg1)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:Process_Exists",kwnames,&obj0)) goto fail;
+    {
+        arg1 = (int) SWIG_PyObj_AsInt(obj0);  
+        if (PyErr_Occurred()) SWIG_fail;
+    }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         result = (bool)wxPyProcess::Exists(arg1);
@@ -8328,7 +8598,7 @@ static PyObject *_wrap_Process_Exists(PyObject *self, PyObject *args, PyObject *
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromBool((bool)result);
     return resultobj;
     fail:
     return NULL;
@@ -8342,15 +8612,22 @@ static PyObject *_wrap_Process_Open(PyObject *self, PyObject *args, PyObject *kw
     wxPyProcess *result;
     bool temp1 = False ;
     PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
     char *kwnames[] = {
         (char *) "cmd",(char *) "flags", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O|i:Process_Open",kwnames,&obj0,&arg2)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O|O:Process_Open",kwnames,&obj0,&obj1)) goto fail;
     {
         arg1 = wxString_in_helper(obj0);
         if (arg1 == NULL) SWIG_fail;
         temp1 = True;
+    }
+    if (obj1) {
+        {
+            arg2 = (int) SWIG_PyObj_AsInt(obj1);  
+            if (PyErr_Occurred()) SWIG_fail;
+        }
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -8380,13 +8657,20 @@ static PyObject *_wrap_new_Process(PyObject *self, PyObject *args, PyObject *kwa
     int arg2 = (int) -1 ;
     wxPyProcess *result;
     PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
     char *kwnames[] = {
         (char *) "parent",(char *) "id", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"|Oi:new_Process",kwnames,&obj0,&arg2)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"|OO:new_Process",kwnames,&obj0,&obj1)) goto fail;
     if (obj0) {
         if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxEvtHandler,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    }
+    if (obj1) {
+        {
+            arg2 = (int) SWIG_PyObj_AsInt(obj1);  
+            if (PyErr_Occurred()) SWIG_fail;
+        }
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -8438,12 +8722,22 @@ static PyObject *_wrap_Process_base_OnTerminate(PyObject *self, PyObject *args, 
     int arg2 ;
     int arg3 ;
     PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
+    PyObject * obj2 = 0 ;
     char *kwnames[] = {
         (char *) "self",(char *) "pid",(char *) "status", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"Oii:Process_base_OnTerminate",kwnames,&obj0,&arg2,&arg3)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO:Process_base_OnTerminate",kwnames,&obj0,&obj1,&obj2)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxPyProcess,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    {
+        arg2 = (int) SWIG_PyObj_AsInt(obj1);  
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    {
+        arg3 = (int) SWIG_PyObj_AsInt(obj2);  
+        if (PyErr_Occurred()) SWIG_fail;
+    }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         (arg1)->base_OnTerminate(arg2,arg3);
@@ -8500,7 +8794,7 @@ static PyObject *_wrap_Process_IsRedirected(PyObject *self, PyObject *args, PyOb
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromBool((bool)result);
     return resultobj;
     fail:
     return NULL;
@@ -8662,7 +8956,7 @@ static PyObject *_wrap_Process_IsInputOpened(PyObject *self, PyObject *args, PyO
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromBool((bool)result);
     return resultobj;
     fail:
     return NULL;
@@ -8687,7 +8981,7 @@ static PyObject *_wrap_Process_IsInputAvailable(PyObject *self, PyObject *args, 
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromBool((bool)result);
     return resultobj;
     fail:
     return NULL;
@@ -8712,7 +9006,7 @@ static PyObject *_wrap_Process_IsErrorAvailable(PyObject *self, PyObject *args, 
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromBool((bool)result);
     return resultobj;
     fail:
     return NULL;
@@ -8732,11 +9026,32 @@ static PyObject *_wrap_new_ProcessEvent(PyObject *self, PyObject *args, PyObject
     int arg2 = (int) 0 ;
     int arg3 = (int) 0 ;
     wxProcessEvent *result;
+    PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
+    PyObject * obj2 = 0 ;
     char *kwnames[] = {
         (char *) "id",(char *) "pid",(char *) "exitcode", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"|iii:new_ProcessEvent",kwnames,&arg1,&arg2,&arg3)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"|OOO:new_ProcessEvent",kwnames,&obj0,&obj1,&obj2)) goto fail;
+    if (obj0) {
+        {
+            arg1 = (int) SWIG_PyObj_AsInt(obj0);  
+            if (PyErr_Occurred()) SWIG_fail;
+        }
+    }
+    if (obj1) {
+        {
+            arg2 = (int) SWIG_PyObj_AsInt(obj1);  
+            if (PyErr_Occurred()) SWIG_fail;
+        }
+    }
+    if (obj2) {
+        {
+            arg3 = (int) SWIG_PyObj_AsInt(obj2);  
+            if (PyErr_Occurred()) SWIG_fail;
+        }
+    }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         result = (wxProcessEvent *)new wxProcessEvent(arg1,arg2,arg3);
@@ -8769,7 +9084,7 @@ static PyObject *_wrap_ProcessEvent_GetPid(PyObject *self, PyObject *args, PyObj
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromInt((int)result);
     return resultobj;
     fail:
     return NULL;
@@ -8794,7 +9109,7 @@ static PyObject *_wrap_ProcessEvent_GetExitCode(PyObject *self, PyObject *args, 
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromInt((int)result);
     return resultobj;
     fail:
     return NULL;
@@ -8806,12 +9121,17 @@ static PyObject *_wrap_ProcessEvent_m_pid_set(PyObject *self, PyObject *args, Py
     wxProcessEvent *arg1 = (wxProcessEvent *) 0 ;
     int arg2 ;
     PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
     char *kwnames[] = {
         (char *) "self",(char *) "m_pid", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"Oi:ProcessEvent_m_pid_set",kwnames,&obj0,&arg2)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:ProcessEvent_m_pid_set",kwnames,&obj0,&obj1)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxProcessEvent,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    {
+        arg2 = (int) SWIG_PyObj_AsInt(obj1);  
+        if (PyErr_Occurred()) SWIG_fail;
+    }
     if (arg1) (arg1)->m_pid = arg2;
     
     Py_INCREF(Py_None); resultobj = Py_None;
@@ -8834,7 +9154,7 @@ static PyObject *_wrap_ProcessEvent_m_pid_get(PyObject *self, PyObject *args, Py
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxProcessEvent,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
     result = (int) ((arg1)->m_pid);
     
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromInt((int)result);
     return resultobj;
     fail:
     return NULL;
@@ -8846,12 +9166,17 @@ static PyObject *_wrap_ProcessEvent_m_exitcode_set(PyObject *self, PyObject *arg
     wxProcessEvent *arg1 = (wxProcessEvent *) 0 ;
     int arg2 ;
     PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
     char *kwnames[] = {
         (char *) "self",(char *) "m_exitcode", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"Oi:ProcessEvent_m_exitcode_set",kwnames,&obj0,&arg2)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:ProcessEvent_m_exitcode_set",kwnames,&obj0,&obj1)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxProcessEvent,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    {
+        arg2 = (int) SWIG_PyObj_AsInt(obj1);  
+        if (PyErr_Occurred()) SWIG_fail;
+    }
     if (arg1) (arg1)->m_exitcode = arg2;
     
     Py_INCREF(Py_None); resultobj = Py_None;
@@ -8874,7 +9199,7 @@ static PyObject *_wrap_ProcessEvent_m_exitcode_get(PyObject *self, PyObject *arg
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxProcessEvent,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
     result = (int) ((arg1)->m_exitcode);
     
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromInt((int)result);
     return resultobj;
     fail:
     return NULL;
@@ -8896,16 +9221,23 @@ static PyObject *_wrap_Execute(PyObject *self, PyObject *args, PyObject *kwargs)
     long result;
     bool temp1 = False ;
     PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
     PyObject * obj2 = 0 ;
     char *kwnames[] = {
         (char *) "command",(char *) "flags",(char *) "process", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O|iO:Execute",kwnames,&obj0,&arg2,&obj2)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O|OO:Execute",kwnames,&obj0,&obj1,&obj2)) goto fail;
     {
         arg1 = wxString_in_helper(obj0);
         if (arg1 == NULL) SWIG_fail;
         temp1 = True;
+    }
+    if (obj1) {
+        {
+            arg2 = (int) SWIG_PyObj_AsInt(obj1);  
+            if (PyErr_Occurred()) SWIG_fail;
+        }
     }
     if (obj2) {
         if ((SWIG_ConvertPtr(obj2,(void **) &arg3, SWIGTYPE_p_wxPyProcess,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
@@ -8917,7 +9249,7 @@ static PyObject *_wrap_Execute(PyObject *self, PyObject *args, PyObject *kwargs)
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromLong((long)result);
     {
         if (temp1)
         delete arg1;
@@ -8936,11 +9268,18 @@ static PyObject *_wrap_new_Joystick(PyObject *self, PyObject *args, PyObject *kw
     PyObject *resultobj;
     int arg1 = (int) wxJOYSTICK1 ;
     wxJoystick *result;
+    PyObject * obj0 = 0 ;
     char *kwnames[] = {
         (char *) "joystick", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"|i:new_Joystick",kwnames,&arg1)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"|O:new_Joystick",kwnames,&obj0)) goto fail;
+    if (obj0) {
+        {
+            arg1 = (int) SWIG_PyObj_AsInt(obj0);  
+            if (PyErr_Occurred()) SWIG_fail;
+        }
+    }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         result = (wxJoystick *)new wxJoystick(arg1);
@@ -9026,7 +9365,7 @@ static PyObject *_wrap_Joystick_GetZPosition(PyObject *self, PyObject *args, PyO
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromInt((int)result);
     return resultobj;
     fail:
     return NULL;
@@ -9051,7 +9390,7 @@ static PyObject *_wrap_Joystick_GetButtonState(PyObject *self, PyObject *args, P
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromInt((int)result);
     return resultobj;
     fail:
     return NULL;
@@ -9076,7 +9415,7 @@ static PyObject *_wrap_Joystick_GetPOVPosition(PyObject *self, PyObject *args, P
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromInt((int)result);
     return resultobj;
     fail:
     return NULL;
@@ -9101,7 +9440,7 @@ static PyObject *_wrap_Joystick_GetPOVCTSPosition(PyObject *self, PyObject *args
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromInt((int)result);
     return resultobj;
     fail:
     return NULL;
@@ -9126,7 +9465,7 @@ static PyObject *_wrap_Joystick_GetRudderPosition(PyObject *self, PyObject *args
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromInt((int)result);
     return resultobj;
     fail:
     return NULL;
@@ -9151,7 +9490,7 @@ static PyObject *_wrap_Joystick_GetUPosition(PyObject *self, PyObject *args, PyO
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromInt((int)result);
     return resultobj;
     fail:
     return NULL;
@@ -9176,7 +9515,7 @@ static PyObject *_wrap_Joystick_GetVPosition(PyObject *self, PyObject *args, PyO
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromInt((int)result);
     return resultobj;
     fail:
     return NULL;
@@ -9201,7 +9540,7 @@ static PyObject *_wrap_Joystick_GetMovementThreshold(PyObject *self, PyObject *a
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromInt((int)result);
     return resultobj;
     fail:
     return NULL;
@@ -9213,12 +9552,17 @@ static PyObject *_wrap_Joystick_SetMovementThreshold(PyObject *self, PyObject *a
     wxJoystick *arg1 = (wxJoystick *) 0 ;
     int arg2 ;
     PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
     char *kwnames[] = {
         (char *) "self",(char *) "threshold", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"Oi:Joystick_SetMovementThreshold",kwnames,&obj0,&arg2)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:Joystick_SetMovementThreshold",kwnames,&obj0,&obj1)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxJoystick,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    {
+        arg2 = (int) SWIG_PyObj_AsInt(obj1);  
+        if (PyErr_Occurred()) SWIG_fail;
+    }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         (arg1)->SetMovementThreshold(arg2);
@@ -9251,7 +9595,7 @@ static PyObject *_wrap_Joystick_IsOk(PyObject *self, PyObject *args, PyObject *k
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromBool((bool)result);
     return resultobj;
     fail:
     return NULL;
@@ -9276,7 +9620,7 @@ static PyObject *_wrap_Joystick_GetNumberJoysticks(PyObject *self, PyObject *arg
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromInt((int)result);
     return resultobj;
     fail:
     return NULL;
@@ -9301,7 +9645,7 @@ static PyObject *_wrap_Joystick_GetManufacturerId(PyObject *self, PyObject *args
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromInt((int)result);
     return resultobj;
     fail:
     return NULL;
@@ -9326,7 +9670,7 @@ static PyObject *_wrap_Joystick_GetProductId(PyObject *self, PyObject *args, PyO
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromInt((int)result);
     return resultobj;
     fail:
     return NULL;
@@ -9382,7 +9726,7 @@ static PyObject *_wrap_Joystick_GetXMin(PyObject *self, PyObject *args, PyObject
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromInt((int)result);
     return resultobj;
     fail:
     return NULL;
@@ -9407,7 +9751,7 @@ static PyObject *_wrap_Joystick_GetYMin(PyObject *self, PyObject *args, PyObject
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromInt((int)result);
     return resultobj;
     fail:
     return NULL;
@@ -9432,7 +9776,7 @@ static PyObject *_wrap_Joystick_GetZMin(PyObject *self, PyObject *args, PyObject
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromInt((int)result);
     return resultobj;
     fail:
     return NULL;
@@ -9457,7 +9801,7 @@ static PyObject *_wrap_Joystick_GetXMax(PyObject *self, PyObject *args, PyObject
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromInt((int)result);
     return resultobj;
     fail:
     return NULL;
@@ -9482,7 +9826,7 @@ static PyObject *_wrap_Joystick_GetYMax(PyObject *self, PyObject *args, PyObject
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromInt((int)result);
     return resultobj;
     fail:
     return NULL;
@@ -9507,7 +9851,7 @@ static PyObject *_wrap_Joystick_GetZMax(PyObject *self, PyObject *args, PyObject
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromInt((int)result);
     return resultobj;
     fail:
     return NULL;
@@ -9532,7 +9876,7 @@ static PyObject *_wrap_Joystick_GetNumberButtons(PyObject *self, PyObject *args,
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromInt((int)result);
     return resultobj;
     fail:
     return NULL;
@@ -9557,7 +9901,7 @@ static PyObject *_wrap_Joystick_GetNumberAxes(PyObject *self, PyObject *args, Py
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromInt((int)result);
     return resultobj;
     fail:
     return NULL;
@@ -9582,7 +9926,7 @@ static PyObject *_wrap_Joystick_GetMaxButtons(PyObject *self, PyObject *args, Py
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromInt((int)result);
     return resultobj;
     fail:
     return NULL;
@@ -9607,7 +9951,7 @@ static PyObject *_wrap_Joystick_GetMaxAxes(PyObject *self, PyObject *args, PyObj
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromInt((int)result);
     return resultobj;
     fail:
     return NULL;
@@ -9632,7 +9976,7 @@ static PyObject *_wrap_Joystick_GetPollingMin(PyObject *self, PyObject *args, Py
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromInt((int)result);
     return resultobj;
     fail:
     return NULL;
@@ -9657,7 +10001,7 @@ static PyObject *_wrap_Joystick_GetPollingMax(PyObject *self, PyObject *args, Py
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromInt((int)result);
     return resultobj;
     fail:
     return NULL;
@@ -9682,7 +10026,7 @@ static PyObject *_wrap_Joystick_GetRudderMin(PyObject *self, PyObject *args, PyO
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromInt((int)result);
     return resultobj;
     fail:
     return NULL;
@@ -9707,7 +10051,7 @@ static PyObject *_wrap_Joystick_GetRudderMax(PyObject *self, PyObject *args, PyO
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromInt((int)result);
     return resultobj;
     fail:
     return NULL;
@@ -9732,7 +10076,7 @@ static PyObject *_wrap_Joystick_GetUMin(PyObject *self, PyObject *args, PyObject
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromInt((int)result);
     return resultobj;
     fail:
     return NULL;
@@ -9757,7 +10101,7 @@ static PyObject *_wrap_Joystick_GetUMax(PyObject *self, PyObject *args, PyObject
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromInt((int)result);
     return resultobj;
     fail:
     return NULL;
@@ -9782,7 +10126,7 @@ static PyObject *_wrap_Joystick_GetVMin(PyObject *self, PyObject *args, PyObject
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromInt((int)result);
     return resultobj;
     fail:
     return NULL;
@@ -9807,7 +10151,7 @@ static PyObject *_wrap_Joystick_GetVMax(PyObject *self, PyObject *args, PyObject
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromInt((int)result);
     return resultobj;
     fail:
     return NULL;
@@ -9832,7 +10176,7 @@ static PyObject *_wrap_Joystick_HasRudder(PyObject *self, PyObject *args, PyObje
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromBool((bool)result);
     return resultobj;
     fail:
     return NULL;
@@ -9857,7 +10201,7 @@ static PyObject *_wrap_Joystick_HasZ(PyObject *self, PyObject *args, PyObject *k
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromBool((bool)result);
     return resultobj;
     fail:
     return NULL;
@@ -9882,7 +10226,7 @@ static PyObject *_wrap_Joystick_HasU(PyObject *self, PyObject *args, PyObject *k
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromBool((bool)result);
     return resultobj;
     fail:
     return NULL;
@@ -9907,7 +10251,7 @@ static PyObject *_wrap_Joystick_HasV(PyObject *self, PyObject *args, PyObject *k
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromBool((bool)result);
     return resultobj;
     fail:
     return NULL;
@@ -9932,7 +10276,7 @@ static PyObject *_wrap_Joystick_HasPOV(PyObject *self, PyObject *args, PyObject 
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromBool((bool)result);
     return resultobj;
     fail:
     return NULL;
@@ -9957,7 +10301,7 @@ static PyObject *_wrap_Joystick_HasPOV4Dir(PyObject *self, PyObject *args, PyObj
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromBool((bool)result);
     return resultobj;
     fail:
     return NULL;
@@ -9982,7 +10326,7 @@ static PyObject *_wrap_Joystick_HasPOVCTS(PyObject *self, PyObject *args, PyObje
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromBool((bool)result);
     return resultobj;
     fail:
     return NULL;
@@ -9997,13 +10341,20 @@ static PyObject *_wrap_Joystick_SetCapture(PyObject *self, PyObject *args, PyObj
     bool result;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
+    PyObject * obj2 = 0 ;
     char *kwnames[] = {
         (char *) "self",(char *) "win",(char *) "pollingFreq", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO|i:Joystick_SetCapture",kwnames,&obj0,&obj1,&arg3)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO|O:Joystick_SetCapture",kwnames,&obj0,&obj1,&obj2)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxJoystick,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
     if ((SWIG_ConvertPtr(obj1,(void **) &arg2, SWIGTYPE_p_wxWindow,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    if (obj2) {
+        {
+            arg3 = (int) SWIG_PyObj_AsInt(obj2);  
+            if (PyErr_Occurred()) SWIG_fail;
+        }
+    }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         result = (bool)(arg1)->SetCapture(arg2,arg3);
@@ -10011,7 +10362,7 @@ static PyObject *_wrap_Joystick_SetCapture(PyObject *self, PyObject *args, PyObj
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromBool((bool)result);
     return resultobj;
     fail:
     return NULL;
@@ -10036,7 +10387,7 @@ static PyObject *_wrap_Joystick_ReleaseCapture(PyObject *self, PyObject *args, P
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromBool((bool)result);
     return resultobj;
     fail:
     return NULL;
@@ -10097,12 +10448,17 @@ static PyObject *_wrap_JoystickEvent_m_zPosition_set(PyObject *self, PyObject *a
     wxJoystickEvent *arg1 = (wxJoystickEvent *) 0 ;
     int arg2 ;
     PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
     char *kwnames[] = {
         (char *) "self",(char *) "m_zPosition", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"Oi:JoystickEvent_m_zPosition_set",kwnames,&obj0,&arg2)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:JoystickEvent_m_zPosition_set",kwnames,&obj0,&obj1)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxJoystickEvent,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    {
+        arg2 = (int) SWIG_PyObj_AsInt(obj1);  
+        if (PyErr_Occurred()) SWIG_fail;
+    }
     if (arg1) (arg1)->m_zPosition = arg2;
     
     Py_INCREF(Py_None); resultobj = Py_None;
@@ -10125,7 +10481,7 @@ static PyObject *_wrap_JoystickEvent_m_zPosition_get(PyObject *self, PyObject *a
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxJoystickEvent,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
     result = (int) ((arg1)->m_zPosition);
     
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromInt((int)result);
     return resultobj;
     fail:
     return NULL;
@@ -10137,12 +10493,17 @@ static PyObject *_wrap_JoystickEvent_m_buttonChange_set(PyObject *self, PyObject
     wxJoystickEvent *arg1 = (wxJoystickEvent *) 0 ;
     int arg2 ;
     PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
     char *kwnames[] = {
         (char *) "self",(char *) "m_buttonChange", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"Oi:JoystickEvent_m_buttonChange_set",kwnames,&obj0,&arg2)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:JoystickEvent_m_buttonChange_set",kwnames,&obj0,&obj1)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxJoystickEvent,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    {
+        arg2 = (int) SWIG_PyObj_AsInt(obj1);  
+        if (PyErr_Occurred()) SWIG_fail;
+    }
     if (arg1) (arg1)->m_buttonChange = arg2;
     
     Py_INCREF(Py_None); resultobj = Py_None;
@@ -10165,7 +10526,7 @@ static PyObject *_wrap_JoystickEvent_m_buttonChange_get(PyObject *self, PyObject
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxJoystickEvent,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
     result = (int) ((arg1)->m_buttonChange);
     
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromInt((int)result);
     return resultobj;
     fail:
     return NULL;
@@ -10177,12 +10538,17 @@ static PyObject *_wrap_JoystickEvent_m_buttonState_set(PyObject *self, PyObject 
     wxJoystickEvent *arg1 = (wxJoystickEvent *) 0 ;
     int arg2 ;
     PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
     char *kwnames[] = {
         (char *) "self",(char *) "m_buttonState", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"Oi:JoystickEvent_m_buttonState_set",kwnames,&obj0,&arg2)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:JoystickEvent_m_buttonState_set",kwnames,&obj0,&obj1)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxJoystickEvent,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    {
+        arg2 = (int) SWIG_PyObj_AsInt(obj1);  
+        if (PyErr_Occurred()) SWIG_fail;
+    }
     if (arg1) (arg1)->m_buttonState = arg2;
     
     Py_INCREF(Py_None); resultobj = Py_None;
@@ -10205,7 +10571,7 @@ static PyObject *_wrap_JoystickEvent_m_buttonState_get(PyObject *self, PyObject 
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxJoystickEvent,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
     result = (int) ((arg1)->m_buttonState);
     
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromInt((int)result);
     return resultobj;
     fail:
     return NULL;
@@ -10217,12 +10583,17 @@ static PyObject *_wrap_JoystickEvent_m_joyStick_set(PyObject *self, PyObject *ar
     wxJoystickEvent *arg1 = (wxJoystickEvent *) 0 ;
     int arg2 ;
     PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
     char *kwnames[] = {
         (char *) "self",(char *) "m_joyStick", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"Oi:JoystickEvent_m_joyStick_set",kwnames,&obj0,&arg2)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:JoystickEvent_m_joyStick_set",kwnames,&obj0,&obj1)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxJoystickEvent,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    {
+        arg2 = (int) SWIG_PyObj_AsInt(obj1);  
+        if (PyErr_Occurred()) SWIG_fail;
+    }
     if (arg1) (arg1)->m_joyStick = arg2;
     
     Py_INCREF(Py_None); resultobj = Py_None;
@@ -10245,7 +10616,7 @@ static PyObject *_wrap_JoystickEvent_m_joyStick_get(PyObject *self, PyObject *ar
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxJoystickEvent,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
     result = (int) ((arg1)->m_joyStick);
     
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromInt((int)result);
     return resultobj;
     fail:
     return NULL;
@@ -10259,11 +10630,39 @@ static PyObject *_wrap_new_JoystickEvent(PyObject *self, PyObject *args, PyObjec
     int arg3 = (int) wxJOYSTICK1 ;
     int arg4 = (int) 0 ;
     wxJoystickEvent *result;
+    PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
+    PyObject * obj2 = 0 ;
+    PyObject * obj3 = 0 ;
     char *kwnames[] = {
         (char *) "type",(char *) "state",(char *) "joystick",(char *) "change", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"|iiii:new_JoystickEvent",kwnames,&arg1,&arg2,&arg3,&arg4)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"|OOOO:new_JoystickEvent",kwnames,&obj0,&obj1,&obj2,&obj3)) goto fail;
+    if (obj0) {
+        {
+            arg1 = (wxEventType) SWIG_PyObj_AsInt(obj0);  
+            if (PyErr_Occurred()) SWIG_fail;
+        }
+    }
+    if (obj1) {
+        {
+            arg2 = (int) SWIG_PyObj_AsInt(obj1);  
+            if (PyErr_Occurred()) SWIG_fail;
+        }
+    }
+    if (obj2) {
+        {
+            arg3 = (int) SWIG_PyObj_AsInt(obj2);  
+            if (PyErr_Occurred()) SWIG_fail;
+        }
+    }
+    if (obj3) {
+        {
+            arg4 = (int) SWIG_PyObj_AsInt(obj3);  
+            if (PyErr_Occurred()) SWIG_fail;
+        }
+    }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         result = (wxJoystickEvent *)new wxJoystickEvent(arg1,arg2,arg3,arg4);
@@ -10325,7 +10724,7 @@ static PyObject *_wrap_JoystickEvent_GetZPosition(PyObject *self, PyObject *args
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromInt((int)result);
     return resultobj;
     fail:
     return NULL;
@@ -10350,7 +10749,7 @@ static PyObject *_wrap_JoystickEvent_GetButtonState(PyObject *self, PyObject *ar
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromInt((int)result);
     return resultobj;
     fail:
     return NULL;
@@ -10375,7 +10774,7 @@ static PyObject *_wrap_JoystickEvent_GetButtonChange(PyObject *self, PyObject *a
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromInt((int)result);
     return resultobj;
     fail:
     return NULL;
@@ -10400,7 +10799,7 @@ static PyObject *_wrap_JoystickEvent_GetJoystick(PyObject *self, PyObject *args,
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromInt((int)result);
     return resultobj;
     fail:
     return NULL;
@@ -10412,12 +10811,17 @@ static PyObject *_wrap_JoystickEvent_SetJoystick(PyObject *self, PyObject *args,
     wxJoystickEvent *arg1 = (wxJoystickEvent *) 0 ;
     int arg2 ;
     PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
     char *kwnames[] = {
         (char *) "self",(char *) "stick", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"Oi:JoystickEvent_SetJoystick",kwnames,&obj0,&arg2)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:JoystickEvent_SetJoystick",kwnames,&obj0,&obj1)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxJoystickEvent,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    {
+        arg2 = (int) SWIG_PyObj_AsInt(obj1);  
+        if (PyErr_Occurred()) SWIG_fail;
+    }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         (arg1)->SetJoystick(arg2);
@@ -10437,12 +10841,17 @@ static PyObject *_wrap_JoystickEvent_SetButtonState(PyObject *self, PyObject *ar
     wxJoystickEvent *arg1 = (wxJoystickEvent *) 0 ;
     int arg2 ;
     PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
     char *kwnames[] = {
         (char *) "self",(char *) "state", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"Oi:JoystickEvent_SetButtonState",kwnames,&obj0,&arg2)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:JoystickEvent_SetButtonState",kwnames,&obj0,&obj1)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxJoystickEvent,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    {
+        arg2 = (int) SWIG_PyObj_AsInt(obj1);  
+        if (PyErr_Occurred()) SWIG_fail;
+    }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         (arg1)->SetButtonState(arg2);
@@ -10462,12 +10871,17 @@ static PyObject *_wrap_JoystickEvent_SetButtonChange(PyObject *self, PyObject *a
     wxJoystickEvent *arg1 = (wxJoystickEvent *) 0 ;
     int arg2 ;
     PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
     char *kwnames[] = {
         (char *) "self",(char *) "change", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"Oi:JoystickEvent_SetButtonChange",kwnames,&obj0,&arg2)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:JoystickEvent_SetButtonChange",kwnames,&obj0,&obj1)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxJoystickEvent,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    {
+        arg2 = (int) SWIG_PyObj_AsInt(obj1);  
+        if (PyErr_Occurred()) SWIG_fail;
+    }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         (arg1)->SetButtonChange(arg2);
@@ -10518,12 +10932,17 @@ static PyObject *_wrap_JoystickEvent_SetZPosition(PyObject *self, PyObject *args
     wxJoystickEvent *arg1 = (wxJoystickEvent *) 0 ;
     int arg2 ;
     PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
     char *kwnames[] = {
         (char *) "self",(char *) "zPos", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"Oi:JoystickEvent_SetZPosition",kwnames,&obj0,&arg2)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:JoystickEvent_SetZPosition",kwnames,&obj0,&obj1)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxJoystickEvent,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    {
+        arg2 = (int) SWIG_PyObj_AsInt(obj1);  
+        if (PyErr_Occurred()) SWIG_fail;
+    }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         (arg1)->SetZPosition(arg2);
@@ -10556,7 +10975,7 @@ static PyObject *_wrap_JoystickEvent_IsButton(PyObject *self, PyObject *args, Py
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromBool((bool)result);
     return resultobj;
     fail:
     return NULL;
@@ -10581,7 +11000,7 @@ static PyObject *_wrap_JoystickEvent_IsMove(PyObject *self, PyObject *args, PyOb
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromBool((bool)result);
     return resultobj;
     fail:
     return NULL;
@@ -10606,7 +11025,7 @@ static PyObject *_wrap_JoystickEvent_IsZMove(PyObject *self, PyObject *args, PyO
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromBool((bool)result);
     return resultobj;
     fail:
     return NULL;
@@ -10619,12 +11038,19 @@ static PyObject *_wrap_JoystickEvent_ButtonDown(PyObject *self, PyObject *args, 
     int arg2 = (int) wxJOY_BUTTON_ANY ;
     bool result;
     PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
     char *kwnames[] = {
         (char *) "self",(char *) "but", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O|i:JoystickEvent_ButtonDown",kwnames,&obj0,&arg2)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O|O:JoystickEvent_ButtonDown",kwnames,&obj0,&obj1)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxJoystickEvent,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    if (obj1) {
+        {
+            arg2 = (int) SWIG_PyObj_AsInt(obj1);  
+            if (PyErr_Occurred()) SWIG_fail;
+        }
+    }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         result = (bool)((wxJoystickEvent const *)arg1)->ButtonDown(arg2);
@@ -10632,7 +11058,7 @@ static PyObject *_wrap_JoystickEvent_ButtonDown(PyObject *self, PyObject *args, 
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromBool((bool)result);
     return resultobj;
     fail:
     return NULL;
@@ -10645,12 +11071,19 @@ static PyObject *_wrap_JoystickEvent_ButtonUp(PyObject *self, PyObject *args, Py
     int arg2 = (int) wxJOY_BUTTON_ANY ;
     bool result;
     PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
     char *kwnames[] = {
         (char *) "self",(char *) "but", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O|i:JoystickEvent_ButtonUp",kwnames,&obj0,&arg2)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O|O:JoystickEvent_ButtonUp",kwnames,&obj0,&obj1)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxJoystickEvent,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    if (obj1) {
+        {
+            arg2 = (int) SWIG_PyObj_AsInt(obj1);  
+            if (PyErr_Occurred()) SWIG_fail;
+        }
+    }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         result = (bool)((wxJoystickEvent const *)arg1)->ButtonUp(arg2);
@@ -10658,7 +11091,7 @@ static PyObject *_wrap_JoystickEvent_ButtonUp(PyObject *self, PyObject *args, Py
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromBool((bool)result);
     return resultobj;
     fail:
     return NULL;
@@ -10671,12 +11104,19 @@ static PyObject *_wrap_JoystickEvent_ButtonIsDown(PyObject *self, PyObject *args
     int arg2 = (int) wxJOY_BUTTON_ANY ;
     bool result;
     PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
     char *kwnames[] = {
         (char *) "self",(char *) "but", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O|i:JoystickEvent_ButtonIsDown",kwnames,&obj0,&arg2)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O|O:JoystickEvent_ButtonIsDown",kwnames,&obj0,&obj1)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxJoystickEvent,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    if (obj1) {
+        {
+            arg2 = (int) SWIG_PyObj_AsInt(obj1);  
+            if (PyErr_Occurred()) SWIG_fail;
+        }
+    }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         result = (bool)((wxJoystickEvent const *)arg1)->ButtonIsDown(arg2);
@@ -10684,7 +11124,7 @@ static PyObject *_wrap_JoystickEvent_ButtonIsDown(PyObject *self, PyObject *args
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromBool((bool)result);
     return resultobj;
     fail:
     return NULL;
@@ -10718,7 +11158,7 @@ static PyObject *_wrap_new_Wave(PyObject *self, PyObject *args, PyObject *kwargs
     }
     if (obj1) {
         {
-            arg2 = (bool) SPyObj_AsBool(obj1);  
+            arg2 = (bool) SWIG_PyObj_AsBool(obj1);  
             if (PyErr_Occurred()) SWIG_fail;
         }
     }
@@ -10824,7 +11264,7 @@ static PyObject *_wrap_Wave_IsOk(PyObject *self, PyObject *args, PyObject *kwarg
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromBool((bool)result);
     return resultobj;
     fail:
     return NULL;
@@ -10848,13 +11288,13 @@ static PyObject *_wrap_Wave_Play(PyObject *self, PyObject *args, PyObject *kwarg
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxWave,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
     if (obj1) {
         {
-            arg2 = (bool) SPyObj_AsBool(obj1);  
+            arg2 = (bool) SWIG_PyObj_AsBool(obj1);  
             if (PyErr_Occurred()) SWIG_fail;
         }
     }
     if (obj2) {
         {
-            arg3 = (bool) SPyObj_AsBool(obj2);  
+            arg3 = (bool) SWIG_PyObj_AsBool(obj2);  
             if (PyErr_Occurred()) SWIG_fail;
         }
     }
@@ -10865,7 +11305,7 @@ static PyObject *_wrap_Wave_Play(PyObject *self, PyObject *args, PyObject *kwarg
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromBool((bool)result);
     return resultobj;
     fail:
     return NULL;
@@ -11054,7 +11494,7 @@ static PyObject *_wrap_FileTypeInfo_IsValid(PyObject *self, PyObject *args, PyOb
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromBool((bool)result);
     return resultobj;
     fail:
     return NULL;
@@ -11069,16 +11509,23 @@ static PyObject *_wrap_FileTypeInfo_SetIcon(PyObject *self, PyObject *args, PyOb
     bool temp2 = False ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
+    PyObject * obj2 = 0 ;
     char *kwnames[] = {
         (char *) "self",(char *) "iconFile",(char *) "iconIndex", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO|i:FileTypeInfo_SetIcon",kwnames,&obj0,&obj1,&arg3)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO|O:FileTypeInfo_SetIcon",kwnames,&obj0,&obj1,&obj2)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxFileTypeInfo,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
     {
         arg2 = wxString_in_helper(obj1);
         if (arg2 == NULL) SWIG_fail;
         temp2 = True;
+    }
+    if (obj2) {
+        {
+            arg3 = (int) SWIG_PyObj_AsInt(obj2);  
+            if (PyErr_Occurred()) SWIG_fail;
+        }
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -11360,7 +11807,7 @@ static PyObject *_wrap_FileTypeInfo_GetExtensionsCount(PyObject *self, PyObject 
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromInt((int)result);
     return resultobj;
     fail:
     return NULL;
@@ -11419,7 +11866,7 @@ static PyObject *_wrap_FileTypeInfo_GetIconIndex(PyObject *self, PyObject *args,
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromInt((int)result);
     return resultobj;
     fail:
     return NULL;
@@ -11846,7 +12293,7 @@ static PyObject *_wrap_FileType_SetCommand(PyObject *self, PyObject *args, PyObj
     }
     if (obj3) {
         {
-            arg4 = (bool) SPyObj_AsBool(obj3);  
+            arg4 = (bool) SWIG_PyObj_AsBool(obj3);  
             if (PyErr_Occurred()) SWIG_fail;
         }
     }
@@ -11857,7 +12304,7 @@ static PyObject *_wrap_FileType_SetCommand(PyObject *self, PyObject *args, PyObj
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromBool((bool)result);
     {
         if (temp2)
         delete arg2;
@@ -11890,17 +12337,24 @@ static PyObject *_wrap_FileType_SetDefaultIcon(PyObject *self, PyObject *args, P
     bool temp2 = False ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
+    PyObject * obj2 = 0 ;
     char *kwnames[] = {
         (char *) "self",(char *) "cmd",(char *) "index", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O|Oi:FileType_SetDefaultIcon",kwnames,&obj0,&obj1,&arg3)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O|OO:FileType_SetDefaultIcon",kwnames,&obj0,&obj1,&obj2)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxFileType,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
     if (obj1) {
         {
             arg2 = wxString_in_helper(obj1);
             if (arg2 == NULL) SWIG_fail;
             temp2 = True;
+        }
+    }
+    if (obj2) {
+        {
+            arg3 = (int) SWIG_PyObj_AsInt(obj2);  
+            if (PyErr_Occurred()) SWIG_fail;
         }
     }
     {
@@ -11910,7 +12364,7 @@ static PyObject *_wrap_FileType_SetDefaultIcon(PyObject *self, PyObject *args, P
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromBool((bool)result);
     {
         if (temp2)
         delete arg2;
@@ -11943,7 +12397,7 @@ static PyObject *_wrap_FileType_Unassociate(PyObject *self, PyObject *args, PyOb
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromBool((bool)result);
     return resultobj;
     fail:
     return NULL;
@@ -12081,7 +12535,7 @@ static PyObject *_wrap_MimeTypesManager_IsOfType(PyObject *self, PyObject *args,
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromBool((bool)result);
     {
         if (temp1)
         delete arg1;
@@ -12134,13 +12588,20 @@ static PyObject *_wrap_MimeTypesManager_Initialize(PyObject *self, PyObject *arg
     wxString *arg3 = (wxString *) &arg3_defvalue ;
     bool temp3 = False ;
     PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
     PyObject * obj2 = 0 ;
     char *kwnames[] = {
         (char *) "self",(char *) "mailcapStyle",(char *) "extraDir", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O|iO:MimeTypesManager_Initialize",kwnames,&obj0,&arg2,&obj2)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O|OO:MimeTypesManager_Initialize",kwnames,&obj0,&obj1,&obj2)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxMimeTypesManager,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    if (obj1) {
+        {
+            arg2 = (int) SWIG_PyObj_AsInt(obj1);  
+            if (PyErr_Occurred()) SWIG_fail;
+        }
+    }
     if (obj2) {
         {
             arg3 = wxString_in_helper(obj2);
@@ -12299,7 +12760,7 @@ static PyObject *_wrap_MimeTypesManager_ReadMailcap(PyObject *self, PyObject *ar
     }
     if (obj2) {
         {
-            arg3 = (bool) SPyObj_AsBool(obj2);  
+            arg3 = (bool) SWIG_PyObj_AsBool(obj2);  
             if (PyErr_Occurred()) SWIG_fail;
         }
     }
@@ -12310,7 +12771,7 @@ static PyObject *_wrap_MimeTypesManager_ReadMailcap(PyObject *self, PyObject *ar
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromBool((bool)result);
     {
         if (temp2)
         delete arg2;
@@ -12351,7 +12812,7 @@ static PyObject *_wrap_MimeTypesManager_ReadMimeTypes(PyObject *self, PyObject *
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromBool((bool)result);
     {
         if (temp2)
         delete arg2;
@@ -12473,7 +12934,7 @@ static PyObject *_wrap_MimeTypesManager_Unassociate(PyObject *self, PyObject *ar
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromBool((bool)result);
     return resultobj;
     fail:
     return NULL;
@@ -13362,7 +13823,7 @@ static PyObject *_wrap_ArtProvider_PopProvider(PyObject *self, PyObject *args, P
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromBool((bool)result);
     return resultobj;
     fail:
     return NULL;
@@ -13387,7 +13848,7 @@ static PyObject *_wrap_ArtProvider_RemoveProvider(PyObject *self, PyObject *args
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromBool((bool)result);
     return resultobj;
     fail:
     return NULL;
@@ -13628,7 +14089,7 @@ static PyObject *_wrap_ConfigBase_Get(PyObject *self, PyObject *args, PyObject *
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"|O:ConfigBase_Get",kwnames,&obj0)) goto fail;
     if (obj0) {
         {
-            arg1 = (bool) SPyObj_AsBool(obj0);  
+            arg1 = (bool) SWIG_PyObj_AsBool(obj0);  
             if (PyErr_Occurred()) SWIG_fail;
         }
     }
@@ -13794,12 +14255,17 @@ static PyObject *_wrap_ConfigBase_GetNextGroup(PyObject *self, PyObject *args, P
     long arg2 ;
     PyObject *result;
     PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
     char *kwnames[] = {
         (char *) "self",(char *) "index", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"Ol:ConfigBase_GetNextGroup",kwnames,&obj0,&arg2)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:ConfigBase_GetNextGroup",kwnames,&obj0,&obj1)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxConfigBase,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    {
+        arg2 = (long) SWIG_PyObj_AsLong(obj1);  
+        if (PyErr_Occurred()) SWIG_fail;
+    }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         result = (PyObject *)wxConfigBase_GetNextGroup(arg1,arg2);
@@ -13845,12 +14311,17 @@ static PyObject *_wrap_ConfigBase_GetNextEntry(PyObject *self, PyObject *args, P
     long arg2 ;
     PyObject *result;
     PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
     char *kwnames[] = {
         (char *) "self",(char *) "index", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"Ol:ConfigBase_GetNextEntry",kwnames,&obj0,&arg2)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:ConfigBase_GetNextEntry",kwnames,&obj0,&obj1)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxConfigBase,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    {
+        arg2 = (long) SWIG_PyObj_AsLong(obj1);  
+        if (PyErr_Occurred()) SWIG_fail;
+    }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         result = (PyObject *)wxConfigBase_GetNextEntry(arg1,arg2);
@@ -13880,7 +14351,7 @@ static PyObject *_wrap_ConfigBase_GetNumberOfEntries(PyObject *self, PyObject *a
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxConfigBase,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
     if (obj1) {
         {
-            arg2 = (bool) SPyObj_AsBool(obj1);  
+            arg2 = (bool) SWIG_PyObj_AsBool(obj1);  
             if (PyErr_Occurred()) SWIG_fail;
         }
     }
@@ -13891,7 +14362,7 @@ static PyObject *_wrap_ConfigBase_GetNumberOfEntries(PyObject *self, PyObject *a
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SPyObj_FromUnsignedLong((unsigned long)result);
+    resultobj = SWIG_PyObj_FromUnsignedLong((unsigned long)result);
     return resultobj;
     fail:
     return NULL;
@@ -13913,7 +14384,7 @@ static PyObject *_wrap_ConfigBase_GetNumberOfGroups(PyObject *self, PyObject *ar
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxConfigBase,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
     if (obj1) {
         {
-            arg2 = (bool) SPyObj_AsBool(obj1);  
+            arg2 = (bool) SWIG_PyObj_AsBool(obj1);  
             if (PyErr_Occurred()) SWIG_fail;
         }
     }
@@ -13924,7 +14395,7 @@ static PyObject *_wrap_ConfigBase_GetNumberOfGroups(PyObject *self, PyObject *ar
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SPyObj_FromUnsignedLong((unsigned long)result);
+    resultobj = SWIG_PyObj_FromUnsignedLong((unsigned long)result);
     return resultobj;
     fail:
     return NULL;
@@ -13957,7 +14428,7 @@ static PyObject *_wrap_ConfigBase_HasGroup(PyObject *self, PyObject *args, PyObj
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromBool((bool)result);
     {
         if (temp2)
         delete arg2;
@@ -13998,7 +14469,7 @@ static PyObject *_wrap_ConfigBase_HasEntry(PyObject *self, PyObject *args, PyObj
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromBool((bool)result);
     {
         if (temp2)
         delete arg2;
@@ -14039,7 +14510,7 @@ static PyObject *_wrap_ConfigBase_Exists(PyObject *self, PyObject *args, PyObjec
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromBool((bool)result);
     {
         if (temp2)
         delete arg2;
@@ -14080,7 +14551,7 @@ static PyObject *_wrap_ConfigBase_GetEntryType(PyObject *self, PyObject *args, P
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromInt((int)result);
     {
         if (temp2)
         delete arg2;
@@ -14170,16 +14641,23 @@ static PyObject *_wrap_ConfigBase_ReadInt(PyObject *self, PyObject *args, PyObje
     bool temp2 = False ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
+    PyObject * obj2 = 0 ;
     char *kwnames[] = {
         (char *) "self",(char *) "key",(char *) "defaultVal", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO|l:ConfigBase_ReadInt",kwnames,&obj0,&obj1,&arg3)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO|O:ConfigBase_ReadInt",kwnames,&obj0,&obj1,&obj2)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxConfigBase,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
     {
         arg2 = wxString_in_helper(obj1);
         if (arg2 == NULL) SWIG_fail;
         temp2 = True;
+    }
+    if (obj2) {
+        {
+            arg3 = (long) SWIG_PyObj_AsLong(obj2);  
+            if (PyErr_Occurred()) SWIG_fail;
+        }
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -14188,7 +14666,7 @@ static PyObject *_wrap_ConfigBase_ReadInt(PyObject *self, PyObject *args, PyObje
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromLong((long)result);
     {
         if (temp2)
         delete arg2;
@@ -14212,16 +14690,23 @@ static PyObject *_wrap_ConfigBase_ReadFloat(PyObject *self, PyObject *args, PyOb
     bool temp2 = False ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
+    PyObject * obj2 = 0 ;
     char *kwnames[] = {
         (char *) "self",(char *) "key",(char *) "defaultVal", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO|d:ConfigBase_ReadFloat",kwnames,&obj0,&obj1,&arg3)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO|O:ConfigBase_ReadFloat",kwnames,&obj0,&obj1,&obj2)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxConfigBase,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
     {
         arg2 = wxString_in_helper(obj1);
         if (arg2 == NULL) SWIG_fail;
         temp2 = True;
+    }
+    if (obj2) {
+        {
+            arg3 = (double) SWIG_PyObj_AsDouble(obj2);  
+            if (PyErr_Occurred()) SWIG_fail;
+        }
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -14230,7 +14715,7 @@ static PyObject *_wrap_ConfigBase_ReadFloat(PyObject *self, PyObject *args, PyOb
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyFloat_FromDouble(result);
+    resultobj = SWIG_PyObj_FromDouble((double)result);
     {
         if (temp2)
         delete arg2;
@@ -14268,7 +14753,7 @@ static PyObject *_wrap_ConfigBase_ReadBool(PyObject *self, PyObject *args, PyObj
     }
     if (obj2) {
         {
-            arg3 = (bool) SPyObj_AsBool(obj2);  
+            arg3 = (bool) SWIG_PyObj_AsBool(obj2);  
             if (PyErr_Occurred()) SWIG_fail;
         }
     }
@@ -14279,7 +14764,7 @@ static PyObject *_wrap_ConfigBase_ReadBool(PyObject *self, PyObject *args, PyObj
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromBool((bool)result);
     {
         if (temp2)
         delete arg2;
@@ -14328,7 +14813,7 @@ static PyObject *_wrap_ConfigBase_Write(PyObject *self, PyObject *args, PyObject
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromBool((bool)result);
     {
         if (temp2)
         delete arg2;
@@ -14360,16 +14845,21 @@ static PyObject *_wrap_ConfigBase_WriteInt(PyObject *self, PyObject *args, PyObj
     bool temp2 = False ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
+    PyObject * obj2 = 0 ;
     char *kwnames[] = {
         (char *) "self",(char *) "key",(char *) "value", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOl:ConfigBase_WriteInt",kwnames,&obj0,&obj1,&arg3)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO:ConfigBase_WriteInt",kwnames,&obj0,&obj1,&obj2)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxConfigBase,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
     {
         arg2 = wxString_in_helper(obj1);
         if (arg2 == NULL) SWIG_fail;
         temp2 = True;
+    }
+    {
+        arg3 = (long) SWIG_PyObj_AsLong(obj2);  
+        if (PyErr_Occurred()) SWIG_fail;
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -14378,7 +14868,7 @@ static PyObject *_wrap_ConfigBase_WriteInt(PyObject *self, PyObject *args, PyObj
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromBool((bool)result);
     {
         if (temp2)
         delete arg2;
@@ -14402,16 +14892,21 @@ static PyObject *_wrap_ConfigBase_WriteFloat(PyObject *self, PyObject *args, PyO
     bool temp2 = False ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
+    PyObject * obj2 = 0 ;
     char *kwnames[] = {
         (char *) "self",(char *) "key",(char *) "value", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOd:ConfigBase_WriteFloat",kwnames,&obj0,&obj1,&arg3)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO:ConfigBase_WriteFloat",kwnames,&obj0,&obj1,&obj2)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxConfigBase,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
     {
         arg2 = wxString_in_helper(obj1);
         if (arg2 == NULL) SWIG_fail;
         temp2 = True;
+    }
+    {
+        arg3 = (double) SWIG_PyObj_AsDouble(obj2);  
+        if (PyErr_Occurred()) SWIG_fail;
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -14420,7 +14915,7 @@ static PyObject *_wrap_ConfigBase_WriteFloat(PyObject *self, PyObject *args, PyO
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromBool((bool)result);
     {
         if (temp2)
         delete arg2;
@@ -14457,7 +14952,7 @@ static PyObject *_wrap_ConfigBase_WriteBool(PyObject *self, PyObject *args, PyOb
         temp2 = True;
     }
     {
-        arg3 = (bool) SPyObj_AsBool(obj2);  
+        arg3 = (bool) SWIG_PyObj_AsBool(obj2);  
         if (PyErr_Occurred()) SWIG_fail;
     }
     {
@@ -14467,7 +14962,7 @@ static PyObject *_wrap_ConfigBase_WriteBool(PyObject *self, PyObject *args, PyOb
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromBool((bool)result);
     {
         if (temp2)
         delete arg2;
@@ -14497,7 +14992,7 @@ static PyObject *_wrap_ConfigBase_Flush(PyObject *self, PyObject *args, PyObject
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxConfigBase,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
     if (obj1) {
         {
-            arg2 = (bool) SPyObj_AsBool(obj1);  
+            arg2 = (bool) SWIG_PyObj_AsBool(obj1);  
             if (PyErr_Occurred()) SWIG_fail;
         }
     }
@@ -14508,7 +15003,7 @@ static PyObject *_wrap_ConfigBase_Flush(PyObject *self, PyObject *args, PyObject
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromBool((bool)result);
     return resultobj;
     fail:
     return NULL;
@@ -14549,7 +15044,7 @@ static PyObject *_wrap_ConfigBase_RenameEntry(PyObject *self, PyObject *args, Py
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromBool((bool)result);
     {
         if (temp2)
         delete arg2;
@@ -14606,7 +15101,7 @@ static PyObject *_wrap_ConfigBase_RenameGroup(PyObject *self, PyObject *args, Py
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromBool((bool)result);
     {
         if (temp2)
         delete arg2;
@@ -14652,7 +15147,7 @@ static PyObject *_wrap_ConfigBase_DeleteEntry(PyObject *self, PyObject *args, Py
     }
     if (obj2) {
         {
-            arg3 = (bool) SPyObj_AsBool(obj2);  
+            arg3 = (bool) SWIG_PyObj_AsBool(obj2);  
             if (PyErr_Occurred()) SWIG_fail;
         }
     }
@@ -14663,7 +15158,7 @@ static PyObject *_wrap_ConfigBase_DeleteEntry(PyObject *self, PyObject *args, Py
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromBool((bool)result);
     {
         if (temp2)
         delete arg2;
@@ -14704,7 +15199,7 @@ static PyObject *_wrap_ConfigBase_DeleteGroup(PyObject *self, PyObject *args, Py
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromBool((bool)result);
     {
         if (temp2)
         delete arg2;
@@ -14737,7 +15232,7 @@ static PyObject *_wrap_ConfigBase_DeleteAll(PyObject *self, PyObject *args, PyOb
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromBool((bool)result);
     return resultobj;
     fail:
     return NULL;
@@ -14762,7 +15257,7 @@ static PyObject *_wrap_ConfigBase_IsExpandingEnvVars(PyObject *self, PyObject *a
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromBool((bool)result);
     return resultobj;
     fail:
     return NULL;
@@ -14783,7 +15278,7 @@ static PyObject *_wrap_ConfigBase_SetExpandEnvVars(PyObject *self, PyObject *arg
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxConfigBase,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
     if (obj1) {
         {
-            arg2 = (bool) SPyObj_AsBool(obj1);  
+            arg2 = (bool) SWIG_PyObj_AsBool(obj1);  
             if (PyErr_Occurred()) SWIG_fail;
         }
     }
@@ -14815,7 +15310,7 @@ static PyObject *_wrap_ConfigBase_SetRecordDefaults(PyObject *self, PyObject *ar
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxConfigBase,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
     if (obj1) {
         {
-            arg2 = (bool) SPyObj_AsBool(obj1);  
+            arg2 = (bool) SWIG_PyObj_AsBool(obj1);  
             if (PyErr_Occurred()) SWIG_fail;
         }
     }
@@ -14851,7 +15346,7 @@ static PyObject *_wrap_ConfigBase_IsRecordingDefaults(PyObject *self, PyObject *
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromBool((bool)result);
     return resultobj;
     fail:
     return NULL;
@@ -15052,12 +15547,17 @@ static PyObject *_wrap_ConfigBase_SetStyle(PyObject *self, PyObject *args, PyObj
     wxConfigBase *arg1 = (wxConfigBase *) 0 ;
     long arg2 ;
     PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
     char *kwnames[] = {
         (char *) "self",(char *) "style", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"Ol:ConfigBase_SetStyle",kwnames,&obj0,&arg2)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:ConfigBase_SetStyle",kwnames,&obj0,&obj1)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxConfigBase,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    {
+        arg2 = (long) SWIG_PyObj_AsLong(obj1);  
+        if (PyErr_Occurred()) SWIG_fail;
+    }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         (arg1)->SetStyle(arg2);
@@ -15090,7 +15590,7 @@ static PyObject *_wrap_ConfigBase_GetStyle(PyObject *self, PyObject *args, PyObj
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromLong((long)result);
     return resultobj;
     fail:
     return NULL;
@@ -15230,11 +15730,12 @@ static PyObject *_wrap_new_Config(PyObject *self, PyObject *args, PyObject *kwar
     PyObject * obj1 = 0 ;
     PyObject * obj2 = 0 ;
     PyObject * obj3 = 0 ;
+    PyObject * obj4 = 0 ;
     char *kwnames[] = {
         (char *) "appName",(char *) "vendorName",(char *) "localFilename",(char *) "globalFilename",(char *) "style", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"|OOOOl:new_Config",kwnames,&obj0,&obj1,&obj2,&obj3,&arg5)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"|OOOOO:new_Config",kwnames,&obj0,&obj1,&obj2,&obj3,&obj4)) goto fail;
     if (obj0) {
         {
             arg1 = wxString_in_helper(obj0);
@@ -15261,6 +15762,12 @@ static PyObject *_wrap_new_Config(PyObject *self, PyObject *args, PyObject *kwar
             arg4 = wxString_in_helper(obj3);
             if (arg4 == NULL) SWIG_fail;
             temp4 = True;
+        }
+    }
+    if (obj4) {
+        {
+            arg5 = (long) SWIG_PyObj_AsLong(obj4);  
+            if (PyErr_Occurred()) SWIG_fail;
         }
     }
     {
@@ -15360,11 +15867,12 @@ static PyObject *_wrap_new_FileConfig(PyObject *self, PyObject *args, PyObject *
     PyObject * obj1 = 0 ;
     PyObject * obj2 = 0 ;
     PyObject * obj3 = 0 ;
+    PyObject * obj4 = 0 ;
     char *kwnames[] = {
         (char *) "appName",(char *) "vendorName",(char *) "localFilename",(char *) "globalFilename",(char *) "style", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"|OOOOl:new_FileConfig",kwnames,&obj0,&obj1,&obj2,&obj3,&arg5)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"|OOOOO:new_FileConfig",kwnames,&obj0,&obj1,&obj2,&obj3,&obj4)) goto fail;
     if (obj0) {
         {
             arg1 = wxString_in_helper(obj0);
@@ -15391,6 +15899,12 @@ static PyObject *_wrap_new_FileConfig(PyObject *self, PyObject *args, PyObject *
             arg4 = wxString_in_helper(obj3);
             if (arg4 == NULL) SWIG_fail;
             temp4 = True;
+        }
+    }
+    if (obj4) {
+        {
+            arg5 = (long) SWIG_PyObj_AsLong(obj4);  
+            if (PyErr_Occurred()) SWIG_fail;
         }
     }
     {
@@ -15557,11 +16071,16 @@ static PyObject *_wrap_TimeSpanFormatStr_get() {
 static PyObject *_wrap_DateTime_SetCountry(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     int arg1 ;
+    PyObject * obj0 = 0 ;
     char *kwnames[] = {
         (char *) "country", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"i:DateTime_SetCountry",kwnames,&arg1)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:DateTime_SetCountry",kwnames,&obj0)) goto fail;
+    {
+        arg1 = (wxDateTime::Country) SWIG_PyObj_AsInt(obj0);  
+        if (PyErr_Occurred()) SWIG_fail;
+    }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         wxDateTime::SetCountry((wxDateTime::Country )arg1);
@@ -15591,7 +16110,7 @@ static PyObject *_wrap_DateTime_GetCountry(PyObject *self, PyObject *args, PyObj
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromInt((int)result);
     return resultobj;
     fail:
     return NULL;
@@ -15602,11 +16121,18 @@ static PyObject *_wrap_DateTime_IsWestEuropeanCountry(PyObject *self, PyObject *
     PyObject *resultobj;
     int arg1 = (int) wxDateTime::Country_Default ;
     bool result;
+    PyObject * obj0 = 0 ;
     char *kwnames[] = {
         (char *) "country", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"|i:DateTime_IsWestEuropeanCountry",kwnames,&arg1)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"|O:DateTime_IsWestEuropeanCountry",kwnames,&obj0)) goto fail;
+    if (obj0) {
+        {
+            arg1 = (wxDateTime::Country) SWIG_PyObj_AsInt(obj0);  
+            if (PyErr_Occurred()) SWIG_fail;
+        }
+    }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         result = (bool)wxDateTime::IsWestEuropeanCountry((wxDateTime::Country )arg1);
@@ -15614,7 +16140,7 @@ static PyObject *_wrap_DateTime_IsWestEuropeanCountry(PyObject *self, PyObject *
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromBool((bool)result);
     return resultobj;
     fail:
     return NULL;
@@ -15625,11 +16151,18 @@ static PyObject *_wrap_DateTime_GetCurrentYear(PyObject *self, PyObject *args, P
     PyObject *resultobj;
     int arg1 = (int) wxDateTime::Gregorian ;
     int result;
+    PyObject * obj0 = 0 ;
     char *kwnames[] = {
         (char *) "cal", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"|i:DateTime_GetCurrentYear",kwnames,&arg1)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"|O:DateTime_GetCurrentYear",kwnames,&obj0)) goto fail;
+    if (obj0) {
+        {
+            arg1 = (wxDateTime::Calendar) SWIG_PyObj_AsInt(obj0);  
+            if (PyErr_Occurred()) SWIG_fail;
+        }
+    }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         result = (int)wxDateTime::GetCurrentYear((wxDateTime::Calendar )arg1);
@@ -15637,7 +16170,7 @@ static PyObject *_wrap_DateTime_GetCurrentYear(PyObject *self, PyObject *args, P
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromInt((int)result);
     return resultobj;
     fail:
     return NULL;
@@ -15648,11 +16181,16 @@ static PyObject *_wrap_DateTime_ConvertYearToBC(PyObject *self, PyObject *args, 
     PyObject *resultobj;
     int arg1 ;
     int result;
+    PyObject * obj0 = 0 ;
     char *kwnames[] = {
         (char *) "year", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"i:DateTime_ConvertYearToBC",kwnames,&arg1)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:DateTime_ConvertYearToBC",kwnames,&obj0)) goto fail;
+    {
+        arg1 = (int) SWIG_PyObj_AsInt(obj0);  
+        if (PyErr_Occurred()) SWIG_fail;
+    }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         result = (int)wxDateTime::ConvertYearToBC(arg1);
@@ -15660,7 +16198,7 @@ static PyObject *_wrap_DateTime_ConvertYearToBC(PyObject *self, PyObject *args, 
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromInt((int)result);
     return resultobj;
     fail:
     return NULL;
@@ -15671,11 +16209,18 @@ static PyObject *_wrap_DateTime_GetCurrentMonth(PyObject *self, PyObject *args, 
     PyObject *resultobj;
     int arg1 = (int) wxDateTime::Gregorian ;
     int result;
+    PyObject * obj0 = 0 ;
     char *kwnames[] = {
         (char *) "cal", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"|i:DateTime_GetCurrentMonth",kwnames,&arg1)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"|O:DateTime_GetCurrentMonth",kwnames,&obj0)) goto fail;
+    if (obj0) {
+        {
+            arg1 = (wxDateTime::Calendar) SWIG_PyObj_AsInt(obj0);  
+            if (PyErr_Occurred()) SWIG_fail;
+        }
+    }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         result = (int)wxDateTime::GetCurrentMonth((wxDateTime::Calendar )arg1);
@@ -15683,7 +16228,7 @@ static PyObject *_wrap_DateTime_GetCurrentMonth(PyObject *self, PyObject *args, 
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromInt((int)result);
     return resultobj;
     fail:
     return NULL;
@@ -15695,11 +16240,25 @@ static PyObject *_wrap_DateTime_IsLeapYear(PyObject *self, PyObject *args, PyObj
     int arg1 = (int) wxDateTime::Inv_Year ;
     int arg2 = (int) wxDateTime::Gregorian ;
     bool result;
+    PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
     char *kwnames[] = {
         (char *) "year",(char *) "cal", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"|ii:DateTime_IsLeapYear",kwnames,&arg1,&arg2)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"|OO:DateTime_IsLeapYear",kwnames,&obj0,&obj1)) goto fail;
+    if (obj0) {
+        {
+            arg1 = (int) SWIG_PyObj_AsInt(obj0);  
+            if (PyErr_Occurred()) SWIG_fail;
+        }
+    }
+    if (obj1) {
+        {
+            arg2 = (wxDateTime::Calendar) SWIG_PyObj_AsInt(obj1);  
+            if (PyErr_Occurred()) SWIG_fail;
+        }
+    }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         result = (bool)wxDateTime::IsLeapYear(arg1,(wxDateTime::Calendar )arg2);
@@ -15707,7 +16266,7 @@ static PyObject *_wrap_DateTime_IsLeapYear(PyObject *self, PyObject *args, PyObj
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromBool((bool)result);
     return resultobj;
     fail:
     return NULL;
@@ -15718,11 +16277,18 @@ static PyObject *_wrap_DateTime_GetCentury(PyObject *self, PyObject *args, PyObj
     PyObject *resultobj;
     int arg1 = (int) wxDateTime::Inv_Year ;
     int result;
+    PyObject * obj0 = 0 ;
     char *kwnames[] = {
         (char *) "year", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"|i:DateTime_GetCentury",kwnames,&arg1)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"|O:DateTime_GetCentury",kwnames,&obj0)) goto fail;
+    if (obj0) {
+        {
+            arg1 = (int) SWIG_PyObj_AsInt(obj0);  
+            if (PyErr_Occurred()) SWIG_fail;
+        }
+    }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         result = (int)wxDateTime::GetCentury(arg1);
@@ -15730,7 +16296,7 @@ static PyObject *_wrap_DateTime_GetCentury(PyObject *self, PyObject *args, PyObj
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromInt((int)result);
     return resultobj;
     fail:
     return NULL;
@@ -15742,11 +16308,23 @@ static PyObject *_wrap_DateTime_GetNumberOfDaysinYear(PyObject *self, PyObject *
     int arg1 ;
     int arg2 = (int) wxDateTime::Gregorian ;
     int result;
+    PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
     char *kwnames[] = {
         (char *) "year",(char *) "cal", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"i|i:DateTime_GetNumberOfDaysinYear",kwnames,&arg1,&arg2)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O|O:DateTime_GetNumberOfDaysinYear",kwnames,&obj0,&obj1)) goto fail;
+    {
+        arg1 = (int) SWIG_PyObj_AsInt(obj0);  
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    if (obj1) {
+        {
+            arg2 = (wxDateTime::Calendar) SWIG_PyObj_AsInt(obj1);  
+            if (PyErr_Occurred()) SWIG_fail;
+        }
+    }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         result = (int)wxDateTime::GetNumberOfDays(arg1,(wxDateTime::Calendar )arg2);
@@ -15754,7 +16332,7 @@ static PyObject *_wrap_DateTime_GetNumberOfDaysinYear(PyObject *self, PyObject *
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromInt((int)result);
     return resultobj;
     fail:
     return NULL;
@@ -15767,11 +16345,30 @@ static PyObject *_wrap_DateTime_GetNumberOfDaysInMonth(PyObject *self, PyObject 
     int arg2 = (int) wxDateTime::Inv_Year ;
     int arg3 = (int) wxDateTime::Gregorian ;
     int result;
+    PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
+    PyObject * obj2 = 0 ;
     char *kwnames[] = {
         (char *) "month",(char *) "year",(char *) "cal", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"i|ii:DateTime_GetNumberOfDaysInMonth",kwnames,&arg1,&arg2,&arg3)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O|OO:DateTime_GetNumberOfDaysInMonth",kwnames,&obj0,&obj1,&obj2)) goto fail;
+    {
+        arg1 = (wxDateTime::Month) SWIG_PyObj_AsInt(obj0);  
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    if (obj1) {
+        {
+            arg2 = (int) SWIG_PyObj_AsInt(obj1);  
+            if (PyErr_Occurred()) SWIG_fail;
+        }
+    }
+    if (obj2) {
+        {
+            arg3 = (wxDateTime::Calendar) SWIG_PyObj_AsInt(obj2);  
+            if (PyErr_Occurred()) SWIG_fail;
+        }
+    }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         result = (int)wxDateTime::GetNumberOfDays((wxDateTime::Month )arg1,arg2,(wxDateTime::Calendar )arg3);
@@ -15779,7 +16376,7 @@ static PyObject *_wrap_DateTime_GetNumberOfDaysInMonth(PyObject *self, PyObject 
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromInt((int)result);
     return resultobj;
     fail:
     return NULL;
@@ -15791,11 +16388,23 @@ static PyObject *_wrap_DateTime_GetMonthName(PyObject *self, PyObject *args, PyO
     int arg1 ;
     int arg2 = (int) wxDateTime::Name_Full ;
     wxString result;
+    PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
     char *kwnames[] = {
         (char *) "month",(char *) "flags", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"i|i:DateTime_GetMonthName",kwnames,&arg1,&arg2)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O|O:DateTime_GetMonthName",kwnames,&obj0,&obj1)) goto fail;
+    {
+        arg1 = (wxDateTime::Month) SWIG_PyObj_AsInt(obj0);  
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    if (obj1) {
+        {
+            arg2 = (wxDateTime::NameFlags) SWIG_PyObj_AsInt(obj1);  
+            if (PyErr_Occurred()) SWIG_fail;
+        }
+    }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         result = wxDateTime::GetMonthName((wxDateTime::Month )arg1,(wxDateTime::NameFlags )arg2);
@@ -15821,11 +16430,23 @@ static PyObject *_wrap_DateTime_GetWeekDayName(PyObject *self, PyObject *args, P
     int arg1 ;
     int arg2 = (int) wxDateTime::Name_Full ;
     wxString result;
+    PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
     char *kwnames[] = {
         (char *) "weekday",(char *) "flags", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"i|i:DateTime_GetWeekDayName",kwnames,&arg1,&arg2)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O|O:DateTime_GetWeekDayName",kwnames,&obj0,&obj1)) goto fail;
+    {
+        arg1 = (wxDateTime::WeekDay) SWIG_PyObj_AsInt(obj0);  
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    if (obj1) {
+        {
+            arg2 = (wxDateTime::NameFlags) SWIG_PyObj_AsInt(obj1);  
+            if (PyErr_Occurred()) SWIG_fail;
+        }
+    }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         result = wxDateTime::GetWeekDayName((wxDateTime::WeekDay )arg1,(wxDateTime::NameFlags )arg2);
@@ -15904,11 +16525,25 @@ static PyObject *_wrap_DateTime_IsDSTApplicable(PyObject *self, PyObject *args, 
     int arg1 = (int) wxDateTime::Inv_Year ;
     int arg2 = (int) wxDateTime::Country_Default ;
     bool result;
+    PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
     char *kwnames[] = {
         (char *) "year",(char *) "country", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"|ii:DateTime_IsDSTApplicable",kwnames,&arg1,&arg2)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"|OO:DateTime_IsDSTApplicable",kwnames,&obj0,&obj1)) goto fail;
+    if (obj0) {
+        {
+            arg1 = (int) SWIG_PyObj_AsInt(obj0);  
+            if (PyErr_Occurred()) SWIG_fail;
+        }
+    }
+    if (obj1) {
+        {
+            arg2 = (wxDateTime::Country) SWIG_PyObj_AsInt(obj1);  
+            if (PyErr_Occurred()) SWIG_fail;
+        }
+    }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         result = (bool)wxDateTime::IsDSTApplicable(arg1,(wxDateTime::Country )arg2);
@@ -15916,7 +16551,7 @@ static PyObject *_wrap_DateTime_IsDSTApplicable(PyObject *self, PyObject *args, 
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromBool((bool)result);
     return resultobj;
     fail:
     return NULL;
@@ -15928,11 +16563,25 @@ static PyObject *_wrap_DateTime_GetBeginDST(PyObject *self, PyObject *args, PyOb
     int arg1 = (int) wxDateTime::Inv_Year ;
     int arg2 = (int) wxDateTime::Country_Default ;
     wxDateTime result;
+    PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
     char *kwnames[] = {
         (char *) "year",(char *) "country", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"|ii:DateTime_GetBeginDST",kwnames,&arg1,&arg2)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"|OO:DateTime_GetBeginDST",kwnames,&obj0,&obj1)) goto fail;
+    if (obj0) {
+        {
+            arg1 = (int) SWIG_PyObj_AsInt(obj0);  
+            if (PyErr_Occurred()) SWIG_fail;
+        }
+    }
+    if (obj1) {
+        {
+            arg2 = (wxDateTime::Country) SWIG_PyObj_AsInt(obj1);  
+            if (PyErr_Occurred()) SWIG_fail;
+        }
+    }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         result = wxDateTime::GetBeginDST(arg1,(wxDateTime::Country )arg2);
@@ -15956,11 +16605,25 @@ static PyObject *_wrap_DateTime_GetEndDST(PyObject *self, PyObject *args, PyObje
     int arg1 = (int) wxDateTime::Inv_Year ;
     int arg2 = (int) wxDateTime::Country_Default ;
     wxDateTime result;
+    PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
     char *kwnames[] = {
         (char *) "year",(char *) "country", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"|ii:DateTime_GetEndDST",kwnames,&arg1,&arg2)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"|OO:DateTime_GetEndDST",kwnames,&obj0,&obj1)) goto fail;
+    if (obj0) {
+        {
+            arg1 = (int) SWIG_PyObj_AsInt(obj0);  
+            if (PyErr_Occurred()) SWIG_fail;
+        }
+    }
+    if (obj1) {
+        {
+            arg2 = (wxDateTime::Country) SWIG_PyObj_AsInt(obj1);  
+            if (PyErr_Occurred()) SWIG_fail;
+        }
+    }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         result = wxDateTime::GetEndDST(arg1,(wxDateTime::Country )arg2);
@@ -16090,7 +16753,7 @@ static PyObject *_wrap_new_DateTimeFromTimeT(PyObject *self, PyObject *args, PyO
     
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:new_DateTimeFromTimeT",kwnames,&obj0)) goto fail;
     {
-        arg1 = (time_t) SPyObj_AsUnsignedInt(obj0);  
+        arg1 = (time_t) SWIG_PyObj_AsUnsignedInt(obj0);  
         if (PyErr_Occurred()) SWIG_fail;
     }
     {
@@ -16111,11 +16774,16 @@ static PyObject *_wrap_new_DateTimeFromJDN(PyObject *self, PyObject *args, PyObj
     PyObject *resultobj;
     double arg1 ;
     wxDateTime *result;
+    PyObject * obj0 = 0 ;
     char *kwnames[] = {
         (char *) "jdn", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"d:new_DateTimeFromJDN",kwnames,&arg1)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:new_DateTimeFromJDN",kwnames,&obj0)) goto fail;
+    {
+        arg1 = (double) SWIG_PyObj_AsDouble(obj0);  
+        if (PyErr_Occurred()) SWIG_fail;
+    }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         result = (wxDateTime *)new wxDateTime(arg1);
@@ -16137,11 +16805,37 @@ static PyObject *_wrap_new_DateTimeFromHMS(PyObject *self, PyObject *args, PyObj
     int arg3 = (int) 0 ;
     int arg4 = (int) 0 ;
     wxDateTime *result;
+    PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
+    PyObject * obj2 = 0 ;
+    PyObject * obj3 = 0 ;
     char *kwnames[] = {
         (char *) "hour",(char *) "minute",(char *) "second",(char *) "millisec", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"i|iii:new_DateTimeFromHMS",kwnames,&arg1,&arg2,&arg3,&arg4)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O|OOO:new_DateTimeFromHMS",kwnames,&obj0,&obj1,&obj2,&obj3)) goto fail;
+    {
+        arg1 = (int) SWIG_PyObj_AsInt(obj0);  
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    if (obj1) {
+        {
+            arg2 = (int) SWIG_PyObj_AsInt(obj1);  
+            if (PyErr_Occurred()) SWIG_fail;
+        }
+    }
+    if (obj2) {
+        {
+            arg3 = (int) SWIG_PyObj_AsInt(obj2);  
+            if (PyErr_Occurred()) SWIG_fail;
+        }
+    }
+    if (obj3) {
+        {
+            arg4 = (int) SWIG_PyObj_AsInt(obj3);  
+            if (PyErr_Occurred()) SWIG_fail;
+        }
+    }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         result = (wxDateTime *)new wxDateTime(arg1,arg2,arg3,arg4);
@@ -16166,11 +16860,58 @@ static PyObject *_wrap_new_DateTimeFromDMY(PyObject *self, PyObject *args, PyObj
     int arg6 = (int) 0 ;
     int arg7 = (int) 0 ;
     wxDateTime *result;
+    PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
+    PyObject * obj2 = 0 ;
+    PyObject * obj3 = 0 ;
+    PyObject * obj4 = 0 ;
+    PyObject * obj5 = 0 ;
+    PyObject * obj6 = 0 ;
     char *kwnames[] = {
         (char *) "day",(char *) "month",(char *) "year",(char *) "hour",(char *) "minute",(char *) "second",(char *) "millisec", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"i|iiiiii:new_DateTimeFromDMY",kwnames,&arg1,&arg2,&arg3,&arg4,&arg5,&arg6,&arg7)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O|OOOOOO:new_DateTimeFromDMY",kwnames,&obj0,&obj1,&obj2,&obj3,&obj4,&obj5,&obj6)) goto fail;
+    {
+        arg1 = (int) SWIG_PyObj_AsInt(obj0);  
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    if (obj1) {
+        {
+            arg2 = (wxDateTime::Month) SWIG_PyObj_AsInt(obj1);  
+            if (PyErr_Occurred()) SWIG_fail;
+        }
+    }
+    if (obj2) {
+        {
+            arg3 = (int) SWIG_PyObj_AsInt(obj2);  
+            if (PyErr_Occurred()) SWIG_fail;
+        }
+    }
+    if (obj3) {
+        {
+            arg4 = (int) SWIG_PyObj_AsInt(obj3);  
+            if (PyErr_Occurred()) SWIG_fail;
+        }
+    }
+    if (obj4) {
+        {
+            arg5 = (int) SWIG_PyObj_AsInt(obj4);  
+            if (PyErr_Occurred()) SWIG_fail;
+        }
+    }
+    if (obj5) {
+        {
+            arg6 = (int) SWIG_PyObj_AsInt(obj5);  
+            if (PyErr_Occurred()) SWIG_fail;
+        }
+    }
+    if (obj6) {
+        {
+            arg7 = (int) SWIG_PyObj_AsInt(obj6);  
+            if (PyErr_Occurred()) SWIG_fail;
+        }
+    }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         result = (wxDateTime *)new wxDateTime(arg1,(wxDateTime::Month )arg2,arg3,arg4,arg5,arg6,arg7);
@@ -16251,7 +16992,7 @@ static PyObject *_wrap_DateTime_SetTimeT(PyObject *self, PyObject *args, PyObjec
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:DateTime_SetTimeT",kwnames,&obj0,&obj1)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxDateTime,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
     {
-        arg2 = (time_t) SPyObj_AsUnsignedInt(obj1);  
+        arg2 = (time_t) SWIG_PyObj_AsUnsignedInt(obj1);  
         if (PyErr_Occurred()) SWIG_fail;
     }
     {
@@ -16277,12 +17018,17 @@ static PyObject *_wrap_DateTime_SetJDN(PyObject *self, PyObject *args, PyObject 
     double arg2 ;
     wxDateTime *result;
     PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
     char *kwnames[] = {
         (char *) "self",(char *) "jdn", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"Od:DateTime_SetJDN",kwnames,&obj0,&arg2)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:DateTime_SetJDN",kwnames,&obj0,&obj1)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxDateTime,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    {
+        arg2 = (double) SWIG_PyObj_AsDouble(obj1);  
+        if (PyErr_Occurred()) SWIG_fail;
+    }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         {
@@ -16309,12 +17055,38 @@ static PyObject *_wrap_DateTime_SetHMS(PyObject *self, PyObject *args, PyObject 
     int arg5 = (int) 0 ;
     wxDateTime *result;
     PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
+    PyObject * obj2 = 0 ;
+    PyObject * obj3 = 0 ;
+    PyObject * obj4 = 0 ;
     char *kwnames[] = {
         (char *) "self",(char *) "hour",(char *) "minute",(char *) "second",(char *) "millisec", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"Oi|iii:DateTime_SetHMS",kwnames,&obj0,&arg2,&arg3,&arg4,&arg5)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO|OOO:DateTime_SetHMS",kwnames,&obj0,&obj1,&obj2,&obj3,&obj4)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxDateTime,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    {
+        arg2 = (int) SWIG_PyObj_AsInt(obj1);  
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    if (obj2) {
+        {
+            arg3 = (int) SWIG_PyObj_AsInt(obj2);  
+            if (PyErr_Occurred()) SWIG_fail;
+        }
+    }
+    if (obj3) {
+        {
+            arg4 = (int) SWIG_PyObj_AsInt(obj3);  
+            if (PyErr_Occurred()) SWIG_fail;
+        }
+    }
+    if (obj4) {
+        {
+            arg5 = (int) SWIG_PyObj_AsInt(obj4);  
+            if (PyErr_Occurred()) SWIG_fail;
+        }
+    }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         {
@@ -16344,12 +17116,59 @@ static PyObject *_wrap_DateTime_Set(PyObject *self, PyObject *args, PyObject *kw
     int arg8 = (int) 0 ;
     wxDateTime *result;
     PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
+    PyObject * obj2 = 0 ;
+    PyObject * obj3 = 0 ;
+    PyObject * obj4 = 0 ;
+    PyObject * obj5 = 0 ;
+    PyObject * obj6 = 0 ;
+    PyObject * obj7 = 0 ;
     char *kwnames[] = {
         (char *) "self",(char *) "day",(char *) "month",(char *) "year",(char *) "hour",(char *) "minute",(char *) "second",(char *) "millisec", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"Oi|iiiiii:DateTime_Set",kwnames,&obj0,&arg2,&arg3,&arg4,&arg5,&arg6,&arg7,&arg8)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO|OOOOOO:DateTime_Set",kwnames,&obj0,&obj1,&obj2,&obj3,&obj4,&obj5,&obj6,&obj7)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxDateTime,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    {
+        arg2 = (int) SWIG_PyObj_AsInt(obj1);  
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    if (obj2) {
+        {
+            arg3 = (wxDateTime::Month) SWIG_PyObj_AsInt(obj2);  
+            if (PyErr_Occurred()) SWIG_fail;
+        }
+    }
+    if (obj3) {
+        {
+            arg4 = (int) SWIG_PyObj_AsInt(obj3);  
+            if (PyErr_Occurred()) SWIG_fail;
+        }
+    }
+    if (obj4) {
+        {
+            arg5 = (int) SWIG_PyObj_AsInt(obj4);  
+            if (PyErr_Occurred()) SWIG_fail;
+        }
+    }
+    if (obj5) {
+        {
+            arg6 = (int) SWIG_PyObj_AsInt(obj5);  
+            if (PyErr_Occurred()) SWIG_fail;
+        }
+    }
+    if (obj6) {
+        {
+            arg7 = (int) SWIG_PyObj_AsInt(obj6);  
+            if (PyErr_Occurred()) SWIG_fail;
+        }
+    }
+    if (obj7) {
+        {
+            arg8 = (int) SWIG_PyObj_AsInt(obj7);  
+            if (PyErr_Occurred()) SWIG_fail;
+        }
+    }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         {
@@ -16401,12 +17220,17 @@ static PyObject *_wrap_DateTime_SetYear(PyObject *self, PyObject *args, PyObject
     int arg2 ;
     wxDateTime *result;
     PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
     char *kwnames[] = {
         (char *) "self",(char *) "year", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"Oi:DateTime_SetYear",kwnames,&obj0,&arg2)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:DateTime_SetYear",kwnames,&obj0,&obj1)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxDateTime,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    {
+        arg2 = (int) SWIG_PyObj_AsInt(obj1);  
+        if (PyErr_Occurred()) SWIG_fail;
+    }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         {
@@ -16430,12 +17254,17 @@ static PyObject *_wrap_DateTime_SetMonth(PyObject *self, PyObject *args, PyObjec
     int arg2 ;
     wxDateTime *result;
     PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
     char *kwnames[] = {
         (char *) "self",(char *) "month", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"Oi:DateTime_SetMonth",kwnames,&obj0,&arg2)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:DateTime_SetMonth",kwnames,&obj0,&obj1)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxDateTime,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    {
+        arg2 = (wxDateTime::Month) SWIG_PyObj_AsInt(obj1);  
+        if (PyErr_Occurred()) SWIG_fail;
+    }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         {
@@ -16459,12 +17288,17 @@ static PyObject *_wrap_DateTime_SetDay(PyObject *self, PyObject *args, PyObject 
     int arg2 ;
     wxDateTime *result;
     PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
     char *kwnames[] = {
         (char *) "self",(char *) "day", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"Oi:DateTime_SetDay",kwnames,&obj0,&arg2)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:DateTime_SetDay",kwnames,&obj0,&obj1)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxDateTime,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    {
+        arg2 = (int) SWIG_PyObj_AsInt(obj1);  
+        if (PyErr_Occurred()) SWIG_fail;
+    }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         {
@@ -16488,12 +17322,17 @@ static PyObject *_wrap_DateTime_SetHour(PyObject *self, PyObject *args, PyObject
     int arg2 ;
     wxDateTime *result;
     PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
     char *kwnames[] = {
         (char *) "self",(char *) "hour", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"Oi:DateTime_SetHour",kwnames,&obj0,&arg2)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:DateTime_SetHour",kwnames,&obj0,&obj1)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxDateTime,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    {
+        arg2 = (int) SWIG_PyObj_AsInt(obj1);  
+        if (PyErr_Occurred()) SWIG_fail;
+    }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         {
@@ -16517,12 +17356,17 @@ static PyObject *_wrap_DateTime_SetMinute(PyObject *self, PyObject *args, PyObje
     int arg2 ;
     wxDateTime *result;
     PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
     char *kwnames[] = {
         (char *) "self",(char *) "minute", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"Oi:DateTime_SetMinute",kwnames,&obj0,&arg2)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:DateTime_SetMinute",kwnames,&obj0,&obj1)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxDateTime,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    {
+        arg2 = (int) SWIG_PyObj_AsInt(obj1);  
+        if (PyErr_Occurred()) SWIG_fail;
+    }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         {
@@ -16546,12 +17390,17 @@ static PyObject *_wrap_DateTime_SetSecond(PyObject *self, PyObject *args, PyObje
     int arg2 ;
     wxDateTime *result;
     PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
     char *kwnames[] = {
         (char *) "self",(char *) "second", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"Oi:DateTime_SetSecond",kwnames,&obj0,&arg2)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:DateTime_SetSecond",kwnames,&obj0,&obj1)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxDateTime,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    {
+        arg2 = (int) SWIG_PyObj_AsInt(obj1);  
+        if (PyErr_Occurred()) SWIG_fail;
+    }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         {
@@ -16575,12 +17424,17 @@ static PyObject *_wrap_DateTime_SetMillisecond(PyObject *self, PyObject *args, P
     int arg2 ;
     wxDateTime *result;
     PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
     char *kwnames[] = {
         (char *) "self",(char *) "millisecond", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"Oi:DateTime_SetMillisecond",kwnames,&obj0,&arg2)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:DateTime_SetMillisecond",kwnames,&obj0,&obj1)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxDateTime,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    {
+        arg2 = (int) SWIG_PyObj_AsInt(obj1);  
+        if (PyErr_Occurred()) SWIG_fail;
+    }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         {
@@ -16605,12 +17459,24 @@ static PyObject *_wrap_DateTime_SetToWeekDayInSameWeek(PyObject *self, PyObject 
     int arg3 = (int) wxDateTime::Monday_First ;
     wxDateTime *result;
     PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
+    PyObject * obj2 = 0 ;
     char *kwnames[] = {
         (char *) "self",(char *) "weekday",(char *) "flags", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"Oi|i:DateTime_SetToWeekDayInSameWeek",kwnames,&obj0,&arg2,&arg3)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO|O:DateTime_SetToWeekDayInSameWeek",kwnames,&obj0,&obj1,&obj2)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxDateTime,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    {
+        arg2 = (wxDateTime::WeekDay) SWIG_PyObj_AsInt(obj1);  
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    if (obj2) {
+        {
+            arg3 = (wxDateTime::WeekFlags) SWIG_PyObj_AsInt(obj2);  
+            if (PyErr_Occurred()) SWIG_fail;
+        }
+    }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         {
@@ -16635,12 +17501,24 @@ static PyObject *_wrap_DateTime_GetWeekDayInSameWeek(PyObject *self, PyObject *a
     int arg3 = (int) wxDateTime::Monday_First ;
     wxDateTime result;
     PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
+    PyObject * obj2 = 0 ;
     char *kwnames[] = {
         (char *) "self",(char *) "weekday",(char *) "flags", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"Oi|i:DateTime_GetWeekDayInSameWeek",kwnames,&obj0,&arg2,&arg3)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO|O:DateTime_GetWeekDayInSameWeek",kwnames,&obj0,&obj1,&obj2)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxDateTime,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    {
+        arg2 = (wxDateTime::WeekDay) SWIG_PyObj_AsInt(obj1);  
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    if (obj2) {
+        {
+            arg3 = (wxDateTime::WeekFlags) SWIG_PyObj_AsInt(obj2);  
+            if (PyErr_Occurred()) SWIG_fail;
+        }
+    }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         result = (arg1)->GetWeekDayInSameWeek((wxDateTime::WeekDay )arg2,(wxDateTime::WeekFlags )arg3);
@@ -16665,12 +17543,17 @@ static PyObject *_wrap_DateTime_SetToNextWeekDay(PyObject *self, PyObject *args,
     int arg2 ;
     wxDateTime *result;
     PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
     char *kwnames[] = {
         (char *) "self",(char *) "weekday", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"Oi:DateTime_SetToNextWeekDay",kwnames,&obj0,&arg2)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:DateTime_SetToNextWeekDay",kwnames,&obj0,&obj1)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxDateTime,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    {
+        arg2 = (wxDateTime::WeekDay) SWIG_PyObj_AsInt(obj1);  
+        if (PyErr_Occurred()) SWIG_fail;
+    }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         {
@@ -16694,12 +17577,17 @@ static PyObject *_wrap_DateTime_GetNextWeekDay(PyObject *self, PyObject *args, P
     int arg2 ;
     wxDateTime result;
     PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
     char *kwnames[] = {
         (char *) "self",(char *) "weekday", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"Oi:DateTime_GetNextWeekDay",kwnames,&obj0,&arg2)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:DateTime_GetNextWeekDay",kwnames,&obj0,&obj1)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxDateTime,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    {
+        arg2 = (wxDateTime::WeekDay) SWIG_PyObj_AsInt(obj1);  
+        if (PyErr_Occurred()) SWIG_fail;
+    }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         result = (arg1)->GetNextWeekDay((wxDateTime::WeekDay )arg2);
@@ -16724,12 +17612,17 @@ static PyObject *_wrap_DateTime_SetToPrevWeekDay(PyObject *self, PyObject *args,
     int arg2 ;
     wxDateTime *result;
     PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
     char *kwnames[] = {
         (char *) "self",(char *) "weekday", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"Oi:DateTime_SetToPrevWeekDay",kwnames,&obj0,&arg2)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:DateTime_SetToPrevWeekDay",kwnames,&obj0,&obj1)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxDateTime,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    {
+        arg2 = (wxDateTime::WeekDay) SWIG_PyObj_AsInt(obj1);  
+        if (PyErr_Occurred()) SWIG_fail;
+    }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         {
@@ -16753,12 +17646,17 @@ static PyObject *_wrap_DateTime_GetPrevWeekDay(PyObject *self, PyObject *args, P
     int arg2 ;
     wxDateTime result;
     PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
     char *kwnames[] = {
         (char *) "self",(char *) "weekday", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"Oi:DateTime_GetPrevWeekDay",kwnames,&obj0,&arg2)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:DateTime_GetPrevWeekDay",kwnames,&obj0,&obj1)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxDateTime,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    {
+        arg2 = (wxDateTime::WeekDay) SWIG_PyObj_AsInt(obj1);  
+        if (PyErr_Occurred()) SWIG_fail;
+    }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         result = (arg1)->GetPrevWeekDay((wxDateTime::WeekDay )arg2);
@@ -16786,12 +17684,38 @@ static PyObject *_wrap_DateTime_SetToWeekDay(PyObject *self, PyObject *args, PyO
     int arg5 = (int) wxDateTime::Inv_Year ;
     bool result;
     PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
+    PyObject * obj2 = 0 ;
+    PyObject * obj3 = 0 ;
+    PyObject * obj4 = 0 ;
     char *kwnames[] = {
         (char *) "self",(char *) "weekday",(char *) "n",(char *) "month",(char *) "year", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"Oi|iii:DateTime_SetToWeekDay",kwnames,&obj0,&arg2,&arg3,&arg4,&arg5)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO|OOO:DateTime_SetToWeekDay",kwnames,&obj0,&obj1,&obj2,&obj3,&obj4)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxDateTime,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    {
+        arg2 = (wxDateTime::WeekDay) SWIG_PyObj_AsInt(obj1);  
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    if (obj2) {
+        {
+            arg3 = (int) SWIG_PyObj_AsInt(obj2);  
+            if (PyErr_Occurred()) SWIG_fail;
+        }
+    }
+    if (obj3) {
+        {
+            arg4 = (wxDateTime::Month) SWIG_PyObj_AsInt(obj3);  
+            if (PyErr_Occurred()) SWIG_fail;
+        }
+    }
+    if (obj4) {
+        {
+            arg5 = (int) SWIG_PyObj_AsInt(obj4);  
+            if (PyErr_Occurred()) SWIG_fail;
+        }
+    }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         result = (bool)(arg1)->SetToWeekDay((wxDateTime::WeekDay )arg2,arg3,(wxDateTime::Month )arg4,arg5);
@@ -16799,7 +17723,7 @@ static PyObject *_wrap_DateTime_SetToWeekDay(PyObject *self, PyObject *args, PyO
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromBool((bool)result);
     return resultobj;
     fail:
     return NULL;
@@ -16814,12 +17738,31 @@ static PyObject *_wrap_DateTime_SetToLastWeekDay(PyObject *self, PyObject *args,
     int arg4 = (int) wxDateTime::Inv_Year ;
     bool result;
     PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
+    PyObject * obj2 = 0 ;
+    PyObject * obj3 = 0 ;
     char *kwnames[] = {
         (char *) "self",(char *) "weekday",(char *) "month",(char *) "year", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"Oi|ii:DateTime_SetToLastWeekDay",kwnames,&obj0,&arg2,&arg3,&arg4)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO|OO:DateTime_SetToLastWeekDay",kwnames,&obj0,&obj1,&obj2,&obj3)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxDateTime,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    {
+        arg2 = (wxDateTime::WeekDay) SWIG_PyObj_AsInt(obj1);  
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    if (obj2) {
+        {
+            arg3 = (wxDateTime::Month) SWIG_PyObj_AsInt(obj2);  
+            if (PyErr_Occurred()) SWIG_fail;
+        }
+    }
+    if (obj3) {
+        {
+            arg4 = (int) SWIG_PyObj_AsInt(obj3);  
+            if (PyErr_Occurred()) SWIG_fail;
+        }
+    }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         result = (bool)(arg1)->SetToLastWeekDay((wxDateTime::WeekDay )arg2,(wxDateTime::Month )arg3,arg4);
@@ -16827,7 +17770,7 @@ static PyObject *_wrap_DateTime_SetToLastWeekDay(PyObject *self, PyObject *args,
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromBool((bool)result);
     return resultobj;
     fail:
     return NULL;
@@ -16842,12 +17785,31 @@ static PyObject *_wrap_DateTime_GetLastWeekDay(PyObject *self, PyObject *args, P
     int arg4 = (int) wxDateTime::Inv_Year ;
     wxDateTime result;
     PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
+    PyObject * obj2 = 0 ;
+    PyObject * obj3 = 0 ;
     char *kwnames[] = {
         (char *) "self",(char *) "weekday",(char *) "month",(char *) "year", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"Oi|ii:DateTime_GetLastWeekDay",kwnames,&obj0,&arg2,&arg3,&arg4)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO|OO:DateTime_GetLastWeekDay",kwnames,&obj0,&obj1,&obj2,&obj3)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxDateTime,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    {
+        arg2 = (wxDateTime::WeekDay) SWIG_PyObj_AsInt(obj1);  
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    if (obj2) {
+        {
+            arg3 = (wxDateTime::Month) SWIG_PyObj_AsInt(obj2);  
+            if (PyErr_Occurred()) SWIG_fail;
+        }
+    }
+    if (obj3) {
+        {
+            arg4 = (int) SWIG_PyObj_AsInt(obj3);  
+            if (PyErr_Occurred()) SWIG_fail;
+        }
+    }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         result = (arg1)->GetLastWeekDay((wxDateTime::WeekDay )arg2,(wxDateTime::Month )arg3,arg4);
@@ -16874,12 +17836,31 @@ static PyObject *_wrap_DateTime_SetToTheWeek(PyObject *self, PyObject *args, PyO
     int arg4 = (int) wxDateTime::Monday_First ;
     bool result;
     PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
+    PyObject * obj2 = 0 ;
+    PyObject * obj3 = 0 ;
     char *kwnames[] = {
         (char *) "self",(char *) "numWeek",(char *) "weekday",(char *) "flags", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"Oi|ii:DateTime_SetToTheWeek",kwnames,&obj0,&arg2,&arg3,&arg4)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO|OO:DateTime_SetToTheWeek",kwnames,&obj0,&obj1,&obj2,&obj3)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxDateTime,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    {
+        arg2 = (int) SWIG_PyObj_AsInt(obj1);  
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    if (obj2) {
+        {
+            arg3 = (wxDateTime::WeekDay) SWIG_PyObj_AsInt(obj2);  
+            if (PyErr_Occurred()) SWIG_fail;
+        }
+    }
+    if (obj3) {
+        {
+            arg4 = (wxDateTime::WeekFlags) SWIG_PyObj_AsInt(obj3);  
+            if (PyErr_Occurred()) SWIG_fail;
+        }
+    }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         result = (bool)(arg1)->SetToTheWeek(arg2,(wxDateTime::WeekDay )arg3,(wxDateTime::WeekFlags )arg4);
@@ -16887,7 +17868,7 @@ static PyObject *_wrap_DateTime_SetToTheWeek(PyObject *self, PyObject *args, PyO
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromBool((bool)result);
     return resultobj;
     fail:
     return NULL;
@@ -16902,12 +17883,31 @@ static PyObject *_wrap_DateTime_GetWeek(PyObject *self, PyObject *args, PyObject
     int arg4 = (int) wxDateTime::Monday_First ;
     wxDateTime result;
     PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
+    PyObject * obj2 = 0 ;
+    PyObject * obj3 = 0 ;
     char *kwnames[] = {
         (char *) "self",(char *) "numWeek",(char *) "weekday",(char *) "flags", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"Oi|ii:DateTime_GetWeek",kwnames,&obj0,&arg2,&arg3,&arg4)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO|OO:DateTime_GetWeek",kwnames,&obj0,&obj1,&obj2,&obj3)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxDateTime,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    {
+        arg2 = (int) SWIG_PyObj_AsInt(obj1);  
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    if (obj2) {
+        {
+            arg3 = (wxDateTime::WeekDay) SWIG_PyObj_AsInt(obj2);  
+            if (PyErr_Occurred()) SWIG_fail;
+        }
+    }
+    if (obj3) {
+        {
+            arg4 = (wxDateTime::WeekFlags) SWIG_PyObj_AsInt(obj3);  
+            if (PyErr_Occurred()) SWIG_fail;
+        }
+    }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         result = (arg1)->GetWeek(arg2,(wxDateTime::WeekDay )arg3,(wxDateTime::WeekFlags )arg4);
@@ -16933,12 +17933,26 @@ static PyObject *_wrap_DateTime_SetToLastMonthDay(PyObject *self, PyObject *args
     int arg3 = (int) wxDateTime::Inv_Year ;
     wxDateTime *result;
     PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
+    PyObject * obj2 = 0 ;
     char *kwnames[] = {
         (char *) "self",(char *) "month",(char *) "year", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O|ii:DateTime_SetToLastMonthDay",kwnames,&obj0,&arg2,&arg3)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O|OO:DateTime_SetToLastMonthDay",kwnames,&obj0,&obj1,&obj2)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxDateTime,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    if (obj1) {
+        {
+            arg2 = (wxDateTime::Month) SWIG_PyObj_AsInt(obj1);  
+            if (PyErr_Occurred()) SWIG_fail;
+        }
+    }
+    if (obj2) {
+        {
+            arg3 = (int) SWIG_PyObj_AsInt(obj2);  
+            if (PyErr_Occurred()) SWIG_fail;
+        }
+    }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         {
@@ -16963,12 +17977,26 @@ static PyObject *_wrap_DateTime_GetLastMonthDay(PyObject *self, PyObject *args, 
     int arg3 = (int) wxDateTime::Inv_Year ;
     wxDateTime result;
     PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
+    PyObject * obj2 = 0 ;
     char *kwnames[] = {
         (char *) "self",(char *) "month",(char *) "year", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O|ii:DateTime_GetLastMonthDay",kwnames,&obj0,&arg2,&arg3)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O|OO:DateTime_GetLastMonthDay",kwnames,&obj0,&obj1,&obj2)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxDateTime,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    if (obj1) {
+        {
+            arg2 = (wxDateTime::Month) SWIG_PyObj_AsInt(obj1);  
+            if (PyErr_Occurred()) SWIG_fail;
+        }
+    }
+    if (obj2) {
+        {
+            arg3 = (int) SWIG_PyObj_AsInt(obj2);  
+            if (PyErr_Occurred()) SWIG_fail;
+        }
+    }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         result = (arg1)->GetLastMonthDay((wxDateTime::Month )arg2,arg3);
@@ -16993,12 +18021,17 @@ static PyObject *_wrap_DateTime_SetToYearDay(PyObject *self, PyObject *args, PyO
     int arg2 ;
     wxDateTime *result;
     PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
     char *kwnames[] = {
         (char *) "self",(char *) "yday", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"Oi:DateTime_SetToYearDay",kwnames,&obj0,&arg2)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:DateTime_SetToYearDay",kwnames,&obj0,&obj1)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxDateTime,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    {
+        arg2 = (int) SWIG_PyObj_AsInt(obj1);  
+        if (PyErr_Occurred()) SWIG_fail;
+    }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         {
@@ -17022,12 +18055,17 @@ static PyObject *_wrap_DateTime_GetYearDay(PyObject *self, PyObject *args, PyObj
     int arg2 ;
     wxDateTime result;
     PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
     char *kwnames[] = {
         (char *) "self",(char *) "yday", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"Oi:DateTime_GetYearDay",kwnames,&obj0,&arg2)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:DateTime_GetYearDay",kwnames,&obj0,&obj1)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxDateTime,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    {
+        arg2 = (int) SWIG_PyObj_AsInt(obj1);  
+        if (PyErr_Occurred()) SWIG_fail;
+    }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         result = (arg1)->GetYearDay(arg2);
@@ -17064,7 +18102,7 @@ static PyObject *_wrap_DateTime_GetJulianDayNumber(PyObject *self, PyObject *arg
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyFloat_FromDouble(result);
+    resultobj = SWIG_PyObj_FromDouble((double)result);
     return resultobj;
     fail:
     return NULL;
@@ -17089,7 +18127,7 @@ static PyObject *_wrap_DateTime_GetJDN(PyObject *self, PyObject *args, PyObject 
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyFloat_FromDouble(result);
+    resultobj = SWIG_PyObj_FromDouble((double)result);
     return resultobj;
     fail:
     return NULL;
@@ -17114,7 +18152,7 @@ static PyObject *_wrap_DateTime_GetModifiedJulianDayNumber(PyObject *self, PyObj
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyFloat_FromDouble(result);
+    resultobj = SWIG_PyObj_FromDouble((double)result);
     return resultobj;
     fail:
     return NULL;
@@ -17139,7 +18177,7 @@ static PyObject *_wrap_DateTime_GetMJD(PyObject *self, PyObject *args, PyObject 
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyFloat_FromDouble(result);
+    resultobj = SWIG_PyObj_FromDouble((double)result);
     return resultobj;
     fail:
     return NULL;
@@ -17164,7 +18202,7 @@ static PyObject *_wrap_DateTime_GetRataDie(PyObject *self, PyObject *args, PyObj
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyFloat_FromDouble(result);
+    resultobj = SWIG_PyObj_FromDouble((double)result);
     return resultobj;
     fail:
     return NULL;
@@ -17193,7 +18231,7 @@ static PyObject *_wrap_DateTime_ToTimezone(PyObject *self, PyObject *args, PyObj
     }
     if (obj2) {
         {
-            arg3 = (bool) SPyObj_AsBool(obj2);  
+            arg3 = (bool) SWIG_PyObj_AsBool(obj2);  
             if (PyErr_Occurred()) SWIG_fail;
         }
     }
@@ -17243,7 +18281,7 @@ static PyObject *_wrap_DateTime_MakeTimezone(PyObject *self, PyObject *args, PyO
     }
     if (obj2) {
         {
-            arg3 = (bool) SPyObj_AsBool(obj2);  
+            arg3 = (bool) SWIG_PyObj_AsBool(obj2);  
             if (PyErr_Occurred()) SWIG_fail;
         }
     }
@@ -17285,7 +18323,7 @@ static PyObject *_wrap_DateTime_ToGMT(PyObject *self, PyObject *args, PyObject *
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxDateTime,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
     if (obj1) {
         {
-            arg2 = (bool) SPyObj_AsBool(obj1);  
+            arg2 = (bool) SWIG_PyObj_AsBool(obj1);  
             if (PyErr_Occurred()) SWIG_fail;
         }
     }
@@ -17322,7 +18360,7 @@ static PyObject *_wrap_DateTime_MakeGMT(PyObject *self, PyObject *args, PyObject
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxDateTime,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
     if (obj1) {
         {
-            arg2 = (bool) SPyObj_AsBool(obj1);  
+            arg2 = (bool) SWIG_PyObj_AsBool(obj1);  
             if (PyErr_Occurred()) SWIG_fail;
         }
     }
@@ -17349,12 +18387,19 @@ static PyObject *_wrap_DateTime_IsDST(PyObject *self, PyObject *args, PyObject *
     int arg2 = (int) wxDateTime::Country_Default ;
     int result;
     PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
     char *kwnames[] = {
         (char *) "self",(char *) "country", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O|i:DateTime_IsDST",kwnames,&obj0,&arg2)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O|O:DateTime_IsDST",kwnames,&obj0,&obj1)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxDateTime,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    if (obj1) {
+        {
+            arg2 = (wxDateTime::Country) SWIG_PyObj_AsInt(obj1);  
+            if (PyErr_Occurred()) SWIG_fail;
+        }
+    }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         result = (int)(arg1)->IsDST((wxDateTime::Country )arg2);
@@ -17362,7 +18407,7 @@ static PyObject *_wrap_DateTime_IsDST(PyObject *self, PyObject *args, PyObject *
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromInt((int)result);
     return resultobj;
     fail:
     return NULL;
@@ -17387,7 +18432,7 @@ static PyObject *_wrap_DateTime_IsValid(PyObject *self, PyObject *args, PyObject
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromBool((bool)result);
     return resultobj;
     fail:
     return NULL;
@@ -17412,7 +18457,7 @@ static PyObject *_wrap_DateTime_GetTicks(PyObject *self, PyObject *args, PyObjec
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SPyObj_FromUnsignedLong((unsigned long)result);
+    resultobj = SWIG_PyObj_FromUnsignedInt((unsigned int)result);
     return resultobj;
     fail:
     return NULL;
@@ -17447,7 +18492,7 @@ static PyObject *_wrap_DateTime_GetYear(PyObject *self, PyObject *args, PyObject
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromInt((int)result);
     {
         if (temp2) delete arg2;
     }
@@ -17488,7 +18533,7 @@ static PyObject *_wrap_DateTime_GetMonth(PyObject *self, PyObject *args, PyObjec
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromInt((int)result);
     {
         if (temp2) delete arg2;
     }
@@ -17529,7 +18574,7 @@ static PyObject *_wrap_DateTime_GetDay(PyObject *self, PyObject *args, PyObject 
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromInt((int)result);
     {
         if (temp2) delete arg2;
     }
@@ -17570,7 +18615,7 @@ static PyObject *_wrap_DateTime_GetWeekDay(PyObject *self, PyObject *args, PyObj
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromInt((int)result);
     {
         if (temp2) delete arg2;
     }
@@ -17611,7 +18656,7 @@ static PyObject *_wrap_DateTime_GetHour(PyObject *self, PyObject *args, PyObject
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromInt((int)result);
     {
         if (temp2) delete arg2;
     }
@@ -17652,7 +18697,7 @@ static PyObject *_wrap_DateTime_GetMinute(PyObject *self, PyObject *args, PyObje
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromInt((int)result);
     {
         if (temp2) delete arg2;
     }
@@ -17693,7 +18738,7 @@ static PyObject *_wrap_DateTime_GetSecond(PyObject *self, PyObject *args, PyObje
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromInt((int)result);
     {
         if (temp2) delete arg2;
     }
@@ -17734,7 +18779,7 @@ static PyObject *_wrap_DateTime_GetMillisecond(PyObject *self, PyObject *args, P
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromInt((int)result);
     {
         if (temp2) delete arg2;
     }
@@ -17775,7 +18820,7 @@ static PyObject *_wrap_DateTime_GetDayOfYear(PyObject *self, PyObject *args, PyO
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromInt((int)result);
     {
         if (temp2) delete arg2;
     }
@@ -17797,13 +18842,20 @@ static PyObject *_wrap_DateTime_GetWeekOfYear(PyObject *self, PyObject *args, Py
     int result;
     bool temp3 = False ;
     PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
     PyObject * obj2 = 0 ;
     char *kwnames[] = {
         (char *) "self",(char *) "flags",(char *) "tz", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O|iO:DateTime_GetWeekOfYear",kwnames,&obj0,&arg2,&obj2)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O|OO:DateTime_GetWeekOfYear",kwnames,&obj0,&obj1,&obj2)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxDateTime,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    if (obj1) {
+        {
+            arg2 = (wxDateTime::WeekFlags) SWIG_PyObj_AsInt(obj1);  
+            if (PyErr_Occurred()) SWIG_fail;
+        }
+    }
     if (obj2) {
         {
             arg3 = new wxDateTime::TimeZone((wxDateTime::TZ)PyInt_AsLong(obj2));
@@ -17817,7 +18869,7 @@ static PyObject *_wrap_DateTime_GetWeekOfYear(PyObject *self, PyObject *args, Py
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromInt((int)result);
     {
         if (temp3) delete arg3;
     }
@@ -17839,13 +18891,20 @@ static PyObject *_wrap_DateTime_GetWeekOfMonth(PyObject *self, PyObject *args, P
     int result;
     bool temp3 = False ;
     PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
     PyObject * obj2 = 0 ;
     char *kwnames[] = {
         (char *) "self",(char *) "flags",(char *) "tz", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O|iO:DateTime_GetWeekOfMonth",kwnames,&obj0,&arg2,&obj2)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O|OO:DateTime_GetWeekOfMonth",kwnames,&obj0,&obj1,&obj2)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxDateTime,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    if (obj1) {
+        {
+            arg2 = (wxDateTime::WeekFlags) SWIG_PyObj_AsInt(obj1);  
+            if (PyErr_Occurred()) SWIG_fail;
+        }
+    }
     if (obj2) {
         {
             arg3 = new wxDateTime::TimeZone((wxDateTime::TZ)PyInt_AsLong(obj2));
@@ -17859,7 +18918,7 @@ static PyObject *_wrap_DateTime_GetWeekOfMonth(PyObject *self, PyObject *args, P
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromInt((int)result);
     {
         if (temp3) delete arg3;
     }
@@ -17878,12 +18937,19 @@ static PyObject *_wrap_DateTime_IsWorkDay(PyObject *self, PyObject *args, PyObje
     int arg2 = (int) wxDateTime::Country_Default ;
     bool result;
     PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
     char *kwnames[] = {
         (char *) "self",(char *) "country", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O|i:DateTime_IsWorkDay",kwnames,&obj0,&arg2)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O|O:DateTime_IsWorkDay",kwnames,&obj0,&obj1)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxDateTime,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    if (obj1) {
+        {
+            arg2 = (wxDateTime::Country) SWIG_PyObj_AsInt(obj1);  
+            if (PyErr_Occurred()) SWIG_fail;
+        }
+    }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         result = (bool)((wxDateTime const *)arg1)->IsWorkDay((wxDateTime::Country )arg2);
@@ -17891,7 +18957,7 @@ static PyObject *_wrap_DateTime_IsWorkDay(PyObject *self, PyObject *args, PyObje
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromBool((bool)result);
     return resultobj;
     fail:
     return NULL;
@@ -17922,7 +18988,7 @@ static PyObject *_wrap_DateTime_IsEqualTo(PyObject *self, PyObject *args, PyObje
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromBool((bool)result);
     return resultobj;
     fail:
     return NULL;
@@ -17953,7 +19019,7 @@ static PyObject *_wrap_DateTime_IsEarlierThan(PyObject *self, PyObject *args, Py
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromBool((bool)result);
     return resultobj;
     fail:
     return NULL;
@@ -17984,7 +19050,7 @@ static PyObject *_wrap_DateTime_IsLaterThan(PyObject *self, PyObject *args, PyOb
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromBool((bool)result);
     return resultobj;
     fail:
     return NULL;
@@ -18021,7 +19087,7 @@ static PyObject *_wrap_DateTime_IsStrictlyBetween(PyObject *self, PyObject *args
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromBool((bool)result);
     return resultobj;
     fail:
     return NULL;
@@ -18058,7 +19124,7 @@ static PyObject *_wrap_DateTime_IsBetween(PyObject *self, PyObject *args, PyObje
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromBool((bool)result);
     return resultobj;
     fail:
     return NULL;
@@ -18089,7 +19155,7 @@ static PyObject *_wrap_DateTime_IsSameDate(PyObject *self, PyObject *args, PyObj
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromBool((bool)result);
     return resultobj;
     fail:
     return NULL;
@@ -18120,7 +19186,7 @@ static PyObject *_wrap_DateTime_IsSameTime(PyObject *self, PyObject *args, PyObj
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromBool((bool)result);
     return resultobj;
     fail:
     return NULL;
@@ -18157,7 +19223,7 @@ static PyObject *_wrap_DateTime_IsEqualUpTo(PyObject *self, PyObject *args, PyOb
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromBool((bool)result);
     return resultobj;
     fail:
     return NULL;
@@ -18934,7 +20000,7 @@ static PyObject *_wrap_DateTime___lt__(PyObject *self, PyObject *args) {
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromBool((bool)result);
     return resultobj;
     fail:
     return NULL;
@@ -18962,7 +20028,7 @@ static PyObject *_wrap_DateTime___le__(PyObject *self, PyObject *args) {
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromBool((bool)result);
     return resultobj;
     fail:
     return NULL;
@@ -18990,7 +20056,7 @@ static PyObject *_wrap_DateTime___gt__(PyObject *self, PyObject *args) {
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromBool((bool)result);
     return resultobj;
     fail:
     return NULL;
@@ -19018,7 +20084,7 @@ static PyObject *_wrap_DateTime___ge__(PyObject *self, PyObject *args) {
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromBool((bool)result);
     return resultobj;
     fail:
     return NULL;
@@ -19046,7 +20112,7 @@ static PyObject *_wrap_DateTime___eq__(PyObject *self, PyObject *args) {
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromBool((bool)result);
     return resultobj;
     fail:
     return NULL;
@@ -19074,7 +20140,7 @@ static PyObject *_wrap_DateTime___ne__(PyObject *self, PyObject *args) {
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromBool((bool)result);
     return resultobj;
     fail:
     return NULL;
@@ -19107,7 +20173,7 @@ static PyObject *_wrap_DateTime_ParseRfc822Date(PyObject *self, PyObject *args, 
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromInt((int)result);
     {
         if (temp2)
         delete arg2;
@@ -19168,7 +20234,7 @@ static PyObject *_wrap_DateTime_ParseFormat(PyObject *self, PyObject *args, PyOb
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromInt((int)result);
     {
         if (temp2)
         delete arg2;
@@ -19217,7 +20283,7 @@ static PyObject *_wrap_DateTime_ParseDateTime(PyObject *self, PyObject *args, Py
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromInt((int)result);
     {
         if (temp2)
         delete arg2;
@@ -19258,7 +20324,7 @@ static PyObject *_wrap_DateTime_ParseDate(PyObject *self, PyObject *args, PyObje
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromInt((int)result);
     {
         if (temp2)
         delete arg2;
@@ -19299,7 +20365,7 @@ static PyObject *_wrap_DateTime_ParseTime(PyObject *self, PyObject *args, PyObje
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromInt((int)result);
     {
         if (temp2)
         delete arg2;
@@ -19515,11 +20581,16 @@ static PyObject *_wrap_TimeSpan_Seconds(PyObject *self, PyObject *args, PyObject
     PyObject *resultobj;
     long arg1 ;
     wxTimeSpan result;
+    PyObject * obj0 = 0 ;
     char *kwnames[] = {
         (char *) "sec", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"l:TimeSpan_Seconds",kwnames,&arg1)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:TimeSpan_Seconds",kwnames,&obj0)) goto fail;
+    {
+        arg1 = (long) SWIG_PyObj_AsLong(obj0);  
+        if (PyErr_Occurred()) SWIG_fail;
+    }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         result = wxTimeSpan::Seconds(arg1);
@@ -19568,11 +20639,16 @@ static PyObject *_wrap_TimeSpan_Minutes(PyObject *self, PyObject *args, PyObject
     PyObject *resultobj;
     long arg1 ;
     wxTimeSpan result;
+    PyObject * obj0 = 0 ;
     char *kwnames[] = {
         (char *) "min", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"l:TimeSpan_Minutes",kwnames,&arg1)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:TimeSpan_Minutes",kwnames,&obj0)) goto fail;
+    {
+        arg1 = (long) SWIG_PyObj_AsLong(obj0);  
+        if (PyErr_Occurred()) SWIG_fail;
+    }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         result = wxTimeSpan::Minutes(arg1);
@@ -19621,11 +20697,16 @@ static PyObject *_wrap_TimeSpan_Hours(PyObject *self, PyObject *args, PyObject *
     PyObject *resultobj;
     long arg1 ;
     wxTimeSpan result;
+    PyObject * obj0 = 0 ;
     char *kwnames[] = {
         (char *) "hours", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"l:TimeSpan_Hours",kwnames,&arg1)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:TimeSpan_Hours",kwnames,&obj0)) goto fail;
+    {
+        arg1 = (long) SWIG_PyObj_AsLong(obj0);  
+        if (PyErr_Occurred()) SWIG_fail;
+    }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         result = wxTimeSpan::Hours(arg1);
@@ -19674,11 +20755,16 @@ static PyObject *_wrap_TimeSpan_Days(PyObject *self, PyObject *args, PyObject *k
     PyObject *resultobj;
     long arg1 ;
     wxTimeSpan result;
+    PyObject * obj0 = 0 ;
     char *kwnames[] = {
         (char *) "days", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"l:TimeSpan_Days",kwnames,&arg1)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:TimeSpan_Days",kwnames,&obj0)) goto fail;
+    {
+        arg1 = (long) SWIG_PyObj_AsLong(obj0);  
+        if (PyErr_Occurred()) SWIG_fail;
+    }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         result = wxTimeSpan::Days(arg1);
@@ -19727,11 +20813,16 @@ static PyObject *_wrap_TimeSpan_Weeks(PyObject *self, PyObject *args, PyObject *
     PyObject *resultobj;
     long arg1 ;
     wxTimeSpan result;
+    PyObject * obj0 = 0 ;
     char *kwnames[] = {
         (char *) "days", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"l:TimeSpan_Weeks",kwnames,&arg1)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:TimeSpan_Weeks",kwnames,&obj0)) goto fail;
+    {
+        arg1 = (long) SWIG_PyObj_AsLong(obj0);  
+        if (PyErr_Occurred()) SWIG_fail;
+    }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         result = wxTimeSpan::Weeks(arg1);
@@ -19783,11 +20874,39 @@ static PyObject *_wrap_new_TimeSpan(PyObject *self, PyObject *args, PyObject *kw
     long arg3 = (long) 0 ;
     long arg4 = (long) 0 ;
     wxTimeSpan *result;
+    PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
+    PyObject * obj2 = 0 ;
+    PyObject * obj3 = 0 ;
     char *kwnames[] = {
         (char *) "hours",(char *) "minutes",(char *) "seconds",(char *) "milliseconds", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"|llll:new_TimeSpan",kwnames,&arg1,&arg2,&arg3,&arg4)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"|OOOO:new_TimeSpan",kwnames,&obj0,&obj1,&obj2,&obj3)) goto fail;
+    if (obj0) {
+        {
+            arg1 = (long) SWIG_PyObj_AsLong(obj0);  
+            if (PyErr_Occurred()) SWIG_fail;
+        }
+    }
+    if (obj1) {
+        {
+            arg2 = (long) SWIG_PyObj_AsLong(obj1);  
+            if (PyErr_Occurred()) SWIG_fail;
+        }
+    }
+    if (obj2) {
+        {
+            arg3 = (long) SWIG_PyObj_AsLong(obj2);  
+            if (PyErr_Occurred()) SWIG_fail;
+        }
+    }
+    if (obj3) {
+        {
+            arg4 = (long) SWIG_PyObj_AsLong(obj3);  
+            if (PyErr_Occurred()) SWIG_fail;
+        }
+    }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         result = (wxTimeSpan *)new wxTimeSpan(arg1,arg2,arg3,arg4);
@@ -19900,12 +21019,17 @@ static PyObject *_wrap_TimeSpan_Multiply(PyObject *self, PyObject *args, PyObjec
     int arg2 ;
     wxTimeSpan *result;
     PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
     char *kwnames[] = {
         (char *) "self",(char *) "n", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"Oi:TimeSpan_Multiply",kwnames,&obj0,&arg2)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:TimeSpan_Multiply",kwnames,&obj0,&obj1)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxTimeSpan,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    {
+        arg2 = (int) SWIG_PyObj_AsInt(obj1);  
+        if (PyErr_Occurred()) SWIG_fail;
+    }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         {
@@ -20054,12 +21178,17 @@ static PyObject *_wrap_TimeSpan___imul__(PyObject *self, PyObject *args, PyObjec
     int arg2 ;
     wxTimeSpan *result;
     PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
     char *kwnames[] = {
         (char *) "self",(char *) "n", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"Oi:TimeSpan___imul__",kwnames,&obj0,&arg2)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:TimeSpan___imul__",kwnames,&obj0,&obj1)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxTimeSpan,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    {
+        arg2 = (int) SWIG_PyObj_AsInt(obj1);  
+        if (PyErr_Occurred()) SWIG_fail;
+    }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         {
@@ -20181,12 +21310,17 @@ static PyObject *_wrap_TimeSpan___mul__(PyObject *self, PyObject *args, PyObject
     int arg2 ;
     wxTimeSpan result;
     PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
     char *kwnames[] = {
         (char *) "self",(char *) "n", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"Oi:TimeSpan___mul__",kwnames,&obj0,&arg2)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:TimeSpan___mul__",kwnames,&obj0,&obj1)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxTimeSpan,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    {
+        arg2 = (int) SWIG_PyObj_AsInt(obj1);  
+        if (PyErr_Occurred()) SWIG_fail;
+    }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         result = wxTimeSpan___mul__(arg1,arg2);
@@ -20211,12 +21345,17 @@ static PyObject *_wrap_TimeSpan___rmul__(PyObject *self, PyObject *args, PyObjec
     int arg2 ;
     wxTimeSpan result;
     PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
     char *kwnames[] = {
         (char *) "self",(char *) "n", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"Oi:TimeSpan___rmul__",kwnames,&obj0,&arg2)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:TimeSpan___rmul__",kwnames,&obj0,&obj1)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxTimeSpan,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    {
+        arg2 = (int) SWIG_PyObj_AsInt(obj1);  
+        if (PyErr_Occurred()) SWIG_fail;
+    }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         result = wxTimeSpan___rmul__(arg1,arg2);
@@ -20259,7 +21398,7 @@ static PyObject *_wrap_TimeSpan___lt__(PyObject *self, PyObject *args, PyObject 
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromBool((bool)result);
     return resultobj;
     fail:
     return NULL;
@@ -20290,7 +21429,7 @@ static PyObject *_wrap_TimeSpan___le__(PyObject *self, PyObject *args, PyObject 
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromBool((bool)result);
     return resultobj;
     fail:
     return NULL;
@@ -20321,7 +21460,7 @@ static PyObject *_wrap_TimeSpan___gt__(PyObject *self, PyObject *args, PyObject 
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromBool((bool)result);
     return resultobj;
     fail:
     return NULL;
@@ -20352,7 +21491,7 @@ static PyObject *_wrap_TimeSpan___ge__(PyObject *self, PyObject *args, PyObject 
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromBool((bool)result);
     return resultobj;
     fail:
     return NULL;
@@ -20383,7 +21522,7 @@ static PyObject *_wrap_TimeSpan___eq__(PyObject *self, PyObject *args, PyObject 
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromBool((bool)result);
     return resultobj;
     fail:
     return NULL;
@@ -20414,7 +21553,7 @@ static PyObject *_wrap_TimeSpan___ne__(PyObject *self, PyObject *args, PyObject 
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromBool((bool)result);
     return resultobj;
     fail:
     return NULL;
@@ -20439,7 +21578,7 @@ static PyObject *_wrap_TimeSpan_IsNull(PyObject *self, PyObject *args, PyObject 
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromBool((bool)result);
     return resultobj;
     fail:
     return NULL;
@@ -20464,7 +21603,7 @@ static PyObject *_wrap_TimeSpan_IsPositive(PyObject *self, PyObject *args, PyObj
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromBool((bool)result);
     return resultobj;
     fail:
     return NULL;
@@ -20489,7 +21628,7 @@ static PyObject *_wrap_TimeSpan_IsNegative(PyObject *self, PyObject *args, PyObj
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromBool((bool)result);
     return resultobj;
     fail:
     return NULL;
@@ -20520,7 +21659,7 @@ static PyObject *_wrap_TimeSpan_IsEqualTo(PyObject *self, PyObject *args, PyObje
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromBool((bool)result);
     return resultobj;
     fail:
     return NULL;
@@ -20551,7 +21690,7 @@ static PyObject *_wrap_TimeSpan_IsLongerThan(PyObject *self, PyObject *args, PyO
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromBool((bool)result);
     return resultobj;
     fail:
     return NULL;
@@ -20582,7 +21721,7 @@ static PyObject *_wrap_TimeSpan_IsShorterThan(PyObject *self, PyObject *args, Py
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromBool((bool)result);
     return resultobj;
     fail:
     return NULL;
@@ -20607,7 +21746,7 @@ static PyObject *_wrap_TimeSpan_GetWeeks(PyObject *self, PyObject *args, PyObjec
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromInt((int)result);
     return resultobj;
     fail:
     return NULL;
@@ -20632,7 +21771,7 @@ static PyObject *_wrap_TimeSpan_GetDays(PyObject *self, PyObject *args, PyObject
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromInt((int)result);
     return resultobj;
     fail:
     return NULL;
@@ -20657,7 +21796,7 @@ static PyObject *_wrap_TimeSpan_GetHours(PyObject *self, PyObject *args, PyObjec
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromInt((int)result);
     return resultobj;
     fail:
     return NULL;
@@ -20682,7 +21821,7 @@ static PyObject *_wrap_TimeSpan_GetMinutes(PyObject *self, PyObject *args, PyObj
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromInt((int)result);
     return resultobj;
     fail:
     return NULL;
@@ -20825,11 +21964,39 @@ static PyObject *_wrap_new_DateSpan(PyObject *self, PyObject *args, PyObject *kw
     int arg3 = (int) 0 ;
     int arg4 = (int) 0 ;
     wxDateSpan *result;
+    PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
+    PyObject * obj2 = 0 ;
+    PyObject * obj3 = 0 ;
     char *kwnames[] = {
         (char *) "years",(char *) "months",(char *) "weeks",(char *) "days", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"|iiii:new_DateSpan",kwnames,&arg1,&arg2,&arg3,&arg4)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"|OOOO:new_DateSpan",kwnames,&obj0,&obj1,&obj2,&obj3)) goto fail;
+    if (obj0) {
+        {
+            arg1 = (int) SWIG_PyObj_AsInt(obj0);  
+            if (PyErr_Occurred()) SWIG_fail;
+        }
+    }
+    if (obj1) {
+        {
+            arg2 = (int) SWIG_PyObj_AsInt(obj1);  
+            if (PyErr_Occurred()) SWIG_fail;
+        }
+    }
+    if (obj2) {
+        {
+            arg3 = (int) SWIG_PyObj_AsInt(obj2);  
+            if (PyErr_Occurred()) SWIG_fail;
+        }
+    }
+    if (obj3) {
+        {
+            arg4 = (int) SWIG_PyObj_AsInt(obj3);  
+            if (PyErr_Occurred()) SWIG_fail;
+        }
+    }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         result = (wxDateSpan *)new wxDateSpan(arg1,arg2,arg3,arg4);
@@ -20872,11 +22039,16 @@ static PyObject *_wrap_DateSpan_Days(PyObject *self, PyObject *args, PyObject *k
     PyObject *resultobj;
     int arg1 ;
     wxDateSpan result;
+    PyObject * obj0 = 0 ;
     char *kwnames[] = {
         (char *) "days", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"i:DateSpan_Days",kwnames,&arg1)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:DateSpan_Days",kwnames,&obj0)) goto fail;
+    {
+        arg1 = (int) SWIG_PyObj_AsInt(obj0);  
+        if (PyErr_Occurred()) SWIG_fail;
+    }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         result = wxDateSpan::Days(arg1);
@@ -20925,11 +22097,16 @@ static PyObject *_wrap_DateSpan_Weeks(PyObject *self, PyObject *args, PyObject *
     PyObject *resultobj;
     int arg1 ;
     wxDateSpan result;
+    PyObject * obj0 = 0 ;
     char *kwnames[] = {
         (char *) "weeks", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"i:DateSpan_Weeks",kwnames,&arg1)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:DateSpan_Weeks",kwnames,&obj0)) goto fail;
+    {
+        arg1 = (int) SWIG_PyObj_AsInt(obj0);  
+        if (PyErr_Occurred()) SWIG_fail;
+    }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         result = wxDateSpan::Weeks(arg1);
@@ -20978,11 +22155,16 @@ static PyObject *_wrap_DateSpan_Months(PyObject *self, PyObject *args, PyObject 
     PyObject *resultobj;
     int arg1 ;
     wxDateSpan result;
+    PyObject * obj0 = 0 ;
     char *kwnames[] = {
         (char *) "mon", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"i:DateSpan_Months",kwnames,&arg1)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:DateSpan_Months",kwnames,&obj0)) goto fail;
+    {
+        arg1 = (int) SWIG_PyObj_AsInt(obj0);  
+        if (PyErr_Occurred()) SWIG_fail;
+    }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         result = wxDateSpan::Months(arg1);
@@ -21031,11 +22213,16 @@ static PyObject *_wrap_DateSpan_Years(PyObject *self, PyObject *args, PyObject *
     PyObject *resultobj;
     int arg1 ;
     wxDateSpan result;
+    PyObject * obj0 = 0 ;
     char *kwnames[] = {
         (char *) "years", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"i:DateSpan_Years",kwnames,&arg1)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:DateSpan_Years",kwnames,&obj0)) goto fail;
+    {
+        arg1 = (int) SWIG_PyObj_AsInt(obj0);  
+        if (PyErr_Occurred()) SWIG_fail;
+    }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         result = wxDateSpan::Years(arg1);
@@ -21086,12 +22273,17 @@ static PyObject *_wrap_DateSpan_SetYears(PyObject *self, PyObject *args, PyObjec
     int arg2 ;
     wxDateSpan *result;
     PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
     char *kwnames[] = {
         (char *) "self",(char *) "n", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"Oi:DateSpan_SetYears",kwnames,&obj0,&arg2)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:DateSpan_SetYears",kwnames,&obj0,&obj1)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxDateSpan,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    {
+        arg2 = (int) SWIG_PyObj_AsInt(obj1);  
+        if (PyErr_Occurred()) SWIG_fail;
+    }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         {
@@ -21115,12 +22307,17 @@ static PyObject *_wrap_DateSpan_SetMonths(PyObject *self, PyObject *args, PyObje
     int arg2 ;
     wxDateSpan *result;
     PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
     char *kwnames[] = {
         (char *) "self",(char *) "n", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"Oi:DateSpan_SetMonths",kwnames,&obj0,&arg2)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:DateSpan_SetMonths",kwnames,&obj0,&obj1)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxDateSpan,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    {
+        arg2 = (int) SWIG_PyObj_AsInt(obj1);  
+        if (PyErr_Occurred()) SWIG_fail;
+    }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         {
@@ -21144,12 +22341,17 @@ static PyObject *_wrap_DateSpan_SetWeeks(PyObject *self, PyObject *args, PyObjec
     int arg2 ;
     wxDateSpan *result;
     PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
     char *kwnames[] = {
         (char *) "self",(char *) "n", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"Oi:DateSpan_SetWeeks",kwnames,&obj0,&arg2)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:DateSpan_SetWeeks",kwnames,&obj0,&obj1)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxDateSpan,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    {
+        arg2 = (int) SWIG_PyObj_AsInt(obj1);  
+        if (PyErr_Occurred()) SWIG_fail;
+    }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         {
@@ -21173,12 +22375,17 @@ static PyObject *_wrap_DateSpan_SetDays(PyObject *self, PyObject *args, PyObject
     int arg2 ;
     wxDateSpan *result;
     PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
     char *kwnames[] = {
         (char *) "self",(char *) "n", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"Oi:DateSpan_SetDays",kwnames,&obj0,&arg2)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:DateSpan_SetDays",kwnames,&obj0,&obj1)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxDateSpan,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    {
+        arg2 = (int) SWIG_PyObj_AsInt(obj1);  
+        if (PyErr_Occurred()) SWIG_fail;
+    }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         {
@@ -21214,7 +22421,7 @@ static PyObject *_wrap_DateSpan_GetYears(PyObject *self, PyObject *args, PyObjec
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromInt((int)result);
     return resultobj;
     fail:
     return NULL;
@@ -21239,7 +22446,7 @@ static PyObject *_wrap_DateSpan_GetMonths(PyObject *self, PyObject *args, PyObje
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromInt((int)result);
     return resultobj;
     fail:
     return NULL;
@@ -21264,7 +22471,7 @@ static PyObject *_wrap_DateSpan_GetWeeks(PyObject *self, PyObject *args, PyObjec
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromInt((int)result);
     return resultobj;
     fail:
     return NULL;
@@ -21289,7 +22496,7 @@ static PyObject *_wrap_DateSpan_GetDays(PyObject *self, PyObject *args, PyObject
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromInt((int)result);
     return resultobj;
     fail:
     return NULL;
@@ -21314,7 +22521,7 @@ static PyObject *_wrap_DateSpan_GetTotalDays(PyObject *self, PyObject *args, PyO
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromInt((int)result);
     return resultobj;
     fail:
     return NULL;
@@ -21423,12 +22630,17 @@ static PyObject *_wrap_DateSpan_Multiply(PyObject *self, PyObject *args, PyObjec
     int arg2 ;
     wxDateSpan *result;
     PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
     char *kwnames[] = {
         (char *) "self",(char *) "factor", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"Oi:DateSpan_Multiply",kwnames,&obj0,&arg2)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:DateSpan_Multiply",kwnames,&obj0,&obj1)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxDateSpan,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    {
+        arg2 = (int) SWIG_PyObj_AsInt(obj1);  
+        if (PyErr_Occurred()) SWIG_fail;
+    }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         {
@@ -21548,12 +22760,17 @@ static PyObject *_wrap_DateSpan___imul__(PyObject *self, PyObject *args, PyObjec
     int arg2 ;
     wxDateSpan *result;
     PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
     char *kwnames[] = {
         (char *) "self",(char *) "factor", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"Oi:DateSpan___imul__",kwnames,&obj0,&arg2)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:DateSpan___imul__",kwnames,&obj0,&obj1)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxDateSpan,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    {
+        arg2 = (int) SWIG_PyObj_AsInt(obj1);  
+        if (PyErr_Occurred()) SWIG_fail;
+    }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         {
@@ -21647,12 +22864,17 @@ static PyObject *_wrap_DateSpan___mul__(PyObject *self, PyObject *args, PyObject
     int arg2 ;
     wxDateSpan result;
     PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
     char *kwnames[] = {
         (char *) "self",(char *) "n", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"Oi:DateSpan___mul__",kwnames,&obj0,&arg2)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:DateSpan___mul__",kwnames,&obj0,&obj1)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxDateSpan,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    {
+        arg2 = (int) SWIG_PyObj_AsInt(obj1);  
+        if (PyErr_Occurred()) SWIG_fail;
+    }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         result = wxDateSpan___mul__(arg1,arg2);
@@ -21677,12 +22899,17 @@ static PyObject *_wrap_DateSpan___rmul__(PyObject *self, PyObject *args, PyObjec
     int arg2 ;
     wxDateSpan result;
     PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
     char *kwnames[] = {
         (char *) "self",(char *) "n", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"Oi:DateSpan___rmul__",kwnames,&obj0,&arg2)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:DateSpan___rmul__",kwnames,&obj0,&obj1)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxDateSpan,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    {
+        arg2 = (int) SWIG_PyObj_AsInt(obj1);  
+        if (PyErr_Occurred()) SWIG_fail;
+    }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         result = wxDateSpan___rmul__(arg1,arg2);
@@ -21725,7 +22952,7 @@ static PyObject *_wrap_DateSpan___eq__(PyObject *self, PyObject *args, PyObject 
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromBool((bool)result);
     return resultobj;
     fail:
     return NULL;
@@ -21756,7 +22983,7 @@ static PyObject *_wrap_DateSpan___ne__(PyObject *self, PyObject *args, PyObject 
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromBool((bool)result);
     return resultobj;
     fail:
     return NULL;
@@ -21785,7 +23012,7 @@ static PyObject *_wrap_GetLocalTime(PyObject *self, PyObject *args, PyObject *kw
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromLong((long)result);
     return resultobj;
     fail:
     return NULL;
@@ -21807,7 +23034,7 @@ static PyObject *_wrap_GetUTCTime(PyObject *self, PyObject *args, PyObject *kwar
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromLong((long)result);
     return resultobj;
     fail:
     return NULL;
@@ -21829,7 +23056,7 @@ static PyObject *_wrap_GetCurrentTime(PyObject *self, PyObject *args, PyObject *
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromLong((long)result);
     return resultobj;
     fail:
     return NULL;
@@ -21873,11 +23100,16 @@ static PyObject *_wrap_new_DataFormat(PyObject *self, PyObject *args, PyObject *
     PyObject *resultobj;
     int arg1 ;
     wxDataFormat *result;
+    PyObject * obj0 = 0 ;
     char *kwnames[] = {
         (char *) "type", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"i:new_DataFormat",kwnames,&arg1)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:new_DataFormat",kwnames,&obj0)) goto fail;
+    {
+        arg1 = (wxDataFormatId) SWIG_PyObj_AsInt(obj0);  
+        if (PyErr_Occurred()) SWIG_fail;
+    }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         result = (wxDataFormat *)new wxDataFormat((wxDataFormatId )arg1);
@@ -21960,9 +23192,14 @@ static PyObject *_wrap_DataFormat___eq____SWIG_0(PyObject *self, PyObject *args)
     int arg2 ;
     bool result;
     PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
     
-    if(!PyArg_ParseTuple(args,(char *)"Oi:DataFormat___eq__",&obj0,&arg2)) goto fail;
+    if(!PyArg_ParseTuple(args,(char *)"OO:DataFormat___eq__",&obj0,&obj1)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxDataFormat,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    {
+        arg2 = (int) SWIG_PyObj_AsInt(obj1);  
+        if (PyErr_Occurred()) SWIG_fail;
+    }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         result = (bool)((wxDataFormat const *)arg1)->operator ==(arg2);
@@ -21970,7 +23207,7 @@ static PyObject *_wrap_DataFormat___eq____SWIG_0(PyObject *self, PyObject *args)
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromBool((bool)result);
     return resultobj;
     fail:
     return NULL;
@@ -21983,9 +23220,14 @@ static PyObject *_wrap_DataFormat___ne____SWIG_0(PyObject *self, PyObject *args)
     int arg2 ;
     bool result;
     PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
     
-    if(!PyArg_ParseTuple(args,(char *)"Oi:DataFormat___ne__",&obj0,&arg2)) goto fail;
+    if(!PyArg_ParseTuple(args,(char *)"OO:DataFormat___ne__",&obj0,&obj1)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxDataFormat,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    {
+        arg2 = (int) SWIG_PyObj_AsInt(obj1);  
+        if (PyErr_Occurred()) SWIG_fail;
+    }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         result = (bool)((wxDataFormat const *)arg1)->operator !=(arg2);
@@ -21993,7 +23235,7 @@ static PyObject *_wrap_DataFormat___ne____SWIG_0(PyObject *self, PyObject *args)
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromBool((bool)result);
     return resultobj;
     fail:
     return NULL;
@@ -22021,7 +23263,7 @@ static PyObject *_wrap_DataFormat___eq____SWIG_1(PyObject *self, PyObject *args)
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromBool((bool)result);
     return resultobj;
     fail:
     return NULL;
@@ -22076,7 +23318,7 @@ static PyObject *_wrap_DataFormat___eq__(PyObject *self, PyObject *args) {
         }
         if (_v) {
             {
-                SPyObj_AsInt(argv[1]);
+                SWIG_PyObj_AsInt(argv[1]);
                 if (PyErr_Occurred()) {
                     _v = 0;
                     PyErr_Clear();
@@ -22116,7 +23358,7 @@ static PyObject *_wrap_DataFormat___ne____SWIG_1(PyObject *self, PyObject *args)
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromBool((bool)result);
     return resultobj;
     fail:
     return NULL;
@@ -22171,7 +23413,7 @@ static PyObject *_wrap_DataFormat___ne__(PyObject *self, PyObject *args) {
         }
         if (_v) {
             {
-                SPyObj_AsInt(argv[1]);
+                SWIG_PyObj_AsInt(argv[1]);
                 if (PyErr_Occurred()) {
                     _v = 0;
                     PyErr_Clear();
@@ -22195,12 +23437,17 @@ static PyObject *_wrap_DataFormat_SetType(PyObject *self, PyObject *args, PyObje
     wxDataFormat *arg1 = (wxDataFormat *) 0 ;
     int arg2 ;
     PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
     char *kwnames[] = {
         (char *) "self",(char *) "format", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"Oi:DataFormat_SetType",kwnames,&obj0,&arg2)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:DataFormat_SetType",kwnames,&obj0,&obj1)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxDataFormat,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    {
+        arg2 = (wxDataFormatId) SWIG_PyObj_AsInt(obj1);  
+        if (PyErr_Occurred()) SWIG_fail;
+    }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         (arg1)->SetType((wxDataFormatId )arg2);
@@ -22233,7 +23480,7 @@ static PyObject *_wrap_DataFormat_GetType(PyObject *self, PyObject *args, PyObje
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromInt((int)result);
     return resultobj;
     fail:
     return NULL;
@@ -22362,12 +23609,19 @@ static PyObject *_wrap_DataObject_GetPreferredFormat(PyObject *self, PyObject *a
     int arg2 = (int) wxDataObject::Get ;
     SwigValueWrapper< wxDataFormat > result;
     PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
     char *kwnames[] = {
         (char *) "self",(char *) "dir", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O|i:DataObject_GetPreferredFormat",kwnames,&obj0,&arg2)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O|O:DataObject_GetPreferredFormat",kwnames,&obj0,&obj1)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxDataObject,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    if (obj1) {
+        {
+            arg2 = (wxDataObject::Direction) SWIG_PyObj_AsInt(obj1);  
+            if (PyErr_Occurred()) SWIG_fail;
+        }
+    }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         result = ((wxDataObject const *)arg1)->GetPreferredFormat((wxDataObject::Direction )arg2);
@@ -22392,12 +23646,19 @@ static PyObject *_wrap_DataObject_GetFormatCount(PyObject *self, PyObject *args,
     int arg2 = (int) wxDataObject::Get ;
     size_t result;
     PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
     char *kwnames[] = {
         (char *) "self",(char *) "dir", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O|i:DataObject_GetFormatCount",kwnames,&obj0,&arg2)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O|O:DataObject_GetFormatCount",kwnames,&obj0,&obj1)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxDataObject,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    if (obj1) {
+        {
+            arg2 = (wxDataObject::Direction) SWIG_PyObj_AsInt(obj1);  
+            if (PyErr_Occurred()) SWIG_fail;
+        }
+    }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         result = (size_t)((wxDataObject const *)arg1)->GetFormatCount((wxDataObject::Direction )arg2);
@@ -22405,7 +23666,7 @@ static PyObject *_wrap_DataObject_GetFormatCount(PyObject *self, PyObject *args,
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SPyObj_FromUnsignedLong((unsigned long)result);
+    resultobj = SWIG_PyObj_FromUnsignedLong((unsigned long)result);
     return resultobj;
     fail:
     return NULL;
@@ -22420,15 +23681,22 @@ static PyObject *_wrap_DataObject_IsSupported(PyObject *self, PyObject *args, Py
     bool result;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
+    PyObject * obj2 = 0 ;
     char *kwnames[] = {
         (char *) "self",(char *) "format",(char *) "dir", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO|i:DataObject_IsSupported",kwnames,&obj0,&obj1,&arg3)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO|O:DataObject_IsSupported",kwnames,&obj0,&obj1,&obj2)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxDataObject,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
     if ((SWIG_ConvertPtr(obj1,(void **) &arg2, SWIGTYPE_p_wxDataFormat,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
     if (arg2 == NULL) {
         PyErr_SetString(PyExc_TypeError,"null reference"); SWIG_fail; 
+    }
+    if (obj2) {
+        {
+            arg3 = (wxDataObject::Direction) SWIG_PyObj_AsInt(obj2);  
+            if (PyErr_Occurred()) SWIG_fail;
+        }
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -22437,7 +23705,7 @@ static PyObject *_wrap_DataObject_IsSupported(PyObject *self, PyObject *args, Py
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromBool((bool)result);
     return resultobj;
     fail:
     return NULL;
@@ -22468,7 +23736,7 @@ static PyObject *_wrap_DataObject_GetDataSize(PyObject *self, PyObject *args, Py
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SPyObj_FromUnsignedLong((unsigned long)result);
+    resultobj = SWIG_PyObj_FromUnsignedLong((unsigned long)result);
     return resultobj;
     fail:
     return NULL;
@@ -22482,13 +23750,20 @@ static PyObject *_wrap_DataObject_GetAllFormats(PyObject *self, PyObject *args, 
     int arg3 = (int) wxDataObject::Get ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
+    PyObject * obj2 = 0 ;
     char *kwnames[] = {
         (char *) "self",(char *) "formats",(char *) "dir", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO|i:DataObject_GetAllFormats",kwnames,&obj0,&obj1,&arg3)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO|O:DataObject_GetAllFormats",kwnames,&obj0,&obj1,&obj2)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxDataObject,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
     if ((SWIG_ConvertPtr(obj1,(void **) &arg2, SWIGTYPE_p_wxDataFormat,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    if (obj2) {
+        {
+            arg3 = (wxDataObject::Direction) SWIG_PyObj_AsInt(obj2);  
+            if (PyErr_Occurred()) SWIG_fail;
+        }
+    }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         ((wxDataObject const *)arg1)->GetAllFormats(arg2,(wxDataObject::Direction )arg3);
@@ -22530,7 +23805,7 @@ static PyObject *_wrap_DataObject_GetDataHere(PyObject *self, PyObject *args, Py
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromBool((bool)result);
     return resultobj;
     fail:
     return NULL;
@@ -22559,7 +23834,7 @@ static PyObject *_wrap_DataObject_SetData(PyObject *self, PyObject *args, PyObje
         PyErr_SetString(PyExc_TypeError,"null reference"); SWIG_fail; 
     }
     {
-        arg3 = (size_t) SPyObj_AsUnsignedLong(obj2);  
+        arg3 = (size_t) SWIG_PyObj_AsUnsignedLong(obj2);  
         if (PyErr_Occurred()) SWIG_fail;
     }
     if ((SWIG_ConvertPtr(obj3,(void **) &arg4, 0, SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
@@ -22570,7 +23845,7 @@ static PyObject *_wrap_DataObject_SetData(PyObject *self, PyObject *args, PyObje
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromBool((bool)result);
     return resultobj;
     fail:
     return NULL;
@@ -22777,13 +24052,20 @@ static PyObject *_wrap_DataObjectComposite_Add(PyObject *self, PyObject *args, P
     int arg3 = (int) False ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
+    PyObject * obj2 = 0 ;
     char *kwnames[] = {
         (char *) "self",(char *) "dataObject",(char *) "preferred", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO|i:DataObjectComposite_Add",kwnames,&obj0,&obj1,&arg3)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO|O:DataObjectComposite_Add",kwnames,&obj0,&obj1,&obj2)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxDataObjectComposite,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
     if ((SWIG_ConvertPtr(obj1,(void **) &arg2, SWIGTYPE_p_wxDataObjectSimple,SWIG_POINTER_EXCEPTION | SWIG_POINTER_DISOWN )) == -1) SWIG_fail;
+    if (obj2) {
+        {
+            arg3 = (int) SWIG_PyObj_AsInt(obj2);  
+            if (PyErr_Occurred()) SWIG_fail;
+        }
+    }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         (arg1)->Add(arg2,arg3);
@@ -22864,7 +24146,7 @@ static PyObject *_wrap_TextDataObject_GetTextLength(PyObject *self, PyObject *ar
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SPyObj_FromUnsignedLong((unsigned long)result);
+    resultobj = SWIG_PyObj_FromUnsignedLong((unsigned long)result);
     return resultobj;
     fail:
     return NULL;
@@ -23330,7 +24612,7 @@ static PyObject *_wrap_CustomDataObject_SetData(PyObject *self, PyObject *args, 
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromBool((bool)result);
     return resultobj;
     fail:
     return NULL;
@@ -23355,7 +24637,7 @@ static PyObject *_wrap_CustomDataObject_GetSize(PyObject *self, PyObject *args, 
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SPyObj_FromUnsignedLong((unsigned long)result);
+    resultobj = SWIG_PyObj_FromUnsignedLong((unsigned long)result);
     return resultobj;
     fail:
     return NULL;
@@ -23527,11 +24809,16 @@ static PyObject *_wrap_IsDragResultOk(PyObject *self, PyObject *args, PyObject *
     PyObject *resultobj;
     int arg1 ;
     bool result;
+    PyObject * obj0 = 0 ;
     char *kwnames[] = {
         (char *) "res", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"i:IsDragResultOk",kwnames,&arg1)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:IsDragResultOk",kwnames,&obj0)) goto fail;
+    {
+        arg1 = (wxDragResult) SWIG_PyObj_AsInt(obj0);  
+        if (PyErr_Occurred()) SWIG_fail;
+    }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         result = (bool)wxIsDragResultOk((wxDragResult )arg1);
@@ -23539,7 +24826,7 @@ static PyObject *_wrap_IsDragResultOk(PyObject *self, PyObject *args, PyObject *
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromBool((bool)result);
     return resultobj;
     fail:
     return NULL;
@@ -23607,14 +24894,19 @@ static PyObject *_wrap_DropSource__setCallbackInfo(PyObject *self, PyObject *arg
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     PyObject * obj2 = 0 ;
+    PyObject * obj3 = 0 ;
     char *kwnames[] = {
         (char *) "self",(char *) "self",(char *) "_class",(char *) "incref", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOOi:DropSource__setCallbackInfo",kwnames,&obj0,&obj1,&obj2,&arg4)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOOO:DropSource__setCallbackInfo",kwnames,&obj0,&obj1,&obj2,&obj3)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxPyDropSource,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
     arg2 = obj1;
     arg3 = obj2;
+    {
+        arg4 = (int) SWIG_PyObj_AsInt(obj3);  
+        if (PyErr_Occurred()) SWIG_fail;
+    }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         (arg1)->_setCallbackInfo(arg2,arg3,arg4);
@@ -23714,13 +25006,18 @@ static PyObject *_wrap_DropSource_SetCursor(PyObject *self, PyObject *args, PyOb
     int arg2 ;
     wxCursor *arg3 = 0 ;
     PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
     PyObject * obj2 = 0 ;
     char *kwnames[] = {
         (char *) "self",(char *) "res",(char *) "cursor", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OiO:DropSource_SetCursor",kwnames,&obj0,&arg2,&obj2)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO:DropSource_SetCursor",kwnames,&obj0,&obj1,&obj2)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxPyDropSource,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    {
+        arg2 = (wxDragResult) SWIG_PyObj_AsInt(obj1);  
+        if (PyErr_Occurred()) SWIG_fail;
+    }
     if ((SWIG_ConvertPtr(obj2,(void **) &arg3, SWIGTYPE_p_wxCursor,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
     if (arg3 == NULL) {
         PyErr_SetString(PyExc_TypeError,"null reference"); SWIG_fail; 
@@ -23745,12 +25042,19 @@ static PyObject *_wrap_DropSource_DoDragDrop(PyObject *self, PyObject *args, PyO
     int arg2 = (int) wxDrag_CopyOnly ;
     int result;
     PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
     char *kwnames[] = {
         (char *) "self",(char *) "flags", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O|i:DropSource_DoDragDrop",kwnames,&obj0,&arg2)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O|O:DropSource_DoDragDrop",kwnames,&obj0,&obj1)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxPyDropSource,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    if (obj1) {
+        {
+            arg2 = (int) SWIG_PyObj_AsInt(obj1);  
+            if (PyErr_Occurred()) SWIG_fail;
+        }
+    }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         result = (int)(arg1)->DoDragDrop(arg2);
@@ -23758,7 +25062,7 @@ static PyObject *_wrap_DropSource_DoDragDrop(PyObject *self, PyObject *args, PyO
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromInt((int)result);
     return resultobj;
     fail:
     return NULL;
@@ -23771,12 +25075,17 @@ static PyObject *_wrap_DropSource_base_GiveFeedback(PyObject *self, PyObject *ar
     int arg2 ;
     bool result;
     PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
     char *kwnames[] = {
         (char *) "self",(char *) "effect", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"Oi:DropSource_base_GiveFeedback",kwnames,&obj0,&arg2)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:DropSource_base_GiveFeedback",kwnames,&obj0,&obj1)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxPyDropSource,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    {
+        arg2 = (wxDragResult) SWIG_PyObj_AsInt(obj1);  
+        if (PyErr_Occurred()) SWIG_fail;
+    }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         result = (bool)(arg1)->base_GiveFeedback((wxDragResult )arg2);
@@ -23784,7 +25093,7 @@ static PyObject *_wrap_DropSource_base_GiveFeedback(PyObject *self, PyObject *ar
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromBool((bool)result);
     return resultobj;
     fail:
     return NULL;
@@ -23939,12 +25248,27 @@ static PyObject *_wrap_DropTarget_base_OnEnter(PyObject *self, PyObject *args, P
     int arg4 ;
     int result;
     PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
+    PyObject * obj2 = 0 ;
+    PyObject * obj3 = 0 ;
     char *kwnames[] = {
         (char *) "self",(char *) "x",(char *) "y",(char *) "def", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"Oiii:DropTarget_base_OnEnter",kwnames,&obj0,&arg2,&arg3,&arg4)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOOO:DropTarget_base_OnEnter",kwnames,&obj0,&obj1,&obj2,&obj3)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxPyDropTarget,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    {
+        arg2 = (int) SWIG_PyObj_AsInt(obj1);  
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    {
+        arg3 = (int) SWIG_PyObj_AsInt(obj2);  
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    {
+        arg4 = (wxDragResult) SWIG_PyObj_AsInt(obj3);  
+        if (PyErr_Occurred()) SWIG_fail;
+    }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         result = (int)(arg1)->base_OnEnter(arg2,arg3,(wxDragResult )arg4);
@@ -23952,7 +25276,7 @@ static PyObject *_wrap_DropTarget_base_OnEnter(PyObject *self, PyObject *args, P
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromInt((int)result);
     return resultobj;
     fail:
     return NULL;
@@ -23967,12 +25291,27 @@ static PyObject *_wrap_DropTarget_base_OnDragOver(PyObject *self, PyObject *args
     int arg4 ;
     int result;
     PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
+    PyObject * obj2 = 0 ;
+    PyObject * obj3 = 0 ;
     char *kwnames[] = {
         (char *) "self",(char *) "x",(char *) "y",(char *) "def", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"Oiii:DropTarget_base_OnDragOver",kwnames,&obj0,&arg2,&arg3,&arg4)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOOO:DropTarget_base_OnDragOver",kwnames,&obj0,&obj1,&obj2,&obj3)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxPyDropTarget,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    {
+        arg2 = (int) SWIG_PyObj_AsInt(obj1);  
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    {
+        arg3 = (int) SWIG_PyObj_AsInt(obj2);  
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    {
+        arg4 = (wxDragResult) SWIG_PyObj_AsInt(obj3);  
+        if (PyErr_Occurred()) SWIG_fail;
+    }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         result = (int)(arg1)->base_OnDragOver(arg2,arg3,(wxDragResult )arg4);
@@ -23980,7 +25319,7 @@ static PyObject *_wrap_DropTarget_base_OnDragOver(PyObject *self, PyObject *args
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromInt((int)result);
     return resultobj;
     fail:
     return NULL;
@@ -24018,12 +25357,22 @@ static PyObject *_wrap_DropTarget_base_OnDrop(PyObject *self, PyObject *args, Py
     int arg3 ;
     bool result;
     PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
+    PyObject * obj2 = 0 ;
     char *kwnames[] = {
         (char *) "self",(char *) "x",(char *) "y", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"Oii:DropTarget_base_OnDrop",kwnames,&obj0,&arg2,&arg3)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO:DropTarget_base_OnDrop",kwnames,&obj0,&obj1,&obj2)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxPyDropTarget,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    {
+        arg2 = (int) SWIG_PyObj_AsInt(obj1);  
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    {
+        arg3 = (int) SWIG_PyObj_AsInt(obj2);  
+        if (PyErr_Occurred()) SWIG_fail;
+    }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         result = (bool)(arg1)->base_OnDrop(arg2,arg3);
@@ -24031,7 +25380,7 @@ static PyObject *_wrap_DropTarget_base_OnDrop(PyObject *self, PyObject *args, Py
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromBool((bool)result);
     return resultobj;
     fail:
     return NULL;
@@ -24056,7 +25405,7 @@ static PyObject *_wrap_DropTarget_GetData(PyObject *self, PyObject *args, PyObje
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromBool((bool)result);
     return resultobj;
     fail:
     return NULL;
@@ -24130,12 +25479,27 @@ static PyObject *_wrap_TextDropTarget_base_OnEnter(PyObject *self, PyObject *arg
     int arg4 ;
     int result;
     PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
+    PyObject * obj2 = 0 ;
+    PyObject * obj3 = 0 ;
     char *kwnames[] = {
         (char *) "self",(char *) "x",(char *) "y",(char *) "def", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"Oiii:TextDropTarget_base_OnEnter",kwnames,&obj0,&arg2,&arg3,&arg4)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOOO:TextDropTarget_base_OnEnter",kwnames,&obj0,&obj1,&obj2,&obj3)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxPyTextDropTarget,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    {
+        arg2 = (int) SWIG_PyObj_AsInt(obj1);  
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    {
+        arg3 = (int) SWIG_PyObj_AsInt(obj2);  
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    {
+        arg4 = (wxDragResult) SWIG_PyObj_AsInt(obj3);  
+        if (PyErr_Occurred()) SWIG_fail;
+    }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         result = (int)(arg1)->base_OnEnter(arg2,arg3,(wxDragResult )arg4);
@@ -24143,7 +25507,7 @@ static PyObject *_wrap_TextDropTarget_base_OnEnter(PyObject *self, PyObject *arg
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromInt((int)result);
     return resultobj;
     fail:
     return NULL;
@@ -24158,12 +25522,27 @@ static PyObject *_wrap_TextDropTarget_base_OnDragOver(PyObject *self, PyObject *
     int arg4 ;
     int result;
     PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
+    PyObject * obj2 = 0 ;
+    PyObject * obj3 = 0 ;
     char *kwnames[] = {
         (char *) "self",(char *) "x",(char *) "y",(char *) "def", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"Oiii:TextDropTarget_base_OnDragOver",kwnames,&obj0,&arg2,&arg3,&arg4)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOOO:TextDropTarget_base_OnDragOver",kwnames,&obj0,&obj1,&obj2,&obj3)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxPyTextDropTarget,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    {
+        arg2 = (int) SWIG_PyObj_AsInt(obj1);  
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    {
+        arg3 = (int) SWIG_PyObj_AsInt(obj2);  
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    {
+        arg4 = (wxDragResult) SWIG_PyObj_AsInt(obj3);  
+        if (PyErr_Occurred()) SWIG_fail;
+    }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         result = (int)(arg1)->base_OnDragOver(arg2,arg3,(wxDragResult )arg4);
@@ -24171,7 +25550,7 @@ static PyObject *_wrap_TextDropTarget_base_OnDragOver(PyObject *self, PyObject *
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromInt((int)result);
     return resultobj;
     fail:
     return NULL;
@@ -24209,12 +25588,22 @@ static PyObject *_wrap_TextDropTarget_base_OnDrop(PyObject *self, PyObject *args
     int arg3 ;
     bool result;
     PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
+    PyObject * obj2 = 0 ;
     char *kwnames[] = {
         (char *) "self",(char *) "x",(char *) "y", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"Oii:TextDropTarget_base_OnDrop",kwnames,&obj0,&arg2,&arg3)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO:TextDropTarget_base_OnDrop",kwnames,&obj0,&obj1,&obj2)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxPyTextDropTarget,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    {
+        arg2 = (int) SWIG_PyObj_AsInt(obj1);  
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    {
+        arg3 = (int) SWIG_PyObj_AsInt(obj2);  
+        if (PyErr_Occurred()) SWIG_fail;
+    }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         result = (bool)(arg1)->base_OnDrop(arg2,arg3);
@@ -24222,7 +25611,7 @@ static PyObject *_wrap_TextDropTarget_base_OnDrop(PyObject *self, PyObject *args
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromBool((bool)result);
     return resultobj;
     fail:
     return NULL;
@@ -24237,12 +25626,27 @@ static PyObject *_wrap_TextDropTarget_base_OnData(PyObject *self, PyObject *args
     int arg4 ;
     int result;
     PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
+    PyObject * obj2 = 0 ;
+    PyObject * obj3 = 0 ;
     char *kwnames[] = {
         (char *) "self",(char *) "x",(char *) "y",(char *) "def", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"Oiii:TextDropTarget_base_OnData",kwnames,&obj0,&arg2,&arg3,&arg4)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOOO:TextDropTarget_base_OnData",kwnames,&obj0,&obj1,&obj2,&obj3)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxPyTextDropTarget,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    {
+        arg2 = (int) SWIG_PyObj_AsInt(obj1);  
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    {
+        arg3 = (int) SWIG_PyObj_AsInt(obj2);  
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    {
+        arg4 = (wxDragResult) SWIG_PyObj_AsInt(obj3);  
+        if (PyErr_Occurred()) SWIG_fail;
+    }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         result = (int)(arg1)->base_OnData(arg2,arg3,(wxDragResult )arg4);
@@ -24250,7 +25654,7 @@ static PyObject *_wrap_TextDropTarget_base_OnData(PyObject *self, PyObject *args
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromInt((int)result);
     return resultobj;
     fail:
     return NULL;
@@ -24324,12 +25728,27 @@ static PyObject *_wrap_FileDropTarget_base_OnEnter(PyObject *self, PyObject *arg
     int arg4 ;
     int result;
     PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
+    PyObject * obj2 = 0 ;
+    PyObject * obj3 = 0 ;
     char *kwnames[] = {
         (char *) "self",(char *) "x",(char *) "y",(char *) "def", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"Oiii:FileDropTarget_base_OnEnter",kwnames,&obj0,&arg2,&arg3,&arg4)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOOO:FileDropTarget_base_OnEnter",kwnames,&obj0,&obj1,&obj2,&obj3)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxPyFileDropTarget,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    {
+        arg2 = (int) SWIG_PyObj_AsInt(obj1);  
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    {
+        arg3 = (int) SWIG_PyObj_AsInt(obj2);  
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    {
+        arg4 = (wxDragResult) SWIG_PyObj_AsInt(obj3);  
+        if (PyErr_Occurred()) SWIG_fail;
+    }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         result = (int)(arg1)->base_OnEnter(arg2,arg3,(wxDragResult )arg4);
@@ -24337,7 +25756,7 @@ static PyObject *_wrap_FileDropTarget_base_OnEnter(PyObject *self, PyObject *arg
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromInt((int)result);
     return resultobj;
     fail:
     return NULL;
@@ -24352,12 +25771,27 @@ static PyObject *_wrap_FileDropTarget_base_OnDragOver(PyObject *self, PyObject *
     int arg4 ;
     int result;
     PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
+    PyObject * obj2 = 0 ;
+    PyObject * obj3 = 0 ;
     char *kwnames[] = {
         (char *) "self",(char *) "x",(char *) "y",(char *) "def", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"Oiii:FileDropTarget_base_OnDragOver",kwnames,&obj0,&arg2,&arg3,&arg4)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOOO:FileDropTarget_base_OnDragOver",kwnames,&obj0,&obj1,&obj2,&obj3)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxPyFileDropTarget,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    {
+        arg2 = (int) SWIG_PyObj_AsInt(obj1);  
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    {
+        arg3 = (int) SWIG_PyObj_AsInt(obj2);  
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    {
+        arg4 = (wxDragResult) SWIG_PyObj_AsInt(obj3);  
+        if (PyErr_Occurred()) SWIG_fail;
+    }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         result = (int)(arg1)->base_OnDragOver(arg2,arg3,(wxDragResult )arg4);
@@ -24365,7 +25799,7 @@ static PyObject *_wrap_FileDropTarget_base_OnDragOver(PyObject *self, PyObject *
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromInt((int)result);
     return resultobj;
     fail:
     return NULL;
@@ -24403,12 +25837,22 @@ static PyObject *_wrap_FileDropTarget_base_OnDrop(PyObject *self, PyObject *args
     int arg3 ;
     bool result;
     PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
+    PyObject * obj2 = 0 ;
     char *kwnames[] = {
         (char *) "self",(char *) "x",(char *) "y", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"Oii:FileDropTarget_base_OnDrop",kwnames,&obj0,&arg2,&arg3)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO:FileDropTarget_base_OnDrop",kwnames,&obj0,&obj1,&obj2)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxPyFileDropTarget,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    {
+        arg2 = (int) SWIG_PyObj_AsInt(obj1);  
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    {
+        arg3 = (int) SWIG_PyObj_AsInt(obj2);  
+        if (PyErr_Occurred()) SWIG_fail;
+    }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         result = (bool)(arg1)->base_OnDrop(arg2,arg3);
@@ -24416,7 +25860,7 @@ static PyObject *_wrap_FileDropTarget_base_OnDrop(PyObject *self, PyObject *args
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromBool((bool)result);
     return resultobj;
     fail:
     return NULL;
@@ -24431,12 +25875,27 @@ static PyObject *_wrap_FileDropTarget_base_OnData(PyObject *self, PyObject *args
     int arg4 ;
     int result;
     PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
+    PyObject * obj2 = 0 ;
+    PyObject * obj3 = 0 ;
     char *kwnames[] = {
         (char *) "self",(char *) "x",(char *) "y",(char *) "def", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"Oiii:FileDropTarget_base_OnData",kwnames,&obj0,&arg2,&arg3,&arg4)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOOO:FileDropTarget_base_OnData",kwnames,&obj0,&obj1,&obj2,&obj3)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxPyFileDropTarget,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    {
+        arg2 = (int) SWIG_PyObj_AsInt(obj1);  
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    {
+        arg3 = (int) SWIG_PyObj_AsInt(obj2);  
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    {
+        arg4 = (wxDragResult) SWIG_PyObj_AsInt(obj3);  
+        if (PyErr_Occurred()) SWIG_fail;
+    }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         result = (int)(arg1)->base_OnData(arg2,arg3,(wxDragResult )arg4);
@@ -24444,7 +25903,7 @@ static PyObject *_wrap_FileDropTarget_base_OnData(PyObject *self, PyObject *args
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromInt((int)result);
     return resultobj;
     fail:
     return NULL;
@@ -24522,7 +25981,7 @@ static PyObject *_wrap_Clipboard_Open(PyObject *self, PyObject *args, PyObject *
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromBool((bool)result);
     return resultobj;
     fail:
     return NULL;
@@ -24571,7 +26030,7 @@ static PyObject *_wrap_Clipboard_IsOpened(PyObject *self, PyObject *args, PyObje
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromBool((bool)result);
     return resultobj;
     fail:
     return NULL;
@@ -24599,7 +26058,7 @@ static PyObject *_wrap_Clipboard_AddData(PyObject *self, PyObject *args, PyObjec
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromBool((bool)result);
     return resultobj;
     fail:
     return NULL;
@@ -24627,7 +26086,7 @@ static PyObject *_wrap_Clipboard_SetData(PyObject *self, PyObject *args, PyObjec
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromBool((bool)result);
     return resultobj;
     fail:
     return NULL;
@@ -24658,7 +26117,7 @@ static PyObject *_wrap_Clipboard_IsSupported(PyObject *self, PyObject *args, PyO
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromBool((bool)result);
     return resultobj;
     fail:
     return NULL;
@@ -24689,7 +26148,7 @@ static PyObject *_wrap_Clipboard_GetData(PyObject *self, PyObject *args, PyObjec
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromBool((bool)result);
     return resultobj;
     fail:
     return NULL;
@@ -24738,7 +26197,7 @@ static PyObject *_wrap_Clipboard_Flush(PyObject *self, PyObject *args, PyObject 
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromBool((bool)result);
     return resultobj;
     fail:
     return NULL;
@@ -24759,7 +26218,7 @@ static PyObject *_wrap_Clipboard_UsePrimarySelection(PyObject *self, PyObject *a
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxClipboard,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
     if (obj1) {
         {
-            arg2 = (bool) SPyObj_AsBool(obj1);  
+            arg2 = (bool) SWIG_PyObj_AsBool(obj1);  
             if (PyErr_Occurred()) SWIG_fail;
         }
     }
@@ -24867,7 +26326,7 @@ static PyObject *_wrap_ClipboardLocker___nonzero__(PyObject *self, PyObject *arg
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    resultobj = SWIG_PyObj_FromBool((bool)result);
     return resultobj;
     fail:
     return NULL;
@@ -26167,12 +27626,12 @@ static swig_type_info _swigt__p_wxLogStderr[] = {{"_p_wxLogStderr", 0, "wxLogStd
 static swig_type_info _swigt__p_wxLogTextCtrl[] = {{"_p_wxLogTextCtrl", 0, "wxLogTextCtrl *", 0},{"_p_wxLogTextCtrl"},{0}};
 static swig_type_info _swigt__p_wxTextCtrl[] = {{"_p_wxTextCtrl", 0, "wxTextCtrl *", 0},{"_p_wxTextCtrl"},{0}};
 static swig_type_info _swigt__p_wxBusyCursor[] = {{"_p_wxBusyCursor", 0, "wxBusyCursor *", 0},{"_p_wxBusyCursor"},{0}};
-static swig_type_info _swigt__p_wxFileDataObject[] = {{"_p_wxFileDataObject", 0, "wxFileDataObject *", 0},{"_p_wxFileDataObject"},{0}};
 static swig_type_info _swigt__p_wxPyBitmapDataObject[] = {{"_p_wxPyBitmapDataObject", 0, "wxPyBitmapDataObject *", 0},{"_p_wxPyBitmapDataObject"},{0}};
 static swig_type_info _swigt__p_wxPyTextDataObject[] = {{"_p_wxPyTextDataObject", 0, "wxPyTextDataObject *", 0},{"_p_wxPyTextDataObject"},{0}};
 static swig_type_info _swigt__p_wxBitmapDataObject[] = {{"_p_wxBitmapDataObject", 0, "wxBitmapDataObject *", 0},{"_p_wxBitmapDataObject"},{"_p_wxPyBitmapDataObject", _p_wxPyBitmapDataObjectTo_p_wxBitmapDataObject},{0}};
 static swig_type_info _swigt__p_wxTextDataObject[] = {{"_p_wxTextDataObject", 0, "wxTextDataObject *", 0},{"_p_wxTextDataObject"},{"_p_wxPyTextDataObject", _p_wxPyTextDataObjectTo_p_wxTextDataObject},{0}};
 static swig_type_info _swigt__p_wxDataObject[] = {{"_p_wxDataObject", 0, "wxDataObject *", 0},{"_p_wxDataObjectSimple", _p_wxDataObjectSimpleTo_p_wxDataObject},{"_p_wxPyDataObjectSimple", _p_wxPyDataObjectSimpleTo_p_wxDataObject},{"_p_wxDataObjectComposite", _p_wxDataObjectCompositeTo_p_wxDataObject},{"_p_wxDataObject"},{"_p_wxTextDataObject", _p_wxTextDataObjectTo_p_wxDataObject},{"_p_wxPyTextDataObject", _p_wxPyTextDataObjectTo_p_wxDataObject},{"_p_wxBitmapDataObject", _p_wxBitmapDataObjectTo_p_wxDataObject},{"_p_wxPyBitmapDataObject", _p_wxPyBitmapDataObjectTo_p_wxDataObject},{"_p_wxFileDataObject", _p_wxFileDataObjectTo_p_wxDataObject},{"_p_wxCustomDataObject", _p_wxCustomDataObjectTo_p_wxDataObject},{"_p_wxMetafileDataObject", _p_wxMetafileDataObjectTo_p_wxDataObject},{"_p_wxURLDataObject", _p_wxURLDataObjectTo_p_wxDataObject},{0}};
+static swig_type_info _swigt__p_wxFileDataObject[] = {{"_p_wxFileDataObject", 0, "wxFileDataObject *", 0},{"_p_wxFileDataObject"},{0}};
 static swig_type_info _swigt__p_wxCustomDataObject[] = {{"_p_wxCustomDataObject", 0, "wxCustomDataObject *", 0},{"_p_wxCustomDataObject"},{0}};
 static swig_type_info _swigt__p_wxURLDataObject[] = {{"_p_wxURLDataObject", 0, "wxURLDataObject *", 0},{"_p_wxURLDataObject"},{0}};
 static swig_type_info _swigt__p_wxMetafileDataObject[] = {{"_p_wxMetafileDataObject", 0, "wxMetafileDataObject *", 0},{"_p_wxMetafileDataObject"},{0}};
@@ -26189,6 +27648,7 @@ static swig_type_info _swigt__p_wxPyDataObjectSimple[] = {{"_p_wxPyDataObjectSim
 static swig_type_info _swigt__p_wxDataObjectSimple[] = {{"_p_wxDataObjectSimple", 0, "wxDataObjectSimple *", 0},{"_p_wxDataObjectSimple"},{"_p_wxPyDataObjectSimple", _p_wxPyDataObjectSimpleTo_p_wxDataObjectSimple},{"_p_wxTextDataObject", _p_wxTextDataObjectTo_p_wxDataObjectSimple},{"_p_wxPyTextDataObject", _p_wxPyTextDataObjectTo_p_wxDataObjectSimple},{"_p_wxBitmapDataObject", _p_wxBitmapDataObjectTo_p_wxDataObjectSimple},{"_p_wxPyBitmapDataObject", _p_wxPyBitmapDataObjectTo_p_wxDataObjectSimple},{"_p_wxFileDataObject", _p_wxFileDataObjectTo_p_wxDataObjectSimple},{"_p_wxCustomDataObject", _p_wxCustomDataObjectTo_p_wxDataObjectSimple},{"_p_wxMetafileDataObject", _p_wxMetafileDataObjectTo_p_wxDataObjectSimple},{0}};
 static swig_type_info _swigt__p_wxEvtHandler[] = {{"_p_wxEvtHandler", 0, "wxEvtHandler *", 0},{"_p_wxControl", _p_wxControlTo_p_wxEvtHandler},{"_p_wxWindow", _p_wxWindowTo_p_wxEvtHandler},{"_p_wxControlWithItems", _p_wxControlWithItemsTo_p_wxEvtHandler},{"_p_wxEvtHandler"},{"_p_wxPyApp", _p_wxPyAppTo_p_wxEvtHandler},{"_p_wxPyTimer", _p_wxPyTimerTo_p_wxEvtHandler},{"_p_wxMenuBar", _p_wxMenuBarTo_p_wxEvtHandler},{"_p_wxValidator", _p_wxValidatorTo_p_wxEvtHandler},{"_p_wxPyValidator", _p_wxPyValidatorTo_p_wxEvtHandler},{"_p_wxMenu", _p_wxMenuTo_p_wxEvtHandler},{"_p_wxPyProcess", _p_wxPyProcessTo_p_wxEvtHandler},{0}};
 static swig_type_info _swigt__p_wxRect[] = {{"_p_wxRect", 0, "wxRect *", 0},{"_p_wxRect"},{0}};
+static swig_type_info _swigt__p_char[] = {{"_p_char", 0, "char *", 0},{"_p_char"},{0}};
 static swig_type_info _swigt__p_wxSingleInstanceChecker[] = {{"_p_wxSingleInstanceChecker", 0, "wxSingleInstanceChecker *", 0},{"_p_wxSingleInstanceChecker"},{0}};
 static swig_type_info _swigt__p_wxFileTypeInfo[] = {{"_p_wxFileTypeInfo", 0, "wxFileTypeInfo *", 0},{"_p_wxFileTypeInfo"},{0}};
 static swig_type_info _swigt__p_wxFrame[] = {{"_p_wxFrame", 0, "wxFrame *", 0},{"_p_wxFrame"},{0}};
@@ -26251,12 +27711,12 @@ _swigt__p_wxLogStderr,
 _swigt__p_wxLogTextCtrl, 
 _swigt__p_wxTextCtrl, 
 _swigt__p_wxBusyCursor, 
-_swigt__p_wxFileDataObject, 
 _swigt__p_wxPyBitmapDataObject, 
 _swigt__p_wxPyTextDataObject, 
 _swigt__p_wxBitmapDataObject, 
 _swigt__p_wxTextDataObject, 
 _swigt__p_wxDataObject, 
+_swigt__p_wxFileDataObject, 
 _swigt__p_wxCustomDataObject, 
 _swigt__p_wxURLDataObject, 
 _swigt__p_wxMetafileDataObject, 
@@ -26273,6 +27733,7 @@ _swigt__p_wxPyDataObjectSimple,
 _swigt__p_wxDataObjectSimple, 
 _swigt__p_wxEvtHandler, 
 _swigt__p_wxRect, 
+_swigt__p_char, 
 _swigt__p_wxSingleInstanceChecker, 
 _swigt__p_wxFileTypeInfo, 
 _swigt__p_wxFrame, 
@@ -26314,364 +27775,11 @@ _swigt__p_wxDateSpan,
 /* -------- TYPE CONVERSION AND EQUIVALENCE RULES (END) -------- */
 
 static swig_const_info swig_const_table[] = {
-{ SWIG_PY_INT,     (char *)"SYS_OEM_FIXED_FONT", (long) wxSYS_OEM_FIXED_FONT, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"SYS_ANSI_FIXED_FONT", (long) wxSYS_ANSI_FIXED_FONT, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"SYS_ANSI_VAR_FONT", (long) wxSYS_ANSI_VAR_FONT, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"SYS_SYSTEM_FONT", (long) wxSYS_SYSTEM_FONT, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"SYS_DEVICE_DEFAULT_FONT", (long) wxSYS_DEVICE_DEFAULT_FONT, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"SYS_DEFAULT_PALETTE", (long) wxSYS_DEFAULT_PALETTE, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"SYS_SYSTEM_FIXED_FONT", (long) wxSYS_SYSTEM_FIXED_FONT, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"SYS_DEFAULT_GUI_FONT", (long) wxSYS_DEFAULT_GUI_FONT, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"SYS_ICONTITLE_FONT", (long) wxSYS_ICONTITLE_FONT, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"SYS_COLOUR_SCROLLBAR", (long) wxSYS_COLOUR_SCROLLBAR, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"SYS_COLOUR_BACKGROUND", (long) wxSYS_COLOUR_BACKGROUND, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"SYS_COLOUR_DESKTOP", (long) wxSYS_COLOUR_DESKTOP, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"SYS_COLOUR_ACTIVECAPTION", (long) wxSYS_COLOUR_ACTIVECAPTION, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"SYS_COLOUR_INACTIVECAPTION", (long) wxSYS_COLOUR_INACTIVECAPTION, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"SYS_COLOUR_MENU", (long) wxSYS_COLOUR_MENU, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"SYS_COLOUR_WINDOW", (long) wxSYS_COLOUR_WINDOW, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"SYS_COLOUR_WINDOWFRAME", (long) wxSYS_COLOUR_WINDOWFRAME, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"SYS_COLOUR_MENUTEXT", (long) wxSYS_COLOUR_MENUTEXT, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"SYS_COLOUR_WINDOWTEXT", (long) wxSYS_COLOUR_WINDOWTEXT, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"SYS_COLOUR_CAPTIONTEXT", (long) wxSYS_COLOUR_CAPTIONTEXT, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"SYS_COLOUR_ACTIVEBORDER", (long) wxSYS_COLOUR_ACTIVEBORDER, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"SYS_COLOUR_INACTIVEBORDER", (long) wxSYS_COLOUR_INACTIVEBORDER, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"SYS_COLOUR_APPWORKSPACE", (long) wxSYS_COLOUR_APPWORKSPACE, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"SYS_COLOUR_HIGHLIGHT", (long) wxSYS_COLOUR_HIGHLIGHT, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"SYS_COLOUR_HIGHLIGHTTEXT", (long) wxSYS_COLOUR_HIGHLIGHTTEXT, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"SYS_COLOUR_BTNFACE", (long) wxSYS_COLOUR_BTNFACE, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"SYS_COLOUR_3DFACE", (long) wxSYS_COLOUR_3DFACE, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"SYS_COLOUR_BTNSHADOW", (long) wxSYS_COLOUR_BTNSHADOW, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"SYS_COLOUR_3DSHADOW", (long) wxSYS_COLOUR_3DSHADOW, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"SYS_COLOUR_GRAYTEXT", (long) wxSYS_COLOUR_GRAYTEXT, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"SYS_COLOUR_BTNTEXT", (long) wxSYS_COLOUR_BTNTEXT, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"SYS_COLOUR_INACTIVECAPTIONTEXT", (long) wxSYS_COLOUR_INACTIVECAPTIONTEXT, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"SYS_COLOUR_BTNHIGHLIGHT", (long) wxSYS_COLOUR_BTNHIGHLIGHT, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"SYS_COLOUR_BTNHILIGHT", (long) wxSYS_COLOUR_BTNHILIGHT, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"SYS_COLOUR_3DHIGHLIGHT", (long) wxSYS_COLOUR_3DHIGHLIGHT, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"SYS_COLOUR_3DHILIGHT", (long) wxSYS_COLOUR_3DHILIGHT, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"SYS_COLOUR_3DDKSHADOW", (long) wxSYS_COLOUR_3DDKSHADOW, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"SYS_COLOUR_3DLIGHT", (long) wxSYS_COLOUR_3DLIGHT, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"SYS_COLOUR_INFOTEXT", (long) wxSYS_COLOUR_INFOTEXT, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"SYS_COLOUR_INFOBK", (long) wxSYS_COLOUR_INFOBK, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"SYS_COLOUR_LISTBOX", (long) wxSYS_COLOUR_LISTBOX, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"SYS_COLOUR_HOTLIGHT", (long) wxSYS_COLOUR_HOTLIGHT, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"SYS_COLOUR_GRADIENTACTIVECAPTION", (long) wxSYS_COLOUR_GRADIENTACTIVECAPTION, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"SYS_COLOUR_GRADIENTINACTIVECAPTION", (long) wxSYS_COLOUR_GRADIENTINACTIVECAPTION, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"SYS_COLOUR_MENUHILIGHT", (long) wxSYS_COLOUR_MENUHILIGHT, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"SYS_COLOUR_MENUBAR", (long) wxSYS_COLOUR_MENUBAR, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"SYS_COLOUR_MAX", (long) wxSYS_COLOUR_MAX, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"SYS_MOUSE_BUTTONS", (long) wxSYS_MOUSE_BUTTONS, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"SYS_BORDER_X", (long) wxSYS_BORDER_X, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"SYS_BORDER_Y", (long) wxSYS_BORDER_Y, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"SYS_CURSOR_X", (long) wxSYS_CURSOR_X, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"SYS_CURSOR_Y", (long) wxSYS_CURSOR_Y, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"SYS_DCLICK_X", (long) wxSYS_DCLICK_X, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"SYS_DCLICK_Y", (long) wxSYS_DCLICK_Y, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"SYS_DRAG_X", (long) wxSYS_DRAG_X, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"SYS_DRAG_Y", (long) wxSYS_DRAG_Y, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"SYS_EDGE_X", (long) wxSYS_EDGE_X, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"SYS_EDGE_Y", (long) wxSYS_EDGE_Y, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"SYS_HSCROLL_ARROW_X", (long) wxSYS_HSCROLL_ARROW_X, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"SYS_HSCROLL_ARROW_Y", (long) wxSYS_HSCROLL_ARROW_Y, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"SYS_HTHUMB_X", (long) wxSYS_HTHUMB_X, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"SYS_ICON_X", (long) wxSYS_ICON_X, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"SYS_ICON_Y", (long) wxSYS_ICON_Y, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"SYS_ICONSPACING_X", (long) wxSYS_ICONSPACING_X, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"SYS_ICONSPACING_Y", (long) wxSYS_ICONSPACING_Y, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"SYS_WINDOWMIN_X", (long) wxSYS_WINDOWMIN_X, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"SYS_WINDOWMIN_Y", (long) wxSYS_WINDOWMIN_Y, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"SYS_SCREEN_X", (long) wxSYS_SCREEN_X, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"SYS_SCREEN_Y", (long) wxSYS_SCREEN_Y, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"SYS_FRAMESIZE_X", (long) wxSYS_FRAMESIZE_X, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"SYS_FRAMESIZE_Y", (long) wxSYS_FRAMESIZE_Y, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"SYS_SMALLICON_X", (long) wxSYS_SMALLICON_X, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"SYS_SMALLICON_Y", (long) wxSYS_SMALLICON_Y, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"SYS_HSCROLL_Y", (long) wxSYS_HSCROLL_Y, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"SYS_VSCROLL_X", (long) wxSYS_VSCROLL_X, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"SYS_VSCROLL_ARROW_X", (long) wxSYS_VSCROLL_ARROW_X, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"SYS_VSCROLL_ARROW_Y", (long) wxSYS_VSCROLL_ARROW_Y, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"SYS_VTHUMB_Y", (long) wxSYS_VTHUMB_Y, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"SYS_CAPTION_Y", (long) wxSYS_CAPTION_Y, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"SYS_MENU_Y", (long) wxSYS_MENU_Y, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"SYS_NETWORK_PRESENT", (long) wxSYS_NETWORK_PRESENT, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"SYS_PENWINDOWS_PRESENT", (long) wxSYS_PENWINDOWS_PRESENT, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"SYS_SHOW_SOUNDS", (long) wxSYS_SHOW_SOUNDS, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"SYS_SWAP_BUTTONS", (long) wxSYS_SWAP_BUTTONS, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"SYS_CAN_DRAW_FRAME_DECORATIONS", (long) wxSYS_CAN_DRAW_FRAME_DECORATIONS, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"SYS_CAN_ICONIZE_FRAME", (long) wxSYS_CAN_ICONIZE_FRAME, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"SYS_SCREEN_NONE", (long) wxSYS_SCREEN_NONE, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"SYS_SCREEN_TINY", (long) wxSYS_SCREEN_TINY, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"SYS_SCREEN_PDA", (long) wxSYS_SCREEN_PDA, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"SYS_SCREEN_SMALL", (long) wxSYS_SCREEN_SMALL, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"SYS_SCREEN_DESKTOP", (long) wxSYS_SCREEN_DESKTOP, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"SHUTDOWN_POWEROFF", (long) wxSHUTDOWN_POWEROFF, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"SHUTDOWN_REBOOT", (long) wxSHUTDOWN_REBOOT, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"TIMER_CONTINUOUS", (long) wxTIMER_CONTINUOUS, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"TIMER_ONE_SHOT", (long) wxTIMER_ONE_SHOT, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"wxEVT_TIMER", (long) wxEVT_TIMER, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"LOG_FatalError", (long) wxLOG_FatalError, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"LOG_Error", (long) wxLOG_Error, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"LOG_Warning", (long) wxLOG_Warning, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"LOG_Message", (long) wxLOG_Message, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"LOG_Status", (long) wxLOG_Status, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"LOG_Info", (long) wxLOG_Info, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"LOG_Debug", (long) wxLOG_Debug, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"LOG_Trace", (long) wxLOG_Trace, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"LOG_Progress", (long) wxLOG_Progress, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"LOG_User", (long) wxLOG_User, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"LOG_Max", (long) wxLOG_Max, 0, 0, 0},
 { SWIG_PY_STRING,  (char*)"TRACE_MemAlloc", 0, 0, (void *)"memalloc", 0},
 { SWIG_PY_STRING,  (char*)"TRACE_Messages", 0, 0, (void *)"messages", 0},
 { SWIG_PY_STRING,  (char*)"TRACE_ResAlloc", 0, 0, (void *)"resalloc", 0},
 { SWIG_PY_STRING,  (char*)"TRACE_RefCount", 0, 0, (void *)"refcount", 0},
 { SWIG_PY_STRING,  (char*)"TRACE_OleCalls", 0, 0, (void *)"ole", 0},
-{ SWIG_PY_INT,     (char *)"TraceMemAlloc", (long) 0x0001, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"TraceMessages", (long) 0x0002, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"TraceResAlloc", (long) 0x0004, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"TraceRefCount", (long) 0x0008, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"TraceOleCalls", (long) 0x0100, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"PROCESS_DEFAULT", (long) wxPROCESS_DEFAULT, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"PROCESS_REDIRECT", (long) wxPROCESS_REDIRECT, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"KILL_OK", (long) wxKILL_OK, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"KILL_BAD_SIGNAL", (long) wxKILL_BAD_SIGNAL, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"KILL_ACCESS_DENIED", (long) wxKILL_ACCESS_DENIED, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"KILL_NO_PROCESS", (long) wxKILL_NO_PROCESS, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"KILL_ERROR", (long) wxKILL_ERROR, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"SIGNONE", (long) wxSIGNONE, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"SIGHUP", (long) wxSIGHUP, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"SIGINT", (long) wxSIGINT, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"SIGQUIT", (long) wxSIGQUIT, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"SIGILL", (long) wxSIGILL, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"SIGTRAP", (long) wxSIGTRAP, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"SIGABRT", (long) wxSIGABRT, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"SIGIOT", (long) wxSIGIOT, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"SIGEMT", (long) wxSIGEMT, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"SIGFPE", (long) wxSIGFPE, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"SIGKILL", (long) wxSIGKILL, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"SIGBUS", (long) wxSIGBUS, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"SIGSEGV", (long) wxSIGSEGV, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"SIGSYS", (long) wxSIGSYS, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"SIGPIPE", (long) wxSIGPIPE, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"SIGALRM", (long) wxSIGALRM, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"SIGTERM", (long) wxSIGTERM, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"wxEVT_END_PROCESS", (long) wxEVT_END_PROCESS, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"EXEC_ASYNC", (long) wxEXEC_ASYNC, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"EXEC_SYNC", (long) wxEXEC_SYNC, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"EXEC_NOHIDE", (long) wxEXEC_NOHIDE, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"EXEC_MAKE_GROUP_LEADER", (long) wxEXEC_MAKE_GROUP_LEADER, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"JOYSTICK1", (long) wxJOYSTICK1, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"JOYSTICK2", (long) wxJOYSTICK2, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"JOY_BUTTON_ANY", (long) wxJOY_BUTTON_ANY, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"JOY_BUTTON1", (long) wxJOY_BUTTON1, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"JOY_BUTTON2", (long) wxJOY_BUTTON2, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"JOY_BUTTON3", (long) wxJOY_BUTTON3, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"JOY_BUTTON4", (long) wxJOY_BUTTON4, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"wxEVT_JOY_BUTTON_DOWN", (long) wxEVT_JOY_BUTTON_DOWN, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"wxEVT_JOY_BUTTON_UP", (long) wxEVT_JOY_BUTTON_UP, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"wxEVT_JOY_MOVE", (long) wxEVT_JOY_MOVE, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"wxEVT_JOY_ZMOVE", (long) wxEVT_JOY_ZMOVE, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"MAILCAP_STANDARD", (long) wxMAILCAP_STANDARD, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"MAILCAP_NETSCAPE", (long) wxMAILCAP_NETSCAPE, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"MAILCAP_KDE", (long) wxMAILCAP_KDE, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"MAILCAP_GNOME", (long) wxMAILCAP_GNOME, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"MAILCAP_ALL", (long) wxMAILCAP_ALL, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"CONFIG_USE_LOCAL_FILE", (long) wxCONFIG_USE_LOCAL_FILE, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"CONFIG_USE_GLOBAL_FILE", (long) wxCONFIG_USE_GLOBAL_FILE, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"CONFIG_USE_RELATIVE_PATH", (long) wxCONFIG_USE_RELATIVE_PATH, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"CONFIG_USE_NO_ESCAPE_CHARACTERS", (long) wxCONFIG_USE_NO_ESCAPE_CHARACTERS, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"ConfigBase_Type_Unknown", (long) wxConfigBase::Type_Unknown, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"ConfigBase_Type_String", (long) wxConfigBase::Type_String, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"ConfigBase_Type_Boolean", (long) wxConfigBase::Type_Boolean, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"ConfigBase_Type_Integer", (long) wxConfigBase::Type_Integer, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"ConfigBase_Type_Float", (long) wxConfigBase::Type_Float, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"DateTime_Local", (long) wxDateTime::Local, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"DateTime_GMT_12", (long) wxDateTime::GMT_12, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"DateTime_GMT_11", (long) wxDateTime::GMT_11, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"DateTime_GMT_10", (long) wxDateTime::GMT_10, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"DateTime_GMT_9", (long) wxDateTime::GMT_9, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"DateTime_GMT_8", (long) wxDateTime::GMT_8, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"DateTime_GMT_7", (long) wxDateTime::GMT_7, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"DateTime_GMT_6", (long) wxDateTime::GMT_6, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"DateTime_GMT_5", (long) wxDateTime::GMT_5, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"DateTime_GMT_4", (long) wxDateTime::GMT_4, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"DateTime_GMT_3", (long) wxDateTime::GMT_3, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"DateTime_GMT_2", (long) wxDateTime::GMT_2, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"DateTime_GMT_1", (long) wxDateTime::GMT_1, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"DateTime_GMT0", (long) wxDateTime::GMT0, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"DateTime_GMT1", (long) wxDateTime::GMT1, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"DateTime_GMT2", (long) wxDateTime::GMT2, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"DateTime_GMT3", (long) wxDateTime::GMT3, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"DateTime_GMT4", (long) wxDateTime::GMT4, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"DateTime_GMT5", (long) wxDateTime::GMT5, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"DateTime_GMT6", (long) wxDateTime::GMT6, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"DateTime_GMT7", (long) wxDateTime::GMT7, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"DateTime_GMT8", (long) wxDateTime::GMT8, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"DateTime_GMT9", (long) wxDateTime::GMT9, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"DateTime_GMT10", (long) wxDateTime::GMT10, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"DateTime_GMT11", (long) wxDateTime::GMT11, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"DateTime_GMT12", (long) wxDateTime::GMT12, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"DateTime_WET", (long) wxDateTime::WET, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"DateTime_WEST", (long) wxDateTime::WEST, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"DateTime_CET", (long) wxDateTime::CET, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"DateTime_CEST", (long) wxDateTime::CEST, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"DateTime_EET", (long) wxDateTime::EET, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"DateTime_EEST", (long) wxDateTime::EEST, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"DateTime_MSK", (long) wxDateTime::MSK, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"DateTime_MSD", (long) wxDateTime::MSD, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"DateTime_AST", (long) wxDateTime::AST, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"DateTime_ADT", (long) wxDateTime::ADT, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"DateTime_EST", (long) wxDateTime::EST, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"DateTime_EDT", (long) wxDateTime::EDT, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"DateTime_CST", (long) wxDateTime::CST, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"DateTime_CDT", (long) wxDateTime::CDT, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"DateTime_MST", (long) wxDateTime::MST, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"DateTime_MDT", (long) wxDateTime::MDT, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"DateTime_PST", (long) wxDateTime::PST, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"DateTime_PDT", (long) wxDateTime::PDT, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"DateTime_HST", (long) wxDateTime::HST, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"DateTime_AKST", (long) wxDateTime::AKST, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"DateTime_AKDT", (long) wxDateTime::AKDT, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"DateTime_A_WST", (long) wxDateTime::A_WST, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"DateTime_A_CST", (long) wxDateTime::A_CST, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"DateTime_A_EST", (long) wxDateTime::A_EST, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"DateTime_A_ESST", (long) wxDateTime::A_ESST, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"DateTime_UTC", (long) wxDateTime::UTC, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"DateTime_Gregorian", (long) wxDateTime::Gregorian, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"DateTime_Julian", (long) wxDateTime::Julian, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"DateTime_Gr_Unknown", (long) wxDateTime::Gr_Unknown, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"DateTime_Gr_Standard", (long) wxDateTime::Gr_Standard, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"DateTime_Gr_Alaska", (long) wxDateTime::Gr_Alaska, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"DateTime_Gr_Albania", (long) wxDateTime::Gr_Albania, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"DateTime_Gr_Austria", (long) wxDateTime::Gr_Austria, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"DateTime_Gr_Austria_Brixen", (long) wxDateTime::Gr_Austria_Brixen, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"DateTime_Gr_Austria_Salzburg", (long) wxDateTime::Gr_Austria_Salzburg, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"DateTime_Gr_Austria_Tyrol", (long) wxDateTime::Gr_Austria_Tyrol, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"DateTime_Gr_Austria_Carinthia", (long) wxDateTime::Gr_Austria_Carinthia, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"DateTime_Gr_Austria_Styria", (long) wxDateTime::Gr_Austria_Styria, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"DateTime_Gr_Belgium", (long) wxDateTime::Gr_Belgium, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"DateTime_Gr_Bulgaria", (long) wxDateTime::Gr_Bulgaria, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"DateTime_Gr_Bulgaria_1", (long) wxDateTime::Gr_Bulgaria_1, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"DateTime_Gr_Bulgaria_2", (long) wxDateTime::Gr_Bulgaria_2, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"DateTime_Gr_Bulgaria_3", (long) wxDateTime::Gr_Bulgaria_3, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"DateTime_Gr_Canada", (long) wxDateTime::Gr_Canada, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"DateTime_Gr_China", (long) wxDateTime::Gr_China, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"DateTime_Gr_China_1", (long) wxDateTime::Gr_China_1, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"DateTime_Gr_China_2", (long) wxDateTime::Gr_China_2, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"DateTime_Gr_Czechoslovakia", (long) wxDateTime::Gr_Czechoslovakia, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"DateTime_Gr_Denmark", (long) wxDateTime::Gr_Denmark, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"DateTime_Gr_Egypt", (long) wxDateTime::Gr_Egypt, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"DateTime_Gr_Estonia", (long) wxDateTime::Gr_Estonia, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"DateTime_Gr_Finland", (long) wxDateTime::Gr_Finland, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"DateTime_Gr_France", (long) wxDateTime::Gr_France, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"DateTime_Gr_France_Alsace", (long) wxDateTime::Gr_France_Alsace, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"DateTime_Gr_France_Lorraine", (long) wxDateTime::Gr_France_Lorraine, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"DateTime_Gr_France_Strasbourg", (long) wxDateTime::Gr_France_Strasbourg, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"DateTime_Gr_Germany", (long) wxDateTime::Gr_Germany, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"DateTime_Gr_Germany_Catholic", (long) wxDateTime::Gr_Germany_Catholic, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"DateTime_Gr_Germany_Prussia", (long) wxDateTime::Gr_Germany_Prussia, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"DateTime_Gr_Germany_Protestant", (long) wxDateTime::Gr_Germany_Protestant, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"DateTime_Gr_GreatBritain", (long) wxDateTime::Gr_GreatBritain, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"DateTime_Gr_Greece", (long) wxDateTime::Gr_Greece, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"DateTime_Gr_Hungary", (long) wxDateTime::Gr_Hungary, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"DateTime_Gr_Ireland", (long) wxDateTime::Gr_Ireland, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"DateTime_Gr_Italy", (long) wxDateTime::Gr_Italy, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"DateTime_Gr_Japan", (long) wxDateTime::Gr_Japan, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"DateTime_Gr_Japan_1", (long) wxDateTime::Gr_Japan_1, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"DateTime_Gr_Japan_2", (long) wxDateTime::Gr_Japan_2, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"DateTime_Gr_Japan_3", (long) wxDateTime::Gr_Japan_3, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"DateTime_Gr_Latvia", (long) wxDateTime::Gr_Latvia, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"DateTime_Gr_Lithuania", (long) wxDateTime::Gr_Lithuania, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"DateTime_Gr_Luxemburg", (long) wxDateTime::Gr_Luxemburg, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"DateTime_Gr_Netherlands", (long) wxDateTime::Gr_Netherlands, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"DateTime_Gr_Netherlands_Groningen", (long) wxDateTime::Gr_Netherlands_Groningen, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"DateTime_Gr_Netherlands_Gelderland", (long) wxDateTime::Gr_Netherlands_Gelderland, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"DateTime_Gr_Netherlands_Utrecht", (long) wxDateTime::Gr_Netherlands_Utrecht, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"DateTime_Gr_Netherlands_Friesland", (long) wxDateTime::Gr_Netherlands_Friesland, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"DateTime_Gr_Norway", (long) wxDateTime::Gr_Norway, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"DateTime_Gr_Poland", (long) wxDateTime::Gr_Poland, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"DateTime_Gr_Portugal", (long) wxDateTime::Gr_Portugal, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"DateTime_Gr_Romania", (long) wxDateTime::Gr_Romania, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"DateTime_Gr_Russia", (long) wxDateTime::Gr_Russia, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"DateTime_Gr_Scotland", (long) wxDateTime::Gr_Scotland, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"DateTime_Gr_Spain", (long) wxDateTime::Gr_Spain, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"DateTime_Gr_Sweden", (long) wxDateTime::Gr_Sweden, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"DateTime_Gr_Switzerland", (long) wxDateTime::Gr_Switzerland, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"DateTime_Gr_Switzerland_Catholic", (long) wxDateTime::Gr_Switzerland_Catholic, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"DateTime_Gr_Switzerland_Protestant", (long) wxDateTime::Gr_Switzerland_Protestant, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"DateTime_Gr_Turkey", (long) wxDateTime::Gr_Turkey, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"DateTime_Gr_USA", (long) wxDateTime::Gr_USA, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"DateTime_Gr_Wales", (long) wxDateTime::Gr_Wales, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"DateTime_Gr_Yugoslavia", (long) wxDateTime::Gr_Yugoslavia, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"DateTime_Country_Unknown", (long) wxDateTime::Country_Unknown, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"DateTime_Country_Default", (long) wxDateTime::Country_Default, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"DateTime_Country_WesternEurope_Start", (long) wxDateTime::Country_WesternEurope_Start, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"DateTime_Country_EEC", (long) wxDateTime::Country_EEC, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"DateTime_France", (long) wxDateTime::France, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"DateTime_Germany", (long) wxDateTime::Germany, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"DateTime_UK", (long) wxDateTime::UK, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"DateTime_Country_WesternEurope_End", (long) wxDateTime::Country_WesternEurope_End, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"DateTime_Russia", (long) wxDateTime::Russia, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"DateTime_USA", (long) wxDateTime::USA, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"DateTime_Jan", (long) wxDateTime::Jan, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"DateTime_Feb", (long) wxDateTime::Feb, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"DateTime_Mar", (long) wxDateTime::Mar, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"DateTime_Apr", (long) wxDateTime::Apr, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"DateTime_May", (long) wxDateTime::May, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"DateTime_Jun", (long) wxDateTime::Jun, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"DateTime_Jul", (long) wxDateTime::Jul, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"DateTime_Aug", (long) wxDateTime::Aug, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"DateTime_Sep", (long) wxDateTime::Sep, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"DateTime_Oct", (long) wxDateTime::Oct, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"DateTime_Nov", (long) wxDateTime::Nov, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"DateTime_Dec", (long) wxDateTime::Dec, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"DateTime_Inv_Month", (long) wxDateTime::Inv_Month, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"DateTime_Sun", (long) wxDateTime::Sun, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"DateTime_Mon", (long) wxDateTime::Mon, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"DateTime_Tue", (long) wxDateTime::Tue, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"DateTime_Wed", (long) wxDateTime::Wed, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"DateTime_Thu", (long) wxDateTime::Thu, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"DateTime_Fri", (long) wxDateTime::Fri, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"DateTime_Sat", (long) wxDateTime::Sat, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"DateTime_Inv_WeekDay", (long) wxDateTime::Inv_WeekDay, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"DateTime_Inv_Year", (long) wxDateTime::Inv_Year, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"DateTime_Name_Full", (long) wxDateTime::Name_Full, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"DateTime_Name_Abbr", (long) wxDateTime::Name_Abbr, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"DateTime_Default_First", (long) wxDateTime::Default_First, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"DateTime_Monday_First", (long) wxDateTime::Monday_First, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"DateTime_Sunday_First", (long) wxDateTime::Sunday_First, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"DF_INVALID", (long) wxDF_INVALID, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"DF_TEXT", (long) wxDF_TEXT, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"DF_BITMAP", (long) wxDF_BITMAP, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"DF_METAFILE", (long) wxDF_METAFILE, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"DF_SYLK", (long) wxDF_SYLK, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"DF_DIF", (long) wxDF_DIF, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"DF_TIFF", (long) wxDF_TIFF, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"DF_OEMTEXT", (long) wxDF_OEMTEXT, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"DF_DIB", (long) wxDF_DIB, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"DF_PALETTE", (long) wxDF_PALETTE, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"DF_PENDATA", (long) wxDF_PENDATA, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"DF_RIFF", (long) wxDF_RIFF, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"DF_WAVE", (long) wxDF_WAVE, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"DF_UNICODETEXT", (long) wxDF_UNICODETEXT, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"DF_ENHMETAFILE", (long) wxDF_ENHMETAFILE, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"DF_FILENAME", (long) wxDF_FILENAME, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"DF_LOCALE", (long) wxDF_LOCALE, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"DF_PRIVATE", (long) wxDF_PRIVATE, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"DF_HTML", (long) wxDF_HTML, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"DF_MAX", (long) wxDF_MAX, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"DataObject_Get", (long) wxDataObject::Get, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"DataObject_Set", (long) wxDataObject::Set, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"DataObject_Both", (long) wxDataObject::Both, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"Drag_CopyOnly", (long) wxDrag_CopyOnly, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"Drag_AllowMove", (long) wxDrag_AllowMove, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"Drag_DefaultMove", (long) wxDrag_DefaultMove, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"DragError", (long) wxDragError, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"DragNone", (long) wxDragNone, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"DragCopy", (long) wxDragCopy, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"DragMove", (long) wxDragMove, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"DragLink", (long) wxDragLink, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"DragCancel", (long) wxDragCancel, 0, 0, 0},
 {0}};
 
 #ifdef __cplusplus
@@ -26698,19 +27806,170 @@ SWIGEXPORT(void) SWIG_init(void) {
     }
     SWIG_InstallConstants(d,swig_const_table);
     
+    PyDict_SetItemString(d,"SYS_OEM_FIXED_FONT", SWIG_PyObj_FromInt((int)wxSYS_OEM_FIXED_FONT));
+    PyDict_SetItemString(d,"SYS_ANSI_FIXED_FONT", SWIG_PyObj_FromInt((int)wxSYS_ANSI_FIXED_FONT));
+    PyDict_SetItemString(d,"SYS_ANSI_VAR_FONT", SWIG_PyObj_FromInt((int)wxSYS_ANSI_VAR_FONT));
+    PyDict_SetItemString(d,"SYS_SYSTEM_FONT", SWIG_PyObj_FromInt((int)wxSYS_SYSTEM_FONT));
+    PyDict_SetItemString(d,"SYS_DEVICE_DEFAULT_FONT", SWIG_PyObj_FromInt((int)wxSYS_DEVICE_DEFAULT_FONT));
+    PyDict_SetItemString(d,"SYS_DEFAULT_PALETTE", SWIG_PyObj_FromInt((int)wxSYS_DEFAULT_PALETTE));
+    PyDict_SetItemString(d,"SYS_SYSTEM_FIXED_FONT", SWIG_PyObj_FromInt((int)wxSYS_SYSTEM_FIXED_FONT));
+    PyDict_SetItemString(d,"SYS_DEFAULT_GUI_FONT", SWIG_PyObj_FromInt((int)wxSYS_DEFAULT_GUI_FONT));
+    PyDict_SetItemString(d,"SYS_ICONTITLE_FONT", SWIG_PyObj_FromInt((int)wxSYS_ICONTITLE_FONT));
+    PyDict_SetItemString(d,"SYS_COLOUR_SCROLLBAR", SWIG_PyObj_FromInt((int)wxSYS_COLOUR_SCROLLBAR));
+    PyDict_SetItemString(d,"SYS_COLOUR_BACKGROUND", SWIG_PyObj_FromInt((int)wxSYS_COLOUR_BACKGROUND));
+    PyDict_SetItemString(d,"SYS_COLOUR_DESKTOP", SWIG_PyObj_FromInt((int)wxSYS_COLOUR_DESKTOP));
+    PyDict_SetItemString(d,"SYS_COLOUR_ACTIVECAPTION", SWIG_PyObj_FromInt((int)wxSYS_COLOUR_ACTIVECAPTION));
+    PyDict_SetItemString(d,"SYS_COLOUR_INACTIVECAPTION", SWIG_PyObj_FromInt((int)wxSYS_COLOUR_INACTIVECAPTION));
+    PyDict_SetItemString(d,"SYS_COLOUR_MENU", SWIG_PyObj_FromInt((int)wxSYS_COLOUR_MENU));
+    PyDict_SetItemString(d,"SYS_COLOUR_WINDOW", SWIG_PyObj_FromInt((int)wxSYS_COLOUR_WINDOW));
+    PyDict_SetItemString(d,"SYS_COLOUR_WINDOWFRAME", SWIG_PyObj_FromInt((int)wxSYS_COLOUR_WINDOWFRAME));
+    PyDict_SetItemString(d,"SYS_COLOUR_MENUTEXT", SWIG_PyObj_FromInt((int)wxSYS_COLOUR_MENUTEXT));
+    PyDict_SetItemString(d,"SYS_COLOUR_WINDOWTEXT", SWIG_PyObj_FromInt((int)wxSYS_COLOUR_WINDOWTEXT));
+    PyDict_SetItemString(d,"SYS_COLOUR_CAPTIONTEXT", SWIG_PyObj_FromInt((int)wxSYS_COLOUR_CAPTIONTEXT));
+    PyDict_SetItemString(d,"SYS_COLOUR_ACTIVEBORDER", SWIG_PyObj_FromInt((int)wxSYS_COLOUR_ACTIVEBORDER));
+    PyDict_SetItemString(d,"SYS_COLOUR_INACTIVEBORDER", SWIG_PyObj_FromInt((int)wxSYS_COLOUR_INACTIVEBORDER));
+    PyDict_SetItemString(d,"SYS_COLOUR_APPWORKSPACE", SWIG_PyObj_FromInt((int)wxSYS_COLOUR_APPWORKSPACE));
+    PyDict_SetItemString(d,"SYS_COLOUR_HIGHLIGHT", SWIG_PyObj_FromInt((int)wxSYS_COLOUR_HIGHLIGHT));
+    PyDict_SetItemString(d,"SYS_COLOUR_HIGHLIGHTTEXT", SWIG_PyObj_FromInt((int)wxSYS_COLOUR_HIGHLIGHTTEXT));
+    PyDict_SetItemString(d,"SYS_COLOUR_BTNFACE", SWIG_PyObj_FromInt((int)wxSYS_COLOUR_BTNFACE));
+    PyDict_SetItemString(d,"SYS_COLOUR_3DFACE", SWIG_PyObj_FromInt((int)wxSYS_COLOUR_3DFACE));
+    PyDict_SetItemString(d,"SYS_COLOUR_BTNSHADOW", SWIG_PyObj_FromInt((int)wxSYS_COLOUR_BTNSHADOW));
+    PyDict_SetItemString(d,"SYS_COLOUR_3DSHADOW", SWIG_PyObj_FromInt((int)wxSYS_COLOUR_3DSHADOW));
+    PyDict_SetItemString(d,"SYS_COLOUR_GRAYTEXT", SWIG_PyObj_FromInt((int)wxSYS_COLOUR_GRAYTEXT));
+    PyDict_SetItemString(d,"SYS_COLOUR_BTNTEXT", SWIG_PyObj_FromInt((int)wxSYS_COLOUR_BTNTEXT));
+    PyDict_SetItemString(d,"SYS_COLOUR_INACTIVECAPTIONTEXT", SWIG_PyObj_FromInt((int)wxSYS_COLOUR_INACTIVECAPTIONTEXT));
+    PyDict_SetItemString(d,"SYS_COLOUR_BTNHIGHLIGHT", SWIG_PyObj_FromInt((int)wxSYS_COLOUR_BTNHIGHLIGHT));
+    PyDict_SetItemString(d,"SYS_COLOUR_BTNHILIGHT", SWIG_PyObj_FromInt((int)wxSYS_COLOUR_BTNHILIGHT));
+    PyDict_SetItemString(d,"SYS_COLOUR_3DHIGHLIGHT", SWIG_PyObj_FromInt((int)wxSYS_COLOUR_3DHIGHLIGHT));
+    PyDict_SetItemString(d,"SYS_COLOUR_3DHILIGHT", SWIG_PyObj_FromInt((int)wxSYS_COLOUR_3DHILIGHT));
+    PyDict_SetItemString(d,"SYS_COLOUR_3DDKSHADOW", SWIG_PyObj_FromInt((int)wxSYS_COLOUR_3DDKSHADOW));
+    PyDict_SetItemString(d,"SYS_COLOUR_3DLIGHT", SWIG_PyObj_FromInt((int)wxSYS_COLOUR_3DLIGHT));
+    PyDict_SetItemString(d,"SYS_COLOUR_INFOTEXT", SWIG_PyObj_FromInt((int)wxSYS_COLOUR_INFOTEXT));
+    PyDict_SetItemString(d,"SYS_COLOUR_INFOBK", SWIG_PyObj_FromInt((int)wxSYS_COLOUR_INFOBK));
+    PyDict_SetItemString(d,"SYS_COLOUR_LISTBOX", SWIG_PyObj_FromInt((int)wxSYS_COLOUR_LISTBOX));
+    PyDict_SetItemString(d,"SYS_COLOUR_HOTLIGHT", SWIG_PyObj_FromInt((int)wxSYS_COLOUR_HOTLIGHT));
+    PyDict_SetItemString(d,"SYS_COLOUR_GRADIENTACTIVECAPTION", SWIG_PyObj_FromInt((int)wxSYS_COLOUR_GRADIENTACTIVECAPTION));
+    PyDict_SetItemString(d,"SYS_COLOUR_GRADIENTINACTIVECAPTION", SWIG_PyObj_FromInt((int)wxSYS_COLOUR_GRADIENTINACTIVECAPTION));
+    PyDict_SetItemString(d,"SYS_COLOUR_MENUHILIGHT", SWIG_PyObj_FromInt((int)wxSYS_COLOUR_MENUHILIGHT));
+    PyDict_SetItemString(d,"SYS_COLOUR_MENUBAR", SWIG_PyObj_FromInt((int)wxSYS_COLOUR_MENUBAR));
+    PyDict_SetItemString(d,"SYS_COLOUR_MAX", SWIG_PyObj_FromInt((int)wxSYS_COLOUR_MAX));
+    PyDict_SetItemString(d,"SYS_MOUSE_BUTTONS", SWIG_PyObj_FromInt((int)wxSYS_MOUSE_BUTTONS));
+    PyDict_SetItemString(d,"SYS_BORDER_X", SWIG_PyObj_FromInt((int)wxSYS_BORDER_X));
+    PyDict_SetItemString(d,"SYS_BORDER_Y", SWIG_PyObj_FromInt((int)wxSYS_BORDER_Y));
+    PyDict_SetItemString(d,"SYS_CURSOR_X", SWIG_PyObj_FromInt((int)wxSYS_CURSOR_X));
+    PyDict_SetItemString(d,"SYS_CURSOR_Y", SWIG_PyObj_FromInt((int)wxSYS_CURSOR_Y));
+    PyDict_SetItemString(d,"SYS_DCLICK_X", SWIG_PyObj_FromInt((int)wxSYS_DCLICK_X));
+    PyDict_SetItemString(d,"SYS_DCLICK_Y", SWIG_PyObj_FromInt((int)wxSYS_DCLICK_Y));
+    PyDict_SetItemString(d,"SYS_DRAG_X", SWIG_PyObj_FromInt((int)wxSYS_DRAG_X));
+    PyDict_SetItemString(d,"SYS_DRAG_Y", SWIG_PyObj_FromInt((int)wxSYS_DRAG_Y));
+    PyDict_SetItemString(d,"SYS_EDGE_X", SWIG_PyObj_FromInt((int)wxSYS_EDGE_X));
+    PyDict_SetItemString(d,"SYS_EDGE_Y", SWIG_PyObj_FromInt((int)wxSYS_EDGE_Y));
+    PyDict_SetItemString(d,"SYS_HSCROLL_ARROW_X", SWIG_PyObj_FromInt((int)wxSYS_HSCROLL_ARROW_X));
+    PyDict_SetItemString(d,"SYS_HSCROLL_ARROW_Y", SWIG_PyObj_FromInt((int)wxSYS_HSCROLL_ARROW_Y));
+    PyDict_SetItemString(d,"SYS_HTHUMB_X", SWIG_PyObj_FromInt((int)wxSYS_HTHUMB_X));
+    PyDict_SetItemString(d,"SYS_ICON_X", SWIG_PyObj_FromInt((int)wxSYS_ICON_X));
+    PyDict_SetItemString(d,"SYS_ICON_Y", SWIG_PyObj_FromInt((int)wxSYS_ICON_Y));
+    PyDict_SetItemString(d,"SYS_ICONSPACING_X", SWIG_PyObj_FromInt((int)wxSYS_ICONSPACING_X));
+    PyDict_SetItemString(d,"SYS_ICONSPACING_Y", SWIG_PyObj_FromInt((int)wxSYS_ICONSPACING_Y));
+    PyDict_SetItemString(d,"SYS_WINDOWMIN_X", SWIG_PyObj_FromInt((int)wxSYS_WINDOWMIN_X));
+    PyDict_SetItemString(d,"SYS_WINDOWMIN_Y", SWIG_PyObj_FromInt((int)wxSYS_WINDOWMIN_Y));
+    PyDict_SetItemString(d,"SYS_SCREEN_X", SWIG_PyObj_FromInt((int)wxSYS_SCREEN_X));
+    PyDict_SetItemString(d,"SYS_SCREEN_Y", SWIG_PyObj_FromInt((int)wxSYS_SCREEN_Y));
+    PyDict_SetItemString(d,"SYS_FRAMESIZE_X", SWIG_PyObj_FromInt((int)wxSYS_FRAMESIZE_X));
+    PyDict_SetItemString(d,"SYS_FRAMESIZE_Y", SWIG_PyObj_FromInt((int)wxSYS_FRAMESIZE_Y));
+    PyDict_SetItemString(d,"SYS_SMALLICON_X", SWIG_PyObj_FromInt((int)wxSYS_SMALLICON_X));
+    PyDict_SetItemString(d,"SYS_SMALLICON_Y", SWIG_PyObj_FromInt((int)wxSYS_SMALLICON_Y));
+    PyDict_SetItemString(d,"SYS_HSCROLL_Y", SWIG_PyObj_FromInt((int)wxSYS_HSCROLL_Y));
+    PyDict_SetItemString(d,"SYS_VSCROLL_X", SWIG_PyObj_FromInt((int)wxSYS_VSCROLL_X));
+    PyDict_SetItemString(d,"SYS_VSCROLL_ARROW_X", SWIG_PyObj_FromInt((int)wxSYS_VSCROLL_ARROW_X));
+    PyDict_SetItemString(d,"SYS_VSCROLL_ARROW_Y", SWIG_PyObj_FromInt((int)wxSYS_VSCROLL_ARROW_Y));
+    PyDict_SetItemString(d,"SYS_VTHUMB_Y", SWIG_PyObj_FromInt((int)wxSYS_VTHUMB_Y));
+    PyDict_SetItemString(d,"SYS_CAPTION_Y", SWIG_PyObj_FromInt((int)wxSYS_CAPTION_Y));
+    PyDict_SetItemString(d,"SYS_MENU_Y", SWIG_PyObj_FromInt((int)wxSYS_MENU_Y));
+    PyDict_SetItemString(d,"SYS_NETWORK_PRESENT", SWIG_PyObj_FromInt((int)wxSYS_NETWORK_PRESENT));
+    PyDict_SetItemString(d,"SYS_PENWINDOWS_PRESENT", SWIG_PyObj_FromInt((int)wxSYS_PENWINDOWS_PRESENT));
+    PyDict_SetItemString(d,"SYS_SHOW_SOUNDS", SWIG_PyObj_FromInt((int)wxSYS_SHOW_SOUNDS));
+    PyDict_SetItemString(d,"SYS_SWAP_BUTTONS", SWIG_PyObj_FromInt((int)wxSYS_SWAP_BUTTONS));
+    PyDict_SetItemString(d,"SYS_CAN_DRAW_FRAME_DECORATIONS", SWIG_PyObj_FromInt((int)wxSYS_CAN_DRAW_FRAME_DECORATIONS));
+    PyDict_SetItemString(d,"SYS_CAN_ICONIZE_FRAME", SWIG_PyObj_FromInt((int)wxSYS_CAN_ICONIZE_FRAME));
+    PyDict_SetItemString(d,"SYS_SCREEN_NONE", SWIG_PyObj_FromInt((int)wxSYS_SCREEN_NONE));
+    PyDict_SetItemString(d,"SYS_SCREEN_TINY", SWIG_PyObj_FromInt((int)wxSYS_SCREEN_TINY));
+    PyDict_SetItemString(d,"SYS_SCREEN_PDA", SWIG_PyObj_FromInt((int)wxSYS_SCREEN_PDA));
+    PyDict_SetItemString(d,"SYS_SCREEN_SMALL", SWIG_PyObj_FromInt((int)wxSYS_SCREEN_SMALL));
+    PyDict_SetItemString(d,"SYS_SCREEN_DESKTOP", SWIG_PyObj_FromInt((int)wxSYS_SCREEN_DESKTOP));
     PyDict_SetItemString(d,(char*)"cvar", SWIG_globals);
     SWIG_addvarlink(SWIG_globals,(char*)"FileSelectorPromptStr",_wrap_FileSelectorPromptStr_get, _wrap_FileSelectorPromptStr_set);
     SWIG_addvarlink(SWIG_globals,(char*)"FileSelectorDefaultWildcardStr",_wrap_FileSelectorDefaultWildcardStr_get, _wrap_FileSelectorDefaultWildcardStr_set);
     SWIG_addvarlink(SWIG_globals,(char*)"DirSelectorPromptStr",_wrap_DirSelectorPromptStr_get, _wrap_DirSelectorPromptStr_set);
+    PyDict_SetItemString(d,"SHUTDOWN_POWEROFF", SWIG_PyObj_FromInt((int)wxSHUTDOWN_POWEROFF));
+    PyDict_SetItemString(d,"SHUTDOWN_REBOOT", SWIG_PyObj_FromInt((int)wxSHUTDOWN_REBOOT));
+    PyDict_SetItemString(d,"TIMER_CONTINUOUS", SWIG_PyObj_FromInt((int)wxTIMER_CONTINUOUS));
+    PyDict_SetItemString(d,"TIMER_ONE_SHOT", SWIG_PyObj_FromInt((int)wxTIMER_ONE_SHOT));
     PyDict_SetItemString(d, "wxEVT_TIMER", PyInt_FromLong(wxEVT_TIMER));
+    PyDict_SetItemString(d,"LOG_FatalError", SWIG_PyObj_FromInt((int)wxLOG_FatalError));
+    PyDict_SetItemString(d,"LOG_Error", SWIG_PyObj_FromInt((int)wxLOG_Error));
+    PyDict_SetItemString(d,"LOG_Warning", SWIG_PyObj_FromInt((int)wxLOG_Warning));
+    PyDict_SetItemString(d,"LOG_Message", SWIG_PyObj_FromInt((int)wxLOG_Message));
+    PyDict_SetItemString(d,"LOG_Status", SWIG_PyObj_FromInt((int)wxLOG_Status));
+    PyDict_SetItemString(d,"LOG_Info", SWIG_PyObj_FromInt((int)wxLOG_Info));
+    PyDict_SetItemString(d,"LOG_Debug", SWIG_PyObj_FromInt((int)wxLOG_Debug));
+    PyDict_SetItemString(d,"LOG_Trace", SWIG_PyObj_FromInt((int)wxLOG_Trace));
+    PyDict_SetItemString(d,"LOG_Progress", SWIG_PyObj_FromInt((int)wxLOG_Progress));
+    PyDict_SetItemString(d,"LOG_User", SWIG_PyObj_FromInt((int)wxLOG_User));
+    PyDict_SetItemString(d,"LOG_Max", SWIG_PyObj_FromInt((int)wxLOG_Max));
+    PyDict_SetItemString(d,"TraceMemAlloc", SWIG_PyObj_FromInt((int)0x0001));
+    PyDict_SetItemString(d,"TraceMessages", SWIG_PyObj_FromInt((int)0x0002));
+    PyDict_SetItemString(d,"TraceResAlloc", SWIG_PyObj_FromInt((int)0x0004));
+    PyDict_SetItemString(d,"TraceRefCount", SWIG_PyObj_FromInt((int)0x0008));
+    PyDict_SetItemString(d,"TraceOleCalls", SWIG_PyObj_FromInt((int)0x0100));
+    PyDict_SetItemString(d,"PROCESS_DEFAULT", SWIG_PyObj_FromInt((int)wxPROCESS_DEFAULT));
+    PyDict_SetItemString(d,"PROCESS_REDIRECT", SWIG_PyObj_FromInt((int)wxPROCESS_REDIRECT));
+    PyDict_SetItemString(d,"KILL_OK", SWIG_PyObj_FromInt((int)wxKILL_OK));
+    PyDict_SetItemString(d,"KILL_BAD_SIGNAL", SWIG_PyObj_FromInt((int)wxKILL_BAD_SIGNAL));
+    PyDict_SetItemString(d,"KILL_ACCESS_DENIED", SWIG_PyObj_FromInt((int)wxKILL_ACCESS_DENIED));
+    PyDict_SetItemString(d,"KILL_NO_PROCESS", SWIG_PyObj_FromInt((int)wxKILL_NO_PROCESS));
+    PyDict_SetItemString(d,"KILL_ERROR", SWIG_PyObj_FromInt((int)wxKILL_ERROR));
+    PyDict_SetItemString(d,"SIGNONE", SWIG_PyObj_FromInt((int)wxSIGNONE));
+    PyDict_SetItemString(d,"SIGHUP", SWIG_PyObj_FromInt((int)wxSIGHUP));
+    PyDict_SetItemString(d,"SIGINT", SWIG_PyObj_FromInt((int)wxSIGINT));
+    PyDict_SetItemString(d,"SIGQUIT", SWIG_PyObj_FromInt((int)wxSIGQUIT));
+    PyDict_SetItemString(d,"SIGILL", SWIG_PyObj_FromInt((int)wxSIGILL));
+    PyDict_SetItemString(d,"SIGTRAP", SWIG_PyObj_FromInt((int)wxSIGTRAP));
+    PyDict_SetItemString(d,"SIGABRT", SWIG_PyObj_FromInt((int)wxSIGABRT));
+    PyDict_SetItemString(d,"SIGIOT", SWIG_PyObj_FromInt((int)wxSIGIOT));
+    PyDict_SetItemString(d,"SIGEMT", SWIG_PyObj_FromInt((int)wxSIGEMT));
+    PyDict_SetItemString(d,"SIGFPE", SWIG_PyObj_FromInt((int)wxSIGFPE));
+    PyDict_SetItemString(d,"SIGKILL", SWIG_PyObj_FromInt((int)wxSIGKILL));
+    PyDict_SetItemString(d,"SIGBUS", SWIG_PyObj_FromInt((int)wxSIGBUS));
+    PyDict_SetItemString(d,"SIGSEGV", SWIG_PyObj_FromInt((int)wxSIGSEGV));
+    PyDict_SetItemString(d,"SIGSYS", SWIG_PyObj_FromInt((int)wxSIGSYS));
+    PyDict_SetItemString(d,"SIGPIPE", SWIG_PyObj_FromInt((int)wxSIGPIPE));
+    PyDict_SetItemString(d,"SIGALRM", SWIG_PyObj_FromInt((int)wxSIGALRM));
+    PyDict_SetItemString(d,"SIGTERM", SWIG_PyObj_FromInt((int)wxSIGTERM));
     PyDict_SetItemString(d, "wxEVT_END_PROCESS", PyInt_FromLong(wxEVT_END_PROCESS));
+    PyDict_SetItemString(d,"EXEC_ASYNC", SWIG_PyObj_FromInt((int)wxEXEC_ASYNC));
+    PyDict_SetItemString(d,"EXEC_SYNC", SWIG_PyObj_FromInt((int)wxEXEC_SYNC));
+    PyDict_SetItemString(d,"EXEC_NOHIDE", SWIG_PyObj_FromInt((int)wxEXEC_NOHIDE));
+    PyDict_SetItemString(d,"EXEC_MAKE_GROUP_LEADER", SWIG_PyObj_FromInt((int)wxEXEC_MAKE_GROUP_LEADER));
     
     wxPyPtrTypeMap_Add("wxProcess", "wxPyProcess");
     
+    PyDict_SetItemString(d,"JOYSTICK1", SWIG_PyObj_FromInt((int)wxJOYSTICK1));
+    PyDict_SetItemString(d,"JOYSTICK2", SWIG_PyObj_FromInt((int)wxJOYSTICK2));
+    PyDict_SetItemString(d,"JOY_BUTTON_ANY", SWIG_PyObj_FromInt((int)wxJOY_BUTTON_ANY));
+    PyDict_SetItemString(d,"JOY_BUTTON1", SWIG_PyObj_FromInt((int)wxJOY_BUTTON1));
+    PyDict_SetItemString(d,"JOY_BUTTON2", SWIG_PyObj_FromInt((int)wxJOY_BUTTON2));
+    PyDict_SetItemString(d,"JOY_BUTTON3", SWIG_PyObj_FromInt((int)wxJOY_BUTTON3));
+    PyDict_SetItemString(d,"JOY_BUTTON4", SWIG_PyObj_FromInt((int)wxJOY_BUTTON4));
     PyDict_SetItemString(d, "wxEVT_JOY_BUTTON_DOWN", PyInt_FromLong(wxEVT_JOY_BUTTON_DOWN));
     PyDict_SetItemString(d, "wxEVT_JOY_BUTTON_UP", PyInt_FromLong(wxEVT_JOY_BUTTON_UP));
     PyDict_SetItemString(d, "wxEVT_JOY_MOVE", PyInt_FromLong(wxEVT_JOY_MOVE));
     PyDict_SetItemString(d, "wxEVT_JOY_ZMOVE", PyInt_FromLong(wxEVT_JOY_ZMOVE));
+    PyDict_SetItemString(d,"MAILCAP_STANDARD", SWIG_PyObj_FromInt((int)wxMAILCAP_STANDARD));
+    PyDict_SetItemString(d,"MAILCAP_NETSCAPE", SWIG_PyObj_FromInt((int)wxMAILCAP_NETSCAPE));
+    PyDict_SetItemString(d,"MAILCAP_KDE", SWIG_PyObj_FromInt((int)wxMAILCAP_KDE));
+    PyDict_SetItemString(d,"MAILCAP_GNOME", SWIG_PyObj_FromInt((int)wxMAILCAP_GNOME));
+    PyDict_SetItemString(d,"MAILCAP_ALL", SWIG_PyObj_FromInt((int)wxMAILCAP_ALL));
     SWIG_addvarlink(SWIG_globals,(char*)"TheMimeTypesManager",_wrap_TheMimeTypesManager_get, _wrap_TheMimeTypesManager_set);
     SWIG_addvarlink(SWIG_globals,(char*)"ART_TOOLBAR",_wrap_ART_TOOLBAR_get, _wrap_ART_TOOLBAR_set);
     SWIG_addvarlink(SWIG_globals,(char*)"ART_MENU",_wrap_ART_MENU_get, _wrap_ART_MENU_set);
@@ -26753,9 +28012,205 @@ SWIGEXPORT(void) SWIG_init(void) {
     
     wxPyPtrTypeMap_Add("wxArtProvider", "wxPyArtProvider");
     
+    PyDict_SetItemString(d,"CONFIG_USE_LOCAL_FILE", SWIG_PyObj_FromInt((int)wxCONFIG_USE_LOCAL_FILE));
+    PyDict_SetItemString(d,"CONFIG_USE_GLOBAL_FILE", SWIG_PyObj_FromInt((int)wxCONFIG_USE_GLOBAL_FILE));
+    PyDict_SetItemString(d,"CONFIG_USE_RELATIVE_PATH", SWIG_PyObj_FromInt((int)wxCONFIG_USE_RELATIVE_PATH));
+    PyDict_SetItemString(d,"CONFIG_USE_NO_ESCAPE_CHARACTERS", SWIG_PyObj_FromInt((int)wxCONFIG_USE_NO_ESCAPE_CHARACTERS));
+    PyDict_SetItemString(d,"ConfigBase_Type_Unknown", SWIG_PyObj_FromInt((int)wxConfigBase::Type_Unknown));
+    PyDict_SetItemString(d,"ConfigBase_Type_String", SWIG_PyObj_FromInt((int)wxConfigBase::Type_String));
+    PyDict_SetItemString(d,"ConfigBase_Type_Boolean", SWIG_PyObj_FromInt((int)wxConfigBase::Type_Boolean));
+    PyDict_SetItemString(d,"ConfigBase_Type_Integer", SWIG_PyObj_FromInt((int)wxConfigBase::Type_Integer));
+    PyDict_SetItemString(d,"ConfigBase_Type_Float", SWIG_PyObj_FromInt((int)wxConfigBase::Type_Float));
     SWIG_addvarlink(SWIG_globals,(char*)"DateFormatStr",_wrap_DateFormatStr_get, _wrap_DateFormatStr_set);
     SWIG_addvarlink(SWIG_globals,(char*)"TimeSpanFormatStr",_wrap_TimeSpanFormatStr_get, _wrap_TimeSpanFormatStr_set);
+    PyDict_SetItemString(d,"DateTime_Local", SWIG_PyObj_FromInt((int)wxDateTime::Local));
+    PyDict_SetItemString(d,"DateTime_GMT_12", SWIG_PyObj_FromInt((int)wxDateTime::GMT_12));
+    PyDict_SetItemString(d,"DateTime_GMT_11", SWIG_PyObj_FromInt((int)wxDateTime::GMT_11));
+    PyDict_SetItemString(d,"DateTime_GMT_10", SWIG_PyObj_FromInt((int)wxDateTime::GMT_10));
+    PyDict_SetItemString(d,"DateTime_GMT_9", SWIG_PyObj_FromInt((int)wxDateTime::GMT_9));
+    PyDict_SetItemString(d,"DateTime_GMT_8", SWIG_PyObj_FromInt((int)wxDateTime::GMT_8));
+    PyDict_SetItemString(d,"DateTime_GMT_7", SWIG_PyObj_FromInt((int)wxDateTime::GMT_7));
+    PyDict_SetItemString(d,"DateTime_GMT_6", SWIG_PyObj_FromInt((int)wxDateTime::GMT_6));
+    PyDict_SetItemString(d,"DateTime_GMT_5", SWIG_PyObj_FromInt((int)wxDateTime::GMT_5));
+    PyDict_SetItemString(d,"DateTime_GMT_4", SWIG_PyObj_FromInt((int)wxDateTime::GMT_4));
+    PyDict_SetItemString(d,"DateTime_GMT_3", SWIG_PyObj_FromInt((int)wxDateTime::GMT_3));
+    PyDict_SetItemString(d,"DateTime_GMT_2", SWIG_PyObj_FromInt((int)wxDateTime::GMT_2));
+    PyDict_SetItemString(d,"DateTime_GMT_1", SWIG_PyObj_FromInt((int)wxDateTime::GMT_1));
+    PyDict_SetItemString(d,"DateTime_GMT0", SWIG_PyObj_FromInt((int)wxDateTime::GMT0));
+    PyDict_SetItemString(d,"DateTime_GMT1", SWIG_PyObj_FromInt((int)wxDateTime::GMT1));
+    PyDict_SetItemString(d,"DateTime_GMT2", SWIG_PyObj_FromInt((int)wxDateTime::GMT2));
+    PyDict_SetItemString(d,"DateTime_GMT3", SWIG_PyObj_FromInt((int)wxDateTime::GMT3));
+    PyDict_SetItemString(d,"DateTime_GMT4", SWIG_PyObj_FromInt((int)wxDateTime::GMT4));
+    PyDict_SetItemString(d,"DateTime_GMT5", SWIG_PyObj_FromInt((int)wxDateTime::GMT5));
+    PyDict_SetItemString(d,"DateTime_GMT6", SWIG_PyObj_FromInt((int)wxDateTime::GMT6));
+    PyDict_SetItemString(d,"DateTime_GMT7", SWIG_PyObj_FromInt((int)wxDateTime::GMT7));
+    PyDict_SetItemString(d,"DateTime_GMT8", SWIG_PyObj_FromInt((int)wxDateTime::GMT8));
+    PyDict_SetItemString(d,"DateTime_GMT9", SWIG_PyObj_FromInt((int)wxDateTime::GMT9));
+    PyDict_SetItemString(d,"DateTime_GMT10", SWIG_PyObj_FromInt((int)wxDateTime::GMT10));
+    PyDict_SetItemString(d,"DateTime_GMT11", SWIG_PyObj_FromInt((int)wxDateTime::GMT11));
+    PyDict_SetItemString(d,"DateTime_GMT12", SWIG_PyObj_FromInt((int)wxDateTime::GMT12));
+    PyDict_SetItemString(d,"DateTime_WET", SWIG_PyObj_FromInt((int)wxDateTime::WET));
+    PyDict_SetItemString(d,"DateTime_WEST", SWIG_PyObj_FromInt((int)wxDateTime::WEST));
+    PyDict_SetItemString(d,"DateTime_CET", SWIG_PyObj_FromInt((int)wxDateTime::CET));
+    PyDict_SetItemString(d,"DateTime_CEST", SWIG_PyObj_FromInt((int)wxDateTime::CEST));
+    PyDict_SetItemString(d,"DateTime_EET", SWIG_PyObj_FromInt((int)wxDateTime::EET));
+    PyDict_SetItemString(d,"DateTime_EEST", SWIG_PyObj_FromInt((int)wxDateTime::EEST));
+    PyDict_SetItemString(d,"DateTime_MSK", SWIG_PyObj_FromInt((int)wxDateTime::MSK));
+    PyDict_SetItemString(d,"DateTime_MSD", SWIG_PyObj_FromInt((int)wxDateTime::MSD));
+    PyDict_SetItemString(d,"DateTime_AST", SWIG_PyObj_FromInt((int)wxDateTime::AST));
+    PyDict_SetItemString(d,"DateTime_ADT", SWIG_PyObj_FromInt((int)wxDateTime::ADT));
+    PyDict_SetItemString(d,"DateTime_EST", SWIG_PyObj_FromInt((int)wxDateTime::EST));
+    PyDict_SetItemString(d,"DateTime_EDT", SWIG_PyObj_FromInt((int)wxDateTime::EDT));
+    PyDict_SetItemString(d,"DateTime_CST", SWIG_PyObj_FromInt((int)wxDateTime::CST));
+    PyDict_SetItemString(d,"DateTime_CDT", SWIG_PyObj_FromInt((int)wxDateTime::CDT));
+    PyDict_SetItemString(d,"DateTime_MST", SWIG_PyObj_FromInt((int)wxDateTime::MST));
+    PyDict_SetItemString(d,"DateTime_MDT", SWIG_PyObj_FromInt((int)wxDateTime::MDT));
+    PyDict_SetItemString(d,"DateTime_PST", SWIG_PyObj_FromInt((int)wxDateTime::PST));
+    PyDict_SetItemString(d,"DateTime_PDT", SWIG_PyObj_FromInt((int)wxDateTime::PDT));
+    PyDict_SetItemString(d,"DateTime_HST", SWIG_PyObj_FromInt((int)wxDateTime::HST));
+    PyDict_SetItemString(d,"DateTime_AKST", SWIG_PyObj_FromInt((int)wxDateTime::AKST));
+    PyDict_SetItemString(d,"DateTime_AKDT", SWIG_PyObj_FromInt((int)wxDateTime::AKDT));
+    PyDict_SetItemString(d,"DateTime_A_WST", SWIG_PyObj_FromInt((int)wxDateTime::A_WST));
+    PyDict_SetItemString(d,"DateTime_A_CST", SWIG_PyObj_FromInt((int)wxDateTime::A_CST));
+    PyDict_SetItemString(d,"DateTime_A_EST", SWIG_PyObj_FromInt((int)wxDateTime::A_EST));
+    PyDict_SetItemString(d,"DateTime_A_ESST", SWIG_PyObj_FromInt((int)wxDateTime::A_ESST));
+    PyDict_SetItemString(d,"DateTime_UTC", SWIG_PyObj_FromInt((int)wxDateTime::UTC));
+    PyDict_SetItemString(d,"DateTime_Gregorian", SWIG_PyObj_FromInt((int)wxDateTime::Gregorian));
+    PyDict_SetItemString(d,"DateTime_Julian", SWIG_PyObj_FromInt((int)wxDateTime::Julian));
+    PyDict_SetItemString(d,"DateTime_Gr_Unknown", SWIG_PyObj_FromInt((int)wxDateTime::Gr_Unknown));
+    PyDict_SetItemString(d,"DateTime_Gr_Standard", SWIG_PyObj_FromInt((int)wxDateTime::Gr_Standard));
+    PyDict_SetItemString(d,"DateTime_Gr_Alaska", SWIG_PyObj_FromInt((int)wxDateTime::Gr_Alaska));
+    PyDict_SetItemString(d,"DateTime_Gr_Albania", SWIG_PyObj_FromInt((int)wxDateTime::Gr_Albania));
+    PyDict_SetItemString(d,"DateTime_Gr_Austria", SWIG_PyObj_FromInt((int)wxDateTime::Gr_Austria));
+    PyDict_SetItemString(d,"DateTime_Gr_Austria_Brixen", SWIG_PyObj_FromInt((int)wxDateTime::Gr_Austria_Brixen));
+    PyDict_SetItemString(d,"DateTime_Gr_Austria_Salzburg", SWIG_PyObj_FromInt((int)wxDateTime::Gr_Austria_Salzburg));
+    PyDict_SetItemString(d,"DateTime_Gr_Austria_Tyrol", SWIG_PyObj_FromInt((int)wxDateTime::Gr_Austria_Tyrol));
+    PyDict_SetItemString(d,"DateTime_Gr_Austria_Carinthia", SWIG_PyObj_FromInt((int)wxDateTime::Gr_Austria_Carinthia));
+    PyDict_SetItemString(d,"DateTime_Gr_Austria_Styria", SWIG_PyObj_FromInt((int)wxDateTime::Gr_Austria_Styria));
+    PyDict_SetItemString(d,"DateTime_Gr_Belgium", SWIG_PyObj_FromInt((int)wxDateTime::Gr_Belgium));
+    PyDict_SetItemString(d,"DateTime_Gr_Bulgaria", SWIG_PyObj_FromInt((int)wxDateTime::Gr_Bulgaria));
+    PyDict_SetItemString(d,"DateTime_Gr_Bulgaria_1", SWIG_PyObj_FromInt((int)wxDateTime::Gr_Bulgaria_1));
+    PyDict_SetItemString(d,"DateTime_Gr_Bulgaria_2", SWIG_PyObj_FromInt((int)wxDateTime::Gr_Bulgaria_2));
+    PyDict_SetItemString(d,"DateTime_Gr_Bulgaria_3", SWIG_PyObj_FromInt((int)wxDateTime::Gr_Bulgaria_3));
+    PyDict_SetItemString(d,"DateTime_Gr_Canada", SWIG_PyObj_FromInt((int)wxDateTime::Gr_Canada));
+    PyDict_SetItemString(d,"DateTime_Gr_China", SWIG_PyObj_FromInt((int)wxDateTime::Gr_China));
+    PyDict_SetItemString(d,"DateTime_Gr_China_1", SWIG_PyObj_FromInt((int)wxDateTime::Gr_China_1));
+    PyDict_SetItemString(d,"DateTime_Gr_China_2", SWIG_PyObj_FromInt((int)wxDateTime::Gr_China_2));
+    PyDict_SetItemString(d,"DateTime_Gr_Czechoslovakia", SWIG_PyObj_FromInt((int)wxDateTime::Gr_Czechoslovakia));
+    PyDict_SetItemString(d,"DateTime_Gr_Denmark", SWIG_PyObj_FromInt((int)wxDateTime::Gr_Denmark));
+    PyDict_SetItemString(d,"DateTime_Gr_Egypt", SWIG_PyObj_FromInt((int)wxDateTime::Gr_Egypt));
+    PyDict_SetItemString(d,"DateTime_Gr_Estonia", SWIG_PyObj_FromInt((int)wxDateTime::Gr_Estonia));
+    PyDict_SetItemString(d,"DateTime_Gr_Finland", SWIG_PyObj_FromInt((int)wxDateTime::Gr_Finland));
+    PyDict_SetItemString(d,"DateTime_Gr_France", SWIG_PyObj_FromInt((int)wxDateTime::Gr_France));
+    PyDict_SetItemString(d,"DateTime_Gr_France_Alsace", SWIG_PyObj_FromInt((int)wxDateTime::Gr_France_Alsace));
+    PyDict_SetItemString(d,"DateTime_Gr_France_Lorraine", SWIG_PyObj_FromInt((int)wxDateTime::Gr_France_Lorraine));
+    PyDict_SetItemString(d,"DateTime_Gr_France_Strasbourg", SWIG_PyObj_FromInt((int)wxDateTime::Gr_France_Strasbourg));
+    PyDict_SetItemString(d,"DateTime_Gr_Germany", SWIG_PyObj_FromInt((int)wxDateTime::Gr_Germany));
+    PyDict_SetItemString(d,"DateTime_Gr_Germany_Catholic", SWIG_PyObj_FromInt((int)wxDateTime::Gr_Germany_Catholic));
+    PyDict_SetItemString(d,"DateTime_Gr_Germany_Prussia", SWIG_PyObj_FromInt((int)wxDateTime::Gr_Germany_Prussia));
+    PyDict_SetItemString(d,"DateTime_Gr_Germany_Protestant", SWIG_PyObj_FromInt((int)wxDateTime::Gr_Germany_Protestant));
+    PyDict_SetItemString(d,"DateTime_Gr_GreatBritain", SWIG_PyObj_FromInt((int)wxDateTime::Gr_GreatBritain));
+    PyDict_SetItemString(d,"DateTime_Gr_Greece", SWIG_PyObj_FromInt((int)wxDateTime::Gr_Greece));
+    PyDict_SetItemString(d,"DateTime_Gr_Hungary", SWIG_PyObj_FromInt((int)wxDateTime::Gr_Hungary));
+    PyDict_SetItemString(d,"DateTime_Gr_Ireland", SWIG_PyObj_FromInt((int)wxDateTime::Gr_Ireland));
+    PyDict_SetItemString(d,"DateTime_Gr_Italy", SWIG_PyObj_FromInt((int)wxDateTime::Gr_Italy));
+    PyDict_SetItemString(d,"DateTime_Gr_Japan", SWIG_PyObj_FromInt((int)wxDateTime::Gr_Japan));
+    PyDict_SetItemString(d,"DateTime_Gr_Japan_1", SWIG_PyObj_FromInt((int)wxDateTime::Gr_Japan_1));
+    PyDict_SetItemString(d,"DateTime_Gr_Japan_2", SWIG_PyObj_FromInt((int)wxDateTime::Gr_Japan_2));
+    PyDict_SetItemString(d,"DateTime_Gr_Japan_3", SWIG_PyObj_FromInt((int)wxDateTime::Gr_Japan_3));
+    PyDict_SetItemString(d,"DateTime_Gr_Latvia", SWIG_PyObj_FromInt((int)wxDateTime::Gr_Latvia));
+    PyDict_SetItemString(d,"DateTime_Gr_Lithuania", SWIG_PyObj_FromInt((int)wxDateTime::Gr_Lithuania));
+    PyDict_SetItemString(d,"DateTime_Gr_Luxemburg", SWIG_PyObj_FromInt((int)wxDateTime::Gr_Luxemburg));
+    PyDict_SetItemString(d,"DateTime_Gr_Netherlands", SWIG_PyObj_FromInt((int)wxDateTime::Gr_Netherlands));
+    PyDict_SetItemString(d,"DateTime_Gr_Netherlands_Groningen", SWIG_PyObj_FromInt((int)wxDateTime::Gr_Netherlands_Groningen));
+    PyDict_SetItemString(d,"DateTime_Gr_Netherlands_Gelderland", SWIG_PyObj_FromInt((int)wxDateTime::Gr_Netherlands_Gelderland));
+    PyDict_SetItemString(d,"DateTime_Gr_Netherlands_Utrecht", SWIG_PyObj_FromInt((int)wxDateTime::Gr_Netherlands_Utrecht));
+    PyDict_SetItemString(d,"DateTime_Gr_Netherlands_Friesland", SWIG_PyObj_FromInt((int)wxDateTime::Gr_Netherlands_Friesland));
+    PyDict_SetItemString(d,"DateTime_Gr_Norway", SWIG_PyObj_FromInt((int)wxDateTime::Gr_Norway));
+    PyDict_SetItemString(d,"DateTime_Gr_Poland", SWIG_PyObj_FromInt((int)wxDateTime::Gr_Poland));
+    PyDict_SetItemString(d,"DateTime_Gr_Portugal", SWIG_PyObj_FromInt((int)wxDateTime::Gr_Portugal));
+    PyDict_SetItemString(d,"DateTime_Gr_Romania", SWIG_PyObj_FromInt((int)wxDateTime::Gr_Romania));
+    PyDict_SetItemString(d,"DateTime_Gr_Russia", SWIG_PyObj_FromInt((int)wxDateTime::Gr_Russia));
+    PyDict_SetItemString(d,"DateTime_Gr_Scotland", SWIG_PyObj_FromInt((int)wxDateTime::Gr_Scotland));
+    PyDict_SetItemString(d,"DateTime_Gr_Spain", SWIG_PyObj_FromInt((int)wxDateTime::Gr_Spain));
+    PyDict_SetItemString(d,"DateTime_Gr_Sweden", SWIG_PyObj_FromInt((int)wxDateTime::Gr_Sweden));
+    PyDict_SetItemString(d,"DateTime_Gr_Switzerland", SWIG_PyObj_FromInt((int)wxDateTime::Gr_Switzerland));
+    PyDict_SetItemString(d,"DateTime_Gr_Switzerland_Catholic", SWIG_PyObj_FromInt((int)wxDateTime::Gr_Switzerland_Catholic));
+    PyDict_SetItemString(d,"DateTime_Gr_Switzerland_Protestant", SWIG_PyObj_FromInt((int)wxDateTime::Gr_Switzerland_Protestant));
+    PyDict_SetItemString(d,"DateTime_Gr_Turkey", SWIG_PyObj_FromInt((int)wxDateTime::Gr_Turkey));
+    PyDict_SetItemString(d,"DateTime_Gr_USA", SWIG_PyObj_FromInt((int)wxDateTime::Gr_USA));
+    PyDict_SetItemString(d,"DateTime_Gr_Wales", SWIG_PyObj_FromInt((int)wxDateTime::Gr_Wales));
+    PyDict_SetItemString(d,"DateTime_Gr_Yugoslavia", SWIG_PyObj_FromInt((int)wxDateTime::Gr_Yugoslavia));
+    PyDict_SetItemString(d,"DateTime_Country_Unknown", SWIG_PyObj_FromInt((int)wxDateTime::Country_Unknown));
+    PyDict_SetItemString(d,"DateTime_Country_Default", SWIG_PyObj_FromInt((int)wxDateTime::Country_Default));
+    PyDict_SetItemString(d,"DateTime_Country_WesternEurope_Start", SWIG_PyObj_FromInt((int)wxDateTime::Country_WesternEurope_Start));
+    PyDict_SetItemString(d,"DateTime_Country_EEC", SWIG_PyObj_FromInt((int)wxDateTime::Country_EEC));
+    PyDict_SetItemString(d,"DateTime_France", SWIG_PyObj_FromInt((int)wxDateTime::France));
+    PyDict_SetItemString(d,"DateTime_Germany", SWIG_PyObj_FromInt((int)wxDateTime::Germany));
+    PyDict_SetItemString(d,"DateTime_UK", SWIG_PyObj_FromInt((int)wxDateTime::UK));
+    PyDict_SetItemString(d,"DateTime_Country_WesternEurope_End", SWIG_PyObj_FromInt((int)wxDateTime::Country_WesternEurope_End));
+    PyDict_SetItemString(d,"DateTime_Russia", SWIG_PyObj_FromInt((int)wxDateTime::Russia));
+    PyDict_SetItemString(d,"DateTime_USA", SWIG_PyObj_FromInt((int)wxDateTime::USA));
+    PyDict_SetItemString(d,"DateTime_Jan", SWIG_PyObj_FromInt((int)wxDateTime::Jan));
+    PyDict_SetItemString(d,"DateTime_Feb", SWIG_PyObj_FromInt((int)wxDateTime::Feb));
+    PyDict_SetItemString(d,"DateTime_Mar", SWIG_PyObj_FromInt((int)wxDateTime::Mar));
+    PyDict_SetItemString(d,"DateTime_Apr", SWIG_PyObj_FromInt((int)wxDateTime::Apr));
+    PyDict_SetItemString(d,"DateTime_May", SWIG_PyObj_FromInt((int)wxDateTime::May));
+    PyDict_SetItemString(d,"DateTime_Jun", SWIG_PyObj_FromInt((int)wxDateTime::Jun));
+    PyDict_SetItemString(d,"DateTime_Jul", SWIG_PyObj_FromInt((int)wxDateTime::Jul));
+    PyDict_SetItemString(d,"DateTime_Aug", SWIG_PyObj_FromInt((int)wxDateTime::Aug));
+    PyDict_SetItemString(d,"DateTime_Sep", SWIG_PyObj_FromInt((int)wxDateTime::Sep));
+    PyDict_SetItemString(d,"DateTime_Oct", SWIG_PyObj_FromInt((int)wxDateTime::Oct));
+    PyDict_SetItemString(d,"DateTime_Nov", SWIG_PyObj_FromInt((int)wxDateTime::Nov));
+    PyDict_SetItemString(d,"DateTime_Dec", SWIG_PyObj_FromInt((int)wxDateTime::Dec));
+    PyDict_SetItemString(d,"DateTime_Inv_Month", SWIG_PyObj_FromInt((int)wxDateTime::Inv_Month));
+    PyDict_SetItemString(d,"DateTime_Sun", SWIG_PyObj_FromInt((int)wxDateTime::Sun));
+    PyDict_SetItemString(d,"DateTime_Mon", SWIG_PyObj_FromInt((int)wxDateTime::Mon));
+    PyDict_SetItemString(d,"DateTime_Tue", SWIG_PyObj_FromInt((int)wxDateTime::Tue));
+    PyDict_SetItemString(d,"DateTime_Wed", SWIG_PyObj_FromInt((int)wxDateTime::Wed));
+    PyDict_SetItemString(d,"DateTime_Thu", SWIG_PyObj_FromInt((int)wxDateTime::Thu));
+    PyDict_SetItemString(d,"DateTime_Fri", SWIG_PyObj_FromInt((int)wxDateTime::Fri));
+    PyDict_SetItemString(d,"DateTime_Sat", SWIG_PyObj_FromInt((int)wxDateTime::Sat));
+    PyDict_SetItemString(d,"DateTime_Inv_WeekDay", SWIG_PyObj_FromInt((int)wxDateTime::Inv_WeekDay));
+    PyDict_SetItemString(d,"DateTime_Inv_Year", SWIG_PyObj_FromInt((int)wxDateTime::Inv_Year));
+    PyDict_SetItemString(d,"DateTime_Name_Full", SWIG_PyObj_FromInt((int)wxDateTime::Name_Full));
+    PyDict_SetItemString(d,"DateTime_Name_Abbr", SWIG_PyObj_FromInt((int)wxDateTime::Name_Abbr));
+    PyDict_SetItemString(d,"DateTime_Default_First", SWIG_PyObj_FromInt((int)wxDateTime::Default_First));
+    PyDict_SetItemString(d,"DateTime_Monday_First", SWIG_PyObj_FromInt((int)wxDateTime::Monday_First));
+    PyDict_SetItemString(d,"DateTime_Sunday_First", SWIG_PyObj_FromInt((int)wxDateTime::Sunday_First));
+    PyDict_SetItemString(d,"DF_INVALID", SWIG_PyObj_FromInt((int)wxDF_INVALID));
+    PyDict_SetItemString(d,"DF_TEXT", SWIG_PyObj_FromInt((int)wxDF_TEXT));
+    PyDict_SetItemString(d,"DF_BITMAP", SWIG_PyObj_FromInt((int)wxDF_BITMAP));
+    PyDict_SetItemString(d,"DF_METAFILE", SWIG_PyObj_FromInt((int)wxDF_METAFILE));
+    PyDict_SetItemString(d,"DF_SYLK", SWIG_PyObj_FromInt((int)wxDF_SYLK));
+    PyDict_SetItemString(d,"DF_DIF", SWIG_PyObj_FromInt((int)wxDF_DIF));
+    PyDict_SetItemString(d,"DF_TIFF", SWIG_PyObj_FromInt((int)wxDF_TIFF));
+    PyDict_SetItemString(d,"DF_OEMTEXT", SWIG_PyObj_FromInt((int)wxDF_OEMTEXT));
+    PyDict_SetItemString(d,"DF_DIB", SWIG_PyObj_FromInt((int)wxDF_DIB));
+    PyDict_SetItemString(d,"DF_PALETTE", SWIG_PyObj_FromInt((int)wxDF_PALETTE));
+    PyDict_SetItemString(d,"DF_PENDATA", SWIG_PyObj_FromInt((int)wxDF_PENDATA));
+    PyDict_SetItemString(d,"DF_RIFF", SWIG_PyObj_FromInt((int)wxDF_RIFF));
+    PyDict_SetItemString(d,"DF_WAVE", SWIG_PyObj_FromInt((int)wxDF_WAVE));
+    PyDict_SetItemString(d,"DF_UNICODETEXT", SWIG_PyObj_FromInt((int)wxDF_UNICODETEXT));
+    PyDict_SetItemString(d,"DF_ENHMETAFILE", SWIG_PyObj_FromInt((int)wxDF_ENHMETAFILE));
+    PyDict_SetItemString(d,"DF_FILENAME", SWIG_PyObj_FromInt((int)wxDF_FILENAME));
+    PyDict_SetItemString(d,"DF_LOCALE", SWIG_PyObj_FromInt((int)wxDF_LOCALE));
+    PyDict_SetItemString(d,"DF_PRIVATE", SWIG_PyObj_FromInt((int)wxDF_PRIVATE));
+    PyDict_SetItemString(d,"DF_HTML", SWIG_PyObj_FromInt((int)wxDF_HTML));
+    PyDict_SetItemString(d,"DF_MAX", SWIG_PyObj_FromInt((int)wxDF_MAX));
     SWIG_addvarlink(SWIG_globals,(char*)"FormatInvalid",_wrap_FormatInvalid_get, _wrap_FormatInvalid_set);
+    PyDict_SetItemString(d,"DataObject_Get", SWIG_PyObj_FromInt((int)wxDataObject::Get));
+    PyDict_SetItemString(d,"DataObject_Set", SWIG_PyObj_FromInt((int)wxDataObject::Set));
+    PyDict_SetItemString(d,"DataObject_Both", SWIG_PyObj_FromInt((int)wxDataObject::Both));
+    PyDict_SetItemString(d,"Drag_CopyOnly", SWIG_PyObj_FromInt((int)wxDrag_CopyOnly));
+    PyDict_SetItemString(d,"Drag_AllowMove", SWIG_PyObj_FromInt((int)wxDrag_AllowMove));
+    PyDict_SetItemString(d,"Drag_DefaultMove", SWIG_PyObj_FromInt((int)wxDrag_DefaultMove));
+    PyDict_SetItemString(d,"DragError", SWIG_PyObj_FromInt((int)wxDragError));
+    PyDict_SetItemString(d,"DragNone", SWIG_PyObj_FromInt((int)wxDragNone));
+    PyDict_SetItemString(d,"DragCopy", SWIG_PyObj_FromInt((int)wxDragCopy));
+    PyDict_SetItemString(d,"DragMove", SWIG_PyObj_FromInt((int)wxDragMove));
+    PyDict_SetItemString(d,"DragLink", SWIG_PyObj_FromInt((int)wxDragLink));
+    PyDict_SetItemString(d,"DragCancel", SWIG_PyObj_FromInt((int)wxDragCancel));
     
     wxPyPtrTypeMap_Add("wxDropSource",     "wxPyDropSource");
     wxPyPtrTypeMap_Add("wxDropTarget",     "wxPyDropTarget");
