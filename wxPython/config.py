@@ -39,8 +39,8 @@ import distutils.command.clean
 VER_MAJOR        = 2      # The first three must match wxWidgets
 VER_MINOR        = 5
 VER_RELEASE      = 3
-VER_SUBREL       = 1      # wxPython release num for x.y.z release of wxWidgets
-VER_FLAGS        = ""     # release flags, such as prerelease num, unicode, etc.
+VER_SUBREL       = 2      # wxPython release num for x.y.z release of wxWidgets
+VER_FLAGS        = "pre"     # release flags, such as prerelease num, unicode, etc.
 
 DESCRIPTION      = "Cross platform GUI toolkit for Python"
 AUTHOR           = "Robin Dunn"
@@ -733,7 +733,7 @@ elif os.name == 'posix':
     WXPREFIX   = os.popen(WX_CONFIG + ' --prefix').read()[:-1]
 
 
-    if sys.platform[:6] == "darwin":
+    if sys.platform[:6] == "darwin" and WXPORT == 'mac':
         # Flags and such for a Darwin (Max OS X) build of Python
         WXPLAT = '__WXMAC__'
         GENDIR = 'mac'
