@@ -94,8 +94,7 @@ public:
     void OnIdle(wxIdleEvent& event);
 
     // for MyPipedProcess
-    void OnProcessTerminated(MyPipedProcess *process)
-        { m_running.Remove(process); }
+    void OnProcessTerminated(MyPipedProcess *process);
     wxListBox *GetLogListBox() const { return m_lbox; }
 
 private:
@@ -230,11 +229,6 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
     // we need this in order to allow the about menu relocation, since ABOUT is
     // not the default id of the about menu
     wxApp::s_macAboutMenuItemId = Exec_About;
-#endif
-
-    // set the frame icon
-#ifndef __WXGTK__
-    SetIcon(wxICON(mondrian));
 #endif
 
     // create a menu bar
@@ -402,6 +396,8 @@ void MyFrame::OnExecWithRedirect(wxCommandEvent& WXUNUSED(event))
             {
                 m_lbox->Append(output[n]);
             }
+
+            m_lbox->Append(_T("--- End of output ---"));
         }
     }
     else // async exec
@@ -475,6 +471,11 @@ void MyFrame::OnIdle(wxIdleEvent& event)
             event.RequestMore();
         }
     }
+}
+
+void MyFrame::OnProcessTerminated(MyPipedProcess *process)
+{
+    m_running.Remove(process);
 }
 
 // ----------------------------------------------------------------------------
