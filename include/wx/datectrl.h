@@ -52,7 +52,7 @@ public:
 #if defined(__WXMSW__) && !defined(__WXUNIVERSAL__)
     #include "wx/msw/datectrl.h"
 #else
-    // TODO: #include "wx/generic/datectrl.h"
+    #include "wx/generic/datectrl.h"
 #endif
 
 #endif // _WX_DATECTRL_H_

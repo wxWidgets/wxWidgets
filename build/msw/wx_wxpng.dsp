@@ -1,4 +1,4 @@
-# Microsoft Developer Studio Project File - Name="wxpng" - Package Owner=<4>
+# Microsoft Developer Studio Project File - Name="wx_wxpng" - Package Owner=<4>
 # Microsoft Developer Studio Generated Build File, Format Version 6.00
 # ** DO NOT EDIT **
 
@@ -54,10 +54,10 @@ RSC=rc.exe
 # PROP Output_Dir "..\..\lib\vc_dll"
 # PROP Intermediate_Dir "vc_mswunivudll\wxpng"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /MD /W1 /O1 /GR /GX /Fd..\..\lib\vc_dll\wxpng.pdb /I "..\..\src\zlib" /D "WIN32" /D "_LIB" /c
-# ADD CPP /nologo /FD /MD /W1 /O1 /GR /GX /Fd..\..\lib\vc_dll\wxpng.pdb /I "..\..\src\zlib" /D "WIN32" /D "_LIB" /c
-# ADD BASE RSC /l 0x405
-# ADD RSC /l 0x405
+# ADD BASE CPP /nologo /FD /MD /W1 /O2 /GR /GX /Fd..\..\lib\vc_dll\wxpng.pdb /I "..\..\src\zlib" /D "WIN32" /D "_LIB" /c
+# ADD CPP /nologo /FD /MD /W1 /O2 /GR /GX /Fd..\..\lib\vc_dll\wxpng.pdb /I "..\..\src\zlib" /D "WIN32" /D "_LIB" /c
+# ADD BASE RSC /l 0x409
+# ADD RSC /l 0x409
 BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
@@ -79,8 +79,8 @@ LIB32=link.exe -lib
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /FD /MDd /W1 /Od /GR /GX /Zi /Gm /GZ /Fd..\..\lib\vc_dll\wxpngd.pdb /I "..\..\src\zlib" /D "WIN32" /D "_LIB" /D "_DEBUG" /c
 # ADD CPP /nologo /FD /MDd /W1 /Od /GR /GX /Zi /Gm /GZ /Fd..\..\lib\vc_dll\wxpngd.pdb /I "..\..\src\zlib" /D "WIN32" /D "_LIB" /D "_DEBUG" /c
-# ADD BASE RSC /l 0x405
-# ADD RSC /l 0x405
+# ADD BASE RSC /l 0x409
+# ADD RSC /l 0x409
 BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
@@ -100,10 +100,10 @@ LIB32=link.exe -lib
 # PROP Output_Dir "..\..\lib\vc_dll"
 # PROP Intermediate_Dir "vc_mswunivdll\wxpng"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /MD /W1 /O1 /GR /GX /Fd..\..\lib\vc_dll\wxpng.pdb /I "..\..\src\zlib" /D "WIN32" /D "_LIB" /c
-# ADD CPP /nologo /FD /MD /W1 /O1 /GR /GX /Fd..\..\lib\vc_dll\wxpng.pdb /I "..\..\src\zlib" /D "WIN32" /D "_LIB" /c
-# ADD BASE RSC /l 0x405
-# ADD RSC /l 0x405
+# ADD BASE CPP /nologo /FD /MD /W1 /O2 /GR /GX /Fd..\..\lib\vc_dll\wxpng.pdb /I "..\..\src\zlib" /D "WIN32" /D "_LIB" /c
+# ADD CPP /nologo /FD /MD /W1 /O2 /GR /GX /Fd..\..\lib\vc_dll\wxpng.pdb /I "..\..\src\zlib" /D "WIN32" /D "_LIB" /c
+# ADD BASE RSC /l 0x409
+# ADD RSC /l 0x409
 BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
@@ -125,8 +125,8 @@ LIB32=link.exe -lib
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /FD /MDd /W1 /Od /GR /GX /Zi /Gm /GZ /Fd..\..\lib\vc_dll\wxpngd.pdb /I "..\..\src\zlib" /D "WIN32" /D "_LIB" /D "_DEBUG" /c
 # ADD CPP /nologo /FD /MDd /W1 /Od /GR /GX /Zi /Gm /GZ /Fd..\..\lib\vc_dll\wxpngd.pdb /I "..\..\src\zlib" /D "WIN32" /D "_LIB" /D "_DEBUG" /c
-# ADD BASE RSC /l 0x405
-# ADD RSC /l 0x405
+# ADD BASE RSC /l 0x409
+# ADD RSC /l 0x409
 BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
@@ -146,10 +146,10 @@ LIB32=link.exe -lib
 # PROP Output_Dir "..\..\lib\vc_dll"
 # PROP Intermediate_Dir "vc_mswudll\wxpng"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /MD /W1 /O1 /GR /GX /Fd..\..\lib\vc_dll\wxpng.pdb /I "..\..\src\zlib" /D "WIN32" /D "_LIB" /c
-# ADD CPP /nologo /FD /MD /W1 /O1 /GR /GX /Fd..\..\lib\vc_dll\wxpng.pdb /I "..\..\src\zlib" /D "WIN32" /D "_LIB" /c
-# ADD BASE RSC /l 0x405
-# ADD RSC /l 0x405
+# ADD BASE CPP /nologo /FD /MD /W1 /O2 /GR /GX /Fd..\..\lib\vc_dll\wxpng.pdb /I "..\..\src\zlib" /D "WIN32" /D "_LIB" /c
+# ADD CPP /nologo /FD /MD /W1 /O2 /GR /GX /Fd..\..\lib\vc_dll\wxpng.pdb /I "..\..\src\zlib" /D "WIN32" /D "_LIB" /c
+# ADD BASE RSC /l 0x409
+# ADD RSC /l 0x409
 BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
@@ -171,8 +171,8 @@ LIB32=link.exe -lib
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /FD /MDd /W1 /Od /GR /GX /Zi /Gm /GZ /Fd..\..\lib\vc_dll\wxpngd.pdb /I "..\..\src\zlib" /D "WIN32" /D "_LIB" /D "_DEBUG" /c
 # ADD CPP /nologo /FD /MDd /W1 /Od /GR /GX /Zi /Gm /GZ /Fd..\..\lib\vc_dll\wxpngd.pdb /I "..\..\src\zlib" /D "WIN32" /D "_LIB" /D "_DEBUG" /c
-# ADD BASE RSC /l 0x405
-# ADD RSC /l 0x405
+# ADD BASE RSC /l 0x409
+# ADD RSC /l 0x409
 BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
@@ -192,10 +192,10 @@ LIB32=link.exe -lib
 # PROP Output_Dir "..\..\lib\vc_dll"
 # PROP Intermediate_Dir "vc_mswdll\wxpng"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /MD /W1 /O1 /GR /GX /Fd..\..\lib\vc_dll\wxpng.pdb /I "..\..\src\zlib" /D "WIN32" /D "_LIB" /c
-# ADD CPP /nologo /FD /MD /W1 /O1 /GR /GX /Fd..\..\lib\vc_dll\wxpng.pdb /I "..\..\src\zlib" /D "WIN32" /D "_LIB" /c
-# ADD BASE RSC /l 0x405
-# ADD RSC /l 0x405
+# ADD BASE CPP /nologo /FD /MD /W1 /O2 /GR /GX /Fd..\..\lib\vc_dll\wxpng.pdb /I "..\..\src\zlib" /D "WIN32" /D "_LIB" /c
+# ADD CPP /nologo /FD /MD /W1 /O2 /GR /GX /Fd..\..\lib\vc_dll\wxpng.pdb /I "..\..\src\zlib" /D "WIN32" /D "_LIB" /c
+# ADD BASE RSC /l 0x409
+# ADD RSC /l 0x409
 BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
@@ -217,8 +217,8 @@ LIB32=link.exe -lib
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /FD /MDd /W1 /Od /GR /GX /Zi /Gm /GZ /Fd..\..\lib\vc_dll\wxpngd.pdb /I "..\..\src\zlib" /D "WIN32" /D "_LIB" /D "_DEBUG" /c
 # ADD CPP /nologo /FD /MDd /W1 /Od /GR /GX /Zi /Gm /GZ /Fd..\..\lib\vc_dll\wxpngd.pdb /I "..\..\src\zlib" /D "WIN32" /D "_LIB" /D "_DEBUG" /c
-# ADD BASE RSC /l 0x405
-# ADD RSC /l 0x405
+# ADD BASE RSC /l 0x409
+# ADD RSC /l 0x409
 BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
@@ -238,10 +238,10 @@ LIB32=link.exe -lib
 # PROP Output_Dir "..\..\lib\vc_lib"
 # PROP Intermediate_Dir "vc_mswunivu\wxpng"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /MD /W1 /O1 /GR /GX /Fd..\..\lib\vc_lib\wxpng.pdb /I "..\..\src\zlib" /D "WIN32" /D "_LIB" /c
-# ADD CPP /nologo /FD /MD /W1 /O1 /GR /GX /Fd..\..\lib\vc_lib\wxpng.pdb /I "..\..\src\zlib" /D "WIN32" /D "_LIB" /c
-# ADD BASE RSC /l 0x405
-# ADD RSC /l 0x405
+# ADD BASE CPP /nologo /FD /MD /W1 /O2 /GR /GX /Fd..\..\lib\vc_lib\wxpng.pdb /I "..\..\src\zlib" /D "WIN32" /D "_LIB" /c
+# ADD CPP /nologo /FD /MD /W1 /O2 /GR /GX /Fd..\..\lib\vc_lib\wxpng.pdb /I "..\..\src\zlib" /D "WIN32" /D "_LIB" /c
+# ADD BASE RSC /l 0x409
+# ADD RSC /l 0x409
 BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
@@ -263,8 +263,8 @@ LIB32=link.exe -lib
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /FD /MDd /W1 /Od /GR /GX /Zi /Gm /GZ /Fd..\..\lib\vc_lib\wxpngd.pdb /I "..\..\src\zlib" /D "WIN32" /D "_LIB" /D "_DEBUG" /c
 # ADD CPP /nologo /FD /MDd /W1 /Od /GR /GX /Zi /Gm /GZ /Fd..\..\lib\vc_lib\wxpngd.pdb /I "..\..\src\zlib" /D "WIN32" /D "_LIB" /D "_DEBUG" /c
-# ADD BASE RSC /l 0x405
-# ADD RSC /l 0x405
+# ADD BASE RSC /l 0x409
+# ADD RSC /l 0x409
 BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
@@ -284,10 +284,10 @@ LIB32=link.exe -lib
 # PROP Output_Dir "..\..\lib\vc_lib"
 # PROP Intermediate_Dir "vc_mswuniv\wxpng"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /MD /W1 /O1 /GR /GX /Fd..\..\lib\vc_lib\wxpng.pdb /I "..\..\src\zlib" /D "WIN32" /D "_LIB" /c
-# ADD CPP /nologo /FD /MD /W1 /O1 /GR /GX /Fd..\..\lib\vc_lib\wxpng.pdb /I "..\..\src\zlib" /D "WIN32" /D "_LIB" /c
-# ADD BASE RSC /l 0x405
-# ADD RSC /l 0x405
+# ADD BASE CPP /nologo /FD /MD /W1 /O2 /GR /GX /Fd..\..\lib\vc_lib\wxpng.pdb /I "..\..\src\zlib" /D "WIN32" /D "_LIB" /c
+# ADD CPP /nologo /FD /MD /W1 /O2 /GR /GX /Fd..\..\lib\vc_lib\wxpng.pdb /I "..\..\src\zlib" /D "WIN32" /D "_LIB" /c
+# ADD BASE RSC /l 0x409
+# ADD RSC /l 0x409
 BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
@@ -309,8 +309,8 @@ LIB32=link.exe -lib
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /FD /MDd /W1 /Od /GR /GX /Zi /Gm /GZ /Fd..\..\lib\vc_lib\wxpngd.pdb /I "..\..\src\zlib" /D "WIN32" /D "_LIB" /D "_DEBUG" /c
 # ADD CPP /nologo /FD /MDd /W1 /Od /GR /GX /Zi /Gm /GZ /Fd..\..\lib\vc_lib\wxpngd.pdb /I "..\..\src\zlib" /D "WIN32" /D "_LIB" /D "_DEBUG" /c
-# ADD BASE RSC /l 0x405
-# ADD RSC /l 0x405
+# ADD BASE RSC /l 0x409
+# ADD RSC /l 0x409
 BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
@@ -330,10 +330,10 @@ LIB32=link.exe -lib
 # PROP Output_Dir "..\..\lib\vc_lib"
 # PROP Intermediate_Dir "vc_mswu\wxpng"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /MD /W1 /O1 /GR /GX /Fd..\..\lib\vc_lib\wxpng.pdb /I "..\..\src\zlib" /D "WIN32" /D "_LIB" /c
-# ADD CPP /nologo /FD /MD /W1 /O1 /GR /GX /Fd..\..\lib\vc_lib\wxpng.pdb /I "..\..\src\zlib" /D "WIN32" /D "_LIB" /c
-# ADD BASE RSC /l 0x405
-# ADD RSC /l 0x405
+# ADD BASE CPP /nologo /FD /MD /W1 /O2 /GR /GX /Fd..\..\lib\vc_lib\wxpng.pdb /I "..\..\src\zlib" /D "WIN32" /D "_LIB" /c
+# ADD CPP /nologo /FD /MD /W1 /O2 /GR /GX /Fd..\..\lib\vc_lib\wxpng.pdb /I "..\..\src\zlib" /D "WIN32" /D "_LIB" /c
+# ADD BASE RSC /l 0x409
+# ADD RSC /l 0x409
 BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
@@ -355,8 +355,8 @@ LIB32=link.exe -lib
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /FD /MDd /W1 /Od /GR /GX /Zi /Gm /GZ /Fd..\..\lib\vc_lib\wxpngd.pdb /I "..\..\src\zlib" /D "WIN32" /D "_LIB" /D "_DEBUG" /c
 # ADD CPP /nologo /FD /MDd /W1 /Od /GR /GX /Zi /Gm /GZ /Fd..\..\lib\vc_lib\wxpngd.pdb /I "..\..\src\zlib" /D "WIN32" /D "_LIB" /D "_DEBUG" /c
-# ADD BASE RSC /l 0x405
-# ADD RSC /l 0x405
+# ADD BASE RSC /l 0x409
+# ADD RSC /l 0x409
 BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
@@ -376,10 +376,10 @@ LIB32=link.exe -lib
 # PROP Output_Dir "..\..\lib\vc_lib"
 # PROP Intermediate_Dir "vc_msw\wxpng"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /MD /W1 /O1 /GR /GX /Fd..\..\lib\vc_lib\wxpng.pdb /I "..\..\src\zlib" /D "WIN32" /D "_LIB" /c
-# ADD CPP /nologo /FD /MD /W1 /O1 /GR /GX /Fd..\..\lib\vc_lib\wxpng.pdb /I "..\..\src\zlib" /D "WIN32" /D "_LIB" /c
-# ADD BASE RSC /l 0x405
-# ADD RSC /l 0x405
+# ADD BASE CPP /nologo /FD /MD /W1 /O2 /GR /GX /Fd..\..\lib\vc_lib\wxpng.pdb /I "..\..\src\zlib" /D "WIN32" /D "_LIB" /c
+# ADD CPP /nologo /FD /MD /W1 /O2 /GR /GX /Fd..\..\lib\vc_lib\wxpng.pdb /I "..\..\src\zlib" /D "WIN32" /D "_LIB" /c
+# ADD BASE RSC /l 0x409
+# ADD RSC /l 0x409
 BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
@@ -401,8 +401,8 @@ LIB32=link.exe -lib
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /FD /MDd /W1 /Od /GR /GX /Zi /Gm /GZ /Fd..\..\lib\vc_lib\wxpngd.pdb /I "..\..\src\zlib" /D "WIN32" /D "_LIB" /D "_DEBUG" /c
 # ADD CPP /nologo /FD /MDd /W1 /Od /GR /GX /Zi /Gm /GZ /Fd..\..\lib\vc_lib\wxpngd.pdb /I "..\..\src\zlib" /D "WIN32" /D "_LIB" /D "_DEBUG" /c
-# ADD BASE RSC /l 0x405
-# ADD RSC /l 0x405
+# ADD BASE RSC /l 0x409
+# ADD RSC /l 0x409
 BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo

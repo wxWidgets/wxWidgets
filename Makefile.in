@@ -1427,6 +1427,7 @@ COND_TOOLKIT_COCOA_GUI_HDR =  \
 	wx/generic/tabg.h
 @COND_TOOLKIT_COCOA@GUI_HDR = $(COND_TOOLKIT_COCOA_GUI_HDR)
 COND_TOOLKIT_GTK_GUI_HDR =  \
+	wx/generic/datectrl.h \
 	wx/generic/colrdlgg.h \
 	wx/generic/dirdlgg.h \
 	wx/generic/fdrepdlg.h \
@@ -2772,6 +2773,7 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS =  \
 	$(__LOWLEVEL_SRC_OBJECTS_1) \
 	monodll_accel.o \
 	monodll_colrdlgg.o \
+	monodll_datectlg.o \
 	monodll_dirdlgg.o \
 	monodll_fdrepdlg.o \
 	monodll_filedlgg.o \
@@ -3227,6 +3229,7 @@ COND_TOOLKIT_COCOA___GUI_SRC_OBJECTS =  \
 	monodll_timer.o
 @COND_TOOLKIT_COCOA@__GUI_SRC_OBJECTS = $(COND_TOOLKIT_COCOA___GUI_SRC_OBJECTS)
 COND_TOOLKIT_GTK___GUI_SRC_OBJECTS =  \
+	monodll_datectlg.o \
 	monodll_accel.o \
 	monodll_colrdlgg.o \
 	monodll_dirdlgg.o \
@@ -4211,6 +4214,7 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_1 =  \
 	$(__LOWLEVEL_SRC_OBJECTS_3) \
 	monolib_accel.o \
 	monolib_colrdlgg.o \
+	monolib_datectlg.o \
 	monolib_dirdlgg.o \
 	monolib_fdrepdlg.o \
 	monolib_filedlgg.o \
@@ -4667,6 +4671,7 @@ COND_TOOLKIT_COCOA___GUI_SRC_OBJECTS_1 =  \
 	monolib_timer.o
 @COND_TOOLKIT_COCOA@__GUI_SRC_OBJECTS_1 = $(COND_TOOLKIT_COCOA___GUI_SRC_OBJECTS_1)
 COND_TOOLKIT_GTK___GUI_SRC_OBJECTS_1 =  \
+	monolib_datectlg.o \
 	monolib_accel.o \
 	monolib_colrdlgg.o \
 	monolib_dirdlgg.o \
@@ -5841,6 +5846,7 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_2 =  \
 	$(__LOWLEVEL_SRC_OBJECTS_5) \
 	coredll_accel.o \
 	coredll_colrdlgg.o \
+	coredll_datectlg.o \
 	coredll_dirdlgg.o \
 	coredll_fdrepdlg.o \
 	coredll_filedlgg.o \
@@ -6297,6 +6303,7 @@ COND_TOOLKIT_COCOA___GUI_SRC_OBJECTS_2 =  \
 	coredll_timer.o
 @COND_TOOLKIT_COCOA@__GUI_SRC_OBJECTS_2 = $(COND_TOOLKIT_COCOA___GUI_SRC_OBJECTS_2)
 COND_TOOLKIT_GTK___GUI_SRC_OBJECTS_2 =  \
+	coredll_datectlg.o \
 	coredll_accel.o \
 	coredll_colrdlgg.o \
 	coredll_dirdlgg.o \
@@ -7032,6 +7039,7 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_3 =  \
 	$(__LOWLEVEL_SRC_OBJECTS_7) \
 	corelib_accel.o \
 	corelib_colrdlgg.o \
+	corelib_datectlg.o \
 	corelib_dirdlgg.o \
 	corelib_fdrepdlg.o \
 	corelib_filedlgg.o \
@@ -7488,6 +7496,7 @@ COND_TOOLKIT_COCOA___GUI_SRC_OBJECTS_3 =  \
 	corelib_timer.o
 @COND_TOOLKIT_COCOA@__GUI_SRC_OBJECTS_3 = $(COND_TOOLKIT_COCOA___GUI_SRC_OBJECTS_3)
 COND_TOOLKIT_GTK___GUI_SRC_OBJECTS_3 =  \
+	corelib_datectlg.o \
 	corelib_accel.o \
 	corelib_colrdlgg.o \
 	corelib_dirdlgg.o \
@@ -11588,6 +11597,12 @@ monodll_gprint.o: $(srcdir)/src/gtk/gnome/gprint.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_MGL_USE_GUI_1@monodll_dirmgl.o: $(srcdir)/src/mgl/dirmgl.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/mgl/dirmgl.cpp
 
+@COND_TOOLKIT_GTK_USE_GUI_1_WXUNIV_0@monodll_datectlg.o: $(srcdir)/src/generic/datectlg.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_GTK_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/datectlg.cpp
+
+@COND_USE_GUI_1_WXUNIV_1@monodll_datectlg.o: $(srcdir)/src/generic/datectlg.cpp $(MONODLL_ODEP)
+@COND_USE_GUI_1_WXUNIV_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/datectlg.cpp
+
 @COND_TOOLKIT_GTK_USE_GUI_1_WXUNIV_0@monodll_accel.o: $(srcdir)/src/generic/accel.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_GTK_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/accel.cpp
 
@@ -14965,6 +14980,12 @@ monolib_gprint.o: $(srcdir)/src/gtk/gnome/gprint.cpp $(MONOLIB_ODEP)
 
 @COND_TOOLKIT_MGL_USE_GUI_1@monolib_dirmgl.o: $(srcdir)/src/mgl/dirmgl.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/mgl/dirmgl.cpp
+
+@COND_TOOLKIT_GTK_USE_GUI_1_WXUNIV_0@monolib_datectlg.o: $(srcdir)/src/generic/datectlg.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_GTK_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/datectlg.cpp
+
+@COND_USE_GUI_1_WXUNIV_1@monolib_datectlg.o: $(srcdir)/src/generic/datectlg.cpp $(MONOLIB_ODEP)
+@COND_USE_GUI_1_WXUNIV_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/datectlg.cpp
 
 @COND_TOOLKIT_GTK_USE_GUI_1_WXUNIV_0@monolib_accel.o: $(srcdir)/src/generic/accel.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_GTK_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/accel.cpp
@@ -18746,6 +18767,12 @@ coredll_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_MGL_USE_GUI_1@coredll_dirmgl.o: $(srcdir)/src/mgl/dirmgl.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/mgl/dirmgl.cpp
 
+@COND_TOOLKIT_GTK_USE_GUI_1_WXUNIV_0@coredll_datectlg.o: $(srcdir)/src/generic/datectlg.cpp $(COREDLL_ODEP)
+@COND_TOOLKIT_GTK_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/generic/datectlg.cpp
+
+@COND_USE_GUI_1_WXUNIV_1@coredll_datectlg.o: $(srcdir)/src/generic/datectlg.cpp $(COREDLL_ODEP)
+@COND_USE_GUI_1_WXUNIV_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/generic/datectlg.cpp
+
 @COND_TOOLKIT_GTK_USE_GUI_1_WXUNIV_0@coredll_accel.o: $(srcdir)/src/generic/accel.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_GTK_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/generic/accel.cpp
 
@@ -21238,6 +21265,12 @@ corelib_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(CORELIB_ODEP)
 
 @COND_TOOLKIT_MGL_USE_GUI_1@corelib_dirmgl.o: $(srcdir)/src/mgl/dirmgl.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/mgl/dirmgl.cpp
+
+@COND_TOOLKIT_GTK_USE_GUI_1_WXUNIV_0@corelib_datectlg.o: $(srcdir)/src/generic/datectlg.cpp $(CORELIB_ODEP)
+@COND_TOOLKIT_GTK_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/generic/datectlg.cpp
+
+@COND_USE_GUI_1_WXUNIV_1@corelib_datectlg.o: $(srcdir)/src/generic/datectlg.cpp $(CORELIB_ODEP)
+@COND_USE_GUI_1_WXUNIV_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/generic/datectlg.cpp
 
 @COND_TOOLKIT_GTK_USE_GUI_1_WXUNIV_0@corelib_accel.o: $(srcdir)/src/generic/accel.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_GTK_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/generic/accel.cpp
