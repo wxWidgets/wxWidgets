@@ -619,6 +619,10 @@
  */
 #define wxUSE_DRAG_AND_DROP 0
 /*
+ * Use OLE (MSW only)
+ */
+#define wxUSE_OLE 0
+/*
  * Use spline
  */
 #define wxUSE_SPLINES 0
