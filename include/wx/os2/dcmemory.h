@@ -28,6 +28,21 @@ protected:
                                  ,wxCoord vWidth
                                  ,wxCoord vHeight
                                 );
+    virtual void DoDrawRoundedRectangle( wxCoord vX
+                                        ,wxCoord vY
+                                        ,wxCoord vWidth
+                                        ,wxCoord vHeight
+                                        ,double  dRadius
+                                       );
+    virtual void DoDrawText( const wxString& rsText
+                            ,wxCoord         vX
+                            ,wxCoord         vY
+                           );
+    virtual void DoDrawLine( wxCoord vX1
+                            ,wxCoord vY1
+                            ,wxCoord vX2
+                            ,wxCoord vY2
+                           );
     virtual void DoGetSize( int* pWidth
                            ,int* pHeight
                           ) const;
