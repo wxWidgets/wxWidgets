@@ -155,12 +155,42 @@ void Game::DoMove(wxDC& dc, Pile* src, Pile* dest)
 			   wxOK | wxICON_EXCLAMATION);
     }
 
-    if (!m_inPlay)
+	if (!m_inPlay)
 	{
 		m_inPlay = TRUE;
 		m_numGames++;
 	}
-    DisplayScore(dc);
+	DisplayScore(dc);
+
+	if (HaveYouWon())
+	{
+		wxWindow *frame = wxTheApp->GetTopWindow();
+		wxWindow *canvas = (wxWindow *) NULL;
+
+		if (frame)
+		{
+			wxNode *node = frame->GetChildren().First();
+			if (node) canvas = (wxWindow*)node->Data();
+		}
+
+		// This game is over
+		m_inPlay = FALSE;
+
+		// Redraw the score box to update games won
+		DisplayScore(dc);
+
+		if (wxMessageBox("Do you wish to play again?",
+			"Well Done, You have won!", wxYES_NO | wxICON_QUESTION) == wxYES)
+		{
+			Deal();
+			canvas->Refresh();
+		}
+		else
+		{
+			// user cancelled the dialog - exit the app
+			((wxFrame*)canvas->GetParent())->Close(TRUE);
+		}
+	}
 }
 
 

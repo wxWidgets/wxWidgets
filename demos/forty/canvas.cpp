@@ -198,25 +198,6 @@ void FortyCanvas::OnMouseEvent(wxMouseEvent& event)
 
 void FortyCanvas::SetCursorStyle(int x, int y)
 {
-	if (m_game->HaveYouWon())
-	{
-		if (wxMessageBox("Do you wish to play again?",
-			"Well Done, You have won!", wxYES_NO | wxICON_QUESTION) == wxYES)
-		{
-			m_game->Deal();
-
-			wxClientDC dc(this); 
-			PrepareDC(dc);
-			dc.SetFont(* m_font);
-			m_game->Redraw(dc);
-		}
-		else
-		{
-			// user cancelled the dialog - exit the app
-			((wxFrame*)GetParent())->Close(TRUE);
-		}
-	}
-
 	// Only set cursor to a hand if 'helping hand' is enabled and
 	// the card under the cursor can go somewhere 
 	if (m_game->CanYouGo(x, y) && m_helpingHand)
