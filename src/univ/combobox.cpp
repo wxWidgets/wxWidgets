@@ -9,16 +9,6 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-/*
-    TODO:
-
-   +1. typing in the text should select the string in listbox
-   +2. scrollbars in listbox are unusable
-   +3. the initially selected item is not selected
-   ?4. kbd interface (what does GTK do?)
-    5. there is still autoscrolling without scrollbars - but is it bad?
- */
-
 // ============================================================================
 // declarations
 // ============================================================================
