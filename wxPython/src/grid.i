@@ -904,7 +904,7 @@ IMP_PYCALLBACK_STRING__constpure(wxPyGridCellEditor, wxGridCellEditor, GetValue)
 class wxPyGridCellEditor : public wxGridCellEditor {
 public:
     %pythonAppend wxPyGridCellEditor  "self._setCallbackInfo(self, PyGridCellEditor);self._setOORInfo(self)"
-    
+
     wxPyGridCellEditor();
     void _setCallbackInfo(PyObject* self, PyObject* _class);
 
@@ -1008,7 +1008,7 @@ public:
             self->SetClientObject(new wxPyOORClientData(_self));
         }
     }
-    
+
     %pythonAppend wxGridCellAttr  "self._setOORInfo(self)"
 
     wxGridCellAttr(wxGridCellAttr *attrDefault = NULL);
@@ -1045,7 +1045,7 @@ public:
     DocDeclA(
         void, GetAlignment(int *OUTPUT, int *OUTPUT) const,
         "GetAlignment() -> (hAlign, vAlign)");
-    
+
     DocDeclA(
         void, GetSize(int *OUTPUT, int *OUTPUT) const,
         "GetSize() -> (num_rows, num_cols)");
@@ -1226,6 +1226,11 @@ public:
             PyObject* ro;
             ro = wxPyCBH_callCallbackObj(m_myInst, Py_BuildValue("(ii)",row,col));
             if (ro) {
+                if (!PyString_Check(ro) && !PyUnicode_Check(ro)) {
+                    PyObject* old = ro;
+                    ro = PyObject_Str(ro);
+                    Py_DECREF(old);
+                }
                 rval = Py2wxString(ro);
                 Py_DECREF(ro);
             }
@@ -1449,7 +1454,7 @@ bool wxGridCellCoords_helper(PyObject* source, wxGridCellCoords** obj) {
 
 bool wxGridCellCoords_typecheck(PyObject* source) {
     void* ptr;
-    
+
     if (wxPySwigInstance_Check(source) &&
         wxPyConvertSwigPtr(source, (void **)&ptr, wxT("wxGridCellCoords")))
         return True;
@@ -1457,7 +1462,7 @@ bool wxGridCellCoords_typecheck(PyObject* source) {
     PyErr_Clear();
     if (PySequence_Check(source) && PySequence_Length(source) == 2)
         return True;
-    
+
     return False;
 }
 %}
@@ -1563,8 +1568,8 @@ public:
             const wxString& name = wxPyPanelNameStr);
 
     %name(PreGrid) wxGrid();
-    
-    
+
+
     bool Create( wxWindow *parent,
                  wxWindowID id=-1,
                  const wxPoint& pos = wxDefaultPosition,
@@ -1572,7 +1577,7 @@ public:
                  long style = wxWANTS_CHARS,
                  const wxString& name = wxPyPanelNameStr );
 
-    
+
     enum wxGridSelectionModes {
         wxGridSelectCells,
         wxGridSelectRows,
@@ -1730,7 +1735,7 @@ public:
     DocDeclA(
         void, GetRowLabelAlignment( int *OUTPUT, int *OUTPUT ),
         "GetRowLabelAlignment() -> (horiz, vert)");
-    
+
     DocDeclA(
         void, GetColLabelAlignment( int *OUTPUT, int *OUTPUT ),
         "GetColLabelAlignment() -> (horiz, vert)");
@@ -1800,7 +1805,7 @@ public:
     DocDeclA(
         void, GetDefaultCellAlignment( int *OUTPUT, int *OUTPUT ),
         "GetDefaultCellAlignment() -> (horiz, vert)");
-    
+
     DocDeclA(
         void, GetCellAlignment( int row, int col, int *OUTPUT, int *OUTPUT ),
         "GetCellAlignment() -> (horiz, vert)");
