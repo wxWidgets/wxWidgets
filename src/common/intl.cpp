@@ -1295,10 +1295,30 @@ wxFontEncoding wxLocale::GetSystemEncoding()
 #ifdef __WIN32__
     UINT codepage = ::GetACP();
 
-    // wxWindows only knows about CP1250-1257
+    // wxWindows only knows about CP1250-1257, 932, 936, 949, 950
     if ( codepage >= 1250 && codepage <= 1257 )
     {
         return (wxFontEncoding)(wxFONTENCODING_CP1250 + codepage - 1250);
+    }
+
+    if ( codepage == 932 )
+    {
+        return wxFONTENCODING_CP932;
+    }
+
+    if ( codepage == 936 )
+    {
+        return wxFONTENCODING_CP936;
+    }
+
+    if ( codepage == 949 )
+    {
+        return wxFONTENCODING_CP949;
+    }
+
+    if ( codepage == 950 )
+    {
+        return wxFONTENCODING_CP950;
     }
 #elif defined(__UNIX_LIKE__) && wxUSE_FONTMAP
     wxString encname = GetSystemEncodingName();

@@ -293,8 +293,8 @@ wxConfigBase *wxFontMapper::GetConfig()
         m_configIsDummy = FALSE;
         // FIXME: ideally, we should add keys from dummy config to the real one now,
         //        but it is a low-priority task because typical wxWin application
-        //        either doesn't use wxConfig at all or creates wxConfig object in 
-        //        wxApp::OnInit(), before any real interaction with the user takes 
+        //        either doesn't use wxConfig at all or creates wxConfig object in
+        //        wxApp::OnInit(), before any real interaction with the user takes
         //        place...
     }
 
@@ -563,6 +563,25 @@ wxFontEncoding wxFontMapper::CharsetToEncoding(const wxString& charset,
                             value += wxFONTENCODING_CP1250;
                             encoding = (wxFontEncoding)value;
                         }
+                    }
+
+                    switch ( value )
+                    {
+                        case 932:
+                            encoding = wxFONTENCODING_CP932;
+                            break;
+
+                        case 936:
+                            encoding = wxFONTENCODING_CP936;
+                            break;
+
+                        case 949:
+                            encoding = wxFONTENCODING_CP949;
+                            break;
+
+                        case 950:
+                            encoding = wxFONTENCODING_CP950;
+                            break;
                     }
                 }
             }
