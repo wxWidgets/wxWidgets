@@ -10,8 +10,16 @@
 // Licence:     wxWindows license (part of wxExtra library)
 /////////////////////////////////////////////////////////////////////////////
 
+// ============================================================================
+// declarations
+// ============================================================================
+
+// ----------------------------------------------------------------------------
+// headers
+// ----------------------------------------------------------------------------
+
 #ifdef    __GNUG__
-#pragma implementation "mimetypebase.h"
+    #pragma implementation "mimetypebase.h"
 #endif
 
 // for compilers that support precompilation, includes "wx.h".
@@ -26,8 +34,6 @@
   #include "wx/defs.h"
 #endif
 
-#if (wxUSE_FILE && wxUSE_TEXTFILE) || defined(__WXMSW__)
-
 #ifndef WX_PRECOMP
   #include "wx/string.h"
   #if wxUSE_GUI
@@ -35,37 +41,18 @@
   #endif
 #endif //WX_PRECOMP
 
-// Doesn't compile in WIN16 mode
-#ifndef __WIN16__
-
 #include "wx/log.h"
 #include "wx/file.h"
 #include "wx/intl.h"
 #include "wx/dynarray.h"
 #include "wx/confbase.h"
 
-#ifdef __WXMSW__
-    #include "wx/msw/registry.h"
-    #include "windows.h"
-#elif defined(__UNIX__)  || defined(__WXPM__)
-    #include "wx/ffile.h"
-    #include "wx/textfile.h"
-    #include "wx/dir.h"
-    #include "wx/utils.h"
-    #include "wx/tokenzr.h"
-#endif // OS
-
 #include "wx/mimetype.h"
 
 // other standard headers
 #include <ctype.h>
 
-// in case we're compiling in non-GUI mode
-class WXDLLEXPORT wxIcon;
-
-
 // implementation classes:
-
 #if defined(__WXMSW__)
     #include "wx/msw/mimetype.h"
 #elif defined (__WXMAC__)
@@ -115,7 +102,6 @@ wxFileTypeInfo::wxFileTypeInfo(const char *mimeType,
 #include "wx/arrimpl.cpp"
 WX_DEFINE_OBJARRAY(wxArrayFileTypeInfo);
 
-
 // ============================================================================
 // implementation of the wrapper classes
 // ============================================================================
@@ -124,6 +110,7 @@ WX_DEFINE_OBJARRAY(wxArrayFileTypeInfo);
 // wxFileType
 // ----------------------------------------------------------------------------
 
+/* static */
 wxString wxFileType::ExpandCommand(const wxString& command,
                                    const wxFileType::MessageParameters& params)
 {
@@ -206,8 +193,15 @@ wxString wxFileType::ExpandCommand(const wxString& command,
     return str;
 }
 
+wxFileType::wxFileType(const wxFileTypeInfo& info)
+{
+    m_info = &info;
+    m_impl = NULL;
+}
+
 wxFileType::wxFileType()
 {
+    m_info = NULL;
     m_impl = new wxFileTypeImpl;
 }
 
@@ -218,16 +212,39 @@ wxFileType::~wxFileType()
 
 bool wxFileType::GetExtensions(wxArrayString& extensions)
 {
+    if ( m_info )
+    {
+        extensions = m_info->GetExtensions();
+        return TRUE;
+    }
+
     return m_impl->GetExtensions(extensions);
 }
 
 bool wxFileType::GetMimeType(wxString *mimeType) const
 {
+    wxCHECK_MSG( mimeType, FALSE, _T("invalid parameter in GetMimeType") );
+
+    if ( m_info )
+    {
+        *mimeType = m_info->GetMimeType();
+
+        return TRUE;
+    }
+
     return m_impl->GetMimeType(mimeType);
 }
 
 bool wxFileType::GetMimeTypes(wxArrayString& mimeTypes) const
 {
+    if ( m_info )
+    {
+        mimeTypes.Clear();
+        mimeTypes.Add(m_info->GetMimeType());
+
+        return TRUE;
+    }
+
     return m_impl->GetMimeTypes(mimeTypes);
 }
 
@@ -235,6 +252,24 @@ bool wxFileType::GetIcon(wxIcon *icon,
                          wxString *iconFile,
                          int *iconIndex) const
 {
+    if ( m_info )
+    {
+        if ( iconFile )
+            *iconFile = m_info->GetIconFile();
+        if ( iconIndex )
+            *iconIndex = m_info->GetIconIndex();
+
+#if wxUSE_GUI
+        if ( icon && !m_info->GetIconFile().empty() )
+        {
+            // FIXME: what about the index?
+            icon->LoadFile(m_info->GetIconFile());
+        }
+#endif // wxUSE_GUI
+
+        return TRUE;
+    }
+
 #ifdef __WXMSW__
     return m_impl->GetIcon(icon, iconFile, iconIndex);
 #else
@@ -244,6 +279,15 @@ bool wxFileType::GetIcon(wxIcon *icon,
 
 bool wxFileType::GetDescription(wxString *desc) const
 {
+    wxCHECK_MSG( desc, FALSE, _T("invalid parameter in GetDescription") );
+
+    if ( m_info )
+    {
+        *desc = m_info->GetDescription();
+
+        return TRUE;
+    }
+
     return m_impl->GetDescription(desc);
 }
 
@@ -251,6 +295,15 @@ bool
 wxFileType::GetOpenCommand(wxString *openCmd,
                            const wxFileType::MessageParameters& params) const
 {
+    wxCHECK_MSG( openCmd, FALSE, _T("invalid parameter in GetOpenCommand") );
+
+    if ( m_info )
+    {
+        *openCmd = ExpandCommand(m_info->GetOpenCommand(), params);
+
+        return TRUE;
+    }
+
     return m_impl->GetOpenCommand(openCmd, params);
 }
 
@@ -258,6 +311,15 @@ bool
 wxFileType::GetPrintCommand(wxString *printCmd,
                             const wxFileType::MessageParameters& params) const
 {
+    wxCHECK_MSG( printCmd, FALSE, _T("invalid parameter in GetPrintCommand") );
+
+    if ( m_info )
+    {
+        *printCmd = ExpandCommand(m_info->GetPrintCommand(), params);
+
+        return TRUE;
+    }
+
     return m_impl->GetPrintCommand(printCmd, params);
 }
 
@@ -278,7 +340,7 @@ size_t wxFileType::GetAllCommands(wxArrayString *verbs,
     // about
     size_t count = 0;
     wxString cmd;
-    if ( m_impl->GetOpenCommand(&cmd, params) )
+    if ( GetOpenCommand(&cmd, params) )
     {
         if ( verbs )
             verbs->Add(_T("Open"));
@@ -301,107 +363,14 @@ size_t wxFileType::GetAllCommands(wxArrayString *verbs,
 #endif // __WXMSW__/!__WXMSW__
 }
 
-bool wxFileType::SetOpenCommand(const wxString& cmd, bool overwriteprompt)
-{
-    return SetCommand(cmd, _T("open"), overwriteprompt);
-}
-
-bool wxFileType::SetCommand(const wxString& cmd, const wxString& verb,
-                            bool overwriteprompt)
-{
-#ifdef __WXMSW__
-    return m_impl->SetCommand(cmd, verb, overwriteprompt);
-#else
-    wxFAIL_MSG(_T("not implemented"));
-
-    return FALSE;
-#endif
-}
-
-bool wxFileType::SetMimeType(const wxString& mimeType)
-{
-    // empty MIME type is meaningless here
-    wxCHECK_MSG( !mimeType.empty(), FALSE, _T("use RemoveMimeType()") );
-
-#ifdef __WXMSW__
-    return m_impl->SetMimeType(mimeType);
-#else
-    wxFAIL_MSG(_T("not implemented"));
-
-    return FALSE;
-#endif
-}
-
-bool wxFileType::SetDefaultIcon(const wxString& cmd, int index)
-{
-    wxString sTmp = cmd;
-    // VZ: should we do this?
-    if ( sTmp.empty() )
-        GetOpenCommand(&sTmp, wxFileType::MessageParameters("", ""));
-
-    wxCHECK_MSG( !sTmp.empty(), FALSE, _T("need the icon file") );
-
-
-#ifdef __WXMSW__
-    return m_impl->SetDefaultIcon (cmd, index);
-#else
-    wxFAIL_MSG(_T("not implemented"));
-
-    return FALSE;
-#endif
-}
-
-// now do remove functions
-bool wxFileType::RemoveOpenCommand()
-{
-   return RemoveCommand(_T("open"));
-}
-
-bool wxFileType::RemoveCommand(const wxString& verb)
-{
-#ifdef __WXMSW__
-    return m_impl->RemoveCommand(verb);
-#else
-    wxFAIL_MSG(_T("not implemented"));
-
-    return FALSE;
-#endif
-}
-
-bool wxFileType::RemoveMimeType()
-{
-#ifdef __WXMSW__
-    return m_impl->RemoveMimeType ();
-#else
-    wxFAIL_MSG(_T("not implemented"));
-
-    return FALSE;
-#endif
-}
-
-bool wxFileType::RemoveDefaultIcon()
-{
-#ifdef __WXMSW__
-    return m_impl->RemoveDefaultIcon();
-#else
-    wxFAIL_MSG(_T("not implemented"));
-
-    return FALSE;
-#endif
-}
-
 bool wxFileType::Unassociate()
 {
-    bool result = TRUE;
-    if ( !RemoveOpenCommand() )
-        result = FALSE;
-    if ( !RemoveDefaultIcon() )
-        result = FALSE;
-    if ( !RemoveMimeType() )
-        result = FALSE;
-
-    // in MSW this leaves a HKCR.xzy key
-    return result;
+#if defined(__WXMSW__) || defined(__UNIX__)
+    return m_impl->Unassociate();
+#else
+    wxFAIL_MSG( _T("not implemented") ); // TODO
+    return FALSE;
+#endif
 }
 
 // ----------------------------------------------------------------------------
@@ -421,7 +390,8 @@ bool wxMimeTypesManager::IsOfType(const wxString& mimeType,
                   wxT("first MIME type can't contain wildcards") );
 
     // all comparaisons are case insensitive (2nd arg of IsSameAs() is FALSE)
-    if ( wildcard.BeforeFirst(wxT('/')).IsSameAs(mimeType.BeforeFirst(wxT('/')), FALSE) )
+    if ( wildcard.BeforeFirst(wxT('/')).
+            IsSameAs(mimeType.BeforeFirst(wxT('/')), FALSE) )
     {
         wxString strSubtype = wildcard.AfterFirst(wxT('/'));
 
@@ -447,45 +417,65 @@ wxMimeTypesManager::~wxMimeTypesManager()
 }
 
 wxFileType *
-wxMimeTypesManager::GetFileTypeFromExtension(const wxString& ext)
+wxMimeTypesManager::Associate(const wxFileTypeInfo& ftInfo)
 {
     EnsureImpl();
-    return m_impl->GetFileTypeFromExtension(ext);
+
+#if defined(__WXMSW__) || defined(__UNIX__)
+    return m_impl->Associate(ftInfo);
+#else // other platforms
+    wxFAIL_MSG( _T("not implemented") ); // TODO
+    return NULL;
+#endif // platforms
 }
 
 wxFileType *
-wxMimeTypesManager::GetOrAllocateFileTypeFromExtension(const wxString& ext)
+wxMimeTypesManager::GetFileTypeFromExtension(const wxString& ext)
 {
     EnsureImpl();
+    wxFileType *ft = m_impl->GetFileTypeFromExtension(ext);
 
-#ifdef __WXMSW__
-    // this writes a root entry to the registry in HKCR.ext
-    return m_impl->GetOrAllocateFileTypeFromExtension(ext);
-#else // !__WXMSW__
-    // VZ: "static const"??? (FIXME)
-    // just make a dummy entry with no writing to file
-    static const wxFileTypeInfo fallback[] =
-    {
-        wxFileTypeInfo("application/x-" + ext,
-                       "",
-                       "",
-                       ext + " format file",
-                       ext, NULL),
-        // must terminate the table with this!
-        wxFileTypeInfo()
-    };
+    if ( !ft ) {
+        // check the fallbacks
+        //
+        // TODO linear search is potentially slow, perhaps we should use a
+        //       sorted array?
+        size_t count = m_fallbacks.GetCount();
+        for ( size_t n = 0; n < count; n++ ) {
+            if ( m_fallbacks[n].GetExtensions().Index(ext) != wxNOT_FOUND ) {
+                ft = new wxFileType(m_fallbacks[n]);
 
-    AddFallbacks (fallback);
-    return m_impl->GetFileTypeFromExtension(ext);
-#endif // __WXMSW__/!__WXMSW__
+                break;
+            }
+        }
+    }
+
+    return ft;
 }
-
 
 wxFileType *
 wxMimeTypesManager::GetFileTypeFromMimeType(const wxString& mimeType)
 {
     EnsureImpl();
-    return m_impl->GetFileTypeFromMimeType(mimeType);
+    wxFileType *ft = m_impl->GetFileTypeFromMimeType(mimeType);
+
+    if ( ft ) {
+        // check the fallbacks
+        //
+        // TODO linear search is potentially slow, perhaps we should use a sorted
+        //      array?
+        size_t count = m_fallbacks.GetCount();
+        for ( size_t n = 0; n < count; n++ ) {
+            if ( wxMimeTypesManager::IsOfType(mimeType,
+                                              m_fallbacks[n].GetMimeType()) ) {
+                ft = new wxFileType(m_fallbacks[n]);
+
+                break;
+            }
+        }
+    }
+
+    return ft;
 }
 
 bool wxMimeTypesManager::ReadMailcap(const wxString& filename, bool fallback)
@@ -503,27 +493,37 @@ bool wxMimeTypesManager::ReadMimeTypes(const wxString& filename)
 void wxMimeTypesManager::AddFallbacks(const wxFileTypeInfo *filetypes)
 {
     EnsureImpl();
-    for ( const wxFileTypeInfo *ft = filetypes; ft->IsValid(); ft++ ) {
-        m_impl->AddFallback(*ft);
+    for ( const wxFileTypeInfo *ft = filetypes; ft && ft->IsValid(); ft++ ) {
+        AddFallback(*ft);
     }
 }
 
 size_t wxMimeTypesManager::EnumAllFileTypes(wxArrayString& mimetypes)
 {
     EnsureImpl();
-    return m_impl->EnumAllFileTypes(mimetypes);
+    size_t countAll = m_impl->EnumAllFileTypes(mimetypes);
+
+    // add the fallback filetypes
+    size_t count = m_fallbacks.GetCount();
+    for ( size_t n = 0; n < count; n++ ) {
+        if ( mimetypes.Index(m_fallbacks[n].GetMimeType()) == wxNOT_FOUND ) {
+            mimetypes.Add(m_fallbacks[n].GetMimeType());
+            countAll++;
+        }
+    }
+
+    return countAll;
 }
 
-
 // ----------------------------------------------------------------------------
-// global data
+// global data and wxMimeTypeCmnModule
 // ----------------------------------------------------------------------------
 
 // private object
 static wxMimeTypesManager gs_mimeTypesManager;
 
 // and public pointer
-wxMimeTypesManager * wxTheMimeTypesManager = &gs_mimeTypesManager;
+wxMimeTypesManager *wxTheMimeTypesManager = &gs_mimeTypesManager;
 
 class wxMimeTypeCmnModule: public wxModule
 {
@@ -545,8 +545,3 @@ public:
 
 IMPLEMENT_DYNAMIC_CLASS(wxMimeTypeCmnModule, wxModule)
 
-#endif
-  // wxUSE_FILE && wxUSE_TEXTFILE
-
-#endif
-  // __WIN16__

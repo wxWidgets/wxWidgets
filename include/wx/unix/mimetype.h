@@ -30,14 +30,13 @@ WX_DEFINE_ARRAY(MailCapEntry *, ArrayTypeEntries);
 // this is the real wxMimeTypesManager for Unix
 class WXDLLEXPORT wxMimeTypesManagerImpl
 {
-friend class WXDLLEXPORT wxFileTypeImpl; // give it access to m_aXXX variables
-
 public:
-    // ctor loads all info into memory for quicker access later on
-    // TODO it would be nice to load them all, but parse on demand only...
+    // ctor and dtor
     wxMimeTypesManagerImpl();
     ~wxMimeTypesManagerImpl();
-    
+
+    // load all data into memory - done when it is needed for the first time
+    void Initialize();
 
     // implement containing class functions
     wxFileType *GetFileTypeFromExtension(const wxString& ext);
@@ -60,6 +59,9 @@ public:
                         const wxString& strTest,
                         const wxString& strDesc);
 
+    // add a new record to the user .mailcap/.mime.types files
+    wxFileType *Associate(const wxFileTypeInfo& ftInfo);
+
     // accessors
         // get the string containing space separated extensions for the given
         // file type
@@ -69,13 +71,28 @@ public:
     static ArrayIconHandlers& GetIconHandlers();
 
 private:
+    void InitIfNeeded()
+    {
+        if ( !m_initialized ) {
+            // set the flag first to prevent recursion
+            m_initialized = TRUE;
+            Initialize();
+        }
+    }
+
     wxArrayString m_aTypes,         // MIME types
                   m_aDescriptions,  // descriptions (just some text)
                   m_aExtensions;    // space separated list of extensions
     ArrayTypeEntries m_aEntries;    // commands and tests for this file type
 
+    // are we initialized?
+    bool m_initialized;
+
     // head of the linked list of the icon handlers
     static ArrayIconHandlers ms_iconHandlers;
+
+    // give it access to m_aXXX variables
+    friend class WXDLLEXPORT wxFileTypeImpl;
 };
 
 
@@ -108,6 +125,9 @@ public:
         return GetExpandedCommand(printCmd, params, FALSE);
     }
 
+    // remove the record for this file type
+    bool Unassociate();
+
 private:
     // get the entry which passes the test (may return NULL)
     MailCapEntry *GetEntry(const wxFileType::MessageParameters& params) const;
@@ -120,8 +140,6 @@ private:
     wxMimeTypesManagerImpl *m_manager;
     wxArrayInt              m_index; // in the wxMimeTypesManagerImpl arrays
 };
-
-
 
 #endif
   // wxUSE_FILE

@@ -13,19 +13,23 @@
 #define _MIMETYPE_IMPL_H
 
 #ifdef    __GNUG__
-#pragma interface "mimetype.h"
+    #pragma interface "mimetype.h"
 #endif
 
 #include "wx/defs.h"
 
 #include "wx/mimetype.h"
 
+// ----------------------------------------------------------------------------
+// wxFileTypeImpl is the MSW version of wxFileType, this is a private class
+// and is never used directly by the application
+// ----------------------------------------------------------------------------
 
 class WXDLLEXPORT wxFileTypeImpl
 {
 public:
     // ctor
-    wxFileTypeImpl() { m_info = NULL; }
+    wxFileTypeImpl() { }
 
     // one of these Init() function must be called (ctor can't take any
     // arguments because it's common)
@@ -33,11 +37,6 @@ public:
         // initialize us with our file type name and extension - in this case
         // we will read all other data from the registry
     void Init(const wxString& strFileType, const wxString& ext);
-
-        // initialize us with a wxFileTypeInfo object - it contains all the
-        // data
-    void Init(const wxFileTypeInfo& info)
-        { m_info = &info; }
 
     // implement accessor functions
     bool GetExtensions(wxArrayString& extensions);
@@ -53,11 +52,17 @@ public:
     size_t GetAllCommands(wxArrayString * verbs, wxArrayString * commands,
                           const wxFileType::MessageParameters& params) const;
 
+    bool Unassociate();
+
+    // these methods are not publicly accessible (as wxMimeTypesManager
+    // doesn't know about them), and generally not very useful - they could be
+    // removed in the (near) future
     bool SetCommand(const wxString& cmd, const wxString& verb,
                     bool overwriteprompt = true);
     bool SetMimeType(const wxString& mimeType);
     bool SetDefaultIcon(const wxString& cmd = wxEmptyString, int index = 0);
 
+    bool RemoveOpenCommand();
     bool RemoveCommand(const wxString& verb);
     bool RemoveMimeType();
     bool RemoveDefaultIcon();
@@ -74,8 +79,6 @@ private:
     // doesn't, return FALSE if this failed
     bool EnsureExtKeyExists();
 
-    // we use either m_info or read the data from the registry if m_info == NULL
-    const wxFileTypeInfo *m_info;
     wxString m_strFileType,         // may be empty
              m_ext;
 };
@@ -100,13 +103,11 @@ public:
     bool ReadMimeTypes(const wxString& filename)
         { return TRUE; }
 
-    void AddFallback(const wxFileTypeInfo& ft) { m_fallbacks.Add(ft); }
+    // create a new filetype association
+    wxFileType *Associate(const wxFileTypeInfo& ftInfo);
 
     // create a new filetype with the given name and extension
     wxFileType *CreateFileType(const wxString& filetype, const wxString& ext);
-
-private:
-    wxArrayFileTypeInfo m_fallbacks;
 };
 
 

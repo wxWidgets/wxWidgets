@@ -10,35 +10,138 @@
 // Licence:     wxWindows license (part of wxExtra library)
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _MIMETYPE_H
-#define _MIMETYPE_H
+#ifndef _WX_MIMETYPE_H_
+#define _WX_MIMETYPE_H_
 
 #ifdef __GNUG__
-#pragma interface "mimetypebase.h"
-#endif
+    #pragma interface "mimetypebase.h"
+#endif // __GNUG__
 
-
-// fwd decls
-class wxIcon;
-class wxFileTypeImpl;
-class wxMimeTypesManagerImpl;
+// ----------------------------------------------------------------------------
+// headers and such
+// ----------------------------------------------------------------------------
 
 #include "wx/defs.h"
-
-#if wxUSE_FILE
 
 // the things we really need
 #include "wx/string.h"
 #include "wx/dynarray.h"
 
-class wxMimeTypeCmnModule;
+// fwd decls
+class WXDLLEXPORT wxIcon;
+class WXDLLEXPORT wxFileTypeImpl;
+class WXDLLEXPORT wxMimeTypesManagerImpl;
 
+/*
+    TODO: would it be more convenient to have this class?
+
+class WXDLLEXPORT wxMimeType : public wxString
+{
+public:
+    // all string ctors here
+
+    wxString GetType() const { return BeforeFirst(_T('/')); }
+    wxString GetSubType() const { return AfterFirst(_T('/')); }
+
+    void SetSubType(const wxString& subtype)
+    {
+        *this = GetType() + _T('/') + subtype;
+    }
+
+    bool Matches(const wxMimeType& wildcard)
+    {
+        // implement using wxMimeTypesManager::IsOfType()
+    }
+};
+
+*/
+
+// ----------------------------------------------------------------------------
+// wxFileTypeInfo: static container of information accessed via wxFileType.
+//
+// This class is used with wxMimeTypesManager::AddFallbacks() and Associate()
+// ----------------------------------------------------------------------------
+
+class WXDLLEXPORT wxFileTypeInfo
+{
+public:
+    // ctors
+        // a normal item
+    wxFileTypeInfo(const char *mimeType,
+                   const char *openCmd,
+                   const char *printCmd,
+                   const char *desc,
+                   // the other parameters form a NULL terminated list of
+                   // extensions
+                   ...);
+
+        // invalid item - use this to terminate the array passed to
+        // wxMimeTypesManager::AddFallbacks
+    wxFileTypeInfo() { }
+
+    // test if this object can be used
+    bool IsValid() const { return !m_mimeType.IsEmpty(); }
+
+    // setters
+        // set the icon info
+    void SetIcon(const wxString& iconFile, int iconIndex = 0)
+    {
+        m_iconFile = iconFile;
+        m_iconIndex = iconIndex;
+    }
+        // set the short desc
+    void SetShortDesc(const wxString& shortDesc) { m_shortDesc = shortDesc; }
+
+    // accessors
+        // get the MIME type
+    const wxString& GetMimeType() const { return m_mimeType; }
+        // get the open command
+    const wxString& GetOpenCommand() const { return m_openCmd; }
+        // get the print command
+    const wxString& GetPrintCommand() const { return m_printCmd; }
+        // get the short description (only used under Win32 so far)
+    const wxString& GetShortDesc() const { return m_shortDesc; }
+        // get the long, user visible description
+    const wxString& GetDescription() const { return m_desc; }
+        // get the array of all extensions
+    const wxArrayString& GetExtensions() const { return m_exts; }
+        // get the icon info
+    const wxString& GetIconFile() const { return m_iconFile; }
+    int GetIconIndex() const { return m_iconIndex; }
+
+private:
+    wxString m_mimeType,    // the MIME type in "type/subtype" form
+             m_openCmd,     // command to use for opening the file (%s allowed)
+             m_printCmd,    // command to use for printing the file (%s allowed)
+             m_shortDesc,   // a short string used in the registry
+             m_desc;        // a free form description of this file type
+
+    // icon stuff
+    wxString m_iconFile;    // the file containing the icon
+    int      m_iconIndex;   // icon index in this file
+
+    wxArrayString m_exts;   // the extensions which are mapped on this filetype
+
+#if 0 // TODO
+    // the additional (except "open" and "print") command names and values
+    wxArrayString m_commandNames,
+                  m_commandValues;
+#endif // 0
+};
+
+WX_DECLARE_EXPORTED_OBJARRAY(wxFileTypeInfo, wxArrayFileTypeInfo);
+
+// ----------------------------------------------------------------------------
+// wxFileType: gives access to all information about the files of given type.
+//
 // This class holds information about a given "file type". File type is the
 // same as MIME type under Unix, but under Windows it corresponds more to an
 // extension than to MIME type (in fact, several extensions may correspond to a
 // file type). This object may be created in many different ways and depending
 // on how it was created some fields may be unknown so the return value of all
 // the accessors *must* be checked!
+// ----------------------------------------------------------------------------
+
 class WXDLLEXPORT wxFileType
 {
 friend class WXDLLEXPORT wxMimeTypesManagerImpl;  // it has access to m_impl
@@ -63,8 +166,8 @@ public:
         const wxString& GetMimeType() const { return m_mimetype; }
 
         // override this function in derived class
-        virtual wxString GetParamValue(const wxString& WXUNUSED(paramName)) const
-            { return ""; }
+        virtual wxString GetParamValue(const wxString& WXUNUSED(name)) const
+            { return wxEmptyString; }
 
         // virtual dtor as in any base class
         virtual ~MessageParameters() { }
@@ -72,6 +175,9 @@ public:
     protected:
         wxString m_filename, m_mimetype;
     };
+
+    // ctor from static data
+    wxFileType(const wxFileTypeInfo& ftInfo);
 
     // accessors: all of them return true if the corresponding information
     // could be retrieved/found, false otherwise (and in this case all [out]
@@ -104,33 +210,10 @@ public:
     size_t GetAllCommands(wxArrayString *verbs, wxArrayString *commands,
                           const wxFileType::MessageParameters& params) const;
 
-    // the methods which modify the system database are only implemented under
-    // Win32 so far (on other platforms they will just return FALSE)
-    //
-    // also, they should only be used with the objects created using
-    // wxMimeTypesManager::Associate()
-
-        // set the command to be used for opening the file
-    bool SetOpenCommand(const wxString& cmd, bool overwriteprompt = TRUE);
-
-        // set an arbitrary command, ask confirmation if it already exists and
-        // overwriteprompt is TRUE
-    bool SetCommand(const wxString& cmd, const wxString& verb,
-                    bool overwriteprompt = TRUE);
-
-        // set the MIME type for this filetype
-    bool SetMimeType(const wxString& mimeType);
-        // set the default icon for this filetype
-    bool SetDefaultIcon(const wxString& cmd = wxEmptyString, int index = 0);
-
-        // remove the association from the system database
+    // remove the association for this filetype from the system MIME database:
+    // notice that it will only work if the association is defined in the user
+    // file/registry part, we will never modify the system-wide settings
     bool Unassociate();
-
-        // delete registration info
-    bool RemoveOpenCommand();
-    bool RemoveCommand(const wxString& verb);
-    bool RemoveMimeType();
-    bool RemoveDefaultIcon();
 
     // operations
         // expand a string in the format of GetOpenCommand (which may contain
@@ -150,68 +233,32 @@ private:
     wxFileType(const wxFileType&);
     wxFileType& operator=(const wxFileType&);
 
+    // the static container of wxFileType data: if it's not NULL, it means that
+    // this object is used as fallback only
+    const wxFileTypeInfo *m_info;
+
+    // the object which implements the real stuff like reading and writing
+    // to/from system MIME database
     wxFileTypeImpl *m_impl;
 };
 
-// This class is only used wuth wxMimeTypesManager::AddFallbacks() and is meant
-// just as the container for the wxFileType data.
-class WXDLLEXPORT wxFileTypeInfo
-{
-public:
-    // ctors
-        // a normal item
-    wxFileTypeInfo(const char *mimeType,
-                   const char *openCmd,
-                   const char *printCmd,
-                   const char *desc,
-                   // the other parameters form a NULL terminated list of
-                   // extensions
-                   ...);
-
-        // invalid item - use this to terminate the array passed to
-        // wxMimeTypesManager::AddFallbacks
-    wxFileTypeInfo() { }
-
-    bool IsValid() const { return !m_mimeType.IsEmpty(); }
-
-    // accessors
-        // get the MIME type
-    const wxString& GetMimeType() const { return m_mimeType; }
-        // get the open command
-    const wxString& GetOpenCommand() const { return m_openCmd; }
-        // get the print command
-    const wxString& GetPrintCommand() const { return m_printCmd; }
-        // get the description
-    const wxString& GetDescription() const { return m_desc; }
-        // get the array of all extensions
-    const wxArrayString& GetExtensions() const { return m_exts; }
-
-private:
-    wxString m_mimeType,    // the MIME type in "type/subtype" form
-             m_openCmd,     // command to use for opening the file (%s allowed)
-             m_printCmd,    // command to use for printing the file (%s allowed)
-             m_desc;        // a free form description of this file type
-
-    wxArrayString m_exts;   // the extensions which are mapped on this filetype
-};
-
-WX_DECLARE_EXPORTED_OBJARRAY(wxFileTypeInfo, wxArrayFileTypeInfo);
-
-
+// ----------------------------------------------------------------------------
+// wxMimeTypesManager: interface to system MIME database.
+//
 // This class accesses the information about all known MIME types and allows
 // the application to retrieve information (including how to handle data of
 // given type) about them.
-//
-// NB: currently it doesn't support modifying MIME database (read-only access).
+// ----------------------------------------------------------------------------
+
 class WXDLLEXPORT wxMimeTypesManager
 {
 public:
     // static helper functions
     // -----------------------
 
-        // check if the given MIME type is the same as the other one: the second
-        // argument may contain wildcards ('*'), but not the first. If the
-        // types are equal or if the mimeType matches wildcard the function
+        // check if the given MIME type is the same as the other one: the
+        // second argument may contain wildcards ('*'), but not the first. If
+        // the types are equal or if the mimeType matches wildcard the function
         // returns TRUE, otherwise it returns FALSE
     static bool IsOfType(const wxString& mimeType, const wxString& wildcard);
 
@@ -224,7 +271,6 @@ public:
     // deleting it.
         // get file type from file extension
     wxFileType *GetFileTypeFromExtension(const wxString& ext);
-    wxFileType *GetOrAllocateFileTypeFromExtension(const wxString& ext);
         // get file type from MIME type (in format <category>/<format>)
     wxFileType *GetFileTypeFromMimeType(const wxString& mimeType);
 
@@ -251,19 +297,19 @@ public:
     // ReadMailcap(filenameWithDefaultTypes, TRUE /* use as fallback */) to
     // achieve the same goal, but this requires having this info in a file).
     //
-    // It isn't possible (currently) to provide fallback icons using this
-    // function.
-    //
-    // The filetypes array should be terminated by a NULL entry
+    // The filetypes array should be terminated by either NULL entry or an
+    // invalid wxFileTypeInfo (i.e. the one created with default ctor)
     void AddFallbacks(const wxFileTypeInfo *filetypes);
+    void AddFallback(const wxFileTypeInfo& ft) { m_fallbacks.Add(ft); }
 
-    // create a new association between the given extension and MIME type and
-    // return the wxFileType object corresponding (which should be deleted by
-    // caller) or NULL if something went wrong
-    wxFileType *Associate(const wxString& ext,
-                          const wxString& mimeType,
-                          const wxString& filetype = wxEmptyString,
-                          const wxString& desc = wxEmptyString);
+    // create or remove associations
+
+        // create a new association using the fields of wxFileTypeInfo (at least
+        // the MIME type and the extension should be set)
+    wxFileType *Associate(const wxFileTypeInfo& ftInfo);
+
+        // undo Associate()
+    bool Unassociate(wxFileType *ft) { return ft->Unassociate(); }
 
     // dtor (not virtual, shouldn't be derived from)
     ~wxMimeTypesManager();
@@ -273,6 +319,11 @@ private:
     wxMimeTypesManager(const wxMimeTypesManager&);
     wxMimeTypesManager& operator=(const wxMimeTypesManager&);
 
+    // the fallback info which is used if the information is not found in the
+    // real system database
+    wxArrayFileTypeInfo m_fallbacks;
+
+    // the object working with the system MIME database
     wxMimeTypesManagerImpl *m_impl;
 
     // if m_impl is NULL, create one
@@ -290,9 +341,6 @@ private:
 WXDLLEXPORT_DATA(extern wxMimeTypesManager *) wxTheMimeTypesManager;
 
 #endif
-  // wxUSE_FILE
-
-#endif
-  //_MIMETYPE_H
+  //_WX_MIMETYPE_H_
 
 /* vi: set cin tw=80 ts=4 sw=4: */

@@ -20,7 +20,7 @@
   #pragma hdrstop
 #endif
 
-// Doesn't compile in WIN16 mode
+// this is Win32 only code
 #ifndef __WIN16__
 
 #ifndef WX_PRECOMP
@@ -172,121 +172,9 @@ bool wxFileTypeImpl::EnsureExtKeyExists()
     return TRUE;
 }
 
-bool wxFileTypeImpl::SetCommand(const wxString& cmd,
-                                const wxString& verb,
-                                bool overwriteprompt)
-{
-    wxCHECK_MSG( !m_ext.IsEmpty() && !verb.IsEmpty(), FALSE,
-                 _T("SetCommand() needs an extension and a verb") );
-
-    if ( !EnsureExtKeyExists() )
-        return FALSE;
-
-    wxRegKey rkey(wxRegKey::HKCR, GetVerbPath(verb));
-
-    if ( rkey.Exists() && overwriteprompt )
-    {
-#if wxUSE_GUI
-        wxString old;
-        rkey.QueryValue(wxT(""), old);
-        if ( wxMessageBox
-             (
-                wxString::Format(
-                    _("Do you want to overwrite the command used to %s "
-                      "files with extension \"%s\" (current value is '%s', "
-                      "new value is '%s')?"),
-                    verb.c_str(),
-                    m_ext.c_str(),
-                    old.c_str(),
-                    cmd.c_str()),
-                _("Confirm registry update"),
-                wxYES_NO | wxICON_QUESTION
-             ) != wxYES )
-#endif // wxUSE_GUI
-        {
-            // cancelled by user
-            return FALSE;
-        }
-    }
-
-    // TODO:
-    // 1. translate '%s' to '%1' instead of always adding it
-    // 2. create DDEExec value if needed (undo GetCommand)
-    return rkey.Create() && rkey.SetValue(_T(""), cmd + _T(" \"%1\"") );
-}
-
-bool wxFileTypeImpl::SetMimeType(const wxString& mimeTypeOrig)
-{
-    wxCHECK_MSG( !m_ext.IsEmpty(), FALSE, _T("SetMimeType() needs extension") );
-
-    if ( !EnsureExtKeyExists() )
-        return FALSE;
-
-    // VZ: is this really useful? (FIXME)
-    wxString mimeType;
-    if ( !mimeTypeOrig )
-    {
-        // make up a default value for it
-        wxString cmd;
-        wxSplitPath(GetCommand(_T("open")), NULL, &cmd, NULL);
-        mimeType << _T("application/x-") << cmd;
-    }
-    else
-    {
-        mimeType = mimeTypeOrig;
-    }
-
-    wxRegKey rkey(wxRegKey::HKCR, m_ext);
-    return rkey.Create() && rkey.SetValue(_T("Content Type"), mimeType);
-}
-
-bool wxFileTypeImpl::SetDefaultIcon(const wxString& cmd, int index)
-{
-    wxCHECK_MSG( !m_ext.IsEmpty(), FALSE, _T("SetMimeType() needs extension") );
-    wxCHECK_MSG( wxFileExists(cmd), FALSE, _T("Icon file not found.") );
-
-    if ( !EnsureExtKeyExists() )
-        return FALSE;
-
-    wxRegKey rkey(wxRegKey::HKCR, m_strFileType + _T("\\DefaultIcon"));
-
-    return rkey.Create() &&
-           rkey.SetValue(_T(""),
-                         wxString::Format(_T("%s,%d"), cmd.c_str(), index));
-}
-
 // ----------------------------------------------------------------------------
-// remove file association
+// get the command to use
 // ----------------------------------------------------------------------------
-
-bool wxFileTypeImpl::RemoveCommand(const wxString& verb)
-{
-    wxCHECK_MSG( !m_ext.IsEmpty() && !verb.IsEmpty(), FALSE,
-                 _T("RemoveCommand() needs an extension and a verb") );
-
-    wxString  sKey = m_strFileType;
-    wxRegKey rkey(wxRegKey::HKCR, GetVerbPath(verb));
-
-    // if the key already doesn't exist, it's a success
-    return !rkey.Exists() || rkey.DeleteSelf();
-}
-
-bool wxFileTypeImpl::RemoveMimeType()
-{
-    wxCHECK_MSG( !m_ext.IsEmpty(), FALSE, _T("RemoveMimeType() needs extension") );
-
-    wxRegKey rkey(wxRegKey::HKCR, m_ext);
-    return !rkey.Exists() || rkey.DeleteSelf();
-}
-
-bool wxFileTypeImpl::RemoveDefaultIcon()
-{
-    wxCHECK_MSG( !m_ext.IsEmpty(), FALSE,
-                 _T("RemoveDefaultIcon() needs extension") );
-
-    wxRegKey rkey (wxRegKey::HKCR, m_strFileType  + _T("\\DefaultIcon"));
-    return !rkey.Exists() || rkey.DeleteSelf();
-}
 
 wxString wxFileTypeImpl::GetCommand(const wxChar *verb) const
 {
@@ -377,13 +265,7 @@ wxFileTypeImpl::GetOpenCommand(wxString *openCmd,
                                const wxFileType::MessageParameters& params)
                                const
 {
-    wxString cmd;
-    if ( m_info ) {
-        cmd = m_info->GetOpenCommand();
-    }
-    else {
-        cmd = GetCommand(wxT("open"));
-    }
+    wxString cmd = GetCommand(wxT("open"));
 
     *openCmd = wxFileType::ExpandCommand(cmd, params);
 
@@ -395,28 +277,21 @@ wxFileTypeImpl::GetPrintCommand(wxString *printCmd,
                                 const wxFileType::MessageParameters& params)
                                 const
 {
-    wxString cmd;
-    if ( m_info ) {
-        cmd = m_info->GetPrintCommand();
-    }
-    else {
-        cmd = GetCommand(wxT("print"));
-    }
+    wxString cmd = GetCommand(wxT("print"));
 
     *printCmd = wxFileType::ExpandCommand(cmd, params);
 
     return !printCmd->IsEmpty();
 }
 
+// ----------------------------------------------------------------------------
+// getting other stuff
+// ----------------------------------------------------------------------------
+
 // TODO this function is half implemented
 bool wxFileTypeImpl::GetExtensions(wxArrayString& extensions)
 {
-    if ( m_info ) {
-        extensions = m_info->GetExtensions();
-
-        return TRUE;
-    }
-    else if ( m_ext.IsEmpty() ) {
+    if ( m_ext.IsEmpty() ) {
         // the only way to get the list of extensions from the file type is to
         // scan through all extensions in the registry - too slow...
         return FALSE;
@@ -432,13 +307,6 @@ bool wxFileTypeImpl::GetExtensions(wxArrayString& extensions)
 
 bool wxFileTypeImpl::GetMimeType(wxString *mimeType) const
 {
-    if ( m_info ) {
-        // we already have it
-        *mimeType = m_info->GetMimeType();
-
-        return TRUE;
-    }
-
     // suppress possible error messages
     wxLogNull nolog;
     wxRegKey key(wxRegKey::HKCR, m_ext);
@@ -466,11 +334,6 @@ bool wxFileTypeImpl::GetIcon(wxIcon *icon,
                              int *iconIndex) const
 {
 #if wxUSE_GUI
-    if ( m_info ) {
-        // we don't have icons in the fallback resources
-        return FALSE;
-    }
-
     wxString strIconKey;
     strIconKey << m_strFileType << wxT("\\DefaultIcon");
 
@@ -496,7 +359,8 @@ bool wxFileTypeImpl::GetIcon(wxIcon *icon,
             }
 
             wxString strExpPath = wxExpandEnvVars(strFullPath);
-            int nIndex = wxAtoi(strIndex) - 1 ; //bug here we need C based counting!!
+            // here we need C based counting!
+            int nIndex = wxAtoi(strIndex) - 1 ;
 
             HICON hIcon = ExtractIcon(GetModuleHandle(NULL), strExpPath, nIndex);
             switch ( (int)hIcon ) {
@@ -525,13 +389,6 @@ bool wxFileTypeImpl::GetIcon(wxIcon *icon,
 
 bool wxFileTypeImpl::GetDescription(wxString *desc) const
 {
-    if ( m_info ) {
-        // we already have it
-        *desc = m_info->GetDescription();
-
-        return TRUE;
-    }
-
     // suppress possible error messages
     wxLogNull nolog;
     wxRegKey key(wxRegKey::HKCR, m_strFileType);
@@ -587,19 +444,6 @@ wxMimeTypesManagerImpl::GetFileTypeFromExtension(const wxString& ext)
         }
     }
 
-    // check the fallbacks
-    // TODO linear search is potentially slow, perhaps we should use a sorted
-    //      array?
-    size_t count = m_fallbacks.GetCount();
-    for ( size_t n = 0; n < count; n++ ) {
-        if ( m_fallbacks[n].GetExtensions().Index(ext) != wxNOT_FOUND ) {
-            wxFileType *fileType = new wxFileType;
-            fileType->m_impl->Init(m_fallbacks[n]);
-
-            return fileType;
-        }
-    }
-
     if ( !knownExtension )
     {
         // unknown extension
@@ -640,20 +484,6 @@ wxMimeTypesManagerImpl::GetFileTypeFromMimeType(const wxString& mimeType)
         }
     }
 
-    // check the fallbacks
-    // TODO linear search is potentially slow, perhaps we should use a sorted
-    //      array?
-    size_t count = m_fallbacks.GetCount();
-    for ( size_t n = 0; n < count; n++ ) {
-        if ( wxMimeTypesManager::IsOfType(mimeType,
-                                          m_fallbacks[n].GetMimeType()) ) {
-            wxFileType *fileType = new wxFileType;
-            fileType->m_impl->Init(m_fallbacks[n]);
-
-            return fileType;
-        }
-    }
-
     // unknown MIME type
     return NULL;
 }
@@ -680,12 +510,15 @@ size_t wxMimeTypesManagerImpl::EnumAllFileTypes(wxArrayString& mimetypes)
 // create a new association
 // ----------------------------------------------------------------------------
 
-wxFileType *wxMimeTypesManager::Associate(const wxString& ext,
-                                          const wxString& mimetype,
-                                          const wxString& filetypeOrig,
-                                          const wxString& WXUNUSED(desc))
+wxFileType *wxMimeTypesManager::Associate(const wxFileTypeInfo& ftInfo)
 {
-    wxCHECK_MSG( !ext.empty(), NULL, _T("Associate() needs extension") );
+    wxCHECK_MSG( !ftInfo.GetExtensions().IsEmpty(), NULL,
+                 _T("Associate() needs extension") );
+
+    const wxString& ext = ftInfo.GetExtensions()[0u];
+
+    wxCHECK_MSG( !ext.empty(), NULL,
+                 _T("Associate() needs non empty extension") );
 
     wxString extWithDot;
     if ( ext[0u] != _T('.') )
@@ -702,6 +535,7 @@ wxFileType *wxMimeTypesManager::Associate(const wxString& ext,
         bool ok = key.Create();
         if ( ok )
         {
+            const wxString& filetypeOrig = ftInfo.GetShortDesc();
             if ( filetypeOrig.empty() )
             {
                 // make it up from the extension
@@ -716,6 +550,7 @@ wxFileType *wxMimeTypesManager::Associate(const wxString& ext,
             ok = key.SetValue(_T(""), filetype);
         }
 
+        const wxString& mimetype = ftInfo.GetMimeType();
         if ( ok && !mimetype.empty() )
         {
             // set the MIME type
@@ -762,6 +597,148 @@ wxFileType *wxMimeTypesManager::Associate(const wxString& ext,
     }
 
     return ft;
+}
+
+bool wxFileTypeImpl::SetCommand(const wxString& cmd,
+                                const wxString& verb,
+                                bool overwriteprompt)
+{
+    wxCHECK_MSG( !m_ext.IsEmpty() && !verb.IsEmpty(), FALSE,
+                 _T("SetCommand() needs an extension and a verb") );
+
+    if ( !EnsureExtKeyExists() )
+        return FALSE;
+
+    wxRegKey rkey(wxRegKey::HKCR, GetVerbPath(verb));
+
+    if ( rkey.Exists() && overwriteprompt )
+    {
+#if wxUSE_GUI
+        wxString old;
+        rkey.QueryValue(wxT(""), old);
+        if ( wxMessageBox
+             (
+                wxString::Format(
+                    _("Do you want to overwrite the command used to %s "
+                      "files with extension \"%s\" (current value is '%s', "
+                      "new value is '%s')?"),
+                    verb.c_str(),
+                    m_ext.c_str(),
+                    old.c_str(),
+                    cmd.c_str()),
+                _("Confirm registry update"),
+                wxYES_NO | wxICON_QUESTION
+             ) != wxYES )
+#endif // wxUSE_GUI
+        {
+            // cancelled by user
+            return FALSE;
+        }
+    }
+
+    // TODO:
+    // 1. translate '%s' to '%1' instead of always adding it
+    // 2. create DDEExec value if needed (undo GetCommand)
+    return rkey.Create() && rkey.SetValue(_T(""), cmd + _T(" \"%1\"") );
+}
+
+bool wxFileTypeImpl::SetMimeType(const wxString& mimeTypeOrig)
+{
+    wxCHECK_MSG( !m_ext.IsEmpty(), FALSE, _T("SetMimeType() needs extension") );
+
+    if ( !EnsureExtKeyExists() )
+        return FALSE;
+
+    // VZ: is this really useful? (FIXME)
+    wxString mimeType;
+    if ( !mimeTypeOrig )
+    {
+        // make up a default value for it
+        wxString cmd;
+        wxSplitPath(GetCommand(_T("open")), NULL, &cmd, NULL);
+        mimeType << _T("application/x-") << cmd;
+    }
+    else
+    {
+        mimeType = mimeTypeOrig;
+    }
+
+    wxRegKey rkey(wxRegKey::HKCR, m_ext);
+    return rkey.Create() && rkey.SetValue(_T("Content Type"), mimeType);
+}
+
+bool wxFileTypeImpl::SetDefaultIcon(const wxString& cmd, int index)
+{
+    wxCHECK_MSG( !m_ext.IsEmpty(), FALSE, _T("SetMimeType() needs extension") );
+    wxCHECK_MSG( wxFileExists(cmd), FALSE, _T("Icon file not found.") );
+
+    if ( !EnsureExtKeyExists() )
+        return FALSE;
+
+    wxRegKey rkey(wxRegKey::HKCR, m_strFileType + _T("\\DefaultIcon"));
+
+    return rkey.Create() &&
+           rkey.SetValue(_T(""),
+                         wxString::Format(_T("%s,%d"), cmd.c_str(), index));
+}
+
+// ----------------------------------------------------------------------------
+// remove file association
+// ----------------------------------------------------------------------------
+
+bool wxFileTypeImpl::Unassociate()
+{
+    bool result = TRUE;
+    if ( !RemoveOpenCommand() )
+        result = FALSE;
+    if ( !RemoveDefaultIcon() )
+        result = FALSE;
+    if ( !RemoveMimeType() )
+        result = FALSE;
+
+    if ( result )
+    {
+        // delete the root key
+        wxRegKey key(wxRegKey::HKCR, m_ext);
+        if ( key.Exists() )
+            result = key.DeleteSelf();
+    }
+
+    return result;
+}
+
+bool wxFileTypeImpl::RemoveOpenCommand()
+{
+   return RemoveCommand(_T("open"));
+}
+
+bool wxFileTypeImpl::RemoveCommand(const wxString& verb)
+{
+    wxCHECK_MSG( !m_ext.IsEmpty() && !verb.IsEmpty(), FALSE,
+                 _T("RemoveCommand() needs an extension and a verb") );
+
+    wxString  sKey = m_strFileType;
+    wxRegKey rkey(wxRegKey::HKCR, GetVerbPath(verb));
+
+    // if the key already doesn't exist, it's a success
+    return !rkey.Exists() || rkey.DeleteSelf();
+}
+
+bool wxFileTypeImpl::RemoveMimeType()
+{
+    wxCHECK_MSG( !m_ext.IsEmpty(), FALSE, _T("RemoveMimeType() needs extension") );
+
+    wxRegKey rkey(wxRegKey::HKCR, m_ext);
+    return !rkey.Exists() || rkey.DeleteSelf();
+}
+
+bool wxFileTypeImpl::RemoveDefaultIcon()
+{
+    wxCHECK_MSG( !m_ext.IsEmpty(), FALSE,
+                 _T("RemoveDefaultIcon() needs extension") );
+
+    wxRegKey rkey (wxRegKey::HKCR, m_strFileType  + _T("\\DefaultIcon"));
+    return !rkey.Exists() || rkey.DeleteSelf();
 }
 
 #endif

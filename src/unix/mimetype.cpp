@@ -82,12 +82,12 @@ static bool IsKnownUnimportantField(const wxString& field);
 // private classes
 // ----------------------------------------------------------------------------
 
-
-// this class uses both mailcap and mime.types to gather information about file
+// This class uses both mailcap and mime.types to gather information about file
 // types.
 //
-// The information about mailcap file was extracted from metamail(1) sources and
-// documentation.
+// The information about mailcap file was extracted from metamail(1) sources
+// and documentation and subsequently revised when I found the RFC 1524
+// describing it.
 //
 // Format of mailcap file: spaces are ignored, each line is either a comment
 // (starts with '#') or a line of the form <field1>;<field2>;...;<fieldN>.
@@ -114,7 +114,8 @@ static bool IsKnownUnimportantField(const wxString& field);
 //  * print=xxx is the command to be used to print (and not view) the data of
 //    this type (parameter/filename expansion is done here too)
 //  * edit=xxx is the command to open/edit the data of this type
-//  * needsterminal means that a new console must be created for the viewer
+//  * needsterminal means that a new interactive console must be created for
+//    the viewer
 //  * copiousoutput means that the viewer doesn't interact with the user but
 //    produces (possibly) a lof of lines of output on stdout (i.e. "cat" is a
 //    good example), thus it might be a good idea to use some kind of paging
@@ -123,7 +124,7 @@ static bool IsKnownUnimportantField(const wxString& field);
 //  * compose and composetyped fields are used to determine the program to be
 //    called to create a new message pert in the specified format (unused).
 //
-// Parameter/filename xpansion:
+// Parameter/filename expansion:
 //  * %s is replaced with the (full) file name
 //  * %t is replaced with MIME type/subtype of the entry
 //  * for multipart type only %n is replaced with the nnumber of parts and %F is
@@ -132,18 +133,20 @@ static bool IsKnownUnimportantField(const wxString& field);
 //  * %{parameter} is replaced with the value of parameter taken from
 //    Content-type header line of the message.
 //
-// FIXME any docs with real descriptions of these files??
 //
 // There are 2 possible formats for mime.types file, one entry per line (used
-// for global mime.types) and "expanded" format where an entry takes multiple
-// lines (used for users mime.types).
+// for global mime.types and called Mosaic format) and "expanded" format where
+// an entry takes multiple lines (used for users mime.types and called
+// Netscape format).
 //
 // For both formats spaces are ignored and lines starting with a '#' are
 // comments. Each record has one of two following forms:
 //  a) for "brief" format:
 //      <mime type>  <space separated list of extensions>
 //  b) for "expanded" format:
-//      type=<mime type> \ desc="<description>" \ exts="ext"
+//      type=<mime type> \ 
+//      desc="<description>" \ 
+//      exts="<comma separated list of extensions>"
 //
 // We try to autodetect the format of mime.types: if a non-comment line starts
 // with "type=" we assume the second format, otherwise the first one.
@@ -636,7 +639,7 @@ bool wxGNOMEIconHandler::GetIcon(const wxString& mimetype,
         *icon = icn;
 #else
     // helpful for testing in console mode
-    wxLogDebug(_T("Found GNOME icon for '%s': '%s'\n"),
+    wxLogTrace(TRACE_MIME, _T("Found GNOME icon for '%s': '%s'\n"),
                mimetype.c_str(), iconname.c_str());
 #endif
 
@@ -882,7 +885,7 @@ bool wxKDEIconHandler::GetIcon(const wxString& mimetype,
         *icon = icn;
 #else
     // helpful for testing in console mode
-    wxLogDebug(_T("Found KDE icon for '%s': '%s'\n"),
+    wxLogTrace(TRACE_MIME, _T("Found KDE icon for '%s': '%s'\n"),
                mimetype.c_str(), iconname.c_str());
 #endif
 
@@ -1041,11 +1044,22 @@ ArrayIconHandlers& wxMimeTypesManagerImpl::GetIconHandlers()
     return ms_iconHandlers;
 }
 
-// read system and user mailcaps (TODO implement mime.types support)
 wxMimeTypesManagerImpl::wxMimeTypesManagerImpl()
+{
+    m_initialized = FALSE;
+}
+
+// read system and user mailcaps and other files
+void wxMimeTypesManagerImpl::Initialize()
 {
     // directories where we look for mailcap and mime.types by default
     // (taken from metamail(1) sources)
+    //
+    // although RFC 1524 specifies the search path of
+    // /etc/:/usr/etc:/usr/local/etc only, it doesn't hurt to search in more
+    // places - OTOH, the RFC also says that this path can be changed with
+    // MAILCAPS environment variable (containing the colon separated full
+    // filenames to try) which is not done yet (TODO?)
     static const wxChar *aStandardLocations[] =
     {
         wxT("/etc"),
@@ -1096,13 +1110,23 @@ wxMimeTypesManagerImpl::wxMimeTypesManagerImpl()
 wxMimeTypesManagerImpl::~wxMimeTypesManagerImpl()
 {
     size_t cnt = m_aEntries.GetCount();
-    for (size_t i = 0; i < cnt; i++) delete m_aEntries[i];
+    for (size_t i = 0; i < cnt; i++)
+        delete m_aEntries[i];
 }
 
+wxFileType *
+wxMimeTypesManagerImpl::Associate(const wxFileTypeInfo& ftInfo)
+{
+    wxFAIL_MSG( _T("unimplemented") ); // TODO
+
+    return NULL;
+}
 
 wxFileType *
 wxMimeTypesManagerImpl::GetFileTypeFromExtension(const wxString& ext)
 {
+    InitIfNeeded();
+
     wxFileType *fileType = NULL;  
     size_t count = m_aExtensions.GetCount();
     for ( size_t n = 0; n < count; n++ ) {
@@ -1127,6 +1151,8 @@ wxMimeTypesManagerImpl::GetFileTypeFromExtension(const wxString& ext)
 wxFileType *
 wxMimeTypesManagerImpl::GetFileTypeFromMimeType(const wxString& mimeType)
 {
+    InitIfNeeded();
+
     // mime types are not case-sensitive
     wxString mimetype(mimeType);
     mimetype.MakeLower();
@@ -1163,6 +1189,8 @@ wxMimeTypesManagerImpl::GetFileTypeFromMimeType(const wxString& mimeType)
 
 void wxMimeTypesManagerImpl::AddFallback(const wxFileTypeInfo& filetype)
 {
+    InitIfNeeded();
+
     wxString extensions;
     const wxArrayString& exts = filetype.GetExtensions();
     size_t nExts = exts.GetCount();
@@ -1188,6 +1216,8 @@ void wxMimeTypesManagerImpl::AddMimeTypeInfo(const wxString& strMimeType,
                                              const wxString& strExtensions,
                                              const wxString& strDesc)
 {
+    InitIfNeeded();
+
     int index = m_aTypes.Index(strMimeType);
     if ( index == wxNOT_FOUND ) {
         // add a new entry
@@ -1211,6 +1241,8 @@ void wxMimeTypesManagerImpl::AddMailcapInfo(const wxString& strType,
                                             const wxString& strTest,
                                             const wxString& strDesc)
 {
+    InitIfNeeded();
+
     MailCapEntry *entry = new MailCapEntry(strOpenCmd, strPrintCmd, strTest);
 
     int nIndex = m_aTypes.Index(strType);
@@ -1364,9 +1396,8 @@ bool wxMimeTypesManagerImpl::ReadMimeTypes(const wxString& strFileName)
             }
         }
 
-        // although it doesn't seem to be covered by RFCs, some programs
-        // (notably Netscape) create their entries with several comma
-        // separated extensions (RFC mention the spaces only)
+        // depending on the format (Mosaic or Netscape) either space or comma
+        // is used to separate the extensions
         strExtensions.Replace(wxT(","), wxT(" "));
 
         // also deal with the leading dot
@@ -1592,6 +1623,11 @@ bool wxMimeTypesManagerImpl::ReadMailcap(const wxString& strFileName,
             // support for flags:
             //  1. create an xterm for 'needsterminal'
             //  2. append "| $PAGER" for 'copiousoutput'
+            //
+            // Note that the RFC says that having both needsterminal and
+            // copiousoutput is probably a mistake, so it seems that running
+            // programs with copiousoutput inside an xterm as it is done now
+            // is a bad idea (FIXME)
             if ( copiousoutput ) {
                 const wxChar *p = wxGetenv(_T("PAGER"));
                 strOpenCmd << _T(" | ") << (p ? p : _T("more"));
@@ -1680,6 +1716,8 @@ bool wxMimeTypesManagerImpl::ReadMailcap(const wxString& strFileName,
 
 size_t wxMimeTypesManagerImpl::EnumAllFileTypes(wxArrayString& mimetypes)
 {
+    InitIfNeeded();
+
     mimetypes.Empty();
 
     wxString type;
@@ -1695,6 +1733,17 @@ size_t wxMimeTypesManagerImpl::EnumAllFileTypes(wxArrayString& mimetypes)
     }
 
     return mimetypes.GetCount();
+}
+
+// ----------------------------------------------------------------------------
+// writing to MIME type files
+// ----------------------------------------------------------------------------
+
+bool wxFileTypeImpl::Unassociate()
+{
+    wxFAIL_MSG( _T("unimplemented") ); // TODO
+
+    return FALSE;
 }
 
 // ----------------------------------------------------------------------------
