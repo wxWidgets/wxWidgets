@@ -1703,7 +1703,7 @@ void wxPostScriptDC::GetTextExtent (const wxString& string, long *x, long *y,
         }
             // JC 1.) check for UnderlinePosition
         else if(strncmp(line,"UnderlinePosition",17)==0){
-          if((sscanf(line,"%s%f",upString,&UnderlinePosition)!=2)
+          if((sscanf(line,"%s%lf",upString,&UnderlinePosition)!=2)
 	     || (strcmp(upString,"UnderlinePosition")!=0)) {
 	    wxDebugMsg("AFM-file '%s': line '%s' has error (bad UnderlinePosition)\n",
 		       afmName,line);
@@ -1711,7 +1711,8 @@ void wxPostScriptDC::GetTextExtent (const wxString& string, long *x, long *y,
         }
 	// JC 2.) check for UnderlineThickness
         else if(strncmp(line,"UnderlineThickness",18)==0){
-          if((sscanf(line,"%s%f",utString,&UnderlineThickness)!=2)
+           if((sscanf(line,"%s%
+f",utString,&UnderlineThickness)!=2)
 	     || (strcmp(utString,"UnderlineThickness")!=0)) {
 	    wxDebugMsg("AFM-file '%s': line '%s' has error (bad UnderlineThickness)\n",
 		       afmName,line);
@@ -2109,11 +2110,11 @@ wxDialog(parent, -1, title, pos, size, style)
   yPos += 25;
 
   (void) new wxStaticText(this, -1, "X Translation", wxPoint(5, yPos));
-  sprintf (buf, "%.2f", wx_printer_translate_x);
+  sprintf (buf, "%.2ld", wx_printer_translate_x);
   /* wxTextCtrl *text3 = */ (void) new wxTextCtrl(this, wxID_PRINTER_X_TRANS, buf, wxPoint(100, -1), wxSize(100, -1));
 
   (void) new wxStaticText(this, -1, "Y Translation", wxPoint(120, yPos));
-  sprintf (buf, "%.2f", wx_printer_translate_y);
+  sprintf (buf, "%.2ld", wx_printer_translate_y);
   /* wxTextCtrl *text4 = */ (void) new wxTextCtrl(this, wxID_PRINTER_Y_TRANS, buf, wxPoint(230, -1), wxSize(100, -1));
 
   Fit ();
