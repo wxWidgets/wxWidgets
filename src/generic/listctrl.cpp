@@ -609,6 +609,7 @@ void wxListLineData::DoDraw( wxDC *dc, bool hilight, bool paintBG )
     if (m_mode == wxLC_REPORT)
     {
         wxString s;
+	wxColour *colour = (wxColour*) NULL;
         wxNode *node = m_items.First();
         while (node)
         {
@@ -622,13 +623,15 @@ void wxListLineData::DoDraw( wxDC *dc, bool hilight, bool paintBG )
                 m_owner->GetImageSize( item->GetImage(), x, y );
                 x += item->GetX() + 5;
             }
+	    if (!colour)
+	        colour = item->GetColour();
             if (item->HasText())
             {
                 item->GetText( s );
                 if (hilight)
                     dc->SetTextForeground( wxSystemSettings::GetSystemColour( wxSYS_COLOUR_HIGHLIGHTTEXT ) );
                 else
-                    dc->SetTextForeground( *item->GetColour() );
+                    dc->SetTextForeground( *colour );
                 dc->DrawText( s, x, item->GetY() );
             }
             dc->DestroyClippingRegion();

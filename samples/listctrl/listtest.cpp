@@ -287,6 +287,21 @@ void MyFrame::OnReportView(wxCommandEvent& WXUNUSED(event))
         wxSprintf(buf, _T("Item %d in column 2"), i);
         tmp = m_listCtrl->SetItem(i, 2, buf);
     }
+    
+#ifndef __WXMSW__
+    // we leave all mask fields to 0 and only change the colour
+    wxListItem first;
+    first.m_itemId = 0;
+    first.m_colour = wxBLUE;
+    m_listCtrl->SetItem( first );
+    
+    first.m_itemId = 2;
+    first.m_colour = wxLIGHT_GREY;
+    m_listCtrl->SetItem( first );
+    first.m_itemId = 3;
+    first.m_colour = wxLIGHT_GREY;
+    m_listCtrl->SetItem( first );
+#endif
 
     m_listCtrl->SetColumnWidth( 0, wxLIST_AUTOSIZE );
     m_listCtrl->SetColumnWidth( 1, wxLIST_AUTOSIZE );

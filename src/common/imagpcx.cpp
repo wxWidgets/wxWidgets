@@ -30,7 +30,7 @@
 #include "wx/wfstream.h"
 #include "wx/module.h"
 #include "wx/log.h"
-
+#include "wx/intl.h"
 
 //-----------------------------------------------------------------------------
 // PCX decoding
