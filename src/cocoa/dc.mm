@@ -140,7 +140,7 @@ bool wxDC::CocoaUnwindStackAndTakeFocus()
 
 wxDC::wxDC(void)
 {
-    m_cocoaWxToBoundsTransform;
+    m_cocoaWxToBoundsTransform = nil;
     m_pen = *wxBLACK_PEN;
 }
 
