@@ -7065,10 +7065,6 @@ void wxGrid::DrawColLabel( wxDC& dc, int col )
     dc.SetTextForeground( GetLabelTextColour() );
     dc.SetFont( GetLabelFont() );
 
-    dc.SetBackgroundMode( wxTRANSPARENT );
-    dc.SetTextForeground( GetLabelTextColour() );
-    dc.SetFont( GetLabelFont() );
-
     int hAlign, vAlign;
     GetColLabelAlignment( &hAlign, &vAlign );
 
