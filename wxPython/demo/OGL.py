@@ -16,11 +16,6 @@ import  images
 ##wx.Trap()
 
 #----------------------------------------------------------------------
-# This creates some pens and brushes that the OGL library uses.
-
-ogl.OGLInitialize()
-
-#----------------------------------------------------------------------
 
 class DiamondShape(ogl.PolygonShape):
     def __init__(self, w=0.0, h=0.0):
@@ -308,12 +303,14 @@ def runTest(frame, nb, log):
     
 #----------------------------------------------------------------------
 
+# The OGL library holds some resources that need to be freed before
+# the app shuts down.
 class __Cleanup:
-    cleanup = ogl.OGLCleanUp
-    def __del__(self):
-        self.cleanup()
+    def __del__(self, cleanup=ogl.OGLCleanUp):
+        cleanup()
 
-# when this module gets cleaned up then wx.OGLCleanUp() will get called
+# When this module gets cleaned up by Python then __cu will be cleaned
+# up and it's __dell__ is called, which will then call ogl.OGLCleanUp.
 __cu = __Cleanup()
 
 
