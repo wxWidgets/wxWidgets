@@ -73,20 +73,26 @@ bool wxHtmlCell::AdjustPagebreak(int *pagebreak)
 wxHtmlWordCell::wxHtmlWordCell(const wxString& word, wxDC& dc) : wxHtmlCell()
 {
     m_Word = word;
+    
+    if (m_Word.Find(wxT('&')) != -1) 
+    {
+        static wxChar* substitutions[][3] = 
+                {
+                    { wxT("&nbsp;"), wxT("&nbsp "), wxT(" ") },
+                    { wxT("&copy;"), wxT("&copy "), wxT("(c)") },
+                    { wxT("&quot;"), wxT("&quot "), wxT("\"") },
+                    { wxT("&lt;"), wxT("&lt "), wxT("<") },
+                    { wxT("&gt;"), wxT("&gt "), wxT(">") },
+                    { wxT("&amp;"), wxT("&amp "), wxT("&")  /*this one should be last one*/ },
+                    { NULL, NULL, NULL }
+                };
 
-    m_Word.Replace(wxT("&nbsp;"), wxT(" "), TRUE);
-    m_Word.Replace(wxT("&copy;"), wxT("(c)"), TRUE);
-    m_Word.Replace(wxT("&quot;"), wxT("\""), TRUE);
-    m_Word.Replace(wxT("&lt;"), wxT("<"), TRUE);
-    m_Word.Replace(wxT("&gt;"), wxT(">"), TRUE);
-    m_Word.Replace(wxT("&amp;"), wxT("&"), TRUE);
-
-    m_Word.Replace(wxT("&nbsp "), wxT(" "), TRUE);
-    m_Word.Replace(wxT("&copy "), wxT("(c)"), TRUE);
-    m_Word.Replace(wxT("&quot "), wxT("\""), TRUE);
-    m_Word.Replace(wxT("&lt "), wxT("<"), TRUE);
-    m_Word.Replace(wxT("&gt "), wxT(">"), TRUE);
-    m_Word.Replace(wxT("&amp "), wxT("&"), TRUE);
+        for (int i = 0; substitutions[i][0] != NULL; i++) 
+        {
+            m_Word.Replace(substitutions[i][0], substitutions[i][2], TRUE);
+            m_Word.Replace(substitutions[i][1], substitutions[i][2], TRUE);
+        }
+    }
 
     dc.GetTextExtent(m_Word, &m_Width, &m_Height, &m_Descent);
     SetCanLiveOnPagebreak(FALSE);
