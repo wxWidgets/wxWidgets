@@ -98,19 +98,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     <if cond="TOOLKIT=='WINCE'">wx/msw/wince/time.h</if>
 </set>
 
-<set var="BASE_DARWIN_SRC" hints="files">
-    src/unix/baseunix.cpp
-    src/unix/dir.cpp
-    src/unix/mimetype.cpp
-    src/unix/snglinst.cpp
-    src/unix/threadpsx.cpp
-</set>
-<set var="BASE_AND_GUI_DARWIN_SRC" hints="files">
-    src/unix/utilsunx.cpp
-</set>
-<set var="BASE_DARWIN_HDR" hints="files">
-</set>
-
 <set var="BASE_MAC_SRC" hints="files">
     src/mac/carbon/dirmac.cpp
     src/mac/carbon/mimetmac.cpp
@@ -330,13 +317,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 </set>
 <set var="NET_WINCE_HDR" hints="files">
     <if cond="TOOLKIT=='WINCE'">wx/msw/wince/net.h</if>
-</set>
-
-<set var="NET_DARWIN_SRC" hints="files">
-    src/unix/gsocket.cpp
-</set>
-<set var="NET_DARWIN_HDR" hints="files">
-    wx/unix/gsockunx.h
 </set>
 
 <set var="NET_OS2_SRC" hints="files">
@@ -2483,11 +2463,15 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     <!-- Nested if would be nicer, but this works -->
     <set var="BASE_MACOSX_SRC" hints="files">
         <if cond="TOOLKIT=='MAC'">$(BASE_MAC_SRC)</if>
-        <if cond="TOOLKIT=='COCOA'">$(BASE_DARWIN_SRC)</if>
-        <if cond="TOOLKIT=='GTK'">$(BASE_DARWIN_SRC)</if>
-        <if cond="TOOLKIT=='X11'">$(BASE_DARWIN_SRC)</if>
-        <if cond="TOOLKIT=='MOTIF'">$(BASE_DARWIN_SRC)</if>
+        <if cond="TOOLKIT=='COCOA'">$(BASE_UNIX_SRC)</if>
+        <if cond="TOOLKIT=='GTK'">$(BASE_UNIX_SRC)</if>
+        <if cond="TOOLKIT=='X11'">$(BASE_UNIX_SRC)</if>
+        <if cond="TOOLKIT=='MOTIF'">$(BASE_UNIX_SRC)</if>
         <!-- FIXME: TOOLKIT!='MAC' is what we really want -->
+        
+        <!-- FIXME: a hack because there are two wxBase versions on
+                    Mac; once fixed, this would no longer be needed -->
+        <if cond="TOOLKIT==''">$(BASE_UNIX_SRC)</if>
     </set>
     <set var="BASE_PLATFORM_SRC" hints="files">
         <if cond="PLATFORM_UNIX=='1'">$(BASE_UNIX_SRC)</if>
@@ -2501,13 +2485,13 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     <set var="BASE_AND_GUI_PLATFORM_SRC" hints="files">
         <if cond="PLATFORM_UNIX=='1'">$(BASE_AND_GUI_UNIX_SRC)</if>
         <if cond="PLATFORM_WIN32=='1'">$(BASE_AND_GUI_WIN32_SRC)</if>
-        <if cond="PLATFORM_MACOSX=='1'">$(BASE_AND_GUI_DARWIN_SRC)</if>
+        <if cond="PLATFORM_MACOSX=='1'">$(BASE_AND_GUI_UNIX_SRC)</if>
     </set>
     <set var="BASE_PLATFORM_HDR" hints="files">
         <if cond="PLATFORM_UNIX=='1'">$(BASE_UNIX_HDR)</if>
         <if cond="PLATFORM_WIN32=='1'">$(BASE_WIN32_HDR) $(BASE_WINCE_HDR)</if>
         <if cond="TOOLKIT=='MAC'">$(BASE_MAC_HDR)</if>
-        <if cond="TOOLKIT=='COCOA'">$(BASE_DARWIN_HDR)</if>
+        <if cond="TOOLKIT=='COCOA'">$(BASE_UNIX_HDR)</if>
     </set>
 
     <set var="BASE_SRC" hints="files">
@@ -2523,14 +2507,14 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     <set var="NET_PLATFORM_SRC" hints="files">
         <if cond="PLATFORM_UNIX=='1'">$(NET_UNIX_SRC)</if>
         <if cond="PLATFORM_WIN32=='1'">$(NET_WIN32_SRC) $(NET_WINCE_SRC)</if>
-        <if cond="PLATFORM_MACOSX=='1'">$(NET_DARWIN_SRC)</if>
+        <if cond="PLATFORM_MACOSX=='1'">$(NET_UNIX_SRC)</if>
         <if cond="PLATFORM_OS2=='1'">$(NET_OS2_SRC)</if>
     </set>
     <set var="NET_PLATFORM_HDR" hints="files">
         <if cond="PLATFORM_UNIX=='1'">$(NET_UNIX_HDR)</if>
         <if cond="PLATFORM_WIN32=='1'">$(NET_WIN32_HDR) $(NET_WINCE_HDR)</if>
         <if cond="PLATFORM_OS2=='1'">$(NET_OS2_HDR)</if>
-        <if cond="PLATFORM_MACOSX=='1'">$(NET_DARWIN_HDR)</if>
+        <if cond="PLATFORM_MACOSX=='1'">$(NET_UNIX_HDR)</if>
     </set>
 
     <set var="NET_SRC" hints="files">
@@ -2644,12 +2628,11 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     <set var="ALL_BASE_SOURCES" make_var="1" hints="files">
         $(BASE_CMN_SRC)
         $(BASE_UNIX_SRC) $(BASE_WIN32_SRC) $(BASE_WINCE_SRC)
-        $(BASE_MAC_SRC) $(BASE_DARWIN_SRC)
+        $(BASE_MAC_SRC)
         $(BASE_OS2_SRC)
         $(BASE_AND_GUI_CMN_SRC)
         $(BASE_AND_GUI_UNIX_SRC)
         $(BASE_AND_GUI_MAC_SRC)
-        $(BASE_AND_GUI_DARWIN_SRC)
         $(BASE_AND_GUI_WIN32_SRC)
         $(NET_CMN_SRC) $(NET_UNIX_SRC) $(NET_WIN32_SRC) $(NET_WINCE_SRC)
         $(XML_SRC) $(ODBC_SRC)
