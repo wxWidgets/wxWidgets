@@ -75,8 +75,12 @@ class MimeTypesTestPanel(wxPanel):
         self.GetExtensionsTxt().SetValue(str(ft.GetExtensions()))
         self.GetDescriptionTxt().SetValue(str(ft.GetDescription()))
 
-        ext = ft.GetExtensions()[0]
-        if ext[0] == ".": ext = ext[1:]
+        extList = ft.GetExtensions()
+        if extList:
+            ext = extList[0]
+            if ext[0] == ".": ext = ext[1:]
+        else:
+            ext = ""
         filename = "SPAM" + "." + ext
         mime = ft.GetMimeType() or ""
         cmd = ft.GetOpenCommand(filename, mime)
