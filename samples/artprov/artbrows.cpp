@@ -22,12 +22,12 @@
 
 #ifndef WX_PRECOMP
     #include "wx/wx.h"
-    #include "wx/listctrl.h"
     #include "wx/choice.h"
 #endif
 
 #include "wx/sizer.h"
 #include "wx/imaglist.h"
+#include "wx/listctrl.h"
 
 #include "artbrows.h"
 
