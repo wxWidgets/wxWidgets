@@ -772,14 +772,9 @@ bool wxEvtHandler::ProcessEvent(wxEvent& event)
     {
         wxWindow *win = (wxWindow *)this;
 
-        // also, don't propagate events beyond the first top level window: it
-        // doesn't make sense to process dialogs events in the parent frame
-        if ( !win->IsTopLevel() )
-        {
-            wxWindow *parent = win->GetParent();
-            if (parent && !parent->IsBeingDeleted())
-                return parent->GetEventHandler()->ProcessEvent(event);
-        }
+        wxWindow *parent = win->GetParent();
+        if (parent && !parent->IsBeingDeleted())
+            return parent->GetEventHandler()->ProcessEvent(event);
     }
 #endif // wxUSE_GUI
 
