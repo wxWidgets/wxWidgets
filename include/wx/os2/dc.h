@@ -298,11 +298,6 @@ protected:
     int                             m_nWindowExtY;
 
     //
-    // for use in some generic code
-    //
-    float                           m_scaleFactor;
-
-    //
     // the window associated with this DC (may be NULL)
     //
     wxWindow*                       m_pCanvas;
