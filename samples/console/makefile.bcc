@@ -4,6 +4,9 @@
 #     Do not modify, all changes will be overwritten!
 # =========================================================================
 
+!ifndef BCCDIR
+BCCDIR = $(MAKEDIR)\..
+!endif
 
 # -------------------------------------------------------------------------
 # These are configurable options:
@@ -21,7 +24,7 @@ CFG =
 !endif
 # Standard preprocessor flags (common for CC and CXX) 
 !ifndef CPPFLAGS
-CPPFLAGS = 
+CPPFLAGS = -a4 -g0 -I$(BCCDIR)\include
 !endif
 # C++ compiler 
 !ifndef CXX
@@ -64,17 +67,13 @@ WXUNIV = 0
 # Do not modify the rest of this file!
 # -------------------------------------------------------------------------
 
-!ifndef BCCDIR
-BCCDIR=$(MAKEDIR)\..
-!endif
-
 !if "$(BCCDIR)" == "\.."
 !error Your Borland compiler does not define MAKEDIR. Please define the BCCDIR variable, e.g. BCCDIR=d:\bc4
 !endif
 
 ### Variables: ###
 
-OBJS = objs_bcc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)
+OBJS = bcc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)
 CONSOLE_CXXFLAGS = $(CPPFLAGS)  -D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) -I./../../include -I./../../lib\bcc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG) -I./../../src/tiff -I./../../src/jpeg -I./../../src/png -I./../../src/zlib  -I./../../src/regex -I. $(__DLLFLAG_p) $(__MULTILIB_FLAG_p) $(CXXFLAGS)
 
 ### Conditionally set variables: ###
@@ -110,7 +109,7 @@ __MULTILIB_FLAG_p = -DwxUSE_GUI=0
 __UNICODE_DEFINE_p = -DwxUSE_UNICODE=1
 !endif
 !if "$(MONOLITHIC)" == "0"
-__WXLIB_BASE_p = wx25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_base.lib
+__WXLIB_BASE_p = wxbase25$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib
 !endif
 !if "$(MONOLITHIC)" == "1"
 __WXLIB_MONO_p = wx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib
@@ -129,7 +128,7 @@ $(OBJS):
 all: $(OBJS)\console.exe data
 
 $(OBJS)\console_console.obj: .\console.cpp
-	$(CXX) -c -P -o$@ $(CONSOLE_CXXFLAGS) $**
+	$(CXX) -q -c -P -o$@ $(CONSOLE_CXXFLAGS) $**
 
 clean: 
 	-if exist $(OBJS)\*.obj del $(OBJS)\*.obj
@@ -143,6 +142,8 @@ $(OBJS)\console.exe: $(OBJS)\console_console.obj
 |
 
 data: 
+	if not exist $(OBJS) mkdir $(OBJS)
+	for %f in (testdata.fc) do if not exist $(OBJS)\%f copy .\%f $(OBJS)
 
 install: all
 

@@ -42,7 +42,7 @@ WXUNIV = 0
 
 ### Variables: ###
 
-OBJS = objs_vc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)
+OBJS = vc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)
 WIDGETS_CXXFLAGS = $(CPPFLAGS) /MD /D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) /I./../../include /I./../../lib\vc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG) /I./../../src/tiff /I./../../src/jpeg /I./../../src/png /I./../../src/zlib  /I./../../src/regex /I. $(__DLLFLAG_p) $(CXXFLAGS)
 
 ### Conditionally set variables: ###
@@ -82,6 +82,9 @@ __UNICODE_DEFINE_p = /DwxUSE_UNICODE=1
 !endif
 !if "$(UNICODE)" == "1"
 __UNICODE_DEFINE_p_1 = /dwxUSE_UNICODE=1
+!endif
+!if "$(MONOLITHIC)" == "0"
+__WXLIB_BASE_p = wxbase25$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib
 !endif
 !if "$(MONOLITHIC)" == "0"
 __WXLIB_CORE_p = wx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_core.lib
@@ -152,5 +155,5 @@ uninstall:
 
 $(OBJS)\widgets.exe: $(OBJS)\widgets_button.obj $(OBJS)\widgets_combobox.obj $(OBJS)\widgets_gauge.obj $(OBJS)\widgets_listbox.obj $(OBJS)\widgets_notebook.obj $(OBJS)\widgets_radiobox.obj $(OBJS)\widgets_slider.obj $(OBJS)\widgets_spinbtn.obj $(OBJS)\widgets_static.obj $(OBJS)\widgets_textctrl.obj $(OBJS)\widgets_widgets.obj $(OBJS)\widgets_widgets.res
 	link /NOLOGO /OUT:$@ $(LDFLAGS) /LIBPATH:.\..\..\lib\vc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)  /SUBSYSTEM:WINDOWS @<<
-	$(OBJS)\widgets_button.obj $(OBJS)\widgets_combobox.obj $(OBJS)\widgets_gauge.obj $(OBJS)\widgets_listbox.obj $(OBJS)\widgets_notebook.obj $(OBJS)\widgets_radiobox.obj $(OBJS)\widgets_slider.obj $(OBJS)\widgets_spinbtn.obj $(OBJS)\widgets_static.obj $(OBJS)\widgets_textctrl.obj $(OBJS)\widgets_widgets.obj $(OBJS)\widgets_widgets.res  $(__WXLIB_MONO_p) $(__WXLIB_CORE_p) wxtiff$(WXDEBUGFLAG).lib wxjpeg$(WXDEBUGFLAG).lib wxpng$(WXDEBUGFLAG).lib wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXDEBUGFLAG).lib  kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib oldnames.lib comctl32.lib odbc32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib
+	$(OBJS)\widgets_button.obj $(OBJS)\widgets_combobox.obj $(OBJS)\widgets_gauge.obj $(OBJS)\widgets_listbox.obj $(OBJS)\widgets_notebook.obj $(OBJS)\widgets_radiobox.obj $(OBJS)\widgets_slider.obj $(OBJS)\widgets_spinbtn.obj $(OBJS)\widgets_static.obj $(OBJS)\widgets_textctrl.obj $(OBJS)\widgets_widgets.obj $(OBJS)\widgets_widgets.res  $(__WXLIB_MONO_p) $(__WXLIB_CORE_p) $(__WXLIB_BASE_p) wxtiff$(WXDEBUGFLAG).lib wxjpeg$(WXDEBUGFLAG).lib wxpng$(WXDEBUGFLAG).lib wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXDEBUGFLAG).lib  kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib odbc32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib
 <<
