@@ -413,6 +413,8 @@ bool wxFrame::Create( wxWindow *parent, wxWindowID id, const wxString &title,
 
 wxFrame::~wxFrame()
 {
+    m_isBeingDeleted = TRUE;
+    
     if (m_frameMenuBar) delete m_frameMenuBar;
     m_frameMenuBar = (wxMenuBar *) NULL;
     

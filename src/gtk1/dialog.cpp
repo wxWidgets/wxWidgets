@@ -245,6 +245,8 @@ bool wxDialog::Create( wxWindow *parent,
 
 wxDialog::~wxDialog()
 {
+    m_isBeingDeleted = TRUE;
+    
     wxTopLevelWindows.DeleteObject( this );
 
     if (wxTheApp->GetTopWindow() == this)
@@ -290,18 +292,14 @@ void wxDialog::OnCancel( wxCommandEvent &WXUNUSED(event) )
 
 void wxDialog::OnOK( wxCommandEvent &WXUNUSED(event) )
 {
-    printf( "OnOK 1.\n" );
     if (Validate() && TransferDataFromWindow())
     {
-        printf( "OnOK 2.\n" );
         if (IsModal())
         {
-            printf( "OnOK: modal.\n" );
             EndModal(wxID_OK);
         }
         else
         {
-            printf( "OnOK: non-modal.\n" );
             SetReturnCode(wxID_OK);
             this->Show(FALSE);
         }

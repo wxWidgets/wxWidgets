@@ -1453,6 +1453,7 @@ void wxWindow::Init()
     m_sizeSet = FALSE;
     m_hasVMT = FALSE;
     m_needParent = TRUE;
+    m_isBeingDeleted = FALSE;
 
     m_hasScrolling = FALSE;
     m_isScrolling = FALSE;
@@ -1633,6 +1634,7 @@ bool wxWindow::Create( wxWindow *parent, wxWindowID id,
 
 wxWindow::~wxWindow()
 {
+    m_isBeingDeleted = TRUE;
     m_hasVMT = FALSE;
 
     if (m_widget)
