@@ -421,6 +421,7 @@ public:
                                      ,WXLPARAM lParam
                                     );
     virtual bool    OS2ProcessMessage(WXMSG* pMsg);
+    virtual bool    OS2ShouldPreProcessMessage(WXMSG* pMsg);
     virtual bool    OS2TranslateMessage(WXMSG* pMsg);
     virtual void    OS2DestroyWindow(void);
 

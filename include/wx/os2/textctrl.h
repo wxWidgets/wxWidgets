@@ -169,6 +169,7 @@ protected:
     //
     void           AdjustSpaceLimit(void);
     virtual wxSize DoGetBestSize(void) const;
+    virtual bool   OS2ShouldPreProcessMessage(WXMSG* pMsg);
 
 private:
     bool                            m_bIsMLE;

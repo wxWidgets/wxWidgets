@@ -30,7 +30,7 @@
    ULONG     idMasterSpb;  /*  ID of the servant's master spinbutton. */
    PVOID     pHWXCtlData;  /*  Handwriting control data structure flag. */
  } SPBCDATA;
- 
+
  typedef SPBCDATA *PSPBCDATA;
 #endif
 
@@ -269,7 +269,7 @@ WXDLLEXPORT wxWindow* wxFindWinFromHandle(WXHWND hWnd);
 WXDLLEXPORT void   wxGetCharSize(WXHWND wnd, int *x, int *y,wxFont *the_font);
 WXDLLEXPORT void   wxFillLogFont( LOGFONT*      pLogFont
                                  ,PFACENAMEDESC pFaceName
-                                 ,HPS           hPS
+                                 ,HPS*          phPS
                                  ,long*         pflId
                                  ,wxString&     sFaceName
                                  ,wxFont*       pFont
