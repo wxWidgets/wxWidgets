@@ -34,13 +34,20 @@
 #ifndef WX_PRECOMP
     #include "wx/app.h"
     #include "wx/frame.h"
+
     #include "wx/utils.h"
     #include "wx/menu.h"
+
     #include "wx/msgdlg.h"
     #include "wx/textdlg.h"
-    #include "wx/listbox.h"
     #include "wx/filedlg.h"
     #include "wx/choicdlg.h"
+
+    #include "wx/button.h"
+    #include "wx/textctrl.h"
+    #include "wx/listbox.h"
+
+    #include "wx/sizer.h"
 #endif
 
 #include "wx/txtstrm.h"
@@ -54,7 +61,7 @@
 #endif // __WINDOWS__
 
 // ----------------------------------------------------------------------------
-// private classes
+// the usual application and main frame classes
 // ----------------------------------------------------------------------------
 
 // Define a new application type, each program should derive a class from wxApp
@@ -93,6 +100,8 @@ public:
     void OnShell(wxCommandEvent& event);
     void OnExecWithRedirect(wxCommandEvent& event);
     void OnExecWithPipe(wxCommandEvent& event);
+
+    void OnPOpen(wxCommandEvent& event);
 
     void OnFileExec(wxCommandEvent& event);
 
@@ -137,6 +146,43 @@ private:
     // any class wishing to process wxWindows events must use this macro
     DECLARE_EVENT_TABLE()
 };
+
+// ----------------------------------------------------------------------------
+// MyPipeFrame: allows the user to communicate with the child process
+// ----------------------------------------------------------------------------
+
+class MyPipeFrame : public wxFrame
+{
+public:
+    MyPipeFrame(wxFrame *parent,
+                const wxString& cmd,
+                wxProcess *process);
+
+protected:
+    void OnTextEnter(wxCommandEvent& event) { DoSend(); }
+    void OnBtnSend(wxCommandEvent& event) { DoSend(); }
+    void OnBtnGet(wxCommandEvent& event) { DoGet(); }
+
+    void OnClose(wxCloseEvent& event);
+
+    void DoSend() { m_out.WriteString(m_textIn->GetValue() + '\n'); DoGet(); }
+    void DoGet();
+
+private:
+    wxProcess *m_process;
+
+    wxTextInputStream m_in;
+    wxTextOutputStream m_out;
+
+    wxTextCtrl *m_textIn,
+               *m_textOut;
+
+    DECLARE_EVENT_TABLE()
+};
+
+// ----------------------------------------------------------------------------
+// wxProcess-derived classes
+// ----------------------------------------------------------------------------
 
 // This is the handler for process termination events
 class MyProcess : public wxProcess
@@ -203,12 +249,17 @@ enum
     Exec_SyncExec = 200,
     Exec_AsyncExec,
     Exec_Shell,
+    Exec_POpen,
     Exec_OpenFile,
     Exec_DDEExec,
     Exec_DDERequest,
     Exec_Redirect,
     Exec_Pipe,
-    Exec_About = 300
+    Exec_About = 300,
+
+    // control ids
+    Exec_Btn_Send = 1000,
+    Exec_Btn_Get
 };
 
 static const wxChar *DIALOG_TITLE = _T("Exec sample");
@@ -231,16 +282,27 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(Exec_Redirect, MyFrame::OnExecWithRedirect)
     EVT_MENU(Exec_Pipe, MyFrame::OnExecWithPipe)
 
+    EVT_MENU(Exec_POpen, MyFrame::OnPOpen)
+
     EVT_MENU(Exec_OpenFile, MyFrame::OnFileExec)
 
 #ifdef __WINDOWS__
     EVT_MENU(Exec_DDEExec, MyFrame::OnDDEExec)
     EVT_MENU(Exec_DDERequest, MyFrame::OnDDERequest)
 #endif // __WINDOWS__
-    
+
     EVT_MENU(Exec_About, MyFrame::OnAbout)
 
     EVT_IDLE(MyFrame::OnIdle)
+END_EVENT_TABLE()
+
+BEGIN_EVENT_TABLE(MyPipeFrame, wxFrame)
+    EVT_BUTTON(Exec_Btn_Send, MyPipeFrame::OnBtnSend)
+    EVT_BUTTON(Exec_Btn_Get, MyPipeFrame::OnBtnGet)
+
+    EVT_TEXT_ENTER(-1, MyPipeFrame::OnTextEnter)
+
+    EVT_CLOSE(MyPipeFrame::OnClose)
 END_EVENT_TABLE()
 
 // Create a new application object: this macro will allow wxWindows to create
@@ -311,8 +373,10 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
     execMenu->AppendSeparator();
     execMenu->Append(Exec_Redirect, _T("Capture command &output...\tCtrl-O"),
                      _T("Launch a program and capture its output"));
-    execMenu->Append(Exec_Pipe, _T("&Pipe through command...\tCtrl-P"),
+    execMenu->Append(Exec_Pipe, _T("&Pipe through command..."),
                      _T("Pipe a string through a filter"));
+    execMenu->Append(Exec_POpen, _T("&Open a pipe to a command...\tCtrl-P"),
+                     _T("Open a pipe to and from another program"));
 
     execMenu->AppendSeparator();
     execMenu->Append(Exec_OpenFile, _T("Open &file...\tCtrl-F"),
@@ -629,11 +693,43 @@ void MyFrame::OnExecWithPipe(wxCommandEvent& WXUNUSED(event))
     m_cmdLast = cmd;
 }
 
+void MyFrame::OnPOpen(wxCommandEvent& event)
+{
+    wxString cmd = wxGetTextFromUser(_T("Enter the command to launch: "),
+                                     DIALOG_TITLE,
+                                     m_cmdLast);
+    if ( cmd.empty() )
+        return;
+
+    wxProcess *process = wxProcess::Open(cmd);
+    if ( !process )
+    {
+        wxLogError(_T("Failed to launch the command."));
+        return;
+    }
+
+    wxOutputStream *out = process->GetOutputStream();
+    if ( !out )
+    {
+        wxLogError(_T("Failed to connect to child stdin"));
+        return;
+    }
+
+    wxInputStream *in = process->GetInputStream();
+    if ( !in )
+    {
+        wxLogError(_T("Failed to connect to child stdout"));
+        return;
+    }
+
+    new MyPipeFrame(this, cmd, process);
+}
+
 void MyFrame::OnFileExec(wxCommandEvent& event)
 {
     static wxString s_filename;
 
-    wxString filename = wxLoadFileSelector(_T("file"), _T(""), s_filename);
+    wxString filename = wxLoadFileSelector(_T(""), _T(""), s_filename);
     if ( !filename )
         return;
 
@@ -785,7 +881,8 @@ void MyFrame::ShowOutput(const wxString& cmd,
         m_lbox->Append(output[n]);
     }
 
-    m_lbox->Append(_T("--- End of output ---"));
+    m_lbox->Append(wxString::Format(_T("--- End of %s ---"),
+                                    title.Lower().c_str()));
 }
 
 // ----------------------------------------------------------------------------
@@ -871,3 +968,53 @@ bool MyPipedProcess2::HasInput()
 
     return MyPipedProcess::HasInput();
 }
+
+// ============================================================================
+// MyPipeFrame implementation
+// ============================================================================
+
+MyPipeFrame::MyPipeFrame(wxFrame *parent,
+                         const wxString& cmd,
+                         wxProcess *process)
+           : wxFrame(parent, -1, cmd),
+             m_process(process),
+             // in a real program we'd check that the streams are !NULL here
+             m_in(*process->GetInputStream()),
+             m_out(*process->GetOutputStream())
+{
+    m_textIn = new wxTextCtrl(this, -1, _T(""),
+                              wxDefaultPosition, wxDefaultSize,
+                              wxTE_PROCESS_ENTER);
+    m_textOut = new wxTextCtrl(this, -1, _T(""));
+    m_textOut->SetEditable(FALSE);
+
+    wxSizer *sizerTop = new wxBoxSizer(wxVERTICAL);
+    sizerTop->Add(m_textIn, 0, wxGROW | wxALL, 5);
+
+    wxSizer *sizerBtns = new wxBoxSizer(wxHORIZONTAL);
+    sizerBtns->Add(new wxButton(this, Exec_Btn_Send, _T("&Send")), 0,
+                   wxALL, 10);
+    sizerBtns->Add(new wxButton(this, Exec_Btn_Get, _T("&Get")), 0,
+                   wxALL, 10);
+
+    sizerTop->Add(sizerBtns, 0, wxCENTRE | wxALL, 5);
+    sizerTop->Add(m_textOut, 0, wxGROW | wxALL, 5);
+
+    SetSizer(sizerTop);
+    sizerTop->Fit(this);
+
+    Show();
+}
+
+void MyPipeFrame::DoGet()
+{
+    m_textOut->SetValue(m_in.ReadLine());
+}
+
+void MyPipeFrame::OnClose(wxCloseEvent& event)
+{
+    m_process->CloseOutput();
+
+    event.Skip();
+}
+
