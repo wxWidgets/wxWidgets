@@ -24,6 +24,7 @@ Unix:
 wxHTML:
 
 - fixed wxHtmlHelpController's cache files handling on big endian machines
+- fixed alignment handling in tables
 
 2.2.9
 -----
