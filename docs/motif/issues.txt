@@ -1,15 +1,34 @@
 Outstanding issues
 ------------------
 
-(see also todo.txt)
+Last updated 19/3/2000.
 
-- wxTextCtrl doesn't work as a stream buffer in Linux/gcc
-- No wxSpinButton
+See also: todo.txt.
+
+- wxTextCtrl doesn't work as a stream buffer in Linux/gcc.
+
+- No wxSpinButton.
+
+- No wxToolTip (but see wxToolBar for a way of implementing it).
+
+- Limited clipboard support (text only) and no drag and drop.
+
 - Need a way of specifying default settings for colour/font/etc.
+
 - More optimisation could be done to reduce X server traffic, etc.
+
 - Should scrollbars take on the background colour? Not right for
   e.g. wxScrolledWindows, so maybe have wxSystemSettings value for
   scrollbar colour, and/or ability to set scrollbar colour independently.
+
 - wxFrame can accept events, but apps cannot draw into it for some reason,
   so the rotate sample won't work. Workaround: use an embedded wxWindow.
+
+- In Life! sample, text above slider isn't legible.
+
+- samples/html/helpview and samples/help show a problem when showing
+  the advanced HTML help controller: a BadDrawable X error occurs
+ (unfortunately hard to tell where). Somewhere in wxHtmlHelpFrame.
+
+- Dialog Editor needs a lot of work.
 

@@ -285,6 +285,7 @@ LifeFrame::LifeFrame() : wxFrame((wxFrame *)0, -1, _("Life!"), wxPoint(200, 200)
 
     sizer2->Add( m_text, 0, wxGROW | wxTOP, 4 );
     sizer2->Add( slider, 0, wxCENTRE | wxALL, 4 );
+
     panel2->SetSizer( sizer2 );
     panel2->SetAutoLayout( TRUE );
     sizer2->Fit( panel2 );

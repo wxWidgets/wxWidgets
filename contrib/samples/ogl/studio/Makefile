@@ -16,7 +16,7 @@ CPP = gcc -g
 CC = gcc
 WXCONFIG=../../../../wx-config
 WXINCLUDE=-I../../../../include -I../../../include
-WXLIB=-L../../../../lib -L../../../lib
+WXLIB=-L../../../../lib -L../../../src/ogl
 
 OBJECTS=studio.o cspalette.o csprint.o dialogs.o doc.o mainfrm.o project.o shapes.o symbols.o view.o
 

@@ -67,7 +67,7 @@ void wxResourceTableWithSaving::OutputFont(wxTextOutputStream& stream, const wxF
  
 bool wxResourceTableWithSaving::Save(const wxString& filename)
 {
-  wxFileOutputStream file_output( filename.fn_str() );
+  wxFileOutputStream file_output( filename );
   if (file_output.LastError())
     return FALSE;
     

@@ -153,6 +153,8 @@ utils/configure.in
 utils/dialoged/Makefile.in
 utils/dialoged/src/bitmaps/*.xbm
 utils/dialoged/src/bitmaps/*.xpm
+utils/dialoged/src/bitmaps/*.bmp
+utils/dialoged/src/bitmaps/*.ico
 utils/dialoged/src/*.h
 utils/dialoged/src/*.cpp
 utils/dialoged/src/*.def
@@ -162,20 +164,9 @@ utils/dialoged/src/*.xbm
 utils/dialoged/src/*.xpm
 utils/dialoged/src/*.txt
 utils/dialoged/src/*.inf
-utils/dialoged/test/*.h
 utils/dialoged/src/*.ico
 utils/dialoged/src/*.prj
 utils/dialoged/src/*.bmp
-utils/dialoged/src/bitmaps/*.bmp
-utils/dialoged/src/bitmaps/*.ico
-utils/dialoged/test/*.cpp
-utils/dialoged/test/*.def
-utils/dialoged/test/*.rc
-utils/dialoged/test/makefile*
-utils/dialoged/lib/dummy
-utils/dialoged/test/*.ico
-utils/dialoged/test/*.prj
-utils/dialoged/test/*.bmp
 
 utils/hhp2cached/*.h
 utils/hhp2cached/*.cpp
@@ -258,6 +249,7 @@ samples/help/*.xbm
 samples/help/*.xpm
 samples/help/*.ico
 samples/help/*.bmp
+samples/help/*.gif
 samples/help/*.rc
 samples/help/*.hlp
 samples/help/*.cnt
@@ -599,6 +591,7 @@ samples/dnd/*.def
 samples/dnd/*.bmp
 samples/dnd/*.xbm
 samples/dnd/*.xpm
+samples/dnd/*.png
 samples/dnd/*.ico
 samples/dnd/*.txt
 

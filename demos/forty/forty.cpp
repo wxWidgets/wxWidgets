@@ -227,7 +227,7 @@ FortyFrame::About(wxCommandEvent&)
 		"Forty Thieves\n\n"
 		"A freeware program using the wxWindows\n"
 		"portable C++ GUI toolkit.\n"
-		"http://web.ukonline.co.uk/julian.smart/wxwin\n"
+		"http://www.wxwindows.org\n"
 		"http://www.freiburg.linux.de/~wxxt\n\n"
 		"Author: Chris Breeze (c) 1992-1998\n"
 		"email: chris.breeze@iname.com",

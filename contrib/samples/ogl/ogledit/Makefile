@@ -16,7 +16,7 @@ CPP = gcc -g
 CC = gcc
 WXCONFIG=../../../../wx-config
 WXINCLUDE=-I../../../../include -I../../../include
-WXLIB=-L../../../../lib -L../../../lib
+WXLIB=-L../../../../lib -L../../../src/ogl
 
 OBJECTS=ogledit.o palette.o doc.o view.o
 

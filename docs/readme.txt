@@ -207,5 +207,5 @@ web site) or contact Julian Smart <julian.smart@ukonline.co.uk>.
 
 Good luck!
 
-The wxWindows Team, March 2000
+The wxWindows Team, 19 March, 2000
 

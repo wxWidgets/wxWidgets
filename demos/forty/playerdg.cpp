@@ -116,7 +116,7 @@ PlayerSelectionDialog::PlayerSelectionDialog(
 	list->SetConstraints(layout);
 
 	wxString prevPlayer = m_scoreFile->GetPreviousPlayer();
-	if (prevPlayer.Length() > 0)
+	if ((prevPlayer.Length() > 0) && (list->FindString(prevPlayer) != -1))
 	{
 		list->SetStringSelection(prevPlayer);
 		m_textField->SetValue(prevPlayer);

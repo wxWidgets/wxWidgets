@@ -26,6 +26,7 @@ erase %dest\ogl3.zip
 erase %dest\tex2rtf2.zip
 erase %dest\jpeg.zip
 erase %dest\tiff.zip
+erase %dest\dialoged.zip
 
 if direxist %dest\wx deltree /Y %dest\wx
 
@@ -78,6 +79,12 @@ zip32 -@ %dest\jpeg.zip < %src\distrib\msw\jpeg.rsp
 
 rem TIFF source
 zip32 -@ %dest\tiff.zip < %src\distrib\msw\tiff.rsp
+
+rem Dialog Editor source and binary
+erase %dest\dialoged_source.zip
+zip32 -@ %dest\dialoged_source.zip < %src\distrib\msw\dialoged.rsp
+zip32 -j %dest\dialoged.zip %dest\dialoged_source.zip %src\bin\dialoged.exe %src\bin\dialoged.hlp %src\bin\dialoged.cnt
+erase %dest\dialoged_source.zip
 
 copy %src\docs\changes.txt %dest
 copy %src\docs\msw\install.txt %dest\install_msw.txt

@@ -290,7 +290,6 @@ void wxSplitterWindow::OnMouseEvent(wxMouseEvent& event)
             // if the child window doesn't have a cursor, the
             // parent's (splitter window) will be used, and this
             // must be the standard cursor.
-            wxLogDebug("wxSplitterWindow: Setting to standard cursor");
 
             // where else do we unset the cursor?
             SetCursor(* wxSTANDARD_CURSOR);
