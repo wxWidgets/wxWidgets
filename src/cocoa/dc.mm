@@ -183,6 +183,7 @@ void wxDC::CocoaApplyTransformations()
 
 void wxDC::DoDrawRectangle(wxCoord x, wxCoord y, wxCoord width, wxCoord height)
 {
+    wxAutoNSAutoreleasePool pool;
     if(!CocoaTakeFocus()) return;
     NSBezierPath *bezpath = [NSBezierPath bezierPathWithRect:NSMakeRect(x,y,width,height)];
     CocoaSetPenForNSBezierPath(m_pen,bezpath);
@@ -193,6 +194,7 @@ void wxDC::DoDrawRectangle(wxCoord x, wxCoord y, wxCoord width, wxCoord height)
 
 void wxDC::DoDrawLine(wxCoord x1, wxCoord y1, wxCoord x2, wxCoord y2)
 {
+    wxAutoNSAutoreleasePool pool;
     if(!CocoaTakeFocus()) return;
     NSBezierPath *bezpath = [NSBezierPath bezierPath];
     [bezpath moveToPoint:NSMakePoint(x1,y1)];
@@ -226,6 +228,7 @@ void wxDC::DoGetTextExtent(const wxString& text, wxCoord *x, wxCoord *y, wxCoord
 
 void wxDC::DoDrawText(const wxString& text, wxCoord x, wxCoord y)
 {
+    wxAutoNSAutoreleasePool pool;
     if(!CocoaTakeFocus()) return;
     wxASSERT_MSG(sm_cocoaNSTextStorage && sm_cocoaNSLayoutManager && sm_cocoaNSTextContainer, wxT("Text system has not been initialized.  BAD PROGRAMMER!"));
     NSAttributedString *attributedString = [[NSAttributedString alloc]
@@ -449,6 +452,7 @@ void wxDC::DoDrawEllipse(wxCoord x, wxCoord y, wxCoord width, wxCoord height)
 
 void wxDC::DoDrawBitmap(const wxBitmap &bmp, wxCoord x, wxCoord y, bool useMask)
 {
+    wxAutoNSAutoreleasePool pool;
     if(!CocoaTakeFocus()) return;
     if(!bmp.Ok())
         return;
