@@ -258,7 +258,6 @@ bool wxDragImage::BeginDrag(const wxPoint& hotspot, wxWindow* window, bool fullS
         m_boundingRect = * rect;
 
     bool ret = (ImageList_BeginDrag(GetHimageList(), 0, hotspot.x, hotspot.y) != 0);
-    //bool ret = (ImageList_BeginDrag(GetHimageList(), 0, 0, 0) != 0);
 
     if (!ret)
     {
@@ -284,6 +283,9 @@ bool wxDragImage::BeginDrag(const wxPoint& hotspot, wxWindow* window, bool fullS
         // See if we can find the cursor hotspot
         wxPoint curHotSpot(hotspot);
 
+        // Although it seems to produce the right position, when the hotspot goeos
+        // negative it has strange effects on the image.
+        // How do we stop the cursor jumping right and below of where it should be?
 #if 0
         ICONINFO iconInfo;
         if (::GetIconInfo((HICON) (HCURSOR) m_cursor.GetHCURSOR(), & iconInfo) != 0)
@@ -292,9 +294,9 @@ bool wxDragImage::BeginDrag(const wxPoint& hotspot, wxWindow* window, bool fullS
             curHotSpot.y -= iconInfo.yHotspot;
         }
 #endif
-        wxString msg;
-        msg.Printf("Hotspot = %d, %d", curHotSpot.x, curHotSpot.y);
-        wxLogDebug(msg);
+        //wxString msg;
+        //msg.Printf("Hotspot = %d, %d", curHotSpot.x, curHotSpot.y);
+        //wxLogDebug(msg);
 
         // First add the cursor to the image list
         HCURSOR hCursor = (HCURSOR) m_cursor.GetHCURSOR();
