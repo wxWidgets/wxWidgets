@@ -760,7 +760,8 @@ void MyListCtrl::OnListKeyDown(wxListEvent& event)
 {
     switch ( event.GetCode() )
     {
-        case 'c':
+        case 'c': // colorize
+        case 'C':
             {
                 wxListItem info;
                 info.m_itemId = event.GetIndex();
@@ -772,7 +773,26 @@ void MyListCtrl::OnListKeyDown(wxListEvent& event)
                     info.SetTextColour(*wxCYAN);
 
                     SetItem(info);
+
+                    RefreshItem(info.m_itemId);
                 }
+            }
+            break;
+
+        case 'n': // next
+        case 'N':
+            {
+                long item = GetNextItem(-1,
+                                        wxLIST_NEXT_ALL, wxLIST_STATE_FOCUSED);
+                if ( item++ == GetItemCount() - 1 )
+                {
+                    item = 0;
+                }
+
+                wxLogMessage(_T("Focusing item %ld"), item);
+
+                SetItemState(item, wxLIST_STATE_FOCUSED, wxLIST_STATE_FOCUSED);
+                EnsureVisible(item);
             }
             break;
 
@@ -818,7 +838,18 @@ void MyListCtrl::OnChar(wxKeyEvent& event)
 {
     wxLogMessage(_T("Got char event."));
 
-    event.Skip();
+    switch ( event.GetKeyCode() )
+    {
+        case 'n':
+        case 'N':
+        case 'c':
+        case 'C':
+            // these are the keys we process ourselves
+            break;
+
+        default:
+            event.Skip();
+    }
 }
 
 void MyListCtrl::LogEvent(const wxListEvent& event, const wxChar *eventName)

@@ -372,9 +372,6 @@ public:
     bool              m_isCommandEvent;
 
 private:
-    // normally copying the events is a bad idea, so disable this
-    wxEvent& operator=(const wxEvent&);
-
     DECLARE_ABSTRACT_CLASS(wxEvent)
 };
 

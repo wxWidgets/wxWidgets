@@ -359,21 +359,18 @@ private:
 class WXDLLEXPORT wxListEvent : public wxNotifyEvent
 {
 public:
-    wxListEvent(wxEventType commandType = wxEVT_NULL, int id = 0);
-
-    int           m_code;
-    long          m_oldItemIndex; // only for wxEVT_COMMAND_LIST_CACHE_HINT
-    long          m_itemIndex;
-    int           m_col;
-    bool          m_cancelled;
-    wxPoint       m_pointDrag;
-
-    wxListItem    m_item;
+    wxListEvent(wxEventType commandType = wxEVT_NULL, int id = 0)
+        : wxNotifyEvent(commandType, id)
+        {
+            m_code = 0;
+            m_itemIndex =
+            m_oldItemIndex = 0;
+            m_col = 0;
+        }
 
     int GetCode() const { return m_code; }
     long GetIndex() const { return m_itemIndex; }
     int GetColumn() const { return m_col; }
-    bool Cancelled() const { return m_cancelled; }
     wxPoint GetPoint() const { return m_pointDrag; }
     const wxString& GetLabel() const { return m_item.m_text; }
     const wxString& GetText() const { return m_item.m_text; }
@@ -392,7 +389,16 @@ public:
     long GetOldItem() const { return 0; }
 #endif // WXWIN_COMPATIBILITY_2_2
 
-    void CopyObject(wxObject& object_dest) const;
+    virtual wxEvent *Clone() const { return new wxListEvent(*this); }
+
+//protected: -- not for backwards compatibility
+    int           m_code;
+    long          m_oldItemIndex; // only for wxEVT_COMMAND_LIST_CACHE_HINT
+    long          m_itemIndex;
+    int           m_col;
+    wxPoint       m_pointDrag;
+
+    wxListItem    m_item;
 
 private:
     DECLARE_DYNAMIC_CLASS(wxListEvent)

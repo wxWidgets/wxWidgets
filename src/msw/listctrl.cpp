@@ -160,6 +160,8 @@ IMPLEMENT_DYNAMIC_CLASS(wxListCtrl, wxControl)
 IMPLEMENT_DYNAMIC_CLASS(wxListView, wxListCtrl)
 IMPLEMENT_DYNAMIC_CLASS(wxListItem, wxObject)
 
+IMPLEMENT_DYNAMIC_CLASS(wxListEvent, wxNotifyEvent)
+
 BEGIN_EVENT_TABLE(wxListCtrl, wxControl)
     EVT_PAINT(wxListCtrl::OnPaint)
 END_EVENT_TABLE()
@@ -167,41 +169,6 @@ END_EVENT_TABLE()
 // ============================================================================
 // implementation
 // ============================================================================
-
-// ----------------------------------------------------------------------------
-// wxListEvent
-// ----------------------------------------------------------------------------
-
-void wxListEvent::CopyObject(wxObject& object_dest) const
-{
-    wxListEvent *obj = (wxListEvent *)&object_dest;
-
-    wxNotifyEvent::CopyObject(object_dest);
-
-    obj->m_code = m_code;
-    obj->m_itemIndex = m_itemIndex;
-    obj->m_oldItemIndex = m_oldItemIndex;
-    obj->m_col = m_col;
-    obj->m_cancelled = m_cancelled;
-    obj->m_pointDrag = m_pointDrag;
-    obj->m_item.m_mask = m_item.m_mask;
-    obj->m_item.m_itemId = m_item.m_itemId;
-    obj->m_item.m_col = m_item.m_col;
-    obj->m_item.m_state = m_item.m_state;
-    obj->m_item.m_stateMask = m_item.m_stateMask;
-    obj->m_item.m_text = m_item.m_text;
-    obj->m_item.m_image = m_item.m_image;
-    obj->m_item.m_data = m_item.m_data;
-    obj->m_item.m_format = m_item.m_format;
-    obj->m_item.m_width = m_item.m_width;
-
-    if ( m_item.HasAttributes() )
-    {
-        obj->m_item.SetTextColour(m_item.GetTextColour());
-        obj->m_item.SetBackgroundColour(m_item.GetBackgroundColour());
-        obj->m_item.SetFont(m_item.GetFont());
-    }
-}
 
 // ----------------------------------------------------------------------------
 // wxListCtrl construction
@@ -702,12 +669,17 @@ bool wxListCtrl::SetItem(wxListItem& info)
     LV_ITEM item;
     wxConvertToMSWListItem(this, info, item);
 
-    item.cchTextMax = 0;
-    if ( !ListView_SetItem(GetHwnd(), &item) )
+    // we could be changing only the attribute in which case we don't need to
+    // call ListView_SetItem() at all
+    if ( item.mask )
     {
-        wxLogDebug(_T("ListView_SetItem() failed"));
+        item.cchTextMax = 0;
+        if ( !ListView_SetItem(GetHwnd(), &item) )
+        {
+            wxLogDebug(_T("ListView_SetItem() failed"));
 
-        return FALSE;
+            return FALSE;
+        }
     }
 
     // we need to update the item immediately to show the new image
@@ -732,7 +704,7 @@ bool wxListCtrl::SetItem(wxListItem& info)
     if ( updateNow )
     {
         // we need this to make the change visible right now
-        ListView_Update(GetHwnd(), item.iItem);
+        RefreshItem(item.iItem);
     }
 
     return TRUE;
@@ -779,12 +751,32 @@ bool wxListCtrl::SetItemState(long item, long state, long stateMask)
 
     wxConvertToMSWFlags(state, stateMask, lvItem);
 
+    // for the virtual list controls we need to refresh the previously focused
+    // item manually when changing focus programmatically because otherwise it
+    // keeps its focus rectangle until next repaint (yet another comctl32 bug)
+    long focusOld;
+    if ( IsVirtual() &&
+         (stateMask & wxLIST_STATE_FOCUSED) &&
+         (state & wxLIST_STATE_FOCUSED) )
+    {
+        focusOld = GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_FOCUSED);
+    }
+    else
+    {
+        focusOld = -1;
+    }
+
     if ( !::SendMessage(GetHwnd(), LVM_SETITEMSTATE,
                         (WPARAM)item, (LPARAM)&lvItem) )
     {
         wxLogLastError(_T("ListView_SetItemState"));
 
         return FALSE;
+    }
+
+    if ( focusOld != -1 )
+    {
+        RefreshItem(focusOld);
     }
 
     return TRUE;
@@ -855,26 +847,33 @@ bool wxListCtrl::SetItemData(long item, long data)
 // Gets the item rectangle
 bool wxListCtrl::GetItemRect(long item, wxRect& rect, int code) const
 {
-    RECT rect2;
+    RECT rectWin;
 
-    int code2 = LVIR_BOUNDS;
+    int codeWin;
     if ( code == wxLIST_RECT_BOUNDS )
-        code2 = LVIR_BOUNDS;
+        codeWin = LVIR_BOUNDS;
     else if ( code == wxLIST_RECT_ICON )
-        code2 = LVIR_ICON;
+        codeWin = LVIR_ICON;
     else if ( code == wxLIST_RECT_LABEL )
-        code2 = LVIR_LABEL;
+        codeWin = LVIR_LABEL;
+    else
+    {
+        wxFAIL_MSG( _T("incorrect code in GetItemRect()") );
+
+        codeWin = LVIR_BOUNDS;
+    }
 
 #ifdef __WXWINE__
-    bool success = (ListView_GetItemRect(GetHwnd(), (int) item, &rect2 ) != 0);
+    bool success = ListView_GetItemRect(GetHwnd(), (int) item, &rectWin ) != 0;
 #else
-    bool success = (ListView_GetItemRect(GetHwnd(), (int) item, &rect2, code2) != 0);
+    bool success = ListView_GetItemRect(GetHwnd(), (int) item, &rectWin, codeWin) != 0;
 #endif
 
-    rect.x = rect2.left;
-    rect.y = rect2.top;
-    rect.width = rect2.right - rect2.left;
-    rect.height = rect2.bottom - rect2.top;
+    rect.x = rectWin.left;
+    rect.y = rectWin.top;
+    rect.width = rectWin.right - rectWin.left;
+    rect.height = rectWin.bottom - rectWin.top;
+
     return success;
 }
 
@@ -2108,10 +2107,18 @@ void wxListCtrl::SetItemCount(long count)
 
 void wxListCtrl::RefreshItem(long item)
 {
+    // strangely enough, ListView_Update() results in much more flicker here
+    // than a dumb Refresh() -- why?
+#if 0
     if ( !ListView_Update(GetHwnd(), item) )
     {
         wxLogLastError(_T("ListView_Update"));
     }
+#else // 1
+    wxRect rect;
+    GetItemRect(item, rect);
+    RefreshRect(rect);
+#endif // 0/1
 }
 
 void wxListCtrl::RefreshItems(long itemFrom, long itemTo)
@@ -2370,22 +2377,6 @@ static void wxConvertToMSWListCol(int col, const wxListItem& item,
         //else: it doesn't support item images anyhow
     }
 #endif
-}
-
-// ----------------------------------------------------------------------------
-// List event
-// ----------------------------------------------------------------------------
-
-IMPLEMENT_DYNAMIC_CLASS(wxListEvent, wxNotifyEvent)
-
-wxListEvent::wxListEvent(wxEventType commandType, int id)
-           : wxNotifyEvent(commandType, id)
-{
-    m_code = 0;
-    m_itemIndex = 0;
-    m_oldItemIndex = 0;
-    m_col = 0;
-    m_cancelled = FALSE;
 }
 
 #endif // wxUSE_LISTCTRL
