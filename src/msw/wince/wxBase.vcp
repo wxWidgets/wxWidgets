@@ -1,0 +1,3033 @@
+# Microsoft eMbedded Visual Tools Project File - Name="wxBase" - Package Owner=<4>
+# Microsoft eMbedded Visual Tools Generated Build File, Format Version 6.02
+# ** DO NOT EDIT **
+
+# TARGTYPE "Win32 (WCE x86em) Dynamic-Link Library" 0x7f02
+# TARGTYPE "Win32 (WCE ARM) Dynamic-Link Library" 0x8502
+
+CFG=wxBase - Win32 (WCE ARM) Debug
+!MESSAGE This is not a valid makefile. To build this project using NMAKE,
+!MESSAGE use the Export Makefile command and run
+!MESSAGE 
+!MESSAGE NMAKE /f "wxBase.vcn".
+!MESSAGE 
+!MESSAGE You can specify a configuration when running NMAKE
+!MESSAGE by defining the macro CFG on the command line. For example:
+!MESSAGE 
+!MESSAGE NMAKE /f "wxBase.vcn" CFG="wxBase - Win32 (WCE ARM) Debug"
+!MESSAGE 
+!MESSAGE Possible choices for configuration are:
+!MESSAGE 
+!MESSAGE "wxBase - Win32 (WCE ARM) Release" (based on "Win32 (WCE ARM) Dynamic-Link Library")
+!MESSAGE "wxBase - Win32 (WCE ARM) Debug" (based on "Win32 (WCE ARM) Dynamic-Link Library")
+!MESSAGE "wxBase - Win32 (WCE x86em) Release" (based on "Win32 (WCE x86em) Dynamic-Link Library")
+!MESSAGE "wxBase - Win32 (WCE x86em) Debug" (based on "Win32 (WCE x86em) Dynamic-Link Library")
+!MESSAGE 
+
+# Begin Project
+# PROP AllowPerConfigDependencies 0
+# PROP Scc_ProjName ""
+# PROP Scc_LocalPath ""
+# PROP ATL_Project 2
+
+!IF  "$(CFG)" == "wxBase - Win32 (WCE ARM) Release"
+
+# PROP BASE Use_MFC 0
+# PROP BASE Use_Debug_Libraries 0
+# PROP BASE Output_Dir "ARMRel"
+# PROP BASE Intermediate_Dir "ARMRel"
+# PROP BASE CPU_ID "{D6518FFC-710F-11D3-99F2-00105A0DF099}"
+# PROP BASE Platform_ID "{8A9A2F80-6887-11D3-842E-005004848CBA}"
+# PROP BASE Target_Dir ""
+# PROP Use_MFC 0
+# PROP Use_Debug_Libraries 0
+# PROP Output_Dir "wxBase_ARMRel"
+# PROP Intermediate_Dir "wxBase_ARMRel"
+# PROP CPU_ID "{D6518FFC-710F-11D3-99F2-00105A0DF099}"
+# PROP Platform_ID "{8A9A2F80-6887-11D3-842E-005004848CBA}"
+# PROP Target_Dir ""
+RSC=rc.exe
+# ADD BASE RSC /l 0x409 /d UNDER_CE=$(CEVersion) /d _WIN32_WCE=$(CEVersion) /d "UNICODE" /d "_UNICODE" /d "NDEBUG" /d "$(CePlatform)" /d "ARM" /d "_ARM_" /r
+# ADD RSC /l 0x409 /d UNDER_CE=$(CEVersion) /d _WIN32_WCE=$(CEVersion) /d "UNICODE" /d "_UNICODE" /d "NDEBUG" /d "$(CePlatform)" /d "ARM" /d "_ARM_" /r
+CPP=clarm.exe
+# ADD BASE CPP /nologo /W3 /D _WIN32_WCE=$(CEVersion) /D "$(CePlatform)" /D "ARM" /D "_ARM_" /D UNDER_CE=$(CEVersion) /D "UNICODE" /D "_UNICODE" /D "NDEBUG" /D "_USRDLL" /D "WXBASE_EXPORTS" /Yu"stdafx.h" /Oxs /M$(CECrtMT) /c
+# ADD CPP /nologo /W3 /D "ARM" /D "_ARM_" /D "NDEBUG" /D "__WXWINCE__" /D _WIN32_WCE=$(CEVersion) /D "$(CePlatform)" /D UNDER_CE=$(CEVersion) /D "UNICODE" /D "_UNICODE" /D "_USRDLL" /D "WXBASE_EXPORTS" /Yu"stdafx.h" /Oxs /M$(CECrtMT) /c
+MTL=midl.exe
+# ADD BASE MTL /nologo /D "NDEBUG" /mktyplib203 /o "NUL" /win32
+# ADD MTL /nologo /D "NDEBUG" /mktyplib203 /o "NUL" /win32
+BSC32=bscmake.exe
+# ADD BASE BSC32 /nologo
+# ADD BSC32 /nologo
+LINK32=link.exe
+# ADD BASE LINK32 commctrl.lib coredll.lib /nologo /base:"0x00100000" /stack:0x10000,0x1000 /entry:"_DllMainCRTStartup" /dll /nodefaultlib:"$(CENoDefaultLib)" /subsystem:$(CESubsystem) /align:"4096" /MACHINE:ARM
+# ADD LINK32 commctrl.lib coredll.lib /nologo /base:"0x00100000" /stack:0x10000,0x1000 /entry:"_DllMainCRTStartup" /dll /nodefaultlib:"$(CENoDefaultLib)" /subsystem:$(CESubsystem) /align:"4096" /MACHINE:ARM
+
+!ELSEIF  "$(CFG)" == "wxBase - Win32 (WCE ARM) Debug"
+
+# PROP BASE Use_MFC 0
+# PROP BASE Use_Debug_Libraries 1
+# PROP BASE Output_Dir "ARMDbg"
+# PROP BASE Intermediate_Dir "ARMDbg"
+# PROP BASE CPU_ID "{D6518FFC-710F-11D3-99F2-00105A0DF099}"
+# PROP BASE Platform_ID "{8A9A2F80-6887-11D3-842E-005004848CBA}"
+# PROP BASE Target_Dir ""
+# PROP Use_MFC 0
+# PROP Use_Debug_Libraries 1
+# PROP Output_Dir "wxBase_ARMDbg"
+# PROP Intermediate_Dir "wxBase_ARMDbg"
+# PROP CPU_ID "{D6518FFC-710F-11D3-99F2-00105A0DF099}"
+# PROP Platform_ID "{8A9A2F80-6887-11D3-842E-005004848CBA}"
+# PROP Target_Dir ""
+RSC=rc.exe
+# ADD BASE RSC /l 0x409 /d UNDER_CE=$(CEVersion) /d _WIN32_WCE=$(CEVersion) /d "UNICODE" /d "_UNICODE" /d "DEBUG" /d "$(CePlatform)" /d "ARM" /d "_ARM_" /r
+# ADD RSC /l 0x409 /d UNDER_CE=$(CEVersion) /d _WIN32_WCE=$(CEVersion) /d "UNICODE" /d "_UNICODE" /d "DEBUG" /d "$(CePlatform)" /d "ARM" /d "_ARM_" /r
+CPP=clarm.exe
+# ADD BASE CPP /nologo /W3 /Zi /Od /D "DEBUG" /D _WIN32_WCE=$(CEVersion) /D "$(CePlatform)" /D "ARM" /D "_ARM_" /D UNDER_CE=$(CEVersion) /D "UNICODE" /D "_UNICODE" /D "_USRDLL" /D "WXBASE_EXPORTS" /Yu"stdafx.h" /M$(CECrtMTDebug) /c
+# ADD CPP /nologo /W3 /Zi /Od /D "DEBUG" /D "ARM" /D "_ARM_" /D "__WXWINCE__" /D _WIN32_WCE=$(CEVersion) /D "$(CePlatform)" /D UNDER_CE=$(CEVersion) /D "UNICODE" /D "_UNICODE" /D "_USRDLL" /D "WXBASE_EXPORTS" /Yu"stdafx.h" /M$(CECrtMTDebug) /c
+MTL=midl.exe
+# ADD BASE MTL /nologo /D "_DEBUG" /mktyplib203 /o "NUL" /win32
+# ADD MTL /nologo /D "_DEBUG" /mktyplib203 /o "NUL" /win32
+BSC32=bscmake.exe
+# ADD BASE BSC32 /nologo
+# ADD BSC32 /nologo
+LINK32=link.exe
+# ADD BASE LINK32 commctrl.lib coredll.lib /nologo /base:"0x00100000" /stack:0x10000,0x1000 /entry:"_DllMainCRTStartup" /dll /debug /nodefaultlib:"$(CENoDefaultLib)" /subsystem:$(CESubsystem) /align:"4096" /MACHINE:ARM
+# ADD LINK32 commctrl.lib coredll.lib /nologo /base:"0x00100000" /stack:0x10000,0x1000 /entry:"_DllMainCRTStartup" /dll /debug /nodefaultlib:"$(CENoDefaultLib)" /subsystem:$(CESubsystem) /align:"4096" /MACHINE:ARM
+
+!ELSEIF  "$(CFG)" == "wxBase - Win32 (WCE x86em) Release"
+
+# PROP BASE Use_MFC 0
+# PROP BASE Use_Debug_Libraries 0
+# PROP BASE Output_Dir "X86EMRel"
+# PROP BASE Intermediate_Dir "X86EMRel"
+# PROP BASE CPU_ID "{D6518FF4-710F-11D3-99F2-00105A0DF099}"
+# PROP BASE Platform_ID "{8A9A2F80-6887-11D3-842E-005004848CBA}"
+# PROP BASE Target_Dir ""
+# PROP Use_MFC 0
+# PROP Use_Debug_Libraries 0
+# PROP Output_Dir "wxBase_X86EMRel"
+# PROP Intermediate_Dir "wxBase_X86EMRel"
+# PROP CPU_ID "{D6518FF4-710F-11D3-99F2-00105A0DF099}"
+# PROP Platform_ID "{8A9A2F80-6887-11D3-842E-005004848CBA}"
+# PROP Target_Dir ""
+RSC=rc.exe
+# ADD BASE RSC /l 0x409 /d UNDER_CE=$(CEVersion) /d _WIN32_WCE=$(CEVersion) /d "UNICODE" /d "_UNICODE" /d "NDEBUG" /d "$(CePlatform)" /d "_X86_" /d "x86" /d "i486" /r
+# ADD RSC /l 0x409 /d UNDER_CE=$(CEVersion) /d _WIN32_WCE=$(CEVersion) /d "UNICODE" /d "_UNICODE" /d "NDEBUG" /d "$(CePlatform)" /d "_X86_" /d "x86" /d "i486" /r
+CPP=cl.exe
+# ADD BASE CPP /nologo /W3 /D _WIN32_WCE=$(CEVersion) /D "WIN32" /D "STRICT" /D "_WIN32_WCE_EMULATION" /D "INTERNATIONAL" /D "USA" /D "INTLMSG_CODEPAGE" /D "$(CePlatform)" /D "i486" /D UNDER_CE=$(CEVersion) /D "UNICODE" /D "_UNICODE" /D "_X86_" /D "x86" /D "NDEBUG" /D "_USRDLL" /D "WXBASE_EXPORTS" /Yu"stdafx.h" /Gz /Oxs /c
+# ADD CPP /nologo /W3 /D "WIN32" /D "STRICT" /D "_WIN32_WCE_EMULATION" /D "INTERNATIONAL" /D "USA" /D "INTLMSG_CODEPAGE" /D "i486" /D "_X86_" /D "x86" /D "NDEBUG" /D "__WXWINCE__" /D _WIN32_WCE=$(CEVersion) /D "$(CePlatform)" /D UNDER_CE=$(CEVersion) /D "UNICODE" /D "_UNICODE" /D "_USRDLL" /D "WXBASE_EXPORTS" /Yu"stdafx.h" /Gz /Oxs /c
+MTL=midl.exe
+# ADD BASE MTL /nologo /D "NDEBUG" /mktyplib203 /o "NUL" /win32
+# ADD MTL /nologo /D "NDEBUG" /mktyplib203 /o "NUL" /win32
+BSC32=bscmake.exe
+# ADD BASE BSC32 /nologo
+# ADD BSC32 /nologo
+LINK32=link.exe
+# ADD BASE LINK32 commctrl.lib coredll.lib $(CEx86Corelibc) /nologo /stack:0x10000,0x1000 /dll /nodefaultlib:"OLDNAMES.lib" /nodefaultlib:$(CENoDefaultLib) /windowsce:emulation /MACHINE:IX86
+# ADD LINK32 commctrl.lib coredll.lib $(CEx86Corelibc) /nologo /stack:0x10000,0x1000 /dll /nodefaultlib:"OLDNAMES.lib" /nodefaultlib:$(CENoDefaultLib) /windowsce:emulation /MACHINE:IX86
+
+!ELSEIF  "$(CFG)" == "wxBase - Win32 (WCE x86em) Debug"
+
+# PROP BASE Use_MFC 0
+# PROP BASE Use_Debug_Libraries 1
+# PROP BASE Output_Dir "X86EMDbg"
+# PROP BASE Intermediate_Dir "X86EMDbg"
+# PROP BASE CPU_ID "{D6518FF4-710F-11D3-99F2-00105A0DF099}"
+# PROP BASE Platform_ID "{8A9A2F80-6887-11D3-842E-005004848CBA}"
+# PROP BASE Target_Dir ""
+# PROP Use_MFC 0
+# PROP Use_Debug_Libraries 1
+# PROP Output_Dir "wxBase_X86EMDbg"
+# PROP Intermediate_Dir "wxBase_X86EMDbg"
+# PROP CPU_ID "{D6518FF4-710F-11D3-99F2-00105A0DF099}"
+# PROP Platform_ID "{8A9A2F80-6887-11D3-842E-005004848CBA}"
+# PROP Target_Dir ""
+RSC=rc.exe
+# ADD BASE RSC /l 0x409 /d UNDER_CE=$(CEVersion) /d _WIN32_WCE=$(CEVersion) /d "UNICODE" /d "_UNICODE" /d "DEBUG" /d "$(CePlatform)" /d "_X86_" /d "x86" /d "i486" /r
+# ADD RSC /l 0x409 /d UNDER_CE=$(CEVersion) /d _WIN32_WCE=$(CEVersion) /d "UNICODE" /d "_UNICODE" /d "DEBUG" /d "$(CePlatform)" /d "_X86_" /d "x86" /d "i486" /r
+CPP=cl.exe
+# ADD BASE CPP /nologo /W3 /Zi /Od /D "DEBUG" /D _WIN32_WCE=$(CEVersion) /D "WIN32" /D "STRICT" /D "_WIN32_WCE_EMULATION" /D "INTERNATIONAL" /D "USA" /D "INTLMSG_CODEPAGE" /D "$(CePlatform)" /D "i486" /D UNDER_CE=$(CEVersion) /D "UNICODE" /D "_UNICODE" /D "_X86_" /D "x86" /D "_USRDLL" /D "WXBASE_EXPORTS" /Yu"stdafx.h" /Gz /c
+# ADD CPP /nologo /W3 /Zi /Od /D "DEBUG" /D "WIN32" /D "STRICT" /D "_WIN32_WCE_EMULATION" /D "INTERNATIONAL" /D "USA" /D "INTLMSG_CODEPAGE" /D "i486" /D "_X86_" /D "x86" /D "__WXWINCE__" /D _WIN32_WCE=$(CEVersion) /D "$(CePlatform)" /D UNDER_CE=$(CEVersion) /D "UNICODE" /D "_UNICODE" /D "_USRDLL" /D "WXBASE_EXPORTS" /Yu"stdafx.h" /Gz /c
+MTL=midl.exe
+# ADD BASE MTL /nologo /D "_DEBUG" /mktyplib203 /o "NUL" /win32
+# ADD MTL /nologo /D "_DEBUG" /mktyplib203 /o "NUL" /win32
+BSC32=bscmake.exe
+# ADD BASE BSC32 /nologo
+# ADD BSC32 /nologo
+LINK32=link.exe
+# ADD BASE LINK32 commctrl.lib coredll.lib $(CEx86Corelibc) /nologo /stack:0x10000,0x1000 /dll /debug /nodefaultlib:"OLDNAMES.lib" /nodefaultlib:$(CENoDefaultLib) /windowsce:emulation /MACHINE:IX86
+# ADD LINK32 commctrl.lib coredll.lib $(CEx86Corelibc) /nologo /stack:0x10000,0x1000 /dll /debug /nodefaultlib:"OLDNAMES.lib" /nodefaultlib:$(CENoDefaultLib) /windowsce:emulation /MACHINE:IX86
+
+!ENDIF 
+
+# Begin Target
+
+# Name "wxBase - Win32 (WCE ARM) Release"
+# Name "wxBase - Win32 (WCE ARM) Debug"
+# Name "wxBase - Win32 (WCE x86em) Release"
+# Name "wxBase - Win32 (WCE x86em) Debug"
+# Begin Group "Source Files"
+
+# PROP Default_Filter "cpp;c;cxx;rc;def;r;odl;idl;hpj;bat"
+# End Group
+# Begin Group "Header Files"
+
+# PROP Default_Filter "h;hpp;hxx;hm;inl"
+# End Group
+# Begin Group "Resource Files"
+
+# PROP Default_Filter "ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe"
+# End Group
+# Begin Group "WinCE files"
+
+# PROP Default_Filter "CPP"
+# Begin Source File
+
+SOURCE=.\dummy.cpp
+
+!IF  "$(CFG)" == "wxBase - Win32 (WCE ARM) Release"
+
+NODEP_CPP_DUMMY=\
+	".\wx\wxprec.h"\
+	
+# ADD CPP /Yc"wx/wxprec.h"
+
+!ELSEIF  "$(CFG)" == "wxBase - Win32 (WCE ARM) Debug"
+
+NODEP_CPP_DUMMY=\
+	".\wx\wxprec.h"\
+	
+# ADD CPP /Yc"wx/wxprec.h"
+
+!ELSEIF  "$(CFG)" == "wxBase - Win32 (WCE x86em) Release"
+
+DEP_CPP_DUMMY=\
+	{$(INCLUDE)}"wx\accel.h"\
+	{$(INCLUDE)}"wx\app.h"\
+	{$(INCLUDE)}"wx\bitmap.h"\
+	{$(INCLUDE)}"wx\bmpbuttn.h"\
+	{$(INCLUDE)}"wx\brush.h"\
+	{$(INCLUDE)}"wx\buffer.h"\
+	{$(INCLUDE)}"wx\build.h"\
+	{$(INCLUDE)}"wx\button.h"\
+	{$(INCLUDE)}"wx\checkbox.h"\
+	{$(INCLUDE)}"wx\checklst.h"\
+	{$(INCLUDE)}"wx\chkconf.h"\
+	{$(INCLUDE)}"wx\choicdlg.h"\
+	{$(INCLUDE)}"wx\choice.h"\
+	{$(INCLUDE)}"wx\clntdata.h"\
+	{$(INCLUDE)}"wx\cmndata.h"\
+	{$(INCLUDE)}"wx\colour.h"\
+	{$(INCLUDE)}"wx\combobox.h"\
+	{$(INCLUDE)}"wx\containr.h"\
+	{$(INCLUDE)}"wx\control.h"\
+	{$(INCLUDE)}"wx\ctrlsub.h"\
+	{$(INCLUDE)}"wx\cursor.h"\
+	{$(INCLUDE)}"wx\dc.h"\
+	{$(INCLUDE)}"wx\dcclient.h"\
+	{$(INCLUDE)}"wx\dcmemory.h"\
+	{$(INCLUDE)}"wx\dcprint.h"\
+	{$(INCLUDE)}"wx\dcscreen.h"\
+	{$(INCLUDE)}"wx\debug.h"\
+	{$(INCLUDE)}"wx\defs.h"\
+	{$(INCLUDE)}"wx\dialog.h"\
+	{$(INCLUDE)}"wx\dirdlg.h"\
+	{$(INCLUDE)}"wx\dynarray.h"\
+	{$(INCLUDE)}"wx\event.h"\
+	{$(INCLUDE)}"wx\features.h"\
+	{$(INCLUDE)}"wx\filedlg.h"\
+	{$(INCLUDE)}"wx\filefn.h"\
+	{$(INCLUDE)}"wx\font.h"\
+	{$(INCLUDE)}"wx\fontenc.h"\
+	{$(INCLUDE)}"wx\frame.h"\
+	{$(INCLUDE)}"wx\gauge.h"\
+	{$(INCLUDE)}"wx\gdicmn.h"\
+	{$(INCLUDE)}"wx\gdiobj.h"\
+	{$(INCLUDE)}"wx\generic\accel.h"\
+	{$(INCLUDE)}"wx\generic\choicdgg.h"\
+	{$(INCLUDE)}"wx\generic\dirdlgg.h"\
+	{$(INCLUDE)}"wx\generic\filedlgg.h"\
+	{$(INCLUDE)}"wx\generic\imaglist.h"\
+	{$(INCLUDE)}"wx\generic\mdig.h"\
+	{$(INCLUDE)}"wx\generic\msgdlgg.h"\
+	{$(INCLUDE)}"wx\generic\notebook.h"\
+	{$(INCLUDE)}"wx\generic\paletteg.h"\
+	{$(INCLUDE)}"wx\generic\panelg.h"\
+	{$(INCLUDE)}"wx\generic\scrolwin.h"\
+	{$(INCLUDE)}"wx\generic\statusbr.h"\
+	{$(INCLUDE)}"wx\generic\tabg.h"\
+	{$(INCLUDE)}"wx\generic\textdlgg.h"\
+	{$(INCLUDE)}"wx\generic\timer.h"\
+	{$(INCLUDE)}"wx\hash.h"\
+	{$(INCLUDE)}"wx\icon.h"\
+	{$(INCLUDE)}"wx\iconbndl.h"\
+	{$(INCLUDE)}"wx\imaglist.h"\
+	{$(INCLUDE)}"wx\intl.h"\
+	{$(INCLUDE)}"wx\ioswrap.h"\
+	{$(INCLUDE)}"wx\layout.h"\
+	{$(INCLUDE)}"wx\list.h"\
+	{$(INCLUDE)}"wx\listbox.h"\
+	{$(INCLUDE)}"wx\log.h"\
+	{$(INCLUDE)}"wx\longlong.h"\
+	{$(INCLUDE)}"wx\mdi.h"\
+	{$(INCLUDE)}"wx\memory.h"\
+	{$(INCLUDE)}"wx\menu.h"\
+	{$(INCLUDE)}"wx\menuitem.h"\
+	{$(INCLUDE)}"wx\module.h"\
+	{$(INCLUDE)}"wx\msgdlg.h"\
+	{$(INCLUDE)}"wx\msw\accel.h"\
+	{$(INCLUDE)}"wx\msw\app.h"\
+	{$(INCLUDE)}"wx\msw\bitmap.h"\
+	{$(INCLUDE)}"wx\msw\bmpbuttn.h"\
+	{$(INCLUDE)}"wx\msw\brush.h"\
+	{$(INCLUDE)}"wx\msw\button.h"\
+	{$(INCLUDE)}"wx\msw\checkbox.h"\
+	{$(INCLUDE)}"wx\msw\checklst.h"\
+	{$(INCLUDE)}"wx\msw\choice.h"\
+	{$(INCLUDE)}"wx\msw\colour.h"\
+	{$(INCLUDE)}"wx\msw\combobox.h"\
+	{$(INCLUDE)}"wx\msw\control.h"\
+	{$(INCLUDE)}"wx\msw\cursor.h"\
+	{$(INCLUDE)}"wx\msw\dc.h"\
+	{$(INCLUDE)}"wx\msw\dcclient.h"\
+	{$(INCLUDE)}"wx\msw\dcmemory.h"\
+	{$(INCLUDE)}"wx\msw\dcprint.h"\
+	{$(INCLUDE)}"wx\msw\dcscreen.h"\
+	{$(INCLUDE)}"wx\msw\dialog.h"\
+	{$(INCLUDE)}"wx\msw\dirdlg.h"\
+	{$(INCLUDE)}"wx\msw\filedlg.h"\
+	{$(INCLUDE)}"wx\msw\font.h"\
+	{$(INCLUDE)}"wx\msw\frame.h"\
+	{$(INCLUDE)}"wx\msw\gauge95.h"\
+	{$(INCLUDE)}"wx\msw\gaugemsw.h"\
+	{$(INCLUDE)}"wx\msw\gccpriv.h"\
+	{$(INCLUDE)}"wx\msw\gdiimage.h"\
+	{$(INCLUDE)}"wx\msw\gdiobj.h"\
+	{$(INCLUDE)}"wx\msw\icon.h"\
+	{$(INCLUDE)}"wx\msw\imaglist.h"\
+	{$(INCLUDE)}"wx\msw\listbox.h"\
+	{$(INCLUDE)}"wx\msw\mdi.h"\
+	{$(INCLUDE)}"wx\msw\menu.h"\
+	{$(INCLUDE)}"wx\msw\menuitem.h"\
+	{$(INCLUDE)}"wx\msw\msgdlg.h"\
+	{$(INCLUDE)}"wx\msw\notebook.h"\
+	{$(INCLUDE)}"wx\msw\palette.h"\
+	{$(INCLUDE)}"wx\msw\pen.h"\
+	{$(INCLUDE)}"wx\msw\radiobox.h"\
+	{$(INCLUDE)}"wx\msw\radiobut.h"\
+	{$(INCLUDE)}"wx\msw\region.h"\
+	{$(INCLUDE)}"wx\msw\scrolbar.h"\
+	{$(INCLUDE)}"wx\msw\slider95.h"\
+	{$(INCLUDE)}"wx\msw\slidrmsw.h"\
+	{$(INCLUDE)}"wx\msw\statbmp.h"\
+	{$(INCLUDE)}"wx\msw\statbox.h"\
+	{$(INCLUDE)}"wx\msw\statbr95.h"\
+	{$(INCLUDE)}"wx\msw\stattext.h"\
+	{$(INCLUDE)}"wx\msw\tbar95.h"\
+	{$(INCLUDE)}"wx\msw\tbarmsw.h"\
+	{$(INCLUDE)}"wx\msw\textctrl.h"\
+	{$(INCLUDE)}"wx\msw\timer.h"\
+	{$(INCLUDE)}"wx\msw\toplevel.h"\
+	{$(INCLUDE)}"wx\msw\window.h"\
+	{$(INCLUDE)}"wx\msw\winundef.h"\
+	{$(INCLUDE)}"wx\notebook.h"\
+	{$(INCLUDE)}"wx\object.h"\
+	{$(INCLUDE)}"wx\ownerdrw.h"\
+	{$(INCLUDE)}"wx\palette.h"\
+	{$(INCLUDE)}"wx\panel.h"\
+	{$(INCLUDE)}"wx\pen.h"\
+	{$(INCLUDE)}"wx\platform.h"\
+	{$(INCLUDE)}"wx\radiobox.h"\
+	{$(INCLUDE)}"wx\radiobut.h"\
+	{$(INCLUDE)}"wx\region.h"\
+	{$(INCLUDE)}"wx\scrolbar.h"\
+	{$(INCLUDE)}"wx\scrolwin.h"\
+	{$(INCLUDE)}"wx\settings.h"\
+	{$(INCLUDE)}"wx\setup.h"\
+	{$(INCLUDE)}"wx\sizer.h"\
+	{$(INCLUDE)}"wx\slider.h"\
+	{$(INCLUDE)}"wx\statbmp.h"\
+	{$(INCLUDE)}"wx\statbox.h"\
+	{$(INCLUDE)}"wx\stattext.h"\
+	{$(INCLUDE)}"wx\statusbr.h"\
+	{$(INCLUDE)}"wx\strconv.h"\
+	{$(INCLUDE)}"wx\stream.h"\
+	{$(INCLUDE)}"wx\string.h"\
+	{$(INCLUDE)}"wx\tbarbase.h"\
+	{$(INCLUDE)}"wx\tbarsmpl.h"\
+	{$(INCLUDE)}"wx\textctrl.h"\
+	{$(INCLUDE)}"wx\textdlg.h"\
+	{$(INCLUDE)}"wx\thread.h"\
+	{$(INCLUDE)}"wx\timer.h"\
+	{$(INCLUDE)}"wx\toolbar.h"\
+	{$(INCLUDE)}"wx\toplevel.h"\
+	{$(INCLUDE)}"wx\univ\bmpbuttn.h"\
+	{$(INCLUDE)}"wx\univ\button.h"\
+	{$(INCLUDE)}"wx\univ\checkbox.h"\
+	{$(INCLUDE)}"wx\univ\checklst.h"\
+	{$(INCLUDE)}"wx\univ\choice.h"\
+	{$(INCLUDE)}"wx\univ\combobox.h"\
+	{$(INCLUDE)}"wx\univ\control.h"\
+	{$(INCLUDE)}"wx\univ\dialog.h"\
+	{$(INCLUDE)}"wx\univ\frame.h"\
+	{$(INCLUDE)}"wx\univ\gauge.h"\
+	{$(INCLUDE)}"wx\univ\inpcons.h"\
+	{$(INCLUDE)}"wx\univ\inphand.h"\
+	{$(INCLUDE)}"wx\univ\listbox.h"\
+	{$(INCLUDE)}"wx\univ\menu.h"\
+	{$(INCLUDE)}"wx\univ\menuitem.h"\
+	{$(INCLUDE)}"wx\univ\notebook.h"\
+	{$(INCLUDE)}"wx\univ\radiobox.h"\
+	{$(INCLUDE)}"wx\univ\radiobut.h"\
+	{$(INCLUDE)}"wx\univ\scrarrow.h"\
+	{$(INCLUDE)}"wx\univ\scrolbar.h"\
+	{$(INCLUDE)}"wx\univ\scrthumb.h"\
+	{$(INCLUDE)}"wx\univ\slider.h"\
+	{$(INCLUDE)}"wx\univ\statbmp.h"\
+	{$(INCLUDE)}"wx\univ\statbox.h"\
+	{$(INCLUDE)}"wx\univ\stattext.h"\
+	{$(INCLUDE)}"wx\univ\statusbr.h"\
+	{$(INCLUDE)}"wx\univ\textctrl.h"\
+	{$(INCLUDE)}"wx\univ\theme.h"\
+	{$(INCLUDE)}"wx\univ\toolbar.h"\
+	{$(INCLUDE)}"wx\univ\toplevel.h"\
+	{$(INCLUDE)}"wx\univ\window.h"\
+	{$(INCLUDE)}"wx\utils.h"\
+	{$(INCLUDE)}"wx\validate.h"\
+	{$(INCLUDE)}"wx\valtext.h"\
+	{$(INCLUDE)}"wx\version.h"\
+	{$(INCLUDE)}"wx\wince\gdiobj.h"\
+	{$(INCLUDE)}"wx\window.h"\
+	{$(INCLUDE)}"wx\wx.h"\
+	{$(INCLUDE)}"wx\wxchar.h"\
+	{$(INCLUDE)}"wx\wxprec.h"\
+	
+NODEP_CPP_DUMMY=\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\gtk\accel.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\gtk\app.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\gtk\bitmap.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\gtk\bmpbuttn.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\gtk\brush.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\gtk\button.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\gtk\checkbox.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\gtk\checklst.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\gtk\choice.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\gtk\colour.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\gtk\combobox.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\gtk\control.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\gtk\cursor.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\gtk\dc.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\gtk\dcclient.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\gtk\dcmemory.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\gtk\dcscreen.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\gtk\dialog.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\gtk\font.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\gtk\frame.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\gtk\gauge.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\gtk\gdiobj.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\gtk\icon.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\gtk\listbox.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\gtk\mdi.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\gtk\menu.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\gtk\menuitem.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\gtk\notebook.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\gtk\pen.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\gtk\radiobox.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\gtk\radiobut.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\gtk\region.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\gtk\scrolbar.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\gtk\scrolwin.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\gtk\slider.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\gtk\statbmp.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\gtk\statbox.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\gtk\stattext.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\gtk\tbargtk.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\gtk\textctrl.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\gtk\timer.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\gtk\toplevel.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\gtk\window.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mac\accel.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mac\app.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mac\bitmap.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mac\bmpbuttn.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mac\brush.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mac\button.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mac\checkbox.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mac\checklst.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mac\choice.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mac\colour.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mac\combobox.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mac\control.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mac\cursor.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mac\dc.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mac\dcclient.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mac\dcmemory.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mac\dcprint.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mac\dcscreen.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mac\dialog.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mac\dirdlg.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mac\filedlg.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mac\font.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mac\frame.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mac\gauge.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mac\gdiobj.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mac\icon.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mac\listbox.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mac\mdi.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mac\menu.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mac\menuitem.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mac\msgdlg.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mac\notebook.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mac\palette.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mac\pen.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mac\radiobox.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mac\radiobut.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mac\region.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mac\scrolbar.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mac\slider.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mac\statbmp.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mac\statbox.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mac\stattext.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mac\statusbr.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mac\textctrl.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mac\timer.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mac\toolbar.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mac\toplevel.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mac\window.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mgl\app.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mgl\bitmap.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mgl\brush.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mgl\colour.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mgl\cursor.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mgl\dc.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mgl\dcclient.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mgl\dcmemory.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mgl\dcscreen.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mgl\font.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mgl\gdiobj.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mgl\icon.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mgl\palette.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mgl\pen.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mgl\region.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mgl\toplevel.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mgl\window.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\motif\accel.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\motif\app.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\motif\bitmap.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\motif\bmpbuttn.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\motif\brush.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\motif\button.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\motif\checkbox.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\motif\checklst.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\motif\choice.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\motif\colour.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\motif\combobox.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\motif\control.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\motif\cursor.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\motif\dc.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\motif\dcclient.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\motif\dcmemory.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\motif\dcscreen.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\motif\dialog.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\motif\filedlg.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\motif\font.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\motif\frame.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\motif\gauge.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\motif\gdiobj.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\motif\icon.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\motif\listbox.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\motif\mdi.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\motif\menu.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\motif\menuitem.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\motif\msgdlg.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\motif\palette.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\motif\pen.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\motif\radiobox.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\motif\radiobut.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\motif\region.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\motif\scrolbar.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\motif\slider.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\motif\statbmp.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\motif\statbox.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\motif\stattext.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\motif\textctrl.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\motif\timer.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\motif\toolbar.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\motif\window.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\os2\accel.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\os2\app.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\os2\bitmap.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\os2\bmpbuttn.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\os2\brush.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\os2\button.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\os2\checkbox.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\os2\checklst.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\os2\choice.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\os2\colour.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\os2\combobox.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\os2\control.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\os2\cursor.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\os2\dc.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\os2\dcclient.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\os2\dcmemory.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\os2\dcprint.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\os2\dcscreen.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\os2\dialog.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\os2\filedlg.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\os2\font.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\os2\frame.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\os2\gauge.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\os2\gdiobj.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\os2\icon.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\os2\listbox.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\os2\menu.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\os2\menuitem.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\os2\msgdlg.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\os2\notebook.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\os2\palette.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\os2\pen.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\os2\radiobox.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\os2\radiobut.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\os2\region.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\os2\scrolbar.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\os2\slider.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\os2\statbmp.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\os2\statbox.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\os2\stattext.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\os2\textctrl.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\os2\timer.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\os2\toolbar.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\os2\toplevel.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\os2\window.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\stubs\accel.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\stubs\app.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\stubs\bitmap.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\stubs\bmpbuttn.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\stubs\brush.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\stubs\button.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\stubs\checkbox.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\stubs\checklst.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\stubs\choice.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\stubs\colour.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\stubs\combobox.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\stubs\control.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\stubs\cursor.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\stubs\dc.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\stubs\dcclient.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\stubs\dcmemory.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\stubs\dcscreen.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\stubs\dialog.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\stubs\filedlg.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\stubs\font.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\stubs\gauge.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\stubs\gdiobj.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\stubs\icon.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\stubs\listbox.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\stubs\mdi.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\stubs\menu.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\stubs\menuitem.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\stubs\notebook.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\stubs\palette.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\stubs\pen.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\stubs\radiobox.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\stubs\radiobut.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\stubs\region.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\stubs\scrolbar.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\stubs\slider.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\stubs\statbmp.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\stubs\statbox.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\stubs\stattext.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\stubs\textctrl.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\stubs\timer.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\stubs\toolbar.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\x11\app.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\x11\bitmap.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\x11\brush.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\x11\colour.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\x11\cursor.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\x11\dc.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\x11\dcclient.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\x11\dcmemory.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\x11\dcscreen.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\x11\font.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\x11\gdiobj.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\x11\icon.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\x11\palette.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\x11\pen.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\x11\region.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\x11\textctrl.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\x11\toplevel.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\x11\window.h"\
+	
+# ADD CPP /Yc"wx/wxprec.h"
+
+!ELSEIF  "$(CFG)" == "wxBase - Win32 (WCE x86em) Debug"
+
+DEP_CPP_DUMMY=\
+	{$(INCLUDE)}"wx\accel.h"\
+	{$(INCLUDE)}"wx\app.h"\
+	{$(INCLUDE)}"wx\bitmap.h"\
+	{$(INCLUDE)}"wx\bmpbuttn.h"\
+	{$(INCLUDE)}"wx\brush.h"\
+	{$(INCLUDE)}"wx\buffer.h"\
+	{$(INCLUDE)}"wx\build.h"\
+	{$(INCLUDE)}"wx\button.h"\
+	{$(INCLUDE)}"wx\checkbox.h"\
+	{$(INCLUDE)}"wx\checklst.h"\
+	{$(INCLUDE)}"wx\chkconf.h"\
+	{$(INCLUDE)}"wx\choicdlg.h"\
+	{$(INCLUDE)}"wx\choice.h"\
+	{$(INCLUDE)}"wx\clntdata.h"\
+	{$(INCLUDE)}"wx\cmndata.h"\
+	{$(INCLUDE)}"wx\colour.h"\
+	{$(INCLUDE)}"wx\combobox.h"\
+	{$(INCLUDE)}"wx\containr.h"\
+	{$(INCLUDE)}"wx\control.h"\
+	{$(INCLUDE)}"wx\ctrlsub.h"\
+	{$(INCLUDE)}"wx\cursor.h"\
+	{$(INCLUDE)}"wx\dc.h"\
+	{$(INCLUDE)}"wx\dcclient.h"\
+	{$(INCLUDE)}"wx\dcmemory.h"\
+	{$(INCLUDE)}"wx\dcprint.h"\
+	{$(INCLUDE)}"wx\dcscreen.h"\
+	{$(INCLUDE)}"wx\debug.h"\
+	{$(INCLUDE)}"wx\defs.h"\
+	{$(INCLUDE)}"wx\dialog.h"\
+	{$(INCLUDE)}"wx\dirdlg.h"\
+	{$(INCLUDE)}"wx\dynarray.h"\
+	{$(INCLUDE)}"wx\event.h"\
+	{$(INCLUDE)}"wx\features.h"\
+	{$(INCLUDE)}"wx\filedlg.h"\
+	{$(INCLUDE)}"wx\filefn.h"\
+	{$(INCLUDE)}"wx\font.h"\
+	{$(INCLUDE)}"wx\fontenc.h"\
+	{$(INCLUDE)}"wx\frame.h"\
+	{$(INCLUDE)}"wx\gauge.h"\
+	{$(INCLUDE)}"wx\gdicmn.h"\
+	{$(INCLUDE)}"wx\gdiobj.h"\
+	{$(INCLUDE)}"wx\generic\accel.h"\
+	{$(INCLUDE)}"wx\generic\choicdgg.h"\
+	{$(INCLUDE)}"wx\generic\dirdlgg.h"\
+	{$(INCLUDE)}"wx\generic\filedlgg.h"\
+	{$(INCLUDE)}"wx\generic\imaglist.h"\
+	{$(INCLUDE)}"wx\generic\mdig.h"\
+	{$(INCLUDE)}"wx\generic\msgdlgg.h"\
+	{$(INCLUDE)}"wx\generic\notebook.h"\
+	{$(INCLUDE)}"wx\generic\paletteg.h"\
+	{$(INCLUDE)}"wx\generic\panelg.h"\
+	{$(INCLUDE)}"wx\generic\scrolwin.h"\
+	{$(INCLUDE)}"wx\generic\statusbr.h"\
+	{$(INCLUDE)}"wx\generic\tabg.h"\
+	{$(INCLUDE)}"wx\generic\textdlgg.h"\
+	{$(INCLUDE)}"wx\generic\timer.h"\
+	{$(INCLUDE)}"wx\hash.h"\
+	{$(INCLUDE)}"wx\icon.h"\
+	{$(INCLUDE)}"wx\iconbndl.h"\
+	{$(INCLUDE)}"wx\imaglist.h"\
+	{$(INCLUDE)}"wx\intl.h"\
+	{$(INCLUDE)}"wx\ioswrap.h"\
+	{$(INCLUDE)}"wx\layout.h"\
+	{$(INCLUDE)}"wx\list.h"\
+	{$(INCLUDE)}"wx\listbox.h"\
+	{$(INCLUDE)}"wx\log.h"\
+	{$(INCLUDE)}"wx\longlong.h"\
+	{$(INCLUDE)}"wx\mdi.h"\
+	{$(INCLUDE)}"wx\memory.h"\
+	{$(INCLUDE)}"wx\menu.h"\
+	{$(INCLUDE)}"wx\menuitem.h"\
+	{$(INCLUDE)}"wx\module.h"\
+	{$(INCLUDE)}"wx\msgdlg.h"\
+	{$(INCLUDE)}"wx\msw\accel.h"\
+	{$(INCLUDE)}"wx\msw\app.h"\
+	{$(INCLUDE)}"wx\msw\bitmap.h"\
+	{$(INCLUDE)}"wx\msw\bmpbuttn.h"\
+	{$(INCLUDE)}"wx\msw\brush.h"\
+	{$(INCLUDE)}"wx\msw\button.h"\
+	{$(INCLUDE)}"wx\msw\checkbox.h"\
+	{$(INCLUDE)}"wx\msw\checklst.h"\
+	{$(INCLUDE)}"wx\msw\choice.h"\
+	{$(INCLUDE)}"wx\msw\colour.h"\
+	{$(INCLUDE)}"wx\msw\combobox.h"\
+	{$(INCLUDE)}"wx\msw\control.h"\
+	{$(INCLUDE)}"wx\msw\cursor.h"\
+	{$(INCLUDE)}"wx\msw\dc.h"\
+	{$(INCLUDE)}"wx\msw\dcclient.h"\
+	{$(INCLUDE)}"wx\msw\dcmemory.h"\
+	{$(INCLUDE)}"wx\msw\dcprint.h"\
+	{$(INCLUDE)}"wx\msw\dcscreen.h"\
+	{$(INCLUDE)}"wx\msw\dialog.h"\
+	{$(INCLUDE)}"wx\msw\dirdlg.h"\
+	{$(INCLUDE)}"wx\msw\filedlg.h"\
+	{$(INCLUDE)}"wx\msw\font.h"\
+	{$(INCLUDE)}"wx\msw\frame.h"\
+	{$(INCLUDE)}"wx\msw\gauge95.h"\
+	{$(INCLUDE)}"wx\msw\gaugemsw.h"\
+	{$(INCLUDE)}"wx\msw\gccpriv.h"\
+	{$(INCLUDE)}"wx\msw\gdiimage.h"\
+	{$(INCLUDE)}"wx\msw\gdiobj.h"\
+	{$(INCLUDE)}"wx\msw\icon.h"\
+	{$(INCLUDE)}"wx\msw\imaglist.h"\
+	{$(INCLUDE)}"wx\msw\listbox.h"\
+	{$(INCLUDE)}"wx\msw\mdi.h"\
+	{$(INCLUDE)}"wx\msw\menu.h"\
+	{$(INCLUDE)}"wx\msw\menuitem.h"\
+	{$(INCLUDE)}"wx\msw\msgdlg.h"\
+	{$(INCLUDE)}"wx\msw\notebook.h"\
+	{$(INCLUDE)}"wx\msw\palette.h"\
+	{$(INCLUDE)}"wx\msw\pen.h"\
+	{$(INCLUDE)}"wx\msw\radiobox.h"\
+	{$(INCLUDE)}"wx\msw\radiobut.h"\
+	{$(INCLUDE)}"wx\msw\region.h"\
+	{$(INCLUDE)}"wx\msw\scrolbar.h"\
+	{$(INCLUDE)}"wx\msw\slider95.h"\
+	{$(INCLUDE)}"wx\msw\slidrmsw.h"\
+	{$(INCLUDE)}"wx\msw\statbmp.h"\
+	{$(INCLUDE)}"wx\msw\statbox.h"\
+	{$(INCLUDE)}"wx\msw\statbr95.h"\
+	{$(INCLUDE)}"wx\msw\stattext.h"\
+	{$(INCLUDE)}"wx\msw\tbar95.h"\
+	{$(INCLUDE)}"wx\msw\tbarmsw.h"\
+	{$(INCLUDE)}"wx\msw\textctrl.h"\
+	{$(INCLUDE)}"wx\msw\timer.h"\
+	{$(INCLUDE)}"wx\msw\toplevel.h"\
+	{$(INCLUDE)}"wx\msw\window.h"\
+	{$(INCLUDE)}"wx\msw\winundef.h"\
+	{$(INCLUDE)}"wx\notebook.h"\
+	{$(INCLUDE)}"wx\object.h"\
+	{$(INCLUDE)}"wx\ownerdrw.h"\
+	{$(INCLUDE)}"wx\palette.h"\
+	{$(INCLUDE)}"wx\panel.h"\
+	{$(INCLUDE)}"wx\pen.h"\
+	{$(INCLUDE)}"wx\platform.h"\
+	{$(INCLUDE)}"wx\radiobox.h"\
+	{$(INCLUDE)}"wx\radiobut.h"\
+	{$(INCLUDE)}"wx\region.h"\
+	{$(INCLUDE)}"wx\scrolbar.h"\
+	{$(INCLUDE)}"wx\scrolwin.h"\
+	{$(INCLUDE)}"wx\settings.h"\
+	{$(INCLUDE)}"wx\setup.h"\
+	{$(INCLUDE)}"wx\sizer.h"\
+	{$(INCLUDE)}"wx\slider.h"\
+	{$(INCLUDE)}"wx\statbmp.h"\
+	{$(INCLUDE)}"wx\statbox.h"\
+	{$(INCLUDE)}"wx\stattext.h"\
+	{$(INCLUDE)}"wx\statusbr.h"\
+	{$(INCLUDE)}"wx\strconv.h"\
+	{$(INCLUDE)}"wx\stream.h"\
+	{$(INCLUDE)}"wx\string.h"\
+	{$(INCLUDE)}"wx\tbarbase.h"\
+	{$(INCLUDE)}"wx\tbarsmpl.h"\
+	{$(INCLUDE)}"wx\textctrl.h"\
+	{$(INCLUDE)}"wx\textdlg.h"\
+	{$(INCLUDE)}"wx\thread.h"\
+	{$(INCLUDE)}"wx\timer.h"\
+	{$(INCLUDE)}"wx\toolbar.h"\
+	{$(INCLUDE)}"wx\toplevel.h"\
+	{$(INCLUDE)}"wx\univ\bmpbuttn.h"\
+	{$(INCLUDE)}"wx\univ\button.h"\
+	{$(INCLUDE)}"wx\univ\checkbox.h"\
+	{$(INCLUDE)}"wx\univ\checklst.h"\
+	{$(INCLUDE)}"wx\univ\choice.h"\
+	{$(INCLUDE)}"wx\univ\combobox.h"\
+	{$(INCLUDE)}"wx\univ\control.h"\
+	{$(INCLUDE)}"wx\univ\dialog.h"\
+	{$(INCLUDE)}"wx\univ\frame.h"\
+	{$(INCLUDE)}"wx\univ\gauge.h"\
+	{$(INCLUDE)}"wx\univ\inpcons.h"\
+	{$(INCLUDE)}"wx\univ\inphand.h"\
+	{$(INCLUDE)}"wx\univ\listbox.h"\
+	{$(INCLUDE)}"wx\univ\menu.h"\
+	{$(INCLUDE)}"wx\univ\menuitem.h"\
+	{$(INCLUDE)}"wx\univ\notebook.h"\
+	{$(INCLUDE)}"wx\univ\radiobox.h"\
+	{$(INCLUDE)}"wx\univ\radiobut.h"\
+	{$(INCLUDE)}"wx\univ\scrarrow.h"\
+	{$(INCLUDE)}"wx\univ\scrolbar.h"\
+	{$(INCLUDE)}"wx\univ\scrthumb.h"\
+	{$(INCLUDE)}"wx\univ\slider.h"\
+	{$(INCLUDE)}"wx\univ\statbmp.h"\
+	{$(INCLUDE)}"wx\univ\statbox.h"\
+	{$(INCLUDE)}"wx\univ\stattext.h"\
+	{$(INCLUDE)}"wx\univ\statusbr.h"\
+	{$(INCLUDE)}"wx\univ\textctrl.h"\
+	{$(INCLUDE)}"wx\univ\theme.h"\
+	{$(INCLUDE)}"wx\univ\toolbar.h"\
+	{$(INCLUDE)}"wx\univ\toplevel.h"\
+	{$(INCLUDE)}"wx\univ\window.h"\
+	{$(INCLUDE)}"wx\utils.h"\
+	{$(INCLUDE)}"wx\validate.h"\
+	{$(INCLUDE)}"wx\valtext.h"\
+	{$(INCLUDE)}"wx\version.h"\
+	{$(INCLUDE)}"wx\wince\gdiobj.h"\
+	{$(INCLUDE)}"wx\window.h"\
+	{$(INCLUDE)}"wx\wx.h"\
+	{$(INCLUDE)}"wx\wxchar.h"\
+	{$(INCLUDE)}"wx\wxprec.h"\
+	
+NODEP_CPP_DUMMY=\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\gtk\accel.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\gtk\app.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\gtk\bitmap.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\gtk\bmpbuttn.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\gtk\brush.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\gtk\button.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\gtk\checkbox.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\gtk\checklst.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\gtk\choice.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\gtk\colour.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\gtk\combobox.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\gtk\control.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\gtk\cursor.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\gtk\dc.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\gtk\dcclient.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\gtk\dcmemory.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\gtk\dcscreen.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\gtk\dialog.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\gtk\font.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\gtk\frame.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\gtk\gauge.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\gtk\gdiobj.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\gtk\icon.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\gtk\listbox.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\gtk\mdi.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\gtk\menu.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\gtk\menuitem.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\gtk\notebook.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\gtk\pen.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\gtk\radiobox.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\gtk\radiobut.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\gtk\region.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\gtk\scrolbar.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\gtk\scrolwin.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\gtk\slider.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\gtk\statbmp.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\gtk\statbox.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\gtk\stattext.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\gtk\tbargtk.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\gtk\textctrl.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\gtk\timer.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\gtk\toplevel.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\gtk\window.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mac\accel.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mac\app.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mac\bitmap.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mac\bmpbuttn.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mac\brush.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mac\button.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mac\checkbox.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mac\checklst.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mac\choice.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mac\colour.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mac\combobox.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mac\control.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mac\cursor.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mac\dc.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mac\dcclient.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mac\dcmemory.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mac\dcprint.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mac\dcscreen.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mac\dialog.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mac\dirdlg.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mac\filedlg.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mac\font.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mac\frame.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mac\gauge.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mac\gdiobj.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mac\icon.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mac\listbox.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mac\mdi.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mac\menu.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mac\menuitem.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mac\msgdlg.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mac\notebook.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mac\palette.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mac\pen.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mac\radiobox.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mac\radiobut.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mac\region.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mac\scrolbar.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mac\slider.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mac\statbmp.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mac\statbox.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mac\stattext.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mac\statusbr.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mac\textctrl.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mac\timer.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mac\toolbar.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mac\toplevel.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mac\window.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mgl\app.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mgl\bitmap.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mgl\brush.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mgl\colour.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mgl\cursor.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mgl\dc.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mgl\dcclient.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mgl\dcmemory.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mgl\dcscreen.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mgl\font.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mgl\gdiobj.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mgl\icon.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mgl\palette.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mgl\pen.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mgl\region.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mgl\toplevel.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mgl\window.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\motif\accel.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\motif\app.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\motif\bitmap.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\motif\bmpbuttn.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\motif\brush.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\motif\button.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\motif\checkbox.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\motif\checklst.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\motif\choice.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\motif\colour.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\motif\combobox.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\motif\control.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\motif\cursor.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\motif\dc.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\motif\dcclient.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\motif\dcmemory.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\motif\dcscreen.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\motif\dialog.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\motif\filedlg.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\motif\font.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\motif\frame.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\motif\gauge.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\motif\gdiobj.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\motif\icon.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\motif\listbox.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\motif\mdi.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\motif\menu.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\motif\menuitem.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\motif\msgdlg.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\motif\palette.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\motif\pen.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\motif\radiobox.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\motif\radiobut.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\motif\region.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\motif\scrolbar.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\motif\slider.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\motif\statbmp.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\motif\statbox.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\motif\stattext.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\motif\textctrl.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\motif\timer.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\motif\toolbar.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\motif\window.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\os2\accel.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\os2\app.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\os2\bitmap.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\os2\bmpbuttn.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\os2\brush.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\os2\button.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\os2\checkbox.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\os2\checklst.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\os2\choice.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\os2\colour.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\os2\combobox.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\os2\control.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\os2\cursor.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\os2\dc.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\os2\dcclient.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\os2\dcmemory.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\os2\dcprint.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\os2\dcscreen.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\os2\dialog.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\os2\filedlg.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\os2\font.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\os2\frame.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\os2\gauge.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\os2\gdiobj.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\os2\icon.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\os2\listbox.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\os2\menu.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\os2\menuitem.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\os2\msgdlg.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\os2\notebook.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\os2\palette.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\os2\pen.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\os2\radiobox.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\os2\radiobut.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\os2\region.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\os2\scrolbar.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\os2\slider.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\os2\statbmp.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\os2\statbox.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\os2\stattext.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\os2\textctrl.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\os2\timer.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\os2\toolbar.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\os2\toplevel.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\os2\window.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\stubs\accel.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\stubs\app.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\stubs\bitmap.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\stubs\bmpbuttn.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\stubs\brush.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\stubs\button.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\stubs\checkbox.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\stubs\checklst.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\stubs\choice.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\stubs\colour.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\stubs\combobox.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\stubs\control.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\stubs\cursor.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\stubs\dc.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\stubs\dcclient.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\stubs\dcmemory.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\stubs\dcscreen.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\stubs\dialog.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\stubs\filedlg.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\stubs\font.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\stubs\gauge.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\stubs\gdiobj.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\stubs\icon.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\stubs\listbox.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\stubs\mdi.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\stubs\menu.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\stubs\menuitem.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\stubs\notebook.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\stubs\palette.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\stubs\pen.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\stubs\radiobox.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\stubs\radiobut.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\stubs\region.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\stubs\scrolbar.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\stubs\slider.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\stubs\statbmp.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\stubs\statbox.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\stubs\stattext.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\stubs\textctrl.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\stubs\timer.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\stubs\toolbar.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\x11\app.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\x11\bitmap.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\x11\brush.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\x11\colour.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\x11\cursor.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\x11\dc.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\x11\dcclient.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\x11\dcmemory.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\x11\dcscreen.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\x11\font.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\x11\gdiobj.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\x11\icon.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\x11\palette.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\x11\pen.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\x11\region.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\x11\textctrl.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\x11\toplevel.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\x11\window.h"\
+	
+# ADD CPP /Yc"wx/wxprec.h"
+
+!ENDIF 
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\main.cpp
+
+!IF  "$(CFG)" == "wxBase - Win32 (WCE ARM) Release"
+
+NODEP_CPP_MAIN_=\
+	".\wx\wxprec.h"\
+	
+# ADD CPP /Yu"wx/wxprec.h"
+
+!ELSEIF  "$(CFG)" == "wxBase - Win32 (WCE ARM) Debug"
+
+NODEP_CPP_MAIN_=\
+	".\wx\wxprec.h"\
+	
+# ADD CPP /Yu"wx/wxprec.h"
+
+!ELSEIF  "$(CFG)" == "wxBase - Win32 (WCE x86em) Release"
+
+DEP_CPP_MAIN_=\
+	{$(INCLUDE)}"wx\accel.h"\
+	{$(INCLUDE)}"wx\app.h"\
+	{$(INCLUDE)}"wx\bitmap.h"\
+	{$(INCLUDE)}"wx\bmpbuttn.h"\
+	{$(INCLUDE)}"wx\brush.h"\
+	{$(INCLUDE)}"wx\buffer.h"\
+	{$(INCLUDE)}"wx\build.h"\
+	{$(INCLUDE)}"wx\button.h"\
+	{$(INCLUDE)}"wx\checkbox.h"\
+	{$(INCLUDE)}"wx\checklst.h"\
+	{$(INCLUDE)}"wx\chkconf.h"\
+	{$(INCLUDE)}"wx\choicdlg.h"\
+	{$(INCLUDE)}"wx\choice.h"\
+	{$(INCLUDE)}"wx\clntdata.h"\
+	{$(INCLUDE)}"wx\cmndata.h"\
+	{$(INCLUDE)}"wx\colour.h"\
+	{$(INCLUDE)}"wx\combobox.h"\
+	{$(INCLUDE)}"wx\containr.h"\
+	{$(INCLUDE)}"wx\control.h"\
+	{$(INCLUDE)}"wx\ctrlsub.h"\
+	{$(INCLUDE)}"wx\cursor.h"\
+	{$(INCLUDE)}"wx\dc.h"\
+	{$(INCLUDE)}"wx\dcclient.h"\
+	{$(INCLUDE)}"wx\dcmemory.h"\
+	{$(INCLUDE)}"wx\dcprint.h"\
+	{$(INCLUDE)}"wx\dcscreen.h"\
+	{$(INCLUDE)}"wx\debug.h"\
+	{$(INCLUDE)}"wx\defs.h"\
+	{$(INCLUDE)}"wx\dialog.h"\
+	{$(INCLUDE)}"wx\dirdlg.h"\
+	{$(INCLUDE)}"wx\dynarray.h"\
+	{$(INCLUDE)}"wx\event.h"\
+	{$(INCLUDE)}"wx\features.h"\
+	{$(INCLUDE)}"wx\filedlg.h"\
+	{$(INCLUDE)}"wx\filefn.h"\
+	{$(INCLUDE)}"wx\font.h"\
+	{$(INCLUDE)}"wx\fontenc.h"\
+	{$(INCLUDE)}"wx\frame.h"\
+	{$(INCLUDE)}"wx\gauge.h"\
+	{$(INCLUDE)}"wx\gdicmn.h"\
+	{$(INCLUDE)}"wx\gdiobj.h"\
+	{$(INCLUDE)}"wx\generic\accel.h"\
+	{$(INCLUDE)}"wx\generic\choicdgg.h"\
+	{$(INCLUDE)}"wx\generic\dirdlgg.h"\
+	{$(INCLUDE)}"wx\generic\filedlgg.h"\
+	{$(INCLUDE)}"wx\generic\imaglist.h"\
+	{$(INCLUDE)}"wx\generic\mdig.h"\
+	{$(INCLUDE)}"wx\generic\msgdlgg.h"\
+	{$(INCLUDE)}"wx\generic\notebook.h"\
+	{$(INCLUDE)}"wx\generic\paletteg.h"\
+	{$(INCLUDE)}"wx\generic\panelg.h"\
+	{$(INCLUDE)}"wx\generic\scrolwin.h"\
+	{$(INCLUDE)}"wx\generic\statusbr.h"\
+	{$(INCLUDE)}"wx\generic\tabg.h"\
+	{$(INCLUDE)}"wx\generic\textdlgg.h"\
+	{$(INCLUDE)}"wx\generic\timer.h"\
+	{$(INCLUDE)}"wx\hash.h"\
+	{$(INCLUDE)}"wx\icon.h"\
+	{$(INCLUDE)}"wx\iconbndl.h"\
+	{$(INCLUDE)}"wx\imaglist.h"\
+	{$(INCLUDE)}"wx\intl.h"\
+	{$(INCLUDE)}"wx\ioswrap.h"\
+	{$(INCLUDE)}"wx\layout.h"\
+	{$(INCLUDE)}"wx\list.h"\
+	{$(INCLUDE)}"wx\listbox.h"\
+	{$(INCLUDE)}"wx\log.h"\
+	{$(INCLUDE)}"wx\longlong.h"\
+	{$(INCLUDE)}"wx\mdi.h"\
+	{$(INCLUDE)}"wx\memory.h"\
+	{$(INCLUDE)}"wx\menu.h"\
+	{$(INCLUDE)}"wx\menuitem.h"\
+	{$(INCLUDE)}"wx\module.h"\
+	{$(INCLUDE)}"wx\msgdlg.h"\
+	{$(INCLUDE)}"wx\msw\accel.h"\
+	{$(INCLUDE)}"wx\msw\app.h"\
+	{$(INCLUDE)}"wx\msw\bitmap.h"\
+	{$(INCLUDE)}"wx\msw\bmpbuttn.h"\
+	{$(INCLUDE)}"wx\msw\brush.h"\
+	{$(INCLUDE)}"wx\msw\button.h"\
+	{$(INCLUDE)}"wx\msw\checkbox.h"\
+	{$(INCLUDE)}"wx\msw\checklst.h"\
+	{$(INCLUDE)}"wx\msw\choice.h"\
+	{$(INCLUDE)}"wx\msw\colour.h"\
+	{$(INCLUDE)}"wx\msw\combobox.h"\
+	{$(INCLUDE)}"wx\msw\control.h"\
+	{$(INCLUDE)}"wx\msw\cursor.h"\
+	{$(INCLUDE)}"wx\msw\dc.h"\
+	{$(INCLUDE)}"wx\msw\dcclient.h"\
+	{$(INCLUDE)}"wx\msw\dcmemory.h"\
+	{$(INCLUDE)}"wx\msw\dcprint.h"\
+	{$(INCLUDE)}"wx\msw\dcscreen.h"\
+	{$(INCLUDE)}"wx\msw\dialog.h"\
+	{$(INCLUDE)}"wx\msw\dirdlg.h"\
+	{$(INCLUDE)}"wx\msw\filedlg.h"\
+	{$(INCLUDE)}"wx\msw\font.h"\
+	{$(INCLUDE)}"wx\msw\frame.h"\
+	{$(INCLUDE)}"wx\msw\gauge95.h"\
+	{$(INCLUDE)}"wx\msw\gaugemsw.h"\
+	{$(INCLUDE)}"wx\msw\gccpriv.h"\
+	{$(INCLUDE)}"wx\msw\gdiimage.h"\
+	{$(INCLUDE)}"wx\msw\gdiobj.h"\
+	{$(INCLUDE)}"wx\msw\icon.h"\
+	{$(INCLUDE)}"wx\msw\imaglist.h"\
+	{$(INCLUDE)}"wx\msw\listbox.h"\
+	{$(INCLUDE)}"wx\msw\mdi.h"\
+	{$(INCLUDE)}"wx\msw\menu.h"\
+	{$(INCLUDE)}"wx\msw\menuitem.h"\
+	{$(INCLUDE)}"wx\msw\msgdlg.h"\
+	{$(INCLUDE)}"wx\msw\notebook.h"\
+	{$(INCLUDE)}"wx\msw\palette.h"\
+	{$(INCLUDE)}"wx\msw\pen.h"\
+	{$(INCLUDE)}"wx\msw\radiobox.h"\
+	{$(INCLUDE)}"wx\msw\radiobut.h"\
+	{$(INCLUDE)}"wx\msw\region.h"\
+	{$(INCLUDE)}"wx\msw\scrolbar.h"\
+	{$(INCLUDE)}"wx\msw\slider95.h"\
+	{$(INCLUDE)}"wx\msw\slidrmsw.h"\
+	{$(INCLUDE)}"wx\msw\statbmp.h"\
+	{$(INCLUDE)}"wx\msw\statbox.h"\
+	{$(INCLUDE)}"wx\msw\statbr95.h"\
+	{$(INCLUDE)}"wx\msw\stattext.h"\
+	{$(INCLUDE)}"wx\msw\tbar95.h"\
+	{$(INCLUDE)}"wx\msw\tbarmsw.h"\
+	{$(INCLUDE)}"wx\msw\textctrl.h"\
+	{$(INCLUDE)}"wx\msw\timer.h"\
+	{$(INCLUDE)}"wx\msw\toplevel.h"\
+	{$(INCLUDE)}"wx\msw\window.h"\
+	{$(INCLUDE)}"wx\msw\winundef.h"\
+	{$(INCLUDE)}"wx\notebook.h"\
+	{$(INCLUDE)}"wx\object.h"\
+	{$(INCLUDE)}"wx\ownerdrw.h"\
+	{$(INCLUDE)}"wx\palette.h"\
+	{$(INCLUDE)}"wx\panel.h"\
+	{$(INCLUDE)}"wx\pen.h"\
+	{$(INCLUDE)}"wx\platform.h"\
+	{$(INCLUDE)}"wx\radiobox.h"\
+	{$(INCLUDE)}"wx\radiobut.h"\
+	{$(INCLUDE)}"wx\region.h"\
+	{$(INCLUDE)}"wx\scrolbar.h"\
+	{$(INCLUDE)}"wx\scrolwin.h"\
+	{$(INCLUDE)}"wx\settings.h"\
+	{$(INCLUDE)}"wx\setup.h"\
+	{$(INCLUDE)}"wx\sizer.h"\
+	{$(INCLUDE)}"wx\slider.h"\
+	{$(INCLUDE)}"wx\statbmp.h"\
+	{$(INCLUDE)}"wx\statbox.h"\
+	{$(INCLUDE)}"wx\stattext.h"\
+	{$(INCLUDE)}"wx\statusbr.h"\
+	{$(INCLUDE)}"wx\strconv.h"\
+	{$(INCLUDE)}"wx\stream.h"\
+	{$(INCLUDE)}"wx\string.h"\
+	{$(INCLUDE)}"wx\tbarbase.h"\
+	{$(INCLUDE)}"wx\tbarsmpl.h"\
+	{$(INCLUDE)}"wx\textctrl.h"\
+	{$(INCLUDE)}"wx\textdlg.h"\
+	{$(INCLUDE)}"wx\thread.h"\
+	{$(INCLUDE)}"wx\timer.h"\
+	{$(INCLUDE)}"wx\toolbar.h"\
+	{$(INCLUDE)}"wx\toplevel.h"\
+	{$(INCLUDE)}"wx\univ\bmpbuttn.h"\
+	{$(INCLUDE)}"wx\univ\button.h"\
+	{$(INCLUDE)}"wx\univ\checkbox.h"\
+	{$(INCLUDE)}"wx\univ\checklst.h"\
+	{$(INCLUDE)}"wx\univ\choice.h"\
+	{$(INCLUDE)}"wx\univ\combobox.h"\
+	{$(INCLUDE)}"wx\univ\control.h"\
+	{$(INCLUDE)}"wx\univ\dialog.h"\
+	{$(INCLUDE)}"wx\univ\frame.h"\
+	{$(INCLUDE)}"wx\univ\gauge.h"\
+	{$(INCLUDE)}"wx\univ\inpcons.h"\
+	{$(INCLUDE)}"wx\univ\inphand.h"\
+	{$(INCLUDE)}"wx\univ\listbox.h"\
+	{$(INCLUDE)}"wx\univ\menu.h"\
+	{$(INCLUDE)}"wx\univ\menuitem.h"\
+	{$(INCLUDE)}"wx\univ\notebook.h"\
+	{$(INCLUDE)}"wx\univ\radiobox.h"\
+	{$(INCLUDE)}"wx\univ\radiobut.h"\
+	{$(INCLUDE)}"wx\univ\scrarrow.h"\
+	{$(INCLUDE)}"wx\univ\scrolbar.h"\
+	{$(INCLUDE)}"wx\univ\scrthumb.h"\
+	{$(INCLUDE)}"wx\univ\slider.h"\
+	{$(INCLUDE)}"wx\univ\statbmp.h"\
+	{$(INCLUDE)}"wx\univ\statbox.h"\
+	{$(INCLUDE)}"wx\univ\stattext.h"\
+	{$(INCLUDE)}"wx\univ\statusbr.h"\
+	{$(INCLUDE)}"wx\univ\textctrl.h"\
+	{$(INCLUDE)}"wx\univ\theme.h"\
+	{$(INCLUDE)}"wx\univ\toolbar.h"\
+	{$(INCLUDE)}"wx\univ\toplevel.h"\
+	{$(INCLUDE)}"wx\univ\window.h"\
+	{$(INCLUDE)}"wx\utils.h"\
+	{$(INCLUDE)}"wx\validate.h"\
+	{$(INCLUDE)}"wx\valtext.h"\
+	{$(INCLUDE)}"wx\version.h"\
+	{$(INCLUDE)}"wx\wince\gdiobj.h"\
+	{$(INCLUDE)}"wx\window.h"\
+	{$(INCLUDE)}"wx\wx.h"\
+	{$(INCLUDE)}"wx\wxchar.h"\
+	{$(INCLUDE)}"wx\wxprec.h"\
+	
+NODEP_CPP_MAIN_=\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\gtk\accel.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\gtk\app.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\gtk\bitmap.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\gtk\bmpbuttn.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\gtk\brush.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\gtk\button.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\gtk\checkbox.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\gtk\checklst.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\gtk\choice.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\gtk\colour.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\gtk\combobox.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\gtk\control.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\gtk\cursor.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\gtk\dc.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\gtk\dcclient.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\gtk\dcmemory.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\gtk\dcscreen.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\gtk\dialog.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\gtk\font.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\gtk\frame.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\gtk\gauge.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\gtk\gdiobj.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\gtk\icon.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\gtk\listbox.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\gtk\mdi.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\gtk\menu.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\gtk\menuitem.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\gtk\notebook.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\gtk\pen.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\gtk\radiobox.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\gtk\radiobut.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\gtk\region.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\gtk\scrolbar.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\gtk\scrolwin.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\gtk\slider.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\gtk\statbmp.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\gtk\statbox.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\gtk\stattext.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\gtk\tbargtk.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\gtk\textctrl.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\gtk\timer.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\gtk\toplevel.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\gtk\window.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mac\accel.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mac\app.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mac\bitmap.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mac\bmpbuttn.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mac\brush.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mac\button.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mac\checkbox.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mac\checklst.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mac\choice.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mac\colour.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mac\combobox.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mac\control.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mac\cursor.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mac\dc.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mac\dcclient.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mac\dcmemory.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mac\dcprint.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mac\dcscreen.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mac\dialog.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mac\dirdlg.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mac\filedlg.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mac\font.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mac\frame.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mac\gauge.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mac\gdiobj.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mac\icon.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mac\listbox.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mac\mdi.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mac\menu.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mac\menuitem.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mac\msgdlg.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mac\notebook.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mac\palette.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mac\pen.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mac\radiobox.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mac\radiobut.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mac\region.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mac\scrolbar.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mac\slider.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mac\statbmp.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mac\statbox.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mac\stattext.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mac\statusbr.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mac\textctrl.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mac\timer.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mac\toolbar.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mac\toplevel.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mac\window.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mgl\app.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mgl\bitmap.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mgl\brush.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mgl\colour.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mgl\cursor.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mgl\dc.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mgl\dcclient.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mgl\dcmemory.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mgl\dcscreen.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mgl\font.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mgl\gdiobj.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mgl\icon.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mgl\palette.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mgl\pen.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mgl\region.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mgl\toplevel.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mgl\window.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\motif\accel.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\motif\app.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\motif\bitmap.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\motif\bmpbuttn.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\motif\brush.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\motif\button.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\motif\checkbox.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\motif\checklst.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\motif\choice.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\motif\colour.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\motif\combobox.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\motif\control.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\motif\cursor.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\motif\dc.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\motif\dcclient.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\motif\dcmemory.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\motif\dcscreen.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\motif\dialog.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\motif\filedlg.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\motif\font.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\motif\frame.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\motif\gauge.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\motif\gdiobj.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\motif\icon.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\motif\listbox.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\motif\mdi.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\motif\menu.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\motif\menuitem.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\motif\msgdlg.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\motif\palette.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\motif\pen.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\motif\radiobox.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\motif\radiobut.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\motif\region.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\motif\scrolbar.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\motif\slider.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\motif\statbmp.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\motif\statbox.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\motif\stattext.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\motif\textctrl.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\motif\timer.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\motif\toolbar.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\motif\window.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\os2\accel.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\os2\app.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\os2\bitmap.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\os2\bmpbuttn.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\os2\brush.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\os2\button.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\os2\checkbox.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\os2\checklst.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\os2\choice.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\os2\colour.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\os2\combobox.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\os2\control.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\os2\cursor.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\os2\dc.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\os2\dcclient.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\os2\dcmemory.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\os2\dcprint.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\os2\dcscreen.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\os2\dialog.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\os2\filedlg.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\os2\font.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\os2\frame.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\os2\gauge.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\os2\gdiobj.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\os2\icon.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\os2\listbox.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\os2\menu.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\os2\menuitem.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\os2\msgdlg.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\os2\notebook.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\os2\palette.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\os2\pen.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\os2\radiobox.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\os2\radiobut.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\os2\region.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\os2\scrolbar.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\os2\slider.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\os2\statbmp.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\os2\statbox.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\os2\stattext.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\os2\textctrl.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\os2\timer.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\os2\toolbar.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\os2\toplevel.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\os2\window.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\stubs\accel.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\stubs\app.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\stubs\bitmap.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\stubs\bmpbuttn.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\stubs\brush.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\stubs\button.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\stubs\checkbox.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\stubs\checklst.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\stubs\choice.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\stubs\colour.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\stubs\combobox.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\stubs\control.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\stubs\cursor.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\stubs\dc.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\stubs\dcclient.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\stubs\dcmemory.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\stubs\dcscreen.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\stubs\dialog.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\stubs\filedlg.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\stubs\font.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\stubs\gauge.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\stubs\gdiobj.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\stubs\icon.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\stubs\listbox.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\stubs\mdi.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\stubs\menu.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\stubs\menuitem.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\stubs\notebook.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\stubs\palette.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\stubs\pen.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\stubs\radiobox.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\stubs\radiobut.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\stubs\region.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\stubs\scrolbar.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\stubs\slider.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\stubs\statbmp.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\stubs\statbox.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\stubs\stattext.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\stubs\textctrl.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\stubs\timer.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\stubs\toolbar.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\x11\app.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\x11\bitmap.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\x11\brush.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\x11\colour.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\x11\cursor.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\x11\dc.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\x11\dcclient.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\x11\dcmemory.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\x11\dcscreen.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\x11\font.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\x11\gdiobj.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\x11\icon.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\x11\palette.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\x11\pen.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\x11\region.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\x11\textctrl.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\x11\toplevel.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\x11\window.h"\
+	
+# ADD CPP /Yu"wx/wxprec.h"
+
+!ELSEIF  "$(CFG)" == "wxBase - Win32 (WCE x86em) Debug"
+
+DEP_CPP_MAIN_=\
+	{$(INCLUDE)}"wx\accel.h"\
+	{$(INCLUDE)}"wx\app.h"\
+	{$(INCLUDE)}"wx\bitmap.h"\
+	{$(INCLUDE)}"wx\bmpbuttn.h"\
+	{$(INCLUDE)}"wx\brush.h"\
+	{$(INCLUDE)}"wx\buffer.h"\
+	{$(INCLUDE)}"wx\build.h"\
+	{$(INCLUDE)}"wx\button.h"\
+	{$(INCLUDE)}"wx\checkbox.h"\
+	{$(INCLUDE)}"wx\checklst.h"\
+	{$(INCLUDE)}"wx\chkconf.h"\
+	{$(INCLUDE)}"wx\choicdlg.h"\
+	{$(INCLUDE)}"wx\choice.h"\
+	{$(INCLUDE)}"wx\clntdata.h"\
+	{$(INCLUDE)}"wx\cmndata.h"\
+	{$(INCLUDE)}"wx\colour.h"\
+	{$(INCLUDE)}"wx\combobox.h"\
+	{$(INCLUDE)}"wx\containr.h"\
+	{$(INCLUDE)}"wx\control.h"\
+	{$(INCLUDE)}"wx\ctrlsub.h"\
+	{$(INCLUDE)}"wx\cursor.h"\
+	{$(INCLUDE)}"wx\dc.h"\
+	{$(INCLUDE)}"wx\dcclient.h"\
+	{$(INCLUDE)}"wx\dcmemory.h"\
+	{$(INCLUDE)}"wx\dcprint.h"\
+	{$(INCLUDE)}"wx\dcscreen.h"\
+	{$(INCLUDE)}"wx\debug.h"\
+	{$(INCLUDE)}"wx\defs.h"\
+	{$(INCLUDE)}"wx\dialog.h"\
+	{$(INCLUDE)}"wx\dirdlg.h"\
+	{$(INCLUDE)}"wx\dynarray.h"\
+	{$(INCLUDE)}"wx\event.h"\
+	{$(INCLUDE)}"wx\features.h"\
+	{$(INCLUDE)}"wx\filedlg.h"\
+	{$(INCLUDE)}"wx\filefn.h"\
+	{$(INCLUDE)}"wx\font.h"\
+	{$(INCLUDE)}"wx\fontenc.h"\
+	{$(INCLUDE)}"wx\frame.h"\
+	{$(INCLUDE)}"wx\gauge.h"\
+	{$(INCLUDE)}"wx\gdicmn.h"\
+	{$(INCLUDE)}"wx\gdiobj.h"\
+	{$(INCLUDE)}"wx\generic\accel.h"\
+	{$(INCLUDE)}"wx\generic\choicdgg.h"\
+	{$(INCLUDE)}"wx\generic\dirdlgg.h"\
+	{$(INCLUDE)}"wx\generic\filedlgg.h"\
+	{$(INCLUDE)}"wx\generic\imaglist.h"\
+	{$(INCLUDE)}"wx\generic\mdig.h"\
+	{$(INCLUDE)}"wx\generic\msgdlgg.h"\
+	{$(INCLUDE)}"wx\generic\notebook.h"\
+	{$(INCLUDE)}"wx\generic\paletteg.h"\
+	{$(INCLUDE)}"wx\generic\panelg.h"\
+	{$(INCLUDE)}"wx\generic\scrolwin.h"\
+	{$(INCLUDE)}"wx\generic\statusbr.h"\
+	{$(INCLUDE)}"wx\generic\tabg.h"\
+	{$(INCLUDE)}"wx\generic\textdlgg.h"\
+	{$(INCLUDE)}"wx\generic\timer.h"\
+	{$(INCLUDE)}"wx\hash.h"\
+	{$(INCLUDE)}"wx\icon.h"\
+	{$(INCLUDE)}"wx\iconbndl.h"\
+	{$(INCLUDE)}"wx\imaglist.h"\
+	{$(INCLUDE)}"wx\intl.h"\
+	{$(INCLUDE)}"wx\ioswrap.h"\
+	{$(INCLUDE)}"wx\layout.h"\
+	{$(INCLUDE)}"wx\list.h"\
+	{$(INCLUDE)}"wx\listbox.h"\
+	{$(INCLUDE)}"wx\log.h"\
+	{$(INCLUDE)}"wx\longlong.h"\
+	{$(INCLUDE)}"wx\mdi.h"\
+	{$(INCLUDE)}"wx\memory.h"\
+	{$(INCLUDE)}"wx\menu.h"\
+	{$(INCLUDE)}"wx\menuitem.h"\
+	{$(INCLUDE)}"wx\module.h"\
+	{$(INCLUDE)}"wx\msgdlg.h"\
+	{$(INCLUDE)}"wx\msw\accel.h"\
+	{$(INCLUDE)}"wx\msw\app.h"\
+	{$(INCLUDE)}"wx\msw\bitmap.h"\
+	{$(INCLUDE)}"wx\msw\bmpbuttn.h"\
+	{$(INCLUDE)}"wx\msw\brush.h"\
+	{$(INCLUDE)}"wx\msw\button.h"\
+	{$(INCLUDE)}"wx\msw\checkbox.h"\
+	{$(INCLUDE)}"wx\msw\checklst.h"\
+	{$(INCLUDE)}"wx\msw\choice.h"\
+	{$(INCLUDE)}"wx\msw\colour.h"\
+	{$(INCLUDE)}"wx\msw\combobox.h"\
+	{$(INCLUDE)}"wx\msw\control.h"\
+	{$(INCLUDE)}"wx\msw\cursor.h"\
+	{$(INCLUDE)}"wx\msw\dc.h"\
+	{$(INCLUDE)}"wx\msw\dcclient.h"\
+	{$(INCLUDE)}"wx\msw\dcmemory.h"\
+	{$(INCLUDE)}"wx\msw\dcprint.h"\
+	{$(INCLUDE)}"wx\msw\dcscreen.h"\
+	{$(INCLUDE)}"wx\msw\dialog.h"\
+	{$(INCLUDE)}"wx\msw\dirdlg.h"\
+	{$(INCLUDE)}"wx\msw\filedlg.h"\
+	{$(INCLUDE)}"wx\msw\font.h"\
+	{$(INCLUDE)}"wx\msw\frame.h"\
+	{$(INCLUDE)}"wx\msw\gauge95.h"\
+	{$(INCLUDE)}"wx\msw\gaugemsw.h"\
+	{$(INCLUDE)}"wx\msw\gccpriv.h"\
+	{$(INCLUDE)}"wx\msw\gdiimage.h"\
+	{$(INCLUDE)}"wx\msw\gdiobj.h"\
+	{$(INCLUDE)}"wx\msw\icon.h"\
+	{$(INCLUDE)}"wx\msw\imaglist.h"\
+	{$(INCLUDE)}"wx\msw\listbox.h"\
+	{$(INCLUDE)}"wx\msw\mdi.h"\
+	{$(INCLUDE)}"wx\msw\menu.h"\
+	{$(INCLUDE)}"wx\msw\menuitem.h"\
+	{$(INCLUDE)}"wx\msw\msgdlg.h"\
+	{$(INCLUDE)}"wx\msw\notebook.h"\
+	{$(INCLUDE)}"wx\msw\palette.h"\
+	{$(INCLUDE)}"wx\msw\pen.h"\
+	{$(INCLUDE)}"wx\msw\radiobox.h"\
+	{$(INCLUDE)}"wx\msw\radiobut.h"\
+	{$(INCLUDE)}"wx\msw\region.h"\
+	{$(INCLUDE)}"wx\msw\scrolbar.h"\
+	{$(INCLUDE)}"wx\msw\slider95.h"\
+	{$(INCLUDE)}"wx\msw\slidrmsw.h"\
+	{$(INCLUDE)}"wx\msw\statbmp.h"\
+	{$(INCLUDE)}"wx\msw\statbox.h"\
+	{$(INCLUDE)}"wx\msw\statbr95.h"\
+	{$(INCLUDE)}"wx\msw\stattext.h"\
+	{$(INCLUDE)}"wx\msw\tbar95.h"\
+	{$(INCLUDE)}"wx\msw\tbarmsw.h"\
+	{$(INCLUDE)}"wx\msw\textctrl.h"\
+	{$(INCLUDE)}"wx\msw\timer.h"\
+	{$(INCLUDE)}"wx\msw\toplevel.h"\
+	{$(INCLUDE)}"wx\msw\window.h"\
+	{$(INCLUDE)}"wx\msw\winundef.h"\
+	{$(INCLUDE)}"wx\notebook.h"\
+	{$(INCLUDE)}"wx\object.h"\
+	{$(INCLUDE)}"wx\ownerdrw.h"\
+	{$(INCLUDE)}"wx\palette.h"\
+	{$(INCLUDE)}"wx\panel.h"\
+	{$(INCLUDE)}"wx\pen.h"\
+	{$(INCLUDE)}"wx\platform.h"\
+	{$(INCLUDE)}"wx\radiobox.h"\
+	{$(INCLUDE)}"wx\radiobut.h"\
+	{$(INCLUDE)}"wx\region.h"\
+	{$(INCLUDE)}"wx\scrolbar.h"\
+	{$(INCLUDE)}"wx\scrolwin.h"\
+	{$(INCLUDE)}"wx\settings.h"\
+	{$(INCLUDE)}"wx\setup.h"\
+	{$(INCLUDE)}"wx\sizer.h"\
+	{$(INCLUDE)}"wx\slider.h"\
+	{$(INCLUDE)}"wx\statbmp.h"\
+	{$(INCLUDE)}"wx\statbox.h"\
+	{$(INCLUDE)}"wx\stattext.h"\
+	{$(INCLUDE)}"wx\statusbr.h"\
+	{$(INCLUDE)}"wx\strconv.h"\
+	{$(INCLUDE)}"wx\stream.h"\
+	{$(INCLUDE)}"wx\string.h"\
+	{$(INCLUDE)}"wx\tbarbase.h"\
+	{$(INCLUDE)}"wx\tbarsmpl.h"\
+	{$(INCLUDE)}"wx\textctrl.h"\
+	{$(INCLUDE)}"wx\textdlg.h"\
+	{$(INCLUDE)}"wx\thread.h"\
+	{$(INCLUDE)}"wx\timer.h"\
+	{$(INCLUDE)}"wx\toolbar.h"\
+	{$(INCLUDE)}"wx\toplevel.h"\
+	{$(INCLUDE)}"wx\univ\bmpbuttn.h"\
+	{$(INCLUDE)}"wx\univ\button.h"\
+	{$(INCLUDE)}"wx\univ\checkbox.h"\
+	{$(INCLUDE)}"wx\univ\checklst.h"\
+	{$(INCLUDE)}"wx\univ\choice.h"\
+	{$(INCLUDE)}"wx\univ\combobox.h"\
+	{$(INCLUDE)}"wx\univ\control.h"\
+	{$(INCLUDE)}"wx\univ\dialog.h"\
+	{$(INCLUDE)}"wx\univ\frame.h"\
+	{$(INCLUDE)}"wx\univ\gauge.h"\
+	{$(INCLUDE)}"wx\univ\inpcons.h"\
+	{$(INCLUDE)}"wx\univ\inphand.h"\
+	{$(INCLUDE)}"wx\univ\listbox.h"\
+	{$(INCLUDE)}"wx\univ\menu.h"\
+	{$(INCLUDE)}"wx\univ\menuitem.h"\
+	{$(INCLUDE)}"wx\univ\notebook.h"\
+	{$(INCLUDE)}"wx\univ\radiobox.h"\
+	{$(INCLUDE)}"wx\univ\radiobut.h"\
+	{$(INCLUDE)}"wx\univ\scrarrow.h"\
+	{$(INCLUDE)}"wx\univ\scrolbar.h"\
+	{$(INCLUDE)}"wx\univ\scrthumb.h"\
+	{$(INCLUDE)}"wx\univ\slider.h"\
+	{$(INCLUDE)}"wx\univ\statbmp.h"\
+	{$(INCLUDE)}"wx\univ\statbox.h"\
+	{$(INCLUDE)}"wx\univ\stattext.h"\
+	{$(INCLUDE)}"wx\univ\statusbr.h"\
+	{$(INCLUDE)}"wx\univ\textctrl.h"\
+	{$(INCLUDE)}"wx\univ\theme.h"\
+	{$(INCLUDE)}"wx\univ\toolbar.h"\
+	{$(INCLUDE)}"wx\univ\toplevel.h"\
+	{$(INCLUDE)}"wx\univ\window.h"\
+	{$(INCLUDE)}"wx\utils.h"\
+	{$(INCLUDE)}"wx\validate.h"\
+	{$(INCLUDE)}"wx\valtext.h"\
+	{$(INCLUDE)}"wx\version.h"\
+	{$(INCLUDE)}"wx\wince\gdiobj.h"\
+	{$(INCLUDE)}"wx\window.h"\
+	{$(INCLUDE)}"wx\wx.h"\
+	{$(INCLUDE)}"wx\wxchar.h"\
+	{$(INCLUDE)}"wx\wxprec.h"\
+	
+NODEP_CPP_MAIN_=\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\gtk\accel.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\gtk\app.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\gtk\bitmap.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\gtk\bmpbuttn.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\gtk\brush.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\gtk\button.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\gtk\checkbox.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\gtk\checklst.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\gtk\choice.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\gtk\colour.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\gtk\combobox.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\gtk\control.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\gtk\cursor.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\gtk\dc.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\gtk\dcclient.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\gtk\dcmemory.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\gtk\dcscreen.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\gtk\dialog.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\gtk\font.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\gtk\frame.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\gtk\gauge.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\gtk\gdiobj.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\gtk\icon.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\gtk\listbox.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\gtk\mdi.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\gtk\menu.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\gtk\menuitem.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\gtk\notebook.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\gtk\pen.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\gtk\radiobox.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\gtk\radiobut.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\gtk\region.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\gtk\scrolbar.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\gtk\scrolwin.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\gtk\slider.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\gtk\statbmp.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\gtk\statbox.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\gtk\stattext.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\gtk\tbargtk.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\gtk\textctrl.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\gtk\timer.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\gtk\toplevel.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\gtk\window.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mac\accel.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mac\app.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mac\bitmap.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mac\bmpbuttn.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mac\brush.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mac\button.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mac\checkbox.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mac\checklst.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mac\choice.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mac\colour.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mac\combobox.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mac\control.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mac\cursor.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mac\dc.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mac\dcclient.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mac\dcmemory.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mac\dcprint.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mac\dcscreen.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mac\dialog.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mac\dirdlg.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mac\filedlg.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mac\font.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mac\frame.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mac\gauge.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mac\gdiobj.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mac\icon.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mac\listbox.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mac\mdi.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mac\menu.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mac\menuitem.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mac\msgdlg.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mac\notebook.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mac\palette.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mac\pen.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mac\radiobox.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mac\radiobut.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mac\region.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mac\scrolbar.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mac\slider.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mac\statbmp.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mac\statbox.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mac\stattext.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mac\statusbr.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mac\textctrl.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mac\timer.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mac\toolbar.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mac\toplevel.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mac\window.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mgl\app.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mgl\bitmap.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mgl\brush.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mgl\colour.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mgl\cursor.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mgl\dc.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mgl\dcclient.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mgl\dcmemory.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mgl\dcscreen.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mgl\font.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mgl\gdiobj.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mgl\icon.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mgl\palette.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mgl\pen.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mgl\region.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mgl\toplevel.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mgl\window.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\motif\accel.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\motif\app.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\motif\bitmap.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\motif\bmpbuttn.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\motif\brush.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\motif\button.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\motif\checkbox.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\motif\checklst.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\motif\choice.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\motif\colour.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\motif\combobox.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\motif\control.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\motif\cursor.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\motif\dc.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\motif\dcclient.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\motif\dcmemory.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\motif\dcscreen.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\motif\dialog.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\motif\filedlg.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\motif\font.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\motif\frame.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\motif\gauge.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\motif\gdiobj.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\motif\icon.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\motif\listbox.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\motif\mdi.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\motif\menu.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\motif\menuitem.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\motif\msgdlg.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\motif\palette.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\motif\pen.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\motif\radiobox.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\motif\radiobut.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\motif\region.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\motif\scrolbar.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\motif\slider.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\motif\statbmp.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\motif\statbox.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\motif\stattext.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\motif\textctrl.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\motif\timer.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\motif\toolbar.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\motif\window.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\os2\accel.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\os2\app.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\os2\bitmap.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\os2\bmpbuttn.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\os2\brush.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\os2\button.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\os2\checkbox.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\os2\checklst.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\os2\choice.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\os2\colour.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\os2\combobox.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\os2\control.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\os2\cursor.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\os2\dc.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\os2\dcclient.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\os2\dcmemory.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\os2\dcprint.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\os2\dcscreen.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\os2\dialog.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\os2\filedlg.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\os2\font.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\os2\frame.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\os2\gauge.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\os2\gdiobj.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\os2\icon.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\os2\listbox.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\os2\menu.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\os2\menuitem.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\os2\msgdlg.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\os2\notebook.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\os2\palette.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\os2\pen.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\os2\radiobox.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\os2\radiobut.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\os2\region.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\os2\scrolbar.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\os2\slider.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\os2\statbmp.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\os2\statbox.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\os2\stattext.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\os2\textctrl.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\os2\timer.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\os2\toolbar.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\os2\toplevel.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\os2\window.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\stubs\accel.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\stubs\app.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\stubs\bitmap.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\stubs\bmpbuttn.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\stubs\brush.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\stubs\button.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\stubs\checkbox.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\stubs\checklst.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\stubs\choice.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\stubs\colour.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\stubs\combobox.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\stubs\control.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\stubs\cursor.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\stubs\dc.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\stubs\dcclient.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\stubs\dcmemory.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\stubs\dcscreen.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\stubs\dialog.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\stubs\filedlg.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\stubs\font.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\stubs\gauge.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\stubs\gdiobj.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\stubs\icon.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\stubs\listbox.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\stubs\mdi.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\stubs\menu.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\stubs\menuitem.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\stubs\notebook.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\stubs\palette.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\stubs\pen.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\stubs\radiobox.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\stubs\radiobut.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\stubs\region.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\stubs\scrolbar.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\stubs\slider.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\stubs\statbmp.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\stubs\statbox.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\stubs\stattext.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\stubs\textctrl.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\stubs\timer.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\stubs\toolbar.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\x11\app.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\x11\bitmap.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\x11\brush.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\x11\colour.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\x11\cursor.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\x11\dc.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\x11\dcclient.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\x11\dcmemory.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\x11\dcscreen.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\x11\font.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\x11\gdiobj.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\x11\icon.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\x11\palette.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\x11\pen.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\x11\region.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\x11\textctrl.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\x11\toplevel.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\x11\window.h"\
+	
+# ADD CPP /Yu"wx/wxprec.h"
+
+!ENDIF 
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\wxBase.cpp
+
+!IF  "$(CFG)" == "wxBase - Win32 (WCE ARM) Release"
+
+NODEP_CPP_WXBAS=\
+	".\wx\wxprec.h"\
+	
+# ADD CPP /Yu"wx/wxprec.h"
+
+!ELSEIF  "$(CFG)" == "wxBase - Win32 (WCE ARM) Debug"
+
+NODEP_CPP_WXBAS=\
+	".\wx\wxprec.h"\
+	
+# ADD CPP /Yu"wx/wxprec.h"
+
+!ELSEIF  "$(CFG)" == "wxBase - Win32 (WCE x86em) Release"
+
+DEP_CPP_WXBAS=\
+	{$(INCLUDE)}"wx\accel.h"\
+	{$(INCLUDE)}"wx\app.h"\
+	{$(INCLUDE)}"wx\bitmap.h"\
+	{$(INCLUDE)}"wx\bmpbuttn.h"\
+	{$(INCLUDE)}"wx\brush.h"\
+	{$(INCLUDE)}"wx\buffer.h"\
+	{$(INCLUDE)}"wx\build.h"\
+	{$(INCLUDE)}"wx\button.h"\
+	{$(INCLUDE)}"wx\checkbox.h"\
+	{$(INCLUDE)}"wx\checklst.h"\
+	{$(INCLUDE)}"wx\chkconf.h"\
+	{$(INCLUDE)}"wx\choicdlg.h"\
+	{$(INCLUDE)}"wx\choice.h"\
+	{$(INCLUDE)}"wx\clntdata.h"\
+	{$(INCLUDE)}"wx\cmndata.h"\
+	{$(INCLUDE)}"wx\colour.h"\
+	{$(INCLUDE)}"wx\combobox.h"\
+	{$(INCLUDE)}"wx\containr.h"\
+	{$(INCLUDE)}"wx\control.h"\
+	{$(INCLUDE)}"wx\ctrlsub.h"\
+	{$(INCLUDE)}"wx\cursor.h"\
+	{$(INCLUDE)}"wx\dc.h"\
+	{$(INCLUDE)}"wx\dcclient.h"\
+	{$(INCLUDE)}"wx\dcmemory.h"\
+	{$(INCLUDE)}"wx\dcprint.h"\
+	{$(INCLUDE)}"wx\dcscreen.h"\
+	{$(INCLUDE)}"wx\debug.h"\
+	{$(INCLUDE)}"wx\defs.h"\
+	{$(INCLUDE)}"wx\dialog.h"\
+	{$(INCLUDE)}"wx\dirdlg.h"\
+	{$(INCLUDE)}"wx\dynarray.h"\
+	{$(INCLUDE)}"wx\event.h"\
+	{$(INCLUDE)}"wx\features.h"\
+	{$(INCLUDE)}"wx\filedlg.h"\
+	{$(INCLUDE)}"wx\filefn.h"\
+	{$(INCLUDE)}"wx\font.h"\
+	{$(INCLUDE)}"wx\fontenc.h"\
+	{$(INCLUDE)}"wx\frame.h"\
+	{$(INCLUDE)}"wx\gauge.h"\
+	{$(INCLUDE)}"wx\gdicmn.h"\
+	{$(INCLUDE)}"wx\gdiobj.h"\
+	{$(INCLUDE)}"wx\generic\accel.h"\
+	{$(INCLUDE)}"wx\generic\choicdgg.h"\
+	{$(INCLUDE)}"wx\generic\dirdlgg.h"\
+	{$(INCLUDE)}"wx\generic\filedlgg.h"\
+	{$(INCLUDE)}"wx\generic\imaglist.h"\
+	{$(INCLUDE)}"wx\generic\mdig.h"\
+	{$(INCLUDE)}"wx\generic\msgdlgg.h"\
+	{$(INCLUDE)}"wx\generic\notebook.h"\
+	{$(INCLUDE)}"wx\generic\paletteg.h"\
+	{$(INCLUDE)}"wx\generic\panelg.h"\
+	{$(INCLUDE)}"wx\generic\scrolwin.h"\
+	{$(INCLUDE)}"wx\generic\statusbr.h"\
+	{$(INCLUDE)}"wx\generic\tabg.h"\
+	{$(INCLUDE)}"wx\generic\textdlgg.h"\
+	{$(INCLUDE)}"wx\generic\timer.h"\
+	{$(INCLUDE)}"wx\hash.h"\
+	{$(INCLUDE)}"wx\icon.h"\
+	{$(INCLUDE)}"wx\iconbndl.h"\
+	{$(INCLUDE)}"wx\imaglist.h"\
+	{$(INCLUDE)}"wx\intl.h"\
+	{$(INCLUDE)}"wx\ioswrap.h"\
+	{$(INCLUDE)}"wx\layout.h"\
+	{$(INCLUDE)}"wx\list.h"\
+	{$(INCLUDE)}"wx\listbox.h"\
+	{$(INCLUDE)}"wx\log.h"\
+	{$(INCLUDE)}"wx\longlong.h"\
+	{$(INCLUDE)}"wx\mdi.h"\
+	{$(INCLUDE)}"wx\memory.h"\
+	{$(INCLUDE)}"wx\menu.h"\
+	{$(INCLUDE)}"wx\menuitem.h"\
+	{$(INCLUDE)}"wx\module.h"\
+	{$(INCLUDE)}"wx\msgdlg.h"\
+	{$(INCLUDE)}"wx\msw\accel.h"\
+	{$(INCLUDE)}"wx\msw\app.h"\
+	{$(INCLUDE)}"wx\msw\bitmap.h"\
+	{$(INCLUDE)}"wx\msw\bmpbuttn.h"\
+	{$(INCLUDE)}"wx\msw\brush.h"\
+	{$(INCLUDE)}"wx\msw\button.h"\
+	{$(INCLUDE)}"wx\msw\checkbox.h"\
+	{$(INCLUDE)}"wx\msw\checklst.h"\
+	{$(INCLUDE)}"wx\msw\choice.h"\
+	{$(INCLUDE)}"wx\msw\colour.h"\
+	{$(INCLUDE)}"wx\msw\combobox.h"\
+	{$(INCLUDE)}"wx\msw\control.h"\
+	{$(INCLUDE)}"wx\msw\cursor.h"\
+	{$(INCLUDE)}"wx\msw\dc.h"\
+	{$(INCLUDE)}"wx\msw\dcclient.h"\
+	{$(INCLUDE)}"wx\msw\dcmemory.h"\
+	{$(INCLUDE)}"wx\msw\dcprint.h"\
+	{$(INCLUDE)}"wx\msw\dcscreen.h"\
+	{$(INCLUDE)}"wx\msw\dialog.h"\
+	{$(INCLUDE)}"wx\msw\dirdlg.h"\
+	{$(INCLUDE)}"wx\msw\filedlg.h"\
+	{$(INCLUDE)}"wx\msw\font.h"\
+	{$(INCLUDE)}"wx\msw\frame.h"\
+	{$(INCLUDE)}"wx\msw\gauge95.h"\
+	{$(INCLUDE)}"wx\msw\gaugemsw.h"\
+	{$(INCLUDE)}"wx\msw\gccpriv.h"\
+	{$(INCLUDE)}"wx\msw\gdiimage.h"\
+	{$(INCLUDE)}"wx\msw\gdiobj.h"\
+	{$(INCLUDE)}"wx\msw\icon.h"\
+	{$(INCLUDE)}"wx\msw\imaglist.h"\
+	{$(INCLUDE)}"wx\msw\listbox.h"\
+	{$(INCLUDE)}"wx\msw\mdi.h"\
+	{$(INCLUDE)}"wx\msw\menu.h"\
+	{$(INCLUDE)}"wx\msw\menuitem.h"\
+	{$(INCLUDE)}"wx\msw\msgdlg.h"\
+	{$(INCLUDE)}"wx\msw\notebook.h"\
+	{$(INCLUDE)}"wx\msw\palette.h"\
+	{$(INCLUDE)}"wx\msw\pen.h"\
+	{$(INCLUDE)}"wx\msw\radiobox.h"\
+	{$(INCLUDE)}"wx\msw\radiobut.h"\
+	{$(INCLUDE)}"wx\msw\region.h"\
+	{$(INCLUDE)}"wx\msw\scrolbar.h"\
+	{$(INCLUDE)}"wx\msw\slider95.h"\
+	{$(INCLUDE)}"wx\msw\slidrmsw.h"\
+	{$(INCLUDE)}"wx\msw\statbmp.h"\
+	{$(INCLUDE)}"wx\msw\statbox.h"\
+	{$(INCLUDE)}"wx\msw\statbr95.h"\
+	{$(INCLUDE)}"wx\msw\stattext.h"\
+	{$(INCLUDE)}"wx\msw\tbar95.h"\
+	{$(INCLUDE)}"wx\msw\tbarmsw.h"\
+	{$(INCLUDE)}"wx\msw\textctrl.h"\
+	{$(INCLUDE)}"wx\msw\timer.h"\
+	{$(INCLUDE)}"wx\msw\toplevel.h"\
+	{$(INCLUDE)}"wx\msw\window.h"\
+	{$(INCLUDE)}"wx\msw\winundef.h"\
+	{$(INCLUDE)}"wx\notebook.h"\
+	{$(INCLUDE)}"wx\object.h"\
+	{$(INCLUDE)}"wx\ownerdrw.h"\
+	{$(INCLUDE)}"wx\palette.h"\
+	{$(INCLUDE)}"wx\panel.h"\
+	{$(INCLUDE)}"wx\pen.h"\
+	{$(INCLUDE)}"wx\platform.h"\
+	{$(INCLUDE)}"wx\radiobox.h"\
+	{$(INCLUDE)}"wx\radiobut.h"\
+	{$(INCLUDE)}"wx\region.h"\
+	{$(INCLUDE)}"wx\scrolbar.h"\
+	{$(INCLUDE)}"wx\scrolwin.h"\
+	{$(INCLUDE)}"wx\settings.h"\
+	{$(INCLUDE)}"wx\setup.h"\
+	{$(INCLUDE)}"wx\sizer.h"\
+	{$(INCLUDE)}"wx\slider.h"\
+	{$(INCLUDE)}"wx\statbmp.h"\
+	{$(INCLUDE)}"wx\statbox.h"\
+	{$(INCLUDE)}"wx\stattext.h"\
+	{$(INCLUDE)}"wx\statusbr.h"\
+	{$(INCLUDE)}"wx\strconv.h"\
+	{$(INCLUDE)}"wx\stream.h"\
+	{$(INCLUDE)}"wx\string.h"\
+	{$(INCLUDE)}"wx\tbarbase.h"\
+	{$(INCLUDE)}"wx\tbarsmpl.h"\
+	{$(INCLUDE)}"wx\textctrl.h"\
+	{$(INCLUDE)}"wx\textdlg.h"\
+	{$(INCLUDE)}"wx\thread.h"\
+	{$(INCLUDE)}"wx\timer.h"\
+	{$(INCLUDE)}"wx\toolbar.h"\
+	{$(INCLUDE)}"wx\toplevel.h"\
+	{$(INCLUDE)}"wx\univ\bmpbuttn.h"\
+	{$(INCLUDE)}"wx\univ\button.h"\
+	{$(INCLUDE)}"wx\univ\checkbox.h"\
+	{$(INCLUDE)}"wx\univ\checklst.h"\
+	{$(INCLUDE)}"wx\univ\choice.h"\
+	{$(INCLUDE)}"wx\univ\combobox.h"\
+	{$(INCLUDE)}"wx\univ\control.h"\
+	{$(INCLUDE)}"wx\univ\dialog.h"\
+	{$(INCLUDE)}"wx\univ\frame.h"\
+	{$(INCLUDE)}"wx\univ\gauge.h"\
+	{$(INCLUDE)}"wx\univ\inpcons.h"\
+	{$(INCLUDE)}"wx\univ\inphand.h"\
+	{$(INCLUDE)}"wx\univ\listbox.h"\
+	{$(INCLUDE)}"wx\univ\menu.h"\
+	{$(INCLUDE)}"wx\univ\menuitem.h"\
+	{$(INCLUDE)}"wx\univ\notebook.h"\
+	{$(INCLUDE)}"wx\univ\radiobox.h"\
+	{$(INCLUDE)}"wx\univ\radiobut.h"\
+	{$(INCLUDE)}"wx\univ\scrarrow.h"\
+	{$(INCLUDE)}"wx\univ\scrolbar.h"\
+	{$(INCLUDE)}"wx\univ\scrthumb.h"\
+	{$(INCLUDE)}"wx\univ\slider.h"\
+	{$(INCLUDE)}"wx\univ\statbmp.h"\
+	{$(INCLUDE)}"wx\univ\statbox.h"\
+	{$(INCLUDE)}"wx\univ\stattext.h"\
+	{$(INCLUDE)}"wx\univ\statusbr.h"\
+	{$(INCLUDE)}"wx\univ\textctrl.h"\
+	{$(INCLUDE)}"wx\univ\theme.h"\
+	{$(INCLUDE)}"wx\univ\toolbar.h"\
+	{$(INCLUDE)}"wx\univ\toplevel.h"\
+	{$(INCLUDE)}"wx\univ\window.h"\
+	{$(INCLUDE)}"wx\utils.h"\
+	{$(INCLUDE)}"wx\validate.h"\
+	{$(INCLUDE)}"wx\valtext.h"\
+	{$(INCLUDE)}"wx\version.h"\
+	{$(INCLUDE)}"wx\wince\gdiobj.h"\
+	{$(INCLUDE)}"wx\window.h"\
+	{$(INCLUDE)}"wx\wx.h"\
+	{$(INCLUDE)}"wx\wxchar.h"\
+	{$(INCLUDE)}"wx\wxprec.h"\
+	
+NODEP_CPP_WXBAS=\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\gtk\accel.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\gtk\app.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\gtk\bitmap.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\gtk\bmpbuttn.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\gtk\brush.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\gtk\button.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\gtk\checkbox.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\gtk\checklst.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\gtk\choice.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\gtk\colour.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\gtk\combobox.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\gtk\control.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\gtk\cursor.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\gtk\dc.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\gtk\dcclient.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\gtk\dcmemory.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\gtk\dcscreen.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\gtk\dialog.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\gtk\font.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\gtk\frame.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\gtk\gauge.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\gtk\gdiobj.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\gtk\icon.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\gtk\listbox.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\gtk\mdi.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\gtk\menu.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\gtk\menuitem.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\gtk\notebook.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\gtk\pen.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\gtk\radiobox.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\gtk\radiobut.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\gtk\region.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\gtk\scrolbar.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\gtk\scrolwin.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\gtk\slider.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\gtk\statbmp.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\gtk\statbox.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\gtk\stattext.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\gtk\tbargtk.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\gtk\textctrl.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\gtk\timer.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\gtk\toplevel.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\gtk\window.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mac\accel.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mac\app.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mac\bitmap.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mac\bmpbuttn.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mac\brush.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mac\button.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mac\checkbox.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mac\checklst.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mac\choice.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mac\colour.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mac\combobox.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mac\control.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mac\cursor.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mac\dc.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mac\dcclient.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mac\dcmemory.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mac\dcprint.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mac\dcscreen.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mac\dialog.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mac\dirdlg.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mac\filedlg.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mac\font.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mac\frame.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mac\gauge.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mac\gdiobj.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mac\icon.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mac\listbox.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mac\mdi.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mac\menu.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mac\menuitem.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mac\msgdlg.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mac\notebook.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mac\palette.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mac\pen.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mac\radiobox.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mac\radiobut.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mac\region.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mac\scrolbar.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mac\slider.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mac\statbmp.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mac\statbox.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mac\stattext.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mac\statusbr.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mac\textctrl.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mac\timer.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mac\toolbar.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mac\toplevel.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mac\window.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mgl\app.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mgl\bitmap.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mgl\brush.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mgl\colour.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mgl\cursor.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mgl\dc.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mgl\dcclient.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mgl\dcmemory.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mgl\dcscreen.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mgl\font.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mgl\gdiobj.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mgl\icon.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mgl\palette.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mgl\pen.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mgl\region.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mgl\toplevel.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mgl\window.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\motif\accel.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\motif\app.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\motif\bitmap.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\motif\bmpbuttn.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\motif\brush.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\motif\button.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\motif\checkbox.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\motif\checklst.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\motif\choice.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\motif\colour.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\motif\combobox.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\motif\control.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\motif\cursor.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\motif\dc.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\motif\dcclient.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\motif\dcmemory.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\motif\dcscreen.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\motif\dialog.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\motif\filedlg.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\motif\font.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\motif\frame.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\motif\gauge.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\motif\gdiobj.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\motif\icon.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\motif\listbox.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\motif\mdi.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\motif\menu.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\motif\menuitem.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\motif\msgdlg.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\motif\palette.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\motif\pen.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\motif\radiobox.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\motif\radiobut.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\motif\region.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\motif\scrolbar.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\motif\slider.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\motif\statbmp.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\motif\statbox.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\motif\stattext.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\motif\textctrl.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\motif\timer.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\motif\toolbar.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\motif\window.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\os2\accel.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\os2\app.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\os2\bitmap.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\os2\bmpbuttn.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\os2\brush.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\os2\button.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\os2\checkbox.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\os2\checklst.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\os2\choice.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\os2\colour.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\os2\combobox.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\os2\control.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\os2\cursor.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\os2\dc.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\os2\dcclient.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\os2\dcmemory.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\os2\dcprint.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\os2\dcscreen.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\os2\dialog.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\os2\filedlg.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\os2\font.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\os2\frame.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\os2\gauge.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\os2\gdiobj.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\os2\icon.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\os2\listbox.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\os2\menu.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\os2\menuitem.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\os2\msgdlg.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\os2\notebook.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\os2\palette.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\os2\pen.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\os2\radiobox.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\os2\radiobut.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\os2\region.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\os2\scrolbar.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\os2\slider.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\os2\statbmp.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\os2\statbox.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\os2\stattext.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\os2\textctrl.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\os2\timer.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\os2\toolbar.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\os2\toplevel.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\os2\window.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\stubs\accel.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\stubs\app.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\stubs\bitmap.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\stubs\bmpbuttn.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\stubs\brush.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\stubs\button.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\stubs\checkbox.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\stubs\checklst.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\stubs\choice.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\stubs\colour.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\stubs\combobox.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\stubs\control.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\stubs\cursor.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\stubs\dc.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\stubs\dcclient.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\stubs\dcmemory.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\stubs\dcscreen.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\stubs\dialog.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\stubs\filedlg.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\stubs\font.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\stubs\gauge.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\stubs\gdiobj.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\stubs\icon.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\stubs\listbox.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\stubs\mdi.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\stubs\menu.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\stubs\menuitem.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\stubs\notebook.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\stubs\palette.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\stubs\pen.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\stubs\radiobox.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\stubs\radiobut.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\stubs\region.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\stubs\scrolbar.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\stubs\slider.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\stubs\statbmp.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\stubs\statbox.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\stubs\stattext.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\stubs\textctrl.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\stubs\timer.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\stubs\toolbar.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\x11\app.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\x11\bitmap.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\x11\brush.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\x11\colour.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\x11\cursor.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\x11\dc.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\x11\dcclient.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\x11\dcmemory.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\x11\dcscreen.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\x11\font.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\x11\gdiobj.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\x11\icon.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\x11\palette.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\x11\pen.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\x11\region.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\x11\textctrl.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\x11\toplevel.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\x11\window.h"\
+	
+# ADD CPP /Yu"wx/wxprec.h"
+
+!ELSEIF  "$(CFG)" == "wxBase - Win32 (WCE x86em) Debug"
+
+DEP_CPP_WXBAS=\
+	{$(INCLUDE)}"wx\accel.h"\
+	{$(INCLUDE)}"wx\app.h"\
+	{$(INCLUDE)}"wx\bitmap.h"\
+	{$(INCLUDE)}"wx\bmpbuttn.h"\
+	{$(INCLUDE)}"wx\brush.h"\
+	{$(INCLUDE)}"wx\buffer.h"\
+	{$(INCLUDE)}"wx\build.h"\
+	{$(INCLUDE)}"wx\button.h"\
+	{$(INCLUDE)}"wx\checkbox.h"\
+	{$(INCLUDE)}"wx\checklst.h"\
+	{$(INCLUDE)}"wx\chkconf.h"\
+	{$(INCLUDE)}"wx\choicdlg.h"\
+	{$(INCLUDE)}"wx\choice.h"\
+	{$(INCLUDE)}"wx\clntdata.h"\
+	{$(INCLUDE)}"wx\cmndata.h"\
+	{$(INCLUDE)}"wx\colour.h"\
+	{$(INCLUDE)}"wx\combobox.h"\
+	{$(INCLUDE)}"wx\containr.h"\
+	{$(INCLUDE)}"wx\control.h"\
+	{$(INCLUDE)}"wx\ctrlsub.h"\
+	{$(INCLUDE)}"wx\cursor.h"\
+	{$(INCLUDE)}"wx\dc.h"\
+	{$(INCLUDE)}"wx\dcclient.h"\
+	{$(INCLUDE)}"wx\dcmemory.h"\
+	{$(INCLUDE)}"wx\dcprint.h"\
+	{$(INCLUDE)}"wx\dcscreen.h"\
+	{$(INCLUDE)}"wx\debug.h"\
+	{$(INCLUDE)}"wx\defs.h"\
+	{$(INCLUDE)}"wx\dialog.h"\
+	{$(INCLUDE)}"wx\dirdlg.h"\
+	{$(INCLUDE)}"wx\dynarray.h"\
+	{$(INCLUDE)}"wx\event.h"\
+	{$(INCLUDE)}"wx\features.h"\
+	{$(INCLUDE)}"wx\filedlg.h"\
+	{$(INCLUDE)}"wx\filefn.h"\
+	{$(INCLUDE)}"wx\font.h"\
+	{$(INCLUDE)}"wx\fontenc.h"\
+	{$(INCLUDE)}"wx\frame.h"\
+	{$(INCLUDE)}"wx\gauge.h"\
+	{$(INCLUDE)}"wx\gdicmn.h"\
+	{$(INCLUDE)}"wx\gdiobj.h"\
+	{$(INCLUDE)}"wx\generic\accel.h"\
+	{$(INCLUDE)}"wx\generic\choicdgg.h"\
+	{$(INCLUDE)}"wx\generic\dirdlgg.h"\
+	{$(INCLUDE)}"wx\generic\filedlgg.h"\
+	{$(INCLUDE)}"wx\generic\imaglist.h"\
+	{$(INCLUDE)}"wx\generic\mdig.h"\
+	{$(INCLUDE)}"wx\generic\msgdlgg.h"\
+	{$(INCLUDE)}"wx\generic\notebook.h"\
+	{$(INCLUDE)}"wx\generic\paletteg.h"\
+	{$(INCLUDE)}"wx\generic\panelg.h"\
+	{$(INCLUDE)}"wx\generic\scrolwin.h"\
+	{$(INCLUDE)}"wx\generic\statusbr.h"\
+	{$(INCLUDE)}"wx\generic\tabg.h"\
+	{$(INCLUDE)}"wx\generic\textdlgg.h"\
+	{$(INCLUDE)}"wx\generic\timer.h"\
+	{$(INCLUDE)}"wx\hash.h"\
+	{$(INCLUDE)}"wx\icon.h"\
+	{$(INCLUDE)}"wx\iconbndl.h"\
+	{$(INCLUDE)}"wx\imaglist.h"\
+	{$(INCLUDE)}"wx\intl.h"\
+	{$(INCLUDE)}"wx\ioswrap.h"\
+	{$(INCLUDE)}"wx\layout.h"\
+	{$(INCLUDE)}"wx\list.h"\
+	{$(INCLUDE)}"wx\listbox.h"\
+	{$(INCLUDE)}"wx\log.h"\
+	{$(INCLUDE)}"wx\longlong.h"\
+	{$(INCLUDE)}"wx\mdi.h"\
+	{$(INCLUDE)}"wx\memory.h"\
+	{$(INCLUDE)}"wx\menu.h"\
+	{$(INCLUDE)}"wx\menuitem.h"\
+	{$(INCLUDE)}"wx\module.h"\
+	{$(INCLUDE)}"wx\msgdlg.h"\
+	{$(INCLUDE)}"wx\msw\accel.h"\
+	{$(INCLUDE)}"wx\msw\app.h"\
+	{$(INCLUDE)}"wx\msw\bitmap.h"\
+	{$(INCLUDE)}"wx\msw\bmpbuttn.h"\
+	{$(INCLUDE)}"wx\msw\brush.h"\
+	{$(INCLUDE)}"wx\msw\button.h"\
+	{$(INCLUDE)}"wx\msw\checkbox.h"\
+	{$(INCLUDE)}"wx\msw\checklst.h"\
+	{$(INCLUDE)}"wx\msw\choice.h"\
+	{$(INCLUDE)}"wx\msw\colour.h"\
+	{$(INCLUDE)}"wx\msw\combobox.h"\
+	{$(INCLUDE)}"wx\msw\control.h"\
+	{$(INCLUDE)}"wx\msw\cursor.h"\
+	{$(INCLUDE)}"wx\msw\dc.h"\
+	{$(INCLUDE)}"wx\msw\dcclient.h"\
+	{$(INCLUDE)}"wx\msw\dcmemory.h"\
+	{$(INCLUDE)}"wx\msw\dcprint.h"\
+	{$(INCLUDE)}"wx\msw\dcscreen.h"\
+	{$(INCLUDE)}"wx\msw\dialog.h"\
+	{$(INCLUDE)}"wx\msw\dirdlg.h"\
+	{$(INCLUDE)}"wx\msw\filedlg.h"\
+	{$(INCLUDE)}"wx\msw\font.h"\
+	{$(INCLUDE)}"wx\msw\frame.h"\
+	{$(INCLUDE)}"wx\msw\gauge95.h"\
+	{$(INCLUDE)}"wx\msw\gaugemsw.h"\
+	{$(INCLUDE)}"wx\msw\gccpriv.h"\
+	{$(INCLUDE)}"wx\msw\gdiimage.h"\
+	{$(INCLUDE)}"wx\msw\gdiobj.h"\
+	{$(INCLUDE)}"wx\msw\icon.h"\
+	{$(INCLUDE)}"wx\msw\imaglist.h"\
+	{$(INCLUDE)}"wx\msw\listbox.h"\
+	{$(INCLUDE)}"wx\msw\mdi.h"\
+	{$(INCLUDE)}"wx\msw\menu.h"\
+	{$(INCLUDE)}"wx\msw\menuitem.h"\
+	{$(INCLUDE)}"wx\msw\msgdlg.h"\
+	{$(INCLUDE)}"wx\msw\notebook.h"\
+	{$(INCLUDE)}"wx\msw\palette.h"\
+	{$(INCLUDE)}"wx\msw\pen.h"\
+	{$(INCLUDE)}"wx\msw\radiobox.h"\
+	{$(INCLUDE)}"wx\msw\radiobut.h"\
+	{$(INCLUDE)}"wx\msw\region.h"\
+	{$(INCLUDE)}"wx\msw\scrolbar.h"\
+	{$(INCLUDE)}"wx\msw\slider95.h"\
+	{$(INCLUDE)}"wx\msw\slidrmsw.h"\
+	{$(INCLUDE)}"wx\msw\statbmp.h"\
+	{$(INCLUDE)}"wx\msw\statbox.h"\
+	{$(INCLUDE)}"wx\msw\statbr95.h"\
+	{$(INCLUDE)}"wx\msw\stattext.h"\
+	{$(INCLUDE)}"wx\msw\tbar95.h"\
+	{$(INCLUDE)}"wx\msw\tbarmsw.h"\
+	{$(INCLUDE)}"wx\msw\textctrl.h"\
+	{$(INCLUDE)}"wx\msw\timer.h"\
+	{$(INCLUDE)}"wx\msw\toplevel.h"\
+	{$(INCLUDE)}"wx\msw\window.h"\
+	{$(INCLUDE)}"wx\msw\winundef.h"\
+	{$(INCLUDE)}"wx\notebook.h"\
+	{$(INCLUDE)}"wx\object.h"\
+	{$(INCLUDE)}"wx\ownerdrw.h"\
+	{$(INCLUDE)}"wx\palette.h"\
+	{$(INCLUDE)}"wx\panel.h"\
+	{$(INCLUDE)}"wx\pen.h"\
+	{$(INCLUDE)}"wx\platform.h"\
+	{$(INCLUDE)}"wx\radiobox.h"\
+	{$(INCLUDE)}"wx\radiobut.h"\
+	{$(INCLUDE)}"wx\region.h"\
+	{$(INCLUDE)}"wx\scrolbar.h"\
+	{$(INCLUDE)}"wx\scrolwin.h"\
+	{$(INCLUDE)}"wx\settings.h"\
+	{$(INCLUDE)}"wx\setup.h"\
+	{$(INCLUDE)}"wx\sizer.h"\
+	{$(INCLUDE)}"wx\slider.h"\
+	{$(INCLUDE)}"wx\statbmp.h"\
+	{$(INCLUDE)}"wx\statbox.h"\
+	{$(INCLUDE)}"wx\stattext.h"\
+	{$(INCLUDE)}"wx\statusbr.h"\
+	{$(INCLUDE)}"wx\strconv.h"\
+	{$(INCLUDE)}"wx\stream.h"\
+	{$(INCLUDE)}"wx\string.h"\
+	{$(INCLUDE)}"wx\tbarbase.h"\
+	{$(INCLUDE)}"wx\tbarsmpl.h"\
+	{$(INCLUDE)}"wx\textctrl.h"\
+	{$(INCLUDE)}"wx\textdlg.h"\
+	{$(INCLUDE)}"wx\thread.h"\
+	{$(INCLUDE)}"wx\timer.h"\
+	{$(INCLUDE)}"wx\toolbar.h"\
+	{$(INCLUDE)}"wx\toplevel.h"\
+	{$(INCLUDE)}"wx\univ\bmpbuttn.h"\
+	{$(INCLUDE)}"wx\univ\button.h"\
+	{$(INCLUDE)}"wx\univ\checkbox.h"\
+	{$(INCLUDE)}"wx\univ\checklst.h"\
+	{$(INCLUDE)}"wx\univ\choice.h"\
+	{$(INCLUDE)}"wx\univ\combobox.h"\
+	{$(INCLUDE)}"wx\univ\control.h"\
+	{$(INCLUDE)}"wx\univ\dialog.h"\
+	{$(INCLUDE)}"wx\univ\frame.h"\
+	{$(INCLUDE)}"wx\univ\gauge.h"\
+	{$(INCLUDE)}"wx\univ\inpcons.h"\
+	{$(INCLUDE)}"wx\univ\inphand.h"\
+	{$(INCLUDE)}"wx\univ\listbox.h"\
+	{$(INCLUDE)}"wx\univ\menu.h"\
+	{$(INCLUDE)}"wx\univ\menuitem.h"\
+	{$(INCLUDE)}"wx\univ\notebook.h"\
+	{$(INCLUDE)}"wx\univ\radiobox.h"\
+	{$(INCLUDE)}"wx\univ\radiobut.h"\
+	{$(INCLUDE)}"wx\univ\scrarrow.h"\
+	{$(INCLUDE)}"wx\univ\scrolbar.h"\
+	{$(INCLUDE)}"wx\univ\scrthumb.h"\
+	{$(INCLUDE)}"wx\univ\slider.h"\
+	{$(INCLUDE)}"wx\univ\statbmp.h"\
+	{$(INCLUDE)}"wx\univ\statbox.h"\
+	{$(INCLUDE)}"wx\univ\stattext.h"\
+	{$(INCLUDE)}"wx\univ\statusbr.h"\
+	{$(INCLUDE)}"wx\univ\textctrl.h"\
+	{$(INCLUDE)}"wx\univ\theme.h"\
+	{$(INCLUDE)}"wx\univ\toolbar.h"\
+	{$(INCLUDE)}"wx\univ\toplevel.h"\
+	{$(INCLUDE)}"wx\univ\window.h"\
+	{$(INCLUDE)}"wx\utils.h"\
+	{$(INCLUDE)}"wx\validate.h"\
+	{$(INCLUDE)}"wx\valtext.h"\
+	{$(INCLUDE)}"wx\version.h"\
+	{$(INCLUDE)}"wx\wince\gdiobj.h"\
+	{$(INCLUDE)}"wx\window.h"\
+	{$(INCLUDE)}"wx\wx.h"\
+	{$(INCLUDE)}"wx\wxchar.h"\
+	{$(INCLUDE)}"wx\wxprec.h"\
+	
+NODEP_CPP_WXBAS=\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\gtk\accel.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\gtk\app.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\gtk\bitmap.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\gtk\bmpbuttn.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\gtk\brush.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\gtk\button.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\gtk\checkbox.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\gtk\checklst.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\gtk\choice.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\gtk\colour.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\gtk\combobox.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\gtk\control.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\gtk\cursor.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\gtk\dc.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\gtk\dcclient.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\gtk\dcmemory.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\gtk\dcscreen.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\gtk\dialog.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\gtk\font.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\gtk\frame.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\gtk\gauge.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\gtk\gdiobj.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\gtk\icon.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\gtk\listbox.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\gtk\mdi.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\gtk\menu.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\gtk\menuitem.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\gtk\notebook.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\gtk\pen.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\gtk\radiobox.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\gtk\radiobut.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\gtk\region.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\gtk\scrolbar.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\gtk\scrolwin.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\gtk\slider.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\gtk\statbmp.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\gtk\statbox.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\gtk\stattext.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\gtk\tbargtk.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\gtk\textctrl.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\gtk\timer.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\gtk\toplevel.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\gtk\window.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mac\accel.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mac\app.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mac\bitmap.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mac\bmpbuttn.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mac\brush.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mac\button.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mac\checkbox.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mac\checklst.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mac\choice.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mac\colour.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mac\combobox.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mac\control.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mac\cursor.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mac\dc.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mac\dcclient.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mac\dcmemory.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mac\dcprint.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mac\dcscreen.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mac\dialog.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mac\dirdlg.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mac\filedlg.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mac\font.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mac\frame.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mac\gauge.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mac\gdiobj.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mac\icon.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mac\listbox.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mac\mdi.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mac\menu.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mac\menuitem.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mac\msgdlg.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mac\notebook.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mac\palette.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mac\pen.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mac\radiobox.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mac\radiobut.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mac\region.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mac\scrolbar.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mac\slider.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mac\statbmp.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mac\statbox.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mac\stattext.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mac\statusbr.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mac\textctrl.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mac\timer.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mac\toolbar.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mac\toplevel.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mac\window.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mgl\app.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mgl\bitmap.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mgl\brush.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mgl\colour.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mgl\cursor.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mgl\dc.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mgl\dcclient.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mgl\dcmemory.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mgl\dcscreen.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mgl\font.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mgl\gdiobj.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mgl\icon.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mgl\palette.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mgl\pen.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mgl\region.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mgl\toplevel.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\mgl\window.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\motif\accel.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\motif\app.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\motif\bitmap.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\motif\bmpbuttn.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\motif\brush.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\motif\button.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\motif\checkbox.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\motif\checklst.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\motif\choice.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\motif\colour.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\motif\combobox.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\motif\control.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\motif\cursor.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\motif\dc.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\motif\dcclient.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\motif\dcmemory.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\motif\dcscreen.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\motif\dialog.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\motif\filedlg.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\motif\font.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\motif\frame.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\motif\gauge.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\motif\gdiobj.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\motif\icon.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\motif\listbox.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\motif\mdi.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\motif\menu.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\motif\menuitem.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\motif\msgdlg.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\motif\palette.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\motif\pen.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\motif\radiobox.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\motif\radiobut.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\motif\region.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\motif\scrolbar.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\motif\slider.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\motif\statbmp.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\motif\statbox.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\motif\stattext.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\motif\textctrl.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\motif\timer.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\motif\toolbar.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\motif\window.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\os2\accel.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\os2\app.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\os2\bitmap.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\os2\bmpbuttn.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\os2\brush.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\os2\button.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\os2\checkbox.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\os2\checklst.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\os2\choice.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\os2\colour.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\os2\combobox.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\os2\control.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\os2\cursor.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\os2\dc.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\os2\dcclient.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\os2\dcmemory.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\os2\dcprint.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\os2\dcscreen.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\os2\dialog.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\os2\filedlg.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\os2\font.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\os2\frame.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\os2\gauge.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\os2\gdiobj.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\os2\icon.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\os2\listbox.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\os2\menu.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\os2\menuitem.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\os2\msgdlg.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\os2\notebook.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\os2\palette.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\os2\pen.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\os2\radiobox.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\os2\radiobut.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\os2\region.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\os2\scrolbar.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\os2\slider.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\os2\statbmp.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\os2\statbox.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\os2\stattext.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\os2\textctrl.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\os2\timer.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\os2\toolbar.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\os2\toplevel.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\os2\window.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\stubs\accel.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\stubs\app.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\stubs\bitmap.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\stubs\bmpbuttn.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\stubs\brush.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\stubs\button.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\stubs\checkbox.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\stubs\checklst.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\stubs\choice.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\stubs\colour.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\stubs\combobox.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\stubs\control.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\stubs\cursor.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\stubs\dc.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\stubs\dcclient.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\stubs\dcmemory.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\stubs\dcscreen.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\stubs\dialog.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\stubs\filedlg.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\stubs\font.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\stubs\gauge.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\stubs\gdiobj.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\stubs\icon.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\stubs\listbox.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\stubs\mdi.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\stubs\menu.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\stubs\menuitem.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\stubs\notebook.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\stubs\palette.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\stubs\pen.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\stubs\radiobox.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\stubs\radiobut.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\stubs\region.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\stubs\scrolbar.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\stubs\slider.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\stubs\statbmp.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\stubs\statbox.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\stubs\stattext.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\stubs\textctrl.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\stubs\timer.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\stubs\toolbar.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\x11\app.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\x11\bitmap.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\x11\brush.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\x11\colour.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\x11\cursor.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\x11\dc.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\x11\dcclient.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\x11\dcmemory.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\x11\dcscreen.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\x11\font.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\x11\gdiobj.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\x11\icon.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\x11\palette.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\x11\pen.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\x11\region.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\x11\textctrl.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\x11\toplevel.h"\
+	"C:\C\WX\WXWINDOWS\INCLUDE\wx\wx\x11\window.h"\
+	
+# ADD CPP /Yu"wx/wxprec.h"
+
+!ENDIF 
+
+# End Source File
+# End Group
+# Begin Group "WinCE Headers"
+
+# PROP Default_Filter "H"
+# Begin Source File
+
+SOURCE=..\..\..\include\wx\msw\wince\missing.h
+# End Source File
+# End Group
+# Begin Source File
+
+SOURCE=".\Koan-HowToBuildLibrary.txt"
+# End Source File
+# End Target
+# End Project
