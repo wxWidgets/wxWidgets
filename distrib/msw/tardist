@@ -251,6 +251,22 @@ else
   echo "Warning - did not find $WXDEST/deliver/extra/wxWidgets-${WXVER}-VC.zip"
 fi
 
+# If we have the full set of eVC++ project files,
+# get them
+if [ -f $WXDEST/extra/wxWidgets-${WXVER}-eVC.zip ]; then
+  unzip -o $WXDEST/extra/wxWidgets-${WXVER}-eVC.zip
+else
+  echo "Warning - did not find $WXDEST/deliver/extra/wxWidgets-${WXVER}-eVC.zip"
+fi
+
+# If we have the full set of DMC project files,
+# get them
+if [ -f $WXDEST/extra/wxWidgets-${WXVER}-DMC.zip ]; then
+  unzip -o $WXDEST/extra/wxWidgets-${WXVER}-DMC.zip
+else
+  echo "Warning - did not find $WXDEST/deliver/extra/wxWidgets-${WXVER}-DMC.zip"
+fi
+
 # If we have the full set of Mac CW project files,
 # get them
 if [ -f $WXDEST/extra/wxWidgets-${WXVER}-CW-Mac.zip ]; then
@@ -288,8 +304,34 @@ gzip -c $WXDEST/wxAll-${WXVER}.tar > $WXDEST/wxAll-${WXVER}.tar.gz
 bzip2 $WXDEST/wxAll-${WXVER}.tar
 }
 
+domakedocs()
+{
+  mkdir -p $WXSRC/docs/html/wx
+  mkdir -p $WXSRC/docs/html/tex2rtf
+  mkdir -p $WXSRC/docs/html/fl
+  mkdir -p $WXSRC/docs/html/ogl
+  mkdir -p $WXSRC/docs/htb
+
+  rm -f -r $WXSRC/docs/html/wx/*.htm*
+  rm -f -r $WXSRC/docs/htb/wx.htb
+
+  echo Making HTML wxWidgets manual...
+  cd $WXSRC/docs/latex/wx
+  cp *.gif $WXSRC/docs/html/wx
+  tex2rtf manual.tex $WXSRC/docs/html/wx/wx.htm -twice -html
+
+  echo Making HTB wxWidgets manual...
+  cd $WXSRC/docs/html/wx
+  zip -q $WXSRC/docs/htb/wx.htb *.html *.gif *.hhp *.hhc *.hhk
+
+  echo Done making manuals.
+}
+
 dospinwxdocs()
 {
+  # First make the docs
+  domakedocs
+
 echo Tarring wxDocs...
 
 ### Doc sources

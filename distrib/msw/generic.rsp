@@ -1183,6 +1183,7 @@ samples/taskbar/*.def
 samples/taskbar/*.bmp
 samples/taskbar/*.ico
 samples/taskbar/*.txt
+samples/taskbar/*.xpm
 
 samples/text/*.cpp
 samples/text/*.h

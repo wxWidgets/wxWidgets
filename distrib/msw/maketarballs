@@ -159,6 +159,32 @@ docopydocs()
   cp $WXSRC/docs/os2/install.txt $WXDEST/install-os2-${WXVER}.txt
 }
 
+dospindocs()
+{
+  mkdir -p $WXSRC/docs/html/wx
+  mkdir -p $WXSRC/docs/html/tex2rtf
+  mkdir -p $WXSRC/docs/html/fl
+  mkdir -p $WXSRC/docs/html/ogl
+  mkdir -p $WXSRC/docs/htb
+
+  rm -f -r $WXSRC/docs/html/wx/*.htm*
+  rm -f -r $WXSRC/docs/htb/wx.htb
+
+  echo Making HTML wxWidgets manual...
+  cd $WXSRC/docs/latex/wx
+  cp *.gif $WXSRC/docs/html/wx
+  tex2rtf manual.tex $WXSRC/docs/html/wx/wx.htm -twice -html
+
+  echo Making HTB wxWidgets manual...
+  cd $WXSRC/docs/html/wx
+  zip -q $WXSRC/docs/htb/wx.htb *.html *.gif *.hhp *.hhc *.hhk
+
+  echo Archiving manuals...
+  # TODO
+
+  echo Done making manuals.
+}
+
 PROGNAME=$0
 WXSRC=$1
 WXDEST=$2
@@ -169,6 +195,7 @@ SPINWXGTK=0
 SPINWXMOTIF=0
 SPINWXMAC=0
 SPINWXBASE=0
+SPINDOCS=0
 SPINEVERYTHING=0
 UPDATECVS=0
 
@@ -182,6 +209,7 @@ usage()
     echo "    --wxx11        Spin wxX11"
     echo "    --wxmotif      Spin wxMotif"
     echo "    --wxmac        Spin wxMac"
+    echo "    --docs         Spin docs"
     echo "    --all          Spin EVERYTHING"
     echo "    --updatecvs    Update from CVS"
 
@@ -249,6 +277,10 @@ fi
 
 if [ "$SPINWXMAC" = "1" ] || [ "$SPINEVERYTHING" = "1" ]; then
   dospinwxmac
+fi
+
+if [ "$SPINDOCS" = "1" ] || [ "$SPINEVERYTHING" = "1" ]; then
+  dospindocs
 fi
 
 docopydocs
