@@ -84,6 +84,11 @@ Python instance object with a class that raises an exception whenever
 a method call (or other attribute access) is attempted.  This works
 for any class that is OOR aware.
 
+Added OOR support for wxGridCellRenderer, wxGridCellEditor,
+wxGridCellAttr, wxGridCellAttrProvider, wxGridTableBase and their
+derived classes..
+
+
 
 
 2.3.2.1
@@ -93,7 +98,6 @@ well as the Python thread state.  This time it works on SMP machines
 without barfing and is also still compatible with Python debuggers.
 
 Added some patches from library contributors.
-
 
 
 
