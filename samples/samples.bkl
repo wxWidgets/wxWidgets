@@ -83,6 +83,5 @@
     <subproject id="vscroll" template="sub"/>
     <subproject id="widgets" template="sub"/>
     <subproject id="wizard" template="sub"/>
-    <subproject id="wxtest" template="sub"/>
 
 </makefile>

@@ -43,7 +43,7 @@ MAKEARGS = CC="$(CC)" CXX="$(CXX)" CFLAGS="$(CFLAGS)" CXXFLAGS="$(CXXFLAGS)" &
 
 ### Targets: ###
 
-all : .SYMBOLIC access artprov calendar caret checklst config console controls db dialogs dialup display dnd docview docvwmdi dragimag drawing dynamic erase event exec except font grid help htlbox html image internat ipc joytest keyboard layout listbox listctrl mdi memcheck menu mfc minifram minimal mobile multimon nativdlg notebook oleauto opengl ownerdrw png printing propsize regtest render richedit rotate sashtest scroll scrollsub shaped sockets sound splitter statbar tab taskbar text thread toolbar treectrl typetest validate vscroll widgets wizard wxtest
+all : .SYMBOLIC access artprov calendar caret checklst config console controls db dialogs dialup display dnd docview docvwmdi dragimag drawing dynamic erase event exec except font grid help htlbox html image internat ipc joytest keyboard layout listbox listctrl mdi memcheck menu mfc minifram minimal mobile multimon nativdlg notebook oleauto opengl ownerdrw png printing propsize regtest render richedit rotate sashtest scroll scrollsub shaped sockets sound splitter statbar tab taskbar text thread toolbar treectrl typetest validate vscroll widgets wizard
 
 clean : .SYMBOLIC 
 	-if exist .\*.obj del .\*.obj
@@ -270,9 +270,6 @@ clean : .SYMBOLIC
 	wmake $(__MAKEOPTS__) -f makefile.wat $(MAKEARGS) clean
 	cd $(WATCOM_CWD)
 	cd wizard
-	wmake $(__MAKEOPTS__) -f makefile.wat $(MAKEARGS) clean
-	cd $(WATCOM_CWD)
-	cd wxtest
 	wmake $(__MAKEOPTS__) -f makefile.wat $(MAKEARGS) clean
 	cd $(WATCOM_CWD)
 
@@ -643,10 +640,5 @@ widgets : .SYMBOLIC
 
 wizard : .SYMBOLIC 
 	cd wizard
-	wmake $(__MAKEOPTS__) -f makefile.wat $(MAKEARGS) all
-	cd $(WATCOM_CWD)
-
-wxtest : .SYMBOLIC 
-	cd wxtest
 	wmake $(__MAKEOPTS__) -f makefile.wat $(MAKEARGS) all
 	cd $(WATCOM_CWD)

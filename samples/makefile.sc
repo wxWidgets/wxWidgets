@@ -77,7 +77,6 @@ all:
     -make -f $(WXDIR)\samples\vscroll\makefile.sc $@
     -make -f $(WXDIR)\samples\widgets\makefile.sc $@
     -make -f $(WXDIR)\samples\wizard\makefile.sc $@
-    -make -f $(WXDIR)\samples\wxtest\makefile.sc $@
     -make -f $(WXDIR)\samples\bytes\makefile.sc $@
 
 
