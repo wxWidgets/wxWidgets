@@ -314,8 +314,9 @@ void wxComboControl::DoMoveWindow(int x, int y, int width, int height)
     wxSize sizeBtn = m_btn->GetBestSize();
 
     wxCoord wText = width - sizeBtn.x;
-    m_text->SetSize(x, y, wText, height);
-    m_btn->SetSize(x + wText, y, sizeBtn.x, height);
+    wxPoint p = GetParent() ? GetParent()->GetClientAreaOrigin() : wxPoint(0,0);
+    m_text->SetSize(x - p.x, y - p.y, wText, height);
+    m_btn->SetSize(x - p.x + wText, y - p.y, sizeBtn.x, height);
 }
 
 // ----------------------------------------------------------------------------
