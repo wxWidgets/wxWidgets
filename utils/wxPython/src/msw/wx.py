@@ -1259,7 +1259,10 @@ class wxApp(wxPyApp):
 #----------------------------------------------------------------------------
 #
 # $Log$
-# Revision 1.6  1999/02/20 09:11:32  RD
+# Revision 1.7  1999/02/25 07:09:30  RD
+# wxPython version 2.0b5
+#
+# Revision 1.11  1999/02/20 09:02:55  RD
 # Added wxWindow_FromHWND(hWnd) for wxMSW to construct a wxWindow from a
 # window handle.  If you can get the window handle into the python code,
 # it should just work...  More news on this later.

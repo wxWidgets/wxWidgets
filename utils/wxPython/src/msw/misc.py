@@ -498,9 +498,6 @@ class wxToolTipPtr :
     def GetTip(self):
         val = miscc.wxToolTip_GetTip(self.this)
         return val
-    def SetWindow(self,arg0):
-        val = miscc.wxToolTip_SetWindow(self.this,arg0.this)
-        return val
     def GetWindow(self):
         val = miscc.wxToolTip_GetWindow(self.this)
         val = wxWindowPtr(val)

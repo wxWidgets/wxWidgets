@@ -48,7 +48,6 @@ public:
     void ActivatePrevious();
     void ArrangeIcons();
     void Cascade();
-    void GetClientSize(int* OUTPUT, int* OUTPUT);
     wxMDIChildFrame* GetActiveChild();
     wxMDIClientWindow* GetClientWindow();
     wxWindow* GetToolBar();
@@ -80,10 +79,6 @@ public:
     void Maximize();
     void Restore();
 
-    void SetMenuBar(wxMenuBar *menu_bar);
-    void SetClientSize(int width, int height);
-    void GetPosition(int* OUTPUT, int* OUTPUT) const ;
-
 };
 
 
@@ -100,6 +95,9 @@ public:
 /////////////////////////////////////////////////////////////////////////////
 //
 // $Log$
+// Revision 1.6  1999/02/25 07:08:34  RD
+// wxPython version 2.0b5
+//
 // Revision 1.5  1998/12/15 20:41:21  RD
 // Changed the import semantics from "from wxPython import *" to "from
 // wxPython.wx import *"  This is for people who are worried about

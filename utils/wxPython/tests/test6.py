@@ -12,7 +12,7 @@
 #----------------------------------------------------------------------------
 
 import sys
-from wxPython.wx import wxConfig
+from wxPython.utils import wxConfig
 
 
 #----------------------------------------------------------------------------
@@ -81,6 +81,9 @@ if __name__ == '__main__':
 #----------------------------------------------------------------------------
 #
 # $Log$
+# Revision 1.2  1999/02/25 07:09:51  RD
+# wxPython version 2.0b5
+#
 # Revision 1.1  1998/12/15 20:44:37  RD
 # Changed the import semantics from "from wxPython import *" to "from
 # wxPython.wx import *"  This is for people who are worried about

@@ -82,7 +82,6 @@ Added wxImageList, wxToolTip.
 Re-enabled wxConfig.DeleteAll() since it is reportedly fixed for the
 wxRegConfig class.
 
-
 As usual, some bug fixes, tweaks, etc.
 
 
@@ -187,11 +186,11 @@ there, make sure wxUSE_OWNER_DRAWN is also set to 1.
 
 2. Change into the $(WXWIN)/utils/wxPython/src directory.
 
-3. Edit makefile.nt and specify where your python installation is at.
+3. Edit makefile.vc and specify where your python installation is at.
 You may also want to fiddle with the TARGETDIR variable as described
 above.
 
-4. Run nmake -f makefile.nt
+4. Run nmake -f makefile.vc
 
 5. If it builds successfully, congratulations!  Move on to the next
 step.  If not then you can try mailing me for help.  Also, I will

@@ -115,6 +115,10 @@ extern wxAcceleratorEntry* wxAcceleratorEntry_LIST_helper(PyObject* source);
 
 static char* wxStringErrorMsg = "string type is required for parameter";
 
+#ifdef SEPARATE
+    static wxString wxPyEmptyStr("");
+#endif
+
     static PyObject* __EnumerationHelper(bool flag, wxString& str, long index) {
         PyObject* ret = PyTuple_New(3);
         if (ret) {

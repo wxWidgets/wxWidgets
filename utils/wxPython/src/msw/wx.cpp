@@ -33,8 +33,8 @@
  * and things like that.
  *
  * $Log$
- * Revision 1.6  1999/02/01 00:11:10  RD
- * Added the missing EVT_LIST_ITEM_SELECTED and friends.
+ * Revision 1.7  1999/02/25 07:09:28  RD
+ * wxPython version 2.0b5
  *
  ************************************************************************/
 
@@ -628,14 +628,27 @@ extern "C" SWIGEXPORT(void,initcontrols2c)();
 extern "C" SWIGEXPORT(void,initcmndlgsc)();
 extern "C" SWIGEXPORT(void,initstattoolc)();
 extern "C" SWIGEXPORT(void,initframesc)();
-extern "C" SWIGEXPORT(void,initutilsc)();
 extern "C" SWIGEXPORT(void,initwindows3c)();
-
-
+#ifndef SEPARATE
+extern "C" SWIGEXPORT(void,initutilsc)();
+#endif
 static int _wrap_wxPyDefaultPosition_set(PyObject *val) {
+    char * tval;
+    wxPoint * temp;
 
-    PyErr_SetString(PyExc_TypeError,"Variable wxPyDefaultPosition is read-only.");
-    return 1;
+    tval = (char *) PyString_AsString(val);
+    if (PyErr_Occurred()) {
+        PyErr_SetString(PyExc_TypeError,"C variable 'wxPyDefaultPosition'(wxPoint *)");
+        return 1; 
+    }
+    if (tval) {
+        if (SWIG_GetPtr(tval,(void **) &temp,"_wxPoint_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in value of wxPyDefaultPosition. Expected _wxPoint_p.");
+        return 1;
+        }
+    }
+    wxPyDefaultPosition = *temp;
+    return 0;
 }
 
 static PyObject *_wrap_wxPyDefaultPosition_get() {
@@ -648,9 +661,22 @@ static PyObject *_wrap_wxPyDefaultPosition_get() {
 }
 
 static int _wrap_wxPyDefaultSize_set(PyObject *val) {
+    char * tval;
+    wxSize * temp;
 
-    PyErr_SetString(PyExc_TypeError,"Variable wxPyDefaultSize is read-only.");
-    return 1;
+    tval = (char *) PyString_AsString(val);
+    if (PyErr_Occurred()) {
+        PyErr_SetString(PyExc_TypeError,"C variable 'wxPyDefaultSize'(wxSize *)");
+        return 1; 
+    }
+    if (tval) {
+        if (SWIG_GetPtr(tval,(void **) &temp,"_wxSize_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in value of wxPyDefaultSize. Expected _wxSize_p.");
+        return 1;
+        }
+    }
+    wxPyDefaultSize = *temp;
+    return 0;
 }
 
 static PyObject *_wrap_wxPyDefaultSize_get() {
@@ -1594,6 +1620,7 @@ SWIGEXPORT(void,initwxc)() {
 	 PyDict_SetItemString(d,"false", PyInt_FromLong((long) 0));
 	 PyDict_SetItemString(d,"TRUE", PyInt_FromLong((long) 1));
 	 PyDict_SetItemString(d,"true", PyInt_FromLong((long) 1));
+	 PyDict_SetItemString(d,"wxVERSION_STRING", PyString_FromString("wxVERSION_STRING"));
 	 PyDict_SetItemString(d,"wxEVT_NULL", PyInt_FromLong((long) wxEVT_NULL));
 	 PyDict_SetItemString(d,"wxEVT_FIRST", PyInt_FromLong((long) wxEVT_FIRST));
 	 PyDict_SetItemString(d,"wxEVT_COMMAND_BUTTON_CLICKED", PyInt_FromLong((long) wxEVT_COMMAND_BUTTON_CLICKED));
@@ -1726,7 +1753,7 @@ SWIGEXPORT(void,initwxc)() {
 	 PyDict_SetItemString(d,"wxEVT_COMMAND_TAB_SEL_CHANGING", PyInt_FromLong((long) wxEVT_COMMAND_TAB_SEL_CHANGING));
 	 PyDict_SetItemString(d,"wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGED", PyInt_FromLong((long) wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGED));
 	 PyDict_SetItemString(d,"wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGING", PyInt_FromLong((long) wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGING));
-	 PyDict_SetItemString(d,"__version__", PyString_FromString("0.5.4"));
+	 PyDict_SetItemString(d,"__version__", PyString_FromString("2.0b5"));
 	 PyDict_SetItemString(d,"cvar", SWIG_globals);
 	 SWIG_addvarlink(SWIG_globals,"wxPyDefaultPosition",_wrap_wxPyDefaultPosition_get, _wrap_wxPyDefaultPosition_set);
 	 SWIG_addvarlink(SWIG_globals,"wxPyDefaultSize",_wrap_wxPyDefaultSize_get, _wrap_wxPyDefaultSize_set);
@@ -1773,6 +1800,7 @@ SWIGEXPORT(void,initwxc)() {
 	 SWIG_RegisterMapping("_wxIndividualLayoutConstraint","_class_wxIndividualLayoutConstraint",0);
 	 SWIG_RegisterMapping("_wxCursor","_class_wxCursor",0);
 	 SWIG_RegisterMapping("_class_wxTreeCtrl","_wxTreeCtrl",0);
+	 SWIG_RegisterMapping("_wxToolTip","_class_wxToolTip",0);
 	 SWIG_RegisterMapping("_wxMask","_class_wxMask",0);
 	 SWIG_RegisterMapping("_wxGrid","_class_wxGrid",0);
 	 SWIG_RegisterMapping("_wxPageSetupData","_class_wxPageSetupData",0);
@@ -1788,6 +1816,7 @@ SWIGEXPORT(void,initwxc)() {
 	 SWIG_RegisterMapping("_long","_wxDash",0);
 	 SWIG_RegisterMapping("_long","_unsigned_long",0);
 	 SWIG_RegisterMapping("_long","_signed_long",0);
+	 SWIG_RegisterMapping("_wxImageList","_class_wxImageList",0);
 	 SWIG_RegisterMapping("_wxDropFilesEvent","_class_wxDropFilesEvent",0);
 	 SWIG_RegisterMapping("_wxBitmapButton","_class_wxBitmapButton",0);
 	 SWIG_RegisterMapping("_wxSashWindow","_class_wxSashWindow",0);
@@ -1809,6 +1838,7 @@ SWIGEXPORT(void,initwxc)() {
 	 SWIG_RegisterMapping("_wxInitDialogEvent","_class_wxInitDialogEvent",0);
 	 SWIG_RegisterMapping("_wxCheckBox","_class_wxCheckBox",0);
 	 SWIG_RegisterMapping("_wxTextCtrl","_class_wxTextCtrl",0);
+	 SWIG_RegisterMapping("_class_wxToolTip","_wxToolTip",0);
 	 SWIG_RegisterMapping("_class_wxMask","_wxMask",0);
 	 SWIG_RegisterMapping("_class_wxKeyEvent","_wxKeyEvent",0);
 	 SWIG_RegisterMapping("_class_wxGrid","_wxGrid",0);
@@ -1962,6 +1992,7 @@ SWIGEXPORT(void,initwxc)() {
 	 SWIG_RegisterMapping("_class_wxChoice","_wxChoice",0);
 	 SWIG_RegisterMapping("_class_wxSlider","_wxSlider",0);
 	 SWIG_RegisterMapping("_class_wxCalculateLayoutEvent","_wxCalculateLayoutEvent",0);
+	 SWIG_RegisterMapping("_class_wxImageList","_wxImageList",0);
 	 SWIG_RegisterMapping("_class_wxBitmapButton","_wxBitmapButton",0);
 	 SWIG_RegisterMapping("_wxFrame","_class_wxFrame",0);
 	 SWIG_RegisterMapping("_class_wxNotebook","_wxNotebook",0);

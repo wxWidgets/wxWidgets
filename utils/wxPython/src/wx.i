@@ -114,11 +114,13 @@ extern "C" SWIGEXPORT(void,initcontrols2c)();
 extern "C" SWIGEXPORT(void,initcmndlgsc)();
 extern "C" SWIGEXPORT(void,initstattoolc)();
 extern "C" SWIGEXPORT(void,initframesc)();
-extern "C" SWIGEXPORT(void,initutilsc)();
 extern "C" SWIGEXPORT(void,initwindows3c)();
-
-
+#ifndef SEPARATE
+extern "C" SWIGEXPORT(void,initutilsc)();
+#endif
 %}
+
+
 
 %init %{
 
@@ -156,6 +158,9 @@ extern "C" SWIGEXPORT(void,initwindows3c)();
 /////////////////////////////////////////////////////////////////////////////
 //
 // $Log$
+// Revision 1.7  1999/02/25 07:08:37  RD
+// wxPython version 2.0b5
+//
 // Revision 1.6  1999/02/20 09:03:04  RD
 // Added wxWindow_FromHWND(hWnd) for wxMSW to construct a wxWindow from a
 // window handle.  If you can get the window handle into the python code,

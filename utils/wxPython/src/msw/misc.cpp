@@ -3470,35 +3470,6 @@ static PyObject *_wrap_wxToolTip_GetTip(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-#define wxToolTip_SetWindow(_swigobj,_swigarg0)  (_swigobj->SetWindow(_swigarg0))
-static PyObject *_wrap_wxToolTip_SetWindow(PyObject *self, PyObject *args) {
-    PyObject * _resultobj;
-    wxToolTip * _arg0;
-    wxWindow * _arg1;
-    char * _argc0 = 0;
-    char * _argc1 = 0;
-
-    self = self;
-    if(!PyArg_ParseTuple(args,"ss:wxToolTip_SetWindow",&_argc0,&_argc1)) 
-        return NULL;
-    if (_argc0) {
-        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_wxToolTip_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxToolTip_SetWindow. Expected _wxToolTip_p.");
-        return NULL;
-        }
-    }
-    if (_argc1) {
-        if (SWIG_GetPtr(_argc1,(void **) &_arg1,"_wxWindow_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxToolTip_SetWindow. Expected _wxWindow_p.");
-        return NULL;
-        }
-    }
-    wxToolTip_SetWindow(_arg0,_arg1);
-    Py_INCREF(Py_None);
-    _resultobj = Py_None;
-    return _resultobj;
-}
-
 #define wxToolTip_GetWindow(_swigobj)  (_swigobj->GetWindow())
 static PyObject *_wrap_wxToolTip_GetWindow(PyObject *self, PyObject *args) {
     PyObject * _resultobj;
@@ -3524,7 +3495,6 @@ static PyObject *_wrap_wxToolTip_GetWindow(PyObject *self, PyObject *args) {
 
 static PyMethodDef misccMethods[] = {
 	 { "wxToolTip_GetWindow", _wrap_wxToolTip_GetWindow, 1 },
-	 { "wxToolTip_SetWindow", _wrap_wxToolTip_SetWindow, 1 },
 	 { "wxToolTip_GetTip", _wrap_wxToolTip_GetTip, 1 },
 	 { "wxToolTip_SetTip", _wrap_wxToolTip_SetTip, 1 },
 	 { "new_wxToolTip", _wrap_new_wxToolTip, 1 },

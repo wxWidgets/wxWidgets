@@ -119,8 +119,7 @@ public:
     int GetCellAlignment(int row, int col);
     %name(GetDefCellAlignment)int GetCellAlignment();
     wxColour& GetCellBackgroundColour(int row, int col);
-    %name(GetDefCellBackgroundColour)
-        wxColour& GetCellBackgroundColour();
+    %name(GetDefCellBackgroundColour) wxColour& GetCellBackgroundColour();
     //wxGridCell *** GetCells();
     wxColour& GetCellTextColour(int row, int col);
     %name(GetDefCellTextColour)wxColour& GetCellTextColour();
@@ -333,7 +332,11 @@ public:
 /////////////////////////////////////////////////////////////////////////////
 //
 // $Log$
+// Revision 1.9  1999/02/25 07:08:36  RD
+// wxPython version 2.0b5
+//
 // Revision 1.8  1998/12/17 18:05:53  RD
+//
 // wxPython 0.5.2
 // Minor fixes and SWIG code generation for RR's changes.  MSW and GTK
 // versions are much closer now!

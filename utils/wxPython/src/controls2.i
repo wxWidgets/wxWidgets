@@ -155,8 +155,9 @@ public:
     long GetItemData(long item);
 
     %addmethods {
-        %new wxListItem* GetItem() {
+        %new wxListItem* GetItem(long itemId) {
             wxListItem* info = new wxListItem;
+            info->m_itemId = itemId;
             self->GetItem(*info);
             return info;
         }
@@ -186,7 +187,7 @@ public:
 #endif
     long GetTopItem();
     long HitTest(const wxPoint& point, int& OUTPUT);
-    %name(InsertColumnWithInfo)long InsertColumn(long col, wxListItem& info);
+    %name(InsertColumnWith)long InsertColumn(long col, wxListItem& info);
     long InsertColumn(long col, const wxString& heading,
                       int format = wxLIST_FORMAT_LEFT,
                       int width = -1);
@@ -228,9 +229,6 @@ public:
     ~wxTreeItemId();
     bool IsOk() const { return m_itemId != 0; }
 
-//    %addmethods {
-//        long GetId() { return (long)(*self); }
-//    }
 };
 
 
@@ -419,6 +417,9 @@ public:
 /////////////////////////////////////////////////////////////////////////////
 //
 // $Log$
+// Revision 1.16  1999/02/25 07:08:32  RD
+// wxPython version 2.0b5
+//
 // Revision 1.15  1999/02/20 09:02:56  RD
 // Added wxWindow_FromHWND(hWnd) for wxMSW to construct a wxWindow from a
 // window handle.  If you can get the window handle into the python code,

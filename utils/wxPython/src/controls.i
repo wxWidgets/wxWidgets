@@ -404,19 +404,19 @@ public:
 
     %pragma(python) addtomethod = "__init__:wx._StdWindowCallbacks(self)"
 
-    %name(EnableBox)void Enable(bool enable);
-    void Enable(int n, bool enable);
+    void Enable(bool enable);
+    %name(EnableItem)void Enable(int n, bool enable);
     int FindString(const wxString& string);
 #ifdef __WXMSW__
-    %name(GetBoxLabel)wxString GetLabel();
+    wxString GetLabel();
 #endif
-    wxString GetLabel(int n);
+    %name(GetItemLabel)wxString GetLabel(int n);
     int GetSelection();
     wxString GetString(int n);
     wxString GetStringSelection();
     int Number();
-    %name(SetBoxLabel)void SetLabel(const wxString& label);
-    void SetLabel(int n, const wxString& label);
+    void SetLabel(const wxString& label);
+    %name(SetItemLabel)void SetLabel(int n, const wxString& label);
     void SetSelection(int n);
     void SetStringSelection(const wxString& string);
     void Show(bool show);
@@ -483,7 +483,11 @@ public:
 /////////////////////////////////////////////////////////////////////////////
 //
 // $Log$
+// Revision 1.11  1999/02/25 07:08:30  RD
+// wxPython version 2.0b5
+//
 // Revision 1.10  1998/12/17 17:52:19  RD
+//
 // wxPython 0.5.2
 // Minor fixes and SWIG code generation for RR's changes.  MSW and GTK
 // versions are much closer now!

@@ -195,8 +195,8 @@ class wxListCtrlPtr(wxControlPtr):
     def GetItemData(self,arg0):
         val = controls2c.wxListCtrl_GetItemData(self.this,arg0)
         return val
-    def GetItem(self):
-        val = controls2c.wxListCtrl_GetItem(self.this)
+    def GetItem(self,arg0):
+        val = controls2c.wxListCtrl_GetItem(self.this,arg0)
         val = wxListItemPtr(val)
         val.thisown = 1
         return val
@@ -242,8 +242,8 @@ class wxListCtrlPtr(wxControlPtr):
     def HitTest(self,arg0):
         val = controls2c.wxListCtrl_HitTest(self.this,arg0.this)
         return val
-    def InsertColumnWithInfo(self,arg0,arg1):
-        val = controls2c.wxListCtrl_InsertColumnWithInfo(self.this,arg0,arg1.this)
+    def InsertColumnWith(self,arg0,arg1):
+        val = controls2c.wxListCtrl_InsertColumnWith(self.this,arg0,arg1.this)
         return val
     def InsertColumn(self,arg0,arg1,*args):
         val = apply(controls2c.wxListCtrl_InsertColumn,(self.this,arg0,arg1,)+args)

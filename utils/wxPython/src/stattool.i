@@ -178,40 +178,17 @@ public:
 
 
 
-//  // The Native Toolbar
-//  class wxToolBar : public wxToolBarBase {
-//  public:
-//      wxToolBar(wxWindow* parent, wxWindowID id,
-//                const wxPoint& pos = wxPyDefaultPosition,
-//                const wxSize& size = wxPyDefaultSize,
-//                long style = wxTB_HORIZONTAL | wxNO_BORDER,
-//                char* name = "toolBar");
-
-//      %pragma(python) addtomethod = "__init__:wx._StdWindowCallbacks(self)"
-
-//  };
-
-
-//  // A generic toolbar
-//  class wxToolBarSimple : public wxToolBarBase {
-//  public:
-//      wxToolBarSimple(wxWindow* parent, wxWindowID id,
-//                      const wxPoint& pos = wxPyDefaultPosition,
-//                      const wxSize& size = wxPyDefaultSize,
-//                      long style = wxTB_HORIZONTAL | wxNO_BORDER,
-//                      char* name = "toolBar");
-
-//      %pragma(python) addtomethod = "__init__:wx._StdWindowCallbacks(self)"
-
-//  };
-
 
 //---------------------------------------------------------------------------
 
 /////////////////////////////////////////////////////////////////////////////
 //
 // $Log$
+// Revision 1.6  1999/02/25 07:08:35  RD
+// wxPython version 2.0b5
+//
 // Revision 1.5  1999/01/30 07:30:15  RD
+//
 // Added wxSashWindow, wxSashEvent, wxLayoutAlgorithm, etc.
 //
 // Various cleanup, tweaks, minor additions, etc. to maintain

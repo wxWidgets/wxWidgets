@@ -388,9 +388,7 @@ public:
 
     void SetTip(const wxString& tip);
     wxString GetTip();
-#ifndef __WXGTK__
-    void SetWindow(wxWindow *win);
-#endif
+    // *** Not in the "public" interface void SetWindow(wxWindow *win);
     wxWindow *GetWindow();
 };
 
@@ -409,7 +407,11 @@ public:
 /////////////////////////////////////////////////////////////////////////////
 //
 // $Log$
+// Revision 1.13  1999/02/25 07:08:34  RD
+// wxPython version 2.0b5
+//
 // Revision 1.12  1999/02/20 10:02:37  RD
+//
 // Changes needed to enable wxGTK compatibility.
 //
 // Revision 1.11  1999/02/20 09:03:01  RD

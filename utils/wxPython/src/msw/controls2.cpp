@@ -1447,8 +1447,9 @@ static PyObject *_wrap_wxListCtrl_GetItemData(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static wxListItem * wxListCtrl_GetItem(wxListCtrl *self) {
+static wxListItem * wxListCtrl_GetItem(wxListCtrl *self,long  itemId) {
             wxListItem* info = new wxListItem;
+            info->m_itemId = itemId;
             self->GetItem(*info);
             return info;
         }
@@ -1456,11 +1457,12 @@ static PyObject *_wrap_wxListCtrl_GetItem(PyObject *self, PyObject *args) {
     PyObject * _resultobj;
     wxListItem * _result;
     wxListCtrl * _arg0;
+    long  _arg1;
     char * _argc0 = 0;
     char _ptemp[128];
 
     self = self;
-    if(!PyArg_ParseTuple(args,"s:wxListCtrl_GetItem",&_argc0)) 
+    if(!PyArg_ParseTuple(args,"sl:wxListCtrl_GetItem",&_argc0,&_arg1)) 
         return NULL;
     if (_argc0) {
         if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_wxListCtrl_p")) {
@@ -1468,7 +1470,7 @@ static PyObject *_wrap_wxListCtrl_GetItem(PyObject *self, PyObject *args) {
         return NULL;
         }
     }
-    _result = (wxListItem *)wxListCtrl_GetItem(_arg0);
+    _result = (wxListItem *)wxListCtrl_GetItem(_arg0,_arg1);
     SWIG_MakePtr(_ptemp, (char *) _result,"_wxListItem_p");
     _resultobj = Py_BuildValue("s",_ptemp);
     return _resultobj;
@@ -1783,8 +1785,8 @@ static PyObject *_wrap_wxListCtrl_HitTest(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-#define wxListCtrl_InsertColumnWithInfo(_swigobj,_swigarg0,_swigarg1)  (_swigobj->InsertColumn(_swigarg0,_swigarg1))
-static PyObject *_wrap_wxListCtrl_InsertColumnWithInfo(PyObject *self, PyObject *args) {
+#define wxListCtrl_InsertColumnWith(_swigobj,_swigarg0,_swigarg1)  (_swigobj->InsertColumn(_swigarg0,_swigarg1))
+static PyObject *_wrap_wxListCtrl_InsertColumnWith(PyObject *self, PyObject *args) {
     PyObject * _resultobj;
     long  _result;
     wxListCtrl * _arg0;
@@ -1794,21 +1796,21 @@ static PyObject *_wrap_wxListCtrl_InsertColumnWithInfo(PyObject *self, PyObject 
     char * _argc2 = 0;
 
     self = self;
-    if(!PyArg_ParseTuple(args,"sls:wxListCtrl_InsertColumnWithInfo",&_argc0,&_arg1,&_argc2)) 
+    if(!PyArg_ParseTuple(args,"sls:wxListCtrl_InsertColumnWith",&_argc0,&_arg1,&_argc2)) 
         return NULL;
     if (_argc0) {
         if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_wxListCtrl_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxListCtrl_InsertColumnWithInfo. Expected _wxListCtrl_p.");
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxListCtrl_InsertColumnWith. Expected _wxListCtrl_p.");
         return NULL;
         }
     }
     if (_argc2) {
         if (SWIG_GetPtr(_argc2,(void **) &_arg2,"_wxListItem_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 3 of wxListCtrl_InsertColumnWithInfo. Expected _wxListItem_p.");
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 3 of wxListCtrl_InsertColumnWith. Expected _wxListItem_p.");
         return NULL;
         }
     }
-    _result = (long )wxListCtrl_InsertColumnWithInfo(_arg0,_arg1,*_arg2);
+    _result = (long )wxListCtrl_InsertColumnWith(_arg0,_arg1,*_arg2);
     _resultobj = Py_BuildValue("l",_result);
     return _resultobj;
 }
@@ -4375,7 +4377,7 @@ static PyMethodDef controls2cMethods[] = {
 	 { "wxListCtrl_InsertStringItem", _wrap_wxListCtrl_InsertStringItem, 1 },
 	 { "wxListCtrl_InsertItem", _wrap_wxListCtrl_InsertItem, 1 },
 	 { "wxListCtrl_InsertColumn", _wrap_wxListCtrl_InsertColumn, 1 },
-	 { "wxListCtrl_InsertColumnWithInfo", _wrap_wxListCtrl_InsertColumnWithInfo, 1 },
+	 { "wxListCtrl_InsertColumnWith", _wrap_wxListCtrl_InsertColumnWith, 1 },
 	 { "wxListCtrl_HitTest", _wrap_wxListCtrl_HitTest, 1 },
 	 { "wxListCtrl_GetTopItem", _wrap_wxListCtrl_GetTopItem, 1 },
 	 { "wxListCtrl_SetTextColour", _wrap_wxListCtrl_SetTextColour, 1 },

@@ -24,11 +24,11 @@
 %include my_typemaps.i
 
 
-#ifdef SEPARATE
 %{
+#ifdef SEPARATE
     static wxString wxPyEmptyStr("");
-%}
 #endif
+%}
 
 
 %{
@@ -138,6 +138,9 @@ public:
 /////////////////////////////////////////////////////////////////////////////
 //
 // $Log$
+// Revision 1.3  1999/02/25 07:08:36  RD
+// wxPython version 2.0b5
+//
 // Revision 1.2  1999/02/20 09:03:02  RD
 // Added wxWindow_FromHWND(hWnd) for wxMSW to construct a wxWindow from a
 // window handle.  If you can get the window handle into the python code,
