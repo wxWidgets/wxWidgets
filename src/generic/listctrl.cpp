@@ -2114,13 +2114,16 @@ void wxListTextCtrl::OnKillFocus( wxFocusEvent &event )
 {
     if ( !m_finished )
     {
-        // We must finish regardless of success, otherwise we'll get focus problems
+        // We must finish regardless of success, otherwise we'll get
+        // focus problems:
         Finish();
 
         if ( !AcceptChanges() )
             m_owner->OnRenameCancelled( m_itemEdited );
     }
 
+    // We must let the native text control handle focus, too, otherwise
+    // it could have problems with the cursor (e.g., in wxGTK):
     event.Skip();
 }
 
