@@ -168,11 +168,8 @@ void wxSplitterWindow::OnMouseEvent(wxMouseEvent& event)
     int x = (int)event.GetX(),
         y = (int)event.GetY();
 
-    // reset the cursor
-#if defined( __WXMOTIF__ ) || defined( __WXGTK__ ) || defined( __WXMAC__ )
-    SetCursor(* wxSTANDARD_CURSOR);
-#elif defined(__WXMSW__)
-    SetCursor(wxCursor());
+#if defined(__WXMSW__)
+    // SetCursor(wxCursor());   // Is this required?
 #endif
 
     if (GetWindowStyle() & wxSP_NOSASH)
@@ -188,9 +185,12 @@ void wxSplitterWindow::OnMouseEvent(wxMouseEvent& event)
     {
         if ( SashHitTest(x, y) )
         {
-            CaptureMouse();
-
+            // Start the drag now
             m_dragMode = wxSPLIT_DRAG_DRAGGING;
+            
+            // Capture mouse and set the cursor
+            CaptureMouse();
+            SetResizeCursor();
 
             if ( !isLive )
             {
@@ -212,7 +212,10 @@ void wxSplitterWindow::OnMouseEvent(wxMouseEvent& event)
     {
         // We can stop dragging now and see what we've got.
         m_dragMode = wxSPLIT_DRAG_NONE;
+        
+        // Release mouse and unset the cursor
         ReleaseMouse();
+        SetCursor(* wxSTANDARD_CURSOR);
 
         // exit if unsplit after doubleclick
         if ( !IsSplit() )
@@ -273,32 +276,14 @@ void wxSplitterWindow::OnMouseEvent(wxMouseEvent& event)
     }  // left up && dragging
     else if (event.Moving() && !event.Dragging())
     {
-        // Just change the cursor if required
+        // Just change the cursor as required
         if ( SashHitTest(x, y) )
-        {
             SetResizeCursor();
-        }
-#if defined(__WXGTK__) || defined(__WXMSW__) || defined(__WXMAC__)
         else
-        {
-            // We must set the normal cursor in MSW, because
-            // if the child window doesn't have a cursor, the
-            // parent's (splitter window) will be used, and this
-            // must be the standard cursor.
-
-            // where else do we unset the cursor?
             SetCursor(* wxSTANDARD_CURSOR);
-        }
-#endif // __WXGTK__
     }
     else if (event.Dragging() && (m_dragMode == wxSPLIT_DRAG_DRAGGING))
     {
-#if defined( __WXMSW__ ) || defined( __WXMAC__ )
-        // Otherwise, the cursor sometimes reverts to the normal cursor
-        // during dragging.
-        SetResizeCursor();
-#endif // __WXMSW__
-
         int diff = m_splitMode == wxSPLIT_VERTICAL ? x - m_oldX : y - m_oldY;
         if ( !diff )
         {
