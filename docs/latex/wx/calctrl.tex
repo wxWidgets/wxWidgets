@@ -50,7 +50,7 @@ is changed, so you will often want to update them in
 \wxheading{Window styles}
 
 \twocolwidtha{5cm}
-\begin{twocollist}\itemsep=0pt
+\begin{twocollist}\itemsep=4pt
 \twocolitem{\windowstyle{wxCAL\_SUNDAY\_FIRST}}{Show Sunday as the first day in the week}
 \twocolitem{\windowstyle{wxCAL\_MONDAY\_FIRST}}{Show Monday as the first day in the week}
 \twocolitem{\windowstyle{wxCAL\_SHOW\_HOLIDAYS}}{Highlight holidays in the calendar}
@@ -67,7 +67,7 @@ direct input to member functions that take a
 \helpref{wxCalendarEvent}{wxcalendarevent} argument.
 
 \twocolwidtha{7cm}
-\begin{twocollist}\itemsep=0pt
+\begin{twocollist}\itemsep=7pt
 \twocolitem{{\bf EVT\_CALENDAR(id, func)}}{A day was double clickedi n the calendar.}
 \twocolitem{{\bf EVT\_CALENDAR\_SEL\_CHANGED(id, func)}}{The selected date changed.}
 \twocolitem{{\bf EVT\_CALENDAR\_DAY(id, func)}}{The selected day changed.}
@@ -84,20 +84,19 @@ Note that changing the selected date will result in either of
 
 The following are the possible return values for 
 \helpref{HitTest}{wxcalendarctrlhittest} method:
-
 {\small \begin{verbatim}
 enum wxCalendarHitTestResult
-{
+\{
     wxCAL_HITTEST_NOWHERE,      // outside of anything
     wxCAL_HITTEST_HEADER,       // on the header (weekdays)
     wxCAL_HITTEST_DAY           // on a day in the calendar
-};
+\};
 \end{verbatim}}
 
 \wxheading{See also}
 
 \helpref{Calendar sample}{samplecalendar}\\
-\helpref{wxCalendarDateAttr}{wxcalendardateattr}
+\helpref{wxCalendarDateAttr}{wxcalendardateattr}\\
 \helpref{wxCalendarEvent}{wxcalendarevent}
 
 \latexignore{\rtfignore{\wxheading{Members}}}

@@ -26,6 +26,7 @@ wxDateTime object.
 All the following constants are defined inside wxDateTime class (i.e., to refer to
 them you should prepend their names with {\tt wxDateTime::}).
 
+\label{wxdatetimetimezones}
 Time zone symbolic names:
 
 \begin{verbatim}
@@ -365,7 +366,7 @@ wxDateTime - they only work with the date part of it.
 \helpref{SetToPrevWeekDay}{wxdatetimesettoprevweekday}\\
 \helpref{GetPrevWeekDay}{wxdatetimegetprevweekday}\\
 \helpref{SetToWeekDay}{wxdatetimesettoweekday}\\
-\helpref{GetWeekDay}{wxdatetimegetweekday}\\
+\helpref{GetWeekDay}{wxdatetimegetweekday2}\\
 \helpref{SetToLastWeekDay}{wxdatetimesettolastweekday}\\
 \helpref{GetLastWeekDay}{wxdatetimegetlastweekday}\\
 \helpref{SetToTheWeek}{wxdatetimesettotheweek}\\
@@ -597,7 +598,7 @@ same as \helpref{Now()}{wxdatetimenow}, but the time part is set to $0$).
 Default constructor. Use one of {\tt Set()} functions to initialize the object
 later.
 
-\membersection{wxDateTime::wxDateTime}\label{wxdatetimewxdatetime}
+\membersection{wxDateTime::wxDateTime}\label{wxdatetimewxdatetimetimet}
 
 \func{wxDateTime\&}{wxDateTime}{\param{time\_t }{timet}}
 
@@ -916,7 +917,7 @@ this interval.
 
 Adds the given time span to this object.
 
-\membersection{wxDateTime::Subtract}\label{wxdatetimesubtract}
+\membersection{wxDateTime::Subtract}\label{wxdatetimesubtractts}
 
 \constfunc{wxDateTime}{Subtract}{\param{const wxTimeSpan\& }{diff}}
 
@@ -926,7 +927,7 @@ Adds the given time span to this object.
 
 Subtracts the given time span from this object.
 
-\membersection{wxDateTime::Add}\label{wxdatetimeadd}
+\membersection{wxDateTime::Add}\label{wxdatetimeaddds}
 
 \constfunc{wxDateTime}{Add}{\param{const wxDateSpan\& }{diff}}
 
@@ -936,7 +937,7 @@ Subtracts the given time span from this object.
 
 Adds the given date span to this object.
 
-\membersection{wxDateTime::Subtract}\label{wxdatetimesubtract}
+\membersection{wxDateTime::Subtract}\label{wxdatetimesubtractds}
 
 \constfunc{wxDateTime}{Subtract}{\param{const wxDateSpan\& }{diff}}
 
@@ -946,7 +947,7 @@ Adds the given date span to this object.
 
 Subtracts the given date span from this object.
 
-\membersection{wxDateTime::Subtract}\label{wxdatetimesubtract}
+\membersection{wxDateTime::Subtract}\label{wxdatetimesubtractdt}
 
 \constfunc{wxTimeSpan}{Subtract}{\param{const wxDateTime\& }{dt}}
 
@@ -1139,7 +1140,7 @@ second Wednesday in the current month and
 Returns {\tt TRUE} if the date was modified successfully, {\tt FALSE}
 otherwise meaning that the specified date doesn't exist.
 
-\membersection{wxDateTime::GetWeekDay}\label{wxdatetimegetweekday}
+\membersection{wxDateTime::GetWeekDay}\label{wxdatetimegetweekday2}
 
 \constfunc{wxDateTime}{GetWeekDay}{\param{WeekDay }{weekday}, \param{int }{n = 1}, \param{Month }{month = Inv\_Month}, \param{int }{year = Inv\_Year}}
 
