@@ -161,6 +161,9 @@ private:
     wxDragResult        dragResult;
 #endif
     int                 wheelRotation;
+
+
+    friend class wxSTCCallTip;
 };
 
 //----------------------------------------------------------------------
