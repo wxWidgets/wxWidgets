@@ -118,7 +118,7 @@ wxString wxFileSelector(const wxChar *title,
                             flags, wxPoint(x, y));
     if( wxStrlen(defaultExtension) != 0 )
     {
-        int filterFind = 1,
+        int filterFind = 0,
             filterIndex = 0;
 
         for( unsigned int i = 0; i < filter2.Len(); i++ )
@@ -127,7 +127,6 @@ wxString wxFileSelector(const wxChar *title,
             {
                 // save the start index of the new filter
                 unsigned int is = i++;
-                filterIndex++;
 
                 // find the end of the filter
                 for( ; i < filter2.Len(); i++ )
@@ -139,12 +138,13 @@ wxString wxFileSelector(const wxChar *title,
                 if( i-is-1 > 0 && is+1 < filter2.Len() )
                 {
                     if( filter2.Mid(is+1,i-is-1).Contains(defaultExtension) )
-//                    if( filter2.Mid(is+1,i-is-1) == defaultExtension )
                     {
                         filterFind = filterIndex;
                         break;
                     }
                 }
+
+                filterIndex++;
             }
         }
 
