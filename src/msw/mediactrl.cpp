@@ -831,13 +831,204 @@ public:
 //---------------------------------------------------------------------------
 //  QT Compilation Guard
 //---------------------------------------------------------------------------
+#undef wxUSE_QUICKTIME
+#define wxUSE_QUICKTIME 1
 #if wxUSE_QUICKTIME
 
 //---------------------------------------------------------------------------
 //  QT Includes
 //---------------------------------------------------------------------------
-#include <qtml.h>                   //Windoze QT include
-#include <QuickTimeComponents.h>    //Standard QT stuff
+//#include <qtml.h>                   //Windoze QT include
+//#include <QuickTimeComponents.h>    //Standard QT stuff
+#include "wx/dynlib.h"
+
+//---------------------------------------------------------------------------
+//  QT Types
+//---------------------------------------------------------------------------
+typedef struct MovieRecord* Movie;
+typedef wxInt16 OSErr;
+typedef wxInt32 OSStatus;
+#define noErr 0
+#define fsRdPerm 1
+typedef unsigned char                   Str255[256];
+#define StringPtr unsigned char*
+#define newMovieActive 1
+#define Ptr char* 
+#define Handle Ptr*
+#define Fixed long
+#define OSType unsigned long
+#define CGrafPtr struct GrafPort *                      
+#define TimeScale long
+#define TimeBase struct TimeBaseRecord *                
+
+struct FSSpec {
+    short                           vRefNum;
+    long                            parID;
+    Str255                           name;  /*Str63 on mac, Str255 on msw */
+};
+
+struct Rect {
+    short                           top;
+    short                           left;
+    short                           bottom;
+    short                           right;
+};
+
+struct wide {
+    wxInt32                          hi;
+    wxUint32                          lo;
+};
+
+struct TimeRecord {
+    wide                  value;                      /* units */
+    TimeScale                       scale;                      /* units per second */
+    TimeBase                        base;
+};
+
+//---------------------------------------------------------------------------
+//  QT Library
+//---------------------------------------------------------------------------
+#define wxDL_METHOD_DEFINE( rettype, name, args, shortargs, defret ) \
+    typedef rettype (* name ## Type) args ; \
+    name ## Type pfn_ ## name; \
+    rettype name args \
+    { if (m_ok) return pfn_ ## name shortargs ; return defret; }
+    
+#define wxDL_VOIDMETHOD_DEFINE( name, args, shortargs ) \
+    typedef void (* name ## Type) args ; \
+    name ## Type pfn_ ## name; \
+    void name args \
+    { if (m_ok) pfn_ ## name shortargs ; }
+
+#define wxDL_METHOD_LOAD( lib, name, success ) \
+    pfn_ ## name = (name ## Type) lib.GetSymbol( wxT(#name), &success ); \
+    if (!success) return false;
+
+//Class that utilizes Robert Roeblings Dynamic Library Macros
+class wxQuickTimeLibrary 
+{
+public:
+    ~wxQuickTimeLibrary()
+    {   
+        if(m_dll.IsLoaded())
+            m_dll.Unload();
+    }
+
+    bool Initialize();
+    bool IsOk() const {return m_ok;}
+
+protected:
+    wxDynamicLibrary m_dll;
+    bool m_ok;
+
+public:
+    wxDL_VOIDMETHOD_DEFINE( StartMovie, (Movie m), (m) );
+    wxDL_VOIDMETHOD_DEFINE( StopMovie, (Movie m), (m) );
+    wxDL_METHOD_DEFINE( bool, IsMovieDone, (Movie m), (m), false);
+    wxDL_VOIDMETHOD_DEFINE( GoToBeginningOfMovie, (Movie m), (m) );
+    wxDL_METHOD_DEFINE( OSErr, GetMoviesError, (), (), -1);
+    wxDL_METHOD_DEFINE( OSErr, EnterMovies, (), (), -1);
+    wxDL_VOIDMETHOD_DEFINE( ExitMovies, (), () );
+    wxDL_METHOD_DEFINE( OSErr, InitializeQTML, (long flags), (flags), -1);
+    wxDL_VOIDMETHOD_DEFINE( TerminateQTML, (), () );
+
+    wxDL_METHOD_DEFINE( OSErr, NativePathNameToFSSpec, 
+                        (char* inName, FSSpec* outFile, long flags), 
+                        (inName, outFile, flags), -1);
+
+    wxDL_METHOD_DEFINE( OSErr, OpenMovieFile, 
+                        (const FSSpec * fileSpec, short * resRefNum, wxInt8 permission),
+                        (fileSpec, resRefNum, permission), -1 );
+
+    wxDL_METHOD_DEFINE( OSErr, CloseMovieFile,
+                        (short resRefNum), (resRefNum), -1);
+
+    wxDL_METHOD_DEFINE( OSErr, NewMovieFromFile,
+                            (Movie * theMovie, short resRefNum, short *  resId,
+                             StringPtr resName, short newMovieFlags,
+                             bool * dataRefWasChanged), 
+                             (theMovie, resRefNum, resId, resName, newMovieFlags,
+                              dataRefWasChanged), -1);
+
+    wxDL_VOIDMETHOD_DEFINE( SetMovieRate, (Movie m, Fixed rate), (m, rate) );
+    wxDL_METHOD_DEFINE( Fixed, GetMovieRate, (Movie m), (m), 0);
+    wxDL_VOIDMETHOD_DEFINE( MoviesTask, (Movie m, long maxms), (m, maxms) );
+    wxDL_VOIDMETHOD_DEFINE( BlockMove, 
+        (const char* p1, const char* p2, long s), (p1,p2,s) );
+    wxDL_METHOD_DEFINE( Handle, NewHandleClear, (long s), (s), NULL );
+
+    wxDL_METHOD_DEFINE( OSErr, NewMovieFromDataRef, 
+                           (Movie * m, short flags, short * id,
+                            Handle  dataRef, OSType  dataRefType),
+                            (m,flags,id,dataRef,dataRefType), -1 );
+
+    wxDL_VOIDMETHOD_DEFINE( DisposeHandle, (Handle h), (h) );
+    wxDL_VOIDMETHOD_DEFINE( GetMovieNaturalBoundsRect, (Movie m, Rect* r), (m,r) );
+    wxDL_METHOD_DEFINE( void*, GetMovieIndTrackType, 
+                        (Movie m, long index, OSType type, long flags), 
+                        (m,index,type,flags), NULL );
+    wxDL_VOIDMETHOD_DEFINE( CreatePortAssociation, 
+            (void* hWnd, void* junk, long morejunk), (hWnd, junk, morejunk) );
+    wxDL_METHOD_DEFINE(void*, GetNativeWindowPort, (void* hWnd), (hWnd), NULL);
+    wxDL_VOIDMETHOD_DEFINE(SetMovieGWorld, (Movie m, CGrafPtr port, void* whatever),
+                            (m, port, whatever) );
+    wxDL_VOIDMETHOD_DEFINE(DisposeMovie, (Movie m), (m) );
+    wxDL_VOIDMETHOD_DEFINE(SetMovieBox, (Movie m, Rect* r), (m,r));
+    wxDL_VOIDMETHOD_DEFINE(SetMovieTimeScale, (Movie m, long s), (m,s));
+    wxDL_METHOD_DEFINE(long, GetMovieDuration, (Movie m), (m), 0);
+    wxDL_METHOD_DEFINE(TimeBase, GetMovieTimeBase, (Movie m), (m), 0);
+    wxDL_METHOD_DEFINE(TimeScale, GetMovieTimeScale, (Movie m), (m), 0);
+    wxDL_METHOD_DEFINE(long, GetMovieTime, (Movie m, void* cruft), (m,cruft), 0);
+    wxDL_VOIDMETHOD_DEFINE(SetMovieTime, (Movie m, TimeRecord* tr), (m,tr) );
+};
+
+bool wxQuickTimeLibrary::Initialize()
+{
+    m_ok = false;
+
+    if(!m_dll.Load(wxT("qtmlClient.dll")))
+        return false;
+
+    bool bOk;
+
+    wxDL_METHOD_LOAD( m_dll, StartMovie, bOk );
+    wxDL_METHOD_LOAD( m_dll, StopMovie, bOk );
+    wxDL_METHOD_LOAD( m_dll, IsMovieDone, bOk );
+    wxDL_METHOD_LOAD( m_dll, GoToBeginningOfMovie, bOk );
+    wxDL_METHOD_LOAD( m_dll, GetMoviesError, bOk );
+    wxDL_METHOD_LOAD( m_dll, EnterMovies, bOk );
+    wxDL_METHOD_LOAD( m_dll, ExitMovies, bOk );
+    wxDL_METHOD_LOAD( m_dll, InitializeQTML, bOk );
+    wxDL_METHOD_LOAD( m_dll, TerminateQTML, bOk );
+    wxDL_METHOD_LOAD( m_dll, NativePathNameToFSSpec, bOk );
+    wxDL_METHOD_LOAD( m_dll, OpenMovieFile, bOk );
+    wxDL_METHOD_LOAD( m_dll, CloseMovieFile, bOk );
+    wxDL_METHOD_LOAD( m_dll, NewMovieFromFile, bOk );
+    wxDL_METHOD_LOAD( m_dll, GetMovieRate, bOk );
+    wxDL_METHOD_LOAD( m_dll, SetMovieRate, bOk );
+    wxDL_METHOD_LOAD( m_dll, MoviesTask, bOk );
+    wxDL_METHOD_LOAD( m_dll, BlockMove, bOk );
+    wxDL_METHOD_LOAD( m_dll, NewHandleClear, bOk );
+    wxDL_METHOD_LOAD( m_dll, NewMovieFromDataRef, bOk );
+    wxDL_METHOD_LOAD( m_dll, DisposeHandle, bOk );
+    wxDL_METHOD_LOAD( m_dll, GetMovieNaturalBoundsRect, bOk );
+    wxDL_METHOD_LOAD( m_dll, GetMovieIndTrackType, bOk );
+    wxDL_METHOD_LOAD( m_dll, CreatePortAssociation, bOk );
+    wxDL_METHOD_LOAD( m_dll, GetNativeWindowPort, bOk );
+    wxDL_METHOD_LOAD( m_dll, SetMovieGWorld, bOk );
+    wxDL_METHOD_LOAD( m_dll, DisposeMovie, bOk );
+    wxDL_METHOD_LOAD( m_dll, SetMovieBox, bOk );
+    wxDL_METHOD_LOAD( m_dll, SetMovieTimeScale, bOk );
+    wxDL_METHOD_LOAD( m_dll, GetMovieDuration, bOk );
+    wxDL_METHOD_LOAD( m_dll, GetMovieTimeBase, bOk );
+    wxDL_METHOD_LOAD( m_dll, GetMovieTimeScale, bOk );
+    wxDL_METHOD_LOAD( m_dll, GetMovieTime, bOk );
+    wxDL_METHOD_LOAD( m_dll, SetMovieTime, bOk );
+    
+    m_ok = true;
+
+    return true;
+}
 
 class WXDLLIMPEXP_MEDIA wxQTMediaBackend : public wxMediaBackend
 {
@@ -877,10 +1068,12 @@ public:
     void FinishLoad();
 
     wxSize m_bestSize;              //Original movie size
-    struct MovieRecord* m_movie;    //QT Movie handle/instance
+    Movie m_movie;    //QT Movie handle/instance
     wxControl* m_ctrl;              //Parent control
     bool m_bVideo;                  //Whether or not we have video
     class _wxQTTimer* m_timer;      //Timer for streaming the movie
+    wxQuickTimeLibrary m_lib;
+
 
     DECLARE_DYNAMIC_CLASS(wxQTMediaBackend);
 };
@@ -1897,8 +2090,8 @@ IMPLEMENT_DYNAMIC_CLASS(wxQTMediaBackend, wxMediaBackend);
 class _wxQTTimer : public wxTimer
 {
 public:
-    _wxQTTimer(Movie movie, wxQTMediaBackend* parent) :
-        m_movie(movie), m_bPaused(false), m_parent(parent)
+    _wxQTTimer(Movie movie, wxQTMediaBackend* parent, wxQuickTimeLibrary* pLib) :
+        m_movie(movie), m_bPaused(false), m_parent(parent), m_pLib(pLib)
     {
     }
 
@@ -1921,8 +2114,8 @@ public:
     {
         if (!m_bPaused)
         {
-            if(!IsMovieDone(m_movie))
-                MoviesTask(m_movie, MOVIE_DELAY);
+            if(!m_pLib->IsMovieDone(m_movie))
+                m_pLib->MoviesTask(m_movie, MOVIE_DELAY);
             else
             {
                 wxMediaEvent theEvent(wxEVT_MEDIA_STOP,
@@ -1933,7 +2126,7 @@ public:
                 {
                     Stop();
                     m_parent->Stop();
-                    wxASSERT(::GetMoviesError() == noErr);
+                    wxASSERT(m_pLib->GetMoviesError() == noErr);
 
                     //send the event to our child
                     wxMediaEvent theEvent(wxEVT_MEDIA_FINISHED,
@@ -1948,6 +2141,7 @@ protected:
     Movie m_movie;                  //Our movie instance
     bool m_bPaused;                 //Whether we are paused or not
     wxQTMediaBackend* m_parent;     //Backend pointer
+    wxQuickTimeLibrary* m_pLib;         //Interfaces
 };
 
 //---------------------------------------------------------------------------
@@ -1973,10 +2167,13 @@ wxQTMediaBackend::~wxQTMediaBackend()
     if(m_timer)
         Cleanup();
 
-    //Note that ExitMovies() is not neccessary, but
-    //the docs are fuzzy on whether or not TerminateQTML is
-    ExitMovies();
-    TerminateQTML();
+    if(m_lib.IsOk())
+    {
+        //Note that ExitMovies() is not neccessary, but
+        //the docs are fuzzy on whether or not TerminateQTML is
+        m_lib.ExitMovies();
+        m_lib.TerminateQTML();
+    }
 }
 
 //---------------------------------------------------------------------------
@@ -1993,13 +2190,16 @@ bool wxQTMediaBackend::CreateControl(wxControl* ctrl, wxWindow* parent,
                                      const wxValidator& validator,
                                      const wxString& name)
 {
+    if(!m_lib.Initialize())
+        return false;
+    
     int nError;
-    if ((nError = InitializeQTML(0)) != noErr)    //-2093 no dll
+    if ((nError = m_lib.InitializeQTML(0)) != noErr)    //-2093 no dll
     {
         wxFAIL_MSG(wxString::Format(wxT("Couldn't Initialize Quicktime-%i"), nError));
         return false;
     }
-    EnterMovies();
+    m_lib.EnterMovies();
 
     //
     // Create window
@@ -2035,17 +2235,17 @@ bool wxQTMediaBackend::Load(const wxString& fileName)
     short movieResFile;
     FSSpec sfFile;
 
-    if (NativePathNameToFSSpec ((char*) (const char*) fileName.mb_str(),
+    if (m_lib.NativePathNameToFSSpec ((char*) (const char*) fileName.mb_str(),
                                 &sfFile, 0) != noErr)
         return false;
 
-    if (OpenMovieFile (&sfFile, &movieResFile, fsRdPerm) != noErr)
+    if (m_lib.OpenMovieFile (&sfFile, &movieResFile, fsRdPerm) != noErr)
         return false;
 
     short movieResID = 0;
     Str255 movieName;
 
-    err = NewMovieFromFile (
+    err = m_lib.NewMovieFromFile (
     &m_movie,
     movieResFile,
     &movieResID,
@@ -2053,14 +2253,14 @@ bool wxQTMediaBackend::Load(const wxString& fileName)
     newMovieActive,
     NULL); //wasChanged
 
-    CloseMovieFile (movieResFile);
+    m_lib.CloseMovieFile (movieResFile);
 
     if (err != noErr)
         return false;
 
     FinishLoad();
 
-    return ::GetMoviesError() == noErr;
+    return m_lib.GetMoviesError() == noErr;
 }
 
 //---------------------------------------------------------------------------
@@ -2077,34 +2277,36 @@ bool wxQTMediaBackend::Load(const wxURI& location)
 
     OSErr err = noErr;
 
-    Handle theHandle = NewHandleClear(theURI.length() + 1);
+    Handle theHandle = m_lib.NewHandleClear(theURI.length() + 1);
     wxASSERT(theHandle);
 
-    BlockMove(theURI.mb_str(), *theHandle, theURI.length() + 1);
+    m_lib.BlockMove(theURI.mb_str(), *theHandle, theURI.length() + 1);
 
     //create the movie from the handle that refers to the URI
-    err = NewMovieFromDataRef(&m_movie, newMovieActive,
+    err = m_lib.NewMovieFromDataRef(&m_movie, newMovieActive,
                                 NULL, theHandle,
-                                URLDataHandlerSubType);
+                                'url'); //URLDataHandlerSubType
 
-    DisposeHandle(theHandle);
+    m_lib.DisposeHandle(theHandle);
 
     if (err != noErr)
         return false;
 
     //preroll movie for streaming
     //TODO:Async this?
-    TimeValue timeNow;
+ /*
+     TimeValue timeNow;
     Fixed playRate;
     timeNow = GetMovieTime(m_movie, NULL);
     playRate = GetMoviePreferredRate(m_movie);
     PrePrerollMovie(m_movie, timeNow, playRate, NULL, NULL);
-    PrerollMovie(m_movie, timeNow, playRate);
-    SetMovieRate(m_movie, playRate);
+    PrerollMovie(m_movie, timeNow, playRate);    
+    m_lib.SetMovieRate(m_movie, playRate);
+*/
 
     FinishLoad();
 
-    return ::GetMoviesError() == noErr;
+    return m_lib.GetMoviesError() == noErr;
 }
 
 //---------------------------------------------------------------------------
@@ -2114,33 +2316,34 @@ bool wxQTMediaBackend::Load(const wxURI& location)
 //---------------------------------------------------------------------------
 void wxQTMediaBackend::FinishLoad()
 {
-    m_timer = new _wxQTTimer(m_movie, (wxQTMediaBackend*) this);
+    m_timer = new _wxQTTimer(m_movie, (wxQTMediaBackend*) this, &m_lib);
     wxASSERT(m_timer);
 
     //get the real size of the movie
     Rect outRect;
-    ::GetMovieNaturalBoundsRect (m_movie, &outRect);
-    wxASSERT(::GetMoviesError() == noErr);
+    m_lib.GetMovieNaturalBoundsRect (m_movie, &outRect);
+    wxASSERT(m_lib.GetMoviesError() == noErr);
 
     m_bestSize.x = outRect.right - outRect.left;
     m_bestSize.y = outRect.bottom - outRect.top;
 
     //reparent movie/*AudioMediaCharacteristic*/
-    if(GetMovieIndTrackType(m_movie, 1,
-                            VisualMediaCharacteristic,
-                            movieTrackCharacteristic |
-                                movieTrackEnabledOnly) != NULL)
+    if(m_lib.GetMovieIndTrackType(m_movie, 1,
+                            'eyes', //VisualMediaCharacteristic,
+                            (1 << 1) //movieTrackCharacteristic 
+                            | (1 << 2) //movieTrackEnabledOnly
+                            ) != NULL)
     {
-        CreatePortAssociation(m_ctrl->GetHWND(), NULL, 0L);
+        m_lib.CreatePortAssociation(m_ctrl->GetHWND(), NULL, 0L);
 
-        SetMovieGWorld(m_movie,
-                       (CGrafPtr) GetNativeWindowPort(m_ctrl->GetHWND()),
-                       nil);
+        m_lib.SetMovieGWorld(m_movie,
+                       (CGrafPtr) m_lib.GetNativeWindowPort(m_ctrl->GetHWND()),
+                       NULL);
     }
 
     //we want millisecond precision
-    ::SetMovieTimeScale(m_movie, 1000);
-    wxASSERT(::GetMoviesError() == noErr);
+    m_lib.SetMovieTimeScale(m_movie, 1000);
+    wxASSERT(m_lib.GetMoviesError() == noErr);
 
     //
     //Here, if the parent of the control has a sizer - we
@@ -2160,10 +2363,10 @@ void wxQTMediaBackend::FinishLoad()
 //---------------------------------------------------------------------------
 bool wxQTMediaBackend::Play()
 {
-    ::StartMovie(m_movie);
+    m_lib.StartMovie(m_movie);
     m_timer->SetPaused(false);
     m_timer->Start(MOVIE_DELAY, wxTIMER_CONTINUOUS);
-    return ::GetMoviesError() == noErr;
+    return m_lib.GetMoviesError() == noErr;
 }
 
 //---------------------------------------------------------------------------
@@ -2173,10 +2376,10 @@ bool wxQTMediaBackend::Play()
 //---------------------------------------------------------------------------
 bool wxQTMediaBackend::Pause()
 {
-    ::StopMovie(m_movie);
+    m_lib.StopMovie(m_movie);
     m_timer->SetPaused(true);
     m_timer->Stop();
-    return ::GetMoviesError() == noErr;
+    return m_lib.GetMoviesError() == noErr;
 }
 
 //---------------------------------------------------------------------------
@@ -2189,12 +2392,12 @@ bool wxQTMediaBackend::Stop()
     m_timer->SetPaused(false);
     m_timer->Stop();
 
-    ::StopMovie(m_movie);
-    if(::GetMoviesError() != noErr)
+    m_lib.StopMovie(m_movie);
+    if(m_lib.GetMoviesError() != noErr)
         return false;
 
-    ::GoToBeginningOfMovie(m_movie);
-    return ::GetMoviesError() == noErr;
+    m_lib.GoToBeginningOfMovie(m_movie);
+    return m_lib.GetMoviesError() == noErr;
 }
 
 //---------------------------------------------------------------------------
@@ -2204,7 +2407,7 @@ bool wxQTMediaBackend::Stop()
 //---------------------------------------------------------------------------
 double wxQTMediaBackend::GetPlaybackRate()
 {
-    return ( ((double)::GetMovieRate(m_movie)) / 0x10000);
+    return ( ((double)m_lib.GetMovieRate(m_movie)) / 0x10000);
 }
 
 //---------------------------------------------------------------------------
@@ -2214,8 +2417,8 @@ double wxQTMediaBackend::GetPlaybackRate()
 //---------------------------------------------------------------------------
 bool wxQTMediaBackend::SetPlaybackRate(double dRate)
 {
-    ::SetMovieRate(m_movie, (Fixed) (dRate * 0x10000));
-    return ::GetMoviesError() == noErr;
+    m_lib.SetMovieRate(m_movie, (Fixed) (dRate * 0x10000));
+    return m_lib.GetMoviesError() == noErr;
 }
 
 //---------------------------------------------------------------------------
@@ -2228,11 +2431,11 @@ bool wxQTMediaBackend::SetPosition(wxLongLong where)
     TimeRecord theTimeRecord;
     memset(&theTimeRecord, 0, sizeof(TimeRecord));
     theTimeRecord.value.lo = where.GetValue();
-    theTimeRecord.scale = ::GetMovieTimeScale(m_movie);
-    theTimeRecord.base = ::GetMovieTimeBase(m_movie);
-    ::SetMovieTime(m_movie, &theTimeRecord);
+    theTimeRecord.scale = m_lib.GetMovieTimeScale(m_movie);
+    theTimeRecord.base = m_lib.GetMovieTimeBase(m_movie);
+    m_lib.SetMovieTime(m_movie, &theTimeRecord);
 
-    if (::GetMoviesError() != noErr)
+    if (m_lib.GetMoviesError() != noErr)
         return false;
 
     return true;
@@ -2246,7 +2449,7 @@ bool wxQTMediaBackend::SetPosition(wxLongLong where)
 //---------------------------------------------------------------------------
 wxLongLong wxQTMediaBackend::GetPosition()
 {
-    return ::GetMovieTime(m_movie, NULL);
+    return m_lib.GetMovieTime(m_movie, NULL);
 }
 
 //---------------------------------------------------------------------------
@@ -2256,7 +2459,7 @@ wxLongLong wxQTMediaBackend::GetPosition()
 //---------------------------------------------------------------------------
 wxLongLong wxQTMediaBackend::GetDuration()
 {
-    return ::GetMovieDuration(m_movie);
+    return m_lib.GetMovieDuration(m_movie);
 }
 
 //---------------------------------------------------------------------------
@@ -2286,8 +2489,8 @@ void wxQTMediaBackend::Cleanup()
     delete m_timer;
     m_timer = NULL;
 
-    StopMovie(m_movie);
-    DisposeMovie(m_movie);
+    m_lib.StopMovie(m_movie);
+    m_lib.DisposeMovie(m_movie);
 }
 
 //---------------------------------------------------------------------------
@@ -2305,14 +2508,14 @@ wxSize wxQTMediaBackend::GetVideoSize() const
 //
 // TODO
 //---------------------------------------------------------------------------
-void wxQTMediaBackend::Move(int x, int y, int w, int h)
+void wxQTMediaBackend::Move(int WXUNUSED(x), int WXUNUSED(y), int w, int h)
 {
     if(m_timer)
     {
         Rect theRect = {0, 0, h, w};
 
-        ::SetMovieBox(m_movie, &theRect);
-        wxASSERT(::GetMoviesError() == noErr);
+        m_lib.SetMovieBox(m_movie, &theRect);
+        wxASSERT(m_lib.GetMoviesError() == noErr);
     }
 }
 
