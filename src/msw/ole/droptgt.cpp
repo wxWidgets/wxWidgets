@@ -123,44 +123,6 @@ END_IID_TABLE;
 
 IMPLEMENT_IUNKNOWN_METHODS(wxIDropTarget)
 
-#if 0
-  STDMETHODIMP wxIDropTarget::QueryInterface(REFIID riid, void **ppv)
-  {                                                                           
-//    wxLogQueryInterface(wxIDropTarget, riid);                                    
-                                                                              
-    if ( IsIidFromList(riid, ms_aIids, WXSIZEOF(ms_aIids)) ) {                  
-      *ppv = this;
-      AddRef();                                                               
-                                                                              
-      return S_OK;                                                            
-    }                                                                         
-    else {                                                                    
-      *ppv = NULL;                                                            
-                                                                              
-      return (HRESULT) E_NOINTERFACE;
-    }                                                                         
-  }                                                                           
-                                                                              
-  STDMETHODIMP_(ULONG) wxIDropTarget::AddRef()                                    
-  {                                                                           
-    wxLogAddRef(wxIDropTarget, m_cRef);                                          
-                                                                              
-    return ++m_cRef;                                                          
-  }                                                                           
-                                                                              
-  STDMETHODIMP_(ULONG) wxIDropTarget::Release()                                   
-  {                                                                           
-    wxLogRelease(wxIDropTarget, m_cRef);                                         
-                                                                              
-    if ( --m_cRef == 0 ) {                                                    
-      delete this;                                                            
-      return 0;                                                               
-    }                                                                         
-    else                                                                      
-      return m_cRef;                                                          
-  }
-#endif
-
 // Name    : wxIDropTarget::DragEnter
 // Purpose : Called when the mouse enters the window (dragging something)
 // Returns : S_OK
@@ -320,7 +282,7 @@ bool wxDropTarget::Register(WXHWND hwnd)
 {
   HRESULT hr = ::CoLockObjectExternal(m_pIDropTarget, TRUE, FALSE);
   if ( FAILED(hr) ) {
-    // wxLogApiError("CoLockObjectExternal", hr);
+    wxLogApiError("CoLockObjectExternal", hr);
     return FALSE;
   }
 
@@ -328,7 +290,7 @@ bool wxDropTarget::Register(WXHWND hwnd)
   if ( FAILED(hr) ) {
     ::CoLockObjectExternal(m_pIDropTarget, FALSE, FALSE);
 
-    // wxLogApiError("RegisterDragDrop", hr);
+    wxLogApiError("RegisterDragDrop", hr);
     return FALSE;
   }
 
@@ -339,9 +301,8 @@ void wxDropTarget::Revoke(WXHWND hwnd)
 {
   HRESULT hr = ::RevokeDragDrop((HWND) hwnd);
 
-  if ( FAILED(hr) )
-  {
-    // wxLogApiError("RevokeDragDrop", hr);
+  if ( FAILED(hr) ) {
+    wxLogApiError("RevokeDragDrop", hr);
   }
 
   ::CoLockObjectExternal(m_pIDropTarget, FALSE, TRUE);
