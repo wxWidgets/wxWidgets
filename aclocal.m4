@@ -1512,7 +1512,7 @@ if test \$DEPSMODE = gcc ; then
     else
         depfile=\`basename \$objfile | sed -e 's/\..*$/.d/g'\`
         if test -f \$depfile ; then
-            sed -e "s,\$depobjname:,\$objfile:,g" \$depfile >\${DEPSDIR}/\${objfile}.d
+            sed -e "/^\$objfile/! s,\$depobjname:,\$objfile:,g" \$depfile >\${DEPSDIR}/\${objfile}.d
             rm -f \$depfile
         fi
     fi
