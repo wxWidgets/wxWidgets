@@ -243,6 +243,18 @@ void wxFrame::DoGetClientSize(
 {
     RECTL                           vRect;
     ::WinQueryWindowRect(GetHwnd(), &vRect);
+#if wxUSE_STATUSBAR
+    if ( GetStatusBar() && GetStatusBar()->IsShown() )
+    {
+        int                         nStatusX
+        int                         nStatusY;
+
+        GetStatusBar()->GetClientSize( &nStatusX
+                                      ,&nStatusY
+                                     );
+        vRect.yBottom += nStatusY;
+    }
+#endif // wxUSE_STATUSBAR
     if (pX)
         *pX = vRect.xRight - vRect.xLeft;
     if (pY)
