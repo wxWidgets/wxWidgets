@@ -41,6 +41,7 @@
 
 #include "wx/sizer.h"
 #include "wx/notebook.h"
+#include "wx/artprov.h"
 
 #include "widgets.h"
 
@@ -320,10 +321,11 @@ void NotebookWidgetsPage::CreateImageList()
         {
             // create a dummy image list with a few icons
             m_imageList = new wxImageList(32, 32);
-            m_imageList->Add(wxTheApp->GetStdIcon(wxICON_INFORMATION));
-            m_imageList->Add(wxTheApp->GetStdIcon(wxICON_QUESTION));
-            m_imageList->Add(wxTheApp->GetStdIcon(wxICON_WARNING));
-            m_imageList->Add(wxTheApp->GetStdIcon(wxICON_ERROR));
+            wxSize size(32, 32);
+            m_imageList->Add(wxArtProvider::GetIcon(wxART_INFORMATION, wxART_OTHER, size));
+            m_imageList->Add(wxArtProvider::GetIcon(wxART_QUESTION, wxART_OTHER, size));
+            m_imageList->Add(wxArtProvider::GetIcon(wxART_WARNING, wxART_OTHER, size));
+            m_imageList->Add(wxArtProvider::GetIcon(wxART_ERROR, wxART_OTHER, size));
         }
 
         m_notebook->SetImageList(m_imageList);

@@ -37,6 +37,7 @@
 
 #include "wx/colordlg.h"
 #include "wx/image.h"
+#include "wx/artprov.h"
 
 // ----------------------------------------------------------------------------
 // ressources
@@ -368,7 +369,7 @@ MyCanvas::MyCanvas(MyFrame *parent)
     m_owner = parent;
     m_show = Show_Default;
     m_smile_bmp = wxBitmap(smile_xpm);
-    m_std_icon = wxTheApp->GetStdIcon(wxICON_INFORMATION);
+    m_std_icon = wxArtProvider::GetIcon(wxART_INFORMATION);
 }
 
 void MyCanvas::DrawTestBrushes(wxDC& dc)
@@ -553,9 +554,9 @@ void MyCanvas::DrawDefault(wxDC& dc)
 
     memdc.SelectObject( wxNullBitmap );
     dc.DrawBitmap( bitmap, 10, 170 );
-    wxImage image( bitmap );
+    wxImage image = bitmap.ConvertToImage();
     image.Rescale( 60,210 );
-    bitmap = image.ConvertToBitmap();
+    bitmap = wxBitmap(image);
     dc.DrawBitmap( bitmap, 50, 170 );
 
     // test the rectangle outline drawing - there should be one pixel between

@@ -39,6 +39,7 @@
 #include <string.h>
 
 #include "wx/generic/msgdlgg.h"
+#include "wx/artprov.h"
 
 #if wxUSE_STATLINE
   #include "wx/statline.h"
@@ -72,9 +73,22 @@ wxGenericMessageDialog::wxGenericMessageDialog( wxWindow *parent,
     // 1) icon
     if (style & wxICON_MASK)
     {
-         wxStaticBitmap *icon = new wxStaticBitmap(
-            this, -1, wxTheApp->GetStdIcon((int)(style & wxICON_MASK)));
-         icon_text->Add( icon, 0, wxCENTER );
+        wxBitmap bitmap;
+        switch ( style & wxICON_MASK )
+        {
+            case wxICON_ERROR:
+                bitmap = wxArtProvider::GetIcon(wxART_ERROR, wxART_MESSAGE_BOX); break;
+            case wxICON_INFORMATION:
+                bitmap = wxArtProvider::GetIcon(wxART_INFORMATION, wxART_MESSAGE_BOX); break;
+            case wxICON_WARNING:
+                bitmap = wxArtProvider::GetIcon(wxART_WARNING, wxART_MESSAGE_BOX); break;
+            case wxICON_QUESTION:
+                bitmap = wxArtProvider::GetIcon(wxART_QUESTION, wxART_MESSAGE_BOX); break;
+            default:
+                wxFAIL_MSG(_T("incorrect log style"));
+        }
+        wxStaticBitmap *icon = new wxStaticBitmap(this, -1, bitmap);
+        icon_text->Add( icon, 0, wxCENTER );
     }
 
     // 2) text

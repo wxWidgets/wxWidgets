@@ -29,6 +29,7 @@
 #include "wx/tglbtn.h"
 #include "wx/notebook.h"
 #include "wx/imaglist.h"
+#include "wx/artprov.h"
 
 #if wxUSE_TOOLTIPS
     #include "wx/tooltip.h"
@@ -721,12 +722,12 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
     panel = new wxPanel(m_notebook);
 
 #if !defined(__WXMOTIF__) && !defined(__WIN16__)  // wxStaticBitmap not working under Motif yet; and icons not allowed under WIN16.
-    wxIcon icon = wxTheApp->GetStdIcon(wxICON_INFORMATION);
+    wxIcon icon = wxArtProvider::GetIcon(wxART_INFORMATION);
     wxStaticBitmap *bmpStatic = new wxStaticBitmap(panel, -1, icon,
                                                    wxPoint(10, 10));
 
     bmpStatic = new wxStaticBitmap(panel, -1, wxNullIcon, wxPoint(50, 10));
-    bmpStatic->SetIcon(wxTheApp->GetStdIcon(wxICON_QUESTION));
+    bmpStatic->SetIcon(wxArtProvider::GetIcon(wxART_QUESTION));
 #endif // !Motif
 
     wxBitmap bitmap( 100, 100 );
@@ -751,9 +752,9 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
     }
 #endif
 
-    wxBitmap bmp1(wxTheApp->GetStdIcon(wxICON_INFORMATION)),
-             bmp2(wxTheApp->GetStdIcon(wxICON_WARNING)),
-             bmp3(wxTheApp->GetStdIcon(wxICON_QUESTION));
+    wxBitmap bmp1(wxArtProvider::GetBitmap(wxART_INFORMATION)),
+             bmp2(wxArtProvider::GetBitmap(wxART_WARNING)),
+             bmp3(wxArtProvider::GetBitmap(wxART_QUESTION));
     wxBitmapButton *bmpBtn = new wxBitmapButton
                                  (
                                   panel, -1,

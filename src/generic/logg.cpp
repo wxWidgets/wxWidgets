@@ -52,6 +52,7 @@
 #include "wx/file.h"
 #include "wx/textfile.h"
 #include "wx/statline.h"
+#include "wx/artprov.h"
 
 #ifdef  __WXMSW__
   // for OutputDebugString()
@@ -734,8 +735,19 @@ wxLogDialog::wxLogDialog(wxWindow *parent,
     sizerButtons->Add(m_btnDetails, 0, wxCENTRE | wxTOP, MARGIN/2 - 1);
 
 #ifndef __WIN16__
-    wxIcon icon = wxTheApp->GetStdIcon((int)(style & wxICON_MASK));
-    sizerAll->Add(new wxStaticBitmap(this, -1, icon), 0);
+    wxBitmap bitmap;
+    switch ( style & wxICON_MASK )
+    {
+        case wxICON_ERROR:
+            bitmap = wxArtProvider::GetIcon(wxART_ERROR, wxART_MESSAGE_BOX); break;
+        case wxICON_INFORMATION:
+            bitmap = wxArtProvider::GetIcon(wxART_INFORMATION, wxART_MESSAGE_BOX); break;
+        case wxICON_WARNING:
+            bitmap = wxArtProvider::GetIcon(wxART_WARNING, wxART_MESSAGE_BOX); break;
+        default:
+            wxFAIL_MSG(_T("incorrect log style"));
+    }
+    sizerAll->Add(new wxStaticBitmap(this, -1, bitmap), 0);
 #endif // !Win16
 
     const wxString& message = messages.Last();
@@ -795,11 +807,11 @@ void wxLogDialog::CreateDetailsControls()
     wxImageList *imageList = new wxImageList(ICON_SIZE, ICON_SIZE);
 
     // order should be the same as in the switch below!
-    static const int icons[] =
+    static const wxChar* icons[] =
     {
-        wxICON_ERROR,
-        wxICON_EXCLAMATION,
-        wxICON_INFORMATION
+        wxART_ERROR,
+        wxART_WARNING,
+        wxART_INFORMATION
     };
 
     bool loadedIcons = TRUE;
@@ -807,19 +819,20 @@ void wxLogDialog::CreateDetailsControls()
 #ifndef __WIN16__
     for ( size_t icon = 0; icon < WXSIZEOF(icons); icon++ )
     {
-        wxBitmap bmp = wxTheApp->GetStdIcon(icons[icon]);
+        wxBitmap bmp = wxArtProvider::GetBitmap(icons[icon], wxART_MESSAGE_BOX,
+                                                wxSize(ICON_SIZE, ICON_SIZE));
 
         // This may very well fail if there are insufficient colours available.
         // Degrade gracefully.
         if ( !bmp.Ok() )
         {
+            wxLogError("FAILED fro %s:", icons[icon]);
             loadedIcons = FALSE;
 
             break;
         }
 
-        wxImage img(bmp);
-        imageList->Add(img.Rescale(ICON_SIZE, ICON_SIZE).ConvertToBitmap());
+        imageList->Add(bmp);
     }
 
     m_listctrl->SetImageList(imageList, wxIMAGE_LIST_SMALL);
