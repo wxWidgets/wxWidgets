@@ -2065,7 +2065,7 @@ wxDialog(parent, -1, title, pos, size, style)
 
   wxRadioBox *radio0 = new wxRadioBox(this, wxID_PRINTER_ORIENTATION, "Orientation: ", wxPoint(5, yPos), wxSize(-1,-1),
   		2,orientation,2,0);
-  radio0->SetSelection((int)wxThePrintSetupData->GetPrinterOrientation());
+  radio0->SetSelection((int)wxThePrintSetupData->GetPrinterOrientation() - 1);
 
   // @@@ Configuration hook
   if (wxThePrintSetupData->GetPrintPreviewCommand() == NULL)
@@ -2144,7 +2144,7 @@ int wxPostScriptPrintDialog::ShowModal (void)
       wxThePrintSetupData->SetPrinterCommand(WXSTRINGCAST text_prt->GetValue ());
 #endif
 
-      wxThePrintSetupData->SetPrinterOrientation((radio0->GetSelection() == PS_LANDSCAPE ? PS_LANDSCAPE : PS_PORTRAIT));
+      wxThePrintSetupData->SetPrinterOrientation((radio0->GetSelection() == 1 ? PS_LANDSCAPE : PS_PORTRAIT));
 
       // C++ wants this
       switch ( radio1->GetSelection() ) {
