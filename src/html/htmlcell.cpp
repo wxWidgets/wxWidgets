@@ -47,7 +47,7 @@ wxHtmlCell::wxHtmlCell() : wxObject()
 
 wxHtmlCell::~wxHtmlCell()
 {
-    if (m_Link) delete m_Link;
+    delete m_Link;
 }
 
 
@@ -60,8 +60,9 @@ void wxHtmlCell::OnMouseClick(wxWindow *parent, int x, int y,
         wxHtmlLinkInfo lnk2(*lnk);
         lnk2.SetEvent(&event);
         lnk2.SetHtmlCell(this);
-        ((wxHtmlWindow*)parent)->OnLinkClicked(lnk2);
-        // note : this overcasting is legal because parent is *always* wxHtmlWindow
+
+        // note : this cast is legal because parent is *always* wxHtmlWindow
+        wxStaticCast(parent, wxHtmlWindow)->OnLinkClicked(lnk2);
     }
 }
 
@@ -71,12 +72,12 @@ bool wxHtmlCell::AdjustPagebreak(int *pagebreak) const
 {
     if ((!m_CanLiveOnPagebreak) &&
                 m_PosY < *pagebreak && m_PosY + m_Height > *pagebreak)
-	{
+    {
         *pagebreak = m_PosY;
         return TRUE;
     }
-    else
-        return FALSE;
+
+    return FALSE;
 }
 
 
@@ -218,7 +219,7 @@ bool wxHtmlContainerCell::AdjustPagebreak(int *pagebreak) const
         int pbrk = *pagebreak - m_PosY;
 
         while (c)
-	    {
+        {
             if (c->AdjustPagebreak(&pbrk))
                 rt = TRUE;
             c = c->GetNext();
@@ -236,17 +237,17 @@ void wxHtmlContainerCell::Layout(int w)
     wxHtmlCell::Layout(w);
 
     if (m_LastLayout == w) return;
-    
+
     // VS: Any attempt to layout with negative or zero width leads to hell,
     // but we can't ignore such attempts completely, since it sometimes
     // happen (e.g. when trying how small a table can be). The best thing we
     // can do is to set the width of child cells to zero
-    if (w < 1) 
+    if (w < 1)
     {
        m_Width = 0;
        for (wxHtmlCell *cell = m_Cells; cell; cell = cell->GetNext())
             cell->Layout(0);
-            // this does two things: it recursively calls this code on all child 
+            // this does two things: it recursively calls this code on all child
             // contrainers and resets children's position to (0,0)
        return;
     }
@@ -299,7 +300,7 @@ void wxHtmlContainerCell::Layout(int w)
     while (cell != NULL)
     {
         switch (m_AlignVer)
-	    {
+        {
             case wxHTML_ALIGN_TOP :      ybasicpos = 0; break;
             case wxHTML_ALIGN_BOTTOM :   ybasicpos = - cell->GetHeight(); break;
             case wxHTML_ALIGN_CENTER :   ybasicpos = - cell->GetHeight() / 2; break;
@@ -316,7 +317,7 @@ void wxHtmlContainerCell::Layout(int w)
 
         // force new line if occured:
         if ((cell == NULL) || (xpos + cell->GetWidth() > s_width))
-	    {
+        {
             if (xpos > MaxLineWidth) MaxLineWidth = xpos;
             if (ysizeup < 0) ysizeup = 0;
             if (ysizedown < 0) ysizedown = 0;
@@ -339,7 +340,7 @@ void wxHtmlContainerCell::Layout(int w)
 
             if (m_AlignHor != wxHTML_ALIGN_JUSTIFY || cell == NULL)
                 while (line != cell)
-		        {
+                {
                     line->SetPos(line->GetPosX() + xdelta,
                                    ypos + line->GetPosY());
                     line = line->GetNext();
@@ -351,7 +352,7 @@ void wxHtmlContainerCell::Layout(int w)
                 if (step < 0) step = 0;
                 xcnt--;
                 if (xcnt > 0) while (line != cell)
-		        {
+                {
                     line->SetPos(line->GetPosX() + s_indent +
                                    (counter++ * step / xcnt),
                                    ypos + line->GetPosY());
@@ -373,12 +374,12 @@ void wxHtmlContainerCell::Layout(int w)
     if (m_Height < m_MinHeight)
     {
         if (m_MinHeightAlign != wxHTML_ALIGN_TOP)
-	    {
+        {
             int diff = m_MinHeight - m_Height;
             if (m_MinHeightAlign == wxHTML_ALIGN_CENTER) diff /= 2;
             cell = m_Cells;
             while (cell)
-	        {
+            {
                 cell->SetPos(cell->GetPosX(), cell->GetPosY() + diff);
                 cell = cell->GetNext();
             }
@@ -403,7 +404,7 @@ void wxHtmlContainerCell::Draw(wxDC& dc, int x, int y, int view_y1, int view_y2)
     {
 
         if (m_UseBkColour)
-	    {
+        {
             wxBrush myb = wxBrush(m_BkColour, wxSOLID);
 
             int real_y1 = mMax(y + m_PosY, view_y1);
@@ -415,7 +416,7 @@ void wxHtmlContainerCell::Draw(wxDC& dc, int x, int y, int view_y1, int view_y2)
         }
 
         if (m_UseBorder)
-	    {
+        {
             wxPen mypen1(m_BorderColour1, 1, wxSOLID);
             wxPen mypen2(m_BorderColour2, 1, wxSOLID);
 
@@ -518,12 +519,12 @@ void wxHtmlContainerCell::SetWidthFloat(const wxHtmlTag& tag, double pixel_scale
         wxString wd = tag.GetParam(wxT("WIDTH"));
 
         if (wd[wd.Length()-1] == wxT('%'))
-	    {
+        {
             wxSscanf(wd.c_str(), wxT("%i%%"), &wdi);
             SetWidthFloat(wdi, wxHTML_UNITS_PERCENT);
         }
         else
-	    {
+        {
             wxSscanf(wd.c_str(), wxT("%i"), &wdi);
             SetWidthFloat((int)(pixel_scale * (double)wdi), wxHTML_UNITS_PIXELS);
         }
@@ -556,12 +557,12 @@ void wxHtmlContainerCell::OnMouseClick(wxWindow *parent, int x, int y, const wxM
     {
         wxHtmlCell *c = m_Cells;
         while (c)
-	    {
+        {
             if (    (c->GetPosX() <= x) &&
                     (c->GetPosY() <= y) &&
                     (c->GetPosX() + c->GetWidth() > x) &&
                     (c->GetPosY() + c->GetHeight() > y))
-		    {
+            {
                 c->OnMouseClick(parent, x - c->GetPosX(), y - c->GetPosY(), event);
                 break;
             }
@@ -576,7 +577,7 @@ void wxHtmlContainerCell::GetHorizontalConstraints(int *left, int *right) const
 {
     int cleft = m_PosX + m_Width, cright = m_PosX; // worst case
     int l, r;
-    
+
     for (wxHtmlCell *cell = m_Cells; cell; cell = cell->GetNext())
     {
         cell->GetHorizontalConstraints(&l, &r);
@@ -584,7 +585,7 @@ void wxHtmlContainerCell::GetHorizontalConstraints(int *left, int *right) const
             cleft = l;
         if (r > cright)
             cright = r;
-    }  
+    }
 
     cleft -= (m_IndentLeft < 0) ? (-m_IndentLeft * m_Width / 100) : m_IndentLeft;
     cright += (m_IndentRight < 0) ? (-m_IndentRight * m_Width / 100) : m_IndentRight;

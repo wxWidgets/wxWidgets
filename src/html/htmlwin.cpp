@@ -309,7 +309,7 @@ bool wxHtmlWindow::LoadPage(const wxString& location)
     {
         int c = m_History->GetCount() - (m_HistoryPos + 1);
 
-        if (m_HistoryPos < 0 || 
+        if (m_HistoryPos < 0 ||
             (*m_History)[m_HistoryPos].GetPage() != m_OpenedPage ||
             (*m_History)[m_HistoryPos].GetAnchor() != m_OpenedAnchor)
         {
@@ -659,11 +659,11 @@ void wxHtmlWindow::OnMouseEvent(wxMouseEvent& event)
     if (event.ButtonDown())
     {
         int sx, sy;
-        wxPoint pos;
-        wxString lnk;
+        GetViewStart(&sx, &sy);
+        sx *= wxHTML_SCROLL_STEP;
+        sy *= wxHTML_SCROLL_STEP;
 
-        GetViewStart(&sx, &sy); sx *= wxHTML_SCROLL_STEP; sy *= wxHTML_SCROLL_STEP;
-        pos = event.GetPosition();
+        wxPoint pos = event.GetPosition();
 
         if (m_Cell)
             m_Cell->OnMouseClick(this, sx + pos.x, sy + pos.y, event);
@@ -683,13 +683,15 @@ void wxHtmlWindow::OnIdle(wxIdleEvent& WXUNUSED(event))
     if (m_tmpMouseMoved && (m_Cell != NULL))
     {
         int sx, sy;
-        int x, y;
-        wxHtmlLinkInfo *lnk;
+        GetViewStart(&sx, &sy);
+        sx *= wxHTML_SCROLL_STEP;
+        sy *= wxHTML_SCROLL_STEP;
 
-        GetViewStart(&sx, &sy); sx *= wxHTML_SCROLL_STEP; sy *= wxHTML_SCROLL_STEP;
+        int x, y;
         wxGetMousePosition(&x, &y);
         ScreenToClient(&x, &y);
-        lnk = m_Cell->GetLink(sx + x, sy + y);
+
+        wxHtmlLinkInfo *lnk = m_Cell->GetLink(sx + x, sy + y);
 
         if (lnk != m_tmpLastLink)
         {
@@ -718,6 +720,7 @@ IMPLEMENT_DYNAMIC_CLASS(wxHtmlWindow,wxScrolledWindow)
 BEGIN_EVENT_TABLE(wxHtmlWindow, wxScrolledWindow)
     EVT_SIZE(wxHtmlWindow::OnSize)
     EVT_LEFT_DOWN(wxHtmlWindow::OnMouseEvent)
+    EVT_RIGHT_DOWN(wxHtmlWindow::OnMouseEvent)
     EVT_MOTION(wxHtmlWindow::OnMouseEvent)
     EVT_IDLE(wxHtmlWindow::OnIdle)
 END_EVENT_TABLE()
