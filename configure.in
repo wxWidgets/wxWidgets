@@ -3047,7 +3047,7 @@ AC_CHECK_FUNCS(strtok_r)
 AC_LANG_RESTORE
 
 dnl check for inet_addr and inet_aton (these may live either in libc, or in
-dnl libnsl or libresolv)
+dnl libnsl or libresolv or libsocket)
 INET_LINK=
 AC_CHECK_FUNCS(inet_addr,
     AC_DEFINE(HAVE_INET_ADDR),
@@ -3055,7 +3055,10 @@ AC_CHECK_FUNCS(inet_addr,
         AC_CHECK_LIB(nsl, inet_addr,
             INET_LINK="nsl",
             AC_CHECK_LIB(resolv, inet_addr,
-                INET_LINK="resolv"
+                INET_LINK="resolv",
+                AC_CHECK_LIB(socket, inet_addr,
+                    INET_LINK="socket"
+                )
             )
         )
     ]
@@ -4396,15 +4399,23 @@ if test "$wxUSE_POPUPWIN" = "yes"; then
         if test "$wxUSE_MOTIF" = 1; then
             AC_MSG_WARN([wxPopupWindow not yet supported under Motif... disabled])
         else
-            AC_DEFINE(wxUSE_POPUPWIN)
+            if test "$wxUSE_PM" = 1; then
+                AC_MSG_WARN([wxPopupWindow not yet supported under PM... disabled])
+            else 
+                AC_DEFINE(wxUSE_POPUPWIN)
 
-            USES_CONTROLS=1
+                USES_CONTROLS=1
+            fi
         fi
     fi
 fi
 
 if test "$wxUSE_TIPWINDOW" = "yes"; then
-    AC_DEFINE(wxUSE_TIPWINDOW)
+    if test "$wxUSE_PM" = 1; then
+        AC_MSG_WARN([wxTipWindow not yet supported under PM... disabled])
+    else 
+        AC_DEFINE(wxUSE_TIPWINDOW)
+    fi
 fi
 
 if test "$USES_CONTROLS" = 1; then
