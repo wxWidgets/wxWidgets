@@ -37,7 +37,7 @@ class UpdateThrobberEvent(wx.PyEvent):
 
 # ------------------------------------------------------------------------------
 
-class Throbber(wx.Panel):
+class Throbber(wx.PyPanel):
     """
     The first argument is either the name of a file that will be split into frames
     (a composite image) or a list of  strings of image names that will be treated
@@ -60,7 +60,7 @@ class Throbber(wx.Panel):
                  reverse = 0,     # reverse direction at end of animation
                  style = 0,       # window style
                  name = "throbber"):
-        wx.Panel.__init__(self, parent, id, pos, size, style, name)
+        wx.PyPanel.__init__(self, parent, id, pos, size, style, name)
         self.name = name
         self.label = label
         self.running = (1 != 1)
@@ -127,7 +127,11 @@ class Throbber(wx.Panel):
         self.Bind(wx.EVT_PAINT, self.OnPaint)
         self.Bind(wx.EVT_TIMER, self.OnTimer, self.timer)
         self.Bind(wx.EVT_WINDOW_DESTROY, self.OnDestroyWindow)
-            
+
+
+    def DoGetBestSize(self):
+        return (self.width, self.height)
+    
 
     def OnTimer(self, event):
         wx.PostEvent(self, UpdateThrobberEvent())

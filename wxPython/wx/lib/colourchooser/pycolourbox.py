@@ -33,12 +33,12 @@ class PyColourBox(wx.Panel):
     def __init__(self, parent, id, colour=(0, 0, 0), size=(25, 20)):
         """Creates a new colour box instance and initializes the colour
         content."""
-        wx.Panel.__init__(self, parent, id, size=size)
+        wx.Panel.__init__(self, parent, id, size=size, style=wx.NO_BORDER)
 
-        self.colour_box = wx.Panel(self, -1, style=wx.SIMPLE_BORDER)
+        self.colour_box = wx.Window(self, -1, style=wx.SIMPLE_BORDER)
 
         sizer = wx.GridSizer(1, 1)
-        sizer.Add(self.colour_box, 0, wx.ALIGN_CENTER_VERTICAL | wx.ALIGN_CENTER_HORIZONTAL)
+        sizer.Add(self.colour_box, 0, wx.FIXED_SIZE | wx.ALIGN_CENTER_VERTICAL | wx.ALIGN_CENTER_HORIZONTAL)
         sizer.SetItemMinSize(self.colour_box, size[0] - 5, size[1] - 5)
         self.SetAutoLayout(True)
         self.SetSizer(sizer)

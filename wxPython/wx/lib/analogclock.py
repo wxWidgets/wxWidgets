@@ -51,14 +51,14 @@ TICKS_DECIMAL       = 16
 TICKS_ROMAN         = 32
 
 
-class AnalogClockWindow(wx.Window):
+class AnalogClockWindow(wx.PyWindow):
     """An analog clock window"""
 
     def __init__(self, parent, ID=-1, pos=wx.DefaultPosition, size=wx.DefaultSize,
                  style=0, name="clock"):
         
         # Initialize the wxWindow...
-        wx.Window.__init__(self, parent, ID, pos, size, style, name)
+        wx.PyWindow.__init__(self, parent, ID, pos, size, style, name)
 
         # Initialize some variables and defaults...
         self.clockStep = 1
@@ -124,6 +124,8 @@ class AnalogClockWindow(wx.Window):
         self.timer = wx.Timer(self)
         self.timer.Start(500)
 
+    def DoGetBestSize(self):
+        return wx.Size(25,25)
 
     def OnPaint(self, event):
         self._doDrawHands(wx.BufferedPaintDC(self), True)

@@ -12,7 +12,7 @@ resourceText = r'''<?xml version="1.0"?>
 <object class="MyCustomPanel" name="MyPanel">
     <size>200,100</size>
     <object class="wxStaticText" name="label1">
-        <label>This blue panel is a class derived from wx.Panel,\nand is loaded by a custom XmlResourceHandler.</label>
+        <label>This panel is a custom class derived from wx.Panel,\nand is loaded by a custom XmlResourceHandler.</label>
         <pos>10,10</pos>
     </object>
 </object>
