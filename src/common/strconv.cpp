@@ -546,6 +546,11 @@ bool IC_CharSet::ms_wcNeedsSwap = FALSE;
 IC_CharSet::IC_CharSet(const wxChar *name)
           : wxCharacterSet(name)
 {
+    // Do it the hard way
+    char cname[100];
+    for (size_t i = 0; i < wxStrlen(name)+1; i++)
+        cname[i] = (char) name[i];
+
     // check for charset that represents wchar_t:
     if (ms_wcCharsetName == NULL)
     {
@@ -553,20 +558,20 @@ IC_CharSet::IC_CharSet(const wxChar *name)
 
         // try charset with explicit bytesex info (e.g. "UCS-4LE"):
         ms_wcCharsetName = WC_NAME_BEST;
-        m2w = iconv_open(ms_wcCharsetName, wxConvLibc.cWX2MB(name));
+        m2w = iconv_open(ms_wcCharsetName, cname);
 
         if (m2w == (iconv_t)-1)
         {
             // try charset w/o bytesex info (e.g. "UCS4")
             // and check for bytesex ourselves:
             ms_wcCharsetName = WC_NAME;
-            m2w = iconv_open(ms_wcCharsetName, wxConvLibc.cWX2MB(name));
+            m2w = iconv_open(ms_wcCharsetName, cname);
 
             // last bet, try if it knows WCHAR_T pseudo-charset
             if (m2w == (iconv_t)-1)
             {
                 ms_wcCharsetName = "WCHAR_T";
-                m2w = iconv_open(ms_wcCharsetName, wxConvLibc.cWX2MB(name));
+                m2w = iconv_open(ms_wcCharsetName, cname);
             }
 
             if (m2w != (iconv_t)-1)
@@ -612,13 +617,13 @@ IC_CharSet::IC_CharSet(const wxChar *name)
     }
     else // we already have ms_wcCharsetName
     {
-        m2w = iconv_open(ms_wcCharsetName, wxConvLibc.cWX2MB(name));
+        m2w = iconv_open(ms_wcCharsetName, cname);
     }
 
     // NB: don't ever pass NULL to iconv_open(), it may crash!
     if ( ms_wcCharsetName )
     {
-        w2m = iconv_open(wxConvLibc.cWX2MB(name), ms_wcCharsetName);
+        w2m = iconv_open( cname, ms_wcCharsetName);
     }
     else
     {
