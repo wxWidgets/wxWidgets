@@ -164,7 +164,7 @@ static int OpenLogFile(wxFile& file, wxString *filename = NULL);
 
 // we use a global variable to store the frame pointer for wxLogStatus - bad,
 // but it's the easiest way
-static wxFrame *gs_pFrame; // FIXME MT-unsafe
+static wxFrame *gs_pFrame = NULL; // FIXME MT-unsafe
 
 // ============================================================================
 // implementation
