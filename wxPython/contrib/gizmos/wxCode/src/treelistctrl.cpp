@@ -4133,6 +4133,9 @@ void wxTreeListMainWindow::OnMouse( wxMouseEvent &event )
     int flags = 0;
     wxTreeListItem *item = m_anchor->HitTest(pt, this, flags, 0);
     wxTreeListItem *underMouse = item;
+#if wxUSE_TOOLTIPS
+    bool underMouseChanged = (underMouse != m_underMouse) ;
+#endif // wxUSE_TOOLTIPS
 
     if (underMouse && (flags & wxTREE_HITTEST_ONITEMBUTTON) &&
         !event.LeftIsDown() && !m_isDragging &&
@@ -4158,6 +4161,25 @@ void wxTreeListMainWindow::OnMouse( wxMouseEvent &event )
          if (m_underMouse)
             RefreshLine( m_underMouse );
     }
+
+#if wxUSE_TOOLTIPS
+    // Determines what item we are hovering over and need a tooltip for
+    wxTreeItemId hoverItem = item;
+
+    // We do not want a tooltip if we are dragging, or if the rename timer is running
+    if (underMouseChanged && hoverItem.IsOk() && !m_isDragging && (!m_renameTimer || !m_renameTimer->IsRunning()))
+    {
+        // Ask the tree control what tooltip (if any) should be shown
+        wxTreeEvent hevent(wxEVT_COMMAND_TREE_ITEM_GETTOOLTIP, GetId());
+        hevent.SetItem(hoverItem);
+        hevent.SetEventObject(this);
+
+        if ( GetEventHandler()->ProcessEvent(hevent) && hevent.IsAllowed() )
+        {
+            SetToolTip(hevent.GetLabel());
+        }
+    }
+#endif
 
     // we process left mouse up event (enables in-place edit), right down
     // (pass to the user code), left dbl click (activate item) and
@@ -4203,6 +4225,7 @@ void wxTreeListMainWindow::OnMouse( wxMouseEvent &event )
         wxTreeEvent nevent( command,/*ALB*/ m_owner->GetId() );
         nevent.SetItem( (long) m_current);
         nevent.SetEventObject(/*this*/m_owner); // ALB
+        nevent.SetPoint(pt);
 
         // by default the dragging is not supported, the user code must
         // explicitly allow the event for it to take place
@@ -4610,6 +4633,7 @@ IMPLEMENT_DYNAMIC_CLASS(wxTreeListCtrl, wxControl);
 
 BEGIN_EVENT_TABLE(wxTreeListCtrl, wxControl)
     EVT_SIZE(wxTreeListCtrl::OnSize)
+    EVT_TREE_ITEM_GETTOOLTIP(wxID_ANY, wxTreeListCtrl::OnGetToolTip)
 END_EVENT_TABLE();
 
 bool wxTreeListCtrl::Create(wxWindow *parent, wxWindowID id,
@@ -5088,3 +5112,11 @@ wxSize wxTreeListCtrl::DoGetBestSize() const
     // something is better than nothing...
     return wxSize(100,80);
 }
+
+// Process the tooltip event, to speed up event processing.
+// Doesn't actually get a tooltip.
+void wxTreeListCtrl::OnGetToolTip( wxTreeEvent &event )
+{
+    event.Veto();
+}
+
