@@ -249,7 +249,7 @@ bool wxFileName::Normalize(wxPathNormalize flags,
             {
                 curDir.AssignDir(wxGetUserHome(dir.c_str() + 1));
 
-                dirs.Remove(0u);
+                dirs.RemoveAt(0u);
             }
         }
     }
