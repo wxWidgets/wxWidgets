@@ -6,13 +6,11 @@
 // Created:     2003/07/14
 // RCS-ID:      $Id$
 // Copyright:   (c) 2003 David Elliott
-// Licence:   	wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef __WX_COCOA_COMBOBOX_H__
 #define __WX_COCOA_COMBOBOX_H__
-
-#include "wx/textctrl.h"
 
 //#include "wx/cocoa/NSTableView.h"
 
@@ -114,7 +112,7 @@ public:
     {   wxTextCtrl::SetInsertionPointEnd(); }
     virtual long GetInsertionPoint() const
     {   return wxTextCtrl::GetInsertionPoint(); }
-    virtual long GetLastPosition() const
+    virtual wxTextPos GetLastPosition() const
     {   return wxTextCtrl::GetLastPosition(); }
     virtual void Replace(long from, long to, const wxString& value)
     {   wxTextCtrl::Replace(from,to,value); }

@@ -1141,7 +1141,7 @@ long wxTextCtrl::GetInsertionPoint() const
     return Pos & 0xFFFF;
 }
 
-long wxTextCtrl::GetLastPosition() const
+wxTextPos wxTextCtrl::GetLastPosition() const
 {
     int numLines = GetNumberOfLines();
     long posStartLastLine = XYToPosition(0, numLines - 1);
@@ -2082,7 +2082,7 @@ void wxTextCtrl::OnSetFocus(wxFocusEvent& WXUNUSED(event))
 // Default colors for MSW text control
 //
 // Set default background color to the native white instead of
-// the default wxSYS_COLOUR_BTNFACE (is triggered with wxNullColour). 
+// the default wxSYS_COLOUR_BTNFACE (is triggered with wxNullColour).
 // ----------------------------------------------------------------------------
 
 wxVisualAttributes wxTextCtrl::GetDefaultAttributes() const
@@ -2466,7 +2466,7 @@ bool wxTextCtrl::SetDefaultStyle(const wxTextAttr& style)
     {
         // we have to do this or the style wouldn't apply for the text typed by
         // the user
-        long posLast = GetLastPosition();
+        wxTextPos posLast = GetLastPosition();
         SetStyle(posLast, posLast, m_defaultStyle);
     }
 
@@ -2531,7 +2531,7 @@ bool wxTextCtrl::GetStyle(long position, wxTextAttr& style)
     wxStrcpy(lf.lfFaceName, cf.szFaceName);
 
     //NOTE:  we _MUST_ set each of these values to _something_ since we
-    //do not call wxZeroMemory on the LOGFONT lf 
+    //do not call wxZeroMemory on the LOGFONT lf
     if (cf.dwEffects & CFE_ITALIC)
         lf.lfItalic = TRUE;
     else

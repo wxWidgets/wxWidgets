@@ -183,18 +183,18 @@ public:
     virtual void Redo() {}
 
     virtual bool CanUndo() const    { return (m_undos.GetCount() > 0); }
-    virtual bool CanRedo() const    { return FALSE; }
+    virtual bool CanRedo() const    { return false; }
 
     // Insertion point
     virtual void SetInsertionPoint(long pos);
     virtual void SetInsertionPointEnd();
     virtual long GetInsertionPoint() const;
-    virtual long GetLastPosition() const;
+    virtual wxTextPos GetLastPosition() const;
 
     virtual void SetSelection(long from, long to);
     virtual void SetEditable(bool editable);
 
-    virtual bool Enable( bool enable = TRUE );
+    virtual bool Enable( bool enable = true );
 
     void OnCut(wxCommandEvent& event);
     void OnCopy(wxCommandEvent& event);
@@ -212,7 +212,7 @@ public:
     bool SetForegroundColour(const wxColour& colour);
     bool SetBackgroundColour(const wxColour& colour);
 
-    void SetModified() { m_modified = TRUE; }
+    void SetModified() { m_modified = true; }
 
     virtual void Freeze();
     virtual void Thaw();
@@ -266,7 +266,7 @@ public:
     void OnInternalIdle();
     void RefreshLine( int n );
     void RefreshDown( int n );
-    void MoveCursor( int new_x, int new_y, bool shift = FALSE, bool centre = FALSE );
+    void MoveCursor( int new_x, int new_y, bool shift = false, bool centre = false );
     void MyAdjustScrollbars();
 
 protected:
@@ -370,13 +370,6 @@ private:
 // wxTextCtrl types
 // ----------------------------------------------------------------------------
 
-// wxTextPos is the position in the text
-typedef long wxTextPos;
-
-// wxTextCoord is the line or row number (which should have been unsigned but
-// is long for backwards compatibility)
-typedef long wxTextCoord;
-
 class WXDLLEXPORT wxStdTextCtrlInputHandler : public wxStdInputHandler
 {
 public:
@@ -384,10 +377,10 @@ public:
 
     virtual bool HandleKey(wxInputConsumer *consumer,
                            const wxKeyEvent& event,
-                           bool pressed) { return FALSE; }
-    virtual bool HandleMouse(wxInputConsumer *consumer, const wxMouseEvent& event) { return FALSE; }
-    virtual bool HandleMouseMove(wxInputConsumer *consumer, const wxMouseEvent& event) { return FALSE; }
-    virtual bool HandleFocus(wxInputConsumer *consumer, const wxFocusEvent& event) { return FALSE; }
+                           bool pressed) { return false; }
+    virtual bool HandleMouse(wxInputConsumer *consumer, const wxMouseEvent& event) { return false; }
+    virtual bool HandleMouseMove(wxInputConsumer *consumer, const wxMouseEvent& event) { return false; }
+    virtual bool HandleFocus(wxInputConsumer *consumer, const wxFocusEvent& event) { return false; }
 
 protected:
     // get the position of the mouse click

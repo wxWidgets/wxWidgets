@@ -16,7 +16,6 @@
 #pragma interface "combobox.h"
 #endif
 
-#include "wx/textctrl.h"
 #include "wx/choice.h"
 
 WXDLLEXPORT_DATA(extern const wxChar*) wxComboBoxNameStr;
@@ -34,8 +33,8 @@ class WXDLLEXPORT wxComboBox : public wxControl, public wxComboBoxBase
     virtual void DoMoveWindow(int x, int y, int width, int height);
 
     // forward these functions to all subcontrols
-    virtual bool Enable(bool enable = TRUE);
-    virtual bool Show(bool show = TRUE);
+    virtual bool Enable(bool enable = true);
+    virtual bool Show(bool show = true);
     virtual void SetFocus();
 
     // callback functions
@@ -106,7 +105,7 @@ class WXDLLEXPORT wxComboBox : public wxControl, public wxComboBoxBase
     virtual void SetInsertionPoint(long pos);
     virtual void SetInsertionPointEnd();
     virtual long GetInsertionPoint() const ;
-    virtual long GetLastPosition() const ;
+    virtual wxTextPos GetLastPosition() const ;
     virtual void Replace(long from, long to, const wxString& value);
     virtual void Remove(long from, long to);
     virtual void SetSelection(long from, long to);

@@ -97,8 +97,8 @@ static void wxTextWindowActivateProc(Widget w, XtPointer clientData, XmAnyCallba
 wxTextCtrl::wxTextCtrl()
 {
     m_tempCallbackStruct = (void*) NULL;
-    m_modified = FALSE;
-    m_processedDefault = FALSE;
+    m_modified = false;
+    m_processedDefault = false;
 }
 
 bool wxTextCtrl::Create(wxWindow *parent,
@@ -114,8 +114,8 @@ bool wxTextCtrl::Create(wxWindow *parent,
         return false;
 
     m_tempCallbackStruct = (void*) NULL;
-    m_modified = FALSE;
-    m_processedDefault = FALSE;
+    m_modified = false;
+    m_processedDefault = false;
 
     m_backgroundColour = *wxWHITE;
 
@@ -181,7 +181,7 @@ bool wxTextCtrl::Create(wxWindow *parent,
                        XmNvalue, wxConstCast(value.c_str(), char),
                        NULL);
     }
-    
+
     // install callbacks
     XtAddCallback((Widget) m_mainWidget, XmNvalueChangedCallback, (XtCallbackProc)wxTextWindowChangedProc, (XtPointer)this);
 
@@ -194,7 +194,7 @@ bool wxTextCtrl::Create(wxWindow *parent,
     XtAddCallback((Widget) m_mainWidget, XmNlosingFocusCallback, (XtCallbackProc)wxTextWindowLoseFocusProc, (XtPointer)this);
 
     // font
-    ChangeFont(FALSE);
+    ChangeFont(false);
 
     wxSize best = GetBestSize();
     if( size.x != -1 ) best.x = size.x;
@@ -205,7 +205,7 @@ bool wxTextCtrl::Create(wxWindow *parent,
 
     ChangeBackgroundColour();
 
-    return TRUE;
+    return true;
 }
 
 WXWidget wxTextCtrl::GetTopWidget() const
@@ -248,7 +248,7 @@ wxString wxTextCtrl::GetValue() const
 
 void wxTextCtrl::SetValue(const wxString& value)
 {
-    m_inSetValue = TRUE;
+    m_inSetValue = true;
 
     // do this instead... MB
     //
@@ -262,7 +262,7 @@ void wxTextCtrl::SetValue(const wxString& value)
     Clear();
     AppendText( value );
 
-    m_inSetValue = FALSE;
+    m_inSetValue = false;
 }
 
 // Clipboard operations
@@ -316,13 +316,13 @@ void wxTextCtrl::Redo()
 bool wxTextCtrl::CanUndo() const
 {
     // No Undo in Motif
-    return FALSE;
+    return false;
 }
 
 bool wxTextCtrl::CanRedo() const
 {
     // No Redo in Motif
-    return FALSE;
+    return false;
 }
 
 // If the return values from and to are the same, there is no
@@ -354,7 +354,7 @@ void wxTextCtrl::SetInsertionPoint(long pos)
 
 void wxTextCtrl::SetInsertionPointEnd()
 {
-    long pos = GetLastPosition();
+    wxTextPos pos = GetLastPosition();
     SetInsertionPoint(pos);
 }
 
@@ -363,7 +363,7 @@ long wxTextCtrl::GetInsertionPoint() const
     return (long) XmTextGetInsertionPosition ((Widget) m_mainWidget);
 }
 
-long wxTextCtrl::GetLastPosition() const
+wxTextPos wxTextCtrl::GetLastPosition() const
 {
     return (long) XmTextGetLastPosition ((Widget) m_mainWidget);
 }
@@ -398,24 +398,24 @@ void wxTextCtrl::WriteText(const wxString& text)
     XtVaSetValues ((Widget) m_mainWidget, XmNcursorPosition, textPosition, NULL);
     SetInsertionPoint(textPosition);
     XmTextShowPosition ((Widget) m_mainWidget, textPosition);
-    m_modified = TRUE;
+    m_modified = true;
 }
 
 void wxTextCtrl::AppendText(const wxString& text)
 {
-    long textPosition = GetLastPosition() + text.length();
+    wxTextPos textPosition = GetLastPosition() + text.length();
     XmTextInsert ((Widget) m_mainWidget, GetLastPosition(),
                   wxConstCast(text.c_str(), char));
     XtVaSetValues ((Widget) m_mainWidget, XmNcursorPosition, textPosition, NULL);
     SetInsertionPoint(textPosition);
     XmTextShowPosition ((Widget) m_mainWidget, textPosition);
-    m_modified = TRUE;
+    m_modified = true;
 }
 
 void wxTextCtrl::Clear()
 {
     XmTextSetString ((Widget) m_mainWidget, "");
-    m_modified = FALSE;
+    m_modified = false;
 }
 
 bool wxTextCtrl::IsModified() const
@@ -426,12 +426,12 @@ bool wxTextCtrl::IsModified() const
 // Makes modified or unmodified
 void wxTextCtrl::MarkDirty()
 {
-    m_modified = TRUE;
+    m_modified = true;
 }
 
 void wxTextCtrl::DiscardEdits()
 {
-    m_modified = FALSE;
+    m_modified = false;
 }
 
 int wxTextCtrl::GetNumberOfLines() const
@@ -442,7 +442,7 @@ int wxTextCtrl::GetNumberOfLines() const
     {
         long i = 0;
         int currentLine = 0;
-        bool finished = FALSE;
+        bool finished = false;
         while (!finished)
         {
             int ch = s[i];
@@ -453,7 +453,7 @@ int wxTextCtrl::GetNumberOfLines() const
             }
             else if (ch == 0)
             {
-                finished = TRUE;
+                finished = true;
             }
             else
                 i++;
@@ -488,7 +488,7 @@ bool wxTextCtrl::PositionToXY(long pos, long *x, long *y) const
     if ( y )
         *y = yy;
 
-    return TRUE;
+    return true;
 }
 
 void wxTextCtrl::ShowPosition(long pos)
@@ -551,7 +551,7 @@ void wxTextCtrl::OnChar(wxKeyEvent& event)
     // Indicates that we should generate a normal command, because
     // we're letting default behaviour happen (otherwise it's vetoed
     // by virtue of overriding OnChar)
-    m_processedDefault = TRUE;
+    m_processedDefault = true;
 
     if (m_tempCallbackStruct)
     {
@@ -588,12 +588,12 @@ void wxTextCtrl::ChangeBackgroundColour()
             NULL);
         wxColour backgroundColour = wxSystemSettings::GetColour(wxSYS_COLOUR_3DFACE);
         if (hsb)
-            wxDoChangeBackgroundColour((WXWidget) hsb, backgroundColour, TRUE);
+            wxDoChangeBackgroundColour((WXWidget) hsb, backgroundColour, true);
         if (vsb)
-            wxDoChangeBackgroundColour((WXWidget) vsb, backgroundColour, TRUE);
+            wxDoChangeBackgroundColour((WXWidget) vsb, backgroundColour, true);
 
         // MBN: why change parent background?
-        // DoChangeBackgroundColour((WXWidget) parent, m_backgroundColour, TRUE);
+        // DoChangeBackgroundColour((WXWidget) parent, m_backgroundColour, true);
     }
 }
 
@@ -677,7 +677,7 @@ wxSize wxDoGetSingleTextCtrlBestSize( Widget textWidget,
 
     return wxSize( x + 2 * xmargin + 2 * highlight + 2 * shadow,
                    // MBN: +2 necessary: Lesstif bug or mine?
-                   y + 2 * ymargin + 2 * highlight + 2 * shadow + 2 ); 
+                   y + 2 * ymargin + 2 * highlight + 2 * shadow + 2 );
 }
 
 wxSize wxTextCtrl::DoGetBestSize() const
@@ -756,14 +756,14 @@ wxTextWindowChangedProc (Widget w, XtPointer clientData, XtPointer WXUNUSED(ptr)
         return;
 
     wxTextCtrl *tw = (wxTextCtrl *) clientData;
-    tw->SetModified(TRUE);
+    tw->SetModified(true);
 }
 
 static void
 wxTextWindowModifyProc (Widget WXUNUSED(w), XtPointer clientData, XmTextVerifyCallbackStruct *cbs)
 {
     wxTextCtrl *tw = (wxTextCtrl *) clientData;
-    tw->m_processedDefault = FALSE;
+    tw->m_processedDefault = false;
 
     // First, do some stuff if it's a password control: in this case, we need
     // to store the string inside the class because GetValue() can't retrieve

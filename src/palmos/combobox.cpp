@@ -244,7 +244,7 @@ long wxComboBox::GetInsertionPoint() const
     return 0;
 }
 
-long wxComboBox::GetLastPosition() const
+wxTextPos wxComboBox::GetLastPosition() const
 {
     return 0;
 }
@@ -263,7 +263,7 @@ void wxComboBox::SetSelection(long from, long to)
 
 bool wxComboBox::IsEditable() const
 {
-	return false;
+    return false;
 }
 
 void wxComboBox::Undo()
@@ -280,27 +280,27 @@ void wxComboBox::SelectAll()
 
 bool wxComboBox::CanCopy() const
 {
-	return false;
+    return false;
 }
 
 bool wxComboBox::CanCut() const
 {
-	return false;
+    return false;
 }
 
 bool wxComboBox::CanPaste() const
 {
-	return false;
+    return false;
 }
 
 bool wxComboBox::CanUndo() const
 {
-	return false;
+    return false;
 }
 
 bool wxComboBox::CanRedo() const
 {
-	return false;
+    return false;
 }
 
 

@@ -620,7 +620,7 @@ void wxComboBox::SetInsertionPointEnd()
     // setting insertion point doesn't make sense for read only comboboxes
     if ( !(GetWindowStyle() & wxCB_READONLY) )
     {
-        long pos = GetLastPosition();
+        wxTextPos pos = GetLastPosition();
         SetInsertionPoint(pos);
     }
 }
@@ -635,15 +635,15 @@ long wxComboBox::GetInsertionPoint() const
 #endif
 }
 
-long wxComboBox::GetLastPosition() const
+wxTextPos wxComboBox::GetLastPosition() const
 {
     HWND hEditWnd = (HWND) GetEditHWND();
 
     // Get number of characters in the last (only) line. We'll add this to the character
     // index for the last line, 1st position.
-    int lineLength = (int)SendMessage(hEditWnd, EM_LINELENGTH, (WPARAM) 0, (LPARAM)0L);
+    wxTextPos lineLength = (wxTextPos)SendMessage(hEditWnd, EM_LINELENGTH, (WPARAM) 0, (LPARAM)0L);
 
-    return (long)(lineLength);
+    return lineLength;
 }
 
 void wxComboBox::Replace(long from, long to, const wxString& value)

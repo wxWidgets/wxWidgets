@@ -110,7 +110,7 @@ class WXDLLEXPORT wxComboBox : public wxChoice
     virtual void        SetInsertionPoint(long lPos);
     virtual void        SetInsertionPointEnd(void);
     virtual long        GetInsertionPoint(void) const;
-    virtual long        GetLastPosition(void) const;
+    virtual wxTextPos   GetLastPosition(void) const;
     virtual void        Replace( long            lFrom
                                 ,long            lTo
                                 ,const wxString& rsValue

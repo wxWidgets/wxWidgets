@@ -566,7 +566,7 @@ long wxTextCtrl::GetInsertionPoint() const
     return Pos & 0xFFFF;
 }
 
-long wxTextCtrl::GetLastPosition() const
+wxTextPos wxTextCtrl::GetLastPosition() const
 {
     int numLines = GetNumberOfLines();
     long posStartLastLine = XYToPosition(0, numLines - 1);

@@ -70,6 +70,11 @@ typedef long wxTextCoord;
 
 WXDLLEXPORT_DATA(extern const wxChar*) wxTextCtrlNameStr;
 
+// this is intentionally not enum to avoid warning fixes with
+// typecasting from enum type to wxTextCoord
+const wxTextCoord wxOutOfRangeTextCoord = -1;
+const wxTextCoord wxInvalidTextCoord    = -2;
+
 // ----------------------------------------------------------------------------
 // wxTextCtrl style flags
 // ----------------------------------------------------------------------------
@@ -359,7 +364,7 @@ public:
     virtual void SetInsertionPoint(long pos) = 0;
     virtual void SetInsertionPointEnd() = 0;
     virtual long GetInsertionPoint() const = 0;
-    virtual long GetLastPosition() const = 0;
+    virtual wxTextPos GetLastPosition() const = 0;
 
     virtual void SetSelection(long from, long to) = 0;
     virtual void SelectAll();

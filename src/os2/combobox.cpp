@@ -81,9 +81,9 @@ bool wxComboBox::OS2Command(
     }
     //
     // There is no return value for the CBN_ notifications, so always return
-    // FALSE from here to pass the message to DefWindowProc()
+    // false from here to pass the message to DefWindowProc()
     //
-    return FALSE;
+    return false;
 } // end of wxComboBox::OS2Command
 
 bool wxComboBox::Create(
@@ -117,7 +117,7 @@ bool wxComboBox::Create(
 , const wxString&                   rsName
 )
 {
-    m_isShown = FALSE;
+    m_isShown = false;
 
     if (!CreateControl( pParent
                        ,vId
@@ -127,7 +127,7 @@ bool wxComboBox::Create(
                        ,rValidator
                        ,rsName
                       ))
-        return FALSE;
+        return false;
 
     //
     // Get the right style
@@ -150,7 +150,7 @@ bool wxComboBox::Create(
     if (!OS2CreateControl( "COMBOBOX"
                           ,lSstyle
                          ))
-        return FALSE;
+        return false;
 
     //
     // A choice/combobox normally has a white background (or other, depending
@@ -171,7 +171,7 @@ bool wxComboBox::Create(
             ,rSize.x
             ,rSize.y
            );
-    if (!rsValue.IsEmpty())
+    if (!rsValue.empty())
     {
         SetValue(rsValue);
     }
@@ -179,8 +179,8 @@ bool wxComboBox::Create(
                                                     ,(PFNWP)wxComboEditWndProc
                                                    );
     ::WinSetWindowULong(GetHwnd(), QWL_USER, (ULONG)this);
-    Show(TRUE);
-    return TRUE;
+    Show(true);
+    return true;
 } // end of wxComboBox::Create
 
 void wxComboBox::SetValue(
@@ -237,7 +237,7 @@ void wxComboBox::SetInsertionPoint(
 
 void wxComboBox::SetInsertionPointEnd()
 {
-    long                            lPos = GetLastPosition();
+    wxTextPos                       lPos = GetLastPosition();
 
     SetInsertionPoint(lPos);
 } // end of wxComboBox::SetInsertionPointEnd
@@ -254,7 +254,7 @@ long wxComboBox::GetInsertionPoint() const
    return lPos;
 } // end of wxComboBox::GetInsertionPoint
 
-long wxComboBox::GetLastPosition() const
+wxTextPos wxComboBox::GetLastPosition() const
 {
     long                            lLineLength = 0L;
     WNDPARAMS                       vParams;
@@ -381,7 +381,7 @@ bool wxComboBox::ProcessEditMsg(
                 case KC_CHAR:
                     return (HandleChar( wParam
                                        ,lParam
-                                       ,TRUE /* isASCII */
+                                       ,true /* isASCII */
                                       ));
 
                 case KC_PREVDOWN:
@@ -403,7 +403,7 @@ bool wxComboBox::ProcessEditMsg(
                 return(HandleKillFocus((WXHWND)(HWND)wParam));
             break;
     }
-    return FALSE;
+    return false;
 } // end of WinGuiBase_CComboBox::ProcessEditMsg
 
 MRESULT EXPENTRY wxComboEditWndProc(

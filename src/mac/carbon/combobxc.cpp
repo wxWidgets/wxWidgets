@@ -19,7 +19,7 @@
 #include "wx/mac/uma.h"
 #if TARGET_API_MAC_OSX
 #ifndef __HIVIEW__
-	#include <HIToolbox/HIView.h>
+    #include <HIToolbox/HIView.h>
 #endif
 #endif
 
@@ -246,7 +246,7 @@ wxComboBox::~wxComboBox()
 wxSize wxComboBox::DoGetBestSize() const
 {
 #if USE_HICOMBOBOX
-	return wxControl::DoGetBestSize();
+    return wxControl::DoGetBestSize();
 #else
     wxSize size = m_choice->GetBestSize();
 
@@ -263,7 +263,7 @@ wxSize wxComboBox::DoGetBestSize() const
 
 void wxComboBox::DoMoveWindow(int x, int y, int width, int height) {
 #if USE_HICOMBOBOX
-	wxControl::DoMoveWindow(x, y, width, height);
+    wxControl::DoMoveWindow(x, y, width, height);
 #else
     height = POPUPHEIGHT;
 
@@ -293,23 +293,23 @@ void wxComboBox::DoMoveWindow(int x, int y, int width, int height) {
 bool wxComboBox::Enable(bool enable)
 {
     if ( !wxControl::Enable(enable) )
-        return FALSE;
+        return false;
 
-    return TRUE;
+    return true;
 }
 
 bool wxComboBox::Show(bool show)
 {
     if ( !wxControl::Show(show) )
-        return FALSE;
+        return false;
 
-    return TRUE;
+    return true;
 }
 
 void wxComboBox::SetFocus()
 {
 #if USE_HICOMBOBOX
-	wxControl::SetFocus();
+    wxControl::SetFocus();
 #else
     if ( m_text != NULL) {
         m_text->SetFocus();
@@ -358,12 +358,12 @@ bool wxComboBox::Create(wxWindow *parent, wxWindowID id,
     m_text = NULL;
     m_choice = NULL;
 #if USE_HICOMBOBOX
-    m_macIsUserPane = FALSE ;
+    m_macIsUserPane = false ;
 #endif
     if ( !wxControl::Create(parent, id, wxDefaultPosition, wxDefaultSize, style ,
                             wxDefaultValidator, name) )
     {
-        return FALSE;
+        return false;
     }
 #if USE_HICOMBOBOX
     Rect bounds = wxMacGetBoundsForControl( this , pos , size ) ;
@@ -380,8 +380,8 @@ bool wxComboBox::Create(wxWindow *parent, wxWindowID id,
     //hiRect.size.width = bounds.right - bounds.left;
     //hiRect.size.height = bounds.bottom - bounds.top;
     //printf("left = %d, right = %d, top = %d, bottom = %d\n", bounds.left, bounds.right, bounds.top, bounds.bottom);
-	//printf("x = %d, y = %d, width = %d, height = %d\n", hibounds.origin.x, hibounds.origin.y, hibounds.size.width, hibounds.size.height);
-	m_peer = new wxMacControl() ;
+    //printf("x = %d, y = %d, width = %d, height = %d\n", hibounds.origin.x, hibounds.origin.y, hibounds.size.width, hibounds.size.height);
+    m_peer = new wxMacControl() ;
     verify_noerr( HIComboBoxCreate( &hiRect, CFSTR(""), NULL, NULL, kHIComboBoxStandardAttributes, *m_peer ) );
 
 
@@ -431,7 +431,7 @@ bool wxComboBox::Create(wxWindow *parent, wxWindowID id,
     SetBestSize(csize);   // Needed because it is a wxControlWithItems
 #endif
 
-    return TRUE;
+    return true;
 }
 
 wxString wxComboBox::GetValue() const
@@ -532,7 +532,7 @@ long wxComboBox::GetInsertionPoint() const
     return 0;
 }
 
-long wxComboBox::GetLastPosition() const
+wxTextPos wxComboBox::GetLastPosition() const
 {
     // TODO
     return 0;
@@ -628,9 +628,9 @@ void wxComboBox::FreeData()
 
 int wxComboBox::GetCount() const {
 #if USE_HICOMBOBOX
-	return (int) HIComboBoxGetItemCount( *m_peer );
+    return (int) HIComboBoxGetItemCount( *m_peer );
 #else
-	return m_choice->GetCount() ;
+    return m_choice->GetCount() ;
 #endif
 }
 
@@ -686,7 +686,7 @@ int wxComboBox::FindString(const wxString& s) const
 #if USE_HICOMBOBOX
     for( int i = 0 ; i < GetCount() ; i++ )
     {
-        if ( GetString( i ).IsSameAs(s, FALSE) )
+        if ( GetString( i ).IsSameAs(s, false) )
             return i ;
     }
     return wxNOT_FOUND ;
@@ -725,10 +725,10 @@ bool wxComboBox::SetStringSelection(const wxString& sel)
     if (s > -1)
         {
             SetSelection (s);
-            return TRUE;
+            return true;
         }
     else
-        return FALSE;
+        return false;
 }
 
 void wxComboBox::SetString(int n, const wxString& s)
@@ -745,17 +745,17 @@ void wxComboBox::SetString(int n, const wxString& s)
 bool wxComboBox::IsEditable() const
 {
 #if USE_HICOMBOBOX
-	// TODO
-	return !HasFlag(wxCB_READONLY);
+    // TODO
+    return !HasFlag(wxCB_READONLY);
 #else
-	return m_text != NULL && !HasFlag(wxCB_READONLY);
+    return m_text != NULL && !HasFlag(wxCB_READONLY);
 #endif
 }
 
 void wxComboBox::Undo()
 {
 #if USE_HICOMBOBOX
-	// TODO
+    // TODO
 #else
     if (m_text != NULL)
         m_text->Undo();
@@ -765,7 +765,7 @@ void wxComboBox::Undo()
 void wxComboBox::Redo()
 {
 #if USE_HICOMBOBOX
-	// TODO
+    // TODO
 #else
     if (m_text != NULL)
         m_text->Redo();
@@ -775,7 +775,7 @@ void wxComboBox::Redo()
 void wxComboBox::SelectAll()
 {
 #if USE_HICOMBOBOX
-	// TODO
+    // TODO
 #else
     if (m_text != NULL)
         m_text->SelectAll();
@@ -785,8 +785,8 @@ void wxComboBox::SelectAll()
 bool wxComboBox::CanCopy() const
 {
 #if USE_HICOMBOBOX
-	// TODO
-	return false;
+    // TODO
+    return false;
 #else
     if (m_text != NULL)
         return m_text->CanCopy();
@@ -798,8 +798,8 @@ bool wxComboBox::CanCopy() const
 bool wxComboBox::CanCut() const
 {
 #if USE_HICOMBOBOX
-	// TODO
-	return false;
+    // TODO
+    return false;
 #else
     if (m_text != NULL)
         return m_text->CanCut();
@@ -811,8 +811,8 @@ bool wxComboBox::CanCut() const
 bool wxComboBox::CanPaste() const
 {
 #if USE_HICOMBOBOX
-	// TODO
-	return false;
+    // TODO
+    return false;
 #else
     if (m_text != NULL)
         return m_text->CanPaste();
@@ -824,8 +824,8 @@ bool wxComboBox::CanPaste() const
 bool wxComboBox::CanUndo() const
 {
 #if USE_HICOMBOBOX
-	// TODO
-	return false;
+    // TODO
+    return false;
 #else
     if (m_text != NULL)
         return m_text->CanUndo();
@@ -837,8 +837,8 @@ bool wxComboBox::CanUndo() const
 bool wxComboBox::CanRedo() const
 {
 #if USE_HICOMBOBOX
-	// TODO
-	return false;
+    // TODO
+    return false;
 #else
     if (m_text != NULL)
         return m_text->CanRedo();

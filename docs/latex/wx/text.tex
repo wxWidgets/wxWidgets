@@ -70,7 +70,7 @@ for a text control.
 \end{verbatim}
 }
 
-The values below are the possible return codes of the 
+The values below are the possible return codes of the
 \helpref{HitTest}{wxtextctrlhittest} method:
 {\small
 \begin{verbatim}
@@ -230,7 +230,7 @@ Sets the text font.
 \func{void}{SetLeftIndent}{\param{int }{indent}, \param{int }{subIndent = 0}}
 
 Sets the left indent in tenths of a millimetre.
-subIndent sets the indent for all lines but the first line in a paragraph 
+subIndent sets the indent for all lines but the first line in a paragraph
 relative to the first line.
 
 
@@ -320,17 +320,17 @@ The multiline text controls always store the text as a sequence of lines
 separated by {\tt $\backslash$n} characters, i.e. in the Unix text format even
 on non-Unix platforms. This allows the user code to ignore the differences
 between the platforms but at a price: the indices in the control such as those
-returned by \helpref{GetInsertionPoint}{wxtextctrlgetinsertionpoint} or 
+returned by \helpref{GetInsertionPoint}{wxtextctrlgetinsertionpoint} or
 \helpref{GetSelection}{wxtextctrlgetselection} can {\bf not} be used as
 indices into the string returned by \helpref{GetValue}{wxtextctrlgetvalue} as
-they're going to be slightly off for platforms using 
+they're going to be slightly off for platforms using
 {\tt $\backslash$r$\backslash$n} as separator (as Windows does), for example.
 
 Instead, if you need to obtain a substring between the $2$ indices obtained
 from the control with the help of the functions mentioned above, you should
 use \helpref{GetRange}{wxtextctrlgetrange}. And the indices themselves can
-only be passed to other methods, for example 
-\helpref{SetInsertionPoint}{wxtextctrlsetinsertionpoint} or 
+only be passed to other methods, for example
+\helpref{SetInsertionPoint}{wxtextctrlsetinsertionpoint} or
 \helpref{SetSelection}{wxtextctrlsetselection}.
 
 To summarize: never use the indices returned by (multiline) wxTextCtrl as
@@ -633,7 +633,7 @@ Resets the internal `modified' flag as if the current edits had been saved.
 \func{bool}{EmulateKeyPress}{\param{const wxKeyEvent\& }{event}}
 
 This functions inserts into the control the character which would have been
-inserted if the given key event had occured in the text control. The 
+inserted if the given key event had occured in the text control. The
 {\it event} object should be the same as the one passed to {\tt EVT\_KEY\_DOWN}
 handler previously by wxWidgets.
 
@@ -683,7 +683,7 @@ point or the zero character if the point is at the end of the control.
 
 \membersection{wxTextCtrl::GetLastPosition}\label{wxtextctrlgetlastposition}
 
-\constfunc{virtual long}{GetLastPosition}{\void}
+\constfunc{virtual wxTextPos}{GetLastPosition}{\void}
 
 Returns the zero based index of the last position in the text control,
 which is equal to the number of characters in the control.
@@ -747,7 +747,7 @@ up to {\it to} in the control. The positions must have been returned by another
 wxTextCtrl method.
 
 Please note that the positions in a multiline wxTextCtrl do {\bf not}
-correspond to the indices in the string returned by 
+correspond to the indices in the string returned by
 \helpref{GetValue}{wxtextctrlgetvalue} because of the different new line
 representations ({\tt CR} or {\tt CR LF}) and so this method should be used to
 obtain the correct results instead of extracting parts of the entire value. It
@@ -822,7 +822,7 @@ sequence in the native control.
 
 This function finds the character at the specified position expressed in
 pixels. If the return code is not \texttt{wxTE\_HT\_UNKNOWN} the row and column
-of the character closest to this position are returned in the \arg{col} and 
+of the character closest to this position are returned in the \arg{col} and
 \arg{row} parameters (unless the pointers are {\tt NULL} which is allowed).
 
 Please note that this function is currently only implemented in wxUniv,
@@ -841,7 +841,7 @@ returns a 3-element list \texttt{(result, col, row)}}.
 
 Returns {\tt true} if the controls contents may be edited by user (note that it
 always can be changed by the program), i.e. if the control hasn't been put in
-read-only mode by a previous call to 
+read-only mode by a previous call to
 \helpref{SetEditable}{wxtextctrlseteditable}.
 
 
@@ -849,7 +849,7 @@ read-only mode by a previous call to
 
 \constfunc{bool}{IsModified}{\void}
 
-Returns {\tt true} if the text has been modified by user. Note that calling 
+Returns {\tt true} if the text has been modified by user. Note that calling
 \helpref{SetValue}{wxtextctrlsetvalue} doesn't make the control modified.
 
 
@@ -894,20 +894,20 @@ Loads and displays the named file, if it exists.
 % VZ: commenting this out as: (a) the docs are wrong (you can't replace
 %     anything), (b) wxTextCtrl doesn't have any OnChar() anyhow
 %% \membersection{wxTextCtrl::OnChar}\label{wxtextctrlonchar}
-%% 
+%%
 %% \func{void}{OnChar}{\param{wxKeyEvent\& }{event}}
-%% 
+%%
 %% Default handler for character input.
-%% 
+%%
 %% \wxheading{Remarks}
-%% 
+%%
 %% It is possible to intercept character
 %% input by overriding this member. Call this function
 %% to let the default behaviour take place; not calling
 %% it results in the character being ignored. You can
 %% replace the {\it keyCode} member of {\it event} to
 %% translate keystrokes.
-%% 
+%%
 %% Note that Windows and Motif have different ways
 %% of implementing the default behaviour. In Windows,
 %% calling wxTextCtrl::OnChar immediately
@@ -916,9 +916,9 @@ Loads and displays the named file, if it exists.
 %% to let default processing happen. This might affect
 %% the way in which you write your OnChar function
 %% on different platforms.
-%% 
+%%
 %% \wxheading{See also}
-%% 
+%%
 %% \helpref{wxKeyEvent}{wxkeyevent}
 
 
@@ -1167,7 +1167,7 @@ the styles are not supported under this platform.
 
 \func{virtual void}{SetValue}{\param{const wxString\& }{ value}}
 
-Sets the text value and marks the control as not-modified (which means that 
+Sets the text value and marks the control as not-modified (which means that
 \helpref{IsModified}{wxtextctrlismodified} would return {\tt false} immediately
 after the call to SetValue).
 

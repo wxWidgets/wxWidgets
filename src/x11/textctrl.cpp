@@ -37,10 +37,10 @@ wxSourceUndoStep::wxSourceUndoStep( wxSourceUndo type, int y1, int y2, wxTextCtr
     m_y1 = y1;
     m_y2 = y2;
     m_owner = owner;
-    
+
     m_cursorX = m_owner->GetCursorX();
     m_cursorY = m_owner->GetCursorY();
-    
+
     if (m_type == wxSOURCE_UNDO_LINE)
     {
         m_text = m_owner->m_lines[m_y1].m_text;
@@ -138,7 +138,7 @@ BEGIN_EVENT_TABLE(wxTextCtrl, wxControl)
     EVT_MOUSE_EVENTS(wxTextCtrl::OnMouse)
     EVT_KILL_FOCUS(wxTextCtrl::OnKillFocus)
     EVT_SET_FOCUS(wxTextCtrl::OnSetFocus)
-    
+
     EVT_MENU(wxID_CUT, wxTextCtrl::OnCut)
     EVT_MENU(wxID_COPY, wxTextCtrl::OnCopy)
     EVT_MENU(wxID_PASTE, wxTextCtrl::OnPaste)
@@ -154,34 +154,34 @@ END_EVENT_TABLE()
 
 void wxTextCtrl::Init()
 {
-    m_editable = TRUE;
-    m_modified = FALSE;
-    
+    m_editable = true;
+    m_modified = false;
+
     m_lang = wxSOURCE_LANG_NONE;
-    
-    m_capturing = FALSE;
-    
+
+    m_capturing = false;
+
     m_cursorX = 0;
     m_cursorY = 0;
-    
+
     m_longestLine = 0;
-    
+
     m_bracketX = -1;
     m_bracketY = -1;
-    
-    m_overwrite = FALSE;
-    m_ignoreInput = FALSE;
-    
+
+    m_overwrite = false;
+    m_ignoreInput = false;
+
     ClearSelection();
-    
+
     m_keywordColour = wxColour( 10, 140, 10 );
-    
+
     m_defineColour = *wxRED;
-    
+
     m_variableColour = wxColour( 50, 120, 150 );
-    
+
     m_commentColour = wxColour( 130, 130, 130 );
-    
+
     m_stringColour = wxColour( 10, 140, 10 );
 }
 
@@ -216,19 +216,19 @@ bool wxTextCtrl::Create( wxWindow *parent,
 {
     if ((style & wxBORDER_MASK) == 0)
         style |= wxBORDER_SUNKEN;
-        
+
     if ((style & wxTE_MULTILINE) != 0)
         style |= wxALWAYS_SHOW_SB;
-        
+
     wxTextCtrlBase::Create( parent, id, pos /* wxDefaultPosition */, size,
                             style | wxVSCROLL | wxHSCROLL);
-                              
+
     SetBackgroundColour( *wxWHITE );
-    
+
     SetCursor( wxCursor( wxCURSOR_IBEAM ) );
-    
+
     m_editable = ((m_windowStyle & wxTE_READONLY) == 0);
-    
+
     if (HasFlag(wxTE_PASSWORD))
         m_sourceFont = wxFont( 12, wxMODERN, wxNORMAL, wxNORMAL );
     else
@@ -238,7 +238,7 @@ bool wxTextCtrl::Create( wxWindow *parent,
     dc.SetFont( m_sourceFont );
     m_lineHeight = dc.GetCharHeight();
     m_charWidth = dc.GetCharWidth();
-    
+
     SetValue( value );
 
     wxSize size_best( DoGetBestSize() );
@@ -249,13 +249,13 @@ bool wxTextCtrl::Create( wxWindow *parent,
         new_size.y = size_best.y;
     if ((new_size.x != size.x) || (new_size.y != size.y))
         SetSize( new_size.x, new_size.y );
-    
+
     // We create an input handler since it might be useful
     CreateInputHandler(wxINP_HANDLER_TEXTCTRL);
-    
+
     MyAdjustScrollbars();
-    
-    return TRUE;
+
+    return true;
 }
 
 //-----------------------------------------------------------------------------
@@ -271,13 +271,13 @@ wxString wxTextCtrl::GetValue() const
         if (i+1 < m_lines.GetCount())
             ret += wxT('\n');
     }
-    
+
     return ret;
 }
 
 void wxTextCtrl::SetValue(const wxString& value)
 {
-    m_modified = FALSE;
+    m_modified = false;
 
     wxString oldValue = GetValue();
 
@@ -287,7 +287,7 @@ void wxTextCtrl::SetValue(const wxString& value)
     m_lines.Clear();
     m_longestLine = 0;
 
-    if (value.IsEmpty())
+    if (value.empty())
     {
         m_lines.Add( new wxSourceLine( wxT("") ) );
     }
@@ -302,7 +302,7 @@ void wxTextCtrl::SetValue(const wxString& value)
             {
                 wxSourceLine *sl = new wxSourceLine( value.Mid( begin, value.Len()-begin ) );
                 m_lines.Add( sl );
-                
+
                 // if (sl->m_text.Len() > m_longestLine)
                 //    m_longestLine = sl->m_text.Len();
                 int ww = 0;
@@ -310,14 +310,14 @@ void wxTextCtrl::SetValue(const wxString& value)
                 ww /= m_charWidth;
                 if (ww > m_longestLine)
                     m_longestLine = ww;
-            
+
                 break;
             }
             else
             {
                 wxSourceLine *sl = new wxSourceLine( value.Mid( begin, pos-begin ) );
                 m_lines.Add( sl );
-            
+
                 // if (sl->m_text.Len() > m_longestLine)
                 //      m_longestLine = sl->m_text.Len();
                 int ww = 0;
@@ -325,7 +325,7 @@ void wxTextCtrl::SetValue(const wxString& value)
                 ww /= m_charWidth;
                 if (ww > m_longestLine)
                     m_longestLine = ww;
-                
+
                 begin = pos+1;
             }
         }
@@ -337,9 +337,9 @@ void wxTextCtrl::SetValue(const wxString& value)
         if (value == oldValue)
             return;
     }
-    
+
     MyAdjustScrollbars();
-    
+
     Refresh();
 }
 
@@ -347,7 +347,7 @@ int wxTextCtrl::GetLineLength(long lineNo) const
 {
     if (lineNo >= (long)m_lines.GetCount())
         return 0;
-        
+
     return m_lines[lineNo].m_text.Len();
 }
 
@@ -355,7 +355,7 @@ wxString wxTextCtrl::GetLineText(long lineNo) const
 {
     if (lineNo >= (long)m_lines.GetCount())
         return wxT("");
-        
+
     return m_lines[lineNo].m_text;
 }
 
@@ -391,14 +391,14 @@ void wxTextCtrl::GetSelection(long* from, long* to) const
 
 void wxTextCtrl::Clear()
 {
-    m_modified = TRUE;
+    m_modified = true;
     m_cursorX = 0;
     m_cursorY = 0;
     ClearSelection();
-    
+
     m_lines.Clear();
     m_lines.Add( new wxSourceLine( wxT("") ) );
-    
+
     SetScrollbars( m_charWidth, m_lineHeight, 0, 0, 0, 0 );
     Refresh();
     WX_CLEAR_LIST(wxList, m_undos);
@@ -410,7 +410,6 @@ void wxTextCtrl::Replace(long from, long to, const wxString& value)
 
 void wxTextCtrl::Remove(long from, long to)
 {
-    
 }
 
 void wxTextCtrl::DiscardEdits()
@@ -429,16 +428,16 @@ int wxTextCtrl::PosToPixel( int line, int pos )
 
     if (line >= (int)m_lines.GetCount()) return 0;
     if (pos < 0) return 0;
-    
+
     wxString text = m_lines[line].m_text;
-    
-    if (text.IsEmpty()) return 0;
-    
+
+    if (text.empty()) return 0;
+
     if (pos < (int)text.Len())
         text.Remove( pos, text.Len()-pos );
-        
+
     int w = 0;
-    
+
     GetTextExtent( text, &w, NULL, NULL, NULL );
 
     return w;
@@ -447,40 +446,40 @@ int wxTextCtrl::PosToPixel( int line, int pos )
 int wxTextCtrl::PixelToPos( int line, int pixel )
 {
     if (pixel < 2) return 0;
-    
+
     if (line >= (int)m_lines.GetCount()) return 0;
-    
+
     wxString text = m_lines[line].m_text;
-    
+
     int w = 0;
     int res = text.Len();
     while (res > 0)
     {
         GetTextExtent( text, &w, NULL, NULL, NULL );
-        
+
         if (w < pixel)
             return res;
-            
+
         res--;
         text.Remove( res,1 );
     }
-    
+
     return 0;
 }
 
 void wxTextCtrl::SetLanguage( wxSourceLanguage lang )
 {
     m_lang = lang;
-    
+
     m_keywords.Clear();
 }
 
 void wxTextCtrl::WriteText(const wxString& text2)
 {
-    if (text2.IsEmpty()) return;
+    if (text2.empty()) return;
 
-    m_modified = TRUE;
-    
+    m_modified = true;
+
     wxString text( text2 );
     wxArrayString lines;
     int pos;
@@ -491,11 +490,11 @@ void wxTextCtrl::WriteText(const wxString& text2)
     }
     lines.Add( text );
     int count = (int)lines.GetCount();
-    
+
     wxString tmp1( m_lines[m_cursorY].m_text );
     wxString tmp2( tmp1 );
     int len = (int)tmp1.Len();
-    
+
     if (len < m_cursorX)
     {
         wxString tmp;
@@ -509,11 +508,11 @@ void wxTextCtrl::WriteText(const wxString& text2)
     tmp1.Remove( m_cursorX );
     tmp2.Remove( 0, m_cursorX );
     tmp1.Append( lines[0] );
-    
+
     if (count == 1)
     {
         m_undos.Append( new wxSourceUndoStep( wxSOURCE_UNDO_LINE, m_cursorY, m_cursorY, this ) );
-        
+
         tmp1.Append( tmp2 );
         m_lines[m_cursorY].m_text = tmp1;
         RefreshLine( m_cursorY );
@@ -521,13 +520,13 @@ void wxTextCtrl::WriteText(const wxString& text2)
     else
     {
         m_undos.Append( new wxSourceUndoStep( wxSOURCE_UNDO_PASTE, m_cursorY, m_cursorY+count-1, this ) );
-        
+
         m_lines[m_cursorY].m_text = tmp1;
         int i;
         for (i = 1; i < count; i++)
             m_lines.Insert( new wxSourceLine( lines[i] ), m_cursorY+i );
         m_lines[m_cursorY+i-1].m_text.Append( tmp2 );
-        
+
         MyAdjustScrollbars();
         RefreshDown( m_cursorY );
     }
@@ -535,10 +534,10 @@ void wxTextCtrl::WriteText(const wxString& text2)
 
 void wxTextCtrl::AppendText(const wxString& text2)
 {
-    if (text2.IsEmpty()) return;
+    if (text2.empty()) return;
 
-    m_modified = TRUE;
-    
+    m_modified = true;
+
     wxString text( text2 );
     wxArrayString lines;
     int pos;
@@ -549,28 +548,28 @@ void wxTextCtrl::AppendText(const wxString& text2)
     }
     lines.Add( text );
     int count = (int)lines.GetCount();
-    
+
     size_t y = m_lines.GetCount()-1;
 
     wxString tmp( m_lines[y].m_text );
     tmp.Append( lines[0] );
-    
+
     if (count == 1)
     {
         m_undos.Append( new wxSourceUndoStep( wxSOURCE_UNDO_LINE, y, y, this ) );
-        
+
         m_lines[y].m_text = tmp;
         RefreshLine( y );
     }
     else
     {
         m_undos.Append( new wxSourceUndoStep( wxSOURCE_UNDO_PASTE, y, y+count-1, this ) );
-        
+
         m_lines[y].m_text = tmp;
         int i;
         for (i = 1; i < count; i++)
             m_lines.Insert( new wxSourceLine( lines[i] ), y+i );
-        
+
         MyAdjustScrollbars();
         RefreshDown( y );
     }
@@ -578,13 +577,13 @@ void wxTextCtrl::AppendText(const wxString& text2)
 
 bool wxTextCtrl::SetStyle(long start, long end, const wxTextAttr& style)
 {
-    return FALSE;
+    return false;
 }
 
 long wxTextCtrl::XYToPosition(long x, long y) const
 {
     long ret = 0;
-    
+
     for (size_t i = 0; i < m_lines.GetCount(); i++)
     {
         if (i < (size_t)y)
@@ -593,13 +592,13 @@ long wxTextCtrl::XYToPosition(long x, long y) const
             ret += m_lines[i].m_text.Len() + 1;
             continue;
         }
-        
+
         if ((size_t)x < (m_lines[i].m_text.Len()+1))
             return (ret + x);
         else
             return (ret + m_lines[i].m_text.Len() + 1);
     }
-     
+
     return ret;
 }
 
@@ -615,7 +614,7 @@ bool wxTextCtrl::PositionToXY(long pos, long *x, long *y) const
 
     long xx = 0;
     long yy = 0;
-    
+
     for (size_t i = 0; i < m_lines.GetCount(); i++)
     {
         //pos -= m_lines[i].m_text.Len();
@@ -628,19 +627,19 @@ bool wxTextCtrl::PositionToXY(long pos, long *x, long *y) const
             xx = pos;
             if (x) *x = xx;
             if (y) *y = yy;
-            return TRUE;
+            return true;
         }
         pos -= (m_lines[i].m_text.Len() + 1);
         yy++;
     }
-    
+
     // Last pos
     //xx = m_lines[ m_lines.GetCount()-1 ].m_text.Len();
     xx = pos;
     if (x) *x = xx;
     if (y) *y = yy;
-    
-    return FALSE;
+
+    return false;
 }
 
 void wxTextCtrl::ShowPosition(long pos)
@@ -650,14 +649,14 @@ void wxTextCtrl::ShowPosition(long pos)
 void wxTextCtrl::Copy()
 {
     if (!HasSelection()) return;
-    
+
     wxString sel;
-    
+
     int selStartY = m_selStartY;
     int selEndY = m_selEndY;
     int selStartX = m_selStartX;
     int selEndX = m_selEndX;
-    
+
     if ((selStartY > selEndY) ||
         ((selStartY == selEndY) && (selStartX > selEndX)))
     {
@@ -668,22 +667,22 @@ void wxTextCtrl::Copy()
         selStartY = selEndY;
         selEndY = tmp;
     }
-    
+
     if (selStartY == selEndY)
     {
         sel = m_lines[selStartY].m_text;
-        
+
         if (selStartX >= (int)sel.Len()) return;
         if (selEndX > (int)sel.Len())
             selEndX = sel.Len();
-        
+
         sel.Remove( selEndX, sel.Len()-selEndX );
         sel.Remove( 0, selStartX );
     }
     else
     {
         wxString tmp( m_lines[selStartY].m_text );
-        
+
         if (selStartX < (int)tmp.Len())
         {
             tmp.Remove( 0, selStartX );
@@ -704,7 +703,7 @@ void wxTextCtrl::Copy()
             sel.Append( tmp );
         }
     }
-    
+
     if (wxTheClipboard->Open())
     {
         wxTheClipboard->SetData( new wxTextDataObject( sel ) );
@@ -714,34 +713,34 @@ void wxTextCtrl::Copy()
 
 void wxTextCtrl::Cut()
 {
-   Copy();
-   
-   Delete();
+    Copy();
+
+    Delete();
 }
 
 void wxTextCtrl::Paste()
 {
     Delete();
-    
+
     if (!wxTheClipboard->Open()) return;
-    
+
     if (!wxTheClipboard->IsSupported( wxDF_TEXT ))
     {
         wxTheClipboard->Close();
-        
+
         return;
     }
-    
+
     wxTextDataObject data;
-    
+
     bool ret = wxTheClipboard->GetData( data );
-    
+
     wxTheClipboard->Close();
-    
+
     if (!ret) return;
-    
-    m_modified = TRUE;
-    
+
+    m_modified = true;
+
     wxString text( data.GetText() );
     wxArrayString lines;
     int pos;
@@ -752,11 +751,11 @@ void wxTextCtrl::Paste()
     }
     lines.Add( text );
     int count = (int)lines.GetCount();
-    
+
     wxString tmp1( m_lines[m_cursorY].m_text );
     wxString tmp2( tmp1 );
     int len = (int)tmp1.Len();
-    
+
     if (len < m_cursorX)
     {
         wxString tmp;
@@ -770,11 +769,11 @@ void wxTextCtrl::Paste()
     tmp1.Remove( m_cursorX );
     tmp2.Remove( 0, m_cursorX );
     tmp1.Append( lines[0] );
-    
+
     if (count == 1)
     {
         m_undos.Append( new wxSourceUndoStep( wxSOURCE_UNDO_LINE, m_cursorY, m_cursorY, this ) );
-        
+
         tmp1.Append( tmp2 );
         m_lines[m_cursorY].m_text = tmp1;
         RefreshLine( m_cursorY );
@@ -782,13 +781,13 @@ void wxTextCtrl::Paste()
     else
     {
         m_undos.Append( new wxSourceUndoStep( wxSOURCE_UNDO_PASTE, m_cursorY, m_cursorY+count-1, this ) );
-        
+
         m_lines[m_cursorY].m_text = tmp1;
         int i;
         for (i = 1; i < count; i++)
             m_lines.Insert( new wxSourceLine( lines[i] ), m_cursorY+i );
         m_lines[m_cursorY+i-1].m_text.Append( tmp2 );
-        
+
         MyAdjustScrollbars();
         RefreshDown( m_cursorY );
     }
@@ -797,16 +796,16 @@ void wxTextCtrl::Paste()
 void wxTextCtrl::Undo()
 {
     if (m_undos.GetCount() == 0) return;
-    
+
     wxList::compatibility_iterator node = m_undos.Item( m_undos.GetCount()-1 );
     wxSourceUndoStep *undo = (wxSourceUndoStep*) node->GetData();
-    
+
     undo->Undo();
 
     delete undo;
     m_undos.Erase( node );
-    
-    m_modified = TRUE;
+
+    m_modified = true;
 }
 
 void wxTextCtrl::SetInsertionPoint(long pos)
@@ -830,7 +829,7 @@ long wxTextCtrl::GetInsertionPoint() const
     return XYToPosition( m_cursorX, m_cursorY );
 }
 
-long wxTextCtrl::GetLastPosition() const
+wxTextPos wxTextCtrl::GetLastPosition() const
 {
     size_t lineCount = m_lines.GetCount() - 1;
     // It's the length of the line, not the length - 1,
@@ -849,25 +848,25 @@ void wxTextCtrl::SetEditable(bool editable)
 
 bool wxTextCtrl::Enable( bool enable )
 {
-    return FALSE;
+    return false;
 }
 
 bool wxTextCtrl::SetFont(const wxFont& font)
 {
     wxTextCtrlBase::SetFont( font );
-    
+
     m_sourceFont = font;
-    
+
     wxClientDC dc(this);
     dc.SetFont( m_sourceFont );
     m_lineHeight = dc.GetCharHeight();
     m_charWidth = dc.GetCharWidth();
-    
+
     // TODO: recalc longest lines
-    
+
     MyAdjustScrollbars();
-    
-    return TRUE;
+
+    return true;
 }
 
 bool wxTextCtrl::SetForegroundColour(const wxColour& colour)
@@ -888,26 +887,26 @@ void wxTextCtrl::SearchForBrackets()
 {
     int oldBracketY = m_bracketY;
     int oldBracketX = m_bracketX;
-    
+
     if (m_cursorY < 0 || m_cursorY >= (int)m_lines.GetCount()) return;
-        
+
     wxString current = m_lines[m_cursorY].m_text;
-    
+
     // reverse search first
 
     char bracket = ' ';
-    
+
     if (m_cursorX > 0)
         bracket = current[(size_t) (m_cursorX-1)];
-        
+
     if (bracket == ')' || bracket == ']' || bracket == '}')
     {
         char antibracket = '(';
         if (bracket == ']') antibracket = '[';
         if (bracket == '}') antibracket = '{';
-        
+
         int count = 1;
-    
+
         int endY = m_cursorY-60;
         if (endY < 0) endY = 0;
         for (int y = m_cursorY; y >= endY; y--)
@@ -915,7 +914,7 @@ void wxTextCtrl::SearchForBrackets()
             current = m_lines[y].m_text;
             if (y == m_cursorY)
                 current.erase(m_cursorX-1,current.Len()-m_cursorX+1);
-            
+
             for (int n = current.Len()-1; n >= 0; n--)
             {
                 // ignore chars
@@ -932,7 +931,7 @@ void wxTextCtrl::SearchForBrackets()
                     }
                     continue;
                 }
-                
+
                 // ignore strings
                 if (current[(size_t) (n)] == '\"')
                 {
@@ -947,7 +946,7 @@ void wxTextCtrl::SearchForBrackets()
                     }
                     continue;
                 }
-            
+
                 if (current[(size_t) (n)] == antibracket)
                 {
                     count--;
@@ -969,7 +968,7 @@ void wxTextCtrl::SearchForBrackets()
             }
         }
     }
-    
+
     // then forward
 
     bracket = ' ';
@@ -980,9 +979,9 @@ void wxTextCtrl::SearchForBrackets()
         char antibracket = ')';
         if (bracket == '[') antibracket = ']';
         if (bracket == '{') antibracket = '}';
-        
+
         int count = 1;
-    
+
         int endY = m_cursorY+60;
         if (endY > (int)(m_lines.GetCount()-1)) endY = m_lines.GetCount()-1;
         for (int y = m_cursorY; y <= endY; y++)
@@ -991,7 +990,7 @@ void wxTextCtrl::SearchForBrackets()
             int start = 0;
             if (y == m_cursorY)
                 start = m_cursorX+1;
-            
+
             for (int n = start; n < (int)current.Len(); n++)
             {
                 // ignore chars
@@ -1008,7 +1007,7 @@ void wxTextCtrl::SearchForBrackets()
                     }
                     continue;
                 }
-                
+
                 // ignore strings
                 if (current[(size_t) (n)] == '\"')
                 {
@@ -1023,7 +1022,7 @@ void wxTextCtrl::SearchForBrackets()
                     }
                     continue;
                 }
-                
+
                 if (current[(size_t) (n)] == antibracket)
                 {
                     count--;
@@ -1045,7 +1044,7 @@ void wxTextCtrl::SearchForBrackets()
             }
         }
     }
-    
+
     if (oldBracketY != -1)
     {
         m_bracketY = -1;
@@ -1056,14 +1055,14 @@ void wxTextCtrl::SearchForBrackets()
 void wxTextCtrl::Delete()
 {
     if (!HasSelection()) return;
-    
-    m_modified = TRUE;
-    
+
+    m_modified = true;
+
     int selStartY = m_selStartY;
     int selEndY = m_selEndY;
     int selStartX = m_selStartX;
     int selEndX = m_selEndX;
-    
+
     if ((selStartY > selEndY) ||
         ((selStartY == selEndY) && (selStartX > selEndX)))
     {
@@ -1074,13 +1073,13 @@ void wxTextCtrl::Delete()
         selStartY = selEndY;
         selEndY = tmp;
     }
-    
+
     int len = (int)m_lines[selStartY].m_text.Len();
-        
+
     if (selStartY == selEndY)
     {
         m_undos.Append( new wxSourceUndoStep( wxSOURCE_UNDO_LINE, selStartY, selStartY, this ) );
-    
+
         wxString tmp( m_lines[selStartY].m_text );
         if (selStartX < len)
         {
@@ -1096,25 +1095,25 @@ void wxTextCtrl::Delete()
     else
     {
         m_undos.Append( new wxSourceUndoStep( wxSOURCE_UNDO_DELETE, selStartY, selEndY, this ) );
-    
+
         if (selStartX < len)
             m_lines[selStartY].m_text.Remove( selStartX );
-        
+
         for (int i = 0; i < selEndY-selStartY-1; i++)
             m_lines.RemoveAt( selStartY+1 );
-            
+
         if (selEndX < (int)m_lines[selStartY+1].m_text.Len())
             m_lines[selStartY+1].m_text.Remove( 0, selEndX );
         else
             m_lines[selStartY+1].m_text.Remove( 0 );
-            
+
         m_lines[selStartY].m_text.Append( m_lines[selStartY+1].m_text );
         m_lines.RemoveAt( selStartY+1 );
-    
+
         ClearSelection();
         MoveCursor( selStartX, selStartY );
         MyAdjustScrollbars();
-        
+
         RefreshDown( selStartY );
     }
 }
@@ -1122,25 +1121,25 @@ void wxTextCtrl::Delete()
 void wxTextCtrl::DeleteLine()
 {
     if (HasSelection()) return;
-    
+
     if (m_cursorY < 0 || m_cursorY >= (int)m_lines.GetCount()-1) return;  // TODO
-        
+
     m_undos.Append( new wxSourceUndoStep( wxSOURCE_UNDO_DELETE, m_cursorY, m_cursorY+1, this ) );
-    
+
     m_lines.RemoveAt( m_cursorY );
     m_cursorX = 0;
     if (m_cursorY >= (int)m_lines.GetCount()) m_cursorY--;
-    
+
     MyAdjustScrollbars();
     RefreshDown( m_cursorY );
 }
 
 void wxTextCtrl::DoChar( char c )
 {
-    m_modified = TRUE;
-    
+    m_modified = true;
+
     m_undos.Append( new wxSourceUndoStep( wxSOURCE_UNDO_LINE, m_cursorY, m_cursorY, this ) );
-    
+
     wxString tmp( m_lines[m_cursorY].m_text );
     tmp.Trim();
     if (m_cursorX >= (int)tmp.Len())
@@ -1157,15 +1156,15 @@ void wxTextCtrl::DoChar( char c )
         else
             tmp.insert( m_cursorX, 1, c );
     }
-    
+
     m_lines[m_cursorY].m_text = tmp;
-    
+
 //    if (tmp.Len() > m_longestLine)
 //    {
 //        m_longestLine = tmp.Len();
 //        MyAdjustScrollbars();
 //    }
-    
+
     int ww = 0;
     GetTextExtent( tmp, &ww, NULL, NULL, NULL );
     ww /= m_charWidth;
@@ -1176,29 +1175,29 @@ void wxTextCtrl::DoChar( char c )
     }
 
     m_cursorX++;
-    
+
     int y = m_cursorY*m_lineHeight;
     // int x = (m_cursorX-1)*m_charWidth;
     int x = PosToPixel( m_cursorY, m_cursorX-1 );
     CalcScrolledPosition( x, y, &x, &y );
     wxRect rect( x+2, y+2, 10000, m_lineHeight );
-    Refresh( TRUE, &rect );
+    Refresh( true, &rect );
     // refresh whole line for syntax colour highlighting
     rect.x = 0;
-    Refresh( FALSE, &rect );
-    
+    Refresh( false, &rect );
+
     int size_x = 0;
     int size_y = 0;
     GetClientSize( &size_x, &size_y );
     size_x /= m_charWidth;
-    
+
     int view_x = 0;
     int view_y = 0;
     GetViewStart( &view_x, &view_y );
-    
+
     //int xx = m_cursorX;
     int xx = PosToPixel( m_cursorY, m_cursorX ) / m_charWidth;
-    
+
     if (xx < view_x)
         Scroll( xx, -1 );
     else if (xx > view_x+size_x-1)
@@ -1207,14 +1206,14 @@ void wxTextCtrl::DoChar( char c )
 
 void wxTextCtrl::DoBack()
 {
-    m_modified = TRUE;
-    
+    m_modified = true;
+
     if (m_cursorX == 0)
     {
         if (m_cursorY == 0) return;
-        
+
         m_undos.Append( new wxSourceUndoStep( wxSOURCE_UNDO_BACK, m_cursorY-1, m_cursorY, this ) );
-        
+
         wxString tmp1( m_lines[m_cursorY-1].m_text );
         tmp1.Trim();
         wxString tmp2( m_lines[m_cursorY].m_text );
@@ -1224,34 +1223,34 @@ void wxTextCtrl::DoBack()
         tmp1.Append( tmp2 );
         m_lines[m_cursorY].m_text = tmp1;
         m_lines.RemoveAt( m_cursorY+1 );
-        
+
         MyAdjustScrollbars();
         RefreshDown( m_cursorY-1 );
     }
     else
     {
         m_undos.Append( new wxSourceUndoStep( wxSOURCE_UNDO_LINE, m_cursorY, m_cursorY, this ) );
-        
+
         if (m_cursorX <= (int)m_lines[m_cursorY].m_text.Len())
             m_lines[m_cursorY].m_text.Remove( m_cursorX-1, 1 );
         m_cursorX--;
-        
+
         int y = m_cursorY*m_lineHeight;
         // int x = m_cursorX*m_charWidth;
         int x = PosToPixel( m_cursorY, m_cursorX );
         CalcScrolledPosition( x, y, &x, &y );
         wxRect rect( x+2, y+2, 10000, m_lineHeight );
-        Refresh( TRUE, &rect );
+        Refresh( true, &rect );
         // refresh whole line for syntax colour highlighting
         rect.x = 0;
-        Refresh( FALSE, &rect );
+        Refresh( false, &rect );
     }
 }
 
 void wxTextCtrl::DoDelete()
 {
-    m_modified = TRUE;
-    
+    m_modified = true;
+
     wxString tmp( m_lines[m_cursorY].m_text );
     tmp.Trim();
     int len = (int)tmp.Len();
@@ -1260,43 +1259,43 @@ void wxTextCtrl::DoDelete()
         if (m_cursorY == (int)m_lines.GetCount()-1) return;
 
         m_undos.Append( new wxSourceUndoStep( wxSOURCE_UNDO_DELETE, m_cursorY, m_cursorY+1, this ) );
-        
+
         for (int i = 0; i < (m_cursorX-len); i++)
             tmp += ' ';
-            
+
         tmp += m_lines[m_cursorY+1].m_text;
-        
+
         m_lines[m_cursorY] = tmp;
         m_lines.RemoveAt( m_cursorY+1 );
-        
+
         MyAdjustScrollbars();
         RefreshDown( m_cursorY );
     }
     else
     {
         m_undos.Append( new wxSourceUndoStep( wxSOURCE_UNDO_LINE, m_cursorY, m_cursorY, this ) );
-    
+
         tmp.Remove( m_cursorX, 1 );
         m_lines[m_cursorY].m_text = tmp;
-        
+
         int y = m_cursorY*m_lineHeight;
         // int x = m_cursorX*m_charWidth;
         int x = PosToPixel( m_cursorY, m_cursorX );
         CalcScrolledPosition( x, y, &x, &y );
         wxRect rect( x+2, y+2, 10000, m_lineHeight );
-        Refresh( TRUE, &rect );
+        Refresh( true, &rect );
         // refresh whole line for syntax colour highlighting
         rect.x = 0;
-        Refresh( FALSE, &rect );
+        Refresh( false, &rect );
     }
 }
 
 void wxTextCtrl::DoReturn()
 {
-    m_modified = TRUE;
-    
+    m_modified = true;
+
     m_undos.Append( new wxSourceUndoStep( wxSOURCE_UNDO_ENTER, m_cursorY, m_cursorY, this ) );
-    
+
     wxString tmp( m_lines[m_cursorY].m_text );
     size_t indent = tmp.find_first_not_of( ' ' );
     if (indent == wxSTRING_MAXLEN) indent = 0;
@@ -1305,11 +1304,11 @@ void wxTextCtrl::DoReturn()
     {
         int cursorX = indent;
         int cursorY = m_cursorY + 1;
-        
+
         wxString new_tmp;
         for (size_t i = 0; i < indent; i++) new_tmp.Append( ' ' );
         m_lines.Insert( new wxSourceLine( new_tmp ), cursorY );
-        
+
         MyAdjustScrollbars();
         MoveCursor( cursorX, cursorY );
         RefreshDown( m_cursorY );
@@ -1319,18 +1318,18 @@ void wxTextCtrl::DoReturn()
         wxString tmp1( tmp );
         tmp1.Remove( m_cursorX, tmp.Len()-m_cursorX );
         m_lines[m_cursorY].m_text = tmp1;
-       
+
         wxString tmp2( tmp );
         tmp2.Remove( 0, m_cursorX );
-       
+
         int cursorX = indent;
         int cursorY = m_cursorY + 1;
-        
+
         wxString new_tmp;
         for (size_t i = 0; i < indent; i++) new_tmp.Append( ' ' );
         new_tmp.Append( tmp2 );
         m_lines.Insert( new wxSourceLine( new_tmp ), cursorY );
-        
+
         MyAdjustScrollbars();
         MoveCursor( cursorX, cursorY );
         RefreshDown( m_cursorY-1 );
@@ -1364,7 +1363,7 @@ void wxTextCtrl::DoDClick()
             }
         }
         m_selStartX = p;
-        
+
         p = m_cursorX;
         if (p < (int)line.Len())
         {
@@ -1410,7 +1409,7 @@ wxString wxTextCtrl::GetNextToken( wxString &line, size_t &pos )
                 return ret;
             }
         }
-        
+
         if (line[p] == '"')
         {
             ret.Append( line[p] );
@@ -1423,7 +1422,7 @@ wxString wxTextCtrl::GetNextToken( wxString &line, size_t &pos )
             pos = p;
             return ret;
         }
-    
+
         if (line[p] == '\'')
         {
             ret.Append( line[p] );
@@ -1436,7 +1435,7 @@ wxString wxTextCtrl::GetNextToken( wxString &line, size_t &pos )
             pos = p;
             return ret;
         }
-    
+
         if (((line[p] >= 'a') && (line[p] <= 'z')) ||
             ((line[p] >= 'A') && (line[p] <= 'Z')) ||
             (line[p] == '_') ||
@@ -1463,7 +1462,7 @@ wxString wxTextCtrl::GetNextToken( wxString &line, size_t &pos )
            return ret;
         }
     }
-    
+
     return ret;
 }
 
@@ -1484,9 +1483,9 @@ void wxTextCtrl::DrawLinePart( wxDC &dc, int x, int y, const wxString &toDraw, c
             pos++;
             if (pos == len) return;
         }
-        
+
         size_t start = pos;
-        
+
         wxString current;
         current += toDraw[pos];
         pos++;
@@ -1495,7 +1494,7 @@ void wxTextCtrl::DrawLinePart( wxDC &dc, int x, int y, const wxString &toDraw, c
             current += toDraw[pos];
             pos++;
         }
-        
+
         int xx = 0;
         wxString tmp = origin.Left( start );
         GetTextExtent( tmp, &xx, NULL, NULL, NULL );
@@ -1511,7 +1510,7 @@ void wxTextCtrl::DrawLine( wxDC &dc, int x, int y, const wxString &line2, int li
     int selEndY = m_selEndY;
     int selStartX = m_selStartX;
     int selEndX = m_selEndX;
-    
+
     if ((selStartY > selEndY) ||
         ((selStartY == selEndY) && (selStartX > selEndX)))
     {
@@ -1536,7 +1535,7 @@ void wxTextCtrl::DrawLine( wxDC &dc, int x, int y, const wxString &line2, int li
     wxString comment( ' ', line.Len() );
     wxString my_string( ' ', line.Len() );
     wxString selection( ' ', line.Len() );
-    
+
     if (m_lang != wxSOURCE_LANG_NONE)
     {
         if (lineNum == m_bracketY)
@@ -1551,7 +1550,7 @@ void wxTextCtrl::DrawLine( wxDC &dc, int x, int y, const wxString &line2, int li
                 dc.SetTextForeground( *wxBLACK );
             }
         }
-    
+
         size_t pos = 0;
         wxString token( GetNextToken( line, pos ) );
         while (!token.IsNull())
@@ -1628,7 +1627,7 @@ void wxTextCtrl::DrawLine( wxDC &dc, int x, int y, const wxString &line2, int li
         DrawLinePart( dc, x, y, my_string, line2, m_stringColour );
         return;
     }
-    
+
     if (selStartY == selEndY)
     {
         // int xx = selStartX*m_charWidth;
@@ -1636,7 +1635,7 @@ void wxTextCtrl::DrawLine( wxDC &dc, int x, int y, const wxString &line2, int li
         // int ww = (selEndX-selStartX)*m_charWidth;
         int ww = PosToPixel( lineNum, selEndX ) - xx;
         dc.DrawRectangle( xx+2, lineNum*m_lineHeight+2, ww, m_lineHeight );
-        
+
         for (size_t i = (size_t)selStartX; i < (size_t)selEndX; i++)
         {
             selection[i] = line[i];
@@ -1646,7 +1645,7 @@ void wxTextCtrl::DrawLine( wxDC &dc, int x, int y, const wxString &line2, int li
     if ((lineNum > selStartY) && (lineNum < selEndY))
     {
         dc.DrawRectangle( 0+2, lineNum*m_lineHeight+2, 10000, m_lineHeight );
-        
+
         for (size_t i = 0; i < line.Len(); i++)
         {
             selection[i] = line[i];
@@ -1658,7 +1657,7 @@ void wxTextCtrl::DrawLine( wxDC &dc, int x, int y, const wxString &line2, int li
         // int xx = selStartX*m_charWidth;
         int xx = PosToPixel( lineNum, selStartX );
         dc.DrawRectangle( xx+2, lineNum*m_lineHeight+2, 10000, m_lineHeight );
-        
+
         for (size_t i = (size_t)selStartX; i < line.Len(); i++)
         {
             selection[i] = line[i];
@@ -1670,14 +1669,14 @@ void wxTextCtrl::DrawLine( wxDC &dc, int x, int y, const wxString &line2, int li
         // int ww = selEndX*m_charWidth;
         int ww = PosToPixel( lineNum, selEndX );
         dc.DrawRectangle( 0+2, lineNum*m_lineHeight+2, ww, m_lineHeight );
-        
+
         for (size_t i = 0; i < (size_t)selEndX; i++)
         {
             selection[i] = line[i];
             line[i] = ' ';
         }
     }
-    
+
     DrawLinePart( dc, x, y, line, line2, *wxBLACK );
     DrawLinePart( dc, x, y, selection, line2, *wxWHITE );
     DrawLinePart( dc, x, y, keyword, line2, m_keywordColour );
@@ -1690,25 +1689,25 @@ void wxTextCtrl::DrawLine( wxDC &dc, int x, int y, const wxString &line2, int li
 void wxTextCtrl::OnPaint( wxPaintEvent &event )
 {
     wxPaintDC dc(this);
-    
+
     if (m_lines.GetCount() == 0) return;
-    
+
     PrepareDC( dc );
-    
+
     dc.SetFont( m_sourceFont );
-    
+
     int scroll_y = 0;
     GetViewStart( NULL, &scroll_y );
-    
+
     // We have a inner border of two pixels
     // around the text, so scroll units do
     // not correspond to lines.
     if (scroll_y > 0) scroll_y--;
-    
+
     int size_x = 0;
     int size_y = 0;
     GetClientSize( &size_x, &size_y );
-    
+
     dc.SetPen( *wxTRANSPARENT_PEN );
     dc.SetBrush( wxBrush( wxTHEME_COLOUR(HIGHLIGHT), wxSOLID ) );
     int upper = wxMin( (int)m_lines.GetCount(), scroll_y+(size_y/m_lineHeight)+2 );
@@ -1722,7 +1721,7 @@ void wxTextCtrl::OnPaint( wxPaintEvent &event )
         if (IsExposed(x,y,w,h))
             DrawLine( dc, 0+2, i*m_lineHeight+2, m_lines[i].m_text, i );
     }
-    
+
     if (m_editable && (FindFocus() == this))
     {
         ///dc.SetBrush( *wxRED_BRUSH );
@@ -1737,7 +1736,7 @@ void wxTextCtrl::OnMouse( wxMouseEvent &event )
 {
     if (m_lines.GetCount() == 0) return;
 
-    
+
 #if 0  // there is no middle button on iPAQs
     if (event.MiddleDown())
     {
@@ -1745,26 +1744,26 @@ void wxTextCtrl::OnMouse( wxMouseEvent &event )
         return;
     }
 #endif
-    
+
     if (event.LeftDClick())
     {
         DoDClick();
         return;
     }
-    
+
     if (event.LeftDown())
-    { 
-        m_capturing = TRUE;
+    {
+        m_capturing = true;
         CaptureMouse();
     }
-    
+
     if (event.LeftUp())
-    {   
-        m_capturing = FALSE;
+    {
+        m_capturing = false;
         ReleaseMouse();
     }
 
-    if (event.LeftDown() || 
+    if (event.LeftDown() ||
         (event.LeftIsDown() && m_capturing))
     {
         int x = event.GetX();
@@ -1773,8 +1772,8 @@ void wxTextCtrl::OnMouse( wxMouseEvent &event )
         y /= m_lineHeight;
         // x /= m_charWidth;
         x = PixelToPos( y, x );
-        MoveCursor( 
-            wxMin( 1000, wxMax( 0, x ) ), 
+        MoveCursor(
+            wxMin( 1000, wxMax( 0, x ) ),
             wxMin( (int)m_lines.GetCount()-1, wxMax( 0, y ) ),
             event.ShiftDown() || !event.LeftDown() );
     }
@@ -1785,14 +1784,14 @@ void wxTextCtrl::OnChar( wxKeyEvent &event )
     if (m_lines.GetCount() == 0) return;
 
     if (!m_editable) return;
-    
+
     int size_x = 0;
     int size_y = 0;
     GetClientSize( &size_x, &size_y );
     size_x /= m_charWidth;
     size_y /= m_lineHeight;
     size_y--;
-    
+
     if (event.ShiftDown())
     {
         switch (event.GetKeyCode())
@@ -1808,7 +1807,7 @@ void wxTextCtrl::OnChar( wxKeyEvent &event )
             case '0': event.m_keyCode = WXK_INSERT; break;
         }
     }
-    
+
     switch (event.GetKeyCode())
     {
         case WXK_UP:
@@ -1816,7 +1815,7 @@ void wxTextCtrl::OnChar( wxKeyEvent &event )
             if (m_ignoreInput) return;
             if (m_cursorY > 0)
                 MoveCursor( m_cursorX, m_cursorY-1, event.ShiftDown() );
-            m_ignoreInput = TRUE;
+            m_ignoreInput = true;
             return;
         }
         case WXK_DOWN:
@@ -1824,7 +1823,7 @@ void wxTextCtrl::OnChar( wxKeyEvent &event )
             if (m_ignoreInput) return;
             if (m_cursorY < (int)(m_lines.GetCount()-1))
                 MoveCursor( m_cursorX, m_cursorY+1, event.ShiftDown() );
-            m_ignoreInput = TRUE;
+            m_ignoreInput = true;
             return;
         }
         case WXK_LEFT:
@@ -1839,7 +1838,7 @@ void wxTextCtrl::OnChar( wxKeyEvent &event )
                 if (m_cursorY > 0)
                     MoveCursor( m_lines[m_cursorY-1].m_text.Len(), m_cursorY-1, event.ShiftDown() );
             }
-            m_ignoreInput = TRUE;
+            m_ignoreInput = true;
             return;
         }
         case WXK_RIGHT:
@@ -1847,7 +1846,7 @@ void wxTextCtrl::OnChar( wxKeyEvent &event )
             if (m_ignoreInput) return;
             if (m_cursorX < 1000)
                 MoveCursor( m_cursorX+1, m_cursorY, event.ShiftDown() );
-            m_ignoreInput = TRUE;
+            m_ignoreInput = true;
             return;
         }
         case WXK_HOME:
@@ -1870,14 +1869,14 @@ void wxTextCtrl::OnChar( wxKeyEvent &event )
         {
             if (m_ignoreInput) return;
             MoveCursor( m_cursorX, wxMin( (int)(m_lines.GetCount()-1), m_cursorY+size_y ), event.ShiftDown() );
-            m_ignoreInput = TRUE;
+            m_ignoreInput = true;
             return;
         }
         case WXK_PRIOR:
         {
             if (m_ignoreInput) return;
             MoveCursor( m_cursorX, wxMax( 0, m_cursorY-size_y ), event.ShiftDown() );
-            m_ignoreInput = TRUE;
+            m_ignoreInput = true;
             return;
         }
         case WXK_INSERT:
@@ -1899,13 +1898,13 @@ void wxTextCtrl::OnChar( wxKeyEvent &event )
                 event.SetString(GetValue());
                 if (GetEventHandler()->ProcessEvent(event)) return;
             }
-            
+
             if (IsSingleLine())
             {
                 event.Skip();
                 return;
             }
-            
+
             if (HasSelection())
                 Delete();
             DoReturn();
@@ -1916,7 +1915,7 @@ void wxTextCtrl::OnChar( wxKeyEvent &event )
             if (HasSelection())
                 Delete();
             bool save_overwrite = m_overwrite;
-            m_overwrite = FALSE;
+            m_overwrite = false;
             int i = 4-(m_cursorX % 4);
             if (i == 0) i = 4;
             for (int c = 0; c < i; c++)
@@ -1940,7 +1939,7 @@ void wxTextCtrl::OnChar( wxKeyEvent &event )
                 DoDelete();
             return;
         }
-        default: 
+        default:
         {
             if (  (event.GetKeyCode() >= 'a') &&
                   (event.GetKeyCode() <= 'z') &&
@@ -1950,8 +1949,8 @@ void wxTextCtrl::OnChar( wxKeyEvent &event )
                 event.Skip();
                 return;
             }
-            
-            if (  (event.GetKeyCode() >= 32) && 
+
+            if (  (event.GetKeyCode() >= 32) &&
                   (event.GetKeyCode() <= 255) &&
                  !(event.ControlDown() && !event.AltDown()) ) // filters out Ctrl-X but leaves Alt-Gr
             {
@@ -1962,16 +1961,16 @@ void wxTextCtrl::OnChar( wxKeyEvent &event )
             }
         }
     }
-    
+
     event.Skip();
 }
 
 void wxTextCtrl::OnInternalIdle()
 {
     wxControl::OnInternalIdle();
-    
-    m_ignoreInput = FALSE;
-    
+
+    m_ignoreInput = false;
+
     if (m_lang != wxSOURCE_LANG_NONE)
         SearchForBrackets();
 }
@@ -1991,9 +1990,9 @@ void wxTextCtrl::Indent()
             endY = tmp;
         }
     }
-    
+
     m_undos.Append( new wxSourceUndoStep( wxSOURCE_UNDO_LINE, startY, endY, this ) );
-    
+
     for (int i = startY; i <= endY; i++)
     {
         m_lines[i].m_text.insert( 0u, wxT("    ") );
@@ -2016,9 +2015,9 @@ void wxTextCtrl::Unindent()
             endY = tmp;
         }
     }
-    
+
     m_undos.Append( new wxSourceUndoStep( wxSOURCE_UNDO_LINE, startY, endY, this ) );
-    
+
     for (int i = startY; i <= endY; i++)
     {
         for (int n = 0; n < 4; n++)
@@ -2048,7 +2047,7 @@ void wxTextCtrl::RefreshLine( int n )
     int x = 0;
     CalcScrolledPosition( x, y, &x, &y );
     wxRect rect( 0+2, y+2, 10000, m_lineHeight );
-    Refresh( TRUE, &rect );
+    Refresh( true, &rect );
 }
 
 void wxTextCtrl::RefreshDown( int n )
@@ -2070,9 +2069,9 @@ void wxTextCtrl::RefreshDown( int n )
         int y = n*m_lineHeight;
         int x = 0;
         CalcScrolledPosition( x, y, &x, &y );
-    
+
         wxRect rect( 0+2, y+2, 10000, size_y );
-        Refresh( TRUE, &rect );
+        Refresh( true, &rect );
     }
 }
 
@@ -2088,19 +2087,19 @@ void wxTextCtrl::MoveCursor( int new_x, int new_y, bool shift, bool centre )
 
     if ((new_x == m_cursorX) && (new_y == m_cursorY)) return;
 
-    bool no_cursor_refresh = FALSE;
+    bool no_cursor_refresh = false;
     bool has_selection = HasSelection();
 
     if (shift)
     {
         int x,y,w,h;
-        bool erase_background = TRUE;
-        
+        bool erase_background = true;
+
         if (!has_selection)
         {
             m_selStartX = m_cursorX;
             m_selStartY = m_cursorY;
-            
+
             x = 0;
             w = 10000;
             if (new_y > m_selStartY)
@@ -2125,8 +2124,8 @@ void wxTextCtrl::MoveCursor( int new_x, int new_y, bool shift, bool centre )
                 y = new_y*m_lineHeight;
                 h = (-new_y+m_selStartY+1)*m_lineHeight;
             }
-            
-            no_cursor_refresh = TRUE;
+
+            no_cursor_refresh = true;
             m_cursorX = new_x;
             m_cursorY = new_y;
         }
@@ -2159,7 +2158,7 @@ void wxTextCtrl::MoveCursor( int new_x, int new_y, bool shift, bool centre )
                 {
                     y = m_selEndY*m_lineHeight;
                     h = (new_y-m_selEndY+1) * m_lineHeight;
-                    
+
                     erase_background = ((m_selEndY < m_selStartY) ||
                                         ((m_selEndY == m_selStartY) && (m_selEndX < m_selStartX)));
                 }
@@ -2167,19 +2166,19 @@ void wxTextCtrl::MoveCursor( int new_x, int new_y, bool shift, bool centre )
                 {
                     y = new_y*m_lineHeight;
                     h = (-new_y+m_selEndY+1) * m_lineHeight;
-                    
+
                     erase_background = ((m_selEndY > m_selStartY) ||
                                         ((m_selEndY == m_selStartY) && (m_selEndX > m_selStartX)));
                 }
-                no_cursor_refresh = TRUE;
+                no_cursor_refresh = true;
                 m_cursorX = new_x;
                 m_cursorY = new_y;
             }
         }
-        
+
         m_selEndX = new_x;
         m_selEndY = new_y;
-        
+
         CalcScrolledPosition( x, y, &x, &y );
         wxRect rect( x+2, y+2, w, h );
         Refresh( erase_background, &rect );
@@ -2194,27 +2193,27 @@ void wxTextCtrl::MoveCursor( int new_x, int new_y, bool shift, bool centre )
             m_selEndY = -1;
             m_selStartX = -1;
             m_selStartY = -1;
-            
+
             if (ry1 > ry2)
             {
                 int tmp = ry2;
                 ry2 = ry1;
                 ry1 = tmp;
             }
-        
+
             int x = 0;
             int y = ry1*m_lineHeight;
             CalcScrolledPosition( x, y, &x, &y );
             wxRect rect( 0, y+2, 10000, (ry2-ry1+1)*m_lineHeight );
-        
-            Refresh( TRUE, &rect );
+
+            Refresh( true, &rect );
         }
     }
-    
+
 /*
-    printf( "startx %d starty %d endx %d endy %d\n", 
+    printf( "startx %d starty %d endx %d endy %d\n",
             m_selStartX, m_selStartY, m_selEndX, m_selEndY );
-            
+
     printf( "has %d\n", (int)HasSelection() );
 */
 
@@ -2225,11 +2224,11 @@ void wxTextCtrl::MoveCursor( int new_x, int new_y, bool shift, bool centre )
         int y = m_cursorY*m_lineHeight;
         CalcScrolledPosition( x, y, &x, &y );
         wxRect rect( x+2, y+2, 4, m_lineHeight+2 );
-        
+
         m_cursorX = new_x;
         m_cursorY = new_y;
-    
-        Refresh( TRUE, &rect );
+
+        Refresh( true, &rect );
 
         if (FindFocus() == this)
         {
@@ -2243,17 +2242,17 @@ void wxTextCtrl::MoveCursor( int new_x, int new_y, bool shift, bool centre )
             dc.DrawRectangle( xx+2, m_cursorY*m_lineHeight+2, 2, m_lineHeight );
         }
     }
-    
+
     int size_x = 0;
     int size_y = 0;
     GetClientSize( &size_x, &size_y );
     size_x /= m_charWidth;
     size_y /= m_lineHeight;
-    
+
     int view_x = 0;
     int view_y = 0;
     GetViewStart( &view_x, &view_y );
-    
+
     if (centre)
     {
         int sy = m_cursorY - (size_y/2);
@@ -2267,10 +2266,10 @@ void wxTextCtrl::MoveCursor( int new_x, int new_y, bool shift, bool centre )
         else if (m_cursorY > view_y+size_y-1)
             Scroll( -1, m_cursorY-size_y+1 );
     }
-    
+
     //int xx = m_cursorX;
     int xx = PosToPixel( m_cursorY, m_cursorX ) / m_charWidth;
-    
+
     if (xx < view_x)
         Scroll( xx, -1 );
     else if (xx > view_x+size_x-1)
@@ -2289,11 +2288,11 @@ void wxTextCtrl::MyAdjustScrollbars()
     height -= 4;
     if (height >= (int)m_lines.GetCount() *m_lineHeight)
         y_range = 0;
-    
+
     int view_x = 0;
     int view_y = 0;
     GetViewStart( &view_x, &view_y );
-    
+
     SetScrollbars( m_charWidth, m_lineHeight, m_longestLine+2, y_range, view_x, view_y );
 }
 
@@ -2356,13 +2355,13 @@ wxSize wxTextCtrl::DoGetBestSize() const
     if (IsSingleLine())
     {
         wxSize ret(80, m_lineHeight + 4);
-        
+
         if (HasFlag(wxBORDER_SUNKEN) || HasFlag(wxBORDER_RAISED))
             ret.y += 4;
-            
+
         if (HasFlag(wxBORDER_SIMPLE))
             ret.y += 2;
-            
+
         return ret;
     }
     else
@@ -2403,13 +2402,13 @@ bool wxTextCtrl::ScrollLines(int lines)
 {
     wxFAIL_MSG( "wxTextCtrl::ScrollLines not implemented");
 
-    return FALSE;
+    return false;
 }
 
 bool wxTextCtrl::ScrollPages(int pages)
 {
     wxFAIL_MSG( "wxTextCtrl::ScrollPages not implemented");
-    
-    return FALSE;
+
+    return false;
 }
 

@@ -114,12 +114,12 @@ public:
     virtual void SetInsertionPoint(long pos);
     virtual void SetInsertionPointEnd();
     virtual long GetInsertionPoint() const;
-    virtual long GetLastPosition() const;
+    virtual wxTextPos GetLastPosition() const;
 
     virtual void SetSelection(long from, long to);
     virtual void SetEditable(bool editable);
 
-    virtual bool Enable( bool enable = TRUE );
+    virtual bool Enable( bool enable = true );
 
     // Implementation from now on
     void OnDropFiles( wxDropFilesEvent &event );
@@ -154,13 +154,13 @@ public:
     void UpdateFontIfNeeded();
 #endif // __WXGTK20__/!__WXGTK20__
 
-    void SetModified() { m_modified = TRUE; }
+    void SetModified() { m_modified = true; }
 
     // GTK+ textctrl is so dumb that you need to freeze/thaw it manually to
     // avoid horrible flicker/scrolling back and forth
     virtual void Freeze();
     virtual void Thaw();
-    
+
     // textctrl specific scrolling
     virtual bool ScrollLines(int lines);
     virtual bool ScrollPages(int pages);
@@ -180,7 +180,7 @@ public:
 
     static wxVisualAttributes
     GetClassDefaultAttributes(wxWindowVariant variant = wxWINDOW_VARIANT_NORMAL);
-    
+
 protected:
     virtual wxSize DoGetBestSize() const;
 
@@ -202,7 +202,7 @@ protected:
     // has the control been frozen by Freeze()?
     bool IsFrozen() const { return m_frozenness > 0; }
 #endif
- 
+
 private:
     // change the font for everything in this control
     void ChangeFontGlobally();
@@ -224,7 +224,7 @@ private:
 
     // number of calls to Freeze() minus number of calls to Thaw()
     unsigned int m_frozenness;
-#endif  
+#endif
 
     DECLARE_EVENT_TABLE()
     DECLARE_DYNAMIC_CLASS(wxTextCtrl);

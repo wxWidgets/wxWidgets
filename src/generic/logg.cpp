@@ -644,7 +644,7 @@ void wxLogWindow::DoLogString(const wxChar *szString, time_t WXUNUSED(t))
 
     // remove selection (WriteText is in fact ReplaceSelection)
 #ifdef __WXMSW__
-    long nLen = pText->GetLastPosition();
+    wxTextPos nLen = pText->GetLastPosition();
     pText->SetSelection(nLen, nLen);
 #endif // Windows
 

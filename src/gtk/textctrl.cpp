@@ -292,13 +292,13 @@ END_EVENT_TABLE()
 void wxTextCtrl::Init()
 {
     m_ignoreNextUpdate =
-    m_modified = FALSE;
-    SetUpdateFont(FALSE);
+    m_modified = false;
+    SetUpdateFont(false);
     m_text =
     m_vScrollbar = (GtkWidget *)NULL;
 #ifdef __WXGTK20__
     m_frozenness = 0;
-#endif 
+#endif
 }
 
 wxTextCtrl::wxTextCtrl( wxWindow *parent,
@@ -324,18 +324,18 @@ bool wxTextCtrl::Create( wxWindow *parent,
                          const wxValidator& validator,
                          const wxString &name )
 {
-    m_needParent = TRUE;
-    m_acceptsFocus = TRUE;
+    m_needParent = true;
+    m_acceptsFocus = true;
 
     if (!PreCreation( parent, pos, size ) ||
         !CreateBase( parent, id, pos, size, style, validator, name ))
     {
         wxFAIL_MSG( wxT("wxTextCtrl creation failed") );
-        return FALSE;
+        return false;
     }
 
 
-    m_vScrollbarVisible = FALSE;
+    m_vScrollbarVisible = false;
 
     bool multi_line = (style & wxTE_MULTILINE) != 0;
 
@@ -363,14 +363,14 @@ bool wxTextCtrl::Create( wxWindow *parent,
 
         if (!HasFlag(wxNO_BORDER))
             gtk_scrolled_window_set_shadow_type( GTK_SCROLLED_WINDOW(m_widget), GTK_SHADOW_IN );
-            
+
         GTK_WIDGET_UNSET_FLAGS( m_widget, GTK_CAN_FOCUS );
 #else
         // create our control ...
         m_text = gtk_text_new( (GtkAdjustment *) NULL, (GtkAdjustment *) NULL );
 
         // ... and put into the upper left hand corner of the table
-        bool bHasHScrollbar = FALSE;
+        bool bHasHScrollbar = false;
         m_widget = gtk_table_new(bHasHScrollbar ? 2 : 1, 2, FALSE);
         GTK_WIDGET_UNSET_FLAGS( m_widget, GTK_CAN_FOCUS );
         gtk_table_attach( GTK_TABLE(m_widget), m_text, 0, 1, 0, 1,
@@ -396,7 +396,7 @@ bool wxTextCtrl::Create( wxWindow *parent,
         m_widget =
         m_text = gtk_entry_new();
 
-#ifdef __WXGTK20__        
+#ifdef __WXGTK20__
         if (style & wxNO_BORDER)
             g_object_set( GTK_ENTRY(m_text), "has-frame", FALSE, NULL );
 #endif
@@ -431,7 +431,7 @@ bool wxTextCtrl::Create( wxWindow *parent,
     }
 #endif // GTK+ 1.x
 
-    if (!value.IsEmpty())
+    if (!value.empty())
     {
 #ifdef __WXGTK20__
         SetValue( value );
@@ -505,7 +505,7 @@ bool wxTextCtrl::Create( wxWindow *parent,
 #endif
     }
 #endif // __WXGTK20__
-    
+
     // We want to be notified about text changes.
 #ifdef __WXGTK20__
     if (multi_line)
@@ -515,7 +515,7 @@ bool wxTextCtrl::Create( wxWindow *parent,
     }
     else
 #endif
-    
+
     {
         gtk_signal_connect( GTK_OBJECT(m_text), "changed",
             GTK_SIGNAL_FUNC(gtk_text_changed_callback), (gpointer)this);
@@ -526,7 +526,7 @@ bool wxTextCtrl::Create( wxWindow *parent,
     wxTextAttr attrDef(GetForegroundColour(), GetBackgroundColour(), GetFont());
     SetDefaultStyle( attrDef );
 
-    return TRUE;
+    return true;
 }
 
 
@@ -542,7 +542,7 @@ void wxTextCtrl::CalculateScrollbar()
         if (m_vScrollbarVisible)
         {
             gtk_widget_hide( m_vScrollbar );
-            m_vScrollbarVisible = FALSE;
+            m_vScrollbarVisible = false;
         }
     }
     else
@@ -550,7 +550,7 @@ void wxTextCtrl::CalculateScrollbar()
         if (!m_vScrollbarVisible)
         {
             gtk_widget_show( m_vScrollbar );
-            m_vScrollbarVisible = TRUE;
+            m_vScrollbarVisible = true;
         }
     }
 #endif
@@ -629,7 +629,7 @@ void wxTextCtrl::SetValue( const wxString &value )
     //   customize this behaviour.
     SetInsertionPoint(0);
 
-    m_modified = FALSE;
+    m_modified = false;
 }
 
 void wxTextCtrl::WriteText( const wxString &text )
@@ -683,7 +683,7 @@ void wxTextCtrl::WriteText( const wxString &text )
         // in UpdateFontIfNeeded() any longer
         if ( !text.empty() )
         {
-            SetUpdateFont(FALSE);
+            SetUpdateFont(false);
         }
 
         // Bring editable's cursor back uptodate.
@@ -785,7 +785,7 @@ bool wxTextCtrl::PositionToXY(long pos, long *x, long *y ) const
 
         // cast to prevent warning. But pos really should've been unsigned.
         if( (unsigned long)pos > text.Len()  )
-            return FALSE;
+            return false;
 
         *x=0;   // First Col
         *y=0;   // First Line
@@ -812,11 +812,11 @@ bool wxTextCtrl::PositionToXY(long pos, long *x, long *y ) const
         else
         {
             // index out of bounds
-            return FALSE;
+            return false;
         }
     }
 
-    return TRUE;
+    return true;
 }
 
 long wxTextCtrl::XYToPosition(long x, long y ) const
@@ -957,7 +957,7 @@ bool wxTextCtrl::Enable( bool enable )
     if (!wxWindowBase::Enable(enable))
     {
         // nothing to do
-        return FALSE;
+        return false;
     }
 
     if (m_windowStyle & wxTE_MULTILINE)
@@ -974,7 +974,7 @@ bool wxTextCtrl::Enable( bool enable )
         gtk_widget_set_sensitive( m_text, enable );
     }
 
-    return TRUE;
+    return true;
 }
 
 // wxGTK-specific: called recursively by Enable,
@@ -999,12 +999,12 @@ void wxTextCtrl::OnParentEnable( bool enable )
 
 void wxTextCtrl::MarkDirty()
 {
-    m_modified = TRUE;
+    m_modified = true;
 }
 
 void wxTextCtrl::DiscardEdits()
 {
-    m_modified = FALSE;
+    m_modified = false;
 }
 
 // ----------------------------------------------------------------------------
@@ -1013,19 +1013,19 @@ void wxTextCtrl::DiscardEdits()
 
 void wxTextCtrl::IgnoreNextTextUpdate()
 {
-    m_ignoreNextUpdate = TRUE;
+    m_ignoreNextUpdate = true;
 }
 
 bool wxTextCtrl::IgnoreTextUpdate()
 {
     if ( m_ignoreNextUpdate )
     {
-        m_ignoreNextUpdate = FALSE;
+        m_ignoreNextUpdate = false;
 
-        return TRUE;
+        return true;
     }
 
-    return FALSE;
+    return false;
 }
 
 void wxTextCtrl::SetMaxLength(unsigned long len)
@@ -1178,7 +1178,7 @@ long wxTextCtrl::GetInsertionPoint() const
     }
 }
 
-long wxTextCtrl::GetLastPosition() const
+wxTextPos wxTextCtrl::GetLastPosition() const
 {
     wxCHECK_MSG( m_text != NULL, 0, wxT("invalid text ctrl") );
 
@@ -1227,7 +1227,7 @@ void wxTextCtrl::Replace( long from, long to, const wxString &value )
 
     Remove( from, to );
 
-    if (!value.IsEmpty())
+    if (!value.empty())
     {
 #ifdef __WXGTK20__
         SetInsertionPoint( from );
@@ -1297,14 +1297,14 @@ bool wxTextCtrl::CanUndo() const
 {
     // TODO
     //wxFAIL_MSG( wxT("wxTextCtrl::CanUndo not implemented") );
-    return FALSE;
+    return false;
 }
 
 bool wxTextCtrl::CanRedo() const
 {
     // TODO
     //wxFAIL_MSG( wxT("wxTextCtrl::CanRedo not implemented") );
-    return FALSE;
+    return false;
 }
 
 // If the return values from and to are the same, there is no
@@ -1315,7 +1315,7 @@ void wxTextCtrl::GetSelection(long* fromOut, long* toOut) const
 
     gint from = -1;
     gint to = -1;
-    bool haveSelection = FALSE;
+    bool haveSelection = false;
 
 #ifdef __WXGTK20__
      if (m_windowStyle & wxTE_MULTILINE)
@@ -1323,7 +1323,7 @@ void wxTextCtrl::GetSelection(long* fromOut, long* toOut) const
          GtkTextIter ifrom, ito;
          if ( gtk_text_buffer_get_selection_bounds(m_buffer, &ifrom, &ito) )
          {
-             haveSelection = TRUE;
+             haveSelection = true;
              from = gtk_text_iter_get_offset(&ifrom);
              to = gtk_text_iter_get_offset(&ito);
          }
@@ -1333,13 +1333,13 @@ void wxTextCtrl::GetSelection(long* fromOut, long* toOut) const
          if ( gtk_editable_get_selection_bounds( GTK_EDITABLE(m_text),
                                                  &from, &to) )
          {
-             haveSelection = TRUE;
+             haveSelection = true;
          }
      }
 #else //  not GTK2
      if ( (GTK_EDITABLE(m_text)->has_selection) )
      {
-         haveSelection = TRUE;
+         haveSelection = true;
          from = (long) GTK_EDITABLE(m_text)->selection_start_pos;
          to = (long) GTK_EDITABLE(m_text)->selection_end_pos;
      }
@@ -1365,7 +1365,7 @@ void wxTextCtrl::GetSelection(long* fromOut, long* toOut) const
 
 bool wxTextCtrl::IsEditable() const
 {
-    wxCHECK_MSG( m_text != NULL, FALSE, wxT("invalid text ctrl") );
+    wxCHECK_MSG( m_text != NULL, false, wxT("invalid text ctrl") );
 
 #ifdef __WXGTK20__
     if (m_windowStyle & wxTE_MULTILINE)
@@ -1451,24 +1451,24 @@ bool wxTextCtrl::IsOwnGtkWindow( GdkWindow *window )
 // the font will change for subsequent text insertiongs
 bool wxTextCtrl::SetFont( const wxFont &font )
 {
-    wxCHECK_MSG( m_text != NULL, FALSE, wxT("invalid text ctrl") );
+    wxCHECK_MSG( m_text != NULL, false, wxT("invalid text ctrl") );
 
     if ( !wxTextCtrlBase::SetFont(font) )
     {
         // font didn't change, nothing to do
-        return FALSE;
+        return false;
     }
 
     if ( m_windowStyle & wxTE_MULTILINE )
     {
-        SetUpdateFont(TRUE);
+        SetUpdateFont(true);
 
         m_defaultStyle.SetFont(font);
 
         ChangeFontGlobally();
     }
 
-    return TRUE;
+    return true;
 }
 
 void wxTextCtrl::ChangeFontGlobally()
@@ -1487,9 +1487,9 @@ void wxTextCtrl::ChangeFontGlobally()
 #endif
 
     wxString value = GetValue();
-    if ( !value.IsEmpty() )
+    if ( !value.empty() )
     {
-        SetUpdateFont(FALSE);
+        SetUpdateFont(false);
 
         Clear();
         AppendText(value);
@@ -1509,35 +1509,35 @@ void wxTextCtrl::UpdateFontIfNeeded()
 bool wxTextCtrl::SetForegroundColour(const wxColour& colour)
 {
     if ( !wxControl::SetForegroundColour(colour) )
-        return FALSE;
+        return false;
 
     // update default fg colour too
     m_defaultStyle.SetTextColour(colour);
 
-    return TRUE;
+    return true;
 }
 
 bool wxTextCtrl::SetBackgroundColour( const wxColour &colour )
 {
-    wxCHECK_MSG( m_text != NULL, FALSE, wxT("invalid text ctrl") );
+    wxCHECK_MSG( m_text != NULL, false, wxT("invalid text ctrl") );
 
     if ( !wxControl::SetBackgroundColour( colour ) )
-        return FALSE;
+        return false;
 
 #ifndef __WXGTK20__
     if (!m_widget->window)
-        return FALSE;
+        return false;
 #endif
 
     if (!m_backgroundColour.Ok())
-        return FALSE;
+        return false;
 
     if (m_windowStyle & wxTE_MULTILINE)
     {
 #ifndef __WXGTK20__
         GdkWindow *window = GTK_TEXT(m_text)->text_area;
         if (!window)
-            return FALSE;
+            return false;
         m_backgroundColour.CalcPixel( gdk_window_get_colormap( window ) );
         gdk_window_set_background( window, m_backgroundColour.GetColor() );
         gdk_window_clear( window );
@@ -1547,7 +1547,7 @@ bool wxTextCtrl::SetBackgroundColour( const wxColour &colour )
     // change active background color too
     m_defaultStyle.SetBackgroundColour( colour );
 
-    return TRUE;
+    return true;
 }
 
 bool wxTextCtrl::SetStyle( long start, long end, const wxTextAttr& style )
@@ -1557,12 +1557,12 @@ bool wxTextCtrl::SetStyle( long start, long end, const wxTextAttr& style )
         if ( style.IsDefault() )
         {
             // nothing to do
-            return TRUE;
+            return true;
         }
 #ifdef __WXGTK20__
         gint l = gtk_text_buffer_get_char_count( m_buffer );
 
-        wxCHECK_MSG( start >= 0 && end <= l, FALSE,
+        wxCHECK_MSG( start >= 0 && end <= l, false,
                      _T("invalid range in wxTextCtrl::SetStyle") );
 
         GtkTextIter starti, endi;
@@ -1576,14 +1576,14 @@ bool wxTextCtrl::SetStyle( long start, long end, const wxTextAttr& style )
 
         wxGtkTextApplyTagsFromAttr( m_buffer, attr, &starti, &endi );
 
-         return TRUE;
+        return true;
 #else
         // VERY dirty way to do that - removes the required text and re-adds it
         // with styling (FIXME)
 
         gint l = gtk_text_get_length( GTK_TEXT(m_text) );
 
-        wxCHECK_MSG( start >= 0 && end <= l, FALSE,
+        wxCHECK_MSG( start >= 0 && end <= l, false,
                      _T("invalid range in wxTextCtrl::SetStyle") );
 
         gint old_pos = gtk_editable_get_position( GTK_EDITABLE(m_text) );
@@ -1615,12 +1615,12 @@ bool wxTextCtrl::SetStyle( long start, long end, const wxTextAttr& style )
         gtk_editable_set_position( GTK_EDITABLE(m_text), old_pos ); */
         SetInsertionPoint( old_pos );
 #endif
-        return TRUE;
+        return true;
     }
     else // singe line
     {
         // cannot do this for GTK+'s Entry widget
-        return FALSE;
+        return false;
     }
 }
 
@@ -1808,7 +1808,7 @@ bool wxTextCtrl::DoScroll(GtkAdjustment *adj, int diff)
     if ( fabs(adj->value - value) < 0.2 )
     {
         // well, this is what Robert does in wxScrollBar, so it must be good...
-        return FALSE;
+        return false;
     }
 
     adj->value = value;
@@ -1819,14 +1819,14 @@ bool wxTextCtrl::DoScroll(GtkAdjustment *adj, int diff)
     gtk_signal_emit_by_name(GTK_OBJECT(adj), "value_changed");
 #endif
 
-    return TRUE;
+    return true;
 }
 
 bool wxTextCtrl::ScrollLines(int lines)
 {
     GtkAdjustment *adj = GetVAdj();
     if ( !adj )
-        return FALSE;
+        return false;
 
 #ifdef __WXGTK20__
     int diff = (int)ceil(lines*adj->step_increment);
@@ -1842,7 +1842,7 @@ bool wxTextCtrl::ScrollPages(int pages)
 {
     GtkAdjustment *adj = GetVAdj();
     if ( !adj )
-        return FALSE;
+        return false;
 
     return DoScroll(adj, (int)ceil(pages*adj->page_increment));
 }

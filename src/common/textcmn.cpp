@@ -220,7 +220,7 @@ bool wxTextCtrlBase::LoadFile(const wxString& filename)
 
 bool wxTextCtrlBase::SaveFile(const wxString& filename)
 {
-    wxString filenameToUse = filename.IsEmpty() ? m_filename : filename;
+    wxString filenameToUse = filename.empty() ? m_filename : filename;
     if ( filenameToUse.empty() )
     {
         // what kind of message to give? is it an error or a program bug?
@@ -394,9 +394,8 @@ bool wxTextCtrlBase::EmulateKeyPress(const wxKeyEvent& event)
         case WXK_NUMPAD_DELETE:
             // delete the character at cursor
             {
-                const long pos = GetInsertionPoint(),
-                           last = GetLastPosition();
-                if ( pos < last )
+                const long pos = GetInsertionPoint();
+                if ( pos < GetLastPosition() )
                     Remove(pos, pos + 1);
             }
             break;

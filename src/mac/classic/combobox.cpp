@@ -223,17 +223,17 @@ void wxComboBox::DoMoveWindow(int x, int y, int width, int height) {
 bool wxComboBox::Enable(bool enable)
 {
     if ( !wxControl::Enable(enable) )
-        return FALSE;
+        return false;
 
-    return TRUE;
+    return true;
 }
 
 bool wxComboBox::Show(bool show)
 {
     if ( !wxControl::Show(show) )
-        return FALSE;
+        return false;
 
-    return TRUE;
+    return true;
 }
 
 void wxComboBox::SetFocus()
@@ -284,7 +284,7 @@ bool wxComboBox::Create(wxWindow *parent, wxWindowID id,
     if ( !wxControl::Create(parent, id, wxDefaultPosition, wxDefaultSize, style ,
                             wxDefaultValidator, name) )
     {
-        return FALSE;
+        return false;
     }
 
     m_choice = new wxComboBoxChoice(this, style );
@@ -309,7 +309,7 @@ bool wxComboBox::Create(wxWindow *parent, wxWindowID id,
         m_choice->DoAppend( choices[ i ] );
     }
 
-    return TRUE;
+    return true;
 }
 
 wxString wxComboBox::GetValue() const
@@ -400,7 +400,7 @@ long wxComboBox::GetInsertionPoint() const
     return 0;
 }
 
-long wxComboBox::GetLastPosition() const
+wxTextPos wxComboBox::GetLastPosition() const
 {
     // TODO
     return 0;
@@ -517,10 +517,10 @@ bool wxComboBox::SetStringSelection(const wxString& sel)
     if (s > -1)
         {
             SetSelection (s);
-            return TRUE;
+            return true;
         }
     else
-        return FALSE;
+        return false;
 }
 
 void wxComboBox::SetString(int n, const wxString& s)
@@ -530,8 +530,7 @@ void wxComboBox::SetString(int n, const wxString& s)
 
 bool wxComboBox::IsEditable() const
 {
-
-	return m_text != NULL && !HasFlag(wxCB_READONLY);
+    return m_text != NULL && !HasFlag(wxCB_READONLY);
 }
 
 void wxComboBox::Undo()

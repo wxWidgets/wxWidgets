@@ -112,7 +112,7 @@ public:
     virtual void SetInsertionPoint(long lPos);
     virtual void SetInsertionPointEnd(void);
     virtual long GetInsertionPoint(void) const;
-    virtual long GetLastPosition(void) const;
+    virtual wxTextPos GetLastPosition(void) const;
 
     virtual void SetSelection( long lFrom
                               ,long lTo

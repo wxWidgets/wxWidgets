@@ -225,7 +225,7 @@ static pascal void TPPaneDrawProc(ControlRef theControl, ControlPartCode thePart
             else
                 TXNSetFrameBounds(  varsp->fTXNRec, varsp->fRTextArea.top + 30000 , varsp->fRTextArea.left + 30000 ,
                     varsp->fRTextArea.bottom + 30000 , varsp->fRTextArea.right + 30000 , varsp->fTXNFrame);
-            
+
         }
 
         if ( IsControlVisible( theControl ) )
@@ -238,7 +238,7 @@ static pascal void TPPaneDrawProc(ControlRef theControl, ControlPartCode thePart
                 /* restore the drawing environment */
                 /* draw the text frame and focus frame (if necessary) */
             DrawThemeEditTextFrame(&varsp->fRTextOutline, varsp->fIsActive ? kThemeStateActive: kThemeStateInactive);
-            if ((**tpvars).fIsActive && varsp->fInFocus) 
+            if ((**tpvars).fIsActive && varsp->fInFocus)
                 DrawThemeFocusRect(&varsp->fRFocusOutline, true);
                 /* release our globals */
             HSetState((Handle) tpvars, state);
@@ -420,7 +420,7 @@ static pascal void TPPaneActivateProc(ControlHandle theControl, Boolean activati
         if ( IsControlVisible( theControl ) )
         {
             DrawThemeEditTextFrame(&varsp->fRTextOutline, varsp->fIsActive ? kThemeStateActive: kThemeStateInactive);
-            if (varsp->fInFocus) 
+            if (varsp->fInFocus)
                 DrawThemeFocusRect(&varsp->fRFocusOutline, varsp->fIsActive);
         }
         HSetState((Handle) tpvars, state);
@@ -483,8 +483,8 @@ static pascal ControlPartCode TPPaneFocusProc(ControlHandle theControl, ControlF
         if ( IsControlVisible( theControl ) )
         {
            /* save the drawing state */
-        	SetPort((**tpvars).fDrawingEnvironment);
-        	wxMacWindowClipper clipper( wxFindControlFromMacControl(theControl ) ) ;
+            SetPort((**tpvars).fDrawingEnvironment);
+            wxMacWindowClipper clipper( wxFindControlFromMacControl(theControl ) ) ;
             DrawThemeEditTextFrame(&varsp->fRTextOutline, varsp->fIsActive ? kThemeStateActive: kThemeStateInactive);
             DrawThemeFocusRect(&varsp->fRFocusOutline, varsp->fIsActive && varsp->fInFocus);
         }
@@ -661,23 +661,23 @@ static void SetTXNData( TXNObject txn , const wxString& st , TXNOffset start , T
 {
 #if wxUSE_UNICODE
 #if SIZEOF_WCHAR_T == 2
-	size_t len = st.Len() ;
+    size_t len = st.Len() ;
     TXNSetData( txn , kTXNUnicodeTextData,  (void*)st.wc_str(), len * 2,
       start, end);
 #else
-	wxMBConvUTF16BE converter ;
-	ByteCount byteBufferLen = converter.WC2MB( NULL , st.wc_str() , 0 ) ;
-	UniChar *unibuf = (UniChar*) malloc(byteBufferLen) ;
-	converter.WC2MB( (char*) unibuf , st.wc_str() , byteBufferLen ) ;
+    wxMBConvUTF16BE converter ;
+    ByteCount byteBufferLen = converter.WC2MB( NULL , st.wc_str() , 0 ) ;
+    UniChar *unibuf = (UniChar*) malloc(byteBufferLen) ;
+    converter.WC2MB( (char*) unibuf , st.wc_str() , byteBufferLen ) ;
     TXNSetData( txn , kTXNUnicodeTextData,  (void*)unibuf, byteBufferLen ,
       start, end);
-	free( unibuf ) ;
+    free( unibuf ) ;
 #endif
 #else
-	wxCharBuffer text =  st.mb_str(wxConvLocal)  ;
+    wxCharBuffer text =  st.mb_str(wxConvLocal)  ;
     TXNSetData( txn , kTXNTextData,  (void*)text.data(), strlen( text ) ,
       start, end);
-#endif    
+#endif
 }
 
 // Text item
@@ -728,7 +728,7 @@ bool wxTextCtrl::Create(wxWindow *parent, wxWindowID id,
 
     // base initialization
     if ( !wxTextCtrlBase::Create(parent, id, pos, size, style & ~(wxHSCROLL|wxVSCROLL), validator, name) )
-        return FALSE;
+        return false;
 
     wxSize mySize = size ;
     if ( m_macUsesTXN )
@@ -767,7 +767,7 @@ bool wxTextCtrl::Create(wxWindow *parent, wxWindowID id,
 
     if ( m_windowStyle & wxTE_READONLY)
     {
-        m_editable = FALSE ;
+        m_editable = false ;
     }
 
     wxString st = str ;
@@ -796,7 +796,7 @@ bool wxTextCtrl::Create(wxWindow *parent, wxWindowID id,
 
     if ( !m_macUsesTXN )
     {
-    	wxCharBuffer text = st.mb_str(wxConvLocal) ;
+        wxCharBuffer text = st.mb_str(wxConvLocal) ;
         ::SetControlData( (ControlHandle) m_macControl, 0, ( m_windowStyle & wxTE_PASSWORD ) ? kControlEditTextPasswordTag : kControlEditTextTextTag , strlen(text) , text ) ;
     }
     else
@@ -813,7 +813,7 @@ bool wxTextCtrl::Create(wxWindow *parent, wxWindowID id,
         TXNShowSelection( (TXNObject) m_macTXN, kTXNShowStart);
     }
 
-    return TRUE;
+    return true;
 }
 
 wxString wxTextCtrl::GetValue() const
@@ -826,12 +826,12 @@ wxString wxTextCtrl::GetValue() const
         err = ::GetControlDataSize((ControlHandle) m_macControl, 0,
             ( m_windowStyle & wxTE_PASSWORD ) ? kControlEditTextPasswordTag : kControlEditTextTextTag, &actualSize ) ;
 
-       if ( err )
-           return wxEmptyString ;
+        if ( err )
+            return wxEmptyString ;
 
-       if ( actualSize > 0 )
-       {
-       		wxCharBuffer buf(actualSize) ;
+        if ( actualSize > 0 )
+        {
+            wxCharBuffer buf(actualSize) ;
             ::GetControlData( (ControlHandle) m_macControl, 0,
                 ( m_windowStyle & wxTE_PASSWORD ) ? kControlEditTextPasswordTag : kControlEditTextTextTag,
                 actualSize , buf.data() , &actualSize ) ;
@@ -854,13 +854,13 @@ wxString wxTextCtrl::GetValue() const
             if ( actualSize > 0 )
             {
                 wxChar *ptr = result.GetWriteBuf(actualSize*sizeof(wxChar)) ;
-#if SIZEOF_WCHAR_T == 2				
+#if SIZEOF_WCHAR_T == 2
                 wxStrncpy( ptr , (wxChar*) *theText , actualSize ) ;
 #else
-				wxMBConvUTF16BE converter ;
-				HLock( theText ) ;
-				converter.MB2WC( ptr , (const char*)*theText , actualSize ) ;
-				HUnlock( theText ) ;
+                wxMBConvUTF16BE converter ;
+                HLock( theText ) ;
+                converter.MB2WC( ptr , (const char*)*theText , actualSize ) ;
+                HUnlock( theText ) ;
 #endif
                 ptr[actualSize] = 0 ;
                 result.UngetWriteBuf( actualSize *sizeof(wxChar) ) ;
@@ -911,7 +911,7 @@ void wxTextCtrl::SetValue(const wxString& str)
     wxMacConvertNewlines13To10( &st ) ;
     if ( !m_macUsesTXN )
     {
-    	wxCharBuffer text =  st.mb_str(wxConvLocal) ;
+        wxCharBuffer text =  st.mb_str(wxConvLocal) ;
         ::SetControlData( (ControlHandle) m_macControl, 0, ( m_windowStyle & wxTE_PASSWORD ) ? kControlEditTextPasswordTag : kControlEditTextTextTag , strlen(text) , text ) ;
     }
     else
@@ -990,14 +990,14 @@ bool wxTextCtrl::SetStyle(long start, long end, const wxTextAttr& style)
         if ( !formerEditable )
             SetEditable(formerEditable) ;
     }
-    return TRUE ;
+    return true ;
 }
 
 bool wxTextCtrl::SetDefaultStyle(const wxTextAttr& style)
 {
     wxTextCtrlBase::SetDefaultStyle( style ) ;
     SetStyle( kTXNUseCurrentSelection , kTXNUseCurrentSelection , GetDefaultStyle() ) ;
-    return TRUE ;
+    return true ;
 }
 
 // Clipboard operations
@@ -1089,7 +1089,7 @@ bool wxTextCtrl::CanCut() const
 bool wxTextCtrl::CanPaste() const
 {
     if (!IsEditable())
-        return FALSE;
+        return false;
 
 #if TARGET_CARBON
     OSStatus err = noErr;
@@ -1105,20 +1105,20 @@ bool wxTextCtrl::CanPaste() const
         {
             if (( err = GetScrapFlavorSize( scrapRef, 'TEXT', &byteCount )) == noErr)
             {
-                return TRUE ;
+                return true ;
             }
         }
     }
-    return FALSE;
+    return false;
 
 #else
     long offset ;
     if ( GetScrap( NULL , 'TEXT' , &offset ) > 0 )
     {
-        return TRUE ;
+        return true ;
     }
 #endif
-    return FALSE ;
+    return false ;
 }
 
 void wxTextCtrl::SetEditable(bool editable)
@@ -1149,7 +1149,7 @@ void wxTextCtrl::SetInsertionPoint(long pos)
 
 void wxTextCtrl::SetInsertionPointEnd()
 {
-    long pos = GetLastPosition();
+    wxTextPos pos = GetLastPosition();
     SetInsertionPoint(pos);
 }
 
@@ -1160,7 +1160,7 @@ long wxTextCtrl::GetInsertionPoint() const
     return begin ;
 }
 
-long wxTextCtrl::GetLastPosition() const
+wxTextPos wxTextCtrl::GetLastPosition() const
 {
     if ( !m_macUsesTXN )
     {
@@ -1245,14 +1245,14 @@ void wxTextCtrl::SetSelection(long from, long to)
         ControlEditTextSelectionRec selection ;
         if ((from == -1) && (to == -1))
         {
-        	selection.selStart = 0 ;
-        	selection.selEnd = 32767 ;
-        } 
+            selection.selStart = 0 ;
+            selection.selEnd = 32767 ;
+        }
         else
         {
-        	selection.selStart = from ;
-        	selection.selEnd = to ;
-    	}
+            selection.selStart = from ;
+            selection.selEnd = to ;
+        }
 
         TESetSelect( selection.selStart , selection.selEnd , ((TEHandle) m_macTE) ) ;
         ::SetControlData((ControlHandle)  m_macControl , 0, kControlEditTextSelectionTag , sizeof( selection ) , (char*) &selection ) ;
@@ -1267,9 +1267,9 @@ void wxTextCtrl::SetSelection(long from, long to)
         SetPort((**tpvars).fDrawingEnvironment);
         /* change the selection */
         if ((from == -1) && (to == -1))
-        	TXNSelectAll((TXNObject) m_macTXN);
+            TXNSelectAll((TXNObject) m_macTXN);
         else
-        	TXNSetSelection( (**tpvars).fTXNRec, from, to);
+            TXNSetSelection( (**tpvars).fTXNRec, from, to);
         TXNShowSelection( (TXNObject) m_macTXN, kTXNShowStart);
     }
 }
@@ -1278,10 +1278,10 @@ bool wxTextCtrl::LoadFile(const wxString& file)
 {
     if ( wxTextCtrlBase::LoadFile(file) )
     {
-        return TRUE;
+        return true;
     }
 
-    return FALSE;
+    return false;
 }
 
 void wxTextCtrl::WriteText(const wxString& str)
@@ -1290,7 +1290,7 @@ void wxTextCtrl::WriteText(const wxString& str)
     wxMacConvertNewlines13To10( &st ) ;
     if ( !m_macUsesTXN )
     {
-    	wxCharBuffer text =  st.mb_str(wxConvLocal) ;
+        wxCharBuffer text =  st.mb_str(wxConvLocal) ;
         TEInsert( text , strlen(text) , ((TEHandle) m_macTE) ) ;
     }
     else
@@ -1386,9 +1386,9 @@ void wxTextCtrl::Undo()
 {
     if (CanUndo())
     {
-        if ( m_macUsesTXN ) 
+        if ( m_macUsesTXN )
         {
-            TXNUndo((TXNObject)m_macTXN); 
+            TXNUndo((TXNObject)m_macTXN);
         }
     }
 }
@@ -1397,37 +1397,37 @@ void wxTextCtrl::Redo()
 {
     if (CanRedo())
     {
-        if ( m_macUsesTXN ) 
+        if ( m_macUsesTXN )
         {
-            TXNRedo((TXNObject)m_macTXN); 
+            TXNRedo((TXNObject)m_macTXN);
         }
     }
 }
 
 bool wxTextCtrl::CanUndo() const
 {
-    if ( !IsEditable() ) 
+    if ( !IsEditable() )
     {
-        return false ; 
+        return false ;
     }
-    if ( m_macUsesTXN ) 
+    if ( m_macUsesTXN )
     {
-        return TXNCanUndo((TXNObject)m_macTXN,NULL); 
+        return TXNCanUndo((TXNObject)m_macTXN,NULL);
     }
-    return FALSE ;
+    return false ;
 }
 
 bool wxTextCtrl::CanRedo() const
 {
-    if ( !IsEditable() ) 
+    if ( !IsEditable() )
     {
-        return false ; 
+        return false ;
     }
-    if ( m_macUsesTXN ) 
+    if ( m_macUsesTXN )
     {
-        return TXNCanRedo((TXNObject)m_macTXN,NULL); 
+        return TXNCanRedo((TXNObject)m_macTXN,NULL);
     }
-    return FALSE ;
+    return false ;
 }
 
 // Makes modifie or unmodified
@@ -1443,14 +1443,14 @@ void wxTextCtrl::DiscardEdits()
 
 int wxTextCtrl::GetNumberOfLines() const
 {
-    if ( m_macUsesTXN ) 
+    if ( m_macUsesTXN )
     {
         ItemCount lines ;
         TXNGetLineCount((TXNObject)m_macTXN, &lines ) ;
         return lines ;
     }
     else
-    {    	
+    {
         wxString content = GetValue() ;
 
         int count = 1;
@@ -1470,13 +1470,13 @@ long wxTextCtrl::XYToPosition(long x, long y) const
 
 bool wxTextCtrl::PositionToXY(long pos, long *x, long *y) const
 {
-    return FALSE ;
+    return false ;
 }
 
 void wxTextCtrl::ShowPosition(long pos)
 {
 #if TARGET_RT_MAC_MACHO && defined(AVAILABLE_MAC_OS_X_VERSION_10_2_AND_LATER)
-    if ( m_macUsesTXN ) 
+    if ( m_macUsesTXN )
     {
         Point current ;
         Point desired ;
@@ -1491,7 +1491,7 @@ void wxTextCtrl::ShowPosition(long pos)
             SInt32 dv = desired.v - current.v ;
             SInt32 dh = desired.h - current.h ;
             TXNShowSelection(  (TXNObject) m_macTXN , true ) ;
-            theErr = TXNScroll( (TXNObject) m_macTXN, kTXNScrollUnitsInPixels , kTXNScrollUnitsInPixels , &dv , &dh );          
+            theErr = TXNScroll( (TXNObject) m_macTXN, kTXNScrollUnitsInPixels , kTXNScrollUnitsInPixels , &dv , &dh );
             wxASSERT_MSG( theErr == noErr, _T("TXNScroll returned an error!") );
         }
     }
@@ -1641,7 +1641,7 @@ void wxTextCtrl::OnChar(wxKeyEvent& event)
                 // this will make wxWidgets eat the ENTER key so that
                 // we actually prevent line wrapping in a single line
                 // text control
-                eat_key = TRUE;
+                eat_key = true;
             }
 
             break;
@@ -1672,7 +1672,7 @@ void wxTextCtrl::OnChar(wxKeyEvent& event)
 #if TARGET_CARBON
         if ( m_macUsesTXN && wxTheApp->MacGetCurrentEvent() != NULL && wxTheApp->MacGetCurrentEventHandlerCallRef() != NULL )
             CallNextEventHandler((EventHandlerCallRef)wxTheApp->MacGetCurrentEventHandlerCallRef() , (EventRef) wxTheApp->MacGetCurrentEvent() ) ;
-        else 
+        else
         {
             EventRecord rec ;
             if ( wxMacConvertEventToRecord(  (EventRef) wxTheApp->MacGetCurrentEvent() , &rec ) )

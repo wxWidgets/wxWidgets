@@ -6,7 +6,7 @@
 // Created:     17/09/98
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
-// Licence:   	wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef _WX_COMBOBOX_H_
@@ -22,11 +22,11 @@
 class WXDLLEXPORT wxComboBox: public wxChoice
 {
     DECLARE_DYNAMIC_CLASS(wxComboBox)
-        
+
 public:
     wxComboBox() { m_inSetSelection = false; }
     ~wxComboBox();
-    
+
     inline wxComboBox(wxWindow *parent, wxWindowID id,
         const wxString& value = wxEmptyString,
         const wxPoint& pos = wxDefaultPosition,
@@ -40,7 +40,7 @@ public:
         Create(parent, id, value, pos, size, n, choices,
                style, validator, name);
     }
-    
+
     inline wxComboBox(wxWindow *parent, wxWindowID id,
         const wxString& value,
         const wxPoint& pos,
@@ -54,7 +54,7 @@ public:
         Create(parent, id, value, pos, size, choices,
                style, validator, name);
     }
-    
+
     bool Create(wxWindow *parent, wxWindowID id,
         const wxString& value = wxEmptyString,
         const wxPoint& pos = wxDefaultPosition,
@@ -63,7 +63,7 @@ public:
         long style = 0,
         const wxValidator& validator = wxDefaultValidator,
         const wxString& name = wxComboBoxNameStr);
-    
+
     bool Create(wxWindow *parent, wxWindowID id,
         const wxString& value,
         const wxPoint& pos,
@@ -72,7 +72,7 @@ public:
         long style = 0,
         const wxValidator& validator = wxDefaultValidator,
         const wxString& name = wxComboBoxNameStr);
-    
+
     // implementation of wxControlWithItems
     virtual int DoAppend(const wxString& item);
     virtual int DoInsert(const wxString& item, int pos);
@@ -87,7 +87,7 @@ public:
     // Text field functions
     virtual wxString GetValue() const ;
     virtual void SetValue(const wxString& value);
-    
+
     // Clipboard operations
     virtual void Copy();
     virtual void Cut();
@@ -95,14 +95,14 @@ public:
     virtual void SetInsertionPoint(long pos);
     virtual void SetInsertionPointEnd();
     virtual long GetInsertionPoint() const ;
-    virtual long GetLastPosition() const ;
+    virtual wxTextPos GetLastPosition() const ;
     virtual void Replace(long from, long to, const wxString& value);
     virtual void Remove(long from, long to);
     virtual void SetSelection(long from, long to);
     virtual void SetEditable(bool editable);
-    
+
     // Implementation
-    virtual void ChangeFont(bool keepOriginalSize = TRUE);
+    virtual void ChangeFont(bool keepOriginalSize = true);
     virtual void ChangeBackgroundColour();
     virtual void ChangeForegroundColour();
     WXWidget GetTopWidget() const { return m_mainWidget; }

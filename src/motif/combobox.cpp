@@ -53,7 +53,7 @@ bool wxComboBox::Create(wxWindow *parent, wxWindowID id,
                         const wxString& name)
 {
     if( !CreateControl( parent, id, pos, size, style, validator, name ) )
-        return FALSE;
+        return false;
 
     m_noStrings = n;
 
@@ -83,7 +83,7 @@ bool wxComboBox::Create(wxWindow *parent, wxWindowID id,
 
     SetValue(value);
 
-    ChangeFont(FALSE);
+    ChangeFont(false);
 
     XtAddCallback (buttonWidget, XmNselectionCallback, (XtCallbackProc) wxComboBoxCallback,
         (XtPointer) this);
@@ -94,7 +94,7 @@ bool wxComboBox::Create(wxWindow *parent, wxWindowID id,
 
     ChangeBackgroundColour();
 
-    return TRUE;
+    return true;
 }
 
 bool wxComboBox::Create(wxWindow *parent, wxWindowID id,
@@ -107,7 +107,7 @@ bool wxComboBox::Create(wxWindow *parent, wxWindowID id,
                         const wxString& name)
 {
     wxCArrayString chs(choices);
-    return Create(parent, id, value, pos, size, chs.GetCount(), 
+    return Create(parent, id, value, pos, size, chs.GetCount(),
                   chs.GetStrings(), style, validator, name);
 }
 
@@ -141,11 +141,11 @@ wxString wxComboBox::GetValue() const
 
 void wxComboBox::SetValue(const wxString& value)
 {
-    m_inSetValue = TRUE;
+    m_inSetValue = true;
     if( !value.empty() )
         XmComboBoxSetString( (Widget)m_mainWidget,
                              wxConstCast(value.c_str(), char) );
-    m_inSetValue = FALSE;
+    m_inSetValue = false;
 }
 
 void wxComboBox::SetString(int n, const wxString& s)
@@ -281,9 +281,9 @@ long wxComboBox::GetInsertionPoint() const
     return (long) XmComboBoxGetInsertionPosition ((Widget) m_mainWidget);
 }
 
-long wxComboBox::GetLastPosition() const
+wxTextPos wxComboBox::GetLastPosition() const
 {
-    return (long) XmComboBoxGetLastPosition ((Widget) m_mainWidget);
+    return (wxTextPos) XmComboBoxGetLastPosition ((Widget) m_mainWidget);
 }
 
 void wxComboBox::Replace(long from, long to, const wxString& value)

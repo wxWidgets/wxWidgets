@@ -68,18 +68,18 @@ public:
 protected:
     void OnChar( wxKeyEvent& event )
     {
-	// Allows processing the tab key to go to the next control
- 	if (event.GetKeyCode() == WXK_TAB)
- 	{
- 		wxNavigationKeyEvent NavEvent;
- 		NavEvent.SetEventObject(this);
- 		NavEvent.SetDirection(true);
- 		NavEvent.SetWindowChange(false);
+        // Allows processing the tab key to go to the next control
+        if (event.GetKeyCode() == WXK_TAB)
+        {
+            wxNavigationKeyEvent NavEvent;
+            NavEvent.SetEventObject(this);
+            NavEvent.SetDirection(true);
+            NavEvent.SetWindowChange(false);
 
-                // Get the parent of the combo and have it process the navigation?
- 		if (m_cb->GetParent()->GetEventHandler()->ProcessEvent(NavEvent))
+            // Get the parent of the combo and have it process the navigation?
+            if (m_cb->GetParent()->GetEventHandler()->ProcessEvent(NavEvent))
                     return;
- 	}
+        }
         if ( event.GetKeyCode() == WXK_RETURN )
         {
             wxCommandEvent event(wxEVT_COMMAND_TEXT_ENTER, m_cb->GetId());
@@ -269,17 +269,17 @@ void wxComboBox::DoMoveWindow(int x, int y, int width, int height)
 bool wxComboBox::Enable(bool enable)
 {
     if ( !wxControl::Enable(enable) )
-        return FALSE;
+        return false;
 
-    return TRUE;
+    return true;
 }
 
 bool wxComboBox::Show(bool show)
 {
     if ( !wxControl::Show(show) )
-        return FALSE;
+        return false;
 
-    return TRUE;
+    return true;
 }
 
 void wxComboBox::SetFocus()
@@ -330,7 +330,7 @@ bool wxComboBox::Create(wxWindow *parent, wxWindowID id,
     if ( !wxControl::Create(parent, id, wxDefaultPosition, wxDefaultSize, style ,
                             wxDefaultValidator, name) )
     {
-        return FALSE;
+        return false;
     }
 
     m_choice = new wxComboBoxChoice(this, style );
@@ -358,7 +358,7 @@ bool wxComboBox::Create(wxWindow *parent, wxWindowID id,
 
     SetBestSize(size);   // Needed because it is a wxControlWithItems
 
-    return TRUE;
+    return true;
 }
 
 wxString wxComboBox::GetValue() const
@@ -452,7 +452,7 @@ long wxComboBox::GetInsertionPoint() const
     return 0;
 }
 
-long wxComboBox::GetLastPosition() const
+wxTextPos wxComboBox::GetLastPosition() const
 {
     // TODO
     return 0;
@@ -569,10 +569,10 @@ bool wxComboBox::SetStringSelection(const wxString& sel)
     if (s > -1)
         {
             SetSelection (s);
-            return TRUE;
+            return true;
         }
     else
-        return FALSE;
+        return false;
 }
 
 void wxComboBox::SetString(int n, const wxString& s)
@@ -582,7 +582,7 @@ void wxComboBox::SetString(int n, const wxString& s)
 
 bool wxComboBox::IsEditable() const
 {
-	return m_text != NULL && !HasFlag(wxCB_READONLY);
+    return m_text != NULL && !HasFlag(wxCB_READONLY);
 }
 
 void wxComboBox::Undo()

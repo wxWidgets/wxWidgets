@@ -51,7 +51,7 @@ gtk_text_changed_callback( GtkWidget *WXUNUSED(widget), wxComboBox *combo )
 
     if (combo->m_ignoreNextUpdate)
     {
-        combo->m_ignoreNextUpdate = FALSE;
+        combo->m_ignoreNextUpdate = false;
         return;
     }
 
@@ -70,7 +70,7 @@ gtk_dummy_callback(GtkEntry *WXUNUSED(entry), GtkCombo *WXUNUSED(combo))
 
 static void
 gtk_popup_hide_callback(GtkCombo *WXUNUSED(gtk_combo), wxComboBox *combo)
-{  
+{
     // when the popup is hidden, throw a SELECTED event only if the combobox
     // selection changed.
     int curSelection = combo->GetSelection();
@@ -82,7 +82,7 @@ gtk_popup_hide_callback(GtkCombo *WXUNUSED(gtk_combo), wxComboBox *combo)
         event.SetEventObject( combo );
         combo->GetEventHandler()->ProcessEvent( event );
     }
-    
+
     // reset the selection flag to an identifiable value
     g_SelectionBeforePopup = -1;
 }
@@ -192,16 +192,16 @@ bool wxComboBox::Create( wxWindow *parent, wxWindowID id, const wxString& value,
                          long style, const wxValidator& validator,
                          const wxString& name )
 {
-    m_ignoreNextUpdate = FALSE;
-    m_needParent = TRUE;
-    m_acceptsFocus = TRUE;
+    m_ignoreNextUpdate = false;
+    m_needParent = true;
+    m_acceptsFocus = true;
     m_prevSelection = 0;
 
     if (!PreCreation( parent, pos, size ) ||
         !CreateBase( parent, id, pos, size, style, validator, name ))
     {
         wxFAIL_MSG( wxT("wxComboBox creation failed") );
-        return FALSE;
+        return false;
     }
 
     m_widget = gtk_combo_new();
@@ -211,7 +211,7 @@ bool wxComboBox::Create( wxWindow *parent, wxWindowID id, const wxString& value,
     gtk_signal_disconnect( GTK_OBJECT(combo->entry), combo->entry_change_id );
     // ... and add surogate handler.
     combo->entry_change_id = gtk_signal_connect (GTK_OBJECT (combo->entry), "changed",
-			      (GtkSignalFunc) gtk_dummy_callback, combo);
+                  (GtkSignalFunc) gtk_dummy_callback, combo);
 
     // make it more useable
     gtk_combo_set_use_arrows_always( GTK_COMBO(m_widget), TRUE );
@@ -223,7 +223,7 @@ bool wxComboBox::Create( wxWindow *parent, wxWindowID id, const wxString& value,
     if (style & wxNO_BORDER)
         g_object_set( GTK_ENTRY( combo->entry ), "has-frame", FALSE, NULL );
 #endif
-        
+
     GtkWidget *list = GTK_COMBO(m_widget)->list;
 
 #ifndef __WXGTK20__
@@ -260,9 +260,9 @@ bool wxComboBox::Create( wxWindow *parent, wxWindowID id, const wxString& value,
     // "show" and "hide" events are generated when user click on the combobox button which popups a list
     // this list is the "popwin" gtk widget
     gtk_signal_connect( GTK_OBJECT(GTK_COMBO(combo)->popwin), "hide",
-			GTK_SIGNAL_FUNC(gtk_popup_hide_callback), (gpointer)this );
+                        GTK_SIGNAL_FUNC(gtk_popup_hide_callback), (gpointer)this );
     gtk_signal_connect( GTK_OBJECT(GTK_COMBO(combo)->popwin), "show",
-			GTK_SIGNAL_FUNC(gtk_popup_show_callback), (gpointer)this );
+                        GTK_SIGNAL_FUNC(gtk_popup_show_callback), (gpointer)this );
 
     gtk_signal_connect( GTK_OBJECT(combo->entry), "changed",
       GTK_SIGNAL_FUNC(gtk_text_changed_callback), (gpointer)this );
@@ -276,7 +276,7 @@ bool wxComboBox::Create( wxWindow *parent, wxWindowID id, const wxString& value,
     wxSize setsize = GetSize();
     gtk_widget_set_usize( m_widget, setsize.x, setsize.y );
 
-    return TRUE;
+    return true;
 }
 
 wxComboBox::~wxComboBox()
@@ -780,7 +780,7 @@ long wxComboBox::GetInsertionPoint() const
     return (long) GET_EDITABLE_POS( GTK_COMBO(m_widget)->entry );
 }
 
-long wxComboBox::GetLastPosition() const
+wxTextPos wxComboBox::GetLastPosition() const
 {
     GtkWidget *entry = GTK_COMBO(m_widget)->entry;
     int pos = GTK_ENTRY(entry)->text_length;

@@ -36,7 +36,7 @@ See also \helpref{window styles overview}{windowstyles}.
 \twocolwidtha{7cm}
 \begin{twocollist}\itemsep=0pt
 \twocolitem{{\bf EVT\_COMBOBOX(id, func)}}{Process a wxEVT\_COMMAND\_COMBOBOX\_SELECTED event,
-when an item on the list is selected. Note that calling 
+when an item on the list is selected. Note that calling
 \helpref{GetValue}{wxcomboboxgetvalue} returns the new value of selection.}
 \twocolitem{{\bf EVT\_TEXT(id, func)}}{Process a wxEVT\_COMMAND\_TEXT\_UPDATED event,
 when the combobox text changes.}
@@ -152,14 +152,14 @@ text field. Only available on Windows.
 
 Returns true if the combobox is editable and the last undo can be redone.
 Only available on Windows.
- 
+
 \membersection{wxComboBox::CanUndo}\label{wxcomboboxcanundo}
 
 \constfunc{bool}{CanUndo}{\void}
 
 Returns true if the combobox is editable and the last edit can be undone.
 Only available on Windows.
- 
+
 \membersection{wxComboBox::Copy}\label{wxcomboboxcopy}
 
 \func{void}{Copy}{\void}
@@ -180,7 +180,7 @@ Returns the insertion point for the combobox's text field.
 
 \membersection{wxComboBox::GetLastPosition}\label{wxcomboboxgetlastposition}
 
-\constfunc{long}{GetLastPosition}{\void}
+\constfunc{virtual wxTextPos}{GetLastPosition}{\void}
 
 Returns the last position in the combobox text field.
 
@@ -257,7 +257,7 @@ Selects the text between the two positions, in the combobox text field.
 \docparam{to}{The second position.}
 
 \pythonnote{This method is called {\tt SetMark} in wxPython, {\tt SetSelection}
-name is kept for 
+name is kept for
 \helpref{wxControlWithItems::SetSelection}{wxcontrolwithitemssetselection}.}
 
 \membersection{wxComboBox::SetValue}\label{wxcomboboxsetvalue}

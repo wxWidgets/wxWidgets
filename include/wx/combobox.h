@@ -22,6 +22,7 @@ WXDLLEXPORT_DATA(extern const wxChar*) wxComboBoxNameStr;
 // wxComboBoxBase: this interface defines the methods wxComboBox must implement
 // ----------------------------------------------------------------------------
 
+#include "wx/textctrl.h"
 #include "wx/ctrlsub.h"
 
 class WXDLLEXPORT wxComboBoxBase : public wxItemContainer
@@ -36,7 +37,7 @@ public:
     virtual void Paste() = 0;
     virtual void SetInsertionPoint(long pos) = 0;
     virtual long GetInsertionPoint() const = 0;
-    virtual long GetLastPosition() const = 0;
+    virtual wxTextPos GetLastPosition() const = 0;
     virtual void Replace(long from, long to, const wxString& value) = 0;
     virtual void SetSelection(long from, long to) = 0;
     virtual void SetEditable(bool editable) = 0;

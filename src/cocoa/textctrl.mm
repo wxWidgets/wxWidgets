@@ -6,7 +6,7 @@
 // Created:     2003/03/16
 // RCS-ID:      $Id:
 // Copyright:   (c) 2003 David Elliott
-// Licence:   	wxWidgets licence
+// Licence:     wxWidgets licence
 /////////////////////////////////////////////////////////////////////////////
 
 #include "wx/wxprec.h"
@@ -177,7 +177,7 @@ int wxTextCtrl::GetLineLength(long) const
     return 0;
 }
 
-long wxTextCtrl::GetLastPosition() const
+wxTextPos wxTextCtrl::GetLastPosition() const
 {
     return 0;
 }

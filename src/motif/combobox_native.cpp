@@ -92,7 +92,7 @@ bool wxComboBox::Create(wxWindow *parent, wxWindowID id,
 
     Widget buttonWidget= XtVaCreateManagedWidget(name.c_str(),
         xmComboBoxWidgetClass, parentWidget,
-	XmNcomboBoxType, cb_type,
+        XmNcomboBoxType, cb_type,
         NULL);
 
     m_mainWidget = (Widget) buttonWidget;
@@ -136,7 +136,7 @@ bool wxComboBox::Create(wxWindow *parent, wxWindowID id,
                         const wxString& name)
 {
     wxCArrayString chs(choices);
-    return Create(parent, id, value, pos, size, chs.GetCount(), 
+    return Create(parent, id, value, pos, size, chs.GetCount(),
                   chs.GetStrings(), style, validator, name);
 }
 
@@ -252,7 +252,7 @@ void wxComboBox::Clear()
 #else
     while(m_noStrings > 0)
     {
-    	XmComboBoxDeletePos((Widget) m_mainWidget, m_noStrings--);
+        XmComboBoxDeletePos((Widget) m_mainWidget, m_noStrings--);
     }
 #endif
 
@@ -333,7 +333,7 @@ long wxComboBox::GetInsertionPoint() const
     return (long)XmTextGetInsertionPosition( GetXmText(this) );
 }
 
-long wxComboBox::GetLastPosition() const
+wxTextPos wxComboBox::GetLastPosition() const
 {
     XmTextPosition pos = XmTextGetLastPosition( GetXmText(this) );
     return (long)pos;

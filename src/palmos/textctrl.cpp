@@ -378,7 +378,7 @@ long wxTextCtrl::GetInsertionPoint() const
     return 0;
 }
 
-long wxTextCtrl::GetLastPosition() const
+wxTextPos wxTextCtrl::GetLastPosition() const
 {
     return 0;
 }

@@ -763,7 +763,7 @@ long wxComboBox::GetInsertionPoint() const
     return GetText()->GetInsertionPoint();
 }
 
-long wxComboBox::GetLastPosition() const
+wxTextPos wxComboBox::GetLastPosition() const
 {
     return GetText()->GetLastPosition();
 }
@@ -892,7 +892,7 @@ wxClientData* wxComboBox::DoGetItemClientObject(int n) const
 
 bool wxComboBox::IsEditable() const
 {
-	return GetText() != NULL && (!HasFlag(wxCB_READONLY) || GetText()->IsEditable());
+    return GetText() != NULL && (!HasFlag(wxCB_READONLY) || GetText()->IsEditable());
 }
 
 void wxComboBox::Undo()

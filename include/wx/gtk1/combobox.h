@@ -5,7 +5,7 @@
 // Created:     01/02/97
 // Id:          $Id$
 // Copyright:   (c) 1998 Robert Roebling
-// Licence:   	wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 
@@ -111,7 +111,7 @@ public:
     void SetInsertionPoint( long pos );
     void SetInsertionPointEnd() { SetInsertionPoint( -1 ); }
     long GetInsertionPoint() const;
-    long GetLastPosition() const;
+    virtual wxTextPos GetLastPosition() const;
     void Remove(long from, long to) { Replace(from, to, wxEmptyString); }
     void Replace( long from, long to, const wxString& value );
     void SetSelection( long from, long to );

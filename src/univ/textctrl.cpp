@@ -47,7 +47,7 @@
    is true in which case a single LINE may correspond to multiple ROWs.
 
    A text position is an unsigned int (which for reasons of compatibility is
-   still a long) from 0 to GetLastPosition() inclusive. The positions
+   still a long as wxTextPos) from 0 to GetLastPosition() inclusive. The positions
    correspond to the gaps between the letters so the position 0 is just
    before the first character and the last position is the one beyond the last
    character. For an empty text control GetLastPosition() returns 0.
@@ -197,7 +197,7 @@ static inline void OrderPositions(wxTextPos& from, wxTextPos& to)
 
 // the value which is never used for text position, even not -1 which is
 // sometimes used for some special meaning
-static const wxTextPos INVALID_POS_VALUE = -2;
+static const wxTextPos INVALID_POS_VALUE = wxInvalidTextCoord;
 
 // overlap between pages (when using PageUp/Dn) in lines
 static const size_t PAGE_OVERLAP_IN_LINES = 1;
@@ -1670,7 +1670,7 @@ wxTextPos wxTextCtrl::XYToPosition(wxTextCoord x, wxTextCoord y) const
     // if they are out of range
     if ( IsSingleLine() )
     {
-        return x > GetLastPosition() || y > 0 ? wxDefaultCoord : x;
+        return ( x > GetLastPosition() || y > 0 ) ? wxOutOfRangeTextCoord : x;
     }
     else // multiline
     {

@@ -112,7 +112,7 @@ bool wxTextCtrl::Create(
                      ,rValidator
                      ,rsName
                     ))
-        return FALSE;
+        return false;
 
     wxPoint                         vPos = rPos; // The OS/2 position
     SWP                             vSwp;
@@ -123,7 +123,7 @@ bool wxTextCtrl::Create(
     }
 
     m_windowStyle = lStyle;
-    m_bIsMLE = FALSE;
+    m_bIsMLE = false;
 
     long                            lSstyle = WS_VISIBLE | WS_TABSTOP;
 
@@ -133,7 +133,7 @@ bool wxTextCtrl::Create(
     if ( m_windowStyle & wxTE_MULTILINE )
     {
         lSstyle |= MLS_BORDER | MLS_WORDWRAP;
-        m_bIsMLE = TRUE;
+        m_bIsMLE = true;
 
         if ((m_windowStyle & wxTE_NO_VSCROLL) == 0)
             lSstyle |= MLS_VSCROLL;
@@ -191,7 +191,7 @@ bool wxTextCtrl::Create(
 
     if (m_hWnd == 0)
     {
-        return FALSE;
+        return false;
     }
 
     SubclassWin(GetHWND());
@@ -205,7 +205,7 @@ bool wxTextCtrl::Create(
                                                             ,wxNORMAL
                                                            );
     SetFont(*pTextFont);
-    if (!rsValue.IsEmpty())
+    if (!rsValue.empty())
     {
         SetValue(rsValue);
     }
@@ -223,7 +223,7 @@ bool wxTextCtrl::Create(
             ,rSize.y
            );
     delete pTextFont;
-    return TRUE;
+    return true;
 } // end of wxTextCtrl::Create
 
 //
@@ -456,10 +456,10 @@ bool wxTextCtrl::CanCut() const
 
 bool wxTextCtrl::CanPaste() const
 {
-    bool                            bIsTextAvailable = FALSE;
+    bool                            bIsTextAvailable = false;
 
     if (!IsEditable())
-        return FALSE;
+        return false;
 
     //
     // Check for straight text on clipboard
@@ -502,7 +502,7 @@ void wxTextCtrl::SetInsertionPoint(
 
 void wxTextCtrl::SetInsertionPointEnd()
 {
-    long                            lPos = GetLastPosition();
+    wxTextPos                       lPos = GetLastPosition();
 
     //
     // We must not do anything if the caret is already there because calling
@@ -530,7 +530,7 @@ long wxTextCtrl::GetInsertionPoint() const
     return (dwPos & 0xFFFF);
 } // end of wxTextCtrl::GetInsertionPoint
 
-long wxTextCtrl::GetLastPosition() const
+wxTextPos wxTextCtrl::GetLastPosition() const
 {
     HWND                            hWnd = GetHwnd();
     long                            lCharIndex;
@@ -687,9 +687,9 @@ bool wxTextCtrl::LoadFile(
         // Update the size limit if needed
         //
         AdjustSpaceLimit();
-        return TRUE;
+        return true;
     }
-    return FALSE;
+    return false;
 } // end of wxTextCtrl::LoadFile
 
 bool wxTextCtrl::IsModified() const
@@ -773,7 +773,7 @@ bool wxTextCtrl::PositionToXY(
     if (nLineNo == -1)
     {
         // no such line
-        return FALSE;
+        return false;
     }
 
     //
@@ -805,7 +805,7 @@ bool wxTextCtrl::PositionToXY(
 
     if (lCharIndex == -1)
     {
-        return FALSE;
+        return false;
     }
 
     //
@@ -816,7 +816,7 @@ bool wxTextCtrl::PositionToXY(
     if (plY)
         *plY = nLineNo;
 
-    return TRUE;
+    return true;
 } // end of wxTextCtrl::PositionToXY
 
 void wxTextCtrl::ShowPosition(
@@ -956,7 +956,7 @@ bool wxTextCtrl::CanUndo() const
     if (m_bIsMLE)
         bOk = (::WinSendMsg(GetHwnd(), MLM_QUERYUNDO, 0, 0) != 0);
     else
-        bOk = FALSE; // can't undo regular edit fields in PM
+        bOk = false; // can't undo regular edit fields in PM
     return bOk;
 } // end of wxTextCtrl::CanUndo
 
@@ -967,7 +967,7 @@ bool wxTextCtrl::CanRedo() const
     if (m_bIsMLE)
         bOk = (::WinSendMsg(GetHwnd(), MLM_QUERYUNDO, 0, 0) != 0);
     else
-        bOk = FALSE; // can't undo regular edit fields in PM
+        bOk = false; // can't undo regular edit fields in PM
     return bOk;
 } // end of wxTextCtrl::CanRedo
 
@@ -1065,7 +1065,7 @@ void wxTextCtrl::OnChar(
                 wxNavigationKeyEvent    vEventNav;
 
                 vEventNav.SetDirection(!rEvent.ShiftDown());
-                vEventNav.SetWindowChange(FALSE);
+                vEventNav.SetWindowChange(false);
                 vEventNav.SetEventObject(this);
 
                 if ( GetEventHandler()->ProcessEvent(vEventNav) )
@@ -1117,15 +1117,15 @@ bool wxTextCtrl::OS2Command(
         case EN_SCROLL:
         case EN_INSERTMODETOGGLE:
         case EN_MEMERROR:
-            return FALSE;
+            return false;
         default:
-            return FALSE;
+            return false;
     }
 
     //
     // Processed
     //
-    return TRUE;
+    return true;
 } // end of wxTextCtrl::OS2Command
 
 void wxTextCtrl::AdjustSpaceLimit()
@@ -1148,7 +1148,7 @@ void wxTextCtrl::AdjustSpaceLimit()
         WNDPARAMS                   vParams;
 
         vParams.fsStatus = WPM_CBCTLDATA;
-	vParams.pCtlData = &Efd;
+        vParams.pCtlData = &Efd;
         vParams.cbCtlData = sizeof(ENTRYFDATA);
 
         if (::WinSendMsg( GetHwnd()
@@ -1325,7 +1325,7 @@ bool wxTextCtrl::SetBackgroundColour(
 {
     if (m_bIsMLE)
         ::WinSendMsg(GetHwnd(), MLM_SETBACKCOLOR, (MPARAM)rColour.GetPixel(), MLE_INDEX);
-    return TRUE;
+    return true;
 } // end of wxTextCtrl::SetBackgroundColour
 
 bool wxTextCtrl::SetForegroundColour(
@@ -1334,7 +1334,7 @@ bool wxTextCtrl::SetForegroundColour(
 {
     if (m_bIsMLE)
         ::WinSendMsg(GetHwnd(), MLM_SETTEXTCOLOR, (MPARAM)rColour.GetPixel(), MLE_INDEX);
-    return TRUE;
+    return true;
 } // end of wxTextCtrl::SetForegroundColour
 
 bool wxTextCtrl::SetStyle(
@@ -1381,6 +1381,6 @@ bool wxTextCtrl::SetStyle(
     //
     // TODO:: finish this part
     //
-    return TRUE;
+    return true;
 } // end of wxTextCtrl::SetStyle
 
