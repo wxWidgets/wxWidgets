@@ -189,6 +189,46 @@ only icon set by \helpref{SetIcon}{wxtoplevelwindowseticon}.
 \helpref{wxIconBundle}{wxiconbundle}.
 
 
+\membersection{wxTopLevelWindow::SetLeftMenu}\label{wxtoplevelwindowsetleftmenu}
+
+\func{void}{SetLeftMenu}{\param{int}{ id = wxID_ANY}, \param{const wxString\&}{ label = wxEmptyString}, \param{wxMenu *}{ subMenu = NULL}}
+
+Sets action or menu activated by pressing left hardware button on the smart phones.
+Unavailable on full keyboard machines.
+
+\wxheading{Parameters}
+
+\docparam{id}{Identifier for this button.}
+
+\docparam{label}{Text to be displayed on the screen area dedicated to this hardware button.}
+
+\docparam{subMenu}{The menu to be opened after pressing this hardware button.}
+
+\wxheading{See also}
+
+\helpref{wxTopLevelWindow::SetRightMenu}{wxtoplevelwindowsetrightmenu}.
+
+
+\membersection{wxTopLevelWindow::SetRightMenu}\label{wxtoplevelwindowsetrightmenu}
+
+\func{void}{SetRightMenu}{\param{int}{ id = wxID_ANY}, \param{const wxString\&}{ label = wxEmptyString}, \param{wxMenu *}{ subMenu = NULL}}
+
+Sets action or menu activated by pressing right hardware button on the smart phones.
+Unavailable on full keyboard machines.
+
+\wxheading{Parameters}
+
+\docparam{id}{Identifier for this button.}
+
+\docparam{label}{Text to be displayed on the screen area dedicated to this hardware button.}
+
+\docparam{subMenu}{The menu to be opened after pressing this hardware button.}
+
+\wxheading{See also}
+
+\helpref{wxTopLevelWindow::SetLeftMenu}{wxtoplevelwindowsetleftmenu}.
+
+
 \membersection{wxTopLevelWindow::SetShape}\label{wxtoplevelwindowsetshape}
 
 \func{bool}{SetShape}{\param{const wxRegion\&}{ region}}
