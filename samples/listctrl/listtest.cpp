@@ -33,6 +33,8 @@
 #include "listtest.h"
 
 BEGIN_EVENT_TABLE(MyFrame, wxFrame)
+	EVT_MENU(BUSY_ON, MyFrame::BusyOn)
+	EVT_MENU(BUSY_OFF, MyFrame::BusyOff)
 	EVT_MENU(LIST_QUIT, MyFrame::OnQuit)
 	EVT_MENU(LIST_ABOUT, MyFrame::OnAbout)
 	EVT_MENU(LIST_LIST_VIEW, MyFrame::OnListView)
@@ -129,6 +131,8 @@ bool MyApp::OnInit(void)
   file_menu->Append(LIST_SMALL_ICON_TEXT_VIEW, 	"Small icon &view with text");
   file_menu->Append(LIST_DESELECT_ALL, "&Deselect All");
   file_menu->Append(LIST_SELECT_ALL, "S&elect All");
+  file_menu->Append(BUSY_ON, 		"&Busy cursor on");
+  file_menu->Append(BUSY_OFF, 		"&Busy cursor off");
   file_menu->AppendSeparator();
   file_menu->Append(LIST_ABOUT, "&About");
   file_menu->Append(LIST_QUIT, "E&xit");
@@ -192,6 +196,16 @@ MyFrame::~MyFrame(void)
 void MyFrame::OnQuit(wxCommandEvent& WXUNUSED(event))
 {
   Close(TRUE);
+}
+
+void MyFrame::BusyOn(wxCommandEvent& WXUNUSED(event))
+{
+   wxBeginBusyCursor();
+}
+
+void MyFrame::BusyOff(wxCommandEvent& WXUNUSED(event))
+{
+   wxEndBusyCursor();
 }
 
 void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
@@ -266,9 +280,9 @@ void MyFrame::OnReportView(wxCommandEvent& WXUNUSED(event))
 
 void MyFrame::OnIconView(wxCommandEvent& WXUNUSED(event))
 {
-	m_listCtrl->DeleteAllItems();
-	m_logWindow->Clear();
-	m_listCtrl->SetSingleStyle(wxLC_ICON);
+   m_listCtrl->DeleteAllItems();
+   m_logWindow->Clear();
+   m_listCtrl->SetSingleStyle(wxLC_ICON);
     m_listCtrl->SetImageList(wxGetApp().m_imageListNormal, wxIMAGE_LIST_NORMAL);
     m_listCtrl->SetImageList(wxGetApp().m_imageListSmall, wxIMAGE_LIST_SMALL);
 

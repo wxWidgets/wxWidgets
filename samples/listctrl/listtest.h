@@ -26,7 +26,7 @@ public:
         wxListCtrl(parent, id, pos, size, style)
    {
    }
-
+   
 	void OnBeginDrag(wxListEvent& event);
 	void OnBeginRDrag(wxListEvent& event);
 	void OnBeginLabelEdit(wxListEvent& event);
@@ -64,7 +64,8 @@ class MyFrame: public wxFrame
     void OnSmallIconTextView(wxCommandEvent& event);
     void OnDeselectAll(wxCommandEvent& event);
     void OnSelectAll(wxCommandEvent& event);
-
+    void BusyOn(wxCommandEvent& event);
+    void BusyOff(wxCommandEvent& event);
    DECLARE_EVENT_TABLE()
 };
 
@@ -80,6 +81,8 @@ class MyFrame: public wxFrame
 #define LIST_DESELECT_ALL           8
 #define LIST_SELECT_ALL             9
 #define LIST_ABOUT                  102
+#define BUSY_ON                     10
+#define BUSY_OFF                    11
 
 #define LIST_CTRL                   1000
 
