@@ -311,6 +311,14 @@ bool wxComboBox::MSWCommand(WXUINT param, WXWORD WXUNUSED(id))
                 }
                 else // we're synthesizing text updated event from sel change
                 {
+                    // We need to retrieve the current selection because the user
+                    // may have changed it in the previous handler (for CBN_SELCHANGE
+                    // above).
+                    sel = GetSelection();
+                    if ( sel > -1 )
+                    {
+                        value = GetString(sel);
+                    }
                     // we need to do this because the user code expects
                     // wxComboBox::GetValue() to return the new value from
                     // "text updated" handler but it hadn't been updated yet
