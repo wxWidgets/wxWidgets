@@ -2,7 +2,8 @@
 
 wxList classes provide linked list functionality for wxWindows, and for an
 application if it wishes.  Depending on the form of constructor used, a list
-can be keyed on integer or string keys to provide a primitive look-up ability.
+can be keyed on integer or string keys to provide a primitive look-up ability,
+but please note that this feature is {\bf deprecated}.
 See \helpref{wxHashMap}{wxhashmap}\rtfsp for a faster method of storage
 when random access is required.
 
@@ -138,11 +139,13 @@ members for getting to the next or previous node.
 
 \func{}{wxList}{\void}
 
-\func{}{wxList}{\param{unsigned int}{ key\_type}}
-
 \func{}{wxList}{\param{int}{ n}, \param{T *}{objects[]}}
 
 \func{}{wxList}{\param{T *}{object}, ...}
+
+{\bf Note}: keyed lists are deprecated and should not be used in new code.
+
+\func{}{wxList}{\param{unsigned int}{ key\_type}}
 
 Constructors. {\it key\_type} is one of wxKEY\_NONE, wxKEY\_INTEGER, or wxKEY\_STRING,
 and indicates what sort of keying is required (if any).
@@ -162,6 +165,8 @@ client data held in the nodes.
 \membersection{wxList::Append}\label{wxlistappend}
 
 \func{wxNode<T> *}{Append}{\param{T *}{object}}
+
+{\bf Note}: keyed lists are deprecated and should not be used in new code.
 
 \func{wxNode<T> *}{Append}{\param{long}{ key}, \param{T *}{object}}
 
@@ -206,6 +211,8 @@ Finds the given client {\it object} and deletes the appropriate node from the li
 \func{wxNode<T> *}{Find}{\param{T *}{ object}}
 
 Returns the node whose client date is {\it object} or NULL if none found.
+
+{\bf Note}: keyed lists are deprecated and should not be used in new code.
 
 \func{wxNode<T> *}{Find}{\param{long}{ key}}
 
