@@ -15,7 +15,7 @@ version of SWIG.  Either get and build the current CVS version, or
 version 1.3.20 when it is released.  If you install this build of SWIG
 to a location that is not on the PATH (so it doesn't interfere with an
 existing SWIG install for example) then you can set a setup.py
-command-line variable named wxSWIG to be the full path name of the
+command-line variable named SWIG to be the full path name of the
 executable and the wxPython build will use it.  See below for an
 example.
 
@@ -117,7 +117,7 @@ place, then do the same for wxPython.
 
 	 USE_SWIG=1 SWIG=/opt/swig/bin/swig
 
-   When the setuyp.py command is done you should have fully populated
+   When the setup.py command is done you should have fully populated
    wxPython and wx packages locally in wxWindows/wxPython/wxPython and
    .../wx, with all the extension modules (*.so files) located in the
    wx package.
