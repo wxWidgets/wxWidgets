@@ -218,7 +218,9 @@ if os.name == 'nt':
             'advapi32', 'wsock32']
 
 
-    cflags = [] #['/GX-']  # workaround for internal compiler error in MSVC on some machines
+    cflags = [
+             # '/GX-'  # workaround for internal compiler error in MSVC on some machines
+             ]
     lflags = None
 
 

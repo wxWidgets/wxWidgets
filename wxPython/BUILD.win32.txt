@@ -242,6 +242,11 @@ C. To build and install wxPython you simply need to execute the
 
          HYBRID:    python setup.py HYBRID=1 install
 
+   NOTE:  If you get an internal compiler error from MSVC then you
+   need to edit setup.py and add in the /GX- flag that is normally
+   commented out.  Just search for "GX-" and uncomment it so it is put
+   into the cflags list.
+
 
 D. At this point you should be able to change into the wxPython\demo
    directory and run the demo:
