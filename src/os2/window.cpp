@@ -2051,7 +2051,7 @@ void wxWindowOS2::GetTextExtent(
     int                             i;
     int                             l;
     FONTMETRICS                     vFM; // metrics structure
-    BOOL                            bRc;
+    BOOL                            bRc = FALSE;
     char*                           pStr;
     ERRORID                         vErrorCode; // last error id code
     HPS                             hPS;
