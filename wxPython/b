@@ -33,7 +33,8 @@ python$PYVER -c "import sys;print '\n', sys.version, '\n'"
 SETUP="python$PYVER -u setup.py"
 FLAGS="USE_SWIG=1 SWIG=/opt/swig/bin/swig" 
 OTHERFLAGS=""
-PORTFLAGS=""
+PORTFLAGS="WXPORT=gtk2 UNICODE=1"
+
 
 
 if [ "$1" = "gtk1" -o "$1" = "gtk" ]; then 
