@@ -962,6 +962,8 @@ void wxExit()
     wxApp::CleanUp();
 } // end of wxExit
 
+static bool gs_inYield = FALSE;
+
 //
 // Yield to incoming messages
 //
@@ -975,6 +977,8 @@ bool wxYield()
     // normally result in message boxes popping up &c
     //
     wxLog::Suspend();
+
+    gs_inYield = TRUE;
 
     //
     // We want to go back to the main message loop
@@ -998,8 +1002,18 @@ bool wxYield()
     // Let the logs be flashed again
     //
     wxLog::Resume();
+    gs_inYield = FALSE;
     return TRUE;
 } // end of wxYield
+
+// Yield to incoming messages; but fail silently if recursion is detected.
+bool wxYieldIfNeeded()
+{
+    if (gs_inYield)
+        return FALSE;
+        
+    return wxYield();
+}
 
 wxIcon wxApp::GetStdIcon(
   int                               nWhich
