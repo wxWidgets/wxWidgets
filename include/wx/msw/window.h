@@ -297,7 +297,6 @@ public:
     bool HandleActivate(int flag, bool minimized, WXHWND activate);
 
     bool HandleCommand(WXWORD id, WXWORD cmd, WXHWND control);
-    bool HandleSysCommand(WXWPARAM wParam, WXLPARAM lParam);
 
     bool HandleCtlColor(WXHBRUSH *hBrush,
                         WXHDC hdc,

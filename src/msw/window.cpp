@@ -2529,10 +2529,6 @@ WXLRESULT wxWindowMSW::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM l
             break;
 #endif // __WXMICROWIN__
 
-        case WM_SYSCOMMAND:
-            processed = HandleSysCommand(wParam, lParam);
-            break;
-
         case WM_COMMAND:
             {
                 WORD id, cmd;
@@ -4285,23 +4281,6 @@ bool wxWindowMSW::HandleCommand(WXWORD id, WXWORD cmd, WXHWND control)
             return true;
     }
 #endif // wxUSE_SPINCTRL
-
-    return false;
-}
-
-bool wxWindowMSW::HandleSysCommand(WXWPARAM wParam, WXLPARAM WXUNUSED(lParam))
-{
-#ifndef __WXWINCE__
-    // 4 bits are reserved
-    switch ( wParam & 0xFFFFFFF0 )
-    {
-        case SC_MAXIMIZE:
-            return HandleMaximize();
-
-        case SC_MINIMIZE:
-            return HandleMinimize();
-    }
-#endif
 
     return false;
 }
