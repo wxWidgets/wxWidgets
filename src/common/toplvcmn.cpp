@@ -161,8 +161,7 @@ void wxTopLevelWindowBase::OnSize(wxSizeEvent& WXUNUSED(event))
 
             child->SetSize(ofs, ofs, clientW - 2*ofs, clientH - 2*ofs);
 #ifdef __WXPM__
-            child->MoveChildren(m_vSwpClient.cy - clientH);
-            ::WinQueryWindowPos(GetHwnd(), &m_vSwpClient);
+            UpdateInternalSize(child, clientH);
 #endif
         }
     }
@@ -181,7 +180,6 @@ bool wxTopLevelWindowBase::SendIconizeEvent(bool iconized)
 
     return GetEventHandler()->ProcessEvent(event);
 }
-
 
 // ----------------------------------------------------------------------------
 // interactive manipulation
