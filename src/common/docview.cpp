@@ -1819,6 +1819,8 @@ wxCommandProcessor::wxCommandProcessor(int maxCommands)
     m_maxNoCommands = maxCommands;
     m_currentCommand = (wxNode *) NULL;
     m_commandEditMenu = (wxMenu *) NULL;
+    m_undoAccelerator = wxT("\tCtrl+Z");
+    m_redoAccelerator = wxT("\tCtrl+Y");
 }
 
 wxCommandProcessor::~wxCommandProcessor()
@@ -1954,9 +1956,9 @@ void wxCommandProcessor::SetMenuStrings()
             if (commandName == wxT("")) commandName = _("Unnamed command");
             bool canUndo = command->CanUndo();
             if (canUndo)
-                buf = wxString(_("&Undo ")) + commandName;
+                buf = wxString(_("&Undo ")) + commandName + m_undoAccelerator;
             else
-                buf = wxString(_("Can't &Undo ")) + commandName;
+                buf = wxString(_("Can't &Undo ")) + commandName + m_undoAccelerator;
 
             m_commandEditMenu->SetLabel(wxID_UNDO, buf);
             m_commandEditMenu->Enable(wxID_UNDO, canUndo);
@@ -1967,24 +1969,24 @@ void wxCommandProcessor::SetMenuStrings()
                 wxCommand *redoCommand = (wxCommand *)m_currentCommand->Next()->Data();
                 wxString redoCommandName(redoCommand->GetName());
                 if (redoCommandName == wxT("")) redoCommandName = _("Unnamed command");
-                buf = wxString(_("&Redo ")) + redoCommandName;
+                buf = wxString(_("&Redo ")) + redoCommandName + m_redoAccelerator;
                 m_commandEditMenu->SetLabel(wxID_REDO, buf);
                 m_commandEditMenu->Enable(wxID_REDO, TRUE);
             }
             else
             {
-                m_commandEditMenu->SetLabel(wxID_REDO, _("&Redo"));
+                m_commandEditMenu->SetLabel(wxID_REDO, _("&Redo") + m_redoAccelerator);
                 m_commandEditMenu->Enable(wxID_REDO, FALSE);
             }
         }
         else
         {
-            m_commandEditMenu->SetLabel(wxID_UNDO, _("&Undo"));
+            m_commandEditMenu->SetLabel(wxID_UNDO, _("&Undo") + m_undoAccelerator);
             m_commandEditMenu->Enable(wxID_UNDO, FALSE);
 
             if (m_commands.Number() == 0)
             {
-                m_commandEditMenu->SetLabel(wxID_REDO, _("&Redo"));
+                m_commandEditMenu->SetLabel(wxID_REDO, _("&Redo") + m_redoAccelerator);
                 m_commandEditMenu->Enable(wxID_REDO, FALSE);
             }
             else
@@ -1994,7 +1996,7 @@ void wxCommandProcessor::SetMenuStrings()
                 wxCommand *redoCommand = (wxCommand *)m_commands.First()->Data();
                 wxString redoCommandName(redoCommand->GetName());
                 if (redoCommandName == wxT("")) redoCommandName = _("Unnamed command");
-                buf = wxString(_("&Redo ")) + redoCommandName;
+                buf = wxString(_("&Redo ")) + redoCommandName + m_redoAccelerator;
                 m_commandEditMenu->SetLabel(wxID_REDO, buf);
                 m_commandEditMenu->Enable(wxID_REDO, TRUE);
             }

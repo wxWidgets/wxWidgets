@@ -70,6 +70,18 @@ Returns the maximum number of commands that the command processor stores.
 
 Returns the edit menu associated with the command processor.
 
+\membersection{wxCommandProcessor::GetRedoAccelerator}\label{wxcommandprocessorgetredoaccelerator}
+
+\constfunc{const wxString\&}{GetRedoAccelerator}{\void}
+
+Returns the string that will be appended to the Redo menu item.
+
+\membersection{wxCommandProcessor::GetUndoAccelerator}\label{wxcommandprocessorgetundoaccelerator}
+
+\constfunc{const wxString\&}{GetUndoAccelerator}{\void}
+
+Returns the string that will be appended to the Undo menu item.
+
 \membersection{wxCommandProcessor::Initialize}
 
 \func{virtual void}{Initialize}{\void}
@@ -86,6 +98,18 @@ Tells the command processor to update the Undo and Redo items on this
 menu as appropriate. Set this to NULL if the menu is about to be
 destroyed and command operations may still be performed, or the command
 processor may try to access an invalid pointer.
+
+\membersection{wxCommandProcessor::SetRedoAccelerator}\label{wxcommandprocessorsetredoaccelerator}
+
+\func{void}{SetRedoAccelerator}{\param{const wxString\&}{accel}}
+
+Sets the string that will be appended to the Redo menu item.
+
+\membersection{wxCommandProcessor::SetUndoAccelerator}\label{wxcommandprocessorsetundoaccelerator}
+
+\func{void}{SetUndoAccelerator}{\param{const wxString\&}{accel}}
+
+Sets the string that will be appended to the Undo menu item.
 
 \membersection{wxCommandProcessor::Submit}
 

@@ -1,37 +1,41 @@
-#! /bin/sh
+#!/bin/sh
 
 # Zip up an external, generic + Windows distribution of wxWindows 2
-src=`cygpath -u $WXWIN`
-dest=$src/deliver
-wise=0
-wiseonly=0
+SRC=`cygpath -u $WXWIN`
+DEST=$SRC/deliver
+WISE=0
+WISEONLY=0
+# If your zip accepts Cygwin-style paths, then
+# use cygpath, else substitute echo
+CYGPATHPROG=cygpath
+#CYGPATHPROG=echo
 
 # Set this to the required version
-version=2.3.0
+VERSION=2.3.0
 
 dowise()
 {
-    cd $dest
+    cd $DEST
 
     # Unzip the Windows files into 'wx'
-    mkdir $dest/wx
+    mkdir $DEST/wx
 
     # After this change of directory, we're in the
     # temporary 'wx' directory and not acting on
     # the source wxWindows directory.
-    cd $dest/wx
-    unzip -o ../wxWindows-$version-msw.zip
-    unzip -o ../wxWindows-$version-gen.zip
-    unzip -o ../wxWindows-$version-vc.zip
-    unzip -o ../wxWindows-$version-bc.zip
-    unzip -o ../wxWindows-$version-HTMLHelp.zip
-    unzip -o ../extradoc.zip
+    cd $DEST/wx
+    unzip -o `$CYGPATHPROG -w ../wxWindows-$VERSION-msw.zip`
+    unzip -o `$CYGPATHPROG -w ../wxWindows-$VERSION-gen.zip`
+    unzip -o `$CYGPATHPROG -w ../wxWindows-$VERSION-vc.zip`
+    unzip -o `$CYGPATHPROG -w ../wxWindows-$VERSION-bc.zip`
+    unzip -o `$CYGPATHPROG -w ../wxWindows-$VERSION-HTMLHelp.zip`
+    unzip -o `$CYGPATHPROG -w ../extradoc.zip`
     # Need Word file, for Remstar DB classes
-    unzip -o ../wxWindows-$version-Word.zip
-    unzip -o ../ogl3.zip
-    unzip -o ../jpeg.zip
-    unzip -o ../tiff.zip
-    unzip -o ../tex2rtf2.zip
+    unzip -o `$CYGPATHPROG -w ../wxWindows-$VERSION-Word.zip`
+    unzip -o `$CYGPATHPROG -w ../ogl3.zip`
+    unzip -o `$CYGPATHPROG -w ../jpeg.zip`
+    unzip -o `$CYGPATHPROG -w ../tiff.zip`
+    unzip -o `$CYGPATHPROG -w ../tex2rtf2.zip`
 
     # Now delete a few files that are unnecessary
     # attrib -R *
@@ -46,20 +50,20 @@ dowise()
     rm -f contrib/docs/htmlhelp/stc.*
     rm -f contrib/docs/pdf/*.*
     rm -f -r contrib/docs/latex/ogl
-    rm -f src/mingegcs.bat
+    rm -f SRC/mingegcs.bat
     rm -f distrib
 
     # Now copy some binary files to 'bin'
     mkdir bin
-    cp $src/bin/dialoged.exe bin
-    cp $src/bin/tex2rtf.exe bin
-    cp $src/bin/dbgview.* bin
-    cp $src/bin/life.exe bin
-    cp $src/docs/winhelp/dialoged.hlp $src/docs/winhelp/dialoged.cnt bin
-    cp $src/docs/winhelp/tex2rtf.hlp $src/docs/winhelp/tex2rtf.cnt bin
+    cp $SRC/bin/dialoged.exe bin
+    cp $SRC/bin/tex2rtf.exe bin
+    cp $SRC/bin/dbgview.* bin
+    cp $SRC/bin/life.exe bin
+    cp $SRC/docs/winhelp/dialoged.hlp $SRC/docs/winhelp/dialoged.cnt bin
+    cp $SRC/docs/winhelp/tex2rtf.hlp $SRC/docs/winhelp/tex2rtf.cnt bin
 
     # Make wxMSW-xxx.zip
-    zip -r ../wxMSW-$version.zip *
+    zip -r `$CYGPATHPROG -w ../wxMSW-$VERSION.zip` *
 
     # Time to regenerate the WISE install script, wxwin2.wse.
     # NB: if you've changed wxwin2.wse using WISE, call splitwise.exe
@@ -68,7 +72,7 @@ dowise()
 
     sh $WXWIN/distrib/msw/makewise.sh
 
-    rm -f $dest/setup.*
+    rm -f $DEST/setup.*
 
     # Now invoke WISE install on the new wxwin2.wse
     echo Invoking WISE...
@@ -76,7 +80,7 @@ dowise()
     echo Press return to continue with the wxWindows distribution...
     read dummy
 
-    cd $dest
+    cd $DEST
 
     # tidy up capitalisation of filenames
     mv setup.EXE s
@@ -107,7 +111,7 @@ dowise()
     mv s setup.w09
 
     # Put all the setup files into a single zip archive.
-    zip wxMSW-$version-setup.zip readme.txt setup.*
+    zip wxMSW-$VERSION-setup.zip readme.txt setup.*
 }
 
 expandlines()
@@ -127,8 +131,8 @@ expandlines()
 # Process command line options.
 for i in "$@"; do
     case "$i" in
-	--wise) wise=1 ;;
-	--wiseonly) wiseonly=1 ;;
+	--wise) WISE=1 ;;
+	--wiseonly) WISEONLY=1 ;;
 	*)
 	    echo Usage: $0 "[ options ]" 1>&2
 	    echo Options:
@@ -139,178 +143,178 @@ for i in "$@"; do
     esac
 done
 
-if [ ! -d "$src" ]; then
-    echo $src not found.
+if [ ! -d "$SRC" ]; then
+    echo $SRC not found.
     exit 1
 fi
 
-if [ ! -d "$dest" ]; then
-    echo $dest not found.
+if [ ! -d "$DEST" ]; then
+    echo $DEST not found.
     exit 1
 fi
 
-echo Creating distribution in $dest. Press return to continue.
+echo Creating distribution in $DEST. Press return to continue.
 read dummy
 
-if [ "$wiseonly" != "0" ]; then
+if [ "$WISEONLY" != "0" ]; then
         dowise
         exit 0
 fi
 
 # Remove all existing files
-rm -f  $dest/wx*.zip
-rm -f  $dest/*.htb
-rm -f  $dest/ogl3.zip
-rm -f  $dest/tex2rtf2.zip
-rm -f  $dest/jpeg.zip
-rm -f  $dest/tiff.zip
-rm -f  $dest/dialoged.zip
-rm -f  $dest/utils.zip
-rm -f  $dest/extradoc.zip
-rm -f  $dest/*-win32.zip
+rm -f  $DEST/wx*.zip
+rm -f  $DEST/*.htb
+rm -f  $DEST/ogl3.zip
+rm -f  $DEST/tex2rtf2.zip
+rm -f  $DEST/jpeg.zip
+rm -f  $DEST/tiff.zip
+rm -f  $DEST/dialoged.zip
+rm -f  $DEST/utils.zip
+rm -f  $DEST/extradoc.zip
+rm -f  $DEST/*-win32.zip
 
-if [ ! -d "$dest/wx" ]; then
-    rm -f -r $dest/wx
+if [ ! -d "$DEST/wx" ]; then
+    rm -f -r $DEST/wx
 fi
 
 
-cd $src
+cd $SRC
 echo Zipping...
 
 # Below is the old-style separated-out format. This is retained only
 # for local use, and for creating wxMSW-xxx.zip.
 
 # We can't use e.g. this:
-# ls `cat $src/distrib/msw/makefile.rsp` zip -@ -u $dest/wxWindows-$version-gen.zip
+# ls `cat $SRC/distrib/msw/makefile.rsp` zip -@ -u $DEST/wxWindows-$VERSION-gen.zip
 # because there's not enough space on the command line, plus we need to ignore the
 # blank lines.
 
-expandlines $src/distrib/msw/generic.rsp temp.txt
-zip -@ $dest/wxWindows-$version-gen.zip < temp.txt
+expandlines $SRC/distrib/msw/generic.rsp temp.txt
+zip -@ `$CYGPATHPROG -w $DEST/wxWindows-$VERSION-gen.zip` < temp.txt
 
-expandlines $src/distrib/msw/makefile.rsp temp.txt
-zip -@ -u $dest/wxWindows-$version-gen.zip < temp.txt
+expandlines $SRC/distrib/msw/makefile.rsp temp.txt
+zip -@ -u `$CYGPATHPROG -w $DEST/wxWindows-$VERSION-gen.zip` < temp.txt
 
-expandlines $src/distrib/msw/msw.rsp temp.txt
-zip -@ $dest/wxWindows-$version-msw.zip < temp.txt
+expandlines $SRC/distrib/msw/msw.rsp temp.txt
+zip -@ `$CYGPATHPROG -w $DEST/wxWindows-$VERSION-msw.zip` < temp.txt
 
-expandlines $src/distrib/msw/makefile.rsp temp.txt
-zip -@ -u $dest/wxWindows-$version-msw.zip < temp.txt
+expandlines $SRC/distrib/msw/makefile.rsp temp.txt
+zip -@ -u `$CYGPATHPROG -w $DEST/wxWindows-$VERSION-msw.zip` < temp.txt
 
-expandlines $src/distrib/msw/gtk.rsp temp.txt
-zip -@ $dest/wxWindows-$version-gtk.zip < temp.txt
+expandlines $SRC/distrib/msw/gtk.rsp temp.txt
+zip -@ `$CYGPATHPROG -w $DEST/wxWindows-$VERSION-gtk.zip` < temp.txt
 
-expandlines $src/distrib/msw/makefile.rsp temp.txt
-zip -@ -u $dest/wxWindows-$version-gtk.zip < temp.txt
+expandlines $SRC/distrib/msw/makefile.rsp temp.txt
+zip -@ -u `$CYGPATHPROG -w $DEST/wxWindows-$VERSION-gtk.zip` < temp.txt
 
-expandlines $src/distrib/msw/stubs.rsp temp.txt
-zip -@ $dest/wxWindows-$version-stubs.zip < temp.txt
+expandlines $SRC/distrib/msw/stubs.rsp temp.txt
+zip -@ `$CYGPATHPROG -w $DEST/wxWindows-$VERSION-stubs.zip` < temp.txt
 
-expandlines $src/distrib/msw/motif.rsp temp.txt
-zip -@ $dest/wxWindows-$version-mot.zip < temp.txt
+expandlines $SRC/distrib/msw/motif.rsp temp.txt
+zip -@ `$CYGPATHPROG -w $DEST/wxWindows-$VERSION-mot.zip` < temp.txt
 
-expandlines $src/distrib/msw/makefile.rsp temp.txt
-zip -@ -u $dest/wxWindows-$version-mot.zip < temp.txt
+expandlines $SRC/distrib/msw/makefile.rsp temp.txt
+zip -@ -u `$CYGPATHPROG -w $DEST/wxWindows-$VERSION-mot.zip` < temp.txt
 
 
-expandlines $src/distrib/msw/docsrc.rsp temp.txt
-zip -@ $dest/wxWindows-$version-DocSource.zip < temp.txt
+expandlines $SRC/distrib/msw/docsrc.rsp temp.txt
+zip -@ `$CYGPATHPROG -w $DEST/wxWindows-$VERSION-DocSource.zip` < temp.txt
 
-expandlines $src/distrib/msw/wx_hlp.rsp temp.txt
-zip -@ $dest/wxWindows-$version-WinHelp.zip < temp.txt
+expandlines $SRC/distrib/msw/wx_hlp.rsp temp.txt
+zip -@ `$CYGPATHPROG -w $DEST/wxWindows-$VERSION-WinHelp.zip` < temp.txt
 
-expandlines $src/distrib/msw/wx_html.rsp temp.txt
-zip -@ $dest/wxWindows-$version-HTML.zip < temp.txt
+expandlines $SRC/distrib/msw/wx_html.rsp temp.txt
+zip -@ `$CYGPATHPROG -w $DEST/wxWindows-$VERSION-HTML.zip` < temp.txt
 
-expandlines $src/distrib/msw/wx_pdf.rsp temp.txt
-zip -@ $dest/wxWindows-$version-PDF.zip < temp.txt
+expandlines $SRC/distrib/msw/wx_pdf.rsp temp.txt
+zip -@ `$CYGPATHPROG -w $DEST/wxWindows-$VERSION-PDF.zip` < temp.txt
 
-expandlines $src/distrib/msw/wx_word.rsp temp.txt
-zip -@ $dest/wxWindows-$version-Word.zip < temp.txt
+expandlines $SRC/distrib/msw/wx_word.rsp temp.txt
+zip -@ `$CYGPATHPROG -w $DEST/wxWindows-$VERSION-Word.zip` < temp.txt
 
-expandlines $src/distrib/msw/wx_htb.rsp temp.txt
-zip -@ $dest/wxWindows-$version-HTB.zip < temp.txt
+expandlines $SRC/distrib/msw/wx_htb.rsp temp.txt
+zip -@ `$CYGPATHPROG -w $DEST/wxWindows-$VERSION-HTB.zip` < temp.txt
 
-expandlines $src/distrib/msw/wx_chm.rsp temp.txt
-zip -@ $dest/wxWindows-$version-HTMLHelp.zip < temp.txt
+expandlines $SRC/distrib/msw/wx_chm.rsp temp.txt
+zip -@ `$CYGPATHPROG -w $DEST/wxWindows-$VERSION-HTMLHelp.zip` < temp.txt
 
 # PDF/HTML docs that should go into the Windows setup because
 # there are no WinHelp equivalents
-expandlines $src/distrib/msw/extradoc.rsp temp.txt
-zip -@ $dest/extradoc.zip < temp.txt
+expandlines $SRC/distrib/msw/extradoc.rsp temp.txt
+zip -@ `$CYGPATHPROG -w $DEST/extradoc.zip` < temp.txt
 
 # VC++ project files
-expandlines $src/distrib/msw/vc.rsp temp.txt
-zip -@ $dest/wxWindows-$version-vc.zip < temp.txt
+expandlines $SRC/distrib/msw/vc.rsp temp.txt
+zip -@ `$CYGPATHPROG -w $DEST/wxWindows-$VERSION-vc.zip` < temp.txt
 
 # BC++ project files
-expandlines $src/distrib/msw/bc.rsp temp.txt
-zip -@ $dest/wxWindows-$version-bc.zip < temp.txt
+expandlines $SRC/distrib/msw/bc.rsp temp.txt
+zip -@ `$CYGPATHPROG -w $DEST/wxWindows-$VERSION-bc.zip` < temp.txt
 
 # CodeWarrior project files
-expandlines $src/distrib/msw/cw.rsp temp.txt
-zip -@ $dest/wxWindows-$version-cw.zip < temp.txt
+expandlines $SRC/distrib/msw/cw.rsp temp.txt
+zip -@ `$CYGPATHPROG -w $DEST/wxWindows-$VERSION-cw.zip` < temp.txt
 
 # OGL 3
-expandlines $src/distrib/msw/ogl.rsp temp.txt
-zip -@ $dest/ogl3.zip < temp.txt
+expandlines $SRC/distrib/msw/ogl.rsp temp.txt
+zip -@ `$CYGPATHPROG -w $DEST/ogl3.zip` < temp.txt
 
 # MMedia
-expandlines $src/distrib/msw/mmedia.rsp temp.txt
-zip -@ $dest/mmedia.zip < temp.txt
+expandlines $SRC/distrib/msw/mmedia.rsp temp.txt
+zip -@ `$CYGPATHPROG -w $DEST/mmedia.zip` < temp.txt
 
 # STC (Scintilla widget)
-expandlines $src/distrib/msw/stc.rsp temp.txt
-zip -@ $dest/stc.zip < temp.txt
+expandlines $SRC/distrib/msw/stc.rsp temp.txt
+zip -@ `$CYGPATHPROG -w $DEST/stc.zip` < temp.txt
 
 # Tex2RTF
-expandlines $src/distrib/msw/tex2rtf.rsp temp.txt
-zip -@ $dest/tex2rtf2.zip < temp.txt
+expandlines $SRC/distrib/msw/tex2rtf.rsp temp.txt
+zip -@ `$CYGPATHPROG -w $DEST/tex2rtf2.zip` < temp.txt
 
 # JPEG source
-expandlines $src/distrib/msw/jpeg.rsp temp.txt
-zip -@ $dest/jpeg.zip < temp.txt
+expandlines $SRC/distrib/msw/jpeg.rsp temp.txt
+zip -@ `$CYGPATHPROG -w $DEST/jpeg.zip` < temp.txt
 
 # TIFF source
-expandlines $src/distrib/msw/tiff.rsp temp.txt
-zip -@ $dest/tiff.zip < temp.txt
+expandlines $SRC/distrib/msw/tiff.rsp temp.txt
+zip -@ `$CYGPATHPROG -w $DEST/tiff.zip` < temp.txt
 
 # Dialog Editor source and binary
-rm -f  $dest/dialoged_source.zip
-expandlines $src/distrib/msw/dialoged.rsp temp.txt
-zip -@ $dest/dialoged_source.zip < temp.txt
-zip -j $dest/dialoged.zip $dest/dialoged_source.zip $src/bin/dialoged.exe $src/docs/winhelp/dialoged.hlp $src/docs/winhelp/dialoged.cnt
-rm -f  $dest/dialoged_source.zip
+rm -f  $DEST/dialoged_source.zip
+expandlines $SRC/distrib/msw/dialoged.rsp temp.txt
+zip -@ `$CYGPATHPROG -w $DEST/dialoged_source.zip` < temp.txt
+zip -j `$CYGPATHPROG -w $DEST/dialoged.zip` $DEST/dialoged_source.zip $SRC/bin/dialoged.exe $SRC/docs/winhelp/dialoged.hlp $SRC/docs/winhelp/dialoged.cnt
+rm -f  $DEST/dialoged_source.zip
 
 # Misc. utils not in the main distribution
-expandlines $src/distrib/msw/utils.rsp temp.txt
-zip -@ $dest/utils.zip < temp.txt
-expandlines $src/distrib/msw/utilmake.rsp temp.txt
-zip -@ -u $dest/utilmake.zip < temp.txt
+expandlines $SRC/distrib/msw/utils.rsp temp.txt
+zip -@ `$CYGPATHPROG -w $DEST/utils.zip` < temp.txt
+expandlines $SRC/distrib/msw/utilmake.rsp temp.txt
+zip -@ -u `$CYGPATHPROG -w $DEST/utilmake.zip` < temp.txt
 
 rm -f temp.txt
 
 # Make dialoged-win32.zip and tex2rtf-win32.zip
 
-cd $src/bin
+cd $SRC/bin
 
-zip $dest/dialoged-win32.zip dialoged.*
-zip $dest/tex2rtf-win32.zip tex2rtf.*
+zip `$CYGPATHPROG -w $DEST/dialoged-win32.zip` dialoged.*
+zip `$CYGPATHPROG -w $DEST/tex2rtf-win32.zip` tex2rtf.*
 
-cp $src/docs/changes.txt $dest
-cp $src/docs/msw/install.txt $dest/install_msw.txt
-cp $src/docs/motif/install.txt $dest/install_motif.txt
-cp $src/docs/gtk/install.txt $dest/install_gtk.txt
-cp $src/docs/readme.txt $dest
-cp $src/docs/motif/readme.txt $dest/readme_motif.txt
-cp $src/docs/gtk/readme.txt $dest/readme_gtk.txt
-cp $src/docs/msw/readme.txt $dest/readme_msw.txt
-cp $src/docs/readme_vms.txt $dest
-cp $src/docs/motif/makewxmotif $dest
-cp $src/docs/gtk/makewxgtk $dest
+cp $SRC/docs/changes.txt $DEST
+cp $SRC/docs/msw/install.txt $DEST/install_msw.txt
+cp $SRC/docs/motif/install.txt $DEST/install_motif.txt
+cp $SRC/docs/gtk/install.txt $DEST/install_gtk.txt
+cp $SRC/docs/readme.txt $DEST
+cp $SRC/docs/motif/readme.txt $DEST/readme_motif.txt
+cp $SRC/docs/gtk/readme.txt $DEST/readme_gtk.txt
+cp $SRC/docs/msw/readme.txt $DEST/readme_msw.txt
+cp $SRC/docs/readme_vms.txt $DEST
+cp $SRC/docs/motif/makewxmotif $DEST
+cp $SRC/docs/gtk/makewxgtk $DEST
 
-# Skip WISE setup if wise is 0.
-if [ "$wise" = "1" ]; then
+# Skip WISE setup if WISE is 0.
+if [ "$WISE" = "1" ]; then
     dowise
 fi
 

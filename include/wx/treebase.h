@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        treectrl.h
+// Name:        treebase.h
 // Purpose:     wxTreeCtrl base classes and types
 // Author:      Julian Smart et al
 // Modified by:

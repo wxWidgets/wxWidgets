@@ -565,11 +565,20 @@ public:
     int GetMaxCommands() const { return m_maxNoCommands; }
     virtual void ClearCommands();
 
+    // By default, the accelerators are "\tCtrl+Z" and "\tCtrl+Y"
+    const wxString& GetUndoAccelerator() const { return m_undoAccelerator; }
+    const wxString& GetRedoAccelerator() const { return m_redoAccelerator; }
+
+    void SetUndoAccelerator(const wxString& accel) { m_undoAccelerator = accel; }
+    void SetRedoAccelerator(const wxString& accel) { m_redoAccelerator = accel; }
+
 protected:
     int           m_maxNoCommands;
     wxList        m_commands;
     wxNode*       m_currentCommand;
     wxMenu*       m_commandEditMenu;
+    wxString      m_undoAccelerator;
+    wxString      m_redoAccelerator;
 };
 
 // ----------------------------------------------------------------------------

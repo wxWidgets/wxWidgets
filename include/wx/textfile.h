@@ -98,7 +98,7 @@ public:
     // you're using "direct access" i.e. GetLine()
   size_t GetCurrentLine() const { return m_nCurLine; }
   void GoToLine(size_t n) { m_nCurLine = n; }
-  bool Eof() const { return m_nCurLine == m_aLines.Count() - 1; }
+  bool Eof() const { return (m_aLines.Count() == 0 || m_nCurLine == m_aLines.Count() - 1); }
 
     // these methods allow more "iterator-like" traversal of the list of
     // lines, i.e. you may write something like:

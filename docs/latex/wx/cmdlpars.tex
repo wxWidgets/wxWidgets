@@ -14,7 +14,8 @@
 wxCmdLineParser is a class for parsing command line.
 
 It has the following features:
-\begin{enumerate}
+
+\begin{enumerate}\itemsep=0pt
 \item distinguishes options, switches and parameters; allows option grouping
 \item allows both short and long options
 \item automatically generates the usage message from the command line description
@@ -22,7 +23,8 @@ It has the following features:
 \end{enumerate}
 
 To use it you should follow these steps:
-\begin{enumerate}
+
+\begin{enumerate}\itemsep=0pt
 \item \helpref{construct}{wxcmdlineparserconstruction} an object of this class
 giving it the command line to parse and optionally its description or use 
 {\tt AddXXX()} functions later
@@ -73,7 +75,9 @@ struct wxCmdLineEntryDesc
 
 The type of a command line entity is in the {\tt kind} field and may be one of
 the following constants:
-{\small \begin{verbatim}
+
+{\small%
+\begin{verbatim}
 enum wxCmdLineEntryType
 {
     wxCMD\_LINE\_SWITCH,
@@ -93,7 +97,9 @@ to construct a help message explaining the syntax of the program.
 
 The possible values of {\tt type} which specifies the type of the value accepted
 by an option or parameter are:
-{\small \begin{verbatim}
+
+{\small%
+\begin{verbatim}
 enum wxCmdLineParamType
 {
     wxCMD\_LINE\_VAL\_STRING,  // default
@@ -104,7 +110,9 @@ enum wxCmdLineParamType
 \end{verbatim}}
 
 Finally, the {\tt flags} field is a combination of the following bit masks:
-{\small \begin{verbatim}
+
+{\small%
+\begin{verbatim}
 enum
 {
     wxCMD\_LINE\_OPTION\_MANDATORY = 0x01, // this option must be given
