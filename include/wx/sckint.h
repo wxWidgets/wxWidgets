@@ -126,13 +126,14 @@ class wxSocketInternal {
   SockRequest *WaitForReq();
   void EndRequest(SockRequest *req);
  public:
-  wxMutex m_socket_locker, m_fd_locker, m_request_locker;
+  wxMutex m_socket_locker, m_fd_locker, m_request_locker, m_end_requester;
   wxCondition m_socket_cond;
   wxSocketBase *m_socket;
   SocketWaiter *m_thread_waiter;
   SocketRequester *m_thread_requester;
   wxList m_requests;
   int m_fd;
+  bool m_invalid_requester;
 };
 
 #endif

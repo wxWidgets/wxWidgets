@@ -161,11 +161,9 @@ void *SocketWaiter::Entry()
 #endif
 #endif
 
-/*
     if (ret == 0)
       // If nothing happened, we wait for 100 ms.
       wxUsleep(10);
-*/
 
     // Check whether we should exit.
     if (TestDestroy()) {
@@ -291,8 +289,13 @@ void *SocketRequester::Entry()
   while (1) {
     // Wait for a new request or a destroy message.
     req = m_internal->WaitForReq();
-    if (TestDestroy() || req == NULL)
+    m_internal->m_end_requester.Lock();
+    if (TestDestroy() || req == NULL) {
+      m_internal->m_invalid_requester = TRUE;
+      m_internal->m_end_requester.Unlock();
       return NULL;
+    }
+    m_internal->m_end_requester.Unlock();
 
     if ((req->type & wxSocketBase::REQ_WAIT) != 0) {
       ProcessWaitEvent(req);
@@ -321,12 +324,15 @@ wxSocketInternal::wxSocketInternal(wxSocketBase *socket)
   m_socket = socket;
   m_thread_requester = NULL;
   m_thread_waiter = NULL;
+  m_invalid_requester = TRUE;
   m_request_locker.Lock();
 }
 
 wxSocketInternal::~wxSocketInternal()
 {
+  StopRequester();
   wxASSERT(m_thread_requester == NULL);
+  StopWaiter();
   wxASSERT(m_thread_waiter == NULL);
   m_request_locker.Unlock();
 }
@@ -341,7 +347,7 @@ SockRequest *wxSocketInternal::WaitForReq()
 
   node = m_requests.First();
   if (node == NULL) {
-    m_socket_cond.Wait(m_request_locker);
+    m_socket_cond.Wait(m_request_locker, 1, 0);
 
     node = m_requests.First();
     if (node == NULL)
@@ -381,18 +387,33 @@ void wxSocketInternal::ResumeRequester()
 
   wxASSERT(m_thread_requester == NULL);
 
-  m_thread_requester = new SocketRequester(m_socket, this);
-  m_thread_requester->m_fd = m_socket->m_fd;
+  m_end_requester.Lock();
+  if (m_invalid_requester) {
+    delete m_thread_requester;
 
-  err = m_thread_requester->Create();
-  wxASSERT(err == wxTHREAD_NO_ERROR);
+    m_thread_requester = new SocketRequester(m_socket, this);
+    m_thread_requester->m_fd = m_socket->m_fd;
 
-  err = m_thread_requester->Run();
-  wxASSERT(err == wxTHREAD_NO_ERROR);
+    err = m_thread_requester->Create();
+    wxASSERT(err == wxTHREAD_NO_ERROR);
+
+    err = m_thread_requester->Run();
+    wxASSERT(err == wxTHREAD_NO_ERROR);
+
+    m_invalid_requester = FALSE;
+  }
+  m_end_requester.Unlock();
 }
 
 void wxSocketInternal::StopRequester()
 {
+  if (m_invalid_requester) {
+    delete m_thread_requester;
+    m_thread_requester = NULL;
+    m_invalid_requester = FALSE;
+    return;
+  }
+
   wxASSERT(m_thread_requester != NULL);
 
   m_socket_locker.Lock();
@@ -429,7 +450,6 @@ void wxSocketInternal::ResumeWaiter()
 
 void wxSocketInternal::StopWaiter()
 {
-/*
   if (m_thread_waiter == NULL)
     return;
 
@@ -437,7 +457,6 @@ void wxSocketInternal::StopWaiter()
 
   delete m_thread_waiter;
   m_thread_waiter = NULL;
-*/
 }
 
 // ----------------------------------------------------------------------
