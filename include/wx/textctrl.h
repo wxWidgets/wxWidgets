@@ -337,7 +337,7 @@ class WXDLLEXPORT wxStreamToTextRedirector
 {
 public:
     wxStreamToTextRedirector(wxTextCtrl *text, wxSTD ostream *ostr = NULL)
-        : m_ostr(ostr ? *ostr : wxSTD::cout)
+        : m_ostr(ostr ? *ostr : wxSTD cout)
     {
         m_sbufOld = m_ostr.rdbuf();
         m_ostr.rdbuf(text);
