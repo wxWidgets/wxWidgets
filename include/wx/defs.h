@@ -886,6 +886,19 @@ inline void *wxUIntToPtr(wxUIntPtr p)
 #endif
 
 
+/* Make sure ssize_t is defined (a signed type the same size as size_t) */
+/* HAVE_SSIZE_T should be defined for compiliers that already have it */
+#ifndef HAVE_SSIZE_T
+    #if SIZEOF_SIZE_T == 4
+        typedef wxInt32 ssize_t;
+    #elif SIZEOF_SIZE_T == 8
+        typedef wxInt64 ssize_t
+    #else
+        #error "error defining ssize_t, size_t is not 4 or 8 bytes"
+    #endif
+#endif
+
+
 /*  base floating point types */
 /*  wxFloat32: 32 bit IEEE float ( 1 sign, 8 exponent bits, 23 fraction bits */
 /*  wxFloat64: 64 bit IEEE float ( 1 sign, 11 exponent bits, 52 fraction bits */

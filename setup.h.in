@@ -39,6 +39,9 @@
 /* Define to `unsigned' if <sys/types.h> doesn't define.  */
 #undef size_t
 
+/* Define if ssize_t type is available.  */
+#undef HAVE_SSIZE_T
+
 /* Define if you have the ANSI C header files.  */
 #undef STDC_HEADERS
 

@@ -3477,6 +3477,9 @@ AC_TYPE_SIZE_T
 dnl   defines uid_t and gid_t if not already defined
 AC_TYPE_UID_T
 
+dnl sets HAVE_SSIZE_T if ssize_t is defined
+AC_CHECK_TYPES(ssize_t)
+
 dnl check what exactly size_t is on this machine - this is necessary to avoid
 dnl ambiguous overloads in several places, notably wx/string.h and wx/array.h
 AC_LANG_SAVE

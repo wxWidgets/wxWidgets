@@ -144,14 +144,6 @@
     #include "wx/msw/private.h"
 #endif
 
-#if !defined __UNIX__ && !defined __DJGPP__
-    #ifdef __WXWINCE__
-        typedef int ssize_t;
-    #else
-        typedef ptrdiff_t ssize_t;
-    #endif
-#endif
-wxCOMPILE_TIME_ASSERT(sizeof(ssize_t) == sizeof(size_t), ssize_t_wrong_size);
 
 // ============================================================================
 // implementation of wxFile
