@@ -463,11 +463,11 @@ private:                                                                 \
 // Some commonly used predefined base arrays
 // ----------------------------------------------------------------------------
 
-WX_DECLARE_EXPORTED_BASEARRAY(void *, wxBaseArrayPtrVoid);
-WX_DECLARE_EXPORTED_BASEARRAY(short,  wxBaseArrayShort);
-WX_DECLARE_EXPORTED_BASEARRAY(int,    wxBaseArrayInt);
-WX_DECLARE_EXPORTED_BASEARRAY(long,   wxBaseArrayLong);
-WX_DECLARE_EXPORTED_BASEARRAY(double, wxBaseArrayDouble);
+WX_DECLARE_EXPORTED_BASEARRAY(const void *, wxBaseArrayPtrVoid);
+WX_DECLARE_EXPORTED_BASEARRAY(short,        wxBaseArrayShort);
+WX_DECLARE_EXPORTED_BASEARRAY(int,          wxBaseArrayInt);
+WX_DECLARE_EXPORTED_BASEARRAY(long,         wxBaseArrayLong);
+WX_DECLARE_EXPORTED_BASEARRAY(double,       wxBaseArrayDouble);
 
 // ----------------------------------------------------------------------------
 // Convenience macros to define arrays from base arrays

@@ -48,7 +48,7 @@
 // wxBaseArray - dynamic array of 'T's
 // ----------------------------------------------------------------------------
 
-#define _DECLARE_BASEARRAY(T, name)                                         \
+#define _WX_DEFINE_BASEARRAY(T, name)                                       \
 /* ctor */                                                                  \
 name::name()                                                                \
 {                                                                           \
@@ -217,7 +217,7 @@ size_t name::IndexForInsert(T lItem, CMPFUNC fnCompare) const               \
   while ( lo < hi ) {                                                       \
     i = (lo + hi)/2;                                                        \
                                                                             \
-    res = (*fnCompare)((const void *)&lItem, (const void *)&(m_pItems[i])); \
+    res = (*fnCompare)((const void *)lItem, (const void *)(m_pItems[i]));   \
     if ( res < 0 )                                                          \
       hi = i;                                                               \
     else if ( res > 0 )                                                     \
@@ -292,9 +292,9 @@ void name::Sort(CMPFUNC fCmp)                                               \
   qsort(m_pItems, m_nCount, sizeof(T), fCmp);                               \
 }
 
-_DECLARE_BASEARRAY(void *, wxBaseArrayPtrVoid)
-_DECLARE_BASEARRAY(short,  wxBaseArrayShort)
-_DECLARE_BASEARRAY(int,    wxBaseArrayInt)
-_DECLARE_BASEARRAY(long,   wxBaseArrayLong)
-_DECLARE_BASEARRAY(double, wxBaseArrayDouble)
+_WX_DEFINE_BASEARRAY(const void *, wxBaseArrayPtrVoid)
+_WX_DEFINE_BASEARRAY(short,        wxBaseArrayShort)
+_WX_DEFINE_BASEARRAY(int,          wxBaseArrayInt)
+_WX_DEFINE_BASEARRAY(long,         wxBaseArrayLong)
+//_WX_DEFINE_BASEARRAY(double,       wxBaseArrayDouble)
 
