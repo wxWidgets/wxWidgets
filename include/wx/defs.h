@@ -26,8 +26,9 @@
 #if defined(__WXMSW__) && defined(__X__)
 #error "Target can't be both X and Windows"
 #elif !defined(__WXMOTIF__) && !defined(__WXMSW__) && !defined(__WXGTK__) && \
-      !defined(__WXPM__) && !defined(__WXMAC__) && !defined(__X__) && \
-      !defined(__WXMGL__) && !defined(__WXX11__) && wxUSE_GUI
+      !defined(__WXPM__) && !defined(__WXMAC__) && !defined(__WXCOCOA__) && \
+      !defined(__X__) && !defined(__WXMGL__) && !defined(__WXX11__) && \
+      wxUSE_GUI
 #ifdef __UNIX__
 #error "No Target! You should use wx-config program for compilation flags!"
 #else // !Unix
@@ -334,7 +335,7 @@ typedef int wxWindowID;
         #define WXEXPORT _Export
         #define WXIMPORT _Export
     #endif
-#elif defined(__WXMAC__)    
+#elif defined(__WXMAC__) || defined(__WXCOCOA__)
     #ifdef __MWERKS__
         #define WXEXPORT __declspec(export)
         #define WXIMPORT __declspec(import)
@@ -613,7 +614,7 @@ enum
 //            precision, so use the IEEE types for storage , and this for calculations
 
 typedef float wxFloat32 ;
-#if defined( __WXMAC__ )  && defined (__MWERKS__)
+#if (defined( __WXMAC__ ) || defined(__WXCOCOA__))  && defined (__MWERKS__)
     typedef short double wxFloat64;
 #else
     typedef double wxFloat64;
@@ -1888,6 +1889,34 @@ typedef WindowPtr       WXWindow;
 typedef ControlHandle   WXWidget;
 */
 #endif
+
+#ifdef __WXCOCOA__
+
+#if defined(__OBJC__)
+    #include <objc/objc.h>
+    #define DECLARE_WXCOCOA_OBJC_CLASS(klass) \
+    @class klass;                   typedef klass *WX_##klass
+#elif defined(wxI_LIKE_OBJC_ID)
+    #define DECLARE_WXCOCOA_OBJC_CLASS(klass) \
+    typedef id WX_##klass
+#else // the goal is to get rid of this secion at some time!
+    #define DECLARE_WXCOCOA_OBJC_CLASS(klass) \
+    typedef void *WX_##klass
+#endif
+
+DECLARE_WXCOCOA_OBJC_CLASS(NSApplication);
+DECLARE_WXCOCOA_OBJC_CLASS(NSBox);
+DECLARE_WXCOCOA_OBJC_CLASS(NSButton);
+DECLARE_WXCOCOA_OBJC_CLASS(NSControl);
+DECLARE_WXCOCOA_OBJC_CLASS(NSMenu);
+DECLARE_WXCOCOA_OBJC_CLASS(NSMenuItem);
+DECLARE_WXCOCOA_OBJC_CLASS(NSPanel);
+DECLARE_WXCOCOA_OBJC_CLASS(NSTableView);
+DECLARE_WXCOCOA_OBJC_CLASS(NSTextField);
+DECLARE_WXCOCOA_OBJC_CLASS(NSWindow);
+DECLARE_WXCOCOA_OBJC_CLASS(NSView);
+typedef WX_NSView WXWidget; // wxWindows BASE definition
+#endif // __WXCOCOA__
 
 #if defined(__WXMSW__) || defined(__WXPM__)
 
