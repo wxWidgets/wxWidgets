@@ -60,9 +60,6 @@ class wxWizardPagePtr(wxPanelPtr):
     def Create(self, *_args, **_kwargs):
         val = apply(wizardc.wxWizardPage_Create,(self,) + _args, _kwargs)
         return val
-    def Init(self, *_args, **_kwargs):
-        val = apply(wizardc.wxWizardPage_Init,(self,) + _args, _kwargs)
-        return val
     def GetPrev(self, *_args, **_kwargs):
         val = apply(wizardc.wxWizardPage_GetPrev,(self,) + _args, _kwargs)
         return val
@@ -173,9 +170,6 @@ class wxWizardPageSimplePtr(wxWizardPagePtr):
         self.thisown = 0
     def Create(self, *_args, **_kwargs):
         val = apply(wizardc.wxWizardPageSimple_Create,(self,) + _args, _kwargs)
-        return val
-    def Init(self, *_args, **_kwargs):
-        val = apply(wizardc.wxWizardPageSimple_Init,(self,) + _args, _kwargs)
         return val
     def SetPrev(self, *_args, **_kwargs):
         val = apply(wizardc.wxWizardPageSimple_SetPrev,(self,) + _args, _kwargs)

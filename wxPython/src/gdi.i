@@ -1049,7 +1049,9 @@ enum wxRegionContain {
 class wxRegion : public wxGDIObject {
 public:
     wxRegion(long x=0, long y=0, long width=0, long height=0);
+#ifndef __WXMAC__
     %name(wxRegionFromPoints)wxRegion(int PCOUNT, wxPoint* points, int fillStyle = wxWINDING_RULE);
+#endif
     ~wxRegion();
 
     void Clear();
