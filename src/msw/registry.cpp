@@ -1166,7 +1166,7 @@ FormatAsHex(const void *data,
         if ( n )
             value << _T(',');
 
-        value << wxString::Format(_T("%02x"), p[n]);
+        value << wxString::Format(_T("%02x"), (unsigned char)p[n]);
     }
 
     return value;
