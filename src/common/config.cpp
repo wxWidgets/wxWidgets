@@ -42,6 +42,7 @@
 
 #include <stdlib.h>
 #include <math.h>
+#include <ctype.h>
 
 // ----------------------------------------------------------------------------
 // global and class static variables
