@@ -11,7 +11,7 @@ program_dir = utils/HelpGen/src
 PROGRAM=HelpGen
 
 OBJECTS = HelpGen.o cjparser.o docripper.o ifcontext.o markup.o \
-          ripper_main.o scriptbinder.o sourcepainter.o srcparser.o \
+          scriptbinder.o sourcepainter.o srcparser.o \
           wx_extra_imps.o
 
 include ../../../src/makeprog.env
