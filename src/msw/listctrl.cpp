@@ -48,7 +48,9 @@
 #if defined(__WXWINCE__)
   #include <ole2.h>
   #include <shellapi.h>
-  #include <aygshell.h>
+  #if _WIN32_WCE < 400
+    #include <aygshell.h>
+  #endif
 #endif
 
 // include <commctrl.h> "properly"
@@ -1808,7 +1810,7 @@ bool wxListCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
                 event.m_col = nmHDR->iItem;
                 break;
 
-#ifdef __WXWINCE__
+#if defined(__WXWINCE__) && _WIN32_WCE < 400
             case GN_CONTEXTMENU:
 #endif //__WXWINCE__
             case NM_RCLICK:
@@ -1822,7 +1824,7 @@ bool wxListCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
 
                     // where did the click occur?
                     POINT ptClick;
-#ifdef __WXWINCE__
+#if defined(__WXWINCE__) && _WIN32_WCE < 400
                   if(nmhdr->code == GN_CONTEXTMENU) {
                       ptClick = ((NMRGINFO*)nmhdr)->ptAction;
                   } else 
@@ -2142,7 +2144,7 @@ bool wxListCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
                 event.m_item.m_data = GetItemData(iItem);
                 break;
 
-#ifdef __WXWINCE__
+#if defined(__WXWINCE__) && _WIN32_WCE < 400
             case GN_CONTEXTMENU:
 #endif //__WXWINCE__
             case NM_RCLICK:
@@ -2157,7 +2159,7 @@ bool wxListCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
                 LV_HITTESTINFO lvhti;
                 wxZeroMemory(lvhti);
 
-#ifdef __WXWINCE__
+#if defined(__WXWINCE__) && _WIN32_WCE < 400
               if(nmhdr->code == GN_CONTEXTMENU) {
                   lvhti.pt = ((NMRGINFO*)nmhdr)->ptAction;
               } else 

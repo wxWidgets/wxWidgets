@@ -45,7 +45,10 @@
 #if defined(__WXWINCE__)
   #include <ole2.h>
   #include <shellapi.h>
-  #include <aygshell.h>
+  #if _WIN32_WCE < 400
+    #include <aygshell.h>
+  #endif
+#include "wx/msw/wince/missing.h"
 #endif
 
 #include "wx/msw/winundef.h"
@@ -737,7 +740,7 @@ bool wxTopLevelWindowMSW::ShowFullScreen(bool show, long style)
                      rect.x, rect.y, rect.width, rect.height,
                      flags);
 
-#ifdef __WXWINCE__
+#if __WXWINCE__ && _WIN32_WCE < 400
         ::SHFullScreen(GetHwnd(), SHFS_HIDETASKBAR | SHFS_HIDESIPBUTTON);
 #endif
 
@@ -747,7 +750,7 @@ bool wxTopLevelWindowMSW::ShowFullScreen(bool show, long style)
     }
     else // stop showing full screen
     {
-#ifdef __WXWINCE__
+#if __WXWINCE__ && _WIN32_WCE < 400
         ::SHFullScreen(GetHwnd(), SHFS_SHOWTASKBAR | SHFS_SHOWSIPBUTTON);
 #endif
         Maximize(m_fsIsMaximized);

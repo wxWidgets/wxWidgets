@@ -54,7 +54,10 @@
 #include <ole2.h>
 #include <shellapi.h>
 #include <commctrl.h>
-#include <aygshell.h>
+#if _WIN32_WCE < 400
+  #include <aygshell.h>
+#endif
+#include "wx/msw/wince/missing.h"
 
 #include "wx/msw/winundef.h"
 
@@ -256,6 +259,10 @@ bool wxToolBar::MSWCreateToolbar(const wxPoint& pos, const wxSize& size, wxMenuB
     if (m_menuBar)
         m_menuBar->SetToolBar(this);
 
+#if _WIN32_WCE >= 400
+    HWND hWnd = CommandBar_Create(wxGetInstance(), (HWND) GetParent()->GetHWND(), GetId());
+    SetHWND((WXHWND) hWnd);
+#else
     // Create the menubar.
     SHMENUBARINFO mbi;
     
@@ -279,12 +286,8 @@ bool wxToolBar::MSWCreateToolbar(const wxPoint& pos, const wxSize& size, wxMenuB
     }
     
     SetHWND((WXHWND) mbi.hwndMB);
-/*
-    if (!::SendMessage((HWND) GetHWND(), TB_DELETEBUTTON, 0, (LPARAM) 0))
-    {
-        wxLogLastError(wxT("TB_DELETEBUTTON"));
-    }
-*/    
+#endif
+
     // install wxWindows window proc for this window
     SubclassWin(m_hWnd);
 

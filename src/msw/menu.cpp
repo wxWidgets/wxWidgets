@@ -51,11 +51,11 @@
 #include <ole2.h>
 #include <shellapi.h>
 #include <commctrl.h>
+#if _WIN32_WCE < 400
 #include <aygshell.h>
-
-#ifndef TBSTYLE_NO_DROPDOWN_ARROW
-#define TBSTYLE_NO_DROPDOWN_ARROW 0x0080
 #endif
+
+#include "wx/msw/wince/missing.h"
 
 #endif
 
@@ -745,7 +745,7 @@ WXHMENU wxMenuBar::Create()
     // since you have to use resources.
     // We'll have to find another way to add a menu
     // by changing/adding menu items to an existing menu.
-#ifdef __WXWINCE__
+#if defined(__WXWINCE__) && _WIN32_WCE < 400
     if ( m_hMenu != 0 )
         return m_hMenu;
 
@@ -805,6 +805,17 @@ WXHMENU wxMenuBar::Create()
             }
         }
     }
+
+#if _WIN32_WCE >= 400
+    if (GetToolBar())
+    {
+        HWND hCommandBar = (HWND) GetToolBar()->GetHWND();
+        if (!CommandBar_InsertMenubarEx(hCommandBar, NULL, (LPTSTR) m_hMenu, 0))
+        {
+            wxLogLastError(wxT("CommandBar_InsertMenubarEx"));
+        }
+    }
+#endif
 
     return m_hMenu;
 #endif
