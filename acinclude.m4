@@ -336,10 +336,15 @@ AC_DEFUN([WX_ARG_WITH],
         ])
 
 dnl like WX_ARG_WITH but uses AC_ARG_ENABLE instead of AC_ARG_WITH
-dnl usage: WX_ARG_ENABLE(option, helpmessage, variable-name)
+dnl usage: WX_ARG_ENABLE(option, helpmessage, variable-name, enablestring)
+dnl
+dnl enablestring is a hack and allows to show "checking for --disable-foo"
+dnl message when running configure instead of the default "checking for
+dnl --enable-foo" one whih is useful for the options enabled by default
 AC_DEFUN([WX_ARG_ENABLE],
         [
-          AC_MSG_CHECKING([for --enable-$1])
+	  enablestring=$4
+          AC_MSG_CHECKING([for --${enablestring:-enable}-$1])
           no_cache=0
           AC_ARG_ENABLE($1, [$2],
                         [
