@@ -134,7 +134,7 @@ BEGIN_EVENT_TABLE(wxSpinCtrlButton, wxSpinButton)
 END_EVENT_TABLE()
 
 IMPLEMENT_DYNAMIC_CLASS(wxSpinCtrl, wxControl)
-    
+
 // ============================================================================
 // implementation
 // ============================================================================
@@ -364,6 +364,13 @@ void wxSpinCtrl::SetRange(int min, int max)
     wxCHECK_RET( m_btn, _T("invalid call to wxSpinCtrl::SetRange") );
 
     m_btn->SetRange(min, max);
+}
+
+void wxSpinCtrl::SetSelection(long from, long to)
+{
+    wxCHECK_RET( m_text, _T("invalid call to wxSpinCtrl::SetSelection") );
+
+    m_text->SetSelection(from, to);
 }
 
 #endif // wxUSE_SPINCTRL

@@ -20,7 +20,7 @@
 // without tons of #ifdefs.
 // ----------------------------------------------------------------------------
 
-#if wxUSE_SPINBTN 
+#if wxUSE_SPINBTN
 
 #if defined(__GNUG__) && !defined(__APPLE__)
     #pragma interface "spinctlg.h"
@@ -66,6 +66,7 @@ public:
     void SetValue(int val);
     void SetValue(const wxString& text);
     void SetRange(int min, int max);
+    void SetSelection(long from, long to);
 
     // accessors
     int GetValue() const;
@@ -102,7 +103,7 @@ private:
     // the subcontrols
     wxTextCtrl *m_text;
     wxSpinButton *m_btn;
-    
+
 private:
     DECLARE_DYNAMIC_CLASS(wxSpinCtrl)
 };
