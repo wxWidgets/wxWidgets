@@ -7,6 +7,8 @@
 // Licence:     wxWindows Licence
 /////////////////////////////////////////////////////////////////////////////
 
+#ifndef _WX_FS_ZIP_H_
+#define _WX_FS_ZIP_H_
 
 #ifdef __GNUG__
 #pragma interface "fs_zip.h"
@@ -51,4 +53,6 @@ class WXDLLEXPORT wxZipFSHandler : public wxFileSystemHandler
 
 #endif
   // wxUSE_FILESYSTEM && wxUSE_FS_ZIP && wxUSE_STREAMS
+
+#endif // _WX_FS_ZIP_H_
 

@@ -6,6 +6,8 @@
 // Licence:     wxWindows Licence
 /////////////////////////////////////////////////////////////////////////////
 
+#ifndef _WX_FS_MEM_H_
+#define _WX_FS_MEM_H_
 
 #ifdef __GNUG__
 #pragma interface "fs_mem.h"
@@ -62,4 +64,6 @@ class WXDLLEXPORT wxMemoryFSHandler : public wxFileSystemHandler
 #endif
   // wxUSE_FILESYSTEM
 
+
+#endif // _WX_FS_MEM_H_
 

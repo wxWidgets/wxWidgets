@@ -18,6 +18,8 @@ limitation)
 
 
 */
+#ifndef _WX_FS_INET_H_
+#define _WX_FS_INET_H_
 
 #ifdef __GNUG__
 #pragma interface "fs_inet.h"
@@ -50,4 +52,6 @@ class WXDLLEXPORT wxInternetFSHandler : public wxFileSystemHandler
 
 #endif
   // wxUSE_FILESYSTEM && wxUSE_FS_INET && wxUSE_STREAMS && wxUSE_SOCKETS
+
+#endif // _WX_FS_INET_H_
 
