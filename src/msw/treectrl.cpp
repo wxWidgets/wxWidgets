@@ -1575,6 +1575,14 @@ void wxTreeCtrl::DeleteTextCtrl()
 {
     if ( m_textCtrl )
     {
+        // the HWND corresponding to this control is deleted by the tree
+        // control itself and we don't know when exactly this happens, so check
+        // if the window still exists before calling UnsubclassWin()
+        if ( !::IsWindow(GetHwndOf(m_textCtrl)) )
+        {
+            m_textCtrl->SetHWND(0);
+        }
+
         m_textCtrl->UnsubclassWin();
         m_textCtrl->SetHWND(0);
         delete m_textCtrl;
