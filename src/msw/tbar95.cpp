@@ -91,7 +91,7 @@
 #define DEFAULTBARHEIGHT 27
 
 // ----------------------------------------------------------------------------
-// function prototypes
+// private function prototypes
 // ----------------------------------------------------------------------------
 
 static void wxMapBitmap(HBITMAP hBitmap, int width, int height);
@@ -113,8 +113,6 @@ END_EVENT_TABLE()
 // private classes
 // ----------------------------------------------------------------------------
 
-// for us, wxToolBarTool is just the base class - we don't need any extra
-// functionality
 class wxToolBarTool : public wxToolBarToolBase
 {
 public:
@@ -129,12 +127,22 @@ public:
         : wxToolBarToolBase(tbar, id, bitmap1, bitmap2, toggle,
                             clientData, shortHelpString, longHelpString)
     {
+        m_nSepCount = 0;
     }
 
     wxToolBarTool(wxToolBar *tbar, wxControl *control)
         : wxToolBarToolBase(tbar, control)
     {
+        m_nSepCount = 1;
     }
+
+    // set/get the number of separators which we use to cover the space used by
+    // a control in the toolbar
+    void SetSeparatorsCount(size_t count) { m_nSepCount = count; }
+    size_t GetSeparatorsCount() const { return m_nSepCount; }
+
+private:
+    size_t m_nSepCount;
 };
 
 
@@ -258,14 +266,53 @@ bool wxToolBar::DoInsertTool(size_t WXUNUSED(pos),
 
 bool wxToolBar::DoDeleteTool(size_t pos, wxToolBarTool *tool)
 {
-    if ( !::SendMessage(GetHwnd(), TB_DELETEBUTTON, pos, 0) )
-    {
-        wxLogLastError("TB_DELETEBUTTON");
+    // normally, we only delete one button, but we use several separators to
+    // cover the space used by one control sometimes (with old comctl32.dll)
+    size_t nButtonsToDelete = 1;
 
-        return FALSE;
+    // get the size of the button we're going to delete
+    RECT r;
+    if ( !::SendMessage(GetHwnd(), TB_GETITEMRECT, pos, (LPARAM)&r) )
+    {
+        wxLogLastError(_T("TB_GETITEMRECT"));
+    }
+
+    int width = r.right - r.left;
+
+    if ( tool->IsControl() )
+    {
+        nButtonsToDelete = tool->GetSeparatorsCount();
+
+        width *= nButtonsToDelete;
+    }
+
+    while ( nButtonsToDelete-- > 0 )
+    {
+        if ( !::SendMessage(GetHwnd(), TB_DELETEBUTTON, pos, 0) )
+        {
+            wxLogLastError("TB_DELETEBUTTON");
+
+            return FALSE;
+        }
     }
 
     tool->Detach();
+
+    m_nButtons -= nButtonsToDelete;
+
+    // reposition all the controls after this button
+    wxToolBarToolsList::Node *node = m_tools.Item(pos);
+    for ( node = node->GetNext(); node; node = node->GetNext() )
+    {
+        wxToolBarToolBase *tool2 = node->GetData();
+        if ( tool2->IsControl() )
+        {
+            int x;
+            wxControl *control = tool2->GetControl();
+            control->GetPosition(&x, NULL);
+            control->Move(x - width, -1);
+        }
+    }
 
     return TRUE;
 }
@@ -527,6 +574,10 @@ bool wxToolBar::Realize()
                     index++;
                 }
 
+                // remember the number of separators we used - we'd have to
+                // delete all of them later
+                ((wxToolBarTool *)tool)->SetSeparatorsCount(nSeparators);
+
                 // adjust the controls width to exactly cover the separators
                 control->SetSize((nSeparators + 1)*widthSep, -1);
             }
@@ -551,34 +602,19 @@ bool wxToolBar::Realize()
 
     if ( !isVertical )
     {
-        (void)::SendMessage(GetHwnd(), TB_AUTOSIZE, (WPARAM)0, (LPARAM) 0);
-
-        SetRows(1);
-    }
-    else // vertical toolbar
-    {
-        // can't use TB_AUTOSIZE here, so calculate the total size ourselves
-        int w = 0,
-            h = 0;
-        for ( size_t pos = 0; pos < m_nButtons; pos++ )
+        if ( m_maxRows == 0 )
         {
-            RECT r;
-            if ( !::SendMessage(GetHwnd(), TB_GETITEMRECT, pos, (LPARAM)&r) )
-            {
-                wxLogLastError("TB_GETITEMRECT");
-            }
-
-            if ( r.right - r.left > w )
-            {
-                w = r.right - r.left;
-            }
-
-            h += r.bottom - r.top;
+            // if not set yet, only one row
+            SetRows(1);
         }
-
-        SetSize(w, h);
-
-        SetRows(m_nButtons);
+    }
+    else if ( m_nButtons > 0 ) // vertical non empty toolbar
+    {
+        if ( m_maxRows == 0 )
+        {
+            // if not set yet, have one column
+            SetRows(m_nButtons);
+        }
     }
 
     return TRUE;
@@ -684,7 +720,7 @@ bool wxToolBar::MSWOnNotify(int WXUNUSED(idCtrl),
 }
 
 // ----------------------------------------------------------------------------
-// sizing stuff
+// toolbar geometry
 // ----------------------------------------------------------------------------
 
 void wxToolBar::SetToolBitmapSize(const wxSize& size)
@@ -696,19 +732,41 @@ void wxToolBar::SetToolBitmapSize(const wxSize& size)
 
 void wxToolBar::SetRows(int nRows)
 {
-    // TRUE in wParam means to create at least as many rows
+    if ( nRows == m_maxRows )
+    {
+        // avoid resizing the frame uselessly
+        return;
+    }
+
+    // TRUE in wParam means to create at least as many rows, FALSE -
+    // at most as many
     RECT rect;
     ::SendMessage(GetHwnd(), TB_SETROWS,
-                  MAKEWPARAM(nRows, TRUE), (LPARAM) &rect);
+                  MAKEWPARAM(nRows, !(GetWindowStyle() & wxTB_VERTICAL)),
+                  (LPARAM) &rect);
 
     m_maxRows = nRows;
+
+    UpdateSize();
 }
 
 // The button size is bigger than the bitmap size
 wxSize wxToolBar::GetToolSize() const
 {
-    // FIXME: this is completely bogus (VZ)
-    return wxSize(m_defaultWidth + 8, m_defaultHeight + 7);
+    // TB_GETBUTTONSIZE is supported from version 4.70
+#if defined(_WIN32_IE) && (_WIN32_IE >= 0x300 )
+    if ( wxTheApp->GetComCtl32Version() >= 470 )
+    {
+        DWORD dw = ::SendMessage(GetHwnd(), TB_GETBUTTONSIZE, 0, 0);
+
+        return wxSize(LOWORD(dw), HIWORD(dw));
+    }
+    else
+#endif // comctl32.dll 4.70+
+    {
+        // defaults
+        return wxSize(m_defaultWidth + 8, m_defaultHeight + 7);
+    }
 }
 
 wxToolBarTool *wxToolBar::FindToolForPosition(wxCoord x, wxCoord y) const
@@ -724,6 +782,25 @@ wxToolBarTool *wxToolBar::FindToolForPosition(wxCoord x, wxCoord y) const
     }
 
     return (wxToolBarTool *)m_tools.Item((size_t)index)->GetData();
+}
+
+void wxToolBar::UpdateSize()
+{
+    // we must refresh the frame after the toolbar size (possibly) changed
+    wxFrame *frame = wxDynamicCast(GetParent(), wxFrame);
+    if ( frame )
+    {
+        // don't change the size, we just need to generate a WM_SIZE
+        RECT r;
+        if ( !GetWindowRect(GetHwndOf(frame), &r) )
+        {
+            wxLogLastError(_T("GetWindowRect"));
+        }
+
+        (void)::SendMessage(GetHwndOf(frame), WM_SIZE, SIZE_RESTORED,
+                            MAKELPARAM(r.right - r.left, r.bottom - r.top));
+    }
+
 }
 
 // ----------------------------------------------------------------------------
@@ -784,19 +861,43 @@ void wxToolBar::OnMouseEvent(wxMouseEvent& event)
 
 long wxToolBar::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
 {
-    if ( (GetWindowStyle() & wxTB_VERTICAL) && (nMsg == WM_SIZE) )
+    if ( nMsg == WM_SIZE )
     {
-        // we never change width, so restore it if the def window proc changed
-        // it
+        // calculate our minor dimenstion ourselves - we're confusing the
+        // standard logic (TB_AUTOSIZE) with our horizontal toolbars and other
+        // hacks
         RECT r;
         if ( ::SendMessage(GetHwnd(), TB_GETITEMRECT, 0, (LPARAM)&r) )
         {
-            int w = r.right - r.left;
-            if ( LOWORD(lParam) != w )
+            int w, h;
+
+            if ( GetWindowStyle() & wxTB_VERTICAL )
             {
-                SetSize(w, HIWORD(lParam));
+                w = r.right - r.left;
+                if ( m_maxRows )
+                {
+                    w *= (m_nButtons + m_maxRows - 1)/m_maxRows;
+                }
+                h = HIWORD(lParam);
+            }
+            else
+            {
+                w = LOWORD(lParam);
+                h = r.bottom - r.top;
+                if ( m_maxRows )
+                {
+                    h += 6; // FIXME: this is the separator line height...
+                    h *= m_maxRows;
+                }
             }
 
+            if ( MAKELPARAM(w, h) != lParam )
+            {
+                // size really changed
+                SetSize(w, h);
+            }
+
+            // message processed
             return 0;
         }
     }

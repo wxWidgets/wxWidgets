@@ -78,6 +78,9 @@ protected:
     virtual void DoToggleTool(wxToolBarTool *tool, bool toggle);
     virtual void DoSetToggle(wxToolBarTool *tool, bool toggle);
 
+    // should be called whenever the toolbar size changes
+    void UpdateSize();
+
     // override WndProc to process WM_SIZE
     virtual long MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam);
 
