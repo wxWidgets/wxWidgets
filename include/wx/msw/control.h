@@ -70,8 +70,6 @@ public:
 
     const wxArrayLong& GetSubcontrols() const { return m_subControls; }
 
-    virtual WXHBRUSH MSWControlColor(WXHDC pDC);
-
 protected:
     // choose the default border for this window
     virtual wxBorder GetDefaultBorder() const;
@@ -117,6 +115,23 @@ protected:
 
     // default style for the control include WS_TABSTOP if it AcceptsFocus()
     virtual WXDWORD MSWGetStyle(long style, WXDWORD *exstyle) const;
+
+    // default handling of WM_CTLCOLORxxx
+    virtual WXHBRUSH MSWControlColor(WXHDC pDC);
+
+    // call this from the derived class MSWControlColor() if you want to show
+    // the control greyed out
+    WXHBRUSH MSWControlColorDisabled(WXHDC pDC);
+
+    // call this from the derived class MSWControlColor() if you want to always
+    // paint the background (as all opaque controls do)
+    WXHBRUSH MSWControlColorSolid(WXHDC pDC)
+    {
+        return MSWControlColorSolid(pDC, GetBackgroundColour());
+    }
+
+    // common part of the 3 methods above
+    WXHBRUSH MSWControlColorSolid(WXHDC pDC, wxColour colBg);
 
     // this is a helper for the derived class GetClassDefaultAttributes()
     // implementation: it returns the right colours for the classes which
