@@ -66,7 +66,7 @@ static CharsetItem* BuildReverseTable(wxUint16 *tbl)
 wxEncodingConverter::wxEncodingConverter()
 {
     m_Table = NULL;
-    m_UnicodeInput = FALSE;
+    m_UnicodeInput = m_UnicodeOutput = FALSE;
     m_JustCopy = FALSE;
 }
 
@@ -85,6 +85,7 @@ bool wxEncodingConverter::Init(wxFontEncoding input_enc, wxFontEncoding output_e
 
     if (input_enc == output_enc) {m_JustCopy = TRUE; return TRUE;}
     
+    m_UnicodeOutput = (output_enc == wxFONTENCODING_UNICODE);
     m_JustCopy = FALSE;
     
     if (input_enc == wxFONTENCODING_UNICODE)
@@ -150,6 +151,7 @@ bool wxEncodingConverter::Init(wxFontEncoding input_enc, wxFontEncoding output_e
 }
 
 
+
 void wxEncodingConverter::Convert(const wxChar* input, wxChar* output)
 {
     if (m_JustCopy)
@@ -173,6 +175,83 @@ void wxEncodingConverter::Convert(const wxChar* input, wxChar* output)
 }
 
 
+#if wxUSE_UNICODE // otherwise wxChar === char
+
+void wxEncodingConverter::Convert(const char* input, wxChar* output)
+{
+    wxASSERT_MSG(!m_UnicodeInput, wxT("You cannot convert from unicode if input is const char*!"));
+
+    const char *i;
+    wxChar *o;
+
+    if (m_JustCopy)
+    {
+        for (i = input, o = output; *i != 0;)
+            *(o++) = (wxChar)(*(i++));
+        *o = 0;
+        return;
+    }
+    
+    wxASSERT_MSG(m_Table != NULL, wxT("You must call wxEncodingConverter::Init() before actually converting!"));
+       
+    for (i = input, o = output; *i != 0;)
+        *(o++) = (wxChar)(m_Table[(wxUint8)*(i++)]);
+    *o = 0;
+}
+
+
+
+void wxEncodingConverter::Convert(const wxChar* input, char* output)
+{
+    wxASSERT_MSG(!m_UnicodeOutput, wxT("You cannot convert to unicode if output is const char*!"));
+
+    const wxChar *i;
+    char *o;
+
+    if (m_JustCopy)
+    {
+        for (i = input, o = output; *i != 0;)
+            *(o++) = (char)(*(i++));
+        *o = 0;
+        return;
+    }
+    
+    wxASSERT_MSG(m_Table != NULL, wxT("You must call wxEncodingConverter::Init() before actually converting!"));
+       
+    if (m_UnicodeInput)
+        for (i = input, o = output; *i != 0; i++, o++)
+            *o = (char)(m_Table[(wxUint16)*i]);
+    else
+        for (i = input, o = output; *i != 0; i++, o++)
+            *o = (char)(m_Table[(wxUint8)*i]);
+    *o = 0;
+}
+
+
+
+void wxEncodingConverter::Convert(const char* input, char* output)
+{
+    wxASSERT_MSG(!m_UnicodeOutput, wxT("You cannot convert to unicode if output is const char*!"));
+    wxASSERT_MSG(!m_UnicodeInput, wxT("You cannot convert from unicode if input is const char*!"));
+
+    const char *i;
+    char *o;
+
+    if (m_JustCopy)
+    {
+        strcpy(output, input);
+        return;
+    }
+    
+    wxASSERT_MSG(m_Table != NULL, wxT("You must call wxEncodingConverter::Init() before actually converting!"));
+       
+    for (i = input, o = output; *i != 0;)
+        *(o++) = (char)(m_Table[(wxUint8)*(i++)]);
+    *o = 0;
+}
+
+#endif // wxUSE_UNICODE
+
 
 wxString wxEncodingConverter::Convert(const wxString& input)
 {
@@ -195,6 +274,9 @@ wxString wxEncodingConverter::Convert(const wxString& input)
 
 
 
+
+
+
 // Following tables describe classes of encoding equivalence.
 // 
 
@@ -208,7 +290,9 @@ wxString wxEncodingConverter::Convert(const wxString& input)
 static wxFontEncoding 
     EquivalentEncodings[][NUM_OF_PLATFORMS][ENC_PER_PLATFORM+1] = {
 
-    // West European (Latin1)
+    // *** Please put more common encodings as first! ***
+
+    // West European
     {
         /* unix    */ {wxFONTENCODING_ISO8859_1, wxFONTENCODING_ISO8859_15, STOP},
         /* windows */ {wxFONTENCODING_CP1252, STOP},
@@ -216,10 +300,58 @@ static wxFontEncoding
         /* mac     */ {STOP}   
     },
 
-    // Central European (Latin2)
+    // Central European
     {
         /* unix    */ {wxFONTENCODING_ISO8859_2, STOP},
         /* windows */ {wxFONTENCODING_CP1250, STOP},
+        /* os2     */ {STOP},
+        /* mac     */ {STOP}   
+    },
+    
+    // Baltic
+    {
+        /* unix    */ {wxFONTENCODING_ISO8859_13, STOP},
+        /* windows */ {wxFONTENCODING_CP1257, STOP},
+        /* os2     */ {STOP},
+        /* mac     */ {STOP}   
+    },
+
+    // Hebrew
+    {
+        /* unix    */ {wxFONTENCODING_ISO8859_8, STOP},
+        /* windows */ {wxFONTENCODING_CP1255, STOP},
+        /* os2     */ {STOP},
+        /* mac     */ {STOP}   
+    },
+
+    // Greek
+    {
+        /* unix    */ {wxFONTENCODING_ISO8859_7, STOP},
+        /* windows */ {wxFONTENCODING_CP1253, STOP},
+        /* os2     */ {STOP},
+        /* mac     */ {STOP}   
+    },
+
+    // Arabic
+    {
+        /* unix    */ {wxFONTENCODING_ISO8859_6, STOP},
+        /* windows */ {wxFONTENCODING_CP1256, STOP},
+        /* os2     */ {STOP},
+        /* mac     */ {STOP}   
+    },
+
+    // Turkish
+    {
+        /* unix    */ {wxFONTENCODING_ISO8859_9, STOP},
+        /* windows */ {wxFONTENCODING_CP1254, STOP},
+        /* os2     */ {STOP},
+        /* mac     */ {STOP}   
+    },
+
+    // Cyrillic
+    {
+        /* unix    */ {wxFONTENCODING_ISO8859_5, STOP},
+        /* windows */ {wxFONTENCODING_CP1251, STOP},
         /* os2     */ {STOP},
         /* mac     */ {STOP}   
     },
@@ -257,7 +389,9 @@ wxFontEncodingArray wxEncodingConverter::GetPlatformEquivalents(wxFontEncoding e
             for (e = 0; EquivalentEncodings[clas][i][e] != STOP; e++)
                 if (EquivalentEncodings[clas][i][e] == enc)
                 {
-                    for (f = EquivalentEncodings[clas][platform]; *f != STOP; f++) 
+                    for (f = EquivalentEncodings[clas][platform]; *f != STOP; f++)
+                        if (*f == enc) arr.Add(enc);
+                    for (f = EquivalentEncodings[clas][platform]; *f != STOP; f++)
                         if (arr.Index(*f) == wxNOT_FOUND) arr.Add(*f);
                     i = NUM_OF_PLATFORMS/*hack*/; break; 
                 }
@@ -274,6 +408,8 @@ wxFontEncodingArray wxEncodingConverter::GetAllEquivalents(wxFontEncoding enc)
     int i, clas, e, j ;
     wxFontEncoding *f;
     wxFontEncodingArray arr;
+    
+    arr = GetPlatformEquivalents(enc); // we want them to be first items in array
 
     clas = 0;
     while (EquivalentEncodings[clas][0][0] != STOP)
