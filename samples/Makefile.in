@@ -9,59 +9,73 @@
 
 CPPFLAGS = @CPPFLAGS@
 INSTALL_DIR = @INSTALL_DIR@
-USE_SOSYMLINKS = @USE_SOSYMLINKS@
-srcdir = @srcdir@
-INSTALL_DATA = @INSTALL_DATA@
-STRIP = @STRIP@
-PLATFORM_MSDOS = @PLATFORM_MSDOS@
-RANLIB = @RANLIB@
-SO_SUFFIX = @SO_SUFFIX@
+DEREZ = @DEREZ@
+MONOLITHIC = @MONOLITHIC@
+SONAME_FLAG = @SONAME_FLAG@
 CXXFLAGS = @CXXFLAGS@
-top_srcdir = @top_srcdir@
 prefix = @prefix@
-AR = @AR@
-BUILD = @BUILD@
 INSTALL = @INSTALL@
 EXEEXT = @EXEEXT@
 RESCOMP = @RESCOMP@
 PLATFORM_MAC = @PLATFORM_MAC@
 USE_SOVERSION = @USE_SOVERSION@
-SONAME_FLAG = @SONAME_FLAG@
-USE_MACVERSION = @USE_MACVERSION@
-PLATFORM_MACOSX = @PLATFORM_MACOSX@
+SAMPLES_RPATH_FLAG = @SAMPLES_RPATH_FLAG@
 INSTALL_PROGRAM = @INSTALL_PROGRAM@
-SETFILE = @SETFILE@
-DEPS_TYPE = @DEPS_TYPE@
 exec_prefix = @exec_prefix@
-DLLPREFIX = @DLLPREFIX@
 libdir = @libdir@
-SHARED_LD_CXX = @SHARED_LD_CXX@
-CXX = @CXX@
+TOOLKIT = @TOOLKIT@
+EXTRALIBS = @EXTRALIBS@
 CC = @CC@
 datadir = @datadir@
+PLATFORM_MSDOS = @PLATFORM_MSDOS@
+SETFILE = @SETFILE@
+UNICODE = @UNICODE@
+STRIP = @STRIP@
+USE_SOVERSOLARIS = @USE_SOVERSOLARIS@
+srcdir = @srcdir@
+bindir = @bindir@
+PIC_FLAG = @PIC_FLAG@
+USE_SOSYMLINKS = @USE_SOSYMLINKS@
+INSTALL_DATA = @INSTALL_DATA@
+USE_GUI = @USE_GUI@
+PLATFORM_UNIX = @PLATFORM_UNIX@
+RANLIB = @RANLIB@
+SO_SUFFIX = @SO_SUFFIX@
+top_srcdir = @top_srcdir@
+AR = @AR@
+BUILD = @BUILD@
+PLATFORM_WIN32 = @PLATFORM_WIN32@
+USE_MACVERSION = @USE_MACVERSION@
+PLATFORM_MACOSX = @PLATFORM_MACOSX@
+TOOLKIT_VERSION = @TOOLKIT_VERSION@
+WXUNIV = @WXUNIV@
+TOOLKIT_LOWERCASE = @TOOLKIT_LOWERCASE@
+DEPS_TYPE = @DEPS_TYPE@
+SHARED_LD_CXX = @SHARED_LD_CXX@
+CXX = @CXX@
 includedir = @includedir@
 LN_S = @LN_S@
-PIC_FLAG = @PIC_FLAG@
 CFLAGS = @CFLAGS@
-PLATFORM_UNIX = @PLATFORM_UNIX@
-USE_SOVERSOLARIS = @USE_SOVERSOLARIS@
-PLATFORM_WIN32 = @PLATFORM_WIN32@
+DLLPREFIX = @DLLPREFIX@
+SHARED = @SHARED@
 USE_SOVERLINUX = @USE_SOVERLINUX@
-bindir = @bindir@
+top_builddir = @top_builddir@
 SHARED_LD_CC = @SHARED_LD_CC@
 
 ### Conditionally set variables: ###
 
 @COND_PLATFORM_WIN321@DLLIMPEXT = .a
 @COND_PLATFORM_WIN320@DLLIMPEXT = .$(SO_SUFFIX)
+@COND_USE_GUI0@__console___depname = console
 @COND_DEPS_TYPEGCC@DEPS_FLAG = -MMD -MT$@ -MF$@.d
 
 ### Targets: ###
 
-all: artprov dialogs image minimal
+all: artprov $(__console___depname) dialogs image minimal
 
 install-strip: install
 	(cd artprov && $(MAKE) install-strip)
+	(cd console && $(MAKE) install-strip)
 	(cd dialogs && $(MAKE) install-strip)
 	(cd image && $(MAKE) install-strip)
 	(cd minimal && $(MAKE) install-strip)
@@ -72,18 +86,23 @@ dialogs:
 clean: 
 	rm -f ./*.o ./*.d
 	(cd artprov && $(MAKE) clean)
+	(cd console && $(MAKE) clean)
 	(cd dialogs && $(MAKE) clean)
 	(cd image && $(MAKE) clean)
 	(cd minimal && $(MAKE) clean)
 
 install: all
 	(cd artprov && $(MAKE) install)
+	(cd console && $(MAKE) install)
 	(cd dialogs && $(MAKE) install)
 	(cd image && $(MAKE) install)
 	(cd minimal && $(MAKE) install)
 
 artprov: 
 	(cd artprov && $(MAKE) all)
+
+console: 
+	(cd console && $(MAKE) all)
 
 image: 
 	(cd image && $(MAKE) all)
@@ -97,4 +116,4 @@ uninstall:
 # Include dependency info, if present:
 @IF_GNU_MAKE@-include *.d
 
-.PHONY: all dialogs artprov image minimal
+.PHONY: all dialogs artprov console image minimal
