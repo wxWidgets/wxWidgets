@@ -179,10 +179,10 @@ place, then do the same for wxPython.
 
          USE_SWIG=1 SWIG=/opt/swig/bin/swig
 
-   If you get errors about wxGLCanvas or being unable to find libGLU
-   or something like that then you can add BUILD_GLCANVAS=0 to the
-   setup.py command line to disable the building of the glcanvas
-   module.
+   If you get errors about wxGLCanvas or being unable to find libGLU,
+   wxGLCanvas being undeclared, or something similar then you can add
+   BUILD_GLCANVAS=0 to the setup.py command line to disable the
+   building of the glcanvas module.
 
    When the setup.py command is done you should have fully populated
    wxPython and wx packages locally in $WXDIR/wxPython/wxPython and
