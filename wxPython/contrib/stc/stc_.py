@@ -13,6 +13,8 @@ from clip_dnd import *
 
 from events import *
 
+from streams import *
+
 from mdi import *
 
 from frames import *
@@ -34,6 +36,10 @@ from image import *
 from printfw import *
 
 from sizers import *
+
+from filesys import *
+
+from utils import *
 
 def EVT_STC_CHANGE(win, id, fn):
     win.Connect(id, -1, wxEVT_STC_CHANGE, fn)
@@ -761,6 +767,12 @@ class wxStyledTextCtrlPtr(wxControlPtr):
     def PointFromPosition(self, *_args, **_kwargs):
         val = apply(stc_c.wxStyledTextCtrl_PointFromPosition,(self,) + _args, _kwargs)
         if val: val = wxPointPtr(val) ; val.thisown = 1
+        return val
+    def ScrollToLine(self, *_args, **_kwargs):
+        val = apply(stc_c.wxStyledTextCtrl_ScrollToLine,(self,) + _args, _kwargs)
+        return val
+    def ScrollToColumn(self, *_args, **_kwargs):
+        val = apply(stc_c.wxStyledTextCtrl_ScrollToColumn,(self,) + _args, _kwargs)
         return val
     def __repr__(self):
         return "<C wxStyledTextCtrl instance at %s>" % (self.this,)
