@@ -45,6 +45,23 @@ wxList wxTaskBarIcon::sm_taskBarIcons;
 bool   wxTaskBarIcon::sm_registeredClass = FALSE;
 UINT   wxTaskBarIcon::sm_taskbarMsg = 0;
 
+
+#if !USE_SHARED_LIBRARY
+BEGIN_EVENT_TABLE(wxTaskBarIcon, wxEvtHandler)
+    EVT_TASKBAR_MOVE         (wxTaskBarIcon::OnMouseMove)
+    EVT_TASKBAR_LEFT_DOWN    (wxTaskBarIcon::OnLButtonDown)
+    EVT_TASKBAR_LEFT_UP      (wxTaskBarIcon::OnLButtonUp)
+    EVT_TASKBAR_RIGHT_DOWN   (wxTaskBarIcon::OnRButtonDown)
+    EVT_TASKBAR_RIGHT_UP     (wxTaskBarIcon::OnRButtonUp)
+    EVT_TASKBAR_LEFT_DCLICK  (wxTaskBarIcon::OnLButtonDClick)
+    EVT_TASKBAR_RIGHT_DCLICK (wxTaskBarIcon::OnRButtonDClick)
+END_EVENT_TABLE()
+
+
+IMPLEMENT_DYNAMIC_CLASS(wxTaskBarIcon, wxEvtHandler)
+#endif
+
+
 wxTaskBarIcon::wxTaskBarIcon(void)
 {
     m_hWnd = 0;
@@ -128,31 +145,31 @@ bool wxTaskBarIcon::RemoveIcon(void)
 }
 
 // Overridables
-void wxTaskBarIcon::OnMouseMove(void)
+void wxTaskBarIcon::OnMouseMove(wxEvent&)
 {
 }
 
-void wxTaskBarIcon::OnLButtonDown(void)
+void wxTaskBarIcon::OnLButtonDown(wxEvent&)
 {
 }
 
-void wxTaskBarIcon::OnLButtonUp(void)
+void wxTaskBarIcon::OnLButtonUp(wxEvent&)
 {
 }
 
-void wxTaskBarIcon::OnRButtonDown(void)
+void wxTaskBarIcon::OnRButtonDown(wxEvent&)
 {
 }
 
-void wxTaskBarIcon::OnRButtonUp(void)
+void wxTaskBarIcon::OnRButtonUp(wxEvent&)
 {
 }
 
-void wxTaskBarIcon::OnLButtonDClick(void)
+void wxTaskBarIcon::OnLButtonDClick(wxEvent&)
 {
 }
 
-void wxTaskBarIcon::OnRButtonDClick(void)
+void wxTaskBarIcon::OnRButtonDClick(wxEvent&)
 {
 }
 
@@ -233,42 +250,52 @@ WXHWND wxTaskBarIcon::CreateTaskBarWindow()
 
 long wxTaskBarIcon::WindowProc( WXHWND hWnd, unsigned int msg, unsigned int wParam, long lParam )
 {
+    wxEventType eventType = 0;
+
     if (msg != sm_taskbarMsg)
         return DefWindowProc((HWND) hWnd, msg, wParam, lParam);
 
     switch (lParam)
     {
 	case WM_LBUTTONDOWN:
-		OnLButtonDown();
-		break;
+            eventType = wxEVT_TASKBAR_LEFT_DOWN;
+            break;
 
 	case WM_LBUTTONUP:
-		OnLButtonUp();
-		break;
+            eventType = wxEVT_TASKBAR_LEFT_UP;
+            break;
 
 	case WM_RBUTTONDOWN:
-		OnRButtonDown();
-		break;
+            eventType = wxEVT_TASKBAR_RIGHT_DOWN;
+            break;
 
 	case WM_RBUTTONUP:
-		OnRButtonUp();
-		break;
+            eventType = wxEVT_TASKBAR_RIGHT_UP;
+            break;
 
 	case WM_LBUTTONDBLCLK:
-		OnLButtonDClick();
-		break;
+            eventType = wxEVT_TASKBAR_LEFT_DCLICK;
+            break;
 
 	case WM_RBUTTONDBLCLK:
-		OnRButtonDClick();
-		break;
+            eventType = wxEVT_TASKBAR_RIGHT_DCLICK;
+            break;
 
 	case WM_MOUSEMOVE:
-		OnMouseMove();
-		break;
+            eventType = wxEVT_TASKBAR_MOVE;
+            break;
 
 	default:
-        break;
+            break;
 	}
+
+    if (eventType) {
+        wxEvent event;
+        event.SetEventType(eventType);
+        event.SetEventObject(this);
+
+        ProcessEvent(event);
+    }
     return 0;
 }
 
