@@ -831,7 +831,7 @@ int wxMenuBar::FindMenuItem(const wxString& menuString,
     for ( size_t i = 0; i < count; i++ )
     {
         wxString title = wxStripMenuCodes(m_titles[i]);
-        if ( menuString == title )
+        if ( menuLabel == title )
             return m_menus[i]->FindItem(itemString);
     }
 
