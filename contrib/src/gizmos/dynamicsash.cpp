@@ -192,7 +192,7 @@ public:
     bool Create();
     void AddChild(wxWindow *window);
     DynamicSashRegion GetRegion(int x, int y);
-    void ResizeChild(wxSize size);
+    void ResizeChild(const wxSize& size);
     wxScrollBar *FindScrollBar(const wxWindow *child, int vert) const;
 
     void OnSize(wxSizeEvent &event);
@@ -1159,22 +1159,17 @@ DynamicSashRegion wxDynamicSashWindowLeaf::GetRegion(int x, int y)
     return DSR_NONE;
 }
 
-void wxDynamicSashWindowLeaf::ResizeChild(wxSize size)
+void wxDynamicSashWindowLeaf::ResizeChild(const wxSize& size)
 {
     if (m_child)
     {
-        if (m_impl->m_window->GetWindowStyle() & wxDS_MANAGE_SCROLLBARS)
+        if (m_impl->m_window->HasFlag(wxDS_MANAGE_SCROLLBARS))
         {
-            m_child->SetSize(size);
             wxSize best_size = m_child->GetBestSize();
             if (best_size.GetWidth() < size.GetWidth())
-            {
                 best_size.SetWidth(size.GetWidth());
-            }
             if (best_size.GetHeight() < size.GetHeight())
-            {
                 best_size.SetHeight(size.GetHeight());
-            }
             m_child->SetSize(best_size);
 
             int hpos = m_hscroll->GetThumbPosition();
@@ -1202,7 +1197,7 @@ void wxDynamicSashWindowLeaf::ResizeChild(wxSize size)
             wxPoint pos = m_child->GetPosition();
             m_viewport->ScrollWindow(-hpos - pos.x, -vpos - pos.y);
         }
-        else
+        else // !wxDS_MANAGE_SCROLLBARS
         {
             m_child->SetSize(size);
         }
