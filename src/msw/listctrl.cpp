@@ -19,6 +19,7 @@
 
 #ifdef __GNUG__
     #pragma implementation "listctrl.h"
+    #pragma implementation "listctrlbase.h"
 #endif
 
 // For compilers that support precompilation, includes "wx.h".

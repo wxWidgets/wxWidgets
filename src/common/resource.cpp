@@ -544,7 +544,6 @@ wxControl *wxResourceTable::CreateItem(wxWindow *parent, const wxItemResource* c
       // Force the layout algorithm since the size changes the layout
       if (control->IsKindOf(CLASSINFO(wxRadioBox)))
       {
-        wxSize sz = control->GetSize();
         control->SetSize(-1, -1, -1, -1, wxSIZE_AUTO_WIDTH|wxSIZE_AUTO_HEIGHT);
       }
 #endif

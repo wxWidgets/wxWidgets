@@ -19,6 +19,7 @@
 
 #ifdef __GNUG__
     #pragma implementation "spinbutt.h"
+    #pragma implementation "spinbutbase.h"
 #endif
 
 // For compilers that support precompilation, includes "wx.h".

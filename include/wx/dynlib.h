@@ -40,7 +40,7 @@
 #   include <dl.h>
     typedef shl_t wxDllType;
 #elif defined(__WINDOWS__)
-//#   include <windows.h>  
+#   include <windows.h>         // needed to get HMODULE
     typedef HMODULE wxDllType;
 #elif defined(__OS2__)
 #   define INCL_DOS
@@ -61,6 +61,7 @@
 // ----------------------------------------------------------------------------
 // wxDllLoader
 // ----------------------------------------------------------------------------
+
 /** wxDllLoader is a class providing an interface similar to unix's
     dlopen(). It is used by the wxLibrary framework and manages the
     actual loading of DLLs and the resolving of symbols in them.
@@ -69,30 +70,31 @@
 */
 class wxDllLoader
 {
- public:
-   /** This function loads a shared library into memory, with libname
-       being the basename of the library, without the filename
-       extension. No initialisation of the library will be done.
-       @param libname Name of the shared object to load.
-       @param success Must point to a bool variable which will be set to TRUE or FALSE.
-       @return A handle to the loaded DLL. Use success parameter to test if it is valid.
-   */
-   static wxDllType LoadLibrary(const wxString & libname, bool *success = NULL);
-   /** This function unloads the shared library. */
-   static void UnloadLibrary(wxDllType dll);
-   /** This function returns a valid handle for the main program
-       itself. */
-   static wxDllType GetProgramHandle(void);
-   /** This function resolves a symbol in a loaded DLL, such as a
-       variable or function name.
-       @param dllHandle Handle of the DLL, as returned by LoadDll().
-       @param name Name of the symbol.
-       @return A pointer to the symbol.
-   */
-   static void * GetSymbol(wxDllType dllHandle, const wxString &name);
- private:
-   /// forbid construction of objects
-   wxDllLoader();
+public:
+    /** This function loads a shared library into memory, with libname
+      being the basename of the library, without the filename
+      extension. No initialisation of the library will be done.
+      @param libname Name of the shared object to load.
+      @param success Must point to a bool variable which will be set to TRUE or FALSE.
+      @return A handle to the loaded DLL. Use success parameter to test if it is valid.
+     */
+    static wxDllType LoadLibrary(const wxString & libname, bool *success = NULL);
+    /** This function unloads the shared library. */
+    static void UnloadLibrary(wxDllType dll);
+    /** This function returns a valid handle for the main program
+      itself. */
+    static wxDllType GetProgramHandle(void);
+    /** This function resolves a symbol in a loaded DLL, such as a
+      variable or function name.
+      @param dllHandle Handle of the DLL, as returned by LoadDll().
+      @param name Name of the symbol.
+      @return A pointer to the symbol.
+     */
+    static void * GetSymbol(wxDllType dllHandle, const wxString &name);
+
+private:
+    /// forbid construction of objects
+    wxDllLoader();
 };
 
 // ----------------------------------------------------------------------------

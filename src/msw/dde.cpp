@@ -50,6 +50,24 @@
     #include "wx/msw/gnuwin32/extra.h"
 #endif
 
+// some compilers headers don't define this one (mingw32)
+#ifndef DMLERR_NO_ERROR
+    #define DMLERR_NO_ERROR (0)
+
+    // this one is also missing from some mingw32 headers, but there is no way
+    // to test for it (I know of) - the test for DMLERR_NO_ERROR works for me,
+    // but is surely not the right thing to do
+    extern "C"
+    HDDEDATA STDCALL DdeClientTransaction(LPBYTE pData,
+                                          DWORD cbData,
+                                          HCONV hConv,
+                                          HSZ hszItem,
+                                          UINT wFmt,
+                                          UINT wType,
+                                          DWORD dwTimeout,
+                                          LPDWORD pdwResult);
+#endif // no DMLERR_NO_ERROR
+
 // ----------------------------------------------------------------------------
 // macros and constants
 // ----------------------------------------------------------------------------

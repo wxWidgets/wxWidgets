@@ -46,6 +46,11 @@
 #include "wx/msw/dib.h"
 #include "wx/image.h"
 
+// missing from mingw32 header
+#ifndef CLR_INVALID
+    #define CLR_INVALID ((COLORREF)-1)
+#endif // no CLR_INVALID
+
 // ----------------------------------------------------------------------------
 // macros
 // ----------------------------------------------------------------------------

@@ -47,9 +47,16 @@
     #include <print.h>
 #endif
 
+// mingw32 defines GDI_ERROR incorrectly
+#ifdef __GNUWIN32__
+    #undef GDI_ERROR
+    #define GDI_ERROR ((int)-1)
+#endif
+
 // ----------------------------------------------------------------------------
 // wxWin macros
 // ----------------------------------------------------------------------------
+
 IMPLEMENT_CLASS(wxPrinterDC, wxDC)
 
 // ============================================================================
