@@ -18,6 +18,8 @@ class WXDLLEXPORT wxTaskBarIconBase : public wxEvtHandler
 
 #if defined(__WXMSW__)
     #include "wx/msw/taskbar.h"
+#elif defined(__WXGTK__) || defined(__WXX11__) || defined(__WXMOTIF__)
+    #include "wx/unix/taskbarx11.h"
 #endif
 
 

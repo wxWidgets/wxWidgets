@@ -74,6 +74,7 @@ Unix:
 
 - fixed compilation on systems with zlib installed but < 1.1.3 version
 - fixed compilation on Solaris 7 with large files support enabled
+- added wxTaskBarIcon implementation for X11
 
 wxGTK:
 
