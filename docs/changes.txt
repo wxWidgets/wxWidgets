@@ -225,6 +225,17 @@ wxOS2:
 - partly fixed wxMouseEvent (reversed coordinate system again, handling of
   CTRL and SHIFT keys. ALT still doesn't work as expected by wxWidgets, though)
 
+wxODBC:
+- Identifying DB VENDOR signatures updated in wxDb::Dbms()
+- wxDb::getDbInfo() will no longer return failure if the return code was 
+  SQL_SUCCESS_WITH_INFO
+- Attempted to port everything for BLOB support back to 2.4.x.  I think it is
+  complete.
+- Table names now prepended to column names when joining tables.  This is only 
+  if there is not a '.' in the column name already.
+- Null column support fixes (SF #766404)
+
+
 
 2.4.2
 -----
