@@ -83,8 +83,10 @@ int _GSocket_Send_Dgram(GSocket *socket, const char *buffer, int size);
 
 /* Callbacks */
 
-int  _GSocket_GUI_Init(GSocket *socket);
-void _GSocket_GUI_Destroy(GSocket *socket);
+int  _GSocket_GUI_Init(void);
+void _GSocket_GUI_Cleanup(void);
+int  _GSocket_GUI_Init_Socket(GSocket *socket);
+void _GSocket_GUI_Destroy_Socket(GSocket *socket);
 
 LRESULT CALLBACK _GSocket_Internal_WinProc(HWND, UINT, WPARAM, LPARAM);
 

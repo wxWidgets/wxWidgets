@@ -28,12 +28,21 @@ void _GSocket_GDK_Input(gpointer data,
   GSocket *socket = (GSocket *)data;
 
   if (condition & GDK_INPUT_READ)
-    _GSocket_Detected_Read(socket);
+    socket->m_functions->Detected_Read(socket);
   if (condition & GDK_INPUT_WRITE)
-    _GSocket_Detected_Write(socket);
+    socket->m_functions->Detected_Write(socket);
 }
 
-int _GSocket_GUI_Init(GSocket *socket)
+int _GSocket_GUI_Init(void)
+{
+    return 1;
+}
+
+void _GSocket_GUI_Cleanup(void)
+{
+}
+    
+int _GSocket_GUI_Init_Socket(GSocket *socket)
 {
   gint *m_id;
 
@@ -46,7 +55,7 @@ int _GSocket_GUI_Init(GSocket *socket)
   return TRUE;
 }
 
-void _GSocket_GUI_Destroy(GSocket *socket)
+void _GSocket_GUI_Destroy_Socket(GSocket *socket)
 {
   free(socket->m_gui_dependent);
 }

@@ -110,17 +110,6 @@ struct sockaddr_un
 #  include "gsocket.h"
 #endif /* __GSOCKET_STANDALONE__ */
 
-/* redefine some GUI-only functions to do nothing in console mode */
-#if 1 //defined(wxUSE_GUI) && !wxUSE_GUI
-      // FIXME -- temporary measure
-#  define _GSocket_GUI_Init(socket) (1)
-#  define _GSocket_GUI_Destroy(socket)
-#  define _GSocket_Enable_Events(socket)
-#  define _GSocket_Disable_Events(socket)
-#  define _GSocket_Install_Callback(socket, event)
-#  define _GSocket_Uninstall_Callback(socket, event)
-#endif /* wxUSE_GUI */
-
 /* debugging helpers */
 #ifdef __GSOCKET_DEBUG__
 #  define GSocket_Debug(args) printf args
@@ -128,15 +117,60 @@ struct sockaddr_un
 #  define GSocket_Debug(args)
 #endif /* __GSOCKET_DEBUG__ */
 
+/* Table of GUI-related functions. We must call them indirectly because
+ * of wxBase and GUI separation: */
+
+static struct GSocketGUIFunctionsTable *gs_gui_functions;
+
+#define USE_GUI() (gs_gui_functions != NULL)
+
+/* Define macros to simplify indirection: */
+#define _GSocket_GUI_Init() \
+    if (gs_gui_functions) gs_gui_functions->GUI_Init()
+#define _GSocket_GUI_Cleanup() \
+    if (gs_gui_functions) gs_gui_functions->GUI_Cleanup()
+#define _GSocket_GUI_Init_Socket(socket) \
+    (gs_gui_functions ? gs_gui_functions->GUI_Init_Socket(socket) : 1)
+#define _GSocket_GUI_Destroy_Socket(socket) \
+    if (gs_gui_functions) gs_gui_functions->GUI_Destroy_Socket(socket)
+#define _GSocket_Enable_Events(socket) \
+    if (gs_gui_functions) gs_gui_functions->Enable_Events(socket)
+#define _GSocket_Disable_Events(socket) \
+    if (gs_gui_functions) gs_gui_functions->Disable_Events(socket)
+#define _GSocket_Install_Callback(socket, event) \
+    if (gs_gui_functions) gs_gui_functions->Install_Callback(socket, event)
+#define _GSocket_Uninstall_Callback(socket, event) \
+    if (gs_gui_functions) gs_gui_functions->Uninstall_Callback(socket, event)
+
+static struct GSocketBaseFunctionsTable gs_base_functions =
+{
+    _GSocket_Detected_Read,
+    _GSocket_Detected_Write
+};
+
 /* Global initialisers */
 
+void GSocket_SetGUIFunctions(struct GSocketGUIFunctionsTable *guifunc)
+{
+  gs_gui_functions = guifunc;
+}
+         
 int GSocket_Init(void)
 {
+  if (gs_gui_functions)
+  {
+      if ( !gs_gui_functions->GUI_Init() )
+        return 0;
+  }
   return 1;
 }
 
 void GSocket_Cleanup(void)
 {
+  if (gs_gui_functions)
+  {
+      gs_gui_functions->GUI_Cleanup();
+  }
 }
 
 /* Constructors / Destructors for GSocket */
@@ -168,8 +202,10 @@ GSocket *GSocket_new(void)
                                 /* 10 minutes * 60 sec * 1000 millisec */
   socket->m_establishing        = FALSE;
 
+  socket->m_functions           = &gs_base_functions;
+
   /* Per-socket GUI-specific initialization */
-  success = _GSocket_GUI_Init(socket);
+  success = _GSocket_GUI_Init_Socket(socket);
   if (!success)
   {
     free(socket);
@@ -195,7 +231,7 @@ void GSocket_destroy(GSocket *socket)
     GSocket_Shutdown(socket);
 
   /* Per-socket GUI-specific cleanup */
-  _GSocket_GUI_Destroy(socket);
+  _GSocket_GUI_Destroy_Socket(socket);
 
   /* Destroy private addresses */
   if (socket->m_local)
@@ -797,123 +833,126 @@ int GSocket_Write(GSocket *socket, const char *buffer, int size)
  */
 GSocketEventFlags GSocket_Select(GSocket *socket, GSocketEventFlags flags)
 {
-#if defined(wxUSE_GUI) && !wxUSE_GUI
-
-  GSocketEventFlags result = 0;
-  fd_set readfds;
-  fd_set writefds;
-  fd_set exceptfds;
-  struct timeval tv;
-
-  /* Do not use a static struct, Linux can garble it */
-  tv.tv_sec = 0;
-  tv.tv_usec = 0;
-
-  assert(socket != NULL);
-
-  FD_ZERO(&readfds);
-  FD_ZERO(&writefds);
-  FD_ZERO(&exceptfds);
-  FD_SET(socket->m_fd, &readfds);
-  FD_SET(socket->m_fd, &writefds);
-  FD_SET(socket->m_fd, &exceptfds);
-
-  /* Check 'sticky' CONNECTION flag first */
-  result |= (GSOCK_CONNECTION_FLAG & socket->m_detected);
-
-  /* If we have already detected a LOST event, then don't try
-   * to do any further processing.
-   */
-  if ((socket->m_detected & GSOCK_LOST_FLAG) != 0)
+  if (!USE_GUI())
   {
-    socket->m_establishing = FALSE;
 
-    return (GSOCK_LOST_FLAG & flags);
-  }
+    GSocketEventFlags result = 0;
+    fd_set readfds;
+    fd_set writefds;
+    fd_set exceptfds;
+    struct timeval tv;
 
-  /* Try select now */
-  if (select(socket->m_fd + 1, &readfds, &writefds, &exceptfds, &tv) <= 0)
-  {
-    /* What to do here? */
-    return (result & flags);
-  }
+    /* Do not use a static struct, Linux can garble it */
+    tv.tv_sec = 0;
+    tv.tv_usec = 0;
 
-  /* Check for readability */
-  if (FD_ISSET(socket->m_fd, &readfds))
-  {
-    char c;
+    assert(socket != NULL);
 
-    if (recv(socket->m_fd, &c, 1, MSG_PEEK) > 0)
+    FD_ZERO(&readfds);
+    FD_ZERO(&writefds);
+    FD_ZERO(&exceptfds);
+    FD_SET(socket->m_fd, &readfds);
+    FD_SET(socket->m_fd, &writefds);
+    FD_SET(socket->m_fd, &exceptfds);
+
+    /* Check 'sticky' CONNECTION flag first */
+    result |= (GSOCK_CONNECTION_FLAG & socket->m_detected);
+
+    /* If we have already detected a LOST event, then don't try
+     * to do any further processing.
+     */
+    if ((socket->m_detected & GSOCK_LOST_FLAG) != 0)
     {
-      result |= GSOCK_INPUT_FLAG;
-    }
-    else
-    {
-      if (socket->m_server && socket->m_stream)
-      {
-        result |= GSOCK_CONNECTION_FLAG;
-        socket->m_detected |= GSOCK_CONNECTION_FLAG;
-      }
-      else
-      {
-        socket->m_detected = GSOCK_LOST_FLAG;
-        socket->m_establishing = FALSE;
-    
-        /* LOST event: Abort any further processing */
-        return (GSOCK_LOST_FLAG & flags);
-      }
-    }
-  }
-
-  /* Check for writability */
-  if (FD_ISSET(socket->m_fd, &writefds))
-  {
-    if (socket->m_establishing && !socket->m_server)
-    {
-      int error;
-      SOCKLEN_T len = sizeof(error);
-
       socket->m_establishing = FALSE;
 
-      getsockopt(socket->m_fd, SOL_SOCKET, SO_ERROR, (void*)&error, &len);
+      return (GSOCK_LOST_FLAG & flags);
+    }
 
-      if (error)
+    /* Try select now */
+    if (select(socket->m_fd + 1, &readfds, &writefds, &exceptfds, &tv) <= 0)
+    {
+      /* What to do here? */
+      return (result & flags);
+    }
+
+    /* Check for readability */
+    if (FD_ISSET(socket->m_fd, &readfds))
+    {
+      char c;
+
+      if (recv(socket->m_fd, &c, 1, MSG_PEEK) > 0)
       {
-        socket->m_detected = GSOCK_LOST_FLAG;
-
-        /* LOST event: Abort any further processing */
-        return (GSOCK_LOST_FLAG & flags);
+        result |= GSOCK_INPUT_FLAG;
       }
       else
       {
-        result |= GSOCK_CONNECTION_FLAG;
-        socket->m_detected |= GSOCK_CONNECTION_FLAG;
+        if (socket->m_server && socket->m_stream)
+        {
+          result |= GSOCK_CONNECTION_FLAG;
+          socket->m_detected |= GSOCK_CONNECTION_FLAG;
+        }
+        else
+        {
+          socket->m_detected = GSOCK_LOST_FLAG;
+          socket->m_establishing = FALSE;
+      
+          /* LOST event: Abort any further processing */
+          return (GSOCK_LOST_FLAG & flags);
+        }
       }
     }
-    else
+
+    /* Check for writability */
+    if (FD_ISSET(socket->m_fd, &writefds))
     {
-      result |= GSOCK_OUTPUT_FLAG;
+      if (socket->m_establishing && !socket->m_server)
+      {
+        int error;
+        SOCKLEN_T len = sizeof(error);
+
+        socket->m_establishing = FALSE;
+
+        getsockopt(socket->m_fd, SOL_SOCKET, SO_ERROR, (void*)&error, &len);
+
+        if (error)
+        {
+          socket->m_detected = GSOCK_LOST_FLAG;
+
+          /* LOST event: Abort any further processing */
+          return (GSOCK_LOST_FLAG & flags);
+        }
+        else
+        {
+          result |= GSOCK_CONNECTION_FLAG;
+          socket->m_detected |= GSOCK_CONNECTION_FLAG;
+        }
+      }
+      else
+      {
+        result |= GSOCK_OUTPUT_FLAG;
+      }
     }
-  }
 
-  /* Check for exceptions and errors (is this useful in Unices?) */
-  if (FD_ISSET(socket->m_fd, &exceptfds))
+    /* Check for exceptions and errors (is this useful in Unices?) */
+    if (FD_ISSET(socket->m_fd, &exceptfds))
+    {
+      socket->m_establishing = FALSE;
+      socket->m_detected = GSOCK_LOST_FLAG;
+
+      /* LOST event: Abort any further processing */
+      return (GSOCK_LOST_FLAG & flags);
+    }
+
+    return (result & flags);
+
+  }
+  else
   {
-    socket->m_establishing = FALSE;
-    socket->m_detected = GSOCK_LOST_FLAG;
 
-    /* LOST event: Abort any further processing */
-    return (GSOCK_LOST_FLAG & flags);
+    assert(socket != NULL);
+    return flags & socket->m_detected;
+
   }
-
-  return (result & flags);
-
-#else 
-
-  assert(socket != NULL);
-  return flags & socket->m_detected;
-
-#endif /* !wxUSE_GUI */
 }
 
 /* Flags */

@@ -95,7 +95,36 @@ typedef void (*GSocketCallback)(GSocket *socket, GSocketEvent event,
                                 char *cdata);
 
 
+/* Functions tables for internal use by GSocket code: */
+
+#ifndef __WINDOWS__
+struct GSocketBaseFunctionsTable
+{
+    void (*Detected_Read)(GSocket *socket);
+    void (*Detected_Write)(GSocket *socket);
+};
+#endif
+
+struct GSocketGUIFunctionsTable
+{
+    int  (*GUI_Init)(void);
+    void (*GUI_Cleanup)(void);
+    int  (*GUI_Init_Socket)(GSocket *socket);
+    void (*GUI_Destroy_Socket)(GSocket *socket);
+#ifndef __WINDOWS__
+    void (*Install_Callback)(GSocket *socket, GSocketEvent event);
+    void (*Uninstall_Callback)(GSocket *socket, GSocketEvent event);
+#endif
+    void (*Enable_Events)(GSocket *socket);
+    void (*Disable_Events)(GSocket *socket);
+};
+
+
 /* Global initializers */
+
+/* Sets GUI functions callbacks. Must be called *before* GSocket_Init
+   if the app uses async sockets. */
+void GSocket_SetGUIFunctions(struct GSocketGUIFunctionsTable *guifunc);
 
 /* GSocket_Init() must be called at the beginning */
 int GSocket_Init(void);

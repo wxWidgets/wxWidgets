@@ -24,6 +24,8 @@ class WXDLLIMPEXP_BASE wxMessageOutput;
 class WXDLLEXPORT wxRendererNative;
 class WXDLLIMPEXP_BASE wxString;
 
+extern "C" struct GSocketGUIFunctionsTable;
+
 // ----------------------------------------------------------------------------
 // toolkit information
 // ----------------------------------------------------------------------------
@@ -105,6 +107,11 @@ public:
     // wxBase
     virtual void RemoveFromPendingDelete(wxObject *object) = 0;
 
+#if wxUSE_SOCKETS
+    // return table of GUI callbacks for GSocket code or NULL in wxBase
+    virtual GSocketGUIFunctionsTable* GetSocketGUIFunctionsTable() = 0;
+#endif
+
 
     // return information about what toolkit is running; we need for two things
     // that are both contained in wxBase:
@@ -154,6 +161,9 @@ public:
     virtual wxFontMapper *CreateFontMapper();
 #endif // wxUSE_FONTMAP
     virtual wxRendererNative *CreateRenderer();
+#if wxUSE_SOCKETS
+    virtual GSocketGUIFunctionsTable* GetSocketGUIFunctionsTable();
+#endif
 
 #ifdef __WXDEBUG__
     virtual bool ShowAssertDialog(const wxString& msg);
@@ -181,6 +191,9 @@ public:
     virtual wxFontMapper *CreateFontMapper();
 #endif // wxUSE_FONTMAP
     virtual wxRendererNative *CreateRenderer();
+#if wxUSE_SOCKETS
+    virtual GSocketGUIFunctionsTable* GetSocketGUIFunctionsTable();
+#endif
 
 #ifdef __WXDEBUG__
     virtual bool ShowAssertDialog(const wxString& msg);

@@ -456,6 +456,13 @@ void wxConsoleAppTraitsBase::RemoveFromPendingDelete(wxObject * WXUNUSED(object)
 {
     // nothing to do
 }
+    
+#if wxUSE_SOCKETS
+GSocketGUIFunctionsTable* wxConsoleAppTraitsBase::GetSocketGUIFunctionsTable()
+{
+    return NULL;
+}
+#endif
 
 // ----------------------------------------------------------------------------
 // wxAppTraits

@@ -73,6 +73,62 @@
 #  define SOCKLEN_T int
 #endif
 
+/* Table of GUI-related functions. We must call them indirectly because
+ * of wxBase and GUI separation: */
+
+static struct GSocketGUIFunctionsTable *gs_gui_functions;
+
+#define USE_GUI() (gs_gui_functions != NULL)
+
+/* Define macros to simplify indirection: */
+#define _GSocket_GUI_Init() \
+    if (gs_gui_functions) gs_gui_functions->GUI_Init()
+#define _GSocket_GUI_Cleanup() \
+    if (gs_gui_functions) gs_gui_functions->GUI_Cleanup()
+#define _GSocket_GUI_Init_Socket(socket) \
+    (gs_gui_functions ? gs_gui_functions->GUI_Init_Socket(socket) : 1)
+#define _GSocket_GUI_Destroy_Socket(socket) \
+    if (gs_gui_functions) gs_gui_functions->GUI_Destroy_Socket(socket)
+#define _GSocket_Enable_Events(socket) \
+    if (gs_gui_functions) gs_gui_functions->Enable_Events(socket)
+#define _GSocket_Disable_Events(socket) \
+    if (gs_gui_functions) gs_gui_functions->Disable_Events(socket)
+#define _GSocket_Install_Callback(socket, event) \
+    if (gs_gui_functions) gs_gui_functions->Install_Callback(socket, event)
+#define _GSocket_Uninstall_Callback(socket, event) \
+    if (gs_gui_functions) gs_gui_functions->Uninstall_Callback(socket, event)
+
+/* Global initialisers */
+
+void GSocket_SetGUIFunctions(struct GSocketGUIFunctionsTable *guifunc)
+{
+  gs_gui_functions = guifunc;
+}
+         
+int GSocket_Init(void)
+{
+  WSADATA wsaData;
+  
+  if (gs_gui_functions)
+  {
+      if ( !gs_gui_functions->GUI_Init() )
+        return 0;
+  }
+
+  /* Initialize WinSocket */
+  return (WSAStartup((1 << 8) | 1, &wsaData) == 0);
+}
+
+void GSocket_Cleanup(void)
+{
+  if (gs_gui_functions)
+  {
+      gs_gui_functions->GUI_Cleanup();
+  }
+  
+  /* Cleanup WinSocket */
+  WSACleanup();
+}
 
 /* Constructors / Destructors for GSocket */
 
@@ -101,7 +157,7 @@ GSocket *GSocket_new(void)
   socket->m_establishing    = FALSE;
 
   /* Per-socket GUI-specific initialization */
-  success = _GSocket_GUI_Init(socket);
+  success = _GSocket_GUI_Init_Socket(socket);
   if (!success)
   {
     free(socket);
@@ -123,7 +179,7 @@ void GSocket_destroy(GSocket *socket)
   assert(socket != NULL);
 
   /* Per-socket GUI-specific cleanup */
-  _GSocket_GUI_Destroy(socket);
+  _GSocket_GUI_Destroy_Socket(socket);
 
   /* Check that the socket is really shutdowned */
   if (socket->m_fd != INVALID_SOCKET)

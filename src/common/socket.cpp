@@ -126,6 +126,12 @@ bool wxSocketBase::Initialize()
 {
     if ( !m_countInit++ )
     {
+        wxAppTraits *traits = wxAppConsole::GetInstance() ?
+                              wxAppConsole::GetInstance()->GetTraits() : NULL;
+        GSocketGUIFunctionsTable *functions = 
+            traits ? traits->GetSocketGUIFunctionsTable() : NULL;
+        GSocket_SetGUIFunctions(functions);
+        
         if ( !GSocket_Init() )
         {
             m_countInit--;

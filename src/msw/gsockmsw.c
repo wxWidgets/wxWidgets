@@ -106,9 +106,8 @@ static int firstAvailable;
 
 /* Global initializers */
 
-int GSocket_Init(void)
+int _GSocket_GUI_Init(void)
 {
-  WSADATA wsaData;
   WNDCLASS winClass;
   int i;
 
@@ -141,11 +140,10 @@ int GSocket_Init(void)
   }
   firstAvailable = 0;
 
-  /* Initialize WinSocket */
-  return (WSAStartup((1 << 8) | 1, &wsaData) == 0);
+  return 1;
 }
 
-void GSocket_Cleanup(void)
+void _GSocket_GUI_Cleanup(void)
 {
   /* Destroy internal window */
   DestroyWindow(hWin);
@@ -153,14 +151,11 @@ void GSocket_Cleanup(void)
 
   /* Delete critical section */
   DeleteCriticalSection(&critical);
-
-  /* Cleanup WinSocket */
-  WSACleanup();
 }
 
 /* Per-socket GUI initialization / cleanup */
 
-int _GSocket_GUI_Init(GSocket *socket)
+int _GSocket_GUI_Init_Socket(GSocket *socket)
 {
   int i;
 
@@ -187,7 +182,7 @@ int _GSocket_GUI_Init(GSocket *socket)
   return TRUE;
 }
 
-void _GSocket_GUI_Destroy(GSocket *socket)
+void _GSocket_GUI_Destroy_Socket(GSocket *socket)
 {
   /* Remove the socket from the list */
   EnterCriticalSection(&critical);

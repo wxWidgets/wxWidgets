@@ -56,6 +56,9 @@ struct _GSocket
   char *m_data[GSOCK_MAX_EVENT];
 
   char *m_gui_dependent;
+
+  /* Function pointers */
+  struct GSocketBaseFunctionsTable *m_functions;
 };
 
 /* Definition of GAddress */
@@ -81,8 +84,11 @@ int _GSocket_Send_Dgram(GSocket *socket, const char *buffer, int size);
 
 /* Callbacks */
 
-int  _GSocket_GUI_Init(GSocket *socket);
-void _GSocket_GUI_Destroy(GSocket *socket);
+int  _GSocket_GUI_Init(void);
+void _GSocket_GUI_Cleanup(void);
+
+int  _GSocket_GUI_Init_Socket(GSocket *socket);
+void _GSocket_GUI_Destroy_Socket(GSocket *socket);
 
 void _GSocket_Enable_Events(GSocket *socket);
 void _GSocket_Disable_Events(GSocket *socket);

@@ -12,12 +12,21 @@
 #include <stdlib.h>
 #include "wx/gsocket.h"
 
-int _GSocket_GUI_Init(GSocket *socket)
+int _GSocket_GUI_Init(void)
+{
+    return 1;
+}
+
+void _GSocket_GUI_Cleanup(void)
+{
+}
+
+int _GSocket_GUI_Init_Socket(GSocket *socket)
 {
     return 0;
 }
 
-void _GSocket_GUI_Destroy(GSocket *socket)
+void _GSocket_GUI_Destroy_Socket(GSocket *socket)
 {
 }
 
