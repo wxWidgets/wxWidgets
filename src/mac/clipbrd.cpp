@@ -298,6 +298,15 @@ bool wxClipboard::AddData( wxDataObject *data )
 void wxClipboard::Close()
 {
     m_open = false ;
+    
+ 	// Get rid of cached object.  If this is not done copying from another application will
+ 	// only work once
+    if (m_data)
+    {
+        delete m_data;
+        m_data = (wxDataObject*) NULL;
+    }    
+	    
 }
 
 bool wxClipboard::IsSupported( const wxDataFormat &dataFormat )
