@@ -20,7 +20,7 @@
     }
 
     foreach $file (sort keys %wxCommon) {
-	next if $wxCommon{$file} =~ /\b16\b/;
+	next if $wxCommon{$file} =~ /\b(16|U)\b/;
 
 	my $tag = $file =~ /\.c$/ ? "WXCSRCS" : "WXCOMMONSRCS";
 	$project{$tag} .= $file . " "
@@ -36,7 +36,7 @@
     }
 
     foreach $file (sort keys %wxHTML) {
-	next if $wxHTML{$file} =~ /\b16\b/;
+	next if $wxHTML{$file} =~ /\b(16|U)\b/;
 	$project{"WXHTMLSRCS"} .= $file . " "
     }
 
