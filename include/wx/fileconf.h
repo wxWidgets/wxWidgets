@@ -17,6 +17,10 @@
 #pragma interface "fileconf.h"
 #endif
 
+#include "wx/defs.h"
+#include "wx/textfile.h"
+#include "wx/string.h"
+
 // ----------------------------------------------------------------------------
 // compile options
 // ----------------------------------------------------------------------------

@@ -159,7 +159,7 @@ void gtk_window_size_callback( GtkWidget *WXUNUSED(widget), GtkAllocation* alloc
 //-----------------------------------------------------------------------------
 // key_press
 
-gint gtk_window_key_press_callback( GtkWidget *WXUNUSED(widget), GdkEventKey *gdk_event, wxWindow *win )
+gint gtk_window_key_press_callback( GtkWidget *widget, GdkEventKey *gdk_event, wxWindow *win )
 { 
   if (!win->HasVMT()) return FALSE;
   if (g_blockEventsOnDrag) return FALSE;
@@ -262,6 +262,13 @@ gint gtk_window_key_press_callback( GtkWidget *WXUNUSED(widget), GdkEventKey *gd
   event.SetEventObject( win );
   
   bool ret = win->ProcessEvent( event );
+  
+  if (ret)
+  {
+    if ((gdk_event->keyval >= 0x20) && (gdk_event->keyval <= 0xFF)) 
+      gtk_signal_emit_stop_by_name( GTK_OBJECT(widget), "key_press_event" );
+  }
+  
 /*
   if (ret) printf( "found.\n") ;
 */

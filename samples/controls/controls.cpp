@@ -127,31 +127,32 @@ bool MyApp::OnInit(void)
 // MyPanel
 //----------------------------------------------------------------------
 
-const  int ID_NOTEBOOK          = 1000;
+const  ID_NOTEBOOK          = 1000;
 
-const  int ID_LISTBOX           = 130;
-const  int ID_LISTBOX_SEL_NUM   = 131;
-const  int ID_LISTBOX_SEL_STR   = 132;
-const  int ID_LISTBOX_CLEAR     = 133;
-const  int ID_LISTBOX_APPEND    = 134;
+const  ID_LISTBOX           = 130;
+const  ID_LISTBOX_SEL_NUM   = 131;
+const  ID_LISTBOX_SEL_STR   = 132;
+const  ID_LISTBOX_CLEAR     = 133;
+const  ID_LISTBOX_APPEND    = 134;
+const  ID_LISTBOX_DELETE    = 135;
 
-const  int ID_CHOICE            = 120;
-const  int ID_CHOICE_SEL_NUM    = 121;
-const  int ID_CHOICE_SEL_STR    = 122;
-const  int ID_CHOICE_CLEAR      = 123;
-const  int ID_CHOICE_APPEND     = 124;
+const  ID_CHOICE            = 120;
+const  ID_CHOICE_SEL_NUM    = 121;
+const  ID_CHOICE_SEL_STR    = 122;
+const  ID_CHOICE_CLEAR      = 123;
+const  ID_CHOICE_APPEND     = 124;
 
-const  int ID_COMBO             = 140;
-const  int ID_COMBO_SEL_NUM     = 141;
-const  int ID_COMBO_SEL_STR     = 142;
-const  int ID_COMBO_CLEAR       = 143;
-const  int ID_COMBO_APPEND      = 144;
+const  ID_COMBO             = 140;
+const  ID_COMBO_SEL_NUM     = 141;
+const  ID_COMBO_SEL_STR     = 142;
+const  ID_COMBO_CLEAR       = 143;
+const  ID_COMBO_APPEND      = 144;
 
-const  int ID_TEXT              = 150;
+const  ID_TEXT              = 150;
 
-const  int ID_RADIOBOX          = 160;
-const  int ID_RADIOBOX_SEL_NUM  = 161;
-const  int ID_RADIOBOX_SEL_STR  = 162;
+const  ID_RADIOBOX          = 160;
+const  ID_RADIOBOX_SEL_NUM  = 161;
+const  ID_RADIOBOX_SEL_STR  = 162;
 
 BEGIN_EVENT_TABLE(MyPanel, wxPanel)
   EVT_SIZE      (                       MyPanel::OnSize)
@@ -160,6 +161,7 @@ BEGIN_EVENT_TABLE(MyPanel, wxPanel)
   EVT_BUTTON    (ID_LISTBOX_SEL_STR,    MyPanel::OnListBoxButtons)
   EVT_BUTTON    (ID_LISTBOX_CLEAR,      MyPanel::OnListBoxButtons)
   EVT_BUTTON    (ID_LISTBOX_APPEND,     MyPanel::OnListBoxButtons)
+  EVT_BUTTON    (ID_LISTBOX_DELETE,     MyPanel::OnListBoxButtons)
   EVT_CHOICE    (ID_CHOICE,             MyPanel::OnChoice)
   EVT_BUTTON    (ID_CHOICE_SEL_NUM,     MyPanel::OnChoiceButtons)
   EVT_BUTTON    (ID_CHOICE_SEL_STR,     MyPanel::OnChoiceButtons)
@@ -196,6 +198,7 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h ) :
   (void)new wxButton( panel, ID_LISTBOX_SEL_STR, "Select 'This'", wxPoint(300,30), wxSize(100,30) );
   (void)new wxButton( panel, ID_LISTBOX_CLEAR, "Clear", wxPoint(180,80), wxSize(100,30) );
   (void)new wxButton( panel, ID_LISTBOX_APPEND, "Append 'Hi!'", wxPoint(300,80), wxSize(100,30) );
+  (void)new wxButton( panel, ID_LISTBOX_DELETE, "Delete selected item", wxPoint(180,130), wxSize(140,30) );
   m_notebook->AddPage(panel, "wxList");
   
   panel = new wxPanel(m_notebook);
@@ -263,6 +266,12 @@ void MyPanel::OnListBoxButtons( wxCommandEvent &event )
     case ID_LISTBOX_APPEND:
     {
       m_listbox->Append( "Hi!" );
+      break;
+    }
+    case ID_LISTBOX_DELETE:
+    {
+      int idx = m_listbox->GetSelection();
+      m_listbox->Delete( idx );
       break;
     }
   }

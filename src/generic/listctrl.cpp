@@ -1604,8 +1604,7 @@ void wxListMainWindow::SetItemState( long item, long state, long stateMask )
       wxListLineData *line = (wxListLineData*)node->Data();
       bool on = state & wxLIST_STATE_SELECTED;
       line->Hilight( on );
-      RefreshLine( m_current );
-      RefreshLine( oldCurrent );
+      RefreshLine( line );
     };
   };
 };

@@ -220,7 +220,7 @@ public:
   inline void SetAppName(const wxString& appName) { m_appName = appName; }
   inline void SetVendorName(const wxString& vendorName) { m_vendorName = vendorName; }
 
-  inline void SetStyle(long style) { m_style; }
+  inline void SetStyle(long style) { m_style = style; }
   inline long GetStyle() const { return m_style; }
 
 protected:

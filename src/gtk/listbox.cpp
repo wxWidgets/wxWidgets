@@ -156,12 +156,22 @@ void wxListBox::Clear(void)
 
 void wxListBox::Delete( int n )
 {
-  gtk_list_clear_items( m_list, n, n );
+  GList *child = g_list_nth( m_list->children, n );
+  
+  if (!child)
+  {
+    wxFAIL_MSG("wrong listbox index");
+    return;
+  }
+  
+  GList *list = g_list_append( NULL, child->data );
+  gtk_list_remove_items( m_list, list );
+  g_list_free( list );
   
   wxNode *node = m_clientData.Nth( n );
   if (!node)
   {
-    wxFAIL_MSG("wxListBox::Delete wrong index");
+    wxFAIL_MSG("wrong listbox index");
   }
   else
     m_clientData.DeleteNode( node );
@@ -184,6 +194,7 @@ int wxListBox::FindString( const wxString &item ) const
     count++;
     child = child->next;
   }
+  wxFAIL_MSG("wrong listbox index");
   return -1;
 }
 
@@ -191,6 +202,8 @@ char *wxListBox::GetClientData( int n ) const
 {
   wxNode *node = m_clientData.Nth( n );
   if (node) return ((char*)node->Data());
+  
+  wxFAIL_MSG("wrong listbox index");
   return (char *) NULL;
 }
 
@@ -208,6 +221,7 @@ int wxListBox::GetSelection(void) const
       child = child->next;
     }
   }
+  wxFAIL_MSG("wrong listbox index");
   return -1;
 }
 
@@ -245,6 +259,7 @@ wxString wxListBox::GetString( int n ) const
     GtkLabel *label = GTK_LABEL( bin->child );
     return label->label;
   }
+  wxFAIL_MSG("wrong listbox index");
   return "";
 }
 
@@ -257,6 +272,7 @@ wxString wxListBox::GetStringSelection(void) const
     wxString tmp = GTK_LABEL( bin->child )->label;
     return tmp;
   }
+  wxFAIL_MSG("no listbox selection available");
   return "";
 }
 
@@ -280,25 +296,36 @@ bool wxListBox::Selected( int n )
       child = child->next;
     }
   }
+  wxFAIL_MSG("wrong listbox index");
   return FALSE;
 }
 
 void wxListBox::Set( int WXUNUSED(n), const wxString *WXUNUSED(choices) )
 {
+  wxFAIL_MSG("wxListBox::Set not implemented");
 }
 
 void wxListBox::SetClientData( int n, char *clientData )
 {
   wxNode *node = m_clientData.Nth( n );
-  if (node) node->SetData( (wxObject*)clientData );
+  if (node)
+  { 
+    node->SetData( (wxObject*)clientData );
+  }
+  else
+  {
+    wxFAIL_MSG("wrong listbox index");
+  }
 }
 
 void wxListBox::SetFirstItem( int WXUNUSED(n) )
 {
+  wxFAIL_MSG("wxListBox::SetFirstItem not implemented");
 }
 
 void wxListBox::SetFirstItem( const wxString &WXUNUSED(item) )
 {
+  wxFAIL_MSG("wxListBox::SetFirstItem not implemented");
 }
 
 void wxListBox::SetSelection( int n, bool select )
@@ -317,6 +344,10 @@ void wxListBox::SetString( int n, const wxString &string )
     GtkBin *bin = GTK_BIN( child->data );
     GtkLabel *label = GTK_LABEL( bin->child );
     gtk_label_set( label, string );
+  }
+  else
+  {
+    wxFAIL_MSG("wrong listbox index");
   }
 }
 
