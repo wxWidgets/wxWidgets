@@ -79,6 +79,7 @@ cvar = _gizmos.cvar
 DynamicSashNameStr = cvar.DynamicSashNameStr
 EditableListBoxNameStr = cvar.EditableListBoxNameStr
 TreeListCtrlNameStr = cvar.TreeListCtrlNameStr
+StaticPictureNameStr = cvar.StaticPictureNameStr
 
 class DynamicSashUnifyEvent(_core.CommandEvent):
     """Proxy of C++ DynamicSashUnifyEvent class"""
@@ -927,6 +928,88 @@ _gizmos.TreeListCtrl_swigregister(TreeListCtrlPtr)
 def PreTreeListCtrl(*args, **kwargs):
     """PreTreeListCtrl() -> TreeListCtrl"""
     val = _gizmos.new_PreTreeListCtrl(*args, **kwargs)
+    val.thisown = 1
+    return val
+
+SCALE_HORIZONTAL = _gizmos.SCALE_HORIZONTAL
+SCALE_VERTICAL = _gizmos.SCALE_VERTICAL
+SCALE_UNIFORM = _gizmos.SCALE_UNIFORM
+SCALE_CUSTOM = _gizmos.SCALE_CUSTOM
+class StaticPicture(_core.Control):
+    """Proxy of C++ StaticPicture class"""
+    def __repr__(self):
+        return "<%s.%s; proxy of C++ wxStaticPicture instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
+    def __init__(self, *args, **kwargs):
+        """
+        __init__(self, Window parent, int id, Bitmap label, Point pos=DefaultPosition, 
+            Size size=DefaultSize, long style=0, 
+            String name=StaticPictureNameStr) -> StaticPicture
+        """
+        newobj = _gizmos.new_StaticPicture(*args, **kwargs)
+        self.this = newobj.this
+        self.thisown = 1
+        del newobj.thisown
+        self._setOORInfo(self)
+
+    def Create(*args, **kwargs):
+        """
+        Create(self, Window parent, int id, Bitmap label, Point pos=DefaultPosition, 
+            Size size=DefaultSize, long style=0, 
+            String name=StaticPictureNameStr) -> bool
+        """
+        return _gizmos.StaticPicture_Create(*args, **kwargs)
+
+    def SetBitmap(*args, **kwargs):
+        """SetBitmap(self, Bitmap bmp)"""
+        return _gizmos.StaticPicture_SetBitmap(*args, **kwargs)
+
+    def GetBitmap(*args, **kwargs):
+        """GetBitmap(self) -> Bitmap"""
+        return _gizmos.StaticPicture_GetBitmap(*args, **kwargs)
+
+    def SetIcon(*args, **kwargs):
+        """SetIcon(self, Icon icon)"""
+        return _gizmos.StaticPicture_SetIcon(*args, **kwargs)
+
+    def GetIcon(*args, **kwargs):
+        """GetIcon(self) -> Icon"""
+        return _gizmos.StaticPicture_GetIcon(*args, **kwargs)
+
+    def SetAlignment(*args, **kwargs):
+        """SetAlignment(self, int align)"""
+        return _gizmos.StaticPicture_SetAlignment(*args, **kwargs)
+
+    def GetAlignment(*args, **kwargs):
+        """GetAlignment(self) -> int"""
+        return _gizmos.StaticPicture_GetAlignment(*args, **kwargs)
+
+    def SetScale(*args, **kwargs):
+        """SetScale(self, int scale)"""
+        return _gizmos.StaticPicture_SetScale(*args, **kwargs)
+
+    def GetScale(*args, **kwargs):
+        """GetScale(self) -> int"""
+        return _gizmos.StaticPicture_GetScale(*args, **kwargs)
+
+    def SetCustomScale(*args, **kwargs):
+        """SetCustomScale(self, float sx, float sy)"""
+        return _gizmos.StaticPicture_SetCustomScale(*args, **kwargs)
+
+    def GetCustomScale(*args, **kwargs):
+        """GetCustomScale(self, float OUTPUT, float OUTPUT)"""
+        return _gizmos.StaticPicture_GetCustomScale(*args, **kwargs)
+
+
+class StaticPicturePtr(StaticPicture):
+    def __init__(self, this):
+        self.this = this
+        if not hasattr(self,"thisown"): self.thisown = 0
+        self.__class__ = StaticPicture
+_gizmos.StaticPicture_swigregister(StaticPicturePtr)
+
+def PreStaticPicture(*args, **kwargs):
+    """PreStaticPicture() -> StaticPicture"""
+    val = _gizmos.new_PreStaticPicture(*args, **kwargs)
     val.thisown = 1
     return val
 
