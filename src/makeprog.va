@@ -1,0 +1,51 @@
+#
+# File:     makeprog.va
+# Author:   David Webster
+# Created:  1999
+# Updated:
+# Copyright:    (c) David Webster
+#
+# Makefile environment for building samples. Include this from
+# your own makefile.
+# Use FINAL=1 argument to nmake to build final version with no debugging
+# info
+
+# Set WXDIR for your system
+WXDIR = j:\dev\wx2\wxWindows
+
+WXUSINGDLL=0
+
+!include $(WXDIR)\src\makeva.env
+
+all:    $(PROGRAM).exe
+
+wx:
+        cd $(WXDIR)\src\os2
+        nmake -f makefile.va FINAL=$(FINAL)
+#        cd $(THISDIR)
+
+wxclean:
+        cd $(WXDIR)\src\os2
+        nmake -f makefile.va clean
+#        cd $(THISDIR)
+
+$(PROGRAM).exe:      $(DUMMYOBJ) $(WXLIB) $(OBJECTS) $(PROGRAM).res
+    @echo " Link::Linker "
+    $(LINK) @<<
+        /B" $(LINKFLAGS)" /Fe$@
+        $(LINKLIBS)
+        $(OBJECTS)
+        $(LIBS)
+<<
+  $(RC) $(PROGRAM).res $(PROGRAM).exe
+
+$(PROGRAM).res :      $(PROGRAM).rc $(WXDIR)\include\wx\os2\wx.rc
+    $(RC) -I $(WXDIR)\include -D __VISAGECPP__ -r $(PROGRAM).rc $(PROGRAM).res
+
+clean:
+        -erase $(OBJECTS)
+        -erase *.exe
+        -erase *.obj
+        -erase *.res
+        -erase *.map
+
