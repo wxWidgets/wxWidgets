@@ -88,6 +88,12 @@
 //          $target=0;
 //  }
 
+enum wxSeekMode
+{
+  wxFromStart,
+  wxFromCurrent,
+  wxFromEnd
+};
 
 
 
@@ -118,6 +124,16 @@ public:
       void write(wxString data);
       void writelines(wxStringPtrList);
     */
+
+    char Peek();
+    char GetC();
+    size_t LastRead();
+    bool CanRead();
+    bool Eof();
+    bool Ungetch(char c);
+
+    long SeekI(long pos, wxSeekMode mode = wxFromStart);
+    long TellI();
 }
 
 

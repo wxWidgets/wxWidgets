@@ -10072,24 +10072,6 @@ static PyObject *_wrap_wxArtProvider_GetIcon(PyObject *self, PyObject *args, PyO
     return _resultobj;
 }
 
-static PyObject *_wrap_wxArtProvider_CleanUpProviders(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    char *_kwnames[] = {  NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,":wxArtProvider_CleanUpProviders",_kwnames)) 
-        return NULL;
-{
-    PyThreadState* __tstate = wxPyBeginAllowThreads();
-    wxPyArtProvider::CleanUpProviders();
-
-    wxPyEndAllowThreads(__tstate);
-    if (PyErr_Occurred()) return NULL;
-}    Py_INCREF(Py_None);
-    _resultobj = Py_None;
-    return _resultobj;
-}
-
 static void *SwigwxFileHistoryTowxObject(void *ptr) {
     wxFileHistory *src;
     wxObject *dest;
@@ -11299,7 +11281,6 @@ static PyMethodDef misc2cMethods[] = {
 	 { "wxFileHistory_AddFileToHistory", (PyCFunction) _wrap_wxFileHistory_AddFileToHistory, METH_VARARGS | METH_KEYWORDS },
 	 { "delete_wxFileHistory", (PyCFunction) _wrap_delete_wxFileHistory, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxFileHistory", (PyCFunction) _wrap_new_wxFileHistory, METH_VARARGS | METH_KEYWORDS },
-	 { "wxArtProvider_CleanUpProviders", (PyCFunction) _wrap_wxArtProvider_CleanUpProviders, METH_VARARGS | METH_KEYWORDS },
 	 { "wxArtProvider_GetIcon", (PyCFunction) _wrap_wxArtProvider_GetIcon, METH_VARARGS | METH_KEYWORDS },
 	 { "wxArtProvider_GetBitmap", (PyCFunction) _wrap_wxArtProvider_GetBitmap, METH_VARARGS | METH_KEYWORDS },
 	 { "wxArtProvider_RemoveProvider", (PyCFunction) _wrap_wxArtProvider_RemoveProvider, METH_VARARGS | METH_KEYWORDS },

@@ -57,6 +57,7 @@ public:
     bool IsWindow();
     bool IsSizer();
     bool IsSpacer();
+    bool IsShown();
 
     wxWindow *GetWindow();
     void SetWindow( wxWindow *window );
@@ -70,6 +71,7 @@ public:
     void SetOption( int option );
     void SetFlag( int flag );
     void SetBorder( int border );
+    void Show(bool show);
 
     // wxObject* GetUserData();
     %addmethods {
@@ -262,6 +264,40 @@ public:
             return wxPy_ConvertList(&list, "wxSizerItem");
         }
     }
+
+
+    // Manage whether individual windows or sub-sizers are considered
+    // in the layout calculations or not.
+    %name(ShowWindow)void Show( wxWindow *window, bool show = TRUE );
+    %name(HideWindow)void Hide( wxWindow *window );
+    %name(ShowSizer)void Show( wxSizer *sizer, bool show = TRUE );
+    %name(HideSizer)void Hide( wxSizer *sizer );
+    %name(IsShownWindow)bool IsShown( wxWindow *window );
+    %name(IsShownSizer)bool IsShown( wxSizer *sizer );
+
+    %pragma(python) addtoclass = "
+    def Show(self, *args):
+        if string.find(args[0].this, 'Sizer') != -1:
+            apply(self.ShowSizer, args)
+        else:
+            apply(self.ShowWindow, args)
+
+    def Hide(self, *args):
+        if string.find(args[0].this, 'Sizer') != -1:
+            apply(self.HideSizer, args)
+        else:
+            apply(self.HideWindow, args)
+
+    def IsShown(self, *args):
+        if string.find(args[0].this, 'Sizer') != -1:
+            return apply(self.IsShownSizer, args)
+        else:
+            return apply(self.IsShownWindow, args)
+"
+
+    // Recursively call wxWindow::Show () on all sizer items.
+    void ShowItems (bool show);
+
 };
 
 

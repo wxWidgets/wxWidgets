@@ -12518,7 +12518,7 @@ static PyObject *_wrap_wxGrid_GetSelectedCells(PyObject *self, PyObject *args, P
     }
 {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-    wxGridCellCoordsArray & _result_ref = wxGrid_GetSelectedCells(_arg0);
+    const wxGridCellCoordsArray & _result_ref = wxGrid_GetSelectedCells(_arg0);
     _result = (wxGridCellCoordsArray *) &_result_ref;
 
     wxPyEndAllowThreads(__tstate);
@@ -12549,7 +12549,7 @@ static PyObject *_wrap_wxGrid_GetSelectionBlockTopLeft(PyObject *self, PyObject 
     }
 {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-    wxGridCellCoordsArray & _result_ref = wxGrid_GetSelectionBlockTopLeft(_arg0);
+    const wxGridCellCoordsArray & _result_ref = wxGrid_GetSelectionBlockTopLeft(_arg0);
     _result = (wxGridCellCoordsArray *) &_result_ref;
 
     wxPyEndAllowThreads(__tstate);
@@ -12580,7 +12580,7 @@ static PyObject *_wrap_wxGrid_GetSelectionBlockBottomRight(PyObject *self, PyObj
     }
 {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-    wxGridCellCoordsArray & _result_ref = wxGrid_GetSelectionBlockBottomRight(_arg0);
+    const wxGridCellCoordsArray & _result_ref = wxGrid_GetSelectionBlockBottomRight(_arg0);
     _result = (wxGridCellCoordsArray *) &_result_ref;
 
     wxPyEndAllowThreads(__tstate);
@@ -12611,7 +12611,7 @@ static PyObject *_wrap_wxGrid_GetSelectedRows(PyObject *self, PyObject *args, Py
     }
 {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-    wxArrayInt & _result_ref = wxGrid_GetSelectedRows(_arg0);
+    const wxArrayInt & _result_ref = wxGrid_GetSelectedRows(_arg0);
     _result = (wxArrayInt *) &_result_ref;
 
     wxPyEndAllowThreads(__tstate);
@@ -12648,7 +12648,7 @@ static PyObject *_wrap_wxGrid_GetSelectedCols(PyObject *self, PyObject *args, Py
     }
 {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-    wxArrayInt & _result_ref = wxGrid_GetSelectedCols(_arg0);
+    const wxArrayInt & _result_ref = wxGrid_GetSelectedCols(_arg0);
     _result = (wxArrayInt *) &_result_ref;
 
     wxPyEndAllowThreads(__tstate);

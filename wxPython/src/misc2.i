@@ -1580,8 +1580,6 @@ public:
                           const wxString& client = wxPyART_OTHER,
                           const wxSize& size = wxDefaultSize);
 
-    // Destroy caches & all providers
-    static void CleanUpProviders();
 };
 
 

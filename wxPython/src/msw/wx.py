@@ -1210,7 +1210,7 @@ def EVT_COMMAND_SCROLL(win, id, func):
     win.Connect(id, -1, wxEVT_SCROLL_PAGEDOWN,  func)
     win.Connect(id, -1, wxEVT_SCROLL_THUMBTRACK,func)
     win.Connect(id, -1, wxEVT_SCROLL_THUMBRELEASE,func)
-    win.Connect(-1, -1, wxEVT_SCROLL_ENDSCROLL,   func)
+    win.Connect(id, -1, wxEVT_SCROLL_ENDSCROLL,   func)
 
 def EVT_COMMAND_SCROLL_TOP(win, id, func):
     win.Connect(id, -1, wxEVT_SCROLL_TOP, func)
@@ -1716,7 +1716,7 @@ class wxApp(wxPyApp):
     error = 'wxApp.error'
     outputWindowClass = wxPyOnDemandOutputWindow
 
-    def __init__(self, redirect=_defRedirect, filename=None, useBestVisual=true):
+    def __init__(self, redirect=_defRedirect, filename=None, useBestVisual=false):
         wxPyApp.__init__(self)
         self.stdioWin = None
         self.saveStdio = (sys.stdout, sys.stderr)

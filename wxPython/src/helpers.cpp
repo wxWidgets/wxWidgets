@@ -787,13 +787,15 @@ PyObject* wxPyInputStream::read(int size) {
 
     // check if we have a real wxInputStream to work with
     if (!m_wxis) {
+        wxPyBeginBlockThreads();
         PyErr_SetString(PyExc_IOError, "no valid C-wxInputStream");
+        wxPyEndBlockThreads();
         return NULL;
     }
 
     if (size < 0) {
-        // read until EOF
-        while (! m_wxis->Eof()) {
+        // read while bytes are available on the stream
+        while ( m_wxis->CanRead() ) {
             m_wxis->Read(buf.GetAppendBuf(BUFSIZE), BUFSIZE);
             buf.UngetAppendBuf(m_wxis->LastRead());
         }
@@ -804,13 +806,16 @@ PyObject* wxPyInputStream::read(int size) {
     }
 
     // error check
-    if (m_wxis->LastError() == wxSTREAM_READ_ERROR) {
+    wxPyBeginBlockThreads();
+    wxStreamError err = m_wxis->GetLastError();
+    if (err != wxSTREAM_NO_ERROR && err != wxSTREAM_EOF) {
         PyErr_SetString(PyExc_IOError,"IOError in wxInputStream");
     }
     else {
         // We use only strings for the streams, not unicode
         obj = PyString_FromStringAndSize(buf, buf.GetDataLen());
     }
+    wxPyEndBlockThreads();
     return obj;
 }
 
@@ -823,24 +828,29 @@ PyObject* wxPyInputStream::readline(int size) {
 
     // check if we have a real wxInputStream to work with
     if (!m_wxis) {
+        wxPyBeginBlockThreads();
         PyErr_SetString(PyExc_IOError,"no valid C-wxInputStream");
+        wxPyEndBlockThreads();
         return NULL;
     }
 
     // read until \n or byte limit reached
-    for (i=ch=0; (ch != '\n') && (!m_wxis->Eof()) && ((size < 0) || (i < size)); i++) {
+    for (i=ch=0; (ch != '\n') && (m_wxis->CanRead()) && ((size < 0) || (i < size)); i++) {
         ch = m_wxis->GetC();
         buf.AppendByte(ch);
     }
 
     // errorcheck
-    if (m_wxis->LastError() == wxSTREAM_READ_ERROR) {
+    wxPyBeginBlockThreads();
+    wxStreamError err = m_wxis->GetLastError();
+    if (err != wxSTREAM_NO_ERROR && err != wxSTREAM_EOF) {
         PyErr_SetString(PyExc_IOError,"IOError in wxInputStream");
     }
     else {
         // We use only strings for the streams, not unicode
         obj = PyString_FromStringAndSize((char*)buf.GetData(), buf.GetDataLen());
     }
+    wxPyEndBlockThreads();
     return obj;
 }
 
@@ -850,33 +860,45 @@ PyObject* wxPyInputStream::readlines(int sizehint) {
 
     // check if we have a real wxInputStream to work with
     if (!m_wxis) {
-        PyErr_SetString(PyExc_IOError,"no valid C-wxInputStream below");
+        wxPyBeginBlockThreads();
+        PyErr_SetString(PyExc_IOError,"no valid C-wxInputStream");
+        wxPyEndBlockThreads();
         return NULL;
     }
 
     // init list
+    wxPyBeginBlockThreads();
     pylist = PyList_New(0);
     if (!pylist) {
+        wxPyBeginBlockThreads();
         PyErr_NoMemory();
+        wxPyEndBlockThreads();
         return NULL;
     }
 
     // read sizehint bytes or until EOF
     int i;
-    for (i=0; (!m_wxis->Eof()) && ((sizehint < 0) || (i < sizehint));) {
+    for (i=0; (m_wxis->CanRead()) && ((sizehint < 0) || (i < sizehint));) {
         PyObject* s = this->readline();
         if (s == NULL) {
+            wxPyBeginBlockThreads();
             Py_DECREF(pylist);
+            wxPyEndBlockThreads();
             return NULL;
         }
+        wxPyBeginBlockThreads();
         PyList_Append(pylist, s);
         i += PyString_Size(s);
+        wxPyEndBlockThreads();
     }
 
     // error check
-    if (m_wxis->LastError() == wxSTREAM_READ_ERROR) {
+    wxStreamError err = m_wxis->GetLastError();
+    if (err != wxSTREAM_NO_ERROR && err != wxSTREAM_EOF) {
+        wxPyBeginBlockThreads();
         Py_DECREF(pylist);
         PyErr_SetString(PyExc_IOError,"IOError in wxInputStream");
+        wxPyEndBlockThreads();
         return NULL;
     }
 

@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        wxp.i
+// Name:        wx.i
 // Purpose:     SWIG interface file for a python wxWindows module
 //
 // Author:      Robin Dunn

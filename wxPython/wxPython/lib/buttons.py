@@ -280,18 +280,19 @@ class wxGenButton(wxPyControl):
     def OnLeftUp(self, event):
         if not self.IsEnabled() or not self.HasCapture():
             return
-        self.ReleaseMouse()
-        if not self.up:    # if the button was down when the mouse was released...
-            self.Notify()
-        self.up = true
-        self.Refresh()
-        event.Skip()
+        if self.HasCapture():
+            self.ReleaseMouse()
+            if not self.up:    # if the button was down when the mouse was released...
+                self.Notify()
+            self.up = true
+            self.Refresh()
+            event.Skip()
 
 
     def OnMotion(self, event):
         if not self.IsEnabled() or not self.HasCapture():
             return
-        if event.LeftIsDown():
+        if event.LeftIsDown() and self.HasCapture():
             x,y = event.GetPositionTuple()
             w,h = self.GetClientSizeTuple()
             if self.up and x<w and x>=0 and y<h and y>=0:
@@ -487,12 +488,29 @@ class __ToggleMixin:
     def OnLeftUp(self, event):
         if not self.IsEnabled() or not self.HasCapture():
             return
-        if self.up != self.saveUp:
-            self.Notify()
-        self.ReleaseMouse()
-        self.Refresh()
+        if self.HasCapture():
+            if self.up != self.saveUp:
+                self.Notify()
+            self.ReleaseMouse()
+            self.Refresh()
 
     def OnKeyDown(self, event):
+        event.Skip()
+
+    def OnMotion(self, event):
+        if not self.IsEnabled():
+            return
+        if event.LeftIsDown() and self.HasCapture():
+            x,y = event.GetPositionTuple()
+            w,h = self.GetClientSizeTuple()
+            if x<w and x>=0 and y<h and y>=0:
+                self.up = not self.saveUp
+                self.Refresh()
+                return
+            if (x<0 or y<0 or x>=w or y>=h):
+                self.up = self.saveUp
+                self.Refresh()
+                return
         event.Skip()
 
     def OnKeyUp(self, event):

@@ -1373,8 +1373,6 @@ def wxArtProvider_GetIcon(*_args, **_kwargs):
     if val: val = wxIconPtr(val); val.thisown = 1
     return val
 
-wxArtProvider_CleanUpProviders = misc2c.wxArtProvider_CleanUpProviders
-
 
 
 #-------------- VARIABLE WRAPPERS ------------------
