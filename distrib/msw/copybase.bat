@@ -47,6 +47,10 @@ rem Copy regex and zlib files
 copy /q src\regex\*.* %DEST%\src\regex
 copy /q src\zlib\*.* %DEST%\src\zlib
 
+rem The files not in src/files.lst
+copy /q src\msw\dummy.cpp %DEST%\src\msw\dummy.cpp
+copy /q src\msw\dummydll.cpp %DEST%\src\msw\dummydll.cpp
+
 rem The rest is generated from src/files.lst
 
 copy /q include\wx\app.h %DEST%\include\wx\app.h
