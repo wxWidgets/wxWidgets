@@ -1,0 +1,9 @@
+foreach i (ANNOUNCE CHANGES INSTALL README TODO Y2KINFO example.c libpng.3 libpng.txt libpngpf.3 png.5 png.c png.h pngconf.h pngerror.c pngget.c pngmem.c pngpread.c pngread.c pngrio.c pngrtran.c pngrutil.c pngset.c pngtest.c pngtrans.c pngwio.c pngwrite.c pngwtran.c pngwutil.c)
+
+cvs up -rLIBPNG_1_0_3 $i
+cp $i $i.old
+cvs up -A $i
+mv $i.old $i
+cvs add $i
+
+end
