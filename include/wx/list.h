@@ -661,14 +661,16 @@ private:
         {                                                                   \
             typedef name list;                                              \
         public:                                                             \
-            typedef list::Node Node;                                        \
+            typedef nodetype Node;                                          \
             typedef iterator itor;                                          \
-            typedef list::value_type* ptr_type;                             \
+            typedef T* value_type;                                          \
+            typedef value_type* ptr_type;                                   \
+            typedef value_type& reference;                                  \
                                                                             \
             Node* m_node;                                                   \
             Node* m_init;                                                   \
         public:                                                             \
-            typedef list::reference reference_type;                         \
+            typedef reference reference_type;                               \
             typedef ptr_type pointer_type;                                  \
                                                                             \
             iterator(Node* node, Node* init) : m_node(node), m_init(init) {}\
@@ -700,14 +702,16 @@ private:
         {                                                                   \
             typedef name list;                                              \
         public:                                                             \
-            typedef list::Node Node;                                        \
+            typedef nodetype Node;                                          \
+            typedef T* value_type;                                          \
+            typedef const value_type& const_reference;                      \
             typedef const_iterator itor;                                    \
-            typedef list::value_type* ptr_type;                             \
+            typedef value_type* ptr_type;                                   \
                                                                             \
             Node* m_node;                                                   \
             Node* m_init;                                                   \
         public:                                                             \
-            typedef list::const_reference reference_type;                   \
+            typedef const_reference reference_type;                         \
             typedef const ptr_type pointer_type;                            \
                                                                             \
             const_iterator(Node* node, Node* init)                          \
@@ -742,14 +746,16 @@ private:
         {                                                                   \
             typedef name list;                                              \
         public:                                                             \
-            typedef list::Node Node;                                        \
+            typedef nodetype Node;                                          \
+            typedef T* value_type;                                          \
             typedef reverse_iterator itor;                                  \
-            typedef list::value_type* ptr_type;                             \
+            typedef value_type* ptr_type;                                   \
+            typedef value_type& reference;                                  \
                                                                             \
             Node* m_node;                                                   \
             Node* m_init;                                                   \
         public:                                                             \
-            typedef list::reference reference_type;                         \
+            typedef reference reference_type;                               \
             typedef ptr_type pointer_type;                                  \
                                                                             \
             reverse_iterator(Node* node, Node* init)                        \
@@ -780,14 +786,16 @@ private:
         {                                                                   \
             typedef name list;                                              \
         public:                                                             \
-            typedef list::Node Node;                                        \
+            typedef nodetype Node;                                          \
+            typedef T* value_type;                                          \
             typedef const_reverse_iterator itor;                            \
-            typedef list::value_type* ptr_type;                             \
+            typedef value_type* ptr_type;                                   \
+            typedef const value_type& const_reference;                      \
                                                                             \
             Node* m_node;                                                   \
             Node* m_init;                                                   \
         public:                                                             \
-            typedef list::const_reference reference_type;                   \
+            typedef const_reference reference_type;                         \
             typedef const ptr_type pointer_type;                            \
                                                                             \
             const_reverse_iterator(Node* node, Node* init)                  \

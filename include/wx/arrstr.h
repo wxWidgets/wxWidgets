@@ -201,9 +201,9 @@ public:
   // FIXME: same in dynarray.h
   class reverse_iterator
   {
-    typedef wxArrayString name;
-    typedef name::reference reference;
-    typedef name::pointer pointer;
+    typedef wxString value_type;
+    typedef value_type* pointer;
+    typedef value_type& reference;
     typedef reverse_iterator itor;
     friend itor operator+(int o, const itor& it);
     friend itor operator+(const itor& it, int o);
@@ -227,9 +227,9 @@ public:
 
   class const_reverse_iterator
   {
-    typedef wxArrayString name;
-    typedef name::const_reference reference;
-    typedef name::const_pointer pointer;
+    typedef wxString value_type;
+    typedef const value_type* pointer;
+    typedef const value_type& reference;
     typedef const_reverse_iterator itor;
     friend itor operator+(int o, const itor& it);
     friend itor operator+(const itor& it, int o);
