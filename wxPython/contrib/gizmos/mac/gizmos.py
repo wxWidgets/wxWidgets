@@ -859,7 +859,7 @@ class TreeListCtrl(_core.Control):
         return _gizmos.TreeListCtrl_GetHeaderWindow(*args, **kwargs)
 
     def GetMainWindow(*args, **kwargs):
-        """GetMainWindow(self) -> Window"""
+        """GetMainWindow(self) -> ScrolledWindow"""
         return _gizmos.TreeListCtrl_GetMainWindow(*args, **kwargs)
 
 

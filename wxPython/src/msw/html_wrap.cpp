@@ -636,7 +636,7 @@ public:
         bool found;
         bool blocked = wxPyBeginBlockThreads();
         if ((found = wxPyCBH_findCallback(m_myInst, "CanRead"))) {
-            PyObject* obj = wxPyMake_wxObject((wxFSFile*)&file);  // cast away const
+            PyObject* obj = wxPyMake_wxObject((wxFSFile*)&file,false);  // cast away const
             rval = wxPyCBH_callCallback(m_myInst, Py_BuildValue("(O)", obj));
             Py_DECREF(obj);
         }
@@ -652,7 +652,7 @@ public:
         bool found;
         bool blocked = wxPyBeginBlockThreads();
         if ((found = wxPyCBH_findCallback(m_myInst, "ReadFile"))) {
-            PyObject* obj = wxPyMake_wxObject((wxFSFile*)&file);  // cast away const
+            PyObject* obj = wxPyMake_wxObject((wxFSFile*)&file,false);  // cast away const
             PyObject* ro;
             ro = wxPyCBH_callCallbackObj(m_myInst, Py_BuildValue("(O)", obj));
             Py_DECREF(obj);
@@ -1060,7 +1060,7 @@ static PyObject *_wrap_HtmlLinkInfo_GetEvent(PyObject *self, PyObject *args, PyO
         if (PyErr_Occurred()) SWIG_fail;
     }
     {
-        resultobj = wxPyMake_wxObject(result); 
+        resultobj = wxPyMake_wxObject(result, 0); 
     }
     return resultobj;
     fail:
@@ -1483,7 +1483,7 @@ static PyObject *_wrap_HtmlParser_GetFS(PyObject *self, PyObject *args, PyObject
         if (PyErr_Occurred()) SWIG_fail;
     }
     {
-        resultobj = wxPyMake_wxObject(result); 
+        resultobj = wxPyMake_wxObject(result, 0); 
     }
     return resultobj;
     fail:
@@ -1519,7 +1519,7 @@ static PyObject *_wrap_HtmlParser_Parse(PyObject *self, PyObject *args, PyObject
         if (PyErr_Occurred()) SWIG_fail;
     }
     {
-        resultobj = wxPyMake_wxObject(result); 
+        resultobj = wxPyMake_wxObject(result, 0); 
     }
     {
         if (temp2)
@@ -1866,7 +1866,7 @@ static PyObject *_wrap_HtmlWinParser_GetDC(PyObject *self, PyObject *args, PyObj
         if (PyErr_Occurred()) SWIG_fail;
     }
     {
-        resultobj = wxPyMake_wxObject(result); 
+        resultobj = wxPyMake_wxObject(result, 0); 
     }
     return resultobj;
     fail:
@@ -1946,7 +1946,7 @@ static PyObject *_wrap_HtmlWinParser_GetWindow(PyObject *self, PyObject *args, P
         if (PyErr_Occurred()) SWIG_fail;
     }
     {
-        resultobj = wxPyMake_wxObject(result); 
+        resultobj = wxPyMake_wxObject(result, 0); 
     }
     return resultobj;
     fail:
@@ -5894,7 +5894,7 @@ static PyObject *_wrap_new_HtmlWindow(PyObject *self, PyObject *args, PyObject *
         if (PyErr_Occurred()) SWIG_fail;
     }
     {
-        resultobj = wxPyMake_wxObject(result); 
+        resultobj = wxPyMake_wxObject(result, 1); 
     }
     {
         if (temp6)
@@ -5927,7 +5927,7 @@ static PyObject *_wrap_new_PreHtmlWindow(PyObject *self, PyObject *args, PyObjec
         if (PyErr_Occurred()) SWIG_fail;
     }
     {
-        resultobj = wxPyMake_wxObject(result); 
+        resultobj = wxPyMake_wxObject(result, 1); 
     }
     return resultobj;
     fail:
@@ -6386,7 +6386,7 @@ static PyObject *_wrap_HtmlWindow_GetRelatedFrame(PyObject *self, PyObject *args
         if (PyErr_Occurred()) SWIG_fail;
     }
     {
-        resultobj = wxPyMake_wxObject(result); 
+        resultobj = wxPyMake_wxObject(result, 0); 
     }
     return resultobj;
     fail:

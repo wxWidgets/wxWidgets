@@ -1210,8 +1210,8 @@ IMP_PYCALLBACK_BOOL_INT(wxPyPrintout, wxPrintout, HasPage);
         bool found;                                                             \
         bool blocked = wxPyBeginBlockThreads();                                                \
         if ((found = wxPyCBH_findCallback(m_myInst, #CBNAME))) {                \
-            PyObject* win = wxPyMake_wxObject(a);                               \
-            PyObject* dc  = wxPyMake_wxObject(&b);                              \
+            PyObject* win = wxPyMake_wxObject(a,false);                               \
+            PyObject* dc  = wxPyMake_wxObject(&b,false);                              \
             rval = wxPyCBH_callCallback(m_myInst, Py_BuildValue("(OO)", win, dc));\
             Py_DECREF(win);                                                     \
             Py_DECREF(dc);                                                      \
@@ -1395,7 +1395,7 @@ static PyObject *_wrap_new_Panel(PyObject *self, PyObject *args, PyObject *kwarg
         if (PyErr_Occurred()) SWIG_fail;
     }
     {
-        resultobj = wxPyMake_wxObject(result); 
+        resultobj = wxPyMake_wxObject(result, 1); 
     }
     {
         if (temp6)
@@ -1428,7 +1428,7 @@ static PyObject *_wrap_new_PrePanel(PyObject *self, PyObject *args, PyObject *kw
         if (PyErr_Occurred()) SWIG_fail;
     }
     {
-        resultobj = wxPyMake_wxObject(result); 
+        resultobj = wxPyMake_wxObject(result, 1); 
     }
     return resultobj;
     fail:
@@ -1647,7 +1647,9 @@ static PyObject *_wrap_new_ScrolledWindow(PyObject *self, PyObject *args, PyObje
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_NewPointerObj((void*)(result), SWIGTYPE_p_wxScrolledWindow, 1);
+    {
+        resultobj = wxPyMake_wxObject(result, 1); 
+    }
     {
         if (temp6)
         delete arg6;
@@ -1678,7 +1680,9 @@ static PyObject *_wrap_new_PreScrolledWindow(PyObject *self, PyObject *args, PyO
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_NewPointerObj((void*)(result), SWIGTYPE_p_wxScrolledWindow, 1);
+    {
+        resultobj = wxPyMake_wxObject(result, 1); 
+    }
     return resultobj;
     fail:
     return NULL;
@@ -2529,7 +2533,7 @@ static PyObject *_wrap_ScrolledWindow_GetTargetWindow(PyObject *self, PyObject *
         if (PyErr_Occurred()) SWIG_fail;
     }
     {
-        resultobj = wxPyMake_wxObject(result); 
+        resultobj = wxPyMake_wxObject(result, 0); 
     }
     return resultobj;
     fail:
@@ -3275,7 +3279,7 @@ static PyObject *_wrap_new_Frame(PyObject *self, PyObject *args, PyObject *kwarg
         if (PyErr_Occurred()) SWIG_fail;
     }
     {
-        resultobj = wxPyMake_wxObject(result); 
+        resultobj = wxPyMake_wxObject(result, 1); 
     }
     {
         if (temp3)
@@ -3316,7 +3320,7 @@ static PyObject *_wrap_new_PreFrame(PyObject *self, PyObject *args, PyObject *kw
         if (PyErr_Occurred()) SWIG_fail;
     }
     {
-        resultobj = wxPyMake_wxObject(result); 
+        resultobj = wxPyMake_wxObject(result, 1); 
     }
     return resultobj;
     fail:
@@ -3530,7 +3534,7 @@ static PyObject *_wrap_Frame_GetMenuBar(PyObject *self, PyObject *args, PyObject
         if (PyErr_Occurred()) SWIG_fail;
     }
     {
-        resultobj = wxPyMake_wxObject(result); 
+        resultobj = wxPyMake_wxObject(result, 0); 
     }
     return resultobj;
     fail:
@@ -3619,7 +3623,7 @@ static PyObject *_wrap_Frame_CreateStatusBar(PyObject *self, PyObject *args, PyO
         if (PyErr_Occurred()) SWIG_fail;
     }
     {
-        resultobj = wxPyMake_wxObject(result); 
+        resultobj = wxPyMake_wxObject(result, 0); 
     }
     {
         if (temp5)
@@ -3655,7 +3659,7 @@ static PyObject *_wrap_Frame_GetStatusBar(PyObject *self, PyObject *args, PyObje
         if (PyErr_Occurred()) SWIG_fail;
     }
     {
-        resultobj = wxPyMake_wxObject(result); 
+        resultobj = wxPyMake_wxObject(result, 0); 
     }
     return resultobj;
     fail:
@@ -3954,7 +3958,7 @@ static PyObject *_wrap_Frame_CreateToolBar(PyObject *self, PyObject *args, PyObj
         if (PyErr_Occurred()) SWIG_fail;
     }
     {
-        resultobj = wxPyMake_wxObject(result); 
+        resultobj = wxPyMake_wxObject(result, 0); 
     }
     {
         if (temp4)
@@ -3990,7 +3994,7 @@ static PyObject *_wrap_Frame_GetToolBar(PyObject *self, PyObject *args, PyObject
         if (PyErr_Occurred()) SWIG_fail;
     }
     {
-        resultobj = wxPyMake_wxObject(result); 
+        resultobj = wxPyMake_wxObject(result, 0); 
     }
     return resultobj;
     fail:
@@ -4218,7 +4222,7 @@ static PyObject *_wrap_new_Dialog(PyObject *self, PyObject *args, PyObject *kwar
         if (PyErr_Occurred()) SWIG_fail;
     }
     {
-        resultobj = wxPyMake_wxObject(result); 
+        resultobj = wxPyMake_wxObject(result, 1); 
     }
     {
         if (temp3)
@@ -4259,7 +4263,7 @@ static PyObject *_wrap_new_PreDialog(PyObject *self, PyObject *args, PyObject *k
         if (PyErr_Occurred()) SWIG_fail;
     }
     {
-        resultobj = wxPyMake_wxObject(result); 
+        resultobj = wxPyMake_wxObject(result, 1); 
     }
     return resultobj;
     fail:
@@ -4452,7 +4456,7 @@ static PyObject *_wrap_Dialog_CreateTextSizer(PyObject *self, PyObject *args, Py
         if (PyErr_Occurred()) SWIG_fail;
     }
     {
-        resultobj = wxPyMake_wxSizer(result); 
+        resultobj = wxPyMake_wxSizer(result, 0); 
     }
     {
         if (temp2)
@@ -4492,7 +4496,7 @@ static PyObject *_wrap_Dialog_CreateButtonSizer(PyObject *self, PyObject *args, 
         if (PyErr_Occurred()) SWIG_fail;
     }
     {
-        resultobj = wxPyMake_wxSizer(result); 
+        resultobj = wxPyMake_wxSizer(result, 0); 
     }
     return resultobj;
     fail:
@@ -5196,7 +5200,7 @@ static PyObject *_wrap_new_StatusBar(PyObject *self, PyObject *args, PyObject *k
         if (PyErr_Occurred()) SWIG_fail;
     }
     {
-        resultobj = wxPyMake_wxObject(result); 
+        resultobj = wxPyMake_wxObject(result, 1); 
     }
     {
         if (temp4)
@@ -5229,7 +5233,7 @@ static PyObject *_wrap_new_PreStatusBar(PyObject *self, PyObject *args, PyObject
         if (PyErr_Occurred()) SWIG_fail;
     }
     {
-        resultobj = wxPyMake_wxObject(result); 
+        resultobj = wxPyMake_wxObject(result, 1); 
     }
     return resultobj;
     fail:
@@ -5938,7 +5942,7 @@ static PyObject *_wrap_SplitterWindow_GetWindow1(PyObject *self, PyObject *args,
         if (PyErr_Occurred()) SWIG_fail;
     }
     {
-        resultobj = wxPyMake_wxObject(result); 
+        resultobj = wxPyMake_wxObject(result, 0); 
     }
     return resultobj;
     fail:
@@ -5966,7 +5970,7 @@ static PyObject *_wrap_SplitterWindow_GetWindow2(PyObject *self, PyObject *args,
         if (PyErr_Occurred()) SWIG_fail;
     }
     {
-        resultobj = wxPyMake_wxObject(result); 
+        resultobj = wxPyMake_wxObject(result, 0); 
     }
     return resultobj;
     fail:
@@ -6764,7 +6768,7 @@ static PyObject *_wrap_SplitterEvent_GetWindowBeingRemoved(PyObject *self, PyObj
         if (PyErr_Occurred()) SWIG_fail;
     }
     {
-        resultobj = wxPyMake_wxObject(result); 
+        resultobj = wxPyMake_wxObject(result, 0); 
     }
     return resultobj;
     fail:
@@ -14688,7 +14692,7 @@ static PyObject *_wrap_MDIParentFrame_GetActiveChild(PyObject *self, PyObject *a
         if (PyErr_Occurred()) SWIG_fail;
     }
     {
-        resultobj = wxPyMake_wxObject(result); 
+        resultobj = wxPyMake_wxObject(result, 0); 
     }
     return resultobj;
     fail:
@@ -14716,7 +14720,7 @@ static PyObject *_wrap_MDIParentFrame_GetClientWindow(PyObject *self, PyObject *
         if (PyErr_Occurred()) SWIG_fail;
     }
     {
-        resultobj = wxPyMake_wxObject(result); 
+        resultobj = wxPyMake_wxObject(result, 0); 
     }
     return resultobj;
     fail:
@@ -14744,7 +14748,7 @@ static PyObject *_wrap_MDIParentFrame_GetToolBar(PyObject *self, PyObject *args,
         if (PyErr_Occurred()) SWIG_fail;
     }
     {
-        resultobj = wxPyMake_wxObject(result); 
+        resultobj = wxPyMake_wxObject(result, 0); 
     }
     return resultobj;
     fail:
@@ -14859,7 +14863,7 @@ static PyObject *_wrap_new_MDIChildFrame(PyObject *self, PyObject *args, PyObjec
         if (PyErr_Occurred()) SWIG_fail;
     }
     {
-        resultobj = wxPyMake_wxObject(result); 
+        resultobj = wxPyMake_wxObject(result, 1); 
     }
     {
         if (temp3)
@@ -14900,7 +14904,7 @@ static PyObject *_wrap_new_PreMDIChildFrame(PyObject *self, PyObject *args, PyOb
         if (PyErr_Occurred()) SWIG_fail;
     }
     {
-        resultobj = wxPyMake_wxObject(result); 
+        resultobj = wxPyMake_wxObject(result, 1); 
     }
     return resultobj;
     fail:
@@ -15123,7 +15127,7 @@ static PyObject *_wrap_new_MDIClientWindow(PyObject *self, PyObject *args, PyObj
         if (PyErr_Occurred()) SWIG_fail;
     }
     {
-        resultobj = wxPyMake_wxObject(result); 
+        resultobj = wxPyMake_wxObject(result, 1); 
     }
     return resultobj;
     fail:
@@ -15148,7 +15152,7 @@ static PyObject *_wrap_new_PreMDIClientWindow(PyObject *self, PyObject *args, Py
         if (PyErr_Occurred()) SWIG_fail;
     }
     {
-        resultobj = wxPyMake_wxObject(result); 
+        resultobj = wxPyMake_wxObject(result, 1); 
     }
     return resultobj;
     fail:
@@ -21353,7 +21357,7 @@ static PyObject *_wrap_PrintDialog_GetPrintDC(PyObject *self, PyObject *args, Py
         if (PyErr_Occurred()) SWIG_fail;
     }
     {
-        resultobj = wxPyMake_wxObject(result); 
+        resultobj = wxPyMake_wxObject(result, 1); 
     }
     return resultobj;
     fail:
@@ -21576,7 +21580,7 @@ static PyObject *_wrap_Printer_PrintDialog(PyObject *self, PyObject *args, PyObj
         if (PyErr_Occurred()) SWIG_fail;
     }
     {
-        resultobj = wxPyMake_wxObject(result); 
+        resultobj = wxPyMake_wxObject(result, 0); 
     }
     return resultobj;
     fail:
@@ -21750,7 +21754,7 @@ static PyObject *_wrap_new_Printout(PyObject *self, PyObject *args, PyObject *kw
         if (PyErr_Occurred()) SWIG_fail;
     }
     {
-        resultobj = wxPyMake_wxObject(result); 
+        resultobj = wxPyMake_wxObject(result, 1); 
     }
     {
         if (temp1)
@@ -21849,7 +21853,7 @@ static PyObject *_wrap_Printout_GetDC(PyObject *self, PyObject *args, PyObject *
         if (PyErr_Occurred()) SWIG_fail;
     }
     {
-        resultobj = wxPyMake_wxObject(result); 
+        resultobj = wxPyMake_wxObject(result, 0); 
     }
     return resultobj;
     fail:
@@ -23300,7 +23304,7 @@ static PyObject *_wrap_PrintPreview_GetPrintout(PyObject *self, PyObject *args, 
         if (PyErr_Occurred()) SWIG_fail;
     }
     {
-        resultobj = wxPyMake_wxObject(result); 
+        resultobj = wxPyMake_wxObject(result, 0); 
     }
     return resultobj;
     fail:
@@ -23328,7 +23332,7 @@ static PyObject *_wrap_PrintPreview_GetPrintoutForPrinting(PyObject *self, PyObj
         if (PyErr_Occurred()) SWIG_fail;
     }
     {
-        resultobj = wxPyMake_wxObject(result); 
+        resultobj = wxPyMake_wxObject(result, 0); 
     }
     return resultobj;
     fail:
@@ -23414,7 +23418,7 @@ static PyObject *_wrap_PrintPreview_GetFrame(PyObject *self, PyObject *args, PyO
         if (PyErr_Occurred()) SWIG_fail;
     }
     {
-        resultobj = wxPyMake_wxObject(result); 
+        resultobj = wxPyMake_wxObject(result, 0); 
     }
     return resultobj;
     fail:

@@ -740,7 +740,7 @@ wxList* wxPy_wxRealPoint_ListHelper(PyObject* pyList) {
 
 //---------------------------------------------------------------------------
 
-PyObject*  wxPyMake_wxShapeEvtHandler(wxShapeEvtHandler* source) {
+PyObject*  wxPyMake_wxShapeEvtHandler(wxShapeEvtHandler* source, bool setThisOwn) {
     PyObject* target = NULL;
 
     if (source && wxIsKindOf(source, wxShapeEvtHandler)) {
@@ -755,7 +755,7 @@ PyObject*  wxPyMake_wxShapeEvtHandler(wxShapeEvtHandler* source) {
         }
     }
     if (! target) {
-        target = wxPyMake_wxObject2(source, FALSE);
+        target = wxPyMake_wxObject2(source, setThisOwn, false);
         if (target != Py_None)
             ((wxShapeEvtHandler*)source)->SetClientObject(new wxPyOORClientData(target));
     }
@@ -796,7 +796,7 @@ PyObject* wxPy_ConvertShapeList(wxListBase* listbase) {
     pyList = PyList_New(0);
     while (node) {
         wxObj = node->GetData();
-        pyObj = wxPyMake_wxShapeEvtHandler((wxShapeEvtHandler*)wxObj);
+        pyObj = wxPyMake_wxShapeEvtHandler((wxShapeEvtHandler*)wxObj, false);
         PyList_Append(pyList, pyObj);
         node = node->GetNext();
     }
@@ -1999,7 +1999,7 @@ static PyObject *_wrap_new_PyShapeEvtHandler(PyObject *self, PyObject *args, PyO
         if (PyErr_Occurred()) SWIG_fail;
     }
     {
-        resultobj = wxPyMake_wxShapeEvtHandler(result); 
+        resultobj = wxPyMake_wxShapeEvtHandler(result, 1); 
     }
     return resultobj;
     fail:
@@ -2115,7 +2115,7 @@ static PyObject *_wrap_PyShapeEvtHandler_GetShape(PyObject *self, PyObject *args
         if (PyErr_Occurred()) SWIG_fail;
     }
     {
-        resultobj = wxPyMake_wxShapeEvtHandler(result); 
+        resultobj = wxPyMake_wxShapeEvtHandler(result, 0); 
     }
     return resultobj;
     fail:
@@ -2172,7 +2172,7 @@ static PyObject *_wrap_PyShapeEvtHandler_GetPreviousHandler(PyObject *self, PyOb
         if (PyErr_Occurred()) SWIG_fail;
     }
     {
-        resultobj = wxPyMake_wxShapeEvtHandler(result); 
+        resultobj = wxPyMake_wxShapeEvtHandler(result, 0); 
     }
     return resultobj;
     fail:
@@ -2200,7 +2200,7 @@ static PyObject *_wrap_PyShapeEvtHandler_CreateNewCopy(PyObject *self, PyObject 
         if (PyErr_Occurred()) SWIG_fail;
     }
     {
-        resultobj = wxPyMake_wxShapeEvtHandler(result); 
+        resultobj = wxPyMake_wxShapeEvtHandler(result, 0); 
     }
     return resultobj;
     fail:
@@ -3442,7 +3442,7 @@ static PyObject *_wrap_new_PyShape(PyObject *self, PyObject *args, PyObject *kwa
         if (PyErr_Occurred()) SWIG_fail;
     }
     {
-        resultobj = wxPyMake_wxShapeEvtHandler(result); 
+        resultobj = wxPyMake_wxShapeEvtHandler(result, 1); 
     }
     return resultobj;
     fail:
@@ -3637,7 +3637,7 @@ static PyObject *_wrap_PyShape_GetCanvas(PyObject *self, PyObject *args, PyObjec
         if (PyErr_Occurred()) SWIG_fail;
     }
     {
-        resultobj = wxPyMake_wxObject(result); 
+        resultobj = wxPyMake_wxObject(result, 0); 
     }
     return resultobj;
     fail:
@@ -3897,7 +3897,7 @@ static PyObject *_wrap_PyShape_GetParent(PyObject *self, PyObject *args, PyObjec
         if (PyErr_Occurred()) SWIG_fail;
     }
     {
-        resultobj = wxPyMake_wxShapeEvtHandler(result); 
+        resultobj = wxPyMake_wxShapeEvtHandler(result, 0); 
     }
     return resultobj;
     fail:
@@ -3954,7 +3954,7 @@ static PyObject *_wrap_PyShape_GetTopAncestor(PyObject *self, PyObject *args, Py
         if (PyErr_Occurred()) SWIG_fail;
     }
     {
-        resultobj = wxPyMake_wxShapeEvtHandler(result); 
+        resultobj = wxPyMake_wxShapeEvtHandler(result, 0); 
     }
     return resultobj;
     fail:
@@ -4171,7 +4171,7 @@ static PyObject *_wrap_PyShape_GetEventHandler(PyObject *self, PyObject *args, P
         if (PyErr_Occurred()) SWIG_fail;
     }
     {
-        resultobj = wxPyMake_wxShapeEvtHandler(result); 
+        resultobj = wxPyMake_wxShapeEvtHandler(result, 0); 
     }
     return resultobj;
     fail:
@@ -6543,7 +6543,7 @@ static PyObject *_wrap_PyShape_FindRegion(PyObject *self, PyObject *args, PyObje
         if (PyErr_Occurred()) SWIG_fail;
     }
     {
-        resultobj = wxPyMake_wxShapeEvtHandler(result); 
+        resultobj = wxPyMake_wxShapeEvtHandler(result, 0); 
     }
     {
         PyObject *o = PyInt_FromLong((long) (*arg3));
@@ -7686,7 +7686,7 @@ static PyObject *_wrap_PyShape_CreateNewCopy(PyObject *self, PyObject *args, PyO
         if (PyErr_Occurred()) SWIG_fail;
     }
     {
-        resultobj = wxPyMake_wxShapeEvtHandler(result); 
+        resultobj = wxPyMake_wxShapeEvtHandler(result, 0); 
     }
     return resultobj;
     fail:
@@ -9235,7 +9235,7 @@ static PyObject *_wrap_new_PseudoMetaFile(PyObject *self, PyObject *args, PyObje
         if (PyErr_Occurred()) SWIG_fail;
     }
     {
-        resultobj = wxPyMake_wxObject(result); 
+        resultobj = wxPyMake_wxObject(result, 1); 
     }
     return resultobj;
     fail:
@@ -17032,7 +17032,7 @@ static PyObject *_wrap_new_OGLConstraint(PyObject *self, PyObject *args, PyObjec
         if (PyErr_Occurred()) SWIG_fail;
     }
     {
-        resultobj = wxPyMake_wxObject(result); 
+        resultobj = wxPyMake_wxObject(result, 1); 
     }
     return resultobj;
     fail:
@@ -17256,7 +17256,7 @@ static PyObject *_wrap_PyCompositeShape_AddConstraint(PyObject *self, PyObject *
         if (PyErr_Occurred()) SWIG_fail;
     }
     {
-        resultobj = wxPyMake_wxObject(result); 
+        resultobj = wxPyMake_wxObject(result, 0); 
     }
     return resultobj;
     fail:
@@ -17295,7 +17295,7 @@ static PyObject *_wrap_PyCompositeShape_AddConstrainedShapes(PyObject *self, PyO
         if (PyErr_Occurred()) SWIG_fail;
     }
     {
-        resultobj = wxPyMake_wxObject(result); 
+        resultobj = wxPyMake_wxObject(result, 0); 
     }
     return resultobj;
     fail:
@@ -17335,7 +17335,7 @@ static PyObject *_wrap_PyCompositeShape_AddSimpleConstraint(PyObject *self, PyOb
         if (PyErr_Occurred()) SWIG_fail;
     }
     {
-        resultobj = wxPyMake_wxObject(result); 
+        resultobj = wxPyMake_wxObject(result, 0); 
     }
     return resultobj;
     fail:
@@ -17478,7 +17478,7 @@ static PyObject *_wrap_PyCompositeShape_FindContainerImage(PyObject *self, PyObj
         if (PyErr_Occurred()) SWIG_fail;
     }
     {
-        resultobj = wxPyMake_wxShapeEvtHandler(result); 
+        resultobj = wxPyMake_wxShapeEvtHandler(result, 0); 
     }
     return resultobj;
     fail:
@@ -20175,7 +20175,7 @@ static PyObject *_wrap_new_PyDivisionShape(PyObject *self, PyObject *args, PyObj
         if (PyErr_Occurred()) SWIG_fail;
     }
     {
-        resultobj = wxPyMake_wxShapeEvtHandler(result); 
+        resultobj = wxPyMake_wxShapeEvtHandler(result, 1); 
     }
     return resultobj;
     fail:
@@ -20424,7 +20424,7 @@ static PyObject *_wrap_PyDivisionShape_GetBottomSide(PyObject *self, PyObject *a
         if (PyErr_Occurred()) SWIG_fail;
     }
     {
-        resultobj = wxPyMake_wxShapeEvtHandler(result); 
+        resultobj = wxPyMake_wxShapeEvtHandler(result, 0); 
     }
     return resultobj;
     fail:
@@ -20478,7 +20478,7 @@ static PyObject *_wrap_PyDivisionShape_GetLeftSide(PyObject *self, PyObject *arg
         if (PyErr_Occurred()) SWIG_fail;
     }
     {
-        resultobj = wxPyMake_wxShapeEvtHandler(result); 
+        resultobj = wxPyMake_wxShapeEvtHandler(result, 0); 
     }
     return resultobj;
     fail:
@@ -20564,7 +20564,7 @@ static PyObject *_wrap_PyDivisionShape_GetRightSide(PyObject *self, PyObject *ar
         if (PyErr_Occurred()) SWIG_fail;
     }
     {
-        resultobj = wxPyMake_wxShapeEvtHandler(result); 
+        resultobj = wxPyMake_wxShapeEvtHandler(result, 0); 
     }
     return resultobj;
     fail:
@@ -20592,7 +20592,7 @@ static PyObject *_wrap_PyDivisionShape_GetTopSide(PyObject *self, PyObject *args
         if (PyErr_Occurred()) SWIG_fail;
     }
     {
-        resultobj = wxPyMake_wxShapeEvtHandler(result); 
+        resultobj = wxPyMake_wxShapeEvtHandler(result, 0); 
     }
     return resultobj;
     fail:
@@ -24786,7 +24786,7 @@ static PyObject *_wrap_new_ArrowHead(PyObject *self, PyObject *args, PyObject *k
         if (PyErr_Occurred()) SWIG_fail;
     }
     {
-        resultobj = wxPyMake_wxObject(result); 
+        resultobj = wxPyMake_wxObject(result, 1); 
     }
     {
         if (temp5)
@@ -25122,7 +25122,7 @@ static PyObject *_wrap_ArrowHead_GetMetaFile(PyObject *self, PyObject *args, PyO
         if (PyErr_Occurred()) SWIG_fail;
     }
     {
-        resultobj = wxPyMake_wxObject(result); 
+        resultobj = wxPyMake_wxObject(result, 0); 
     }
     return resultobj;
     fail:
@@ -25819,7 +25819,7 @@ static PyObject *_wrap_PyLineShape_FindArrowHeadId(PyObject *self, PyObject *arg
         if (PyErr_Occurred()) SWIG_fail;
     }
     {
-        resultobj = wxPyMake_wxObject(result); 
+        resultobj = wxPyMake_wxObject(result, 0); 
     }
     return resultobj;
     fail:
@@ -25859,7 +25859,7 @@ static PyObject *_wrap_PyLineShape_FindArrowHead(PyObject *self, PyObject *args,
         if (PyErr_Occurred()) SWIG_fail;
     }
     {
-        resultobj = wxPyMake_wxObject(result); 
+        resultobj = wxPyMake_wxObject(result, 0); 
     }
     {
         if (temp3)
@@ -26160,7 +26160,7 @@ static PyObject *_wrap_PyLineShape_GetFrom(PyObject *self, PyObject *args, PyObj
         if (PyErr_Occurred()) SWIG_fail;
     }
     {
-        resultobj = wxPyMake_wxShapeEvtHandler(result); 
+        resultobj = wxPyMake_wxShapeEvtHandler(result, 0); 
     }
     return resultobj;
     fail:
@@ -26261,7 +26261,7 @@ static PyObject *_wrap_PyLineShape_GetTo(PyObject *self, PyObject *args, PyObjec
         if (PyErr_Occurred()) SWIG_fail;
     }
     {
-        resultobj = wxPyMake_wxShapeEvtHandler(result); 
+        resultobj = wxPyMake_wxShapeEvtHandler(result, 0); 
     }
     return resultobj;
     fail:
@@ -30973,7 +30973,7 @@ static PyObject *_wrap_new_Diagram(PyObject *self, PyObject *args, PyObject *kwa
         if (PyErr_Occurred()) SWIG_fail;
     }
     {
-        resultobj = wxPyMake_wxObject(result); 
+        resultobj = wxPyMake_wxObject(result, 1); 
     }
     return resultobj;
     fail:
@@ -31149,7 +31149,7 @@ static PyObject *_wrap_Diagram_FindShape(PyObject *self, PyObject *args, PyObjec
         if (PyErr_Occurred()) SWIG_fail;
     }
     {
-        resultobj = wxPyMake_wxShapeEvtHandler(result); 
+        resultobj = wxPyMake_wxShapeEvtHandler(result, 0); 
     }
     return resultobj;
     fail:
@@ -31177,7 +31177,7 @@ static PyObject *_wrap_Diagram_GetCanvas(PyObject *self, PyObject *args, PyObjec
         if (PyErr_Occurred()) SWIG_fail;
     }
     {
-        resultobj = wxPyMake_wxObject(result); 
+        resultobj = wxPyMake_wxObject(result, 0); 
     }
     return resultobj;
     fail:
@@ -31792,7 +31792,7 @@ static PyObject *_wrap_new_PyShapeCanvas(PyObject *self, PyObject *args, PyObjec
         if (PyErr_Occurred()) SWIG_fail;
     }
     {
-        resultobj = wxPyMake_wxObject(result); 
+        resultobj = wxPyMake_wxObject(result, 1); 
     }
     {
         if (temp6)
@@ -31917,7 +31917,7 @@ static PyObject *_wrap_PyShapeCanvas_FindShape(PyObject *self, PyObject *args, P
         if (PyErr_Occurred()) SWIG_fail;
     }
     {
-        resultobj = wxPyMake_wxShapeEvtHandler(result); 
+        resultobj = wxPyMake_wxShapeEvtHandler(result, 0); 
     }
     {
         PyObject *o = PyInt_FromLong((long) (*arg4));
@@ -31964,7 +31964,7 @@ static PyObject *_wrap_PyShapeCanvas_FindFirstSensitiveShape(PyObject *self, PyO
         if (PyErr_Occurred()) SWIG_fail;
     }
     {
-        resultobj = wxPyMake_wxShapeEvtHandler(result); 
+        resultobj = wxPyMake_wxShapeEvtHandler(result, 0); 
     }
     {
         PyObject *o = PyInt_FromLong((long) (*arg4));
@@ -31996,7 +31996,7 @@ static PyObject *_wrap_PyShapeCanvas_GetDiagram(PyObject *self, PyObject *args, 
         if (PyErr_Occurred()) SWIG_fail;
     }
     {
-        resultobj = wxPyMake_wxObject(result); 
+        resultobj = wxPyMake_wxObject(result, 0); 
     }
     return resultobj;
     fail:

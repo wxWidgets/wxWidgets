@@ -3376,6 +3376,20 @@ class MouseEvent(Event):
         """ShiftDown(self) -> bool"""
         return _core_.MouseEvent_ShiftDown(*args, **kwargs)
 
+    def CmdDown(*args, **kwargs):
+        """
+        CmdDown(self) -> bool
+
+        "Cmd" is a pseudo key which is the same as Control for PC and Unix
+        platforms but the special "Apple" (a.k.a as "Command") key on
+        Macs: it makes often sense to use it instead of, say, `ControlDown`
+        because Cmd key is used for the same thing under Mac as Ctrl
+        elsewhere. The Ctrl still exists, it's just not used for this
+        purpose. So for non-Mac platforms this is the same as `ControlDown`
+        and Macs this is the same as `MetaDown`.
+        """
+        return _core_.MouseEvent_CmdDown(*args, **kwargs)
+
     def LeftDown(*args, **kwargs):
         """LeftDown(self) -> bool"""
         return _core_.MouseEvent_LeftDown(*args, **kwargs)
@@ -3571,6 +3585,20 @@ class KeyEvent(Event):
     def ShiftDown(*args, **kwargs):
         """ShiftDown(self) -> bool"""
         return _core_.KeyEvent_ShiftDown(*args, **kwargs)
+
+    def CmdDown(*args, **kwargs):
+        """
+        CmdDown(self) -> bool
+
+        "Cmd" is a pseudo key which is the same as Control for PC and Unix
+        platforms but the special "Apple" (a.k.a as "Command") key on
+        Macs: it makes often sense to use it instead of, say, `ControlDown`
+        because Cmd key is used for the same thing under Mac as Ctrl
+        elsewhere. The Ctrl still exists, it's just not used for this
+        purpose. So for non-Mac platforms this is the same as `ControlDown`
+        and Macs this is the same as `MetaDown`.
+        """
+        return _core_.KeyEvent_CmdDown(*args, **kwargs)
 
     def HasModifiers(*args, **kwargs):
         """HasModifiers(self) -> bool"""
@@ -5003,6 +5031,8 @@ class PyOnDemandOutputWindow:
     def __init__(self, title = "wxPython: stdout/stderr"):
         self.frame  = None
         self.title  = title
+        self.pos    = wx.DefaultPosition
+        self.size   = (450, 300)
         self.parent = None
 
     def SetParent(self, parent):
@@ -5011,12 +5041,11 @@ class PyOnDemandOutputWindow:
 
 
     def CreateOutputWindow(self, st):
-        self.frame = wx.Frame(self.parent, -1, self.title,
-                              style=wx.DEFAULT_FRAME_STYLE | wx.NO_FULL_REPAINT_ON_RESIZE)
+        self.frame = wx.Frame(self.parent, -1, self.title, self.pos, self.size,
+                              style=wx.DEFAULT_FRAME_STYLE)
         self.text  = wx.TextCtrl(self.frame, -1, "",
-                                 style = wx.TE_MULTILINE | wx.TE_READONLY)
+                                 style=wx.TE_MULTILINE|wx.TE_READONLY)
         self.text.AppendText(st)
-        self.frame.SetSize((450, 300))
         self.frame.Show(True)
         EVT_CLOSE(self.frame, self.OnCloseWindow)
         
@@ -5192,6 +5221,21 @@ your Mac."""
 
     def RestoreStdio(self):
         _sys.stdout, _sys.stderr = self.saveStdio
+
+
+    def SetOutputWindowAttributes(self, title=None, pos=None, size=None):
+        """
+        Set the title, position and/or size of the output window if
+        the stdio has been redirected.
+        """
+        if self.stdioWin:
+            if title is not None:
+                self.stdioWin.title = title
+            if pos is not None:
+                self.stdioWin.pos = pos
+            if size is not None:
+                self.stdioWin.size = size
+            
 
 
 
@@ -6820,9 +6864,9 @@ class Window(EvtHandler):
         """
         return _core_.Window_SetBackgroundColour(*args, **kwargs)
 
-    def SetOwnBackroundColour(*args, **kwargs):
-        """SetOwnBackroundColour(self, Colour colour)"""
-        return _core_.Window_SetOwnBackroundColour(*args, **kwargs)
+    def SetOwnBackgroundColour(*args, **kwargs):
+        """SetOwnBackgroundColour(self, Colour colour)"""
+        return _core_.Window_SetOwnBackgroundColour(*args, **kwargs)
 
     def SetForegroundColour(*args, **kwargs):
         """

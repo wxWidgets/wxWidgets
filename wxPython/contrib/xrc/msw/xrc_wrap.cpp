@@ -1039,7 +1039,7 @@ static PyObject *_wrap_XmlResource_LoadMenu(PyObject *self, PyObject *args, PyOb
         if (PyErr_Occurred()) SWIG_fail;
     }
     {
-        resultobj = wxPyMake_wxObject(result); 
+        resultobj = wxPyMake_wxObject(result, 0); 
     }
     {
         if (temp2)
@@ -1083,7 +1083,7 @@ static PyObject *_wrap_XmlResource_LoadMenuBar(PyObject *self, PyObject *args, P
         if (PyErr_Occurred()) SWIG_fail;
     }
     {
-        resultobj = wxPyMake_wxObject(result); 
+        resultobj = wxPyMake_wxObject(result, 0); 
     }
     {
         if (temp2)
@@ -1131,7 +1131,7 @@ static PyObject *_wrap_XmlResource_LoadMenuBarOnFrame(PyObject *self, PyObject *
         if (PyErr_Occurred()) SWIG_fail;
     }
     {
-        resultobj = wxPyMake_wxObject(result); 
+        resultobj = wxPyMake_wxObject(result, 0); 
     }
     {
         if (temp3)
@@ -1179,7 +1179,7 @@ static PyObject *_wrap_XmlResource_LoadToolBar(PyObject *self, PyObject *args, P
         if (PyErr_Occurred()) SWIG_fail;
     }
     {
-        resultobj = wxPyMake_wxObject(result); 
+        resultobj = wxPyMake_wxObject(result, 0); 
     }
     {
         if (temp3)
@@ -1227,7 +1227,7 @@ static PyObject *_wrap_XmlResource_LoadDialog(PyObject *self, PyObject *args, Py
         if (PyErr_Occurred()) SWIG_fail;
     }
     {
-        resultobj = wxPyMake_wxObject(result); 
+        resultobj = wxPyMake_wxObject(result, 0); 
     }
     {
         if (temp3)
@@ -1327,7 +1327,7 @@ static PyObject *_wrap_XmlResource_LoadPanel(PyObject *self, PyObject *args, PyO
         if (PyErr_Occurred()) SWIG_fail;
     }
     {
-        resultobj = wxPyMake_wxObject(result); 
+        resultobj = wxPyMake_wxObject(result, 0); 
     }
     {
         if (temp3)
@@ -1427,7 +1427,7 @@ static PyObject *_wrap_XmlResource_LoadFrame(PyObject *self, PyObject *args, PyO
         if (PyErr_Occurred()) SWIG_fail;
     }
     {
-        resultobj = wxPyMake_wxObject(result); 
+        resultobj = wxPyMake_wxObject(result, 0); 
     }
     {
         if (temp3)
@@ -1535,7 +1535,7 @@ static PyObject *_wrap_XmlResource_LoadObject(PyObject *self, PyObject *args, Py
         if (PyErr_Occurred()) SWIG_fail;
     }
     {
-        resultobj = wxPyMake_wxObject(result); 
+        resultobj = wxPyMake_wxObject(result, 0); 
     }
     {
         if (temp3)
@@ -3962,7 +3962,7 @@ static PyObject *_wrap_XmlResourceHandler_CreateResource(PyObject *self, PyObjec
         if (PyErr_Occurred()) SWIG_fail;
     }
     {
-        resultobj = wxPyMake_wxObject(result); 
+        resultobj = wxPyMake_wxObject(result, 0); 
     }
     return resultobj;
     fail:
@@ -4103,7 +4103,7 @@ static PyObject *_wrap_XmlResourceHandler_GetParent(PyObject *self, PyObject *ar
         if (PyErr_Occurred()) SWIG_fail;
     }
     {
-        resultobj = wxPyMake_wxObject(result); 
+        resultobj = wxPyMake_wxObject(result, 0); 
     }
     return resultobj;
     fail:
@@ -4131,7 +4131,7 @@ static PyObject *_wrap_XmlResourceHandler_GetInstance(PyObject *self, PyObject *
         if (PyErr_Occurred()) SWIG_fail;
     }
     {
-        resultobj = wxPyMake_wxObject(result); 
+        resultobj = wxPyMake_wxObject(result, 0); 
     }
     return resultobj;
     fail:
@@ -4159,7 +4159,7 @@ static PyObject *_wrap_XmlResourceHandler_GetParentAsWindow(PyObject *self, PyOb
         if (PyErr_Occurred()) SWIG_fail;
     }
     {
-        resultobj = wxPyMake_wxObject(result); 
+        resultobj = wxPyMake_wxObject(result, 0); 
     }
     return resultobj;
     fail:
@@ -4187,7 +4187,7 @@ static PyObject *_wrap_XmlResourceHandler_GetInstanceAsWindow(PyObject *self, Py
         if (PyErr_Occurred()) SWIG_fail;
     }
     {
-        resultobj = wxPyMake_wxObject(result); 
+        resultobj = wxPyMake_wxObject(result, 0); 
     }
     return resultobj;
     fail:
@@ -5256,7 +5256,7 @@ static PyObject *_wrap_XmlResourceHandler_CreateResFromNode(PyObject *self, PyOb
         if (PyErr_Occurred()) SWIG_fail;
     }
     {
-        resultobj = wxPyMake_wxObject(result); 
+        resultobj = wxPyMake_wxObject(result, 0); 
     }
     return resultobj;
     fail:

@@ -416,7 +416,7 @@ public:
         bool found;
         bool blocked = wxPyBeginBlockThreads();
         if ((found = wxPyCBH_findCallback(m_myInst, "DrawItem"))) {
-            PyObject* dcobj = wxPyMake_wxObject(&dc);
+            PyObject* dcobj = wxPyMake_wxObject(&dc,false);
             PyObject* idobj = wxPyConstructObject((void*)&id, wxT("wxTreeItemId"), False);
             PyObject* recobj= wxPyConstructObject((void*)&rect, wxT("wxRect"), False);
             wxPyCBH_callCallback(m_myInst, Py_BuildValue("(OOO)", dcobj, idobj, recobj));
@@ -1273,7 +1273,7 @@ static PyObject *_wrap_EditableListBox_GetListCtrl(PyObject *self, PyObject *arg
         if (PyErr_Occurred()) SWIG_fail;
     }
     {
-        resultobj = wxPyMake_wxObject(result); 
+        resultobj = wxPyMake_wxObject(result, 0); 
     }
     return resultobj;
     fail:
@@ -1301,7 +1301,7 @@ static PyObject *_wrap_EditableListBox_GetDelButton(PyObject *self, PyObject *ar
         if (PyErr_Occurred()) SWIG_fail;
     }
     {
-        resultobj = wxPyMake_wxObject(result); 
+        resultobj = wxPyMake_wxObject(result, 0); 
     }
     return resultobj;
     fail:
@@ -1329,7 +1329,7 @@ static PyObject *_wrap_EditableListBox_GetNewButton(PyObject *self, PyObject *ar
         if (PyErr_Occurred()) SWIG_fail;
     }
     {
-        resultobj = wxPyMake_wxObject(result); 
+        resultobj = wxPyMake_wxObject(result, 0); 
     }
     return resultobj;
     fail:
@@ -1357,7 +1357,7 @@ static PyObject *_wrap_EditableListBox_GetUpButton(PyObject *self, PyObject *arg
         if (PyErr_Occurred()) SWIG_fail;
     }
     {
-        resultobj = wxPyMake_wxObject(result); 
+        resultobj = wxPyMake_wxObject(result, 0); 
     }
     return resultobj;
     fail:
@@ -1385,7 +1385,7 @@ static PyObject *_wrap_EditableListBox_GetDownButton(PyObject *self, PyObject *a
         if (PyErr_Occurred()) SWIG_fail;
     }
     {
-        resultobj = wxPyMake_wxObject(result); 
+        resultobj = wxPyMake_wxObject(result, 0); 
     }
     return resultobj;
     fail:
@@ -1413,7 +1413,7 @@ static PyObject *_wrap_EditableListBox_GetEditButton(PyObject *self, PyObject *a
         if (PyErr_Occurred()) SWIG_fail;
     }
     {
-        resultobj = wxPyMake_wxObject(result); 
+        resultobj = wxPyMake_wxObject(result, 0); 
     }
     return resultobj;
     fail:
@@ -1554,7 +1554,9 @@ static PyObject *_wrap_RemotelyScrolledTreeCtrl_GetScrolledWindow(PyObject *self
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_NewPointerObj((void*)(result), SWIGTYPE_p_wxScrolledWindow, 0);
+    {
+        resultobj = wxPyMake_wxObject(result, 0); 
+    }
     return resultobj;
     fail:
     return NULL;
@@ -1643,7 +1645,7 @@ static PyObject *_wrap_RemotelyScrolledTreeCtrl_GetCompanionWindow(PyObject *sel
         if (PyErr_Occurred()) SWIG_fail;
     }
     {
-        resultobj = wxPyMake_wxObject(result); 
+        resultobj = wxPyMake_wxObject(result, 0); 
     }
     return resultobj;
     fail:
@@ -3118,7 +3120,7 @@ static PyObject *_wrap_TreeListCtrl_GetImageList(PyObject *self, PyObject *args,
         if (PyErr_Occurred()) SWIG_fail;
     }
     {
-        resultobj = wxPyMake_wxObject(result); 
+        resultobj = wxPyMake_wxObject(result, 0); 
     }
     return resultobj;
     fail:
@@ -3146,7 +3148,7 @@ static PyObject *_wrap_TreeListCtrl_GetStateImageList(PyObject *self, PyObject *
         if (PyErr_Occurred()) SWIG_fail;
     }
     {
-        resultobj = wxPyMake_wxObject(result); 
+        resultobj = wxPyMake_wxObject(result, 0); 
     }
     return resultobj;
     fail:
@@ -3174,7 +3176,7 @@ static PyObject *_wrap_TreeListCtrl_GetButtonsImageList(PyObject *self, PyObject
         if (PyErr_Occurred()) SWIG_fail;
     }
     {
-        resultobj = wxPyMake_wxObject(result); 
+        resultobj = wxPyMake_wxObject(result, 0); 
     }
     return resultobj;
     fail:
@@ -6524,7 +6526,7 @@ static PyObject *_wrap_TreeListCtrl_GetHeaderWindow(PyObject *self, PyObject *ar
         if (PyErr_Occurred()) SWIG_fail;
     }
     {
-        resultobj = wxPyMake_wxObject(result); 
+        resultobj = wxPyMake_wxObject(result, 0); 
     }
     return resultobj;
     fail:
@@ -6535,7 +6537,7 @@ static PyObject *_wrap_TreeListCtrl_GetHeaderWindow(PyObject *self, PyObject *ar
 static PyObject *_wrap_TreeListCtrl_GetMainWindow(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPyTreeListCtrl *arg1 = (wxPyTreeListCtrl *) 0 ;
-    wxWindow *result;
+    wxScrolledWindow *result;
     PyObject * obj0 = 0 ;
     char *kwnames[] = {
         (char *) "self", NULL 
@@ -6546,13 +6548,13 @@ static PyObject *_wrap_TreeListCtrl_GetMainWindow(PyObject *self, PyObject *args
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
-        result = (wxWindow *)((wxPyTreeListCtrl const *)arg1)->GetMainWindow();
+        result = (wxScrolledWindow *)((wxPyTreeListCtrl const *)arg1)->GetMainWindow();
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
     {
-        resultobj = wxPyMake_wxObject(result); 
+        resultobj = wxPyMake_wxObject(result, 0); 
     }
     return resultobj;
     fail:

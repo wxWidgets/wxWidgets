@@ -2203,7 +2203,7 @@ static PyObject *_wrap_CalendarCtrl_GetMonthControl(PyObject *self, PyObject *ar
         if (PyErr_Occurred()) SWIG_fail;
     }
     {
-        resultobj = wxPyMake_wxObject(result); 
+        resultobj = wxPyMake_wxObject(result, 0); 
     }
     return resultobj;
     fail:
@@ -2231,7 +2231,7 @@ static PyObject *_wrap_CalendarCtrl_GetYearControl(PyObject *self, PyObject *arg
         if (PyErr_Occurred()) SWIG_fail;
     }
     {
-        resultobj = wxPyMake_wxObject(result); 
+        resultobj = wxPyMake_wxObject(result, 0); 
     }
     return resultobj;
     fail:

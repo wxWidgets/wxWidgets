@@ -605,7 +605,7 @@ static PyObject *_wrap_WizardEvent_GetPage(PyObject *self, PyObject *args, PyObj
         if (PyErr_Occurred()) SWIG_fail;
     }
     {
-        resultobj = wxPyMake_wxObject(result); 
+        resultobj = wxPyMake_wxObject(result, 0); 
     }
     return resultobj;
     fail:
@@ -703,7 +703,7 @@ static PyObject *_wrap_WizardPage_GetPrev(PyObject *self, PyObject *args, PyObje
         if (PyErr_Occurred()) SWIG_fail;
     }
     {
-        resultobj = wxPyMake_wxObject(result); 
+        resultobj = wxPyMake_wxObject(result, 0); 
     }
     return resultobj;
     fail:
@@ -731,7 +731,7 @@ static PyObject *_wrap_WizardPage_GetNext(PyObject *self, PyObject *args, PyObje
         if (PyErr_Occurred()) SWIG_fail;
     }
     {
-        resultobj = wxPyMake_wxObject(result); 
+        resultobj = wxPyMake_wxObject(result, 0); 
     }
     return resultobj;
     fail:
@@ -2032,7 +2032,7 @@ static PyObject *_wrap_Wizard_GetCurrentPage(PyObject *self, PyObject *args, PyO
         if (PyErr_Occurred()) SWIG_fail;
     }
     {
-        resultobj = wxPyMake_wxObject(result); 
+        resultobj = wxPyMake_wxObject(result, 0); 
     }
     return resultobj;
     fail:
@@ -2151,7 +2151,7 @@ static PyObject *_wrap_Wizard_GetPageAreaSizer(PyObject *self, PyObject *args, P
         if (PyErr_Occurred()) SWIG_fail;
     }
     {
-        resultobj = wxPyMake_wxSizer(result); 
+        resultobj = wxPyMake_wxSizer(result, 0); 
     }
     return resultobj;
     fail:
