@@ -88,8 +88,6 @@ Editor::Editor() {
 	
 	modEventMask = SC_MODEVENTMASKALL;
 
-	displayPopupMenu = true;
-	
 	pdoc = new Document();
 	pdoc ->AddRef();
 	pdoc->AddWatcher(this, 0);
@@ -633,7 +631,7 @@ void Editor::PaintSelMargin(Surface *surfWindow, PRectangle &rc) {
 			int line = cs.DocFromDisplay(visibleLine);
 			int yposScreen = 0;
 
-			while ((visibleLine < cs.LinesDisplayed()) && yposScreen < rcMargin.bottom) {
+			while (line < pdoc->LinesTotal() && yposScreen < rcMargin.bottom) {
 				int marks = pdoc->GetMark(line);
 				if (pdoc->GetLevel(line) & SC_FOLDLEVELHEADERFLAG) {
 					if (cs.GetExpanded(line)) {
@@ -650,7 +648,7 @@ void Editor::PaintSelMargin(Surface *surfWindow, PRectangle &rc) {
 					char number[100];
 					number[0] = '\0';
 					sprintf(number, "%d", line + 1);
-					if (foldFlags & 64)
+					if (foldFlags & 8)
 						sprintf(number, "%X", pdoc->GetLevel(line));
 					int xpos = 0;
 					PRectangle rcNumber=rcMarker;
@@ -855,7 +853,7 @@ void Editor::DrawLine(Surface *surface, ViewStyle &vsDraw, int line, int xStart,
 			} else {
 				rcSegment.left = ll.positions[startseg] + xStart;
 				rcSegment.right = ll.positions[i + 1] + xStart;
-				// Only try to draw if really visible - enhances performance by not calling environment to 
+				// Only try do draw if really visible - enhances performance by not calling environment to 
 				// draw strings that are completely past the right side of the window.
 				if (rcSegment.left <= rcLine.right) {
 					surface->DrawText(rcSegment, textFont,
@@ -993,9 +991,10 @@ void Editor::Paint(Surface *surfaceWindow, PRectangle rcArea) {
 		ypos += screenLinePaintFirst * vs.lineHeight;
 	int yposScreen = screenLinePaintFirst * vs.lineHeight;
 
-	// Ensure we are styled as far as we are painting.
-	pdoc->EnsureStyledTo(endPosPaint);
-
+	if (endPosPaint > pdoc->GetEndStyled()) {
+		// Notify container to do some more styling
+		NotifyStyleNeeded(endPosPaint);
+	}
 	if (needUpdateUI) {
 		NotifyUpdateUI();
 		needUpdateUI = false;
@@ -1010,7 +1009,7 @@ void Editor::Paint(Surface *surfaceWindow, PRectangle rcArea) {
 	}
 
 	if (paintState == paintAbandoned) {
-		// Either styling or NotifyUpdateUI noticed that painting is needed
+		// Either NotifyStyleNeeded or NotifyUpdateUI noticed that painting is needed
 		// outside the current painting rectangle
 		//Platform::DebugPrintf("Abandoning paint\n");
 		return;
@@ -1068,18 +1067,10 @@ void Editor::Paint(Surface *surfaceWindow, PRectangle rcArea) {
 			if (cs.GetVisible(line))
 				DrawLine(surface, vs, line, xStart, rcLine, ll);
 
-			bool expanded = cs.GetExpanded(line);
-			if ( (expanded && (foldFlags & 2)) || (!expanded && (foldFlags & 4)) ) {
+			if (foldFlags & 2) {
 				if (pdoc->GetLevel(line) & SC_FOLDLEVELHEADERFLAG) {
 					PRectangle rcFoldLine = rcLine;
 					rcFoldLine.bottom = rcFoldLine.top + 1;
-					surface->FillRectangle(rcFoldLine, vs.styles[STYLE_DEFAULT].fore.allocated);
-				}
-			}
-			if ( (expanded && (foldFlags & 8)) || (!expanded && (foldFlags & 16)) ) {
-				if (pdoc->GetLevel(line) & SC_FOLDLEVELHEADERFLAG) {
-					PRectangle rcFoldLine = rcLine;
-					rcFoldLine.top = rcFoldLine.bottom - 1;
 					surface->FillRectangle(rcFoldLine, vs.styles[STYLE_DEFAULT].fore.allocated);
 				}
 			}
@@ -1213,9 +1204,10 @@ long Editor::FormatRange(bool draw, FORMATRANGE *pfr) {
 	if (linePrintLast < pdoc->LinesTotal())
 		endPosPrint = pdoc->LineStart(linePrintLast + 1);
 
-	// Ensure we are styled to where we are formatting.
-	pdoc->EnsureStyledTo(endPosPrint);
-
+	if (endPosPrint > pdoc->GetEndStyled()) {
+		// Notify container to do some more styling
+		NotifyStyleNeeded(endPosPrint);
+	}
 	int xStart = vsPrint.fixedColumnWidth + pfr->rc.left + lineNumberWidth;
 	int ypos = pfr->rc.top;
 	int line = linePrintStart;
@@ -1236,27 +1228,20 @@ long Editor::FormatRange(bool draw, FORMATRANGE *pfr) {
 				PRectangle rcNumber = rcLine;
 				rcNumber.right = rcNumber.left + lineNumberWidth;
 				// Right justify
-				rcNumber.left -=  
+				rcNumber.left += lineNumberWidth - 
 					surface->WidthText(vsPrint.styles[STYLE_LINENUMBER].font, number, strlen(number));
 				surface->DrawText(rcNumber, vsPrint.styles[STYLE_LINENUMBER].font,
 				                  ypos + vsPrint.maxAscent, number, strlen(number),
 				                  vsPrint.styles[STYLE_LINENUMBER].fore.allocated, 
 						  vsPrint.styles[STYLE_LINENUMBER].back.allocated);
 			}
-
-			// When printing, the hdc and hdcTarget may be the same, so
-			// changing the state of surfaceMeasure may change the underlying
-			// state of surface. Therefore, any cached state is discarded before 
-			// using each surface.
 			
 			// Copy this line and its styles from the document into local arrays
 			// and determine the x position at which each character starts.
-			surfaceMeasure->FlushCachedState();
 			LineLayout ll;
 			LayoutLine(line, surfaceMeasure, vsPrint, ll);
 			                                
 			// Draw the line
-			surface->FlushCachedState();
 			DrawLine(surface, vsPrint, line, xStart, rcLine, ll);
 
 			ypos += vsPrint.lineHeight;
@@ -1434,10 +1419,6 @@ void Editor::NotifyStyleNeeded(int endStyleNeeded) {
 	scn.nmhdr.code = SCN_STYLENEEDED;
 	scn.position = endStyleNeeded;
 	NotifyParent(scn);
-}
-
-void Editor::NotifyStyleNeeded(Document*, void *, int endStyleNeeded) {
-	NotifyStyleNeeded(endStyleNeeded);
 }
 
 void Editor::NotifyChar(char ch) {
@@ -1618,10 +1599,6 @@ void Editor::NotifyModified(Document*, DocModification mh, void *) {
 		SetScrollBars();
 	}
 
-	if (mh.modificationType & SC_MOD_CHANGEMARKER) {
-		RedrawSelMargin();
-	}
-	
 	// If client wants to see this modification
 	if (mh.modificationType & modEventMask) {
 		if ((mh.modificationType & SC_MOD_CHANGESTYLE) == 0) {
@@ -1700,11 +1677,6 @@ void Editor::NotifyMacroRecord(UINT iMessage, WPARAM wParam, LPARAM lParam) {
 	case SCI_VCHOMEEXTEND:
 	case SCI_DELWORDLEFT:
 	case SCI_DELWORDRIGHT:
-	case SCI_LINECUT:
-	case SCI_LINEDELETE:
-	case SCI_LINETRANSPOSE:
-	case SCI_LOWERCASE:
-	case SCI_UPPERCASE:
 		break;
 
 	// Filter out all others (display changes, etc)
@@ -1737,60 +1709,6 @@ void Editor::PageMove(int direction, bool extend) {
 		SetVerticalScrollPos();
 	} else {
 		MovePositionTo(newPos, extend);
-	}
-}
-
-void Editor::ChangeCaseOfSelection(bool makeUpperCase) {
-	pdoc->BeginUndoAction();
-	int startCurrent = currentPos;
-	int startAnchor = anchor;
-	if (selType == selRectangle) {
-		int lineStart = pdoc->LineFromPosition(SelectionStart());
-		int lineEnd = pdoc->LineFromPosition(SelectionEnd());
-		for (int line=lineStart; line <= lineEnd; line++) {
-			pdoc->ChangeCase(
-				Range(SelectionStart(line), SelectionEnd(line)), 
-				makeUpperCase);
-		}
-		// Would be nicer to keep the rectangular selection but this is complex
-		selType = selStream;
-		SetSelection(startCurrent, startCurrent);
-	} else {
-		pdoc->ChangeCase(Range(SelectionStart(), SelectionEnd()), 
-			makeUpperCase);
-		SetSelection(startCurrent, startAnchor);
-	}
-	pdoc->EndUndoAction();
-}
-
-
-void Editor::LineTranspose() {
-	int line = pdoc->LineFromPosition(currentPos);
-	if (line > 0) {
-		int startPrev = pdoc->LineStart(line-1);
-		int endPrev = pdoc->LineEnd(line-1);
-		int start = pdoc->LineStart(line);
-		int end = pdoc->LineEnd(line);
-		int startNext = pdoc->LineStart(line+1);
-		if (end < pdoc->Length()) {
-			end = startNext;
-			char *thisLine = CopyRange(start, end);
-			pdoc->DeleteChars(start, end-start);
-			pdoc->InsertString(startPrev, thisLine, end-start);
-			MovePositionTo(startPrev+end-start);
-			delete []thisLine;
-		} else {
-			// Last line so line has no line end
-			char *thisLine = CopyRange(start, end);
-			char *prevEnd = CopyRange(endPrev, start);
-			pdoc->DeleteChars(endPrev, end-endPrev);
-			pdoc->InsertString(startPrev, thisLine, end-start);
-			pdoc->InsertString(startPrev + end-start, prevEnd, start-endPrev);
-			MovePositionTo(startPrev + end-endPrev);
-			delete []thisLine;
-			delete []prevEnd;
-		}
-		
 	}
 }
 
@@ -1966,39 +1884,7 @@ int Editor::KeyCommand(UINT iMessage) {
 	case SCI_DELWORDRIGHT: {
 			int endWord = pdoc->NextWordStart(currentPos, 1);
 			pdoc->DeleteChars(currentPos, endWord - currentPos);
-			MovePositionTo(currentPos);
 		}
-		break;
-	case SCI_LINECUT: {
-			int lineStart = pdoc->LineFromPosition(currentPos);
-			int lineEnd = pdoc->LineFromPosition(anchor);
-			if (lineStart > lineEnd) {
-				int t = lineEnd;
-				lineEnd = lineStart;
-				lineStart = t;
-			}
-			int start = pdoc->LineStart(lineStart);
-			int end = pdoc->LineStart(lineEnd+1);
-			SetSelection(start,end);
-			Cut();
-		}
-		break;
-	case SCI_LINEDELETE: {
-			int line = pdoc->LineFromPosition(currentPos);
-			int start = pdoc->LineStart(line);
-			int end = pdoc->LineStart(line+1);
-			pdoc->DeleteChars(start, end-start);
-			MovePositionTo(start);
-		}
-		break;
-	case SCI_LINETRANSPOSE:
-		LineTranspose();
-		break;
-	case SCI_LOWERCASE:
-		ChangeCaseOfSelection(false);
-		break;
-	case SCI_UPPERCASE:
-		ChangeCaseOfSelection(true);
 		break;
 	}
 	return 0;
@@ -2225,11 +2111,7 @@ void Editor::DropAt(int position, const char *value, bool moving, bool rectangul
 
 	int positionWasInSelection = PositionInSelection(position);
 
-	bool positionOnEdgeOfSelection = 
-		(position == SelectionStart()) || (position == SelectionEnd());
-
-	if ((!inDragDrop) || !(0 == positionWasInSelection) || 
-		(positionOnEdgeOfSelection && !moving)) {
+	if ((!inDragDrop) || !(0 == positionWasInSelection)) {
 
 		int selStart = SelectionStart();
 		int selEnd = SelectionEnd();
@@ -2684,10 +2566,6 @@ void Editor::SetDocPointer(Document *document) {
 		pdoc = document;
 	}
 	pdoc->AddRef();
-	// Reset the contraction state to fully shown.
-	cs.Clear();
-	cs.InsertLines(0, pdoc->LinesTotal()-1);
-
 	pdoc->AddWatcher(this, 0);
 	Redraw();
 	SetScrollBars();
@@ -2802,7 +2680,6 @@ LRESULT Editor::WndProc(UINT iMessage, WPARAM wParam, LPARAM lParam) {
 	case WM_PASTE:
 		Paste();
 		SetLastXChosen();
-		EnsureCaretVisible();
 		break;
 
 	case WM_CLEAR:
@@ -3184,8 +3061,7 @@ LRESULT Editor::WndProc(UINT iMessage, WPARAM wParam, LPARAM lParam) {
 
 #ifdef INCLUDE_DEPRECATED_FEATURES
 	case SCI_APPENDUNDOSTARTACTION:
-		// Not just deprecated - now dead
-		//pdoc->AppendUndoStartAction();
+		pdoc->AppendUndoStartAction();
 		return 0;
 #endif
 
@@ -3384,15 +3260,18 @@ LRESULT Editor::WndProc(UINT iMessage, WPARAM wParam, LPARAM lParam) {
 		break;
 	case SCI_MARKERADD: {
 			int markerID = pdoc->AddMark(wParam, lParam);
+			RedrawSelMargin();
 			return markerID;
 		}
 
 	case SCI_MARKERDELETE:
 		pdoc->DeleteMark(wParam, lParam);
+		RedrawSelMargin();
 		break;
 
 	case SCI_MARKERDELETEALL:
 		pdoc->DeleteAllMarks(static_cast<int>(wParam));
+		RedrawSelMargin();
 		break;
 
 	case SCI_MARKERGET:
@@ -3512,7 +3391,7 @@ LRESULT Editor::WndProc(UINT iMessage, WPARAM wParam, LPARAM lParam) {
 		if (lParam == 0)
 			return 0;
 		if (wParam <= STYLE_MAX) {
-			vs.SetStyleFontName(wParam, reinterpret_cast<const char *>(lParam));
+			strcpy(vs.styles[wParam].fontName, reinterpret_cast<char *>(lParam));
 			InvalidateStyleRedraw();
 		}
 		break;
@@ -3613,14 +3492,7 @@ LRESULT Editor::WndProc(UINT iMessage, WPARAM wParam, LPARAM lParam) {
 		caretSlop = lParam;
 		break;
 
-	case SCI_LINESONSCREEN:
-		return LinesOnScreen();
-
-	case SCI_USEPOPUP:
-		displayPopupMenu = wParam;
-		break;
-
-  #ifdef INCLUDE_DEPRECATED_FEATURES
+#ifdef INCLUDE_DEPRECATED_FEATURES
 	case SCI_SETFORE:
 		vs.styles[STYLE_DEFAULT].fore.desired = Colour(wParam);
 		InvalidateStyleRedraw();
@@ -3740,11 +3612,6 @@ LRESULT Editor::WndProc(UINT iMessage, WPARAM wParam, LPARAM lParam) {
 	case SCI_ZOOMOUT:
 	case SCI_DELWORDLEFT:
 	case SCI_DELWORDRIGHT:
-	case SCI_LINECUT:
-	case SCI_LINEDELETE:
-	case SCI_LINETRANSPOSE:
-	case SCI_LOWERCASE:
-	case SCI_UPPERCASE:
 		return KeyCommand(iMessage);
 
 	case SCI_BRACEHIGHLIGHT:

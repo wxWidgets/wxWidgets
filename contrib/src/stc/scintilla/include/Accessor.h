@@ -3,8 +3,6 @@
 // Copyright 1998-2000 by Neil Hodgson <neilh@scintilla.org>
 // The License.txt file describes the conditions under which this software may be distributed.
 
-enum { wsSpace = 1, wsTab = 2, wsSpaceTab = 4, wsInconsistent=8};
-
 class Accessor {
 protected:
 	// bufferSize is a trade off between time taken to copy the characters and SendMessage overhead
@@ -17,15 +15,12 @@ protected:
 	int endPos;
 	int lenDoc;
 	int offset;	// Optional but including an offset makes GCC generate better code 
-	int codePage;	
-	bool InternalIsLeadByte(char ch);
 	void Fill(int position);
 public:
 	Accessor(WindowID id_, PropSet &props_, int offset_=0) : 
 			id(id_), props(props_), startPos(0x7FFFFFFF), endPos(0), 
-			lenDoc(-1), offset(offset_), codePage(0) {
+			lenDoc(-1), offset(offset_) {
 	}
-	void SetCodePage(int codePage_) { codePage = codePage_; }
 	char operator[](int position) {
 		position += offset;
 		if (position < startPos || position >= endPos) {
@@ -45,9 +40,6 @@ public:
 		}
 		return buf[position - startPos];
 	}
-	bool IsLeadByte(char ch) {
-		return codePage && InternalIsLeadByte(ch);
-	}
 	char StyleAt(int position);
 	int GetLine(int position);
 	int LineStart(int line);
@@ -62,10 +54,6 @@ public:
 	PropSet &GetPropSet() { return props; }
 };
 
-class StylingContext;
-
-typedef bool (*PFNIsCommentLeader)(StylingContext &styler, int pos, int len);
-
 class StylingContext : public Accessor {
 	char styleBuf[bufferSize];
 	int validLen;
@@ -77,12 +65,12 @@ public:
 		Accessor(id_,props_,offset_), validLen(0), chFlags(0) {}
 	void StartAt(unsigned int start, char chMask=31);
 	void SetFlags(char chFlags_, char chWhile_) {chFlags = chFlags_; chWhile = chWhile_; };
+	void ColourSegment(unsigned int start, unsigned int end, int chAttr);
 	unsigned int GetStartSegment() { return startSeg; }
 	void StartSegment(unsigned int pos);
 	void ColourTo(unsigned int pos, int chAttr);
 	int GetLine(int position);
 	void SetLevel(int line, int level);
 	void Flush();
-	int IndentAmount(int line, int *flags, PFNIsCommentLeader pfnIsCommentLeader = 0);
 };
 

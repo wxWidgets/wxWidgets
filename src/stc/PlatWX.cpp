@@ -4,7 +4,6 @@
 //                        Robin Dunn <robin@aldunn.com>
 // The License.txt file describes the conditions under which this software may be distributed.
 
-#include <ctype.h>
 
 #include "Platform.h"
 #include "wx/stc/stc.h"
@@ -182,14 +181,7 @@ void Surface::BrushColor(Colour back) {
 }
 
 void Surface::SetFont(Font &font_) {
-
-  // I think the following check is valid.  
-  // It eliminates a crash for me.  -- eric@sourcegear.com
-
-  if (font_.GetID())
-    {
-      hdc->SetFont(*font_.GetID());
-    }
+    hdc->SetFont(*font_.GetID());
 }
 
 int Surface::LogPixelsY() {
@@ -352,11 +344,7 @@ void Surface::SetClip(PRectangle rc) {
     hdc->SetClippingRegion(wxRectFromPRectangle(rc));
 }
 
-void Surface::FlushCachedState() {
-  // TODO Is there anything we need to do here? eric@sourcegear.com
-  // TODO I had to add this method when I merged new Scintilla code
-  // TODO from Neil.
-}
+
 
 Window::~Window() {
 }

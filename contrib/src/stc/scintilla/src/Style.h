@@ -10,11 +10,10 @@ class Style {
 public:
 	ColourPair fore;
 	ColourPair back;
-	bool aliasOfDefaultFont;
 	bool bold;
 	bool italic;
 	int size;
-	const char *fontName;
+	char fontName[100];
 	bool eolFilled;
 
 	Font font;
@@ -28,12 +27,11 @@ public:
 	Style();
 	~Style();
 	Style &operator=(const Style &source);
-	void Clear(Colour fore_, Colour back_,
-           	int size_, 
-		const char *fontName_, 
-		bool bold_, bool italic_, bool eolFilled_);
-	bool EquivalentFontTo(const Style *other) const;
-	void Realise(Surface &surface, int zoomLevel, Style *defaultStyle=0);
+	void Clear(Colour fore_=Colour(0,0,0), Colour back_=Colour(0xff,0xff,0xff),
+           	int size_=Platform::DefaultFontSize(), 
+		const char *fontName_=Platform::DefaultFont(), 
+		bool bold_=false, bool italic_=false, bool eolFilled_=false);
+	void Realise(Surface &surface, int zoomLevel);
 };
 
 #endif

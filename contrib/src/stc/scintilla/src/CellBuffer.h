@@ -89,42 +89,6 @@ public:
 
 enum undoCollectionType { undoCollectNone, undoCollectAutoStart, undoCollectManualStart };
 
-class UndoHistory {
-	Action *actions;
-	int lenActions;
-	int maxAction;
-	int currentAction;
-	int undoSequenceDepth;
-	int savePoint;
-
-	void EnsureUndoRoom();
-	
-public:
-	UndoHistory();
-	~UndoHistory();
-	
-	void AppendAction(actionType at, int position, char *data, int length);
-
-	void BeginUndoAction();
-	void EndUndoAction();
-	void DropUndoSequence();
-	void DeleteUndoHistory();
-	
-	// The save point is a marker in the undo stack where the container has stated that 
-	// the buffer was saved. Undo and redo can move over the save point.
-	void SetSavePoint();
-	bool IsSavePoint() const;
-
-	// To perform an undo, StartUndo is called to retrieve the number of steps, then UndoStep is 
-	// called that many times. Similarly for redo.
-	bool CanUndo() const;
-	int StartUndo();
-	const Action &UndoStep();
-	bool CanRedo() const;
-	int StartRedo();
-	const Action &RedoStep();
-};
-
 // Holder for an expandable array of characters that supports undo and line markers
 // Based on article "Data Structures in a Bit-Mapped Text Editor"
 // by Wilfred J. Hansen, Byte January 1987, page 183
@@ -138,8 +102,13 @@ private:
 	char *part2body;
 	bool readOnly;
 
+	Action *actions;
+	int lenActions;
+	int maxAction;
+	int currentAction;
 	undoCollectionType collectingUndo;
-	UndoHistory uh;
+	int undoSequenceDepth;
+	int savePoint;
 
 	LineVector lv;
 
@@ -147,6 +116,9 @@ private:
 
 	void GapTo(int position);
 	void RoomFor(int insertionLength);
+
+	void EnsureUndoRoom();
+	void AppendAction(actionType at, int position, char *data, int length);
 
 	inline char ByteAt(int position);
 	void SetByteAt(int position, char ch);
@@ -198,11 +170,12 @@ public:
 
 	undoCollectionType SetUndoCollection(undoCollectionType collectUndo);
 	bool IsCollectingUndo();
+	void AppendUndoStartAction();
 	void BeginUndoAction();
 	void EndUndoAction();
 	void DeleteUndoHistory();
 	
-	// To perform an undo, StartUndo is called to retrieve the number of steps, then UndoStep is 
+	// To perform an undo, StartUndo is called to retreive the number of steps, then UndoStep is 
 	// called that many times. Similarly for redo.
 	bool CanUndo();
 	int StartUndo();

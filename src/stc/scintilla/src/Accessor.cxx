@@ -4,7 +4,6 @@
 // The License.txt file describes the conditions under which this software may be distributed.
 
 #include <stdlib.h>
-#include <ctype.h> 
 #include <stdio.h>
 
 #include "Platform.h"
@@ -12,17 +11,6 @@
 #include "PropSet.h"
 #include "Accessor.h"
 #include "Scintilla.h"
-
-bool Accessor::InternalIsLeadByte(char ch) {
-#if PLAT_GTK
-	// TODO: support DBCS under GTK+
-	return false;
-#elif PLAT_WIN 
-	return IsDBCSLeadByteEx(codePage, ch);
-#elif PLAT_WX 
-	return false;
-#endif 
-}
 
 void Accessor::Fill(int position) {
 	if (lenDoc == -1)
@@ -75,31 +63,35 @@ void StylingContext::StartAt(unsigned int start, char chMask) {
 	Platform::SendScintilla(id, SCI_STARTSTYLING, start, chMask);
 }
 
+void StylingContext::ColourSegment(unsigned int start, unsigned int end, int chAttr) {
+	// Only perform styling if non empty range
+	if (end != start - 1) {
+		if (end < start) {
+			Platform::DebugPrintf("Bad colour positions %d - %d\n", start, end);
+		}
+
+		if (validLen + (end - start + 1) >= bufferSize)
+			Flush();
+		if (validLen + (end - start + 1) >= bufferSize) {
+			// Too big for buffer so send directly
+			Platform::SendScintilla(id, SCI_SETSTYLING, end - start + 1, chAttr);
+		} else {
+			if (chAttr != chWhile)
+				chFlags = 0;
+			chAttr |= chFlags;
+			for (unsigned int i = start; i <= end; i++) {
+				styleBuf[validLen++] = chAttr;
+			}
+		}
+	}
+}
+
 void StylingContext::StartSegment(unsigned int pos) {
 	startSeg = pos;
 }
 
 void StylingContext::ColourTo(unsigned int pos, int chAttr) {
-	// Only perform styling if non empty range
-	if (pos != startSeg - 1) {
-		if (pos < startSeg) {
-			Platform::DebugPrintf("Bad colour positions %d - %d\n", startSeg, pos);
-		}
-
-		if (validLen + (pos - startSeg + 1) >= bufferSize)
-			Flush();
-		if (validLen + (pos - startSeg + 1) >= bufferSize) {
-			// Too big for buffer so send directly
-			Platform::SendScintilla(id, SCI_SETSTYLING, pos - startSeg + 1, chAttr);
-		} else {
-			if (chAttr != chWhile)
-				chFlags = 0;
-			chAttr |= chFlags;
-			for (unsigned int i = startSeg; i <= pos; i++) {
-				styleBuf[validLen++] = chAttr;
-			}
-		}
-	}
+	ColourSegment(startSeg, pos, chAttr);
 	startSeg = pos+1;
 }
 
@@ -118,49 +110,3 @@ void StylingContext::Flush() {
 		validLen = 0;
 	}
 }
-
-int StylingContext::IndentAmount(int line, int *flags, PFNIsCommentLeader pfnIsCommentLeader) {
-	int end = Length();
-	int spaceFlags = 0;
-	
-	// Determines the indentation level of the current line and also checks for consistent 
-	// indentation compared to the previous line.
-	// Indentation is judged consistent when the indentation whitespace of each line lines 
-	// the same or the indentation of one line is a prefix of the other.
-	
-	int pos = LineStart(line);
-	char ch = (*this)[pos];
-	int indent = 0;
-	bool inPrevPrefix = line > 0;
-	int posPrev = inPrevPrefix ? LineStart(line-1) : 0;
-	while ((ch == ' ' || ch == '\t') && (pos < end)) {
-		if (inPrevPrefix) {
-			char chPrev = (*this)[posPrev++];
-			if (chPrev == ' ' || chPrev == '\t') {
-				if (chPrev != ch)
-					spaceFlags |= wsInconsistent;
-			} else {
-				inPrevPrefix = false;
-			}
-		}
-		if (ch == ' ') {
-			spaceFlags |= wsSpace;
-			indent++;
-		} else {	// Tab
-			spaceFlags |= wsTab;
-			if (spaceFlags & wsSpace)
-				spaceFlags |= wsSpaceTab;
-			indent = (indent / 8 + 1) * 8;
-		}
-		ch = (*this)[++pos];
-	}
-	
-	*flags = spaceFlags;
-	indent += SC_FOLDLEVELBASE;
-	// if completely empty line or the start of a comment...
-	if (isspace(ch) || (pfnIsCommentLeader && (*pfnIsCommentLeader)(*this, pos, end-pos)) )
-		return indent | SC_FOLDLEVELWHITEFLAG;
-	else
-		return indent;
-}
-

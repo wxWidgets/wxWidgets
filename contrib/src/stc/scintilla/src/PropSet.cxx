@@ -27,7 +27,6 @@ bool EqualCaseInsensitive(const char *a, const char *b) {
 // Get a line of input. If end of line escaped with '\\' then continue reading.
 static bool GetFullLine(const char *&fpc, int &lenData, char *s, int len) {
 	bool continuation = true;
-	s[0] = '\0';
 	while ((len > 1) && lenData > 0) {
 		char ch = *fpc;
 		fpc++;
@@ -47,7 +46,6 @@ static bool GetFullLine(const char *&fpc, int &lenData, char *s, int len) {
 		} else {
 			continuation = false;
 			*s++ = ch;
-			*s = '\0';
 			len--;
 		}
 	}
@@ -255,9 +253,6 @@ void PropSet::ReadFromMemory(const char *data, int len) {
 			if (isalpha(linebuf[0]))
 				Set(linebuf);
 		}
-		// If there is a final line:
-		if (isalpha(linebuf[0]))
-			Set(linebuf);
 	}
 }
 

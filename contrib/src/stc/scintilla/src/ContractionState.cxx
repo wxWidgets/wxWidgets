@@ -108,8 +108,8 @@ void ContractionState::InsertLines(int lineDoc, int lineCount) {
 		return;
 	}
 	//Platform::DebugPrintf("InsertLine[%d] = %d\n", lineDoc);
-	if ((linesInDoc + lineCount + 2) >= size) {
-		Grow(linesInDoc + lineCount + growSize);
+	if ((linesInDoc + 2) >= size) {
+		Grow(size + growSize);
 	}
 	linesInDoc += lineCount;
 	linesInDisplay += lineCount;
@@ -155,7 +155,7 @@ bool ContractionState::GetVisible(int lineDoc) const {
 
 bool ContractionState::SetVisible(int lineDocStart, int lineDocEnd, bool visible) {
 	if (size == 0) {
-		Grow(linesInDoc + growSize);
+		Grow(lineDocEnd + growSize);
 	}
 	// TODO: modify docLine members to mirror displayLine
 	int delta = 0;
@@ -191,7 +191,7 @@ bool ContractionState::GetExpanded(int lineDoc) const {
 
 bool ContractionState::SetExpanded(int lineDoc, bool expanded) {
 	if (size == 0) {
-		Grow(linesInDoc + growSize);
+		Grow(lineDoc + growSize);
 	}
 	if ((lineDoc >= 0) && (lineDoc < linesInDoc)) {
 		if (lines[lineDoc].expanded != expanded) {

@@ -14,8 +14,6 @@
 // Licence:     wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
-#include <ctype.h>
-
 #include "ScintillaWX.h"
 #include "wx/stc/stc.h"
 

@@ -15,20 +15,8 @@ public:
 	MarginStyle();
 };
 
-class FontNames {
-private:
-	char *names[STYLE_MAX + 1];
-	int max;
-public:
-	FontNames();
-	~FontNames();
-	void Clear();
-	const char *Save(const char *name);
-};
-
 class ViewStyle {
 public:
-	FontNames fontNames;
 	Style styles[STYLE_MAX + 1];
 	LineMarker markers[MARKER_MAX + 1];
 	Indicator indicators[INDIC_MAX + 1];
@@ -66,7 +54,6 @@ public:
 	void Refresh(Surface &surface);
 	void ResetDefaultStyle();
 	void ClearStyles();
-	void SetStyleFontName(int styleIndex, const char *name);
 };
 
 #endif
