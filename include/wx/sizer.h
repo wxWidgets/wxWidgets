@@ -81,8 +81,12 @@ public:
 
   wxWindow *GetWindow() const
     { return m_window; }
+  void SetWindow( wxWindow *window )
+    { m_window = window; }
   wxSizer *GetSizer() const
     { return m_sizer; }
+  void SetSizer( wxSizer *sizer )
+    { m_sizer = sizer; }
   int GetOption() const
     { return m_option; }
   int GetFlag() const
