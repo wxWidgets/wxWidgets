@@ -103,6 +103,7 @@
     $1 = new wxMemoryBuffer(len);
     temp = True;
     memcpy($1->GetData(), str, len);
+    $1->SetDataLen(len);
 }
 
 %typemap(freearg) wxMemoryBuffer& {
