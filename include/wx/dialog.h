@@ -62,19 +62,22 @@ protected:
 };
 
 
-
-#if defined(__WXMSW__)
-    #include "wx/msw/dialog.h"
-#elif defined(__WXMOTIF__)
-    #include "wx/motif/dialog.h"
-#elif defined(__WXGTK__)
-    #include "wx/gtk/dialog.h"
-#elif defined(__WXMAC__)
-    #include "wx/mac/dialog.h"
-#elif defined(__WXPM__)
-    #include "wx/os2/dialog.h"
-#elif defined(__WXSTUBS__)
-    #include "wx/stubs/dialog.h"
+#if defined(__WXUNIVERSAL__)
+    #include "wx/univ/dialog.h"
+#else
+    #if defined(__WXMSW__)
+        #include "wx/msw/dialog.h"
+    #elif defined(__WXMOTIF__)
+        #include "wx/motif/dialog.h"
+    #elif defined(__WXGTK__)
+        #include "wx/gtk/dialog.h"
+    #elif defined(__WXMAC__)
+        #include "wx/mac/dialog.h"
+    #elif defined(__WXPM__)
+        #include "wx/os2/dialog.h"
+    #elif defined(__WXSTUBS__)
+        #include "wx/stubs/dialog.h"
+    #endif
 #endif
 
 #endif
