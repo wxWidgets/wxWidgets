@@ -1702,7 +1702,7 @@ void wxListMainWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
                 x += colWidth ;
                 dc.DrawLine(x, firstItemRect.GetY() - 1, x, lastItemRect.GetBottom() + 1);
             }
-	}
+        }
     }
     else
     {

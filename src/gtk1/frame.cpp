@@ -447,6 +447,7 @@ void wxFrame::Init()
     m_menuBarDetached = FALSE;
     m_toolBarDetached = FALSE;
     m_insertInClientArea = TRUE;
+    m_isFrame = TRUE;
     m_isIconized = FALSE;
     m_fsIsShowing = FALSE;
     m_themeEnabled = TRUE;
