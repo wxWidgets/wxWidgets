@@ -173,7 +173,8 @@ a) Add files to files.bkl:
      Finally, define FOO_SRC and FOO_HDR to contain both
      FOO_PLATFORM_{SRC,HDR} and FOO_{SRC,HDR} (see NET_SRC definition for an
      example).
-   * Add FOO_HDR to ALL_HEADERS
+   * Add FOO_HDR to ALL_HEADERS (or ALL_BASE_HEADERS if wxFoo is not GUI
+     component). 
 
    (You can apply different approaches to HDR and SRC variables, if e.g.
    headers are all common but sources are not.)
