@@ -30,6 +30,7 @@
 //---------------------------------------------------------------------------
 #include <wx/dbtable.h>
 #include "std.h"
+#include <iostream>
 //---------------------------------------------------------------------------
 // Global structure for holding ODBC connection information
 // - darf nur einmal im Projekte definiert werden ?? Extra Databasse Klasse ?
@@ -73,95 +74,7 @@ char *GetExtendedDBErrorMsg(char *ErrFile, int ErrLine)
   msg += "\n";
   return (char*) (const char*) msg;
 }  // GetExtendedDBErrorMsg
-//////////////////////////////////////////////////////////////////////////////////
-// BJO 20000115 : New stuff : dialog to ask for username and password
-//////////////////////////////////////////////////////////////////////////////////
-class UserDialog : public wxDialog
-{
-public:
-  UserDialog(wxWindow* parent);
-  virtual ~UserDialog();
-  void OnOK(wxCommandEvent& event);
-  wxString s_UserName, s_Password;
-  
-private:
-  wxButton *m_OK;
-  wxStaticText *m_Label1, *m_Label2;
-  wxTextCtrl *m_UserName, *m_Password;
-  
-  
-  DECLARE_EVENT_TABLE()
-    };
-//---------------------------------------------------------------------------
-BEGIN_EVENT_TABLE(UserDialog, wxDialog)
-  EVT_BUTTON(wxID_OK, UserDialog::OnOK)
-  END_EVENT_TABLE()
-  //---------------------------------------------------------------------------
-  UserDialog::UserDialog(wxWindow *parent):
-    wxDialog(parent, -1, _("ODBC user"),wxDefaultPosition, wxSize(310, 300),wxDIALOG_MODAL | wxDEFAULT_DIALOG_STYLE)
-{
-  wxLayoutConstraints* layout;
-  SetAutoLayout(TRUE);
-  //-----------------------------------------------
-  m_OK = new wxButton(this, wxID_OK, _("Ok"));
-  layout = new wxLayoutConstraints;
-  layout->left.SameAs(this, wxLeft, 10);
-  layout->top.SameAs(this, wxTop,10);
-  layout->height.AsIs();
-  layout->width.Absolute(75);
-  m_OK->SetConstraints(layout);
-  
-  m_Label1 = new wxStaticText(this, -1, _("User ID:"));
-  layout = new wxLayoutConstraints;
-  layout->left.SameAs(m_OK, wxLeft);
-  layout->top.SameAs(m_OK, wxBottom, 10);
-  layout->height.AsIs();
-  layout->width.AsIs();
-  m_Label1->SetConstraints(layout);
-  
-  m_UserName = new wxTextCtrl(this, -1, "");
-  layout = new wxLayoutConstraints;
-  layout->left.SameAs(m_OK, wxLeft);
-  layout->top.SameAs(m_Label1, wxBottom, 3);
-  layout->width.AsIs();
-  layout->height.AsIs();
-  m_UserName->SetConstraints(layout);
-  
-  m_Label2 = new wxStaticText(this, -1, _("Password:"));
-  layout = new wxLayoutConstraints;
-  layout->left.SameAs(m_OK, wxLeft);
-  layout->top.SameAs(m_UserName, wxBottom, 10);
-  layout->height.AsIs();
-  layout->width.AsIs();
-  m_Label2->SetConstraints(layout);
-  
-  m_Password = new wxTextCtrl(this, -1, "", wxDefaultPosition, wxDefaultSize, wxTE_PASSWORD);
-  layout = new wxLayoutConstraints;
-  layout->left.SameAs(m_OK, wxLeft);
-  layout->width.AsIs();
-  layout->top.SameAs(m_Label2, wxBottom, 3);
-  layout->height.AsIs();
-  m_Password->SetConstraints(layout);
-  
-  s_UserName = "";
-  s_Password = "";
-  
-  Layout();
-}
-//---------------------------------------------------------------------------
-UserDialog::~UserDialog()
-{
-}
-//---------------------------------------------------------------------------
-void UserDialog::OnOK(wxCommandEvent& WXUNUSED(event))
-{
-  strcpy(ConnectInf.Uid,  m_UserName->GetValue());
-  strcpy(ConnectInf.AuthStr, m_Password->GetValue());
-  EndModal(1);
-}
-//////////////////////////////////////////////////////////////////////////////////
-// BJO 20000115 : end of  new stuff
-//////////////////////////////////////////////////////////////////////////////////
+
 //---------------------------------------------------------------------------
 BrowserDB::BrowserDB()
 {
@@ -228,7 +141,7 @@ bool BrowserDB::OnStartDB(int Quite)
   delete p_Dlg;
 
   if (OK)
-    {
+    {     
       //---------------------------
       strcpy(ConnectInf.Dsn, ODBCSource);           // ODBC data source name (created with ODBC Administrator under Win95/NT)
       strcpy(ConnectInf.Uid, UserName);             // database username - must already exist in the data source

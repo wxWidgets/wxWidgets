@@ -264,30 +264,30 @@ void PgmCtrl::OnUserPassword()
   // wxMessageBox(SaveDSN);
   int i, rc=0;
   //-------------------------------------------
-  DlgUser p_Dlg(this, "Username and Password");
+  DlgUser *p_Dlg = new DlgUser(this, "Username and Password");
   //-------------------------------------------
   for (i=0;i<pDoc->i_DSN;i++)
     {
       if (SaveDSN == (pDoc->p_DSN+i)->Dsn)
 	{
-	  p_Dlg.s_DSN      = (pDoc->p_DSN+i)->Dsn;
-	  p_Dlg.s_User     = (pDoc->p_DSN+i)->Usr;
-	  p_Dlg.s_Password = (pDoc->p_DSN+i)->Pas;
-	  p_Dlg.OnInit();
-	  p_Dlg.Fit();
+	  p_Dlg->s_DSN      = (pDoc->p_DSN+i)->Dsn;
+	  p_Dlg->s_User     = (pDoc->p_DSN+i)->Usr;
+	  p_Dlg->s_Password = (pDoc->p_DSN+i)->Pas;
+	  p_Dlg->OnInit();
+	  p_Dlg->Fit();
 	  //--------------------
 	  // Temp0.Printf("i(%d) ; s_DSN(%s) ; s_User(%s) ; s_Password(%s)",i,p_Dlg.s_DSN,p_Dlg.s_User,p_Dlg.s_Password);
 	  // wxMessageBox(Temp0);
 	  bool OK = FALSE;
-	  if (p_Dlg.ShowModal() == wxID_OK)
+	  if (p_Dlg->ShowModal() == wxID_OK)
 	    {
-	      (pDoc->p_DSN+i)->Usr = p_Dlg.s_User;
-	      (pDoc->p_DSN+i)->Pas = p_Dlg.s_Password;
+	      (pDoc->p_DSN+i)->Usr = p_Dlg->s_User;
+	      (pDoc->p_DSN+i)->Pas = p_Dlg->s_Password;
 	      (pDoc->db_Br+i)->UserName  = (pDoc->p_DSN+i)->Usr;
 	      (pDoc->db_Br+i)->Password  = (pDoc->p_DSN+i)->Pas;
 	      OK = TRUE;
 	    }
-	  p_Dlg.Destroy();
+	  delete p_Dlg;
 	  if (!OK) return;
 	  //--------------------
 	  break; // We have what we want, leave

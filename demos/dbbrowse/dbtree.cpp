@@ -67,26 +67,26 @@ DBTree::DBTree(wxWindow *parent, const wxWindowID id,const wxPoint& pos, const w
   p_imageListNormal = new wxImageList(16, 16, TRUE);
   
   // should correspond to TreeIc_xxx enum
-#if defined(__WXMSW__)
-  p_imageListNormal->Add(wxICON(Logo));
-  p_imageListNormal->Add(wxICON(DsnClosed));
-  p_imageListNormal->Add(wxICON(DsnOpen));
-  p_imageListNormal->Add(wxICON(TAB));
-  p_imageListNormal->Add(wxICON(COL));
-  p_imageListNormal->Add(wxICON(KEY));
-  p_imageListNormal->Add(wxICON(KEYF));
-  p_imageListNormal->Add(wxICON(DocOpen));
-  p_imageListNormal->Add(wxICON(DocOpen));
-#else
-#include "bitmaps/logo.xpm"
-#include "bitmaps/dsnclose.xpm"
-#include "bitmaps/dsnopen.xpm"
-#include "bitmaps/tab.xpm"
-#include "bitmaps/key.xpm"
-#include "bitmaps/keyf.xpm"
-#include "bitmaps/d_open.xpm"
-#include "bitmaps/d_closed.xpm"
-#endif
+// #if defined(__WXMSW__)
+//   p_imageListNormal->Add(wxICON(Logo));
+//   p_imageListNormal->Add(wxICON(DsnClosed));
+//   p_imageListNormal->Add(wxICON(DsnOpen));
+//   p_imageListNormal->Add(wxICON(TAB));
+//   p_imageListNormal->Add(wxICON(COL));
+//   p_imageListNormal->Add(wxICON(KEY));
+//   p_imageListNormal->Add(wxICON(KEYF));
+//   p_imageListNormal->Add(wxICON(DocOpen));
+//   p_imageListNormal->Add(wxICON(DocOpen));
+// #else
+// #include "bitmaps/logo.xpm"
+// #include "bitmaps/dsnclose.xpm"
+// #include "bitmaps/dsnopen.xpm"
+// #include "bitmaps/tab.xpm"
+// #include "bitmaps/key.xpm"
+// #include "bitmaps/keyf.xpm"
+// #include "bitmaps/d_open.xpm"
+// #include "bitmaps/d_closed.xpm"
+//#endif
   
   SetImageList(p_imageListNormal);
   ct_BrowserDB = NULL;
@@ -111,6 +111,7 @@ int  DBTree::OnPopulate()
   wxTreeItemId Root, Folder, Docu, Funkt;
   int i,x,y;
   wxString SQL_TYPE, DB_TYPE;
+  wxBeginBusyCursor();
   //----------------------------------------------------------------------------------------------------------------------------
   if((pDoc->db_Br+i_Which)->Initialize(FALSE))
     {
@@ -189,8 +190,9 @@ int  DBTree::OnPopulate()
     }       // if((pDoc->db_Br+i_Which)->Initialize(FALSE))
   else
     {
+      wxEndBusyCursor();
       return 0;
-      wxLogMessage(_("\n-E-> DBTree::OnPopulate() : A valid Pointer could not be created : Failed"));
+      //wxLogMessage(_("\n-E-> DBTree::OnPopulate() : A valid Pointer could not be created : Failed"));
     }
   //----------------------------------------------------------------------------------------------------------------------------
   Expand(Root);
@@ -206,6 +208,7 @@ int  DBTree::OnPopulate()
   popupMenu2->AppendSeparator();
   popupMenu2->Append(DATA_TABLE, _("Make wxTable.cpp/h "));
   //----------------------------------------------------------------------------------------------------------------------------
+  wxEndBusyCursor();  
   return 0;
 }
 //---------------------------------------------------------------------------
