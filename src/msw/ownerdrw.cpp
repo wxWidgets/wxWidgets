@@ -188,7 +188,7 @@ bool wxOwnerDrawn::OnMeasureItem(size_t *pwidth, size_t *pheight)
 // get drawn embossed? How can we tell DrawState that we don't want the
 // embossing?
 
-#if defined(__WIN32__) && !defined(__SC__) && !defined(__TWIN32__)
+#if defined(__WIN32__) && !defined(__SYMANTEC__) && !defined(__TWIN32__)
 #define   O_DRAW_NATIVE_API     // comments below explain why I use it
 #endif
 

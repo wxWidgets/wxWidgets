@@ -53,7 +53,7 @@
 #include <Files.h>
 #include <Memory.h>
 
-#if defined(__PPCC__) || defined(__SC__) || defined(__MRC__) || defined(applec)
+#if defined(__PPCC__) || defined(__SYMANTEC__) || defined(__MRC__) || defined(applec)
 #define	CtoPstr	c2pstr
 #endif
 

@@ -56,7 +56,7 @@
         #include <commdlg.h>
     #endif // Win16
 
-    #if defined(__WATCOMC__) || defined(__SC__) || defined(__SALFORDC__)
+    #if defined(__WATCOMC__) || defined(__SYMANTEC__) || defined(__SALFORDC__)
         #include <windowsx.h>
         #include <commdlg.h>
     #endif
