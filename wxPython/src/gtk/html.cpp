@@ -206,10 +206,14 @@ public:
     void OnLinkClicked(const wxHtmlLinkInfo& link);
     void base_OnLinkClicked(const wxHtmlLinkInfo& link);
 
+     wxHtmlOpeningStatus OnOpeningURL(wxHtmlURLType type,
+                                      const wxString& url,
+                                      wxString *redirect) const;
+
     DEC_PYCALLBACK__STRING(OnSetTitle);
     DEC_PYCALLBACK__CELLINTINT(OnCellMouseHover);
     DEC_PYCALLBACK__CELLINTINTME(OnCellClicked);
-    DEC_PYCALLBACK_BOOL_STRING(OnOpeningURL);
+//     DEC_PYCALLBACK_BOOL_STRING(OnOpeningURL);
     PYPRIVATE;
 };
 
@@ -217,7 +221,7 @@ IMPLEMENT_ABSTRACT_CLASS( wxPyHtmlWindow, wxHtmlWindow );
 IMP_PYCALLBACK__STRING(wxPyHtmlWindow, wxHtmlWindow, OnSetTitle);
 IMP_PYCALLBACK__CELLINTINT(wxPyHtmlWindow, wxHtmlWindow, OnCellMouseHover);
 IMP_PYCALLBACK__CELLINTINTME(wxPyHtmlWindow, wxHtmlWindow, OnCellClicked);
-IMP_PYCALLBACK_BOOL_STRING(wxPyHtmlWindow, wxHtmlWindow, OnOpeningURL);
+// IMP_PYCALLBACK_BOOL_STRING(wxPyHtmlWindow, wxHtmlWindow, OnOpeningURL);
 
 
 void wxPyHtmlWindow::OnLinkClicked(const wxHtmlLinkInfo& link) {
@@ -235,6 +239,40 @@ void wxPyHtmlWindow::OnLinkClicked(const wxHtmlLinkInfo& link) {
 void wxPyHtmlWindow::base_OnLinkClicked(const wxHtmlLinkInfo& link) {
     wxHtmlWindow::OnLinkClicked(link);
 }
+
+
+wxHtmlOpeningStatus wxPyHtmlWindow::OnOpeningURL(wxHtmlURLType type,
+                                                 const wxString& url,
+                                                 wxString *redirect) const {
+    bool found;
+    wxHtmlOpeningStatus rval;
+    wxPyBeginBlockThreads();
+    if ((found = wxPyCBH_findCallback(m_myInst, "OnOpeningURL"))) {
+        PyObject* ro;
+        ro = wxPyCBH_callCallbackObj(m_myInst, Py_BuildValue("(is)", type, url.c_str()));
+        if (PyString_Check(ro)
+#if PYTHON_API_VERSION >= 1009
+            || PyUnicode_Check(ro)
+#endif
+            ) {
+            PyObject* str = PyObject_Str(ro);
+            *redirect = PyString_AsString(str);
+            Py_DECREF(str);
+            rval = wxHTML_REDIRECT;
+        }
+        else {
+            PyObject* num = PyNumber_Int(ro);
+            rval = (wxHtmlOpeningStatus)PyInt_AsLong(num);
+            Py_DECREF(num);
+        }
+        Py_DECREF(ro);
+    }
+    wxPyEndBlockThreads();
+    if (! found)
+        rval = wxHtmlWindow::OnOpeningURL(type, url, redirect);
+    return rval;
+}
+
 
 
     void wxHtmlWindow_AddFilter(wxHtmlFilter *filter) {
@@ -1268,58 +1306,6 @@ static PyObject *_wrap_wxHtmlParser_PopTagHandler(PyObject *self, PyObject *args
     return _resultobj;
 }
 
-#define wxHtmlParser_CanOpenURL(_swigobj,_swigarg0)  (_swigobj->CanOpenURL(_swigarg0))
-static PyObject *_wrap_wxHtmlParser_CanOpenURL(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    bool  _result;
-    wxHtmlParser * _arg0;
-    wxString * _arg1;
-    PyObject * _argo0 = 0;
-    PyObject * _obj1 = 0;
-    char *_kwnames[] = { "self","url", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxHtmlParser_CanOpenURL",_kwnames,&_argo0,&_obj1)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxHtmlParser_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxHtmlParser_CanOpenURL. Expected _wxHtmlParser_p.");
-        return NULL;
-        }
-    }
-{
-#if PYTHON_API_VERSION >= 1009
-    char* tmpPtr; int tmpSize;
-    if (!PyString_Check(_obj1) && !PyUnicode_Check(_obj1)) {
-        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
-        return NULL;
-    }
-    if (PyString_AsStringAndSize(_obj1, &tmpPtr, &tmpSize) == -1)
-        return NULL;
-    _arg1 = new wxString(tmpPtr, tmpSize);
-#else
-    if (!PyString_Check(_obj1)) {
-        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
-        return NULL;
-    }
-    _arg1 = new wxString(PyString_AS_STRING(_obj1), PyString_GET_SIZE(_obj1));
-#endif
-}
-{
-    PyThreadState* __tstate = wxPyBeginAllowThreads();
-        _result = (bool )wxHtmlParser_CanOpenURL(_arg0,*_arg1);
-
-    wxPyEndAllowThreads(__tstate);
-    if (PyErr_Occurred()) return NULL;
-}    _resultobj = Py_BuildValue("i",_result);
-{
-    if (_obj1)
-        delete _arg1;
-}
-    return _resultobj;
-}
-
 static void *SwigwxHtmlWinParserTowxHtmlParser(void *ptr) {
     wxHtmlWinParser *src;
     wxHtmlParser *dest;
@@ -1495,7 +1481,7 @@ static PyObject *_wrap_wxHtmlWinParser_GetCharWidth(PyObject *self, PyObject *ar
 #define wxHtmlWinParser_GetWindow(_swigobj)  (_swigobj->GetWindow())
 static PyObject *_wrap_wxHtmlWinParser_GetWindow(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
-    wxWindow * _result;
+    wxHtmlWindow * _result;
     wxHtmlWinParser * _arg0;
     PyObject * _argo0 = 0;
     char *_kwnames[] = { "self", NULL };
@@ -1512,7 +1498,7 @@ static PyObject *_wrap_wxHtmlWinParser_GetWindow(PyObject *self, PyObject *args,
     }
 {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-        _result = (wxWindow *)wxHtmlWinParser_GetWindow(_arg0);
+        _result = (wxHtmlWindow *)wxHtmlWinParser_GetWindow(_arg0);
 
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
@@ -4178,7 +4164,7 @@ static PyObject *_wrap_new_wxHtmlWindow(PyObject *self, PyObject *args, PyObject
     int  _arg1 = (int ) -1;
     wxPoint * _arg2 = (wxPoint *) &wxDefaultPosition;
     wxSize * _arg3 = (wxSize *) &wxDefaultSize;
-    int  _arg4 = (int ) wxHW_SCROLLBAR_AUTO;
+    int  _arg4 = (int ) (wxHW_SCROLLBAR_AUTO);
     char * _arg5 = (char *) "htmlWindow";
     PyObject * _argo0 = 0;
     wxPoint  temp;
@@ -4261,7 +4247,7 @@ static PyObject *_wrap_wxHtmlWindow_Create(PyObject *self, PyObject *args, PyObj
     int  _arg2 = (int ) -1;
     wxPoint * _arg3 = (wxPoint *) &wxDefaultPosition;
     wxSize * _arg4 = (wxSize *) &wxDefaultSize;
-    int  _arg5 = (int ) wxHW_SCROLLBAR_AUTO;
+    int  _arg5 = (int ) (wxHW_SCROLLBAR_AUTO);
     char * _arg6 = (char *) "htmlWindow";
     PyObject * _argo0 = 0;
     PyObject * _argo1 = 0;
@@ -6633,7 +6619,6 @@ static PyMethodDef htmlcMethods[] = {
 	 { "wxHtmlWinParser_GetDC", (PyCFunction) _wrap_wxHtmlWinParser_GetDC, METH_VARARGS | METH_KEYWORDS },
 	 { "wxHtmlWinParser_SetDC", (PyCFunction) _wrap_wxHtmlWinParser_SetDC, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxHtmlWinParser", (PyCFunction) _wrap_new_wxHtmlWinParser, METH_VARARGS | METH_KEYWORDS },
-	 { "wxHtmlParser_CanOpenURL", (PyCFunction) _wrap_wxHtmlParser_CanOpenURL, METH_VARARGS | METH_KEYWORDS },
 	 { "wxHtmlParser_PopTagHandler", (PyCFunction) _wrap_wxHtmlParser_PopTagHandler, METH_VARARGS | METH_KEYWORDS },
 	 { "wxHtmlParser_PushTagHandler", (PyCFunction) _wrap_wxHtmlParser_PushTagHandler, METH_VARARGS | METH_KEYWORDS },
 	 { "wxHtmlParser_GetSource", (PyCFunction) _wrap_wxHtmlParser_GetSource, METH_VARARGS | METH_KEYWORDS },
@@ -6828,6 +6813,14 @@ SWIGEXPORT(void) inithtmlc() {
 	 PyDict_SetItemString(d,"wxHTML_COND_ISANCHOR", PyInt_FromLong((long) wxHTML_COND_ISANCHOR));
 	 PyDict_SetItemString(d,"wxHTML_COND_ISIMAGEMAP", PyInt_FromLong((long) wxHTML_COND_ISIMAGEMAP));
 	 PyDict_SetItemString(d,"wxHTML_COND_USER", PyInt_FromLong((long) wxHTML_COND_USER));
+	 PyDict_SetItemString(d,"wxHW_SCROLLBAR_NEVER", PyInt_FromLong((long) wxHW_SCROLLBAR_NEVER));
+	 PyDict_SetItemString(d,"wxHW_SCROLLBAR_AUTO", PyInt_FromLong((long) wxHW_SCROLLBAR_AUTO));
+	 PyDict_SetItemString(d,"wxHTML_OPEN", PyInt_FromLong((long) wxHTML_OPEN));
+	 PyDict_SetItemString(d,"wxHTML_BLOCK", PyInt_FromLong((long) wxHTML_BLOCK));
+	 PyDict_SetItemString(d,"wxHTML_REDIRECT", PyInt_FromLong((long) wxHTML_REDIRECT));
+	 PyDict_SetItemString(d,"wxHTML_URL_PAGE", PyInt_FromLong((long) wxHTML_URL_PAGE));
+	 PyDict_SetItemString(d,"wxHTML_URL_IMAGE", PyInt_FromLong((long) wxHTML_URL_IMAGE));
+	 PyDict_SetItemString(d,"wxHTML_URL_OTHER", PyInt_FromLong((long) wxHTML_URL_OTHER));
 	 PyDict_SetItemString(d,"wxPAGE_ODD", PyInt_FromLong((long) wxPAGE_ODD));
 	 PyDict_SetItemString(d,"wxPAGE_EVEN", PyInt_FromLong((long) wxPAGE_EVEN));
 	 PyDict_SetItemString(d,"wxPAGE_ALL", PyInt_FromLong((long) wxPAGE_ALL));

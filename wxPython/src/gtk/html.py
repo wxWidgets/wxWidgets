@@ -145,9 +145,6 @@ class wxHtmlParserPtr(wxObjectPtr):
     def PopTagHandler(self, *_args, **_kwargs):
         val = apply(htmlc.wxHtmlParser_PopTagHandler,(self,) + _args, _kwargs)
         return val
-    def CanOpenURL(self, *_args, **_kwargs):
-        val = apply(htmlc.wxHtmlParser_CanOpenURL,(self,) + _args, _kwargs)
-        return val
     def __repr__(self):
         return "<C wxHtmlParser instance at %s>" % (self.this,)
 class wxHtmlParser(wxHtmlParserPtr):
@@ -756,6 +753,14 @@ wxHTML_INDENT_ALL = htmlc.wxHTML_INDENT_ALL
 wxHTML_COND_ISANCHOR = htmlc.wxHTML_COND_ISANCHOR
 wxHTML_COND_ISIMAGEMAP = htmlc.wxHTML_COND_ISIMAGEMAP
 wxHTML_COND_USER = htmlc.wxHTML_COND_USER
+wxHW_SCROLLBAR_NEVER = htmlc.wxHW_SCROLLBAR_NEVER
+wxHW_SCROLLBAR_AUTO = htmlc.wxHW_SCROLLBAR_AUTO
+wxHTML_OPEN = htmlc.wxHTML_OPEN
+wxHTML_BLOCK = htmlc.wxHTML_BLOCK
+wxHTML_REDIRECT = htmlc.wxHTML_REDIRECT
+wxHTML_URL_PAGE = htmlc.wxHTML_URL_PAGE
+wxHTML_URL_IMAGE = htmlc.wxHTML_URL_IMAGE
+wxHTML_URL_OTHER = htmlc.wxHTML_URL_OTHER
 wxPAGE_ODD = htmlc.wxPAGE_ODD
 wxPAGE_EVEN = htmlc.wxPAGE_EVEN
 wxPAGE_ALL = htmlc.wxPAGE_ALL

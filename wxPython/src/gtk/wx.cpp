@@ -2137,8 +2137,6 @@ SWIGEXPORT(void) initwxc() {
 	 PyDict_SetItemString(d,"wxNB_MULTILINE", PyInt_FromLong((long) wxNB_MULTILINE));
 	 PyDict_SetItemString(d,"wxLI_HORIZONTAL", PyInt_FromLong((long) wxLI_HORIZONTAL));
 	 PyDict_SetItemString(d,"wxLI_VERTICAL", PyInt_FromLong((long) wxLI_VERTICAL));
-	 PyDict_SetItemString(d,"wxHW_SCROLLBAR_NEVER", PyInt_FromLong((long) wxHW_SCROLLBAR_NEVER));
-	 PyDict_SetItemString(d,"wxHW_SCROLLBAR_AUTO", PyInt_FromLong((long) wxHW_SCROLLBAR_AUTO));
 	 PyDict_SetItemString(d,"wxJOYSTICK1", PyInt_FromLong((long) wxJOYSTICK1));
 	 PyDict_SetItemString(d,"wxJOYSTICK2", PyInt_FromLong((long) wxJOYSTICK2));
 	 PyDict_SetItemString(d,"wxJOY_BUTTON1", PyInt_FromLong((long) wxJOY_BUTTON1));
