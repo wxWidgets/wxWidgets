@@ -1087,7 +1087,7 @@ bool wxDialUpManagerMSW::EnableAutoCheckOnlineStatus(size_t nSeconds)
     {
         // create a hidden window to receive notification about connections
         // status change
-        extern wxChar wxPanelClassName[];
+        extern const wxChar *wxPanelClassName;
         ms_hwndRas = ::CreateWindow(wxPanelClassName, NULL,
                                     0, 0, 0, 0,
                                     0, NULL,
