@@ -1,18 +1,11 @@
-// hello.h : Declares the class interfaces for the application.
-//         Hello is a simple program which consists of a main window
-//         and an "About" dialog which can be invoked by a menu choice.
-//         It is intended to serve as a starting-point for new
-//         applications.
-//
-// This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992 Microsoft Corporation
-// All rights reserved.
-//
-// This source code is only intended as a supplement to the
-// Microsoft Foundation Classes Reference and Microsoft
-// WinHelp documentation provided with the library.
-// See these sources for detailed information regarding the
-// Microsoft Foundation Classes product.
+/////////////////////////////////////////////////////////////////////////////
+// Name:        mfctest.h
+// Purpose:     Sample to demonstrate mixing MFC and wxWindows code
+// Author:      Julian Smart
+// Id:          $Id$
+// Copyright:   (c) Julian Smart
+// Licence:     wxWindows licence
+/////////////////////////////////////////////////////////////////////////////
 
 #ifndef __MFCTEST_H__
 #define __MFCTEST_H__

@@ -1,21 +1,12 @@
-// hello.cpp : Defines the class behaviors for the application.
-//           Hello is a simple program which consists of a main window
-//           and an "About" dialog which can be invoked by a menu choice.
-//           It is intended to serve as a starting-point for new
-//           applications.
-//
-// This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992 Microsoft Corporation
-// All rights reserved.
-//
-// This source code is only intended as a supplement to the
-// Microsoft Foundation Classes Reference and Microsoft
-// WinHelp documentation provided with the library.
-// See these sources for detailed information regarding the
-// Microsoft Foundation Classes product.
+/////////////////////////////////////////////////////////////////////////////
+// Name:        mfctest.cpp
+// Purpose:     Sample to demonstrate mixing MFC and wxWindows code
+// Author:      Julian Smart
+// Id:          $Id$
+// Copyright:   (c) Julian Smart
+// Licence:     wxWindows licence
+/////////////////////////////////////////////////////////////////////////////
 
-// *** MODIFIED BY JULIAN SMART TO DEMONSTRATE CO-EXISTANCE WITH wxWINDOWS ***
-//
 // This sample pops up an initial wxWindows frame, with a menu item
 // that allows a new MFC window to be created. Note that CDummyWindow
 // is a class that allows a wxWindows window to be seen as a CWnd
