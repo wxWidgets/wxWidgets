@@ -5815,7 +5815,11 @@ public:
     static LRESULT CALLBACK MsgHookProc(int nCode, WPARAM wParam, LPARAM lParam)
     {
         MSG *msg = (MSG*)lParam;
-        if ( msg->message == WM_NULL )
+
+        // only process the message if it is actually going to be removed from
+        // the message queue, this prevents that the same event from being
+        // processed multiple times if now someone just called PeekMessage()
+        if ( msg->message == WM_NULL && wParam == PM_REMOVE )
         {
             wxTheApp->ProcessPendingEvents();
         }
