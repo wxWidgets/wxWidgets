@@ -2185,15 +2185,19 @@ bool wxMimeTypesManagerImpl::ReadMimeTypes(const wxString& strFileName)
             else if ( strLHS == wxT("exts") ) {
                 strExtensions = strRHS;
             }
-            else {
+            else if ( strLHS != _T("icon") )
+            {
                 // this one is simply ignored: it usually refers to Netscape
                 // built in icons which are useless for us anyhow
-                if ( strLHS != _T("icon") )
-                {
-                    // This crashes for some reason in wcslen() in libc. RR.
-                    // wxLogWarning(_("Unknown field in file %s, line %d: '%s'."),
-                    //                strFileName.c_str(), nLine + 1, strLHS.c_str());
-                }
+            }
+            else if ( !strLHS.StartsWith(_T("x-")) )
+            {
+                // we suppose that all fields starting with "X-" are
+                // unregistered extensions according to the standard practice,
+                // but it may be worth telling the user about other junk in
+                // his mime.types file
+                wxLogWarning(_("Unknown field in file %s, line %d: '%s'."),
+                             strFileName.c_str(), nLine + 1, strLHS.c_str());
             }
 
             if ( !entryEnded ) {
