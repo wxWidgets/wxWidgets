@@ -1044,13 +1044,6 @@ elif test "$wxUSE_CONTROLS" = "no"; then
   DEFAULT_wxUSE_TIPWINDOW=no
 fi
 
-## FIXME: This is a blatant hack
-if test "x$wxUSE_COCOA" != "x" -a "$wxUSE_COCOA" != "0" ; then
-  wxUSE_PRINTING_ARCHITECTURE=no
-  wxUSE_DRAG_AND_DROP=no
-  DEFAULT_wxUSE_DRAGIMAGE=no
-fi
-
 WX_ARG_ENABLE(accel,       [  --enable-accel          use accelerators], wxUSE_ACCEL)
 WX_ARG_ENABLE(button,      [  --enable-button         use wxButton class], wxUSE_BUTTON)
 WX_ARG_ENABLE(bmpbutton,   [  --enable-bmpbutton      use wxBitmapButton class], wxUSE_BMPBUTTON)
@@ -2428,6 +2421,21 @@ if test "$wxUSE_GUI" = "yes"; then
     WXGTK127=
     WXGTK20=
     WXGPE=
+
+    if test "$wxUSE_COCOA" = 1 ; then
+        if test "$wxUSE_PRINTING_ARCHITECTURE" = "yes"; then
+            AC_MSG_WARN([Printing not supported under wxCocoa yet, disabled])
+            wxUSE_PRINTING_ARCHITECTURE=no
+        fi
+        if test "$wxUSE_DRAG_AND_DROP" = "yes"; then
+            AC_MSG_WARN([Drag and Drop not supported under wxCocoa yet, disabled])
+            wxUSE_DRAG_AND_DROP=no
+        fi
+        if test "$wxUSE_DRAGIMAGE" = "yes"; then
+            AC_MSG_WARN([Drag Image and DandD not supported under wxCocoa yet, disabled])
+            wxUSE_DRAGIMAGE=no
+        fi
+    fi
 
     if test "$wxUSE_MSW" = 1 ; then
         TOOLKIT=MSW

@@ -7008,13 +7008,6 @@ elif test "$wxUSE_CONTROLS" = "no"; then
   DEFAULT_wxUSE_TIPWINDOW=no
 fi
 
-## FIXME: This is a blatant hack
-if test "x$wxUSE_COCOA" != "x" -a "$wxUSE_COCOA" != "0" ; then
-  wxUSE_PRINTING_ARCHITECTURE=no
-  wxUSE_DRAG_AND_DROP=no
-  DEFAULT_wxUSE_DRAGIMAGE=no
-fi
-
 
 	  enablestring=
           echo "$as_me:$LINENO: checking for --${enablestring:-enable}-accel" >&5
@@ -22550,6 +22543,24 @@ if test "$wxUSE_GUI" = "yes"; then
     WXGTK127=
     WXGTK20=
     WXGPE=
+
+    if test "$wxUSE_COCOA" = 1 ; then
+        if test "$wxUSE_PRINTING_ARCHITECTURE" = "yes"; then
+            { echo "$as_me:$LINENO: WARNING: Printing not supported under wxCocoa yet, disabled" >&5
+echo "$as_me: WARNING: Printing not supported under wxCocoa yet, disabled" >&2;}
+            wxUSE_PRINTING_ARCHITECTURE=no
+        fi
+        if test "$wxUSE_DRAG_AND_DROP" = "yes"; then
+            { echo "$as_me:$LINENO: WARNING: Drag and Drop not supported under wxCocoa yet, disabled" >&5
+echo "$as_me: WARNING: Drag and Drop not supported under wxCocoa yet, disabled" >&2;}
+            wxUSE_DRAG_AND_DROP=no
+        fi
+        if test "$wxUSE_DRAGIMAGE" = "yes"; then
+            { echo "$as_me:$LINENO: WARNING: Drag Image and DandD not supported under wxCocoa yet, disabled" >&5
+echo "$as_me: WARNING: Drag Image and DandD not supported under wxCocoa yet, disabled" >&2;}
+            wxUSE_DRAGIMAGE=no
+        fi
+    fi
 
     if test "$wxUSE_MSW" = 1 ; then
         TOOLKIT=MSW
