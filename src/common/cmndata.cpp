@@ -83,7 +83,17 @@
 
 #ifdef __WXMAC__
     #include "wx/mac/uma.h"
-    
+
+#if defined(TARGET_CARBON) && !defined(__DARWIN__)
+#  if PM_USE_SESSION_APIS
+#    include <PMCore.h>
+#  endif
+#  include <PMApplication.h>
+#endif
+
+#ifndef __DARWIN__
+    #include "Printing.h"
+#endif
     #define mm2pt            2.83464566929
     #define pt2mm            0.352777777778
 #endif // Mac
