@@ -49,7 +49,7 @@ class LayoutTestFrame(wx.Frame):
         self.destroyBtn = destroyBtn
 
         bottomPanel = wx.Panel(p, style=wx.SUNKEN_BORDER, name="bottomPanel")
-        bottomPanel.SetSizeHints((640,240))
+        bottomPanel.SetMinSize((640,240))
         bottomPanel.SetDefaultBackgroundColour("light blue")
 
         self.testPanel = wx.Panel(bottomPanel, name="testPanel")
@@ -338,10 +338,10 @@ class LayoutTestFrame(wx.Frame):
         self.testPanel.SetSizer(None, True)
         self.testPanel.Refresh()
 
-        # ensure the panel shrinks again
-        self.testPanel.SetSizeHints((20,20))
+        # ensure the panel shrinks again now that it has no sizer
+        self.testPanel.SetMinSize((20,20))
         self.bottomSizer.Layout()
-        self.testPanel.SetSizeHints(wx.DefaultSize)
+        self.testPanel.SetMinSize(wx.DefaultSize)
 
         # make the create button be default now
         self.createBtn.SetDefault()
@@ -409,6 +409,7 @@ class SizeInfoPane(wx.Panel):
         self._minsize     = wx.TextCtrl(self, -1, "", style=wx.TE_READONLY)
         self._bestsize    = wx.TextCtrl(self, -1, "", style=wx.TE_READONLY)
         self._adjbstsize  = wx.TextCtrl(self, -1, "", style=wx.TE_READONLY)
+        self._bestfit     = wx.TextCtrl(self, -1, "", style=wx.TE_READONLY)
 
         # setup the layout
         fgs = wx.FlexGridSizer(2, 2, 5, 5)
@@ -430,6 +431,10 @@ class SizeInfoPane(wx.Panel):
                 0, wx.ALIGN_RIGHT|wx.ALIGN_CENTER_VERTICAL)
         fgs.Add(self._adjbstsize, 0, wx.EXPAND)
 
+        fgs.Add(wx.StaticText(self, -1, "BestFittingSize:"),
+                0, wx.ALIGN_RIGHT|wx.ALIGN_CENTER_VERTICAL)
+        fgs.Add(self._bestfit, 0, wx.EXPAND)
+
         sbs = wx.StaticBoxSizer(sb, wx.VERTICAL)
         sbs.Add(fgs, 0, wx.EXPAND|wx.ALL, 4)
 
@@ -441,13 +446,14 @@ class SizeInfoPane(wx.Panel):
         self._minsize.SetValue(    str(win.GetMinSize()) )
         self._bestsize.SetValue(   str(win.GetBestSize()) )
         self._adjbstsize.SetValue( str(win.GetAdjustedBestSize()) )
-        
+        self._bestfit.SetValue(    str(win.GetBestFittingSize()) )
 
     def Clear(self):
         self._size.SetValue("")
         self._minsize.SetValue("")
         self._bestsize.SetValue("")
         self._adjbstsize.SetValue("")
+        self._bestfit.SetValue("")
 
 
 
