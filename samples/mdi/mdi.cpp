@@ -141,13 +141,10 @@ void MyFrame::OnNewWindow(wxCommandEvent& WXUNUSED(event) )
       subframe->SetTitle(title);
       winNumber ++;
 
-      // Give it an icon (this is ignored in MDI mode: uses resources)
+      // Give it an icon
 #ifdef __WXMSW__
       subframe->SetIcon(wxIcon("chrt_icn"));
 #endif
-
-      // Give it a status line
-      subframe->CreateStatusBar();
 
       // Make a menubar
       wxMenu *file_menu = new wxMenu;

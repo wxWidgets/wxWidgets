@@ -18,7 +18,7 @@
 // headers
 // ----------------------------------------------------------------------------
 #ifdef __GNUG__
-  #pragma implementation "config.h"
+  #pragma implementation "confbase.h"
 #endif
 
 #include  "wx/wxprec.h"
@@ -36,7 +36,7 @@
 #include  <wx/file.h>
 #include  <wx/log.h>
 #include  <wx/textfile.h>
-#include  <wx/config.h>
+#include  <wx/confbase.h>
 
 // we must include (one of) these files for wxConfigBase::Create
 #if defined(__WXMSW__) && defined(wxCONFIG_WIN32_NATIVE)
