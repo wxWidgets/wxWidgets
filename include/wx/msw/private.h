@@ -52,10 +52,15 @@ WXDLLEXPORT_DATA(extern HICON) wxDEFAULT_MDICHILDFRAME_ICON;
 WXDLLEXPORT_DATA(extern HFONT) wxSTATUS_LINE_FONT;
 
 // ---------------------------------------------------------------------------
-// this defines a CASTWNDPROC macro which casts a pointer to the type of a
-// window proc
+// define things missing from some compilers' headers
 // ---------------------------------------------------------------------------
 
+#if defined(__GNUWIN32__) && !defined(wxUSE_NORLANDER_HEADERS)
+    inline void ZeroMemory(void *buf, size_t len) { memset(buf, 0, len); }
+#endif // old mingw32
+
+// this defines a CASTWNDPROC macro which casts a pointer to the type of a
+// window proc
 #if defined(__GNUWIN32__) && !defined(wxUSE_NORLANDER_HEADERS)
 #  define CASTWNDPROC (long unsigned)
 #else
@@ -206,6 +211,24 @@ extern LONG APIENTRY _EXPORT
 #endif // USE_DBWIN32
 
 // ---------------------------------------------------------------------------
+// useful macros and functions
+// ---------------------------------------------------------------------------
+
+// a wrapper macro for ZeroMemory()
+#define wxZeroMemory(obj)   ::ZeroMemory(&obj, sizeof(obj))
+
+// make conversion from wxColour and COLORREF a bit less painful
+inline COLORREF wxColourToRGB(const wxColour& c)
+{
+    return RGB(c.Red(), c.Green(), c.Blue());
+}
+
+inline void wxRGBToColour(wxColour& c, COLORREF rgb)
+{
+    c.Set(GetRValue(rgb), GetGValue(rgb), GetBValue(rgb));
+}
+
+// ---------------------------------------------------------------------------
 // macros to make casting between WXFOO and FOO a bit easier: the GetFoo()
 // returns Foo cast to the Windows type for oruselves, while GetFooOf() takes
 // an argument which should be a pointer or reference to the object of the
@@ -219,6 +242,9 @@ extern LONG APIENTRY _EXPORT
 
 #define GetHdc()                ((HDC)GetHDC())
 #define GetHdcOf(dc)            ((HDC)(dc).GetHDC())
+
+#define GetHbitmap()            ((HBITMAP)GetHBITMAP())
+#define GetHbitmapOf(bmp)       ((HBITMAP)(bmp).GetHBITMAP())
 
 #define GetHicon()              ((HICON)GetHICON())
 #define GetHiconOf(icon)        ((HICON)(icon).GetHICON())
@@ -252,8 +278,8 @@ WXDLLEXPORT void wxSetInstance(HINSTANCE hInst);
 WXDLLEXPORT wxWindow* wxFindWinFromHandle(WXHWND hWnd);
 
 WXDLLEXPORT void wxGetCharSize(WXHWND wnd, int *x, int *y,wxFont *the_font);
-WXDLLEXPORT void wxFillLogFont(LOGFONT *logFont, wxFont *font);
-WXDLLEXPORT wxFont wxCreateFontFromLogFont(LOGFONT *logFont);
+WXDLLEXPORT void wxFillLogFont(LOGFONT *logFont, const wxFont *font);
+WXDLLEXPORT wxFont wxCreateFontFromLogFont(const LOGFONT *logFont);
 
 WXDLLEXPORT void wxSliderEvent(WXHWND control, WXWORD wParam, WXWORD pos);
 WXDLLEXPORT void wxScrollBarEvent(WXHWND hbar, WXWORD wParam, WXWORD pos);

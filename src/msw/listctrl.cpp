@@ -497,11 +497,7 @@ wxTextCtrl* wxListCtrl::GetEditControl(void) const
 bool wxListCtrl::GetItem(wxListItem& info) const
 {
     LV_ITEM lvItem;
-#ifdef __GNUWIN32__
-    memset(&lvItem, 0, sizeof(lvItem));
-#else
-    ZeroMemory(&lvItem, sizeof(lvItem)); // must set all fields to 0
-#endif
+    wxZeroMemory(lvItem);
 
     lvItem.iItem = info.m_itemId;
     lvItem.iSubItem = info.m_col;
@@ -1362,11 +1358,8 @@ bool wxListCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
 
             // else translate it into wxEVT_COMMAND_LIST_ITEM_RIGHT_CLICK event
             LV_HITTESTINFO lvhti;
-#ifdef __GNUWIN32__
-            memset(&lvhti,0,sizeof(LV_HITTESTINFO));
-#else
-            ZeroMemory(&lvhti, sizeof(LV_HITTESTINFO)); // must set all fields to 0
-#endif
+            wxZeroMemory(lvhti);
+
             ::GetCursorPos(&(lvhti.pt));
             ::ScreenToClient(GetHwnd(),&(lvhti.pt));
             if ( ListView_HitTest(GetHwnd(),&lvhti) != -1 )

@@ -47,10 +47,9 @@ WXHWND wxToolTip::hwndTT = (WXHWND)NULL;
 // private classes
 // ----------------------------------------------------------------------------
 
-
 // a simple wrapper around TOOLINFO Win32 structure
 #ifdef __VISUALC__
-    #pragma warning( disable : 4097 )
+    #pragma warning( disable : 4097 ) // we inherit from a typedef - so what?
 #endif
 class wxToolInfo : public TOOLINFO
 {
@@ -58,11 +57,7 @@ public:
     wxToolInfo(wxWindow *win)
     {
         // initialize all members
-#if __GNUWIN32__ && !defined(wxUSE_NORLANDER_HEADERS)
-        memset(this, 0, sizeof(TOOLINFO));
-#else
         ::ZeroMemory(this, sizeof(TOOLINFO));
-#endif
 
         cbSize = sizeof(TOOLINFO);
         uFlags = TTF_IDISHWND;

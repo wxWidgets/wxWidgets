@@ -54,6 +54,8 @@ struct wxNativeEncodingInfo
     wxString facename;          // may be empty meaning "any"
 
 #if defined(__WXMSW__)
+    wxNativeEncodingInfo() { charset = 0; /* ANSI_CHARSET */ }
+
     int      charset;
 #elif defined(_WX_X_FONTLIKE)
     wxString xregistry,

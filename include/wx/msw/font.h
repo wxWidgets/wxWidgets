@@ -17,15 +17,6 @@
 #endif
 
 // ----------------------------------------------------------------------------
-// public functions
-// ----------------------------------------------------------------------------
-
-// convert wxFontEncoding into one of Windows XXX_CHARSET constants (fill exact
-// parameter if it's not NULL with TRUE if encoding is realyl supported under
-// Windows and FALSE if not and we just chose something close to it)
-extern int wxCharsetFromEncoding(wxFontEncoding encoding, bool *exact = NULL);
-
-// ----------------------------------------------------------------------------
 // wxFont
 // ----------------------------------------------------------------------------
 

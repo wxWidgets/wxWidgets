@@ -305,7 +305,7 @@ bool MyFrame::DoEnumerateFamilies(bool fixedWidthOnly,
             facenames[n] = fontEnumerator.GetFacenames().Item(n);
 
         if ( silent )
-            n = 1;
+            n = 0;
         else
             n = wxGetSingleChoiceIndex("Choose a facename", "Font demo",
                                        nFacenames, facenames, this);
@@ -542,10 +542,9 @@ BEGIN_EVENT_TABLE(MyCanvas, wxWindow)
 END_EVENT_TABLE()
 
 MyCanvas::MyCanvas( wxWindow *parent )
-        : wxWindow( parent, -1 )
+        : wxWindow( parent, -1 ),
+          m_colour(*wxRED), m_font(*wxNORMAL_FONT)
 {
-    m_font = *wxNORMAL_FONT;
-    m_colour = *wxRED;
 }
 
 MyCanvas::~MyCanvas()

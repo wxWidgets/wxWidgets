@@ -214,11 +214,7 @@ long wxExecute(const wxString& command, bool sync, wxProcess *handler)
 #else // 1
     // create the process
     STARTUPINFO si;
-#ifdef __GNUWIN32__
-    memset(&si, 0, sizeof(si));
-#else
-    ::ZeroMemory(&si, sizeof(si));
-#endif
+    wxZeroMemory(si);
 
     si.cb = sizeof(si);
 

@@ -33,6 +33,7 @@
 #endif
 
 #include "wx/fontenum.h"
+#include "wx/fontmap.h"
 
 #include "wx/msw/private.h"
 
@@ -63,6 +64,9 @@ private:
     // if != -1, enum only fonts which have this encoding
     int m_charset;
 
+    // if not empty, enum only the fonts with this facename
+    wxString m_facename;
+
     // if TRUE, enum only fixed fonts
     bool m_fixedOnly;
 };
@@ -91,16 +95,20 @@ wxFontEnumeratorHelper::wxFontEnumeratorHelper(wxFontEnumerator *fontEnum)
 
 bool wxFontEnumeratorHelper::SetEncoding(wxFontEncoding encoding)
 {
-    bool exact;
-    m_charset = wxCharsetFromEncoding(encoding, &exact);
-#ifdef __WIN32__
-    if ( !exact )
+    wxNativeEncodingInfo info;
+    if ( !wxGetNativeFontEncoding(encoding, &info) )
     {
-        m_charset = DEFAULT_CHARSET;
-    }
-#endif // Win32
+        if ( !wxTheFontMapper->GetAltForEncoding(encoding, &info) )
+        {
+            // no such encodings at all
+            return FALSE;
+        }
 
-    return exact;
+        m_charset = info.charset;
+        m_facename = info.facename;
+    }
+
+    return TRUE;
 }
 
 void wxFontEnumeratorHelper::DoEnumerate()
@@ -110,7 +118,7 @@ void wxFontEnumeratorHelper::DoEnumerate()
 #ifdef __WIN32__
     LOGFONT lf;
     lf.lfCharSet = m_charset;
-    lf.lfFaceName[0] = _T('\0');
+    wxStrncpy(lf.lfFaceName, m_facename, WXSIZEOF(lf.lfFaceName));
     lf.lfPitchAndFamily = 0;
     ::EnumFontFamiliesEx(hDC, &lf, (FONTENUMPROC)wxFontEnumeratorProc,
                          (LPARAM)this, 0 /* reserved */) ;

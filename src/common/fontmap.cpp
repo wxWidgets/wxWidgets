@@ -438,9 +438,9 @@ wxFontEncoding wxFontMapper::CharsetToEncoding(const wxString& charset,
 
         wxString *encodingNamesTranslated = new wxString[count];
 
-        for ( size_t n = 0; n < count; n++ )
+        for ( size_t i = 0; i < count; i++ )
         {
-            encodingNamesTranslated[n] = wxGetTranslation(gs_encodingDescs[n]);
+            encodingNamesTranslated[i] = wxGetTranslation(gs_encodingDescs[i]);
         }
 
         // the parent window
@@ -564,8 +564,7 @@ bool wxFontMapper::GetAltForEncoding(wxFontEncoding encoding,
                 wxFontData retData = dialog.GetFontData();
                 wxFont font = retData.GetChosenFont();
 
-                info->xregistry = retData.EncodingInfo().xregistry;
-                info->xencoding = retData.EncodingInfo().xencoding;
+                *info = retData.EncodingInfo();
 
                 // remember this in the config
                 if ( ChangePath(FONTMAPPER_FONT_FROM_ENCODING_PATH, &pathOld) )
