@@ -1143,7 +1143,7 @@ int wxGUIAppTraits::WaitForChild(wxExecuteData& execData)
     }
 
 
-#if defined(__DARWIN__)
+#if defined(__DARWIN__) && (defined(__WXMAC__) || defined(__WXCOCOA__))
     endProcData->tag = wxAddProcessCallbackForPid(endProcData, execData.pid);
 #else
     endProcData->tag = wxAddProcessCallback
@@ -1153,7 +1153,7 @@ int wxGUIAppTraits::WaitForChild(wxExecuteData& execData)
                 );
 
     execData.pipeEndProcDetect.Close();
-#endif // defined(__DARWIN__)
+#endif // defined(__DARWIN__) && (defined(__WXMAC__) || defined(__WXCOCOA__))
 
     if ( execData.flags & wxEXEC_SYNC )
     {
