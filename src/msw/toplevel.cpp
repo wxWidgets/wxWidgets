@@ -157,21 +157,14 @@ WXDWORD wxTopLevelWindowMSW::MSWGetStyle(long style, WXDWORD *exflags) const
     // creates a window with both caption and border, hence we also test it
     // below in some other cases
     if ( style & wxFRAME_TOOL_WINDOW )
-        msflags |= WS_POPUP;
-    else
     {
-        if (msflags & WS_BORDER)
-            msflags |= WS_OVERLAPPED;
+        msflags |= WS_POPUP;
     }
-    
+    //else: WS_OVERLAPPED is 0 anyhow, so it is on by default
 
     // border and caption styles
     if ( style & wxRESIZE_BORDER )
-#ifndef WS_THICKFRAME
-        msflags = msflags;
-#else
         msflags |= WS_THICKFRAME;
-#endif
     else if ( exflags && ((style & wxBORDER_DOUBLE) || (style & wxBORDER_RAISED)) )
         *exflags |= WS_EX_DLGMODALFRAME;
     else if ( !(style & wxBORDER_NONE) )
@@ -179,16 +172,16 @@ WXDWORD wxTopLevelWindowMSW::MSWGetStyle(long style, WXDWORD *exflags) const
     else
         msflags |= WS_POPUP;
 
+    // normally we consider that all windows without caption must be popups,
+    // but CE is an exception: there windows normally do not have the caption
+    // but shouldn't be made popups as popups can't have menus and don't look
+    // like normal windows anyhow
     if ( style & wxCAPTION )
-#ifdef __WXWINCE__
-        msflags = msflags;
-#else
         msflags |= WS_CAPTION;
-#endif
+#ifndef __WXWINCE__
     else
         msflags |= WS_POPUP;
-
-    return msflags;
+#endif // !__WXWINCE__
 
     // next translate the individual flags
     if ( style & wxMINIMIZE_BOX )
@@ -198,15 +191,12 @@ WXDWORD wxTopLevelWindowMSW::MSWGetStyle(long style, WXDWORD *exflags) const
     if ( style & wxSYSTEM_MENU )
         msflags |= WS_SYSMENU;
 
-    // under CE these 2 styles are not defined currently
-#ifdef WS_MINIMIZE
+    // NB: under CE these 2 styles are not supported currently, we should
+    //     call Minimize()/Maximize() "manually" if we want to support them
     if ( style & wxMINIMIZE )
         msflags |= WS_MINIMIZE;
-#endif // WS_MINIMIZE
-#ifdef WS_MAXIMIZE
     if ( style & wxMAXIMIZE )
         msflags |= WS_MAXIMIZE;
-#endif // WS_MAXIMIZE
 
     // Keep this here because it saves recoding this function in wxTinyFrame
     if ( style & (wxTINY_CAPTION_VERT | wxTINY_CAPTION_HORIZ) )
@@ -214,6 +204,8 @@ WXDWORD wxTopLevelWindowMSW::MSWGetStyle(long style, WXDWORD *exflags) const
         
     if ( exflags )
     {
+        // there is no taskbar under CE, so omit all this
+#ifndef __WXWINCE__
         if ( !(GetExtraStyle() & wxTOPLEVEL_EX_DIALOG) )
         {
             if ( style & wxFRAME_TOOL_WINDOW )
@@ -225,8 +217,6 @@ WXDWORD wxTopLevelWindowMSW::MSWGetStyle(long style, WXDWORD *exflags) const
                 style |= wxFRAME_NO_TASKBAR;
             }
 
-            // again, support for this is missing under CE
-#ifdef WS_EX_APPWINDOW
             // We have to solve 2 different problems here:
             //
             // 1. frames with wxFRAME_NO_TASKBAR flag shouldn't appear in the
@@ -245,8 +235,8 @@ WXDWORD wxTopLevelWindowMSW::MSWGetStyle(long style, WXDWORD *exflags) const
                 *exflags |= WS_EX_APPWINDOW;
             }
             //else: nothing to do [here]
-#endif // WS_EX_APPWINDOW
         }
+#endif // !__WXWINCE__
 
         if ( style & wxSTAY_ON_TOP )
             *exflags |= WS_EX_TOPMOST;
