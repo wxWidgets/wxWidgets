@@ -23,7 +23,7 @@ class MyApp: public wxApp
 class MyMiniFrame: public wxMiniFrame
 {
 public:
-    MyMiniFrame(wxFrame *parent, wxWindowID id = -1, const wxString& title = _T("wxToolBar Sample"),
+    MyMiniFrame(wxFrame *parent, wxWindowID id = wxID_ANY, const wxString& title = _T("wxToolBar Sample"),
         const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize );
 
     void OnCloseWindow(wxCloseEvent& event);
@@ -36,7 +36,7 @@ DECLARE_EVENT_TABLE()
 class MyMainFrame: public wxFrame
 {
 public:
-    MyMainFrame(wxFrame *parent, wxWindowID id = -1, const wxString& title = _T("wxToolBar Sample"),
+    MyMainFrame(wxFrame *parent, wxWindowID id = wxID_ANY, const wxString& title = _T("wxToolBar Sample"),
         const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize );
 
     void OnCloseWindow(wxCloseEvent& event);

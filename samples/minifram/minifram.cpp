@@ -45,7 +45,7 @@ IMPLEMENT_APP(MyApp)
 
 MyMainFrame   *main_frame = (MyMainFrame*) NULL;
 MyMiniFrame   *mini_frame = (MyMiniFrame*) NULL;
-bool           mini_frame_exists = FALSE;
+bool           mini_frame_exists = false;
 wxButton      *button     = (wxButton*) NULL;
 
 // The `main program' equivalent, creating the windows and returning the
@@ -53,7 +53,7 @@ wxButton      *button     = (wxButton*) NULL;
 bool MyApp::OnInit()
 {
   // Create the main frame window
-  main_frame = new MyMainFrame((wxFrame *) NULL, -1, _T("wxFrame sample"),
+  main_frame = new MyMainFrame((wxFrame *) NULL, wxID_ANY, _T("wxFrame sample"),
      wxPoint(100, 100), wxSize(300, 200));
 
   main_frame->CreateToolBar(wxNO_BORDER|wxTB_VERTICAL, ID_TOOLBAR);
@@ -62,9 +62,9 @@ bool MyApp::OnInit()
   button = new wxButton( main_frame, ID_REPARENT, _T("Press to reparent!") );
 
   // Create the mini frame window
-  mini_frame = new MyMiniFrame( main_frame, -1, _T("wxMiniFrame sample"),
+  mini_frame = new MyMiniFrame( main_frame, wxID_ANY, _T("wxMiniFrame sample"),
      wxPoint(100, 100), wxSize(220, 100));
-  mini_frame_exists = TRUE;
+  mini_frame_exists = true;
 
   mini_frame->CreateToolBar(wxNO_BORDER|wxTB_HORIZONTAL|wxTB_FLAT, ID_TOOLBAR);
   InitToolbar(mini_frame->GetToolBar());
@@ -74,10 +74,10 @@ bool MyApp::OnInit()
 
   SetTopWindow(main_frame);
 
-  main_frame->Show(TRUE);
-  mini_frame->Show(TRUE);
+  main_frame->Show(true);
+  mini_frame->Show(true);
 
-  return TRUE;
+  return true;
 }
 
 bool MyApp::InitToolbar(wxToolBar* toolBar)
@@ -100,35 +100,35 @@ bool MyApp::InitToolbar(wxToolBar* toolBar)
   int width = 16;
   int currentX = 5;
 
-  toolBar->AddTool(wxID_NEW, *(toolBarBitmaps[0]), wxNullBitmap, FALSE, currentX, -1, (wxObject *) NULL, _T("New file"));
+  toolBar->AddTool(wxID_NEW, *(toolBarBitmaps[0]), wxNullBitmap, false, currentX, wxDefaultPosition.y, (wxObject *) NULL, _T("New file"));
   currentX += width + 5;
-  toolBar->AddTool(wxID_OPEN, *(toolBarBitmaps[1]), wxNullBitmap, FALSE, currentX, -1, (wxObject *) NULL, _T("Open file"));
+  toolBar->AddTool(wxID_OPEN, *(toolBarBitmaps[1]), wxNullBitmap, false, currentX, wxDefaultPosition.y, (wxObject *) NULL, _T("Open file"));
   currentX += width + 5;
-  toolBar->AddTool(wxID_SAVE, *(toolBarBitmaps[2]), wxNullBitmap, FALSE, currentX, -1, (wxObject *) NULL, _T("Save file"));
-  currentX += width + 5;
-  toolBar->AddSeparator();
-  toolBar->AddTool(wxID_COPY, *(toolBarBitmaps[3]), wxNullBitmap, FALSE, currentX, -1, (wxObject *) NULL, _T("Copy"));
-  currentX += width + 5;
-  toolBar->AddTool(wxID_CUT, *(toolBarBitmaps[4]), wxNullBitmap, FALSE, currentX, -1, (wxObject *) NULL, _T("Cut"));
-  currentX += width + 5;
-  toolBar->AddTool(wxID_PASTE, *(toolBarBitmaps[5]), wxNullBitmap, FALSE, currentX, -1, (wxObject *) NULL, _T("Paste"));
+  toolBar->AddTool(wxID_SAVE, *(toolBarBitmaps[2]), wxNullBitmap, false, currentX, wxDefaultPosition.y, (wxObject *) NULL, _T("Save file"));
   currentX += width + 5;
   toolBar->AddSeparator();
-  toolBar->AddTool(wxID_PRINT, *(toolBarBitmaps[6]), wxNullBitmap, FALSE, currentX, -1, (wxObject *) NULL, _T("Reparent the button"));
+  toolBar->AddTool(wxID_COPY, *(toolBarBitmaps[3]), wxNullBitmap, false, currentX, wxDefaultPosition.y, (wxObject *) NULL, _T("Copy"));
+  currentX += width + 5;
+  toolBar->AddTool(wxID_CUT, *(toolBarBitmaps[4]), wxNullBitmap, false, currentX, wxDefaultPosition.y, (wxObject *) NULL, _T("Cut"));
+  currentX += width + 5;
+  toolBar->AddTool(wxID_PASTE, *(toolBarBitmaps[5]), wxNullBitmap, false, currentX, wxDefaultPosition.y, (wxObject *) NULL, _T("Paste"));
   currentX += width + 5;
   toolBar->AddSeparator();
-  toolBar->AddTool(wxID_HELP, *(toolBarBitmaps[7]), wxNullBitmap, FALSE, currentX, -1, (wxObject *) NULL, _T("Help"));
+  toolBar->AddTool(wxID_PRINT, *(toolBarBitmaps[6]), wxNullBitmap, false, currentX, wxDefaultPosition.y, (wxObject *) NULL, _T("Reparent the button"));
+  currentX += width + 5;
+  toolBar->AddSeparator();
+  toolBar->AddTool(wxID_HELP, *(toolBarBitmaps[7]), wxNullBitmap, false, currentX, wxDefaultPosition.y, (wxObject *) NULL, _T("Help"));
 
   toolBar->Realize();
 
-  toolBar->EnableTool( wxID_HELP, FALSE );
+  toolBar->EnableTool( wxID_HELP, false );
 
   // Can delete the bitmaps since they're reference counted
   int i;
   for (i = 0; i < 8; i++)
     delete toolBarBitmaps[i];
 
-  return TRUE;
+  return true;
 }
 
 // MyMiniFrame
@@ -148,7 +148,7 @@ MyMiniFrame::MyMiniFrame(wxFrame* parent, wxWindowID id, const wxString& title, 
 void MyMiniFrame::OnCloseWindow(wxCloseEvent& WXUNUSED(event))
 {
   // make it known that the miniframe is no more
-  mini_frame_exists = FALSE;
+  mini_frame_exists = false;
   Destroy();
 }
 
