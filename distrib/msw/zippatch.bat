@@ -1,12 +1,10 @@
 @echo off
 rem Zip up a patch file
-Rem m:\wx2 contains the latest version + any crucial patches
-set src=m:\wx2
+set src=d:\wx2\wxWindows
 set dest=%wxwin\deliver
-set wise=0
 
 Rem Set this to the required patch version
-set version=03
+set version=01
 
 if "%src" == "" goto usage
 if "%dest" == "" goto usage

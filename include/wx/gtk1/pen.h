@@ -21,15 +21,13 @@
 #include "wx/gdiobj.h"
 #include "wx/gdicmn.h"
 
-#include <gtk/gtk.h>  // only needed for wxGTKDash, should it go elsewhere..
-
 //-----------------------------------------------------------------------------
 // classes
 //-----------------------------------------------------------------------------
 
 class wxPen;
 
-#if GTK_CHECK_VERSION(1,2,7)
+#ifdef __WXGTK127__
 typedef    gint8 wxGTKDash;
 #else
 typedef    gchar wxGTKDash;
@@ -47,8 +45,8 @@ public:
     wxPen( const wxPen& pen );
     ~wxPen();
     wxPen& operator = ( const wxPen& pen );
-    bool operator == ( const wxPen& pen );
-    bool operator != ( const wxPen& pen );
+    bool operator == ( const wxPen& pen ) const;
+    bool operator != ( const wxPen& pen ) const;
 
     void SetColour( const wxColour &colour );
     void SetColour( int red, int green, int blue );

@@ -260,6 +260,7 @@ bool wxSlider95::MSWOnScroll(int WXUNUSED(orientation), WXWORD wParam,
     GetEventHandler()->ProcessEvent(event);
 
     wxCommandEvent cevent( wxEVT_COMMAND_SLIDER_UPDATED, GetId() );
+    cevent.SetInt( newPos );
     cevent.SetEventObject( this );
 
     return GetEventHandler()->ProcessEvent( cevent );

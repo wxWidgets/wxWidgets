@@ -158,8 +158,7 @@ wxString wxFileType::ExpandCommand(const wxString& command,
                         const wxChar *pEnd = wxStrchr(pc, wxT('}'));
                         if ( pEnd == NULL ) {
                             wxString mimetype;
-                            wxLogWarning(_("Unmatched '{' in an entry for "
-                                           "mime type %s."),
+                            wxLogWarning(_("Unmatched '{' in an entry for mime type %s."),
                                          params.GetMimeType().c_str());
                             str << wxT("%{");
                         }
@@ -190,8 +189,16 @@ wxString wxFileType::ExpandCommand(const wxString& command,
     }
 
     // metamail(1) man page states that if the mailcap entry doesn't have '%s'
-    // the program will accept the data on stdin: so give it to it!
-    if ( !hasFilename && !str.IsEmpty() ) {
+    // the program will accept the data on stdin so normally we should append
+    // "< %s" to the end of the command in such case, but not all commands
+    // behave like this, in particular a common test is 'test -n "$DISPLAY"'
+    // and appending "< %s" to this command makes the test fail... I don't
+    // know of the correct solution, try to guess what we have to do.
+    if ( !hasFilename && !str.IsEmpty()
+#ifdef __UNIX__
+                      && !str.StartsWith(_T("test "))
+#endif // Unix
+       ) {
         str << wxT(" < '") << params.GetFileName() << wxT('\'');
     }
 

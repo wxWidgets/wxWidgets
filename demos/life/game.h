@@ -29,45 +29,44 @@
 #endif
 
 // --------------------------------------------------------------------------
-// Cell
-// --------------------------------------------------------------------------
-
-// A Cell is just a struct which contains a pair of (i, j) coords.
-// These structs are not used internally anywhere; they are just
-// used to pass cell coordinates around.
-
-struct Cell
-{
-    wxInt32 i;
-    wxInt32 j;
-};       
-
-// --------------------------------------------------------------------------
-// LifeShape
+// LifePattern
 // --------------------------------------------------------------------------
 
 // A class which holds a pattern
-class LifeShape
+class LifePattern
 {
 public:
-    LifeShape(wxString name,
-              wxString desc,
-              int width,
-              int height,
-              char *data)
+    // This ctor is used by the LifeReader class
+    LifePattern(wxString      name,
+                wxString      description,
+                wxString      rules,
+                wxArrayString shape)
     {
-        m_name   = name;
-        m_desc   = desc;
-        m_width  = width;
-        m_height = height;
-        m_data   = data;
-    }
+        m_name        = name;
+        m_description = description;
+        m_rules       = rules;
+        m_shape       = shape;
+    };
+    
+    // A more convenient ctor for the built-in samples    
+    LifePattern(wxString      name,
+                wxString      description,
+                int           width,
+                int           height,
+                const char   *shape)
+    {
+        m_name        = name;
+        m_description = description;
+        m_rules       = _("");
+        m_shape.Add( wxString::Format("%i %i", -width/2, -height/2) );
+        for(int j = 0; j < height; j++)
+            m_shape.Add( wxString(shape + (j * width), (size_t) width) );        
+    };
 
-    wxString  m_name;
-    wxString  m_desc;
-    int       m_width;
-    int       m_height;
-    char     *m_data;
+    wxString      m_name;
+    wxString      m_description;
+    wxString      m_rules;
+    wxArrayString m_shape;
 };
 
 
@@ -75,8 +74,17 @@ public:
 // Life
 // --------------------------------------------------------------------------
 
+// A struct used to pass cell coordinates around
+struct Cell
+{
+    wxInt32 i;
+    wxInt32 j;
+};       
+
+// A private class that contains data about a block of cells
 class CellBox;
 
+// A class that models a Life game instance
 class Life
 {
 public:
@@ -85,10 +93,12 @@ public:
     ~Life();
 
     // accessors
-    inline wxUint32 GetNumCells() const { return m_numcells; };
-    bool IsAlive  (wxInt32 x, wxInt32 y);
-    void SetCell  (wxInt32 x, wxInt32 y, bool alive = TRUE);
-    void SetShape (const LifeShape &shape);
+    inline wxUint32 GetNumCells() const    { return m_numcells; };
+    inline wxString GetRules() const       { return m_rules; };
+    inline wxString GetDescription() const { return m_description; };
+    bool IsAlive(wxInt32 x, wxInt32 y);
+    void SetCell(wxInt32 x, wxInt32 y, bool alive = TRUE);
+    void SetPattern(const LifePattern &pattern);
 
     // game control
     void Clear();
@@ -119,8 +129,8 @@ public:
     //  FALSE, then the operation is not complete: just process all cells
     //  and call FillMore() again.
     //
-    void BeginFind(wxInt32 i0, wxInt32 j0,
-                   wxInt32 i1, wxInt32 j1,
+    void BeginFind(wxInt32 x0, wxInt32 y0,
+                   wxInt32 x1, wxInt32 y1,
                    bool changed);
     bool FindMore(Cell *cells[], size_t *ncells);
 
@@ -131,20 +141,28 @@ private:
     void KillBox(CellBox *c);
 
     // helper for BeginFind & FindMore
-    void DoLine(wxInt32 i, wxInt32 j, wxUint32 alive, wxUint32 old = 0);
+    void DoLine(wxInt32 x, wxInt32 y, wxUint32 alive, wxUint32 old = 0);
 
 
-    CellBox  *m_head;           // list of alive boxes
-    CellBox  *m_available;      // list of reusable dead boxes
-    CellBox **m_boxes;          // hash table of alive boxes
-    wxUint32  m_numcells;       // population (number of alive cells)
-    Cell     *m_cells;          // cell array for FindMore()
-    size_t    m_ncells;         // number of valid cells in cell array
-    wxInt32   m_i, m_j,         // state vars for FindMore()
-              m_i0, m_j0,
-              m_i1, m_j1;
-    bool      m_changed;
-    bool      m_findmore;
+    // pattern description
+    wxString   m_name;          // name (currently unused)
+    wxString   m_rules;         // rules (currently unused)
+    wxString   m_description;   // description
+
+    // pattern data
+    CellBox   *m_head;          // list of alive boxes
+    CellBox   *m_available;     // list of reusable dead boxes
+    CellBox  **m_boxes;         // hash table of alive boxes
+    wxUint32   m_numcells;      // population (number of alive cells)
+
+    // state vars for BeginFind & FindMore
+    Cell      *m_cells;         // array of cells
+    size_t     m_ncells;        // number of valid entries in m_cells
+    wxInt32    m_x, m_y,        // counters and search mode
+               m_x0, m_y0,
+               m_x1, m_y1;
+    bool       m_changed;
+    bool       m_findmore;
 };
 
 #endif  // _LIFE_GAME_H_

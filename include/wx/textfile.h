@@ -25,15 +25,11 @@
     #define wxUSE_TEXTFILE 0
 #endif // wxUSE_FILE
 
-#if wxUSE_TEXTFILE
-
-#include "wx/string.h"
-#include "wx/file.h"
-#include "wx/dynarray.h"
-
 // ----------------------------------------------------------------------------
-// wxTextFile
+// constants
 // ----------------------------------------------------------------------------
+
+// NB: this is always defined, even if !wxUSE_TEXTFILE
 
 // the line termination type
 enum wxTextFileType
@@ -44,6 +40,16 @@ enum wxTextFileType
     wxTextFileType_Mac,   //                         'CR' = 0xD = 13 = '\r'
     wxTextFileType_Os2    //                         'CR' 'LF'
 };
+
+#if wxUSE_TEXTFILE
+
+#include "wx/string.h"
+#include "wx/file.h"
+#include "wx/dynarray.h"
+
+// ----------------------------------------------------------------------------
+// wxTextFile
+// ----------------------------------------------------------------------------
 
 WX_DEFINE_EXPORTED_ARRAY(wxTextFileType, ArrayFileType);
 
@@ -98,7 +104,7 @@ public:
     // you're using "direct access" i.e. GetLine()
   size_t GetCurrentLine() const { return m_nCurLine; }
   void GoToLine(size_t n) { m_nCurLine = n; }
-  bool Eof() const { return m_nCurLine == m_aLines.Count() - 1; }
+  bool Eof() const { return (m_aLines.Count() == 0 || m_nCurLine == m_aLines.Count() - 1); }
 
     // these methods allow more "iterator-like" traversal of the list of
     // lines, i.e. you may write something like:

@@ -236,23 +236,27 @@ class WXDLLEXPORT wxStringFormValidator: public wxPropertyFormValidator
 
 class WXDLLEXPORT wxPropertyFormDialog: public wxDialog
 {
-  DECLARE_CLASS(wxPropertyFormDialog)
- public:
-  wxPropertyFormDialog(wxPropertyFormView *v, wxWindow *parent, const wxString& title,
-    const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize,
-    long style = wxDEFAULT_DIALOG_STYLE, const wxString& name = "dialogBox");
+public:
+    wxPropertyFormDialog(wxPropertyFormView *v = NULL,
+                         wxWindow *parent = NULL,
+                         const wxString& title = wxEmptyString,
+                         const wxPoint& pos = wxDefaultPosition,
+                         const wxSize& size = wxDefaultSize,
+                         long style = wxDEFAULT_DIALOG_STYLE,
+                         const wxString& name = _T("dialogBox"));
 
-  void OnCloseWindow(wxCloseEvent& event);
-  void OnDefaultAction(wxControl *item);
-  void OnCommand(wxWindow& win, wxCommandEvent& event);
+    void OnCloseWindow(wxCloseEvent& event);
+    void OnDefaultAction(wxControl *item);
+    void OnCommand(wxWindow& win, wxCommandEvent& event);
 
-  // Extend event processing to search the view's event table
-  virtual bool ProcessEvent(wxEvent& event);
+    // Extend event processing to search the view's event table
+    virtual bool ProcessEvent(wxEvent& event);
 
- private:
-  wxPropertyFormView*       m_view;
+private:
+    wxPropertyFormView*       m_view;
 
-DECLARE_EVENT_TABLE()
+    DECLARE_EVENT_TABLE()
+    DECLARE_CLASS(wxPropertyFormDialog)
 };
 
 /*
@@ -261,22 +265,29 @@ DECLARE_EVENT_TABLE()
 
 class WXDLLEXPORT wxPropertyFormPanel: public wxPanel
 {
-  DECLARE_CLASS(wxPropertyFormPanel)
- public:
-  wxPropertyFormPanel(wxPropertyFormView *v, wxWindow *parent, const wxPoint& pos = wxDefaultPosition,
-    const wxSize& size = wxDefaultSize, long style = 0, const wxString& name = "panel"):
-     wxPanel(parent, -1, pos, size, style, name)
-  {
-    m_view = v;
-  }
-  void OnDefaultAction(wxControl *item);
-  void OnCommand(wxWindow& win, wxCommandEvent& event);
+public:
+    wxPropertyFormPanel(wxPropertyFormView *v = NULL,
+                        wxWindow *parent = NULL,
+                        const wxPoint& pos = wxDefaultPosition,
+                        const wxSize& size = wxDefaultSize,
+                        long style = 0,
+                        const wxString& name = _T("panel"))
+        : wxPanel(parent, -1, pos, size, style, name)
+        {
+            m_view = v;
+        }
+    void OnDefaultAction(wxControl *item);
+    void OnCommand(wxWindow& win, wxCommandEvent& event);
 
-  // Extend event processing to search the view's event table
-  virtual bool ProcessEvent(wxEvent& event);
+    // Extend event processing to search the view's event table
+    virtual bool ProcessEvent(wxEvent& event);
+    void SetView(wxPropertyFormView* view) { m_view = view; }
+    wxPropertyFormView* GetView() const { return m_view; }
 
- private:
-  wxPropertyFormView*       m_view;
+private:
+    wxPropertyFormView*       m_view;
+
+    DECLARE_CLASS(wxPropertyFormPanel)
 };
 
 /*
@@ -285,28 +296,32 @@ class WXDLLEXPORT wxPropertyFormPanel: public wxPanel
 
 class WXDLLEXPORT wxPropertyFormFrame: public wxFrame
 {
-  DECLARE_CLASS(wxPropertyFormFrame)
- public:
-  wxPropertyFormFrame(wxPropertyFormView *v, wxFrame *parent, const wxString& title,
-    const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize,
-    long style = wxDEFAULT_FRAME_STYLE, const wxString& name = "frame"):
-     wxFrame(parent, -1, title, pos, size, style, name)
-  {
-    m_view = v;
-    m_propertyPanel = NULL;
-  }
-  void OnCloseWindow(wxCloseEvent& event);
+public:
+    wxPropertyFormFrame(wxPropertyFormView *v = NULL,
+                        wxFrame *parent = NULL,
+                        const wxString& title = wxEmptyString,
+                        const wxPoint& pos = wxDefaultPosition,
+                        const wxSize& size = wxDefaultSize,
+                        long style = wxDEFAULT_FRAME_STYLE,
+                        const wxString& name = _T("frame"))
+        : wxFrame(parent, -1, title, pos, size, style, name)
+        {
+            m_view = v;
+            m_propertyPanel = NULL;
+        }
+    void OnCloseWindow(wxCloseEvent& event);
 
-  // Must call this to create panel and associate view
-  virtual bool Initialize(void);
-  virtual wxPanel *OnCreatePanel(wxFrame *parent, wxPropertyFormView *v);
-  inline virtual wxPanel *GetPropertyPanel(void) const { return m_propertyPanel; }
+    // Must call this to create panel and associate view
+    virtual bool Initialize(void);
+    virtual wxPanel *OnCreatePanel(wxFrame *parent, wxPropertyFormView *v);
+    inline virtual wxPanel *GetPropertyPanel(void) const { return m_propertyPanel; }
 
- private:
-  wxPropertyFormView*       m_view;
-  wxPanel*                  m_propertyPanel;
+private:
+    wxPropertyFormView*       m_view;
+    wxPanel*                  m_propertyPanel;
 
-DECLARE_EVENT_TABLE()
+    DECLARE_EVENT_TABLE()
+    DECLARE_CLASS(wxPropertyFormFrame)
 };
 
 #endif

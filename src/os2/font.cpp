@@ -183,6 +183,9 @@ wxFont::~wxFont()
 
 // ----------------------------------------------------------------------------
 // real implementation
+// Boris' Kovalenko comments:
+//   Because OS/2 fonts are associated with PS we can not create the font
+//   here, but we may check that font definition is true
 // ----------------------------------------------------------------------------
 
 bool wxFont::RealizeResource()
@@ -196,7 +199,24 @@ bool wxFont::RealizeResource()
        return TRUE;
     }
 
-    int ff_family = 0;
+    HPS          hps;
+    FATTRS       fAttrs;
+    FACENAMEDESC fName;
+    LONG         fLid;
+
+    fAttrs.usRecordLength = sizeof(FATTRS);
+    fAttrs.fsFontUse = FATTR_FONTUSE_OUTLINE |       // only outline fonts allowed
+                       FATTR_FONTUSE_TRANSFORMABLE;  // may be transformed
+    fAttrs.fsType = 0;
+    fAttrs.lMaxBaselineExt = fAttrs.lAveCharWidth = 0;
+    fAttrs.idRegistry = 0;
+    fAttrs.lMatch = 0;
+
+    fName.usSize = sizeof(FACENAMEDESC);
+    fName.usWidthClass = FWIDTH_NORMAL;
+    fName.usReserved = 0;
+    fName.flOptions = 0;
+
     wxString ff_face;
 
 // OS/2 combines the family with styles to give a facename
@@ -204,42 +224,27 @@ bool wxFont::RealizeResource()
     switch ( M_FONTDATA->m_family )
     {
         case wxSCRIPT:
-//            ff_family = FF_SCRIPT ;
-            ff_face = wxT("Script") ;
-            break ;
-
         case wxDECORATIVE:
-//            ff_family = FF_DECORATIVE;
-            break;
-
         case wxROMAN:
-//            ff_family = FF_ROMAN;
             ff_face = wxT("Times New Roman") ;
             break;
 
         case wxTELETYPE:
         case wxMODERN:
-//            ff_family = FF_MODERN;
-            ff_face = wxT("Courier New") ;
+            ff_face = wxT("Courier") ;
             break;
 
         case wxSWISS:
-//            ff_family = FF_SWISS;
-            ff_face = wxT("Arial") ;
-            break;
-
         case wxDEFAULT:
         default:
-//            ff_family = FF_SWISS;
-            ff_face = wxT("Arial") ;
+            ff_face = wxT("Helvetica") ;
     }
 
-    BYTE ff_italic;
     switch ( M_FONTDATA->m_style )
     {
         case wxITALIC:
         case wxSLANT:
-            ff_italic = 1;
+            fAttrs.fsSelection = FATTR_SEL_ITALIC;
             break;
 
         default:
@@ -247,10 +252,9 @@ bool wxFont::RealizeResource()
             // fall through
 
         case wxNORMAL:
-            ff_italic = 0;
+            fAttrs.fsSelection = 0;
     }
 
-    int ff_weight = 0;
     switch ( M_FONTDATA->m_weight )
     {
         default:
@@ -258,68 +262,20 @@ bool wxFont::RealizeResource()
             // fall through
 
         case wxNORMAL:
-//            ff_weight = FW_NORMAL;
+            fName.usWeightClass = FWEIGHT_NORMAL;
             break;
 
         case wxLIGHT:
-//            ff_weight = FW_LIGHT;
+            fName.usWeightClass = FWEIGHT_LIGHT;
             break;
 
         case wxBOLD:
-//            ff_weight = FW_BOLD;
+            fName.usWeightClass = FWEIGHT_BOLD;
             break;
     }
-
-    const wxChar* pzFace;
-    if ( M_FONTDATA->m_faceName.IsEmpty() )
-        pzFace = ff_face;
-    else
-        pzFace = M_FONTDATA->m_faceName ;
-
-#if 0
-    /* Always calculate fonts using the screen DC (is this the best strategy?)
-     * There may be confusion if a font is selected into a printer
-     * DC (say), because the height will be calculated very differently.
-     */
-    // What sort of display is it?
-    int technology = ::GetDeviceCaps(dc, TECHNOLOGY);
-
-    int nHeight;
-
-    if (technology != DT_RASDISPLAY && technology != DT_RASPRINTER)
-    {
-        // Have to get screen DC Caps, because a metafile will return 0.
-        HDC dc2 = ::GetDC(NULL);
-        nHeight = M_FONTDATA->m_pointSize*GetDeviceCaps(dc2, LOGPIXELSY)/72;
-        ::ReleaseDC(NULL, dc2);
-    }
-    else
-    {
-        nHeight = M_FONTDATA->m_pointSize*GetDeviceCaps(dc, LOGPIXELSY)/72;
-    }
-#endif // 0
-
-#if 0
-    // Have to get screen DC Caps, because a metafile will return 0.
-    HDC dc2 = ::GetDC(NULL);
-    ppInch = ::GetDeviceCaps(dc2, LOGPIXELSY);
-    ::ReleaseDC(NULL, dc2);
-#endif // 0
-
-    // New behaviour: apparently ppInch varies according to Large/Small Fonts
-    // setting in Windows. This messes up fonts. So, set ppInch to a constant
-    // 96 dpi.
-    static const int ppInch = 96;
-
-#if wxFONT_SIZE_COMPATIBILITY
-    // Incorrect, but compatible with old wxWindows behaviour
-    int nHeight = (M_FONTDATA->m_pointSize*ppInch/72);
-#else
-    // Correct for Windows compatibility
-    int nHeight = - (M_FONTDATA->m_pointSize*ppInch/72);
-#endif
-
-    BYTE ff_underline = M_FONTDATA->m_underlined;
+  
+    if( M_FONTDATA->m_underlined )
+        fAttrs.fsSelection |= FATTR_SEL_UNDERSCORE;
 
     wxFontEncoding encoding = M_FONTDATA->m_encoding;
     if ( encoding == wxFONTENCODING_DEFAULT )
@@ -327,52 +283,51 @@ bool wxFont::RealizeResource()
         encoding = wxFont::GetDefaultEncoding();
     }
 
-    DWORD charset;
     switch ( encoding )
     {
         case wxFONTENCODING_ISO8859_1:
         case wxFONTENCODING_ISO8859_15:
         case wxFONTENCODING_CP1250:
-//            charset = ANSI_CHARSET;
+            fAttrs.usCodePage = 1250;
             break;
 
         case wxFONTENCODING_ISO8859_2:
         case wxFONTENCODING_CP1252:
-//            charset = EASTEUROPE_CHARSET;
+            fAttrs.usCodePage = 1252;
             break;
 
         case wxFONTENCODING_ISO8859_4:
         case wxFONTENCODING_ISO8859_10:
-//            charset = BALTIC_CHARSET;
+            fAttrs.usCodePage = 850; // what is baltic?
             break;
 
         case wxFONTENCODING_ISO8859_5:
         case wxFONTENCODING_CP1251:
-//            charset = RUSSIAN_CHARSET;
+            fAttrs.usCodePage = 1251;
             break;
 
         case wxFONTENCODING_ISO8859_6:
-//            charset = ARABIC_CHARSET;
+            fAttrs.usCodePage = 850;  // what is arabic?
             break;
 
         case wxFONTENCODING_ISO8859_7:
-//            charset = GREEK_CHARSET;
+            fAttrs.usCodePage = 850;  // what is greek
             break;
 
         case wxFONTENCODING_ISO8859_8:
-//            charset = HEBREW_CHARSET;
+            fAttrs.usCodePage = 850; // what is hebrew?
             break;
 
         case wxFONTENCODING_ISO8859_9:
-//            charset = TURKISH_CHARSET;
+            fAttrs.usCodePage = 857;
             break;
 
         case wxFONTENCODING_ISO8859_11:
-//            charset = THAI_CHARSET;
+            fAttrs.usCodePage = 850; // what is thai
             break;
 
         case wxFONTENCODING_CP437:
-//            charset = OEM_CHARSET;
+            fAttrs.usCodePage = 437;
             break;
 
         default:
@@ -380,32 +335,58 @@ bool wxFont::RealizeResource()
             // fall through
 
         case wxFONTENCODING_SYSTEM:
-//            charset = ANSI_CHARSET;
+            fAttrs.usCodePage = 850; // what is ANSI?
             break;
     }
 
-// TODO:
-WXHFONT hFont = 0;
-//    HFONT hFont = ::CreateFont
-//                  (
-//                   nHeight,             // height
-//                   0,                   // width (choose best)
-//                   0,                   // escapement
-//                   0,                   // orientation
-//                   ff_weight,           // weight
-//                   ff_italic,           // italic?
-//                   ff_underline,        // underlined?
-//                   0,                   // strikeout?
-//                   charset,             // charset
-//                   OUT_DEFAULT_PRECIS,  // precision
-//                   CLIP_DEFAULT_PRECIS, // clip precision
-//                   PROOF_QUALITY,       // quality of match
-//                   DEFAULT_PITCH |      // fixed or variable
-//                   ff_family,           // family id
-//                   pzFace               // face name
-//                  );
+// Now cheking 
+    fLid = 1;
+    hps  = ::WinGetPS( HWND_DESKTOP );
 
-    M_FONTDATA->m_hFont = (WXHFONT)hFont;
+    long numLids = ::GpiQueryNumberSetIds( hps );
+    long gpiError;
+    
+    // First we should generate unique id
+    if( numLids )
+    {
+        long Types[255];
+        STR8 Names[255];
+        long lIds[255];
+
+        if( !GpiQuerySetIds(hps, numLids, Types, Names, lIds) )
+        {
+            ::WinReleasePS( hps );
+            return 0;
+        }
+      
+        for(unsigned long LCNum = 0; LCNum < numLids; LCNum++)
+            if(lIds[LCNum] == fLid)
+               ++fLid;
+        if(fLid > 254)  // wow, no id available!
+        {
+           ::WinReleasePS( hps );
+           return 0;
+        }
+    }
+
+    // now building facestring
+    if(::GpiQueryFaceString(hps, ff_face.c_str(), &fName, FACESIZE, fAttrs.szFacename) == GPI_ERROR)
+    {
+       ::WinReleasePS( hps );
+       return 0;
+    }
+
+    // now creating font
+    WXHFONT hFont = (WXHFONT)0;
+
+    if(::GpiCreateLogFont(hps, NULL, fLid, &fAttrs) != GPI_ERROR)
+       M_FONTDATA->m_hFont = hFont = (WXHFONT)1;
+
+    if( hFont )
+        ::GpiDeleteSetId(hps, fLid);
+
+    ::WinReleasePS( hps );
+
     if ( !hFont )
     {
         wxLogLastError("CreateFont");

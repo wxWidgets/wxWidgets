@@ -1,0 +1,6 @@
+*.gz
+*.rpm
+*.zip
+build.pyc
+filelist
+wxp2.wse

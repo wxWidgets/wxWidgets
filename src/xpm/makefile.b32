@@ -9,3 +9,10 @@ OBJECTS = attrib.obj crbuffri.obj crdatfri.obj create.obj crifrbuf.obj crifrdat.
           rdftodat.obj rdftoi.obj rgb.obj scan.obj simx.obj wrffrdat.obj wrffri.obj
 
 !include $(WXWIN)\src\makelib.b32
+
+create.obj: create.c
+	bcc32 $(CPPFLAGS) -Od -P- -c create.c
+
+rgb.obj: rgb.c
+	bcc32 $(CPPFLAGS) -Od -P- -c rgb.c
+

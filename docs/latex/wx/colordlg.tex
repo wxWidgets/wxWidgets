@@ -19,7 +19,7 @@ This class represents the colour chooser dialog.
 
 \latexignore{\rtfignore{\wxheading{Members}}}
 
-\membersection{wxColourDialog::wxColourDialog}
+\membersection{wxColourDialog::wxColourDialog}\label{wxcolourdialogwxcolourdialog}
 
 \func{}{wxColourDialog}{\param{wxWindow* }{parent}, \param{wxColourData* }{data = NULL}}
 
@@ -35,6 +35,12 @@ data, which will be copied to the colour dialog's colour data.
 \func{}{\destruct{wxColourDialog}}{\void}
 
 Destructor.
+
+\membersection{wxColourDialog::Create}
+
+\func{bool}{Create}{\param{wxWindow* }{parent}, \param{wxColourData* }{data = NULL}}
+
+Same as \helpref{constructor}{wxcolourdialogwxcolourdialog}.
 
 \membersection{wxColourDialog::GetColourData}
 

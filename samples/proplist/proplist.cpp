@@ -10,7 +10,8 @@
 /////////////////////////////////////////////////////////////////////////////
 
 #ifdef __GNUG__
-#pragma implementation "proplist.h"
+// watch out for conflict with wxWindows code
+#pragma implementation "sample_proplist.h"
 #endif
 
 // For compilers that support precompilation, includes "wx/wx.h".

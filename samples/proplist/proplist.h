@@ -10,7 +10,8 @@
 /////////////////////////////////////////////////////////////////////////////
 
 #ifdef __GNUG__
-#pragma interface "proplist.h"
+// watch out for conflict with wxWindows code
+#pragma interface "sample_proplist.h"
 #endif
 
 #ifndef _PROPTEST_H_

@@ -148,7 +148,13 @@ WXDLLEXPORT long wxExecute(const wxString& command, bool sync = FALSE,
                            wxProcess *process = (wxProcess *) NULL);
 
 // execute the command capturing its output into an array line by line
-WXDLLEXPORT long wxExecute(const wxString& command, wxArrayString& output);
+WXDLLEXPORT long wxExecute(const wxString& command,
+                           wxArrayString& output);
+
+// also capture stderr
+WXDLLEXPORT long wxExecute(const wxString& command,
+                           wxArrayString& output,
+                           wxArrayString& error);
 
 enum wxSignal
 {
@@ -270,6 +276,9 @@ WXDLLEXPORT int wxFindMenuItemId(wxFrame *frame, const wxString& menuString, con
 // Yield to other apps/messages
 WXDLLEXPORT bool wxYield();
 
+// Like wxYield, but fails silently if the yield is recursive.
+WXDLLEXPORT bool wxYieldIfNeeded();
+
 // Yield to other apps/messages and disable user input
 WXDLLEXPORT bool wxSafeYield(wxWindow *win = NULL);
 
@@ -294,6 +303,7 @@ public:
 private:
     wxWindowList *m_winDisabled;
 
+    // not used any more but left here for binary compatibility
 #ifdef __WXMSW__
     wxWindow *m_winTop;
 #endif // MSW
@@ -320,25 +330,18 @@ class WXDLLEXPORT wxBusyCursor
 public:
     wxBusyCursor(wxCursor* cursor = wxHOURGLASS_CURSOR)
         { wxBeginBusyCursor(cursor); }
-   ~wxBusyCursor()
+    ~wxBusyCursor()
         { wxEndBusyCursor(); }
+
+    // FIXME: These two methods are currently only implemented (and needed?)
+    //        in wxGTK.  BusyCursor handling should probably be moved to
+    //        common code since the wxGTK and wxMSW implementations are very
+    //        similar except for wxMSW using HCURSOR directly instead of
+    //        wxCursor..  -- RL.
+    static const wxCursor &GetStoredCursor();
+    static const wxCursor GetBusyCursor();
 };
 
-// ----------------------------------------------------------------------------
-// Error message functions used by wxWindows (deprecated, use wxLog)
-// ----------------------------------------------------------------------------
-
-// Format a message on the standard error (UNIX) or the debugging
-// stream (Windows)
-WXDLLEXPORT void wxDebugMsg(const wxChar *fmt ...);
-
-// Non-fatal error (continues)
-WXDLLEXPORT_DATA(extern const wxChar*) wxInternalErrorStr;
-WXDLLEXPORT void wxError(const wxString& msg, const wxString& title = wxInternalErrorStr);
-
-// Fatal error (exits)
-WXDLLEXPORT_DATA(extern const wxChar*) wxFatalErrorStr;
-WXDLLEXPORT void wxFatalError(const wxString& msg, const wxString& title = wxFatalErrorStr);
 
 // ----------------------------------------------------------------------------
 // Reading and writing resources (eg WIN.INI, .Xdefaults)
@@ -417,6 +420,23 @@ void wxAllocColor(Display *display,Colormap colormap,XColor *xcolor);
 #endif //__X__
 
 #endif // wxUSE_GUI
+
+// ----------------------------------------------------------------------------
+// Error message functions used by wxWindows (deprecated, use wxLog)
+// ----------------------------------------------------------------------------
+
+// Format a message on the standard error (UNIX) or the debugging
+// stream (Windows)
+WXDLLEXPORT void wxDebugMsg(const wxChar *fmt ...);
+
+// Non-fatal error (continues)
+WXDLLEXPORT_DATA(extern const wxChar*) wxInternalErrorStr;
+WXDLLEXPORT void wxError(const wxString& msg, const wxString& title = wxInternalErrorStr);
+
+// Fatal error (exits)
+WXDLLEXPORT_DATA(extern const wxChar*) wxFatalErrorStr;
+WXDLLEXPORT void wxFatalError(const wxString& msg, const wxString& title = wxFatalErrorStr);
+
 
 #endif
     // _WX_UTILSH__

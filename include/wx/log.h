@@ -298,12 +298,6 @@ protected:
     // empty everything
     void Clear();
 
-    // the translated titles for misc message boxes: only translate ones to
-    // avoid reentrancy problems later
-    wxString      m_error,
-                  m_warning,
-                  m_info;
-
     wxArrayString m_aMessages;      // the log message texts
     wxArrayInt    m_aSeverity;      // one of wxLOG_XXX values
     wxArrayLong   m_aTimes;         // the time of each message
@@ -327,15 +321,15 @@ public:
     ~wxLogWindow();
 
     // window operations
-    // show/hide the log window
+        // show/hide the log window
     void Show(bool bShow = TRUE);
-    // retrieve the pointer to the frame
+        // retrieve the pointer to the frame
     wxFrame *GetFrame() const;
 
     // accessors
-    // the previous log target (may be NULL)
+        // the previous log target (may be NULL)
     wxLog *GetOldLog() const { return m_pOldLog; }
-    // are we passing the messages to the previous log target?
+        // are we passing the messages to the previous log target?
     bool IsPassingMessages() const { return m_bPassMessages; }
 
     // we can pass the messages to the previous log target (we're in this mode by
@@ -344,14 +338,20 @@ public:
     void PassMessages(bool bDoPass) { m_bPassMessages = bDoPass; }
 
     // base class virtuals
-    // we don't need it ourselves, but we pass it to the previous logger
+        // we don't need it ourselves, but we pass it to the previous logger
     virtual void Flush();
 
     // overridables
-    // called immediately after the log frame creation allowing for
-    // any extra initializations
+        // called immediately after the log frame creation allowing for
+        // any extra initializations
     virtual void OnFrameCreate(wxFrame *frame);
-    // called right before the log frame is going to be deleted
+        // called if the user closes the window interactively, will not be
+        // called if it is destroyed for another reason (such as when program
+        // exits) - return TRUE from here to allow the frame to close, FALSE
+        // to prevent this from happening
+    virtual bool OnFrameClose(wxFrame *frame);
+        // called right before the log frame is going to be deleted: will
+        // always be called unlike OnFrameClose()
     virtual void OnFrameDelete(wxFrame *frame);
 
 protected:
@@ -471,7 +471,7 @@ DECLARE_LOG_FUNCTION2(SysError, long lErrCode);
 
     // this second version will only log the message if the mask had been
     // added to the list of masks with AddTraceMask()
-    DECLARE_LOG_FUNCTION2(Trace, const char *mask);
+    DECLARE_LOG_FUNCTION2(Trace, const wxChar *mask);
 
     // the last one does nothing if all of level bits are not set
     // in wxLog::GetActive()->GetTraceMask() - it's deprecated in favour of
@@ -500,13 +500,13 @@ DECLARE_LOG_FUNCTION2(SysError, long lErrCode);
 #ifdef __VISUALC__
     #define wxLogApiError(api, rc)                                            \
         wxLogDebug(wxT("%s(%d): '%s' failed with error 0x%08lx (%s)."),       \
-                   __TFILE__, __LINE__, _T(api),                              \
+                   __TFILE__, __LINE__, api,                              \
                    rc, wxSysErrorMsg(rc))
 #else // !VC++
     #define wxLogApiError(api, rc)                                            \
         wxLogDebug(wxT("In file %s at line %d: '%s' failed with "             \
                       "error 0x%08lx (%s)."),                                 \
-                   __TFILE__, __LINE__, _T(api),                              \
+                   __TFILE__, __LINE__, api,                              \
                    rc, wxSysErrorMsg(rc))
 #endif // VC++/!VC++
 

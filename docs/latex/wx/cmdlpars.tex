@@ -1,0 +1,451 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Name:        cmdlpars.tex
+%% Purpose:     wxCmdLineParser documentation
+%% Author:      Vadim Zeitlin
+%% Modified by:
+%% Created:     27.03.00
+%% RCS-ID:      $Id$
+%% Copyright:   (c) Vadim Zeitlin
+%% License:     wxWindows license
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{\class{wxCmdLineParser}}\label{wxcmdlineparser}
+
+wxCmdLineParser is a class for parsing command line.
+
+It has the following features:
+\begin{enumerate}
+\item distinguishes options, switches and parameters; allows option grouping
+\item allows both short and long options
+\item automatically generates the usage message from the command line description
+\item does type checks on the options values (number, date, $\ldots$).
+\end{enumerate}
+
+To use it you should follow these steps:
+\begin{enumerate}
+\item \helpref{construct}{wxcmdlineparserconstruction} an object of this class
+giving it the command line to parse and optionally its description or use 
+{\tt AddXXX()} functions later
+\item call {\tt Parse()}
+\item use {\tt Found()} to retrieve the results
+\end{enumerate}
+
+In the documentation below the following terminology is used:
+
+\begin{twocollist}\itemsep=0pt
+\twocolitem{switch}{This is a boolean option which can be given or not, but
+which doesn't have any value. We use the word switch to distinguish such boolean
+options from more generic options like those described below. For example, 
+{\tt -v} might be a switch meaning "enable verbose mode".}
+\twocolitem{option}{Option for us here is something which comes with a value 0
+unlike a switch. For example, {\tt -o:filename} might be an option which allows
+to specify the name of the output file.}
+\twocolitem{parameter}{This is a required program argument.}
+\end{twocollist}
+
+\wxheading{Derived from}
+
+No base class
+
+\wxheading{Include files}
+
+<wx/cmdline.h>
+
+\wxheading{Constants}
+
+The structure wxCmdLineEntryDesc is used to describe the one command
+line switch, option or parameter. An array of such structures should be passed
+to \helpref{SetDesc()}{wxcmdlineparsersetdesc}. Also, the meanings of parameters
+of the {\tt AddXXX()} functions are the same as of the corresponding fields in
+this structure:
+
+\begin{verbatim}
+struct wxCmdLineEntryDesc
+{
+    wxCmdLineEntryType kind;
+    const wxChar *shortName;
+    const wxChar *longName;
+    const wxChar *description;
+    wxCmdLineParamType type;
+    int flags;
+};
+\end{verbatim}
+
+The type of a command line entity is in the {\tt kind} field and may be one of
+the following constants:
+{\small \begin{verbatim}
+enum wxCmdLineEntryType
+{
+    wxCMD\_LINE\_SWITCH,
+    wxCMD\_LINE\_OPTION,
+    wxCMD\_LINE\_PARAM,
+    wxCMD\_LINE\_NONE         // use this to terminate the list
+}
+\end{verbatim}}
+
+The field {\tt shortName} is the usual, short, name of the switch or the option.
+{\tt longName} is the corresponding long name or NULL if the option has no long
+name. Both of these fields are unused for the parameters. Both the short and
+long option names can contain only letters, digits and the underscores.
+
+{\tt description} is used by the \helpref{Usage()}{wxcmdlineparserusage} method
+to construct a help message explaining the syntax of the program.
+
+The possible values of {\tt type} which specifies the type of the value accepted
+by an option or parameter are:
+{\small \begin{verbatim}
+enum wxCmdLineParamType
+{
+    wxCMD\_LINE\_VAL\_STRING,  // default
+    wxCMD\_LINE\_VAL\_NUMBER,
+    wxCMD\_LINE\_VAL\_DATE,
+    wxCMD\_LINE\_VAL\_NONE
+}
+\end{verbatim}}
+
+Finally, the {\tt flags} field is a combination of the following bit masks:
+{\small \begin{verbatim}
+enum
+{
+    wxCMD\_LINE\_OPTION\_MANDATORY = 0x01, // this option must be given
+    wxCMD\_LINE\_PARAM\_OPTIONAL   = 0x02, // the parameter may be omitted
+    wxCMD\_LINE\_PARAM\_MULTIPLE   = 0x04, // the parameter may be repeated
+    wxCMD\_LINE\_OPTION\_HELP      = 0x08, // this option is a help request
+    wxCMD\_LINE\_NEEDS\_SEPARATOR  = 0x10, // must have sep before the value
+}
+\end{verbatim}}
+
+Notice that by default (i.e. if flags are just $0$), options are optional (sic)
+and each call to \helpref{AddParam()}{wxcmdlineparseraddparam} allows one more
+parameter - this may be changed by giving non-default flags to it, i.e. use 
+{\tt wxCMD\_LINE\_OPTION\_MANDATORY} to require that the option is given and 
+{\tt wxCMD\_LINE\_PARAM\_OPTIONAL} to make a parameter optional. Also, 
+{\tt wxCMD\_LINE\_PARAM\_MULTIPLE} may be specified if the programs accepts a
+variable number of parameters - but it only can be given for the last parameter
+in the command line description. If you use this flag, you will probably need to
+use \helpref{GetParamCount}{wxcmdlineparsergetparamcount} to retrieve the number
+of parameters effectively specified after calling 
+\helpref{Parse}{wxcmdlineparserparse}.
+
+The last flag {\tt wxCMD\_LINE\_NEEDS\_SEPARATOR} can be specified to require a
+separator (either a colon, an equal sign or white space) between the option
+name and its value. By default, no separator is required.
+
+\wxheading{See also}
+
+\helpref{wxApp::argc}{wxappargc} and \helpref{wxApp::argv}{wxappargv}\\
+console sample
+
+%%%%%%%%%%%%% Methods by group %%%%%%%%%%%%%
+\latexignore{\rtfignore{\wxheading{Function groups}}}
+
+\membersection{Construction}\label{wxcmdlineparserconstruction}
+
+Before \helpref{Parse}{wxcmdlineparserparse} can be called, the command line
+parser object must have the command line to parse and also the rules saying
+which switches, options and parameters are valid - this is called command line
+description in what follows.
+
+You have complete freedom of choice as to when specify the required information,
+the only restriction is that it must be done before calling 
+\helpref{Parse}{wxcmdlineparserparse}.
+
+To specify the command line to parse you may use either one of constructors
+accepting it (\helpref{wxCmdLineParser(argc, argv)}{wxcmdlineparserwxcmdlineparserargc} or 
+\helpref{wxCmdLineParser}{wxcmdlineparserwxcmdlineparserdescargc} usually) or,
+if you use \helpref{the default constructor}{wxcmdlineparserwxcmdlineparserdef},
+you can do it later by calling 
+\helpref{SetCmdLine}{wxcmdlineparsersetcmdlineargc}.
+
+The same holds for command line description: it can be specified either in
+the constructor (\helpref{without command line}{wxcmdlineparserwxcmdlineparserdesc} or 
+\helpref{together with it}{wxcmdlineparserwxcmdlineparserdescargc}) or
+constructed later using either \helpref{SetDesc}{wxcmdlineparsersetdesc} or
+combination of \helpref{AddSwitch}{wxcmdlineparseraddswitch}, 
+\helpref{AddOption}{wxcmdlineparseraddoption} and 
+\helpref{AddParam}{wxcmdlineparseraddparam} methods.
+
+Using constructors or \helpref{SetDesc}{wxcmdlineparsersetdesc} uses a (usually 
+{\tt const static}) table containing the command line description. If you want
+to decide which options to acccept during the run-time, using one of the 
+{\tt AddXXX()} functions above might be preferable.
+
+\membersection{Customization}\label{wxcmdlineparsercustomization}
+
+wxCmdLineParser has several global options which may be changed by the
+application. All of the functions described in this section should be called
+before \helpref{Parse}{wxcmdlineparserparse}.
+
+First global option is the support for long (also known as GNU-style) options.
+The long options are the ones which start with two dashes ({\tt "--"}) and look
+like this: {\tt --verbose}, i.e. they generally are complete words and not some
+abbreviations of them. As long options are used by more and more applications,
+they are enabled by default, but may be disabled with 
+\helpref{DisableLongOptions}{wxcmdlineparserdisablelongoptions}.
+
+Another global option is the set of characters which may be used to start an
+option (otherwise, the word on the command line is assumed to be a parameter).
+Under Unix, {\tt '-'} is always used, but Windows has at least two common
+choices for this: {\tt '-'} and {\tt '/'}. Some programs also use {\tt '+'}.
+The default is to use what suits most the current platform, but may be changed
+with \helpref{SetSwitchChars}{wxcmdlineparsersetswitchchars} method.
+
+Finally, \helpref{SetLogo}{wxcmdlineparsersetlogo} can be used to show some
+application-specific text before the explanation given by 
+\helpref{Usage}{wxcmdlineparserusage} function.
+
+\membersection{Parsing command line}\label{wxcmdlineparserparsing}
+
+After the command line description was constructed and the desiredoptions were
+set, you can finally call \helpref{Parse}{wxcmdlineparserparse} method.
+It returns $0$ if the command line was correct and was parsed, $-1$ if the help
+option was specified (this is a separate case as, normally, the program will
+terminate after this) or a positive number if there was an error during the
+command line parsing.
+
+In the latter case, the appropriate error message and usage information are
+logged by wxCmdLineParser itself using the standard wxWindows logging functions.
+
+\membersection{Getting results}\label{wxcmdlineparsergettingresults}
+
+After calling \helpref{Parse}{wxcmdlineparserparse} (and if it returned $0$),
+you may access the results of parsing using one of overloaded {\tt Found()}
+methods.
+
+For a simple switch, you will simply call 
+\helpref{Found}{wxcmdlineparserfoundswitch} to determine if the switch was given
+or not, for an option or a parameter, you will call a version of {\tt Found()} 
+which also returns the associated value in the provided variable. All 
+{\tt Found()} functions return TRUE if the switch or option were found in the
+command line or FALSE if they were not specified.
+
+%%%%%%%%%%%%% Methods in alphabetic order %%%%%%%%%%%%%
+\helponly{\insertatlevel{2}{
+
+\wxheading{Members}
+
+}}
+
+\membersection{wxCmdLineParser::wxCmdLineParser}\label{wxcmdlineparserwxcmdlineparserdef}
+
+\func{}{wxCmdLineParser}{\void}
+
+Default constructor. You must use 
+\helpref{SetCmdLine}{wxcmdlineparsersetcmdlineargc} or 
+\helpref{SetCmdLinelater.}{wxcmdlineparsersetcmdlinestr} later.
+
+\membersection{wxCmdLineParser::wxCmdLineParser}\label{wxcmdlineparserwxcmdlineparserargc}
+
+\func{}{wxCmdLineParser}{\param{int }{argc}, \param{char** }{argv}}
+
+Constructor specifies the command line to parse. This is the traditional
+(Unix) command line format. The parameters {\it argc} and {\it argv} have the
+same meaning as for {\tt main()} function.
+
+\membersection{wxCmdLineParser::wxCmdLineParser}\label{wxcmdlineparserwxcmdlineparserstr}
+
+\func{}{wxCmdLineParser}{\param{const wxString\& }{cmdline}}
+
+Constructor specifies the command line to parse in Windows format. The parameter 
+{\it cmdline} has the same meaning as the corresponding parameter of 
+{\tt WinMain()}.
+
+\membersection{wxCmdLineParser::wxCmdLineParser}\label{wxcmdlineparserwxcmdlineparserdesc}
+
+\func{}{wxCmdLineParser}{\param{const wxCmdLineEntryDesc* }{desc}}
+
+Same as \helpref{wxCmdLineParser}{wxcmdlineparserwxcmdlineparserdef}, but also
+specifies the \helpref{command line description}{wxcmdlineparsersetdesc}.
+
+\membersection{wxCmdLineParser::wxCmdLineParser}\label{wxcmdlineparserwxcmdlineparserdescargc}
+
+\func{}{wxCmdLineParser}{\param{const wxCmdLineEntryDesc* }{desc}, \param{int }{argc}, \param{char** }{argv}}
+
+Same as \helpref{wxCmdLineParser}{wxcmdlineparserwxcmdlineparserargc}, but also
+specifies the \helpref{command line description}{wxcmdlineparsersetdesc}.
+
+\membersection{wxCmdLineParser::wxCmdLineParser}\label{wxcmdlineparserwxcmdlineparserdescstr}
+
+\func{}{wxCmdLineParser}{\param{const wxCmdLineEntryDesc* }{desc}, \param{const wxString\& }{cmdline}}
+
+Same as \helpref{wxCmdLineParser}{wxcmdlineparserwxcmdlineparserstr}, but also
+specifies the \helpref{command line description}{wxcmdlineparsersetdesc}.
+
+\membersection{wxCmdLineParser::SetCmdLine}\label{wxcmdlineparsersetcmdlineargc}
+
+\func{void}{SetCmdLine}{\param{int }{argc}, \param{char** }{argv}}
+
+Set command line to parse after using one of the constructors which don't do it.
+
+\wxheading{See also}
+
+\helpref{wxCmdLineParser}{wxcmdlineparserwxcmdlineparserargc}
+
+\membersection{wxCmdLineParser::SetCmdLine}\label{wxcmdlineparsersetcmdlinestr}
+
+\func{void}{SetCmdLine}{\param{const wxString\& }{cmdline}}
+
+Set command line to parse after using one of the constructors which don't do it.
+
+\wxheading{See also}
+
+\helpref{wxCmdLineParser}{wxcmdlineparserwxcmdlineparserstr}
+
+\membersection{wxCmdLineParser::\destruct{wxCmdLineParser}}\label{wxcmdlineparserdtor}
+
+\func{}{\destruct{wxCmdLineParser}}{\void}
+
+Frees resources allocated by the object.
+
+{\bf NB:} destructor is not virtual, don't use this class polymorphically.
+
+\membersection{wxCmdLineParser::SetSwitchChars}\label{wxcmdlineparsersetswitchchars}
+
+\func{void}{SetSwitchChars}{\param{const wxString\& }{switchChars}}
+
+{\it switchChars} contains all characters with which an option or switch may
+start. Default is {\tt "-"} for Unix, {\tt "-/"} for Windows.
+
+\membersection{wxCmdLineParser::EnableLongOptions}\label{wxcmdlineparserenablelongoptions}
+
+\func{void}{EnableLongOptions}{\param{bool }{enable = TRUE}}
+
+Enable or disable support for the long options.
+
+As long options are not (yet) POSIX-compliant, this option allows to disable
+them.
+
+\wxheading{See also}
+
+\helpref{Customization}{wxcmdlineparsercustomization}
+
+\membersection{wxCmdLineParser::DisableLongOptions}\label{wxcmdlineparserdisablelongoptions}
+
+\func{void}{DisableLongOptions}{\void}
+
+Ientical to \helpref{EnableLongOptions(FALSE)}{wxcmdlineparserenablelongoptions}.
+
+\membersection{wxCmdLineParser::SetLogo}\label{wxcmdlineparsersetlogo}
+
+\func{void}{SetLogo}{\param{const wxString\& }{logo}}
+
+{\it logo} is some extra text which will be shown by 
+\helpref{Usage}{wxcmdlineparserusage} method.
+
+\membersection{wxCmdLineParser::SetDesc}\label{wxcmdlineparsersetdesc}
+
+\func{void}{SetDesc}{\param{const wxCmdLineEntryDesc* }{desc}}
+
+Construct the command line description
+
+Take the command line description from the wxCMD\_LINE\_NONE terminated table.
+
+Example of usage:
+
+\begin{verbatim}
+static const wxCmdLineEntryDesc cmdLineDesc[] =
+{
+    { wxCMD_LINE_SWITCH, "v", "verbose", "be verbose" },
+    { wxCMD_LINE_SWITCH, "q", "quiet",   "be quiet" },
+
+    { wxCMD_LINE_OPTION, "o", "output",  "output file" },
+    { wxCMD_LINE_OPTION, "i", "input",   "input dir" },
+    { wxCMD_LINE_OPTION, "s", "size",    "output block size", wxCMD_LINE_VAL_NUMBER },
+    { wxCMD_LINE_OPTION, "d", "date",    "output file date", wxCMD_LINE_VAL_DATE },
+
+    { wxCMD_LINE_PARAM,  NULL, NULL, "input file", wxCMD_LINE_VAL_STRING, wxCMD_LINE_PARAM_MULTIPLE },
+
+    { wxCMD_LINE_NONE }
+};
+
+wxCmdLineParser parser;
+
+parser.SetDesc(cmdLineDesc);
+\end{verbatim}
+
+\membersection{wxCmdLineParser::AddSwitch}\label{wxcmdlineparseraddswitch}
+
+\func{void}{AddSwitch}{\param{const wxString\& }{name}, \param{const wxString\& }{lng = wxEmptyString}, \param{const wxString\& }{desc = wxEmptyString}, \param{int }{flags = 0}}
+
+Add a switch {\it name} with an optional long name {\it lng} (no long name if it
+is empty, which is default), description {\it desc} and flags {\it flags} to the
+command line description.
+
+\membersection{wxCmdLineParser::AddOption}\label{wxcmdlineparseraddoption}
+
+\func{void}{AddOption}{\param{const wxString\& }{name}, \param{const wxString\& }{lng = wxEmptyString}, \param{const wxString\& }{desc = wxEmptyString}, \param{wxCmdLineParamType }{type = wxCMD\_LINE\_VAL\_STRING}, \param{int }{flags = 0}}
+
+Add an option {\it name} with an optional long name {\it lng} (no long name if
+it is empty, which is default) taking a value of the given type (string by
+default) to the command line description.
+
+\membersection{wxCmdLineParser::AddParam}\label{wxcmdlineparseraddparam}
+
+\func{void}{AddParam}{\param{const wxString\& }{desc = wxEmptyString}, \param{wxCmdLineParamType }{type = wxCMD\_LINE\_VAL\_STRING}, \param{int }{flags = 0}}
+
+Add a parameter of the given {\it type} to the command line description.
+
+\membersection{wxCmdLineParser::Parse}\label{wxcmdlineparserparse}
+
+\func{int}{Parse}{\void}
+
+Parse the command line, return $0$ if ok, $-1$ if {\tt "-h"} or {\tt "--help"} 
+option was encountered and the help message was given or a positive value if a
+syntax error occured.
+
+\membersection{wxCmdLineParser::Usage}\label{wxcmdlineparserusage}
+
+\func{void}{Usage}{\void}
+
+Give the standard usage message describing all program options. It will use the
+options and parameters descriptions specified earlier, so the resulting message
+will not be helpful to the user unless the descriptions were indeed specified.
+
+\wxheading{See also}
+
+\helpref{SetLogo}{wxcmdlineparsersetlogo}
+
+\membersection{wxCmdLineParser::Found}\label{wxcmdlineparserfoundswitch}
+
+\constfunc{bool}{Found}{\param{const wxString\& }{name}}
+
+Returns TRUE if the given switch was found, FALSE otherwise.
+
+\membersection{wxCmdLineParser::Found}\label{wxcmdlineparserfoundstringoption}
+
+\constfunc{bool}{Found}{\param{const wxString\& }{name}, \param{wxString* }{value}}
+
+Returns TRUE if an option taking a string value was found and stores the
+value in the provided pointer (which should not be NULL).
+
+\membersection{wxCmdLineParser::Found}\label{wxcmdlineparserfoundintoption}
+
+\constfunc{bool}{Found}{\param{const wxString\& }{name}, \param{long* }{value}}
+
+Returns TRUE if an option taking an integer value was found and stores
+the value in the provided pointer (which should not be NULL).
+
+\membersection{wxCmdLineParser::Found}\label{wxcmdlineparserfounddateoption}
+
+\constfunc{bool}{Found}{\param{const wxString\& }{name}, \param{wxDateTime* }{value}}
+
+Returns TRUE if an option taking a date value was found and stores the
+value in the provided pointer (which should not be NULL).
+
+\membersection{wxCmdLineParser::GetParamCount}\label{wxcmdlineparsergetparamcount}
+
+\constfunc{size\_t}{GetParamCount}{\void}
+
+Returns the number of parameters found. This function makes sense mostly if you
+had used {\tt wxCMD\_LINE\_PARAM\_MULTIPLE} flag.
+
+\membersection{wxCmdLineParser::GetParam}\label{wxcmdlineparsergetparam}
+
+\constfunc{wxString}{GetParam}{\param{size\_t }{n = 0u}}
+
+Returns the value of Nth parameter (as string only for now).
+
+\wxheading{See also}
+
+\helpref{GetParamCount}{wxcmdlineparsergetparamcount}
+

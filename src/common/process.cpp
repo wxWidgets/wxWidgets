@@ -36,14 +36,21 @@ void wxProcess::Init(wxEvtHandler *parent, int id, bool redirect)
 
     m_id         = id;
     m_redirect   = redirect;
+
+#if wxUSE_STREAMS
     m_inputStream  = NULL;
+    m_errorStream  = NULL;
     m_outputStream = NULL;
+#endif // wxUSE_STREAMS
 }
 
 wxProcess::~wxProcess()
 {
+#if wxUSE_STREAMS
     delete m_inputStream;
+    delete m_errorStream;
     delete m_outputStream;
+#endif // wxUSE_STREAMS
 }
 
 void wxProcess::OnTerminate(int pid, int status)
@@ -61,9 +68,15 @@ void wxProcess::Detach()
     SetNextHandler(NULL);
 }
 
-void wxProcess::SetPipeStreams(wxInputStream *in_stream, wxOutputStream *out_stream)
+#if wxUSE_STREAMS
+
+void wxProcess::SetPipeStreams(wxInputStream *inputSstream,
+                               wxOutputStream *outputStream,
+                               wxInputStream *errorStream)
 {
-    m_inputStream  = in_stream;
-    m_outputStream = out_stream;
+    m_inputStream  = inputSstream;
+    m_errorStream  = errorStream;
+    m_outputStream = outputStream;
 }
 
+#endif // wxUSE_STREAMS

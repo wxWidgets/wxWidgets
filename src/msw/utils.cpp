@@ -31,9 +31,11 @@
 #ifndef WX_PRECOMP
     #include "wx/utils.h"
     #include "wx/app.h"
-    #include "wx/cursor.h"
     #include "wx/intl.h"
     #include "wx/log.h"
+#if wxUSE_GUI
+    #include "wx/cursor.h"
+#endif
 #endif  //WX_PRECOMP
 
 // In some mingws there is a missing extern "C" int the winsock header,
@@ -127,7 +129,7 @@ extern "C" {
 #endif
 
 #  if defined(__WXDEBUG__) && wxUSE_GLOBAL_MEMORY_OPERATORS && wxUSE_DEBUG_NEW_ALWAYS
-#  define new new(__FILE__,__LINE__)
+#  define new new(__TFILE__,__LINE__)
 #  endif
 
 #endif
@@ -163,7 +165,7 @@ bool wxGetHostName(wxChar *buf, int maxSize)
     DWORD nSize = maxSize;
     if ( !::GetComputerName(buf, &nSize) )
     {
-        wxLogLastError("GetComputerName");
+        wxLogLastError(wxT("GetComputerName"));
 
         return FALSE;
     }
@@ -450,7 +452,7 @@ bool wxDirExists(const wxString& dir)
 
     if ( h == INVALID_HANDLE_VALUE )
     {
-        wxLogLastError("FindFirstFile");
+        wxLogLastError(wxT("FindFirstFile"));
 
         return FALSE;
     }
@@ -547,10 +549,16 @@ wxString wxGetOsDescription()
 
             case VER_PLATFORM_WIN32_WINDOWS:
                 str.Printf(_("Windows 9%c"),
-                           info.dwMinorVersion == 0 ? _T('5') : _T('9'));
-                if ( !wxIsEmpty(info.szCSDVersion) )
+                           info.dwMinorVersion == 0 ? _T('5') : _T('8'));
                 {
-                    str << _T(" (") << info.szCSDVersion << _T(')');
+                    // we need to trim it as under my version of Win98 this is
+                    // just a space and "( )" at the end looks quite ugly
+                    wxString ver = info.szCSDVersion;
+                    ver.Trim();
+                    if ( !ver.IsEmpty() )
+                    {
+                        str << _T(" (") << ver << _T(')');
+                    }
                 }
                 break;
 
@@ -910,8 +918,6 @@ bool wxCheckForInterrupt(wxWindow *wnd)
     return TRUE;
 }
 
-#endif // wxUSE_GUI
-
 // MSW only: get user-defined resource from the .res file.
 // Returns NULL or newly-allocated memory, so use delete[] to clean up.
 
@@ -964,10 +970,22 @@ void wxGetMousePosition( int* x, int* y )
 // Return TRUE if we have a colour display
 bool wxColourDisplay()
 {
-    ScreenHDC dc;
-    int noCols = GetDeviceCaps(dc, NUMCOLORS);
+    // this function is called from wxDC ctor so it is called a *lot* of times
+    // hence we optimize it a bit but doign the check only once
+    //
+    // this should be MT safe as only the GUI thread (holding the GUI mutex)
+    // can call us
+    static int s_isColour = -1;
 
-    return (noCols == -1) || (noCols > 2);
+    if ( s_isColour == -1 )
+    {
+        ScreenHDC dc;
+        int noCols = ::GetDeviceCaps(dc, NUMCOLORS);
+
+        s_isColour = (noCols == -1) || (noCols > 2);
+    }
+
+    return s_isColour != 0;
 }
 
 // Returns depth of screen
@@ -1051,6 +1069,8 @@ WXWORD WXDLLEXPORT wxGetWindowId(WXHWND hWnd)
     return GetWindowLong((HWND)hWnd, GWL_ID);
 #endif // Win16/32
 }
+
+#endif // wxUSE_GUI
 
 #if 0
 //------------------------------------------------------------------------
@@ -1209,7 +1229,7 @@ bool wxMatchWild( const wxString& pat, const wxString& text, bool dot_special )
     return ((*str == '\0') && (*pattern == '\0'));
 };
 
-#endif
+#endif // 0
 
 #if 0
 

@@ -118,19 +118,16 @@ void wxWindowBase::InitBase()
 #endif // wxUSE_VALIDATORS
 
     // use the system default colours
-    wxSystemSettings settings;
-
-    m_backgroundColour = settings.GetSystemColour(wxSYS_COLOUR_BTNFACE);
-    // m_foregroundColour = *wxBLACK;  // TODO take this from sys settings too?
+    m_backgroundColour = wxSystemSettings::GetSystemColour(wxSYS_COLOUR_BTNFACE);
     m_foregroundColour = wxSystemSettings::GetSystemColour(wxSYS_COLOUR_WINDOWTEXT);
 
-    // GRG, changed Mar/2000
-#if defined(__VISAGECPP__) && __IBMCPP__ < 0x400
-    // For now VisualAge 3.0 needs it this way
-    m_font = *wxSWISS_FONT;         //      and this?
-#else
-    m_font = settings.GetSystemFont(wxSYS_DEFAULT_GUI_FONT);
-#endif
+    // don't set the font here for wxMSW as we don't call WM_SETFONT here and
+    // so the font is *not* really set - but calls to SetFont() later won't do
+    // anything because m_font appears to be already set!
+#ifndef __WXMSW__
+    m_font = wxSystemSettings::GetSystemFont(wxSYS_DEFAULT_GUI_FONT);
+#endif // __WXMSW__
+
     // no style bits
     m_exStyle =
     m_windowStyle = 0;
@@ -321,13 +318,32 @@ bool wxWindowBase::DestroyChildren()
 // centre the window with respect to its parent in either (or both) directions
 void wxWindowBase::Centre(int direction)
 {
+    // the position/size of the parent window or of the entire screen
+    wxPoint posParent;
     int widthParent, heightParent;
 
-    wxWindow *parent = GetParent();
-    if ( !parent )
+    wxWindow *parent = NULL;
+
+    if ( !(direction & wxCENTRE_ON_SCREEN) )
     {
-        // no other choice
-        direction |= wxCENTRE_ON_SCREEN;
+        // find the parent to centre this window on: it should be the
+        // immediate parent for the controls but the top level parent for the
+        // top level windows (like dialogs)
+        parent = GetParent();
+        if ( IsTopLevel() )
+        {
+            while ( parent && !parent->IsTopLevel() )
+            {
+                parent = parent->GetParent();
+            }
+        }
+
+        // did we find the parent?
+        if ( !parent )
+        {
+            // no other choice
+            direction |= wxCENTRE_ON_SCREEN;
+        }
     }
 
     if ( direction & wxCENTRE_ON_SCREEN )
@@ -337,8 +353,19 @@ void wxWindowBase::Centre(int direction)
     }
     else
     {
-        // centre inside the parents rectangle
-        parent->GetClientSize(&widthParent, &heightParent);
+        if ( IsTopLevel() )
+        {
+            // centre on the parent
+            parent->GetSize(&widthParent, &heightParent);
+
+            // adjust to the parents position
+            posParent = parent->GetPosition();
+        }
+        else
+        {
+            // centre inside the parents client rectangle
+            parent->GetClientSize(&widthParent, &heightParent);
+        }
     }
 
     int width, height;
@@ -353,20 +380,8 @@ void wxWindowBase::Centre(int direction)
     if ( direction & wxVERTICAL )
         yNew = (heightParent - height)/2;
 
-    // controls are always centered on their parent because it doesn't make
-    // sense to centre them on the screen
-    if ( !(direction & wxCENTRE_ON_SCREEN) || !IsTopLevel() )
-    {
-        // the only chance to get this is to have a not top level window
-        // without parent which shouldn't happen
-        wxCHECK_RET( parent, wxT("this window must have a parent") );
-
-        // adjust to the parents client area origin
-        wxPoint posParent = parent->ClientToScreen(wxPoint(0, 0));
-
-        xNew += posParent.x;
-        yNew += posParent.y;
-    }
+    xNew += posParent.x;
+    yNew += posParent.y;
 
     // move the centre of this window to this position
     Move(xNew, yNew);
@@ -491,6 +506,11 @@ void wxWindowBase::AddChild(wxWindowBase *child)
 {
     wxCHECK_RET( child, wxT("can't add a NULL child") );
 
+    // this should never happen and it will lead to a crash later if it does
+    // because RemoveChild() will remove only one node from the children list
+    // and the other(s) one(s) will be left with dangling pointers in them
+    wxASSERT_MSG( !GetChildren().Find(child), _T("AddChild() called twice") );
+
     GetChildren().Append(child);
     child->SetParent(this);
 }
@@ -607,7 +627,7 @@ bool wxWindowBase::SetFont(const wxFont& font)
     // don't try to set invalid font, always fall back to the default
     const wxFont& fontOk = font.Ok() ? font : *wxSWISS_FONT;
 
-    if ( (wxFont&)fontOk == m_font )
+    if ( fontOk == m_font )
     {
         // no change
         return FALSE;
@@ -1416,9 +1436,7 @@ void wxWindowBase::OnMiddleClick( wxMouseEvent& event )
 
         wxMessageBox(wxString::Format(
                                       _T(
-                                        "       wxWindows Library (%s port)\n"
-                                        "Version %u.%u.%u, compiled at %s %s\n"
-                                        "   Copyright (c) 1995-2000 wxWindows team"
+                                        "       wxWindows Library (%s port)\nVersion %u.%u.%u, compiled at %s %s\n   Copyright (c) 1995-2001 wxWindows team"
                                         ),
                                       port.c_str(),
                                       wxMAJOR_VERSION,

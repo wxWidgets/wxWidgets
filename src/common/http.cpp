@@ -20,7 +20,7 @@
   #pragma hdrstop
 #endif
 
-#if wxUSE_SOCKETS
+#if wxUSE_SOCKETS && wxUSE_STREAMS
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -299,7 +299,8 @@ bool wxHTTP::Abort(void)
 
 wxInputStream *wxHTTP::GetInputStream(const wxString& path)
 {
-  wxHTTPStream *inp_stream = new wxHTTPStream(this);
+  wxHTTPStream *inp_stream;
+
   wxString new_path;
 
   m_perr = wxPROTO_CONNERR;
@@ -312,6 +313,8 @@ wxInputStream *wxHTTP::GetInputStream(const wxString& path)
 
   if (!BuildRequest(path, wxHTTP_GET))
     return NULL;
+
+  inp_stream = new wxHTTPStream(this);
 
   if (!GetHeader(wxT("Content-Length")).IsEmpty())
     inp_stream->m_httpsize = wxAtoi(WXSTRINGCAST GetHeader(wxT("Content-Length")));

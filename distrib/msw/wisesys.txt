@@ -1,20 +1,20 @@
 item: Install File
-  Source=c:\Windows\System\Msvcirt.dll
+  Source=c:\wx\dlls\winnt\Msvcirt.dll
   Destination=%SYS32%\Msvcirt.dll
   Flags=0000010000010011
 end
 item: Install File
-  Source=c:\Windows\System\Msvcrt.dll
+  Source=c:\wx\dlls\winnt\Msvcrt.dll
   Destination=%SYS32%\Msvcrt.dll
   Flags=0000010000010011
 end
 item: Install File
-  Source=c:\Windows\System\Msvcrt.dll
+  Source=c:\wx\dlls\win95\Msvcrt.dll
   Destination=%SYS%\Msvcrt.dll
   Flags=0000010000010011
 end
 item: Install File
-  Source=c:\Windows\System\Msvcirt.dll
+  Source=c:\wx\dlls\win95\Msvcirt.dll
   Destination=%SYS%\Msvcirt.dll
   Flags=0000010000010011
 end

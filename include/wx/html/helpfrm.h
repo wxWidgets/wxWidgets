@@ -43,7 +43,9 @@
 #define wxHF_BOOKMARKS    0x0010
 #define wxHF_OPENFILES    0x0020
 #define wxHF_PRINT        0x0040
-#define wxHF_DEFAULTSTYLE (wxHF_TOOLBAR | wxHF_CONTENTS | wxHF_INDEX | wxHF_SEARCH | wxHF_BOOKMARKS | wxHF_PRINT)
+#define wxHF_FLATTOOLBAR  0x0080
+#define wxHF_DEFAULTSTYLE (wxHF_TOOLBAR | wxHF_CONTENTS | wxHF_INDEX | \
+                           wxHF_SEARCH | wxHF_BOOKMARKS | wxHF_PRINT)
 
 
 // Command IDs :

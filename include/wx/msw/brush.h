@@ -57,8 +57,8 @@ public:
   virtual void SetStipple(const wxBitmap& stipple)  ;
 
   inline wxBrush& operator = (const wxBrush& brush) { if (*this == brush) return (*this); Ref(brush); return *this; }
-  inline bool operator == (const wxBrush& brush) { return m_refData == brush.m_refData; }
-  inline bool operator != (const wxBrush& brush) { return m_refData != brush.m_refData; }
+  inline bool operator == (const wxBrush& brush) const { return m_refData == brush.m_refData; }
+  inline bool operator != (const wxBrush& brush) const { return m_refData != brush.m_refData; }
 
   inline wxColour& GetColour(void) const { return (M_BRUSHDATA ? M_BRUSHDATA->m_colour : wxNullColour); };
   inline int GetStyle(void) const { return (M_BRUSHDATA ? M_BRUSHDATA->m_style : 0); };

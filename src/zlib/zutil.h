@@ -73,7 +73,15 @@ extern const char *z_errmsg[10]; /* indexed by 2-zlib_error */
 
         /* target dependencies */
 
-#ifdef MSDOS
+#ifdef OS2
+#  define OS_CODE  0x06
+#endif
+
+#ifdef WIN32 /* Window 95 & Windows NT */
+#  define OS_CODE  0x0b
+#endif
+
+#if defined(MSDOS) && !defined(OS_CODE)
 #  define OS_CODE  0x00
 #  ifdef __TURBOC__
 #    if(__STDC__ == 1) && (defined(__LARGE__) || defined(__COMPACT__))
@@ -86,14 +94,6 @@ extern const char *z_errmsg[10]; /* indexed by 2-zlib_error */
 #  else /* MSC or DJGPP */
 #    include <malloc.h>
 #  endif
-#endif
-
-#ifdef OS2
-#  define OS_CODE  0x06
-#endif
-
-#ifdef WIN32 /* Window 95 & Windows NT */
-#  define OS_CODE  0x0b
 #endif
 
 #if defined(VAXC) || defined(VMS)

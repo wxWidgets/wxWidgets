@@ -63,7 +63,8 @@ static void gtk_scrollbar_callback( GtkAdjustment *adjust, wxScrollBar *win )
     else if (range->scroll_type == GTK_SCROLL_PAGE_BACKWARD) command = wxEVT_SCROLL_PAGEUP;
     else if (range->scroll_type == GTK_SCROLL_PAGE_FORWARD)  command = wxEVT_SCROLL_PAGEDOWN;
     
-    int value = (int)ceil(adjust->value);
+    double dvalue = adjust->value;
+    int value = (int)(dvalue >= 0 ? dvalue - 0.5 : dvalue + 0.5);
       
     int orient = win->HasFlag(wxSB_VERTICAL) ? wxVERTICAL : wxHORIZONTAL;
   
@@ -129,7 +130,7 @@ static gint gtk_scrollbar_button_release_callback( GtkRange *WXUNUSED(widget),
 
 IMPLEMENT_DYNAMIC_CLASS(wxScrollBar,wxControl)
 
-wxScrollBar::~wxScrollBar(void)
+wxScrollBar::~wxScrollBar()
 {
 }
 
@@ -182,9 +183,10 @@ bool wxScrollBar::Create(wxWindow *parent, wxWindowID id,
     return TRUE;
 }
 
-int wxScrollBar::GetThumbPosition(void) const
+int wxScrollBar::GetThumbPosition() const
 {
-    return (int)(m_adjust->value+0.5);
+    double val = m_adjust->value;
+    return (int)(val >= 0 ? val - 0.5 : val + 0.5);
 }
 
 int wxScrollBar::GetThumbSize() const
@@ -252,7 +254,7 @@ void wxScrollBar::SetScrollbar( int position, int thumbSize, int range, int page
 }
 
 /* Backward compatibility */
-int wxScrollBar::GetValue(void) const
+int wxScrollBar::GetValue() const
 {
     return GetThumbPosition();
 }

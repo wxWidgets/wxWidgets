@@ -30,6 +30,8 @@
 
 #include "wx/defs.h"
 
+#if wxUSE_PRINTING_ARCHITECTURE
+
 #ifndef WX_PRECOMP
     #include "wx/window.h"
     #include "wx/msw/private.h"
@@ -87,7 +89,7 @@ wxWindowsPrinter::~wxWindowsPrinter()
 {
     // avoids mingw warning about statement with no effect (FreeProcInstance
     // doesn't do anything under Win32)
-#ifndef __GNUWIN32__
+#if !defined(__GNUWIN32__) && !defined(__WATCOMC__)
     FreeProcInstance((FARPROC) m_lpAbortProc);
 #endif
 }
@@ -98,7 +100,10 @@ bool wxWindowsPrinter::Print(wxWindow *parent, wxPrintout *printout, bool prompt
     sm_abortWindow = NULL;
 
     if (!printout)
+    {
+        sm_lastError = wxPRINTER_ERROR;
         return FALSE;
+    }
 
     printout->SetIsPreview(FALSE);
 
@@ -113,7 +118,10 @@ bool wxWindowsPrinter::Print(wxWindow *parent, wxPrintout *printout, bool prompt
     printout->GetPageInfo(&minPage, &maxPage, &fromPage, &toPage);
 
     if (maxPage == 0)
+    {
+        sm_lastError = wxPRINTER_ERROR;
         return FALSE;
+    }
 
     m_printDialogData.SetMinPage(minPage);
     m_printDialogData.SetMaxPage(maxPage);
@@ -173,6 +181,7 @@ bool wxWindowsPrinter::Print(wxWindow *parent, wxPrintout *printout, bool prompt
     if (logPPIPrinterX == 0 || logPPIPrinterY == 0)
     {
         delete dc;
+        sm_lastError = wxPRINTER_ERROR;
         return FALSE;
     }
 
@@ -220,6 +229,7 @@ bool wxWindowsPrinter::Print(wxWindow *parent, wxPrintout *printout, bool prompt
     {
         wxEndBusyCursor();
         wxLogDebug(wxT("Could not create an abort dialog."));
+        sm_lastError = wxPRINTER_ERROR;
 
         delete dc;
     }
@@ -228,6 +238,8 @@ bool wxWindowsPrinter::Print(wxWindow *parent, wxPrintout *printout, bool prompt
     wxSafeYield();
 
     printout->OnBeginPrinting();
+
+    sm_lastError = wxPRINTER_NO_ERROR;
 
     int copyCount;
     for ( copyCount = 1;
@@ -238,10 +250,14 @@ bool wxWindowsPrinter::Print(wxWindow *parent, wxPrintout *printout, bool prompt
         {
             wxEndBusyCursor();
             wxLogError(_("Could not start printing."));
+            sm_lastError = wxPRINTER_ERROR;
             break;
         }
         if (sm_abortIt)
+        {
+            sm_lastError = wxPRINTER_CANCELLED;
             break;
+        }
 
         int pn;
         for ( pn = m_printDialogData.GetFromPage();
@@ -250,6 +266,7 @@ bool wxWindowsPrinter::Print(wxWindow *parent, wxPrintout *printout, bool prompt
         {
             if ( sm_abortIt )
             {
+                sm_lastError = wxPRINTER_CANCELLED;
                 break;
             }
 
@@ -258,7 +275,10 @@ bool wxWindowsPrinter::Print(wxWindow *parent, wxPrintout *printout, bool prompt
             dc->EndPage();
 
             if ( !cont )
+            {
+                sm_lastError = wxPRINTER_CANCELLED;
                 break;
+            }
         }
 
         printout->OnEndDocument();
@@ -277,7 +297,7 @@ bool wxWindowsPrinter::Print(wxWindow *parent, wxPrintout *printout, bool prompt
 
     delete dc;
 
-    return TRUE;
+    return (sm_lastError == wxPRINTER_NO_ERROR);
 }
 
 wxDC* wxWindowsPrinter::PrintDialog(wxWindow *parent)
@@ -291,7 +311,13 @@ wxDC* wxWindowsPrinter::PrintDialog(wxWindow *parent)
     {
         dc = dialog.GetPrintDC();
         m_printDialogData = dialog.GetPrintDialogData();
+        if (dc == NULL) 
+            sm_lastError = wxPRINTER_ERROR;
+        else
+            sm_lastError = wxPRINTER_NO_ERROR;
     }
+    else
+        sm_lastError = wxPRINTER_CANCELLED;
 
     return dc;
 }
@@ -419,3 +445,5 @@ LONG APIENTRY _EXPORT wxAbortProc(HDC WXUNUSED(hPr), int WXUNUSED(Code))
         return (!wxPrinterBase::sm_abortIt);
 }
 
+#endif
+    // wxUSE_PRINTING_ARCHITECTURE

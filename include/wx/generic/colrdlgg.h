@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        colrdlgg.h
+// Name:        wx/generic/colrdlgg.h
 // Purpose:     wxGenericColourDialog
 // Author:      Julian Smart
 // Modified by:
@@ -27,88 +27,91 @@
 #define wxID_BLUE_SLIDER    3003
 
 class WXDLLEXPORT wxSlider;
-class WXDLLEXPORT wxGenericColourDialog: public wxDialog
+class WXDLLEXPORT wxGenericColourDialog : public wxDialog
 {
- DECLARE_DYNAMIC_CLASS(wxGenericColourDialog)
- protected:
-  wxColourData colourData;
-  wxWindow *dialogParent;
+public:
+    wxGenericColourDialog();
+    wxGenericColourDialog(wxWindow *parent,
+                          wxColourData *data = (wxColourData *) NULL);
+    virtual ~wxGenericColourDialog();
 
-  // Area reserved for grids of colours
-  wxRect standardColoursRect;
-  wxRect customColoursRect;
-  wxRect singleCustomColourRect;
+    bool Create(wxWindow *parent, wxColourData *data = (wxColourData *) NULL);
 
-  // Size of each colour rectangle
-  wxPoint smallRectangleSize;
+    wxColourData &GetColourData() { return colourData; }
 
-  // For single customizable colour
-  wxPoint customRectangleSize;
+    virtual int ShowModal();
 
-  // Grid spacing (between rectangles)
-  int gridSpacing;
+    // Internal functions
+    void OnMouseEvent(wxMouseEvent& event);
+    void OnPaint(wxPaintEvent& event);
 
-  // Section spacing (between left and right halves of dialog box)
-  int sectionSpacing;
+    virtual void CalculateMeasurements();
+    virtual void CreateWidgets();
+    virtual void InitializeColours();
 
-  // 48 'standard' colours
-  wxColour standardColours[48];
+    virtual void PaintBasicColours(wxDC& dc);
+    virtual void PaintCustomColours(wxDC& dc);
+    virtual void PaintCustomColour(wxDC& dc);
+    virtual void PaintHighlight(wxDC& dc, bool draw);
 
-  // 16 'custom' colours
-  wxColour customColours[16];
+    virtual void OnBasicColourClick(int which);
+    virtual void OnCustomColourClick(int which);
 
-  // One single custom colour (use sliders)
-  wxColour singleCustomColour;
+    void OnAddCustom(wxCommandEvent& event);
 
-  // Which colour is selected? An index into one of the two areas.
-  int colourSelection;
-  int whichKind; // 1 for standard colours, 2 for custom colours,
+    void OnRedSlider(wxCommandEvent& event);
+    void OnGreenSlider(wxCommandEvent& event);
+    void OnBlueSlider(wxCommandEvent& event);
 
-  wxSlider *redSlider;
-  wxSlider *greenSlider;
-  wxSlider *blueSlider;
+    void OnCloseWindow(wxCloseEvent& event);
 
-  int buttonY;
+protected:
+    wxColourData colourData;
+    wxWindow *dialogParent;
 
-  int okButtonX;
-  int customButtonX;
+    // Area reserved for grids of colours
+    wxRect standardColoursRect;
+    wxRect customColoursRect;
+    wxRect singleCustomColourRect;
 
-//  static bool colourDialogCancelled;
- public:
-  wxGenericColourDialog(void);
-  wxGenericColourDialog(wxWindow *parent, wxColourData *data = (wxColourData *) NULL);
-  ~wxGenericColourDialog(void);
+    // Size of each colour rectangle
+    wxPoint smallRectangleSize;
 
-  bool Create(wxWindow *parent, wxColourData *data = (wxColourData *) NULL);
+    // For single customizable colour
+    wxPoint customRectangleSize;
 
-  int ShowModal(void);
-  wxColourData &GetColourData(void) { return colourData; }
+    // Grid spacing (between rectangles)
+    int gridSpacing;
 
-  // Internal functions
-  void OnMouseEvent(wxMouseEvent& event);
-  void OnPaint(wxPaintEvent& event);
+    // Section spacing (between left and right halves of dialog box)
+    int sectionSpacing;
 
-  virtual void CalculateMeasurements(void);
-  virtual void CreateWidgets(void);
-  virtual void InitializeColours(void);
-  
-  virtual void PaintBasicColours(wxDC& dc);
-  virtual void PaintCustomColours(wxDC& dc);
-  virtual void PaintCustomColour(wxDC& dc);
-  virtual void PaintHighlight(wxDC& dc, bool draw);
+    // 48 'standard' colours
+    wxColour standardColours[48];
 
-  virtual void OnBasicColourClick(int which);
-  virtual void OnCustomColourClick(int which);
+    // 16 'custom' colours
+    wxColour customColours[16];
 
-  void OnAddCustom(wxCommandEvent& event);
+    // One single custom colour (use sliders)
+    wxColour singleCustomColour;
 
-  void OnRedSlider(wxCommandEvent& event);
-  void OnGreenSlider(wxCommandEvent& event);
-  void OnBlueSlider(wxCommandEvent& event);
+    // Which colour is selected? An index into one of the two areas.
+    int colourSelection;
+    int whichKind; // 1 for standard colours, 2 for custom colours,
 
-  void OnCloseWindow(wxCloseEvent& event);
+    wxSlider *redSlider;
+    wxSlider *greenSlider;
+    wxSlider *blueSlider;
 
-DECLARE_EVENT_TABLE()
+    int buttonY;
+
+    int okButtonX;
+    int customButtonX;
+
+    //  static bool colourDialogCancelled;
+
+    DECLARE_EVENT_TABLE()
+    DECLARE_DYNAMIC_CLASS(wxGenericColourDialog)
 };
 
 /* This shouldn't be necessary, we have a #define in wx/colordlg.h.

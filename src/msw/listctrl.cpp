@@ -209,8 +209,7 @@ bool wxListCtrl::DoCreateControl(int x, int y, int w, int h)
 
     if ( !m_hWnd )
     {
-        wxLogError(_("Can't create list control window, check "
-                     "that comctl32.dll is installed."));
+        wxLogError(_("Can't create list control window, check that comctl32.dll is installed."));
 
         return FALSE;
     }
@@ -255,6 +254,7 @@ void wxListCtrl::FreeAllAttrs(bool dontRecreate)
 {
     if ( m_hasAnyAttr )
     {
+        m_attrs.BeginFind();
         for ( wxNode *node = m_attrs.Next(); node; node = m_attrs.Next() )
         {
             delete (wxListItemAttr *)node->Data();
@@ -600,6 +600,9 @@ bool wxListCtrl::GetItem(wxListItem& info) const
     if (info.m_mask & wxLIST_MASK_DATA)
         lvItem.mask |= LVIF_PARAM;
 
+    if (info.m_mask & wxLIST_MASK_IMAGE)
+        lvItem.mask |= LVIF_IMAGE;
+
     if ( info.m_mask & wxLIST_MASK_STATE )
     {
         lvItem.mask |= LVIF_STATE;
@@ -630,23 +633,40 @@ bool wxListCtrl::SetItem(wxListItem& info)
     LV_ITEM item;
     wxConvertToMSWListItem(this, info, item);
 
+    item.cchTextMax = 0;
+    if ( !ListView_SetItem(GetHwnd(), &item) )
+    {
+        wxLogDebug(_T("ListView_SetItem() failed"));
+
+        return FALSE;
+    }
+
+    // we need to update the item immediately to show the new image
+    bool updateNow = (info.m_mask & wxLIST_MASK_IMAGE) != 0;
+
     // check whether it has any custom attributes
     if ( info.HasAttributes() )
     {
-        m_attrs.Put(item.iItem, (wxObject *)new wxListItemAttr(*info.GetAttributes()));
+        wxListItemAttr *attr = (wxListItemAttr *)m_attrs.Get(item.iItem);
+
+        if ( attr == NULL )
+            m_attrs.Put(item.iItem, (wxObject *)new wxListItemAttr(*info.GetAttributes()));
+        else
+            *attr = *info.GetAttributes();
 
         m_hasAnyAttr = TRUE;
+
+        // if the colour has changed, we must redraw the item
+        updateNow = TRUE;
     }
 
-    item.cchTextMax = 0;
-    bool ok = ListView_SetItem(GetHwnd(), &item) != 0;
-    if ( ok && (info.m_mask & wxLIST_MASK_IMAGE) )
+    if ( updateNow )
     {
-        // make the change visible
+        // we need this to make the change visible right now
         ListView_Update(GetHwnd(), item.iItem);
     }
 
-    return ok;
+    return TRUE;
 }
 
 long wxListCtrl::SetItem(long index, int col, const wxString& label, int imageId)
@@ -777,7 +797,7 @@ bool wxListCtrl::GetItemRect(long item, wxRect& rect, int code) const
     rect.x = rect2.left;
     rect.y = rect2.top;
     rect.width = rect2.right - rect2.left;
-    rect.height = rect2.bottom - rect2.left;
+    rect.height = rect2.bottom - rect2.top;
     return success;
 }
 
@@ -936,7 +956,35 @@ bool wxListCtrl::Arrange(int flag)
 // Deletes an item
 bool wxListCtrl::DeleteItem(long item)
 {
-    return (ListView_DeleteItem(GetHwnd(), (int) item) != 0);
+    if ( !ListView_DeleteItem(GetHwnd(), (int)item) )
+    {
+        wxLogDebug(_T("ListView_DeleteItem() failed"));
+
+        return FALSE;
+    }
+
+    if ( m_hasAnyAttr )
+    {
+        // first, delete the attribute associated with this item, if any
+        (void)m_attrs.Delete(item);
+
+        // then, as in InsertItem(), we have to adjust the existing attributes
+        // keyed on item index
+        long count = GetItemCount();
+        while ( item < count )
+        {
+            wxObject *attr = m_attrs.Delete(item + 1);
+            if ( attr )
+            {
+                // add it back with new key
+                m_attrs.Put(item, attr);
+            }
+
+            item++;
+        }
+    }
+
+    return TRUE;
 }
 
 // Deletes all items
@@ -952,7 +1000,7 @@ bool wxListCtrl::DeleteAllColumns()
     {
         if ( ListView_DeleteColumn(GetHwnd(), 0) == 0 )
         {
-            wxLogLastError("ListView_DeleteColumn");
+            wxLogLastError(wxT("ListView_DeleteColumn"));
 
             return FALSE;
         }
@@ -1040,10 +1088,13 @@ long wxListCtrl::FindItem(long start, const wxString& str, bool partial)
 
     findInfo.flags = LVFI_STRING;
     if ( partial )
-        findInfo.flags |= LVFI_STRING;
-    findInfo.psz = WXSTRINGCAST str;
+        findInfo.flags |= LVFI_PARTIAL;
+    findInfo.psz = str;
 
-    return ListView_FindItem(GetHwnd(), (int) start, & findInfo);
+    // ListView_FindItem() excludes the first item from search and to look
+    // through all the items you need to start from -1 which is unnatural and
+    // inconsitent with the generic version - so we adjust the index
+    return ListView_FindItem(GetHwnd(), (int) start - 1, &findInfo);
 }
 
 // Find an item whose data matches this data, starting from the item after 'start'
@@ -1119,15 +1170,50 @@ long wxListCtrl::InsertItem(wxListItem& info)
     LV_ITEM item;
     wxConvertToMSWListItem(this, info, item);
 
+    long lItem = ListView_InsertItem(GetHwnd(), &item);
+    if ( lItem == -1 )
+    {
+        wxLogDebug(_T("ListView_InsertItem() failed"));
+
+        return -1;
+    }
+
+    if ( m_hasAnyAttr )
+    {
+        // we have to offset all existing item attributes for the items
+        // following this one as the attrs are keyed on the position
+        //
+        // NB: it would be faster to traverse the hash table looking for all
+        //     elements with keys > lItem, but wxHashTable doesn't seem to
+        //     support and because of this the code below is, of course,
+        //     horribly inefficient (FIXME)
+
+        // we have to go in downwards direction to avoid overwriting the old
+        // attributes
+        for ( long n = GetItemCount() - 1; n > lItem; n-- )
+        {
+            wxObject *attr = m_attrs.Delete(n - 1);
+            if ( attr )
+            {
+                // add it back with new key
+                m_attrs.Put(n, attr);
+            }
+        }
+    }
+
     // check whether it has any custom attributes
     if ( info.HasAttributes() )
     {
+        // there can't be any attr for this id as the item was just inserted!
+        wxASSERT_MSG( !m_attrs.Get(item.iItem),
+                      _T("error in wxListCtrl attributes handling code") );
+
         m_attrs.Put(item.iItem, (wxObject *)new wxListItemAttr(*info.GetAttributes()));
 
         m_hasAnyAttr = TRUE;
     }
 
-    return (long) ListView_InsertItem(GetHwnd(), & item);
+    return lItem;
 }
 
 long wxListCtrl::InsertItem(long index, const wxString& label)
@@ -1257,11 +1343,73 @@ bool wxListCtrl::ScrollList(int dx, int dy)
 // The return value is a negative number if the first item should precede the second
 // item, a positive number of the second item should precede the first,
 // or zero if the two items are equivalent.
-
+//
 // data is arbitrary data to be passed to the sort function.
+
+// FIXME: this is horrible and MT-unsafe and everything else but I don't have
+//        time for anything better right now (VZ)
+static long gs_sortData = 0;
+static wxListCtrl *gs_sortCtrl = NULL;
+static wxListCtrlCompare gs_sortFunction = NULL;
+
+int wxCMPFUNC_CONV wxListCtrlCompareFn(const void *arg1, const void *arg2)
+{
+    int n1 = *(const int *)arg1,
+        n2 = *(const int *)arg2;
+
+    return gs_sortFunction(gs_sortCtrl->GetItemData(n1),
+                           gs_sortCtrl->GetItemData(n2),
+                           gs_sortData);
+}
+
 bool wxListCtrl::SortItems(wxListCtrlCompare fn, long data)
 {
-    return (ListView_SortItems(GetHwnd(), (PFNLVCOMPARE) fn, data) != 0);
+    // sort the attributes too
+    if ( m_hasAnyAttr )
+    {
+        int n,
+            count = GetItemCount();
+        int *aItems = new int[count];
+        for ( n = 0; n < count; n++ )
+        {
+            aItems[n] = n;
+        }
+
+        gs_sortData = data;
+        gs_sortCtrl = this;
+        gs_sortFunction = fn;
+
+        qsort(aItems, count, sizeof(int), wxListCtrlCompareFn);
+
+        gs_sortData = 0;
+        gs_sortCtrl = NULL;
+        gs_sortFunction = NULL;
+
+        wxHashTable attrsNew(wxKEY_INTEGER, 1000);
+        for ( n = 0; n < count; n++ )
+        {
+            wxObject *attr = m_attrs.Delete(n);
+            if ( attr )
+            {
+                attrsNew.Put(aItems[n], attr);
+            }
+        }
+
+        // FIXME: workaround for wxHashTable memory leak
+        m_attrs.Destroy();
+        m_attrs = attrsNew;
+
+        delete [] aItems;
+    }
+
+    if ( !ListView_SortItems(GetHwnd(), (PFNLVCOMPARE)fn, data) )
+    {
+        wxLogDebug(_T("ListView_SortItems() failed"));
+
+        return FALSE;
+    }
+
+    return TRUE;
 }
 
 // ----------------------------------------------------------------------------
@@ -1423,10 +1571,13 @@ bool wxListCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
                                          wxLIST_NEXT_ALL,
                                          wxLIST_STATE_SELECTED);
 
-                // <Enter> or <Space> activate the selected item if any
-                if ( lItem != -1 && (wVKey == VK_RETURN || wVKey == VK_SPACE) )
+                // <Enter> or <Space> activate the selected item if any (but
+                // not with Shift and/or Ctrl as then they have a predefined
+                // meaning for the list view)
+                if ( lItem != -1 &&
+                     (wVKey == VK_RETURN || wVKey == VK_SPACE) &&
+                     !(wxIsShiftDown() || wxIsCtrlDown()) )
                 {
-                    // TODO this behaviour probably should be optional
                     eventType = wxEVT_COMMAND_LIST_ITEM_ACTIVATED;
                     event.m_itemIndex = lItem;
                 }
@@ -1436,7 +1587,12 @@ bool wxListCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
                     event.m_code = wxCharCodeMSWToWX(wVKey);
                 }
 
-                event.m_item.m_data = GetItemData(lItem);
+                if ( lItem != -1 )
+                {
+                    // fill the other fields too
+                    event.m_item.m_text = GetItemText(lItem);
+                    event.m_item.m_data = GetItemData(lItem);
+                }
             }
             break;
 
@@ -1458,6 +1614,7 @@ bool wxListCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
 
             eventType = wxEVT_COMMAND_LIST_ITEM_ACTIVATED;
             event.m_itemIndex = nmLV->iItem;
+            event.m_item.m_text = GetItemText(nmLV->iItem);
             event.m_item.m_data = GetItemData(nmLV->iItem);
             break;
 
@@ -1487,6 +1644,8 @@ bool wxListCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
                     {
                         eventType = wxEVT_COMMAND_LIST_ITEM_RIGHT_CLICK;
                         event.m_itemIndex = lvhti.iItem;
+                        event.m_pointDrag.x = lvhti.pt.x;
+                        event.m_pointDrag.y = lvhti.pt.y;
                     }
                 }
             }

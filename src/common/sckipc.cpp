@@ -36,7 +36,7 @@
 #include "wx/defs.h"
 #endif
 
-#if wxUSE_SOCKETS && wxUSE_IPC
+#if wxUSE_SOCKETS && wxUSE_IPC && wxUSE_STREAMS
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -200,28 +200,49 @@ wxConnectionBase *wxTCPClient::OnMakeConnection()
 
 wxTCPServer::wxTCPServer () : wxServerBase()
 {
+  m_server = NULL;
 }
 
-bool wxTCPServer::Create(const wxString& server_name)
+bool wxTCPServer::Create(const wxString& serverName)
 {
-  wxSocketServer *server;
+  // Destroy previous server, if any
+  if (m_server)
+  {
+    m_server->SetClientData(NULL);
+    m_server->Destroy();
+    m_server = NULL;
+  }
 
   // wxIPV4address defaults to INADDR_ANY:0
   wxIPV4address addr;
-  addr.Service(server_name);
+  addr.Service(serverName);
 
-  // Create a socket listening on specified port
-  server = new wxSocketServer(addr, SCKIPC_FLAGS);
-  server->SetEventHandler(*gs_handler, _SERVER_ONREQUEST_ID);
-  server->SetClientData(this);
-  server->SetNotify(wxSOCKET_CONNECTION_FLAG);
-  server->Notify(TRUE);
+  // Create a socket listening on the specified port
+  m_server = new wxSocketServer(addr, SCKIPC_FLAGS);
+
+  if (!m_server->Ok())
+  {
+    m_server->Destroy();
+    m_server = NULL;
+
+    return FALSE;
+  }
+
+  m_server->SetEventHandler(*gs_handler, _SERVER_ONREQUEST_ID);
+  m_server->SetClientData(this);
+  m_server->SetNotify(wxSOCKET_CONNECTION_FLAG);
+  m_server->Notify(TRUE);
 
   return TRUE;
 }
 
 wxTCPServer::~wxTCPServer()
 {
+  if (m_server)
+  {
+    m_server->SetClientData(NULL);
+    m_server->Destroy();
+  }
 }
 
 wxConnectionBase *wxTCPServer::OnAcceptConnection( const wxString& WXUNUSED(topic) )
@@ -284,7 +305,7 @@ bool wxTCPConnection::Execute(const wxChar *data, int size, wxIPCFormat format)
   m_codeco->Write8(format);
 
   if (size < 0)
-    size = strlen(data) + 1;    // includes final NUL
+    size = wxStrlen(data) + 1;    // includes final NUL
 
   m_codeco->Write32(size);
   m_sockstrm->Write(data, size);
@@ -332,7 +353,7 @@ bool wxTCPConnection::Poke (const wxString& item, wxChar *data, int size, wxIPCF
   m_codeco->Write8(format);
 
   if (size < 0)
-    size = strlen(data) + 1;    // includes final NUL
+    size = wxStrlen(data) + 1;    // includes final NUL
 
   m_codeco->Write32(size);
   m_sockstrm->Write(data, size);
@@ -388,7 +409,7 @@ bool wxTCPConnection::Advise (const wxString& item,
   m_codeco->Write8(format);
 
   if (size < 0)
-    size = strlen(data) + 1;    // includes final NUL
+    size = wxStrlen(data) + 1;    // includes final NUL
 
   m_codeco->Write32(size);
   m_sockstrm->Write(data, size);
@@ -555,7 +576,7 @@ void wxTCPEventHandler::Client_OnRequest(wxSocketEvent &event)
 void wxTCPEventHandler::Server_OnRequest(wxSocketEvent &event)
 {
   wxSocketServer *server = (wxSocketServer *) event.GetSocket();
-  wxTCPServer *ipcserv = (wxTCPServer *) event.GetClientData();
+  wxTCPServer *ipcserv = (wxTCPServer *) server->GetClientData();
 
   // This socket is being deleted; skip this event
   if (!ipcserv)

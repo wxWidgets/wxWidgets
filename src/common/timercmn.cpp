@@ -53,6 +53,13 @@
     #define HAVE_FTIME
 #endif
 
+#if defined(__VISAGECPP__) && !defined(HAVE_FTIME)
+    #define HAVE_FTIME
+#  if __IBMCPP__ >= 400
+    #  define ftime(x) _ftime(x)
+#  endif
+#endif
+
 #include <time.h>
 #ifndef __WXMAC__
     #include <sys/types.h>      // for time_t
@@ -87,12 +94,6 @@
         #define wxGetTimeOfDay(tv, tz)      gettimeofday((tv), (tz))
     #endif
 #endif // HAVE_GETTIMEOFDAY
-
-// ----------------------------------------------------------------------------
-// prototypes
-// ----------------------------------------------------------------------------
-
-wxLongLong wxGetLocalTimeMillis();
 
 // ============================================================================
 // implementation
@@ -274,7 +275,7 @@ wxLongLong wxGetLocalTimeMillis()
     (void)ftime(&tp);
     val *= tp.time;
     return (val + tp.millitm);
-#else
+#else // no gettimeofday() nor ftime()
     // We use wxGetLocalTime() to get the seconds since
     // 00:00:00 Jan 1st 1970 and then whatever is available
     // to get millisecond resolution.
@@ -285,22 +286,31 @@ wxLongLong wxGetLocalTimeMillis()
 
     val *= wxGetLocalTime();
 
-#if defined(__VISAGECPP__)
-    DATETIME dt;
-    ::DosGetDateTime(&dt);
-    val += (dt.hundredths*10);
-#elif defined (__WIN32__)
-#warning "Possible clock skew bug in wxStopWatch!"
+// GRG: This will go soon as all WIN32 seem to have ftime
+#if defined (__WIN32__)
+    // If your platform/compiler needs to use two different functions
+    // to get ms resolution, please do NOT just shut off these warnings,
+    // drop me a line instead at <guille@iies.es>
+    #warning "Possible clock skew bug in wxGetLocalTimeMillis()!"
+
     SYSTEMTIME st;
     ::GetLocalTime(&st);
     val += st.wMilliseconds;
-#else
-#if !defined(__VISUALC__) && !defined(__BORLANDC__)
-#warning "wxStopWatch will be up to second resolution!"
-#endif
+#else // !Win32
+    // If your platform/compiler does not support ms resolution please
+    // do NOT just shut off these warnings, drop me a line instead at
+    // <guille@iies.es>
+
+    #if defined(__VISUALC__)
+        #pragma message("wxStopWatch will be up to second resolution!")
+    #elif defined(__BORLANDC__)
+        #pragma message "wxStopWatch will be up to second resolution!"
+    #else
+        #warning "wxStopWatch will be up to second resolution!"
+    #endif // compiler
 #endif
 
     return val;
 
-#endif
+#endif // time functions
 }

@@ -95,6 +95,7 @@ BEGIN_EVENT_TABLE(wxYearSpinCtrl, wxSpinCtrl)
 END_EVENT_TABLE()
 
 IMPLEMENT_DYNAMIC_CLASS(wxCalendarCtrl, wxControl)
+IMPLEMENT_DYNAMIC_CLASS(wxCalendarEvent, wxCommandEvent)
 
 // ============================================================================
 // implementation
@@ -121,6 +122,7 @@ wxMonthComboBox::wxMonthComboBox(wxCalendarCtrl *cal)
     }
 
     SetSelection(m_cal->GetDate().GetMonth());
+    SetSize(-1, -1, -1, -1, wxSIZE_AUTO_WIDTH|wxSIZE_AUTO_HEIGHT);
 }
 
 wxYearSpinCtrl::wxYearSpinCtrl(wxCalendarCtrl *cal)
@@ -562,7 +564,7 @@ void wxCalendarCtrl::OnPaint(wxPaintEvent& WXUNUSED(event))
     RecalcGeometry();
 
 #if DEBUG_PAINT
-    printf("--- starting to paint, selection: %s, week %u\n",
+    wxLogDebug("--- starting to paint, selection: %s, week %u\n",
            m_date.Format("%a %d-%m-%Y %H:%M:%S").c_str(),
            GetWeek(m_date));
 #endif
@@ -571,7 +573,7 @@ void wxCalendarCtrl::OnPaint(wxPaintEvent& WXUNUSED(event))
     if ( IsExposed(0, 0, 7*m_widthCol, m_heightRow) )
     {
 #if DEBUG_PAINT
-        puts("painting the header");
+        wxLogDebug("painting the header");
 #endif
 
         dc.SetBackgroundMode(wxTRANSPARENT);
@@ -601,7 +603,7 @@ void wxCalendarCtrl::OnPaint(wxPaintEvent& WXUNUSED(event))
 
     wxDateTime date = GetStartDate();
 #if DEBUG_PAINT
-    printf("starting calendar from %s\n",
+    wxLogDebug("starting calendar from %s\n",
             date.Format("%a %d-%m-%Y %H:%M:%S").c_str());
 #endif
 
@@ -617,7 +619,7 @@ void wxCalendarCtrl::OnPaint(wxPaintEvent& WXUNUSED(event))
         }
 
 #if DEBUG_PAINT
-        printf("painting week %d at y = %d\n", nWeek, y);
+        wxLogDebug("painting week %d at y = %d\n", nWeek, y);
 #endif
 
         for ( size_t wd = 0; wd < 7; wd++ )
@@ -730,7 +732,7 @@ void wxCalendarCtrl::OnPaint(wxPaintEvent& WXUNUSED(event))
         }
     }
 #if DEBUG_PAINT
-    puts("+++ finished painting");
+    wxLogDebug("+++ finished painting");
 #endif
 }
 
@@ -748,8 +750,17 @@ void wxCalendarCtrl::RefreshDate(const wxDateTime& date)
     rect.width = 7*m_widthCol;
     rect.height = m_heightRow;
 
+#ifdef __WXMSW__
+    // VZ: for some reason, the selected date seems to occupy more space under
+    //     MSW - this is probably some bug in the font size calculations, but I
+    //     don't know where exactly. This fix is ugly and leads to more
+    //     refreshes than really needed, but without it the selected days
+    //     leaves even more ugly underscores on screen.
+    rect.Inflate(0, 1);
+#endif // MSW
+
 #if DEBUG_PAINT
-    printf("*** refreshing week %d at (%d, %d)-(%d, %d)\n",
+    wxLogDebug("*** refreshing week %d at (%d, %d)-(%d, %d)\n",
            GetWeek(date),
            rect.x, rect.y,
            rect.x + rect.width, rect.y + rect.height);

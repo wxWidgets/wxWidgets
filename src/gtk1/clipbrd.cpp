@@ -212,7 +212,7 @@ selection_clear_clip( GtkWidget *WXUNUSED(widget), GdkEventSelection *event )
         /* the clipboard is no longer in our hands. we can the delete clipboard data. */
         if (wxTheClipboard->m_data)
         {
-            wxLogDebug( wxT("wxClipboard will get cleared" ) );
+            wxLogTrace(TRACE_CLIPBOARD, wxT("wxClipboard will get cleared" ));
 
             delete wxTheClipboard->m_data;
             wxTheClipboard->m_data = (wxDataObject*) NULL;
@@ -590,7 +590,8 @@ bool wxClipboard::GetData( wxDataObject& data )
 
         m_waiting = TRUE;
 
-        wxLogDebug( wxT("wxClipboard::GetData: format found, start convert") );
+        wxLogTrace( TRACE_CLIPBOARD,
+                    wxT("wxClipboard::GetData: format found, start convert") );
 
         gtk_selection_convert( m_clipboardWidget,
                                m_usePrimary ? (GdkAtom)GDK_SELECTION_PRIMARY
@@ -608,7 +609,8 @@ bool wxClipboard::GetData( wxDataObject& data )
         return TRUE;
     }
 
-    wxLogDebug( wxT("wxClipboard::GetData: format not found") );
+    wxLogTrace( TRACE_CLIPBOARD,
+                wxT("wxClipboard::GetData: format not found") );
 
     /* return failure */
     delete[] array;

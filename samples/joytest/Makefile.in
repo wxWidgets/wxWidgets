@@ -1,17 +1,11 @@
-#
-# File:		makefile.unx
-# Author:	Julian Smart
-# Created:	1998
-# Updated:	
-# Copyright:	(c) 1998 Julian Smart
-#
-# "%W% %G%"
-#
-# Makefile for joytest example (UNIX).
+# Purpose: makefile for joytest example (UNIX).
+# Created: 2000-03-14
 
 top_srcdir = @top_srcdir@/..
 top_builddir = ../..
 program_dir = samples/joytest
+
+DATAFILES=gun.wav
 
 PROGRAM=joytest
 

@@ -3,8 +3,6 @@
 // Purpose:     declaration of wxLongLong class - best implementation of a 64
 //              bit integer for the current platform.
 // Author:      Jeffrey C. Ollie <jeff@ollie.clive.ia.us>, Vadim Zeitlin
-// Remarks:     this class is not public in wxWindows 2.0! It is intentionally
-//              not documented and is for private use only.
 // Modified by:
 // Created:     10.02.99
 // RCS-ID:      $Id$
@@ -21,7 +19,6 @@
 
 #include "wx/defs.h"
 #include "wx/wxchar.h"
-#include "wx/debug.h"
 
 #include <limits.h>     // for LONG_MAX
 
@@ -30,7 +27,7 @@
 // wxLongLongNative -- this is extremely useful to find the bugs in
 // wxLongLongWx class!
 
-//#define wxLONGLONG_TEST_MODE
+// #define wxLONGLONG_TEST_MODE
 
 #ifdef wxLONGLONG_TEST_MODE
     #define wxUSE_LONGLONG_WX 1
@@ -53,9 +50,9 @@
     #define wxLongLongIsLong
 #elif (defined(__VISUALC__) && defined(__WIN32__)) || defined( __VMS__ )
     #define wxLongLong_t __int64
-#elif defined(__BORLANDC__) && (__BORLANDC__ >= 0x530)
+#elif defined(__BORLANDC__) && defined(__WIN32__) && (__BORLANDC__ >= 0x520)
     #define wxLongLong_t __int64
-#elif defined(__GNUG__)
+#elif defined(__GNUG__) || defined(__sgi)
     #define wxLongLong_t long long
 #elif defined(__MWERKS__)
     #if __option(longlong)
@@ -68,14 +65,14 @@
         #define wxLongLong_t long long
 #else // no native long long type
     // both warning and pragma warning are not portable, but at least an
-    // unknown pragma should never be an error.
-    // Err, actually, Watcom C++ doesn't like it.
-    // (well, if the compilers are _that_ broken, I'm removing it (VZ))
-#if 0 //ndef __WATCOMC__
+    // unknown pragma should never be an error - except that, actually, Watcom
+    // C++ doesn't like it, so we have to disable it in this case <sigh>
+#ifndef __WATCOMC__
     #pragma warning "Your compiler does not appear to support 64 bit "\
-                    "integers, using emulation class instead."
+                    "integers, using emulation class instead.\n" \
+                    "Please report your compiler version to " \
+                    "wx-dev@lists.wxwindows.org!"
 #endif
-
     #define wxUSE_LONGLONG_WX 1
 #endif // compiler
 
@@ -90,7 +87,12 @@
     #endif
 
     class WXDLLEXPORT wxLongLongWx;
+#if defined(__VISUALC__) && !defined(__WIN32__)
+    #define wxLongLong wxLongLongWx
+#else
     typedef wxLongLongWx wxLongLong;
+#endif
+
 #else
     // if nothing is defined, use native implementation by default, of course
     #ifndef wxUSE_LONGLONG_NATIVE
@@ -315,7 +317,6 @@ private:
 #endif // wxUSE_LONGLONG_NATIVE
 
 #if wxUSE_LONGLONG_WX
-
 class WXDLLEXPORT wxLongLongWx
 {
 public:
@@ -459,6 +460,17 @@ public:
         { return *this < ll || *this == ll; }
     bool operator>=(const wxLongLongWx& ll) const
         { return *this > ll || *this == ll; }
+
+    bool operator<(long l) const { return *this < wxLongLongWx(l); }
+    bool operator>(long l) const { return *this > wxLongLongWx(l); }
+    bool operator==(long l) const
+    {
+        return l >= 0 ? (m_hi == 0 && m_lo == (unsigned long)l)
+                      : (m_hi == -1 && m_lo == (unsigned long)l);
+    }
+
+    bool operator<=(long l) const { return *this < l || *this == l; }
+    bool operator>=(long l) const { return *this > l || *this == l; }
 
     // multiplication
     wxLongLongWx operator*(const wxLongLongWx& ll) const;

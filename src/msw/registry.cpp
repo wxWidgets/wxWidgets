@@ -27,7 +27,6 @@
 #include  "wx/string.h"
 #include  "wx/intl.h"
 #include  "wx/log.h"
-#include  "wx/config.h"    // for wxExpandEnvVars
 
 #ifndef __WIN16__
 
@@ -92,12 +91,12 @@ aStdKeys[] =
 // ----------------------------------------------------------------------------
 // macros
 // ----------------------------------------------------------------------------
-// @ const_cast<> is not yet supported by all compilers
+
+// const_cast<> is not yet supported by all compilers
 #define CONST_CAST    ((wxRegKey *)this)->
 
-#if   !USE_MUTABLE
-  #define m_dwLastError   CONST_CAST m_dwLastError
-#endif
+// and neither is mutable which m_dwLastError should be
+#define m_dwLastError   CONST_CAST m_dwLastError
 
 // ----------------------------------------------------------------------------
 // non member functions
@@ -187,16 +186,16 @@ wxRegKey::StdKey wxRegKey::GetStdKeyFromHkey(WXHKEY hkey)
 
 wxRegKey::wxRegKey()
 {
-  m_hKey = 0;
   m_hRootKey = (WXHKEY) aStdKeys[HKCR].hkey;
-  m_dwLastError = 0;
+
+  Init();
 }
 
 wxRegKey::wxRegKey(const wxString& strKey) : m_strKey(strKey)
 {
   m_hRootKey  = (WXHKEY) aStdKeys[ExtractKeyName(m_strKey)].hkey;
-  m_hKey      = (WXHKEY) NULL;
-  m_dwLastError = 0;
+
+  Init();
 }
 
 // parent is a predefined (and preopened) key
@@ -204,8 +203,8 @@ wxRegKey::wxRegKey(StdKey keyParent, const wxString& strKey) : m_strKey(strKey)
 {
   RemoveTrailingSeparator(m_strKey);
   m_hRootKey  = (WXHKEY) aStdKeys[keyParent].hkey;
-  m_hKey      = (WXHKEY) NULL;
-  m_dwLastError = 0;
+
+  Init();
 }
 
 // parent is a normal regkey
@@ -222,8 +221,8 @@ wxRegKey::wxRegKey(const wxRegKey& keyParent, const wxString& strKey)
   RemoveTrailingSeparator(m_strKey);
 
   m_hRootKey  = keyParent.m_hRootKey;
-  m_hKey      = (WXHKEY) NULL;
-  m_dwLastError = 0;
+
+  Init();
 }
 
 // dtor closes the key releasing system resource
@@ -261,7 +260,14 @@ void wxRegKey::SetName(const wxRegKey& keyParent, const wxString& strKey)
   Close();
 
   // combine our name with parent's to get the full name
-  m_strKey = keyParent.m_strKey;
+
+  // NB: this method is called by wxRegConfig::SetPath() which is a performance
+  //     critical function and so it preallocates space for our m_strKey to
+  //     gain some speed - this is why we only use += here and not = which
+  //     would just free the prealloc'd buffer and would have to realloc it the
+  //     next line!
+  m_strKey.clear();
+  m_strKey += keyParent.m_strKey;
   if ( !strKey.IsEmpty() && strKey[0] != REG_SEPARATOR )
     m_strKey += REG_SEPARATOR;
   m_strKey += strKey;
@@ -406,15 +412,13 @@ bool wxRegKey::Close()
 {
   if ( IsOpened() ) {
     m_dwLastError = RegCloseKey((HKEY) m_hKey);
+    m_hKey = 0;
+
     if ( m_dwLastError != ERROR_SUCCESS ) {
       wxLogSysError(m_dwLastError, _("Can't close registry key '%s'"),
                     GetName().c_str());
 
-      m_hKey = 0;
       return FALSE;
-    }
-    else {
-      m_hKey = 0;
     }
   }
 
@@ -573,7 +577,7 @@ bool wxRegKey::Copy(wxRegKey& keyDst)
         wxRegKey key(*this, strKey);
         wxString keyName;
         keyName << GetFullName(&keyDst) << REG_SEPARATOR << strKey;
-        ok = key.Copy((const char*) keyName);
+        ok = key.Copy((const wxChar*) keyName);
 
         if ( ok )
             bCont = GetNextKey(strKey, lIndex);
@@ -596,8 +600,7 @@ bool wxRegKey::Copy(wxRegKey& keyDst)
     }
 
     if ( !ok ) {
-        wxLogError(_("Failed to copy the contents of registry key '%s' to "
-                     "'%s'."), GetFullName(this), GetFullName(&keyDst));
+        wxLogError(_("Failed to copy the contents of registry key '%s' to '%s'."), GetFullName(this), GetFullName(&keyDst));
     }
 
     return ok;
@@ -619,11 +622,10 @@ bool wxRegKey::DeleteSelf()
   // prevent a buggy program from erasing one of the root registry keys or an
   // immediate subkey (i.e. one which doesn't have '\\' inside) of any other
   // key except HKCR (HKCR has some "deleteable" subkeys)
-  if ( m_strKey.IsEmpty() || (m_hRootKey != HKCR &&
-       m_strKey.Find(REG_SEPARATOR) == wxNOT_FOUND) ) {
-      wxLogError(_("Registry key '%s' is needed for normal system operation,\n"
-                   "deleting it will leave your system in unusable state:\n"
-                   "operation aborted."), GetFullName(this));
+  if ( m_strKey.IsEmpty() ||
+       ((m_hRootKey != (WXHKEY) aStdKeys[HKCR].hkey) &&
+        (m_strKey.Find(REG_SEPARATOR) == wxNOT_FOUND)) ) {
+      wxLogError(_("Registry key '%s' is needed for normal system operation,\ndeleting it will leave your system in unusable state:\noperation aborted."), GetFullName(this));
 
       return FALSE;
   }
@@ -709,12 +711,14 @@ bool wxRegKey::HasValue(const wxChar *szValue) const
   wxLogNull nolog;
 
   #ifdef  __WIN32__
-    if ( CONST_CAST Open() ) {
-      return RegQueryValueEx((HKEY) m_hKey, WXSTRINGCAST szValue, RESERVED,
-                             NULL, NULL, NULL) == ERROR_SUCCESS;
-    }
-    else
-      return FALSE;
+    if ( !CONST_CAST Open() )
+        return FALSE;
+
+    LONG dwRet = ::RegQueryValueEx((HKEY) m_hKey,
+                                   WXSTRINGCAST szValue,
+                                   RESERVED,
+                                   NULL, NULL, NULL);
+    return dwRet == ERROR_SUCCESS;
   #else   // WIN16
     // only unnamed value exists
     return IsEmpty(szValue);
@@ -751,10 +755,10 @@ bool wxRegKey::HasSubKey(const wxChar *szKey) const
   // this function should be silent, so suppress possible messages from Open()
   wxLogNull nolog;
 
-  if ( CONST_CAST Open() )
-    return KeyExists(m_hKey, szKey);
-  else
+  if ( !CONST_CAST Open() )
     return FALSE;
+
+  return KeyExists(m_hKey, szKey);
 }
 
 wxRegKey::ValueType wxRegKey::GetValueType(const wxChar *szValue) const
@@ -847,6 +851,30 @@ bool wxRegKey::QueryValue(const wxChar *szValue, wxString& strValue) const
                                             pBuf,
                                             &dwSize);
             strValue.UngetWriteBuf();
+
+            // always expand the var expansions in the string
+            if ( dwType == REG_EXPAND_SZ )
+            {
+                DWORD dwExpSize = ::ExpandEnvironmentStrings(strValue, NULL, 0);
+                bool ok = dwExpSize != 0;
+                if ( ok )
+                {
+                    wxString strExpValue;
+                    ok = ::ExpandEnvironmentStrings
+                           (
+                            strValue,
+                            strExpValue.GetWriteBuf(dwExpSize),
+                            dwExpSize
+                           ) != 0;
+                    strExpValue.UngetWriteBuf();
+                    strValue = strExpValue;
+                }
+
+                if ( !ok )
+                {
+                    wxLogLastError(_T("ExpandEnvironmentStrings"));
+                }
+            }
         }
 
         if ( m_dwLastError == ERROR_SUCCESS ) {
@@ -879,7 +907,7 @@ bool wxRegKey::SetValue(const wxChar *szValue, const wxString& strValue)
 #if defined( __WIN32__) && !defined(__TWIN32__)
       m_dwLastError = RegSetValueEx((HKEY) m_hKey, szValue, (DWORD) RESERVED, REG_SZ,
                                     (RegString)strValue.c_str(),
-                                    strValue.Len() + 1);
+                                    (strValue.Len() + 1)*sizeof(wxChar));
       if ( m_dwLastError == ERROR_SUCCESS )
         return TRUE;
     #else   //WIN16
@@ -1018,8 +1046,13 @@ bool wxRegKey::IsNumericValue(const wxChar *szValue) const
 // ============================================================================
 // implementation of global private functions
 // ============================================================================
+
 bool KeyExists(WXHKEY hRootKey, const wxChar *szKey)
 {
+  // don't close this key itself for the case of empty szKey!
+  if ( wxIsEmpty(szKey) )
+    return TRUE;
+
   HKEY hkeyDummy;
   if ( RegOpenKey( (HKEY) hRootKey, szKey, &hkeyDummy) == ERROR_SUCCESS ) {
     RegCloseKey(hkeyDummy);

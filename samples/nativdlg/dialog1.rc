@@ -13,6 +13,10 @@
 #define __WIN95__
 #endif
 
+//#ifdef _MSC_VER
+#define __VISUALC__ _MSC_VER
+//#endif
+
 #ifdef __GNUWIN32__
 #define wxID_OK                 5100
 #define wxID_CANCEL             5101

@@ -10,7 +10,8 @@
 WXDIR = ../..
 
 TARGET=life
-OBJECTS = $(TARGET).o dialogs.o game.o
+EXTRALDFLAGS=-Wl,--subsystem,console
+OBJECTS = $(TARGET).o dialogs.o game.o reader.o
 
 include $(WXDIR)/src/makeprog.g95
 

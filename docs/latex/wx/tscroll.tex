@@ -3,7 +3,7 @@
 Classes: \helpref{wxWindow}{wxwindow}, \helpref{wxScrolledWindow}{wxscrolledwindow}, \helpref{wxIcon}{wxicon}, \helpref{wxScrollBar}{wxscrollbar}.
 
 Scrollbars come in various guises in wxWindows. All windows have the potential
-to show a vertical scrollbar and/or a horizontal scrollbar: it's a basic capability of a window.
+to show a vertical scrollbar and/or a horizontal scrollbar: it is a basic capability of a window.
 However, in practice, not all windows do make use of scrollbars, such as a single-line wxTextCtrl.
 
 Because any class derived from  \helpref{wxWindow}{wxwindow} may have scrollbars,
@@ -18,7 +18,7 @@ events varies from one window class to another.
 \helpref{wxScrolledWindow}{wxscrolledwindow} (formerly wxCanvas) is an example of a window that
 adds functionality to make scrolling really work. It assumes that scrolling happens in
 consistent units, not different-sized jumps, and that page size is represented
-by the visible portion of the window. It's suited to drawing applications, but perhaps
+by the visible portion of the window. It is suited to drawing applications, but perhaps
 not so suitable for a sophisticated editor in which the amount scrolled may vary according
 to the size of text on a given line. For this, you would derive from wxWindow and
 implement scrolling yourself. \helpref{wxGrid}{wxgrid} is an example of a class
@@ -27,7 +27,7 @@ that implements its own scrolling, largely because columns and rows can vary in 
 \wxheading{The scrollbar model}
 
 The function \helpref{wxWindow::SetScrollbar}{wxwindowsetscrollbar} gives a clue about
-the way a scrollbar is modelled. This function takes the following arguments:
+the way a scrollbar is modeled. This function takes the following arguments:
 
 \twocolwidtha{5cm}%
 \begin{twocollist}
@@ -42,7 +42,7 @@ the way a scrollbar is modelled. This function takes the following arguments:
 the built-in horizontal or vertical scrollbar.
 
 {\it position} is simply the position of the `thumb' (the bit you drag to scroll around).
-It's given in scroll units, and so is relative to the total range of the scrollbar.
+It is given in scroll units, and so is relative to the total range of the scrollbar.
 
 {\it visible} gives the number of scroll units that represents the portion of the
 window currently visible. Normally, a scrollbar is capable of indicating this visually
@@ -51,7 +51,7 @@ by showing a different length of thumb.
 {\it range} is the maximum value of the scrollbar, where zero is the start
 position. You choose the units that suit you,
 so if you wanted to display text that has 100 lines, you would set this to 100.
-Note that this doesn't have to correspond to the number of pixels scrolled - it's
+Note that this doesn't have to correspond to the number of pixels scrolled - it is
 up to you how you actually show the contents of the window.
 
 {\it refresh} just indicates whether the scrollbar should be repainted immediately or not.
@@ -83,7 +83,7 @@ from your \helpref{wxWindow::OnSize}{wxwindowonsize} event handler function.
 
 %\normalbox{{\bf For Windows programmers:} note that scrollbar range in wxWindows has a different meaning
 %from that in Windows. In native Windows scrollbar calls, range is the number of positions that the scrollbar
-%can physically scroll through - in our example above, it would be 34. But it's easier
+%can physically scroll through - in our example above, it would be 34. But it is easier
 %to think in terms of the number of units that the whole scrollbar represents - the virtual
 %window size - which is why wxWindows does it differently.}
 

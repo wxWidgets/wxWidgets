@@ -29,12 +29,14 @@
 #endif
 
 #ifndef WX_PRECOMP
+    #include "wx/button.h"
     #include "wx/dialog.h"
     #include "wx/dcclient.h"
     #include "wx/intl.h"
     #include "wx/settings.h"
     #include "wx/stattext.h"
     #include "wx/sizer.h"
+    #include "wx/button.h"
 #endif
 
 //--------------------------------------------------------------------------

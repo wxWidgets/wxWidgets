@@ -70,6 +70,7 @@ class WXDLLEXPORT wxHtmlHelpController : public wxHelpControllerBase // wxEvtHan
         virtual void SetViewer(const wxString& WXUNUSED(viewer), long WXUNUSED(flags) = 0) {}
         virtual bool LoadFile(const wxString& file = "");
         virtual bool DisplaySection(int sectionNo);
+        virtual bool DisplaySection(const wxString& section) { return Display(section); }
         virtual bool DisplayBlock(long blockNo) { return DisplaySection(blockNo); }
         virtual void SetFrameParameters(const wxString& title,
                                    const wxSize& size,

@@ -44,6 +44,14 @@ extern "C"
 IMPLEMENT_DYNAMIC_CLASS(wxTIFFHandler,wxImageHandler)
 
 static tsize_t
+_tiffNullProc(thandle_t WXUNUSED(handle),
+	      tdata_t WXUNUSED(buf),
+	      tsize_t WXUNUSED(size))
+{
+    return (tsize_t) -1;
+}
+
+static tsize_t
 _tiffReadProc(thandle_t handle, tdata_t buf, tsize_t size)
 {
     wxInputStream *stream = (wxInputStream*) handle;
@@ -60,7 +68,7 @@ _tiffWriteProc(thandle_t handle, tdata_t buf, tsize_t size)
 }
 
 static toff_t
-_tiffSeekProc(thandle_t handle, toff_t off, int whence)
+_tiffSeekIProc(thandle_t handle, toff_t off, int whence)
 {
     wxInputStream *stream = (wxInputStream*) handle;
     wxSeekMode mode;
@@ -75,6 +83,22 @@ _tiffSeekProc(thandle_t handle, toff_t off, int whence)
     return (toff_t)stream->SeekI( (off_t)off, mode );
 }
 
+static toff_t
+_tiffSeekOProc(thandle_t handle, toff_t off, int whence)
+{
+    wxOutputStream *stream = (wxOutputStream*) handle;
+    wxSeekMode mode;
+    switch (whence)
+    {
+        case SEEK_SET: mode = wxFromStart; break;
+        case SEEK_CUR: mode = wxFromCurrent; break;
+        case SEEK_END: mode = wxFromEnd; break;
+        default:       mode = wxFromCurrent; break;
+    }
+
+    return (toff_t)stream->SeekO( (off_t)off, mode );
+}
+
 static int
 _tiffCloseProc(thandle_t WXUNUSED(handle))
 {
@@ -84,7 +108,7 @@ _tiffCloseProc(thandle_t WXUNUSED(handle))
 static toff_t
 _tiffSizeProc(thandle_t handle)
 {
-    wxInputStream *stream = (wxInputStream*) handle;
+    wxStreamBase *stream = (wxStreamBase*) handle;
     return (toff_t) stream->GetSize();
 }
 
@@ -108,13 +132,24 @@ TIFFwxOpen(wxInputStream &stream, const char* name, const char* mode)
 {
     TIFF* tif = TIFFClientOpen(name, mode,
         (thandle_t) &stream,
-        _tiffReadProc, _tiffWriteProc,
-        _tiffSeekProc, _tiffCloseProc, _tiffSizeProc,
+        _tiffReadProc, _tiffNullProc,
+        _tiffSeekIProc, _tiffCloseProc, _tiffSizeProc,
         _tiffMapProc, _tiffUnmapProc);
 
     return tif;
 }
 
+TIFF*
+TIFFwxOpen(wxOutputStream &stream, const char* name, const char* mode)
+{
+    TIFF* tif = TIFFClientOpen(name, mode,
+        (thandle_t) &stream,
+        _tiffNullProc, _tiffWriteProc,
+        _tiffSeekOProc, _tiffCloseProc, _tiffSizeProc,
+        _tiffMapProc, _tiffUnmapProc);
+
+    return tif;
+}
 
 bool wxTIFFHandler::LoadFile( wxImage *image, wxInputStream& stream, bool verbose, int index )
 {
@@ -155,6 +190,8 @@ bool wxTIFFHandler::LoadFile( wxImage *image, wxInputStream& stream, bool verbos
     {
         if (verbose)
             wxLogError( _("TIFF: Couldn't allocate memory.") );
+            
+        TIFFClose( tif );
 
         return FALSE;
     }
@@ -166,6 +203,7 @@ bool wxTIFFHandler::LoadFile( wxImage *image, wxInputStream& stream, bool verbos
             wxLogError( _("TIFF: Couldn't allocate memory.") );
 
         _TIFFfree( raster );
+        TIFFClose( tif );
 
         return FALSE;
     }
@@ -177,6 +215,7 @@ bool wxTIFFHandler::LoadFile( wxImage *image, wxInputStream& stream, bool verbos
 
         _TIFFfree( raster );
         image->Destroy();
+        TIFFClose( tif );
 
         return FALSE;
     }
@@ -242,9 +281,77 @@ int wxTIFFHandler::GetImageCount( wxInputStream& stream )
     return dircount;
 }
 
-bool wxTIFFHandler::SaveFile( wxImage *WXUNUSED(image), wxOutputStream& WXUNUSED(stream), bool WXUNUSED(verbose) )
+bool wxTIFFHandler::SaveFile( wxImage *image, wxOutputStream& stream, bool verbose )
 {
-    return FALSE;
+    TIFF *tif = TIFFwxOpen( stream, "image", "w" );
+
+    if (!tif)
+    {
+        if (verbose)
+            wxLogError( _("TIFF: Error saving image.") );
+
+        return FALSE;
+    }
+
+    TIFFSetField(tif, TIFFTAG_IMAGEWIDTH,  (uint32)image->GetWidth());
+    TIFFSetField(tif, TIFFTAG_IMAGELENGTH, (uint32)image->GetHeight());
+    TIFFSetField(tif, TIFFTAG_ORIENTATION, ORIENTATION_TOPLEFT);
+    TIFFSetField(tif, TIFFTAG_SAMPLESPERPIXEL, 3);
+    TIFFSetField(tif, TIFFTAG_BITSPERSAMPLE, 8);
+    TIFFSetField(tif, TIFFTAG_PLANARCONFIG, PLANARCONFIG_CONTIG);
+    TIFFSetField(tif, TIFFTAG_PHOTOMETRIC, PHOTOMETRIC_RGB);
+    TIFFSetField(tif, TIFFTAG_COMPRESSION, COMPRESSION_LZW);
+    
+    tsize_t linebytes = (tsize_t)image->GetWidth() * 3;
+    unsigned char *buf;
+    
+    if (TIFFScanlineSize(tif) > linebytes) 
+    {
+        buf = (unsigned char *)_TIFFmalloc(TIFFScanlineSize(tif));
+        if (!buf)
+        {
+            if (verbose)
+                wxLogError( _("TIFF: Couldn't allocate memory.") );
+
+            TIFFClose( tif );
+
+            return FALSE;
+        }
+    } 
+    else 
+    {
+        buf = NULL;
+    }
+
+    TIFFSetField(tif, TIFFTAG_ROWSPERSTRIP,
+        TIFFDefaultStripSize(tif, (uint32) -1));
+        
+    unsigned char *ptr = image->GetData();
+    for (int row = 0; row < image->GetHeight(); row++) 
+    {
+	    if (buf)
+	        memcpy(buf, ptr, image->GetWidth());
+        
+	    if (TIFFWriteScanline(tif, buf ? buf : ptr, (uint32)row, 0) < 0)
+        {
+	        if (verbose)
+	            wxLogError( _("TIFF: Error writing image.") );
+        
+            TIFFClose( tif );
+            if (buf)
+                _TIFFfree(buf);
+                
+            return FALSE;
+        }
+        ptr += image->GetWidth()*3;
+    }
+
+    (void) TIFFClose(tif);
+
+    if (buf)
+    _TIFFfree(buf);
+
+    return TRUE;
 }
 
 bool wxTIFFHandler::DoCanRead( wxInputStream& stream )
@@ -261,9 +368,5 @@ bool wxTIFFHandler::DoCanRead( wxInputStream& stream )
 
 #endif
    // wxUSE_LIBTIFF
-
-
-
-
 
 

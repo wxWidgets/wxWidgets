@@ -528,10 +528,10 @@ void BibReadValue(istream& istr, char *buffer, bool ignoreBraces = TRUE,
   while (!istr.eof() && !stopping)
   {
 //    i ++;
-    if (i >= 2000)
+    if (i >= 4000)
     {
       char buf[100];
-      sprintf(buf, "Sorry, value > 2000 chars in bib file at line %ld, terminating.", BibLine);
+      sprintf(buf, "Sorry, value > 4000 chars in bib file at line %ld, terminating.", BibLine);
       wxFatalError(buf, "Tex2RTF Fatal Error");
     }
     istr.get(ch);
@@ -581,7 +581,7 @@ bool ReadBib(char *filename)
   OnInform("Reading .bib file...");
 
   char ch;
-  char fieldValue[2000];
+  char fieldValue[4000];
   char recordType[100];
   char recordKey[100];
   char recordField[100];

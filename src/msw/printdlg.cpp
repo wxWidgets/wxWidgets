@@ -28,6 +28,12 @@
     #pragma hdrstop
 #endif
 
+#if wxUSE_PRINTING_ARCHITECTURE
+
+#ifndef WX_PRECOMP
+    #include "wx/app.h"
+#endif
+
 #include "wx/printdlg.h"
 #include "wx/dcprint.h"
 
@@ -106,7 +112,18 @@ int wxPrintDialog::ShowModal()
 {
     m_printDialogData.ConvertToNative();
 
-    bool ret = (PrintDlg( (PRINTDLG *)m_printDialogData.GetNativeData() ) != 0);
+    PRINTDLG* p = (PRINTDLG *)m_printDialogData.GetNativeData() ;
+    if (m_dialogParent)
+        p->hwndOwner = (HWND) m_dialogParent->GetHWND();
+    else if (wxTheApp->GetTopWindow())
+        p->hwndOwner = (HWND) wxTheApp->GetTopWindow()->GetHWND();
+    else
+        p->hwndOwner = 0;
+
+    bool ret = (PrintDlg( p ) != 0);
+
+    p->hwndOwner = 0;
+
     if ( ret != FALSE && ((PRINTDLG *)m_printDialogData.GetNativeData())->hDC)
     {
         wxPrinterDC *pdc = new wxPrinterDC((WXHDC) ((PRINTDLG *)m_printDialogData.GetNativeData())->hDC);
@@ -166,7 +183,16 @@ int wxPageSetupDialog::ShowModal()
 {
 #ifdef __WIN95__
     m_pageSetupData.ConvertToNative();
-    if (PageSetupDlg( (PAGESETUPDLG *)m_pageSetupData.GetNativeData() ))
+    PAGESETUPDLG *p = (PAGESETUPDLG *)m_pageSetupData.GetNativeData();
+    if (m_dialogParent)
+        p->hwndOwner = (HWND) m_dialogParent->GetHWND();
+    else if (wxTheApp->GetTopWindow())
+        p->hwndOwner = (HWND) wxTheApp->GetTopWindow()->GetHWND();
+    else
+        p->hwndOwner = 0;
+    BOOL retVal = PageSetupDlg( p ) ;
+    p->hwndOwner = 0;
+    if (retVal)
     {
         m_pageSetupData.ConvertFromNative();
         return wxID_OK;
@@ -182,3 +208,5 @@ int wxPageSetupDialog::ShowModal()
 #endif
 }
 
+#endif
+    // wxUSE_PRINTING_ARCHITECTURE

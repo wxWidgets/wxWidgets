@@ -28,8 +28,8 @@
 IMPLEMENT_APP(MyApp)
 
 BEGIN_EVENT_TABLE(MyApp, wxApp)
-    EVT_MENU(OBJECT_MENU_EDIT, MyApp::OnObjectPopupMenu)
-    EVT_MENU(OBJECT_MENU_DELETE, MyApp::OnObjectPopupMenu)
+EVT_MENU(OBJECT_MENU_EDIT, MyApp::OnObjectPopupMenu)
+EVT_MENU(OBJECT_MENU_DELETE, MyApp::OnObjectPopupMenu)
 END_EVENT_TABLE()
 
 MyApp::MyApp(void)
@@ -44,14 +44,14 @@ bool MyApp::OnInit(void)
 {
     theResourceManager = new wxResourceManager;
     theResourceManager->Initialize();
-
+    
     theResourceManager->ShowResourceEditor(TRUE);
-  
+    
     if (argc > 1)
         theResourceManager->Load(argv[1]);
-
+    
     SetTopWindow(theResourceManager->GetEditorFrame());
-
+    
     return TRUE;
 }
 

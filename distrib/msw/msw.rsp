@@ -8,6 +8,7 @@ lib/watcom/*.bat
 lib/bcc16/*.lib
 
 docs/licence.txt
+docs/base/*.txt
 docs/msw/*.txt
 docs/wine/*.txt
 docs/wine/COPYING.LIB
@@ -15,9 +16,13 @@ docs/wine/COPYING.LIB
 distrib/msw/*.rsp
 distrib/msw/*.bat
 
-tools/gettext/xgettext.exe
-tools/gettext/msgfmt.exe
-tools/gettext/msgunfmt.exe
+tools/gettext/*.exe
+tools/gettext/*.sed
+
+wxBase.dsp
+wxBase.dsw
+wxBaseDll.dsp
+wxBaseDll.dsw
 
 src/makeb32.env
 src/makeprog.b32
@@ -54,6 +59,7 @@ src/common/dosyacc.c
 src/common/doslex.c
 src/common/y_tab.c
 src/common/lex_yy.c
+src/common/*.rc
 
 src/msw/*.cpp
 src/msw/*.h

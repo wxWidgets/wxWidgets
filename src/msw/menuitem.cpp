@@ -173,7 +173,7 @@ void wxMenuItem::Enable(bool enable)
                              (enable ? MF_ENABLED : MF_GRAYED));
 
     if ( rc == -1 ) {
-        wxLogLastError("EnableMenuItem");
+        wxLogLastError(wxT("EnableMenuItem"));
     }
 
     wxMenuItemBase::Enable(enable);
@@ -192,7 +192,7 @@ void wxMenuItem::Check(bool check)
                             (check ? MF_CHECKED : MF_UNCHECKED));
 
     if ( rc == -1 ) {
-        wxLogLastError("CheckMenuItem");
+        wxLogLastError(wxT("CheckMenuItem"));
     }
 
     wxMenuItemBase::Check(check);
@@ -218,7 +218,7 @@ void wxMenuItem::SetText(const wxString& text)
     UINT flagsOld = ::GetMenuState(hMenu, id, MF_BYCOMMAND);
     if ( flagsOld == 0xFFFFFFFF )
     {
-        wxLogLastError("GetMenuState");
+        wxLogLastError(wxT("GetMenuState"));
     }
     else
     {

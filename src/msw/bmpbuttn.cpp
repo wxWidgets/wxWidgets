@@ -75,12 +75,25 @@ bool wxBitmapButton::Create(wxWindow *parent, wxWindowID id, const wxBitmap& bit
   if ( height == -1 && bitmap.Ok())
     height = bitmap.GetHeight() + 2*m_marginY;
 
+	long msStyle = WS_VISIBLE | WS_TABSTOP | WS_CHILD | BS_OWNERDRAW ;
+
+#ifdef __WIN32__
+    if(m_windowStyle & wxBU_LEFT)
+        msStyle |= BS_LEFT;
+    if(m_windowStyle & wxBU_RIGHT)
+        msStyle |= BS_RIGHT;
+    if(m_windowStyle & wxBU_TOP)
+        msStyle |= BS_TOP;
+    if(m_windowStyle & wxBU_BOTTOM)
+        msStyle |= BS_BOTTOM;
+#endif
+
   m_hWnd = (WXHWND)CreateWindowEx
                    (
                     0,
                     wxT("BUTTON"),
                     wxT(""),
-                    WS_VISIBLE | WS_TABSTOP | WS_CHILD | BS_OWNERDRAW ,
+                    msStyle,
                     0, 0, 0, 0, 
                     GetWinHwnd(parent),
                     (HMENU)m_windowId,
@@ -102,6 +115,9 @@ void wxBitmapButton::SetBitmapLabel(const wxBitmap& bitmap)
 {
   m_buttonBitmap = bitmap;
 }
+
+// VZ: should be at the very least less than wxDEFAULT_BUTTON_MARGIN
+#define FOCUS_MARGIN 3
 
 bool wxBitmapButton::MSWOnDraw(WXDRAWITEMSTRUCT *item)
 {
@@ -144,8 +160,22 @@ bool wxBitmapButton::MSWOnDraw(WXDRAWITEMSTRUCT *item)
     int height = lpDIS->rcItem.bottom - y;
     int wBmp   = bitmap->GetWidth();
     int hBmp   = bitmap->GetHeight();
-    int x1     = x + (width - wBmp) / 2;
-    int y1     = y + (height - hBmp) / 2;
+
+	int x1,y1;
+	
+    if(m_windowStyle & wxBU_LEFT)
+        x1 = x + (FOCUS_MARGIN+1);
+    else if(m_windowStyle & wxBU_RIGHT)
+        x1 = x + (width - wBmp) - (FOCUS_MARGIN+1);
+    else
+        x1 = x + (width - wBmp) / 2;
+
+    if(m_windowStyle & wxBU_TOP)
+        y1 = y + (FOCUS_MARGIN+1);
+    else if(m_windowStyle & wxBU_BOTTOM)
+        y1 = y + (height - hBmp) - (FOCUS_MARGIN+1);
+    else
+        y1 = y + (height - hBmp) / 2;
 
     if ( isSelected && autoDraw )
     {
@@ -307,9 +337,6 @@ void wxBitmapButton::DrawFace( WXHDC dc, int left, int top, int right, int botto
 
 #endif // defined(__WIN95__)
 
-
-// VZ: should be at the very least less than wxDEFAULT_BUTTON_MARGIN
-#define FOCUS_MARGIN 3
 
 void wxBitmapButton::DrawButtonFocus( WXHDC dc, int left, int top, int right, int bottom, bool sel )
 {

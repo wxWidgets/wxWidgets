@@ -19,15 +19,16 @@
 #   pragma hdrstop
 #endif
 
-#if wxUSE_HTML
+#if wxUSE_HTML && wxUSE_STREAMS
 
 #ifndef WX_PRECOMP
-#   include "wx/string.h"
-#   include "wx/utils.h"
-#   include "wx/list.h"
-#   include "wx/intl.h"
-#   include "wx/layout.h"
-#   include "wx/combobox.h"
+    #include "wx/string.h"
+    #include "wx/utils.h"
+    #include "wx/list.h"
+    #include "wx/intl.h"
+    #include "wx/layout.h"
+    #include "wx/combobox.h"
+    #include "wx/button.h"
 #endif
 
 #include "wx/helpbase.h"
@@ -266,7 +267,7 @@ wxHelpControllerHtml::~wxHelpControllerHtml(void)
 #endif
 
 bool
-wxHelpControllerHtml::DisplayHelp(wxString const &relativeURL)
+wxHelpControllerHtml::DisplayHelp(const wxString &relativeURL)
 {
    wxBusyCursor b; // display a busy cursor
 

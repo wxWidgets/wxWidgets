@@ -95,7 +95,7 @@ is destroyed.
 
 \func{wxObject *}{Get}{\param{long}{ key}}
 
-\func{wxObject *}{Get}{\param{const wxString\& }{ key}}
+\func{wxObject *}{Get}{\param{const char*}{ key}}
 
 Gets data from the hash table, using an integer or string key (depending on which
 has table constructor was used).
@@ -121,12 +121,11 @@ description for \helpref{wxNode}{wxnode}. The user will probably only wish to us
 
 \func{void}{Put}{\param{long}{ key}, \param{wxObject *}{object}}
 
-\func{void}{Put}{\param{const wxString\& }{ key}, \param{wxObject *}{object}}
+\func{void}{Put}{\param{const char*}{ key}, \param{wxObject *}{object}}
 
 Inserts data into the hash table, using an integer or string key (depending on which
 has table constructor was used). The key string is copied and stored by the hash
 table implementation.
-
 
 \membersection{wxList::GetCount}
 

@@ -165,7 +165,6 @@ void wxListBase::DoCopy(const wxListBase& list)
     wxASSERT_MSG( !list.m_destroy,
                   wxT("copying list which owns it's elements is a bad idea") );
 
-    m_count = list.m_count;
     m_destroy = list.m_destroy;
     m_keyType = list.m_keyType;
     m_nodeFirst =
@@ -204,6 +203,8 @@ void wxListBase::DoCopy(const wxListBase& list)
                 break;
             }
     }
+
+    wxASSERT_MSG( m_count == list.m_count, _T("logic error in wxList::DoCopy") );
 }
 
 wxListBase::~wxListBase()

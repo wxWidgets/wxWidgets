@@ -28,11 +28,15 @@
         $file =~ s/cp?p?$/obj/;
         $project{$tag} .= $file . " "
     }
+    
+    foreach $file (sort keys %wxHTML) {
+        next if $wxHTML{$file} =~ /\b16\b/;
+
+        $file =~ s/cp?p?$/obj/;
+        $project{"WXHTMLOBJS"} .= $file . " "
+    }
 
     foreach $file (sort keys %wxCommon) {
-        #! doesn't compile, apparently
-        next if $file =~ /^imagjpeg\./;
-
         $isCFile = $file =~ /\.c$/;
         $file =~ s/cp?p?$/obj/;
         $project{"WXCOMMONOBJS"} .= $file . " ";
@@ -85,13 +89,16 @@ LIBTARGET   = $(WXLIB)\wx.lib
 DUMMY=dummydll
 # ODBCLIB     = ..\..\contrib\odbc\odbc32.lib
 
-EXTRATARGETS = xpm png zlib
-EXTRATARGETSCLEAN = clean_xpm clean_png clean_zlib
+EXTRATARGETS = xpm png zlib jpeg tiff
+EXTRATARGETSCLEAN = clean_xpm clean_png clean_zlib clean_jpeg clean_tiff
 GENDIR=$(WXDIR)\src\generic
 COMMDIR=$(WXDIR)\src\common
 XPMDIR=$(WXDIR)\src\xpm
+JPEGDIR=$(WXDIR)\src\jpeg
+TIFFDIR=$(WXDIR)\src\tiff
 MSWDIR=$(WXDIR)\src\msw
 OLEDIR=$(MSWDIR)\ole
+HTMLDIR=$(WXDIR)\src\html
 
 DOCDIR = $(WXDIR)\docs
 
@@ -107,10 +114,12 @@ COMMONOBJS = &
 
 MSWOBJS = #$ ExpandGlue("WXMSWOBJS", "", " &\n\t")
 
-# Add $(NONESSENTIALOBJS) if wanting generic dialogs, PostScript etc.
-OBJECTS = $(COMMONOBJS) $(GENERICOBJS) $(MSWOBJS)
+HTMLOBJS = #$ ExpandGlue("WXHTMLOBJS", "", " &\n\t")
 
-all:        $(OBJECTS) $(LIBTARGET) $(EXTRATARGETS)
+# Add $(NONESSENTIALOBJS) if wanting generic dialogs, PostScript etc.
+OBJECTS = $(COMMONOBJS) $(GENERICOBJS) $(MSWOBJS) $(HTMLOBJS)
+
+all:        $(OBJECTS) $(LIBTARGET) $(EXTRATARGETS) .SYMBOLIC
 
 $(LIBTARGET) : $(OBJECTS)
     %create tmp.lbc
@@ -207,6 +216,23 @@ $(COMMDIR)\lex_yy.c:    $(COMMDIR)\doslex.c
                  '  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<' . "\n\n";
     }
 #$}
+
+
+########################################################
+# HTML objects (always compiled)
+
+#${
+    $_ = $project{"WXHTMLOBJS"};
+    my @objs = split;
+    foreach (@objs) {
+        $text .= $_;
+        s/\.obj$//;
+        $text .= ':     $(HTMLDIR)\\';
+        $text .= $_ . ".cpp\n" .
+                 '  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<' . "\n\n";
+    }
+#$}
+
 
 crbuffri.obj: $(XPMDIR)\crbuffri.c
   *$(CC) $(CPPFLAGS) $(IFLAGS) $<
@@ -351,6 +377,26 @@ zlib:   .SYMBOLIC
 
 clean_zlib:   .SYMBOLIC
     cd $(WXDIR)\src\zlib
+    wmake -f makefile.wat clean
+    cd $(WXDIR)\src\msw
+
+jpeg:    .SYMBOLIC
+    cd $(WXDIR)\src\jpeg
+    wmake -f makefile.wat all
+    cd $(WXDIR)\src\msw
+
+clean_jpeg:   .SYMBOLIC
+    cd $(WXDIR)\src\jpeg
+    wmake -f makefile.wat clean
+    cd $(WXDIR)\src\msw
+
+tiff:    .SYMBOLIC
+    cd $(WXDIR)\src\tiff
+    wmake -f makefile.wat all
+    cd $(WXDIR)\src\msw
+
+clean_tiff:   .SYMBOLIC
+    cd $(WXDIR)\src\tiff
     wmake -f makefile.wat clean
     cd $(WXDIR)\src\msw
 

@@ -222,10 +222,13 @@ long WXDLLEXPORT wxGetElapsedTime(bool resetTimer = TRUE);
 // ----------------------------------------------------------------------------
 
 // Get number of seconds since local time 00:00:00 Jan 1st 1970.
-long WXDLLEXPORT wxGetLocalTime();
+extern long WXDLLEXPORT wxGetLocalTime();
 
 // Get number of seconds since GMT 00:00:00, Jan 1st 1970.
-long WXDLLEXPORT wxGetUTCTime();
+extern long WXDLLEXPORT wxGetUTCTime();
+
+// Get number of milliseconds since local time 00:00:00 Jan 1st 1970
+extern wxLongLong WXDLLEXPORT wxGetLocalTimeMillis();
 
 #define wxGetCurrentTime() wxGetLocalTime()
 

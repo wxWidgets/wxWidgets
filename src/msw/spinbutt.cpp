@@ -106,7 +106,7 @@ bool wxSpinButton::Create(wxWindow *parent,
         y = 0;
 
     // translate the styles
-    DWORD wstyle = WS_VISIBLE | WS_CHILD | WS_TABSTOP |
+    DWORD wstyle = WS_VISIBLE | WS_CHILD | WS_TABSTOP | /*  WS_CLIPSIBLINGS | */
                    UDS_NOTHOUSANDS | // never useful, sometimes harmful
                    UDS_SETBUDDYINT;  // it doesn't harm if we don't have buddy
 
@@ -132,7 +132,7 @@ bool wxSpinButton::Create(wxWindow *parent,
 
     if ( !m_hWnd )
     {
-        wxLogLastError("CreateUpDownControl");
+        wxLogLastError(wxT("CreateUpDownControl"));
 
         return FALSE;
     }
@@ -220,6 +220,9 @@ bool wxSpinButton::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
 #else
     LPNMUPDOWN lpnmud = (LPNMUPDOWN)lParam;
 #endif
+
+    if (lpnmud->hdr.hwndFrom != GetHwnd()) // make sure it is the right control
+        return FALSE;
 
     wxSpinEvent event(lpnmud->iDelta > 0 ? wxEVT_SCROLL_LINEUP
                                          : wxEVT_SCROLL_LINEDOWN,

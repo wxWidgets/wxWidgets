@@ -20,9 +20,11 @@
 enum    DialogModes {mView,mCreate,mEdit,mSearch};
 
 // ID for the menu quit command
-#define FILE_CREATE            100
-#define FILE_EXIT                199
-#define EDIT_PARAMETERS        200
+#define FILE_CREATE           100
+#define FILE_RECREATE_TABLE   110
+#define FILE_RECREATE_INDEXES 120
+#define FILE_EXIT             199
+#define EDIT_PARAMETERS       200
 #define ABOUT_DEMO            300
 
 // this seems to be missing, Robert Roebling (?)
@@ -74,9 +76,9 @@ class CstructContact : public wxObject
 
 
 //
-// NOTE: Ccontact inherits wxTable, which gives access to all the database functionality
+// NOTE: Ccontact inherits wxDbTable, which gives access to all the database functionality
 //
-class Ccontact : public wxTable, public CstructContact
+class Ccontact : public wxDbTable, public CstructContact
 { 
     private:
         bool                 freeDbConn;
@@ -86,7 +88,7 @@ class Ccontact : public wxTable, public CstructContact
         wxString             whereStr;
         wxString             qryWhereStr;   // Where string returned from the query dialog
 
-        Ccontact(wxDB *pwxDB=NULL);
+        Ccontact(wxDb *pwxDb=NULL);
         ~Ccontact();
 
         void                 Initialize();
@@ -129,11 +131,13 @@ class DatabaseDemoFrame: public wxFrame
 
         void    OnCloseWindow(wxCloseEvent& event);
         void    OnCreate(wxCommandEvent& event);
+        void    OnRecreateTable(wxCommandEvent& event);
+        void    OnRecreateIndexes(wxCommandEvent& event);
         void    OnExit(wxCommandEvent& event);
         void    OnEditParameters(wxCommandEvent& event);
         void    OnAbout(wxCommandEvent& event);
 
-        void    CreateDataTable();
+        void    CreateDataTable(bool recreate);
         void    BuildEditorDialog();
         void    BuildParameterDialog(wxWindow *parent);
 
@@ -147,8 +151,8 @@ DECLARE_EVENT_TABLE()
 class CeditorDlg : public wxPanel
 {
     private:
-        bool                         widgetPtrsSet;
-        wxString                     saveName;
+        bool             widgetPtrsSet;
+        wxString         saveName;
 
         // Pointers to all widgets on the dialog
         wxButton        *pCreateBtn,  *pEditBtn,      *pDeleteBtn,  *pCopyBtn,  *pSaveBtn,  *pCancelBtn;
@@ -163,8 +167,9 @@ class CeditorDlg : public wxPanel
         wxStaticText    *pNativeLangMsg;
 
     public:
-        enum DialogModes     mode;
-        Ccontact            *Contact;    // this is the table object that will be being manipulated
+        bool             initialized;
+        enum DialogModes mode;
+        Ccontact        *Contact;    // this is the table object that will be being manipulated
 
         CeditorDlg(wxWindow *parent);
 
@@ -173,6 +178,7 @@ class CeditorDlg : public wxPanel
         void    OnCommand(wxWindow& win, wxCommandEvent& event);
         void    OnActivate(bool) {};  // necessary for hot keys
 
+        bool    Initialize();
         void    FieldsEditable();
         void    SetMode(enum DialogModes m);
         bool    PutData();
@@ -307,11 +313,11 @@ char * const langQRY_BETWEEN      = "column BETWEEN value AND value";
 class CqueryDlg : public wxDialog
 {
     private:
-        wxColInf    *colInf;        // Column inf. returned by db->GetColumns()
-        wxTable     *dbTable;
+        wxDbColInf  *colInf;        // Column inf. returned by db->GetColumns()
+        wxDbTable   *dbTable;
         char        *masterTableName;
         char        *pWhere;        // A pointer to the storage for the resulting where clause
-        wxDB        *pDB;
+        wxDb        *pDB;
 
     public:
         bool                     widgetPtrsSet;
@@ -343,9 +349,9 @@ class CqueryDlg : public wxDialog
         wxStaticBox             *pQueryHintGrp;
         wxStaticText            *pQueryHintMsg;
 
-        wxTextCtrl                 *pFocusTxt;
+        wxTextCtrl              *pFocusTxt;
 
-        CqueryDlg(wxWindow *parent, wxDB *pDb, char *tblName[], char *pWhereArg);
+        CqueryDlg(wxWindow *parent, wxDb *pDb, char *tblName[], char *pWhereArg);
         ~CqueryDlg();
 
         void        OnButton( wxCommandEvent &event );

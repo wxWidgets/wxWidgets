@@ -1,6 +1,5 @@
 *.spec
 BuildCVS.txt
-acconfig.h
 *.m4
 autogen.sh
 configure
@@ -25,6 +24,7 @@ distrib/msw/*.bat
 distrib/msw/*.cpp
 distrib/msw/*.txt
 distrib/msw/tardist
+distrib/msw/tarwxmotif
 distrib/msw/tmake/*.t
 distrib/msw/tmake/Makefile
 distrib/msw/tmake/filelist.txt
@@ -32,12 +32,15 @@ distrib/msw/tmake/makeall.bat
 distrib/msw/tmake/makeall.sh
 distrib/msw/tmake/wxwin.pro
 distrib/msw/tmake/tmake.conf
-distrib/gtk/*
+distrib/gtk/*.txt
+distrib/gtk/Setup
+distrib/gtk/copy_src
 
 locale/*.po
 locale/*.mo
 
 docs/readme.txt
+docs/readme_vms.txt
 docs/install.txt
 docs/release.txt
 docs/changes.txt
@@ -58,6 +61,7 @@ docs/html/icons/*.gif
 docs/html/icons/*.png
 docs/html/icons/*.jpg
 docs/tech/*.txt
+docs/tech/*.htm
 
 src/makeenvs/*.env
 src/make.env
@@ -103,7 +107,11 @@ src/png/TODO
 src/png/*.1
 src/png/*.3
 src/png/*.5
-src/png/scripts/*
+src/png/scripts/*.ppc
+src/png/scripts/*.bat
+src/png/scripts/makefile*
+src/png/scripts/*.com
+src/png/scripts/*.def
 
 src/zlib/*.c
 src/zlib/*.h
@@ -236,6 +244,8 @@ samples/sockets/client.b32
 samples/sockets/server.b32
 samples/sockets/client.bcc
 samples/sockets/server.bcc
+samples/sockets/client.g95
+samples/sockets/server.g95
 samples/sockets/*.xbm
 samples/sockets/*.xpm
 samples/sockets/*.ico
@@ -255,6 +265,10 @@ samples/help/*.hlp
 samples/help/*.cnt
 samples/help/*.zip
 samples/help/*.htb
+samples/help/*.chm
+samples/help/*.hhp
+samples/help/*.hhk
+samples/help/*.hhc
 samples/help/*.hpj
 samples/help/*.tex
 samples/help/*.ini
@@ -594,6 +608,7 @@ samples/dnd/*.xpm
 samples/dnd/*.png
 samples/dnd/*.ico
 samples/dnd/*.txt
+samples/dnd/*.cur
 
 samples/tab/*.cpp
 samples/tab/*.h
@@ -642,6 +657,7 @@ samples/image/*.pnm
 samples/image/*.pcx
 samples/image/*.jpg
 samples/image/*.gif
+samples/image/*.tif
 samples/image/*.ico
 samples/image/*.txt
 
@@ -670,6 +686,8 @@ samples/ipc/client.bcc
 samples/ipc/server.bcc
 samples/ipc/client.dos
 samples/ipc/server.dos
+samples/ipc/client.g95
+samples/ipc/server.g95
 samples/ipc/*.rc
 samples/ipc/*.def
 samples/ipc/*.bmp
@@ -1063,6 +1081,7 @@ demos/life/*.def
 demos/life/*.ico
 demos/life/*.xpm
 demos/life/*.txt
+demos/life/*.lif
 demos/life/bitmaps/*.xpm
 demos/life/bitmaps/*.bmp
 

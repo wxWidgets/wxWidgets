@@ -71,6 +71,8 @@ LRESULT APIENTRY wxStatusBarProc(HWND hwnd,
 {
     switch (message) {
         case WM_COMMAND:
+        case WM_DRAWITEM:
+        case WM_MEASUREITEM:
         case WM_SIZE:
         case WM_MOVE:
         case WM_MOUSEMOVE:
@@ -120,7 +122,7 @@ bool wxStatusBar95::Create(wxWindow *parent,
 
     m_windowId = id == -1 ? NewControlId() : id;
 
-    DWORD wstyle = WS_CHILD | WS_VISIBLE;
+    DWORD wstyle = WS_CHILD | WS_VISIBLE /* | WS_CLIPSIBLINGS */ ;
 
     // setting SBARS_SIZEGRIP is perfectly useless: it's always on by default
     // (at least in the version of comctl32.dll I'm using), and the only way to
@@ -186,21 +188,21 @@ void wxStatusBar95::CopyFieldsWidth(const int widths[])
 
 void wxStatusBar95::SetFieldsCount(int nFields, const int *widths)
 {
-  // this is Windows limitation
-  wxASSERT_MSG( (nFields > 0) && (nFields < 255), _T("too many fields") );
+    // this is a Windows limitation
+    wxASSERT_MSG( (nFields > 0) && (nFields < 255), _T("too many fields") );
 
-  m_nFields = nFields;
+    m_nFields = nFields;
 
-  CopyFieldsWidth(widths);
-  SetFieldsWidth();
+    CopyFieldsWidth(widths);
+    SetFieldsWidth();
 }
 
 void wxStatusBar95::SetStatusWidths(int n, const int widths[])
 {
-  wxASSERT_MSG( n == m_nFields, _T("field number mismatch") );
+    wxASSERT_MSG( n == m_nFields, _T("field number mismatch") );
 
-  CopyFieldsWidth(widths);
-  SetFieldsWidth();
+    CopyFieldsWidth(widths);
+    SetFieldsWidth();
 }
 
 void wxStatusBar95::SetFieldsWidth()
@@ -319,7 +321,7 @@ bool wxStatusBar95::GetFieldRect(int i, wxRect& rect) const
     RECT r;
     if ( !::SendMessage(GetHwnd(), SB_GETRECT, i, (LPARAM)&r) )
     {
-        wxLogLastError("SendMessage(SB_GETRECT)");
+        wxLogLastError(wxT("SendMessage(SB_GETRECT)"));
     }
 
     wxCopyRECTToRect(r, rect);
