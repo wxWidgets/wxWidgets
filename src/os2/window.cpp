@@ -347,12 +347,22 @@ bool wxWindow::Create(
 
     if (pParent)
     {
+        int                         nTempy;
+
         pParent->AddChild(this);
         hParent = GetWinHwnd(pParent);
         //
         // OS2 uses normal coordinates, no bassackwards Windows ones
         //
-        vPos.y = pParent->GetSize().y - (vPos.y + rSize.y);
+        nTempy = pParent->GetSize().y - (vPos.y + rSize.y);
+#if 0
+        if (nTempy < 0)
+        {
+            nTempy = pParent->GetSize().y + (vPos.y + rSize.y);
+            pParent->SetSize(0, 0, pParent->GetSize().x, nTempy);
+        }
+#endif
+        vPos.y = nTempy;
     }
     else
     {
@@ -602,7 +612,24 @@ void wxWindow::SetScrollRange(
 , bool                              bRefresh
 )
 {
-    ::WinSendMsg(GetHwnd(), SBM_SETSCROLLBAR, (MPARAM)0, MPFROM2SHORT(0, nRange));
+    int                             nRange1 = nRange;
+    int                             nPageSize = GetScrollPage(nOrient);
+
+    if (nPpageSize > 1 && nRange > 0)
+    {
+        nRange1 += (nPageSize - 1);
+    }
+
+    if (nOrient == wxHORIZONTAL)
+    {
+        ::WinSendMsg(m_hWndScrollBarHorz, SBM_SETSCROLLBAR, (MPARAM)0, MPFROM2SHORT(0, (SHORT)nRange1));
+        ::WinSendMsg(m_hWndScrollBarHorz, SBM_SETTHUMBSIZE, MPFROM2SHORT((SHORT)nThumbVisible, (SHORT)nRange1), (MPARAM)0);
+    }
+    else
+    {
+        ::WinSendMsg(m_hWndScrollBarVert, SBM_SETSCROLLBAR, (MPARAM)0, MPFROM2SHORT(0, (SHORT)nRange1));
+        ::WinSendMsg(m_hWndScrollBarVert, SBM_SETTHUMBSIZE, MPFROM2SHORT((SHORT)nThumbVisible, (SHORT)nRange1), (MPARAM)0);
+    }
 } // end of wxWindow::SetScrollRange
 
 void wxWindow::SetScrollPage(
@@ -611,11 +638,11 @@ void wxWindow::SetScrollPage(
 , bool                              bRefresh
 )
 {
-    if ( orient == wxHORIZONTAL )
-        m_xThumbSize = page;
+    if (nOrient == wxHORIZONTAL )
+        m_nXThumbSize = nPage;
     else
-        m_yThumbSize = page;
-}
+        m_nYThumbSize = nPage;
+} // end of wxWindow::SetScrollPage
 
 int wxWindow::OldGetScrollRange(
   int                               nOrient
@@ -647,7 +674,10 @@ int  wxWindow::GetScrollPos(
   int                               nOrient
 ) const
 {
-    return((int)::WinSendMsg(GetHwnd(), SBM_QUERYPOS, (MPARAM)NULL, (MPARAM)NULL));
+    if (nOrient == wxHORIZONTAL)
+        return((int)::WinSendMsg(m_hWndScrollBarHorz, SBM_QUERYPOS, (MPARAM)NULL, (MPARAM)NULL));
+    else
+        return((int)::WinSendMsg(m_hWndScrollBarVert, SBM_QUERYPOS, (MPARAM)NULL, (MPARAM)NULL));
 } // end of wxWindow::GetScrollPos
 
 int wxWindow::GetScrollRange(
@@ -656,7 +686,10 @@ int wxWindow::GetScrollRange(
 {
     MRESULT                         mr;
 
-    mr = ::WinSendMsg(GetHwnd(), SBM_QUERYRANGE, (MPARAM)NULL, (MPARAM)NULL);
+    if (nOrient == wxHORIZONTAL)
+        mr = ::WinSendMsg(m_hWndScrollBarHorz, SBM_QUERYRANGE, (MPARAM)NULL, (MPARAM)NULL);
+    else
+        mr = ::WinSendMsg(m_hWndScrollBarVert, SBM_QUERYRANGE, (MPARAM)NULL, (MPARAM)NULL);
     return((int)SHORT2FROMMR(mr));
 } // end of wxWindow::GetScrollRange
 
@@ -664,12 +697,10 @@ int wxWindow::GetScrollThumb(
   int                               nOrient
 ) const
 {
-    WNDPARAMS                       vWndParams;
-    PSBCDATA                        pSbcd;
-
-    ::WinSendMsg(GetHwnd(), WM_QUERYWINDOWPARAMS, (MPARAM)&vWndParams, (MPARAM)NULL);
-    pSbcd = (PSBCDATA)vWndParams.pCtlData;
-    return((int)pSbcd->posThumb);
+    if (nOrient == wxHORIZONTAL )
+        return m_nXThumbSize;
+    else
+        return m_nYThumbSize;
 } // end of wxWindow::GetScrollThumb
 
 void wxWindow::SetScrollPos(
@@ -678,7 +709,10 @@ void wxWindow::SetScrollPos(
 , bool                              bRefresh
 )
 {
-    ::WinSendMsg(GetHwnd(), SBM_SETPOS, (MPARAM)nPos, (MPARAM)NULL);
+    if (nOrient == wxHORIZONTAL )
+        ::WinSendMsg(m_hWndScrollBarHorz, SBM_SETPOS, (MPARAM)nPos, (MPARAM)NULL);
+    else
+        ::WinSendMsg(m_hWndScrollBarVert, SBM_SETPOS, (MPARAM)nPos, (MPARAM)NULL);
 } // end of wxWindow::SetScrollPos(
 
 void wxWindow::SetScrollbar(
@@ -713,7 +747,12 @@ void wxWindow::SetScrollbar(
         ulStyle |= SBS_HORZ;
         if (m_hWndScrollBarHorz == 0L)
         {
-            m_hWndScrollBarHorz = ::WinCreateWindow( hWnd
+            //
+            // We create the scrollbars with the desktop so that they are not
+            // registered as child windows of the window in order that child
+            // windows may be scrolled without scrolling the scrollbars themselves!
+            //
+            m_hWndScrollBarHorz = ::WinCreateWindow( HWND_DESKTOP
                                                     ,WC_SCROLLBAR
                                                     ,(PSZ)NULL
                                                     ,ulStyle
@@ -723,7 +762,7 @@ void wxWindow::SetScrollbar(
                                                     ,20
                                                     ,hWnd
                                                     ,HWND_TOP
-                                                    ,-1
+                                                    ,FID_HORZSCROLL
                                                     ,&vInfo
                                                     ,NULL
                                                    );
@@ -763,7 +802,7 @@ void wxWindow::SetScrollbar(
         ulStyle |= SBS_VERT;
         if (m_hWndScrollBarVert == 0L)
         {
-            m_hWndScrollBarVert = ::WinCreateWindow( hWnd
+            m_hWndScrollBarVert = ::WinCreateWindow( HWND_DESKTOP
                                                     ,WC_SCROLLBAR
                                                     ,(PSZ)NULL
                                                     ,ulStyle
@@ -773,7 +812,7 @@ void wxWindow::SetScrollbar(
                                                     ,vRect.yTop - vRect.yBottom
                                                     ,hWnd
                                                     ,HWND_TOP
-                                                    ,-1
+                                                    ,FID_VERTSCROLL
                                                     ,&vInfo
                                                     ,NULL
                                                    );
@@ -817,20 +856,38 @@ void wxWindow::ScrollWindow(
 , const wxRect*                     pRect
 )
 {
+    RECTL                           vRect;
     RECTL                           vRect2;
 
+    nDy *= -1; // flip the sign of Dy as OS/2 is opposite wxWin.
     if (pRect)
     {
         vRect2.xLeft   = pRect->x;
-        vRect2.yTop    = pRect->y;
+        vRect2.yTop    = pRect->y + pRect->height;
         vRect2.xRight  = pRect->x + pRect->width;
-        vRect2.yBottom = pRect->y + pRect->height;
+        vRect2.yBottom = pRect->y;
     }
 
     if (pRect)
-        ::WinScrollWindow(GetHwnd(), (LONG)nDx, (LONG)nDy, &vRect2, NULL, NULLHANDLE, NULL, 0L);
+        ::WinScrollWindow( GetHwnd()
+                          ,(LONG)nDx
+                          ,(LONG)nDy
+                          ,&vRect2
+                          ,NULL
+                          ,NULLHANDLE
+                          ,NULL
+                          ,SW_SCROLLCHILDREN | SW_INVALIDATERGN
+                         );
     else
-        ::WinScrollWindow(GetHwnd(), nDx, nDy, NULL, NULL, NULLHANDLE, NULL, 0L);
+        ::WinScrollWindow( GetHwnd()
+                          ,nDx
+                          ,nDy
+                          ,NULL
+                          ,NULL
+                          ,NULLHANDLE
+                          ,NULL
+                          ,SW_SCROLLCHILDREN | SW_INVALIDATERGN
+                         );
 } // end of wxWindow::ScrollWindow
 
 // ---------------------------------------------------------------------------
@@ -1874,9 +1931,18 @@ void wxWindow::UnpackScroll(
 , WXHWND*                           phWnd
 )
 {
-    *pCode = LOWORD(wParam);
-    *pPos  = HIWORD(wParam);
-    *phWnd = (WXHWND)lParam;
+    ULONG                           ulId;
+    HWND                            hWnd;
+
+    ulId    = (ULONG)LONGFROMMP(wParam);
+    hWnd = ::WinWindowFromID(GetHwnd(), ulId);
+    if (hWnd == m_hWndScrollBarHorz || hWnd == m_hWndScrollBarVert)
+        *phWnd = NULLHANDLE;
+    else
+        *phWnd = hWnd;
+
+    *pPos  = SHORT1FROMMP(lParam);
+    *pCode = SHORT2FROMMP(lParam);
 } // end of wxWindow::UnpackScroll
 
 void wxWindow::UnpackMenuSelect(
