@@ -256,7 +256,7 @@ private:
  */
 
 #ifndef wxUSE_GENERIC_MDI_AS_NATIVE
-#if defined(__WXUNIVERSAL__) || defined(__WXPM__)
+#if defined(__WXUNIVERSAL__) || defined(__WXPM__) || defined(__WXCOCOA__)
 #define wxUSE_GENERIC_MDI_AS_NATIVE   1
 #else
 #define wxUSE_GENERIC_MDI_AS_NATIVE   0
