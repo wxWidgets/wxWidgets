@@ -23,6 +23,8 @@ makefiles, e.g. wx24dsp or rpmspec ones.
         <define-tag name="optimize"/>
         <define-tag name="warnings"/>
         <define-tag name="threading"/>
+        <define-tag name="cxx-rtti"/>
+        <define-tag name="cxx-exceptions"/>
         <define-tag name="cppflags"/>
         <define-tag name="cflags"/>
         <define-tag name="cxxflags"/>
