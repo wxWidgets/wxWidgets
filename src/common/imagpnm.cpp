@@ -37,7 +37,7 @@ IMPLEMENT_DYNAMIC_CLASS(wxPNMHandler,wxImageHandler)
 
 #if wxUSE_STREAMS
 
-  //#include <stream.h> // for cout
+//#include <stream.h> // for cout
 
 void Skip_Comment(wxInputStream &stream)
 {
@@ -64,11 +64,10 @@ bool wxPNMHandler::LoadFile( wxImage *image, wxInputStream& stream, bool WXUNUSE
      * Read the PNM header
      */
 
-    wxBufferedInputStream buf_stream(stream);
-    wxTextInputStream text_stream(buf_stream);
+    wxTextInputStream text_stream(stream);
 
-    Skip_Comment(buf_stream);
-    if (buf_stream.GetC()==_T('P')) c=buf_stream.GetC();
+    Skip_Comment(stream);
+    if (stream.GetC()==_T('P')) c=stream.GetC();
 
     switch (c)
       {
@@ -85,12 +84,12 @@ bool wxPNMHandler::LoadFile( wxImage *image, wxInputStream& stream, bool WXUNUSE
       }
 
     text_stream >> line; // for the \n
-    Skip_Comment(buf_stream);
+    Skip_Comment(stream);
     text_stream >> width >> height ;
-    Skip_Comment(buf_stream); 
+    Skip_Comment(stream); 
     text_stream >> maxval;
 
-    //cout << width << " " << height << " " << maxval << endl;
+    //cout << line << " " << width << " " << height << " " << maxval << endl;
     image->Create( width, height );
     unsigned char *ptr = image->GetData();
     if (!ptr)
@@ -99,7 +98,9 @@ bool wxPNMHandler::LoadFile( wxImage *image, wxInputStream& stream, bool WXUNUSE
 	return FALSE;
     }
 
-    if (c=='3') // Ascii RBG
+    wxBufferedInputStream buf_stream(stream);
+
+   if (c=='3') // Ascii RBG
       { 
 	wxUint32 value, size=3*width*height;
 	for (wxUint32 i=0; i<size; ++i)
