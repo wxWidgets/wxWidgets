@@ -7,7 +7,6 @@
  */
 
 #include "wx/setup.h"
-#include "wx/defs.h"
 
 #if wxUSE_SOCKETS
 
@@ -15,11 +14,20 @@
 
 #include <assert.h>
 #include <sys\types.h>
+#ifdef __EMX__
+#include <sys/time.h>
+#include <netinet/in.h>
+#include <arpa/inet.h>
+#include <netdb.h>
+#include <errno.h>
+#define HAVE_INET_ADDR
+#else
 #include <utils.h>
 #include <sys\time.h>
 #include <in.h>
 #include <netdb.h>
 #include <nerrno.h>
+#endif
 #if defined(__VISAGECPP__) && __IBMCPP__ < 400
 #include <socket.h>
 #include <ioctl.h>
@@ -28,6 +36,7 @@
 #include <sys\socket.h>
 #include <sys\ioctl.h>
 #include <sys\select.h>
+#ifndef __EMX__
 #define select(a,b,c,d,e) bsdselect(a,b,c,d,e)
 int _System bsdselect(int,
                       struct fd_set *,
@@ -35,6 +44,7 @@ int _System bsdselect(int,
                       struct fd_set *,
                       struct timeval *);
 int _System soclose(int);
+#endif
 #endif
 
 #include <string.h>
