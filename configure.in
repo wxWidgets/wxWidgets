@@ -957,6 +957,8 @@ if test "x$wxUSE_COCOA" != "x" -a "$wxUSE_COCOA" != "0" ; then
   wxUSE_CLIPBOARD=no
   wxUSE_DRAG_AND_DROP=no
   wxUSE_DATAOBJ=no
+  # Generic notebook requires tab dialog
+  DEFAULT_wxUSE_TABDIALOG=yes
   DEFAULT_wxUSE_TOOLBAR_NATIVE=no
   DEFAULT_wxUSE_GAUGE=no
   DEFAULT_wxUSE_SCROLLBAR=no
