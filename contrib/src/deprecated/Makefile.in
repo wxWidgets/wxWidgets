@@ -1,0 +1,26 @@
+# $Id$
+
+top_srcdir = @top_srcdir@/..
+top_builddir = ../../..
+libsrc_dir = contrib/src/deprecated
+
+TARGET_LIBNAME=lib@WX_LIBRARY_BASENAME@_deprecated-@WX_RELEASE@
+
+LIBVERSION_CURRENT=@WX_CURRENT@
+LIBVERSION_REVISION=@WX_REVISION@
+LIBVERSION_AGE=@WX_AGE@
+
+
+HEADER_PATH=$(top_srcdir)/contrib/include/wx
+HEADER_SUBDIR=deprecated
+
+HEADERS=prop.h propform.h proplist.h resource.h treelay.h wxexpr.h treelay.h
+
+OBJECTS=prop.o propform.o proplist.o wxexpr.o y_tab.o treelay.cpp
+DEPFILES=$(OBJECTS:.o=.d)
+
+APPEXTRADEFS=-I$(top_srcdir)/contrib/include
+
+include $(top_builddir)/src/makelib.env
+
+-include $(DEPFILES)
