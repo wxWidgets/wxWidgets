@@ -177,6 +177,7 @@ COMMONOBJS = &
 	$(OUTPUTDIR)\radiocmn.obj &
 	$(OUTPUTDIR)\regex.obj &
 	$(OUTPUTDIR)\resource.obj &
+	$(OUTPUTDIR)\rgncmn.obj &
 	$(OUTPUTDIR)\sckaddr.obj &
 	$(OUTPUTDIR)\sckfile.obj &
 	$(OUTPUTDIR)\sckipc.obj &
@@ -359,7 +360,7 @@ $(ARCHINCDIR)\wx:
 $(OUTPUTDIR):
 	@if not exist $^@ mkdir $^@
 
-$(SETUP_H):  $(ARCHINCDIR)\wx
+$(SETUP_H): $(ARCHINCDIR)\wx
     if not exist $(WXDIR)\include\wx\msw\setup.h copy $(WXDIR)\include\wx\msw\setup0.h $(WXDIR)\include\wx\msw\setup.h
 	copy $(WXDIR)\include\wx\msw\setup.h $@
 
@@ -997,6 +998,9 @@ $(OUTPUTDIR)\regex.obj:     $(COMMDIR)\regex.cpp
   *$(CXX) $(CXXFLAGS) $<
 
 $(OUTPUTDIR)\resource.obj:     $(COMMDIR)\resource.cpp
+  *$(CXX) $(CXXFLAGS) $<
+
+$(OUTPUTDIR)\rgncmn.obj:     $(COMMDIR)\rgncmn.cpp
   *$(CXX) $(CXXFLAGS) $<
 
 $(OUTPUTDIR)\sckaddr.obj:     $(COMMDIR)\sckaddr.cpp

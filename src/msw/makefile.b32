@@ -470,6 +470,7 @@ COMMONOBJS = \
 		$(MSWDIR)\radiocmn.obj \
 		$(MSWDIR)\regex.obj \
 		$(MSWDIR)\resource.obj \
+		$(MSWDIR)\rgncmn.obj \
 		$(MSWDIR)\sckaddr.obj \
 		$(MSWDIR)\sckfile.obj \
 		$(MSWDIR)\sckipc.obj \
@@ -1192,6 +1193,8 @@ $(MSWDIR)\radiocmn.obj: $(COMMDIR)\radiocmn.$(SRCSUFF)
 $(MSWDIR)\regex.obj: $(COMMDIR)\regex.$(SRCSUFF)
 
 $(MSWDIR)\resource.obj: $(COMMDIR)\resource.$(SRCSUFF)
+
+$(MSWDIR)\rgncmn.obj: $(COMMDIR)\rgncmn.$(SRCSUFF)
 
 $(MSWDIR)\sckaddr.obj: $(COMMDIR)\sckaddr.$(SRCSUFF)
 

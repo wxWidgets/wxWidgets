@@ -232,6 +232,7 @@ COMMONOBJS = \
 		$(COMMDIR)\$D\radiocmn.obj \
 		$(COMMDIR)\$D\regex.obj \
 		$(COMMDIR)\$D\resource.obj \
+		$(COMMDIR)\$D\rgncmn.obj \
 		$(COMMDIR)\$D\sckaddr.obj \
 		$(COMMDIR)\$D\sckfile.obj \
 		$(COMMDIR)\$D\sckipc.obj \

@@ -624,6 +624,10 @@ SOURCE=.\common\resource.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\common\rgncmn.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\common\sckaddr.cpp
 # End Source File
 # Begin Source File
