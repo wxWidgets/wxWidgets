@@ -8,8 +8,8 @@ Version: %{ver}
 Release: %{rel}
 Copyright: wxWindows Licence
 Group: X11/Libraries
-Source: wxGTK-%{ver}.tar.gz
-URL: http://wxwindows.org
+Source: wxGTK-%{ver}.tar.bz2
+URL: http://www.wxwindows.org
 Packager: Vadim Zeitlin <vadim@wxwindows.org>
 Prefix: %{pref}
 BuildRoot: /var/tmp/%{name}-root

@@ -8,8 +8,8 @@ Version: %{ver}
 Release: %{rel}
 Copyright: wxWindows Licence
 Group: Development/Libraries
-Source: wxBase-%{ver}.tar.gz
-URL: none
+Source: wxBase-%{ver}.tar.bz2
+URL: http://www.wxwindows.org
 Packager: Vadim Zeitlin <vadim@wxwindows.org>
 Prefix: %{pref}
 BuildRoot: /var/tmp/%{name}-root
