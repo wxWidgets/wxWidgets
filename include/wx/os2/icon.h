@@ -73,7 +73,7 @@ public:
                  );
 
     inline wxIcon& operator = (const wxIcon& rIcon)
-       { if (*this == rIcon) Ref(rIcon); return *this; }
+       { if (*this != rIcon) Ref(rIcon); return *this; }
     inline bool operator == (const wxIcon& rIcon)
        { return m_refData == rIcon.m_refData; }
     inline bool operator != (const wxIcon& rIcon)

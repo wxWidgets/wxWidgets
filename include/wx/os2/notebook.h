@@ -28,7 +28,7 @@ class WXDLLEXPORT wxWindow;
 
 // array of notebook pages
 typedef wxWindow WXDLLEXPORT wxNotebookPage;  // so far, any window can be a page
-WX_DEFINE_ARRAY(wxNotebookPage *, wxArrayPages);
+WX_DEFINE_ARRAY(wxNotebookPage *, wxArrayNBPages);
 
 // ----------------------------------------------------------------------------
 // wxNotebook
@@ -151,7 +151,7 @@ protected:
   void ChangePage(int nOldSel, int nSel); // change pages
 
   wxImageList  *m_pImageList; // we can have an associated image list
-  wxArrayPages  m_aPages;     // array of pages
+  wxArrayNBPages  m_aPages;     // array of pages
 
   int m_nSelection;           // the current selection (-1 if none)
 

@@ -47,7 +47,12 @@ public:
     }
 
     // accessors
-    bool IsOk() const { return m_hHandle != 0; }
+    bool IsOk() const
+    {
+        if (m_hHandle == 0)
+            return FALSE;
+        return TRUE;
+    }
 
     void SetSize( int nW
                  ,int nH
@@ -55,7 +60,7 @@ public:
         { m_nWidth = nW; m_nHeight = nH; }
 
     // free the ressources we allocated
-    virtual void Free() = 0;
+    virtual void Free() { };
 
     // for compatibility, the member fields are public
 
@@ -170,9 +175,23 @@ public:
 
     // accessors
     WXHANDLE GetHandle() const
-        { return IsNull() ? 0 : GetGDIImageData()->m_hHandle; }
+    {
+        wxGDIImageRefData*               pData;
+
+        pData = GetGDIImageData();
+        if (!pData)
+            return 0;
+        else
+            return pData->m_hHandle;
+    }
     void SetHandle(WXHANDLE hHandle)
-        { EnsureHasData(); GetGDIImageData()->m_hHandle = hHandle; }
+    {
+        wxGDIImageRefData*               pData;
+
+        EnsureHasData();
+        pData = GetGDIImageData();
+        pData->m_hHandle = hHandle;
+    }
 
     bool Ok() const { return GetHandle() != 0; }
 
