@@ -33,6 +33,21 @@ END_EVENT_TABLE()
 
 #include "wx/mac/uma.h"
 #include "wx/geometry.h"
+
+#ifdef __WXMAC_OSX__
+const short kwxMacToolBarToolDefaultWidth = 32 ;
+const short kwxMacToolBarToolDefaultHeight = 32 ;
+const short kwxMacToolBarTopMargin = 4 ;
+const short kwxMacToolBarLeftMargin = 4 ;
+const short kwxMacToolBorder = 0 ;
+#else
+const short kwxMacToolBarToolDefaultWidth = 24 ;
+const short kwxMacToolBarToolDefaultHeight = 22 ;
+const short kwxMacToolBarTopMargin = 2 ;
+const short kwxMacToolBarLeftMargin = 2 ;
+const short kwxMacToolBorder = 4 ;
+#endif
+
 // ----------------------------------------------------------------------------
 // private classes
 // ----------------------------------------------------------------------------
@@ -202,7 +217,16 @@ void wxToolBarTool::SetPosition(const wxPoint& position)
         x = y = 0 ;
         int mac_x = position.x ;
         int mac_y = position.y ;
-#if !TARGET_API_MAC_OSX
+#ifdef __WXMAC_OSX__
+        wxSize toolSize = m_tbar->GetToolSize() ;    
+        int iconsize = 16 ;
+        if ( toolSize.x >= 32 && toolSize.y >= 32)
+        {
+            iconsize = 32 ;
+        }
+        mac_x += ( toolSize.x - iconsize ) / 2 ;
+        mac_y += ( toolSize.y - iconsize ) / 2  ;
+#else
         WindowRef rootwindow = (WindowRef) GetToolBar()->MacGetTopLevelWindowRef() ;    
         GetToolBar()->MacWindowToRootWindow( &x , &y ) ;
         mac_x += x;
@@ -224,11 +248,6 @@ void wxToolBarTool::SetPosition(const wxPoint& position)
         GetControl()->Move( position ) ;
     }
 }
-
-const short kwxMacToolBarToolDefaultWidth = 24 ;
-const short kwxMacToolBarToolDefaultHeight = 22 ;
-const short kwxMacToolBarTopMargin = 2 ;
-const short kwxMacToolBarLeftMargin = 2 ;
 
 wxToolBarTool::wxToolBarTool(wxToolBar *tbar,
   int id,
@@ -256,12 +275,29 @@ wxToolBarTool::wxToolBarTool(wxToolBar *tbar,
     SInt16 behaviour = kControlBehaviorOffsetContents ;
     if ( CanBeToggled() )
         behaviour += kControlBehaviorToggles ;
-        
+
+#ifdef __WXMAC_OSX__
+    int iconsize = 16 ;
+    if ( toolSize.x >= 32 && toolSize.y >= 32)
+    {
+        iconsize = 32 ;
+    }
+    toolrect.left += ( toolSize.x - iconsize ) / 2 ;
+    toolrect.right = toolrect.left + iconsize ;
+    toolrect.top += ( toolSize.y - iconsize ) / 2  ;
+    toolrect.bottom = toolrect.top + iconsize ;
+    CreateIconControl( window , &toolrect , &info , false , &m_controlHandle ) ;
+#else        
     CreateBevelButtonControl( window , &toolrect , CFSTR("") , kControlBevelButtonNormalBevel , behaviour , &info , 
         0 , 0 , 0 , &m_controlHandle ) ;
+#endif
         
     wxMacReleaseBitmapButton( &info ) ;
-
+    /*
+    SetBevelButtonTextPlacement( m_controlHandle , kControlBevelButtonPlaceBelowGraphic ) ;
+    UMASetControlTitle(  m_controlHandle , label , wxFont::GetDefaultEncoding() ) ;
+    */
+    
     InstallControlEventHandler( (ControlRef) m_controlHandle, GetwxMacToolBarToolEventHandlerUPP(),
         GetEventTypeCount(eventList), eventList, this,NULL);
         
@@ -307,6 +343,7 @@ void wxToolBar::Init()
 bool wxToolBar::Create(wxWindow *parent, wxWindowID id, const wxPoint& pos, const wxSize& size,
             long style, const wxString& name)
 {  
+
     if ( !wxToolBarBase::Create( parent , id , pos , size , style ) )
         return FALSE ;
     
@@ -430,13 +467,13 @@ bool wxToolBar::Realize()
 
 void wxToolBar::SetToolBitmapSize(const wxSize& size)
 {
-    m_defaultWidth = size.x+4; m_defaultHeight = size.y+4;
+    m_defaultWidth = size.x+kwxMacToolBorder; m_defaultHeight = size.y+kwxMacToolBorder;
 }
 
 // The button size is bigger than the bitmap size
 wxSize wxToolBar::GetToolSize() const
 {
-    return wxSize(m_defaultWidth + 4, m_defaultHeight + 4);
+    return wxSize(m_defaultWidth + kwxMacToolBorder, m_defaultHeight + kwxMacToolBorder);
 }
 
 void wxToolBar::SetRows(int nRows)
@@ -494,7 +531,13 @@ void wxToolBar::DoToggleTool(wxToolBarToolBase *t, bool toggle)
     wxToolBarTool *tool = (wxToolBarTool *)t;
     if ( tool->IsButton() )
     {
+#ifdef __WXMAC_OSX__
+        IconTransformType transform = toggle ? kTransformSelected : kTransformNone ;
+    	SetControlData( (ControlRef) tool->GetControlHandle(), 0, kControlIconTransformTag, sizeof( transform ),
+    			(Ptr)&transform );
+#else
         ::SetControl32BitValue( (ControlRef) tool->GetControlHandle() , toggle ) ;
+#endif
     }
 }
 
@@ -558,6 +601,7 @@ void wxToolBar::OnPaint(wxPaintEvent& event)
 {
     wxPaintDC dc(this) ;
 #if wxMAC_USE_CORE_GRAPHICS
+    // leave the background as it is (striped or metal)
 #else
     wxMacPortSetter helper(&dc) ;
     int w, h ;
