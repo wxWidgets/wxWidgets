@@ -2776,92 +2776,92 @@ def ToggleButton_GetClassDefaultAttributes(*args, **kwargs):
 
 #---------------------------------------------------------------------------
 
-class BookCtrl(_core.Control):
+class BookCtrlBase(_core.Control):
     def __init__(self): raise RuntimeError, "No constructor defined"
     def __repr__(self):
-        return "<%s.%s; proxy of C++ wxBookCtrl instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
+        return "<%s.%s; proxy of C++ wxBookCtrlBase instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def GetPageCount(*args, **kwargs):
         """GetPageCount(self) -> size_t"""
-        return _controls_.BookCtrl_GetPageCount(*args, **kwargs)
+        return _controls_.BookCtrlBase_GetPageCount(*args, **kwargs)
 
     def GetPage(*args, **kwargs):
         """GetPage(self, size_t n) -> Window"""
-        return _controls_.BookCtrl_GetPage(*args, **kwargs)
+        return _controls_.BookCtrlBase_GetPage(*args, **kwargs)
 
     def GetCurrentPage(*args, **kwargs):
         """GetCurrentPage(self) -> Window"""
-        return _controls_.BookCtrl_GetCurrentPage(*args, **kwargs)
+        return _controls_.BookCtrlBase_GetCurrentPage(*args, **kwargs)
 
     def GetSelection(*args, **kwargs):
         """GetSelection(self) -> int"""
-        return _controls_.BookCtrl_GetSelection(*args, **kwargs)
+        return _controls_.BookCtrlBase_GetSelection(*args, **kwargs)
 
     def SetPageText(*args, **kwargs):
         """SetPageText(self, size_t n, String strText) -> bool"""
-        return _controls_.BookCtrl_SetPageText(*args, **kwargs)
+        return _controls_.BookCtrlBase_SetPageText(*args, **kwargs)
 
     def GetPageText(*args, **kwargs):
         """GetPageText(self, size_t n) -> String"""
-        return _controls_.BookCtrl_GetPageText(*args, **kwargs)
+        return _controls_.BookCtrlBase_GetPageText(*args, **kwargs)
 
     def SetImageList(*args, **kwargs):
         """SetImageList(self, ImageList imageList)"""
-        return _controls_.BookCtrl_SetImageList(*args, **kwargs)
+        return _controls_.BookCtrlBase_SetImageList(*args, **kwargs)
 
     def AssignImageList(*args, **kwargs):
         """AssignImageList(self, ImageList imageList)"""
-        return _controls_.BookCtrl_AssignImageList(*args, **kwargs)
+        return _controls_.BookCtrlBase_AssignImageList(*args, **kwargs)
 
     def GetImageList(*args, **kwargs):
         """GetImageList(self) -> ImageList"""
-        return _controls_.BookCtrl_GetImageList(*args, **kwargs)
+        return _controls_.BookCtrlBase_GetImageList(*args, **kwargs)
 
     def GetPageImage(*args, **kwargs):
         """GetPageImage(self, size_t n) -> int"""
-        return _controls_.BookCtrl_GetPageImage(*args, **kwargs)
+        return _controls_.BookCtrlBase_GetPageImage(*args, **kwargs)
 
     def SetPageImage(*args, **kwargs):
         """SetPageImage(self, size_t n, int imageId) -> bool"""
-        return _controls_.BookCtrl_SetPageImage(*args, **kwargs)
+        return _controls_.BookCtrlBase_SetPageImage(*args, **kwargs)
 
     def SetPageSize(*args, **kwargs):
         """SetPageSize(self, Size size)"""
-        return _controls_.BookCtrl_SetPageSize(*args, **kwargs)
+        return _controls_.BookCtrlBase_SetPageSize(*args, **kwargs)
 
     def CalcSizeFromPage(*args, **kwargs):
         """CalcSizeFromPage(self, Size sizePage) -> Size"""
-        return _controls_.BookCtrl_CalcSizeFromPage(*args, **kwargs)
+        return _controls_.BookCtrlBase_CalcSizeFromPage(*args, **kwargs)
 
     def DeletePage(*args, **kwargs):
         """DeletePage(self, size_t n) -> bool"""
-        return _controls_.BookCtrl_DeletePage(*args, **kwargs)
+        return _controls_.BookCtrlBase_DeletePage(*args, **kwargs)
 
     def RemovePage(*args, **kwargs):
         """RemovePage(self, size_t n) -> bool"""
-        return _controls_.BookCtrl_RemovePage(*args, **kwargs)
+        return _controls_.BookCtrlBase_RemovePage(*args, **kwargs)
 
     def DeleteAllPages(*args, **kwargs):
         """DeleteAllPages(self) -> bool"""
-        return _controls_.BookCtrl_DeleteAllPages(*args, **kwargs)
+        return _controls_.BookCtrlBase_DeleteAllPages(*args, **kwargs)
 
     def AddPage(*args, **kwargs):
         """AddPage(self, Window page, String text, bool select=False, int imageId=-1) -> bool"""
-        return _controls_.BookCtrl_AddPage(*args, **kwargs)
+        return _controls_.BookCtrlBase_AddPage(*args, **kwargs)
 
     def InsertPage(*args, **kwargs):
         """
         InsertPage(self, size_t n, Window page, String text, bool select=False, 
             int imageId=-1) -> bool
         """
-        return _controls_.BookCtrl_InsertPage(*args, **kwargs)
+        return _controls_.BookCtrlBase_InsertPage(*args, **kwargs)
 
     def SetSelection(*args, **kwargs):
         """SetSelection(self, size_t n) -> int"""
-        return _controls_.BookCtrl_SetSelection(*args, **kwargs)
+        return _controls_.BookCtrlBase_SetSelection(*args, **kwargs)
 
     def AdvanceSelection(*args, **kwargs):
         """AdvanceSelection(self, bool forward=True)"""
-        return _controls_.BookCtrl_AdvanceSelection(*args, **kwargs)
+        return _controls_.BookCtrlBase_AdvanceSelection(*args, **kwargs)
 
     def GetClassDefaultAttributes(*args, **kwargs):
         """
@@ -2878,21 +2878,21 @@ class BookCtrl(_core.Control):
         the returned font. See `wx.Window.SetWindowVariant` for more about
         this.
         """
-        return _controls_.BookCtrl_GetClassDefaultAttributes(*args, **kwargs)
+        return _controls_.BookCtrlBase_GetClassDefaultAttributes(*args, **kwargs)
 
     GetClassDefaultAttributes = staticmethod(GetClassDefaultAttributes)
 
-class BookCtrlPtr(BookCtrl):
+class BookCtrlBasePtr(BookCtrlBase):
     def __init__(self, this):
         self.this = this
         if not hasattr(self,"thisown"): self.thisown = 0
-        self.__class__ = BookCtrl
-_controls_.BookCtrl_swigregister(BookCtrlPtr)
+        self.__class__ = BookCtrlBase
+_controls_.BookCtrlBase_swigregister(BookCtrlBasePtr)
 NOTEBOOK_NAME = cvar.NOTEBOOK_NAME
 
-def BookCtrl_GetClassDefaultAttributes(*args, **kwargs):
+def BookCtrlBase_GetClassDefaultAttributes(*args, **kwargs):
     """
-    BookCtrl_GetClassDefaultAttributes(int variant=WINDOW_VARIANT_NORMAL) -> VisualAttributes
+    BookCtrlBase_GetClassDefaultAttributes(int variant=WINDOW_VARIANT_NORMAL) -> VisualAttributes
 
     Get the default attributes for this class.  This is useful if you want
     to use the same font or colour in your own control as in a standard
@@ -2905,43 +2905,43 @@ def BookCtrl_GetClassDefaultAttributes(*args, **kwargs):
     the returned font. See `wx.Window.SetWindowVariant` for more about
     this.
     """
-    return _controls_.BookCtrl_GetClassDefaultAttributes(*args, **kwargs)
+    return _controls_.BookCtrlBase_GetClassDefaultAttributes(*args, **kwargs)
 
-class BookCtrlEvent(_core.NotifyEvent):
+class BookCtrlBaseEvent(_core.NotifyEvent):
     def __repr__(self):
-        return "<%s.%s; proxy of C++ wxBookCtrlEvent instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
+        return "<%s.%s; proxy of C++ wxBookCtrlBaseEvent instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
         """
         __init__(self, wxEventType commandType=wxEVT_NULL, int id=0, int nSel=-1, 
-            int nOldSel=-1) -> BookCtrlEvent
+            int nOldSel=-1) -> BookCtrlBaseEvent
         """
-        newobj = _controls_.new_BookCtrlEvent(*args, **kwargs)
+        newobj = _controls_.new_BookCtrlBaseEvent(*args, **kwargs)
         self.this = newobj.this
         self.thisown = 1
         del newobj.thisown
     def GetSelection(*args, **kwargs):
         """GetSelection(self) -> int"""
-        return _controls_.BookCtrlEvent_GetSelection(*args, **kwargs)
+        return _controls_.BookCtrlBaseEvent_GetSelection(*args, **kwargs)
 
     def SetSelection(*args, **kwargs):
         """SetSelection(self, int nSel)"""
-        return _controls_.BookCtrlEvent_SetSelection(*args, **kwargs)
+        return _controls_.BookCtrlBaseEvent_SetSelection(*args, **kwargs)
 
     def GetOldSelection(*args, **kwargs):
         """GetOldSelection(self) -> int"""
-        return _controls_.BookCtrlEvent_GetOldSelection(*args, **kwargs)
+        return _controls_.BookCtrlBaseEvent_GetOldSelection(*args, **kwargs)
 
     def SetOldSelection(*args, **kwargs):
         """SetOldSelection(self, int nOldSel)"""
-        return _controls_.BookCtrlEvent_SetOldSelection(*args, **kwargs)
+        return _controls_.BookCtrlBaseEvent_SetOldSelection(*args, **kwargs)
 
 
-class BookCtrlEventPtr(BookCtrlEvent):
+class BookCtrlBaseEventPtr(BookCtrlBaseEvent):
     def __init__(self, this):
         self.this = this
         if not hasattr(self,"thisown"): self.thisown = 0
-        self.__class__ = BookCtrlEvent
-_controls_.BookCtrlEvent_swigregister(BookCtrlEventPtr)
+        self.__class__ = BookCtrlBaseEvent
+_controls_.BookCtrlBaseEvent_swigregister(BookCtrlBaseEventPtr)
 
 #---------------------------------------------------------------------------
 
@@ -2955,7 +2955,7 @@ NB_HITTEST_NOWHERE = _controls_.NB_HITTEST_NOWHERE
 NB_HITTEST_ONICON = _controls_.NB_HITTEST_ONICON
 NB_HITTEST_ONLABEL = _controls_.NB_HITTEST_ONLABEL
 NB_HITTEST_ONITEM = _controls_.NB_HITTEST_ONITEM
-class Notebook(BookCtrl):
+class Notebook(BookCtrlBase):
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxNotebook instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -3050,7 +3050,7 @@ def Notebook_GetClassDefaultAttributes(*args, **kwargs):
     """
     return _controls_.Notebook_GetClassDefaultAttributes(*args, **kwargs)
 
-class NotebookEvent(BookCtrlEvent):
+class NotebookEvent(BookCtrlBaseEvent):
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxNotebookEvent instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -3114,7 +3114,7 @@ LB_BOTTOM = _controls_.LB_BOTTOM
 LB_LEFT = _controls_.LB_LEFT
 LB_RIGHT = _controls_.LB_RIGHT
 LB_ALIGN_MASK = _controls_.LB_ALIGN_MASK
-class Listbook(BookCtrl):
+class Listbook(BookCtrlBase):
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxListbook instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -3157,7 +3157,7 @@ def PreListbook(*args, **kwargs):
     val.thisown = 1
     return val
 
-class ListbookEvent(BookCtrlEvent):
+class ListbookEvent(BookCtrlBaseEvent):
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxListbookEvent instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -3188,7 +3188,7 @@ CHB_BOTTOM = _controls_.CHB_BOTTOM
 CHB_LEFT = _controls_.CHB_LEFT
 CHB_RIGHT = _controls_.CHB_RIGHT
 CHB_ALIGN_MASK = _controls_.CHB_ALIGN_MASK
-class Choicebook(BookCtrl):
+class Choicebook(BookCtrlBase):
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxChoicebook instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -3231,7 +3231,7 @@ def PreChoicebook(*args, **kwargs):
     val.thisown = 1
     return val
 
-class ChoicebookEvent(BookCtrlEvent):
+class ChoicebookEvent(BookCtrlBaseEvent):
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxChoicebookEvent instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -3262,7 +3262,7 @@ class BookCtrlSizer(_core.Sizer):
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxBookCtrlSizer instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
-        """__init__(self, BookCtrl nb) -> BookCtrlSizer"""
+        """__init__(self, BookCtrlBase nb) -> BookCtrlSizer"""
         newobj = _controls_.new_BookCtrlSizer(*args, **kwargs)
         self.this = newobj.this
         self.thisown = 1
@@ -3290,7 +3290,7 @@ class BookCtrlSizer(_core.Sizer):
         return _controls_.BookCtrlSizer_CalcMin(*args, **kwargs)
 
     def GetControl(*args, **kwargs):
-        """GetControl(self) -> BookCtrl"""
+        """GetControl(self) -> BookCtrlBase"""
         return _controls_.BookCtrlSizer_GetControl(*args, **kwargs)
 
 
