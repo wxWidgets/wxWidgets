@@ -5,25 +5,59 @@ applications can use to alter behaviour at run-time. It can be
 used to optimize behaviour that doesn't deserve a distinct API,
 but is still important to be able to configure.
 
-These options are currently recognised by wxWidgets:
+These options are currently recognised by wxWidgets.
+
+\wxheading{Windows}
 
 \twocolwidtha{7cm}
 \begin{twocollist}\itemsep=0pt
 \twocolitem{{\bf Option}}{{\bf Value}}
 \twocolitem{no-maskblt}{1 to never use WIN32's MaskBlt function, 0 to allow it to be used where possible. Default: 0.
-
 In some circumstances the MaskBlt function can be slower than using the fallback code, especially if using
-DC cacheing. By default, MaskBlt will be used where it is implemented by the operating system and driver.
-}
-\twocolitem{msw.remap}{(wxMSW only) If 1 (the default), wxToolBar bitmap colours will be remapped
+DC cacheing. By default, MaskBlt will be used where it is implemented by the operating system and driver.}
+\twocolitem{msw.remap}{If 1 (the default), wxToolBar bitmap colours will be remapped
 to the current theme's values. Set this to 0 to disable this functionality, for example if you're using
 more than 16 colours in your tool bitmaps.}
-\twocolitem{mgl.aa-threshold}{(wxMGL only) Set this integer option to point
-size below which fonts are not antialiased. Default: 10.
-}
-\twocolitem{mgl.screen-refresh}{(wxMGL only) Screen refresh rate in Hz.
-Reasonable default is used if not specified.
-}
+\twocolitem{msw.window.no-clip-children}{If 1, windows will not automatically get the WS\_CLIPCHILDREN
+style. This restores the way windows are refreshed back to the method used in versions of wxWidgets
+earlier than 2.5.4, and for some complex window hierarchies it can reduce apparent refresh delays. You may
+still specify wxCLIP\_CHILDREN for individual windows.}
+\twocolitem{msw.notebook.themed-background}{If set to 0, globally disables themed backgrounds on notebook
+pages. Note that this won't disable the theme on the actual notebook background (noticeable only if there are no
+pages).}
+\twocolitem{msw.staticbitmap.htclient}{If set to 1, allows the static bitmap to respond to mouse
+events. The default is 0, since a value of 1 can interfere with refresh in static boxes. Note that once set,
+this option cannot be unset later in the application.}
+\end{twocollist}
+
+\wxheading{Mac}
+
+\twocolwidtha{7cm}
+\begin{twocollist}\itemsep=0pt
+\twocolitem{{\bf Option}}{{\bf Value}}
+\twocolitem{mac.window-plain-transition}{If 1, uses a plainer transition when showing
+a window. You can also use the symbol wxMAC\_WINDOW\_PLAIN\_TRANSITION.}
+\twocolitem{window-default-variant}{The default variant used by windows (cast to integer from the wxWindowVariant enum).
+Also known as wxWINDOW\_DEFAULT\_VARIANT.}
+\end{twocollist}
+
+\wxheading{MGL}
+
+\twocolwidtha{7cm}
+\begin{twocollist}\itemsep=0pt
+\twocolitem{{\bf Option}}{{\bf Value}}
+\twocolitem{mgl.aa-threshold}{Set this integer option to point
+size below which fonts are not antialiased. Default: 10.}
+\twocolitem{mgl.screen-refresh}{Screen refresh rate in Hz.
+A reasonable default is used if not specified.}
+\end{twocollist}
+
+\wxheading{Motif}
+
+\twocolwidtha{7cm}
+\begin{twocollist}\itemsep=0pt
+\twocolitem{{\bf Option}}{{\bf Value}}
+\twocolitem{motif.largebuttons}{If 1, uses a bigger default size for wxButtons.}
 \end{twocollist}
 
 The compile-time option to include or exclude this functionality
