@@ -140,7 +140,8 @@ int wxDirDialog::ShowModal()
     bi.hwndOwner      = parent ? GetHwndOf(parent) : NULL;
     bi.pidlRoot       = NULL;
     bi.pszDisplayName = NULL;
-#ifdef __WXWINCE__
+    // WinCE StandardSDK requires .c_str() form
+#if defined(__WXWINCE__) && (defined(__POCKETPC__) || defined(__SMARTPHONE__))
     bi.lpszTitle      = m_message.mb_str();
 #else
     bi.lpszTitle      = m_message.c_str();
