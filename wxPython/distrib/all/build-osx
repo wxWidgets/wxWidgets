@@ -50,7 +50,10 @@ echo "Invoking wxPythonOSX build script..."
 cd $WXDIR/wxPython
 export TARBALLDIR=$DESTDIR
 mkdir -p dist
-distrib/mac/wxPythonOSX/build $KIND inplace skipclean
+if [ $KIND = panther ]; then
+    distrib/mac/wxPythonOSX/build $KIND inplace unicode
+fi
+distrib/mac/wxPythonOSX/build $KIND inplace 
 
 
 echo "Copying installers to $DESTDIR..."
