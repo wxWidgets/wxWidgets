@@ -421,53 +421,17 @@ wxMenu *wxMenuBar::Replace(size_t pos, wxMenu *menu, const wxString& title)
     return menuOld;
 }
 
-static wxMenu *CopyMenu (wxMenu *menu)
-{
-    wxMenu *menucopy = new wxMenu ();
-    wxMenuItemList::compatibility_iterator node = menu->GetMenuItems().GetFirst();
-    while (node)
-    {
-        wxMenuItem *item = node->GetData();
-        int itemid = item->GetId();
-        wxString text = item->GetText();
-        text.Replace(wxT("_"), wxT("&"));
-        wxMenu *submenu = item->GetSubMenu();
-        if (!submenu)
-        {
-            wxMenuItem* itemcopy = new wxMenuItem(menucopy,
-                                        itemid, text,
-                                        menu->GetHelpString(itemid));
-            itemcopy->SetBitmap(item->GetBitmap());
-            itemcopy->SetCheckable(item->IsCheckable());
-            menucopy->Append(itemcopy);
-        }
-        else
-          menucopy->Append (itemid, text, CopyMenu(submenu),
-                            menu->GetHelpString(itemid));
-
-        node = node->GetNext();
-    }
-
-    return menucopy;
-}
-
 wxMenu *wxMenuBar::Remove(size_t pos)
 {
     wxMenu *menu = wxMenuBarBase::Remove(pos);
     if ( !menu )
         return (wxMenu*) NULL;
 
-    wxMenu *menucopy = CopyMenu( menu );
-
-    // unparent calls unref() and that would delete the widget so we raise
-    // the ref count to 2 artificially before invoking unparent.
-    gtk_widget_ref( menu->m_menu );
-    gtk_widget_unparent( menu->m_menu );
+    gtk_menu_item_remove_submenu( GTK_MENU_ITEM(menu->m_owner) );
+    gtk_container_remove(GTK_CONTAINER(m_menubar), menu->m_owner);
 
     gtk_widget_destroy( menu->m_owner );
-    delete menu;
-
-    menu = menucopy;
+    menu->m_owner = NULL;
 
     if (m_invokingWindow)
     {
@@ -986,6 +950,9 @@ void wxMenu::Init()
 {
     m_accel = gtk_accel_group_new();
     m_menu = gtk_menu_new();
+    // NB: keep reference to the menu so that it is not destroyed behind
+    //     our back by GTK+ e.g. when it is removed from menubar:
+    gtk_widget_ref(m_menu);
 
     m_owner = (GtkWidget*) NULL;
 
@@ -1014,7 +981,10 @@ wxMenu::~wxMenu()
    WX_CLEAR_LIST(wxMenuItemList, m_items);
 
    if ( GTK_IS_WIDGET( m_menu ))
+   {
+       gtk_widget_unref( m_menu ); // see wxMenu::Init
        gtk_widget_destroy( m_menu );
+   }
 }
 
 bool wxMenu::GtkAppend(wxMenuItem *mitem, int pos)
