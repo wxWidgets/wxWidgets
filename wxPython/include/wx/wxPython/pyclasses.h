@@ -186,6 +186,7 @@ class wxPyVScrolledWindow;
 class wxPyVListBox;
 class wxPyHtmlListBox;
 class wxPyPanel;
+class wxPyScrolledWindow;
 class wxPyPopupTransientWindow;
 class wxPyPreviewFrame;
 class wxPyWindow;
