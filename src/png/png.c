@@ -144,7 +144,7 @@ png_zalloc(voidpf png_ptr, uInt items, uInt size)
 {
    png_uint_32 num_bytes = (png_uint_32)items * size;
    png_voidp ptr;
-   png_structp p=png_ptr;
+   png_structp p=(png_struct*)png_ptr;
    png_uint_32 save_flags=p->flags;
 
    p->flags|=PNG_FLAG_MALLOC_NULL_MEM_OK;
