@@ -54,18 +54,7 @@
 #include "wx/msw/winundef.h"
 
 #if wxUSE_UXTHEME
-#include "wx/msw/uxtheme.h"
-
-#include "wx/radiobut.h"
-#include "wx/radiobox.h"
-#include "wx/checkbox.h"
-#include "wx/bmpbuttn.h"
-#include "wx/statline.h"
-#include "wx/statbox.h"
-#include "wx/stattext.h"
-#include "wx/slider.h"
-#include "wx/scrolwin.h"
-#include "wx/panel.h"
+    #include "wx/msw/uxtheme.h"
 #endif
 
 // ----------------------------------------------------------------------------
@@ -220,6 +209,10 @@ void wxNotebook::Init()
 {
   m_imageList = NULL;
   m_nSelection = -1;
+
+#if wxUSE_UXTHEME
+  m_hbrBackground = NULL;
+#endif // wxUSE_UXTHEME
 }
 
 // default for dynamic class
@@ -270,8 +263,6 @@ bool wxNotebook::Create(wxWindow *parent,
     if ( !MSWCreateControl(WC_TABCONTROL, wxEmptyString, pos, size) )
         return false;
 
-    SetBackgroundColour(wxColour(::GetSysColor(COLOR_BTNFACE)));
-
     return true;
 }
 
@@ -302,6 +293,14 @@ WXDWORD wxNotebook::MSWGetStyle(long style, WXDWORD *exstyle) const
     }
 
     return tabStyle;
+}
+
+wxNotebook::~wxNotebook()
+{
+#if wxUSE_UXTHEME
+    if ( m_hbrBackground )
+        ::DeleteObject((HBRUSH)m_hbrBackground);
+#endif // wxUSE_UXTHEME
 }
 
 // ----------------------------------------------------------------------------
@@ -571,27 +570,6 @@ bool wxNotebook::InsertPage(size_t nPage,
     wxASSERT_MSG( pPage->GetParent() == this,
                     _T("notebook pages must have notebook as parent") );
 
-#if wxUSE_UXTHEME && wxUSE_UXTHEME_AUTO
-    static bool g_TestedForTheme = false;
-    static bool g_UseTheme = false;
-    if (!g_TestedForTheme)
-    {
-        int commCtrlVersion = wxTheApp->GetComCtl32Version() ;
-
-        g_UseTheme = (commCtrlVersion >= 600);
-        g_TestedForTheme = true;
-    }
-
-    // Automatically apply the theme background,
-    // changing the colour of the panel to match the
-    // tab page colour. This won't work well with all
-    // themes but it's a start.
-    if (g_UseTheme && wxUxThemeEngine::Get() && pPage->IsKindOf(CLASSINFO(wxPanel)))
-    {
-        ApplyThemeBackground(pPage, GetThemeBackgroundColour());
-    }
-#endif
-
     // add a new tab to the control
     // ----------------------------
 
@@ -743,6 +721,10 @@ void wxNotebook::OnSize(wxSizeEvent& event)
     pPage->SetSize(rc.left, rc.top, width, height);
   }
 
+#if wxUSE_UXTHEME
+  UpdateBgBrush();
+#endif // wxUSE_UXTHEME
+
   event.Skip();
 }
 
@@ -877,6 +859,66 @@ void wxNotebook::OnNavigationKey(wxNavigationKeyEvent& event)
     }
 }
 
+#if wxUSE_UXTHEME
+
+void wxNotebook::UpdateBgBrush()
+{
+    if ( m_hbrBackground )
+        ::DeleteObject((HBRUSH)m_hbrBackground);
+
+    if ( wxUxThemeEngine::GetIfActive() )
+    {
+        RECT rc;
+        GetWindowRect(GetHwnd(), &rc);
+
+        WindowHDC hDC(GetHwnd());
+        MemoryHDC hDCMem(hDC);
+        CompatibleBitmap hBmp(hDC, rc.right - rc.left, rc.bottom - rc.top);
+
+        SelectInHDC selectBmp(hDCMem, hBmp);
+
+        SendMessage(GetHwnd(), WM_PRINTCLIENT, (WPARAM)(HDC)hDCMem, 
+                    PRF_ERASEBKGND | PRF_CLIENT | PRF_NONCLIENT);
+
+        m_hbrBackground = (WXHBRUSH)::CreatePatternBrush(hBmp);
+    }
+    else // no themes
+    {
+        m_hbrBackground = NULL;
+    }
+}
+
+void wxNotebook::DoEraseBackground(wxEraseEvent& event)
+{
+    // we can either draw the background ourselves or let DrawThemeBackground()
+    // do it, but as we already have the correct brush, let's do it ourselves
+    // (note that we use the same code in wxControl::MSWControlColor(), so if
+    // it breaks, it should at least break in consistent way)
+    if ( m_hbrBackground )
+    {
+        // before drawing with the background brush, we need to position it
+        // correctly
+        wxWindow *win = (wxWindow *)event.GetEventObject();
+
+        RECT rc;
+        ::GetWindowRect(GetHwndOf(win), &rc);
+
+        ::MapWindowPoints(NULL, GetHwnd(), (POINT *)&rc, 1);
+
+        HDC hdc = GetHdcOf(*event.GetDC());
+        if ( !::SetBrushOrgEx(hdc, -rc.left, -rc.top, NULL) )
+        {
+            wxLogLastError(_T("SetBrushOrgEx(notebook bg brush)"));
+        }
+
+        RECT rectClient;
+        ::GetClientRect(GetHwndOf(win), &rectClient);
+        ::FillRect(hdc, &rectClient, (HBRUSH)m_hbrBackground);
+    }
+}
+
+#endif // wxUSE_UXTHEME
+
 // ----------------------------------------------------------------------------
 // wxNotebook base class virtuals
 // ----------------------------------------------------------------------------
@@ -940,105 +982,5 @@ bool wxNotebook::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM* result)
   *result = !event.IsAllowed();
   return processed;
 }
-
-// Windows only: attempts to get colour for UX theme page background
-wxColour wxNotebook::GetThemeBackgroundColour()
-{
-#if wxUSE_UXTHEME
-    if (wxUxThemeEngine::Get())
-    {
-        wxUxThemeHandle hTheme(this, L"TAB");
-        if (hTheme)
-        {
-            // This is total guesswork.
-            // See PlatformSDK\Include\Tmschema.h for values
-            COLORREF themeColor;
-            wxUxThemeEngine::Get()->GetThemeColor(
-                                        hTheme,
-                                        10 /* TABP_BODY */,
-                                        1 /* NORMAL */,
-                                        3821 /* FILLCOLORHINT */,
-                                        &themeColor);
-
-            /*
-            [DS] Workaround for WindowBlinds:
-            Some themes return a near black theme color using FILLCOLORHINT,
-            this makes notebook pages have an ugly black background and makes
-            text (usually black) unreadable. Retry again with FILLCOLOR.
-
-            This workaround potentially breaks appearance of some themes,
-            but in practice it already fixes some themes.
-            */
-            if (themeColor == 1)
-            {
-                wxUxThemeEngine::Get()->GetThemeColor(
-                                            hTheme,
-                                            10 /* TABP_BODY */,
-                                            1 /* NORMAL */,
-                                            3802 /* FILLCOLOR */,
-                                            &themeColor);
-            }
-
-            wxColour colour(GetRValue(themeColor), GetGValue(themeColor), GetBValue(themeColor));
-            return colour;
-        }
-    }
-#endif // wxUSE_UXTHEME
-
-    return GetBackgroundColour();
-}
-
-// Windows only: attempts to apply the UX theme page background to this page
-#if wxUSE_UXTHEME
-void wxNotebook::ApplyThemeBackground(wxWindow* window, const wxColour& colour)
-#else
-void wxNotebook::ApplyThemeBackground(wxWindow*, const wxColour&)
-#endif
-{
-#if wxUSE_UXTHEME
-
-    window->ApplyParentThemeBackground(colour);
-
-    for ( wxWindowList::compatibility_iterator node = window->GetChildren().GetFirst(); node; node = node->GetNext() )
-    {
-        wxWindow *child = node->GetData();
-        ApplyThemeBackground(child, colour);
-    }
-#endif
-}
-
-#if wxUSE_UXTHEME
-WXLRESULT wxNotebook::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
-{
-    static bool g_TestedForTheme = false;
-    static bool g_supportsThemes = false;
-    switch ( nMsg )
-    {
-        case WM_ERASEBKGND:
-        {
-            if (!g_TestedForTheme)
-            {
-                int commCtrlVersion = wxTheApp->GetComCtl32Version() ;
-
-                g_supportsThemes = (commCtrlVersion >= 600);
-                g_TestedForTheme = true;
-            }
-
-            // If currently an XP theme is active, it seems we can get away
-            // with not drawing a background, which reduces flicker.
-            if (g_supportsThemes)
-            {
-                wxUxThemeEngine *p = wxUxThemeEngine::Get();
-                if (p && p->IsThemeActive() )
-                {
-                    return true;
-                }
-            }
-        }
-    }
-
-    return wxControl::MSWWindowProc(nMsg, wParam, lParam);
-}
-#endif // #if wxUSE_UXTHEME
 
 #endif // wxUSE_NOTEBOOK

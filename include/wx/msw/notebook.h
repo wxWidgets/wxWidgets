@@ -72,6 +72,7 @@ public:
               const wxSize& size = wxDefaultSize,
               long style = 0,
               const wxString& name = wxNOTEBOOK_NAME);
+  virtual ~wxNotebook();
 
   // accessors
   // ---------
@@ -111,9 +112,6 @@ public:
     // set the padding between tabs (in pixels)
   void SetPadding(const wxSize& padding);
 
-    // Windows only: attempts to get colour for UX theme page background
-  wxColour GetThemeBackgroundColour();
-
   // operations
   // ----------
     // remove all pages
@@ -133,9 +131,6 @@ public:
     // Windows-only at present. Also, you must use the wxNB_FIXEDWIDTH
     // style.
   void SetTabSize(const wxSize& sz);
-
-    // Windows only: attempts to apply the UX theme page background to this page
-  void ApplyThemeBackground(wxWindow* window, const wxColour& colour);
 
     // hit test
   virtual int HitTest(const wxPoint& pt, long *flags = NULL) const;
@@ -162,6 +157,19 @@ public:
   virtual bool DoPhase(int nPhase);
 #endif // wxUSE_CONSTRAINTS
 
+
+  // implementation only
+  // -------------------
+
+#if wxUSE_UXTHEME
+  // handler for child pages erase background event
+  void DoEraseBackground(wxEraseEvent& event);
+
+  // get the brush to be used for painting the background for the controls
+  // which need it in their MSWControlColor()
+  WXHBRUSH GetThemeBackgroundBrush() const { return m_hbrBackground; }
+#endif // wxUSE_UXTHEME
+
 protected:
   // common part of all ctors
   void Init();
@@ -175,15 +183,20 @@ protected:
   // set the size of the given page to fit in the notebook
   void AdjustPageSize(wxNotebookPage *page);
 
-    // override WndProc.
 #if wxUSE_UXTHEME
-    virtual WXLRESULT MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam);
-#endif
+  // creates the brush to be used for drawing the tab control background
+  void UpdateBgBrush();
+#endif // wxUSE_UXTHEME
 
   // the current selection (-1 if none)
   int m_nSelection;
 
-  wxNotebookPageInfoList m_pageInfos ;
+  wxNotebookPageInfoList m_pageInfos;
+
+#if wxUSE_UXTHEME
+  // background brush used to paint the tab control
+  WXHBRUSH m_hbrBackground;
+#endif // wxUSE_UXTHEME
 
 
   DECLARE_DYNAMIC_CLASS_NO_COPY(wxNotebook)
