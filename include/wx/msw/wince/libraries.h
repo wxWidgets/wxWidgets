@@ -36,6 +36,9 @@
     #pragma comment(lib,"ceshell.lib")
 
     #pragma comment(lib,"aygshell.lib")
+#elif defined(__HANDHELDPC__)
+    // Handheld PC builds. Maybe WindowsCE.NET 4.X needs another symbol.
+    #pragma comment(lib,"ceshell.lib")
 #elif defined(__SMARTPHONE__)
     // Smartphone build:
     #pragma comment(lib,"ceshell.lib")
