@@ -6,7 +6,7 @@
 // Created:     04/01/98
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
-// Licence:   	wxWindows licence
+// Licence:           wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifdef __GNUG__
@@ -36,7 +36,7 @@ END_EVENT_TABLE()
 #endif
 
 static void wxToolButtonCallback (Widget w, XtPointer clientData,
-		    XtPointer ptr);
+                    XtPointer ptr);
 static void wxToolButtonPopupCallback (Widget w, XtPointer client_data,
                      XEvent *event, Boolean *continue_to_dispatch);
 
@@ -71,7 +71,7 @@ bool wxToolBar::Create(wxWindow *parent, wxWindowID id, const wxPoint& pos, cons
 {
     m_maxWidth = -1;
     m_maxHeight = -1;
-  
+
     m_defaultWidth = 24;
     m_defaultHeight = 22;
     SetName(name);
@@ -113,7 +113,7 @@ bool wxToolBar::Create(wxWindow *parent, wxWindowID id, const wxPoint& pos, cons
     AttachWidget (parent, m_mainWidget, (WXWidget) NULL, pos.x, pos.y, size.x, size.y);
 
     ChangeBackgroundColour();
-  
+
     return TRUE;
 }
 
@@ -158,15 +158,15 @@ bool wxToolBar::CreateTools()
 
             if (tool->m_isToggle)
             {
-                button = XtVaCreateWidget("toggleButton", 
+                button = XtVaCreateWidget("toggleButton",
                    xmToggleButtonWidgetClass, (Widget) m_mainWidget,
                    XmNx, currentX, XmNy, currentY,
-						 //                   XmNpushButtonEnabled, True,
+                                                 //                   XmNpushButtonEnabled, True,
                    XmNmultiClick, XmMULTICLICK_KEEP,
                    XmNlabelType, XmPIXMAP,
                    NULL);
                 XtAddCallback ((Widget) button, XmNvalueChangedCallback, (XtCallbackProc) wxToolButtonCallback,
-		 (XtPointer) this);
+                 (XtPointer) this);
 
                 XtVaSetValues ((Widget) button,
                       XmNselectColor, m_backgroundColour.AllocColour(XtDisplay((Widget) button)),
@@ -174,7 +174,7 @@ bool wxToolBar::CreateTools()
             }
             else
             {
-                button = XtVaCreateWidget("button", 
+                button = XtVaCreateWidget("button",
                    xmPushButtonWidgetClass, (Widget) m_mainWidget,
                    XmNx, currentX, XmNy, currentY,
                    XmNpushButtonEnabled, True,
@@ -198,12 +198,12 @@ bool wxToolBar::CreateTools()
             {
                 int backgroundPixel;
                 XtVaGetValues(button, XmNbackground, &backgroundPixel,
-			      NULL);
+                              NULL);
 
 
                 wxColour col;
                 col.SetPixel(backgroundPixel);
-                
+
                 wxBitmap newBitmap = wxCreateMaskedBitmap(tool->m_bitmap1, col);
 
                 tool->m_bitmap1 = newBitmap;
@@ -214,10 +214,10 @@ bool wxToolBar::CreateTools()
             int backgroundPixel;
             if (tool->m_isToggle)
                 XtVaGetValues(button, XmNselectColor, &backgroundPixel,
-		      NULL);
+                      NULL);
             else
                 XtVaGetValues(button, XmNarmColor, &backgroundPixel,
-		      NULL);
+                      NULL);
 
             wxColour col;
             col.SetPixel(backgroundPixel);
@@ -235,7 +235,7 @@ bool wxToolBar::CreateTools()
                 {
                     wxBitmap newBitmap = wxCreateMaskedBitmap(originalBitmap, col);
                     tool->m_bitmap2 = newBitmap;
-		}
+                }
                 else
                     tool->m_bitmap2 = tool->m_bitmap1;
             }
@@ -264,11 +264,11 @@ bool wxToolBar::CreateTools()
                 }
                 XtVaSetValues (button,
                     XmNindicatorOn, False,
-		    XmNshadowThickness, 2,
-			       //		    XmNborderWidth, 0,
-			       //		    XmNspacing, 0,
-		    XmNmarginWidth, 0,
-		    XmNmarginHeight, 0,
+                    XmNshadowThickness, 2,
+                               //                    XmNborderWidth, 0,
+                               //                    XmNspacing, 0,
+                    XmNmarginWidth, 0,
+                    XmNmarginHeight, 0,
                     XmNfillOnSelect, True,
                     XmNlabelPixmap, pixmap,
                     XmNselectPixmap, pixmap2,
@@ -303,11 +303,11 @@ bool wxToolBar::CreateTools()
 
             Dimension width, height;
             XtVaGetValues(button, XmNwidth, & width, XmNheight, & height,
-			      NULL);
+                              NULL);
             currentX += width + marginX;
             buttonHeight = wxMax(buttonHeight, height);
 
-            XtAddEventHandler (button, EnterWindowMask | LeaveWindowMask, 
+            XtAddEventHandler (button, EnterWindowMask | LeaveWindowMask,
                        False, wxToolButtonPopupCallback, (XtPointer) this);
             m_widgets.Append(tool->m_index, (wxObject*) button);
 
@@ -471,7 +471,7 @@ WXWidget wxToolBar::GetMainWidget() const
 
 
 void wxToolButtonCallback (Widget w, XtPointer clientData,
-		    XtPointer ptr)
+                    XtPointer ptr)
 {
     wxToolBar *toolBar = (wxToolBar *) clientData;
     int index = toolBar->FindIndexForWidget((WXWidget) w);
@@ -505,7 +505,6 @@ static void wxToolButtonPopupCallback (Widget w, XtPointer client_data,
         wxNode *node = toolBar->GetTools().Find((long)index);
         if (!node)
             return;
-        wxToolBarTool *tool = (wxToolBarTool *)node->Data();
         wxString str(toolBar->GetToolShortHelp(index));
         if (str.IsNull() || str == "")
             return;
@@ -513,8 +512,8 @@ static void wxToolButtonPopupCallback (Widget w, XtPointer client_data,
         if (!wxTheToolBarTimer)
           wxTheToolBarTimer = new wxToolBarTimer;
 
-	wxToolBarTimer::buttonWidget = w;
-	wxToolBarTimer::helpString = str;
+        wxToolBarTimer::buttonWidget = w;
+        wxToolBarTimer::helpString = str;
 
 
     /************************************************************/
@@ -526,7 +525,7 @@ static void wxToolButtonPopupCallback (Widget w, XtPointer client_data,
         {
             XtDestroyWidget (wxToolBarTimer::help_popup);
             XtPopdown (wxToolBarTimer::help_popup);
-	}
+        }
         wxToolBarTimer::help_popup = (Widget) 0;
 
         // One shot
@@ -544,7 +543,7 @@ static void wxToolButtonPopupCallback (Widget w, XtPointer client_data,
         {
             XtDestroyWidget (wxToolBarTimer::help_popup);
             XtPopdown (wxToolBarTimer::help_popup);
-	}
+        }
         wxToolBarTimer::help_popup = (Widget) 0;
     }
     }
@@ -557,16 +556,16 @@ void wxToolBarTimer::Notify()
         /************************************************************/
         /* Create shell without window decorations                  */
         /************************************************************/
-        help_popup = XtVaCreatePopupShell ("shell", 
-                                           overrideShellWidgetClass, (Widget) wxTheApp->GetTopLevelWidget(), 
+        help_popup = XtVaCreatePopupShell ("shell",
+                                           overrideShellWidgetClass, (Widget) wxTheApp->GetTopLevelWidget(),
                                            NULL);
 
         /************************************************************/
         /* Get absolute position on display of toolbar button       */
         /************************************************************/
         XtTranslateCoords (buttonWidget,
-                           (Position) 0, 
-                           (Position) 0, 
+                           (Position) 0,
+                           (Position) 0,
                            &x, &y);
 
         // Move the tooltip more or less above the button
@@ -577,24 +576,24 @@ void wxToolBarTimer::Notify()
         /************************************************************/
         /* Set the position of the help popup                       */
         /************************************************************/
-        XtVaSetValues (help_popup, 
-                       XmNx, (Position) x, 
-                       XmNy, (Position) y, 
+        XtVaSetValues (help_popup,
+                       XmNx, (Position) x,
+                       XmNy, (Position) y,
                        NULL);
-        
+
         /************************************************************/
         /* Create help label                                        */
         /************************************************************/
         XmString text = XmStringCreateSimple ((char*) (const char*) helpString);
-        XtVaCreateManagedWidget ("help_label", 
-                                 xmLabelWidgetClass, help_popup, 
+        XtVaCreateManagedWidget ("help_label",
+                                 xmLabelWidgetClass, help_popup,
                                  XmNlabelString, text,
-                                 XtVaTypedArg, 
-                                 XmNforeground, XtRString, "black", 
-                                                strlen("black")+1,      
-                                 XtVaTypedArg, 
-                                 XmNbackground, XtRString, "LightGoldenrod", 
-                                                strlen("LightGoldenrod")+1, 
+                                 XtVaTypedArg,
+                                 XmNforeground, XtRString, "black",
+                                                strlen("black")+1,
+                                 XtVaTypedArg,
+                                 XmNbackground, XtRString, "LightGoldenrod",
+                                                strlen("LightGoldenrod")+1,
                                  NULL);
         XmStringFree (text);
 

@@ -5,6 +5,8 @@
 // Modified by: Michael Bedward
 //                Added edit in place facility, 20 Apr 1999
 //                Added cursor key control, 29 Jun 1999
+//              Gerhard Gruber
+//                Added keyboard navigation, client data, other fixes
 // Created:     04/01/98
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart and Markus Holzem
@@ -77,8 +79,10 @@ BEGIN_EVENT_TABLE(wxGenericGrid, wxPanel)
 END_EVENT_TABLE()
 
 
-wxGenericGrid::wxGenericGrid(void)
+wxGenericGrid::wxGenericGrid()
 {
+  m_viewWidth = 0;
+  m_viewHeight = 0;
   m_batchCount = 0;
   m_hScrollBar = (wxScrollBar *) NULL;
   m_vScrollBar = (wxScrollBar *) NULL;
@@ -137,9 +141,15 @@ wxGenericGrid::wxGenericGrid(void)
   m_textItem = (wxTextCtrl *) NULL;
 }
 
-bool wxGenericGrid::Create(wxWindow *parent, wxWindowID id, const wxPoint& pos, const wxSize& size,
- long style, const wxString& name)
+bool wxGenericGrid::Create(wxWindow *parent,
+                           wxWindowID id,
+                           const wxPoint& pos,
+                           const wxSize& size,
+                           long style,
+                           const wxString& name)
 {
+  m_viewWidth = 0;
+  m_viewHeight = 0;
   m_batchCount = 0;
   m_editingPanel = (wxPanel *) NULL;
   m_hScrollBar = (wxScrollBar *) NULL;
@@ -246,12 +256,12 @@ bool wxGenericGrid::Create(wxWindow *parent, wxWindowID id, const wxPoint& pos, 
   return TRUE;
 }
 
-wxGenericGrid::~wxGenericGrid(void)
+wxGenericGrid::~wxGenericGrid()
 {
   ClearGrid();
 }
 
-void wxGenericGrid::ClearGrid(void)
+void wxGenericGrid::ClearGrid()
 {
   int i,j;
   if (m_gridCells)
@@ -380,7 +390,7 @@ bool wxGenericGrid::CreateGrid(int nRows, int nCols, wxString **cellValues, shor
 }
 
 // Need to determine various dimensions
-void wxGenericGrid::UpdateDimensions(void)
+void wxGenericGrid::UpdateDimensions()
 {
   int canvasWidth, canvasHeight;
   GetSize(&canvasWidth, &canvasHeight);
@@ -941,7 +951,7 @@ void wxGenericGrid::DrawCellValue(wxDC *dc, wxRect *rect, int row, int col)
   }
 }
 
-void wxGenericGrid::AdjustScrollbars(void)
+void wxGenericGrid::AdjustScrollbars()
 {
   int cw, ch;
   GetClientSize(&cw, &ch);
@@ -966,56 +976,53 @@ void wxGenericGrid::AdjustScrollbars(void)
   int noHorizSteps = 0;
   int noVertSteps = 0;
 
-  if (m_totalGridWidth + vertScrollBarWidth <= cw)
-    noHorizSteps = 0;
-  else
+  if (m_totalGridWidth + vertScrollBarWidth > cw)
   {
-    noHorizSteps = 0;
     int widthCount = 0;
 
     int i;
-        int nx = 0;
+    int nx = 0;
     for (i = m_scrollPosX ; i < m_totalCols; i++)
     {
       widthCount += m_colWidths[i];
-          // A partial bit doesn't count, we still have to scroll to see the
-          // rest of it
+      // A partial bit doesn't count, we still have to scroll to see the
+      // rest of it
       if (widthCount + m_leftOfSheet + m_verticalLabelWidth > (cw-vertScrollBarWidth))
         break;
-          else
-               nx ++;
-
+      else
+           nx ++;
     }
 
     noHorizSteps += nx;
   }
-  if (m_totalGridHeight + horizScrollBarHeight <= ch)
-    noVertSteps = 0;
-  else
+  m_viewWidth = noHorizSteps;
+
+  if (m_totalGridHeight + horizScrollBarHeight > ch)
   {
-    noVertSteps = 0;
     int heightCount = 0;
 
     int i;
-        int ny = 0;
+    int ny = 0;
     for (i = m_scrollPosY ; i < m_totalRows; i++)
     {
       heightCount += m_rowHeights[i];
-          // A partial bit doesn't count, we still have to scroll to see the
-          // rest of it
+      // A partial bit doesn't count, we still have to scroll to see the
+      // rest of it
       if (heightCount + m_topOfSheet + m_horizontalLabelHeight > (ch-horizScrollBarHeight))
         break;
-          else
-            ny ++;
+      else
+        ny ++;
     }
 
     noVertSteps += ny;
   }
 
+  m_viewHeight = noVertSteps;
+
   if (m_totalGridWidth + vertScrollBarWidth <= cw)
   {
-        if ( m_hScrollBar )
-            m_hScrollBar->Show(FALSE);
+    if ( m_hScrollBar )
+        m_hScrollBar->Show(FALSE);
     SetScrollPosX(0);
   }
   else
@@ -1479,12 +1486,12 @@ void wxGenericGrid::OnSelectCellImplementation(wxDC *dc, int row, int col)
   GetEventHandler()->ProcessEvent(g_evt2);
 }
 
-wxGridCell *wxGenericGrid::OnCreateCell(void)
+wxGridCell *wxGenericGrid::OnCreateCell()
 {
   return new wxGridCell(this);
 }
 
-void wxGenericGrid::OnChangeLabels(void)
+void wxGenericGrid::OnChangeLabels()
 {
   char buf[100];
   int i;
@@ -1510,7 +1517,7 @@ void wxGenericGrid::OnChangeLabels(void)
   }
 }
 
-void wxGenericGrid::OnChangeSelectionLabel(void)
+void wxGenericGrid::OnChangeSelectionLabel()
 {
   if (!GetEditable())
     return;
@@ -1553,7 +1560,7 @@ void wxGenericGrid::HighlightCell(wxDC *dc)
   dc->SetLogicalFunction(wxCOPY);
 }
 
-void wxGenericGrid::DrawCellText(void)
+void wxGenericGrid::DrawCellText()
 {
   if (!m_currentRectVisible)
     return;
@@ -2510,9 +2517,9 @@ void wxGenericGrid::SetGridCursor(int row, int col)
   dc.EndDrawing();
 }
 
-/*
- * Grid cell
- */
+// ----------------------------------------------------------------------------
+// Grid cell
+// ----------------------------------------------------------------------------
 
 wxGridCell::wxGridCell(wxGenericGrid *window)
 {
@@ -2539,9 +2546,11 @@ wxGridCell::wxGridCell(wxGenericGrid *window)
     alignment = window->GetCellAlignment();
   else
     alignment = wxLEFT;
+
+  cellData = (void *)NULL;
 }
 
-wxGridCell::~wxGridCell(void)
+wxGridCell::~wxGridCell()
 {
 }
 
@@ -2741,4 +2750,25 @@ void wxGenericGrid::_OnLabelRightClick(wxGridEvent& ev)
     OnLabelRightClick(ev.m_row, ev.m_col, ev.m_x, ev.m_y, ev.m_control, ev.m_shift);
 }
 
+void *wxGenericGrid::SetCellData(void *data, int row, int col)
+{
+    void *rc = NULL;
+
+    wxGridCell *cell = GetCell(row, col);
+    if ( cell )
+        rc = cell->SetCellData(data);
+
+    return rc;
+}
+
+void *wxGenericGrid::GetCellData(int row, int col)
+{
+    void *rc = NULL;
+
+    wxGridCell *cell = GetCell(row, col);
+    if ( cell )
+        rc = cell->GetCellData();
+
+    return rc;
+}
 

@@ -75,7 +75,7 @@ void wxFlushEvents()
     Display *display = (Display*) wxGetDisplay();
 
     XSync (display, FALSE);
-    XEvent event;
+
     // XtAppPending returns availability of events AND timers/inputs, which
     // are processed via callbacks, so XtAppNextEvent will not return if
     // there are no events. So added '& XtIMXEvent' - Sergey.

@@ -118,7 +118,6 @@ libwx_motif_la_SOURCES = \
  imaglist.cpp \
  laywin.cpp \
  listctrl.cpp \
- msgdlgg.cpp \
  panelg.cpp \
  printps.cpp \
  prntdlgg.cpp \
@@ -170,6 +169,7 @@ libwx_motif_la_SOURCES = \
  menu.cpp \
  menuitem.cpp \
  minifram.cpp \
+ msgdlg.cpp \
  notebook.cpp \
  palette.cpp \
  pen.cpp \

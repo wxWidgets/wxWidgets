@@ -6,7 +6,7 @@
 // Created:     17/09/98
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
-// Licence:   	wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 /*
@@ -17,7 +17,7 @@
  * in Create().  The cells are freed on the next call to Create()
  * or when the destructor is called.
  */
- 
+
 /* Wolfram Gloger <u7y22ab@sunmail.lrz-muenchen.de>
 I have implemented basic colormap support for the X11 versions of
 wxWindows, notably wxPalette::Create().  The way I did it is to
@@ -71,11 +71,10 @@ wxPaletteRefData::wxPaletteRefData()
 
 wxPaletteRefData::~wxPaletteRefData()
 {
-    XColor xcol;
     Display *display = (Display*) NULL;
-    
+
     wxNode *node, *next;
-    
+
     for (node = m_palettes.First(); node; node = next) {
         wxXPalette *c = (wxXPalette *)node->Data();
         unsigned long *pix_array = c->m_pix_array;
@@ -83,7 +82,7 @@ wxPaletteRefData::~wxPaletteRefData()
         bool destroyable = c->m_destroyable;
         int pix_array_n = c->m_pix_array_n;
         display = (Display*) c->m_display;
-        
+
         if (pix_array_n > 0)
         {
             //      XFreeColors(display, cmap, pix_array, pix_array_n, 0);
@@ -96,10 +95,10 @@ wxPaletteRefData::~wxPaletteRefData()
             }
             delete [] pix_array;
         }
-        
+
         if (destroyable)
             XFreeColormap(display, cmap);
-        
+
         next = node->Next();
         m_palettes.DeleteNode(node);
         delete c;
@@ -122,26 +121,26 @@ wxPalette::~wxPalette()
 bool wxPalette::Create(int n, const unsigned char *red, const unsigned char *green, const unsigned char *blue)
 {
     UnRef();
-    
+
     if (!n) {
         return FALSE;
     }
-    
+
     m_refData = new wxPaletteRefData;
-    
+
     XColor xcol;
     Display* display = (Display*) wxGetDisplay();
-    
+
     unsigned long *pix_array;
     Colormap cmap;
     int pix_array_n;
-    
+
     cmap = (Colormap) wxTheApp->GetMainColormap(display);
-    
+
     pix_array = new unsigned long[n];
     if (!pix_array)
         return FALSE;
-    
+
     pix_array_n = n;
     xcol.flags = DoRed | DoGreen | DoBlue;
     for(int i = 0; i < n; i++) {
@@ -150,16 +149,16 @@ bool wxPalette::Create(int n, const unsigned char *red, const unsigned char *gre
         xcol.blue = (unsigned short)blue[i] << 8;
         pix_array[i] = (XAllocColor(display, cmap, &xcol) == 0) ? 0 : xcol.pixel;
     }
-    
+
     wxXPalette *c = new wxXPalette;
-    
+
     c->m_pix_array_n = pix_array_n;
     c->m_pix_array = pix_array;
     c->m_cmap = (WXColormap) cmap;
     c->m_display = (WXDisplay*) display;
     c->m_destroyable = FALSE;
     M_PALETTEDATA->m_palettes.Append(c);
-    
+
     return TRUE;
 }
 
@@ -167,7 +166,7 @@ int wxPalette::GetPixel(const unsigned char red, const unsigned char green, cons
 {
     if ( !m_refData )
         return FALSE;
-    
+
     // TODO
     return FALSE;
 }
@@ -176,10 +175,10 @@ bool wxPalette::GetRGB(int index, unsigned char *red, unsigned char *green, unsi
 {
     if ( !m_refData )
         return FALSE;
-    
+
     if (index < 0 || index > 255)
         return FALSE;
-    
+
     // TODO
     return FALSE;
 }
@@ -188,7 +187,7 @@ WXColormap wxPalette::GetXColormap(WXDisplay* display) const
 {
     if (!M_PALETTEDATA || (M_PALETTEDATA->m_palettes.Number() == 0))
         return wxTheApp->GetMainColormap(display);
-    
+
     wxNode* node = M_PALETTEDATA->m_palettes.First();
     if (!display && node)
     {
@@ -200,22 +199,22 @@ WXColormap wxPalette::GetXColormap(WXDisplay* display) const
         wxXPalette* p = (wxXPalette*) node->Data();
         if (p->m_display == display)
             return p->m_cmap;
-        
+
         node = node->Next();
     }
-    
+
     /* Make a new one: */
     wxXPalette *c = new wxXPalette;
     wxXPalette *first = (wxXPalette *)M_PALETTEDATA->m_palettes.First()->Data();
     XColor xcol;
     int pix_array_n = first->m_pix_array_n;
-    
+
     c->m_pix_array_n = pix_array_n;
     c->m_pix_array = new unsigned long[pix_array_n];
     c->m_display = display;
     c->m_cmap = wxTheApp->GetMainColormap(display);
     c->m_destroyable = FALSE;
-    
+
     xcol.flags = DoRed | DoGreen | DoBlue;
     int i;
     for (i = 0; i < pix_array_n; i++)
@@ -225,11 +224,11 @@ WXColormap wxPalette::GetXColormap(WXDisplay* display) const
         c->m_pix_array[i] =
             (XAllocColor((Display*) display, (Colormap) c->m_cmap, &xcol) == 0) ? 0 : xcol.pixel;
     }
-    
+
     //    wxPalette* nonConstThis = (wxPalette*) this;
-    
+
     M_PALETTEDATA->m_palettes.Append(c);
-    
+
     return c->m_cmap;
 }
 
@@ -247,7 +246,7 @@ bool wxPalette::TransferBitmap(void *data, int depth, int size)
                     *uptr = (unsigned char)pix_array[*uptr];
                 uptr++;
             }
-            
+
             return TRUE;
         }
     default:
@@ -315,7 +314,7 @@ unsigned long *wxPalette::GetXPixArray(WXDisplay *display, int *n)
     if (!M_PALETTEDATA)
         return (unsigned long*) 0;
     wxNode *node;
-    
+
     for (node = M_PALETTEDATA->m_palettes.First(); node; node = node->Next())
     {
         wxXPalette *c = (wxXPalette *)node->Data();
@@ -326,7 +325,7 @@ unsigned long *wxPalette::GetXPixArray(WXDisplay *display, int *n)
             return c->m_pix_array;
         }
     }
-    
+
     /* Not found; call GetXColormap, which will create it, then this again */
     if (GetXColormap(display))
         return GetXPixArray(display, n);
@@ -337,17 +336,17 @@ unsigned long *wxPalette::GetXPixArray(WXDisplay *display, int *n)
 void wxPalette::PutXColormap(WXDisplay* display, WXColormap cm, bool dp)
 {
     UnRef();
-    
+
     m_refData = new wxPaletteRefData;
-    
+
     wxXPalette *c = new wxXPalette;
-    
+
     c->m_pix_array_n = 0;
     c->m_pix_array = (unsigned long*) NULL;
     c->m_display = display;
     c->m_cmap = cm;
     c->m_destroyable = dp;
-    
+
     M_PALETTEDATA->m_palettes.Append(c);
 }
 

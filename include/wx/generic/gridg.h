@@ -2,7 +2,7 @@
 // Name:        gridg.h
 // Purpose:     wxGenericGrid
 // Author:      Julian Smart
-// Modified by: Michael Bedward 
+// Modified by: Michael Bedward
 //                Added edit in place facility, 20 April 1999
 //                Added cursor key control, 29 Jun 1999
 // Created:     01/02/97
@@ -101,12 +101,16 @@ public:
     void SetCellTextFont(const wxFont& fnt, int row, int col);
     wxBitmap *GetCellBitmap(int row, int col) const;
     void SetCellBitmap(wxBitmap *bitmap, int row, int col);
+    void *SetCellData(void *data, int row, int col);
+    void *GetCellData(int row, int col);
 
     // Size accessors
     void SetColumnWidth(int col, int width);
     int GetColumnWidth(int col) const;
     void SetRowHeight(int row, int height);
     int GetRowHeight(int row) const;
+    int GetViewHeight() const { return m_viewHeight; }
+    int GetViewWidth() const { return m_viewWidth; }
 
     // Label accessors
     void SetLabelSize(int orientation, int sz);
@@ -266,6 +270,8 @@ protected:
     int                       m_bottomOfSheet;   // Calculated from m_rowHeights
     int                       m_totalGridWidth; // Total 'virtual' size
     int                       m_totalGridHeight;
+    int                       m_viewHeight;        // Number of rows displayed
+    int                       m_viewWidth;        // Number of columns displayed
     int                       m_cellHeight;      // For now, a default
     int                       m_verticalLabelWidth;
     int                       m_horizontalLabelHeight;
@@ -318,7 +324,8 @@ public:
     wxColour  backgroundColour;
     wxBrush   backgroundBrush;
     wxBitmap* cellBitmap;
-    int alignment;
+    void*     cellData;        // intended for additional data associated with a cell
+    int       alignment;
 
     wxGridCell(wxGenericGrid *window = (wxGenericGrid *) NULL);
     ~wxGridCell();
@@ -337,6 +344,9 @@ public:
     void SetAlignment(int align) { alignment = align; }
     wxBitmap *GetCellBitmap() const { return cellBitmap; }
     void SetCellBitmap(wxBitmap *bitmap) { cellBitmap = bitmap; }
+
+    void *SetCellData(void *data) { void *rc = cellData; cellData = data; return rc; }
+    void *GetCellData() const { return cellData; }
 };
 
 class WXDLLEXPORT wxGrid : public wxGenericGrid

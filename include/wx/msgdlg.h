@@ -4,7 +4,7 @@
 #if defined(__WXMSW__)
 #include "wx/msw/msgdlg.h"
 #elif defined(__WXMOTIF__)
-#include "wx/generic/msgdlgg.h"
+#include "wx/motif/msgdlg.h"
 #elif defined(__WXGTK__)
 #include "wx/gtk/msgdlg.h"
 #elif defined(__WXQT__)
