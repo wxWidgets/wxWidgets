@@ -43,18 +43,11 @@ class TestPanel(wx.Panel):
 
 
     def OnSelect(self, evt):
-        #print "OnSelect: "
         face = self.lb1.GetStringSelection()
-        #print '\t '+face
         font = wx.Font(28, wx.DEFAULT, wx.NORMAL, wx.NORMAL, False, face)
-        #print "\t got font"
         self.txt.SetLabel(face)
-        #print "\t set label"
         self.txt.SetFont(font)
-        #print "\t set font"
-        #self.txt.SetSize(self.txt.GetBestSize())
-        #print "\t set size"
-
+        if wx.Platform == "__WXMAC__": self.Refresh()
 
 ##         st = font.GetNativeFontInfo().ToString()
 ##         ni2 = wx.NativeFontInfo()

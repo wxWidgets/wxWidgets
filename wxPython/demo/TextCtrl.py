@@ -70,12 +70,13 @@ class TestPanel(wx.Panel):
         t5.Bind(wx.EVT_LEFT_DOWN, self.OnT5LeftDown)
         self.t5 = t5
 
+        space = 4
         bsizer = wx.BoxSizer(wx.VERTICAL)
-        bsizer.Add(b, 0, wx.GROW|wx.ALL, 4)
-        bsizer.Add(b2, 0, wx.GROW|wx.ALL, 4)
-        bsizer.Add(b3, 0, wx.GROW|wx.ALL, 4)
+        bsizer.Add(b, 0, wx.GROW|wx.ALL, space)
+        bsizer.Add(b2, 0, wx.GROW|wx.ALL, space)
+        bsizer.Add(b3, 0, wx.GROW|wx.ALL, space)
 
-        sizer = wx.FlexGridSizer(cols=3, hgap=6, vgap=6)
+        sizer = wx.FlexGridSizer(cols=3, hgap=space, vgap=space)
         sizer.AddMany([ l1, t1, (0,0),
                         l2, t2, (0,0),
                         l3, t3, bsizer,
