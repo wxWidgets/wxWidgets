@@ -1254,6 +1254,174 @@ static PyObject *_wrap_wxFrame_SetStatusWidths(PyObject *self, PyObject *args, P
     return _resultobj;
 }
 
+#define wxFrame_PushStatusText(_swigobj,_swigarg0,_swigarg1)  (_swigobj->PushStatusText(_swigarg0,_swigarg1))
+static PyObject *_wrap_wxFrame_PushStatusText(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxFrame * _arg0;
+    wxString * _arg1;
+    int  _arg2 = (int ) 0;
+    PyObject * _argo0 = 0;
+    PyObject * _obj1 = 0;
+    char *_kwnames[] = { "self","text","number", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO|i:wxFrame_PushStatusText",_kwnames,&_argo0,&_obj1,&_arg2)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxFrame_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxFrame_PushStatusText. Expected _wxFrame_p.");
+        return NULL;
+        }
+    }
+{
+    _arg1 = wxString_in_helper(_obj1);
+    if (_arg1 == NULL)
+        return NULL;
+}
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    wxFrame_PushStatusText(_arg0,*_arg1,_arg2);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+{
+    if (_obj1)
+        delete _arg1;
+}
+    return _resultobj;
+}
+
+#define wxFrame_PopStatusText(_swigobj,_swigarg0)  (_swigobj->PopStatusText(_swigarg0))
+static PyObject *_wrap_wxFrame_PopStatusText(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxFrame * _arg0;
+    int  _arg1 = (int ) 0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self","number", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O|i:wxFrame_PopStatusText",_kwnames,&_argo0,&_arg1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxFrame_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxFrame_PopStatusText. Expected _wxFrame_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    wxFrame_PopStatusText(_arg0,_arg1);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxFrame_DoGiveHelp(_swigobj,_swigarg0,_swigarg1)  (_swigobj->DoGiveHelp(_swigarg0,_swigarg1))
+static PyObject *_wrap_wxFrame_DoGiveHelp(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxFrame * _arg0;
+    wxString * _arg1;
+    bool  _arg2;
+    PyObject * _argo0 = 0;
+    PyObject * _obj1 = 0;
+    int tempbool2;
+    char *_kwnames[] = { "self","text","show", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OOi:wxFrame_DoGiveHelp",_kwnames,&_argo0,&_obj1,&tempbool2)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxFrame_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxFrame_DoGiveHelp. Expected _wxFrame_p.");
+        return NULL;
+        }
+    }
+{
+    _arg1 = wxString_in_helper(_obj1);
+    if (_arg1 == NULL)
+        return NULL;
+}
+    _arg2 = (bool ) tempbool2;
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    wxFrame_DoGiveHelp(_arg0,*_arg1,_arg2);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+{
+    if (_obj1)
+        delete _arg1;
+}
+    return _resultobj;
+}
+
+#define wxFrame_SetStatusBarPane(_swigobj,_swigarg0)  (_swigobj->SetStatusBarPane(_swigarg0))
+static PyObject *_wrap_wxFrame_SetStatusBarPane(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxFrame * _arg0;
+    int  _arg1;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self","n", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxFrame_SetStatusBarPane",_kwnames,&_argo0,&_arg1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxFrame_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxFrame_SetStatusBarPane. Expected _wxFrame_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    wxFrame_SetStatusBarPane(_arg0,_arg1);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxFrame_GetStatusBarPane(_swigobj)  (_swigobj->GetStatusBarPane())
+static PyObject *_wrap_wxFrame_GetStatusBarPane(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    int  _result;
+    wxFrame * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxFrame_GetStatusBarPane",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxFrame_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxFrame_GetStatusBarPane. Expected _wxFrame_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    _result = (int )wxFrame_GetStatusBarPane(_arg0);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
 #define wxFrame_CreateToolBar(_swigobj,_swigarg0,_swigarg1,_swigarg2)  (_swigobj->CreateToolBar(_swigarg0,_swigarg1,_swigarg2))
 static PyObject *_wrap_wxFrame_CreateToolBar(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
@@ -2455,6 +2623,11 @@ static PyMethodDef framescMethods[] = {
 	 { "wxFrame_SetToolBar", (PyCFunction) _wrap_wxFrame_SetToolBar, METH_VARARGS | METH_KEYWORDS },
 	 { "wxFrame_GetToolBar", (PyCFunction) _wrap_wxFrame_GetToolBar, METH_VARARGS | METH_KEYWORDS },
 	 { "wxFrame_CreateToolBar", (PyCFunction) _wrap_wxFrame_CreateToolBar, METH_VARARGS | METH_KEYWORDS },
+	 { "wxFrame_GetStatusBarPane", (PyCFunction) _wrap_wxFrame_GetStatusBarPane, METH_VARARGS | METH_KEYWORDS },
+	 { "wxFrame_SetStatusBarPane", (PyCFunction) _wrap_wxFrame_SetStatusBarPane, METH_VARARGS | METH_KEYWORDS },
+	 { "wxFrame_DoGiveHelp", (PyCFunction) _wrap_wxFrame_DoGiveHelp, METH_VARARGS | METH_KEYWORDS },
+	 { "wxFrame_PopStatusText", (PyCFunction) _wrap_wxFrame_PopStatusText, METH_VARARGS | METH_KEYWORDS },
+	 { "wxFrame_PushStatusText", (PyCFunction) _wrap_wxFrame_PushStatusText, METH_VARARGS | METH_KEYWORDS },
 	 { "wxFrame_SetStatusWidths", (PyCFunction) _wrap_wxFrame_SetStatusWidths, METH_VARARGS | METH_KEYWORDS },
 	 { "wxFrame_SetStatusText", (PyCFunction) _wrap_wxFrame_SetStatusText, METH_VARARGS | METH_KEYWORDS },
 	 { "wxFrame_SetStatusBar", (PyCFunction) _wrap_wxFrame_SetStatusBar, METH_VARARGS | METH_KEYWORDS },

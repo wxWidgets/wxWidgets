@@ -73,6 +73,9 @@ public:
     void SetFieldsCount(int number = 1);
     void SetStatusText(const wxString& text, int i = 0);
     void SetStatusWidths(int LCOUNT, int* choices);
+    void PushStatusText(const wxString& text, int number = 0);
+    void PopStatusText(int number = 0);
+
     void SetMinHeight(int height);
 };
 

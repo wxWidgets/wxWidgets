@@ -116,6 +116,21 @@ class wxFramePtr(wxTopLevelWindowPtr):
     def SetStatusWidths(self, *_args, **_kwargs):
         val = apply(framesc.wxFrame_SetStatusWidths,(self,) + _args, _kwargs)
         return val
+    def PushStatusText(self, *_args, **_kwargs):
+        val = apply(framesc.wxFrame_PushStatusText,(self,) + _args, _kwargs)
+        return val
+    def PopStatusText(self, *_args, **_kwargs):
+        val = apply(framesc.wxFrame_PopStatusText,(self,) + _args, _kwargs)
+        return val
+    def DoGiveHelp(self, *_args, **_kwargs):
+        val = apply(framesc.wxFrame_DoGiveHelp,(self,) + _args, _kwargs)
+        return val
+    def SetStatusBarPane(self, *_args, **_kwargs):
+        val = apply(framesc.wxFrame_SetStatusBarPane,(self,) + _args, _kwargs)
+        return val
+    def GetStatusBarPane(self, *_args, **_kwargs):
+        val = apply(framesc.wxFrame_GetStatusBarPane,(self,) + _args, _kwargs)
+        return val
     def CreateToolBar(self, *_args, **_kwargs):
         val = apply(framesc.wxFrame_CreateToolBar,(self,) + _args, _kwargs)
         return val

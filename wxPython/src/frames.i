@@ -166,6 +166,16 @@ public:
     // forward these to status bar
     virtual void SetStatusText(const wxString &text, int number = 0);
     virtual void SetStatusWidths(int LCOUNT, int* choices); // uses typemap
+    void PushStatusText(const wxString &text, int number = 0);
+    void PopStatusText(int number = 0);
+
+    // show help text (typically in the statusbar); show is FALSE
+    // if you are hiding the help, TRUE otherwise
+    virtual void DoGiveHelp(const wxString& text, bool show);
+
+    // set the status bar pane the help will be shown in
+    void SetStatusBarPane(int n);
+    int GetStatusBarPane() const;
 
 
     // create main toolbar
