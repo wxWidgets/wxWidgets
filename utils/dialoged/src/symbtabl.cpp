@@ -133,7 +133,7 @@ bool wxResourceSymbolTable::WriteIncludeFile(const wxString& filename)
     wxNode* node = m_hashTable.Next();
     while (node)
     {
-        const char* str = node->GetKeyString();
+        char* str = node->key.string;
         int id = (int) node->Data() ;
 
         if (!IsStandardSymbol(str))
@@ -181,7 +181,7 @@ wxString wxResourceSymbolTable::GetSymbolForId(int id)
     wxNode* node = m_hashTable.Next();
     while (node)
     {
-        const char* str = node->GetKeyString();
+        char* str = node->key.string;
         if (str && ( ((int) node->Data()) == id) )
             return wxString(str);
 
@@ -323,7 +323,7 @@ bool wxResourceSymbolTable::FillComboBox(wxComboBox* comboBox)
     wxNode* node = m_hashTable.Next();
     while (node)
     {
-        const char* str = node->GetKeyString();
+        char* str = node->key.string;
 
         comboBox->Append(str);
         node = m_hashTable.Next();
