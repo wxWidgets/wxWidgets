@@ -75,6 +75,10 @@ constants in the \helpref{artprov}{sampleartprovider} sample):
 \item wxART\_MISSING\_IMAGE      
 \end{itemize}
 
+Additionally, any string recognized by custom art providers registered using
+\helpref{PushProvider}{wxartproviderpushprovider} may be used. When running
+under GTK+ 2, GTK+ stock item IDs (e.g. {\tt "gtk-cdrom"}) may be used as well.
+
 \membersection{Clients}
 
 Client is the entity that calls wxArtProvider's GetBitmap or GetIcon

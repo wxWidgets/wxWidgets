@@ -250,6 +250,7 @@ wxGTK:
   freedesktop.org's wm-spec (Mart Raudsepp)
 - wxEVT_CONTEXT_MENU is now generated for right mouse press, not release
 - implemented alpha channel support in wxBitmap
+- added native GTK+2  wxArtProvider implementation
 
 wxMotif:
 

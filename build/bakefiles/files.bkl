@@ -725,6 +725,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     <!-- Generic implementations used by wxGPE: -->
     src/generic/fontdlgg.cpp
     <!-- GTK+ specific files: -->
+    src/gtk/artgtk.cpp
     src/gtk/bmpbuttn.cpp
     src/gtk/button.cpp
     src/gtk/checkbox.cpp

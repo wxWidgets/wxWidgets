@@ -210,6 +210,7 @@ public:
     bool OnInit()
     {
         wxArtProvider::InitStdProvider();
+        wxArtProvider::InitNativeProvider();
         return TRUE;
     }
     void OnExit()

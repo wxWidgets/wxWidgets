@@ -2676,6 +2676,7 @@ COND_TOOLKIT_GTK___GUI_SRC_OBJECTS =  \
 	monodll_statusbr.o \
 	monodll_tabg.o \
 	monodll_fontdlgg.o \
+	monodll_artgtk.o \
 	monodll_bmpbuttn.o \
 	monodll_button.o \
 	monodll_checkbox.o \
@@ -3554,6 +3555,7 @@ COND_TOOLKIT_GTK___GUI_SRC_OBJECTS_1 =  \
 	monolib_statusbr.o \
 	monolib_tabg.o \
 	monolib_fontdlgg.o \
+	monolib_artgtk.o \
 	monolib_bmpbuttn.o \
 	monolib_button.o \
 	monolib_checkbox.o \
@@ -4618,6 +4620,7 @@ COND_TOOLKIT_GTK___GUI_SRC_OBJECTS_2 =  \
 	coredll_statusbr.o \
 	coredll_tabg.o \
 	coredll_fontdlgg.o \
+	coredll_artgtk.o \
 	coredll_bmpbuttn.o \
 	coredll_button.o \
 	coredll_checkbox.o \
@@ -5349,6 +5352,7 @@ COND_TOOLKIT_GTK___GUI_SRC_OBJECTS_3 =  \
 	corelib_statusbr.o \
 	corelib_tabg.o \
 	corelib_fontdlgg.o \
+	corelib_artgtk.o \
 	corelib_bmpbuttn.o \
 	corelib_button.o \
 	corelib_checkbox.o \
@@ -8148,6 +8152,9 @@ monodll_urlmsw.o: $(srcdir)/src/msw/urlmsw.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
 
 monodll_net.o: $(srcdir)/src/msw/wince/net.cpp $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
+
+monodll_artgtk.o: $(srcdir)/src/gtk/artgtk.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
 
 monodll_scrolwin.o: $(srcdir)/src/gtk/scrolwin.cpp $(MONODLL_ODEP)
@@ -11133,6 +11140,9 @@ monolib_urlmsw.o: $(srcdir)/src/msw/urlmsw.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
 
 monolib_net.o: $(srcdir)/src/msw/wince/net.cpp $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
+
+monolib_artgtk.o: $(srcdir)/src/gtk/artgtk.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
 
 monolib_scrolwin.o: $(srcdir)/src/gtk/scrolwin.cpp $(MONOLIB_ODEP)
@@ -14666,6 +14676,9 @@ coredll_volume.o: $(srcdir)/src/msw/volume.cpp $(COREDLL_ODEP)
 coredll_uma.o: $(srcdir)/src/mac/carbon/uma.cpp $(COREDLL_ODEP)
 	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $<
 
+coredll_artgtk.o: $(srcdir)/src/gtk/artgtk.cpp $(COREDLL_ODEP)
+	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $<
+
 coredll_scrolwin.o: $(srcdir)/src/gtk/scrolwin.cpp $(COREDLL_ODEP)
 	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $<
 
@@ -17103,6 +17116,9 @@ corelib_volume.o: $(srcdir)/src/msw/volume.cpp $(CORELIB_ODEP)
 	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $<
 
 corelib_uma.o: $(srcdir)/src/mac/carbon/uma.cpp $(CORELIB_ODEP)
+	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $<
+
+corelib_artgtk.o: $(srcdir)/src/gtk/artgtk.cpp $(CORELIB_ODEP)
 	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $<
 
 corelib_scrolwin.o: $(srcdir)/src/gtk/scrolwin.cpp $(CORELIB_ODEP)
