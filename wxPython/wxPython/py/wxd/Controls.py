@@ -503,6 +503,19 @@ class GenericDirCtrl(Control):
         pass
 
 
+class DirFilterListCtrl(Choice):
+    """"""
+
+    def __init__(self, parent, id=-1, pos=wx.DefaultPosition,
+                 size=wx.DefaultSize, style=0):
+        """"""
+        pass
+
+    def FillFilterList(filter, defaultFilter):
+        """"""
+        pass
+
+
 class ListBox(ControlWithItems):
     """"""
 
