@@ -351,6 +351,29 @@ public:
 
 
 
+class wxPyClientData : public wxClientData {
+public:
+    wxPyClientData(PyObject* obj) {
+        m_obj = obj;
+        Py_INCREF(m_obj);
+    }
+
+    ~wxPyClientData() {
+#ifdef wxPyUSE_EXPORT
+        wxPyTState* state = wxPyCoreAPIPtr->p_wxPyBeginBlockThreads();
+        Py_DECREF(m_obj);
+        wxPyCoreAPIPtr->p_wxPyEndBlockThreads(state);
+#else
+        wxPyTState* state = wxPyBeginBlockThreads();
+        Py_DECREF(m_obj);
+        wxPyEndBlockThreads(state);
+#endif
+    }
+    PyObject* m_obj;
+};
+
+
+
 //---------------------------------------------------------------------------
 // These macros are used to implement the virtual methods that should
 // redirect to a Python method if one exists.  The names designate the

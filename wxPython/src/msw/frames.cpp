@@ -525,6 +525,66 @@ static PyObject *_wrap_wxTopLevelWindow_SetIcon(PyObject *self, PyObject *args, 
     return _resultobj;
 }
 
+#define wxTopLevelWindow_ShowFullScreen(_swigobj,_swigarg0,_swigarg1)  (_swigobj->ShowFullScreen(_swigarg0,_swigarg1))
+static PyObject *_wrap_wxTopLevelWindow_ShowFullScreen(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    bool  _result;
+    wxTopLevelWindow * _arg0;
+    bool  _arg1;
+    long  _arg2 = (long ) (wxFULLSCREEN_ALL);
+    PyObject * _argo0 = 0;
+    int tempbool1;
+    char *_kwnames[] = { "self","show","style", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi|l:wxTopLevelWindow_ShowFullScreen",_kwnames,&_argo0,&tempbool1,&_arg2)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxTopLevelWindow_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxTopLevelWindow_ShowFullScreen. Expected _wxTopLevelWindow_p.");
+        return NULL;
+        }
+    }
+    _arg1 = (bool ) tempbool1;
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (bool )wxTopLevelWindow_ShowFullScreen(_arg0,_arg1,_arg2);
+
+    wxPy_END_ALLOW_THREADS;
+    if (PyErr_Occurred()) return NULL;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxTopLevelWindow_IsFullScreen(_swigobj)  (_swigobj->IsFullScreen())
+static PyObject *_wrap_wxTopLevelWindow_IsFullScreen(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    bool  _result;
+    wxTopLevelWindow * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxTopLevelWindow_IsFullScreen",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxTopLevelWindow_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxTopLevelWindow_IsFullScreen. Expected _wxTopLevelWindow_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (bool )wxTopLevelWindow_IsFullScreen(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+    if (PyErr_Occurred()) return NULL;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
 #define wxTopLevelWindow_SetTitle(_swigobj,_swigarg0)  (_swigobj->SetTitle(_swigarg0))
 static PyObject *_wrap_wxTopLevelWindow_SetTitle(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
@@ -1270,162 +1330,6 @@ static PyObject *_wrap_wxFrame_SetToolBar(PyObject *self, PyObject *args, PyObje
 {
     wxPy_BEGIN_ALLOW_THREADS;
         wxFrame_SetToolBar(_arg0,_arg1);
-
-    wxPy_END_ALLOW_THREADS;
-    if (PyErr_Occurred()) return NULL;
-}    Py_INCREF(Py_None);
-    _resultobj = Py_None;
-    return _resultobj;
-}
-
-#define wxFrame_ShowFullScreen(_swigobj,_swigarg0,_swigarg1)  (_swigobj->ShowFullScreen(_swigarg0,_swigarg1))
-static PyObject *_wrap_wxFrame_ShowFullScreen(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    bool  _result;
-    wxFrame * _arg0;
-    bool  _arg1;
-    long  _arg2 = (long ) (wxFULLSCREEN_ALL);
-    PyObject * _argo0 = 0;
-    int tempbool1;
-    char *_kwnames[] = { "self","show","style", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi|l:wxFrame_ShowFullScreen",_kwnames,&_argo0,&tempbool1,&_arg2)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxFrame_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxFrame_ShowFullScreen. Expected _wxFrame_p.");
-        return NULL;
-        }
-    }
-    _arg1 = (bool ) tempbool1;
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        _result = (bool )wxFrame_ShowFullScreen(_arg0,_arg1,_arg2);
-
-    wxPy_END_ALLOW_THREADS;
-    if (PyErr_Occurred()) return NULL;
-}    _resultobj = Py_BuildValue("i",_result);
-    return _resultobj;
-}
-
-#define wxFrame_IsFullScreen(_swigobj)  (_swigobj->IsFullScreen())
-static PyObject *_wrap_wxFrame_IsFullScreen(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    bool  _result;
-    wxFrame * _arg0;
-    PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxFrame_IsFullScreen",_kwnames,&_argo0)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxFrame_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxFrame_IsFullScreen. Expected _wxFrame_p.");
-        return NULL;
-        }
-    }
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        _result = (bool )wxFrame_IsFullScreen(_arg0);
-
-    wxPy_END_ALLOW_THREADS;
-    if (PyErr_Occurred()) return NULL;
-}    _resultobj = Py_BuildValue("i",_result);
-    return _resultobj;
-}
-
-#define wxFrame_Raise(_swigobj)  (_swigobj->Raise())
-static PyObject *_wrap_wxFrame_Raise(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    wxFrame * _arg0;
-    PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxFrame_Raise",_kwnames,&_argo0)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxFrame_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxFrame_Raise. Expected _wxFrame_p.");
-        return NULL;
-        }
-    }
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        wxFrame_Raise(_arg0);
-
-    wxPy_END_ALLOW_THREADS;
-    if (PyErr_Occurred()) return NULL;
-}    Py_INCREF(Py_None);
-    _resultobj = Py_None;
-    return _resultobj;
-}
-
-#define wxFrame_SetAcceleratorTable(_swigobj,_swigarg0)  (_swigobj->SetAcceleratorTable(_swigarg0))
-static PyObject *_wrap_wxFrame_SetAcceleratorTable(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    wxFrame * _arg0;
-    wxAcceleratorTable * _arg1;
-    PyObject * _argo0 = 0;
-    PyObject * _argo1 = 0;
-    char *_kwnames[] = { "self","accel", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxFrame_SetAcceleratorTable",_kwnames,&_argo0,&_argo1)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxFrame_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxFrame_SetAcceleratorTable. Expected _wxFrame_p.");
-        return NULL;
-        }
-    }
-    if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxAcceleratorTable_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxFrame_SetAcceleratorTable. Expected _wxAcceleratorTable_p.");
-        return NULL;
-        }
-    }
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        wxFrame_SetAcceleratorTable(_arg0,*_arg1);
-
-    wxPy_END_ALLOW_THREADS;
-    if (PyErr_Occurred()) return NULL;
-}    Py_INCREF(Py_None);
-    _resultobj = Py_None;
-    return _resultobj;
-}
-
-#define wxFrame_MakeModal(_swigobj,_swigarg0)  (_swigobj->MakeModal(_swigarg0))
-static PyObject *_wrap_wxFrame_MakeModal(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    wxFrame * _arg0;
-    bool  _arg1 = (bool ) TRUE;
-    PyObject * _argo0 = 0;
-    int tempbool1 = (int) TRUE;
-    char *_kwnames[] = { "self","modal", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O|i:wxFrame_MakeModal",_kwnames,&_argo0,&tempbool1)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxFrame_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxFrame_MakeModal. Expected _wxFrame_p.");
-        return NULL;
-        }
-    }
-    _arg1 = (bool ) tempbool1;
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        wxFrame_MakeModal(_arg0,_arg1);
 
     wxPy_END_ALLOW_THREADS;
     if (PyErr_Occurred()) return NULL;
@@ -2282,11 +2186,6 @@ static PyMethodDef framescMethods[] = {
 	 { "wxDialog_Create", (PyCFunction) _wrap_wxDialog_Create, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxPreDialog", (PyCFunction) _wrap_new_wxPreDialog, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxDialog", (PyCFunction) _wrap_new_wxDialog, METH_VARARGS | METH_KEYWORDS },
-	 { "wxFrame_MakeModal", (PyCFunction) _wrap_wxFrame_MakeModal, METH_VARARGS | METH_KEYWORDS },
-	 { "wxFrame_SetAcceleratorTable", (PyCFunction) _wrap_wxFrame_SetAcceleratorTable, METH_VARARGS | METH_KEYWORDS },
-	 { "wxFrame_Raise", (PyCFunction) _wrap_wxFrame_Raise, METH_VARARGS | METH_KEYWORDS },
-	 { "wxFrame_IsFullScreen", (PyCFunction) _wrap_wxFrame_IsFullScreen, METH_VARARGS | METH_KEYWORDS },
-	 { "wxFrame_ShowFullScreen", (PyCFunction) _wrap_wxFrame_ShowFullScreen, METH_VARARGS | METH_KEYWORDS },
 	 { "wxFrame_SetToolBar", (PyCFunction) _wrap_wxFrame_SetToolBar, METH_VARARGS | METH_KEYWORDS },
 	 { "wxFrame_GetToolBar", (PyCFunction) _wrap_wxFrame_GetToolBar, METH_VARARGS | METH_KEYWORDS },
 	 { "wxFrame_CreateToolBar", (PyCFunction) _wrap_wxFrame_CreateToolBar, METH_VARARGS | METH_KEYWORDS },
@@ -2305,6 +2204,8 @@ static PyMethodDef framescMethods[] = {
 	 { "new_wxFrame", (PyCFunction) _wrap_new_wxFrame, METH_VARARGS | METH_KEYWORDS },
 	 { "wxTopLevelWindow_GetTitle", (PyCFunction) _wrap_wxTopLevelWindow_GetTitle, METH_VARARGS | METH_KEYWORDS },
 	 { "wxTopLevelWindow_SetTitle", (PyCFunction) _wrap_wxTopLevelWindow_SetTitle, METH_VARARGS | METH_KEYWORDS },
+	 { "wxTopLevelWindow_IsFullScreen", (PyCFunction) _wrap_wxTopLevelWindow_IsFullScreen, METH_VARARGS | METH_KEYWORDS },
+	 { "wxTopLevelWindow_ShowFullScreen", (PyCFunction) _wrap_wxTopLevelWindow_ShowFullScreen, METH_VARARGS | METH_KEYWORDS },
 	 { "wxTopLevelWindow_SetIcon", (PyCFunction) _wrap_wxTopLevelWindow_SetIcon, METH_VARARGS | METH_KEYWORDS },
 	 { "wxTopLevelWindow_GetIcon", (PyCFunction) _wrap_wxTopLevelWindow_GetIcon, METH_VARARGS | METH_KEYWORDS },
 	 { "wxTopLevelWindow_IsIconized", (PyCFunction) _wrap_wxTopLevelWindow_IsIconized, METH_VARARGS | METH_KEYWORDS },

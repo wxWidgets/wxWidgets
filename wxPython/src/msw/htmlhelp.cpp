@@ -1261,6 +1261,14 @@ static void *SwigwxHtmlHelpFrameTowxFrame(void *ptr) {
     return (void *) dest;
 }
 
+static void *SwigwxHtmlHelpFrameTowxTopLevelWindow(void *ptr) {
+    wxHtmlHelpFrame *src;
+    wxTopLevelWindow *dest;
+    src = (wxHtmlHelpFrame *) ptr;
+    dest = (wxTopLevelWindow *) src;
+    return (void *) dest;
+}
+
 static void *SwigwxHtmlHelpFrameTowxWindow(void *ptr) {
     wxHtmlHelpFrame *src;
     wxWindow *dest;
@@ -2520,6 +2528,7 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_size_t","_int",0},
     { "_size_t","_wxWindowID",0},
     { "_size_t","_uint",0},
+    { "_wxTopLevelWindow","_wxHtmlHelpFrame",SwigwxHtmlHelpFrameTowxTopLevelWindow},
     { "_uint","_wxCoord",0},
     { "_uint","_wxPrintQuality",0},
     { "_uint","_time_t",0},

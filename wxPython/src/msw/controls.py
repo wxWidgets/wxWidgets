@@ -42,6 +42,53 @@ def wxPreControl(*_args,**_kwargs):
     return val
 
 
+class wxControlWithItemsPtr(wxControlPtr):
+    def __init__(self,this):
+        self.this = this
+        self.thisown = 0
+    def Delete(self, *_args, **_kwargs):
+        val = apply(controlsc.wxControlWithItems_Delete,(self,) + _args, _kwargs)
+        return val
+    def GetCount(self, *_args, **_kwargs):
+        val = apply(controlsc.wxControlWithItems_GetCount,(self,) + _args, _kwargs)
+        return val
+    def GetString(self, *_args, **_kwargs):
+        val = apply(controlsc.wxControlWithItems_GetString,(self,) + _args, _kwargs)
+        return val
+    def SetString(self, *_args, **_kwargs):
+        val = apply(controlsc.wxControlWithItems_SetString,(self,) + _args, _kwargs)
+        return val
+    def FindString(self, *_args, **_kwargs):
+        val = apply(controlsc.wxControlWithItems_FindString,(self,) + _args, _kwargs)
+        return val
+    def Select(self, *_args, **_kwargs):
+        val = apply(controlsc.wxControlWithItems_Select,(self,) + _args, _kwargs)
+        return val
+    def GetSelection(self, *_args, **_kwargs):
+        val = apply(controlsc.wxControlWithItems_GetSelection,(self,) + _args, _kwargs)
+        return val
+    def GetStringSelection(self, *_args, **_kwargs):
+        val = apply(controlsc.wxControlWithItems_GetStringSelection,(self,) + _args, _kwargs)
+        return val
+    def Append(self, *_args, **_kwargs):
+        val = apply(controlsc.wxControlWithItems_Append,(self,) + _args, _kwargs)
+        return val
+    def GetClientData(self, *_args, **_kwargs):
+        val = apply(controlsc.wxControlWithItems_GetClientData,(self,) + _args, _kwargs)
+        return val
+    def SetClientData(self, *_args, **_kwargs):
+        val = apply(controlsc.wxControlWithItems_SetClientData,(self,) + _args, _kwargs)
+        return val
+    def __repr__(self):
+        return "<C wxControlWithItems instance at %s>" % (self.this,)
+    Number = GetCount
+class wxControlWithItems(wxControlWithItemsPtr):
+    def __init__(self,this):
+        self.this = this
+
+
+
+
 class wxButtonPtr(wxControlPtr):
     def __init__(self,this):
         self.this = this
@@ -166,39 +213,18 @@ def wxPreCheckBox(*_args,**_kwargs):
     return val
 
 
-class wxChoicePtr(wxControlPtr):
+class wxChoicePtr(wxControlWithItemsPtr):
     def __init__(self,this):
         self.this = this
         self.thisown = 0
     def Create(self, *_args, **_kwargs):
         val = apply(controlsc.wxChoice_Create,(self,) + _args, _kwargs)
         return val
-    def Append(self, *_args, **_kwargs):
-        val = apply(controlsc.wxChoice_Append,(self,) + _args, _kwargs)
-        return val
     def Clear(self, *_args, **_kwargs):
         val = apply(controlsc.wxChoice_Clear,(self,) + _args, _kwargs)
         return val
-    def Delete(self, *_args, **_kwargs):
-        val = apply(controlsc.wxChoice_Delete,(self,) + _args, _kwargs)
-        return val
-    def FindString(self, *_args, **_kwargs):
-        val = apply(controlsc.wxChoice_FindString,(self,) + _args, _kwargs)
-        return val
     def GetColumns(self, *_args, **_kwargs):
         val = apply(controlsc.wxChoice_GetColumns,(self,) + _args, _kwargs)
-        return val
-    def GetSelection(self, *_args, **_kwargs):
-        val = apply(controlsc.wxChoice_GetSelection,(self,) + _args, _kwargs)
-        return val
-    def GetString(self, *_args, **_kwargs):
-        val = apply(controlsc.wxChoice_GetString,(self,) + _args, _kwargs)
-        return val
-    def GetStringSelection(self, *_args, **_kwargs):
-        val = apply(controlsc.wxChoice_GetStringSelection,(self,) + _args, _kwargs)
-        return val
-    def GetCount(self, *_args, **_kwargs):
-        val = apply(controlsc.wxChoice_GetCount,(self,) + _args, _kwargs)
         return val
     def SetColumns(self, *_args, **_kwargs):
         val = apply(controlsc.wxChoice_SetColumns,(self,) + _args, _kwargs)
@@ -215,7 +241,6 @@ class wxChoicePtr(wxControlPtr):
     def __repr__(self):
         return "<C wxChoice instance at %s>" % (self.this,)
     
-    Number = GetCount
     Select = SetSelection
     
 class wxChoice(wxChoicePtr):
@@ -238,38 +263,17 @@ class wxComboBoxPtr(wxChoicePtr):
     def Create(self, *_args, **_kwargs):
         val = apply(controlsc.wxComboBox_Create,(self,) + _args, _kwargs)
         return val
-    def Append(self, *_args, **_kwargs):
-        val = apply(controlsc.wxComboBox_Append,(self,) + _args, _kwargs)
-        return val
-    def Clear(self, *_args, **_kwargs):
-        val = apply(controlsc.wxComboBox_Clear,(self,) + _args, _kwargs)
-        return val
     def Copy(self, *_args, **_kwargs):
         val = apply(controlsc.wxComboBox_Copy,(self,) + _args, _kwargs)
         return val
     def Cut(self, *_args, **_kwargs):
         val = apply(controlsc.wxComboBox_Cut,(self,) + _args, _kwargs)
         return val
-    def Delete(self, *_args, **_kwargs):
-        val = apply(controlsc.wxComboBox_Delete,(self,) + _args, _kwargs)
-        return val
-    def FindString(self, *_args, **_kwargs):
-        val = apply(controlsc.wxComboBox_FindString,(self,) + _args, _kwargs)
-        return val
     def GetInsertionPoint(self, *_args, **_kwargs):
         val = apply(controlsc.wxComboBox_GetInsertionPoint,(self,) + _args, _kwargs)
         return val
     def GetLastPosition(self, *_args, **_kwargs):
         val = apply(controlsc.wxComboBox_GetLastPosition,(self,) + _args, _kwargs)
-        return val
-    def GetSelection(self, *_args, **_kwargs):
-        val = apply(controlsc.wxComboBox_GetSelection,(self,) + _args, _kwargs)
-        return val
-    def GetString(self, *_args, **_kwargs):
-        val = apply(controlsc.wxComboBox_GetString,(self,) + _args, _kwargs)
-        return val
-    def GetStringSelection(self, *_args, **_kwargs):
-        val = apply(controlsc.wxComboBox_GetStringSelection,(self,) + _args, _kwargs)
         return val
     def GetValue(self, *_args, **_kwargs):
         val = apply(controlsc.wxComboBox_GetValue,(self,) + _args, _kwargs)
@@ -434,45 +438,24 @@ def wxPreStaticText(*_args,**_kwargs):
     return val
 
 
-class wxListBoxPtr(wxControlPtr):
+class wxListBoxPtr(wxControlWithItemsPtr):
     def __init__(self,this):
         self.this = this
         self.thisown = 0
     def Create(self, *_args, **_kwargs):
         val = apply(controlsc.wxListBox_Create,(self,) + _args, _kwargs)
         return val
-    def Append(self, *_args, **_kwargs):
-        val = apply(controlsc.wxListBox_Append,(self,) + _args, _kwargs)
-        return val
     def Clear(self, *_args, **_kwargs):
         val = apply(controlsc.wxListBox_Clear,(self,) + _args, _kwargs)
         return val
-    def Delete(self, *_args, **_kwargs):
-        val = apply(controlsc.wxListBox_Delete,(self,) + _args, _kwargs)
-        return val
     def Deselect(self, *_args, **_kwargs):
         val = apply(controlsc.wxListBox_Deselect,(self,) + _args, _kwargs)
-        return val
-    def FindString(self, *_args, **_kwargs):
-        val = apply(controlsc.wxListBox_FindString,(self,) + _args, _kwargs)
-        return val
-    def GetSelection(self, *_args, **_kwargs):
-        val = apply(controlsc.wxListBox_GetSelection,(self,) + _args, _kwargs)
         return val
     def GetSelections(self, *_args, **_kwargs):
         val = apply(controlsc.wxListBox_GetSelections,(self,) + _args, _kwargs)
         return val
     def InsertItems(self, *_args, **_kwargs):
         val = apply(controlsc.wxListBox_InsertItems,(self,) + _args, _kwargs)
-        return val
-    def GetString(self, *_args, **_kwargs):
-        val = apply(controlsc.wxListBox_GetString,(self,) + _args, _kwargs)
-        return val
-    def GetStringSelection(self, *_args, **_kwargs):
-        val = apply(controlsc.wxListBox_GetStringSelection,(self,) + _args, _kwargs)
-        return val
-    def GetCount(self, *_args, **_kwargs):
-        val = apply(controlsc.wxListBox_GetCount,(self,) + _args, _kwargs)
         return val
     def IsSelected(self, *_args, **_kwargs):
         val = apply(controlsc.wxListBox_IsSelected,(self,) + _args, _kwargs)
@@ -500,7 +483,6 @@ class wxListBoxPtr(wxControlPtr):
         return val
     def __repr__(self):
         return "<C wxListBox instance at %s>" % (self.this,)
-    Number = GetCount
 class wxListBox(wxListBoxPtr):
     def __init__(self,*_args,**_kwargs):
         self.this = apply(controlsc.new_wxListBox,_args,_kwargs)

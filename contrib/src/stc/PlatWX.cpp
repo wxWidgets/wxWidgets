@@ -174,6 +174,8 @@ void Surface::InitPixMap(int width, int height, Surface *surface_) {
     Release();
     hdc = new wxMemoryDC(surface_->hdc);
     hdcOwned = true;
+    if (width < 1) width = 1;
+    if (height < 1) height = 1;
     bitmap = new wxBitmap(width, height);
     ((wxMemoryDC*)hdc)->SelectObject(*bitmap);
 }

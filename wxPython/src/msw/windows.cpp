@@ -3119,13 +3119,13 @@ static PyObject *_wrap_wxWindow_Lower(PyObject *self, PyObject *args, PyObject *
 static PyObject *_wrap_wxWindow_MakeModal(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxWindow * _arg0;
-    bool  _arg1;
+    bool  _arg1 = (bool ) TRUE;
     PyObject * _argo0 = 0;
-    int tempbool1;
+    int tempbool1 = (int) TRUE;
     char *_kwnames[] = { "self","flag", NULL };
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxWindow_MakeModal",_kwnames,&_argo0,&tempbool1)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O|i:wxWindow_MakeModal",_kwnames,&_argo0,&tempbool1)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -5712,6 +5712,41 @@ static PyObject *_wrap_wxWindow_PrevControlId(PyObject *self, PyObject *args, Py
     wxPy_END_ALLOW_THREADS;
     if (PyErr_Occurred()) return NULL;
 }    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxWindow_GetAcceleratorTable(_swigobj)  (_swigobj->GetAcceleratorTable())
+static PyObject *_wrap_wxWindow_GetAcceleratorTable(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxAcceleratorTable * _result;
+    wxWindow * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxWindow_GetAcceleratorTable",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxWindow_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxWindow_GetAcceleratorTable. Expected _wxWindow_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (wxAcceleratorTable *)wxWindow_GetAcceleratorTable(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+    if (PyErr_Occurred()) return NULL;
+}    if (_result) {
+        SWIG_MakePtr(_ptemp, (char *) _result,"_wxAcceleratorTable_p");
+        _resultobj = Py_BuildValue("s",_ptemp);
+    } else {
+        Py_INCREF(Py_None);
+        _resultobj = Py_None;
+    }
     return _resultobj;
 }
 
@@ -10502,6 +10537,7 @@ static PyMethodDef windowscMethods[] = {
 	 { "wxPanel_Create", (PyCFunction) _wrap_wxPanel_Create, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxPrePanel", (PyCFunction) _wrap_new_wxPrePanel, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxPanel", (PyCFunction) _wrap_new_wxPanel, METH_VARARGS | METH_KEYWORDS },
+	 { "wxWindow_GetAcceleratorTable", (PyCFunction) _wrap_wxWindow_GetAcceleratorTable, METH_VARARGS | METH_KEYWORDS },
 	 { "wxWindow_PrevControlId", (PyCFunction) _wrap_wxWindow_PrevControlId, METH_VARARGS | METH_KEYWORDS },
 	 { "wxWindow_NextControlId", (PyCFunction) _wrap_wxWindow_NextControlId, METH_VARARGS | METH_KEYWORDS },
 	 { "wxWindow_NewControlId", (PyCFunction) _wrap_wxWindow_NewControlId, METH_VARARGS | METH_KEYWORDS },

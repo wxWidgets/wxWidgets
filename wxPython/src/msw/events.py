@@ -135,6 +135,9 @@ class wxCommandEventPtr(wxEventPtr):
     def SetInt(self, *_args, **_kwargs):
         val = apply(eventsc.wxCommandEvent_SetInt,(self,) + _args, _kwargs)
         return val
+    def GetClientData(self, *_args, **_kwargs):
+        val = apply(eventsc.wxCommandEvent_GetClientData,(self,) + _args, _kwargs)
+        return val
     def __repr__(self):
         return "<C wxCommandEvent instance at %s>" % (self.this,)
 class wxCommandEvent(wxCommandEventPtr):

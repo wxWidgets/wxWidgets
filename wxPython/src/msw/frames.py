@@ -44,6 +44,12 @@ class wxTopLevelWindowPtr(wxWindowPtr):
     def SetIcon(self, *_args, **_kwargs):
         val = apply(framesc.wxTopLevelWindow_SetIcon,(self,) + _args, _kwargs)
         return val
+    def ShowFullScreen(self, *_args, **_kwargs):
+        val = apply(framesc.wxTopLevelWindow_ShowFullScreen,(self,) + _args, _kwargs)
+        return val
+    def IsFullScreen(self, *_args, **_kwargs):
+        val = apply(framesc.wxTopLevelWindow_IsFullScreen,(self,) + _args, _kwargs)
+        return val
     def SetTitle(self, *_args, **_kwargs):
         val = apply(framesc.wxTopLevelWindow_SetTitle,(self,) + _args, _kwargs)
         return val
@@ -111,21 +117,6 @@ class wxFramePtr(wxTopLevelWindowPtr):
         return val
     def SetToolBar(self, *_args, **_kwargs):
         val = apply(framesc.wxFrame_SetToolBar,(self,) + _args, _kwargs)
-        return val
-    def ShowFullScreen(self, *_args, **_kwargs):
-        val = apply(framesc.wxFrame_ShowFullScreen,(self,) + _args, _kwargs)
-        return val
-    def IsFullScreen(self, *_args, **_kwargs):
-        val = apply(framesc.wxFrame_IsFullScreen,(self,) + _args, _kwargs)
-        return val
-    def Raise(self, *_args, **_kwargs):
-        val = apply(framesc.wxFrame_Raise,(self,) + _args, _kwargs)
-        return val
-    def SetAcceleratorTable(self, *_args, **_kwargs):
-        val = apply(framesc.wxFrame_SetAcceleratorTable,(self,) + _args, _kwargs)
-        return val
-    def MakeModal(self, *_args, **_kwargs):
-        val = apply(framesc.wxFrame_MakeModal,(self,) + _args, _kwargs)
         return val
     def __repr__(self):
         return "<C wxFrame instance at %s>" % (self.this,)

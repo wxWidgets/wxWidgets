@@ -1,27 +1,57 @@
-#
-# File:         Makefile
-# Author:       Hans Van Leemputten
-# Created:      2001
-# Updated:
-# Copyright:    (c) wxWorkshop team, 2001
-#
-# Makefile for wxWindows FrameLayout library (Linux/wxGTK).
+# $Id$
 
 top_srcdir = @top_srcdir@/..
 top_builddir = ../../..
 libsrc_dir = contrib/src/fl
 
 TARGET_LIBNAME = libfl
-OBJ_EXT	= o
 
-# Version Info.
 LIBVERSION_CURRENT=1
 LIBVERSION_REVISION=0
 LIBVERSION_AGE=0
 
-include $(top_srcdir)/$(libsrc_dir)/files.lst
+HEADER_PATH=$(top_srcdir)/contrib/include/wx
+HEADER_SUBDIR=fl
 
-OBJECTS = $(FL_OBJECTS)
+HEADERS = \
+            bardragpl.h \
+            cbcustom.h \
+            dynbarhnd.h \
+            dyntbarhnd.h \
+            garbagec.h \
+            hintanimpl.h \
+            panedrawpl.h \
+            rowlayoutpl.h \
+            updatesmgr.h \
+            antiflickpl.h \
+            barhintspl.h \
+            controlbar.h \
+            dyntbar.h \
+            frmview.h \
+            gcupdatesmgr.h \
+            newbmpbtn.h \
+            rowdragpl.h \
+            toolwnd.h
+
+OBJECTS  = \
+            antiflickpl.o \
+            gcupdatesmgr.o \
+            rowlayoutpl.o \
+            bardragpl.o \
+            dyntbar.o \
+            hintanimpl.o \
+            toolwnd.o \
+            barhintspl.o \
+            dyntbarhnd.o \
+            newbmpbtn.o \
+            updatesmgr.o \
+            cbcustom.o \
+            frmview.o \
+            panedrawpl.o \
+            controlbar.o \
+            garbagec.o \
+            rowdragpl.o
+
 DEPFILES= $(OBJECTS:.o=.d)
 
 APPEXTRADEFS = -I$(top_srcdir)/contrib/include
@@ -29,3 +59,4 @@ APPEXTRADEFS = -I$(top_srcdir)/contrib/include
 include $(top_builddir)/src/makelib.env
 
 -include $(DEPFILES)
+

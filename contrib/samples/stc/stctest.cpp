@@ -49,7 +49,6 @@ public:
 
     void OnQuit(wxCommandEvent& event);
     void OnAbout(wxCommandEvent& event);
-    void OnStyleNeeded(wxStyledTextEvent& event);
 
 private:
     wxStyledTextCtrl* ed;
@@ -70,7 +69,6 @@ enum
 BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU            (ID_Quit,  MyFrame::OnQuit)
     EVT_MENU            (ID_About, MyFrame::OnAbout)
-    EVT_STC_STYLENEEDED (ID_ED, MyFrame::OnStyleNeeded)
 END_EVENT_TABLE()
 
 IMPLEMENT_APP(MyApp)
@@ -128,7 +126,7 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
     ed = new wxStyledTextCtrl(this, ID_ED);
 
     // Default font
-    wxFont font(8, wxMODERN, wxNORMAL, wxNORMAL);
+    wxFont font(10, wxMODERN, wxNORMAL, wxNORMAL);
     ed->StyleSetFont(wxSTC_STYLE_DEFAULT, font);
     ed->StyleClearAll();
 
@@ -148,9 +146,9 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
     ed->StyleSetBold(10, TRUE);
 
 #ifdef __WXMSW__
-    ed->StyleSetSpec(2, "fore:#007f00,bold,face:Arial,size:7");
+    ed->StyleSetSpec(2, "fore:#007f00,bold,face:Arial,size:9");
 #else
-    ed->StyleSetSpec(2, "fore:#007f00,bold,face:Helvetica,size:7");
+    ed->StyleSetSpec(2, "fore:#007f00,bold,face:Helvetica,size:9");
 #endif
 
     // give it some text to play with
@@ -180,14 +178,6 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
 
 
 // event handlers
-
-void MyFrame::OnStyleNeeded(wxStyledTextEvent& event) {
-    int currEndStyled = ed->GetEndStyled();
-    ed->Colourise(currEndStyled, event.GetPosition());
-}
-
-
-
 
 void MyFrame::OnQuit(wxCommandEvent& WXUNUSED(event))
 {

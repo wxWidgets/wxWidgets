@@ -13,7 +13,7 @@ from my_distutils import run_swig, contrib_copy_tree
 # flags and values that affect this script
 #----------------------------------------------------------------------
 
-VERSION          = "2.3.2b4"
+VERSION          = "2.3.2b5"
 DESCRIPTION      = "Cross platform GUI toolkit for Python"
 AUTHOR           = "Robin Dunn"
 AUTHOR_EMAIL     = "Robin Dunn <robin@alldunn.com>"
@@ -415,14 +415,13 @@ if BUILD_GLCANVAS or GL_ONLY:
 
     gl_libs = []
     if os.name == 'posix':
-        if '-D__WXDEBUG__' in cflags:
-            gl_libs = ['wx_gtkd_gl', 'GL', 'GLU']
-        else:
-            gl_libs = ['wx_gtk_gl', 'GL', 'GLU']
+        gl_config = os.popen(WX_CONFIG + ' --gl-libs', 'r').read()[:-1]
+        gl_lflags = string.split(gl_config) + lflags
+        gl_libs = libs
     else:
         other_sources = [opj(location, 'msw/myglcanvas.cpp')]
-        gl_libs = ['opengl32', 'glu32']
-
+        gl_libs = libs + ['opengl32', 'glu32']
+        gl_lflags = lflags
 
     ext = Extension('glcanvasc',
                     swig_sources + other_sources,
@@ -431,10 +430,10 @@ if BUILD_GLCANVAS or GL_ONLY:
                     define_macros = defines,
 
                     library_dirs = libdirs,
-                    libraries = libs + gl_libs,
+                    libraries = gl_libs,
 
                     extra_compile_args = cflags,
-                    extra_link_args = lflags,
+                    extra_link_args = gl_lflags,
                     )
 
     wxpExtensions.append(ext)

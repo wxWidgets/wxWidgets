@@ -357,11 +357,11 @@ static void *SwigwxColourDialogTowxDialog(void *ptr) {
     return (void *) dest;
 }
 
-static void *SwigwxColourDialogTowxPanel(void *ptr) {
+static void *SwigwxColourDialogTowxTopLevelWindow(void *ptr) {
     wxColourDialog *src;
-    wxPanel *dest;
+    wxTopLevelWindow *dest;
     src = (wxColourDialog *) ptr;
-    dest = (wxPanel *) src;
+    dest = (wxTopLevelWindow *) src;
     return (void *) dest;
 }
 
@@ -505,11 +505,11 @@ static void *SwigwxDirDialogTowxDialog(void *ptr) {
     return (void *) dest;
 }
 
-static void *SwigwxDirDialogTowxPanel(void *ptr) {
+static void *SwigwxDirDialogTowxTopLevelWindow(void *ptr) {
     wxDirDialog *src;
-    wxPanel *dest;
+    wxTopLevelWindow *dest;
     src = (wxDirDialog *) ptr;
-    dest = (wxPanel *) src;
+    dest = (wxTopLevelWindow *) src;
     return (void *) dest;
 }
 
@@ -818,11 +818,11 @@ static void *SwigwxFileDialogTowxDialog(void *ptr) {
     return (void *) dest;
 }
 
-static void *SwigwxFileDialogTowxPanel(void *ptr) {
+static void *SwigwxFileDialogTowxTopLevelWindow(void *ptr) {
     wxFileDialog *src;
-    wxPanel *dest;
+    wxTopLevelWindow *dest;
     src = (wxFileDialog *) ptr;
-    dest = (wxPanel *) src;
+    dest = (wxTopLevelWindow *) src;
     return (void *) dest;
 }
 
@@ -1554,11 +1554,11 @@ static void *SwigwxSingleChoiceDialogTowxDialog(void *ptr) {
     return (void *) dest;
 }
 
-static void *SwigwxSingleChoiceDialogTowxPanel(void *ptr) {
+static void *SwigwxSingleChoiceDialogTowxTopLevelWindow(void *ptr) {
     wxSingleChoiceDialog *src;
-    wxPanel *dest;
+    wxTopLevelWindow *dest;
     src = (wxSingleChoiceDialog *) ptr;
-    dest = (wxPanel *) src;
+    dest = (wxTopLevelWindow *) src;
     return (void *) dest;
 }
 
@@ -1830,11 +1830,11 @@ static void *SwigwxTextEntryDialogTowxDialog(void *ptr) {
     return (void *) dest;
 }
 
-static void *SwigwxTextEntryDialogTowxPanel(void *ptr) {
+static void *SwigwxTextEntryDialogTowxTopLevelWindow(void *ptr) {
     wxTextEntryDialog *src;
-    wxPanel *dest;
+    wxTopLevelWindow *dest;
     src = (wxTextEntryDialog *) ptr;
-    dest = (wxPanel *) src;
+    dest = (wxTopLevelWindow *) src;
     return (void *) dest;
 }
 
@@ -2500,11 +2500,11 @@ static void *SwigwxFontDialogTowxDialog(void *ptr) {
     return (void *) dest;
 }
 
-static void *SwigwxFontDialogTowxPanel(void *ptr) {
+static void *SwigwxFontDialogTowxTopLevelWindow(void *ptr) {
     wxFontDialog *src;
-    wxPanel *dest;
+    wxTopLevelWindow *dest;
     src = (wxFontDialog *) ptr;
-    dest = (wxPanel *) src;
+    dest = (wxTopLevelWindow *) src;
     return (void *) dest;
 }
 
@@ -2648,11 +2648,11 @@ static void *SwigwxMessageDialogTowxDialog(void *ptr) {
     return (void *) dest;
 }
 
-static void *SwigwxMessageDialogTowxPanel(void *ptr) {
+static void *SwigwxMessageDialogTowxTopLevelWindow(void *ptr) {
     wxMessageDialog *src;
-    wxPanel *dest;
+    wxTopLevelWindow *dest;
     src = (wxMessageDialog *) ptr;
-    dest = (wxPanel *) src;
+    dest = (wxTopLevelWindow *) src;
     return (void *) dest;
 }
 
@@ -2760,6 +2760,14 @@ static void *SwigwxProgressDialogTowxFrame(void *ptr) {
     wxFrame *dest;
     src = (wxProgressDialog *) ptr;
     dest = (wxFrame *) src;
+    return (void *) dest;
+}
+
+static void *SwigwxProgressDialogTowxTopLevelWindow(void *ptr) {
+    wxProgressDialog *src;
+    wxTopLevelWindow *dest;
+    src = (wxProgressDialog *) ptr;
+    dest = (wxTopLevelWindow *) src;
     return (void *) dest;
 }
 
@@ -3064,20 +3072,22 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_size_t","_int",0},
     { "_size_t","_wxWindowID",0},
     { "_size_t","_uint",0},
-    { "_wxPanel","_class_wxMessageDialog",SwigwxMessageDialogTowxPanel},
-    { "_wxPanel","_wxMessageDialog",SwigwxMessageDialogTowxPanel},
-    { "_wxPanel","_class_wxFontDialog",SwigwxFontDialogTowxPanel},
-    { "_wxPanel","_wxFontDialog",SwigwxFontDialogTowxPanel},
-    { "_wxPanel","_class_wxTextEntryDialog",SwigwxTextEntryDialogTowxPanel},
-    { "_wxPanel","_wxTextEntryDialog",SwigwxTextEntryDialogTowxPanel},
-    { "_wxPanel","_class_wxSingleChoiceDialog",SwigwxSingleChoiceDialogTowxPanel},
-    { "_wxPanel","_wxSingleChoiceDialog",SwigwxSingleChoiceDialogTowxPanel},
-    { "_wxPanel","_class_wxFileDialog",SwigwxFileDialogTowxPanel},
-    { "_wxPanel","_wxFileDialog",SwigwxFileDialogTowxPanel},
-    { "_wxPanel","_class_wxDirDialog",SwigwxDirDialogTowxPanel},
-    { "_wxPanel","_wxDirDialog",SwigwxDirDialogTowxPanel},
-    { "_wxPanel","_class_wxColourDialog",SwigwxColourDialogTowxPanel},
-    { "_wxPanel","_wxColourDialog",SwigwxColourDialogTowxPanel},
+    { "_wxTopLevelWindow","_class_wxProgressDialog",SwigwxProgressDialogTowxTopLevelWindow},
+    { "_wxTopLevelWindow","_wxProgressDialog",SwigwxProgressDialogTowxTopLevelWindow},
+    { "_wxTopLevelWindow","_class_wxMessageDialog",SwigwxMessageDialogTowxTopLevelWindow},
+    { "_wxTopLevelWindow","_wxMessageDialog",SwigwxMessageDialogTowxTopLevelWindow},
+    { "_wxTopLevelWindow","_class_wxFontDialog",SwigwxFontDialogTowxTopLevelWindow},
+    { "_wxTopLevelWindow","_wxFontDialog",SwigwxFontDialogTowxTopLevelWindow},
+    { "_wxTopLevelWindow","_class_wxTextEntryDialog",SwigwxTextEntryDialogTowxTopLevelWindow},
+    { "_wxTopLevelWindow","_wxTextEntryDialog",SwigwxTextEntryDialogTowxTopLevelWindow},
+    { "_wxTopLevelWindow","_class_wxSingleChoiceDialog",SwigwxSingleChoiceDialogTowxTopLevelWindow},
+    { "_wxTopLevelWindow","_wxSingleChoiceDialog",SwigwxSingleChoiceDialogTowxTopLevelWindow},
+    { "_wxTopLevelWindow","_class_wxFileDialog",SwigwxFileDialogTowxTopLevelWindow},
+    { "_wxTopLevelWindow","_wxFileDialog",SwigwxFileDialogTowxTopLevelWindow},
+    { "_wxTopLevelWindow","_class_wxDirDialog",SwigwxDirDialogTowxTopLevelWindow},
+    { "_wxTopLevelWindow","_wxDirDialog",SwigwxDirDialogTowxTopLevelWindow},
+    { "_wxTopLevelWindow","_class_wxColourDialog",SwigwxColourDialogTowxTopLevelWindow},
+    { "_wxTopLevelWindow","_wxColourDialog",SwigwxColourDialogTowxTopLevelWindow},
     { "_class_wxDialog","_class_wxMessageDialog",SwigwxMessageDialogTowxDialog},
     { "_class_wxDialog","_wxMessageDialog",SwigwxMessageDialogTowxDialog},
     { "_class_wxDialog","_class_wxFontDialog",SwigwxFontDialogTowxDialog},
@@ -3101,31 +3111,35 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_uint","_wxWindowID",0},
     { "_wxChar","_char",0},
     { "_char","_wxChar",0},
+    { "_struct_wxNativeFontInfo","_wxNativeFontInfo",0},
     { "_EBool","_wxCoord",0},
     { "_EBool","_wxPrintQuality",0},
     { "_EBool","_signed_int",0},
     { "_EBool","_int",0},
     { "_EBool","_wxWindowID",0},
     { "_unsigned_long","_long",0},
-    { "_class_wxPanel","_class_wxMessageDialog",SwigwxMessageDialogTowxPanel},
-    { "_class_wxPanel","_wxMessageDialog",SwigwxMessageDialogTowxPanel},
-    { "_class_wxPanel","_class_wxFontDialog",SwigwxFontDialogTowxPanel},
-    { "_class_wxPanel","_wxFontDialog",SwigwxFontDialogTowxPanel},
-    { "_class_wxPanel","_class_wxTextEntryDialog",SwigwxTextEntryDialogTowxPanel},
-    { "_class_wxPanel","_wxTextEntryDialog",SwigwxTextEntryDialogTowxPanel},
-    { "_class_wxPanel","_class_wxSingleChoiceDialog",SwigwxSingleChoiceDialogTowxPanel},
-    { "_class_wxPanel","_wxSingleChoiceDialog",SwigwxSingleChoiceDialogTowxPanel},
-    { "_class_wxPanel","_class_wxFileDialog",SwigwxFileDialogTowxPanel},
-    { "_class_wxPanel","_wxFileDialog",SwigwxFileDialogTowxPanel},
-    { "_class_wxPanel","_class_wxDirDialog",SwigwxDirDialogTowxPanel},
-    { "_class_wxPanel","_wxDirDialog",SwigwxDirDialogTowxPanel},
-    { "_class_wxPanel","_class_wxColourDialog",SwigwxColourDialogTowxPanel},
-    { "_class_wxPanel","_wxColourDialog",SwigwxColourDialogTowxPanel},
+    { "_wxNativeFontInfo","_struct_wxNativeFontInfo",0},
     { "_signed_int","_wxCoord",0},
     { "_signed_int","_wxPrintQuality",0},
     { "_signed_int","_EBool",0},
     { "_signed_int","_wxWindowID",0},
     { "_signed_int","_int",0},
+    { "_class_wxTopLevelWindow","_class_wxProgressDialog",SwigwxProgressDialogTowxTopLevelWindow},
+    { "_class_wxTopLevelWindow","_wxProgressDialog",SwigwxProgressDialogTowxTopLevelWindow},
+    { "_class_wxTopLevelWindow","_class_wxMessageDialog",SwigwxMessageDialogTowxTopLevelWindow},
+    { "_class_wxTopLevelWindow","_wxMessageDialog",SwigwxMessageDialogTowxTopLevelWindow},
+    { "_class_wxTopLevelWindow","_class_wxFontDialog",SwigwxFontDialogTowxTopLevelWindow},
+    { "_class_wxTopLevelWindow","_wxFontDialog",SwigwxFontDialogTowxTopLevelWindow},
+    { "_class_wxTopLevelWindow","_class_wxTextEntryDialog",SwigwxTextEntryDialogTowxTopLevelWindow},
+    { "_class_wxTopLevelWindow","_wxTextEntryDialog",SwigwxTextEntryDialogTowxTopLevelWindow},
+    { "_class_wxTopLevelWindow","_class_wxSingleChoiceDialog",SwigwxSingleChoiceDialogTowxTopLevelWindow},
+    { "_class_wxTopLevelWindow","_wxSingleChoiceDialog",SwigwxSingleChoiceDialogTowxTopLevelWindow},
+    { "_class_wxTopLevelWindow","_class_wxFileDialog",SwigwxFileDialogTowxTopLevelWindow},
+    { "_class_wxTopLevelWindow","_wxFileDialog",SwigwxFileDialogTowxTopLevelWindow},
+    { "_class_wxTopLevelWindow","_class_wxDirDialog",SwigwxDirDialogTowxTopLevelWindow},
+    { "_class_wxTopLevelWindow","_wxDirDialog",SwigwxDirDialogTowxTopLevelWindow},
+    { "_class_wxTopLevelWindow","_class_wxColourDialog",SwigwxColourDialogTowxTopLevelWindow},
+    { "_class_wxTopLevelWindow","_wxColourDialog",SwigwxColourDialogTowxTopLevelWindow},
     { "_WXTYPE","_short",0},
     { "_WXTYPE","_signed_short",0},
     { "_WXTYPE","_unsigned_short",0},

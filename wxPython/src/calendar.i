@@ -155,7 +155,7 @@ public:
                    const wxDateTime& date = wxDefaultDateTime,
                    const wxPoint& pos = wxDefaultPosition,
                    const wxSize& size = wxDefaultSize,
-                   long style = wxCAL_SHOW_HOLIDAYS,
+                   long style = wxCAL_SHOW_HOLIDAYS | wxWANTS_CHARS,
                    const char* name = "calendar");
     %name(wxPreCalendarCtrl)wxCalendarCtrl();
 
@@ -164,7 +164,7 @@ public:
                 const wxDateTime& date = wxDefaultDateTime,
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
-                long style = wxCAL_SHOW_HOLIDAYS,
+                long style = wxCAL_SHOW_HOLIDAYS | wxWANTS_CHARS,
                 const char* name = "calendar");
 
     // set/get the current date

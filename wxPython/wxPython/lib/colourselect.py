@@ -1,4 +1,3 @@
-#!/bin/env python
 #----------------------------------------------------------------------------
 # Name:         ColourSelect.py
 # Purpose:      Colour Box Selection Control
@@ -63,8 +62,4 @@ class ColourSelect(wxButton):
             self.SetBackgroundColour(bcolour)
             self.OnChange()
         dlg.Destroy()
-
-
-
-
 

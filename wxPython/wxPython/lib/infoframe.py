@@ -29,7 +29,7 @@ then), it's "frame" attribute is the actual instance of wFrame...
 Typical usage:
     from wxPython.lib.infoframe import *
     ... # ... modify your wxApp as follows:
-    class myApp[wxApp):
+    class myApp(wxApp):
         outputWindowClass = wxPyInformationalMessagesFrame
         ...
 If you're running on Linux, you'll also have to supply an argument 1 to your

@@ -67,13 +67,15 @@ class TestListBox(wxPanel):
         EVT_LISTBOX_DCLICK(self, 60, self.EvtListBoxDClick)
         EVT_RIGHT_UP(self.lb1, self.EvtRightButton)
         self.lb1.SetSelection(3)
+        self.lb1.Append("with data", "This one has data");
+        self.lb1.SetClientData(2, "This one has data");
 
 
         wxStaticText(self, -1, "Select many:", wxPoint(200, 50), wxSize(65, 18))
         self.lb2 = wxListBox(self, 70, wxPoint(280, 50), wxSize(80, 120),
                        sampleList, wxLB_EXTENDED)
         EVT_LISTBOX(self, 70, self.EvtMultiListBox)
-        EVT_LISTBOX_DCLICK(self, 70, self.EvtListBoxDClick)
+        EVT_RIGHT_UP(self.lb2, self.EvtRightButton)
         self.lb2.SetSelection(0)
 
 
@@ -89,6 +91,11 @@ class TestListBox(wxPanel):
 
     def EvtListBox(self, event):
         self.log.WriteText('EvtListBox: %s\n' % event.GetString())
+        lb = event.GetEventObject()
+        data = lb.GetClientData(lb.GetSelection())
+        if data is not None:
+            self.log.WriteText('\tdata: %s\n' % data)
+
 
     def EvtListBoxDClick(self, event):
         self.log.WriteText('EvtListBoxDClick: %s\n' % self.lb1.GetSelection())
@@ -99,6 +106,12 @@ class TestListBox(wxPanel):
 
     def EvtRightButton(self, event):
         self.log.WriteText('EvtRightButton: %s\n' % event.GetPosition())
+        if event.GetEventObject().GetId() == 70:
+            selections = list(self.lb2.GetSelections())
+            selections.reverse()
+            for index in selections:
+                self.lb2.Delete(index)
+
 
 #---------------------------------------------------------------------------
 

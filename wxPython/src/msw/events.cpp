@@ -1098,6 +1098,45 @@ static PyObject *_wrap_wxCommandEvent_SetInt(PyObject *self, PyObject *args, PyO
     return _resultobj;
 }
 
+static PyObject * wxCommandEvent_GetClientData(wxCommandEvent *self) {
+            wxPyClientData* data = (wxPyClientData*)self->GetClientObject();
+            if (data) {
+                Py_INCREF(data->m_obj);
+                return data->m_obj;
+            } else {
+                Py_INCREF(Py_None);
+                return Py_None;
+            }
+        }
+static PyObject *_wrap_wxCommandEvent_GetClientData(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    PyObject * _result;
+    wxCommandEvent * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxCommandEvent_GetClientData",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxCommandEvent_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxCommandEvent_GetClientData. Expected _wxCommandEvent_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (PyObject *)wxCommandEvent_GetClientData(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+    if (PyErr_Occurred()) return NULL;
+}{
+  _resultobj = _result;
+}
+    return _resultobj;
+}
+
 static void *SwigwxScrollEventTowxCommandEvent(void *ptr) {
     wxScrollEvent *src;
     wxCommandEvent *dest;
@@ -7119,6 +7158,7 @@ static PyMethodDef eventscMethods[] = {
 	 { "wxScrollEvent_GetPosition", (PyCFunction) _wrap_wxScrollEvent_GetPosition, METH_VARARGS | METH_KEYWORDS },
 	 { "wxScrollEvent_GetOrientation", (PyCFunction) _wrap_wxScrollEvent_GetOrientation, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxScrollEvent", (PyCFunction) _wrap_new_wxScrollEvent, METH_VARARGS | METH_KEYWORDS },
+	 { "wxCommandEvent_GetClientData", (PyCFunction) _wrap_wxCommandEvent_GetClientData, METH_VARARGS | METH_KEYWORDS },
 	 { "wxCommandEvent_SetInt", (PyCFunction) _wrap_wxCommandEvent_SetInt, METH_VARARGS | METH_KEYWORDS },
 	 { "wxCommandEvent_SetExtraLong", (PyCFunction) _wrap_wxCommandEvent_SetExtraLong, METH_VARARGS | METH_KEYWORDS },
 	 { "wxCommandEvent_SetString", (PyCFunction) _wrap_wxCommandEvent_SetString, METH_VARARGS | METH_KEYWORDS },

@@ -38,7 +38,7 @@ import img2xpm
 
 
 def crunch_data(data, compressed):
-    # convert the lines to a Python list, pickle it and compress the result.
+    # convert the lines to a Python list, pickle it and optionally compress the result.
     lines = []
     for line in data:
         if line[0] == "\"":

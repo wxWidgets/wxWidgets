@@ -1593,6 +1593,7 @@ private:
     ScintillaWX*        m_swx;
     wxStopWatch         m_stopWatch;
 
+    bool                m_lastKeyDownConsumed;
 
     friend class ScintillaWX;
     friend class Platform;
