@@ -274,7 +274,8 @@ wxWindow::~wxWindow()
 
     if ( m_hWnd )
     {
-        if (::IsWindow(GetHwnd()))
+        // VZ: test temp removed to understand what really happens here
+        //if (::IsWindow(GetHwnd()))
         {
             if ( !::DestroyWindow(GetHwnd()) )
                 wxLogLastError("DestroyWindow");
