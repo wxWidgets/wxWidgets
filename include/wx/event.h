@@ -443,7 +443,7 @@ public:
     wxString GetString() const { return m_commandString; }
 
     // Get checkbox value
-    bool Checked() const { return (m_commandInt != 0); }
+    bool IsChecked() const { return m_commandInt != 0; }
 
     // TRUE if the listbox event was a selection.
     bool IsSelection() const { return (m_extraLong != 0); }
@@ -455,6 +455,10 @@ public:
     long GetInt() const { return m_commandInt ; }
 
     void CopyObject(wxObject& obj) const;
+
+#ifdef WXWIN_COMPATIBILITY_2
+    bool Checked() const { return IsChecked(); }
+#endif // WXWIN_COMPATIBILITY_2
 
 public:
     wxString          m_commandString; // String event argument

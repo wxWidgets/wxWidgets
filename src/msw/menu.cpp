@@ -434,7 +434,13 @@ bool wxMenu::MSWCommand(WXUINT WXUNUSED(param), WXWORD id)
         wxCommandEvent event(wxEVT_COMMAND_MENU_SELECTED);
         event.SetEventObject( this );
         event.SetId( id );
-        event.SetInt( id );
+
+        // VZ: previosuly, the command int was set to id too which was quite
+        //     useless anyhow (as it could be retrieved using GetId()) and
+        //     uncompatible with wxGTK, so now we use the command int instead
+        //     to pass the checked status
+        event.SetInt(::GetMenuState(GetHmenu(), id, MF_BYCOMMAND) & MF_CHECKED);
+
         ProcessCommand(event);
     }
 
