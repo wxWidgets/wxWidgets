@@ -5,7 +5,7 @@
 
 \section{\class{wxHtmlHelpController}}\label{wxhtmlhelpcontroller}
 
-{\bf WARNING!} Although this class has an API compatible with other wxWindows
+Although this class has an API compatible with other wxWindows
 help controllers as documented by \helpref{wxHelpController}{wxhelpcontroller}, it
 is recommended that you use the enhanced capabilities of wxHtmlHelpController's API.
 
@@ -22,6 +22,17 @@ Have a look at docs/html/ directory where sample project files are stored.
 
 You can use Tex2RTF to produce these files when generating HTML, if you set {\bf htmlWorkshopFiles} to {\bf true} in
 your tex2rtf.ini file.
+
+When using wxHtmlHelpController, you must add an extra include at the top of your
+application class source file and a line to your application initialization:
+
+\begin{verbatim}
+    #include <wx/fs_zip.h>
+    ...
+    wxFileSystem::AddHandler(new wxZipFSHandler);
+\end{verbatim}
+
+or nothing will be shown in your help window.
 
 \wxheading{Note}
 
