@@ -270,7 +270,6 @@ class WXDLLEXPORT wxSocketHandler : public wxObject
 {
   DECLARE_CLASS(wxSocketHandler)
 protected:
-  static wxSocketHandler *master;
 #if defined(__WINDOWS__)
   wxList *smsg_list;
   struct wxSockHandlerInternal *internal;
@@ -280,6 +279,7 @@ protected:
 public:
   enum SockStatus { SOCK_NONE, SOCK_DATA, SOCK_CONNECT, SOCK_DISCONNECT,
 		    SOCK_ERROR };
+  static wxSocketHandler *master;
 
   wxSocketHandler();
   virtual ~wxSocketHandler();
@@ -303,8 +303,7 @@ public:
                        (wxSocketBase::wxSockFlags flags = wxSocketBase::NONE);
 
   // Create or reuse a socket handler
-  static wxSocketHandler& Master()
-  { return *((master) ? (master) : (master = new wxSocketHandler())); }
+  static wxSocketHandler& Master() { return *master; }
 
 #if defined(WXSOCK_INTERNAL) && defined(__WINDOWS__)
 

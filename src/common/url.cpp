@@ -41,7 +41,7 @@ IMPLEMENT_CLASS(wxURL, wxObject)
 
 // Protocols list
 wxProtoInfo *wxURL::g_protocols = NULL;
-wxHTTP wxURL::g_proxy;
+wxHTTP *wxURL::g_proxy;
 
 /////////////////////////////////////////////////////////////////
 // wxURL ////////////////////////////////////////////////////////
@@ -56,8 +56,8 @@ wxHTTP wxURL::g_proxy;
 wxURL::wxURL(const wxString& url)
 {
   m_protocol = NULL;
-  if (g_proxy.IsConnected()) {
-    m_protocol = &g_proxy;
+  if (g_proxy->IsConnected()) {
+    m_protocol = g_proxy;
     m_protoname = "proxy";
     m_path = url;
     return;
@@ -267,7 +267,7 @@ wxInputStream *wxURL::GetInputStream(void)
 
 void wxURL::SetDefaultProxy(const wxString& url_proxy)
 {
-  g_proxy.Close();
+  g_proxy->Close();
 
   if (url_proxy.IsNull())
     return;
@@ -281,7 +281,7 @@ void wxURL::SetDefaultProxy(const wxString& url_proxy)
   addr.Hostname(hostname);
   addr.Service(port);
   
-  g_proxy.Connect(addr);
+  g_proxy->Connect(addr);
 }
 
 void wxURL::SetProxy(const wxString& url_proxy)

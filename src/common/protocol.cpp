@@ -26,6 +26,7 @@
 
 #include "wx/protocol/protocol.h"
 #include "wx/url.h"
+#include "wx/module.h"
 
 /////////////////////////////////////////////////////////////////
 // wxProtoInfo
@@ -107,4 +108,32 @@ wxProtocolError GetLine(wxSocketBase *sock, wxString& result) {
   sock->CreatePushbackBefore(&tmp_buf[size], avail-size);
   return wxPROTO_NOERR;
 #undef PROTO_BSIZE
+}
+
+// ----------------------------------------------------------------------
+// Module
+// ----------------------------------------------------------------------
+
+class wxProtocolModule: public wxModule {
+  DECLARE_DYNAMIC_CLASS(wxProtocolModule)
+public:
+  wxProtocolModule() {}
+  bool OnInit();
+  void OnExit();
+};
+
+#if !USE_SHARED_LIBRARY
+IMPLEMENT_DYNAMIC_CLASS(wxProtocolModule, wxModule)
+#endif
+
+bool wxProtocolModule::OnInit()
+{
+  wxURL::g_proxy = new wxHTTP();
+  return TRUE;
+}
+
+void wxProtocolModule::OnExit()
+{
+  delete wxURL::g_proxy;
+  wxURL::g_proxy = NULL;
 }

@@ -36,7 +36,7 @@ class WXDLLEXPORT wxURL : public wxObject {
   DECLARE_DYNAMIC_CLASS(wxURL)
 protected:
   static wxProtoInfo *g_protocols;
-  static wxHTTP g_proxy;
+  static wxHTTP *g_proxy;
   wxProtoInfo *m_protoinfo;
   wxProtocol *m_protocol;
   wxHTTP m_proxy;
@@ -52,6 +52,7 @@ protected:
   bool FetchProtocol();
 
   friend class wxProtoInfo;
+  friend class wxProtocolModule;
 public:
 
   wxURL(const wxString& url);

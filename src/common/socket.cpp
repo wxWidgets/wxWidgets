@@ -89,6 +89,7 @@
 /////////////////////////////////////////////////////////////////////////////
 // wxSocket headers
 /////////////////////////////////////////////////////////////////////////////
+#include "wx/module.h"
 #define WXSOCK_INTERNAL
 #include "wx/sckaddr.h"
 #include "wx/socket.h"
@@ -154,6 +155,17 @@ int PASCAL FAR __WSAFDIsSet(SOCKET fd, fd_set FAR *set)
 /////////////////////////////////////////////////////////////////////////////
 
 // --------------------------------------------------------------
+// Module
+// --------------------------------------------------------------
+class wxSocketModule: public wxModule {
+  DECLARE_DYNAMIC_CLASS(wxSocketModule)
+public:
+  wxSocketModule() {}
+  bool OnInit();
+  void OnExit();
+};
+
+// --------------------------------------------------------------
 // ClassInfos
 // --------------------------------------------------------------
 #if !USE_SHARED_LIBRARY
@@ -162,6 +174,7 @@ IMPLEMENT_CLASS(wxSocketServer, wxSocketBase)
 IMPLEMENT_CLASS(wxSocketClient, wxSocketBase)
 IMPLEMENT_CLASS(wxSocketHandler, wxObject)
 IMPLEMENT_DYNAMIC_CLASS(wxSocketEvent, wxEvent)
+IMPLEMENT_DYNAMIC_CLASS(wxSocketModule, wxModule)
 #endif
 
 class wxSockWakeUp : public wxTimer {
@@ -1542,6 +1555,16 @@ HWND wxSocketHandler::GetHWND() const
 }
 
 #endif
+
+bool wxSocketModule::OnInit() {
+  wxSocketHandler::master = new wxSocketHandler();
+  return TRUE;
+}
+
+void wxSocketModule::OnExit() {
+  delete wxSocketHandler::master;
+  wxSocketHandler::master = NULL;
+}
 
 #endif
   // __WXSTUBS__
