@@ -397,7 +397,7 @@ bool wxSingleChoiceDialog::Create(wxWindow *parent,
     int i;
     for ( i = 0; i < choices.Number(); i++)
     {
-        strings[i] = (char *)choices.Nth(i)->Data();
+        strings[i] = (wxChar *)choices.Nth(i)->Data();
     }
     bool ans = Create(parent, message, caption, choices.Number(), strings, clientData, style, pos);
     delete[] strings;
