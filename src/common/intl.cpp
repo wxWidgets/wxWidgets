@@ -1593,6 +1593,11 @@ bool wxLocale::AddCatalog(const wxChar *szDomain)
   else {
     // don't add it because it couldn't be loaded anyway
     delete pMsgCat;
+    
+    // it's OK to not load English catalog, the texts are embedded in
+    // the program:
+    if (m_strShort.Mid(0, 2) == wxT("en"))
+        return TRUE;
 
     return FALSE;
   }
