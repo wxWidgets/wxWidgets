@@ -2068,6 +2068,10 @@ for them is found. Using this style allows to prevent them from being
 propagated beyond this window. Notice that wxDialog has this style on by
 default for the reasons explained in the 
 \helpref{event processing overview}{eventprocessing}.}
+\twocolitem{\windowstyle{wxWS\_EX\_TRANSIENT}}{This can be used to prevent a
+window from being used as an implicit parent for the dialogs which were
+created without a parent. It is useful for the windows which can disappear at
+any moment as creating childs of such windows results in fatal problems.}
 \end{twocollist}
 
 \membersection{wxWindow::SetFocus}\label{wxwindowsetfocus}

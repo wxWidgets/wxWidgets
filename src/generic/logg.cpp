@@ -245,9 +245,6 @@ void wxLogGui::Flush()
     wxString title;
     title.Printf(titleFormat, appName.c_str());
 
-    // this is the best we can do here
-    wxWindow *parent = wxTheApp->GetTopWindow();
-
     size_t nMsgCount = m_aMessages.Count();
 
     // avoid showing other log dialogs until we're done with the dialog we're
@@ -263,7 +260,7 @@ void wxLogGui::Flush()
     {
 #if wxUSE_LOG_DIALOG
 
-        wxLogDialog dlg(parent,
+        wxLogDialog dlg(NULL,
                         m_aMessages, m_aSeverity, m_aTimes,
                         title, style);
 
@@ -295,7 +292,7 @@ void wxLogGui::Flush()
     // situation without it
     if ( !!str )
     {
-        wxMessageBox(str, title, wxOK | style, parent);
+        wxMessageBox(str, title, wxOK | style);
 
         // no undisplayed messages whatsoever
         Clear();

@@ -784,6 +784,12 @@ enum wxBorder
 // flag on by default.
 #define wxWS_EX_BLOCK_EVENTS            0x00000002
 
+// don't use this window as an implicit parent for the other windows: this must
+// be used with transient windows as otherwise there is the risk of creating a
+// dialog/frame with this window as a parent which would lead to a crash if the
+// parent is destroyed before the child
+#define wxWS_EX_TRANSIENT               0x00000004
+
 /*
  * wxFrame/wxDialog style flags
  */

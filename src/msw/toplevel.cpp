@@ -196,11 +196,18 @@ bool wxTopLevelWindowMSW::CreateDialog(const wxChar *dlgTemplate,
     {
         parent = wxTheApp->GetTopWindow();
 
-        // but don't use the window which is currently hidden as then the
-        // dialog would be hidden as well
-        if ( parent && !parent->IsShown() )
+        if ( parent )
         {
-            parent = NULL;
+            // don't use transient windows as parents, this is dangerous as it
+            // can lead to a crash if the parent is destroyed before the child
+            //
+            // also don't use the window which is currently hidden as then the
+            // dialog would be hidden as well
+            if ( (parent->GetExtraStyle() & wxWS_EX_TRANSIENT) ||
+                    !parent->IsShown() )
+            {
+                parent = NULL;
+            }
         }
     }
 

@@ -89,6 +89,9 @@ wxProgressDialog::wxProgressDialog(wxString const &title,
                                    int style)
                 : wxDialog(parent, -1, title)
 {
+    // we may disappear at any moment, let the others know about it
+    SetExtraStyle(GetExtraStyle() | wxWS_EX_TRANSIENT);
+
     m_windowStyle |= style;
 
     bool hasAbortButton = (style & wxPD_CAN_ABORT) != 0;
