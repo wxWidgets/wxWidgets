@@ -15,6 +15,7 @@
 
 #include "wx/window.h"
 #include "wx/frame.h"
+#include "wx/button.h"
 #include "wx/app.h"
 #include "wx/utils.h"
 #include "wx/gdicmn.h"
