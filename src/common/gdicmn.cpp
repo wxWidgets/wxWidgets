@@ -437,6 +437,8 @@ wxBitmapList::wxBitmapList ()
 
 wxBitmapList::~wxBitmapList ()
 {
+  printf( "Count: %d.\n", Number() );
+
   wxNode *node = First ();
   while (node)
     {

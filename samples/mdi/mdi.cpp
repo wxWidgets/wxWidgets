@@ -60,6 +60,8 @@ bool MyApp::OnInit(void)
   // Give it an icon (this is ignored in MDI mode: uses resources)
 #ifdef __WXMSW__
   frame->SetIcon(wxIcon("mdi_icn"));
+#else
+  frame->SetIcon(wxIcon( mondrian_xpm ));
 #endif
 
   // Make a menubar
@@ -142,8 +144,6 @@ void MyFrame::OnNewWindow(wxCommandEvent& WXUNUSED(event) )
       // Give it an icon (this is ignored in MDI mode: uses resources)
 #ifdef __WXMSW__
       subframe->SetIcon(wxIcon("chrt_icn"));
-#else
-      subframe->SetIcon(wxIcon(mondrian_xpm));
 #endif
 
       // Give it a status line

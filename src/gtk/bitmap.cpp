@@ -13,6 +13,7 @@
 #endif
 
 #include "wx/bitmap.h"
+#include "wx/icon.h"
 #include "gdk/gdkprivate.h"
 
 #ifdef USE_GDK_IMLIB

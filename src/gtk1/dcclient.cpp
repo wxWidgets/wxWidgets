@@ -115,9 +115,6 @@ wxPaintDC::wxPaintDC( wxWindow *window )
   m_isDrawable = TRUE;
         
   SetUpDC();
-  
-  long x = 0;
-  long y = 0;
 }
 
 wxPaintDC::~wxPaintDC(void)

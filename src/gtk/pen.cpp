@@ -57,6 +57,7 @@ wxPen::wxPen( const wxColour &colour, int width, int style )
   M_PENDATA->m_width = width;
   M_PENDATA->m_style = style;
   M_PENDATA->m_colour = colour;
+  
   if (wxThePenList) wxThePenList->AddPen( this );
 }
 
@@ -66,6 +67,7 @@ wxPen::wxPen( const wxString &colourName, int width, int style )
   M_PENDATA->m_width = width;
   M_PENDATA->m_style = style;
   M_PENDATA->m_colour = colourName;
+  
   if (wxThePenList) wxThePenList->AddPen( this );
 }
 
@@ -79,6 +81,7 @@ wxPen::wxPen( const wxPen* pen )
 {
   UnRef();
   if (pen) Ref( *pen ); 
+  
   if (wxThePenList) wxThePenList->AddPen( this );
 }
 

@@ -153,12 +153,16 @@ wxFont::wxFont(int PointSize, const char *Face, int Family, int Style,
 wxFont::wxFont( const wxFont& font )
 { 
   Ref( font ); 
+  
+  if (wxTheFontList) wxTheFontList->Append( this );
 }
 
 wxFont::wxFont( const wxFont* font ) 
 { 
   UnRef(); 
   if (font) Ref( *font ); 
+  
+  if (wxTheFontList) wxTheFontList->Append( this );
 }
 
 wxFont::~wxFont(void)
