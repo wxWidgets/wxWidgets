@@ -183,7 +183,7 @@ void Surface::BrushColor(Colour back) {
 
 void Surface::SetFont(Font &font_) {
 
-  // I think the following check is valid.  
+  // I think the following check is valid.
   // It eliminates a crash for me.  -- eric@sourcegear.com
 
   if (font_.GetID())
@@ -240,7 +240,7 @@ void Surface::FillRectangle(PRectangle rc, Surface &surfacePattern) {
 void Surface::RoundedRectangle(PRectangle rc, Colour fore, Colour back) {
     PenColour(fore);
     BrushColor(back);
-    hdc->DrawRoundedRectangle(wxRectFromPRectangle(rc), 8);
+    hdc->DrawRoundedRectangle(wxRectFromPRectangle(rc), 4);
 }
 
 void Surface::Ellipse(PRectangle rc, Colour fore, Colour back) {
