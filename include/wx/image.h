@@ -185,7 +185,8 @@ public:
     void Replace( unsigned char r1, unsigned char g1, unsigned char b1,
                   unsigned char r2, unsigned char g2, unsigned char b2 );
 
-    // convert to monochrome image (<r,g,b> will be replaced by white, everything else by black)
+    // convert to monochrome image (<r,g,b> will be replaced by white,
+    // everything else by black)
     wxImage ConvertToMono( unsigned char r, unsigned char g, unsigned char b ) const;
 
     // these routines are slow but safe
@@ -205,6 +206,10 @@ public:
     // Set image's mask to the area of 'mask' that has <r,g,b> colour
     bool SetMaskFromImage(const wxImage & mask,
                           unsigned char mr, unsigned char mg, unsigned char mb);
+
+    // converts image's alpha channel to mask, if it has any, does nothing
+    // otherwise:
+    bool ConvertAlphaToMask(unsigned threshold = 128);
 
     static bool CanRead( const wxString& name );
     static int GetImageCount( const wxString& name, long type = wxBITMAP_TYPE_ANY );

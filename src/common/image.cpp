@@ -935,6 +935,44 @@ bool wxImage::SetMaskFromImage(const wxImage& mask,
 
     return true;
 }
+    
+bool wxImage::ConvertAlphaToMask(unsigned threshold)
+{
+    if (!HasAlpha())
+        return true;
+
+    unsigned char mr, mg, mb;
+    if (!FindFirstUnusedColour(&mr, &mg, &mb))
+    {
+        wxLogError( _("No unused colour in image being masked.") );
+        return false;
+    }
+    
+    SetMask(true);
+    SetMaskColour(mr, mg, mb);
+    
+    unsigned char *imgdata = GetData();
+    unsigned char *alphadata = GetAlpha();
+
+    size_t w = GetWidth();
+    size_t h = GetHeight();
+
+    for (size_t y = 0; y < h; y++)
+    {
+        for (size_t x = 0; x < w; x++, imgdata += 3, alphadata++)
+        {
+            if (*alphadata < threshold)
+            {
+                imgdata[0] = mr;
+                imgdata[1] = mg;
+                imgdata[2] = mb;
+            }
+        }
+    }
+
+    free(M_IMGDATA->m_alpha);
+    M_IMGDATA->m_alpha = NULL;
+}
 
 #if wxUSE_PALETTE
 
