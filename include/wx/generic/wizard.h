@@ -47,7 +47,7 @@ public:
     virtual wxWizardPage *GetCurrentPage() const;
     virtual void SetPageSize(const wxSize& size);
     virtual wxSize GetPageSize() const;
-    virtual void Fit(const wxWizardPage *firstPage);
+    virtual void FitToPage(const wxWizardPage *firstPage);
 
     // implementation only from now on
     // -------------------------------

@@ -280,7 +280,7 @@ void wxWizard::SetPageSize(const wxSize& size)
     m_sizePage = size;
 }
 
-void wxWizard::Fit(const wxWizardPage *page)
+void wxWizard::FitToPage(const wxWizardPage *page)
 {
     // otherwise it will have no effect now as it's too late...
     wxASSERT_MSG( !WasCreated(), _T("should be called before RunWizard()!") );

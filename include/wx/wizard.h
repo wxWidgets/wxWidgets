@@ -185,7 +185,7 @@ public:
     // pages in which case it will only increase the page size if needed (this
     // may be useful if not all pages are accessible from the first one by
     // default)
-    virtual void Fit(const wxWizardPage *firstPage) = 0;
+    virtual void FitToPage(const wxWizardPage *firstPage) = 0;
 };
 
 // include the real class declaration
