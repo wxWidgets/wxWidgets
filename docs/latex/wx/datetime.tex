@@ -26,7 +26,6 @@ wxDateTime object.
 All the following constants are defined inside wxDateTime class (i.e., to refer to
 them you should prepend their names with {\tt wxDateTime::}).
 
-\label{wxdatetimetimezones}
 Time zone symbolic names:
 
 \begin{verbatim}
@@ -109,7 +108,6 @@ flags:
     };
 \end{verbatim}
 
-\label{wxdatetimecalendar}
 Several functions accept an extra parameter specifying the calendar to use
 (although most of them only support now the Gregorian calendar). This
 parameters is one of the following values:
@@ -122,7 +120,6 @@ parameters is one of the following values:
     };
 \end{verbatim}
 
-\label{wxdatetimecountry}
 Date calculatiosn often depend on the country adn wxDateTime allows to set the
 country which conventions should be used using 
 \helpref{SetCountry}{wxdatetimesetcountry}. It takes one of the following
@@ -148,7 +145,6 @@ values as parameter:
     };
 \end{verbatim}
 
-\label{wxdatetimeweekstart}
 Differnet parst of the world use different conventions for the week start.
 In some countries, the week starts on Sunday, while in others - on Monday.
 The ISO standard doesn't address this issue, so we support both conventions in
@@ -571,8 +567,8 @@ Example:
 Sets the country to use by default. This setting influences the DST
 calculations, date formatting and other things.
 
-The possible values for {\it country} parameter are enumerated 
-\helpref{here}{wxdatetimecountry}.
+The possible values for {\it country} parameter are enumerated in 
+\helpref{wxDateTime constants section}{wxdatetime}.
 
 \wxheading{See also}
 
@@ -817,7 +813,7 @@ Returns the number of the week of the year this date is in. The first week of
 the year is, according to international standards, the one containing Jan 4.
 The week number is in $1\ldots53$ range ($52$ for non leap years).
 
-The function depends on the \helpref{week start}{wxdatetimeweekstart} convention
+The function depends on the \helpref{week start}{wxdatetime} convention
 specified by the {\it flags} argument.
 
 \membersection{wxDateTime::GetWeekOfMonth}\label{wxdatetimegetweekofmonth}
@@ -828,7 +824,7 @@ Returns the ordinal number of the week in the month (in $1\ldots5$  range).
 
 As \helpref{GetWeekOfYear}{wxdatetimegetweekofyear}, this function supports
 both conventions for the week start. See the description of these 
-\helpref{week start}{wxdatetimeweekstart} conventions.
+\helpref{week start}{wxdatetime} conventions.
 
 \membersection{wxDateTime::IsWorkDay}\label{wxdatetimeisworkday}
 
