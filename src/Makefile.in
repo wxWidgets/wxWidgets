@@ -27,7 +27,6 @@ IODBC_C_SRC=\
   iodbc/hstmt.c \
   iodbc/info.c \
   iodbc/itrace.c \
-  iodbc/main.c \
   iodbc/misc.c \
   iodbc/prepare.c \
   iodbc/result.c

@@ -45,11 +45,9 @@
 extern "C" {
 #include <../iodbc/isql.h>
 #include <../iodbc/isqlext.h>
-#include <../iodbc/odbc_funcs.h>
-#include <../iodbc/odbc_types.h>
-
-typedef float   SFLOAT;
-typedef double  SDOUBLE;
+typedef float         SFLOAT;
+typedef double        SDOUBLE;
+typedef unsigned int  UINT;
 #define ULONG UDWORD
 
 }

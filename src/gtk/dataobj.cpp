@@ -23,37 +23,21 @@
 
 IMPLEMENT_CLASS(wxDataFormat, wxObject)
 
+wxDataFormat::wxDataFormat()
+{
+    m_type = wxDF_INVALID;
+    m_hasAtom = FALSE;
+    m_atom = (GdkAtom) 0;
+}
+
 wxDataFormat::wxDataFormat( wxDataType type )
 {
-    m_type = type;
-    
-    if (m_type == wxDF_TEXT)
-    {
-        m_id = "STRING";
-    } 
-    else
-    if (m_type == wxDF_BITMAP)
-    {
-        m_id = "BITMAP";
-    } 
-    else
-    if (m_type == wxDF_FILENAME)
-    {
-        m_id = "file:ALL";
-    }
-    else
-    {
-       wxFAIL_MSG( "invalid dataformat" );
-    }
-    
-    m_hasAtom = FALSE;
+    SetType( type );
 }
 
 wxDataFormat::wxDataFormat( const wxString &id )
 {
-    m_type = wxDF_PRIVATE;
-    m_id = id;
-    m_hasAtom = FALSE;
+    SetId( id );
 }
 
 wxDataFormat::wxDataFormat( wxDataFormat &format )
@@ -89,7 +73,33 @@ wxDataFormat::wxDataFormat( const GdkAtom atom )
     }
 }
 
-int wxDataFormat::GetType() const
+void wxDataFormat::SetType( wxDataType type )
+{
+    m_type = type;
+    
+    if (m_type == wxDF_TEXT)
+    {
+        m_id = "STRING";
+    } 
+    else
+    if (m_type == wxDF_BITMAP)
+    {
+        m_id = "BITMAP";
+    } 
+    else
+    if (m_type == wxDF_FILENAME)
+    {
+        m_id = "file:ALL";
+    }
+    else
+    {
+       wxFAIL_MSG( "invalid dataformat" );
+    }
+    
+    m_hasAtom = FALSE;
+}
+  
+wxDataType wxDataFormat::GetType() const
 {
     return m_type;
 }
@@ -246,20 +256,32 @@ IMPLEMENT_ABSTRACT_CLASS( wxDataObject, wxObject )
 
 wxDataObject::wxDataObject()
 {
-    m_format = (wxDataFormat*) NULL;
 }
   
 wxDataObject::~wxDataObject()
 {
-    if (m_format) delete m_format;
 }
 
-wxDataFormat &wxDataObject::GetFormat() const
+wxDataFormat &wxDataObject::GetFormat()
 {
-    wxASSERT( m_format );
-
-    return (*m_format);
+    return m_format;
 }
+
+wxDataType wxDataObject::GetFormatType() const
+{
+    return m_format.GetType();
+}
+
+wxString wxDataObject::GetFormatId() const
+{
+    return m_format.GetId();
+}
+
+GdkAtom wxDataObject::GetFormatAtom() const
+{
+    GdkAtom ret = m_format.GetAtom();
+    return ret;
+}  
 
 // ----------------------------------------------------------------------------
 // wxTextDataObject
@@ -269,12 +291,12 @@ IMPLEMENT_DYNAMIC_CLASS( wxTextDataObject, wxDataObject )
 
 wxTextDataObject::wxTextDataObject()
 {
-    m_format = new wxDataFormat( wxDF_TEXT );
+    m_format.SetType( wxDF_TEXT );
 }
 
 wxTextDataObject::wxTextDataObject( const wxString& data )
 {
-    m_format = new wxDataFormat( wxDF_TEXT );
+    m_format.SetType( wxDF_TEXT );
     
     m_data = data;
 }
@@ -310,9 +332,9 @@ void wxTextDataObject::WriteString( const wxString &str, void *dest ) const
 
 IMPLEMENT_DYNAMIC_CLASS( wxFileDataObject, wxDataObject )
 
-wxFileDataObject::wxFileDataObject(void)
+wxFileDataObject::wxFileDataObject()
 {
-    m_format = new wxDataFormat( wxDF_FILENAME );
+    m_format.SetType( wxDF_FILENAME );
 }
 
 void wxFileDataObject::AddFile( const wxString &file )
@@ -344,12 +366,12 @@ IMPLEMENT_DYNAMIC_CLASS( wxBitmapDataObject, wxDataObject )
 
 wxBitmapDataObject::wxBitmapDataObject()
 {
-    m_format = new wxDataFormat( wxDF_BITMAP );
+    m_format.SetType( wxDF_BITMAP );
 }
 
 wxBitmapDataObject::wxBitmapDataObject( const wxBitmap& bitmap )
 {
-    m_format = new wxDataFormat( wxDF_BITMAP );
+    m_format.SetType( wxDF_BITMAP );
     
     m_bitmap = bitmap;
 }
@@ -390,7 +412,7 @@ wxPrivateDataObject::wxPrivateDataObject()
     m_id = "application/";
     m_id += wxTheApp->GetAppName();
     
-    m_format = new wxDataFormat( m_id );
+    m_format.SetId( m_id );
     
     m_size = 0; 
     m_data = (char*) NULL; 
@@ -404,7 +426,7 @@ wxPrivateDataObject::~wxPrivateDataObject()
 void wxPrivateDataObject::SetId( const wxString& id )
 { 
     m_id = id;
-    m_format->SetId( m_id );
+    m_format.SetId( m_id );
 }
     
 wxString wxPrivateDataObject::GetId() const

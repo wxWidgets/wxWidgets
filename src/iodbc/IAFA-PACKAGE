@@ -1,23 +1,26 @@
-Title:		iODBC Driver Manager for Unix
+Title:		iODBC Driver Manager 
 
-Version:	2.12.0
+Version:	2.50
 
 Description:	iODBC (intrinsic Open Database Connectivity) driver manager
-		is compatible with ODBC 2.0 specification and performs exactly
-		same jobs of ODBC 2.0 driver manager(i.e driver loading, 
-		parameters and function sequence checking, driver's function 
-		invoking, etc.). Any ODBC driver works with ODBC 2.0 driver 
-		manager will also work with iODBC driver manager and vice versa. 
-		Applications(which using ODBC function calls) linked with 
+		is compatible with ODBC 2.x specification and performs exactly
+		same jobs of ODBC 2.x driver manager(i.e. driver loading, 
+		Parameters and function sequence checking, driver's function 
+		Invoking, etc.). Any ODBC driver works with ODBC 2.0 driver 
+		Manager will also work with iODBC driver manager and vice versa. 
+		Applications (using ODBC function calls) linked with 
 		iODBC driver manager will be able to simultaneously access 
 		different type of data sources within one process through 
-		suitable ODBC drivers. 
+		suitable iODBC drivers. 
 		
-Author:		Jin, Ke <kejin@empress.com>
+Original Author:	Jin, Ke 
+Source Code Enhancement Contributors: OpenLink Software
+Maintainers: 	OpenLink Software
+Web Site: 	http://www.openlinksw.com
 
 Platforms:	SunOS (Sparc)		4.1.x
 		HP/UX (s700/s800)	9.x, 10.x
-		HP/UX (s300/s400)       9.x 
+		HP/UX (s300/s400) 	9.x 
 		IBM AIX			3.x, 4.x 
 		Solaris (Sparc)		2.x
 		Solaris (PCx86)		2.x
@@ -32,6 +35,6 @@ Platforms:	SunOS (Sparc)		4.1.x
 		Concurrent MAX/OS	1.x 
 		DG/UX			5.x
 
-Copying-Policy:	Freely Redistributable under GNU General Public License
+License Policy:	Freely Redistributable under GNU Library General Public License (LGPL)
 
-Keywords:	ODBC, database, SQL
+Keywords:	ODBC, database, SQL, OpenLink

@@ -559,6 +559,60 @@ dnl   defines YYTEXT_POINTER  if yytext is char*
 dnl   defines LEX_OUTPUT_ROOT as to the base of the 
 dnl                           filename output by the lexer
 
+dnl ###################################
+dnl ##  Check for dynamic load module #
+dnl ###################################
+
+DL_LIBRARY=
+AC_CHECK_FUNCS(dlopen, AC_DEFINE(HAVE_LIBDL),
+[AC_CHECK_LIB(dl, dlopen, [AC_DEFINE(HAVE_LIBDL) DL_LIBRARY="-ldl"],
+ [AC_CHECK_LIB(dld, dld_link, [AC_DEFINE(HAVE_DLD) DL_LIBRARY="-ldld"],
+   [AC_CHECK_FUNCS(shl_load, AC_DEFINE(HAVE_SHL_LOAD) )]
+  )]
+ )]
+)
+AC_SUBST(DL_LIBRARY)
+
+AC_CACHE_CHECK([for underscore before symbols], libltdl_cv_uscore, [
+  echo "main(){int i=1;} fnord(){int i=23; int ltuae=42;}" > conftest.c
+  ${CC} -c conftest.c > /dev/null
+  if (nm conftest.o | grep _fnord) > /dev/null; then
+    libltdl_cv_uscore=yes
+  else
+    libltdl_cv_uscore=no
+  fi
+  rm -f conftest*
+])
+
+if test x"$libltdl_cv_uscore" = xyes; then
+  if test x"$ac_cv_func_dlopen" = xyes ||
+     test x"$ac_cv_lib_dl_dlopen" = xyes ; then
+	AC_CACHE_CHECK([whether we have to add an underscore for dlsym],
+		libltdl_cv_need_uscore, [dnl
+		AC_TRY_RUN([
+#include <dlfcn.h>
+#include <stdio.h>
+fnord() { int i=42;}
+main() { void *self, *ptr1, *ptr2; self=dlopen(NULL,RTLD_LAZY);
+    if(self) { ptr1=dlsym(self,"fnord"); ptr2=dlsym(self,"_fnord");
+    if(ptr1 && !ptr2) exit(0); } exit(1); } 
+],	libltdl_cv_need_uscore=no, libltdl_cv_need_uscore=yes,
+	libltdl_cv_need_uscore=no
+)])
+  fi
+fi
+
+if test x"$libltdl_cv_need_uscore" = xyes; then
+   AC_DEFINE(NEED_USCORE)
+fi
+
+dnl ##########################################
+dnl ##  Check for specific library functions #
+dnl ##########################################
+
+dnl Checks for library functions.
+AC_CHECK_FUNCS(strerror)
+
 dnl ------------------------------------------------------------------------
 dnl main includes
 dnl ------------------------------------------------------------------------
@@ -1244,13 +1298,6 @@ fi
 AC_SUBST(HELP)
 
 dnl ----------------------------------------------------------------
-dnl select  dynamic loader (used by iODBC to load drivers)
-dnl ----------------------------------------------------------------
-
-AC_CHECK_LIB(dl,main,[DL_LIBRARY=-ldl],[DL_LIBRARY=])
-AC_SUBST(DL_LIBRARY)
-
-dnl ----------------------------------------------------------------
 dnl thread support
 dnl ----------------------------------------------------------------
 
@@ -1405,7 +1452,7 @@ case "${canonical}" in
 esac
 
 if test "x$GCC" = xyes; then
-  CFLAGS="${CFLAGS} -Wall -Wno-unused -Wno-uninitialized -D_REENTRANT -DLEX_SCANNER"
+  CFLAGS="${CFLAGS} -Wall -Wno-unused -Wno-uninitialized -D_REENTRANT -DLEX_SCANNER -DHAVE_LIBDL"
 fi
 
 if test "x$GXX" = xyes; then

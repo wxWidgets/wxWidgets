@@ -63,22 +63,26 @@ class wxDataFormat : public wxObject
   
 public:
   
+  wxDataFormat();
   wxDataFormat( wxDataType type );
   wxDataFormat( const wxString &id );
   wxDataFormat( wxDataFormat &format );
   wxDataFormat( const GdkAtom atom );
-    
-  int GetType() const;
+
+  void SetType( wxDataType type );    
+  wxDataType GetType() const;
+  
   wxString GetId() const;
   void SetId( const wxString &id );
+  
   GdkAtom GetAtom();
       
 private:
 
-  int       m_type;
-  wxString  m_id;
-  bool      m_hasAtom;
-  GdkAtom   m_atom;
+  wxDataType  m_type;
+  wxString    m_id;
+  bool        m_hasAtom;
+  GdkAtom     m_atom;
 };
 
 //-------------------------------------------------------------------------
@@ -151,9 +155,13 @@ public:
   
   /* implementation */
   
-  virtual wxDataFormat &GetFormat() const;
+  wxDataFormat &GetFormat();
   
-  wxDataFormat *m_format;
+  wxDataType GetFormatType() const;
+  wxString   GetFormatId() const;
+  GdkAtom    GetFormatAtom() const;
+  
+  wxDataFormat m_format;
 };
 
 //----------------------------------------------------------------------------

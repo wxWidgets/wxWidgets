@@ -1,18 +1,49 @@
-#ifndef CLI_NAME_PREFIX
+/*
+ *  henv.ci
+ *
+ *  $Id$
+ *
+ *  Function names
+ *
+ *  The iODBC driver manager.
+ *  
+ *  Copyright (C) 1995 by Ke Jin <kejin@empress.com> 
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Library General Public
+ *  License as published by the Free Software Foundation; either
+ *  version 2 of the License, or (at your option) any later version.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Library General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Library General Public
+ *  License along with this library; if not, write to the Free
+ *  Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+ */
 
 /* There are some exceptions :
  * on FreeBSD 2.x      CLI_NAME_PREFIX is defined in Config.mk as "_SQL"
- * on HP/UX s300/s400, CLI_NAME_PREFIX is defined in Config.mk as "_SQL"
- * on AIX 3.x 4.x,     CLI_NAME_PREFIX is defined in Config.mk as ".SQL"
+ * on HP/UX s300/s400, CLI_NAME_PREFIX is defined in Config.mk as "_SQL" 
+ * on AIX 3.x 4.x,     CLI_NAME_PREFIX is defined in Config.mk as ".SQL" 
  */
-
-#  define CLI_NAME_PREFIX       "SQL"   /* using call by value prefix */
+#ifndef	CLI_NAME_PREFIX
+#  define CLI_NAME_PREFIX	"SQL"	/* using call by value prefix */ 
+#else
+# ifdef NEED_USCORE
+#  define CLI_NAME_PREFIX	"_SQL"
+# endif
 #endif
 
-static struct {
-        int     en_idx;
-        char*   symbol;
-} odbcapi_symtab[] = {
+static struct
+  {
+    int en_idx;
+    char *symbol;
+  }
+odbcapi_symtab[] = {
+
 #if (ODBCVER >= 0x0300)
         { en_AllocHandle          CLI_NAME_PREFIX "AllocHandle" },
         { en_FreeHandle           CLI_NAME_PREFIX "FreeHandle" },

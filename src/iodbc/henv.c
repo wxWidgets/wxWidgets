@@ -1,75 +1,89 @@
-/** Environment object managment functions
+/*
+ *  henv.c
+ *
+ *  $Id$
+ *
+ *  Environment object management functions
+ *
+ *  The iODBC driver manager.
+ *  
+ *  Copyright (C) 1995 by Ke Jin <kejin@empress.com> 
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Library General Public
+ *  License as published by the Free Software Foundation; either
+ *  version 2 of the License, or (at your option) any later version.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Library General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Library General Public
+ *  License along with this library; if not, write to the Free
+ *  Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+ */
 
-    Copyright (C) 1995 by Ke Jin <kejin@empress.com>
+#include	<config.h>
 
-    This program is free software; you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation; either version 2 of the License, or
-    (at your option) any later version.
+#include	<isql.h>
+#include	<isqlext.h>
 
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-**/
+#include	<dlproc.h>
 
-#include	<../iodbc/iodbc.h>
+#include	<herr.h>
+#include	<henv.h>
 
-#include	<../iodbc/isql.h>
-#include	<../iodbc/isqlext.h>
+#include	<itrace.h>
 
-#include	<../iodbc/dlproc.h>
-
-#include	<../iodbc/herr.h>
-#include	<../iodbc/henv.h>
-
-#include	<../iodbc/itrace.h>
-
-RETCODE SQL_API SQLAllocEnv( HENV FAR* phenv )
+RETCODE SQL_API 
+SQLAllocEnv (HENV FAR * phenv)
 {
-        GENV_t FAR*     genv;
+  GENV_t FAR *genv;
 
-        genv = (GENV_t*)MEM_ALLOC( sizeof(GENV_t) );
+  genv = (GENV_t *) MEM_ALLOC (sizeof (GENV_t));
 
-        if( genv == NULL )
-        {
-                *phenv = SQL_NULL_HENV;
+  if (genv == NULL)
+    {
+      *phenv = SQL_NULL_HENV;
 
-                return SQL_ERROR;
-        }
+      return SQL_ERROR;
+    }
 
 #if (ODBCVER >= 0x0300 )
-        genv->type = SQL_HANDLE_ENV;
+  genv->type = SQL_HANDLE_ENV;
 #endif
 
-        genv->henv = SQL_NULL_HENV;     /* driver's env list */
-        genv->hdbc = SQL_NULL_HDBC;     /* driver's dbc list */
-        genv->herr = SQL_NULL_HERR;     /* err list          */
+  genv->henv = SQL_NULL_HENV;	/* driver's env list */
+  genv->hdbc = SQL_NULL_HDBC;	/* driver's dbc list */
+  genv->herr = SQL_NULL_HERR;	/* err list          */
 
-        *phenv = (HENV)genv;
+  *phenv = (HENV) genv;
 
-        return SQL_SUCCESS;
+  return SQL_SUCCESS;
 }
 
-RETCODE SQL_API SQLFreeEnv ( HENV henv )
+
+RETCODE SQL_API 
+SQLFreeEnv (HENV henv)
 {
-        GENV_t FAR*     genv = (GENV_t*)henv;
+  GENV_t FAR *genv = (GENV_t *) henv;
 
-        if( henv == SQL_NULL_HENV )
-        {
-                return SQL_INVALID_HANDLE;
-        }
+  if (henv == SQL_NULL_HENV)
+    {
+      return SQL_INVALID_HANDLE;
+    }
 
-        if( genv->hdbc != SQL_NULL_HDBC )
-        {
-                PUSHSQLERR ( genv->herr, en_S1010 );
+  if (genv->hdbc != SQL_NULL_HDBC)
+    {
+      PUSHSQLERR (genv->herr, en_S1010);
 
-                return SQL_ERROR;
-        }
+      return SQL_ERROR;
+    }
 
-        _iodbcdm_freesqlerrlist( genv->herr );
+  _iodbcdm_freesqlerrlist (genv->herr);
 
-        MEM_FREE( henv );
+  MEM_FREE (henv);
 
-        return SQL_SUCCESS;
+  return SQL_SUCCESS;
 }
