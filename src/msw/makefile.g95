@@ -390,10 +390,10 @@ $(COMMDIR)/y_tab.$(OBJSUFF):    $(COMMDIR)/y_tab.c $(COMMDIR)/lex_yy.c
 	$(CCLEX) -c $(CPPFLAGS) -DUSE_DEFINE -DYY_USE_PROTOS -o $@ $(COMMDIR)/y_tab.c
 
 $(COMMDIR)/y_tab.c:     $(COMMDIR)/dosyacc.c
-	copy ..\\common\\dosyacc.c ..\\common\\y_tab.c
+	copy ..\common\dosyacc.c ..\common\y_tab.c
 
 $(COMMDIR)/lex_yy.c:    $(COMMDIR)/doslex.c
-	copy ..\\common\\doslex.c ..\\common\\lex_yy.c
+	copy ..\common\doslex.c ..\common\lex_yy.c
 
 # Replace lex with flex if you run into compilation
 # problems with lex_yy.c. See also note about LEX_SCANNER
