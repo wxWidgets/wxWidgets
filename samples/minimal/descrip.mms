@@ -24,7 +24,7 @@ all :
 
 minimal.exe : minimal.obj
 .ifdef __WXMOTIF__
-	cxxlink minimal,minimal/opt
+	cxxlink minimal,[--.lib]vms/opt
 .endif
 
 minimal.obj : minimal.cpp

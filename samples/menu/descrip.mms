@@ -24,7 +24,7 @@ all :
 
 menu.exe : menu.obj
 .ifdef __WXMOTIF__
-	cxxlink menu,menu/opt
+	cxxlink menu,[--.lib]vms/opt
 .endif
 
 menu.obj : menu.cpp

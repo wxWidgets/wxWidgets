@@ -24,7 +24,7 @@ all :
 
 game.exe : game.obj bombs1.obj bombs.obj
 .ifdef __WXMOTIF__
-	cxxlink game,bombs1,bombs,bombs/opt
+	cxxlink game,bombs1,bombs,[--.lib]vms/opt
 .endif
 
 game.obj : game.cpp

@@ -24,7 +24,7 @@ all :
 
 conftest.exe : conftest.obj
 .ifdef __WXMOTIF__
-	cxxlink conftest,conftest/opt
+	cxxlink conftest,[--.lib]vms/opt
 .endif
 
 conftest.obj : conftest.cpp

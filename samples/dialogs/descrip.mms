@@ -24,7 +24,7 @@ all :
 
 dialogs.exe : dialogs.obj
 .ifdef __WXMOTIF__
-	cxxlink dialogs,dialogs/opt
+	cxxlink dialogs,[--.lib]vms.opt/opt
 .endif
 
 dialogs.obj : dialogs.cpp

@@ -24,7 +24,7 @@ all :
 
 controls.exe : controls.obj
 .ifdef __WXMOTIF__
-	cxxlink controls,controls/opt
+	cxxlink controls,[--.lib]vms/opt
 .endif
 
 controls.obj : controls.cpp

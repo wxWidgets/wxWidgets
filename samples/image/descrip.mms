@@ -24,7 +24,7 @@ all :
 
 image.exe : image.obj
 .ifdef __WXMOTIF__
-	cxxlink image,image/opt
+	cxxlink image,[--.lib]vms/opt
 .endif
 
 image.obj : image.cpp

@@ -24,7 +24,7 @@ all :
 
 checklst.exe : checklst.obj
 .ifdef __WXMOTIF__
-	cxxlink checklst,checklst/opt
+	cxxlink checklst,[--.lib]vms/opt
 .endif
 
 checklst.obj : checklst.cpp
