@@ -95,7 +95,7 @@ public:
 
     void SetNoAntiAliasing( bool no = TRUE ) { m_noAA = no; }
     bool GetNoAntiAliasing() { return m_noAA; }
-    
+
     // and this one also modifies all the other font data fields
     void SetNativeFontInfo(const wxNativeFontInfo& info);
 
@@ -158,7 +158,7 @@ private:
 };
 
 // ----------------------------------------------------------------------------
-// wxFontRefData 
+// wxFontRefData
 // ----------------------------------------------------------------------------
 
 void wxFontRefData::Init(int pointSize,
@@ -185,7 +185,7 @@ void wxFontRefData::Init(int pointSize,
 
     m_underlined = underlined;
     m_encoding = encoding;
-    
+
     m_noAA = FALSE;
 
 #ifdef __WXGTK20__
@@ -215,7 +215,7 @@ void wxFontRefData::Init(int pointSize,
                break;
         }
     }
-    
+
     SetStyle( m_style );
     SetPointSize( m_pointSize );
     SetWeight( m_weight );
@@ -407,8 +407,11 @@ wxFontRefData::wxFontRefData( const wxFontRefData& data )
     m_encoding = data.m_encoding;
 
     m_noAA = data.m_noAA;
-    
-    m_nativeFontInfo = data.m_nativeFontInfo;
+
+    // Forces a copy of the internal data.  wxNativeFontInfo should probably
+    // have a copy ctor and assignment operator to fix this properly but that
+    // would break binary compatibility...
+    m_nativeFontInfo.FromString(data.m_nativeFontInfo.ToString());
 }
 
 wxFontRefData::wxFontRefData(int size, int family, int style,
