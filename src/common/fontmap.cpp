@@ -40,6 +40,7 @@
 #include "wx/msgdlg.h"
 #include "wx/fontdlg.h"
 #include "wx/choicdlg.h"
+#include "wx/encconv.h"
 
 // ----------------------------------------------------------------------------
 // constants
@@ -598,71 +599,13 @@ bool wxFontMapper::GetAltForEncoding(wxFontEncoding encoding,
     }
     //else: we're in non-interactive mode
 
-    // now try the default mappings
-    switch ( encoding )
-    {
-        case wxFONTENCODING_ISO8859_15:
-            // iso8859-15 is slightly modified iso8859-1
-            if ( TestAltEncoding(configEntry, wxFONTENCODING_ISO8859_1, info) )
-                return TRUE;
-            // fall through
 
-        case wxFONTENCODING_ISO8859_1:
-            // iso8859-1 is identical to CP1252
-            if ( TestAltEncoding(configEntry, wxFONTENCODING_CP1252, info) )
-                return TRUE;
-
-            break;
-
-        case wxFONTENCODING_CP1252:
-            if ( TestAltEncoding(configEntry, wxFONTENCODING_ISO8859_1, info) )
-                return TRUE;
-
-            break;
-
-        // iso8859-13 is quite similar to WinBaltic
-        case wxFONTENCODING_ISO8859_13:
-            if ( TestAltEncoding(configEntry, wxFONTENCODING_CP1257, info) )
-                return TRUE;
-
-            break;
-
-        case wxFONTENCODING_CP1257:
-            if ( TestAltEncoding(configEntry, wxFONTENCODING_ISO8859_13, info) )
-                return TRUE;
-
-            break;
-
-        // iso8859-8 is almost identical to WinHebrew
-        case wxFONTENCODING_ISO8859_8:
-            if ( TestAltEncoding(configEntry, wxFONTENCODING_CP1255, info) )
-                return TRUE;
-
-            break;
-
-        case wxFONTENCODING_CP1255:
-            if ( TestAltEncoding(configEntry, wxFONTENCODING_ISO8859_8, info) )
-                return TRUE;
-
-            break;
-
-        // and iso8859-7 is not too different from WinGreek
-        case wxFONTENCODING_ISO8859_7:
-            if ( TestAltEncoding(configEntry, wxFONTENCODING_CP1253, info) )
-                return TRUE;
-
-            break;
-
-        case wxFONTENCODING_CP1253:
-            if ( TestAltEncoding(configEntry, wxFONTENCODING_ISO8859_7, info) )
-                return TRUE;
-
-            break;
-
-        default:
-           // TODO add other mappings...
-           ;
-    }
+    // now try the default mappings:
+    
+    wxFontEncodingArray equiv = wxEncodingConverter::GetAllEquivalents(encoding);
+    for ( unsigned i = (equiv[0] == encoding) ? 1 : 0; i < equiv.GetCount(); i++ )
+        if ( TestAltEncoding(configEntry, equiv[i], info) )
+            return TRUE;
 
     return FALSE;
 }
