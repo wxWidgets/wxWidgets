@@ -520,6 +520,8 @@ public:
     // append count copies of given character
   wxString& Append(wxChar ch, size_t count = 1u)
     { wxString str(ch, count); return *this << str; }
+  wxString& Append(const wxChar* psz, size_t nLen)
+    { ConcatSelf(nLen, psz); return *this; }
 
     // prepend a string, return the string itself
   wxString& Prepend(const wxString& str)
@@ -668,6 +670,7 @@ public:
   wxChar *GetWriteBuf(size_t nLen);
     // call this immediately after GetWriteBuf() has been used
   void UngetWriteBuf();
+  void UngetWriteBuf(size_t nLen);
 
   // wxWindows version 1 compatibility functions
 

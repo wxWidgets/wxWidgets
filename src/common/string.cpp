@@ -528,6 +528,12 @@ void wxString::UngetWriteBuf()
   GetStringData()->Validate(TRUE);
 }
 
+void wxString::UngetWriteBuf(size_t nLen)
+{
+  GetStringData()->nDataLength = nLen;
+  GetStringData()->Validate(TRUE);
+}
+
 // ---------------------------------------------------------------------------
 // data access
 // ---------------------------------------------------------------------------
