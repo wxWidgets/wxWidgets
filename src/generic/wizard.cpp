@@ -47,6 +47,29 @@
 #include "wx/wizard.h"
 
 // ----------------------------------------------------------------------------
+// wxWizardSizer
+// ----------------------------------------------------------------------------
+
+class wxWizardSizer : public wxSizer
+{
+public:
+    wxWizardSizer(wxWizard *owner);
+
+    void RecalcSizes();
+    wxSize CalcMin();
+
+    wxSize GetMaxChildSize();
+    int Border() const;
+    
+private:
+    wxSize SiblingSize(wxSizerItem *child);
+    
+    wxWizard *m_owner;
+    bool m_childSizeValid;
+    wxSize m_childSize;
+};
+
+// ----------------------------------------------------------------------------
 // event tables and such
 // ----------------------------------------------------------------------------
 
@@ -138,29 +161,6 @@ wxWizardPage *wxWizardPageSimple::GetNext() const
 // ----------------------------------------------------------------------------
 // wxWizardSizer
 // ----------------------------------------------------------------------------
-
-class wxWizardSizer : public wxSizer
-{
-public:
-    wxWizardSizer(wxWizard *owner);
-
-    void RecalcSizes();
-    wxSize CalcMin();
-
-    wxSize GetMaxChildSize();
-    int Border() const;
-    
-private:
-    wxSize SiblingSize(wxSizerItem *child);
-    
-    wxWizard *m_owner;
-    bool m_childSizeValid;
-    wxSize m_childSize;
-
-    DECLARE_CLASS(wxWizardSizer);
-};
-
-IMPLEMENT_CLASS(wxWizardSizer, wxSizer)
 
 wxWizardSizer::wxWizardSizer(wxWizard *owner)
     : m_owner(owner)
@@ -264,6 +264,7 @@ void wxWizard::Init()
     m_page = (wxWizardPage *)NULL;
     m_btnPrev = m_btnNext = NULL;
     m_statbmp = NULL;
+    m_sizerBmpAndPage = NULL;
     m_sizerPage = NULL;
     m_calledSetBorder = false;
     m_border = 0;
@@ -271,11 +272,11 @@ void wxWizard::Init()
 }
 
 bool wxWizard::Create(wxWindow *parent,
-                   int id,
-                   const wxString& title,
-                   const wxBitmap& bitmap,
-                   const wxPoint& pos,
-                   long style)
+                      int id,
+                      const wxString& title,
+                      const wxBitmap& bitmap,
+                      const wxPoint& pos,
+                      long style)
 {
     bool result = wxDialog::Create(parent,id,title,pos,wxDefaultSize,style);
     
@@ -315,8 +316,6 @@ void wxWizard::AddBitmapRow(wxBoxSizer *mainColumn)
             wxEXPAND // No border, (mostly useless) vertical stretching
         );
     }
-    else
-        m_statbmp = (wxStaticBitmap *)NULL;
 
     // Added to m_sizerBmpAndPage in FinishLayout
     m_sizerPage = new wxWizardSizer(this);
@@ -602,6 +601,7 @@ wxSizer *wxWizard::GetPageAreaSizer() const
 void wxWizard::SetBorder(int border)
 {
     wxCHECK_RET(!m_started,wxT("wxWizard::SetBorder after RunWizard"));
+
     m_calledSetBorder = true;
     m_border = border;
 }
@@ -616,8 +616,10 @@ wxSize wxWizard::GetManualPageSize() const
     
     totalPageSize.IncTo(m_sizePage);
     
-    if(m_statbmp)
-        totalPageSize.IncTo(wxSize(0,m_bitmap.GetHeight()));
+    if ( m_statbmp )
+    {
+        totalPageSize.IncTo(wxSize(0, m_bitmap.GetHeight()));
+    }
     
     return totalPageSize;
 }
