@@ -2114,7 +2114,7 @@ void wxResourceEditorFrame::OnExit(wxCommandEvent& WXUNUSED(event))
 void wxResourceEditorFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
 {
       char buf[300];
-      sprintf(buf, "wxWindows Dialog Editor %.1f\nAuthor: Julian Smart J.Smart@ed.ac.uk\nJulian Smart (c) 1996", wxDIALOG_EDITOR_VERSION);
+      sprintf(buf, "wxWindows Dialog Editor %.1f\nAuthor: Julian Smart <julian.smart@ukonline.co.uk>\nJulian Smart (c) 1996-1999", wxDIALOG_EDITOR_VERSION);
       wxMessageBox(buf, "About Dialog Editor", wxOK|wxCENTRE);
 }
 

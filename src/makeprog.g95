@@ -20,9 +20,9 @@ $(TARGET)_resources.o:  $(TARGET).rc
 	$(RESCOMP) $(RCINPUTSWITCH) $(TARGET).rc $(RCOUTPUTSWITCH) $(TARGET)_resources.o $(RESFLAGS)
 
 clean:
-	erase *.o
-	erase $(TARGET)_resources.o
-	erase $(TARGET).exe 
-	erase core 
-	erase *.rsc
-	erase *.res
+	rm -f *.o
+	rm -f $(TARGET)_resources.o
+	rm -f $(TARGET).exe 
+	rm -f core 
+	rm -f *.rsc
+	rm -f *.res

@@ -303,7 +303,10 @@ typedef unsigned __WCHAR_TYPE__ wxUChar;
 #   ifdef __FreeBSD__
 #     undef _T
 #   endif
-#   define _T(x)           x
+
+#   if !defined(__MINGW32__) || !defined(_T)
+#     define _T(x)           x
+#   endif
 
      // ctype.h functions
 #   define  wxIsalnum   isalnum

@@ -1,3 +1,5 @@
+Mingw32-gcc295.patches
+
 docs/licence.txt
 docs/msw/*.txt
 docs/wine/*.txt

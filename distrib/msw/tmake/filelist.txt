@@ -254,6 +254,7 @@ settings.cpp	M
 slider95.cpp	M	32
 slidrmsw.cpp	M	16
 spinbutt.cpp	M
+spinctrl.cpp	M
 statbmp.cpp	M
 statbox.cpp	M
 statbr95.cpp	M	32

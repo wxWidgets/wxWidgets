@@ -61,6 +61,11 @@ item: Set Variable
   Variable=MAINDIR
   Value=wx2
 end
+item: Display Graphic
+  Pathname=D:\wx2\wxWindows\distrib\msw\wxwin01.bmp
+  X Position=16
+  Y Position=16
+end
 item: Check Configuration
   Flags=10111011
 end
@@ -140,22 +145,6 @@ item: Wizard Block
   X Position=9
   Y Position=10
   Filler Color=8421440
-  Dialog=Select Program Manager Group
-  Dialog=Select Backup Directory
-  Dialog=Display Registration Information
-  Dialog=Get Registration Information
-  Variable=EXPLORER
-  Variable=DOBACKUP
-  Variable=DOBRAND
-  Variable=DOBRAND
-  Value=1
-  Value=A
-  Value=1
-  Value=1
-  Compare=0
-  Compare=1
-  Compare=0
-  Compare=1
   Flags=00000011
 end
 item: Custom Dialog Set
@@ -601,4 +590,3 @@ end
 item: Check Disk Space
   Component=COMPONENTS
 end
-

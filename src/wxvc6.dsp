@@ -919,6 +919,10 @@ SOURCE=.\msw\spinbutt.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\msw\spinctrl.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\msw\statbmp.cpp
 # End Source File
 # Begin Source File

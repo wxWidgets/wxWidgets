@@ -21,6 +21,9 @@ set len=%@LINES[%TEMP\files1.tmp]
 
 erase /Y %TEMP\files2.tmp
 
+Rem, first add system files
+cat %WXWIN\distrib\msw\wisesys.txt > %temp\files2.tmp
+
 do i = 0 to %len by 1
     set line=%@LINE[%TEMP\files1.tmp,%i]
     Rem Skip directories.

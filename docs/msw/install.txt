@@ -402,7 +402,7 @@ References:
  - The GNU-WIN32 site is at
      http://www.cygnus.com/gnu-win32/
  - Mingw32 is available at:
-     http://agnes.dida.physik.uni-essen.de/~janjaap/mingw32/index.html
+     ftp://ftp.xraylith.wisc.edu/pub/khan/gnu-win32/mingw32/gcc-2.95/
  - See also http://web.ukonline.co.uk/julian.smart/wxwin/gnuwin32.htm
 
 TWIN32 and gcc on Linux
