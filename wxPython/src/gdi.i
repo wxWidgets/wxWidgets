@@ -586,6 +586,7 @@ public:
                      int fill_style=wxODDEVEN_RULE);
     void DrawPoint(long x, long y);
     void DrawRectangle(long x, long y, long width, long height);
+    %name(DrawRectangleRect)void DrawRectangle(const wxRect& rect);
     void DrawRotatedText(const wxString& text, wxCoord x, wxCoord y, double angle);
     void DrawRoundedRectangle(long x, long y, long width, long height, long radius=20);
     void DrawSpline(int PCOUNT, wxPoint* points);
@@ -637,6 +638,7 @@ public:
     void SetBackgroundMode(int mode);
     void SetClippingRegion(long x, long y, long width, long height);
     %name(SetClippingRegionAsRegion) void SetClippingRegion(const wxRegion& region);
+    %name(SetClippingRect) void SetClippingRegion(const wxRect& rect);
     void SetPalette(const wxPalette& colourMap);
     void SetBrush(const wxBrush& brush);
     void SetFont(const wxFont& font);
