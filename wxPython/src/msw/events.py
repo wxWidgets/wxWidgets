@@ -16,29 +16,29 @@ class wxEventPtr(wxObjectPtr):
                 delfunc(self)
             except:
                 pass
-    def GetEventObject(self, *_args, **_kwargs):
-        val = eventsc.wxEvent_GetEventObject(self, *_args, **_kwargs)
+    def SetEventType(self, *_args, **_kwargs):
+        val = eventsc.wxEvent_SetEventType(self, *_args, **_kwargs)
         return val
     def GetEventType(self, *_args, **_kwargs):
         val = eventsc.wxEvent_GetEventType(self, *_args, **_kwargs)
         return val
-    def GetId(self, *_args, **_kwargs):
-        val = eventsc.wxEvent_GetId(self, *_args, **_kwargs)
-        return val
-    def GetTimestamp(self, *_args, **_kwargs):
-        val = eventsc.wxEvent_GetTimestamp(self, *_args, **_kwargs)
+    def GetEventObject(self, *_args, **_kwargs):
+        val = eventsc.wxEvent_GetEventObject(self, *_args, **_kwargs)
         return val
     def SetEventObject(self, *_args, **_kwargs):
         val = eventsc.wxEvent_SetEventObject(self, *_args, **_kwargs)
         return val
-    def SetEventType(self, *_args, **_kwargs):
-        val = eventsc.wxEvent_SetEventType(self, *_args, **_kwargs)
-        return val
-    def SetId(self, *_args, **_kwargs):
-        val = eventsc.wxEvent_SetId(self, *_args, **_kwargs)
+    def GetTimestamp(self, *_args, **_kwargs):
+        val = eventsc.wxEvent_GetTimestamp(self, *_args, **_kwargs)
         return val
     def SetTimestamp(self, *_args, **_kwargs):
         val = eventsc.wxEvent_SetTimestamp(self, *_args, **_kwargs)
+        return val
+    def GetId(self, *_args, **_kwargs):
+        val = eventsc.wxEvent_GetId(self, *_args, **_kwargs)
+        return val
+    def SetId(self, *_args, **_kwargs):
+        val = eventsc.wxEvent_SetId(self, *_args, **_kwargs)
         return val
     def IsCommandEvent(self, *_args, **_kwargs):
         val = eventsc.wxEvent_IsCommandEvent(self, *_args, **_kwargs)

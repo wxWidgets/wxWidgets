@@ -1163,6 +1163,13 @@ class wxMenuItemPtr(wxObjectPtr):
     def SetBitmaps(self, *_args, **_kwargs):
         val = windowsc.wxMenuItem_SetBitmaps(self, *_args, **_kwargs)
         return val
+    def SetDisabledBitmap(self, *_args, **_kwargs):
+        val = windowsc.wxMenuItem_SetDisabledBitmap(self, *_args, **_kwargs)
+        return val
+    def GetDisabledBitmap(self, *_args, **_kwargs):
+        val = windowsc.wxMenuItem_GetDisabledBitmap(self, *_args, **_kwargs)
+        if val: val = wxBitmapPtr(val) 
+        return val
     def SetMarginWidth(self, *_args, **_kwargs):
         val = windowsc.wxMenuItem_SetMarginWidth(self, *_args, **_kwargs)
         return val
@@ -1171,6 +1178,9 @@ class wxMenuItemPtr(wxObjectPtr):
         return val
     def IsOwnerDrawn(self, *_args, **_kwargs):
         val = windowsc.wxMenuItem_IsOwnerDrawn(self, *_args, **_kwargs)
+        return val
+    def SetOwnerDrawn(self, *_args, **_kwargs):
+        val = windowsc.wxMenuItem_SetOwnerDrawn(self, *_args, **_kwargs)
         return val
     def ResetOwnerDrawn(self, *_args, **_kwargs):
         val = windowsc.wxMenuItem_ResetOwnerDrawn(self, *_args, **_kwargs)
