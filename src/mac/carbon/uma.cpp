@@ -15,8 +15,10 @@
 
 #define wxUSE_MLTE 0
 
+
 static bool	sUMAHasAppearance = false ;
 static long sUMAAppearanceVersion = 0 ;
+static bool sUMAHasAquaLayout = false ;
 extern int gAGABackgroundColor ;
 bool UMAHasAppearance() { return sUMAHasAppearance ; }
 long UMAGetAppearanceVersion() { return sUMAAppearanceVersion ; }
@@ -26,6 +28,8 @@ static long sUMAWindowManagerAttr = 0 ;
 
 bool UMAHasWindowManager() { return sUMAHasWindowManager ; }
 long UMAGetWindowManagerAttr() { return sUMAWindowManagerAttr ; }
+bool UMAHasAquaLayout() { return sUMAHasAquaLayout ; }
+
 
 void UMACleanupToolbox()
 {
@@ -104,6 +108,11 @@ void UMAInitToolbox( UInt16 inMoreMastersCalls )
   defaults.encoding = kTXNSystemDefaultEncoding;
 	TXNInitTextension(&defaults,  1, (kTXNAlwaysUseQuickDrawTextMask | kTXNWantMoviesMask | kTXNWantSoundMask | kTXNWantGraphicsMask));
 #endif
+  long menuMgrAttr ;
+  Gestalt( gestaltMenuMgrAttr , &menuMgrAttr ) ;
+  if ( menuMgrAttr & gestaltMenuMgrAquaLayoutMask )
+    sUMAHasAquaLayout = true ;
+
 }
 
 // process manager
