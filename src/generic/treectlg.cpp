@@ -758,6 +758,8 @@ void wxGenericTreeCtrl::Init()
 
     m_findTimer = NULL;
 
+    m_dropEffectAboveItem = false;
+
     m_lastOnSame = false;
 
 #ifdef __WXMAC_CARBON__
@@ -2499,7 +2501,7 @@ void wxGenericTreeCtrl::DrawDropEffect(wxGenericTreeItem *item)
         {
             // draw a line under the drop target because the item will be
             // dropped there
-            DrawLine(item, true /* below */);
+            DrawLine(item, !m_dropEffectAboveItem );
         }
 
         SetCursor(wxCURSOR_BULLSEYE);

@@ -105,6 +105,9 @@ public:
     virtual void AssignStateImageList(wxImageList *imageList);
     virtual void AssignButtonsImageList(wxImageList *imageList);
 
+    virtual void SetDropEffectAboveItem( bool above = false ) { m_dropEffectAboveItem = above; }
+    virtual bool GetDropEffectAboveItem() const { return m_dropEffectAboveItem; }
+
     // Functions to work with tree ctrl items.
 
     // accessors
@@ -446,6 +449,8 @@ protected:
     // incremental search data
     wxString             m_findPrefix;
     wxTimer             *m_findTimer;
+    
+    bool                 m_dropEffectAboveItem;
 
     // the common part of all ctors
     void Init();
