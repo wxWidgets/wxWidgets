@@ -157,7 +157,7 @@ wxTabbedWindow::wxTabbedWindow()
 //---------------------------------------------------------------------------
 wxTabbedWindow::~wxTabbedWindow()
 {
-    wxNode* pTab = mTabs.GetFirst();
+    wxObjectList::compatibility_iterator pTab = mTabs.GetFirst();
     
     while( pTab )
     {
@@ -169,7 +169,7 @@ wxTabbedWindow::~wxTabbedWindow()
 //---------------------------------------------------------------------------
 void wxTabbedWindow::SizeTabs(int x,int y, int width, int height, bool WXUNUSED(repant))
 {
-    wxNode* pTabNode = mTabs.GetFirst();
+    wxObjectList::compatibility_iterator pTabNode = mTabs.GetFirst();
     size_t n = 0;
     
     while( pTabNode )
@@ -252,7 +252,7 @@ void wxTabbedWindow::RemoveTab( int tabNo )
     twTabInfo* pTab = ((twTabInfo*)(mTabs.Item( tabNo )->GetData()));
     pTab->mpContent->Destroy();
     delete pTab;
-    mTabs.DeleteNode( mTabs.Item( tabNo ) );
+    mTabs.Erase( mTabs.Item( tabNo ) );
     // if ( mActiveTab >= mTabs.GetCount() );
     if ( mActiveTab >= mTabs.GetCount() )
         mActiveTab = mTabs.GetCount() - 1;
@@ -364,7 +364,7 @@ void wxTabbedWindow::DrawDecorations( wxDC& dc )
     curY = height - mVertGap - mTitleHeight;
     
     size_t tabNo = 0;
-    wxNode* pNode = mTabs.GetFirst();
+    wxObjectList::compatibility_iterator pNode = mTabs.GetFirst();
     
     while( pNode )
     {
@@ -453,7 +453,7 @@ int wxTabbedWindow::HitTest( const wxPoint& pos )
     int curY = height - mVertGap - mTitleHeight;
     
     int     tabNo = 0;
-    wxNode* pNode = mTabs.GetFirst();
+    wxObjectList::compatibility_iterator pNode = mTabs.GetFirst();
     
     while( pNode )
     {
@@ -482,7 +482,7 @@ void wxTabbedWindow::HideInactiveTabs( bool andRepaint )
     if ( !andRepaint )
         return;
     
-    wxNode* pNode = mTabs.GetFirst();
+    wxObjectList::compatibility_iterator pNode = mTabs.GetFirst();
     size_t  tabNo = 0;
     
     while( pNode )
@@ -541,7 +541,7 @@ void wxTabbedWindow::RecalcLayout(bool andRepaint)
     
     mLayoutType = wxTITLE_IMG_AND_TEXT;
     
-    wxNode* pNode = mTabs.GetFirst();
+    wxObjectList::compatibility_iterator pNode = mTabs.GetFirst();
     
     curX = mFirstTitleGap; // the left-side gap
     mTitleHeight = 0;
@@ -768,7 +768,7 @@ wxScrollBar& wxPagedWindow::GetHorizontalScrollBar()
 //---------------------------------------------------------------------------
 int wxPagedWindow::GetWholeTabRowLen()
 {
-    wxNode* pNode = mTabs.GetFirst();
+    wxObjectList::compatibility_iterator pNode = mTabs.GetFirst();
     
     int len = 0;
     
@@ -861,7 +861,7 @@ void wxPagedWindow::DrawDecorations( wxDC& dc )
 
     // draw inactive tab title bars frist (left-to-right)
 
-    wxNode* pNode = mTabs.GetFirst();
+    wxObjectList::compatibility_iterator pNode = mTabs.GetFirst();
     size_t  tabNo = 0;
 
     /* OLD STUFF::
@@ -1033,7 +1033,7 @@ void wxPagedWindow::RecalcLayout(bool andRepaint)
     
     mLayoutType = wxTITLE_IMG_AND_TEXT;
     
-    wxNode* pNode = mTabs.GetFirst();
+    wxObjectList::compatibility_iterator pNode = mTabs.GetFirst();
     
     while( pNode )
     {
