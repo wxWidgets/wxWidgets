@@ -1529,8 +1529,17 @@ int wxFileIconsTable::GetIconID(const wxString& extension, const wxString& mime)
     wxFileType *ft = (mime.IsEmpty()) ?
                    wxTheMimeTypesManager -> GetFileTypeFromExtension(extension) :
                    wxTheMimeTypesManager -> GetFileTypeFromMimeType(mime);
+
+    wxIconLocation iconLoc;
     wxIcon ic;
-    if (ft == NULL || (!ft->GetIcon(&ic)) || (!ic.Ok()))
+    if ( ft && ft->GetIcon(&iconLoc) )
+    {
+        ic = wxIcon(iconLoc);
+    }
+
+    delete ft;
+
+    if ( !ic.Ok() )
     {
         int newid = file;
         m_HashTable->Put(extension, new wxFileIconEntry(newid));
@@ -1540,8 +1549,6 @@ int wxFileIconsTable::GetIconID(const wxString& extension, const wxString& mime)
     wxBitmap tmpBmp;
     tmpBmp.CopyFromIcon(ic);
     wxImage img = tmpBmp.ConvertToImage();
-
-    delete ft;
 
     int id = m_smallImageList->GetImageCount();
     if (img.GetWidth() == 16 && img.GetHeight() == 16)
