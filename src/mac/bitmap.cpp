@@ -59,9 +59,9 @@ void wxMacDestroyColorTable( CTabHandle colors )
 void wxMacSetColorTableEntry( CTabHandle newColors , int index , int red , int green ,  int blue )
 {
     (**newColors).ctTable[index].value = index;
-    (**newColors).ctTable[index].rgb.red = 0 ;// someRedValue;
-    (**newColors).ctTable[index].rgb.green = 0 ; // someGreenValue;
-    (**newColors).ctTable[index].rgb.blue = 0 ; // someBlueValue;
+    (**newColors).ctTable[index].rgb.red = red ;// someRedValue;
+    (**newColors).ctTable[index].rgb.green = green ; // someGreenValue;
+    (**newColors).ctTable[index].rgb.blue = blue ; // someBlueValue;
 }
 
 GWorldPtr wxMacCreateGWorld( int width , int height , int depth )
