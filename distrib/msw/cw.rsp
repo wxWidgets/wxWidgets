@@ -5,6 +5,10 @@ include/wx_cw.pch
 include/wx_cw.pch++
 include/wx_cw_d.pch
 include/wx_cw_d.pch++
+include/wx_cwc.pch
+include/wx_cwc.pch++
+include/wx_cwc_d.pch
+include/wx_cwc_d.pch++
 
 samples/bombs/*.mcp
 
