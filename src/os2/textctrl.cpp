@@ -712,7 +712,11 @@ bool wxTextCtrl::IsModified() const
 
 void wxTextCtrl::MarkDirty()
 {
-    wxFAIL_MSG( _T("not implemented") );
+    if (m_bIsMLE)
+        ::WinSendMsg(GetHwnd(), MLM_SETCHANGED, MPFROMLONG(TRUE), 0);
+    else
+        // EM controls do not have a SETCHANGED, what can we do??
+        wxFAIL_MSG( _T("not implemented") );
 }
 
 //
