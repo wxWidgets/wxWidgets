@@ -11,30 +11,7 @@
 /*
    TODO for better virtual list control support:
 
-   1. less dumb line caching, we should cache at least all those visible
-      in the control itself and probably twice as many (we might also need to
-      cache the first one always for geometry calculations?)
-
-  +2. storing selections: we can't use an array to store the selected indices
-      like right now as selecting all in a control with 1000000 items is not
-      doable like this - instead, store selections as collection of individual
-      items and ranges
-
-   => wxSelectionStore
-
-   3. we need to implement searching/sorting somehow
-
-   4. the idea of storing the line index in the line itself is really stupid,
-      we shouldn't need it - but for this we have to get rid of all calles to
-      wxListLineData::GetFoo() and replace them with something like
-        if ( IsVirtual()
-            ... we have it ourselves ...
-        else
-            line->GetFoo();
-
-   => done
-
-   5. attributes support: we need OnGetItemAttr() as well!
+   1. we need to implement searching/sorting somehow
  */
 
 // ============================================================================
