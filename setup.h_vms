@@ -1323,7 +1323,19 @@
 #undef HAVE_XIM
 
 /* Define if fseeko and ftello are available.  */
-#undef HAVE_FSEEKO
+#define HAVE_FSEEKO 1
+
+/* Define this is you have X11/extensions/shape.h */
+#define HAVE_XSHAPE 1
+
+/* Define this if you have type SPBCDATA */
+#undef HAVE_SPBCDATA
+
+/* Define if you have pango_font_family_is_monospace() (Pango >= 1.3.3) */
+#undef HAVE_PANGO_FONT_FAMILY_IS_MONOSPACE
+
+/* Define if you have Pango xft support */
+#undef HAVE_PANGO_XFT
 
 /* ---------------------------------------------------------------------
    Win32 adjustments section
@@ -1355,14 +1367,5 @@
 
 /* define this when wxDC::Blit() respects SetDeviceOrigin() in wxGTK */
 #define wxHAS_WORKING_GTK_DC_BLIT 1
-
-/* Define this is you have X11/extensions/shape.h */
-#define HAVE_XSHAPE 1
-
-/* Define this if you have type SPBCDATA */
-#undef HAVE_SPBCDATA
-
-/* Define if you have pango_font_family_is_monospace() (Pango >= 1.3.3) */
-#undef HAVE_PANGO_FONT_FAMILY_IS_MONOSPACE
 
 #endif /* __WX_SETUP_H__ */
