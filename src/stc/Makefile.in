@@ -49,6 +49,7 @@ OBJECTS=PlatWX.o ScintillaWX.o stc.o \
 	LexLisp.o		\
 	LexLua.o		\
 	LexOthers.o		\
+	LexPOV.o		\
 	LexPascal.o		\
 	LexPerl.o		\
 	LexPython.o		\
