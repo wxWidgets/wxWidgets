@@ -274,6 +274,7 @@ COMMONOBJS = \
   ..\common\$D\menucmn.obj \
   ..\common\$D\mimecmn.obj \
   ..\common\$D\module.obj \
+  ..\common\$D\msgout.obj \
   ..\common\$D\mstream.obj \
   ..\common\$D\nbkbase.obj \
   ..\common\$D\object.obj \
@@ -411,12 +412,13 @@ COMLIBOBJS2 = \
   menucmn.obj \
   mimecmn.obj \
   module.obj \
+  msgout.obj \
   mstream.obj \
   nbkbase.obj \
-  object.obj \
-  odbc.obj
+  object.obj
 
 COMLIBOBJS3 = \
+  odbc.obj \
   paper.obj \
   popupcmn.obj \
   prntbase.obj \
@@ -458,10 +460,10 @@ COMLIBOBJS3 = \
   wincmn.obj \
   wxchar.obj \
   wxexpr.obj \
-  xpmdecod.obj \
-  y_tab.obj
+  xpmdecod.obj
 
 COMLIBOBJS4 = \
+  y_tab.obj \
   zipstrm.obj \
   zstream.obj
 
@@ -784,12 +786,13 @@ $(COMLIBOBJS2):
   copy ..\common\$D\menucmn.obj
   copy ..\common\$D\mimecmn.obj
   copy ..\common\$D\module.obj
+  copy ..\common\$D\msgout.obj
   copy ..\common\$D\mstream.obj
   copy ..\common\$D\nbkbase.obj
   copy ..\common\$D\object.obj
-  copy ..\common\$D\odbc.obj
 
 $(COMLIBOBJS3):
+  copy ..\common\$D\odbc.obj
   copy ..\common\$D\paper.obj
   copy ..\common\$D\popupcmn.obj
   copy ..\common\$D\prntbase.obj
@@ -832,9 +835,9 @@ $(COMLIBOBJS3):
   copy ..\common\$D\wxchar.obj
   copy ..\common\$D\wxexpr.obj
   copy ..\common\$D\xpmdecod.obj
-  copy ..\common\$D\y_tab.obj
 
 $(COMLIBOBJS4):
+  copy ..\common\$D\y_tab.obj
   copy ..\common\$D\zipstrm.obj
   copy ..\common\$D\zstream.obj
 

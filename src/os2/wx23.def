@@ -4,7 +4,7 @@ DATA MULTIPLE NONSHARED READWRITE LOADONCALL
 CODE LOADONCALL
 
 EXPORTS
-;From library:  F:\DEV\WX2\WXWINDOWS\LIB\wx.lib
+;From library:  F:\DEV\WX2\WXWINDOWS\LIB\WX.lib
   ;From object file:  dummy.cpp
     ;PUBDEFs (Symbols available from object file):
       wxDummyChar
@@ -78,6 +78,8 @@ EXPORTS
       __ct__9wxAppBaseFv
       ;wxAppBase::OnInit()
       OnInit__9wxAppBaseFv
+      ;wxAppBase::DoInit()
+      DoInit__9wxAppBaseFv
       ;wxOnAssert(const char*,int,const char*,const char*)
       wxOnAssert__FPCciN21
       ;wxAppBase::~wxAppBase()
@@ -201,6 +203,8 @@ EXPORTS
       __dt__15wxCmdLineParserFv
       ;wxArrayParams::~wxArrayParams()
       __dt__13wxArrayParamsFv
+      ;wxCmdLineParser::GetUsageString()
+      GetUsageString__15wxCmdLineParserFv
       ;wxArrayParams::operator=(const wxArrayParams&)
       __as__13wxArrayParamsFRC13wxArrayParams
       ;wxArrayOptions::RemoveAt(unsigned int,unsigned int)
@@ -4325,6 +4329,20 @@ EXPORTS
       CleanUpModules__8wxModuleFv
       ;wxModule::RegisterModule(wxModule*)
       RegisterModule__8wxModuleFP8wxModule
+  ;From object file:  ..\common\msgout.cpp
+    ;PUBDEFs (Symbols available from object file):
+      ;wxMessageOutputMessageBox::Printf(const char*,...)
+      Printf__25wxMessageOutputMessageBoxFPCce
+      ;wxMessageOutput::Get()
+      Get__15wxMessageOutputFv
+      ;wxMessageOutput::ms_msgOut
+      ms_msgOut__15wxMessageOutput
+      ;wxMessageOutput::Set(wxMessageOutput*)
+      Set__15wxMessageOutputFP15wxMessageOutput
+      __vft25wxMessageOutputMessageBox15wxMessageOutput
+      __vft21wxMessageOutputStderr15wxMessageOutput
+      ;wxMessageOutputStderr::Printf(const char*,...)
+      Printf__21wxMessageOutputStderrFPCce
   ;From object file:  ..\common\mstream.cpp
     ;PUBDEFs (Symbols available from object file):
       ;wxMemoryOutputStream::CopyTo(void*,unsigned int) const
@@ -9117,8 +9135,6 @@ EXPORTS
       SetItem__17wxGenericListCtrlFR10wxListItem
       ;wxListLineData::SetItem(int,const wxListItem&)
       SetItem__14wxListLineDataFiRC10wxListItem
-      ;wxGenericListCtrl::SetImageList(wxGenericImageList*,int)
-      SetImageList__17wxGenericListCtrlFP18wxGenericImageListi
       ;wxGenericListCtrl::SetColumnWidth(int,int)
       SetColumnWidth__17wxGenericListCtrlFiT1
       ;wxGenericListCtrl::ScrollList(int,int)
@@ -9211,8 +9227,8 @@ EXPORTS
       SetItem__16wxListHeaderDataFRC10wxListItem
       ;wxListMainWindow::SetItemState(long,long,long)
       SetItemState__16wxListMainWindowFlN21
-      ;wxListMainWindow::SetImageList(wxGenericImageList*,int)
-      SetImageList__16wxListMainWindowFP18wxGenericImageListi
+      ;wxListMainWindow::SetImageList(wxImageList*,int)
+      SetImageList__16wxListMainWindowFP11wxImageListi
       ;wxGenericListCtrl::SetColumn(int,wxListItem&)
       SetColumn__17wxGenericListCtrlFiR10wxListItem
       ;wxListMainWindow::SetColumnWidth(int,int)
@@ -9241,6 +9257,8 @@ EXPORTS
       DeleteColumn__17wxGenericListCtrlFi
       ;wxListMainWindow::CacheLineData(unsigned int)
       CacheLineData__16wxListMainWindowFUi
+      ;wxGenericListCtrl::AssignImageList(wxImageList*,int)
+      AssignImageList__17wxGenericListCtrlFP11wxImageListi
       ;wxGenericListCtrl::GetNextItem(long,int,int) const
       GetNextItem__17wxGenericListCtrlCFliT2
       ;wxConstructorForwxListCtrl()
@@ -9362,8 +9380,6 @@ EXPORTS
       DrawImage__16wxListMainWindowFiP4wxDCN21
       ;wxListMainWindow::ChangeCurrent(unsigned int)
       ChangeCurrent__16wxListMainWindowFUi
-      ;wxGenericListCtrl::AssignImageList(wxGenericImageList*,int)
-      AssignImageList__17wxGenericListCtrlFP18wxGenericImageListi
       ;wxGenericListCtrl::~wxGenericListCtrl()
       __dt__17wxGenericListCtrlFv
       wxEVT_COMMAND_LIST_KEY_DOWN
@@ -9578,6 +9594,8 @@ EXPORTS
       SetItem__16wxListMainWindowFR10wxListItem
       ;wxListItemData::SetItem(const wxListItem&)
       SetItem__14wxListItemDataFRC10wxListItem
+      ;wxGenericListCtrl::SetImageList(wxImageList*,int)
+      SetImageList__17wxGenericListCtrlFP11wxImageListi
       ;wxListMainWindow::SetColumn(int,wxListItem&)
       SetColumn__16wxListMainWindowFiR10wxListItem
       ;wxListLineDataArray::RemoveAt(unsigned int,unsigned int)

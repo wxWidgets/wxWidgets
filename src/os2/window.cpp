@@ -442,17 +442,19 @@ bool wxWindowOS2::Create(
     // Generic OS/2 Windows have no Control Data but other classes
     // that call OS2Create may have some.
     //
-    OS2Create( (PSZ)wxCanvasClassName
-              ,rName.c_str()
-              ,ulCreateFlags
-              ,rPos
-              ,rSize
-              ,NULL         // Control Data
-              ,dwExStyle
-              ,TRUE         // Child
-             );
+    bool                            bRetVal = OS2Create( (PSZ)wxCanvasClassName
+                                                        ,rName.c_str()
+                                                        ,ulCreateFlags
+                                                        ,rPos
+                                                        ,rSize
+                                                        ,NULL         // Control Data
+                                                        ,dwExStyle
+                                                        ,TRUE         // Child
+                                                       );
 
-    return(TRUE);
+    if (bRetVal)
+        ::WinSubclassWindow(m_hWnd, (PFNWP)wxWndProc);
+    return(bRetVal);
 } // end of wxWindowOS2::Create
 
 // ---------------------------------------------------------------------------
