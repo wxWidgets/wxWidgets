@@ -35,10 +35,6 @@
 IMPLEMENT_ABSTRACT_CLASS(wxFileSystemHandler, wxObject)
 
 
-#if wxUSE_MIMETYPE
-static wxFileTypeInfo *gs_FSMimeFallbacks = NULL;
-#endif
-
 wxString wxFileSystemHandler::GetMimeTypeFromExt(const wxString& location)
 {
     wxString ext, mime;
@@ -62,10 +58,41 @@ wxString wxFileSystemHandler::GetMimeTypeFromExt(const wxString& location)
     }
 
 #if wxUSE_MIMETYPE
-    static bool s_MinimalMimeEnsured = FALSE;
-    if (!s_MinimalMimeEnsured) {
-        wxTheMimeTypesManager->AddFallbacks(gs_FSMimeFallbacks);
-        s_MinimalMimeEnsured = TRUE;
+    static bool s_MinimalMimeEnsured = false;
+    if (!s_MinimalMimeEnsured)
+    {
+        static const wxFileTypeInfo fallbacks[] =
+        {
+            wxFileTypeInfo(_T("image/jpeg"),
+                           _T(""),
+                           _T(""),
+                           _T("JPEG image (from fallback)"),
+                           _T("jpg"), _T("jpeg"), _T("JPG"), _T("JPEG"), NULL),
+            wxFileTypeInfo(_T("image/gif"),
+                           _T(""),
+                           _T(""),
+                           _T("GIF image (from fallback)"),
+                           _T("gif"), _T("GIF"), NULL),
+            wxFileTypeInfo(_T("image/png"),
+                           _T(""),
+                           _T(""),
+                           _T("PNG image (from fallback)"),
+                           _T("png"), _T("PNG"), NULL),
+            wxFileTypeInfo(_T("image/bmp"),
+                           _T(""),
+                           _T(""),
+                           _T("windows bitmap image (from fallback)"),
+                           _T("bmp"), _T("BMP"), NULL),
+            wxFileTypeInfo(_T("text/html"),
+                           _T(""),
+                           _T(""),
+                           _T("HTML document (from fallback)"),
+                           _T("htm"), _T("html"), _T("HTM"), _T("HTML"), NULL),
+            // must terminate the table with this!
+            wxFileTypeInfo()
+        };
+        wxTheMimeTypesManager->AddFallbacks(fallbacks);
+        s_MinimalMimeEnsured = true;
     }
 
     wxFileType *ft = wxTheMimeTypesManager->GetFileTypeFromExtension(ext);
@@ -522,50 +549,10 @@ class wxFileSystemModule : public wxModule
         virtual bool OnInit()
         {
             wxFileSystem::AddHandler(new wxLocalFSHandler);
-
-        #if wxUSE_MIMETYPE
-            gs_FSMimeFallbacks = new wxFileTypeInfo[6];
-            gs_FSMimeFallbacks[0] =
-            wxFileTypeInfo(_T("image/jpeg"),
-                           _T(""),
-                           _T(""),
-                           _T("JPEG image (from fallback)"),
-                           _T("jpg"), _T("jpeg"), _T("JPG"), _T("JPEG"), NULL);
-            gs_FSMimeFallbacks[1] =
-            wxFileTypeInfo(_T("image/gif"),
-                           _T(""),
-                           _T(""),
-                           _T("GIF image (from fallback)"),
-                           _T("gif"), _T("GIF"), NULL);
-            gs_FSMimeFallbacks[2] =
-            wxFileTypeInfo(_T("image/png"),
-                           _T(""),
-                           _T(""),
-                           _T("PNG image (from fallback)"),
-                           _T("png"), _T("PNG"), NULL);
-            gs_FSMimeFallbacks[3] =
-            wxFileTypeInfo(_T("image/bmp"),
-                           _T(""),
-                           _T(""),
-                           _T("windows bitmap image (from fallback)"),
-                           _T("bmp"), _T("BMP"), NULL);
-            gs_FSMimeFallbacks[4] =
-            wxFileTypeInfo(_T("text/html"),
-                           _T(""),
-                           _T(""),
-                           _T("HTML document (from fallback)"),
-                           _T("htm"), _T("html"), _T("HTM"), _T("HTML"), NULL);
-            gs_FSMimeFallbacks[5] =
-            // must terminate the table with this!
-            wxFileTypeInfo();
-        #endif
-            return TRUE;
+            return true;
         }
         virtual void OnExit()
         {
-        #if wxUSE_MIMETYPE
-            delete [] gs_FSMimeFallbacks;
-        #endif
             wxFileSystem::CleanUpHandlers();
         }
 };
