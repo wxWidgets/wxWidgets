@@ -502,21 +502,22 @@ void MyFrame::OnViewMsg(wxCommandEvent& WXUNUSED(event))
     if (!wxTheFontMapper->IsEncodingAvailable(fontenc))
     {
         // try to find some similar encoding:
-        wxFontEncoding enc2;
-        if (wxTheFontMapper->GetAltForEncoding(fontenc, &enc2, 
-                                       wxEmptyString /*facename*/, FALSE /*interactive*/))
+        wxFontEncoding encAlt;
+        if ( wxTheFontMapper->GetAltForEncoding(fontenc, &encAlt) )
         {
             wxEncodingConverter conv;
             
-            if (conv.Init(fontenc, enc2))
+            if (conv.Init(fontenc, encAlt))
             {
-                fontenc = enc2;
+                fontenc = encAlt;
                 m_textctrl -> SetValue(conv.Convert(m_textctrl -> GetValue()));
             }
             else
+            {
                 wxLogWarning("Cannot convert from '%s' to '%s'.",
                              wxFontMapper::GetEncodingDescription(fontenc).c_str(),
-                             wxFontMapper::GetEncodingDescription(enc2).c_str());
+                             wxFontMapper::GetEncodingDescription(encAlt).c_str());
+            }
         }
         else
             wxLogWarning("No fonts for encoding '%s' on this system.",
