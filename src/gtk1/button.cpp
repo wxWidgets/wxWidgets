@@ -154,6 +154,11 @@ bool wxButton::Create(  wxWindow *parent, wxWindowID id, const wxString &label,
 
 void wxButton::SetDefault()
 {
+    wxWindow *parent = GetParent();
+    wxCHECK_RET( parent, _T("button without parent?") );
+
+    wxWindow *winOldDefault = parent->SetDefaultItem(this);
+    
     GTK_WIDGET_SET_FLAGS( m_widget, GTK_CAN_DEFAULT );
     gtk_widget_grab_default( m_widget );
 
