@@ -57,6 +57,9 @@ wxMSW:
   style to avoid it, wxFRAME_FLOAT_ON_PARENT style is now obsolete and has no
   effect
 
+- all overloads of wxDC::SetClippingRegion() combine the given region with the
+  previously selected one instead of replacing it
+
 Unix ports:
 
 - You should use `wx-config --cxxflags` in your makefiles instead of

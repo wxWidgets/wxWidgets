@@ -279,7 +279,7 @@ void wxDC::UpdateClipBox()
 #endif
 
     RECT rect;
-    GetClipBox(GetHdc(), &rect);
+    ::GetClipBox(GetHdc(), &rect);
 
     m_clipX1 = (wxCoord) XDEV2LOG(rect.left);
     m_clipY1 = (wxCoord) YDEV2LOG(rect.top);
@@ -287,14 +287,50 @@ void wxDC::UpdateClipBox()
     m_clipY2 = (wxCoord) YDEV2LOG(rect.bottom);
 }
 
-void wxDC::DoSetClippingRegion(wxCoord x, wxCoord y, wxCoord w, wxCoord h)
+// common part of DoSetClippingRegion() and DoSetClippingRegionAsRegion()
+void wxDC::SetClippingHrgn(WXHRGN hrgn)
 {
+    wxCHECK_RET( hrgn, wxT("invalid clipping region") );
+
 #ifdef __WXMICROWIN__
-    if (!GetHDC()) return;
-#endif
+    if (!GetHdc()) return;
+#endif // __WXMICROWIN__
+
+    // note that we combine the new clipping region with the existing one: this
+    // is compatible with what the other ports do and is the documented
+    // behaviour now (starting with 2.3.3)
+#ifdef __WIN16__
+    RECT rectClip;
+    if ( !::GetClipBox(GetHdc(), &rectClip) )
+        return;
+
+    HRGN hrgnDest = ::CreateRectRgn(0, 0, 0, 0);
+    HRGN hrgnClipOld = ::CreateRectRgn(rectClip.left, rectClip.top,
+                                       rectClip.right, rectClip.bottom);
+
+    if ( ::CombineRgn(hrgnDest, hrgnClipOld, (HRGN)hrgn, RGN_AND) != ERROR )
+    {
+        ::SelectClipRgn(GetHdc(), hrgnDest);
+    }
+
+    ::DeleteObject(hrgnClipOld);
+    ::DeleteObject(hrgnDest);
+#else // Win32
+    if ( ::ExtSelectClipRgn(GetHdc(), (HRGN)hrgn, RGN_AND) == ERROR )
+    {
+        wxLogLastError(_T("ExtSelectClipRgn"));
+
+        return;
+    }
+#endif // Win16/32
 
     m_clipping = TRUE;
 
+    UpdateClipBox();
+}
+
+void wxDC::DoSetClippingRegion(wxCoord x, wxCoord y, wxCoord w, wxCoord h)
+{
     // the region coords are always the device ones, so do the translation
     // manually
     //
@@ -309,33 +345,15 @@ void wxDC::DoSetClippingRegion(wxCoord x, wxCoord y, wxCoord w, wxCoord h)
     }
     else
     {
-        if ( ::SelectClipRgn(GetHdc(), hrgn) == ERROR )
-        {
-            wxLogLastError(_T("SelectClipRgn"));
-        }
-        DeleteObject(hrgn);
+        SetClippingHrgn((WXHRGN)hrgn);
 
-        UpdateClipBox();
+        ::DeleteObject(hrgn);
     }
 }
 
 void wxDC::DoSetClippingRegionAsRegion(const wxRegion& region)
 {
-#ifdef __WXMICROWIN__
-    if (!GetHDC()) return;
-#endif
-
-    wxCHECK_RET( GetHrgnOf(region), wxT("invalid clipping region") );
-
-    m_clipping = TRUE;
-
-#ifdef __WIN16__
-    SelectClipRgn(GetHdc(), GetHrgnOf(region));
-#else // Win32
-    ExtSelectClipRgn(GetHdc(), GetHrgnOf(region), RGN_AND);
-#endif // Win16/32
-
-    UpdateClipBox();
+    SetClippingHrgn(region.GetHRGN());
 }
 
 void wxDC::DestroyClippingRegion()
@@ -347,11 +365,12 @@ void wxDC::DestroyClippingRegion()
     if (m_clipping && m_hDC)
     {
         // TODO: this should restore the previous clipping region,
-        // so that OnPaint processing works correctly, and the update clipping region
-        // doesn't get destroyed after the first DestroyClippingRegion.
+        //       so that OnPaint processing works correctly, and the update
+        //       clipping region doesn't get destroyed after the first
+        //       DestroyClippingRegion.
         HRGN rgn = CreateRectRgn(0, 0, 32000, 32000);
-        SelectClipRgn(GetHdc(), rgn);
-        DeleteObject(rgn);
+        ::SelectClipRgn(GetHdc(), rgn);
+        ::DeleteObject(rgn);
     }
 
     m_clipping = FALSE;

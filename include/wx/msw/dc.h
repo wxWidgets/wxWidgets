@@ -235,6 +235,9 @@ protected:
     // common part of DoDrawText() and DoDrawRotatedText()
     void DrawAnyText(const wxString& text, wxCoord x, wxCoord y);
 
+    // common part of DoSetClippingRegion() and DoSetClippingRegionAsRegion()
+    void SetClippingHrgn(WXHRGN hrgn);
+
     // MSW-specific member variables
     int               m_windowExtX;
     int               m_windowExtY;
