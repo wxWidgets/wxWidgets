@@ -34,10 +34,22 @@
 //-------------------------------------------------------------------------
 
 #if (GTK_MINOR_VERSION == 1)
-#if (GTK_MICRO_VERSION >= 5)
-#define NEW_GTK_SCROLL_CODE
+    #if (GTK_MICRO_VERSION >= 5)
+        #define NEW_GTK_SCROLL_CODE
+    #endif
 #endif
-#endif
+
+//-----------------------------------------------------------------------------
+// private functions
+//-----------------------------------------------------------------------------
+
+#define CHECKBOX_STRING "[-] "
+
+// checklistboxes have "[±] " prepended to their lables, this macro removes it
+// (NB: 4 below is the length of CHECKBOX_STRING above)
+//
+// the argument to it is a "const char *" pointer
+#define GET_REAL_LABEL(label) ((m_hasCheckBoxes)?(label)+4 : (label))
 
 //-----------------------------------------------------------------------------
 // data
@@ -236,16 +248,13 @@ bool wxListBox::Create( wxWindow *parent, wxWindowID id,
 
         GtkWidget *list_item;
 
+        wxString str(choices[i]);
         if (m_hasCheckBoxes)
         {
-            wxString str = "[-] ";
-            str += choices[i];
-            list_item = gtk_list_item_new_with_label( str );
+            str.Prepend(CHECKBOX_STRING);
         }
-        else
-        {
-            list_item = gtk_list_item_new_with_label( choices[i] );
-        }
+
+        list_item = gtk_list_item_new_with_label( str );
 
 #ifdef __WXDEBUG__
         debug_focus_in( list_item, "wxListBox::list_item", name );
@@ -300,22 +309,117 @@ wxListBox::~wxListBox()
     Clear();
 }
 
+void wxListBox::InsertItems(int nItems, const wxString items[], int pos)
+{
+    wxCHECK_RET( m_list != NULL, "invalid listbox" );
+
+    GList *children = m_list->children;
+    int length = g_list_length(children);
+    wxCHECK_RET( pos <= length, "invalid index in wxListBox::InsertItems" );
+
+    // VZ: it seems that GTK 1.0.6 doesn't has a function to insert an item
+    //     into a listbox at the given position, this is why we first delete
+    //     all items after this position, then append these items and then
+    //     reappend back the old ones.
+
+    // first detach the old items
+    int n; // loop var
+
+    if ( pos == length )
+    {
+        // no need to do anything complicated
+        for ( n = 0; n < nItems; n++ )
+        {
+            Append(items[n]);
+        }
+
+        return;
+    }
+    
+    wxArrayString deletedLabels;
+    wxArrayPtrVoid deletedData;
+    wxArrayInt deletedChecks;   // only for check list boxes
+
+    GList *child = g_list_nth( children, pos );
+    for ( n = 0; child != NULL; n++, child = child->next )
+    {
+        // save label
+        GtkBin *bin = GTK_BIN( child->data );
+        GtkLabel *label = GTK_LABEL( bin->child );
+
+        wxString str(GET_REAL_LABEL(label->label));
+        deletedLabels.Add(str);
+
+        // save data
+        void *clientData = NULL;
+        wxNode *node = NULL;
+       
+        if ( n < (int)m_clientObjectList.GetCount() )
+            node = m_clientObjectList.Nth( n );
+
+        if ( node )
+        {
+            clientData = node->GetData();
+            m_clientObjectList.DeleteNode( node );
+        }
+
+        if ( !clientData )
+        {
+            if ( n < (int)m_clientDataList.GetCount() )
+                node = m_clientDataList.Nth( n );        
+
+            if ( node )
+            {
+                clientData = node->GetData();
+                node = m_clientDataList.Nth( n );
+            }
+        }
+
+        deletedData.Add(clientData);
+
+        // save check state
+        if ( m_hasCheckBoxes )
+        {
+            deletedChecks.Add(((wxCheckListBox *)this)->IsChecked(pos + n));
+        }
+    }
+
+    int nDeletedCount = n;
+
+    gtk_list_clear_items( m_list, pos, length );
+
+    // now append the new items
+    for ( n = 0; n < nItems; n++ )
+    {
+        Append(items[n]);
+    }
+
+    // and append the old items too
+    pos += nItems;  // now the indices are shifter
+    for ( n = 0; n < nDeletedCount; n++ )
+    {
+        Append(deletedLabels[n], deletedData[n]);
+
+        if ( m_hasCheckBoxes )
+        {
+            ((wxCheckListBox *)this)->Check(pos + n, (bool)deletedChecks[n]);
+        }
+    }
+}
+
 void wxListBox::AppendCommon( const wxString &item )
 {
     wxCHECK_RET( m_list != NULL, "invalid listbox" );
 
     GtkWidget *list_item;
 
+    wxString label(item);
     if (m_hasCheckBoxes)
     {
-        wxString str = "[-] ";
-        str += item;
-        list_item = gtk_list_item_new_with_label( str );
+        label.Prepend(CHECKBOX_STRING);
     }
-    else
-    {
-        list_item = gtk_list_item_new_with_label( item );
-    }
+
+    list_item = gtk_list_item_new_with_label( label );
 
     gtk_container_add( GTK_CONTAINER(m_list), list_item );
 
@@ -336,9 +440,9 @@ void wxListBox::AppendCommon( const wxString &item )
     if (m_hasCheckBoxes)
     {
        gtk_signal_connect( GTK_OBJECT(list_item),
-                        "key_press_event",
-                        (GtkSignalFunc)gtk_listbox_key_press_callback,
-                        (gpointer)this );
+                           "key_press_event",
+                           (GtkSignalFunc)gtk_listbox_key_press_callback,
+                           (gpointer)this );
     }
 
     gtk_widget_show( list_item );
@@ -486,10 +590,10 @@ int wxListBox::FindString( const wxString &item ) const
         GtkBin *bin = GTK_BIN( child->data );
         GtkLabel *label = GTK_LABEL( bin->child );
 
-        wxString str = label->label;
-        if (m_hasCheckBoxes) str.Remove( 0, 4 );
+        wxString str = GET_REAL_LABEL(label->label);
 
-        if (str == item) return count;
+        if (str == item)
+            return count;
 
         count++;
         child = child->next;
@@ -555,12 +659,13 @@ wxString wxListBox::GetString( int n ) const
         GtkBin *bin = GTK_BIN( child->data );
         GtkLabel *label = GTK_LABEL( bin->child );
 
-        wxString str = label->label;
-        if (m_hasCheckBoxes) str.Remove( 0, 4 );
+        wxString str = GET_REAL_LABEL(label->label);
 
         return str;
     }
+    
     wxFAIL_MSG("wrong listbox index");
+
     return "";
 }
 
@@ -574,8 +679,7 @@ wxString wxListBox::GetStringSelection() const
         GtkBin *bin = GTK_BIN( selection->data );
         GtkLabel *label = GTK_LABEL( bin->child );
 
-        wxString str = label->label;
-        if (m_hasCheckBoxes) str.Remove( 0, 4 );
+        wxString str = GET_REAL_LABEL(label->label);
 
         return str;
     }
@@ -648,7 +752,8 @@ void wxListBox::SetString( int n, const wxString &string )
         GtkLabel *label = GTK_LABEL( bin->child );
 
         wxString str;
-        if (m_hasCheckBoxes) str += "[-] ";
+        if (m_hasCheckBoxes)
+            str += CHECKBOX_STRING;
         str += string;
 
         gtk_label_set( label, str );
