@@ -104,14 +104,18 @@ class FillingTree(wxTreeCtrl):
             self.setText('')
             return
         object = self.GetPyData(item)
+        otype = type(object)
         text = ''
         text += self.getFullName(item)
-        text += '\n\nType: ' + str(type(object))
-        value = str(object)
-        if type(object) is types.StringType:
-            value = repr(value)
+        text += '\n\nType: ' + str(otype)
+        try:
+            value = str(object)
+        except:
+            value = ''
+        if otype is types.StringType or otype is types.UnicodeType:
+            value = repr(object)
         text += '\n\nValue: ' + value
-        if type(object) is types.InstanceType:
+        if otype is types.InstanceType:
             try:
                 text += '\n\nClass Definition:\n\n' + \
                         inspect.getsource(object.__class__)

@@ -74,8 +74,13 @@ def getAllAttributeNames(object):
     # !!! Do Not use hasattr() as a test anywhere in this function,
     # !!! because it is unreliable with remote objects - xmlrpc, soap, etc.
     # !!! They always return true for hasattr().
-    # !!! 
-    key = str(object)
+    # !!!
+    try:
+        # Yes, this can fail if object is an instance of a class with 
+        # __str__ (or __repr__) having a bug or raising an exception. :-(
+        key = str(object)
+    except:
+        key = 'anonymous'
     # Wake up sleepy objects - a hack for ZODB objects in "ghost" state.
     wakeupcall = dir(object)
     del wakeupcall

@@ -176,6 +176,8 @@ class Shell(wxStyledTextCtrl):
         # Assign handlers for keyboard events.
         EVT_KEY_DOWN(self, self.OnKeyDown)
         EVT_CHAR(self, self.OnChar)
+        # Assign handlers for wxSTC events.
+        EVT_STC_UPDATEUI(self, id, self.OnUpdateUI)
         # Configure various defaults and user preferences.
         self.config()
         # Display the introductory banner information.
@@ -290,6 +292,37 @@ class Shell(wxStyledTextCtrl):
         self.StyleSetSpec(wxSTC_P_IDENTIFIER, "")
         self.StyleSetSpec(wxSTC_P_COMMENTBLOCK, "fore:#7F7F7F")
         self.StyleSetSpec(wxSTC_P_STRINGEOL, "fore:#000000,face:%(mono)s,back:#E0C0E0,eolfilled" % faces)
+
+    def OnUpdateUI(self, evt):
+        """Check for matching braces."""
+        braceAtCaret = -1
+        braceOpposite = -1
+        charBefore = None
+        caretPos = self.GetCurrentPos()
+        if caretPos > 0:
+            charBefore = self.GetCharAt(caretPos - 1)
+            styleBefore = self.GetStyleAt(caretPos - 1)
+
+        # Check before.
+        if charBefore and chr(charBefore) in '[]{}()' \
+        and styleBefore == wxSTC_P_OPERATOR:
+            braceAtCaret = caretPos - 1
+
+        # Check after.
+        if braceAtCaret < 0:
+            charAfter = self.GetCharAt(caretPos)
+            styleAfter = self.GetStyleAt(caretPos)
+            if charAfter and chr(charAfter) in '[]{}()' \
+            and styleAfter == wxSTC_P_OPERATOR:
+                braceAtCaret = caretPos
+
+        if braceAtCaret >= 0:
+            braceOpposite = self.BraceMatch(braceAtCaret)
+
+        if braceAtCaret != -1  and braceOpposite == -1:
+            self.BraceBadLight(braceAtCaret)
+        else:
+            self.BraceHighlight(braceAtCaret, braceOpposite)
 
     def OnChar(self, event):
         """Keypress event handler.
