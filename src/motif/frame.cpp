@@ -300,6 +300,8 @@ bool wxFrame::Create(wxWindow *parent,
 
 wxFrame::~wxFrame()
 {
+    m_isBeingDeleted = TRUE;
+    
     if (m_clientArea)
       XtRemoveEventHandler((Widget) m_clientArea, ExposureMask, FALSE,
           wxUniversalRepaintProc, (XtPointer) this);

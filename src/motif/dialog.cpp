@@ -258,6 +258,8 @@ void wxDialog::SetModal(bool flag)
 
 wxDialog::~wxDialog()
 {
+    m_isBeingDeleted = TRUE;
+    
     if (m_mainWidget)
       XtRemoveEventHandler((Widget) m_mainWidget, ExposureMask, FALSE,
           wxUniversalRepaintProc, (XtPointer) this);

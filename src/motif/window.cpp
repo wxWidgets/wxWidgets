@@ -183,7 +183,8 @@ void wxWindow::Init()
     m_winCaptured = FALSE;
 
     m_isShown = TRUE;
-
+    m_isBeingDeleted = FALSE;
+    
     m_hScrollBar =
     m_vScrollBar =
     m_borderWidget =
@@ -360,6 +361,8 @@ bool wxWindow::Create(wxWindow *parent, wxWindowID id,
 // Destructor
 wxWindow::~wxWindow()
 {
+    m_isBeingDeleted = TRUE;
+    
     // Motif-specific actions first
     WXWidget wMain = GetMainWidget();
     if ( wMain )
