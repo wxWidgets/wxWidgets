@@ -57,6 +57,8 @@ bool MyApp::OnInit()
     m_fire.Create(_T("gun.wav"));
 #endif // wxUSE_SOUND
 
+    m_minX = stick.GetXMin();
+    m_minY = stick.GetYMin();
     m_maxX = stick.GetXMax();
     m_maxY = stick.GetYMax();
 
@@ -103,14 +105,14 @@ END_EVENT_TABLE()
 MyCanvas::MyCanvas(wxWindow *parent, const wxPoint& pos, const wxSize& size):
     wxScrolledWindow(parent, -1, pos, size, wxSUNKEN_BORDER)
 {
-    wxJoystick joystick(wxJOYSTICK1);
-    joystick.SetCapture(this);
+    m_stick = new wxJoystick(wxJOYSTICK1);
+    m_stick->SetCapture(this, 10);
 }
 
 MyCanvas::~MyCanvas()
 {
-    wxJoystick joystick(wxJOYSTICK1);
-    joystick.ReleaseCapture();
+    m_stick->ReleaseCapture();
+    delete m_stick;
 }
 
 void MyCanvas::OnJoystickEvent(wxJoystickEvent& event)
@@ -119,12 +121,28 @@ void MyCanvas::OnJoystickEvent(wxJoystickEvent& event)
 
     wxPoint pt(event.GetPosition());
 
+    // if negative positions are possible then shift everything up
+    int xmin = wxGetApp().m_minX;
+    int xmax = wxGetApp().m_maxX;
+    int ymin = wxGetApp().m_minY;
+    int ymax = wxGetApp().m_maxY;
+    if (xmin < 0) {
+        xmax += abs(xmin);
+        pt.x += abs(xmin);
+        xmin = 0;
+    }
+    if (ymin < 0) {
+        ymax += abs(ymin);
+        pt.y += abs(ymin);
+        ymin = 0;
+    }
+    
     // Scale to canvas size
     int cw, ch;
     GetSize(&cw, &ch);
 
-    pt.x = (long) (((double)pt.x/(double)wxGetApp().m_maxX) * cw);
-    pt.y = (long) (((double)pt.y/(double)wxGetApp().m_maxY) * ch);
+    pt.x = (long) (((double)pt.x/(double)xmax) * cw);
+    pt.y = (long) (((double)pt.y/(double)ymax) * ch);
 
     if (xpos > -1 && ypos > -1 && event.IsMove() && event.ButtonIsDown())
     {

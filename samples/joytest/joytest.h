@@ -16,6 +16,8 @@ public:
     bool OnInit();
 
     // Joystick max values
+    int     m_minX;
+    int     m_minY;
     int     m_maxX;
     int     m_maxY;
 
@@ -33,6 +35,7 @@ public:
     ~MyCanvas();
     void OnJoystickEvent(wxJoystickEvent& event);
 
+    wxJoystick* m_stick;
     DECLARE_EVENT_TABLE()
 };
 
