@@ -5,8 +5,10 @@ AC_INIT(Makefile.in)
 
 GL_TOOLKIT_DIR=$wx_cv_path_glcanvas
 USE_GUI=$wx_cv_use_gui
+USE_RESOURCES=$wx_cv_use_resources
 AC_SUBST(GL_TOOLKIT_DIR)
 AC_SUBST(USE_GUI)
+AC_SUBST(USE_RESOURCES)
 
 AC_OUTPUT([
             Makefile
