@@ -30,7 +30,7 @@ class wxNotebookPage: public wxObject
    int                m_image;
    void              *m_clientData;
    GtkNotebookPage   *m_page;
-   wxPanel           *m_clientPanel;
+   wxWindow          *m_clientPanel;
    
    wxNotebookPage(void)
    {
@@ -131,37 +131,32 @@ int wxNotebook::GetRowCount(void) const
 
 wxString wxNotebook::GetPageText( const int page ) const
 {
-  wxNotebookPage *nb_page = NULL;
-
-  wxNode *node = m_pages.First();
-  while (node)
-  {
-    nb_page = (wxNotebookPage*)node->Data();
-    if (nb_page->m_id == page) break;
-    node = node->Next();
-  };
-  if (!node) return "";
-  
-  return nb_page->m_text;
+  wxNotebookPage* nb_page = GetNotebookPage(page);
+  if (nb_page)
+    return nb_page->m_text;
+  else
+    return "";
 };
 
 int wxNotebook::GetPageImage( const int page ) const
 {
-  wxNotebookPage *nb_page = NULL;
-
-  wxNode *node = m_pages.First();
-  while (node)
-  {
-    nb_page = (wxNotebookPage*)node->Data();
-    if (nb_page->m_id == page) break;
-    node = node->Next();
-  };
-  if (!node) return -1;
-  
-  return nb_page->m_image;
+  wxNotebookPage* nb_page = GetNotebookPage(page);
+  if (nb_page)
+    return nb_page->m_image;
+  else
+    return NULL;
 };
 
 void* wxNotebook::GetPageData( const int page ) const
+{
+  wxNotebookPage* nb_page = GetNotebookPage(page);
+  if (nb_page)
+    return nb_page->m_clientData;
+  else
+    return NULL;
+};
+
+wxNotebookPage* wxNotebook::GetNotebookPage(int page) const
 {
   wxNotebookPage *nb_page = NULL;
 
@@ -173,22 +168,13 @@ void* wxNotebook::GetPageData( const int page ) const
     node = node->Next();
   };
   if (!node) return NULL;
-  
-  return nb_page->m_clientData;
+  return nb_page;
 };
 
 int wxNotebook::SetSelection( const int page )
 {
-  wxNotebookPage *nb_page = NULL;
-
-  wxNode *node = m_pages.First();
-  while (node)
-  {
-    nb_page = (wxNotebookPage*)node->Data();
-    if (nb_page->m_id == page) break;
-    node = node->Next();
-  };
-  if (!node) return -1;
+  wxNotebookPage* nb_page = GetNotebookPage(page);
+  if (!nb_page) return -1;
   
   int page_num = 0;
   GList *child = GTK_NOTEBOOK(m_widget)->children;
@@ -213,16 +199,8 @@ void wxNotebook::SetImageList( wxImageList* imageList )
 
 bool wxNotebook::SetPageText( const int page, const wxString &text )
 {
-  wxNotebookPage *nb_page = NULL;
-
-  wxNode *node = m_pages.First();
-  while (node)
-  {
-    nb_page = (wxNotebookPage*)node->Data();
-    if (nb_page->m_id == page) break;
-    node = node->Next();
-  };
-  if (!node) return FALSE;
+  wxNotebookPage* nb_page = GetNotebookPage(page);
+  if (!nb_page) return FALSE;
   
   nb_page->m_text = text;
  
@@ -233,16 +211,9 @@ bool wxNotebook::SetPageText( const int page, const wxString &text )
 
 bool wxNotebook::SetPageImage( const int page, const int image )
 {
-  wxNotebookPage *nb_page = NULL;
-
-  wxNode *node = m_pages.First();
-  while (node)
-  {
-    nb_page = (wxNotebookPage*)node->Data();
-    if (nb_page->m_id == page) break;
-    node = node->Next();
-  };
-  if (!node) return FALSE;
+  wxNotebookPage* nb_page = GetNotebookPage(page);
+  if (!nb_page)
+    return FALSE;
   
   nb_page->m_image = image;
  
@@ -253,17 +224,9 @@ bool wxNotebook::SetPageImage( const int page, const int image )
 
 bool wxNotebook::SetPageData( const int page, void* data )
 {
-  wxNotebookPage *nb_page = NULL;
+  wxNotebookPage* nb_page = GetNotebookPage(page);
+  if (!nb_page) return FALSE;
 
-  wxNode *node = m_pages.First();
-  while (node)
-  {
-    nb_page = (wxNotebookPage*)node->Data();
-    if (nb_page->m_id == page) break;
-    node = node->Next();
-  };
-  if (!node) return FALSE;
-  
   nb_page->m_clientData = data;
   
   return TRUE;
@@ -295,16 +258,8 @@ bool wxNotebook::DeleteAllPages(void)
 
 bool wxNotebook::DeletePage( const int page )
 {
-  wxNotebookPage *nb_page = NULL;
-
-  wxNode *node = m_pages.First();
-  while (node)
-  {
-    nb_page = (wxNotebookPage*)node->Data();
-    if (nb_page->m_id == page) break;
-    node = node->Next();
-  };
-  if (!node) return FALSE;
+  wxNotebookPage* nb_page = GetNotebookPage(page);
+  if (!nb_page) return FALSE;
 
   int page_num = 0;
   GList *child = GTK_NOTEBOOK(m_widget)->children;
@@ -327,10 +282,10 @@ bool wxNotebook::DeletePage( const int page )
   return TRUE;
 };
 
-wxPanel *wxNotebook::CreatePage( const int item, const wxString &text, const int imageId, void* data )
+bool wxNotebook::AddPage( const int item, const wxString &text, wxWindow* win, const int imageId, void* data )
 {
   wxNotebookPage *page = new wxNotebookPage;
-  
+
   page->m_text = text;
   if (page->m_text.IsNull()) page->m_text = "";
   page->m_id = item;
@@ -338,33 +293,32 @@ wxPanel *wxNotebook::CreatePage( const int item, const wxString &text, const int
   page->m_clientData = data;
   
   m_frame = gtk_label_new( page->m_text );
+  gtk_notebook_append_page( GTK_NOTEBOOK(m_widget), win->m_widget, m_frame );
+
   gtk_misc_set_alignment( GTK_MISC(m_frame), 0.0, 0.5 );
 
-  page->m_clientPanel = new wxPanel( this, -1, wxPoint(0,0), wxSize(100,100) );
+  page->m_clientPanel = win;
+//  page->m_clientPanel = new wxPanel( this, -1, wxPoint(0,0), wxSize(100,100) );
     
   m_frame = NULL;
   
   page->m_page = (GtkNotebookPage*)( g_list_last( GTK_NOTEBOOK(m_widget)->children )->data );
   
-  if (!page->m_page) wxFatalError( "Notebook page creation error" );
-  
+  if (!page->m_page)
+  {
+     wxFatalError( "Notebook page creation error" );
+     return FALSE;
+  }
+
   m_pages.Append( page );
 
-  return page->m_clientPanel;
+  return TRUE;
 };
 
-wxPanel *wxNotebook::GetPanel( const int page )
+wxWindow *wxNotebook::GetPageWindow( const int page ) const
 {
-  wxNotebookPage *nb_page = NULL;
-
-  wxNode *node = m_pages.First();
-  while (node)
-  {
-    nb_page = (wxNotebookPage*)node->Data();
-    if (nb_page->m_id == page) break;
-    node = node->Next();
-  };
-  if (!node) return NULL;
+  wxNotebookPage* nb_page = GetNotebookPage(page);
+  if (!nb_page) return NULL;
   
   return nb_page->m_clientPanel;
 };
@@ -373,7 +327,7 @@ void wxNotebook::AddChild( wxWindow *win )
 {
   if (!m_frame) wxFatalError( "Notebook::Addchild() must not be called directly." );
   
-  gtk_notebook_append_page( GTK_NOTEBOOK(m_widget), win->m_widget, m_frame );
+//  gtk_notebook_append_page( GTK_NOTEBOOK(m_widget), win->m_widget, m_frame );
 };
 
 //-----------------------------------------------------------------------------

@@ -25,9 +25,8 @@
 //-----------------------------------------------------------------------------
 
 class wxImageList;
-class wxPanel;
-
 class wxNotebook;
+class wxNotebookPage;
 
 //-----------------------------------------------------------------------------
 // global data
@@ -59,6 +58,7 @@ class wxNotebook: public wxControl
     wxString GetPageText( const int page ) const;
     int GetPageImage( const int page ) const;
     void* GetPageData( const int page ) const;
+    wxNotebookPage* GetNotebookPage(int page) const;
     int SetSelection( const int page );
     void SetImageList( wxImageList* imageList );
     bool SetPageText( const int page, const wxString& text );
@@ -68,8 +68,8 @@ class wxNotebook: public wxControl
     void SetPadding( const wxSize& padding );
     bool DeleteAllPages(void);
     bool DeletePage( const int page );
-    wxPanel *CreatePage( const int page, const wxString& text, const int imageId = -1, void* data = NULL );
-    wxPanel *GetPanel( const int page );
+    bool AddPage( const int page, const wxString& text, wxWindow* win, const int imageId = -1, void* data = NULL );
+    wxWindow *GetPageWindow( const int page ) const;
     
     // overriden to do nothing
     virtual void AddChild( wxWindow *win );
