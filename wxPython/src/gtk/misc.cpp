@@ -1451,6 +1451,121 @@ static PyObject *_wrap_wxRealPoint_asTuple(PyObject *self, PyObject *args, PyObj
     return _resultobj;
 }
 
+static wxRealPoint  wxRealPoint___add__(wxRealPoint *self,const wxRealPoint * p) {
+            if (! p) return *self;
+            return *self + *p;
+        }
+static PyObject *_wrap_wxRealPoint___add__(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxRealPoint * _result;
+    wxRealPoint * _arg0;
+    wxRealPoint * _arg1;
+    wxRealPoint  temp;
+    PyObject * _obj0 = 0;
+    wxRealPoint  temp0;
+    PyObject * _obj1 = 0;
+    char *_kwnames[] = { "self","p", NULL };
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxRealPoint___add__",_kwnames,&_obj0,&_obj1)) 
+        return NULL;
+{
+    _arg0 = &temp;
+    if (! wxRealPoint_helper(_obj0, &_arg0))
+        return NULL;
+}
+{
+    _arg1 = &temp0;
+    if (! wxRealPoint_helper(_obj1, &_arg1))
+        return NULL;
+}
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = new wxRealPoint (wxRealPoint___add__(_arg0,_arg1));
+
+    wxPy_END_ALLOW_THREADS;
+}    SWIG_MakePtr(_ptemp, (void *) _result,"_wxRealPoint_p");
+    _resultobj = Py_BuildValue("s",_ptemp);
+    return _resultobj;
+}
+
+static wxRealPoint  wxRealPoint___sub__(wxRealPoint *self,const wxRealPoint * p) {
+            if (! p) return *self;
+            return *self - *p;
+        }
+static PyObject *_wrap_wxRealPoint___sub__(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxRealPoint * _result;
+    wxRealPoint * _arg0;
+    wxRealPoint * _arg1;
+    wxRealPoint  temp;
+    PyObject * _obj0 = 0;
+    wxRealPoint  temp0;
+    PyObject * _obj1 = 0;
+    char *_kwnames[] = { "self","p", NULL };
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxRealPoint___sub__",_kwnames,&_obj0,&_obj1)) 
+        return NULL;
+{
+    _arg0 = &temp;
+    if (! wxRealPoint_helper(_obj0, &_arg0))
+        return NULL;
+}
+{
+    _arg1 = &temp0;
+    if (! wxRealPoint_helper(_obj1, &_arg1))
+        return NULL;
+}
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = new wxRealPoint (wxRealPoint___sub__(_arg0,_arg1));
+
+    wxPy_END_ALLOW_THREADS;
+}    SWIG_MakePtr(_ptemp, (void *) _result,"_wxRealPoint_p");
+    _resultobj = Py_BuildValue("s",_ptemp);
+    return _resultobj;
+}
+
+static int  wxRealPoint___cmp__(wxRealPoint *self,const wxRealPoint * p) {
+            if (! p) return 0;
+            return *self == *p;
+        }
+static PyObject *_wrap_wxRealPoint___cmp__(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    int  _result;
+    wxRealPoint * _arg0;
+    wxRealPoint * _arg1;
+    wxRealPoint  temp;
+    PyObject * _obj0 = 0;
+    wxRealPoint  temp0;
+    PyObject * _obj1 = 0;
+    char *_kwnames[] = { "self","p", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxRealPoint___cmp__",_kwnames,&_obj0,&_obj1)) 
+        return NULL;
+{
+    _arg0 = &temp;
+    if (! wxRealPoint_helper(_obj0, &_arg0))
+        return NULL;
+}
+{
+    _arg1 = &temp0;
+    if (! wxRealPoint_helper(_obj1, &_arg1))
+        return NULL;
+}
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (int )wxRealPoint___cmp__(_arg0,_arg1);
+
+    wxPy_END_ALLOW_THREADS;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
 #define wxPoint_x_set(_swigobj,_swigval) (_swigobj->x = _swigval,_swigval)
 static PyObject *_wrap_wxPoint_x_set(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
@@ -1671,6 +1786,121 @@ static PyObject *_wrap_wxPoint_asTuple(PyObject *self, PyObject *args, PyObject 
 }{
   _resultobj = _result;
 }
+    return _resultobj;
+}
+
+static wxPoint  wxPoint___add__(wxPoint *self,const wxPoint * p) {
+            if (! p) return *self;
+            return *self + *p;
+        }
+static PyObject *_wrap_wxPoint___add__(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxPoint * _result;
+    wxPoint * _arg0;
+    wxPoint * _arg1;
+    wxPoint  temp;
+    PyObject * _obj0 = 0;
+    wxPoint  temp0;
+    PyObject * _obj1 = 0;
+    char *_kwnames[] = { "self","p", NULL };
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxPoint___add__",_kwnames,&_obj0,&_obj1)) 
+        return NULL;
+{
+    _arg0 = &temp;
+    if (! wxPoint_helper(_obj0, &_arg0))
+        return NULL;
+}
+{
+    _arg1 = &temp0;
+    if (! wxPoint_helper(_obj1, &_arg1))
+        return NULL;
+}
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = new wxPoint (wxPoint___add__(_arg0,_arg1));
+
+    wxPy_END_ALLOW_THREADS;
+}    SWIG_MakePtr(_ptemp, (void *) _result,"_wxPoint_p");
+    _resultobj = Py_BuildValue("s",_ptemp);
+    return _resultobj;
+}
+
+static wxPoint  wxPoint___sub__(wxPoint *self,const wxPoint * p) {
+            if (! p) return *self;
+            return *self - *p;
+        }
+static PyObject *_wrap_wxPoint___sub__(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxPoint * _result;
+    wxPoint * _arg0;
+    wxPoint * _arg1;
+    wxPoint  temp;
+    PyObject * _obj0 = 0;
+    wxPoint  temp0;
+    PyObject * _obj1 = 0;
+    char *_kwnames[] = { "self","p", NULL };
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxPoint___sub__",_kwnames,&_obj0,&_obj1)) 
+        return NULL;
+{
+    _arg0 = &temp;
+    if (! wxPoint_helper(_obj0, &_arg0))
+        return NULL;
+}
+{
+    _arg1 = &temp0;
+    if (! wxPoint_helper(_obj1, &_arg1))
+        return NULL;
+}
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = new wxPoint (wxPoint___sub__(_arg0,_arg1));
+
+    wxPy_END_ALLOW_THREADS;
+}    SWIG_MakePtr(_ptemp, (void *) _result,"_wxPoint_p");
+    _resultobj = Py_BuildValue("s",_ptemp);
+    return _resultobj;
+}
+
+static int  wxPoint___cmp__(wxPoint *self,const wxPoint * p) {
+            if (! p) return 0;
+            return *self == *p;
+        }
+static PyObject *_wrap_wxPoint___cmp__(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    int  _result;
+    wxPoint * _arg0;
+    wxPoint * _arg1;
+    wxPoint  temp;
+    PyObject * _obj0 = 0;
+    wxPoint  temp0;
+    PyObject * _obj1 = 0;
+    char *_kwnames[] = { "self","p", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxPoint___cmp__",_kwnames,&_obj0,&_obj1)) 
+        return NULL;
+{
+    _arg0 = &temp;
+    if (! wxPoint_helper(_obj0, &_arg0))
+        return NULL;
+}
+{
+    _arg1 = &temp0;
+    if (! wxPoint_helper(_obj1, &_arg1))
+        return NULL;
+}
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (int )wxPoint___cmp__(_arg0,_arg1);
+
+    wxPy_END_ALLOW_THREADS;
+}    _resultobj = Py_BuildValue("i",_result);
     return _resultobj;
 }
 
@@ -4643,6 +4873,9 @@ static PyMethodDef misccMethods[] = {
 	 { "wxRect_GetX", (PyCFunction) _wrap_wxRect_GetX, METH_VARARGS | METH_KEYWORDS },
 	 { "delete_wxRect", (PyCFunction) _wrap_delete_wxRect, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxRect", (PyCFunction) _wrap_new_wxRect, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPoint___cmp__", (PyCFunction) _wrap_wxPoint___cmp__, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPoint___sub__", (PyCFunction) _wrap_wxPoint___sub__, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPoint___add__", (PyCFunction) _wrap_wxPoint___add__, METH_VARARGS | METH_KEYWORDS },
 	 { "wxPoint_asTuple", (PyCFunction) _wrap_wxPoint_asTuple, METH_VARARGS | METH_KEYWORDS },
 	 { "wxPoint_Set", (PyCFunction) _wrap_wxPoint_Set, METH_VARARGS | METH_KEYWORDS },
 	 { "delete_wxPoint", (PyCFunction) _wrap_delete_wxPoint, METH_VARARGS | METH_KEYWORDS },
@@ -4651,6 +4884,9 @@ static PyMethodDef misccMethods[] = {
 	 { "wxPoint_y_set", (PyCFunction) _wrap_wxPoint_y_set, METH_VARARGS | METH_KEYWORDS },
 	 { "wxPoint_x_get", (PyCFunction) _wrap_wxPoint_x_get, METH_VARARGS | METH_KEYWORDS },
 	 { "wxPoint_x_set", (PyCFunction) _wrap_wxPoint_x_set, METH_VARARGS | METH_KEYWORDS },
+	 { "wxRealPoint___cmp__", (PyCFunction) _wrap_wxRealPoint___cmp__, METH_VARARGS | METH_KEYWORDS },
+	 { "wxRealPoint___sub__", (PyCFunction) _wrap_wxRealPoint___sub__, METH_VARARGS | METH_KEYWORDS },
+	 { "wxRealPoint___add__", (PyCFunction) _wrap_wxRealPoint___add__, METH_VARARGS | METH_KEYWORDS },
 	 { "wxRealPoint_asTuple", (PyCFunction) _wrap_wxRealPoint_asTuple, METH_VARARGS | METH_KEYWORDS },
 	 { "wxRealPoint_Set", (PyCFunction) _wrap_wxRealPoint_Set, METH_VARARGS | METH_KEYWORDS },
 	 { "delete_wxRealPoint", (PyCFunction) _wrap_delete_wxRealPoint, METH_VARARGS | METH_KEYWORDS },
