@@ -66,6 +66,14 @@ wxIndividualLayoutConstraint::~wxIndividualLayoutConstraint()
 
 void wxIndividualLayoutConstraint::Set(wxRelationship rel, wxWindowBase *otherW, wxEdge otherE, int val, int marg)
 {
+    if (rel == wxSameAs)
+    {
+        // If Set is called by the user with wxSameAs then call SameAs to do
+        // it since it will actually use wxPercent instead.
+        SameAs(otherW, otherE, marg);
+        return;
+    }
+
     relationship = rel;
     otherWin = otherW;
     otherEdge = otherE;
@@ -106,13 +114,13 @@ void wxIndividualLayoutConstraint::Below(wxWindowBase *sibling, int marg)
 // 'Same edge' alignment
 //
 void wxIndividualLayoutConstraint::SameAs(wxWindowBase *otherW, wxEdge edge, int marg)
-{ 
+{
     Set(wxPercentOf, otherW, edge, 100, marg);
 }
 
 // The edge is a percentage of the other window's edge
 void wxIndividualLayoutConstraint::PercentOf(wxWindowBase *otherW, wxEdge wh, int per)
-{ 
+{
     Set(wxPercentOf, otherW, wh, per);
 }
 
@@ -1038,7 +1046,7 @@ bool wxLayoutConstraints::SatisfyConstraints(wxWindowBase *win, int *nChanges)
     Set each calculated position and size
 
  */
- 
+
 #if WXWIN_COMPATIBILITY
 bool wxOldDoLayout(wxWindowBase *win)
 {
