@@ -919,6 +919,7 @@ bool wxMenuBar::Append(wxMenu *menu, const wxString& title)
     {
         if (s_macInstalledMenuBar == this)
         {
+            menu->MacBeforeDisplay( false ) ;
             ::InsertMenu( MAC_WXHMENU(menu->GetHMenu()) , 0 ) ;
         }
 
