@@ -131,12 +131,18 @@ public:
         // get file type from MIME type (in format <category>/<format>)
     wxFileType *GetFileTypeFromMimeType(const wxString& mimeType);
 
-    // other operations
+    // other operations: return TRUE if there were no errors or FALSE if there
+    // were some unreckognized entries (the good entries are always read anyhow)
         // read in additional file (the standard ones are read automatically)
         // in mailcap format (see mimetype.cpp for description)
-    void ReadMailcap(const wxString& filename);
+        //
+        // 'fallback' parameter may be set to TRUE to avoid overriding the
+        // settings from other, previously parsed, files by this one: normally,
+        // the files read most recently would override the older files, but with
+        // fallback == TRUE this won't happen
+    bool ReadMailcap(const wxString& filename, bool fallback = FALSE);
         // read in additional file in mime.types format
-    void ReadMimeTypes(const wxString& filename);
+    bool ReadMimeTypes(const wxString& filename);
 
     // dtor (not virtual, shouldn't be derived from)
     ~wxMimeTypesManager();

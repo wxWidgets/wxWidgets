@@ -15,7 +15,7 @@ initialization is needed.
 (system-wide) and .mailcap and .mime.types in the current user's home directory:
 all of these files are searched for and loaded if found by default. However,
 additional functions 
-\helpref{wxMimeTypesManager::ReadMailcap}{wxmimetypesmanagerreadmailcap} and
+\helpref{wxMimeTypesManager::ReadMailcap}{wxmimetypesmanagerreadmailcap} and 
 \helpref{wxMimeTypesManager::ReadMimeTypes}{wxmimetypesmanagerreadmimetypes} are
 provided to load additional files.
 
@@ -123,17 +123,29 @@ necessary to convert the strings to the same case before calling it.
 
 \membersection{wxMimeTypesManager::ReadMailcap}\label{wxmimetypesmanagerreadmailcap}
 
-\func{void}{ReadMailcap}{\param{const wxString\&}{ filename}}
+\func{bool}{ReadMailcap}{\param{const wxString\&}{ filename}, \param{bool}{ fallback = FALSE}}
 
 Load additional file containing information about MIME types and associated
 information in mailcap format. See metamail(1) and mailcap(5) for more
 information.
 
+{\it fallback} parameter may be used to load additional mailcap files without
+overriding the settings found in the standard files: normally, entries from
+files loaded with ReadMailcap will override the entries from files loaded
+previously (and the standard ones are loaded in the very beginning), but this
+will not happen if this parameter is set to TRUE (default is FALSE).
+
+The return value is TRUE if there were no errors in the file or FALSE
+otherwise.
+
 \membersection{wxMimeTypesManager::ReadMimeTypes}\label{wxmimetypesmanagerreadmimetypes}
 
-\func{void}{ReadMimeTypes}{\param{const wxString\&}{ filename}}
+\func{bool}{ReadMimeTypes}{\param{const wxString\&}{ filename}}
 
 Load additional file containing information about MIME types and associated
 information in mime.types file format. See metamail(1) and mailcap(5) for more
 information.
+
+The return value is TRUE if there were no errors in the file or FALSE
+otherwise.
 
