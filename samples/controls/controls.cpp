@@ -882,14 +882,16 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
 
     m_buttonSizer = new wxBoxSizer (wxVERTICAL);
     
-    m_sizerBtn1 = new wxButton(panel, wxID_ANY, _T("Test Button &1") );
+    m_sizerBtn1 = new wxButton(panel, wxID_ANY, _T("Test Button &1 (tab order 1)") );
     m_buttonSizer->Add( m_sizerBtn1, 0, wxALL, 10 );
-    m_sizerBtn2 = new wxButton(panel, wxID_ANY, _T("Test Button &2") );
+    m_sizerBtn2 = new wxButton(panel, wxID_ANY, _T("Test Button &2 (tab order 3)") );
     m_buttonSizer->Add( m_sizerBtn2, 0, wxALL, 10 );
-    m_sizerBtn3 = new wxButton(panel, wxID_ANY, _T("Test Button &3") );
+    m_sizerBtn3 = new wxButton(panel, wxID_ANY, _T("Test Button &3 (tab order 2)") );
     m_buttonSizer->Add( m_sizerBtn3, 0, wxALL, 10 );
-    m_sizerBtn4 = new wxButton(panel, wxID_ANY, _T("Test Button &4") );
+    m_sizerBtn4 = new wxButton(panel, wxID_ANY, _T("Test Button &4 (tab order 4)") );
     m_buttonSizer->Add( m_sizerBtn4, 0, wxALL, 10 );
+
+    m_sizerBtn3->MoveBeforeInTabOrder(m_sizerBtn2);
 
     m_hsizer->Add (m_buttonSizer);
     m_hsizer->Add( 20,20, 1 );
