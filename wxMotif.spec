@@ -62,8 +62,6 @@ else
   export MAKE="make"
 fi
 
-(cd locale; make allmo)
-
 mkdir obj-shared
 cd obj-shared
 ../configure --prefix=%{pref} --enable-soname --with-odbc --with-opengl --with-motif

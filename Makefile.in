@@ -132,7 +132,7 @@ DISTDIR=./_dist_dir/$(DISTDIRNAME)
 
 ############################## Files ##################################
 
-WX_LINGUAS = `cd $(top_srcdir)/locale && ls *.mo 2> /dev/null | sed -n 's/\.mo//p'`
+WX_LINGUAS = `cd $(top_builddir)/locale; ls *.mo 2> /dev/null | sed -n 's/\.mo//p'`
 
 # this line will include a file which defines ALL_SOURCES, ALL_OBJECTS,
 # ALL_DEPFILES and ALL_HEADERS variables with the complete list of .cpp, .o,
@@ -312,7 +312,7 @@ IODBCOBJS = \
 SONAME_FLAGS = @SONAME_FLAGS@
 SONAME_FLAGS_GL = @SONAME_FLAGS_GL@
 
-all: @WX_ALL@
+all: @WX_ALL@ locale_files
 
 $(build_libdir)/@WX_LIBRARY_NAME_STATIC@:  $(OBJECTS)
 	@$(INSTALL) -d $(build_libdir)
@@ -377,6 +377,8 @@ lexer.c:	$(COMMDIR)/lexer.l
 
 -include $(OBJECTS:.o=.d)
 
+locale_files:
+	@(cd locale && $(MAKE))
 
 CREATE_INSTALLED_LINKS: preinstall
 	$(RM) $(libdir)/@WX_LIBRARY_LINK1@
@@ -450,8 +452,8 @@ preinstall: $(build_libdir)/@WX_TARGET_LIBRARY@ $(top_builddir)/wx@TOOLCHAIN_NAM
 	@for p in $(WX_LINGUAS); do \
 	  if test ! -d $(localedir)/$$p; then $(INSTALL) -d $(localedir)/$$p; fi;\
 	  if test ! -d $(localedir)/$$p/LC_MESSAGES; then $(INSTALL) -d $(localedir)/$$p/LC_MESSAGES; fi;\
-	  $(INSTALL_DATA) $(top_srcdir)/locale/$$p.mo $(localedir)/$$p/LC_MESSAGES/wxstd.mo; \
-	  echo "$(INSTALL_DATA) $(top_srcdir)/locale/$$p.mo $(localedir)/$$p/LC_MESSAGES/wxstd.mo"; \
+	  $(INSTALL_DATA) locale/$$p.mo $(localedir)/$$p/LC_MESSAGES/wxstd.mo; \
+	  echo "$(INSTALL_DATA) locale/$$p.mo $(localedir)/$$p/LC_MESSAGES/wxstd.mo"; \
 	done
 
 preinstall_res: $(build_libdir)/@WX_RESOURCES_MACOSX_COMPILED@
@@ -1288,11 +1290,10 @@ MISC_DIST: ALL_GUI_DIST
 	mkdir $(DISTDIR)/misc/gs_afm
 	cp $(MISCDIR)/gs_afm/*.afm  $(DISTDIR)/misc/gs_afm
 
-INTL_DIST:
+INTL_DIST: locale_files
 	mkdir $(DISTDIR)/locale
-	cp $(INTLDIR)/Makefile $(DISTDIR)/locale
+	cp $(INTLDIR)/Makefile.in $(DISTDIR)/locale
 	cp $(INTLDIR)/*.po $(DISTDIR)/locale
-	-cp $(INTLDIR)/*.mo $(DISTDIR)/locale
 
 MANUAL_DIST:
 	mkdir $(DISTDIR)/docs

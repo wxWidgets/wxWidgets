@@ -8369,17 +8369,17 @@ fi
           fi
         
 
-          echo $ac_n "checking for --enable-ico_cur""... $ac_c" 1>&6
-echo "configure:8374: checking for --enable-ico_cur" >&5
+          echo $ac_n "checking for --enable-icocur""... $ac_c" 1>&6
+echo "configure:8374: checking for --enable-icocur" >&5
           no_cache=0
-          # Check whether --enable-ico_cur or --disable-ico_cur was given.
-if test "${enable_ico_cur+set}" = set; then
-  enableval="$enable_ico_cur"
+          # Check whether --enable-icocur or --disable-icocur was given.
+if test "${enable_icocur+set}" = set; then
+  enableval="$enable_icocur"
   
                           if test "$enableval" = yes; then
-                            ac_cv_use_ico_cur='wxUSE_ICO_CUR=yes'
+                            ac_cv_use_icocur='wxUSE_ICO_CUR=yes'
                           else
-                            ac_cv_use_ico_cur='wxUSE_ICO_CUR=no'
+                            ac_cv_use_icocur='wxUSE_ICO_CUR=no'
                           fi
                         
 else
@@ -8391,14 +8391,14 @@ else
                             no_cache=1
                           fi
 
-                          ac_cv_use_ico_cur='wxUSE_ICO_CUR='$DEFAULT_wxUSE_ICO_CUR
+                          ac_cv_use_icocur='wxUSE_ICO_CUR='$DEFAULT_wxUSE_ICO_CUR
                         
 fi
 
 
-          eval "$ac_cv_use_ico_cur"
+          eval "$ac_cv_use_icocur"
           if test "$no_cache" != 1; then
-            echo $ac_cv_use_ico_cur >> ${wx_arg_cache_file}.tmp
+            echo $ac_cv_use_icocur >> ${wx_arg_cache_file}.tmp
           fi
 
           if test "$wxUSE_ICO_CUR" = yes; then
@@ -19782,6 +19782,7 @@ trap 'rm -fr `echo "
             src/makeprog.env
             src/makelib.env
             Makefile
+            locale/Makefile
            setup.h:setup.h.in" | sed "s/:[^ ]*//g"` conftest*; exit 1' 1 2 15
 EOF
 cat >> $CONFIG_STATUS <<EOF
@@ -19965,6 +19966,7 @@ CONFIG_FILES=\${CONFIG_FILES-"wx-config
             src/makeprog.env
             src/makelib.env
             Makefile
+            locale/Makefile
           "}
 EOF
 cat >> $CONFIG_STATUS <<\EOF

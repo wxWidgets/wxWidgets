@@ -49,8 +49,6 @@ else
   export MAKE="make"
 fi
 
-(cd locale; make allmo)
-
 mkdir obj-shared
 cd obj-shared
 ../configure --prefix=%{pref} --enable-soname --disable-gui --disable-std_iostreams

@@ -1360,7 +1360,7 @@ WX_ARG_ENABLE(gif,         [  --enable-gif            use gif images (GIF file f
 WX_ARG_ENABLE(pcx,         [  --enable-pcx            use pcx images (PCX file format)], wxUSE_PCX)
 WX_ARG_ENABLE(pnm,         [  --enable-pnm            use pnm images (PNM file format)], wxUSE_PNM)
 WX_ARG_ENABLE(xpm,         [  --enable-xpm            use xpm images (XPM file format)], wxUSE_XPM)
-WX_ARG_ENABLE(ico_cur,     [  --enable-icocur         use Windows ICO and CUR formats], wxUSE_ICO_CUR)
+WX_ARG_ENABLE(icocur,      [  --enable-icocur         use Windows ICO and CUR formats], wxUSE_ICO_CUR)
 
 fi
 dnl for GUI only
@@ -5048,6 +5048,7 @@ AC_OUTPUT([
             src/makeprog.env
             src/makelib.env
             Makefile
+            locale/Makefile
           ],
           [
             dnl This test is required to make the following idempotent.
