@@ -185,7 +185,7 @@ public:
     }
 
     void SetValue( int , int , const wxString&  ) { /* ignore */ }
-    bool IsEmptyCell( int , int  ) { return FALSE; }
+    bool IsEmptyCell( int , int  ) { return false; }
 
 private:
     long m_sizeGrid;

@@ -34,6 +34,7 @@
 
 #include "wx/colordlg.h"
 #include "wx/fontdlg.h"
+#include "wx/numdlg.h"
 
 #include "wx/grid.h"
 #include "wx/generic/gridctrl.h"
@@ -57,9 +58,9 @@ IMPLEMENT_APP( GridApp )
 bool GridApp::OnInit()
 {
     GridFrame *frame = new GridFrame;
-    frame->Show( TRUE );
+    frame->Show(true);
 
-    return TRUE;
+    return true;
 }
 
 // ----------------------------------------------------------------------------
@@ -130,7 +131,7 @@ END_EVENT_TABLE()
 
 
 GridFrame::GridFrame()
-        : wxFrame( (wxFrame *)NULL, -1, _T("wxWidgets grid class demo"),
+        : wxFrame( (wxFrame *)NULL, wxID_ANY, _T("wxWidgets grid class demo"),
                    wxDefaultPosition,
                    wxDefaultSize )
 {
@@ -226,15 +227,15 @@ GridFrame::GridFrame()
 
     SetMenuBar( menuBar );
 
-    m_addToSel = FALSE;
+    m_addToSel = false;
 
     grid = new wxGrid( this,
-                       -1,
+                       wxID_ANY,
                        wxPoint( 0, 0 ),
                        wxSize( 400, 300 ) );
 
     logWin = new wxTextCtrl( this,
-                             -1,
+                             wxID_ANY,
                              wxEmptyString,
                              wxPoint( 0, gridH + 20 ),
                              wxSize( logW, logH ),
@@ -328,7 +329,7 @@ GridFrame::GridFrame()
     grid->SetCellEditor(4, 0, new wxGridCellChoiceEditor(WXSIZEOF(choices), choices));
     grid->SetCellSize(4, 0, 1, 2);
     grid->SetCellValue(4, 0, choices[0]);
-    grid->SetCellOverflow(4, 0, FALSE);
+    grid->SetCellOverflow(4, 0, false);
 
     grid->SetCellSize(7, 1, 3, 4);
     grid->SetCellAlignment(7, 1, wxALIGN_CENTRE, wxALIGN_CENTRE);
@@ -343,7 +344,7 @@ GridFrame::GridFrame()
                    0,
                    wxEXPAND );
 
-    SetAutoLayout( TRUE );
+    SetAutoLayout(true);
     SetSizer( topSizer );
 
     topSizer->Fit( this );
@@ -362,14 +363,14 @@ GridFrame::~GridFrame()
 
 void GridFrame::SetDefaults()
 {
-    GetMenuBar()->Check( ID_TOGGLEROWLABELS, TRUE );
-    GetMenuBar()->Check( ID_TOGGLECOLLABELS, TRUE );
-    GetMenuBar()->Check( ID_TOGGLEEDIT, TRUE );
-    GetMenuBar()->Check( ID_TOGGLEROWSIZING, TRUE );
-    GetMenuBar()->Check( ID_TOGGLECOLSIZING, TRUE );
-    GetMenuBar()->Check( ID_TOGGLEGRIDSIZING, TRUE );
-    GetMenuBar()->Check( ID_TOGGLEGRIDLINES, TRUE );
-    GetMenuBar()->Check( ID_CELLOVERFLOW, TRUE );
+    GetMenuBar()->Check( ID_TOGGLEROWLABELS, true );
+    GetMenuBar()->Check( ID_TOGGLECOLLABELS, true );
+    GetMenuBar()->Check( ID_TOGGLEEDIT, true );
+    GetMenuBar()->Check( ID_TOGGLEROWSIZING, true );
+    GetMenuBar()->Check( ID_TOGGLECOLSIZING, true );
+    GetMenuBar()->Check( ID_TOGGLEGRIDSIZING, true );
+    GetMenuBar()->Check( ID_TOGGLEGRIDLINES, true );
+    GetMenuBar()->Check( ID_CELLOVERFLOW, true );
 }
 
 
@@ -539,7 +540,7 @@ void GridFrame::SetRowLabelHorizAlignment( wxCommandEvent& WXUNUSED(ev) )
             break;
     }
 
-    grid->SetRowLabelAlignment( horiz, -1 );
+    grid->SetRowLabelAlignment( horiz, vert );
 }
 
 void GridFrame::SetRowLabelVertAlignment( wxCommandEvent& WXUNUSED(ev) )
@@ -562,7 +563,7 @@ void GridFrame::SetRowLabelVertAlignment( wxCommandEvent& WXUNUSED(ev) )
             break;
     }
 
-    grid->SetRowLabelAlignment( -1, vert );
+    grid->SetRowLabelAlignment( horiz, vert );
 }
 
 
@@ -586,7 +587,7 @@ void GridFrame::SetColLabelHorizAlignment( wxCommandEvent& WXUNUSED(ev) )
             break;
     }
 
-    grid->SetColLabelAlignment( horiz, -1 );
+    grid->SetColLabelAlignment( horiz, vert );
 }
 
 
@@ -610,7 +611,7 @@ void GridFrame::SetColLabelVertAlignment( wxCommandEvent& WXUNUSED(ev) )
             break;
     }
 
-    grid->SetColLabelAlignment( -1, vert );
+    grid->SetColLabelAlignment( horiz, vert );
 }
 
 
@@ -709,7 +710,7 @@ void GridFrame::SetCellBgColour( wxCommandEvent& WXUNUSED(ev) )
         // which exactly fits the grid.
         wxRect r(wxPoint(0, 0), grid->GetSize());
         grid->SetDefaultCellBackgroundColour(col);
-        grid->Refresh(TRUE, &r);
+        grid->Refresh(true, &r);
     }
 }
 
@@ -916,24 +917,24 @@ void GridFrame::About(  wxCommandEvent& WXUNUSED(ev) )
 
 void GridFrame::OnQuit( wxCommandEvent& WXUNUSED(ev) )
 {
-    Close( TRUE );
+    Close( true );
 }
 
 void GridFrame::OnBugsTable(wxCommandEvent& )
 {
     BugsGridFrame *frame = new BugsGridFrame;
-    frame->Show(TRUE);
+    frame->Show(true);
 }
 
 void GridFrame::OnSmallGrid(wxCommandEvent& )
 {
-    wxFrame* frame = new wxFrame(NULL, -1, _T("A Small Grid"),
+    wxFrame* frame = new wxFrame(NULL, wxID_ANY, _T("A Small Grid"),
                                  wxDefaultPosition, wxSize(640, 480));
-    wxPanel* panel = new wxPanel(frame, -1);
-    wxGrid* grid = new wxGrid(panel, -1, wxPoint(10,10), wxSize(400,400),
+    wxPanel* panel = new wxPanel(frame, wxID_ANY);
+    wxGrid* grid = new wxGrid(panel, wxID_ANY, wxPoint(10,10), wxSize(400,400),
                               wxWANTS_CHARS | wxSIMPLE_BORDER);
     grid->CreateGrid(3,3);
-    frame->Show(TRUE);
+    frame->Show(true);
 }
 
 void GridFrame::OnVTable(wxCommandEvent& )
@@ -961,7 +962,7 @@ void GridFrame::OnVTable(wxCommandEvent& )
     if ( s_sizeGrid != -1 )
     {
         BigGridFrame* win = new BigGridFrame(s_sizeGrid);
-        win->Show(TRUE);
+        win->Show(true);
     }
 }
 
@@ -1033,17 +1034,17 @@ wxGridCellAttr *MyGridCellAttrProvider::GetAttr(int row, int col,
 // ============================================================================
 
 BigGridFrame::BigGridFrame(long sizeGrid)
-            : wxFrame(NULL, -1, _T("Plugin Virtual Table"),
+            : wxFrame(NULL, wxID_ANY, _T("Plugin Virtual Table"),
                       wxDefaultPosition, wxSize(500, 450))
 {
-    m_grid = new wxGrid(this, -1, wxDefaultPosition, wxDefaultSize);
+    m_grid = new wxGrid(this, wxID_ANY, wxDefaultPosition, wxDefaultSize);
     m_table = new BigGridTable(sizeGrid);
 
     // VZ: I don't understand why this slows down the display that much,
     //     must profile it...
     //m_table->SetAttrProvider(new MyGridCellAttrProvider);
 
-    m_grid->SetTable(m_table, TRUE);
+    m_grid->SetTable(m_table, true);
 
 #if defined __WXMOTIF__
     // MB: the grid isn't getting a sensible default size under wxMotif
@@ -1101,10 +1102,10 @@ static struct BugsGridData
     bool opened;
 } gs_dataBugsGrid [] =
 {
-    { 18, _T("foo doesn't work"), Sev_Major, 1, _T("wxMSW"), TRUE },
-    { 27, _T("bar crashes"), Sev_Critical, 1, _T("all"), FALSE },
-    { 45, _T("printing is slow"), Sev_Minor, 3, _T("wxMSW"), TRUE },
-    { 68, _T("Rectangle() fails"), Sev_Normal, 1, _T("wxMSW"), FALSE },
+    { 18, _T("foo doesn't work"), Sev_Major, 1, _T("wxMSW"), true },
+    { 27, _T("bar crashes"), Sev_Critical, 1, _T("all"), false },
+    { 45, _T("printing is slow"), Sev_Minor, 3, _T("wxMSW"), true },
+    { 68, _T("Rectangle() fails"), Sev_Normal, 1, _T("wxMSW"), false },
 };
 
 static const wxChar *headers[Col_Max] =
@@ -1159,7 +1160,7 @@ int BugsGridTable::GetNumberCols()
 
 bool BugsGridTable::IsEmptyCell( int WXUNUSED(row), int WXUNUSED(col) )
 {
-    return FALSE;
+    return false;
 }
 
 wxString BugsGridTable::GetValue( int row, int col )
@@ -1234,7 +1235,7 @@ bool BugsGridTable::CanGetValueAs( int WXUNUSED(row), int col, const wxString& t
 {
     if ( typeName == wxGRID_VALUE_STRING )
     {
-        return TRUE;
+        return true;
     }
     else if ( typeName == wxGRID_VALUE_BOOL )
     {
@@ -1246,7 +1247,7 @@ bool BugsGridTable::CanGetValueAs( int WXUNUSED(row), int col, const wxString& t
     }
     else
     {
-        return FALSE;
+        return false;
     }
 }
 
@@ -1286,7 +1287,7 @@ bool BugsGridTable::GetValueAsBool( int row, int col )
     {
         wxFAIL_MSG(_T("unexpected column"));
 
-        return FALSE;
+        return false;
     }
 }
 
@@ -1331,13 +1332,13 @@ BugsGridTable::BugsGridTable()
 // ----------------------------------------------------------------------------
 
 BugsGridFrame::BugsGridFrame()
-             : wxFrame(NULL, -1, _T("Bugs table"),
+             : wxFrame(NULL, wxID_ANY, _T("Bugs table"),
                        wxDefaultPosition, wxSize(500, 300))
 {
-    wxGrid *grid = new wxGrid(this, -1, wxDefaultPosition);
+    wxGrid *grid = new wxGrid(this, wxID_ANY, wxDefaultPosition);
     wxGridTableBase *table = new BugsGridTable();
     table->SetAttrProvider(new MyGridCellAttrProvider);
-    grid->SetTable(table, TRUE);
+    grid->SetTable(table, true);
 
     wxGridCellAttr *attrRO = new wxGridCellAttr,
                    *attrRangeEditor = new wxGridCellAttr,

@@ -49,7 +49,7 @@ BEGIN_EVENT_TABLE(MyFrame,wxFrame)
     EVT_MENU_RANGE(ID_LAST_1, ID_LAST_3, MyFrame::OnLastFiles)
     
     EVT_CLOSE(MyFrame::OnCloseWindow)
-    EVT_UPDATE_UI(-1,MyFrame::OnUpdateUI)
+    EVT_UPDATE_UI(wxID_ANY,MyFrame::OnUpdateUI)
 END_EVENT_TABLE()
 
 MyFrame::MyFrame( wxWindow *parent, wxWindowID id, const wxString &title,
@@ -64,7 +64,7 @@ MyFrame::MyFrame( wxWindow *parent, wxWindowID id, const wxString &title,
     // Create edit control. Since it is the only
     // control in the frame, it will be resized
     // to file it out.
-    m_text = new wxTextCtrl( this, -1, _T(""), wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE );
+    m_text = new wxTextCtrl( this, wxID_ANY, _T(""), wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE );
     
     // Read .ini file for file history etc.
     wxConfig *conf = (wxConfig*) wxConfig::Get();
@@ -112,7 +112,7 @@ void MyFrame::AddToHistory( const wxString &fname )
     int index = m_history.Index( fname );
     
     if (index != wxNOT_FOUND)
-        m_history.Remove( (size_t) index );
+        m_history.RemoveAt( (size_t) index );
     
     m_history.Insert( fname, 0 );
     
@@ -284,7 +284,7 @@ void MyFrame::OnAbout( wxCommandEvent& WXUNUSED(event) )
 
 void MyFrame::OnQuit( wxCommandEvent& WXUNUSED(event) )
 {
-     Close( TRUE );
+     Close( true );
 }
 
 bool MyFrame::Save()
@@ -296,7 +296,7 @@ bool MyFrame::Save()
     else
         m_text->SaveFile( m_filename );
    
-   return TRUE;
+   return true;
 }
 
 bool MyFrame::Discard()
@@ -309,16 +309,16 @@ bool MyFrame::Discard()
         int ret = dialog.ShowModal();
         
         if (ret == wxID_CANCEL)
-            return FALSE;
+            return false;
             
         if (ret == wxID_YES)
         {
             if (!Save())
-                return FALSE;
+                return false;
         }
     }
     
-    return TRUE;
+    return true;
 }
 
 void MyFrame::OnUpdateUI( wxUpdateUIEvent &event )
@@ -326,13 +326,13 @@ void MyFrame::OnUpdateUI( wxUpdateUIEvent &event )
     switch (event.GetId())
     {
         case ID_COPY:
-            event.Enable( FALSE );
+            event.Enable( false );
             break;
         case ID_CUT:
-            event.Enable( FALSE );
+            event.Enable( false );
             break;
         case ID_PASTE:
-            event.Enable( FALSE );
+            event.Enable( false );
             break;
         case ID_DELETE:
 #ifdef __WXUNIVERSAL__
@@ -398,10 +398,10 @@ bool MyApp::OnInit()
     SetVendorName(_T("Free world"));
     SetAppName(_T("wxEdit"));
     
-    MyFrame *frame = new MyFrame( NULL, -1, _T("wxEdit"), wxPoint(20,20), wxSize(500,340) );
-    frame->Show( TRUE );
+    MyFrame *frame = new MyFrame( NULL, wxID_ANY, _T("wxEdit"), wxPoint(20,20), wxSize(500,340) );
+    frame->Show( true );
     
-    return TRUE;
+    return true;
 }
 
 int MyApp::OnExit()
