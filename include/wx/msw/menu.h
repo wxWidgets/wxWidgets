@@ -281,13 +281,13 @@ public:
         // get the menu handle
     WXHMENU GetHMenu() const { return m_hMenu; }
 
-protected:
-    // common part of all ctors
-    void Init();
-
     // if the menubar is modified, the display is not updated automatically,
     // call this function to update it (m_menuBarFrame should be !NULL)
     void Refresh();
+
+protected:
+    // common part of all ctors
+    void Init();
 
     wxEvtHandler *m_eventHandler;
     int           m_menuCount;
