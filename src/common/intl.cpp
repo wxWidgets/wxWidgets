@@ -1659,7 +1659,7 @@ bool wxLocale::Init(int language, int flags)
                     (flags & wxLOCALE_CONV_ENCODING) != 0);
     free(szLocale);
 
-    if ( ret )
+    if (IsOk()) // setlocale() succeeded
         m_language = lang;
 
     return ret;
