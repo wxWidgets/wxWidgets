@@ -1372,6 +1372,7 @@ COND_TOOLKIT_MAC_GUI_HDR =  \
 	wx/mac/tabctrl.h \
 	wx/mac/textctrl.h \
 	wx/mac/timer.h \
+	wx/mac/tglbtn.h \
 	wx/mac/toolbar.h \
 	wx/mac/tooltip.h \
 	wx/mac/toplevel.h \
@@ -2510,6 +2511,7 @@ COND_TOOLKIT_MAC___GUI_SRC_OBJECTS =  \
 	monodll_tabctrl.o \
 	monodll_textctrl.o \
 	monodll_timer.o \
+	monodll_tglbtn.o \
 	monodll_toolbar.o \
 	monodll_tooltip.o \
 	monodll_toplevel.o \
@@ -3296,6 +3298,7 @@ COND_TOOLKIT_MAC___GUI_SRC_OBJECTS_1 =  \
 	monolib_tabctrl.o \
 	monolib_textctrl.o \
 	monolib_timer.o \
+	monolib_tglbtn.o \
 	monolib_toolbar.o \
 	monolib_tooltip.o \
 	monolib_toplevel.o \
@@ -4241,6 +4244,7 @@ COND_TOOLKIT_MAC___GUI_SRC_OBJECTS_2 =  \
 	coredll_tabctrl.o \
 	coredll_textctrl.o \
 	coredll_timer.o \
+	coredll_tglbtn.o \
 	coredll_toolbar.o \
 	coredll_tooltip.o \
 	coredll_toplevel.o \
@@ -4902,6 +4906,7 @@ COND_TOOLKIT_MAC___GUI_SRC_OBJECTS_3 =  \
 	corelib_tabctrl.o \
 	corelib_textctrl.o \
 	corelib_timer.o \
+	corelib_tglbtn.o \
 	corelib_toolbar.o \
 	corelib_tooltip.o \
 	corelib_toplevel.o \
@@ -9241,6 +9246,9 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@monodll_tglbtn.o: $(srcdir)/src/msw/tglbtn.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
 
+@COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@monodll_tglbtn.o: $(srcdir)/src/mac/tglbtn.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
+
 @COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@monodll_filedlg.o: $(srcdir)/src/motif/filedlg.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
 
@@ -11847,6 +11855,9 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 
 @COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@monolib_tglbtn.o: $(srcdir)/src/msw/tglbtn.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
+
+@COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@monolib_tglbtn.o: $(srcdir)/src/mac/tglbtn.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
 
 @COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@monolib_filedlg.o: $(srcdir)/src/motif/filedlg.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
@@ -14719,6 +14730,9 @@ coredll_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@coredll_tglbtn.o: $(srcdir)/src/msw/tglbtn.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $<
 
+@COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@coredll_tglbtn.o: $(srcdir)/src/mac/tglbtn.cpp $(COREDLL_ODEP)
+@COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $<
+
 @COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@coredll_filedlg.o: $(srcdir)/src/motif/filedlg.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $<
 
@@ -16831,6 +16845,9 @@ corelib_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@corelib_tglbtn.o: $(srcdir)/src/msw/tglbtn.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $<
 
+@COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@corelib_tglbtn.o: $(srcdir)/src/mac/tglbtn.cpp $(CORELIB_ODEP)
+@COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $<
+
 @COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@corelib_filedlg.o: $(srcdir)/src/motif/filedlg.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $<
 
@@ -17878,7 +17895,7 @@ MOTIF_DIST: ALL_GUI_DIST
 	mkdir $(DISTDIR)/src/x11
 	mkdir $(DISTDIR)/include/wx/x11
 	cp $(X11DIR)/pen.cpp $(X11DIR)/brush.cpp $(X11DIR)/utilsx.cpp \
-		$(X11DIR)/glcanvas.cpp $(X11DIR)/bitmap.cpp $(X11DIR)/region.cpp \
+		$(X11DIR)/bitmap.cpp $(X11DIR)/glcanvas.cpp $(X11DIR)/region.cpp \
 		$(DISTDIR)/src/x11
 	cp $(X11INC)/pen.h $(X11INC)/brush.h $(X11INC)/privx.h \
 		$(X11INC)/bitmap.h $(X11INC)/glcanvas.h $(X11INC)/private.h $(X11INC)/region.h \

@@ -1588,6 +1588,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/mac/tabctrl.cpp
     src/mac/textctrl.cpp
     src/mac/timer.cpp
+    src/mac/tglbtn.cpp
     src/mac/toolbar.cpp
     src/mac/tooltip.cpp
     src/mac/toplevel.cpp
@@ -1677,6 +1678,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/mac/tabctrl.h
     wx/mac/textctrl.h
     wx/mac/timer.h
+    wx/mac/tglbtn.h
     wx/mac/toolbar.h
     wx/mac/tooltip.h
     wx/mac/toplevel.h
