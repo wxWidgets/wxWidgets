@@ -551,11 +551,12 @@ SWIG_Check_bool(PyObject* obj)
     } else if (target == Py_None) {  
         Py_DECREF(Py_None);
         target = o;
-    } else {                         
-        o2 = target;
-        target = PyTuple_New(1);
-        PyTuple_SetItem(target, 0, o2);
-
+    } else {
+        if (!PyTuple_Check(target)) {
+            o2 = target;
+            target = PyTuple_New(1);
+            PyTuple_SetItem(target, 0, o2);
+        }            
         o3 = PyTuple_New(1);            
         PyTuple_SetItem(o3, 0, o);      
 
@@ -565,7 +566,7 @@ SWIG_Check_bool(PyObject* obj)
         Py_DECREF(o3);
     }
     return target;
-}
+  }
 
 
 

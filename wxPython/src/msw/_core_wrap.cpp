@@ -865,11 +865,12 @@ PyObject *wxRect_Get(wxRect *self){
     } else if (target == Py_None) {  
         Py_DECREF(Py_None);
         target = o;
-    } else {                         
-        o2 = target;
-        target = PyTuple_New(1);
-        PyTuple_SetItem(target, 0, o2);
-
+    } else {
+        if (!PyTuple_Check(target)) {
+            o2 = target;
+            target = PyTuple_New(1);
+            PyTuple_SetItem(target, 0, o2);
+        }            
         o3 = PyTuple_New(1);            
         PyTuple_SetItem(o3, 0, o);      
 
@@ -879,7 +880,7 @@ PyObject *wxRect_Get(wxRect *self){
         Py_DECREF(o3);
     }
     return target;
-}
+  }
 
 
 void wxPoint2D_Set(wxPoint2D *self,double x,double y){
@@ -1554,6 +1555,9 @@ bool wxWindow_UnregisterHotKey(wxWindow *self,int hotkeyId){
 long wxWindow_GetHandle(wxWindow *self){
             return wxPyGetWinHandle(self);
         }
+void wxWindow_AssociateHandle(wxWindow *self,long handle){
+            self->AssociateHandle((WXWidget)handle);
+        }
 
 wxWindow* wxFindWindowById( long id, const wxWindow *parent = NULL ) {
     return wxWindow::FindWindowById(id, parent);
@@ -1906,16 +1910,16 @@ PyObject *wxSizer_GetChildren(wxSizer *self){
             wxSizerItemList& list = self->GetChildren();
             return wxPy_ConvertList(&list);
         }
-void wxSizer_Show(wxSizer *self,PyObject *item,bool show){
+bool wxSizer_Show(wxSizer *self,PyObject *item,bool show,bool recursive){
             bool blocked = wxPyBeginBlockThreads();
             wxPySizerItemInfo info = wxPySizerItemTypeHelper(item, False, True);
             wxPyEndBlockThreads(blocked);
             if ( info.window )
-                self->Show(info.window, show);
+                return self->Show(info.window, show, recursive);
             else if ( info.sizer )
-                self->Show(info.sizer, show);
+                return self->Show(info.sizer, show, recursive);
             else if ( info.gotPos )
-                self->Show(info.pos, show);
+                return self->Show(info.pos, show);
         }
 bool wxSizer_IsShown(wxSizer *self,PyObject *item){
             bool blocked = wxPyBeginBlockThreads();
@@ -27451,6 +27455,60 @@ static PyObject *_wrap_Window_GetHandle(PyObject *, PyObject *args, PyObject *kw
 }
 
 
+static PyObject *_wrap_Window_AssociateHandle(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxWindow *arg1 = (wxWindow *) 0 ;
+    long arg2 ;
+    PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
+    char *kwnames[] = {
+        (char *) "self",(char *) "handle", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:Window_AssociateHandle",kwnames,&obj0,&obj1)) goto fail;
+    if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxWindow,
+    SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
+    arg2 = (long)SWIG_As_long(obj1); 
+    if (PyErr_Occurred()) SWIG_fail;
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        wxWindow_AssociateHandle(arg1,arg2);
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    Py_INCREF(Py_None); resultobj = Py_None;
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_Window_DissociateHandle(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxWindow *arg1 = (wxWindow *) 0 ;
+    PyObject * obj0 = 0 ;
+    char *kwnames[] = {
+        (char *) "self", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:Window_DissociateHandle",kwnames,&obj0)) goto fail;
+    if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxWindow,
+    SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        (arg1)->DissociateHandle();
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    Py_INCREF(Py_None); resultobj = Py_None;
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
 static PyObject *_wrap_Window_OnPaint(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWindow *arg1 = (wxWindow *) 0 ;
@@ -36422,14 +36480,17 @@ static PyObject *_wrap_Sizer_Show(PyObject *, PyObject *args, PyObject *kwargs) 
     wxSizer *arg1 = (wxSizer *) 0 ;
     PyObject *arg2 = (PyObject *) 0 ;
     bool arg3 = (bool) True ;
+    bool arg4 = (bool) False ;
+    bool result;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     PyObject * obj2 = 0 ;
+    PyObject * obj3 = 0 ;
     char *kwnames[] = {
-        (char *) "self",(char *) "item",(char *) "show", NULL 
+        (char *) "self",(char *) "item",(char *) "show",(char *) "recursive", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO|O:Sizer_Show",kwnames,&obj0,&obj1,&obj2)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO|OO:Sizer_Show",kwnames,&obj0,&obj1,&obj2,&obj3)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxSizer,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
     arg2 = obj1;
@@ -36437,14 +36498,20 @@ static PyObject *_wrap_Sizer_Show(PyObject *, PyObject *args, PyObject *kwargs) 
         arg3 = (bool)SWIG_As_bool(obj2); 
         if (PyErr_Occurred()) SWIG_fail;
     }
+    if (obj3) {
+        arg4 = (bool)SWIG_As_bool(obj3); 
+        if (PyErr_Occurred()) SWIG_fail;
+    }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
-        wxSizer_Show(arg1,arg2,arg3);
+        result = (bool)wxSizer_Show(arg1,arg2,arg3,arg4);
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    Py_INCREF(Py_None); resultobj = Py_None;
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
     return resultobj;
     fail:
     return NULL;
@@ -41632,6 +41699,8 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"Window_PopupMenuXY", (PyCFunction) _wrap_Window_PopupMenuXY, METH_VARARGS | METH_KEYWORDS, NULL },
 	 { (char *)"Window_PopupMenu", (PyCFunction) _wrap_Window_PopupMenu, METH_VARARGS | METH_KEYWORDS, NULL },
 	 { (char *)"Window_GetHandle", (PyCFunction) _wrap_Window_GetHandle, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"Window_AssociateHandle", (PyCFunction) _wrap_Window_AssociateHandle, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"Window_DissociateHandle", (PyCFunction) _wrap_Window_DissociateHandle, METH_VARARGS | METH_KEYWORDS, NULL },
 	 { (char *)"Window_OnPaint", (PyCFunction) _wrap_Window_OnPaint, METH_VARARGS | METH_KEYWORDS, NULL },
 	 { (char *)"Window_HasScrollbar", (PyCFunction) _wrap_Window_HasScrollbar, METH_VARARGS | METH_KEYWORDS, NULL },
 	 { (char *)"Window_SetScrollbar", (PyCFunction) _wrap_Window_SetScrollbar, METH_VARARGS | METH_KEYWORDS, NULL },
