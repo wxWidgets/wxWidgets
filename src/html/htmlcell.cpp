@@ -73,11 +73,19 @@ bool wxHtmlCell::AdjustPagebreak(int *pagebreak)
 wxHtmlWordCell::wxHtmlWordCell(const wxString& word, wxDC& dc) : wxHtmlCell()
 {
     m_Word = word;
+
     m_Word.Replace(wxT("&nbsp;"), wxT(" "), TRUE);
     m_Word.Replace(wxT("&quot;"), wxT("\""), TRUE);
     m_Word.Replace(wxT("&lt;"), wxT("<"), TRUE);
     m_Word.Replace(wxT("&gt;"), wxT(">"), TRUE);
     m_Word.Replace(wxT("&amp;"), wxT("&"), TRUE);
+
+    m_Word.Replace(wxT("&nbsp "), wxT(" "), TRUE);
+    m_Word.Replace(wxT("&quot "), wxT("\""), TRUE);
+    m_Word.Replace(wxT("&lt "), wxT("<"), TRUE);
+    m_Word.Replace(wxT("&gt "), wxT(">"), TRUE);
+    m_Word.Replace(wxT("&amp "), wxT("&"), TRUE);
+
     dc.GetTextExtent(m_Word, &m_Width, &m_Height, &m_Descent);
     SetCanLiveOnPagebreak(FALSE);
 }
