@@ -1,4 +1,0 @@
-#!/bin/bash
-
-distrib/all/build-all dryrun $* 2>&1 | tee tmp/dryrun.log
-

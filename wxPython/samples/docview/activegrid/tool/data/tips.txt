@@ -1,3 +1,0 @@
-Tips for PyDocViewDemo App
-wxWindows rules!
-Use the source, Luke!
