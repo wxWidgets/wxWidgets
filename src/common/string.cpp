@@ -85,6 +85,12 @@ static const struct
   wxChar dummy;
 } g_strEmpty = { {-1, 0, 0}, wxT('\0') };
 
+#if defined(__VISAGECPP__) && __IBMCPP__ >= 400
+// must define this static for VA or else you get multiply defined symbols everywhere
+const unsigned int wxSTRING_MAXLEN = UINT_MAX - 100;
+
+#endif
+
 // empty C style string: points to 'string data' byte of g_strEmpty
 extern const wxChar WXDLLEXPORT *wxEmptyString = &g_strEmpty.dummy;
 

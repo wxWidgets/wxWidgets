@@ -130,6 +130,14 @@ extern wxChar *wxBuffer;
 
 static wxChar wxFileFunctionsBuffer[4*_MAXPATHLEN];
 
+#if defined(__VISAGECPP__) && __IBMCPP__ >= 400
+//
+// VisualAge C++ V4.0 cannot have any external linkage const decs 
+// in headers included by more than one primary source
+//
+const off_t wxInvalidOffset = (off_t)-1;
+#endif
+
 // ============================================================================
 // implementation
 // ============================================================================

@@ -46,7 +46,7 @@
 // VisualAge C++ V4.0 cannot have any external linkage const decs 
 // in headers included by more than one primary source
 //
-static const off_t wxInvalidOffset = (off_t)-1;
+extern const off_t wxInvalidOffset = (off_t)-1;
 #else 
 const off_t wxInvalidOffset = (off_t)-1;
 #endif
