@@ -69,6 +69,11 @@ void Client_OnRequest(wxSocketBase& sock,
                       wxSocketNotify evt,
                       char *cdata);
 
+
+// All sockets will be created with the following flags
+
+#define SCKIPC_FLAGS wxSOCKET_NONE
+
 // ---------------------------------------------------------------------------
 // wxTCPClient
 // ---------------------------------------------------------------------------
@@ -93,7 +98,7 @@ wxConnectionBase *wxTCPClient::MakeConnection (const wxString& host,
                                                const wxString& server_name,
                                                const wxString& topic)
 {
-  wxSocketClient *client = new wxSocketClient();
+  wxSocketClient *client = new wxSocketClient(SCKIPC_FLAGS);
   wxSocketStream *stream = new wxSocketStream(*client);
   wxDataInputStream *data_is = new wxDataInputStream(*stream);
   wxDataOutputStream *data_os = new wxDataOutputStream(*stream);
@@ -165,18 +170,18 @@ wxTCPServer::wxTCPServer ()
 
 bool wxTCPServer::Create(const wxString& server_name)
 {
-  wxIPV4address addr;
   wxSocketServer *server;
 
-  addr.LocalHost();             // GRG
+  // wxIPV4address defaults to INADDR_ANY:0
+  wxIPV4address addr;
   addr.Service(server_name);
 
   // Create a socket listening on specified port
-  server = new wxSocketServer(addr);
+  server = new wxSocketServer(addr, SCKIPC_FLAGS);
   server->Callback((wxSocketBase::wxSockCbk)Server_OnRequest);
   server->CallbackData((char *)this);
   server->SetNotify(wxSOCKET_CONNECTION_FLAG);
-  server->Notify(TRUE);         // GRG
+  server->Notify(TRUE);
 
   return TRUE;
 }

@@ -131,6 +131,11 @@ bool wxIPV4address::LocalHost()
   return (GAddress_INET_SetHostName(m_address, "localhost") == GSOCK_NOERROR);
 }
 
+bool wxIPV4address::AnyAddress()
+{
+  return (GAddress_INET_SetAnyAddress(m_address) == GSOCK_NOERROR);
+}
+
 wxString wxIPV4address::Hostname()
 {
    char hostname[1024];

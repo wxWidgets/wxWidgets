@@ -3,9 +3,8 @@
 // Purpose:    Socket handler classes
 // Authors:    Guilhem Lavaux, Guillermo Rodriguez Garcia
 // Created:    April 1997
-// Updated:    September 1999
-// Copyright:  (C) 1999, 1998, 1997, Guilhem Lavaux
-//             (C) 1999, Guillermo Rodriguez Garcia
+// Copyright:  (C) 1999-1997, Guilhem Lavaux
+//             (C) 2000-1999, Guillermo Rodriguez Garcia
 // RCS_ID:     $Id$
 // License:    see wxWindows license
 /////////////////////////////////////////////////////////////////////////////
@@ -52,7 +51,6 @@
 
 // use wxPostEvent or not
 #define EXPERIMENTAL_USE_POST 1
-
 
 // --------------------------------------------------------------
 // ClassInfos
@@ -168,8 +166,8 @@ wxSocketBase& wxSocketBase::Read(char* buffer, wxUint32 nbytes)
 
   m_lcount = _Read(buffer, nbytes);
 
-  // If in WAITALL mode, all bytes should have been read.
-  if (m_flags & WAITALL)
+  // If in wxSOCKET_WAITALL mode, all bytes should have been read.
+  if (m_flags & wxSOCKET_WAITALL)
     m_error = (m_lcount != nbytes);
   else
     m_error = (m_lcount == 0);
@@ -215,7 +213,7 @@ wxUint32 wxSocketBase::_Read(char* buffer, wxUint32 nbytes)
   {
     while (ret > 0 && nbytes > 0)
     {
-      if (!(m_flags & wxSOCKET_BLOCK) && !(WaitForRead()))
+      if (!(m_flags & wxSOCKET_BLOCK) && !WaitForRead())
           break;
 
       ret = GSocket_Read(m_socket, buffer, nbytes);
@@ -412,7 +410,7 @@ wxUint32 wxSocketBase::_Write(const char *buffer, wxUint32 nbytes)
   {
     while (ret > 0 && nbytes > 0)
     {
-      if (!(m_flags & wxSOCKET_BLOCK) && !(WaitForWrite()))
+      if (!(m_flags & wxSOCKET_BLOCK) && !WaitForWrite())
           break;
 
       ret = GSocket_Write(m_socket, buffer, nbytes);
@@ -629,14 +627,16 @@ void wxSocketBase::RestoreState()
 // wxSocketBase Wait functions
 // --------------------------------------------------------------
 
-// GRG: I have completely rewritten this family of functions
-// so that they don't depend on event notifications; instead,
-// they poll the socket, using GSocket_Select(), to check for
-// the specified combination of event flags, until an event
-// occurs or until the timeout ellapses. The polling loop
-// calls PROCESS_EVENTS(), so this won't block the GUI.
-
-bool wxSocketBase::_Wait(long seconds, long milliseconds, wxSocketEventFlags flags)
+// These WaitXXX unctions do not depend on the event system any
+// longer; instead, they poll the socket, using GSocket_Select()
+// to check for the specified combination of event flags, until
+// an event occurs or until the timeout ellapses. The polling
+// loop calls PROCESS_EVENTS(), so this won't block the GUI.
+//
+// XXX: Should it honour the wxSOCKET_BLOCK flag ?
+//
+bool wxSocketBase::_Wait(long seconds, long milliseconds,
+                         wxSocketEventFlags flags)
 {
   GSocketEventFlags result;
   _wxSocketInternalTimer timer;
@@ -677,7 +677,7 @@ bool wxSocketBase::_Wait(long seconds, long milliseconds, wxSocketEventFlags fla
   // because maybe the WaitXXX functions are not being used.
   //
   // Do this at least once (important if timeout == 0, when
-  // we are just polling)
+  // we are just polling). Also, if just polling, do not yield.
   //
   while (state == -1)
   {
@@ -709,8 +709,8 @@ bool wxSocketBase::_Wait(long seconds, long milliseconds, wxSocketEventFlags fla
     // Wait more?
     if ((timeout == 0) || (m_interrupt))
       break;
-
-    PROCESS_EVENTS();
+    else
+      PROCESS_EVENTS();
   }
 
   timer.Stop();
@@ -824,16 +824,15 @@ void wxSocketBase::OnRequest(wxSocketNotify req_evt)
   wxSocketEvent event(m_id);
   wxSocketEventFlags flag = EventToNotify(req_evt);
 
-  // fprintf(stderr, "%s: Entering OnRequest (evt %d)\n", (m_type == SOCK_CLIENT)? "client" : "server", req_evt);
+  // dbg("Entering OnRequest (evt %d)\n", req_evt);
 
-  // NOTE: this duplicates some of the code in _Wait, (lost
-  // connections and delayed connection establishment) but
-  // this doesn't hurt. It has to be here because maybe the
-  // WaitXXX are not being used, and it has to be in _Wait
-  // as well because the event might be a bit delayed.
-  //
   switch (req_evt)
   {
+    // This duplicates some code in _Wait(), but this doesn't
+    // hurt. It has to be here because we don't know whether
+    // WaitXXX will be used, and it has to be in _Wait as well
+    // because the event might be a bit delayed.
+    //
     case wxSOCKET_CONNECTION :
       m_establishing = FALSE;
       m_connected = TRUE;
@@ -842,19 +841,26 @@ void wxSocketBase::OnRequest(wxSocketNotify req_evt)
       Close();
       break;
 
-  // If we are in the middle of a R/W operation, do not
-  // propagate events to users.
-  //
+    // If we are in the middle of a R/W operation, do not
+    // propagate events to users. Also, filter 'late' events
+    // which are no longer valid.
+    //
     case wxSOCKET_INPUT:
-      if (m_reading) return;
+      if (m_reading || !GSocket_Select(m_socket, GSOCK_INPUT_FLAG))
+        return;
+      else
+        break;
 
     case wxSOCKET_OUTPUT:
-      if (m_writing) return;
+      if (m_writing || !GSocket_Select(m_socket, GSOCK_OUTPUT_FLAG))
+        return;
+      else
+        break;
   }
 
   if (((m_neededreq & flag) == flag) && m_notify_state)
   {
-    // fprintf(stderr, "%s: Evt %d delivered\n", (m_type == SOCK_CLIENT)? "client" : "server", req_evt);
+    // dbg("Evt %d delivered\n", req_evt);
     event.m_socket = this;
     event.m_skevt  = req_evt;
 
@@ -871,7 +877,7 @@ void wxSocketBase::OnRequest(wxSocketNotify req_evt)
 
   }
 
-  // fprintf(stderr, "%s: Exiting OnRequest (evt %d)\n", (m_type == SOCK_CLIENT)? "client" : "server", req_evt);
+  // dbg("Exiting OnRequest (evt %d)\n", req_evt);
 }
 
 void wxSocketBase::OldOnNotify(wxSocketNotify WXUNUSED(evt))

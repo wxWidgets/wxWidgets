@@ -21,9 +21,7 @@
 #include "gsocket.h"
 #endif
 
-#if defined(__BORLANDC__)
 #include <windows.h>
-#endif
 #include <winsock.h>
 
 #ifdef __cplusplus
@@ -69,6 +67,7 @@ struct _GAddress
 
 GSocketError _GSocket_Input_Timeout(GSocket *socket);
 GSocketError _GSocket_Output_Timeout(GSocket *socket);
+GSocketError _GSocket_Connect_Timeout(GSocket *socket);
 int _GSocket_Recv_Stream(GSocket *socket, char *buffer, int size);
 int _GSocket_Recv_Dgram(GSocket *socket, char *buffer, int size);
 int _GSocket_Send_Stream(GSocket *socket, const char *buffer, int size);
@@ -84,10 +83,8 @@ LRESULT CALLBACK _GSocket_Internal_WinProc(HWND, UINT, WPARAM, LPARAM);
 
 GSocketError _GAddress_translate_from(GAddress *address,
                                       struct sockaddr *addr, int len);
-
-GSocketError _GAddress_translate_to(GAddress *address,
-                                    struct sockaddr **addr, int *len);
-
+GSocketError _GAddress_translate_to  (GAddress *address,
+                                      struct sockaddr **addr, int *len);
 GSocketError _GAddress_Init_INET(GAddress *address);
 GSocketError _GAddress_Init_UNIX(GAddress *address);
 
