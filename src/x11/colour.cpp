@@ -1,214 +1,254 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        colour.cpp
 // Purpose:     wxColour class
-// Author:      Julian Smart
+// Author:      Julian Smart, Robert Roebling
 // Modified by:
 // Created:     17/09/98
 // RCS-ID:      $Id$
-// Copyright:   (c) Julian Smart
+// Copyright:   (c) Julian Smart, Robert Roebling
 // Licence:   	wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-//// TODO: make wxColour a ref-counted object,
-//// so pixel values get shared.
 
 #ifdef __GNUG__
 #pragma implementation "colour.h"
 #endif
 
 #include "wx/gdicmn.h"
-#include "wx/colour.h"
-#include "wx/app.h"
-
-#ifdef __VMS__
-#pragma message disable nosimpint
-#endif
-#include <Xm/Xm.h>
-#ifdef __VMS__
-#pragma message enable nosimpint
-#endif
 
 #include "wx/x11/private.h"
 
-IMPLEMENT_DYNAMIC_CLASS(wxColour, wxObject)
+//-----------------------------------------------------------------------------
+// wxColour
+//-----------------------------------------------------------------------------
 
-// Colour
-
-wxColour::wxColour ()
+class wxColourRefData: public wxObjectRefData
 {
-    m_isInit = FALSE;
-    m_red = m_blue = m_green = 0;
-    m_pixel = -1;
-}
-
-wxColour::wxColour (unsigned char r, unsigned char g, unsigned char b)
-{
-    m_red = r;
-    m_green = g;
-    m_blue = b;
-    m_isInit = TRUE;
-    m_pixel = -1;
-}
-
-wxColour::wxColour (const wxColour& col)
-{
-    m_red = col.m_red;
-    m_green = col.m_green;
-    m_blue = col.m_blue;
-    m_isInit = col.m_isInit;
-    m_pixel = col.m_pixel;
-}
-
-wxColour& wxColour::operator =(const wxColour& col)
-{
-    m_red = col.m_red;
-    m_green = col.m_green;
-    m_blue = col.m_blue;
-    m_isInit = col.m_isInit;
-    m_pixel = col.m_pixel;
-    return *this;
-}
-
-void wxColour::InitFromName(const wxString& col)
-{
-    wxColour *the_colour = wxTheColourDatabase->FindColour (col);
-    if (the_colour)
+public:
+    wxColourRefData()
     {
-        m_red = the_colour->Red ();
-        m_green = the_colour->Green ();
-        m_blue = the_colour->Blue ();
-        m_pixel = the_colour->m_pixel;
-        m_isInit = TRUE;
+        m_color.red = 0;
+        m_color.green = 0;
+        m_color.blue = 0;
+        m_color.pixel = 0;
+        m_colormap = (WXColormap *) NULL;
+        m_hasPixel = FALSE;
+    }
+    
+    ~wxColourRefData()
+    {
+        FreeColour();
+    }
+
+    bool operator == (const wxColourRefData& data) const
+    {
+        return (m_colormap == data.m_colormap &&
+                m_hasPixel == data.m_hasPixel &&
+                m_color.red == data.m_color.red &&
+                m_color.green == data.m_color.green &&
+                m_color.blue == data.m_color.blue &&
+                m_color.pixel == data.m_color.pixel);
+    }
+    
+    void FreeColour();
+    void AllocColour( WXColormap cmap );
+
+    XColor       m_color;
+    WXColormap   m_colormap;
+    bool         m_hasPixel;
+
+    friend class wxColour;
+
+    // reference counter for systems with <= 8-Bit display
+    static unsigned short colMapAllocCounter[ 256 ];
+};
+
+unsigned short wxColourRefData::colMapAllocCounter[ 256 ] = 
+{  
+  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+};
+
+void wxColourRefData::FreeColour()
+{
+    if (m_colormap)
+    {
+        Colormap cm = (Colormap)m_colormap;
+
+#if 0        
+        GdkColormapPrivate *private_colormap = (GdkColormapPrivate*) m_colormap;
+        if ((private_colormap->visual->type == GDK_VISUAL_GRAYSCALE) ||
+            (private_colormap->visual->type == GDK_VISUAL_PSEUDO_COLOR))
+        {
+            int idx = m_color.pixel;
+            colMapAllocCounter[ idx ] = colMapAllocCounter[ idx ] - 1;
+        
+            if (colMapAllocCounter[ idx ] == 0)
+            gdk_colormap_free_colors( m_colormap, &m_color, 1 );
+        }
+#endif
+    }
+}
+
+void wxColourRefData::AllocColour( WXColormap cmap )
+{
+    if (m_hasPixel && (m_colormap == cmap))
+        return;
+
+    FreeColour();
+
+#if 0    
+    GdkColormapPrivate *private_colormap = (GdkColormapPrivate*) cmap;
+    if ((private_colormap->visual->type == GDK_VISUAL_GRAYSCALE) ||
+        (private_colormap->visual->type == GDK_VISUAL_PSEUDO_COLOR))
+    {
+        m_hasPixel = gdk_colormap_alloc_color( cmap, &m_color, FALSE, TRUE );
+        int idx = m_color.pixel;
+        colMapAllocCounter[ idx ] = colMapAllocCounter[ idx ] + 1;
+    }
+    else
+#endif
+    {
+        m_hasPixel = XAllocColor( wxGlobalDisplay(), (Colormap) cmap, &m_color );
+    }
+    m_colormap = cmap;
+}
+
+//-----------------------------------------------------------------------------
+
+#define M_COLDATA ((wxColourRefData *)m_refData)
+
+#define SHIFT (8*(sizeof(short int)-sizeof(char)))
+
+IMPLEMENT_DYNAMIC_CLASS(wxColour,wxGDIObject)
+
+wxColour::wxColour( unsigned char red, unsigned char green, unsigned char blue )
+{
+    m_refData = new wxColourRefData();
+    M_COLDATA->m_color.red = ((unsigned short)red) << SHIFT;
+    M_COLDATA->m_color.green = ((unsigned short)green) << SHIFT;
+    M_COLDATA->m_color.blue = ((unsigned short)blue) << SHIFT;
+    M_COLDATA->m_color.pixel = 0;
+}
+
+void wxColour::InitFromName( const wxString &colourName )
+{
+    wxNode *node = (wxNode *) NULL;
+    if ( (wxTheColourDatabase) && (node = wxTheColourDatabase->Find(colourName)) )
+    {
+        wxColour *col = (wxColour*)node->Data();
+        UnRef();
+        if (col) Ref( *col );
     }
     else
     {
-        m_red = 0;
-        m_green = 0;
-        m_blue = 0;
-        m_isInit = FALSE;
-    }
-}
-
-wxColour::~wxColour ()
-{
-}
-
-void wxColour::Set (unsigned char r, unsigned char g, unsigned char b)
-{
-    m_red = r;
-    m_green = g;
-    m_blue = b;
-    m_isInit = TRUE;
-    m_pixel = -1;
-}
-
-// Allocate a colour, or nearest colour, using the given display.
-// If realloc is TRUE, ignore the existing pixel, otherwise just return
-// the existing one.
-// Returns the old or allocated pixel.
-
-// TODO: can this handle mono displays? If not, we should have an extra
-// flag to specify whether this should be black or white by default.
-
-int wxColour::AllocColour(WXDisplay* display, bool realloc)
-{
-    if ((m_pixel != -1) && !realloc)
-        return m_pixel;
-    
-    XColor color;
-    color.red = (unsigned short) Red ();
-    color.red |= color.red << 8;
-    color.green = (unsigned short) Green ();
-    color.green |= color.green << 8;
-    color.blue = (unsigned short) Blue ();
-    color.blue |= color.blue << 8;
-    
-    color.flags = DoRed | DoGreen | DoBlue;
-    
-    WXColormap cmap = wxTheApp->GetMainColormap(display);
-    
-    if (!XAllocColor ((Display*) display, (Colormap) cmap, &color))
-    {
-        m_pixel = wxGetBestMatchingPixel((Display*) display, &color,(Colormap) cmap);
-        return m_pixel;
-    }
-    else
-    {
-        m_pixel = (int) color.pixel;
-        return m_pixel;
-    }
-}
-
-/*-------------------------------------------
-Markus Emmenegger <mege@iqe.ethz.ch>
-Find the pixel value with an assigned color closest to the desired color
-Used if color cell allocation fails
-As the returned pixel value may be in use by another application,
-the color might change anytime.
-But in many cases, that is still better than always using black.
---
-Chris Breeze <chris@hel.co.uk>
-Improvements:
-1) More efficient calculation of RGB distance of colour cell from
-the desired colour. There is no need to take the sqrt of 'dist', and
-since we are only interested in the top 8-bits of R, G and B we
-can perform integer arithmetic.
-2) Attempt to allocate a read-only colour when a close match is found.
-A read-only colour will not change.
-3) Fall back to the closest match if no read-only colours are available.
-
-  Possible further improvements:
-  1) Scan the lookup table and sort the colour cells in order of
-  increasing
-  distance from the desired colour. Then attempt to allocate a
-  read-only
-  colour starting from the nearest match.
-  2) Linear RGB distance is not a particularly good method of colour
-  matching
-  (though it is quick). Converting the colour to HLS and then comparing
-  may give better matching.
--------------------------------------------*/
-
-int wxGetBestMatchingPixel(Display *display, XColor *desiredColor, Colormap cmap)
-{
-    if (cmap == (Colormap) NULL)
-        cmap = (Colormap) wxTheApp->GetMainColormap(display);
-    
-    int numPixVals = XDisplayCells(display, DefaultScreen (display));
-    int mindist = 256 * 256 * 3;
-    int bestpixel = (int) BlackPixel (display, DefaultScreen (display));
-    int red = desiredColor->red >> 8;
-    int green = desiredColor->green >> 8;
-    int blue = desiredColor->blue >> 8;
-    const int threshold = 2 * 2 * 3;    // allow an error of up to 2 in R,G & B
-    
-    for (int pixelcount = 0; pixelcount < numPixVals; pixelcount++)
-    {
-        XColor matching_color;
-        matching_color.pixel = pixelcount;
-        XQueryColor(display,cmap,&matching_color);
-        
-        int delta_red = red - (matching_color.red >> 8);
-        int delta_green = green - (matching_color.green >> 8);
-        int delta_blue = blue - (matching_color.blue >> 8);
-        
-        int dist = delta_red * delta_red +
-            delta_green * delta_green +
-            delta_blue * delta_blue;
-        
-        if (dist <= threshold)
+        m_refData = new wxColourRefData();
+        if (!XParseColor( wxGlobalDisplay(), (Colormap) M_COLDATA->m_colormap, colourName.mb_str(), &M_COLDATA->m_color ))
         {
-            // try to allocate a read-only colour...
-            if (XAllocColor (display, cmap, &matching_color))
-            {
-                return matching_color.pixel;
-            }
-        }
-        if (dist < mindist)
-        {
-            bestpixel = pixelcount;
-            mindist = dist;
+            // VZ: asserts are good in general but this one is triggered by
+            //     calling wxColourDatabase::FindColour() with an
+            //     unrecognized colour name and this can't be avoided from the
+            //     user code, so don't give it here
+            //
+            //     a better solution would be to changed code in FindColour()
+
+            //wxFAIL_MSG( wxT("wxColour: couldn't find colour") );
+
+            delete m_refData;
+            m_refData = (wxObjectRefData *) NULL;
         }
     }
-    return bestpixel;
+}
+
+wxColour::~wxColour()
+{
+}
+
+bool wxColour::operator == ( const wxColour& col ) const
+{
+    if (m_refData == col.m_refData) return TRUE;
+
+    if (!m_refData || !col.m_refData) return FALSE;
+
+    XColor *own = &(((wxColourRefData*)m_refData)->m_color);
+    XColor *other = &(((wxColourRefData*)col.m_refData)->m_color);
+    if (own->red != other->red) return FALSE;
+    if (own->blue != other->blue) return FALSE;
+    if (own->green != other->green) return FALSE;
+
+    return TRUE;
+}
+
+wxObjectRefData *wxColour::CreateRefData() const
+{
+    return new wxColourRefData;
+}
+
+wxObjectRefData *wxColour::CloneRefData(const wxObjectRefData *data) const
+{
+    return new wxColourRefData(*(wxColourRefData *)data);
+}
+
+void wxColour::Set( unsigned char red, unsigned char green, unsigned char blue )
+{
+    AllocExclusive();
+    
+    m_refData = new wxColourRefData();
+    M_COLDATA->m_color.red = ((unsigned short)red) << SHIFT;
+    M_COLDATA->m_color.green = ((unsigned short)green) << SHIFT;
+    M_COLDATA->m_color.blue = ((unsigned short)blue) << SHIFT;
+    M_COLDATA->m_color.pixel = 0;
+}
+
+unsigned char wxColour::Red() const
+{
+    wxCHECK_MSG( Ok(), 0, wxT("invalid colour") );
+
+    return (unsigned char)(M_COLDATA->m_color.red >> SHIFT);
+}
+
+unsigned char wxColour::Green() const
+{
+    wxCHECK_MSG( Ok(), 0, wxT("invalid colour") );
+
+    return (unsigned char)(M_COLDATA->m_color.green >> SHIFT);
+}
+
+unsigned char wxColour::Blue() const
+{
+    wxCHECK_MSG( Ok(), 0, wxT("invalid colour") );
+
+    return (unsigned char)(M_COLDATA->m_color.blue >> SHIFT);
+}
+
+void wxColour::CalcPixel( WXColormap cmap )
+{
+    if (!Ok()) return;
+
+    M_COLDATA->AllocColour( cmap );
+}
+
+unsigned long wxColour::GetPixel() const
+{
+    wxCHECK_MSG( Ok(), 0, wxT("invalid colour") );
+
+    return M_COLDATA->m_color.pixel;
+}
+
+WXColor *wxColour::GetColor() const
+{
+    wxCHECK_MSG( Ok(), (WXColor *) NULL, wxT("invalid colour") );
+
+    return (WXColor*) &M_COLDATA->m_color;
 }

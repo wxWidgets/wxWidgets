@@ -246,6 +246,8 @@ wxWindowDC::wxWindowDC()
 
 wxWindowDC::wxWindowDC( wxWindow *window )
 {
+    wxASSERT_MSG( window, wxT("DC needs a window") );
+
     m_penGC = (GdkGC *) NULL;
     m_brushGC = (GdkGC *) NULL;
     m_textGC = (GdkGC *) NULL;
@@ -255,8 +257,6 @@ wxWindowDC::wxWindowDC( wxWindow *window )
     m_isMemDC = FALSE;
     m_isScreenDC = FALSE;
     m_font = window->GetFont();
-
-    wxASSERT_MSG( window, wxT("DC needs a window") );
 
     GtkWidget *widget = window->m_wxwindow;
 

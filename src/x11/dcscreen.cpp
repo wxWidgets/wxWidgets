@@ -1,11 +1,11 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        dcscreen.cpp
 // Purpose:     wxScreenDC class
-// Author:      Julian Smart
+// Author:      Julian Smart, Robert Roebling
 // Modified by:
 // Created:     17/09/98
 // RCS-ID:      $Id$
-// Copyright:   (c) Julian Smart
+// Copyright:   (c) Julian Smart, Robert Roebling
 // Licence:   	wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -18,117 +18,102 @@
 #include "wx/dcscreen.h"
 #include "wx/utils.h"
 
-#ifdef __VMS__
-#pragma message disable nosimpint
-#endif
-
-#ifdef __VMS__
-#pragma message enable nosimpint
-#endif
-
 #include "wx/x11/private.h"
 
-IMPLEMENT_DYNAMIC_CLASS(wxScreenDC, wxWindowDC)
+//-----------------------------------------------------------------------------
+// global data initialization
+//-----------------------------------------------------------------------------
 
-WXWindow wxScreenDC::sm_overlayWindow = 0;
+WXWindow *wxScreenDC::sm_overlayWindow  = (WXWindow*) NULL;
 int wxScreenDC::sm_overlayWindowX = 0;
 int wxScreenDC::sm_overlayWindowY = 0;
 
-// Create a DC representing the whole screen
+//-----------------------------------------------------------------------------
+// wxScreenDC
+//-----------------------------------------------------------------------------
+
+IMPLEMENT_DYNAMIC_CLASS(wxScreenDC,wxPaintDC)
+
 wxScreenDC::wxScreenDC()
 {
-    m_display = wxGetDisplay();
-    Display* display = (Display*) m_display;
+    m_ok = FALSE;
     
-    if (sm_overlayWindow)
-    {
-        m_pixmap = sm_overlayWindow;
-        m_deviceOriginX = - sm_overlayWindowX;
-        m_deviceOriginY = - sm_overlayWindowY;
-    }
-    else
-        m_pixmap = (WXPixmap) RootWindow(display, DefaultScreen(display));
+    m_display = (WXDisplay *) wxGlobalDisplay();
     
-    XGCValues gcvalues;
-    gcvalues.foreground = BlackPixel (display, DefaultScreen (display));
-    gcvalues.background = WhitePixel (display, DefaultScreen (display));
-    gcvalues.graphics_exposures = False;
-    gcvalues.subwindow_mode = IncludeInferiors;
-    gcvalues.line_width = 1;
-    m_gc = XCreateGC (display, RootWindow (display, DefaultScreen (display)),
-        GCForeground | GCBackground | GCGraphicsExposures | GCLineWidth | GCSubwindowMode,
-        &gcvalues);
+    int screen = DefaultScreen( (Display*) m_display );
+    m_cmap = (WXColormap) DefaultColormap( (Display*) m_display, screen );
     
-    m_backgroundPixel = (int) gcvalues.background;
-    m_ok = TRUE;
+    m_window = (WXWindow) RootWindow( (Display*) m_display, screen );
+
+    m_isScreenDC = TRUE;
+
+    SetUpDC();
+
+    XSetSubwindowMode( (Display*) m_display, (GC) m_penGC, IncludeInferiors );
+    XSetSubwindowMode( (Display*) m_display, (GC) m_brushGC, IncludeInferiors );
+    XSetSubwindowMode( (Display*) m_display, (GC) m_textGC, IncludeInferiors );
+    XSetSubwindowMode( (Display*) m_display, (GC) m_bgGC, IncludeInferiors );
 }
 
 wxScreenDC::~wxScreenDC()
 {
+    XSetSubwindowMode( (Display*) m_display, (GC) m_penGC, ClipByChildren );
+    XSetSubwindowMode( (Display*) m_display, (GC) m_brushGC, ClipByChildren );
+    XSetSubwindowMode( (Display*) m_display, (GC) m_textGC, ClipByChildren );
+    XSetSubwindowMode( (Display*) m_display, (GC) m_bgGC, ClipByChildren );
+
     EndDrawingOnTop();
 }
 
-bool wxScreenDC::StartDrawingOnTop(wxWindow* window)
+bool wxScreenDC::StartDrawingOnTop( wxWindow *window )
 {
-    wxRect rect;
-    int x, y, width, height;
-    window->GetPosition(& x, & y);
-    if (window->GetParent() && !window->IsKindOf(CLASSINFO(wxFrame)))
-        window->GetParent()->ClientToScreen(& x, & y);
-    window->GetSize(& width, & height);
-    rect.x = x; rect.y = y;
-    rect.width = width; rect.height = height;
-    
-    return StartDrawingOnTop(& rect);
-}
+    if (!window) return StartDrawingOnTop();
 
-bool wxScreenDC::StartDrawingOnTop(wxRect* rect)
-{
-    if (sm_overlayWindow)
-        return FALSE;
-    
-    Display *dpy = (Display*) wxGetDisplay();
-    Pixmap screenPixmap = RootWindow(dpy, DefaultScreen(dpy));
-    
     int x = 0;
     int y = 0;
-    int width, height;
-    wxDisplaySize(&width, &height);
-    
+    window->GetPosition( &x, &y );
+    int w = 0;
+    int h = 0;
+    window->GetSize( &w, &h );
+    window->ClientToScreen( &x, &y );
+
+    wxRect rect;
+    rect.x = x;
+    rect.y = y;
+    rect.width = 0;
+    rect.height = 0;
+
+    return StartDrawingOnTop( &rect );
+}
+
+bool wxScreenDC::StartDrawingOnTop( wxRect *rect )
+{
+    int x = 0;
+    int y = 0;
+#if 0
+    int width = gdk_screen_width();
+    int height = gdk_screen_height();
+#else
+    int width = 1024;
+    int height = 768;
+#endif
     if (rect)
     {
-        x = rect->x; y = rect->y;
-        width = rect->width; height = rect->height;
+        x = rect->x;
+        y = rect->y;
+        width = rect->width;
+        height = rect->height;
     }
-    sm_overlayWindowX = x;
-    sm_overlayWindowY = y;
-    
-    XSetWindowAttributes attributes;
-    attributes.override_redirect = True;
-    unsigned long valueMask = CWOverrideRedirect;
-    
-    sm_overlayWindow = (WXWindow) XCreateWindow(dpy, screenPixmap, x, y, width, height, 0,
-        wxDisplayDepth(), InputOutput,
-        DefaultVisual(dpy, 0), valueMask,
-        & attributes);
-    
-    if (sm_overlayWindow)
-    {
-        XMapWindow(dpy, (Window) sm_overlayWindow);
-        return TRUE;
-    }
-    else
-        return FALSE;
+
+    return TRUE;
 }
 
 bool wxScreenDC::EndDrawingOnTop()
 {
-    if (sm_overlayWindow)
-    {
-        XDestroyWindow((Display*) wxGetDisplay(), (Window) sm_overlayWindow);
-        sm_overlayWindow = 0;
-        return TRUE;
-    }
-    else
-        return FALSE;
+    return TRUE;
+}
+
+void wxScreenDC::DoGetSize(int *width, int *height) const
+{
+    wxDisplaySize(width, height);
 }

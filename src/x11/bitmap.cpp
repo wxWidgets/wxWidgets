@@ -531,11 +531,13 @@ wxBitmap wxCreateMaskedBitmap(const wxBitmap& bitmap, wxColour& colour)
     srcDC.SelectObject(bitmap);
     destDC.SelectObject(newBitmap);
 
+#if 0
     wxBrush brush(colour, wxSOLID);
     destDC.SetOptimization(FALSE);
     destDC.SetBackground(brush);
     destDC.Clear();
     destDC.Blit(0, 0, bitmap.GetWidth(), bitmap.GetHeight(), & srcDC, 0, 0, wxCOPY, TRUE);
+#endif
 
     return newBitmap;
 }

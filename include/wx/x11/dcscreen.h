@@ -18,30 +18,33 @@
 
 #include "wx/dcclient.h"
 
-class WXDLLEXPORT wxScreenDC: public wxWindowDC
+//-----------------------------------------------------------------------------
+// wxScreenDC
+//-----------------------------------------------------------------------------
+
+class wxScreenDC : public wxPaintDC
 {
-    DECLARE_DYNAMIC_CLASS(wxScreenDC)
-        
 public:
-    // Create a DC representing the whole screen
     wxScreenDC();
-    ~wxScreenDC();
-    
-    // Compatibility with X's requirements for
-    // drawing on top of all windows
-    static bool StartDrawingOnTop(wxWindow* window);
-    static bool StartDrawingOnTop(wxRect* rect = NULL);
+    virtual ~wxScreenDC();
+
+    static bool StartDrawingOnTop( wxWindow *window );
+    static bool StartDrawingOnTop( wxRect *rect = (wxRect *) NULL );
     static bool EndDrawingOnTop();
-    
+
+    // implementation
+
+    static WXWindow   *sm_overlayWindow;
+    static int         sm_overlayWindowX;
+    static int         sm_overlayWindowY;
+
+protected:
+    virtual void DoGetSize(int *width, int *height) const;
+
 private:
-    static WXWindow sm_overlayWindow;
-    
-    // If we have started transparent drawing at a non-(0,0) point
-    // then we will have to adjust the device origin in the
-    // constructor.
-    static int sm_overlayWindowX;
-    static int sm_overlayWindowY;
+    DECLARE_DYNAMIC_CLASS(wxScreenDC)
 };
+
 
 #endif
 // _WX_DCSCREEN_H_

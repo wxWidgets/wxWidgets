@@ -38,44 +38,28 @@ wxDC::wxDC()
 {
     m_ok = FALSE;
 
+#if 1
     m_mm_to_pix_x = 1.0;
     m_mm_to_pix_y = 1.0;
+#else
+    m_mm_to_pix_x = (double)wxGetDisplaySize().GetWidth() /
+                    (double)wxGetDisplaySizeMM().GetWidth();
+    m_mm_to_pix_y = (double)wxGetDisplaySize().GetHeight() /
+                    (double)wxGetDisplaySizeMM().GetHeight();
+#endif
+
+    m_needComputeScaleX = FALSE; /* not used yet */
+    m_needComputeScaleY = FALSE; /* not used yet */
+
+    m_logicalFunction = wxCOPY;
+
+    m_pen = *wxBLACK_PEN;
+    m_font = *wxNORMAL_FONT;
+    m_brush = *wxWHITE_BRUSH;
 
     m_backgroundMode = wxTRANSPARENT;
 
-    m_isInteractive = FALSE;
-}
-
-void wxDC::DoDrawIcon( const wxIcon &icon, wxCoord x, wxCoord y)
-{
-    wxCHECK_RET( Ok(), "invalid dc" );
-    wxCHECK_RET( icon.Ok(), "invalid icon" );
-
-    DoDrawBitmap(icon, x, y, TRUE);
-}
-
-void wxDC::DoDrawBitmap( const wxBitmap& bitmap, wxCoord x, wxCoord y, bool useMask )
-{
-    wxCHECK_RET( bitmap.Ok(), "invalid bitmap" );
-
-    wxMemoryDC memDC;
-    memDC.SelectObject(bitmap);
-
-#if 0
-    // Not sure if we need this. The mask should leave the masked areas as per
-    // the original background of this DC.
-    if (useMask)
-    {
-        // There might be transparent areas, so make these the same colour as this
-        // DC
-        memDC.SetBackground(* GetBackground());
-        memDC.Clear();
-    }
-#endif // 0
-
-    Blit(x, y, bitmap.GetWidth(), bitmap.GetHeight(), &memDC, 0, 0, wxCOPY, useMask);
-
-    memDC.SelectObject(wxNullBitmap);
+    m_isInteractive = FALSE;  // ???
 }
 
 void wxDC::DoSetClippingRegion( wxCoord x, wxCoord y, wxCoord width, wxCoord height )
@@ -90,14 +74,6 @@ void wxDC::DoSetClippingRegion( wxCoord x, wxCoord y, wxCoord width, wxCoord hei
 void wxDC::DestroyClippingRegion()
 {
     m_clipping = FALSE;
-}
-
-void wxDC::DoGetSize( int* width, int* height ) const
-{
-    if ( width )
-        *width = m_maxX - m_minX;
-    if ( height )
-        *height = m_maxY - m_minY;
 }
 
 void wxDC::DoGetSizeMM( int* width, int* height ) const

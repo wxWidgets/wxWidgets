@@ -43,8 +43,6 @@
 
 class WXDLLEXPORT wxDC : public wxDCBase
 {
-    DECLARE_DYNAMIC_CLASS(wxDC)
-        
 public:
     wxDC();
     ~wxDC() { }
@@ -64,13 +62,8 @@ public:
     virtual void SetAxisOrientation(bool xLeftRight, bool yBottomUp);
     
 protected:
-    virtual void DoDrawIcon(const wxIcon& icon, wxCoord x, wxCoord y);
-    virtual void DoDrawBitmap(const wxBitmap &bmp, wxCoord x, wxCoord y,
-        bool useMask = FALSE);
-    
     virtual void DoSetClippingRegion(wxCoord x, wxCoord y,
         wxCoord width, wxCoord height);
-    virtual void DoGetSize(int *width, int *height) const;
     virtual void DoGetSizeMM(int* width, int* height) const;
     
 public:
@@ -114,15 +107,6 @@ public:
         else
             return (wxCoord)((double)(new_x) * m_scaleX - 0.5) * m_signX + m_deviceOriginX;
     }
-    // Without device translation, for backing pixmap purposes
-    wxCoord XLOG2DEV_2(wxCoord x) const
-    {
-        wxCoord new_x = x - m_logicalOriginX;
-        if (new_x > 0)
-            return (wxCoord)((double)(new_x) * m_scaleX + 0.5) * m_signX;
-        else
-            return (wxCoord)((double)(new_x) * m_scaleX - 0.5) * m_signX;
-    }
     wxCoord XLOG2DEVREL(wxCoord x) const
     {
         if (x > 0)
@@ -137,15 +121,6 @@ public:
             return (wxCoord)((double)(new_y) * m_scaleY + 0.5) * m_signY + m_deviceOriginY;
         else
             return (wxCoord)((double)(new_y) * m_scaleY - 0.5) * m_signY + m_deviceOriginY;
-    }
-    // Without device translation, for backing pixmap purposes
-    wxCoord YLOG2DEV_2(wxCoord y) const
-    {
-        wxCoord new_y = y - m_logicalOriginY;
-        if (new_y > 0)
-            return (wxCoord)((double)(new_y) * m_scaleY + 0.5) * m_signY;
-        else
-            return (wxCoord)((double)(new_y) * m_scaleY - 0.5) * m_signY;
     }
     wxCoord YLOG2DEVREL(wxCoord y) const
     {
@@ -162,6 +137,9 @@ public:
     // recompute scale?
     bool         m_needComputeScaleX, m_needComputeScaleY;
     
+
+private:
+    DECLARE_ABSTRACT_CLASS(wxDC)
 };
 
 #endif

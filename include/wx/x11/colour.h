@@ -1,11 +1,11 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        colour.h
 // Purpose:     wxColour class
-// Author:      Julian Smart
+// Author:      Julian Smart, Robert Roebling
 // Modified by:
 // Created:     17/09/98
 // RCS-ID:      $Id$
-// Copyright:   (c) Julian Smart
+// Copyright:   (c) Julian Smart, Robert Roebling
 // Licence:   	wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -16,77 +16,82 @@
 #pragma interface "colour.h"
 #endif
 
+#include "wx/defs.h"
 #include "wx/object.h"
 #include "wx/string.h"
+#include "wx/gdiobj.h"
+#include "wx/palette.h"
 
-// Colour
-class WXDLLEXPORT wxColour : public wxObject
+//-----------------------------------------------------------------------------
+// classes
+//-----------------------------------------------------------------------------
+
+class wxDC;
+class wxPaintDC;
+class wxBitmap;
+class wxWindow;
+
+class wxColour;
+
+//-----------------------------------------------------------------------------
+// wxColour
+//-----------------------------------------------------------------------------
+
+class wxColour: public wxGDIObject
 {
-    DECLARE_DYNAMIC_CLASS(wxColour)
 public:
-    // ctors
-    // default
-    wxColour();
-    // from RGB
+    wxColour() { }
+  
+    // Construct from RGB
     wxColour( unsigned char red, unsigned char green, unsigned char blue );
     wxColour( unsigned long colRGB ) { Set(colRGB); }
-    
-    // implicit conversion from the colour name
+
+    // Implicit conversion from the colour name
     wxColour( const wxString &colourName ) { InitFromName(colourName); }
     wxColour( const char *colourName ) { InitFromName(colourName); }
-    
-    // copy ctors and assignment operators
-    wxColour( const wxColour& col );
-    wxColour& operator = ( const wxColour& col );
-    
-    // dtor
+
+    wxColour( const wxColour& col ) { Ref(col); }
+    wxColour& operator = ( const wxColour& col ) { Ref(col); return *this; }
+
     ~wxColour();
-    
-    // Set() functions
+
+    bool Ok() const { return m_refData != NULL; }
+  
+    bool operator == ( const wxColour& col ) const;
+    bool operator != ( const wxColour& col ) const { return !(*this == col); }
+
     void Set( unsigned char red, unsigned char green, unsigned char blue );
     void Set( unsigned long colRGB )
     {
-        // we don't need to know sizeof(long) here because we assume that the three
+        // We don't need to know sizeof(long) here because we assume that the three
         // least significant bytes contain the R, G and B values
         Set((unsigned char)colRGB,
             (unsigned char)(colRGB >> 8),
             (unsigned char)(colRGB >> 16));
     }
+
+    unsigned char Red() const;
+    unsigned char Green() const;
+    unsigned char Blue() const;
+
+    // Implementation part
     
-    // accessors
-    bool Ok() const {return m_isInit; }
-    unsigned char Red() const { return m_red; }
-    unsigned char Green() const { return m_green; }
-    unsigned char Blue() const { return m_blue; }
+    void CalcPixel( WXColormap cmap );
+    unsigned long GetPixel() const;
+    WXColor *GetColor() const;
+
+protected:
+    // ref counting code
+    virtual wxObjectRefData *CreateRefData() const;
+    virtual wxObjectRefData *CloneRefData(const wxObjectRefData *data) const;
     
-    int GetPixel() const { return m_pixel; };
-    void SetPixel(int pixel) { m_pixel = pixel; m_isInit = TRUE; };
-    
-    inline bool operator == (const wxColour& colour) const { return (m_red == colour.m_red && m_green == colour.m_green && m_blue == colour.m_blue); }
-    
-    inline bool operator != (const wxColour& colour) const { return (!(m_red == colour.m_red && m_green == colour.m_green && m_blue == colour.m_blue)); }
-    
-    // Allocate a colour, or nearest colour, using the given display.
-    // If realloc is TRUE, ignore the existing pixel, otherwise just return
-    // the existing one.
-    // Returns the allocated pixel.
-    
-    // TODO: can this handle mono displays? If not, we should have an extra
-    // flag to specify whether this should be black or white by default.
-    
-    int AllocColour(WXDisplay* display, bool realloc = FALSE);
-    
-    void InitFromName(const wxString& col);
-    
+    // Helper functions
+    void InitFromName(const wxString& colourName);
+
 private:
-    bool          m_isInit;
-    unsigned char m_red;
-    unsigned char m_blue;
-    unsigned char m_green;
-    
-public:
-    int           m_pixel;
+    DECLARE_DYNAMIC_CLASS(wxColour)
 };
 
 #endif
+
 // _WX_COLOUR_H_

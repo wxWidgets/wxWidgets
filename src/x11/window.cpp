@@ -121,11 +121,7 @@ bool wxWindowX11::Create(wxWindow *parent, wxWindowID id,
 
     CreateBase(parent, id, pos, size, style, wxDefaultValidator, name);
 
-    if (parent)
-        parent->AddChild(this);
-
-    m_backgroundColour = wxSystemSettings::GetColour(wxSYS_COLOUR_3DFACE);
-    m_foregroundColour = *wxBLACK;
+    parent->AddChild(this);
 
     int w = size.GetWidth();
     int h = size.GetHeight();
@@ -136,18 +132,25 @@ bool wxWindowX11::Create(wxWindow *parent, wxWindowID id,
     if (x == -1) x = 0;
     if (y == -1) y = 0;
 
-    int screen = DefaultScreen(wxGlobalDisplay());
+    Display *xdisplay = (Display*) wxGlobalDisplay();
+    int xscreen = DefaultScreen( xdisplay );
+    Colormap cm = DefaultColormap( xdisplay, xscreen );
 
-    Window parentWindow;
-    if (parent)
-        parentWindow = (Window) parent->GetMainWindow();
-    else
-        parentWindow = RootWindow(wxGlobalDisplay(), screen);
+    m_backgroundColour = wxSystemSettings::GetColour(wxSYS_COLOUR_3DFACE);
+    m_backgroundColour.CalcPixel( (WXColormap) cm ); 
+    
+    m_foregroundColour = *wxBLACK;
+    m_foregroundColour.CalcPixel( (WXColormap) cm ); 
+    
 
-    Window window = XCreateSimpleWindow(wxGlobalDisplay(), parentWindow,
-        x, y, w, h, 0,
-        m_backgroundColour.AllocColour(wxGlobalDisplay()),
-					m_foregroundColour.AllocColour(wxGlobalDisplay()));
+    Window parentWindow = (Window) parent->GetMainWindow();
+
+    Window window = XCreateSimpleWindow( 
+        xdisplay, parentWindow,
+        x, y, w, h, 0, 
+        m_backgroundColour.GetPixel(),
+        m_foregroundColour.GetPixel() );
+        
     m_mainWidget = (WXWindow) window;
 
     // Select event types wanted
@@ -411,6 +414,7 @@ void wxWindowX11::WarpPointer (int x, int y)
 // Does a physical scroll
 void wxWindowX11::ScrollWindow(int dx, int dy, const wxRect *rect)
 {
+#if 0
     int x, y, w, h;
     if (rect)
     {
@@ -573,10 +577,7 @@ void wxWindowX11::ScrollWindow(int dx, int dy, const wxRect *rect)
         delete rect;
         node = node->Next();
     }
-    
-    // TODO
-
-    // XmUpdateDisplay((Widget) GetMainWidget());
+#endif
 }
 
 // ---------------------------------------------------------------------------
@@ -697,7 +698,7 @@ void wxWindowX11::DoGetClientSize(int *x, int *y) const
     if (window)
     {
         XWindowAttributes attr;
-        Status status = XGetWindowAttributes(wxGlobalDisplay(), window, & attr);
+        Status status = XGetWindowAttributes( wxGlobalDisplay(), window, &attr );
         wxASSERT(status);
         
         if (status)
@@ -972,9 +973,9 @@ void wxWindowX11::X11SendPaintEvents()
         m_clearRegion.Clear();
     }
 
-    wxNcPaintEvent nc_paint_event( GetId() );
-    nc_paint_event.SetEventObject( this );
-    GetEventHandler()->ProcessEvent( nc_paint_event );
+    // wxNcPaintEvent nc_paint_event( GetId() );
+    // nc_paint_event.SetEventObject( this );
+    // GetEventHandler()->ProcessEvent( nc_paint_event );
 
     wxPaintEvent paint_event( GetId() );
     paint_event.SetEventObject( this );
@@ -1314,9 +1315,15 @@ bool wxWindowX11::SetBackgroundColour(const wxColour& col)
     if (!GetMainWindow())
         return FALSE;
 
+    Display *xdisplay = (Display*) wxGlobalDisplay();
+    int xscreen = DefaultScreen( xdisplay );
+    Colormap cm = DefaultColormap( xdisplay, xscreen );
+
     wxColour colour( col );
+    colour.CalcPixel( (WXColormap) cm );
+    
     XSetWindowAttributes attrib;
-    attrib.background_pixel = colour.AllocColour(wxGlobalDisplay());
+    attrib.background_pixel = colour.GetPixel();
 
     XChangeWindowAttributes(wxGlobalDisplay(),
         (Window) GetMainWindow(),

@@ -1860,6 +1860,7 @@ typedef void*           WXWindow;
 typedef void*           WXWidget;
 typedef void*           WXAppContext;
 typedef void*           WXColormap;
+typedef void*           WXColor;
 typedef void            WXDisplay;
 typedef void            WXEvent;
 typedef void*           WXCursor;

@@ -123,6 +123,9 @@ public:
     // Generates paint events
     void X11SendPaintEvents();
     
+    // Clip to paint region?
+    bool GetClipPaintRegion() { return m_clipPaintRegion; }
+    
     // sets the fore/background colour for the given widget
     static void DoChangeForegroundColour(WXWindow widget, wxColour& foregroundColour);
     static void DoChangeBackgroundColour(WXWindow widget, wxColour& backgroundColour, bool changeArmColour = FALSE);
