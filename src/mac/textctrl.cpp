@@ -216,8 +216,17 @@ static pascal void TPPaneDrawProc(ControlRef theControl, ControlPartCode thePart
                 InvalWindowRect( GetControlOwner( theControl ) , &oldbounds ) ;
             SetRect(&varsp->fRFocusOutline, bounds.left, bounds.top, bounds.right, bounds.bottom);
             SetRect(&varsp->fRTextOutline, bounds.left, bounds.top, bounds.right, bounds.bottom);
-            SetRect(&varsp->fRTextArea, bounds.left + 2 , bounds.top + (varsp->fMultiline ? 0 : 2) ,
-                bounds.right - (varsp->fMultiline ? 0 : 2), bounds.bottom - (varsp->fMultiline ? 0 : 2));
+
+            if (!wxFindControlFromMacControl(theControl)->HasFlag(wxNO_BORDER))
+            {
+                SetRect(&varsp->fRTextArea, bounds.left + 2 , bounds.top + (varsp->fMultiline ? 0 : 2) ,
+                    bounds.right - (varsp->fMultiline ? 0 : 2), bounds.bottom - (varsp->fMultiline ? 0 : 2));
+            }
+            else
+            {
+                SetRect(&varsp->fRTextArea, bounds.left , bounds.top ,
+                    bounds.right, bounds.bottom);
+            }
             RectRgn(varsp->fTextBackgroundRgn, &varsp->fRTextOutline);
             if ( IsControlVisible( theControl ) )
                 TXNSetFrameBounds(  varsp->fTXNRec, varsp->fRTextArea.top, varsp->fRTextArea.left,
@@ -237,9 +246,12 @@ static pascal void TPPaneDrawProc(ControlRef theControl, ControlPartCode thePart
             TXNDraw(varsp->fTXNRec, NULL);
                 /* restore the drawing environment */
                 /* draw the text frame and focus frame (if necessary) */
-            DrawThemeEditTextFrame(&varsp->fRTextOutline, varsp->fIsActive ? kThemeStateActive: kThemeStateInactive);
-            if ((**tpvars).fIsActive && varsp->fInFocus) 
-                DrawThemeFocusRect(&varsp->fRFocusOutline, true);
+            if (!wxFindControlFromMacControl(theControl)->HasFlag(wxNO_BORDER))
+            {
+                DrawThemeEditTextFrame(&varsp->fRTextOutline, varsp->fIsActive ? kThemeStateActive: kThemeStateInactive);
+                if ((**tpvars).fIsActive && varsp->fInFocus) 
+                    DrawThemeFocusRect(&varsp->fRFocusOutline, true);
+            }
                 /* release our globals */
             HSetState((Handle) tpvars, state);
         }
@@ -419,9 +431,12 @@ static pascal void TPPaneActivateProc(ControlHandle theControl, Boolean activati
             /* redraw the frame */
         if ( IsControlVisible( theControl ) )
         {
-            DrawThemeEditTextFrame(&varsp->fRTextOutline, varsp->fIsActive ? kThemeStateActive: kThemeStateInactive);
-            if (varsp->fInFocus) 
-                DrawThemeFocusRect(&varsp->fRFocusOutline, varsp->fIsActive);
+            if (!wxFindControlFromMacControl(theControl)->HasFlag(wxNO_BORDER))
+            {
+                DrawThemeEditTextFrame(&varsp->fRTextOutline, varsp->fIsActive ? kThemeStateActive: kThemeStateInactive);
+                if (varsp->fInFocus) 
+                    DrawThemeFocusRect(&varsp->fRFocusOutline, varsp->fIsActive);
+            }
         }
         HSetState((Handle) tpvars, state);
     }
@@ -482,11 +497,14 @@ static pascal ControlPartCode TPPaneFocusProc(ControlHandle theControl, ControlF
         new focus state */
         if ( IsControlVisible( theControl ) )
         {
+            if (!wxFindControlFromMacControl(theControl)->HasFlag(wxNO_BORDER))
+            {
            /* save the drawing state */
         	SetPort((**tpvars).fDrawingEnvironment);
         	wxMacWindowClipper clipper( wxFindControlFromMacControl(theControl ) ) ;
-            DrawThemeEditTextFrame(&varsp->fRTextOutline, varsp->fIsActive ? kThemeStateActive: kThemeStateInactive);
-            DrawThemeFocusRect(&varsp->fRFocusOutline, varsp->fIsActive && varsp->fInFocus);
+                DrawThemeEditTextFrame(&varsp->fRTextOutline, varsp->fIsActive ? kThemeStateActive: kThemeStateInactive);
+                DrawThemeFocusRect(&varsp->fRFocusOutline, varsp->fIsActive && varsp->fInFocus);
+            }
         }
             /* done */
         HSetState((Handle) tpvars, state);
@@ -548,8 +566,17 @@ OSStatus mUPOpenControl(ControlHandle theControl, long wxStyle )
     GetControlBounds(theControl, &bounds);
     SetRect(&varsp->fRFocusOutline, bounds.left, bounds.top, bounds.right, bounds.bottom);
     SetRect(&varsp->fRTextOutline, bounds.left, bounds.top, bounds.right, bounds.bottom);
-    SetRect(&varsp->fRTextArea, bounds.left + 2 , bounds.top + (varsp->fMultiline ? 0 : 2) ,
-        bounds.right - (varsp->fMultiline ? 0 : 2), bounds.bottom - (varsp->fMultiline ? 0 : 2));
+    if ((wxStyle & wxNO_BORDER) != wxNO_BORDER)
+    {
+        SetRect(&varsp->fRTextArea, bounds.left + 2 , bounds.top + (varsp->fMultiline ? 0 : 2) ,
+                bounds.right - (varsp->fMultiline ? 0 : 2), bounds.bottom - (varsp->fMultiline ? 0 : 2));
+    }
+    else
+    {
+        SetRect(&varsp->fRTextArea, bounds.left , bounds.top ,
+                bounds.right, bounds.bottom);
+    }
+    
         /* calculate the background region for the text.  In this case, it's kindof
         and irregular region because we're setting the scroll bar a little ways inside
         of the text area. */
@@ -731,7 +758,12 @@ bool wxTextCtrl::Create(wxWindow *parent, wxWindowID id,
         return FALSE;
 
     wxSize mySize = size ;
-    if ( m_macUsesTXN )
+    if (style & wxNO_BORDER)
+    {
+        m_macHorizontalBorder = 0 ;
+        m_macVerticalBorder = 0 ;
+    }
+    else if ( m_macUsesTXN )
     {
         m_macHorizontalBorder = 5 ; // additional pixels around the real control
         m_macVerticalBorder = 3 ;
