@@ -9,6 +9,14 @@
 // Licence:     wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
+// ============================================================================
+// declarations
+// ============================================================================
+
+// ----------------------------------------------------------------------------
+// headers
+// ----------------------------------------------------------------------------
+
 #ifdef __GNUG__
     #pragma implementation "radiobut.h"
 #endif
@@ -30,263 +38,153 @@
 
 #include "wx/msw/private.h"
 
-IMPLEMENT_DYNAMIC_CLASS(wxRadioButton, wxControl)
-// IMPLEMENT_DYNAMIC_CLASS(wxBitmapRadioButton, wxRadioButton)
+// ============================================================================
+// wxRadioButton implementation
+// ============================================================================
 
-bool wxRadioButton::MSWCommand(WXUINT param, WXWORD WXUNUSED(id))
+// ----------------------------------------------------------------------------
+// wxRadioButton creation
+// ----------------------------------------------------------------------------
+
+IMPLEMENT_DYNAMIC_CLASS(wxRadioButton, wxControl)
+
+void wxRadioButton::Init()
 {
-  if (param == BN_CLICKED)
-  {
-    wxCommandEvent event(wxEVT_COMMAND_RADIOBUTTON_SELECTED, m_windowId);
-    event.SetEventObject( this );
-    event.SetInt( GetValue() );
-    ProcessCommand(event);
-    return TRUE;
-  }
-  else return FALSE;
+    m_focusJustSet = FALSE;
 }
 
-bool wxRadioButton::Create(wxWindow *parent, wxWindowID id,
-       const wxString& label,
-           const wxPoint& pos,
-           const wxSize& size, long style,
-           const wxValidator& validator,
-           const wxString& name)
+bool wxRadioButton::Create(wxWindow *parent,
+                           wxWindowID id,
+                           const wxString& label,
+                           const wxPoint& pos,
+                           const wxSize& size,
+                           long style,
+                           const wxValidator& validator,
+                           const wxString& name)
 {
-  SetName(name);
-#if wxUSE_VALIDATORS
-  SetValidator(validator);
-#endif // wxUSE_VALIDATORS
+    if ( !CreateControl(parent, id, pos, size, style, validator, name) )
+        return FALSE;
 
-  if (parent) parent->AddChild(this);
+    long msStyle = HasFlag(wxRB_GROUP) ? WS_GROUP : 0;
 
-  SetBackgroundColour(parent->GetBackgroundColour());
-  SetForegroundColour(parent->GetForegroundColour());
+    msStyle |= BS_AUTORADIOBUTTON;
 
-  if ( id == -1 )
-    m_windowId = (int)NewControlId();
-  else
-  m_windowId = id;
-
-  int x = pos.x;
-  int y = pos.y;
-  int width = size.x;
-  int height = size.y;
-
-  m_windowStyle = style ;
-
-  long groupStyle = 0;
-  if (m_windowStyle & wxRB_GROUP)
-    groupStyle = WS_GROUP;
-
-//  long msStyle = groupStyle | RADIO_FLAGS;
-  long msStyle = groupStyle | BS_AUTORADIOBUTTON | WS_CHILD | WS_VISIBLE /* | WS_CLIPSIBLINGS */;
-
-  if ( m_windowStyle & wxCLIP_SIBLINGS )
+    if ( HasFlag(wxCLIP_SIBLINGS) )
         msStyle |= WS_CLIPSIBLINGS;
 
+    if ( !MSWCreateControl(_T("BUTTON"), msStyle, pos, size, label, 0) )
+        return FALSE;
 
-  bool want3D;
-  WXDWORD exStyle = Determine3DEffects(0, &want3D) ;
+    // for compatibility with wxGTK, the first radio button in a group is
+    // always checked (this makes sense anyhow as you need to ensure that at
+    // least one button in the group is checked and this is the simlpest way to
+    // do it)
+    if ( HasFlag(wxRB_GROUP) )
+        SetValue(TRUE);
 
-  // Even with extended styles, need to combine with WS_BORDER
-  // for them to look right.
-/*
-  if ( want3D || wxStyleHasBorder(m_windowStyle) )
-    msStyle |= WS_BORDER;
-*/
-
-  m_hWnd = (WXHWND) CreateWindowEx(exStyle, RADIO_CLASS, (const wxChar *)label,
-                          msStyle,0,0,0,0,
-                          (HWND) parent->GetHWND(), (HMENU)m_windowId, wxGetInstance(), NULL);
-
-  wxCHECK_MSG( m_hWnd, FALSE, wxT("Failed to create radiobutton") );
-
-#if wxUSE_CTL3D
-  if (want3D)
-  {
-    Ctl3dSubclassCtl((HWND) m_hWnd);
-   m_useCtl3D = TRUE;
-  }
-#endif
-
-  SetFont(parent->GetFont());
-
-  // Subclass again for purposes of dialog editing mode
-  SubclassWin((WXHWND)m_hWnd);
-
-//  SetValue(value);
-
-  // start GRW fix
-  if (label != wxT(""))
-  {
-    int label_width, label_height;
-    GetTextExtent(label, &label_width, &label_height, NULL, NULL, & this->GetFont());
-    if (width < 0)
-      width = (int)(label_width + RADIO_SIZE);
-    if (height<0)
-    {
-      height = (int)(label_height);
-      if (height < RADIO_SIZE)
-        height = RADIO_SIZE;
-    }
-  }
-  else
-  {
-    if (width < 0)
-      width = RADIO_SIZE;
-    if (height < 0)
-      height = RADIO_SIZE;
-  }
-  // end GRW fix
-
-  SetSize(x, y, width, height);
-
-  // for compatibility with wxGTK, the first radio button in a group is
-  // always checked (this makes sense anyhow as you need to ensure that at
-  // least one button in the group is checked and this is the simlpest way to
-  // do it)
-  if ( m_windowStyle & wxRB_GROUP )
-      SetValue(TRUE);
-
-  return TRUE;
+    return TRUE;
 }
 
-
-void wxRadioButton::SetLabel(const wxString& label)
-{
-  SetWindowText((HWND) GetHWND(), (const wxChar *)label);
-}
+// ----------------------------------------------------------------------------
+// wxRadioButton functions
+// ----------------------------------------------------------------------------
 
 void wxRadioButton::SetValue(bool value)
 {
-// Following necessary for Win32s, because Win32s translate BM_SETCHECK
-  SendMessage((HWND) GetHWND(), BM_SETCHECK, (WPARAM)value, 0L);
+    // BST_CHECKED is defined as 1, BST_UNCHECKED as 0, so we can just pass
+    // value as is (we don't sue BST_XXX here as they're not defined for Win16)
+    (void)::SendMessage(GetHwnd(), BM_SETCHECK, (WPARAM)value, 0L);
 }
 
-// Get single selection
-bool wxRadioButton::GetValue(void) const
+bool wxRadioButton::GetValue() const
 {
-  return (SendMessage((HWND) GetHWND(), BM_GETCHECK, 0, 0L) != 0);
+    // NB: this will also return TRUE for BST_INDETERMINATE value if we ever
+    //     have 3-state radio buttons
+    return ::SendMessage(GetHwnd(), BM_GETCHECK, 0, 0L) != 0;
 }
 
-void wxRadioButton::Command (wxCommandEvent & event)
+// ----------------------------------------------------------------------------
+// wxRadioButton event processing
+// ----------------------------------------------------------------------------
+
+void wxRadioButton::Command (wxCommandEvent& event)
 {
-  SetValue ( (event.m_commandInt != 0) );
-  ProcessCommand (event);
+    SetValue(event.m_commandInt != 0);
+    ProcessCommand(event);
 }
 
-WXHBRUSH wxRadioButton::OnCtlColor(WXHDC pDC, WXHWND WXUNUSED(pWnd), WXUINT WXUNUSED(nCtlColor),
-#if wxUSE_CTL3D
-                               WXUINT message,
-                               WXWPARAM wParam,
-                               WXLPARAM lParam
-#else
-                               WXUINT WXUNUSED(message),
-                               WXWPARAM WXUNUSED(wParam),
-                               WXLPARAM WXUNUSED(lParam)
-#endif
-    )
+void wxRadioButton::SetFocus()
 {
-#if wxUSE_CTL3D
-    if ( m_useCtl3D )
+    // when the radio button receives a WM_SETFOCUS message it generates a
+    // BN_CLICKED which is totally unexpected and leads to catastrophic results
+    // if you pop up a dialog from the radio button event handler as, when the
+    // dialog is dismissed, the focus is returned to the radio button which
+    // generates BN_CLICKED which leads to showing another dialog and so on
+    // without end!
+    //
+    // to aviod this, we drop the pseudo BN_CLICKED events generated when the
+    // button gains focus
+    m_focusJustSet = TRUE;
+
+    wxControl::SetFocus();
+}
+
+bool wxRadioButton::MSWCommand(WXUINT param, WXWORD WXUNUSED(id))
+{
+    if ( param != BN_CLICKED )
+        return FALSE;
+
+    if ( m_focusJustSet )
     {
-        HBRUSH hbrush = Ctl3dCtlColorEx(message, wParam, lParam);
-        return (WXHBRUSH) hbrush;
+        // see above: we want to ignore this event
+        m_focusJustSet = FALSE;
     }
-#endif // wxUSE_CTL3D
+    else // a real clicked event
+    {
+        wxCommandEvent event(wxEVT_COMMAND_RADIOBUTTON_SELECTED, GetId());
+        event.SetEventObject( this );
+        event.SetInt( GetValue() );
 
-    HDC hdc = (HDC)pDC;
-    if (GetParent()->GetTransparentBackground())
-        SetBkMode(hdc, TRANSPARENT);
+        ProcessCommand(event);
+    }
+
+    return TRUE;
+}
+
+// ----------------------------------------------------------------------------
+// wxRadioButton geometry
+// ----------------------------------------------------------------------------
+
+wxSize wxRadioButton::DoGetBestSize() const
+{
+    static int s_radioSize = 0;
+
+    if ( !s_radioSize )
+    {
+        wxScreenDC dc;
+        dc.SetFont(wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT));
+
+        s_radioSize = dc.GetCharHeight();
+    }
+
+    wxString str = GetLabel();
+
+    int wRadio, hRadio;
+    if ( !str.empty() )
+    {
+        GetTextExtent(str, &wRadio, &hRadio);
+        wRadio += s_radioSize + GetCharWidth();
+
+        if ( hRadio < s_radioSize )
+            hRadio = s_radioSize;
+    }
     else
-        SetBkMode(hdc, OPAQUE);
+    {
+        wRadio = s_radioSize;
+        hRadio = s_radioSize;
+    }
 
-    wxColour colBack = GetBackgroundColour();
-
-    if (!IsEnabled())
-        colBack = wxSystemSettings::GetColour(wxSYS_COLOUR_3DFACE);
-
-    ::SetBkColor(hdc, wxColourToRGB(colBack));
-    ::SetTextColor(hdc, wxColourToRGB(GetForegroundColour()));
-
-    wxBrush *brush = wxTheBrushList->FindOrCreateBrush(colBack, wxSOLID);
-
-    return (WXHBRUSH)brush->GetResourceHandle();
+    return wxSize(wRadio, hRadio);
 }
-
-// Not implemented
-#if 0
-bool wxBitmapRadioButton::Create(wxWindow *parent, wxWindowID id,
-       const wxBitmap *bitmap,
-           const wxPoint& pos,
-           const wxSize& size, long style,
-           const wxValidator& validator,
-           const wxString& name)
-{
-  SetName(name);
-  SetValidator(validator);
-
-  if (parent) parent->AddChild(this);
-  SetBackgroundColour(parent->GetBackgroundColour());
-  SetForegroundColour(parent->GetForegroundColour());
-
-  if ( id == -1 )
-    m_windowId = (int)NewControlId();
-  else
-  m_windowId = id;
-
-  int x = pos.x;
-  int y = pos.y;
-  int width = size.x;
-  int height = size.y;
-  m_windowStyle = style ;
-
-  long groupStyle = 0;
-  if (m_windowStyle & wxRB_GROUP)
-    groupStyle = WS_GROUP;
-
-//  long msStyle = groupStyle | RADIO_FLAGS;
-  long msStyle = groupStyle | BS_RADIOBUTTON | WS_CHILD | WS_VISIBLE ;
-
-  m_hWnd = (WXHWND) CreateWindowEx(MakeExtendedStyle(m_windowStyle), RADIO_CLASS, "toggle",
-                          msStyle,0,0,0,0,
-                          (HWND) parent->GetHWND(), (HMENU)m_windowId, wxGetInstance(), NULL);
-
-  wxCHECK_MSG( m_hWnd, "Failed to create radio button", FALSE );
-
-#if wxUSE_CTL3D
-  if (!(GetParent()->GetWindowStyleFlag() & wxUSER_COLOURS))
-  {
-    Ctl3dSubclassCtl((HWND) GetHWND());
-    m_useCtl3D = TRUE;
-  }
-#endif
-
-  // Subclass again for purposes of dialog editing mode
-  SubclassWin(GetHWND());
-
-  SetSize(x, y, width, height);
-
-  return TRUE;
-}
-
-void wxBitmapRadioButton::SetLabel(const wxBitmap *bitmap)
-{
-}
-
-void wxBitmapRadioButton::SetValue(bool value)
-{
-// Following necessary for Win32s, because Win32s translate BM_SETCHECK
-  SendMessage((HWND) GetHWND(), BM_SETCHECK, (WPARAM)value, 0L);
-}
-
-// Get single selection, for single choice list items
-bool wxBitmapRadioButton::GetValue(void) const
-{
-  return (bool)SendMessage((HWND) GetHWND(), BM_GETCHECK, 0, 0L);
-}
-
-#endif
 
 #endif // wxUSE_RADIOBTN

@@ -13,41 +13,59 @@
 #define _WX_RADIOBUT_H_
 
 #ifdef __GNUG__
-#pragma interface "radiobut.h"
+    #pragma interface "radiobut.h"
 #endif
 
 class WXDLLEXPORT wxRadioButton: public wxControl
 {
-  DECLARE_DYNAMIC_CLASS(wxRadioButton)
- protected:
- public:
-  inline wxRadioButton(void) {}
-  inline wxRadioButton(wxWindow *parent, wxWindowID id,
-           const wxString& label,
-           const wxPoint& pos = wxDefaultPosition,
-           const wxSize& size = wxDefaultSize, long style = 0,
-           const wxValidator& validator = wxDefaultValidator,
-           const wxString& name = wxRadioButtonNameStr)
-  {
-      Create(parent, id, label, pos, size, style, validator, name);
-  }
+public:
+    // ctors and creation functions
+    wxRadioButton() { Init(); }
 
-  bool Create(wxWindow *parent, wxWindowID id,
-           const wxString& label,
-           const wxPoint& pos = wxDefaultPosition,
-           const wxSize& size = wxDefaultSize, long style = 0,
-           const wxValidator& validator = wxDefaultValidator,
-           const wxString& name = wxRadioButtonNameStr);
+    wxRadioButton(wxWindow *parent,
+                  wxWindowID id,
+                  const wxString& label,
+                  const wxPoint& pos = wxDefaultPosition,
+                  const wxSize& size = wxDefaultSize,
+                  long style = 0,
+                  const wxValidator& validator = wxDefaultValidator,
+                  const wxString& name = wxRadioButtonNameStr)
+    {
+        Init();
 
-  virtual void SetLabel(const wxString& label);
-  virtual void SetValue(bool val);
-  virtual bool GetValue(void) const ;
+        Create(parent, id, label, pos, size, style, validator, name);
+    }
 
-  bool MSWCommand(WXUINT param, WXWORD id);
-  virtual WXHBRUSH OnCtlColor(WXHDC pDC, WXHWND pWnd, WXUINT nCtlColor,
-            WXUINT message, WXWPARAM wParam, WXLPARAM lParam);
+    bool Create(wxWindow *parent,
+                wxWindowID id,
+                const wxString& label,
+                const wxPoint& pos = wxDefaultPosition,
+                const wxSize& size = wxDefaultSize,
+                long style = 0,
+                const wxValidator& validator = wxDefaultValidator,
+                const wxString& name = wxRadioButtonNameStr);
 
-  void Command(wxCommandEvent& event);
+    // implement the radio button interface
+    virtual void SetValue(bool value);
+    virtual bool GetValue() const;
+
+    // implementation only from now on
+    virtual bool MSWCommand(WXUINT param, WXWORD id);
+    virtual void Command(wxCommandEvent& event);
+
+    virtual void SetFocus();
+
+protected:
+    virtual wxSize DoGetBestSize() const;
+
+private:
+    // common part of all ctors
+    void Init();
+
+    // see the comments in SetFocus()
+    bool m_focusJustSet;
+
+    DECLARE_DYNAMIC_CLASS(wxRadioButton)
 };
 
 #endif
