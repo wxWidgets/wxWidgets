@@ -181,6 +181,11 @@ public:
     void DrawText(const wxString& text, const wxPoint& pt)
         { DoDrawText(text, pt.x, pt.y); }
 
+    void DrawRotatedText(const wxString& text, wxCoord x, wxCoord y, double angle)
+        { DoDrawRotatedText(text, x, y, angle); }
+    void DrawRotatedText(const wxString& text, const wxPoint& pt, double angle)
+        { DoDrawRotatedText(text, pt.x, pt.y, angle); }
+
     bool Blit(wxCoord xdest, wxCoord ydest, wxCoord width, wxCoord height,
               wxDC *source, wxCoord xsrc, wxCoord ysrc,
               int rop = wxCOPY, bool useMask = FALSE)
@@ -497,6 +502,8 @@ protected:
                               bool useMask = FALSE) = 0;
 
     virtual void DoDrawText(const wxString& text, wxCoord x, wxCoord y) = 0;
+    virtual void DoDrawRotatedText(const wxString& text,
+                                   wxCoord x, wxCoord y, double angle) = 0;
 
     virtual bool DoBlit(wxCoord xdest, wxCoord ydest,
                         wxCoord width, wxCoord height,

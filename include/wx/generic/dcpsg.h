@@ -86,6 +86,7 @@ public:
   void DoDrawBitmap( const wxBitmap& bitmap, wxCoord x, wxCoord y, bool useMask=FALSE );
 
   void DoDrawText(const wxString& text, wxCoord x, wxCoord y );
+  void DoDrawRotatedText(const wxString& text, wxCoord x, wxCoord y, double angle);
 
   void Clear();
   void SetFont( const wxFont& font );

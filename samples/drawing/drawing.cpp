@@ -278,6 +278,9 @@ void MyCanvas::OnPaint(wxPaintEvent &WXUNUSED(event))
 
     dc.DrawText( "This is text", 110, 10 );
 
+    dc.DrawRotatedText( "+90 rotated text", 30, 30, 90 );
+    dc.DrawRotatedText( "-90 rotated text", 30, 30, -90 );
+
     dc.SetFont( wxFont( 18, wxSWISS, wxNORMAL, wxNORMAL ) );
 
     dc.DrawText( "This is Swiss 18pt text.", 110, 40 );

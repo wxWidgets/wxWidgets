@@ -75,8 +75,6 @@ static Pixmap bdiag, cdiag, fdiag, cross, horiz, verti;
 // constants
 // ----------------------------------------------------------------------------
 
-#define RAD2DEG 57.2957795131
-
 // Fudge factor (VZ: what??)
 #define WX_GC_CF 1
 
@@ -105,6 +103,25 @@ static void XCopyRemote(Display *src_display, Display *dest_display,
 // ============================================================================
 // implementation
 // ============================================================================
+
+/*
+ * compare two doubles and return the larger rounded
+ * to the nearest int
+ */
+static int roundmax(double a, double b)
+{
+    return (int)((a > b ? a : b) + 0.5);
+}
+
+/*
+ * compare two doubles and return the smaller rounded
+ * to the nearest int
+ */
+static int roundmin(double a, double b)
+{
+    return (int)((a < b ? a : b) - 0.5);
+}
+
 
 // ----------------------------------------------------------------------------
 // wxWindowDC
@@ -1171,6 +1188,145 @@ void wxWindowDC::DoDrawText( const wxString &text, wxCoord x, wxCoord y )
     CalcBoundingBox (x, y);
 }
 
+void wxWindowDC::DoDrawRotatedText( const wxString &text, wxCoord x, wxCoord y, double angle )
+{
+    if (angle == 0.0)
+    {
+        DrawText(text, x, y);
+        return;
+    }
+
+    wxCHECK_RET( Ok(), "invalid dc" );
+
+    // Since X draws from the baseline of the text, must add the text height
+    int cx = 0;
+    int cy = 0;
+    int ascent = 0;
+    int slen;
+
+    slen = strlen(text);
+
+    if (m_font.Ok())
+    {
+        // Calculate text extent.
+        WXFontStructPtr pFontStruct = m_font.GetFontStruct(m_userScaleY*m_logicalScaleY, m_display);
+        int direction, descent;
+        XCharStruct overall_return;
+#if 0
+        if (use16)
+            (void)XTextExtents16((XFontStruct*) pFontStruct, (XChar2b *)(const char*) text, slen, &direction,
+            &ascent, &descent, &overall_return);
+        else
+#endif // 0
+            (void)XTextExtents((XFontStruct*) pFontStruct, (char*) (const char*) text, slen, &direction,
+                               &ascent, &descent, &overall_return);
+
+        cx = overall_return.width;
+        cy = ascent + descent;
+    }
+
+    wxBitmap src(cx, cy);
+    wxMemoryDC dc;
+    dc.SelectObject(src);
+    dc.SetFont(GetFont());
+    dc.SetBackground(*wxWHITE_BRUSH);
+    dc.SetBrush(*wxBLACK_BRUSH);
+    dc.Clear();
+    dc.DrawText(text, 0, 0);
+    dc.SetFont(wxNullFont);
+
+    // Calculate the size of the rotated bounding box.
+    double dx = cos(angle / 180.0 * M_PI);
+    double dy = sin(angle / 180.0 * M_PI);
+    double x4 = -cy * dy;
+    double y4 = cy * dx;
+    double x3 = cx * dx;
+    double y3 = cx * dy;
+    double x2 = x3 + x4;
+    double y2 = y3 + y4;
+    double x1 = x;
+    double y1 = y;
+
+    // Create image from the source bitmap after writing the text into it.
+    wxImage  image(src);
+
+    int minx = roundmin(0, roundmin(x4, roundmin(x2, x3)));
+    int miny = roundmin(0, roundmin(y4, roundmin(y2, y3)));
+    int maxx = roundmax(0, roundmax(x4, roundmax(x2, x3)));
+    int maxy = roundmax(0, roundmax(y4, roundmax(y2, y3)));
+
+    // This rotates counterclockwise around the top left corner.
+    for (int rx = minx; rx < maxx; rx++)
+    {
+        for (int ry = miny; ry < maxy; ry++)
+        {
+            // transform dest coords to source coords
+            int sx = (int) (rx * dx + ry * dy + 0.5);
+            int sy = (int) (ry * dx - rx * dy + 0.5);
+            if (sx >= 0 && sx < cx && sy >= 0 && sy < cy)
+            {
+                // draw black pixels, ignore white ones (i.e. transparent b/g)
+                if (image.GetRed(sx, sy) == 0)
+                {
+                {
+                    DrawPoint(x1 + maxx - rx, cy + y1 - ry);
+                }
+                else
+                {
+                    // Background
+                    //DrawPoint(x1 + maxx - rx, cy + y1 + maxy - ry);
+                }
+            }
+        }
+    }
+
+#if 0
+    // First draw a rectangle representing the text background, if a text
+    // background is specified
+    if (m_textBackgroundColour.Ok () && (m_backgroundMode != wxTRANSPARENT))
+    {
+        wxColour oldPenColour = m_currentColour;
+        m_currentColour = m_textBackgroundColour;
+        bool sameColour = (oldPenColour.Ok () && m_textBackgroundColour.Ok () &&
+            (oldPenColour.Red () == m_textBackgroundColour.Red ()) &&
+            (oldPenColour.Blue () == m_textBackgroundColour.Blue ()) &&
+            (oldPenColour.Green () == m_textBackgroundColour.Green ()));
+
+        // This separation of the big && test required for gcc2.7/HP UX 9.02
+        // or pixel value can be corrupted!
+        sameColour = (sameColour &&
+            (oldPenColour.GetPixel() == m_textBackgroundColour.GetPixel()));
+
+        if (!sameColour || !GetOptimization())
+        {
+            int pixel = m_textBackgroundColour.AllocColour(m_display);
+            m_currentColour = m_textBackgroundColour;
+
+            // Set the GC to the required colour
+            if (pixel > -1)
+            {
+                XSetForeground ((Display*) m_display, (GC) m_gc, pixel);
+                if (m_window && m_window->GetBackingPixmap())
+                    XSetForeground ((Display*) m_display,(GC) m_gcBacking, pixel);
+            }
+        }
+        else
+            m_textBackgroundColour = oldPenColour ;
+
+        XFillRectangle ((Display*) m_display, (Pixmap) m_pixmap, (GC) m_gc, XLOG2DEV (x), YLOG2DEV (y), cx, cy);
+        if (m_window && m_window->GetBackingPixmap())
+            XFillRectangle ((Display*) m_display, (Pixmap) m_window->GetBackingPixmap(),(GC) m_gcBacking,
+            XLOG2DEV_2 (x), YLOG2DEV_2 (y), cx, cy);
+    }
+#endif
+
+    long w, h;
+    // XXX use pixmap size
+    GetTextExtent (text, &w, &h);
+    CalcBoundingBox (x + w, y + h);
+    CalcBoundingBox (x, y);
+}
+
 bool wxWindowDC::CanGetTextExtent() const
 {
     return TRUE;
@@ -2205,7 +2361,7 @@ static void wx_spline_draw_point_array(wxDC *dc)
 void wxWindowDC::DoDrawSpline( wxList *points )
 {
     wxCHECK_RET( Ok(), wxT("invalid window dc") );
-  
+
     wxPoint *p;
     double           cx1, cy1, cx2, cy2, cx3, cy3, cx4, cy4;
     double           x1, y1, x2, y2;

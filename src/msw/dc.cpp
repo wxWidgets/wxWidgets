@@ -655,6 +655,13 @@ void wxDC::DoDrawText(const wxString& text, wxCoord x, wxCoord y)
     CalcBoundingBox((x + w), (y + h));
 }
 
+void wxDC::DoDrawRotatedText(const wxString& text,
+                             wxCoord x, wxCoord y,
+                             double angle)
+{
+    wxFAIL_MSG( _T("TODO") );
+}
+
 // ---------------------------------------------------------------------------
 // set GDI objects
 // ---------------------------------------------------------------------------

@@ -16,12 +16,15 @@ wxBase:
 
 all (GUI):
 - wxMenu(Bar)::Insert() and Remove() functions for dynamic menu menagament
+- wxToolBar supports arbitrary controls (not only buttons) and can be
+  dynamically changed (Delete/Insert functions)
+- wxDC::DrawRotatedText() (contributed by Hans-Joachim Baader, limited to
+  +/-90 degrees for now - contributions to improve it are welcome!)
 
 wxMSW:
 
 - wxTreeCtrl::IsVisible() bug fixed (thanks to Gary Chessun)
 - tooltips work with wxRadioBox
-- arbitrary controls (and not only buttons) can be put into a toolbar
 
 wxGTK:
 

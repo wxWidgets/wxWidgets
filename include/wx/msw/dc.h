@@ -166,6 +166,8 @@ protected:
                               bool useMask = FALSE);
 
     virtual void DoDrawText(const wxString& text, wxCoord x, wxCoord y);
+    virtual void DoDrawRotatedText(const wxString& text, wxCoord x, wxCoord y,
+                                   double angle);
 
     virtual bool DoBlit(wxCoord xdest, wxCoord ydest, wxCoord width, wxCoord height,
                         wxDC *source, wxCoord xsrc, wxCoord ysrc,

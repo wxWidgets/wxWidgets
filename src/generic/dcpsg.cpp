@@ -1240,6 +1240,116 @@ void wxPostScriptDC::DoDrawText( const wxString& text, wxCoord x, wxCoord y )
     CalcBoundingBox( x + size * text.Length() * 2/3 , y );
 }
 
+void wxPostScriptDC::DoDrawRotatedText( const wxString& text, wxCoord x, wxCoord y, double angle )
+{
+    if (angle == 0.0)
+    {
+        DoDrawText(text, x, y);
+        return;
+    }
+
+    wxCHECK_RET( m_ok && m_pstream, wxT("invalid postscript dc") );
+
+    SetFont( m_font );
+
+    if (m_textForegroundColour.Ok())
+    {
+        unsigned char red = m_textForegroundColour.Red();
+        unsigned char blue = m_textForegroundColour.Blue();
+        unsigned char green = m_textForegroundColour.Green();
+
+        if (!m_colour)
+        {
+            // Anything not white is black
+            if (! (red == (unsigned char) 255 && 
+	           blue == (unsigned char) 255 &&
+		   green == (unsigned char) 255))
+            {
+                red = (unsigned char) 0;
+                green = (unsigned char) 0;
+                blue = (unsigned char) 0;
+            }
+        }
+
+        // maybe setgray here ?
+        if (!(red == m_currentRed && green == m_currentGreen && blue == m_currentBlue))
+        {
+            double redPS = (double)(red) / 255.0;
+            double bluePS = (double)(blue) / 255.0;
+            double greenPS = (double)(green) / 255.0;
+	
+	    fprintf( m_pstream, 
+	            "%.8f %.8f %.8f setrgbcolor\n",
+		    redPS, greenPS, bluePS );
+		
+            m_currentRed = red;
+            m_currentBlue = blue;
+            m_currentGreen = green;
+        }
+    }
+
+    int size = m_font.GetPointSize();
+
+    long by = y + (long)floor( double(size) * 2.0 / 3.0 ); // approximate baseline
+
+    // XXX only correct for 90 degrees
+    fprintf( m_pstream, "%ld %ld moveto\n", XLOG2DEV(x + size), YLOG2DEV(by) );
+    fprintf(m_pstream, "%.8f rotate\n", angle);
+
+    /* I don't know how to write char to a stream, so I use a mini string */
+    char tmpbuf[2];
+    tmpbuf[1] = 0;
+    
+    fprintf( m_pstream, "(" );
+    const wxWX2MBbuf textbuf = text.mb_str();
+    int len = strlen(textbuf);
+    int i;
+    for (i = 0; i < len; i++)
+    {
+        int c = (unsigned char) textbuf[i];
+        if (c == ')' || c == '(' || c == '\\')
+        {
+            /* Cope with special characters */
+	    fprintf( m_pstream, "\\" );
+	    tmpbuf[0] = (char) c;
+	    fprintf( m_pstream, tmpbuf );
+        }
+        else if ( c >= 128 )
+        {
+            /* Cope with character codes > 127 */
+	    fprintf(m_pstream, "\\%o", c);
+        }
+        else
+	{
+	    tmpbuf[0] = (char) c;
+	    fprintf( m_pstream, tmpbuf );
+	}
+    }
+    
+    fprintf( m_pstream, ") show\n" );
+    fprintf( m_pstream, "%.8f rotate\n", -angle );
+
+    if (m_font.GetUnderlined())
+    {
+        long uy = (long)(y + size - m_underlinePosition);
+        long w, h;
+        GetTextExtent(text, &w, &h);
+
+        fprintf( m_pstream, 
+	        "gsave\n"
+		"%ld %ld moveto\n"		
+		"%ld setlinewidth\n"
+		"%ld %ld lineto\n"
+		"stroke\n"
+		"grestore\n", 
+                XLOG2DEV(x), YLOG2DEV(uy),
+		(long)m_underlineThickness,
+		XLOG2DEV(x + w), YLOG2DEV(uy) );
+    }
+
+    CalcBoundingBox( x, y );
+    CalcBoundingBox( x + size * text.Length() * 2/3 , y );
+}
 
 void wxPostScriptDC::SetBackground (const wxBrush& brush)
 {

@@ -70,6 +70,8 @@ public:
                          int logical_func = wxCOPY, bool useMask = FALSE );
 
     virtual void DoDrawText( const wxString &text, wxCoord x, wxCoord y );
+    virtual void DoDrawRotatedText(const wxString& text, wxCoord x, wxCoord y,
+                                   double angle);
     virtual void DoGetTextExtent( const wxString &string,
                                 wxCoord *width, wxCoord *height,
                                 wxCoord *descent = (wxCoord *) NULL,
