@@ -17,8 +17,9 @@ DATAFILES = samples.inc breeder.lif
 
 PROGRAM=life
 
-OBJECTS=$(PROGRAM).o dialogs.o game.o reader.o
+OBJECTS =$(PROGRAM).o dialogs.o game.o reader.o
+DEPFILES=$(PROGRAM).d dialogs.d game.d reader.d
 
 include ../../src/makeprog.env
 
-
+-include $(DEPFILES)

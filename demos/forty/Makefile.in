@@ -15,7 +15,9 @@ program_dir = demos/forty
 
 PROGRAM=forty
 
-OBJECTS=$(PROGRAM).o canvas.o card.o game.o pile.o playerdg.o scoredg.o scorefil.o
+OBJECTS =$(PROGRAM).o canvas.o card.o game.o pile.o playerdg.o scoredg.o scorefil.o
+DEPFILES=$(PROGRAM).d canvas.d card.d game.d pile.d playerdg.d scoredg.d scorefil.d
 
 include ../../src/makeprog.env
 
+-include $(DEPFILES)

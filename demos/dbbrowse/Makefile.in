@@ -15,9 +15,11 @@ program_dir = demos/dbbrowse
 
 PROGRAM=dbbrowse
 
-
-OBJECTS= dbbrowse.o doc.o pgmctrl.o tabpgwin.o \
-         browsedb.o dbtree.o dbgrid.o  dlguser.o
+OBJECTS = dbbrowse.o doc.o pgmctrl.o tabpgwin.o \
+          browsedb.o dbtree.o dbgrid.o dlguser.o
+DEPFILES= dbbrowse.d doc.d pgmctrl.d tabpgwin.d \
+          browsedb.d dbtree.d dbgrid.d dlguser.d
 
 include ../../src/makeprog.env
 
+-include $(DEPFILES)
