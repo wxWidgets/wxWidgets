@@ -229,6 +229,14 @@
 #   endif
 #endif /* !defined(wxUSE_LOGWINDOW) */
 
+#ifndef wxUSE_LOG_DIALOG
+#   ifdef wxABORT_ON_CONFIG_ERROR
+#       error "wxUSE_LOG_DIALOG must be defined."
+#   else
+#       define wxUSE_LOG_DIALOG 0
+#   endif
+#endif /* !defined(wxUSE_LOGWINDOW) */
+
 #ifndef wxUSE_MDI_ARCHITECTURE
 #   ifdef wxABORT_ON_CONFIG_ERROR
 #       error "wxUSE_MDI_ARCHITECTURE must be defined."
@@ -715,6 +723,17 @@
 #        endif
 #    endif
 #endif /* wxUSE_LOGWINDOW */
+
+#if wxUSE_LOG_DIALOG
+#    if !wxUSE_LISTCTRL
+#        ifdef wxABORT_ON_CONFIG_ERROR
+#            error "wxUSE_LOG_DIALOG requires wxUSE_LISTCTRL"
+#        else
+#            undef wxUSE_LISTCTRL
+#            define wxUSE_LISTCTRL 1
+#        endif
+#    endif
+#endif /* wxUSE_LOG_DIALOG */
 
 /* I wonder if we shouldn't just remove all occurrences of
    wxUSE_DYNAMIC_CLASSES from the sources? */

@@ -30,6 +30,9 @@
 #define wxUSE_UNICODE 0
 #define wxUSE_WCHAR_T 0
 #define wxUSE_LOG 1
+#define wxUSE_LOGGUI 1
+#define wxUSE_LOGWINDOW 1
+#define wxUSE_LOG_DIALOG 0
 #define wxUSE_THREADS 0
 #define wxUSE_STREAMS       0
 #define wxUSE_STD_IOSTREAM  0
@@ -44,11 +47,6 @@
 #define wxUSE_DIALUP_MANAGER   0
 #define wxUSE_DYNLIB_CLASS  0
 #define wxUSE_SOCKETS       0
-#define wxUSE_FILESYSTEM    0
-#define wxUSE_FS_ZIP        0
-#define wxUSE_FS_INET       0
-#define wxUSE_ZIPSTREAM     0
-#define wxUSE_ZLIB          0
 #define wxUSE_FILESYSTEM    0
 #define wxUSE_FS_ZIP        0
 #define wxUSE_FS_INET       0
@@ -133,6 +131,7 @@
 #define wxUSE_IPC         0
 #define wxUSE_HELP        0
 #define wxUSE_MS_HTML_HELP 0
+#define wxUSE_WXHTML_HELP 0
 #define wxUSE_RESOURCES   0
 #define wxUSE_CONSTRAINTS 1
 #define wxUSE_CLIPBOARD   0

@@ -152,7 +152,7 @@ END_EVENT_TABLE()
 // private functions
 // ----------------------------------------------------------------------------
 
-#if wxUSE_FILE
+#if wxUSE_FILE && wxUSE_FILEDLG
 
 // pass an uninitialized file object, the function will ask the user for the
 // filename and try to open it, returns TRUE on success (file was opened),
@@ -167,7 +167,7 @@ static int OpenLogFile(wxFile& file, wxString *filename = NULL);
 // ----------------------------------------------------------------------------
 
 // we use a global variable to store the frame pointer for wxLogStatus - bad,
-// but it's he easiest way
+// but it's the easiest way
 static wxFrame *gs_pFrame; // FIXME MT-unsafe
 
 // ============================================================================
@@ -261,6 +261,7 @@ void wxLogGui::Flush()
     else // more than one message
     {
 #if wxUSE_LOG_DIALOG
+
         wxLogDialog dlg(parent,
                         m_aMessages, m_aSeverity, m_aTimes,
                         title, style);
@@ -504,6 +505,7 @@ void wxLogFrame::OnCloseWindow(wxCloseEvent& WXUNUSED(event))
 #if wxUSE_FILE
 void wxLogFrame::OnSave(wxCommandEvent& WXUNUSED(event))
 {
+#if wxUSE_FILEDLG
     wxString filename;
     wxFile file;
     int rc = OpenLogFile(file, &filename);
@@ -532,6 +534,7 @@ void wxLogFrame::OnSave(wxCommandEvent& WXUNUSED(event))
     else {
         wxLogStatus(this, _("Log saved to the file '%s'."), filename.c_str());
     }
+#endif
 }
 #endif // wxUSE_FILE
 
@@ -891,6 +894,7 @@ void wxLogDialog::OnOk(wxCommandEvent& WXUNUSED(event))
 
 void wxLogDialog::OnSave(wxCommandEvent& WXUNUSED(event))
 {
+#if wxUSE_FILEDLG
     wxFile file;
     int rc = OpenLogFile(file);
     if ( rc == -1 )
@@ -925,6 +929,7 @@ void wxLogDialog::OnSave(wxCommandEvent& WXUNUSED(event))
 
     if ( !ok )
         wxLogError(_("Can't save log contents to file."));
+#endif
 }
 
 #endif // wxUSE_FILE
@@ -991,7 +996,7 @@ wxLogDialog::~wxLogDialog()
 
 #endif // wxUSE_LOG_DIALOG
 
-#if wxUSE_FILE
+#if wxUSE_FILE && wxUSE_FILEDLG
 
 // pass an uninitialized file object, the function will ask the user for the
 // filename and try to open it, returns TRUE on success (file was opened),

@@ -634,7 +634,7 @@ SOURCE=.\generic\sashwin.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\generic\scrolwin.cpp
+SOURCE=.\generic\scrlwing.cpp
 # End Source File
 # Begin Source File
 

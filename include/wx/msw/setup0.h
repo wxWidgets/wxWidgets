@@ -199,6 +199,9 @@
 // Recommended setting: 1 (always)
 #define wxUSE_LOGGUI 1
 
+// Recommended setting: 1 (always)
+#define wxUSE_LOG_DIALOG 1
+
 // Support for multithreaded applications: if 1, compile in thread classes
 // (thread.h) and make the library a bit more thread safe. Although thread
 // support is quite stable by now, you may still consider recompiling the
