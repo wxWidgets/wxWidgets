@@ -164,13 +164,13 @@ wxColour wxSystemSettings::GetSystemColour( int index )
             {
                 GtkWidget *widget = gtk_list_new();
                 GtkStyle *def = gtk_rc_get_style( widget );
-                if (!def)
+                if (!def) 
                     def = gtk_widget_get_default_style();
                 if (def)
                 {
-                    int red = def->bg[GTK_STATE_NORMAL].red;
-                    int green = def->bg[GTK_STATE_NORMAL].green;
-                    int blue = def->bg[GTK_STATE_NORMAL].blue;
+                    int red = def->base[GTK_STATE_NORMAL].red;
+                    int green = def->base[GTK_STATE_NORMAL].green;
+                    int blue = def->base[GTK_STATE_NORMAL].blue;
                     g_systemListBoxColour = 
 	                    new wxColour( red    >> SHIFT,
 	                                  green  >> SHIFT,
@@ -179,7 +179,6 @@ wxColour wxSystemSettings::GetSystemColour( int index )
                 else
                     g_systemListBoxColour = new wxColour(*wxWHITE);
                 gtk_widget_destroy( widget );
-
             }
             return *g_systemListBoxColour;
         }
