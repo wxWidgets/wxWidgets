@@ -1335,7 +1335,7 @@ FSExchangeObjectsCompat(
 #pragma mark FSLockRange
 
 OSErr
-FSLockRange(
+FSLockRangeMoreFilesX(
 	SInt16 refNum,
 	SInt32 rangeLength,
 	SInt32 rangeStart);
@@ -1358,7 +1358,7 @@ FSLockRange(
 #pragma mark FSUnlockRange
 
 OSErr
-FSUnlockRange(
+FSUnlockRangeMoreFilesX(
 	SInt16 refNum,
 	SInt32 rangeLength,
 	SInt32 rangeStart);

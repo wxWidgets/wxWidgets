@@ -2122,7 +2122,7 @@ BadParameter:
 /*****************************************************************************/
 
 OSErr
-FSLockRange(
+FSLockRangeMoreFilesX(
 	SInt16 refNum,
 	SInt32 rangeLength,
 	SInt32 rangeStart)
@@ -2145,7 +2145,7 @@ PBLockRangeSync:
 /*****************************************************************************/
 
 OSErr
-FSUnlockRange(
+FSUnlockRangeMoreFilesX(
 	SInt16 refNum,
 	SInt32 rangeLength,
 	SInt32 rangeStart)
@@ -2610,7 +2610,7 @@ BadParameter:
 
 /*****************************************************************************/
 
-static Ptr
+Ptr
 GetTempBuffer(
 	ByteCount buffReqSize,
 	ByteCount *buffActSize)
