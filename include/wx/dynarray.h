@@ -781,9 +781,12 @@ private:                                                                 \
 #define WX_DECLARE_EXPORTED_OBJARRAY(T, name)               \
     WX_DECLARE_USER_EXPORTED_OBJARRAY(T, name, WXDLLEXPORT)
 
-#define WX_DECLARE_USER_EXPORTED_OBJARRAY(T, name, expmode) \
+#define WX_DECLARE_OBJARRAY_WITH_DECL(T, name, decl) \
     typedef T _wxObjArray##name;                            \
-    _WX_DECLARE_OBJARRAY(_wxObjArray##name, name, wxArrayPtrVoid, class expmode)
+    _WX_DECLARE_OBJARRAY(_wxObjArray##name, name, wxArrayPtrVoid, decl)
+    
+#define WX_DECLARE_USER_EXPORTED_OBJARRAY(T, name, expmode) \
+    WX_DECLARE_OBJARRAY_WITH_DECL(T, name, class expmode)
 
 // WX_DEFINE_OBJARRAY is going to be redefined when arrimpl.cpp is included,
 // try to provoke a human-understandable error if it used incorrectly.
