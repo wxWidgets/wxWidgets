@@ -1022,7 +1022,7 @@ bool wxFileName::MakeRelativeTo(const wxString& pathBase, wxPathFormat format)
 // filename kind tests
 // ----------------------------------------------------------------------------
 
-bool wxFileName::SameAs(const wxFileName &filepath, wxPathFormat format)
+bool wxFileName::SameAs(const wxFileName& filepath, wxPathFormat format) const
 {
     wxFileName fn1 = *this,
                fn2 = filepath;
