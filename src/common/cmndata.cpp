@@ -1481,11 +1481,11 @@ void wxPageSetupDialogData::ConvertFromNative()
 	OSStatus err = PMGetAdjustedPaperRect((PMPageFormat)m_printData.m_macPageFormat, &rPaper);
     if ( err == noErr )
     {
-	    m_paperSize.x = ((double) rPaper.right - rPaper.left ) * pt2mm;
-	    m_paperSize.y = ((double) rPaper.bottom - rPaper.top ) * pt2mm;
+	    m_paperSize.x = (int)(((double) rPaper.right - rPaper.left ) * pt2mm);
+	    m_paperSize.y = (int)(((double) rPaper.bottom - rPaper.top ) * pt2mm);
 
-	    m_minMarginTopLeft.x = ((double) - rPaper.left ) * pt2mm;
-	    m_minMarginTopLeft.y = ((double) - rPaper.top ) * pt2mm;
+	    m_minMarginTopLeft.x = (int)(((double) - rPaper.left ) * pt2mm);
+	    m_minMarginTopLeft.y = (int)(((double) - rPaper.top ) * pt2mm);
 
 //	    m_minMarginBottomRight.x = ((double) rPaper.right - (**(THPrint)m_printData.m_macPrintSettings).prInfo.rPage.right ) * pt2mm;
 //	    m_minMarginBottomRight.y = ((double)(**(THPrint)m_printData.m_macPrintSettings).rPaper.bottom - (**(THPrint)m_printData.m_macPrintSettings).prInfo.rPage.bottom ) * pt2mm;

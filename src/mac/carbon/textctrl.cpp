@@ -1542,9 +1542,7 @@ void wxTextCtrl::OnChar(wxKeyEvent& event)
          key == WXK_DELETE || 
          key == WXK_BACK)
     {
-        long t1 = 0xDEADBEEF ;
         wxCommandEvent event1(wxEVT_COMMAND_TEXT_UPDATED, m_windowId);
-        long t2 = 0xDEADBEEF ;
         event1.SetString( GetValue() ) ;
         event1.SetEventObject( this );
         wxPostEvent(GetEventHandler(),event1);

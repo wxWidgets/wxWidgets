@@ -355,7 +355,6 @@ void wxNotebook::MacSetupTabs()
     wxNotebookPage *page;
     ControlTabInfoRec info;
 
-    OSStatus err = noErr ;
     for(int ii = 0; ii < GetPageCount(); ii++)
     {
         page = m_pages[ii];

@@ -432,7 +432,7 @@ int wxFileDialog::ShowModal()
 	  	{
 		  	mNavOptions.popupExtension = (NavMenuItemSpecArrayHandle) NewHandle( sizeof( NavMenuItemSpec ) * myData.extensions.GetCount() ) ;
 			myData.menuitems = mNavOptions.popupExtension ;
-		  	for ( int i = 0 ; i < myData.extensions.GetCount() ; ++i ) 
+		  	for ( size_t i = 0 ; i < myData.extensions.GetCount() ; ++i ) 
 		  	{
 		  	    (*mNavOptions.popupExtension)[i].version = kNavMenuItemSpecVersion ;
 		  	    (*mNavOptions.popupExtension)[i].menuCreator = 'WXNG' ;
