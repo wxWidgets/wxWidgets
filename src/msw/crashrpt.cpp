@@ -1020,7 +1020,7 @@ bool wxCrashReportImpl::Generate(int flags)
     {
         if ( ResolveSymFunctions(dllDbgHelp) )
         {
-            SymSetOptions(SYMOPT_DEFERRED_LOADS);
+            SymSetOptions(SYMOPT_DEFERRED_LOADS | SYMOPT_UNDNAME);
 
             // Initialize DbgHelp
             if ( SymInitialize(GetCurrentProcess(), NULL, TRUE /* invade */) )
