@@ -187,8 +187,11 @@ private:
 
 class WXDLLEXPORT wxListItem : public wxObject
 {
+    wxListItem& operator=(const wxListItem& item);
+    
 public:
     wxListItem();
+    wxListItem(const wxListItem& item);
     ~wxListItem() { delete m_attr; }
 
     // resetting
@@ -361,13 +364,24 @@ class WXDLLEXPORT wxListEvent : public wxNotifyEvent
 public:
     wxListEvent(wxEventType commandType = wxEVT_NULL, int id = 0)
         : wxNotifyEvent(commandType, id)
-        {
-            m_code = 0;
-            m_itemIndex =
-            m_oldItemIndex = 0;
-            m_col = 0;
-        }
+        , m_code(0)
+        , m_oldItemIndex(0)
+        , m_itemIndex(0)
+        , m_col(0)
+        , m_pointDrag()
+        , m_item()
+        { }
 
+    wxListEvent(const wxListEvent& event)
+        : wxNotifyEvent(event)
+        , m_code(event.m_code)
+        , m_oldItemIndex(event.m_oldItemIndex)
+        , m_itemIndex(event.m_itemIndex)
+        , m_col(event.m_col)
+        , m_pointDrag(event.m_pointDrag)
+        , m_item(event.m_item)
+        { }
+    
     int GetCode() const { return m_code; }
     long GetIndex() const { return m_itemIndex; }
     int GetColumn() const { return m_col; }

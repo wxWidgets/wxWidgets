@@ -4499,6 +4499,24 @@ wxListItem::wxListItem()
     Clear();
 }
 
+wxListItem::wxListItem(const wxListItem& item)
+    : wxObject()
+    , m_mask(item.m_mask)
+    , m_itemId(item.m_itemId)
+    , m_col(item.m_col)
+    , m_state(item.m_state)
+    , m_stateMask(item.m_stateMask)
+    , m_text(item.m_text)
+    , m_image(item.m_image)
+    , m_data(item.m_data)
+    , m_format(item.m_format)
+    , m_width(item.m_width)
+    , m_attr(NULL)
+{
+    // copy list item attributes
+    m_attr = new wxListItemAttr(*item.GetAttributes());
+}
+
 void wxListItem::Clear()
 {
     m_mask = 0;
@@ -5099,7 +5117,7 @@ bool wxListCtrl::SortItems( wxListCtrlCompare fn, long data )
 // event handlers
 // ----------------------------------------------------------------------------
 
-void wxListCtrl::OnSize(wxSizeEvent& event)
+void wxListCtrl::OnSize(wxSizeEvent& WXUNUSED(event))
 {
     if ( !m_mainWin )
         return;
@@ -5243,19 +5261,19 @@ void wxListCtrl::SetFocus()
 // virtual list control support
 // ----------------------------------------------------------------------------
 
-wxString wxListCtrl::OnGetItemText(long item, long col) const
+wxString wxListCtrl::OnGetItemText(long WXUNUSED(item), long WXUNUSED(col)) const
 {
     // this is a pure virtual function, in fact - which is not really pure
     // because the controls which are not virtual don't need to implement it
-    wxFAIL_MSG( _T("not supposed to be called") );
+    wxFAIL_MSG( _T("wxListCtrl::OnGetItemText not supposed to be called") );
 
     return wxEmptyString;
 }
 
-int wxListCtrl::OnGetItemImage(long item) const
+int wxListCtrl::OnGetItemImage(long WXUNUSED(item)) const
 {
     // same as above
-    wxFAIL_MSG( _T("not supposed to be called") );
+    wxFAIL_MSG( _T("wxListCtrl::OnGetItemImage not supposed to be called") );
 
     return -1;
 }
