@@ -117,9 +117,13 @@ Things are much simpler for wxArray and wxSortedArray however: it is enough
 just to write
 
 \begin{verbatim} 
-WX_DEFINE_ARRAY(MyDirectory *, ArrayOfDirectories);
-WX_DEFINE_SORTED_ARRAY(MyFile *, ArrayOfFiles);
+WX_DEFINE_ARRAY(int, ArrayOfDirectories);
+WX_DEFINE_SORTED_ARRAY(int, ArrayOfFiles);
 \end{verbatim}
+
+i.e. there is only one {\tt DEFINE} macro and no need for separate 
+{\tt DECLARE} one.
+
 
 \wxheading{See also:}
 
@@ -151,6 +155,17 @@ WX\_DEFINE\_OBJARRAY macro.
 \helpref{WX\_DEFINE\_OBJARRAY}{wxdefineobjarray}\\
 \helpref{WX\_DEFINE\_EXPORTED\_OBJARRAY}{wxdefineobjarray}\\
 \helpref{WX\_DEFINE\_USER\_EXPORTED\_OBJARRAY}{wxdefineobjarray}
+
+To slightly complicate the matters even further, the operator $->$ defined by
+default for the array iterators by these macros only makes sense if the array
+element type is not a pointer itself and, although it still works, this
+provokes warnings from some compilers and to avoid them you should use the 
+{\tt \_PTR} versions of the macros above. For example, to define an array of
+pointers to {\tt double} you should use
+
+\begin{verbatim} 
+WX_DEFINE_ARRAY_PTR(double *, MyArrayOfDoublePointers);
+\end{verbatim}
 
 \membersection{Constructors and destructors}
 
