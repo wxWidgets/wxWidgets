@@ -1,11 +1,26 @@
 /* -------------------------------------------------------------------------
  * Project: GSocket (Generic Socket)
- * Name:    gsockmsw.c
+ * Name:    gsockmsw.cpp
  * Author:  Guillermo Rodriguez Garcia <guille@iies.es>
  * Purpose: GSocket GUI-specific MSW code
  * CVSID:   $Id$
  * -------------------------------------------------------------------------
  */
+
+// ============================================================================
+// declarations
+// ============================================================================
+
+// ----------------------------------------------------------------------------
+// headers
+// ----------------------------------------------------------------------------
+
+// For compilers that support precompilation, includes "wx.h".
+#include "wx/wxprec.h"
+
+#ifdef __BORLANDC__
+    #pragma hdrstop
+#endif
 
 /*
  * TODO: for WinCE we need to replace WSAAsyncSelect

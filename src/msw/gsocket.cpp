@@ -1,6 +1,6 @@
 /* -------------------------------------------------------------------------
  * Project: GSocket (Generic Socket)
- * Name:    gsocket.c
+ * Name:    gsocket.cpp
  * Author:  Guillermo Rodriguez Garcia <guille@iies.es>
  * Purpose: GSocket main MSW file
  * Licence: The wxWindows licence
@@ -8,9 +8,20 @@
  * -------------------------------------------------------------------------
  */
 
-/*
- * PLEASE don't put C++ comments here - this is a C source file.
- */
+// ============================================================================
+// declarations
+// ============================================================================
+
+// ----------------------------------------------------------------------------
+// headers
+// ----------------------------------------------------------------------------
+
+// For compilers that support precompilation, includes "wx.h".
+#include "wx/wxprec.h"
+
+#ifdef __BORLANDC__
+    #pragma hdrstop
+#endif
 
 #ifdef _MSC_VER
    /* RPCNOTIFICATION_ROUTINE in rasasync.h (included from winsock.h),
