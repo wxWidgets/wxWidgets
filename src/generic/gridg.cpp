@@ -25,7 +25,7 @@
     #pragma hdrstop
 #endif
 
-#if wxUSE_GRID
+#if wxUSE_GRID && !(wxUSE_NEW_GRID)
 
 #ifndef WX_PRECOMP
     #include "wx/utils.h"
@@ -2854,4 +2854,4 @@ void *wxGenericGrid::GetCellData(int row, int col)
     return rc;
 }
 
-#endif // wxUSE_GRID
+#endif // wxUSE_GRID && !(wxUSE_NEW_GRID)
