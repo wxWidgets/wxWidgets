@@ -320,6 +320,13 @@ will change the visible state of the tool to indicate that it is disabled.
 \helpref{wxToolBar::GetToolEnabled}{wxtoolbargettoolenabled},\rtfsp
 \helpref{wxToolBar::ToggleTool}{wxtoolbartoggletool}
 
+\membersection{wxToolBar::FindControl}\label{wxtoolbarfindcontrol}
+
+\func{wxControl*}{FindControl}{\param{int }{id}}
+
+Returns a pointer to the control identified by {\it id} or
+NULL if no corresponding control is found.
+
 \membersection{wxToolBar::FindToolForPosition}\label{wxtoolbarfindtoolforposition}
 
 \constfunc{wxToolBarTool*}{FindToolForPosition}{\param{const float}{ x}, \param{const float}{ y}}

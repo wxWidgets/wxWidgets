@@ -469,9 +469,9 @@ implements the following methods:\par
 \end{twocollist}}
 }
 
-\membersection{wxWindow::FindWindowById}\label{wxwindowfindwindow}
+\membersection{wxWindow::FindWindowById}\label{wxwindowfindwindowbyid}
 
-\func{wxWindow*}{FindWindowById}{\param{long}{ id}}
+\func{static wxWindow*}{FindWindowById}{\param{long}{ id}, \param{wxWindow*}{ parent = NULL}}
 
 Find the first window with the given {\it id}.
 
@@ -481,11 +481,11 @@ The search is recursive in both cases.
 
 \wxheading{See also}
 
-\helpref{FindWindowById}{wxwindowfindwindowbyid}
+\helpref{FindWindow}{wxwindowfindwindow}
 
 \membersection{wxWindow::FindWindowByName}\label{wxwindowfindwindowbyname}
 
-\func{wxWindow*}{FindWindowByName}{\param{long}{ id}}
+\func{static wxWindow*}{FindWindowByName}{\param{const wxString\&}{ name}, \param{wxWindow*}{ parent = NULL}}
 
 Find a window by its name (as given in a window constructor or {\bf Create} function call).
 If {\it parent} is NULL, the search will start from all top-level
@@ -497,11 +497,11 @@ If no window with such name is found,
 
 \wxheading{See also}
 
-\helpref{FindWindowById}{wxwindowfindwindowbyid}
+\helpref{FindWindow}{wxwindowfindwindow}
 
 \membersection{wxWindow::FindWindowByLabel}\label{wxwindowfindwindowbylabel}
 
-\func{wxWindow*}{FindWindowByLabel}{\param{long}{ id}}
+\func{static wxWindow*}{FindWindowByLabel}{\param{const wxString\&}{ label}, \param{wxWindow*}{ parent = NULL}}
 
 Find a window by its label. Depending on the type of window, the label may be a window title
 or panel item label. If {\it parent} is NULL, the search will start from all top-level
@@ -510,7 +510,7 @@ The search is recursive in both cases.
 
 \wxheading{See also}
 
-\helpref{FindWindowById}{wxwindowfindwindowbyid}
+\helpref{FindWindow}{wxwindowfindwindow}
 
 \membersection{wxWindow::Fit}\label{wxwindowfit}
 
@@ -2518,6 +2518,20 @@ Sets the window's title. Applicable only to frames and dialogs.
 \wxheading{See also}
 
 \helpref{wxWindow::GetTitle}{wxwindowgettitle}
+
+\membersection{wxWindow::SetThemeEnabled}\label{wxwindowsetthemeenabled}
+
+\func{virtual void}{SetThemeEnabled}{\param{bool }{enable}}
+
+This function tells a window if it should use the system's "theme" code
+to draw the windows' background instead if its own background drawing
+code. This does not always have any effect since the underlying platform
+obviously needs to support the notion of themes in user defined windows.
+One such platform is GTK+ where windows can have (very colourful) backgrounds
+defined by a user's selected theme.
+
+Dialogs, notebook pages and the status bar have this flag set to TRUE
+by default so that the default look and feel is simulated best.
 
 \membersection{wxWindow::SetValidator}\label{wxwindowsetvalidator}
 
