@@ -48,11 +48,11 @@ bool wxChoice::Create(wxWindow *parent, wxWindowID id,
 {
     Rect bounds ;
     Str255 title ;
-    
+
     MacPreControlCreate( parent , id ,  wxEmptyString , pos , size ,style, validator , name , &bounds , title ) ;
-    m_macControl = ::NewControl( MAC_WXHWND(parent->MacGetRootWindow()) , &bounds , title , false , 0 , -12345 , 0 , 
-        kControlPopupButtonProc + kControlPopupFixedWidthVariant , (long) this ) ; 
-    
+    m_macControl = ::NewControl( MAC_WXHWND(parent->MacGetRootWindow()) , &bounds , title , false , 0 , -12345 , 0 ,
+        kControlPopupButtonProc + kControlPopupFixedWidthVariant , (long) this ) ;
+
     m_macPopUpMenuHandle =  NewUniqueMenu() ;
     SetControlData( (ControlHandle) m_macControl , kControlNoPart , kControlPopupButtonMenuHandleTag , sizeof( MenuHandle ) , (char*) &m_macPopUpMenuHandle) ;
     SetControl32BitMinimum( (ControlHandle) m_macControl , 0 ) ;
@@ -161,7 +161,7 @@ int wxChoice::FindString(const wxString& s) const
     for( int i = 0 ; i < GetCount() ; i++ )
     {
         if ( GetString( i ).IsSameAs(s, FALSE) )
-            return i ; 
+            return i ;
     }
     return wxNOT_FOUND ;
 }
@@ -186,14 +186,15 @@ void wxChoice::DoSetItemClientData( int n, void* clientData )
 {
     wxCHECK_RET( n >= 0 && (size_t)n < m_datas.GetCount(),
                  wxT("invalid index in wxChoice::SetClientData") );
-    
+
     m_datas[n] = (char*) clientData ;
 }
 
 void *wxChoice::DoGetItemClientData(int n) const
 {
-    wxCHECK_MSG( n >= 0 && (size_t)n < m_datas.GetCount(), NULL,
-                 wxT("invalid index in wxChoice::GetClientData") );
+    if ( n < 0 || (size_t)n >= m_datas.GetCount() )
+        return (void*)NULL;
+
     return (void *)m_datas[n];
 }
 
@@ -207,7 +208,7 @@ wxClientData* wxChoice::DoGetItemClientObject( int n ) const
     return (wxClientData *)DoGetItemClientData(n);
 }
 
-void wxChoice::MacHandleControlClick( WXWidget control , wxInt16 controlpart ) 
+void wxChoice::MacHandleControlClick( WXWidget control , wxInt16 controlpart )
 {
     wxCommandEvent event(wxEVT_COMMAND_CHOICE_SELECTED, m_windowId );
     int n = GetSelection();
@@ -232,11 +233,11 @@ wxSize wxChoice::DoGetBestSize() const
     int wLine;
 #if TARGET_CARBON
     long metric ;
-    GetThemeMetric(kThemeMetricPopupButtonHeight , &metric );   
-    lbHeight = metric ; 
+    GetThemeMetric(kThemeMetricPopupButtonHeight , &metric );
+    lbHeight = metric ;
 #endif
     {
-        wxMacPortStateHelper st( UMAGetWindowPort( (WindowRef) MacGetRootWindow() ) ) ; 
+        wxMacPortStateHelper st( UMAGetWindowPort( (WindowRef) MacGetRootWindow() ) ) ;
         wxFontRefData * font = (wxFontRefData*) m_font.GetRefData() ;
         if ( font )
         {
@@ -274,7 +275,7 @@ wxSize wxChoice::DoGetBestSize() const
         // And just a bit more
         int cx = ::TextWidth( "X" , 0 , 1 ) ;
         lbWidth += cx ;
-        
+
     }
     return wxSize(lbWidth, lbHeight);
 }
