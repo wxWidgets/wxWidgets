@@ -21,6 +21,8 @@
 // headers
 // ----------------------------------------------------------------------------
 
+#include "wx/defs.h"
+
 #ifdef __VMS
 #define XtDisplay XTDISPLAY
 #pragma message disable nosimpint
