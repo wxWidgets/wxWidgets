@@ -350,7 +350,7 @@ private:
         } pt;               // position of double click for DCLICK event
     } m_data;
 
-    DECLARE_DYNAMIC_CLASS(wxSplitterEvent)
+    DECLARE_DYNAMIC_CLASS_NO_COPY(wxSplitterEvent)
 };
 
 typedef void (wxEvtHandler::*wxSplitterEventFunction)(wxSplitterEvent&);

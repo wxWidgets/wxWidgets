@@ -584,6 +584,8 @@ private:
             ((listclass *)m_hashTable[slot])->Append(value, data);             \
             m_count++;                                                         \
         }                                                                      \
+                                                                               \
+        DECLARE_NO_COPY_CLASS(hashclass)                                       \
     }
 
 #endif

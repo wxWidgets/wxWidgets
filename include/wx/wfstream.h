@@ -85,9 +85,14 @@ class WXDLLIMPEXP_BASE wxFileOutputStream: public wxOutputStream {
     DECLARE_NO_COPY_CLASS(wxFileOutputStream)
 };
 
-class WXDLLIMPEXP_BASE wxFileStream: public wxFileInputStream, public wxFileOutputStream {
- public:
-  wxFileStream(const wxString& fileName);
+class WXDLLIMPEXP_BASE wxFileStream : public wxFileInputStream,
+                                      public wxFileOutputStream
+{
+public:
+    wxFileStream(const wxString& fileName);
+
+private:
+    DECLARE_NO_COPY_CLASS(wxFileStream)
 };
 
 // ----------------------------------------------------------------------------
@@ -149,10 +154,16 @@ class WXDLLIMPEXP_BASE wxFFileOutputStream: public wxOutputStream {
     DECLARE_NO_COPY_CLASS(wxFFileOutputStream)
 };
 
-class WXDLLIMPEXP_BASE wxFFileStream: public wxFFileInputStream, public wxFFileOutputStream {
- public:
-  wxFFileStream(const wxString& fileName);
+class WXDLLIMPEXP_BASE wxFFileStream : public wxFFileInputStream,
+                                       public wxFFileOutputStream
+{
+public:
+    wxFFileStream(const wxString& fileName);
+
+private:
+    DECLARE_NO_COPY_CLASS(wxFFileStream)
 };
+
 #endif
   // wxUSE_STREAMS && wxUSE_FILE
 

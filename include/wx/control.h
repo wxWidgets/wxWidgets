@@ -35,6 +35,8 @@ WXDLLEXPORT_DATA(extern const wxChar*) wxControlNameStr;
 class WXDLLEXPORT wxControlBase : public wxWindow
 {
 public:
+    wxControlBase() { }
+
     virtual ~wxControlBase();
 
     // Create() function adds the validator parameter
@@ -68,6 +70,8 @@ protected:
 
     // initialize the common fields of wxCommandEvent
     void InitCommandEvent(wxCommandEvent& event) const;
+
+    DECLARE_NO_COPY_CLASS(wxControlBase)
 };
 
 // ----------------------------------------------------------------------------

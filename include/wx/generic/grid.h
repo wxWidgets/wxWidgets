@@ -430,6 +430,8 @@ protected:
 private:
     size_t   m_maxChars;        // max number of chars allowed
     wxString m_startValue;
+
+    DECLARE_NO_COPY_CLASS(wxGridCellTextEditor)
 };
 
 // the editor for numeric (long) data
@@ -475,6 +477,8 @@ private:
         m_max;
 
     long m_valueOld;
+
+    DECLARE_NO_COPY_CLASS(wxGridCellNumberEditor)
 };
 
 // the editor for floating point numbers (double) data
@@ -508,6 +512,8 @@ private:
     int m_width,
         m_precision;
     double m_valueOld;
+
+    DECLARE_NO_COPY_CLASS(wxGridCellFloatEditor)
 };
 
 #endif // wxUSE_TEXTCTRL
@@ -518,6 +524,8 @@ private:
 class WXDLLEXPORT wxGridCellBoolEditor : public wxGridCellEditor
 {
 public:
+    wxGridCellBoolEditor() { }
+
     virtual void Create(wxWindow* parent,
                         wxWindowID id,
                         wxEvtHandler* evtHandler);
@@ -543,6 +551,8 @@ protected:
 
 private:
     bool m_startValue;
+
+    DECLARE_NO_COPY_CLASS(wxGridCellBoolEditor)
 };
 
 #endif // wxUSE_CHECKBOX
@@ -586,6 +596,8 @@ protected:
     wxString        m_startValue;
     wxArrayString   m_choices;
     bool            m_allowOthers;
+
+    DECLARE_NO_COPY_CLASS(wxGridCellChoiceEditor)
 };
 
 #endif // wxUSE_COMBOBOX
@@ -974,7 +986,7 @@ private:
     wxArrayString     m_rowLabels;
     wxArrayString     m_colLabels;
 
-    DECLARE_DYNAMIC_CLASS( wxGridStringTable )
+    DECLARE_DYNAMIC_CLASS_NO_COPY( wxGridStringTable )
 };
 
 
@@ -1937,7 +1949,7 @@ protected:
     bool        m_shift;
     bool        m_alt;
 
-    DECLARE_DYNAMIC_CLASS(wxGridEvent)
+    DECLARE_DYNAMIC_CLASS_NO_COPY(wxGridEvent)
 };
 
 class WXDLLEXPORT wxGridSizeEvent : public wxNotifyEvent
@@ -1969,7 +1981,7 @@ protected:
     bool        m_shift;
     bool        m_alt;
 
-    DECLARE_DYNAMIC_CLASS(wxGridSizeEvent)
+    DECLARE_DYNAMIC_CLASS_NO_COPY(wxGridSizeEvent)
 };
 
 
@@ -2016,7 +2028,7 @@ protected:
     bool              m_shift;
     bool              m_alt;
 
-    DECLARE_DYNAMIC_CLASS(wxGridRangeSelectEvent)
+    DECLARE_DYNAMIC_CLASS_NO_COPY(wxGridRangeSelectEvent)
 };
 
 

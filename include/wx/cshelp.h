@@ -79,7 +79,7 @@ public:
     void OnContextHelp(wxCommandEvent& event);
 
 private:
-    DECLARE_CLASS(wxContextHelpButton)
+    DECLARE_DYNAMIC_CLASS_NO_COPY(wxContextHelpButton)
     DECLARE_EVENT_TABLE()
 };
 

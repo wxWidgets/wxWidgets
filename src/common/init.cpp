@@ -59,7 +59,11 @@
 class wxDummyConsoleApp : public wxAppConsole
 {
 public:
+    wxDummyConsoleApp() { }
+
     virtual int OnRun() { wxFAIL_MSG( _T("unreachable code") ); return 0; }
+
+    DECLARE_NO_COPY_CLASS(wxDummyConsoleApp)
 };
 
 // we need a special kind of auto pointer to wxApp which not only deletes the
@@ -87,6 +91,8 @@ public:
 
         wxTheApp = ptr;
     }
+
+    DECLARE_NO_COPY_CLASS(wxAppPtr)
 };
 
 // class to ensure that wxAppBase::CleanUp() is called if our Initialize()
@@ -152,6 +158,8 @@ static struct InitData
     // free it when doing cleanup to avoid memory leaks
     wchar_t **argv;
 #endif // wxUSE_UNICODE
+
+    DECLARE_NO_COPY_CLASS(InitData)
 } gs_initData;
 
 // ============================================================================

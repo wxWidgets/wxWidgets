@@ -50,6 +50,7 @@ protected:
     // the return code from modal dialog
     int m_returnCode;
 
+    DECLARE_NO_COPY_CLASS(wxDialogBase)
     DECLARE_EVENT_TABLE()
     WX_DECLARE_CONTROL_CONTAINER();
 };

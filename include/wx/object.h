@@ -145,6 +145,15 @@ WXDLLIMPEXP_BASE wxObject *wxCreateDynamicObject(const wxChar *name);
   virtual wxClassInfo *GetClassInfo() const   \
    { return &name::sm_class##name; }
 
+#define DECLARE_DYNAMIC_CLASS_NO_ASSIGN(name)   \
+    private:                                    \
+        name& operator=(const name&);           \
+    DECLARE_DYNAMIC_CLASS(name)
+
+#define DECLARE_DYNAMIC_CLASS_NO_COPY(name)   \
+    DECLARE_NO_COPY_CLASS(name)               \
+    DECLARE_DYNAMIC_CLASS(name)
+
 #define DECLARE_ABSTRACT_CLASS(name) DECLARE_DYNAMIC_CLASS(name)
 #define DECLARE_CLASS(name) DECLARE_DYNAMIC_CLASS(name)
 

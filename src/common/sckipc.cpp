@@ -125,6 +125,7 @@ public:
   void Server_OnRequest(wxSocketEvent& event);
 
   DECLARE_EVENT_TABLE()
+  DECLARE_NO_COPY_CLASS(wxTCPEventHandler)
 };
 
 enum

@@ -36,6 +36,8 @@ FORCE_LINK_ME(m_dflist)
 
 TAG_HANDLER_BEGIN(DEFLIST, "DL,DT,DD" )
 
+    TAG_HANDLER_CONSTR(DEFLIST) { }
+
     TAG_HANDLER_PROC(tag)
     {
         wxHtmlContainerCell *c;

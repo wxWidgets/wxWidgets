@@ -54,7 +54,7 @@ protected:
     virtual wxSize DoGetBestSize() const;
 
 private:
-    DECLARE_DYNAMIC_CLASS(wxCheckBox)
+    DECLARE_DYNAMIC_CLASS_NO_COPY(wxCheckBox)
 };
 
 #endif

@@ -66,7 +66,7 @@ protected:
     void DoMoveWindow(int x, int y, int width, int height);
 
 private:
-    DECLARE_DYNAMIC_CLASS(wxStatusBar95);
+    DECLARE_DYNAMIC_CLASS_NO_COPY(wxStatusBar95);
 };
 
 #endif  // wxUSE_NATIVE_STATUSBAR

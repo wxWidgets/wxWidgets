@@ -147,7 +147,7 @@ protected:
 // ----------------------------------------------------------------------------
 
 wxBitmap wxDefaultArtProvider::CreateBitmap(const wxArtID& id,
-                                            const wxArtClient& client,
+                                            const wxArtClient& WXUNUSED(client),
                                             const wxSize& WXUNUSED(size))
 {
     // wxMessageBox icons:

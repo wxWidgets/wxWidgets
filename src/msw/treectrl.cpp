@@ -398,6 +398,8 @@ public:
 
 private:
     wxArrayTreeItemIds& m_selections;
+
+    DECLARE_NO_COPY_CLASS(TraverseSelections)
 };
 
 // internal class for counting tree items
@@ -425,6 +427,8 @@ public:
 
 private:
     size_t m_count;
+
+    DECLARE_NO_COPY_CLASS(TraverseCounter)
 };
 
 // ----------------------------------------------------------------------------

@@ -47,6 +47,8 @@ public:
                                     0)              // don't use any files
     {
     }
+
+    DECLARE_NO_COPY_CLASS(wxMemoryConfig)
 };
 
 #endif // wxUSE_CONFIG

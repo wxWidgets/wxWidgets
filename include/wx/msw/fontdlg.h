@@ -36,7 +36,7 @@ public:
         : wxFontDialogBase(parent, data) { Create(parent, data); }
 
 protected:
-    DECLARE_DYNAMIC_CLASS(wxFontDialog)
+    DECLARE_DYNAMIC_CLASS_NO_COPY(wxFontDialog)
 };
 
 #endif

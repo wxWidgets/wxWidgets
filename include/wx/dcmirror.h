@@ -278,6 +278,8 @@ private:
     wxMirrorDC& m_dc;
 
     bool m_mirror;
+
+    DECLARE_NO_COPY_CLASS(wxMirrorDC)
 };
 
 #endif // _WX_DCMIRROR_H_

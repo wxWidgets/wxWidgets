@@ -82,7 +82,7 @@ public:
     virtual void SetPassword(const wxString& WXUNUSED(passwd) ) {}
 
 private:
-    DECLARE_ABSTRACT_CLASS(wxProtocol)
+    DECLARE_DYNAMIC_CLASS_NO_COPY(wxProtocol)
 };
 
 #if wxUSE_SOCKETS

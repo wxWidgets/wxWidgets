@@ -70,6 +70,8 @@ public:
 
 private:
     wxTextFile m_textfile;
+
+    DECLARE_NO_COPY_CLASS(wxFileTipProvider)
 };
 
 #ifdef __WIN32__

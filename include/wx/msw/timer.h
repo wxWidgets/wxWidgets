@@ -37,7 +37,7 @@ protected:
     long m_id;
 
 private:
-    DECLARE_ABSTRACT_CLASS(wxTimer)
+    DECLARE_DYNAMIC_CLASS_NO_COPY(wxTimer)
 };
 
 #endif

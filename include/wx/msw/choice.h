@@ -22,8 +22,6 @@
 
 class WXDLLEXPORT wxChoice : public wxChoiceBase
 {
-    DECLARE_DYNAMIC_CLASS(wxChoice)
-
 public:
     // ctors
     wxChoice() { }
@@ -85,6 +83,8 @@ protected:
 
     // free all memory we have (used by Clear() and dtor)
     void Free();
+
+    DECLARE_DYNAMIC_CLASS_NO_COPY(wxChoice)
 };
 
 #endif // _WX_CHOICE_H_

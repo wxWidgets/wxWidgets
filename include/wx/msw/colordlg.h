@@ -54,7 +54,7 @@ protected:
 
     wxPoint             m_pos;
 
-    DECLARE_DYNAMIC_CLASS(wxColourDialog)
+    DECLARE_DYNAMIC_CLASS_NO_COPY(wxColourDialog)
 };
 
 #endif

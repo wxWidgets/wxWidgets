@@ -153,7 +153,7 @@ protected:
   int m_nSelection;
 
 
-  DECLARE_DYNAMIC_CLASS(wxNotebook)
+  DECLARE_DYNAMIC_CLASS_NO_COPY(wxNotebook)
   DECLARE_EVENT_TABLE()
 };
 

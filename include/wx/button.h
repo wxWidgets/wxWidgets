@@ -48,6 +48,8 @@ WXDLLEXPORT_DATA(extern const wxChar*) wxButtonNameStr;
 class WXDLLEXPORT wxButtonBase : public wxControl
 {
 public:
+    wxButtonBase() { }
+
     // show the image in the button in addition to the label
     virtual void SetImageLabel(const wxBitmap& WXUNUSED(bitmap)) { }
 
@@ -60,6 +62,8 @@ public:
 
     // returns the default button size for this platform
     static wxSize GetDefaultSize();
+
+    DECLARE_NO_COPY_CLASS(wxButtonBase)
 };
 
 #if defined(__WXUNIVERSAL__)

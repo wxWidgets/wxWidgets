@@ -846,6 +846,8 @@ public:
 
     // were we initialized successfully?
     bool m_ok;
+
+    DECLARE_NO_COPY_CLASS(EC_CharSet)
 };
 
 #endif // wxUSE_FONTMAP

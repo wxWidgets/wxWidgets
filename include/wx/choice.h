@@ -37,8 +37,10 @@ WXDLLEXPORT_DATA(extern const wxChar*) wxChoiceNameStr;
 class WXDLLEXPORT wxChoiceBase : public wxControlWithItems
 {
 public:
-    // all generic methods are in wxControlWithItems
+    wxChoiceBase() { }
     virtual ~wxChoiceBase();
+
+    // all generic methods are in wxControlWithItems
 
     // single selection logic
     virtual void SetSelection(int n) = 0;
@@ -54,6 +56,9 @@ public:
 
     // emulate selecting the item event.GetInt()
     void Command(wxCommandEvent& event);
+
+private:
+    DECLARE_NO_COPY_CLASS(wxChoiceBase)
 };
 
 // ----------------------------------------------------------------------------

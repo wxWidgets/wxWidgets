@@ -53,7 +53,7 @@ protected:
     virtual void DoGetSize(int *width, int *height) const;
 
 private:
-    DECLARE_DYNAMIC_CLASS(wxWindowDC)
+    DECLARE_DYNAMIC_CLASS_NO_COPY(wxWindowDC)
 };
 
 class WXDLLEXPORT wxClientDC : public wxWindowDC
@@ -74,7 +74,7 @@ protected:
     virtual void DoGetSize(int *width, int *height) const;
 
 private:
-    DECLARE_DYNAMIC_CLASS(wxClientDC)
+    DECLARE_DYNAMIC_CLASS_NO_COPY(wxClientDC)
 };
 
 class WXDLLEXPORT wxPaintDC : public wxClientDC
@@ -97,7 +97,7 @@ protected:
     wxPaintDCInfo *FindInCache(size_t *index = NULL) const;
 
 private:
-    DECLARE_DYNAMIC_CLASS(wxPaintDC)
+    DECLARE_DYNAMIC_CLASS_NO_COPY(wxPaintDC)
 };
 
 #endif

@@ -94,7 +94,7 @@ protected:
 #endif // __WXMSW__
 
 private:
-    DECLARE_ABSTRACT_CLASS(wxGenericScrolledWindow)
+    DECLARE_DYNAMIC_CLASS_NO_COPY(wxGenericScrolledWindow)
     DECLARE_EVENT_TABLE()
 };
 

@@ -85,9 +85,14 @@ wxHtmlHelpIndexCompareFunc(const void *a, const void *b)
 class HP_Parser : public wxHtmlParser
 {
 public:
+    HP_Parser() { }
+
     wxObject* GetProduct() { return NULL; }
+
 protected:
     virtual void AddText(const wxChar* WXUNUSED(txt)) {}
+
+    DECLARE_NO_COPY_CLASS(HP_Parser)
 };
 
 

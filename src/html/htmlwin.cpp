@@ -805,7 +805,7 @@ void wxHtmlWindow::OnCellMouseHover(wxHtmlCell * WXUNUSED(cell),
     // do nothing here
 }
 
-void wxHtmlWindow::OnEraseBackground(wxEraseEvent& event)
+void wxHtmlWindow::OnEraseBackground(wxEraseEvent& WXUNUSED(event))
 {
 }
 
@@ -897,7 +897,7 @@ void wxHtmlWindow::OnSize(wxSizeEvent& event)
 }
 
 
-void wxHtmlWindow::OnMouseMove(wxMouseEvent& event)
+void wxHtmlWindow::OnMouseMove(wxMouseEvent& WXUNUSED(event))
 {
     m_tmpMouseMoved = true;
 }
@@ -1218,7 +1218,7 @@ void wxHtmlWindow::OnKeyUp(wxKeyEvent& event)
     }
 }
 
-void wxHtmlWindow::OnCopy(wxCommandEvent& event)
+void wxHtmlWindow::OnCopy(wxCommandEvent& WXUNUSED(event))
 {
     if ( m_selection )
         CopySelection();

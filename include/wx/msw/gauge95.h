@@ -25,8 +25,6 @@ WXDLLEXPORT_DATA(extern const wxChar*) wxGaugeNameStr;
 // Group box
 class WXDLLEXPORT wxGauge95 : public wxControl
 {
-    DECLARE_DYNAMIC_CLASS(wxGauge95)
-
 public:
     wxGauge95(void) { m_rangeMax = 0; m_gaugePos = 0; }
 
@@ -75,6 +73,9 @@ public:
 protected:
     int      m_rangeMax;
     int      m_gaugePos;
+
+
+    DECLARE_DYNAMIC_CLASS_NO_COPY(wxGauge95)
 };
 
 #endif // wxUSE_GAUGE

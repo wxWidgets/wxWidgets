@@ -42,6 +42,7 @@ public:
              const wxValidator& validator = wxDefaultValidator,
              const wxString& name = wxSliderNameStr);
     */
+    wxSliderBase() { }
 
     // get/set the current slider value (should be in range)
     virtual int GetValue() const = 0;
@@ -76,6 +77,9 @@ public:
     virtual int GetSelEnd() const { return GetMin(); }
     virtual int GetSelStart() const { return GetMax(); }
     virtual void SetSelection(int WXUNUSED(min), int WXUNUSED(max)) { }
+
+private:
+    DECLARE_NO_COPY_CLASS(wxSliderBase)
 };
 
 // ----------------------------------------------------------------------------

@@ -10,8 +10,13 @@ WXDLLEXPORT_DATA(extern const wxChar*) wxStaticTextNameStr;
 class WXDLLEXPORT wxStaticTextBase : public wxControl
 {
 public:
-    // overriden base class virtuals
+    wxStaticTextBase() { }
+
+    // overriden base cirtuals
     virtual bool AcceptsFocus() const { return FALSE; }
+
+private:
+    DECLARE_NO_COPY_CLASS(wxStaticTextBase)
 };
 
 #if defined(__WXUNIVERSAL__)

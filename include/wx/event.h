@@ -459,6 +459,8 @@ public:
 private:
     wxEvent& m_event;
     int m_propagationLevelOld;
+
+    DECLARE_NO_COPY_CLASS(wxPropagationDisabler)
 };
 
 /*
@@ -482,6 +484,8 @@ public:
 
 private:
     wxEvent& m_event;
+
+    DECLARE_NO_COPY_CLASS(wxPropagateOnce)
 };
 
 #if wxUSE_GUI
@@ -508,9 +512,6 @@ private:
 
 class WXDLLIMPEXP_CORE wxCommandEvent : public wxEvent
 {
-private:
-    wxCommandEvent& operator=(const wxCommandEvent& event);
-
 public:
     wxCommandEvent(wxEventType commandType = wxEVT_NULL, int winid = 0);
 
@@ -564,7 +565,7 @@ public:
     wxClientData*     m_clientObject;  // Arbitrary client object
 
 private:
-    DECLARE_DYNAMIC_CLASS(wxCommandEvent)
+    DECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxCommandEvent)
 };
 
 // this class adds a possibility to react (from the user) code to a control
@@ -595,7 +596,7 @@ private:
     bool m_bAllow;
 
 private:
-    DECLARE_DYNAMIC_CLASS(wxNotifyEvent)
+    DECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxNotifyEvent)
 };
 
 // Scroll event class, derived form wxCommandEvent. wxScrollEvents are
@@ -626,7 +627,7 @@ public:
     virtual wxEvent *Clone() const { return new wxScrollEvent(*this); }
 
 private:
-    DECLARE_DYNAMIC_CLASS(wxScrollEvent)
+    DECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxScrollEvent)
 };
 
 // ScrollWin event class, derived fom wxEvent. wxScrollWinEvents
@@ -663,7 +664,7 @@ public:
     long              m_extraLong;
 
 private:
-    DECLARE_DYNAMIC_CLASS(wxScrollWinEvent)
+    DECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxScrollWinEvent)
 };
 
 // Mouse event class
@@ -904,7 +905,7 @@ private:
     wxCursor m_cursor;
 
 private:
-    DECLARE_DYNAMIC_CLASS(wxSetCursorEvent)
+    DECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxSetCursorEvent)
 };
 
 // Keyboard input event class
@@ -1051,7 +1052,7 @@ public:
     wxRect m_rect; // Used for wxEVT_SIZING
 
 private:
-    DECLARE_DYNAMIC_CLASS(wxSizeEvent)
+    DECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxSizeEvent)
 };
 
 // Move event class
@@ -1088,7 +1089,7 @@ public:
     wxRect m_rect;
 
 private:
-    DECLARE_DYNAMIC_CLASS(wxMoveEvent)
+    DECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxMoveEvent)
 };
 
 // Paint event class
@@ -1125,7 +1126,7 @@ public:
     virtual wxEvent *Clone() const { return new wxPaintEvent(*this); }
 
 private:
-    DECLARE_DYNAMIC_CLASS(wxPaintEvent)
+    DECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxPaintEvent)
 };
 
 class WXDLLIMPEXP_CORE wxNcPaintEvent : public wxEvent
@@ -1138,7 +1139,7 @@ public:
     virtual wxEvent *Clone() const { return new wxNcPaintEvent(*this); }
 
 private:
-    DECLARE_DYNAMIC_CLASS(wxNcPaintEvent)
+    DECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxNcPaintEvent)
 };
 
 // Erase background event class
@@ -1148,9 +1149,6 @@ private:
 
 class WXDLLIMPEXP_CORE wxEraseEvent : public wxEvent
 {
-private:
-    wxEraseEvent& operator=(const wxEraseEvent& event);
-
 public:
     wxEraseEvent(int Id = 0, wxDC *dc = (wxDC *) NULL)
         : wxEvent(Id, wxEVT_ERASE_BACKGROUND),
@@ -1169,7 +1167,7 @@ public:
     wxDC *m_dc;
 
 private:
-    DECLARE_DYNAMIC_CLASS(wxEraseEvent)
+    DECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxEraseEvent)
 };
 
 // Focus event class
@@ -1180,9 +1178,6 @@ private:
 
 class WXDLLIMPEXP_CORE wxFocusEvent : public wxEvent
 {
-private:
-    wxFocusEvent& operator=(const wxFocusEvent& event);
-
 public:
     wxFocusEvent(wxEventType type = wxEVT_NULL, int winid = 0)
         : wxEvent(winid, type)
@@ -1204,7 +1199,7 @@ private:
     wxWindow *m_win;
 
 private:
-    DECLARE_DYNAMIC_CLASS(wxFocusEvent)
+    DECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxFocusEvent)
 };
 
 // wxChildFocusEvent notifies the parent that a child has got the focus: unlike
@@ -1219,7 +1214,7 @@ public:
     virtual wxEvent *Clone() const { return new wxChildFocusEvent(*this); }
 
 private:
-    DECLARE_DYNAMIC_CLASS(wxChildFocusEvent)
+    DECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxChildFocusEvent)
 };
 
 // Activate event class
@@ -1246,7 +1241,7 @@ private:
     bool m_active;
 
 private:
-    DECLARE_DYNAMIC_CLASS(wxActivateEvent)
+    DECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxActivateEvent)
 };
 
 // InitDialog event class
@@ -1264,7 +1259,7 @@ public:
     virtual wxEvent *Clone() const { return new wxInitDialogEvent(*this); }
 
 private:
-    DECLARE_DYNAMIC_CLASS(wxInitDialogEvent)
+    DECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxInitDialogEvent)
 };
 
 // Miscellaneous menu event class
@@ -1279,7 +1274,7 @@ class WXDLLIMPEXP_CORE wxMenuEvent : public wxEvent
 public:
     wxMenuEvent(wxEventType type = wxEVT_NULL, int winid = 0, wxMenu* menu = NULL)
         : wxEvent(winid, type)
-        { m_menuId = winid; m_menu = NULL; }
+        { m_menuId = winid; m_menu = menu; }
     wxMenuEvent(const wxMenuEvent & event)
         : wxEvent(event)
     { m_menuId = event.m_menuId; m_menu = event.m_menu; }
@@ -1299,7 +1294,7 @@ private:
     int     m_menuId;
     wxMenu* m_menu;
 
-    DECLARE_DYNAMIC_CLASS(wxMenuEvent)
+    DECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxMenuEvent)
 };
 
 // Window close or session close event class
@@ -1368,7 +1363,7 @@ protected:
 #endif
 
 private:
-    DECLARE_DYNAMIC_CLASS(wxCloseEvent)
+    DECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxCloseEvent)
 
 };
 
@@ -1395,7 +1390,7 @@ protected:
     bool m_show;
 
 private:
-    DECLARE_DYNAMIC_CLASS(wxShowEvent)
+    DECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxShowEvent)
 };
 
 /*
@@ -1421,7 +1416,7 @@ protected:
     bool m_iconized;
 
 private:
-    DECLARE_DYNAMIC_CLASS(wxIconizeEvent)
+    DECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxIconizeEvent)
 };
 /*
  wxEVT_MAXIMIZE
@@ -1437,7 +1432,7 @@ public:
     virtual wxEvent *Clone() const { return new wxMaximizeEvent(*this); }
 
 private:
-    DECLARE_DYNAMIC_CLASS(wxMaximizeEvent)
+    DECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxMaximizeEvent)
 };
 
 // Joystick event class
@@ -1535,7 +1530,7 @@ public:
     virtual wxEvent *Clone() const { return new wxJoystickEvent(*this); }
 
 private:
-    DECLARE_DYNAMIC_CLASS(wxJoystickEvent)
+    DECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxJoystickEvent)
 };
 
 // Drop files event class
@@ -1545,9 +1540,6 @@ private:
 
 class WXDLLIMPEXP_CORE wxDropFilesEvent : public wxEvent
 {
-private:
-    wxDropFilesEvent& operator=(const wxDropFilesEvent& event);
-
 public:
     int       m_noFiles;
     wxPoint   m_pos;
@@ -1588,7 +1580,7 @@ public:
     virtual wxEvent *Clone() const { return new wxDropFilesEvent(*this); }
 
 private:
-    DECLARE_DYNAMIC_CLASS(wxDropFilesEvent)
+    DECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxDropFilesEvent)
 };
 
 // Update UI event
@@ -1681,7 +1673,7 @@ protected:
     static wxUpdateUIMode   sm_updateMode;
 
 private:
-    DECLARE_DYNAMIC_CLASS(wxUpdateUIEvent)
+    DECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxUpdateUIEvent)
 };
 
 /*
@@ -1699,7 +1691,7 @@ public:
     virtual wxEvent *Clone() const { return new wxSysColourChangedEvent(*this); }
 
 private:
-    DECLARE_DYNAMIC_CLASS(wxSysColourChangedEvent)
+    DECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxSysColourChangedEvent)
 };
 
 /*
@@ -1710,9 +1702,6 @@ private:
 
 class WXDLLIMPEXP_CORE wxMouseCaptureChangedEvent : public wxEvent
 {
-private:
-    wxMouseCaptureChangedEvent operator=(const wxMouseCaptureChangedEvent& event);
-
 public:
     wxMouseCaptureChangedEvent(wxWindowID winid = 0, wxWindow* gainedCapture = NULL)
         : wxEvent(winid, wxEVT_MOUSE_CAPTURE_CHANGED),
@@ -1730,7 +1719,8 @@ public:
 
 private:
     wxWindow* m_gainedCapture;
-    DECLARE_DYNAMIC_CLASS(wxMouseCaptureChangedEvent)
+
+    DECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxMouseCaptureChangedEvent)
 };
 
 /*
@@ -1739,7 +1729,7 @@ private:
 class WXDLLIMPEXP_CORE wxDisplayChangedEvent : public wxEvent
 {
 private:
-    DECLARE_DYNAMIC_CLASS(wxDisplayChangedEvent)
+    DECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxDisplayChangedEvent)
 
 public:
     wxDisplayChangedEvent()
@@ -1755,9 +1745,6 @@ public:
 
 class WXDLLIMPEXP_CORE wxPaletteChangedEvent : public wxEvent
 {
-private:
-    wxPaletteChangedEvent& operator=(const wxPaletteChangedEvent& event);
-
 public:
     wxPaletteChangedEvent(wxWindowID winid = 0)
         : wxEvent(winid, wxEVT_PALETTE_CHANGED),
@@ -1778,7 +1765,7 @@ protected:
     wxWindow*     m_changedWindow;
 
 private:
-    DECLARE_DYNAMIC_CLASS(wxPaletteChangedEvent)
+    DECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxPaletteChangedEvent)
 };
 
 /*
@@ -1808,7 +1795,7 @@ protected:
     bool m_paletteRealized;
 
 private:
-    DECLARE_DYNAMIC_CLASS(wxQueryNewPaletteEvent)
+    DECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxQueryNewPaletteEvent)
 };
 
 /*
@@ -1818,9 +1805,6 @@ private:
 // NB: don't derive from command event to avoid being propagated to the parent
 class WXDLLIMPEXP_CORE wxNavigationKeyEvent : public wxEvent
 {
-private:
-    wxNavigationKeyEvent& operator=(const wxNavigationKeyEvent& event);
-
 public:
     wxNavigationKeyEvent()
         : wxEvent(0, wxEVT_NAVIGATION_KEY),
@@ -1874,7 +1858,7 @@ private:
     wxWindow *m_focus;
 
 private:
-    DECLARE_DYNAMIC_CLASS(wxNavigationKeyEvent)
+    DECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxNavigationKeyEvent)
 };
 
 // Window creation/destruction events: the first is sent as soon as window is
@@ -1897,7 +1881,7 @@ public:
     virtual wxEvent *Clone() const { return new wxWindowCreateEvent(*this); }
 
 private:
-    DECLARE_DYNAMIC_CLASS(wxWindowCreateEvent)
+    DECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxWindowCreateEvent)
 };
 
 class WXDLLIMPEXP_CORE wxWindowDestroyEvent : public wxCommandEvent
@@ -1910,7 +1894,7 @@ public:
     virtual wxEvent *Clone() const { return new wxWindowDestroyEvent(*this); }
 
 private:
-    DECLARE_DYNAMIC_CLASS(wxWindowDestroyEvent)
+    DECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxWindowDestroyEvent)
 };
 
 // A help event is sent when the user clicks on a window in context-help mode.
@@ -1955,7 +1939,7 @@ protected:
     wxString  m_link;
 
 private:
-    DECLARE_DYNAMIC_CLASS(wxHelpEvent)
+    DECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxHelpEvent)
 };
 
 // A Context event is sent when the user right clicks on a window or
@@ -1990,7 +1974,7 @@ protected:
     wxPoint   m_pos;
 
 private:
-    DECLARE_DYNAMIC_CLASS(wxContextMenuEvent)
+    DECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxContextMenuEvent)
 };
 
 // Idle event
@@ -2045,7 +2029,7 @@ protected:
     static wxIdleMode sm_idleMode;
 
 private:
-    DECLARE_DYNAMIC_CLASS(wxIdleEvent)
+    DECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxIdleEvent)
 };
 
 #endif // wxUSE_GUI
@@ -2138,6 +2122,9 @@ struct WXDLLIMPEXP_BASE wxEventTableEntry : public wxEventTableEntryBase
     // objects will have been initialized (including the event type constants)
     // and so it will have the correct value when it is needed
     const int& m_eventType;
+
+private:
+    wxEventTableEntry& operator=(const wxEventTableEntry&);
 };
 
 class WXDLLIMPEXP_BASE wxEvtHandler;
@@ -2161,6 +2148,8 @@ struct WXDLLIMPEXP_BASE wxDynamicEventTableEntry : public wxEventTableEntryBase
     // EventFunction is always a member of the EventHandler receiving the 
     // message
     wxEvtHandler* m_eventSink;
+
+    DECLARE_NO_COPY_CLASS(wxDynamicEventTableEntry)
 };
 
 #endif // !WXWIN_COMPATIBILITY_EVENT_TYPES
@@ -2223,6 +2212,8 @@ protected:
 
     size_t                 m_size;
     EventTypeTablePointer *m_eventTypeTable;
+
+    DECLARE_NO_COPY_CLASS(wxEventHashTable)
 };
 
 // ----------------------------------------------------------------------------
@@ -2389,8 +2380,7 @@ protected:
     virtual void *DoGetClientData() const;
 
 private:
-    DECLARE_NO_COPY_CLASS(wxEvtHandler)
-    DECLARE_DYNAMIC_CLASS(wxEvtHandler)
+    DECLARE_DYNAMIC_CLASS_NO_COPY(wxEvtHandler)
 };
 
 // Post a message to the given eventhandler which will be processed during the

@@ -189,7 +189,7 @@ private:
     bool m_needsResize; // flag which tells us to artificially resize the frame
 
     DECLARE_EVENT_TABLE()
-    DECLARE_DYNAMIC_CLASS(wxMDIChildFrame)
+    DECLARE_DYNAMIC_CLASS_NO_COPY(wxMDIChildFrame)
 };
 
 // ---------------------------------------------------------------------------
@@ -224,7 +224,7 @@ protected:
 
 private:
     DECLARE_EVENT_TABLE()
-    DECLARE_DYNAMIC_CLASS(wxMDIClientWindow)
+    DECLARE_DYNAMIC_CLASS_NO_COPY(wxMDIClientWindow)
 };
 
 #endif

@@ -71,6 +71,9 @@ class wxHtmlImageMapAreaCell : public wxHtmlCell
                   int WXUNUSED(x), int WXUNUSED(y),
                   int WXUNUSED(view_y1), int WXUNUSED(view_y2),
                   wxHtmlRenderingInfo& WXUNUSED(info)) {}
+
+
+    DECLARE_NO_COPY_CLASS(wxHtmlImageMapAreaCell)
 };
 
 
@@ -247,6 +250,8 @@ class wxHtmlImageMapCell : public wxHtmlCell
                   int WXUNUSED(x), int WXUNUSED(y),
                   int WXUNUSED(view_y1), int WXUNUSED(view_y2),
                   wxHtmlRenderingInfo& WXUNUSED(info)) {}
+
+    DECLARE_NO_COPY_CLASS(wxHtmlImageMapCell)
 };
 
 
@@ -589,6 +594,7 @@ wxHtmlLinkInfo *wxHtmlImageCell::GetLink( int x, int y ) const
 //--------------------------------------------------------------------------------
 
 TAG_HANDLER_BEGIN(IMG, "IMG,MAP,AREA")
+    TAG_HANDLER_CONSTR(IMG) { }
 
     TAG_HANDLER_PROC(tag)
     {

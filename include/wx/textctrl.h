@@ -349,6 +349,8 @@ protected:
 
     // the text style which will be used for any new text added to the control
     wxTextAttr m_defaultStyle;
+
+    DECLARE_NO_COPY_CLASS(wxTextCtrlBase)
 };
 
 // ----------------------------------------------------------------------------
@@ -415,7 +417,7 @@ protected:
          m_end;
 
 private:
-    DECLARE_DYNAMIC_CLASS(wxTextUrlEvent)
+    DECLARE_DYNAMIC_CLASS_NO_COPY(wxTextUrlEvent)
 
 public:
     // for wxWin RTTI only, don't use

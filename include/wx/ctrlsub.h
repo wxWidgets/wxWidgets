@@ -161,6 +161,9 @@ public:
     {
         return wxItemContainer::GetClientObject(n);
     }
+
+private:
+    DECLARE_NO_COPY_CLASS(wxControlWithItems);
 };
 
 #endif // wxUSE_CONTROLS

@@ -68,14 +68,16 @@ void wxHtmlSelection::Set(const wxHtmlCell *fromCell, const wxHtmlCell *toCell)
     Set(p1, fromCell, p2, toCell);
 }
 
-wxColour wxDefaultHtmlRenderingStyle::GetSelectedTextColour(
-                                        const wxColour& clr)
+wxColour
+wxDefaultHtmlRenderingStyle::
+GetSelectedTextColour(const wxColour& WXUNUSED(clr))
 {
     return wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHTTEXT);
 }
 
-wxColour wxDefaultHtmlRenderingStyle::GetSelectedTextBgColour(
-                                        const wxColour& WXUNUSED(clr))
+wxColour
+wxDefaultHtmlRenderingStyle::
+GetSelectedTextBgColour(const wxColour& WXUNUSED(clr))
 {
     return wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHT);
 }

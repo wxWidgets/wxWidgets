@@ -291,7 +291,7 @@ private:
     friend class WXDLLEXPORT wxTreeCtrl;
     friend class WXDLLEXPORT wxGenericTreeCtrl;
 
-    DECLARE_DYNAMIC_CLASS(wxTreeEvent);
+    DECLARE_DYNAMIC_CLASS_NO_COPY(wxTreeEvent);
 };
 
 typedef void (wxEvtHandler::*wxTreeEventFunction)(wxTreeEvent&);

@@ -241,6 +241,8 @@ public:
 private:
     // the one and only format we support
     wxDataFormat m_format;
+
+    DECLARE_NO_COPY_CLASS(wxDataObjectSimple)
 };
 
 // ----------------------------------------------------------------------------
@@ -294,6 +296,8 @@ private:
     // the index of the preferred one (0 initially, so by default the first
     // one is the preferred)
     size_t m_preferred;
+
+    DECLARE_NO_COPY_CLASS(wxDataObjectComposite)
 };
 
 // ============================================================================
@@ -341,6 +345,8 @@ private:
         { return(wxDataObjectSimple::GetDataHere(format, pBuf)); }
     bool SetData(const wxDataFormat& format, size_t nLen, const void* pBuf)
         { return(wxDataObjectSimple::SetData(format, nLen, pBuf)); }
+
+    DECLARE_NO_COPY_CLASS(wxTextDataObject)
 };
 
 // ----------------------------------------------------------------------------
@@ -364,6 +370,8 @@ public:
 
 protected:
     wxBitmap m_bitmap;
+
+    DECLARE_NO_COPY_CLASS(wxBitmapDataObjectBase)
 };
 
 // ----------------------------------------------------------------------------
@@ -395,6 +403,8 @@ private:
         { return(wxDataObjectSimple::GetDataSize(format)); }
     bool GetDataHere(const wxDataFormat& format, void* pBuf) const
         { return(wxDataObjectSimple::GetDataHere(format, pBuf)); }
+
+    DECLARE_NO_COPY_CLASS(wxFileDataObjectBase)
 };
 
 // ----------------------------------------------------------------------------

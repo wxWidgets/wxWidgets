@@ -42,7 +42,7 @@ protected:
     // get the HWND to be used as parent of this window with CreateWindow()
     virtual WXHWND MSWGetParent() const;
 
-    DECLARE_DYNAMIC_CLASS(wxPopupWindow)
+    DECLARE_DYNAMIC_CLASS_NO_COPY(wxPopupWindow)
 };
 
 #endif // _WX_MSW_POPUPWIN_H_

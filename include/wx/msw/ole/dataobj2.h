@@ -64,6 +64,9 @@ public:
     virtual size_t GetDataSize() const;
     virtual bool GetDataHere(void *buf) const;
     virtual bool SetData(size_t len, const void *buf);
+
+private:
+    DECLARE_NO_COPY_CLASS(wxBitmapDataObject2)
 };
 
 // ----------------------------------------------------------------------------
@@ -73,11 +76,16 @@ public:
 class WXDLLEXPORT wxFileDataObject : public wxFileDataObjectBase
 {
 public:
+    wxFileDataObject() { }
+
     // implement base class pure virtuals
     virtual bool SetData(size_t len, const void *buf);
     virtual size_t GetDataSize() const;
     virtual bool GetDataHere(void *pData) const;
     virtual void AddFile(const wxString& file);
+
+private:
+    DECLARE_NO_COPY_CLASS(wxFileDataObject)
 };
 
 // ----------------------------------------------------------------------------

@@ -51,6 +51,7 @@ I STRONGLY recommend reading and understanding these macros!!
 
 
 #define TAG_HANDLER_END(name)                                             \
+        DECLARE_NO_COPY_CLASS(HTML_Handler_##name)                        \
     };
 
 

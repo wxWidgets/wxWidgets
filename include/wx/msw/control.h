@@ -22,12 +22,12 @@
 class WXDLLEXPORT wxControl : public wxControlBase
 {
 public:
-   wxControl();
-   wxControl(wxWindow *parent, wxWindowID id,
-             const wxPoint& pos = wxDefaultPosition,
-             const wxSize& size = wxDefaultSize, long style = 0,
-             const wxValidator& validator = wxDefaultValidator,
-             const wxString& name = wxControlNameStr)
+    wxControl();
+    wxControl(wxWindow *parent, wxWindowID id,
+              const wxPoint& pos = wxDefaultPosition,
+              const wxSize& size = wxDefaultSize, long style = 0,
+              const wxValidator& validator = wxDefaultValidator,
+              const wxString& name = wxControlNameStr)
     {
         Create(parent, id, pos, size, style, validator, name);
     }
@@ -119,7 +119,7 @@ protected:
     wxArrayLong m_subControls;
 
 private:
-    DECLARE_ABSTRACT_CLASS(wxControl)
+    DECLARE_DYNAMIC_CLASS_NO_COPY(wxControl)
     DECLARE_EVENT_TABLE()
 };
 

@@ -66,7 +66,7 @@ private:
     // see the comments in SetFocus()
     bool m_focusJustSet;
 
-    DECLARE_DYNAMIC_CLASS(wxRadioButton)
+    DECLARE_DYNAMIC_CLASS_NO_COPY(wxRadioButton)
 };
 
 #endif

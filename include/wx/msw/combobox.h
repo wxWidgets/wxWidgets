@@ -26,8 +26,6 @@
 
 class WXDLLEXPORT wxComboBox: public wxChoice
 {
-    DECLARE_DYNAMIC_CLASS(wxComboBox)
-
 public:
     wxComboBox() { }
 
@@ -81,6 +79,9 @@ public:
             WXUINT message, WXWPARAM wParam, WXLPARAM lParam);
 
     WXHWND GetEditHWND() const;
+
+private:
+    DECLARE_DYNAMIC_CLASS_NO_COPY(wxComboBox)
 };
 
 #endif // wxUSE_COMBOBOX

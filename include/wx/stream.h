@@ -232,6 +232,8 @@ protected:
     size_t m_wbackcur;
 
     friend class wxStreamBuffer;
+
+    DECLARE_NO_COPY_CLASS(wxInputStream)
 };
 
 // ----------------------------------------------------------------------------
@@ -264,6 +266,8 @@ protected:
     virtual size_t OnSysWrite(const void *buffer, size_t bufsize);
 
     friend class wxStreamBuffer;
+
+    DECLARE_NO_COPY_CLASS(wxOutputStream)
 };
 
 // ============================================================================
@@ -288,6 +292,8 @@ protected:
     virtual off_t OnSysTell() const;
 
     size_t m_currentPos;
+
+    DECLARE_NO_COPY_CLASS(wxCountingOutputStream)
 };
 
 // ---------------------------------------------------------------------------

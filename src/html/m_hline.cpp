@@ -50,6 +50,8 @@ class wxHtmlLineCell : public wxHtmlCell
     private:
         // Should we draw 3-D shading or not
       bool m_HasShading;
+
+      DECLARE_NO_COPY_CLASS(wxHtmlLineCell)
 };
 
 
@@ -73,6 +75,7 @@ void wxHtmlLineCell::Draw(wxDC& dc, int x, int y,
 
 
 TAG_HANDLER_BEGIN(HR, "HR")
+    TAG_HANDLER_CONSTR(HR) { }
 
     TAG_HANDLER_PROC(tag)
     {

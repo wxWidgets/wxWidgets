@@ -129,7 +129,7 @@ protected:
 #endif
 
 private:
-    DECLARE_DYNAMIC_CLASS(wxListBox)
+    DECLARE_DYNAMIC_CLASS_NO_COPY(wxListBox)
 };
 
 #endif // wxUSE_LISTBOX

@@ -436,6 +436,8 @@ bool wxTextCtrlBase::EmulateKeyPress(const wxKeyEvent& event)
 
         return TRUE;
     }
+#else
+    event;
 #endif // !__WIN32__
 
     return FALSE;

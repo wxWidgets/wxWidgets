@@ -407,6 +407,7 @@ public:
 
 private:
     DECLARE_EVENT_TABLE()
+    DECLARE_NO_COPY_CLASS(wxPrintAbortDialog)
 };
 
 #endif // wxUSE_PRINTING_ARCHITECTURE

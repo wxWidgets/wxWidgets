@@ -606,7 +606,7 @@ protected:
 
 private:
     DECLARE_EVENT_TABLE()
-    DECLARE_CLASS(wxToolBarBase)
+    DECLARE_NO_COPY_CLASS(wxToolBarBase)
 };
 
 // Helper function for creating the image for disabled buttons

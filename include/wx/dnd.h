@@ -231,6 +231,9 @@ public:
     virtual bool OnDropText(wxCoord x, wxCoord y, const wxString& text) = 0;
 
     virtual wxDragResult OnData(wxCoord x, wxCoord y, wxDragResult def);
+
+private:
+    DECLARE_NO_COPY_CLASS(wxTextDropTarget)
 };
 
 // A drop target which accepts files (dragged from File Manager or Explorer)
@@ -244,6 +247,9 @@ public:
                              const wxArrayString& filenames) = 0;
 
     virtual wxDragResult OnData(wxCoord x, wxCoord y, wxDragResult def);
+
+private:
+    DECLARE_NO_COPY_CLASS(wxFileDropTarget)
 };
 
 #endif // wxUSE_DRAG_AND_DROP

@@ -57,6 +57,8 @@ protected:
         { if ( data ) m_fontData = *data; }
 
     wxFontData m_fontData;
+
+    DECLARE_NO_COPY_CLASS(wxFontDialogBase)
 };
 
 // ----------------------------------------------------------------------------

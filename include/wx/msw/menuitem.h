@@ -90,7 +90,7 @@ private:
     // does this item start a radio group?
     bool m_isRadioGroupStart;
 
-    DECLARE_DYNAMIC_CLASS(wxMenuItem)
+    DECLARE_DYNAMIC_CLASS_NO_COPY(wxMenuItem)
 };
 
 #endif  //_MENUITEM_H

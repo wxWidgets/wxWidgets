@@ -827,6 +827,9 @@ void wxNotebook::ApplyThemeBackground(wxWindow* window, const wxColour& colour)
         wxWindow *child = node->GetData();
         ApplyThemeBackground(child, colour);
     }
+#else
+    window;
+    colour;
 #endif
 }
 

@@ -229,7 +229,7 @@ protected:
         }
 
     private:
-        DECLARE_CLASS(wxScrolledWindow)
+        DECLARE_DYNAMIC_CLASS_NO_COPY(wxScrolledWindow)
     };
 
     #define wxSCROLLED_WINDOW_IS_GENERIC 1
@@ -238,4 +238,3 @@ protected:
 #endif
     // _WX_SCROLWIN_H_BASE_
 
-// vi:sts=4:sw=4:et

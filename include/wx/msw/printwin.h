@@ -49,8 +49,6 @@ private:
 
 class WXDLLEXPORT wxWindowsPrintPreview : public wxPrintPreviewBase
 {
-    DECLARE_CLASS(wxWindowsPrintPreview)
-
 public:
     wxWindowsPrintPreview(wxPrintout *printout,
                           wxPrintout *printoutForPrinting = NULL,
@@ -62,6 +60,9 @@ public:
 
     virtual bool Print(bool interactive);
     virtual void DetermineScaling();
+
+private:
+    DECLARE_DYNAMIC_CLASS_NO_COPY(wxWindowsPrintPreview)
 };
 
 #endif

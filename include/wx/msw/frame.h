@@ -154,7 +154,7 @@ private:
     bool m_wasMinimized;
 
     DECLARE_EVENT_TABLE()
-    DECLARE_DYNAMIC_CLASS(wxFrame)
+    DECLARE_DYNAMIC_CLASS_NO_COPY(wxFrame)
 };
 
 #endif

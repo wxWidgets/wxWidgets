@@ -45,6 +45,8 @@ public:
     // the point must be given in screen coordinates!
     virtual void Position(const wxPoint& ptOrigin,
                           const wxSize& size);
+
+    DECLARE_NO_COPY_CLASS(wxPopupWindowBase)
 };
 
 

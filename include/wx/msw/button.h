@@ -81,7 +81,7 @@ protected:
     virtual WXDWORD MSWGetStyle(long style, WXDWORD *exstyle) const ;
 
 private:
-    DECLARE_DYNAMIC_CLASS(wxButton)
+    DECLARE_DYNAMIC_CLASS_NO_COPY(wxButton)
 };
 
 #endif

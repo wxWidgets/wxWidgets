@@ -159,7 +159,8 @@ public:
 
     // hit test, returns which tab is hit and, optionally, where (icon, label)
     // (not implemented on all platforms)
-    virtual int HitTest(const wxPoint& pt, long *flags = NULL) const
+    virtual int HitTest(const wxPoint& WXUNUSED(pt),
+                        long * WXUNUSED(flags) = NULL) const
     {
         return wxNOT_FOUND;
     }
@@ -218,7 +219,7 @@ private:
     int m_nSel,     // currently selected page
         m_nOldSel;  // previously selected page
 
-    DECLARE_DYNAMIC_CLASS(wxNotebookEvent)
+    DECLARE_DYNAMIC_CLASS_NO_COPY(wxNotebookEvent)
 };
 
 // ----------------------------------------------------------------------------

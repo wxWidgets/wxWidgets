@@ -86,6 +86,8 @@ protected:
     // returns EOT (\4) if there is a stream error, or end of file
     wxChar NextChar();   // this should be used instead of GetC() because of Unicode issues
     wxChar NextNonSeparators();
+
+    DECLARE_NO_COPY_CLASS(wxTextInputStream)
 };
 
 typedef enum
@@ -135,6 +137,7 @@ protected:
     wxMBConv &m_conv;
 #endif
 
+    DECLARE_NO_COPY_CLASS(wxTextOutputStream)
 };
 
 #endif

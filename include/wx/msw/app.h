@@ -102,6 +102,7 @@ protected:
     bool m_keepGoing;
 
     DECLARE_EVENT_TABLE()
+    DECLARE_NO_COPY_CLASS(wxApp)
 };
 
 int WXDLLEXPORT wxEntry(WXHINSTANCE hInstance, WXHINSTANCE hPrevInstance,

@@ -14,6 +14,8 @@ WXDLLEXPORT_DATA(extern const wxChar*) wxScrollBarNameStr;
 class WXDLLEXPORT wxScrollBarBase : public wxControl
 {
 public:
+    wxScrollBarBase() { }
+
     // scrollbar construction
     bool Create(wxWindow *parent,
                 wxWindowID id,
@@ -36,6 +38,9 @@ public:
     virtual void SetScrollbar(int position, int thumbSize,
                               int range, int pageSize,
                               bool refresh = TRUE) = 0;
+
+private:
+    DECLARE_NO_COPY_CLASS(wxScrollBarBase)
 };
 
 #if defined(__WXUNIVERSAL__)

@@ -110,6 +110,8 @@ public:
 
 private:
     long int   m_startint;
+
+    DECLARE_NO_COPY_CLASS(wxGridCellEnumEditor)
 };
 
 #endif // wxUSE_COMBOBOX
@@ -124,6 +126,8 @@ public:
 
     virtual wxGridCellEditor *Clone() const
         { return new wxGridCellAutoWrapStringEditor; }
+
+    DECLARE_NO_COPY_CLASS(wxGridCellAutoWrapStringEditor)
 };
 
 class WXDLLEXPORT wxGridCellAutoWrapStringRenderer : public wxGridCellStringRenderer

@@ -55,11 +55,14 @@ public:
             return wxHtmlCell::Find(condition, param);
         }
     }
+
+    DECLARE_NO_COPY_CLASS(wxHtmlAnchorCell)
 };
 
 
 
 TAG_HANDLER_BEGIN(A, "A")
+    TAG_HANDLER_CONSTR(A) { }
 
     TAG_HANDLER_PROC(tag)
     {

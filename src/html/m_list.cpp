@@ -45,6 +45,8 @@ class wxHtmlListmarkCell : public wxHtmlCell
         wxHtmlListmarkCell(wxDC *dc, const wxColour& clr);
         void Draw(wxDC& dc, int x, int y, int view_y1, int view_y2,
                   wxHtmlRenderingInfo& info);
+
+    DECLARE_NO_COPY_CLASS(wxHtmlListmarkCell)
 };
 
 wxHtmlListmarkCell::wxHtmlListmarkCell(wxDC* dc, const wxColour& clr) : wxHtmlCell(), m_Brush(clr, wxSOLID)

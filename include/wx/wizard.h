@@ -81,7 +81,7 @@ protected:
     wxBitmap m_bitmap;
 
 private:
-    DECLARE_ABSTRACT_CLASS(wxWizardPage)
+    DECLARE_DYNAMIC_CLASS_NO_COPY(wxWizardPage)
 };
 
 // ----------------------------------------------------------------------------
@@ -149,8 +149,7 @@ private:
     wxWizardPage *m_prev,
                  *m_next;
 
-    DECLARE_DYNAMIC_CLASS(wxWizardPageSimple)
-    DECLARE_NO_COPY_CLASS(wxWizardPageSimple)
+    DECLARE_DYNAMIC_CLASS_NO_COPY(wxWizardPageSimple)
 };
 
 // ----------------------------------------------------------------------------
@@ -171,6 +170,7 @@ public:
                  const wxPoint& pos = wxDefaultPosition,
                  long style = wxDEFAULT_DIALOG_STYLE);
     */
+    wxWizardBase() { }
 
     // executes the wizard starting from the given page, returns TRUE if it was
     // successfully finished, FALSE if user cancelled it
@@ -221,6 +221,9 @@ public:
 
     virtual bool HasPrevPage(wxWizardPage *page)
         { return page->GetPrev() != NULL; }
+
+private:
+    DECLARE_NO_COPY_CLASS(wxWizardBase)
 };
 
 // include the real class declaration

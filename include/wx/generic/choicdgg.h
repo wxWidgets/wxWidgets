@@ -131,7 +131,7 @@ protected:
     wxString    m_stringSelection;
 
 private:
-    DECLARE_DYNAMIC_CLASS(wxSingleChoiceDialog)
+    DECLARE_DYNAMIC_CLASS_NO_COPY(wxSingleChoiceDialog)
     DECLARE_EVENT_TABLE()
 };
 
@@ -173,7 +173,7 @@ protected:
     wxArrayInt m_selections;
 
 private:
-    DECLARE_DYNAMIC_CLASS(wxMultiChoiceDialog)
+    DECLARE_DYNAMIC_CLASS_NO_COPY(wxMultiChoiceDialog)
 };
 
 // ----------------------------------------------------------------------------

@@ -43,6 +43,9 @@ protected:
     virtual bool OnWrite(wxTextFileType WXUNUSED(typeNew),
                          wxMBConv& WXUNUSED(conv) = wxConvUTF8)
         { return TRUE; }
+
+private:
+    DECLARE_NO_COPY_CLASS(wxMemoryText)
 };
 
 #endif // wxUSE_TEXTBUFFER

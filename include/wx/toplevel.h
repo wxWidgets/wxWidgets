@@ -111,7 +111,7 @@ public:
     // Set the shape of the window to the given region.
     // Returns TRUE if the platform supports this feature (and the
     // operation is successful.)
-    virtual bool SetShape(const wxRegion& region) { return FALSE; }
+    virtual bool SetShape(const wxRegion& WXUNUSED(region)) { return FALSE; }
 
     // old functions, use the new ones instead!
 #if WXWIN_COMPATIBILITY_2
@@ -158,6 +158,7 @@ protected:
     // the frame icon
     wxIconBundle m_icons;
 
+    DECLARE_NO_COPY_CLASS(wxTopLevelWindowBase)
     DECLARE_EVENT_TABLE()
 };
 
@@ -210,12 +211,10 @@ protected:
                 Create(parent, winid, title, pos, size, style, name);
             }
 
-            DECLARE_DYNAMIC_CLASS(wxTopLevelWindow)
+            DECLARE_DYNAMIC_CLASS_NO_COPY(wxTopLevelWindow)
         };
     #endif // wxTopLevelWindowNative
 #endif // __WXUNIVERSAL__/!__WXUNIVERSAL__
 
 
 #endif // _WX_TOPLEVEL_BASE_H_
-
-// vi:sts=4:sw=4:et

@@ -42,7 +42,7 @@ wxFileDialogBase::wxFileDialogBase(wxWindow *parent,
                                    const wxString& defaultFile,
                                    const wxString& wildCard,
                                    long style,
-                                   const wxPoint& pos)
+                                   const wxPoint& WXUNUSED(pos))
 {
     m_parent = parent;
     m_message = message;

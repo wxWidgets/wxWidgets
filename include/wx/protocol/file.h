@@ -24,7 +24,7 @@
 #include "wx/url.h"
 
 class WXDLLIMPEXP_BASE wxFileProto: public wxProtocol {
-  DECLARE_DYNAMIC_CLASS(wxFileProto)
+  DECLARE_DYNAMIC_CLASS_NO_COPY(wxFileProto)
   DECLARE_PROTOCOL(wxFileProto)
 protected:
   wxProtocolError m_error;

@@ -72,6 +72,8 @@ protected:
     {
         return AdjustSize(wxDefaultSize);
     }
+
+    DECLARE_NO_COPY_CLASS(wxStaticLineBase)
 };
 
 // ----------------------------------------------------------------------------

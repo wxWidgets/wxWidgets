@@ -254,6 +254,9 @@ class WXDLLEXPORT wxDCTemp : public wxDC
 public:
     wxDCTemp(WXHDC hdc) { SetHDC(hdc); }
     virtual ~wxDCTemp() { SetHDC((WXHDC)NULL); }
+
+private:
+    DECLARE_NO_COPY_CLASS(wxDCTemp)
 };
 
 #endif

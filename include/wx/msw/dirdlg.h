@@ -42,7 +42,7 @@ protected:
     wxString    m_path;
 
 private:
-    DECLARE_DYNAMIC_CLASS(wxDirDialog)
+    DECLARE_DYNAMIC_CLASS_NO_COPY(wxDirDialog)
 };
 
 #endif

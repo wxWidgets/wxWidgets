@@ -133,6 +133,7 @@ bool wxHtmlPageBreakCell::AdjustPagebreak(int* pagebreak, int* known_pagebreaks,
 }
 
 TAG_HANDLER_BEGIN(P, "P")
+    TAG_HANDLER_CONSTR(P) { }
 
     TAG_HANDLER_PROC(tag)
     {
@@ -151,6 +152,7 @@ TAG_HANDLER_END(P)
 
 
 TAG_HANDLER_BEGIN(BR, "BR")
+    TAG_HANDLER_CONSTR(BR) { }
 
     TAG_HANDLER_PROC(tag)
     {
@@ -170,6 +172,7 @@ TAG_HANDLER_END(BR)
 
 
 TAG_HANDLER_BEGIN(CENTER, "CENTER")
+    TAG_HANDLER_CONSTR(CENTER) { }
 
     TAG_HANDLER_PROC(tag)
     {
@@ -208,6 +211,7 @@ TAG_HANDLER_END(CENTER)
 
 
 TAG_HANDLER_BEGIN(DIV, "DIV")
+    TAG_HANDLER_CONSTR(DIV) { }
 
     TAG_HANDLER_PROC(tag)
     {
@@ -270,6 +274,7 @@ TAG_HANDLER_END(DIV)
 
 
 TAG_HANDLER_BEGIN(TITLE, "TITLE")
+    TAG_HANDLER_CONSTR(TITLE) { }
 
     TAG_HANDLER_PROC(tag)
     {
@@ -292,6 +297,7 @@ TAG_HANDLER_END(TITLE)
 
 
 TAG_HANDLER_BEGIN(BODY, "BODY")
+    TAG_HANDLER_CONSTR(BODY) { }
 
     TAG_HANDLER_PROC(tag)
     {
@@ -321,6 +327,7 @@ TAG_HANDLER_END(BODY)
 
 
 TAG_HANDLER_BEGIN(BLOCKQUOTE, "BLOCKQUOTE")
+    TAG_HANDLER_CONSTR(BLOCKQUOTE) { }
 
     TAG_HANDLER_PROC(tag)
     {
@@ -351,7 +358,9 @@ TAG_HANDLER_END(BLOCKQUOTE)
 // Tag handler for tags that we have to ignore, otherwise non-text data
 // would show up as text:
 TAG_HANDLER_BEGIN(DoNothing, "SCRIPT")
-    TAG_HANDLER_PROC(tag)
+    TAG_HANDLER_CONSTR(DoNothing) { }
+
+    TAG_HANDLER_PROC(WXUNUSED(tag))
     {
         return true;
     }

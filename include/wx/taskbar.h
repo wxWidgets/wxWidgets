@@ -13,6 +13,11 @@
 
 class WXDLLEXPORT wxTaskBarIconBase : public wxEvtHandler
 {
+public:
+    wxTaskBarIconBase() { }
+
+private:
+    DECLARE_NO_COPY_CLASS(wxTaskBarIconBase)
 };
 
 
@@ -40,6 +45,9 @@ public:
     }
 
     virtual wxEvent *Clone() const { return new wxTaskBarIconEvent(*this); }
+
+private:
+    DECLARE_NO_COPY_CLASS(wxTaskBarIconEvent)
 };
 
 BEGIN_DECLARE_EVENT_TYPES()

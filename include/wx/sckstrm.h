@@ -65,6 +65,8 @@ class WXDLLIMPEXP_BASE wxSocketStream : public wxSocketInputStream,
  public:
   wxSocketStream(wxSocketBase& s);
   ~wxSocketStream();
+
+  DECLARE_NO_COPY_CLASS(wxSocketStream)
 };
 
 #endif

@@ -47,7 +47,10 @@ protected:
     virtual bool OnWrite(wxTextFileType typeNew, wxMBConv& conv);
 
 private:
+
     wxFile m_file;
+
+    DECLARE_NO_COPY_CLASS(wxTextFile)
 };
 
 #else // !wxUSE_TEXTFILE

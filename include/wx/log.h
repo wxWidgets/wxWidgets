@@ -381,6 +381,9 @@ class WXDLLIMPEXP_BASE wxLogPassThrough : public wxLogChain
 {
 public:
     wxLogPassThrough();
+
+private:
+    DECLARE_NO_COPY_CLASS(wxLogPassThrough)
 };
 
 #if wxUSE_GUI

@@ -93,7 +93,7 @@ protected:
     void Init();
 
 private:
-    DECLARE_DYNAMIC_CLASS(wxPanel)
+    DECLARE_DYNAMIC_CLASS_NO_COPY(wxPanel)
     DECLARE_EVENT_TABLE()
 };
 

@@ -101,7 +101,7 @@ protected:
                            int width, int height,
                            int sizeFlags = wxSIZE_AUTO);
 
-    DECLARE_DYNAMIC_CLASS(wxSlider95)
+    DECLARE_DYNAMIC_CLASS_NO_COPY(wxSlider95)
 };
 
 #endif

@@ -44,8 +44,6 @@
 // wxWindows macros
 // ----------------------------------------------------------------------------
 
-IMPLEMENT_CLASS(wxToolBarBase, wxControl)
-
 BEGIN_EVENT_TABLE(wxToolBarBase, wxControl)
 END_EVENT_TABLE()
 

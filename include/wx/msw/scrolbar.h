@@ -19,8 +19,6 @@
 // Scrollbar item
 class WXDLLEXPORT wxScrollBar: public wxScrollBarBase
 {
-    DECLARE_DYNAMIC_CLASS(wxScrollBar)
-
 public:
     wxScrollBar() { m_pageSize = 0; m_viewSize = 0; m_objectSize = 0; }
     ~wxScrollBar();
@@ -81,6 +79,7 @@ protected:
     int m_objectSize;
 
     DECLARE_EVENT_TABLE()
+    DECLARE_DYNAMIC_CLASS_NO_COPY(wxScrollBar)
 };
 
 #endif

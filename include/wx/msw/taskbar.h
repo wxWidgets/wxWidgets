@@ -26,7 +26,7 @@ WX_DECLARE_EXPORTED_LIST(wxTaskBarIcon, wxTaskBarIconList);
 
 class WXDLLEXPORT wxTaskBarIcon: public wxTaskBarIconBase
 {
-    DECLARE_DYNAMIC_CLASS(wxTaskBarIcon)
+    DECLARE_DYNAMIC_CLASS_NO_COPY(wxTaskBarIcon)
 public:
     wxTaskBarIcon(void);
     virtual ~wxTaskBarIcon(void);

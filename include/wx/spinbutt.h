@@ -68,6 +68,8 @@ protected:
     // the range value
     int   m_min;
     int   m_max;
+
+    DECLARE_NO_COPY_CLASS(wxSpinButtonBase)
 };
 
 // ----------------------------------------------------------------------------
@@ -107,7 +109,7 @@ public:
     void SetPosition(int pos) { m_commandInt = pos; }
 
 private:
-    DECLARE_DYNAMIC_CLASS(wxSpinEvent)
+    DECLARE_DYNAMIC_CLASS_NO_COPY(wxSpinEvent)
 };
 
 typedef void (wxEvtHandler::*wxSpinEventFunction)(wxSpinEvent&);

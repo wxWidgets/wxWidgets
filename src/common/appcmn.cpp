@@ -260,7 +260,7 @@ bool wxAppBase::SendIdleEvents(wxWindow* win, wxIdleEvent& event)
     return needMore;
 }
 
-void wxAppBase::OnIdle(wxIdleEvent& event)
+void wxAppBase::OnIdle(wxIdleEvent& WXUNUSED(event))
 {
     // If there are pending events, we must process them: pending events
     // are either events to the threads other than main or events posted

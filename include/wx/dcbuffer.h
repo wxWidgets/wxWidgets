@@ -98,6 +98,8 @@ public:
     // default copy ctor ok.
 
     ~wxBufferedPaintDC();
+
+    DECLARE_NO_COPY_CLASS(wxBufferedPaintDC)
 };
 
 

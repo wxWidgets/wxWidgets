@@ -790,6 +790,8 @@ private:
     wxDC& m_dc;
 
     wxColour m_colFgOld;
+
+    DECLARE_NO_COPY_CLASS(wxDCTextColourChanger)
 };
 
 // ----------------------------------------------------------------------------
@@ -809,6 +811,8 @@ public:
 
 private:
     wxDC& m_dc;
+
+    DECLARE_NO_COPY_CLASS(wxDCClipper)
 };
 
 #endif

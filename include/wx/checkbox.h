@@ -27,11 +27,16 @@ WXDLLEXPORT_DATA(extern const wxChar*) wxCheckBoxNameStr;
 class WXDLLEXPORT wxCheckBoxBase : public wxControl
 {
 public:
+    wxCheckBoxBase() { }
+
     // set/get the checked status of the listbox
     virtual void SetValue(bool value) = 0;
     virtual bool GetValue() const = 0;
 
     bool IsChecked() const { return GetValue(); }
+
+private:
+    DECLARE_NO_COPY_CLASS(wxCheckBoxBase)
 };
 
 #if defined(__WXUNIVERSAL__)

@@ -394,7 +394,7 @@ public:
     wxListItem    m_item;
 
 private:
-    DECLARE_DYNAMIC_CLASS(wxListEvent)
+    DECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxListEvent)
 };
 
 // ----------------------------------------------------------------------------

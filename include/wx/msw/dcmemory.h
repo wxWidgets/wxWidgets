@@ -38,7 +38,7 @@ protected:
     void Init();
 
 private:
-    DECLARE_DYNAMIC_CLASS(wxMemoryDC)
+    DECLARE_DYNAMIC_CLASS_NO_COPY(wxMemoryDC)
 };
 
 #endif

@@ -43,10 +43,11 @@ WXDLLEXPORT_DATA(extern const wxChar*) wxListBoxNameStr;
 class WXDLLEXPORT wxListBoxBase : public wxControlWithItems
 {
 public:
-    // all generic methods are in wxControlWithItems, except for the following
-    // ones which are not yet implemented by wxChoice/wxCombobox
+    wxListBoxBase() { }
     virtual ~wxListBoxBase();
 
+    // all generic methods are in wxControlWithItems, except for the following
+    // ones which are not yet implemented by wxChoice/wxCombobox
     void Insert(const wxString& item, int pos)
         { DoInsert(item, pos); }
     void Insert(const wxString& item, int pos, void *clientData)
@@ -117,6 +118,8 @@ protected:
     virtual void DoSetItems(const wxArrayString& items, void **clientData) = 0;
 
     virtual void DoSetFirstItem(int n) = 0;
+
+    DECLARE_NO_COPY_CLASS(wxListBoxBase)
 };
 
 // ----------------------------------------------------------------------------

@@ -150,6 +150,8 @@ public:
 
 protected:
     wxRendererNative& m_rendererNative;
+
+    DECLARE_NO_COPY_CLASS(wxDelegateRendererNative)
 };
 
 #endif // _WX_RENDERER_H_

@@ -31,6 +31,7 @@ WXDLLEXPORT_DATA(extern const wxChar*) wxGaugeNameStr;
 class WXDLLEXPORT wxGaugeBase : public wxControl
 {
 public:
+    wxGaugeBase() { }
     virtual ~wxGaugeBase();
 
     bool Create(wxWindow *parent,
@@ -67,6 +68,8 @@ protected:
 
     // the current position
     int m_gaugePos;
+
+    DECLARE_NO_COPY_CLASS(wxGaugeBase)
 };
 
 #if defined(__WXUNIVERSAL__)

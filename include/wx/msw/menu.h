@@ -116,7 +116,7 @@ private:
     wxAcceleratorArray m_accels;
 #endif // wxUSE_ACCEL
 
-    DECLARE_DYNAMIC_CLASS(wxMenu)
+    DECLARE_DYNAMIC_CLASS_NO_COPY(wxMenu)
 };
 
 // ----------------------------------------------------------------------------
@@ -206,7 +206,7 @@ protected:
 #endif
 
 private:
-    DECLARE_DYNAMIC_CLASS(wxMenuBar)
+    DECLARE_DYNAMIC_CLASS_NO_COPY(wxMenuBar)
 };
 
 #endif // _WX_MENU_H_

@@ -54,13 +54,10 @@
 
 // suppress some Visual C++ warnings
 #ifdef __VISUALC__
+    // the only "real" warning here is 4244 but there arej ust too many of them
+    // in our code... one day someone should go and fix them but until then...
 #   pragma warning(disable:4201)    // nonstandard extension used: nameless struct/union
 #   pragma warning(disable:4244)    // conversion from double to float
-#   pragma warning(disable:4100)    // unreferenced formal parameter
-#   pragma warning(disable:4511)    // copy ctor couldn't be generated
-#   pragma warning(disable:4512)    // operator=() couldn't be generated
-#   pragma warning(disable:4699)    // using precompiled header
-#   pragma warning(disable:4134)    // conversion between pointers to members of same class
 #   pragma warning(disable:4710)    // function not inlined
 #   pragma warning(disable:4097)    // typedef used as class
 #ifndef WIN32

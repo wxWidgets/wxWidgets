@@ -217,6 +217,8 @@ public:
 
 private:
     wxArrayString& m_files;
+
+    DECLARE_NO_COPY_CLASS(wxDirTraverserSimple)
 };
 
 /* static */

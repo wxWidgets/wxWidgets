@@ -59,7 +59,7 @@ public:
     virtual void DrawButtonDisable( WXHDC dc, int left, int top, int right, int bottom, bool with_marg );
 
 private:
-    DECLARE_DYNAMIC_CLASS(wxBitmapButton)
+    DECLARE_DYNAMIC_CLASS_NO_COPY(wxBitmapButton)
 };
 
 #endif

@@ -28,6 +28,9 @@ class WXDLLEXPORT wxInfoFrame : public wxFrame
 {
 public:
     wxInfoFrame(wxWindow *parent, const wxString& message);
+
+private:
+    DECLARE_NO_COPY_CLASS(wxInfoFrame)
 };
 
 

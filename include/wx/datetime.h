@@ -1490,8 +1490,9 @@ inline bool wxDateTime::SetToLastWeekDay(WeekDay weekday,
     return SetToWeekDay(weekday, -1, month, year);
 }
 
-inline wxDateTime wxDateTime::GetWeekDayInSameWeek(WeekDay weekday,
-                                                   WeekFlags flags) const
+inline wxDateTime
+wxDateTime::GetWeekDayInSameWeek(WeekDay weekday,
+                                 WeekFlags WXUNUSED(flags)) const
 {
     MODIFY_AND_RETURN( SetToWeekDayInSameWeek(weekday) );
 }

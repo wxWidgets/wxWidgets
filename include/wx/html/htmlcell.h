@@ -348,6 +348,8 @@ protected:
     
     wxString m_Word;
     bool     m_allowLinebreak;
+
+    DECLARE_NO_COPY_CLASS(wxHtmlWordCell)
 };
 
 
@@ -482,6 +484,8 @@ public:
 protected:
     wxColour m_Colour;
     unsigned m_Flags;
+
+    DECLARE_NO_COPY_CLASS(wxHtmlColourCell)
 };
 
 
@@ -503,6 +507,8 @@ public:
 
 protected:
     wxFont m_Font;
+
+    DECLARE_NO_COPY_CLASS(wxHtmlFontCell)
 };
 
 

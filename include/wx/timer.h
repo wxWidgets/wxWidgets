@@ -156,6 +156,8 @@ public:
 
 private:
     wxTimer& m_timer;
+
+    DECLARE_NO_COPY_CLASS(wxTimerRunner)
 };
 
 // ----------------------------------------------------------------------------
@@ -181,7 +183,7 @@ public:
 private:
     int m_interval;
 
-    DECLARE_DYNAMIC_CLASS(wxTimerEvent)
+    DECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxTimerEvent)
 };
 
 typedef void (wxEvtHandler::*wxTimerEventFunction)(wxTimerEvent&);

@@ -31,7 +31,8 @@ WXDLLEXPORT_DATA(extern const wxChar*) wxStaticBitmapNameStr;
 // a control showing an icon or a bitmap
 class WXDLLEXPORT wxStaticBitmapBase : public wxControl
 {
- public:
+public:
+    wxStaticBitmapBase() { }
     virtual ~wxStaticBitmapBase();
     
     // our interface
@@ -44,6 +45,8 @@ class WXDLLEXPORT wxStaticBitmapBase : public wxControl
 
 protected:
     virtual wxSize DoGetBestClientSize() const;
+
+    DECLARE_NO_COPY_CLASS(wxStaticBitmapBase)
 };
 
 #if defined(__WXUNIVERSAL__)
