@@ -121,10 +121,12 @@ We aim to arrive at a lazy initializiation of modules only when they are first
 needed. Dependency information between modules is needed. Dynamic Plug-In
 loading and unloading must be compatible with that.
 
+
 wxUniversal
 ===========
 
 - Renderers within native ports.
+
 
 wxPrinting
 ==========
@@ -133,12 +135,30 @@ wxPrinting
   of pages.
 - Preview UI enhancement.
 
+
 wxStaticBox
 ===========
 
 Hide the platform problems (GTK: 'children' must be siblings) in encapsulation 
 in order to avoid problems on ports where the hierarchy must be
 'correct'.
+
+
+Removal of old code
+===================
+
+In addition to wxCOMPATIBILITY code:
+
+- wxProperty classes.
+- All wxCOMPATIBILITY (1.X) code.
+- contrib/src/canvas?
+- contrib/src/mmedia
+- contrib/src/applet?
+- utils/Install
+- wxDate, wxTime
+- Layout constraints code
+- Old wxODBC code
+
 
 wxMiscellaneous
 ===============
