@@ -106,6 +106,10 @@ http or ftp streams doesn't deal with it.
 \wxheading{Return value}
 
 Returns the initialized stream. You will have to delete it yourself.
+But be careful that you don't destroy the URL object while you're getting
+the data through the stream. As the protocol and the input stream are
+extremely linked together, the destruction of the protocol by URL may
+cause you problems.
 
 \wxheading{See also}
 

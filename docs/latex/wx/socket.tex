@@ -169,7 +169,30 @@ This remark is also valid for all IO call.
 \helpref{wxSocketBase::Error}{wxsocketbaseerror},
  \helpref{wxSocketBase::LastCount}{wxsocketbaselastcount},
  \helpref{wxSocketBase::LastError}{wxsocketbaselasterror}
- 
+
+\membersection{wxSocketBase::SetNotify}\label{wxsocketbasesetnotify}
+
+\func{void}{SetNotify}{\param{wxSocketBase::wxRequestNotify}{ req}}
+
+SetNotify sets up the the events you want to receive through the event handler.
+
+\twocolwidtha{7cm}
+\begin{twocollist}\itemsep=0pt
+\twocolitem{{\bf wxSocketBase::REQ\_READ}}{Sends EVT\_READ when the socket has data to be read.}
+\twocolitem{{\bf wxSocketBase::REQ\_WRITE}}{Sends EVT\_WRITE when the socket is ready to accept new datas to be written.}
+\twocolitem{{\bf wxSocketBase::REQ\_LOST}}{Sends EVT\_LOST when the connection to the peer is lost.}
+\twocolitem{{\bf wxSocketBase::REQ\_ACCEPT}}{Sends EVT\_ACCEPT when, as a server, a client wants to connect.}
+\twocolitem{{\bf wxSocketBase::REQ\_CONNECT}}{Sends EVT\_CONNECT when the client finished establishing the connection to the server.}
+\end{twocollist}
+
+\membersection{wxSocketBase::Notify}
+
+\func{void}{Notify}{\param{bool}{ on}}
+
+If \it{on} is TRUE, the event dispatcher is switched on. In the other case,
+if an event occurs, even if you sets it to be dispatched with \helpref{SetNotify}{wxsocketbasesetnotify},
+you won't receive the event.
+
 \membersection{wxSocketBase::SetFlags}\label{wxsocketbasesetflags}
 
 \func{void}{SetFlags}{\param{wxSockFlags}{ flags}}
