@@ -89,14 +89,14 @@ void wxStopWatch::Start(long t)
     m_pause = 0;
 }
 
+inline long wxStopWatch::GetElapsedTime() const
+{
+    return (wxGetLocalTimeMillis() - m_t0).GetLo();
+}
+
 long wxStopWatch::Time() const
 {
     return (m_pause ? m_pause : GetElapsedTime());
-}
-
-long wxStopWatch::GetElapsedTime() const
-{
-    return (wxGetLocalTimeMillis() - m_t0).GetLo();
 }
 
 // ----------------------------------------------------------------------------
@@ -233,6 +233,8 @@ wxLongLong wxGetLocalTimeMillis()
     {
         return (val + tp.millitm);
     }
+#else
+#warning "wxStopWatch will be up to second resolution!"
 #endif
 
     return val;
