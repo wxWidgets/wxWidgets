@@ -205,6 +205,10 @@ private:
     // create the header window
     void CreateHeaderWindow();
 
+    // reposition the header and the main window in the report view depending
+    // on whether it should be shown or not
+    void ResizeReportView(bool showHeader);
+
     DECLARE_EVENT_TABLE()
     DECLARE_DYNAMIC_CLASS(wxListCtrl);
 };
