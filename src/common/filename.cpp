@@ -811,7 +811,7 @@ wxPathFormat wxFileName::GetFormat( wxPathFormat format )
     {
 #if defined(__WXMSW__) || defined(__WXPM__)
         format = wxPATH_DOS;
-#elif defined(__WXMAC__)
+#elif defined(__WXMAC__) && !defined(__DARWIN__)
         format = wxPATH_MAC; 
 #else
         format = wxPATH_UNIX;
