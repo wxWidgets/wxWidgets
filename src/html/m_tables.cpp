@@ -411,8 +411,8 @@ TAG_HANDLER_BEGIN(TABLE, "TABLE,TR,TD,TH")
     TAG_HANDLER_CONSTR(TABLE)
     {
         m_Table = NULL;
-    m_tAlign = m_rAlign = wxEmptyString;
-    m_OldAlign = wxHTML_ALIGN_LEFT;
+        m_tAlign = m_rAlign = wxEmptyString;
+        m_OldAlign = wxHTML_ALIGN_LEFT;
     }
 
 
