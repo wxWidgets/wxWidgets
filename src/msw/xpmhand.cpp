@@ -35,7 +35,16 @@
 
 #if wxUSE_XPM_IN_MSW
     #define FOR_MSW 1
-    #include "../xpm/xpm.h"
+
+    // allow the user to use the system-wide xpm.h by defining
+    // wxUSE_XPM_H_IN_PATH (and always use xpm.h in path if __WX_SETUP_H__ is
+    // defined which means that we use configure as it always add -I../xpm to
+    // the include path if needed)
+    #if !defined(__WX_SETUP_H__) && !defined(wxUSE_XPM_H_IN_PATH)
+        #include "../xpm/xpm.h"
+    #else
+        #include <xpm.h>
+    #endif
 #endif
 
 #include "wx/xpmhand.h"
