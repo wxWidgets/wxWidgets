@@ -944,7 +944,6 @@ IMPLEMENT_DYNAMIC_CLASS(wxVariant, wxObject)
 wxVariant::wxVariant()
 {
     m_data = (wxVariantData*) NULL;
-    m_name = wxEmptyString;
 }
 
 wxVariant::wxVariant(double val, const wxString& name)
