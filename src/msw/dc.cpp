@@ -1181,53 +1181,107 @@ bool wxDC::Blit(long xdest, long ydest, long width, long height,
 	    ::SelectObject(dc_mask, 0);
 	    ::DeleteDC(dc_mask);
 #endif
-        // New code from Chris Breeze, 8/5/98
+        // New code from Chris Breeze, 15/7/98
+		// Blit bitmap with mask
 
-		// create a temp buffer bitmap and DCs to access it and the mask
-		HDC dc_mask = ::CreateCompatibleDC((HDC) source->m_hDC);
-		HDC dc_buffer = ::CreateCompatibleDC((HDC) m_hDC);
-		HBITMAP buffer_bmap = ::CreateCompatibleBitmap((HDC) m_hDC, width, height);
-	    ::SelectObject(dc_mask, (HBITMAP) source->m_selectedBitmap.GetMask()->GetMaskBitmap());
-	    ::SelectObject(dc_buffer, buffer_bmap);
+		if (IsKindOf(CLASSINFO(wxPrinterDC)))
+		{
+			// If we are printing source colours are screen colours
+			// not printer colours and so we need copy the bitmap
+			// pixel by pixel.
+			RECT rect;
+			HDC dc_mask = ::CreateCompatibleDC((HDC) source->m_hDC);
+			HDC dc_src = (HDC) source->m_hDC;
 
-        // copy dest to buffer
-		::BitBlt(dc_buffer, 0, 0, (int)width, (int)height,
-			(HDC) m_hDC, xdest1, ydest1, SRCCOPY);
+			::SelectObject(dc_mask, (HBITMAP) source->m_selectedBitmap.GetMask()->GetMaskBitmap());
+			for (int x = 0; x < width; x++)
+			{
+				for (int y = 0; y < height; y++)
+				{
+					COLORREF cref = ::GetPixel(dc_mask, x, y);
+					if (cref)
+					{
+						HBRUSH brush = ::CreateSolidBrush(::GetPixel(dc_src, x, y));
+						rect.left = xdest1 + x;	rect.right = rect.left + 1;
+						rect.top = ydest1 + y;	rect.bottom = rect.top + 1;
+						::FillRect((HDC) m_hDC, &rect, brush);
+						::DeleteObject(brush);
+					}
+				}
+			}
+			::SelectObject(dc_mask, 0);
+			::DeleteDC(dc_mask);
+		}
+		else
+		{
+			// create a temp buffer bitmap and DCs to access it and the mask
+			HDC dc_mask = ::CreateCompatibleDC((HDC) source->m_hDC);
+			HDC dc_buffer = ::CreateCompatibleDC((HDC) m_hDC);
+			HBITMAP buffer_bmap = ::CreateCompatibleBitmap((HDC) m_hDC, width, height);
+			::SelectObject(dc_mask, (HBITMAP) source->m_selectedBitmap.GetMask()->GetMaskBitmap());
+			::SelectObject(dc_buffer, buffer_bmap);
 
-		// copy src to buffer using selected raster op
-		::BitBlt(dc_buffer, 0, 0, (int)width, (int)height,
-			(HDC) source->m_hDC, xsrc1, ysrc1, dwRop);
+			// copy dest to buffer
+			::BitBlt(dc_buffer, 0, 0, (int)width, (int)height,
+				(HDC) m_hDC, xdest1, ydest1, SRCCOPY);
 
-		// set masked area in buffer to BLACK (pixel value 0)
-		COLORREF prevBkCol = ::SetBkColor((HDC) m_hDC, RGB(255, 255, 255));
-		COLORREF prevCol = ::SetTextColor((HDC) m_hDC, RGB(0, 0, 0));
-        ::BitBlt(dc_buffer, 0, 0, (int)width, (int)height,
-			dc_mask, xsrc1, ysrc1, SRCAND);
+			// copy src to buffer using selected raster op
+			::BitBlt(dc_buffer, 0, 0, (int)width, (int)height,
+				(HDC) source->m_hDC, xsrc1, ysrc1, dwRop);
 
-		// set unmasked area in dest to BLACK
-		::SetBkColor((HDC) m_hDC, RGB(0, 0, 0));
-		::SetTextColor((HDC) m_hDC, RGB(255, 255, 255));
-		::BitBlt((HDC) m_hDC, xdest1, ydest1, (int)width, (int)height,
-			dc_mask, xsrc1, ysrc1, SRCAND);
-		::SetBkColor((HDC) m_hDC, prevBkCol);	// restore colours to original values
-		::SetTextColor((HDC) m_hDC, prevCol);
+			// set masked area in buffer to BLACK (pixel value 0)
+			COLORREF prevBkCol = ::SetBkColor((HDC) m_hDC, RGB(255, 255, 255));
+			COLORREF prevCol = ::SetTextColor((HDC) m_hDC, RGB(0, 0, 0));
+			::BitBlt(dc_buffer, 0, 0, (int)width, (int)height,
+				dc_mask, xsrc1, ysrc1, SRCAND);
 
-        // OR buffer to dest
-		success = (::BitBlt((HDC) m_hDC, xdest1, ydest1, (int)width, (int)height,
-			dc_buffer, 0, 0, SRCPAINT) != 0);
+			// set unmasked area in dest to BLACK
+			::SetBkColor((HDC) m_hDC, RGB(0, 0, 0));
+			::SetTextColor((HDC) m_hDC, RGB(255, 255, 255));
+			::BitBlt((HDC) m_hDC, xdest1, ydest1, (int)width, (int)height,
+				dc_mask, xsrc1, ysrc1, SRCAND);
+			::SetBkColor((HDC) m_hDC, prevBkCol);	// restore colours to original values
+			::SetTextColor((HDC) m_hDC, prevCol);
 
-		// tidy up temporary DCs and bitmap
-		::SelectObject(dc_mask, 0);
-	    ::DeleteDC(dc_mask);
-		::SelectObject(dc_buffer, 0);
-	    ::DeleteDC(dc_buffer);
-		::DeleteObject(buffer_bmap);
-    }
+			// OR buffer to dest
+			success = (::BitBlt((HDC) m_hDC, xdest1, ydest1, (int)width, (int)height,
+				dc_buffer, 0, 0, SRCPAINT) != 0);
+
+			// tidy up temporary DCs and bitmap
+			::SelectObject(dc_mask, 0);
+			::DeleteDC(dc_mask);
+			::SelectObject(dc_buffer, 0);
+			::DeleteDC(dc_buffer);
+			::DeleteObject(buffer_bmap);
+		}
+	}
   }
   else
   {
+	if (IsKindOf(CLASSINFO(wxPrinterDC)))
+	{
+      // If we are printing source colours are screen colours
+      // not printer colours and so we need copy the bitmap
+      // pixel by pixel.
+      HDC dc_src = (HDC) source->m_hDC;
+      RECT rect;
+      for (int x = 0; x < width; x++)
+	  {
+        for (int y = 0; y < height; y++)
+		{
+          HBRUSH brush = ::CreateSolidBrush(::GetPixel(dc_src, x, y));
+          rect.left = xdest1 + x;	rect.right = rect.left + 1;
+          rect.top = ydest1 + y;	rect.bottom = rect.top + 1;
+          ::FillRect((HDC) m_hDC, &rect, brush);
+          ::DeleteObject(brush);
+		}
+	  }
+    }
+	else
+	{
       success = (BitBlt((HDC) m_hDC, xdest1, ydest1, (int)width, (int)height, (HDC) source->m_hDC,
                             xsrc1, ysrc1, dwRop) != 0);
+	}
   }
   ::SetTextColor((HDC)m_hDC, old_textground);
   ::SetBkColor((HDC)m_hDC, old_background);

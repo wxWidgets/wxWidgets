@@ -606,7 +606,9 @@ wxListBox::InsertItems(int nItems, const wxString items[], int pos)
 
 void wxListBox::SetString(int N, const wxString& s)
 {
-  int sel = GetSelection();
+  int sel = -1;
+  if (!(m_windowStyle & wxLB_MULTIPLE) && !(m_windowStyle & wxLB_EXTENDED))
+    sel = GetSelection();
   
   char *oldData = (char *)wxListBox::GetClientData(N);
   

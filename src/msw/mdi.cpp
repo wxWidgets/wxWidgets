@@ -431,7 +431,7 @@ bool wxMDIParentFrame::MSWOnDestroy(void)
 
 void wxMDIParentFrame::MSWOnCreate(WXLPCREATESTRUCT WXUNUSED(cs))
 {
-	m_clientWindow = new wxMDIClientWindow;
+	m_clientWindow = OnCreateClient();
 	// Uses own style for client style
 	m_clientWindow->CreateClient(this, GetWindowStyleFlag());
 }
