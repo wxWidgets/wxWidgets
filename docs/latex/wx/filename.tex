@@ -48,23 +48,6 @@ enum wxPathFormat
 }
 \end{verbatim}
 
-The kind of normalization to do with the file name: these values can be
-or'd together to perform several operations at once in\rtfsp
-\helpref{Normalize}{wxfilenamenormalize}.
-
-\begin{verbatim}
-enum wxPathNormalize
-{
-    wxPATH_NORM_ENV_VARS = 0x0001,  // replace env vars with their values
-    wxPATH_NORM_DOTS     = 0x0002,  // squeeze all .. and . and prepend cwd
-    wxPATH_NORM_TILDE    = 0x0004,  // Unix only: replace ~ and ~user
-    wxPATH_NORM_CASE     = 0x0008,  // if case insensitive => tolower
-    wxPATH_NORM_ABSOLUTE = 0x0010,  // make the path absolute
-    wxPATH_NORM_LONG =     0x0020,  // make the path the long form
-    wxPATH_NORM_ALL      = 0x003f
-}
-\end{verbatim}
-
 \latexignore{\rtfignore{\wxheading{Function groups}}}
 
 \membersection{File name format}
@@ -79,7 +62,7 @@ filename itself which, in turn, is composed from the base file name and the
 extension. All of the individual components of the file name may be empty and,
 for example, the volume name is always empty under Unix, but if they are all
 empty simultaneously, the filename object is considered to be in an invalid
-state and \helpref{IsOk}{wxfilenameisok} returns {\tt FALSE} for it.
+state and \helpref{IsOk}{wxfilenameisok} returns {\tt false} for it.
 
 File names can be case-sensitive or not, the function\rtfsp
 \helpref{IsCaseSensitive}{wxfilenameiscasesensitive} allows to determine this.
@@ -87,10 +70,10 @@ File names can be case-sensitive or not, the function\rtfsp
 The rules for determining if the file name is absolute or relative also depends
 on the file name format and the only portable way to answer to this question is
 to use \helpref{IsAbsolute}{wxfilenameisabsolute} method. To ensure that the
-filename is absolute you may use \helpref{Normalize}{wxfilenamenormalize}. There
-is also an inverse function \helpref{MakeRelativeTo}{wxfilenamemakerelativeto} 
-which undoes what \helpref{Normalize(wxPATH\_NORM\_DOTS)}{wxfilenamenormalize} 
-does.
+filename is absolute you may use \helpref{MakeAbsolute}{wxfilenamemakeabsolute}.
+There is also an inverse function
+\helpref{MakeRelativeTo}{wxfilenamemakerelativeto} which undoes what
+\helpref{Normalize(wxPATH\_NORM\_DOTS)}{wxfilenamenormalize} does.
 
 Other functions returning information about the file format provided by this
 class are \helpref{GetVolumeSeparator}{wxfilenamegetvolumeseparator},\rtfsp
@@ -278,7 +261,7 @@ The full temporary file name or an empty string on error.
 
 \func{bool}{DirExists}{\param{const wxString\& }{dir}}
 
-Returns TRUE if the directory with this name exists.
+Returns true if the directory with this name exists.
 
 \membersection{wxFileName::DirName}\label{wxfilenamedirname}
 
@@ -292,7 +275,7 @@ Returns the directory name.
 
 \func{bool}{FileExists}{\param{const wxString\& }{file}}
 
-Returns TRUE if the file with this name exists.
+Returns true if the file with this name exists.
 
 \membersection{wxFileName::FileName}\label{wxfilenamefilename}
 
@@ -442,7 +425,7 @@ needed.
 
 \wxheading{Return value}
 
-{\tt TRUE} on success, {\tt FALSE} if we failed to retrieve the times.
+{\tt true} on success, {\tt false} if we failed to retrieve the times.
 
 \membersection{wxFileName::GetVolume}\label{wxfilenamegetvolume}
 
@@ -462,19 +445,19 @@ Returns the string separating the volume from the path for this format.
 
 \constfunc{bool}{HasExt}{\void}
 
-Returns TRUE if an extension is present.
+Returns true if an extension is present.
 
 \membersection{wxFileName::HasName}\label{wxfilenamehasname}
 
 \constfunc{bool}{HasName}{\void}
 
-Returns TRUE if a name is present.
+Returns true if a name is present.
 
 \membersection{wxFileName::HasVolume}\label{wxfilenamehasvolume}
 
 \constfunc{bool}{HasVolume}{\void}
 
-Returns TRUE if a volume specifier is present.
+Returns true if a volume specifier is present.
 
 \membersection{wxFileName::InsertDir}\label{wxfilenameinsertdir}
 
@@ -486,19 +469,19 @@ Inserts a directory before the zero-based position in the directory list.
 
 \func{bool}{IsAbsolute}{\param{wxPathFormat }{format = wxPATH\_NATIVE}}
 
-Returns TRUE if this filename is absolute.
+Returns true if this filename is absolute.
 
 \membersection{wxFileName::IsCaseSensitive}\label{wxfilenameiscasesensitive}
 
 \func{bool}{IsCaseSensitive}{\param{wxPathFormat }{format = wxPATH\_NATIVE}}
 
-Returns TRUE if the file names of this type are case-sensitive.
+Returns true if the file names of this type are case-sensitive.
 
 \membersection{wxFileName::IsOk}\label{wxfilenameisok}
 
 \constfunc{bool}{IsOk}{\void}
 
-Returns {\tt TRUE} if the filename is valid, {\tt FALSE} if it is not
+Returns {\tt true} if the filename is valid, {\tt false} if it is not
 initialized yet. The assignment functions and
 \helpref{Clear}{wxfilenameclear} may reset the object to the uninitialized,
 invalid state (the former only do it on failure).
@@ -507,23 +490,36 @@ invalid state (the former only do it on failure).
 
 \func{bool}{IsPathSeparator}{\param{wxChar }{ch}, \param{wxPathFormat }{format = wxPATH\_NATIVE}}
 
-Returns {\tt TRUE} if the char is a path separator for this format.
+Returns {\tt true} if the char is a path separator for this format.
 
 \membersection{wxFileName::IsRelative}\label{wxfilenameisrelative}
 
 \func{bool}{IsRelative}{\param{wxPathFormat }{format = wxPATH\_NATIVE}}
 
-Returns {\tt TRUE} if this filename is not absolute.
+Returns {\tt true} if this filename is not absolute.
 
 \membersection{wxFileName::IsDir}\label{wxfilenameisdir}
 
 \constfunc{bool}{IsDir}{\void}
 
-Returns {\tt TRUE} if this object represents a directory, {\tt FALSE} otherwise
+Returns {\tt true} if this object represents a directory, {\tt false} otherwise
 (i.e. if it is a file). Note that this method doesn't test whether the
 directory or file really exists, you should use 
 \helpref{DirExists}{wxfilenamedirexists} or 
 \helpref{FileExists}{wxfilenamefileexists} for this.
+
+\membersection{wxFileName::MakeAbsolute}\label{wxfilenamemakeabsolute}
+
+\func{bool}{MakeAbsolute}{\param{const wxString\& }{cwd = wxEmptyString}, \param{wxPathFormat }{format = wxPATH\_NATIVE}}
+
+Make the file name absolute. This is a shortcut for
+{\tt \helpref{Normalize}{wxfilenamenormalize}(wxPATH\_NORM\_DOTS | wxPATH\_NORM\_ABSOLUTE | wxPATH\_NORM\_TILDE, cwd, format)}.
+
+\wxheading{See also}
+
+\helpref{MakeRelativeTo}{wxfilenamemakerelativeto},
+\helpref{Normalize}{wxfilenamenormalize},
+\helpref{IsAbsolute}{wxfilenameisabsolute}
 
 \membersection{wxFileName::MakeRelativeTo}\label{wxfilenamemakerelativeto}
 
@@ -540,7 +536,7 @@ default}
 
 \wxheading{Return value}
 
-{\tt TRUE} if the file name has been changed, {\tt FALSE} if we failed to do
+{\tt true} if the file name has been changed, {\tt false} if we failed to do
 anything with it (currently this only happens if the file name is on a volume
 different from the volume specified by {\it pathBase}).
 
@@ -564,17 +560,34 @@ if the target directory already exists.}
 
 \wxheading{Return value}
 
-Returns {\tt TRUE} if the directory was successfully created, {\tt FALSE}
+Returns {\tt true} if the directory was successfully created, {\tt false}
 otherwise.
 
 \membersection{wxFileName::Normalize}\label{wxfilenamenormalize}
 
 \func{bool}{Normalize}{\param{int }{flags = wxPATH\_NORM\_ALL}, \param{const wxString\& }{cwd = wxEmptyString}, \param{wxPathFormat }{format = wxPATH\_NATIVE}}
 
-Normalize the path: with the default flags value, the path will be
+Normalize the path. With the default flags value, the path will be
 made absolute, without any ".." and "." and all environment
-variables will be expanded in it
-this may be done using another (than current) value of cwd
+variables will be expanded in it.
+
+\docparam{flags}{The kind of normalization to do with the file name. It can be
+any or-combination of the following constants:
+\begin{twocollist}
+\twocolitem{{\bf wxPATH\_NORM\_ENV\_VARS}}{replace env vars with their values}
+\twocolitem{{\bf wxPATH\_NORM\_DOTS}}{squeeze all .. and . and prepend cwd}
+\twocolitem{{\bf wxPATH\_NORM\_TILDE}}{Unix only: replace ~ and ~user}
+\twocolitem{{\bf wxPATH\_NORM\_CASE}}{if case insensitive => tolower}
+\twocolitem{{\bf wxPATH\_NORM\_ABSOLUTE}}{make the path absolute}
+\twocolitem{{\bf wxPATH\_NORM\_LONG}}{make the path the long form}
+\twocolitem{{\bf wxPATH\_NORM\_ALL}}{all of previous flags}
+\end{twocollist}
+}
+
+\docparam{cwd}{If not empty, this directory will be used instead of current
+working directory in normalization.}
+
+\docparam{format}{The file name format, native by default.}
 
 \membersection{wxFileName::PrependDir}\label{wxfilenameprependdir}
 
@@ -678,7 +691,7 @@ Assigns the new value to this filename object.
 
 \constfunc{bool operator}{operator==}{\param{const wxString\& }{filename}}
 
-Returns {\tt TRUE} if the filenames are equal. The string {\it filenames} is
+Returns {\tt true} if the filenames are equal. The string {\it filenames} is
 interpreted as a path in the native filename format.
 
 \membersection{wxFileName::operator!=}\label{wxfilenameoperatornotequal}
@@ -687,6 +700,6 @@ interpreted as a path in the native filename format.
 
 \constfunc{bool operator}{operator!=}{\param{const wxString\& }{filename}}
 
-Returns {\tt TRUE} if the filenames are different. The string {\it filenames}
+Returns {\tt true} if the filenames are different. The string {\it filenames}
 is interpreted as a path in the native filename format.
 

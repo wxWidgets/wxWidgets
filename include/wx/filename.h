@@ -271,6 +271,13 @@ public:
     bool MakeRelativeTo(const wxString& pathBase = _T(""),
                         wxPathFormat format = wxPATH_NATIVE);
 
+        // make the path absolute
+        //
+        // this may be done using another (than current) value of cwd
+    bool MakeAbsolute(const wxString& cwd = wxEmptyString,
+                      wxPathFormat format = wxPATH_NATIVE)
+        { return Normalize(wxPATH_NORM_DOTS | wxPATH_NORM_ABSOLUTE |
+                           wxPATH_NORM_TILDE, cwd, format); }
 
     // Comparison
 
