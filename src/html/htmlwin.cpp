@@ -172,7 +172,7 @@ bool wxHtmlWindow::LoadPage(const wxString& location)
         if (f == NULL) {
             wxString err;
 
-            wxLogError(_("Unable to open requested HTML document: %s"), location.mb_str());
+            wxLogError(_("Unable to open requested HTML document: %s"), location.c_str());
             m_tmpCanDrawLocks--;
 
             SetCursor(*wxSTANDARD_CURSOR);
@@ -248,7 +248,7 @@ bool wxHtmlWindow::ScrollToAnchor(const wxString& anchor)
     const wxHtmlCell *c = m_Cell -> Find(wxHTML_COND_ISANCHOR, &anchor);
     if (!c)
     {
-        wxLogWarning(_("HTML anchor %s does not exist."), anchor.mb_str());
+        wxLogWarning(_("HTML anchor %s does not exist."), anchor.c_str());
         return FALSE;
     }
     else {

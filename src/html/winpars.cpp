@@ -355,7 +355,7 @@ void wxHtmlWinParser::SetInputEncoding(wxFontEncoding enc)
                            wxCONVERT_SUBSTITUTE))  
     { // total failture :-(
         wxLogError(_("Failed to display HTML document in %s encoding"), 
-	           wxFontMapper::GetEncodingName(enc).mb_str());
+	           wxFontMapper::GetEncodingName(enc).c_str());
         m_InputEnc = m_OutputEnc = wxFONTENCODING_DEFAULT;
         delete m_EncConv;
         m_EncConv = NULL;

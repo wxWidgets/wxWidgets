@@ -235,7 +235,7 @@ bool wxHtmlHelpData::LoadMSProject(wxHtmlBookRecord *book, wxFileSystem& fsys, c
         delete[] buf;
     }
     else
-        wxLogError(_("Cannot open contents file: %s"), contentsfile.mb_str());
+        wxLogError(_("Cannot open contents file: %s"), contentsfile.c_str());
 
     f = ( indexfile.IsEmpty() ? (wxFSFile*) NULL : fsys.OpenFile(indexfile) );
     if (f) {
@@ -250,7 +250,7 @@ bool wxHtmlHelpData::LoadMSProject(wxHtmlBookRecord *book, wxFileSystem& fsys, c
         delete[] buf;
     }
     else if (!indexfile.IsEmpty())
-        wxLogError(_("Cannot open index file: %s"), indexfile.mb_str());
+        wxLogError(_("Cannot open index file: %s"), indexfile.c_str());
     return TRUE;
 }
 
@@ -539,7 +539,7 @@ bool wxHtmlHelpData::AddBook(const wxString& book)
         fi = fsys.OpenFile(bookFull);
         if (fi == NULL) 
 	{
-	    wxLogError(_("Cannot open HTML help book: %s"), bookFull.mb_str());
+	    wxLogError(_("Cannot open HTML help book: %s"), bookFull.c_str());
 	    return FALSE;
 	}
         fsys.ChangePathTo(bookFull);
