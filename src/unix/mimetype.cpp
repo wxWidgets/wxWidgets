@@ -1346,6 +1346,7 @@ void wxMimeTypesManagerImpl::ClearData()
     m_aExtensions.Clear ();
     m_aDescriptions.Clear ();
 
+    WX_CLEAR_ARRAY(m_aEntries);
     m_aEntries.Empty();
 
     m_mailcapStylesInited = 0;
@@ -1354,8 +1355,6 @@ void wxMimeTypesManagerImpl::ClearData()
 wxMimeTypesManagerImpl::~wxMimeTypesManagerImpl()
 {
     ClearData();
-
-    WX_CLEAR_ARRAY(m_aEntries);
 }
 
 
