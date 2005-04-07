@@ -158,7 +158,7 @@ void CIDataObject::SetData (
 , char*                             pzBuffer
 )
 {
-    ULONG                           ulSize;
+    ULONG                           ulSize = 0;
 
     switch (rFormat.GetType())
     {

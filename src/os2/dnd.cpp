@@ -127,7 +127,7 @@ MRESULT CIDropTarget::DragOver ()
 {
     char                            zBuffer[128];
     ULONG                           ulBytes;
-    USHORT                          uOp;
+    USHORT                          uOp = 0;
     USHORT                          uIndicator;
     ULONG                           ulItems;
     ULONG                           i;
@@ -197,7 +197,7 @@ MRESULT CIDropTarget::Drop ()
 {
     char                            zBuffer[128];
     ULONG                           ulBytes;
-    USHORT                          uOp;
+    USHORT                          uOp = 0;
     USHORT                          uIndicator;
     ULONG                           ulItems;
     ULONG                           i;
@@ -250,7 +250,7 @@ MRESULT CIDropTarget::Drop ()
                           ,m_pDragInfo->yDrop
                          ))
     {
-        wxDragResult                 eRc;
+        wxDragResult                 eRc = wxDragNone;;
 
         //
         // And now it has the data

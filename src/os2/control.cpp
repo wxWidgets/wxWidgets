@@ -115,7 +115,7 @@ bool wxControl::OS2CreateControl(
         dwStyle |= WS_VISIBLE;
 
     wxWindow*                       pParent = GetParent();
-    PSZ                             zClass;
+    PSZ                             zClass = "";
 
     if (!pParent)
         return FALSE;
