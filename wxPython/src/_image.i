@@ -238,7 +238,7 @@ length of the data must be width*height*3.", "",
 
 
     // Turn it back on again
-    %typemap(out) wxWWindow* { $result = wxPyMake_wxObject($1, $owner); }
+    %typemap(out) wxImage* { $result = wxPyMake_wxObject($1, $owner); }
 
 
     void Create( int width, int height );
