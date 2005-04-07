@@ -106,7 +106,7 @@ public:
     void OnShowProgress( wxCommandEvent &event );
 #endif // wxUSE_PROGRESSDLG
 #endif // wxUSE_SPINBTN
-
+    void OnNewText( wxCommandEvent &event );
 #if wxUSE_SPINCTRL
     void OnSpinCtrl(wxSpinEvent& event);
     void OnSpinCtrlUp(wxSpinEvent& event);
@@ -147,6 +147,8 @@ public:
     wxButton      *m_btnProgress;
 #endif // wxUSE_PROGRESSDLG
 #endif // wxUSE_SPINBTN
+    wxStaticText  *m_wrappingText;
+    wxStaticText  *m_nonWrappingText;
 
 #if wxUSE_SPINCTRL
     wxSpinCtrl    *m_spinctrl;
@@ -425,6 +427,7 @@ const int  ID_BTNPROGRESS       = 183;
 #endif // wxUSE_PROGRESSDLG
 const int  ID_BUTTON_LABEL      = 184;
 const int  ID_SPINCTRL          = 185;
+const int  ID_BTNNEWTEXT        = 186;
 
 const int  ID_BUTTON_TEST1      = 190;
 const int  ID_BUTTON_TEST2      = 191;
@@ -501,6 +504,7 @@ EVT_SPIN_UP   (ID_SPINCTRL,             MyPanel::OnSpinCtrlUp)
 EVT_SPIN_DOWN (ID_SPINCTRL,             MyPanel::OnSpinCtrlDown)
 EVT_TEXT      (ID_SPINCTRL,             MyPanel::OnSpinCtrlText)
 #endif // wxUSE_SPINCTRL
+EVT_BUTTON    (ID_BTNNEWTEXT,           MyPanel::OnNewText)
 EVT_TOGGLEBUTTON(ID_BUTTON_LABEL,       MyPanel::OnUpdateLabel)
 EVT_CHECKBOX  (ID_CHANGE_COLOUR,        MyPanel::OnChangeColour)
 EVT_BUTTON    (ID_BUTTON_TEST1,         MyPanel::OnTestButton)
@@ -783,52 +787,81 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
     (void)new wxRadioButton( panel, ID_RADIOBUTTON_2, _T("&Radiobutton2"), wxPoint(340,170), wxDefaultSize );
     m_book->AddPage(panel, _T("wxRadioBox"), false, Image_Radio);
 
+
 #if wxUSE_SLIDER && wxUSE_GAUGE
     panel = new wxPanel(m_book);
-    (void)new wxStaticBox( panel, wxID_ANY, _T("&wxGauge and wxSlider"), wxPoint(10,10), wxSize(222,130) );
-    m_gauge = new wxGauge( panel, wxID_ANY, 200, wxPoint(18,50), wxSize(155, 30), wxGA_HORIZONTAL|wxNO_BORDER );
+    
+    wxBoxSizer *main_sizer = new wxBoxSizer( wxHORIZONTAL );
+    panel->SetSizer( main_sizer );
+    
+    wxStaticBoxSizer *gauge_sizer = new wxStaticBoxSizer( wxHORIZONTAL, panel, _T("&wxGauge and wxSlider") );
+    main_sizer->Add( gauge_sizer, 0, wxALL, 5 );
+    wxBoxSizer *sz = new wxBoxSizer( wxVERTICAL );
+    gauge_sizer->Add( sz );
+    m_gauge = new wxGauge( panel, wxID_ANY, 200, wxDefaultPosition, wxSize(155, 30), wxGA_HORIZONTAL|wxNO_BORDER );
     m_gauge->SetBackgroundColour(*wxGREEN);
     m_gauge->SetForegroundColour(*wxRED);
-    m_gaugeVert = new wxGauge( panel, wxID_ANY, 100,
-                               wxPoint(195,35), wxSize(30, 90),
-                               wxGA_VERTICAL | wxGA_SMOOTH | wxNO_BORDER );
+    sz->Add( m_gauge, 0, wxALL, 10 );
     m_slider = new wxSlider( panel, ID_SLIDER, 0, 0, 200,
-                             wxPoint(18,85), wxSize(155,wxDefaultCoord),
+                             wxDefaultPosition, wxSize(155,wxDefaultCoord),
                              wxSL_AUTOTICKS | wxSL_LABELS);
     m_slider->SetTickFreq(40, 0);
 #if wxUSE_TOOLTIPS
     m_slider->SetToolTip(_T("This is a sliding slider"));
 #endif // wxUSE_TOOLTIPS
+    sz->Add( m_slider, 0, wxALL, 10 );
+    
+    m_gaugeVert = new wxGauge( panel, wxID_ANY, 100,
+                               wxDefaultPosition, wxSize(wxDefaultCoord, 90),
+                               wxGA_VERTICAL | wxGA_SMOOTH | wxNO_BORDER );
+    gauge_sizer->Add( m_gaugeVert, 0, wxALL, 10 );
 
-    (void)new wxStaticBox( panel, wxID_ANY, _T("&Explanation"),
-                           wxPoint(230,10), wxSize(270,130),
-                           wxALIGN_CENTER );
+
+
+    wxStaticBox *sb = new wxStaticBox( panel, wxID_ANY, _T("&Explanation"),
+                           wxDefaultPosition, wxDefaultSize ); //, wxALIGN_CENTER );
+    wxStaticBoxSizer *wrapping_sizer = new wxStaticBoxSizer( sb, wxVERTICAL );
+    main_sizer->Add( wrapping_sizer, 0, wxALL, 5 );
 
 #ifdef __WXMOTIF__
     // No wrapping text in wxStaticText yet :-(
-    (void)new wxStaticText( panel, wxID_ANY,
+    m_wrappingText = new wxStaticText( panel, wxID_ANY,
                             _T("Drag the slider!"),
                             wxPoint(250,30),
                             wxSize(240, wxDefaultCoord)
                           );
 #else
-    (void)new wxStaticText( panel, wxID_ANY,
-                            _T("In order see the gauge (aka progress bar)\n")
-                            _T("control do something you have to drag the\n")
-                            _T("handle of the slider to the right.\n")
-                            _T("\n")
-                            _T("This is also supposed to demonstrate how\n")
-                            _T("to use static controls.\n"),
-                            wxPoint(250,25),
-                            wxSize(240, 110)
+    m_wrappingText = new wxStaticText( panel, wxID_ANY,
+                            _T("In order see the gauge (aka progress bar) ")
+                            _T("control do something you have to drag the ")
+                            _T("handle of the slider to the right.")
+                            _T("\n\n")
+                            _T("This is also supposed to demonstrate how ")
+                            _T("to use static controls with line wrapping."),
+                            wxDefaultPosition,
+                            wxSize(240, -1)
                           );
 #endif
+    wrapping_sizer->Add( m_wrappingText );
+
+    wxStaticBoxSizer *non_wrapping_sizer = new wxStaticBoxSizer( wxVERTICAL, panel, wxT("Non-wrapping") );
+    main_sizer->Add( non_wrapping_sizer, 0, wxALL, 5 );
+
+    m_nonWrappingText = new wxStaticText( panel, wxID_ANY,
+                            _T("This static text has two lines.\nThey do not wrap."),
+                            wxDefaultPosition,
+                            wxDefaultSize
+                          );
+    non_wrapping_sizer->Add( m_nonWrappingText );
+
+    (void)new wxButton( panel, ID_BTNNEWTEXT, wxT("New text"), wxPoint(450, 160) );
+
     int initialSpinValue = -5;
     wxString s;
     s << initialSpinValue;
     m_spintext = new wxTextCtrl( panel, wxID_ANY, s, wxPoint(20,160), wxSize(80,wxDefaultCoord) );
 #if wxUSE_SPINBTN
-    m_spinbutton = new wxSpinButton( panel, ID_SPIN, wxPoint(103,160), wxSize(80, wxDefaultCoord) );
+    m_spinbutton = new wxSpinButton( panel, ID_SPIN, wxPoint(103,160) );
     m_spinbutton->SetRange(-40,30);
     m_spinbutton->SetValue(initialSpinValue);
 
@@ -846,6 +879,7 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
 
     m_book->AddPage(panel, _T("wxGauge"), false, Image_Gauge);
 #endif // wxUSE_SLIDER && wxUSE_GAUGE
+
 
     panel = new wxPanel(m_book);
 
@@ -1476,6 +1510,13 @@ void MyPanel::OnSpinUpdate( wxSpinEvent &event )
                  m_spinbutton->GetValue());
 
     m_text->AppendText(value);
+}
+
+void MyPanel::OnNewText( wxCommandEvent &event )
+{
+    m_nonWrappingText->SetLabel( wxT("This text is short\nbut still spans\nover three lines.") );
+    m_wrappingText->SetLabel( wxT("This text is short but will still be wrapped if it is too long.") );
+    m_wrappingText->GetParent()->Layout();
 }
 
 #if wxUSE_PROGRESSDLG
