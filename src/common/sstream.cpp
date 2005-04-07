@@ -36,7 +36,9 @@
 // construction/destruction
 // ----------------------------------------------------------------------------
 
-wxStringInputStream::wxStringInputStream(const wxString& s)
+// TODO:  Do we want to include the null char in the stream?  If so then
+// just add +1 to m_len in the ctor 
+wxStringInputStream::wxStringInputStream(const wxString& s) 
 #if wxUSE_UNICODE
     : m_str(s), m_buf(wxMBConvUTF8().cWX2MB(s).release()), m_len(strlen(m_buf))
 #else
@@ -91,7 +93,7 @@ wxFileOffset wxStringInputStream::OnSysSeek(wxFileOffset ofs, wxSeekMode mode)
             return wxInvalidOffset;
     }
 
-    if ( ofs < 0 || wx_static_cast(size_t, ofs) >= m_len )
+    if ( ofs < 0 || wx_static_cast(size_t, ofs) > m_len )
         return wxInvalidOffset;
 
     m_pos = wx_static_cast(size_t, ofs);
@@ -154,9 +156,10 @@ size_t wxStringOutputStream::OnSysWrite(const void *buffer, size_t size)
     // the literal length
     m_str->Append(wxString(p, m_conv, size));
 
-    // return number of bytes actually written
+    // update position
     m_pos += size;
 
+    // return number of bytes actually written
     return size;
 }
 
