@@ -67,6 +67,10 @@ public:
     // --------------
 
 protected:
+    virtual void DoSetSize(int x, int y,
+                           int width, int height,
+                           int sizeFlags = wxSIZE_AUTO);
+                           
     virtual wxSize DoGetBestSize() const;
 
     DECLARE_DYNAMIC_CLASS(wxStaticText)
