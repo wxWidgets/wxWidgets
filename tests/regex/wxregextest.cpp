@@ -169,7 +169,7 @@ void RegExReplaceTestCase::runTest()
     msgstr.Printf(_T("returns '%s' (expected '%s')"), text.c_str(), m_expected.c_str());
     CPPUNIT_ASSERT_MESSAGE((const char*)msgstr.mb_str(), text == m_expected);
 
-    msgstr << _T("matches ") << nRepl << _T(" times (expected ") << m_count << _T(")");
+    msgstr.Printf(_T("matches %d times (expected %d)"), (int)nRepl, (int)m_count);
     CPPUNIT_ASSERT_MESSAGE((const char*)msgstr.mb_str(), nRepl == m_count);
 }
 
