@@ -1488,7 +1488,7 @@ void wxMacMLTEControl::SetStringValue( const wxString &str)
 TXNFrameOptions wxMacMLTEControl::FrameOptionsFromWXStyle( long wxStyle )
 {
     TXNFrameOptions frameOptions =
-        kTXNDontDrawCaretWhenInactiveMask ;
+        kTXNDontDrawCaretWhenInactiveMask | kTXNDoFontSubstitutionMask ;
 
     if ( ! ( wxStyle & wxTE_NOHIDESEL ) )
         frameOptions |= kTXNDontDrawSelectionWhenInactiveMask ;
@@ -1528,7 +1528,7 @@ void wxMacMLTEControl::AdjustCreationAttributes( const wxColour &background, boo
         };
     TXNControlData iControlData[] = 
         { 
-            {false}, 
+            {true}, 
             {kTXNNoAutoWrap},
         };
         
