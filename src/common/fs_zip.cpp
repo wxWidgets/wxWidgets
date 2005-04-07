@@ -109,9 +109,12 @@ wxFSFile* wxZipFSHandler::OpenFile(wxFileSystem& fs, const wxString& location)
     s = new wxZipFSInputStream(leftFile);
     if (s && s->IsOk())
     {
-       wxZipEntry *ent;
        bool found = false;
-       while (!found && (ent = s->GetNextEntry())) {
+       while (!found)
+       {
+           wxZipEntry *ent = s->GetNextEntry();
+           if (!ent)
+               break;
            if (ent->GetInternalName() == right)
                found = true;
            delete ent;
