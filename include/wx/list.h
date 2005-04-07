@@ -460,9 +460,7 @@ class WXDLLIMPEXP_BASE wxListBase : public wxObject
 {
 friend class WXDLLIMPEXP_BASE wxNodeBase; // should be able to call DetachNode()
 friend class wxHashTableBase;   // should be able to call untyped Find()
-private:
-        // common part of all ctors
-    void Init(wxKeyType keyType = wxKEY_NONE); // Must be declared before it's used (for VC++ 1.5)
+
 public:
     // default ctor & dtor
     wxListBase(wxKeyType keyType = wxKEY_NONE)
@@ -599,6 +597,10 @@ protected:
     void Reverse();
     void DeleteNodes(wxNodeBase* first, wxNodeBase* last);
 private:
+
+        // common part of all ctors
+    void Init(wxKeyType keyType = wxKEY_NONE);
+
     // helpers
         // common part of copy ctor and assignment operator
     void DoCopy(const wxListBase& list);

@@ -512,11 +512,8 @@ public:
     // find a substring
   size_t find(const wxStringBase& str, size_t nStart = 0) const;
 
-  // VC++ 1.5 can't cope with this syntax.
-#if !defined(__VISUALC__) || defined(__WIN32__)
     // find first n characters of sz
   size_t find(const wxChar* sz, size_t nStart = 0, size_t n = npos) const;
-#endif // VC++ 1.5
 
     // find the first occurence of character ch after nStart
   size_t find(wxChar ch, size_t nStart = 0) const;
@@ -526,7 +523,6 @@ public:
     // as find, but from the end
   size_t rfind(const wxStringBase& str, size_t nStart = npos) const;
 
-  // VC++ 1.5 can't cope with this syntax.
     // as find, but from the end
   size_t rfind(const wxChar* sz, size_t nStart = npos,
                size_t n = npos) const;
@@ -700,7 +696,7 @@ public:
   {
     Truncate(0);
 
-    wxASSERT_MSG( IsEmpty(), _T("string not empty after call to Empty()?") );
+    wxASSERT_MSG( empty(), _T("string not empty after call to Empty()?") );
   }
     // empty the string and free memory
   void Clear()
@@ -731,7 +727,7 @@ public:
     // get last character
     wxChar  Last() const
       {
-          wxASSERT_MSG( !IsEmpty(), _T("wxString: index out of bounds") );
+          wxASSERT_MSG( !empty(), _T("wxString: index out of bounds") );
 
           return at(length() - 1);
       }
@@ -739,7 +735,7 @@ public:
     // get writable last character
     wxChar& Last()
       {
-          wxASSERT_MSG( !IsEmpty(), _T("wxString: index out of bounds") );
+          wxASSERT_MSG( !empty(), _T("wxString: index out of bounds") );
           return at(length() - 1);
       }
 
@@ -906,8 +902,8 @@ public:
     // string += C string
   wxString& Append(const wxString& s)
     {
-        // test for IsEmpty() to share the string if possible
-        if ( IsEmpty() )
+        // test for empty() to share the string if possible
+        if ( empty() )
             *this = s;
         else
             append(s);
@@ -1127,8 +1123,8 @@ public:
   int Last( const wxChar ch ) const { return Find(ch, true); }
   bool Contains(const wxString& str) const { return Find(str) != wxNOT_FOUND; }
 
-    // use IsEmpty()
-  bool IsNull() const { return IsEmpty(); }
+    // use empty()
+  bool IsNull() const { return empty(); }
 
   // std::string compatibility functions
 
