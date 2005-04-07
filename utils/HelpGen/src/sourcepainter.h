@@ -32,8 +32,12 @@
 	#include "wxstlvec.h"
 	#include "wx/string.h"
 	
-	// FIXME:: dirty!
-	#define  string wxString
+	#ifdef wxUSE_STD_STRING
+		using std::string;
+	#else
+		// FIXME:: dirty!
+		#define  string wxString
+	#endif
 
 	typedef WXSTL_VECTOR_SHALLOW_COPY(int) SPBlockListT;
 

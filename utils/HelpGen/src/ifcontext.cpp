@@ -267,7 +267,7 @@ void spInterFileContext::WriteToFiles()
 	{
 		FILE* fp = fopen( mFiles[i].c_str(), "w+t" );
 
-		if ( int(fp) > 0 )
+		if ( fp != NULL )
 		{
 			fwrite( mContents[i].c_str(), sizeof(char), mContents[i].length(), fp );
 

@@ -28,8 +28,12 @@
 	#include "wxstlvec.h"
 	#include "wx/string.h"
 	
-	// FIXME:: dirty!
-	typedef wxString string;
+	#ifdef wxUSE_STD_STRING
+		using std::string;
+	#else
+		// FIXME:: dirty!
+		typedef wxString string;
+	#endif
 
 #endif
 

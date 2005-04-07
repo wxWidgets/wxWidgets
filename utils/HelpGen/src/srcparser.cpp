@@ -533,7 +533,7 @@ spFile* SourceParserBase::ParseFile( const char* fname )
 
     FILE* fp = fopen( fname, "rt" );
 
-    if ( (int)fp == -1 || !fp ) return NULL;
+    if ( !fp ) return NULL;
 
     int sz = fread( mpFileBuf, 1, mFileBufSz, fp );
 
@@ -587,7 +587,7 @@ void spAttribute::DumpThis(const wxString& indent) const
 void spOperation::DumpThis(const wxString& indent) const
 {
     wxString protection;
-    if ( !!mScope ) {
+    if ( !mScope.empty() ) {
         switch ( mVisibility ) {
             case SP_VIS_PUBLIC:
                 protection = "public";
