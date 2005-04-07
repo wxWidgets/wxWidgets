@@ -209,7 +209,7 @@ class ListCtrlAutoWidthMixin:
 
             'minWidth' is the preferred minimum width for the last column.
         """
-        self.resizeCloumn(self, minWidth)
+        self.resizeColumn(self, minWidth)
 
 
     def resizeColumn(self, minWidth):
