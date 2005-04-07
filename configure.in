@@ -6268,6 +6268,8 @@ if test "$wxUSE_MAC" = 1 ; then
     else
         LDFLAGS="$LDFLAGS -lCarbonLib"
     fi
+elif test "$USE_DARWIN" = 1; then
+    LDFLAGS="$LDFLAGS -framework IOKit -framework CoreServices -framework System"
 fi
 if test "$wxUSE_COCOA" = 1 ; then
     LDFLAGS="$LDFLAGS -framework IOKit -framework Cocoa"
