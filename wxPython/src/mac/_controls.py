@@ -4750,10 +4750,11 @@ class ListCtrl(_core.Control):
         """InsertImageStringItem(self, long index, String label, int imageIndex) -> long"""
         return _controls_.ListCtrl_InsertImageStringItem(*args, **kwargs)
 
-    def InsertColumnInfo(*args, **kwargs):
-        """InsertColumnInfo(self, long col, ListItem info) -> long"""
-        return _controls_.ListCtrl_InsertColumnInfo(*args, **kwargs)
+    def InsertColumnItem(*args, **kwargs):
+        """InsertColumnItem(self, long col, ListItem info) -> long"""
+        return _controls_.ListCtrl_InsertColumnItem(*args, **kwargs)
 
+    InsertColumnInfo = InsertColumnItem 
     def InsertColumn(*args, **kwargs):
         """
         InsertColumn(self, long col, String heading, int format=LIST_FORMAT_LEFT, 

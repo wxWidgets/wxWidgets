@@ -26168,7 +26168,7 @@ static PyObject *_wrap_ListCtrl_InsertImageStringItem(PyObject *, PyObject *args
 }
 
 
-static PyObject *_wrap_ListCtrl_InsertColumnInfo(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_ListCtrl_InsertColumnItem(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPyListCtrl *arg1 = (wxPyListCtrl *) 0 ;
     long arg2 ;
@@ -26181,7 +26181,7 @@ static PyObject *_wrap_ListCtrl_InsertColumnInfo(PyObject *, PyObject *args, PyO
         (char *) "self",(char *) "col",(char *) "info", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO:ListCtrl_InsertColumnInfo",kwnames,&obj0,&obj1,&obj2)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO:ListCtrl_InsertColumnItem",kwnames,&obj0,&obj1,&obj2)) goto fail;
     SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxPyListCtrl, SWIG_POINTER_EXCEPTION | 0);
     if (SWIG_arg_fail(1)) SWIG_fail;
     {
@@ -35735,7 +35735,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"ListCtrl_InsertStringItem", (PyCFunction) _wrap_ListCtrl_InsertStringItem, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"ListCtrl_InsertImageItem", (PyCFunction) _wrap_ListCtrl_InsertImageItem, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"ListCtrl_InsertImageStringItem", (PyCFunction) _wrap_ListCtrl_InsertImageStringItem, METH_VARARGS | METH_KEYWORDS, NULL},
-	 { (char *)"ListCtrl_InsertColumnInfo", (PyCFunction) _wrap_ListCtrl_InsertColumnInfo, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"ListCtrl_InsertColumnItem", (PyCFunction) _wrap_ListCtrl_InsertColumnItem, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"ListCtrl_InsertColumn", (PyCFunction) _wrap_ListCtrl_InsertColumn, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"ListCtrl_SetItemCount", (PyCFunction) _wrap_ListCtrl_SetItemCount, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"ListCtrl_ScrollList", (PyCFunction) _wrap_ListCtrl_ScrollList, METH_VARARGS | METH_KEYWORDS, NULL},
