@@ -426,6 +426,8 @@ protected:
     // information about all functions documented in the TeX file(s)
     // -------------------------------------------------------------
 
+public: // Note: Sun C++ 5.5 requires TypeInfo and ParamInfo to be public
+
     // info about a type: for now stored as text string, but must be parsed
     // further later (to know that "char *" == "char []" - TODO)
     class TypeInfo
@@ -1862,7 +1864,7 @@ bool DocManager::DumpDifferences(spContext *ctxTop) const
                         spParameter *ctxParam = (spParameter *)ctx;
                         const ParamInfo& param = method.GetParam(nParam);
                         if ( m_checkParamNames &&
-                             (param.GetName() != ctxParam->mName) ) {
+                             (param.GetName() != ctxParam->mName.c_str()) ) {
                             foundDiff = true;
 
                             wxLogError("Parameter #%d of '%s::%s' should be "
@@ -1890,7 +1892,7 @@ bool DocManager::DumpDifferences(spContext *ctxTop) const
                             continue;
                         }
 
-                        if ( param.GetDefValue() != ctxParam->mInitVal ) {
+                        if ( param.GetDefValue() != ctxParam->mInitVal.c_str() ) {
                             wxLogWarning("Default value of parameter '%s' of "
                                          "'%s::%s' should be '%s' and not "
                                          "'%s'.",
@@ -2190,6 +2192,9 @@ static const wxString GetVersionString()
 
 /*
    $Log$
+   Revision 1.36  2005/04/07 19:54:58  MW
+   Workarounds to allow compilation by Sun C++ 5.5
+
    Revision 1.35  2004/12/12 11:03:31  VZ
    give an error message if we're built in Unicode mode (in response to bug 1079224)
 
