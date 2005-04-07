@@ -228,7 +228,6 @@ void MyFrame::OnOpen( wxCommandEvent& WXUNUSED(event) )
     {
         m_text->Clear();
 
-
 #ifdef __WXX11__
         // requires wxUSE_UNIV_TEXTCTRL to be set to 0
 #if 0
