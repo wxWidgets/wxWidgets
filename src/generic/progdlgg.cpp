@@ -115,7 +115,7 @@ wxProgressDialog::wxProgressDialog(wxString const &title,
     m_hasSkipButton = (style & wxPD_CAN_SKIP) != 0;
 
     bool isPda = (wxSystemSettings::GetScreenType() <= wxSYS_SCREEN_PDA);
-    
+
 #if defined(__WXMSW__) && !defined(__WXUNIVERSAL__)
     // we have to remove the "Close" button from the title bar then as it is
     // confusing to have it - it doesn't work anyhow
@@ -427,7 +427,7 @@ wxProgressDialog::Update(int value, const wxString& newmsg, bool *skip)
             EnableCloseButton();
 #endif // __WXMSW__
 
-            if ( !newmsg.empty() )
+            if ( newmsg.empty() )
             {
                 // also provide the finishing message if the application didn't
                 m_msg->SetLabel(_("Done."));
