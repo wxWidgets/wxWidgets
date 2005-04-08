@@ -91,7 +91,7 @@ initialTask = Task([ Job("", ["distrib/all/build-setup", CFGFILE]),
                      ])
 
 # Build tasks.  Anything that can be done in parallel (depends greatly
-# on the nature of the build machine configurations...) is a separate
+# on the nature of the build machines configurations...) is a separate
 # task.
 
 jaguarTask =  Task( Job("whopper.23",
