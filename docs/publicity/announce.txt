@@ -62,9 +62,10 @@ handlers for reading and writing many image types, resizeable panels
 and dialogs on all platforms, document/view, OpenGL support,
 HTML-based and context-sensitive help, wizards, drag and drop,
 a grid class, ODBC support, threads, sockets, container classes,
-a styled text control, and much more. An 1800-page reference manual
-is provided in HTML, MS HTML Help, WinHelp, wxWidgets Help and PDF
-formats, and there are over 80 samples and demos.
+a styled text control, and much more. An eighteen hundred page
+reference manual is provided in HTML, MS HTML Help, WinHelp,
+wxWidgets Help and PDF formats, and there are over eighty samples
+and demos.
 
 If you're an MFC user, you'll find many wxWidgets concepts
 reassuringly familiar, while often clearer and more consistent.
