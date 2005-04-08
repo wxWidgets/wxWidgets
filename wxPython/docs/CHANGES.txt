@@ -85,6 +85,7 @@ list of top-level windows that currently exist in the application.
 Updated docview library modules and sample apps from the ActiveGrid
 folks. 
 
+Added the ActiveGrid IDE as a sample application.
 
 
 
