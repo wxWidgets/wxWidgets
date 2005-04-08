@@ -843,9 +843,16 @@ public:
     // from a character
   wxString& operator=(wxChar ch)
     { return (wxString&)wxStringBase::operator=(ch); }
-    // from a C string
+    // from a C string - STL probably will crash on NULL,
+    // so we need to compensate in that case
+#if wxUSE_STL
+  wxString& operator=(const wxChar *psz)
+    { if(psz) wxStringBase::operator=(psz); else Clear(); return *this; }
+#else
   wxString& operator=(const wxChar *psz)
     { return (wxString&)wxStringBase::operator=(psz); }
+#endif
+
 #if wxUSE_UNICODE
     // from wxWCharBuffer
   wxString& operator=(const wxWCharBuffer& psz)
