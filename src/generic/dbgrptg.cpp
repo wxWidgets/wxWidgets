@@ -431,12 +431,15 @@ void wxDebugReportDialog::OnOpen(wxCommandEvent& )
 
     // try to get the command to open this kind of files ourselves
     wxString command;
+#if wxUSE_MIMETYPE
     wxFileType *
         ft = wxTheMimeTypesManager->GetFileTypeFromExtension(fn.GetExt());
     if ( ft )
     {
         command = ft->GetOpenCommand(fn.GetFullPath());
+        delete ft;
     }
+#endif // wxUSE_MIMETYPE
 
     // if we couldn't, ask the user
     if ( command.empty() )
