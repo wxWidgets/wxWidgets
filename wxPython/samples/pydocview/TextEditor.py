@@ -6,8 +6,8 @@
 #
 # Created:      8/15/03
 # CVS-ID:       $Id$
-# Copyright:    (c) 2003-2004 ActiveGrid, Inc.
-# License:      wxWindows license
+# Copyright:    (c) 2003-2005 ActiveGrid, Inc.
+# License:      ASL 2.0  http://apache.org/licenses/LICENSE-2.0
 #----------------------------------------------------------------------------
 import wx
 import wx.lib.docview
@@ -142,7 +142,7 @@ class TextView(wx.lib.docview.View):
         if not wx.lib.docview.View.OnClose(self, deleteWindow):
             return False
         self.Activate(False)
-        if deleteWindow:
+        if deleteWindow and self.GetFrame():
             self.GetFrame().Destroy()
         return True
 
@@ -246,7 +246,7 @@ class TextView(wx.lib.docview.View):
             event.Enable(self._textCtrl.CanPaste())
             return True
         elif id == wx.ID_CLEAR:
-            event.Enable(True)  # wxBug: No matter what we do, the wxTextCtrl disables the Clear menu item and the menu item traps the Del key and the wxTextCtrl doesn't get it and can't delete the next character
+            event.Enable(self._textCtrl.CanCopy())
             return True
         elif id == wx.ID_SELECTALL:
             event.Enable(hasText)

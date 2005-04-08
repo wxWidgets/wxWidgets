@@ -6,8 +6,8 @@
 #
 # Created:      8/15/03
 # CVS-ID:       $Id$
-# Copyright:    (c) 2003-2004 ActiveGrid, Inc.
-# License:      wxWindows license
+# Copyright:    (c) 2003-2005 ActiveGrid, Inc.
+# License:      ASL 2.0  http://apache.org/licenses/LICENSE-2.0
 #----------------------------------------------------------------------------
 
 import wx

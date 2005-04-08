@@ -82,6 +82,9 @@ events in a wx.TreeCtrl.
 Added wx.GetTopLevelWindows() function which returns a copy of the
 list of top-level windows that currently exist in the application.
 
+Updated docview library modules and sample apps from the ActiveGrid
+folks. 
+
 
 
 
