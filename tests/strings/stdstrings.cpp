@@ -98,7 +98,7 @@ void StdStringTestCase::StdAppend()
 {
     wxString s1, s2, s3, s4, s5, s6, s7, s8;
 
-    s1 = s2 = s3 = s4 = s5 = s6 = s7 = s8 = _T("abc");
+    s1 = s2 = s3 = s4 = s5 = s6 = _T("abc");
     s1.append(_T("def"));
     s2.append(_T("defgh"), 3);
     s3.append(wxString(_T("abcdef")), 3, 6);
@@ -112,6 +112,14 @@ void StdStringTestCase::StdAppend()
     CPPUNIT_ASSERT( s4 == _T("abcabcdef") );
     CPPUNIT_ASSERT( s5 == _T("abcaaa") );
     CPPUNIT_ASSERT( s6 == _T("abcdef") );
+
+    s7 = s8 = wxString(_T("null\0time"), 9);
+
+    s7.append(_T("def"));
+    s8.append(_T("defgh"), 3);
+
+    CPPUNIT_ASSERT( s7 == wxString(_T("null\0timedef"), 12) );
+    CPPUNIT_ASSERT( s8 == wxString(_T("null\0timedef"), 12) );
 }
 
 void StdStringTestCase::StdAssign()

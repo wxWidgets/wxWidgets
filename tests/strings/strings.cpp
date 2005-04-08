@@ -259,8 +259,11 @@ void StringTestCase::ConversionUTF7()
     {
         { "+-", L"+" },
         { "+--", L"+-" },
+        //\u isn't recognized on MSVC 6
+#if !defined(_MSC_VER)
 #if !defined(__GNUC__) || (__GNUC__ >= 3)
         { "+AKM-", L"\u00a3" },
+#endif
 #endif
         // Windows accepts invalid UTF-7 strings and so does our UTF-7
         // conversion code -- this is wrong IMO but the way it is for now
@@ -285,8 +288,11 @@ void StringTestCase::ConversionUTF8()
 {
     static const StringConversionData utf8data[] =
     {
+        //\u isn't recognized on MSVC 6
+#if !defined(_MSC_VER)
 #if !defined(__GNUC__) || (__GNUC__ >= 3)
         { "\xc2\xa3", L"\u00a3" },
+#endif
 #endif
         { "\xc2", NULL },
     };
@@ -402,8 +408,8 @@ void StringTestCase::Tokenizer()
 // call this with the string to tokenize, delimeters to use and the expected
 // positions (i.e. results of GetPosition()) after each GetNextToken() call,
 // terminate positions with 0
-static void
-DoTokenizerGetPosition(const wxChar *s, const wxChar *delims, int pos, ...)
+static void DoTokenizerGetPosition(const wxChar *s, 
+                                   const wxChar *delims, int pos, ...)
 {
     wxStringTokenizer tkz(s, delims);
 
@@ -452,6 +458,29 @@ void StringTestCase::Replace()
     TEST_REPLACE( _T("foobar"),        3, 0, _T("-"),      _T("foo-bar")       );
     TEST_REPLACE( _T("barfoo"),        0, 6, _T("foobar"), _T("foobar")        );
 
+    
+    #define TEST_NULLCHARREPLACE( o , olen, pos , len , replacement , r, rlen ) \
+        { \
+            wxString s(o,olen); \
+            s.replace( pos , len , replacement ); \
+            CPPUNIT_ASSERT( s == wxString(r,rlen) ); \
+        }
+    
+    TEST_NULLCHARREPLACE( _T("null\0char"), 9, 5, 1, _T("d"), 
+                          _T("null\0dhar"), 9 );   
+
+    #define TEST_WXREPLACE( o , olen, olds, news, all, r, rlen ) \
+        { \
+            wxString s(o,olen); \
+            s.Replace( olds, news, all ); \
+            CPPUNIT_ASSERT( s == wxString(r,rlen) ); \
+        }
+    
+    TEST_WXREPLACE( _T("null\0char"), 9, _T("c"), _T("d"), true,
+                          _T("null\0dhar"), 9 );   
+
+    #undef TEST_WXREPLACE
+    #undef TEST_NULLCHARREPLACE
     #undef TEST_REPLACE
 }
 
