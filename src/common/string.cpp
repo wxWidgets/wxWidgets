@@ -735,10 +735,25 @@ wxStringBase& wxStringBase::replace(size_t nStart, size_t nLen,
   wxStringBase strTmp;
   strTmp.reserve(length()); // micro optimisation to avoid multiple mem allocs
 
+  //This is kind of inefficient, but its pretty good considering...
+  //we don't want to use character access operators here because on STL
+  //it will freeze the reference count of strTmp, which means a deep copy
+  //at the end when swap is called
+  //
+  //Also, we can't use append with the full character pointer and must
+  //do it manually because this string can contain null characters
   if ( nStart != 0 )
-    strTmp.append(c_str(), nStart);
+  {
+      for(size_t i1 = 0; i1 < nStart; ++i1)
+          strTmp.append(1, this->c_str()[i1]);
+  }
+  
+  //its safe to do the full version here because
+  //sz must be a normal c string
   strTmp.append(sz);
-  strTmp.append(c_str() + nStart + nLen);
+
+  for(size_t i2 = nStart + nLen; i2 < length(); ++i2)
+      strTmp.append(1, this->c_str()[i2]);
 
   swap(strTmp);
   return *this;
@@ -1512,55 +1527,46 @@ wxString wxString::AfterFirst(wxChar ch) const
 }
 
 // replace first (or all) occurences of some substring with another one
-size_t
-wxString::Replace(const wxChar *szOld, const wxChar *szNew, bool bReplaceAll)
+size_t wxString::Replace(const wxChar *szOld, 
+                  const wxChar *szNew, bool bReplaceAll)
 {
     // if we tried to replace an empty string we'd enter an infinite loop below
     wxCHECK_MSG( szOld && *szOld && szNew, 0,
                  _T("wxString::Replace(): invalid parameter") );
 
-  size_t uiCount = 0;   // count of replacements made
+    size_t uiCount = 0;   // count of replacements made
 
-  size_t uiOldLen = wxStrlen(szOld);
+    size_t uiOldLen = wxStrlen(szOld);
+    size_t uiNewLen = wxStrlen(szNew);
 
-  wxString strTemp;
-  const wxChar *pCurrent = c_str();
-  const wxChar *pSubstr;
-  while ( *pCurrent != wxT('\0') ) {
-    pSubstr = wxStrstr(pCurrent, szOld);
-    if ( pSubstr == NULL ) {
-      // strTemp is unused if no replacements were made, so avoid the copy
-      if ( uiCount == 0 )
-        return 0;
+    size_t dwPos = 0;
 
-      strTemp += pCurrent;    // copy the rest
-      break;                  // exit the loop
+    while ( this->c_str()[dwPos] != wxT('\0') ) 
+    {
+        //DO NOT USE STRSTR HERE
+        //this string can contain embedded null characters,
+        //so strstr will function incorrectly
+        dwPos = find(szOld, dwPos);
+        if ( dwPos == npos ) 
+            break;                  // exit the loop
+        else 
+        {
+            //replace this occurance of the old string with the new one
+            replace(dwPos, uiOldLen, szNew, uiNewLen);
+
+            //move up pos past the old string
+            dwPos += uiOldLen;
+
+            //increase replace count
+            ++uiCount;
+    
+            // stop now?
+            if ( !bReplaceAll ) 
+                break;                  // exit the loop
+        }
     }
-    else {
-      // take chars before match
-      size_type len = strTemp.length();
-      strTemp.append(pCurrent, pSubstr - pCurrent);
-      if ( strTemp.length() != (size_t)(len + pSubstr - pCurrent) ) {
-        wxFAIL_MSG( _T("out of memory in wxString::Replace") );
-        return 0;
-      }
-      strTemp += szNew;
-      pCurrent = pSubstr + uiOldLen;  // restart after match
 
-      uiCount++;
-
-      // stop now?
-      if ( !bReplaceAll ) {
-        strTemp += pCurrent;    // copy the rest
-        break;                  // exit the loop
-      }
-    }
-  }
-
-  // only done if there were replacements, otherwise would have returned above
-  swap(strTemp);
-
-  return uiCount;
+    return uiCount;
 }
 
 bool wxString::IsAscii() const
