@@ -134,7 +134,7 @@ and unregister the button when you're done with it. For example:
   win->UnregisterHotKey(0);
 \end{verbatim}
 
-You may have to register the buttons in a wxEVT_ACTIVATE event handler
+You may have to register the buttons in a wxEVT\_ACTIVATE event handler
 since other applications will grab the buttons.
 
 There is currently no method of finding out the names of the special
@@ -165,7 +165,7 @@ and wxTopLevelWindow::SetRightMenu, for example:
 #endif
 \end{verbatim}
 
-For implementing property sheets (flat tabs), use a wxNotebook with wxNB_FLAT|wxNB_BOTTOM
+For implementing property sheets (flat tabs), use a wxNotebook with wxNB\_FLAT|wxNB\_BOTTOM
 and have the notebook left, top and right sides overlap the dialog by about 3 pixels
 to eliminate spurious borders. You can do this by using a negative spacing in your
 sizer Add() call. The cross-platform property sheet dialog \helpref{wxPropertySheetDialog}{wxpropertysheetdialog} is

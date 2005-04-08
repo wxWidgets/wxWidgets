@@ -103,7 +103,7 @@ Returns the value of a system metric, or -1 if the metric is not supported on th
 The value of {\it win} determines if the metric returned is a global value or
 a \helpref{wxWindow}{wxwindow} based value, in which case it might determine the widget, the
 display the window is on, or something similar. The window given should be as close to the
-metric as possible (e.g a wxTopLevelWindow in case of the wxSYS_CAPTION_Y metric).
+metric as possible (e.g a wxTopLevelWindow in case of the wxSYS\_CAPTION\_Y metric).
 
 {\it index} can be one of:
 
@@ -159,7 +159,7 @@ where it would otherwise present the information only in audible form; zero othe
 Specifying the {\it win} parameter is encouraged, because some metrics on some ports are not supported without one,
 or they might be capable of reporting better values if given one. If a window does not make sense for a metric,
 one should still be given, as for example it might determine which displays cursor width is requested with
-wxSYS_CURSOR_X.
+wxSYS\_CURSOR\_X.
 
 \pythonnote{This static method is implemented in Python as a
 standalone function named {\tt wxSystemSettings\_GetMetric}}
