@@ -5298,6 +5298,8 @@ class MaskedEditMixin:
         """ Handler for EVT_KILL_FOCUS event.
         """
 ##        dbg('MaskedEditMixin::_OnKillFocus', 'isDate=',self._isDate, indent=1)
+        if self.IsBeingDeleted() or self.GetParent().IsBeingDeleted():
+            return 
         if self._mask and self._IsEditable():
             self._AdjustField(self._GetInsertionPoint())
             self._CheckValid()   ## Call valid handler
