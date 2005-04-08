@@ -2069,5 +2069,19 @@ wxWindow* wxFindWindowByLabel( const wxString& label,
 %}
 
 //---------------------------------------------------------------------------
+
+DocStr(GetTopLevelWindows,
+"Returns a list of the the application's top-level windows, (frames,
+dialogs, etc.)  NOTE: Currently this is a copy of the list maintained
+by wxWidgets, and so it is only valid as long as no top-level windows
+are closed or new top-level windows are created.
+", "");
+%inline %{
+    PyObject* GetTopLevelWindows() {
+        return wxPy_ConvertList(&wxTopLevelWindows);
+    }
+%}
+
+//---------------------------------------------------------------------------
 //---------------------------------------------------------------------------
 

@@ -128,6 +128,8 @@ key value from a RGB tripple.", "");
 
 class wxImage : public wxObject {
 public:
+    %typemap(out) wxImage*;    // turn off this typemap
+
     DocCtorStr(
         wxImage( const wxString& name, long type = wxBITMAP_TYPE_ANY, int index = -1 ),
         "", "");
@@ -233,6 +235,10 @@ length of the data must be width*height*3.", "",
     }
 
     // TODO: wxImage( char** xpmData );
+
+
+    // Turn it back on again
+    %typemap(out) wxImage* { $result = wxPyMake_wxObject($1, $owner); }
 
 
     void Create( int width, int height );

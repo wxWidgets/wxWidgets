@@ -11,7 +11,73 @@
 <div class="document" id="recent-changes-for-wxpython">
 <h1 class="title">Recent Changes for wxPython</h1>
 <div class="section" id="id1">
-<h1><a name="id1">2.5.4.1</a></h1>
+<h1><a name="id1">2.5.5.0</a></h1>
+<p>wxMSW: Fixed bug #1022383, 'several ComboBoxes appear selected'</p>
+<p>wx.grid.Grid: Fixed bug #1163384.  Moved the code that handles
+activating the cell editors to a EVT_CHAR event handler.  This is done
+so the character inserted into the editor will be the &quot;cooked&quot; char
+value (including accented or composed keys) rather than the raw code
+provided by the EVT_KEY_DOWN event.</p>
+<p>Added orient parameter to wx.MDIParentFrame.Tile()</p>
+<p>wxMSW: wxTextCtrl with wx.TE_RICH2 style now uses RichEdit 4.1 if
+available.</p>
+<p>Added GetCount, GetCountRGB, and GetCountColour methods to
+wx.ImageHistogram.</p>
+<p>wxMSW: wx.Window.Refresh changed to explicitly refresh all children as
+well as the parent.  Previously it was implicitly done because parents
+did not clip their children by default.  Now that they always clip
+children then Refresh needed to be fixed to do a recursive refresh.
+This also fixes the Freeze/Thaw problems that some people had with
+2.5.4.1.</p>
+<p>wx.SplitterWindow: Send EVT_SPLITTER_SASH_POS_CHANGED only once after
+end of dragging and not after each CHANGING event (modified patch
+#1076226)</p>
+<p>wx.glcanvas.GLCanvas: applied patch fixing problems with X server
+crash when using nVidia cards (patch 1155132)</p>
+<dl>
+<dt>wx.lib.mixins.listctrl: Patches from Toni Brkic:</dt>
+<dd><ul class="first last simple">
+<li>Bugfix for TextEditMixin when the view can't be scrolled</li>
+<li>Enhancement for ListCtrlAutoWidthMixin, allowing it to manage 
+the width of any column.</li>
+</ul>
+</dd>
+</dl>
+<p>wxMac: removal and reusing toolbar tools like the other platforms is
+now possible.</p>
+<p>wxMac: Correct radio tool selection after calling Realize a 2nd time.</p>
+<p>wxMSW: Applied patch #1166587, removes all flicker from wx.StaticBox</p>
+<p>Added wx.lib.foldpanelbar, Andrea Gavana's port of Jorgen Bodde's C++
+wxFoldPanelBar classes to Python.</p>
+<p>wxGTK: Applied patch #1173802, reimplementation of GtkFileChooser
+wxFileDialog by Mart Raudsepp.  Note that this new file dialog is only
+used on GTK2 &gt;= 2.4.  For earlier GTK2 versions and GTK1 then the
+older generic file dialog is used.</p>
+<p>wxMSW: fixes to static box borders calculations (finalizes patch
+#1166587)</p>
+<p>wx.Image: Use Python's buffer interface API for all image data and
+alpha Set/Get methods and the ImageFromData* constructors.  They all
+still copy the buffer except for SetDataBuffer and SetAlphaBuffer, but
+this gives more flexibility on where the data can come from.</p>
+<p>Added MDI support to XRC</p>
+<p>Added wx.animate module and a demo.  The wx.animate module provides a
+control that is able to display an animated GIF file.</p>
+<p>wx.lib.plot.py: Applied patch from Werner F. Bruhin that allows either
+vertical and/or horizontal gridlines.</p>
+<p>wxMSW: Extra space given for top border of wx.StaticBoxSizer so the
+upper line is not cliped when there is no label.</p>
+<p>wxMSW: Restored old behaviour of wx.StaticBox.SetBackgroundColour only
+affecting the label.</p>
+<p>wxMSW: Fixed missing EVT_RIGHT_DOWN and EVT_TREE_ITEM_RIGHT_CLICK
+events in a wx.TreeCtrl.</p>
+<p>Added wx.GetTopLevelWindows() function which returns a copy of the
+list of top-level windows that currently exist in the application.</p>
+<p>Updated docview library modules and sample apps from the ActiveGrid
+folks.</p>
+<p>Added the ActiveGrid IDE as a sample application.</p>
+</div>
+<div class="section" id="id2">
+<h1><a name="id2">2.5.4.1</a></h1>
 <p>wx.Sizer Add, Insert, and Prepend functions now return a reference to the
 wx.SizerItem that was added to the sizer, and the wx.SizerItem has a
 GetRect accessor to give the position of the item on the parent window.</p>
@@ -241,8 +307,8 @@ wx.Image.</p>
 </dd>
 </dl>
 </div>
-<div class="section" id="id2">
-<h1><a name="id2">2.5.3.1</a></h1>
+<div class="section" id="id3">
+<h1><a name="id3">2.5.3.1</a></h1>
 <p>wxMac focus and border refreshes corrected.</p>
 <p>Updated internal PNG library.</p>
 <p>wxMac fix for metal appearance on wx.ToolBar.</p>
@@ -395,8 +461,8 @@ it.</p>
 <p>wxPython on OSX can now be built in Unicode mode, can support multiple
 version installs, and comes with an uninstaller script.</p>
 </div>
-<div class="section" id="id3">
-<h1><a name="id3">2.5.2.8</a></h1>
+<div class="section" id="id4">
+<h1><a name="id4">2.5.2.8</a></h1>
 <p>Predominantly a bug-fix release.</p>
 <blockquote>
 <ul class="simple">
@@ -424,8 +490,8 @@ wxCheckListBox.</li>
 </ul>
 </blockquote>
 </div>
-<div class="section" id="id4">
-<h1><a name="id4">2.5.2.7</a></h1>
+<div class="section" id="id5">
+<h1><a name="id5">2.5.2.7</a></h1>
 <p>wx.ADJUST_MINSIZE is now the default behaviour for window items in
 sizers.  This means that the item's GetMinSize and/or GetBestSize will
 be called when calculating layout and the return value from that will
@@ -520,8 +586,8 @@ in the PyShell:</p>
 <p>wxGTK: Applied wxNO_BORDER patch (#1098374) for text control and combo
 box.</p>
 </div>
-<div class="section" id="id5">
-<h1><a name="id5">2.5.1.5</a></h1>
+<div class="section" id="id6">
+<h1><a name="id6">2.5.1.5</a></h1>
 <p>(See also the <a class="reference" href="MigrationGuide.html">MigrationGuide</a> file for details about some of the
 big changes that have happened in this release and how you should
 adapt your code.)</p>
@@ -602,8 +668,8 @@ migrating away from using activexwrapper as well.  Please see the
 MigrationGuide for more details on using the new module.</p>
 <p>Floats are allowed again as function parameters where ints are expected.</p>
 </div>
-<div class="section" id="id7">
-<h1><a name="id7">2.4.2.4</a></h1>
+<div class="section" id="id8">
+<h1><a name="id8">2.4.2.4</a></h1>
 <p>Use wxSTC in the demo for displaying the soucre code of the samples.</p>
 <p>Lots of bug fixes and such from the wxWindows folks.</p>
 <p>Added wxPython.lib.newevent from Miki Tebeka.  Its usage is
@@ -612,8 +678,8 @@ demonstrated in the Threads sample in the demo.</p>
 <p>Added wxMaskedNumCtrl.</p>
 <p>Added Chris Barker's FloatCanvas.</p>
 </div>
-<div class="section" id="id8">
-<h1><a name="id8">2.4.1.2</a></h1>
+<div class="section" id="id9">
+<h1><a name="id9">2.4.1.2</a></h1>
 <p>Added wxScrolledPanel from Will Sadkin</p>
 <p>Added SetShape method to top level windows (e.g. wxFrame.)</p>
 <p>Changed wxSWIG to not generate Python code using apply, (since it will
@@ -664,8 +730,8 @@ release,) SetItemMinSize can now take a wxSize (or 2-tuple) parameter,
 and Spacers can be specified with a wxSize (or 2-tuple) parameter</p>
 <p>Added wxCursorFromBits.</p>
 </div>
-<div class="section" id="id9">
-<h1><a name="id9">2.4.0.7</a></h1>
+<div class="section" id="id10">
+<h1><a name="id10">2.4.0.7</a></h1>
 <p>Gave up on generating a warning upon the use of the old true/false or
 TRUE/FALSE values.</p>
 <p>Fixed wxGenericTreeCtrl (used on wxGTK and wxMac for wxTreeCtrl) so
@@ -695,8 +761,8 @@ think I am testing in the future...</p>
 <p>Updated pycolourchooser.</p>
 <p>Updated to 0.9b of PyCrust.</p>
 </div>
-<div class="section" id="id10">
-<h1><a name="id10">2.4.0.4</a></h1>
+<div class="section" id="id11">
+<h1><a name="id11">2.4.0.4</a></h1>
 <p>Added missing wxRect methods</p>
 <p>Add OOR support for wxApp objects too.</p>
 <p>Added wxCursorFromImage, which works on wxMSW and wxGTK so far.</p>
@@ -752,25 +818,25 @@ doesn't have a standard place for them.</p>
 <p>Fixed typemaps for wxGridCellCoordsArray.</p>
 <p>Updated to the 0.9a version of PyCrust</p>
 </div>
-<div class="section" id="id11">
-<h1><a name="id11">2.4.0.2</a></h1>
+<div class="section" id="id12">
+<h1><a name="id12">2.4.0.2</a></h1>
 <p>Several bug fixes.</p>
 <p>Added wxIntCtrl from Will Sadkin.</p>
 <p>Added wxPyColourChooser by Michael Gilfix.</p>
 </div>
-<div class="section" id="id12">
-<h1><a name="id12">2.4.0.1</a></h1>
+<div class="section" id="id13">
+<h1><a name="id13">2.4.0.1</a></h1>
 <p>No major new features since 2.3.4.2, mostly bug fixes and minor
 enhancements.</p>
 <p>Added function wrappers for the common dialogs from Kevin Altis.  See
 wxPython/lib/dialogs.py for more details.</p>
 </div>
-<div class="section" id="id13">
-<h1><a name="id13">2.3.4.2</a></h1>
+<div class="section" id="id14">
+<h1><a name="id14">2.3.4.2</a></h1>
 <p>Various bug fixes.</p>
 </div>
-<div class="section" id="id14">
-<h1><a name="id14">2.3.4.1</a></h1>
+<div class="section" id="id15">
+<h1><a name="id15">2.3.4.1</a></h1>
 <p>Updated XRCed and wxTimeCtrl contribs.</p>
 <p>Show a couple new wxGrid features in the demo.</p>
 <p>Several bug fixes in wxWindows.</p>
@@ -824,8 +890,8 @@ windows when desired.</p>
 HTMLHelp viewer does.  Changed how the wxPythonDocs tarball is built
 and added a script to launch the doc viewer.</p>
 </div>
-<div class="section" id="id15">
-<h1><a name="id15">2.3.3.1</a></h1>
+<div class="section" id="id16">
+<h1><a name="id16">2.3.3.1</a></h1>
 <p>Added wxSplashScreen.</p>
 <p>Added wxGenericDirCtrl.</p>
 <p>Added wxMultiChoiceDialog.</p>
@@ -967,15 +1033,15 @@ example.</p>
 <p>Added wxPython.lib.mixins.rubberband module from Robb Shecter.</p>
 <p>Added wxTimeCtrl from Will Sadkin.</p>
 </div>
-<div class="section" id="id16">
-<h1><a name="id16">2.3.2.1</a></h1>
+<div class="section" id="id17">
+<h1><a name="id17">2.3.2.1</a></h1>
 <p>Changed (again) how the Python global interpreter lock is handled as
 well as the Python thread state.  This time it works on SMP machines
 without barfing and is also still compatible with Python debuggers.</p>
 <p>Added some patches from library contributors.</p>
 </div>
-<div class="section" id="id17">
-<h1><a name="id17">2.3.2</a></h1>
+<div class="section" id="id18">
+<h1><a name="id18">2.3.2</a></h1>
 <p>Added EVT_HELP, EVT_HELP_RANGE, EVT_DETAILED_HELP,
 EVT_DETAILED_HELP_RANGE, EVT_CONTEXT_MENU, wxHelpEvent,
 wxContextMenuEvent, wxContextHelp, wxContextHelpButton, wxTipWindow,
@@ -1057,8 +1123,8 @@ SendCommand method, but it is still quite powerful.  See
 wxPython/contrib/dllwidget and wxPython/demo/dllwidget for more
 details.</p>
 </div>
-<div class="section" id="id18">
-<h1><a name="id18">2.3.1</a></h1>
+<div class="section" id="id19">
+<h1><a name="id19">2.3.1</a></h1>
 <p>Added EVT_GRID_EDITOR_CREATED and wxGridEditorCreatedEvent so the user
 code can get access to the edit control when it is created, (to push
 on a custom event handler for example.)</p>
@@ -1071,8 +1137,8 @@ subclass wxXmlResourceHandler, etc...</p>
 <p>Fixed img2py to work correctly with Python 2.1.</p>
 <p>Added enhanced wxVTKRenderWindow by Prabhu Ramachandran</p>
 </div>
-<div class="section" id="id19">
-<h1><a name="id19">2.3.0</a></h1>
+<div class="section" id="id20">
+<h1><a name="id20">2.3.0</a></h1>
 <p>Removed initial startup dependency on the OpenGL DLLs so only the
 glcanvasc.pyd depends on them, (on wxMSW.)</p>
 <p>Changed wxFont, wxPen, wxBrush to not implicitly use the
@@ -1168,13 +1234,13 @@ please send it to me for inclusion in this package.</p>
 by having smaller functional apps to play with.  They can be found in
 wxPython/samples.</p>
 </div>
-<div class="section" id="id20">
-<h1><a name="id20">2.2.6</a></h1>
+<div class="section" id="id21">
+<h1><a name="id21">2.2.6</a></h1>
 <p>No changes happened in the Python wrappers for this release, only
 changes and fixes in the wxWindows library.</p>
 </div>
-<div class="section" id="id21">
-<h1><a name="id21">2.2.5</a></h1>
+<div class="section" id="id22">
+<h1><a name="id22">2.2.5</a></h1>
 <p>New typemaps for wxString when compiling for Python 2.0 and beyond
 that allow Unicode objects to be passed as well as String objects.  If
 a Unicode object is passed PyString_AsStringAndSize is used to convert

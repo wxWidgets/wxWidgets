@@ -772,7 +772,7 @@ void wxNotebook::OnSize(wxSizeEvent& event)
     {
         // Prevents droppings on resize, but does cause some flicker
         // when there are no pages.
-        Refresh(false);
+        Refresh();
         event.Skip();
         return;
     }

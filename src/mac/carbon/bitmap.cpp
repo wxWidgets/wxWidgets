@@ -108,6 +108,10 @@ void wxMacReleaseBitmapButton( ControlButtonContentInfo*info )
     {
         ReleaseIconRef( info->u.iconRef ) ;
     }
+    else if ( info->contentType == kControlNoContent )
+    {
+        // there's no bitmap at all, fall through silently
+    }
     else if ( info->contentType == kControlContentPictHandle )
     {
         // owned by the bitmap, no release here

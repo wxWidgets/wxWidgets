@@ -647,15 +647,6 @@ size_t wxMBConvUTF8::MB2WC(wchar_t *buf, const char *psz, size_t n) const
             if (buf)
                 *buf++ = cc;
             len++;
-
-            // escape the escape character for octal escapes
-            if ((m_options & MAP_INVALID_UTF8_TO_OCTAL)
-                    && cc == '\\' && (!buf || len < n))
-            {
-                if (buf)
-                    *buf++ = cc;
-                len++;
-            }
         }
         else
         {
@@ -791,14 +782,6 @@ size_t wxMBConvUTF8::WC2MB(char *buf, const wchar_t *psz, size_t n) const
         {
             if (buf)
                 *buf++ = (char)(cc - wxUnicodePUA);
-            len++;
-        }
-        else if ( (m_options & MAP_INVALID_UTF8_TO_OCTAL)
-                    && cc == L'\\' && psz[0] == L'\\' )
-        {
-            if (buf)
-                *buf++ = (char)cc;
-            psz++;
             len++;
         }
         else if ( (m_options & MAP_INVALID_UTF8_TO_OCTAL) &&

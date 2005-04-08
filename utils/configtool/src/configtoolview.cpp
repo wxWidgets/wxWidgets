@@ -21,7 +21,6 @@
 #endif
 
 #include "wx/wfstream.h"
-#include "wx/txtstrm.h"
 #include "configtoolview.h"
 #include "configtooldoc.h"
 #include "configtree.h"
@@ -924,14 +923,13 @@ void ctConfigToolView::OnSaveSetupFile(wxCommandEvent& WXUNUSED(event))
         wxString fullPath = dialog.GetPath();
         wxGetApp().GetSettings().m_lastSetupSaveDir = wxPathOnly(fullPath);
 
-        wxFileOutputStream osFile(fullPath);
-        if (!osFile.Ok())
+        wxFileOutputStream stream(fullPath);
+        if (!stream.Ok())
         {
             wxMessageBox(_("Sorry, could not save this file."), _("Save Setup File"), wxICON_EXCLAMATION|wxOK);
             return;
         }
 
-        wxTextOutputStream stream(osFile);
         stream << setupStr;
     }
 }
@@ -957,14 +955,13 @@ void ctConfigToolView::OnSaveConfigureCommand(wxCommandEvent& WXUNUSED(event))
         wxString fullPath = dialog.GetPath();
         wxGetApp().GetSettings().m_lastSetupSaveDir = wxPathOnly(fullPath);
 
-        wxFileOutputStream osFile(fullPath);
-        if (!osFile.Ok())
+        wxFileOutputStream stream(fullPath);
+        if (!stream.Ok())
         {
             wxMessageBox(_("Sorry, could not save this file."), _("Save Configure Command File"), wxICON_EXCLAMATION|wxOK);
             return;
         }
 
-        wxTextOutputStream stream(osFile);
         stream << configureStr;
     }
 }

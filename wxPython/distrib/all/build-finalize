@@ -96,8 +96,8 @@ Hi,
 A new RC build of wxPython has been uploaded to starship.  
 
    Version: $VERSION
-   URL:     http://starship.python.net/crew/robind/wxPython/preview/$VERSION
-   Changes: http://starship.python.net/crew/robind/wxPython/preview/$VERSION/CHANGES.html
+   URL:     http://starship.python.net/crew/robind/wxPython/rc/$VERSION
+   Changes: http://starship.python.net/crew/robind/wxPython/rc/$VERSION/CHANGES.html
 
 Have fun!
 R'bot

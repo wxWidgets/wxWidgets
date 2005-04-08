@@ -84,32 +84,34 @@ class TestTreeCtrlPanel(wx.Panel):
         self.Bind(wx.EVT_TREE_ITEM_ACTIVATED, self.OnActivate, self.tree)
 
         self.tree.Bind(wx.EVT_LEFT_DCLICK, self.OnLeftDClick)
-        self.tree.Bind(wx.EVT_RIGHT_DOWN, self.OnRightClick)
+        self.tree.Bind(wx.EVT_RIGHT_DOWN, self.OnRightDown)
         self.tree.Bind(wx.EVT_RIGHT_UP, self.OnRightUp)
 
 
-
-    def OnRightClick(self, event):
+    def OnRightDown(self, event):
         pt = event.GetPosition();
         item, flags = self.tree.HitTest(pt)
-        self.log.WriteText("OnRightClick: %s, %s, %s\n" %
-                           (self.tree.GetItemText(item), type(item), item.__class__))
-        self.tree.SelectItem(item)
+        if item:
+            self.log.WriteText("OnRightClick: %s, %s, %s\n" %
+                               (self.tree.GetItemText(item), type(item), item.__class__))
+            self.tree.SelectItem(item)
 
 
     def OnRightUp(self, event):
         pt = event.GetPosition();
         item, flags = self.tree.HitTest(pt)
-        self.log.WriteText("OnRightUp: %s (manually starting label edit)\n"
-                           % self.tree.GetItemText(item))
-        self.tree.EditLabel(item)
+        if item:        
+            self.log.WriteText("OnRightUp: %s (manually starting label edit)\n"
+                               % self.tree.GetItemText(item))
+            self.tree.EditLabel(item)
 
 
 
     def OnBeginEdit(self, event):
         self.log.WriteText("OnBeginEdit\n")
         # show how to prevent edit...
-        if self.tree.GetItemText(event.GetItem()) == "The Root Item":
+        item = event.GetItem()
+        if item and self.tree.GetItemText(item) == "The Root Item":
             wx.Bell()
             self.log.WriteText("You can't edit this one...\n")
 
@@ -141,9 +143,10 @@ class TestTreeCtrlPanel(wx.Panel):
     def OnLeftDClick(self, event):
         pt = event.GetPosition();
         item, flags = self.tree.HitTest(pt)
-        self.log.WriteText("OnLeftDClick: %s\n" % self.tree.GetItemText(item))
-        parent = self.tree.GetItemParent(item)
-        self.tree.SortChildren(parent)
+        if item:
+            self.log.WriteText("OnLeftDClick: %s\n" % self.tree.GetItemText(item))
+            parent = self.tree.GetItemParent(item)
+            self.tree.SortChildren(parent)
         event.Skip()
 
 
@@ -154,25 +157,29 @@ class TestTreeCtrlPanel(wx.Panel):
 
     def OnItemExpanded(self, event):
         item = event.GetItem()
-        self.log.WriteText("OnItemExpanded: %s\n" % self.tree.GetItemText(item))
+        if item:
+            self.log.WriteText("OnItemExpanded: %s\n" % self.tree.GetItemText(item))
 
     def OnItemCollapsed(self, event):
         item = event.GetItem()
-        self.log.WriteText("OnItemCollapsed: %s\n" % self.tree.GetItemText(item))
+        if item:
+            self.log.WriteText("OnItemCollapsed: %s\n" % self.tree.GetItemText(item))
 
     def OnSelChanged(self, event):
         self.item = event.GetItem()
-        self.log.WriteText("OnSelChanged: %s\n" % self.tree.GetItemText(self.item))
-        if wx.Platform == '__WXMSW__':
-            self.log.WriteText("BoundingRect: %s\n" %
-                               self.tree.GetBoundingRect(self.item, True))
-        #items = self.tree.GetSelections()
-        #print map(self.tree.GetItemText, items)
+        if self.item:
+            self.log.WriteText("OnSelChanged: %s\n" % self.tree.GetItemText(self.item))
+            if wx.Platform == '__WXMSW__':
+                self.log.WriteText("BoundingRect: %s\n" %
+                                   self.tree.GetBoundingRect(self.item, True))
+            #items = self.tree.GetSelections()
+            #print map(self.tree.GetItemText, items)
         event.Skip()
 
 
     def OnActivate(self, event):
-        self.log.WriteText("OnActivate: %s\n" % self.tree.GetItemText(self.item))
+        if self.item:
+            self.log.WriteText("OnActivate: %s\n" % self.tree.GetItemText(self.item))
 
 
 #---------------------------------------------------------------------------

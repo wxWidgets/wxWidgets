@@ -29,7 +29,6 @@
 #endif
 
 #include "wx/textfile.h"
-#include "wx/txtstrm.h"
 #include "wx/wfstream.h"
 #include "wx/config.h"
 #include "configtooldoc.h"
@@ -176,7 +175,7 @@ bool ctConfigToolDoc::OnSaveDocument(const wxString& filename)
     // This is the backup filename
     wxString backupFilename(filename);
     backupFilename += wxT(".bak");
-
+    
     // This is the temporary copy of the backup
     wxString tempFilename(filename);
     tempFilename += wxT(".tmp");
@@ -194,7 +193,7 @@ bool ctConfigToolDoc::OnSaveDocument(const wxString& filename)
         {
             wxRemoveFile(backupFilename);
         }
-
+        
         // Copy the old file to the .bak
 
         if (leaveBackup)
@@ -213,13 +212,13 @@ bool ctConfigToolDoc::OnSaveDocument(const wxString& filename)
             if (wxFileExists(filename))
                 wxRemoveFile(filename);
         }
-
+        
         // Finally, copy the temporary file to the proper filename
         if (!wxRenameFile(tempFilename, filename))
         {
             wxCopyFile(tempFilename, filename);
             wxRemoveFile(tempFilename);
-        }
+        }        
 
         Modify(false);
         ((ctConfigToolView*)GetFirstView())->OnChangeFilename();
@@ -263,36 +262,32 @@ bool ctConfigToolDoc::OnOpenDocument(const wxString& filename)
 /// Save the settings file
 bool ctConfigToolDoc::DoSave(const wxString& filename)
 {
-    wxFileOutputStream osFile(filename);
-    if (!osFile.Ok())
+    wxFileOutputStream stream(filename);
+    if (!stream.Ok())
         return false;
-
-    wxTextOutputStream stream(osFile);
 
     stream << wxT("<?xml version=\"1.0\" encoding=\"utf-8\"?>\n");
     stream << wxT("<settings xmlns=\"http://www.wxwidgets.org/wxs\" version=\"2.5.0.1\">");
 
-    DoSave(m_topItem, osFile, 1);
+    DoSave(m_topItem, stream, 1);
 
     stream << wxT("\n</settings>\n");
 
     return true;
 }
 
-inline static void OutputIndentation(wxOutputStream& osFile, int indent)
+inline static void OutputIndentation(wxOutputStream& stream, int indent)
 {
-    wxTextOutputStream stream(osFile);
     wxString str = wxT("\n");
     for (int i = 0; i < indent; i++)
-        str << wxT("  ");
+        str << wxT(' ') << wxT(' ');
     stream << str ;
 }
 
 /// Recursive helper function for file saving
-bool ctConfigToolDoc::DoSave(ctConfigItem* item, wxOutputStream& osFile, int indent)
+bool ctConfigToolDoc::DoSave(ctConfigItem* item, wxOutputStream& stream, int indent)
 {
-    OutputIndentation(osFile, indent*2);
-    wxTextOutputStream stream(osFile);
+    OutputIndentation(stream, indent*2);
 
     wxString name(item->GetName());
     wxString s;
@@ -318,12 +313,12 @@ bool ctConfigToolDoc::DoSave(ctConfigItem* item, wxOutputStream& osFile, int ind
 
     indent ++;
 
-    OutputIndentation(osFile, indent*2);
+    OutputIndentation(stream, indent*2);
     if (item->IsActive())
         stream << wxT("<active>1</active>");
     else
         stream << wxT("<active>0</active>");
-    OutputIndentation(osFile, indent*2);
+    OutputIndentation(stream, indent*2);
     if (item->IsEnabled())
         stream << wxT("<enabled>1</enabled>");
     else
@@ -334,9 +329,9 @@ bool ctConfigToolDoc::DoSave(ctConfigItem* item, wxOutputStream& osFile, int ind
     while (node)
     {
         ctProperty* prop = (ctProperty*) node->GetData();
-        OutputIndentation(osFile, indent*2);
+        OutputIndentation(stream, indent*2);
         stream << wxT("<") << prop->GetName() ;
-
+        
         if (prop->IsCustom())
         {
             stream << wxT(" custom=\"true\"");
@@ -350,7 +345,7 @@ bool ctConfigToolDoc::DoSave(ctConfigItem* item, wxOutputStream& osFile, int ind
                 stream << wxT(" choices=\"") << choices << wxT("\"");
             }
         }
-
+        
         stream << wxT(">");
 
         stream << ctEscapeHTMLCharacters(prop->GetVariant().GetString()) ;
@@ -364,14 +359,14 @@ bool ctConfigToolDoc::DoSave(ctConfigItem* item, wxOutputStream& osFile, int ind
     while (node)
     {
         ctConfigItem* child = (ctConfigItem*) node->GetData();
-        DoSave(child, osFile, indent);
+        DoSave(child, stream, indent);
 
         node = node->GetNext();
     }
 
     indent --;
 
-    OutputIndentation(osFile, indent*2);
+    OutputIndentation(stream, indent*2);
     stream << wxT("</setting>");
 
     return true;
@@ -405,10 +400,10 @@ bool ctConfigToolDoc::DoOpen(const wxString& filename)
 
 static bool GetHtmlBoolValue(const wxString& value)
 {
-    if (value.IsSameAs(wxT("true"),false) || value == wxT("1"))
+    if (value == wxT("true") || value == wxT("TRUE") || value == wxT("1"))
         return true;
-    else
-        return false;
+     else
+         return false;
 }
 
 static int GetHtmlIntegerValue(const wxString& value)
@@ -607,7 +602,7 @@ void ctConfigToolDoc::RefreshDependencies(ctConfigItem* item)
     // parent is a check or radio group.
     ctConfigItem* parent = item->GetParent();
     if (parent &&
-        (parent->GetType() == ctTypeCheckGroup ||
+        (parent->GetType() == ctTypeCheckGroup || 
         parent->GetType() == ctTypeRadioGroup))
         requiresArr.Add(parent->GetName());
 
@@ -777,7 +772,7 @@ void ctConfigToolDoc::GenerateConfigureCommand(ctConfigItem* item, wxString& str
                 {
                     str << wxT(" ") << configureCommand;
                 }
-            }
+            }            
         }
     }
 
@@ -919,7 +914,7 @@ bool ctConfigCommand::DoAndUndo(bool doCmd)
 
                 // This will delete the old clipboard contents, if any.
                 doc->SetClipboardItem(newItem);
-
+                
                 m_parent = m_activeState->GetParent();
                 m_insertBefore = m_activeState->FindNextSibling();
 
@@ -1087,7 +1082,7 @@ ctConfiguration::~ctConfiguration()
             wxGetApp().GetMainFrame()->GetDocument()->SetTopItem(NULL);
     }
 */
-
+    
     Clear();
 }
 
@@ -1255,3 +1250,5 @@ void ctConfiguration::DetachFromTree()
     }
 */
 }
+
+        

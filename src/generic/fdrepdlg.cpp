@@ -174,7 +174,9 @@ bool wxGenericFindReplaceDialog::Create(wxWindow *parent,
 
     wxBoxSizer *bttnsizer = new wxBoxSizer(wxVERTICAL);
 
-    bttnsizer->Add(new wxButton(this, wxID_FIND), 0, wxALL, 3);
+    wxButton* btn = new wxButton(this, wxID_FIND);
+    btn->SetDefault();
+    bttnsizer->Add(btn, 0, wxALL, 3);
 
     bttnsizer->Add(new wxButton(this, wxID_CANCEL), 0, wxALL, 3);
 

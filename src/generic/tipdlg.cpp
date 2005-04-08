@@ -258,7 +258,7 @@ wxTipDialog::wxTipDialog(wxWindow *parent,
                             wxTE_MULTILINE |
                             wxTE_READONLY |
                             wxTE_NO_VSCROLL |
-                            wxTE_RICH | // a hack to get rid of vert scrollbar
+                            wxTE_RICH2 | // a hack to get rid of vert scrollbar
                             wxDEFAULT_CONTROL_BORDER
                             );
 #if defined(__WXMSW__)

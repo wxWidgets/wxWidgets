@@ -26,7 +26,7 @@ from wx.lib.masked import *
 # be a good place to implement the 2.3 logger class
 from wx.tools.dbg import Logger
 ##dbg = Logger()
-##dbg(enable=0)
+##dbg(enable=1)
 
 ## ---------- ---------- ---------- ---------- ---------- ---------- ----------
 ## Because calling SetSelection programmatically does not fire EVT_COMBOBOX
@@ -197,6 +197,7 @@ class BaseMaskedComboBox( wx.ComboBox, MaskedEditMixin ):
         Allow mixin to get the text selection of this control.
         REQUIRED by any class derived from MaskedEditMixin.
         """
+##        dbg('MaskedComboBox::_GetSelection()')
         return self.GetMark()
 
     def _SetSelection(self, sel_start, sel_to):
@@ -204,13 +205,22 @@ class BaseMaskedComboBox( wx.ComboBox, MaskedEditMixin ):
         Allow mixin to set the text selection of this control.
         REQUIRED by any class derived from MaskedEditMixin.
         """
+##        dbg('MaskedComboBox::_SetSelection: setting mark to (%d, %d)' % (sel_start, sel_to))
         return self.SetMark( sel_start, sel_to )
 
 
     def _GetInsertionPoint(self):
-        return self.GetInsertionPoint()
+##        dbg('MaskedComboBox::_GetInsertionPoint()', indent=1)
+##        ret = self.GetInsertionPoint()
+        # work around new bug in 2.5, in which the insertion point
+        # returned is always at the right side of the selection,
+        # rather than the start, as is the case with TextCtrl.
+        ret = self.GetMark()[0]
+##        dbg('returned', ret, indent=0)
+        return ret
 
     def _SetInsertionPoint(self, pos):
+##        dbg('MaskedComboBox::_SetInsertionPoint(%d)' % pos)
         self.SetInsertionPoint(pos)
 
 
@@ -482,6 +492,12 @@ class BaseMaskedComboBox( wx.ComboBox, MaskedEditMixin ):
 
 ##            dbg('computed selection:', sel_start, sel_to, indent=0, suspend=0)
             return sel_start, sel_to
+    else:
+        def GetMark(self):
+##            dbg('MaskedComboBox::GetMark()', indent = 1)
+            ret = wx.ComboBox.GetMark(self)
+##            dbg('returned', ret, indent=0)
+            return ret
 
 
     def SetSelection(self, index):

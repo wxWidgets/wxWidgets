@@ -194,13 +194,8 @@ void wxStaticBox::GetBordersForSizer(int *borderTop, int *borderOther) const
 {
     wxStaticBoxBase::GetBordersForSizer(borderTop, borderOther);
 
-    // if not using correct (but backwards cojmpatible) text metrics
-    // calculations, we need to add some extra margin or otherwise static box
-    // title is clipped
-#if !wxDIALOG_UNIT_COMPATIBILITY
-    if ( !GetLabel().empty() )
-        *borderTop += GetCharHeight()/3;
-#endif // !wxDIALOG_UNIT_COMPATIBILITY
+    // need extra space, don't know how much but this seems to be enough
+    *borderTop += GetCharHeight()/3;
 }
 
 // MSWGetRegionWithoutSelf helper: removes the given rectangle from region
@@ -287,11 +282,15 @@ WXHRGN wxStaticBox::MSWGetRegionWithoutChildren()
 // helper for OnPaint()
 void wxStaticBox::PaintBackground(wxDC& dc, const RECT& rc)
 {
-    HBRUSH hbr = (HBRUSH)DoMSWControlColor(GetHdcOf(dc), wxNullColour);
+    // note that static box should be transparent, so it should show its
+    // parents colour, not its own
+    wxWindow * const parent = GetParent();
+
+    HBRUSH hbr = (HBRUSH)parent->MSWGetBgBrush(dc.GetHDC());
     if ( !hbr )
     {
-        wxBrush *
-            brush = wxTheBrushList->FindOrCreateBrush(GetBackgroundColour());
+        wxBrush *brush =
+            wxTheBrushList->FindOrCreateBrush(parent->GetBackgroundColour());
         if ( brush )
             hbr = GetHbrushOf(*brush);
     }

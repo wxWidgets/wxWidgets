@@ -28,7 +28,7 @@ may already have installed.</p>
 <p>If you want to make changes to any of the <tt class="literal"><span class="pre">*.i</span></tt> files, (SWIG
 interface definition files,) or to regenerate the extension sources or
 renamer modules, then you will need an up to date version of SWIG,
-plus some patches.  Get the sources for version 1.3.22, and then apply
+plus some patches.  Get the sources for version 1.3.24, and then apply
 the patches in wxPython/SWIG and then build SWIG like normal.  See the
 README.txt in the wxPython/SWIG dir for details about each patch and
 also info about those that may already have been applied to the SWIG
@@ -39,7 +39,7 @@ to be the full path name of the executable and the wxPython build will
 use it.  See below for an example.</p>
 <p>In the text below I'll use WXDIR with environment variable syntax
 (either $WXDIR or %WXDIR%) to refer to the top level directory where
-your wxWidgerts and wxPython sources are located.  It will equate to
+your wxWidgets and wxPython sources are located.  It will equate to
 whereever you checked out the wxWidgets module from CVS, or untarred
 the wxPython-src tarball to.  You can either substitute the $WXDIR text
 below with your actual dir, or set the value in the environment and
@@ -135,6 +135,7 @@ all for me so I don't forget anything.  This time it is called
 dir I don't lose my scripts too.)  This is what it looks like:</p>
 <pre class="literal-block">
 make $* \
+    &amp;&amp; make -C contrib/src/animate $* \
     &amp;&amp; make -C contrib/src/gizmos $* \
     &amp;&amp; make -C contrib/src/stc $* 
 </pre>
@@ -354,7 +355,7 @@ clean up the build:</p>
 executing nmake with a bunch of extra command line parameters.
 The base set are:</p>
 <pre class="literal-block">
--f makefile.vc OFFICIAL_BUILD=1 SHARED=1 MONOLITHIC=1 USE_OPENGL=1
+nmake -f makefile.vc OFFICIAL_BUILD=1 SHARED=1 MONOLITHIC=1 USE_OPENGL=1
 </pre>
 <p>If doing a debug build then add:</p>
 <pre class="literal-block">
@@ -373,6 +374,7 @@ selection of command-line flags as described above.  Repeat this
 same command from the following directories in order to build the
 contrib libraries:</p>
 <pre class="literal-block">
+%WXDIR%\contrib\build\animate
 %WXDIR%\contrib\build\gizmos
 %WXDIR%\contrib\build\stc
 </pre>

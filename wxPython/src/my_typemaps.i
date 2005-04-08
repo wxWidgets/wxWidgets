@@ -334,6 +334,7 @@ MAKE_INT_ARRAY_TYPEMAPS(styles, styles_field)
 %typemap(out) wxFSFile*                 { $result = wxPyMake_wxObject($1, $owner); }
 %typemap(out) wxFileSystem*             { $result = wxPyMake_wxObject($1, $owner); }
 %typemap(out) wxImageList*              { $result = wxPyMake_wxObject($1, $owner); }
+%typemap(out) wxImage*                  { $result = wxPyMake_wxObject($1, $owner); }
 %typemap(out) wxListItem*               { $result = wxPyMake_wxObject($1, $owner); }
 %typemap(out) wxMenuItem*               { $result = wxPyMake_wxObject($1, $owner); }
 %typemap(out) wxMouseEvent*             { $result = wxPyMake_wxObject($1, $owner); }

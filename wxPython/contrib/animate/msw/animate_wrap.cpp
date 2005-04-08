@@ -1361,10 +1361,9 @@ SWIG_Python_GetTypeList() {
 #define  SWIGTYPE_ptrdiff_t swig_types[20] 
 #define  SWIGTYPE_p_wxControl swig_types[21] 
 #define  SWIGTYPE_p_wxPaperSize swig_types[22] 
-#define  SWIGTYPE_p_wxImage swig_types[23] 
-#define  SWIGTYPE_p_wxSize swig_types[24] 
-#define  SWIGTYPE_p_int swig_types[25] 
-static swig_type_info *swig_types[27];
+#define  SWIGTYPE_p_wxSize swig_types[23] 
+#define  SWIGTYPE_p_int swig_types[24] 
+static swig_type_info *swig_types[26];
 
 /* -------- TYPES TABLE (END) -------- */
 
@@ -2456,7 +2455,9 @@ static PyObject *_wrap_AnimationPlayer_GetFrame(PyObject *, PyObject *args, PyOb
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_NewPointerObj((void*)(result), SWIGTYPE_p_wxImage, 0);
+    {
+        resultobj = wxPyMake_wxObject(result, 0); 
+    }
     return resultobj;
     fail:
     return NULL;
@@ -3015,7 +3016,9 @@ static PyObject *_wrap_AnimationBase_GetFrame(PyObject *, PyObject *args, PyObje
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_NewPointerObj((void*)(result), SWIGTYPE_p_wxImage, 0);
+    {
+        resultobj = wxPyMake_wxObject(result, 0); 
+    }
     return resultobj;
     fail:
     return NULL;
@@ -3403,7 +3406,9 @@ static PyObject *_wrap_GIFAnimation_GetFrame(PyObject *, PyObject *args, PyObjec
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_NewPointerObj((void*)(result), SWIGTYPE_p_wxImage, 0);
+    {
+        resultobj = wxPyMake_wxObject(result, 0); 
+    }
     return resultobj;
     fail:
     return NULL;
@@ -4616,7 +4621,6 @@ static swig_type_info _swigt__std__ptrdiff_t[] = {{"_std__ptrdiff_t", 0, "std::p
 static swig_type_info _swigt__ptrdiff_t[] = {{"_ptrdiff_t", 0, "ptrdiff_t", 0, 0, 0, 0},{"_ptrdiff_t", 0, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
 static swig_type_info _swigt__p_wxControl[] = {{"_p_wxControl", 0, "wxControl *", 0, 0, 0, 0},{"_p_wxControl", 0, 0, 0, 0, 0, 0},{"_p_wxControlWithItems", _p_wxControlWithItemsTo_p_wxControl, 0, 0, 0, 0, 0},{"_p_wxGIFAnimationCtrl", _p_wxGIFAnimationCtrlTo_p_wxControl, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
 static swig_type_info _swigt__p_wxPaperSize[] = {{"_p_wxPaperSize", 0, "enum wxPaperSize *|wxPaperSize *", 0, 0, 0, 0},{"_p_wxPaperSize", 0, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
-static swig_type_info _swigt__p_wxImage[] = {{"_p_wxImage", 0, "wxImage *", 0, 0, 0, 0},{"_p_wxImage", 0, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
 static swig_type_info _swigt__p_wxSize[] = {{"_p_wxSize", 0, "wxSize *", 0, 0, 0, 0},{"_p_wxSize", 0, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
 static swig_type_info _swigt__p_int[] = {{"_p_int", 0, "int *|wxEventType *", 0, 0, 0, 0},{"_p_int", 0, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
 
@@ -4644,7 +4648,6 @@ _swigt__std__ptrdiff_t,
 _swigt__ptrdiff_t, 
 _swigt__p_wxControl, 
 _swigt__p_wxPaperSize, 
-_swigt__p_wxImage, 
 _swigt__p_wxSize, 
 _swigt__p_int, 
 0

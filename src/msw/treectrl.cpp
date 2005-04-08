@@ -1951,6 +1951,8 @@ void wxTreeCtrl::UnselectAll()
             ::UnselectItem(GetHwnd(), HITEM_PTR(selections[n]));
 #endif // wxUSE_CHECKBOXES_IN_MULTI_SEL_TREE/!wxUSE_CHECKBOXES_IN_MULTI_SEL_TREE
         }
+
+        m_htSelStart.Unset();
     }
     else
     {
@@ -2241,17 +2243,18 @@ WXLRESULT wxTreeCtrl::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lPara
     WXLRESULT rc = 0;
     bool isMultiple = HasFlag(wxTR_MULTIPLE);
 
-#ifdef WM_CONTEXTMENU
     if ( nMsg == WM_CONTEXTMENU )
     {
         wxTreeEvent event( wxEVT_COMMAND_TREE_ITEM_MENU, GetId() );
-        event.m_item = GetSelection();
+
+        // can't use GetSelection() here as it would assert in multiselect mode
+        event.m_item = wxTreeItemId(TreeView_GetSelection(GetHwnd()));
         event.SetEventObject( this );
+
         if ( GetEventHandler()->ProcessEvent(event) )
             processed = true;
         //else: continue with generating wxEVT_CONTEXT_MENU in base class code
     }
-#endif // WM_CONTEXTMENU
     else if ( (nMsg >= WM_MOUSEFIRST) && (nMsg <= WM_MOUSELAST) )
     {
         // we only process mouse messages here and these parameters have the
@@ -2275,13 +2278,6 @@ WXLRESULT wxTreeCtrl::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lPara
                 // newly selected item
                 ::SelectItem(GetHwnd(), htItem);
                 ::SetFocus(GetHwnd(), htItem);
-
-                // default WM_RBUTTONUP handler enters modal loop inside
-                // DefWindowProc() waiting for WM_RBUTTONDOWN and then sends
-                // the resulting WM_CONTEXTMENU to the parent window, not us,
-                // which completely breaks everything so simply don't let it
-                // see this message at all
-                processed = true;
                 break;
 
 #if !wxUSE_CHECKBOXES_IN_MULTI_SEL_TREE
@@ -2443,79 +2439,82 @@ WXLRESULT wxTreeCtrl::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lPara
         bool bCtrl = wxIsCtrlDown(),
              bShift = wxIsShiftDown();
 
-        // we handle.arrows and space, but not page up/down and home/end: the
-        // latter should be easy, but not the former
-
         HTREEITEM htSel = (HTREEITEM)TreeView_GetSelection(GetHwnd());
-        if ( !m_htSelStart )
+        switch ( wParam )
         {
-            m_htSelStart = htSel;
-        }
-
-        if ( wParam == VK_SPACE )
-        {
-            if ( bCtrl )
-            {
-                ::ToggleItemSelection(GetHwnd(), htSel);
-            }
-            else
-            {
-                UnselectAll();
-
-                ::SelectItem(GetHwnd(), htSel);
-            }
-
-            processed = true;
-        }
-        else if ( wParam == VK_UP || wParam == VK_DOWN )
-        {
-            if ( !bCtrl && !bShift )
-            {
-                // no modifiers, just clear selection and then let the default
-                // processing to take place
-                UnselectAll();
-            }
-            else if ( htSel )
-            {
-                (void)wxControl::MSWWindowProc(nMsg, wParam, lParam);
-
-                HTREEITEM htNext = (HTREEITEM)(wParam == VK_UP
-                                    ? TreeView_GetPrevVisible(GetHwnd(), htSel)
-                                    : TreeView_GetNextVisible(GetHwnd(), htSel));
-
-                if ( !htNext )
+            case VK_SPACE:
+                if ( bCtrl )
                 {
-                    // at the top/bottom
-                    htNext = htSel;
+                    ::ToggleItemSelection(GetHwnd(), htSel);
                 }
+                else
+                {
+                    UnselectAll();
 
-                if ( bShift )
-                {
-                    SelectRange(GetHwnd(), HITEM(m_htSelStart), htNext);
-                }
-                else // bCtrl
-                {
-                    // without changing selection
-                    ::SetFocus(GetHwnd(), htNext);
+                    ::SelectItem(GetHwnd(), htSel);
                 }
 
                 processed = true;
-            }
+                break;
+
+            case VK_UP:
+            case VK_DOWN:
+                if ( !bCtrl && !bShift )
+                {
+                    // no modifiers, just clear selection and then let the default
+                    // processing to take place
+                    UnselectAll();
+                }
+                else if ( htSel )
+                {
+                    (void)wxControl::MSWWindowProc(nMsg, wParam, lParam);
+
+                    HTREEITEM htNext = (HTREEITEM)
+                        TreeView_GetNextItem
+                        (
+                            GetHwnd(),
+                            htSel,
+                            wParam == VK_UP ? TVGN_PREVIOUSVISIBLE
+                                            : TVGN_NEXTVISIBLE
+                        );
+
+                    if ( !htNext )
+                    {
+                        // at the top/bottom
+                        htNext = htSel;
+                    }
+
+                    if ( bShift )
+                    {
+                        if ( !m_htSelStart )
+                            m_htSelStart = htSel;
+
+                        SelectRange(GetHwnd(), HITEM(m_htSelStart), htNext);
+                    }
+                    else // bCtrl
+                    {
+                        // without changing selection
+                        ::SetFocus(GetHwnd(), htNext);
+                    }
+
+                    processed = true;
+                }
+                break;
+
+            case VK_HOME:
+            case VK_END:
+            case VK_PRIOR:
+            case VK_NEXT:
+                // TODO: handle Shift/Ctrl with these keys
+                if ( !bCtrl && !bShift )
+                {
+                    UnselectAll();
+
+                    m_htSelStart.Unset();
+                }
         }
     }
 #endif // !wxUSE_CHECKBOXES_IN_MULTI_SEL_TREE
-    else if ( nMsg == WM_CHAR )
-    {
-        // don't let the control process Space and Return keys because it
-        // doesn't do anything useful with them anyhow but always beeps
-        // annoyingly when it receives them and there is no way to turn it off
-        // simply if you just process TREEITEM_ACTIVATED event to which Space
-        // and Enter presses are mapped in your code
-        if ( wParam == VK_SPACE || wParam == VK_RETURN )
-        {
-            processed = true;
-        }
-    }
     else if ( nMsg == WM_COMMAND )
     {
         // if we receive a EN_KILLFOCUS command from the in-place edit control
@@ -2539,6 +2538,46 @@ WXLRESULT wxTreeCtrl::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lPara
         rc = wxControl::MSWWindowProc(nMsg, wParam, lParam);
 
     return rc;
+}
+
+WXLRESULT
+wxTreeCtrl::MSWDefWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
+{
+    // default WM_RBUTTONDOWN handler enters modal loop inside DefWindowProc()
+    // waiting for WM_RBUTTONUP and then sends the resulting WM_CONTEXTMENU to
+    // the parent window, not us, which completely breaks everything so simply
+    // don't let it see this message at all
+    if ( nMsg == WM_RBUTTONDOWN )
+        return 0;
+
+    // but because of the above we don't get NM_RCLICK which is normally
+    // generated by tree window proc when the modal loop mentioned above ends
+    // because the mouse is released -- synthesize it ourselves instead
+    if ( nMsg == WM_RBUTTONUP )
+    {
+        NMHDR hdr;
+        hdr.hwndFrom = GetHwnd();
+        hdr.idFrom = GetId();
+        hdr.code = NM_RCLICK;
+
+        WXLPARAM rc;
+        MSWOnNotify(GetId(), (LPARAM)&hdr, &rc);
+
+        // continue as usual
+    }
+
+    if ( nMsg == WM_CHAR )
+    {
+        // also don't let the control process Space and Return keys because it
+        // doesn't do anything useful with them anyhow but always beeps
+        // annoyingly when it receives them and there is no way to turn it off
+        // simply if you just process TREEITEM_ACTIVATED event to which Space
+        // and Enter presses are mapped in your code
+        if ( wParam == VK_SPACE || wParam == VK_RETURN )
+            return 0;
+    }
+
+    return wxControl::MSWDefWindowProc(nMsg, wParam, lParam);
 }
 
 // process WM_NOTIFY Windows message

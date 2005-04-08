@@ -394,6 +394,17 @@ bool wxTextCtrl::Create(wxWindow *parent, wxWindowID id,
             // we also need EN_MSGFILTER for richedit 1.0 for the reasons
             // explained in its handler
            mask |= ENM_MOUSEEVENTS;
+
+           // we also need to force the appearance of the vertical scrollbar
+           // initially as otherwise the control doesn't refresh correctly
+           // after resize: but once the vertical scrollbar had been shown
+           // (even if it's subsequently hidden) it does
+           //
+           // this is clearly a bug and for now it has been only noticed under
+           // Windows XP, so if we're sure it works correctly under other
+           // systems we could do this only for XP
+           SetSize(-1, 1); // 1 is small enough to force vert scrollbar
+           SetSize(size);
         }
         else if ( m_windowStyle & wxTE_AUTO_URL )
         {

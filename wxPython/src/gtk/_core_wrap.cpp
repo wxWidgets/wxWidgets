@@ -2766,6 +2766,11 @@ wxWindow* wxFindWindowByLabel( const wxString& label,
     }
 
 
+    PyObject* GetTopLevelWindows() {
+        return wxPy_ConvertList(&wxTopLevelWindows);
+    }
+
+
 IMP_PYCALLBACK_BOOL_WXWIN(wxPyValidator, wxValidator, Validate);
 IMP_PYCALLBACK_BOOL_(wxPyValidator, wxValidator, TransferToWindow);
 IMP_PYCALLBACK_BOOL_(wxPyValidator, wxValidator, TransferFromWindow);
@@ -32244,6 +32249,28 @@ static PyObject *_wrap_Window_FromHWND(PyObject *, PyObject *args, PyObject *kwa
 }
 
 
+static PyObject *_wrap_GetTopLevelWindows(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    PyObject *result;
+    char *kwnames[] = {
+        NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)":GetTopLevelWindows",kwnames)) goto fail;
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = (PyObject *)GetTopLevelWindows();
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    resultobj = result;
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
 static PyObject *_wrap_new_Validator(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxValidator *result;
@@ -46194,6 +46221,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"FindWindowByName", (PyCFunction) _wrap_FindWindowByName, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"FindWindowByLabel", (PyCFunction) _wrap_FindWindowByLabel, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"Window_FromHWND", (PyCFunction) _wrap_Window_FromHWND, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"GetTopLevelWindows", (PyCFunction) _wrap_GetTopLevelWindows, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"new_Validator", (PyCFunction) _wrap_new_Validator, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"Validator_Clone", (PyCFunction) _wrap_Validator_Clone, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"Validator_Validate", (PyCFunction) _wrap_Validator_Validate, METH_VARARGS | METH_KEYWORDS, NULL},

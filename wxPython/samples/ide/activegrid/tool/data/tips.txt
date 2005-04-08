@@ -1,0 +1,7 @@
+Ctrl-Space in any editor does code completion.
+Right-clicking on something in the 'Thing' column of the debugger's frame tab may allow you to introspect it for more information.
+Right-Mouse-Click in Outline window allows you to change display sorting.
+In an editor, you can add line markers via Ctrl-M and jump to the next marker with F4 or previous marker with Shift-F4.
+In an editor. you can use the numpad + and - keys to toggle folding.
+In 'Find in Directory', if you specify a file, it will display all matches in the Message Window.
+Breakpoints for the debugger can be set while the process is running

@@ -666,7 +666,8 @@ details in the second return value (see wx.LIST_HITTEST flags.)", "");
     %Rename(InsertImageStringItem,  long, InsertItem(long index, const wxString& label, int imageIndex));
 
     // For list view mode (only), inserts a column.
-    %Rename(InsertColumnInfo,  long, InsertColumn(long col, wxListItem& info));
+    %Rename(InsertColumnItem,  long, InsertColumn(long col, wxListItem& info));
+    %pythoncode { InsertColumnInfo = InsertColumnItem }
 
     long InsertColumn(long col,
                       const wxString& heading,

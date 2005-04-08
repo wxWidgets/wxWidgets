@@ -6,7 +6,7 @@
 #
 # Created:      5/15/03
 # CVS-ID:       $Id$
-# Copyright:    (c) 2003-2004 ActiveGrid, Inc. (Port of wxWindows classes by Julian Smart et al)
+# Copyright:    (c) 2003-2005 ActiveGrid, Inc. (Port of wxWindows classes by Julian Smart et al)
 # License:      wxWindows license
 #----------------------------------------------------------------------------
 
@@ -91,6 +91,7 @@ class Document(wx.EvtHandler):
         self._documentTemplate = None
         self._commandProcessor = None
         self._savedYet = False
+        self._writeable = True
 
         self._documentTitle = None
         self._documentFile = None
@@ -334,7 +335,7 @@ class Document(wx.EvtHandler):
         Saves the document by calling OnSaveDocument if there is an associated
         filename, or SaveAs if there is no filename.
         """
-        if not self.IsModified() and self._savedYet:
+        if not self.IsModified():  # and self._savedYet:  This was here, but if it is not modified who cares if it hasn't been saved yet?
             return True
 
         if not self._documentFile or not self._savedYet:
@@ -646,6 +647,29 @@ class Document(wx.EvtHandler):
                 view.OnChangeFilename()
 
 
+    def GetWriteable(self):
+        """
+        Returns true if the document can be written to its accociated file path.
+        This method has been added to wxPython and is not in wxWindows.
+        """
+        if not self._writeable:
+            return False 
+        if not self._documentFile:  # Doesn't exist, do a save as
+            return True
+        else:
+            return os.access(self._documentFile, os.W_OK)
+
+
+    def SetWriteable(self, writeable):
+        """
+        Set to False if the document can not be saved.  This will disable the ID_SAVE_AS
+        event and is useful for custom documents that should not be saveable.  The ID_SAVE
+        event can be disabled by never Modifying the document.  This method has been added
+        to wxPython and is not in wxWindows.
+        """
+        self._writeable = writeable
+
+
 class View(wx.EvtHandler):
     """
     The view class can be used to model the viewing and editing component of
@@ -753,7 +777,7 @@ class View(wx.EvtHandler):
                 else:
                     return
             else:
-                if appName and not isinstance(self.GetFrame(), DocMDIChildFrame):  # Don't need appname in title for MDI
+                if appName and isinstance(self.GetFrame(), DocChildFrame):  # Only need app name in title for SDI
                     title = appName + _(" - ")
                 else:
                     title = ''
@@ -1478,7 +1502,7 @@ class DocManager(wx.EvtHandler):
         """
         Updates the user interface for the File Save As command.
         """
-        event.Enable(self.GetCurrentDocument() != None)
+        event.Enable(self.GetCurrentDocument() != None and self.GetCurrentDocument().GetWriteable())
 
 
     def OnUpdateUndo(self, event):

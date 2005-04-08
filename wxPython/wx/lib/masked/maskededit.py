@@ -2952,6 +2952,7 @@ class MaskedEditMixin:
                         if pos == year2dig and unadjusted[year2dig] != newstr[year2dig]:
                             newpos = pos+2
 
+##                    dbg('queuing insertion point: (%d)' % newpos)
                     wx.CallAfter(self._SetInsertionPoint, newpos)
 
                     if match_field is not None:
@@ -2964,6 +2965,8 @@ class MaskedEditMixin:
                     else:
                         newfield = self._FindField(newpos)
                         if newfield != field and newfield._selectOnFieldEntry:
+##                            dbg('queuing insertion point: (%d)' % newfield._extent[0])
+                            wx.CallAfter(self._SetInsertionPoint, newfield._extent[0])
 ##                            dbg('queuing selection: (%d, %d)' % (newfield._extent[0], newfield._extent[1]))
                             wx.CallAfter(self._SetSelection, newfield._extent[0], newfield._extent[1])
                         else:
@@ -4022,7 +4025,9 @@ class MaskedEditMixin:
 ##                    dbg('match found:', choice)
                     match = index
                     break
-                else: dbg('choice: "%s" - no match' % choice)
+                else:
+##                    dbg('choice: "%s" - no match' % choice)
+                    pass
             if match is not None:
 ##                dbg('matched', match)
                 pass
@@ -4936,7 +4941,7 @@ class MaskedEditMixin:
                 old_right_signpos = text.find(')')
 
             if field._allowInsert and not field._insertRight and sel_to <= end and sel_start >= start:
-                # inserting within a left-insert-capable field
+##                dbg('inserting within a left-insert-capable field')
                 field_len = end - start
                 before = text[start:sel_start]
                 after = text[sel_to:end].strip()
@@ -4965,6 +4970,9 @@ class MaskedEditMixin:
                 char = char.decode(self._defaultEncoding)
 
             newtext = left + char + right
+####            dbg('left:    "%s"' % left)
+####            dbg('right:   "%s"' % right)
+####            dbg('newtext: "%s"' % newtext)
 
             if self._signOk and self._useParens:
                 # Balance parentheses:
@@ -5298,6 +5306,8 @@ class MaskedEditMixin:
         """ Handler for EVT_KILL_FOCUS event.
         """
 ##        dbg('MaskedEditMixin::_OnKillFocus', 'isDate=',self._isDate, indent=1)
+        if self.IsBeingDeleted() or self.GetParent().IsBeingDeleted():
+            return 
         if self._mask and self._IsEditable():
             self._AdjustField(self._GetInsertionPoint())
             self._CheckValid()   ## Call valid handler

@@ -96,3 +96,5 @@ if [ $skiplinux != yes ]; then
 	sleep 10
     fi
 fi
+
+sleep 30

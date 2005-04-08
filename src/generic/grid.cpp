@@ -6526,7 +6526,7 @@ void wxGrid::OnChar( wxKeyEvent& event )
             // visible (even after calling MakeCellVisible the
             // control is not created and calling StartingKey will
             // crash the app
-            if ( editor->IsCreated() && m_cellEditCtrlEnabled )
+            if ( event.GetKeyCode() != WXK_F2 && editor->IsCreated() && m_cellEditCtrlEnabled )
                 editor->StartingKey(event);
         }
         else
