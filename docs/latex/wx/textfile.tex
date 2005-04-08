@@ -7,11 +7,11 @@ native" line termination sequences - in fact, it can be also used to modify the
 text files and change the line termination characters from one type (say DOS) to
 another (say Unix).
 
-One word of warning: the class is not at all optimized for big files and so it
-will load the file entirely into memory when opened. Of course, you should not
+One word of warning: the class is not at all optimized for big files and thus
+it will load the file entirely into memory when opened. Of course, you should not
 work in this way with large files (as an estimation, anything over 1 Megabyte is
 surely too big for this class). On the other hand, it is not a serious
-limitation for the small files like configuration files or programs sources
+limitation for small files like configuration files or program sources
 which are well handled by wxTextFile.
 
 The typical things you may do with wxTextFile in order are:

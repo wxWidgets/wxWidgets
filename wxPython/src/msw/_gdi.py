@@ -3315,7 +3315,7 @@ class DC(_core.Object):
         *text*. The generic version simply builds a running total of the widths
         of each character using GetTextExtent, however if the various
         platforms have a native API function that is faster or more accurate
-        than the generic implementaiton then it will be used instead.
+        than the generic implementation then it will be used instead.
         """
         return _gdi_.DC_GetPartialTextExtents(*args, **kwargs)
 

@@ -26,7 +26,7 @@
 #define _WX_DB_H_
 
 
-// BJO 20000503: introduce new GetColumns members which are more database independant and
+// BJO 20000503: introduce new GetColumns members which are more database independent and
 //               return columns in the order they were created
 #define OLD_GETCOLUMNS 1
 #define EXPERIMENTAL_WXDB_FUNCTIONS 1

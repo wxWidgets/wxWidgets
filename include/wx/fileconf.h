@@ -89,7 +89,7 @@
   in the entries it reads: for example, if you have an entry
     score_file = $HOME/.score
   a call to Read(&str, "score_file") will return a complete path to .score file
-  unless the expansion was previousle disabled with SetExpandEnvVars(false) call
+  unless the expansion was previously disabled with SetExpandEnvVars(false) call
   (it's on by default, the current status can be retrieved with
    IsExpandingEnvVars function).
 */
@@ -113,7 +113,7 @@ public:
   // Unix   /etc/file.ext           ~/.file
   // Win    %windir%\file.ext   %USERPROFILE%\file.ext
   //
-  // where file is the basename of szFile, ext is it's extension
+  // where file is the basename of szFile, ext is its extension
   // or .conf (Unix) or .ini (Win) if it has none
   static wxString GetGlobalFileName(const wxChar *szFile);
   static wxString GetLocalFileName(const wxChar *szFile);

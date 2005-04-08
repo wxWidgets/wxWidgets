@@ -2861,7 +2861,7 @@ wxDbColInf *wxDb::GetColumns(const wxString &tableName, UWORD *numCols, const wx
 /*
     BJO 20000503
     These are tentative new GetColumns members which should be more database
-    independant and which always returns the columns in the order they were
+    independent and which always returns the columns in the order they were
     created.
 
     - The first one (wxDbColInf *wxDb::GetColumns(wxChar *tableName[], const

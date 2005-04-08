@@ -369,7 +369,7 @@ protected:
     void AddWindowStyles();
 
     // Gets style flags from text in form "flag | flag2| flag3 |..."
-    // Only understads flags added with AddStyle
+    // Only understands flags added with AddStyle
     int GetStyle(const wxString& param = wxT("style"), int defaults = 0);
 
     // Gets text from param and does some conversions:

@@ -226,7 +226,7 @@ bool wxMediaCtrl::DoCreate(wxClassInfo* classInfo,
 // of wxMediaBackend
 //
 //
-// STL isn't compatable with and will have a compilation error
+// STL isn't compatible with and will have a compilation error
 // on a wxNode, however, wxHashTable::compatibility_iterator is
 // incompatible with the old 2.4 stable version - but since
 // we're in 2.5 only we don't need to worry about this

@@ -461,7 +461,7 @@ comes from the program itself (for example, if SetValue() is called)}
 \twocolitem{{\bf EVT\_TEXT\_ENTER(id, func)}}{Respond to a wxEVT\_COMMAND\_TEXT\_ENTER event,
 generated when enter is pressed in a text control (which must have
 wxTE\_PROCESS\_ENTER style for this event to be generated).}
-\twocolitem{{\bf EVT\_TEXT\_URL(id, func)}}{A mouse event occured over an URL
+\twocolitem{{\bf EVT\_TEXT\_URL(id, func)}}{A mouse event occurred over an URL
 in the text control (wxMSW and wxGTK2 only)}
 \twocolitem{{\bf EVT\_TEXT\_MAXLEN(id, func)}}{User tried to enter more text
 into the control than the limit set by
@@ -634,7 +634,7 @@ Resets the internal `modified' flag as if the current edits had been saved.
 \func{bool}{EmulateKeyPress}{\param{const wxKeyEvent\& }{event}}
 
 This functions inserts into the control the character which would have been
-inserted if the given key event had occured in the text control. The
+inserted if the given key event had occurred in the text control. The
 {\it event} object should be the same as the one passed to {\tt EVT\_KEY\_DOWN}
 handler previously by wxWidgets.
 
@@ -743,7 +743,7 @@ working with controls that contain large amounts of text.
 
 \constfunc{virtual wxString}{GetRange}{\param{long}{ from}, \param{long}{ to}}
 
-Returns the string containing the text staring in the positions {\it from} and
+Returns the string containing the text starting in the positions {\it from} and
 up to {\it to} in the control. The positions must have been returned by another
 wxTextCtrl method.
 
@@ -799,7 +799,7 @@ support this function.
 
 \wxheading{Return value}
 
-{\tt true} on success, {\tt false} if an error occured - it may also mean that
+{\tt true} on success, {\tt false} if an error occurred - it may also mean that
 the styles are not supported under this platform.
 
 \wxheading{See also}
@@ -852,6 +852,10 @@ read-only mode by a previous call to
 
 Returns {\tt true} if the text has been modified by user. Note that calling
 \helpref{SetValue}{wxtextctrlsetvalue} doesn't make the control modified.
+
+\wxheading{See also}
+
+\helpref{MarkDirty}{wxtextctrlmarkdirty}
 
 
 \membersection{wxTextCtrl::IsMultiLine}\label{wxtextctrlismultiline}
@@ -921,6 +925,17 @@ Loads and displays the named file, if it exists.
 %% \wxheading{See also}
 %%
 %% \helpref{wxKeyEvent}{wxkeyevent}
+
+
+\membersection{wxTextCtrl::MarkDirty}\label{wxtextctrlmarkdirty}
+
+\func{void}{MarkDirty}{\void}
+
+Mark text as modified (dirty).
+
+\wxheading{See also}
+
+\helpref{IsModified}{wxtextctrlismodified}
 
 
 \membersection{wxTextCtrl::OnDropFiles}\label{wxtextctrlondropfiles}
@@ -1057,7 +1072,7 @@ wouldn't change it at all).
 
 \wxheading{Return value}
 
-{\tt true} on success, {\tt false} if an error occured - may also mean that
+{\tt true} on success, {\tt false} if an error occurred - may also mean that
 the styles are not supported under this platform.
 
 \wxheading{See also}
@@ -1156,7 +1171,7 @@ not set, the corresponding attribute from \helpref{GetDefaultStyle()}{wxtextctrl
 
 \wxheading{Return value}
 
-{\tt true} on success, {\tt false} if an error occured - it may also mean that
+{\tt true} on success, {\tt false} if an error occurred - it may also mean that
 the styles are not supported under this platform.
 
 \wxheading{See also}

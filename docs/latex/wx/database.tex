@@ -77,20 +77,6 @@ and disconnects from the current data source.
 
 Commits previous transactions. Not implemented.
 
-\membersection{wxDatabase::ErrorOccured}
-
-\func{bool}{ErrorOccured}{\void}
-
-Returns true if the last action caused an error.
-
-\membersection{wxDatabase::ErrorSnapshot}
-
-\func{void}{ErrorSnapshot}{\param{HSTMT}{ statement = SQL\_NULL\_HSTMT}}
-
-This function will be called whenever an ODBC error occured. It stores the
-error related information returned by ODBC. If a statement handle of the
-concerning ODBC action is available it should be passed to the function.
-
 \membersection{wxDatabase::GetDatabaseName}
 
 \func{wxString}{GetDatabaseName}{\void}

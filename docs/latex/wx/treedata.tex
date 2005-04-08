@@ -7,7 +7,7 @@ it means that the memory and any other resources associated with a tree item
 will be automatically freed when it is deleted. Note that we don't use wxObject
 as the base class for wxTreeItemData because the size of this class is
 critical: in many applications, each tree leaf will have wxTreeItemData
-associated with it and number of leaves may be quite big.
+associated with it and the number of leaves may be quite big.
 
 Also please note that because the objects of this class are deleted by the tree
 using the operator {\tt delete}, they must always be allocated on the heap

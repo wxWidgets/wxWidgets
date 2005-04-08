@@ -123,7 +123,7 @@ MyFrame::MyFrame(wxWindow* parent)
     SetToolBar(wxXmlResource::Get()->LoadToolBar(this, wxT("main_toolbar")));
 
 #if wxUSE_STATUSBAR
-    // Give the frame a optional statusbar. The '1' just means one field.
+    // Give the frame an optional statusbar. The '1' just means one field.
     // A gripsizer will automatically get put on into the corner, if that
     // is the normal OS behaviour for frames on that platform. Helptext
     // for menu items and toolbar tools will automatically get displayed
@@ -172,7 +172,7 @@ void MyFrame::OnControlsToolOrMenuCommand(wxCommandEvent& WXUNUSED(event))
 
 #if wxUSE_LISTCTRL
     // There is no data in the listctrl. This will add some columns
-    // and some data. You don't need use any pointers
+    // and some data. You don't need to use any pointers
     // at all to manipulate the controls, just simply use the XRCCTL(...) macros.
     // "controls_treectrl" is the name of this control in the XRC.
     // (1) Insert a column, with the column header of "Name"

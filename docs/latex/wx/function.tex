@@ -435,7 +435,7 @@ This function is used in wxBase only and only if you don't create
 \helpref{wxApp}{wxapp} object at all. In this case you must call it from your
 {\tt main()} function before calling any other wxWidgets functions.
 
-If the function returns {\tt false} the initialization could not be performed,
+If the function returns \false the initialization could not be performed,
 in this case the library cannot be used and
 \helpref{wxUninitialize}{wxuninitialize} shouldn't be called neither.
 
@@ -740,7 +740,7 @@ and that this function is only implemented under Unix and Win32.
 
 \wxheading{Returns}
 
-{\tt true} on success, {\tt false} if an error occured.
+\true on success, \false if an error occurred.
 
 \wxheading{Include files}
 
@@ -841,7 +841,7 @@ This macro is equivalent to \helpref{cs.Enter()}{wxcriticalsectionenter} if
 
 \func{bool}{wxIsMainThread}{\void}
 
-Returns {\tt true} if this thread is the main one. Always returns {\tt true} if
+Returns \true if this thread is the main one. Always returns \true if
 {\tt wxUSE\_THREADS} is $0$.
 
 
@@ -960,7 +960,7 @@ parent directory "..".
 
 \wxheading{Warning}
 
-As of wx 2.5.2, these functions are not thread-safe! (use static variables)
+As of wx 2.5.2, these functions are not thread-safe! (they use static variables). You probably want to use \helpref{wxDir::GetFirst}{wxdirgetfirst} or \helpref{wxDirTraverser}{wxdirtraverser} instead.
 
 {\it spec} may contain wildcards.
 
@@ -998,7 +998,7 @@ information is not needed.
 
 \wxheading{Returns}
 
-{\tt true} on success, {\tt false} if an error occured (for example, the
+\true on success, \false if an error occurred (for example, the
 directory doesn't exist).
 
 \wxheading{Portability}
@@ -1460,8 +1460,8 @@ is running, the entry {\bf Current} in the section {\bf User} of
 the PENWIN.INI file is used.
 
 The first variant of this function returns the user name if successful or an
-empty string otherwise. The second (deprecated) function returns {\tt true}
-if successful, {\tt false} otherwise.
+empty string otherwise. The second (deprecated) function returns \true
+if successful, \false otherwise.
 
 \wxheading{See also}
 
@@ -1518,8 +1518,8 @@ Both versions call \helpref{wxLocale::GetString}{wxlocalegetstring}.
 
 \func{bool}{wxIsEmpty}{\param{const char *}{ p}}
 
-Returns {\tt true} if the pointer is either {\tt NULL} or points to an empty
-string, {\tt false} otherwise.
+Returns \true if the pointer is either {\tt NULL} or points to an empty
+string, \false otherwise.
 
 
 \membersection{::wxStrcmp}\label{wxstrcmp}
@@ -1551,8 +1551,8 @@ case-sensitive comparison.
 
 {\bf NB:} This function is obsolete, use \helpref{wxString::Find}{wxstringfind} instead.
 
-Returns {\tt true} if the substring {\it s1} is found within {\it s2},
-ignoring case if {\it exact} is false. If {\it subString} is {\tt false},
+Returns \true if the substring {\it s1} is found within {\it s2},
+ignoring case if {\it exact} is false. If {\it subString} is \false,
 no substring matching is done.
 
 
@@ -4336,7 +4336,7 @@ Returns the current value of the environment variable {\it var} in {\it value}.
 {\it value} may be {\tt NULL} if you just want to know if the variable exists
 and are not interested in its value.
 
-Returns {\tt true} if the variable exists, {\tt false} otherwise.
+Returns \true if the variable exists, \false otherwise.
 
 
 \membersection{wxSetEnv}\label{wxsetenv}
@@ -4346,7 +4346,7 @@ Returns {\tt true} if the variable exists, {\tt false} otherwise.
 Sets the value of the environment variable {\it var} (adding it if necessary)
 to {\it value}.
 
-Returns {\tt true} on success.
+Returns \true on success.
 
 
 \membersection{wxUnsetEnv}\label{wxunsetenv}
@@ -4357,5 +4357,5 @@ Removes the variable {\it var} from the environment.
 \helpref{wxGetEnv}{wxgetenv} will return {\tt NULL} after the call to this
 function.
 
-Returns {\tt true} on success.
+Returns \true on success.
 

@@ -186,7 +186,7 @@ public:
     wxString FindNext();
 
     // Adds FS handler.
-    // In fact, this class is only front-end to the FS hanlers :-)
+    // In fact, this class is only front-end to the FS handlers :-)
     static void AddHandler(wxFileSystemHandler *handler);
 
     // remove all items from the m_Handlers list

@@ -122,8 +122,8 @@ Destructor will close the connection if connected.
 
 \func{bool}{Abort}{\void}
 
-Aborts the download currently in process, returns {\tt true} if ok, {\tt false} 
-if an error occured.
+Aborts the download currently in process, returns \true if ok, \false 
+if an error occurred.
 
 
 \membersection{wxFTP::CheckCommand}\label{wxftpcheckcommand}
@@ -285,7 +285,7 @@ to specify a user and a password.
 
 \func{bool}{FileExists}{\param{const wxString\&}{ filename}}
 
-Returns {\tt true} if the given remote file exists, {\tt false} otherwise.
+Returns \true if the given remote file exists, \false otherwise.
 
 
 \membersection{wxFTP::GetFileSize}\label{wxftpgetfilesize}
@@ -371,9 +371,9 @@ An initialized write-only stream.
 
 \func{wxInputStream *}{GetInputStream}{\param{const wxString\&}{ path}}
 
-Creates a new input stream on the the specified path. You can use all but the seek
+Creates a new input stream on the specified path. You can use all but the seek
 functionality of wxStream. Seek isn't available on all streams. For example,
-http or ftp streams do not deal with it. Other functions like Tell
+HTTP or FTP streams do not deal with it. Other functions like Tell
 are not available for this sort of stream, at present.
 You will be notified when the EOF is reached by an error.
 

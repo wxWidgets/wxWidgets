@@ -3713,7 +3713,7 @@ the datasource knows on which column values the tables should be joined on.
 \begin{verbatim}
     ...
     // Base table is the "LOCATION" table, and it is being
-    // outer joined to the "PART" table via the the field "PART_NUMBER"
+    // outer joined to the "PART" table via the field "PART_NUMBER"
     // that can be related between the two tables.
     location->SetWhereClause("LOCATION.PART_NUMBER = PART.PART_NUMBER")
     location->SetFromClause("PART");

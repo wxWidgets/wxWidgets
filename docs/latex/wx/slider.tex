@@ -227,37 +227,6 @@ Gets the current slider value.
 \helpref{wxSlider::GetMin}{wxslidergetmin}, \helpref{wxSlider::GetMax}{wxslidergetmax},\rtfsp
 \helpref{wxSlider::SetValue}{wxslidersetvalue}
 
-\membersection{wxSlider::SetRange}\label{wxslidersetrange}
-
-\func{void}{SetRange}{\param{int}{ minValue}, \param{int}{ maxValue}}
-
-Sets the minimum and maximum slider values.
-
-\wxheading{See also}
-
-\helpref{wxSlider::GetMin}{wxslidergetmin}, \helpref{wxSlider::GetMax}{wxslidergetmax}
-
-\membersection{wxSlider::SetTickFreq}\label{wxslidersettickfreq}
-
-\func{void}{SetTickFreq}{\param{int }{n}, \param{int }{pos}}
-
-Sets the tick mark frequency and position.
-
-\wxheading{Parameters}
-
-\docparam{n}{Frequency. For example, if the frequency is set to two, a tick mark is displayed for
-every other increment in the slider's range.}
-
-\docparam{pos}{Position. Must be greater than zero. TODO: what is this for?}
-
-\wxheading{Remarks}
-
-Windows 95 only.
-
-\wxheading{See also}
-
-\helpref{wxSlider::GetTickFreq}{wxslidergettickfreq}
-
 \membersection{wxSlider::SetLineSize}\label{wxslidersetlinesize}
 
 \func{void}{SetLineSize}{\param{int }{lineSize}}
@@ -285,6 +254,16 @@ Sets the page size for the slider.
 \wxheading{See also}
 
 \helpref{wxSlider::GetPageSize}{wxslidergetpagesize}
+
+\membersection{wxSlider::SetRange}\label{wxslidersetrange}
+
+\func{void}{SetRange}{\param{int}{ minValue}, \param{int}{ maxValue}}
+
+Sets the minimum and maximum slider values.
+
+\wxheading{See also}
+
+\helpref{wxSlider::GetMin}{wxslidergetmin}, \helpref{wxSlider::GetMax}{wxslidergetmax}
 
 \membersection{wxSlider::SetSelection}\label{wxslidersetselection}
 
@@ -341,6 +320,27 @@ Windows 95 only.
 \wxheading{See also}
 
 \helpref{wxSlider::SetTickFreq}{wxslidersettickfreq}
+
+\membersection{wxSlider::SetTickFreq}\label{wxslidersettickfreq}
+
+\func{void}{SetTickFreq}{\param{int }{n}, \param{int }{pos}}
+
+Sets the tick mark frequency and position.
+
+\wxheading{Parameters}
+
+\docparam{n}{Frequency. For example, if the frequency is set to two, a tick mark is displayed for
+every other increment in the slider's range.}
+
+\docparam{pos}{Position. Must be greater than zero. TODO: what is this for?}
+
+\wxheading{Remarks}
+
+Windows 95 only.
+
+\wxheading{See also}
+
+\helpref{wxSlider::GetTickFreq}{wxslidergettickfreq}
 
 \membersection{wxSlider::SetValue}\label{wxslidersetvalue}
 

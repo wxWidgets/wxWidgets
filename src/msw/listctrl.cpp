@@ -166,7 +166,7 @@ private:
 //
 // Solution:
 // Under MSW the only way to associate data with a List
-// item independant of its position in the list is to
+// item independent of its position in the list is to
 // store a pointer to it in its lParam attribute. However
 // user programs are already using this (via the
 // SetItemData() GetItemData() calls).

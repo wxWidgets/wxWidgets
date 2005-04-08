@@ -47,7 +47,7 @@ public:
     virtual ~wxListBoxBase();
 
     // all generic methods are in wxControlWithItems, except for the following
-    // ones which are not yet implemented by wxChoice/wxCombobox
+    // ones which are not yet implemented by wxChoice/wxComboBox
     void Insert(const wxString& item, int pos)
         { DoInsert(item, pos); }
     void Insert(const wxString& item, int pos, void *clientData)
