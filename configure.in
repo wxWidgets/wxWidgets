@@ -456,6 +456,7 @@ if test $DEBUG_CONFIGURE = 1; then
   DEFAULT_wxUSE_DRAG_AND_DROP=no
   DEFAULT_wxUSE_DRAGIMAGE=no
   DEFAULT_wxUSE_SPLINES=no
+  DEFAULT_wxUSE_MOUSEWHEEL=no
 
   DEFAULT_wxUSE_MDI=no
   DEFAULT_wxUSE_MDI_ARCHITECTURE=no
@@ -652,6 +653,7 @@ else
   DEFAULT_wxUSE_DRAG_AND_DROP=yes
   DEFAULT_wxUSE_DRAGIMAGE=yes
   DEFAULT_wxUSE_SPLINES=yes
+  DEFAULT_wxUSE_MOUSEWHEEL=yes
 
   DEFAULT_wxUSE_MDI=yes
   DEFAULT_wxUSE_MDI_ARCHITECTURE=yes
@@ -1149,6 +1151,7 @@ WX_ARG_ENABLE(menus,       [  --enable-menus          use wxMenu/wxMenuBar/wxMen
 WX_ARG_ENABLE(miniframe,   [  --enable-miniframe      use wxMiniFrame class], wxUSE_MINIFRAME)
 WX_ARG_ENABLE(tooltips,    [  --enable-tooltips       use wxToolTip class], wxUSE_TOOLTIPS)
 WX_ARG_ENABLE(splines,     [  --enable-splines        use spline drawing code], wxUSE_SPLINES)
+WX_ARG_ENABLE(mousewheel,  [  --enable-mousewheel     use mousewheel], wxUSE_MOUSEWHEEL)
 WX_ARG_ENABLE(validators,  [  --enable-validators     use wxValidator and derived classes], wxUSE_VALIDATORS)
 WX_ARG_ENABLE(busyinfo,    [  --enable-busyinfo       use wxBusyInfo], wxUSE_BUSYINFO)
 WX_ARG_ENABLE(joystick,    [  --enable-joystick       use wxJoystick], wxUSE_JOYSTICK)
@@ -5567,6 +5570,10 @@ fi
 
 if test "$wxUSE_SPLINES" = "yes" ; then
   AC_DEFINE(wxUSE_SPLINES)
+fi
+
+if test "$wxUSE_MOUSEWHEEL" = "yes" ; then
+  AC_DEFINE(wxUSE_MOUSEWHEEL)
 fi
 
 dnl ---------------------------------------------------------------------------
