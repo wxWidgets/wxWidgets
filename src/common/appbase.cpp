@@ -774,8 +774,10 @@ void ShowAssertDialog(const wxChar *szFile,
     dump.Walk(5); // don't show OnAssert() call itself
     wxString stackTrace = dump.GetStackTrace();
 
-    const int maxLines = 10;
-    // Don't show more than maxLines or we could get an enormous dialog
+    // don't show more than maxLines or we could get a dialog too tall to be
+    // shown on screen: 20 should be ok everywhere as even with 15 pixel high
+    // characters it is still only 300 pixels...
+    const int maxLines = 20;
     int count = stackTrace.Freq(wxT('\n'));
     if (count > maxLines)
     {
