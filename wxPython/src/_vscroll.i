@@ -189,10 +189,10 @@ public:
     size_t GetLineCount() const;
 
     // get the first currently visible line
-    size_t GetFirstVisibleLine() const;
+    size_t GetVisibleBegin() const;
 
     // get the last currently visible line
-    size_t GetLastVisibleLine() const;
+    size_t GetVisibleEnd() const;
 
     // is this line currently visible?
     bool IsVisible(size_t line) const;
