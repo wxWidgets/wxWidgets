@@ -860,12 +860,13 @@ public:
     %pythoncode {
     def __repr__(self):
         if self.IsValid():
-            return '<wx.DateTime: \"%s\" at %s>' % ( self.Format(), self.this)
+            f = self.Format().encode(wx.GetDefaultPyEncoding())
+            return '<wx.DateTime: \"%s\" at %s>' % ( f, self.this)
         else:
             return '<wx.DateTime: \"INVALID\" at %s>' % self.this
     def __str__(self):
         if self.IsValid():
-            return self.Format()
+            return self.Format().encode(wx.GetDefaultPyEncoding())
         else:
             return "INVALID DateTime"
     }
@@ -1011,9 +1012,10 @@ public:
 
     %pythoncode {
      def __repr__(self):
-         return '<wx.TimeSpan: \"%s\" at %s>' % ( self.Format(), self.this)
+         f = self.Format().encode(wx.GetDefaultPyEncoding())
+         return '<wx.TimeSpan: \"%s\" at %s>' % ( f, self.this)
      def __str__(self):
-         return self.Format()
+         return self.Format().encode(wx.GetDefaultPyEncoding())
      }
 };
 
