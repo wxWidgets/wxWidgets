@@ -197,6 +197,17 @@ public:
     // is this line currently visible?
     bool IsVisible(size_t line) const;
 
+    // this is the same as GetVisibleBegin(), exists to match
+    // GetLastVisibleLine() and for backwards compatibility only
+    size_t GetFirstVisibleLine() const;
+
+    // get the last currently visible line
+    //
+    // this function is unsafe as it returns (size_t)-1 (i.e. a huge positive
+    // number) if the control is empty, use GetVisibleEnd() instead, this one
+    // is kept for backwards compatibility
+    size_t GetLastVisibleLine() const;
+
 };
 
 //---------------------------------------------------------------------------

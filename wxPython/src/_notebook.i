@@ -388,7 +388,10 @@ public:
 
 
     // returns true if we have wxCHB_TOP or wxCHB_BOTTOM style
-    bool IsVertical() const { return HasFlag(wxCHB_BOTTOM | wxCHB_TOP); }
+    bool IsVertical() const;
+
+    // returns the choice control
+    wxChoice* GetChoiceCtrl() const;
 
     virtual bool DeleteAllPages();
 };
