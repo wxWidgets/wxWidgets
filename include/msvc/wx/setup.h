@@ -42,6 +42,7 @@
             #pragma comment(lib,"wxmsw25ud_adv")
             #pragma comment(lib,"wxmsw25ud_core")
             #pragma comment(lib,"wxmsw25ud_html")
+            #pragma comment(lib,"wxmsw25ud_qa")
             #pragma comment(lib,"wxmsw25ud_xrc")
         #else // release
             #pragma comment(lib,"wxexpat")
@@ -56,6 +57,7 @@
             #pragma comment(lib,"wxmsw25u_adv")
             #pragma comment(lib,"wxmsw25u_core")
             #pragma comment(lib,"wxmsw25u_html")
+            #pragma comment(lib,"wxmsw25u_qa")
             #pragma comment(lib,"wxmsw25u_xrc")
         #endif // debug/release
     #else // !_UNICODE
@@ -86,6 +88,7 @@
             #pragma comment(lib,"wxmsw25d_adv")
             #pragma comment(lib,"wxmsw25d_core")
             #pragma comment(lib,"wxmsw25d_html")
+            #pragma comment(lib,"wxmsw25d_qa")
             #pragma comment(lib,"wxmsw25d_xrc")
         #else // release
             #pragma comment(lib,"wxexpat")
@@ -100,6 +103,7 @@
             #pragma comment(lib,"wxmsw25_adv")
             #pragma comment(lib,"wxmsw25_core")
             #pragma comment(lib,"wxmsw25_html")
+            #pragma comment(lib,"wxmsw25_qa")
             #pragma comment(lib,"wxmsw25_xrc")
         #endif // debug/release
     #endif // _UNICODE/!_UNICODE
