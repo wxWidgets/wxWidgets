@@ -76,7 +76,6 @@ public:
     void OnContextMenu(wxContextMenuEvent& event);
     void OnItemMenu(wxTreeEvent& event);
     void OnGetInfo(wxTreeEvent& event);
-    void OnTreeRMouseClick(wxTreeEvent& event);
     void OnSetInfo(wxTreeEvent& event);
     void OnItemExpanded(wxTreeEvent& event);
     void OnItemExpanding(wxTreeEvent& event);
@@ -86,6 +85,7 @@ public:
     void OnSelChanging(wxTreeEvent& event);
     void OnTreeKeyDown(wxTreeEvent& event);
     void OnItemActivated(wxTreeEvent& event);
+    void OnItemRClick(wxTreeEvent& event);
 
     void OnRMouseDown(wxMouseEvent& event);
     void OnRMouseUp(wxMouseEvent& event);
