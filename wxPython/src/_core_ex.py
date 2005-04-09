@@ -47,7 +47,7 @@ if default == 'ascii':
     try:
         default = locale.getdefaultlocale()[1]
         codecs.lookup(default)
-    except (ValueError, LookupError):
+    except (ValueError, LookupError, TypeError):
         default = _sys.getdefaultencoding()
     del locale
     del codecs
