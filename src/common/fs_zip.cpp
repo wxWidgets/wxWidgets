@@ -86,7 +86,7 @@ bool wxZipFSHandler::CanOpen(const wxString& location)
 }
 
 
-wxFSFile* wxZipFSHandler::OpenFile(wxFileSystem& fs, const wxString& location)
+wxFSFile* wxZipFSHandler::OpenFile(wxFileSystem& WXUNUSED(fs), const wxString& location)
 {
     wxString right = GetRightLocation(location);
     wxString left = GetLeftLocation(location);
@@ -102,7 +102,8 @@ wxFSFile* wxZipFSHandler::OpenFile(wxFileSystem& fs, const wxString& location)
 
     if (right.GetChar(0) == wxT('/')) right = right.Mid(1);
 
-    wxFSFile *leftFile = fs.OpenFile(left);
+    // a new wxFileSystem object is needed here to avoid infinite recursion
+    wxFSFile *leftFile = wxFileSystem().OpenFile(left);
     if (!leftFile)
        return NULL;
 
@@ -141,7 +142,7 @@ wxString wxZipFSHandler::FindFirst(const wxString& spec, int flags)
     wxString right = GetRightLocation(spec);
     wxString left = GetLeftLocation(spec);
 
-    if (right.Last() == wxT('/')) right.RemoveLast();
+    if (!right.empty() && right.Last() == wxT('/')) right.RemoveLast();
 
     if (m_Archive)
     {
@@ -167,6 +168,8 @@ wxString wxZipFSHandler::FindFirst(const wxString& spec, int flags)
 
     m_Pattern = right.AfterLast(wxT('/'));
     m_BaseDir = right.BeforeLast(wxT('/'));
+    if (m_BaseDir.StartsWith(wxT("/")))
+        m_BaseDir = m_BaseDir.Mid(1);
 
     if (m_Archive)
     {
@@ -174,6 +177,8 @@ wxString wxZipFSHandler::FindFirst(const wxString& spec, int flags)
         {
             delete m_DirsFound;
             m_DirsFound = new wxZipFilenameHashMap();
+            if (right.empty())  // allow "/" to match the archive root
+                return spec;
         }
         return DoFind();
     }
