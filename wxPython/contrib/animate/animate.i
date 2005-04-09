@@ -11,7 +11,7 @@
 /////////////////////////////////////////////////////////////////////////////
 
 %define DOCSTRING
-"Simple animation player classes, including `wxGIFAnimationCtrl` for displaying
+"Simple animation player classes, including `GIFAnimationCtrl` for displaying
 animated GIF files
 "
 %enddef
