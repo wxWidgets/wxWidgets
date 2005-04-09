@@ -5780,11 +5780,6 @@ if test "$wxUSE_TOGGLEBTN" = "yes"; then
     if test "$wxUSE_COCOA" = 1 ; then
         AC_MSG_WARN([Toggle button not yet supported under Mac OS X... disabled])
         wxUSE_TOGGLEBTN=no
-    else
-        if test "$wxUSE_PM" = 1; then
-            AC_MSG_WARN([Toggle button not yet supported under PM... disabled])
-            wxUSE_TOGGLEBTN=no
-        fi
     fi
     if test "$wxUSE_UNIVERSAL" = "yes"; then
         AC_MSG_WARN([Toggle button not yet supported under wxUniversal... disabled])

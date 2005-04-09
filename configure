@@ -1025,6 +1025,7 @@ Optional Features:
   --enable-miniframe      use wxMiniFrame class
   --enable-tooltips       use wxToolTip class
   --enable-splines        use spline drawing code
+  --enable-mousewheel     use mousewheel
   --enable-validators     use wxValidator and derived classes
   --enable-busyinfo       use wxBusyInfo
   --enable-joystick       use wxJoystick
@@ -2111,6 +2112,7 @@ if test $DEBUG_CONFIGURE = 1; then
   DEFAULT_wxUSE_DRAG_AND_DROP=no
   DEFAULT_wxUSE_DRAGIMAGE=no
   DEFAULT_wxUSE_SPLINES=no
+  DEFAULT_wxUSE_MOUSEWHEEL=no
 
   DEFAULT_wxUSE_MDI=no
   DEFAULT_wxUSE_MDI_ARCHITECTURE=no
@@ -2307,6 +2309,7 @@ else
   DEFAULT_wxUSE_DRAG_AND_DROP=yes
   DEFAULT_wxUSE_DRAGIMAGE=yes
   DEFAULT_wxUSE_SPLINES=yes
+  DEFAULT_wxUSE_MOUSEWHEEL=yes
 
   DEFAULT_wxUSE_MDI=yes
   DEFAULT_wxUSE_MDI_ARCHITECTURE=yes
@@ -9776,6 +9779,47 @@ fi;
           fi
 
           if test "$wxUSE_SPLINES" = yes; then
+            echo "$as_me:$LINENO: result: yes" >&5
+echo "${ECHO_T}yes" >&6
+          else
+            echo "$as_me:$LINENO: result: no" >&5
+echo "${ECHO_T}no" >&6
+          fi
+
+
+	  enablestring=
+          echo "$as_me:$LINENO: checking for --${enablestring:-enable}-mousewheel" >&5
+echo $ECHO_N "checking for --${enablestring:-enable}-mousewheel... $ECHO_C" >&6
+          no_cache=0
+          # Check whether --enable-mousewheel or --disable-mousewheel was given.
+if test "${enable_mousewheel+set}" = set; then
+  enableval="$enable_mousewheel"
+
+                          if test "$enableval" = yes; then
+                            ac_cv_use_mousewheel='wxUSE_MOUSEWHEEL=yes'
+                          else
+                            ac_cv_use_mousewheel='wxUSE_MOUSEWHEEL=no'
+                          fi
+
+else
+
+                          LINE=`grep "wxUSE_MOUSEWHEEL" ${wx_arg_cache_file}`
+                          if test "x$LINE" != x ; then
+                            eval "DEFAULT_$LINE"
+                          else
+                            no_cache=1
+                          fi
+
+                          ac_cv_use_mousewheel='wxUSE_MOUSEWHEEL='$DEFAULT_wxUSE_MOUSEWHEEL
+
+fi;
+
+          eval "$ac_cv_use_mousewheel"
+          if test "$no_cache" != 1; then
+            echo $ac_cv_use_mousewheel >> ${wx_arg_cache_file}.tmp
+          fi
+
+          if test "$wxUSE_MOUSEWHEEL" = yes; then
             echo "$as_me:$LINENO: result: yes" >&5
 echo "${ECHO_T}yes" >&6
           else
@@ -38748,6 +38792,13 @@ _ACEOF
 
 fi
 
+if test "$wxUSE_MOUSEWHEEL" = "yes" ; then
+  cat >>confdefs.h <<\_ACEOF
+#define wxUSE_MOUSEWHEEL 1
+_ACEOF
+
+fi
+
 
 USES_CONTROLS=0
 if test "$wxUSE_CONTROLS" = "yes"; then
@@ -39050,12 +39101,6 @@ if test "$wxUSE_TOGGLEBTN" = "yes"; then
         { echo "$as_me:$LINENO: WARNING: Toggle button not yet supported under Mac OS X... disabled" >&5
 echo "$as_me: WARNING: Toggle button not yet supported under Mac OS X... disabled" >&2;}
         wxUSE_TOGGLEBTN=no
-    else
-        if test "$wxUSE_PM" = 1; then
-            { echo "$as_me:$LINENO: WARNING: Toggle button not yet supported under PM... disabled" >&5
-echo "$as_me: WARNING: Toggle button not yet supported under PM... disabled" >&2;}
-            wxUSE_TOGGLEBTN=no
-        fi
     fi
     if test "$wxUSE_UNIVERSAL" = "yes"; then
         { echo "$as_me:$LINENO: WARNING: Toggle button not yet supported under wxUniversal... disabled" >&5

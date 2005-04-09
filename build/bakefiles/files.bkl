@@ -1631,6 +1631,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/os2/stattext.cpp
     src/os2/tabctrl.cpp
     src/os2/textctrl.cpp
+    src/os2/tglbtn.cpp
     src/os2/timer.cpp
     src/os2/toolbar.cpp
     src/os2/tooltip.cpp
@@ -1708,6 +1709,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/os2/stattext.h
     wx/os2/tabctrl.h
     wx/os2/textctrl.h
+    wx/os2/tglbtn.h
     wx/os2/timer.h
     wx/os2/toolbar.h
     wx/os2/tooltip.h
