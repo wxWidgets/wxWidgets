@@ -173,10 +173,9 @@ class PrintBase:
         return date + ' ' + time
 
     def GetNow(self):
-        full = str(wx.DateTime_Now())        # get the current date and time in print format
-        flds = full.split()
-        date = flds[0]
-        time = flds[1]
+        now = wx.DateTime.Now()
+        date = now.FormatDate()
+        time = now.FormatTime()
         return date, time
 
     def SetPreview(self, preview):
