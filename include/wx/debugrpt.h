@@ -54,6 +54,13 @@ public:
     // description is shown to the user in the report summary
     virtual void AddFile(const wxString& name, const wxString& description);
 
+    // convenience function: write the given text to a file with the given name
+    // and then add it to the report (the difference with AddFile() is that the
+    // file will be created by this function and doesn't have to already exist)
+    bool AddText(const wxString& name,
+                 const wxString& text,
+                 const wxString& description);
+
 #if wxUSE_STACKWALKER
     // add an XML file containing the current or exception context and the
     // stack trace

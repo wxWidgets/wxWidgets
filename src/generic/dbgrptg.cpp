@@ -389,14 +389,8 @@ bool wxDebugReportDialog::TransferDataFromWindow()
     const wxString notes = m_notes->GetValue();
     if ( !notes.empty() )
     {
-        // for now it's fixed, could make it configurable in the future...
-        const wxChar *NOTES_FILE_NAME = _T("notes.txt");
-        wxFileName fn(m_dbgrpt.GetDirectory(), NOTES_FILE_NAME);
-        wxFFile file(fn.GetFullPath(), _T("w"));
-        if ( file.IsOpened() && file.Write(notes) )
-        {
-            m_dbgrpt.AddFile(NOTES_FILE_NAME, _T("user notes"));
-        }
+        // for now filename fixed, could make it configurable in the future...
+        m_dbgrpt.AddText(_T("notes.txt"), notes, _T("user notes"));
     }
 
     return true;

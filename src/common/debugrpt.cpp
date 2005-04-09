@@ -258,6 +258,21 @@ void wxDebugReport::AddFile(const wxString& name, const wxString& description)
     m_descriptions.Add(description);
 }
 
+bool
+wxDebugReport::AddText(const wxString& name,
+                       const wxString& text,
+                       const wxString& description)
+{
+    wxFileName fn(GetDirectory(), name);
+    wxFFile file(fn.GetFullPath(), _T("w"));
+    if ( !file.IsOpened() || !file.Write(text) )
+        return false;
+
+    AddFile(name, description);
+
+    return true;
+}
+
 void wxDebugReport::RemoveFile(const wxString& name)
 {
     const int n = m_files.Index(name);
