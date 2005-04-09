@@ -742,11 +742,8 @@ wxStringBase& wxStringBase::replace(size_t nStart, size_t nLen,
   //
   //Also, we can't use append with the full character pointer and must
   //do it manually because this string can contain null characters
-  if ( nStart != 0 )
-  {
-      for(size_t i1 = 0; i1 < nStart; ++i1)
-          strTmp.append(1, this->c_str()[i1]);
-  }
+  for(size_t i1 = 0; i1 < nStart; ++i1)
+      strTmp.append(1, this->c_str()[i1]);
   
   //its safe to do the full version here because
   //sz must be a normal c string
