@@ -32,10 +32,10 @@
 #define wxSL_TICKS           0x0010
 #define wxSL_AUTOTICKS       wxSL_TICKS // we don't support manual ticks
 #define wxSL_LABELS          0x0020
+#define wxSL_LEFT            0x0040
 #define wxSL_TOP             0x0080
-#define wxSL_LEFT            (wxSL_TOP | wxVERTICAL)
+#define wxSL_RIGHT           0x0100
 #define wxSL_BOTTOM          0x0200
-#define wxSL_RIGHT           (wxSL_BOTTOM | wxVERTICAL)
 #define wxSL_BOTH            0x0400
 #define wxSL_SELRANGE        0x0800
 #define wxSL_INVERSE         0x1000
