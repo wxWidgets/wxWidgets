@@ -142,7 +142,26 @@ WXDWORD wxStaticBox::MSWGetStyle(long style, WXDWORD *exstyle) const
     styleWin &= ~WS_CLIPCHILDREN;
 
     if ( exstyle )
-        *exstyle = 0;
+    {
+        // If any of the ancestors are scrolling windows, style has to be WS_EX_TRANSPARENT
+        // or the static box won't be painted when the window is scrolled. We try
+        // not to do this normally, because we get a lot of flicker.
+        wxWindow* p = GetParent();
+        bool ancestorScrolls = false;
+        while (p && !p->IsTopLevel())
+        {
+            if (p->HasFlag(wxVSCROLL) || GetParent()->HasFlag(wxHSCROLL))
+            {
+                ancestorScrolls = true;
+                break;
+            }
+            p = p->GetParent();
+        }
+        if (ancestorScrolls)
+            *exstyle = WS_EX_TRANSPARENT;
+        else
+            *exstyle = 0;
+    }
 
     return styleWin | BS_GROUPBOX;
 }
