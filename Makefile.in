@@ -1430,9 +1430,15 @@ COND_TOOLKIT_MOTIF_LOWLEVEL_HDR =  \
 	wx/x11/pen.h \
 	wx/x11/region.h
 @COND_TOOLKIT_MOTIF@LOWLEVEL_HDR = $(COND_TOOLKIT_MOTIF_LOWLEVEL_HDR)
-@COND_TOOLKIT_MSW@LOWLEVEL_HDR = wx/msw/uxtheme.h
+COND_TOOLKIT_MSW_LOWLEVEL_HDR =  \
+	wx/msw/popupwin.h \
+	wx/msw/uxtheme.h \
+	wx/msw/helpchm.h \
+	wx/msw/helpwin.h
+@COND_TOOLKIT_MSW@LOWLEVEL_HDR = $(COND_TOOLKIT_MSW_LOWLEVEL_HDR)
 @COND_TOOLKIT_PM@LOWLEVEL_HDR = 
-@COND_TOOLKIT_WINCE@LOWLEVEL_HDR = wx/msw/uxtheme.h
+@COND_TOOLKIT_WINCE@LOWLEVEL_HDR = wx/msw/popupwin.h \
+@COND_TOOLKIT_WINCE@	    wx/msw/uxtheme.h
 COND_TOOLKIT_X11_LOWLEVEL_HDR =  \
 	wx/generic/caret.h \
 	wx/unix/fontutil.h \
@@ -1788,6 +1794,7 @@ COND_TOOLKIT_MOTIF_GUI_HDR =  \
 	wx/motif/button.h \
 	wx/motif/checkbox.h \
 	wx/motif/checklst.h \
+	wx/motif/chkconf.h \
 	wx/motif/choice.h \
 	wx/motif/clipbrd.h \
 	wx/motif/colour.h \
@@ -1929,6 +1936,7 @@ COND_TOOLKIT_MSW_GUI_HDR =  \
 	wx/msw/blank.cur \
 	wx/msw/bullseye.cur \
 	wx/msw/clock.cur \
+	wx/msw/cross.cur \
 	wx/msw/hand.cur \
 	wx/msw/heart.cur \
 	wx/msw/magnif1.cur \
@@ -2033,6 +2041,7 @@ COND_TOOLKIT_PM_GUI_HDR =  \
 	wx/os2/stattext.h \
 	wx/os2/tabctrl.h \
 	wx/os2/textctrl.h \
+	wx/os2/tglbtn.h \
 	wx/os2/timer.h \
 	wx/os2/toolbar.h \
 	wx/os2/tooltip.h \
@@ -2133,6 +2142,7 @@ COND_TOOLKIT_WINCE_GUI_HDR =  \
 	wx/msw/blank.cur \
 	wx/msw/bullseye.cur \
 	wx/msw/clock.cur \
+	wx/msw/cross.cur \
 	wx/msw/hand.cur \
 	wx/msw/heart.cur \
 	wx/msw/magnif1.cur \
@@ -3698,6 +3708,7 @@ COND_TOOLKIT_PM___GUI_SRC_OBJECTS =  \
 	monodll_stattext.o \
 	monodll_tabctrl.o \
 	monodll_textctrl.o \
+	monodll_tglbtn.o \
 	monodll_timer.o \
 	monodll_toolbar.o \
 	monodll_tooltip.o \
@@ -5156,6 +5167,7 @@ COND_TOOLKIT_PM___GUI_SRC_OBJECTS_1 =  \
 	monolib_stattext.o \
 	monolib_tabctrl.o \
 	monolib_textctrl.o \
+	monolib_tglbtn.o \
 	monolib_timer.o \
 	monolib_toolbar.o \
 	monolib_tooltip.o \
@@ -6838,6 +6850,7 @@ COND_TOOLKIT_PM___GUI_SRC_OBJECTS_2 =  \
 	coredll_stattext.o \
 	coredll_tabctrl.o \
 	coredll_textctrl.o \
+	coredll_tglbtn.o \
 	coredll_timer.o \
 	coredll_toolbar.o \
 	coredll_tooltip.o \
@@ -8030,6 +8043,7 @@ COND_TOOLKIT_PM___GUI_SRC_OBJECTS_3 =  \
 	corelib_stattext.o \
 	corelib_tabctrl.o \
 	corelib_textctrl.o \
+	corelib_tglbtn.o \
 	corelib_timer.o \
 	corelib_toolbar.o \
 	corelib_tooltip.o \
@@ -12936,6 +12950,9 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@monodll_tglbtn.o: $(srcdir)/src/mac/carbon/tglbtn.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/mac/carbon/tglbtn.cpp
 
+@COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@monodll_tglbtn.o: $(srcdir)/src/os2/tglbtn.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/os2/tglbtn.cpp
+
 @COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@monodll_menuitem.o: $(srcdir)/src/motif/menuitem.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/motif/menuitem.cpp
 
@@ -16373,6 +16390,9 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 
 @COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@monolib_tglbtn.o: $(srcdir)/src/mac/carbon/tglbtn.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/mac/carbon/tglbtn.cpp
+
+@COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@monolib_tglbtn.o: $(srcdir)/src/os2/tglbtn.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/os2/tglbtn.cpp
 
 @COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@monolib_menuitem.o: $(srcdir)/src/motif/menuitem.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/motif/menuitem.cpp
@@ -20229,6 +20249,9 @@ coredll_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@coredll_tglbtn.o: $(srcdir)/src/mac/carbon/tglbtn.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/mac/carbon/tglbtn.cpp
 
+@COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@coredll_tglbtn.o: $(srcdir)/src/os2/tglbtn.cpp $(COREDLL_ODEP)
+@COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/os2/tglbtn.cpp
+
 @COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@coredll_menuitem.o: $(srcdir)/src/motif/menuitem.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/motif/menuitem.cpp
 
@@ -22724,6 +22747,9 @@ corelib_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(CORELIB_ODEP)
 
 @COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@corelib_tglbtn.o: $(srcdir)/src/mac/carbon/tglbtn.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/mac/carbon/tglbtn.cpp
+
+@COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@corelib_tglbtn.o: $(srcdir)/src/os2/tglbtn.cpp $(CORELIB_ODEP)
+@COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/os2/tglbtn.cpp
 
 @COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@corelib_menuitem.o: $(srcdir)/src/motif/menuitem.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/motif/menuitem.cpp

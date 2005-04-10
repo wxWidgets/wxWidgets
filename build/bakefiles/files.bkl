@@ -1254,6 +1254,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/msw/window.cpp
 </set>
 <set var="MSW_LOWLEVEL_HDR" hints="files">
+    wx/msw/popupwin.h
     wx/msw/uxtheme.h
 </set>
 
@@ -2826,7 +2827,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     <set var="LOWLEVEL_HDR" hints="files">
         <if cond="TOOLKIT=='GTK'">$(GTK_LOWLEVEL_HDR)</if>
         <if cond="TOOLKIT=='MOTIF'">$(MOTIF_LOWLEVEL_HDR)</if>
-        <if cond="TOOLKIT=='MSW'">$(MSW_LOWLEVEL_HDR)</if>
+        <if cond="TOOLKIT=='MSW'">$(MSW_LOWLEVEL_HDR) $(MSW_DESKTOP_LOWLEVEL_HDR)</if>
         <if cond="TOOLKIT=='WINCE'">$(MSW_LOWLEVEL_HDR)</if>
         <if cond="TOOLKIT=='MAC'">$(MAC_LOWLEVEL_HDR)</if>
         <if cond="TOOLKIT=='COCOA'">$(COCOA_LOWLEVEL_HDR)</if>
