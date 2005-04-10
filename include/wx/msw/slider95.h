@@ -84,6 +84,10 @@ public:
     WXHWND GetEditValue() const;
     virtual bool ContainsHWND(WXHWND hWnd) const;
 
+    // we should let background show through the slider (and its labels)
+    virtual bool HasTransparentBackground() { return true; }
+
+
     void Command(wxCommandEvent& event);
     virtual bool MSWOnScroll(int orientation, WXWORD wParam,
                              WXWORD pos, WXHWND control);
