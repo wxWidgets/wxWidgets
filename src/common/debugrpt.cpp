@@ -252,23 +252,45 @@ wxString wxDebugReport::GetReportName() const
     return _T("wx");
 }
 
-void wxDebugReport::AddFile(const wxString& name, const wxString& description)
+void
+wxDebugReport::AddFile(const wxString& filename, const wxString& description)
 {
+    wxString name;
+    wxFileName fn(filename);
+    if ( fn.IsAbsolute() )
+    {
+        // we need to copy the file to the debug report directory: give it the
+        // same name there
+        name = fn.GetFullName();
+        wxCopyFile(fn.GetFullPath(),
+                   wxFileName(GetDirectory(), name).GetFullPath());
+    }
+    else // file relative to the report directory
+    {
+        name = filename;
+
+        wxASSERT_MSG( wxFileName(GetDirectory(), name).FileExists(),
+                      _T("file should exist in debug report directory") );
+    }
+
     m_files.Add(name);
     m_descriptions.Add(description);
 }
 
 bool
-wxDebugReport::AddText(const wxString& name,
+wxDebugReport::AddText(const wxString& filename,
                        const wxString& text,
                        const wxString& description)
 {
-    wxFileName fn(GetDirectory(), name);
+    wxASSERT_MSG( !wxFileName(filename).IsAbsolute(),
+                  _T("filename should be relative to debug report directory") );
+
+    wxFileName fn(GetDirectory(), filename);
     wxFFile file(fn.GetFullPath(), _T("w"));
     if ( !file.IsOpened() || !file.Write(text) )
         return false;
 
-    AddFile(name, description);
+    AddFile(filename, description);
 
     return true;
 }

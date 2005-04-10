@@ -31,14 +31,14 @@
 // custom debug reporting class
 // ----------------------------------------------------------------------------
 
-// this is your custom debug reporter, you will probably want to parse the XML
-// document in OnServerReply() instead of just dumping it as I do
+// this is your custom debug reporter: it will use curl program (which should
+// be available) to upload the crash report to the given URL (which should be
+// set up by you)
 class MyDebugReport : public wxDebugReportUpload
 {
 public:
     MyDebugReport() : wxDebugReportUpload
                        (
-                        //_T("http://iml2.hitchcock.org/intranet/crashes/wxtest"),
                         _T("http://your.url.here/"),
                         _T("report:file"),
                         _T("action")
@@ -47,6 +47,9 @@ public:
     }
 
 protected:
+    // this is called with the contents of the server response: you will
+    // probably want to parse the XML document in OnServerReply() instead of
+    // just dumping it as I do
     virtual bool OnServerReply(const wxArrayString& reply)
     {
         if ( reply.IsEmpty() )
@@ -198,6 +201,14 @@ public:
         }
 
         report.AddFile(fn.GetFullName(), _T("timestamp of this report"));
+
+        // can also add an existing file directly, it will be copied
+        // automatically
+#ifdef __WXMSW__
+        report.AddFile(_T("c:\\autoexec.bat"), _T("DOS startup file"));
+#else
+        report.AddFile(_T("/etc/motd"), _T("Message of the day"));
+#endif
 
         // calling Show() is not mandatory, but is more polite
         if ( wxDebugReportPreviewStd().Show(report) )

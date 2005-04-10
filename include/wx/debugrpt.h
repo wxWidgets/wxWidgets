@@ -48,16 +48,17 @@ public:
     void Reset() { m_dir.clear(); }
 
 
-    // add another file to the report: the file must already exist, its name is
-    // relative to GetDirectory()
+    // add another file to the report: the file must already exist, its name
+    // can be either absolute in which case it is copied to the debug report
+    // directory or relative to GetDirectory()
     //
     // description is shown to the user in the report summary
-    virtual void AddFile(const wxString& name, const wxString& description);
+    virtual void AddFile(const wxString& filename, const wxString& description);
 
     // convenience function: write the given text to a file with the given name
     // and then add it to the report (the difference with AddFile() is that the
     // file will be created by this function and doesn't have to already exist)
-    bool AddText(const wxString& name,
+    bool AddText(const wxString& filename,
                  const wxString& text,
                  const wxString& description);
 
