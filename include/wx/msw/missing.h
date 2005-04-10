@@ -652,6 +652,10 @@ typedef struct {
     #define WM_UPDATEUISTATE    0x0128
 #endif
 
+#ifndef WM_PRINTCLIENT
+    #define WM_PRINTCLIENT 0x318
+#endif
+
 #ifndef UIS_INITIALIZE
     #define UIS_INITIALIZE  3
 #endif
