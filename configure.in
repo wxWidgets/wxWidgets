@@ -1882,6 +1882,42 @@ dnl we don't use HAVE_DYNAMIC_CAST anywhere right now...
 dnl AC_CXX_DYNAMIC_CAST
 
 dnl check various STL features
+if test "$wxUSE_UNICODE" = "yes" -a \
+        \( "$wxUSE_STD_STRING" = "yes" -o "$wxUSE_STL" = "yes" \); then
+    AC_LANG_PUSH(C++)
+
+    dnl check if <string> declares std::wstring
+    AC_MSG_CHECKING([for std::wstring in <string>])
+    AC_TRY_COMPILE([#include <string>],
+                   [std::wstring foo;],
+                   [AC_MSG_RESULT(yes)
+                    AC_DEFINE(HAVE_STD_WSTRING)],
+                   [AC_MSG_RESULT(no)
+                    AC_MSG_CHECKING([if std::basic_string<wchar_t> works])
+                    AC_TRY_COMPILE([
+                        #ifdef HAVE_WCHAR_H
+                        #  ifdef __CYGWIN__
+                        #    include <stddef.h>
+                        #  endif
+                        #  include <wchar.h>
+                        #endif
+                        #ifdef HAVE_STDLIB_H
+                        #  include <stdlib.h>
+                        #endif
+                        #include <stdio.h>
+                        #include <string>
+                        ],
+                        [std::basic_string<wchar_t> foo;
+                         const wchar_t* dummy = foo.c_str();],
+                        [AC_MSG_RESULT(yes)],
+                        [AC_MSG_RESULT([no])
+                         AC_MSG_ERROR([Can't compile without unicode string class])]
+                    )
+                    ])
+
+    AC_LANG_POP
+fi
+
 if test "$wxUSE_STL" = "yes"; then
     AC_LANG_PUSH(C++)
 
@@ -1900,14 +1936,6 @@ if test "$wxUSE_STL" = "yes"; then
                     [AC_MSG_RESULT([yes])],
                     [AC_MSG_RESULT([no])
                      AC_MSG_ERROR([Basic STL functionality missing])])
-
-    dnl check if <string> declares std::wstring
-    AC_MSG_CHECKING([for std::wstring in <string>])
-    AC_TRY_COMPILE([#include <string>],
-                   [std::wstring foo;],
-                   [AC_MSG_RESULT(yes)
-                    AC_DEFINE(HAVE_STD_WSTRING)],
-                   [AC_MSG_RESULT(no)])
 
     dnl check for compliant std::string::compare
     AC_MSG_CHECKING([for compliant std::string::compare])
@@ -2861,6 +2889,10 @@ equivalent variable and GTK+ is version 1.2.3 or above.
     fi
 
     if test "$wxUSE_MOTIF" = 1; then
+        if test "$wxUSE_UNICODE" = "yes"; then
+            AC_MSG_ERROR([Unicode configuration not supported with Motif])
+        fi
+
         AC_MSG_CHECKING(for Motif/Lesstif headers)
         WX_PATH_FIND_INCLUDES($SEARCH_INCLUDE, Xm/Xm.h)
         if test "$ac_find_includes" != "" ; then
