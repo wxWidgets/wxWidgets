@@ -160,7 +160,7 @@ public:
 
 #endif // wxUSE_IPV6
 
-#if defined(__UNIX__) && !defined(__WINE__) && (!defined(__WXMAC__) || defined(__DARWIN__))
+#if defined(__UNIX__) && !defined(__WINE__) && (!defined(__WXMAC__) || defined(__DARWIN__)) && !defined(__CYGWIN__)
 #include <sys/socket.h>
 #ifndef __VMS__
 # include <sys/un.h>

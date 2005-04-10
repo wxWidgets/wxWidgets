@@ -20,8 +20,6 @@
 
 #include "wx/platform.h"
 
-/*  RN - only double-check the environment when building in C++
-    Shouldn't configure pass the environment to all sub-libs too? */
 #ifdef __cplusplus
 /*  Make sure the environment is set correctly */
 #   if defined(__WXMSW__) && defined(__X__)
@@ -2247,6 +2245,15 @@ enum wxUpdateUI
 #   define wxALL_FILES_PATTERN   wxT("*")
 #   define wxALL_FILES           gettext_noop("All files (*)|*")
 #endif
+
+#   if wxUSE_STL || defined(wxUSE_STD_STRING)
+         //NASTY HACK because the gethostname in sys/unistd.h which the gnu stl includes
+         //and wx builds with by default clash with each other (windows version
+         //2nd param is int, sys/unistd.h version is unsigned int).  
+#        define gethostname gethostnameHACK
+#        include <unistd.h>
+#        undef gethostname
+#   endif
 
 /*  --------------------------------------------------------------------------- */
 /*  macros that enable wxWidgets apps to be compiled in absence of the */
