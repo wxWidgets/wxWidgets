@@ -478,7 +478,7 @@ wxLog *wxGUIAppTraitsBase::CreateLogTarget()
 #if wxUSE_LOGGUI
     return new wxLogGui;
 #else
-    // wem ust have something!
+    // we must have something!
     return new wxLogStderr;
 #endif
 }
