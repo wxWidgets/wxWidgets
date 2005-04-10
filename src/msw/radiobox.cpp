@@ -644,6 +644,31 @@ void wxRadioBox::DoSetSize(int x, int y, int width, int height, int sizeFlags)
     }
 }
 
+// ----------------------------------------------------------------------------
+// radio box drawing
+// ----------------------------------------------------------------------------
+
+#ifndef __WXWINCE__
+
+WXHRGN wxRadioBox::MSWGetRegionWithoutChildren()
+{
+    RECT rc;
+    ::GetWindowRect(GetHwnd(), &rc);
+    HRGN hrgn = ::CreateRectRgn(rc.left, rc.top, rc.right + 1, rc.bottom + 1);
+
+    const size_t count = GetCount();
+    for ( size_t i = 0; i < count; ++i )
+    {
+        ::GetWindowRect((*m_radioButtons)[i], &rc);
+        AutoHRGN hrgnchild(::CreateRectRgnIndirect(&rc));
+        ::CombineRgn(hrgn, hrgn, hrgnchild, RGN_DIFF);
+    }
+
+    return (WXHRGN)hrgn;
+}
+
+#endif // __WXWINCE__
+
 // ---------------------------------------------------------------------------
 // window proc for radio buttons
 // ---------------------------------------------------------------------------
@@ -810,57 +835,12 @@ LRESULT APIENTRY _EXPORT wxRadioBtnWndProc(HWND hwnd,
 
                 break;
             }
+            break;
 #endif // !__WXWINCE__
     }
 
     return ::CallWindowProc(CASTWNDPROC s_wndprocRadioBtn, hwnd, message, wParam, lParam);
 }
 
-WXHRGN wxRadioBox::MSWGetRegionWithoutChildren()
-{
-    RECT rc;
-    ::GetWindowRect(GetHwnd(), &rc);
-    HRGN hrgn = ::CreateRectRgn(rc.left, rc.top, rc.right + 1, rc.bottom + 1);
-
-    const size_t count = GetCount();
-    for ( size_t i = 0; i < count; ++i )
-    {
-        ::GetWindowRect((*m_radioButtons)[i], &rc);
-        AutoHRGN hrgnchild(::CreateRectRgnIndirect(&rc));
-        ::CombineRgn(hrgn, hrgn, hrgnchild, RGN_DIFF);
-    }
-
-    return (WXHRGN)hrgn;
-}
-
-WXLRESULT wxRadioBox::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
-{
-#ifndef __WXWINCE__
-    if ( nMsg == WM_PRINTCLIENT )
-    {
-        // first check to see if a parent window knows how to paint us better
-        for ( wxWindow *win = GetParent(); win; win = win->GetParent() )
-            if ( win->MSWPrintChild(this, wParam, lParam) )
-                return true;
-
-        // nope, so lets do it ourselves
-        RECT rc;
-        WXHBRUSH hbr = DoMSWControlColor((HDC)wParam, wxNullColour);
-        if ( !hbr )
-        {
-            wxBrush *brush = wxTheBrushList->FindOrCreateBrush(GetBackgroundColour(), wxSOLID);
-            hbr = (WXHBRUSH)brush->GetResourceHandle();
-        }
-
-        ::GetClientRect(GetHwnd(), &rc);
-        ::FillRect((HDC)wParam, &rc, (HBRUSH)hbr);
-
-        return true;
-    }
-#endif
-    // __WXWINCE__
-
-    return wxStaticBox::MSWWindowProc(nMsg, wParam, lParam);
-}
 #endif // wxUSE_RADIOBOX
 

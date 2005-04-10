@@ -70,6 +70,10 @@ public:
 
     const wxArrayLong& GetSubcontrols() const { return m_subControls; }
 
+    // default handling of WM_CTLCOLORxxx: this is public so that wxWindow
+    // could call it
+    virtual WXHBRUSH MSWControlColor(WXHDC pDC);
+
 protected:
     // choose the default border for this window
     virtual wxBorder GetDefaultBorder() const;
@@ -116,33 +120,14 @@ protected:
     // default style for the control include WS_TABSTOP if it AcceptsFocus()
     virtual WXDWORD MSWGetStyle(long style, WXDWORD *exstyle) const;
 
-    // default handling of WM_CTLCOLORxxx
-    virtual WXHBRUSH MSWControlColor(WXHDC pDC);
-
     // call this from the derived class MSWControlColor() if you want to show
     // the control greyed out (and opaque)
     WXHBRUSH MSWControlColorDisabled(WXHDC pDC);
-
-    // call this from the derived class MSWControlColor() if you want to always
-    // paint the background (as all opaque controls do)
-    WXHBRUSH MSWControlColorSolid(WXHDC pDC)
-    {
-        return DoMSWControlColor(pDC, GetBackgroundColour());
-    }
 
     // common part of the 3 functions above: pass wxNullColour to use the
     // appropriate background colour (meaning ours or our parents) or a fixed
     // one
     virtual WXHBRUSH DoMSWControlColor(WXHDC pDC, wxColour colBg);
-
-    // another WM_CTLCOLOR-related function: override this to return the brush
-    // which should be used to paint the control background by default
-    //
-    // for most controls, the default behaviour of returning 0 and letting the
-    // system do it is correct, but for some -- e.g. checkboxes -- we actually
-    // have to return transparent brush from here to prevent the system from
-    // overwriting background with solid colour
-    virtual WXHBRUSH MSWGetDefaultBgBrush() { return 0; }
 
     // this is a helper for the derived class GetClassDefaultAttributes()
     // implementation: it returns the right colours for the classes which

@@ -2318,55 +2318,57 @@ WXLRESULT wxWindowMSW::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM l
             processed = HandleKillFocus((WXHWND)(HWND)wParam);
             break;
 
-        case WM_PAINT:
-            {
-                if ( wParam )
-                {
-                    // cast to wxWindow is needed for wxUniv
-                    wxPaintDCEx dc((wxWindow *)this, (WXHDC)wParam);
-                    processed = HandlePaint();
-                }
-                else
-                {
-                    processed = HandlePaint();
-                }
-                break;
-            }
-
-#ifdef WM_PRINT
         case WM_PRINTCLIENT:
-            if ( GetParent() &&
-                  GetParent()->MSWPrintChild((wxWindow *)this, wParam, lParam) )
+            // we receive this message when DrawThemeParentBackground() is
+            // called from def window proc of several controls under XP and we
+            // must draw properly themed background here
+            //
+            // note that naively I'd expect filling the client rect with the
+            // brush returned by MSWGetBgBrush() work -- but for some reason it
+            // doesn't and we have to call parents MSWPrintChild() which is
+            // supposed to call DrawThemeBackground() with appropriate params
+            //
+            // also note that in this case lParam == PRF_CLIENT but we're
+            // clearly expected to paint the background and nothing else!
             {
-                processed = true;
+                for ( wxWindow *win = GetParent(); win; win = win->GetParent() )
+                {
+                    if ( win->MSWPrintChild((WXHDC)wParam, (wxWindow *)this) )
+                    {
+                        processed = true;
+                        break;
+                    }
+
+                    if ( win->IsTopLevel() || win->InheritsBackgroundColour() )
+                        break;
+                }
             }
             break;
 
-        case WM_PRINT:
+        case WM_PAINT:
+            if ( wParam )
             {
-                if ( lParam & PRF_ERASEBKGND )
-                    HandleEraseBkgnd((WXHDC)(HDC)wParam);
-
                 wxPaintDCEx dc((wxWindow *)this, (WXHDC)wParam);
 
                 processed = HandlePaint();
             }
+            else // no DC given
+            {
+                processed = HandlePaint();
+            }
             break;
-#endif // WM_PRINT
 
         case WM_CLOSE:
 #ifdef __WXUNIVERSAL__
             // Universal uses its own wxFrame/wxDialog, so we don't receive
             // close events unless we have this.
             Close();
-            processed = true;
-            rc.result = TRUE;
-#else
+#endif // __WXUNIVERSAL__
+
             // don't let the DefWindowProc() destroy our window - we'll do it
             // ourselves in ~wxWindow
             processed = true;
             rc.result = TRUE;
-#endif
             break;
 
         case WM_SHOWWINDOW:
@@ -3708,7 +3710,8 @@ bool wxWindowMSW::HandleDisplayChange()
 bool wxWindowMSW::HandleCtlColor(WXHBRUSH *brush, WXHDC pDC, WXHWND pWnd)
 {
 #if wxUSE_CONTROLS
-    wxWindow *item = FindItemByHWND(pWnd, true);
+    wxControl *item = wxDynamicCast(FindItemByHWND(pWnd, true), wxControl);
+
     if ( item )
         *brush = item->MSWControlColor(pDC);
     else
@@ -3719,11 +3722,6 @@ bool wxWindowMSW::HandleCtlColor(WXHBRUSH *brush, WXHDC pDC, WXHWND pWnd)
 }
 
 #endif // __WXMICROWIN__
-
-WXHBRUSH wxWindowMSW::MSWControlColor(WXHDC WXUNUSED(hDC))
-{
-    return (WXHBRUSH)0;
-}
 
 bool wxWindowMSW::HandlePaletteChanged(WXHWND hWndPalChange)
 {
@@ -3986,93 +3984,70 @@ void wxWindowMSW::OnEraseBackground(wxEraseEvent& event)
 
 
     // do default background painting
-    if ( !DoEraseBackground(*event.GetDC()) )
+    if ( !DoEraseBackground(GetHdcOf(*event.GetDC())) )
     {
         // let the system paint the background
         event.Skip();
     }
 }
 
-bool wxWindowMSW::DoEraseBackground(wxDC& dc)
+bool wxWindowMSW::DoEraseBackground(WXHDC hDC)
 {
-    HBRUSH hBrush = (HBRUSH)MSWGetBgBrush(dc.GetHDC());
-    if ( !hBrush )
+    HBRUSH hbr = (HBRUSH)MSWGetBgBrush(hDC);
+    if ( !hbr )
         return false;
 
-    RECT rc;
-    ::GetClientRect(GetHwnd(), &rc);
-    ::FillRect(GetHdcOf(dc), &rc, hBrush);
+    wxFillRect(GetHwnd(), (HDC)hDC, hbr);
 
     return true;
 }
 
-WXHBRUSH wxWindowMSW::MSWGetSolidBgBrushForChild(wxWindow *child)
-{
-    wxColour col = MSWGetBgColourForChild(child);
-    if ( col.Ok() )
-    {
-        // draw children with the same colour as the parent
-        wxBrush *brush = wxTheBrushList->FindOrCreateBrush(col, wxSOLID);
-
-        return (WXHBRUSH)brush->GetResourceHandle();
-    }
-
-    return 0;
-}
-
-wxColour wxWindowMSW::MSWGetBgColourForChild(wxWindow *child)
+WXHBRUSH
+wxWindowMSW::MSWGetBgBrushForChild(WXHDC WXUNUSED(hDC), wxWindow *child)
 {
     if ( m_hasBgCol )
     {
         // our background colour applies to:
         //  1. this window itself, always
         //  2. all children unless the colour is "not inheritable"
-        //  3. immediate transparent children which should show the same
-        //     background as we do, but not for transparent grandchildren
-        //     which use the background of their immediate parent instead
-        if ( m_inheritBgCol ||
-                child == this ||
+        //  3. even if it is not inheritable, our immediate transparent
+        //     children should still inherit it -- but not any transparent
+        //     children because it would look wrong if a child of non
+        //     transparent child would show our bg colour when the child itself
+        //     does not
+        if ( child == this ||
+                m_inheritBgCol ||
                     (child->HasTransparentBackground() &&
                         child->GetParent() == this) )
         {
-            return GetBackgroundColour();
+            // draw children with the same colour as the parent
+            wxBrush *
+                brush = wxTheBrushList->FindOrCreateBrush(GetBackgroundColour());
+
+            return (WXHBRUSH)GetHbrushOf(*brush);
         }
-    }
-
-    return wxNullColour;
-}
-
-WXHBRUSH wxWindowMSW::MSWGetBgBrushForSelf(wxWindow *parent, WXHDC hDC)
-{
-    return parent->MSWGetBgBrushForChild(hDC, (wxWindow *)this);
-}
-
-WXHBRUSH wxWindowMSW::MSWGetBgBrush(WXHDC hDC)
-{
-    for ( wxWindow *win = (wxWindow *)this; win; win = win->GetParent() )
-    {
-        WXHBRUSH hBrush = MSWGetBgBrushForSelf(win, hDC);
-        if ( hBrush )
-            return hBrush;
-
-        // background is not inherited beyond the windows which have their own
-        // fixed background such as top level windows and notebooks and for
-        // windows for which a custom colour had been explicitly set with
-        // SetOwnBackgroundColour() and so shouldn't affect its children
-        if ( win->ProvidesBackground() ||
-                (win->UseBgCol() && !win->InheritsBackgroundColour()) )
-            break;
     }
 
     return 0;
 }
 
-bool
-wxWindowMSW::MSWPrintChild(wxWindow * WXUNUSED(win),
-                           WXWPARAM WXUNUSED(wParam),
-                           WXLPARAM WXUNUSED(lParam))
+WXHBRUSH wxWindowMSW::MSWGetBgBrush(WXHDC hDC, wxWindow *winToPaint)
 {
-    return false;
+    if ( !winToPaint )
+        winToPaint = this;
+
+    for ( wxWindowMSW *win = this; win; win = win->GetParent() )
+    {
+        WXHBRUSH hBrush = win->MSWGetBgBrushForChild(hDC, winToPaint);
+        if ( hBrush )
+            return hBrush;
+
+        // background is not inherited beyond top level windows
+        if ( win->IsTopLevel() )
+            break;
+    }
+
+    return 0;
 }
 
 // ---------------------------------------------------------------------------

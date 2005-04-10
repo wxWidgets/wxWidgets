@@ -183,9 +183,6 @@ public:
 
       return true;
   }
-
-  virtual WXHBRUSH MSWGetBgBrushForChild(WXHDC hDC, wxWindow *win);
-  virtual wxColour MSWGetBgColourForChild(wxWindow *win);
 #endif // wxUSE_UXTHEME
 
 protected:
@@ -198,6 +195,11 @@ protected:
   // remove one page from the notebook, without deleting
   virtual wxNotebookPage *DoRemovePage(size_t nPage);
 
+  // get the page rectangle for the current notebook size
+  //
+  // returns empty rectangle if an error occurs, do test for it
+  wxRect GetPageSize() const;
+
   // set the size of the given page to fit in the notebook
   void AdjustPageSize(wxNotebookPage *page);
 
@@ -208,8 +210,16 @@ protected:
   // creates the brush to be used for drawing the tab control background
   void UpdateBgBrush();
 
-  // paint themed children background here
-  virtual bool MSWPrintChild(wxWindow *win, WXWPARAM wParam, WXLPARAM lParam);
+  // return the themed brush for painting our children
+  virtual WXHBRUSH MSWGetBgBrushForChild(WXHDC hDC, wxWindow *win);
+
+  // draw child background
+  virtual bool MSWPrintChild(WXHDC hDC, wxWindow *win);
+
+  // common part of QueryBgBitmap() and MSWPrintChild()
+  //
+  // if child == NULL, draw background for the entire notebook itself
+  bool DoDrawBackground(WXHDC hDC, wxWindow *child = NULL);
 #endif // wxUSE_UXTHEME
 
   // the current selection (-1 if none)

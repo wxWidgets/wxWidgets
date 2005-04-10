@@ -340,8 +340,19 @@ WXHBRUSH wxControl::DoMSWControlColor(WXHDC pDC, wxColour colBg)
         ::SetTextColor(hdc, wxColourToRGB(GetForegroundColour()));
     }
 
+    WXHBRUSH hbr = 0;
+    if ( !colBg.Ok() )
+    {
+        hbr = MSWGetBgBrush(pDC);
+
+        // if the control doesn't have any bg colour, foreground colour will be
+        // ignored as the return value would be 0 -- so forcefully give it a
+        // non default background brush in this case
+        if ( !hbr && m_hasFgCol )
+            colBg = GetBackgroundColour();
+    }
+
     // use the background colour override if a valid colour is given
-    WXHBRUSH hbr;
     if ( colBg.Ok() )
     {
         ::SetBkColor(hdc, wxColourToRGB(colBg));
@@ -351,22 +362,20 @@ WXHBRUSH wxControl::DoMSWControlColor(WXHDC pDC, wxColour colBg)
 
         hbr = (WXHBRUSH)brush->GetResourceHandle();
     }
-    else // use our own background colour and recurse upwards if necessary
-    {
-        hbr = MSWGetBgBrush(pDC);
-    }
 
     return hbr;
 }
 
 WXHBRUSH wxControl::MSWControlColor(WXHDC pDC)
 {
-    // by default consider that the controls text shouldn't erase the
-    // background under it (this is true for all static controls, check boxes,
-    // radio buttons, ...)
-    ::SetBkMode((HDC)pDC, TRANSPARENT);
+    wxColour colBg;
 
-    return DoMSWControlColor(pDC, wxNullColour);
+    if ( HasTransparentBackground() )
+        ::SetBkMode((HDC)pDC, TRANSPARENT);
+    else // if the control is opaque it shouldn't use the parents background
+        colBg = GetBackgroundColour();
+
+    return DoMSWControlColor(pDC, colBg);
 }
 
 WXHBRUSH wxControl::MSWControlColorDisabled(WXHDC pDC)

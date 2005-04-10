@@ -358,54 +358,31 @@ public:
     // called when the window is about to be destroyed
     virtual void MSWDestroyWindow();
 
-    // this function should return the brush to paint the window background
-    // with or 0 for the default brush
-    virtual WXHBRUSH MSWControlColor(WXHDC hDC);
 
     // this function should return the brush to paint the children controls
     // background or 0 if this window doesn't impose any particular background
     // on its children
     //
-    // the base class version uses MSWGetBgColourForChild() and returns a solid
-    // brush if we have a non default background colour or 0 otherwise
-    virtual WXHBRUSH MSWGetBgBrushForChild(WXHDC WXUNUSED(hDC), wxWindow *child)
+    // the base class version returns a solid brush if we have a non default
+    // background colour or 0 otherwise
+    virtual WXHBRUSH MSWGetBgBrushForChild(WXHDC hDC, wxWindow *child);
+
+    // return the background brush to use for painting the given window by
+    // quering the parent windows via their MSWGetBgBrushForChild() recursively
+    //
+    // winToPaint is normally NULL meaning this window itself, but it can also
+    // be a child of this window which is used by the static box and could be
+    // potentially useful for other transparent controls
+    WXHBRUSH MSWGetBgBrush(WXHDC hDC, wxWindow *winToPaint = NULL);
+
+    // gives the parent the possibility to draw its children background, e.g.
+    // this is used by wxNotebook to do it using DrawThemeBackground()
+    //
+    // return true if background was drawn, false otherwise
+    virtual bool MSWPrintChild(WXHDC WXUNUSED(hDC), wxWindow * WXUNUSED(child))
     {
-        return MSWGetSolidBgBrushForChild(child);
+        return false;
     }
-
-    // return the background colour of this window under the given child
-    // (possible grand child)
-    //
-    // this is a hack as if the background is themed, there is no single colour
-    // representing it, but sometimes we can't use the pattern brush returned
-    // by MSWGetBgBrushForChild() anyhow and then this function is used as
-    // fallback
-    //
-    // the base class version returns bg colour if it had been explicitely set
-    // or wxNullColour otherwise
-    virtual wxColour MSWGetBgColourForChild(wxWindow *child);
-
-    // convenience function: returns a solid brush of the colour returned by
-    // MSWGetBgColourForChild() or 0
-    WXHBRUSH MSWGetSolidBgBrushForChild(wxWindow *child);
-
-    // normally just calls MSWGetBgBrushForChild() on the parent window but may
-    // be overridden if the default background brush is not suitable for some
-    // reason (e.g. wxStaticBox uses MSWGetSolidBgBrushForChild() instead)
-    virtual WXHBRUSH MSWGetBgBrushForSelf(wxWindow *parent, WXHDC hDC);
-
-    // return the background brush to use for this window by quering the parent
-    // windows via their MSWGetBgBrushForChild() recursively
-    WXHBRUSH MSWGetBgBrush(WXHDC hDC);
-
-    // overriding this method gives the parent window the opportunity to
-    // process WM_PRINTCLIENT for its children: this is currently used by
-    // wxNotebook to draw themed background for them
-    //
-    // return true if the message was processed or false to use default logic
-    // for it (currently this means handling it just as WM_PAINT i.e. render
-    // the control into the provided DC)
-    virtual bool MSWPrintChild(wxWindow *win, WXWPARAM wParam, WXLPARAM lParam);
 
 
     // Responds to colour changes: passes event on to children.
@@ -422,7 +399,7 @@ public:
 
     // virtual function for implementing internal idle
     // behaviour
-    virtual void OnInternalIdle() ;
+    virtual void OnInternalIdle();
 
 protected:
     // the window handle
@@ -485,8 +462,8 @@ protected:
 
 
     // default OnEraseBackground() implementation, return true if we did erase
-    // the background, false otherwise
-    bool DoEraseBackground(wxDC& dc);
+    // the background, false otherwise (i.e. the system should erase it)
+    bool DoEraseBackground(WXHDC hDC);
 
 private:
     // common part of all ctors

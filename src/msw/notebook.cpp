@@ -180,25 +180,6 @@ IMPLEMENT_DYNAMIC_CLASS(wxNotebookPageInfo, wxObject )
 #endif
 IMPLEMENT_DYNAMIC_CLASS(wxNotebookEvent, wxNotifyEvent)
 
-// ----------------------------------------------------------------------------
-// local functions
-// ----------------------------------------------------------------------------
-
-#ifndef __WXWINCE__
-// apparently DrawThemeBackground() modifies the rect passed to it and if we
-// don't call this function there are some drawing artifacts which are only
-// visible with some non default themes; so modify the rect here so that it
-// still paints the correct area
-static void AdjustRectForThemeBg(RECT& rc)
-{
-    // magic numbers needed to compensate for DrawThemeBackground()
-    rc.left   -= 2;
-    rc.top    -= 2;
-    rc.right  += 4;
-    rc.bottom += 5;
-}
-#endif
-
 // ============================================================================
 // implementation
 // ============================================================================
@@ -264,7 +245,7 @@ bool wxNotebook::Create(wxWindow *parent,
     if (style & wxNB_FLAT)
         style |= wxBORDER_SUNKEN;
 #endif
-    
+
     // comctl32.dll 6.0 doesn't support non-top tabs with visual styles (the
     // control is simply not rendered correctly), so disable them in this case
     const int verComCtl32 = wxApp::GetComCtl32Version();
@@ -361,7 +342,7 @@ WXDWORD wxNotebook::MSWGetStyle(long style, WXDWORD *exstyle) const
     else if ( style & wxNB_LEFT )
         tabStyle |= TCS_VERTICAL;
     else if ( style & wxNB_RIGHT )
-        tabStyle |= TCS_VERTICAL | TCS_RIGHT; 
+        tabStyle |= TCS_VERTICAL | TCS_RIGHT;
 
     // ex style
     if ( exstyle )
@@ -485,6 +466,29 @@ void wxNotebook::SetImageList(wxImageList* imageList)
 // wxNotebook size settings
 // ----------------------------------------------------------------------------
 
+wxRect wxNotebook::GetPageSize() const
+{
+    wxRect r;
+
+    RECT rc;
+    ::GetClientRect(GetHwnd(), &rc);
+
+    // This check is to work around a bug in TabCtrl_AdjustRect which will
+    // cause a crash on win2k, or on XP with themes disabled, if the
+    // wxNB_MULTILINE style is used and the rectangle is very small, (such as
+    // when the notebook is first created.)  The value of 20 is just
+    // arbitrarily chosen, if there is a better way to determine this value
+    // then please do so.  --RD
+    if ( !HasFlag(wxNB_MULTILINE) || (rc.right > 20 && rc.bottom > 20) )
+    {
+        TabCtrl_AdjustRect(m_hwnd, false, &rc);
+
+        wxCopyRECTToRect(rc, r);
+    }
+
+    return r;
+}
+
 void wxNotebook::SetPageSize(const wxSize& size)
 {
     // transform the page size into the notebook size
@@ -543,23 +547,10 @@ void wxNotebook::AdjustPageSize(wxNotebookPage *page)
 {
     wxCHECK_RET( page, _T("NULL page in wxNotebook::AdjustPageSize") );
 
-    RECT rc;
-    rc.left =
-    rc.top = 0;
-
-    // get the page size from the notebook size
-    GetSize((int *)&rc.right, (int *)&rc.bottom);
-
-    // This check is to work around a bug in TabCtrl_AdjustRect which will
-    // cause a crash on win2k, or on XP with themes disabled, if the
-    // wxNB_MULTILINE style is used and the rectangle is very small, (such as
-    // when the notebook is first created.)  The value of 20 is just
-    // arbitrarily chosen, if there is a better way to determine this value
-    // then please do so.  --RD
-    if (rc.right > 20 && rc.bottom > 20)
+    const wxRect r = GetPageSize();
+    if ( !r.IsEmpty() )
     {
-        TabCtrl_AdjustRect(m_hwnd, false, &rc);
-        page->SetSize(rc.left, rc.top, rc.right - rc.left, rc.bottom - rc.top);
+        page->SetSize(r);
     }
 }
 
@@ -969,35 +960,63 @@ void wxNotebook::OnNavigationKey(wxNavigationKeyEvent& event)
 
 #if wxUSE_UXTHEME
 
+bool wxNotebook::DoDrawBackground(WXHDC hDC, wxWindow *child)
+{
+    wxUxThemeHandle theme(child ? child : this, L"TAB");
+    if ( !theme )
+        return false;
+
+    // get the notebook client rect (we're not interested in drawing tabs
+    // themselves)
+    wxRect r = GetPageSize();
+    if ( r.IsEmpty() )
+        return false;
+
+    RECT rc;
+    wxCopyRectToRECT(r, rc);
+
+    // map rect to the coords of the window we're drawing in
+    if ( child )
+        ::MapWindowPoints(GetHwnd(), GetHwndOf(child), (POINT *)&rc, 2);
+
+
+    // apparently DrawThemeBackground() modifies the rect passed to it and if we
+    // don't do these adjustments, there are some drawing artifacts which are
+    // only visible with some non default themes; so modify the rect here using
+    // the magic numbers below so that it still paints the correct area
+    rc.left   -= 2;
+    rc.top    -= 2;
+    rc.right  += 4;
+    rc.bottom += 5;
+
+
+    wxUxThemeEngine::Get()->DrawThemeBackground
+                            (
+                                theme,
+                                hDC,
+                                9 /* TABP_PANE */,
+                                0,
+                                &rc,
+                                NULL
+                            );
+
+    return true;
+}
+
 WXHBRUSH wxNotebook::QueryBgBitmap()
 {
-    RECT rc;
-    ::GetClientRect(GetHwnd(), &rc);
-
-    // adjust position
-    TabCtrl_AdjustRect(GetHwnd(), false, &rc);
+    wxRect r = GetPageSize();
+    if ( r.IsEmpty() )
+        return 0;
 
     WindowHDC hDC(GetHwnd());
     MemoryHDC hDCMem(hDC);
-    CompatibleBitmap hBmp(hDC, rc.right, rc.bottom);
+    CompatibleBitmap hBmp(hDC, r.x + r.width, r.y + r.height);
 
     SelectInHDC selectBmp(hDCMem, hBmp);
 
-    wxUxThemeHandle theme(this, L"TAB");
-    if ( theme )
-    {
-        AdjustRectForThemeBg(rc);
-
-        wxUxThemeEngine::Get()->DrawThemeBackground
-        (
-            theme,
-            (WXHDC)hDCMem,
-            9 /* TABP_PANE */,
-            0,
-            &rc,
-            NULL
-        );
-    }
+    if ( !DoDrawBackground((WXHDC)(HDC)hDCMem) )
+        return 0;
 
     return (WXHBRUSH)::CreatePatternBrush(hBmp);
 }
@@ -1011,7 +1030,7 @@ void wxNotebook::UpdateBgBrush()
     {
         m_hbrBackground = QueryBgBitmap();
     }
-    else // no themes
+    else // no themes or we've got user-defined solid colour
     {
         m_hbrBackground = NULL;
     }
@@ -1039,63 +1058,13 @@ WXHBRUSH wxNotebook::MSWGetBgBrushForChild(WXHDC hDC, wxWindow *win)
     return wxNotebookBase::MSWGetBgBrushForChild(hDC, win);
 }
 
-wxColour wxNotebook::MSWGetBgColourForChild(wxWindow *WXUNUSED(win))
+bool wxNotebook::MSWPrintChild(WXHDC hDC, wxWindow *child)
 {
-    if ( m_hasBgCol )
-        return GetBackgroundColour();
+    // solid background colour overrides themed background drawing
+    if ( !UseBgCol() && DoDrawBackground(hDC, child) )
+        return true;
 
-    // Experimental: don't do this since we're doing it in wxPanel
-#if 0 // defined(__POCKETPC__) || defined(__SMARTPHONE__)
-    // For some reason, the pages will be grey by default.
-    // Normally they should be white on these platforms.
-    // (However the static control backgrounds are painted
-    // in the correct colour, just not the rest of it.)
-    // So let's give WinCE a hint.
-    else if (!win->m_hasBgCol)
-        return *wxWHITE;
-#endif
-
-    if ( !wxUxThemeEngine::GetIfActive() )
-        return wxNullColour;
-
-    return GetThemeBackgroundColour();
-}
-
-bool
-wxNotebook::MSWPrintChild(wxWindow *win,
-                          WXWPARAM wParam,
-                          WXLPARAM WXUNUSED(lParam))
-{
-    // Don't paint the theme for the child if we have a solid background
-    if ( m_hasBgCol )
-        return false;
-
-
-    RECT rc;
-    ::GetClientRect(GetHwnd(), &rc);
-
-    // adjust position
-    TabCtrl_AdjustRect(GetHwnd(), false, &rc);
-
-    wxUxThemeHandle theme(win, L"TAB");
-    if ( theme )
-    {
-        // map from this client to win client coords
-        ::MapWindowPoints(GetHwnd(), GetHwndOf(win), (POINT *)&rc, 2);
-
-        AdjustRectForThemeBg(rc);
-        wxUxThemeEngine::Get()->DrawThemeBackground
-        (
-            theme,
-            (WXHDC)wParam,
-            9 /* TABP_PANE */,
-            0,
-            &rc,
-            NULL
-        );
-    }
-
-    return true;
+    return wxNotebookBase::MSWPrintChild(hDC, child);
 }
 
 #endif // wxUSE_UXTHEME

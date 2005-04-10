@@ -56,10 +56,6 @@ public:
     // send a notification event, return true if processed
     bool SendClickEvent();
 
-    virtual void ApplyParentThemeBackground(const wxColour& bg)
-        { SetBackgroundColour(bg); }
-
-
 protected:
     virtual wxSize DoGetBestSize() const;
 

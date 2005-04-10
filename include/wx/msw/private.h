@@ -722,6 +722,14 @@ extern WXDLLEXPORT wxSize wxGetHiconSize(HICON hicon);
 // Lines are drawn differently for WinCE and regular WIN32
 WXDLLEXPORT void wxDrawLine(HDC hdc, int x1, int y1, int x2, int y2);
 
+// fill the client rect of the given window on the provided dc using this brush
+inline void wxFillRect(HWND hwnd, HDC hdc, HBRUSH hbr)
+{
+    RECT rc;
+    ::GetClientRect(hwnd, &rc);
+    ::FillRect(hdc, &rc, hbr);
+}
+
 // ----------------------------------------------------------------------------
 // 32/64 bit helpers
 // ----------------------------------------------------------------------------

@@ -80,11 +80,7 @@ public:
 
 #ifdef __WXUNIVERSAL__
     virtual bool IsCanvasWindow() const { return true; }
-    virtual bool ProvidesBackground() const { return true; }
 #endif
-
-    virtual void ApplyParentThemeBackground(const wxColour& bg)
-        { SetBackgroundColour(bg); }
 
 
     WX_DECLARE_CONTROL_CONTAINER();

@@ -482,14 +482,6 @@ public:
     virtual void SetThemeEnabled(bool enableTheme) { m_themeEnabled = enableTheme; }
     virtual bool GetThemeEnabled() const { return m_themeEnabled; }
 
-        // Returns true if this class should have the background colour
-        // changed to match the parent window's theme.  For example when a
-        // page is added to a notebook it and its children may need to have
-        // the colours adjusted depending on the current theme settings, but
-        // not all windows/controls can do this without looking wrong.
-    virtual void ApplyParentThemeBackground(const wxColour& WXUNUSED(bg))
-        { /* do nothing */ }
-
 
     // focus and keyboard handling
     // ---------------------------
@@ -767,13 +759,6 @@ public:
     {
         return m_hasBgCol;
     }
-
-    // if the window shouldn't inherit its colour from the parent, override
-    // this function to return true
-    //
-    // this is currently only used by wxMSW and wxUniv but should be useful for
-    // the other ports too
-    virtual bool ProvidesBackground() const { return false; }
 
     virtual bool SetForegroundColour(const wxColour& colour);
     void SetOwnForegroundColour(const wxColour& colour)

@@ -201,26 +201,14 @@ wxSize wxCheckBox::DoGetBestSize() const
     return wxSize(wCheckbox, hCheckbox);
 }
 
-WXHBRUSH wxCheckBox::MSWGetDefaultBgBrush()
-{
-    return ::GetStockObject(NULL_BRUSH);
-}
-
 void wxCheckBox::SetValue(bool val)
 {
-    if (val)
-    {
-        Set3StateValue(wxCHK_CHECKED);
-    }
-    else
-    {
-        Set3StateValue(wxCHK_UNCHECKED);
-    }
+    Set3StateValue(val ? wxCHK_CHECKED : wxCHK_UNCHECKED);
 }
 
 bool wxCheckBox::GetValue() const
 {
-    return (Get3StateValue() != wxCHK_UNCHECKED);
+    return Get3StateValue() != wxCHK_UNCHECKED;
 }
 
 void wxCheckBox::Command(wxCommandEvent& event)
@@ -245,13 +233,7 @@ void wxCheckBox::DoSet3StateValue(wxCheckBoxState state)
 
 wxCheckBoxState wxCheckBox::DoGet3StateValue() const
 {
-#ifdef __WIN32__
     return (wxCheckBoxState) ::SendMessage(GetHwnd(), BM_GETCHECK, 0, 0);
-#else
-    return (wxCheckBoxState) ((::SendMessage(GetHwnd(), BM_GETCHECK, 0, 0)
-        & 0x001) == 0x001);
-#endif
-
 }
 
 #endif // wxUSE_CHECKBOX

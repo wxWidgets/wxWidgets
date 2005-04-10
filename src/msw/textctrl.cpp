@@ -1891,7 +1891,7 @@ WXHBRUSH wxTextCtrl::MSWControlColor(WXHDC hDC)
     if ( !IsEnabled() && !HasFlag(wxTE_MULTILINE) )
         return MSWControlColorDisabled(hDC);
 
-    return wxTextCtrlBase::MSWControlColorSolid(hDC);
+    return wxTextCtrlBase::MSWControlColor(hDC);
 }
 
 bool wxTextCtrl::AdjustSpaceLimit()

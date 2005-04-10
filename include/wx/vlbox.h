@@ -189,10 +189,6 @@ public:
     void SetSelectionBackground(const wxColour& col);
 
 
-    virtual void ApplyParentThemeBackground(const wxColour& WXUNUSED(bg))
-        { /* do nothing */ }
-
-
     virtual wxVisualAttributes GetDefaultAttributes() const
     {
         return GetClassDefaultAttributes(GetWindowVariant());

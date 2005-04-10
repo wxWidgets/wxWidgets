@@ -639,7 +639,7 @@ WXHBRUSH wxChoice::MSWControlColor(WXHDC hDC)
     if ( !IsEnabled() )
         return MSWControlColorDisabled(hDC);
 
-    return wxChoiceBase::MSWControlColorSolid(hDC);
+    return wxChoiceBase::MSWControlColor(hDC);
 }
 
 #endif // wxUSE_CHOICE && !(__SMARTPHONE__ && __WXWINCE__)

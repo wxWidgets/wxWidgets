@@ -123,7 +123,7 @@ bool wxStaticBox::Create(wxWindow *parent,
 
 #ifndef __WXWINCE__
     Connect(wxEVT_PAINT, wxPaintEventHandler(wxStaticBox::OnPaint));
-#endif
+#endif // !__WXWINCE__
 
     return true;
 }
@@ -161,9 +161,19 @@ wxSize wxStaticBox::DoGetBestSize() const
     return wxSize(wBox, hBox);
 }
 
+void wxStaticBox::GetBordersForSizer(int *borderTop, int *borderOther) const
+{
+    wxStaticBoxBase::GetBordersForSizer(borderTop, borderOther);
+
+    // need extra space, don't know how much but this seems to be enough
+    *borderTop += GetCharHeight()/3;
+}
+
+// all the hacks below are not necessary for WinCE
+#ifndef __WXWINCE__
+
 WXLRESULT wxStaticBox::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
 {
-#ifndef __WXWINCE__
     if ( nMsg == WM_NCHITTEST )
     {
         // This code breaks some other processing such as enter/leave tracking
@@ -174,8 +184,8 @@ WXLRESULT wxStaticBox::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lPar
             s_useHTClient = wxSystemOptions::GetOptionInt(wxT("msw.staticbox.htclient"));
         if (s_useHTClient == 1)
         {
-            int xPos = LOWORD(lParam);  // horizontal position of cursor
-            int yPos = HIWORD(lParam);  // vertical position of cursor
+            int xPos = GET_X_LPARAM(lParam);
+            int yPos = GET_Y_LPARAM(lParam);
 
             ScreenToClient(&xPos, &yPos);
 
@@ -185,18 +195,21 @@ WXLRESULT wxStaticBox::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lPar
                 return (long)HTCLIENT;
         }
     }
-#endif // !__WXWINCE__
 
     return wxControl::MSWWindowProc(nMsg, wParam, lParam);
 }
 
-void wxStaticBox::GetBordersForSizer(int *borderTop, int *borderOther) const
-{
-    wxStaticBoxBase::GetBordersForSizer(borderTop, borderOther);
+// ----------------------------------------------------------------------------
+// static box drawing
+// ----------------------------------------------------------------------------
 
-    // need extra space, don't know how much but this seems to be enough
-    *borderTop += GetCharHeight()/3;
-}
+/*
+   We draw the static box ourselves because it's the only way to prevent it
+   from flickering horribly on resize (because everything inside the box is
+   erased twice: once when the box itself is repainted and second time when
+   the control inside it is repainted) without using WS_EX_TRANSPARENT style as
+   we used to do and which resulted in other problems.
+ */
 
 // MSWGetRegionWithoutSelf helper: removes the given rectangle from region
 static inline void
@@ -279,42 +292,60 @@ WXHRGN wxStaticBox::MSWGetRegionWithoutChildren()
     return (WXHRGN)hrgn;
 }
 
-// helper for OnPaint()
+// helper for OnPaint(): really erase the background, i.e. do it even if we
+// don't have any non default brush for doing it (DoEraseBackground() doesn't
+// do anything in such case)
 void wxStaticBox::PaintBackground(wxDC& dc, const RECT& rc)
 {
-    // note that static box should be transparent, so it should show its
-    // parents colour, not its own
-    wxWindow * const parent = GetParent();
+    // note that we do not use the box background colour here, it shouldn't
+    // apply to its interior for several reasons:
+    //  1. wxGTK doesn't do it
+    //  2. controls inside the box don't get correct bg colour because they
+    //     are not our children so we'd have some really ugly colour mix if
+    //     we did it
+    //  3. this is backwards compatible behaviour and some people rely on it,
+    //     see http://groups.google.com/groups?selm=4252E932.3080801%40able.es
+    wxWindow *parent = GetParent();
+    HBRUSH hbr = (HBRUSH)parent->MSWGetBgBrush(dc.GetHDC(), this);
 
-    HBRUSH hbr = (HBRUSH)parent->MSWGetBgBrush(dc.GetHDC());
+    // if there is no special brush for painting this control, just use the
+    // solid background colour
+    wxBrush brush;
     if ( !hbr )
     {
-        wxBrush *brush =
-            wxTheBrushList->FindOrCreateBrush(parent->GetBackgroundColour());
-        if ( brush )
-            hbr = GetHbrushOf(*brush);
+        brush = wxBrush(parent->GetBackgroundColour());
+        hbr = GetHbrushOf(brush);
     }
 
-    if ( hbr )
-        ::FillRect(GetHdcOf(dc), &rc, hbr);
+    ::FillRect(GetHdcOf(dc), &rc, hbr);
 }
 
 void wxStaticBox::OnPaint(wxPaintEvent& WXUNUSED(event))
 {
-    wxPaintDC dc(this);
     RECT rc;
     ::GetClientRect(GetHwnd(), &rc);
 
-    // draw the entire box in a memory DC, but only blit the bits not redrawn
-    // either by our children windows nor by FillRect() painting the background
-    // below
+    // draw the entire box in a memory DC
     wxMemoryDC memdc;
     wxBitmap bitmap(rc.right, rc.bottom);
     memdc.SelectObject(bitmap);
 
     PaintBackground(memdc, rc);
+
+    // NB: neither setting the text colour nor transparent background mode
+    //     doesn't change anything: the static box def window proc still
+    //     draws the label in its own colours, so if we want to have control
+    //     over this we really have to draw everything ourselves
     MSWDefWindowProc(WM_PAINT, (WPARAM)GetHdcOf(memdc), 0);
 
+
+    // now only blit the static box border itself, not the interior, to avoid
+    // flicker when background is drawn below
+    //
+    // note that it seems to be faster to do 4 small blits here and then paint
+    // directly into wxPaintDC than painting background in wxMemoryDC and then
+    // blitting everything at once to wxPaintDC, this is why we do it like this
+    wxPaintDC dc(this);
     int borderTop, border;
     GetBordersForSizer(&borderTop, &border);
 
@@ -331,20 +362,22 @@ void wxStaticBox::OnPaint(wxPaintEvent& WXUNUSED(event))
     dc.Blit(rc.right - border, 0, rc.right, rc.bottom,
             &memdc, rc.right - border, 0);
 
+
+    // create the region excluding box children
     AutoHRGN hrgn((HRGN)MSWGetRegionWithoutChildren());
     RECT rcWin;
     ::GetWindowRect(GetHwnd(), &rcWin);
     ::OffsetRgn(hrgn, -rcWin.left, -rcWin.top);
 
-
-    // now remove the box itself
+    // and also the box itself
     MSWGetRegionWithoutSelf((WXHRGN) hrgn, rc.right, rc.bottom);
+    HDCClipper clipToBg(GetHdcOf(dc), hrgn);
 
-    // and paint the inside of the box (excluding child controls)
-    ::SelectClipRgn(GetHdcOf(dc), hrgn);
+    // paint the inside of the box (excluding box itself and child controls)
     PaintBackground(dc, rc);
-    ::SelectClipRgn(GetHdcOf(dc), NULL);
 }
+
+#endif // !__WXWINCE__
 
 #endif // wxUSE_STATBOX
 

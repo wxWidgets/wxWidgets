@@ -137,9 +137,6 @@ public:
     int GetNumVer() const;
     int GetNumHor() const;
 
-    virtual void ApplyParentThemeBackground(const wxColour& bg)
-        { SetBackgroundColour(bg); }
-
 protected:
     // we can't compute our best size before the items are added to the control
     virtual void SetInitialBestSize(const wxSize& WXUNUSED(size)) { }

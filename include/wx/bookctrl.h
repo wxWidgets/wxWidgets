@@ -179,11 +179,6 @@ public:
         }
     }
 
-    // override some base class virtuals
-    virtual void ApplyParentThemeBackground(const wxColour& bg)
-        { SetBackgroundColour(bg); }
-    virtual bool ProvidesBackground() const { return true; }
-
 protected:
     // remove the page and return a pointer to it
     virtual wxWindow *DoRemovePage(size_t page) = 0;

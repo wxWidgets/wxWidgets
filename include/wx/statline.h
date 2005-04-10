@@ -48,8 +48,6 @@ public:
 
     // overriden base class virtuals
     virtual bool AcceptsFocus() const { return false; }
-    virtual void ApplyParentThemeBackground(const wxColour& bg)
-        { SetBackgroundColour(bg); }
 
 protected:
     // set the right size for the right dimension

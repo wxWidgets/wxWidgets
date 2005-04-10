@@ -49,6 +49,8 @@ protected:
     virtual wxBorder GetDefaultBorder() const;
 
     virtual WXDWORD MSWGetStyle(long style, WXDWORD *exstyle) const;
+
+#ifndef __WXWINCE__
     virtual WXLRESULT MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam);
 
     // return the region with all the windows inside this static box excluded
@@ -58,12 +60,13 @@ protected:
     // region which is embedded in a rectangle (0, 0)-(w, h)
     virtual void MSWGetRegionWithoutSelf(WXHRGN hrgn, int w, int h);
 
-    // paint the given rectangle with our background colour
+    // paint the given rectangle with our background brush/colour
     void PaintBackground(wxDC& dc, const struct tagRECT& rc);
 
     void OnPaint(wxPaintEvent& event);
 
     DECLARE_DYNAMIC_CLASS_NO_COPY(wxStaticBox)
+#endif // !__WXWINCE__
 };
 
 #endif // _WX_MSW_STATBOX_H_
