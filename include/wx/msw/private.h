@@ -244,15 +244,26 @@ struct WXDLLEXPORT wxCOLORMAP
 extern wxCOLORMAP *wxGetStdColourMap();
 
 // create a wxRect from Windows RECT
-inline wxRect wxRectFromRECT(const RECT& r)
+inline wxRect wxRectFromRECT(const RECT& rc)
 {
-    return wxRect(r.left, r.top, r.right - r.left, r.bottom - r.top);
+    return wxRect(rc.left, rc.top, rc.right - rc.left, rc.bottom - rc.top);
 }
 
 // copy Windows RECT to our wxRect
-inline void wxCopyRECTToRect(const RECT& r, wxRect& rect)
+inline void wxCopyRECTToRect(const RECT& rc, wxRect& rect)
 {
-    rect = wxRectFromRECT(r);
+    rect = wxRectFromRECT(rc);
+}
+
+// and vice versa
+inline void wxCopyRectToRECT(const wxRect& rect, RECT& rc)
+{
+    // note that we don't use wxRect::GetRight() as it is one of compared to
+    // wxRectFromRECT() above
+    rc.top = rect.y;
+    rc.left = rect.x;
+    rc.right = rect.x + rect.width;
+    rc.bottom = rect.y + rect.height;
 }
 
 // translations between HIMETRIC units (which OLE likes) and pixels (which are
