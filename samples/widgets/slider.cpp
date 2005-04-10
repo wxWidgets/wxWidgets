@@ -76,10 +76,10 @@ enum
 // sides radiobox values
 enum
 {
-    StaticSides_Top,
-    StaticSides_Bottom,
-    StaticSides_Left,
-    StaticSides_Right
+    SliderTicks_Top,
+    SliderTicks_Bottom,
+    SliderTicks_Left,
+    SliderTicks_Right
 };
 
 // ----------------------------------------------------------------------------
@@ -142,7 +142,6 @@ protected:
 
     // the check/radio boxes for styles
     wxCheckBox *m_chkLabels,
-               *m_chkVert,
                *m_chkInverse,
                *m_chkTicks,
                *m_chkBothSides;
@@ -210,7 +209,6 @@ SliderWidgetsPage::SliderWidgetsPage(wxBookCtrl *book,
     m_min = 0;
     m_max = 100;
 
-    m_chkVert =
     m_chkInverse =
     m_chkTicks =
     m_chkLabels =
@@ -227,7 +225,6 @@ SliderWidgetsPage::SliderWidgetsPage(wxBookCtrl *book,
     wxStaticBox *box = new wxStaticBox(this, wxID_ANY, _T("&Set style"));
     wxSizer *sizerLeft = new wxStaticBoxSizer(box, wxVERTICAL);
 
-    m_chkVert = CreateCheckBoxAndAddToSizer(sizerLeft, _T("&Vertical"));
     m_chkInverse = CreateCheckBoxAndAddToSizer(sizerLeft, _T("&Inverse"));
     m_chkTicks = CreateCheckBoxAndAddToSizer(sizerLeft, _T("Show &ticks"));
     m_chkLabels = CreateCheckBoxAndAddToSizer(sizerLeft, _T("Show &labels"));
@@ -326,24 +323,17 @@ SliderWidgetsPage::SliderWidgetsPage(wxBookCtrl *book,
 
 void SliderWidgetsPage::Reset()
 {
-    m_chkVert->SetValue(false);
     m_chkInverse->SetValue(false);
     m_chkTicks->SetValue(true);
     m_chkLabels->SetValue(true);
     m_chkBothSides->SetValue(false);
 
-    m_radioSides->SetSelection(StaticSides_Top);
+    m_radioSides->SetSelection(SliderTicks_Top);
 }
 
 void SliderWidgetsPage::CreateSlider()
 {
     int flags = 0;
-
-    bool isVert = m_chkVert->GetValue();
-    if ( isVert )
-        flags |= wxSL_VERTICAL;
-    else
-        flags |= wxSL_HORIZONTAL;
 
     if ( m_chkInverse->GetValue() )
     {
@@ -362,18 +352,22 @@ void SliderWidgetsPage::CreateSlider()
 
     switch ( m_radioSides->GetSelection() )
     {
-        case StaticSides_Top:
+        case SliderTicks_Top:
             flags |= wxSL_TOP;
             break;
-        case StaticSides_Left:
+
+        case SliderTicks_Left:
             flags |= wxSL_LEFT;
             break;
-        case StaticSides_Bottom:
+
+        case SliderTicks_Bottom:
             flags |= wxSL_BOTTOM;
             break;
-        case StaticSides_Right:
+
+        case SliderTicks_Right:
             flags |= wxSL_RIGHT;
             break;
+
         default:
             wxFAIL_MSG(_T("unexpected radiobox selection"));
             // fall through
@@ -410,7 +404,7 @@ void SliderWidgetsPage::CreateSlider()
                             wxDefaultPosition, wxDefaultSize,
                             flags);
 
-    if ( isVert )
+    if ( m_slider->HasFlag(wxSL_VERTICAL) )
     {
         m_sizerSlider->Add(0, 0, 1);
         m_sizerSlider->Add(m_slider, 0, wxGROW | wxALL, 5);
@@ -544,11 +538,11 @@ void SliderWidgetsPage::OnUpdateUIMinMaxButton(wxUpdateUIEvent& event)
 
 void SliderWidgetsPage::OnUpdateUIResetButton(wxUpdateUIEvent& event)
 {
-    event.Enable( m_chkVert->GetValue() ||
-                  m_chkInverse->GetValue() ||
+    event.Enable( m_chkInverse->GetValue() ||
                   !m_chkTicks->GetValue() ||
                   !m_chkLabels->GetValue() ||
-                  m_chkBothSides->GetValue() );
+                  m_chkBothSides->GetValue() ||
+                  m_radioSides->GetSelection() != SliderTicks_Top );
 }
 
 void SliderWidgetsPage::OnCheckOrRadioBox(wxCommandEvent& WXUNUSED(event))
