@@ -161,6 +161,35 @@ wxSlider::Create(wxWindow *parent,
                  const wxValidator& validator,
                  const wxString& name)
 {
+    // our styles are redundant: wxSL_LEFT/RIGHT imply wxSL_VERTICAL and
+    // wxSL_TOP/BOTTOM imply wxSL_HORIZONTAL, but for backwards compatibility
+    // reasons we can't really change it, instead try to infer the orientation
+    // from the flags given to us here
+    switch ( style & (wxSL_LEFT | wxSL_RIGHT | wxSL_TOP | wxSL_BOTTOM) )
+    {
+        case wxSL_LEFT:
+        case wxSL_RIGHT:
+            style |= wxSL_VERTICAL;
+            break;
+
+        case wxSL_TOP:
+        case wxSL_BOTTOM:
+            style |= wxSL_HORIZONTAL;
+            break;
+
+        case 0:
+            // no specific direction, do we have at least the orientation?
+            if ( !(style & (wxSL_HORIZONTAL | wxSL_VERTICAL)) )
+            {
+                // no, choose default
+                style |= wxSL_BOTTOM | wxSL_HORIZONTAL;
+            }
+    };
+
+    wxASSERT_MSG( !(style & wxSL_VERTICAL) | !(style & wxSL_HORIZONTAL),
+                    _T("incompatible slider direction and orientation") );
+
+
     // initialize everything
     if ( !CreateControl(parent, id, pos, size, style, validator, name) )
         return false;
@@ -223,13 +252,9 @@ WXDWORD wxSlider::MSWGetStyle(long style, WXDWORD *exstyle) const
 {
     WXDWORD msStyle = wxControl::MSWGetStyle(style, exstyle);
 
-    // TBS_HORZ is 0 anyhow, but do mention it explicitly for clarity
+    // TBS_HORZ, TBS_RIGHT and TBS_BOTTOM are 0 but do include them for clarity
     msStyle |= style & wxSL_VERTICAL ? TBS_VERT : TBS_HORZ;
 
-    if ( style & wxSL_AUTOTICKS )
-        msStyle |= TBS_AUTOTICKS ;
-
-    // again, TBS_RIGHT is 0 but do include it for clarity
     if ( style & wxSL_LEFT )
         msStyle |= TBS_LEFT;
     else if ( style & wxSL_RIGHT )
@@ -238,9 +263,13 @@ WXDWORD wxSlider::MSWGetStyle(long style, WXDWORD *exstyle) const
         msStyle |= TBS_TOP;
     else if ( style & wxSL_BOTTOM )
         msStyle |= TBS_BOTTOM;
-    else if ( style & wxSL_BOTH )
+
+    if ( style & wxSL_BOTH )
         msStyle |= TBS_BOTH;
-    else if ( !(style & wxSL_AUTOTICKS) )
+
+    if ( style & wxSL_AUTOTICKS )
+        msStyle |= TBS_AUTOTICKS;
+    else
         msStyle |= TBS_NOTICKS;
 
     if ( style & wxSL_SELRANGE )
