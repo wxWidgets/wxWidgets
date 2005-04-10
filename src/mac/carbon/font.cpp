@@ -41,7 +41,7 @@ public:
         , m_style(wxNORMAL)
         , m_weight(wxNORMAL)
         , m_underlined(FALSE)
-        , m_faceName(wxT("Geneva"))
+        , m_faceName(wxT("applicationfont"))
         , m_encoding(wxFONTENCODING_DEFAULT)
         , m_macFontNum(0)
         , m_macFontSize(0)
@@ -49,8 +49,8 @@ public:
         , m_macATSUStyle(0)
         , m_macATSUFontID(0)
     {
-        Init(10, wxDEFAULT, wxNORMAL, wxNORMAL, FALSE,
-             wxT("Geneva"), wxFONTENCODING_DEFAULT);
+        Init(m_pointSize, m_family, m_style, m_weight,
+             m_underlined, m_faceName, m_encoding);
     }
 
     wxFontRefData(const wxFontRefData& data)
