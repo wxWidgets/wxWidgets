@@ -255,17 +255,22 @@ WXDWORD wxSlider::MSWGetStyle(long style, WXDWORD *exstyle) const
     // TBS_HORZ, TBS_RIGHT and TBS_BOTTOM are 0 but do include them for clarity
     msStyle |= style & wxSL_VERTICAL ? TBS_VERT : TBS_HORZ;
 
-    if ( style & wxSL_LEFT )
-        msStyle |= TBS_LEFT;
-    else if ( style & wxSL_RIGHT )
-        msStyle |= TBS_RIGHT;
-    else if ( style & wxSL_TOP )
-        msStyle |= TBS_TOP;
-    else if ( style & wxSL_BOTTOM )
-        msStyle |= TBS_BOTTOM;
-
     if ( style & wxSL_BOTH )
+    {
+        // this fully specifies the style combined with TBS_VERT/HORZ above
         msStyle |= TBS_BOTH;
+    }
+    else // choose one direction
+    {
+        if ( style & wxSL_LEFT )
+            msStyle |= TBS_LEFT;
+        else if ( style & wxSL_RIGHT )
+            msStyle |= TBS_RIGHT;
+        else if ( style & wxSL_TOP )
+            msStyle |= TBS_TOP;
+        else if ( style & wxSL_BOTTOM )
+            msStyle |= TBS_BOTTOM;
+    }
 
     if ( style & wxSL_AUTOTICKS )
         msStyle |= TBS_AUTOTICKS;
@@ -497,13 +502,16 @@ wxSize wxSlider::DoGetBestSize() const
 {
     // these values are arbitrary
     static const int length = 100;
-    static const int thickness = 26;
+    static const int thumb = 24;
+    static const int ticks = 8;
 
+    int *width;
     wxSize size;
     if ( HasFlag(wxSL_VERTICAL) )
     {
-        size.x = thickness;
+        size.x = thumb;
         size.y = length;
+        width = &size.x;
 
         if ( m_labels )
         {
@@ -520,13 +528,24 @@ wxSize wxSlider::DoGetBestSize() const
     else // horizontal
     {
         size.x = length;
-        size.y = thickness;
+        size.y = thumb;
+        width = &size.y;
 
         if ( m_labels )
         {
             // labels add extra height
             size.y += GetLabelsSize();
         }
+    }
+
+    // need extra space to show ticks
+    if ( HasFlag(wxSL_TICKS) )
+    {
+        *width += ticks;
+
+        // and maybe twice as much if we show them on both sides
+        if ( HasFlag(wxSL_BOTH) )
+            *width += ticks;
     }
 
     return size;
