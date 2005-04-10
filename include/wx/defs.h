@@ -1151,7 +1151,7 @@ enum wxGeometryCentre
 
 enum wxOrientation
 {
-    // don't change the values of th4ese elements, they are used elsewhere
+    // don't change the values of these elements, they are used elsewhere
     wxHORIZONTAL              = 0x0004,
     wxVERTICAL                = 0x0008,
 
