@@ -1512,7 +1512,7 @@ void MyPanel::OnSpinUpdate( wxSpinEvent &event )
     m_text->AppendText(value);
 }
 
-void MyPanel::OnNewText( wxCommandEvent &event )
+void MyPanel::OnNewText( wxCommandEvent& /* event */)
 {
     m_nonWrappingText->SetLabel( wxT("This text is short\nbut still spans\nover three lines.") );
     m_wrappingText->SetLabel( wxT("This text is short but will still be wrapped if it is too long.") );
