@@ -332,7 +332,7 @@ bool wxControl::MSWOnNotify(int idCtrl,
 }
 #endif // Win95
 
-WXHBRUSH wxControl::DoMSWControlColor(WXHDC pDC, wxColour colBg)
+WXHBRUSH wxControl::DoMSWControlColor(WXHDC pDC, wxColour colBg, WXHWND hWnd)
 {
     HDC hdc = (HDC)pDC;
     if ( m_hasFgCol )
@@ -343,7 +343,7 @@ WXHBRUSH wxControl::DoMSWControlColor(WXHDC pDC, wxColour colBg)
     WXHBRUSH hbr = 0;
     if ( !colBg.Ok() )
     {
-        hbr = MSWGetBgBrush(pDC);
+        hbr = MSWGetBgBrush(pDC, hWnd);
 
         // if the control doesn't have any bg colour, foreground colour will be
         // ignored as the return value would be 0 -- so forcefully give it a
@@ -366,7 +366,7 @@ WXHBRUSH wxControl::DoMSWControlColor(WXHDC pDC, wxColour colBg)
     return hbr;
 }
 
-WXHBRUSH wxControl::MSWControlColor(WXHDC pDC)
+WXHBRUSH wxControl::MSWControlColor(WXHDC pDC, WXHWND hWnd)
 {
     wxColour colBg;
 
@@ -375,13 +375,14 @@ WXHBRUSH wxControl::MSWControlColor(WXHDC pDC)
     else // if the control is opaque it shouldn't use the parents background
         colBg = GetBackgroundColour();
 
-    return DoMSWControlColor(pDC, colBg);
+    return DoMSWControlColor(pDC, colBg, hWnd);
 }
 
 WXHBRUSH wxControl::MSWControlColorDisabled(WXHDC pDC)
 {
     return DoMSWControlColor(pDC,
-                             wxSystemSettings::GetColour(wxSYS_COLOUR_BTNFACE));
+                             wxSystemSettings::GetColour(wxSYS_COLOUR_BTNFACE),
+                             GetHWND());
 }
 
 // ---------------------------------------------------------------------------

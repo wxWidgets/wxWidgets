@@ -599,7 +599,7 @@ WXLRESULT wxChoice::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
                 WXHWND hwnd;
                 UnpackCtlColor(wParam, lParam, &hdc, &hwnd);
 
-                WXHBRUSH hbr = MSWControlColor((WXHDC)hdc);
+                WXHBRUSH hbr = MSWControlColor((WXHDC)hdc, hwnd);
                 if ( hbr )
                     return (WXLRESULT)hbr;
                 //else: fall through to default window proc
@@ -634,12 +634,12 @@ bool wxChoice::MSWCommand(WXUINT param, WXWORD WXUNUSED(id))
     return true;
 }
 
-WXHBRUSH wxChoice::MSWControlColor(WXHDC hDC)
+WXHBRUSH wxChoice::MSWControlColor(WXHDC hDC, WXHWND hWnd)
 {
     if ( !IsEnabled() )
         return MSWControlColorDisabled(hDC);
 
-    return wxChoiceBase::MSWControlColor(hDC);
+    return wxChoiceBase::MSWControlColor(hDC, hWnd);
 }
 
 #endif // wxUSE_CHOICE && !(__SMARTPHONE__ && __WXWINCE__)

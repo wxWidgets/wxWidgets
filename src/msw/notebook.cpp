@@ -1036,14 +1036,14 @@ void wxNotebook::UpdateBgBrush()
     }
 }
 
-WXHBRUSH wxNotebook::MSWGetBgBrushForChild(WXHDC hDC, wxWindow *win)
+WXHBRUSH wxNotebook::MSWGetBgBrushForChild(WXHDC hDC, WXHWND hWnd)
 {
     if ( m_hbrBackground )
     {
         // before drawing with the background brush, we need to position it
         // correctly
         RECT rc;
-        ::GetWindowRect(GetHwndOf(win), &rc);
+        ::GetWindowRect((HWND)hWnd, &rc);
 
         ::MapWindowPoints(NULL, GetHwnd(), (POINT *)&rc, 1);
 
@@ -1055,7 +1055,7 @@ WXHBRUSH wxNotebook::MSWGetBgBrushForChild(WXHDC hDC, wxWindow *win)
         return m_hbrBackground;
     }
 
-    return wxNotebookBase::MSWGetBgBrushForChild(hDC, win);
+    return wxNotebookBase::MSWGetBgBrushForChild(hDC, hWnd);
 }
 
 bool wxNotebook::MSWPrintChild(WXHDC hDC, wxWindow *child)

@@ -211,7 +211,7 @@ protected:
   void UpdateBgBrush();
 
   // return the themed brush for painting our children
-  virtual WXHBRUSH MSWGetBgBrushForChild(WXHDC hDC, wxWindow *win);
+  virtual WXHBRUSH MSWGetBgBrushForChild(WXHDC hDC, WXHWND hWnd);
 
   // draw child background
   virtual bool MSWPrintChild(WXHDC hDC, wxWindow *win);

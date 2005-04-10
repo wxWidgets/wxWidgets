@@ -84,7 +84,7 @@ public:
     // MSW only
     virtual bool MSWCommand(WXUINT param, WXWORD id);
     WXLRESULT MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam);
-    virtual WXHBRUSH MSWControlColor(WXHDC hDC);
+    virtual WXHBRUSH MSWControlColor(WXHDC hDC, WXHWND hWnd);
 
 protected:
     virtual void DoMoveWindow(int x, int y, int width, int height);

@@ -3707,13 +3707,13 @@ bool wxWindowMSW::HandleDisplayChange()
 
 #ifndef __WXMICROWIN__
 
-bool wxWindowMSW::HandleCtlColor(WXHBRUSH *brush, WXHDC pDC, WXHWND pWnd)
+bool wxWindowMSW::HandleCtlColor(WXHBRUSH *brush, WXHDC pDC, WXHWND hWnd)
 {
 #if wxUSE_CONTROLS
-    wxControl *item = wxDynamicCast(FindItemByHWND(pWnd, true), wxControl);
+    wxControl *item = wxDynamicCast(FindItemByHWND(hWnd, true), wxControl);
 
     if ( item )
-        *brush = item->MSWControlColor(pDC);
+        *brush = item->MSWControlColor(pDC, hWnd);
     else
 #endif // wxUSE_CONTROLS
         *brush = NULL;
@@ -4003,7 +4003,7 @@ bool wxWindowMSW::DoEraseBackground(WXHDC hDC)
 }
 
 WXHBRUSH
-wxWindowMSW::MSWGetBgBrushForChild(WXHDC WXUNUSED(hDC), wxWindow *child)
+wxWindowMSW::MSWGetBgBrushForChild(WXHDC WXUNUSED(hDC), WXHWND hWnd)
 {
     if ( m_hasBgCol )
     {
@@ -4015,10 +4015,11 @@ wxWindowMSW::MSWGetBgBrushForChild(WXHDC WXUNUSED(hDC), wxWindow *child)
         //     children because it would look wrong if a child of non
         //     transparent child would show our bg colour when the child itself
         //     does not
-        if ( child == this ||
+        wxWindow *win = wxFindWinFromHandle(hWnd);
+        if ( win == this ||
                 m_inheritBgCol ||
-                    (child->HasTransparentBackground() &&
-                        child->GetParent() == this) )
+                    (win && win->HasTransparentBackground() &&
+                        win->GetParent() == this) )
         {
             // draw children with the same colour as the parent
             wxBrush *
@@ -4031,14 +4032,14 @@ wxWindowMSW::MSWGetBgBrushForChild(WXHDC WXUNUSED(hDC), wxWindow *child)
     return 0;
 }
 
-WXHBRUSH wxWindowMSW::MSWGetBgBrush(WXHDC hDC, wxWindow *winToPaint)
+WXHBRUSH wxWindowMSW::MSWGetBgBrush(WXHDC hDC, WXHWND hWndToPaint)
 {
-    if ( !winToPaint )
-        winToPaint = this;
+    if ( !hWndToPaint )
+        hWndToPaint = GetHWND();
 
     for ( wxWindowMSW *win = this; win; win = win->GetParent() )
     {
-        WXHBRUSH hBrush = win->MSWGetBgBrushForChild(hDC, winToPaint);
+        WXHBRUSH hBrush = win->MSWGetBgBrushForChild(hDC, hWndToPaint);
         if ( hBrush )
             return hBrush;
 

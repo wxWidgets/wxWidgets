@@ -1886,12 +1886,12 @@ bool wxTextCtrl::MSWCommand(WXUINT param, WXWORD WXUNUSED(id))
     return true;
 }
 
-WXHBRUSH wxTextCtrl::MSWControlColor(WXHDC hDC)
+WXHBRUSH wxTextCtrl::MSWControlColor(WXHDC hDC, WXHWND hWnd)
 {
     if ( !IsEnabled() && !HasFlag(wxTE_MULTILINE) )
         return MSWControlColorDisabled(hDC);
 
-    return wxTextCtrlBase::MSWControlColor(hDC);
+    return wxTextCtrlBase::MSWControlColor(hDC, hWnd);
 }
 
 bool wxTextCtrl::AdjustSpaceLimit()

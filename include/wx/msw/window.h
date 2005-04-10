@@ -365,15 +365,15 @@ public:
     //
     // the base class version returns a solid brush if we have a non default
     // background colour or 0 otherwise
-    virtual WXHBRUSH MSWGetBgBrushForChild(WXHDC hDC, wxWindow *child);
+    virtual WXHBRUSH MSWGetBgBrushForChild(WXHDC hDC, WXHWND hWnd);
 
     // return the background brush to use for painting the given window by
     // quering the parent windows via their MSWGetBgBrushForChild() recursively
     //
-    // winToPaint is normally NULL meaning this window itself, but it can also
+    // hWndToPaint is normally NULL meaning this window itself, but it can also
     // be a child of this window which is used by the static box and could be
     // potentially useful for other transparent controls
-    WXHBRUSH MSWGetBgBrush(WXHDC hDC, wxWindow *winToPaint = NULL);
+    WXHBRUSH MSWGetBgBrush(WXHDC hDC, WXHWND hWndToPaint = NULL);
 
     // gives the parent the possibility to draw its children background, e.g.
     // this is used by wxNotebook to do it using DrawThemeBackground()

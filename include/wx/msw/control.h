@@ -72,7 +72,7 @@ public:
 
     // default handling of WM_CTLCOLORxxx: this is public so that wxWindow
     // could call it
-    virtual WXHBRUSH MSWControlColor(WXHDC pDC);
+    virtual WXHBRUSH MSWControlColor(WXHDC pDC, WXHWND hWnd);
 
 protected:
     // choose the default border for this window
@@ -127,7 +127,7 @@ protected:
     // common part of the 3 functions above: pass wxNullColour to use the
     // appropriate background colour (meaning ours or our parents) or a fixed
     // one
-    virtual WXHBRUSH DoMSWControlColor(WXHDC pDC, wxColour colBg);
+    virtual WXHBRUSH DoMSWControlColor(WXHDC pDC, wxColour colBg, WXHWND hWnd);
 
     // this is a helper for the derived class GetClassDefaultAttributes()
     // implementation: it returns the right colours for the classes which
