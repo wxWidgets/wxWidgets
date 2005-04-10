@@ -1488,7 +1488,11 @@ void wxMacMLTEControl::SetStringValue( const wxString &str)
 TXNFrameOptions wxMacMLTEControl::FrameOptionsFromWXStyle( long wxStyle )
 {
     TXNFrameOptions frameOptions =
-        kTXNDontDrawCaretWhenInactiveMask | kTXNDoFontSubstitutionMask ;
+        kTXNDontDrawCaretWhenInactiveMask 
+#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_3
+        | kTXNDoFontSubstitutionMask
+#endif
+        ;
 
     if ( ! ( wxStyle & wxTE_NOHIDESEL ) )
         frameOptions |= kTXNDontDrawSelectionWhenInactiveMask ;
