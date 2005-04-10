@@ -3656,7 +3656,15 @@ wxWindowMSW::MSWOnMeasureItem(int id, WXMEASUREITEMSTRUCT *itemStruct)
     {
         wxMenuItem *pMenuItem = (wxMenuItem *)(pMeasureStruct->itemData);
 
-        wxCHECK_MSG( pMenuItem && pMenuItem->IsKindOf(CLASSINFO(wxMenuItem)),
+        // according to Carsten Fuchs the pointer may be NULL under XP if an
+        // MDI child frame is initially maximized, see this for more info:
+        // http://article.gmane.org/gmane.comp.lib.wxwidgets.general/27745
+        //
+        // so silently ignore it instead of asserting
+        if ( !pMenuItem )
+            return false;
+
+        wxCHECK_MSG( wxDynamicCast(pMenuItem, wxMenuItem),
                         false, _T("MSWOnMeasureItem: bad wxMenuItem pointer") );
 
         size_t w, h;
