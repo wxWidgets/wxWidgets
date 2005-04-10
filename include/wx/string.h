@@ -164,7 +164,7 @@ inline int Stricmp(const char *psz1, const char *psz2)
 // ----------------------------------------------------------------------------
 
 // in both cases we need to define wxStdString
-#if wxUSE_STL || defined(wxUSE_STD_STRING)
+#if wxUSE_STL || wxUSE_STD_STRING
 
 #include "wx/beforestd.h"
 #include <string>
@@ -196,7 +196,8 @@ inline int Stricmp(const char *psz1, const char *psz2)
     typedef wxStdString wxStringBase;
 #else // if !wxUSE_STL
 
-#ifndef HAVE_STD_STRING_COMPARE
+#if !defined(HAVE_STD_STRING_COMPARE) && \
+    (!defined(__WX_SETUP_H__) || wxUSE_STL == 0)
     #define HAVE_STD_STRING_COMPARE
 #endif
 
@@ -657,7 +658,7 @@ public:
   // unconditionally add this ctor as it would make wx lib dependent on
   // libstdc++ on some Linux versions which is bad, so instead we ask the
   // client code to define this wxUSE_STD_STRING symbol if they need it
-#ifdef wxUSE_STD_STRING
+#if wxUSE_STD_STRING
   wxString(const wxStdString& s)
       : wxStringBase(s.c_str()) { }
 #endif // wxUSE_STD_STRING
@@ -1184,7 +1185,7 @@ public:
     { return (wxString&)wxStringBase::assign(first, last); }
 
     // string comparison
-#ifndef HAVE_STD_STRING_COMPARE
+#if !defined(HAVE_STD_STRING_COMPARE) 
   int compare(const wxStringBase& str) const;
     // comparison with a substring
   int compare(size_t nStart, size_t nLen, const wxStringBase& str) const;
