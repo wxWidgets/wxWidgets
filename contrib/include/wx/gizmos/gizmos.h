@@ -9,4 +9,12 @@
     #define WXDLLIMPEXP_GIZMOS
 #endif
 
+#ifdef WXMAKINGDLL_GIZMOS_XRC
+    #define WXDLLIMPEXP_GIZMOS_XRC WXEXPORT
+#elif defined(WXUSINGDLL)
+    #define WXDLLIMPEXP_GIZMOS_XRC WXIMPORT
+#else // not making nor using DLL
+    #define WXDLLIMPEXP_GIZMOS
+#endif
+
 #endif

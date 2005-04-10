@@ -398,6 +398,12 @@ dnl ### begin block 20_COND_SHARED_0_USE_GUI_1_WXUSE_LIBTIFF_BUILTIN[wx.bkl] ###
         COND_SHARED_0_USE_GUI_1_WXUSE_LIBTIFF_BUILTIN=""
     fi
     AC_SUBST(COND_SHARED_0_USE_GUI_1_WXUSE_LIBTIFF_BUILTIN)
+dnl ### begin block 20_COND_SHARED_0_USE_XRC_1[../../contrib/build/gizmos/gizmos.bkl] ###
+    COND_SHARED_0_USE_XRC_1="#"
+    if test "x$SHARED" = "x0" -a "x$USE_XRC" = "x1" ; then
+        COND_SHARED_0_USE_XRC_1=""
+    fi
+    AC_SUBST(COND_SHARED_0_USE_XRC_1)
 dnl ### begin block 20_COND_SHARED_0_WXUSE_EXPAT_BUILTIN[wx.bkl] ###
     COND_SHARED_0_WXUSE_EXPAT_BUILTIN="#"
     if test "x$SHARED" = "x0" -a "x$wxUSE_EXPAT" = "xbuiltin" ; then
@@ -434,6 +440,12 @@ dnl ### begin block 20_COND_SHARED_1_USE_GUI_1_USE_OPENGL_1[wx.bkl] ###
         COND_SHARED_1_USE_GUI_1_USE_OPENGL_1=""
     fi
     AC_SUBST(COND_SHARED_1_USE_GUI_1_USE_OPENGL_1)
+dnl ### begin block 20_COND_SHARED_1_USE_XRC_1[../../contrib/build/gizmos/gizmos.bkl] ###
+    COND_SHARED_1_USE_XRC_1="#"
+    if test "x$SHARED" = "x1" -a "x$USE_XRC" = "x1" ; then
+        COND_SHARED_1_USE_XRC_1=""
+    fi
+    AC_SUBST(COND_SHARED_1_USE_XRC_1)
 dnl ### begin block 20_COND_TOOLKIT_[wx.bkl] ###
     COND_TOOLKIT_="#"
     if test "x$TOOLKIT" = "x" ; then

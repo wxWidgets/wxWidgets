@@ -21,7 +21,8 @@
 // XML resource handler for the wxStaticPicture class in wxContrib.
 //
 
-class WXDLLIMPEXP_GIZMOS wxStaticPictureXmlHandler : public wxXmlResourceHandler
+class WXDLLIMPEXP_GIZMOS_XRC wxStaticPictureXmlHandler
+    : public wxXmlResourceHandler
 {
 public:
 
