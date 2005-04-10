@@ -449,6 +449,28 @@ public:
     operator HRGN() const { return (HRGN)GetObject(); }
 };
 
+// class sets the specified clipping region during its life time
+class HDCClipper
+{
+public:
+    HDCClipper(HDC hdc, HRGN hrgn)
+        : m_hdc(hdc)
+    {
+        if ( !::SelectClipRgn(hdc, hrgn) )
+            wxLogLastError(_T("SelectClipRgn"));
+    }
+
+    ~HDCClipper()
+    {
+        ::SelectClipRgn(m_hdc, NULL);
+    }
+
+private:
+    HDC m_hdc;
+
+    DECLARE_NO_COPY_CLASS(HDCClipper)
+};
+
 // when working with global pointers (which is unfortunately still necessary
 // sometimes, e.g. for clipboard) it is important to unlock them exactly as
 // many times as we lock them which just asks for using a "smart lock" class
