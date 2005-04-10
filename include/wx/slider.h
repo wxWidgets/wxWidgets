@@ -22,6 +22,28 @@
 
 #include "wx/control.h"
 
+// ----------------------------------------------------------------------------
+// wxSlider flags
+// ----------------------------------------------------------------------------
+
+#define wxSL_HORIZONTAL      wxHORIZONTAL /* 0x0004 */
+#define wxSL_VERTICAL        wxVERTICAL   /* 0x0008 */
+
+#define wxSL_TICKS           0x0010
+#define wxSL_AUTOTICKS       wxSL_TICKS // we don't support manual ticks
+#define wxSL_LABELS          0x0020
+#define wxSL_TOP             0x0080
+#define wxSL_LEFT            (wxSL_TOP | wxVERTICAL)
+#define wxSL_BOTTOM          0x0200
+#define wxSL_RIGHT           (wxSL_BOTTOM | wxVERTICAL)
+#define wxSL_BOTH            0x0400
+#define wxSL_SELRANGE        0x0800
+#define wxSL_INVERSE         0x1000
+
+// obsolete
+#define wxSL_NOTIFY_DRAG     0x0000
+
+
 extern WXDLLEXPORT_DATA(const wxChar*) wxSliderNameStr;
 
 // ----------------------------------------------------------------------------

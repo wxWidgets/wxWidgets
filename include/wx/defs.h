@@ -1151,10 +1151,11 @@ enum wxGeometryCentre
 
 enum wxOrientation
 {
+    // don't change the values of th4ese elements, they are used elsewhere
     wxHORIZONTAL              = 0x0004,
     wxVERTICAL                = 0x0008,
 
-    wxBOTH                    = (wxVERTICAL | wxHORIZONTAL)
+    wxBOTH                    = wxVERTICAL | wxHORIZONTAL
 };
 
 enum wxDirection
@@ -1442,24 +1443,6 @@ enum wxBorder
 #define wxRB_GROUP          0x0004
 #define wxRB_SINGLE         0x0008
 #define wxRB_USE_CHECKBOX   0x0010 /* alternative native control (wxPalmOS) */
-
-/*
- * wxSlider flags
- */
-#define wxSL_HORIZONTAL      wxHORIZONTAL /*  4 */
-#define wxSL_VERTICAL        wxVERTICAL   /*  8 */
-/*  The next one is obsolete - use scroll events instead */
-#define wxSL_NOTIFY_DRAG     0x0000
-#define wxSL_TICKS           0x0010
-#define wxSL_AUTOTICKS       wxSL_TICKS /*  we don't support manual ticks */
-#define wxSL_LABELS          0x0020
-#define wxSL_LEFT            0x0040
-#define wxSL_TOP             0x0080
-#define wxSL_RIGHT           0x0100
-#define wxSL_BOTTOM          0x0200
-#define wxSL_BOTH            0x0400
-#define wxSL_SELRANGE        0x0800
-#define wxSL_INVERSE         0x1000
 
 /*
  * wxScrollBar flags
