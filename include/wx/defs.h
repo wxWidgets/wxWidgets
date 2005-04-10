@@ -2246,6 +2246,7 @@ enum wxUpdateUI
 #   define wxALL_FILES           gettext_noop("All files (*)|*")
 #endif
 
+#if defined(__CYGWIN__)
 #   if wxUSE_STL || defined(wxUSE_STD_STRING)
          //NASTY HACK because the gethostname in sys/unistd.h which the gnu stl includes
          //and wx builds with by default clash with each other (windows version
@@ -2254,6 +2255,7 @@ enum wxUpdateUI
 #        include <unistd.h>
 #        undef gethostname
 #   endif
+#endif
 
 /*  --------------------------------------------------------------------------- */
 /*  macros that enable wxWidgets apps to be compiled in absence of the */
