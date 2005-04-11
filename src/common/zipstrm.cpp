@@ -1182,25 +1182,21 @@ wxZipInputStream::wxZipInputStream(wxInputStream& stream,
                                    wxMBConv& conv /*=wxConvLocal*/)
   : wxArchiveInputStream(stream, conv)
 {
-#if 1 //WXWIN_COMPATIBILITY_2_6
-    m_allowSeeking = false;
-#endif
-    m_ffile = NULL;
     Init();
 }
 
 #if 1 //WXWIN_COMPATIBILITY_2_6
 
-// Compatibility constructor
+// Part of the compatibility constructor, which has been made inline to
+// avoid a problem with it not being exported by mingw 3.2.3
 //
-wxZipInputStream::wxZipInputStream(const wxString& archive,
-                                   const wxString& file)
-  : wxArchiveInputStream(OpenFile(archive), wxConvLocal)
+void wxZipInputStream::Init(const wxString& file)
 {
     // no error messages
     wxLogNull nolog;
     Init();
     m_allowSeeking = true;
+    m_ffile = wx_static_cast(wxFFileInputStream*, m_parent_i_stream);
     wx__ZipEntryPtr entry;
 
     if (m_ffile->Ok()) {
@@ -1217,8 +1213,7 @@ wxZipInputStream::wxZipInputStream(const wxString& archive,
 wxInputStream& wxZipInputStream::OpenFile(const wxString& archive)
 {
     wxLogNull nolog;
-    m_ffile = new wxFFileInputStream(archive);
-    return *m_ffile;
+    return *new wxFFileInputStream(archive);
 }
 
 #endif // WXWIN_COMPATIBILITY_2_6
@@ -1239,6 +1234,10 @@ void wxZipInputStream::Init()
     m_signature = 0;
     m_TotalEntries = 0;
     m_lasterror = m_parent_i_stream->GetLastError();
+    m_ffile = NULL;
+#if 1 //WXWIN_COMPATIBILITY_2_6
+    m_allowSeeking = false;
+#endif
 }
 
 wxZipInputStream::~wxZipInputStream()
