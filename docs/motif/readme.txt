@@ -1,7 +1,7 @@
 
-  Welcome to wxWidgets/Motif 2.5.5
+  Welcome to wxWidgets/Motif 2.6.0
 
-You have downloaded version 2.5.5 of the Motif port of
+You have downloaded version 2.6.0 of the Motif port of
 the wxWidgets GUI library.
 
 More information about the wxWidgets project as a whole
@@ -33,7 +33,7 @@ Alternatively, you may also use the bug reporting system
 linked from the wxWidgets web page.
 
 The library produced by the install process will be called 
-libwx_motif.a (static) and libwx_motif-2.5.so.0.0.0 (shared) so that
+libwx_motif.a (static) and libwx_motif-2.6.so.0.0.0 (shared) so that
 once a binary incompatible version of wxWidgets/Motif comes out 
 we'll augment the library version number to avoid linking problems.
 

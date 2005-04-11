@@ -1,5 +1,5 @@
-wxWidgets 2.5 for X11 installation
-----------------------------------
+wxWidgets 2.6.0 for X11 installation
+------------------------------------
 
 IMPORTANT NOTE:
 
@@ -11,7 +11,7 @@ IMPORTANT NOTE:
 
   When sending bug reports tell us what version of wxWidgets you are 
   using (including the beta) and what compiler on what system. One 
-  example: wxX11 2.5.5, gcc 2.95.4, Redhat 6.2
+  example: wxX11 2.6.0, gcc 2.95.4, Redhat 6.2
 
 First steps
 -----------
@@ -508,5 +508,4 @@ compiler and the error message(s) to the wxwin-developers mailing list at:
 
     wx-dev@lists.wxwindows.org
 
-Julian Smart, Robert Roebling and Vadim Zeitlin, February 2002.
 

@@ -1,13 +1,5 @@
-wxWidgets 2.5.5
+wxWidgets 2.6.0
 ---------------
-
-*** Please note that this is an UNSTABLE DEVELOPMENT SNAPSHOT.
-*** Unless you need the new features and bug fixes, you may wish to
-*** use the official 2.4.x stable series. You are still encouraged
-*** to try the releases from 2.5.x branch, of course, and unstable
-*** doesn't mean that they crash all the time -- just that the API
-*** may change in a backwards incompatible way. If this doesn't frighten
-*** you, do try this release and please let us know what you think!
 
 Welcome to wxWidgets, a sophisticated cross-platform C++
 framework for writing advanced GUI applications using (where
@@ -21,7 +13,7 @@ TCP/IP applications, thread handling, and more. Where certain
 features are not available on a platform, such as MDI and tree
 controls on Unix, they are emulated.
 
-A detailed 1800-page reference manual is supplied in HTML, PDF
+A detailed 2000-page reference manual is supplied in HTML, PDF
 and Windows Help form: see the docs hierarchy.
 
 For a quick start, point your Web browser at docs/html/index.htm
