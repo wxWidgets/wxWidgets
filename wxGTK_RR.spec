@@ -12,12 +12,19 @@
 %{?_with_gtk2: %{expand: %%define gtk2 1}}
 %{?_without_gtk2: %{expand: %%define gtk2 0}}
 
+# "buildname" needs to be e.g. gtk2ud for debug builds
 %if %{gtk2}
     %define gtkver 2
     %define portname gtk2
+%if %{unicode}
+    %define buildname gtk2u
+%else
+    %define buildname gtk2u
+%endif
 %else
     %define gtkver 1.2
     %define portname gtk
+    %define buildname gtk
 %endif
 
 %if %{unicode}
@@ -553,30 +560,41 @@ rm -f %{_bindir}/%{wxbaseconfiglink}
 %files
 %defattr(-,root,root)
 %doc COPYING.LIB *.txt
-%{_libdir}/libwx_%{portname}*_adv-%{ver2}.so.*
-%{_libdir}/libwx_%{portname}*_core-%{ver2}.so.*
+%{_libdir}/libwx_%{buildname}_adv-%{ver2}.so.*
+%{_libdir}/libwx_%{buildname}_core-%{ver2}.so.*
 %if !%{unicode}
-    %{_libdir}/libwx_%{portname}*_dbgrid-%{ver2}.so.*
+    %{_libdir}/libwx_%{buildname}_dbgrid-%{ver2}.so.*
 %endif
-%{_libdir}/libwx_%{portname}*_html-%{ver2}.so.*
-%{_libdir}/libwx_%{portname}*_media-%{ver2}.so.*
-%{_libdir}/libwx_%{portname}*_qa-%{ver2}.so.*
-%{_libdir}/libwx_%{portname}*_xrc-%{ver2}.so.*
+%{_libdir}/libwx_%{buildname}_html-%{ver2}.so.*
+%{_libdir}/libwx_%{buildname}_media-%{ver2}.so.*
+%{_libdir}/libwx_%{buildname}_qa-%{ver2}.so.*
+%{_libdir}/libwx_%{buildname}_xrc-%{ver2}.so.*
 
 
 %files devel -f core-headers.files
 %defattr(-,root,root)
-%{_libdir}/libwx_%{portname}*_adv-%{ver2}.so
-%{_libdir}/libwx_%{portname}*_core-%{ver2}.so
+# shared libs
+%{_libdir}/libwx_%{buildname}_adv-%{ver2}.so
+%{_libdir}/libwx_%{buildname}_core-%{ver2}.so
 %if !%{unicode}
-    %{_libdir}/libwx_%{portname}*_dbgrid-%{ver2}.so
+    %{_libdir}/libwx_%{buildname}_dbgrid-%{ver2}.so
 %endif
-%{_libdir}/libwx_%{portname}*_gl-%{ver2}.so
-%{_libdir}/libwx_%{portname}*_html-%{ver2}.so
-%{_libdir}/libwx_%{portname}*_media-%{ver2}.so
-%{_libdir}/libwx_%{portname}*_qa-%{ver2}.so
-%{_libdir}/libwx_%{portname}*_xrc-%{ver2}.so
-%{_libdir}/libwx_%{portname}*_*-%{ver2}.a
+%{_libdir}/libwx_%{buildname}_gl-%{ver2}.so
+%{_libdir}/libwx_%{buildname}_html-%{ver2}.so
+%{_libdir}/libwx_%{buildname}_media-%{ver2}.so
+%{_libdir}/libwx_%{buildname}_qa-%{ver2}.so
+%{_libdir}/libwx_%{buildname}_xrc-%{ver2}.so
+# static libs
+%{_libdir}/libwx_%{buildname}_adv-%{ver2}.a
+%{_libdir}/libwx_%{buildname}_core-%{ver2}.a
+%if !%{unicode}
+    %{_libdir}/libwx_%{buildname}_dbgrid-%{ver2}.a
+%endif
+%{_libdir}/libwx_%{buildname}_gl-%{ver2}.a
+%{_libdir}/libwx_%{buildname}_html-%{ver2}.a
+%{_libdir}/libwx_%{buildname}_media-%{ver2}.a
+%{_libdir}/libwx_%{buildname}_qa-%{ver2}.a
+%{_libdir}/libwx_%{buildname}_xrc-%{ver2}.a
 %dir %{_libdir}/wx
 %{_libdir}/wx/config/%{wxconfig}
 %{_libdir}/wx/include/%{wxconfig}/wx/setup.h
@@ -594,7 +612,6 @@ rm -f %{_bindir}/%{wxbaseconfiglink}
 %dir %{_includedir}/wx-%{ver2}
 %{_libdir}/libwx_base*-%{ver2}.so
 %{_libdir}/libwx_base*-%{ver2}.a
-
 %if %{unicode}
     %{_libdir}/libwxregexu-%{ver2}.a
 %endif
@@ -607,54 +624,56 @@ rm -f %{_bindir}/%{wxbaseconfiglink}
 
 %files gl
 %defattr(-,root,root)
-%{_libdir}/libwx_%{portname}*_gl-%{ver2}.so.*
+%{_libdir}/libwx_%{buildname}_gl-%{ver2}.so.*
 
 %files contrib
 %defattr(-,root,root)
-%{_libdir}/libwx_%{portname}*_animate-%{ver2}.so.*
-%{_libdir}/libwx_%{portname}*_deprecated-%{ver2}.so.*
-%{_libdir}/libwx_%{portname}*_fl-%{ver2}.so.*
-%{_libdir}/libwx_%{portname}*_gizmos-%{ver2}.so.*
-%{_libdir}/libwx_%{portname}*_mmedia-%{ver2}.so.*
-%{_libdir}/libwx_%{portname}*_ogl-%{ver2}.so.*
-%{_libdir}/libwx_%{portname}*_plot-%{ver2}.so.*
-%{_libdir}/libwx_%{portname}*_stc-%{ver2}.so.*
-%{_libdir}/libwx_%{portname}*_svg-%{ver2}.so.*
+%{_libdir}/libwx_%{buildname}_animate-%{ver2}.so.*
+%{_libdir}/libwx_%{buildname}_deprecated-%{ver2}.so.*
+%{_libdir}/libwx_%{buildname}_fl-%{ver2}.so.*
+%{_libdir}/libwx_%{buildname}_gizmos-%{ver2}.so.*
+%{_libdir}/libwx_%{buildname}_gizmos_xrc-%{ver2}.so.*
+%{_libdir}/libwx_%{buildname}_mmedia-%{ver2}.so.*
+%{_libdir}/libwx_%{buildname}_ogl-%{ver2}.so.*
+%{_libdir}/libwx_%{buildname}_plot-%{ver2}.so.*
+%{_libdir}/libwx_%{buildname}_stc-%{ver2}.so.*
+%{_libdir}/libwx_%{buildname}_svg-%{ver2}.so.*
 
 %files contrib-devel
 %defattr(-,root,root)
 %dir %{_includedir}/wx-%{ver2}/wx/animate
 %{_includedir}/wx-%{ver2}/wx/animate/*
-%{_libdir}/libwx_%{portname}*_animate-%{ver2}.so
+%{_libdir}/libwx_%{buildname}_animate-%{ver2}.so
 
 %dir %{_includedir}/wx-%{ver2}/wx/deprecated
 %{_includedir}/wx-%{ver2}/wx/deprecated/*
-%{_libdir}/libwx_%{portname}*_deprecated-%{ver2}.so
+%{_libdir}/libwx_%{buildname}_deprecated-%{ver2}.so
 
 %dir %{_includedir}/wx-%{ver2}/wx/fl
 %{_includedir}/wx-%{ver2}/wx/fl/*
-%{_libdir}/libwx_%{portname}*_fl-%{ver2}.so
+%{_libdir}/libwx_%{buildname}_fl-%{ver2}.so
 
 %dir %{_includedir}/wx-%{ver2}/wx/gizmos
 %{_includedir}/wx-%{ver2}/wx/gizmos/*
-%{_libdir}/libwx_%{portname}*_gizmos-%{ver2}.so
+%{_libdir}/libwx_%{buildname}_gizmos-%{ver2}.so
+%{_libdir}/libwx_%{buildname}_gizmos_xrc-%{ver2}.so
 
 %dir %{_includedir}/wx-%{ver2}/wx/mmedia
 %{_includedir}/wx-%{ver2}/wx/mmedia/*
-%{_libdir}/libwx_%{portname}*_mmedia-%{ver2}.so
+%{_libdir}/libwx_%{buildname}_mmedia-%{ver2}.so
 
 %dir %{_includedir}/wx-%{ver2}/wx/ogl
 %{_includedir}/wx-%{ver2}/wx/ogl/*
-%{_libdir}/libwx_%{portname}*_ogl-%{ver2}.so
+%{_libdir}/libwx_%{buildname}_ogl-%{ver2}.so
 
 %dir %{_includedir}/wx-%{ver2}/wx/plot
 %{_includedir}/wx-%{ver2}/wx/plot/*
-%{_libdir}/libwx_%{portname}*_plot-%{ver2}.so
+%{_libdir}/libwx_%{buildname}_plot-%{ver2}.so
 
 %dir %{_includedir}/wx-%{ver2}/wx/stc
 %{_includedir}/wx-%{ver2}/wx/stc/*
-%{_libdir}/libwx_%{portname}*_stc-%{ver2}.so
+%{_libdir}/libwx_%{buildname}_stc-%{ver2}.so
 
 %dir %{_includedir}/wx-%{ver2}/wx/svg
 %{_includedir}/wx-%{ver2}/wx/svg/*
-%{_libdir}/libwx_%{portname}*_svg-%{ver2}.so
+%{_libdir}/libwx_%{buildname}_svg-%{ver2}.so
