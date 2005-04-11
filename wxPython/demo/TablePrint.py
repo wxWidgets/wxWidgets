@@ -76,7 +76,7 @@ class TablePanel(wx.Panel):
 
         prt.SetHeader("wx.Windows Applications")
         prt.SetFooter()
-        prt.SetFooter("Date: ", type = "Date", align=wx.ALIGN_RIGHT, indent = -2, colour = wx.NamedColour('RED'))
+        prt.SetFooter("Date: ", type = "Date", align=wx.ALIGN_RIGHT, indent = -1, colour = wx.NamedColour('RED'))
         prt.Preview()
 
     def PreviewNarrow(self):
@@ -106,7 +106,7 @@ class TablePanel(wx.Panel):
         prt.label_font_colour = wx.NamedColour('WHITE')
         prt.SetHeader("wxWindows Applications", colour = wx.NamedColour('RED'))
 
-        prt.SetHeader("Printed: ", type = "Date & Time", align=wx.ALIGN_RIGHT, indent = -2, colour = wx.NamedColour('BLUE'))
+        prt.SetHeader("Printed: ", type = "Date & Time", align=wx.ALIGN_RIGHT, indent = -1, colour = wx.NamedColour('BLUE'))
         prt.SetFooter("Page No", colour = wx.NamedColour('RED'), type ="Num")
         prt.Preview()
 
