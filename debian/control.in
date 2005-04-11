@@ -123,8 +123,8 @@ Description: wxWidgets Cross-platform C++ GUI toolkit (header files)
 Package: wx=V-i18n
 Architecture: all
 Section: libs
-Conflicts: wx-i18n, wxwin-i18n
-Replaces: wx-i18n, wxwin-i18n
+Conflicts: wx-i18n, wxwin-i18n, wx2.4-i18n
+Replaces: wx-i18n, wxwin-i18n, wx2.4-i18n
 Provides: wx-i18n
 Description: wxWidgets Cross-platform C++ GUI toolkit (i18n support)
  wxWidgets (formerly known as wxWindows) is a class library for C++ providing

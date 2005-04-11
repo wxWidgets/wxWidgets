@@ -1,3 +1,16 @@
+wxwidgets2.5 (2.5.5.1) unstable; urgency=low
+
+  * Last chance.
+  * Conflict with wxwin2.4-i18n.  Due to inertia, it really
+    does.  Sorry if you are not a gringo and want both 2.4 and
+    2.5 apps localised on the same machine.  Maybe for 2.6.1.
+    Bitch upstream if you want it fixed.
+  * Don't package the static libs anymore for wxGTK.
+    Blame drepper for encouraging their obsolescence  If you dare.
+  * Trim the configure options to reflect the new defaults.
+
+ -- Ron Lee <ron@debian.org>  Mon, 11 Apr 2005 22:43:58 +0930
+
 wxwidgets2.5 (2.5.4.0) unstable; urgency=low
 
   * Experimental snapshot.
@@ -6,6 +19,7 @@ wxwidgets2.5 (2.5.4.0) unstable; urgency=low
   * Fixes lack of version checking in wxPython examples.
     Closes: #287772
   * Fixes FTBFS on ppc.  Closes: #285186
+  * Enable gnomeprint, Closes: #284943 satisfactorily I hope.
 
  -- Ron Lee <ron@debian.org>  Sun, 13 Feb 2005 16:52:38 +1030
 

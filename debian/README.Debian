@@ -5,7 +5,7 @@ The following packages are built from the wxWidgets CVS source.
 
 libwxgtk		wxGTK runtime shared libraries, including selected
 			contrib libs.
-libwxgtk-dev		extra files and static libs for building wxGTK apps
+libwxgtk-dev		extra files required for building wxGTK apps
 libwxgtk-dbg		wxGTK libraries built with -g and __WXDEBUG__
 
 libwxgtk-python		Python binding to wxGTK  (from 2.2.3 onward, this
@@ -17,6 +17,11 @@ wx-doc			HTML version of the wxWidgets manual
 wx-examples		wxWidgets and wxPython demos and samples (source)
 wx-i18n			message catalogs for native language support
 
+
+	Note that static libraries are no longer supplied in these
+	packages.  Please read, or have understood:
+	http://people.redhat.com/drepper/no_static_linking.html
+	among others before reporting this as a bug.
 
 	The following binaries can be built from the source package
 	with the mingw32 cross compiler, but are not currently

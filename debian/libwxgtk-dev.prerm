@@ -2,7 +2,6 @@
 set -e
 
 update-alternatives --remove wx-config /usr/lib/wx/config/gtk2-unicode-release-=V
-update-alternatives --remove wx-config /usr/lib/wx/config/gtk2-unicode-release-=V-static
 
 #DEBHELPER#
 
