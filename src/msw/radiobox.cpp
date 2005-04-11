@@ -832,8 +832,6 @@ LRESULT APIENTRY _EXPORT wxRadioBtnWndProc(HWND hwnd,
 
                 if ( processed )
                     return 0;
-
-                break;
             }
             break;
 #endif // !__WXWINCE__
