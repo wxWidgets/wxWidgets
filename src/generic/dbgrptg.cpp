@@ -286,14 +286,9 @@ wxDebugReportDialog::wxDebugReportDialog(wxDebugReport& dbgrpt)
         << _T('\n')
         << _T("             \"") << dbgrpt.GetDirectory() << _T("\"\n")
         << _T('\n')
-        << _("The report contains the files listed below. If any of these ")
-        << _("files contain private information,\n")
-        << _("please uncheck them and they will be removed from the report.\n")
+        << _("The report contains the files listed below. If any of these files contain private information,\nplease uncheck them and they will be removed from the report.\n")
         << _T('\n')
-        << _("If you wish to suppress this debug report completely, please ")
-        << _("choose the \"Cancel\" button,\n")
-        << _("but be warned that it may hinder improving the program, so if\n")
-        << _("at all possible please do continue with the report generation.\n")
+        << _("If you wish to suppress this debug report completely, please choose the \"Cancel\" button,\nbut be warned that it may hinder improving the program, so if\nat all possible please do continue with the report generation.\n")
         << _T('\n')
         << _("              Thank you and we're sorry for the inconvenience!\n")
         << _T("\n\n"); // just some white space to separate from other stuff
@@ -327,8 +322,7 @@ wxDebugReportDialog::wxDebugReportDialog(wxDebugReport& dbgrpt)
     // lower part of the dialog: notes field
     wxSizer *sizerNotes = new wxStaticBoxSizer(wxVERTICAL, this, _("&Notes:"));
 
-    msg = _("If you have any additional information pertaining to this bug\n");
-    msg << _("report, please enter it here and it will be joined to it:");
+    msg = _("If you have any additional information pertaining to this bug\nreport, please enter it here and it will be joined to it:");
 
     m_notes = new wxTextCtrl(this, wxID_ANY, wxEmptyString,
                              wxDefaultPosition, wxDefaultSize,
