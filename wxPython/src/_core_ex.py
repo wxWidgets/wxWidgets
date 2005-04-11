@@ -32,11 +32,15 @@ if RELEASE_VERSION != _core_.RELEASE_VERSION:
 
 #----------------------------------------------------------------------------
 
-# Set the default string<-->unicode conversion encoding from the
-# locale.  This encoding is used when string or unicode objects need
-# to be converted in order to pass them to wxWidgets.  Please be aware
-# that the default encoding within the same locale may be slightly
-# different on different platforms.  For example, please see
+# Set wxPython's default string<-->unicode conversion encoding from
+# the locale, but only if Python's default hasn't been changed.  (We
+# assume that if the user has customized it already then that is the
+# encoding we need to use as well.)
+#
+# The encoding selected here is used when string or unicode objects
+# need to be converted in order to pass them to wxWidgets.  Please be
+# aware that the default encoding within the same locale may be
+# slightly different on different platforms.  For example, please see
 # http://www.alanwood.net/demos/charsetdiffs.html for differences
 # between the common latin/roman encodings.
 
