@@ -1,7 +1,18 @@
 Recent Changes for wxPython
 =====================================================================
 
-2.5.5.0
+2.6.0.0
+-------
+
+wxGTK: wx.StaticText can wrap text if the width is set to an explicit
+value. 
+
+
+
+
+
+
+2.5.5.1
 -------
 
 wxMSW: Fixed bug #1022383, 'several ComboBoxes appear selected'
@@ -86,6 +97,7 @@ Updated docview library modules and sample apps from the ActiveGrid
 folks. 
 
 Added the ActiveGrid IDE as a sample application.
+
 
 
 
