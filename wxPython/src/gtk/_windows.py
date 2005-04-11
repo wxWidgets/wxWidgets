@@ -1972,6 +1972,18 @@ class VScrolledWindow(Panel):
         """GetLineCount(self) -> size_t"""
         return _windows_.VScrolledWindow_GetLineCount(*args, **kwargs)
 
+    def GetVisibleBegin(*args, **kwargs):
+        """GetVisibleBegin(self) -> size_t"""
+        return _windows_.VScrolledWindow_GetVisibleBegin(*args, **kwargs)
+
+    def GetVisibleEnd(*args, **kwargs):
+        """GetVisibleEnd(self) -> size_t"""
+        return _windows_.VScrolledWindow_GetVisibleEnd(*args, **kwargs)
+
+    def IsVisible(*args, **kwargs):
+        """IsVisible(self, size_t line) -> bool"""
+        return _windows_.VScrolledWindow_IsVisible(*args, **kwargs)
+
     def GetFirstVisibleLine(*args, **kwargs):
         """GetFirstVisibleLine(self) -> size_t"""
         return _windows_.VScrolledWindow_GetFirstVisibleLine(*args, **kwargs)
@@ -1979,10 +1991,6 @@ class VScrolledWindow(Panel):
     def GetLastVisibleLine(*args, **kwargs):
         """GetLastVisibleLine(self) -> size_t"""
         return _windows_.VScrolledWindow_GetLastVisibleLine(*args, **kwargs)
-
-    def IsVisible(*args, **kwargs):
-        """IsVisible(self, size_t line) -> bool"""
-        return _windows_.VScrolledWindow_IsVisible(*args, **kwargs)
 
 
 class VScrolledWindowPtr(VScrolledWindow):
@@ -3580,10 +3588,6 @@ class PyWindow(_core.Window):
         """base_ShouldInheritColours(self) -> bool"""
         return _windows_.PyWindow_base_ShouldInheritColours(*args, **kwargs)
 
-    def base_ApplyParentThemeBackground(*args, **kwargs):
-        """base_ApplyParentThemeBackground(self, Colour c)"""
-        return _windows_.PyWindow_base_ApplyParentThemeBackground(*args, **kwargs)
-
     def base_GetDefaultAttributes(*args, **kwargs):
         """base_GetDefaultAttributes(self) -> VisualAttributes"""
         return _windows_.PyWindow_base_GetDefaultAttributes(*args, **kwargs)
@@ -3701,10 +3705,6 @@ class PyPanel(Panel):
         """base_ShouldInheritColours(self) -> bool"""
         return _windows_.PyPanel_base_ShouldInheritColours(*args, **kwargs)
 
-    def base_ApplyParentThemeBackground(*args, **kwargs):
-        """base_ApplyParentThemeBackground(self, Colour c)"""
-        return _windows_.PyPanel_base_ApplyParentThemeBackground(*args, **kwargs)
-
     def base_GetDefaultAttributes(*args, **kwargs):
         """base_GetDefaultAttributes(self) -> VisualAttributes"""
         return _windows_.PyPanel_base_GetDefaultAttributes(*args, **kwargs)
@@ -3821,10 +3821,6 @@ class PyScrolledWindow(ScrolledWindow):
     def base_ShouldInheritColours(*args, **kwargs):
         """base_ShouldInheritColours(self) -> bool"""
         return _windows_.PyScrolledWindow_base_ShouldInheritColours(*args, **kwargs)
-
-    def base_ApplyParentThemeBackground(*args, **kwargs):
-        """base_ApplyParentThemeBackground(self, Colour c)"""
-        return _windows_.PyScrolledWindow_base_ApplyParentThemeBackground(*args, **kwargs)
 
     def base_GetDefaultAttributes(*args, **kwargs):
         """base_GetDefaultAttributes(self) -> VisualAttributes"""

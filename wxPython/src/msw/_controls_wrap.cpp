@@ -2189,7 +2189,6 @@ public:
     DEC_PYCALLBACK_VOID_WXWINBASE(RemoveChild);
 
     DEC_PYCALLBACK_BOOL_const(ShouldInheritColours);
-    DEC_PYCALLBACK__COLOUR(ApplyParentThemeBackground);
     DEC_PYCALLBACK_VIZATTR_(GetDefaultAttributes);
     
     DEC_PYCALLBACK_BOOL_(HasTransparentBackground);
@@ -2224,7 +2223,6 @@ IMP_PYCALLBACK_VOID_WXWINBASE(wxPyControl, wxControl, AddChild);
 IMP_PYCALLBACK_VOID_WXWINBASE(wxPyControl, wxControl, RemoveChild);
 
 IMP_PYCALLBACK_BOOL_const(wxPyControl, wxControl, ShouldInheritColours);
-IMP_PYCALLBACK__COLOUR(wxPyControl, wxControl, ApplyParentThemeBackground);
 IMP_PYCALLBACK_VIZATTR_(wxPyControl, wxControl, GetDefaultAttributes);
 
 IMP_PYCALLBACK_BOOL_(wxPyControl, wxControl, HasTransparentBackground);
@@ -18144,6 +18142,32 @@ static PyObject *_wrap_Choicebook_IsVertical(PyObject *, PyObject *args, PyObjec
 }
 
 
+static PyObject *_wrap_Choicebook_GetChoiceCtrl(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxChoicebook *arg1 = (wxChoicebook *) 0 ;
+    wxChoice *result;
+    PyObject * obj0 = 0 ;
+    char *kwnames[] = {
+        (char *) "self", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:Choicebook_GetChoiceCtrl",kwnames,&obj0)) goto fail;
+    SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxChoicebook, SWIG_POINTER_EXCEPTION | 0);
+    if (SWIG_arg_fail(1)) SWIG_fail;
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = (wxChoice *)((wxChoicebook const *)arg1)->GetChoiceCtrl();
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    resultobj = SWIG_NewPointerObj((void*)(result), SWIGTYPE_p_wxChoice, 0);
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
 static PyObject *_wrap_Choicebook_DeleteAllPages(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxChoicebook *arg1 = (wxChoicebook *) 0 ;
@@ -33122,38 +33146,6 @@ static PyObject *_wrap_PyControl_base_ShouldInheritColours(PyObject *, PyObject 
 }
 
 
-static PyObject *_wrap_PyControl_base_ApplyParentThemeBackground(PyObject *, PyObject *args, PyObject *kwargs) {
-    PyObject *resultobj;
-    wxPyControl *arg1 = (wxPyControl *) 0 ;
-    wxColour *arg2 = 0 ;
-    wxColour temp2 ;
-    PyObject * obj0 = 0 ;
-    PyObject * obj1 = 0 ;
-    char *kwnames[] = {
-        (char *) "self",(char *) "c", NULL 
-    };
-    
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:PyControl_base_ApplyParentThemeBackground",kwnames,&obj0,&obj1)) goto fail;
-    SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxPyControl, SWIG_POINTER_EXCEPTION | 0);
-    if (SWIG_arg_fail(1)) SWIG_fail;
-    {
-        arg2 = &temp2;
-        if ( ! wxColour_helper(obj1, &arg2)) SWIG_fail;
-    }
-    {
-        PyThreadState* __tstate = wxPyBeginAllowThreads();
-        (arg1)->base_ApplyParentThemeBackground((wxColour const &)*arg2);
-        
-        wxPyEndAllowThreads(__tstate);
-        if (PyErr_Occurred()) SWIG_fail;
-    }
-    Py_INCREF(Py_None); resultobj = Py_None;
-    return resultobj;
-    fail:
-    return NULL;
-}
-
-
 static PyObject *_wrap_PyControl_base_GetDefaultAttributes(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPyControl *arg1 = (wxPyControl *) 0 ;
@@ -35489,6 +35481,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"new_PreChoicebook", (PyCFunction) _wrap_new_PreChoicebook, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"Choicebook_Create", (PyCFunction) _wrap_Choicebook_Create, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"Choicebook_IsVertical", (PyCFunction) _wrap_Choicebook_IsVertical, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"Choicebook_GetChoiceCtrl", (PyCFunction) _wrap_Choicebook_GetChoiceCtrl, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"Choicebook_DeleteAllPages", (PyCFunction) _wrap_Choicebook_DeleteAllPages, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"Choicebook_swigregister", Choicebook_swigregister, METH_VARARGS, NULL},
 	 { (char *)"new_ChoicebookEvent", (PyCFunction) _wrap_new_ChoicebookEvent, METH_VARARGS | METH_KEYWORDS, NULL},
@@ -35920,7 +35913,6 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"PyControl_base_AddChild", (PyCFunction) _wrap_PyControl_base_AddChild, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"PyControl_base_RemoveChild", (PyCFunction) _wrap_PyControl_base_RemoveChild, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"PyControl_base_ShouldInheritColours", (PyCFunction) _wrap_PyControl_base_ShouldInheritColours, METH_VARARGS | METH_KEYWORDS, NULL},
-	 { (char *)"PyControl_base_ApplyParentThemeBackground", (PyCFunction) _wrap_PyControl_base_ApplyParentThemeBackground, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"PyControl_base_GetDefaultAttributes", (PyCFunction) _wrap_PyControl_base_GetDefaultAttributes, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"PyControl_swigregister", PyControl_swigregister, METH_VARARGS, NULL},
 	 { (char *)"new_HelpEvent", (PyCFunction) _wrap_new_HelpEvent, METH_VARARGS | METH_KEYWORDS, NULL},
@@ -37790,6 +37782,9 @@ SWIGEXPORT(void) SWIG_init(void) {
     }
     {
         PyDict_SetItemString(d,"SL_VERTICAL", SWIG_From_int((int)(wxSL_VERTICAL))); 
+    }
+    {
+        PyDict_SetItemString(d,"SL_TICKS", SWIG_From_int((int)(wxSL_TICKS))); 
     }
     {
         PyDict_SetItemString(d,"SL_AUTOTICKS", SWIG_From_int((int)(wxSL_AUTOTICKS))); 

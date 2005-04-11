@@ -188,6 +188,7 @@ wxRadioButton_GetClassDefaultAttributes = wx._controls.RadioButton_GetClassDefau
 wxSliderNameStr = wx._controls.SliderNameStr
 wxSL_HORIZONTAL = wx._controls.SL_HORIZONTAL
 wxSL_VERTICAL = wx._controls.SL_VERTICAL
+wxSL_TICKS = wx._controls.SL_TICKS
 wxSL_AUTOTICKS = wx._controls.SL_AUTOTICKS
 wxSL_LABELS = wx._controls.SL_LABELS
 wxSL_LEFT = wx._controls.SL_LEFT

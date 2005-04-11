@@ -93,6 +93,7 @@
 %rename(RadioButton)                        wxRadioButton;
 %rename(SL_HORIZONTAL)                      wxSL_HORIZONTAL;
 %rename(SL_VERTICAL)                        wxSL_VERTICAL;
+%rename(SL_TICKS)                           wxSL_TICKS;
 %rename(SL_AUTOTICKS)                       wxSL_AUTOTICKS;
 %rename(SL_LABELS)                          wxSL_LABELS;
 %rename(SL_LEFT)                            wxSL_LEFT;

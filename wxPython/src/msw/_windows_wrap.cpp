@@ -2138,7 +2138,6 @@ public:
     DEC_PYCALLBACK_VOID_WXWINBASE(RemoveChild);
 
     DEC_PYCALLBACK_BOOL_const(ShouldInheritColours);
-    DEC_PYCALLBACK__COLOUR(ApplyParentThemeBackground);
     DEC_PYCALLBACK_VIZATTR_(GetDefaultAttributes);
     
     DEC_PYCALLBACK_BOOL_(HasTransparentBackground);
@@ -2173,7 +2172,6 @@ IMP_PYCALLBACK_VOID_WXWINBASE(wxPyWindow, wxWindow, AddChild);
 IMP_PYCALLBACK_VOID_WXWINBASE(wxPyWindow, wxWindow, RemoveChild);
 
 IMP_PYCALLBACK_BOOL_const(wxPyWindow, wxWindow, ShouldInheritColours);
-IMP_PYCALLBACK__COLOUR(wxPyWindow, wxWindow, ApplyParentThemeBackground);
 IMP_PYCALLBACK_VIZATTR_(wxPyWindow, wxWindow, GetDefaultAttributes);
 
 IMP_PYCALLBACK_BOOL_(wxPyWindow, wxWindow, HasTransparentBackground);
@@ -2219,7 +2217,6 @@ public:
     DEC_PYCALLBACK_VOID_WXWINBASE(RemoveChild);
 
     DEC_PYCALLBACK_BOOL_const(ShouldInheritColours);
-    DEC_PYCALLBACK__COLOUR(ApplyParentThemeBackground);
     DEC_PYCALLBACK_VIZATTR_(GetDefaultAttributes);
     
     DEC_PYCALLBACK_BOOL_(HasTransparentBackground);
@@ -2254,7 +2251,6 @@ IMP_PYCALLBACK_VOID_WXWINBASE(wxPyPanel, wxPanel, AddChild);
 IMP_PYCALLBACK_VOID_WXWINBASE(wxPyPanel, wxPanel, RemoveChild);
 
 IMP_PYCALLBACK_BOOL_const(wxPyPanel, wxPanel, ShouldInheritColours);
-IMP_PYCALLBACK__COLOUR(wxPyPanel, wxPanel, ApplyParentThemeBackground);
 IMP_PYCALLBACK_VIZATTR_(wxPyPanel, wxPanel, GetDefaultAttributes);
 
 IMP_PYCALLBACK_BOOL_(wxPyPanel, wxPanel, HasTransparentBackground);
@@ -2299,7 +2295,6 @@ public:
     DEC_PYCALLBACK_VOID_WXWINBASE(RemoveChild);
 
     DEC_PYCALLBACK_BOOL_const(ShouldInheritColours);
-    DEC_PYCALLBACK__COLOUR(ApplyParentThemeBackground);
     DEC_PYCALLBACK_VIZATTR_(GetDefaultAttributes);
     
     DEC_PYCALLBACK_BOOL_(HasTransparentBackground);
@@ -2334,7 +2329,6 @@ IMP_PYCALLBACK_VOID_WXWINBASE(wxPyScrolledWindow, wxScrolledWindow, AddChild);
 IMP_PYCALLBACK_VOID_WXWINBASE(wxPyScrolledWindow, wxScrolledWindow, RemoveChild);
 
 IMP_PYCALLBACK_BOOL_const(wxPyScrolledWindow, wxScrolledWindow, ShouldInheritColours);
-IMP_PYCALLBACK__COLOUR(wxPyScrolledWindow, wxScrolledWindow, ApplyParentThemeBackground);
 IMP_PYCALLBACK_VIZATTR_(wxPyScrolledWindow, wxScrolledWindow, GetDefaultAttributes);
 
 IMP_PYCALLBACK_BOOL_(wxPyScrolledWindow, wxScrolledWindow, HasTransparentBackground);
@@ -11591,6 +11585,96 @@ static PyObject *_wrap_VScrolledWindow_GetLineCount(PyObject *, PyObject *args, 
 }
 
 
+static PyObject *_wrap_VScrolledWindow_GetVisibleBegin(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxPyVScrolledWindow *arg1 = (wxPyVScrolledWindow *) 0 ;
+    size_t result;
+    PyObject * obj0 = 0 ;
+    char *kwnames[] = {
+        (char *) "self", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:VScrolledWindow_GetVisibleBegin",kwnames,&obj0)) goto fail;
+    SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxPyVScrolledWindow, SWIG_POINTER_EXCEPTION | 0);
+    if (SWIG_arg_fail(1)) SWIG_fail;
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = (size_t)((wxPyVScrolledWindow const *)arg1)->GetVisibleBegin();
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    {
+        resultobj = SWIG_From_unsigned_SS_long((unsigned long)(result)); 
+    }
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_VScrolledWindow_GetVisibleEnd(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxPyVScrolledWindow *arg1 = (wxPyVScrolledWindow *) 0 ;
+    size_t result;
+    PyObject * obj0 = 0 ;
+    char *kwnames[] = {
+        (char *) "self", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:VScrolledWindow_GetVisibleEnd",kwnames,&obj0)) goto fail;
+    SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxPyVScrolledWindow, SWIG_POINTER_EXCEPTION | 0);
+    if (SWIG_arg_fail(1)) SWIG_fail;
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = (size_t)((wxPyVScrolledWindow const *)arg1)->GetVisibleEnd();
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    {
+        resultobj = SWIG_From_unsigned_SS_long((unsigned long)(result)); 
+    }
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_VScrolledWindow_IsVisible(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxPyVScrolledWindow *arg1 = (wxPyVScrolledWindow *) 0 ;
+    size_t arg2 ;
+    bool result;
+    PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
+    char *kwnames[] = {
+        (char *) "self",(char *) "line", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:VScrolledWindow_IsVisible",kwnames,&obj0,&obj1)) goto fail;
+    SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxPyVScrolledWindow, SWIG_POINTER_EXCEPTION | 0);
+    if (SWIG_arg_fail(1)) SWIG_fail;
+    {
+        arg2 = (size_t)(SWIG_As_unsigned_SS_long(obj1)); 
+        if (SWIG_arg_fail(2)) SWIG_fail;
+    }
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = (bool)((wxPyVScrolledWindow const *)arg1)->IsVisible(arg2);
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
 static PyObject *_wrap_VScrolledWindow_GetFirstVisibleLine(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPyVScrolledWindow *arg1 = (wxPyVScrolledWindow *) 0 ;
@@ -11640,40 +11724,6 @@ static PyObject *_wrap_VScrolledWindow_GetLastVisibleLine(PyObject *, PyObject *
     }
     {
         resultobj = SWIG_From_unsigned_SS_long((unsigned long)(result)); 
-    }
-    return resultobj;
-    fail:
-    return NULL;
-}
-
-
-static PyObject *_wrap_VScrolledWindow_IsVisible(PyObject *, PyObject *args, PyObject *kwargs) {
-    PyObject *resultobj;
-    wxPyVScrolledWindow *arg1 = (wxPyVScrolledWindow *) 0 ;
-    size_t arg2 ;
-    bool result;
-    PyObject * obj0 = 0 ;
-    PyObject * obj1 = 0 ;
-    char *kwnames[] = {
-        (char *) "self",(char *) "line", NULL 
-    };
-    
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:VScrolledWindow_IsVisible",kwnames,&obj0,&obj1)) goto fail;
-    SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxPyVScrolledWindow, SWIG_POINTER_EXCEPTION | 0);
-    if (SWIG_arg_fail(1)) SWIG_fail;
-    {
-        arg2 = (size_t)(SWIG_As_unsigned_SS_long(obj1)); 
-        if (SWIG_arg_fail(2)) SWIG_fail;
-    }
-    {
-        PyThreadState* __tstate = wxPyBeginAllowThreads();
-        result = (bool)((wxPyVScrolledWindow const *)arg1)->IsVisible(arg2);
-        
-        wxPyEndAllowThreads(__tstate);
-        if (PyErr_Occurred()) SWIG_fail;
-    }
-    {
-        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     }
     return resultobj;
     fail:
@@ -18576,38 +18626,6 @@ static PyObject *_wrap_PyWindow_base_ShouldInheritColours(PyObject *, PyObject *
 }
 
 
-static PyObject *_wrap_PyWindow_base_ApplyParentThemeBackground(PyObject *, PyObject *args, PyObject *kwargs) {
-    PyObject *resultobj;
-    wxPyWindow *arg1 = (wxPyWindow *) 0 ;
-    wxColour *arg2 = 0 ;
-    wxColour temp2 ;
-    PyObject * obj0 = 0 ;
-    PyObject * obj1 = 0 ;
-    char *kwnames[] = {
-        (char *) "self",(char *) "c", NULL 
-    };
-    
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:PyWindow_base_ApplyParentThemeBackground",kwnames,&obj0,&obj1)) goto fail;
-    SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxPyWindow, SWIG_POINTER_EXCEPTION | 0);
-    if (SWIG_arg_fail(1)) SWIG_fail;
-    {
-        arg2 = &temp2;
-        if ( ! wxColour_helper(obj1, &arg2)) SWIG_fail;
-    }
-    {
-        PyThreadState* __tstate = wxPyBeginAllowThreads();
-        (arg1)->base_ApplyParentThemeBackground((wxColour const &)*arg2);
-        
-        wxPyEndAllowThreads(__tstate);
-        if (PyErr_Occurred()) SWIG_fail;
-    }
-    Py_INCREF(Py_None); resultobj = Py_None;
-    return resultobj;
-    fail:
-    return NULL;
-}
-
-
 static PyObject *_wrap_PyWindow_base_GetDefaultAttributes(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPyWindow *arg1 = (wxPyWindow *) 0 ;
@@ -19445,38 +19463,6 @@ static PyObject *_wrap_PyPanel_base_ShouldInheritColours(PyObject *, PyObject *a
 }
 
 
-static PyObject *_wrap_PyPanel_base_ApplyParentThemeBackground(PyObject *, PyObject *args, PyObject *kwargs) {
-    PyObject *resultobj;
-    wxPyPanel *arg1 = (wxPyPanel *) 0 ;
-    wxColour *arg2 = 0 ;
-    wxColour temp2 ;
-    PyObject * obj0 = 0 ;
-    PyObject * obj1 = 0 ;
-    char *kwnames[] = {
-        (char *) "self",(char *) "c", NULL 
-    };
-    
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:PyPanel_base_ApplyParentThemeBackground",kwnames,&obj0,&obj1)) goto fail;
-    SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxPyPanel, SWIG_POINTER_EXCEPTION | 0);
-    if (SWIG_arg_fail(1)) SWIG_fail;
-    {
-        arg2 = &temp2;
-        if ( ! wxColour_helper(obj1, &arg2)) SWIG_fail;
-    }
-    {
-        PyThreadState* __tstate = wxPyBeginAllowThreads();
-        (arg1)->base_ApplyParentThemeBackground((wxColour const &)*arg2);
-        
-        wxPyEndAllowThreads(__tstate);
-        if (PyErr_Occurred()) SWIG_fail;
-    }
-    Py_INCREF(Py_None); resultobj = Py_None;
-    return resultobj;
-    fail:
-    return NULL;
-}
-
-
 static PyObject *_wrap_PyPanel_base_GetDefaultAttributes(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPyPanel *arg1 = (wxPyPanel *) 0 ;
@@ -20308,38 +20294,6 @@ static PyObject *_wrap_PyScrolledWindow_base_ShouldInheritColours(PyObject *, Py
     {
         resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     }
-    return resultobj;
-    fail:
-    return NULL;
-}
-
-
-static PyObject *_wrap_PyScrolledWindow_base_ApplyParentThemeBackground(PyObject *, PyObject *args, PyObject *kwargs) {
-    PyObject *resultobj;
-    wxPyScrolledWindow *arg1 = (wxPyScrolledWindow *) 0 ;
-    wxColour *arg2 = 0 ;
-    wxColour temp2 ;
-    PyObject * obj0 = 0 ;
-    PyObject * obj1 = 0 ;
-    char *kwnames[] = {
-        (char *) "self",(char *) "c", NULL 
-    };
-    
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:PyScrolledWindow_base_ApplyParentThemeBackground",kwnames,&obj0,&obj1)) goto fail;
-    SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxPyScrolledWindow, SWIG_POINTER_EXCEPTION | 0);
-    if (SWIG_arg_fail(1)) SWIG_fail;
-    {
-        arg2 = &temp2;
-        if ( ! wxColour_helper(obj1, &arg2)) SWIG_fail;
-    }
-    {
-        PyThreadState* __tstate = wxPyBeginAllowThreads();
-        (arg1)->base_ApplyParentThemeBackground((wxColour const &)*arg2);
-        
-        wxPyEndAllowThreads(__tstate);
-        if (PyErr_Occurred()) SWIG_fail;
-    }
-    Py_INCREF(Py_None); resultobj = Py_None;
     return resultobj;
     fail:
     return NULL;
@@ -28061,9 +28015,11 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"VScrolledWindow_HitTest", (PyCFunction) _wrap_VScrolledWindow_HitTest, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"VScrolledWindow_RefreshAll", (PyCFunction) _wrap_VScrolledWindow_RefreshAll, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"VScrolledWindow_GetLineCount", (PyCFunction) _wrap_VScrolledWindow_GetLineCount, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"VScrolledWindow_GetVisibleBegin", (PyCFunction) _wrap_VScrolledWindow_GetVisibleBegin, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"VScrolledWindow_GetVisibleEnd", (PyCFunction) _wrap_VScrolledWindow_GetVisibleEnd, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"VScrolledWindow_IsVisible", (PyCFunction) _wrap_VScrolledWindow_IsVisible, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"VScrolledWindow_GetFirstVisibleLine", (PyCFunction) _wrap_VScrolledWindow_GetFirstVisibleLine, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"VScrolledWindow_GetLastVisibleLine", (PyCFunction) _wrap_VScrolledWindow_GetLastVisibleLine, METH_VARARGS | METH_KEYWORDS, NULL},
-	 { (char *)"VScrolledWindow_IsVisible", (PyCFunction) _wrap_VScrolledWindow_IsVisible, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"VScrolledWindow_swigregister", VScrolledWindow_swigregister, METH_VARARGS, NULL},
 	 { (char *)"new_VListBox", (PyCFunction) _wrap_new_VListBox, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"new_PreVListBox", (PyCFunction) _wrap_new_PreVListBox, METH_VARARGS | METH_KEYWORDS, NULL},
@@ -28260,7 +28216,6 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"PyWindow_base_AddChild", (PyCFunction) _wrap_PyWindow_base_AddChild, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"PyWindow_base_RemoveChild", (PyCFunction) _wrap_PyWindow_base_RemoveChild, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"PyWindow_base_ShouldInheritColours", (PyCFunction) _wrap_PyWindow_base_ShouldInheritColours, METH_VARARGS | METH_KEYWORDS, NULL},
-	 { (char *)"PyWindow_base_ApplyParentThemeBackground", (PyCFunction) _wrap_PyWindow_base_ApplyParentThemeBackground, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"PyWindow_base_GetDefaultAttributes", (PyCFunction) _wrap_PyWindow_base_GetDefaultAttributes, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"PyWindow_swigregister", PyWindow_swigregister, METH_VARARGS, NULL},
 	 { (char *)"new_PyPanel", (PyCFunction) _wrap_new_PyPanel, METH_VARARGS | METH_KEYWORDS, NULL},
@@ -28286,7 +28241,6 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"PyPanel_base_AddChild", (PyCFunction) _wrap_PyPanel_base_AddChild, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"PyPanel_base_RemoveChild", (PyCFunction) _wrap_PyPanel_base_RemoveChild, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"PyPanel_base_ShouldInheritColours", (PyCFunction) _wrap_PyPanel_base_ShouldInheritColours, METH_VARARGS | METH_KEYWORDS, NULL},
-	 { (char *)"PyPanel_base_ApplyParentThemeBackground", (PyCFunction) _wrap_PyPanel_base_ApplyParentThemeBackground, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"PyPanel_base_GetDefaultAttributes", (PyCFunction) _wrap_PyPanel_base_GetDefaultAttributes, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"PyPanel_swigregister", PyPanel_swigregister, METH_VARARGS, NULL},
 	 { (char *)"new_PyScrolledWindow", (PyCFunction) _wrap_new_PyScrolledWindow, METH_VARARGS | METH_KEYWORDS, NULL},
@@ -28312,7 +28266,6 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"PyScrolledWindow_base_AddChild", (PyCFunction) _wrap_PyScrolledWindow_base_AddChild, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"PyScrolledWindow_base_RemoveChild", (PyCFunction) _wrap_PyScrolledWindow_base_RemoveChild, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"PyScrolledWindow_base_ShouldInheritColours", (PyCFunction) _wrap_PyScrolledWindow_base_ShouldInheritColours, METH_VARARGS | METH_KEYWORDS, NULL},
-	 { (char *)"PyScrolledWindow_base_ApplyParentThemeBackground", (PyCFunction) _wrap_PyScrolledWindow_base_ApplyParentThemeBackground, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"PyScrolledWindow_base_GetDefaultAttributes", (PyCFunction) _wrap_PyScrolledWindow_base_GetDefaultAttributes, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"PyScrolledWindow_swigregister", PyScrolledWindow_swigregister, METH_VARARGS, NULL},
 	 { (char *)"new_PrintData", _wrap_new_PrintData, METH_VARARGS, NULL},

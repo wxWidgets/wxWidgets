@@ -2655,6 +2655,7 @@ def RadioButton_GetClassDefaultAttributes(*args, **kwargs):
 
 SL_HORIZONTAL = _controls_.SL_HORIZONTAL
 SL_VERTICAL = _controls_.SL_VERTICAL
+SL_TICKS = _controls_.SL_TICKS
 SL_AUTOTICKS = _controls_.SL_AUTOTICKS
 SL_LABELS = _controls_.SL_LABELS
 SL_LEFT = _controls_.SL_LEFT
@@ -3241,7 +3242,7 @@ class NotebookPage(wx.Panel):
     """
     There is an old (and apparently unsolvable) bug when placing a
     window with a nonstandard background colour in a wx.Notebook on
-    wxGTK, as the notbooks's background colour would always be used
+    wxGTK1, as the notbooks's background colour would always be used
     when the window is refreshed.  The solution is to place a panel in
     the notbook and the coloured window on the panel, sized to cover
     the panel.  This simple class does that for you, just put an
@@ -3374,6 +3375,10 @@ class Choicebook(BookCtrlBase):
     def IsVertical(*args, **kwargs):
         """IsVertical(self) -> bool"""
         return _controls_.Choicebook_IsVertical(*args, **kwargs)
+
+    def GetChoiceCtrl(*args, **kwargs):
+        """GetChoiceCtrl(self) -> Choice"""
+        return _controls_.Choicebook_GetChoiceCtrl(*args, **kwargs)
 
     def DeleteAllPages(*args, **kwargs):
         """DeleteAllPages(self) -> bool"""
@@ -5908,10 +5913,6 @@ class PyControl(_core.Control):
     def base_ShouldInheritColours(*args, **kwargs):
         """base_ShouldInheritColours(self) -> bool"""
         return _controls_.PyControl_base_ShouldInheritColours(*args, **kwargs)
-
-    def base_ApplyParentThemeBackground(*args, **kwargs):
-        """base_ApplyParentThemeBackground(self, Colour c)"""
-        return _controls_.PyControl_base_ApplyParentThemeBackground(*args, **kwargs)
 
     def base_GetDefaultAttributes(*args, **kwargs):
         """base_GetDefaultAttributes(self) -> VisualAttributes"""

@@ -5008,8 +5008,8 @@ class PyApp(EvtHandler):
         self.this = newobj.this
         self.thisown = 1
         del newobj.thisown
-        self._setCallbackInfo(self, PyApp)
-        self._setOORInfo(self)
+        self._setCallbackInfo(self, PyApp, False)
+        self._setOORInfo(self, False)
 
     def __del__(self, destroy=_core_.delete_PyApp):
         """__del__(self)"""
@@ -5018,7 +5018,7 @@ class PyApp(EvtHandler):
         except: pass
 
     def _setCallbackInfo(*args, **kwargs):
-        """_setCallbackInfo(self, PyObject self, PyObject _class)"""
+        """_setCallbackInfo(self, PyObject self, PyObject _class, bool incref)"""
         return _core_.PyApp__setCallbackInfo(*args, **kwargs)
 
     def GetAppName(*args, **kwargs):
@@ -5694,9 +5694,12 @@ your Mac."""
     def __del__(self):
         try:
             self.RestoreStdio()  # Just in case the MainLoop was overridden
-        except:
-            pass
+        finally:
+            wx.PyApp.__del__(self)
 
+    def Destroy(self):
+        wx.PyApp.Destroy(self)
+        self.thisown = 0
 
     def SetTopWindow(self, frame):
         """Set the \"main\" top level window"""
@@ -11334,11 +11337,15 @@ if RELEASE_VERSION != _core_.RELEASE_VERSION:
 
 #----------------------------------------------------------------------------
 
-# Set the default string<-->unicode conversion encoding from the
-# locale.  This encoding is used when string or unicode objects need
-# to be converted in order to pass them to wxWidgets.  Please be aware
-# that the default encoding within the same locale may be slightly
-# different on different platforms.  For example, please see
+# Set wxPython's default string<-->unicode conversion encoding from
+# the locale, but only if Python's default hasn't been changed.  (We
+# assume that if the user has customized it already then that is the
+# encoding we need to use as well.)
+#
+# The encoding selected here is used when string or unicode objects
+# need to be converted in order to pass them to wxWidgets.  Please be
+# aware that the default encoding within the same locale may be
+# slightly different on different platforms.  For example, please see
 # http://www.alanwood.net/demos/charsetdiffs.html for differences
 # between the common latin/roman encodings.
 
@@ -11349,7 +11356,7 @@ if default == 'ascii':
     try:
         default = locale.getdefaultlocale()[1]
         codecs.lookup(default)
-    except (ValueError, LookupError):
+    except (ValueError, LookupError, TypeError):
         default = _sys.getdefaultencoding()
     del locale
     del codecs
