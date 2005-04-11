@@ -667,11 +667,10 @@ void wxComboBox::SetInsertionPointEnd()
 
 long wxComboBox::GetInsertionPoint() const
 {
-    // CB_GETEDITSEL returns the index of the last character after selection in
-    // its high-order word
+    // CB_GETEDITSEL returns the index of the first character of the selection in
+    // its low-order word
     DWORD pos= (DWORD)::SendMessage(GetHwnd(), CB_GETEDITSEL, 0, 0L);
-
-    return HIWORD(pos);
+    return LOWORD(pos);
 }
 
 wxTextPos wxComboBox::GetLastPosition() const
