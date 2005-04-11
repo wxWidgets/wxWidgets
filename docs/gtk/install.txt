@@ -1,4 +1,4 @@
-wxWidgets 2.5 for GTK+ installation
+wxWidgets 2.6 for GTK+ installation
 -----------------------------------
 
 IMPORTANT NOTE:
@@ -48,33 +48,7 @@ If you want to remove wxWidgets on Unix you can do this:
 > exit
 
 Note that by default, GTK+ 2 is used. GTK+ 1 can be specified
-with --disable-gtk2.
-
-* The Unicode case
-------------------
-
-wxGTK has support for the new version 2.0.X of GTK+ since version 2.4.0.
-This means that wxGTK apps can now make use Unicode as the underlying encoding
-for all text operations. This is a very fundamental change and will need time
-to stabilize, so be careful. After installing a recent version of GTK+
-2.0, do this
-
-> mkdir buildgtk
-> cd buildgtk
-> ../configure --with-gtk --enable-gtk2 --enable-unicode
-> make
-> su <type root password>
-> make install
-> ldconfig
-> exit
-
-If you are adventurous, you can install the FcConfig 2.0 package
-and the Pango library from CVS (or a very recent snapshot from
-the upcoming 1.2 series) and set do "export GDK_USE_XFT=1" so
-that the display as well as the printing code will use render
-using the same FreeType code even for Far Eastern encodings.
-
-Expect problems.
+with --with-gtk1.
 
 * The expert case
 -----------------
@@ -149,22 +123,6 @@ probably have an old version of flex, 2.5.4 is recommended.
 Now create your super-application myfoo.cpp and compile anywhere with
 
 g++ myfoo.cpp `wx-config --libs --cxxflags` -o myfoo
-
-* General
----------
-
-The Unix variants of wxWidgets use GNU configure. If you have problems with
-your make use GNU make instead.
-
-If you have general problems with installation, read my homepage at
-
-  http://wesley.informatik.uni-freiburg.de/~wxxt/
-
-for newest information. If you still don't have any success, please send a bug
-report to one of our mailing lists (see my homepage) INCLUDING A DESCRIPTION OF
-YOUR SYSTEM AND YOUR PROBLEM, SUCH AS YOUR VERSION OF GTK, WXGTK, WHAT
-DISTRIBUTION YOU USE AND WHAT ERROR WAS REPORTED. I know this has no effect,
-but I tried...
 
 * GUI libraries
 ---------------
@@ -290,7 +248,8 @@ if you use all of our CVS repository you have to choose a
 toolkit. You must do this by running configure with either of:
 
     --with-gtk              Use the GIMP ToolKit (GTK+). Default.
-
+    --with-gtk2             Use the GTK+ 2.0. Default.
+    --with-gtk1             Use the GTK+ 1.2. Default.
     --with-motif            Use either Motif or Lesstif
                             Configure will look for both.
 
@@ -311,9 +270,7 @@ The following options handle the kind of library you want to build.
                             such as Sun with gcc 2.8.X which
                             would otherwise produce segvs.
 
-    --enable-unicode        Enable Unicode support.
-
-    --enable-gtk2           Compiling using GTK+ 2 (the default).
+    --enable-unicode        Enable Unicode support. Default for GTK+2.0
 
     --enable-profile        Add profiling info to the object
                             files. Currently broken, I think.
