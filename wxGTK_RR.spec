@@ -53,6 +53,13 @@ Packager: Vadim Zeitlin <vadim@wxwindows.org>
 Prefix: %{pref}
 BuildRoot: %{_tmppath}/%{name}-root
 Requires: %{wxbasename} = %{ver}
+%if %{portname} == gtk2
+# BuildRequires: gtk+-2.0-devel
+%else
+# BuildRequires: gtk+-devel >= 1.2.0
+%endif
+
+BuildRequires: zlib-devel, libjpeg-devel, libpng-devel, libtiff-devel
 
 # all packages providing an implementation of wxWidgets library (regardless of
 # the toolkit used) should provide the (virtual) wxwin package, this makes it
@@ -63,7 +70,7 @@ Provides: wxGTK
 %description
 wxWidgets is a free C++ library for cross-platform GUI development.
 With wxWidgets, you can create applications for different GUIs (GTK+,
-Motif, MS Windows, MacOS X) from the same source code.
+Motif, MS Windows, MacOS X, Windows CE, GPE) from the same source code.
 
 %package devel
 Summary: The GTK+ %{gtkver} port of the wxWidgets library
@@ -73,7 +80,7 @@ Requires: %{wxbasename}-devel = %{ver}
 Provides: wxGTK-devel
 
 %description devel
-Header files for wxGTK, the GTK+ %{gtkver} port of the wxWidgets library.
+The GTK+ %{gtkver} port of the wxWidgets library, header files.
 
 %package gl
 Summary: The GTK+ %{gtkver} port of the wxWidgets library, OpenGL add-on.
@@ -85,20 +92,26 @@ Provides: wxGTK-gl
 OpenGL add-on library for wxGTK, the GTK+ %{gtkver} port of the wxWidgets library.
 
 %package -n %{wxbasename}
-Summary: The base classes 
+Summary: wxBase library - non-GUI support classes of the wxWidgets toolkit
 Group: Development/Libraries
 Provides: wxBase
 
 %description -n %{wxbasename}
-A collection of GUI independent classes
+wxBase is a collection of C++ classes providing basic data structures (strings,
+lists, arrays), portable wrappers around many OS-specific funstions (file
+operations, time/date manipulations, threads, processes, sockets, shared
+library loading) as well as other utility classes (streams, archive and
+compression). wxBase currently supports Win32, most Unix variants (Linux, 
+FreeBSD, Solaris, HP-UX) and MacOS X 10.3.
 
 %package -n %{wxbasename}-devel
-Summary: The base classes header files
+Summary: wxBase library, header files.
 Group: Development/Libraries
 Provides: wxBase-devel
 
 %description -n %{wxbasename}-devel
-A collection of GUI independent classes. Header files.
+wxBase library - non-GUI support classes of the wxWidgets toolkit,
+header files.
 
 %package contrib
 Summary: The GTK+ %{gtkver} port of the wxWidgets library, contributed libraries.
@@ -127,6 +140,17 @@ else
     export MAKE="make"
 fi
 
+mkdir obj-shared-no-gui
+cd obj-shared-no-gui
+../configure --prefix=%{pref} \
+			      --disable-gui \
+%if %{unicode}
+                              --enable-unicode \
+%endif
+                              --disable-optimise
+$MAKE
+cd ..
+
 mkdir obj-shared
 cd obj-shared
 ../configure --prefix=%{pref} \
@@ -136,10 +160,10 @@ cd obj-shared
 			      --with-gtk2 \
 %endif
 %if %{unicode}
-                              --enable-unicode \
+                           --enable-unicode \
 %endif
-                              --disable-optimise \
-                              --with-opengl
+                           --disable-optimise \
+                           --with-opengl
 $MAKE
 
 cd contrib/src
@@ -148,6 +172,7 @@ cd ../../..
 
 %install
 rm -rf $RPM_BUILD_ROOT
+(cd obj-shared-no-gui; make prefix=$RPM_BUILD_ROOT/usr install)
 (cd obj-shared; make prefix=$RPM_BUILD_ROOT/usr install)
 
 # --- wxBase headers list begins here ---
@@ -425,7 +450,9 @@ rm -rf $RPM_BUILD_ROOT
 
 %post devel
 # link wx-config when you install RPM.
-ln -sf %{_libdir}/wx/config/%{wxconfig} %{_bindir}/wx-config
+%if %{unicode}
+    ln -sf %{_libdir}/wx/config/%{wxconfig} %{_bindir}/wx-config
+%endif
 # link wx-config with explicit name.
 ln -sf %{_libdir}/wx/config/%{wxconfig} %{_bindir}/%{wxconfiglink}
 /sbin/ldconfig
@@ -521,9 +548,9 @@ rm -f %{_bindir}/%{wxbaseconfiglink}
 %defattr (-,root,root)
 %dir %{_includedir}/wx-%{ver2}
 %{_libdir}/libwx_base*-%{ver2}.so
-#%dir %{_libdir}/wx
-#%{_libdir}/wx/config/%{wxbaseconfig}
-#%{_libdir}/wx/include/%{wxbaseconfig}/wx/setup.h
+%dir %{_libdir}/wx
+%{_libdir}/wx/config/%{wxbaseconfig}
+%{_libdir}/wx/include/%{wxbaseconfig}/wx/setup.h
 %{_datadir}/aclocal/*.m4
 
 %files gl
