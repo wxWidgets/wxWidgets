@@ -28,6 +28,7 @@ MAKE_CONST_WXSTRING(SliderNameStr);
 enum {
     wxSL_HORIZONTAL,
     wxSL_VERTICAL,
+    wxSL_TICKS,
     wxSL_AUTOTICKS,
     wxSL_LABELS,
     wxSL_LEFT,
