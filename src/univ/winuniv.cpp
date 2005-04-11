@@ -316,7 +316,7 @@ bool wxWindow::DoDrawBackground(wxDC& dc)
     rect.height = size.y;
 
     wxWindow * const parent = GetParent();
-    if ( HasTransparentBackground() && parent && parent->ProvidesBackground() )
+    if ( HasTransparentBackground() && parent )
     {
         wxASSERT( !IsTopLevel() );
 
