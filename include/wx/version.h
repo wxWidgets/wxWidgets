@@ -20,10 +20,10 @@
 /*  NB: this file is parsed by Perl code in tmake templates in distrib/msw/tmake */
 /*      so don't change its format too much or they could break */
 #define wxMAJOR_VERSION      2
-#define wxMINOR_VERSION      5
-#define wxRELEASE_NUMBER     5
-#define wxSUBRELEASE_NUMBER  1
-#define wxVERSION_STRING   _T("wxWidgets 2.5.5")
+#define wxMINOR_VERSION      6
+#define wxRELEASE_NUMBER     0
+#define wxSUBRELEASE_NUMBER  0
+#define wxVERSION_STRING   _T("wxWidgets 2.6.0")
 
 /*  nothing to update below this line when updating the version */
 /*  ---------------------------------------------------------------------------- */

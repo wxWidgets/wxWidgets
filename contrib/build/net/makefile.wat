@@ -79,7 +79,7 @@ EXTRALIBS_FOR_BASE =
 __netutilsdll___depname =
 !ifeq SHARED 1
 __netutilsdll___depname = &
-	$(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_VERSION_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_netutils_wat$(VENDORTAG).dll
+	$(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_netutils_wat$(VENDORTAG).dll
 !endif
 __DEBUGINFO_2 =
 !ifeq BUILD debug
@@ -214,8 +214,7 @@ __UNICODE_DEFINE_p = -d_UNICODE
 
 ### Variables: ###
 
-WX_RELEASE_NODOT = 25
-WX_VERSION_NODOT = $(WX_RELEASE_NODOT)5
+WX_RELEASE_NODOT = 26
 OBJS = &
 	wat_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)
 LIBDIRNAME = ..\..\src\net\..\..\..\lib\wat_$(LIBTYPE_SUFFIX)$(CFG)
@@ -261,12 +260,12 @@ clean : .SYMBOLIC
 	-if exist $(OBJS)\*.lbc del $(OBJS)\*.lbc
 	-if exist $(OBJS)\*.ilk del $(OBJS)\*.ilk
 	-if exist $(OBJS)\*.pch del $(OBJS)\*.pch
-	-if exist $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_VERSION_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_netutils_wat$(VENDORTAG).dll del $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_VERSION_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_netutils_wat$(VENDORTAG).dll
+	-if exist $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_netutils_wat$(VENDORTAG).dll del $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_netutils_wat$(VENDORTAG).dll
 	-if exist $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_netutils.lib del $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_netutils.lib
 	-if exist $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_netutils.lib del $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_netutils.lib
 
 !ifeq SHARED 1
-$(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_VERSION_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_netutils_wat$(VENDORTAG).dll :  $(NETUTILSDLL_OBJECTS) $(OBJS)\netutilsdll_version.res
+$(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_netutils_wat$(VENDORTAG).dll :  $(NETUTILSDLL_OBJECTS) $(OBJS)\netutilsdll_version.res
 	@%create $(OBJS)\netutilsdll.lbc
 	@%append $(OBJS)\netutilsdll.lbc option quiet
 	@%append $(OBJS)\netutilsdll.lbc name $^@
@@ -291,7 +290,7 @@ $(OBJS)\netutilsdll_dummy.obj :  .AUTODEPEND ../../src/net\..\..\..\src\msw\dumm
 	$(CXX) -zq -fo=$^@ $(NETUTILSDLL_CXXFLAGS) $<
 
 $(OBJS)\netutilsdll_version.res :  .AUTODEPEND ../../src/net\..\..\..\src\msw\version.rc
-	wrc -q -ad -bt=nt -r -fo=$^@   -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p) -i=..\..\src\net\..\..\..\include -i=$(SETUPHDIR) -dWXDLLNAME=wx$(PORTNAME)$(WXUNIVNAME)$(WX_VERSION_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_netutils_wat$(VENDORTAG) $<
+	wrc -q -ad -bt=nt -r -fo=$^@   -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p) -i=..\..\src\net\..\..\..\include -i=$(SETUPHDIR) -dWXDLLNAME=wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_netutils_wat$(VENDORTAG) $<
 
 $(OBJS)\netutilsdll_email.obj :  .AUTODEPEND ../../src/net\email.cpp
 	$(CXX) -zq -fo=$^@ $(NETUTILSDLL_CXXFLAGS) $<

@@ -36,8 +36,8 @@ SAMPLES_RPATH_POSTLINK = @SAMPLES_RPATH_POSTLINK@
 ### Variables: ###
 
 DESTDIR = 
-WX_RELEASE = 2.5
-WX_VERSION = $(WX_RELEASE).5
+WX_RELEASE = 2.6
+WX_VERSION = $(WX_RELEASE).0
 LIBDIRNAME = $(top_builddir)lib
 DYNSASH_SWITCH_CXXFLAGS = -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
 	$(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) \
@@ -128,7 +128,7 @@ COND_TOOLKIT_MAC___MACOSX_RESOURCES_p_1 = $(RESCOMP) -d __DARWIN__ -t APPL -d \
 	$(__RTTI_DEFINE_p_1) $(__THREAD_DEFINE_p_1) -i $(srcdir) $(__DLLFLAG_p_1) -i \
 	$(srcdir)/../../../../samples -i $(top_srcdir)/include -i \
 	$(srcdir)/../../../include -o dynsash_switch$(EXEEXT) Carbon.r \
-	$(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).5.r sample.r
+	$(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).0.r sample.r
 @COND_TOOLKIT_MAC@__MACOSX_RESOURCES_p_1 = $(COND_TOOLKIT_MAC___MACOSX_RESOURCES_p_1)
 
 ### Targets: ###
@@ -157,7 +157,7 @@ dynsash_switch$(EXEEXT): $(DYNSASH_SWITCH_OBJECTS) $(__dynsash_switch___win32rc)
 	$(__dynsash_switch___os2_emxbindcmd)
 	$(SAMPLES_RPATH_POSTLINK)
 
-dynsash_switch.app/Contents/PkgInfo: dynsash_switch$(EXEEXT) $(top_srcdir)/src/mac/carbon/Info.plist.in $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).5.rsrc $(top_srcdir)/src/mac/carbon/wxmac.icns
+dynsash_switch.app/Contents/PkgInfo: dynsash_switch$(EXEEXT) $(top_srcdir)/src/mac/carbon/Info.plist.in $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).0.rsrc $(top_srcdir)/src/mac/carbon/wxmac.icns
 	mkdir -p dynsash_switch.app/Contents
 	mkdir -p dynsash_switch.app/Contents/MacOS
 	mkdir -p dynsash_switch.app/Contents/Resources
@@ -175,7 +175,7 @@ dynsash_switch.app/Contents/PkgInfo: dynsash_switch$(EXEEXT) $(top_srcdir)/src/m
 	ln -f dynsash_switch$(EXEEXT) dynsash_switch.app/Contents/MacOS/dynsash_switch
 	
 	
-	cp -f $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).5.rsrc dynsash_switch.app/Contents/Resources/dynsash_switch.rsrc
+	cp -f $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).0.rsrc dynsash_switch.app/Contents/Resources/dynsash_switch.rsrc
 	cp -f $(top_srcdir)/src/mac/carbon/wxmac.icns dynsash_switch.app/Contents/Resources/wxmac.icns
 
 @COND_PLATFORM_MACOSX_1@dynsash_switch_bundle: $(____dynsash_switch_BUNDLE_TGT_REF_DEP)

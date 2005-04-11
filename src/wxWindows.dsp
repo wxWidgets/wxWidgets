@@ -3411,6 +3411,14 @@ SOURCE=..\include\wx\msw\helpbest.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\include\wx\msw\helpchm.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\msw\helpwin.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\include\wx\msw\icon.h
 # End Source File
 # Begin Source File
@@ -3520,6 +3528,10 @@ SOURCE=..\include\wx\msw\palette.h
 # Begin Source File
 
 SOURCE=..\include\wx\msw\pen.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\msw\popupwin.h
 # End Source File
 # Begin Source File
 

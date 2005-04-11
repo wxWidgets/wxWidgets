@@ -36,8 +36,8 @@ SAMPLES_RPATH_POSTLINK = @SAMPLES_RPATH_POSTLINK@
 ### Variables: ###
 
 DESTDIR = 
-WX_RELEASE = 2.5
-WX_VERSION = $(WX_RELEASE).5
+WX_RELEASE = 2.6
+WX_VERSION = $(WX_RELEASE).0
 LIBDIRNAME = $(top_builddir)lib
 MDI_CXXFLAGS = -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
 	$(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) \
@@ -119,7 +119,7 @@ COND_TOOLKIT_MAC___MACOSX_RESOURCES_p_1 = $(RESCOMP) -d __DARWIN__ -t APPL -d \
 	__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_1) $(__EXCEPTIONS_DEFINE_p_1) \
 	$(__RTTI_DEFINE_p_1) $(__THREAD_DEFINE_p_1) -i $(srcdir) $(__DLLFLAG_p_1) -i \
 	$(srcdir)/../../samples -i $(top_srcdir)/include -o mdi$(EXEEXT) Carbon.r \
-	$(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).5.r sample.r
+	$(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).0.r sample.r
 @COND_TOOLKIT_MAC@__MACOSX_RESOURCES_p_1 = $(COND_TOOLKIT_MAC___MACOSX_RESOURCES_p_1)
 
 ### Targets: ###
@@ -148,7 +148,7 @@ mdi$(EXEEXT): $(MDI_OBJECTS) $(__mdi___win32rc)
 	$(__mdi___os2_emxbindcmd)
 	$(SAMPLES_RPATH_POSTLINK)
 
-mdi.app/Contents/PkgInfo: mdi$(EXEEXT) $(top_srcdir)/src/mac/carbon/Info.plist.in $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).5.rsrc $(top_srcdir)/src/mac/carbon/wxmac.icns
+mdi.app/Contents/PkgInfo: mdi$(EXEEXT) $(top_srcdir)/src/mac/carbon/Info.plist.in $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).0.rsrc $(top_srcdir)/src/mac/carbon/wxmac.icns
 	mkdir -p mdi.app/Contents
 	mkdir -p mdi.app/Contents/MacOS
 	mkdir -p mdi.app/Contents/Resources
@@ -166,7 +166,7 @@ mdi.app/Contents/PkgInfo: mdi$(EXEEXT) $(top_srcdir)/src/mac/carbon/Info.plist.i
 	ln -f mdi$(EXEEXT) mdi.app/Contents/MacOS/mdi
 	
 	
-	cp -f $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).5.rsrc mdi.app/Contents/Resources/mdi.rsrc
+	cp -f $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).0.rsrc mdi.app/Contents/Resources/mdi.rsrc
 	cp -f $(top_srcdir)/src/mac/carbon/wxmac.icns mdi.app/Contents/Resources/wxmac.icns
 
 @COND_PLATFORM_MACOSX_1@mdi_bundle: $(____mdi_BUNDLE_TGT_REF_DEP)

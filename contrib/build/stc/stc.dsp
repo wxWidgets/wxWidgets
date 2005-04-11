@@ -55,18 +55,18 @@ RSC=rc.exe
 # PROP Output_Dir "..\..\src\stc\..\..\..\lib\vc_dll"
 # PROP Intermediate_Dir "vc_mswunivudll\stc"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /MD /O2 /GR /EHsc /I "..\..\src\stc\..\..\..\include" /I "..\..\src\stc\..\..\..\lib\vc_dll\mswunivu" /W4 /Fd..\..\src\stc\..\..\..\lib\vc_dll\wxmswuniv255u_stc_vc_custom.pdb /I "..\..\src\stc\..\..\include" /I "..\..\src\stc\scintilla\include" /I "..\..\src\stc\scintilla\src" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "_UNICODE" /D "__WX__" /D "SCI_LEXER" /D "LINK_LEXERS" /D "WXUSINGDLL" /D "WXMAKINGDLL_STC" /c
-# ADD CPP /nologo /FD /MD /O2 /GR /EHsc /I "..\..\src\stc\..\..\..\include" /I "..\..\src\stc\..\..\..\lib\vc_dll\mswunivu" /W4 /Fd..\..\src\stc\..\..\..\lib\vc_dll\wxmswuniv255u_stc_vc_custom.pdb /I "..\..\src\stc\..\..\include" /I "..\..\src\stc\scintilla\include" /I "..\..\src\stc\scintilla\src" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "_UNICODE" /D "__WX__" /D "SCI_LEXER" /D "LINK_LEXERS" /D "WXUSINGDLL" /D "WXMAKINGDLL_STC" /c
+# ADD BASE CPP /nologo /FD /MD /O2 /GR /EHsc /I "..\..\src\stc\..\..\..\include" /I "..\..\src\stc\..\..\..\lib\vc_dll\mswunivu" /W4 /Fd..\..\src\stc\..\..\..\lib\vc_dll\wxmswuniv26u_stc_vc_custom.pdb /I "..\..\src\stc\..\..\include" /I "..\..\src\stc\scintilla\include" /I "..\..\src\stc\scintilla\src" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "_UNICODE" /D "__WX__" /D "SCI_LEXER" /D "LINK_LEXERS" /D "WXUSINGDLL" /D "WXMAKINGDLL_STC" /c
+# ADD CPP /nologo /FD /MD /O2 /GR /EHsc /I "..\..\src\stc\..\..\..\include" /I "..\..\src\stc\..\..\..\lib\vc_dll\mswunivu" /W4 /Fd..\..\src\stc\..\..\..\lib\vc_dll\wxmswuniv26u_stc_vc_custom.pdb /I "..\..\src\stc\..\..\include" /I "..\..\src\stc\scintilla\include" /I "..\..\src\stc\scintilla\src" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "_UNICODE" /D "__WX__" /D "SCI_LEXER" /D "LINK_LEXERS" /D "WXUSINGDLL" /D "WXMAKINGDLL_STC" /c
 # ADD BASE MTL /nologo /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "_UNICODE" /D "__WX__" /D "SCI_LEXER" /D "LINK_LEXERS" /D "WXUSINGDLL" /D "WXMAKINGDLL_STC" /mktyplib203 /win32
 # ADD MTL /nologo /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "_UNICODE" /D "__WX__" /D "SCI_LEXER" /D "LINK_LEXERS" /D "WXUSINGDLL" /D "WXMAKINGDLL_STC" /mktyplib203 /win32
-# ADD BASE RSC /l 0x409 /d "__WXMSW__" /d "__WXUNIVERSAL__" /d "_UNICODE" /i "..\..\src\stc\..\..\..\include" /i "..\..\src\stc\..\..\..\lib\vc_dll\mswunivu" /d WXDLLNAME=wxmswuniv255u_stc_vc_custom /i "..\..\src\stc\..\..\include" /i "..\..\src\stc\scintilla\include" /i "..\..\src\stc\scintilla\src" /d "__WX__" /d "SCI_LEXER" /d "LINK_LEXERS" /d "WXUSINGDLL" /d WXMAKINGDLL_STC
-# ADD RSC /l 0x409 /d "__WXMSW__" /d "__WXUNIVERSAL__" /d "_UNICODE" /i "..\..\src\stc\..\..\..\include" /i "..\..\src\stc\..\..\..\lib\vc_dll\mswunivu" /d WXDLLNAME=wxmswuniv255u_stc_vc_custom /i "..\..\src\stc\..\..\include" /i "..\..\src\stc\scintilla\include" /i "..\..\src\stc\scintilla\src" /d "__WX__" /d "SCI_LEXER" /d "LINK_LEXERS" /d "WXUSINGDLL" /d WXMAKINGDLL_STC
+# ADD BASE RSC /l 0x409 /d "__WXMSW__" /d "__WXUNIVERSAL__" /d "_UNICODE" /i "..\..\src\stc\..\..\..\include" /i "..\..\src\stc\..\..\..\lib\vc_dll\mswunivu" /d WXDLLNAME=wxmswuniv26u_stc_vc_custom /i "..\..\src\stc\..\..\include" /i "..\..\src\stc\scintilla\include" /i "..\..\src\stc\scintilla\src" /d "__WX__" /d "SCI_LEXER" /d "LINK_LEXERS" /d "WXUSINGDLL" /d WXMAKINGDLL_STC
+# ADD RSC /l 0x409 /d "__WXMSW__" /d "__WXUNIVERSAL__" /d "_UNICODE" /i "..\..\src\stc\..\..\..\include" /i "..\..\src\stc\..\..\..\lib\vc_dll\mswunivu" /d WXDLLNAME=wxmswuniv26u_stc_vc_custom /i "..\..\src\stc\..\..\include" /i "..\..\src\stc\scintilla\include" /i "..\..\src\stc\scintilla\src" /d "__WX__" /d "SCI_LEXER" /d "LINK_LEXERS" /d "WXUSINGDLL" /d WXMAKINGDLL_STC
 BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LINK32=link.exe
-# ADD BASE LINK32 wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregexu.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib oleacc.lib odbc32.lib wxmswuniv25u_core.lib wxbase25u.lib /nologo /dll /machine:i386 /out:"..\..\src\stc\..\..\..\lib\vc_dll\wxmswuniv255u_stc_vc_custom.dll" /libpath:"..\..\src\stc\..\..\..\lib\vc_dll" /implib:"..\..\src\stc\..\..\..\lib\vc_dll\wxmswuniv25u_stc.lib"
-# ADD LINK32 wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregexu.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib oleacc.lib odbc32.lib wxmswuniv25u_core.lib wxbase25u.lib /nologo /dll /machine:i386 /out:"..\..\src\stc\..\..\..\lib\vc_dll\wxmswuniv255u_stc_vc_custom.dll" /libpath:"..\..\src\stc\..\..\..\lib\vc_dll" /implib:"..\..\src\stc\..\..\..\lib\vc_dll\wxmswuniv25u_stc.lib"
+# ADD BASE LINK32 wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregexu.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib oleacc.lib odbc32.lib wxmswuniv26u_core.lib wxbase26u.lib /nologo /dll /machine:i386 /out:"..\..\src\stc\..\..\..\lib\vc_dll\wxmswuniv26u_stc_vc_custom.dll" /libpath:"..\..\src\stc\..\..\..\lib\vc_dll" /implib:"..\..\src\stc\..\..\..\lib\vc_dll\wxmswuniv26u_stc.lib"
+# ADD LINK32 wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregexu.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib oleacc.lib odbc32.lib wxmswuniv26u_core.lib wxbase26u.lib /nologo /dll /machine:i386 /out:"..\..\src\stc\..\..\..\lib\vc_dll\wxmswuniv26u_stc_vc_custom.dll" /libpath:"..\..\src\stc\..\..\..\lib\vc_dll" /implib:"..\..\src\stc\..\..\..\lib\vc_dll\wxmswuniv26u_stc.lib"
 
 !ELSEIF  "$(CFG)" == "stc - Win32 DLL Universal Unicode Debug"
 
@@ -80,18 +80,18 @@ LINK32=link.exe
 # PROP Output_Dir "..\..\src\stc\..\..\..\lib\vc_dll"
 # PROP Intermediate_Dir "vc_mswunivuddll\stc"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /MDd /Od /GR /EHsc /I "..\..\src\stc\..\..\..\include" /I "..\..\src\stc\..\..\..\lib\vc_dll\mswunivud" /W4 /Zi /Gm /GZ /Fd..\..\src\stc\..\..\..\lib\vc_dll\wxmswuniv255ud_stc_vc_custom.pdb /I "..\..\src\stc\..\..\include" /I "..\..\src\stc\scintilla\include" /I "..\..\src\stc\scintilla\src" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "__WXDEBUG__" /D "_UNICODE" /D "__WX__" /D "SCI_LEXER" /D "LINK_LEXERS" /D "WXUSINGDLL" /D "WXMAKINGDLL_STC" /c
-# ADD CPP /nologo /FD /MDd /Od /GR /EHsc /I "..\..\src\stc\..\..\..\include" /I "..\..\src\stc\..\..\..\lib\vc_dll\mswunivud" /W4 /Zi /Gm /GZ /Fd..\..\src\stc\..\..\..\lib\vc_dll\wxmswuniv255ud_stc_vc_custom.pdb /I "..\..\src\stc\..\..\include" /I "..\..\src\stc\scintilla\include" /I "..\..\src\stc\scintilla\src" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "__WXDEBUG__" /D "_UNICODE" /D "__WX__" /D "SCI_LEXER" /D "LINK_LEXERS" /D "WXUSINGDLL" /D "WXMAKINGDLL_STC" /c
+# ADD BASE CPP /nologo /FD /MDd /Od /GR /EHsc /I "..\..\src\stc\..\..\..\include" /I "..\..\src\stc\..\..\..\lib\vc_dll\mswunivud" /W4 /Zi /Gm /GZ /Fd..\..\src\stc\..\..\..\lib\vc_dll\wxmswuniv26ud_stc_vc_custom.pdb /I "..\..\src\stc\..\..\include" /I "..\..\src\stc\scintilla\include" /I "..\..\src\stc\scintilla\src" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "__WXDEBUG__" /D "_UNICODE" /D "__WX__" /D "SCI_LEXER" /D "LINK_LEXERS" /D "WXUSINGDLL" /D "WXMAKINGDLL_STC" /c
+# ADD CPP /nologo /FD /MDd /Od /GR /EHsc /I "..\..\src\stc\..\..\..\include" /I "..\..\src\stc\..\..\..\lib\vc_dll\mswunivud" /W4 /Zi /Gm /GZ /Fd..\..\src\stc\..\..\..\lib\vc_dll\wxmswuniv26ud_stc_vc_custom.pdb /I "..\..\src\stc\..\..\include" /I "..\..\src\stc\scintilla\include" /I "..\..\src\stc\scintilla\src" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "__WXDEBUG__" /D "_UNICODE" /D "__WX__" /D "SCI_LEXER" /D "LINK_LEXERS" /D "WXUSINGDLL" /D "WXMAKINGDLL_STC" /c
 # ADD BASE MTL /nologo /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "__WXDEBUG__" /D "_UNICODE" /D "__WX__" /D "SCI_LEXER" /D "LINK_LEXERS" /D "WXUSINGDLL" /D "WXMAKINGDLL_STC" /mktyplib203 /win32
 # ADD MTL /nologo /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "__WXDEBUG__" /D "_UNICODE" /D "__WX__" /D "SCI_LEXER" /D "LINK_LEXERS" /D "WXUSINGDLL" /D "WXMAKINGDLL_STC" /mktyplib203 /win32
-# ADD BASE RSC /l 0x409 /d "_DEBUG" /d "__WXMSW__" /d "__WXUNIVERSAL__" /d "__WXDEBUG__" /d "_UNICODE" /i "..\..\src\stc\..\..\..\include" /i "..\..\src\stc\..\..\..\lib\vc_dll\mswunivud" /d WXDLLNAME=wxmswuniv255ud_stc_vc_custom /i "..\..\src\stc\..\..\include" /i "..\..\src\stc\scintilla\include" /i "..\..\src\stc\scintilla\src" /d "__WX__" /d "SCI_LEXER" /d "LINK_LEXERS" /d "WXUSINGDLL" /d WXMAKINGDLL_STC
-# ADD RSC /l 0x409 /d "_DEBUG" /d "__WXMSW__" /d "__WXUNIVERSAL__" /d "__WXDEBUG__" /d "_UNICODE" /i "..\..\src\stc\..\..\..\include" /i "..\..\src\stc\..\..\..\lib\vc_dll\mswunivud" /d WXDLLNAME=wxmswuniv255ud_stc_vc_custom /i "..\..\src\stc\..\..\include" /i "..\..\src\stc\scintilla\include" /i "..\..\src\stc\scintilla\src" /d "__WX__" /d "SCI_LEXER" /d "LINK_LEXERS" /d "WXUSINGDLL" /d WXMAKINGDLL_STC
+# ADD BASE RSC /l 0x409 /d "_DEBUG" /d "__WXMSW__" /d "__WXUNIVERSAL__" /d "__WXDEBUG__" /d "_UNICODE" /i "..\..\src\stc\..\..\..\include" /i "..\..\src\stc\..\..\..\lib\vc_dll\mswunivud" /d WXDLLNAME=wxmswuniv26ud_stc_vc_custom /i "..\..\src\stc\..\..\include" /i "..\..\src\stc\scintilla\include" /i "..\..\src\stc\scintilla\src" /d "__WX__" /d "SCI_LEXER" /d "LINK_LEXERS" /d "WXUSINGDLL" /d WXMAKINGDLL_STC
+# ADD RSC /l 0x409 /d "_DEBUG" /d "__WXMSW__" /d "__WXUNIVERSAL__" /d "__WXDEBUG__" /d "_UNICODE" /i "..\..\src\stc\..\..\..\include" /i "..\..\src\stc\..\..\..\lib\vc_dll\mswunivud" /d WXDLLNAME=wxmswuniv26ud_stc_vc_custom /i "..\..\src\stc\..\..\include" /i "..\..\src\stc\scintilla\include" /i "..\..\src\stc\scintilla\src" /d "__WX__" /d "SCI_LEXER" /d "LINK_LEXERS" /d "WXUSINGDLL" /d WXMAKINGDLL_STC
 BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LINK32=link.exe
-# ADD BASE LINK32 wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib wxregexud.lib wxexpatd.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib oleacc.lib odbc32.lib wxmswuniv25ud_core.lib wxbase25ud.lib /nologo /dll /machine:i386 /out:"..\..\src\stc\..\..\..\lib\vc_dll\wxmswuniv255ud_stc_vc_custom.dll" /libpath:"..\..\src\stc\..\..\..\lib\vc_dll" /implib:"..\..\src\stc\..\..\..\lib\vc_dll\wxmswuniv25ud_stc.lib" /debug
-# ADD LINK32 wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib wxregexud.lib wxexpatd.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib oleacc.lib odbc32.lib wxmswuniv25ud_core.lib wxbase25ud.lib /nologo /dll /machine:i386 /out:"..\..\src\stc\..\..\..\lib\vc_dll\wxmswuniv255ud_stc_vc_custom.dll" /libpath:"..\..\src\stc\..\..\..\lib\vc_dll" /implib:"..\..\src\stc\..\..\..\lib\vc_dll\wxmswuniv25ud_stc.lib" /debug
+# ADD BASE LINK32 wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib wxregexud.lib wxexpatd.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib oleacc.lib odbc32.lib wxmswuniv26ud_core.lib wxbase26ud.lib /nologo /dll /machine:i386 /out:"..\..\src\stc\..\..\..\lib\vc_dll\wxmswuniv26ud_stc_vc_custom.dll" /libpath:"..\..\src\stc\..\..\..\lib\vc_dll" /implib:"..\..\src\stc\..\..\..\lib\vc_dll\wxmswuniv26ud_stc.lib" /debug
+# ADD LINK32 wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib wxregexud.lib wxexpatd.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib oleacc.lib odbc32.lib wxmswuniv26ud_core.lib wxbase26ud.lib /nologo /dll /machine:i386 /out:"..\..\src\stc\..\..\..\lib\vc_dll\wxmswuniv26ud_stc_vc_custom.dll" /libpath:"..\..\src\stc\..\..\..\lib\vc_dll" /implib:"..\..\src\stc\..\..\..\lib\vc_dll\wxmswuniv26ud_stc.lib" /debug
 
 !ELSEIF  "$(CFG)" == "stc - Win32 DLL Universal Release"
 
@@ -105,18 +105,18 @@ LINK32=link.exe
 # PROP Output_Dir "..\..\src\stc\..\..\..\lib\vc_dll"
 # PROP Intermediate_Dir "vc_mswunivdll\stc"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /MD /O2 /GR /EHsc /I "..\..\src\stc\..\..\..\include" /I "..\..\src\stc\..\..\..\lib\vc_dll\mswuniv" /W4 /Fd..\..\src\stc\..\..\..\lib\vc_dll\wxmswuniv255_stc_vc_custom.pdb /I "..\..\src\stc\..\..\include" /I "..\..\src\stc\scintilla\include" /I "..\..\src\stc\scintilla\src" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "__WX__" /D "SCI_LEXER" /D "LINK_LEXERS" /D "WXUSINGDLL" /D "WXMAKINGDLL_STC" /c
-# ADD CPP /nologo /FD /MD /O2 /GR /EHsc /I "..\..\src\stc\..\..\..\include" /I "..\..\src\stc\..\..\..\lib\vc_dll\mswuniv" /W4 /Fd..\..\src\stc\..\..\..\lib\vc_dll\wxmswuniv255_stc_vc_custom.pdb /I "..\..\src\stc\..\..\include" /I "..\..\src\stc\scintilla\include" /I "..\..\src\stc\scintilla\src" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "__WX__" /D "SCI_LEXER" /D "LINK_LEXERS" /D "WXUSINGDLL" /D "WXMAKINGDLL_STC" /c
+# ADD BASE CPP /nologo /FD /MD /O2 /GR /EHsc /I "..\..\src\stc\..\..\..\include" /I "..\..\src\stc\..\..\..\lib\vc_dll\mswuniv" /W4 /Fd..\..\src\stc\..\..\..\lib\vc_dll\wxmswuniv26_stc_vc_custom.pdb /I "..\..\src\stc\..\..\include" /I "..\..\src\stc\scintilla\include" /I "..\..\src\stc\scintilla\src" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "__WX__" /D "SCI_LEXER" /D "LINK_LEXERS" /D "WXUSINGDLL" /D "WXMAKINGDLL_STC" /c
+# ADD CPP /nologo /FD /MD /O2 /GR /EHsc /I "..\..\src\stc\..\..\..\include" /I "..\..\src\stc\..\..\..\lib\vc_dll\mswuniv" /W4 /Fd..\..\src\stc\..\..\..\lib\vc_dll\wxmswuniv26_stc_vc_custom.pdb /I "..\..\src\stc\..\..\include" /I "..\..\src\stc\scintilla\include" /I "..\..\src\stc\scintilla\src" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "__WX__" /D "SCI_LEXER" /D "LINK_LEXERS" /D "WXUSINGDLL" /D "WXMAKINGDLL_STC" /c
 # ADD BASE MTL /nologo /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "__WX__" /D "SCI_LEXER" /D "LINK_LEXERS" /D "WXUSINGDLL" /D "WXMAKINGDLL_STC" /mktyplib203 /win32
 # ADD MTL /nologo /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "__WX__" /D "SCI_LEXER" /D "LINK_LEXERS" /D "WXUSINGDLL" /D "WXMAKINGDLL_STC" /mktyplib203 /win32
-# ADD BASE RSC /l 0x409 /d "__WXMSW__" /d "__WXUNIVERSAL__" /i "..\..\src\stc\..\..\..\include" /i "..\..\src\stc\..\..\..\lib\vc_dll\mswuniv" /d WXDLLNAME=wxmswuniv255_stc_vc_custom /i "..\..\src\stc\..\..\include" /i "..\..\src\stc\scintilla\include" /i "..\..\src\stc\scintilla\src" /d "__WX__" /d "SCI_LEXER" /d "LINK_LEXERS" /d "WXUSINGDLL" /d WXMAKINGDLL_STC
-# ADD RSC /l 0x409 /d "__WXMSW__" /d "__WXUNIVERSAL__" /i "..\..\src\stc\..\..\..\include" /i "..\..\src\stc\..\..\..\lib\vc_dll\mswuniv" /d WXDLLNAME=wxmswuniv255_stc_vc_custom /i "..\..\src\stc\..\..\include" /i "..\..\src\stc\scintilla\include" /i "..\..\src\stc\scintilla\src" /d "__WX__" /d "SCI_LEXER" /d "LINK_LEXERS" /d "WXUSINGDLL" /d WXMAKINGDLL_STC
+# ADD BASE RSC /l 0x409 /d "__WXMSW__" /d "__WXUNIVERSAL__" /i "..\..\src\stc\..\..\..\include" /i "..\..\src\stc\..\..\..\lib\vc_dll\mswuniv" /d WXDLLNAME=wxmswuniv26_stc_vc_custom /i "..\..\src\stc\..\..\include" /i "..\..\src\stc\scintilla\include" /i "..\..\src\stc\scintilla\src" /d "__WX__" /d "SCI_LEXER" /d "LINK_LEXERS" /d "WXUSINGDLL" /d WXMAKINGDLL_STC
+# ADD RSC /l 0x409 /d "__WXMSW__" /d "__WXUNIVERSAL__" /i "..\..\src\stc\..\..\..\include" /i "..\..\src\stc\..\..\..\lib\vc_dll\mswuniv" /d WXDLLNAME=wxmswuniv26_stc_vc_custom /i "..\..\src\stc\..\..\include" /i "..\..\src\stc\scintilla\include" /i "..\..\src\stc\scintilla\src" /d "__WX__" /d "SCI_LEXER" /d "LINK_LEXERS" /d "WXUSINGDLL" /d WXMAKINGDLL_STC
 BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LINK32=link.exe
-# ADD BASE LINK32 wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregex.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib oleacc.lib odbc32.lib wxmswuniv25_core.lib wxbase25.lib /nologo /dll /machine:i386 /out:"..\..\src\stc\..\..\..\lib\vc_dll\wxmswuniv255_stc_vc_custom.dll" /libpath:"..\..\src\stc\..\..\..\lib\vc_dll" /implib:"..\..\src\stc\..\..\..\lib\vc_dll\wxmswuniv25_stc.lib"
-# ADD LINK32 wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregex.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib oleacc.lib odbc32.lib wxmswuniv25_core.lib wxbase25.lib /nologo /dll /machine:i386 /out:"..\..\src\stc\..\..\..\lib\vc_dll\wxmswuniv255_stc_vc_custom.dll" /libpath:"..\..\src\stc\..\..\..\lib\vc_dll" /implib:"..\..\src\stc\..\..\..\lib\vc_dll\wxmswuniv25_stc.lib"
+# ADD BASE LINK32 wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregex.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib oleacc.lib odbc32.lib wxmswuniv26_core.lib wxbase26.lib /nologo /dll /machine:i386 /out:"..\..\src\stc\..\..\..\lib\vc_dll\wxmswuniv26_stc_vc_custom.dll" /libpath:"..\..\src\stc\..\..\..\lib\vc_dll" /implib:"..\..\src\stc\..\..\..\lib\vc_dll\wxmswuniv26_stc.lib"
+# ADD LINK32 wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregex.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib oleacc.lib odbc32.lib wxmswuniv26_core.lib wxbase26.lib /nologo /dll /machine:i386 /out:"..\..\src\stc\..\..\..\lib\vc_dll\wxmswuniv26_stc_vc_custom.dll" /libpath:"..\..\src\stc\..\..\..\lib\vc_dll" /implib:"..\..\src\stc\..\..\..\lib\vc_dll\wxmswuniv26_stc.lib"
 
 !ELSEIF  "$(CFG)" == "stc - Win32 DLL Universal Debug"
 
@@ -130,18 +130,18 @@ LINK32=link.exe
 # PROP Output_Dir "..\..\src\stc\..\..\..\lib\vc_dll"
 # PROP Intermediate_Dir "vc_mswunivddll\stc"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /MDd /Od /GR /EHsc /I "..\..\src\stc\..\..\..\include" /I "..\..\src\stc\..\..\..\lib\vc_dll\mswunivd" /W4 /Zi /Gm /GZ /Fd..\..\src\stc\..\..\..\lib\vc_dll\wxmswuniv255d_stc_vc_custom.pdb /I "..\..\src\stc\..\..\include" /I "..\..\src\stc\scintilla\include" /I "..\..\src\stc\scintilla\src" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "__WXDEBUG__" /D "__WX__" /D "SCI_LEXER" /D "LINK_LEXERS" /D "WXUSINGDLL" /D "WXMAKINGDLL_STC" /c
-# ADD CPP /nologo /FD /MDd /Od /GR /EHsc /I "..\..\src\stc\..\..\..\include" /I "..\..\src\stc\..\..\..\lib\vc_dll\mswunivd" /W4 /Zi /Gm /GZ /Fd..\..\src\stc\..\..\..\lib\vc_dll\wxmswuniv255d_stc_vc_custom.pdb /I "..\..\src\stc\..\..\include" /I "..\..\src\stc\scintilla\include" /I "..\..\src\stc\scintilla\src" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "__WXDEBUG__" /D "__WX__" /D "SCI_LEXER" /D "LINK_LEXERS" /D "WXUSINGDLL" /D "WXMAKINGDLL_STC" /c
+# ADD BASE CPP /nologo /FD /MDd /Od /GR /EHsc /I "..\..\src\stc\..\..\..\include" /I "..\..\src\stc\..\..\..\lib\vc_dll\mswunivd" /W4 /Zi /Gm /GZ /Fd..\..\src\stc\..\..\..\lib\vc_dll\wxmswuniv26d_stc_vc_custom.pdb /I "..\..\src\stc\..\..\include" /I "..\..\src\stc\scintilla\include" /I "..\..\src\stc\scintilla\src" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "__WXDEBUG__" /D "__WX__" /D "SCI_LEXER" /D "LINK_LEXERS" /D "WXUSINGDLL" /D "WXMAKINGDLL_STC" /c
+# ADD CPP /nologo /FD /MDd /Od /GR /EHsc /I "..\..\src\stc\..\..\..\include" /I "..\..\src\stc\..\..\..\lib\vc_dll\mswunivd" /W4 /Zi /Gm /GZ /Fd..\..\src\stc\..\..\..\lib\vc_dll\wxmswuniv26d_stc_vc_custom.pdb /I "..\..\src\stc\..\..\include" /I "..\..\src\stc\scintilla\include" /I "..\..\src\stc\scintilla\src" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "__WXDEBUG__" /D "__WX__" /D "SCI_LEXER" /D "LINK_LEXERS" /D "WXUSINGDLL" /D "WXMAKINGDLL_STC" /c
 # ADD BASE MTL /nologo /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "__WXDEBUG__" /D "__WX__" /D "SCI_LEXER" /D "LINK_LEXERS" /D "WXUSINGDLL" /D "WXMAKINGDLL_STC" /mktyplib203 /win32
 # ADD MTL /nologo /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "__WXDEBUG__" /D "__WX__" /D "SCI_LEXER" /D "LINK_LEXERS" /D "WXUSINGDLL" /D "WXMAKINGDLL_STC" /mktyplib203 /win32
-# ADD BASE RSC /l 0x409 /d "_DEBUG" /d "__WXMSW__" /d "__WXUNIVERSAL__" /d "__WXDEBUG__" /i "..\..\src\stc\..\..\..\include" /i "..\..\src\stc\..\..\..\lib\vc_dll\mswunivd" /d WXDLLNAME=wxmswuniv255d_stc_vc_custom /i "..\..\src\stc\..\..\include" /i "..\..\src\stc\scintilla\include" /i "..\..\src\stc\scintilla\src" /d "__WX__" /d "SCI_LEXER" /d "LINK_LEXERS" /d "WXUSINGDLL" /d WXMAKINGDLL_STC
-# ADD RSC /l 0x409 /d "_DEBUG" /d "__WXMSW__" /d "__WXUNIVERSAL__" /d "__WXDEBUG__" /i "..\..\src\stc\..\..\..\include" /i "..\..\src\stc\..\..\..\lib\vc_dll\mswunivd" /d WXDLLNAME=wxmswuniv255d_stc_vc_custom /i "..\..\src\stc\..\..\include" /i "..\..\src\stc\scintilla\include" /i "..\..\src\stc\scintilla\src" /d "__WX__" /d "SCI_LEXER" /d "LINK_LEXERS" /d "WXUSINGDLL" /d WXMAKINGDLL_STC
+# ADD BASE RSC /l 0x409 /d "_DEBUG" /d "__WXMSW__" /d "__WXUNIVERSAL__" /d "__WXDEBUG__" /i "..\..\src\stc\..\..\..\include" /i "..\..\src\stc\..\..\..\lib\vc_dll\mswunivd" /d WXDLLNAME=wxmswuniv26d_stc_vc_custom /i "..\..\src\stc\..\..\include" /i "..\..\src\stc\scintilla\include" /i "..\..\src\stc\scintilla\src" /d "__WX__" /d "SCI_LEXER" /d "LINK_LEXERS" /d "WXUSINGDLL" /d WXMAKINGDLL_STC
+# ADD RSC /l 0x409 /d "_DEBUG" /d "__WXMSW__" /d "__WXUNIVERSAL__" /d "__WXDEBUG__" /i "..\..\src\stc\..\..\..\include" /i "..\..\src\stc\..\..\..\lib\vc_dll\mswunivd" /d WXDLLNAME=wxmswuniv26d_stc_vc_custom /i "..\..\src\stc\..\..\include" /i "..\..\src\stc\scintilla\include" /i "..\..\src\stc\scintilla\src" /d "__WX__" /d "SCI_LEXER" /d "LINK_LEXERS" /d "WXUSINGDLL" /d WXMAKINGDLL_STC
 BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LINK32=link.exe
-# ADD BASE LINK32 wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib wxregexd.lib wxexpatd.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib oleacc.lib odbc32.lib wxmswuniv25d_core.lib wxbase25d.lib /nologo /dll /machine:i386 /out:"..\..\src\stc\..\..\..\lib\vc_dll\wxmswuniv255d_stc_vc_custom.dll" /libpath:"..\..\src\stc\..\..\..\lib\vc_dll" /implib:"..\..\src\stc\..\..\..\lib\vc_dll\wxmswuniv25d_stc.lib" /debug
-# ADD LINK32 wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib wxregexd.lib wxexpatd.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib oleacc.lib odbc32.lib wxmswuniv25d_core.lib wxbase25d.lib /nologo /dll /machine:i386 /out:"..\..\src\stc\..\..\..\lib\vc_dll\wxmswuniv255d_stc_vc_custom.dll" /libpath:"..\..\src\stc\..\..\..\lib\vc_dll" /implib:"..\..\src\stc\..\..\..\lib\vc_dll\wxmswuniv25d_stc.lib" /debug
+# ADD BASE LINK32 wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib wxregexd.lib wxexpatd.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib oleacc.lib odbc32.lib wxmswuniv26d_core.lib wxbase26d.lib /nologo /dll /machine:i386 /out:"..\..\src\stc\..\..\..\lib\vc_dll\wxmswuniv26d_stc_vc_custom.dll" /libpath:"..\..\src\stc\..\..\..\lib\vc_dll" /implib:"..\..\src\stc\..\..\..\lib\vc_dll\wxmswuniv26d_stc.lib" /debug
+# ADD LINK32 wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib wxregexd.lib wxexpatd.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib oleacc.lib odbc32.lib wxmswuniv26d_core.lib wxbase26d.lib /nologo /dll /machine:i386 /out:"..\..\src\stc\..\..\..\lib\vc_dll\wxmswuniv26d_stc_vc_custom.dll" /libpath:"..\..\src\stc\..\..\..\lib\vc_dll" /implib:"..\..\src\stc\..\..\..\lib\vc_dll\wxmswuniv26d_stc.lib" /debug
 
 !ELSEIF  "$(CFG)" == "stc - Win32 DLL Unicode Release"
 
@@ -155,18 +155,18 @@ LINK32=link.exe
 # PROP Output_Dir "..\..\src\stc\..\..\..\lib\vc_dll"
 # PROP Intermediate_Dir "vc_mswudll\stc"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /MD /O2 /GR /EHsc /I "..\..\src\stc\..\..\..\include" /I "..\..\src\stc\..\..\..\lib\vc_dll\mswu" /W4 /Fd..\..\src\stc\..\..\..\lib\vc_dll\wxmsw255u_stc_vc_custom.pdb /I "..\..\src\stc\..\..\include" /I "..\..\src\stc\scintilla\include" /I "..\..\src\stc\scintilla\src" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D "_UNICODE" /D "__WX__" /D "SCI_LEXER" /D "LINK_LEXERS" /D "WXUSINGDLL" /D "WXMAKINGDLL_STC" /c
-# ADD CPP /nologo /FD /MD /O2 /GR /EHsc /I "..\..\src\stc\..\..\..\include" /I "..\..\src\stc\..\..\..\lib\vc_dll\mswu" /W4 /Fd..\..\src\stc\..\..\..\lib\vc_dll\wxmsw255u_stc_vc_custom.pdb /I "..\..\src\stc\..\..\include" /I "..\..\src\stc\scintilla\include" /I "..\..\src\stc\scintilla\src" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D "_UNICODE" /D "__WX__" /D "SCI_LEXER" /D "LINK_LEXERS" /D "WXUSINGDLL" /D "WXMAKINGDLL_STC" /c
+# ADD BASE CPP /nologo /FD /MD /O2 /GR /EHsc /I "..\..\src\stc\..\..\..\include" /I "..\..\src\stc\..\..\..\lib\vc_dll\mswu" /W4 /Fd..\..\src\stc\..\..\..\lib\vc_dll\wxmsw26u_stc_vc_custom.pdb /I "..\..\src\stc\..\..\include" /I "..\..\src\stc\scintilla\include" /I "..\..\src\stc\scintilla\src" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D "_UNICODE" /D "__WX__" /D "SCI_LEXER" /D "LINK_LEXERS" /D "WXUSINGDLL" /D "WXMAKINGDLL_STC" /c
+# ADD CPP /nologo /FD /MD /O2 /GR /EHsc /I "..\..\src\stc\..\..\..\include" /I "..\..\src\stc\..\..\..\lib\vc_dll\mswu" /W4 /Fd..\..\src\stc\..\..\..\lib\vc_dll\wxmsw26u_stc_vc_custom.pdb /I "..\..\src\stc\..\..\include" /I "..\..\src\stc\scintilla\include" /I "..\..\src\stc\scintilla\src" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D "_UNICODE" /D "__WX__" /D "SCI_LEXER" /D "LINK_LEXERS" /D "WXUSINGDLL" /D "WXMAKINGDLL_STC" /c
 # ADD BASE MTL /nologo /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D "_UNICODE" /D "__WX__" /D "SCI_LEXER" /D "LINK_LEXERS" /D "WXUSINGDLL" /D "WXMAKINGDLL_STC" /mktyplib203 /win32
 # ADD MTL /nologo /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D "_UNICODE" /D "__WX__" /D "SCI_LEXER" /D "LINK_LEXERS" /D "WXUSINGDLL" /D "WXMAKINGDLL_STC" /mktyplib203 /win32
-# ADD BASE RSC /l 0x409 /d "__WXMSW__" /d "_UNICODE" /i "..\..\src\stc\..\..\..\include" /i "..\..\src\stc\..\..\..\lib\vc_dll\mswu" /d WXDLLNAME=wxmsw255u_stc_vc_custom /i "..\..\src\stc\..\..\include" /i "..\..\src\stc\scintilla\include" /i "..\..\src\stc\scintilla\src" /d "__WX__" /d "SCI_LEXER" /d "LINK_LEXERS" /d "WXUSINGDLL" /d WXMAKINGDLL_STC
-# ADD RSC /l 0x409 /d "__WXMSW__" /d "_UNICODE" /i "..\..\src\stc\..\..\..\include" /i "..\..\src\stc\..\..\..\lib\vc_dll\mswu" /d WXDLLNAME=wxmsw255u_stc_vc_custom /i "..\..\src\stc\..\..\include" /i "..\..\src\stc\scintilla\include" /i "..\..\src\stc\scintilla\src" /d "__WX__" /d "SCI_LEXER" /d "LINK_LEXERS" /d "WXUSINGDLL" /d WXMAKINGDLL_STC
+# ADD BASE RSC /l 0x409 /d "__WXMSW__" /d "_UNICODE" /i "..\..\src\stc\..\..\..\include" /i "..\..\src\stc\..\..\..\lib\vc_dll\mswu" /d WXDLLNAME=wxmsw26u_stc_vc_custom /i "..\..\src\stc\..\..\include" /i "..\..\src\stc\scintilla\include" /i "..\..\src\stc\scintilla\src" /d "__WX__" /d "SCI_LEXER" /d "LINK_LEXERS" /d "WXUSINGDLL" /d WXMAKINGDLL_STC
+# ADD RSC /l 0x409 /d "__WXMSW__" /d "_UNICODE" /i "..\..\src\stc\..\..\..\include" /i "..\..\src\stc\..\..\..\lib\vc_dll\mswu" /d WXDLLNAME=wxmsw26u_stc_vc_custom /i "..\..\src\stc\..\..\include" /i "..\..\src\stc\scintilla\include" /i "..\..\src\stc\scintilla\src" /d "__WX__" /d "SCI_LEXER" /d "LINK_LEXERS" /d "WXUSINGDLL" /d WXMAKINGDLL_STC
 BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LINK32=link.exe
-# ADD BASE LINK32 wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregexu.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib oleacc.lib odbc32.lib wxmsw25u_core.lib wxbase25u.lib /nologo /dll /machine:i386 /out:"..\..\src\stc\..\..\..\lib\vc_dll\wxmsw255u_stc_vc_custom.dll" /libpath:"..\..\src\stc\..\..\..\lib\vc_dll" /implib:"..\..\src\stc\..\..\..\lib\vc_dll\wxmsw25u_stc.lib"
-# ADD LINK32 wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregexu.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib oleacc.lib odbc32.lib wxmsw25u_core.lib wxbase25u.lib /nologo /dll /machine:i386 /out:"..\..\src\stc\..\..\..\lib\vc_dll\wxmsw255u_stc_vc_custom.dll" /libpath:"..\..\src\stc\..\..\..\lib\vc_dll" /implib:"..\..\src\stc\..\..\..\lib\vc_dll\wxmsw25u_stc.lib"
+# ADD BASE LINK32 wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregexu.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib oleacc.lib odbc32.lib wxmsw26u_core.lib wxbase26u.lib /nologo /dll /machine:i386 /out:"..\..\src\stc\..\..\..\lib\vc_dll\wxmsw26u_stc_vc_custom.dll" /libpath:"..\..\src\stc\..\..\..\lib\vc_dll" /implib:"..\..\src\stc\..\..\..\lib\vc_dll\wxmsw26u_stc.lib"
+# ADD LINK32 wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregexu.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib oleacc.lib odbc32.lib wxmsw26u_core.lib wxbase26u.lib /nologo /dll /machine:i386 /out:"..\..\src\stc\..\..\..\lib\vc_dll\wxmsw26u_stc_vc_custom.dll" /libpath:"..\..\src\stc\..\..\..\lib\vc_dll" /implib:"..\..\src\stc\..\..\..\lib\vc_dll\wxmsw26u_stc.lib"
 
 !ELSEIF  "$(CFG)" == "stc - Win32 DLL Unicode Debug"
 
@@ -180,18 +180,18 @@ LINK32=link.exe
 # PROP Output_Dir "..\..\src\stc\..\..\..\lib\vc_dll"
 # PROP Intermediate_Dir "vc_mswuddll\stc"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /MDd /Od /GR /EHsc /I "..\..\src\stc\..\..\..\include" /I "..\..\src\stc\..\..\..\lib\vc_dll\mswud" /W4 /Zi /Gm /GZ /Fd..\..\src\stc\..\..\..\lib\vc_dll\wxmsw255ud_stc_vc_custom.pdb /I "..\..\src\stc\..\..\include" /I "..\..\src\stc\scintilla\include" /I "..\..\src\stc\scintilla\src" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXDEBUG__" /D "_UNICODE" /D "__WX__" /D "SCI_LEXER" /D "LINK_LEXERS" /D "WXUSINGDLL" /D "WXMAKINGDLL_STC" /c
-# ADD CPP /nologo /FD /MDd /Od /GR /EHsc /I "..\..\src\stc\..\..\..\include" /I "..\..\src\stc\..\..\..\lib\vc_dll\mswud" /W4 /Zi /Gm /GZ /Fd..\..\src\stc\..\..\..\lib\vc_dll\wxmsw255ud_stc_vc_custom.pdb /I "..\..\src\stc\..\..\include" /I "..\..\src\stc\scintilla\include" /I "..\..\src\stc\scintilla\src" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXDEBUG__" /D "_UNICODE" /D "__WX__" /D "SCI_LEXER" /D "LINK_LEXERS" /D "WXUSINGDLL" /D "WXMAKINGDLL_STC" /c
+# ADD BASE CPP /nologo /FD /MDd /Od /GR /EHsc /I "..\..\src\stc\..\..\..\include" /I "..\..\src\stc\..\..\..\lib\vc_dll\mswud" /W4 /Zi /Gm /GZ /Fd..\..\src\stc\..\..\..\lib\vc_dll\wxmsw26ud_stc_vc_custom.pdb /I "..\..\src\stc\..\..\include" /I "..\..\src\stc\scintilla\include" /I "..\..\src\stc\scintilla\src" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXDEBUG__" /D "_UNICODE" /D "__WX__" /D "SCI_LEXER" /D "LINK_LEXERS" /D "WXUSINGDLL" /D "WXMAKINGDLL_STC" /c
+# ADD CPP /nologo /FD /MDd /Od /GR /EHsc /I "..\..\src\stc\..\..\..\include" /I "..\..\src\stc\..\..\..\lib\vc_dll\mswud" /W4 /Zi /Gm /GZ /Fd..\..\src\stc\..\..\..\lib\vc_dll\wxmsw26ud_stc_vc_custom.pdb /I "..\..\src\stc\..\..\include" /I "..\..\src\stc\scintilla\include" /I "..\..\src\stc\scintilla\src" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXDEBUG__" /D "_UNICODE" /D "__WX__" /D "SCI_LEXER" /D "LINK_LEXERS" /D "WXUSINGDLL" /D "WXMAKINGDLL_STC" /c
 # ADD BASE MTL /nologo /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXDEBUG__" /D "_UNICODE" /D "__WX__" /D "SCI_LEXER" /D "LINK_LEXERS" /D "WXUSINGDLL" /D "WXMAKINGDLL_STC" /mktyplib203 /win32
 # ADD MTL /nologo /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXDEBUG__" /D "_UNICODE" /D "__WX__" /D "SCI_LEXER" /D "LINK_LEXERS" /D "WXUSINGDLL" /D "WXMAKINGDLL_STC" /mktyplib203 /win32
-# ADD BASE RSC /l 0x409 /d "_DEBUG" /d "__WXMSW__" /d "__WXDEBUG__" /d "_UNICODE" /i "..\..\src\stc\..\..\..\include" /i "..\..\src\stc\..\..\..\lib\vc_dll\mswud" /d WXDLLNAME=wxmsw255ud_stc_vc_custom /i "..\..\src\stc\..\..\include" /i "..\..\src\stc\scintilla\include" /i "..\..\src\stc\scintilla\src" /d "__WX__" /d "SCI_LEXER" /d "LINK_LEXERS" /d "WXUSINGDLL" /d WXMAKINGDLL_STC
-# ADD RSC /l 0x409 /d "_DEBUG" /d "__WXMSW__" /d "__WXDEBUG__" /d "_UNICODE" /i "..\..\src\stc\..\..\..\include" /i "..\..\src\stc\..\..\..\lib\vc_dll\mswud" /d WXDLLNAME=wxmsw255ud_stc_vc_custom /i "..\..\src\stc\..\..\include" /i "..\..\src\stc\scintilla\include" /i "..\..\src\stc\scintilla\src" /d "__WX__" /d "SCI_LEXER" /d "LINK_LEXERS" /d "WXUSINGDLL" /d WXMAKINGDLL_STC
+# ADD BASE RSC /l 0x409 /d "_DEBUG" /d "__WXMSW__" /d "__WXDEBUG__" /d "_UNICODE" /i "..\..\src\stc\..\..\..\include" /i "..\..\src\stc\..\..\..\lib\vc_dll\mswud" /d WXDLLNAME=wxmsw26ud_stc_vc_custom /i "..\..\src\stc\..\..\include" /i "..\..\src\stc\scintilla\include" /i "..\..\src\stc\scintilla\src" /d "__WX__" /d "SCI_LEXER" /d "LINK_LEXERS" /d "WXUSINGDLL" /d WXMAKINGDLL_STC
+# ADD RSC /l 0x409 /d "_DEBUG" /d "__WXMSW__" /d "__WXDEBUG__" /d "_UNICODE" /i "..\..\src\stc\..\..\..\include" /i "..\..\src\stc\..\..\..\lib\vc_dll\mswud" /d WXDLLNAME=wxmsw26ud_stc_vc_custom /i "..\..\src\stc\..\..\include" /i "..\..\src\stc\scintilla\include" /i "..\..\src\stc\scintilla\src" /d "__WX__" /d "SCI_LEXER" /d "LINK_LEXERS" /d "WXUSINGDLL" /d WXMAKINGDLL_STC
 BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LINK32=link.exe
-# ADD BASE LINK32 wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib wxregexud.lib wxexpatd.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib oleacc.lib odbc32.lib wxmsw25ud_core.lib wxbase25ud.lib /nologo /dll /machine:i386 /out:"..\..\src\stc\..\..\..\lib\vc_dll\wxmsw255ud_stc_vc_custom.dll" /libpath:"..\..\src\stc\..\..\..\lib\vc_dll" /implib:"..\..\src\stc\..\..\..\lib\vc_dll\wxmsw25ud_stc.lib" /debug
-# ADD LINK32 wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib wxregexud.lib wxexpatd.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib oleacc.lib odbc32.lib wxmsw25ud_core.lib wxbase25ud.lib /nologo /dll /machine:i386 /out:"..\..\src\stc\..\..\..\lib\vc_dll\wxmsw255ud_stc_vc_custom.dll" /libpath:"..\..\src\stc\..\..\..\lib\vc_dll" /implib:"..\..\src\stc\..\..\..\lib\vc_dll\wxmsw25ud_stc.lib" /debug
+# ADD BASE LINK32 wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib wxregexud.lib wxexpatd.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib oleacc.lib odbc32.lib wxmsw26ud_core.lib wxbase26ud.lib /nologo /dll /machine:i386 /out:"..\..\src\stc\..\..\..\lib\vc_dll\wxmsw26ud_stc_vc_custom.dll" /libpath:"..\..\src\stc\..\..\..\lib\vc_dll" /implib:"..\..\src\stc\..\..\..\lib\vc_dll\wxmsw26ud_stc.lib" /debug
+# ADD LINK32 wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib wxregexud.lib wxexpatd.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib oleacc.lib odbc32.lib wxmsw26ud_core.lib wxbase26ud.lib /nologo /dll /machine:i386 /out:"..\..\src\stc\..\..\..\lib\vc_dll\wxmsw26ud_stc_vc_custom.dll" /libpath:"..\..\src\stc\..\..\..\lib\vc_dll" /implib:"..\..\src\stc\..\..\..\lib\vc_dll\wxmsw26ud_stc.lib" /debug
 
 !ELSEIF  "$(CFG)" == "stc - Win32 DLL Release"
 
@@ -205,18 +205,18 @@ LINK32=link.exe
 # PROP Output_Dir "..\..\src\stc\..\..\..\lib\vc_dll"
 # PROP Intermediate_Dir "vc_mswdll\stc"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /MD /O2 /GR /EHsc /I "..\..\src\stc\..\..\..\include" /I "..\..\src\stc\..\..\..\lib\vc_dll\msw" /W4 /Fd..\..\src\stc\..\..\..\lib\vc_dll\wxmsw255_stc_vc_custom.pdb /I "..\..\src\stc\..\..\include" /I "..\..\src\stc\scintilla\include" /I "..\..\src\stc\scintilla\src" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D "__WX__" /D "SCI_LEXER" /D "LINK_LEXERS" /D "WXUSINGDLL" /D "WXMAKINGDLL_STC" /c
-# ADD CPP /nologo /FD /MD /O2 /GR /EHsc /I "..\..\src\stc\..\..\..\include" /I "..\..\src\stc\..\..\..\lib\vc_dll\msw" /W4 /Fd..\..\src\stc\..\..\..\lib\vc_dll\wxmsw255_stc_vc_custom.pdb /I "..\..\src\stc\..\..\include" /I "..\..\src\stc\scintilla\include" /I "..\..\src\stc\scintilla\src" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D "__WX__" /D "SCI_LEXER" /D "LINK_LEXERS" /D "WXUSINGDLL" /D "WXMAKINGDLL_STC" /c
+# ADD BASE CPP /nologo /FD /MD /O2 /GR /EHsc /I "..\..\src\stc\..\..\..\include" /I "..\..\src\stc\..\..\..\lib\vc_dll\msw" /W4 /Fd..\..\src\stc\..\..\..\lib\vc_dll\wxmsw26_stc_vc_custom.pdb /I "..\..\src\stc\..\..\include" /I "..\..\src\stc\scintilla\include" /I "..\..\src\stc\scintilla\src" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D "__WX__" /D "SCI_LEXER" /D "LINK_LEXERS" /D "WXUSINGDLL" /D "WXMAKINGDLL_STC" /c
+# ADD CPP /nologo /FD /MD /O2 /GR /EHsc /I "..\..\src\stc\..\..\..\include" /I "..\..\src\stc\..\..\..\lib\vc_dll\msw" /W4 /Fd..\..\src\stc\..\..\..\lib\vc_dll\wxmsw26_stc_vc_custom.pdb /I "..\..\src\stc\..\..\include" /I "..\..\src\stc\scintilla\include" /I "..\..\src\stc\scintilla\src" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D "__WX__" /D "SCI_LEXER" /D "LINK_LEXERS" /D "WXUSINGDLL" /D "WXMAKINGDLL_STC" /c
 # ADD BASE MTL /nologo /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D "__WX__" /D "SCI_LEXER" /D "LINK_LEXERS" /D "WXUSINGDLL" /D "WXMAKINGDLL_STC" /mktyplib203 /win32
 # ADD MTL /nologo /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D "__WX__" /D "SCI_LEXER" /D "LINK_LEXERS" /D "WXUSINGDLL" /D "WXMAKINGDLL_STC" /mktyplib203 /win32
-# ADD BASE RSC /l 0x409 /d "__WXMSW__" /i "..\..\src\stc\..\..\..\include" /i "..\..\src\stc\..\..\..\lib\vc_dll\msw" /d WXDLLNAME=wxmsw255_stc_vc_custom /i "..\..\src\stc\..\..\include" /i "..\..\src\stc\scintilla\include" /i "..\..\src\stc\scintilla\src" /d "__WX__" /d "SCI_LEXER" /d "LINK_LEXERS" /d "WXUSINGDLL" /d WXMAKINGDLL_STC
-# ADD RSC /l 0x409 /d "__WXMSW__" /i "..\..\src\stc\..\..\..\include" /i "..\..\src\stc\..\..\..\lib\vc_dll\msw" /d WXDLLNAME=wxmsw255_stc_vc_custom /i "..\..\src\stc\..\..\include" /i "..\..\src\stc\scintilla\include" /i "..\..\src\stc\scintilla\src" /d "__WX__" /d "SCI_LEXER" /d "LINK_LEXERS" /d "WXUSINGDLL" /d WXMAKINGDLL_STC
+# ADD BASE RSC /l 0x409 /d "__WXMSW__" /i "..\..\src\stc\..\..\..\include" /i "..\..\src\stc\..\..\..\lib\vc_dll\msw" /d WXDLLNAME=wxmsw26_stc_vc_custom /i "..\..\src\stc\..\..\include" /i "..\..\src\stc\scintilla\include" /i "..\..\src\stc\scintilla\src" /d "__WX__" /d "SCI_LEXER" /d "LINK_LEXERS" /d "WXUSINGDLL" /d WXMAKINGDLL_STC
+# ADD RSC /l 0x409 /d "__WXMSW__" /i "..\..\src\stc\..\..\..\include" /i "..\..\src\stc\..\..\..\lib\vc_dll\msw" /d WXDLLNAME=wxmsw26_stc_vc_custom /i "..\..\src\stc\..\..\include" /i "..\..\src\stc\scintilla\include" /i "..\..\src\stc\scintilla\src" /d "__WX__" /d "SCI_LEXER" /d "LINK_LEXERS" /d "WXUSINGDLL" /d WXMAKINGDLL_STC
 BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LINK32=link.exe
-# ADD BASE LINK32 wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregex.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib oleacc.lib odbc32.lib wxmsw25_core.lib wxbase25.lib /nologo /dll /machine:i386 /out:"..\..\src\stc\..\..\..\lib\vc_dll\wxmsw255_stc_vc_custom.dll" /libpath:"..\..\src\stc\..\..\..\lib\vc_dll" /implib:"..\..\src\stc\..\..\..\lib\vc_dll\wxmsw25_stc.lib"
-# ADD LINK32 wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregex.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib oleacc.lib odbc32.lib wxmsw25_core.lib wxbase25.lib /nologo /dll /machine:i386 /out:"..\..\src\stc\..\..\..\lib\vc_dll\wxmsw255_stc_vc_custom.dll" /libpath:"..\..\src\stc\..\..\..\lib\vc_dll" /implib:"..\..\src\stc\..\..\..\lib\vc_dll\wxmsw25_stc.lib"
+# ADD BASE LINK32 wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregex.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib oleacc.lib odbc32.lib wxmsw26_core.lib wxbase26.lib /nologo /dll /machine:i386 /out:"..\..\src\stc\..\..\..\lib\vc_dll\wxmsw26_stc_vc_custom.dll" /libpath:"..\..\src\stc\..\..\..\lib\vc_dll" /implib:"..\..\src\stc\..\..\..\lib\vc_dll\wxmsw26_stc.lib"
+# ADD LINK32 wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregex.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib oleacc.lib odbc32.lib wxmsw26_core.lib wxbase26.lib /nologo /dll /machine:i386 /out:"..\..\src\stc\..\..\..\lib\vc_dll\wxmsw26_stc_vc_custom.dll" /libpath:"..\..\src\stc\..\..\..\lib\vc_dll" /implib:"..\..\src\stc\..\..\..\lib\vc_dll\wxmsw26_stc.lib"
 
 !ELSEIF  "$(CFG)" == "stc - Win32 DLL Debug"
 
@@ -230,18 +230,18 @@ LINK32=link.exe
 # PROP Output_Dir "..\..\src\stc\..\..\..\lib\vc_dll"
 # PROP Intermediate_Dir "vc_mswddll\stc"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /MDd /Od /GR /EHsc /I "..\..\src\stc\..\..\..\include" /I "..\..\src\stc\..\..\..\lib\vc_dll\mswd" /W4 /Zi /Gm /GZ /Fd..\..\src\stc\..\..\..\lib\vc_dll\wxmsw255d_stc_vc_custom.pdb /I "..\..\src\stc\..\..\include" /I "..\..\src\stc\scintilla\include" /I "..\..\src\stc\scintilla\src" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXDEBUG__" /D "__WX__" /D "SCI_LEXER" /D "LINK_LEXERS" /D "WXUSINGDLL" /D "WXMAKINGDLL_STC" /c
-# ADD CPP /nologo /FD /MDd /Od /GR /EHsc /I "..\..\src\stc\..\..\..\include" /I "..\..\src\stc\..\..\..\lib\vc_dll\mswd" /W4 /Zi /Gm /GZ /Fd..\..\src\stc\..\..\..\lib\vc_dll\wxmsw255d_stc_vc_custom.pdb /I "..\..\src\stc\..\..\include" /I "..\..\src\stc\scintilla\include" /I "..\..\src\stc\scintilla\src" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXDEBUG__" /D "__WX__" /D "SCI_LEXER" /D "LINK_LEXERS" /D "WXUSINGDLL" /D "WXMAKINGDLL_STC" /c
+# ADD BASE CPP /nologo /FD /MDd /Od /GR /EHsc /I "..\..\src\stc\..\..\..\include" /I "..\..\src\stc\..\..\..\lib\vc_dll\mswd" /W4 /Zi /Gm /GZ /Fd..\..\src\stc\..\..\..\lib\vc_dll\wxmsw26d_stc_vc_custom.pdb /I "..\..\src\stc\..\..\include" /I "..\..\src\stc\scintilla\include" /I "..\..\src\stc\scintilla\src" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXDEBUG__" /D "__WX__" /D "SCI_LEXER" /D "LINK_LEXERS" /D "WXUSINGDLL" /D "WXMAKINGDLL_STC" /c
+# ADD CPP /nologo /FD /MDd /Od /GR /EHsc /I "..\..\src\stc\..\..\..\include" /I "..\..\src\stc\..\..\..\lib\vc_dll\mswd" /W4 /Zi /Gm /GZ /Fd..\..\src\stc\..\..\..\lib\vc_dll\wxmsw26d_stc_vc_custom.pdb /I "..\..\src\stc\..\..\include" /I "..\..\src\stc\scintilla\include" /I "..\..\src\stc\scintilla\src" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXDEBUG__" /D "__WX__" /D "SCI_LEXER" /D "LINK_LEXERS" /D "WXUSINGDLL" /D "WXMAKINGDLL_STC" /c
 # ADD BASE MTL /nologo /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXDEBUG__" /D "__WX__" /D "SCI_LEXER" /D "LINK_LEXERS" /D "WXUSINGDLL" /D "WXMAKINGDLL_STC" /mktyplib203 /win32
 # ADD MTL /nologo /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXDEBUG__" /D "__WX__" /D "SCI_LEXER" /D "LINK_LEXERS" /D "WXUSINGDLL" /D "WXMAKINGDLL_STC" /mktyplib203 /win32
-# ADD BASE RSC /l 0x409 /d "_DEBUG" /d "__WXMSW__" /d "__WXDEBUG__" /i "..\..\src\stc\..\..\..\include" /i "..\..\src\stc\..\..\..\lib\vc_dll\mswd" /d WXDLLNAME=wxmsw255d_stc_vc_custom /i "..\..\src\stc\..\..\include" /i "..\..\src\stc\scintilla\include" /i "..\..\src\stc\scintilla\src" /d "__WX__" /d "SCI_LEXER" /d "LINK_LEXERS" /d "WXUSINGDLL" /d WXMAKINGDLL_STC
-# ADD RSC /l 0x409 /d "_DEBUG" /d "__WXMSW__" /d "__WXDEBUG__" /i "..\..\src\stc\..\..\..\include" /i "..\..\src\stc\..\..\..\lib\vc_dll\mswd" /d WXDLLNAME=wxmsw255d_stc_vc_custom /i "..\..\src\stc\..\..\include" /i "..\..\src\stc\scintilla\include" /i "..\..\src\stc\scintilla\src" /d "__WX__" /d "SCI_LEXER" /d "LINK_LEXERS" /d "WXUSINGDLL" /d WXMAKINGDLL_STC
+# ADD BASE RSC /l 0x409 /d "_DEBUG" /d "__WXMSW__" /d "__WXDEBUG__" /i "..\..\src\stc\..\..\..\include" /i "..\..\src\stc\..\..\..\lib\vc_dll\mswd" /d WXDLLNAME=wxmsw26d_stc_vc_custom /i "..\..\src\stc\..\..\include" /i "..\..\src\stc\scintilla\include" /i "..\..\src\stc\scintilla\src" /d "__WX__" /d "SCI_LEXER" /d "LINK_LEXERS" /d "WXUSINGDLL" /d WXMAKINGDLL_STC
+# ADD RSC /l 0x409 /d "_DEBUG" /d "__WXMSW__" /d "__WXDEBUG__" /i "..\..\src\stc\..\..\..\include" /i "..\..\src\stc\..\..\..\lib\vc_dll\mswd" /d WXDLLNAME=wxmsw26d_stc_vc_custom /i "..\..\src\stc\..\..\include" /i "..\..\src\stc\scintilla\include" /i "..\..\src\stc\scintilla\src" /d "__WX__" /d "SCI_LEXER" /d "LINK_LEXERS" /d "WXUSINGDLL" /d WXMAKINGDLL_STC
 BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LINK32=link.exe
-# ADD BASE LINK32 wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib wxregexd.lib wxexpatd.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib oleacc.lib odbc32.lib wxmsw25d_core.lib wxbase25d.lib /nologo /dll /machine:i386 /out:"..\..\src\stc\..\..\..\lib\vc_dll\wxmsw255d_stc_vc_custom.dll" /libpath:"..\..\src\stc\..\..\..\lib\vc_dll" /implib:"..\..\src\stc\..\..\..\lib\vc_dll\wxmsw25d_stc.lib" /debug
-# ADD LINK32 wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib wxregexd.lib wxexpatd.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib oleacc.lib odbc32.lib wxmsw25d_core.lib wxbase25d.lib /nologo /dll /machine:i386 /out:"..\..\src\stc\..\..\..\lib\vc_dll\wxmsw255d_stc_vc_custom.dll" /libpath:"..\..\src\stc\..\..\..\lib\vc_dll" /implib:"..\..\src\stc\..\..\..\lib\vc_dll\wxmsw25d_stc.lib" /debug
+# ADD BASE LINK32 wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib wxregexd.lib wxexpatd.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib oleacc.lib odbc32.lib wxmsw26d_core.lib wxbase26d.lib /nologo /dll /machine:i386 /out:"..\..\src\stc\..\..\..\lib\vc_dll\wxmsw26d_stc_vc_custom.dll" /libpath:"..\..\src\stc\..\..\..\lib\vc_dll" /implib:"..\..\src\stc\..\..\..\lib\vc_dll\wxmsw26d_stc.lib" /debug
+# ADD LINK32 wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib wxregexd.lib wxexpatd.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib oleacc.lib odbc32.lib wxmsw26d_core.lib wxbase26d.lib /nologo /dll /machine:i386 /out:"..\..\src\stc\..\..\..\lib\vc_dll\wxmsw26d_stc_vc_custom.dll" /libpath:"..\..\src\stc\..\..\..\lib\vc_dll" /implib:"..\..\src\stc\..\..\..\lib\vc_dll\wxmsw26d_stc.lib" /debug
 
 !ELSEIF  "$(CFG)" == "stc - Win32 Universal Unicode Release"
 
@@ -255,16 +255,16 @@ LINK32=link.exe
 # PROP Output_Dir "..\..\src\stc\..\..\..\lib\vc_lib"
 # PROP Intermediate_Dir "vc_mswunivu\stc"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /MD /O2 /GR /EHsc /I "..\..\src\stc\..\..\..\include" /I "..\..\src\stc\..\..\..\lib\vc_lib\mswunivu" /W4 /Fd..\..\src\stc\..\..\..\lib\vc_lib\wxmswuniv25u_stc.pdb /I "..\..\src\stc\..\..\include" /I "..\..\src\stc\scintilla\include" /I "..\..\src\stc\scintilla\src" /D "WIN32" /D "_LIB" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "_UNICODE" /D "__WX__" /D "SCI_LEXER" /D "LINK_LEXERS" /c
-# ADD CPP /nologo /FD /MD /O2 /GR /EHsc /I "..\..\src\stc\..\..\..\include" /I "..\..\src\stc\..\..\..\lib\vc_lib\mswunivu" /W4 /Fd..\..\src\stc\..\..\..\lib\vc_lib\wxmswuniv25u_stc.pdb /I "..\..\src\stc\..\..\include" /I "..\..\src\stc\scintilla\include" /I "..\..\src\stc\scintilla\src" /D "WIN32" /D "_LIB" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "_UNICODE" /D "__WX__" /D "SCI_LEXER" /D "LINK_LEXERS" /c
+# ADD BASE CPP /nologo /FD /MD /O2 /GR /EHsc /I "..\..\src\stc\..\..\..\include" /I "..\..\src\stc\..\..\..\lib\vc_lib\mswunivu" /W4 /Fd..\..\src\stc\..\..\..\lib\vc_lib\wxmswuniv26u_stc.pdb /I "..\..\src\stc\..\..\include" /I "..\..\src\stc\scintilla\include" /I "..\..\src\stc\scintilla\src" /D "WIN32" /D "_LIB" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "_UNICODE" /D "__WX__" /D "SCI_LEXER" /D "LINK_LEXERS" /c
+# ADD CPP /nologo /FD /MD /O2 /GR /EHsc /I "..\..\src\stc\..\..\..\include" /I "..\..\src\stc\..\..\..\lib\vc_lib\mswunivu" /W4 /Fd..\..\src\stc\..\..\..\lib\vc_lib\wxmswuniv26u_stc.pdb /I "..\..\src\stc\..\..\include" /I "..\..\src\stc\scintilla\include" /I "..\..\src\stc\scintilla\src" /D "WIN32" /D "_LIB" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "_UNICODE" /D "__WX__" /D "SCI_LEXER" /D "LINK_LEXERS" /c
 # ADD BASE RSC /l 0x409
 # ADD RSC /l 0x409
 BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LIB32=link.exe -lib
-# ADD BASE LIB32 /nologo /out:"..\..\src\stc\..\..\..\lib\vc_lib\wxmswuniv25u_stc.lib"
-# ADD LIB32 /nologo /out:"..\..\src\stc\..\..\..\lib\vc_lib\wxmswuniv25u_stc.lib"
+# ADD BASE LIB32 /nologo /out:"..\..\src\stc\..\..\..\lib\vc_lib\wxmswuniv26u_stc.lib"
+# ADD LIB32 /nologo /out:"..\..\src\stc\..\..\..\lib\vc_lib\wxmswuniv26u_stc.lib"
 
 !ELSEIF  "$(CFG)" == "stc - Win32 Universal Unicode Debug"
 
@@ -278,16 +278,16 @@ LIB32=link.exe -lib
 # PROP Output_Dir "..\..\src\stc\..\..\..\lib\vc_lib"
 # PROP Intermediate_Dir "vc_mswunivud\stc"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /MDd /Od /GR /EHsc /I "..\..\src\stc\..\..\..\include" /I "..\..\src\stc\..\..\..\lib\vc_lib\mswunivud" /W4 /Zi /Gm /GZ /Fd..\..\src\stc\..\..\..\lib\vc_lib\wxmswuniv25ud_stc.pdb /I "..\..\src\stc\..\..\include" /I "..\..\src\stc\scintilla\include" /I "..\..\src\stc\scintilla\src" /D "WIN32" /D "_LIB" /D "_DEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "__WXDEBUG__" /D "_UNICODE" /D "__WX__" /D "SCI_LEXER" /D "LINK_LEXERS" /c
-# ADD CPP /nologo /FD /MDd /Od /GR /EHsc /I "..\..\src\stc\..\..\..\include" /I "..\..\src\stc\..\..\..\lib\vc_lib\mswunivud" /W4 /Zi /Gm /GZ /Fd..\..\src\stc\..\..\..\lib\vc_lib\wxmswuniv25ud_stc.pdb /I "..\..\src\stc\..\..\include" /I "..\..\src\stc\scintilla\include" /I "..\..\src\stc\scintilla\src" /D "WIN32" /D "_LIB" /D "_DEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "__WXDEBUG__" /D "_UNICODE" /D "__WX__" /D "SCI_LEXER" /D "LINK_LEXERS" /c
+# ADD BASE CPP /nologo /FD /MDd /Od /GR /EHsc /I "..\..\src\stc\..\..\..\include" /I "..\..\src\stc\..\..\..\lib\vc_lib\mswunivud" /W4 /Zi /Gm /GZ /Fd..\..\src\stc\..\..\..\lib\vc_lib\wxmswuniv26ud_stc.pdb /I "..\..\src\stc\..\..\include" /I "..\..\src\stc\scintilla\include" /I "..\..\src\stc\scintilla\src" /D "WIN32" /D "_LIB" /D "_DEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "__WXDEBUG__" /D "_UNICODE" /D "__WX__" /D "SCI_LEXER" /D "LINK_LEXERS" /c
+# ADD CPP /nologo /FD /MDd /Od /GR /EHsc /I "..\..\src\stc\..\..\..\include" /I "..\..\src\stc\..\..\..\lib\vc_lib\mswunivud" /W4 /Zi /Gm /GZ /Fd..\..\src\stc\..\..\..\lib\vc_lib\wxmswuniv26ud_stc.pdb /I "..\..\src\stc\..\..\include" /I "..\..\src\stc\scintilla\include" /I "..\..\src\stc\scintilla\src" /D "WIN32" /D "_LIB" /D "_DEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "__WXDEBUG__" /D "_UNICODE" /D "__WX__" /D "SCI_LEXER" /D "LINK_LEXERS" /c
 # ADD BASE RSC /l 0x409
 # ADD RSC /l 0x409
 BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LIB32=link.exe -lib
-# ADD BASE LIB32 /nologo /out:"..\..\src\stc\..\..\..\lib\vc_lib\wxmswuniv25ud_stc.lib"
-# ADD LIB32 /nologo /out:"..\..\src\stc\..\..\..\lib\vc_lib\wxmswuniv25ud_stc.lib"
+# ADD BASE LIB32 /nologo /out:"..\..\src\stc\..\..\..\lib\vc_lib\wxmswuniv26ud_stc.lib"
+# ADD LIB32 /nologo /out:"..\..\src\stc\..\..\..\lib\vc_lib\wxmswuniv26ud_stc.lib"
 
 !ELSEIF  "$(CFG)" == "stc - Win32 Universal Release"
 
@@ -301,16 +301,16 @@ LIB32=link.exe -lib
 # PROP Output_Dir "..\..\src\stc\..\..\..\lib\vc_lib"
 # PROP Intermediate_Dir "vc_mswuniv\stc"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /MD /O2 /GR /EHsc /I "..\..\src\stc\..\..\..\include" /I "..\..\src\stc\..\..\..\lib\vc_lib\mswuniv" /W4 /Fd..\..\src\stc\..\..\..\lib\vc_lib\wxmswuniv25_stc.pdb /I "..\..\src\stc\..\..\include" /I "..\..\src\stc\scintilla\include" /I "..\..\src\stc\scintilla\src" /D "WIN32" /D "_LIB" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "__WX__" /D "SCI_LEXER" /D "LINK_LEXERS" /c
-# ADD CPP /nologo /FD /MD /O2 /GR /EHsc /I "..\..\src\stc\..\..\..\include" /I "..\..\src\stc\..\..\..\lib\vc_lib\mswuniv" /W4 /Fd..\..\src\stc\..\..\..\lib\vc_lib\wxmswuniv25_stc.pdb /I "..\..\src\stc\..\..\include" /I "..\..\src\stc\scintilla\include" /I "..\..\src\stc\scintilla\src" /D "WIN32" /D "_LIB" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "__WX__" /D "SCI_LEXER" /D "LINK_LEXERS" /c
+# ADD BASE CPP /nologo /FD /MD /O2 /GR /EHsc /I "..\..\src\stc\..\..\..\include" /I "..\..\src\stc\..\..\..\lib\vc_lib\mswuniv" /W4 /Fd..\..\src\stc\..\..\..\lib\vc_lib\wxmswuniv26_stc.pdb /I "..\..\src\stc\..\..\include" /I "..\..\src\stc\scintilla\include" /I "..\..\src\stc\scintilla\src" /D "WIN32" /D "_LIB" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "__WX__" /D "SCI_LEXER" /D "LINK_LEXERS" /c
+# ADD CPP /nologo /FD /MD /O2 /GR /EHsc /I "..\..\src\stc\..\..\..\include" /I "..\..\src\stc\..\..\..\lib\vc_lib\mswuniv" /W4 /Fd..\..\src\stc\..\..\..\lib\vc_lib\wxmswuniv26_stc.pdb /I "..\..\src\stc\..\..\include" /I "..\..\src\stc\scintilla\include" /I "..\..\src\stc\scintilla\src" /D "WIN32" /D "_LIB" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "__WX__" /D "SCI_LEXER" /D "LINK_LEXERS" /c
 # ADD BASE RSC /l 0x409
 # ADD RSC /l 0x409
 BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LIB32=link.exe -lib
-# ADD BASE LIB32 /nologo /out:"..\..\src\stc\..\..\..\lib\vc_lib\wxmswuniv25_stc.lib"
-# ADD LIB32 /nologo /out:"..\..\src\stc\..\..\..\lib\vc_lib\wxmswuniv25_stc.lib"
+# ADD BASE LIB32 /nologo /out:"..\..\src\stc\..\..\..\lib\vc_lib\wxmswuniv26_stc.lib"
+# ADD LIB32 /nologo /out:"..\..\src\stc\..\..\..\lib\vc_lib\wxmswuniv26_stc.lib"
 
 !ELSEIF  "$(CFG)" == "stc - Win32 Universal Debug"
 
@@ -324,16 +324,16 @@ LIB32=link.exe -lib
 # PROP Output_Dir "..\..\src\stc\..\..\..\lib\vc_lib"
 # PROP Intermediate_Dir "vc_mswunivd\stc"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /MDd /Od /GR /EHsc /I "..\..\src\stc\..\..\..\include" /I "..\..\src\stc\..\..\..\lib\vc_lib\mswunivd" /W4 /Zi /Gm /GZ /Fd..\..\src\stc\..\..\..\lib\vc_lib\wxmswuniv25d_stc.pdb /I "..\..\src\stc\..\..\include" /I "..\..\src\stc\scintilla\include" /I "..\..\src\stc\scintilla\src" /D "WIN32" /D "_LIB" /D "_DEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "__WXDEBUG__" /D "__WX__" /D "SCI_LEXER" /D "LINK_LEXERS" /c
-# ADD CPP /nologo /FD /MDd /Od /GR /EHsc /I "..\..\src\stc\..\..\..\include" /I "..\..\src\stc\..\..\..\lib\vc_lib\mswunivd" /W4 /Zi /Gm /GZ /Fd..\..\src\stc\..\..\..\lib\vc_lib\wxmswuniv25d_stc.pdb /I "..\..\src\stc\..\..\include" /I "..\..\src\stc\scintilla\include" /I "..\..\src\stc\scintilla\src" /D "WIN32" /D "_LIB" /D "_DEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "__WXDEBUG__" /D "__WX__" /D "SCI_LEXER" /D "LINK_LEXERS" /c
+# ADD BASE CPP /nologo /FD /MDd /Od /GR /EHsc /I "..\..\src\stc\..\..\..\include" /I "..\..\src\stc\..\..\..\lib\vc_lib\mswunivd" /W4 /Zi /Gm /GZ /Fd..\..\src\stc\..\..\..\lib\vc_lib\wxmswuniv26d_stc.pdb /I "..\..\src\stc\..\..\include" /I "..\..\src\stc\scintilla\include" /I "..\..\src\stc\scintilla\src" /D "WIN32" /D "_LIB" /D "_DEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "__WXDEBUG__" /D "__WX__" /D "SCI_LEXER" /D "LINK_LEXERS" /c
+# ADD CPP /nologo /FD /MDd /Od /GR /EHsc /I "..\..\src\stc\..\..\..\include" /I "..\..\src\stc\..\..\..\lib\vc_lib\mswunivd" /W4 /Zi /Gm /GZ /Fd..\..\src\stc\..\..\..\lib\vc_lib\wxmswuniv26d_stc.pdb /I "..\..\src\stc\..\..\include" /I "..\..\src\stc\scintilla\include" /I "..\..\src\stc\scintilla\src" /D "WIN32" /D "_LIB" /D "_DEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "__WXDEBUG__" /D "__WX__" /D "SCI_LEXER" /D "LINK_LEXERS" /c
 # ADD BASE RSC /l 0x409
 # ADD RSC /l 0x409
 BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LIB32=link.exe -lib
-# ADD BASE LIB32 /nologo /out:"..\..\src\stc\..\..\..\lib\vc_lib\wxmswuniv25d_stc.lib"
-# ADD LIB32 /nologo /out:"..\..\src\stc\..\..\..\lib\vc_lib\wxmswuniv25d_stc.lib"
+# ADD BASE LIB32 /nologo /out:"..\..\src\stc\..\..\..\lib\vc_lib\wxmswuniv26d_stc.lib"
+# ADD LIB32 /nologo /out:"..\..\src\stc\..\..\..\lib\vc_lib\wxmswuniv26d_stc.lib"
 
 !ELSEIF  "$(CFG)" == "stc - Win32 Unicode Release"
 
@@ -347,16 +347,16 @@ LIB32=link.exe -lib
 # PROP Output_Dir "..\..\src\stc\..\..\..\lib\vc_lib"
 # PROP Intermediate_Dir "vc_mswu\stc"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /MD /O2 /GR /EHsc /I "..\..\src\stc\..\..\..\include" /I "..\..\src\stc\..\..\..\lib\vc_lib\mswu" /W4 /Fd..\..\src\stc\..\..\..\lib\vc_lib\wxmsw25u_stc.pdb /I "..\..\src\stc\..\..\include" /I "..\..\src\stc\scintilla\include" /I "..\..\src\stc\scintilla\src" /D "WIN32" /D "_LIB" /D "__WXMSW__" /D "_UNICODE" /D "__WX__" /D "SCI_LEXER" /D "LINK_LEXERS" /c
-# ADD CPP /nologo /FD /MD /O2 /GR /EHsc /I "..\..\src\stc\..\..\..\include" /I "..\..\src\stc\..\..\..\lib\vc_lib\mswu" /W4 /Fd..\..\src\stc\..\..\..\lib\vc_lib\wxmsw25u_stc.pdb /I "..\..\src\stc\..\..\include" /I "..\..\src\stc\scintilla\include" /I "..\..\src\stc\scintilla\src" /D "WIN32" /D "_LIB" /D "__WXMSW__" /D "_UNICODE" /D "__WX__" /D "SCI_LEXER" /D "LINK_LEXERS" /c
+# ADD BASE CPP /nologo /FD /MD /O2 /GR /EHsc /I "..\..\src\stc\..\..\..\include" /I "..\..\src\stc\..\..\..\lib\vc_lib\mswu" /W4 /Fd..\..\src\stc\..\..\..\lib\vc_lib\wxmsw26u_stc.pdb /I "..\..\src\stc\..\..\include" /I "..\..\src\stc\scintilla\include" /I "..\..\src\stc\scintilla\src" /D "WIN32" /D "_LIB" /D "__WXMSW__" /D "_UNICODE" /D "__WX__" /D "SCI_LEXER" /D "LINK_LEXERS" /c
+# ADD CPP /nologo /FD /MD /O2 /GR /EHsc /I "..\..\src\stc\..\..\..\include" /I "..\..\src\stc\..\..\..\lib\vc_lib\mswu" /W4 /Fd..\..\src\stc\..\..\..\lib\vc_lib\wxmsw26u_stc.pdb /I "..\..\src\stc\..\..\include" /I "..\..\src\stc\scintilla\include" /I "..\..\src\stc\scintilla\src" /D "WIN32" /D "_LIB" /D "__WXMSW__" /D "_UNICODE" /D "__WX__" /D "SCI_LEXER" /D "LINK_LEXERS" /c
 # ADD BASE RSC /l 0x409
 # ADD RSC /l 0x409
 BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LIB32=link.exe -lib
-# ADD BASE LIB32 /nologo /out:"..\..\src\stc\..\..\..\lib\vc_lib\wxmsw25u_stc.lib"
-# ADD LIB32 /nologo /out:"..\..\src\stc\..\..\..\lib\vc_lib\wxmsw25u_stc.lib"
+# ADD BASE LIB32 /nologo /out:"..\..\src\stc\..\..\..\lib\vc_lib\wxmsw26u_stc.lib"
+# ADD LIB32 /nologo /out:"..\..\src\stc\..\..\..\lib\vc_lib\wxmsw26u_stc.lib"
 
 !ELSEIF  "$(CFG)" == "stc - Win32 Unicode Debug"
 
@@ -370,16 +370,16 @@ LIB32=link.exe -lib
 # PROP Output_Dir "..\..\src\stc\..\..\..\lib\vc_lib"
 # PROP Intermediate_Dir "vc_mswud\stc"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /MDd /Od /GR /EHsc /I "..\..\src\stc\..\..\..\include" /I "..\..\src\stc\..\..\..\lib\vc_lib\mswud" /W4 /Zi /Gm /GZ /Fd..\..\src\stc\..\..\..\lib\vc_lib\wxmsw25ud_stc.pdb /I "..\..\src\stc\..\..\include" /I "..\..\src\stc\scintilla\include" /I "..\..\src\stc\scintilla\src" /D "WIN32" /D "_LIB" /D "_DEBUG" /D "__WXMSW__" /D "__WXDEBUG__" /D "_UNICODE" /D "__WX__" /D "SCI_LEXER" /D "LINK_LEXERS" /c
-# ADD CPP /nologo /FD /MDd /Od /GR /EHsc /I "..\..\src\stc\..\..\..\include" /I "..\..\src\stc\..\..\..\lib\vc_lib\mswud" /W4 /Zi /Gm /GZ /Fd..\..\src\stc\..\..\..\lib\vc_lib\wxmsw25ud_stc.pdb /I "..\..\src\stc\..\..\include" /I "..\..\src\stc\scintilla\include" /I "..\..\src\stc\scintilla\src" /D "WIN32" /D "_LIB" /D "_DEBUG" /D "__WXMSW__" /D "__WXDEBUG__" /D "_UNICODE" /D "__WX__" /D "SCI_LEXER" /D "LINK_LEXERS" /c
+# ADD BASE CPP /nologo /FD /MDd /Od /GR /EHsc /I "..\..\src\stc\..\..\..\include" /I "..\..\src\stc\..\..\..\lib\vc_lib\mswud" /W4 /Zi /Gm /GZ /Fd..\..\src\stc\..\..\..\lib\vc_lib\wxmsw26ud_stc.pdb /I "..\..\src\stc\..\..\include" /I "..\..\src\stc\scintilla\include" /I "..\..\src\stc\scintilla\src" /D "WIN32" /D "_LIB" /D "_DEBUG" /D "__WXMSW__" /D "__WXDEBUG__" /D "_UNICODE" /D "__WX__" /D "SCI_LEXER" /D "LINK_LEXERS" /c
+# ADD CPP /nologo /FD /MDd /Od /GR /EHsc /I "..\..\src\stc\..\..\..\include" /I "..\..\src\stc\..\..\..\lib\vc_lib\mswud" /W4 /Zi /Gm /GZ /Fd..\..\src\stc\..\..\..\lib\vc_lib\wxmsw26ud_stc.pdb /I "..\..\src\stc\..\..\include" /I "..\..\src\stc\scintilla\include" /I "..\..\src\stc\scintilla\src" /D "WIN32" /D "_LIB" /D "_DEBUG" /D "__WXMSW__" /D "__WXDEBUG__" /D "_UNICODE" /D "__WX__" /D "SCI_LEXER" /D "LINK_LEXERS" /c
 # ADD BASE RSC /l 0x409
 # ADD RSC /l 0x409
 BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LIB32=link.exe -lib
-# ADD BASE LIB32 /nologo /out:"..\..\src\stc\..\..\..\lib\vc_lib\wxmsw25ud_stc.lib"
-# ADD LIB32 /nologo /out:"..\..\src\stc\..\..\..\lib\vc_lib\wxmsw25ud_stc.lib"
+# ADD BASE LIB32 /nologo /out:"..\..\src\stc\..\..\..\lib\vc_lib\wxmsw26ud_stc.lib"
+# ADD LIB32 /nologo /out:"..\..\src\stc\..\..\..\lib\vc_lib\wxmsw26ud_stc.lib"
 
 !ELSEIF  "$(CFG)" == "stc - Win32 Release"
 
@@ -393,16 +393,16 @@ LIB32=link.exe -lib
 # PROP Output_Dir "..\..\src\stc\..\..\..\lib\vc_lib"
 # PROP Intermediate_Dir "vc_msw\stc"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /MD /O2 /GR /EHsc /I "..\..\src\stc\..\..\..\include" /I "..\..\src\stc\..\..\..\lib\vc_lib\msw" /W4 /Fd..\..\src\stc\..\..\..\lib\vc_lib\wxmsw25_stc.pdb /I "..\..\src\stc\..\..\include" /I "..\..\src\stc\scintilla\include" /I "..\..\src\stc\scintilla\src" /D "WIN32" /D "_LIB" /D "__WXMSW__" /D "__WX__" /D "SCI_LEXER" /D "LINK_LEXERS" /c
-# ADD CPP /nologo /FD /MD /O2 /GR /EHsc /I "..\..\src\stc\..\..\..\include" /I "..\..\src\stc\..\..\..\lib\vc_lib\msw" /W4 /Fd..\..\src\stc\..\..\..\lib\vc_lib\wxmsw25_stc.pdb /I "..\..\src\stc\..\..\include" /I "..\..\src\stc\scintilla\include" /I "..\..\src\stc\scintilla\src" /D "WIN32" /D "_LIB" /D "__WXMSW__" /D "__WX__" /D "SCI_LEXER" /D "LINK_LEXERS" /c
+# ADD BASE CPP /nologo /FD /MD /O2 /GR /EHsc /I "..\..\src\stc\..\..\..\include" /I "..\..\src\stc\..\..\..\lib\vc_lib\msw" /W4 /Fd..\..\src\stc\..\..\..\lib\vc_lib\wxmsw26_stc.pdb /I "..\..\src\stc\..\..\include" /I "..\..\src\stc\scintilla\include" /I "..\..\src\stc\scintilla\src" /D "WIN32" /D "_LIB" /D "__WXMSW__" /D "__WX__" /D "SCI_LEXER" /D "LINK_LEXERS" /c
+# ADD CPP /nologo /FD /MD /O2 /GR /EHsc /I "..\..\src\stc\..\..\..\include" /I "..\..\src\stc\..\..\..\lib\vc_lib\msw" /W4 /Fd..\..\src\stc\..\..\..\lib\vc_lib\wxmsw26_stc.pdb /I "..\..\src\stc\..\..\include" /I "..\..\src\stc\scintilla\include" /I "..\..\src\stc\scintilla\src" /D "WIN32" /D "_LIB" /D "__WXMSW__" /D "__WX__" /D "SCI_LEXER" /D "LINK_LEXERS" /c
 # ADD BASE RSC /l 0x409
 # ADD RSC /l 0x409
 BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LIB32=link.exe -lib
-# ADD BASE LIB32 /nologo /out:"..\..\src\stc\..\..\..\lib\vc_lib\wxmsw25_stc.lib"
-# ADD LIB32 /nologo /out:"..\..\src\stc\..\..\..\lib\vc_lib\wxmsw25_stc.lib"
+# ADD BASE LIB32 /nologo /out:"..\..\src\stc\..\..\..\lib\vc_lib\wxmsw26_stc.lib"
+# ADD LIB32 /nologo /out:"..\..\src\stc\..\..\..\lib\vc_lib\wxmsw26_stc.lib"
 
 !ELSEIF  "$(CFG)" == "stc - Win32 Debug"
 
@@ -416,16 +416,16 @@ LIB32=link.exe -lib
 # PROP Output_Dir "..\..\src\stc\..\..\..\lib\vc_lib"
 # PROP Intermediate_Dir "vc_mswd\stc"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /MDd /Od /GR /EHsc /I "..\..\src\stc\..\..\..\include" /I "..\..\src\stc\..\..\..\lib\vc_lib\mswd" /W4 /Zi /Gm /GZ /Fd..\..\src\stc\..\..\..\lib\vc_lib\wxmsw25d_stc.pdb /I "..\..\src\stc\..\..\include" /I "..\..\src\stc\scintilla\include" /I "..\..\src\stc\scintilla\src" /D "WIN32" /D "_LIB" /D "_DEBUG" /D "__WXMSW__" /D "__WXDEBUG__" /D "__WX__" /D "SCI_LEXER" /D "LINK_LEXERS" /c
-# ADD CPP /nologo /FD /MDd /Od /GR /EHsc /I "..\..\src\stc\..\..\..\include" /I "..\..\src\stc\..\..\..\lib\vc_lib\mswd" /W4 /Zi /Gm /GZ /Fd..\..\src\stc\..\..\..\lib\vc_lib\wxmsw25d_stc.pdb /I "..\..\src\stc\..\..\include" /I "..\..\src\stc\scintilla\include" /I "..\..\src\stc\scintilla\src" /D "WIN32" /D "_LIB" /D "_DEBUG" /D "__WXMSW__" /D "__WXDEBUG__" /D "__WX__" /D "SCI_LEXER" /D "LINK_LEXERS" /c
+# ADD BASE CPP /nologo /FD /MDd /Od /GR /EHsc /I "..\..\src\stc\..\..\..\include" /I "..\..\src\stc\..\..\..\lib\vc_lib\mswd" /W4 /Zi /Gm /GZ /Fd..\..\src\stc\..\..\..\lib\vc_lib\wxmsw26d_stc.pdb /I "..\..\src\stc\..\..\include" /I "..\..\src\stc\scintilla\include" /I "..\..\src\stc\scintilla\src" /D "WIN32" /D "_LIB" /D "_DEBUG" /D "__WXMSW__" /D "__WXDEBUG__" /D "__WX__" /D "SCI_LEXER" /D "LINK_LEXERS" /c
+# ADD CPP /nologo /FD /MDd /Od /GR /EHsc /I "..\..\src\stc\..\..\..\include" /I "..\..\src\stc\..\..\..\lib\vc_lib\mswd" /W4 /Zi /Gm /GZ /Fd..\..\src\stc\..\..\..\lib\vc_lib\wxmsw26d_stc.pdb /I "..\..\src\stc\..\..\include" /I "..\..\src\stc\scintilla\include" /I "..\..\src\stc\scintilla\src" /D "WIN32" /D "_LIB" /D "_DEBUG" /D "__WXMSW__" /D "__WXDEBUG__" /D "__WX__" /D "SCI_LEXER" /D "LINK_LEXERS" /c
 # ADD BASE RSC /l 0x409
 # ADD RSC /l 0x409
 BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LIB32=link.exe -lib
-# ADD BASE LIB32 /nologo /out:"..\..\src\stc\..\..\..\lib\vc_lib\wxmsw25d_stc.lib"
-# ADD LIB32 /nologo /out:"..\..\src\stc\..\..\..\lib\vc_lib\wxmsw25d_stc.lib"
+# ADD BASE LIB32 /nologo /out:"..\..\src\stc\..\..\..\lib\vc_lib\wxmsw26d_stc.lib"
+# ADD LIB32 /nologo /out:"..\..\src\stc\..\..\..\lib\vc_lib\wxmsw26d_stc.lib"
 
 !ENDIF
 

@@ -12,7 +12,7 @@
 
 ### Variables: ###
 
-WX_RELEASE_NODOT = 25
+WX_RELEASE_NODOT = 26
 OBJS = \
 	vc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)
 LIBDIRNAME = .\..\..\lib\vc_$(LIBTYPE_SUFFIX)$(CFG)
@@ -242,6 +242,10 @@ __DLLFLAG_p = /DWXUSINGDLL
 __DLLFLAG_p_1 = /d WXUSINGDLL
 !endif
 !if "$(MONOLITHIC)" == "0"
+__WXLIB_QA_p = \
+	wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_qa.lib
+!endif
+!if "$(MONOLITHIC)" == "0"
 __WXLIB_CORE_p = \
 	wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_core.lib
 !endif
@@ -252,10 +256,6 @@ __WXLIB_BASE_p = \
 !if "$(MONOLITHIC)" == "0"
 __WXLIB_XML_p = \
 	wxbase$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_xml.lib
-!endif
-!if "$(MONOLITHIC)" == "0"
-__WXLIB_QA_p = \
-	wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_qa.lib
 !endif
 !if "$(MONOLITHIC)" == "1"
 __WXLIB_MONO_p = \
@@ -293,7 +293,7 @@ clean:
 
 $(OBJS)\debugrpt.exe: $(DEBUGRPT_OBJECTS) $(OBJS)\debugrpt_sample.res
 	link /NOLOGO /OUT:$@ $(LDFLAGS) $(__DEBUGINFO_1)  /LIBPATH:$(LIBDIRNAME) /SUBSYSTEM:WINDOWS @<<
-	$(DEBUGRPT_OBJECTS)  $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p)  $(__WXLIB_XML_p)  $(__WXLIB_QA_p)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE) $(__UNICOWS_LIB_p) kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib oleacc.lib odbc32.lib
+	$(DEBUGRPT_OBJECTS)  $(__WXLIB_QA_p)  $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p)  $(__WXLIB_XML_p)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE) $(__UNICOWS_LIB_p) kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib oleacc.lib odbc32.lib
 <<
 
 $(OBJS)\debugrpt_sample.res: .\..\..\samples\sample.rc

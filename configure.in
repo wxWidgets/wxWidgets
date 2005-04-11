@@ -17,7 +17,7 @@ dnl ---------------------------------------------------------------------------
 dnl initialization
 dnl ---------------------------------------------------------------------------
 
-AC_INIT([wxWidgets], [2.5.5], [wx-dev@lists.wxwidgets.org])
+AC_INIT([wxWidgets], [2.6.0], [wx-dev@lists.wxwidgets.org])
 
 dnl the file passed to AC_CONFIG_SRCDIR should be specific to our package
 AC_CONFIG_SRCDIR([wx-config.in])
@@ -48,15 +48,16 @@ dnl    If any public interface was removed (or altered in a way effectively
 dnl    removing the previous definition), instead do:  WX_AGE = 0
 dnl
 dnl When the major or minor version numbers are incremented, all the above
-dnl variables should be reset to 0.
+dnl variables should be reset to 0. wx_subrelease_number should be set to zero
+dnl when major, minor or release numbers change.
 dnl
 dnl The resulting library name will be of the form:
 dnl   libwx_$(TOOLKIT)-$(WX_RELEASE).so.$(WX_CURRENT).$(WX_REVISION).$(WX_AGE)
 
 wx_major_version_number=2
-wx_minor_version_number=5
-wx_release_number=5
-wx_subrelease_number=1
+wx_minor_version_number=6
+wx_release_number=0
+wx_subrelease_number=0
 
 WX_RELEASE=$wx_major_version_number.$wx_minor_version_number
 WX_VERSION=$WX_RELEASE.$wx_release_number
@@ -64,9 +65,9 @@ WX_SUBVERSION=$WX_VERSION.$wx_subrelease_number
 
 WX_MSW_VERSION=$wx_major_version_number$wx_minor_version_number$wx_release_number
 
-WX_CURRENT=5
+WX_CURRENT=0
 WX_REVISION=0
-WX_AGE=5
+WX_AGE=0
 
 
 dnl ------------------------------------------------------------------------

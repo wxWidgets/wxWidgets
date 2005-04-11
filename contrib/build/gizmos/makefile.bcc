@@ -21,15 +21,14 @@ BCCDIR = $(MAKEDIR)\..
 
 ### Variables: ###
 
-WX_RELEASE_NODOT = 25
-WX_VERSION_NODOT = $(WX_RELEASE_NODOT)5
+WX_RELEASE_NODOT = 26
 OBJS = \
 	bcc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)
 LIBDIRNAME = ..\..\src\gizmos\..\..\..\lib\bcc_$(LIBTYPE_SUFFIX)$(CFG)
 SETUPHDIR = \
 	$(LIBDIRNAME)\$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)
 GIZMOSDLL_CXXFLAGS = $(__RUNTIME_LIBS) -I$(BCCDIR)\include $(__DEBUGINFO) \
-	$(__OPTIMIZEFLAG) $(__THREADSFLAG) -D__WXMSW__ $(__WXUNIV_DEFINE_p) \
+	$(__OPTIMIZEFLAG) $(__THREADSFLAG_2) -D__WXMSW__ $(__WXUNIV_DEFINE_p) \
 	$(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) \
 	$(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p) \
 	-I..\..\src\gizmos\..\..\..\include -I$(SETUPHDIR) \
@@ -42,10 +41,19 @@ GIZMOSDLL_OBJECTS =  \
 	$(OBJS)\gizmosdll_ledctrl.obj \
 	$(OBJS)\gizmosdll_multicell.obj \
 	$(OBJS)\gizmosdll_splittree.obj \
-	$(OBJS)\gizmosdll_statpict.obj \
-	$(OBJS)\gizmosdll_xh_statpict.obj
+	$(OBJS)\gizmosdll_statpict.obj
+GIZMOS_XRCDLL_CXXFLAGS = $(__RUNTIME_LIBS) -I$(BCCDIR)\include $(__DEBUGINFO) \
+	$(__OPTIMIZEFLAG) $(__THREADSFLAG_2) -D__WXMSW__ $(__WXUNIV_DEFINE_p) \
+	$(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) \
+	$(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p) \
+	-I..\..\src\gizmos\..\..\..\include -I$(SETUPHDIR) \
+	-I..\..\src\gizmos\..\..\include -DWXUSINGDLL -DWXMAKINGDLL_GIZMOS_XRC -Hu \
+	-H=$(OBJS)\wxprec_gizmos_xrcdll.csm $(CPPFLAGS) $(CXXFLAGS)
+GIZMOS_XRCDLL_OBJECTS =  \
+	$(OBJS)\gizmos_xrcdll_dummy.obj \
+	$(OBJS)\gizmos_xrcdll_xh_statpict.obj
 GIZMOSLIB_CXXFLAGS = $(__RUNTIME_LIBS) -I$(BCCDIR)\include $(__DEBUGINFO) \
-	$(__OPTIMIZEFLAG) $(__THREADSFLAG) -D__WXMSW__ $(__WXUNIV_DEFINE_p) \
+	$(__OPTIMIZEFLAG) $(__THREADSFLAG_2) -D__WXMSW__ $(__WXUNIV_DEFINE_p) \
 	$(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) \
 	$(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p) \
 	-I..\..\src\gizmos\..\..\..\include -I$(SETUPHDIR) \
@@ -58,8 +66,17 @@ GIZMOSLIB_OBJECTS =  \
 	$(OBJS)\gizmoslib_ledctrl.obj \
 	$(OBJS)\gizmoslib_multicell.obj \
 	$(OBJS)\gizmoslib_splittree.obj \
-	$(OBJS)\gizmoslib_statpict.obj \
-	$(OBJS)\gizmoslib_xh_statpict.obj
+	$(OBJS)\gizmoslib_statpict.obj
+GIZMOS_XRCLIB_CXXFLAGS = $(__RUNTIME_LIBS) -I$(BCCDIR)\include $(__DEBUGINFO) \
+	$(__OPTIMIZEFLAG) $(__THREADSFLAG_2) -D__WXMSW__ $(__WXUNIV_DEFINE_p) \
+	$(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) \
+	$(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p) \
+	-I..\..\src\gizmos\..\..\..\include -I$(SETUPHDIR) \
+	-I..\..\src\gizmos\..\..\include -Hu -H=$(OBJS)\wxprec_gizmos_xrclib.csm \
+	$(CPPFLAGS) $(CXXFLAGS)
+GIZMOS_XRCLIB_OBJECTS =  \
+	$(OBJS)\gizmos_xrclib_dummy.obj \
+	$(OBJS)\gizmos_xrclib_xh_statpict.obj
 
 ### Conditionally set variables: ###
 
@@ -104,40 +121,56 @@ EXTRALIBS_FOR_BASE =
 !endif
 !if "$(SHARED)" == "1"
 __gizmosdll___depname = \
-	$(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_VERSION_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_gizmos_bcc$(VENDORTAG).dll
+	$(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_gizmos_bcc$(VENDORTAG).dll
+!endif
+!if "$(SHARED)" == "1" && "$(USE_XRC)" == "1"
+__gizmos_xrcdll___depname = \
+	$(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_gizmos_xrc_bcc$(VENDORTAG).dll
+!endif
+!if "$(MONOLITHIC)" == "0"
+__WXLIB_XRC_p = \
+	wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_xrc.lib
+!endif
+!if "$(SHARED)" == "0"
+__gizmoslib___depname = \
+	$(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_gizmos.lib
+!endif
+!if "$(SHARED)" == "0" && "$(USE_XRC)" == "1"
+__gizmos_xrclib___depname = \
+	$(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_gizmos_xrc.lib
 !endif
 !if "$(USE_THREADS)" == "0"
-__THREADSFLAG_6 = 
+__THREADSFLAG = 
 !endif
 !if "$(USE_THREADS)" == "1"
-__THREADSFLAG_6 = mt
+__THREADSFLAG = mt
 !endif
 !if "$(RUNTIME_LIBS)" == "dynamic"
-__RUNTIME_LIBS_9 = i
+__RUNTIME_LIBS_0 = i
 !endif
 !if "$(RUNTIME_LIBS)" == "static"
-__RUNTIME_LIBS_9 = 
+__RUNTIME_LIBS_0 = 
 !endif
 !if "$(WXUNIV)" == "1"
-__WXUNIV_DEFINE_p_1 = -d__WXUNIVERSAL__
+__WXUNIV_DEFINE_p_0 = -d__WXUNIVERSAL__
 !endif
 !if "$(BUILD)" == "debug" && "$(DEBUG_FLAG)" == "default"
-__DEBUG_DEFINE_p_1 = -d__WXDEBUG__
+__DEBUG_DEFINE_p_0 = -d__WXDEBUG__
 !endif
 !if "$(DEBUG_FLAG)" == "1"
-__DEBUG_DEFINE_p_1 = -d__WXDEBUG__
+__DEBUG_DEFINE_p_0 = -d__WXDEBUG__
 !endif
 !if "$(USE_EXCEPTIONS)" == "0"
-__EXCEPTIONS_DEFINE_p_1 = -dwxNO_EXCEPTIONS
+__EXCEPTIONS_DEFINE_p_0 = -dwxNO_EXCEPTIONS
 !endif
 !if "$(USE_RTTI)" == "0"
-__RTTI_DEFINE_p_1 = -dwxNO_RTTI
+__RTTI_DEFINE_p_0 = -dwxNO_RTTI
 !endif
 !if "$(USE_THREADS)" == "0"
-__THREAD_DEFINE_p_1 = -dwxNO_THREADS
+__THREAD_DEFINE_p_0 = -dwxNO_THREADS
 !endif
 !if "$(UNICODE)" == "1"
-__UNICODE_DEFINE_p_1 = -d_UNICODE
+__UNICODE_DEFINE_p_0 = -d_UNICODE
 !endif
 !if "$(MONOLITHIC)" == "1"
 __WXLIB_MONO_p = \
@@ -156,16 +189,12 @@ __LIB_PNG_p = wxpng$(WXDEBUGFLAG).lib
 __UNICOWS_LIB_p = unicows.lib
 !endif
 !if "$(MONOLITHIC)" == "0"
-__WXLIB_BASE_p = \
-	wxbase$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR).lib
-!endif
-!if "$(MONOLITHIC)" == "0"
 __WXLIB_CORE_p = \
 	wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_core.lib
 !endif
-!if "$(SHARED)" == "0"
-__gizmoslib___depname = \
-	$(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_gizmos.lib
+!if "$(MONOLITHIC)" == "0"
+__WXLIB_BASE_p = \
+	wxbase$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR).lib
 !endif
 !if "$(BUILD)" == "debug" && "$(DEBUG_INFO)" == "default"
 __DEBUGINFO = -v
@@ -186,10 +215,10 @@ __OPTIMIZEFLAG = -Od
 __OPTIMIZEFLAG = -O2
 !endif
 !if "$(USE_THREADS)" == "0"
-__THREADSFLAG = 
+__THREADSFLAG_2 = 
 !endif
 !if "$(USE_THREADS)" == "1"
-__THREADSFLAG = -tWM
+__THREADSFLAG_2 = -tWM
 !endif
 !if "$(RUNTIME_LIBS)" == "dynamic"
 __RUNTIME_LIBS = -tWR
@@ -226,27 +255,43 @@ $(OBJS):
 
 ### Targets: ###
 
-all: $(__gizmosdll___depname) $(__gizmoslib___depname)
+all: $(__gizmosdll___depname) $(__gizmos_xrcdll___depname) $(__gizmoslib___depname) $(__gizmos_xrclib___depname)
 
 clean: 
 	-if exist $(OBJS)\*.obj del $(OBJS)\*.obj
 	-if exist $(OBJS)\*.res del $(OBJS)\*.res
 	-if exist $(OBJS)\*.csm del $(OBJS)\*.csm
-	-if exist $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_VERSION_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_gizmos_bcc$(VENDORTAG).dll del $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_VERSION_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_gizmos_bcc$(VENDORTAG).dll
-	-if exist $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_VERSION_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_gizmos_bcc$(VENDORTAG).tds del $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_VERSION_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_gizmos_bcc$(VENDORTAG).tds
-	-if exist $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_VERSION_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_gizmos_bcc$(VENDORTAG).ilc del $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_VERSION_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_gizmos_bcc$(VENDORTAG).ilc
-	-if exist $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_VERSION_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_gizmos_bcc$(VENDORTAG).ild del $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_VERSION_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_gizmos_bcc$(VENDORTAG).ild
-	-if exist $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_VERSION_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_gizmos_bcc$(VENDORTAG).ilf del $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_VERSION_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_gizmos_bcc$(VENDORTAG).ilf
-	-if exist $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_VERSION_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_gizmos_bcc$(VENDORTAG).ils del $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_VERSION_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_gizmos_bcc$(VENDORTAG).ils
+	-if exist $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_gizmos_bcc$(VENDORTAG).dll del $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_gizmos_bcc$(VENDORTAG).dll
+	-if exist $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_gizmos_bcc$(VENDORTAG).tds del $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_gizmos_bcc$(VENDORTAG).tds
+	-if exist $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_gizmos_bcc$(VENDORTAG).ilc del $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_gizmos_bcc$(VENDORTAG).ilc
+	-if exist $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_gizmos_bcc$(VENDORTAG).ild del $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_gizmos_bcc$(VENDORTAG).ild
+	-if exist $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_gizmos_bcc$(VENDORTAG).ilf del $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_gizmos_bcc$(VENDORTAG).ilf
+	-if exist $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_gizmos_bcc$(VENDORTAG).ils del $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_gizmos_bcc$(VENDORTAG).ils
 	-if exist $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_gizmos.lib del $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_gizmos.lib
+	-if exist $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_gizmos_xrc_bcc$(VENDORTAG).dll del $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_gizmos_xrc_bcc$(VENDORTAG).dll
+	-if exist $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_gizmos_xrc_bcc$(VENDORTAG).tds del $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_gizmos_xrc_bcc$(VENDORTAG).tds
+	-if exist $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_gizmos_xrc_bcc$(VENDORTAG).ilc del $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_gizmos_xrc_bcc$(VENDORTAG).ilc
+	-if exist $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_gizmos_xrc_bcc$(VENDORTAG).ild del $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_gizmos_xrc_bcc$(VENDORTAG).ild
+	-if exist $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_gizmos_xrc_bcc$(VENDORTAG).ilf del $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_gizmos_xrc_bcc$(VENDORTAG).ilf
+	-if exist $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_gizmos_xrc_bcc$(VENDORTAG).ils del $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_gizmos_xrc_bcc$(VENDORTAG).ils
+	-if exist $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_gizmos_xrc.lib del $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_gizmos_xrc.lib
 	-if exist $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_gizmos.lib del $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_gizmos.lib
+	-if exist $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_gizmos_xrc.lib del $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_gizmos_xrc.lib
 
 !if "$(SHARED)" == "1"
-$(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_VERSION_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_gizmos_bcc$(VENDORTAG).dll: $(OBJS)\gizmosdll_dummy.obj  $(GIZMOSDLL_OBJECTS)  $(OBJS)\gizmosdll_version.res
+$(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_gizmos_bcc$(VENDORTAG).dll: $(OBJS)\gizmosdll_dummy.obj  $(GIZMOSDLL_OBJECTS)  $(OBJS)\gizmosdll_version.res
 	ilink32 -Tpd -q $(LDFLAGS) -L$(BCCDIR)\lib -L$(BCCDIR)\lib\psdk $(__DEBUGINFO)  -L$(LIBDIRNAME) @&&|
-	c0d32.obj $(GIZMOSDLL_OBJECTS),$@,, $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE) $(__UNICOWS_LIB_p) ole2w32.lib oleacc.lib odbc32.lib  $(__WXLIB_BASE_p)  $(__WXLIB_CORE_p)  import32.lib cw32$(__THREADSFLAG_6)$(__RUNTIME_LIBS_9).lib,, $(OBJS)\gizmosdll_version.res
+	c0d32.obj $(GIZMOSDLL_OBJECTS),$@,, $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE) $(__UNICOWS_LIB_p) ole2w32.lib oleacc.lib odbc32.lib  $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p)  import32.lib cw32$(__THREADSFLAG)$(__RUNTIME_LIBS_0).lib,, $(OBJS)\gizmosdll_version.res
 |
 	implib -f $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_gizmos $@
+!endif
+
+!if "$(SHARED)" == "1" && "$(USE_XRC)" == "1"
+$(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_gizmos_xrc_bcc$(VENDORTAG).dll: $(OBJS)\gizmos_xrcdll_dummy.obj  $(GIZMOS_XRCDLL_OBJECTS)  $(OBJS)\gizmos_xrcdll_version.res $(__gizmosdll___depname)
+	ilink32 -Tpd -q $(LDFLAGS) -L$(BCCDIR)\lib -L$(BCCDIR)\lib\psdk $(__DEBUGINFO)  -L$(LIBDIRNAME) @&&|
+	c0d32.obj $(GIZMOS_XRCDLL_OBJECTS),$@,, $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE) $(__UNICOWS_LIB_p) ole2w32.lib oleacc.lib odbc32.lib  $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_gizmos.lib $(__WXLIB_XRC_p)  $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p)  import32.lib cw32$(__THREADSFLAG)$(__RUNTIME_LIBS_0).lib,, $(OBJS)\gizmos_xrcdll_version.res
+|
+	implib -f $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_gizmos_xrc $@
 !endif
 
 !if "$(SHARED)" == "0"
@@ -257,11 +302,19 @@ $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXD
 |
 !endif
 
+!if "$(SHARED)" == "0" && "$(USE_XRC)" == "1"
+$(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_gizmos_xrc.lib: $(OBJS)\gizmos_xrclib_dummy.obj  $(GIZMOS_XRCLIB_OBJECTS)
+	if exist $@ del $@
+	tlib /a /p4096 $@ @&&|
+	$(GIZMOS_XRCLIB_OBJECTS)
+|
+!endif
+
 $(OBJS)\gizmosdll_dummy.obj: ../../src/gizmos\..\..\..\src\msw\dummy.cpp
 	$(CXX) -q -c -P -o$@ $(GIZMOSDLL_CXXFLAGS) -H $**
 
 $(OBJS)\gizmosdll_version.res: ../../src/gizmos\..\..\..\src\msw\version.rc
-	brcc32 -32 -r -fo$@ -i$(BCCDIR)\include   -d__WXMSW__ $(__WXUNIV_DEFINE_p_1) $(__DEBUG_DEFINE_p_1) $(__EXCEPTIONS_DEFINE_p_1) $(__RTTI_DEFINE_p_1) $(__THREAD_DEFINE_p_1) $(__UNICODE_DEFINE_p_1) -i..\..\src\gizmos\..\..\..\include -i$(SETUPHDIR) -dWXDLLNAME=wx$(PORTNAME)$(WXUNIVNAME)$(WX_VERSION_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_gizmos_bcc$(VENDORTAG) $**
+	brcc32 -32 -r -fo$@ -i$(BCCDIR)\include   -d__WXMSW__ $(__WXUNIV_DEFINE_p_0) $(__DEBUG_DEFINE_p_0) $(__EXCEPTIONS_DEFINE_p_0) $(__RTTI_DEFINE_p_0) $(__THREAD_DEFINE_p_0) $(__UNICODE_DEFINE_p_0) -i..\..\src\gizmos\..\..\..\include -i$(SETUPHDIR) -dWXDLLNAME=wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_gizmos_bcc$(VENDORTAG) $**
 
 $(OBJS)\gizmosdll_dynamicsash.obj: ../../src/gizmos\dynamicsash.cpp
 	$(CXX) -q -c -P -o$@ $(GIZMOSDLL_CXXFLAGS) $**
@@ -281,8 +334,14 @@ $(OBJS)\gizmosdll_splittree.obj: ../../src/gizmos\splittree.cpp
 $(OBJS)\gizmosdll_statpict.obj: ../../src/gizmos\statpict.cpp
 	$(CXX) -q -c -P -o$@ $(GIZMOSDLL_CXXFLAGS) $**
 
-$(OBJS)\gizmosdll_xh_statpict.obj: ../../src/gizmos\xh_statpict.cpp
-	$(CXX) -q -c -P -o$@ $(GIZMOSDLL_CXXFLAGS) $**
+$(OBJS)\gizmos_xrcdll_dummy.obj: ../../src/gizmos\..\..\..\src\msw\dummy.cpp
+	$(CXX) -q -c -P -o$@ $(GIZMOS_XRCDLL_CXXFLAGS) -H $**
+
+$(OBJS)\gizmos_xrcdll_version.res: ../../src/gizmos\..\..\..\src\msw\version.rc
+	brcc32 -32 -r -fo$@ -i$(BCCDIR)\include   -d__WXMSW__ $(__WXUNIV_DEFINE_p_0) $(__DEBUG_DEFINE_p_0) $(__EXCEPTIONS_DEFINE_p_0) $(__RTTI_DEFINE_p_0) $(__THREAD_DEFINE_p_0) $(__UNICODE_DEFINE_p_0) -i..\..\src\gizmos\..\..\..\include -i$(SETUPHDIR) -dWXDLLNAME=wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_gizmos_xrc_bcc$(VENDORTAG) $**
+
+$(OBJS)\gizmos_xrcdll_xh_statpict.obj: ../../src/gizmos\xh_statpict.cpp
+	$(CXX) -q -c -P -o$@ $(GIZMOS_XRCDLL_CXXFLAGS) $**
 
 $(OBJS)\gizmoslib_dummy.obj: ../../src/gizmos\..\..\..\src\msw\dummy.cpp
 	$(CXX) -q -c -P -o$@ $(GIZMOSLIB_CXXFLAGS) -H $**
@@ -305,6 +364,9 @@ $(OBJS)\gizmoslib_splittree.obj: ../../src/gizmos\splittree.cpp
 $(OBJS)\gizmoslib_statpict.obj: ../../src/gizmos\statpict.cpp
 	$(CXX) -q -c -P -o$@ $(GIZMOSLIB_CXXFLAGS) $**
 
-$(OBJS)\gizmoslib_xh_statpict.obj: ../../src/gizmos\xh_statpict.cpp
-	$(CXX) -q -c -P -o$@ $(GIZMOSLIB_CXXFLAGS) $**
+$(OBJS)\gizmos_xrclib_dummy.obj: ../../src/gizmos\..\..\..\src\msw\dummy.cpp
+	$(CXX) -q -c -P -o$@ $(GIZMOS_XRCLIB_CXXFLAGS) -H $**
+
+$(OBJS)\gizmos_xrclib_xh_statpict.obj: ../../src/gizmos\xh_statpict.cpp
+	$(CXX) -q -c -P -o$@ $(GIZMOS_XRCLIB_CXXFLAGS) $**
 

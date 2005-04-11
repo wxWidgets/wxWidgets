@@ -55,18 +55,18 @@ RSC=rc.exe
 # PROP Output_Dir "..\..\src\animate\..\..\..\lib\vc_dll"
 # PROP Intermediate_Dir "vc_mswunivudll\animate"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /MD /O2 /GR /EHsc /I "..\..\src\animate\..\..\..\include" /I "..\..\src\animate\..\..\..\lib\vc_dll\mswunivu" /W4 /Yu"wx/wxprec.h" /Fp"vc_mswunivudll\wxprec_animatedll.pch" /Fd..\..\src\animate\..\..\..\lib\vc_dll\wxmswuniv255u_animate_vc_custom.pdb /I "..\..\src\animate\..\..\include" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "_UNICODE" /D "WXUSINGDLL" /D "WXMAKINGDLL_ANIMATE" /c
-# ADD CPP /nologo /FD /MD /O2 /GR /EHsc /I "..\..\src\animate\..\..\..\include" /I "..\..\src\animate\..\..\..\lib\vc_dll\mswunivu" /W4 /Yu"wx/wxprec.h" /Fp"vc_mswunivudll\wxprec_animatedll.pch" /Fd..\..\src\animate\..\..\..\lib\vc_dll\wxmswuniv255u_animate_vc_custom.pdb /I "..\..\src\animate\..\..\include" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "_UNICODE" /D "WXUSINGDLL" /D "WXMAKINGDLL_ANIMATE" /c
+# ADD BASE CPP /nologo /FD /MD /O2 /GR /EHsc /I "..\..\src\animate\..\..\..\include" /I "..\..\src\animate\..\..\..\lib\vc_dll\mswunivu" /W4 /Yu"wx/wxprec.h" /Fp"vc_mswunivudll\wxprec_animatedll.pch" /Fd..\..\src\animate\..\..\..\lib\vc_dll\wxmswuniv26u_animate_vc_custom.pdb /I "..\..\src\animate\..\..\include" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "_UNICODE" /D "WXUSINGDLL" /D "WXMAKINGDLL_ANIMATE" /c
+# ADD CPP /nologo /FD /MD /O2 /GR /EHsc /I "..\..\src\animate\..\..\..\include" /I "..\..\src\animate\..\..\..\lib\vc_dll\mswunivu" /W4 /Yu"wx/wxprec.h" /Fp"vc_mswunivudll\wxprec_animatedll.pch" /Fd..\..\src\animate\..\..\..\lib\vc_dll\wxmswuniv26u_animate_vc_custom.pdb /I "..\..\src\animate\..\..\include" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "_UNICODE" /D "WXUSINGDLL" /D "WXMAKINGDLL_ANIMATE" /c
 # ADD BASE MTL /nologo /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "_UNICODE" /D "WXUSINGDLL" /D "WXMAKINGDLL_ANIMATE" /mktyplib203 /win32
 # ADD MTL /nologo /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "_UNICODE" /D "WXUSINGDLL" /D "WXMAKINGDLL_ANIMATE" /mktyplib203 /win32
-# ADD BASE RSC /l 0x409 /d "__WXMSW__" /d "__WXUNIVERSAL__" /d "_UNICODE" /i "..\..\src\animate\..\..\..\include" /i "..\..\src\animate\..\..\..\lib\vc_dll\mswunivu" /d WXDLLNAME=wxmswuniv255u_animate_vc_custom /i "..\..\src\animate\..\..\include" /d "WXUSINGDLL" /d WXMAKINGDLL_ANIMATE
-# ADD RSC /l 0x409 /d "__WXMSW__" /d "__WXUNIVERSAL__" /d "_UNICODE" /i "..\..\src\animate\..\..\..\include" /i "..\..\src\animate\..\..\..\lib\vc_dll\mswunivu" /d WXDLLNAME=wxmswuniv255u_animate_vc_custom /i "..\..\src\animate\..\..\include" /d "WXUSINGDLL" /d WXMAKINGDLL_ANIMATE
+# ADD BASE RSC /l 0x409 /d "__WXMSW__" /d "__WXUNIVERSAL__" /d "_UNICODE" /i "..\..\src\animate\..\..\..\include" /i "..\..\src\animate\..\..\..\lib\vc_dll\mswunivu" /d WXDLLNAME=wxmswuniv26u_animate_vc_custom /i "..\..\src\animate\..\..\include" /d "WXUSINGDLL" /d WXMAKINGDLL_ANIMATE
+# ADD RSC /l 0x409 /d "__WXMSW__" /d "__WXUNIVERSAL__" /d "_UNICODE" /i "..\..\src\animate\..\..\..\include" /i "..\..\src\animate\..\..\..\lib\vc_dll\mswunivu" /d WXDLLNAME=wxmswuniv26u_animate_vc_custom /i "..\..\src\animate\..\..\include" /d "WXUSINGDLL" /d WXMAKINGDLL_ANIMATE
 BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LINK32=link.exe
-# ADD BASE LINK32 wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregexu.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib oleacc.lib odbc32.lib wxmswuniv25u_core.lib wxbase25u.lib /nologo /dll /machine:i386 /out:"..\..\src\animate\..\..\..\lib\vc_dll\wxmswuniv255u_animate_vc_custom.dll" /libpath:"..\..\src\animate\..\..\..\lib\vc_dll" /implib:"..\..\src\animate\..\..\..\lib\vc_dll\wxmswuniv25u_animate.lib"
-# ADD LINK32 wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregexu.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib oleacc.lib odbc32.lib wxmswuniv25u_core.lib wxbase25u.lib /nologo /dll /machine:i386 /out:"..\..\src\animate\..\..\..\lib\vc_dll\wxmswuniv255u_animate_vc_custom.dll" /libpath:"..\..\src\animate\..\..\..\lib\vc_dll" /implib:"..\..\src\animate\..\..\..\lib\vc_dll\wxmswuniv25u_animate.lib"
+# ADD BASE LINK32 wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregexu.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib oleacc.lib odbc32.lib wxmswuniv26u_core.lib wxbase26u.lib /nologo /dll /machine:i386 /out:"..\..\src\animate\..\..\..\lib\vc_dll\wxmswuniv26u_animate_vc_custom.dll" /libpath:"..\..\src\animate\..\..\..\lib\vc_dll" /implib:"..\..\src\animate\..\..\..\lib\vc_dll\wxmswuniv26u_animate.lib"
+# ADD LINK32 wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregexu.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib oleacc.lib odbc32.lib wxmswuniv26u_core.lib wxbase26u.lib /nologo /dll /machine:i386 /out:"..\..\src\animate\..\..\..\lib\vc_dll\wxmswuniv26u_animate_vc_custom.dll" /libpath:"..\..\src\animate\..\..\..\lib\vc_dll" /implib:"..\..\src\animate\..\..\..\lib\vc_dll\wxmswuniv26u_animate.lib"
 
 !ELSEIF  "$(CFG)" == "animate - Win32 DLL Universal Unicode Debug"
 
@@ -80,18 +80,18 @@ LINK32=link.exe
 # PROP Output_Dir "..\..\src\animate\..\..\..\lib\vc_dll"
 # PROP Intermediate_Dir "vc_mswunivuddll\animate"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /MDd /Od /GR /EHsc /I "..\..\src\animate\..\..\..\include" /I "..\..\src\animate\..\..\..\lib\vc_dll\mswunivud" /W4 /Yu"wx/wxprec.h" /Fp"vc_mswunivuddll\wxprec_animatedll.pch" /Zi /Gm /GZ /Fd..\..\src\animate\..\..\..\lib\vc_dll\wxmswuniv255ud_animate_vc_custom.pdb /I "..\..\src\animate\..\..\include" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "__WXDEBUG__" /D "_UNICODE" /D "WXUSINGDLL" /D "WXMAKINGDLL_ANIMATE" /c
-# ADD CPP /nologo /FD /MDd /Od /GR /EHsc /I "..\..\src\animate\..\..\..\include" /I "..\..\src\animate\..\..\..\lib\vc_dll\mswunivud" /W4 /Yu"wx/wxprec.h" /Fp"vc_mswunivuddll\wxprec_animatedll.pch" /Zi /Gm /GZ /Fd..\..\src\animate\..\..\..\lib\vc_dll\wxmswuniv255ud_animate_vc_custom.pdb /I "..\..\src\animate\..\..\include" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "__WXDEBUG__" /D "_UNICODE" /D "WXUSINGDLL" /D "WXMAKINGDLL_ANIMATE" /c
+# ADD BASE CPP /nologo /FD /MDd /Od /GR /EHsc /I "..\..\src\animate\..\..\..\include" /I "..\..\src\animate\..\..\..\lib\vc_dll\mswunivud" /W4 /Yu"wx/wxprec.h" /Fp"vc_mswunivuddll\wxprec_animatedll.pch" /Zi /Gm /GZ /Fd..\..\src\animate\..\..\..\lib\vc_dll\wxmswuniv26ud_animate_vc_custom.pdb /I "..\..\src\animate\..\..\include" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "__WXDEBUG__" /D "_UNICODE" /D "WXUSINGDLL" /D "WXMAKINGDLL_ANIMATE" /c
+# ADD CPP /nologo /FD /MDd /Od /GR /EHsc /I "..\..\src\animate\..\..\..\include" /I "..\..\src\animate\..\..\..\lib\vc_dll\mswunivud" /W4 /Yu"wx/wxprec.h" /Fp"vc_mswunivuddll\wxprec_animatedll.pch" /Zi /Gm /GZ /Fd..\..\src\animate\..\..\..\lib\vc_dll\wxmswuniv26ud_animate_vc_custom.pdb /I "..\..\src\animate\..\..\include" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "__WXDEBUG__" /D "_UNICODE" /D "WXUSINGDLL" /D "WXMAKINGDLL_ANIMATE" /c
 # ADD BASE MTL /nologo /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "__WXDEBUG__" /D "_UNICODE" /D "WXUSINGDLL" /D "WXMAKINGDLL_ANIMATE" /mktyplib203 /win32
 # ADD MTL /nologo /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "__WXDEBUG__" /D "_UNICODE" /D "WXUSINGDLL" /D "WXMAKINGDLL_ANIMATE" /mktyplib203 /win32
-# ADD BASE RSC /l 0x409 /d "_DEBUG" /d "__WXMSW__" /d "__WXUNIVERSAL__" /d "__WXDEBUG__" /d "_UNICODE" /i "..\..\src\animate\..\..\..\include" /i "..\..\src\animate\..\..\..\lib\vc_dll\mswunivud" /d WXDLLNAME=wxmswuniv255ud_animate_vc_custom /i "..\..\src\animate\..\..\include" /d "WXUSINGDLL" /d WXMAKINGDLL_ANIMATE
-# ADD RSC /l 0x409 /d "_DEBUG" /d "__WXMSW__" /d "__WXUNIVERSAL__" /d "__WXDEBUG__" /d "_UNICODE" /i "..\..\src\animate\..\..\..\include" /i "..\..\src\animate\..\..\..\lib\vc_dll\mswunivud" /d WXDLLNAME=wxmswuniv255ud_animate_vc_custom /i "..\..\src\animate\..\..\include" /d "WXUSINGDLL" /d WXMAKINGDLL_ANIMATE
+# ADD BASE RSC /l 0x409 /d "_DEBUG" /d "__WXMSW__" /d "__WXUNIVERSAL__" /d "__WXDEBUG__" /d "_UNICODE" /i "..\..\src\animate\..\..\..\include" /i "..\..\src\animate\..\..\..\lib\vc_dll\mswunivud" /d WXDLLNAME=wxmswuniv26ud_animate_vc_custom /i "..\..\src\animate\..\..\include" /d "WXUSINGDLL" /d WXMAKINGDLL_ANIMATE
+# ADD RSC /l 0x409 /d "_DEBUG" /d "__WXMSW__" /d "__WXUNIVERSAL__" /d "__WXDEBUG__" /d "_UNICODE" /i "..\..\src\animate\..\..\..\include" /i "..\..\src\animate\..\..\..\lib\vc_dll\mswunivud" /d WXDLLNAME=wxmswuniv26ud_animate_vc_custom /i "..\..\src\animate\..\..\include" /d "WXUSINGDLL" /d WXMAKINGDLL_ANIMATE
 BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LINK32=link.exe
-# ADD BASE LINK32 wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib wxregexud.lib wxexpatd.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib oleacc.lib odbc32.lib wxmswuniv25ud_core.lib wxbase25ud.lib /nologo /dll /machine:i386 /out:"..\..\src\animate\..\..\..\lib\vc_dll\wxmswuniv255ud_animate_vc_custom.dll" /libpath:"..\..\src\animate\..\..\..\lib\vc_dll" /implib:"..\..\src\animate\..\..\..\lib\vc_dll\wxmswuniv25ud_animate.lib" /debug
-# ADD LINK32 wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib wxregexud.lib wxexpatd.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib oleacc.lib odbc32.lib wxmswuniv25ud_core.lib wxbase25ud.lib /nologo /dll /machine:i386 /out:"..\..\src\animate\..\..\..\lib\vc_dll\wxmswuniv255ud_animate_vc_custom.dll" /libpath:"..\..\src\animate\..\..\..\lib\vc_dll" /implib:"..\..\src\animate\..\..\..\lib\vc_dll\wxmswuniv25ud_animate.lib" /debug
+# ADD BASE LINK32 wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib wxregexud.lib wxexpatd.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib oleacc.lib odbc32.lib wxmswuniv26ud_core.lib wxbase26ud.lib /nologo /dll /machine:i386 /out:"..\..\src\animate\..\..\..\lib\vc_dll\wxmswuniv26ud_animate_vc_custom.dll" /libpath:"..\..\src\animate\..\..\..\lib\vc_dll" /implib:"..\..\src\animate\..\..\..\lib\vc_dll\wxmswuniv26ud_animate.lib" /debug
+# ADD LINK32 wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib wxregexud.lib wxexpatd.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib oleacc.lib odbc32.lib wxmswuniv26ud_core.lib wxbase26ud.lib /nologo /dll /machine:i386 /out:"..\..\src\animate\..\..\..\lib\vc_dll\wxmswuniv26ud_animate_vc_custom.dll" /libpath:"..\..\src\animate\..\..\..\lib\vc_dll" /implib:"..\..\src\animate\..\..\..\lib\vc_dll\wxmswuniv26ud_animate.lib" /debug
 
 !ELSEIF  "$(CFG)" == "animate - Win32 DLL Universal Release"
 
@@ -105,18 +105,18 @@ LINK32=link.exe
 # PROP Output_Dir "..\..\src\animate\..\..\..\lib\vc_dll"
 # PROP Intermediate_Dir "vc_mswunivdll\animate"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /MD /O2 /GR /EHsc /I "..\..\src\animate\..\..\..\include" /I "..\..\src\animate\..\..\..\lib\vc_dll\mswuniv" /W4 /Yu"wx/wxprec.h" /Fp"vc_mswunivdll\wxprec_animatedll.pch" /Fd..\..\src\animate\..\..\..\lib\vc_dll\wxmswuniv255_animate_vc_custom.pdb /I "..\..\src\animate\..\..\include" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "WXUSINGDLL" /D "WXMAKINGDLL_ANIMATE" /c
-# ADD CPP /nologo /FD /MD /O2 /GR /EHsc /I "..\..\src\animate\..\..\..\include" /I "..\..\src\animate\..\..\..\lib\vc_dll\mswuniv" /W4 /Yu"wx/wxprec.h" /Fp"vc_mswunivdll\wxprec_animatedll.pch" /Fd..\..\src\animate\..\..\..\lib\vc_dll\wxmswuniv255_animate_vc_custom.pdb /I "..\..\src\animate\..\..\include" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "WXUSINGDLL" /D "WXMAKINGDLL_ANIMATE" /c
+# ADD BASE CPP /nologo /FD /MD /O2 /GR /EHsc /I "..\..\src\animate\..\..\..\include" /I "..\..\src\animate\..\..\..\lib\vc_dll\mswuniv" /W4 /Yu"wx/wxprec.h" /Fp"vc_mswunivdll\wxprec_animatedll.pch" /Fd..\..\src\animate\..\..\..\lib\vc_dll\wxmswuniv26_animate_vc_custom.pdb /I "..\..\src\animate\..\..\include" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "WXUSINGDLL" /D "WXMAKINGDLL_ANIMATE" /c
+# ADD CPP /nologo /FD /MD /O2 /GR /EHsc /I "..\..\src\animate\..\..\..\include" /I "..\..\src\animate\..\..\..\lib\vc_dll\mswuniv" /W4 /Yu"wx/wxprec.h" /Fp"vc_mswunivdll\wxprec_animatedll.pch" /Fd..\..\src\animate\..\..\..\lib\vc_dll\wxmswuniv26_animate_vc_custom.pdb /I "..\..\src\animate\..\..\include" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "WXUSINGDLL" /D "WXMAKINGDLL_ANIMATE" /c
 # ADD BASE MTL /nologo /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "WXUSINGDLL" /D "WXMAKINGDLL_ANIMATE" /mktyplib203 /win32
 # ADD MTL /nologo /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "WXUSINGDLL" /D "WXMAKINGDLL_ANIMATE" /mktyplib203 /win32
-# ADD BASE RSC /l 0x409 /d "__WXMSW__" /d "__WXUNIVERSAL__" /i "..\..\src\animate\..\..\..\include" /i "..\..\src\animate\..\..\..\lib\vc_dll\mswuniv" /d WXDLLNAME=wxmswuniv255_animate_vc_custom /i "..\..\src\animate\..\..\include" /d "WXUSINGDLL" /d WXMAKINGDLL_ANIMATE
-# ADD RSC /l 0x409 /d "__WXMSW__" /d "__WXUNIVERSAL__" /i "..\..\src\animate\..\..\..\include" /i "..\..\src\animate\..\..\..\lib\vc_dll\mswuniv" /d WXDLLNAME=wxmswuniv255_animate_vc_custom /i "..\..\src\animate\..\..\include" /d "WXUSINGDLL" /d WXMAKINGDLL_ANIMATE
+# ADD BASE RSC /l 0x409 /d "__WXMSW__" /d "__WXUNIVERSAL__" /i "..\..\src\animate\..\..\..\include" /i "..\..\src\animate\..\..\..\lib\vc_dll\mswuniv" /d WXDLLNAME=wxmswuniv26_animate_vc_custom /i "..\..\src\animate\..\..\include" /d "WXUSINGDLL" /d WXMAKINGDLL_ANIMATE
+# ADD RSC /l 0x409 /d "__WXMSW__" /d "__WXUNIVERSAL__" /i "..\..\src\animate\..\..\..\include" /i "..\..\src\animate\..\..\..\lib\vc_dll\mswuniv" /d WXDLLNAME=wxmswuniv26_animate_vc_custom /i "..\..\src\animate\..\..\include" /d "WXUSINGDLL" /d WXMAKINGDLL_ANIMATE
 BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LINK32=link.exe
-# ADD BASE LINK32 wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregex.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib oleacc.lib odbc32.lib wxmswuniv25_core.lib wxbase25.lib /nologo /dll /machine:i386 /out:"..\..\src\animate\..\..\..\lib\vc_dll\wxmswuniv255_animate_vc_custom.dll" /libpath:"..\..\src\animate\..\..\..\lib\vc_dll" /implib:"..\..\src\animate\..\..\..\lib\vc_dll\wxmswuniv25_animate.lib"
-# ADD LINK32 wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregex.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib oleacc.lib odbc32.lib wxmswuniv25_core.lib wxbase25.lib /nologo /dll /machine:i386 /out:"..\..\src\animate\..\..\..\lib\vc_dll\wxmswuniv255_animate_vc_custom.dll" /libpath:"..\..\src\animate\..\..\..\lib\vc_dll" /implib:"..\..\src\animate\..\..\..\lib\vc_dll\wxmswuniv25_animate.lib"
+# ADD BASE LINK32 wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregex.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib oleacc.lib odbc32.lib wxmswuniv26_core.lib wxbase26.lib /nologo /dll /machine:i386 /out:"..\..\src\animate\..\..\..\lib\vc_dll\wxmswuniv26_animate_vc_custom.dll" /libpath:"..\..\src\animate\..\..\..\lib\vc_dll" /implib:"..\..\src\animate\..\..\..\lib\vc_dll\wxmswuniv26_animate.lib"
+# ADD LINK32 wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregex.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib oleacc.lib odbc32.lib wxmswuniv26_core.lib wxbase26.lib /nologo /dll /machine:i386 /out:"..\..\src\animate\..\..\..\lib\vc_dll\wxmswuniv26_animate_vc_custom.dll" /libpath:"..\..\src\animate\..\..\..\lib\vc_dll" /implib:"..\..\src\animate\..\..\..\lib\vc_dll\wxmswuniv26_animate.lib"
 
 !ELSEIF  "$(CFG)" == "animate - Win32 DLL Universal Debug"
 
@@ -130,18 +130,18 @@ LINK32=link.exe
 # PROP Output_Dir "..\..\src\animate\..\..\..\lib\vc_dll"
 # PROP Intermediate_Dir "vc_mswunivddll\animate"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /MDd /Od /GR /EHsc /I "..\..\src\animate\..\..\..\include" /I "..\..\src\animate\..\..\..\lib\vc_dll\mswunivd" /W4 /Yu"wx/wxprec.h" /Fp"vc_mswunivddll\wxprec_animatedll.pch" /Zi /Gm /GZ /Fd..\..\src\animate\..\..\..\lib\vc_dll\wxmswuniv255d_animate_vc_custom.pdb /I "..\..\src\animate\..\..\include" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "__WXDEBUG__" /D "WXUSINGDLL" /D "WXMAKINGDLL_ANIMATE" /c
-# ADD CPP /nologo /FD /MDd /Od /GR /EHsc /I "..\..\src\animate\..\..\..\include" /I "..\..\src\animate\..\..\..\lib\vc_dll\mswunivd" /W4 /Yu"wx/wxprec.h" /Fp"vc_mswunivddll\wxprec_animatedll.pch" /Zi /Gm /GZ /Fd..\..\src\animate\..\..\..\lib\vc_dll\wxmswuniv255d_animate_vc_custom.pdb /I "..\..\src\animate\..\..\include" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "__WXDEBUG__" /D "WXUSINGDLL" /D "WXMAKINGDLL_ANIMATE" /c
+# ADD BASE CPP /nologo /FD /MDd /Od /GR /EHsc /I "..\..\src\animate\..\..\..\include" /I "..\..\src\animate\..\..\..\lib\vc_dll\mswunivd" /W4 /Yu"wx/wxprec.h" /Fp"vc_mswunivddll\wxprec_animatedll.pch" /Zi /Gm /GZ /Fd..\..\src\animate\..\..\..\lib\vc_dll\wxmswuniv26d_animate_vc_custom.pdb /I "..\..\src\animate\..\..\include" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "__WXDEBUG__" /D "WXUSINGDLL" /D "WXMAKINGDLL_ANIMATE" /c
+# ADD CPP /nologo /FD /MDd /Od /GR /EHsc /I "..\..\src\animate\..\..\..\include" /I "..\..\src\animate\..\..\..\lib\vc_dll\mswunivd" /W4 /Yu"wx/wxprec.h" /Fp"vc_mswunivddll\wxprec_animatedll.pch" /Zi /Gm /GZ /Fd..\..\src\animate\..\..\..\lib\vc_dll\wxmswuniv26d_animate_vc_custom.pdb /I "..\..\src\animate\..\..\include" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "__WXDEBUG__" /D "WXUSINGDLL" /D "WXMAKINGDLL_ANIMATE" /c
 # ADD BASE MTL /nologo /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "__WXDEBUG__" /D "WXUSINGDLL" /D "WXMAKINGDLL_ANIMATE" /mktyplib203 /win32
 # ADD MTL /nologo /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "__WXDEBUG__" /D "WXUSINGDLL" /D "WXMAKINGDLL_ANIMATE" /mktyplib203 /win32
-# ADD BASE RSC /l 0x409 /d "_DEBUG" /d "__WXMSW__" /d "__WXUNIVERSAL__" /d "__WXDEBUG__" /i "..\..\src\animate\..\..\..\include" /i "..\..\src\animate\..\..\..\lib\vc_dll\mswunivd" /d WXDLLNAME=wxmswuniv255d_animate_vc_custom /i "..\..\src\animate\..\..\include" /d "WXUSINGDLL" /d WXMAKINGDLL_ANIMATE
-# ADD RSC /l 0x409 /d "_DEBUG" /d "__WXMSW__" /d "__WXUNIVERSAL__" /d "__WXDEBUG__" /i "..\..\src\animate\..\..\..\include" /i "..\..\src\animate\..\..\..\lib\vc_dll\mswunivd" /d WXDLLNAME=wxmswuniv255d_animate_vc_custom /i "..\..\src\animate\..\..\include" /d "WXUSINGDLL" /d WXMAKINGDLL_ANIMATE
+# ADD BASE RSC /l 0x409 /d "_DEBUG" /d "__WXMSW__" /d "__WXUNIVERSAL__" /d "__WXDEBUG__" /i "..\..\src\animate\..\..\..\include" /i "..\..\src\animate\..\..\..\lib\vc_dll\mswunivd" /d WXDLLNAME=wxmswuniv26d_animate_vc_custom /i "..\..\src\animate\..\..\include" /d "WXUSINGDLL" /d WXMAKINGDLL_ANIMATE
+# ADD RSC /l 0x409 /d "_DEBUG" /d "__WXMSW__" /d "__WXUNIVERSAL__" /d "__WXDEBUG__" /i "..\..\src\animate\..\..\..\include" /i "..\..\src\animate\..\..\..\lib\vc_dll\mswunivd" /d WXDLLNAME=wxmswuniv26d_animate_vc_custom /i "..\..\src\animate\..\..\include" /d "WXUSINGDLL" /d WXMAKINGDLL_ANIMATE
 BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LINK32=link.exe
-# ADD BASE LINK32 wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib wxregexd.lib wxexpatd.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib oleacc.lib odbc32.lib wxmswuniv25d_core.lib wxbase25d.lib /nologo /dll /machine:i386 /out:"..\..\src\animate\..\..\..\lib\vc_dll\wxmswuniv255d_animate_vc_custom.dll" /libpath:"..\..\src\animate\..\..\..\lib\vc_dll" /implib:"..\..\src\animate\..\..\..\lib\vc_dll\wxmswuniv25d_animate.lib" /debug
-# ADD LINK32 wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib wxregexd.lib wxexpatd.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib oleacc.lib odbc32.lib wxmswuniv25d_core.lib wxbase25d.lib /nologo /dll /machine:i386 /out:"..\..\src\animate\..\..\..\lib\vc_dll\wxmswuniv255d_animate_vc_custom.dll" /libpath:"..\..\src\animate\..\..\..\lib\vc_dll" /implib:"..\..\src\animate\..\..\..\lib\vc_dll\wxmswuniv25d_animate.lib" /debug
+# ADD BASE LINK32 wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib wxregexd.lib wxexpatd.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib oleacc.lib odbc32.lib wxmswuniv26d_core.lib wxbase26d.lib /nologo /dll /machine:i386 /out:"..\..\src\animate\..\..\..\lib\vc_dll\wxmswuniv26d_animate_vc_custom.dll" /libpath:"..\..\src\animate\..\..\..\lib\vc_dll" /implib:"..\..\src\animate\..\..\..\lib\vc_dll\wxmswuniv26d_animate.lib" /debug
+# ADD LINK32 wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib wxregexd.lib wxexpatd.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib oleacc.lib odbc32.lib wxmswuniv26d_core.lib wxbase26d.lib /nologo /dll /machine:i386 /out:"..\..\src\animate\..\..\..\lib\vc_dll\wxmswuniv26d_animate_vc_custom.dll" /libpath:"..\..\src\animate\..\..\..\lib\vc_dll" /implib:"..\..\src\animate\..\..\..\lib\vc_dll\wxmswuniv26d_animate.lib" /debug
 
 !ELSEIF  "$(CFG)" == "animate - Win32 DLL Unicode Release"
 
@@ -155,18 +155,18 @@ LINK32=link.exe
 # PROP Output_Dir "..\..\src\animate\..\..\..\lib\vc_dll"
 # PROP Intermediate_Dir "vc_mswudll\animate"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /MD /O2 /GR /EHsc /I "..\..\src\animate\..\..\..\include" /I "..\..\src\animate\..\..\..\lib\vc_dll\mswu" /W4 /Yu"wx/wxprec.h" /Fp"vc_mswudll\wxprec_animatedll.pch" /Fd..\..\src\animate\..\..\..\lib\vc_dll\wxmsw255u_animate_vc_custom.pdb /I "..\..\src\animate\..\..\include" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D "_UNICODE" /D "WXUSINGDLL" /D "WXMAKINGDLL_ANIMATE" /c
-# ADD CPP /nologo /FD /MD /O2 /GR /EHsc /I "..\..\src\animate\..\..\..\include" /I "..\..\src\animate\..\..\..\lib\vc_dll\mswu" /W4 /Yu"wx/wxprec.h" /Fp"vc_mswudll\wxprec_animatedll.pch" /Fd..\..\src\animate\..\..\..\lib\vc_dll\wxmsw255u_animate_vc_custom.pdb /I "..\..\src\animate\..\..\include" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D "_UNICODE" /D "WXUSINGDLL" /D "WXMAKINGDLL_ANIMATE" /c
+# ADD BASE CPP /nologo /FD /MD /O2 /GR /EHsc /I "..\..\src\animate\..\..\..\include" /I "..\..\src\animate\..\..\..\lib\vc_dll\mswu" /W4 /Yu"wx/wxprec.h" /Fp"vc_mswudll\wxprec_animatedll.pch" /Fd..\..\src\animate\..\..\..\lib\vc_dll\wxmsw26u_animate_vc_custom.pdb /I "..\..\src\animate\..\..\include" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D "_UNICODE" /D "WXUSINGDLL" /D "WXMAKINGDLL_ANIMATE" /c
+# ADD CPP /nologo /FD /MD /O2 /GR /EHsc /I "..\..\src\animate\..\..\..\include" /I "..\..\src\animate\..\..\..\lib\vc_dll\mswu" /W4 /Yu"wx/wxprec.h" /Fp"vc_mswudll\wxprec_animatedll.pch" /Fd..\..\src\animate\..\..\..\lib\vc_dll\wxmsw26u_animate_vc_custom.pdb /I "..\..\src\animate\..\..\include" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D "_UNICODE" /D "WXUSINGDLL" /D "WXMAKINGDLL_ANIMATE" /c
 # ADD BASE MTL /nologo /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D "_UNICODE" /D "WXUSINGDLL" /D "WXMAKINGDLL_ANIMATE" /mktyplib203 /win32
 # ADD MTL /nologo /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D "_UNICODE" /D "WXUSINGDLL" /D "WXMAKINGDLL_ANIMATE" /mktyplib203 /win32
-# ADD BASE RSC /l 0x409 /d "__WXMSW__" /d "_UNICODE" /i "..\..\src\animate\..\..\..\include" /i "..\..\src\animate\..\..\..\lib\vc_dll\mswu" /d WXDLLNAME=wxmsw255u_animate_vc_custom /i "..\..\src\animate\..\..\include" /d "WXUSINGDLL" /d WXMAKINGDLL_ANIMATE
-# ADD RSC /l 0x409 /d "__WXMSW__" /d "_UNICODE" /i "..\..\src\animate\..\..\..\include" /i "..\..\src\animate\..\..\..\lib\vc_dll\mswu" /d WXDLLNAME=wxmsw255u_animate_vc_custom /i "..\..\src\animate\..\..\include" /d "WXUSINGDLL" /d WXMAKINGDLL_ANIMATE
+# ADD BASE RSC /l 0x409 /d "__WXMSW__" /d "_UNICODE" /i "..\..\src\animate\..\..\..\include" /i "..\..\src\animate\..\..\..\lib\vc_dll\mswu" /d WXDLLNAME=wxmsw26u_animate_vc_custom /i "..\..\src\animate\..\..\include" /d "WXUSINGDLL" /d WXMAKINGDLL_ANIMATE
+# ADD RSC /l 0x409 /d "__WXMSW__" /d "_UNICODE" /i "..\..\src\animate\..\..\..\include" /i "..\..\src\animate\..\..\..\lib\vc_dll\mswu" /d WXDLLNAME=wxmsw26u_animate_vc_custom /i "..\..\src\animate\..\..\include" /d "WXUSINGDLL" /d WXMAKINGDLL_ANIMATE
 BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LINK32=link.exe
-# ADD BASE LINK32 wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregexu.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib oleacc.lib odbc32.lib wxmsw25u_core.lib wxbase25u.lib /nologo /dll /machine:i386 /out:"..\..\src\animate\..\..\..\lib\vc_dll\wxmsw255u_animate_vc_custom.dll" /libpath:"..\..\src\animate\..\..\..\lib\vc_dll" /implib:"..\..\src\animate\..\..\..\lib\vc_dll\wxmsw25u_animate.lib"
-# ADD LINK32 wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregexu.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib oleacc.lib odbc32.lib wxmsw25u_core.lib wxbase25u.lib /nologo /dll /machine:i386 /out:"..\..\src\animate\..\..\..\lib\vc_dll\wxmsw255u_animate_vc_custom.dll" /libpath:"..\..\src\animate\..\..\..\lib\vc_dll" /implib:"..\..\src\animate\..\..\..\lib\vc_dll\wxmsw25u_animate.lib"
+# ADD BASE LINK32 wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregexu.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib oleacc.lib odbc32.lib wxmsw26u_core.lib wxbase26u.lib /nologo /dll /machine:i386 /out:"..\..\src\animate\..\..\..\lib\vc_dll\wxmsw26u_animate_vc_custom.dll" /libpath:"..\..\src\animate\..\..\..\lib\vc_dll" /implib:"..\..\src\animate\..\..\..\lib\vc_dll\wxmsw26u_animate.lib"
+# ADD LINK32 wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregexu.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib oleacc.lib odbc32.lib wxmsw26u_core.lib wxbase26u.lib /nologo /dll /machine:i386 /out:"..\..\src\animate\..\..\..\lib\vc_dll\wxmsw26u_animate_vc_custom.dll" /libpath:"..\..\src\animate\..\..\..\lib\vc_dll" /implib:"..\..\src\animate\..\..\..\lib\vc_dll\wxmsw26u_animate.lib"
 
 !ELSEIF  "$(CFG)" == "animate - Win32 DLL Unicode Debug"
 
@@ -180,18 +180,18 @@ LINK32=link.exe
 # PROP Output_Dir "..\..\src\animate\..\..\..\lib\vc_dll"
 # PROP Intermediate_Dir "vc_mswuddll\animate"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /MDd /Od /GR /EHsc /I "..\..\src\animate\..\..\..\include" /I "..\..\src\animate\..\..\..\lib\vc_dll\mswud" /W4 /Yu"wx/wxprec.h" /Fp"vc_mswuddll\wxprec_animatedll.pch" /Zi /Gm /GZ /Fd..\..\src\animate\..\..\..\lib\vc_dll\wxmsw255ud_animate_vc_custom.pdb /I "..\..\src\animate\..\..\include" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXDEBUG__" /D "_UNICODE" /D "WXUSINGDLL" /D "WXMAKINGDLL_ANIMATE" /c
-# ADD CPP /nologo /FD /MDd /Od /GR /EHsc /I "..\..\src\animate\..\..\..\include" /I "..\..\src\animate\..\..\..\lib\vc_dll\mswud" /W4 /Yu"wx/wxprec.h" /Fp"vc_mswuddll\wxprec_animatedll.pch" /Zi /Gm /GZ /Fd..\..\src\animate\..\..\..\lib\vc_dll\wxmsw255ud_animate_vc_custom.pdb /I "..\..\src\animate\..\..\include" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXDEBUG__" /D "_UNICODE" /D "WXUSINGDLL" /D "WXMAKINGDLL_ANIMATE" /c
+# ADD BASE CPP /nologo /FD /MDd /Od /GR /EHsc /I "..\..\src\animate\..\..\..\include" /I "..\..\src\animate\..\..\..\lib\vc_dll\mswud" /W4 /Yu"wx/wxprec.h" /Fp"vc_mswuddll\wxprec_animatedll.pch" /Zi /Gm /GZ /Fd..\..\src\animate\..\..\..\lib\vc_dll\wxmsw26ud_animate_vc_custom.pdb /I "..\..\src\animate\..\..\include" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXDEBUG__" /D "_UNICODE" /D "WXUSINGDLL" /D "WXMAKINGDLL_ANIMATE" /c
+# ADD CPP /nologo /FD /MDd /Od /GR /EHsc /I "..\..\src\animate\..\..\..\include" /I "..\..\src\animate\..\..\..\lib\vc_dll\mswud" /W4 /Yu"wx/wxprec.h" /Fp"vc_mswuddll\wxprec_animatedll.pch" /Zi /Gm /GZ /Fd..\..\src\animate\..\..\..\lib\vc_dll\wxmsw26ud_animate_vc_custom.pdb /I "..\..\src\animate\..\..\include" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXDEBUG__" /D "_UNICODE" /D "WXUSINGDLL" /D "WXMAKINGDLL_ANIMATE" /c
 # ADD BASE MTL /nologo /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXDEBUG__" /D "_UNICODE" /D "WXUSINGDLL" /D "WXMAKINGDLL_ANIMATE" /mktyplib203 /win32
 # ADD MTL /nologo /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXDEBUG__" /D "_UNICODE" /D "WXUSINGDLL" /D "WXMAKINGDLL_ANIMATE" /mktyplib203 /win32
-# ADD BASE RSC /l 0x409 /d "_DEBUG" /d "__WXMSW__" /d "__WXDEBUG__" /d "_UNICODE" /i "..\..\src\animate\..\..\..\include" /i "..\..\src\animate\..\..\..\lib\vc_dll\mswud" /d WXDLLNAME=wxmsw255ud_animate_vc_custom /i "..\..\src\animate\..\..\include" /d "WXUSINGDLL" /d WXMAKINGDLL_ANIMATE
-# ADD RSC /l 0x409 /d "_DEBUG" /d "__WXMSW__" /d "__WXDEBUG__" /d "_UNICODE" /i "..\..\src\animate\..\..\..\include" /i "..\..\src\animate\..\..\..\lib\vc_dll\mswud" /d WXDLLNAME=wxmsw255ud_animate_vc_custom /i "..\..\src\animate\..\..\include" /d "WXUSINGDLL" /d WXMAKINGDLL_ANIMATE
+# ADD BASE RSC /l 0x409 /d "_DEBUG" /d "__WXMSW__" /d "__WXDEBUG__" /d "_UNICODE" /i "..\..\src\animate\..\..\..\include" /i "..\..\src\animate\..\..\..\lib\vc_dll\mswud" /d WXDLLNAME=wxmsw26ud_animate_vc_custom /i "..\..\src\animate\..\..\include" /d "WXUSINGDLL" /d WXMAKINGDLL_ANIMATE
+# ADD RSC /l 0x409 /d "_DEBUG" /d "__WXMSW__" /d "__WXDEBUG__" /d "_UNICODE" /i "..\..\src\animate\..\..\..\include" /i "..\..\src\animate\..\..\..\lib\vc_dll\mswud" /d WXDLLNAME=wxmsw26ud_animate_vc_custom /i "..\..\src\animate\..\..\include" /d "WXUSINGDLL" /d WXMAKINGDLL_ANIMATE
 BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LINK32=link.exe
-# ADD BASE LINK32 wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib wxregexud.lib wxexpatd.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib oleacc.lib odbc32.lib wxmsw25ud_core.lib wxbase25ud.lib /nologo /dll /machine:i386 /out:"..\..\src\animate\..\..\..\lib\vc_dll\wxmsw255ud_animate_vc_custom.dll" /libpath:"..\..\src\animate\..\..\..\lib\vc_dll" /implib:"..\..\src\animate\..\..\..\lib\vc_dll\wxmsw25ud_animate.lib" /debug
-# ADD LINK32 wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib wxregexud.lib wxexpatd.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib oleacc.lib odbc32.lib wxmsw25ud_core.lib wxbase25ud.lib /nologo /dll /machine:i386 /out:"..\..\src\animate\..\..\..\lib\vc_dll\wxmsw255ud_animate_vc_custom.dll" /libpath:"..\..\src\animate\..\..\..\lib\vc_dll" /implib:"..\..\src\animate\..\..\..\lib\vc_dll\wxmsw25ud_animate.lib" /debug
+# ADD BASE LINK32 wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib wxregexud.lib wxexpatd.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib oleacc.lib odbc32.lib wxmsw26ud_core.lib wxbase26ud.lib /nologo /dll /machine:i386 /out:"..\..\src\animate\..\..\..\lib\vc_dll\wxmsw26ud_animate_vc_custom.dll" /libpath:"..\..\src\animate\..\..\..\lib\vc_dll" /implib:"..\..\src\animate\..\..\..\lib\vc_dll\wxmsw26ud_animate.lib" /debug
+# ADD LINK32 wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib wxregexud.lib wxexpatd.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib oleacc.lib odbc32.lib wxmsw26ud_core.lib wxbase26ud.lib /nologo /dll /machine:i386 /out:"..\..\src\animate\..\..\..\lib\vc_dll\wxmsw26ud_animate_vc_custom.dll" /libpath:"..\..\src\animate\..\..\..\lib\vc_dll" /implib:"..\..\src\animate\..\..\..\lib\vc_dll\wxmsw26ud_animate.lib" /debug
 
 !ELSEIF  "$(CFG)" == "animate - Win32 DLL Release"
 
@@ -205,18 +205,18 @@ LINK32=link.exe
 # PROP Output_Dir "..\..\src\animate\..\..\..\lib\vc_dll"
 # PROP Intermediate_Dir "vc_mswdll\animate"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /MD /O2 /GR /EHsc /I "..\..\src\animate\..\..\..\include" /I "..\..\src\animate\..\..\..\lib\vc_dll\msw" /W4 /Yu"wx/wxprec.h" /Fp"vc_mswdll\wxprec_animatedll.pch" /Fd..\..\src\animate\..\..\..\lib\vc_dll\wxmsw255_animate_vc_custom.pdb /I "..\..\src\animate\..\..\include" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D "WXUSINGDLL" /D "WXMAKINGDLL_ANIMATE" /c
-# ADD CPP /nologo /FD /MD /O2 /GR /EHsc /I "..\..\src\animate\..\..\..\include" /I "..\..\src\animate\..\..\..\lib\vc_dll\msw" /W4 /Yu"wx/wxprec.h" /Fp"vc_mswdll\wxprec_animatedll.pch" /Fd..\..\src\animate\..\..\..\lib\vc_dll\wxmsw255_animate_vc_custom.pdb /I "..\..\src\animate\..\..\include" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D "WXUSINGDLL" /D "WXMAKINGDLL_ANIMATE" /c
+# ADD BASE CPP /nologo /FD /MD /O2 /GR /EHsc /I "..\..\src\animate\..\..\..\include" /I "..\..\src\animate\..\..\..\lib\vc_dll\msw" /W4 /Yu"wx/wxprec.h" /Fp"vc_mswdll\wxprec_animatedll.pch" /Fd..\..\src\animate\..\..\..\lib\vc_dll\wxmsw26_animate_vc_custom.pdb /I "..\..\src\animate\..\..\include" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D "WXUSINGDLL" /D "WXMAKINGDLL_ANIMATE" /c
+# ADD CPP /nologo /FD /MD /O2 /GR /EHsc /I "..\..\src\animate\..\..\..\include" /I "..\..\src\animate\..\..\..\lib\vc_dll\msw" /W4 /Yu"wx/wxprec.h" /Fp"vc_mswdll\wxprec_animatedll.pch" /Fd..\..\src\animate\..\..\..\lib\vc_dll\wxmsw26_animate_vc_custom.pdb /I "..\..\src\animate\..\..\include" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D "WXUSINGDLL" /D "WXMAKINGDLL_ANIMATE" /c
 # ADD BASE MTL /nologo /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D "WXUSINGDLL" /D "WXMAKINGDLL_ANIMATE" /mktyplib203 /win32
 # ADD MTL /nologo /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D "WXUSINGDLL" /D "WXMAKINGDLL_ANIMATE" /mktyplib203 /win32
-# ADD BASE RSC /l 0x409 /d "__WXMSW__" /i "..\..\src\animate\..\..\..\include" /i "..\..\src\animate\..\..\..\lib\vc_dll\msw" /d WXDLLNAME=wxmsw255_animate_vc_custom /i "..\..\src\animate\..\..\include" /d "WXUSINGDLL" /d WXMAKINGDLL_ANIMATE
-# ADD RSC /l 0x409 /d "__WXMSW__" /i "..\..\src\animate\..\..\..\include" /i "..\..\src\animate\..\..\..\lib\vc_dll\msw" /d WXDLLNAME=wxmsw255_animate_vc_custom /i "..\..\src\animate\..\..\include" /d "WXUSINGDLL" /d WXMAKINGDLL_ANIMATE
+# ADD BASE RSC /l 0x409 /d "__WXMSW__" /i "..\..\src\animate\..\..\..\include" /i "..\..\src\animate\..\..\..\lib\vc_dll\msw" /d WXDLLNAME=wxmsw26_animate_vc_custom /i "..\..\src\animate\..\..\include" /d "WXUSINGDLL" /d WXMAKINGDLL_ANIMATE
+# ADD RSC /l 0x409 /d "__WXMSW__" /i "..\..\src\animate\..\..\..\include" /i "..\..\src\animate\..\..\..\lib\vc_dll\msw" /d WXDLLNAME=wxmsw26_animate_vc_custom /i "..\..\src\animate\..\..\include" /d "WXUSINGDLL" /d WXMAKINGDLL_ANIMATE
 BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LINK32=link.exe
-# ADD BASE LINK32 wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregex.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib oleacc.lib odbc32.lib wxmsw25_core.lib wxbase25.lib /nologo /dll /machine:i386 /out:"..\..\src\animate\..\..\..\lib\vc_dll\wxmsw255_animate_vc_custom.dll" /libpath:"..\..\src\animate\..\..\..\lib\vc_dll" /implib:"..\..\src\animate\..\..\..\lib\vc_dll\wxmsw25_animate.lib"
-# ADD LINK32 wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregex.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib oleacc.lib odbc32.lib wxmsw25_core.lib wxbase25.lib /nologo /dll /machine:i386 /out:"..\..\src\animate\..\..\..\lib\vc_dll\wxmsw255_animate_vc_custom.dll" /libpath:"..\..\src\animate\..\..\..\lib\vc_dll" /implib:"..\..\src\animate\..\..\..\lib\vc_dll\wxmsw25_animate.lib"
+# ADD BASE LINK32 wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregex.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib oleacc.lib odbc32.lib wxmsw26_core.lib wxbase26.lib /nologo /dll /machine:i386 /out:"..\..\src\animate\..\..\..\lib\vc_dll\wxmsw26_animate_vc_custom.dll" /libpath:"..\..\src\animate\..\..\..\lib\vc_dll" /implib:"..\..\src\animate\..\..\..\lib\vc_dll\wxmsw26_animate.lib"
+# ADD LINK32 wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregex.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib oleacc.lib odbc32.lib wxmsw26_core.lib wxbase26.lib /nologo /dll /machine:i386 /out:"..\..\src\animate\..\..\..\lib\vc_dll\wxmsw26_animate_vc_custom.dll" /libpath:"..\..\src\animate\..\..\..\lib\vc_dll" /implib:"..\..\src\animate\..\..\..\lib\vc_dll\wxmsw26_animate.lib"
 
 !ELSEIF  "$(CFG)" == "animate - Win32 DLL Debug"
 
@@ -230,18 +230,18 @@ LINK32=link.exe
 # PROP Output_Dir "..\..\src\animate\..\..\..\lib\vc_dll"
 # PROP Intermediate_Dir "vc_mswddll\animate"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /MDd /Od /GR /EHsc /I "..\..\src\animate\..\..\..\include" /I "..\..\src\animate\..\..\..\lib\vc_dll\mswd" /W4 /Yu"wx/wxprec.h" /Fp"vc_mswddll\wxprec_animatedll.pch" /Zi /Gm /GZ /Fd..\..\src\animate\..\..\..\lib\vc_dll\wxmsw255d_animate_vc_custom.pdb /I "..\..\src\animate\..\..\include" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXDEBUG__" /D "WXUSINGDLL" /D "WXMAKINGDLL_ANIMATE" /c
-# ADD CPP /nologo /FD /MDd /Od /GR /EHsc /I "..\..\src\animate\..\..\..\include" /I "..\..\src\animate\..\..\..\lib\vc_dll\mswd" /W4 /Yu"wx/wxprec.h" /Fp"vc_mswddll\wxprec_animatedll.pch" /Zi /Gm /GZ /Fd..\..\src\animate\..\..\..\lib\vc_dll\wxmsw255d_animate_vc_custom.pdb /I "..\..\src\animate\..\..\include" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXDEBUG__" /D "WXUSINGDLL" /D "WXMAKINGDLL_ANIMATE" /c
+# ADD BASE CPP /nologo /FD /MDd /Od /GR /EHsc /I "..\..\src\animate\..\..\..\include" /I "..\..\src\animate\..\..\..\lib\vc_dll\mswd" /W4 /Yu"wx/wxprec.h" /Fp"vc_mswddll\wxprec_animatedll.pch" /Zi /Gm /GZ /Fd..\..\src\animate\..\..\..\lib\vc_dll\wxmsw26d_animate_vc_custom.pdb /I "..\..\src\animate\..\..\include" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXDEBUG__" /D "WXUSINGDLL" /D "WXMAKINGDLL_ANIMATE" /c
+# ADD CPP /nologo /FD /MDd /Od /GR /EHsc /I "..\..\src\animate\..\..\..\include" /I "..\..\src\animate\..\..\..\lib\vc_dll\mswd" /W4 /Yu"wx/wxprec.h" /Fp"vc_mswddll\wxprec_animatedll.pch" /Zi /Gm /GZ /Fd..\..\src\animate\..\..\..\lib\vc_dll\wxmsw26d_animate_vc_custom.pdb /I "..\..\src\animate\..\..\include" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXDEBUG__" /D "WXUSINGDLL" /D "WXMAKINGDLL_ANIMATE" /c
 # ADD BASE MTL /nologo /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXDEBUG__" /D "WXUSINGDLL" /D "WXMAKINGDLL_ANIMATE" /mktyplib203 /win32
 # ADD MTL /nologo /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXDEBUG__" /D "WXUSINGDLL" /D "WXMAKINGDLL_ANIMATE" /mktyplib203 /win32
-# ADD BASE RSC /l 0x409 /d "_DEBUG" /d "__WXMSW__" /d "__WXDEBUG__" /i "..\..\src\animate\..\..\..\include" /i "..\..\src\animate\..\..\..\lib\vc_dll\mswd" /d WXDLLNAME=wxmsw255d_animate_vc_custom /i "..\..\src\animate\..\..\include" /d "WXUSINGDLL" /d WXMAKINGDLL_ANIMATE
-# ADD RSC /l 0x409 /d "_DEBUG" /d "__WXMSW__" /d "__WXDEBUG__" /i "..\..\src\animate\..\..\..\include" /i "..\..\src\animate\..\..\..\lib\vc_dll\mswd" /d WXDLLNAME=wxmsw255d_animate_vc_custom /i "..\..\src\animate\..\..\include" /d "WXUSINGDLL" /d WXMAKINGDLL_ANIMATE
+# ADD BASE RSC /l 0x409 /d "_DEBUG" /d "__WXMSW__" /d "__WXDEBUG__" /i "..\..\src\animate\..\..\..\include" /i "..\..\src\animate\..\..\..\lib\vc_dll\mswd" /d WXDLLNAME=wxmsw26d_animate_vc_custom /i "..\..\src\animate\..\..\include" /d "WXUSINGDLL" /d WXMAKINGDLL_ANIMATE
+# ADD RSC /l 0x409 /d "_DEBUG" /d "__WXMSW__" /d "__WXDEBUG__" /i "..\..\src\animate\..\..\..\include" /i "..\..\src\animate\..\..\..\lib\vc_dll\mswd" /d WXDLLNAME=wxmsw26d_animate_vc_custom /i "..\..\src\animate\..\..\include" /d "WXUSINGDLL" /d WXMAKINGDLL_ANIMATE
 BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LINK32=link.exe
-# ADD BASE LINK32 wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib wxregexd.lib wxexpatd.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib oleacc.lib odbc32.lib wxmsw25d_core.lib wxbase25d.lib /nologo /dll /machine:i386 /out:"..\..\src\animate\..\..\..\lib\vc_dll\wxmsw255d_animate_vc_custom.dll" /libpath:"..\..\src\animate\..\..\..\lib\vc_dll" /implib:"..\..\src\animate\..\..\..\lib\vc_dll\wxmsw25d_animate.lib" /debug
-# ADD LINK32 wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib wxregexd.lib wxexpatd.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib oleacc.lib odbc32.lib wxmsw25d_core.lib wxbase25d.lib /nologo /dll /machine:i386 /out:"..\..\src\animate\..\..\..\lib\vc_dll\wxmsw255d_animate_vc_custom.dll" /libpath:"..\..\src\animate\..\..\..\lib\vc_dll" /implib:"..\..\src\animate\..\..\..\lib\vc_dll\wxmsw25d_animate.lib" /debug
+# ADD BASE LINK32 wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib wxregexd.lib wxexpatd.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib oleacc.lib odbc32.lib wxmsw26d_core.lib wxbase26d.lib /nologo /dll /machine:i386 /out:"..\..\src\animate\..\..\..\lib\vc_dll\wxmsw26d_animate_vc_custom.dll" /libpath:"..\..\src\animate\..\..\..\lib\vc_dll" /implib:"..\..\src\animate\..\..\..\lib\vc_dll\wxmsw26d_animate.lib" /debug
+# ADD LINK32 wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib wxregexd.lib wxexpatd.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib oleacc.lib odbc32.lib wxmsw26d_core.lib wxbase26d.lib /nologo /dll /machine:i386 /out:"..\..\src\animate\..\..\..\lib\vc_dll\wxmsw26d_animate_vc_custom.dll" /libpath:"..\..\src\animate\..\..\..\lib\vc_dll" /implib:"..\..\src\animate\..\..\..\lib\vc_dll\wxmsw26d_animate.lib" /debug
 
 !ELSEIF  "$(CFG)" == "animate - Win32 Universal Unicode Release"
 
@@ -255,16 +255,16 @@ LINK32=link.exe
 # PROP Output_Dir "..\..\src\animate\..\..\..\lib\vc_lib"
 # PROP Intermediate_Dir "vc_mswunivu\animate"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /MD /O2 /GR /EHsc /I "..\..\src\animate\..\..\..\include" /I "..\..\src\animate\..\..\..\lib\vc_lib\mswunivu" /W4 /Fd..\..\src\animate\..\..\..\lib\vc_lib\wxmswuniv25u_animate.pdb /Yu"wx/wxprec.h" /Fp"vc_mswunivu\wxprec_animatelib.pch" /I "..\..\src\animate\..\..\include" /D "WIN32" /D "_LIB" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "_UNICODE" /c
-# ADD CPP /nologo /FD /MD /O2 /GR /EHsc /I "..\..\src\animate\..\..\..\include" /I "..\..\src\animate\..\..\..\lib\vc_lib\mswunivu" /W4 /Fd..\..\src\animate\..\..\..\lib\vc_lib\wxmswuniv25u_animate.pdb /Yu"wx/wxprec.h" /Fp"vc_mswunivu\wxprec_animatelib.pch" /I "..\..\src\animate\..\..\include" /D "WIN32" /D "_LIB" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "_UNICODE" /c
+# ADD BASE CPP /nologo /FD /MD /O2 /GR /EHsc /I "..\..\src\animate\..\..\..\include" /I "..\..\src\animate\..\..\..\lib\vc_lib\mswunivu" /W4 /Fd..\..\src\animate\..\..\..\lib\vc_lib\wxmswuniv26u_animate.pdb /Yu"wx/wxprec.h" /Fp"vc_mswunivu\wxprec_animatelib.pch" /I "..\..\src\animate\..\..\include" /D "WIN32" /D "_LIB" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "_UNICODE" /c
+# ADD CPP /nologo /FD /MD /O2 /GR /EHsc /I "..\..\src\animate\..\..\..\include" /I "..\..\src\animate\..\..\..\lib\vc_lib\mswunivu" /W4 /Fd..\..\src\animate\..\..\..\lib\vc_lib\wxmswuniv26u_animate.pdb /Yu"wx/wxprec.h" /Fp"vc_mswunivu\wxprec_animatelib.pch" /I "..\..\src\animate\..\..\include" /D "WIN32" /D "_LIB" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "_UNICODE" /c
 # ADD BASE RSC /l 0x409
 # ADD RSC /l 0x409
 BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LIB32=link.exe -lib
-# ADD BASE LIB32 /nologo /out:"..\..\src\animate\..\..\..\lib\vc_lib\wxmswuniv25u_animate.lib"
-# ADD LIB32 /nologo /out:"..\..\src\animate\..\..\..\lib\vc_lib\wxmswuniv25u_animate.lib"
+# ADD BASE LIB32 /nologo /out:"..\..\src\animate\..\..\..\lib\vc_lib\wxmswuniv26u_animate.lib"
+# ADD LIB32 /nologo /out:"..\..\src\animate\..\..\..\lib\vc_lib\wxmswuniv26u_animate.lib"
 
 !ELSEIF  "$(CFG)" == "animate - Win32 Universal Unicode Debug"
 
@@ -278,16 +278,16 @@ LIB32=link.exe -lib
 # PROP Output_Dir "..\..\src\animate\..\..\..\lib\vc_lib"
 # PROP Intermediate_Dir "vc_mswunivud\animate"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /MDd /Od /GR /EHsc /I "..\..\src\animate\..\..\..\include" /I "..\..\src\animate\..\..\..\lib\vc_lib\mswunivud" /W4 /Zi /Gm /GZ /Fd..\..\src\animate\..\..\..\lib\vc_lib\wxmswuniv25ud_animate.pdb /Yu"wx/wxprec.h" /Fp"vc_mswunivud\wxprec_animatelib.pch" /I "..\..\src\animate\..\..\include" /D "WIN32" /D "_LIB" /D "_DEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "__WXDEBUG__" /D "_UNICODE" /c
-# ADD CPP /nologo /FD /MDd /Od /GR /EHsc /I "..\..\src\animate\..\..\..\include" /I "..\..\src\animate\..\..\..\lib\vc_lib\mswunivud" /W4 /Zi /Gm /GZ /Fd..\..\src\animate\..\..\..\lib\vc_lib\wxmswuniv25ud_animate.pdb /Yu"wx/wxprec.h" /Fp"vc_mswunivud\wxprec_animatelib.pch" /I "..\..\src\animate\..\..\include" /D "WIN32" /D "_LIB" /D "_DEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "__WXDEBUG__" /D "_UNICODE" /c
+# ADD BASE CPP /nologo /FD /MDd /Od /GR /EHsc /I "..\..\src\animate\..\..\..\include" /I "..\..\src\animate\..\..\..\lib\vc_lib\mswunivud" /W4 /Zi /Gm /GZ /Fd..\..\src\animate\..\..\..\lib\vc_lib\wxmswuniv26ud_animate.pdb /Yu"wx/wxprec.h" /Fp"vc_mswunivud\wxprec_animatelib.pch" /I "..\..\src\animate\..\..\include" /D "WIN32" /D "_LIB" /D "_DEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "__WXDEBUG__" /D "_UNICODE" /c
+# ADD CPP /nologo /FD /MDd /Od /GR /EHsc /I "..\..\src\animate\..\..\..\include" /I "..\..\src\animate\..\..\..\lib\vc_lib\mswunivud" /W4 /Zi /Gm /GZ /Fd..\..\src\animate\..\..\..\lib\vc_lib\wxmswuniv26ud_animate.pdb /Yu"wx/wxprec.h" /Fp"vc_mswunivud\wxprec_animatelib.pch" /I "..\..\src\animate\..\..\include" /D "WIN32" /D "_LIB" /D "_DEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "__WXDEBUG__" /D "_UNICODE" /c
 # ADD BASE RSC /l 0x409
 # ADD RSC /l 0x409
 BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LIB32=link.exe -lib
-# ADD BASE LIB32 /nologo /out:"..\..\src\animate\..\..\..\lib\vc_lib\wxmswuniv25ud_animate.lib"
-# ADD LIB32 /nologo /out:"..\..\src\animate\..\..\..\lib\vc_lib\wxmswuniv25ud_animate.lib"
+# ADD BASE LIB32 /nologo /out:"..\..\src\animate\..\..\..\lib\vc_lib\wxmswuniv26ud_animate.lib"
+# ADD LIB32 /nologo /out:"..\..\src\animate\..\..\..\lib\vc_lib\wxmswuniv26ud_animate.lib"
 
 !ELSEIF  "$(CFG)" == "animate - Win32 Universal Release"
 
@@ -301,16 +301,16 @@ LIB32=link.exe -lib
 # PROP Output_Dir "..\..\src\animate\..\..\..\lib\vc_lib"
 # PROP Intermediate_Dir "vc_mswuniv\animate"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /MD /O2 /GR /EHsc /I "..\..\src\animate\..\..\..\include" /I "..\..\src\animate\..\..\..\lib\vc_lib\mswuniv" /W4 /Fd..\..\src\animate\..\..\..\lib\vc_lib\wxmswuniv25_animate.pdb /Yu"wx/wxprec.h" /Fp"vc_mswuniv\wxprec_animatelib.pch" /I "..\..\src\animate\..\..\include" /D "WIN32" /D "_LIB" /D "__WXMSW__" /D "__WXUNIVERSAL__" /c
-# ADD CPP /nologo /FD /MD /O2 /GR /EHsc /I "..\..\src\animate\..\..\..\include" /I "..\..\src\animate\..\..\..\lib\vc_lib\mswuniv" /W4 /Fd..\..\src\animate\..\..\..\lib\vc_lib\wxmswuniv25_animate.pdb /Yu"wx/wxprec.h" /Fp"vc_mswuniv\wxprec_animatelib.pch" /I "..\..\src\animate\..\..\include" /D "WIN32" /D "_LIB" /D "__WXMSW__" /D "__WXUNIVERSAL__" /c
+# ADD BASE CPP /nologo /FD /MD /O2 /GR /EHsc /I "..\..\src\animate\..\..\..\include" /I "..\..\src\animate\..\..\..\lib\vc_lib\mswuniv" /W4 /Fd..\..\src\animate\..\..\..\lib\vc_lib\wxmswuniv26_animate.pdb /Yu"wx/wxprec.h" /Fp"vc_mswuniv\wxprec_animatelib.pch" /I "..\..\src\animate\..\..\include" /D "WIN32" /D "_LIB" /D "__WXMSW__" /D "__WXUNIVERSAL__" /c
+# ADD CPP /nologo /FD /MD /O2 /GR /EHsc /I "..\..\src\animate\..\..\..\include" /I "..\..\src\animate\..\..\..\lib\vc_lib\mswuniv" /W4 /Fd..\..\src\animate\..\..\..\lib\vc_lib\wxmswuniv26_animate.pdb /Yu"wx/wxprec.h" /Fp"vc_mswuniv\wxprec_animatelib.pch" /I "..\..\src\animate\..\..\include" /D "WIN32" /D "_LIB" /D "__WXMSW__" /D "__WXUNIVERSAL__" /c
 # ADD BASE RSC /l 0x409
 # ADD RSC /l 0x409
 BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LIB32=link.exe -lib
-# ADD BASE LIB32 /nologo /out:"..\..\src\animate\..\..\..\lib\vc_lib\wxmswuniv25_animate.lib"
-# ADD LIB32 /nologo /out:"..\..\src\animate\..\..\..\lib\vc_lib\wxmswuniv25_animate.lib"
+# ADD BASE LIB32 /nologo /out:"..\..\src\animate\..\..\..\lib\vc_lib\wxmswuniv26_animate.lib"
+# ADD LIB32 /nologo /out:"..\..\src\animate\..\..\..\lib\vc_lib\wxmswuniv26_animate.lib"
 
 !ELSEIF  "$(CFG)" == "animate - Win32 Universal Debug"
 
@@ -324,16 +324,16 @@ LIB32=link.exe -lib
 # PROP Output_Dir "..\..\src\animate\..\..\..\lib\vc_lib"
 # PROP Intermediate_Dir "vc_mswunivd\animate"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /MDd /Od /GR /EHsc /I "..\..\src\animate\..\..\..\include" /I "..\..\src\animate\..\..\..\lib\vc_lib\mswunivd" /W4 /Zi /Gm /GZ /Fd..\..\src\animate\..\..\..\lib\vc_lib\wxmswuniv25d_animate.pdb /Yu"wx/wxprec.h" /Fp"vc_mswunivd\wxprec_animatelib.pch" /I "..\..\src\animate\..\..\include" /D "WIN32" /D "_LIB" /D "_DEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "__WXDEBUG__" /c
-# ADD CPP /nologo /FD /MDd /Od /GR /EHsc /I "..\..\src\animate\..\..\..\include" /I "..\..\src\animate\..\..\..\lib\vc_lib\mswunivd" /W4 /Zi /Gm /GZ /Fd..\..\src\animate\..\..\..\lib\vc_lib\wxmswuniv25d_animate.pdb /Yu"wx/wxprec.h" /Fp"vc_mswunivd\wxprec_animatelib.pch" /I "..\..\src\animate\..\..\include" /D "WIN32" /D "_LIB" /D "_DEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "__WXDEBUG__" /c
+# ADD BASE CPP /nologo /FD /MDd /Od /GR /EHsc /I "..\..\src\animate\..\..\..\include" /I "..\..\src\animate\..\..\..\lib\vc_lib\mswunivd" /W4 /Zi /Gm /GZ /Fd..\..\src\animate\..\..\..\lib\vc_lib\wxmswuniv26d_animate.pdb /Yu"wx/wxprec.h" /Fp"vc_mswunivd\wxprec_animatelib.pch" /I "..\..\src\animate\..\..\include" /D "WIN32" /D "_LIB" /D "_DEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "__WXDEBUG__" /c
+# ADD CPP /nologo /FD /MDd /Od /GR /EHsc /I "..\..\src\animate\..\..\..\include" /I "..\..\src\animate\..\..\..\lib\vc_lib\mswunivd" /W4 /Zi /Gm /GZ /Fd..\..\src\animate\..\..\..\lib\vc_lib\wxmswuniv26d_animate.pdb /Yu"wx/wxprec.h" /Fp"vc_mswunivd\wxprec_animatelib.pch" /I "..\..\src\animate\..\..\include" /D "WIN32" /D "_LIB" /D "_DEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "__WXDEBUG__" /c
 # ADD BASE RSC /l 0x409
 # ADD RSC /l 0x409
 BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LIB32=link.exe -lib
-# ADD BASE LIB32 /nologo /out:"..\..\src\animate\..\..\..\lib\vc_lib\wxmswuniv25d_animate.lib"
-# ADD LIB32 /nologo /out:"..\..\src\animate\..\..\..\lib\vc_lib\wxmswuniv25d_animate.lib"
+# ADD BASE LIB32 /nologo /out:"..\..\src\animate\..\..\..\lib\vc_lib\wxmswuniv26d_animate.lib"
+# ADD LIB32 /nologo /out:"..\..\src\animate\..\..\..\lib\vc_lib\wxmswuniv26d_animate.lib"
 
 !ELSEIF  "$(CFG)" == "animate - Win32 Unicode Release"
 
@@ -347,16 +347,16 @@ LIB32=link.exe -lib
 # PROP Output_Dir "..\..\src\animate\..\..\..\lib\vc_lib"
 # PROP Intermediate_Dir "vc_mswu\animate"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /MD /O2 /GR /EHsc /I "..\..\src\animate\..\..\..\include" /I "..\..\src\animate\..\..\..\lib\vc_lib\mswu" /W4 /Fd..\..\src\animate\..\..\..\lib\vc_lib\wxmsw25u_animate.pdb /Yu"wx/wxprec.h" /Fp"vc_mswu\wxprec_animatelib.pch" /I "..\..\src\animate\..\..\include" /D "WIN32" /D "_LIB" /D "__WXMSW__" /D "_UNICODE" /c
-# ADD CPP /nologo /FD /MD /O2 /GR /EHsc /I "..\..\src\animate\..\..\..\include" /I "..\..\src\animate\..\..\..\lib\vc_lib\mswu" /W4 /Fd..\..\src\animate\..\..\..\lib\vc_lib\wxmsw25u_animate.pdb /Yu"wx/wxprec.h" /Fp"vc_mswu\wxprec_animatelib.pch" /I "..\..\src\animate\..\..\include" /D "WIN32" /D "_LIB" /D "__WXMSW__" /D "_UNICODE" /c
+# ADD BASE CPP /nologo /FD /MD /O2 /GR /EHsc /I "..\..\src\animate\..\..\..\include" /I "..\..\src\animate\..\..\..\lib\vc_lib\mswu" /W4 /Fd..\..\src\animate\..\..\..\lib\vc_lib\wxmsw26u_animate.pdb /Yu"wx/wxprec.h" /Fp"vc_mswu\wxprec_animatelib.pch" /I "..\..\src\animate\..\..\include" /D "WIN32" /D "_LIB" /D "__WXMSW__" /D "_UNICODE" /c
+# ADD CPP /nologo /FD /MD /O2 /GR /EHsc /I "..\..\src\animate\..\..\..\include" /I "..\..\src\animate\..\..\..\lib\vc_lib\mswu" /W4 /Fd..\..\src\animate\..\..\..\lib\vc_lib\wxmsw26u_animate.pdb /Yu"wx/wxprec.h" /Fp"vc_mswu\wxprec_animatelib.pch" /I "..\..\src\animate\..\..\include" /D "WIN32" /D "_LIB" /D "__WXMSW__" /D "_UNICODE" /c
 # ADD BASE RSC /l 0x409
 # ADD RSC /l 0x409
 BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LIB32=link.exe -lib
-# ADD BASE LIB32 /nologo /out:"..\..\src\animate\..\..\..\lib\vc_lib\wxmsw25u_animate.lib"
-# ADD LIB32 /nologo /out:"..\..\src\animate\..\..\..\lib\vc_lib\wxmsw25u_animate.lib"
+# ADD BASE LIB32 /nologo /out:"..\..\src\animate\..\..\..\lib\vc_lib\wxmsw26u_animate.lib"
+# ADD LIB32 /nologo /out:"..\..\src\animate\..\..\..\lib\vc_lib\wxmsw26u_animate.lib"
 
 !ELSEIF  "$(CFG)" == "animate - Win32 Unicode Debug"
 
@@ -370,16 +370,16 @@ LIB32=link.exe -lib
 # PROP Output_Dir "..\..\src\animate\..\..\..\lib\vc_lib"
 # PROP Intermediate_Dir "vc_mswud\animate"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /MDd /Od /GR /EHsc /I "..\..\src\animate\..\..\..\include" /I "..\..\src\animate\..\..\..\lib\vc_lib\mswud" /W4 /Zi /Gm /GZ /Fd..\..\src\animate\..\..\..\lib\vc_lib\wxmsw25ud_animate.pdb /Yu"wx/wxprec.h" /Fp"vc_mswud\wxprec_animatelib.pch" /I "..\..\src\animate\..\..\include" /D "WIN32" /D "_LIB" /D "_DEBUG" /D "__WXMSW__" /D "__WXDEBUG__" /D "_UNICODE" /c
-# ADD CPP /nologo /FD /MDd /Od /GR /EHsc /I "..\..\src\animate\..\..\..\include" /I "..\..\src\animate\..\..\..\lib\vc_lib\mswud" /W4 /Zi /Gm /GZ /Fd..\..\src\animate\..\..\..\lib\vc_lib\wxmsw25ud_animate.pdb /Yu"wx/wxprec.h" /Fp"vc_mswud\wxprec_animatelib.pch" /I "..\..\src\animate\..\..\include" /D "WIN32" /D "_LIB" /D "_DEBUG" /D "__WXMSW__" /D "__WXDEBUG__" /D "_UNICODE" /c
+# ADD BASE CPP /nologo /FD /MDd /Od /GR /EHsc /I "..\..\src\animate\..\..\..\include" /I "..\..\src\animate\..\..\..\lib\vc_lib\mswud" /W4 /Zi /Gm /GZ /Fd..\..\src\animate\..\..\..\lib\vc_lib\wxmsw26ud_animate.pdb /Yu"wx/wxprec.h" /Fp"vc_mswud\wxprec_animatelib.pch" /I "..\..\src\animate\..\..\include" /D "WIN32" /D "_LIB" /D "_DEBUG" /D "__WXMSW__" /D "__WXDEBUG__" /D "_UNICODE" /c
+# ADD CPP /nologo /FD /MDd /Od /GR /EHsc /I "..\..\src\animate\..\..\..\include" /I "..\..\src\animate\..\..\..\lib\vc_lib\mswud" /W4 /Zi /Gm /GZ /Fd..\..\src\animate\..\..\..\lib\vc_lib\wxmsw26ud_animate.pdb /Yu"wx/wxprec.h" /Fp"vc_mswud\wxprec_animatelib.pch" /I "..\..\src\animate\..\..\include" /D "WIN32" /D "_LIB" /D "_DEBUG" /D "__WXMSW__" /D "__WXDEBUG__" /D "_UNICODE" /c
 # ADD BASE RSC /l 0x409
 # ADD RSC /l 0x409
 BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LIB32=link.exe -lib
-# ADD BASE LIB32 /nologo /out:"..\..\src\animate\..\..\..\lib\vc_lib\wxmsw25ud_animate.lib"
-# ADD LIB32 /nologo /out:"..\..\src\animate\..\..\..\lib\vc_lib\wxmsw25ud_animate.lib"
+# ADD BASE LIB32 /nologo /out:"..\..\src\animate\..\..\..\lib\vc_lib\wxmsw26ud_animate.lib"
+# ADD LIB32 /nologo /out:"..\..\src\animate\..\..\..\lib\vc_lib\wxmsw26ud_animate.lib"
 
 !ELSEIF  "$(CFG)" == "animate - Win32 Release"
 
@@ -393,16 +393,16 @@ LIB32=link.exe -lib
 # PROP Output_Dir "..\..\src\animate\..\..\..\lib\vc_lib"
 # PROP Intermediate_Dir "vc_msw\animate"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /MD /O2 /GR /EHsc /I "..\..\src\animate\..\..\..\include" /I "..\..\src\animate\..\..\..\lib\vc_lib\msw" /W4 /Fd..\..\src\animate\..\..\..\lib\vc_lib\wxmsw25_animate.pdb /Yu"wx/wxprec.h" /Fp"vc_msw\wxprec_animatelib.pch" /I "..\..\src\animate\..\..\include" /D "WIN32" /D "_LIB" /D "__WXMSW__" /c
-# ADD CPP /nologo /FD /MD /O2 /GR /EHsc /I "..\..\src\animate\..\..\..\include" /I "..\..\src\animate\..\..\..\lib\vc_lib\msw" /W4 /Fd..\..\src\animate\..\..\..\lib\vc_lib\wxmsw25_animate.pdb /Yu"wx/wxprec.h" /Fp"vc_msw\wxprec_animatelib.pch" /I "..\..\src\animate\..\..\include" /D "WIN32" /D "_LIB" /D "__WXMSW__" /c
+# ADD BASE CPP /nologo /FD /MD /O2 /GR /EHsc /I "..\..\src\animate\..\..\..\include" /I "..\..\src\animate\..\..\..\lib\vc_lib\msw" /W4 /Fd..\..\src\animate\..\..\..\lib\vc_lib\wxmsw26_animate.pdb /Yu"wx/wxprec.h" /Fp"vc_msw\wxprec_animatelib.pch" /I "..\..\src\animate\..\..\include" /D "WIN32" /D "_LIB" /D "__WXMSW__" /c
+# ADD CPP /nologo /FD /MD /O2 /GR /EHsc /I "..\..\src\animate\..\..\..\include" /I "..\..\src\animate\..\..\..\lib\vc_lib\msw" /W4 /Fd..\..\src\animate\..\..\..\lib\vc_lib\wxmsw26_animate.pdb /Yu"wx/wxprec.h" /Fp"vc_msw\wxprec_animatelib.pch" /I "..\..\src\animate\..\..\include" /D "WIN32" /D "_LIB" /D "__WXMSW__" /c
 # ADD BASE RSC /l 0x409
 # ADD RSC /l 0x409
 BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LIB32=link.exe -lib
-# ADD BASE LIB32 /nologo /out:"..\..\src\animate\..\..\..\lib\vc_lib\wxmsw25_animate.lib"
-# ADD LIB32 /nologo /out:"..\..\src\animate\..\..\..\lib\vc_lib\wxmsw25_animate.lib"
+# ADD BASE LIB32 /nologo /out:"..\..\src\animate\..\..\..\lib\vc_lib\wxmsw26_animate.lib"
+# ADD LIB32 /nologo /out:"..\..\src\animate\..\..\..\lib\vc_lib\wxmsw26_animate.lib"
 
 !ELSEIF  "$(CFG)" == "animate - Win32 Debug"
 
@@ -416,16 +416,16 @@ LIB32=link.exe -lib
 # PROP Output_Dir "..\..\src\animate\..\..\..\lib\vc_lib"
 # PROP Intermediate_Dir "vc_mswd\animate"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /MDd /Od /GR /EHsc /I "..\..\src\animate\..\..\..\include" /I "..\..\src\animate\..\..\..\lib\vc_lib\mswd" /W4 /Zi /Gm /GZ /Fd..\..\src\animate\..\..\..\lib\vc_lib\wxmsw25d_animate.pdb /Yu"wx/wxprec.h" /Fp"vc_mswd\wxprec_animatelib.pch" /I "..\..\src\animate\..\..\include" /D "WIN32" /D "_LIB" /D "_DEBUG" /D "__WXMSW__" /D "__WXDEBUG__" /c
-# ADD CPP /nologo /FD /MDd /Od /GR /EHsc /I "..\..\src\animate\..\..\..\include" /I "..\..\src\animate\..\..\..\lib\vc_lib\mswd" /W4 /Zi /Gm /GZ /Fd..\..\src\animate\..\..\..\lib\vc_lib\wxmsw25d_animate.pdb /Yu"wx/wxprec.h" /Fp"vc_mswd\wxprec_animatelib.pch" /I "..\..\src\animate\..\..\include" /D "WIN32" /D "_LIB" /D "_DEBUG" /D "__WXMSW__" /D "__WXDEBUG__" /c
+# ADD BASE CPP /nologo /FD /MDd /Od /GR /EHsc /I "..\..\src\animate\..\..\..\include" /I "..\..\src\animate\..\..\..\lib\vc_lib\mswd" /W4 /Zi /Gm /GZ /Fd..\..\src\animate\..\..\..\lib\vc_lib\wxmsw26d_animate.pdb /Yu"wx/wxprec.h" /Fp"vc_mswd\wxprec_animatelib.pch" /I "..\..\src\animate\..\..\include" /D "WIN32" /D "_LIB" /D "_DEBUG" /D "__WXMSW__" /D "__WXDEBUG__" /c
+# ADD CPP /nologo /FD /MDd /Od /GR /EHsc /I "..\..\src\animate\..\..\..\include" /I "..\..\src\animate\..\..\..\lib\vc_lib\mswd" /W4 /Zi /Gm /GZ /Fd..\..\src\animate\..\..\..\lib\vc_lib\wxmsw26d_animate.pdb /Yu"wx/wxprec.h" /Fp"vc_mswd\wxprec_animatelib.pch" /I "..\..\src\animate\..\..\include" /D "WIN32" /D "_LIB" /D "_DEBUG" /D "__WXMSW__" /D "__WXDEBUG__" /c
 # ADD BASE RSC /l 0x409
 # ADD RSC /l 0x409
 BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LIB32=link.exe -lib
-# ADD BASE LIB32 /nologo /out:"..\..\src\animate\..\..\..\lib\vc_lib\wxmsw25d_animate.lib"
-# ADD LIB32 /nologo /out:"..\..\src\animate\..\..\..\lib\vc_lib\wxmsw25d_animate.lib"
+# ADD BASE LIB32 /nologo /out:"..\..\src\animate\..\..\..\lib\vc_lib\wxmsw26d_animate.lib"
+# ADD LIB32 /nologo /out:"..\..\src\animate\..\..\..\lib\vc_lib\wxmsw26d_animate.lib"
 
 !ENDIF
 

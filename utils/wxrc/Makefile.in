@@ -36,7 +36,7 @@ HOST_SUFFIX = @HOST_SUFFIX@
 ### Variables: ###
 
 DESTDIR = 
-WX_RELEASE = 2.5
+WX_RELEASE = 2.6
 LIBDIRNAME = $(top_builddir)lib
 WXRC_CXXFLAGS = -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
 	$(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) \
