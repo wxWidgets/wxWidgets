@@ -61,7 +61,6 @@ public:
     DEC_PYCALLBACK_VOID_WXWINBASE(RemoveChild);
 
     DEC_PYCALLBACK_BOOL_const(ShouldInheritColours);
-    DEC_PYCALLBACK__COLOUR(ApplyParentThemeBackground);
     DEC_PYCALLBACK_VIZATTR_(GetDefaultAttributes);
     
     DEC_PYCALLBACK_BOOL_(HasTransparentBackground);
@@ -96,7 +95,6 @@ IMP_PYCALLBACK_VOID_WXWINBASE(wxPyControl, wxControl, AddChild);
 IMP_PYCALLBACK_VOID_WXWINBASE(wxPyControl, wxControl, RemoveChild);
 
 IMP_PYCALLBACK_BOOL_const(wxPyControl, wxControl, ShouldInheritColours);
-IMP_PYCALLBACK__COLOUR(wxPyControl, wxControl, ApplyParentThemeBackground);
 IMP_PYCALLBACK_VIZATTR_(wxPyControl, wxControl, GetDefaultAttributes);
 
 IMP_PYCALLBACK_BOOL_(wxPyControl, wxControl, HasTransparentBackground);
@@ -155,7 +153,6 @@ public:
     void base_RemoveChild(wxWindow* child);
 
     bool base_ShouldInheritColours() const;
-    void base_ApplyParentThemeBackground(const wxColour& c);
     wxVisualAttributes base_GetDefaultAttributes();
 };
 
