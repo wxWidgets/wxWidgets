@@ -21,24 +21,27 @@
 %endif
 
 %if %{unicode}
-    %define name         wx-%{portname}-unicode
-    %define wxconfig     %{portname}-unicode-release-%{ver2}
-    %define wxconfiglink wx%{portname}u-%{ver2}-config
+    %define name		wx-%{portname}-unicode
+    %define wxconfig		%{portname}-unicode-release-%{ver2}
+    %define wxconfigstatic	%{portname}-unicode-release-static-%{ver2}
+    %define wxconfiglink	wx%{portname}u-%{ver2}-config
 %else
-    %define wxbasename   wx-base
-    %define name         wx-%{portname}
-    %define wxconfig     %{portname}-ansi-release-%{ver2}
-    %define wxconfiglink wx%{portname}-%{ver2}-config
+    %define name		wx-%{portname}
+    %define wxconfig		%{portname}-ansi-release-%{ver2}
+    %define wxconfigstatic	%{portname}-ansi-release-static-%{ver2}
+    %define wxconfiglink	wx%{portname}-%{ver2}-config
 %endif
 
 %if %{unicode}
-    %define wxbasename   wx-base-unicode
-    %define wxbaseconfig base-unicode-release-%{ver2}
-    %define wxbaseconfiglink wxbaseu-%{ver2}-config
+    %define wxbasename		wx-base-unicode
+    %define wxbaseconfig	base-unicode-release-%{ver2}
+    %define wxbaseconfigstatic	base-unicode-release-static-%{ver2}
+    %define wxbaseconfiglink	wxbaseu-%{ver2}-config
 %else
-    %define wxbasename   wx-base-ansi
-    %define wxbaseconfig base-ansi-release-%{ver2}
-    %define wxbaseconfiglink wxbase-%{ver2}-config
+    %define wxbasename		wx-base-ansi
+    %define wxbaseconfig	base-ansi-release-%{ver2}
+    %define wxbaseconfigstatic	base-ansi-release-static-%{ver2}
+    %define wxbaseconfiglink	wxbase-%{ver2}-config
 %endif
 
 Summary: The GTK+ %{gtkver} port of the wxWidgets library
@@ -144,10 +147,12 @@ mkdir obj-shared-no-gui
 cd obj-shared-no-gui
 ../configure --prefix=%{pref} \
 			      --disable-gui \
+			      --disable-optimise \
 %if %{unicode}
-                              --enable-unicode \
+                              --enable-unicode
+%else
+                              --disable-unicode
 %endif
-                              --disable-optimise
 $MAKE
 cd ..
 
@@ -159,11 +164,49 @@ cd obj-shared
 %else
 			      --with-gtk2 \
 %endif
+			      --disable-optimise \
 %if %{unicode}
-                           --enable-unicode \
+			      --enable-unicode \
+%else
+			      --disable-unicode \
 %endif
-                           --disable-optimise \
-                           --with-opengl
+			      --with-opengl
+$MAKE
+
+cd contrib/src
+$MAKE
+cd ../../..
+
+mkdir obj-static-no-gui
+cd obj-static-no-gui
+../configure --prefix=%{pref} \
+			      --disable-gui \
+      			      --disable-shared \
+			      --disable-optimise \
+%if %{unicode}
+                              --enable-unicode
+%else
+                              --disable-unicode
+%endif
+$MAKE
+cd ..
+
+mkdir obj-static
+cd obj-static
+../configure --prefix=%{pref} \
+%if ! %{gtk2}
+			      --with-gtk1 \
+%else
+			      --with-gtk2 \
+%endif
+			      --disable-shared \
+			      --disable-optimise \
+%if %{unicode}
+                	      --enable-unicode \
+%else
+            		      --disable-unicode \
+%endif
+            		      --with-opengl
 $MAKE
 
 cd contrib/src
@@ -172,6 +215,8 @@ cd ../../..
 
 %install
 rm -rf $RPM_BUILD_ROOT
+(cd obj-static-no-gui; make prefix=$RPM_BUILD_ROOT/usr install)
+(cd obj-static; make prefix=$RPM_BUILD_ROOT/usr install)
 (cd obj-shared-no-gui; make prefix=$RPM_BUILD_ROOT/usr install)
 (cd obj-shared; make prefix=$RPM_BUILD_ROOT/usr install)
 
@@ -531,26 +576,33 @@ rm -f %{_bindir}/%{wxbaseconfiglink}
 %{_libdir}/libwx_%{portname}*_media-%{ver2}.so
 %{_libdir}/libwx_%{portname}*_qa-%{ver2}.so
 %{_libdir}/libwx_%{portname}*_xrc-%{ver2}.so
+%{_libdir}/libwx_%{portname}*_*-%{ver2}.a
 %dir %{_libdir}/wx
 %{_libdir}/wx/config/%{wxconfig}
 %{_libdir}/wx/include/%{wxconfig}/wx/setup.h
+%{_libdir}/wx/config/%{wxconfigstatic}
+%{_libdir}/wx/include/%{wxconfigstatic}/wx/setup.h
 %{_bindir}/wxrc*
 
 %files -n %{wxbasename}
 %defattr(-,root,root)
 %{_libdir}/libwx_base*-%{ver2}.so.*
 #%{_datadir}/locale/*/*/*
-# %if %{unicode}
-#    %{_libdir}/libwxregexu-%{ver2}.a
-#%endif
 
 %files -n %{wxbasename}-devel -f wxbase-headers.paths
 %defattr (-,root,root)
 %dir %{_includedir}/wx-%{ver2}
 %{_libdir}/libwx_base*-%{ver2}.so
+%{_libdir}/libwx_base*-%{ver2}.a
+
+%if %{unicode}
+    %{_libdir}/libwxregexu-%{ver2}.a
+%endif
 %dir %{_libdir}/wx
 %{_libdir}/wx/config/%{wxbaseconfig}
 %{_libdir}/wx/include/%{wxbaseconfig}/wx/setup.h
+%{_libdir}/wx/config/%{wxbaseconfigstatic}
+%{_libdir}/wx/include/%{wxbaseconfigstatic}/wx/setup.h
 %{_datadir}/aclocal/*.m4
 
 %files gl
