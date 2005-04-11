@@ -210,6 +210,9 @@ samples/regtest/regtest.dsw
 samples/render/*.dsp
 samples/render/*.dsw
 
+samples/richedit/*.dsp
+samples/richedit/*.dsw
+
 samples/rotate/rotate.dsp
 samples/rotate/rotate.dsw
 
