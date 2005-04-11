@@ -126,6 +126,8 @@ wxPyApp::wxPyApp() {
 
 
 wxPyApp::~wxPyApp() {
+    wxPythonApp = NULL;
+    wxApp::SetInstance(NULL);
 }
 
 
@@ -408,11 +410,11 @@ void wxPyApp::_BootstrapApp()
         if (sysargv != NULL && executable != NULL) {
             argc = PyList_Size(sysargv) + 1;
             argv = new char*[argc+1];
-            argv[0] = PyString_AsString(executable);
+            argv[0] = strdup(PyString_AsString(executable));
             int x;
             for(x=1; x<argc; x++) {
                 PyObject *pyArg = PyList_GetItem(sysargv, x-1);
-                argv[x] = PyString_AsString(pyArg);
+                argv[x] = strdup(PyString_AsString(pyArg));
             }
             argv[argc] = NULL;
         }
@@ -420,7 +422,7 @@ void wxPyApp::_BootstrapApp()
 
         // Initialize wxWidgets
         result = wxEntryStart(argc, argv);
-        delete [] argv;
+        // wxApp takes ownership of the argv array, don't delete it here
 
         blocked = wxPyBeginBlockThreads();
         if (! result)  {

@@ -176,9 +176,12 @@ your Mac."""
     def __del__(self):
         try:
             self.RestoreStdio()  # Just in case the MainLoop was overridden
-        except:
-            pass
+        finally:
+            wx.PyApp.__del__(self)
 
+    def Destroy(self):
+        wx.PyApp.Destroy(self)
+        self.thisown = 0
 
     def SetTopWindow(self, frame):
         """Set the \"main\" top level window"""

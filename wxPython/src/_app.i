@@ -48,8 +48,8 @@ class wxPyApp : public wxEvtHandler {
 public:
 
     %pythonAppend wxPyApp
-       "self._setCallbackInfo(self, PyApp)
-        self._setOORInfo(self)";
+       "self._setCallbackInfo(self, PyApp, False)
+        self._setOORInfo(self, False)";
     %typemap(out) wxPyApp*;    // turn off this typemap
 
     DocStr(wxPyApp,
@@ -67,7 +67,7 @@ public:
     %typemap(out) wxPyApp* { $result = wxPyMake_wxObject($1, $owner); }
 
 
-    void _setCallbackInfo(PyObject* self, PyObject* _class);
+    void _setCallbackInfo(PyObject* self, PyObject* _class, bool incref);
 
 
     DocDeclStr(
