@@ -479,6 +479,9 @@ void StringTestCase::Replace()
     TEST_WXREPLACE( _T("null\0char"), 9, _T("c"), _T("de"), true,
                           _T("null\0dehar"), 10 );   
 
+    TEST_WXREPLACE( _T("null\0dehar"), 10, _T("de"), _T("c"), true,
+                          _T("null\0char"), 9 );   
+
     #undef TEST_WXREPLACE
     #undef TEST_NULLCHARREPLACE
     #undef TEST_REPLACE
