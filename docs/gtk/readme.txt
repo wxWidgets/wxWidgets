@@ -1,7 +1,7 @@
 
-   Welcome to wxWidgets/Gtk 2.5
+   Welcome to wxWidgets 2.6 for GTK+
 
-You have downloaded version 2.5 of the GTK+ port of the 
+You have downloaded version 2.6 of the GTK+ port of the 
 wxWidgets GUI library.
 
 wxWidgets no longer supports GTK 1.0.x (as did some early
@@ -22,16 +22,16 @@ many systems:
 
     mkdir build_gtk
     cd build_gtk
-    ../configure --with-gtk
+    ../configure --with-gtk2
     make
     su <type root password>
     make install
     ldconfig
 
-In order to use wxGTK with GTK 2.0 you need to use --enable-gtk2
+In order to use wxGTK with GTK 1.2 you need to use --with-gtk1
 configure option. To build the library in Unicode mode (all
 strings will be wide strings and so on) you need to configure
-with GTK 2.0 and add --enable-unicode.
+with GTK 2.0 and add --enable-unicode (default by now).
 
 Please note that it is strongly advised to build the library in
 a separate directory, as shown above, as it allows you to have
@@ -54,7 +54,7 @@ http://lists.wxwidgets.org.
 
 Do NOT send any comments directly to me.
 
-wxWidgets/Gtk doesn't come with any guarantee whatsoever. It 
+wxWidgets doesn't come with any guarantee whatsoever. It 
 might crash your harddisk or destroy your monitor. It doesn't 
 claim to be suitable for any special or general purpose.
 
