@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: wxWidgets-2.5.4\n"
-"POT-Creation-Date: 2005-04-10 21:39+0200\n"
+"POT-Creation-Date: 2005-04-11 22:24+0200\n"
 "PO-Revision-Date: 2005-02-16 18:19+0100\n"
 "Last-Translator: Hans Fredrik Nordhaug <hans@nordhaug.priv.no>\n"
 "Language-Team: Norwegian Bokmål <i18n-nb@lister.ping.uio.no>\n"
@@ -25,7 +25,7 @@ msgstr ""
 msgid " "
 msgstr "  "
 
-#: ../src/generic/dbgrptg.cpp:298
+#: ../src/generic/dbgrptg.cpp:293
 msgid "              Thank you and we're sorry for the inconvenience!\n"
 msgstr ""
 
@@ -173,7 +173,7 @@ msgstr "&Lukk"
 msgid "&Copy"
 msgstr "&Kopier"
 
-#: ../src/generic/dbgrptg.cpp:306
+#: ../src/generic/dbgrptg.cpp:301
 msgid "&Debug report preview:"
 msgstr ""
 
@@ -258,7 +258,7 @@ msgstr "&Neste tips"
 msgid "&No"
 msgstr "&Nei"
 
-#: ../src/generic/dbgrptg.cpp:328
+#: ../src/generic/dbgrptg.cpp:323
 #, fuzzy
 msgid "&Notes:"
 msgstr "&Nei"
@@ -2352,12 +2352,18 @@ msgstr "IFF: Ukjent feil!"
 msgid "Icon resource specification %s not found."
 msgstr "Ikon ressursspesifikasjon %s ikke funnet."
 
-#: ../src/generic/dbgrptg.cpp:330
-msgid "If you have any additional information pertaining to this bug\n"
+#: ../src/generic/dbgrptg.cpp:325
+msgid ""
+"If you have any additional information pertaining to this bug\n"
+"report, please enter it here and it will be joined to it:"
 msgstr ""
 
-#: ../src/generic/dbgrptg.cpp:293
-msgid "If you wish to suppress this debug report completely, please "
+#: ../src/generic/dbgrptg.cpp:291
+msgid ""
+"If you wish to suppress this debug report completely, please choose the "
+"\"Cancel\" button,\n"
+"but be warned that it may hinder improving the program, so if\n"
+"at all possible please do continue with the report generation.\n"
 msgstr ""
 
 #: ../src/msw/registry.cpp:1281
@@ -3472,7 +3478,10 @@ msgid "The path '%s' contains too many \"..\"!"
 msgstr "Stien «%s» inneholder for mange \"..\"!"
 
 #: ../src/generic/dbgrptg.cpp:289
-msgid "The report contains the files listed below. If any of these "
+msgid ""
+"The report contains the files listed below. If any of these files contain "
+"private information,\n"
+"please uncheck them and they will be removed from the report.\n"
 msgstr ""
 
 #: ../src/common/cmdline.cpp:883
@@ -4046,10 +4055,6 @@ msgstr ""
 msgid "assuming this is a multi-part zip concatenated"
 msgstr "antar dette er en mangedelt zip-fil slått sammen"
 
-#: ../src/generic/dbgrptg.cpp:296
-msgid "at all possible please do continue with the report generation.\n"
-msgstr ""
-
 #: ../src/common/fileconf.cpp:1819
 #, c-format
 msgid "attempt to change immutable key '%s' ignored."
@@ -4078,10 +4083,6 @@ msgstr "fet"
 #: ../src/common/fontcmn.cpp:569
 msgid "bold "
 msgstr "fet"
-
-#: ../src/generic/dbgrptg.cpp:295
-msgid "but be warned that it may hinder improving the program, so if\n"
-msgstr ""
 
 #: ../src/common/ffile.cpp:91
 #, c-format
@@ -4214,10 +4215,6 @@ msgstr "katalogfil for domene «%s» ikke funnet."
 msgid "checksum error"
 msgstr "kontrollsumfeil"
 
-#: ../src/generic/dbgrptg.cpp:294
-msgid "choose the \"Cancel\" button,\n"
-msgstr ""
-
 #: ../src/html/chm.cpp:348
 msgid "compression error"
 msgstr "kompresjonsfeil"
@@ -4335,10 +4332,6 @@ msgstr "file «%s», linje %d: verdi for uforanderlig nøkkel «%s» ignorert."
 msgid "file '%s': unexpected character %c at line %d."
 msgstr "fil «%s»: uventet tegn %c på linje %d."
 
-#: ../src/generic/dbgrptg.cpp:290
-msgid "files contain private information,\n"
-msgstr ""
-
 #: ../src/common/datetime.cpp:3762
 msgid "first"
 msgstr "først"
@@ -4441,10 +4434,6 @@ msgstr "objekter kan ikke ha XML-tekstnoder"
 msgid "out of memory"
 msgstr "tom for minne"
 
-#: ../src/generic/dbgrptg.cpp:291
-msgid "please uncheck them and they will be removed from the report.\n"
-msgstr ""
-
 #: ../src/common/debugrpt.cpp:478
 msgid "process context description"
 msgstr ""
@@ -4470,10 +4459,6 @@ msgstr "leser zip-strøm (oppføring %s): feil lengde"
 #: ../src/msw/dde.cpp:1077
 msgid "reentrancy problem."
 msgstr "gjeninngangsproblem."
-
-#: ../src/generic/dbgrptg.cpp:331
-msgid "report, please enter it here and it will be joined to it:"
-msgstr ""
 
 #: ../src/common/datetime.cpp:3763
 msgid "second"

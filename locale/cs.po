@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: wxWidgets-2.5.2\n"
-"POT-Creation-Date: 2005-04-10 21:39+0200\n"
+"POT-Creation-Date: 2005-04-11 22:24+0200\n"
 "PO-Revision-Date: 2004-08-14 15:36+0100\n"
 "Last-Translator: Herbert Breunung <herbert_breunung@web.de>\n"
 "Language-Team: wxWidgets translators <wx-translators@wxwidgets.org>\n"
@@ -25,7 +25,7 @@ msgstr ""
 msgid " "
 msgstr ""
 
-#: ../src/generic/dbgrptg.cpp:298
+#: ../src/generic/dbgrptg.cpp:293
 msgid "              Thank you and we're sorry for the inconvenience!\n"
 msgstr ""
 
@@ -176,7 +176,7 @@ msgstr "&Zavřít"
 msgid "&Copy"
 msgstr "&Kopírovat"
 
-#: ../src/generic/dbgrptg.cpp:306
+#: ../src/generic/dbgrptg.cpp:301
 msgid "&Debug report preview:"
 msgstr ""
 
@@ -269,7 +269,7 @@ msgstr "&Další tip"
 msgid "&No"
 msgstr "Ne"
 
-#: ../src/generic/dbgrptg.cpp:328
+#: ../src/generic/dbgrptg.cpp:323
 #, fuzzy
 msgid "&Notes:"
 msgstr "Ne"
@@ -2389,12 +2389,18 @@ msgstr "IFF: neznámá chyba!!!"
 msgid "Icon resource specification %s not found."
 msgstr "XRC zdroj '%s' (třída '%s') nenalezen!"
 
-#: ../src/generic/dbgrptg.cpp:330
-msgid "If you have any additional information pertaining to this bug\n"
+#: ../src/generic/dbgrptg.cpp:325
+msgid ""
+"If you have any additional information pertaining to this bug\n"
+"report, please enter it here and it will be joined to it:"
 msgstr ""
 
-#: ../src/generic/dbgrptg.cpp:293
-msgid "If you wish to suppress this debug report completely, please "
+#: ../src/generic/dbgrptg.cpp:291
+msgid ""
+"If you wish to suppress this debug report completely, please choose the "
+"\"Cancel\" button,\n"
+"but be warned that it may hinder improving the program, so if\n"
+"at all possible please do continue with the report generation.\n"
 msgstr ""
 
 #: ../src/msw/registry.cpp:1281
@@ -3535,7 +3541,10 @@ msgid "The path '%s' contains too many \"..\"!"
 msgstr "Cesta '%s' obsahuje příliš mnoho \"..\"!"
 
 #: ../src/generic/dbgrptg.cpp:289
-msgid "The report contains the files listed below. If any of these "
+msgid ""
+"The report contains the files listed below. If any of these files contain "
+"private information,\n"
+"please uncheck them and they will be removed from the report.\n"
 msgstr ""
 
 #: ../src/common/cmdline.cpp:883
@@ -4132,10 +4141,6 @@ msgstr ""
 msgid "assuming this is a multi-part zip concatenated"
 msgstr ""
 
-#: ../src/generic/dbgrptg.cpp:296
-msgid "at all possible please do continue with the report generation.\n"
-msgstr ""
-
 #: ../src/common/fileconf.cpp:1819
 #, c-format
 msgid "attempt to change immutable key '%s' ignored."
@@ -4164,10 +4169,6 @@ msgstr "tučné"
 #: ../src/common/fontcmn.cpp:569
 msgid "bold "
 msgstr "tučné "
-
-#: ../src/generic/dbgrptg.cpp:295
-msgid "but be warned that it may hinder improving the program, so if\n"
-msgstr ""
 
 #: ../src/common/ffile.cpp:91
 #, c-format
@@ -4303,10 +4304,6 @@ msgstr "katalog pro doménu '%s' nenalezen."
 msgid "checksum error"
 msgstr ""
 
-#: ../src/generic/dbgrptg.cpp:294
-msgid "choose the \"Cancel\" button,\n"
-msgstr ""
-
 #: ../src/html/chm.cpp:348
 msgid "compression error"
 msgstr ""
@@ -4425,10 +4422,6 @@ msgstr "soubor '%s', řádka %d: hodnota pro neměnný klíč '%s' ignorována."
 msgid "file '%s': unexpected character %c at line %d."
 msgstr "soubor '%s': neočekávaný znak %c na řádku %d."
 
-#: ../src/generic/dbgrptg.cpp:290
-msgid "files contain private information,\n"
-msgstr ""
-
 #: ../src/common/datetime.cpp:3762
 msgid "first"
 msgstr "prvního"
@@ -4532,10 +4525,6 @@ msgstr ""
 msgid "out of memory"
 msgstr "nedostatek paměti."
 
-#: ../src/generic/dbgrptg.cpp:291
-msgid "please uncheck them and they will be removed from the report.\n"
-msgstr ""
-
 #: ../src/common/debugrpt.cpp:478
 msgid "process context description"
 msgstr ""
@@ -4561,10 +4550,6 @@ msgstr ""
 #: ../src/msw/dde.cpp:1077
 msgid "reentrancy problem."
 msgstr "problém reentrance."
-
-#: ../src/generic/dbgrptg.cpp:331
-msgid "report, please enter it here and it will be joined to it:"
-msgstr ""
 
 #: ../src/common/datetime.cpp:3763
 msgid "second"

@@ -9,7 +9,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: wxWidgets-2.5.4\n"
-"POT-Creation-Date: 2005-04-10 21:39+0200\n"
+"POT-Creation-Date: 2005-04-11 22:24+0200\n"
 "PO-Revision-Date: 2004-07-17 23:37+0300\n"
 "Last-Translator: Jaakko Salli <jmsalli79@hotmail.com>\n"
 "Language-Team: Finnish <translation-team-fi@lists.sourceforge.net>\n"
@@ -34,7 +34,7 @@ msgstr ""
 msgid " "
 msgstr " "
 
-#: ../src/generic/dbgrptg.cpp:298
+#: ../src/generic/dbgrptg.cpp:293
 msgid "              Thank you and we're sorry for the inconvenience!\n"
 msgstr ""
 
@@ -190,7 +190,7 @@ msgstr "&Sulje"
 msgid "&Copy"
 msgstr "K&opioi"
 
-#: ../src/generic/dbgrptg.cpp:306
+#: ../src/generic/dbgrptg.cpp:301
 msgid "&Debug report preview:"
 msgstr ""
 
@@ -282,7 +282,7 @@ msgstr "&Seuraava vihje"
 msgid "&No"
 msgstr "&Ei"
 
-#: ../src/generic/dbgrptg.cpp:328
+#: ../src/generic/dbgrptg.cpp:323
 #, fuzzy
 msgid "&Notes:"
 msgstr "&Ei"
@@ -2413,12 +2413,18 @@ msgstr "IFF: tuntemataon virhe!!!"
 msgid "Icon resource specification %s not found."
 msgstr "Kuvakeresurssin määritelmää %s ei löydy."
 
-#: ../src/generic/dbgrptg.cpp:330
-msgid "If you have any additional information pertaining to this bug\n"
+#: ../src/generic/dbgrptg.cpp:325
+msgid ""
+"If you have any additional information pertaining to this bug\n"
+"report, please enter it here and it will be joined to it:"
 msgstr ""
 
-#: ../src/generic/dbgrptg.cpp:293
-msgid "If you wish to suppress this debug report completely, please "
+#: ../src/generic/dbgrptg.cpp:291
+msgid ""
+"If you wish to suppress this debug report completely, please choose the "
+"\"Cancel\" button,\n"
+"but be warned that it may hinder improving the program, so if\n"
+"at all possible please do continue with the report generation.\n"
 msgstr ""
 
 #: ../src/msw/registry.cpp:1281
@@ -3556,7 +3562,10 @@ msgid "The path '%s' contains too many \"..\"!"
 msgstr "Polku '%s' sisältää liian monta \"..\"!"
 
 #: ../src/generic/dbgrptg.cpp:289
-msgid "The report contains the files listed below. If any of these "
+msgid ""
+"The report contains the files listed below. If any of these files contain "
+"private information,\n"
+"please uncheck them and they will be removed from the report.\n"
 msgstr ""
 
 #: ../src/common/cmdline.cpp:883
@@ -4155,10 +4164,6 @@ msgstr ""
 msgid "assuming this is a multi-part zip concatenated"
 msgstr ""
 
-#: ../src/generic/dbgrptg.cpp:296
-msgid "at all possible please do continue with the report generation.\n"
-msgstr ""
-
 #: ../src/common/fileconf.cpp:1819
 #, c-format
 msgid "attempt to change immutable key '%s' ignored."
@@ -4187,10 +4192,6 @@ msgstr "lihavoitu"
 #: ../src/common/fontcmn.cpp:569
 msgid "bold "
 msgstr "lihavoitu "
-
-#: ../src/generic/dbgrptg.cpp:295
-msgid "but be warned that it may hinder improving the program, so if\n"
-msgstr ""
 
 #: ../src/common/ffile.cpp:91
 #, c-format
@@ -4323,10 +4324,6 @@ msgstr "luettelotiedostoa varkkoalueelle '%s' ei löydy."
 msgid "checksum error"
 msgstr ""
 
-#: ../src/generic/dbgrptg.cpp:294
-msgid "choose the \"Cancel\" button,\n"
-msgstr ""
-
 #: ../src/html/chm.cpp:348
 msgid "compression error"
 msgstr ""
@@ -4444,10 +4441,6 @@ msgstr "tiedosto '%s', rivi %d: muuttamattoman avaimen '%s' arvo ohitettu."
 msgid "file '%s': unexpected character %c at line %d."
 msgstr "tiedosto \"%s\": odottamaton merkki %c rivillä %d."
 
-#: ../src/generic/dbgrptg.cpp:290
-msgid "files contain private information,\n"
-msgstr ""
-
 #: ../src/common/datetime.cpp:3762
 msgid "first"
 msgstr "ensimmäinen"
@@ -4552,10 +4545,6 @@ msgstr ""
 msgid "out of memory"
 msgstr "muisti loppu"
 
-#: ../src/generic/dbgrptg.cpp:291
-msgid "please uncheck them and they will be removed from the report.\n"
-msgstr ""
-
 #: ../src/common/debugrpt.cpp:478
 msgid "process context description"
 msgstr ""
@@ -4581,10 +4570,6 @@ msgstr "luetaan zip-virtaa (kohta %s): virheellinen pituus"
 #: ../src/msw/dde.cpp:1077
 msgid "reentrancy problem."
 msgstr "vaikeuksia uudelleen palaamisessa."
-
-#: ../src/generic/dbgrptg.cpp:331
-msgid "report, please enter it here and it will be joined to it:"
-msgstr ""
 
 #: ../src/common/datetime.cpp:3763
 msgid "second"

@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: wxWidgets-2.5.1\n"
-"POT-Creation-Date: 2005-04-10 21:39+0200\n"
+"POT-Creation-Date: 2005-04-11 22:24+0200\n"
 "PO-Revision-Date: 2004-05-08 16:34+0800\n"
 "Last-Translator: PAL <lyh37@ntu.edu.tw>\n"
 "Language-Team: wxWidgets tranlators <wx-translators@wxwidgets.org>\n"
@@ -25,7 +25,7 @@ msgstr ""
 msgid " "
 msgstr ""
 
-#: ../src/generic/dbgrptg.cpp:298
+#: ../src/generic/dbgrptg.cpp:293
 msgid "              Thank you and we're sorry for the inconvenience!\n"
 msgstr ""
 
@@ -176,7 +176,7 @@ msgstr "關閉(&C)"
 msgid "&Copy"
 msgstr "複製(&C)"
 
-#: ../src/generic/dbgrptg.cpp:306
+#: ../src/generic/dbgrptg.cpp:301
 msgid "&Debug report preview:"
 msgstr ""
 
@@ -269,7 +269,7 @@ msgstr "下一技巧(&N)"
 msgid "&No"
 msgstr "否"
 
-#: ../src/generic/dbgrptg.cpp:328
+#: ../src/generic/dbgrptg.cpp:323
 #, fuzzy
 msgid "&Notes:"
 msgstr "否"
@@ -2378,12 +2378,18 @@ msgstr "IFF: 未知的錯誤！！！"
 msgid "Icon resource specification %s not found."
 msgstr "沒有找到 XRC 資源 '%s' (類別 '%s')！"
 
-#: ../src/generic/dbgrptg.cpp:330
-msgid "If you have any additional information pertaining to this bug\n"
+#: ../src/generic/dbgrptg.cpp:325
+msgid ""
+"If you have any additional information pertaining to this bug\n"
+"report, please enter it here and it will be joined to it:"
 msgstr ""
 
-#: ../src/generic/dbgrptg.cpp:293
-msgid "If you wish to suppress this debug report completely, please "
+#: ../src/generic/dbgrptg.cpp:291
+msgid ""
+"If you wish to suppress this debug report completely, please choose the "
+"\"Cancel\" button,\n"
+"but be warned that it may hinder improving the program, so if\n"
+"at all possible please do continue with the report generation.\n"
 msgstr ""
 
 #: ../src/msw/registry.cpp:1281
@@ -3518,7 +3524,10 @@ msgid "The path '%s' contains too many \"..\"!"
 msgstr "路徑 '%s' 包含太多的 \"..\"！"
 
 #: ../src/generic/dbgrptg.cpp:289
-msgid "The report contains the files listed below. If any of these "
+msgid ""
+"The report contains the files listed below. If any of these files contain "
+"private information,\n"
+"please uncheck them and they will be removed from the report.\n"
 msgstr ""
 
 #: ../src/common/cmdline.cpp:883
@@ -4103,10 +4112,6 @@ msgstr ""
 msgid "assuming this is a multi-part zip concatenated"
 msgstr ""
 
-#: ../src/generic/dbgrptg.cpp:296
-msgid "at all possible please do continue with the report generation.\n"
-msgstr ""
-
 #: ../src/common/fileconf.cpp:1819
 #, c-format
 msgid "attempt to change immutable key '%s' ignored."
@@ -4135,10 +4140,6 @@ msgstr "粗體"
 #: ../src/common/fontcmn.cpp:569
 msgid "bold "
 msgstr "粗體"
-
-#: ../src/generic/dbgrptg.cpp:295
-msgid "but be warned that it may hinder improving the program, so if\n"
-msgstr ""
 
 #: ../src/common/ffile.cpp:91
 #, c-format
@@ -4274,10 +4275,6 @@ msgstr "找不到 '%s' 領域的記載檔。"
 msgid "checksum error"
 msgstr "總和檢查碼錯誤"
 
-#: ../src/generic/dbgrptg.cpp:294
-msgid "choose the \"Cancel\" button,\n"
-msgstr ""
-
 #: ../src/html/chm.cpp:348
 msgid "compression error"
 msgstr "壓縮失敗"
@@ -4396,10 +4393,6 @@ msgstr "檔案 '%s' 第 %d 行：忽略對不可變更機碼 '%s' 的值。"
 msgid "file '%s': unexpected character %c at line %d."
 msgstr "檔案 '%s'： 不應有字元 %c 存在於第 %d 行中"
 
-#: ../src/generic/dbgrptg.cpp:290
-msgid "files contain private information,\n"
-msgstr ""
-
 #: ../src/common/datetime.cpp:3762
 msgid "first"
 msgstr "第一"
@@ -4503,10 +4496,6 @@ msgstr "物件不能有 XML 文字子節點"
 msgid "out of memory"
 msgstr "記憶體不足。"
 
-#: ../src/generic/dbgrptg.cpp:291
-msgid "please uncheck them and they will be removed from the report.\n"
-msgstr ""
-
 #: ../src/common/debugrpt.cpp:478
 msgid "process context description"
 msgstr ""
@@ -4532,10 +4521,6 @@ msgstr ""
 #: ../src/msw/dde.cpp:1077
 msgid "reentrancy problem."
 msgstr "重複進入問題。"
-
-#: ../src/generic/dbgrptg.cpp:331
-msgid "report, please enter it here and it will be joined to it:"
-msgstr ""
 
 #: ../src/common/datetime.cpp:3763
 msgid "second"

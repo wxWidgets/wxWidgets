@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: wxWidgets-2.5.2\n"
-"POT-Creation-Date: 2005-04-10 21:39+0200\n"
+"POT-Creation-Date: 2005-04-11 22:24+0200\n"
 "PO-Revision-Date: 2004-05-12 17:19-0300\n"
 "Last-Translator: E. A. Tacão <e.a.tacao@terra.com.br>\n"
 "Language-Team: wxWidgets translators <wx-translators@lists.wxwidgets.org>\n"
@@ -25,7 +25,7 @@ msgstr ""
 msgid " "
 msgstr ""
 
-#: ../src/generic/dbgrptg.cpp:298
+#: ../src/generic/dbgrptg.cpp:293
 msgid "              Thank you and we're sorry for the inconvenience!\n"
 msgstr ""
 
@@ -176,7 +176,7 @@ msgstr "&Fechar"
 msgid "&Copy"
 msgstr "&Copiar"
 
-#: ../src/generic/dbgrptg.cpp:306
+#: ../src/generic/dbgrptg.cpp:301
 msgid "&Debug report preview:"
 msgstr ""
 
@@ -270,7 +270,7 @@ msgstr "&Próxima Dica"
 msgid "&No"
 msgstr "Não"
 
-#: ../src/generic/dbgrptg.cpp:328
+#: ../src/generic/dbgrptg.cpp:323
 #, fuzzy
 msgid "&Notes:"
 msgstr "Não"
@@ -2367,12 +2367,18 @@ msgstr "IFF: erro desconhecido!!!"
 msgid "Icon resource specification %s not found."
 msgstr "Recurso XRC '%s' (classe '%s') não localizado!"
 
-#: ../src/generic/dbgrptg.cpp:330
-msgid "If you have any additional information pertaining to this bug\n"
+#: ../src/generic/dbgrptg.cpp:325
+msgid ""
+"If you have any additional information pertaining to this bug\n"
+"report, please enter it here and it will be joined to it:"
 msgstr ""
 
-#: ../src/generic/dbgrptg.cpp:293
-msgid "If you wish to suppress this debug report completely, please "
+#: ../src/generic/dbgrptg.cpp:291
+msgid ""
+"If you wish to suppress this debug report completely, please choose the "
+"\"Cancel\" button,\n"
+"but be warned that it may hinder improving the program, so if\n"
+"at all possible please do continue with the report generation.\n"
 msgstr ""
 
 #: ../src/msw/registry.cpp:1281
@@ -3493,7 +3499,10 @@ msgid "The path '%s' contains too many \"..\"!"
 msgstr "The caminho '%s' contém muitos \"..\"!"
 
 #: ../src/generic/dbgrptg.cpp:289
-msgid "The report contains the files listed below. If any of these "
+msgid ""
+"The report contains the files listed below. If any of these files contain "
+"private information,\n"
+"please uncheck them and they will be removed from the report.\n"
 msgstr ""
 
 #: ../src/common/cmdline.cpp:883
@@ -4079,10 +4088,6 @@ msgstr ""
 msgid "assuming this is a multi-part zip concatenated"
 msgstr ""
 
-#: ../src/generic/dbgrptg.cpp:296
-msgid "at all possible please do continue with the report generation.\n"
-msgstr ""
-
 #: ../src/common/fileconf.cpp:1819
 #, c-format
 msgid "attempt to change immutable key '%s' ignored."
@@ -4111,10 +4116,6 @@ msgstr "negrito"
 #: ../src/common/fontcmn.cpp:569
 msgid "bold "
 msgstr "negrito "
-
-#: ../src/generic/dbgrptg.cpp:295
-msgid "but be warned that it may hinder improving the program, so if\n"
-msgstr ""
 
 #: ../src/common/ffile.cpp:91
 #, c-format
@@ -4252,10 +4253,6 @@ msgstr "arquivo de catálogo para domínio '%s' não localizado."
 msgid "checksum error"
 msgstr "erro de checksum"
 
-#: ../src/generic/dbgrptg.cpp:294
-msgid "choose the \"Cancel\" button,\n"
-msgstr ""
-
 #: ../src/html/chm.cpp:348
 msgid "compression error"
 msgstr "erro de compactação"
@@ -4375,10 +4372,6 @@ msgstr "arquivo '%s', linha %d: valor da chave imutável '%s' ignorado."
 msgid "file '%s': unexpected character %c at line %d."
 msgstr "arquivo '%s': caractere %c inesperado na linha %d."
 
-#: ../src/generic/dbgrptg.cpp:290
-msgid "files contain private information,\n"
-msgstr ""
-
 #: ../src/common/datetime.cpp:3762
 msgid "first"
 msgstr "primeiro"
@@ -4482,10 +4475,6 @@ msgstr "objetos não podem ter Nós de Texto XML"
 msgid "out of memory"
 msgstr "memória insuficiente"
 
-#: ../src/generic/dbgrptg.cpp:291
-msgid "please uncheck them and they will be removed from the report.\n"
-msgstr ""
-
 #: ../src/common/debugrpt.cpp:478
 msgid "process context description"
 msgstr ""
@@ -4511,10 +4500,6 @@ msgstr "leitura de fluxo Gzip: crc ilegal: comprimento incorreto"
 #: ../src/msw/dde.cpp:1077
 msgid "reentrancy problem."
 msgstr "falha de reentrada."
-
-#: ../src/generic/dbgrptg.cpp:331
-msgid "report, please enter it here and it will be joined to it:"
-msgstr ""
 
 #: ../src/common/datetime.cpp:3763
 msgid "second"

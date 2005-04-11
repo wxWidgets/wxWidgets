@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: wxstd-hi\n"
-"POT-Creation-Date: 2005-04-10 21:39+0200\n"
+"POT-Creation-Date: 2005-04-11 22:24+0200\n"
 "PO-Revision-Date: 2004-04-12 22:31+0530\n"
 "Last-Translator: धनञ्जय शर्मा (Dhananjaya Sharma) <dysxhi@yahoo.co.in>\n"
 "Language-Team: हिन्दी (Hindi) <dysxhi@yahoo.co.in>\n"
@@ -31,7 +31,7 @@ msgstr ""
 msgid " "
 msgstr ""
 
-#: ../src/generic/dbgrptg.cpp:298
+#: ../src/generic/dbgrptg.cpp:293
 msgid "              Thank you and we're sorry for the inconvenience!\n"
 msgstr ""
 
@@ -182,7 +182,7 @@ msgstr "बन्द करे (&C)"
 msgid "&Copy"
 msgstr "प्रतिलिपि बनाएँ (&C)"
 
-#: ../src/generic/dbgrptg.cpp:306
+#: ../src/generic/dbgrptg.cpp:301
 msgid "&Debug report preview:"
 msgstr ""
 
@@ -276,7 +276,7 @@ msgstr "अगला संकेत (&N)"
 msgid "&No"
 msgstr "नहीं"
 
-#: ../src/generic/dbgrptg.cpp:328
+#: ../src/generic/dbgrptg.cpp:323
 #, fuzzy
 msgid "&Notes:"
 msgstr "नहीं"
@@ -2384,12 +2384,18 @@ msgstr "आईएफ़एफ़: अज्ञात त्रुटि!!!"
 msgid "Icon resource specification %s not found."
 msgstr "एक्सआरसी स्रोत संसाधन '%s' (वर्ग '%s') नहीं मिला!"
 
-#: ../src/generic/dbgrptg.cpp:330
-msgid "If you have any additional information pertaining to this bug\n"
+#: ../src/generic/dbgrptg.cpp:325
+msgid ""
+"If you have any additional information pertaining to this bug\n"
+"report, please enter it here and it will be joined to it:"
 msgstr ""
 
-#: ../src/generic/dbgrptg.cpp:293
-msgid "If you wish to suppress this debug report completely, please "
+#: ../src/generic/dbgrptg.cpp:291
+msgid ""
+"If you wish to suppress this debug report completely, please choose the "
+"\"Cancel\" button,\n"
+"but be warned that it may hinder improving the program, so if\n"
+"at all possible please do continue with the report generation.\n"
 msgstr ""
 
 #: ../src/msw/registry.cpp:1281
@@ -3531,7 +3537,10 @@ msgid "The path '%s' contains too many \"..\"!"
 msgstr "इस पथ '%s' में बहुत सारे \"..\" सम्मिलित है!"
 
 #: ../src/generic/dbgrptg.cpp:289
-msgid "The report contains the files listed below. If any of these "
+msgid ""
+"The report contains the files listed below. If any of these files contain "
+"private information,\n"
+"please uncheck them and they will be removed from the report.\n"
 msgstr ""
 
 #: ../src/common/cmdline.cpp:883
@@ -4122,10 +4131,6 @@ msgstr ""
 msgid "assuming this is a multi-part zip concatenated"
 msgstr ""
 
-#: ../src/generic/dbgrptg.cpp:296
-msgid "at all possible please do continue with the report generation.\n"
-msgstr ""
-
 #: ../src/common/fileconf.cpp:1819
 #, c-format
 msgid "attempt to change immutable key '%s' ignored."
@@ -4154,10 +4159,6 @@ msgstr "गहरा"
 #: ../src/common/fontcmn.cpp:569
 msgid "bold "
 msgstr "गहरा "
-
-#: ../src/generic/dbgrptg.cpp:295
-msgid "but be warned that it may hinder improving the program, so if\n"
-msgstr ""
 
 #: ../src/common/ffile.cpp:91
 #, c-format
@@ -4294,10 +4295,6 @@ msgstr "'%s' डोमेन के लिए सूचीपत्र फ़ाइ
 msgid "checksum error"
 msgstr "चेकसम त्रुटि"
 
-#: ../src/generic/dbgrptg.cpp:294
-msgid "choose the \"Cancel\" button,\n"
-msgstr ""
-
 #: ../src/html/chm.cpp:348
 msgid "compression error"
 msgstr "संकुचन त्रुटि"
@@ -4416,10 +4413,6 @@ msgstr "फ़ाइल '%s', पंक्ति %d: निर्विकल्प
 msgid "file '%s': unexpected character %c at line %d."
 msgstr "फ़ाइल '%s': अप्रत्याशित %c शब्द %d पंक्ति पर।"
 
-#: ../src/generic/dbgrptg.cpp:290
-msgid "files contain private information,\n"
-msgstr ""
-
 #: ../src/common/datetime.cpp:3762
 msgid "first"
 msgstr "प्रथम"
@@ -4523,10 +4516,6 @@ msgstr "एक्सएमएल पाठ नोडो को ऑबजेक�
 msgid "out of memory"
 msgstr "स्मॄति समाप्त"
 
-#: ../src/generic/dbgrptg.cpp:291
-msgid "please uncheck them and they will be removed from the report.\n"
-msgstr ""
-
 #: ../src/common/debugrpt.cpp:478
 msgid "process context description"
 msgstr ""
@@ -4552,10 +4541,6 @@ msgstr "जीज़िप धारा को पढ़ा जा रहा है: �
 #: ../src/msw/dde.cpp:1077
 msgid "reentrancy problem."
 msgstr "पुनःअन्दर आने की समस्या।"
-
-#: ../src/generic/dbgrptg.cpp:331
-msgid "report, please enter it here and it will be joined to it:"
-msgstr ""
 
 #: ../src/common/datetime.cpp:3763
 msgid "second"
