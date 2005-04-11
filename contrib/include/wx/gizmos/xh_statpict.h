@@ -16,6 +16,7 @@
 #endif
 
 #include "wx/xrc/xmlres.h"
+#include "wx/gizmos/gizmos.h"
 
 //
 // XML resource handler for the wxStaticPicture class in wxContrib.

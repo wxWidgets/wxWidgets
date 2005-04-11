@@ -14,7 +14,7 @@
 #elif defined(WXUSINGDLL)
     #define WXDLLIMPEXP_GIZMOS_XRC WXIMPORT
 #else // not making nor using DLL
-    #define WXDLLIMPEXP_GIZMOS
+    #define WXDLLIMPEXP_GIZMOS_XRC
 #endif
 
 #endif
