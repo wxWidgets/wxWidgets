@@ -290,7 +290,8 @@ public:
     bool HandleDestroy();
 
     bool HandlePaint();
-    bool HandleEraseBkgnd(WXHDC pDC);
+    bool HandlePrintClient(WXHDC hDC);
+    bool HandleEraseBkgnd(WXHDC hDC);
 
     bool HandleMinimize();
     bool HandleMaximize();

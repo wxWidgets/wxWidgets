@@ -146,6 +146,9 @@ protected:
 
 #ifndef __WXWINCE__
     virtual WXHRGN MSWGetRegionWithoutChildren();
+    virtual WXLRESULT MSWWindowProc(WXUINT nMsg,
+                                    WXWPARAM wParam,
+                                    WXLPARAM lParam);
 #endif // __WXWINCE__
 
 

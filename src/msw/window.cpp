@@ -2319,30 +2319,7 @@ WXLRESULT wxWindowMSW::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM l
             break;
 
         case WM_PRINTCLIENT:
-            // we receive this message when DrawThemeParentBackground() is
-            // called from def window proc of several controls under XP and we
-            // must draw properly themed background here
-            //
-            // note that naively I'd expect filling the client rect with the
-            // brush returned by MSWGetBgBrush() work -- but for some reason it
-            // doesn't and we have to call parents MSWPrintChild() which is
-            // supposed to call DrawThemeBackground() with appropriate params
-            //
-            // also note that in this case lParam == PRF_CLIENT but we're
-            // clearly expected to paint the background and nothing else!
-            {
-                for ( wxWindow *win = GetParent(); win; win = win->GetParent() )
-                {
-                    if ( win->MSWPrintChild((WXHDC)wParam, (wxWindow *)this) )
-                    {
-                        processed = true;
-                        break;
-                    }
-
-                    if ( win->IsTopLevel() || win->InheritsBackgroundColour() )
-                        break;
-                }
-            }
+            processed = HandlePrintClient((WXHDC)wParam);
             break;
 
         case WM_PAINT:
@@ -3715,7 +3692,7 @@ bool wxWindowMSW::HandleDisplayChange()
 
 #ifndef __WXMICROWIN__
 
-bool wxWindowMSW::HandleCtlColor(WXHBRUSH *brush, WXHDC pDC, WXHWND hWnd)
+bool wxWindowMSW::HandleCtlColor(WXHBRUSH *brush, WXHDC hDC, WXHWND hWnd)
 {
 #if !wxUSE_CONTROLS || defined(__WXUNIVERSAL__)
     wxUnusedVar(pDC);
@@ -3724,7 +3701,7 @@ bool wxWindowMSW::HandleCtlColor(WXHBRUSH *brush, WXHDC pDC, WXHWND hWnd)
     wxControl *item = wxDynamicCast(FindItemByHWND(hWnd, true), wxControl);
 
     if ( item )
-        *brush = item->MSWControlColor(pDC, hWnd);
+        *brush = item->MSWControlColor(hDC, hWnd);
     else
 #endif // wxUSE_CONTROLS
         *brush = NULL;
@@ -4060,6 +4037,31 @@ WXHBRUSH wxWindowMSW::MSWGetBgBrush(WXHDC hDC, WXHWND hWndToPaint)
     }
 
     return 0;
+}
+
+bool wxWindowMSW::HandlePrintClient(WXHDC hDC)
+{
+    // we receive this message when DrawThemeParentBackground() is
+    // called from def window proc of several controls under XP and we
+    // must draw properly themed background here
+    //
+    // note that naively I'd expect filling the client rect with the
+    // brush returned by MSWGetBgBrush() work -- but for some reason it
+    // doesn't and we have to call parents MSWPrintChild() which is
+    // supposed to call DrawThemeBackground() with appropriate params
+    //
+    // also note that in this case lParam == PRF_CLIENT but we're
+    // clearly expected to paint the background and nothing else!
+    for ( wxWindow *win = GetParent(); win; win = win->GetParent() )
+    {
+        if ( win->MSWPrintChild(hDC, (wxWindow *)this) )
+            return true;
+
+        if ( win->IsTopLevel() || win->InheritsBackgroundColour() )
+            break;
+    }
+
+    return false;
 }
 
 // ---------------------------------------------------------------------------

@@ -667,6 +667,30 @@ WXHRGN wxRadioBox::MSWGetRegionWithoutChildren()
     return (WXHRGN)hrgn;
 }
 
+WXLRESULT
+wxRadioBox::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
+{
+    if ( nMsg == WM_PRINTCLIENT )
+    {
+        // we have to process WM_PRINTCLIENT ourselves as otherwise the radio
+        // buttons background would never be drawn unless we have a parent with
+        // non default background
+
+        // so check first if we have one
+        if ( !HandlePrintClient((WXHDC)wParam) )
+        {
+            // no, we don't, erase the background ourselves (don't use our own
+            // colour as with static box, see comments there)
+            wxFillRect(GetHwnd(), (HDC)wParam,
+                        GetHbrushOf(wxBrush(GetParent()->GetBackgroundColour())));
+        }
+
+        return 0;
+    }
+
+    return wxStaticBox::MSWWindowProc(nMsg, wParam, lParam);
+}
+
 #endif // __WXWINCE__
 
 // ---------------------------------------------------------------------------
