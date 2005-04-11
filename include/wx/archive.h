@@ -341,6 +341,8 @@ public:
     wxMBConv& GetConv() const { return *m_pConv; }
 
 protected:
+    // old compilers don't support covarient returns, so 'Do' methods are
+    // used to simulate them
     virtual wxArchiveEntry        *DoNewEntry() const = 0;
     virtual wxArchiveInputStream  *DoNewStream(wxInputStream& stream) const = 0;
     virtual wxArchiveOutputStream *DoNewStream(wxOutputStream& stream) const = 0;
