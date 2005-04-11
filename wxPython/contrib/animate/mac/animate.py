@@ -2,7 +2,7 @@
 # Don't modify this file, modify the SWIG interface instead.
 
 """
-Simple animation player classes, including `wxGIFAnimationCtrl` for displaying
+Simple animation player classes, including `GIFAnimationCtrl` for displaying
 animated GIF files
 
 """
