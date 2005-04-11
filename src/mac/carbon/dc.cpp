@@ -457,11 +457,6 @@ void wxDC::DoSetClippingRegion( wxCoord x, wxCoord y, wxCoord width, wxCoord hei
 void wxDC::DoSetClippingRegionAsRegion( const wxRegion &region  )
 {
     wxCHECK_RET( Ok(), wxT("invalid window dc") ) ;
-    if (region.Empty())
-    {
-        DestroyClippingRegion();
-        return;
-    }
     wxMacFastPortSetter helper(this) ;
     wxCoord x, y, w, h;
     region.GetBox( x, y, w, h );
