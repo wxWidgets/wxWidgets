@@ -1551,8 +1551,8 @@ size_t wxString::Replace(const wxChar *szOld,
             //replace this occurance of the old string with the new one
             replace(dwPos, uiOldLen, szNew, uiNewLen);
 
-            //move up pos past the old string
-            dwPos += uiOldLen;
+            //move up pos past the string that was replaced
+            dwPos += uiNewLen;
 
             //increase replace count
             ++uiCount;

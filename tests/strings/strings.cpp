@@ -476,8 +476,8 @@ void StringTestCase::Replace()
             CPPUNIT_ASSERT( s == wxString(r,rlen) ); \
         }
     
-    TEST_WXREPLACE( _T("null\0char"), 9, _T("c"), _T("d"), true,
-                          _T("null\0dhar"), 9 );   
+    TEST_WXREPLACE( _T("null\0char"), 9, _T("c"), _T("de"), true,
+                          _T("null\0dehar"), 10 );   
 
     #undef TEST_WXREPLACE
     #undef TEST_NULLCHARREPLACE
