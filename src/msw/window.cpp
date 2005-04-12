@@ -3695,7 +3695,7 @@ bool wxWindowMSW::HandleDisplayChange()
 bool wxWindowMSW::HandleCtlColor(WXHBRUSH *brush, WXHDC hDC, WXHWND hWnd)
 {
 #if !wxUSE_CONTROLS || defined(__WXUNIVERSAL__)
-    wxUnusedVar(pDC);
+    wxUnusedVar(hDC);
     wxUnusedVar(hWnd);
 #else
     wxControl *item = wxDynamicCast(FindItemByHWND(hWnd, true), wxControl);
