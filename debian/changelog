@@ -1,4 +1,4 @@
-wxwidgets2.5 (2.6.0) unstable; urgency=low
+wxwidgets2.6 (2.6.0) unstable; urgency=low
 
   * 8 ... 9 ... 10.  Here it comes, ready or not...
   * make install includes archive.h now.  Closes: #294998
