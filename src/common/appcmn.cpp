@@ -580,10 +580,10 @@ void wxGUIAppTraitsBase::RemoveFromPendingDelete(wxObject *object)
 
 #if wxUSE_SOCKETS
 
-#if defined(__UNIX__) || defined(__DARWIN__) || defined(__OS2__)
-    #include "wx/unix/gsockunx.h"
-#elif defined(__WINDOWS__)
+#if defined(__WINDOWS__)
     #include "wx/msw/gsockmsw.h"
+#elif defined(__UNIX__) || defined(__DARWIN__) || defined(__OS2__)
+    #include "wx/unix/gsockunx.h"
 #elif defined(__WXMAC__)
   #include <MacHeaders.c>
   #define OTUNIXERRORS 1
