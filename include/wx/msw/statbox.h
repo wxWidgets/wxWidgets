@@ -64,9 +64,9 @@ protected:
     void PaintBackground(wxDC& dc, const struct tagRECT& rc);
 
     void OnPaint(wxPaintEvent& event);
+#endif // !__WXWINCE__
 
     DECLARE_DYNAMIC_CLASS_NO_COPY(wxStaticBox)
-#endif // !__WXWINCE__
 };
 
 #endif // _WX_MSW_STATBOX_H_
