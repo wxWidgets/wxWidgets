@@ -570,6 +570,10 @@ typedef struct {
     #define QS_ALLPOSTMESSAGE    0x0100
 #endif
 
+#ifndef WS_EX_TRANSPARENT
+    #define WS_EX_TRANSPARENT 0x00000020L
+#endif
+
 #ifndef WS_EX_CLIENTEDGE
     #define WS_EX_CLIENTEDGE 0x00000200L
 #endif

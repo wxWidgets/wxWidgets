@@ -42,6 +42,7 @@
 #include "wx/dcmemory.h"
 
 #include "wx/msw/private.h"
+#include "wx/msw/missing.h"
 
 // ----------------------------------------------------------------------------
 // wxWin macros
