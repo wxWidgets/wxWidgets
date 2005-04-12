@@ -47,7 +47,7 @@ IMPLEMENT_DYNAMIC_CLASS(wxIPV4address, wxIPaddress)
 #if wxUSE_IPV6
 IMPLEMENT_DYNAMIC_CLASS(wxIPV6address, wxIPaddress)
 #endif
-#if defined(__UNIX__) && !defined(__WINE__) && (!defined(__WXMAC__) || defined(__DARWIN__))
+#if defined(__UNIX__) && !defined(__WINDOWS__) && !defined(__WINE__) && (!defined(__WXMAC__) || defined(__DARWIN__))
 IMPLEMENT_DYNAMIC_CLASS(wxUNIXaddress, wxSockAddress)
 #endif
 
@@ -311,7 +311,7 @@ unsigned short wxIPV6address::Service() const
 
 #endif // wxUSE_IPV6
 
-#if defined(__UNIX__) && !defined(__WINE__) && (!defined(__WXMAC__) || defined(__DARWIN__))
+#if defined(__UNIX__) && !defined(__WINDOWS__) && !defined(__WINE__) && (!defined(__WXMAC__) || defined(__DARWIN__))
 
 // ---------------------------------------------------------------------------
 // wxUNIXaddress
