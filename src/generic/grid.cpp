@@ -4331,7 +4331,7 @@ void wxGrid::CalcDimensions()
         y = wxMax( h - 1, 0 );
 
     // do set scrollbar parameters
-    SetScrollbars( GRID_SCROLL_LINE_X, GRID_SCROLL_LINE_Y,
+    SetScrollbars( m_scrollLineX, m_scrollLineY,
                    GetScrollX(w), GetScrollY(h), x, y,
                    GetBatchCount() != 0);
 
@@ -8075,7 +8075,7 @@ void wxGrid::MakeCellVisible( int row, int col )
             //
             // Sometimes GRID_SCROLL_LINE/2 is not enough, so just add a full
             // scroll unit...
-            ypos += GRID_SCROLL_LINE_Y;
+            ypos += m_scrollLineY;
         }
 
         if ( left < 0 )
@@ -8090,15 +8090,15 @@ void wxGrid::MakeCellVisible( int row, int col )
             xpos = x0 + (right - cw);
 
             // see comment for ypos above
-            xpos += GRID_SCROLL_LINE_X;
+            xpos += m_scrollLineX;
         }
 
         if ( xpos != -1  ||  ypos != -1 )
         {
             if ( xpos != -1 )
-                xpos /= GRID_SCROLL_LINE_X;
+                xpos /= m_scrollLineX;
             if ( ypos != -1 )
-                ypos /= GRID_SCROLL_LINE_Y;
+                ypos /= m_scrollLineY;
             Scroll( xpos, ypos );
             AdjustScrollbars();
         }
@@ -9844,8 +9844,8 @@ void wxGrid::AutoSize()
     // won't get the scrollbars if we're sized exactly to this width
     // CalcDimension adds m_extraWidth + 1 etc. to calculate the necessary
     // scrollbar steps
-    wxSize sizeFit(GetScrollX(size.x + m_extraWidth + 1) * GRID_SCROLL_LINE_X,
-                   GetScrollY(size.y + m_extraHeight + 1) * GRID_SCROLL_LINE_Y);
+    wxSize sizeFit(GetScrollX(size.x + m_extraWidth + 1) * m_scrollLineX,
+                   GetScrollY(size.y + m_extraHeight + 1) * m_scrollLineY);
 
     // distribute the extra space between the columns/rows to avoid having
     // extra white space
