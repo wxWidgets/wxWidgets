@@ -1,3 +1,10 @@
+wxwidgets2.5 (2.6.0) unstable; urgency=low
+
+  * 8 ... 9 ... 10.  Here it comes, ready or not...
+  * make install includes archive.h now.  Closes: #294998
+
+ -- Ron Lee <ron@debian.org>  Wed, 13 Apr 2005 01:15:05 +0930
+
 wxwidgets2.5 (2.5.5.1) unstable; urgency=low
 
   * Last chance.
