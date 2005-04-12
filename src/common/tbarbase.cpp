@@ -451,7 +451,7 @@ wxToolBarBase::~wxToolBarBase()
 
     // notify the frame that it doesn't have a tool bar any longer to avoid
     // dangling pointers
-    wxFrameBase *frame = wxDynamicCast(GetParent(), wxFrameBase);
+    wxFrame *frame = wxDynamicCast(GetParent(), wxFrame);
     if ( frame && frame->GetToolBar() == this )
     {
         frame->SetToolBar(NULL);
