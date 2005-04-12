@@ -124,6 +124,9 @@ protected:
     // remove our event handlers
     void PopHandlers();
 
+    // get alerted when child gets deleted from under us
+    void OnDestroy(wxWindowDestroyEvent& event);
+
     // the child of this popup if any
     wxWindow *m_child;
 
