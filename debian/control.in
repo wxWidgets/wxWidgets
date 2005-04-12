@@ -98,7 +98,7 @@ Architecture: any
 Section: devel
 Depends: ${shlibs:Depends}
 Conflicts: wx-common
-Replaces: wx-common, wxwin2.4-headers, libwxgtk2.4-contrib-dev
+Replaces: wx-common, wxwin2.4-headers, libwxgtk2.4-contrib-dev, wx2.5-common
 Provides: wx-common
 Description: wxWidgets Cross-platform C++ GUI toolkit (common support files)
  wxWidgets (formerly known as wxWindows) is a class library for C++ providing
@@ -124,7 +124,7 @@ Package: wx=V-i18n
 Architecture: all
 Section: libs
 Conflicts: wx-i18n, wxwin-i18n, wx2.4-i18n
-Replaces: wx-i18n, wxwin-i18n, wx2.4-i18n
+Replaces: wx-i18n, wxwin-i18n, wx2.4-i18n, wx2.5-i18n
 Provides: wx-i18n
 Description: wxWidgets Cross-platform C++ GUI toolkit (i18n support)
  wxWidgets (formerly known as wxWindows) is a class library for C++ providing
