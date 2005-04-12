@@ -1068,7 +1068,7 @@ bool wxVariantDataDateTime::Eq(wxVariantData& data) const
 
 
 #if wxUSE_STD_IOSTREAM
-bool wxVariantDataDateTime::Write(wxSTD ostream& str) const
+bool wxVariantDataDateTime::Write(wxSTD ostream& WXUNUSED(str)) const
 {
     // Not implemented
     return false;
@@ -1156,7 +1156,7 @@ bool wxVariantDataArrayString::Eq(wxVariantData& data) const
 
 
 #if wxUSE_STD_IOSTREAM
-bool wxVariantDataArrayString::Write(wxSTD ostream& str) const
+bool wxVariantDataArrayString::Write(wxSTD ostream& WXUNUSED(str)) const
 {
     // Not implemented
     return false;
