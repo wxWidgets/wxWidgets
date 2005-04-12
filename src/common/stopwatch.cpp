@@ -286,7 +286,7 @@ wxLongLong wxGetLocalTimeMillis()
 
     // ftime() is void and not int in some mingw32 headers, so don't
     // test the return code (well, it shouldn't fail anyhow...)
-    (void)ftime(&tp);
+    (void)::ftime(&tp);
     val *= tp.time;
     return (val + tp.millitm);
 #elif defined(__WXMAC__)
