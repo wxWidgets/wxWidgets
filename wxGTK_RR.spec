@@ -1,4 +1,4 @@
-%define pref /opt/gnome
+%define _prefix /opt/gnome
 %define ver  2.6.0
 %define ver2 2.6
 %define rel  1
@@ -60,7 +60,7 @@ Group: X11/Libraries
 Source: wxGTK-%{ver}.tar.gz
 URL: http://www.wxwidgets.org
 Packager: Vadim Zeitlin <vadim@wxwindows.org>
-Prefix: %{pref}
+Prefix: %{_prefix}
 BuildRoot: %{_tmppath}/%{name}-root
 Requires: %{wxbasename} = %{ver}
 %if %{portname} == gtk2
@@ -152,7 +152,7 @@ fi
 
 mkdir obj-shared-no-gui
 cd obj-shared-no-gui
-../configure --prefix=%{pref} \
+../configure --prefix=%{_prefix} \
 			      --disable-gui \
 			      --disable-optimise \
 %if %{unicode}
@@ -165,7 +165,7 @@ cd ..
 
 mkdir obj-shared
 cd obj-shared
-../configure --prefix=%{pref} \
+../configure --prefix=%{_prefix} \
 %if ! %{gtk2}
 			      --with-gtk1 \
 %else
@@ -186,7 +186,7 @@ cd ../../..
 
 mkdir obj-static-no-gui
 cd obj-static-no-gui
-../configure --prefix=%{pref} \
+../configure --prefix=%{_prefix} \
 			      --disable-gui \
       			      --disable-shared \
 			      --disable-optimise \
@@ -200,7 +200,7 @@ cd ..
 
 mkdir obj-static
 cd obj-static
-../configure --prefix=%{pref} \
+../configure --prefix=%{_prefix} \
 %if ! %{gtk2}
 			      --with-gtk1 \
 %else
@@ -222,10 +222,10 @@ cd ../../..
 
 %install
 rm -rf $RPM_BUILD_ROOT
-(cd obj-static-no-gui; make prefix=$RPM_BUILD_ROOT/usr install)
-(cd obj-static; make prefix=$RPM_BUILD_ROOT/usr install)
-(cd obj-shared-no-gui; make prefix=$RPM_BUILD_ROOT/usr install)
-(cd obj-shared; make prefix=$RPM_BUILD_ROOT/usr install)
+(cd obj-static-no-gui; make DESTDIR=$RPM_BUILD_ROOT install)
+(cd obj-static; make DESTDIR=$RPM_BUILD_ROOT install)
+(cd obj-shared-no-gui; DESTDIR=$RPM_BUILD_ROOT install)
+(cd obj-shared; make DESTDIR=$RPM_BUILD_ROOT install)
 
 # --- wxBase headers list begins here ---
 cat <<EOF >wxbase-headers.files
@@ -349,6 +349,14 @@ wx/xtixml.h
 wx/db.h
 wx/dbkeyg.h
 wx/dbtable.h
+wx/unix/apptbase.h
+wx/unix/apptrait.h
+wx/unix/execute.h
+wx/unix/gsockunx.h
+wx/unix/mimetype.h
+wx/unix/pipe.h
+wx/unix/stackwalk.h
+wx/unix/stdpaths.h
 EOF
 # --- wxBase headers list ends here ---
 cat <<EOF >wxbase-headers.paths
@@ -472,6 +480,14 @@ cat <<EOF >wxbase-headers.paths
 %{_includedir}/wx-%{ver2}/wx/db.h
 %{_includedir}/wx-%{ver2}/wx/dbkeyg.h
 %{_includedir}/wx-%{ver2}/wx/dbtable.h
+%{_includedir}/wx-%{ver2}/wx/unix/apptbase.h
+%{_includedir}/wx-%{ver2}/wx/unix/apptrait.h
+%{_includedir}/wx-%{ver2}/wx/unix/execute.h
+%{_includedir}/wx-%{ver2}/wx/unix/gsockunx.h
+%{_includedir}/wx-%{ver2}/wx/unix/mimetype.h
+%{_includedir}/wx-%{ver2}/wx/unix/pipe.h
+%{_includedir}/wx-%{ver2}/wx/unix/stackwalk.h
+%{_includedir}/wx-%{ver2}/wx/unix/stdpaths.h
 EOF
 # --- wxBase headers list ends here ---
 
@@ -488,8 +504,8 @@ cp -f -r $RPM_BUILD_ROOT/_save_dir/* $RPM_BUILD_ROOT%{_includedir}
 rm -rf $RPM_BUILD_ROOT/_save_dir
 
 # contrib stuff:
-(cd obj-shared/contrib/src; make prefix=$RPM_BUILD_ROOT/usr install)
-(cd obj-shared/utils/wxrc; make prefix=$RPM_BUILD_ROOT/usr install)
+(cd obj-shared/contrib/src; make DESTDIR=$RPM_BUILD_ROOT install)
+(cd obj-shared/utils/wxrc; make DESTDIR=$RPM_BUILD_ROOT install)
 
 %clean
 rm -rf $RPM_BUILD_ROOT
