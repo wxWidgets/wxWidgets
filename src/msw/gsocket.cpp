@@ -43,6 +43,12 @@
 
 #endif /* _MSC_VER */
 
+#if defined(__CYGWIN__)
+    //CYGWIN gives annoying warning about runtime stuff if we don't do this
+#   define USE_SYS_TYPES_FD_SET
+#   include <sys/types.h>
+#endif
+
 #include <winsock.h>
 
 #ifndef __GSOCKET_STANDALONE__
