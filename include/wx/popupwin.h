@@ -124,6 +124,15 @@ protected:
     // remove our event handlers
     void PopHandlers();
 
+    // get alerted when child gets deleted from under us
+    void OnDestroy(wxWindowDestroyEvent& event);
+
+    void OnEnter(wxMouseEvent& event);
+    void OnLeave(wxMouseEvent& event);
+    void OnLeftDown(wxMouseEvent& event);
+    void OnChildEnter(wxMouseEvent& event);
+    void OnChildLeave(wxMouseEvent& event);
+    
     // the child of this popup if any
     wxWindow *m_child;
 
@@ -138,6 +147,7 @@ protected:
     wxPopupWindowHandler *m_handlerPopup;
     wxPopupFocusHandler  *m_handlerFocus;
 
+    DECLARE_EVENT_TABLE()
     DECLARE_DYNAMIC_CLASS(wxPopupTransientWindow)
     DECLARE_NO_COPY_CLASS(wxPopupTransientWindow)
 };
