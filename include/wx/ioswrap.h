@@ -17,6 +17,10 @@
 #   include <iostream>
 #endif
 
+#ifdef __WXMSW__
+#   include "wx/msw/winundef.h"
+#endif
+
 #endif
   // wxUSE_STD_IOSTREAM
 
