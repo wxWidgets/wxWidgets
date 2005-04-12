@@ -66,8 +66,7 @@ IMPLEMENT_DYNAMIC_CLASS(wxPopupTransientWindow, wxPopupWindow)
 class wxPopupWindowHandler : public wxEvtHandler
 {
 public:
-    wxPopupWindowHandler(wxPopupTransientWindow *popup) : m_popup(popup) {}
-    ~wxPopupWindowHandler();
+    wxPopupWindowHandler(wxPopupTransientWindow *popup) { m_popup = popup; }
 
 protected:
     // event handlers
@@ -83,8 +82,10 @@ private:
 class wxPopupFocusHandler : public wxEvtHandler
 {
 public:
-    wxPopupFocusHandler(wxPopupTransientWindow *popup) : m_popup(popup) {}
-    ~wxPopupFocusHandler();
+    wxPopupFocusHandler(wxPopupTransientWindow *popup)
+    {
+        m_popup = popup;
+    }
 
 protected:
     void OnKillFocus(wxFocusEvent& event);
@@ -168,14 +169,6 @@ void wxPopupWindowBase::Position(const wxPoint& ptOrigin,
 // wxPopupTransientWindow
 // ----------------------------------------------------------------------------
 
-BEGIN_EVENT_TABLE(wxPopupTransientWindow, wxPopupWindow)
-#ifdef __WXMSW__
-    EVT_ENTER_WINDOW(wxPopupTransientWindow::OnEnter)
-    EVT_LEAVE_WINDOW(wxPopupTransientWindow::OnLeave)
-    EVT_LEFT_DOWN(wxPopupTransientWindow::OnLeftDown)
-#endif
-END_EVENT_TABLE()
-
 void wxPopupTransientWindow::Init()
 {
     m_child =
@@ -212,10 +205,6 @@ void wxPopupTransientWindow::PopHandlers()
     }
 
 #ifdef __WXMSW__
-    if ( HasCapture() )
-    {
-        ReleaseMouse();
-    }    
     if ( m_focus )
     {
         if ( m_handlerFocus && !m_focus->RemoveEventHandler(m_handlerFocus) )
@@ -255,10 +244,6 @@ void wxPopupTransientWindow::Popup(wxWindow *winFocus)
 
     Show();
 
-    // There is is a problem if these are still valid
-    wxASSERT_MSG(!m_handlerPopup, wxT("Popup handler not deleted"));
-    wxASSERT_MSG(!m_handlerFocus, wxT("Focus handler not deleted"));
-
     delete m_handlerPopup;
     m_handlerPopup = new wxPopupWindowHandler(this);
 
@@ -287,31 +272,6 @@ void wxPopupTransientWindow::Popup(wxWindow *winFocus)
     PushEventHandler(m_handlerFocus);
 #endif // __WXMSW__
 
-    // catch destroy events, if you close a program with a popup shown in MSW
-    // you get a segfault if m_child or m_focus are deleted before this is
-    m_child->Connect(wxEVT_DESTROY,
-                     wxWindowDestroyEventHandler(wxPopupTransientWindow::OnDestroy),
-                     NULL, this);
-    m_focus->Connect(wxEVT_DESTROY,
-                     wxWindowDestroyEventHandler(wxPopupTransientWindow::OnDestroy),
-                     NULL, this);
-#ifdef __WXMSW__
-    // Assume that the mouse is currently outside of the popup window
-    CaptureMouse();
-
-    // Connect the child Enter/Leave events too, incase the child completly
-    // covers the popup (because then the popup's enter/leave events won't be
-    // sent.
-    if (m_child != this)
-    {
-        m_child->Connect(wxEVT_ENTER_WINDOW,
-                         wxMouseEventHandler(wxPopupTransientWindow::OnChildEnter),
-                         NULL, this);
-        m_child->Connect(wxEVT_LEAVE_WINDOW,
-                         wxMouseEventHandler(wxPopupTransientWindow::OnChildLeave),
-                         NULL, this);
-    }
-#endif
 }
 
 bool wxPopupTransientWindow::Show( bool show )
@@ -394,66 +354,6 @@ bool wxPopupTransientWindow::ProcessLeftDown(wxMouseEvent& WXUNUSED(event))
     return false;
 }
 
-void wxPopupTransientWindow::OnDestroy(wxWindowDestroyEvent& event)
-{
-    if (event.GetEventObject() == m_child)
-        m_child = NULL;
-    if (event.GetEventObject() == m_focus)
-        m_focus = NULL;
-}
-
-void wxPopupTransientWindow::OnEnter(wxMouseEvent& /*event*/)
-{
-    if ( HasCapture() )
-    {
-        ReleaseMouse();
-    }    
-}
-
-void wxPopupTransientWindow::OnLeave(wxMouseEvent& /*event*/)
-{
-    CaptureMouse();
-}
-
-void wxPopupTransientWindow::OnLeftDown(wxMouseEvent& event)
-{
-    if (m_handlerPopup && m_child && m_child != this)
-    {
-        m_child->GetEventHandler()->ProcessEvent(event);
-    }
-}
-
-
-
-// If the child is the same size as the popup window then handle the event,
-// otherwise assume that there is enough of the popup showing that it will get
-// it's own Enter/Leave events.  A more reliable way to detect this situation
-// would be appreciated...
-
-void wxPopupTransientWindow::OnChildEnter(wxMouseEvent& event)
-{
-    if (m_child)
-    {
-        wxSize cs = m_child->GetSize();
-        wxSize ps = GetClientSize();
-        
-        if ((cs.x * cs.y) >= (ps.x * ps.y))
-            OnEnter(event);
-    }
-}
-
-void wxPopupTransientWindow::OnChildLeave(wxMouseEvent& event)
-{
-    if (m_child)
-    {
-        wxSize cs = m_child->GetSize();
-        wxSize ps = GetClientSize();
-        
-        if ((cs.x * cs.y) >= (ps.x * ps.y))
-            OnLeave(event);
-    }
-}
-
 #if wxUSE_COMBOBOX && defined(__WXUNIVERSAL__)
 
 // ----------------------------------------------------------------------------
@@ -511,11 +411,6 @@ void wxPopupComboWindow::OnKeyDown(wxKeyEvent& event)
 // ----------------------------------------------------------------------------
 // wxPopupWindowHandler
 // ----------------------------------------------------------------------------
-wxPopupWindowHandler::~wxPopupWindowHandler()
-{
-    if (m_popup && (m_popup->m_handlerPopup == this))
-        m_popup->m_handlerPopup = NULL;
-}
 
 void wxPopupWindowHandler::OnLeftDown(wxMouseEvent& event)
 {
@@ -604,11 +499,6 @@ void wxPopupWindowHandler::OnLeftDown(wxMouseEvent& event)
 // ----------------------------------------------------------------------------
 // wxPopupFocusHandler
 // ----------------------------------------------------------------------------
-wxPopupFocusHandler::~wxPopupFocusHandler()
-{
-    if (m_popup && (m_popup->m_handlerFocus == this))
-        m_popup->m_handlerFocus = NULL;
-}
 
 void wxPopupFocusHandler::OnKillFocus(wxFocusEvent& event)
 {
