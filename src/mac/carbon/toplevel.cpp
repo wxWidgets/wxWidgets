@@ -1201,6 +1201,8 @@ void  wxTopLevelWindowMac::MacCreateRealWindow( const wxString& title,
     InstallStandardEventHandler( GetWindowEventTarget(MAC_WXHWND(m_macWindow)) ) ;
     MacInstallTopLevelWindowEventHandler() ;
 
+    DoSetWindowVariant( m_windowVariant ) ;
+
     m_macFocus = NULL ;
 
     if ( HasFlag(wxFRAME_SHAPED) )
