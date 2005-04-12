@@ -214,7 +214,7 @@ void wxPopupTransientWindow::PopHandlers()
 #ifdef __WXMSW__
     if ( HasCapture() )
     {
-        ReleaseCapture();
+        ReleaseMouse();
     }    
     if ( m_focus )
     {
@@ -406,7 +406,7 @@ void wxPopupTransientWindow::OnEnter(wxMouseEvent& /*event*/)
 {
     if ( HasCapture() )
     {
-        ReleaseCapture();
+        ReleaseMouse();
     }    
 }
 
