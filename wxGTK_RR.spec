@@ -19,7 +19,7 @@
 %if %{unicode}
     %define buildname gtk2u
 %else
-    %define buildname gtk2u
+    %define buildname gtk2
 %endif
 %else
     %define gtkver 1.2
@@ -154,7 +154,6 @@ mkdir obj-shared-no-gui
 cd obj-shared-no-gui
 ../configure --prefix=%{_prefix} \
 			      --disable-gui \
-			      --disable-optimise \
 %if %{unicode}
                               --enable-unicode
 %else
@@ -167,11 +166,10 @@ mkdir obj-shared
 cd obj-shared
 ../configure --prefix=%{_prefix} \
 %if ! %{gtk2}
-			      --with-gtk1 \
+			      --disable-gtk2 \
 %else
-			      --with-gtk2 \
+			      --enable-gtk2 \
 %endif
-			      --disable-optimise \
 %if %{unicode}
 			      --enable-unicode \
 %else
@@ -189,7 +187,6 @@ cd obj-static-no-gui
 ../configure --prefix=%{_prefix} \
 			      --disable-gui \
       			      --disable-shared \
-			      --disable-optimise \
 %if %{unicode}
                               --enable-unicode
 %else
@@ -202,12 +199,11 @@ mkdir obj-static
 cd obj-static
 ../configure --prefix=%{_prefix} \
 %if ! %{gtk2}
-			      --with-gtk1 \
+			      --disable-gtk2 \
 %else
-			      --with-gtk2 \
+			      --enable-gtk2 \
 %endif
 			      --disable-shared \
-			      --disable-optimise \
 %if %{unicode}
                 	      --enable-unicode \
 %else
@@ -224,7 +220,7 @@ cd ../../..
 rm -rf $RPM_BUILD_ROOT
 (cd obj-static-no-gui; make DESTDIR=$RPM_BUILD_ROOT install)
 (cd obj-static; make DESTDIR=$RPM_BUILD_ROOT install)
-(cd obj-shared-no-gui; DESTDIR=$RPM_BUILD_ROOT install)
+(cd obj-shared-no-gui; make DESTDIR=$RPM_BUILD_ROOT install)
 (cd obj-shared; make DESTDIR=$RPM_BUILD_ROOT install)
 
 # --- wxBase headers list begins here ---
