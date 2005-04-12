@@ -89,7 +89,7 @@ static wxSockAddress *
 GetAddressFromName(const wxString& serverName, const wxString& host = wxEmptyString)
 {
     // we always use INET sockets under non-Unix systems
-#if defined(__UNIX__) && !defined(__WXMAC__) && !defined(__WINE__)
+#if defined(__UNIX__) && !defined(__WINDOWS__) && !defined(__WXMAC__) && !defined(__WINE__)
     // under Unix, if the server name looks like a path, create a AF_UNIX
     // socket instead of AF_INET one
     if ( serverName.Find(_T('/')) != wxNOT_FOUND )
