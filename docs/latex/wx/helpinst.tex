@@ -18,7 +18,8 @@ names of the form wxXXXHelpController or wxHelpControllerXXX. An
 appropriate class is aliased to the name wxHelpController for each platform, as follows:
 
 \begin{itemize}\itemsep=0pt
-\item On Windows, wxWinHelpController is used.
+\item On desktop Windows, wxBestHelpController is used (MS HTML Help or WinHelp).
+\item On Windows CE, wxWinceHelpController is used.
 \item On all other platforms, wxHtmlHelpController is used if wxHTML is
 compiled into wxWidgets; otherwise wxExtHelpController is used (for invoking an external
 browser).

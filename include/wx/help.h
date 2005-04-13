@@ -27,9 +27,10 @@
 
     #define wxHelpController wxPalmHelpController
 #elif defined(__WXMSW__)
-    #include "wx/msw/helpwin.h"
+    #include "wx/msw/helpbest.h"
 
-    #define wxHelpController wxWinHelpController
+    // CHM or WinHelp, whichever is available
+    #define wxHelpController wxBestHelpController
 #else // !MSW
 
 #if wxUSE_WXHTML_HELP

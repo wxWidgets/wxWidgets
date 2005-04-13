@@ -1,18 +1,28 @@
--------------------------------------------------------------------
-wxWidgets 2.5 Change Log - For more verbose changes, see the manual
--------------------------------------------------------------------
+---------------------------------------------------------------
+wxWidgets Change Log - For more verbose changes, see the manual
+---------------------------------------------------------------
 
-2.6
+2.6.0
 -----
 
 All:
 
 - wxPathExists deprecated, use wxDirExists instead.
 
+All (GUI):
+
+- Fixed ~wxStatusBar and ~wxToolBar which tried to check
+  non-existent wxFrameBase RTTI, causing a crash if not in a frame.
+
 wxMSW:
 
-- fixed static box border when the label is empty
-- fixed SetBackgroundColour() to change only label background, not entire box
+- Fixed static box border when the label is empty.
+- Fixed SetBackgroundColour() to change only label background, not entire box.
+- wxHelpController is now aliased to wxBestHelpController.
+
+wxWinCE:
+
+- Fixed device origin setting and clipping region setting.
 
 2.5.5
 -----
@@ -42,7 +52,7 @@ All (GUI):
 - Added wxTE_BESTWRAP (based on patch by Mart Raudsepp).
 - wxEVT_COMMAND_SPLITTER_SASH_POS_CHANGED is now only sent once at the end of
   splitter dragging and not after each CHANGING event (Jacobo Vilella Vilahur).
-- Added wxImage::IsTransparent()
+- Added wxImage::IsTransparent().
 
 Unix:
 
