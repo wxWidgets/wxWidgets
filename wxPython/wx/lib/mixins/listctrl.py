@@ -402,6 +402,9 @@ class TextEditMixin:
 
     Authors:     Steve Zatz, Pim Van Heuven (pim@think-wize.com)
     """
+
+    editorBgColour = wx.Colour(255,255,175) # Yellow
+    editorFgColour = wx.Colour(0,0,0)       # black
         
     def __init__(self):
         #editor = wx.TextCtrl(self, -1, pos=(-1,-1), size=(-1,-1),
@@ -425,7 +428,8 @@ class TextEditMixin:
                   }[col_style]
         
         editor.Create(self, -1, style=style)
-        editor.SetBackgroundColour(wx.Colour(red=255,green=255,blue=175)) #Yellow
+        editor.SetBackgroundColour(self.editorBgColour)
+        editor.SetForegroundColour(self.editorFgColour)
         font = self.GetFont()
         editor.SetFont(font)
 
@@ -561,16 +565,33 @@ class TextEditMixin:
         self.curCol = col
 
     
+    # FIXME: this function is usually called twice - second time because
+    # it is binded to wx.EVT_KILL_FOCUS. Can it be avoided? (MW)
     def CloseEditor(self, evt=None):
         ''' Close the editor and save the new value to the ListCtrl. '''
         text = self.editor.GetValue()
         self.editor.Hide()
-        if self.IsVirtual():
-            # replace by whather you use to populate the virtual ListCtrl
-            # data source
-            self.SetVirtualData(self.curRow, self.curCol, text)
-        else:
-            self.SetStringItem(self.curRow, self.curCol, text)
+        self.SetFocus()
+        
+        # post wxEVT_COMMAND_LIST_END_LABEL_EDIT
+        # Event can be vetoed. It doesn't has SetEditCanceled(), what would 
+        # require passing extra argument to CloseEditor() 
+        evt = wx.ListEvent(wx.wxEVT_COMMAND_LIST_END_LABEL_EDIT, self.GetId())
+        evt.m_itemIndex = self.curRow
+        evt.m_col = self.curCol
+        item = self.GetItem(self.curRow, self.curCol)
+        evt.m_item.SetId(item.GetId()) 
+        evt.m_item.SetColumn(item.GetColumn()) 
+        evt.m_item.SetData(item.GetData()) 
+        evt.m_item.SetText(text) #should be empty string if editor was canceled
+        ret = self.GetEventHandler().ProcessEvent(evt)
+        if not ret or evt.IsAllowed():
+            if self.IsVirtual():
+                # replace by whather you use to populate the virtual ListCtrl
+                # data source
+                self.SetVirtualData(self.curRow, self.curCol, text)
+            else:
+                self.SetStringItem(self.curRow, self.curCol, text)
         self.RefreshItem(self.curRow)
 
     def _SelectIndex(self, row):
