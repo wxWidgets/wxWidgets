@@ -103,10 +103,10 @@ static const int MM_METRIC = 10;
  */
 
 #ifdef __WXWINCE__
-    #define XLOG2DEV(x) ((x-m_logicalOriginX)*m_signX+m_deviceOriginX)
-    #define YLOG2DEV(y) ((y-m_logicalOriginY)*m_signY+m_deviceOriginY)
-    #define XDEV2LOG(x) ((x-m_deviceOriginX)*m_signX+m_logicalOriginX)
-    #define YDEV2LOG(y) ((y-m_deviceOriginY)*m_signY+m_logicalOriginY)
+    #define XLOG2DEV(x) ((x-m_logicalOriginX)*m_signX)
+    #define YLOG2DEV(y) ((y-m_logicalOriginY)*m_signY)
+    #define XDEV2LOG(x) ((x)*m_signX+m_logicalOriginX)
+    #define YDEV2LOG(y) ((y)*m_signY+m_logicalOriginY)
 #else
     #define XLOG2DEV(x) (x)
     #define YLOG2DEV(y) (y)
@@ -406,6 +406,12 @@ void wxDC::SetClippingHrgn(WXHRGN hrgn)
     RECT rectClip;
     if ( !::GetClipBox(GetHdc(), &rectClip) )
         return;
+
+    // GetClipBox returns logical coordinates, so transform to device
+    rectClip.left = LogicalToDeviceX(rectClip.left);
+    rectClip.top = LogicalToDeviceY(rectClip.top);
+    rectClip.right = LogicalToDeviceX(rectClip.right);
+    rectClip.bottom = LogicalToDeviceY(rectClip.bottom);
 
     HRGN hrgnDest = ::CreateRectRgn(0, 0, 0, 0);
     HRGN hrgnClipOld = ::CreateRectRgn(rectClip.left, rectClip.top,
@@ -1835,9 +1841,7 @@ void wxDC::SetDeviceOrigin(wxCoord x, wxCoord y)
     m_deviceOriginX = x;
     m_deviceOriginY = y;
 
-#ifndef __WXWINCE__
     ::SetViewportOrgEx(GetHdc(), (int)m_deviceOriginX, (int)m_deviceOriginY, NULL);
-#endif
 }
 
 // ---------------------------------------------------------------------------
