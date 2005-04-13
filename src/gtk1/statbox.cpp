@@ -78,7 +78,7 @@ bool wxStaticBox::Create( wxWindow *parent,
         xalign = 0.0;
 
     if ( xalign )
-        gtk_frame_set_label_align(GTK_FRAME( m_widget ), xalign, 0.0);
+        gtk_frame_set_label_align(GTK_FRAME( m_widget ), xalign, 0.5);
 
     return TRUE;
 }
