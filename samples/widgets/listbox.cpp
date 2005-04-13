@@ -134,10 +134,11 @@ protected:
     wxRadioBox *m_radioSelMode;
 
     // the checkboxes
-    wxCheckBox *m_chkSort,
-               *m_chkCheck,
+    wxCheckBox *m_chkVScroll,
                *m_chkHScroll,
-               *m_chkVScroll;
+               *m_chkCheck,
+               *m_chkSort,
+               *m_chkOwnerDraw;
 
     // the listbox itself and the sizer it is in
     wxListBox *m_lbox;
@@ -205,7 +206,8 @@ ListboxWidgetsPage::ListboxWidgetsPage(wxBookCtrl *book,
     m_chkVScroll =
     m_chkHScroll =
     m_chkCheck =
-    m_chkSort = (wxCheckBox *)NULL;
+    m_chkSort =
+    m_chkOwnerDraw = (wxCheckBox *)NULL;
 
     m_lbox = (wxListBox *)NULL;
     m_sizerLbox = (wxSizer *)NULL;
@@ -247,6 +249,7 @@ ListboxWidgetsPage::ListboxWidgetsPage(wxBookCtrl *book,
                    );
     m_chkCheck = CreateCheckBoxAndAddToSizer(sizerLeft, _T("&Check list box"));
     m_chkSort = CreateCheckBoxAndAddToSizer(sizerLeft, _T("&Sort items"));
+    m_chkOwnerDraw = CreateCheckBoxAndAddToSizer(sizerLeft, _T("&Owner drawn"));
 
     sizerLeft->Add(5, 5, 0, wxGROW | wxALL, 5); // spacer
     sizerLeft->Add(m_radioSelMode, 0, wxGROW | wxALL, 5);
@@ -322,10 +325,11 @@ ListboxWidgetsPage::ListboxWidgetsPage(wxBookCtrl *book,
 void ListboxWidgetsPage::Reset()
 {
     m_radioSelMode->SetSelection(LboxSel_Single);
-    m_chkSort->SetValue(false);
-    m_chkCheck->SetValue(false);
-    m_chkHScroll->SetValue(true);
     m_chkVScroll->SetValue(false);
+    m_chkHScroll->SetValue(true);
+    m_chkCheck->SetValue(false);
+    m_chkSort->SetValue(false);
+    m_chkOwnerDraw->SetValue(false);
 }
 
 void ListboxWidgetsPage::CreateLbox()
@@ -347,6 +351,8 @@ void ListboxWidgetsPage::CreateLbox()
         flags |= wxLB_HSCROLL;
     if ( m_chkSort->GetValue() )
         flags |= wxLB_SORT;
+    if ( m_chkOwnerDraw->GetValue() )
+        flags |= wxLB_OWNERDRAW;
 
     wxArrayString items;
     if ( m_lbox )
@@ -468,6 +474,7 @@ void ListboxWidgetsPage::OnUpdateUIResetButton(wxUpdateUIEvent& event)
 {
     event.Enable( (m_radioSelMode->GetSelection() != LboxSel_Single) ||
                   m_chkSort->GetValue() ||
+                  m_chkOwnerDraw->GetValue() ||
                   !m_chkHScroll->GetValue() ||
                   m_chkVScroll->GetValue() );
 }

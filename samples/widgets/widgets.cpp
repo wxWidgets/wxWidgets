@@ -43,6 +43,7 @@
 #include "wx/bookctrl.h"
 #include "wx/sizer.h"
 #include "wx/colordlg.h"
+#include "wx/fontdlg.h"
 #include "wx/textdlg.h"
 
 #include "widgets.h"
@@ -60,7 +61,8 @@ enum
     Widgets_SetTooltip,
 #endif // wxUSE_TOOLTIPS
     Widgets_SetFgColour,
-    Widgets_SetBgColour
+    Widgets_SetBgColour,
+    Widgets_SetFont
 };
 
 // ----------------------------------------------------------------------------
@@ -100,6 +102,7 @@ protected:
 #endif // wxUSE_TOOLTIPS
     void OnSetFgCol(wxCommandEvent& event);
     void OnSetBgCol(wxCommandEvent& event);
+    void OnSetFont(wxCommandEvent& event);
 #endif // wxUSE_MENUS
 
     // initialize the book: add all pages to it
@@ -124,9 +127,10 @@ private:
     wxImageList *m_imaglist;
 
 #if wxUSE_MENUS
-    // last chosen fg/bg colours
+    // last chosen fg/bg colours and font
     wxColour m_colFg,
              m_colBg;
+    wxFont   m_font;
 #endif // wxUSE_MENUS
 
     // any class wishing to process wxWidgets events must use this macro
@@ -217,6 +221,7 @@ BEGIN_EVENT_TABLE(WidgetsFrame, wxFrame)
 
     EVT_MENU(Widgets_SetFgColour, WidgetsFrame::OnSetFgCol)
     EVT_MENU(Widgets_SetBgColour, WidgetsFrame::OnSetBgCol)
+    EVT_MENU(Widgets_SetFont,     WidgetsFrame::OnSetFont)
 
     EVT_MENU(wxID_EXIT, WidgetsFrame::OnExit)
 END_EVENT_TABLE()
@@ -293,6 +298,7 @@ WidgetsFrame::WidgetsFrame(const wxString& title)
 #endif // wxUSE_TOOLTIPS
     menuWidget->Append(Widgets_SetFgColour, _T("Set &foreground...\tCtrl-F"));
     menuWidget->Append(Widgets_SetBgColour, _T("Set &background...\tCtrl-B"));
+    menuWidget->Append(Widgets_SetFont,     _T("Set f&ont...\tCtrl-O"));
     menuWidget->AppendSeparator();
     menuWidget->Append(wxID_EXIT, _T("&Quit\tCtrl-Q"));
     mbar->Append(menuWidget, _T("&Widget"));
@@ -462,13 +468,17 @@ void WidgetsFrame::OnSetTooltip(wxCommandEvent& WXUNUSED(event))
 void WidgetsFrame::OnSetFgCol(wxCommandEvent& WXUNUSED(event))
 {
 #if wxUSE_COLOURDLG
+    // allow for debugging the default colour the first time this is called
+    WidgetsPage *page = wxStaticCast(m_book->GetCurrentPage(), WidgetsPage);
+    if (!m_colFg.Ok())
+        m_colFg = page->GetForegroundColour();
+
     wxColour col = wxGetColourFromUser(this, m_colFg);
     if ( !col.Ok() )
         return;
 
     m_colFg = col;
 
-    WidgetsPage *page = wxStaticCast(m_book->GetCurrentPage(), WidgetsPage);
     page->GetWidget()->SetForegroundColour(m_colFg);
     page->GetWidget()->Refresh();
 
@@ -486,13 +496,16 @@ void WidgetsFrame::OnSetFgCol(wxCommandEvent& WXUNUSED(event))
 void WidgetsFrame::OnSetBgCol(wxCommandEvent& WXUNUSED(event))
 {
 #if wxUSE_COLOURDLG
+    WidgetsPage *page = wxStaticCast(m_book->GetCurrentPage(), WidgetsPage);
+    if ( !m_colBg.Ok() )
+        m_colBg = page->GetBackgroundColour();
+
     wxColour col = wxGetColourFromUser(this, m_colBg);
     if ( !col.Ok() )
         return;
 
     m_colBg = col;
 
-    WidgetsPage *page = wxStaticCast(m_book->GetCurrentPage(), WidgetsPage);
     page->GetWidget()->SetBackgroundColour(m_colBg);
     page->GetWidget()->Refresh();
 
@@ -504,6 +517,33 @@ void WidgetsFrame::OnSetBgCol(wxCommandEvent& WXUNUSED(event))
     }
 #else
     wxLogMessage(_T("Colour selection dialog not available in current build."));
+#endif
+}
+
+void WidgetsFrame::OnSetFont(wxCommandEvent& WXUNUSED(event))
+{
+#if wxUSE_FONTDLG
+    WidgetsPage *page = wxStaticCast(m_book->GetCurrentPage(), WidgetsPage);
+    if (!m_font.Ok())
+        m_font = page->GetFont();
+
+    wxFont font = wxGetFontFromUser(this, m_font);
+    if ( !font.Ok() )
+        return;
+
+    m_font = font;
+
+    page->GetWidget()->SetFont(m_font);
+    page->GetWidget()->Refresh();
+
+    wxControl *ctrl2 = page->GetWidget2();
+    if ( ctrl2 )
+    {
+        ctrl2->SetFont(m_font);
+        ctrl2->Refresh();
+    }
+#else
+    wxLogMessage(_T("Font selection dialog not available in current build."));
 #endif
 }
 
