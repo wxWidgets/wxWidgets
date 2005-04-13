@@ -33,7 +33,7 @@
     %define wxconfigstatic	%{portname}-unicode-release-static-%{ver2}
     %define wxconfiglink	wx%{portname}u-%{ver2}-config
 %else
-    %define name		wx-%{portname}
+    %define name		wx-%{portname}-ansi
     %define wxconfig		%{portname}-ansi-release-%{ver2}
     %define wxconfigstatic	%{portname}-ansi-release-static-%{ver2}
     %define wxconfiglink	wx%{portname}-%{ver2}-config
@@ -174,6 +174,7 @@ cd obj-shared
 			      --enable-unicode \
 %else
 			      --disable-unicode \
+			      --with-odbc \
 %endif
 			      --with-opengl
 $MAKE
@@ -208,6 +209,7 @@ cd obj-static
                 	      --enable-unicode \
 %else
             		      --disable-unicode \
+			      --with-odbc \
 %endif
             		      --with-opengl
 $MAKE
