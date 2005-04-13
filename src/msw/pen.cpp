@@ -128,11 +128,11 @@ bool wxPen::RealizeResource()
 #if !defined(__WXMICROWIN__) && !defined(__WXWINCE__)
    // Only NT can display dashed or dotted lines with width > 1
    if ( os != wxWINDOWS_NT &&
-           (M_PENDATA->m_style & (wxDOT |
-                                  wxLONG_DASH |
-                                  wxSHORT_DASH |
-                                  wxDOT_DASH |
-                                  wxUSER_DASH)) &&
+           (M_PENDATA->m_style == wxDOT ||
+            M_PENDATA->m_style == wxLONG_DASH ||
+            M_PENDATA->m_style == wxSHORT_DASH ||
+            M_PENDATA->m_style == wxDOT_DASH ||
+            M_PENDATA->m_style == wxUSER_DASH) &&
             M_PENDATA->m_width > 1 )
    {
        M_PENDATA->m_width = 1;
