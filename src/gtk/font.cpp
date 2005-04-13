@@ -240,7 +240,7 @@ void wxFontRefData::InitFromNative()
     int pango_size = pango_font_description_get_size( desc );
     if (pango_size == 0)
         pango_font_description_set_size( desc, 12 * PANGO_SCALE);
-        
+
     m_pointSize = pango_font_description_get_size( desc ) / PANGO_SCALE;
 
     switch (pango_font_description_get_style( desc ))
@@ -256,26 +256,19 @@ void wxFontRefData::InitFromNative()
             break;
     }
 
-    switch (pango_font_description_get_weight( desc ))
+    PangoWeight pango_weight = pango_font_description_get_weight( desc );
+
+    if (pango_weight >= 600)
     {
-        case PANGO_WEIGHT_ULTRALIGHT:
-            m_weight = wxFONTWEIGHT_LIGHT;
-            break;
-        case PANGO_WEIGHT_LIGHT:
-            m_weight = wxFONTWEIGHT_LIGHT;
-            break;
-        case PANGO_WEIGHT_NORMAL:
-            m_weight = wxFONTWEIGHT_NORMAL;
-            break;
-        case PANGO_WEIGHT_BOLD:
-            m_weight = wxFONTWEIGHT_BOLD;
-            break;
-        case PANGO_WEIGHT_ULTRABOLD:
-            m_weight = wxFONTWEIGHT_BOLD;
-            break;
-        case PANGO_WEIGHT_HEAVY:
-            m_weight = wxFONTWEIGHT_BOLD;
-            break;
+        m_weight = wxFONTWEIGHT_BOLD;
+    }
+    else if (pango_weight < 350)
+    {
+        m_weight = wxFONTWEIGHT_LIGHT;
+    }
+    else
+    {
+        m_weight = wxFONTWEIGHT_NORMAL;
     }
 
     if (m_faceName == wxT("monospace"))
@@ -960,7 +953,7 @@ GdkFont *wxFont::GetInternalFont( float scale ) const
                                                M_FONTDATA->m_faceName,
                                                M_FONTDATA->m_encoding,
                                                &xfontname);
-                // NB: wxFont::GetNativeFontInfo relies on this 
+                // NB: wxFont::GetNativeFontInfo relies on this
                 //     side-effect of GetInternalFont
                 if ( int_scale == 100 )
                     M_FONTDATA->m_nativeFontInfo.SetXFontName(xfontname);

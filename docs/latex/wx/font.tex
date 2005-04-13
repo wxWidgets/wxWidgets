@@ -36,6 +36,19 @@ enum wxFontFamily
 };
 \end{verbatim}
 
+The possible values for the \arg{weight} parameter are (the old names
+are for compatibility only):
+
+\begin{verbatim}
+enum wxFontWeight
+{
+    wxFONTWEIGHT_NORMAL = wxNORMAL,
+    wxFONTWEIGHT_LIGHT = wxLIGHT,
+    wxFONTWEIGHT_BOLD = wxBOLD,
+    wxFONTWEIGHT_MAX
+};
+\end{verbatim}
+
 The font flags which can be used during the font creation are:
 
 \begin{verbatim}
@@ -152,11 +165,11 @@ wxSWISS\_FONT}
 
 Default constructor.
 
-\func{}{wxFont}{\param{int}{ pointSize}, \param{wxFontFamily}{ family}, \param{int}{ style}, \param{int}{ weight},
+\func{}{wxFont}{\param{int}{ pointSize}, \param{wxFontFamily}{ family}, \param{int}{ style}, \param{wxFontWeight}{ weight},
  \param{const bool}{ underline = false}, \param{const wxString\& }{faceName = ""},
  \param{wxFontEncoding }{encoding = wxFONTENCODING\_DEFAULT}}
 
-\func{}{wxFont}{\param{int}{ pixelSize}, \param{int}{ family}, \param{int}{ style}, \param{int}{ weight},
+\func{}{wxFont}{\param{int}{ pixelSize}, \param{wxFontFamily}{ family}, \param{int}{ style}, \param{wxFontWeight}{ weight},
  \param{const bool}{ underline = false}, \param{const wxString\& }{faceName = ""},
  \param{wxFontEncoding }{encoding = wxFONTENCODING\_DEFAULT}}
 
@@ -175,17 +188,25 @@ the static \helpref{New}{wxfontnew} method must be used.}
 
 \twocolwidtha{5cm}
 \begin{twocollist}\itemsep=0pt
-\twocolitem{{\bf wxDEFAULT}}{Chooses a default font.}
-\twocolitem{{\bf wxDECORATIVE}}{A decorative font.}
-\twocolitem{{\bf wxROMAN}}{A formal, serif font.}
-\twocolitem{{\bf wxSCRIPT}}{A handwriting font.}
-\twocolitem{{\bf wxSWISS}}{A sans-serif font.}
-\twocolitem{{\bf wxMODERN}}{A fixed pitch font.}
+\twocolitem{{\bf wxFONTFAMILY\_DEFAULT}}{Chooses a default font.}
+\twocolitem{{\bf wxFONTFAMILY\_DECORATIVE}}{A decorative font.}
+\twocolitem{{\bf wxFONTFAMILY\_ROMAN}}{A formal, serif font.}
+\twocolitem{{\bf wxFONTFAMILY\_SCRIPT}}{A handwriting font.}
+\twocolitem{{\bf wxFONTFAMILY\_SWISS}}{A sans-serif font.}
+\twocolitem{{\bf wxFONTFAMILY\_MODERN}}{A fixed pitch font.}
+\twocolitem{{\bf wxFONTFAMILY\_TELETYPE}}{A teletype font.}
 \end{twocollist}}
 
-\docparam{style}{One of {\bf wxNORMAL}, {\bf wxSLANT} and {\bf wxITALIC}.}
+\docparam{style}{One of {\bf wxFONTSTYLE\_NORMAL}, {\bf wxFONTSTYLE\_SLANT} and {\bf wxFONTSTYLE\_ITALIC}.}
 
-\docparam{weight}{One of {\bf wxNORMAL}, {\bf wxLIGHT} and {\bf wxBOLD}.}
+\docparam{weight}{Font weight, sometimes also referred to as font boldness. One of:
+
+\twocolwidtha{5cm}
+\begin{twocollist}\itemsep=0pt
+\twocolitem{{\bf wxFONTWEIGHT\_NORMAL}}{Normal font.}
+\twocolitem{{\bf wxFONTWEIGHT\_LIGHT}}{Light font.}
+\twocolitem{{\bf wxFONTWEIGHT\_BOLD}}{Bold font.}
+\end{twocollist}}
 
 \docparam{underline}{The value can be true or false. At present this has an effect on Windows and Motif 2.x only.}
 
@@ -197,7 +218,7 @@ a default typeface will be chosen based on the family.}
 \begin{twocollist}\itemsep=0pt
 \twocolitem{{\bf wxFONTENCODING\_SYSTEM}}{Default system encoding.}
 \twocolitem{{\bf wxFONTENCODING\_DEFAULT}}{Default application encoding: this
-is the encoding set by calls to 
+is the encoding set by calls to
 \helpref{SetDefaultEncoding}{wxfontsetdefaultencoding} and which may be set to,
 say, KOI8 to create all fonts by default with KOI8 encoding. Initially, the
 default application encoding is the same as default system encoding.}
@@ -239,7 +260,7 @@ application data structure, and there is a risk of double deletion.
 
 \constfunc{bool}{IsFixedWidth}{\void}
 
-Returns {\tt true} if the font is a fixed width (or monospaced) font, 
+Returns {\tt true} if the font is a fixed width (or monospaced) font,
 {\tt false} if it is a proportional one or font is invalid.
 
 
@@ -251,7 +272,7 @@ Returns the current application's default encoding.
 
 \wxheading{See also}
 
-\helpref{Font encoding overview}{wxfontencodingoverview}, 
+\helpref{Font encoding overview}{wxfontencodingoverview},
 \helpref{SetDefaultEncoding}{wxfontsetdefaultencoding}
 
 
@@ -269,9 +290,9 @@ typeface information.
 
 \membersection{wxFont::GetFamily}\label{wxfontgetfamily}
 
-\constfunc{int}{GetFamily}{\void}
+\constfunc{wxFontFamily}{GetFamily}{\void}
 
-Gets the font family. See \helpref{wxFont::wxFont}{wxfontctor} for a list of valid
+Gets the font family. See \helpref{wxFont::SetFamily}{wxfontsetfamily} for a list of valid
 family identifiers.
 
 \wxheading{See also}
@@ -327,7 +348,7 @@ Returns true if the font is underlined, false otherwise.
 
 \membersection{wxFont::GetWeight}\label{wxfontgetweight}
 
-\constfunc{int}{GetWeight}{\void}
+\constfunc{wxFontWeight}{GetWeight}{\void}
 
 Gets the font weight. See \helpref{wxFont::wxFont}{wxfontctor} for a list of valid
 weight identifiers.
@@ -339,19 +360,19 @@ weight identifiers.
 
 \membersection{wxFont::New}\label{wxfontnew}
 
-\func{static wxFont *}{New}{\param{int}{ pointSize}, \param{wxFontFamily}{ family}, \param{int}{ style}, \param{int}{ weight},
+\func{static wxFont *}{New}{\param{int}{ pointSize}, \param{wxFontFamily}{ family}, \param{int}{ style}, \param{wxFontWeight}{ weight},
  \param{const bool}{ underline = false}, \param{const wxString\& }{faceName = ""},
  \param{wxFontEncoding }{encoding = wxFONTENCODING\_DEFAULT}}
 
-\func{static wxFont *}{New}{\param{int}{ pointSize}, \param{wxFontFamily}{ family}, 
+\func{static wxFont *}{New}{\param{int}{ pointSize}, \param{wxFontFamily}{ family},
  \param{int}{ flags = \texttt{wxFONTFLAG\_DEFAULT}}, \param{const wxString\& }{faceName = ""},
  \param{wxFontEncoding }{encoding = wxFONTENCODING\_DEFAULT}}
 
-\func{static wxFont *}{New}{\param{const wxSize\&}{ pixelSize}, \param{wxFontFamily}{ family}, \param{int}{ style}, \param{int}{ weight},
+\func{static wxFont *}{New}{\param{const wxSize\&}{ pixelSize}, \param{wxFontFamily}{ family}, \param{int}{ style}, \param{wxFontWeight}{ weight},
  \param{const bool}{ underline = false}, \param{const wxString\& }{faceName = ""},
  \param{wxFontEncoding }{encoding = wxFONTENCODING\_DEFAULT}}
 
-\func{static wxFont *}{New}{\param{const wxSize\&}{ pixelSize}, \param{wxFontFamily}{ family}, 
+\func{static wxFont *}{New}{\param{const wxSize\&}{ pixelSize}, \param{wxFontFamily}{ family},
  \param{int}{ flags = \texttt{wxFONTFLAG\_DEFAULT}}, \param{const wxString\& }{faceName = ""},
  \param{wxFontEncoding }{encoding = wxFONTENCODING\_DEFAULT}}
 
@@ -377,7 +398,7 @@ Sets the default font encoding.
 
 \wxheading{See also}
 
-\helpref{Font encoding overview}{wxfontencodingoverview}, 
+\helpref{Font encoding overview}{wxfontencodingoverview},
 \helpref{GetDefaultEncoding}{wxfontgetdefaultencoding}
 
 
@@ -405,7 +426,7 @@ and then for a font belonging to the same family.
 
 \membersection{wxFont::SetFamily}\label{wxfontsetfamily}
 
-\func{void}{SetFamily}{\param{int}{ family}}
+\func{void}{SetFamily}{\param{wxFontFamily}{ family}}
 
 Sets the font family.
 
@@ -415,12 +436,13 @@ Sets the font family.
 
 \twocolwidtha{5cm}
 \begin{twocollist}\itemsep=0pt
-\twocolitem{{\bf wxDEFAULT}}{Chooses a default font.}
-\twocolitem{{\bf wxDECORATIVE}}{A decorative font.}
-\twocolitem{{\bf wxROMAN}}{A formal, serif font.}
-\twocolitem{{\bf wxSCRIPT}}{A handwriting font.}
-\twocolitem{{\bf wxSWISS}}{A sans-serif font.}
-\twocolitem{{\bf wxMODERN}}{A fixed pitch font.}
+\twocolitem{{\bf wxFONTFAMILY\_DEFAULT}}{Chooses a default font.}
+\twocolitem{{\bf wxFONTFAMILY\_DECORATIVE}}{A decorative font.}
+\twocolitem{{\bf wxFONTFAMILY\_ROMAN}}{A formal, serif font.}
+\twocolitem{{\bf wxFONTFAMILY\_SCRIPT}}{A handwriting font.}
+\twocolitem{{\bf wxFONTFAMILY\_SWISS}}{A sans-serif font.}
+\twocolitem{{\bf wxFONTFAMILY\_MODERN}}{A fixed pitch font.}
+\twocolitem{{\bf wxFONTFAMILY\_TELETYPE}}{A teletype font.}
 \end{twocollist}}
 
 \wxheading{See also}
@@ -433,7 +455,7 @@ Sets the font family.
 \func{void}{SetNativeFontInfo}{\param{const wxString\& }{info}}
 
 Creates the font corresponding to the given native font description string
-which must have been previously returned by 
+which must have been previously returned by
 \helpref{GetNativeFontInfoDesc}{wxfontgetnativefontinfodesc}. If the string is
 invalid, font is unchanged.
 
@@ -461,7 +483,7 @@ Sets the font style.
 
 \wxheading{Parameters}
 
-\docparam{style}{One of {\bf wxNORMAL}, {\bf wxSLANT} and {\bf wxITALIC}.}
+\docparam{style}{One of {\bf wxFONTSTYLE\_NORMAL}, {\bf wxFONTSTYLE\_SLANT} and {\bf wxFONTSTYLE\_ITALIC}.}
 
 \wxheading{See also}
 
@@ -485,13 +507,20 @@ Sets underlining.
 
 \membersection{wxFont::SetWeight}\label{wxfontsetweight}
 
-\func{void}{SetWeight}{\param{int}{ weight}}
+\func{void}{SetWeight}{\param{wxFontWeight}{ weight}}
 
 Sets the font weight.
 
 \wxheading{Parameters}
 
-\docparam{weight}{One of {\bf wxNORMAL}, {\bf wxLIGHT} and {\bf wxBOLD}.}
+\docparam{weight}{One of:
+
+\twocolwidtha{5cm}
+\begin{twocollist}\itemsep=0pt
+\twocolitem{{\bf wxFONTWEIGHT\_NORMAL}}{Normal font.}
+\twocolitem{{\bf wxFONTWEIGHT\_LIGHT}}{Light font.}
+\twocolitem{{\bf wxFONTWEIGHT\_BOLD}}{Bold font.}
+\end{twocollist}}
 
 \wxheading{See also}
 

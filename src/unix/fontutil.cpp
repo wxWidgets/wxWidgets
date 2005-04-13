@@ -29,6 +29,7 @@
 #endif
 
 #ifndef WX_PRECOMP
+    #include "wx/font.h" // wxFont enums
     #include "wx/encinfo.h"
 #endif // PCH
 
@@ -99,31 +100,27 @@ wxFontStyle wxNativeFontInfo::GetStyle() const
 
 wxFontWeight wxNativeFontInfo::GetWeight() const
 {
-    wxFontWeight m_weight = wxFONTWEIGHT_NORMAL;
+#if 0
+    // We seem to currently initialize only by string.
+    // In that case PANGO_FONT_MASK_WEIGHT is always set.
+    if (!(pango_font_description_get_set_fields(description) & PANGO_FONT_MASK_WEIGHT))
+        return wxFONTWEIGHT_NORMAL;
+#endif
 
-    switch (pango_font_description_get_weight( description ))
-    {
-        case PANGO_WEIGHT_ULTRALIGHT:
-            m_weight = wxFONTWEIGHT_LIGHT;
-            break;
-        case PANGO_WEIGHT_LIGHT:
-            m_weight = wxFONTWEIGHT_LIGHT;
-            break;
-        case PANGO_WEIGHT_NORMAL:
-            m_weight = wxFONTWEIGHT_NORMAL;
-            break;
-        case PANGO_WEIGHT_BOLD:
-            m_weight = wxFONTWEIGHT_BOLD;
-            break;
-        case PANGO_WEIGHT_ULTRABOLD:
-            m_weight = wxFONTWEIGHT_BOLD;
-            break;
-        case PANGO_WEIGHT_HEAVY:
-            m_weight = wxFONTWEIGHT_BOLD;
-            break;
-    }
+    PangoWeight pango_weight = pango_font_description_get_weight( description );
 
-    return m_weight;
+    // Until the API can be changed the following ranges of weight values are used:
+    // wxFONTWEIGHT_LIGHT:  100 .. 349 - range of 250
+    // wxFONTWEIGHT_NORMAL: 350 .. 599 - range of 250
+    // wxFONTWEIGHT_BOLD:   600 .. 900 - range of 301 (600 is "semibold" already)
+
+    if (pango_weight >= 600)
+        return wxFONTWEIGHT_BOLD;
+
+    if (pango_weight < 350)
+        return wxFONTWEIGHT_LIGHT;
+
+    return wxFONTWEIGHT_NORMAL;
 }
 
 bool wxNativeFontInfo::GetUnderlined() const
