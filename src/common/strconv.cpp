@@ -377,15 +377,17 @@ wxConvBrokenFileNames::wxConvBrokenFileNames()
     }
     else // no G_FILENAME_ENCODING
     {
+#if wxUSE_INTL        
         if ( encName.empty() )
             encName = wxLocale::GetSystemEncodingName().Upper();
+#endif
 
         // (2) if a non default locale is set, assume that the user wants his
         //     filenames in this locale too
         if ( !encName.empty() && encName != _T("UTF-8") && encName != _T("UTF8") )
         {
             wxSetEnv(_T("G_FILENAME_ENCODING"), encName);
-            m_conv = new wxMBConvLibc;
+            m_conv = new wxCSConv(encName);
         }
         else
         {
