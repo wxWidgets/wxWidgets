@@ -218,6 +218,18 @@ static void EnsureParentHasControlParentStyle(wxWindow *parent)
 
 #endif // !__WXWINCE__
 
+#ifdef __WXWINCE__
+// On Windows CE, GetCursorPos can return an error, so use this function
+// instead
+bool GetCursorPosWinCE(POINT* pt)
+{
+    DWORD pos = GetMessagePos();
+    pt->x = LOWORD(pos);
+    pt->y = HIWORD(pos);
+    return true;
+}
+#endif
+
 // ---------------------------------------------------------------------------
 // event tables
 // ---------------------------------------------------------------------------
@@ -757,7 +769,11 @@ bool wxWindowMSW::SetCursor(const wxCursor& cursor)
 
         // Change the cursor NOW if we're within the correct window
         POINT point;
+#ifdef __WXWINCE__
+        ::GetCursorPosWinCE(&point);
+#else
         ::GetCursorPos(&point);
+#endif
 
         RECT rect = wxGetWindowRect(hWnd);
 
@@ -1235,7 +1251,11 @@ bool wxWindowMSW::IsMouseInWindow() const
 {
     // get the mouse position
     POINT pt;
+#ifdef __WXWINCE__
+    ::GetCursorPosWinCE(&pt);
+#else
     ::GetCursorPos(&pt);
+#endif
 
     // find the window which currently has the cursor and go up the window
     // chain until we find this window - or exhaust it
@@ -3490,7 +3510,11 @@ bool wxWindowMSW::HandleSetCursor(WXHWND WXUNUSED(hWnd),
     // first ask the user code - it may wish to set the cursor in some very
     // specific way (for example, depending on the current position)
     POINT pt;
+#ifdef __WXWINCE__
+    if ( !::GetCursorPosWinCE(&pt) )
+#else
     if ( !::GetCursorPos(&pt) )
+#endif
     {
         wxLogLastError(wxT("GetCursorPos"));
     }
@@ -4529,7 +4553,11 @@ void wxWindowMSW::GenerateMouseLeave()
         state |= MK_RBUTTON;
 
     POINT pt;
+#ifdef __WXWINCE__
+    if ( !::GetCursorPosWinCE(&pt) )
+#else
     if ( !::GetCursorPos(&pt) )
+#endif
     {
         wxLogLastError(_T("GetCursorPos"));
     }
@@ -4576,7 +4604,11 @@ wxKeyEvent wxWindowMSW::CreateKeyEvent(wxEventType evType,
 
     // translate the position to client coords
     POINT pt;
+#ifdef __WXWINCE__
+    GetCursorPosWinCE(&pt);
+#else
     GetCursorPos(&pt);
+#endif
     RECT rect;
     GetWindowRect(GetHwnd(),&rect);
     pt.x -= rect.left;
@@ -5797,7 +5829,11 @@ wxWindow* wxFindWindowAtPoint(const wxPoint& pt)
 wxPoint wxGetMousePosition()
 {
     POINT pt;
+#ifdef __WXWINCE__
+    GetCursorPosWinCE(&pt);
+#else
     GetCursorPos( & pt );
+#endif
 
     return wxPoint(pt.x, pt.y);
 }
