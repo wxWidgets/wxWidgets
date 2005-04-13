@@ -482,7 +482,12 @@ wxWindowMSW::~wxWindowMSW()
             {
                 frame->SetLastFocus(NULL);
             }
-            break;
+
+            // apparently sometimes we can end up with our grand parent
+            // pointing to us as well: this is surely a bug in focus handling
+            // code but it's not clear where it happens so for now just try to
+            // fix it here by not breaking out of the loop
+            //break;
         }
     }
 #endif // __WXUNIVERSAL__
