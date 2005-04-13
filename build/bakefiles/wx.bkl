@@ -124,23 +124,6 @@
         <!-- Mac OS X resources: -->
         <set var="MACOS_R">lib/libwx_$(TOOLCHAIN_NAME).$(WXSOVERSION[0]).r</set>
         <set var="MACOS_RSRC">lib/libwx_$(TOOLCHAIN_NAME).$(WXSOVERSION[0]).rsrc</set>
-        <action id="macos-res" cond="TOOLKIT=='MAC'">
-            <dependency-of>all</dependency-of>
-            <set var="__targetname">$(MACOS_R)</set>
-            <command>
-                $(RESCOMP) -d __UNIX__ -useDF $(top_srcdir)/src/mac/carbon/apprsrc.r $(top_srcdir)/src/mac/carbon/carbrsrc.r $(top_srcdir)/src/mac/carbon/corersrc.r -o $(MACOS_RSRC)
-                $(DEREZ) $(MACOS_RSRC) Carbon.r -useDF >$(MACOS_R)
-            </command>
-            <clean-files>$(MACOS_RSRC) $(MACOS_R)</clean-files>
-        </action>
-        <action id="macos-res-install" cond="TOOLKIT=='MAC'">
-            <dependency-of>install</dependency-of>
-            <depends>macos-res</depends>
-            <command>
-                $(INSTALL_DATA) $(MACOS_R) $(LIBDIR)
-                $(INSTALL_DATA) $(MACOS_RSRC) $(LIBDIR)
-            </command>
-        </action>
         <action id="cocoa-res" cond="TOOLKIT=='COCOA'">
             <dependency-of>all</dependency-of>
             <set var="__targetname">$(MACOS_R)</set>
@@ -152,7 +135,7 @@
         </action>
         <action id="cocoa-res-install" cond="TOOLKIT=='COCOA'">
             <dependency-of>install</dependency-of>
-            <depends>macos-res</depends>
+            <depends>cocoa-res</depends>
             <command>
                 $(INSTALL_DATA) $(MACOS_R) $(LIBDIR)
                 $(INSTALL_DATA) $(MACOS_RSRC) $(LIBDIR)
