@@ -567,6 +567,9 @@ if test $DEBUG_CONFIGURE = 1; then
   DEFAULT_wxUSE_MONOLITHIC=no
   DEFAULT_wxUSE_PLUGINS=no
   DEFAULT_wxUSE_OFFICIAL_BUILD=no
+
+  DEFAULT_wxUSE_GTK1=no
+  DEFAULT_wxUSE_GTK2=no
 else
   DEFAULT_wxUSE_UNIVERSAL=no
   DEFAULT_wxUSE_STL=no
@@ -765,8 +768,9 @@ else
   DEFAULT_wxUSE_PLUGINS=no
   DEFAULT_wxUSE_OFFICIAL_BUILD=no
 
-  dnl Appliable only when --with-gtk was used:
-  DEFAULT_wxUSE_GTK2=yes
+  dnl Implies --with-gtk. Should be no here, the default is set to yes below
+  DEFAULT_wxUSE_GTK1=no
+  DEFAULT_wxUSE_GTK2=no
 fi
 
 dnl WX_ARG_WITH should be used to select whether an external package will be
@@ -803,7 +807,9 @@ WX_ARG_ENABLE(plugins,     [  --enable-plugins        build parts of wxWidgets a
 if test "$wxUSE_GUI" = "yes"; then
 
 WX_ARG_ENABLE(universal,   [  --enable-universal      use wxWidgets GUI controls instead of native ones], wxUSE_UNIVERSAL)
-AC_ARG_WITH(gtk,           [  --with-gtk              use GTK+], [wxUSE_GTK="$withval" CACHE_GTK=1 TOOLKIT_GIVEN=1])
+AC_ARG_WITH(gtk,           [  --with-gtk              use GTK+ (currently uses 2.0)], [wxUSE_GTK="$withval" CACHE_GTK=1 TOOLKIT_GIVEN=1])
+WX_ARG_WITH(gtk1,          [  --with-gtk1             use GTK+ 1.2], wxUSE_GTK1)
+WX_ARG_WITH(gtk2,          [  --with-gtk2             use GTK+ 2.0], wxUSE_GTK2)
 AC_ARG_WITH(motif,         [  --with-motif            use Motif/Lesstif], [wxUSE_MOTIF="$withval" CACHE_MOTIF=1 TOOLKIT_GIVEN=1])
 AC_ARG_WITH(mac,           [  --with-mac              use Mac OS X], [wxUSE_MAC="$withval" CACHE_MAC=1 TOOLKIT_GIVEN=1])
 AC_ARG_WITH(cocoa,         [  --with-cocoa            use Cocoa], [wxUSE_COCOA="$withval" CACHE_COCOA=1 TOOLKIT_GIVEN=1])
@@ -815,7 +821,6 @@ AC_ARG_WITH(microwin,      [  --with-microwin         use MicroWindows], [wxUSE_
 AC_ARG_WITH(x11,           [  --with-x11              use X11], [wxUSE_X11="$withval" wxUSE_UNIVERSAL="yes" CACHE_X11=1 TOOLKIT_GIVEN=1])
 WX_ARG_ENABLE(nanox,       [  --enable-nanox          use NanoX], wxUSE_NANOX)
 
-WX_ARG_ENABLE(gtk2,        [  --disable-gtk2          use GTK+ 1.2 instead of 2.0], wxUSE_GTK2)
 WX_ARG_ENABLE(gpe,         [  --enable-gpe            use GNOME PDA Environment features if possible], wxUSE_GPE)
 
 WX_ARG_SYS_WITH(libpng,    [  --with-libpng           use libpng (PNG image format)], wxUSE_LIBPNG)
@@ -1211,6 +1216,12 @@ if test "$wxUSE_WINE" = "yes"; then
     DEFAULT_DEFAULT_wxUSE_MOTIF=0
     DEFAULT_DEFAULT_wxUSE_MSW=1
     wxUSE_SHARED=no
+fi
+
+dnl --with-gtk1 or --with-gtk2 imply --with-gtk
+if test "$wxUSE_GTK1" = "yes" -o "$wxUSE_GTK2" = "yes"; then
+    wxUSE_GTK=yes
+    TOOLKIT_GIVEN=1
 fi
 
 if test "$wxUSE_GUI" = "yes"; then
@@ -2580,12 +2591,19 @@ if test "$wxUSE_GUI" = "yes"; then
                     GTK_MODULES=gthread
                 fi
 
-                dnl note that if we fail to find GTK2 we abort and don't fall
-                dnl back to GTK1.x
+                dnl GTK+2 is currently the default
+                if test "x$wxUSE_GTK1" != "xyes" -a "x$wxUSE_GTK2" != "xyes"; then
+                    wxUSE_GTK2=yes
+                fi
+
+                dnl test for GTK2
                 wx_cv_lib_gtk=
                 if test "x$wxUSE_GTK2" = "xyes"; then
                     AM_PATH_GTK_2_0(2.0.0, wx_cv_lib_gtk=2.0, , $GTK_MODULES)
-                else
+                fi
+
+                dnl test for GTK1.x
+                if test -z "$wx_cv_lib_gtk" -a "x$wxUSE_GTK1" = "xyes"; then
                     AM_PATH_GTK(1.2.7, wx_cv_lib_gtk=1.2.7, , $GTK_MODULES)
 
                     if test -z "$wx_cv_lib_gtk"; then
@@ -2621,10 +2639,12 @@ if test "$wxUSE_GUI" = "yes"; then
             1.2.3)  WXGTK12=1
                     ;;
             *)      AC_MSG_ERROR([
-Please check that gtk-config is in path, the directory
-where GTK+ libraries are installed (returned by
-'gtk-config --libs' command) is in LD_LIBRARY_PATH or
-equivalent variable and GTK+ is version 1.2.3 or above.
+The development files for GTK+ were not found. For GTK+ 2, please
+ensure that pkg-config is in the path and that gtk+-2.0.pc is
+installed. For GTK+ 1.2 please check that gtk-config is in the path,
+and that the version is 1.2.3 or above. Also check that the
+libraries returned by 'pkg-config gtk+-2.0 --libs' or 'gtk-config
+--libs' are in the LD_LIBRARY_PATH or equivalent.
                             ])
                     ;;
         esac
