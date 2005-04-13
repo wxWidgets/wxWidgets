@@ -32,7 +32,7 @@
         <if cond="PLATFORM_WIN32=='1'">src/tiff/tif_win32.c</if>
         <if cond="PLATFORM_MACOS=='1'">src/tiff/tif_apple.c</if>
     </set>
-    
+
     <lib id="wxtiff" template="3rdparty_lib"
          cond="wxUSE_LIBTIFF=='builtin' and USE_GUI=='1' and BUILDING_LIB=='1'">
         <dirname>$(LIBDIRNAME)</dirname>
@@ -45,7 +45,7 @@
 		    src/tiff/tif_aux.c
 		    src/tiff/tif_close.c
 		    src/tiff/tif_codec.c
-            src/tiff/tif_color.c
+		    src/tiff/tif_color.c
 		    src/tiff/tif_compress.c
 		    src/tiff/tif_dir.c
 		    src/tiff/tif_dirinfo.c
@@ -53,6 +53,7 @@
 		    src/tiff/tif_dirwrite.c
 		    src/tiff/tif_dumpmode.c
 		    src/tiff/tif_error.c
+		    src/tiff/tif_extension.c
 		    src/tiff/tif_fax3.c
 		    src/tiff/tif_fax3sm.c
 		    src/tiff/tif_getimage.c
