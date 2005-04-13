@@ -715,6 +715,7 @@ static pascal OSStatus wxMacTopLevelWindowEventHandler( EventHandlerCallRef hand
                 event.SetEventObject( toplevelWindow ) ;
 
                 toplevelWindow->GetEventHandler()->ProcessEvent(event) ;
+                frame->wxWindowMac::MacSuperChangedPosition() ; // like this only children will be notified
             }
             if ( attributes & kWindowBoundsChangeOriginChanged )
             {
@@ -755,6 +756,7 @@ static pascal OSStatus wxMacTopLevelWindowEventHandler( EventHandlerCallRef hand
                 const Rect adjustedRect = { adjustR.y + top  , adjustR.x + left , adjustR.y + adjustR.height - bottom , adjustR.x + adjustR.width - right } ;
                 if ( !EqualRect( &newRect , &adjustedRect ) )
                     cEvent.SetParameter<Rect>( kEventParamCurrentBounds , &adjustedRect ) ;
+                toplevelWindow->wxWindowMac::MacSuperChangedPosition() ; // like this only children will be notified
             }
 
             result = noErr ; 
@@ -1387,6 +1389,7 @@ void wxTopLevelWindowMac::DoMoveWindow(int x, int y, int width, int height)
     m_cachedClippedRectValid = false ;
     Rect bounds = { y , x , y + height , x + width } ;
     verify_noerr(SetWindowBounds( (WindowRef) m_macWindow, kWindowStructureRgn , &bounds )) ;
+    wxWindowMac::MacSuperChangedPosition() ; // like this only children will be notified
 }
 
 void wxTopLevelWindowMac::DoGetPosition( int *x, int *y ) const
