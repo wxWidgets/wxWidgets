@@ -576,6 +576,9 @@ void wxWindowMac::MacControlUserPaneDrawProc(wxInt16 part)
 {
     RgnHandle rgn = NewRgn() ;
     GetClip( rgn ) ;
+    int x = 0 , y = 0;
+    MacWindowToRootWindow( &x,&y ) ;
+    OffsetRgn( rgn , -x , -y ) ;
     wxMacWindowStateSaver sv( this ) ;
     SectRgn( rgn , (RgnHandle) MacGetVisibleRegion().GetWXHRGN() , rgn ) ;
     MacDoRedraw( rgn , 0 ) ;
@@ -2461,7 +2464,7 @@ void wxWindowMac::ScrollWindow(int dx, int dy, const wxRect *rect)
                 HIViewRender(m_peer->GetControlRef()) ;
             else
 #endif
-                Update() ;
+                Update() ;                
 
 #endif
 	}
@@ -2717,7 +2720,7 @@ void wxWindowMac::ClearBackground()
 void wxWindowMac::Update()
 {
 #if TARGET_API_MAC_OSX
-	MacGetTopLevelWindow()->MacPerformUpdates() ;
+    MacGetTopLevelWindow()->MacPerformUpdates() ;
 #else
     ::Draw1Control( m_peer->GetControlRef() ) ;
 #endif
