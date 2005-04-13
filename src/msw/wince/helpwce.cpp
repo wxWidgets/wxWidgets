@@ -103,6 +103,10 @@ wxString wxWinceHelpController::GetValidFilename(const wxString& file) const
         fullName = path + name + wxT(".htm");
     else
         fullName = path + wxT("\\") + name + wxT(".htm");
+
+    if (!wxFileExists(fullName))
+        fullName = wxT("\\Windows\\") + name + wxT(".htm");
+
     return fullName;
 }
 
