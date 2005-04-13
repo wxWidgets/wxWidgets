@@ -25,6 +25,8 @@
 
 #include <MacHeaders.c>
 #define OTUNIXERRORS 1
+// we get a conflict in OT headers otherwise :
+#undef EDEADLK
 #include <OpenTransport.h>
 #include <OpenTransportProviders.h>
 #include <OpenTptInternet.h>
