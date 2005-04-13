@@ -40,6 +40,7 @@
 #endif
 
 #include "wx/sizer.h"
+#include "wx/ioswrap.h"
 
 #include "widgets.h"
 
@@ -554,7 +555,7 @@ wxTextCtrl *TextWidgetsPage::CreateInfoText()
 
     wxTextCtrl *text = new wxTextCtrl(this, wxID_ANY, wxEmptyString,
                                       wxDefaultPosition,
-                                      wxSize(s_maxWidth, -1),
+                                      wxSize(s_maxWidth, wxDefaultCoord),
                                       wxTE_READONLY);
     return text;
 }
@@ -887,13 +888,11 @@ void TextWidgetsPage::OnCheckOrRadioBox(wxCommandEvent& WXUNUSED(event))
 
 void TextWidgetsPage::OnStreamRedirector(wxCommandEvent& WXUNUSED(event))
 {
-// Note, NO_TEXT_WINDOW_STREAM is private flag of wxWidgets header
-// it's simpler to check it rather than duplicate whole
-#ifdef NO_TEXT_WINDOW_STREAM
-    wxMessageBox(_T("This wxWidgets build does not support wxStreamToTextRedirector"));
-#else
+#if wxHAS_TEXT_WINDOW_STREAM
     wxStreamToTextRedirector redirect(m_text);
     wxString str( _T("Outputed to cout, appears in wxTextCtrl!") );
     cout << str << endl;
+#else
+    wxMessageBox(_T("This wxWidgets build does not support wxStreamToTextRedirector"));
 #endif
 }

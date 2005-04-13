@@ -28,26 +28,24 @@
 #include "wx/dynarray.h"        // wxArrayInt
 #include "wx/gdicmn.h"          // wxPoint
 
-// 16-bit Borland 4.0 doesn't seem to allow multiple inheritance with wxWindow
-// and streambuf: it complains about deriving a huge class from the huge class
-// streambuf. !! Also, can't use streambuf if making or using a DLL :-(
+// Open Watcom 1.3 does allow only ios::rdbuf() while
+// we want something with streambuf parameter
+// Also, can't use streambuf if making or using a DLL :-(
 
-#if (defined(__BORLANDC__)) || defined(__MWERKS__) || \
+#if defined(__WATCOMC__) || \
+    defined(__MWERKS__) || \
     (defined(__WINDOWS__) && (defined(WXUSINGDLL) || defined(WXMAKINGDLL)))
+    #define wxHAS_TEXT_WINDOW_STREAM 0
+#elif wxUSE_STD_IOSTREAM
+    #include "wx/ioswrap.h"
+    #define wxHAS_TEXT_WINDOW_STREAM 1
+#else
+    #define wxHAS_TEXT_WINDOW_STREAM 0
+#endif
+
+#if WXWIN_COMPATIBILITY_2_4 && !wxHAS_TEXT_WINDOW_STREAM
+    // define old flag if one could use it somewhere
     #define NO_TEXT_WINDOW_STREAM
-#endif
-
-#ifndef NO_TEXT_WINDOW_STREAM
-    #if wxUSE_STD_IOSTREAM
-        #include "wx/ioswrap.h"    // derivation: we need the full decls.
-    #else // !wxUSE_STD_IOSTREAM
-        // can't compile this feature in if we don't use streams at all
-        #define NO_TEXT_WINDOW_STREAM
-    #endif // wxUSE_STD_IOSTREAM/!wxUSE_STD_IOSTREAM
-#endif
-
-#if defined(__WXMSW__) && defined(__MINGW32__)
-    #include "wx/msw/winundef.h"
 #endif
 
 class WXDLLEXPORT wxTextCtrl;
@@ -267,7 +265,7 @@ private:
 // ----------------------------------------------------------------------------
 
 class WXDLLEXPORT wxTextCtrlBase : public wxControl
-#ifndef NO_TEXT_WINDOW_STREAM
+#if wxHAS_TEXT_WINDOW_STREAM
                                  , public wxSTD streambuf
 #endif
 
@@ -384,9 +382,9 @@ public:
     virtual void SetEditable(bool editable) = 0;
 
     // override streambuf method
-#ifndef NO_TEXT_WINDOW_STREAM
+#if wxHAS_TEXT_WINDOW_STREAM
     int overflow(int i);
-#endif // NO_TEXT_WINDOW_STREAM
+#endif // wxHAS_TEXT_WINDOW_STREAM
 
     // stream-like insertion operators: these are always available, whether we
     // were, or not, compiled with streambuf support
@@ -503,7 +501,7 @@ typedef void (wxEvtHandler::*wxTextUrlEventFunction)(wxTextUrlEvent&);
 #define EVT_TEXT_URL(id, fn) wx__DECLARE_TEXTURLEVT(URL, id, fn)
 #define EVT_TEXT_MAXLEN(id, fn) wx__DECLARE_TEXTEVT(MAXLEN, id, fn)
 
-#ifndef NO_TEXT_WINDOW_STREAM
+#if wxHAS_TEXT_WINDOW_STREAM
 
 // ----------------------------------------------------------------------------
 // wxStreamToTextRedirector: this class redirects all data sent to the given
@@ -545,7 +543,7 @@ private:
     wxSTD streambuf *m_sbufOld;
 };
 
-#endif // !NO_TEXT_WINDOW_STREAM
+#endif // wxHAS_TEXT_WINDOW_STREAM
 
 #endif // wxUSE_TEXTCTRL
 

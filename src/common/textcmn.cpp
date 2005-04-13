@@ -299,7 +299,7 @@ wxTextCtrl& wxTextCtrlBase::operator<<(const wxChar c)
 // streambuf methods implementation
 // ----------------------------------------------------------------------------
 
-#ifndef NO_TEXT_WINDOW_STREAM
+#if wxHAS_TEXT_WINDOW_STREAM
 
 int wxTextCtrlBase::overflow(int c)
 {
@@ -309,7 +309,7 @@ int wxTextCtrlBase::overflow(int c)
     return 0;
 }
 
-#endif // NO_TEXT_WINDOW_STREAM
+#endif // wxHAS_TEXT_WINDOW_STREAM
 
 // ----------------------------------------------------------------------------
 // clipboard stuff
