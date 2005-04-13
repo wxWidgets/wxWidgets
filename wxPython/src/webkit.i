@@ -86,8 +86,8 @@ public:
     bool CanGetPageSource() { return false; }
     wxString GetPageSource() { return wxEmptyString; }
     void SetPageSource(wxString& source, const wxString& baseUrl = wxEmptyString) {}
-    wxString GetPageURL(){ return m_currentURL; }
-	wxString GetPageTitle(){ return m_pageTitle; }
+    wxString GetPageURL()   { return wxEmptyString; }
+    wxString GetPageTitle() { return wxEmptyString; }
 };
 
 
@@ -158,6 +158,8 @@ public:
     bool CanGetPageSource();
     wxString GetPageSource();
     void SetPageSource(wxString& source, const wxString& baseUrl = wxPyEmptyString);
+    wxString GetPageURL();
+    wxString GetPageTitle();
 };
 
 
