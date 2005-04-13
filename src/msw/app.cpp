@@ -86,12 +86,6 @@
 #include "wx/msw/wince/missing.h"
 #endif
 
-#if (!defined(__MINGW32__) || wxCHECK_W32API_VERSION( 2, 0 )) && \
-    !defined(__CYGWIN__) && !defined(__DIGITALMARS__) && !defined(__WXWINCE__) && \
-    (!defined(_MSC_VER) || (_MSC_VER > 1100))
-    #include <shlwapi.h>
-#endif
-
 // ---------------------------------------------------------------------------
 // global variables
 // ---------------------------------------------------------------------------
