@@ -221,7 +221,8 @@ h) Add this code to one of wxFoo's files (the more often used, the better):
       WX_CHECK_BUILD_OPTIONS("wxFoo")
 
 i) Add information about wxFoo to the manual ("Libraries list" section
-   in libs.tex).
+   in libs.tex) and update docs/latex/wx/libs.dia (you need Dia for this)
+   to show the dependencies of the new library.
 
 
 === EOF ===
