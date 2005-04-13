@@ -713,6 +713,14 @@ public:
 
     void SetDefAttr(wxGridCellAttr* defAttr) { m_defGridAttr = defAttr; }
 
+protected:
+    // the dtor is private because only DecRef() can delete us
+    virtual ~wxGridCellAttr()
+    {
+        wxSafeDecRef(m_renderer);
+        wxSafeDecRef(m_editor);
+    }
+
 private:
     enum wxAttrReadMode
     {
@@ -731,12 +739,6 @@ private:
     // the common part of all ctors
     void Init(wxGridCellAttr *attrDefault = NULL);
 
-    // the dtor is private because only DecRef() can delete us
-    ~wxGridCellAttr()
-    {
-        wxSafeDecRef(m_renderer);
-        wxSafeDecRef(m_editor);
-    }
 
     // the ref count - when it goes to 0, we die
     size_t   m_nRef;
