@@ -681,8 +681,8 @@ wxRadioBox::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
         {
             // no, we don't, erase the background ourselves (don't use our own
             // colour as with static box, see comments there)
-            wxFillRect(GetHwnd(), (HDC)wParam,
-                        GetHbrushOf(wxBrush(GetParent()->GetBackgroundColour())));
+            wxBrush brush(GetParent()->GetBackgroundColour());
+            wxFillRect(GetHwnd(), (HDC)wParam, GetHbrushOf(brush));
         }
 
         return 0;
