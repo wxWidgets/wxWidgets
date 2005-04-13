@@ -69,11 +69,6 @@ public:
     // or the XVisualInfo* for SGI.
     GdkVisual      *GetGdkVisual();
     
-#ifdef __WXGTK20__
-    wxConvBrokenFileNames *m_convBrokenFileNames;
-    wxMBConv *m_oldConvFileName;
-#endif
-
 private:
     // true if we're inside an assert modal dialog
 #ifdef __WXDEBUG__

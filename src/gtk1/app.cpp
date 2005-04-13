@@ -607,10 +607,30 @@ bool wxApp::Initialize(int& argc, wxChar **argv)
 #endif // wxUSE_WCHAR_T/!wxUSE_WCHAR_T
 
 #ifdef __WXGTK20__
-    m_convBrokenFileNames = new wxConvBrokenFileNames;
-    m_oldConvFileName = wxConvFileName;
-    wxConvFileName = m_convBrokenFileNames;
-#endif
+    // decide which conversion to use for the file names
+
+    // (1) this variable exists for the sole purpose of specifying the encoding
+    //     of the filenames for GTK+ programs, so use it if it is set
+    wxString encName(wxGetenv(_T("G_FILENAME_ENCODING")));
+    encName.MakeUpper();
+#if wxUSE_INTL        
+    if (encName.empty())
+    {
+        // (2) if a non default locale is set, assume that the user wants his
+        //     filenames in this locale too
+        encName = wxLocale::GetSystemEncodingName().Upper();
+        // (3) finally use UTF-8 by default
+        if (encName.empty() || encName == _T("US-ASCII"))
+            encName = _T("UTF-8");
+        wxSetEnv(_T("G_FILENAME_ENCODING"), encName);
+    }
+#else
+    if (encName.empty())
+        encName = _T("UTF-8");
+#endif // wxUSE_INTL
+    static wxConvBrokenFileNames fileconv(encName);
+    wxConvFileName = &fileconv;
+#endif // __WXGTK20__
 
 #if wxUSE_UNICODE
     // gtk_init() wants UTF-8, not wchar_t, so convert
@@ -686,11 +706,6 @@ bool wxApp::Initialize(int& argc, wxChar **argv)
 
 void wxApp::CleanUp()
 {
-#ifdef __WXGTK20__
-    delete m_convBrokenFileNames;
-    wxConvFileName = m_oldConvFileName;
-#endif
-
     gdk_threads_leave();
 
     wxAppBase::CleanUp();

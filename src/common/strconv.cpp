@@ -363,38 +363,13 @@ size_t wxMBConvLibc::WC2MB(char *buf, const wchar_t *psz, size_t n) const
 // wxConvBrokenFileNames 
 // ----------------------------------------------------------------------------
 
-wxConvBrokenFileNames::wxConvBrokenFileNames()
+wxConvBrokenFileNames::wxConvBrokenFileNames(const wxChar *charset)
 {
-    // decide which conversion to use for the file names
-
-    // (1) this variable exists for the sole purpose of specifying the encoding
-    //     of the filenames for GTK+ programs, so use it if it is set
-    wxString encName(wxGetenv(_T("G_FILENAME_ENCODING")));
-    encName.MakeUpper();
-    if ( !encName.empty() && encName != _T("UTF-8") && encName != _T("UTF8") )
-    {
-        m_conv = new wxCSConv(encName);
-    }
-    else // no G_FILENAME_ENCODING
-    {
-#if wxUSE_INTL        
-        if ( encName.empty() )
-            encName = wxLocale::GetSystemEncodingName().Upper();
-#endif
-
-        // (2) if a non default locale is set, assume that the user wants his
-        //     filenames in this locale too
-        if ( !encName.empty() && encName != _T("UTF-8") && encName != _T("UTF8") )
-        {
-            wxSetEnv(_T("G_FILENAME_ENCODING"), encName);
-            m_conv = new wxCSConv(encName);
-        }
-        else
-        {
-            // (3) finally use UTF-8 by default
-            m_conv = new wxMBConvUTF8(wxMBConvUTF8::MAP_INVALID_UTF8_TO_OCTAL);
-        }
-    }
+    if ( !charset || wxStricmp(charset, _T("UTF-8")) == 0
+                  || wxStricmp(charset, _T("UTF8")) == 0  )
+        m_conv = new wxMBConvUTF8(wxMBConvUTF8::MAP_INVALID_UTF8_TO_OCTAL);
+    else
+        m_conv = new wxCSConv(charset);
 }
 
 size_t

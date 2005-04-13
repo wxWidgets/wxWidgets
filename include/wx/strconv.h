@@ -98,7 +98,7 @@ public:
 class WXDLLIMPEXP_BASE wxConvBrokenFileNames : public wxMBConv
 {
 public:
-    wxConvBrokenFileNames();
+    wxConvBrokenFileNames(const wxChar *charset);
     virtual ~wxConvBrokenFileNames() { delete m_conv; }
 
     virtual size_t MB2WC(wchar_t *outputBuf, const char *psz, size_t outputSize) const;
