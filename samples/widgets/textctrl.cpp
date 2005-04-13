@@ -36,6 +36,7 @@
     #include "wx/statbox.h"
     #include "wx/stattext.h"
     #include "wx/textctrl.h"
+    #include "wx/msgdlg.h"
 #endif
 
 #include "wx/sizer.h"
@@ -58,6 +59,8 @@ enum
     TextPage_Insert,
     TextPage_Clear,
     TextPage_Load,
+
+    TextPage_StreamRedirector,
 
     TextPage_Password,
     TextPage_WrapLines,
@@ -153,6 +156,7 @@ protected:
     void OnButtonClear(wxCommandEvent& event);
     void OnButtonLoad(wxCommandEvent& event);
 
+    void OnStreamRedirector(wxCommandEvent& event);
     void OnButtonQuit(wxCommandEvent& event);
 
     void OnText(wxCommandEvent& event);
@@ -292,6 +296,8 @@ BEGIN_EVENT_TABLE(TextWidgetsPage, WidgetsPage)
     EVT_IDLE(TextWidgetsPage::OnIdle)
 
     EVT_BUTTON(TextPage_Reset, TextWidgetsPage::OnButtonReset)
+
+    EVT_BUTTON(TextPage_StreamRedirector, TextWidgetsPage::OnStreamRedirector)
 
     EVT_BUTTON(TextPage_Clear, TextWidgetsPage::OnButtonClear)
     EVT_BUTTON(TextPage_Set, TextWidgetsPage::OnButtonSet)
@@ -437,6 +443,9 @@ TextWidgetsPage::TextWidgetsPage(wxBookCtrl *book, wxImageList *imaglist)
     sizerMiddleUp->Add(btn, 0, wxALL | wxGROW, 1);
 
     btn = new wxButton(this, TextPage_Clear, _T("&Clear"));
+    sizerMiddleUp->Add(btn, 0, wxALL | wxGROW, 1);
+
+    btn = new wxButton(this, TextPage_StreamRedirector, _T("St&ream redirection"));
     sizerMiddleUp->Add(btn, 0, wxALL | wxGROW, 1);
 
     wxStaticBox *box4 = new wxStaticBox(this, wxID_ANY, _T("&Info:"));
@@ -876,3 +885,15 @@ void TextWidgetsPage::OnCheckOrRadioBox(wxCommandEvent& WXUNUSED(event))
     CreateText();
 }
 
+void TextWidgetsPage::OnStreamRedirector(wxCommandEvent& WXUNUSED(event))
+{
+// Note, NO_TEXT_WINDOW_STREAM is private flag of wxWidgets header
+// it's simpler to check it rather than duplicate whole
+#ifdef NO_TEXT_WINDOW_STREAM
+    wxMessageBox(_T("This wxWidgets build does not support wxStreamToTextRedirector"));
+#else
+    wxStreamToTextRedirector redirect(m_text);
+    wxString str( _T("Outputed to cout, appears in wxTextCtrl!") );
+    cout << str << endl;
+#endif
+}
