@@ -131,8 +131,12 @@ wxSTD istream& operator>>(wxSTD istream& is, wxString& WXUNUSED(str))
 
 wxSTD ostream& operator<<(wxSTD ostream& os, const wxString& str)
 {
-  os << str.c_str();
-  return os;
+#ifdef __BORLANDC__
+    os << str.mb_str();
+#else
+    os << str.c_str();
+#endif
+    return os;
 }
 
 #endif // wxUSE_STD_IOSTREAM
@@ -744,7 +748,7 @@ wxStringBase& wxStringBase::replace(size_t nStart, size_t nLen,
   //do it manually because this string can contain null characters
   for(size_t i1 = 0; i1 < nStart; ++i1)
       strTmp.append(1, this->c_str()[i1]);
-  
+
   //its safe to do the full version here because
   //sz must be a normal c string
   strTmp.append(sz);
@@ -1524,7 +1528,7 @@ wxString wxString::AfterFirst(wxChar ch) const
 }
 
 // replace first (or all) occurences of some substring with another one
-size_t wxString::Replace(const wxChar *szOld, 
+size_t wxString::Replace(const wxChar *szOld,
                   const wxChar *szNew, bool bReplaceAll)
 {
     // if we tried to replace an empty string we'd enter an infinite loop below
@@ -1538,15 +1542,15 @@ size_t wxString::Replace(const wxChar *szOld,
 
     size_t dwPos = 0;
 
-    while ( this->c_str()[dwPos] != wxT('\0') ) 
+    while ( this->c_str()[dwPos] != wxT('\0') )
     {
         //DO NOT USE STRSTR HERE
         //this string can contain embedded null characters,
         //so strstr will function incorrectly
         dwPos = find(szOld, dwPos);
-        if ( dwPos == npos ) 
+        if ( dwPos == npos )
             break;                  // exit the loop
-        else 
+        else
         {
             //replace this occurance of the old string with the new one
             replace(dwPos, uiOldLen, szNew, uiNewLen);
@@ -1556,9 +1560,9 @@ size_t wxString::Replace(const wxChar *szOld,
 
             //increase replace count
             ++uiCount;
-    
+
             // stop now?
-            if ( !bReplaceAll ) 
+            if ( !bReplaceAll )
                 break;                  // exit the loop
         }
     }
@@ -1839,7 +1843,7 @@ int wxString::PrintfV(const wxChar* pszFormat, va_list argptr)
         // in which case we need to break out
         if ( (len >= 0 && len <= size)
         // No EOVERFLOW on Windows nor Palm 6.0 nor OpenVMS nor MacOS (not X)
-	// not OS/2 (not Innotek libc).
+        // not OS/2 (not Innotek libc).
 #if !defined(__WXMSW__) && !defined(__WXPALMOS__) && !defined( __VMS ) && !(defined(__WXMAC__) && !defined(__WXMAC_OSX__)) && !(defined(__EMX__) && !defined(__INNOTEK_LIBC__))
             || errno != EOVERFLOW
 #endif
