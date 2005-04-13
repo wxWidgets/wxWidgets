@@ -1107,13 +1107,13 @@
         <dia:point val="5.5451,19.695"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="-9.9499,5.35;5.5951,19.745"/>
+        <dia:rectangle val="-9.9499,6.05;5.5951,19.745"/>
       </dia:attribute>
       <dia:attribute name="orth_points">
         <dia:point val="5.5451,19.695"/>
         <dia:point val="-9.8999,19.695"/>
-        <dia:point val="-9.8999,5.8"/>
-        <dia:point val="-5.25,5.8"/>
+        <dia:point val="-9.8999,6.5"/>
+        <dia:point val="-5.25,6.5"/>
       </dia:attribute>
       <dia:attribute name="orth_orient">
         <dia:enum val="0"/>
@@ -1137,6 +1137,92 @@
       </dia:attribute>
       <dia:connections>
         <dia:connection handle="0" to="O23" connection="3"/>
+        <dia:connection handle="1" to="O1" connection="3"/>
+      </dia:connections>
+    </dia:object>
+    <dia:object type="UML - SmallPackage" version="0" id="O26">
+      <dia:attribute name="obj_pos">
+        <dia:point val="-14.5899,6.815"/>
+      </dia:attribute>
+      <dia:attribute name="obj_bb">
+        <dia:rectangle val="-14.6399,5.865;-11.4899,8.265"/>
+      </dia:attribute>
+      <dia:attribute name="elem_corner">
+        <dia:point val="-14.5899,6.815"/>
+      </dia:attribute>
+      <dia:attribute name="elem_width">
+        <dia:real val="3.0500000000000003"/>
+      </dia:attribute>
+      <dia:attribute name="elem_height">
+        <dia:real val="1.3999999999999999"/>
+      </dia:attribute>
+      <dia:attribute name="line_colour">
+        <dia:color val="#000000"/>
+      </dia:attribute>
+      <dia:attribute name="fill_colour">
+        <dia:color val="#ffffff"/>
+      </dia:attribute>
+      <dia:attribute name="stereotype">
+        <dia:string>##</dia:string>
+      </dia:attribute>
+      <dia:attribute name="text">
+        <dia:composite type="text">
+          <dia:attribute name="string">
+            <dia:string>#wxMedia#</dia:string>
+          </dia:attribute>
+          <dia:attribute name="font">
+            <dia:font family="monospace" style="0" name="Courier"/>
+          </dia:attribute>
+          <dia:attribute name="height">
+            <dia:real val="0.80000000000000004"/>
+          </dia:attribute>
+          <dia:attribute name="pos">
+            <dia:point val="-14.2899,7.665"/>
+          </dia:attribute>
+          <dia:attribute name="color">
+            <dia:color val="#000000"/>
+          </dia:attribute>
+          <dia:attribute name="alignment">
+            <dia:enum val="0"/>
+          </dia:attribute>
+        </dia:composite>
+      </dia:attribute>
+    </dia:object>
+    <dia:object type="UML - Dependency" version="0" id="O27">
+      <dia:attribute name="obj_pos">
+        <dia:point val="-11.5399,7.515"/>
+      </dia:attribute>
+      <dia:attribute name="obj_bb">
+        <dia:rectangle val="-11.5899,5.35;-4.8,7.565"/>
+      </dia:attribute>
+      <dia:attribute name="orth_points">
+        <dia:point val="-11.5399,7.515"/>
+        <dia:point val="-10.7999,7.515"/>
+        <dia:point val="-10.7999,5.8"/>
+        <dia:point val="-5.25,5.8"/>
+      </dia:attribute>
+      <dia:attribute name="orth_orient">
+        <dia:enum val="0"/>
+        <dia:enum val="1"/>
+        <dia:enum val="0"/>
+      </dia:attribute>
+      <dia:attribute name="orth_autoroute">
+        <dia:boolean val="false"/>
+      </dia:attribute>
+      <dia:attribute name="line_colour">
+        <dia:color val="#000000"/>
+      </dia:attribute>
+      <dia:attribute name="name">
+        <dia:string>##</dia:string>
+      </dia:attribute>
+      <dia:attribute name="stereotype">
+        <dia:string>##</dia:string>
+      </dia:attribute>
+      <dia:attribute name="draw_arrow">
+        <dia:boolean val="true"/>
+      </dia:attribute>
+      <dia:connections>
+        <dia:connection handle="0" to="O26" connection="4"/>
         <dia:connection handle="1" to="O1" connection="0"/>
       </dia:connections>
     </dia:object>
