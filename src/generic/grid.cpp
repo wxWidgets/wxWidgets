@@ -1092,8 +1092,12 @@ void wxGridCellFloatEditor::StartingKey(wxKeyEvent& event)
     tmpbuf[0] = (char) keycode;
     tmpbuf[1] = '\0';
     wxString strbuf(tmpbuf, *wxConvCurrent);
+#if wxUSE_INTL        
     bool is_decimal_point = ( strbuf ==
        wxLocale::GetInfo(wxLOCALE_DECIMAL_POINT, wxLOCALE_CAT_NUMBER) );
+#else
+    bool is_decimal_point = ( strbuf == _T(".") );
+#endif
     if ( wxIsdigit(keycode) || keycode == '+' || keycode == '-'
          || is_decimal_point )
     {
@@ -1166,9 +1170,13 @@ bool wxGridCellFloatEditor::IsAcceptedKey(wxKeyEvent& event)
         tmpbuf[0] = (char) keycode;
         tmpbuf[1] = '\0';
         wxString strbuf(tmpbuf, *wxConvCurrent);
+#if wxUSE_INTL        
         bool is_decimal_point =
             ( strbuf == wxLocale::GetInfo(wxLOCALE_DECIMAL_POINT,
                                           wxLOCALE_CAT_NUMBER) );
+#else
+        bool is_decimal_point = ( strbuf == _T(".") );
+#endif
         if ( (keycode < 128) && 
              (wxIsdigit(keycode) || tolower(keycode) == 'e' ||
               is_decimal_point || keycode == '+' || keycode == '-') )
