@@ -456,7 +456,7 @@ public:
         |- wx.ALL                    |                                          |
         |                            |                                          |
         +----------------------------+------------------------------------------+
-        |- wx.EXAPAND                |The item will be expanded to fill         |
+        |- wx.EXPAND                 |The item will be expanded to fill         |
         |                            |the space allotted to the item.           |
         +----------------------------+------------------------------------------+
         |- wx.SHAPED                 |The item will be expanded as much as      |
