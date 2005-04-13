@@ -145,8 +145,8 @@ bool wxWebKitCtrl::Create(wxWindow *parent,
     SetInitialFrameRect(pos,sizeInstance);
 #else
     m_macIsUserPane = false;
+	wxControl::Create(parent, m_windowID, pos, size, style , validator , name);
     m_peer = new wxMacControl(this);
-    wxControl::Create(parent, m_windowID, pos, size, style , validator , name);
     WebInitForCarbon();
     HIWebViewCreate( m_peer->GetControlRefAddr() );
 
@@ -258,51 +258,108 @@ void wxWebKitCtrl::SetPageSource(wxString& source, const wxString& baseUrl){
 void wxWebKitCtrl::OnSize(wxSizeEvent &event){
     // This is a nasty hack because WebKit seems to lose its position when it is embedded
     // in a control that is not itself the content view for a TLW.
+	// I put it in OnSize because these calcs are not perfect, and in fact are basically 
+	// guesses based on reverse engineering, so it's best to give people the option of
+	// overriding OnSize with their own calcs if need be.
+	// I also left some test debugging print statements as a convenience if a(nother)
+	// problem crops up.
+	
+	// Let's hope that Tiger fixes this mess...
+	
+	int x, y; 
+	x = 0;
+	y = 0;
+	
+	bool isParentTopLevel = true;
+			
+	wxWindow* parent = GetParent();
+	
+	wxWindow* tlw = MacGetTopLevelWindow();
+	
+	// This must be the case that Apple tested with, because well, in this one case
+	// we don't need to do anything! It just works. ;)
+	if (parent == tlw){
+		return;
+	}
+					
+	while(parent != NULL)
+	{
+		if ( parent->GetClassInfo()->GetClassName() == wxT("wxSplitterWindow") ){
+			//do nothing in this case
+		}
+		else{
+			if (!parent->IsTopLevel()) {
+				//printf("Parent: %s\n", parent->GetClassInfo()->GetClassName());
+				int plusx = 0;
+				plusx = parent->GetClientAreaOrigin().x + parent->GetPosition().x; 
+				if (plusx > 0){
+					x += plusx; 
+					//printf("Parent: %s Added x: %d\n", parent->GetClassInfo()->GetClassName(), parent->GetClientAreaOrigin().x + parent->GetPosition().x);
+				}
+				
+				int plusy = 0;
+				plusy = parent->GetClientAreaOrigin().y + parent->GetPosition().y;
+				if (plusy > 0){
+					y += plusy; 
+					//printf("Parent: %s Added y: %d\n", parent->GetClassInfo()->GetClassName(), parent->GetClientAreaOrigin().y + parent->GetPosition().y);
+				}
+				else{
+					//printf("Parent: %s Origin: %d Position:%d\n", parent->GetClassInfo()->GetClassName(), parent->GetClientAreaOrigin().y, parent->GetPosition().y);
+				}
+				
+			}
+			else{
+				// 
+				x += parent->GetClientAreaOrigin().x;
+				// calculate the title bar height (26 pixels) into the top offset.
+				// This becomes important later when we must flip the y coordinate
+				// to convert to Cocoa's coordinate system.
+				y += parent->GetClientAreaOrigin().y += 26;
+				//printf("x: %d, y:%d\n", x, y);
+			}
+			//we still need to add the y, because we have to convert/flip coordinates for Cocoa
 
-    wxWindow* parent = GetParent();
-    bool isParentTopLevel = true;
-    if (!parent->IsTopLevel())
-        isParentTopLevel = false;
+			if ( parent->IsKindOf( CLASSINFO( wxNotebook ) )  ){
+				//Not sure why calcs are off in this one scenario...
+				x -= 3;
+				//printf("x: %d, y:%d\n", x, y);
+			}
+			
+			if (parent->IsKindOf( CLASSINFO( wxPanel ) ) ){
+				// Another strange case. Adding a wxPanel to the parent heirarchy
+				// causes wxWebKitCtrl's Cocoa y origin to be 4 pixels off 
+				// for some reason, even if the panel has a position and origin of 0. 
+				// This corrects that. Man, I wish I could debug Carbon/HIWebView!! ;)
+				y -= 4;
+			}
+		}
 
-    int x = GetPosition().x;
-    // we must take into account the title bar size as well, which is 26 pixels
-    int y = GetPosition().y + 26;
+		parent = parent->GetParent();
+	}
 
-    NSRect bounds = [m_webView frame];
-    wxWindow* tlw = NULL;
-
-    while(parent != NULL)
-    {
-        if (parent->IsTopLevel())
-            tlw = parent;
-
-        x += parent->GetPosition().x;
-        y += parent->GetPosition().y;
-
-        if ( parent->IsKindOf( CLASSINFO( wxNotebook ) )  ){
-            //manually account for the size the tabs take up
-            y += 14;
-        }
-
-        //if ( parent->GetClassInfo()->GetClassName() == wxT("wxSplitterWindow") ){
-        //    x += 3;
-        //}
-
-        parent = parent->GetParent();
-    }
-
-    if (!isParentTopLevel){
-        if (tlw){
-            //x = tlw->GetSize().x - (GetSize().x + x);
-            y = tlw->GetSize().y - (GetSize().y + y);
-        }
-        NSRect bounds = [m_webView frame];
-        bounds.origin.x += x;
-        bounds.origin.y += y;
-        //leaving debug checks in until I know it works everywhere ;-)
-        //printf("Added to bounds x=%d, y=%d\n", x, y);
-        [m_webView setFrame:bounds];
-    }
+	// Tried using MacWindowToRootWindow both for wxWebKitCtrl and its parent,
+	// but coordinates were off by a significant amount.
+	// Am leaving the code here if anyone wants to play with it.
+	
+	//int x2, y2 = 0;
+	//if (GetParent())
+	//	GetParent()->MacWindowToRootWindow(&x2, &y2);
+	//printf("x = %d, y = %d\n", x, y);
+	//printf("x2 = %d, y2 = %d\n", x2, y2);
+	//x = x2;
+	//y = y2;
+	
+	if (tlw){
+		//flip the y coordinate to convert to Cocoa coordinates
+		//printf("tlw y: %d, y: %d\n", tlw->GetSize().y, (GetSize().y + y));
+		y = tlw->GetSize().y - ((GetSize().y) + y);
+	}
+			
+	//printf("Added to bounds x=%d, y=%d\n", x, y);
+	NSRect bounds = [m_webView frame];
+	bounds.origin.x = x;
+	bounds.origin.y = y;
+	[m_webView setFrame:bounds];
 
     //printf("Carbon position x=%d, y=%d\n", GetPosition().x, GetPosition().y);
     if (IsShown())

@@ -67,6 +67,8 @@ public:
     bool CanGetPageSource();
     wxString GetPageSource();
     void SetPageSource(wxString& source, const wxString& baseUrl = wxEmptyString);
+	wxString GetPageURL(){ return m_currentURL; }
+	wxString GetPageTitle(){ return m_pageTitle; }
 
     //we need to resize the webview when the control size changes
     void OnSize(wxSizeEvent &event);

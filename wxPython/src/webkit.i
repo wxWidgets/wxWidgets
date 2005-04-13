@@ -86,6 +86,8 @@ public:
     bool CanGetPageSource() { return false; }
     wxString GetPageSource() { return wxEmptyString; }
     void SetPageSource(wxString& source, const wxString& baseUrl = wxEmptyString) {}
+    wxString GetPageURL(){ return m_currentURL; }
+	wxString GetPageTitle(){ return m_pageTitle; }
 };
 
 
