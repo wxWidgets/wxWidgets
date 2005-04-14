@@ -22676,21 +22676,27 @@ static PyObject *_wrap_PyApp__setCallbackInfo(PyObject *, PyObject *args, PyObje
     wxPyApp *arg1 = (wxPyApp *) 0 ;
     PyObject *arg2 = (PyObject *) 0 ;
     PyObject *arg3 = (PyObject *) 0 ;
+    bool arg4 ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     PyObject * obj2 = 0 ;
+    PyObject * obj3 = 0 ;
     char *kwnames[] = {
-        (char *) "self",(char *) "self",(char *) "_class", NULL 
+        (char *) "self",(char *) "self",(char *) "_class",(char *) "incref", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO:PyApp__setCallbackInfo",kwnames,&obj0,&obj1,&obj2)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOOO:PyApp__setCallbackInfo",kwnames,&obj0,&obj1,&obj2,&obj3)) goto fail;
     SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxPyApp, SWIG_POINTER_EXCEPTION | 0);
     if (SWIG_arg_fail(1)) SWIG_fail;
     arg2 = obj1;
     arg3 = obj2;
     {
+        arg4 = (bool)(SWIG_As_bool(obj3)); 
+        if (SWIG_arg_fail(4)) SWIG_fail;
+    }
+    {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
-        (arg1)->_setCallbackInfo(arg2,arg3);
+        (arg1)->_setCallbackInfo(arg2,arg3,arg4);
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;

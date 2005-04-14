@@ -117,6 +117,14 @@ class WebKitCtrl(_core.Control):
         """SetPageSource(self, String source, String baseUrl=EmptyString)"""
         return _webkit.WebKitCtrl_SetPageSource(*args, **kwargs)
 
+    def GetPageURL(*args, **kwargs):
+        """GetPageURL(self) -> String"""
+        return _webkit.WebKitCtrl_GetPageURL(*args, **kwargs)
+
+    def GetPageTitle(*args, **kwargs):
+        """GetPageTitle(self) -> String"""
+        return _webkit.WebKitCtrl_GetPageTitle(*args, **kwargs)
+
 
 class WebKitCtrlPtr(WebKitCtrl):
     def __init__(self, this):

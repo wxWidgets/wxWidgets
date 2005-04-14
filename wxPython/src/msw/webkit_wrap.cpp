@@ -1422,6 +1422,8 @@ public:
     bool CanGetPageSource() { return false; }
     wxString GetPageSource() { return wxEmptyString; }
     void SetPageSource(wxString& source, const wxString& baseUrl = wxEmptyString) {}
+    wxString GetPageURL()   { return wxEmptyString; }
+    wxString GetPageTitle() { return wxEmptyString; }
 };
 
 
@@ -2170,6 +2172,70 @@ static PyObject *_wrap_WebKitCtrl_SetPageSource(PyObject *, PyObject *args, PyOb
 }
 
 
+static PyObject *_wrap_WebKitCtrl_GetPageURL(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxWebKitCtrl *arg1 = (wxWebKitCtrl *) 0 ;
+    wxString result;
+    PyObject * obj0 = 0 ;
+    char *kwnames[] = {
+        (char *) "self", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:WebKitCtrl_GetPageURL",kwnames,&obj0)) goto fail;
+    SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxWebKitCtrl, SWIG_POINTER_EXCEPTION | 0);
+    if (SWIG_arg_fail(1)) SWIG_fail;
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = (arg1)->GetPageURL();
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    {
+#if wxUSE_UNICODE
+        resultobj = PyUnicode_FromWideChar((&result)->c_str(), (&result)->Len());
+#else
+        resultobj = PyString_FromStringAndSize((&result)->c_str(), (&result)->Len());
+#endif
+    }
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_WebKitCtrl_GetPageTitle(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxWebKitCtrl *arg1 = (wxWebKitCtrl *) 0 ;
+    wxString result;
+    PyObject * obj0 = 0 ;
+    char *kwnames[] = {
+        (char *) "self", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:WebKitCtrl_GetPageTitle",kwnames,&obj0)) goto fail;
+    SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxWebKitCtrl, SWIG_POINTER_EXCEPTION | 0);
+    if (SWIG_arg_fail(1)) SWIG_fail;
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = (arg1)->GetPageTitle();
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    {
+#if wxUSE_UNICODE
+        resultobj = PyUnicode_FromWideChar((&result)->c_str(), (&result)->Len());
+#else
+        resultobj = PyString_FromStringAndSize((&result)->c_str(), (&result)->Len());
+#endif
+    }
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
 static PyObject * WebKitCtrl_swigregister(PyObject *, PyObject *args) {
     PyObject *obj;
     if (!PyArg_ParseTuple(args,(char*)"O", &obj)) return NULL;
@@ -2358,6 +2424,8 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"WebKitCtrl_CanGetPageSource", (PyCFunction) _wrap_WebKitCtrl_CanGetPageSource, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"WebKitCtrl_GetPageSource", (PyCFunction) _wrap_WebKitCtrl_GetPageSource, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"WebKitCtrl_SetPageSource", (PyCFunction) _wrap_WebKitCtrl_SetPageSource, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"WebKitCtrl_GetPageURL", (PyCFunction) _wrap_WebKitCtrl_GetPageURL, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"WebKitCtrl_GetPageTitle", (PyCFunction) _wrap_WebKitCtrl_GetPageTitle, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"WebKitCtrl_swigregister", WebKitCtrl_swigregister, METH_VARARGS, NULL},
 	 { (char *)"new_WebKitStateChangedEvent", (PyCFunction) _wrap_new_WebKitStateChangedEvent, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"WebKitStateChangedEvent_GetState", (PyCFunction) _wrap_WebKitStateChangedEvent_GetState, METH_VARARGS | METH_KEYWORDS, NULL},
