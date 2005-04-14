@@ -20,7 +20,7 @@ XGETTEXT_ARGS=-C -k_ -kwxGetTranslation -kwxTRANSLATE -s -j
 
 # implicit rules
 %.mo: %.po
-	$(MSGFMT) -o $@ $<
+	$(MSGFMT) -c -o $@ $<
 
 # a PO file must be updated from wxstd.po to include new translations
 %.po: wxstd.po
