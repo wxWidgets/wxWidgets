@@ -10,7 +10,7 @@ the macros behave exactly the same.
 \twocolwidtha{9cm}
 \begin{twocollist}\itemsep=0pt
 \twocolitem{{\bf EVT\_SCROLL(func)}}{Process all scroll events.}
-\twocolitem{{\bf EVT\_SCROLL\_TOP(func)}}{Process wxEVT\_SCROLL\_TOP scroll-to-top events (minium position).}
+\twocolitem{{\bf EVT\_SCROLL\_TOP(func)}}{Process wxEVT\_SCROLL\_TOP scroll-to-top events (minimum position).}
 \twocolitem{{\bf EVT\_SCROLL\_BOTTOM(func)}}{Process wxEVT\_SCROLL\_TOP scroll-to-bottom events (maximum position).}
 \twocolitem{{\bf EVT\_SCROLL\_LINEUP(func)}}{Process wxEVT\_SCROLL\_LINEUP line up events.}
 \twocolitem{{\bf EVT\_SCROLL\_LINEDOWN(func)}}{Process wxEVT\_SCROLL\_LINEDOWN line down events.}
