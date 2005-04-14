@@ -79,7 +79,12 @@ bool wxChoice::Create(wxWindow *parent, wxWindowID id,
     m_peer->SetData<MenuHandle>( kControlNoPart , kControlPopupButtonMenuHandleTag , (MenuHandle) m_macPopUpMenuHandle ) ;
     m_peer->SetValueAndRange( n > 0 ? 1 : 0 , 0 , 0 ) ;
     MacPostControlCreate(pos,size) ;
-    // TODO wxCB_SORT
+
+    if ( style & wxCB_SORT )
+    {
+        m_strings = wxArrayString(1) ; // autosort
+    }
+    
     for ( int i = 0; i < n; i++ )
     {
         Append(choices[i]);
@@ -93,10 +98,9 @@ bool wxChoice::Create(wxWindow *parent, wxWindowID id,
 // ----------------------------------------------------------------------------
 int wxChoice::DoAppend(const wxString& item)
 {
-    UMAAppendMenuItem(MAC_WXHMENU( m_macPopUpMenuHandle ) , item, m_font.GetEncoding() );
-    m_strings.Add( item ) ;
-    m_datas.Add( NULL ) ;
-    int index = m_strings.GetCount()  - 1  ;
+    size_t index = m_strings.Add( item ) ;
+    m_datas.Insert( NULL , index ) ;
+    UMAInsertMenuItem(MAC_WXHMENU( m_macPopUpMenuHandle ) , item, m_font.GetEncoding() , index );
     DoSetItemClientData( index , NULL ) ;
     m_peer->SetMaximum( GetCount() ) ;
     return index ;
@@ -110,7 +114,7 @@ int wxChoice::DoInsert(const wxString& item, int pos)
     if (pos == GetCount())
         return DoAppend(item);
 
-    UMAAppendMenuItem(MAC_WXHMENU( m_macPopUpMenuHandle ) , item, m_font.GetEncoding() );
+    UMAInsertMenuItem(MAC_WXHMENU( m_macPopUpMenuHandle ) , item, m_font.GetEncoding() , pos );
     m_strings.Insert( item, pos ) ;
     m_datas.Insert( NULL, pos ) ;
     DoSetItemClientData( pos , NULL ) ;
@@ -179,21 +183,14 @@ int wxChoice::GetCount() const
 
 int wxChoice::FindString(const wxString& s) const
 {
-    for( int i = 0 ; i < GetCount() ; i++ )
-    {
-        if ( GetString( i ).IsSameAs(s, false) )
-            return i ;
-    }
-    return wxNOT_FOUND ;
+    return m_strings.Index( s , true , false) ;
 }
 
 void wxChoice::SetString(int n, const wxString& s)
 {
-    wxFAIL_MSG(wxT("wxChoice::SetString() not yet implemented"));
-#if 0 // should do this, but no Insert() so far
-    Delete(n);
-    Insert(n + 1, s);
-#endif
+    m_strings[n] = s ;
+    // apple menu pos is 1-based
+    UMASetMenuItemText( MAC_WXHMENU(m_macPopUpMenuHandle) , n + 1 , s , wxFont::GetDefaultEncoding() ) ;
 }
 
 wxString wxChoice::GetString(int n) const
