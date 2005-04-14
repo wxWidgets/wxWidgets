@@ -21,6 +21,10 @@
  */
 
 ////@begin includes
+
+#include "wx/intl.h"
+#include "wx/dialog.h"
+
 ////@end includes
 
 /*!

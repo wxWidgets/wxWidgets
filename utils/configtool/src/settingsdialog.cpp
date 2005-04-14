@@ -22,6 +22,7 @@
 
 #ifndef WX_PRECOMP
 
+#include "wx/intl.h"
 #include "wx/statline.h"
 #include "wx/splitter.h"
 #include "wx/scrolwin.h"
@@ -30,6 +31,8 @@
 #include "wx/sizer.h"
 #include "wx/statbox.h"
 #include "wx/dirdlg.h"
+#include "wx/stattext.h"
+#include "wx/choice.h"
 
 #endif
 

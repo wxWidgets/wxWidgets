@@ -21,6 +21,10 @@
 #pragma hdrstop
 #endif
 
+#if defined(__WXMSW__)
+    #include "wx/msw/wrapwin.h"
+#endif
+
 #ifndef WX_PRECOMP
     #ifndef NO_GUI
         #include "wx/menu.h"
