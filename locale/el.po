@@ -989,7 +989,7 @@ msgid "Cannot find the location of address book file"
 msgstr "Δεν είναι δυνατή η εύρεση της θέσης του αρχείου βιβλίου διευθύνσεων"
 
 #: ../src/unix/threadpsx.cpp:1100
-#, c-format
+#, fuzzy, c-format
 msgid "Cannot get priority range for scheduling policy %d."
 msgstr "Δεν είναι δυνατή η ανάγνωση του εύρους προτεραιοτήτων"
 
@@ -1817,7 +1817,7 @@ msgid "Failed to establish an advise loop with DDE server"
 msgstr "Αποτυχία επίτευξης βρόχου advise με τον διακομιστή DDE"
 
 #: ../src/msw/dialup.cpp:621
-#, c-format
+#, fuzzy, c-format
 msgid "Failed to establish dialup connection: %s"
 msgstr "Αποτυχία %s της σύνδεσης μέσω τηλεφώνου : %s"
 
@@ -1871,7 +1871,7 @@ msgid "Failed to get data from the clipboard"
 msgstr "Αποτυχία λήψης δεδομένων απο το πρόχειρο"
 
 #: ../src/msw/stackwalk.cpp:221
-#, c-format
+#, fuzzy, c-format
 msgid ""
 "Failed to get stack backtrace:\n"
 "%s"
@@ -2083,7 +2083,7 @@ msgid "Failed to set temporary file permissions"
 msgstr "Αποτυχία θέσπισης δικαιωμάτων προσωρινού αρχείου"
 
 #: ../src/unix/threadpsx.cpp:1245 ../src/unix/threadpsx.cpp:1256
-#, c-format
+#, fuzzy, c-format
 msgid "Failed to set thread priority %d."
 msgstr "Δεν είναι δυνατή η θέση προτεραιότητας του thread"
 

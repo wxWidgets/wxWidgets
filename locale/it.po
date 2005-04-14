@@ -2533,7 +2533,7 @@ msgstr "Indice dell'immagine TIFF non valido."
 #: ../src/xrc/xmlres.cpp:399
 #, c-format
 msgid "Invalid XRC resource '%s': doesn't have root node 'resource'."
-msgstr "Risorsa XRC non valida: il nodo radice deve essere di tipo 'resource'."
+msgstr "Risorsa XRC '%s' non valida: il nodo radice deve essere di tipo 'resource'."
 
 #: ../src/common/appcmn.cpp:249
 #, c-format

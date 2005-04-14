@@ -2813,7 +2813,7 @@ msgid ""
 msgstr ""
 "Aucune police de caractères n'a été trouvée pour afficher du texte utilisant "
 "l'encodage '%s',\n"
-"mais un encodage similaire est disponible. Souhaitez-vous l'utiliser ?\n"
+"mais un encodage similaire '%s' est disponible. Souhaitez-vous l'utiliser ?\n"
 "(dans le cas contraire, vous devrez choisir par vous-même un encodage de "
 "substitution)"
 

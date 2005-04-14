@@ -1917,7 +1917,7 @@ msgstr ""
 "käynnistä ohjelma uudestaan"
 
 #: ../src/msw/utils.cpp:702
-#, c-format
+#, fuzzy, c-format
 msgid "Failed to kill process %d"
 msgstr "Prosessia %s ei voitu lopettaa"
 

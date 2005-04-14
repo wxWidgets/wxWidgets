@@ -807,7 +807,7 @@ msgid "Can not resume thread %lu"
 msgstr "No es pot enumerar els fitxers en el directori '%s'"
 
 #: ../src/mac/classic/thread.cpp:491 ../src/msw/thread.cpp:824
-#, c-format
+#, fuzzy, c-format
 msgid "Can not resume thread %x"
 msgstr "No es pot enumerar els fitxers en el directori '%s'"
 
@@ -1519,7 +1519,7 @@ msgstr ""
 "%s %1"
 
 #: ../src/common/docview.cpp:464
-#, c-format
+#, fuzzy, c-format
 msgid "Do you want to save changes to document %s?"
 msgstr "Voleu desar els canvis del document"
 
@@ -2162,7 +2162,7 @@ msgid "File %s does not exist."
 msgstr "El fitxer %s no existeix"
 
 #: ../src/generic/filedlgg.cpp:1321 ../src/gtk/filedlg.cpp:61
-#, c-format
+#, fuzzy, c-format
 msgid "File '%s' already exists, do you really want to overwrite it?"
 msgstr "El fitxer '%' ja existex, n'esteu segur de voleu rescriure-hi?"
 
@@ -2322,7 +2322,7 @@ msgid "HTML Help Project (*.hhp)|*.hhp|"
 msgstr ""
 
 #: ../src/html/htmlwin.cpp:498
-#, c-format
+#, fuzzy, c-format
 msgid "HTML anchor %s does not exist."
 msgstr "L'ancoratge de l'HTML no existeix."
 
@@ -3528,7 +3528,7 @@ msgstr ""
 "[Anul·la] si no pot ser substituït."
 
 #: ../src/msw/ole/dataobj.cpp:164
-#, c-format
+#, fuzzy, c-format
 msgid "The clipboard format '%d' doesn't exist."
 msgstr "El format '%s' del porta-retalls no existeix."
 
@@ -4326,7 +4326,7 @@ msgid "can't re-initialize zlib inflate stream"
 msgstr "No es pot començar a mostrar."
 
 #: ../src/common/file.cpp:310
-#, c-format
+#, fuzzy, c-format
 msgid "can't read from file descriptor %d"
 msgstr "no es pot llegir des del fitxer descriptor %s"
 

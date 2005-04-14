@@ -891,7 +891,7 @@ msgid "Can't open registry key '%s'"
 msgstr "レジストリキー '%s' をオープンできません"
 
 #: ../src/common/zstream.cpp:166
-#, c-format
+#, fuzzy, c-format
 msgid "Can't read from inflate stream: %s"
 msgstr "膨張ストリーム %d から読むことができません"
 
@@ -930,7 +930,7 @@ msgid "Can't set value of '%s'"
 msgstr "'%s' の値を設定できません"
 
 #: ../src/common/zstream.cpp:316
-#, c-format
+#, fuzzy, c-format
 msgid "Can't write to deflate stream: %s"
 msgstr "収縮ストリーム %d に書き出せません"
 
@@ -2748,7 +2748,7 @@ msgid "No image handler for type %d defined."
 msgstr "タイプ '%d' のイメージ・ハンドラーは、定義されていません。"
 
 #: ../src/common/image.cpp:1551 ../src/common/image.cpp:1581
-#, c-format
+#, fuzzy, c-format
 msgid "No image handler for type %s defined."
 msgstr "タイプ '%d' のイメージ・ハンドラーは、定義されていません。"
 
@@ -4124,7 +4124,7 @@ msgid "bold "
 msgstr "ボールド"
 
 #: ../src/common/ffile.cpp:91
-#, c-format
+#, fuzzy, c-format
 msgid "can't close file '%s'"
 msgstr "ファイル '%' を閉じることができません"
 
@@ -4302,7 +4302,7 @@ msgid "eleventh"
 msgstr "第１１"
 
 #: ../src/common/strconv.cpp:2671
-#, c-format
+#, fuzzy, c-format
 msgid "encoding %s"
 msgstr "エンコード %d"
 
@@ -4689,7 +4689,7 @@ msgid "yesterday"
 msgstr "昨日"
 
 #: ../src/common/zstream.cpp:165 ../src/common/zstream.cpp:315
-#, c-format
+#, fuzzy, c-format
 msgid "zlib error %d"
 msgstr "zlib エラー %ld"
 
