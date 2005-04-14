@@ -76,9 +76,8 @@ class TestTransientPopup(wx.PopupTransientWindow):
     def __init__(self, parent, style, log):
         wx.PopupTransientWindow.__init__(self, parent, style)
         self.log = log
-        panel = wx.Panel(self, -1)
-        panel.SetBackgroundColour("#FFB6C1")
-        st = wx.StaticText(panel, -1,
+        self.SetBackgroundColour("#FFB6C1")
+        st = wx.StaticText(self, -1,
                           "wx.PopupTransientWindow is a\n"
                           "wx.PopupWindow which disappears\n"
                           "automatically when the user\n"
@@ -88,8 +87,7 @@ class TestTransientPopup(wx.PopupTransientWindow):
                           ,
                           pos=(10,10))
         sz = st.GetBestSize()
-        panel.SetSize( (sz.width+20, sz.height+20) )
-        self.SetSize(panel.GetSize())
+        self.SetSize( (sz.width+20, sz.height+20) )
 
     def ProcessLeftDown(self, evt):
         self.log.write("ProcessLeftDown\n")
@@ -132,7 +130,9 @@ class TestPanel(wx.Panel):
 
 
     def OnShowPopupTransient(self, evt):
-        win = TestTransientPopup(self, wx.SIMPLE_BORDER, self.log)
+        win = TestTransientPopup(self,
+                                 wx.SIMPLE_BORDER,
+                                 self.log)
 
         # Show the popup right below or above the button
         # depending on available screen space...
