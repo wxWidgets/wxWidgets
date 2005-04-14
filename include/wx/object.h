@@ -391,7 +391,7 @@ inline void* wxCheckCast(void *ptr)
 
 #endif // wxUSE_ARRAY_MEMORY_OPERATORS
 
-#endif // WXDEBUG && wxUSE_MEMORY_TRACING
+#endif // __WXDEBUG__ && wxUSE_MEMORY_TRACING
 
 // ----------------------------------------------------------------------------
 // wxObject: the root class of wxWidgets object hierarchy

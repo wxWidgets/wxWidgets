@@ -197,11 +197,11 @@ void wxLogQueryInterface(const wxChar *szInterface, REFIID riid);
 void wxLogAddRef (const wxChar *szInterface, ULONG cRef);
 void wxLogRelease(const wxChar *szInterface, ULONG cRef);
 
-#else   //!WXDEBUG
+#else   //!__WXDEBUG__
   #define   wxLogQueryInterface(szInterface, riid)
   #define   wxLogAddRef(szInterface, cRef)
   #define   wxLogRelease(szInterface, cRef)
-#endif  //WXDEBUG
+#endif  //__WXDEBUG__
 
 // wrapper around BSTR type (by Vadim Zeitlin)
 
