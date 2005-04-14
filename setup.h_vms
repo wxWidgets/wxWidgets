@@ -211,6 +211,7 @@
 
 #define wxUSE_STD_IOSTREAM  0
 
+#define wxUSE_STD_STRING  0
 
 #define wxUSE_LONGLONG      1
 

@@ -62,6 +62,7 @@ OBJECTS = \
 		panelg.obj,\
 		printps.obj,\
 		prntdlgg.obj,\
+		propdlg.obj,\
 		progdlgg.obj,\
 		renderg.obj,\
 		sashwin.obj,\
@@ -103,6 +104,7 @@ SOURCES = \
 		panelg.cpp,\
 		printps.cpp,\
 		prntdlgg.cpp,\
+		propdlg.cpp,\
 		progdlgg.cpp,\
 		renderg.cpp,\
 		sashwin.cpp,\
@@ -183,6 +185,7 @@ panelg.obj : panelg.cpp
 printps.obj : printps.cpp
 prntdlgg.obj : prntdlgg.cpp
 progdlgg.obj : progdlgg.cpp
+propdlg.obj : propdlg.cpp
 scrlwing.obj : scrlwing.cpp
 spinctlg.obj : spinctlg.cpp
 renderg.obj : renderg.cpp
