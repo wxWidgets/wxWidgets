@@ -644,7 +644,6 @@ int wxApp::GetComCtl32Version()
                                         dvi.dwMinorVersion;
                 }
             }
-//#endif
 
             // if DllGetVersion() is unavailable either during compile or
             // run-time, try to guess the version otherwise
