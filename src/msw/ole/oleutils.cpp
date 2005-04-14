@@ -223,7 +223,7 @@ void wxLogRelease(const char *szInterface, ULONG cRef)
   wxLogTrace("After %s::Release: m_cRef = %d", szInterface, cRef - 1);
 }
 
-#endif  //WXDEBUG
+#endif  // __WXDEBUG__
 
 #endif
   // wxUSE_DRAG_AND_DROP
