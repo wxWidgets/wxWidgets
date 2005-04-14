@@ -146,7 +146,7 @@ class wxComboBoxChoice : public wxChoice
 {
 public:
     wxComboBoxChoice(wxComboBox *cb, int style)
-        : wxChoice( cb , 1 )
+        : wxChoice( cb , 1 , wxDefaultPosition , wxDefaultSize , 0 , NULL , style & (wxCB_SORT) )
     {
         m_cb = cb;
     }
