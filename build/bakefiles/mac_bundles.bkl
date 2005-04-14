@@ -18,9 +18,6 @@
     <set var="BUNDLE_PLIST">
         $(TOP_SRCDIR)src/mac/carbon/Info.plist.in
     </set>
-    <set var="BUNDLE_RESOURCE">
-        $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).$(WXSOVERSION[0]).rsrc
-    </set>
     <set var="BUNDLE_ICONS">
         $(TOP_SRCDIR)src/mac/carbon/wxmac.icns
     </set>
@@ -40,7 +37,6 @@
             <!-- required data: -->
             <depends>$(id)</depends>
             <depends-on-file>$(BUNDLE_PLIST)</depends-on-file>
-            <depends-on-file>$(BUNDLE_RESOURCE)</depends-on-file>
             <depends-on-file>$(BUNDLE_ICONS)</depends-on-file>
 
             <command>
@@ -62,7 +58,6 @@
                 ln -f $(ref("__targetdir",id))$(ref("__targetname",id)) $(BUNDLE)/MacOS/$(id)
 
                 <!-- ditto wxWidgets resources and icons: -->
-                cp -f $(BUNDLE_RESOURCE) $(BUNDLE)/Resources/$(id).rsrc
                 cp -f $(BUNDLE_ICONS) $(BUNDLE)/Resources/wxmac.icns
             </command>            
         </modify-target>

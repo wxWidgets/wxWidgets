@@ -13,7 +13,7 @@
     <if cond="FORMAT=='autoconf'">
         <set var="MACOSX_RESOURCES">
             <if cond="TOOLKIT=='MAC'">
-                Carbon.r $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).$(WXSOVERSION[0]).r sample.r
+                Carbon.r sample.r
             </if>
         </set>
     </if>

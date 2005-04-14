@@ -169,6 +169,7 @@ WXTIFF_OBJECTS =  \
 	wxtiff_tif_dirwrite.o \
 	wxtiff_tif_dumpmode.o \
 	wxtiff_tif_error.o \
+	wxtiff_tif_extension.o \
 	wxtiff_tif_fax3.o \
 	wxtiff_tif_fax3sm.o \
 	wxtiff_tif_getimage.o \
@@ -9663,7 +9664,7 @@ install-wxconfig:
 	$(INSTALL_DIR) $(DESTDIR)$(bindir)
 	$(INSTALL_DIR) $(DESTDIR)$(libdir)/wx/config
 	$(INSTALL_PROGRAM) lib/wx/config/$(TOOLCHAIN_FULLNAME) $(DESTDIR)$(libdir)/wx/config
-	(cd $(DESTDIR)$(bindir) && rm -f wx-config && $(LN_S) $(libdir)/wx/config/$(TOOLCHAIN_FULLNAME) wx-config)
+	(cd $(DESTDIR)$(bindir) && rm -f wx-config && $(LN_S) $(DESTDIR)$(libdir)/wx/config/$(TOOLCHAIN_FULLNAME) wx-config)
 
 locale_install: 
 	$(INSTALL_DIR) $(DESTDIR)$(datadir)/locale
@@ -9958,6 +9959,9 @@ wxtiff_tif_dumpmode.o: $(srcdir)/src/tiff/tif_dumpmode.c
 
 wxtiff_tif_error.o: $(srcdir)/src/tiff/tif_error.c
 	$(CCC) -c -o $@ $(WXTIFF_CFLAGS) $(srcdir)/src/tiff/tif_error.c
+
+wxtiff_tif_extension.o: $(srcdir)/src/tiff/tif_extension.c
+	$(CCC) -c -o $@ $(WXTIFF_CFLAGS) $(srcdir)/src/tiff/tif_extension.c
 
 wxtiff_tif_fax3.o: $(srcdir)/src/tiff/tif_fax3.c
 	$(CCC) -c -o $@ $(WXTIFF_CFLAGS) $(srcdir)/src/tiff/tif_fax3.c
