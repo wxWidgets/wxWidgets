@@ -51,7 +51,7 @@ void wxApp::Exit()
 // wxYield
 //-----------------------------------------------------------------------------
 
-static bool gs_inYield = FALSE;
+static bool gs_inYield = false;
 
 bool wxApp::Yield(bool onlyIfNeeded)
 {
@@ -62,18 +62,18 @@ bool wxApp::Yield(bool onlyIfNeeded)
             wxFAIL_MSG( wxT("wxYield called recursively" ) );
         }
 
-        return FALSE;
+        return false;
     }
 
 #if wxUSE_THREADS
     if ( !wxThread::IsMain() )
     {
         // can't process events from other threads, MGL is thread-unsafe
-        return TRUE;
+        return true;
     }
 #endif // wxUSE_THREADS
 
-    gs_inYield = TRUE;
+    gs_inYield = true;
 
     wxLog::Suspend();
 
@@ -90,9 +90,9 @@ bool wxApp::Yield(bool onlyIfNeeded)
 
     wxLog::Resume();
 
-    gs_inYield = FALSE;
+    gs_inYield = false;
 
-    return TRUE;
+    return true;
 }
 
 
@@ -123,7 +123,7 @@ void wxApp::WakeUpIdle()
 class wxRootWindow : public wxWindow
 {
     public:
-        wxRootWindow() : wxWindow(NULL, -1)
+        wxRootWindow() : wxWindow(NULL, wxID_ANY)
         {
             SetMGLwindow_t(MGL_wmGetRootWindow(g_winMng));
             SetBackgroundColour(wxTHEME_COLOUR(DESKTOP));
@@ -134,7 +134,7 @@ class wxRootWindow : public wxWindow
             m_wnd = NULL;
         }
 
-        virtual bool AcceptsFocus() const { return FALSE; }
+        virtual bool AcceptsFocus() const { return false; }
 
         DECLARE_DYNAMIC_CLASS(wxRootWindow)
 };
@@ -166,21 +166,21 @@ static bool wxCreateMGL_WM(const wxVideoMode& displayMode)
                      displayMode.GetWidth(),
                      displayMode.GetHeight(),
                      displayMode.GetDepth());
-        return FALSE;
+        return false;
     }
     g_displayDC = new MGLDisplayDC(mode, 1, refresh);
     if ( !g_displayDC->isValid() )
     {
         delete g_displayDC;
         g_displayDC = NULL;
-        return FALSE;
+        return false;
     }
 
     g_winMng = MGL_wmCreate(g_displayDC->getDC());
     if (!g_winMng)
-        return FALSE;
+        return false;
 
-    return TRUE;
+    return true;
 }
 
 static void wxDestroyMGL_WM()
@@ -234,42 +234,42 @@ bool wxApp::SetDisplayMode(const wxVideoMode& mode)
 {
     if ( !mode.IsOk() )
     {
-        return FALSE;
+        return false;
     }
     if ( g_displayDC != NULL )
     {
         // FIXME_MGL -- we currently don't allow to switch video mode
         // more than once. This can hopefully be changed...
         wxFAIL_MSG(wxT("Can't change display mode after intialization!"));
-        return FALSE;
+        return false;
     }
 
     if ( !wxCreateMGL_WM(mode) )
-        return FALSE;
+        return false;
     gs_rootWindow = new wxRootWindow;
 
     m_displayMode = mode;
 
-    return TRUE;
+    return true;
 }
 
 bool wxApp::OnInitGui()
 {
     if ( !wxAppBase::OnInitGui() )
-        return FALSE;
+        return false;
 
 #ifdef __WXDEBUG__
     // MGL redirects stdout and stderr to physical console, so lets redirect
-    // it to file. Do it only when WXDEBUG environment variable is set
+    // it to file in debug build. Do it only when WXSTDERR environment variable is set
     wxString redirect;
     if ( wxGetEnv(wxT("WXSTDERR"), &redirect) )
         freopen(redirect.mb_str(), "wt", stderr);
-#endif
+#endif // __WXDEBUG__
 
     wxLog *oldLog = wxLog::SetActiveTarget(new wxLogGui);
     if ( oldLog ) delete oldLog;
 
-    return TRUE;
+    return true;
 }
 
 bool wxApp::Initialize(int& argc, wxChar **argv)
