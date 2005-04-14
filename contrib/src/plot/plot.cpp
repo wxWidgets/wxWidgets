@@ -54,27 +54,27 @@
 // event types
 //----------------------------------------------------------------------------
 
-const int wxEVT_PLOT_SEL_CHANGING = wxNewEventType();
-const int wxEVT_PLOT_SEL_CHANGED = wxNewEventType();
-const int wxEVT_PLOT_CLICKED = wxNewEventType();
-const int wxEVT_PLOT_DOUBLECLICKED = wxNewEventType();
-const int wxEVT_PLOT_ZOOM_IN = wxNewEventType();
-const int wxEVT_PLOT_ZOOM_OUT = wxNewEventType();
-const int wxEVT_PLOT_VALUE_SEL_CREATING = wxNewEventType();
-const int wxEVT_PLOT_VALUE_SEL_CREATED = wxNewEventType();
-const int wxEVT_PLOT_VALUE_SEL_CHANGING = wxNewEventType();
-const int wxEVT_PLOT_VALUE_SEL_CHANGED = wxNewEventType();
-const int wxEVT_PLOT_AREA_SEL_CREATING = wxNewEventType();
-const int wxEVT_PLOT_AREA_SEL_CREATED = wxNewEventType();
-const int wxEVT_PLOT_AREA_SEL_CHANGING = wxNewEventType();
-const int wxEVT_PLOT_AREA_SEL_CHANGED = wxNewEventType();
-const int wxEVT_PLOT_BEGIN_X_LABEL_EDIT = wxNewEventType();
-const int wxEVT_PLOT_END_X_LABEL_EDIT = wxNewEventType();
-const int wxEVT_PLOT_BEGIN_Y_LABEL_EDIT = wxNewEventType();
-const int wxEVT_PLOT_END_Y_LABEL_EDIT = wxNewEventType();
-const int wxEVT_PLOT_BEGIN_TITLE_EDIT = wxNewEventType();
-const int wxEVT_PLOT_END_TITLE_EDIT = wxNewEventType();
-const int wxEVT_PLOT_AREA_CREATE = wxNewEventType();
+DEFINE_EVENT_TYPE(wxEVT_PLOT_SEL_CHANGING);
+DEFINE_EVENT_TYPE(wxEVT_PLOT_SEL_CHANGED);
+DEFINE_EVENT_TYPE(wxEVT_PLOT_CLICKED);
+DEFINE_EVENT_TYPE(wxEVT_PLOT_DOUBLECLICKED);
+DEFINE_EVENT_TYPE(wxEVT_PLOT_ZOOM_IN);
+DEFINE_EVENT_TYPE(wxEVT_PLOT_ZOOM_OUT);
+DEFINE_EVENT_TYPE(wxEVT_PLOT_VALUE_SEL_CREATING);
+DEFINE_EVENT_TYPE(wxEVT_PLOT_VALUE_SEL_CREATED);
+DEFINE_EVENT_TYPE(wxEVT_PLOT_VALUE_SEL_CHANGING);
+DEFINE_EVENT_TYPE(wxEVT_PLOT_VALUE_SEL_CHANGED);
+DEFINE_EVENT_TYPE(wxEVT_PLOT_AREA_SEL_CREATING);
+DEFINE_EVENT_TYPE(wxEVT_PLOT_AREA_SEL_CREATED);
+DEFINE_EVENT_TYPE(wxEVT_PLOT_AREA_SEL_CHANGING);
+DEFINE_EVENT_TYPE(wxEVT_PLOT_AREA_SEL_CHANGED);
+DEFINE_EVENT_TYPE(wxEVT_PLOT_BEGIN_X_LABEL_EDIT);
+DEFINE_EVENT_TYPE(wxEVT_PLOT_END_X_LABEL_EDIT);
+DEFINE_EVENT_TYPE(wxEVT_PLOT_BEGIN_Y_LABEL_EDIT);
+DEFINE_EVENT_TYPE(wxEVT_PLOT_END_Y_LABEL_EDIT);
+DEFINE_EVENT_TYPE(wxEVT_PLOT_BEGIN_TITLE_EDIT);
+DEFINE_EVENT_TYPE(wxEVT_PLOT_END_TITLE_EDIT);
+DEFINE_EVENT_TYPE(wxEVT_PLOT_AREA_CREATE);
 
 //----------------------------------------------------------------------------
 // accessor functions for the bitmaps (may return NULL, check for it!)
