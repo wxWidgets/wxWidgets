@@ -3633,11 +3633,11 @@ if test "$wxUSE_MAC" = 1 -o "$wxUSE_COCOA" = 1; then
     dnl resources are bundled both with shared library and applications
     dnl since the carb resource *must* be included in the application
     if test "$wxUSE_MAC" = 1; then
-        MACRESCOMP="\$(RESCOMP) -d __DARWIN__ -t APPL Carbon.r ${LIBWXMACRES} -o"
+        MACRESCOMP="\$(RESCOMP) -d __DARWIN__ -t APPL Carbon.r -o"
 
         dnl this command is used to implement `wx-config --rezflags` and it is
         dnl eval'd there so escape any metacharacters inside
-        MACRESWXCONFIG="${RESCOMP} -d __DARWIN__ -t APPL Carbon.r \\\${exec_prefix}/lib/${WX_RESOURCES_MACOSX_ASCII} -o"
+        MACRESWXCONFIG="${RESCOMP} -d __DARWIN__ -t APPL Carbon.r -o"
     else
         MACRESCOMP="echo -n | \$(RESCOMP) -d __DARWIN__ -t APPL ${LIBWXMACRES} -o"
         MACRESWXCONFIG="echo -n \\\| ${RESCOMP} -d __DARWIN__ -t APPL \\\${exec_prefix}/lib/${WX_RESOURCES_MACOSX_ASCII} -o"

@@ -29799,9 +29799,9 @@ fi
     MACSETFILE="\$(SETFILE)"
 
             if test "$wxUSE_MAC" = 1; then
-        MACRESCOMP="\$(RESCOMP) -d __DARWIN__ -t APPL Carbon.r ${LIBWXMACRES} -o"
+        MACRESCOMP="\$(RESCOMP) -d __DARWIN__ -t APPL Carbon.r -o"
 
-                        MACRESWXCONFIG="${RESCOMP} -d __DARWIN__ -t APPL Carbon.r \\\${exec_prefix}/lib/${WX_RESOURCES_MACOSX_ASCII} -o"
+                        MACRESWXCONFIG="${RESCOMP} -d __DARWIN__ -t APPL Carbon.r -o"
     else
         MACRESCOMP="echo -n | \$(RESCOMP) -d __DARWIN__ -t APPL ${LIBWXMACRES} -o"
         MACRESWXCONFIG="echo -n \\\| ${RESCOMP} -d __DARWIN__ -t APPL \\\${exec_prefix}/lib/${WX_RESOURCES_MACOSX_ASCII} -o"
