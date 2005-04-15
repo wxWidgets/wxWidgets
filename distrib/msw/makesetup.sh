@@ -25,7 +25,7 @@ PROGNAME=$0
 SCRIPTDIR=$WXWIN/distrib/msw
 WEBFILES=c:/wx2dev/wxWebSite
 # Set this to the required version
-VERSION=2.5.5
+VERSION=2.6.0
 
 . $SCRIPTDIR/setup.var
 
@@ -287,7 +287,7 @@ dospinwxall()
     cd $DESTDIR
 
     rm -f $DESTDIR/wxWidgets-$VERSION-all.zip
-    zip $ZIPFLAGS -r wxAll-$VERSION.zip wxWidgets-$VERSION/*
+    zip $ZIPFLAGS -r wxWidgets-$VERSION.zip wxWidgets-$VERSION/*
 }
 
 dospinbase()

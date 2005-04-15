@@ -234,7 +234,7 @@ echo Tarring wxAll...
 cd $WXSRC
 cat $WXSRC/distrib/msw/generic.rsp $WXSRC/distrib/msw/msw.rsp $WXSRC/distrib/msw/wince.rsp $WXSRC/distrib/msw/vc.rsp $WXSRC/distrib/msw/cw.rsp $WXSRC/distrib/msw/cw_mac.rsp $WXSRC/distrib/msw/gtk.rsp $WXSRC/distrib/msw/x11.rsp $WXSRC/distrib/msw/motif.rsp $WXSRC/distrib/msw/mac.rsp $WXSRC/distrib/msw/cocoa.rsp $WXSRC/distrib/msw/os2.rsp $WXSRC/distrib/msw/palmos.rsp $WXSRC/distrib/msw/x11.rsp $WXSRC/distrib/msw/univ.rsp $WXSRC/distrib/msw/mgl.rsp $WXSRC/distrib/msw/contrib.rsp $WXSRC/distrib/msw/deprecated.rsp $WXSRC/distrib/msw/utilmake.rsp $WXSRC/distrib/msw/utils.rsp $WXSRC/distrib/msw/mmedia.rsp $WXSRC/distrib/msw/tex2rtf.rsp $WXSRC/distrib/msw/stc.rsp $WXSRC/distrib/msw/xml.rsp $WXSRC/distrib/msw/ogl.rsp $WXSRC/distrib/msw/makefile.rsp $WXSRC/distrib/msw/tiff.rsp $WXSRC/distrib/msw/jpeg.rsp $WXSRC/distrib/msw/docsrc.rsp | uniq > /tmp/wxall_in.txt
 expandlines /tmp/wxall_in.txt /tmp/wxall.txt
-$TAR cf $WXDEST/wxAll-${WXVER}.tar -T /tmp/wxall.txt
+$TAR cf $WXDEST/wxWidgets-${WXVER}.tar -T /tmp/wxall.txt
 
 echo Re-tarring wxAll in a subdirectory...
 cd $WXDEST
@@ -274,7 +274,7 @@ else
   echo "Warning - did not find $WXDEST/deliver/extra/wxWidgets-${WXVER}-CW-Mac.zip"
 fi
 
-$TAR xf ../wxAll-${WXVER}.tar
+$TAR xf ../wxWidgets-${WXVER}.tar
 
 # Translate all .dsp and .dsw files to DOS format
 unix2dos --unix2dos `cat $WXSRC/distrib/msw/vc.rsp`
@@ -297,11 +297,11 @@ cp $WXSRC/docs/palmos/readme.txt README-PALMOS.txt
 cp $WXSRC/docs/os2/install.txt INSTALL-OS2.txt
 
 cd ..
-rm -f wxAll-${WXVER}.tar
-$TAR cf $WXDEST/wxAll-${WXVER}.tar wxWidgets-${WXVER}/*
+rm -f wxWidgets-${WXVER}.tar
+$TAR cf $WXDEST/wxWidgets-${WXVER}.tar wxWidgets-${WXVER}/*
 rm -f -r wxWidgets-${WXVER}
-gzip -c $WXDEST/wxAll-${WXVER}.tar > $WXDEST/wxAll-${WXVER}.tar.gz
-bzip2 $WXDEST/wxAll-${WXVER}.tar
+gzip -c $WXDEST/wxWidgets-${WXVER}.tar > $WXDEST/wxWidgets-${WXVER}.tar.gz
+bzip2 $WXDEST/wxWidgets-${WXVER}.tar
 }
 
 domakedocs()
