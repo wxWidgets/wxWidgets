@@ -907,6 +907,12 @@ void wxTextCtrl::SetValue( const wxString &value )
         if (gtk_text_buffer_get_char_count(m_buffer) != 0)
             IgnoreNextTextUpdate();
 
+        if ( !buffer )
+        {
+            // what else can we do? at least don't crash...
+            return;
+        }
+        
         gtk_text_buffer_set_text( m_buffer, buffer, strlen(buffer) );
 
 #else
