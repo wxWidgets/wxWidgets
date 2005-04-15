@@ -575,6 +575,12 @@
  * Use SDL for audio (Unix)
  */
 #define wxUSE_LIBSDL 0
+
+/*
+ * Compile sound backends as plugins
+ */
+#define wxUSE_PLUGINS 0
+
 /*
  * Use GNOME print for printing under GTK+ 2.0
  */
