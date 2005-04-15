@@ -258,35 +258,44 @@ WXHRGN wxStaticBox::MSWGetRegionWithoutChildren()
           child;
           child = ::GetWindow(child, GW_HWNDNEXT) )
     {
-        wxWindow *childWindow = wxGetWindowFromHWND((WXHWND) child);
-
-        // can't just test for (this != child) here since if a wxStaticBox
-        // overlaps another wxStaticBox then neither are drawn. The overlapping
-        // region will flicker but we shouldn't have overlapping windows anyway.
-        if ( !childWindow || !wxDynamicCast(childWindow, wxStaticBox) )
+        if ( ! ::IsWindowVisible(child) )
         {
-            ::GetWindowRect(child, &rc);
-            if ( ::RectInRegion(hrgn, &rc) )
+            // if the window isn't visible then it doesn't need clipped
+            continue;
+        }
+        
+        LONG style = ::GetWindowLong(child, GWL_STYLE);
+        wxString str(wxGetWindowClass(child));
+        str.UpperCase();
+        if ( str == wxT("BUTTON") && (style & BS_GROUPBOX) != 0 )
+        {
+            // Don't clip any static boxes, not just this one.  This will
+            // result in flicker in overlapping static boxes, but at least
+            // they will all be drawn correctly and we shouldn't have
+            // overlapping windows anyway.
+            continue;
+        }
+        
+        ::GetWindowRect(child, &rc);
+        if ( ::RectInRegion(hrgn, &rc) )
+        {
+            // need to remove WS_CLIPSIBLINGS from all sibling windows
+            // that are within this staticbox if set
+            if ( style & WS_CLIPSIBLINGS )
             {
-                // need to remove WS_CLIPSIBLINGS from all sibling windows
-                // that are within this staticbox if set
-                LONG style = ::GetWindowLong(child, GWL_STYLE);
-                if ( style & WS_CLIPSIBLINGS )
-                {
-                    style &= ~WS_CLIPSIBLINGS;
-                    ::SetWindowLong(child, GWL_STYLE, style);
-
-                    // MSDN: "If you have changed certain window data using
-                    // SetWindowLong, you must call SetWindowPos to have the
-                    // changes take effect."
-                    ::SetWindowPos(child, NULL, 0, 0, 0, 0,
-                                   SWP_NOMOVE | SWP_NOSIZE | SWP_NOZORDER |
-                                   SWP_FRAMECHANGED);
-                }
-
-                AutoHRGN hrgnChild(::CreateRectRgnIndirect(&rc));
-                ::CombineRgn(hrgn, hrgn, hrgnChild, RGN_DIFF);
+                style &= ~WS_CLIPSIBLINGS;
+                ::SetWindowLong(child, GWL_STYLE, style);
+                
+                // MSDN: "If you have changed certain window data using
+                // SetWindowLong, you must call SetWindowPos to have the
+                // changes take effect."
+                ::SetWindowPos(child, NULL, 0, 0, 0, 0,
+                               SWP_NOMOVE | SWP_NOSIZE | SWP_NOZORDER |
+                               SWP_FRAMECHANGED);
             }
+
+            AutoHRGN hrgnChild(::CreateRectRgnIndirect(&rc));
+            ::CombineRgn(hrgn, hrgn, hrgnChild, RGN_DIFF);
         }
     }
 
