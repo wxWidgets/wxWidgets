@@ -150,19 +150,20 @@ wxStyledTextCtrl::wxStyledTextCtrl(wxWindow *parent,
 }
 
 
-void wxStyledTextCtrl::Create(wxWindow *parent,
-                                   wxWindowID id,
-                                   const wxPoint& pos,
-                                   const wxSize& size,
-                                   long style,
-                                   const wxString& name)
+bool wxStyledTextCtrl::Create(wxWindow *parent,
+                              wxWindowID id,
+                              const wxPoint& pos,
+                              const wxSize& size,
+                              long style,
+                              const wxString& name)
 {
 #ifdef __WXMAC__
     style |= wxVSCROLL | wxHSCROLL;
 #endif
-    wxControl::Create(parent, id, pos, size,
-              style | wxWANTS_CHARS | wxCLIP_CHILDREN,
-              wxDefaultValidator, name);
+    if (!wxControl::Create(parent, id, pos, size,
+                           style | wxWANTS_CHARS | wxCLIP_CHILDREN,
+                           wxDefaultValidator, name))
+        return false;
 
 #ifdef LINK_LEXERS
     Scintilla_LinkLexers();
@@ -181,6 +182,7 @@ void wxStyledTextCtrl::Create(wxWindow *parent,
 
     // Reduces flicker on GTK+/X11
     SetBackgroundStyle(wxBG_STYLE_CUSTOM);
+    return true;
 }
 
 
