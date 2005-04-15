@@ -29,6 +29,7 @@
 #endif
 
 #ifndef WX_PRECOMP
+    #include "wx/dc.h"
     #include "wx/font.h"
     #include "wx/intl.h"
     #include "wx/dcscreen.h"
