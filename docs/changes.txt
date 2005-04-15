@@ -24,6 +24,14 @@ wxWinCE:
 
 - Fixed device origin setting and clipping region setting.
 
+wxGTK:
+- New configure syntax for specifying the GTK+ version.
+    --with-gtk             Use GTK 2.x, no fallback
+    --with-gtk=1           Use GTK 1.2, no fallback
+    --with-gtk=2           Use GTK 2.x, no fallback
+    --with-gtk=any         Use any available GTK
+
+
 2.5.5
 -----
 
