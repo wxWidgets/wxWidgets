@@ -81,6 +81,7 @@ private:
     wxScrolledWindow *m_panel;
     wxButton *m_button;
     wxSpinCtrl *m_spinCtrl;
+    wxStaticText *m_mouseText;
 
 private:
     void OnMouse( wxMouseEvent &event );
@@ -118,9 +119,9 @@ SimpleTransientPopup::SimpleTransientPopup( wxWindow *parent )
     // Keep this code to verify if mouse events work, they're required if 
     // you're making a control like a combobox where the items are highlighted
     // under the cursor, the m_panel is set focus in the Popup() function
-    //m_panel->Connect(wxEVT_MOTION,
-    //                 wxMouseEventHandler(SimpleTransientPopup::OnMouse),
-    //                 NULL, this);
+    m_panel->Connect(wxEVT_MOTION,
+                     wxMouseEventHandler(SimpleTransientPopup::OnMouse),
+                     NULL, this);
 
     wxStaticText *text = new wxStaticText( m_panel, wxID_ANY,
                           wxT("wx.PopupTransientWindow is a\n")
@@ -128,16 +129,23 @@ SimpleTransientPopup::SimpleTransientPopup( wxWindow *parent )
                           wxT("automatically when the user\n")
                           wxT("clicks the mouse outside it or if it\n")
                           wxT("(or its first child) loses focus in \n")
-                          wxT("any other way."), wxPoint( 10,10) );
-    wxSize size = text->GetBestSize();
+                          wxT("any other way.") );
 
-    m_button = new wxButton(m_panel, Minimal_PopupButton, wxT("Press Me"), wxPoint(0, size.y + 10));
-    size.y = m_button->GetRect().GetBottom();
-    m_spinCtrl = new wxSpinCtrl(m_panel, Minimal_PopupSpinctrl, wxT("Hello"), wxPoint(0, size.y + 5));
-    size.y = m_spinCtrl->GetRect().GetBottom();
+    m_button = new wxButton(m_panel, Minimal_PopupButton, wxT("Press Me"));
+    m_spinCtrl = new wxSpinCtrl(m_panel, Minimal_PopupSpinctrl, wxT("Hello"));
+    m_mouseText = new wxStaticText(m_panel, wxID_ANY, 
+                                   wxT("<- Test Mouse ->"));
 
-    m_panel->SetSize( size.x+20, size.y+20 );
-    SetClientSize( size.x+20, size.y+20 );
+    wxBoxSizer *topSizer = new wxBoxSizer( wxVERTICAL );
+    topSizer->Add( text, 0, wxALL, 5 );
+    topSizer->Add( m_button, 0, wxALL, 5 );
+    topSizer->Add( m_spinCtrl, 0, wxALL, 5 );
+    topSizer->Add( m_mouseText, 0, wxCENTRE|wxALL, 5 );
+
+    m_panel->SetAutoLayout( true );
+    m_panel->SetSizer( topSizer );
+    topSizer->Fit(m_panel);
+    topSizer->Fit(this);
 }
 
 SimpleTransientPopup::~SimpleTransientPopup()
@@ -187,7 +195,22 @@ void SimpleTransientPopup::OnKillFocus(wxFocusEvent &event)
 
 void SimpleTransientPopup::OnMouse(wxMouseEvent &event)
 {
+    wxRect rect(m_mouseText->GetRect());
+    rect.SetX(-100000);
+    rect.SetWidth(1000000);
+    wxColour colour(*wxLIGHT_GREY);
+
+    if (rect.Inside(event.GetPosition()))
+    {       
+        colour = wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHT);
     wxLogMessage( wxT("0x%lx SimpleTransientPopup::OnMouse pos(%d, %d)"), long(event.GetEventObject()), event.GetX(), event.GetY());
+    }
+
+    if (colour != m_mouseText->GetBackgroundColour())
+    {
+        m_mouseText->SetBackgroundColour(colour);
+        m_mouseText->Refresh();
+    }
     event.Skip();
 }
 
@@ -317,6 +340,12 @@ MyFrame::MyFrame(const wxString& title)
     SetMenuBar(menuBar);
 #endif // wxUSE_MENUS
 
+#if wxUSE_STATUSBAR
+    // create a status bar just for fun (by default with 1 pane only)
+    CreateStatusBar(2);
+    SetStatusText(_T("Welcome to wxWidgets!"));
+#endif // wxUSE_STATUSBAR
+
     wxPanel *panel = new wxPanel(this, -1);
     wxButton *button1 = new wxButton( panel, Minimal_StartSimplePopup, wxT("Show simple popup"), wxPoint(20,20) );
     wxButton *button2 = new wxButton( panel, Minimal_StartScrolledPopup, wxT("Show scrolled popup"), wxPoint(20,70) );
@@ -336,11 +365,6 @@ MyFrame::MyFrame(const wxString& title)
     panel->SetAutoLayout( true );
     panel->SetSizer( topSizer );
 
-#if wxUSE_STATUSBAR
-    // create a status bar just for fun (by default with 1 pane only)
-    CreateStatusBar(2);
-    SetStatusText(_T("Welcome to wxWidgets!"));
-#endif // wxUSE_STATUSBAR
 }
 
 MyFrame::~MyFrame()

@@ -127,6 +127,11 @@ protected:
     // get alerted when child gets deleted from under us
     void OnDestroy(wxWindowDestroyEvent& event);
 
+#ifdef __WXMSW__
+    // check if the mouse needs captured or released
+    void OnIdle(wxIdleEvent& event);
+#endif
+    
     // the child of this popup if any
     wxWindow *m_child;
 
@@ -141,6 +146,7 @@ protected:
     wxPopupWindowHandler *m_handlerPopup;
     wxPopupFocusHandler  *m_handlerFocus;
 
+    DECLARE_EVENT_TABLE()
     DECLARE_DYNAMIC_CLASS(wxPopupTransientWindow)
     DECLARE_NO_COPY_CLASS(wxPopupTransientWindow)
 };

@@ -110,6 +110,12 @@ BEGIN_EVENT_TABLE(wxPopupFocusHandler, wxEvtHandler)
     EVT_KEY_DOWN(wxPopupFocusHandler::OnKeyDown)
 END_EVENT_TABLE()
 
+BEGIN_EVENT_TABLE(wxPopupTransientWindow, wxPopupWindow)
+#ifdef __WXMSW__
+    EVT_IDLE(wxPopupTransientWindow::OnIdle)
+#endif
+END_EVENT_TABLE()
+
 // ============================================================================
 // implementation
 // ============================================================================
@@ -199,7 +205,10 @@ void wxPopupTransientWindow::PopHandlers()
             // handler - so don't risk deleting it second time
             m_handlerPopup = NULL;
         }
-
+        if (m_child->HasCapture())
+        {       
+            m_child->ReleaseMouse();
+        }
         m_child = NULL;
     }
 
@@ -303,6 +312,13 @@ bool wxPopupTransientWindow::Show( bool show )
     }
 #endif
 
+#ifdef __WXMSW__
+    if (!show && m_child && m_child->HasCapture())
+    {       
+        m_child->ReleaseMouse();
+    }
+#endif
+    
     bool ret = wxPopupWindow::Show( show );
 
 #ifdef __WXGTK__
@@ -337,20 +353,27 @@ bool wxPopupTransientWindow::Show( bool show )
             CurrentTime );
     }
 #endif
+
+#ifdef __WXMSW__
+    if (show && m_child)
+    {
+        // Assume that the mouse is outside the popup to begin with
+        m_child->CaptureMouse();
+    }
+#endif
+
     return ret;
 }
 
 void wxPopupTransientWindow::Dismiss()
 {
-    PopHandlers();
-
     Hide();
+    PopHandlers();
 }
 
 void wxPopupTransientWindow::DismissAndNotify()
 {
     Dismiss();
-
     OnDismiss();
 }
 
@@ -372,6 +395,35 @@ void wxPopupTransientWindow::OnDestroy(wxWindowDestroyEvent& event)
     if (event.GetEventObject() == m_focus)
         m_focus = NULL;
 }
+
+#ifdef __WXMSW__
+void wxPopupTransientWindow::OnIdle(wxIdleEvent& event)
+{
+    event.Skip();
+
+    if (IsShown() && m_child)
+    {
+        wxPoint pos = ScreenToClient(wxGetMousePosition());
+        wxRect rect(wxPoint(0,0), GetSize());
+
+        if ( rect.Inside(pos) )
+        {
+            if ( m_child->HasCapture() )
+            {
+                m_child->ReleaseMouse();
+            }
+        }
+        else
+        {
+            if ( !m_child->HasCapture() )
+            {
+                m_child->CaptureMouse();
+            }
+        }                
+    }
+}
+#endif
+
 
 #if wxUSE_COMBOBOX && defined(__WXUNIVERSAL__)
 
