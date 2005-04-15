@@ -249,12 +249,14 @@ public:
             5 // Border width
         );
 
+#if wxUSE_CHECKLISTBOX
         static const wxChar *aszChoices[] =
             { _T("Zeroth"), _T("First"), _T("Second"), _T("Third"), _T("Fourth"), _T("Fifth"), _T("Sixth"), _T("Seventh"), _T("Eighth"), _T("Nineth") };
         wxString *astrChoices = new wxString[WXSIZEOF(aszChoices)];
         unsigned int ui;
         for ( ui = 0; ui < WXSIZEOF(aszChoices); ui++ )
             astrChoices[ui] = aszChoices[ui];
+
         m_checklistbox = new wxCheckListBox(this, wxID_ANY, wxDefaultPosition, wxSize(100,100),
             WXSIZEOF(aszChoices), astrChoices);
 
@@ -264,7 +266,7 @@ public:
             wxALL,
             5 // Border width
         );
-
+#endif // wxUSE_CHECKLISTBOX
 
         SetSizer(mainSizer);
         mainSizer->Fit(this);
@@ -282,7 +284,9 @@ private:
                  *m_next;
 
     wxCheckBox *m_checkbox;
+#if wxUSE_CHECKLISTBOX
     wxCheckListBox *m_checklistbox;
+#endif
 };
 
 // ============================================================================
