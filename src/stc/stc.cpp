@@ -17,17 +17,11 @@
 
 #include <ctype.h>
 
-#define Point macPoint  // These names are also defined by some mac headers so
-#define Style macStyle  // change their names, and then undef before we need them
-
 #include <wx/wx.h>
 #include <wx/tokenzr.h>
 #include <wx/mstream.h>
 #include <wx/image.h>
 #include <wx/file.h>
-
-#undef Point
-#undef Style
 
 #include "wx/stc/stc.h"
 #include "ScintillaWX.h"

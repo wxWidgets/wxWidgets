@@ -14,17 +14,11 @@
 // Licence:     wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
-#define Point macPoint  // These names are also defined by some mac headers so
-#define Style macStyle  // change their names, and then undef before we need them
-
 #include <wx/wx.h>
 #include <wx/textbuf.h>
 #include <wx/dataobj.h>
 #include <wx/clipbrd.h>
 #include <wx/dnd.h>
-
-#undef Point
-#undef Style
 
 #include "ScintillaWX.h"
 #include "ExternalLexer.h"

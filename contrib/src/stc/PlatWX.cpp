@@ -6,18 +6,12 @@
 
 #include <ctype.h>
 
-#define Point macPoint  // These names are also defined by some mac headers so
-#define Style macStyle  // change their names, and then undef before we need them
-
 #include <wx/wx.h>
 #include <wx/encconv.h>
 #include <wx/listctrl.h>
 #include <wx/mstream.h>
 #include <wx/image.h>
 #include <wx/imaglist.h>
-
-#undef Point
-#undef Style
 
 #include "Platform.h"
 #include "PlatWX.h"
