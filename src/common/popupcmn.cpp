@@ -404,7 +404,7 @@ void wxPopupTransientWindow::OnIdle(wxIdleEvent& event)
     if (IsShown() && m_child)
     {
         wxPoint pos = ScreenToClient(wxGetMousePosition());
-        wxRect rect(wxPoint(0,0), GetSize());
+        wxRect rect(GetSize());
 
         if ( rect.Inside(pos) )
         {
