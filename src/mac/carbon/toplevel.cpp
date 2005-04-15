@@ -715,7 +715,7 @@ static pascal OSStatus wxMacTopLevelWindowEventHandler( EventHandlerCallRef hand
                 event.SetEventObject( toplevelWindow ) ;
 
                 toplevelWindow->GetEventHandler()->ProcessEvent(event) ;
-                frame->wxWindowMac::MacSuperChangedPosition() ; // like this only children will be notified
+                toplevelWindow->wxWindowMac::MacSuperChangedPosition() ; // like this only children will be notified
             }
             if ( attributes & kWindowBoundsChangeOriginChanged )
             {
