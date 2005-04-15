@@ -1002,6 +1002,12 @@ void wxTextCtrl::WriteText( const wxString &text )
 #else
         wxCharBuffer buffer( wxConvUTF8.cWC2MB( wxConvLocal.cWX2WC( text ) ) );
 #endif
+        if ( !buffer )
+        {
+            // what else can we do? at least don't crash...
+            return;
+        }
+
         gtk_editable_insert_text( GTK_EDITABLE(m_text), buffer, strlen(buffer), &len );
 
 #else
