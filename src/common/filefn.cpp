@@ -1016,7 +1016,7 @@ wxCopyFile (const wxString& file1, const wxString& file2, bool overwrite)
 #elif defined(__PALMOS__)
     // TODO with http://www.palmos.com/dev/support/docs/protein_books/Memory_Databases_Files/
     return false;
-#else // !Win32
+#elif wxUSE_FILE // !Win32
 
     wxStructStat fbuf;
     // get permissions of file1
@@ -1087,6 +1087,15 @@ wxCopyFile (const wxString& file1, const wxString& file2, bool overwrite)
         return false;
     }
 #endif // OS/2 || Mac
+
+#else // !Win32 && ! wxUSE_FILE
+
+    // impossible to simulate with wxWidgets API
+    wxUnusedVar(file1);
+    wxUnusedVar(file2);
+    wxUnusedVar(overwrite);
+    return false;
+
 #endif // __WXMSW__ && __WIN32__
 
     return true;
@@ -1256,6 +1265,8 @@ wxChar *wxGetTempFileName(const wxString& prefix, wxChar *buf)
 
     return buf;
 #else
+    wxUnusedVar(prefix);
+    wxUnusedVar(buf);
     // wxFileName::CreateTempFileName needs wxFile class enabled
     return NULL;
 #endif
