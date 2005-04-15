@@ -754,11 +754,6 @@ int wxNotebook::HitTest(const wxPoint& pt, long *flags) const
 
 void wxNotebook::OnSize(wxSizeEvent& event)
 {
-#if wxUSE_UXTHEME
-    // background bitmap size has changed, update the brush using it too
-    UpdateBgBrush();
-#endif // wxUSE_UXTHEME
-
     if ( GetPageCount() == 0 )
     {
         // Prevents droppings on resize, but does cause some flicker
@@ -800,6 +795,11 @@ void wxNotebook::OnSize(wxSizeEvent& event)
             s_isInOnSize = false;
         }
     }
+
+#if wxUSE_UXTHEME
+    // background bitmap size has changed, update the brush using it too
+    UpdateBgBrush();
+#endif // wxUSE_UXTHEME
 
     TabCtrl_AdjustRect(m_hwnd, false, &rc);
 
