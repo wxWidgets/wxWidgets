@@ -567,9 +567,6 @@ if test $DEBUG_CONFIGURE = 1; then
   DEFAULT_wxUSE_MONOLITHIC=no
   DEFAULT_wxUSE_PLUGINS=no
   DEFAULT_wxUSE_OFFICIAL_BUILD=no
-
-  DEFAULT_wxUSE_GTK1=no
-  DEFAULT_wxUSE_GTK2=no
 else
   DEFAULT_wxUSE_UNIVERSAL=no
   DEFAULT_wxUSE_STL=no
@@ -768,10 +765,10 @@ else
   DEFAULT_wxUSE_PLUGINS=no
   DEFAULT_wxUSE_OFFICIAL_BUILD=no
 
-  dnl Implies --with-gtk. Should be no here, the default is set to yes below
-  DEFAULT_wxUSE_GTK1=no
-  DEFAULT_wxUSE_GTK2=no
+  dnl Appliable only when --with-gtk was used:
+  DEFAULT_wxUSE_GTK2=yes
 fi
+
 
 dnl WX_ARG_WITH should be used to select whether an external package will be
 dnl used or not, to configure compile-time features of this package itself,
@@ -789,6 +786,11 @@ for toolkit in `echo $ALL_TOOLKITS`; do
     has_toolkit_in_cache=1
     eval "DEFAULT_$LINE"
     eval "CACHE_$toolkit=1"
+    
+    LINE=`grep "wx${toolkit}_VERSION=" ${wx_arg_cache_file}`
+    if test "x$LINE" != "x" ; then
+        eval "DEFAULT_$LINE"
+    fi
   fi
 done
 
@@ -807,9 +809,7 @@ WX_ARG_ENABLE(plugins,     [  --enable-plugins        build parts of wxWidgets a
 if test "$wxUSE_GUI" = "yes"; then
 
 WX_ARG_ENABLE(universal,   [  --enable-universal      use wxWidgets GUI controls instead of native ones], wxUSE_UNIVERSAL)
-AC_ARG_WITH(gtk,           [  --with-gtk              use GTK+ (currently uses 2.0)], [wxUSE_GTK="$withval" CACHE_GTK=1 TOOLKIT_GIVEN=1])
-WX_ARG_WITH(gtk1,          [  --with-gtk1             use GTK+ 1.2], wxUSE_GTK1)
-WX_ARG_WITH(gtk2,          [  --with-gtk2             use GTK+ 2.0], wxUSE_GTK2)
+AC_ARG_WITH(gtk,          [[  --with-gtk[=VERSION]    use GTK+, VERSION can be 2 (default), 1 or "any"]], [wxUSE_GTK="$withval" CACHE_GTK=1 TOOLKIT_GIVEN=1])
 AC_ARG_WITH(motif,         [  --with-motif            use Motif/Lesstif], [wxUSE_MOTIF="$withval" CACHE_MOTIF=1 TOOLKIT_GIVEN=1])
 AC_ARG_WITH(mac,           [  --with-mac              use Mac OS X], [wxUSE_MAC="$withval" CACHE_MAC=1 TOOLKIT_GIVEN=1])
 AC_ARG_WITH(cocoa,         [  --with-cocoa            use Cocoa], [wxUSE_COCOA="$withval" CACHE_COCOA=1 TOOLKIT_GIVEN=1])
@@ -821,6 +821,7 @@ AC_ARG_WITH(microwin,      [  --with-microwin         use MicroWindows], [wxUSE_
 AC_ARG_WITH(x11,           [  --with-x11              use X11], [wxUSE_X11="$withval" wxUSE_UNIVERSAL="yes" CACHE_X11=1 TOOLKIT_GIVEN=1])
 WX_ARG_ENABLE(nanox,       [  --enable-nanox          use NanoX], wxUSE_NANOX)
 
+AC_ARG_ENABLE(gtk2,        [  --disable-gtk2          use GTK+ 1.2 instead of 2.0], [wxUSE_GTK2="$enableval"])
 WX_ARG_ENABLE(gpe,         [  --enable-gpe            use GNOME PDA Environment features if possible], wxUSE_GPE)
 
 WX_ARG_SYS_WITH(libpng,    [  --with-libpng           use libpng (PNG image format)], wxUSE_LIBPNG)
@@ -1218,11 +1219,6 @@ if test "$wxUSE_WINE" = "yes"; then
     wxUSE_SHARED=no
 fi
 
-dnl --with-gtk1 or --with-gtk2 imply --with-gtk
-if test "$wxUSE_GTK1" = "yes" -o "$wxUSE_GTK2" = "yes"; then
-    wxUSE_GTK=yes
-    TOOLKIT_GIVEN=1
-fi
 
 if test "$wxUSE_GUI" = "yes"; then
 
@@ -1231,11 +1227,19 @@ if test "$wxUSE_GUI" = "yes"; then
     fi
 
     if test "$TOOLKIT_GIVEN" = 1; then
-      dnl convert "yes" to 1 and "no" to 0
+      dnl convert "yes", "any" or a number to 1 and "no" to 0
       for toolkit in `echo $ALL_TOOLKITS`; do
         var=wxUSE_$toolkit
         eval "value=\$${var}"
-        eval "$var=`echo \$value | sed -e "s/yes/1/" -e "s/no/0/"`"
+        if test "x$value" = "xno"; then
+          eval "$var=0"
+        elif test "x$value" != "x"; then
+          eval "$var=1"
+        fi
+
+        if test "x$value" != "x" -a "x$value" != "xyes" -a "x$value" != "xno"; then
+          eval "wx${toolkit}_VERSION=$value"
+        fi
       done
     else
       dnl try to guess the most apropriate toolkit for this platform
@@ -1244,6 +1248,11 @@ if test "$wxUSE_GUI" = "yes"; then
           var=DEFAULT_DEFAULT_wxUSE_$toolkit
         else
           var=DEFAULT_wxUSE_$toolkit
+
+          eval "version=\$DEFAULT_wx${toolkit}_VERSION"
+          if test "x$version" != "x"; then
+            eval "wx${toolkit}_VERSION=$version"
+          fi
         fi
         eval "wxUSE_$toolkit=\$${var}"
       done
@@ -1271,6 +1280,13 @@ if test "$wxUSE_GUI" = "yes"; then
         AC_MSG_ERROR(Please specify at most one toolkit (maybe some are cached in configarg.cache?))
     esac
 
+    # to be removed when --disable-gtk2 isn't needed
+    if test "x$wxUSE_GTK2" = "xyes"; then
+        wxGTK_VERSION=2
+    elif test "x$wxUSE_GTK2" = "xno"; then
+        wxGTK_VERSION=1
+    fi
+
     dnl cache the wxUSE_<TOOLKIT> values too
     for toolkit in `echo $ALL_TOOLKITS`; do
       var=wxUSE_$toolkit
@@ -1280,6 +1296,10 @@ if test "$wxUSE_GUI" = "yes"; then
         eval "cache=\$${cache_var}"
         if test "$cache" = 1; then
           echo "$var=$value" >> ${wx_arg_cache_file}
+          eval "version=\$wx${toolkit}_VERSION"
+          if test "x$version" != "x"; then
+            echo "wx${toolkit}_VERSION=$version" >> ${wx_arg_cache_file}
+          fi
         fi
         if test "$value" = 1; then
           toolkit_echo=`echo $toolkit | tr "[[A-Z]]" "[[a-z]]"`
@@ -2591,23 +2611,20 @@ if test "$wxUSE_GUI" = "yes"; then
                     GTK_MODULES=gthread
                 fi
 
-                dnl GTK+2 is currently the default
-                if test "x$wxUSE_GTK1" != "xyes" -a "x$wxUSE_GTK2" != "xyes"; then
-                    wxUSE_GTK2=yes
-                fi
-
-                dnl test for GTK2
+                dnl detect GTK2
                 wx_cv_lib_gtk=
-                if test "x$wxUSE_GTK2" = "xyes"; then
+                if test "x$wxGTK_VERSION" != "x1"; then
                     AM_PATH_GTK_2_0(2.0.0, wx_cv_lib_gtk=2.0, , $GTK_MODULES)
                 fi
 
-                dnl test for GTK1.x
-                if test -z "$wx_cv_lib_gtk" -a "x$wxUSE_GTK1" = "xyes"; then
-                    AM_PATH_GTK(1.2.7, wx_cv_lib_gtk=1.2.7, , $GTK_MODULES)
+                dnl detect GTK1.x
+                if test -z "$wx_cv_lib_gtk"; then
+                    if test "x$wxGTK_VERSION" = "x1" -o "x$wxGTK_VERSION" = "xany" ; then
+                        AM_PATH_GTK(1.2.7, wx_cv_lib_gtk=1.2.7, , $GTK_MODULES)
 
-                    if test -z "$wx_cv_lib_gtk"; then
-                        AM_PATH_GTK(1.2.3, wx_cv_lib_gtk=1.2.3, , $GTK_MODULES)
+                        if test -z "$wx_cv_lib_gtk"; then
+                            AM_PATH_GTK(1.2.3, wx_cv_lib_gtk=1.2.3, , $GTK_MODULES)
+                        fi
                     fi
                 fi
 
