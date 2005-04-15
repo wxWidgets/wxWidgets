@@ -173,11 +173,9 @@ your Mac."""
         self._BootstrapApp()
 
 
-    def __del__(self):
-        try:
-            self.RestoreStdio()  # Just in case the MainLoop was overridden
-        finally:
-            wx.PyApp.__del__(self)
+    def __del__(self, destroy=wx.PyApp.__del__):
+        self.RestoreStdio()  # Just in case the MainLoop was overridden
+        destroy(self)
 
     def Destroy(self):
         wx.PyApp.Destroy(self)
@@ -206,7 +204,10 @@ your Mac."""
 
 
     def RestoreStdio(self):
-        _sys.stdout, _sys.stderr = self.saveStdio
+        try:
+            _sys.stdout, _sys.stderr = self.saveStdio
+        except:
+            pass
 
 
     def SetOutputWindowAttributes(self, title=None, pos=None, size=None):
