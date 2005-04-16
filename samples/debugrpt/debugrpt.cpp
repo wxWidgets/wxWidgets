@@ -137,7 +137,9 @@ class MyApp : public wxApp
 public:
     virtual bool OnInit()
     {
+#if wxUSE_ON_FATAL_EXCEPTION
         wxHandleFatalExceptions();
+#endif
 
         if ( !wxApp::OnInit() )
             return false;
