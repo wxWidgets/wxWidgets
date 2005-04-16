@@ -1116,1009 +1116,2051 @@ class StyledTextCtrl(_core.Control):
         return _stc.StyledTextCtrl_Create(*args, **kwargs)
 
     def AddText(*args, **kwargs):
-        """AddText(self, String text)"""
+        """
+        AddText(self, String text)
+
+        Add text to the document at current position.
+        """
         return _stc.StyledTextCtrl_AddText(*args, **kwargs)
 
     def AddStyledText(*args, **kwargs):
-        """AddStyledText(self, wxMemoryBuffer data)"""
+        """
+        AddStyledText(self, wxMemoryBuffer data)
+
+        Add array of cells to document.
+        """
         return _stc.StyledTextCtrl_AddStyledText(*args, **kwargs)
 
     def InsertText(*args, **kwargs):
-        """InsertText(self, int pos, String text)"""
+        """
+        InsertText(self, int pos, String text)
+
+        Insert string at a position.
+        """
         return _stc.StyledTextCtrl_InsertText(*args, **kwargs)
 
     def ClearAll(*args, **kwargs):
-        """ClearAll(self)"""
+        """
+        ClearAll(self)
+
+        Delete all text in the document.
+        """
         return _stc.StyledTextCtrl_ClearAll(*args, **kwargs)
 
     def ClearDocumentStyle(*args, **kwargs):
-        """ClearDocumentStyle(self)"""
+        """
+        ClearDocumentStyle(self)
+
+        Set all style bytes to 0, remove all folding information.
+        """
         return _stc.StyledTextCtrl_ClearDocumentStyle(*args, **kwargs)
 
     def GetLength(*args, **kwargs):
-        """GetLength(self) -> int"""
+        """
+        GetLength(self) -> int
+
+        Returns the number of characters in the document.
+        """
         return _stc.StyledTextCtrl_GetLength(*args, **kwargs)
 
     def GetCharAt(*args, **kwargs):
-        """GetCharAt(self, int pos) -> int"""
+        """
+        GetCharAt(self, int pos) -> int
+
+        Returns the character byte at the position.
+        """
         return _stc.StyledTextCtrl_GetCharAt(*args, **kwargs)
 
     def GetCurrentPos(*args, **kwargs):
-        """GetCurrentPos(self) -> int"""
+        """
+        GetCurrentPos(self) -> int
+
+        Returns the position of the caret.
+        """
         return _stc.StyledTextCtrl_GetCurrentPos(*args, **kwargs)
 
     def GetAnchor(*args, **kwargs):
-        """GetAnchor(self) -> int"""
+        """
+        GetAnchor(self) -> int
+
+        Returns the position of the opposite end of the selection to the caret.
+        """
         return _stc.StyledTextCtrl_GetAnchor(*args, **kwargs)
 
     def GetStyleAt(*args, **kwargs):
-        """GetStyleAt(self, int pos) -> int"""
+        """
+        GetStyleAt(self, int pos) -> int
+
+        Returns the style byte at the position.
+        """
         return _stc.StyledTextCtrl_GetStyleAt(*args, **kwargs)
 
     def Redo(*args, **kwargs):
-        """Redo(self)"""
+        """
+        Redo(self)
+
+        Redoes the next action on the undo history.
+        """
         return _stc.StyledTextCtrl_Redo(*args, **kwargs)
 
     def SetUndoCollection(*args, **kwargs):
-        """SetUndoCollection(self, bool collectUndo)"""
+        """
+        SetUndoCollection(self, bool collectUndo)
+
+        Choose between collecting actions into the undo
+        history and discarding them.
+        """
         return _stc.StyledTextCtrl_SetUndoCollection(*args, **kwargs)
 
     def SelectAll(*args, **kwargs):
-        """SelectAll(self)"""
+        """
+        SelectAll(self)
+
+        Select all the text in the document.
+        """
         return _stc.StyledTextCtrl_SelectAll(*args, **kwargs)
 
     def SetSavePoint(*args, **kwargs):
-        """SetSavePoint(self)"""
+        """
+        SetSavePoint(self)
+
+        Remember the current position in the undo history as the position
+        at which the document was saved.
+        """
         return _stc.StyledTextCtrl_SetSavePoint(*args, **kwargs)
 
     def GetStyledText(*args, **kwargs):
-        """GetStyledText(self, int startPos, int endPos) -> wxMemoryBuffer"""
+        """
+        GetStyledText(self, int startPos, int endPos) -> wxMemoryBuffer
+
+        Retrieve a buffer of cells.
+        """
         return _stc.StyledTextCtrl_GetStyledText(*args, **kwargs)
 
     def CanRedo(*args, **kwargs):
-        """CanRedo(self) -> bool"""
+        """
+        CanRedo(self) -> bool
+
+        Are there any redoable actions in the undo history?
+        """
         return _stc.StyledTextCtrl_CanRedo(*args, **kwargs)
 
     def MarkerLineFromHandle(*args, **kwargs):
-        """MarkerLineFromHandle(self, int handle) -> int"""
+        """
+        MarkerLineFromHandle(self, int handle) -> int
+
+        Retrieve the line number at which a particular marker is located.
+        """
         return _stc.StyledTextCtrl_MarkerLineFromHandle(*args, **kwargs)
 
     def MarkerDeleteHandle(*args, **kwargs):
-        """MarkerDeleteHandle(self, int handle)"""
+        """
+        MarkerDeleteHandle(self, int handle)
+
+        Delete a marker.
+        """
         return _stc.StyledTextCtrl_MarkerDeleteHandle(*args, **kwargs)
 
     def GetUndoCollection(*args, **kwargs):
-        """GetUndoCollection(self) -> bool"""
+        """
+        GetUndoCollection(self) -> bool
+
+        Is undo history being collected?
+        """
         return _stc.StyledTextCtrl_GetUndoCollection(*args, **kwargs)
 
     def GetViewWhiteSpace(*args, **kwargs):
-        """GetViewWhiteSpace(self) -> int"""
+        """
+        GetViewWhiteSpace(self) -> int
+
+        Are white space characters currently visible?
+        Returns one of SCWS_* constants.
+        """
         return _stc.StyledTextCtrl_GetViewWhiteSpace(*args, **kwargs)
 
     def SetViewWhiteSpace(*args, **kwargs):
-        """SetViewWhiteSpace(self, int viewWS)"""
+        """
+        SetViewWhiteSpace(self, int viewWS)
+
+        Make white space characters invisible, always visible or visible outside indentation.
+        """
         return _stc.StyledTextCtrl_SetViewWhiteSpace(*args, **kwargs)
 
     def PositionFromPoint(*args, **kwargs):
-        """PositionFromPoint(self, Point pt) -> int"""
+        """
+        PositionFromPoint(self, Point pt) -> int
+
+        Find the position from a point within the window.
+        """
         return _stc.StyledTextCtrl_PositionFromPoint(*args, **kwargs)
 
     def PositionFromPointClose(*args, **kwargs):
-        """PositionFromPointClose(self, int x, int y) -> int"""
+        """
+        PositionFromPointClose(self, int x, int y) -> int
+
+        Find the position from a point within the window but return
+        INVALID_POSITION if not close to text.
+        """
         return _stc.StyledTextCtrl_PositionFromPointClose(*args, **kwargs)
 
     def GotoLine(*args, **kwargs):
-        """GotoLine(self, int line)"""
+        """
+        GotoLine(self, int line)
+
+        Set caret to start of a line and ensure it is visible.
+        """
         return _stc.StyledTextCtrl_GotoLine(*args, **kwargs)
 
     def GotoPos(*args, **kwargs):
-        """GotoPos(self, int pos)"""
+        """
+        GotoPos(self, int pos)
+
+        Set caret to a position and ensure it is visible.
+        """
         return _stc.StyledTextCtrl_GotoPos(*args, **kwargs)
 
     def SetAnchor(*args, **kwargs):
-        """SetAnchor(self, int posAnchor)"""
+        """
+        SetAnchor(self, int posAnchor)
+
+        Set the selection anchor to a position. The anchor is the opposite
+        end of the selection from the caret.
+        """
         return _stc.StyledTextCtrl_SetAnchor(*args, **kwargs)
 
     def GetCurLine(*args, **kwargs):
-        """GetCurLine(self, int OUTPUT) -> String"""
+        """
+        GetCurLine(self) -> (text, pos)
+
+        Retrieve the text of the line containing the caret, and also theindex
+        of the caret on the line.
+        """
         return _stc.StyledTextCtrl_GetCurLine(*args, **kwargs)
 
     def GetEndStyled(*args, **kwargs):
-        """GetEndStyled(self) -> int"""
+        """
+        GetEndStyled(self) -> int
+
+        Retrieve the position of the last correctly styled character.
+        """
         return _stc.StyledTextCtrl_GetEndStyled(*args, **kwargs)
 
     def ConvertEOLs(*args, **kwargs):
-        """ConvertEOLs(self, int eolMode)"""
+        """
+        ConvertEOLs(self, int eolMode)
+
+        Convert all line endings in the document to one mode.
+        """
         return _stc.StyledTextCtrl_ConvertEOLs(*args, **kwargs)
 
     def GetEOLMode(*args, **kwargs):
-        """GetEOLMode(self) -> int"""
+        """
+        GetEOLMode(self) -> int
+
+        Retrieve the current end of line mode - one of CRLF, CR, or LF.
+        """
         return _stc.StyledTextCtrl_GetEOLMode(*args, **kwargs)
 
     def SetEOLMode(*args, **kwargs):
-        """SetEOLMode(self, int eolMode)"""
+        """
+        SetEOLMode(self, int eolMode)
+
+        Set the current end of line mode.
+        """
         return _stc.StyledTextCtrl_SetEOLMode(*args, **kwargs)
 
     def StartStyling(*args, **kwargs):
-        """StartStyling(self, int pos, int mask)"""
+        """
+        StartStyling(self, int pos, int mask)
+
+        Set the current styling position to pos and the styling mask to mask.
+        The styling mask can be used to protect some bits in each styling byte from modification.
+        """
         return _stc.StyledTextCtrl_StartStyling(*args, **kwargs)
 
     def SetStyling(*args, **kwargs):
-        """SetStyling(self, int length, int style)"""
+        """
+        SetStyling(self, int length, int style)
+
+        Change style from current styling position for length characters to a style
+        and move the current styling position to after this newly styled segment.
+        """
         return _stc.StyledTextCtrl_SetStyling(*args, **kwargs)
 
     def GetBufferedDraw(*args, **kwargs):
-        """GetBufferedDraw(self) -> bool"""
+        """
+        GetBufferedDraw(self) -> bool
+
+        Is drawing done first into a buffer or direct to the screen?
+        """
         return _stc.StyledTextCtrl_GetBufferedDraw(*args, **kwargs)
 
     def SetBufferedDraw(*args, **kwargs):
-        """SetBufferedDraw(self, bool buffered)"""
+        """
+        SetBufferedDraw(self, bool buffered)
+
+        If drawing is buffered then each line of text is drawn into a bitmap buffer
+        before drawing it to the screen to avoid flicker.
+        """
         return _stc.StyledTextCtrl_SetBufferedDraw(*args, **kwargs)
 
     def SetTabWidth(*args, **kwargs):
-        """SetTabWidth(self, int tabWidth)"""
+        """
+        SetTabWidth(self, int tabWidth)
+
+        Change the visible size of a tab to be a multiple of the width of a space character.
+        """
         return _stc.StyledTextCtrl_SetTabWidth(*args, **kwargs)
 
     def GetTabWidth(*args, **kwargs):
-        """GetTabWidth(self) -> int"""
+        """
+        GetTabWidth(self) -> int
+
+        Retrieve the visible size of a tab.
+        """
         return _stc.StyledTextCtrl_GetTabWidth(*args, **kwargs)
 
     def SetCodePage(*args, **kwargs):
-        """SetCodePage(self, int codePage)"""
+        """
+        SetCodePage(self, int codePage)
+
+        Set the code page used to interpret the bytes of the document as characters.
+        """
         return _stc.StyledTextCtrl_SetCodePage(*args, **kwargs)
 
     def MarkerDefine(*args, **kwargs):
         """
         MarkerDefine(self, int markerNumber, int markerSymbol, Colour foreground=wxNullColour, 
             Colour background=wxNullColour)
+
+        Set the symbol used for a particular marker number,
+        and optionally the fore and background colours.
         """
         return _stc.StyledTextCtrl_MarkerDefine(*args, **kwargs)
 
     def MarkerSetForeground(*args, **kwargs):
-        """MarkerSetForeground(self, int markerNumber, Colour fore)"""
+        """
+        MarkerSetForeground(self, int markerNumber, Colour fore)
+
+        Set the foreground colour used for a particular marker number.
+        """
         return _stc.StyledTextCtrl_MarkerSetForeground(*args, **kwargs)
 
     def MarkerSetBackground(*args, **kwargs):
-        """MarkerSetBackground(self, int markerNumber, Colour back)"""
+        """
+        MarkerSetBackground(self, int markerNumber, Colour back)
+
+        Set the background colour used for a particular marker number.
+        """
         return _stc.StyledTextCtrl_MarkerSetBackground(*args, **kwargs)
 
     def MarkerAdd(*args, **kwargs):
-        """MarkerAdd(self, int line, int markerNumber) -> int"""
+        """
+        MarkerAdd(self, int line, int markerNumber) -> int
+
+        Add a marker to a line, returning an ID which can be used to find or delete the marker.
+        """
         return _stc.StyledTextCtrl_MarkerAdd(*args, **kwargs)
 
     def MarkerDelete(*args, **kwargs):
-        """MarkerDelete(self, int line, int markerNumber)"""
+        """
+        MarkerDelete(self, int line, int markerNumber)
+
+        Delete a marker from a line.
+        """
         return _stc.StyledTextCtrl_MarkerDelete(*args, **kwargs)
 
     def MarkerDeleteAll(*args, **kwargs):
-        """MarkerDeleteAll(self, int markerNumber)"""
+        """
+        MarkerDeleteAll(self, int markerNumber)
+
+        Delete all markers with a particular number from all lines.
+        """
         return _stc.StyledTextCtrl_MarkerDeleteAll(*args, **kwargs)
 
     def MarkerGet(*args, **kwargs):
-        """MarkerGet(self, int line) -> int"""
+        """
+        MarkerGet(self, int line) -> int
+
+        Get a bit mask of all the markers set on a line.
+        """
         return _stc.StyledTextCtrl_MarkerGet(*args, **kwargs)
 
     def MarkerNext(*args, **kwargs):
-        """MarkerNext(self, int lineStart, int markerMask) -> int"""
+        """
+        MarkerNext(self, int lineStart, int markerMask) -> int
+
+        Find the next line after lineStart that includes a marker in mask.
+        """
         return _stc.StyledTextCtrl_MarkerNext(*args, **kwargs)
 
     def MarkerPrevious(*args, **kwargs):
-        """MarkerPrevious(self, int lineStart, int markerMask) -> int"""
+        """
+        MarkerPrevious(self, int lineStart, int markerMask) -> int
+
+        Find the previous line before lineStart that includes a marker in mask.
+        """
         return _stc.StyledTextCtrl_MarkerPrevious(*args, **kwargs)
 
     def MarkerDefineBitmap(*args, **kwargs):
-        """MarkerDefineBitmap(self, int markerNumber, Bitmap bmp)"""
+        """
+        MarkerDefineBitmap(self, int markerNumber, Bitmap bmp)
+
+        Define a marker from a bitmap
+        """
         return _stc.StyledTextCtrl_MarkerDefineBitmap(*args, **kwargs)
 
     def SetMarginType(*args, **kwargs):
-        """SetMarginType(self, int margin, int marginType)"""
+        """
+        SetMarginType(self, int margin, int marginType)
+
+        Set a margin to be either numeric or symbolic.
+        """
         return _stc.StyledTextCtrl_SetMarginType(*args, **kwargs)
 
     def GetMarginType(*args, **kwargs):
-        """GetMarginType(self, int margin) -> int"""
+        """
+        GetMarginType(self, int margin) -> int
+
+        Retrieve the type of a margin.
+        """
         return _stc.StyledTextCtrl_GetMarginType(*args, **kwargs)
 
     def SetMarginWidth(*args, **kwargs):
-        """SetMarginWidth(self, int margin, int pixelWidth)"""
+        """
+        SetMarginWidth(self, int margin, int pixelWidth)
+
+        Set the width of a margin to a width expressed in pixels.
+        """
         return _stc.StyledTextCtrl_SetMarginWidth(*args, **kwargs)
 
     def GetMarginWidth(*args, **kwargs):
-        """GetMarginWidth(self, int margin) -> int"""
+        """
+        GetMarginWidth(self, int margin) -> int
+
+        Retrieve the width of a margin in pixels.
+        """
         return _stc.StyledTextCtrl_GetMarginWidth(*args, **kwargs)
 
     def SetMarginMask(*args, **kwargs):
-        """SetMarginMask(self, int margin, int mask)"""
+        """
+        SetMarginMask(self, int margin, int mask)
+
+        Set a mask that determines which markers are displayed in a margin.
+        """
         return _stc.StyledTextCtrl_SetMarginMask(*args, **kwargs)
 
     def GetMarginMask(*args, **kwargs):
-        """GetMarginMask(self, int margin) -> int"""
+        """
+        GetMarginMask(self, int margin) -> int
+
+        Retrieve the marker mask of a margin.
+        """
         return _stc.StyledTextCtrl_GetMarginMask(*args, **kwargs)
 
     def SetMarginSensitive(*args, **kwargs):
-        """SetMarginSensitive(self, int margin, bool sensitive)"""
+        """
+        SetMarginSensitive(self, int margin, bool sensitive)
+
+        Make a margin sensitive or insensitive to mouse clicks.
+        """
         return _stc.StyledTextCtrl_SetMarginSensitive(*args, **kwargs)
 
     def GetMarginSensitive(*args, **kwargs):
-        """GetMarginSensitive(self, int margin) -> bool"""
+        """
+        GetMarginSensitive(self, int margin) -> bool
+
+        Retrieve the mouse click sensitivity of a margin.
+        """
         return _stc.StyledTextCtrl_GetMarginSensitive(*args, **kwargs)
 
     def StyleClearAll(*args, **kwargs):
-        """StyleClearAll(self)"""
+        """
+        StyleClearAll(self)
+
+        Clear all the styles and make equivalent to the global default style.
+        """
         return _stc.StyledTextCtrl_StyleClearAll(*args, **kwargs)
 
     def StyleSetForeground(*args, **kwargs):
-        """StyleSetForeground(self, int style, Colour fore)"""
+        """
+        StyleSetForeground(self, int style, Colour fore)
+
+        Set the foreground colour of a style.
+        """
         return _stc.StyledTextCtrl_StyleSetForeground(*args, **kwargs)
 
     def StyleSetBackground(*args, **kwargs):
-        """StyleSetBackground(self, int style, Colour back)"""
+        """
+        StyleSetBackground(self, int style, Colour back)
+
+        Set the background colour of a style.
+        """
         return _stc.StyledTextCtrl_StyleSetBackground(*args, **kwargs)
 
     def StyleSetBold(*args, **kwargs):
-        """StyleSetBold(self, int style, bool bold)"""
+        """
+        StyleSetBold(self, int style, bool bold)
+
+        Set a style to be bold or not.
+        """
         return _stc.StyledTextCtrl_StyleSetBold(*args, **kwargs)
 
     def StyleSetItalic(*args, **kwargs):
-        """StyleSetItalic(self, int style, bool italic)"""
+        """
+        StyleSetItalic(self, int style, bool italic)
+
+        Set a style to be italic or not.
+        """
         return _stc.StyledTextCtrl_StyleSetItalic(*args, **kwargs)
 
     def StyleSetSize(*args, **kwargs):
-        """StyleSetSize(self, int style, int sizePoints)"""
+        """
+        StyleSetSize(self, int style, int sizePoints)
+
+        Set the size of characters of a style.
+        """
         return _stc.StyledTextCtrl_StyleSetSize(*args, **kwargs)
 
     def StyleSetFaceName(*args, **kwargs):
-        """StyleSetFaceName(self, int style, String fontName)"""
+        """
+        StyleSetFaceName(self, int style, String fontName)
+
+        Set the font of a style.
+        """
         return _stc.StyledTextCtrl_StyleSetFaceName(*args, **kwargs)
 
     def StyleSetEOLFilled(*args, **kwargs):
-        """StyleSetEOLFilled(self, int style, bool filled)"""
+        """
+        StyleSetEOLFilled(self, int style, bool filled)
+
+        Set a style to have its end of line filled or not.
+        """
         return _stc.StyledTextCtrl_StyleSetEOLFilled(*args, **kwargs)
 
     def StyleResetDefault(*args, **kwargs):
-        """StyleResetDefault(self)"""
+        """
+        StyleResetDefault(self)
+
+        Reset the default style to its state at startup
+        """
         return _stc.StyledTextCtrl_StyleResetDefault(*args, **kwargs)
 
     def StyleSetUnderline(*args, **kwargs):
-        """StyleSetUnderline(self, int style, bool underline)"""
+        """
+        StyleSetUnderline(self, int style, bool underline)
+
+        Set a style to be underlined or not.
+        """
         return _stc.StyledTextCtrl_StyleSetUnderline(*args, **kwargs)
 
     def StyleSetCase(*args, **kwargs):
-        """StyleSetCase(self, int style, int caseForce)"""
+        """
+        StyleSetCase(self, int style, int caseForce)
+
+        Set a style to be mixed case, or to force upper or lower case.
+        """
         return _stc.StyledTextCtrl_StyleSetCase(*args, **kwargs)
 
     def StyleSetCharacterSet(*args, **kwargs):
-        """StyleSetCharacterSet(self, int style, int characterSet)"""
+        """
+        StyleSetCharacterSet(self, int style, int characterSet)
+
+        Set the character set of the font in a style.
+        """
         return _stc.StyledTextCtrl_StyleSetCharacterSet(*args, **kwargs)
 
     def StyleSetHotSpot(*args, **kwargs):
-        """StyleSetHotSpot(self, int style, bool hotspot)"""
+        """
+        StyleSetHotSpot(self, int style, bool hotspot)
+
+        Set a style to be a hotspot or not.
+        """
         return _stc.StyledTextCtrl_StyleSetHotSpot(*args, **kwargs)
 
     def SetSelForeground(*args, **kwargs):
-        """SetSelForeground(self, bool useSetting, Colour fore)"""
+        """
+        SetSelForeground(self, bool useSetting, Colour fore)
+
+        Set the foreground colour of the selection and whether to use this setting.
+        """
         return _stc.StyledTextCtrl_SetSelForeground(*args, **kwargs)
 
     def SetSelBackground(*args, **kwargs):
-        """SetSelBackground(self, bool useSetting, Colour back)"""
+        """
+        SetSelBackground(self, bool useSetting, Colour back)
+
+        Set the background colour of the selection and whether to use this setting.
+        """
         return _stc.StyledTextCtrl_SetSelBackground(*args, **kwargs)
 
     def SetCaretForeground(*args, **kwargs):
-        """SetCaretForeground(self, Colour fore)"""
+        """
+        SetCaretForeground(self, Colour fore)
+
+        Set the foreground colour of the caret.
+        """
         return _stc.StyledTextCtrl_SetCaretForeground(*args, **kwargs)
 
     def CmdKeyAssign(*args, **kwargs):
-        """CmdKeyAssign(self, int key, int modifiers, int cmd)"""
+        """
+        CmdKeyAssign(self, int key, int modifiers, int cmd)
+
+        When key+modifier combination km is pressed perform msg.
+        """
         return _stc.StyledTextCtrl_CmdKeyAssign(*args, **kwargs)
 
     def CmdKeyClear(*args, **kwargs):
-        """CmdKeyClear(self, int key, int modifiers)"""
+        """
+        CmdKeyClear(self, int key, int modifiers)
+
+        When key+modifier combination km is pressed do nothing.
+        """
         return _stc.StyledTextCtrl_CmdKeyClear(*args, **kwargs)
 
     def CmdKeyClearAll(*args, **kwargs):
-        """CmdKeyClearAll(self)"""
+        """
+        CmdKeyClearAll(self)
+
+        Drop all key mappings.
+        """
         return _stc.StyledTextCtrl_CmdKeyClearAll(*args, **kwargs)
 
     def SetStyleBytes(*args, **kwargs):
-        """SetStyleBytes(self, int length, char styleBytes)"""
+        """
+        SetStyleBytes(self, int length, char styleBytes)
+
+        Set the styles for a segment of the document.
+        """
         return _stc.StyledTextCtrl_SetStyleBytes(*args, **kwargs)
 
     def StyleSetVisible(*args, **kwargs):
-        """StyleSetVisible(self, int style, bool visible)"""
+        """
+        StyleSetVisible(self, int style, bool visible)
+
+        Set a style to be visible or not.
+        """
         return _stc.StyledTextCtrl_StyleSetVisible(*args, **kwargs)
 
     def GetCaretPeriod(*args, **kwargs):
-        """GetCaretPeriod(self) -> int"""
+        """
+        GetCaretPeriod(self) -> int
+
+        Get the time in milliseconds that the caret is on and off.
+        """
         return _stc.StyledTextCtrl_GetCaretPeriod(*args, **kwargs)
 
     def SetCaretPeriod(*args, **kwargs):
-        """SetCaretPeriod(self, int periodMilliseconds)"""
+        """
+        SetCaretPeriod(self, int periodMilliseconds)
+
+        Get the time in milliseconds that the caret is on and off. 0 = steady on.
+        """
         return _stc.StyledTextCtrl_SetCaretPeriod(*args, **kwargs)
 
     def SetWordChars(*args, **kwargs):
-        """SetWordChars(self, String characters)"""
+        """
+        SetWordChars(self, String characters)
+
+        Set the set of characters making up words for when moving or selecting by word.
+        First sets deaults like SetCharsDefault.
+        """
         return _stc.StyledTextCtrl_SetWordChars(*args, **kwargs)
 
     def BeginUndoAction(*args, **kwargs):
-        """BeginUndoAction(self)"""
+        """
+        BeginUndoAction(self)
+
+        Start a sequence of actions that is undone and redone as a unit.
+        May be nested.
+        """
         return _stc.StyledTextCtrl_BeginUndoAction(*args, **kwargs)
 
     def EndUndoAction(*args, **kwargs):
-        """EndUndoAction(self)"""
+        """
+        EndUndoAction(self)
+
+        End a sequence of actions that is undone and redone as a unit.
+        """
         return _stc.StyledTextCtrl_EndUndoAction(*args, **kwargs)
 
     def IndicatorSetStyle(*args, **kwargs):
-        """IndicatorSetStyle(self, int indic, int style)"""
+        """
+        IndicatorSetStyle(self, int indic, int style)
+
+        Set an indicator to plain, squiggle or TT.
+        """
         return _stc.StyledTextCtrl_IndicatorSetStyle(*args, **kwargs)
 
     def IndicatorGetStyle(*args, **kwargs):
-        """IndicatorGetStyle(self, int indic) -> int"""
+        """
+        IndicatorGetStyle(self, int indic) -> int
+
+        Retrieve the style of an indicator.
+        """
         return _stc.StyledTextCtrl_IndicatorGetStyle(*args, **kwargs)
 
     def IndicatorSetForeground(*args, **kwargs):
-        """IndicatorSetForeground(self, int indic, Colour fore)"""
+        """
+        IndicatorSetForeground(self, int indic, Colour fore)
+
+        Set the foreground colour of an indicator.
+        """
         return _stc.StyledTextCtrl_IndicatorSetForeground(*args, **kwargs)
 
     def IndicatorGetForeground(*args, **kwargs):
-        """IndicatorGetForeground(self, int indic) -> Colour"""
+        """
+        IndicatorGetForeground(self, int indic) -> Colour
+
+        Retrieve the foreground colour of an indicator.
+        """
         return _stc.StyledTextCtrl_IndicatorGetForeground(*args, **kwargs)
 
     def SetWhitespaceForeground(*args, **kwargs):
-        """SetWhitespaceForeground(self, bool useSetting, Colour fore)"""
+        """
+        SetWhitespaceForeground(self, bool useSetting, Colour fore)
+
+        Set the foreground colour of all whitespace and whether to use this setting.
+        """
         return _stc.StyledTextCtrl_SetWhitespaceForeground(*args, **kwargs)
 
     def SetWhitespaceBackground(*args, **kwargs):
-        """SetWhitespaceBackground(self, bool useSetting, Colour back)"""
+        """
+        SetWhitespaceBackground(self, bool useSetting, Colour back)
+
+        Set the background colour of all whitespace and whether to use this setting.
+        """
         return _stc.StyledTextCtrl_SetWhitespaceBackground(*args, **kwargs)
 
     def SetStyleBits(*args, **kwargs):
-        """SetStyleBits(self, int bits)"""
+        """
+        SetStyleBits(self, int bits)
+
+        Divide each styling byte into lexical class bits (default: 5) and indicator
+        bits (default: 3). If a lexer requires more than 32 lexical states, then this
+        is used to expand the possible states.
+        """
         return _stc.StyledTextCtrl_SetStyleBits(*args, **kwargs)
 
     def GetStyleBits(*args, **kwargs):
-        """GetStyleBits(self) -> int"""
+        """
+        GetStyleBits(self) -> int
+
+        Retrieve number of bits in style bytes used to hold the lexical state.
+        """
         return _stc.StyledTextCtrl_GetStyleBits(*args, **kwargs)
 
     def SetLineState(*args, **kwargs):
-        """SetLineState(self, int line, int state)"""
+        """
+        SetLineState(self, int line, int state)
+
+        Used to hold extra styling information for each line.
+        """
         return _stc.StyledTextCtrl_SetLineState(*args, **kwargs)
 
     def GetLineState(*args, **kwargs):
-        """GetLineState(self, int line) -> int"""
+        """
+        GetLineState(self, int line) -> int
+
+        Retrieve the extra styling information for a line.
+        """
         return _stc.StyledTextCtrl_GetLineState(*args, **kwargs)
 
     def GetMaxLineState(*args, **kwargs):
-        """GetMaxLineState(self) -> int"""
+        """
+        GetMaxLineState(self) -> int
+
+        Retrieve the last line number that has line state.
+        """
         return _stc.StyledTextCtrl_GetMaxLineState(*args, **kwargs)
 
     def GetCaretLineVisible(*args, **kwargs):
-        """GetCaretLineVisible(self) -> bool"""
+        """
+        GetCaretLineVisible(self) -> bool
+
+        Is the background of the line containing the caret in a different colour?
+        """
         return _stc.StyledTextCtrl_GetCaretLineVisible(*args, **kwargs)
 
     def SetCaretLineVisible(*args, **kwargs):
-        """SetCaretLineVisible(self, bool show)"""
+        """
+        SetCaretLineVisible(self, bool show)
+
+        Display the background of the line containing the caret in a different colour.
+        """
         return _stc.StyledTextCtrl_SetCaretLineVisible(*args, **kwargs)
 
     def GetCaretLineBack(*args, **kwargs):
-        """GetCaretLineBack(self) -> Colour"""
+        """
+        GetCaretLineBack(self) -> Colour
+
+        Get the colour of the background of the line containing the caret.
+        """
         return _stc.StyledTextCtrl_GetCaretLineBack(*args, **kwargs)
 
     def SetCaretLineBack(*args, **kwargs):
-        """SetCaretLineBack(self, Colour back)"""
+        """
+        SetCaretLineBack(self, Colour back)
+
+        Set the colour of the background of the line containing the caret.
+        """
         return _stc.StyledTextCtrl_SetCaretLineBack(*args, **kwargs)
 
     def StyleSetChangeable(*args, **kwargs):
-        """StyleSetChangeable(self, int style, bool changeable)"""
+        """
+        StyleSetChangeable(self, int style, bool changeable)
+
+        Set a style to be changeable or not (read only).
+        Experimental feature, currently buggy.
+        """
         return _stc.StyledTextCtrl_StyleSetChangeable(*args, **kwargs)
 
     def AutoCompShow(*args, **kwargs):
-        """AutoCompShow(self, int lenEntered, String itemList)"""
+        """
+        AutoCompShow(self, int lenEntered, String itemList)
+
+        Display a auto-completion list.
+        The lenEntered parameter indicates how many characters before
+        the caret should be used to provide context.
+        """
         return _stc.StyledTextCtrl_AutoCompShow(*args, **kwargs)
 
     def AutoCompCancel(*args, **kwargs):
-        """AutoCompCancel(self)"""
+        """
+        AutoCompCancel(self)
+
+        Remove the auto-completion list from the screen.
+        """
         return _stc.StyledTextCtrl_AutoCompCancel(*args, **kwargs)
 
     def AutoCompActive(*args, **kwargs):
-        """AutoCompActive(self) -> bool"""
+        """
+        AutoCompActive(self) -> bool
+
+        Is there an auto-completion list visible?
+        """
         return _stc.StyledTextCtrl_AutoCompActive(*args, **kwargs)
 
     def AutoCompPosStart(*args, **kwargs):
-        """AutoCompPosStart(self) -> int"""
+        """
+        AutoCompPosStart(self) -> int
+
+        Retrieve the position of the caret when the auto-completion list was displayed.
+        """
         return _stc.StyledTextCtrl_AutoCompPosStart(*args, **kwargs)
 
     def AutoCompComplete(*args, **kwargs):
-        """AutoCompComplete(self)"""
+        """
+        AutoCompComplete(self)
+
+        User has selected an item so remove the list and insert the selection.
+        """
         return _stc.StyledTextCtrl_AutoCompComplete(*args, **kwargs)
 
     def AutoCompStops(*args, **kwargs):
-        """AutoCompStops(self, String characterSet)"""
+        """
+        AutoCompStops(self, String characterSet)
+
+        Define a set of character that when typed cancel the auto-completion list.
+        """
         return _stc.StyledTextCtrl_AutoCompStops(*args, **kwargs)
 
     def AutoCompSetSeparator(*args, **kwargs):
-        """AutoCompSetSeparator(self, int separatorCharacter)"""
+        """
+        AutoCompSetSeparator(self, int separatorCharacter)
+
+        Change the separator character in the string setting up an auto-completion list.
+        Default is space but can be changed if items contain space.
+        """
         return _stc.StyledTextCtrl_AutoCompSetSeparator(*args, **kwargs)
 
     def AutoCompGetSeparator(*args, **kwargs):
-        """AutoCompGetSeparator(self) -> int"""
+        """
+        AutoCompGetSeparator(self) -> int
+
+        Retrieve the auto-completion list separator character.
+        """
         return _stc.StyledTextCtrl_AutoCompGetSeparator(*args, **kwargs)
 
     def AutoCompSelect(*args, **kwargs):
-        """AutoCompSelect(self, String text)"""
+        """
+        AutoCompSelect(self, String text)
+
+        Select the item in the auto-completion list that starts with a string.
+        """
         return _stc.StyledTextCtrl_AutoCompSelect(*args, **kwargs)
 
     def AutoCompSetCancelAtStart(*args, **kwargs):
-        """AutoCompSetCancelAtStart(self, bool cancel)"""
+        """
+        AutoCompSetCancelAtStart(self, bool cancel)
+
+        Should the auto-completion list be cancelled if the user backspaces to a
+        position before where the box was created.
+        """
         return _stc.StyledTextCtrl_AutoCompSetCancelAtStart(*args, **kwargs)
 
     def AutoCompGetCancelAtStart(*args, **kwargs):
-        """AutoCompGetCancelAtStart(self) -> bool"""
+        """
+        AutoCompGetCancelAtStart(self) -> bool
+
+        Retrieve whether auto-completion cancelled by backspacing before start.
+        """
         return _stc.StyledTextCtrl_AutoCompGetCancelAtStart(*args, **kwargs)
 
     def AutoCompSetFillUps(*args, **kwargs):
-        """AutoCompSetFillUps(self, String characterSet)"""
+        """
+        AutoCompSetFillUps(self, String characterSet)
+
+        Define a set of characters that when typed will cause the autocompletion to
+        choose the selected item.
+        """
         return _stc.StyledTextCtrl_AutoCompSetFillUps(*args, **kwargs)
 
     def AutoCompSetChooseSingle(*args, **kwargs):
-        """AutoCompSetChooseSingle(self, bool chooseSingle)"""
+        """
+        AutoCompSetChooseSingle(self, bool chooseSingle)
+
+        Should a single item auto-completion list automatically choose the item.
+        """
         return _stc.StyledTextCtrl_AutoCompSetChooseSingle(*args, **kwargs)
 
     def AutoCompGetChooseSingle(*args, **kwargs):
-        """AutoCompGetChooseSingle(self) -> bool"""
+        """
+        AutoCompGetChooseSingle(self) -> bool
+
+        Retrieve whether a single item auto-completion list automatically choose the item.
+        """
         return _stc.StyledTextCtrl_AutoCompGetChooseSingle(*args, **kwargs)
 
     def AutoCompSetIgnoreCase(*args, **kwargs):
-        """AutoCompSetIgnoreCase(self, bool ignoreCase)"""
+        """
+        AutoCompSetIgnoreCase(self, bool ignoreCase)
+
+        Set whether case is significant when performing auto-completion searches.
+        """
         return _stc.StyledTextCtrl_AutoCompSetIgnoreCase(*args, **kwargs)
 
     def AutoCompGetIgnoreCase(*args, **kwargs):
-        """AutoCompGetIgnoreCase(self) -> bool"""
+        """
+        AutoCompGetIgnoreCase(self) -> bool
+
+        Retrieve state of ignore case flag.
+        """
         return _stc.StyledTextCtrl_AutoCompGetIgnoreCase(*args, **kwargs)
 
     def UserListShow(*args, **kwargs):
-        """UserListShow(self, int listType, String itemList)"""
+        """
+        UserListShow(self, int listType, String itemList)
+
+        Display a list of strings and send notification when user chooses one.
+        """
         return _stc.StyledTextCtrl_UserListShow(*args, **kwargs)
 
     def AutoCompSetAutoHide(*args, **kwargs):
-        """AutoCompSetAutoHide(self, bool autoHide)"""
+        """
+        AutoCompSetAutoHide(self, bool autoHide)
+
+        Set whether or not autocompletion is hidden automatically when nothing matches.
+        """
         return _stc.StyledTextCtrl_AutoCompSetAutoHide(*args, **kwargs)
 
     def AutoCompGetAutoHide(*args, **kwargs):
-        """AutoCompGetAutoHide(self) -> bool"""
+        """
+        AutoCompGetAutoHide(self) -> bool
+
+        Retrieve whether or not autocompletion is hidden automatically when nothing matches.
+        """
         return _stc.StyledTextCtrl_AutoCompGetAutoHide(*args, **kwargs)
 
     def AutoCompSetDropRestOfWord(*args, **kwargs):
-        """AutoCompSetDropRestOfWord(self, bool dropRestOfWord)"""
+        """
+        AutoCompSetDropRestOfWord(self, bool dropRestOfWord)
+
+        Set whether or not autocompletion deletes any word characters
+        after the inserted text upon completion.
+        """
         return _stc.StyledTextCtrl_AutoCompSetDropRestOfWord(*args, **kwargs)
 
     def AutoCompGetDropRestOfWord(*args, **kwargs):
-        """AutoCompGetDropRestOfWord(self) -> bool"""
+        """
+        AutoCompGetDropRestOfWord(self) -> bool
+
+        Retrieve whether or not autocompletion deletes any word characters
+        after the inserted text upon completion.
+        """
         return _stc.StyledTextCtrl_AutoCompGetDropRestOfWord(*args, **kwargs)
 
     def RegisterImage(*args, **kwargs):
-        """RegisterImage(self, int type, Bitmap bmp)"""
+        """
+        RegisterImage(self, int type, Bitmap bmp)
+
+        Register an image for use in autocompletion lists.
+        """
         return _stc.StyledTextCtrl_RegisterImage(*args, **kwargs)
 
     def ClearRegisteredImages(*args, **kwargs):
-        """ClearRegisteredImages(self)"""
+        """
+        ClearRegisteredImages(self)
+
+        Clear all the registered images.
+        """
         return _stc.StyledTextCtrl_ClearRegisteredImages(*args, **kwargs)
 
     def AutoCompGetTypeSeparator(*args, **kwargs):
-        """AutoCompGetTypeSeparator(self) -> int"""
+        """
+        AutoCompGetTypeSeparator(self) -> int
+
+        Retrieve the auto-completion list type-separator character.
+        """
         return _stc.StyledTextCtrl_AutoCompGetTypeSeparator(*args, **kwargs)
 
     def AutoCompSetTypeSeparator(*args, **kwargs):
-        """AutoCompSetTypeSeparator(self, int separatorCharacter)"""
+        """
+        AutoCompSetTypeSeparator(self, int separatorCharacter)
+
+        Change the type-separator character in the string setting up an auto-completion list.
+        Default is '?' but can be changed if items contain '?'.
+        """
         return _stc.StyledTextCtrl_AutoCompSetTypeSeparator(*args, **kwargs)
 
     def SetIndent(*args, **kwargs):
-        """SetIndent(self, int indentSize)"""
+        """
+        SetIndent(self, int indentSize)
+
+        Set the number of spaces used for one level of indentation.
+        """
         return _stc.StyledTextCtrl_SetIndent(*args, **kwargs)
 
     def GetIndent(*args, **kwargs):
-        """GetIndent(self) -> int"""
+        """
+        GetIndent(self) -> int
+
+        Retrieve indentation size.
+        """
         return _stc.StyledTextCtrl_GetIndent(*args, **kwargs)
 
     def SetUseTabs(*args, **kwargs):
-        """SetUseTabs(self, bool useTabs)"""
+        """
+        SetUseTabs(self, bool useTabs)
+
+        Indentation will only use space characters if useTabs is false, otherwise
+        it will use a combination of tabs and spaces.
+        """
         return _stc.StyledTextCtrl_SetUseTabs(*args, **kwargs)
 
     def GetUseTabs(*args, **kwargs):
-        """GetUseTabs(self) -> bool"""
+        """
+        GetUseTabs(self) -> bool
+
+        Retrieve whether tabs will be used in indentation.
+        """
         return _stc.StyledTextCtrl_GetUseTabs(*args, **kwargs)
 
     def SetLineIndentation(*args, **kwargs):
-        """SetLineIndentation(self, int line, int indentSize)"""
+        """
+        SetLineIndentation(self, int line, int indentSize)
+
+        Change the indentation of a line to a number of columns.
+        """
         return _stc.StyledTextCtrl_SetLineIndentation(*args, **kwargs)
 
     def GetLineIndentation(*args, **kwargs):
-        """GetLineIndentation(self, int line) -> int"""
+        """
+        GetLineIndentation(self, int line) -> int
+
+        Retrieve the number of columns that a line is indented.
+        """
         return _stc.StyledTextCtrl_GetLineIndentation(*args, **kwargs)
 
     def GetLineIndentPosition(*args, **kwargs):
-        """GetLineIndentPosition(self, int line) -> int"""
+        """
+        GetLineIndentPosition(self, int line) -> int
+
+        Retrieve the position before the first non indentation character on a line.
+        """
         return _stc.StyledTextCtrl_GetLineIndentPosition(*args, **kwargs)
 
     def GetColumn(*args, **kwargs):
-        """GetColumn(self, int pos) -> int"""
+        """
+        GetColumn(self, int pos) -> int
+
+        Retrieve the column number of a position, taking tab width into account.
+        """
         return _stc.StyledTextCtrl_GetColumn(*args, **kwargs)
 
     def SetUseHorizontalScrollBar(*args, **kwargs):
-        """SetUseHorizontalScrollBar(self, bool show)"""
+        """
+        SetUseHorizontalScrollBar(self, bool show)
+
+        Show or hide the horizontal scroll bar.
+        """
         return _stc.StyledTextCtrl_SetUseHorizontalScrollBar(*args, **kwargs)
 
     def GetUseHorizontalScrollBar(*args, **kwargs):
-        """GetUseHorizontalScrollBar(self) -> bool"""
+        """
+        GetUseHorizontalScrollBar(self) -> bool
+
+        Is the horizontal scroll bar visible?
+        """
         return _stc.StyledTextCtrl_GetUseHorizontalScrollBar(*args, **kwargs)
 
     def SetIndentationGuides(*args, **kwargs):
-        """SetIndentationGuides(self, bool show)"""
+        """
+        SetIndentationGuides(self, bool show)
+
+        Show or hide indentation guides.
+        """
         return _stc.StyledTextCtrl_SetIndentationGuides(*args, **kwargs)
 
     def GetIndentationGuides(*args, **kwargs):
-        """GetIndentationGuides(self) -> bool"""
+        """
+        GetIndentationGuides(self) -> bool
+
+        Are the indentation guides visible?
+        """
         return _stc.StyledTextCtrl_GetIndentationGuides(*args, **kwargs)
 
     def SetHighlightGuide(*args, **kwargs):
-        """SetHighlightGuide(self, int column)"""
+        """
+        SetHighlightGuide(self, int column)
+
+        Set the highlighted indentation guide column.
+        0 = no highlighted guide.
+        """
         return _stc.StyledTextCtrl_SetHighlightGuide(*args, **kwargs)
 
     def GetHighlightGuide(*args, **kwargs):
-        """GetHighlightGuide(self) -> int"""
+        """
+        GetHighlightGuide(self) -> int
+
+        Get the highlighted indentation guide column.
+        """
         return _stc.StyledTextCtrl_GetHighlightGuide(*args, **kwargs)
 
     def GetLineEndPosition(*args, **kwargs):
-        """GetLineEndPosition(self, int line) -> int"""
+        """
+        GetLineEndPosition(self, int line) -> int
+
+        Get the position after the last visible characters on a line.
+        """
         return _stc.StyledTextCtrl_GetLineEndPosition(*args, **kwargs)
 
     def GetCodePage(*args, **kwargs):
-        """GetCodePage(self) -> int"""
+        """
+        GetCodePage(self) -> int
+
+        Get the code page used to interpret the bytes of the document as characters.
+        """
         return _stc.StyledTextCtrl_GetCodePage(*args, **kwargs)
 
     def GetCaretForeground(*args, **kwargs):
-        """GetCaretForeground(self) -> Colour"""
+        """
+        GetCaretForeground(self) -> Colour
+
+        Get the foreground colour of the caret.
+        """
         return _stc.StyledTextCtrl_GetCaretForeground(*args, **kwargs)
 
     def GetReadOnly(*args, **kwargs):
-        """GetReadOnly(self) -> bool"""
+        """
+        GetReadOnly(self) -> bool
+
+        In read-only mode?
+        """
         return _stc.StyledTextCtrl_GetReadOnly(*args, **kwargs)
 
     def SetCurrentPos(*args, **kwargs):
-        """SetCurrentPos(self, int pos)"""
+        """
+        SetCurrentPos(self, int pos)
+
+        Sets the position of the caret.
+        """
         return _stc.StyledTextCtrl_SetCurrentPos(*args, **kwargs)
 
     def SetSelectionStart(*args, **kwargs):
-        """SetSelectionStart(self, int pos)"""
+        """
+        SetSelectionStart(self, int pos)
+
+        Sets the position that starts the selection - this becomes the anchor.
+        """
         return _stc.StyledTextCtrl_SetSelectionStart(*args, **kwargs)
 
     def GetSelectionStart(*args, **kwargs):
-        """GetSelectionStart(self) -> int"""
+        """
+        GetSelectionStart(self) -> int
+
+        Returns the position at the start of the selection.
+        """
         return _stc.StyledTextCtrl_GetSelectionStart(*args, **kwargs)
 
     def SetSelectionEnd(*args, **kwargs):
-        """SetSelectionEnd(self, int pos)"""
+        """
+        SetSelectionEnd(self, int pos)
+
+        Sets the position that ends the selection - this becomes the currentPosition.
+        """
         return _stc.StyledTextCtrl_SetSelectionEnd(*args, **kwargs)
 
     def GetSelectionEnd(*args, **kwargs):
-        """GetSelectionEnd(self) -> int"""
+        """
+        GetSelectionEnd(self) -> int
+
+        Returns the position at the end of the selection.
+        """
         return _stc.StyledTextCtrl_GetSelectionEnd(*args, **kwargs)
 
     def SetPrintMagnification(*args, **kwargs):
-        """SetPrintMagnification(self, int magnification)"""
+        """
+        SetPrintMagnification(self, int magnification)
+
+        Sets the print magnification added to the point size of each style for printing.
+        """
         return _stc.StyledTextCtrl_SetPrintMagnification(*args, **kwargs)
 
     def GetPrintMagnification(*args, **kwargs):
-        """GetPrintMagnification(self) -> int"""
+        """
+        GetPrintMagnification(self) -> int
+
+        Returns the print magnification.
+        """
         return _stc.StyledTextCtrl_GetPrintMagnification(*args, **kwargs)
 
     def SetPrintColourMode(*args, **kwargs):
-        """SetPrintColourMode(self, int mode)"""
+        """
+        SetPrintColourMode(self, int mode)
+
+        Modify colours when printing for clearer printed text.
+        """
         return _stc.StyledTextCtrl_SetPrintColourMode(*args, **kwargs)
 
     def GetPrintColourMode(*args, **kwargs):
-        """GetPrintColourMode(self) -> int"""
+        """
+        GetPrintColourMode(self) -> int
+
+        Returns the print colour mode.
+        """
         return _stc.StyledTextCtrl_GetPrintColourMode(*args, **kwargs)
 
     def FindText(*args, **kwargs):
-        """FindText(self, int minPos, int maxPos, String text, int flags=0) -> int"""
+        """
+        FindText(self, int minPos, int maxPos, String text, int flags=0) -> int
+
+        Find some text in the document.
+        """
         return _stc.StyledTextCtrl_FindText(*args, **kwargs)
 
     def FormatRange(*args, **kwargs):
         """
         FormatRange(self, bool doDraw, int startPos, int endPos, DC draw, DC target, 
             Rect renderRect, Rect pageRect) -> int
+
+        On Windows, will draw the document into a display context such as a printer.
         """
         return _stc.StyledTextCtrl_FormatRange(*args, **kwargs)
 
     def GetFirstVisibleLine(*args, **kwargs):
-        """GetFirstVisibleLine(self) -> int"""
+        """
+        GetFirstVisibleLine(self) -> int
+
+        Retrieve the display line at the top of the display.
+        """
         return _stc.StyledTextCtrl_GetFirstVisibleLine(*args, **kwargs)
 
     def GetLine(*args, **kwargs):
-        """GetLine(self, int line) -> String"""
+        """
+        GetLine(self, int line) -> String
+
+        Retrieve the contents of a line.
+        """
         return _stc.StyledTextCtrl_GetLine(*args, **kwargs)
 
     def GetLineCount(*args, **kwargs):
-        """GetLineCount(self) -> int"""
+        """
+        GetLineCount(self) -> int
+
+        Returns the number of lines in the document. There is always at least one.
+        """
         return _stc.StyledTextCtrl_GetLineCount(*args, **kwargs)
 
     def SetMarginLeft(*args, **kwargs):
-        """SetMarginLeft(self, int pixelWidth)"""
+        """
+        SetMarginLeft(self, int pixelWidth)
+
+        Sets the size in pixels of the left margin.
+        """
         return _stc.StyledTextCtrl_SetMarginLeft(*args, **kwargs)
 
     def GetMarginLeft(*args, **kwargs):
-        """GetMarginLeft(self) -> int"""
+        """
+        GetMarginLeft(self) -> int
+
+        Returns the size in pixels of the left margin.
+        """
         return _stc.StyledTextCtrl_GetMarginLeft(*args, **kwargs)
 
     def SetMarginRight(*args, **kwargs):
-        """SetMarginRight(self, int pixelWidth)"""
+        """
+        SetMarginRight(self, int pixelWidth)
+
+        Sets the size in pixels of the right margin.
+        """
         return _stc.StyledTextCtrl_SetMarginRight(*args, **kwargs)
 
     def GetMarginRight(*args, **kwargs):
-        """GetMarginRight(self) -> int"""
+        """
+        GetMarginRight(self) -> int
+
+        Returns the size in pixels of the right margin.
+        """
         return _stc.StyledTextCtrl_GetMarginRight(*args, **kwargs)
 
     def GetModify(*args, **kwargs):
-        """GetModify(self) -> bool"""
+        """
+        GetModify(self) -> bool
+
+        Is the document different from when it was last saved?
+        """
         return _stc.StyledTextCtrl_GetModify(*args, **kwargs)
 
     def SetSelection(*args, **kwargs):
-        """SetSelection(self, int start, int end)"""
+        """
+        SetSelection(self, int start, int end)
+
+        Select a range of text.
+        """
         return _stc.StyledTextCtrl_SetSelection(*args, **kwargs)
 
     def GetSelectedText(*args, **kwargs):
-        """GetSelectedText(self) -> String"""
+        """
+        GetSelectedText(self) -> String
+
+        Retrieve the selected text.
+        """
         return _stc.StyledTextCtrl_GetSelectedText(*args, **kwargs)
 
     def GetTextRange(*args, **kwargs):
-        """GetTextRange(self, int startPos, int endPos) -> String"""
+        """
+        GetTextRange(self, int startPos, int endPos) -> String
+
+        Retrieve a range of text.
+        """
         return _stc.StyledTextCtrl_GetTextRange(*args, **kwargs)
 
     def HideSelection(*args, **kwargs):
-        """HideSelection(self, bool normal)"""
+        """
+        HideSelection(self, bool normal)
+
+        Draw the selection in normal style or with selection highlighted.
+        """
         return _stc.StyledTextCtrl_HideSelection(*args, **kwargs)
 
     def LineFromPosition(*args, **kwargs):
-        """LineFromPosition(self, int pos) -> int"""
+        """
+        LineFromPosition(self, int pos) -> int
+
+        Retrieve the line containing a position.
+        """
         return _stc.StyledTextCtrl_LineFromPosition(*args, **kwargs)
 
     def PositionFromLine(*args, **kwargs):
-        """PositionFromLine(self, int line) -> int"""
+        """
+        PositionFromLine(self, int line) -> int
+
+        Retrieve the position at the start of a line.
+        """
         return _stc.StyledTextCtrl_PositionFromLine(*args, **kwargs)
 
     def LineScroll(*args, **kwargs):
-        """LineScroll(self, int columns, int lines)"""
+        """
+        LineScroll(self, int columns, int lines)
+
+        Scroll horizontally and vertically.
+        """
         return _stc.StyledTextCtrl_LineScroll(*args, **kwargs)
 
     def EnsureCaretVisible(*args, **kwargs):
-        """EnsureCaretVisible(self)"""
+        """
+        EnsureCaretVisible(self)
+
+        Ensure the caret is visible.
+        """
         return _stc.StyledTextCtrl_EnsureCaretVisible(*args, **kwargs)
 
     def ReplaceSelection(*args, **kwargs):
-        """ReplaceSelection(self, String text)"""
+        """
+        ReplaceSelection(self, String text)
+
+        Replace the selected text with the argument text.
+        """
         return _stc.StyledTextCtrl_ReplaceSelection(*args, **kwargs)
 
     def SetReadOnly(*args, **kwargs):
-        """SetReadOnly(self, bool readOnly)"""
+        """
+        SetReadOnly(self, bool readOnly)
+
+        Set to read only or read write.
+        """
         return _stc.StyledTextCtrl_SetReadOnly(*args, **kwargs)
 
     def CanPaste(*args, **kwargs):
-        """CanPaste(self) -> bool"""
+        """
+        CanPaste(self) -> bool
+
+        Will a paste succeed?
+        """
         return _stc.StyledTextCtrl_CanPaste(*args, **kwargs)
 
     def CanUndo(*args, **kwargs):
-        """CanUndo(self) -> bool"""
+        """
+        CanUndo(self) -> bool
+
+        Are there any undoable actions in the undo history?
+        """
         return _stc.StyledTextCtrl_CanUndo(*args, **kwargs)
 
     def EmptyUndoBuffer(*args, **kwargs):
-        """EmptyUndoBuffer(self)"""
+        """
+        EmptyUndoBuffer(self)
+
+        Delete the undo history.
+        """
         return _stc.StyledTextCtrl_EmptyUndoBuffer(*args, **kwargs)
 
     def Undo(*args, **kwargs):
-        """Undo(self)"""
+        """
+        Undo(self)
+
+        Undo one action in the undo history.
+        """
         return _stc.StyledTextCtrl_Undo(*args, **kwargs)
 
     def Cut(*args, **kwargs):
-        """Cut(self)"""
+        """
+        Cut(self)
+
+        Cut the selection to the clipboard.
+        """
         return _stc.StyledTextCtrl_Cut(*args, **kwargs)
 
     def Copy(*args, **kwargs):
-        """Copy(self)"""
+        """
+        Copy(self)
+
+        Copy the selection to the clipboard.
+        """
         return _stc.StyledTextCtrl_Copy(*args, **kwargs)
 
     def Paste(*args, **kwargs):
-        """Paste(self)"""
+        """
+        Paste(self)
+
+        Paste the contents of the clipboard into the document replacing the selection.
+        """
         return _stc.StyledTextCtrl_Paste(*args, **kwargs)
 
     def Clear(*args, **kwargs):
-        """Clear(self)"""
+        """
+        Clear(self)
+
+        Clear the selection.
+        """
         return _stc.StyledTextCtrl_Clear(*args, **kwargs)
 
     def SetText(*args, **kwargs):
-        """SetText(self, String text)"""
+        """
+        SetText(self, String text)
+
+        Replace the contents of the document with the argument text.
+        """
         return _stc.StyledTextCtrl_SetText(*args, **kwargs)
 
     def GetText(*args, **kwargs):
-        """GetText(self) -> String"""
+        """
+        GetText(self) -> String
+
+        Retrieve all the text in the document.
+        """
         return _stc.StyledTextCtrl_GetText(*args, **kwargs)
 
     def GetTextLength(*args, **kwargs):
-        """GetTextLength(self) -> int"""
+        """
+        GetTextLength(self) -> int
+
+        Retrieve the number of characters in the document.
+        """
         return _stc.StyledTextCtrl_GetTextLength(*args, **kwargs)
 
     def SetOvertype(*args, **kwargs):
-        """SetOvertype(self, bool overtype)"""
+        """
+        SetOvertype(self, bool overtype)
+
+        Set to overtype (true) or insert mode.
+        """
         return _stc.StyledTextCtrl_SetOvertype(*args, **kwargs)
 
     def GetOvertype(*args, **kwargs):
-        """GetOvertype(self) -> bool"""
+        """
+        GetOvertype(self) -> bool
+
+        Returns true if overtype mode is active otherwise false is returned.
+        """
         return _stc.StyledTextCtrl_GetOvertype(*args, **kwargs)
 
     def SetCaretWidth(*args, **kwargs):
-        """SetCaretWidth(self, int pixelWidth)"""
+        """
+        SetCaretWidth(self, int pixelWidth)
+
+        Set the width of the insert mode caret.
+        """
         return _stc.StyledTextCtrl_SetCaretWidth(*args, **kwargs)
 
     def GetCaretWidth(*args, **kwargs):
-        """GetCaretWidth(self) -> int"""
+        """
+        GetCaretWidth(self) -> int
+
+        Returns the width of the insert mode caret.
+        """
         return _stc.StyledTextCtrl_GetCaretWidth(*args, **kwargs)
 
     def SetTargetStart(*args, **kwargs):
-        """SetTargetStart(self, int pos)"""
+        """
+        SetTargetStart(self, int pos)
+
+        Sets the position that starts the target which is used for updating the
+        document without affecting the scroll position.
+        """
         return _stc.StyledTextCtrl_SetTargetStart(*args, **kwargs)
 
     def GetTargetStart(*args, **kwargs):
-        """GetTargetStart(self) -> int"""
+        """
+        GetTargetStart(self) -> int
+
+        Get the position that starts the target.
+        """
         return _stc.StyledTextCtrl_GetTargetStart(*args, **kwargs)
 
     def SetTargetEnd(*args, **kwargs):
-        """SetTargetEnd(self, int pos)"""
+        """
+        SetTargetEnd(self, int pos)
+
+        Sets the position that ends the target which is used for updating the
+        document without affecting the scroll position.
+        """
         return _stc.StyledTextCtrl_SetTargetEnd(*args, **kwargs)
 
     def GetTargetEnd(*args, **kwargs):
-        """GetTargetEnd(self) -> int"""
+        """
+        GetTargetEnd(self) -> int
+
+        Get the position that ends the target.
+        """
         return _stc.StyledTextCtrl_GetTargetEnd(*args, **kwargs)
 
     def ReplaceTarget(*args, **kwargs):
-        """ReplaceTarget(self, String text) -> int"""
+        """
+        ReplaceTarget(self, String text) -> int
+
+        Replace the target text with the argument text.
+        Text is counted so it can contain NULs.
+        Returns the length of the replacement text.
+        """
         return _stc.StyledTextCtrl_ReplaceTarget(*args, **kwargs)
 
     def ReplaceTargetRE(*args, **kwargs):
-        """ReplaceTargetRE(self, String text) -> int"""
+        """
+        ReplaceTargetRE(self, String text) -> int
+
+        Replace the target text with the argument text after \d processing.
+        Text is counted so it can contain NULs.
+        Looks for \d where d is between 1 and 9 and replaces these with the strings
+        matched in the last search operation which were surrounded by \( and \).
+        Returns the length of the replacement text including any change
+        caused by processing the \d patterns.
+        """
         return _stc.StyledTextCtrl_ReplaceTargetRE(*args, **kwargs)
 
     def SearchInTarget(*args, **kwargs):
-        """SearchInTarget(self, String text) -> int"""
+        """
+        SearchInTarget(self, String text) -> int
+
+        Search for a counted string in the target and set the target to the found
+        range. Text is counted so it can contain NULs.
+        Returns length of range or -1 for failure in which case target is not moved.
+        """
         return _stc.StyledTextCtrl_SearchInTarget(*args, **kwargs)
 
     def SetSearchFlags(*args, **kwargs):
-        """SetSearchFlags(self, int flags)"""
+        """
+        SetSearchFlags(self, int flags)
+
+        Set the search flags used by SearchInTarget.
+        """
         return _stc.StyledTextCtrl_SetSearchFlags(*args, **kwargs)
 
     def GetSearchFlags(*args, **kwargs):
-        """GetSearchFlags(self) -> int"""
+        """
+        GetSearchFlags(self) -> int
+
+        Get the search flags used by SearchInTarget.
+        """
         return _stc.StyledTextCtrl_GetSearchFlags(*args, **kwargs)
 
     def CallTipShow(*args, **kwargs):
-        """CallTipShow(self, int pos, String definition)"""
+        """
+        CallTipShow(self, int pos, String definition)
+
+        Show a call tip containing a definition near position pos.
+        """
         return _stc.StyledTextCtrl_CallTipShow(*args, **kwargs)
 
     def CallTipCancel(*args, **kwargs):
-        """CallTipCancel(self)"""
+        """
+        CallTipCancel(self)
+
+        Remove the call tip from the screen.
+        """
         return _stc.StyledTextCtrl_CallTipCancel(*args, **kwargs)
 
     def CallTipActive(*args, **kwargs):
-        """CallTipActive(self) -> bool"""
+        """
+        CallTipActive(self) -> bool
+
+        Is there an active call tip?
+        """
         return _stc.StyledTextCtrl_CallTipActive(*args, **kwargs)
 
     def CallTipPosAtStart(*args, **kwargs):
-        """CallTipPosAtStart(self) -> int"""
+        """
+        CallTipPosAtStart(self) -> int
+
+        Retrieve the position where the caret was before displaying the call tip.
+        """
         return _stc.StyledTextCtrl_CallTipPosAtStart(*args, **kwargs)
 
     def CallTipSetHighlight(*args, **kwargs):
-        """CallTipSetHighlight(self, int start, int end)"""
+        """
+        CallTipSetHighlight(self, int start, int end)
+
+        Highlight a segment of the definition.
+        """
         return _stc.StyledTextCtrl_CallTipSetHighlight(*args, **kwargs)
 
     def CallTipSetBackground(*args, **kwargs):
-        """CallTipSetBackground(self, Colour back)"""
+        """
+        CallTipSetBackground(self, Colour back)
+
+        Set the background colour for the call tip.
+        """
         return _stc.StyledTextCtrl_CallTipSetBackground(*args, **kwargs)
 
     def CallTipSetForeground(*args, **kwargs):
-        """CallTipSetForeground(self, Colour fore)"""
+        """
+        CallTipSetForeground(self, Colour fore)
+
+        Set the foreground colour for the call tip.
+        """
         return _stc.StyledTextCtrl_CallTipSetForeground(*args, **kwargs)
 
     def CallTipSetForegroundHighlight(*args, **kwargs):
-        """CallTipSetForegroundHighlight(self, Colour fore)"""
+        """
+        CallTipSetForegroundHighlight(self, Colour fore)
+
+        Set the foreground colour for the highlighted part of the call tip.
+        """
         return _stc.StyledTextCtrl_CallTipSetForegroundHighlight(*args, **kwargs)
 
     def VisibleFromDocLine(*args, **kwargs):
-        """VisibleFromDocLine(self, int line) -> int"""
+        """
+        VisibleFromDocLine(self, int line) -> int
+
+        Find the display line of a document line taking hidden lines into account.
+        """
         return _stc.StyledTextCtrl_VisibleFromDocLine(*args, **kwargs)
 
     def DocLineFromVisible(*args, **kwargs):
-        """DocLineFromVisible(self, int lineDisplay) -> int"""
+        """
+        DocLineFromVisible(self, int lineDisplay) -> int
+
+        Find the document line of a display line taking hidden lines into account.
+        """
         return _stc.StyledTextCtrl_DocLineFromVisible(*args, **kwargs)
 
     def SetFoldLevel(*args, **kwargs):
-        """SetFoldLevel(self, int line, int level)"""
+        """
+        SetFoldLevel(self, int line, int level)
+
+        Set the fold level of a line.
+        This encodes an integer level along with flags indicating whether the
+        line is a header and whether it is effectively white space.
+        """
         return _stc.StyledTextCtrl_SetFoldLevel(*args, **kwargs)
 
     def GetFoldLevel(*args, **kwargs):
-        """GetFoldLevel(self, int line) -> int"""
+        """
+        GetFoldLevel(self, int line) -> int
+
+        Retrieve the fold level of a line.
+        """
         return _stc.StyledTextCtrl_GetFoldLevel(*args, **kwargs)
 
     def GetLastChild(*args, **kwargs):
-        """GetLastChild(self, int line, int level) -> int"""
+        """
+        GetLastChild(self, int line, int level) -> int
+
+        Find the last child line of a header line.
+        """
         return _stc.StyledTextCtrl_GetLastChild(*args, **kwargs)
 
     def GetFoldParent(*args, **kwargs):
-        """GetFoldParent(self, int line) -> int"""
+        """
+        GetFoldParent(self, int line) -> int
+
+        Find the parent line of a child line.
+        """
         return _stc.StyledTextCtrl_GetFoldParent(*args, **kwargs)
 
     def ShowLines(*args, **kwargs):
-        """ShowLines(self, int lineStart, int lineEnd)"""
+        """
+        ShowLines(self, int lineStart, int lineEnd)
+
+        Make a range of lines visible.
+        """
         return _stc.StyledTextCtrl_ShowLines(*args, **kwargs)
 
     def HideLines(*args, **kwargs):
-        """HideLines(self, int lineStart, int lineEnd)"""
+        """
+        HideLines(self, int lineStart, int lineEnd)
+
+        Make a range of lines invisible.
+        """
         return _stc.StyledTextCtrl_HideLines(*args, **kwargs)
 
     def GetLineVisible(*args, **kwargs):
-        """GetLineVisible(self, int line) -> bool"""
+        """
+        GetLineVisible(self, int line) -> bool
+
+        Is a line visible?
+        """
         return _stc.StyledTextCtrl_GetLineVisible(*args, **kwargs)
 
     def SetFoldExpanded(*args, **kwargs):
-        """SetFoldExpanded(self, int line, bool expanded)"""
+        """
+        SetFoldExpanded(self, int line, bool expanded)
+
+        Show the children of a header line.
+        """
         return _stc.StyledTextCtrl_SetFoldExpanded(*args, **kwargs)
 
     def GetFoldExpanded(*args, **kwargs):
-        """GetFoldExpanded(self, int line) -> bool"""
+        """
+        GetFoldExpanded(self, int line) -> bool
+
+        Is a header line expanded?
+        """
         return _stc.StyledTextCtrl_GetFoldExpanded(*args, **kwargs)
 
     def ToggleFold(*args, **kwargs):
-        """ToggleFold(self, int line)"""
+        """
+        ToggleFold(self, int line)
+
+        Switch a header line between expanded and contracted.
+        """
         return _stc.StyledTextCtrl_ToggleFold(*args, **kwargs)
 
     def EnsureVisible(*args, **kwargs):
-        """EnsureVisible(self, int line)"""
+        """
+        EnsureVisible(self, int line)
+
+        Ensure a particular line is visible by expanding any header line hiding it.
+        """
         return _stc.StyledTextCtrl_EnsureVisible(*args, **kwargs)
 
     def SetFoldFlags(*args, **kwargs):
-        """SetFoldFlags(self, int flags)"""
+        """
+        SetFoldFlags(self, int flags)
+
+        Set some style options for folding.
+        """
         return _stc.StyledTextCtrl_SetFoldFlags(*args, **kwargs)
 
     def EnsureVisibleEnforcePolicy(*args, **kwargs):
-        """EnsureVisibleEnforcePolicy(self, int line)"""
+        """
+        EnsureVisibleEnforcePolicy(self, int line)
+
+        Ensure a particular line is visible by expanding any header line hiding it.
+        Use the currently set visibility policy to determine which range to display.
+        """
         return _stc.StyledTextCtrl_EnsureVisibleEnforcePolicy(*args, **kwargs)
 
     def SetTabIndents(*args, **kwargs):
-        """SetTabIndents(self, bool tabIndents)"""
+        """
+        SetTabIndents(self, bool tabIndents)
+
+        Sets whether a tab pressed when caret is within indentation indents.
+        """
         return _stc.StyledTextCtrl_SetTabIndents(*args, **kwargs)
 
     def GetTabIndents(*args, **kwargs):
-        """GetTabIndents(self) -> bool"""
+        """
+        GetTabIndents(self) -> bool
+
+        Does a tab pressed when caret is within indentation indent?
+        """
         return _stc.StyledTextCtrl_GetTabIndents(*args, **kwargs)
 
     def SetBackSpaceUnIndents(*args, **kwargs):
-        """SetBackSpaceUnIndents(self, bool bsUnIndents)"""
+        """
+        SetBackSpaceUnIndents(self, bool bsUnIndents)
+
+        Sets whether a backspace pressed when caret is within indentation unindents.
+        """
         return _stc.StyledTextCtrl_SetBackSpaceUnIndents(*args, **kwargs)
 
     def GetBackSpaceUnIndents(*args, **kwargs):
-        """GetBackSpaceUnIndents(self) -> bool"""
+        """
+        GetBackSpaceUnIndents(self) -> bool
+
+        Does a backspace pressed when caret is within indentation unindent?
+        """
         return _stc.StyledTextCtrl_GetBackSpaceUnIndents(*args, **kwargs)
 
     def SetMouseDwellTime(*args, **kwargs):
-        """SetMouseDwellTime(self, int periodMilliseconds)"""
+        """
+        SetMouseDwellTime(self, int periodMilliseconds)
+
+        Sets the time the mouse must sit still to generate a mouse dwell event.
+        """
         return _stc.StyledTextCtrl_SetMouseDwellTime(*args, **kwargs)
 
     def GetMouseDwellTime(*args, **kwargs):
-        """GetMouseDwellTime(self) -> int"""
+        """
+        GetMouseDwellTime(self) -> int
+
+        Retrieve the time the mouse must sit still to generate a mouse dwell event.
+        """
         return _stc.StyledTextCtrl_GetMouseDwellTime(*args, **kwargs)
 
     def WordStartPosition(*args, **kwargs):
-        """WordStartPosition(self, int pos, bool onlyWordCharacters) -> int"""
+        """
+        WordStartPosition(self, int pos, bool onlyWordCharacters) -> int
+
+        Get position of start of word.
+        """
         return _stc.StyledTextCtrl_WordStartPosition(*args, **kwargs)
 
     def WordEndPosition(*args, **kwargs):
-        """WordEndPosition(self, int pos, bool onlyWordCharacters) -> int"""
+        """
+        WordEndPosition(self, int pos, bool onlyWordCharacters) -> int
+
+        Get position of end of word.
+        """
         return _stc.StyledTextCtrl_WordEndPosition(*args, **kwargs)
 
     def SetWrapMode(*args, **kwargs):
-        """SetWrapMode(self, int mode)"""
+        """
+        SetWrapMode(self, int mode)
+
+        Sets whether text is word wrapped.
+        """
         return _stc.StyledTextCtrl_SetWrapMode(*args, **kwargs)
 
     def GetWrapMode(*args, **kwargs):
-        """GetWrapMode(self) -> int"""
+        """
+        GetWrapMode(self) -> int
+
+        Retrieve whether text is word wrapped.
+        """
         return _stc.StyledTextCtrl_GetWrapMode(*args, **kwargs)
 
     def SetWrapVisualFlags(*args, **kwargs):
-        """SetWrapVisualFlags(self, int wrapVisualFlags)"""
+        """
+        SetWrapVisualFlags(self, int wrapVisualFlags)
+
+        Set the display mode of visual flags for wrapped lines.
+        """
         return _stc.StyledTextCtrl_SetWrapVisualFlags(*args, **kwargs)
 
     def GetWrapVisualFlags(*args, **kwargs):
-        """GetWrapVisualFlags(self) -> int"""
+        """
+        GetWrapVisualFlags(self) -> int
+
+        Retrive the display mode of visual flags for wrapped lines.
+        """
         return _stc.StyledTextCtrl_GetWrapVisualFlags(*args, **kwargs)
 
     def SetWrapVisualFlagsLocation(*args, **kwargs):
-        """SetWrapVisualFlagsLocation(self, int wrapVisualFlagsLocation)"""
+        """
+        SetWrapVisualFlagsLocation(self, int wrapVisualFlagsLocation)
+
+        Set the location of visual flags for wrapped lines.
+        """
         return _stc.StyledTextCtrl_SetWrapVisualFlagsLocation(*args, **kwargs)
 
     def GetWrapVisualFlagsLocation(*args, **kwargs):
-        """GetWrapVisualFlagsLocation(self) -> int"""
+        """
+        GetWrapVisualFlagsLocation(self) -> int
+
+        Retrive the location of visual flags for wrapped lines.
+        """
         return _stc.StyledTextCtrl_GetWrapVisualFlagsLocation(*args, **kwargs)
 
     def SetWrapStartIndent(*args, **kwargs):
-        """SetWrapStartIndent(self, int indent)"""
+        """
+        SetWrapStartIndent(self, int indent)
+
+        Set the start indent for wrapped lines.
+        """
         return _stc.StyledTextCtrl_SetWrapStartIndent(*args, **kwargs)
 
     def GetWrapStartIndent(*args, **kwargs):
-        """GetWrapStartIndent(self) -> int"""
+        """
+        GetWrapStartIndent(self) -> int
+
+        Retrive the start indent for wrapped lines.
+        """
         return _stc.StyledTextCtrl_GetWrapStartIndent(*args, **kwargs)
 
     def SetLayoutCache(*args, **kwargs):
-        """SetLayoutCache(self, int mode)"""
+        """
+        SetLayoutCache(self, int mode)
+
+        Sets the degree of caching of layout information.
+        """
         return _stc.StyledTextCtrl_SetLayoutCache(*args, **kwargs)
 
     def GetLayoutCache(*args, **kwargs):
-        """GetLayoutCache(self) -> int"""
+        """
+        GetLayoutCache(self) -> int
+
+        Retrieve the degree of caching of layout information.
+        """
         return _stc.StyledTextCtrl_GetLayoutCache(*args, **kwargs)
 
     def SetScrollWidth(*args, **kwargs):
-        """SetScrollWidth(self, int pixelWidth)"""
+        """
+        SetScrollWidth(self, int pixelWidth)
+
+        Sets the document width assumed for scrolling.
+        """
         return _stc.StyledTextCtrl_SetScrollWidth(*args, **kwargs)
 
     def GetScrollWidth(*args, **kwargs):
-        """GetScrollWidth(self) -> int"""
+        """
+        GetScrollWidth(self) -> int
+
+        Retrieve the document width assumed for scrolling.
+        """
         return _stc.StyledTextCtrl_GetScrollWidth(*args, **kwargs)
 
     def TextWidth(*args, **kwargs):
-        """TextWidth(self, int style, String text) -> int"""
+        """
+        TextWidth(self, int style, String text) -> int
+
+        Measure the pixel width of some text in a particular style.
+        NUL terminated text argument.
+        Does not handle tab or control characters.
+        """
         return _stc.StyledTextCtrl_TextWidth(*args, **kwargs)
 
     def SetEndAtLastLine(*args, **kwargs):
-        """SetEndAtLastLine(self, bool endAtLastLine)"""
+        """
+        SetEndAtLastLine(self, bool endAtLastLine)
+
+        Sets the scroll range so that maximum scroll position has
+        the last line at the bottom of the view (default).
+        Setting this to false allows scrolling one page below the last line.
+        """
         return _stc.StyledTextCtrl_SetEndAtLastLine(*args, **kwargs)
 
     def GetEndAtLastLine(*args, **kwargs):
-        """GetEndAtLastLine(self) -> int"""
+        """
+        GetEndAtLastLine(self) -> int
+
+        Retrieve whether the maximum scroll position has the last
+        line at the bottom of the view.
+        """
         return _stc.StyledTextCtrl_GetEndAtLastLine(*args, **kwargs)
 
     def TextHeight(*args, **kwargs):
-        """TextHeight(self, int line) -> int"""
+        """
+        TextHeight(self, int line) -> int
+
+        Retrieve the height of a particular line of text in pixels.
+        """
         return _stc.StyledTextCtrl_TextHeight(*args, **kwargs)
 
     def SetUseVerticalScrollBar(*args, **kwargs):
-        """SetUseVerticalScrollBar(self, bool show)"""
+        """
+        SetUseVerticalScrollBar(self, bool show)
+
+        Show or hide the vertical scroll bar.
+        """
         return _stc.StyledTextCtrl_SetUseVerticalScrollBar(*args, **kwargs)
 
     def GetUseVerticalScrollBar(*args, **kwargs):
-        """GetUseVerticalScrollBar(self) -> bool"""
+        """
+        GetUseVerticalScrollBar(self) -> bool
+
+        Is the vertical scroll bar visible?
+        """
         return _stc.StyledTextCtrl_GetUseVerticalScrollBar(*args, **kwargs)
 
     def AppendText(*args, **kwargs):
-        """AppendText(self, String text)"""
+        """
+        AppendText(self, String text)
+
+        Append a string to the end of the document without changing the selection.
+        """
         return _stc.StyledTextCtrl_AppendText(*args, **kwargs)
 
     def GetTwoPhaseDraw(*args, **kwargs):
-        """GetTwoPhaseDraw(self) -> bool"""
+        """
+        GetTwoPhaseDraw(self) -> bool
+
+        Is drawing done in two phases with backgrounds drawn before foregrounds?
+        """
         return _stc.StyledTextCtrl_GetTwoPhaseDraw(*args, **kwargs)
 
     def SetTwoPhaseDraw(*args, **kwargs):
-        """SetTwoPhaseDraw(self, bool twoPhase)"""
+        """
+        SetTwoPhaseDraw(self, bool twoPhase)
+
+        In twoPhaseDraw mode, drawing is performed in two phases, first the background
+        and then the foreground. This avoids chopping off characters that overlap the next run.
+        """
         return _stc.StyledTextCtrl_SetTwoPhaseDraw(*args, **kwargs)
 
     def TargetFromSelection(*args, **kwargs):
-        """TargetFromSelection(self)"""
+        """
+        TargetFromSelection(self)
+
+        Make the target range start and end be the same as the selection range start and end.
+        """
         return _stc.StyledTextCtrl_TargetFromSelection(*args, **kwargs)
 
     def LinesJoin(*args, **kwargs):
-        """LinesJoin(self)"""
+        """
+        LinesJoin(self)
+
+        Join the lines in the target.
+        """
         return _stc.StyledTextCtrl_LinesJoin(*args, **kwargs)
 
     def LinesSplit(*args, **kwargs):
-        """LinesSplit(self, int pixelWidth)"""
+        """
+        LinesSplit(self, int pixelWidth)
+
+        Split the lines in the target into lines that are less wide than pixelWidth
+        where possible.
+        """
         return _stc.StyledTextCtrl_LinesSplit(*args, **kwargs)
 
     def SetFoldMarginColour(*args, **kwargs):
-        """SetFoldMarginColour(self, bool useSetting, Colour back)"""
+        """
+        SetFoldMarginColour(self, bool useSetting, Colour back)
+
+        Set the colours used as a chequerboard pattern in the fold margin
+        """
         return _stc.StyledTextCtrl_SetFoldMarginColour(*args, **kwargs)
 
     def SetFoldMarginHiColour(*args, **kwargs):
@@ -2134,7 +3176,11 @@ class StyledTextCtrl(_core.Control):
         return _stc.StyledTextCtrl_LineDown(*args, **kwargs)
 
     def LineDownExtend(*args, **kwargs):
-        """LineDownExtend(self)"""
+        """
+        LineDownExtend(self)
+
+        Move caret down one line extending selection to new caret position.
+        """
         return _stc.StyledTextCtrl_LineDownExtend(*args, **kwargs)
 
     def LineUp(*args, **kwargs):
@@ -2146,71 +3192,139 @@ class StyledTextCtrl(_core.Control):
         return _stc.StyledTextCtrl_LineUp(*args, **kwargs)
 
     def LineUpExtend(*args, **kwargs):
-        """LineUpExtend(self)"""
+        """
+        LineUpExtend(self)
+
+        Move caret up one line extending selection to new caret position.
+        """
         return _stc.StyledTextCtrl_LineUpExtend(*args, **kwargs)
 
     def CharLeft(*args, **kwargs):
-        """CharLeft(self)"""
+        """
+        CharLeft(self)
+
+        Move caret left one character.
+        """
         return _stc.StyledTextCtrl_CharLeft(*args, **kwargs)
 
     def CharLeftExtend(*args, **kwargs):
-        """CharLeftExtend(self)"""
+        """
+        CharLeftExtend(self)
+
+        Move caret left one character extending selection to new caret position.
+        """
         return _stc.StyledTextCtrl_CharLeftExtend(*args, **kwargs)
 
     def CharRight(*args, **kwargs):
-        """CharRight(self)"""
+        """
+        CharRight(self)
+
+        Move caret right one character.
+        """
         return _stc.StyledTextCtrl_CharRight(*args, **kwargs)
 
     def CharRightExtend(*args, **kwargs):
-        """CharRightExtend(self)"""
+        """
+        CharRightExtend(self)
+
+        Move caret right one character extending selection to new caret position.
+        """
         return _stc.StyledTextCtrl_CharRightExtend(*args, **kwargs)
 
     def WordLeft(*args, **kwargs):
-        """WordLeft(self)"""
+        """
+        WordLeft(self)
+
+        Move caret left one word.
+        """
         return _stc.StyledTextCtrl_WordLeft(*args, **kwargs)
 
     def WordLeftExtend(*args, **kwargs):
-        """WordLeftExtend(self)"""
+        """
+        WordLeftExtend(self)
+
+        Move caret left one word extending selection to new caret position.
+        """
         return _stc.StyledTextCtrl_WordLeftExtend(*args, **kwargs)
 
     def WordRight(*args, **kwargs):
-        """WordRight(self)"""
+        """
+        WordRight(self)
+
+        Move caret right one word.
+        """
         return _stc.StyledTextCtrl_WordRight(*args, **kwargs)
 
     def WordRightExtend(*args, **kwargs):
-        """WordRightExtend(self)"""
+        """
+        WordRightExtend(self)
+
+        Move caret right one word extending selection to new caret position.
+        """
         return _stc.StyledTextCtrl_WordRightExtend(*args, **kwargs)
 
     def Home(*args, **kwargs):
-        """Home(self)"""
+        """
+        Home(self)
+
+        Move caret to first position on line.
+        """
         return _stc.StyledTextCtrl_Home(*args, **kwargs)
 
     def HomeExtend(*args, **kwargs):
-        """HomeExtend(self)"""
+        """
+        HomeExtend(self)
+
+        Move caret to first position on line extending selection to new caret position.
+        """
         return _stc.StyledTextCtrl_HomeExtend(*args, **kwargs)
 
     def LineEnd(*args, **kwargs):
-        """LineEnd(self)"""
+        """
+        LineEnd(self)
+
+        Move caret to last position on line.
+        """
         return _stc.StyledTextCtrl_LineEnd(*args, **kwargs)
 
     def LineEndExtend(*args, **kwargs):
-        """LineEndExtend(self)"""
+        """
+        LineEndExtend(self)
+
+        Move caret to last position on line extending selection to new caret position.
+        """
         return _stc.StyledTextCtrl_LineEndExtend(*args, **kwargs)
 
     def DocumentStart(*args, **kwargs):
-        """DocumentStart(self)"""
+        """
+        DocumentStart(self)
+
+        Move caret to first position in document.
+        """
         return _stc.StyledTextCtrl_DocumentStart(*args, **kwargs)
 
     def DocumentStartExtend(*args, **kwargs):
-        """DocumentStartExtend(self)"""
+        """
+        DocumentStartExtend(self)
+
+        Move caret to first position in document extending selection to new caret position.
+        """
         return _stc.StyledTextCtrl_DocumentStartExtend(*args, **kwargs)
 
     def DocumentEnd(*args, **kwargs):
-        """DocumentEnd(self)"""
+        """
+        DocumentEnd(self)
+
+        Move caret to last position in document.
+        """
         return _stc.StyledTextCtrl_DocumentEnd(*args, **kwargs)
 
     def DocumentEndExtend(*args, **kwargs):
-        """DocumentEndExtend(self)"""
+        """
+        DocumentEndExtend(self)
+
+        Move caret to last position in document extending selection to new caret position.
+        """
         return _stc.StyledTextCtrl_DocumentEndExtend(*args, **kwargs)
 
     def PageUp(*args, **kwargs):
@@ -2222,7 +3336,11 @@ class StyledTextCtrl(_core.Control):
         return _stc.StyledTextCtrl_PageUp(*args, **kwargs)
 
     def PageUpExtend(*args, **kwargs):
-        """PageUpExtend(self)"""
+        """
+        PageUpExtend(self)
+
+        Move caret one page up extending selection to new caret position.
+        """
         return _stc.StyledTextCtrl_PageUpExtend(*args, **kwargs)
 
     def PageDown(*args, **kwargs):
@@ -2234,115 +3352,236 @@ class StyledTextCtrl(_core.Control):
         return _stc.StyledTextCtrl_PageDown(*args, **kwargs)
 
     def PageDownExtend(*args, **kwargs):
-        """PageDownExtend(self)"""
+        """
+        PageDownExtend(self)
+
+        Move caret one page down extending selection to new caret position.
+        """
         return _stc.StyledTextCtrl_PageDownExtend(*args, **kwargs)
 
     def EditToggleOvertype(*args, **kwargs):
-        """EditToggleOvertype(self)"""
+        """
+        EditToggleOvertype(self)
+
+        Switch from insert to overtype mode or the reverse.
+        """
         return _stc.StyledTextCtrl_EditToggleOvertype(*args, **kwargs)
 
     def Cancel(*args, **kwargs):
-        """Cancel(self)"""
+        """
+        Cancel(self)
+
+        Cancel any modes such as call tip or auto-completion list display.
+        """
         return _stc.StyledTextCtrl_Cancel(*args, **kwargs)
 
     def DeleteBack(*args, **kwargs):
-        """DeleteBack(self)"""
+        """
+        DeleteBack(self)
+
+        Delete the selection or if no selection, the character before the caret.
+        """
         return _stc.StyledTextCtrl_DeleteBack(*args, **kwargs)
 
     def Tab(*args, **kwargs):
-        """Tab(self)"""
+        """
+        Tab(self)
+
+        If selection is empty or all on one line replace the selection with a tab character.
+        If more than one line selected, indent the lines.
+        """
         return _stc.StyledTextCtrl_Tab(*args, **kwargs)
 
     def BackTab(*args, **kwargs):
-        """BackTab(self)"""
+        """
+        BackTab(self)
+
+        Dedent the selected lines.
+        """
         return _stc.StyledTextCtrl_BackTab(*args, **kwargs)
 
     def NewLine(*args, **kwargs):
-        """NewLine(self)"""
+        """
+        NewLine(self)
+
+        Insert a new line, may use a CRLF, CR or LF depending on EOL mode.
+        """
         return _stc.StyledTextCtrl_NewLine(*args, **kwargs)
 
     def FormFeed(*args, **kwargs):
-        """FormFeed(self)"""
+        """
+        FormFeed(self)
+
+        Insert a Form Feed character.
+        """
         return _stc.StyledTextCtrl_FormFeed(*args, **kwargs)
 
     def VCHome(*args, **kwargs):
-        """VCHome(self)"""
+        """
+        VCHome(self)
+
+        Move caret to before first visible character on line.
+        If already there move to first character on line.
+        """
         return _stc.StyledTextCtrl_VCHome(*args, **kwargs)
 
     def VCHomeExtend(*args, **kwargs):
-        """VCHomeExtend(self)"""
+        """
+        VCHomeExtend(self)
+
+        Like VCHome but extending selection to new caret position.
+        """
         return _stc.StyledTextCtrl_VCHomeExtend(*args, **kwargs)
 
     def ZoomIn(*args, **kwargs):
-        """ZoomIn(self)"""
+        """
+        ZoomIn(self)
+
+        Magnify the displayed text by increasing the sizes by 1 point.
+        """
         return _stc.StyledTextCtrl_ZoomIn(*args, **kwargs)
 
     def ZoomOut(*args, **kwargs):
-        """ZoomOut(self)"""
+        """
+        ZoomOut(self)
+
+        Make the displayed text smaller by decreasing the sizes by 1 point.
+        """
         return _stc.StyledTextCtrl_ZoomOut(*args, **kwargs)
 
     def DelWordLeft(*args, **kwargs):
-        """DelWordLeft(self)"""
+        """
+        DelWordLeft(self)
+
+        Delete the word to the left of the caret.
+        """
         return _stc.StyledTextCtrl_DelWordLeft(*args, **kwargs)
 
     def DelWordRight(*args, **kwargs):
-        """DelWordRight(self)"""
+        """
+        DelWordRight(self)
+
+        Delete the word to the right of the caret.
+        """
         return _stc.StyledTextCtrl_DelWordRight(*args, **kwargs)
 
     def LineCut(*args, **kwargs):
-        """LineCut(self)"""
+        """
+        LineCut(self)
+
+        Cut the line containing the caret.
+        """
         return _stc.StyledTextCtrl_LineCut(*args, **kwargs)
 
     def LineDelete(*args, **kwargs):
-        """LineDelete(self)"""
+        """
+        LineDelete(self)
+
+        Delete the line containing the caret.
+        """
         return _stc.StyledTextCtrl_LineDelete(*args, **kwargs)
 
     def LineTranspose(*args, **kwargs):
-        """LineTranspose(self)"""
+        """
+        LineTranspose(self)
+
+        Switch the current line with the previous.
+        """
         return _stc.StyledTextCtrl_LineTranspose(*args, **kwargs)
 
     def LineDuplicate(*args, **kwargs):
-        """LineDuplicate(self)"""
+        """
+        LineDuplicate(self)
+
+        Duplicate the current line.
+        """
         return _stc.StyledTextCtrl_LineDuplicate(*args, **kwargs)
 
     def LowerCase(*args, **kwargs):
-        """LowerCase(self)"""
+        """
+        LowerCase(self)
+
+        Transform the selection to lower case.
+        """
         return _stc.StyledTextCtrl_LowerCase(*args, **kwargs)
 
     def UpperCase(*args, **kwargs):
-        """UpperCase(self)"""
+        """
+        UpperCase(self)
+
+        Transform the selection to upper case.
+        """
         return _stc.StyledTextCtrl_UpperCase(*args, **kwargs)
 
     def LineScrollDown(*args, **kwargs):
-        """LineScrollDown(self)"""
+        """
+        LineScrollDown(self)
+
+        Scroll the document down, keeping the caret visible.
+        """
         return _stc.StyledTextCtrl_LineScrollDown(*args, **kwargs)
 
     def LineScrollUp(*args, **kwargs):
-        """LineScrollUp(self)"""
+        """
+        LineScrollUp(self)
+
+        Scroll the document up, keeping the caret visible.
+        """
         return _stc.StyledTextCtrl_LineScrollUp(*args, **kwargs)
 
     def DeleteBackNotLine(*args, **kwargs):
-        """DeleteBackNotLine(self)"""
+        """
+        DeleteBackNotLine(self)
+
+        Delete the selection or if no selection, the character before the caret.
+        Will not delete the character before at the start of a line.
+        """
         return _stc.StyledTextCtrl_DeleteBackNotLine(*args, **kwargs)
 
     def HomeDisplay(*args, **kwargs):
-        """HomeDisplay(self)"""
+        """
+        HomeDisplay(self)
+
+        Move caret to first position on display line.
+        """
         return _stc.StyledTextCtrl_HomeDisplay(*args, **kwargs)
 
     def HomeDisplayExtend(*args, **kwargs):
-        """HomeDisplayExtend(self)"""
+        """
+        HomeDisplayExtend(self)
+
+        Move caret to first position on display line extending selection to
+        new caret position.
+        """
         return _stc.StyledTextCtrl_HomeDisplayExtend(*args, **kwargs)
 
     def LineEndDisplay(*args, **kwargs):
-        """LineEndDisplay(self)"""
+        """
+        LineEndDisplay(self)
+
+        Move caret to last position on display line.
+        """
         return _stc.StyledTextCtrl_LineEndDisplay(*args, **kwargs)
 
     def LineEndDisplayExtend(*args, **kwargs):
-        """LineEndDisplayExtend(self)"""
+        """
+        LineEndDisplayExtend(self)
+
+        Move caret to last position on display line extending selection to new
+        caret position.
+        """
         return _stc.StyledTextCtrl_LineEndDisplayExtend(*args, **kwargs)
 
     def HomeWrap(*args, **kwargs):
-        """HomeWrap(self)"""
+        """
+        HomeWrap(self)
+
+        These are like their namesakes Home(Extend)?, LineEnd(Extend)?, VCHome(Extend)?
+        except they behave differently when word-wrap is enabled:
+        They go first to the start / end of the display line, like (Home|LineEnd)Display
+        The difference is that, the cursor is already at the point, it goes on to the start
+        or end of the document line, as appropriate for (Home|LineEnd|VCHome)(Extend)?.
+        """
         return _stc.StyledTextCtrl_HomeWrap(*args, **kwargs)
 
     def HomeWrapExtend(*args, **kwargs):
@@ -2366,191 +3605,390 @@ class StyledTextCtrl(_core.Control):
         return _stc.StyledTextCtrl_VCHomeWrapExtend(*args, **kwargs)
 
     def LineCopy(*args, **kwargs):
-        """LineCopy(self)"""
+        """
+        LineCopy(self)
+
+        Copy the line containing the caret.
+        """
         return _stc.StyledTextCtrl_LineCopy(*args, **kwargs)
 
     def MoveCaretInsideView(*args, **kwargs):
-        """MoveCaretInsideView(self)"""
+        """
+        MoveCaretInsideView(self)
+
+        Move the caret inside current view if it's not there already.
+        """
         return _stc.StyledTextCtrl_MoveCaretInsideView(*args, **kwargs)
 
     def LineLength(*args, **kwargs):
-        """LineLength(self, int line) -> int"""
+        """
+        LineLength(self, int line) -> int
+
+        How many characters are on a line, not including end of line characters?
+        """
         return _stc.StyledTextCtrl_LineLength(*args, **kwargs)
 
     def BraceHighlight(*args, **kwargs):
-        """BraceHighlight(self, int pos1, int pos2)"""
+        """
+        BraceHighlight(self, int pos1, int pos2)
+
+        Highlight the characters at two positions.
+        """
         return _stc.StyledTextCtrl_BraceHighlight(*args, **kwargs)
 
     def BraceBadLight(*args, **kwargs):
-        """BraceBadLight(self, int pos)"""
+        """
+        BraceBadLight(self, int pos)
+
+        Highlight the character at a position indicating there is no matching brace.
+        """
         return _stc.StyledTextCtrl_BraceBadLight(*args, **kwargs)
 
     def BraceMatch(*args, **kwargs):
-        """BraceMatch(self, int pos) -> int"""
+        """
+        BraceMatch(self, int pos) -> int
+
+        Find the position of a matching brace or INVALID_POSITION if no match.
+        """
         return _stc.StyledTextCtrl_BraceMatch(*args, **kwargs)
 
     def GetViewEOL(*args, **kwargs):
-        """GetViewEOL(self) -> bool"""
+        """
+        GetViewEOL(self) -> bool
+
+        Are the end of line characters visible?
+        """
         return _stc.StyledTextCtrl_GetViewEOL(*args, **kwargs)
 
     def SetViewEOL(*args, **kwargs):
-        """SetViewEOL(self, bool visible)"""
+        """
+        SetViewEOL(self, bool visible)
+
+        Make the end of line characters visible or invisible.
+        """
         return _stc.StyledTextCtrl_SetViewEOL(*args, **kwargs)
 
     def GetDocPointer(*args, **kwargs):
-        """GetDocPointer(self) -> void"""
+        """
+        GetDocPointer(self) -> void
+
+        Retrieve a pointer to the document object.
+        """
         return _stc.StyledTextCtrl_GetDocPointer(*args, **kwargs)
 
     def SetDocPointer(*args, **kwargs):
-        """SetDocPointer(self, void docPointer)"""
+        """
+        SetDocPointer(self, void docPointer)
+
+        Change the document object used.
+        """
         return _stc.StyledTextCtrl_SetDocPointer(*args, **kwargs)
 
     def SetModEventMask(*args, **kwargs):
-        """SetModEventMask(self, int mask)"""
+        """
+        SetModEventMask(self, int mask)
+
+        Set which document modification events are sent to the container.
+        """
         return _stc.StyledTextCtrl_SetModEventMask(*args, **kwargs)
 
     def GetEdgeColumn(*args, **kwargs):
-        """GetEdgeColumn(self) -> int"""
+        """
+        GetEdgeColumn(self) -> int
+
+        Retrieve the column number which text should be kept within.
+        """
         return _stc.StyledTextCtrl_GetEdgeColumn(*args, **kwargs)
 
     def SetEdgeColumn(*args, **kwargs):
-        """SetEdgeColumn(self, int column)"""
+        """
+        SetEdgeColumn(self, int column)
+
+        Set the column number of the edge.
+        If text goes past the edge then it is highlighted.
+        """
         return _stc.StyledTextCtrl_SetEdgeColumn(*args, **kwargs)
 
     def GetEdgeMode(*args, **kwargs):
-        """GetEdgeMode(self) -> int"""
+        """
+        GetEdgeMode(self) -> int
+
+        Retrieve the edge highlight mode.
+        """
         return _stc.StyledTextCtrl_GetEdgeMode(*args, **kwargs)
 
     def SetEdgeMode(*args, **kwargs):
-        """SetEdgeMode(self, int mode)"""
+        """
+        SetEdgeMode(self, int mode)
+
+        The edge may be displayed by a line (EDGE_LINE) or by highlighting text that
+        goes beyond it (EDGE_BACKGROUND) or not displayed at all (EDGE_NONE).
+        """
         return _stc.StyledTextCtrl_SetEdgeMode(*args, **kwargs)
 
     def GetEdgeColour(*args, **kwargs):
-        """GetEdgeColour(self) -> Colour"""
+        """
+        GetEdgeColour(self) -> Colour
+
+        Retrieve the colour used in edge indication.
+        """
         return _stc.StyledTextCtrl_GetEdgeColour(*args, **kwargs)
 
     def SetEdgeColour(*args, **kwargs):
-        """SetEdgeColour(self, Colour edgeColour)"""
+        """
+        SetEdgeColour(self, Colour edgeColour)
+
+        Change the colour used in edge indication.
+        """
         return _stc.StyledTextCtrl_SetEdgeColour(*args, **kwargs)
 
     def SearchAnchor(*args, **kwargs):
-        """SearchAnchor(self)"""
+        """
+        SearchAnchor(self)
+
+        Sets the current caret position to be the search anchor.
+        """
         return _stc.StyledTextCtrl_SearchAnchor(*args, **kwargs)
 
     def SearchNext(*args, **kwargs):
-        """SearchNext(self, int flags, String text) -> int"""
+        """
+        SearchNext(self, int flags, String text) -> int
+
+        Find some text starting at the search anchor.
+        Does not ensure the selection is visible.
+        """
         return _stc.StyledTextCtrl_SearchNext(*args, **kwargs)
 
     def SearchPrev(*args, **kwargs):
-        """SearchPrev(self, int flags, String text) -> int"""
+        """
+        SearchPrev(self, int flags, String text) -> int
+
+        Find some text starting at the search anchor and moving backwards.
+        Does not ensure the selection is visible.
+        """
         return _stc.StyledTextCtrl_SearchPrev(*args, **kwargs)
 
     def LinesOnScreen(*args, **kwargs):
-        """LinesOnScreen(self) -> int"""
+        """
+        LinesOnScreen(self) -> int
+
+        Retrieves the number of lines completely visible.
+        """
         return _stc.StyledTextCtrl_LinesOnScreen(*args, **kwargs)
 
     def UsePopUp(*args, **kwargs):
-        """UsePopUp(self, bool allowPopUp)"""
+        """
+        UsePopUp(self, bool allowPopUp)
+
+        Set whether a pop up menu is displayed automatically when the user presses
+        the wrong mouse button.
+        """
         return _stc.StyledTextCtrl_UsePopUp(*args, **kwargs)
 
     def SelectionIsRectangle(*args, **kwargs):
-        """SelectionIsRectangle(self) -> bool"""
+        """
+        SelectionIsRectangle(self) -> bool
+
+        Is the selection rectangular? The alternative is the more common stream selection.
+        """
         return _stc.StyledTextCtrl_SelectionIsRectangle(*args, **kwargs)
 
     def SetZoom(*args, **kwargs):
-        """SetZoom(self, int zoom)"""
+        """
+        SetZoom(self, int zoom)
+
+        Set the zoom level. This number of points is added to the size of all fonts.
+        It may be positive to magnify or negative to reduce.
+        """
         return _stc.StyledTextCtrl_SetZoom(*args, **kwargs)
 
     def GetZoom(*args, **kwargs):
-        """GetZoom(self) -> int"""
+        """
+        GetZoom(self) -> int
+
+        Retrieve the zoom level.
+        """
         return _stc.StyledTextCtrl_GetZoom(*args, **kwargs)
 
     def CreateDocument(*args, **kwargs):
-        """CreateDocument(self) -> void"""
+        """
+        CreateDocument(self) -> void
+
+        Create a new document object.
+        Starts with reference count of 1 and not selected into editor.
+        """
         return _stc.StyledTextCtrl_CreateDocument(*args, **kwargs)
 
     def AddRefDocument(*args, **kwargs):
-        """AddRefDocument(self, void docPointer)"""
+        """
+        AddRefDocument(self, void docPointer)
+
+        Extend life of document.
+        """
         return _stc.StyledTextCtrl_AddRefDocument(*args, **kwargs)
 
     def ReleaseDocument(*args, **kwargs):
-        """ReleaseDocument(self, void docPointer)"""
+        """
+        ReleaseDocument(self, void docPointer)
+
+        Release a reference to the document, deleting document if it fades to black.
+        """
         return _stc.StyledTextCtrl_ReleaseDocument(*args, **kwargs)
 
     def GetModEventMask(*args, **kwargs):
-        """GetModEventMask(self) -> int"""
+        """
+        GetModEventMask(self) -> int
+
+        Get which document modification events are sent to the container.
+        """
         return _stc.StyledTextCtrl_GetModEventMask(*args, **kwargs)
 
     def SetSTCFocus(*args, **kwargs):
-        """SetSTCFocus(self, bool focus)"""
+        """
+        SetSTCFocus(self, bool focus)
+
+        Change internal focus flag.
+        """
         return _stc.StyledTextCtrl_SetSTCFocus(*args, **kwargs)
 
     def GetSTCFocus(*args, **kwargs):
-        """GetSTCFocus(self) -> bool"""
+        """
+        GetSTCFocus(self) -> bool
+
+        Get internal focus flag.
+        """
         return _stc.StyledTextCtrl_GetSTCFocus(*args, **kwargs)
 
     def SetStatus(*args, **kwargs):
-        """SetStatus(self, int statusCode)"""
+        """
+        SetStatus(self, int statusCode)
+
+        Change error status - 0 = OK.
+        """
         return _stc.StyledTextCtrl_SetStatus(*args, **kwargs)
 
     def GetStatus(*args, **kwargs):
-        """GetStatus(self) -> int"""
+        """
+        GetStatus(self) -> int
+
+        Get error status.
+        """
         return _stc.StyledTextCtrl_GetStatus(*args, **kwargs)
 
     def SetMouseDownCaptures(*args, **kwargs):
-        """SetMouseDownCaptures(self, bool captures)"""
+        """
+        SetMouseDownCaptures(self, bool captures)
+
+        Set whether the mouse is captured when its button is pressed.
+        """
         return _stc.StyledTextCtrl_SetMouseDownCaptures(*args, **kwargs)
 
     def GetMouseDownCaptures(*args, **kwargs):
-        """GetMouseDownCaptures(self) -> bool"""
+        """
+        GetMouseDownCaptures(self) -> bool
+
+        Get whether mouse gets captured.
+        """
         return _stc.StyledTextCtrl_GetMouseDownCaptures(*args, **kwargs)
 
     def SetSTCCursor(*args, **kwargs):
-        """SetSTCCursor(self, int cursorType)"""
+        """
+        SetSTCCursor(self, int cursorType)
+
+        Sets the cursor to one of the SC_CURSOR* values.
+        """
         return _stc.StyledTextCtrl_SetSTCCursor(*args, **kwargs)
 
     def GetSTCCursor(*args, **kwargs):
-        """GetSTCCursor(self) -> int"""
+        """
+        GetSTCCursor(self) -> int
+
+        Get cursor type.
+        """
         return _stc.StyledTextCtrl_GetSTCCursor(*args, **kwargs)
 
     def SetControlCharSymbol(*args, **kwargs):
-        """SetControlCharSymbol(self, int symbol)"""
+        """
+        SetControlCharSymbol(self, int symbol)
+
+        Change the way control characters are displayed:
+        If symbol is < 32, keep the drawn way, else, use the given character.
+        """
         return _stc.StyledTextCtrl_SetControlCharSymbol(*args, **kwargs)
 
     def GetControlCharSymbol(*args, **kwargs):
-        """GetControlCharSymbol(self) -> int"""
+        """
+        GetControlCharSymbol(self) -> int
+
+        Get the way control characters are displayed.
+        """
         return _stc.StyledTextCtrl_GetControlCharSymbol(*args, **kwargs)
 
     def WordPartLeft(*args, **kwargs):
-        """WordPartLeft(self)"""
+        """
+        WordPartLeft(self)
+
+        Move to the previous change in capitalisation.
+        """
         return _stc.StyledTextCtrl_WordPartLeft(*args, **kwargs)
 
     def WordPartLeftExtend(*args, **kwargs):
-        """WordPartLeftExtend(self)"""
+        """
+        WordPartLeftExtend(self)
+
+        Move to the previous change in capitalisation extending selection
+        to new caret position.
+        """
         return _stc.StyledTextCtrl_WordPartLeftExtend(*args, **kwargs)
 
     def WordPartRight(*args, **kwargs):
-        """WordPartRight(self)"""
+        """
+        WordPartRight(self)
+
+        Move to the change next in capitalisation.
+        """
         return _stc.StyledTextCtrl_WordPartRight(*args, **kwargs)
 
     def WordPartRightExtend(*args, **kwargs):
-        """WordPartRightExtend(self)"""
+        """
+        WordPartRightExtend(self)
+
+        Move to the next change in capitalisation extending selection
+        to new caret position.
+        """
         return _stc.StyledTextCtrl_WordPartRightExtend(*args, **kwargs)
 
     def SetVisiblePolicy(*args, **kwargs):
-        """SetVisiblePolicy(self, int visiblePolicy, int visibleSlop)"""
+        """
+        SetVisiblePolicy(self, int visiblePolicy, int visibleSlop)
+
+        Set the way the display area is determined when a particular line
+        is to be moved to by Find, FindNext, GotoLine, etc.
+        """
         return _stc.StyledTextCtrl_SetVisiblePolicy(*args, **kwargs)
 
     def DelLineLeft(*args, **kwargs):
-        """DelLineLeft(self)"""
+        """
+        DelLineLeft(self)
+
+        Delete back from the current position to the start of the line.
+        """
         return _stc.StyledTextCtrl_DelLineLeft(*args, **kwargs)
 
     def DelLineRight(*args, **kwargs):
-        """DelLineRight(self)"""
+        """
+        DelLineRight(self)
+
+        Delete forwards from the current position to the end of the line.
+        """
         return _stc.StyledTextCtrl_DelLineRight(*args, **kwargs)
 
     def SetXOffset(*args, **kwargs):
-        """SetXOffset(self, int newOffset)"""
+        """
+        SetXOffset(self, int newOffset)
+
+        Get and Set the xOffset (ie, horizonal scroll position).
+        """
         return _stc.StyledTextCtrl_SetXOffset(*args, **kwargs)
 
     def GetXOffset(*args, **kwargs):
@@ -2558,43 +3996,85 @@ class StyledTextCtrl(_core.Control):
         return _stc.StyledTextCtrl_GetXOffset(*args, **kwargs)
 
     def ChooseCaretX(*args, **kwargs):
-        """ChooseCaretX(self)"""
+        """
+        ChooseCaretX(self)
+
+        Set the last x chosen value to be the caret x position.
+        """
         return _stc.StyledTextCtrl_ChooseCaretX(*args, **kwargs)
 
     def SetXCaretPolicy(*args, **kwargs):
-        """SetXCaretPolicy(self, int caretPolicy, int caretSlop)"""
+        """
+        SetXCaretPolicy(self, int caretPolicy, int caretSlop)
+
+        Set the way the caret is kept visible when going sideway.
+        The exclusion zone is given in pixels.
+        """
         return _stc.StyledTextCtrl_SetXCaretPolicy(*args, **kwargs)
 
     def SetYCaretPolicy(*args, **kwargs):
-        """SetYCaretPolicy(self, int caretPolicy, int caretSlop)"""
+        """
+        SetYCaretPolicy(self, int caretPolicy, int caretSlop)
+
+        Set the way the line the caret is on is kept visible.
+        The exclusion zone is given in lines.
+        """
         return _stc.StyledTextCtrl_SetYCaretPolicy(*args, **kwargs)
 
     def SetPrintWrapMode(*args, **kwargs):
-        """SetPrintWrapMode(self, int mode)"""
+        """
+        SetPrintWrapMode(self, int mode)
+
+        Set printing to line wrapped (SC_WRAP_WORD) or not line wrapped (SC_WRAP_NONE).
+        """
         return _stc.StyledTextCtrl_SetPrintWrapMode(*args, **kwargs)
 
     def GetPrintWrapMode(*args, **kwargs):
-        """GetPrintWrapMode(self) -> int"""
+        """
+        GetPrintWrapMode(self) -> int
+
+        Is printing line wrapped?
+        """
         return _stc.StyledTextCtrl_GetPrintWrapMode(*args, **kwargs)
 
     def SetHotspotActiveForeground(*args, **kwargs):
-        """SetHotspotActiveForeground(self, bool useSetting, Colour fore)"""
+        """
+        SetHotspotActiveForeground(self, bool useSetting, Colour fore)
+
+        Set a fore colour for active hotspots.
+        """
         return _stc.StyledTextCtrl_SetHotspotActiveForeground(*args, **kwargs)
 
     def SetHotspotActiveBackground(*args, **kwargs):
-        """SetHotspotActiveBackground(self, bool useSetting, Colour back)"""
+        """
+        SetHotspotActiveBackground(self, bool useSetting, Colour back)
+
+        Set a back colour for active hotspots.
+        """
         return _stc.StyledTextCtrl_SetHotspotActiveBackground(*args, **kwargs)
 
     def SetHotspotActiveUnderline(*args, **kwargs):
-        """SetHotspotActiveUnderline(self, bool underline)"""
+        """
+        SetHotspotActiveUnderline(self, bool underline)
+
+        Enable / Disable underlining active hotspots.
+        """
         return _stc.StyledTextCtrl_SetHotspotActiveUnderline(*args, **kwargs)
 
     def SetHotspotSingleLine(*args, **kwargs):
-        """SetHotspotSingleLine(self, bool singleLine)"""
+        """
+        SetHotspotSingleLine(self, bool singleLine)
+
+        Limit hotspots to single line so hotspots on two lines don't merge.
+        """
         return _stc.StyledTextCtrl_SetHotspotSingleLine(*args, **kwargs)
 
     def ParaDown(*args, **kwargs):
-        """ParaDown(self)"""
+        """
+        ParaDown(self)
+
+        Move caret between paragraphs (delimited by empty lines).
+        """
         return _stc.StyledTextCtrl_ParaDown(*args, **kwargs)
 
     def ParaDownExtend(*args, **kwargs):
@@ -2610,210 +4090,431 @@ class StyledTextCtrl(_core.Control):
         return _stc.StyledTextCtrl_ParaUpExtend(*args, **kwargs)
 
     def PositionBefore(*args, **kwargs):
-        """PositionBefore(self, int pos) -> int"""
+        """
+        PositionBefore(self, int pos) -> int
+
+        Given a valid document position, return the previous position taking code
+        page into account. Returns 0 if passed 0.
+        """
         return _stc.StyledTextCtrl_PositionBefore(*args, **kwargs)
 
     def PositionAfter(*args, **kwargs):
-        """PositionAfter(self, int pos) -> int"""
+        """
+        PositionAfter(self, int pos) -> int
+
+        Given a valid document position, return the next position taking code
+        page into account. Maximum value returned is the last position in the document.
+        """
         return _stc.StyledTextCtrl_PositionAfter(*args, **kwargs)
 
     def CopyRange(*args, **kwargs):
-        """CopyRange(self, int start, int end)"""
+        """
+        CopyRange(self, int start, int end)
+
+        Copy a range of text to the clipboard. Positions are clipped into the document.
+        """
         return _stc.StyledTextCtrl_CopyRange(*args, **kwargs)
 
     def CopyText(*args, **kwargs):
-        """CopyText(self, int length, String text)"""
+        """
+        CopyText(self, int length, String text)
+
+        Copy argument text to the clipboard.
+        """
         return _stc.StyledTextCtrl_CopyText(*args, **kwargs)
 
     def SetSelectionMode(*args, **kwargs):
-        """SetSelectionMode(self, int mode)"""
+        """
+        SetSelectionMode(self, int mode)
+
+        Set the selection mode to stream (SC_SEL_STREAM) or rectangular (SC_SEL_RECTANGLE) or
+        by lines (SC_SEL_LINES).
+        """
         return _stc.StyledTextCtrl_SetSelectionMode(*args, **kwargs)
 
     def GetSelectionMode(*args, **kwargs):
-        """GetSelectionMode(self) -> int"""
+        """
+        GetSelectionMode(self) -> int
+
+        Get the mode of the current selection.
+        """
         return _stc.StyledTextCtrl_GetSelectionMode(*args, **kwargs)
 
     def GetLineSelStartPosition(*args, **kwargs):
-        """GetLineSelStartPosition(self, int line) -> int"""
+        """
+        GetLineSelStartPosition(self, int line) -> int
+
+        Retrieve the position of the start of the selection at the given line (INVALID_POSITION if no selection on this line).
+        """
         return _stc.StyledTextCtrl_GetLineSelStartPosition(*args, **kwargs)
 
     def GetLineSelEndPosition(*args, **kwargs):
-        """GetLineSelEndPosition(self, int line) -> int"""
+        """
+        GetLineSelEndPosition(self, int line) -> int
+
+        Retrieve the position of the end of the selection at the given line (INVALID_POSITION if no selection on this line).
+        """
         return _stc.StyledTextCtrl_GetLineSelEndPosition(*args, **kwargs)
 
     def LineDownRectExtend(*args, **kwargs):
-        """LineDownRectExtend(self)"""
+        """
+        LineDownRectExtend(self)
+
+        Move caret down one line, extending rectangular selection to new caret position.
+        """
         return _stc.StyledTextCtrl_LineDownRectExtend(*args, **kwargs)
 
     def LineUpRectExtend(*args, **kwargs):
-        """LineUpRectExtend(self)"""
+        """
+        LineUpRectExtend(self)
+
+        Move caret up one line, extending rectangular selection to new caret position.
+        """
         return _stc.StyledTextCtrl_LineUpRectExtend(*args, **kwargs)
 
     def CharLeftRectExtend(*args, **kwargs):
-        """CharLeftRectExtend(self)"""
+        """
+        CharLeftRectExtend(self)
+
+        Move caret left one character, extending rectangular selection to new caret position.
+        """
         return _stc.StyledTextCtrl_CharLeftRectExtend(*args, **kwargs)
 
     def CharRightRectExtend(*args, **kwargs):
-        """CharRightRectExtend(self)"""
+        """
+        CharRightRectExtend(self)
+
+        Move caret right one character, extending rectangular selection to new caret position.
+        """
         return _stc.StyledTextCtrl_CharRightRectExtend(*args, **kwargs)
 
     def HomeRectExtend(*args, **kwargs):
-        """HomeRectExtend(self)"""
+        """
+        HomeRectExtend(self)
+
+        Move caret to first position on line, extending rectangular selection to new caret position.
+        """
         return _stc.StyledTextCtrl_HomeRectExtend(*args, **kwargs)
 
     def VCHomeRectExtend(*args, **kwargs):
-        """VCHomeRectExtend(self)"""
+        """
+        VCHomeRectExtend(self)
+
+        Move caret to before first visible character on line.
+        If already there move to first character on line.
+        In either case, extend rectangular selection to new caret position.
+        """
         return _stc.StyledTextCtrl_VCHomeRectExtend(*args, **kwargs)
 
     def LineEndRectExtend(*args, **kwargs):
-        """LineEndRectExtend(self)"""
+        """
+        LineEndRectExtend(self)
+
+        Move caret to last position on line, extending rectangular selection to new caret position.
+        """
         return _stc.StyledTextCtrl_LineEndRectExtend(*args, **kwargs)
 
     def PageUpRectExtend(*args, **kwargs):
-        """PageUpRectExtend(self)"""
+        """
+        PageUpRectExtend(self)
+
+        Move caret one page up, extending rectangular selection to new caret position.
+        """
         return _stc.StyledTextCtrl_PageUpRectExtend(*args, **kwargs)
 
     def PageDownRectExtend(*args, **kwargs):
-        """PageDownRectExtend(self)"""
+        """
+        PageDownRectExtend(self)
+
+        Move caret one page down, extending rectangular selection to new caret position.
+        """
         return _stc.StyledTextCtrl_PageDownRectExtend(*args, **kwargs)
 
     def StutteredPageUp(*args, **kwargs):
-        """StutteredPageUp(self)"""
+        """
+        StutteredPageUp(self)
+
+        Move caret to top of page, or one page up if already at top of page.
+        """
         return _stc.StyledTextCtrl_StutteredPageUp(*args, **kwargs)
 
     def StutteredPageUpExtend(*args, **kwargs):
-        """StutteredPageUpExtend(self)"""
+        """
+        StutteredPageUpExtend(self)
+
+        Move caret to top of page, or one page up if already at top of page, extending selection to new caret position.
+        """
         return _stc.StyledTextCtrl_StutteredPageUpExtend(*args, **kwargs)
 
     def StutteredPageDown(*args, **kwargs):
-        """StutteredPageDown(self)"""
+        """
+        StutteredPageDown(self)
+
+        Move caret to bottom of page, or one page down if already at bottom of page.
+        """
         return _stc.StyledTextCtrl_StutteredPageDown(*args, **kwargs)
 
     def StutteredPageDownExtend(*args, **kwargs):
-        """StutteredPageDownExtend(self)"""
+        """
+        StutteredPageDownExtend(self)
+
+        Move caret to bottom of page, or one page down if already at bottom of page, extending selection to new caret position.
+        """
         return _stc.StyledTextCtrl_StutteredPageDownExtend(*args, **kwargs)
 
     def WordLeftEnd(*args, **kwargs):
-        """WordLeftEnd(self)"""
+        """
+        WordLeftEnd(self)
+
+        Move caret left one word, position cursor at end of word.
+        """
         return _stc.StyledTextCtrl_WordLeftEnd(*args, **kwargs)
 
     def WordLeftEndExtend(*args, **kwargs):
-        """WordLeftEndExtend(self)"""
+        """
+        WordLeftEndExtend(self)
+
+        Move caret left one word, position cursor at end of word, extending selection to new caret position.
+        """
         return _stc.StyledTextCtrl_WordLeftEndExtend(*args, **kwargs)
 
     def WordRightEnd(*args, **kwargs):
-        """WordRightEnd(self)"""
+        """
+        WordRightEnd(self)
+
+        Move caret right one word, position cursor at end of word.
+        """
         return _stc.StyledTextCtrl_WordRightEnd(*args, **kwargs)
 
     def WordRightEndExtend(*args, **kwargs):
-        """WordRightEndExtend(self)"""
+        """
+        WordRightEndExtend(self)
+
+        Move caret right one word, position cursor at end of word, extending selection to new caret position.
+        """
         return _stc.StyledTextCtrl_WordRightEndExtend(*args, **kwargs)
 
     def SetWhitespaceChars(*args, **kwargs):
-        """SetWhitespaceChars(self, String characters)"""
+        """
+        SetWhitespaceChars(self, String characters)
+
+        Set the set of characters making up whitespace for when moving or selecting by word.
+        Should be called after SetWordChars.
+        """
         return _stc.StyledTextCtrl_SetWhitespaceChars(*args, **kwargs)
 
     def SetCharsDefault(*args, **kwargs):
-        """SetCharsDefault(self)"""
+        """
+        SetCharsDefault(self)
+
+        Reset the set of characters for whitespace and word characters to the defaults.
+        """
         return _stc.StyledTextCtrl_SetCharsDefault(*args, **kwargs)
 
     def AutoCompGetCurrent(*args, **kwargs):
-        """AutoCompGetCurrent(self) -> int"""
+        """
+        AutoCompGetCurrent(self) -> int
+
+        Get currently selected item position in the auto-completion list
+        """
         return _stc.StyledTextCtrl_AutoCompGetCurrent(*args, **kwargs)
 
     def Allocate(*args, **kwargs):
-        """Allocate(self, int bytes)"""
+        """
+        Allocate(self, int bytes)
+
+        Enlarge the document to a particular size of text bytes.
+        """
         return _stc.StyledTextCtrl_Allocate(*args, **kwargs)
 
     def FindColumn(*args, **kwargs):
-        """FindColumn(self, int line, int column) -> int"""
+        """
+        FindColumn(self, int line, int column) -> int
+
+        Find the position of a column on a line taking into account tabs and 
+        multi-byte characters. If beyond end of line, return line end position.
+        """
         return _stc.StyledTextCtrl_FindColumn(*args, **kwargs)
 
     def StartRecord(*args, **kwargs):
-        """StartRecord(self)"""
+        """
+        StartRecord(self)
+
+        Start notifying the container of all key presses and commands.
+        """
         return _stc.StyledTextCtrl_StartRecord(*args, **kwargs)
 
     def StopRecord(*args, **kwargs):
-        """StopRecord(self)"""
+        """
+        StopRecord(self)
+
+        Stop notifying the container of all key presses and commands.
+        """
         return _stc.StyledTextCtrl_StopRecord(*args, **kwargs)
 
     def SetLexer(*args, **kwargs):
-        """SetLexer(self, int lexer)"""
+        """
+        SetLexer(self, int lexer)
+
+        Set the lexing language of the document.
+        """
         return _stc.StyledTextCtrl_SetLexer(*args, **kwargs)
 
     def GetLexer(*args, **kwargs):
-        """GetLexer(self) -> int"""
+        """
+        GetLexer(self) -> int
+
+        Retrieve the lexing language of the document.
+        """
         return _stc.StyledTextCtrl_GetLexer(*args, **kwargs)
 
     def Colourise(*args, **kwargs):
-        """Colourise(self, int start, int end)"""
+        """
+        Colourise(self, int start, int end)
+
+        Colourise a segment of the document using the current lexing language.
+        """
         return _stc.StyledTextCtrl_Colourise(*args, **kwargs)
 
     def SetProperty(*args, **kwargs):
-        """SetProperty(self, String key, String value)"""
+        """
+        SetProperty(self, String key, String value)
+
+        Set up a value that may be used by a lexer for some optional feature.
+        """
         return _stc.StyledTextCtrl_SetProperty(*args, **kwargs)
 
     def SetKeyWords(*args, **kwargs):
-        """SetKeyWords(self, int keywordSet, String keyWords)"""
+        """
+        SetKeyWords(self, int keywordSet, String keyWords)
+
+        Set up the key words used by the lexer.
+        """
         return _stc.StyledTextCtrl_SetKeyWords(*args, **kwargs)
 
     def SetLexerLanguage(*args, **kwargs):
-        """SetLexerLanguage(self, String language)"""
+        """
+        SetLexerLanguage(self, String language)
+
+        Set the lexing language of the document based on string name.
+        """
         return _stc.StyledTextCtrl_SetLexerLanguage(*args, **kwargs)
 
     def GetCurrentLine(*args, **kwargs):
-        """GetCurrentLine(self) -> int"""
+        """
+        GetCurrentLine(self) -> int
+
+        Returns the line number of the line with the caret.
+        """
         return _stc.StyledTextCtrl_GetCurrentLine(*args, **kwargs)
 
     def StyleSetSpec(*args, **kwargs):
-        """StyleSetSpec(self, int styleNum, String spec)"""
+        """
+        StyleSetSpec(self, int styleNum, String spec)
+
+        Extract style settings from a spec-string which is composed of one or
+        more of the following comma separated elements::
+
+             bold                    turns on bold
+             italic                  turns on italics
+             fore:[name or #RRGGBB]  sets the foreground colour
+             back:[name or #RRGGBB]  sets the background colour
+             face:[facename]         sets the font face name to use
+             size:[num]              sets the font size in points
+             eol                     turns on eol filling
+             underline               turns on underlining
+
+        """
         return _stc.StyledTextCtrl_StyleSetSpec(*args, **kwargs)
 
     def StyleSetFont(*args, **kwargs):
-        """StyleSetFont(self, int styleNum, Font font)"""
+        """
+        StyleSetFont(self, int styleNum, Font font)
+
+        Set style size, face, bold, italic, and underline attributes from the
+        attributes of a `wx.Font`.
+        """
         return _stc.StyledTextCtrl_StyleSetFont(*args, **kwargs)
 
     def StyleSetFontAttr(*args, **kwargs):
         """
         StyleSetFontAttr(self, int styleNum, int size, String faceName, bool bold, 
             bool italic, bool underline)
+
+        Set all font style attributes at once.
         """
         return _stc.StyledTextCtrl_StyleSetFontAttr(*args, **kwargs)
 
     def CmdKeyExecute(*args, **kwargs):
-        """CmdKeyExecute(self, int cmd)"""
+        """
+        CmdKeyExecute(self, int cmd)
+
+        Perform one of the operations defined by the wx.stc.STC_CMD_* constants.
+        """
         return _stc.StyledTextCtrl_CmdKeyExecute(*args, **kwargs)
 
     def SetMargins(*args, **kwargs):
-        """SetMargins(self, int left, int right)"""
+        """
+        SetMargins(self, int left, int right)
+
+        Set the left and right margin in the edit area, measured in pixels.
+        """
         return _stc.StyledTextCtrl_SetMargins(*args, **kwargs)
 
     def GetSelection(*args, **kwargs):
-        """GetSelection(self, int OUTPUT, int OUTPUT)"""
+        """
+        GetSelection(self) -> (startPos, endPos)
+
+        Retrieve the start and end positions of the current selection.
+        """
         return _stc.StyledTextCtrl_GetSelection(*args, **kwargs)
 
     def PointFromPosition(*args, **kwargs):
-        """PointFromPosition(self, int pos) -> Point"""
+        """
+        PointFromPosition(self, int pos) -> Point
+
+        Retrieve the point in the window where a position is displayed.
+        """
         return _stc.StyledTextCtrl_PointFromPosition(*args, **kwargs)
 
     def ScrollToLine(*args, **kwargs):
-        """ScrollToLine(self, int line)"""
+        """
+        ScrollToLine(self, int line)
+
+        Scroll enough to make the given line visible.
+        """
         return _stc.StyledTextCtrl_ScrollToLine(*args, **kwargs)
 
     def ScrollToColumn(*args, **kwargs):
-        """ScrollToColumn(self, int column)"""
+        """
+        ScrollToColumn(self, int column)
+
+        Scroll enough to make the given column visible
+        """
         return _stc.StyledTextCtrl_ScrollToColumn(*args, **kwargs)
 
     def SendMsg(*args, **kwargs):
-        """SendMsg(self, int msg, long wp=0, long lp=0) -> long"""
+        """
+        SendMsg(self, int msg, long wp=0, long lp=0) -> long
+
+        Send a message to Scintilla.
+        """
         return _stc.StyledTextCtrl_SendMsg(*args, **kwargs)
 
     def SetVScrollBar(*args, **kwargs):
-        """SetVScrollBar(self, wxScrollBar bar)"""
+        """
+        SetVScrollBar(self, wxScrollBar bar)
+
+        Set the vertical scrollbar to use instead of the one that's built-in.
+        """
         return _stc.StyledTextCtrl_SetVScrollBar(*args, **kwargs)
 
     def SetHScrollBar(*args, **kwargs):
-        """SetHScrollBar(self, wxScrollBar bar)"""
+        """
+        SetHScrollBar(self, wxScrollBar bar)
+
+        Set the horizontal scrollbar to use instead of the ont that's built-in.
+        """
         return _stc.StyledTextCtrl_SetHScrollBar(*args, **kwargs)
 
     def GetLastKeydownProcessed(*args, **kwargs):
@@ -2825,64 +4526,258 @@ class StyledTextCtrl(_core.Control):
         return _stc.StyledTextCtrl_SetLastKeydownProcessed(*args, **kwargs)
 
     def SaveFile(*args, **kwargs):
-        """SaveFile(self, String filename) -> bool"""
+        """
+        SaveFile(self, String filename) -> bool
+
+        Write the contents of the editor to filename
+        """
         return _stc.StyledTextCtrl_SaveFile(*args, **kwargs)
 
     def LoadFile(*args, **kwargs):
-        """LoadFile(self, String filename) -> bool"""
+        """
+        LoadFile(self, String filename) -> bool
+
+        Load the contents of filename into the editor
+        """
         return _stc.StyledTextCtrl_LoadFile(*args, **kwargs)
 
     def DoDragOver(*args, **kwargs):
-        """DoDragOver(self, int x, int y, int def) -> int"""
+        """
+        DoDragOver(self, int x, int y, int def) -> int
+
+        Allow for simulating a DnD DragOver.
+        """
         return _stc.StyledTextCtrl_DoDragOver(*args, **kwargs)
 
     def DoDropText(*args, **kwargs):
-        """DoDropText(self, long x, long y, String data) -> bool"""
+        """
+        DoDropText(self, long x, long y, String data) -> bool
+
+        Allow for simulating a DnD DropText.
+        """
         return _stc.StyledTextCtrl_DoDropText(*args, **kwargs)
 
     def SetUseAntiAliasing(*args, **kwargs):
-        """SetUseAntiAliasing(self, bool useAA)"""
+        """
+        SetUseAntiAliasing(self, bool useAA)
+
+        Specify whether anti-aliased fonts should be used.  Will have no
+        effect on some platforms, but on some (wxMac for example) can greatly
+        improve performance.
+        """
         return _stc.StyledTextCtrl_SetUseAntiAliasing(*args, **kwargs)
 
     def GetUseAntiAliasing(*args, **kwargs):
-        """GetUseAntiAliasing(self) -> bool"""
+        """
+        GetUseAntiAliasing(self) -> bool
+
+        Returns the current UseAntiAliasing setting.
+        """
         return _stc.StyledTextCtrl_GetUseAntiAliasing(*args, **kwargs)
 
     def AddTextRaw(*args, **kwargs):
-        """AddTextRaw(self, char text)"""
+        """
+        AddTextRaw(self, char text)
+
+        Add text to the document at current position.  The text should be
+        utf-8 encoded on unicode builds of wxPython, or can be any 8-bit text
+        in ansi builds.
+        """
         return _stc.StyledTextCtrl_AddTextRaw(*args, **kwargs)
 
     def InsertTextRaw(*args, **kwargs):
-        """InsertTextRaw(self, int pos, char text)"""
+        """
+        InsertTextRaw(self, int pos, char text)
+
+        Insert string at a position.  The text should be utf-8 encoded on
+        unicode builds of wxPython, or can be any 8-bit text in ansi builds.
+        """
         return _stc.StyledTextCtrl_InsertTextRaw(*args, **kwargs)
 
     def GetCurLineRaw(*args, **kwargs):
-        """GetCurLineRaw(self, int OUTPUT) -> wxCharBuffer"""
+        """
+        GetCurLineRaw() -> (text, index)
+
+        Retrieve the text of the line containing the caret, and also the index
+        of the caret on the line.  The returned value is a utf-8 encoded
+        string in unicode builds of wxPython, or raw 8-bit text otherwise.
+        """
         return _stc.StyledTextCtrl_GetCurLineRaw(*args, **kwargs)
 
     def GetLineRaw(*args, **kwargs):
-        """GetLineRaw(self, int line) -> wxCharBuffer"""
+        """
+        GetLineRaw(self, int line) -> wxCharBuffer
+
+        Retrieve the contents of a line.  The returned value is a utf-8
+        encoded string in unicode builds of wxPython, or raw 8-bit text
+        otherwise.
+        """
         return _stc.StyledTextCtrl_GetLineRaw(*args, **kwargs)
 
     def GetSelectedTextRaw(*args, **kwargs):
-        """GetSelectedTextRaw(self) -> wxCharBuffer"""
+        """
+        GetSelectedTextRaw(self) -> wxCharBuffer
+
+        Retrieve the selected text.  The returned value is a utf-8 encoded
+        string in unicode builds of wxPython, or raw 8-bit text otherwise.
+        """
         return _stc.StyledTextCtrl_GetSelectedTextRaw(*args, **kwargs)
 
     def GetTextRangeRaw(*args, **kwargs):
-        """GetTextRangeRaw(self, int startPos, int endPos) -> wxCharBuffer"""
+        """
+        GetTextRangeRaw(self, int startPos, int endPos) -> wxCharBuffer
+
+        Retrieve a range of text.    The returned value is a utf-8 encoded
+        string in unicode builds of wxPython, or raw 8-bit text otherwise.
+        """
         return _stc.StyledTextCtrl_GetTextRangeRaw(*args, **kwargs)
 
     def SetTextRaw(*args, **kwargs):
-        """SetTextRaw(self, char text)"""
+        """
+        SetTextRaw(self, char text)
+
+        Replace the contents of the document with the argument text.  The text
+        should be utf-8 encoded on unicode builds of wxPython, or can be any
+        8-bit text in ansi builds.
+        """
         return _stc.StyledTextCtrl_SetTextRaw(*args, **kwargs)
 
     def GetTextRaw(*args, **kwargs):
-        """GetTextRaw(self) -> wxCharBuffer"""
+        """
+        GetTextRaw(self) -> wxCharBuffer
+
+        Retrieve all the text in the document.  The returned value is a utf-8
+        encoded string in unicode builds of wxPython, or raw 8-bit text
+        otherwise.
+        """
         return _stc.StyledTextCtrl_GetTextRaw(*args, **kwargs)
 
     def AppendTextRaw(*args, **kwargs):
-        """AppendTextRaw(self, char text)"""
+        """
+        AppendTextRaw(self, char text)
+
+        Append a string to the end of the document without changing the
+        selection.  The text should be utf-8 encoded on unicode builds of
+        wxPython, or can be any 8-bit text in ansi builds.
+        """
         return _stc.StyledTextCtrl_AppendTextRaw(*args, **kwargs)
+
+    def AddTextUTF8(self, text):
+        """
+        Add UTF8 encoded text to the document at the current position.
+        Works 'natively' in a unicode build of wxPython, and will also work
+        in an ansi build if the UTF8 text is compatible with the current
+        encoding.
+        """
+        if not wx.USE_UNICODE:
+            u = text.decode('utf-8')
+            text = u.encode(wx.GetDefaultPyEncoding())
+        self.AddTextRaw(text)
+
+        
+    def InsertTextUTF8(self, pos, text):
+        """
+        Insert UTF8 encoded text at a position.  Works 'natively' in a
+        unicode build of wxPython, and will also work in an ansi build if
+        the UTF8 text is compatible with the current encoding.
+        """
+        if not wx.USE_UNICODE:
+            u = text.decode('utf-8')
+            text = u.encode(wx.GetDefaultPyEncoding())
+        self.InsertTextRaw(pos, text)
+
+        
+    def GetCurLineUTF8(self):
+        """
+        Retrieve the UTF8 text of the line containing the caret, and also
+        the index of the caret on the line.  In an ansi build of wxPython
+        the text retrieved from the document is assumed to be in the
+        current default encoding.
+        """
+        text, pos = self.GetCurLineRaw()
+        if not wx.USE_UNICODE:
+            u = text.decode(wx.GetDefaultPyEncoding())
+            text = u.encode('utf-8')
+        return text, pos
+
+        
+    def GetLineUTF8(self, line):
+        """
+        Retrieve the contents of a line as UTF8.  In an ansi build of wxPython
+        the text retrieved from the document is assumed to be in the
+        current default encoding.
+        """
+        text = self.GetLineRaw(line)
+        if not wx.USE_UNICODE:
+            u = text.decode(wx.GetDefaultPyEncoding())
+            text = u.encode('utf-8')
+        return text
+
+
+    def GetSelectedTextUTF8(self):
+        """
+        Retrieve the selected text as UTF8.  In an ansi build of wxPython
+        the text retrieved from the document is assumed to be in the
+        current default encoding.
+        """
+        text = self.GetSelectedTextRaw()
+        if not wx.USE_UNICODE:
+            u = text.decode(wx.GetDefaultPyEncoding())
+            text = u.encode('utf-8')
+        return text
+
+
+    def GetTextRangeUTF8(self, startPos, endPos):
+        """
+        Retrieve a range of text as UTF8.  In an ansi build of wxPython
+        the text retrieved from the document is assumed to be in the
+        current default encoding.
+        """
+        text = self.GetTextRangeRaw(startPos, endPos)
+        if not wx.USE_UNICODE:
+            u = text.decode(wx.GetDefaultPyEncoding())
+            text = u.encode('utf-8')
+        return text
+
+
+    def SetTextUTF8(self, text):
+        """
+        Replace the contents of the document with the UTF8 text given.
+        Works 'natively' in a unicode build of wxPython, and will also
+        work in an ansi build if the UTF8 text is compatible with the
+        current encoding.
+        """
+        if not wx.USE_UNICODE:
+            u = text.decode('utf-8')
+            text = u.encode(wx.GetDefaultPyEncoding())
+        self.SetTextRaw(text)
+
+
+    def GetTextUTF8(self):
+        """
+        Retrieve all the text in the document as UTF8.  In an ansi build
+        of wxPython the text retrieved from the document is assumed to be
+        in the current default encoding.
+        """
+        text = self.GetTextRaw()
+        if not wx.USE_UNICODE:
+            u = text.decode(wx.GetDefaultPyEncoding())
+            text = u.encode('utf-8')
+        return text
+
+
+    def AppendTextUTF8(self, text):
+        """
+        Append a UTF8 string to the end of the document without changing
+        the selection.  Works 'natively' in a unicode build of wxPython,
+        and will also work in an ansi build if the UTF8 text is compatible
+        with the current encoding.
+        """
+        if not wx.USE_UNICODE:
+            u = text.decode('utf-8')
+            text = u.encode(wx.GetDefaultPyEncoding())
+        self.AppendTextRaw(text)
+
 
 
 class StyledTextCtrlPtr(StyledTextCtrl):
