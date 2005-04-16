@@ -1111,7 +1111,7 @@ class StyledTextCtrl(_core.Control):
     def Create(*args, **kwargs):
         """
         Create(self, Window parent, int id=ID_ANY, Point pos=DefaultPosition, 
-            Size size=DefaultSize, long style=0, String name=wxSTCNameStr)
+            Size size=DefaultSize, long style=0, String name=wxSTCNameStr) -> bool
         """
         return _stc.StyledTextCtrl_Create(*args, **kwargs)
 
@@ -2094,7 +2094,7 @@ class StyledTextCtrl(_core.Control):
         return _stc.StyledTextCtrl_GetUseVerticalScrollBar(*args, **kwargs)
 
     def AppendText(*args, **kwargs):
-        """AppendText(self, int length, String text)"""
+        """AppendText(self, String text)"""
         return _stc.StyledTextCtrl_AppendText(*args, **kwargs)
 
     def GetTwoPhaseDraw(*args, **kwargs):
@@ -2847,6 +2847,42 @@ class StyledTextCtrl(_core.Control):
     def GetUseAntiAliasing(*args, **kwargs):
         """GetUseAntiAliasing(self) -> bool"""
         return _stc.StyledTextCtrl_GetUseAntiAliasing(*args, **kwargs)
+
+    def AddTextRaw(*args, **kwargs):
+        """AddTextRaw(self, char text)"""
+        return _stc.StyledTextCtrl_AddTextRaw(*args, **kwargs)
+
+    def InsertTextRaw(*args, **kwargs):
+        """InsertTextRaw(self, int pos, char text)"""
+        return _stc.StyledTextCtrl_InsertTextRaw(*args, **kwargs)
+
+    def GetCurLineRaw(*args, **kwargs):
+        """GetCurLineRaw(self, int OUTPUT) -> wxCharBuffer"""
+        return _stc.StyledTextCtrl_GetCurLineRaw(*args, **kwargs)
+
+    def GetLineRaw(*args, **kwargs):
+        """GetLineRaw(self, int line) -> wxCharBuffer"""
+        return _stc.StyledTextCtrl_GetLineRaw(*args, **kwargs)
+
+    def GetSelectedTextRaw(*args, **kwargs):
+        """GetSelectedTextRaw(self) -> wxCharBuffer"""
+        return _stc.StyledTextCtrl_GetSelectedTextRaw(*args, **kwargs)
+
+    def GetTextRangeRaw(*args, **kwargs):
+        """GetTextRangeRaw(self, int startPos, int endPos) -> wxCharBuffer"""
+        return _stc.StyledTextCtrl_GetTextRangeRaw(*args, **kwargs)
+
+    def SetTextRaw(*args, **kwargs):
+        """SetTextRaw(self, char text)"""
+        return _stc.StyledTextCtrl_SetTextRaw(*args, **kwargs)
+
+    def GetTextRaw(*args, **kwargs):
+        """GetTextRaw(self) -> wxCharBuffer"""
+        return _stc.StyledTextCtrl_GetTextRaw(*args, **kwargs)
+
+    def AppendTextRaw(*args, **kwargs):
+        """AppendTextRaw(self, char text)"""
+        return _stc.StyledTextCtrl_AppendTextRaw(*args, **kwargs)
 
 
 class StyledTextCtrlPtr(StyledTextCtrl):
