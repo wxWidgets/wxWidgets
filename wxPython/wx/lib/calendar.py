@@ -64,6 +64,14 @@
 #   Use the cursor keys to navigate through the ages. :)
 #   The Home key function as go to today
 # o select day is now a filled rect instead of just an outline
+#
+# 15/04/2005 - Joe "shmengie" Brown joebrown@podiatryfl.com
+# o Adjusted spin control size/placement (On Windows ctrls were overlapping).
+# o Set Ok/Cancel buttons to wx.ID_OK & wx.ID_CANCEL to provide default dialog
+#   behaviour.
+# o If no date has been clicked clicked, OnOk set the result to calend's date,
+#   important if keyboard only navigation is used.
+
 
 import wx
 
@@ -1072,10 +1080,8 @@ class Calendar( wx.PyControl ):
             self.DrawRect(self.sel_key, bgcolor,cfont, sel_size)
 
         self.DrawRect(key, self.GetColor(COLOR_HIGHLIGHT_BACKGROUND), self.GetColor(COLOR_HIGHLIGHT_FONT), sel_size)
-
         # store last used by
         self.sel_key = key
-        self.select_day = None
 
     def ClearDsp(self):
         self.Clear()
@@ -1102,7 +1108,8 @@ class Calendar( wx.PyControl ):
 class CalenDlg(wx.Dialog):
     def __init__(self, parent, month=None, day = None, year=None):
         wx.Dialog.__init__(self, parent, -1, "Event Calendar", wx.DefaultPosition, (280, 360))
-
+        self.result = None
+        
         # set the calendar and attributes
         self.calend = Calendar(self, -1, (20, 60), (240, 200))
 
@@ -1128,7 +1135,7 @@ class CalenDlg(wx.Dialog):
 
         # alternate spin button to control the month
         h = self.date.GetSize().height
-        self.m_spin = wx.SpinButton(self, -1, (130, 20), (h*2, h), wx.SP_VERTICAL)
+        self.m_spin = wx.SpinButton(self, -1, (115, 20), (h*1.5, h), wx.SP_VERTICAL)
         self.m_spin.SetRange(1, 12)
         self.m_spin.SetValue(start_month)
         self.Bind(wx.EVT_SPIN, self.OnMonthSpin, self.m_spin)
@@ -1137,7 +1144,7 @@ class CalenDlg(wx.Dialog):
         self.dtext = wx.TextCtrl(self, -1, str(start_year), (160, 20), (60, -1))
         h = self.dtext.GetSize().height
 
-        self.y_spin = wx.SpinButton(self, -1, (220, 20), (h*2, h), wx.SP_VERTICAL)
+        self.y_spin = wx.SpinButton(self, -1, (225, 20), (h*1.5, h), wx.SP_VERTICAL)
         self.y_spin.SetRange(1980, 2010)
         self.y_spin.SetValue(start_year)
 
@@ -1148,13 +1155,14 @@ class CalenDlg(wx.Dialog):
         y_pos = 280
         but_size = (60, 25)
 
-        btn = wx.Button(self, -1, ' Ok ', (x_pos, y_pos), but_size)
+        btn = wx.Button(self, wx.ID_OK, ' Ok ', (x_pos, y_pos), but_size)
         self.Bind(wx.EVT_BUTTON, self.OnOk, btn)
 
-        btn = wx.Button(self, -1, ' Close ', (x_pos + 120, y_pos), but_size)
+        btn = wx.Button(self, wx.ID_CANCEL, ' Close ', (x_pos + 120, y_pos), but_size)
         self.Bind(wx.EVT_BUTTON, self.OnCancel, btn)
 
-    def OnOk(self, event):
+    def OnOk(self, evt):
+        self.result = ['None', str(self.calend.day), Month[self.calend.month], str(self.calend.year)]
         self.EndModal(wx.ID_OK)
 
     def OnCancel(self, event):
