@@ -1151,7 +1151,7 @@ enum wxGeometryCentre
 
 enum wxOrientation
 {
-    // don't change the values of these elements, they are used elsewhere
+    /* don't change the values of these elements, they are used elsewhere */
     wxHORIZONTAL              = 0x0004,
     wxVERTICAL                = 0x0008,
 
@@ -2231,9 +2231,12 @@ enum wxUpdateUI
 
 #if defined(__CYGWIN__) && defined(__WXMSW__)
 #   if wxUSE_STL || defined(wxUSE_STD_STRING)
-         //NASTY HACK because the gethostname in sys/unistd.h which the gnu stl includes
-         //and wx builds with by default clash with each other (windows version
-         //2nd param is int, sys/unistd.h version is unsigned int).  
+         /*
+            NASTY HACK because the gethostname in sys/unistd.h which the gnu
+            stl includes and wx builds with by default clash with each other
+            (windows version 2nd param is int, sys/unistd.h version is unsigned
+            int).  
+          */
 #        define gethostname gethostnameHACK
 #        include <unistd.h>
 #        undef gethostname
