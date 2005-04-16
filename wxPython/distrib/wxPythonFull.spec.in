@@ -181,7 +181,12 @@ WXDIR=`pwd`
 # Configure and build wxWidgets
 mkdir bld
 cd bld
-../configure --with-gtk \
+../configure \
+%if %{using_gtk1}
+	--with-gtk=1 \
+%else 
+	--with-gtk=2 \
+%endif
 	--prefix=%{wxpref} \
 	--enable-monolithic \
 	--disable-rpath \
@@ -190,13 +195,10 @@ cd bld
 	--enable-optimise \
 	--enable-sound 	--with-sdl \
 	--enable-display \
-%if %{using_gtk1}
-	--disable-gtk2 \
-%else 
-	--enable-gtk2 \
-%endif
 %if %{unicode}
 	--enable-unicode \
+%else
+	--disable-unicode \
 %endif
 %if %{debug_flag}
 	--enable-debug_flag \
