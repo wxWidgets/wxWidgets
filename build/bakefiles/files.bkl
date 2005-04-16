@@ -194,6 +194,8 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 </set>
 <set var="BASE_MACOSX_WXMAC_HDR" hints="files">
     $(BASE_MAC_HDR)
+    wx/unix/apptbase.h
+    wx/unix/apptrait.h
     wx/unix/stdpaths.h
 </set>
 
