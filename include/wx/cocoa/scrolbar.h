@@ -30,7 +30,7 @@ public:
     wxScrollBar(wxWindow *parent, wxWindowID winid,
             const wxPoint& pos = wxDefaultPosition,
             const wxSize& size = wxDefaultSize,
-            long style = wxSL_HORIZONTAL,
+            long style = wxSB_HORIZONTAL,
             const wxValidator& validator = wxDefaultValidator,
             const wxString& name = wxScrollBarNameStr)
     {
@@ -40,7 +40,7 @@ public:
     bool Create(wxWindow *parent, wxWindowID winid,
             const wxPoint& pos = wxDefaultPosition,
             const wxSize& size = wxDefaultSize,
-            long style = wxSL_HORIZONTAL,
+            long style = wxSB_HORIZONTAL,
             const wxValidator& validator = wxDefaultValidator,
             const wxString& name = wxScrollBarNameStr);
     virtual ~wxScrollBar();
