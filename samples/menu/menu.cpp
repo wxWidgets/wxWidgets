@@ -438,6 +438,8 @@ MyFrame::MyFrame()
     menuMenu->AppendSeparator();
     menuMenu->Append(Menu_Menu_GetInfo, _T("Get menu item in&fo\tAlt-F"),
                      _T("Show the state of the last menu item"));
+    menuMenu->Append(Menu_Menu_SetLabel, _T("Set menu item label\tAlt-L"),
+                     _T("Set the label of a menu item"));
 #if wxUSE_TEXTDLG
     menuMenu->AppendSeparator();
     menuMenu->Append(Menu_Menu_FindItem, _T("Find menu item from label"),
@@ -799,6 +801,7 @@ void MyFrame::OnSetLabelMenuItem(wxCommandEvent& WXUNUSED(event))
                             item->GetLabel(),
                             this
                          );
+        label.Replace( _T("\\t"), _T("\t") );
 
         if ( !label.empty() )
         {

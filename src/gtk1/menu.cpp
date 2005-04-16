@@ -57,7 +57,7 @@ extern void wxapp_install_idle_handler();
 extern bool g_isIdle;
 
 #if wxUSE_ACCEL
-static wxString GetHotKey( const wxMenuItem& item );
+static wxString GetGtkHotKey( const wxMenuItem& item );
 #endif
 
 //-----------------------------------------------------------------------------
@@ -815,13 +815,16 @@ void wxMenuItem::SetText( const wxString& str )
 {
     // Some optimization to avoid flicker
     wxString oldLabel = m_text;
-    oldLabel = wxStripMenuCodes(oldLabel.BeforeFirst('\t'));
+    oldLabel = wxStripMenuCodes(oldLabel);
     oldLabel.Replace(wxT("_"), wxT(""));
-    wxString label1 = wxStripMenuCodes(str.BeforeFirst('\t'));
-    if (oldLabel == label1)
-        return;
+    wxString label1 = wxStripMenuCodes(str);
+    // Make sure we can change a hotkey even if the label is unaltered
+    wxString oldhotkey = GetHotKey();
 
     DoSetText(str);
+
+    if (oldLabel == label1 && oldhotkey == GetHotKey())
+        return;
 
     if (m_menuItem)
     {
@@ -842,6 +845,32 @@ void wxMenuItem::SetText( const wxString& str )
         gtk_accel_label_refetch( GTK_ACCEL_LABEL(label) );
 #endif
     }
+
+#ifdef __WXGTK20__
+    guint accel_key;
+    GdkModifierType accel_mods;
+    wxCharBuffer oldbuf = wxGTK_CONV( oldhotkey );
+    gtk_accelerator_parse( (const char*) oldbuf, &accel_key, &accel_mods);
+    if (accel_key != 0)
+    {
+        gtk_widget_remove_accelerator( GTK_WIDGET(m_menuItem), 
+                                       m_parentMenu->m_accel,
+                                       accel_key,
+                                       accel_mods );
+    }
+
+    wxCharBuffer buf = wxGTK_CONV( GetGtkHotKey(*this) );
+    gtk_accelerator_parse( (const char*) buf, &accel_key, &accel_mods);
+    if (accel_key != 0)
+    {
+        gtk_widget_add_accelerator( GTK_WIDGET(m_menuItem),
+                                    "activate",
+                                    m_parentMenu->m_accel,
+                                    accel_key,
+                                    accel_mods,
+                                    GTK_ACCEL_VISIBLE);
+    }
+#endif
 }
 
 // it's valid for this function to be called even if m_menuItem == NULL
@@ -873,8 +902,6 @@ void wxMenuItem::DoSetText( const wxString& str )
         ++pc;
     }
 
-    // wxPrintf( wxT("DoSetText(): str %s m_text %s\n"), str.c_str(), m_text.c_str() );
-
     m_hotKey = wxT("");
 
     if(*pc == wxT('\t'))
@@ -882,6 +909,8 @@ void wxMenuItem::DoSetText( const wxString& str )
        pc++;
        m_hotKey = pc;
     }
+    
+    // wxPrintf( wxT("DoSetText(): str %s m_text %s hotkey %s\n"), str.c_str(), m_text.c_str(), m_hotKey.c_str() );
 }
 
 #if wxUSE_ACCEL
@@ -1100,7 +1129,7 @@ bool wxMenu::GtkAppend(wxMenuItem *mitem, int pos)
 
         // accelerator for the item, as specified by its label
         // (ex. Ctrl+O for open)
-        gtk_accelerator_parse(GetHotKey(*mitem).c_str(), &accel_key,
+        gtk_accelerator_parse(GetGtkHotKey(*mitem).c_str(), &accel_key,
                               &accel_mods);
         if (accel_key != GDK_VoidSymbol)
         {
@@ -1271,10 +1300,9 @@ bool wxMenu::GtkAppend(wxMenuItem *mitem, int pos)
 
     guint accel_key;
     GdkModifierType accel_mods;
-    wxCharBuffer buf = wxGTK_CONV( GetHotKey(*mitem) );
+    wxCharBuffer buf = wxGTK_CONV( GetGtkHotKey(*mitem) );
 
-    // wxPrintf( wxT("item: %s hotkey %s\n"), mitem->GetText().c_str(), GetHotKey(*mitem).c_str() );
-
+    // wxPrintf( wxT("item: %s hotkey %s\n"), mitem->GetText().c_str(), GetGtkHotKey(*mitem).c_str() );
     gtk_accelerator_parse( (const char*) buf, &accel_key, &accel_mods);
     if (accel_key != 0)
     {
@@ -1364,7 +1392,7 @@ int wxMenu::FindMenuIdByMenuItem( GtkWidget *menuItem ) const
 
 #if wxUSE_ACCEL
 
-static wxString GetHotKey( const wxMenuItem& item )
+static wxString GetGtkHotKey( const wxMenuItem& item )
 {
     wxString hotkey;
 
