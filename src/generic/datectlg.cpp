@@ -521,6 +521,13 @@ void wxDatePickerCtrlGeneric::Init()
     m_ignoreDrop = false;
 }
 
+wxDatePickerCtrlGeneric::~wxDatePickerCtrlGeneric()
+{
+    m_popup = NULL;
+    m_txt = NULL;
+    m_cal = NULL;
+    m_btn = NULL;
+}
 
 bool wxDatePickerCtrlGeneric::Destroy()
 {
@@ -820,6 +827,9 @@ void wxDatePickerCtrlGeneric::OnSetFocus(wxFocusEvent& WXUNUSED(ev))
 
 void wxDatePickerCtrlGeneric::OnKillFocus(wxFocusEvent &ev)
 {
+    if (!m_txt)
+        return;
+    
     ev.Skip();
 
     wxDateTime dt;
