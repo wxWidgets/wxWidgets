@@ -27,6 +27,10 @@
     #error "This sample can't be built without wxUSE_DEBUGREPORT"
 #endif // wxUSE_DEBUGREPORT
 
+#if !wxUSE_ON_FATAL_EXCEPTION
+    #error "This sample can't be built without wxUSE_ON_FATAL_EXCEPTION"
+#endif // wxUSE_ON_FATAL_EXCEPTION
+
 // ----------------------------------------------------------------------------
 // custom debug reporting class
 // ----------------------------------------------------------------------------
@@ -137,9 +141,7 @@ class MyApp : public wxApp
 public:
     virtual bool OnInit()
     {
-#if wxUSE_ON_FATAL_EXCEPTION
         wxHandleFatalExceptions();
-#endif
 
         if ( !wxApp::OnInit() )
             return false;
