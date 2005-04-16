@@ -30,7 +30,7 @@ public:                                                                     \
     {                                                                       \
     }                                                                       \
                                                                             \
-    classname(size_t len)                                                   \
+    classname(size_t len=0)                                                 \
         : m_str((chartype *)malloc((len + 1)*sizeof(chartype)))             \
     {                                                                       \
         m_str[len] = (chartype)0;                                           \
