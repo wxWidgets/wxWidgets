@@ -85,9 +85,6 @@ bool wxStaticText::Create(wxWindow *parent,
     static const float labelAlignments[] = { 0.0, 1.0, 0.5 };
     gtk_misc_set_alignment(GTK_MISC(m_widget), labelAlignments[justify], 0.0);
 
-    if (size.x == -1)
-        gtk_label_set_line_wrap( GTK_LABEL(m_widget), FALSE );
-    else
         gtk_label_set_line_wrap( GTK_LABEL(m_widget), TRUE );
 
     m_parent->DoAddChild( this );
@@ -182,12 +179,14 @@ wxSize wxStaticText::DoGetBestSize() const
     // Do not return any arbitrary default value...
     wxASSERT_MSG( m_widget, wxT("wxStaticText::DoGetBestSize called before creation") );
 
-    int width = m_width;
 #ifndef __WXGTK20__
+    // This resets the internal GTK1 size calculation, which
+    // otherwise would be cashed (incorrectly)
     gtk_label_set_pattern( GTK_LABEL(m_widget), NULL );
-    if (width < 3) width = -1;
 #endif
-    gtk_widget_set_usize( m_widget, width, -1 );
+
+    // GetBestSize is supposed to return unwrapped size
+    gtk_label_set_line_wrap( GTK_LABEL(m_widget), FALSE );
     
     GtkRequisition req;
     req.width = -1;
@@ -195,6 +194,8 @@ wxSize wxStaticText::DoGetBestSize() const
     (* GTK_WIDGET_CLASS( GTK_OBJECT_GET_CLASS(m_widget) )->size_request )
         (m_widget, &req );
 
+    gtk_label_set_line_wrap( GTK_LABEL(m_widget), TRUE );
+    
     return wxSize (req.width, req.height);
 }
 
