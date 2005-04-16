@@ -124,6 +124,11 @@ MAKE_INT_ARRAY_TYPEMAPS(styles, styles_field)
 
 
 
+%typemap(out) wxCharBuffer {
+    $result = PyString_FromString((char*)$1.data());
+}
+
+
 //---------------------------------------------------------------------------
 // Typemaps to convert Python sequence objects (tuples, etc.) to
 // wxSize, wxPoint, wxRealPoint, and wxRect.
