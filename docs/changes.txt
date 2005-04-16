@@ -30,6 +30,8 @@ wxGTK:
     --with-gtk=1           Use GTK 1.2, no fallback
     --with-gtk=2           Use GTK 2.x, no fallback
     --with-gtk=any         Use any available GTK
+- wxMenuItem::SetText() takes care of hotkeys, too.
+- Reworked text wrapping for wxStaticText.
 
 wxMac:
 - Implemented most of the wxFileType and wxMimeTypesManager functions
