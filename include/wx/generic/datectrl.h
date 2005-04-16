@@ -89,6 +89,7 @@ private:
     void OnSetFocus(wxFocusEvent &event);
     void OnKillFocus(wxFocusEvent &event);
     void OnChildSetFocus(wxChildFocusEvent &event);
+    void OnSize(wxSizeEvent& event);
 
 
     wxDatePopupInternal *m_popup;
