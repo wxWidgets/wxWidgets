@@ -1344,31 +1344,30 @@ SWIG_Python_GetTypeList() {
 #define  SWIGTYPE_p_unsigned_char swig_types[2] 
 #define  SWIGTYPE_p_wxColour swig_types[3] 
 #define  SWIGTYPE_p_wxScrollBar swig_types[4] 
-#define  SWIGTYPE_p_wxCharBuffer swig_types[5] 
-#define  SWIGTYPE_p_wxStyledTextEvent swig_types[6] 
-#define  SWIGTYPE_p_wxWindow swig_types[7] 
-#define  SWIGTYPE_p_wxCommandEvent swig_types[8] 
-#define  SWIGTYPE_p_unsigned_long swig_types[9] 
-#define  SWIGTYPE_p_wxBitmap swig_types[10] 
-#define  SWIGTYPE_p_unsigned_int swig_types[11] 
-#define  SWIGTYPE_unsigned_int swig_types[12] 
-#define  SWIGTYPE_p_form_ops_t swig_types[13] 
-#define  SWIGTYPE_p_wxDuplexMode swig_types[14] 
-#define  SWIGTYPE_p_void swig_types[15] 
-#define  SWIGTYPE_p_char swig_types[16] 
-#define  SWIGTYPE_p_wxPoint swig_types[17] 
-#define  SWIGTYPE_p_wxDC swig_types[18] 
-#define  SWIGTYPE_p_wxEvtHandler swig_types[19] 
-#define  SWIGTYPE_std__ptrdiff_t swig_types[20] 
-#define  SWIGTYPE_ptrdiff_t swig_types[21] 
-#define  SWIGTYPE_p_wxStyledTextCtrl swig_types[22] 
-#define  SWIGTYPE_p_wxFont swig_types[23] 
-#define  SWIGTYPE_p_wxControl swig_types[24] 
-#define  SWIGTYPE_p_wxEvent swig_types[25] 
-#define  SWIGTYPE_p_wxPaperSize swig_types[26] 
-#define  SWIGTYPE_p_int swig_types[27] 
-#define  SWIGTYPE_p_wxMemoryBuffer swig_types[28] 
-static swig_type_info *swig_types[30];
+#define  SWIGTYPE_p_wxStyledTextEvent swig_types[5] 
+#define  SWIGTYPE_p_wxWindow swig_types[6] 
+#define  SWIGTYPE_p_wxCommandEvent swig_types[7] 
+#define  SWIGTYPE_p_unsigned_long swig_types[8] 
+#define  SWIGTYPE_p_wxBitmap swig_types[9] 
+#define  SWIGTYPE_p_unsigned_int swig_types[10] 
+#define  SWIGTYPE_unsigned_int swig_types[11] 
+#define  SWIGTYPE_p_form_ops_t swig_types[12] 
+#define  SWIGTYPE_p_wxDuplexMode swig_types[13] 
+#define  SWIGTYPE_p_void swig_types[14] 
+#define  SWIGTYPE_p_char swig_types[15] 
+#define  SWIGTYPE_p_wxPoint swig_types[16] 
+#define  SWIGTYPE_p_wxDC swig_types[17] 
+#define  SWIGTYPE_p_wxEvtHandler swig_types[18] 
+#define  SWIGTYPE_std__ptrdiff_t swig_types[19] 
+#define  SWIGTYPE_ptrdiff_t swig_types[20] 
+#define  SWIGTYPE_p_wxStyledTextCtrl swig_types[21] 
+#define  SWIGTYPE_p_wxFont swig_types[22] 
+#define  SWIGTYPE_p_wxControl swig_types[23] 
+#define  SWIGTYPE_p_wxEvent swig_types[24] 
+#define  SWIGTYPE_p_wxPaperSize swig_types[25] 
+#define  SWIGTYPE_p_int swig_types[26] 
+#define  SWIGTYPE_p_wxMemoryBuffer swig_types[27] 
+static swig_type_info *swig_types[29];
 
 /* -------- TYPES TABLE (END) -------- */
 
@@ -15403,9 +15402,7 @@ static PyObject *_wrap_StyledTextCtrl_GetCurLineRaw(PyObject *, PyObject *args, 
         if (PyErr_Occurred()) SWIG_fail;
     }
     {
-        wxCharBuffer * resultptr;
-        resultptr = new wxCharBuffer((wxCharBuffer &)(result));
-        resultobj = SWIG_NewPointerObj((void *)(resultptr), SWIGTYPE_p_wxCharBuffer, 1);
+        resultobj = PyString_FromString((char*)(&result)->data());
     }
     resultobj = t_output_helper(resultobj, ((res2 == SWIG_NEWOBJ) ?
     SWIG_From_int((*arg2)) : SWIG_NewPointerObj((void*)(arg2), SWIGTYPE_p_int, 0)));
@@ -15441,9 +15438,7 @@ static PyObject *_wrap_StyledTextCtrl_GetLineRaw(PyObject *, PyObject *args, PyO
         if (PyErr_Occurred()) SWIG_fail;
     }
     {
-        wxCharBuffer * resultptr;
-        resultptr = new wxCharBuffer((wxCharBuffer &)(result));
-        resultobj = SWIG_NewPointerObj((void *)(resultptr), SWIGTYPE_p_wxCharBuffer, 1);
+        resultobj = PyString_FromString((char*)(&result)->data());
     }
     return resultobj;
     fail:
@@ -15471,9 +15466,7 @@ static PyObject *_wrap_StyledTextCtrl_GetSelectedTextRaw(PyObject *, PyObject *a
         if (PyErr_Occurred()) SWIG_fail;
     }
     {
-        wxCharBuffer * resultptr;
-        resultptr = new wxCharBuffer((wxCharBuffer &)(result));
-        resultobj = SWIG_NewPointerObj((void *)(resultptr), SWIGTYPE_p_wxCharBuffer, 1);
+        resultobj = PyString_FromString((char*)(&result)->data());
     }
     return resultobj;
     fail:
@@ -15513,9 +15506,7 @@ static PyObject *_wrap_StyledTextCtrl_GetTextRangeRaw(PyObject *, PyObject *args
         if (PyErr_Occurred()) SWIG_fail;
     }
     {
-        wxCharBuffer * resultptr;
-        resultptr = new wxCharBuffer((wxCharBuffer &)(result));
-        resultobj = SWIG_NewPointerObj((void *)(resultptr), SWIGTYPE_p_wxCharBuffer, 1);
+        resultobj = PyString_FromString((char*)(&result)->data());
     }
     return resultobj;
     fail:
@@ -15573,9 +15564,7 @@ static PyObject *_wrap_StyledTextCtrl_GetTextRaw(PyObject *, PyObject *args, PyO
         if (PyErr_Occurred()) SWIG_fail;
     }
     {
-        wxCharBuffer * resultptr;
-        resultptr = new wxCharBuffer((wxCharBuffer &)(result));
-        resultobj = SWIG_NewPointerObj((void *)(resultptr), SWIGTYPE_p_wxCharBuffer, 1);
+        resultobj = PyString_FromString((char*)(&result)->data());
     }
     return resultobj;
     fail:
@@ -17967,7 +17956,6 @@ static swig_type_info _swigt__p_wxObject[] = {{"_p_wxObject", 0, "wxObject *", 0
 static swig_type_info _swigt__p_unsigned_char[] = {{"_p_unsigned_char", 0, "unsigned char *|byte *", 0, 0, 0, 0},{"_p_unsigned_char", 0, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
 static swig_type_info _swigt__p_wxColour[] = {{"_p_wxColour", 0, "wxColour *", 0, 0, 0, 0},{"_p_wxColour", 0, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
 static swig_type_info _swigt__p_wxScrollBar[] = {{"_p_wxScrollBar", 0, "wxScrollBar *", 0, 0, 0, 0},{"_p_wxScrollBar", 0, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
-static swig_type_info _swigt__p_wxCharBuffer[] = {{"_p_wxCharBuffer", 0, "wxCharBuffer *", 0, 0, 0, 0},{"_p_wxCharBuffer", 0, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
 static swig_type_info _swigt__p_wxStyledTextEvent[] = {{"_p_wxStyledTextEvent", 0, "wxStyledTextEvent *", 0, 0, 0, 0},{"_p_wxStyledTextEvent", 0, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
 static swig_type_info _swigt__p_wxWindow[] = {{"_p_wxWindow", 0, "wxWindow *", 0, 0, 0, 0},{"_p_wxControl", _p_wxControlTo_p_wxWindow, 0, 0, 0, 0, 0},{"_p_wxWindow", 0, 0, 0, 0, 0, 0},{"_p_wxControlWithItems", _p_wxControlWithItemsTo_p_wxWindow, 0, 0, 0, 0, 0},{"_p_wxStyledTextCtrl", _p_wxStyledTextCtrlTo_p_wxWindow, 0, 0, 0, 0, 0},{"_p_wxMenuBar", _p_wxMenuBarTo_p_wxWindow, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
 static swig_type_info _swigt__p_wxCommandEvent[] = {{"_p_wxCommandEvent", 0, "wxCommandEvent *", 0, 0, 0, 0},{"_p_wxChildFocusEvent", _p_wxChildFocusEventTo_p_wxCommandEvent, 0, 0, 0, 0, 0},{"_p_wxScrollEvent", _p_wxScrollEventTo_p_wxCommandEvent, 0, 0, 0, 0, 0},{"_p_wxWindowCreateEvent", _p_wxWindowCreateEventTo_p_wxCommandEvent, 0, 0, 0, 0, 0},{"_p_wxDateEvent", _p_wxDateEventTo_p_wxCommandEvent, 0, 0, 0, 0, 0},{"_p_wxUpdateUIEvent", _p_wxUpdateUIEventTo_p_wxCommandEvent, 0, 0, 0, 0, 0},{"_p_wxStyledTextEvent", _p_wxStyledTextEventTo_p_wxCommandEvent, 0, 0, 0, 0, 0},{"_p_wxWindowDestroyEvent", _p_wxWindowDestroyEventTo_p_wxCommandEvent, 0, 0, 0, 0, 0},{"_p_wxContextMenuEvent", _p_wxContextMenuEventTo_p_wxCommandEvent, 0, 0, 0, 0, 0},{"_p_wxCommandEvent", 0, 0, 0, 0, 0, 0},{"_p_wxNotifyEvent", _p_wxNotifyEventTo_p_wxCommandEvent, 0, 0, 0, 0, 0},{"_p_wxPyCommandEvent", _p_wxPyCommandEventTo_p_wxCommandEvent, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
@@ -17998,7 +17986,6 @@ _swigt__p_wxObject,
 _swigt__p_unsigned_char, 
 _swigt__p_wxColour, 
 _swigt__p_wxScrollBar, 
-_swigt__p_wxCharBuffer, 
 _swigt__p_wxStyledTextEvent, 
 _swigt__p_wxWindow, 
 _swigt__p_wxCommandEvent, 
