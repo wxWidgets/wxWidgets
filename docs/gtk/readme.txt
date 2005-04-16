@@ -22,16 +22,16 @@ many systems:
 
     mkdir build_gtk
     cd build_gtk
-    ../configure --with-gtk2
+    ../configure --with-gtk=2
     make
     su <type root password>
     make install
     ldconfig
 
-In order to use wxGTK with GTK 1.2 you need to use --with-gtk1
+In order to use wxGTK with GTK 1.2 you need to use --with-gtk=1
 configure option. To build the library in Unicode mode (all
 strings will be wide strings and so on) you need to configure
-with GTK 2.0 and add --enable-unicode (default by now).
+with GTK 2.0 and add --enable-unicode.
 
 Please note that it is strongly advised to build the library in
 a separate directory, as shown above, as it allows you to have

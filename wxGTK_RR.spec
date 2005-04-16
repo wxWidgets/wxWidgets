@@ -166,9 +166,9 @@ mkdir obj-shared
 cd obj-shared
 ../configure --prefix=%{_prefix} \
 %if ! %{gtk2}
-			      --disable-gtk2 \
+			      --with-gtk=1 \
 %else
-			      --enable-gtk2 \
+			      --with-gtk=2 \
 %endif
 %if %{unicode}
 			      --enable-unicode \
@@ -200,9 +200,9 @@ mkdir obj-static
 cd obj-static
 ../configure --prefix=%{_prefix} \
 %if ! %{gtk2}
-			      --disable-gtk2 \
+			      --with-gtk=1 \
 %else
-			      --enable-gtk2 \
+			      --with-gtk=2 \
 %endif
 			      --disable-shared \
 %if %{unicode}
