@@ -10,7 +10,7 @@ RCS file: /cvsroot/swig/SWIG/Doc/Manual/Python.html,v
 retrieving revision 1.20
 diff -u -4 -r1.20 Python.html
 --- Doc/Manual/Python.html	25 Oct 2004 20:42:08 -0000	1.20
-+++ Doc/Manual/Python.html	23 Dec 2004 20:14:06 -0000
++++ Doc/Manual/Python.html	15 Apr 2005 23:11:25 -0000
 @@ -3869,10 +3869,10 @@
  
  <H2><a name="Python_nn65"></a>26.10 Docstring Features</H2>
@@ -24,13 +24,32 @@ diff -u -4 -r1.20 Python.html
  and popup call-tips in Python-aware IDEs.  Given the way that SWIG
  generates the proxy code by default, your users will normally get
  something like <tt>"function_name(*args)"</tt> in the popup calltip of
+Index: Lib/python/pyrun.swg
+===================================================================
+RCS file: /cvsroot/swig/SWIG/Lib/python/pyrun.swg,v
+retrieving revision 1.53
+diff -u -4 -r1.53 pyrun.swg
+--- Lib/python/pyrun.swg	11 Dec 2004 23:38:44 -0000	1.53
++++ Lib/python/pyrun.swg	15 Apr 2005 23:11:25 -0000
+@@ -455,9 +455,10 @@
+ 	} else {
+ 	  PyErr_Format(PyExc_TypeError, "a '%s' is expected, '%s' is received",
+ 		       type, otype);
+ 	}
+-	Py_DECREF(str);
++	if (str)
++          Py_DECREF(str);
+ 	return;
+       }
+     }   
+     PyErr_Format(PyExc_TypeError, "a '%s' is expected", type);
 Index: Source/Modules/python.cxx
 ===================================================================
 RCS file: /cvsroot/swig/SWIG/Source/Modules/python.cxx,v
 retrieving revision 1.81
 diff -u -4 -r1.81 python.cxx
 --- Source/Modules/python.cxx	13 Dec 2004 22:12:47 -0000	1.81
-+++ Source/Modules/python.cxx	23 Dec 2004 20:14:07 -0000
++++ Source/Modules/python.cxx	15 Apr 2005 23:11:26 -0000
 @@ -74,9 +74,9 @@
       -modern         - Use modern python features only, without compatibility code\n\
       -apply          - Use apply() in proxy classes\n\
@@ -150,7 +169,7 @@ RCS file: /cvsroot/swig/SWIG/Source/Swig/cwrap.c,v
 retrieving revision 1.51
 diff -u -4 -r1.51 cwrap.c
 --- Source/Swig/cwrap.c	4 Dec 2004 08:33:02 -0000	1.51
-+++ Source/Swig/cwrap.c	23 Dec 2004 20:14:07 -0000
++++ Source/Swig/cwrap.c	15 Apr 2005 23:11:26 -0000
 @@ -172,17 +172,26 @@
        tycode = SwigType_type(type);
        if (tycode == T_REFERENCE) {
