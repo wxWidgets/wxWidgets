@@ -540,6 +540,8 @@ if BUILD_STC:
                             swig_args + ['-I'+STC_H, '-I'+location],
                             [opj(STC_H, 'stc.h'),
                              opj(location, "_stc_utf8_methods.py"),
+                             opj(location, "_stc_docstrings.i"),
+                             opj(location, "_stc_gendocs.i"),
                              ] + swig_deps)
 
     ext = Extension('_stc',

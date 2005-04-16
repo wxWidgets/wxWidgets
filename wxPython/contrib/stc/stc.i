@@ -37,6 +37,7 @@ MAKE_CONST_WXSTRING(STCNameStr);
 
 
 %include _stc_rename.i
+%include _stc_docstrings.i
 
 MustHaveApp(wxStyledTextCtrl);
 
