@@ -72,23 +72,19 @@ enum
     #define DEFAULT_ITEM_WIDTH 100
 #endif
 
-#ifdef __WXMSW__
+#if defined(__WXMSW__)
     #undef wxUSE_POPUPWIN
     #define wxUSE_POPUPWIN    0  // Popup not working
     #define TXTCTRL_FLAGS     wxNO_BORDER
-    #define BTN_FLAGS         wxNO_BORDER
     #define CALBORDER         0
-    #define RIGHTBUTTONBORDER 4
-    #define TOPBUTTONBORDER   0
-    #define BUTTONBORDER      4
     #define TXTPOSY           1
+#elif defined(__WXGTK__)
+    #define TXTCTRL_FLAGS     0
+    #define CALBORDER         4
+    #define TXTPOSY           0
 #else
     #define TXTCTRL_FLAGS     0
-    #define BTN_FLAGS         wxBU_AUTODRAW
     #define CALBORDER         4
-    #define RIGHTBUTTONBORDER 0
-    #define TOPBUTTONBORDER   0
-    #define BUTTONBORDER      0
     #define TXTPOSY           0
 #endif
 
@@ -96,6 +92,9 @@ enum
 // ----------------------------------------------------------------------------
 // local classes
 // ----------------------------------------------------------------------------
+
+// This flag indicates that combo box style drop button is to be created
+#define wxBU_COMBO          0x0400
 
 
 class wxDropdownButton : public wxBitmapButton
@@ -109,11 +108,6 @@ public:
                      long style=0,
                      const wxValidator& validator = wxDefaultValidator);
 
-    void Init()
-    {
-        m_borderX = -1;
-        m_borderY = -1;
-    }
     bool Create(wxWindow *parent,
                 wxWindowID id,
                 const wxPoint& pos = wxDefaultPosition,
@@ -121,11 +115,67 @@ public:
                 long style = 0,
                 const wxValidator& validator = wxDefaultValidator);
 
-    void DoMoveWindow(int x, int y, int w, int h);
+    virtual void DoMoveWindow(int x, int y, int w, int h);
 
 protected:
-    int m_borderX, m_borderY;
+
+    void OnSize(wxSizeEvent& event);
+    void OnMouseEnter(wxMouseEvent& event);
+    void OnMouseLeave(wxMouseEvent& event);
+
+    void RecreateBitmaps(int w, int h);
+
+    wxBitmap    m_bmpNormal;
+    wxBitmap    m_bmpHot;
+
+    int         m_borderX, m_borderY;
+
+    // True if DrawDropArrow should be used instead of DrawComboBoxDropButton
+    bool        m_useDropArrow;
+
+private:
+
+    void Init()
+    {
+        m_borderX = -1;
+        m_borderY = -1;
+    }
+
+    DECLARE_EVENT_TABLE()
+    DECLARE_DYNAMIC_CLASS_NO_COPY(wxDropdownButton)
 };
+
+
+// Below, macro DROPBUT_USEDROPARROW should return false when
+// DrawComboBoxDropButton is to be used to render the entire button.
+// COMBOST is non-zero if wxBU_COMBO was set.
+
+#if defined(__WXMSW__)
+
+    #define DROPBUT_USEDROPARROW(COMBOST)   (COMBOST?false:true)
+    #define DROPBUT_DEFAULT_WIDTH           17
+
+#elif defined(__WXGTK__)
+
+    #define DROPBUT_USEDROPARROW(COMBOST)   true
+    #define DROPBUT_DEFAULT_WIDTH           19
+
+#else
+
+    #define DROPBUT_USEDROPARROW(COMBOST)   true
+    #define DROPBUT_DEFAULT_WIDTH           17
+
+#endif
+
+
+IMPLEMENT_DYNAMIC_CLASS(wxDropdownButton, wxBitmapButton)
+
+
+BEGIN_EVENT_TABLE(wxDropdownButton,wxBitmapButton)
+    EVT_ENTER_WINDOW(wxDropdownButton::OnMouseEnter)
+    EVT_LEAVE_WINDOW(wxDropdownButton::OnMouseLeave)
+    EVT_SIZE(wxDropdownButton::OnSize)
+END_EVENT_TABLE()
 
 
 wxDropdownButton::wxDropdownButton(wxWindow *parent,
@@ -144,15 +194,19 @@ bool wxDropdownButton::Create(wxWindow *parent,
                               wxWindowID id,
                               const wxPoint& pos,
                               const wxSize& size,
-                              long WXUNUSED(style),
+                              long style,
                               const wxValidator& validator)
 {
     m_marginX = 0;
     m_marginY = 0;
 
+    m_useDropArrow = DROPBUT_USEDROPARROW(style & wxBU_COMBO);
+
     wxBitmap chkBmp(15,15);  // arbitrary
     if ( !wxBitmapButton::Create(parent, id, chkBmp,
-                                 pos, wxDefaultSize, BTN_FLAGS, validator) )
+                                 pos, wxDefaultSize,
+                                 style | (m_useDropArrow ? wxBU_AUTODRAW : wxNO_BORDER),
+                                 validator) )
         return false;
 
     const wxSize sz = GetSize();
@@ -161,73 +215,118 @@ bool wxDropdownButton::Create(wxWindow *parent,
     m_borderX = sz.x - m_marginX - w;
     m_borderY = sz.y - m_marginY - h;
 
-    w = size.x > 0 ? size.x : sz.x;
-    h = size.y > 0 ? size.y : sz.y;
-
-    DoMoveWindow(pos.x, pos.y, w, h);
+    DoMoveWindow(pos.x, pos.y, size.x, size.y);
 
     return true;
 }
 
 
-void wxDropdownButton::DoMoveWindow(int x, int y, int w, int h)
+void wxDropdownButton::RecreateBitmaps(int w, int h)
 {
-    if (m_borderX >= 0 && m_borderY >= 0 && (w >= 0 || h >= 0))
+    wxMemoryDC dc;
+
+    int borderX = m_marginX + m_borderX;
+    int borderY = m_marginY + m_borderY;
+    int bw = w - borderX;
+    int bh = h - borderY;
+
+    wxBitmap bmp(bw, bh);
+    wxBitmap bmpSel(bw, bh);
+    wxRect r(0,0,w,h);
+
+    wxRendererNative& renderer = wxRendererNative::Get();
+
+    dc.SelectObject(bmp);
+
+    if ( m_useDropArrow )
     {
-        wxMemoryDC dc;
-        if (w < 0)
-              w = GetSize().x;
-#ifdef __WXGTK__
-        else
-            w = m_marginX + m_borderX + 15; // GTK magic size
-#endif
-        if (h < 0)
-            h = GetSize().y;
+        // Use DrawDropArrow on transparent background.
 
-        int borderX = m_marginX + m_borderX; 
-        int borderY = m_marginY + m_borderY;
-        int bw = w - borderX;
-        int bh = h - borderY;
-        if (bh < 11) bh=11;
-        if (bw < 9)  bw=9;
-
-        wxBitmap bmp(bw, bh);
-        dc.SelectObject(bmp);
-
-        wxRendererNative& renderer = wxRendererNative::Get();
-
-#ifdef __WXGTK__
-        wxRect r(-(borderX/2),-(borderY/2),w,h);
         wxColour magic(255,0,255);
-        dc.SetBrush( wxBrush( magic ) );
+        wxBrush magicBrush(magic);
+        r.x = -(borderX/2);
+        r.y = -(borderY/2);
+
+        dc.SetBrush( magicBrush );
         dc.SetPen( *wxTRANSPARENT_PEN );
         dc.DrawRectangle(0,0,bw,bh);
         renderer.DrawDropArrow(this, dc, r);
+        dc.SelectObject( wxNullBitmap );
         wxMask *mask = new wxMask( bmp, magic );
         bmp.SetMask( mask );
-#else
-        wxRect r(0,0,bw,bh);
-        renderer.DrawComboBoxDropButton(this, dc, r);
-#endif
-        SetBitmapLabel(bmp);
 
-        wxBitmap bmpSel(bw, bh);
         dc.SelectObject(bmpSel);
 
-#ifdef __WXGTK__
-        dc.SetBrush( wxBrush( magic ) );
+        dc.SetBrush( magicBrush );
         dc.SetPen( *wxTRANSPARENT_PEN );
         dc.DrawRectangle(0,0,bw,bh);
         renderer.DrawDropArrow(this, dc, r, wxCONTROL_PRESSED);
+        dc.SelectObject( wxNullBitmap );
         mask = new wxMask( bmpSel, magic );
         bmpSel.SetMask( mask );
-#else
+    }
+    else
+    {
+        // Use DrawComboBoxDropButton for the entire button
+        // (also render extra "hot" button state).
+
+        renderer.DrawComboBoxDropButton(this, dc, r);
+
+        dc.SelectObject(bmpSel);
+
         renderer.DrawComboBoxDropButton(this, dc, r, wxCONTROL_PRESSED);
-#endif
-        SetBitmapSelected(bmpSel);
+
+        wxBitmap bmpHot(bw,bh);
+        dc.SelectObject(bmpHot);
+        renderer.DrawComboBoxDropButton(this, dc, r, wxCONTROL_CURRENT);
+
+        m_bmpNormal = bmp;
+        m_bmpHot = bmpHot;
     }
 
+    SetBitmapLabel(bmp);
+    SetBitmapSelected(bmpSel);
+}
+
+
+void wxDropdownButton::DoMoveWindow(int x, int y, int w, int h)
+{
+    if (w < 0)
+        w = DROPBUT_DEFAULT_WIDTH;
+
     wxBitmapButton::DoMoveWindow(x, y, w, h);
+}
+
+
+void wxDropdownButton::OnSize(wxSizeEvent& event)
+{
+    if ( m_borderX >= 0 && m_borderY >= 0 )
+    {
+        int w, h;
+        GetClientSize(&w,&h);
+
+        if ( w > 1 && h > 1 )
+            RecreateBitmaps(w,h);
+    }
+    event.Skip();
+}
+
+
+void wxDropdownButton::OnMouseEnter(wxMouseEvent& event)
+{
+    if ( !m_useDropArrow )
+        SetBitmapLabel(m_bmpHot);
+
+    event.Skip();
+}
+
+
+void wxDropdownButton::OnMouseLeave(wxMouseEvent& event)
+{
+    if ( !m_useDropArrow )
+        SetBitmapLabel(m_bmpNormal);
+
+    event.Skip();
 }
 
 
@@ -289,6 +388,7 @@ BEGIN_EVENT_TABLE(wxDatePickerCtrlGeneric, wxDatePickerCtrlBase)
     EVT_BUTTON(CTRLID_BTN, wxDatePickerCtrlGeneric::OnClick)
     EVT_TEXT(CTRLID_TXT, wxDatePickerCtrlGeneric::OnText)
     EVT_CHILD_FOCUS(wxDatePickerCtrlGeneric::OnChildSetFocus)
+    EVT_SIZE(wxDatePickerCtrlGeneric::OnSize)
 END_EVENT_TABLE()
 
 #ifndef wxHAS_NATIVE_DATEPICKCTRL
@@ -330,9 +430,7 @@ bool wxDatePickerCtrlGeneric::Create(wxWindow *parent,
                    wxFocusEventHandler(wxDatePickerCtrlGeneric::OnKillFocus),
                    NULL, this);
 
-    const int height = m_txt->GetBestSize().y - BUTTONBORDER;
-
-    m_btn = new wxDropdownButton(this, CTRLID_BTN, wxDefaultPosition, wxSize(height, height));
+    m_btn = new wxDropdownButton(this, CTRLID_BTN, wxDefaultPosition, wxDefaultSize, wxBU_COMBO);
 
     m_popup = new wxDatePopupInternal(this);
     m_popup->SetFont(GetFont());
@@ -406,6 +504,8 @@ bool wxDatePickerCtrlGeneric::Create(wxWindow *parent,
 
     SetBestFittingSize(size);
 
+    SetBackgroundColour(m_txt->GetBackgroundColour());
+
     return true;
 }
 
@@ -448,11 +548,6 @@ bool wxDatePickerCtrlGeneric::Destroy()
 void wxDatePickerCtrlGeneric::DoMoveWindow(int x, int y, int w, int h)
 {
     wxControl::DoMoveWindow(x, y, w, h);
-    wxSize bs=m_btn->GetBestSize();
-    int eh=m_txt->GetBestSize().y;
-
-    m_txt->SetSize(0, TXTPOSY, w-bs.x-RIGHTBUTTONBORDER, h > eh ? eh-TXTPOSY : h-TXTPOSY);
-    m_btn->SetSize(w - bs.x-RIGHTBUTTONBORDER, TOPBUTTONBORDER, bs.x, h > bs.y ? bs.y : h);
 
     if (m_dropped)
         DropDown(true);
@@ -659,6 +754,23 @@ void wxDatePickerCtrlGeneric::DropDown(bool down)
 }
 
 
+void wxDatePickerCtrlGeneric::OnSize(wxSizeEvent& event)
+{
+    if ( m_btn )
+    {
+        wxSize sz = GetClientSize();
+
+        wxSize bs=m_btn->GetSize();
+        int eh=m_txt->GetBestSize().y;
+
+        m_txt->SetSize(0, TXTPOSY, sz.x-bs.x, sz.y > eh ? eh-TXTPOSY : sz.y-TXTPOSY);
+        m_btn->SetSize(sz.x - bs.x, 0, bs.x, sz.y);
+    }
+
+    event.Skip();
+}
+
+
 void wxDatePickerCtrlGeneric::OnChildSetFocus(wxChildFocusEvent &ev)
 {
     ev.Skip();
@@ -675,7 +787,7 @@ void wxDatePickerCtrlGeneric::OnChildSetFocus(wxChildFocusEvent &ev)
     if (m_dropped)
     {
         DropDown(false);
-        if (ev.GetEventObject() == m_btn)
+        if (::wxFindWindowAtPoint(::wxGetMousePosition()) == m_btn)
             m_ignoreDrop = true;
     }
 }

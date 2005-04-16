@@ -357,10 +357,15 @@ wxRendererGeneric::DrawComboBoxDropButton(wxWindow *win,
                                           const wxRect& rect,
                                           int WXUNUSED(flags))
 {
-    // FIXME: Is it worth to do a better implementation?
-    // Generic wxComboDropButton should be drawn using
-    // combination of wxBitmapButton and DrawDropArrow
-    // anyway.
+    // Creating a generic button background that would actually be
+    // useful is rather difficult to accomplish. Best compromise
+    // is to use window's background colour to achieve transparent'
+    // ish appearance that should look decent in combo box style
+    // controls.
+    wxColour col = win->GetBackgroundColour();
+    dc.SetBrush(wxBrush(col));
+    dc.SetPen(wxPen(col));
+    dc.DrawRectangle(rect);
     DrawDropArrow(win,dc,rect);
 }
 
