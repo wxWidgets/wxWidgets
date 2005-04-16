@@ -53,10 +53,15 @@
             Type of compiled binaries
         </description>
     </option>
+    
+    <set var="DEBUG_INFO_DEFAULT">
+        <if cond="FORMAT in ['msvc','msvc6prj','msevc4prj']">1</if>
+        <if cond="FORMAT not in ['msvc','msvc6prj','msevc4prj']">default</if>
+    </set>
 
     <option name="DEBUG_INFO">
         <values>0,1,default</values>
-        <default-value>default</default-value>
+        <default-value>$(DEBUG_INFO_DEFAULT)</default-value>
         <description>
 Should debugging info be included in the executables? The default value
 "default" means that debug info will be included if BUILD=debug
@@ -79,7 +84,7 @@ be defined if BUILD=debug and not defined if BUILD=release.
             <default-value>default</default-value>
             <description>
 Should link against debug RTL (msvcrtd.dll) or release (msvcrt.dll)?
-Acts according to DEBUG_INFO by default.
+Acts according to BUILD by default.
             </description>
         </option>
     </if>
@@ -356,7 +361,7 @@ Set the version of your Mingw installation here.
         <set var="USE_EXCEPTIONS">1</set>
         <set var="USE_RTTI">1</set>
         <set var="USE_THREADS">1</set>
-        <set var="DEBUG_INFO">default</set>
+        <set var="DEBUG_INFO">$(DEBUG_INFO_DEFAULT)</set>
         <set var="DEBUG_FLAG">default</set>
         <set var="MSLU">0</set>
     </if>
