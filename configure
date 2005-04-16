@@ -36675,7 +36675,9 @@ echo "$as_me: WARNING: Creating debug reports not supported under OS/2 yet, disa
 #define wxUSE_DEBUGREPORT 1
 _ACEOF
 
-        SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS debugrpt"
+        if test "$wxUSE_ON_FATAL_EXCEPTION" = "yes"; then
+            SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS debugrpt"
+        fi
     fi
 fi
 

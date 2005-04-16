@@ -4950,7 +4950,9 @@ if test "$wxUSE_DEBUGREPORT" = "yes"; then
         wxUSE_DEBUGREPORT=no
     else
         AC_DEFINE(wxUSE_DEBUGREPORT)
-        SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS debugrpt"
+        if test "$wxUSE_ON_FATAL_EXCEPTION" = "yes"; then
+            SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS debugrpt"
+        fi
     fi
 fi
 
