@@ -1623,7 +1623,7 @@ void wxWindowOS2::DoMoveWindow(
                               ,vSwpScroll.cy - nAdjustHeight
                               ,SWP_MOVE | SWP_SIZE
                              );
-            nYDiff += nAdjustHeight;
+            nYDiff -= nAdjustHeight;
         }
         MoveChildren(nYDiff);
         ::WinQueryWindowPos(GetHwnd(), &m_vWinSwp);
