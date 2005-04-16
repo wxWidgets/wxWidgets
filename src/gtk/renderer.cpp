@@ -430,10 +430,12 @@ wxRendererGTK::DrawDropArrow(wxWindow *win,
 
     GtkStateType state;
 
-    if ( flags & wxCONTROL_CURRENT )
-        state = GTK_STATE_PRELIGHT;
+    if ( flags & wxCONTROL_PRESSED )
+        state = GTK_STATE_ACTIVE;
     else if ( flags & wxCONTROL_DISABLED )
         state = GTK_STATE_INSENSITIVE;
+    else if ( flags & wxCONTROL_CURRENT )
+        state = GTK_STATE_PRELIGHT;
     else
         state = GTK_STATE_NORMAL;
 
@@ -471,10 +473,12 @@ wxRendererGTK::DrawComboBoxDropButton(wxWindow *win,
     // draw button
     GtkStateType state;
 
-    if ( flags & wxCONTROL_CURRENT )
-        state = GTK_STATE_PRELIGHT;
+    if ( flags & wxCONTROL_PRESSED )
+        state = GTK_STATE_ACTIVE;
     else if ( flags & wxCONTROL_DISABLED )
         state = GTK_STATE_INSENSITIVE;
+    else if ( flags & wxCONTROL_CURRENT )
+        state = GTK_STATE_PRELIGHT;
     else
         state = GTK_STATE_NORMAL;
 
