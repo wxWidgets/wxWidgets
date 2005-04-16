@@ -1,12 +1,12 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        wx/mac/mimetype.h
-// Purpose:     classes and functions to manage MIME types
-// Author:      Vadim Zeitlin
+// Purpose:     Mac Carbon implementation for wx mime-related classes
+// Author:      Ryan Norton
 // Modified by:
-// Created:     23.09.98
+// Created:     04/16/2005
 // RCS-ID:      $Id$
-// Copyright:   (c) 1998 Vadim Zeitlin <zeitlin@dptmaths.ens-cachan.fr>
-// Licence:     wxWindows licence (part of wxExtra library)
+// Copyright:   (c) 2005 Ryan Norton (<wxprojects@comcast.net>)
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef _MIMETYPE_IMPL_H
@@ -23,10 +23,10 @@
 class wxMimeTypesManagerImpl
 {
 public :
-    wxMimeTypesManagerImpl() { }
-#ifdef __DARWIN__
-    ~wxMimeTypesManagerImpl() { }
-#endif
+    //kinda kooky but in wxMimeTypesManager::EnsureImpl it doesn't call 
+    //intialize, so we do it ourselves
+    wxMimeTypesManagerImpl() : m_hIC(NULL) { Initialize(); }
+    ~wxMimeTypesManagerImpl() { ClearData(); }
  
     // load all data into memory - done when it is needed for the first time
     void Initialize(int mailcapStyles = wxMAILCAP_STANDARD,
@@ -52,33 +52,23 @@ public :
     wxFileType *Associate(const wxFileTypeInfo& ftInfo);
     // remove association
     bool Unassociate(wxFileType *ft);
-
-    // create a new filetype with the given name and extension
-    wxFileType *CreateFileType(const wxString& filetype, const wxString& ext);
-
+    
 private:
     wxArrayFileTypeInfo m_fallbacks;
+    void* 				m_hIC;
+    void** 				m_hDatabase;
+    long				m_lCount;
+    
+    friend class wxFileTypeImpl;
 };
 
 class wxFileTypeImpl
 {
 public:
-    // initialization functions
-    // this is used to construct a list of mimetypes which match;
-    // if built with GetFileTypeFromMimetype index 0 has the exact match and
-    // index 1 the type / * match
-    // if built with GetFileTypeFromExtension, index 0 has the mimetype for
-    // the first extension found, index 1 for the second and so on
+    //kind of nutty, but mimecmn.cpp creates one with an empty new
+    wxFileTypeImpl() : m_manager(NULL) {}
+    ~wxFileTypeImpl() {} //for those broken compilers
     
-    void Init(wxMimeTypesManagerImpl *manager, size_t index)
-    { m_manager = manager; m_index.Add(index); }
-
-    // initialize us with our file type name
-    void SetFileType(const wxString& strFileType)
-        { m_strFileType = strFileType; }
-    void SetExt(const wxString& ext)
-        { m_ext = ext; }
-
     // implement accessor functions
     bool GetExtensions(wxArrayString& extensions);
     bool GetMimeType(wxString *mimeType) const;
@@ -86,11 +76,9 @@ public:
     bool GetIcon(wxIconLocation *iconLoc) const;
     bool GetDescription(wxString *desc) const;
     bool GetOpenCommand(wxString *openCmd,
-                        const wxFileType::MessageParameters&) const
-        { return GetCommand(openCmd, "open"); }
+                        const wxFileType::MessageParameters&) const;
     bool GetPrintCommand(wxString *printCmd,
-                         const wxFileType::MessageParameters&) const
-        { return GetCommand(printCmd, "print"); }
+                         const wxFileType::MessageParameters&) const;
 
     size_t GetAllCommands(wxArrayString * verbs, wxArrayString * commands,
                           const wxFileType::MessageParameters& params) const;
@@ -108,15 +96,17 @@ public:
     bool SetDefaultIcon(const wxString& strIcon = wxEmptyString, int index = 0);
 
  private:
+    void Init(wxMimeTypesManagerImpl *manager, long lIndex) 
+    { m_manager=(manager); m_lIndex=(lIndex); }
+
     // helper function
-    bool GetCommand(wxString *command, const char *verb) const;
+    wxString GetCommand(const wxString& verb) const;
     
     wxMimeTypesManagerImpl *m_manager;
-    wxArrayInt              m_index; // in the wxMimeTypesManagerImpl arrays
-    wxString m_strFileType, m_ext;
+    long                    m_lIndex; 
+    
+    friend class wxMimeTypesManagerImpl;
 };
 
 #endif
   //_MIMETYPE_H
-
-/* vi: set cin tw=80 ts=4 sw=4: */

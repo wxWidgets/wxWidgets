@@ -31,6 +31,8 @@ wxGTK:
     --with-gtk=2           Use GTK 2.x, no fallback
     --with-gtk=any         Use any available GTK
 
+wxMac:
+- Implemented most of the wxFileType and wxMimeTypesManager functions
 
 2.5.5
 -----
