@@ -56,7 +56,7 @@ bool wxPropertySheetDialog::Create(wxWindow* parent, wxWindowID id, const wxStri
     // This gives more space around the edges
     m_innerSizer = new wxBoxSizer( wxVERTICAL );
 
-    int extraSpace = 5;
+    int extraSpace = 2;
 #if defined(__SMARTPHONE__) || defined(__POCKETPC__)
     extraSpace=0;
 #endif
@@ -79,6 +79,7 @@ void wxPropertySheetDialog::LayoutDialog()
 {
 #if !defined(__SMARTPHONE__) && !defined(__POCKETPC__)
     GetSizer()->Fit(this);
+    GetSizer()->SetSizeHints(this);
     Centre(wxBOTH);
 #endif
 #if defined(__SMARTPHONE__)
@@ -99,7 +100,8 @@ void wxPropertySheetDialog::CreateButtons(int flags)
     // Do nothing
 #else
     wxSizer* sizer = CreateButtonSizer(flags);
-    m_innerSizer->Add( sizer, 0, wxGROW|wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM, 5);
+    m_innerSizer->Add( sizer, 0, wxGROW|wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM|wxLEFT|wxRIGHT, 2);
+    m_innerSizer->AddSpacer(2);
 #endif
 }
 
