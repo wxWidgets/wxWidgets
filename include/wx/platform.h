@@ -310,12 +310,13 @@
 
 /*
    old C++ headers (like <iostream.h>) declare classes in the global namespace
-   while the new, standard ones (like <iostream>) do it in std:: namespace
+   while the new, standard ones (like <iostream>) do it in std:: namespace,
+   unless it's an old gcc version.
 
    using this macro allows constuctions like "wxSTD iostream" to work in
    either case
  */
-#if !wxUSE_IOSTREAMH
+#if !wxUSE_IOSTREAMH && (!defined(__GNUC__) || ( __GNUC__ > 2 ) || (__GNUC__ == 2 && __GNUC_MINOR__ >= 95))
 #    define wxSTD std::
 #else
 #    define wxSTD
