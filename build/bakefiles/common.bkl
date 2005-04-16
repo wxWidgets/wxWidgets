@@ -241,7 +241,8 @@
         <if cond="DEBUG_INFO=='0'">off</if>
     </set>
     <set var="DEBUGRUNTIME">
-        <if cond="DEBUG_RUNTIME_LIBS=='default'">$(DEBUGINFO)</if>
+        <if cond="DEBUG_RUNTIME_LIBS=='default' and BUILD=='debug'">on</if>
+        <if cond="DEBUG_RUNTIME_LIBS=='default' and BUILD=='release'">off</if>
         <if cond="DEBUG_RUNTIME_LIBS=='0'">off</if>
         <if cond="DEBUG_RUNTIME_LIBS=='1'">on</if>
     </set>
