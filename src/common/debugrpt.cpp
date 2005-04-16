@@ -652,7 +652,7 @@ bool wxDebugReportUpload::DoProcess()
     wxArrayString output, errors;
     int rc = wxExecute(wxString::Format
                        (
-                            _T("%s -F %s=@%s %s"),
+                            _T("%s -F %s=@\"%s\" %s"),
                             m_curlCmd.c_str(),
                             m_inputField.c_str(),
                             GetCompressedFileName().c_str(),
