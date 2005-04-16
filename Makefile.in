@@ -1302,6 +1302,8 @@ COND_TOOLKIT_MAC_BASE_MACOSX_HDR =  \
 	wx/mac/corefoundation/cfstring.h \
 	wx/mac/corefoundation/hid.h \
 	wx/mac/corefoundation/stdpaths.h \
+	wx/unix/apptbase.h \
+	wx/unix/apptrait.h \
 	wx/unix/stdpaths.h
 @COND_TOOLKIT_MAC@BASE_MACOSX_HDR = $(COND_TOOLKIT_MAC_BASE_MACOSX_HDR)
 COND_TOOLKIT_MOTIF_BASE_MACOSX_HDR =  \
