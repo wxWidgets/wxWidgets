@@ -13,7 +13,7 @@
 
 #include "wx/defs.h"
 
-#if wxUSE_DEBUGREPORT
+#if wxUSE_DEBUGREPORT && wxUSE_XML
 
 class WXDLLIMPEXP_XML wxXmlNode;
 
