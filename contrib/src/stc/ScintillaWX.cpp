@@ -1010,28 +1010,25 @@ void ScintillaWX::DoScrollToColumn(int column) {
     HorizontalScrollTo(column * vs.spaceWidth);
 }
 
-#ifdef __WXGTK__
-void ScintillaWX::ClipChildren(wxDC& dc, PRectangle rect) {
-    wxRegion rgn(wxRectFromPRectangle(rect));
-    if (ac.Active()) {
-        wxRect childRect = ((wxWindow*)ac.lb->GetID())->GetRect();
-        rgn.Subtract(childRect);
-    }
-    if (ct.inCallTipMode) {
-        wxSTCCallTip* tip = (wxSTCCallTip*)ct.wCallTip.GetID();
-        wxRect childRect = tip->GetRect();
-#if wxUSE_POPUPWIN && wxSTC_USE_POPUP
-        childRect.SetPosition(tip->GetMyPosition());
-#endif
-        rgn.Subtract(childRect);
-    }
-
-    dc.SetClippingRegion(rgn);
+// wxGTK doesn't appear to need this explicit clipping code any longer, but I
+// will leave it here commented out for a while just in case...
+void ScintillaWX::ClipChildren(wxDC& WXUNUSED(dc), PRectangle WXUNUSED(rect))
+{
+//     wxRegion rgn(wxRectFromPRectangle(rect));
+//     if (ac.Active()) {
+//         wxRect childRect = ((wxWindow*)ac.lb->GetID())->GetRect();
+//         rgn.Subtract(childRect);
+//     }
+//     if (ct.inCallTipMode) {
+//         wxSTCCallTip* tip = (wxSTCCallTip*)ct.wCallTip.GetID();
+//         wxRect childRect = tip->GetRect();
+// #if wxUSE_POPUPWIN && wxSTC_USE_POPUP
+//         childRect.SetPosition(tip->GetMyPosition());
+// #endif
+//         rgn.Subtract(childRect);
+//     }
+//     dc.SetClippingRegion(rgn);
 }
-#else
-void ScintillaWX::ClipChildren(wxDC& WXUNUSED(dc), PRectangle WXUNUSED(rect)) {
-}
-#endif
 
 
 void ScintillaWX::SetUseAntiAliasing(bool useAA) {
