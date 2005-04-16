@@ -1037,7 +1037,8 @@ SWIG_Python_TypeError(const char *type, PyObject *obj)
 	  PyErr_Format(PyExc_TypeError, "a '%s' is expected, '%s' is received",
 		       type, otype);
 	}
-	Py_DECREF(str);
+	if (str)
+          Py_DECREF(str);
 	return;
       }
     }   
@@ -1343,30 +1344,31 @@ SWIG_Python_GetTypeList() {
 #define  SWIGTYPE_p_unsigned_char swig_types[2] 
 #define  SWIGTYPE_p_wxColour swig_types[3] 
 #define  SWIGTYPE_p_wxScrollBar swig_types[4] 
-#define  SWIGTYPE_p_wxStyledTextEvent swig_types[5] 
-#define  SWIGTYPE_p_wxWindow swig_types[6] 
-#define  SWIGTYPE_p_wxCommandEvent swig_types[7] 
-#define  SWIGTYPE_p_unsigned_long swig_types[8] 
-#define  SWIGTYPE_p_wxBitmap swig_types[9] 
-#define  SWIGTYPE_p_unsigned_int swig_types[10] 
-#define  SWIGTYPE_unsigned_int swig_types[11] 
-#define  SWIGTYPE_p_form_ops_t swig_types[12] 
-#define  SWIGTYPE_p_wxDuplexMode swig_types[13] 
-#define  SWIGTYPE_p_void swig_types[14] 
-#define  SWIGTYPE_p_char swig_types[15] 
-#define  SWIGTYPE_p_wxPoint swig_types[16] 
-#define  SWIGTYPE_p_wxDC swig_types[17] 
-#define  SWIGTYPE_p_wxEvtHandler swig_types[18] 
-#define  SWIGTYPE_std__ptrdiff_t swig_types[19] 
-#define  SWIGTYPE_ptrdiff_t swig_types[20] 
-#define  SWIGTYPE_p_wxStyledTextCtrl swig_types[21] 
-#define  SWIGTYPE_p_wxFont swig_types[22] 
-#define  SWIGTYPE_p_wxControl swig_types[23] 
-#define  SWIGTYPE_p_wxEvent swig_types[24] 
-#define  SWIGTYPE_p_wxPaperSize swig_types[25] 
-#define  SWIGTYPE_p_int swig_types[26] 
-#define  SWIGTYPE_p_wxMemoryBuffer swig_types[27] 
-static swig_type_info *swig_types[29];
+#define  SWIGTYPE_p_wxCharBuffer swig_types[5] 
+#define  SWIGTYPE_p_wxStyledTextEvent swig_types[6] 
+#define  SWIGTYPE_p_wxWindow swig_types[7] 
+#define  SWIGTYPE_p_wxCommandEvent swig_types[8] 
+#define  SWIGTYPE_p_unsigned_long swig_types[9] 
+#define  SWIGTYPE_p_wxBitmap swig_types[10] 
+#define  SWIGTYPE_p_unsigned_int swig_types[11] 
+#define  SWIGTYPE_unsigned_int swig_types[12] 
+#define  SWIGTYPE_p_form_ops_t swig_types[13] 
+#define  SWIGTYPE_p_wxDuplexMode swig_types[14] 
+#define  SWIGTYPE_p_void swig_types[15] 
+#define  SWIGTYPE_p_char swig_types[16] 
+#define  SWIGTYPE_p_wxPoint swig_types[17] 
+#define  SWIGTYPE_p_wxDC swig_types[18] 
+#define  SWIGTYPE_p_wxEvtHandler swig_types[19] 
+#define  SWIGTYPE_std__ptrdiff_t swig_types[20] 
+#define  SWIGTYPE_ptrdiff_t swig_types[21] 
+#define  SWIGTYPE_p_wxStyledTextCtrl swig_types[22] 
+#define  SWIGTYPE_p_wxFont swig_types[23] 
+#define  SWIGTYPE_p_wxControl swig_types[24] 
+#define  SWIGTYPE_p_wxEvent swig_types[25] 
+#define  SWIGTYPE_p_wxPaperSize swig_types[26] 
+#define  SWIGTYPE_p_int swig_types[27] 
+#define  SWIGTYPE_p_wxMemoryBuffer swig_types[28] 
+static swig_type_info *swig_types[30];
 
 /* -------- TYPES TABLE (END) -------- */
 
@@ -1764,6 +1766,7 @@ static PyObject *_wrap_StyledTextCtrl_Create(PyObject *, PyObject *args, PyObjec
     long arg6 = (long) 0 ;
     wxString const &arg7_defvalue = wxSTCNameStr ;
     wxString *arg7 = (wxString *) &arg7_defvalue ;
+    bool result;
     wxPoint temp4 ;
     wxSize temp5 ;
     bool temp7 = false ;
@@ -1816,12 +1819,14 @@ static PyObject *_wrap_StyledTextCtrl_Create(PyObject *, PyObject *args, PyObjec
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
-        (arg1)->Create(arg2,arg3,(wxPoint const &)*arg4,(wxSize const &)*arg5,arg6,(wxString const &)*arg7);
+        result = (bool)(arg1)->Create(arg2,arg3,(wxPoint const &)*arg4,(wxSize const &)*arg5,arg6,(wxString const &)*arg7);
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    Py_INCREF(Py_None); resultobj = Py_None;
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
     {
         if (temp7)
         delete arg7;
@@ -9850,45 +9855,39 @@ static PyObject *_wrap_StyledTextCtrl_GetUseVerticalScrollBar(PyObject *, PyObje
 static PyObject *_wrap_StyledTextCtrl_AppendText(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
-    int arg2 ;
-    wxString *arg3 = 0 ;
-    bool temp3 = false ;
+    wxString *arg2 = 0 ;
+    bool temp2 = false ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
-    PyObject * obj2 = 0 ;
     char *kwnames[] = {
-        (char *) "self",(char *) "length",(char *) "text", NULL 
+        (char *) "self",(char *) "text", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO:StyledTextCtrl_AppendText",kwnames,&obj0,&obj1,&obj2)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:StyledTextCtrl_AppendText",kwnames,&obj0,&obj1)) goto fail;
     SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxStyledTextCtrl, SWIG_POINTER_EXCEPTION | 0);
     if (SWIG_arg_fail(1)) SWIG_fail;
     {
-        arg2 = (int)(SWIG_As_int(obj1)); 
-        if (SWIG_arg_fail(2)) SWIG_fail;
-    }
-    {
-        arg3 = wxString_in_helper(obj2);
-        if (arg3 == NULL) SWIG_fail;
-        temp3 = true;
+        arg2 = wxString_in_helper(obj1);
+        if (arg2 == NULL) SWIG_fail;
+        temp2 = true;
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
-        (arg1)->AppendText(arg2,(wxString const &)*arg3);
+        (arg1)->AppendText((wxString const &)*arg2);
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
     Py_INCREF(Py_None); resultobj = Py_None;
     {
-        if (temp3)
-        delete arg3;
+        if (temp2)
+        delete arg2;
     }
     return resultobj;
     fail:
     {
-        if (temp3)
-        delete arg3;
+        if (temp2)
+        delete arg2;
     }
     return NULL;
 }
@@ -15314,6 +15313,306 @@ static PyObject *_wrap_StyledTextCtrl_GetUseAntiAliasing(PyObject *, PyObject *a
 }
 
 
+static PyObject *_wrap_StyledTextCtrl_AddTextRaw(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
+    char *arg2 = (char *) 0 ;
+    PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
+    char *kwnames[] = {
+        (char *) "self",(char *) "text", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:StyledTextCtrl_AddTextRaw",kwnames,&obj0,&obj1)) goto fail;
+    SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxStyledTextCtrl, SWIG_POINTER_EXCEPTION | 0);
+    if (SWIG_arg_fail(1)) SWIG_fail;
+    if (!SWIG_AsCharPtr(obj1, (char**)&arg2)) {
+        SWIG_arg_fail(2);SWIG_fail;
+    }
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        (arg1)->AddTextRaw((char const *)arg2);
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    Py_INCREF(Py_None); resultobj = Py_None;
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_StyledTextCtrl_InsertTextRaw(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
+    int arg2 ;
+    char *arg3 = (char *) 0 ;
+    PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
+    PyObject * obj2 = 0 ;
+    char *kwnames[] = {
+        (char *) "self",(char *) "pos",(char *) "text", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO:StyledTextCtrl_InsertTextRaw",kwnames,&obj0,&obj1,&obj2)) goto fail;
+    SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxStyledTextCtrl, SWIG_POINTER_EXCEPTION | 0);
+    if (SWIG_arg_fail(1)) SWIG_fail;
+    {
+        arg2 = (int)(SWIG_As_int(obj1)); 
+        if (SWIG_arg_fail(2)) SWIG_fail;
+    }
+    if (!SWIG_AsCharPtr(obj2, (char**)&arg3)) {
+        SWIG_arg_fail(3);SWIG_fail;
+    }
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        (arg1)->InsertTextRaw(arg2,(char const *)arg3);
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    Py_INCREF(Py_None); resultobj = Py_None;
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_StyledTextCtrl_GetCurLineRaw(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
+    int *arg2 = (int *) 0 ;
+    wxCharBuffer result;
+    int temp2 ;
+    int res2 = 0 ;
+    PyObject * obj0 = 0 ;
+    char *kwnames[] = {
+        (char *) "self", NULL 
+    };
+    
+    arg2 = &temp2; res2 = SWIG_NEWOBJ;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:StyledTextCtrl_GetCurLineRaw",kwnames,&obj0)) goto fail;
+    SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxStyledTextCtrl, SWIG_POINTER_EXCEPTION | 0);
+    if (SWIG_arg_fail(1)) SWIG_fail;
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = (arg1)->GetCurLineRaw(arg2);
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    {
+        wxCharBuffer * resultptr;
+        resultptr = new wxCharBuffer((wxCharBuffer &)(result));
+        resultobj = SWIG_NewPointerObj((void *)(resultptr), SWIGTYPE_p_wxCharBuffer, 1);
+    }
+    resultobj = t_output_helper(resultobj, ((res2 == SWIG_NEWOBJ) ?
+    SWIG_From_int((*arg2)) : SWIG_NewPointerObj((void*)(arg2), SWIGTYPE_p_int, 0)));
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_StyledTextCtrl_GetLineRaw(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
+    int arg2 ;
+    wxCharBuffer result;
+    PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
+    char *kwnames[] = {
+        (char *) "self",(char *) "line", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:StyledTextCtrl_GetLineRaw",kwnames,&obj0,&obj1)) goto fail;
+    SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxStyledTextCtrl, SWIG_POINTER_EXCEPTION | 0);
+    if (SWIG_arg_fail(1)) SWIG_fail;
+    {
+        arg2 = (int)(SWIG_As_int(obj1)); 
+        if (SWIG_arg_fail(2)) SWIG_fail;
+    }
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = (arg1)->GetLineRaw(arg2);
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    {
+        wxCharBuffer * resultptr;
+        resultptr = new wxCharBuffer((wxCharBuffer &)(result));
+        resultobj = SWIG_NewPointerObj((void *)(resultptr), SWIGTYPE_p_wxCharBuffer, 1);
+    }
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_StyledTextCtrl_GetSelectedTextRaw(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
+    wxCharBuffer result;
+    PyObject * obj0 = 0 ;
+    char *kwnames[] = {
+        (char *) "self", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:StyledTextCtrl_GetSelectedTextRaw",kwnames,&obj0)) goto fail;
+    SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxStyledTextCtrl, SWIG_POINTER_EXCEPTION | 0);
+    if (SWIG_arg_fail(1)) SWIG_fail;
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = (arg1)->GetSelectedTextRaw();
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    {
+        wxCharBuffer * resultptr;
+        resultptr = new wxCharBuffer((wxCharBuffer &)(result));
+        resultobj = SWIG_NewPointerObj((void *)(resultptr), SWIGTYPE_p_wxCharBuffer, 1);
+    }
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_StyledTextCtrl_GetTextRangeRaw(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
+    int arg2 ;
+    int arg3 ;
+    wxCharBuffer result;
+    PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
+    PyObject * obj2 = 0 ;
+    char *kwnames[] = {
+        (char *) "self",(char *) "startPos",(char *) "endPos", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO:StyledTextCtrl_GetTextRangeRaw",kwnames,&obj0,&obj1,&obj2)) goto fail;
+    SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxStyledTextCtrl, SWIG_POINTER_EXCEPTION | 0);
+    if (SWIG_arg_fail(1)) SWIG_fail;
+    {
+        arg2 = (int)(SWIG_As_int(obj1)); 
+        if (SWIG_arg_fail(2)) SWIG_fail;
+    }
+    {
+        arg3 = (int)(SWIG_As_int(obj2)); 
+        if (SWIG_arg_fail(3)) SWIG_fail;
+    }
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = (arg1)->GetTextRangeRaw(arg2,arg3);
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    {
+        wxCharBuffer * resultptr;
+        resultptr = new wxCharBuffer((wxCharBuffer &)(result));
+        resultobj = SWIG_NewPointerObj((void *)(resultptr), SWIGTYPE_p_wxCharBuffer, 1);
+    }
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_StyledTextCtrl_SetTextRaw(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
+    char *arg2 = (char *) 0 ;
+    PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
+    char *kwnames[] = {
+        (char *) "self",(char *) "text", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:StyledTextCtrl_SetTextRaw",kwnames,&obj0,&obj1)) goto fail;
+    SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxStyledTextCtrl, SWIG_POINTER_EXCEPTION | 0);
+    if (SWIG_arg_fail(1)) SWIG_fail;
+    if (!SWIG_AsCharPtr(obj1, (char**)&arg2)) {
+        SWIG_arg_fail(2);SWIG_fail;
+    }
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        (arg1)->SetTextRaw((char const *)arg2);
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    Py_INCREF(Py_None); resultobj = Py_None;
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_StyledTextCtrl_GetTextRaw(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
+    wxCharBuffer result;
+    PyObject * obj0 = 0 ;
+    char *kwnames[] = {
+        (char *) "self", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:StyledTextCtrl_GetTextRaw",kwnames,&obj0)) goto fail;
+    SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxStyledTextCtrl, SWIG_POINTER_EXCEPTION | 0);
+    if (SWIG_arg_fail(1)) SWIG_fail;
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = (arg1)->GetTextRaw();
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    {
+        wxCharBuffer * resultptr;
+        resultptr = new wxCharBuffer((wxCharBuffer &)(result));
+        resultobj = SWIG_NewPointerObj((void *)(resultptr), SWIGTYPE_p_wxCharBuffer, 1);
+    }
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_StyledTextCtrl_AppendTextRaw(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
+    char *arg2 = (char *) 0 ;
+    PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
+    char *kwnames[] = {
+        (char *) "self",(char *) "text", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:StyledTextCtrl_AppendTextRaw",kwnames,&obj0,&obj1)) goto fail;
+    SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxStyledTextCtrl, SWIG_POINTER_EXCEPTION | 0);
+    if (SWIG_arg_fail(1)) SWIG_fail;
+    if (!SWIG_AsCharPtr(obj1, (char**)&arg2)) {
+        SWIG_arg_fail(2);SWIG_fail;
+    }
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        (arg1)->AppendTextRaw((char const *)arg2);
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    Py_INCREF(Py_None); resultobj = Py_None;
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
 static PyObject * StyledTextCtrl_swigregister(PyObject *, PyObject *args) {
     PyObject *obj;
     if (!PyArg_ParseTuple(args,(char*)"O", &obj)) return NULL;
@@ -17138,6 +17437,15 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"StyledTextCtrl_DoDropText", (PyCFunction) _wrap_StyledTextCtrl_DoDropText, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"StyledTextCtrl_SetUseAntiAliasing", (PyCFunction) _wrap_StyledTextCtrl_SetUseAntiAliasing, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"StyledTextCtrl_GetUseAntiAliasing", (PyCFunction) _wrap_StyledTextCtrl_GetUseAntiAliasing, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"StyledTextCtrl_AddTextRaw", (PyCFunction) _wrap_StyledTextCtrl_AddTextRaw, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"StyledTextCtrl_InsertTextRaw", (PyCFunction) _wrap_StyledTextCtrl_InsertTextRaw, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"StyledTextCtrl_GetCurLineRaw", (PyCFunction) _wrap_StyledTextCtrl_GetCurLineRaw, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"StyledTextCtrl_GetLineRaw", (PyCFunction) _wrap_StyledTextCtrl_GetLineRaw, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"StyledTextCtrl_GetSelectedTextRaw", (PyCFunction) _wrap_StyledTextCtrl_GetSelectedTextRaw, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"StyledTextCtrl_GetTextRangeRaw", (PyCFunction) _wrap_StyledTextCtrl_GetTextRangeRaw, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"StyledTextCtrl_SetTextRaw", (PyCFunction) _wrap_StyledTextCtrl_SetTextRaw, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"StyledTextCtrl_GetTextRaw", (PyCFunction) _wrap_StyledTextCtrl_GetTextRaw, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"StyledTextCtrl_AppendTextRaw", (PyCFunction) _wrap_StyledTextCtrl_AppendTextRaw, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"StyledTextCtrl_swigregister", StyledTextCtrl_swigregister, METH_VARARGS, NULL},
 	 { (char *)"new_StyledTextEvent", (PyCFunction) _wrap_new_StyledTextEvent, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"delete_StyledTextEvent", (PyCFunction) _wrap_delete_StyledTextEvent, METH_VARARGS | METH_KEYWORDS, NULL},
@@ -17659,6 +17967,7 @@ static swig_type_info _swigt__p_wxObject[] = {{"_p_wxObject", 0, "wxObject *", 0
 static swig_type_info _swigt__p_unsigned_char[] = {{"_p_unsigned_char", 0, "unsigned char *|byte *", 0, 0, 0, 0},{"_p_unsigned_char", 0, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
 static swig_type_info _swigt__p_wxColour[] = {{"_p_wxColour", 0, "wxColour *", 0, 0, 0, 0},{"_p_wxColour", 0, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
 static swig_type_info _swigt__p_wxScrollBar[] = {{"_p_wxScrollBar", 0, "wxScrollBar *", 0, 0, 0, 0},{"_p_wxScrollBar", 0, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
+static swig_type_info _swigt__p_wxCharBuffer[] = {{"_p_wxCharBuffer", 0, "wxCharBuffer *", 0, 0, 0, 0},{"_p_wxCharBuffer", 0, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
 static swig_type_info _swigt__p_wxStyledTextEvent[] = {{"_p_wxStyledTextEvent", 0, "wxStyledTextEvent *", 0, 0, 0, 0},{"_p_wxStyledTextEvent", 0, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
 static swig_type_info _swigt__p_wxWindow[] = {{"_p_wxWindow", 0, "wxWindow *", 0, 0, 0, 0},{"_p_wxControl", _p_wxControlTo_p_wxWindow, 0, 0, 0, 0, 0},{"_p_wxWindow", 0, 0, 0, 0, 0, 0},{"_p_wxControlWithItems", _p_wxControlWithItemsTo_p_wxWindow, 0, 0, 0, 0, 0},{"_p_wxStyledTextCtrl", _p_wxStyledTextCtrlTo_p_wxWindow, 0, 0, 0, 0, 0},{"_p_wxMenuBar", _p_wxMenuBarTo_p_wxWindow, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
 static swig_type_info _swigt__p_wxCommandEvent[] = {{"_p_wxCommandEvent", 0, "wxCommandEvent *", 0, 0, 0, 0},{"_p_wxChildFocusEvent", _p_wxChildFocusEventTo_p_wxCommandEvent, 0, 0, 0, 0, 0},{"_p_wxScrollEvent", _p_wxScrollEventTo_p_wxCommandEvent, 0, 0, 0, 0, 0},{"_p_wxWindowCreateEvent", _p_wxWindowCreateEventTo_p_wxCommandEvent, 0, 0, 0, 0, 0},{"_p_wxDateEvent", _p_wxDateEventTo_p_wxCommandEvent, 0, 0, 0, 0, 0},{"_p_wxUpdateUIEvent", _p_wxUpdateUIEventTo_p_wxCommandEvent, 0, 0, 0, 0, 0},{"_p_wxStyledTextEvent", _p_wxStyledTextEventTo_p_wxCommandEvent, 0, 0, 0, 0, 0},{"_p_wxWindowDestroyEvent", _p_wxWindowDestroyEventTo_p_wxCommandEvent, 0, 0, 0, 0, 0},{"_p_wxContextMenuEvent", _p_wxContextMenuEventTo_p_wxCommandEvent, 0, 0, 0, 0, 0},{"_p_wxCommandEvent", 0, 0, 0, 0, 0, 0},{"_p_wxNotifyEvent", _p_wxNotifyEventTo_p_wxCommandEvent, 0, 0, 0, 0, 0},{"_p_wxPyCommandEvent", _p_wxPyCommandEventTo_p_wxCommandEvent, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
@@ -17689,6 +17998,7 @@ _swigt__p_wxObject,
 _swigt__p_unsigned_char, 
 _swigt__p_wxColour, 
 _swigt__p_wxScrollBar, 
+_swigt__p_wxCharBuffer, 
 _swigt__p_wxStyledTextEvent, 
 _swigt__p_wxWindow, 
 _swigt__p_wxCommandEvent, 

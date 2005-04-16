@@ -1037,7 +1037,8 @@ SWIG_Python_TypeError(const char *type, PyObject *obj)
 	  PyErr_Format(PyExc_TypeError, "a '%s' is expected, '%s' is received",
 		       type, otype);
 	}
-	Py_DECREF(str);
+	if (str)
+          Py_DECREF(str);
 	return;
       }
     }   
