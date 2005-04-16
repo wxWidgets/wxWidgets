@@ -6,8 +6,8 @@
  *  iODBC defines
  *
  *  The iODBC driver manager.
- *  
- *  Copyright (C) 1995 by Ke Jin <kejin@empress.com> 
+ *
+ *  Copyright (C) 1995 by Ke Jin <kejin@empress.com>
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -47,6 +47,7 @@ typedef long int SDWORD;
 typedef short int SWORD;
 typedef unsigned long int UDWORD;
 typedef unsigned short int UWORD;
+typedef long SQLINTEGER;
 
 typedef void FAR *PTR;
 typedef void FAR *HENV;

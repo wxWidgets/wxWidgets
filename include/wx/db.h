@@ -613,7 +613,7 @@ public:
     wxChar errorList[DB_MAX_ERROR_HISTORY][DB_MAX_ERROR_MSG_LEN];
 #endif
     wxChar errorMsg[SQL_MAX_MESSAGE_LENGTH];
-    SDWORD nativeError;
+    SQLINTEGER nativeError;
     wxChar sqlState[20];
 
 #if wxODBC_BACKWARD_COMPATABILITY
