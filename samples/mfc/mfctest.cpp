@@ -32,12 +32,14 @@
 //     normally this shouldn't be needed any longer, i.e. it works without
 //     it for me (VZ)
 //
-// (2) You should link with MFC DLL, not static libraries
-
-// suppress warning about WINVER not being defined from MFC
-#ifndef WINVER
-#define WINVER 0x7000
-#endif
+// (2) You should link with MFC DLL, not static libraries: or, to use static
+//     run-time libraries, use this command for both building wxWidgets and
+//     the sample:
+//
+//     nmake -f makefile.vc BUILD=debug SHARED=0 DEBUG_RUNTIME_LIBS=0 RUNTIME_LIBS=static all
+//
+//     Unless the run-time library settings match for wxWidgets and MFC, you will get
+//     link errors for symbols such as __mbctype, __argc, and __argv 
 
 #include "stdafx.h"
 
