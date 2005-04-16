@@ -93,6 +93,14 @@ methodOverrideMap = {
                           SendMsg(%s, data.GetDataLen(), (long)data.GetData());''',
                        0),
 
+    'AppendText' : (0,
+                 'void %s(const wxString& text);',
+
+                 '''void %s(const wxString& text) {
+                    wxWX2MBbuf buf = (wxWX2MBbuf)wx2stc(text);
+                    SendMsg(%s, strlen(buf), (long)(const char*)buf);''',
+                 0),
+
     'GetViewWS' : ( 'GetViewWhiteSpace', 0, 0, 0),
     'SetViewWS' : ( 'SetViewWhiteSpace', 0, 0, 0),
 
