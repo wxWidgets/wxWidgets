@@ -234,6 +234,7 @@ if sys.platform[:6] == "darwin":
 if os.name == 'nt':
     WXPORT = 'msw'
 
+WXPYTHON_TYPE_TABLE = '_wxPython_table'
 
 #----------------------------------------------------------------------
 # Check for build flags on the command line
@@ -679,7 +680,7 @@ if os.name == 'nt':
                 (WXPLAT, None),
                 ('WXUSINGDLL', '1'),
 
-                ('SWIG_TYPE_TABLE', '_wxPython_table'),
+                ('SWIG_TYPE_TABLE', WXPYTHON_TYPE_TABLE),
                 ('WXP_USE_THREAD', '1'),
                 ]
 
@@ -733,7 +734,7 @@ if os.name == 'nt':
 elif os.name == 'posix':
     WXDIR = '..'
     includes = ['include', 'src']
-    defines = [('SWIG_TYPE_TABLE', 'wxPython_type_table'),
+    defines = [('SWIG_TYPE_TABLE', WXPYTHON_TYPE_TABLE),
                ('HAVE_CONFIG_H', None),
                ('WXP_USE_THREAD', '1'),
                ]
