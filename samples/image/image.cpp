@@ -321,9 +321,9 @@ public:
             {
                 // note that RGB must be premultiplied by alpha
                 unsigned a = (Data::Iterator::ChannelType)((x*255.)/REAL_SIZE);
-                p.Red() = r * alpha / 256;
-                p.Green() = g * alpha / 256;
-                p.Blue() = b * alpha / 256;
+                p.Red() = r * a / 256;
+                p.Green() = g * a / 256;
+                p.Blue() = b * a / 256;
                 p.Alpha() = a;
 
                 ++p; // same as p.OffsetX(1)
