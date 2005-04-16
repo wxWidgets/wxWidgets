@@ -242,10 +242,9 @@ wxString wxFileTypeImpl::GetCommand(const wxString& verb) const
     if(verb == wxT("open"))
     {
         ICMapEntry entry;
-        OSStatus status = ICGetMapEntry( (ICInstance) m_manager->m_hIC, 
-                                     (Handle) m_manager->m_hDatabase, 
-                                     m_lIndex, &entry);
-        wxASSERT( status == noErr );
+        ICGetMapEntry( (ICInstance) m_manager->m_hIC, 
+                       (Handle) m_manager->m_hDatabase, 
+                       m_lIndex, &entry);
         
         //Technote 1002 is a godsend in launching apps :)
         //The entry in the mimetype database only contains the app
@@ -269,10 +268,9 @@ bool wxFileTypeImpl::GetExtensions(wxArrayString& extensions)
         return false;
     
     ICMapEntry entry;
-    OSStatus status = ICGetMapEntry( (ICInstance) m_manager->m_hIC, 
-                                     (Handle) m_manager->m_hDatabase, 
-                                     m_lIndex, &entry);
-    wxASSERT( status == noErr );
+    ICGetMapEntry( (ICInstance) m_manager->m_hIC, 
+                   (Handle) m_manager->m_hDatabase, 
+                   m_lIndex, &entry);
     
     //entry has period in it
     wxString sCurrentExtension = wxMacMakeStringFromPascal(entry.extension);
@@ -286,10 +284,9 @@ bool wxFileTypeImpl::GetMimeType(wxString *mimeType) const
         return false;
     
     ICMapEntry entry;
-    OSStatus status = ICGetMapEntry( (ICInstance) m_manager->m_hIC, 
-                                     (Handle) m_manager->m_hDatabase, 
-                                     m_lIndex, &entry);
-    wxASSERT( status == noErr );
+    ICGetMapEntry( (ICInstance) m_manager->m_hIC, 
+                   (Handle) m_manager->m_hDatabase, 
+                   m_lIndex, &entry);
     
     *mimeType = wxMacMakeStringFromPascal(entry.MIMEType);
     return true;
@@ -321,10 +318,9 @@ bool wxFileTypeImpl::GetDescription(wxString *desc) const
         return false;
     
     ICMapEntry entry;
-    OSStatus status = ICGetMapEntry( (ICInstance) m_manager->m_hIC, 
-                                     (Handle) m_manager->m_hDatabase, 
-                                     m_lIndex, &entry);
-    wxASSERT( status == noErr );
+    ICGetMapEntry( (ICInstance) m_manager->m_hIC, 
+                   (Handle) m_manager->m_hDatabase, 
+                   m_lIndex, &entry);
     
     *desc = wxString((char*)entry.entryName, wxConvLocal);
     return true;
