@@ -60,6 +60,7 @@ typedef long int SDWORD;
 typedef short int SWORD;
 typedef unsigned long int UDWORD;
 typedef unsigned short int UWORD;
+typedef long SQLINTEGER;
 
 typedef void FAR *PTR;
 typedef void FAR *HENV;
