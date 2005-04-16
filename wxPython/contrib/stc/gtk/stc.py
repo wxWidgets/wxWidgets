@@ -2884,6 +2884,90 @@ class StyledTextCtrl(_core.Control):
         """AppendTextRaw(self, char text)"""
         return _stc.StyledTextCtrl_AppendTextRaw(*args, **kwargs)
 
+    # These functions are inserted as methods in to the Python StyleTextCtrl class
+
+        
+        
+    def AddTextUTF8(self, text):
+        """Add UTF8 encoded text to the document at the current position."""
+        if not wx.USE_UNICODE:
+            u = text.decode('utf-8')
+            text = u.encode(wx.GetDefaultPyEncoding())
+        self.AddTextRaw(text)
+
+        
+    def InsertTextUTF8(self, pos, text):
+        """Insert UTF8 encoded text at a position."""
+        if not wx.USE_UNICODE:
+            u = text.decode('utf-8')
+            text = u.encode(wx.GetDefaultPyEncoding())
+        self.InsertTextRaw(pos, text)
+
+        
+    def GetCurLineUTF8(self):
+        """
+        Retrieve the text of the line containing the caret, and also the
+        index of the caret on the line.
+        """
+        text, pos = self.GetCurLineRaw()
+        if not wx.USE_UNICODE:
+            u = text.decode(wx.GetDefaultPyEncoding())
+            text = u.encode('utf-8')
+        return text, pos
+
+        
+    def GetLineUTF8(self, line):
+        """Retrieve the contents of a line."""
+        text = self.GetLineRaw(line)
+        if not wx.USE_UNICODE:
+            u = text.decode(wx.GetDefaultPyEncoding())
+            text = u.encode('utf-8')
+        return text
+
+
+    def GetSelectedTextUTF8(self):
+        """Retrieve the selected text."""
+        text = self.GetSelectedTextRaw()
+        if not wx.USE_UNICODE:
+            u = text.decode(wx.GetDefaultPyEncoding())
+            text = u.encode('utf-8')
+        return text
+
+
+    def GetTextRangeUTF8(self, startPos, endPos):
+        """Retrieve a range of text."""
+        text = self.GetTextRangeRaw(startPos, endPos)
+        if not wx.USE_UNICODE:
+            u = text.decode(wx.GetDefaultPyEncoding())
+            text = u.encode('utf-8')
+        return text
+
+
+    def SetTextUTF8(self, text):
+        """Replace the contents of the document with the argument text."""
+        if not wx.USE_UNICODE:
+            u = text.decode('utf-8')
+            text = u.encode(wx.GetDefaultPyEncoding())
+        self.SetTextRaw(text)
+
+
+    def GetTextUTF8(self):
+        """Retrieve all the text in the document."""
+        text = self.GetTextRaw()
+        if not wx.USE_UNICODE:
+            u = text.decode(wx.GetDefaultPyEncoding())
+            text = u.encode('utf-8')
+        return text
+
+
+    def AppendTextUTF8(self, text):
+        """Append a string to the end of the document without changing the selection."""
+        if not wx.USE_UNICODE:
+            u = text.decode('utf-8')
+            text = u.encode(wx.GetDefaultPyEncoding())
+        self.AppendTextRaw(text)
+
+
 
 class StyledTextCtrlPtr(StyledTextCtrl):
     def __init__(self, this):

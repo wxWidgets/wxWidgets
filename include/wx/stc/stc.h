@@ -2947,7 +2947,9 @@ public:
     // Append a string to the end of the document without changing the selection.
     void AppendTextRaw(const char* text);
 
-
+#ifdef SWIG
+    %pythoncode "_stc_utf8_methods.py"
+#endif
 //----------------------------------------------------------------------
 
 

@@ -538,7 +538,9 @@ if BUILD_STC:
     swig_sources = run_swig(['stc.i'], location, GENDIR, PKGDIR,
                             USE_SWIG, swig_force,
                             swig_args + ['-I'+STC_H, '-I'+location],
-                            [opj(STC_H, 'stc.h')] + swig_deps)
+                            [opj(STC_H, 'stc.h'),
+                             opj(location, "_stc_utf8_methods.py"),
+                             ] + swig_deps)
 
     ext = Extension('_stc',
                     swig_sources,

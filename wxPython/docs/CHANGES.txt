@@ -4,9 +4,38 @@ Recent Changes for wxPython
 2.6.0.0
 -------
 
-wxGTK: wx.StaticText can wrap text if the width is set to an explicit
-value. 
+wxMSW: Fixed wx.TransientPopupWindow (and therefore wx.TipWindow) to
+auto-dismiss when the mouse is clicked outside of the popup like it is
+supposed to.
 
+wxMSW: Fixed bug #1167891 wx.Notebook display problem with wx.NB_MULTILINE.
+
+wxMSW: Fixed bad cliping of hidden windows inside of wx.StaticBox.
+
+wxGTK:  The configure flags for selecting GTK+ 1.2.x or 2.x has
+changed slightly.  It is now --with-gtk[=VERSION] where VERSION is
+either '1', '2' or 'any'.  The default is '2'.
+
+wx.stc.StyledTextCtrl:  Added the following methods for alternate ways
+to set and fetch text from the document buffer.  They work similarly
+to the existing methods of the same name, except that they don't go
+through the same string/unicode <--> wxString conversions.  The "Raw"
+methods will do no conversions at all and in a unicode build of wxPython
+the strings will be in the utf-8 encoding and in an ansi build no
+assumption is made about the encoding.  The "UTF8" functions will
+attempt to always get/set utf-8 text, which will always be true in a
+unicode build, and in an ansi build will also be true as long as the
+utf-8 used is compatible with the current encoding.
+
+      AddTextRaw          AddTextUTF8
+      InsertTextRaw       InsertTextUTF8
+      GetCurLineRaw       GetCurLineUTF8
+      GetLineRaw          GetLineUTF8
+      GetSelectedTextRaw  GetSelectedTextUTF8
+      GetTextRangeRaw     GetTextRangeUTF8
+      SetTextRaw          SetTextUTF8
+      GetTextRaw          GetTextUTF8
+      AppendTextRaw       AppendTextUTF8
 
 
 
@@ -21,15 +50,15 @@ wx.grid.Grid: Fixed bug #1163384.  Moved the code that handles
 activating the cell editors to a EVT_CHAR event handler.  This is done
 so the character inserted into the editor will be the "cooked" char
 value (including accented or composed keys) rather than the raw code
-provided by the EVT_KEY_DOWN event.  
+provided by the EVT_KEY_DOWN event.
 
 Added orient parameter to wx.MDIParentFrame.Tile()
 
 wxMSW: wxTextCtrl with wx.TE_RICH2 style now uses RichEdit 4.1 if
-available. 
+available.
 
 Added GetCount, GetCountRGB, and GetCountColour methods to
-wx.ImageHistogram. 
+wx.ImageHistogram.
 
 wxMSW: wx.Window.Refresh changed to explicitly refresh all children as
 well as the parent.  Previously it was implicitly done because parents
@@ -47,7 +76,7 @@ crash when using nVidia cards (patch 1155132)
 
 wx.lib.mixins.listctrl: Patches from Toni Brkic:
    * Bugfix for TextEditMixin when the view can't be scrolled
-   * Enhancement for ListCtrlAutoWidthMixin, allowing it to manage 
+   * Enhancement for ListCtrlAutoWidthMixin, allowing it to manage
      the width of any column.
 
 wxMac: removal and reusing toolbar tools like the other platforms is
@@ -94,7 +123,7 @@ Added wx.GetTopLevelWindows() function which returns a copy of the
 list of top-level windows that currently exist in the application.
 
 Updated docview library modules and sample apps from the ActiveGrid
-folks. 
+folks.
 
 Added the ActiveGrid IDE as a sample application.
 
@@ -116,7 +145,7 @@ consecutive (there may be intervening controls). Without this fix, an
 out-of-sync assert is generated when clicking on a radio button and
 then calling GetValue().
 
-Some XRC changes: 
+Some XRC changes:
     - Added 'icon' property to wxFrame and wxDialog
     - No longer ignores menu bitmaps on non-MSW platforms
     - Notebook page bitmaps are now supported
@@ -192,7 +221,7 @@ focus (a slightly modified patch 1084592.)
 
 Added wx.EXEC_NODISABLE flag for wx.Execute, which will prevent all
 the app's windows being disabled while a synchronous child process is
-running. 
+running.
 
 wxMSW: Much work to correct painting (or leaving transparent) of
 control backgrounds, properly using background themes on XP, etc.
@@ -314,7 +343,7 @@ erased and repainted, giving a ghostly gradual-redraw effect). May be
 a temporary 'fix' until properly fixed before 2.6.
 
 wxMac:  Toolbar is now more native looking with borderless toolbar
-buttons.  
+buttons.
 
 wxMac: Switched wx.Bitmap to use newer Quartz object types and APIs
 internally.  This results in faster display and better alpha support.
@@ -336,7 +365,7 @@ Added modules from Peter Yared and Morgan Hua that implement the wx
 Doc/View framework in pure Python code.  See wx.lib.docview for the
 base implementation and wx.lib.pydocview for Python-specific
 extensions.  There are also a couple sample applications located in
-samples/docview. 
+samples/docview.
 
 Added GetBitmap, GetIcon to wx.ImageList.
 
@@ -362,10 +391,10 @@ indicate that the entire virtual area is covered simply add a
 style=wx.BUFFER_VIRTUAL_AREA parameter.
 
 wx.gizmos.TreeListCtrl:  Add support for the EVT_TREE_ITEM_GETTOOLTIP
-event. 
+event.
 
 Added Resize, SetRGBRect, Size, and GetOrFindMaskColour methods to
-wx.Image. 
+wx.Image.
 
 Added wx.Rect.IsEmpty
 
@@ -394,11 +423,11 @@ wxMac fix for not sending a native click to a control if it is not
 enabled (does an enable itself)
 
 Added wx.lib.ogl.DrawnShape, and fixed various little bugs in the new
-OGL. 
+OGL.
 
 Added support to XRC and XRCed for the 3-state checkbox flags and also
 for wx.ToggleButton.  Updated the generic window styles supported by
-XRCed. 
+XRCed.
 
 It is now possible to create "stock" buttons.  Basically this means
 that you only have to provide one of the stock IDs (and either an
@@ -410,7 +439,7 @@ button will be used.  For example, the following will result in a
 button with "Cancel" as the label and if run on wxGTK2 then there will
 also be an image of a red X::
 
-       b = wx.Button(parent, wx.ID_CANCEL) 
+       b = wx.Button(parent, wx.ID_CANCEL)
 
 
 Added wx.lib.ticker.Ticker class from Chris Mellon.
@@ -532,7 +561,7 @@ PyPlot updates from Gordon Williams:
    - Removed FloatDCWrapper for conversion to ints and ints in
      arguments
    - Imported modules given leading underscore to name.
-   - Added Cursor Line Tracking and User Point Labels. 
+   - Added Cursor Line Tracking and User Point Labels.
    - Demo for Cursor Line Tracking and Point Labels.
    - Size of plot preview frame adjusted to show page better.
    - Added helper functions PositionUserToScreen and
@@ -558,13 +587,13 @@ Migrarion Guide for more information.
 Applied patch from Pim Van Heuven that modifies 4 files:
     - wxPython/demo/ListCtrl_edit.py (new demo)
     - wxPython/demo/Main.py (include new demo in demo app)
-    - wxPython/wx/lib/mixins/listctrl.py (several improvements to 
+    - wxPython/wx/lib/mixins/listctrl.py (several improvements to
       TextEditMixin)
     - wxPython/wx/lib/wxpTag.py (some small fixes)
 
 Added (thanks to Kevin Ollivier!) wrappers for wx.WebKitCtrl for the
 OSX build.  Other platforms will raise an exception if you try to use
-it. 
+it.
 
 wxPython on OSX can now be built in Unicode mode, can support multiple
 version installs, and comes with an uninstaller script.
@@ -601,10 +630,10 @@ Predominantly a bug-fix release.
     of property panels, since Reparent on wxMac is not implemented.
 
   * Add support for wxTAB_TRAVERSAL to the XRC handler for
-    wxScrolledWindow. 
+    wxScrolledWindow.
 
   * Add support for all wxListBox styles to the XRC handler for
-    wxCheckListBox. 
+    wxCheckListBox.
 
   * Fix for wx.Listbook.DeleteAllPages to really delete everything.
 
@@ -637,7 +666,7 @@ The changes that implemented the incompatible wx.DC methods in 2.5.1.5
 have been reverted.  The wx.DC methods are now compatible with the 2.4
 implemetation.  In addition a set of renamed methods have been added
 that take wx.Point and/or wx.Size objects instead of individual
-parameters. 
+parameters.
 
 Added wx.lib.mixins.listctrl.TextEditMixin, a mixin class that allows
 all columns of a wx.ListCtrl in report mode to be edited.
@@ -818,7 +847,7 @@ menu for controlling this setting if you would like to experiment with
 it.
 
 Updated wx.lib.calendar with many fixes and enhancements from Joerg
-"Adi" Sieker. 
+"Adi" Sieker.
 
 Added wx.Display and wx.VideoMode.
 
@@ -2356,7 +2385,7 @@ compatibility with the current wxWindows.
 
 What's new in 0.5.0
 -------------------
-Changed the import semantics from ``"from wxPython import *"`` to 
+Changed the import semantics from ``"from wxPython import *"`` to
 ``"from wxPython.wx import *"``  This is for people who are worried about
 namespace pollution, they can use "from wxPython import wx" and then
 prefix all the wxPython identifiers with "wx."
