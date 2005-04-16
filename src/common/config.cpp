@@ -293,23 +293,24 @@ wxConfigPathChanger::~wxConfigPathChanger()
 // understands both Unix and Windows (but only under Windows) environment
 // variables expansion: i.e. $var, $(var) and ${var} are always understood
 // and in addition under Windows %var% is also.
+
+// don't change the values the enum elements: they must be equal
+// to the matching [closing] delimiter.
+enum Bracket
+{
+  Bracket_None,
+  Bracket_Normal  = ')',
+  Bracket_Curly   = '}',
+#ifdef  __WXMSW__
+  Bracket_Windows = '%',    // yeah, Windows people are a bit strange ;-)
+#endif
+  Bracket_Max
+};
+
 wxString wxExpandEnvVars(const wxString& str)
 {
   wxString strResult;
   strResult.Alloc(str.Len());
-
-  // don't change the values the enum elements: they must be equal
-  // to the matching [closing] delimiter.
-  enum Bracket
-  {
-    Bracket_None,
-    Bracket_Normal  = ')',
-    Bracket_Curly   = '}',
-#ifdef  __WXMSW__
-    Bracket_Windows = '%',    // yeah, Windows people are a bit strange ;-)
-#endif
-    Bracket_Max
-  };
 
   size_t m;
   for ( size_t n = 0; n < str.Len(); n++ ) {
