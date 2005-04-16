@@ -97,11 +97,11 @@ place, then do the same for wxPython.
 
                      --enable-monolithic \
 
-   By default GTK2 will be selected if its development pacakge is
-   installed on your build system.  To force the use of GTK 1.2.x
-   instead add this flag::
+   By default GTK 2.x will be used for the build.  If you woudl rather
+   use GTK 1.2.x for some reason then you can force configure to use
+   it by changing the --with-gtk flag to specify it like this::
 
-                      --disable-gtk2 \
+                      --with-gtk=1 \
 
    To make the wxWidgets build be unicode enabled (strongly
    recommended if you are building with GTK2) then add the following.
