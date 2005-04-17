@@ -141,7 +141,7 @@ wxDatePickerCtrl::Create(wxWindow *parent,
     if ( !MSWCreateControl(DATETIMEPICK_CLASS, wxEmptyString, pos, size) )
         return false;
 
-    if ( dt.IsValid() )
+    if ( dt.IsValid() || (style & wxDP_ALLOWNONE) )
         SetValue(dt);
 
     return true;
