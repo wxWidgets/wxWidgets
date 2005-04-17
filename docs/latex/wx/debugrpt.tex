@@ -142,22 +142,28 @@ The same as \helpref{AddDump(Context\_Exception)}{wxdebugreportadddump}.
 
 \membersection{wxDebugReport::AddFile}\label{wxdebugreportaddfile}
 
-\func{void}{AddFile}{\param{const wxString\& }{name}, \param{const wxString\& }{description}}
+\func{void}{AddFile}{\param{const wxString\& }{filename}, \param{const wxString\& }{description}}
 
-Add another file to the report: the file must already exist on disk. Its name
-is relative to \helpref{GetDirectory()}{wxdebugreportgetdirectory}.
+Add another file to the report. If \arg{filename} is an absolute path, it is
+copied to a file in the debug report directory with the same name. Otherwise
+the file should already exist in this directory
 
-\arg{description} only exists to be shown to the user in the report summary
+\arg{description} only exists to be displayed to the user in the report summary
 shown by \helpref{wxDebugReportPreview}{wxdebugreportpreview}.
+
+\wxheading{See also }
+
+\helpref{GetDirectory()}{wxdebugreportgetdirectory},\\
+\helpref{AddText()}{wxdebugreportaddtext}
 
 
 \membersection{wxDebugReport::AddText}\label{wxdebugreportaddtext}
 
-\func{bool}{AddText}{\param{const wxString\& }{name}, \param{const wxString\& }{text}, \param{const wxString\& }{description}}
+\func{bool}{AddText}{\param{const wxString\& }{filename}, \param{const wxString\& }{text}, \param{const wxString\& }{description}}
 
 This is a convenient wrapper around \helpref{AddFile}{wxdebugreportaddfile}. It
 creates the file with the given \arg{name} and writes \arg{text} to it, then
-adds the file to the report.
+adds the file to the report. The \arg{filename} shouldn't contain the path.
 
 Returns \true if file could be added successfully, \false if an IO error
 occured.
