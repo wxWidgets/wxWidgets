@@ -44,6 +44,10 @@ Most popular C++ compilers are supported; see the install.txt
 file for each platform (available via docs/html/index.htm) for details.
 See also http://www.wxwidgets.org/platform.htm.
 
+The 2.6 series is the last to fully support GTK+ 1.2, and Mac OS
+9/Mac OS 10.2 and below. wxWidgets 2.7 and above will focus on
+GTK+ 2, and Mac OS 10.3 and above.
+
 Files
 -----
 
