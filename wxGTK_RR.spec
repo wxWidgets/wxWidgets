@@ -82,6 +82,13 @@ wxWidgets is a free C++ library for cross-platform GUI development.
 With wxWidgets, you can create applications for different GUIs (GTK+,
 Motif, MS Windows, MacOS X, Windows CE, GPE) from the same source code.
 
+%package -n wx-i28n
+Summary: The translations for the wxWidgets library.
+Group: X11/Libraries
+
+%description -n wx-i28n
+The translations files for the wxWidgets library.
+
 %package devel
 Summary: The GTK+ %{gtkver} port of the wxWidgets library
 Group: X11/Libraries
@@ -112,7 +119,7 @@ lists, arrays), portable wrappers around many OS-specific funstions (file
 operations, time/date manipulations, threads, processes, sockets, shared
 library loading) as well as other utility classes (streams, archive and
 compression). wxBase currently supports Win32, most Unix variants (Linux, 
-FreeBSD, Solaris, HP-UX) and MacOS X 10.3.
+FreeBSD, Solaris, HP-UX) and MacOS X (Carbon and Mach-0).
 
 %package -n %{wxbasename}-devel
 Summary: wxBase library, header files.
@@ -527,13 +534,7 @@ ln -sf %{_libdir}/wx/config/%{wxconfig} %{_bindir}/%{wxconfiglink}
 /sbin/ldconfig
 
 %preun devel
-if test -f %{_bindir}/wx-config -a -f /usr/bin/md5sum ; then
-    SUM1=`md5sum %{_libdir}/wx/config/%{wxconfig} | cut -c 0-32`
-    SUM2=`md5sum %{_bindir}/wx-config | cut -c 0-32`
-    if test "x$SUM1" = "x$SUM2" ; then
-        rm -f %{_bindir}/wx-config
-    fi
-fi
+rm -f %{_bindir}/wx-config
 rm -f %{_bindir}/%{wxconfiglink}
 
 %post -n %{wxbasename}
@@ -584,6 +585,9 @@ rm -f %{_bindir}/%{wxbaseconfiglink}
 %{_libdir}/libwx_%{buildname}_qa-%{ver2}.so.*
 %{_libdir}/libwx_%{buildname}_xrc-%{ver2}.so.*
 
+%files -n wx-i28n
+%defattr(-,root,root)
+%{_datadir}/locale/*/*/*
 
 %files devel -f core-headers.files
 %defattr(-,root,root)
@@ -619,7 +623,6 @@ rm -f %{_bindir}/%{wxbaseconfiglink}
 %files -n %{wxbasename}
 %defattr(-,root,root)
 %{_libdir}/libwx_base*-%{ver2}.so.*
-#%{_datadir}/locale/*/*/*
 
 %files -n %{wxbasename}-devel -f wxbase-headers.paths
 %defattr (-,root,root)
