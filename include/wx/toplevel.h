@@ -206,6 +206,17 @@ public:
     // do the window-specific processing after processing the update event
     virtual void DoUpdateWindowUI(wxUpdateUIEvent& event) ;
 
+    // Reserved for future use
+    virtual void ReservedTopLevelWindowFunc1() {}
+    virtual void ReservedTopLevelWindowFunc2() {}
+    virtual void ReservedTopLevelWindowFunc3() {}
+    virtual void ReservedTopLevelWindowFunc4() {}
+    virtual void ReservedTopLevelWindowFunc5() {}
+    virtual void ReservedTopLevelWindowFunc6() {}
+    virtual void ReservedTopLevelWindowFunc7() {}
+    virtual void ReservedTopLevelWindowFunc8() {}
+    virtual void ReservedTopLevelWindowFunc9() {}
+
 protected:
     // the frame client to screen translation should take account of the
     // toolbar which may shift the origin of the client area
