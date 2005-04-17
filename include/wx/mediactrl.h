@@ -270,6 +270,16 @@ public:
     virtual wxMediaState GetState()
     {   return wxMEDIASTATE_STOPPED;    }
 
+    virtual void RESERVED1() {}
+    virtual void RESERVED2() {}
+    virtual void RESERVED3() {}
+    virtual void RESERVED4() {}
+    virtual void RESERVED5() {}
+    virtual void RESERVED6() {}
+    virtual void RESERVED7() {}
+    virtual void RESERVED8() {}
+    virtual void RESERVED9() {}
+
     DECLARE_DYNAMIC_CLASS(wxMediaBackend)
 };
 
