@@ -330,6 +330,15 @@ void wxStaticBox::PaintBackground(wxDC& dc, const RECT& rc)
     ::FillRect(GetHdcOf(dc), &rc, hbr);
 }
 
+void wxStaticBox::PaintForeground(wxDC& dc, const RECT& WXUNUSED(rc))
+{
+    // NB: neither setting the text colour nor transparent background mode
+    //     doesn't change anything: the static box def window proc still
+    //     draws the label in its own colours, so if we want to have control
+    //     over this we really have to draw everything ourselves
+    MSWDefWindowProc(WM_PAINT, (WPARAM)GetHdcOf(dc), 0);
+}
+
 void wxStaticBox::OnPaint(wxPaintEvent& WXUNUSED(event))
 {
     RECT rc;
@@ -341,13 +350,7 @@ void wxStaticBox::OnPaint(wxPaintEvent& WXUNUSED(event))
     memdc.SelectObject(bitmap);
 
     PaintBackground(memdc, rc);
-
-    // NB: neither setting the text colour nor transparent background mode
-    //     doesn't change anything: the static box def window proc still
-    //     draws the label in its own colours, so if we want to have control
-    //     over this we really have to draw everything ourselves
-    MSWDefWindowProc(WM_PAINT, (WPARAM)GetHdcOf(memdc), 0);
-
+    PaintForeground(memdc, rc);
 
     // now only blit the static box border itself, not the interior, to avoid
     // flicker when background is drawn below

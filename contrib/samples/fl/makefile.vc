@@ -18,8 +18,8 @@ OBJS = \
 LIBDIRNAME = .\..\..\..\lib\vc_$(LIBTYPE_SUFFIX)$(CFG)
 SETUPHDIR = \
 	$(LIBDIRNAME)\$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)
-FL_DEMO1_CXXFLAGS = /M$(__RUNTIME_LIBS_8)$(__DEBUGRUNTIME_3) /DWIN32 \
-	$(__DEBUGINFO) /Fd$(OBJS)\fl_demo1.pdb $(____DEBUGRUNTIME_2_p) \
+FL_DEMO1_CXXFLAGS = /M$(__RUNTIME_LIBS_8)$(__DEBUGRUNTIME) /DWIN32 \
+	$(__DEBUGINFO) /Fd$(OBJS)\fl_demo1.pdb $(____DEBUGRUNTIME) \
 	$(__OPTIMIZEFLAG) $(__NO_VC_CRTDBG_p) /D__WXMSW__ $(__WXUNIV_DEFINE_p) \
 	$(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) \
 	$(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p) /I.\..\..\..\include \
@@ -29,8 +29,8 @@ FL_DEMO1_CXXFLAGS = /M$(__RUNTIME_LIBS_8)$(__DEBUGRUNTIME_3) /DWIN32 \
 FL_DEMO1_OBJECTS =  \
 	$(OBJS)\fl_demo1_fl_demo1.obj \
 	$(OBJS)\fl_demo1_fl_demo1.res
-FL_DEMO2_CXXFLAGS = /M$(__RUNTIME_LIBS_22)$(__DEBUGRUNTIME_17) /DWIN32 \
-	$(__DEBUGINFO) /Fd$(OBJS)\fl_demo2.pdb $(____DEBUGRUNTIME_16_p) \
+FL_DEMO2_CXXFLAGS = /M$(__RUNTIME_LIBS_22)$(__DEBUGRUNTIME) /DWIN32 \
+	$(__DEBUGINFO) /Fd$(OBJS)\fl_demo2.pdb $(____DEBUGRUNTIME) \
 	$(__OPTIMIZEFLAG) $(__NO_VC_CRTDBG_p) /D__WXMSW__ $(__WXUNIV_DEFINE_p) \
 	$(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) \
 	$(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p) /I.\..\..\..\include \
@@ -40,8 +40,8 @@ FL_DEMO2_CXXFLAGS = /M$(__RUNTIME_LIBS_22)$(__DEBUGRUNTIME_17) /DWIN32 \
 FL_DEMO2_OBJECTS =  \
 	$(OBJS)\fl_demo2_fl_demo2.obj \
 	$(OBJS)\fl_demo2_fl_demo2.res
-FL_SAMPLE1_CXXFLAGS = /M$(__RUNTIME_LIBS_36)$(__DEBUGRUNTIME_31) /DWIN32 \
-	$(__DEBUGINFO) /Fd$(OBJS)\fl_sample1.pdb $(____DEBUGRUNTIME_30_p) \
+FL_SAMPLE1_CXXFLAGS = /M$(__RUNTIME_LIBS_36)$(__DEBUGRUNTIME) /DWIN32 \
+	$(__DEBUGINFO) /Fd$(OBJS)\fl_sample1.pdb $(____DEBUGRUNTIME) \
 	$(__OPTIMIZEFLAG) $(__NO_VC_CRTDBG_p) /D__WXMSW__ $(__WXUNIV_DEFINE_p) \
 	$(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) \
 	$(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p) /I.\..\..\..\include \
@@ -51,8 +51,8 @@ FL_SAMPLE1_CXXFLAGS = /M$(__RUNTIME_LIBS_36)$(__DEBUGRUNTIME_31) /DWIN32 \
 FL_SAMPLE1_OBJECTS =  \
 	$(OBJS)\fl_sample1_fl_sample1.obj \
 	$(OBJS)\fl_sample1_fl_sample1.res
-FL_SAMPLE2_CXXFLAGS = /M$(__RUNTIME_LIBS_50)$(__DEBUGRUNTIME_45) /DWIN32 \
-	$(__DEBUGINFO) /Fd$(OBJS)\fl_sample2.pdb $(____DEBUGRUNTIME_44_p) \
+FL_SAMPLE2_CXXFLAGS = /M$(__RUNTIME_LIBS_50)$(__DEBUGRUNTIME) /DWIN32 \
+	$(__DEBUGINFO) /Fd$(OBJS)\fl_sample2.pdb $(____DEBUGRUNTIME) \
 	$(__OPTIMIZEFLAG) $(__NO_VC_CRTDBG_p) /D__WXMSW__ $(__WXUNIV_DEFINE_p) \
 	$(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) \
 	$(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p) /I.\..\..\..\include \
@@ -62,8 +62,8 @@ FL_SAMPLE2_CXXFLAGS = /M$(__RUNTIME_LIBS_50)$(__DEBUGRUNTIME_45) /DWIN32 \
 FL_SAMPLE2_OBJECTS =  \
 	$(OBJS)\fl_sample2_fl_sample2.obj \
 	$(OBJS)\fl_sample2_fl_sample2.res
-FL_SAMPLE3_CXXFLAGS = /M$(__RUNTIME_LIBS_64)$(__DEBUGRUNTIME_59) /DWIN32 \
-	$(__DEBUGINFO) /Fd$(OBJS)\fl_sample3.pdb $(____DEBUGRUNTIME_58_p) \
+FL_SAMPLE3_CXXFLAGS = /M$(__RUNTIME_LIBS_64)$(__DEBUGRUNTIME) /DWIN32 \
+	$(__DEBUGINFO) /Fd$(OBJS)\fl_sample3.pdb $(____DEBUGRUNTIME) \
 	$(__OPTIMIZEFLAG) $(__NO_VC_CRTDBG_p) /D__WXMSW__ $(__WXUNIV_DEFINE_p) \
 	$(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) \
 	$(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p) /I.\..\..\..\include \
@@ -109,65 +109,11 @@ EXTRALIBS_FOR_BASE =
 !if "$(MONOLITHIC)" == "1"
 EXTRALIBS_FOR_BASE =  
 !endif
-!if "$(DEBUG_RUNTIME_LIBS)" == "0"
-____DEBUGRUNTIME_2_p = 
-!endif
-!if "$(DEBUG_RUNTIME_LIBS)" == "1"
-____DEBUGRUNTIME_2_p = /D_DEBUG
-!endif
-!if "$(DEBUG_RUNTIME_LIBS)" == "default"
-____DEBUGRUNTIME_2_p = $(____DEBUGINFO)
-!endif
-!if "$(DEBUG_RUNTIME_LIBS)" == "0"
-____DEBUGRUNTIME_2_p_1 = 
-!endif
-!if "$(DEBUG_RUNTIME_LIBS)" == "1"
-____DEBUGRUNTIME_2_p_1 = /d _DEBUG
-!endif
-!if "$(DEBUG_RUNTIME_LIBS)" == "default"
-____DEBUGRUNTIME_2_p_1 = $(____DEBUGINFO_3)
-!endif
-!if "$(DEBUG_RUNTIME_LIBS)" == "0"
-__DEBUGRUNTIME_3 = 
-!endif
-!if "$(DEBUG_RUNTIME_LIBS)" == "1"
-__DEBUGRUNTIME_3 = d
-!endif
-!if "$(DEBUG_RUNTIME_LIBS)" == "default"
-__DEBUGRUNTIME_3 = $(__DEBUGINFO_8)
-!endif
 !if "$(RUNTIME_LIBS)" == "dynamic"
 __RUNTIME_LIBS_8 = D
 !endif
 !if "$(RUNTIME_LIBS)" == "static"
 __RUNTIME_LIBS_8 = $(__THREADSFLAG)
-!endif
-!if "$(DEBUG_RUNTIME_LIBS)" == "0"
-____DEBUGRUNTIME_16_p = 
-!endif
-!if "$(DEBUG_RUNTIME_LIBS)" == "1"
-____DEBUGRUNTIME_16_p = /D_DEBUG
-!endif
-!if "$(DEBUG_RUNTIME_LIBS)" == "default"
-____DEBUGRUNTIME_16_p = $(____DEBUGINFO)
-!endif
-!if "$(DEBUG_RUNTIME_LIBS)" == "0"
-____DEBUGRUNTIME_16_p_1 = 
-!endif
-!if "$(DEBUG_RUNTIME_LIBS)" == "1"
-____DEBUGRUNTIME_16_p_1 = /d _DEBUG
-!endif
-!if "$(DEBUG_RUNTIME_LIBS)" == "default"
-____DEBUGRUNTIME_16_p_1 = $(____DEBUGINFO_3)
-!endif
-!if "$(DEBUG_RUNTIME_LIBS)" == "0"
-__DEBUGRUNTIME_17 = 
-!endif
-!if "$(DEBUG_RUNTIME_LIBS)" == "1"
-__DEBUGRUNTIME_17 = d
-!endif
-!if "$(DEBUG_RUNTIME_LIBS)" == "default"
-__DEBUGRUNTIME_17 = $(__DEBUGINFO_8)
 !endif
 !if "$(RUNTIME_LIBS)" == "dynamic"
 __RUNTIME_LIBS_22 = D
@@ -175,98 +121,17 @@ __RUNTIME_LIBS_22 = D
 !if "$(RUNTIME_LIBS)" == "static"
 __RUNTIME_LIBS_22 = $(__THREADSFLAG)
 !endif
-!if "$(DEBUG_RUNTIME_LIBS)" == "0"
-____DEBUGRUNTIME_30_p = 
-!endif
-!if "$(DEBUG_RUNTIME_LIBS)" == "1"
-____DEBUGRUNTIME_30_p = /D_DEBUG
-!endif
-!if "$(DEBUG_RUNTIME_LIBS)" == "default"
-____DEBUGRUNTIME_30_p = $(____DEBUGINFO)
-!endif
-!if "$(DEBUG_RUNTIME_LIBS)" == "0"
-____DEBUGRUNTIME_30_p_1 = 
-!endif
-!if "$(DEBUG_RUNTIME_LIBS)" == "1"
-____DEBUGRUNTIME_30_p_1 = /d _DEBUG
-!endif
-!if "$(DEBUG_RUNTIME_LIBS)" == "default"
-____DEBUGRUNTIME_30_p_1 = $(____DEBUGINFO_3)
-!endif
-!if "$(DEBUG_RUNTIME_LIBS)" == "0"
-__DEBUGRUNTIME_31 = 
-!endif
-!if "$(DEBUG_RUNTIME_LIBS)" == "1"
-__DEBUGRUNTIME_31 = d
-!endif
-!if "$(DEBUG_RUNTIME_LIBS)" == "default"
-__DEBUGRUNTIME_31 = $(__DEBUGINFO_8)
-!endif
 !if "$(RUNTIME_LIBS)" == "dynamic"
 __RUNTIME_LIBS_36 = D
 !endif
 !if "$(RUNTIME_LIBS)" == "static"
 __RUNTIME_LIBS_36 = $(__THREADSFLAG)
 !endif
-!if "$(DEBUG_RUNTIME_LIBS)" == "0"
-____DEBUGRUNTIME_44_p = 
-!endif
-!if "$(DEBUG_RUNTIME_LIBS)" == "1"
-____DEBUGRUNTIME_44_p = /D_DEBUG
-!endif
-!if "$(DEBUG_RUNTIME_LIBS)" == "default"
-____DEBUGRUNTIME_44_p = $(____DEBUGINFO)
-!endif
-!if "$(DEBUG_RUNTIME_LIBS)" == "0"
-____DEBUGRUNTIME_44_p_1 = 
-!endif
-!if "$(DEBUG_RUNTIME_LIBS)" == "1"
-____DEBUGRUNTIME_44_p_1 = /d _DEBUG
-!endif
-!if "$(DEBUG_RUNTIME_LIBS)" == "default"
-____DEBUGRUNTIME_44_p_1 = $(____DEBUGINFO_3)
-!endif
-!if "$(DEBUG_RUNTIME_LIBS)" == "0"
-__DEBUGRUNTIME_45 = 
-!endif
-!if "$(DEBUG_RUNTIME_LIBS)" == "1"
-__DEBUGRUNTIME_45 = d
-!endif
-!if "$(DEBUG_RUNTIME_LIBS)" == "default"
-__DEBUGRUNTIME_45 = $(__DEBUGINFO_8)
-!endif
 !if "$(RUNTIME_LIBS)" == "dynamic"
 __RUNTIME_LIBS_50 = D
 !endif
 !if "$(RUNTIME_LIBS)" == "static"
 __RUNTIME_LIBS_50 = $(__THREADSFLAG)
-!endif
-!if "$(DEBUG_RUNTIME_LIBS)" == "0"
-____DEBUGRUNTIME_58_p = 
-!endif
-!if "$(DEBUG_RUNTIME_LIBS)" == "1"
-____DEBUGRUNTIME_58_p = /D_DEBUG
-!endif
-!if "$(DEBUG_RUNTIME_LIBS)" == "default"
-____DEBUGRUNTIME_58_p = $(____DEBUGINFO)
-!endif
-!if "$(DEBUG_RUNTIME_LIBS)" == "0"
-____DEBUGRUNTIME_58_p_1 = 
-!endif
-!if "$(DEBUG_RUNTIME_LIBS)" == "1"
-____DEBUGRUNTIME_58_p_1 = /d _DEBUG
-!endif
-!if "$(DEBUG_RUNTIME_LIBS)" == "default"
-____DEBUGRUNTIME_58_p_1 = $(____DEBUGINFO_3)
-!endif
-!if "$(DEBUG_RUNTIME_LIBS)" == "0"
-__DEBUGRUNTIME_59 = 
-!endif
-!if "$(DEBUG_RUNTIME_LIBS)" == "1"
-__DEBUGRUNTIME_59 = d
-!endif
-!if "$(DEBUG_RUNTIME_LIBS)" == "default"
-__DEBUGRUNTIME_59 = $(__DEBUGINFO_8)
 !endif
 !if "$(RUNTIME_LIBS)" == "dynamic"
 __RUNTIME_LIBS_64 = D
@@ -287,52 +152,52 @@ __DEBUGINFO =
 __DEBUGINFO = /Zi
 !endif
 !if "$(BUILD)" == "debug" && "$(DEBUG_INFO)" == "default"
-__DEBUGINFO_7 = /DEBUG
+__DEBUGINFO_4 = /DEBUG
 !endif
 !if "$(BUILD)" == "release" && "$(DEBUG_INFO)" == "default"
-__DEBUGINFO_7 = 
+__DEBUGINFO_4 = 
 !endif
 !if "$(DEBUG_INFO)" == "0"
-__DEBUGINFO_7 = 
+__DEBUGINFO_4 = 
 !endif
 !if "$(DEBUG_INFO)" == "1"
-__DEBUGINFO_7 = /DEBUG
+__DEBUGINFO_4 = /DEBUG
 !endif
-!if "$(BUILD)" == "debug" && "$(DEBUG_INFO)" == "default"
-____DEBUGINFO = /D_DEBUG
+!if "$(BUILD)" == "debug" && "$(DEBUG_RUNTIME_LIBS)" == "default"
+____DEBUGRUNTIME = /D_DEBUG
 !endif
-!if "$(BUILD)" == "release" && "$(DEBUG_INFO)" == "default"
-____DEBUGINFO = 
+!if "$(BUILD)" == "release" && "$(DEBUG_RUNTIME_LIBS)" == "default"
+____DEBUGRUNTIME = 
 !endif
-!if "$(DEBUG_INFO)" == "0"
-____DEBUGINFO = 
+!if "$(DEBUG_RUNTIME_LIBS)" == "0"
+____DEBUGRUNTIME = 
 !endif
-!if "$(DEBUG_INFO)" == "1"
-____DEBUGINFO = /D_DEBUG
+!if "$(DEBUG_RUNTIME_LIBS)" == "1"
+____DEBUGRUNTIME = /D_DEBUG
 !endif
-!if "$(BUILD)" == "debug" && "$(DEBUG_INFO)" == "default"
-____DEBUGINFO_3 = /d _DEBUG
+!if "$(BUILD)" == "debug" && "$(DEBUG_RUNTIME_LIBS)" == "default"
+____DEBUGRUNTIME_3 = /d _DEBUG
 !endif
-!if "$(BUILD)" == "release" && "$(DEBUG_INFO)" == "default"
-____DEBUGINFO_3 = 
+!if "$(BUILD)" == "release" && "$(DEBUG_RUNTIME_LIBS)" == "default"
+____DEBUGRUNTIME_3 = 
 !endif
-!if "$(DEBUG_INFO)" == "0"
-____DEBUGINFO_3 = 
+!if "$(DEBUG_RUNTIME_LIBS)" == "0"
+____DEBUGRUNTIME_3 = 
 !endif
-!if "$(DEBUG_INFO)" == "1"
-____DEBUGINFO_3 = /d _DEBUG
+!if "$(DEBUG_RUNTIME_LIBS)" == "1"
+____DEBUGRUNTIME_3 = /d _DEBUG
 !endif
-!if "$(BUILD)" == "debug" && "$(DEBUG_INFO)" == "default"
-__DEBUGINFO_8 = d
+!if "$(BUILD)" == "debug" && "$(DEBUG_RUNTIME_LIBS)" == "default"
+__DEBUGRUNTIME = d
 !endif
-!if "$(BUILD)" == "release" && "$(DEBUG_INFO)" == "default"
-__DEBUGINFO_8 = 
+!if "$(BUILD)" == "release" && "$(DEBUG_RUNTIME_LIBS)" == "default"
+__DEBUGRUNTIME = 
 !endif
-!if "$(DEBUG_INFO)" == "0"
-__DEBUGINFO_8 = 
+!if "$(DEBUG_RUNTIME_LIBS)" == "0"
+__DEBUGRUNTIME = 
 !endif
-!if "$(DEBUG_INFO)" == "1"
-__DEBUGINFO_8 = d
+!if "$(DEBUG_RUNTIME_LIBS)" == "1"
+__DEBUGRUNTIME = d
 !endif
 !if "$(BUILD)" == "debug"
 __OPTIMIZEFLAG = /Od
@@ -473,27 +338,27 @@ clean:
 	-if exist $(OBJS)\fl_sample3.pdb del $(OBJS)\fl_sample3.pdb
 
 $(OBJS)\fl_demo1.exe: $(FL_DEMO1_OBJECTS) $(OBJS)\fl_demo1_fl_demo1.res
-	link /NOLOGO /OUT:$@ $(LDFLAGS) $(__DEBUGINFO_7)  /LIBPATH:$(LIBDIRNAME) /SUBSYSTEM:WINDOWS @<<
+	link /NOLOGO /OUT:$@ $(LDFLAGS) $(__DEBUGINFO_4)  /LIBPATH:$(LIBDIRNAME) /SUBSYSTEM:WINDOWS @<<
 	$(FL_DEMO1_OBJECTS)  wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_fl.lib  $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE) $(__UNICOWS_LIB_p) kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib oleacc.lib odbc32.lib
 <<
 
 $(OBJS)\fl_demo2.exe: $(FL_DEMO2_OBJECTS) $(OBJS)\fl_demo2_fl_demo2.res
-	link /NOLOGO /OUT:$@ $(LDFLAGS) $(__DEBUGINFO_7)  /LIBPATH:$(LIBDIRNAME) /SUBSYSTEM:WINDOWS @<<
+	link /NOLOGO /OUT:$@ $(LDFLAGS) $(__DEBUGINFO_4)  /LIBPATH:$(LIBDIRNAME) /SUBSYSTEM:WINDOWS @<<
 	$(FL_DEMO2_OBJECTS)  wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_fl.lib  $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE) $(__UNICOWS_LIB_p) kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib oleacc.lib odbc32.lib
 <<
 
 $(OBJS)\fl_sample1.exe: $(FL_SAMPLE1_OBJECTS) $(OBJS)\fl_sample1_fl_sample1.res
-	link /NOLOGO /OUT:$@ $(LDFLAGS) $(__DEBUGINFO_7)  /LIBPATH:$(LIBDIRNAME) /SUBSYSTEM:WINDOWS @<<
+	link /NOLOGO /OUT:$@ $(LDFLAGS) $(__DEBUGINFO_4)  /LIBPATH:$(LIBDIRNAME) /SUBSYSTEM:WINDOWS @<<
 	$(FL_SAMPLE1_OBJECTS)  wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_fl.lib  $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE) $(__UNICOWS_LIB_p) kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib oleacc.lib odbc32.lib
 <<
 
 $(OBJS)\fl_sample2.exe: $(FL_SAMPLE2_OBJECTS) $(OBJS)\fl_sample2_fl_sample2.res
-	link /NOLOGO /OUT:$@ $(LDFLAGS) $(__DEBUGINFO_7)  /LIBPATH:$(LIBDIRNAME) /SUBSYSTEM:WINDOWS @<<
+	link /NOLOGO /OUT:$@ $(LDFLAGS) $(__DEBUGINFO_4)  /LIBPATH:$(LIBDIRNAME) /SUBSYSTEM:WINDOWS @<<
 	$(FL_SAMPLE2_OBJECTS)  wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_fl.lib  $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE) $(__UNICOWS_LIB_p) kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib oleacc.lib odbc32.lib
 <<
 
 $(OBJS)\fl_sample3.exe: $(FL_SAMPLE3_OBJECTS) $(OBJS)\fl_sample3_fl_sample3.res
-	link /NOLOGO /OUT:$@ $(LDFLAGS) $(__DEBUGINFO_7)  /LIBPATH:$(LIBDIRNAME) /SUBSYSTEM:WINDOWS @<<
+	link /NOLOGO /OUT:$@ $(LDFLAGS) $(__DEBUGINFO_4)  /LIBPATH:$(LIBDIRNAME) /SUBSYSTEM:WINDOWS @<<
 	$(FL_SAMPLE3_OBJECTS)  wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_fl.lib  $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE) $(__UNICOWS_LIB_p) kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib oleacc.lib odbc32.lib
 <<
 
@@ -505,29 +370,29 @@ $(OBJS)\fl_demo1_fl_demo1.obj: .\fl_demo1.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(FL_DEMO1_CXXFLAGS) $**
 
 $(OBJS)\fl_demo1_fl_demo1.res: .\fl_demo1.rc
-	rc /fo$@  /d WIN32 $(____DEBUGRUNTIME_2_p_1) $(__NO_VC_CRTDBG_p_12)  /d __WXMSW__ $(__WXUNIV_DEFINE_p_12) $(__DEBUG_DEFINE_p_12) $(__EXCEPTIONS_DEFINE_p_12) $(__RTTI_DEFINE_p_12) $(__THREAD_DEFINE_p_12) $(__UNICODE_DEFINE_p_12) /i .\..\..\..\include /i $(SETUPHDIR) /i . $(__DLLFLAG_p_12) /d _WINDOWS /i .\..\..\..\samples /d NOPCH /i .\..\..\include /d BMP_DIR="bitmaps/" $**
+	rc /fo$@  /d WIN32 $(____DEBUGRUNTIME_3) $(__NO_VC_CRTDBG_p_12)  /d __WXMSW__ $(__WXUNIV_DEFINE_p_12) $(__DEBUG_DEFINE_p_12) $(__EXCEPTIONS_DEFINE_p_12) $(__RTTI_DEFINE_p_12) $(__THREAD_DEFINE_p_12) $(__UNICODE_DEFINE_p_12) /i .\..\..\..\include /i $(SETUPHDIR) /i . $(__DLLFLAG_p_12) /d _WINDOWS /i .\..\..\..\samples /d NOPCH /i .\..\..\include /d BMP_DIR="bitmaps/" $**
 
 $(OBJS)\fl_demo2_fl_demo2.obj: .\fl_demo2.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(FL_DEMO2_CXXFLAGS) $**
 
 $(OBJS)\fl_demo2_fl_demo2.res: .\fl_demo2.rc
-	rc /fo$@  /d WIN32 $(____DEBUGRUNTIME_16_p_1) $(__NO_VC_CRTDBG_p_12)  /d __WXMSW__ $(__WXUNIV_DEFINE_p_12) $(__DEBUG_DEFINE_p_12) $(__EXCEPTIONS_DEFINE_p_12) $(__RTTI_DEFINE_p_12) $(__THREAD_DEFINE_p_12) $(__UNICODE_DEFINE_p_12) /i .\..\..\..\include /i $(SETUPHDIR) /i . $(__DLLFLAG_p_12) /d _WINDOWS /i .\..\..\..\samples /d NOPCH /i .\..\..\include /d BMP_DIR="bitmaps/" $**
+	rc /fo$@  /d WIN32 $(____DEBUGRUNTIME_3) $(__NO_VC_CRTDBG_p_12)  /d __WXMSW__ $(__WXUNIV_DEFINE_p_12) $(__DEBUG_DEFINE_p_12) $(__EXCEPTIONS_DEFINE_p_12) $(__RTTI_DEFINE_p_12) $(__THREAD_DEFINE_p_12) $(__UNICODE_DEFINE_p_12) /i .\..\..\..\include /i $(SETUPHDIR) /i . $(__DLLFLAG_p_12) /d _WINDOWS /i .\..\..\..\samples /d NOPCH /i .\..\..\include /d BMP_DIR="bitmaps/" $**
 
 $(OBJS)\fl_sample1_fl_sample1.obj: .\fl_sample1.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(FL_SAMPLE1_CXXFLAGS) $**
 
 $(OBJS)\fl_sample1_fl_sample1.res: .\fl_sample1.rc
-	rc /fo$@  /d WIN32 $(____DEBUGRUNTIME_30_p_1) $(__NO_VC_CRTDBG_p_12)  /d __WXMSW__ $(__WXUNIV_DEFINE_p_12) $(__DEBUG_DEFINE_p_12) $(__EXCEPTIONS_DEFINE_p_12) $(__RTTI_DEFINE_p_12) $(__THREAD_DEFINE_p_12) $(__UNICODE_DEFINE_p_12) /i .\..\..\..\include /i $(SETUPHDIR) /i . $(__DLLFLAG_p_12) /d _WINDOWS /i .\..\..\..\samples /d NOPCH /i .\..\..\include /d BMP_DIR="bitmaps/" $**
+	rc /fo$@  /d WIN32 $(____DEBUGRUNTIME_3) $(__NO_VC_CRTDBG_p_12)  /d __WXMSW__ $(__WXUNIV_DEFINE_p_12) $(__DEBUG_DEFINE_p_12) $(__EXCEPTIONS_DEFINE_p_12) $(__RTTI_DEFINE_p_12) $(__THREAD_DEFINE_p_12) $(__UNICODE_DEFINE_p_12) /i .\..\..\..\include /i $(SETUPHDIR) /i . $(__DLLFLAG_p_12) /d _WINDOWS /i .\..\..\..\samples /d NOPCH /i .\..\..\include /d BMP_DIR="bitmaps/" $**
 
 $(OBJS)\fl_sample2_fl_sample2.obj: .\fl_sample2.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(FL_SAMPLE2_CXXFLAGS) $**
 
 $(OBJS)\fl_sample2_fl_sample2.res: .\fl_sample2.rc
-	rc /fo$@  /d WIN32 $(____DEBUGRUNTIME_44_p_1) $(__NO_VC_CRTDBG_p_12)  /d __WXMSW__ $(__WXUNIV_DEFINE_p_12) $(__DEBUG_DEFINE_p_12) $(__EXCEPTIONS_DEFINE_p_12) $(__RTTI_DEFINE_p_12) $(__THREAD_DEFINE_p_12) $(__UNICODE_DEFINE_p_12) /i .\..\..\..\include /i $(SETUPHDIR) /i . $(__DLLFLAG_p_12) /d _WINDOWS /i .\..\..\..\samples /d NOPCH /i .\..\..\include /d BMP_DIR="bitmaps/" $**
+	rc /fo$@  /d WIN32 $(____DEBUGRUNTIME_3) $(__NO_VC_CRTDBG_p_12)  /d __WXMSW__ $(__WXUNIV_DEFINE_p_12) $(__DEBUG_DEFINE_p_12) $(__EXCEPTIONS_DEFINE_p_12) $(__RTTI_DEFINE_p_12) $(__THREAD_DEFINE_p_12) $(__UNICODE_DEFINE_p_12) /i .\..\..\..\include /i $(SETUPHDIR) /i . $(__DLLFLAG_p_12) /d _WINDOWS /i .\..\..\..\samples /d NOPCH /i .\..\..\include /d BMP_DIR="bitmaps/" $**
 
 $(OBJS)\fl_sample3_fl_sample3.obj: .\fl_sample3.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(FL_SAMPLE3_CXXFLAGS) $**
 
 $(OBJS)\fl_sample3_fl_sample3.res: .\fl_sample3.rc
-	rc /fo$@  /d WIN32 $(____DEBUGRUNTIME_58_p_1) $(__NO_VC_CRTDBG_p_12)  /d __WXMSW__ $(__WXUNIV_DEFINE_p_12) $(__DEBUG_DEFINE_p_12) $(__EXCEPTIONS_DEFINE_p_12) $(__RTTI_DEFINE_p_12) $(__THREAD_DEFINE_p_12) $(__UNICODE_DEFINE_p_12) /i .\..\..\..\include /i $(SETUPHDIR) /i . $(__DLLFLAG_p_12) /d _WINDOWS /i .\..\..\..\samples /d NOPCH /i .\..\..\include /d BMP_DIR="bitmaps/" $**
+	rc /fo$@  /d WIN32 $(____DEBUGRUNTIME_3) $(__NO_VC_CRTDBG_p_12)  /d __WXMSW__ $(__WXUNIV_DEFINE_p_12) $(__DEBUG_DEFINE_p_12) $(__EXCEPTIONS_DEFINE_p_12) $(__RTTI_DEFINE_p_12) $(__THREAD_DEFINE_p_12) $(__UNICODE_DEFINE_p_12) /i .\..\..\..\include /i $(SETUPHDIR) /i . $(__DLLFLAG_p_12) /d _WINDOWS /i .\..\..\..\samples /d NOPCH /i .\..\..\include /d BMP_DIR="bitmaps/" $**
 

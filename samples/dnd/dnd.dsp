@@ -46,17 +46,17 @@ RSC=rc.exe
 !IF  "$(CFG)" == "dnd - Win32 DLL Universal Unicode Release"
 
 # PROP BASE Use_MFC 0
-# PROP BASE Use_Debug_Libraries 0
+# PROP BASE Use_Debug_Libraries 1
 # PROP BASE Output_Dir "vc_mswunivudll"
 # PROP BASE Intermediate_Dir "vc_mswunivudll\dnd"
 # PROP BASE Target_Dir ""
 # PROP Use_MFC 0
-# PROP Use_Debug_Libraries 0
+# PROP Use_Debug_Libraries 1
 # PROP Output_Dir "vc_mswunivudll"
 # PROP Intermediate_Dir "vc_mswunivudll\dnd"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /MD /Fdvc_mswunivudll\dnd.pdb /O2 /GR /EHsc /I ".\..\..\include" /I ".\..\..\lib\vc_dll\mswunivu" /W4 /I "." /I ".\..\..\samples" /D "WIN32" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "_UNICODE" /D "WXUSINGDLL" /D "_WINDOWS" /D "NOPCH" /c
-# ADD CPP /nologo /FD /MD /Fdvc_mswunivudll\dnd.pdb /O2 /GR /EHsc /I ".\..\..\include" /I ".\..\..\lib\vc_dll\mswunivu" /W4 /I "." /I ".\..\..\samples" /D "WIN32" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "_UNICODE" /D "WXUSINGDLL" /D "_WINDOWS" /D "NOPCH" /c
+# ADD BASE CPP /nologo /FD /MD /Zi /Gm /GZ /Fdvc_mswunivudll\dnd.pdb /O2 /GR /EHsc /I ".\..\..\include" /I ".\..\..\lib\vc_dll\mswunivu" /W4 /I "." /I ".\..\..\samples" /D "WIN32" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "_UNICODE" /D "WXUSINGDLL" /D "_WINDOWS" /D "NOPCH" /c
+# ADD CPP /nologo /FD /MD /Zi /Gm /GZ /Fdvc_mswunivudll\dnd.pdb /O2 /GR /EHsc /I ".\..\..\include" /I ".\..\..\lib\vc_dll\mswunivu" /W4 /I "." /I ".\..\..\samples" /D "WIN32" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "_UNICODE" /D "WXUSINGDLL" /D "_WINDOWS" /D "NOPCH" /c
 # ADD BASE MTL /nologo /D "WIN32" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "_UNICODE" /D "WXUSINGDLL" /D "_WINDOWS" /D "NOPCH" /mktyplib203 /win32
 # ADD MTL /nologo /D "WIN32" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "_UNICODE" /D "WXUSINGDLL" /D "_WINDOWS" /D "NOPCH" /mktyplib203 /win32
 # ADD BASE RSC /l 0x409 /d "__WXMSW__" /d "__WXUNIVERSAL__" /d "_UNICODE" /i ".\..\..\include" /i ".\..\..\lib\vc_dll\mswunivu" /i "." /d "WXUSINGDLL" /d "_WINDOWS" /i ".\..\..\samples" /d NOPCH
@@ -65,8 +65,8 @@ BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LINK32=link.exe
-# ADD BASE LINK32 wxmswuniv25u_core.lib wxbase25u.lib wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregexu.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib oleacc.lib odbc32.lib /nologo /machine:i386 /out:"vc_mswunivudll\dnd.exe" /libpath:".\..\..\lib\vc_dll" /subsystem:windows
-# ADD LINK32 wxmswuniv25u_core.lib wxbase25u.lib wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregexu.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib oleacc.lib odbc32.lib /nologo /machine:i386 /out:"vc_mswunivudll\dnd.exe" /libpath:".\..\..\lib\vc_dll" /subsystem:windows
+# ADD BASE LINK32 wxmswuniv26u_core.lib wxbase26u.lib wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregexu.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib oleacc.lib odbc32.lib /nologo /machine:i386 /out:"vc_mswunivudll\dnd.exe" /debug /libpath:".\..\..\lib\vc_dll" /subsystem:windows
+# ADD LINK32 wxmswuniv26u_core.lib wxbase26u.lib wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregexu.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib oleacc.lib odbc32.lib /nologo /machine:i386 /out:"vc_mswunivudll\dnd.exe" /debug /libpath:".\..\..\lib\vc_dll" /subsystem:windows
 
 !ELSEIF  "$(CFG)" == "dnd - Win32 DLL Universal Unicode Debug"
 
@@ -90,23 +90,23 @@ BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LINK32=link.exe
-# ADD BASE LINK32 wxmswuniv25ud_core.lib wxbase25ud.lib wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib wxregexud.lib wxexpatd.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib oleacc.lib odbc32.lib /nologo /machine:i386 /out:"vc_mswunivuddll\dnd.exe" /debug /libpath:".\..\..\lib\vc_dll" /subsystem:windows
-# ADD LINK32 wxmswuniv25ud_core.lib wxbase25ud.lib wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib wxregexud.lib wxexpatd.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib oleacc.lib odbc32.lib /nologo /machine:i386 /out:"vc_mswunivuddll\dnd.exe" /debug /libpath:".\..\..\lib\vc_dll" /subsystem:windows
+# ADD BASE LINK32 wxmswuniv26ud_core.lib wxbase26ud.lib wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib wxregexud.lib wxexpatd.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib oleacc.lib odbc32.lib /nologo /machine:i386 /out:"vc_mswunivuddll\dnd.exe" /debug /libpath:".\..\..\lib\vc_dll" /subsystem:windows
+# ADD LINK32 wxmswuniv26ud_core.lib wxbase26ud.lib wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib wxregexud.lib wxexpatd.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib oleacc.lib odbc32.lib /nologo /machine:i386 /out:"vc_mswunivuddll\dnd.exe" /debug /libpath:".\..\..\lib\vc_dll" /subsystem:windows
 
 !ELSEIF  "$(CFG)" == "dnd - Win32 DLL Universal Release"
 
 # PROP BASE Use_MFC 0
-# PROP BASE Use_Debug_Libraries 0
+# PROP BASE Use_Debug_Libraries 1
 # PROP BASE Output_Dir "vc_mswunivdll"
 # PROP BASE Intermediate_Dir "vc_mswunivdll\dnd"
 # PROP BASE Target_Dir ""
 # PROP Use_MFC 0
-# PROP Use_Debug_Libraries 0
+# PROP Use_Debug_Libraries 1
 # PROP Output_Dir "vc_mswunivdll"
 # PROP Intermediate_Dir "vc_mswunivdll\dnd"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /MD /Fdvc_mswunivdll\dnd.pdb /O2 /GR /EHsc /I ".\..\..\include" /I ".\..\..\lib\vc_dll\mswuniv" /W4 /I "." /I ".\..\..\samples" /D "WIN32" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "WXUSINGDLL" /D "_WINDOWS" /D "NOPCH" /c
-# ADD CPP /nologo /FD /MD /Fdvc_mswunivdll\dnd.pdb /O2 /GR /EHsc /I ".\..\..\include" /I ".\..\..\lib\vc_dll\mswuniv" /W4 /I "." /I ".\..\..\samples" /D "WIN32" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "WXUSINGDLL" /D "_WINDOWS" /D "NOPCH" /c
+# ADD BASE CPP /nologo /FD /MD /Zi /Gm /GZ /Fdvc_mswunivdll\dnd.pdb /O2 /GR /EHsc /I ".\..\..\include" /I ".\..\..\lib\vc_dll\mswuniv" /W4 /I "." /I ".\..\..\samples" /D "WIN32" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "WXUSINGDLL" /D "_WINDOWS" /D "NOPCH" /c
+# ADD CPP /nologo /FD /MD /Zi /Gm /GZ /Fdvc_mswunivdll\dnd.pdb /O2 /GR /EHsc /I ".\..\..\include" /I ".\..\..\lib\vc_dll\mswuniv" /W4 /I "." /I ".\..\..\samples" /D "WIN32" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "WXUSINGDLL" /D "_WINDOWS" /D "NOPCH" /c
 # ADD BASE MTL /nologo /D "WIN32" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "WXUSINGDLL" /D "_WINDOWS" /D "NOPCH" /mktyplib203 /win32
 # ADD MTL /nologo /D "WIN32" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "WXUSINGDLL" /D "_WINDOWS" /D "NOPCH" /mktyplib203 /win32
 # ADD BASE RSC /l 0x409 /d "__WXMSW__" /d "__WXUNIVERSAL__" /i ".\..\..\include" /i ".\..\..\lib\vc_dll\mswuniv" /i "." /d "WXUSINGDLL" /d "_WINDOWS" /i ".\..\..\samples" /d NOPCH
@@ -115,8 +115,8 @@ BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LINK32=link.exe
-# ADD BASE LINK32 wxmswuniv25_core.lib wxbase25.lib wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregex.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib oleacc.lib odbc32.lib /nologo /machine:i386 /out:"vc_mswunivdll\dnd.exe" /libpath:".\..\..\lib\vc_dll" /subsystem:windows
-# ADD LINK32 wxmswuniv25_core.lib wxbase25.lib wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregex.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib oleacc.lib odbc32.lib /nologo /machine:i386 /out:"vc_mswunivdll\dnd.exe" /libpath:".\..\..\lib\vc_dll" /subsystem:windows
+# ADD BASE LINK32 wxmswuniv26_core.lib wxbase26.lib wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregex.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib oleacc.lib odbc32.lib /nologo /machine:i386 /out:"vc_mswunivdll\dnd.exe" /debug /libpath:".\..\..\lib\vc_dll" /subsystem:windows
+# ADD LINK32 wxmswuniv26_core.lib wxbase26.lib wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregex.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib oleacc.lib odbc32.lib /nologo /machine:i386 /out:"vc_mswunivdll\dnd.exe" /debug /libpath:".\..\..\lib\vc_dll" /subsystem:windows
 
 !ELSEIF  "$(CFG)" == "dnd - Win32 DLL Universal Debug"
 
@@ -140,23 +140,23 @@ BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LINK32=link.exe
-# ADD BASE LINK32 wxmswuniv25d_core.lib wxbase25d.lib wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib wxregexd.lib wxexpatd.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib oleacc.lib odbc32.lib /nologo /machine:i386 /out:"vc_mswunivddll\dnd.exe" /debug /libpath:".\..\..\lib\vc_dll" /subsystem:windows
-# ADD LINK32 wxmswuniv25d_core.lib wxbase25d.lib wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib wxregexd.lib wxexpatd.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib oleacc.lib odbc32.lib /nologo /machine:i386 /out:"vc_mswunivddll\dnd.exe" /debug /libpath:".\..\..\lib\vc_dll" /subsystem:windows
+# ADD BASE LINK32 wxmswuniv26d_core.lib wxbase26d.lib wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib wxregexd.lib wxexpatd.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib oleacc.lib odbc32.lib /nologo /machine:i386 /out:"vc_mswunivddll\dnd.exe" /debug /libpath:".\..\..\lib\vc_dll" /subsystem:windows
+# ADD LINK32 wxmswuniv26d_core.lib wxbase26d.lib wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib wxregexd.lib wxexpatd.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib oleacc.lib odbc32.lib /nologo /machine:i386 /out:"vc_mswunivddll\dnd.exe" /debug /libpath:".\..\..\lib\vc_dll" /subsystem:windows
 
 !ELSEIF  "$(CFG)" == "dnd - Win32 DLL Unicode Release"
 
 # PROP BASE Use_MFC 0
-# PROP BASE Use_Debug_Libraries 0
+# PROP BASE Use_Debug_Libraries 1
 # PROP BASE Output_Dir "vc_mswudll"
 # PROP BASE Intermediate_Dir "vc_mswudll\dnd"
 # PROP BASE Target_Dir ""
 # PROP Use_MFC 0
-# PROP Use_Debug_Libraries 0
+# PROP Use_Debug_Libraries 1
 # PROP Output_Dir "vc_mswudll"
 # PROP Intermediate_Dir "vc_mswudll\dnd"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /MD /Fdvc_mswudll\dnd.pdb /O2 /GR /EHsc /I ".\..\..\include" /I ".\..\..\lib\vc_dll\mswu" /W4 /I "." /I ".\..\..\samples" /D "WIN32" /D "__WXMSW__" /D "_UNICODE" /D "WXUSINGDLL" /D "_WINDOWS" /D "NOPCH" /c
-# ADD CPP /nologo /FD /MD /Fdvc_mswudll\dnd.pdb /O2 /GR /EHsc /I ".\..\..\include" /I ".\..\..\lib\vc_dll\mswu" /W4 /I "." /I ".\..\..\samples" /D "WIN32" /D "__WXMSW__" /D "_UNICODE" /D "WXUSINGDLL" /D "_WINDOWS" /D "NOPCH" /c
+# ADD BASE CPP /nologo /FD /MD /Zi /Gm /GZ /Fdvc_mswudll\dnd.pdb /O2 /GR /EHsc /I ".\..\..\include" /I ".\..\..\lib\vc_dll\mswu" /W4 /I "." /I ".\..\..\samples" /D "WIN32" /D "__WXMSW__" /D "_UNICODE" /D "WXUSINGDLL" /D "_WINDOWS" /D "NOPCH" /c
+# ADD CPP /nologo /FD /MD /Zi /Gm /GZ /Fdvc_mswudll\dnd.pdb /O2 /GR /EHsc /I ".\..\..\include" /I ".\..\..\lib\vc_dll\mswu" /W4 /I "." /I ".\..\..\samples" /D "WIN32" /D "__WXMSW__" /D "_UNICODE" /D "WXUSINGDLL" /D "_WINDOWS" /D "NOPCH" /c
 # ADD BASE MTL /nologo /D "WIN32" /D "__WXMSW__" /D "_UNICODE" /D "WXUSINGDLL" /D "_WINDOWS" /D "NOPCH" /mktyplib203 /win32
 # ADD MTL /nologo /D "WIN32" /D "__WXMSW__" /D "_UNICODE" /D "WXUSINGDLL" /D "_WINDOWS" /D "NOPCH" /mktyplib203 /win32
 # ADD BASE RSC /l 0x409 /d "__WXMSW__" /d "_UNICODE" /i ".\..\..\include" /i ".\..\..\lib\vc_dll\mswu" /i "." /d "WXUSINGDLL" /d "_WINDOWS" /i ".\..\..\samples" /d NOPCH
@@ -165,8 +165,8 @@ BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LINK32=link.exe
-# ADD BASE LINK32 wxmsw25u_core.lib wxbase25u.lib wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregexu.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib oleacc.lib odbc32.lib /nologo /machine:i386 /out:"vc_mswudll\dnd.exe" /libpath:".\..\..\lib\vc_dll" /subsystem:windows
-# ADD LINK32 wxmsw25u_core.lib wxbase25u.lib wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregexu.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib oleacc.lib odbc32.lib /nologo /machine:i386 /out:"vc_mswudll\dnd.exe" /libpath:".\..\..\lib\vc_dll" /subsystem:windows
+# ADD BASE LINK32 wxmsw26u_core.lib wxbase26u.lib wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregexu.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib oleacc.lib odbc32.lib /nologo /machine:i386 /out:"vc_mswudll\dnd.exe" /debug /libpath:".\..\..\lib\vc_dll" /subsystem:windows
+# ADD LINK32 wxmsw26u_core.lib wxbase26u.lib wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregexu.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib oleacc.lib odbc32.lib /nologo /machine:i386 /out:"vc_mswudll\dnd.exe" /debug /libpath:".\..\..\lib\vc_dll" /subsystem:windows
 
 !ELSEIF  "$(CFG)" == "dnd - Win32 DLL Unicode Debug"
 
@@ -190,23 +190,23 @@ BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LINK32=link.exe
-# ADD BASE LINK32 wxmsw25ud_core.lib wxbase25ud.lib wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib wxregexud.lib wxexpatd.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib oleacc.lib odbc32.lib /nologo /machine:i386 /out:"vc_mswuddll\dnd.exe" /debug /libpath:".\..\..\lib\vc_dll" /subsystem:windows
-# ADD LINK32 wxmsw25ud_core.lib wxbase25ud.lib wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib wxregexud.lib wxexpatd.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib oleacc.lib odbc32.lib /nologo /machine:i386 /out:"vc_mswuddll\dnd.exe" /debug /libpath:".\..\..\lib\vc_dll" /subsystem:windows
+# ADD BASE LINK32 wxmsw26ud_core.lib wxbase26ud.lib wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib wxregexud.lib wxexpatd.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib oleacc.lib odbc32.lib /nologo /machine:i386 /out:"vc_mswuddll\dnd.exe" /debug /libpath:".\..\..\lib\vc_dll" /subsystem:windows
+# ADD LINK32 wxmsw26ud_core.lib wxbase26ud.lib wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib wxregexud.lib wxexpatd.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib oleacc.lib odbc32.lib /nologo /machine:i386 /out:"vc_mswuddll\dnd.exe" /debug /libpath:".\..\..\lib\vc_dll" /subsystem:windows
 
 !ELSEIF  "$(CFG)" == "dnd - Win32 DLL Release"
 
 # PROP BASE Use_MFC 0
-# PROP BASE Use_Debug_Libraries 0
+# PROP BASE Use_Debug_Libraries 1
 # PROP BASE Output_Dir "vc_mswdll"
 # PROP BASE Intermediate_Dir "vc_mswdll\dnd"
 # PROP BASE Target_Dir ""
 # PROP Use_MFC 0
-# PROP Use_Debug_Libraries 0
+# PROP Use_Debug_Libraries 1
 # PROP Output_Dir "vc_mswdll"
 # PROP Intermediate_Dir "vc_mswdll\dnd"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /MD /Fdvc_mswdll\dnd.pdb /O2 /GR /EHsc /I ".\..\..\include" /I ".\..\..\lib\vc_dll\msw" /W4 /I "." /I ".\..\..\samples" /D "WIN32" /D "__WXMSW__" /D "WXUSINGDLL" /D "_WINDOWS" /D "NOPCH" /c
-# ADD CPP /nologo /FD /MD /Fdvc_mswdll\dnd.pdb /O2 /GR /EHsc /I ".\..\..\include" /I ".\..\..\lib\vc_dll\msw" /W4 /I "." /I ".\..\..\samples" /D "WIN32" /D "__WXMSW__" /D "WXUSINGDLL" /D "_WINDOWS" /D "NOPCH" /c
+# ADD BASE CPP /nologo /FD /MD /Zi /Gm /GZ /Fdvc_mswdll\dnd.pdb /O2 /GR /EHsc /I ".\..\..\include" /I ".\..\..\lib\vc_dll\msw" /W4 /I "." /I ".\..\..\samples" /D "WIN32" /D "__WXMSW__" /D "WXUSINGDLL" /D "_WINDOWS" /D "NOPCH" /c
+# ADD CPP /nologo /FD /MD /Zi /Gm /GZ /Fdvc_mswdll\dnd.pdb /O2 /GR /EHsc /I ".\..\..\include" /I ".\..\..\lib\vc_dll\msw" /W4 /I "." /I ".\..\..\samples" /D "WIN32" /D "__WXMSW__" /D "WXUSINGDLL" /D "_WINDOWS" /D "NOPCH" /c
 # ADD BASE MTL /nologo /D "WIN32" /D "__WXMSW__" /D "WXUSINGDLL" /D "_WINDOWS" /D "NOPCH" /mktyplib203 /win32
 # ADD MTL /nologo /D "WIN32" /D "__WXMSW__" /D "WXUSINGDLL" /D "_WINDOWS" /D "NOPCH" /mktyplib203 /win32
 # ADD BASE RSC /l 0x409 /d "__WXMSW__" /i ".\..\..\include" /i ".\..\..\lib\vc_dll\msw" /i "." /d "WXUSINGDLL" /d "_WINDOWS" /i ".\..\..\samples" /d NOPCH
@@ -215,8 +215,8 @@ BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LINK32=link.exe
-# ADD BASE LINK32 wxmsw25_core.lib wxbase25.lib wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregex.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib oleacc.lib odbc32.lib /nologo /machine:i386 /out:"vc_mswdll\dnd.exe" /libpath:".\..\..\lib\vc_dll" /subsystem:windows
-# ADD LINK32 wxmsw25_core.lib wxbase25.lib wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregex.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib oleacc.lib odbc32.lib /nologo /machine:i386 /out:"vc_mswdll\dnd.exe" /libpath:".\..\..\lib\vc_dll" /subsystem:windows
+# ADD BASE LINK32 wxmsw26_core.lib wxbase26.lib wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregex.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib oleacc.lib odbc32.lib /nologo /machine:i386 /out:"vc_mswdll\dnd.exe" /debug /libpath:".\..\..\lib\vc_dll" /subsystem:windows
+# ADD LINK32 wxmsw26_core.lib wxbase26.lib wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregex.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib oleacc.lib odbc32.lib /nologo /machine:i386 /out:"vc_mswdll\dnd.exe" /debug /libpath:".\..\..\lib\vc_dll" /subsystem:windows
 
 !ELSEIF  "$(CFG)" == "dnd - Win32 DLL Debug"
 
@@ -240,23 +240,23 @@ BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LINK32=link.exe
-# ADD BASE LINK32 wxmsw25d_core.lib wxbase25d.lib wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib wxregexd.lib wxexpatd.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib oleacc.lib odbc32.lib /nologo /machine:i386 /out:"vc_mswddll\dnd.exe" /debug /libpath:".\..\..\lib\vc_dll" /subsystem:windows
-# ADD LINK32 wxmsw25d_core.lib wxbase25d.lib wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib wxregexd.lib wxexpatd.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib oleacc.lib odbc32.lib /nologo /machine:i386 /out:"vc_mswddll\dnd.exe" /debug /libpath:".\..\..\lib\vc_dll" /subsystem:windows
+# ADD BASE LINK32 wxmsw26d_core.lib wxbase26d.lib wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib wxregexd.lib wxexpatd.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib oleacc.lib odbc32.lib /nologo /machine:i386 /out:"vc_mswddll\dnd.exe" /debug /libpath:".\..\..\lib\vc_dll" /subsystem:windows
+# ADD LINK32 wxmsw26d_core.lib wxbase26d.lib wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib wxregexd.lib wxexpatd.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib oleacc.lib odbc32.lib /nologo /machine:i386 /out:"vc_mswddll\dnd.exe" /debug /libpath:".\..\..\lib\vc_dll" /subsystem:windows
 
 !ELSEIF  "$(CFG)" == "dnd - Win32 Universal Unicode Release"
 
 # PROP BASE Use_MFC 0
-# PROP BASE Use_Debug_Libraries 0
+# PROP BASE Use_Debug_Libraries 1
 # PROP BASE Output_Dir "vc_mswunivu"
 # PROP BASE Intermediate_Dir "vc_mswunivu\dnd"
 # PROP BASE Target_Dir ""
 # PROP Use_MFC 0
-# PROP Use_Debug_Libraries 0
+# PROP Use_Debug_Libraries 1
 # PROP Output_Dir "vc_mswunivu"
 # PROP Intermediate_Dir "vc_mswunivu\dnd"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /MD /Fdvc_mswunivu\dnd.pdb /O2 /GR /EHsc /I ".\..\..\include" /I ".\..\..\lib\vc_lib\mswunivu" /W4 /I "." /I ".\..\..\samples" /D "WIN32" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "_UNICODE" /D "_WINDOWS" /D "NOPCH" /c
-# ADD CPP /nologo /FD /MD /Fdvc_mswunivu\dnd.pdb /O2 /GR /EHsc /I ".\..\..\include" /I ".\..\..\lib\vc_lib\mswunivu" /W4 /I "." /I ".\..\..\samples" /D "WIN32" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "_UNICODE" /D "_WINDOWS" /D "NOPCH" /c
+# ADD BASE CPP /nologo /FD /MD /Zi /Gm /GZ /Fdvc_mswunivu\dnd.pdb /O2 /GR /EHsc /I ".\..\..\include" /I ".\..\..\lib\vc_lib\mswunivu" /W4 /I "." /I ".\..\..\samples" /D "WIN32" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "_UNICODE" /D "_WINDOWS" /D "NOPCH" /c
+# ADD CPP /nologo /FD /MD /Zi /Gm /GZ /Fdvc_mswunivu\dnd.pdb /O2 /GR /EHsc /I ".\..\..\include" /I ".\..\..\lib\vc_lib\mswunivu" /W4 /I "." /I ".\..\..\samples" /D "WIN32" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "_UNICODE" /D "_WINDOWS" /D "NOPCH" /c
 # ADD BASE MTL /nologo /D "WIN32" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "_UNICODE" /D "_WINDOWS" /D "NOPCH" /mktyplib203 /win32
 # ADD MTL /nologo /D "WIN32" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "_UNICODE" /D "_WINDOWS" /D "NOPCH" /mktyplib203 /win32
 # ADD BASE RSC /l 0x409 /d "__WXMSW__" /d "__WXUNIVERSAL__" /d "_UNICODE" /i ".\..\..\include" /i ".\..\..\lib\vc_lib\mswunivu" /i "." /d "_WINDOWS" /i ".\..\..\samples" /d NOPCH
@@ -265,8 +265,8 @@ BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LINK32=link.exe
-# ADD BASE LINK32 wxmswuniv25u_core.lib wxbase25u.lib wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregexu.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib oleacc.lib odbc32.lib /nologo /machine:i386 /out:"vc_mswunivu\dnd.exe" /libpath:".\..\..\lib\vc_lib" /subsystem:windows
-# ADD LINK32 wxmswuniv25u_core.lib wxbase25u.lib wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregexu.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib oleacc.lib odbc32.lib /nologo /machine:i386 /out:"vc_mswunivu\dnd.exe" /libpath:".\..\..\lib\vc_lib" /subsystem:windows
+# ADD BASE LINK32 wxmswuniv26u_core.lib wxbase26u.lib wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregexu.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib oleacc.lib odbc32.lib /nologo /machine:i386 /out:"vc_mswunivu\dnd.exe" /debug /libpath:".\..\..\lib\vc_lib" /subsystem:windows
+# ADD LINK32 wxmswuniv26u_core.lib wxbase26u.lib wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregexu.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib oleacc.lib odbc32.lib /nologo /machine:i386 /out:"vc_mswunivu\dnd.exe" /debug /libpath:".\..\..\lib\vc_lib" /subsystem:windows
 
 !ELSEIF  "$(CFG)" == "dnd - Win32 Universal Unicode Debug"
 
@@ -290,23 +290,23 @@ BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LINK32=link.exe
-# ADD BASE LINK32 wxmswuniv25ud_core.lib wxbase25ud.lib wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib wxregexud.lib wxexpatd.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib oleacc.lib odbc32.lib /nologo /machine:i386 /out:"vc_mswunivud\dnd.exe" /debug /libpath:".\..\..\lib\vc_lib" /subsystem:windows
-# ADD LINK32 wxmswuniv25ud_core.lib wxbase25ud.lib wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib wxregexud.lib wxexpatd.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib oleacc.lib odbc32.lib /nologo /machine:i386 /out:"vc_mswunivud\dnd.exe" /debug /libpath:".\..\..\lib\vc_lib" /subsystem:windows
+# ADD BASE LINK32 wxmswuniv26ud_core.lib wxbase26ud.lib wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib wxregexud.lib wxexpatd.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib oleacc.lib odbc32.lib /nologo /machine:i386 /out:"vc_mswunivud\dnd.exe" /debug /libpath:".\..\..\lib\vc_lib" /subsystem:windows
+# ADD LINK32 wxmswuniv26ud_core.lib wxbase26ud.lib wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib wxregexud.lib wxexpatd.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib oleacc.lib odbc32.lib /nologo /machine:i386 /out:"vc_mswunivud\dnd.exe" /debug /libpath:".\..\..\lib\vc_lib" /subsystem:windows
 
 !ELSEIF  "$(CFG)" == "dnd - Win32 Universal Release"
 
 # PROP BASE Use_MFC 0
-# PROP BASE Use_Debug_Libraries 0
+# PROP BASE Use_Debug_Libraries 1
 # PROP BASE Output_Dir "vc_mswuniv"
 # PROP BASE Intermediate_Dir "vc_mswuniv\dnd"
 # PROP BASE Target_Dir ""
 # PROP Use_MFC 0
-# PROP Use_Debug_Libraries 0
+# PROP Use_Debug_Libraries 1
 # PROP Output_Dir "vc_mswuniv"
 # PROP Intermediate_Dir "vc_mswuniv\dnd"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /MD /Fdvc_mswuniv\dnd.pdb /O2 /GR /EHsc /I ".\..\..\include" /I ".\..\..\lib\vc_lib\mswuniv" /W4 /I "." /I ".\..\..\samples" /D "WIN32" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "_WINDOWS" /D "NOPCH" /c
-# ADD CPP /nologo /FD /MD /Fdvc_mswuniv\dnd.pdb /O2 /GR /EHsc /I ".\..\..\include" /I ".\..\..\lib\vc_lib\mswuniv" /W4 /I "." /I ".\..\..\samples" /D "WIN32" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "_WINDOWS" /D "NOPCH" /c
+# ADD BASE CPP /nologo /FD /MD /Zi /Gm /GZ /Fdvc_mswuniv\dnd.pdb /O2 /GR /EHsc /I ".\..\..\include" /I ".\..\..\lib\vc_lib\mswuniv" /W4 /I "." /I ".\..\..\samples" /D "WIN32" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "_WINDOWS" /D "NOPCH" /c
+# ADD CPP /nologo /FD /MD /Zi /Gm /GZ /Fdvc_mswuniv\dnd.pdb /O2 /GR /EHsc /I ".\..\..\include" /I ".\..\..\lib\vc_lib\mswuniv" /W4 /I "." /I ".\..\..\samples" /D "WIN32" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "_WINDOWS" /D "NOPCH" /c
 # ADD BASE MTL /nologo /D "WIN32" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "_WINDOWS" /D "NOPCH" /mktyplib203 /win32
 # ADD MTL /nologo /D "WIN32" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "_WINDOWS" /D "NOPCH" /mktyplib203 /win32
 # ADD BASE RSC /l 0x409 /d "__WXMSW__" /d "__WXUNIVERSAL__" /i ".\..\..\include" /i ".\..\..\lib\vc_lib\mswuniv" /i "." /d "_WINDOWS" /i ".\..\..\samples" /d NOPCH
@@ -315,8 +315,8 @@ BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LINK32=link.exe
-# ADD BASE LINK32 wxmswuniv25_core.lib wxbase25.lib wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregex.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib oleacc.lib odbc32.lib /nologo /machine:i386 /out:"vc_mswuniv\dnd.exe" /libpath:".\..\..\lib\vc_lib" /subsystem:windows
-# ADD LINK32 wxmswuniv25_core.lib wxbase25.lib wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregex.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib oleacc.lib odbc32.lib /nologo /machine:i386 /out:"vc_mswuniv\dnd.exe" /libpath:".\..\..\lib\vc_lib" /subsystem:windows
+# ADD BASE LINK32 wxmswuniv26_core.lib wxbase26.lib wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregex.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib oleacc.lib odbc32.lib /nologo /machine:i386 /out:"vc_mswuniv\dnd.exe" /debug /libpath:".\..\..\lib\vc_lib" /subsystem:windows
+# ADD LINK32 wxmswuniv26_core.lib wxbase26.lib wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregex.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib oleacc.lib odbc32.lib /nologo /machine:i386 /out:"vc_mswuniv\dnd.exe" /debug /libpath:".\..\..\lib\vc_lib" /subsystem:windows
 
 !ELSEIF  "$(CFG)" == "dnd - Win32 Universal Debug"
 
@@ -340,23 +340,23 @@ BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LINK32=link.exe
-# ADD BASE LINK32 wxmswuniv25d_core.lib wxbase25d.lib wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib wxregexd.lib wxexpatd.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib oleacc.lib odbc32.lib /nologo /machine:i386 /out:"vc_mswunivd\dnd.exe" /debug /libpath:".\..\..\lib\vc_lib" /subsystem:windows
-# ADD LINK32 wxmswuniv25d_core.lib wxbase25d.lib wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib wxregexd.lib wxexpatd.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib oleacc.lib odbc32.lib /nologo /machine:i386 /out:"vc_mswunivd\dnd.exe" /debug /libpath:".\..\..\lib\vc_lib" /subsystem:windows
+# ADD BASE LINK32 wxmswuniv26d_core.lib wxbase26d.lib wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib wxregexd.lib wxexpatd.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib oleacc.lib odbc32.lib /nologo /machine:i386 /out:"vc_mswunivd\dnd.exe" /debug /libpath:".\..\..\lib\vc_lib" /subsystem:windows
+# ADD LINK32 wxmswuniv26d_core.lib wxbase26d.lib wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib wxregexd.lib wxexpatd.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib oleacc.lib odbc32.lib /nologo /machine:i386 /out:"vc_mswunivd\dnd.exe" /debug /libpath:".\..\..\lib\vc_lib" /subsystem:windows
 
 !ELSEIF  "$(CFG)" == "dnd - Win32 Unicode Release"
 
 # PROP BASE Use_MFC 0
-# PROP BASE Use_Debug_Libraries 0
+# PROP BASE Use_Debug_Libraries 1
 # PROP BASE Output_Dir "vc_mswu"
 # PROP BASE Intermediate_Dir "vc_mswu\dnd"
 # PROP BASE Target_Dir ""
 # PROP Use_MFC 0
-# PROP Use_Debug_Libraries 0
+# PROP Use_Debug_Libraries 1
 # PROP Output_Dir "vc_mswu"
 # PROP Intermediate_Dir "vc_mswu\dnd"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /MD /Fdvc_mswu\dnd.pdb /O2 /GR /EHsc /I ".\..\..\include" /I ".\..\..\lib\vc_lib\mswu" /W4 /I "." /I ".\..\..\samples" /D "WIN32" /D "__WXMSW__" /D "_UNICODE" /D "_WINDOWS" /D "NOPCH" /c
-# ADD CPP /nologo /FD /MD /Fdvc_mswu\dnd.pdb /O2 /GR /EHsc /I ".\..\..\include" /I ".\..\..\lib\vc_lib\mswu" /W4 /I "." /I ".\..\..\samples" /D "WIN32" /D "__WXMSW__" /D "_UNICODE" /D "_WINDOWS" /D "NOPCH" /c
+# ADD BASE CPP /nologo /FD /MD /Zi /Gm /GZ /Fdvc_mswu\dnd.pdb /O2 /GR /EHsc /I ".\..\..\include" /I ".\..\..\lib\vc_lib\mswu" /W4 /I "." /I ".\..\..\samples" /D "WIN32" /D "__WXMSW__" /D "_UNICODE" /D "_WINDOWS" /D "NOPCH" /c
+# ADD CPP /nologo /FD /MD /Zi /Gm /GZ /Fdvc_mswu\dnd.pdb /O2 /GR /EHsc /I ".\..\..\include" /I ".\..\..\lib\vc_lib\mswu" /W4 /I "." /I ".\..\..\samples" /D "WIN32" /D "__WXMSW__" /D "_UNICODE" /D "_WINDOWS" /D "NOPCH" /c
 # ADD BASE MTL /nologo /D "WIN32" /D "__WXMSW__" /D "_UNICODE" /D "_WINDOWS" /D "NOPCH" /mktyplib203 /win32
 # ADD MTL /nologo /D "WIN32" /D "__WXMSW__" /D "_UNICODE" /D "_WINDOWS" /D "NOPCH" /mktyplib203 /win32
 # ADD BASE RSC /l 0x409 /d "__WXMSW__" /d "_UNICODE" /i ".\..\..\include" /i ".\..\..\lib\vc_lib\mswu" /i "." /d "_WINDOWS" /i ".\..\..\samples" /d NOPCH
@@ -365,8 +365,8 @@ BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LINK32=link.exe
-# ADD BASE LINK32 wxmsw25u_core.lib wxbase25u.lib wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregexu.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib oleacc.lib odbc32.lib /nologo /machine:i386 /out:"vc_mswu\dnd.exe" /libpath:".\..\..\lib\vc_lib" /subsystem:windows
-# ADD LINK32 wxmsw25u_core.lib wxbase25u.lib wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregexu.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib oleacc.lib odbc32.lib /nologo /machine:i386 /out:"vc_mswu\dnd.exe" /libpath:".\..\..\lib\vc_lib" /subsystem:windows
+# ADD BASE LINK32 wxmsw26u_core.lib wxbase26u.lib wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregexu.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib oleacc.lib odbc32.lib /nologo /machine:i386 /out:"vc_mswu\dnd.exe" /debug /libpath:".\..\..\lib\vc_lib" /subsystem:windows
+# ADD LINK32 wxmsw26u_core.lib wxbase26u.lib wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregexu.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib oleacc.lib odbc32.lib /nologo /machine:i386 /out:"vc_mswu\dnd.exe" /debug /libpath:".\..\..\lib\vc_lib" /subsystem:windows
 
 !ELSEIF  "$(CFG)" == "dnd - Win32 Unicode Debug"
 
@@ -390,23 +390,23 @@ BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LINK32=link.exe
-# ADD BASE LINK32 wxmsw25ud_core.lib wxbase25ud.lib wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib wxregexud.lib wxexpatd.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib oleacc.lib odbc32.lib /nologo /machine:i386 /out:"vc_mswud\dnd.exe" /debug /libpath:".\..\..\lib\vc_lib" /subsystem:windows
-# ADD LINK32 wxmsw25ud_core.lib wxbase25ud.lib wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib wxregexud.lib wxexpatd.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib oleacc.lib odbc32.lib /nologo /machine:i386 /out:"vc_mswud\dnd.exe" /debug /libpath:".\..\..\lib\vc_lib" /subsystem:windows
+# ADD BASE LINK32 wxmsw26ud_core.lib wxbase26ud.lib wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib wxregexud.lib wxexpatd.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib oleacc.lib odbc32.lib /nologo /machine:i386 /out:"vc_mswud\dnd.exe" /debug /libpath:".\..\..\lib\vc_lib" /subsystem:windows
+# ADD LINK32 wxmsw26ud_core.lib wxbase26ud.lib wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib wxregexud.lib wxexpatd.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib oleacc.lib odbc32.lib /nologo /machine:i386 /out:"vc_mswud\dnd.exe" /debug /libpath:".\..\..\lib\vc_lib" /subsystem:windows
 
 !ELSEIF  "$(CFG)" == "dnd - Win32 Release"
 
 # PROP BASE Use_MFC 0
-# PROP BASE Use_Debug_Libraries 0
+# PROP BASE Use_Debug_Libraries 1
 # PROP BASE Output_Dir "vc_msw"
 # PROP BASE Intermediate_Dir "vc_msw\dnd"
 # PROP BASE Target_Dir ""
 # PROP Use_MFC 0
-# PROP Use_Debug_Libraries 0
+# PROP Use_Debug_Libraries 1
 # PROP Output_Dir "vc_msw"
 # PROP Intermediate_Dir "vc_msw\dnd"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /MD /Fdvc_msw\dnd.pdb /O2 /GR /EHsc /I ".\..\..\include" /I ".\..\..\lib\vc_lib\msw" /W4 /I "." /I ".\..\..\samples" /D "WIN32" /D "__WXMSW__" /D "_WINDOWS" /D "NOPCH" /c
-# ADD CPP /nologo /FD /MD /Fdvc_msw\dnd.pdb /O2 /GR /EHsc /I ".\..\..\include" /I ".\..\..\lib\vc_lib\msw" /W4 /I "." /I ".\..\..\samples" /D "WIN32" /D "__WXMSW__" /D "_WINDOWS" /D "NOPCH" /c
+# ADD BASE CPP /nologo /FD /MD /Zi /Gm /GZ /Fdvc_msw\dnd.pdb /O2 /GR /EHsc /I ".\..\..\include" /I ".\..\..\lib\vc_lib\msw" /W4 /I "." /I ".\..\..\samples" /D "WIN32" /D "__WXMSW__" /D "_WINDOWS" /D "NOPCH" /c
+# ADD CPP /nologo /FD /MD /Zi /Gm /GZ /Fdvc_msw\dnd.pdb /O2 /GR /EHsc /I ".\..\..\include" /I ".\..\..\lib\vc_lib\msw" /W4 /I "." /I ".\..\..\samples" /D "WIN32" /D "__WXMSW__" /D "_WINDOWS" /D "NOPCH" /c
 # ADD BASE MTL /nologo /D "WIN32" /D "__WXMSW__" /D "_WINDOWS" /D "NOPCH" /mktyplib203 /win32
 # ADD MTL /nologo /D "WIN32" /D "__WXMSW__" /D "_WINDOWS" /D "NOPCH" /mktyplib203 /win32
 # ADD BASE RSC /l 0x409 /d "__WXMSW__" /i ".\..\..\include" /i ".\..\..\lib\vc_lib\msw" /i "." /d "_WINDOWS" /i ".\..\..\samples" /d NOPCH
@@ -415,8 +415,8 @@ BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LINK32=link.exe
-# ADD BASE LINK32 wxmsw25_core.lib wxbase25.lib wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregex.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib oleacc.lib odbc32.lib /nologo /machine:i386 /out:"vc_msw\dnd.exe" /libpath:".\..\..\lib\vc_lib" /subsystem:windows
-# ADD LINK32 wxmsw25_core.lib wxbase25.lib wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregex.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib oleacc.lib odbc32.lib /nologo /machine:i386 /out:"vc_msw\dnd.exe" /libpath:".\..\..\lib\vc_lib" /subsystem:windows
+# ADD BASE LINK32 wxmsw26_core.lib wxbase26.lib wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregex.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib oleacc.lib odbc32.lib /nologo /machine:i386 /out:"vc_msw\dnd.exe" /debug /libpath:".\..\..\lib\vc_lib" /subsystem:windows
+# ADD LINK32 wxmsw26_core.lib wxbase26.lib wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregex.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib oleacc.lib odbc32.lib /nologo /machine:i386 /out:"vc_msw\dnd.exe" /debug /libpath:".\..\..\lib\vc_lib" /subsystem:windows
 
 !ELSEIF  "$(CFG)" == "dnd - Win32 Debug"
 
@@ -440,8 +440,8 @@ BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LINK32=link.exe
-# ADD BASE LINK32 wxmsw25d_core.lib wxbase25d.lib wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib wxregexd.lib wxexpatd.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib oleacc.lib odbc32.lib /nologo /machine:i386 /out:"vc_mswd\dnd.exe" /debug /libpath:".\..\..\lib\vc_lib" /subsystem:windows
-# ADD LINK32 wxmsw25d_core.lib wxbase25d.lib wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib wxregexd.lib wxexpatd.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib oleacc.lib odbc32.lib /nologo /machine:i386 /out:"vc_mswd\dnd.exe" /debug /libpath:".\..\..\lib\vc_lib" /subsystem:windows
+# ADD BASE LINK32 wxmsw26d_core.lib wxbase26d.lib wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib wxregexd.lib wxexpatd.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib oleacc.lib odbc32.lib /nologo /machine:i386 /out:"vc_mswd\dnd.exe" /debug /libpath:".\..\..\lib\vc_lib" /subsystem:windows
+# ADD LINK32 wxmsw26d_core.lib wxbase26d.lib wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib wxregexd.lib wxexpatd.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib oleacc.lib odbc32.lib /nologo /machine:i386 /out:"vc_mswd\dnd.exe" /debug /libpath:".\..\..\lib\vc_lib" /subsystem:windows
 
 !ENDIF
 

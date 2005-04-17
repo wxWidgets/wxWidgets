@@ -46,14 +46,14 @@ BUILD = debug
 # Should debugging info be included in the executables? The default value
 # "default" means that debug info will be included if BUILD=debug
 # and not included if BUILD=release. [0,1,default]
-DEBUG_INFO = default
+DEBUG_INFO = 1
 
 # Should __WXDEBUG__ be defined? The default value "default" means that it will
 # be defined if BUILD=debug and not defined if BUILD=release. [0,1,default]
 DEBUG_FLAG = default
 
 # Should link against debug RTL (msvcrtd.dll) or release (msvcrt.dll)?
-# Acts according to DEBUG_INFO by default. [0,1,default]
+# Acts according to BUILD by default. [0,1,default]
 DEBUG_RUNTIME_LIBS = default
 
 # Multiple libraries or single huge monolithic one? [0,1]

@@ -62,6 +62,8 @@ protected:
 
     // paint the given rectangle with our background brush/colour
     void PaintBackground(wxDC& dc, const struct tagRECT& rc);
+    // paint the foreground of the static box
+    virtual void PaintForeground(wxDC& dc, const struct tagRECT& rc);
 
     void OnPaint(wxPaintEvent& event);
 #endif // !__WXWINCE__

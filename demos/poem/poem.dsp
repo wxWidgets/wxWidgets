@@ -46,17 +46,17 @@ RSC=rc.exe
 !IF  "$(CFG)" == "wxpoem - Win32 DLL Universal Unicode Release"
 
 # PROP BASE Use_MFC 0
-# PROP BASE Use_Debug_Libraries 0
+# PROP BASE Use_Debug_Libraries 1
 # PROP BASE Output_Dir "vc_mswunivudll"
 # PROP BASE Intermediate_Dir "vc_mswunivudll\wxpoem"
 # PROP BASE Target_Dir ""
 # PROP Use_MFC 0
-# PROP Use_Debug_Libraries 0
+# PROP Use_Debug_Libraries 1
 # PROP Output_Dir "vc_mswunivudll"
 # PROP Intermediate_Dir "vc_mswunivudll\wxpoem"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /MD /Fdvc_mswunivudll\wxpoem.pdb /O2 /GR /EHsc /I ".\..\..\include" /I ".\..\..\lib\vc_dll\mswunivu" /W4 /I "." /I ".\..\..\samples" /D "WIN32" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "_UNICODE" /D "WXUSINGDLL" /D "_WINDOWS" /D "NOPCH" /c
-# ADD CPP /nologo /FD /MD /Fdvc_mswunivudll\wxpoem.pdb /O2 /GR /EHsc /I ".\..\..\include" /I ".\..\..\lib\vc_dll\mswunivu" /W4 /I "." /I ".\..\..\samples" /D "WIN32" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "_UNICODE" /D "WXUSINGDLL" /D "_WINDOWS" /D "NOPCH" /c
+# ADD BASE CPP /nologo /FD /MD /Zi /Gm /GZ /Fdvc_mswunivudll\wxpoem.pdb /O2 /GR /EHsc /I ".\..\..\include" /I ".\..\..\lib\vc_dll\mswunivu" /W4 /I "." /I ".\..\..\samples" /D "WIN32" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "_UNICODE" /D "WXUSINGDLL" /D "_WINDOWS" /D "NOPCH" /c
+# ADD CPP /nologo /FD /MD /Zi /Gm /GZ /Fdvc_mswunivudll\wxpoem.pdb /O2 /GR /EHsc /I ".\..\..\include" /I ".\..\..\lib\vc_dll\mswunivu" /W4 /I "." /I ".\..\..\samples" /D "WIN32" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "_UNICODE" /D "WXUSINGDLL" /D "_WINDOWS" /D "NOPCH" /c
 # ADD BASE MTL /nologo /D "WIN32" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "_UNICODE" /D "WXUSINGDLL" /D "_WINDOWS" /D "NOPCH" /mktyplib203 /win32
 # ADD MTL /nologo /D "WIN32" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "_UNICODE" /D "WXUSINGDLL" /D "_WINDOWS" /D "NOPCH" /mktyplib203 /win32
 # ADD BASE RSC /l 0x409 /d "__WXMSW__" /d "__WXUNIVERSAL__" /d "_UNICODE" /i ".\..\..\include" /i ".\..\..\lib\vc_dll\mswunivu" /i "." /d "WXUSINGDLL" /d "_WINDOWS" /i ".\..\..\samples" /d NOPCH
@@ -65,8 +65,8 @@ BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LINK32=link.exe
-# ADD BASE LINK32 wxmswuniv26u_html.lib wxmswuniv26u_core.lib wxbase26u.lib wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregexu.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib oleacc.lib odbc32.lib /nologo /machine:i386 /out:"vc_mswunivudll\wxpoem.exe" /libpath:".\..\..\lib\vc_dll" /subsystem:windows
-# ADD LINK32 wxmswuniv26u_html.lib wxmswuniv26u_core.lib wxbase26u.lib wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregexu.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib oleacc.lib odbc32.lib /nologo /machine:i386 /out:"vc_mswunivudll\wxpoem.exe" /libpath:".\..\..\lib\vc_dll" /subsystem:windows
+# ADD BASE LINK32 wxmswuniv26u_html.lib wxmswuniv26u_core.lib wxbase26u.lib wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregexu.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib oleacc.lib odbc32.lib /nologo /machine:i386 /out:"vc_mswunivudll\wxpoem.exe" /debug /libpath:".\..\..\lib\vc_dll" /subsystem:windows
+# ADD LINK32 wxmswuniv26u_html.lib wxmswuniv26u_core.lib wxbase26u.lib wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregexu.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib oleacc.lib odbc32.lib /nologo /machine:i386 /out:"vc_mswunivudll\wxpoem.exe" /debug /libpath:".\..\..\lib\vc_dll" /subsystem:windows
 
 !ELSEIF  "$(CFG)" == "wxpoem - Win32 DLL Universal Unicode Debug"
 
@@ -96,17 +96,17 @@ LINK32=link.exe
 !ELSEIF  "$(CFG)" == "wxpoem - Win32 DLL Universal Release"
 
 # PROP BASE Use_MFC 0
-# PROP BASE Use_Debug_Libraries 0
+# PROP BASE Use_Debug_Libraries 1
 # PROP BASE Output_Dir "vc_mswunivdll"
 # PROP BASE Intermediate_Dir "vc_mswunivdll\wxpoem"
 # PROP BASE Target_Dir ""
 # PROP Use_MFC 0
-# PROP Use_Debug_Libraries 0
+# PROP Use_Debug_Libraries 1
 # PROP Output_Dir "vc_mswunivdll"
 # PROP Intermediate_Dir "vc_mswunivdll\wxpoem"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /MD /Fdvc_mswunivdll\wxpoem.pdb /O2 /GR /EHsc /I ".\..\..\include" /I ".\..\..\lib\vc_dll\mswuniv" /W4 /I "." /I ".\..\..\samples" /D "WIN32" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "WXUSINGDLL" /D "_WINDOWS" /D "NOPCH" /c
-# ADD CPP /nologo /FD /MD /Fdvc_mswunivdll\wxpoem.pdb /O2 /GR /EHsc /I ".\..\..\include" /I ".\..\..\lib\vc_dll\mswuniv" /W4 /I "." /I ".\..\..\samples" /D "WIN32" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "WXUSINGDLL" /D "_WINDOWS" /D "NOPCH" /c
+# ADD BASE CPP /nologo /FD /MD /Zi /Gm /GZ /Fdvc_mswunivdll\wxpoem.pdb /O2 /GR /EHsc /I ".\..\..\include" /I ".\..\..\lib\vc_dll\mswuniv" /W4 /I "." /I ".\..\..\samples" /D "WIN32" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "WXUSINGDLL" /D "_WINDOWS" /D "NOPCH" /c
+# ADD CPP /nologo /FD /MD /Zi /Gm /GZ /Fdvc_mswunivdll\wxpoem.pdb /O2 /GR /EHsc /I ".\..\..\include" /I ".\..\..\lib\vc_dll\mswuniv" /W4 /I "." /I ".\..\..\samples" /D "WIN32" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "WXUSINGDLL" /D "_WINDOWS" /D "NOPCH" /c
 # ADD BASE MTL /nologo /D "WIN32" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "WXUSINGDLL" /D "_WINDOWS" /D "NOPCH" /mktyplib203 /win32
 # ADD MTL /nologo /D "WIN32" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "WXUSINGDLL" /D "_WINDOWS" /D "NOPCH" /mktyplib203 /win32
 # ADD BASE RSC /l 0x409 /d "__WXMSW__" /d "__WXUNIVERSAL__" /i ".\..\..\include" /i ".\..\..\lib\vc_dll\mswuniv" /i "." /d "WXUSINGDLL" /d "_WINDOWS" /i ".\..\..\samples" /d NOPCH
@@ -115,8 +115,8 @@ BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LINK32=link.exe
-# ADD BASE LINK32 wxmswuniv26_html.lib wxmswuniv26_core.lib wxbase26.lib wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregex.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib oleacc.lib odbc32.lib /nologo /machine:i386 /out:"vc_mswunivdll\wxpoem.exe" /libpath:".\..\..\lib\vc_dll" /subsystem:windows
-# ADD LINK32 wxmswuniv26_html.lib wxmswuniv26_core.lib wxbase26.lib wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregex.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib oleacc.lib odbc32.lib /nologo /machine:i386 /out:"vc_mswunivdll\wxpoem.exe" /libpath:".\..\..\lib\vc_dll" /subsystem:windows
+# ADD BASE LINK32 wxmswuniv26_html.lib wxmswuniv26_core.lib wxbase26.lib wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregex.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib oleacc.lib odbc32.lib /nologo /machine:i386 /out:"vc_mswunivdll\wxpoem.exe" /debug /libpath:".\..\..\lib\vc_dll" /subsystem:windows
+# ADD LINK32 wxmswuniv26_html.lib wxmswuniv26_core.lib wxbase26.lib wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregex.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib oleacc.lib odbc32.lib /nologo /machine:i386 /out:"vc_mswunivdll\wxpoem.exe" /debug /libpath:".\..\..\lib\vc_dll" /subsystem:windows
 
 !ELSEIF  "$(CFG)" == "wxpoem - Win32 DLL Universal Debug"
 
@@ -146,17 +146,17 @@ LINK32=link.exe
 !ELSEIF  "$(CFG)" == "wxpoem - Win32 DLL Unicode Release"
 
 # PROP BASE Use_MFC 0
-# PROP BASE Use_Debug_Libraries 0
+# PROP BASE Use_Debug_Libraries 1
 # PROP BASE Output_Dir "vc_mswudll"
 # PROP BASE Intermediate_Dir "vc_mswudll\wxpoem"
 # PROP BASE Target_Dir ""
 # PROP Use_MFC 0
-# PROP Use_Debug_Libraries 0
+# PROP Use_Debug_Libraries 1
 # PROP Output_Dir "vc_mswudll"
 # PROP Intermediate_Dir "vc_mswudll\wxpoem"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /MD /Fdvc_mswudll\wxpoem.pdb /O2 /GR /EHsc /I ".\..\..\include" /I ".\..\..\lib\vc_dll\mswu" /W4 /I "." /I ".\..\..\samples" /D "WIN32" /D "__WXMSW__" /D "_UNICODE" /D "WXUSINGDLL" /D "_WINDOWS" /D "NOPCH" /c
-# ADD CPP /nologo /FD /MD /Fdvc_mswudll\wxpoem.pdb /O2 /GR /EHsc /I ".\..\..\include" /I ".\..\..\lib\vc_dll\mswu" /W4 /I "." /I ".\..\..\samples" /D "WIN32" /D "__WXMSW__" /D "_UNICODE" /D "WXUSINGDLL" /D "_WINDOWS" /D "NOPCH" /c
+# ADD BASE CPP /nologo /FD /MD /Zi /Gm /GZ /Fdvc_mswudll\wxpoem.pdb /O2 /GR /EHsc /I ".\..\..\include" /I ".\..\..\lib\vc_dll\mswu" /W4 /I "." /I ".\..\..\samples" /D "WIN32" /D "__WXMSW__" /D "_UNICODE" /D "WXUSINGDLL" /D "_WINDOWS" /D "NOPCH" /c
+# ADD CPP /nologo /FD /MD /Zi /Gm /GZ /Fdvc_mswudll\wxpoem.pdb /O2 /GR /EHsc /I ".\..\..\include" /I ".\..\..\lib\vc_dll\mswu" /W4 /I "." /I ".\..\..\samples" /D "WIN32" /D "__WXMSW__" /D "_UNICODE" /D "WXUSINGDLL" /D "_WINDOWS" /D "NOPCH" /c
 # ADD BASE MTL /nologo /D "WIN32" /D "__WXMSW__" /D "_UNICODE" /D "WXUSINGDLL" /D "_WINDOWS" /D "NOPCH" /mktyplib203 /win32
 # ADD MTL /nologo /D "WIN32" /D "__WXMSW__" /D "_UNICODE" /D "WXUSINGDLL" /D "_WINDOWS" /D "NOPCH" /mktyplib203 /win32
 # ADD BASE RSC /l 0x409 /d "__WXMSW__" /d "_UNICODE" /i ".\..\..\include" /i ".\..\..\lib\vc_dll\mswu" /i "." /d "WXUSINGDLL" /d "_WINDOWS" /i ".\..\..\samples" /d NOPCH
@@ -165,8 +165,8 @@ BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LINK32=link.exe
-# ADD BASE LINK32 wxmsw26u_html.lib wxmsw26u_core.lib wxbase26u.lib wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregexu.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib oleacc.lib odbc32.lib /nologo /machine:i386 /out:"vc_mswudll\wxpoem.exe" /libpath:".\..\..\lib\vc_dll" /subsystem:windows
-# ADD LINK32 wxmsw26u_html.lib wxmsw26u_core.lib wxbase26u.lib wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregexu.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib oleacc.lib odbc32.lib /nologo /machine:i386 /out:"vc_mswudll\wxpoem.exe" /libpath:".\..\..\lib\vc_dll" /subsystem:windows
+# ADD BASE LINK32 wxmsw26u_html.lib wxmsw26u_core.lib wxbase26u.lib wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregexu.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib oleacc.lib odbc32.lib /nologo /machine:i386 /out:"vc_mswudll\wxpoem.exe" /debug /libpath:".\..\..\lib\vc_dll" /subsystem:windows
+# ADD LINK32 wxmsw26u_html.lib wxmsw26u_core.lib wxbase26u.lib wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregexu.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib oleacc.lib odbc32.lib /nologo /machine:i386 /out:"vc_mswudll\wxpoem.exe" /debug /libpath:".\..\..\lib\vc_dll" /subsystem:windows
 
 !ELSEIF  "$(CFG)" == "wxpoem - Win32 DLL Unicode Debug"
 
@@ -196,17 +196,17 @@ LINK32=link.exe
 !ELSEIF  "$(CFG)" == "wxpoem - Win32 DLL Release"
 
 # PROP BASE Use_MFC 0
-# PROP BASE Use_Debug_Libraries 0
+# PROP BASE Use_Debug_Libraries 1
 # PROP BASE Output_Dir "vc_mswdll"
 # PROP BASE Intermediate_Dir "vc_mswdll\wxpoem"
 # PROP BASE Target_Dir ""
 # PROP Use_MFC 0
-# PROP Use_Debug_Libraries 0
+# PROP Use_Debug_Libraries 1
 # PROP Output_Dir "vc_mswdll"
 # PROP Intermediate_Dir "vc_mswdll\wxpoem"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /MD /Fdvc_mswdll\wxpoem.pdb /O2 /GR /EHsc /I ".\..\..\include" /I ".\..\..\lib\vc_dll\msw" /W4 /I "." /I ".\..\..\samples" /D "WIN32" /D "__WXMSW__" /D "WXUSINGDLL" /D "_WINDOWS" /D "NOPCH" /c
-# ADD CPP /nologo /FD /MD /Fdvc_mswdll\wxpoem.pdb /O2 /GR /EHsc /I ".\..\..\include" /I ".\..\..\lib\vc_dll\msw" /W4 /I "." /I ".\..\..\samples" /D "WIN32" /D "__WXMSW__" /D "WXUSINGDLL" /D "_WINDOWS" /D "NOPCH" /c
+# ADD BASE CPP /nologo /FD /MD /Zi /Gm /GZ /Fdvc_mswdll\wxpoem.pdb /O2 /GR /EHsc /I ".\..\..\include" /I ".\..\..\lib\vc_dll\msw" /W4 /I "." /I ".\..\..\samples" /D "WIN32" /D "__WXMSW__" /D "WXUSINGDLL" /D "_WINDOWS" /D "NOPCH" /c
+# ADD CPP /nologo /FD /MD /Zi /Gm /GZ /Fdvc_mswdll\wxpoem.pdb /O2 /GR /EHsc /I ".\..\..\include" /I ".\..\..\lib\vc_dll\msw" /W4 /I "." /I ".\..\..\samples" /D "WIN32" /D "__WXMSW__" /D "WXUSINGDLL" /D "_WINDOWS" /D "NOPCH" /c
 # ADD BASE MTL /nologo /D "WIN32" /D "__WXMSW__" /D "WXUSINGDLL" /D "_WINDOWS" /D "NOPCH" /mktyplib203 /win32
 # ADD MTL /nologo /D "WIN32" /D "__WXMSW__" /D "WXUSINGDLL" /D "_WINDOWS" /D "NOPCH" /mktyplib203 /win32
 # ADD BASE RSC /l 0x409 /d "__WXMSW__" /i ".\..\..\include" /i ".\..\..\lib\vc_dll\msw" /i "." /d "WXUSINGDLL" /d "_WINDOWS" /i ".\..\..\samples" /d NOPCH
@@ -215,8 +215,8 @@ BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LINK32=link.exe
-# ADD BASE LINK32 wxmsw26_html.lib wxmsw26_core.lib wxbase26.lib wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregex.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib oleacc.lib odbc32.lib /nologo /machine:i386 /out:"vc_mswdll\wxpoem.exe" /libpath:".\..\..\lib\vc_dll" /subsystem:windows
-# ADD LINK32 wxmsw26_html.lib wxmsw26_core.lib wxbase26.lib wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregex.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib oleacc.lib odbc32.lib /nologo /machine:i386 /out:"vc_mswdll\wxpoem.exe" /libpath:".\..\..\lib\vc_dll" /subsystem:windows
+# ADD BASE LINK32 wxmsw26_html.lib wxmsw26_core.lib wxbase26.lib wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregex.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib oleacc.lib odbc32.lib /nologo /machine:i386 /out:"vc_mswdll\wxpoem.exe" /debug /libpath:".\..\..\lib\vc_dll" /subsystem:windows
+# ADD LINK32 wxmsw26_html.lib wxmsw26_core.lib wxbase26.lib wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregex.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib oleacc.lib odbc32.lib /nologo /machine:i386 /out:"vc_mswdll\wxpoem.exe" /debug /libpath:".\..\..\lib\vc_dll" /subsystem:windows
 
 !ELSEIF  "$(CFG)" == "wxpoem - Win32 DLL Debug"
 
@@ -246,17 +246,17 @@ LINK32=link.exe
 !ELSEIF  "$(CFG)" == "wxpoem - Win32 Universal Unicode Release"
 
 # PROP BASE Use_MFC 0
-# PROP BASE Use_Debug_Libraries 0
+# PROP BASE Use_Debug_Libraries 1
 # PROP BASE Output_Dir "vc_mswunivu"
 # PROP BASE Intermediate_Dir "vc_mswunivu\wxpoem"
 # PROP BASE Target_Dir ""
 # PROP Use_MFC 0
-# PROP Use_Debug_Libraries 0
+# PROP Use_Debug_Libraries 1
 # PROP Output_Dir "vc_mswunivu"
 # PROP Intermediate_Dir "vc_mswunivu\wxpoem"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /MD /Fdvc_mswunivu\wxpoem.pdb /O2 /GR /EHsc /I ".\..\..\include" /I ".\..\..\lib\vc_lib\mswunivu" /W4 /I "." /I ".\..\..\samples" /D "WIN32" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "_UNICODE" /D "_WINDOWS" /D "NOPCH" /c
-# ADD CPP /nologo /FD /MD /Fdvc_mswunivu\wxpoem.pdb /O2 /GR /EHsc /I ".\..\..\include" /I ".\..\..\lib\vc_lib\mswunivu" /W4 /I "." /I ".\..\..\samples" /D "WIN32" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "_UNICODE" /D "_WINDOWS" /D "NOPCH" /c
+# ADD BASE CPP /nologo /FD /MD /Zi /Gm /GZ /Fdvc_mswunivu\wxpoem.pdb /O2 /GR /EHsc /I ".\..\..\include" /I ".\..\..\lib\vc_lib\mswunivu" /W4 /I "." /I ".\..\..\samples" /D "WIN32" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "_UNICODE" /D "_WINDOWS" /D "NOPCH" /c
+# ADD CPP /nologo /FD /MD /Zi /Gm /GZ /Fdvc_mswunivu\wxpoem.pdb /O2 /GR /EHsc /I ".\..\..\include" /I ".\..\..\lib\vc_lib\mswunivu" /W4 /I "." /I ".\..\..\samples" /D "WIN32" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "_UNICODE" /D "_WINDOWS" /D "NOPCH" /c
 # ADD BASE MTL /nologo /D "WIN32" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "_UNICODE" /D "_WINDOWS" /D "NOPCH" /mktyplib203 /win32
 # ADD MTL /nologo /D "WIN32" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "_UNICODE" /D "_WINDOWS" /D "NOPCH" /mktyplib203 /win32
 # ADD BASE RSC /l 0x409 /d "__WXMSW__" /d "__WXUNIVERSAL__" /d "_UNICODE" /i ".\..\..\include" /i ".\..\..\lib\vc_lib\mswunivu" /i "." /d "_WINDOWS" /i ".\..\..\samples" /d NOPCH
@@ -265,8 +265,8 @@ BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LINK32=link.exe
-# ADD BASE LINK32 wxmswuniv26u_html.lib wxmswuniv26u_core.lib wxbase26u.lib wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregexu.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib oleacc.lib odbc32.lib /nologo /machine:i386 /out:"vc_mswunivu\wxpoem.exe" /libpath:".\..\..\lib\vc_lib" /subsystem:windows
-# ADD LINK32 wxmswuniv26u_html.lib wxmswuniv26u_core.lib wxbase26u.lib wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregexu.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib oleacc.lib odbc32.lib /nologo /machine:i386 /out:"vc_mswunivu\wxpoem.exe" /libpath:".\..\..\lib\vc_lib" /subsystem:windows
+# ADD BASE LINK32 wxmswuniv26u_html.lib wxmswuniv26u_core.lib wxbase26u.lib wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregexu.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib oleacc.lib odbc32.lib /nologo /machine:i386 /out:"vc_mswunivu\wxpoem.exe" /debug /libpath:".\..\..\lib\vc_lib" /subsystem:windows
+# ADD LINK32 wxmswuniv26u_html.lib wxmswuniv26u_core.lib wxbase26u.lib wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregexu.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib oleacc.lib odbc32.lib /nologo /machine:i386 /out:"vc_mswunivu\wxpoem.exe" /debug /libpath:".\..\..\lib\vc_lib" /subsystem:windows
 
 !ELSEIF  "$(CFG)" == "wxpoem - Win32 Universal Unicode Debug"
 
@@ -296,17 +296,17 @@ LINK32=link.exe
 !ELSEIF  "$(CFG)" == "wxpoem - Win32 Universal Release"
 
 # PROP BASE Use_MFC 0
-# PROP BASE Use_Debug_Libraries 0
+# PROP BASE Use_Debug_Libraries 1
 # PROP BASE Output_Dir "vc_mswuniv"
 # PROP BASE Intermediate_Dir "vc_mswuniv\wxpoem"
 # PROP BASE Target_Dir ""
 # PROP Use_MFC 0
-# PROP Use_Debug_Libraries 0
+# PROP Use_Debug_Libraries 1
 # PROP Output_Dir "vc_mswuniv"
 # PROP Intermediate_Dir "vc_mswuniv\wxpoem"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /MD /Fdvc_mswuniv\wxpoem.pdb /O2 /GR /EHsc /I ".\..\..\include" /I ".\..\..\lib\vc_lib\mswuniv" /W4 /I "." /I ".\..\..\samples" /D "WIN32" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "_WINDOWS" /D "NOPCH" /c
-# ADD CPP /nologo /FD /MD /Fdvc_mswuniv\wxpoem.pdb /O2 /GR /EHsc /I ".\..\..\include" /I ".\..\..\lib\vc_lib\mswuniv" /W4 /I "." /I ".\..\..\samples" /D "WIN32" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "_WINDOWS" /D "NOPCH" /c
+# ADD BASE CPP /nologo /FD /MD /Zi /Gm /GZ /Fdvc_mswuniv\wxpoem.pdb /O2 /GR /EHsc /I ".\..\..\include" /I ".\..\..\lib\vc_lib\mswuniv" /W4 /I "." /I ".\..\..\samples" /D "WIN32" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "_WINDOWS" /D "NOPCH" /c
+# ADD CPP /nologo /FD /MD /Zi /Gm /GZ /Fdvc_mswuniv\wxpoem.pdb /O2 /GR /EHsc /I ".\..\..\include" /I ".\..\..\lib\vc_lib\mswuniv" /W4 /I "." /I ".\..\..\samples" /D "WIN32" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "_WINDOWS" /D "NOPCH" /c
 # ADD BASE MTL /nologo /D "WIN32" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "_WINDOWS" /D "NOPCH" /mktyplib203 /win32
 # ADD MTL /nologo /D "WIN32" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "_WINDOWS" /D "NOPCH" /mktyplib203 /win32
 # ADD BASE RSC /l 0x409 /d "__WXMSW__" /d "__WXUNIVERSAL__" /i ".\..\..\include" /i ".\..\..\lib\vc_lib\mswuniv" /i "." /d "_WINDOWS" /i ".\..\..\samples" /d NOPCH
@@ -315,8 +315,8 @@ BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LINK32=link.exe
-# ADD BASE LINK32 wxmswuniv26_html.lib wxmswuniv26_core.lib wxbase26.lib wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregex.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib oleacc.lib odbc32.lib /nologo /machine:i386 /out:"vc_mswuniv\wxpoem.exe" /libpath:".\..\..\lib\vc_lib" /subsystem:windows
-# ADD LINK32 wxmswuniv26_html.lib wxmswuniv26_core.lib wxbase26.lib wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregex.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib oleacc.lib odbc32.lib /nologo /machine:i386 /out:"vc_mswuniv\wxpoem.exe" /libpath:".\..\..\lib\vc_lib" /subsystem:windows
+# ADD BASE LINK32 wxmswuniv26_html.lib wxmswuniv26_core.lib wxbase26.lib wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregex.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib oleacc.lib odbc32.lib /nologo /machine:i386 /out:"vc_mswuniv\wxpoem.exe" /debug /libpath:".\..\..\lib\vc_lib" /subsystem:windows
+# ADD LINK32 wxmswuniv26_html.lib wxmswuniv26_core.lib wxbase26.lib wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregex.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib oleacc.lib odbc32.lib /nologo /machine:i386 /out:"vc_mswuniv\wxpoem.exe" /debug /libpath:".\..\..\lib\vc_lib" /subsystem:windows
 
 !ELSEIF  "$(CFG)" == "wxpoem - Win32 Universal Debug"
 
@@ -346,17 +346,17 @@ LINK32=link.exe
 !ELSEIF  "$(CFG)" == "wxpoem - Win32 Unicode Release"
 
 # PROP BASE Use_MFC 0
-# PROP BASE Use_Debug_Libraries 0
+# PROP BASE Use_Debug_Libraries 1
 # PROP BASE Output_Dir "vc_mswu"
 # PROP BASE Intermediate_Dir "vc_mswu\wxpoem"
 # PROP BASE Target_Dir ""
 # PROP Use_MFC 0
-# PROP Use_Debug_Libraries 0
+# PROP Use_Debug_Libraries 1
 # PROP Output_Dir "vc_mswu"
 # PROP Intermediate_Dir "vc_mswu\wxpoem"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /MD /Fdvc_mswu\wxpoem.pdb /O2 /GR /EHsc /I ".\..\..\include" /I ".\..\..\lib\vc_lib\mswu" /W4 /I "." /I ".\..\..\samples" /D "WIN32" /D "__WXMSW__" /D "_UNICODE" /D "_WINDOWS" /D "NOPCH" /c
-# ADD CPP /nologo /FD /MD /Fdvc_mswu\wxpoem.pdb /O2 /GR /EHsc /I ".\..\..\include" /I ".\..\..\lib\vc_lib\mswu" /W4 /I "." /I ".\..\..\samples" /D "WIN32" /D "__WXMSW__" /D "_UNICODE" /D "_WINDOWS" /D "NOPCH" /c
+# ADD BASE CPP /nologo /FD /MD /Zi /Gm /GZ /Fdvc_mswu\wxpoem.pdb /O2 /GR /EHsc /I ".\..\..\include" /I ".\..\..\lib\vc_lib\mswu" /W4 /I "." /I ".\..\..\samples" /D "WIN32" /D "__WXMSW__" /D "_UNICODE" /D "_WINDOWS" /D "NOPCH" /c
+# ADD CPP /nologo /FD /MD /Zi /Gm /GZ /Fdvc_mswu\wxpoem.pdb /O2 /GR /EHsc /I ".\..\..\include" /I ".\..\..\lib\vc_lib\mswu" /W4 /I "." /I ".\..\..\samples" /D "WIN32" /D "__WXMSW__" /D "_UNICODE" /D "_WINDOWS" /D "NOPCH" /c
 # ADD BASE MTL /nologo /D "WIN32" /D "__WXMSW__" /D "_UNICODE" /D "_WINDOWS" /D "NOPCH" /mktyplib203 /win32
 # ADD MTL /nologo /D "WIN32" /D "__WXMSW__" /D "_UNICODE" /D "_WINDOWS" /D "NOPCH" /mktyplib203 /win32
 # ADD BASE RSC /l 0x409 /d "__WXMSW__" /d "_UNICODE" /i ".\..\..\include" /i ".\..\..\lib\vc_lib\mswu" /i "." /d "_WINDOWS" /i ".\..\..\samples" /d NOPCH
@@ -365,8 +365,8 @@ BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LINK32=link.exe
-# ADD BASE LINK32 wxmsw26u_html.lib wxmsw26u_core.lib wxbase26u.lib wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregexu.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib oleacc.lib odbc32.lib /nologo /machine:i386 /out:"vc_mswu\wxpoem.exe" /libpath:".\..\..\lib\vc_lib" /subsystem:windows
-# ADD LINK32 wxmsw26u_html.lib wxmsw26u_core.lib wxbase26u.lib wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregexu.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib oleacc.lib odbc32.lib /nologo /machine:i386 /out:"vc_mswu\wxpoem.exe" /libpath:".\..\..\lib\vc_lib" /subsystem:windows
+# ADD BASE LINK32 wxmsw26u_html.lib wxmsw26u_core.lib wxbase26u.lib wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregexu.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib oleacc.lib odbc32.lib /nologo /machine:i386 /out:"vc_mswu\wxpoem.exe" /debug /libpath:".\..\..\lib\vc_lib" /subsystem:windows
+# ADD LINK32 wxmsw26u_html.lib wxmsw26u_core.lib wxbase26u.lib wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregexu.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib oleacc.lib odbc32.lib /nologo /machine:i386 /out:"vc_mswu\wxpoem.exe" /debug /libpath:".\..\..\lib\vc_lib" /subsystem:windows
 
 !ELSEIF  "$(CFG)" == "wxpoem - Win32 Unicode Debug"
 
@@ -396,17 +396,17 @@ LINK32=link.exe
 !ELSEIF  "$(CFG)" == "wxpoem - Win32 Release"
 
 # PROP BASE Use_MFC 0
-# PROP BASE Use_Debug_Libraries 0
+# PROP BASE Use_Debug_Libraries 1
 # PROP BASE Output_Dir "vc_msw"
 # PROP BASE Intermediate_Dir "vc_msw\wxpoem"
 # PROP BASE Target_Dir ""
 # PROP Use_MFC 0
-# PROP Use_Debug_Libraries 0
+# PROP Use_Debug_Libraries 1
 # PROP Output_Dir "vc_msw"
 # PROP Intermediate_Dir "vc_msw\wxpoem"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /MD /Fdvc_msw\wxpoem.pdb /O2 /GR /EHsc /I ".\..\..\include" /I ".\..\..\lib\vc_lib\msw" /W4 /I "." /I ".\..\..\samples" /D "WIN32" /D "__WXMSW__" /D "_WINDOWS" /D "NOPCH" /c
-# ADD CPP /nologo /FD /MD /Fdvc_msw\wxpoem.pdb /O2 /GR /EHsc /I ".\..\..\include" /I ".\..\..\lib\vc_lib\msw" /W4 /I "." /I ".\..\..\samples" /D "WIN32" /D "__WXMSW__" /D "_WINDOWS" /D "NOPCH" /c
+# ADD BASE CPP /nologo /FD /MD /Zi /Gm /GZ /Fdvc_msw\wxpoem.pdb /O2 /GR /EHsc /I ".\..\..\include" /I ".\..\..\lib\vc_lib\msw" /W4 /I "." /I ".\..\..\samples" /D "WIN32" /D "__WXMSW__" /D "_WINDOWS" /D "NOPCH" /c
+# ADD CPP /nologo /FD /MD /Zi /Gm /GZ /Fdvc_msw\wxpoem.pdb /O2 /GR /EHsc /I ".\..\..\include" /I ".\..\..\lib\vc_lib\msw" /W4 /I "." /I ".\..\..\samples" /D "WIN32" /D "__WXMSW__" /D "_WINDOWS" /D "NOPCH" /c
 # ADD BASE MTL /nologo /D "WIN32" /D "__WXMSW__" /D "_WINDOWS" /D "NOPCH" /mktyplib203 /win32
 # ADD MTL /nologo /D "WIN32" /D "__WXMSW__" /D "_WINDOWS" /D "NOPCH" /mktyplib203 /win32
 # ADD BASE RSC /l 0x409 /d "__WXMSW__" /i ".\..\..\include" /i ".\..\..\lib\vc_lib\msw" /i "." /d "_WINDOWS" /i ".\..\..\samples" /d NOPCH
@@ -415,8 +415,8 @@ BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LINK32=link.exe
-# ADD BASE LINK32 wxmsw26_html.lib wxmsw26_core.lib wxbase26.lib wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregex.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib oleacc.lib odbc32.lib /nologo /machine:i386 /out:"vc_msw\wxpoem.exe" /libpath:".\..\..\lib\vc_lib" /subsystem:windows
-# ADD LINK32 wxmsw26_html.lib wxmsw26_core.lib wxbase26.lib wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregex.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib oleacc.lib odbc32.lib /nologo /machine:i386 /out:"vc_msw\wxpoem.exe" /libpath:".\..\..\lib\vc_lib" /subsystem:windows
+# ADD BASE LINK32 wxmsw26_html.lib wxmsw26_core.lib wxbase26.lib wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregex.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib oleacc.lib odbc32.lib /nologo /machine:i386 /out:"vc_msw\wxpoem.exe" /debug /libpath:".\..\..\lib\vc_lib" /subsystem:windows
+# ADD LINK32 wxmsw26_html.lib wxmsw26_core.lib wxbase26.lib wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregex.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib oleacc.lib odbc32.lib /nologo /machine:i386 /out:"vc_msw\wxpoem.exe" /debug /libpath:".\..\..\lib\vc_lib" /subsystem:windows
 
 !ELSEIF  "$(CFG)" == "wxpoem - Win32 Debug"
 

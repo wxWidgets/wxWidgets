@@ -101,26 +101,23 @@ __DEBUGINFO_1 =
 !if "$(DEBUG_INFO)" == "1"
 __DEBUGINFO_1 = /DEBUG
 !endif
+!if "$(BUILD)" == "debug" && "$(DEBUG_RUNTIME_LIBS)" == "default"
+____DEBUGRUNTIME_2_p = /D_DEBUG
+!endif
+!if "$(BUILD)" == "release" && "$(DEBUG_RUNTIME_LIBS)" == "default"
+____DEBUGRUNTIME_2_p = 
+!endif
 !if "$(DEBUG_RUNTIME_LIBS)" == "0"
 ____DEBUGRUNTIME_2_p = 
 !endif
 !if "$(DEBUG_RUNTIME_LIBS)" == "1"
 ____DEBUGRUNTIME_2_p = /D_DEBUG
 !endif
-!if "$(DEBUG_RUNTIME_LIBS)" == "default"
-____DEBUGRUNTIME_2_p = $(____DEBUGINFO_2_p)
+!if "$(BUILD)" == "debug" && "$(DEBUG_RUNTIME_LIBS)" == "default"
+____DEBUGRUNTIME_2_p_1 = /d _DEBUG
 !endif
-!if "$(BUILD)" == "debug" && "$(DEBUG_INFO)" == "default"
-____DEBUGINFO_2_p = /D_DEBUG
-!endif
-!if "$(BUILD)" == "release" && "$(DEBUG_INFO)" == "default"
-____DEBUGINFO_2_p = 
-!endif
-!if "$(DEBUG_INFO)" == "0"
-____DEBUGINFO_2_p = 
-!endif
-!if "$(DEBUG_INFO)" == "1"
-____DEBUGINFO_2_p = /D_DEBUG
+!if "$(BUILD)" == "release" && "$(DEBUG_RUNTIME_LIBS)" == "default"
+____DEBUGRUNTIME_2_p_1 = 
 !endif
 !if "$(DEBUG_RUNTIME_LIBS)" == "0"
 ____DEBUGRUNTIME_2_p_1 = 
@@ -128,41 +125,17 @@ ____DEBUGRUNTIME_2_p_1 =
 !if "$(DEBUG_RUNTIME_LIBS)" == "1"
 ____DEBUGRUNTIME_2_p_1 = /d _DEBUG
 !endif
-!if "$(DEBUG_RUNTIME_LIBS)" == "default"
-____DEBUGRUNTIME_2_p_1 = $(____DEBUGINFO_2_p_1)
+!if "$(BUILD)" == "debug" && "$(DEBUG_RUNTIME_LIBS)" == "default"
+__DEBUGRUNTIME_3 = d
 !endif
-!if "$(BUILD)" == "debug" && "$(DEBUG_INFO)" == "default"
-____DEBUGINFO_2_p_1 = /d _DEBUG
-!endif
-!if "$(BUILD)" == "release" && "$(DEBUG_INFO)" == "default"
-____DEBUGINFO_2_p_1 = 
-!endif
-!if "$(DEBUG_INFO)" == "0"
-____DEBUGINFO_2_p_1 = 
-!endif
-!if "$(DEBUG_INFO)" == "1"
-____DEBUGINFO_2_p_1 = /d _DEBUG
+!if "$(BUILD)" == "release" && "$(DEBUG_RUNTIME_LIBS)" == "default"
+__DEBUGRUNTIME_3 = 
 !endif
 !if "$(DEBUG_RUNTIME_LIBS)" == "0"
 __DEBUGRUNTIME_3 = 
 !endif
 !if "$(DEBUG_RUNTIME_LIBS)" == "1"
 __DEBUGRUNTIME_3 = d
-!endif
-!if "$(DEBUG_RUNTIME_LIBS)" == "default"
-__DEBUGRUNTIME_3 = $(__DEBUGINFO_3)
-!endif
-!if "$(BUILD)" == "debug" && "$(DEBUG_INFO)" == "default"
-__DEBUGINFO_3 = d
-!endif
-!if "$(BUILD)" == "release" && "$(DEBUG_INFO)" == "default"
-__DEBUGINFO_3 = 
-!endif
-!if "$(DEBUG_INFO)" == "0"
-__DEBUGINFO_3 = 
-!endif
-!if "$(DEBUG_INFO)" == "1"
-__DEBUGINFO_3 = d
 !endif
 !if "$(BUILD)" == "debug"
 __OPTIMIZEFLAG_4 = /Od

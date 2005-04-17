@@ -18,10 +18,10 @@ OBJS = \
 LIBDIRNAME = ..\..\src\plot\..\..\..\lib\vc_$(LIBTYPE_SUFFIX)$(CFG)
 SETUPHDIR = \
 	$(LIBDIRNAME)\$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)
-PLOTDLL_CXXFLAGS = /M$(__RUNTIME_LIBS_9)$(__DEBUGRUNTIME_4) /DWIN32 \
+PLOTDLL_CXXFLAGS = /M$(__RUNTIME_LIBS_9)$(__DEBUGRUNTIME) /DWIN32 \
 	$(__DEBUGINFO_1) \
 	/Fd$(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_plot_vc$(VENDORTAG).pdb \
-	$(____DEBUGRUNTIME_3_p) $(__OPTIMIZEFLAG) $(__NO_VC_CRTDBG_p) /D__WXMSW__ \
+	$(____DEBUGRUNTIME) $(__OPTIMIZEFLAG) $(__NO_VC_CRTDBG_p) /D__WXMSW__ \
 	$(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) \
 	$(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p) \
 	/I..\..\src\plot\..\..\..\include /I$(SETUPHDIR) /W4 \
@@ -32,10 +32,10 @@ PLOTDLL_OBJECTS =  \
 	$(OBJS)\plotdll_dummy.obj \
 	$(OBJS)\plotdll_version.res \
 	$(OBJS)\plotdll_plot.obj
-PLOTLIB_CXXFLAGS = /M$(__RUNTIME_LIBS_22)$(__DEBUGRUNTIME_17) /DWIN32 \
+PLOTLIB_CXXFLAGS = /M$(__RUNTIME_LIBS_22)$(__DEBUGRUNTIME) /DWIN32 \
 	$(__DEBUGINFO_1) \
 	/Fd$(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_plot.pdb \
-	$(____DEBUGRUNTIME_16_p) $(__OPTIMIZEFLAG) $(__NO_VC_CRTDBG_p) /D__WXMSW__ \
+	$(____DEBUGRUNTIME) $(__OPTIMIZEFLAG) $(__NO_VC_CRTDBG_p) /D__WXMSW__ \
 	$(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) \
 	$(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p) \
 	/I..\..\src\plot\..\..\..\include /I$(SETUPHDIR) /W4 \
@@ -102,44 +102,17 @@ __DEBUGINFO_2 =
 !if "$(DEBUG_INFO)" == "1"
 __DEBUGINFO_2 = /DEBUG
 !endif
-!if "$(DEBUG_RUNTIME_LIBS)" == "0"
-____DEBUGRUNTIME_3_p = 
+!if "$(BUILD)" == "debug" && "$(DEBUG_RUNTIME_LIBS)" == "default"
+____DEBUGRUNTIME_3_p_1 = /d _DEBUG
 !endif
-!if "$(DEBUG_RUNTIME_LIBS)" == "1"
-____DEBUGRUNTIME_3_p = /D_DEBUG
-!endif
-!if "$(DEBUG_RUNTIME_LIBS)" == "default"
-____DEBUGRUNTIME_3_p = $(____DEBUGINFO)
+!if "$(BUILD)" == "release" && "$(DEBUG_RUNTIME_LIBS)" == "default"
+____DEBUGRUNTIME_3_p_1 = 
 !endif
 !if "$(DEBUG_RUNTIME_LIBS)" == "0"
 ____DEBUGRUNTIME_3_p_1 = 
 !endif
 !if "$(DEBUG_RUNTIME_LIBS)" == "1"
 ____DEBUGRUNTIME_3_p_1 = /d _DEBUG
-!endif
-!if "$(DEBUG_RUNTIME_LIBS)" == "default"
-____DEBUGRUNTIME_3_p_1 = $(____DEBUGINFO_3_p_1)
-!endif
-!if "$(BUILD)" == "debug" && "$(DEBUG_INFO)" == "default"
-____DEBUGINFO_3_p_1 = /d _DEBUG
-!endif
-!if "$(BUILD)" == "release" && "$(DEBUG_INFO)" == "default"
-____DEBUGINFO_3_p_1 = 
-!endif
-!if "$(DEBUG_INFO)" == "0"
-____DEBUGINFO_3_p_1 = 
-!endif
-!if "$(DEBUG_INFO)" == "1"
-____DEBUGINFO_3_p_1 = /d _DEBUG
-!endif
-!if "$(DEBUG_RUNTIME_LIBS)" == "0"
-__DEBUGRUNTIME_4 = 
-!endif
-!if "$(DEBUG_RUNTIME_LIBS)" == "1"
-__DEBUGRUNTIME_4 = d
-!endif
-!if "$(DEBUG_RUNTIME_LIBS)" == "default"
-__DEBUGRUNTIME_4 = $(__DEBUGINFO)
 !endif
 !if "$(RUNTIME_LIBS)" == "dynamic"
 __RUNTIME_LIBS_9 = D
@@ -202,24 +175,6 @@ __WXLIB_BASE_p = \
 __plotlib___depname = \
 	$(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_plot.lib
 !endif
-!if "$(DEBUG_RUNTIME_LIBS)" == "0"
-____DEBUGRUNTIME_16_p = 
-!endif
-!if "$(DEBUG_RUNTIME_LIBS)" == "1"
-____DEBUGRUNTIME_16_p = /D_DEBUG
-!endif
-!if "$(DEBUG_RUNTIME_LIBS)" == "default"
-____DEBUGRUNTIME_16_p = $(____DEBUGINFO)
-!endif
-!if "$(DEBUG_RUNTIME_LIBS)" == "0"
-__DEBUGRUNTIME_17 = 
-!endif
-!if "$(DEBUG_RUNTIME_LIBS)" == "1"
-__DEBUGRUNTIME_17 = d
-!endif
-!if "$(DEBUG_RUNTIME_LIBS)" == "default"
-__DEBUGRUNTIME_17 = $(__DEBUGINFO)
-!endif
 !if "$(RUNTIME_LIBS)" == "dynamic"
 __RUNTIME_LIBS_22 = D
 !endif
@@ -238,29 +193,29 @@ __DEBUGINFO_1 =
 !if "$(DEBUG_INFO)" == "1"
 __DEBUGINFO_1 = /Zi
 !endif
-!if "$(BUILD)" == "debug" && "$(DEBUG_INFO)" == "default"
-____DEBUGINFO = /D_DEBUG
+!if "$(BUILD)" == "debug" && "$(DEBUG_RUNTIME_LIBS)" == "default"
+____DEBUGRUNTIME = /D_DEBUG
 !endif
-!if "$(BUILD)" == "release" && "$(DEBUG_INFO)" == "default"
-____DEBUGINFO = 
+!if "$(BUILD)" == "release" && "$(DEBUG_RUNTIME_LIBS)" == "default"
+____DEBUGRUNTIME = 
 !endif
-!if "$(DEBUG_INFO)" == "0"
-____DEBUGINFO = 
+!if "$(DEBUG_RUNTIME_LIBS)" == "0"
+____DEBUGRUNTIME = 
 !endif
-!if "$(DEBUG_INFO)" == "1"
-____DEBUGINFO = /D_DEBUG
+!if "$(DEBUG_RUNTIME_LIBS)" == "1"
+____DEBUGRUNTIME = /D_DEBUG
 !endif
-!if "$(BUILD)" == "debug" && "$(DEBUG_INFO)" == "default"
-__DEBUGINFO = d
+!if "$(BUILD)" == "debug" && "$(DEBUG_RUNTIME_LIBS)" == "default"
+__DEBUGRUNTIME = d
 !endif
-!if "$(BUILD)" == "release" && "$(DEBUG_INFO)" == "default"
-__DEBUGINFO = 
+!if "$(BUILD)" == "release" && "$(DEBUG_RUNTIME_LIBS)" == "default"
+__DEBUGRUNTIME = 
 !endif
-!if "$(DEBUG_INFO)" == "0"
-__DEBUGINFO = 
+!if "$(DEBUG_RUNTIME_LIBS)" == "0"
+__DEBUGRUNTIME = 
 !endif
-!if "$(DEBUG_INFO)" == "1"
-__DEBUGINFO = d
+!if "$(DEBUG_RUNTIME_LIBS)" == "1"
+__DEBUGRUNTIME = d
 !endif
 !if "$(BUILD)" == "debug"
 __OPTIMIZEFLAG = /Od

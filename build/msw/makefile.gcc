@@ -137,6 +137,7 @@ WXTIFF_OBJECTS =  \
 	$(OBJS)\wxtiff_tif_dirwrite.o \
 	$(OBJS)\wxtiff_tif_dumpmode.o \
 	$(OBJS)\wxtiff_tif_error.o \
+	$(OBJS)\wxtiff_tif_extension.o \
 	$(OBJS)\wxtiff_tif_fax3.o \
 	$(OBJS)\wxtiff_tif_fax3sm.o \
 	$(OBJS)\wxtiff_tif_getimage.o \
@@ -3923,6 +3924,9 @@ $(OBJS)\wxtiff_tif_dumpmode.o: ../../src/tiff/tif_dumpmode.c
 	$(CC) -c -o $@ $(WXTIFF_CFLAGS) $<
 
 $(OBJS)\wxtiff_tif_error.o: ../../src/tiff/tif_error.c
+	$(CC) -c -o $@ $(WXTIFF_CFLAGS) $<
+
+$(OBJS)\wxtiff_tif_extension.o: ../../src/tiff/tif_extension.c
 	$(CC) -c -o $@ $(WXTIFF_CFLAGS) $<
 
 $(OBJS)\wxtiff_tif_fax3.o: ../../src/tiff/tif_fax3.c

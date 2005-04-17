@@ -2478,6 +2478,7 @@ WXTIFF_OBJECTS =  &
 	$(OBJS)\wxtiff_tif_dirwrite.obj &
 	$(OBJS)\wxtiff_tif_dumpmode.obj &
 	$(OBJS)\wxtiff_tif_error.obj &
+	$(OBJS)\wxtiff_tif_extension.obj &
 	$(OBJS)\wxtiff_tif_fax3.obj &
 	$(OBJS)\wxtiff_tif_fax3sm.obj &
 	$(OBJS)\wxtiff_tif_getimage.obj &
@@ -4136,6 +4137,9 @@ $(OBJS)\wxtiff_tif_dumpmode.obj :  .AUTODEPEND ..\..\src\tiff\tif_dumpmode.c
 	$(CC) -zq -fo=$^@ $(WXTIFF_CFLAGS) $<
 
 $(OBJS)\wxtiff_tif_error.obj :  .AUTODEPEND ..\..\src\tiff\tif_error.c
+	$(CC) -zq -fo=$^@ $(WXTIFF_CFLAGS) $<
+
+$(OBJS)\wxtiff_tif_extension.obj :  .AUTODEPEND ..\..\src\tiff\tif_extension.c
 	$(CC) -zq -fo=$^@ $(WXTIFF_CFLAGS) $<
 
 $(OBJS)\wxtiff_tif_fax3.obj :  .AUTODEPEND ..\..\src\tiff\tif_fax3.c
