@@ -17,4 +17,5 @@ include/wx/palmos/*.xrd
 include/wx/palmos/*.def
 include/wx/palmos/*.sld
 include/wx/palmos/*.xrd
+include/wx/palmos/Icons/*.bmp
 
