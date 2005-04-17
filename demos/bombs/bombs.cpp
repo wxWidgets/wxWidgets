@@ -284,7 +284,7 @@ void BombsCanvas::UpdateGridSize()
         delete m_bmp;
         m_bmp = NULL;
     }
-
+    SetSize(GetGridSizeInPixels());
     Refresh();
 }
 
