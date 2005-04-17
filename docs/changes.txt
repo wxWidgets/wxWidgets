@@ -8,6 +8,7 @@ wxWidgets Change Log - For more verbose changes, see the manual
 All:
 
 - wxPathExists deprecated, use wxDirExists instead.
+- Configure: --enable-std_iostreams, --enable-std_string are now the default.
 
 All (GUI):
 
@@ -18,7 +19,7 @@ wxMSW:
 
 - Fixed static box border when the label is empty.
 - Fixed SetBackgroundColour() to change only label background, not entire box.
-- wxHelpController is now aliased to wxBestHelpController.
+- wxHelpController is now aliased to wxCHMHelpController.
 
 wxWinCE:
 
