@@ -2146,6 +2146,9 @@ bool wxMenuBar::ProcessMouseEvent(const wxPoint& pt)
         return false;
     }
 
+    // FIXME: temporary workaround for crash, to be fixed
+    // in a later version.
+#if 0
     // select the new active item
     DoSelectMenu(currentNew);
 
@@ -2156,6 +2159,7 @@ bool wxMenuBar::ProcessMouseEvent(const wxPoint& pt)
         // open the new menu if the old one we closed had been opened
         PopupCurrentMenu(false /* don't select first item - as Windows does */);
     }
+#endif
 
     return true;
 }
