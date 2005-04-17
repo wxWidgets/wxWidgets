@@ -1367,7 +1367,7 @@ END_EVENT_TABLE()
 
 SettingsDialog::SettingsDialog(wxWindow* win)
 {
-    SetExtraStyle(wxDIALOG_EX_CONTEXTHELP);
+    SetExtraStyle(wxDIALOG_EX_CONTEXTHELP|wxWS_EX_VALIDATE_RECURSIVELY);
 
     Create(win, -1, _("Preferences"), wxDefaultPosition, wxDefaultSize, wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER);
     CreateButtons(wxOK|wxCANCEL|wxHELP);
@@ -1483,6 +1483,7 @@ wxPanel* SettingsDialog::CreateAestheticSettingsPage(wxWindow* parent)
 #endif
 
     topSizer->Add( item0, 1, wxGROW|wxALIGN_CENTRE|wxALL, 5 );
+    topSizer->AddSpacer(5);
 
     panel->SetSizer(topSizer);
     topSizer->Fit(panel);
