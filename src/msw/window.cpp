@@ -223,9 +223,12 @@ static void EnsureParentHasControlParentStyle(wxWindow *parent)
 // instead
 bool GetCursorPosWinCE(POINT* pt)
 {
-    DWORD pos = GetMessagePos();
-    pt->x = LOWORD(pos);
-    pt->y = HIWORD(pos);
+    if (!GetCursorPos(pt))
+    {
+        DWORD pos = GetMessagePos();
+        pt->x = LOWORD(pos);
+        pt->y = HIWORD(pos);
+    }
     return true;
 }
 #endif
@@ -3516,10 +3519,10 @@ bool wxWindowMSW::HandleSetCursor(WXHWND WXUNUSED(hWnd),
     // specific way (for example, depending on the current position)
     POINT pt;
 #ifdef __WXWINCE__
-    if ( !::GetCursorPosWinCE(&pt) )
+    if ( !::GetCursorPosWinCE(&pt))
 #else
     if ( !::GetCursorPos(&pt) )
-#endif
+#endif        
     {
         wxLogLastError(wxT("GetCursorPos"));
     }
