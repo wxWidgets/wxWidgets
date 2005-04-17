@@ -322,11 +322,15 @@ class WXDLLEXPORT wxIcon;
 
 bool wxFileTypeImpl::SetCommand(const wxString& cmd, const wxString& verb, bool overwriteprompt)
 {
+    wxASSERT_MSG( m_manager != NULL , wxT("Bad wxFileType") );
+
     return FALSE;
 }
 
 bool wxFileTypeImpl::SetDefaultIcon(const wxString& strIcon, int index)
 {
+    wxASSERT_MSG( m_manager != NULL , wxT("Bad wxFileType") );
+
     return FALSE;
 }
 
@@ -372,10 +376,7 @@ wxFileTypeImpl::GetPrintCommand(wxString *printCmd,
 
 wxString wxFileTypeImpl::GetCommand(const wxString& verb) const
 {
-    wxASSERT(m_manager);
-    
-    if(!m_manager)
-        return wxEmptyString;
+    wxASSERT_MSG( m_manager != NULL , wxT("Bad wxFileType") );
         
     if(verb == wxT("open"))
     {
@@ -421,10 +422,7 @@ wxString wxFileTypeImpl::GetCommand(const wxString& verb) const
 
 wxString wxFileTypeImpl::GetCommand(const wxString& verb) const
 {
-    wxASSERT(m_manager);
-    
-    if(!m_manager)
-        return wxEmptyString;
+    wxASSERT_MSG( m_manager != NULL , wxT("Bad wxFileType") );
         
     if(verb == wxT("open"))
     {
@@ -486,8 +484,7 @@ wxString wxFileTypeImpl::GetCommand(const wxString& verb) const
 
 bool wxFileTypeImpl::GetExtensions(wxArrayString& extensions)
 {
-    if(!m_manager)
-        return false;
+    wxASSERT_MSG( m_manager != NULL , wxT("Bad wxFileType") );
     
     ICMapEntry entry;
     ICGetMapEntry( (ICInstance) m_manager->m_hIC, 
@@ -502,8 +499,7 @@ bool wxFileTypeImpl::GetExtensions(wxArrayString& extensions)
 
 bool wxFileTypeImpl::GetMimeType(wxString *mimeType) const
 {
-    if(!m_manager)
-        return false;
+    wxASSERT_MSG( m_manager != NULL , wxT("Bad wxFileType") );
     
     ICMapEntry entry;
     ICGetMapEntry( (ICInstance) m_manager->m_hIC, 
@@ -530,14 +526,15 @@ bool wxFileTypeImpl::GetMimeTypes(wxArrayString& mimeTypes) const
 
 bool wxFileTypeImpl::GetIcon(wxIconLocation *WXUNUSED(icon)) const
 {
+    wxASSERT_MSG( m_manager != NULL , wxT("Bad wxFileType") );
+
     // no such file type or no value or incorrect icon entry
     return FALSE;
 }
 
 bool wxFileTypeImpl::GetDescription(wxString *desc) const
 {
-    if(!m_manager)
-        return false;
+    wxASSERT_MSG( m_manager != NULL , wxT("Bad wxFileType") );
     
     ICMapEntry entry;
     ICGetMapEntry( (ICInstance) m_manager->m_hIC, 
@@ -551,8 +548,19 @@ bool wxFileTypeImpl::GetDescription(wxString *desc) const
 size_t wxFileTypeImpl::GetAllCommands(wxArrayString * verbs, wxArrayString * commands,
                    const wxFileType::MessageParameters& params) const
 {
-    wxFAIL_MSG( _T("wxFileTypeImpl::GetAllCommands() not yet implemented") );
-    return 0;
+    wxASSERT_MSG( m_manager != NULL , wxT("Bad wxFileType") );
+
+    wxString sCommand;
+    size_t ulCount = 0;
+    
+    if(GetOpenCommand(&sCommand, params))
+    {
+        verbs->Add(wxString(wxT("open")));
+        commands->Add(sCommand);
+        ++ulCount;
+    }
+    
+    return ulCount;
 }
 
 void wxMimeTypesManagerImpl::Initialize(int mailcapStyles, const wxString& extraDir)
@@ -570,6 +578,7 @@ void wxMimeTypesManagerImpl::Initialize(int mailcapStyles, const wxString& extra
     {
         wxLogDebug(wxT("Could not initialize wxMimeTypesManager!"));
         wxASSERT( false );
+        m_hIC = NULL;
         return;
     }
     
@@ -633,6 +642,11 @@ void wxMimeTypesManagerImpl::ClearData()
     }
 }
 
+//
+//  Q) Iterating through the map - why does it use if (err == noErr) instead of just asserting?
+//  A) Some intermediate indexes are bad while subsequent ones may be good.  Its wierd, I know.
+//
+
 // extension -> file type
 wxFileType* wxMimeTypesManagerImpl::GetFileTypeFromExtension(const wxString& e)
 {
@@ -640,7 +654,6 @@ wxFileType* wxMimeTypesManagerImpl::GetFileTypeFromExtension(const wxString& e)
     
     //low level functions - iterate through the database    
     ICMapEntry entry;
-    wxFileType* pFileType;
     long pos;
     
     for(long i = 1; i <= m_lCount; ++i)
@@ -652,14 +665,14 @@ wxFileType* wxMimeTypesManagerImpl::GetFileTypeFromExtension(const wxString& e)
             wxString sCurrentExtension = wxMacMakeStringFromPascal(entry.extension);
             if( sCurrentExtension.Right(sCurrentExtension.Length()-1) == e ) //entry has period in it
             {
-                pFileType = new wxFileType();
+                wxFileType* pFileType = new wxFileType();
                 pFileType->m_impl->Init((wxMimeTypesManagerImpl*)this, pos);
-                break;
+                return pFileType;
             }
         }
     }
     
-    return pFileType;    
+    return NULL;    
 }
 
 // MIME type -> extension -> file type
@@ -669,8 +682,6 @@ wxFileType* wxMimeTypesManagerImpl::GetFileTypeFromMimeType(const wxString& mime
 
     //low level functions - iterate through the database    
     ICMapEntry entry;
-    wxFileType* pFileType;
-    
     long pos;
     
     for(long i = 1; i <= m_lCount; ++i)
@@ -682,14 +693,14 @@ wxFileType* wxMimeTypesManagerImpl::GetFileTypeFromMimeType(const wxString& mime
         {        
             if( wxMacMakeStringFromPascal(entry.MIMEType) == mimeType)
             {
-                pFileType = new wxFileType();
+                wxFileType* pFileType = new wxFileType();
                 pFileType->m_impl->Init((wxMimeTypesManagerImpl*)this, pos);
-                break;
+                return pFileType;
             }
         }
     }
     
-    return pFileType;
+    return NULL;
 }
 
 size_t wxMimeTypesManagerImpl::EnumAllFileTypes(wxArrayString& mimetypes)
@@ -698,8 +709,8 @@ size_t wxMimeTypesManagerImpl::EnumAllFileTypes(wxArrayString& mimetypes)
 
     //low level functions - iterate through the database    
     ICMapEntry entry;
-    
     long pos;
+    
     long lStartCount = (long) mimetypes.GetCount();
     
     for(long i = 1; i <= m_lCount; ++i)
