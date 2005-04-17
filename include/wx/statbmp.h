@@ -42,6 +42,7 @@ public:
 
     // overriden base class virtuals
     virtual bool AcceptsFocus() const { return false; }
+    virtual bool HasTransparentBackground() { return true; }
 
 protected:
     virtual wxSize DoGetBestSize() const;
