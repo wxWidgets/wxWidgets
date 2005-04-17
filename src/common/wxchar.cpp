@@ -78,14 +78,14 @@ size_t WXDLLEXPORT wxMB2WC(wchar_t *buf, const char *psz, size_t n)
 #ifdef HAVE_WCSRTOMBS
     return mbsrtowcs(buf, &psz, n, &mbstate);
 #else
-    return mbstowcs(buf, psz, n);
+    return wxMbstowcs(buf, psz, n);
 #endif
   }
 
 #ifdef HAVE_WCSRTOMBS
   return mbsrtowcs((wchar_t *) NULL, &psz, 0, &mbstate);
 #else
-  return mbstowcs((wchar_t *) NULL, psz, 0);
+  return wxMbstowcs((wchar_t *) NULL, psz, 0);
 #endif
 }
 
@@ -105,14 +105,14 @@ size_t WXDLLEXPORT wxWC2MB(char *buf, const wchar_t *pwz, size_t n)
 #if HAVE_WCSRTOMBS
     return wcsrtombs(buf, &pwz, n, &mbstate);
 #else
-    return wcstombs(buf, pwz, n);
+    return wxWcstombs(buf, pwz, n);
 #endif
   }
 
 #if HAVE_WCSRTOMBS
   return wcsrtombs((char *) NULL, &pwz, 0, &mbstate);
 #else
-  return wcstombs((char *) NULL, pwz, 0);
+  return wxWcstombs((char *) NULL, pwz, 0);
 #endif
 }
 #endif // wxUSE_WCHAR_T
@@ -1072,7 +1072,7 @@ WXDLLEXPORT int wxToupper(wxChar ch) { return (wxChar)CharUpper((LPTSTR)(ch)); }
 
 #if defined(__DARWIN__) && ( MAC_OS_X_VERSION_MAX_ALLOWED <= MAC_OS_X_VERSION_10_2 )
 
-WXDLLEXPORT size_t wxInternalMbstowcs (wchar_t * out, const char * in, size_t outlen)
+WXDLLEXPORT size_t wxMbstowcs (wchar_t * out, const char * in, size_t outlen)
 {
     if (!out)
     {
@@ -1094,7 +1094,7 @@ WXDLLEXPORT size_t wxInternalMbstowcs (wchar_t * out, const char * in, size_t ou
     return in - origin;
 }
 
-WXDLLEXPORT size_t	wxInternalWcstombs (char * out, const wchar_t * in, size_t outlen)
+WXDLLEXPORT size_t	wxWcstombs (char * out, const wchar_t * in, size_t outlen)
 {
     if (!out)
     {

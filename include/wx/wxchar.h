@@ -385,16 +385,19 @@
     /* time.h functions */
     #define  wxAsctime   _tasctime
     #define  wxCtime     _tctime
+    
+    #define wxMbstowcs mbstowcs
+    #define wxWcstombs wcstombs
 #else /* !TCHAR-aware compilers */
 
     #if !defined(__MWERKS__) && defined(__DARWIN__) && ( MAC_OS_X_VERSION_MAX_ALLOWED <= MAC_OS_X_VERSION_10_2 )
         /* even though they are defined and "implemented", they are bad and just
            stubs so we need our own - we need these even in ANSI builds!! */
-        #define mbstowcs wxInternalMbstowcs
-        #define wcstombs wxInternalWcstombs
-
-        WXDLLIMPEXP_BASE size_t wxInternalMbstowcs (wchar_t *, const char *, size_t);
-        WXDLLIMPEXP_BASE size_t wxInternalWcstombs (char *, const wchar_t *, size_t);
+        WXDLLIMPEXP_BASE size_t wxMbstowcs (wchar_t *, const char *, size_t);
+        WXDLLIMPEXP_BASE size_t wxWcstombs (char *, const wchar_t *, size_t);
+    #else
+        #define wxMbstowcs mbstowcs
+        #define wxWcstombs wcstombs
     #endif
 
     /* No UNICODE in the c library except wchar_t typedef on mac OSX 10.2 and less - roll our own */
