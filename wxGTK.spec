@@ -233,7 +233,7 @@ rm -rf $RPM_BUILD_ROOT
 (cd obj-shared; make DESTDIR=$RPM_BUILD_ROOT install)
 
 # --- wxBase headers list begins here ---
-cat <<EOF >wxbase-headers.files
+cat <<EOF >wxbase-headers-list
 wx/afterstd.h
 wx/app.h
 wx/apptrait.h
@@ -298,6 +298,7 @@ wx/memtext.h
 wx/mimetype.h
 wx/module.h
 wx/msgout.h
+wx/msgout.h
 wx/mstream.h
 wx/object.h
 wx/platform.h
@@ -338,6 +339,19 @@ wx/xti.h
 wx/xtistrm.h
 wx/zipstrm.h
 wx/zstream.h
+wx/msw/apptrait.h
+wx/msw/apptbase.h
+wx/msw/chkconf.h
+wx/msw/crashrpt.h
+wx/msw/dde.h
+wx/msw/debughlp.h
+wx/msw/gccpriv.h
+wx/msw/mimetype.h
+wx/msw/stackwalk.h
+wx/msw/winundef.h
+wx/msw/wrapcctl.h
+wx/msw/wrapcdlg.h
+wx/msw/wrapwin.h
 wx/fs_inet.h
 wx/gsocket.h
 wx/protocol/file.h
@@ -349,19 +363,12 @@ wx/sckipc.h
 wx/sckstrm.h
 wx/socket.h
 wx/url.h
+wx/msw/gsockmsw.h
 wx/xml/xml.h
 wx/xtixml.h
 wx/db.h
 wx/dbkeyg.h
 wx/dbtable.h
-wx/unix/apptbase.h
-wx/unix/apptrait.h
-wx/unix/execute.h
-wx/unix/gsockunx.h
-wx/unix/mimetype.h
-wx/unix/pipe.h
-wx/unix/stackwalk.h
-wx/unix/stdpaths.h
 EOF
 # --- wxBase headers list ends here ---
 cat <<EOF >wxbase-headers.paths

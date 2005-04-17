@@ -197,6 +197,18 @@ cleandocs:
     -erase $(DOCDIR)\htmlhelp\wx.chm
     -erase $(DOCDIR)\htb\wx.htb
 
+# Only clean the online help, not PDF RTF
+cleanonlinehelp:
+    -erase $(DOCDIR)\winhelp\wx.hlp
+    -erase $(DOCDIR)\winhelp\wx.cnt
+    -erase $(DOCDIR)\html\wx\*.html
+    -erase $(DOCDIR)\latex\wx\wx.rtf
+    -erase $(DOCDIR)\latex\wx\WX.PH
+    -erase $(DOCDIR)\latex\wx\wx.hpj
+    -erase $(DOCDIR)\htmlhelp\wx.chm
+    -erase $(DOCDIR)\mshtml\wx\*.html
+    -erase $(DOCDIR)\htb\wx.htb
+
 # Start Word, running the GeneratePDF macro. MakeManual.dot should be in the
 # Office StartUp folder, and PDFMaker should be installed.
 updatepdf:  # touchmanual pdfrtf

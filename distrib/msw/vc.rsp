@@ -3,8 +3,6 @@ build/msw/*.dsw
 
 src/wxWindows.dsp
 src/wxWindows.dsw
-src/wxBase.dsp
-src/wxBase.dsw
 
 src/jpeg/jpeg.dsp
 src/jpeg/jpeg.dsw

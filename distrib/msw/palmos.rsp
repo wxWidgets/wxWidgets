@@ -1,11 +1,8 @@
-lib/dummy
-
 build/palmos/.cdtproject
 build/palmos/.project
 build/palmos/*.mk
 build/palmos/makefile
 
-docs/licence.txt
 docs/palmos/*.txt
 
 src/palmos/*.cpp
