@@ -261,6 +261,22 @@ SOURCE=.\tif_error.c
 # End Source File
 # Begin Source File
 
+SOURCE=.\tif_extension.c
+
+!IF  "$(CFG)" == "tiff - Win32 Release"
+
+# ADD CPP /I ".."
+# SUBTRACT CPP /YX /Yc /Yu
+
+!ELSEIF  "$(CFG)" == "tiff - Win32 Debug"
+
+# SUBTRACT CPP /YX /Yc /Yu
+
+!ENDIF 
+
+# End Source File
+# Begin Source File
+
 SOURCE=.\tif_fax3.c
 
 !IF  "$(CFG)" == "tiff - Win32 Release"
