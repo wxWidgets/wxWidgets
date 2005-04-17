@@ -189,7 +189,7 @@ dialogs.app/Contents/PkgInfo: dialogs$(EXEEXT) $(top_srcdir)/src/mac/carbon/Info
 data: 
 	@mkdir -p .
 	@for f in tips.txt; do \
-	if test ! -e ./$$f ; \
+	if test ! -f ./$$f ; \
 	then x=yep ; \
 	else x=`find $(srcdir)/$$f -newer ./$$f -print` ; \
 	fi; \

@@ -188,7 +188,7 @@ penguin.app/Contents/PkgInfo: $(__penguin___depname) $(top_srcdir)/src/mac/carbo
 data: 
 	@mkdir -p .
 	@for f in penguin.lwo; do \
-	if test ! -e ./$$f ; \
+	if test ! -f ./$$f ; \
 	then x=yep ; \
 	else x=`find $(srcdir)/$$f -newer ./$$f -print` ; \
 	fi; \

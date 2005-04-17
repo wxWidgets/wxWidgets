@@ -176,7 +176,7 @@ life.app/Contents/PkgInfo: life$(EXEEXT) $(top_srcdir)/src/mac/carbon/Info.plist
 data: 
 	@mkdir -p .
 	@for f in breeder.lif; do \
-	if test ! -e ./$$f ; \
+	if test ! -f ./$$f ; \
 	then x=yep ; \
 	else x=`find $(srcdir)/$$f -newer ./$$f -print` ; \
 	fi; \

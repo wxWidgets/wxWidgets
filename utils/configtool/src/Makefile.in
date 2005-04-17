@@ -172,7 +172,7 @@ wxconfigtool$(EXEEXT): $(WXCONFIGTOOL_OBJECTS) $(__wxconfigtool___win32rc)
 data: 
 	@mkdir -p .
 	@for f in wxwin250.wxs; do \
-	if test ! -e ./$$f ; \
+	if test ! -f ./$$f ; \
 	then x=yep ; \
 	else x=`find $(srcdir)/../configs/$$f -newer ./$$f -print` ; \
 	fi; \

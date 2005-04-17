@@ -175,7 +175,7 @@ dragimag.app/Contents/PkgInfo: dragimag$(EXEEXT) $(top_srcdir)/src/mac/carbon/In
 data: 
 	@mkdir -p .
 	@for f in backgrnd.png shape01.png shape02.png shape03.png; do \
-	if test ! -e ./$$f ; \
+	if test ! -f ./$$f ; \
 	then x=yep ; \
 	else x=`find $(srcdir)/$$f -newer ./$$f -print` ; \
 	fi; \

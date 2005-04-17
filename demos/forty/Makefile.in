@@ -190,7 +190,7 @@ forty.app/Contents/PkgInfo: forty$(EXEEXT) $(top_srcdir)/src/mac/carbon/Info.pli
 data: 
 	@mkdir -p .
 	@for f in about.htm; do \
-	if test ! -e ./$$f ; \
+	if test ! -f ./$$f ; \
 	then x=yep ; \
 	else x=`find $(srcdir)/$$f -newer ./$$f -print` ; \
 	fi; \

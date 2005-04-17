@@ -179,7 +179,7 @@ richedit.app/Contents/PkgInfo: richedit$(EXEEXT) $(top_srcdir)/src/mac/carbon/In
 data: 
 	@mkdir -p .
 	@for f in wxLayout.cpp; do \
-	if test ! -e ./$$f ; \
+	if test ! -f ./$$f ; \
 	then x=yep ; \
 	else x=`find $(srcdir)/$$f -newer ./$$f -print` ; \
 	fi; \

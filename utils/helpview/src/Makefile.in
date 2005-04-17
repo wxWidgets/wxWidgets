@@ -160,7 +160,7 @@ install_helpview:
 data: 
 	@mkdir -p .
 	@for f in test.zip; do \
-	if test ! -e ./$$f ; \
+	if test ! -f ./$$f ; \
 	then x=yep ; \
 	else x=`find $(srcdir)/$$f -newer ./$$f -print` ; \
 	fi; \

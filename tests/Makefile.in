@@ -241,7 +241,7 @@ test_gui.app/Contents/PkgInfo: $(__test_gui___depname) $(top_srcdir)/src/mac/car
 data: 
 	@mkdir -p .
 	@for f in testdata.fc; do \
-	if test ! -e ./$$f ; \
+	if test ! -f ./$$f ; \
 	then x=yep ; \
 	else x=`find $(srcdir)/$$f -newer ./$$f -print` ; \
 	fi; \
