@@ -468,6 +468,18 @@ public:
     // destroy a reference
     void UnRef();
 
+
+    // Reserved for future use
+    virtual void ReservedObjectFunc1() {}
+    virtual void ReservedObjectFunc2() {}
+    virtual void ReservedObjectFunc3() {}
+    virtual void ReservedObjectFunc4() {}
+    virtual void ReservedObjectFunc5() {}
+    virtual void ReservedObjectFunc6() {}
+    virtual void ReservedObjectFunc7() {}
+    virtual void ReservedObjectFunc8() {}
+    virtual void ReservedObjectFunc9() {}
+
 protected:
     // ensure that our data is not shared with anybody else: if we have no
     // data, it is created using CreateRefData() below, if we have shared data
