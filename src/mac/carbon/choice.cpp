@@ -80,10 +80,13 @@ bool wxChoice::Create(wxWindow *parent, wxWindowID id,
     m_peer->SetValueAndRange( n > 0 ? 1 : 0 , 0 , 0 ) ;
     MacPostControlCreate(pos,size) ;
 
+    // FIXME: STL version of wxArrayString doesn't have the same args
+#if !wxUSE_STL
     if ( style & wxCB_SORT )
     {
         m_strings = wxArrayString(1) ; // autosort
     }
+#endif
     
     for ( int i = 0; i < n; i++ )
     {
