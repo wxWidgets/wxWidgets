@@ -1,4 +1,3 @@
-
 <HTML>
 
 <HEAD>
@@ -45,9 +44,9 @@ See also <a href="faq.htm">top-level FAQ page</a>.
 <li><a href="#shortcutproblem">Why are menu hotkeys or shortcuts not working in my application?</a></li>
 <li><a href="#regconfig">Why can I not write to the HKLM part of the registry with wxRegConfig?</a></li>
 <li><a href="#access">Is MS Active Accessibility supported?</a></li>
-<li><a href="#dspfmt">Why does Visual C++ complain about corrupted project files{/a></li>
+<li><a href="#dspfmt">Why does Visual C++ complain about corrupted project files?</a></li>
 <li><a href="#crtmismatch">Visual C++ gives errors about multiply defined symbols, what can I do?</a></li>
-<li><a href="#directx">Why do I get compilation erros when using wxWidgets with DirectShow?</a></li>
+<li><a href="#directx">Why do I get compilation errors when using wxWidgets with DirectShow?</a></li>
 <li><a href="#handlewm">How do I handle Windows messages in my wxWidgets program?</a></li>
 </ul>
 <hr>
@@ -342,7 +341,7 @@ example) and regenerate the makefile using tmake.<P>
 
 tmake can be found at
 <a href="http://www.troll.no/freebies/tmake.html" target=_new>www.troll.no/freebies/tmake.html</a>.
-It&#39;s a Perl5 program and so it needs Perl (doh). There is a binary for 
+It&#39;s a Perl5 program and so it needs Perl (doh). There is a binary for
 Windows (available from the same page), but I haven&#39;t used it, so
 I don&#39;t know if it works as flawlessly as "perl tmake" does (note
 for people knowing Perl: don&#39;t try to run tmake with -w, it won&#39;t
@@ -351,7 +350,7 @@ just go to distrib/msw/tmake and type<P>
 
 <pre>tmake -t b32 wxwin.pro -o ../../src/msw/makefile.b32</pre><P>
 
-The makefiles are untested - I don&#39;t have any of Borland, Watcom  or
+The makefiles are untested - I don&#39;t have any of Borland, Watcom or
 Symantec and I don&#39;t have enough diskspace to recompile even with
 VC6 using makefiles. The new makefiles are as close as possible to the
 old ones, but not closer: in fact, there has been many strange things
@@ -458,7 +457,7 @@ First, you can use wxRegKey directly, for example:
     regKey.SetName(idName);
 
     {
-        wxLogNull dummy; 
+        wxLogNull dummy;
         if (!regKey.Create())
         {
             idName = wxT("HKEY_CURRENT_USER\\SOFTWARE\\My Company\\My Product\\Stuff\\");
@@ -504,7 +503,7 @@ for the current status.
 <P>
 
 
-<h3><a name="#dspfmt">Why does Visual C++ complain about corrupted project files{/a></h3>
+<h3><a name="#dspfmt">Why does Visual C++ complain about corrupted project files?</a></h3>
 
 If you have downloaded the wxWidgets sources from the cvs using a Unix cvs
 client or downloaded a daily snapshot in <tt>.tar.gz</tt> format, it is likely
@@ -543,11 +542,11 @@ slightly smaller and faster.
 But the most important thing is to use the <strong>same</strong> CRT setting for
 all components of your project.
 
-<h3><a name="#directx">Why do I get compilation errors when using wxWidgets with DirectShow?</a></h3>
+<h3><a name="#directx">Why do I get compilation erros when using wxWidgets with DirectShow?</a></h3>
 
 If you get errors when including Microsoft DirectShow or DirectDraw headers,
 the following message from Peter Whaite could help:
-<blockquote><pre>
+<blockquote>
 &gt; This causes compilation errors within DirectShow:
 &gt;
 &gt; wxutil.h(125) : error C2065: &#39;EXECUTE_ASSERT&#39; : undeclared identifier
@@ -555,11 +554,11 @@ the following message from Peter Whaite could help:
 
 The reason for this is that __WXDEBUG__ is also used by the DXSDK (9.0
 in my case) to &#39;#pragma once&#39; the contents of
-DXSDK/Samples/C++/DirectShow/BaseClasses/wxdebug.h.  So if __WXDEBUG__
+DXSDK/Samples/C++/DirectShow/BaseClasses/wxdebug.h. So if __WXDEBUG__
 is defined, then wxdebug.h doesn&#39;t get included, and the assert macros
-don&#39;t get defined.  You have to #undef __WXDEBUG__ before including the
+don&#39;t get defined. You have to #undef __WXDEBUG__ before including the
 directshow baseclass&#39;s &lt;streams.h&gt;.
-</pre></blockquote>
+</blockquote>
 
 
 <h3><a name="#handlewm">How do I handle Windows messages in my wxWidgets program?</a></h3>

@@ -1,8 +1,11 @@
 Installing wxWidgets 2.6.0
---------------------------
+-----------------------------------------------------------
 
-This is wxWidgets 2.6.0 for Microsoft Windows 9x/ME, Windows NT, Windows 2000
-and Windows XP.
+This is wxWidgets 2.6.0 for Microsoft Windows 9x/ME, Windows NT,
+Windows 2000, Windows XP and Windows CE.
+
+These installation notes can be found in docs/msw/install.txt
+in your wxWidgets distribution.
 
 IMPORTANT NOTE: If you experience problems installing, please
 re-read this instructions and other related files (changes.txt,
@@ -17,7 +20,7 @@ Please report bugs using the SourceForge bug tracker:
   http://sourceforge.net/bugs/?group_id=9863
 
 Unarchiving
-===========
+============================================================
 
 A setup program is provided (setup.exe) to automatically copy
 files to a directory on your hard disk. Do not install into a
@@ -105,7 +108,7 @@ Below are compiler specific notes followed by customizing instructions that
 apply to all compilers (search for "Configuring the build").
 
 Microsoft Visual C++ compilation
---------------------------------
+----------------------------------------------------------------
 
 You may wish to visit http://wiki.wxwindows.org/wiki.pl?MSVC for a more
 informal and more detailed description of the process summarized below.
@@ -184,7 +187,7 @@ files from an existing wxWidgets sample and adapt them, or
 visit http://wiki.wxwindows.org/wiki.pl?MSVC.
 
 Borland C++ 5.0/5.5 compilation
--------------------------------
+----------------------------------------------------------------
 
 Compiling using the makefiles (updated 24 Sept 02):
 
@@ -228,13 +231,13 @@ the following preprocessor directive:
 more details)
 
 Borland 16 Bit compilation for Windows 3.1
-------------------------------------------
+----------------------------------------------------------------
 
 The last version of wxWidgets to support 16-bit compilation with Borland was
 2.2.7 - Please download and read the instructions in that release
 
 Watcom C++ 10.6/11 and OpenWatcom compilation
----------------------------------------------
+----------------------------------------------------------------
 
 1. Change directory to build\msw. Type 'wmake -f makefile.wat' to
    make the wxWidgets core library.
@@ -258,9 +261,9 @@ Note (4): if Watcom can't read the precompiled header when building a sample,
           the sample again.
 
 Metrowerks CodeWarrior compilation
-----------------------------------
+----------------------------------------------------------------
 
-1. CodeWarrior Pro7 project files in XML format are already
+1. CodeWarrior Pro 7 project files in XML format are already
    included in wxMSW-2.6.0.zip and the setup version.
 
 2. Review the file include\wx\msw\setup.h (or include\wx\msw\setup0.h if
@@ -322,7 +325,7 @@ Metrowerks CodeWarrior compilation
 
 
 Cygwin/MinGW compilation
-------------------------
+----------------------------------------------------------------
 
 wxWidgets supports Cygwin (formerly GnuWin32) betas and
 releases, and MinGW. Cygwin can be downloaded from:
@@ -351,7 +354,7 @@ If using MinGW, you can download the add-on MSYS package to
 provide Unix-like tools that you'll need to build wxWidgets using configure.
 
 Using makefiles directly
-------------------------
+----------------------------------------------------------------
 
 NOTE: The makefile.gcc makefiles are for compilation under MinGW using
       native make and Windows command interpreter (command.com/cmd.exe), they
@@ -383,7 +386,7 @@ All targets have 'clean' targets to allow removal of object files
 and other intermediate compiler files.
 
 Using configure
----------------
+----------------------------------------------------------------
 
 Instead of using the makefiles, you can use the configure
 system to generate appropriate makefiles, as used on Unix
@@ -477,7 +480,8 @@ OLD VERSIONS:
 
 
 Symantec & DigitalMars C++ compilation
---------------------------------------
+----------------------------------------------------------------
+
 The DigitalMars compiler is a free succssor to the Symantec compiler
 and can be downloaded from http://www.digitalmars.com/
    
@@ -505,7 +509,7 @@ using bakefile tool according to the instructions in build\bakefiles\README:
 16-bit compilation is no longer supported.
 
 Configuring the build
-=====================
+================================================================
 
 So far the instructions only explained how to build release DLLs of wxWidgets
 and did not cover any configuration. It is possible to change many aspects of
@@ -515,7 +519,7 @@ and the only difference between them is in object files and library directory
 names and in make invocation command.
 
 Changing the settings
----------------------
+----------------------------------------------------------------
 
 There are two ways to modify the settings: either by passing the values as
 arguments when invoking make or by editing build\msw\config.$(compiler) file
@@ -553,7 +557,7 @@ Brief explanation of options and possible values is in every
 build\msw\config.* file; more detailed description follows.
 
 Basic options
--------------
+----------------------------------------------------------------
 
 BUILD=release
   Builds release version of the library. It differs from default 'debug' 
@@ -578,7 +582,7 @@ WXUNIV=1
   http://www.wxwidgets.org/wxuniv.htm for more information).
 
 Advanced options
-----------------
+----------------------------------------------------------------
 
 MONOLITHIC=1
   Starting with version 2.5.1, wxWidgets has the ability to be built as 
@@ -656,7 +660,7 @@ CFG=<configuration name>
   directories" below for more information.
 
 Compiler specific options
--------------------------
+----------------------------------------------------------------
 
 * MinGW
 
@@ -678,7 +682,7 @@ DEBUG_RUNTIME_LIBS=1
   setting makes it possible.
 
 Fine-tuning the compiler
-------------------------
+----------------------------------------------------------------
 
 All makefiles have variables that you can use to specify additional options
 passed to the compiler or linker. You won't need this in most cases, but if you
@@ -686,7 +690,7 @@ do, simply add desired flags to CFLAGS (for C compiler), CXXFLAGS (for C++
 compiler), CPPFLAGS (for both C and C++ compiler) and LDFLAGS (the linker).
 
 Object and library directories
-------------------------------
+----------------------------------------------------------------
 
 All object files produced during library build are stored in a directory under
 build\msw. It's name is derived from build settings and CFG variable and from
@@ -736,7 +740,7 @@ enabled (without CFG, both of them would be put into same directory and there
 would be conflicts between the files).
 
 General Notes
-=============
+=================================================================
 
 - Debugging: under Windows 95, debugging output isn't output in
   the same way that it is under NT or Windows 3.1.

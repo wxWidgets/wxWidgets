@@ -13,11 +13,11 @@
 
 <IMG src="logo.gif" align=right hspace=10 vspace=0>
 
-<b>Welcome to wxWidgets 2, the premi&egrave;re cross-platform GUI C++ framework.</b><P>
+<b>Welcome to wxWidgets, the premi&egrave;re cross-platform GUI C++ framework.</b><P>
 
 This is an index of
 the plain text, HTML, Windows Help and Acrobat documentation: availability depends on what you've
-downloaded from the <a href="http://www.wxwindows.org">wxWidgets Web site</a>.<br clear=all><P>
+downloaded from the <a href="http://www.wxwidgets.org">wxWidgets Web site</a>.<br clear=all><P>
 
 <CENTER>
 <FONT size=-1>
@@ -25,6 +25,7 @@ downloaded from the <a href="http://www.wxwindows.org">wxWidgets Web site</a>.<b
 [<a href="#manuals">Manuals</a>]
 [<a href="#technotes">Technical Notes</a>]
 [<a href="#thirdparty">3rd party tools</a>] 
+[<a href="#contribs">Optional Libraries</a>]
 [<a href="#samples">Samples</a>]
 [<a href="#demos">Demos</a>]
 </FONT>
@@ -53,22 +54,24 @@ for how to do this.
 
 <ul>
 <li>ReadMe: <a href="../readme.txt"><b>General ReadMe</b></a>,
+<a href="../msw/readme.txt">wxMSW</a>,
 <a href="../gtk/readme.txt">wxGTK</a>,
+<a href="../mac/readme.txt">wxMac</a>,
+<a href="../cocoa/readme.txt">wxCocoa</a>,
+<a href="../mgl/readme.txt">wxMGL</a>,
 <a href="../motif/readme.txt">wxMotif</a>,
 <a href="../x11/readme.txt">wxX11</a>,
-<a href="../x11/readme-nanox.txt">wxNanoX</a>,
-<a href="../msw/readme.txt">wxMSW</a>,
-<a href="../mac/readme.txt">wxMac</a>,
-<a href="../mgl/readme.txt">wxMGL</a>,
 <a href="../univ/readme.txt">Univ</a>
-<li>Installation: <a href="../gtk/install.txt">wxGTK</a>,
+<li>Installation:
+<a href="../msw/install.txt">wxMSW</a>,
+<a href="../gtk/install.txt">wxGTK</a>,
 <a href="../motif/install.txt">wxMotif</a>,
 <a href="../x11/install.txt">wxX11</a>,
-<a href="../msw/install.txt">wxMSW</a>,
 <a href="../mac/install.txt">wxMac</a>,
+<a href="../cocoa/install.txt">wxCocoa</a>,
 <a href="../mgl/install.txt">wxMGL</a>,
 <a href="../os2/install.txt">wxOS2</a>
-<li><a href="../changes.txt"><b>General change log</b></a>, <a href="../gtk/changes.txt">wxGTK change log</a>
+<li><a href="../changes.txt"><b>General change log</b></a>
 <li>Licence: <a href="../preamble.txt">Preamble</a>,
 <a href="../licence.txt">Licence</a>,
 <a href="../licendoc.txt">Documentation Licence</a>,
@@ -77,18 +80,18 @@ for how to do this.
 <li><a href="faq.htm"><B>FAQ</B></a>:
   <ul>
   <li><a href="faqgen.htm">General questions</a>
-  <li><a href="faqgtk.htm">wxWidgets 2 for GTK+</a>
-  <li><a href="faqmsw.htm">wxWidgets 2 for Windows</a>
-  <li><a href="faqmot.htm">wxWidgets 2 for Motif</a>
-  <li><a href="faqx11.htm">wxWidgets 2 for X11</a>
-  <li><a href="faqmac.htm">wxWidgets 2 for Mac</a>
+  <li><a href="faqcmn.htm">Questions common to all platforms</a>
+  <li><a href="faqmsw.htm">wxWidgets for Windows</a>
+  <li><a href="faqgtk.htm">wxWidgets for GTK+</a>
+  <li><a href="faqmot.htm">wxWidgets for Motif</a>
+  <li><a href="faqx11.htm">wxWidgets for X11</a>
+  <li><a href="faqunx.htm">wxWidgets for Unix</a>
+  <li><a href="faqmac.htm">wxWidgets for Mac</a>
   </ul>
 <li>ToDo: <a href="../todo.txt"><b>General ToDo</b></a>,
 <a href="../gtk/todo.txt">wxGTK</a>,
 <a href="../motif/todo.txt">wxMotif</a>,
-<a href="../msw/todo.txt">wxMSW</a>,
 <a href="../mac/todo.txt">wxMac</a>
-<li>List of <a href="../symbols.txt">preprocessor symbols</a> used in wxWidgets
 </ul>
 
 Further platform-specific notes:
@@ -114,11 +117,6 @@ Further platform-specific notes:
 To use manuals in wxHTML Help form (extension htb), you can use the <b>HelpView</b>
 application, either compiling it from utils/helpview in the distribution,
 or downloading a binary, for example from <a href="http://www.storylinescentral.com/helpview.htm">here</a>.<P>
-
-See also the <a href="../pdf/wxTutorial.pdf">wxWidgets Tutorial</a>
-by Franky Braem, in PDF format.<P>
-
-<P>
 
 <table border=0 cellpadding=5 cellspacing=0>
 
@@ -277,6 +275,37 @@ by Franky Braem, in PDF format.<P>
 <tr>
 <td bgcolor="#004080" align=left height=24 background="images/bluetitlegradient.gif">
 <font size=+1 face="Arial, Lucida Sans, Helvetica" color="#FFFFFF">
+<b><a name="contribs">Optional Libraries</a></b>
+</font>
+</td>
+</tr>
+</table>
+
+<P>
+
+These are the optional libraries in the <a href="../../contrib">contrib</a> hierarchy.<P>
+
+<ul>
+<li><a href="../../contrib/src/animate">animate</a>: a flip-book animation class, with animated GIF player.
+<li><a href="../../contrib/src/deprecated">deprecated</a>: deprecated classes including the old WXR resource system and property sheet classes.
+<li><a href="../../contrib/src/fl">fl</a>: a frame layout/docking library.
+<li><a href="../../contrib/src/foldbar">foldbar</a>: wxFoldPanel class for economical layout of controls.
+<li><a href="../../contrib/src/gizmos">gizmos</a>: a variety of GUI classes including wxDynamicSashWindow, wxLEDNumberCtrl, wxEditableListBox, wxStaticPicture
+and a split tree/content view.
+<li><a href="../../contrib/src/mmedia">mmedia</a>: deprecated library for playing audio and video.
+<li><a href="../../contrib/src/net">net</a>: wxEmail class.
+<li><a href="../../contrib/src/ogl">ogl</a>: Object Graphics Library (for drawing connected shapes).
+<li><a href="../../contrib/src/plot">plot</a>: simple plotting class.
+<li><a href="../../contrib/src/stc">stc</a>: wxStyledTextControl, a wrapper for the Scintilla code editor control.
+<li><a href="../../contrib/src/svg">svg</a>: wxSVGFileDC class for drawing vector graphics into a SVG file.
+</ul>
+
+<P>
+
+<table width=100% border=0 cellpadding=3 cellspacing=0>
+<tr>
+<td bgcolor="#004080" align=left height=24 background="images/bluetitlegradient.gif">
+<font size=+1 face="Arial, Lucida Sans, Helvetica" color="#FFFFFF">
 <b><a name="samples">Samples</a></b>
 </font>
 </td>
@@ -288,6 +317,7 @@ by Franky Braem, in PDF format.<P>
 Each of the following samples demonstrates one or more aspect of wxWidgets.<P>
 
 <ul>
+<li><a href="../../samples/access">access</a>: Active Accessiblity sample (Windows only).
 <li><a href="../../samples/artprov">artprov</a>: shows how you can customize the look of standard
 wxWidgets dialogs by replacing default bitmaps/icons with your own versions.
 <li><a href="../../samples/calendar">calendar</a>: a sample to test the wxCalendarCtrl class.
@@ -300,11 +330,13 @@ defaults to wxRegConfig on WIN32 (optionally wxIniConfig), and wxFileConfig on o
 console-mode (no-GUI) compilation of wxWidgets.
 <li><a href="../../samples/controls">controls</a>: sample showing a variety of controls, including
 wxNotebook.
-<li><a href="../../samples/db">db</a>: wxDB ODBC sample.
+<li><a href="../../samples/db">db</a>: wxODBC sample.
+<li><a href="../../samples/debugrpt">debugrpt</a>: wxDebugReport sample.
 <li><a href="../../samples/dialogs">dialogs</a>: shows some of the common dialogs available -- wxFontDialog,
 wxColourDialog, wxFileDialog, wxDirDialog, wxMessageBox, wxTextEntryDialog, wxSingleChoiceDialog.
 For printing-related dialogs, see the printing sample.
 <li><a href="../../samples/dialup">dialup</a>: wxDialUpManager demo.
+<li><a href="../../samples/display">display</a>: wxDisplay demo.
 <li><a href="../../samples/dnd">dnd</a>: demonstrates drag and drop on supported platforms.
 <li><a href="../../samples/docview">docview</a>: demonstrates use of the document view classes,
 using wxFrame.
@@ -314,7 +346,9 @@ using wxMDIParentFrame, wxMDIChildFrame.
 <li><a href="../../samples/drawing">drawing</a>: tests device context drawing.
 <li><a href="../../samples/dynamic">dynamic</a>: shows how to connect events to member functions
 dynamically.
+<li><a href="../../samples/erase">erase</a>: Window erasing sample.
 <li><a href="../../samples/event">event</a>: demonstrates event handling.
+<li><a href="../../samples/except">exept</a>: demonstrates exception handling.
 <li><a href="../../samples/exec">exec</a>: demonstrates wxExecute.
 <li><a href="../../samples/font">font</a>: tests fonts, font enumerator, font encodings.
 <li><a href="../../samples/grid">grid</a>: demonstrates the wxGrid class.
@@ -331,6 +365,7 @@ applications and also as a help facility.
   <li><a href="../../samples/html/widget">widget</a>: demonstrates the use of controls in HTML pages.
   <li><a href="../../samples/html/zip">zip</a>: shows how help files can be packaged in zip archives.
   </ul>
+<li><a href="../../samples/htlbox">htlbox</a>: demonstrates wxHtmlListBox.
 <li><a href="../../samples/image">image</a>: shows off the cross-platform wxImage class.
 <li><a href="../../samples/ipc">ipc</a>: shows the DDE-like protocol in action, both using real
 DDE on Windows, and TCP/IP on all platforms. Edit <a href="../../samples/ipc/ddesetup.h">ddesetup.h</a>
@@ -342,6 +377,7 @@ to switch between compilation modes.
 <li><a href="../../samples/listctrl">listctrl</a>: demonstrates the wxListCtrl (implemented natively on
 WIN32, and using a generic version on other platforms).
 <li><a href="../../samples/menu">menu</a>: tests menus.
+<li><a href="../../samples/mediaplayer">mediaplayer</a>: demonstrates wxMediaCtrl, for playing movies and audio files in a window.
 <li><a href="../../samples/mdi">mdi</a>: shows off the MDI (Multiple Document Interface) classes. On Windows, the regular MDI
 scheme is used whereby child windows have full sizing and moving rights within the main
 window. On other platforms, tabbed windows are used, where the children are always maximized.
@@ -353,6 +389,7 @@ platforms that don't support it, a normal-sized title bar is displayed.
 <li><a href="../../samples/minimal">minimal</a>: just shows a frame, a menubar, and a statusbar. About as
 small a wxWidgets application as you can get.
 <li><a href="../../samples/mobile">mobile</a>: mini applications for embedded platforms.
+<li><a href="../../samples/multimon">multimon</a>: demo showing how to use multiple monitors.
 <li><a href="../../samples/nativdlg">nativdlg</a>: shows how wxWidgets can load a standard Windows
 dialog resource, translating the controls into wxWidgets controls (Windows only).
 <li><a href="../../samples/notebook">notebook</a>: shows the wxNotebook (tabbed window) control.
@@ -363,9 +400,10 @@ Excel to be present).
 <li><a href="../../samples/printing">printing</a>: shows printing and previewing.
 <li><a href="../../samples/propsize">propsize</a>: demonstrates proportional sizer classes.
 <li><a href="../../samples/regtest">regtest</a>: tests the low-level Windows registry functions (Windows only).
-<!-- <li><a href="../../samples/richedit">richedit</a>: a work-in-progress rich text editor with plain text and HTML export
+<li><a href="../../samples/render">render</a>: shows how to use wxRenderer to implement controls consistent with the
+platform's native look.
+<li><a href="../../samples/richedit">richedit</a>: a work-in-progress rich text editor with plain text and HTML export
 facilities.
--->
 <li><a href="../../samples/rotate">rotate</a>: demonstrates interpolated and non-interpolated
 rotation of a wxImage.
 <li><a href="../../samples/sashtest">sashtest</a>: demonstrates use of the wxSashWindow class to allow
@@ -373,7 +411,9 @@ the user to resize subwindows.
 <li><a href="../../samples/scroll">scroll</a>: demonstrates wxScrolledWindow.
 <li><a href="../../samples/scrollsub">scrollsub</a>: demonstrates the use of wxScrolledWindow to scroll
 an embedded window.
+<li><a href="../../samples/shaped">shaped</a>: demonstrates non-rectangular windows using wxFrame::SetShape.
 <li><a href="../../samples/sockets">sockets</a>: demonstrates the TCP/IP family of classes.
+<li><a href="../../samples/sound">sound</a>: demonstrates use of wxSound.
 <li><a href="../../samples/splash">splash</a>: demonstrates use of the wxSplashScreen class.
 <li><a href="../../samples/splitter">splitter</a>: demonstrates the wxSplitterWindow class.
 <li><a href="../../samples/statbar">statbar</a>: demonstrates the wxStatusBar class.
@@ -389,6 +429,7 @@ programming.
 <li><a href="../../samples/typetest">typetest</a>: tests various data type classes, including
 wxTime, wxDate and wxVariant.
 <li><a href="../../samples/validate">validate</a>: shows simple use of validation.
+<li><a href="../../samples/vscroll">vscroll</a>: shows use of wxVScrolledWindow.
 <li><a href="../../samples/wizard">wizard</a>: demonstrates the wxWizard class.
 <li><a href="../../samples/xrc">xrc</a>: demonstrates the XRC resource system.
 </ul>
