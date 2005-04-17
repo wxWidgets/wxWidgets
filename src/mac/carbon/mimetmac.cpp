@@ -482,6 +482,19 @@ wxString wxFileTypeImpl::GetCommand(const wxString& verb) const
 }
 #endif //!DARWIN
 
+bool wxFileTypeImpl::GetDescription(wxString *desc) const
+{
+    wxASSERT_MSG( m_manager != NULL , wxT("Bad wxFileType") );
+    
+    ICMapEntry entry;
+    ICGetMapEntry( (ICInstance) m_manager->m_hIC, 
+                   (Handle) m_manager->m_hDatabase, 
+                   m_lIndex, &entry);
+    
+    *desc = wxMacMakeStringFromPascal(entry.entryName);
+    return true;
+}
+
 bool wxFileTypeImpl::GetExtensions(wxArrayString& extensions)
 {
     wxASSERT_MSG( m_manager != NULL , wxT("Bad wxFileType") );
@@ -530,19 +543,6 @@ bool wxFileTypeImpl::GetIcon(wxIconLocation *WXUNUSED(icon)) const
 
     // no such file type or no value or incorrect icon entry
     return FALSE;
-}
-
-bool wxFileTypeImpl::GetDescription(wxString *desc) const
-{
-    wxASSERT_MSG( m_manager != NULL , wxT("Bad wxFileType") );
-    
-    ICMapEntry entry;
-    ICGetMapEntry( (ICInstance) m_manager->m_hIC, 
-                   (Handle) m_manager->m_hDatabase, 
-                   m_lIndex, &entry);
-    
-    *desc = wxString((char*)entry.entryName, wxConvLocal);
-    return true;
 }
 
 size_t wxFileTypeImpl::GetAllCommands(wxArrayString * verbs, wxArrayString * commands,
