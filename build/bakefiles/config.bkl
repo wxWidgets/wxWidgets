@@ -53,11 +53,15 @@
             Type of compiled binaries
         </description>
     </option>
-    
+   
+    <!-- FIXME: restore this once bakefile is fixed to not use
+                /Gm /GZ (incompatible with /O2) w/ debug-info -->
     <set var="DEBUG_INFO_DEFAULT">
         <if cond="FORMAT in ['msvc','msvc6prj','msevc4prj']">1</if>
         <if cond="FORMAT not in ['msvc','msvc6prj','msevc4prj']">default</if>
     </set>
+    -->
+    <set var="DEBUG_INFO_DEFAULT">default</set>
 
     <option name="DEBUG_INFO">
         <values>0,1,default</values>
