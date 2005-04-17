@@ -534,7 +534,9 @@ ln -sf %{_libdir}/wx/config/%{wxconfig} %{_bindir}/%{wxconfiglink}
 /sbin/ldconfig
 
 %preun devel
-rm -f %{_bindir}/wx-config
+%if %{unicode}
+    rm -f %{_bindir}/wx-config
+%endif
 rm -f %{_bindir}/%{wxconfiglink}
 
 %post -n %{wxbasename}
