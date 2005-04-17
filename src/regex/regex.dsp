@@ -4,7 +4,7 @@
 
 # TARGTYPE "Win32 (x86) Static Library" 0x0104
 
-CFG=regex - Win32 Debug Unicode DLL
+CFG=regex - Win32 Debug
 !MESSAGE This is not a valid makefile. To build this project using NMAKE,
 !MESSAGE use the Export Makefile command and run
 !MESSAGE 
@@ -13,7 +13,7 @@ CFG=regex - Win32 Debug Unicode DLL
 !MESSAGE You can specify a configuration when running NMAKE
 !MESSAGE by defining the macro CFG on the command line. For example:
 !MESSAGE 
-!MESSAGE NMAKE /f "regex.mak" CFG="regex - Win32 Debug Unicode DLL"
+!MESSAGE NMAKE /f "regex.mak" CFG="regex - Win32 Debug"
 !MESSAGE 
 !MESSAGE Possible choices for configuration are:
 !MESSAGE 
@@ -250,6 +250,8 @@ LIB32=link.exe -lib
 
 # Name "regex - Win32 Release"
 # Name "regex - Win32 Debug"
+# Name "regex - Win32 Release DLL"
+# Name "regex - Win32 Debug DLL"
 # Name "regex - Win32 Release Unicode"
 # Name "regex - Win32 Debug Unicode"
 # Name "regex - Win32 Release With Debug Info"
