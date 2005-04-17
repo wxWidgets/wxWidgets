@@ -269,6 +269,9 @@ wxMessageOutput *wxAppConsole::CreateMessageOutput()
 
 void wxAppConsole::ProcessPendingEvents()
 {
+    if ( !wxPendingEventsLocker )
+        return;
+    
     // ensure that we're the only thread to modify the pending events list
     wxENTER_CRIT_SECT( *wxPendingEventsLocker );
 

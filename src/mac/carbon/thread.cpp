@@ -1721,6 +1721,9 @@ void WXDLLIMPEXP_BASE wxMutexGuiLeaveOrEnter()
     wxASSERT_MSG( wxThread::IsMain(),
                   wxT("only main thread may call wxMutexGuiLeaveOrEnter()!") );
 
+    if( !gs_critsectWaitingForGui )
+        return;
+        
     wxCriticalSectionLocker enter(*gs_critsectWaitingForGui);
 
     if ( gs_nWaitingForGui == 0 )
