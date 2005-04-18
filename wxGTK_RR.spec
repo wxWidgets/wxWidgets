@@ -82,11 +82,11 @@ wxWidgets is a free C++ library for cross-platform GUI development.
 With wxWidgets, you can create applications for different GUIs (GTK+,
 Motif, MS Windows, MacOS X, Windows CE, GPE) from the same source code.
 
-%package -n wx-i28n
+%package -n wx-i18n
 Summary: The translations for the wxWidgets library.
 Group: X11/Libraries
 
-%description -n wx-i28n
+%description -n wx-i18n
 The translations files for the wxWidgets library.
 
 %package devel
@@ -587,7 +587,7 @@ rm -f %{_bindir}/%{wxbaseconfiglink}
 %{_libdir}/libwx_%{buildname}_qa-%{ver2}.so.*
 %{_libdir}/libwx_%{buildname}_xrc-%{ver2}.so.*
 
-%files -n wx-i28n
+%files -n wx-i18n
 %defattr(-,root,root)
 %{_datadir}/locale/*/*/*
 
