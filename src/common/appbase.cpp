@@ -269,6 +269,7 @@ wxMessageOutput *wxAppConsole::CreateMessageOutput()
 
 void wxAppConsole::ProcessPendingEvents()
 {
+#if wxUSE_THREADS
     if ( !wxPendingEventsLocker )
         return;
     
@@ -280,6 +281,7 @@ void wxAppConsole::ProcessPendingEvents()
         wxLEAVE_CRIT_SECT( *wxPendingEventsLocker );
         return;
     }
+#endif
 
     // iterate until the list becomes empty
     wxList::compatibility_iterator node = wxPendingEvents->GetFirst();
@@ -288,16 +290,24 @@ void wxAppConsole::ProcessPendingEvents()
         wxEvtHandler *handler = (wxEvtHandler *)node->GetData();
         wxPendingEvents->Erase(node);
 
+#if wxUSE_THREADS
         // In ProcessPendingEvents(), new handlers might be add
         // and we can safely leave the critical section here.
         wxLEAVE_CRIT_SECT( *wxPendingEventsLocker );
+#endif
+        
         handler->ProcessPendingEvents();
+
+#if wxUSE_THREADS
         wxENTER_CRIT_SECT( *wxPendingEventsLocker );
+#endif
 
         node = wxPendingEvents->GetFirst();
     }
 
+#if wxUSE_THREADS
     wxLEAVE_CRIT_SECT( *wxPendingEventsLocker );
+#endif
 }
 
 int wxAppConsole::FilterEvent(wxEvent& WXUNUSED(event))
