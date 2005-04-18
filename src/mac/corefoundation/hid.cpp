@@ -347,7 +347,7 @@ void wxHIDKeyboard::BuildCookies(wxCFArray& Array)
 	InitCookies(500);
 	int i,
 		nUsage;
-	for (i = 0; i < Array.Count(); ++i)
+	for (i = 0; i < Array.GetCount(); ++i)
 	{
 		CFNumberGetValue(
 			(CFNumberRef) CFDictionaryGetValue((CFDictionaryRef) Array[i], CFSTR(kIOHIDElementUsageKey)), 

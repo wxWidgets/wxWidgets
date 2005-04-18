@@ -91,7 +91,7 @@ void wxHIDJoystick::MakeCookies(wxCFArray& Array)
 	int i,
 		nUsage,
         nPage;
-	for (i = 0; i < Array.Count(); ++i)
+	for (i = 0; i < Array.GetCount(); ++i)
 	{
         const void* ref = CFDictionaryGetValue((CFDictionaryRef)Array[i], CFSTR(kIOHIDElementKey));
 

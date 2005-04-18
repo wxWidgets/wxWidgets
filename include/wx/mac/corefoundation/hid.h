@@ -41,16 +41,7 @@
 
 #include <mach/mach.h>
 
-//Utility wrapper around CFArray
-class wxCFArray
-{
-public:
-	wxCFArray(CFTypeRef pData) : pArray((CFArrayRef) pData) {}
-	CFTypeRef operator [] (const int& nIndex) {return CFArrayGetValueAtIndex(pArray, nIndex); }
-	int Count() {return CFArrayGetCount(pArray);}
-private:
-	CFArrayRef pArray;
-};
+#include "wx/mac/corefoundation/cfwrappers.h"
 
 //
 //	A wrapper around OS X HID Manager procedures.
