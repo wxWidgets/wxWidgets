@@ -9,9 +9,6 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef __WX_CFSTRINGHOLDER_H__
-#define __WX_CFSTRINGHOLDER_H__
-
 #ifdef __DARWIN__
     #include <CoreFoundation/CFString.h>
 #else
@@ -73,7 +70,7 @@ public:
 
     void Assign( const wxString &str , wxFontEncoding encoding ) ;
 
-    operator CFStringRef () const { return m_cfs; }
+    operator CFStringRef () { return m_cfs; }
     wxString AsString( wxFontEncoding encoding = wxFONTENCODING_DEFAULT ) ;
 
 private:
@@ -84,4 +81,3 @@ private:
     DECLARE_NO_COPY_CLASS( wxMacCFStringHolder )
 } ;
 
-#endif //__WXCFSTRINGHOLDER_H__

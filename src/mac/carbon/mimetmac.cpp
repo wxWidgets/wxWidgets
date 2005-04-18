@@ -754,333 +754,13 @@ pascal  OSStatus  MoreProcGetProcessTypeSignature(
   return anErr;
 }//end MoreProcGetProcessTypeSignature
 
-#include "wx/mac/corefoundation/cfwrappers.h"
-
-void wxCFDictionary::MakeValidXML()
+wxFileType *
+wxMimeTypesManagerImpl::Associate(const wxFileTypeInfo& ftInfo)
 {
-    {
-        CFIndex cfiCount = GetCount();
-        CFTypeRef* pKeys = new CFTypeRef[cfiCount];
-        CFTypeRef* pValues = new CFTypeRef[cfiCount];
-
-        CFDictionaryGetKeysAndValues(m_cfmdRef, pKeys, pValues);
-
-        //for plist xml format all dictionary keys must be cfstrings and no values in 
-        //the dictionary or subkeys/values can be NULL
-        //Also, CFURLs are not allowed
-        for(CFIndex i = 0; i < cfiCount; ++i)
-        {
-            //must be an array, dictionary, string, bool, or int and cannot be null
-            //and dictionaries can only contain cfstring keys
-            CFTypeRef cfRef = pValues[i];
-            if(!pKeys[i] ||
-                CFGetTypeID(pKeys[i]) != CFStringGetTypeID() || 
-                !cfRef)
-            {
-                Remove(pKeys[i]);
-                --i;
-                --cfiCount;
-                delete[] pKeys;
-                delete[] pValues;
-                pKeys = new CFTypeRef[cfiCount];
-                pValues = new CFTypeRef[cfiCount];
-                CFDictionaryGetKeysAndValues(m_cfmdRef, pKeys, pValues);
-            }
-            else if (CFGetTypeID(cfRef) == CFArrayGetTypeID())
-            {
-                CFRetain(cfRef);
-                wxCFArray cfaCurrent(cfRef);
-                cfaCurrent.MakeMutable();
-                cfaCurrent.MakeValidXML();
-                Set(pKeys[i], cfaCurrent);
-            }
-            else if (CFGetTypeID(cfRef) == CFDictionaryGetTypeID())
-            {
-                CFRetain(cfRef);
-                wxCFDictionary cfdCurrent(cfRef);
-                cfdCurrent.MakeMutable();
-                cfdCurrent.MakeValidXML();
-                Set(pKeys[i], cfdCurrent);
-            }
-            else if( ( 	CFGetTypeID(cfRef) == CFStringGetTypeID() ||
-                        CFGetTypeID(cfRef) == CFNumberGetTypeID() ||
-                        CFGetTypeID(cfRef) == CFBooleanGetTypeID() ) == false )
-            {
-                Remove(pKeys[i]);
-                --i;
-                --cfiCount;
-                delete[] pKeys;
-                delete[] pValues;
-                pKeys = new CFTypeRef[cfiCount];
-                pValues = new CFTypeRef[cfiCount];
-                CFDictionaryGetKeysAndValues(m_cfmdRef, pKeys, pValues);
-            }                
-        }
-
-        delete[] pValues;
-        delete[] pKeys;
-    }
-}
-
-void wxCFArray::MakeValidXML()
-{
-{
-        for(CFIndex i = 0; i < GetCount(); ++i)
-        {
-            //must be an array, dictionary, string, bool, or int and cannot be null
-            //and dictionaries can only contain cfstring keys
-            CFTypeRef cfRef = (*this)[i];
-            if(!cfRef)
-            {
-                Remove(i);
-                --i;
-            }
-            else if (CFGetTypeID(cfRef) == CFArrayGetTypeID())
-            {
-                CFRetain(cfRef);
-                wxCFArray cfaCurrent(cfRef);
-                cfaCurrent.MakeMutable();
-                cfaCurrent.MakeValidXML();
-                Set(i, cfaCurrent);
-            }
-            else if (CFGetTypeID(cfRef) == CFDictionaryGetTypeID())
-            {
-                CFRetain(cfRef);
-                wxCFDictionary cfdCurrent(cfRef);
-                cfdCurrent.MakeMutable();
-                cfdCurrent.MakeValidXML();
-                Set(i, cfdCurrent);
-            }
-            else if( ( 	CFGetTypeID(cfRef) == CFStringGetTypeID() ||
-                        CFGetTypeID(cfRef) == CFNumberGetTypeID() ||
-                        CFGetTypeID(cfRef) == CFBooleanGetTypeID() ) == false )
-            {
-                Remove(i);
-                --i;
-            }
-        }
-    }
-}
-
-wxFileType* wxMimeTypesManagerImpl::Associate(const wxFileTypeInfo& ftInfo)
-{
-    bool bInfoSuccess = false;
-    
-    const wxArrayString& asExtensions = ftInfo.GetExtensions();                
-    size_t dwFoundIndex = 0;
-    if(!asExtensions.GetCount())
-    {
-        wxLogDebug(wxT("Must have extension to associate with"));
-    }
-    
-    //Find and write to Info.plist in main bundle (note that some other
-    //apps have theirs named differently, i.e. IE's is named Info-macos.plist
-    //some apps (non-wx) use the 'plst' resource instead
-    CFBundleRef cfbMain = CFBundleGetMainBundle();
-    if(cfbMain)
-    {	
-        UInt32 dwBundleType, dwBundleCreator;
-        CFBundleGetPackageInfo(cfbMain, &dwBundleType, &dwBundleCreator);
-                
-        //if launching terminal non-app version will be 'BNDL' (generic bundle, maybe in other cases too),
-        //which will give us the incorrect info.plist path
-        //otherwise it will be 'APPL', or in the case of a framework,
-        //'FMWK'
-        if(dwBundleType == 'APPL')
-        {
-
-            wxCFURL cfurlBundleLoc((CFTypeRef)CFBundleCopyBundleURL(cfbMain));
-//             wxCFURL cfurlBundleLoc((CFTypeRef)CFBundleCopyExecutableURL(cfbMain));
-            wxString sInfoPath;
-//            sInfoPath << wxT("file://");
-            sInfoPath << cfurlBundleLoc.BuildWXString();
-            sInfoPath << wxT("Contents/Info.plist");
-        
-//        wxCFDictionary cfdInfo( (CFTypeRef) CFBundleGetInfoDictionary(cfbMain), wxCF_RETAIN );
-            wxCFDictionary cfdInfo;
-            bool bInfoOpenSuccess = false;
-            wxFile indictfile;
-            if(indictfile.Open(sInfoPath, wxFile::read));
-            {
-                CFIndex cfiBufLen = (CFIndex) indictfile.Length();
-                const UInt8* pBuffer = new UInt8[cfiBufLen];
-                indictfile.Read((void*)pBuffer, cfiBufLen);
-                wxCFData cfdaInDict(pBuffer, cfiBufLen);
-                wxString sError;
-  	             bInfoOpenSuccess = cfdInfo.ReadAsXML(cfdaInDict, &sError);
-                if(!bInfoOpenSuccess)
-                    wxLogDebug(sError);
-                indictfile.Close();
-            }
-            if(bInfoOpenSuccess)
-            {
-                cfdInfo.MakeMutable( cfdInfo.GetCount() + 1 );
-
-                wxCFArray cfaDocTypes( cfdInfo[ wxCFString(wxT("CFBundleDocumentTypes")) ], wxCF_RETAIN );
-            
-                bool bAddDocTypesArrayToDictionary = cfaDocTypes.IsOk() == false;
-                if(bAddDocTypesArrayToDictionary)
-                    cfaDocTypes.Create();
-                else
-                    cfaDocTypes.MakeMutable( cfaDocTypes.GetCount() + 1 );
-                
-                bool bEntryFound = false;
-                
-                //search for duplicate
-                CFIndex i;
-                for(i = 0; i < cfaDocTypes.GetCount(); ++i)
-                {
-                    wxCFDictionary cfdDocTypeEntry( cfaDocTypes[i], wxCF_RETAIN );
-                            
-                    //A lot of apps dont do to mime types for some reason
-                    //so we go by extensions only
-                    wxCFArray cfaExtensions( cfdDocTypeEntry[ wxCFString(wxT("CFBundleTypeExtensions")) ], 
-                                             wxCF_RETAIN );
-                                             
-                    if(cfaExtensions.IsOk() == false)
-                        continue;
-                    
-                    for(CFIndex iExt = 0; iExt < cfaExtensions.GetCount(); ++iExt)
-                    {                        
-                        for (size_t iWXExt = 0; iWXExt < asExtensions.GetCount(); ++iWXExt)
-                        {
-                            if(asExtensions[iWXExt] == 
-                                    wxCFString(cfaExtensions[iExt], wxCF_RETAIN).BuildWXString())
-                            {
-                                bEntryFound = true;
-                                dwFoundIndex = iWXExt;
-                                break;
-                            }
-                        }	//end of wxstring array
-                        
-                        if(bEntryFound)
-                            break;
-                    } //end for cf array                    
-                    
-                    if(bEntryFound)
-                        break;
-                }//end for doctypes
-                
-                wxCFDictionary cfdNewEntry;
-
-                if(!ftInfo.GetDescription().empty())
-                {
-                    cfdNewEntry.Add( wxCFString(wxT("CFBundleTypeName")), 
-                                wxCFString(ftInfo.GetDescription()) );
-                }
-                    
-                if(!ftInfo.GetIconFile().empty())
-                {
-                    cfdNewEntry.Add( wxCFString(wxT("CFBundleTypeIconFile")), 
-                                    wxCFString(ftInfo.GetIconFile()) );
-                }
-                    
-                
-                wxCFArray cfaOSTypes;
-                wxCFArray cfaExtensions;
-                wxCFArray cfaMimeTypes;
-                    
-                
-                //OSTypes is a cfarray of four-char-codes - '****' for unrestricted
-                cfaOSTypes.Add( wxCFString(wxT("****")) );
-                cfdNewEntry.Add( wxCFString(wxT("CFBundleTypeOSTypes")), cfaOSTypes );
-
-                if(ftInfo.GetExtensionsCount() != 0) //'*' for unrestricted
-                {
-                    for(size_t iExtension = 0; iExtension < (size_t)ftInfo.GetExtensionsCount(); ++iExtension)
-                    {
-                        cfaExtensions.Add( wxCFString( asExtensions[iExtension] ) );
-                    }
-                    
-                    cfdNewEntry.Add( wxCFString(wxT("CFBundleTypeExtensions")), cfaExtensions );
-                }
-                
-                if(!ftInfo.GetMimeType().empty())
-                {
-                    cfaMimeTypes.Add( wxCFString(ftInfo.GetMimeType()) );
-                    cfdNewEntry.Add( wxCFString(wxT("CFBundleTypeMIMETypes")), cfaMimeTypes );
-                }
-                
-                // Editor - can perform all actions
-                // Viewer - all actions except manipulation/saving
-                // None - can perform no actions
-                cfdNewEntry.Add( wxCFString(wxT("CFBundleTypeRole")), wxCFString(wxT("Editor")) );
-                
-                // Is application bundled?
-                cfdNewEntry.Add( wxCFString(wxT("LSTypeIsPackage")), kCFBooleanTrue );
-
-                if(bEntryFound)
-                    cfaDocTypes.Set(i, cfdNewEntry);
-                else
-                    cfaDocTypes.Add(cfdNewEntry);
-                    
-                //
-                // set the doc types array in the muted dictionary
-                //
-                
-                if(bAddDocTypesArrayToDictionary)
-                    cfdInfo.Add(wxCFString(wxT("CFBundleDocumentTypes")), cfaDocTypes);
-                else
-                    cfdInfo.Set(wxCFString(wxT("CFBundleDocumentTypes")), cfaDocTypes);
-                    
-                cfdInfo.MakeValidXML();
-
-                wxFile outdictfile;
-                if(outdictfile.Open(sInfoPath, wxFile::write))
-                {
-                    wxCFData cfdaInfo(cfdInfo.WriteAsXML());
-                    if(cfdaInfo.IsOk())
-                    {
-                        if(outdictfile.Write(cfdaInfo.GetValue(), cfdaInfo.GetCount()) != 
-                            (wxFileOffset)cfdaInfo.GetCount())
-                        {
-                            wxLogDebug(wxT("error in writing to file"));
-                        }
-                        else
-                        {
-                            bInfoSuccess = true;
-//#if defined(__DARWIN__)
-//                //force launch services to update its database for the finder
-//                OSStatus status = LSRegisterURL((CFURLRef)(CFTypeRef)cfurlBundleLoc, true);
-//                if(status != noErr)
-//                {
-//                    wxLogDebug(wxT("LSRegisterURL Failed."));
-//                }
-//#endif
-                        }
-                        outdictfile.Close();
-                    }
-                    else
-                    {
-                        outdictfile.Close();
-                        wxLogDebug(wxT("Could not read in new dictionary"));
-                    }
-                }
-                else
-                {
-                    wxLogDebug(wxString(wxT("Could not open [")) + 
-                    sInfoPath + wxT("] for writing."));
-                }
-            }
-            else
-            {
-                wxLogDebug(wxT("No info dictionary in main bundle"));
-            }
-        }
-        else	
-        {
-            wxLogDebug(wxT("Can only call associate from bundled app within XXX.app"));
-        }
-    }
-    else
-    {
-        wxLogDebug(wxT("No main bundle"));
-    }
-
-#if defined(__DARWIN__)
-    if(!bInfoSuccess)
-        return NULL;
-#endif
+#if 1
+    wxFAIL_MSG(wxT("Associate not ready for production use"));
+    return NULL;
+#else
     //on mac you have to embed it into the mac's file reference resource ('FREF' I believe)
     //or, alternately, you could just add an entry to m_hDatabase, but you'd need to get
     //the app's signature somehow...
@@ -1101,7 +781,7 @@ wxFileType* wxMimeTypesManagerImpl::Associate(const wxFileTypeInfo& ftInfo)
             //get the file type if it exists - 
             //if it really does then modify the database then save it,
             //otherwise we need to create a whole new entry
-            wxFileType* pFileType = GetFileTypeFromExtension(asExtensions[dwFoundIndex]);
+            wxFileType* pFileType = GetFileTypeFromMimeType(ftInfo.GetMimeType());
             if(pFileType)
             {
                 ICMapEntry entry;
@@ -1116,18 +796,7 @@ wxFileType* wxMimeTypesManagerImpl::Associate(const wxFileTypeInfo& ftInfo)
 
                 //success
                 if(status == noErr)
-                {
-                    //kICAttrNoChange means we don't care about attributes such as
-                    //locking in the database
-//                    status = ICSetPrefHandle((ICInstance) m_hIC, kICMapping, 
-//                                             kICAttrNoChange, (Handle) m_hDatabase);
-//                    if(status == noErr)
-                        return pFileType;
-//                    else
-//                    {
-//                        wxLogDebug(wxString::Format(wxT("%i - %s"), (int)status, wxT("ICSetPrefHandle failed."))); 
-       //             }
-                }
+                    return pFileType;
                 else 
                 { 
                     wxLogDebug(wxString::Format(wxT("%i - %s"), __LINE__, wxT("ICSetMapEntry failed."))); 
@@ -1152,6 +821,7 @@ wxFileType* wxMimeTypesManagerImpl::Associate(const wxFileTypeInfo& ftInfo)
 
 
                 //add the entry to the database
+                //TODO:  Does this work?
                 ICMapEntry entry;
                 entry.totalLength = sizeof(ICMapEntry);
                 entry.fixedLength = kICMapFixedLength;
@@ -1172,16 +842,16 @@ wxFileType* wxMimeTypesManagerImpl::Associate(const wxFileTypeInfo& ftInfo)
                 {
                     //kICAttrNoChange means we don't care about attributes such as
                     //locking in the database
-         //           status = ICSetPrefHandle((ICInstance) m_hIC, kICMapping, 
-           //                                  kICAttrNoChange, (Handle) m_hDatabase);
+                    status = ICSetPrefHandle((ICInstance) m_hIC, kICMapping, 
+                                             kICAttrNoChange, (Handle) m_hDatabase);
                                              
                     //return the entry in the database if successful
-             //       if(status == noErr)
-                        return GetFileTypeFromExtension(ftInfo.GetMimeType());
-             //       else 
-              //      { 
-               //         wxLogDebug(wxString::Format(wxT("%i - %s"), __LINE__, wxT("ICSetPrefHandle failed."))); 
-               //     }
+                    if(status == noErr)
+                        return GetFileTypeFromMimeType(ftInfo.GetMimeType());
+                    else 
+                    { 
+                        wxLogDebug(wxString::Format(wxT("%i - %s"), __LINE__, wxT("ICSetPrefHandle failed."))); 
+                    }
                 }
                 else 
                 { 
@@ -1199,185 +869,16 @@ wxFileType* wxMimeTypesManagerImpl::Associate(const wxFileTypeInfo& ftInfo)
         wxLogDebug(wxString::Format(wxT("%i - %s"), __LINE__, wxT("GetProcessSignature failed."))); 
     }
     return NULL;
+#endif
 }
 
 bool
 wxMimeTypesManagerImpl::Unassociate(wxFileType *pFileType)
 {
-    wxASSERT(pFileType);
-    bool bInfoSuccess = false;
-    
-    wxArrayString asExtensions;
-    pFileType->GetExtensions(asExtensions);                
-    
-    if(!asExtensions.GetCount())
-    {
-        wxLogDebug(wxT("Must have extension to disassociate"));
-        return FALSE;
-    }
-
-    //Find and write to Info.plist in main bundle (note that some other
-    //apps have theirs named differently, i.e. IE's is named Info-macos.plist
-    //some apps (non-wx) use the 'plst' resource instead
-    CFBundleRef cfbMain = CFBundleGetMainBundle();
-    if(cfbMain)
-    {	
-        UInt32 dwBundleType, dwBundleCreator;
-        CFBundleGetPackageInfo(cfbMain, &dwBundleType, &dwBundleCreator);
-                
-        //if launching terminal non-app version will be 'BNDL' (generic bundle, maybe in other cases too),
-        //which will give us the incorrect info.plist path
-        //otherwise it will be 'APPL', or in the case of a framework,
-        //'FMWK'
-        if(dwBundleType == 'APPL')
-        {
-
-            wxCFURL cfurlBundleLoc((CFTypeRef)CFBundleCopyBundleURL(cfbMain));
-//             wxCFURL cfurlBundleLoc((CFTypeRef)CFBundleCopyExecutableURL(cfbMain));
-            wxString sInfoPath;
-//            sInfoPath << wxT("file://");
-            sInfoPath << cfurlBundleLoc.BuildWXString();
-            sInfoPath << wxT("Contents/Info.plist");
-        
-//        wxCFDictionary cfdInfo( (CFTypeRef) CFBundleGetInfoDictionary(cfbMain), wxCF_RETAIN );
-            wxCFDictionary cfdInfo;
-            bool bInfoOpenSuccess = false;
-            wxFile indictfile;
-            if(indictfile.Open(sInfoPath, wxFile::read));
-            {
-                CFIndex cfiBufLen = (CFIndex) indictfile.Length();
-                const UInt8* pBuffer = new UInt8[cfiBufLen];
-                indictfile.Read((void*)pBuffer, cfiBufLen);
-                wxCFData cfdaInDict(pBuffer, cfiBufLen);
-                wxString sError;
-  	             bInfoOpenSuccess = cfdInfo.ReadAsXML(cfdaInDict, &sError);
-                if(!bInfoOpenSuccess)
-                    wxLogDebug(sError);
-                indictfile.Close();
-            }
-            if(bInfoOpenSuccess)
-            {
-                cfdInfo.MakeMutable( cfdInfo.GetCount() + 1 );
-
-                wxCFArray cfaDocTypes( cfdInfo[ wxCFString(wxT("CFBundleDocumentTypes")) ], wxCF_RETAIN );
-                
-                if(cfaDocTypes.IsOk())
-                { 	                               
-                    bool bEntryFound = false;
-                
-                    //search for duplicate
-                    CFIndex i;
-                    for(i = 0; i < cfaDocTypes.GetCount(); ++i)
-                    {
-                        wxCFDictionary cfdDocTypeEntry( cfaDocTypes[i], wxCF_RETAIN );
-                                
-                        //A lot of apps dont do to mime types for some reason
-                        //so we go by extensions only
-                        wxCFArray cfaExtensions( cfdDocTypeEntry[ wxCFString(wxT("CFBundleTypeExtensions")) ], 
-                                        wxCF_RETAIN );
-                                             
-                        if(cfaExtensions.IsOk() == false)
-                            continue;
-                    
-                        for(CFIndex iExt = 0; iExt < cfaExtensions.GetCount(); ++iExt)
-                        {            	            
-                            for (size_t iWXExt = 0; iWXExt < asExtensions.GetCount(); ++iWXExt)
-                            {
-                                if(asExtensions[iWXExt] == 
-                                    wxCFString(cfaExtensions[iExt], wxCF_RETAIN).BuildWXString())
-                                {
-                                    bEntryFound = true;
-                                    cfaDocTypes.Remove(i);
-                                    cfdInfo.Set( wxCFString(wxT("CFBundleDocumentTypes")) , cfaDocTypes );
-                                    break;
-                                }
-                            }	//end of wxstring array
-                        
-                            if(bEntryFound)
-                                break;
-                        } //end for cf array                    
-                            
-                        if(bEntryFound)
-                            break;
-                    }//end for doctypes
-                                        
-                    if(bEntryFound)
-                    {
-                        cfdInfo.MakeValidXML();
-
-                        wxFile outdictfile;
-                        if(outdictfile.Open(sInfoPath, wxFile::write))
-                        {
-                            wxCFData cfdaInfo(cfdInfo.WriteAsXML());
-                            if(cfdaInfo.IsOk())
-                            {
-                                if(outdictfile.Write(cfdaInfo.GetValue(), cfdaInfo.GetCount()) != 
-                                    (wxFileOffset)cfdaInfo.GetCount())
-                                {
-                                    wxLogDebug(wxT("error in writing to file"));
-                                }
-                                else
-                                {
-                                    bInfoSuccess = true;
-//#if defined(__DARWIN__)
-//                //force launch services to update its database for the finder
-//                OSStatus status = LSRegisterURL((CFURLRef)(CFTypeRef)cfurlBundleLoc, true);
-//                if(status != noErr)
-//                {
-//                    wxLogDebug(wxT("LSRegisterURL Failed."));
-//                }
-//#endif
-                                }
-                                outdictfile.Close();
-                            }
-                            else
-                            {
-                                outdictfile.Close();
-                                wxLogDebug(wxT("Could not read in new dictionary"));
-                            }
-                        }
-                        else
-                        {
-                            wxLogDebug(wxString(wxT("Could not open [")) + 
-                            sInfoPath + wxT("] for writing."));
-                        }
-                    }
-                    else
-                    {
-                        wxLogDebug(wxT("Entry not found to remove"));
-                        wxString sPrintOut;  
-                        wxCFDictionary::PrintOutArray(sPrintOut, (CFArrayRef)(CFTypeRef)cfaDocTypes);  
-                        wxLogDebug(sPrintOut);
-                        for(size_t i = 0; i < asExtensions.GetCount(); ++i)
-                            wxLogDebug(asExtensions[i]);
-                    }
-                }
-                else
-                {
-                    wxLogDebug(wxT("No doc types array found"));
-                    wxString sPrintOut;  cfdInfo.PrintOut(sPrintOut);  wxLogDebug(sPrintOut);
-                }
-            }
-            else
-            {
-                wxLogDebug(wxT("No info dictionary in main bundle"));
-            }
-        }
-        else	
-        {
-            wxLogDebug(wxT("Can only call associate from bundled app within XXX.app"));
-        }
-    }
-    else
-    {
-        wxLogDebug(wxT("No main bundle"));
-    }
-
-#if defined(__DARWIN__)
-    if(!bInfoSuccess)
-        return NULL;
-#endif
-
+#if 1
+    wxFAIL_MSG(wxT("Unassociate not ready for production use"));
+    return FALSE;
+#else
     //this should be as easy as removing the entry from the database and then saving 
     //the database
     OSStatus status = ICDeleteMapEntry( (ICInstance) m_hIC, (Handle) m_hDatabase, 
@@ -1387,15 +888,15 @@ wxMimeTypesManagerImpl::Unassociate(wxFileType *pFileType)
     {
         //kICAttrNoChange means we don't care about attributes such as
         //locking in the database
-//        status = ICSetPrefHandle((ICInstance) m_hIC, kICMapping, 
-//                    kICAttrNoChange, (Handle) m_hDatabase);
+        status = ICSetPrefHandle((ICInstance) m_hIC, kICMapping, 
+                    kICAttrNoChange, (Handle) m_hDatabase);
             
-//        if(status == noErr)
+        if(status == noErr)
             return TRUE;
-//        else
-//        { 
-//            wxLogDebug(wxString::Format(wxT("%i - %s"), __LINE__, wxT("ICSetPrefHandle failed."))); 
-//        }
+        else
+        { 
+            wxLogDebug(wxString::Format(wxT("%i - %s"), __LINE__, wxT("ICSetPrefHandle failed."))); 
+        }
 
     }
     else
@@ -1404,44 +905,7 @@ wxMimeTypesManagerImpl::Unassociate(wxFileType *pFileType)
     }
     
     return FALSE;
+#endif
 }
-/*
-                    CFWriteStreamRef cfwsInfo = CFWriteStreamCreateWithFile(
-                                        kCFAllocatorDefault,
-                                        (CFURLRef) (CFTypeRef)cfurlInfoLoc	);
-                
-//                CFShow(cfdInfo);
-                    if(cfwsInfo)
-                    {
-                        Boolean bOpened = CFWriteStreamOpen(cfwsInfo);
-                        if(bOpened)
-                        { 	                   
-                            CFStringRef cfsError;
-                            CFIndex cfiWritten = CFPropertyListWriteToStream((CFPropertyListRef)(CFTypeRef)cfdInfo,
-                                                cfwsInfo,
-                                                kCFPropertyListXMLFormat_v1_0, //100
-                                                &cfsError);
-                            if(cfsError && cfiWritten == 0)
-                            {
-                                wxLogDebug(wxCFString(cfsError).BuildWXString());
-                                wxString sMessage;
-                                cfdInfo.PrintOut(sMessage);
-                                wxLogDebug(sMessage);
-                            }
-                            else
-                            {
-                                bInfoSuccess = true;
-//#if defined(__DARWIN__)
-//                //force launch services to update its database for the finder
-//                OSStatus status = LSRegisterURL((CFURLRef)(CFTypeRef)cfurlBundleLoc, true);
-//                if(status != noErr)
-//                {
-//                    wxLogDebug(wxT("LSRegisterURL Failed."));
-//                }
-//#endif
-                            }
-                    
-                            CFWriteStreamClose(cfwsInfo);
 
-*/
 #endif //wxUSE_MIMETYPE
