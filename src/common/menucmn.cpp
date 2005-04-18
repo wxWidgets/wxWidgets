@@ -160,10 +160,7 @@ wxAcceleratorEntry *wxGetAccelFromString(const wxString& label)
                 if ( current[0U] == 'f' && wxIsdigit(current[1U]) &&
                      (current.Len() == 2 ||
                      (current.Len() == 3 && wxIsdigit(current[2U]))) ) {
-                    int n;
-                    wxSscanf(current.c_str() + 1, wxT("%d"), &n);
-
-                    keyCode = WXK_F1 + n - 1;
+                    keyCode = WXK_F1 + wxAtoi(current.c_str() + 1) - 1;
                 }
                 else {
                     // several special cases
