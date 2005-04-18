@@ -82,11 +82,11 @@ wxWidgets is a free C++ library for cross-platform GUI development.
 With wxWidgets, you can create applications for different GUIs (GTK+,
 Motif, MS Windows, MacOS X, Windows CE, GPE) from the same source code.
 
-%package -n wx-i28n
+%package -n wx-i18n
 Summary: The translations for the wxWidgets library.
 Group: X11/Libraries
 
-%description -n wx-i28n
+%description -n wx-i18n
 The translations files for the wxWidgets library.
 
 %package devel
@@ -233,7 +233,7 @@ rm -rf $RPM_BUILD_ROOT
 (cd obj-shared; make DESTDIR=$RPM_BUILD_ROOT install)
 
 # --- wxBase headers list begins here ---
-cat <<EOF >wxbase-headers-list
+cat <<EOF >wxbase-headers.files
 wx/afterstd.h
 wx/app.h
 wx/apptrait.h
@@ -298,7 +298,6 @@ wx/memtext.h
 wx/mimetype.h
 wx/module.h
 wx/msgout.h
-wx/msgout.h
 wx/mstream.h
 wx/object.h
 wx/platform.h
@@ -339,19 +338,6 @@ wx/xti.h
 wx/xtistrm.h
 wx/zipstrm.h
 wx/zstream.h
-wx/msw/apptrait.h
-wx/msw/apptbase.h
-wx/msw/chkconf.h
-wx/msw/crashrpt.h
-wx/msw/dde.h
-wx/msw/debughlp.h
-wx/msw/gccpriv.h
-wx/msw/mimetype.h
-wx/msw/stackwalk.h
-wx/msw/winundef.h
-wx/msw/wrapcctl.h
-wx/msw/wrapcdlg.h
-wx/msw/wrapwin.h
 wx/fs_inet.h
 wx/gsocket.h
 wx/protocol/file.h
@@ -363,12 +349,19 @@ wx/sckipc.h
 wx/sckstrm.h
 wx/socket.h
 wx/url.h
-wx/msw/gsockmsw.h
 wx/xml/xml.h
 wx/xtixml.h
 wx/db.h
 wx/dbkeyg.h
 wx/dbtable.h
+wx/unix/apptbase.h
+wx/unix/apptrait.h
+wx/unix/execute.h
+wx/unix/gsockunx.h
+wx/unix/mimetype.h
+wx/unix/pipe.h
+wx/unix/stackwalk.h
+wx/unix/stdpaths.h
 EOF
 # --- wxBase headers list ends here ---
 cat <<EOF >wxbase-headers.paths
@@ -594,7 +587,7 @@ rm -f %{_bindir}/%{wxbaseconfiglink}
 %{_libdir}/libwx_%{buildname}_qa-%{ver2}.so.*
 %{_libdir}/libwx_%{buildname}_xrc-%{ver2}.so.*
 
-%files -n wx-i28n
+%files -n wx-i18n
 %defattr(-,root,root)
 %{_datadir}/locale/*/*/*
 
