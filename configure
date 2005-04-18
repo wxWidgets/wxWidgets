@@ -1726,6 +1726,8 @@ SO_SUFFIX=so
 SAMPLES_RPATH_FLAG=
 SAMPLES_RPATH_POSTLINK=
 
+DEFAULT_STD_FLAG=yes
+
 case "${host}" in
   *-hp-hpux* )
     USE_HPUX=1
@@ -1929,6 +1931,7 @@ _ACEOF
     PROGRAM_EXT=".exe"
     RESCOMP=windres
     DEFAULT_DEFAULT_wxUSE_MSW=1
+    DEFAULT_STD_FLAG=no
   ;;
 
   *-pc-msdosdjgpp )
@@ -1972,6 +1975,7 @@ _ACEOF
     done
     export PATH="$ac_TEMP_PATH"
     unset ac_TEMP_PATH
+    DEFAULT_STD_FLAG=no
   ;;
 
   powerpc-*-darwin* )
@@ -1991,12 +1995,14 @@ _ACEOF
 _ACEOF
 
     DEFAULT_DEFAULT_wxUSE_MAC=1
+    DEFAULT_STD_FLAG=no
   ;;
   powerpc-apple-macos* )
         USE_UNIX=0
             ac_cv_c_bigendian=yes
     SO_SUFFIX=shlib
             DEFAULT_DEFAULT_wxUSE_MAC=1
+    DEFAULT_STD_FLAG=no
   ;;
 
   *-*-beos* )
@@ -2264,7 +2270,7 @@ else
   DEFAULT_wxUSE_LIBXPM=yes
   DEFAULT_wxUSE_LIBMSPACK=yes
   DEFAULT_wxUSE_LIBSDL=no
-  DEFAULT_wxUSE_LIBGNOMEPRINT=yes
+  DEFAULT_wxUSE_LIBGNOMEPRINT=no
   DEFAULT_wxUSE_ODBC=no
   DEFAULT_wxUSE_OPENGL=no
 
@@ -2272,8 +2278,8 @@ else
   DEFAULT_wxUSE_STACKWALKER=yes
   DEFAULT_wxUSE_DEBUGREPORT=yes
   DEFAULT_wxUSE_SNGLINST_CHECKER=yes
-  DEFAULT_wxUSE_STD_IOSTREAM=yes
-  DEFAULT_wxUSE_STD_STRING=yes
+  DEFAULT_wxUSE_STD_IOSTREAM=$DEFAULT_STD_FLAG
+  DEFAULT_wxUSE_STD_STRING=$DEFAULT_STD_FLAG
   DEFAULT_wxUSE_CMDLINE_PARSER=yes
   DEFAULT_wxUSE_DATETIME=yes
   DEFAULT_wxUSE_TIMER=yes

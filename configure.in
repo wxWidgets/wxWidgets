@@ -146,6 +146,8 @@ SO_SUFFIX=so
 SAMPLES_RPATH_FLAG=
 SAMPLES_RPATH_POSTLINK=
 
+DEFAULT_STD_FLAG=yes
+
 dnl to support a new system, you need to add its canonical name (as determined
 dnl by config.sub or specified by the configure command line) to this "case"
 dnl and also define the shared library flags below - search for
@@ -277,6 +279,7 @@ case "${host}" in
     PROGRAM_EXT=".exe"
     RESCOMP=windres
     DEFAULT_DEFAULT_wxUSE_MSW=1
+    DEFAULT_STD_FLAG=no
   ;;
 
   *-pc-msdosdjgpp )
@@ -320,6 +323,7 @@ case "${host}" in
     done
     export PATH="$ac_TEMP_PATH"
     unset ac_TEMP_PATH
+    DEFAULT_STD_FLAG=no
   ;;
 
   powerpc-*-darwin* )
@@ -331,6 +335,7 @@ case "${host}" in
     AC_DEFINE(__DARWIN__)
     AC_DEFINE(TARGET_CARBON)
     DEFAULT_DEFAULT_wxUSE_MAC=1
+    DEFAULT_STD_FLAG=no
   ;;
   powerpc-apple-macos* )
     dnl Classic Mac OS (< X)
@@ -342,6 +347,7 @@ case "${host}" in
     dnl AC_DEFINE(TARGET_CARBON)
     dnl platform.h needs TARGET_CARBON before setup.h, we'll add it to CPPFLAGS
     DEFAULT_DEFAULT_wxUSE_MAC=1
+    DEFAULT_STD_FLAG=no
   ;;
 
   *-*-beos* )
@@ -617,8 +623,8 @@ else
   DEFAULT_wxUSE_STACKWALKER=yes
   DEFAULT_wxUSE_DEBUGREPORT=yes
   DEFAULT_wxUSE_SNGLINST_CHECKER=yes
-  DEFAULT_wxUSE_STD_IOSTREAM=no
-  DEFAULT_wxUSE_STD_STRING=no
+  DEFAULT_wxUSE_STD_IOSTREAM=$DEFAULT_STD_FLAG
+  DEFAULT_wxUSE_STD_STRING=$DEFAULT_STD_FLAG
   DEFAULT_wxUSE_CMDLINE_PARSER=yes
   DEFAULT_wxUSE_DATETIME=yes
   DEFAULT_wxUSE_TIMER=yes
