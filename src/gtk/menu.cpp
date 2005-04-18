@@ -818,12 +818,13 @@ void wxMenuItem::SetText( const wxString& str )
     oldLabel = wxStripMenuCodes(oldLabel);
     oldLabel.Replace(wxT("_"), wxT(""));
     wxString label1 = wxStripMenuCodes(str);
-    // Make sure we can change a hotkey even if the label is unaltered
-    wxString oldhotkey = GetHotKey();
+    wxString oldhotkey = GetHotKey();    // Store the old hotkey in Ctrl-foo format
+    wxCharBuffer oldbuf = wxGTK_CONV( GetGtkHotKey(*this) );  // and as <control>foo
 
     DoSetText(str);
 
-    if (oldLabel == label1 && oldhotkey == GetHotKey())
+    if (oldLabel == label1 && 
+             oldhotkey == GetHotKey())    // Make sure we can change a hotkey even if the label is unaltered
         return;
 
     if (m_menuItem)
@@ -846,10 +847,8 @@ void wxMenuItem::SetText( const wxString& str )
 #endif
     }
 
-#ifdef __WXGTK20__
     guint accel_key;
     GdkModifierType accel_mods;
-    wxCharBuffer oldbuf = wxGTK_CONV( oldhotkey );
     gtk_accelerator_parse( (const char*) oldbuf, &accel_key, &accel_mods);
     if (accel_key != 0)
     {
@@ -870,7 +869,6 @@ void wxMenuItem::SetText( const wxString& str )
                                     accel_mods,
                                     GTK_ACCEL_VISIBLE);
     }
-#endif
 }
 
 // it's valid for this function to be called even if m_menuItem == NULL
