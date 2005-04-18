@@ -47,8 +47,8 @@ If you want to remove wxWidgets on Unix you can do this:
 > ldconfig
 > exit
 
-Note that by default, GTK+ 2 is used. GTK+ 1 can be specified
-with --with-gtk1.
+Note that by default, GTK+ 2.X is used. GTK+ 1.2 can be specified
+with --with-gtk=1.
 
 * The expert case
 -----------------
