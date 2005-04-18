@@ -28,7 +28,7 @@ extern "C" {
 void wxMAC_MachPortEndProcessDetect(CFMachPortRef port, void *data)
 {
     wxEndProcessData *proc_data = (wxEndProcessData*)data;
-    wxLogDebug(wxT("Wow.. this actually worked!"));
+    wxLogDebug(wxT("Process ended"));
     int status = 0;
     int rc = waitpid(abs(proc_data->pid), &status, WNOHANG);
     if(!rc)
