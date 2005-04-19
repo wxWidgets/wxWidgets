@@ -2954,7 +2954,7 @@ public:
 
 
 #ifndef SWIG
-private:
+protected:
     // Event handlers
     void OnPaint(wxPaintEvent& evt);
     void OnScrollWin(wxScrollWinEvent& evt);
@@ -2983,6 +2983,7 @@ private:
     void NotifyChange();
     void NotifyParent(SCNotification* scn);
 
+private:
     DECLARE_EVENT_TABLE()
     DECLARE_DYNAMIC_CLASS(wxStyledTextCtrl)
 
