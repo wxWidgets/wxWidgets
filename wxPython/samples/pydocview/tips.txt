@@ -1,1 +1,0 @@
-wxPython is cool.
