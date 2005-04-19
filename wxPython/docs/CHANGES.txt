@@ -25,7 +25,8 @@ the strings will be in the utf-8 encoding and in an ansi build no
 assumption is made about the encoding.  The "UTF8" functions will
 attempt to always get/set utf-8 text, which will always be true in a
 unicode build, and in an ansi build will also be true as long as the
-utf-8 used is compatible with the current encoding.
+utf-8 used is compatible with the current encoding, (you'll get an
+exception otherwise.)
 
       AddTextRaw          AddTextUTF8
       InsertTextRaw       InsertTextUTF8
@@ -37,6 +38,10 @@ utf-8 used is compatible with the current encoding.
       GetTextRaw          GetTextUTF8
       AppendTextRaw       AppendTextUTF8
 
+
+wx.stc.StyledTextCtrl:  Added the StyleSetFontEncoding(style, enc)
+method that allows you to set the encoding to be used by the font for
+a particular style.
 
 
 
