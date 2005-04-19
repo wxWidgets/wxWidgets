@@ -102,7 +102,7 @@ static
 void TranslateError(const char *path, int number)
 {
     unsigned int index;
-    static char *OFIErrorStrings[] =
+    static const char *OFIErrorStrings[] =
     {
         "%s(%d): Object Image Load Failure\n",
         "%s(%d): Object Image Load Success\n",
@@ -110,7 +110,7 @@ void TranslateError(const char *path, int number)
         "%s(%d): No valid architecture\n",
         "%s(%d): Object image has an invalid format\n",
         "%s(%d): Invalid access (permissions?)\n",
-        "%s(%d): Unknown error code from NSCreateObjectFileImageFromFile\n",
+        "%s(%d): Unknown error code from NSCreateObjectFileImageFromFile\n"
     };
 #define NUM_OFI_ERRORS (sizeof(OFIErrorStrings) / sizeof(OFIErrorStrings[0]))
 
