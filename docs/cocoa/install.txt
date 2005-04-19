@@ -4,11 +4,12 @@ To compile it, you will need Apple's Developer Tools.  However, please
 note that any work to make it suitable for GNUstep (which will require
 a GCC release with Objective-C++) will be much appreciated.
 
-For the time being, the standard configure/make method works.  You will
-want to build static because there are a number of unimplemented functions
-that a shared library will need (becuase of wxWidgets code internally using
-them) but that a static library will not (because most of the samples
-don't need it).
+Some users also report success with Metrowerks CodeWarrior IDE and I've even
+on occasion used the command-line MW compilers (see docs/metrowerks) with
+configure instead of GCC and Apple's LD.
+
+Like most UNIX ports, the standard configure/make method works.  You should
+be able to build the library as static or shared.  I usually build static.
 
 On my system I have the following:
 
@@ -22,28 +23,15 @@ $ ../wxWidgets/configure --with-cocoa --enable-debug --disable-shared
 $ make
 $ cd samples/minimal
 $ make
-$ ./minimal
+$ ./minimal.app/Contents/MacOS/minimal
 
-You may also need to configure the library --without-expat.  It didn't
-build last time I checked, but then again, several improvements have
-been made since then.
+Like wxMac applications, wxCocoa applications are "bundled".  For development
+purposes all this means is that an executable named "foo" needs to be
+inside a "foo.app/Contents/MacOS" directory.  For deployment you will need
+an appropriate Info.plist and PkgInfo inside the foo.app/Contents directory.
 
-For other samples, you will need to provide at the very least an empty
-resource fork so the OS will recognize it as a GUI application.
-
-From the debug build directory:
-$ cd samples/drawing
-$ make
-$ true | /Developer/Tools/Rez -t APPL -o drawing
-$ ./drawing
-
-Note that the empty resource fork doesn't actually allow the app to be
-started from the Finder (it thinks it's a classic app!) but does allow
-it to run with a menubar and proper event handling from the command line.
-
-I suspect (but am uncertain) that if we provided an empty plist resource
-that the app would be recognized as a proper OS X application.  Obviously,
-bundles would be preferrable, and any work on Bakefile (see
-http://bakefile.sf.net/) would be much appreciated.  wxMac also needs
-bundle building restored since the switch to Bakefile.
-
+wxCocoa (and Cocoa in general) has no need for Mac OS resources.  It
+certainly has no need for resource forks as no Mach-O applications should
+_ever_ have resource forks (note: Bakefile violates this right now).
+Please see the wxWiki and/or discuss this with wx-users before shipping
+any wxCocoa apps if you are new to the OS X platform.
