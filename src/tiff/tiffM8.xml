@@ -706,10 +706,6 @@
                     <SETTING><VALUE>WSPC</VALUE></SETTING>
                 </SETTING>
 
-                <!-- Settings for "OmnisRC Panel" panel -->
-                <SETTING><NAME>Defines</NAME><VALUE>ismac,isMacRCC</VALUE></SETTING>
-                <SETTING><NAME>Compatible</NAME><VALUE>false</VALUE></SETTING>
-
                 <!-- Settings for "Output Flags" panel -->
                 <SETTING><NAME>FileLocked</NAME><VALUE>false</VALUE></SETTING>
                 <SETTING><NAME>ResourcesMapIsReadOnly</NAME><VALUE>false</VALUE></SETTING>
@@ -1297,6 +1293,13 @@
                     <FILEKIND>Text</FILEKIND>
                     <FILEFLAGS>Debug</FILEFLAGS>
                 </FILE>
+                <FILE>
+                    <PATHTYPE>Name</PATHTYPE>
+                    <PATH>tif_color.c</PATH>
+                    <PATHFORMAT>MacOS</PATHFORMAT>
+                    <FILEKIND>Text</FILEKIND>
+                    <FILEFLAGS>Debug</FILEFLAGS>
+                </FILE>
             </FILELIST>
             <LINKORDER>
                 <FILEREF>
@@ -1462,6 +1465,11 @@
                 <FILEREF>
                     <PATHTYPE>Name</PATHTYPE>
                     <PATH>tif_next.c</PATH>
+                    <PATHFORMAT>MacOS</PATHFORMAT>
+                </FILEREF>
+                <FILEREF>
+                    <PATHTYPE>Name</PATHTYPE>
+                    <PATH>tif_color.c</PATH>
                     <PATHFORMAT>MacOS</PATHFORMAT>
                 </FILEREF>
             </LINKORDER>
@@ -2327,10 +2335,6 @@
                     <SETTING><VALUE>WSPC</VALUE></SETTING>
                 </SETTING>
 
-                <!-- Settings for "OmnisRC Panel" panel -->
-                <SETTING><NAME>Defines</NAME><VALUE>ismac,isMacRCC</VALUE></SETTING>
-                <SETTING><NAME>Compatible</NAME><VALUE>false</VALUE></SETTING>
-
                 <!-- Settings for "Output Flags" panel -->
                 <SETTING><NAME>FileLocked</NAME><VALUE>false</VALUE></SETTING>
                 <SETTING><NAME>ResourcesMapIsReadOnly</NAME><VALUE>false</VALUE></SETTING>
@@ -2918,6 +2922,13 @@
                     <FILEKIND>Text</FILEKIND>
                     <FILEFLAGS>Debug</FILEFLAGS>
                 </FILE>
+                <FILE>
+                    <PATHTYPE>Name</PATHTYPE>
+                    <PATH>tif_color.c</PATH>
+                    <PATHFORMAT>MacOS</PATHFORMAT>
+                    <FILEKIND>Text</FILEKIND>
+                    <FILEFLAGS>Debug</FILEFLAGS>
+                </FILE>
             </FILELIST>
             <LINKORDER>
                 <FILEREF>
@@ -3085,6 +3096,11 @@
                     <PATH>tif_next.c</PATH>
                     <PATHFORMAT>MacOS</PATHFORMAT>
                 </FILEREF>
+                <FILEREF>
+                    <PATHTYPE>Name</PATHTYPE>
+                    <PATH>tif_color.c</PATH>
+                    <PATHFORMAT>MacOS</PATHFORMAT>
+                </FILEREF>
             </LINKORDER>
             <FRAMEWORKLIST>
                 <FRAMEWORK>
@@ -3127,6 +3143,12 @@
             <TARGETNAME>PPC</TARGETNAME>
             <PATHTYPE>Name</PATHTYPE>
             <PATH>tif_codec.c</PATH>
+            <PATHFORMAT>MacOS</PATHFORMAT>
+        </FILEREF>
+        <FILEREF>
+            <TARGETNAME>PPC</TARGETNAME>
+            <PATHTYPE>Name</PATHTYPE>
+            <PATH>tif_color.c</PATH>
             <PATHFORMAT>MacOS</PATHFORMAT>
         </FILEREF>
         <FILEREF>
