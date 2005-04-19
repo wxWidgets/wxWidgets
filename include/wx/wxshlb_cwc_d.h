@@ -21,15 +21,15 @@
 #else
 #ifdef __cplusplus
     #ifdef __MACH__
-        #include <wxshlb_Mach++_d.mch>
+        #include "wxshlb_Mach++_d.mch"
     #elif __POWERPC__
-        #include <wxshlb_Carbon++_d.mch>
+        #include "wxshlb_Carbon++_d.mch"
     #endif
 #else
     #ifdef __MACH__
-        #include <wxshlb_Mach_d.mch>
+        #include "wxshlb_Mach_d.mch"
     #elif __POWERPC__
-        #include <wxshlb_Carbon_d.mch>
+        #include "wxshlb_Carbon_d.mch"
     #endif
 #endif
 #endif

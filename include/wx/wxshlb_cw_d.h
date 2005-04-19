@@ -21,23 +21,23 @@
 #else
 #ifdef __cplusplus
     #if __POWERPC__
-        #include <wxshlb_PPC++_d.mch>
+        #include "wxshlb_PPC++_d.mch"
     #elif __INTEL__
-        #include <wxshlb_x86++_d.mch>
+        #include "wxshlb_x86++_d.mch"
     #elif __CFM68K__
-        #include <wxshlb_cfm++_d.mch>
+        #include "wxshlb_cfm++_d.mch"
     #else
-        #include <wxshlb_68k++_d.mch>
+        #include "wxshlb_68k++_d.mch"
     #endif
 #else
     #if __POWERPC__
-        #include <wxshlb_PPC_d.mch>
+        #include "wxshlb_PPC_d.mch"
     #elif __INTEL__
-        #include <wxshlb_x86_d.mch>
+        #include "wxshlb_x86_d.mch"
     #elif __CFM68K__
-        #include <wxshlb_cfm_d.mch>
+        #include "wxshlb_cfm_d.mch"
     #else
-        #include <wxshlb_68k_d.mch>
+        #include "wxshlb_68k_d.mch"
     #endif
 #endif
 #endif

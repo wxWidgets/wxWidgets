@@ -19,45 +19,45 @@
 #if __option(profile)
 #ifdef __cplusplus
     #if __POWERPC__
-        #include <wxshlb_PPC++_prof.mch>
+        #include "wxshlb_PPC++_prof.mch"
     #elif __INTEL__
-        #include <wxshlb_x86++_prof.mch>
+        #include "wxshlb_x86++_prof.mch"
     #elif __CFM68K__
-        #include <wxshlb_cfm++_prof.mch>
+        #include "wxshlb_cfm++_prof.mch"
     #else
-        #include <wxshlb_68k++_prof.mch>
+        #include "wxshlb_68k++_prof.mch"
     #endif
 #else
     #if __POWERPC__
-        #include <wxshlb_PPC_prof.mch>
+        #include "wxshlb_PPC_prof.mch"
     #elif __INTEL__
-        #include <wxshlb_x86_prof.mch>
+        #include "wxshlb_x86_prof.mch"
     #elif __CFM68K__
-        #include <wxshlb_cfm_prof.mch>
+        #include "wxshlb_cfm_prof.mch"
     #else
-        #include <wxshlb_68k_prof.mch>
+        #include "wxshlb_68k_prof.mch"
     #endif
 #endif
 #else
 #ifdef __cplusplus
     #if __POWERPC__
-        #include <wxshlb_PPC++.mch>
+        #include "wxshlb_PPC++.mch"
     #elif __INTEL__
-        #include <wxshlb_x86++.mch>
+        #include "wxshlb_x86++.mch"
     #elif __CFM68K__
-        #include <wxshlb_cfm++.mch>
+        #include "wxshlb_cfm++.mch"
     #else
-        #include <wxshlb_68k++.mch>
+        #include "wxshlb_68k++.mch"
     #endif
 #else
     #if __POWERPC__
-        #include <wxshlb_PPC.mch>
+        #include "wxshlb_PPC.mch"
     #elif __INTEL__
-        #include <wxshlb_x86.mch>
+        #include "wxshlb_x86.mch"
     #elif __CFM68K__
-        #include <wxshlb_cfm.mch>
+        #include "wxshlb_cfm.mch"
     #else
-        #include <wxshlb_68k.mch>
+        #include "wxshlb_68k.mch"
     #endif
 #endif
 #endif

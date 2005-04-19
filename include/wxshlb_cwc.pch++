@@ -5,10 +5,10 @@
 	#error "illegal processor for carbon"
 #endif
 #else
-#if __POWERPC__
-	#pragma precompile_target "wxshlb_Carbon++.mch"
-#elif __MACH__
+#if __MACH__
 	#pragma precompile_target "wxshlb_Mach++.mch"
+#elif __POWERPC__
+	#pragma precompile_target "wxshlb_Carbon++.mch"
 #else
 	#error "illegal processor for carbon"
 #endif
