@@ -5,9 +5,7 @@
 # 11/28/2003 - Jeff Grimmett (grimmtooth@softhome.net)
 #
 # o Changed the event binding slightly.
-# o There are issues with the GetReplaceText() method of the 
-#   FindDialogEvent. Must be retested when this is fixed.
-# 
+
 
 import  wx
 
@@ -69,9 +67,7 @@ class TestPanel(wx.Panel):
         else:
             evtType = "**Unknown Event Type**"
 
-        #>> Todo: the GetReplaceString() method is broken. Has to be
-        # fixed.
-        if et == wx.EVT_COMMAND_FIND_REPLACE or et == wx.EVT_COMMAND_FIND_REPLACE_ALL:
+        if et in [wx.wxEVT_COMMAND_FIND_REPLACE, wx.wxEVT_COMMAND_FIND_REPLACE_ALL]:
             replaceTxt = "Replace text: %s" % evt.GetReplaceString()
         else:
             replaceTxt = ""
