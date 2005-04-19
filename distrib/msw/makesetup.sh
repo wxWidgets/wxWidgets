@@ -533,7 +533,7 @@ dospinsetup()
 		doreplace $SETUPSCRIPTNAME "s;%HELPFILE%;$RETVALUE;g"
     fi
 
-    rm -f $DESTDIR/setup*.*
+    rm -f $DESTDIR/setup*.* $DESTDIR/wxMSW-$VERSION-Setup.exe
 
     # Inno Setup complains if this step is not done
     unix2dos --unix2dos $SETUPSCRIPTNAME
@@ -560,13 +560,19 @@ dospinsetup()
     fi
 
     cd $DESTDIR
-#    mv setup.exe $APPNAME-$VERSION-setup.exe
+    mv setup.exe wxMSW-$VERSION-Setup.exe
 
-    echo Putting all the setup files into a single zip archive
-    zip wxMSW-$VERSION-setup.zip readme-$VERSION.txt setup*.*
+    # echo Putting all the setup files into a single zip archive
+    # zip wxMSW-$VERSION-setup.zip readme-$VERSION.txt setup*.*
 
-#    rm -f wxWidgets-$VERSION-win.zip
+    rm -f wxWidgets-$VERSION-win.zip
     rm -f wxWidgets-$VERSION-ExtraDoc.zip
+    rm -f wxWidgets-$VERSION-DMC.zip
+    rm -f wxWidgets-$VERSION-eVC.zip
+    rm -f wxWidgets-$VERSION-Univ.zip
+    rm -f wxWidgets-$VERSION-VC.zip
+    rm -f wxWidgets-$VERSION-DocSource.zip
+    rm -f wxWidgets-$VERSION-LinuxDocs.zip
 
     echo If you saw no warnings or errors, $APPTITLE was successfully spun.
     echo

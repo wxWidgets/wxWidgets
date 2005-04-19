@@ -36,7 +36,7 @@
     InfoBeforeFile=%READMEFILE%
     InfoAfterFile=%READMEAFTERFILE%
 ;    MessagesFile=compiler:default.isl
-    DiskSpanning=1
+    DiskSpanning=0
 ;    DiskSize=1457664
 ;    DiskClusterSize=512
     ReserveBytes=0
