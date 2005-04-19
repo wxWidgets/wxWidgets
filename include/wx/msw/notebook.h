@@ -232,6 +232,11 @@ protected:
   WXHBRUSH m_hbrBackground;
 #endif // wxUSE_UXTHEME
 
+  // No need to optimize for WinCE
+#ifndef __WXWINCE__
+  void OnEraseBackground(wxEraseEvent& event);
+  void OnPaint(wxPaintEvent& event);
+#endif
 
   DECLARE_DYNAMIC_CLASS_NO_COPY(wxNotebook)
   DECLARE_EVENT_TABLE()
