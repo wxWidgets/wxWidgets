@@ -438,7 +438,7 @@ extern wxFont wxGetCCDefaultFont()
     {
         case wxWIN95:
             // 4.10 is Win98
-            useIconFont = verMin == 4 && verMin >= 10;
+            useIconFont = verMaj == 4 && verMin >= 10;
             break;
 
         case wxWINDOWS_NT:
