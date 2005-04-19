@@ -46,7 +46,7 @@
  */
 
 #include "tiffiop.h"
-#include <Errors.h>
+#include <MacErrors.h>
 #include <Files.h>
 #include <Memory.h>
 #include <Script.h>
