@@ -4129,43 +4129,6 @@ static PyObject *_wrap_StyledTextCtrl_StyleSetCase(PyObject *, PyObject *args, P
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_StyleSetCharacterSet(PyObject *, PyObject *args, PyObject *kwargs) {
-    PyObject *resultobj;
-    wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
-    int arg2 ;
-    int arg3 ;
-    PyObject * obj0 = 0 ;
-    PyObject * obj1 = 0 ;
-    PyObject * obj2 = 0 ;
-    char *kwnames[] = {
-        (char *) "self",(char *) "style",(char *) "characterSet", NULL 
-    };
-    
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO:StyledTextCtrl_StyleSetCharacterSet",kwnames,&obj0,&obj1,&obj2)) goto fail;
-    SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxStyledTextCtrl, SWIG_POINTER_EXCEPTION | 0);
-    if (SWIG_arg_fail(1)) SWIG_fail;
-    {
-        arg2 = (int)(SWIG_As_int(obj1)); 
-        if (SWIG_arg_fail(2)) SWIG_fail;
-    }
-    {
-        arg3 = (int)(SWIG_As_int(obj2)); 
-        if (SWIG_arg_fail(3)) SWIG_fail;
-    }
-    {
-        PyThreadState* __tstate = wxPyBeginAllowThreads();
-        (arg1)->StyleSetCharacterSet(arg2,arg3);
-        
-        wxPyEndAllowThreads(__tstate);
-        if (PyErr_Occurred()) SWIG_fail;
-    }
-    Py_INCREF(Py_None); resultobj = Py_None;
-    return resultobj;
-    fail:
-    return NULL;
-}
-
-
 static PyObject *_wrap_StyledTextCtrl_StyleSetHotSpot(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
@@ -14633,6 +14596,7 @@ static PyObject *_wrap_StyledTextCtrl_StyleSetFontAttr(PyObject *, PyObject *arg
     bool arg5 ;
     bool arg6 ;
     bool arg7 ;
+    wxFontEncoding arg8 = (wxFontEncoding) wxFONTENCODING_DEFAULT ;
     bool temp4 = false ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
@@ -14641,11 +14605,12 @@ static PyObject *_wrap_StyledTextCtrl_StyleSetFontAttr(PyObject *, PyObject *arg
     PyObject * obj4 = 0 ;
     PyObject * obj5 = 0 ;
     PyObject * obj6 = 0 ;
+    PyObject * obj7 = 0 ;
     char *kwnames[] = {
-        (char *) "self",(char *) "styleNum",(char *) "size",(char *) "faceName",(char *) "bold",(char *) "italic",(char *) "underline", NULL 
+        (char *) "self",(char *) "styleNum",(char *) "size",(char *) "faceName",(char *) "bold",(char *) "italic",(char *) "underline",(char *) "encoding", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOOOOOO:StyledTextCtrl_StyleSetFontAttr",kwnames,&obj0,&obj1,&obj2,&obj3,&obj4,&obj5,&obj6)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOOOOOO|O:StyledTextCtrl_StyleSetFontAttr",kwnames,&obj0,&obj1,&obj2,&obj3,&obj4,&obj5,&obj6,&obj7)) goto fail;
     SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxStyledTextCtrl, SWIG_POINTER_EXCEPTION | 0);
     if (SWIG_arg_fail(1)) SWIG_fail;
     {
@@ -14673,9 +14638,15 @@ static PyObject *_wrap_StyledTextCtrl_StyleSetFontAttr(PyObject *, PyObject *arg
         arg7 = (bool)(SWIG_As_bool(obj6)); 
         if (SWIG_arg_fail(7)) SWIG_fail;
     }
+    if (obj7) {
+        {
+            arg8 = (wxFontEncoding)(SWIG_As_int(obj7)); 
+            if (SWIG_arg_fail(8)) SWIG_fail;
+        }
+    }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
-        (arg1)->StyleSetFontAttr(arg2,arg3,(wxString const &)*arg4,arg5,arg6,arg7);
+        (arg1)->StyleSetFontAttr(arg2,arg3,(wxString const &)*arg4,arg5,arg6,arg7,(wxFontEncoding )arg8);
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
@@ -14691,6 +14662,80 @@ static PyObject *_wrap_StyledTextCtrl_StyleSetFontAttr(PyObject *, PyObject *arg
         if (temp4)
         delete arg4;
     }
+    return NULL;
+}
+
+
+static PyObject *_wrap_StyledTextCtrl_StyleSetCharacterSet(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
+    int arg2 ;
+    int arg3 ;
+    PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
+    PyObject * obj2 = 0 ;
+    char *kwnames[] = {
+        (char *) "self",(char *) "style",(char *) "characterSet", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO:StyledTextCtrl_StyleSetCharacterSet",kwnames,&obj0,&obj1,&obj2)) goto fail;
+    SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxStyledTextCtrl, SWIG_POINTER_EXCEPTION | 0);
+    if (SWIG_arg_fail(1)) SWIG_fail;
+    {
+        arg2 = (int)(SWIG_As_int(obj1)); 
+        if (SWIG_arg_fail(2)) SWIG_fail;
+    }
+    {
+        arg3 = (int)(SWIG_As_int(obj2)); 
+        if (SWIG_arg_fail(3)) SWIG_fail;
+    }
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        (arg1)->StyleSetCharacterSet(arg2,arg3);
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    Py_INCREF(Py_None); resultobj = Py_None;
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_StyledTextCtrl_StyleSetFontEncoding(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
+    int arg2 ;
+    wxFontEncoding arg3 ;
+    PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
+    PyObject * obj2 = 0 ;
+    char *kwnames[] = {
+        (char *) "self",(char *) "style",(char *) "encoding", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO:StyledTextCtrl_StyleSetFontEncoding",kwnames,&obj0,&obj1,&obj2)) goto fail;
+    SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxStyledTextCtrl, SWIG_POINTER_EXCEPTION | 0);
+    if (SWIG_arg_fail(1)) SWIG_fail;
+    {
+        arg2 = (int)(SWIG_As_int(obj1)); 
+        if (SWIG_arg_fail(2)) SWIG_fail;
+    }
+    {
+        arg3 = (wxFontEncoding)(SWIG_As_int(obj2)); 
+        if (SWIG_arg_fail(3)) SWIG_fail;
+    }
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        (arg1)->StyleSetFontEncoding(arg2,(wxFontEncoding )arg3);
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    Py_INCREF(Py_None); resultobj = Py_None;
+    return resultobj;
+    fail:
     return NULL;
 }
 
@@ -17066,7 +17111,6 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"StyledTextCtrl_StyleResetDefault", (PyCFunction) _wrap_StyledTextCtrl_StyleResetDefault, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"StyledTextCtrl_StyleSetUnderline", (PyCFunction) _wrap_StyledTextCtrl_StyleSetUnderline, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"StyledTextCtrl_StyleSetCase", (PyCFunction) _wrap_StyledTextCtrl_StyleSetCase, METH_VARARGS | METH_KEYWORDS, NULL},
-	 { (char *)"StyledTextCtrl_StyleSetCharacterSet", (PyCFunction) _wrap_StyledTextCtrl_StyleSetCharacterSet, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"StyledTextCtrl_StyleSetHotSpot", (PyCFunction) _wrap_StyledTextCtrl_StyleSetHotSpot, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"StyledTextCtrl_SetSelForeground", (PyCFunction) _wrap_StyledTextCtrl_SetSelForeground, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"StyledTextCtrl_SetSelBackground", (PyCFunction) _wrap_StyledTextCtrl_SetSelBackground, METH_VARARGS | METH_KEYWORDS, NULL},
@@ -17409,6 +17453,8 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"StyledTextCtrl_StyleSetSpec", (PyCFunction) _wrap_StyledTextCtrl_StyleSetSpec, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"StyledTextCtrl_StyleSetFont", (PyCFunction) _wrap_StyledTextCtrl_StyleSetFont, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"StyledTextCtrl_StyleSetFontAttr", (PyCFunction) _wrap_StyledTextCtrl_StyleSetFontAttr, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"StyledTextCtrl_StyleSetCharacterSet", (PyCFunction) _wrap_StyledTextCtrl_StyleSetCharacterSet, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"StyledTextCtrl_StyleSetFontEncoding", (PyCFunction) _wrap_StyledTextCtrl_StyleSetFontEncoding, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"StyledTextCtrl_CmdKeyExecute", (PyCFunction) _wrap_StyledTextCtrl_CmdKeyExecute, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"StyledTextCtrl_SetMargins", (PyCFunction) _wrap_StyledTextCtrl_SetMargins, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"StyledTextCtrl_GetSelection", (PyCFunction) _wrap_StyledTextCtrl_GetSelection, METH_VARARGS | METH_KEYWORDS, NULL},
