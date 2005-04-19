@@ -1736,9 +1736,6 @@ public:
     // Set a style to be mixed case, or to force upper or lower case.
     void StyleSetCase(int style, int caseForce);
 
-    // Set the character set of the font in a style.
-    void StyleSetCharacterSet(int style, int characterSet);
-
     // Set a style to be a hotspot or not.
     void StyleSetHotSpot(int style, bool hotspot);
 
@@ -2838,13 +2835,20 @@ public:
     void StyleSetFontAttr(int styleNum, int size,
                           const wxString& faceName,
                           bool bold, bool italic,
-                          bool underline);
+                          bool underline,
+                          wxFontEncoding encoding=wxFONTENCODING_DEFAULT);
 
 
+    // Set the character set of the font in a style.  Converts the Scintilla
+    // character set values to a wxFontEncoding.
+    void StyleSetCharacterSet(int style, int characterSet);
+
+    // Set the font encoding to be used by a style.
+    void StyleSetFontEncoding(int style, wxFontEncoding encoding);
+    
 
     // Perform one of the operations defined by the wxSTC_CMD_* constants.
     void CmdKeyExecute(int cmd);
-
 
 
     // Set the left and right margin in the edit area, measured in pixels.

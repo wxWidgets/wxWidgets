@@ -99,86 +99,15 @@ Font::~Font() {
 }
 
 void Font::Create(const char *faceName, int characterSet, int size, bool bold, bool italic, bool extraFontFlag) {
-    wxFontEncoding encoding;
 
     Release();
 
-    switch (characterSet) {
-        default:
-        case wxSTC_CHARSET_ANSI:
-        case wxSTC_CHARSET_DEFAULT:
-            encoding = wxFONTENCODING_DEFAULT;
-            break;
-
-        case wxSTC_CHARSET_BALTIC:
-            encoding = wxFONTENCODING_ISO8859_13;
-            break;
-
-        case wxSTC_CHARSET_CHINESEBIG5:
-            encoding = wxFONTENCODING_CP950;
-            break;
-
-        case wxSTC_CHARSET_EASTEUROPE:
-            encoding = wxFONTENCODING_ISO8859_2;
-            break;
-
-        case wxSTC_CHARSET_GB2312:
-            encoding = wxFONTENCODING_CP936;
-            break;
-
-        case wxSTC_CHARSET_GREEK:
-            encoding = wxFONTENCODING_ISO8859_7;
-            break;
-
-        case wxSTC_CHARSET_HANGUL:
-            encoding = wxFONTENCODING_CP949;
-            break;
-
-        case wxSTC_CHARSET_MAC:
-            encoding = wxFONTENCODING_DEFAULT;
-            break;
-
-        case wxSTC_CHARSET_OEM:
-            encoding = wxFONTENCODING_DEFAULT;
-            break;
-
-        case wxSTC_CHARSET_RUSSIAN:
-            encoding = wxFONTENCODING_KOI8;
-            break;
-
-        case wxSTC_CHARSET_SHIFTJIS:
-            encoding = wxFONTENCODING_CP932;
-            break;
-
-        case wxSTC_CHARSET_SYMBOL:
-            encoding = wxFONTENCODING_DEFAULT;
-            break;
-
-        case wxSTC_CHARSET_TURKISH:
-            encoding = wxFONTENCODING_ISO8859_9;
-            break;
-
-        case wxSTC_CHARSET_JOHAB:
-            encoding = wxFONTENCODING_DEFAULT;
-            break;
-
-        case wxSTC_CHARSET_HEBREW:
-            encoding = wxFONTENCODING_ISO8859_8;
-            break;
-
-        case wxSTC_CHARSET_ARABIC:
-            encoding = wxFONTENCODING_ISO8859_6;
-            break;
-
-        case wxSTC_CHARSET_VIETNAMESE:
-            encoding = wxFONTENCODING_DEFAULT;
-            break;
-
-        case wxSTC_CHARSET_THAI:
-            encoding = wxFONTENCODING_ISO8859_11;
-            break;
-    }
-
+    // The minus one is done because since Scintilla uses SC_SHARSET_DEFAULT
+    // internally and we need to have wxFONENCODING_DEFAULT == SC_SHARSET_DEFAULT
+    // so we adjust the encoding before passing it to Scintilla.  See also
+    // wxStyledTextCtrl::StyleSetCharacterSet
+    wxFontEncoding encoding = (wxFontEncoding)(characterSet-1);
+    
     wxFontEncodingArray ea = wxEncodingConverter::GetPlatformEquivalents(encoding);
     if (ea.GetCount())
         encoding = ea[0];

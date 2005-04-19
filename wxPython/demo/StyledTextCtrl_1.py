@@ -192,7 +192,16 @@ def runTest(frame, nb, log):
         ed.AddText('\tRussian: ')
         ed.AddText(unitext)
         ed.GotoPos(0)
-
+    #else:
+    #    #ed.StyleSetFontEncoding(stc.STC_STYLE_DEFAULT, wx.FONTENCODING_KOI8)
+    #    #text = u'\u041f\u0438\u0442\u043e\u043d - \u043b\u0443\u0447\u0448\u0438\u0439 \u044f\u0437\u044b\u043a \n\u043f\u0440\u043e\u0433\u0440\u0430\u043c\u043c\u0438\u0440\u043e\u0432\u0430\u043d\u0438\u044f!'
+    #    #text = text.encode('koi8-r')
+    #    #ed.StyleSetFontEncoding(stc.STC_STYLE_DEFAULT, wx.FONTENCODING_BIG5)
+    #    #text = u'Python \u662f\u6700\u597d\u7684\u7de8\u7a0b\u8a9e\u8a00\uff01'
+    #    #text = text.encode('big5')
+    #    ed.GotoPos(ed.GetLength())
+    #    ed.AddText('\n\n' + text)
+        
     ed.EmptyUndoBuffer()
 
     # make some styles

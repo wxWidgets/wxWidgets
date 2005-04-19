@@ -56,6 +56,13 @@ attributes of a `wx.Font`.", "");
 DocStr(wxStyledTextCtrl::StyleSetFontAttr,
 "Set all font style attributes at once.", "");
 
+DocStr(wxStyledTextCtrl::StyleSetCharacterSet,
+       "Set the character set of the font in a style.  Converts the Scintilla
+wx.stc.STC_CHARSET_* set values to a wxFontEncoding.", "");
+
+DocStr(wxStyledTextCtrl::StyleSetFontEncoding,
+       "Set the font encoding to be used by a style.", "");
+
 DocStr(wxStyledTextCtrl::CmdKeyExecute,
 "Perform one of the operations defined by the wx.stc.STC_CMD_* constants.", "");
 

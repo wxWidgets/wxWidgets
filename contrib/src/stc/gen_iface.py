@@ -229,7 +229,8 @@ methodOverrideMap = {
     'SetSelBack' : ('SetSelBackground', 0, 0, 0),
     'SetCaretFore' : ('SetCaretForeground', 0, 0, 0),
     'StyleSetFont' : ('StyleSetFaceName', 0, 0, 0),
-
+    'StyleSetCharacterSet' : (None, 0, 0, 0),
+    
     'AssignCmdKey' :
     ('CmdKeyAssign',
      'void %s(int key, int modifiers, int cmd);',

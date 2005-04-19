@@ -30,6 +30,8 @@ languages are built-in."
 
 %import core.i
 %import misc.i  // for DnD
+//%import gdi.i   // for wxFontEncoding
+
 %pythoncode { wx = _core }
 %pythoncode { __docfilter__ = wx.__DocFilter(globals()) }
 
@@ -38,6 +40,8 @@ MAKE_CONST_WXSTRING(STCNameStr);
 
 %include _stc_rename.i
 %include _stc_docstrings.i
+
+enum wxFontEncoding;  // forward declare
 
 MustHaveApp(wxStyledTextCtrl);
 

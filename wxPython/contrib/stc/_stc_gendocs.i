@@ -209,9 +209,6 @@ DocStr(wxStyledTextCtrl::StyleSetUnderline,
 DocStr(wxStyledTextCtrl::StyleSetCase,
 "Set a style to be mixed case, or to force upper or lower case.", "");
 
-DocStr(wxStyledTextCtrl::StyleSetCharacterSet,
-"Set the character set of the font in a style.", "");
-
 DocStr(wxStyledTextCtrl::StyleSetHotSpot,
 "Set a style to be a hotspot or not.", "");
 
