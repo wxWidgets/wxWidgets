@@ -182,7 +182,7 @@ static pascal OSStatus wxMacToolBarToolControlEventHandler( EventHandlerCallRef 
     return result ;
 }
 
-pascal OSStatus wxMacToolBarToolEventHandler( EventHandlerCallRef handler , EventRef event , void *data )
+static pascal OSStatus wxMacToolBarToolEventHandler( EventHandlerCallRef handler , EventRef event , void *data )
 {
     OSStatus result = eventNotHandledErr ;
 
