@@ -42,7 +42,7 @@ public:
     bool Create(wxWindow *parent, wxWindowID winid, int range,
             const wxPoint& pos = wxDefaultPosition,
             const wxSize& size = wxDefaultSize,
-            long style = wxSL_HORIZONTAL,
+            long style = wxGA_HORIZONTAL,
             const wxValidator& validator = wxDefaultValidator,
             const wxString& name = wxGaugeNameStr);
     virtual ~wxGauge();

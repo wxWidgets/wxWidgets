@@ -39,7 +39,7 @@ public:
     bool Create(wxWindow *parent, wxWindowID winid = -1,
             const wxPoint& pos = wxDefaultPosition,
             const wxSize& size = wxDefaultSize,
-            long style = wxSL_HORIZONTAL,
+            long style = wxSP_HORIZONTAL,
             const wxString& name = wxSPIN_BUTTON_NAME);
     virtual ~wxSpinButton();
 
