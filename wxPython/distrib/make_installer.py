@@ -528,15 +528,10 @@ def find_DLLs():
     proc.close()
     for line in lines:
         if line.startswith("    wxmsw"):
-            WXDLLVER = line[9:14]
-            if WXDLLVER.endswith('_'):
-                WXDLLVER = WXDLLVER[:-1]
-
+            WXDLLVER = line[9:14].split('_')[0]
+            
         if line.startswith("    python"):
             PYTHONVER = line[10] + '.' + line[11]
-
-        #if WXDLLVER and PYTHONVER:
-        #    return WXDLLVER, PYTHONVER
 
     return WXDLLVER, PYTHONVER
 
