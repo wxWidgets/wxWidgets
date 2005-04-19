@@ -1,9 +1,9 @@
 ============================
-wxPython 2.5 Migration Guide
+wxPython 2.6 Migration Guide
 ============================
 
 This document will help explain some of the major changes in wxPython
-2.5 since the 2.4 series and let you know what you need to do to adapt
+2.6 since the 2.4 series and let you know what you need to do to adapt
 your programs to those changes.  Be sure to also check in the CHANGES_
 file like usual to see info about the not so major changes and other
 things that have been added to wxPython.

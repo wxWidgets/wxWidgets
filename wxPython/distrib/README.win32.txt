@@ -21,7 +21,7 @@ page for using wxversion.
 This installer does *not* include the wxPython documentation, the
 wxPython demo and other sample applications are provided as part of
 wxPython.  Those are available in a separate installer named
-wxPython2.5-win32-docs-demos-*.exe which should also be located from
+wxPython2.6-win32-docs-demos-*.exe which should also be located from
 wherever you downloaded this package from.  The Docs and Demos
 installer will also create Start Menu shortcuts for the tool scripts
 mentioned above.

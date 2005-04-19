@@ -1,4 +1,4 @@
-README for wxPython-src-2.5.*.tar.gz
+README for wxPython-src-2.6.*.tar.gz
 ====================================
 
 
@@ -12,7 +12,7 @@ checkout from CVS yourself (see http://www.wxwindows.org/cvs.htm.)  If
 you would like to use CVS to get the exact same sources as one of
 these tarballs then you can update using a release tag.  For example::
 
-      cvs update -r wxPy_2_5_1_0
+      cvs update -r wxPy_2_6_1_0
 
 
 For more details about building and installing wxWidgets and wxPython
@@ -28,8 +28,8 @@ For a log of recent changes check these files::
       wxPython/docs/CHANGES.txt    (for wxPython)
 
 
-And for information about major changes in wxPython 2.5 and how to
-migrate your existing code to 2.5 please read this file::
+And for information about major changes in wxPython 2.6 and how to
+migrate your existing code to 2.6 please read this file::
 
       wxPython/docs/MigrationGuide.txt
 
