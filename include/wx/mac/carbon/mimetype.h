@@ -59,6 +59,13 @@ private:
     void** 				m_hDatabase;
     long				m_lCount;
     
+    void* pReserved1;
+    void* pReserved2;
+    void* pReserved3;
+    void* pReserved4;
+    void* pReserved5;
+    void* pReserved6;
+    
     friend class wxFileTypeImpl;
 };
 
@@ -105,6 +112,13 @@ public:
     wxMimeTypesManagerImpl *m_manager;
     long                    m_lIndex; 
     
+    void* pReserved1;
+    void* pReserved2;
+    void* pReserved3;
+    void* pReserved4;
+    void* pReserved5;
+    void* pReserved6;
+
     friend class wxMimeTypesManagerImpl;
 };
 
