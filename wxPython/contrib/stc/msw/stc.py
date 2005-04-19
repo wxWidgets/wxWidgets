@@ -1662,14 +1662,6 @@ class StyledTextCtrl(_core.Control):
         """
         return _stc.StyledTextCtrl_StyleSetCase(*args, **kwargs)
 
-    def StyleSetCharacterSet(*args, **kwargs):
-        """
-        StyleSetCharacterSet(self, int style, int characterSet)
-
-        Set the character set of the font in a style.
-        """
-        return _stc.StyledTextCtrl_StyleSetCharacterSet(*args, **kwargs)
-
     def StyleSetHotSpot(*args, **kwargs):
         """
         StyleSetHotSpot(self, int style, bool hotspot)
@@ -4439,11 +4431,28 @@ class StyledTextCtrl(_core.Control):
     def StyleSetFontAttr(*args, **kwargs):
         """
         StyleSetFontAttr(self, int styleNum, int size, String faceName, bool bold, 
-            bool italic, bool underline)
+            bool italic, bool underline, int encoding=wxFONTENCODING_DEFAULT)
 
         Set all font style attributes at once.
         """
         return _stc.StyledTextCtrl_StyleSetFontAttr(*args, **kwargs)
+
+    def StyleSetCharacterSet(*args, **kwargs):
+        """
+        StyleSetCharacterSet(self, int style, int characterSet)
+
+        Set the character set of the font in a style.  Converts the Scintilla
+        wx.stc.STC_CHARSET_* set values to a wxFontEncoding.
+        """
+        return _stc.StyledTextCtrl_StyleSetCharacterSet(*args, **kwargs)
+
+    def StyleSetFontEncoding(*args, **kwargs):
+        """
+        StyleSetFontEncoding(self, int style, int encoding)
+
+        Set the font encoding to be used by a style.
+        """
+        return _stc.StyledTextCtrl_StyleSetFontEncoding(*args, **kwargs)
 
     def CmdKeyExecute(*args, **kwargs):
         """
