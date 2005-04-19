@@ -93,7 +93,7 @@ static int DoGetOSVersion(int *majorVsn, int *minorVsn)
 // debugging support
 // ----------------------------------------------------------------------------
 
-#if defined(__WXMAC__) && !defined(__DARWIN__) && defined(__MWERKS__) && (__MWERKS__ >= 0x2400)
+#if defined(__WXDEBUG__) && defined(__WXMAC__) && !defined(__DARWIN__) && defined(__MWERKS__) && (__MWERKS__ >= 0x2400)
 
 // MetroNub stuff doesn't seem to work in CodeWarrior 5.3 Carbon builds...
 
