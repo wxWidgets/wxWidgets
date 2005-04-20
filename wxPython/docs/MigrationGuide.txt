@@ -339,8 +339,8 @@ Building, Extending and Embedding wxPython
 wxPython's setup.py script now expects to use existing libraries for
 the contribs (gizmos, stc, xrc, etc.) rather than building local
 copies of them.  If you build your own copies of wxPython please be
-aware that you now need to also build the ogl, stc, xrc, and gizmos
-libraries in addition to the main wx lib.  
+aware that you now need to also build the stc, xrc, animate and gizmos
+libraries in addition to the main wx lib.
 
 The wxPython.h and other header files are now in
 .../wxPython/include/wx/wxPython instead of in wxPython/src.  You
@@ -691,19 +691,22 @@ OGL is dead! LONG LIVE OGL!
 
 **[Changed in 2.5.2.x]** 
 
-The wx.ogl module has been deprecated in favor of the new Python port
-of the OGL library located at wx.lib.ogl contributed by Pierre Hjälm.
-This will hopefully greatly extend the life of OGL within wxPython by
-making it more easily maintainable and less prone to getting rusty as
-there seems to be less and less interest in maintaining the C++
-version.  
+The wx.ogl module was deprecated in version 2.5.2 in favor of the new
+Python port of the OGL library located at wx.lib.ogl contributed by
+Pierre Hjälm.  Starting in version 2.5.5 the old ogl is no longer
+being built in the distributed binaries, however the source code is
+still in the source tree so people can built it themselves if desired.
+
+The reason this changes was done was to greatly extend the life of OGL
+within wxPython by making it more easily maintainable and less prone
+to getting rusty as there seems to be less and less interest in
+maintaining the C++ version.
 
 There are only a few known compatibility issues at this time.  First
-is that the ogl.DrawnShape has not been reimplemented yet.  Next is the
-location of OGL.  The deprecated version is located in the wx.ogl
-module, and the new version is in the wx.lib.ogl package.  So this
-just means that to start using the new version you need to adjust your
-imports.  So if your code currently has something like this::
+is the location of OGL.  The old version was located in the
+wx.ogl module, and the new version is in the wx.lib.ogl package.  So
+this just means that to start using the new version you need to adjust
+your imports.  So if your code currently has something like this::
 
      import wx
      import wx.ogl as ogl
