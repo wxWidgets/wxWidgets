@@ -1,21 +1,22 @@
 Announcing wxWidgets 2.6.0: a cross-platform GUI toolkit
 ----------------------------------------------------------------
 
-October 11th, 2004 -- the wxWidgets team is pleased to announce
-a development snapshot release of the mature cross-platform C++
+April 18th, 2004 -- the wxWidgets team is pleased to announce
+a new official release of the mature cross-platform C++
 application framework.
 
 The following platforms are supported:
 
 - Windows 95/98/ME, Windows NT, Windows 2000, Windows XP
-- Windows CE
+- Windows CE, including Pocket PC 2003 and Smartphone 2003
 - Linux/Unix/VMS with GTK+ 1.x and 2.0
 - Linux/Unix with X11 (beta)
 - Linux/Unix with Motif/Lesstif
-- Mac OS 9.x and 10.x using Carbon
+- Mac OS 9.x and 10.2 and above using Carbon
 - Mac OS 10.x using Cocoa (beta)
 - OS/2 (beta)
-- MGL (Linux and DOS)
+- MGL for Linux and DOS
+- Palm OS (alpha)
 
 A non-GUI subset of wxWidgets called wxBase is also supported
 on most of these platforms.
@@ -24,17 +25,21 @@ To get wxWidgets, go to the Download page at:
 
   http://www.wxwidgets.org
 
-This is a development snapshot, sometimes known as
-an 'unstable' release. Improvements over 2.4.x include:
-numerous bug fixes, STL-like container classes,
-improved GTK+ 2 compatibility, new build system,
-improved Unicode compatibility, wxRenderer class,
-shaped frame and dialog windows on Windows and GTK+,
-more efficient UI update processing, print preview
-improvements, wxCrashReport class, OpenWatcom and
-Digital Mars compiler support, and more. Improvements
-over 2.5.2 include much improved Mac OS X and Windows CE
-support, as well as the usual bug fixes and minor enhancements.
+Since 2.4.2, we have added support for Windows Mobile devices,
+enhanced GTK+ 2 support, radically overhauled the Mac OS X port,
+replaced the build system with Bakefile, added better
+integration with STL, and added a CppUnit-based test suite.
+Other changes include sizer improvements, new Gnome printing
+features, ODBC enhancements such as BLOB support and Unicode
+support on Windows, wxTaskBarIcon support on Mac OS X and Linux
+as well as Windows, top-level windows can have arbitrary shapes,
+images can have alpha channels, plus many API enhancements and
+bug fixes to existing classes. New classes include
+wxVScrolledWindow, wxVListBox, wxHtmlListbox,
+wxPropertySheetDialog, wxGridBagSizer, wxMediaCtrl,
+wxDatePickerCtrl, wxArchiveInputStream/wxArchiveOutputStream
+(including zip archive read/write support), wxListbook,
+wxChoicebook, wxDebugReport, and more.
 
 *** About wxWidgets
 
