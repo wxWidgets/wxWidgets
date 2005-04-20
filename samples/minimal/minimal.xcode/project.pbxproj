@@ -742,7 +742,7 @@
 		40ADC58D081629DD0009DA36 = {
 			buildActionMask = 2147483647;
 			dstPath = "";
-			dstSubfolderSpec = 6;
+			dstSubfolderSpec = 10;
 			files = (
 				40ADC58E081629E80009DA36,
 			);
@@ -758,7 +758,7 @@
 		40ADC6C508163A7C0009DA36 = {
 			buildActionMask = 2147483647;
 			dstPath = "";
-			dstSubfolderSpec = 6;
+			dstSubfolderSpec = 10;
 			files = (
 				40ADC6C608163A8B0009DA36,
 			);
