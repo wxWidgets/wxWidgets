@@ -748,7 +748,7 @@
                 <SETTING><NAME>MWFrontEnd_C_mpwpointerstyle</NAME><VALUE>0</VALUE></SETTING>
                 <SETTING><NAME>MWFrontEnd_C_prefixname</NAME><VALUE>wx/wxshlba_cwc_d.h</VALUE></SETTING>
                 <SETTING><NAME>MWFrontEnd_C_ansistrict</NAME><VALUE>0</VALUE></SETTING>
-                <SETTING><NAME>MWFrontEnd_C_mpwcnewline</NAME><VALUE>1</VALUE></SETTING>
+                <SETTING><NAME>MWFrontEnd_C_mpwcnewline</NAME><VALUE>0</VALUE></SETTING>
                 <SETTING><NAME>MWFrontEnd_C_wchar_type</NAME><VALUE>1</VALUE></SETTING>
                 <SETTING><NAME>MWFrontEnd_C_enableexceptions</NAME><VALUE>1</VALUE></SETTING>
                 <SETTING><NAME>MWFrontEnd_C_dontreusestrings</NAME><VALUE>0</VALUE></SETTING>
@@ -756,7 +756,7 @@
                 <SETTING><NAME>MWFrontEnd_C_dontinline</NAME><VALUE>0</VALUE></SETTING>
                 <SETTING><NAME>MWFrontEnd_C_useRTTI</NAME><VALUE>1</VALUE></SETTING>
                 <SETTING><NAME>MWFrontEnd_C_multibyteaware</NAME><VALUE>0</VALUE></SETTING>
-                <SETTING><NAME>MWFrontEnd_C_unsignedchars</NAME><VALUE>0</VALUE></SETTING>
+                <SETTING><NAME>MWFrontEnd_C_unsignedchars</NAME><VALUE>1</VALUE></SETTING>
                 <SETTING><NAME>MWFrontEnd_C_autoinline</NAME><VALUE>0</VALUE></SETTING>
                 <SETTING><NAME>MWFrontEnd_C_booltruefalse</NAME><VALUE>1</VALUE></SETTING>
                 <SETTING><NAME>MWFrontEnd_C_inlinelevel</NAME><VALUE>0</VALUE></SETTING>
@@ -784,7 +784,7 @@
                 <!-- Settings for "FTP Panel" panel -->
                 <SETTING><NAME>MWFTP_Post_hostName</NAME><VALUE></VALUE></SETTING>
                 <SETTING><NAME>MWFTP_Post_username</NAME><VALUE></VALUE></SETTING>
-                <SETTING><NAME>MWFTP_Post_password</NAME><VALUE>0&#255;&#196; &#156;	&#192;&#144;)&#157;@</VALUE></SETTING>
+                <SETTING><NAME>MWFTP_Post_password</NAME><VALUE>0&#255;&#194;&#224;h&#205;$&#144;,&#154;&#236;</VALUE></SETTING>
                 <SETTING><NAME>MWFTP_Post_remoteDir</NAME><VALUE></VALUE></SETTING>
                 <SETTING><NAME>MWFTP_Post_ftp_PathVersion</NAME><VALUE>0</VALUE></SETTING>
                 <SETTING><NAME>MWFTP_Post_ftp_PathType</NAME><VALUE>0</VALUE></SETTING>
@@ -933,6 +933,10 @@
                     <SETTING><VALUE>Proj</VALUE></SETTING>
                     <SETTING><VALUE>WSPC</VALUE></SETTING>
                 </SETTING>
+
+                <!-- Settings for "OmnisRC Panel" panel -->
+                <SETTING><NAME>Defines</NAME><VALUE>ismac,isMacRCC</VALUE></SETTING>
+                <SETTING><NAME>Compatible</NAME><VALUE>false</VALUE></SETTING>
 
                 <!-- Settings for "Output Flags" panel -->
                 <SETTING><NAME>FileLocked</NAME><VALUE>false</VALUE></SETTING>
@@ -1331,13 +1335,6 @@
                 </FILE>
                 <FILE>
                     <PATHTYPE>Name</PATHTYPE>
-                    <PATH>crt1.o</PATH>
-                    <PATHFORMAT>Unix</PATHFORMAT>
-                    <FILEKIND>Library</FILEKIND>
-                    <FILEFLAGS>Debug</FILEFLAGS>
-                </FILE>
-                <FILE>
-                    <PATHTYPE>Name</PATHTYPE>
                     <PATH>MSL_Runtime_Mach-O_D.a</PATH>
                     <PATHFORMAT>Unix</PATHFORMAT>
                     <FILEKIND>Library</FILEKIND>
@@ -1345,7 +1342,7 @@
                 </FILE>
                 <FILE>
                     <PATHTYPE>Name</PATHTYPE>
-                    <PATH>MSL_C++_Mach-O_D.a</PATH>
+                    <PATH>mwcrt1.o</PATH>
                     <PATHFORMAT>Unix</PATHFORMAT>
                     <FILEKIND>Library</FILEKIND>
                     <FILEFLAGS>Debug</FILEFLAGS>
@@ -1379,17 +1376,12 @@
                 </FILEREF>
                 <FILEREF>
                     <PATHTYPE>Name</PATHTYPE>
-                    <PATH>crt1.o</PATH>
-                    <PATHFORMAT>Unix</PATHFORMAT>
-                </FILEREF>
-                <FILEREF>
-                    <PATHTYPE>Name</PATHTYPE>
                     <PATH>MSL_Runtime_Mach-O_D.a</PATH>
                     <PATHFORMAT>Unix</PATHFORMAT>
                 </FILEREF>
                 <FILEREF>
                     <PATHTYPE>Name</PATHTYPE>
-                    <PATH>MSL_C++_Mach-O_D.a</PATH>
+                    <PATH>mwcrt1.o</PATH>
                     <PATHFORMAT>Unix</PATHFORMAT>
                 </FILEREF>
             </LINKORDER>
@@ -1409,6 +1401,22 @@
                         <PATHFORMAT>Unix</PATHFORMAT>
                     </FILEREF>
                     <DYNAMICLIBRARY>Carbon</DYNAMICLIBRARY>
+                </FRAMEWORK>
+                <FRAMEWORK>
+                    <FILEREF>
+                        <PATHTYPE>Name</PATHTYPE>
+                        <PATH>QuickTime.framework</PATH>
+                        <PATHFORMAT>Unix</PATHFORMAT>
+                    </FILEREF>
+                    <DYNAMICLIBRARY>QuickTime</DYNAMICLIBRARY>
+                </FRAMEWORK>
+                <FRAMEWORK>
+                    <FILEREF>
+                        <PATHTYPE>Name</PATHTYPE>
+                        <PATH>IOKit.framework</PATH>
+                        <PATHFORMAT>Unix</PATHFORMAT>
+                    </FILEREF>
+                    <DYNAMICLIBRARY>IOKit</DYNAMICLIBRARY>
                 </FRAMEWORK>
             </FRAMEWORKLIST>
         </TARGET>
@@ -1839,7 +1847,7 @@
                 <SETTING><NAME>MWFrontEnd_C_mpwpointerstyle</NAME><VALUE>0</VALUE></SETTING>
                 <SETTING><NAME>MWFrontEnd_C_prefixname</NAME><VALUE>wx/wx_cwc_d.h</VALUE></SETTING>
                 <SETTING><NAME>MWFrontEnd_C_ansistrict</NAME><VALUE>0</VALUE></SETTING>
-                <SETTING><NAME>MWFrontEnd_C_mpwcnewline</NAME><VALUE>1</VALUE></SETTING>
+                <SETTING><NAME>MWFrontEnd_C_mpwcnewline</NAME><VALUE>0</VALUE></SETTING>
                 <SETTING><NAME>MWFrontEnd_C_wchar_type</NAME><VALUE>1</VALUE></SETTING>
                 <SETTING><NAME>MWFrontEnd_C_enableexceptions</NAME><VALUE>1</VALUE></SETTING>
                 <SETTING><NAME>MWFrontEnd_C_dontreusestrings</NAME><VALUE>0</VALUE></SETTING>
@@ -1847,7 +1855,7 @@
                 <SETTING><NAME>MWFrontEnd_C_dontinline</NAME><VALUE>0</VALUE></SETTING>
                 <SETTING><NAME>MWFrontEnd_C_useRTTI</NAME><VALUE>1</VALUE></SETTING>
                 <SETTING><NAME>MWFrontEnd_C_multibyteaware</NAME><VALUE>0</VALUE></SETTING>
-                <SETTING><NAME>MWFrontEnd_C_unsignedchars</NAME><VALUE>0</VALUE></SETTING>
+                <SETTING><NAME>MWFrontEnd_C_unsignedchars</NAME><VALUE>1</VALUE></SETTING>
                 <SETTING><NAME>MWFrontEnd_C_autoinline</NAME><VALUE>0</VALUE></SETTING>
                 <SETTING><NAME>MWFrontEnd_C_booltruefalse</NAME><VALUE>1</VALUE></SETTING>
                 <SETTING><NAME>MWFrontEnd_C_inlinelevel</NAME><VALUE>0</VALUE></SETTING>
@@ -1875,7 +1883,7 @@
                 <!-- Settings for "FTP Panel" panel -->
                 <SETTING><NAME>MWFTP_Post_hostName</NAME><VALUE></VALUE></SETTING>
                 <SETTING><NAME>MWFTP_Post_username</NAME><VALUE></VALUE></SETTING>
-                <SETTING><NAME>MWFTP_Post_password</NAME><VALUE>0&#255;&#196; &#156;	&#192;&#144;)&#157;@</VALUE></SETTING>
+                <SETTING><NAME>MWFTP_Post_password</NAME><VALUE>0&#255;&#194;&#224;h&#205;$&#144;,&#154;&#236;</VALUE></SETTING>
                 <SETTING><NAME>MWFTP_Post_remoteDir</NAME><VALUE></VALUE></SETTING>
                 <SETTING><NAME>MWFTP_Post_ftp_PathVersion</NAME><VALUE>0</VALUE></SETTING>
                 <SETTING><NAME>MWFTP_Post_ftp_PathType</NAME><VALUE>0</VALUE></SETTING>
@@ -2024,6 +2032,10 @@
                     <SETTING><VALUE>Proj</VALUE></SETTING>
                     <SETTING><VALUE>WSPC</VALUE></SETTING>
                 </SETTING>
+
+                <!-- Settings for "OmnisRC Panel" panel -->
+                <SETTING><NAME>Defines</NAME><VALUE>ismac,isMacRCC</VALUE></SETTING>
+                <SETTING><NAME>Compatible</NAME><VALUE>false</VALUE></SETTING>
 
                 <!-- Settings for "Output Flags" panel -->
                 <SETTING><NAME>FileLocked</NAME><VALUE>false</VALUE></SETTING>
@@ -2873,10 +2885,10 @@
                 <SETTING><NAME>MWFrontEnd_C_trigraphs</NAME><VALUE>0</VALUE></SETTING>
                 <SETTING><NAME>MWFrontEnd_C_onlystdkeywords</NAME><VALUE>0</VALUE></SETTING>
                 <SETTING><NAME>MWFrontEnd_C_enumsalwaysint</NAME><VALUE>0</VALUE></SETTING>
-                <SETTING><NAME>MWFrontEnd_C_mpwpointerstyle</NAME><VALUE>1</VALUE></SETTING>
+                <SETTING><NAME>MWFrontEnd_C_mpwpointerstyle</NAME><VALUE>0</VALUE></SETTING>
                 <SETTING><NAME>MWFrontEnd_C_prefixname</NAME><VALUE>wx/wx_cwc.h</VALUE></SETTING>
                 <SETTING><NAME>MWFrontEnd_C_ansistrict</NAME><VALUE>0</VALUE></SETTING>
-                <SETTING><NAME>MWFrontEnd_C_mpwcnewline</NAME><VALUE>1</VALUE></SETTING>
+                <SETTING><NAME>MWFrontEnd_C_mpwcnewline</NAME><VALUE>0</VALUE></SETTING>
                 <SETTING><NAME>MWFrontEnd_C_wchar_type</NAME><VALUE>1</VALUE></SETTING>
                 <SETTING><NAME>MWFrontEnd_C_enableexceptions</NAME><VALUE>1</VALUE></SETTING>
                 <SETTING><NAME>MWFrontEnd_C_dontreusestrings</NAME><VALUE>0</VALUE></SETTING>
@@ -2884,7 +2896,7 @@
                 <SETTING><NAME>MWFrontEnd_C_dontinline</NAME><VALUE>0</VALUE></SETTING>
                 <SETTING><NAME>MWFrontEnd_C_useRTTI</NAME><VALUE>1</VALUE></SETTING>
                 <SETTING><NAME>MWFrontEnd_C_multibyteaware</NAME><VALUE>0</VALUE></SETTING>
-                <SETTING><NAME>MWFrontEnd_C_unsignedchars</NAME><VALUE>0</VALUE></SETTING>
+                <SETTING><NAME>MWFrontEnd_C_unsignedchars</NAME><VALUE>1</VALUE></SETTING>
                 <SETTING><NAME>MWFrontEnd_C_autoinline</NAME><VALUE>0</VALUE></SETTING>
                 <SETTING><NAME>MWFrontEnd_C_booltruefalse</NAME><VALUE>1</VALUE></SETTING>
                 <SETTING><NAME>MWFrontEnd_C_inlinelevel</NAME><VALUE>0</VALUE></SETTING>
@@ -2912,7 +2924,7 @@
                 <!-- Settings for "FTP Panel" panel -->
                 <SETTING><NAME>MWFTP_Post_hostName</NAME><VALUE></VALUE></SETTING>
                 <SETTING><NAME>MWFTP_Post_username</NAME><VALUE></VALUE></SETTING>
-                <SETTING><NAME>MWFTP_Post_password</NAME><VALUE>0&#255;&#196; &#156;	&#192;&#144;)&#157;@</VALUE></SETTING>
+                <SETTING><NAME>MWFTP_Post_password</NAME><VALUE>0&#255;&#194;&#224;h&#205;$&#144;,&#154;&#236;</VALUE></SETTING>
                 <SETTING><NAME>MWFTP_Post_remoteDir</NAME><VALUE></VALUE></SETTING>
                 <SETTING><NAME>MWFTP_Post_ftp_PathVersion</NAME><VALUE>0</VALUE></SETTING>
                 <SETTING><NAME>MWFTP_Post_ftp_PathType</NAME><VALUE>0</VALUE></SETTING>
@@ -3061,6 +3073,10 @@
                     <SETTING><VALUE>Proj</VALUE></SETTING>
                     <SETTING><VALUE>WSPC</VALUE></SETTING>
                 </SETTING>
+
+                <!-- Settings for "OmnisRC Panel" panel -->
+                <SETTING><NAME>Defines</NAME><VALUE>ismac,isMacRCC</VALUE></SETTING>
+                <SETTING><NAME>Compatible</NAME><VALUE>false</VALUE></SETTING>
 
                 <!-- Settings for "Output Flags" panel -->
                 <SETTING><NAME>FileLocked</NAME><VALUE>false</VALUE></SETTING>
@@ -3683,7 +3699,7 @@
                 <!-- Settings for "FTP Panel" panel -->
                 <SETTING><NAME>MWFTP_Post_hostName</NAME><VALUE></VALUE></SETTING>
                 <SETTING><NAME>MWFTP_Post_username</NAME><VALUE></VALUE></SETTING>
-                <SETTING><NAME>MWFTP_Post_password</NAME><VALUE>0&#255;&#196; &#156;	&#192;&#144;)&#157;@</VALUE></SETTING>
+                <SETTING><NAME>MWFTP_Post_password</NAME><VALUE>0&#255;&#194;&#224;h&#205;$&#144;,&#154;&#236;</VALUE></SETTING>
                 <SETTING><NAME>MWFTP_Post_remoteDir</NAME><VALUE></VALUE></SETTING>
                 <SETTING><NAME>MWFTP_Post_ftp_PathVersion</NAME><VALUE>0</VALUE></SETTING>
                 <SETTING><NAME>MWFTP_Post_ftp_PathType</NAME><VALUE>0</VALUE></SETTING>
@@ -3833,6 +3849,10 @@
                     <SETTING><VALUE>WSPC</VALUE></SETTING>
                     <SETTING><VALUE>mcvs</VALUE></SETTING>
                 </SETTING>
+
+                <!-- Settings for "OmnisRC Panel" panel -->
+                <SETTING><NAME>Defines</NAME><VALUE>ismac,isMacRCC</VALUE></SETTING>
+                <SETTING><NAME>Compatible</NAME><VALUE>false</VALUE></SETTING>
 
                 <!-- Settings for "Output Flags" panel -->
                 <SETTING><NAME>FileLocked</NAME><VALUE>false</VALUE></SETTING>
@@ -4651,7 +4671,7 @@
                 <SETTING><NAME>MWFrontEnd_C_mpwpointerstyle</NAME><VALUE>0</VALUE></SETTING>
                 <SETTING><NAME>MWFrontEnd_C_prefixname</NAME><VALUE>wx/wxshlba_cwc_d.h</VALUE></SETTING>
                 <SETTING><NAME>MWFrontEnd_C_ansistrict</NAME><VALUE>0</VALUE></SETTING>
-                <SETTING><NAME>MWFrontEnd_C_mpwcnewline</NAME><VALUE>1</VALUE></SETTING>
+                <SETTING><NAME>MWFrontEnd_C_mpwcnewline</NAME><VALUE>0</VALUE></SETTING>
                 <SETTING><NAME>MWFrontEnd_C_wchar_type</NAME><VALUE>1</VALUE></SETTING>
                 <SETTING><NAME>MWFrontEnd_C_enableexceptions</NAME><VALUE>1</VALUE></SETTING>
                 <SETTING><NAME>MWFrontEnd_C_dontreusestrings</NAME><VALUE>0</VALUE></SETTING>
@@ -4659,7 +4679,7 @@
                 <SETTING><NAME>MWFrontEnd_C_dontinline</NAME><VALUE>0</VALUE></SETTING>
                 <SETTING><NAME>MWFrontEnd_C_useRTTI</NAME><VALUE>1</VALUE></SETTING>
                 <SETTING><NAME>MWFrontEnd_C_multibyteaware</NAME><VALUE>0</VALUE></SETTING>
-                <SETTING><NAME>MWFrontEnd_C_unsignedchars</NAME><VALUE>0</VALUE></SETTING>
+                <SETTING><NAME>MWFrontEnd_C_unsignedchars</NAME><VALUE>1</VALUE></SETTING>
                 <SETTING><NAME>MWFrontEnd_C_autoinline</NAME><VALUE>0</VALUE></SETTING>
                 <SETTING><NAME>MWFrontEnd_C_booltruefalse</NAME><VALUE>1</VALUE></SETTING>
                 <SETTING><NAME>MWFrontEnd_C_inlinelevel</NAME><VALUE>0</VALUE></SETTING>
@@ -4687,7 +4707,7 @@
                 <!-- Settings for "FTP Panel" panel -->
                 <SETTING><NAME>MWFTP_Post_hostName</NAME><VALUE></VALUE></SETTING>
                 <SETTING><NAME>MWFTP_Post_username</NAME><VALUE></VALUE></SETTING>
-                <SETTING><NAME>MWFTP_Post_password</NAME><VALUE>0&#255;&#196; &#156;	&#192;&#144;)&#157;@</VALUE></SETTING>
+                <SETTING><NAME>MWFTP_Post_password</NAME><VALUE>0&#255;&#194;&#224;h&#205;$&#144;,&#154;&#236;</VALUE></SETTING>
                 <SETTING><NAME>MWFTP_Post_remoteDir</NAME><VALUE></VALUE></SETTING>
                 <SETTING><NAME>MWFTP_Post_ftp_PathVersion</NAME><VALUE>0</VALUE></SETTING>
                 <SETTING><NAME>MWFTP_Post_ftp_PathType</NAME><VALUE>0</VALUE></SETTING>
@@ -4837,6 +4857,10 @@
                     <SETTING><VALUE>WSPC</VALUE></SETTING>
                 </SETTING>
 
+                <!-- Settings for "OmnisRC Panel" panel -->
+                <SETTING><NAME>Defines</NAME><VALUE>ismac,isMacRCC</VALUE></SETTING>
+                <SETTING><NAME>Compatible</NAME><VALUE>false</VALUE></SETTING>
+
                 <!-- Settings for "Output Flags" panel -->
                 <SETTING><NAME>FileLocked</NAME><VALUE>false</VALUE></SETTING>
                 <SETTING><NAME>ResourcesMapIsReadOnly</NAME><VALUE>false</VALUE></SETTING>
@@ -4928,12 +4952,12 @@
                 <SETTING><NAME>MWLinker_PPC_symfullpath</NAME><VALUE>1</VALUE></SETTING>
                 <SETTING><NAME>MWLinker_PPC_linkmap</NAME><VALUE>0</VALUE></SETTING>
                 <SETTING><NAME>MWLinker_PPC_nolinkwarnings</NAME><VALUE>0</VALUE></SETTING>
-                <SETTING><NAME>MWLinker_PPC_dontdeadstripinitcode</NAME><VALUE>1</VALUE></SETTING>
+                <SETTING><NAME>MWLinker_PPC_dontdeadstripinitcode</NAME><VALUE>0</VALUE></SETTING>
                 <SETTING><NAME>MWLinker_PPC_permitmultdefs</NAME><VALUE>1</VALUE></SETTING>
                 <SETTING><NAME>MWLinker_PPC_linkmode</NAME><VALUE>Fast</VALUE></SETTING>
-                <SETTING><NAME>MWLinker_PPC_initname</NAME><VALUE></VALUE></SETTING>
+                <SETTING><NAME>MWLinker_PPC_initname</NAME><VALUE>__initialize</VALUE></SETTING>
                 <SETTING><NAME>MWLinker_PPC_mainname</NAME><VALUE>__start</VALUE></SETTING>
-                <SETTING><NAME>MWLinker_PPC_termname</NAME><VALUE></VALUE></SETTING>
+                <SETTING><NAME>MWLinker_PPC_termname</NAME><VALUE>__terminate</VALUE></SETTING>
 
                 <!-- Settings for "PPC Mac OS X Linker" panel -->
                 <SETTING><NAME>MWLinker_MacOSX_linksym</NAME><VALUE>0</VALUE></SETTING>
@@ -5206,20 +5230,6 @@
                 </FILE>
                 <FILE>
                     <PATHTYPE>Name</PATHTYPE>
-                    <PATH>CarbonLib</PATH>
-                    <PATHFORMAT>MacOS</PATHFORMAT>
-                    <FILEKIND>Library</FILEKIND>
-                    <FILEFLAGS>Debug</FILEFLAGS>
-                </FILE>
-                <FILE>
-                    <PATHTYPE>Name</PATHTYPE>
-                    <PATH>wx_Carbon_d.shlb</PATH>
-                    <PATHFORMAT>MacOS</PATHFORMAT>
-                    <FILEKIND>Library</FILEKIND>
-                    <FILEFLAGS>Debug</FILEFLAGS>
-                </FILE>
-                <FILE>
-                    <PATHTYPE>Name</PATHTYPE>
                     <PATH>wx_CARBON.rsrc</PATH>
                     <PATHFORMAT>MacOS</PATHFORMAT>
                     <FILEKIND>Resource</FILEKIND>
@@ -5234,35 +5244,34 @@
                 </FILE>
                 <FILE>
                     <PATHTYPE>Name</PATHTYPE>
-                    <PATH>MSL_All_Carbon.Shlb</PATH>
+                    <PATH>MSL_Runtime_PPC_D.Lib</PATH>
                     <PATHFORMAT>Unix</PATHFORMAT>
                     <FILEKIND>Library</FILEKIND>
                     <FILEFLAGS>Debug</FILEFLAGS>
                 </FILE>
                 <FILE>
                     <PATHTYPE>Name</PATHTYPE>
-                    <PATH>MSL_Runtime_PPC.Lib</PATH>
+                    <PATH>MSL_All_Carbon_D.Shlb</PATH>
+                    <PATHFORMAT>Unix</PATHFORMAT>
+                    <FILEKIND>Library</FILEKIND>
+                    <FILEFLAGS>Debug</FILEFLAGS>
+                </FILE>
+                <FILE>
+                    <PATHTYPE>Name</PATHTYPE>
+                    <PATH>wx_Carbon_d.shlb</PATH>
+                    <PATHFORMAT>Unix</PATHFORMAT>
+                    <FILEKIND>Library</FILEKIND>
+                    <FILEFLAGS>Debug</FILEFLAGS>
+                </FILE>
+                <FILE>
+                    <PATHTYPE>Name</PATHTYPE>
+                    <PATH>CarbonLib</PATH>
                     <PATHFORMAT>Unix</PATHFORMAT>
                     <FILEKIND>Library</FILEKIND>
                     <FILEFLAGS>Debug</FILEFLAGS>
                 </FILE>
             </FILELIST>
             <LINKORDER>
-                <FILEREF>
-                    <PATHTYPE>Name</PATHTYPE>
-                    <PATH>minimal.cpp</PATH>
-                    <PATHFORMAT>MacOS</PATHFORMAT>
-                </FILEREF>
-                <FILEREF>
-                    <PATHTYPE>Name</PATHTYPE>
-                    <PATH>CarbonLib</PATH>
-                    <PATHFORMAT>MacOS</PATHFORMAT>
-                </FILEREF>
-                <FILEREF>
-                    <PATHTYPE>Name</PATHTYPE>
-                    <PATH>wx_Carbon_d.shlb</PATH>
-                    <PATHFORMAT>MacOS</PATHFORMAT>
-                </FILEREF>
                 <FILEREF>
                     <PATHTYPE>Name</PATHTYPE>
                     <PATH>wx_CARBON.rsrc</PATH>
@@ -5275,12 +5284,27 @@
                 </FILEREF>
                 <FILEREF>
                     <PATHTYPE>Name</PATHTYPE>
-                    <PATH>MSL_All_Carbon.Shlb</PATH>
+                    <PATH>MSL_Runtime_PPC_D.Lib</PATH>
                     <PATHFORMAT>Unix</PATHFORMAT>
                 </FILEREF>
                 <FILEREF>
                     <PATHTYPE>Name</PATHTYPE>
-                    <PATH>MSL_Runtime_PPC.Lib</PATH>
+                    <PATH>MSL_All_Carbon_D.Shlb</PATH>
+                    <PATHFORMAT>Unix</PATHFORMAT>
+                </FILEREF>
+                <FILEREF>
+                    <PATHTYPE>Name</PATHTYPE>
+                    <PATH>wx_Carbon_d.shlb</PATH>
+                    <PATHFORMAT>Unix</PATHFORMAT>
+                </FILEREF>
+                <FILEREF>
+                    <PATHTYPE>Name</PATHTYPE>
+                    <PATH>minimal.cpp</PATH>
+                    <PATHFORMAT>MacOS</PATHFORMAT>
+                </FILEREF>
+                <FILEREF>
+                    <PATHTYPE>Name</PATHTYPE>
+                    <PATH>CarbonLib</PATH>
                     <PATHFORMAT>Unix</PATHFORMAT>
                 </FILEREF>
             </LINKORDER>
@@ -5712,7 +5736,7 @@
                 <SETTING><NAME>MWFrontEnd_C_mpwpointerstyle</NAME><VALUE>0</VALUE></SETTING>
                 <SETTING><NAME>MWFrontEnd_C_prefixname</NAME><VALUE>wx/wxshlba_cwc.h</VALUE></SETTING>
                 <SETTING><NAME>MWFrontEnd_C_ansistrict</NAME><VALUE>0</VALUE></SETTING>
-                <SETTING><NAME>MWFrontEnd_C_mpwcnewline</NAME><VALUE>1</VALUE></SETTING>
+                <SETTING><NAME>MWFrontEnd_C_mpwcnewline</NAME><VALUE>0</VALUE></SETTING>
                 <SETTING><NAME>MWFrontEnd_C_wchar_type</NAME><VALUE>1</VALUE></SETTING>
                 <SETTING><NAME>MWFrontEnd_C_enableexceptions</NAME><VALUE>1</VALUE></SETTING>
                 <SETTING><NAME>MWFrontEnd_C_dontreusestrings</NAME><VALUE>0</VALUE></SETTING>
@@ -5720,7 +5744,7 @@
                 <SETTING><NAME>MWFrontEnd_C_dontinline</NAME><VALUE>0</VALUE></SETTING>
                 <SETTING><NAME>MWFrontEnd_C_useRTTI</NAME><VALUE>1</VALUE></SETTING>
                 <SETTING><NAME>MWFrontEnd_C_multibyteaware</NAME><VALUE>0</VALUE></SETTING>
-                <SETTING><NAME>MWFrontEnd_C_unsignedchars</NAME><VALUE>0</VALUE></SETTING>
+                <SETTING><NAME>MWFrontEnd_C_unsignedchars</NAME><VALUE>1</VALUE></SETTING>
                 <SETTING><NAME>MWFrontEnd_C_autoinline</NAME><VALUE>0</VALUE></SETTING>
                 <SETTING><NAME>MWFrontEnd_C_booltruefalse</NAME><VALUE>1</VALUE></SETTING>
                 <SETTING><NAME>MWFrontEnd_C_inlinelevel</NAME><VALUE>0</VALUE></SETTING>
@@ -5748,7 +5772,7 @@
                 <!-- Settings for "FTP Panel" panel -->
                 <SETTING><NAME>MWFTP_Post_hostName</NAME><VALUE></VALUE></SETTING>
                 <SETTING><NAME>MWFTP_Post_username</NAME><VALUE></VALUE></SETTING>
-                <SETTING><NAME>MWFTP_Post_password</NAME><VALUE>0&#255;&#196; &#156;	&#192;&#144;)&#157;@</VALUE></SETTING>
+                <SETTING><NAME>MWFTP_Post_password</NAME><VALUE>0&#255;&#194;&#224;h&#205;$&#144;,&#154;&#236;</VALUE></SETTING>
                 <SETTING><NAME>MWFTP_Post_remoteDir</NAME><VALUE></VALUE></SETTING>
                 <SETTING><NAME>MWFTP_Post_ftp_PathVersion</NAME><VALUE>0</VALUE></SETTING>
                 <SETTING><NAME>MWFTP_Post_ftp_PathType</NAME><VALUE>0</VALUE></SETTING>
@@ -5898,6 +5922,10 @@
                     <SETTING><VALUE>WSPC</VALUE></SETTING>
                 </SETTING>
 
+                <!-- Settings for "OmnisRC Panel" panel -->
+                <SETTING><NAME>Defines</NAME><VALUE>ismac,isMacRCC</VALUE></SETTING>
+                <SETTING><NAME>Compatible</NAME><VALUE>false</VALUE></SETTING>
+
                 <!-- Settings for "Output Flags" panel -->
                 <SETTING><NAME>FileLocked</NAME><VALUE>false</VALUE></SETTING>
                 <SETTING><NAME>ResourcesMapIsReadOnly</NAME><VALUE>false</VALUE></SETTING>
@@ -5992,9 +6020,9 @@
                 <SETTING><NAME>MWLinker_PPC_dontdeadstripinitcode</NAME><VALUE>1</VALUE></SETTING>
                 <SETTING><NAME>MWLinker_PPC_permitmultdefs</NAME><VALUE>1</VALUE></SETTING>
                 <SETTING><NAME>MWLinker_PPC_linkmode</NAME><VALUE>Fast</VALUE></SETTING>
-                <SETTING><NAME>MWLinker_PPC_initname</NAME><VALUE></VALUE></SETTING>
+                <SETTING><NAME>MWLinker_PPC_initname</NAME><VALUE>__initialize</VALUE></SETTING>
                 <SETTING><NAME>MWLinker_PPC_mainname</NAME><VALUE>__start</VALUE></SETTING>
-                <SETTING><NAME>MWLinker_PPC_termname</NAME><VALUE></VALUE></SETTING>
+                <SETTING><NAME>MWLinker_PPC_termname</NAME><VALUE>__terminate</VALUE></SETTING>
 
                 <!-- Settings for "PPC Mac OS X Linker" panel -->
                 <SETTING><NAME>MWLinker_MacOSX_linksym</NAME><VALUE>0</VALUE></SETTING>
@@ -6307,6 +6335,13 @@
                     <FILEKIND>Library</FILEKIND>
                     <FILEFLAGS>Debug</FILEFLAGS>
                 </FILE>
+                <FILE>
+                    <PATHTYPE>Name</PATHTYPE>
+                    <PATH>wx_Carbon_d.shlb</PATH>
+                    <PATHFORMAT>Unix</PATHFORMAT>
+                    <FILEKIND>Library</FILEKIND>
+                    <FILEFLAGS>Debug</FILEFLAGS>
+                </FILE>
             </FILELIST>
             <LINKORDER>
                 <FILEREF>
@@ -6342,6 +6377,11 @@
                 <FILEREF>
                     <PATHTYPE>Name</PATHTYPE>
                     <PATH>MSL_Runtime_PPC.Lib</PATH>
+                    <PATHFORMAT>Unix</PATHFORMAT>
+                </FILEREF>
+                <FILEREF>
+                    <PATHTYPE>Name</PATHTYPE>
+                    <PATH>wx_Carbon_d.shlb</PATH>
                     <PATHFORMAT>Unix</PATHFORMAT>
                 </FILEREF>
             </LINKORDER>
@@ -7041,7 +7081,7 @@
                 <SETTING><NAME>MWFrontEnd_C_mpwpointerstyle</NAME><VALUE>0</VALUE></SETTING>
                 <SETTING><NAME>MWFrontEnd_C_prefixname</NAME><VALUE>wx/wx_cwc_d.h</VALUE></SETTING>
                 <SETTING><NAME>MWFrontEnd_C_ansistrict</NAME><VALUE>0</VALUE></SETTING>
-                <SETTING><NAME>MWFrontEnd_C_mpwcnewline</NAME><VALUE>1</VALUE></SETTING>
+                <SETTING><NAME>MWFrontEnd_C_mpwcnewline</NAME><VALUE>0</VALUE></SETTING>
                 <SETTING><NAME>MWFrontEnd_C_wchar_type</NAME><VALUE>1</VALUE></SETTING>
                 <SETTING><NAME>MWFrontEnd_C_enableexceptions</NAME><VALUE>1</VALUE></SETTING>
                 <SETTING><NAME>MWFrontEnd_C_dontreusestrings</NAME><VALUE>0</VALUE></SETTING>
@@ -7049,7 +7089,7 @@
                 <SETTING><NAME>MWFrontEnd_C_dontinline</NAME><VALUE>0</VALUE></SETTING>
                 <SETTING><NAME>MWFrontEnd_C_useRTTI</NAME><VALUE>1</VALUE></SETTING>
                 <SETTING><NAME>MWFrontEnd_C_multibyteaware</NAME><VALUE>0</VALUE></SETTING>
-                <SETTING><NAME>MWFrontEnd_C_unsignedchars</NAME><VALUE>0</VALUE></SETTING>
+                <SETTING><NAME>MWFrontEnd_C_unsignedchars</NAME><VALUE>1</VALUE></SETTING>
                 <SETTING><NAME>MWFrontEnd_C_autoinline</NAME><VALUE>0</VALUE></SETTING>
                 <SETTING><NAME>MWFrontEnd_C_booltruefalse</NAME><VALUE>1</VALUE></SETTING>
                 <SETTING><NAME>MWFrontEnd_C_inlinelevel</NAME><VALUE>0</VALUE></SETTING>
@@ -7077,7 +7117,7 @@
                 <!-- Settings for "FTP Panel" panel -->
                 <SETTING><NAME>MWFTP_Post_hostName</NAME><VALUE></VALUE></SETTING>
                 <SETTING><NAME>MWFTP_Post_username</NAME><VALUE></VALUE></SETTING>
-                <SETTING><NAME>MWFTP_Post_password</NAME><VALUE>0&#255;&#196; &#156;	&#192;&#144;)&#157;@</VALUE></SETTING>
+                <SETTING><NAME>MWFTP_Post_password</NAME><VALUE>0&#255;&#194;&#224;h&#205;$&#144;,&#154;&#236;</VALUE></SETTING>
                 <SETTING><NAME>MWFTP_Post_remoteDir</NAME><VALUE></VALUE></SETTING>
                 <SETTING><NAME>MWFTP_Post_ftp_PathVersion</NAME><VALUE>0</VALUE></SETTING>
                 <SETTING><NAME>MWFTP_Post_ftp_PathType</NAME><VALUE>0</VALUE></SETTING>
@@ -7227,6 +7267,10 @@
                     <SETTING><VALUE>WSPC</VALUE></SETTING>
                 </SETTING>
 
+                <!-- Settings for "OmnisRC Panel" panel -->
+                <SETTING><NAME>Defines</NAME><VALUE>ismac,isMacRCC</VALUE></SETTING>
+                <SETTING><NAME>Compatible</NAME><VALUE>false</VALUE></SETTING>
+
                 <!-- Settings for "Output Flags" panel -->
                 <SETTING><NAME>FileLocked</NAME><VALUE>false</VALUE></SETTING>
                 <SETTING><NAME>ResourcesMapIsReadOnly</NAME><VALUE>false</VALUE></SETTING>
@@ -7326,7 +7370,7 @@
                 <SETTING><NAME>MWLinker_PPC_termname</NAME><VALUE></VALUE></SETTING>
 
                 <!-- Settings for "PPC Mac OS X Linker" panel -->
-                <SETTING><NAME>MWLinker_MacOSX_linksym</NAME><VALUE>0</VALUE></SETTING>
+                <SETTING><NAME>MWLinker_MacOSX_linksym</NAME><VALUE>1</VALUE></SETTING>
                 <SETTING><NAME>MWLinker_MacOSX_symfullpath</NAME><VALUE>1</VALUE></SETTING>
                 <SETTING><NAME>MWLinker_MacOSX_nolinkwarnings</NAME><VALUE>0</VALUE></SETTING>
                 <SETTING><NAME>MWLinker_MacOSX_linkmap</NAME><VALUE>0</VALUE></SETTING>
@@ -7610,13 +7654,6 @@
                 </FILE>
                 <FILE>
                     <PATHTYPE>Name</PATHTYPE>
-                    <PATH>crt1.o</PATH>
-                    <PATHFORMAT>Unix</PATHFORMAT>
-                    <FILEKIND>Library</FILEKIND>
-                    <FILEFLAGS>Debug</FILEFLAGS>
-                </FILE>
-                <FILE>
-                    <PATHTYPE>Name</PATHTYPE>
                     <PATH>minimal.plc</PATH>
                     <PATHFORMAT>Unix</PATHFORMAT>
                     <FILEKIND>Text</FILEKIND>
@@ -7628,6 +7665,13 @@
                     <PATHFORMAT>Unix</PATHFORMAT>
                     <FILEKIND>Unknown</FILEKIND>
                     <FILEFLAGS></FILEFLAGS>
+                </FILE>
+                <FILE>
+                    <PATHTYPE>Name</PATHTYPE>
+                    <PATH>mwcrt1.o</PATH>
+                    <PATHFORMAT>Unix</PATHFORMAT>
+                    <FILEKIND>Library</FILEKIND>
+                    <FILEFLAGS>Debug</FILEFLAGS>
                 </FILE>
             </FILELIST>
             <LINKORDER>
@@ -7648,17 +7692,17 @@
                 </FILEREF>
                 <FILEREF>
                     <PATHTYPE>Name</PATHTYPE>
-                    <PATH>crt1.o</PATH>
-                    <PATHFORMAT>Unix</PATHFORMAT>
-                </FILEREF>
-                <FILEREF>
-                    <PATHTYPE>Name</PATHTYPE>
                     <PATH>minimal.plc</PATH>
                     <PATHFORMAT>Unix</PATHFORMAT>
                 </FILEREF>
                 <FILEREF>
                     <PATHTYPE>Name</PATHTYPE>
                     <PATH>mondrian.icns</PATH>
+                    <PATHFORMAT>Unix</PATHFORMAT>
+                </FILEREF>
+                <FILEREF>
+                    <PATHTYPE>Name</PATHTYPE>
+                    <PATH>mwcrt1.o</PATH>
                     <PATHFORMAT>Unix</PATHFORMAT>
                 </FILEREF>
             </LINKORDER>
@@ -7678,6 +7722,22 @@
                         <PATHFORMAT>Unix</PATHFORMAT>
                     </FILEREF>
                     <DYNAMICLIBRARY>Carbon</DYNAMICLIBRARY>
+                </FRAMEWORK>
+                <FRAMEWORK>
+                    <FILEREF>
+                        <PATHTYPE>Name</PATHTYPE>
+                        <PATH>QuickTime.framework</PATH>
+                        <PATHFORMAT>Unix</PATHFORMAT>
+                    </FILEREF>
+                    <DYNAMICLIBRARY>QuickTime</DYNAMICLIBRARY>
+                </FRAMEWORK>
+                <FRAMEWORK>
+                    <FILEREF>
+                        <PATHTYPE>Name</PATHTYPE>
+                        <PATH>IOKit.framework</PATH>
+                        <PATHFORMAT>Unix</PATHFORMAT>
+                    </FILEREF>
+                    <DYNAMICLIBRARY>IOKit</DYNAMICLIBRARY>
                 </FRAMEWORK>
             </FRAMEWORKLIST>
         </TARGET>
@@ -8376,7 +8436,7 @@
                 <SETTING><NAME>MWFrontEnd_C_mpwpointerstyle</NAME><VALUE>0</VALUE></SETTING>
                 <SETTING><NAME>MWFrontEnd_C_prefixname</NAME><VALUE>wx/wx_cwc.h</VALUE></SETTING>
                 <SETTING><NAME>MWFrontEnd_C_ansistrict</NAME><VALUE>0</VALUE></SETTING>
-                <SETTING><NAME>MWFrontEnd_C_mpwcnewline</NAME><VALUE>1</VALUE></SETTING>
+                <SETTING><NAME>MWFrontEnd_C_mpwcnewline</NAME><VALUE>0</VALUE></SETTING>
                 <SETTING><NAME>MWFrontEnd_C_wchar_type</NAME><VALUE>1</VALUE></SETTING>
                 <SETTING><NAME>MWFrontEnd_C_enableexceptions</NAME><VALUE>1</VALUE></SETTING>
                 <SETTING><NAME>MWFrontEnd_C_dontreusestrings</NAME><VALUE>0</VALUE></SETTING>
@@ -8384,7 +8444,7 @@
                 <SETTING><NAME>MWFrontEnd_C_dontinline</NAME><VALUE>0</VALUE></SETTING>
                 <SETTING><NAME>MWFrontEnd_C_useRTTI</NAME><VALUE>1</VALUE></SETTING>
                 <SETTING><NAME>MWFrontEnd_C_multibyteaware</NAME><VALUE>0</VALUE></SETTING>
-                <SETTING><NAME>MWFrontEnd_C_unsignedchars</NAME><VALUE>0</VALUE></SETTING>
+                <SETTING><NAME>MWFrontEnd_C_unsignedchars</NAME><VALUE>1</VALUE></SETTING>
                 <SETTING><NAME>MWFrontEnd_C_autoinline</NAME><VALUE>0</VALUE></SETTING>
                 <SETTING><NAME>MWFrontEnd_C_booltruefalse</NAME><VALUE>1</VALUE></SETTING>
                 <SETTING><NAME>MWFrontEnd_C_inlinelevel</NAME><VALUE>0</VALUE></SETTING>
@@ -8412,7 +8472,7 @@
                 <!-- Settings for "FTP Panel" panel -->
                 <SETTING><NAME>MWFTP_Post_hostName</NAME><VALUE></VALUE></SETTING>
                 <SETTING><NAME>MWFTP_Post_username</NAME><VALUE></VALUE></SETTING>
-                <SETTING><NAME>MWFTP_Post_password</NAME><VALUE>0&#255;&#196; &#156;	&#192;&#144;)&#157;@</VALUE></SETTING>
+                <SETTING><NAME>MWFTP_Post_password</NAME><VALUE>0&#255;&#194;&#224;h&#205;$&#144;,&#154;&#236;</VALUE></SETTING>
                 <SETTING><NAME>MWFTP_Post_remoteDir</NAME><VALUE></VALUE></SETTING>
                 <SETTING><NAME>MWFTP_Post_ftp_PathVersion</NAME><VALUE>0</VALUE></SETTING>
                 <SETTING><NAME>MWFTP_Post_ftp_PathType</NAME><VALUE>0</VALUE></SETTING>
@@ -8561,6 +8621,10 @@
                     <SETTING><VALUE>Proj</VALUE></SETTING>
                     <SETTING><VALUE>WSPC</VALUE></SETTING>
                 </SETTING>
+
+                <!-- Settings for "OmnisRC Panel" panel -->
+                <SETTING><NAME>Defines</NAME><VALUE>ismac,isMacRCC</VALUE></SETTING>
+                <SETTING><NAME>Compatible</NAME><VALUE>false</VALUE></SETTING>
 
                 <!-- Settings for "Output Flags" panel -->
                 <SETTING><NAME>FileLocked</NAME><VALUE>false</VALUE></SETTING>
@@ -8945,13 +9009,6 @@
                 </FILE>
                 <FILE>
                     <PATHTYPE>Name</PATHTYPE>
-                    <PATH>crt1.o</PATH>
-                    <PATHFORMAT>Unix</PATHFORMAT>
-                    <FILEKIND>Library</FILEKIND>
-                    <FILEFLAGS>Debug</FILEFLAGS>
-                </FILE>
-                <FILE>
-                    <PATHTYPE>Name</PATHTYPE>
                     <PATH>wx_MACH.lib</PATH>
                     <PATHFORMAT>Unix</PATHFORMAT>
                     <FILEKIND>Library</FILEKIND>
@@ -8970,6 +9027,13 @@
                     <PATHFORMAT>Unix</PATHFORMAT>
                     <FILEKIND>Unknown</FILEKIND>
                     <FILEFLAGS></FILEFLAGS>
+                </FILE>
+                <FILE>
+                    <PATHTYPE>Name</PATHTYPE>
+                    <PATH>mwcrt1.o</PATH>
+                    <PATHFORMAT>Unix</PATHFORMAT>
+                    <FILEKIND>Library</FILEKIND>
+                    <FILEFLAGS>Debug</FILEFLAGS>
                 </FILE>
             </FILELIST>
             <LINKORDER>
@@ -8990,11 +9054,6 @@
                 </FILEREF>
                 <FILEREF>
                     <PATHTYPE>Name</PATHTYPE>
-                    <PATH>crt1.o</PATH>
-                    <PATHFORMAT>Unix</PATHFORMAT>
-                </FILEREF>
-                <FILEREF>
-                    <PATHTYPE>Name</PATHTYPE>
                     <PATH>wx_MACH.lib</PATH>
                     <PATHFORMAT>Unix</PATHFORMAT>
                 </FILEREF>
@@ -9006,6 +9065,11 @@
                 <FILEREF>
                     <PATHTYPE>Name</PATHTYPE>
                     <PATH>mondrian.icns</PATH>
+                    <PATHFORMAT>Unix</PATHFORMAT>
+                </FILEREF>
+                <FILEREF>
+                    <PATHTYPE>Name</PATHTYPE>
+                    <PATH>mwcrt1.o</PATH>
                     <PATHFORMAT>Unix</PATHFORMAT>
                 </FILEREF>
             </LINKORDER>
@@ -9025,6 +9089,22 @@
                         <PATHFORMAT>Unix</PATHFORMAT>
                     </FILEREF>
                     <DYNAMICLIBRARY>Carbon</DYNAMICLIBRARY>
+                </FRAMEWORK>
+                <FRAMEWORK>
+                    <FILEREF>
+                        <PATHTYPE>Name</PATHTYPE>
+                        <PATH>QuickTime.framework</PATH>
+                        <PATHFORMAT>Unix</PATHFORMAT>
+                    </FILEREF>
+                    <DYNAMICLIBRARY>QuickTime</DYNAMICLIBRARY>
+                </FRAMEWORK>
+                <FRAMEWORK>
+                    <FILEREF>
+                        <PATHTYPE>Name</PATHTYPE>
+                        <PATH>IOKit.framework</PATH>
+                        <PATHFORMAT>Unix</PATHFORMAT>
+                    </FILEREF>
+                    <DYNAMICLIBRARY>IOKit</DYNAMICLIBRARY>
                 </FRAMEWORK>
             </FRAMEWORKLIST>
         </TARGET>
@@ -9723,7 +9803,7 @@
                 <SETTING><NAME>MWFrontEnd_C_mpwpointerstyle</NAME><VALUE>0</VALUE></SETTING>
                 <SETTING><NAME>MWFrontEnd_C_prefixname</NAME><VALUE>wx/wxshlba_cwc.h</VALUE></SETTING>
                 <SETTING><NAME>MWFrontEnd_C_ansistrict</NAME><VALUE>0</VALUE></SETTING>
-                <SETTING><NAME>MWFrontEnd_C_mpwcnewline</NAME><VALUE>1</VALUE></SETTING>
+                <SETTING><NAME>MWFrontEnd_C_mpwcnewline</NAME><VALUE>0</VALUE></SETTING>
                 <SETTING><NAME>MWFrontEnd_C_wchar_type</NAME><VALUE>1</VALUE></SETTING>
                 <SETTING><NAME>MWFrontEnd_C_enableexceptions</NAME><VALUE>1</VALUE></SETTING>
                 <SETTING><NAME>MWFrontEnd_C_dontreusestrings</NAME><VALUE>0</VALUE></SETTING>
@@ -9731,7 +9811,7 @@
                 <SETTING><NAME>MWFrontEnd_C_dontinline</NAME><VALUE>0</VALUE></SETTING>
                 <SETTING><NAME>MWFrontEnd_C_useRTTI</NAME><VALUE>1</VALUE></SETTING>
                 <SETTING><NAME>MWFrontEnd_C_multibyteaware</NAME><VALUE>0</VALUE></SETTING>
-                <SETTING><NAME>MWFrontEnd_C_unsignedchars</NAME><VALUE>0</VALUE></SETTING>
+                <SETTING><NAME>MWFrontEnd_C_unsignedchars</NAME><VALUE>1</VALUE></SETTING>
                 <SETTING><NAME>MWFrontEnd_C_autoinline</NAME><VALUE>0</VALUE></SETTING>
                 <SETTING><NAME>MWFrontEnd_C_booltruefalse</NAME><VALUE>1</VALUE></SETTING>
                 <SETTING><NAME>MWFrontEnd_C_inlinelevel</NAME><VALUE>0</VALUE></SETTING>
@@ -9759,7 +9839,7 @@
                 <!-- Settings for "FTP Panel" panel -->
                 <SETTING><NAME>MWFTP_Post_hostName</NAME><VALUE></VALUE></SETTING>
                 <SETTING><NAME>MWFTP_Post_username</NAME><VALUE></VALUE></SETTING>
-                <SETTING><NAME>MWFTP_Post_password</NAME><VALUE>0&#255;&#196; &#156;	&#192;&#144;)&#157;@</VALUE></SETTING>
+                <SETTING><NAME>MWFTP_Post_password</NAME><VALUE>0&#255;&#194;&#224;h&#205;$&#144;,&#154;&#236;</VALUE></SETTING>
                 <SETTING><NAME>MWFTP_Post_remoteDir</NAME><VALUE></VALUE></SETTING>
                 <SETTING><NAME>MWFTP_Post_ftp_PathVersion</NAME><VALUE>0</VALUE></SETTING>
                 <SETTING><NAME>MWFTP_Post_ftp_PathType</NAME><VALUE>0</VALUE></SETTING>
@@ -9908,6 +9988,10 @@
                     <SETTING><VALUE>Proj</VALUE></SETTING>
                     <SETTING><VALUE>WSPC</VALUE></SETTING>
                 </SETTING>
+
+                <!-- Settings for "OmnisRC Panel" panel -->
+                <SETTING><NAME>Defines</NAME><VALUE>ismac,isMacRCC</VALUE></SETTING>
+                <SETTING><NAME>Compatible</NAME><VALUE>false</VALUE></SETTING>
 
                 <!-- Settings for "Output Flags" panel -->
                 <SETTING><NAME>FileLocked</NAME><VALUE>false</VALUE></SETTING>
@@ -10299,13 +10383,6 @@
                 </FILE>
                 <FILE>
                     <PATHTYPE>Name</PATHTYPE>
-                    <PATH>crt1.o</PATH>
-                    <PATHFORMAT>Unix</PATHFORMAT>
-                    <FILEKIND>Library</FILEKIND>
-                    <FILEFLAGS>Debug</FILEFLAGS>
-                </FILE>
-                <FILE>
-                    <PATHTYPE>Name</PATHTYPE>
                     <PATH>MSL_Runtime_Mach-O.a</PATH>
                     <PATHFORMAT>Unix</PATHFORMAT>
                     <FILEKIND>Library</FILEKIND>
@@ -10313,14 +10390,14 @@
                 </FILE>
                 <FILE>
                     <PATHTYPE>Name</PATHTYPE>
-                    <PATH>MSL_C++_Mach-O.a</PATH>
+                    <PATH>wx_MACH.dylib</PATH>
                     <PATHFORMAT>Unix</PATHFORMAT>
                     <FILEKIND>Library</FILEKIND>
                     <FILEFLAGS>Debug</FILEFLAGS>
                 </FILE>
                 <FILE>
                     <PATHTYPE>Name</PATHTYPE>
-                    <PATH>wx_MACH.dylib</PATH>
+                    <PATH>mwcrt1.o</PATH>
                     <PATHFORMAT>Unix</PATHFORMAT>
                     <FILEKIND>Library</FILEKIND>
                     <FILEFLAGS>Debug</FILEFLAGS>
@@ -10349,22 +10426,17 @@
                 </FILEREF>
                 <FILEREF>
                     <PATHTYPE>Name</PATHTYPE>
-                    <PATH>crt1.o</PATH>
-                    <PATHFORMAT>Unix</PATHFORMAT>
-                </FILEREF>
-                <FILEREF>
-                    <PATHTYPE>Name</PATHTYPE>
                     <PATH>MSL_Runtime_Mach-O.a</PATH>
                     <PATHFORMAT>Unix</PATHFORMAT>
                 </FILEREF>
                 <FILEREF>
                     <PATHTYPE>Name</PATHTYPE>
-                    <PATH>MSL_C++_Mach-O.a</PATH>
+                    <PATH>wx_MACH.dylib</PATH>
                     <PATHFORMAT>Unix</PATHFORMAT>
                 </FILEREF>
                 <FILEREF>
                     <PATHTYPE>Name</PATHTYPE>
-                    <PATH>wx_MACH.dylib</PATH>
+                    <PATH>mwcrt1.o</PATH>
                     <PATHFORMAT>Unix</PATHFORMAT>
                 </FILEREF>
             </LINKORDER>
@@ -10384,6 +10456,22 @@
                         <PATHFORMAT>Unix</PATHFORMAT>
                     </FILEREF>
                     <DYNAMICLIBRARY>Carbon</DYNAMICLIBRARY>
+                </FRAMEWORK>
+                <FRAMEWORK>
+                    <FILEREF>
+                        <PATHTYPE>Name</PATHTYPE>
+                        <PATH>QuickTime.framework</PATH>
+                        <PATHFORMAT>Unix</PATHFORMAT>
+                    </FILEREF>
+                    <DYNAMICLIBRARY>QuickTime</DYNAMICLIBRARY>
+                </FRAMEWORK>
+                <FRAMEWORK>
+                    <FILEREF>
+                        <PATHTYPE>Name</PATHTYPE>
+                        <PATH>IOKit.framework</PATH>
+                        <PATHFORMAT>Unix</PATHFORMAT>
+                    </FILEREF>
+                    <DYNAMICLIBRARY>IOKit</DYNAMICLIBRARY>
                 </FRAMEWORK>
             </FRAMEWORKLIST>
         </TARGET>
@@ -10437,7 +10525,7 @@
                 <TARGETNAME>Carbon shlb Debug</TARGETNAME>
                 <PATHTYPE>Name</PATHTYPE>
                 <PATH>wx_Carbon_d.shlb</PATH>
-                <PATHFORMAT>MacOS</PATHFORMAT>
+                <PATHFORMAT>Unix</PATHFORMAT>
             </FILEREF>
             <FILEREF>
                 <TARGETNAME>Carbon Debug</TARGETNAME>
@@ -10484,7 +10572,7 @@
             <FILEREF>
                 <TARGETNAME>Mach-O shlb Debug</TARGETNAME>
                 <PATHTYPE>Name</PATHTYPE>
-                <PATH>crt1.o</PATH>
+                <PATH>mwcrt1.o</PATH>
                 <PATHFORMAT>Unix</PATHFORMAT>
             </FILEREF>
         </GROUP>
@@ -10502,28 +10590,16 @@
                 <PATHFORMAT>Unix</PATHFORMAT>
             </FILEREF>
             <FILEREF>
-                <TARGETNAME>Carbon shlb Debug</TARGETNAME>
+                <TARGETNAME>Carbon shlb Release</TARGETNAME>
                 <PATHTYPE>Name</PATHTYPE>
                 <PATH>MSL_All_Carbon.Shlb</PATH>
                 <PATHFORMAT>Unix</PATHFORMAT>
             </FILEREF>
             <FILEREF>
-                <TARGETNAME>Mach-O shlb Release</TARGETNAME>
-                <PATHTYPE>Name</PATHTYPE>
-                <PATH>MSL_C++_Mach-O.a</PATH>
-                <PATHFORMAT>Unix</PATHFORMAT>
-            </FILEREF>
-            <FILEREF>
-                <TARGETNAME>Mach-O shlb Debug</TARGETNAME>
-                <PATHTYPE>Name</PATHTYPE>
-                <PATH>MSL_C++_Mach-O_D.a</PATH>
-                <PATHFORMAT>Unix</PATHFORMAT>
-            </FILEREF>
-            <FILEREF>
                 <TARGETNAME>Carbon shlb Debug</TARGETNAME>
                 <PATHTYPE>Name</PATHTYPE>
-                <PATH>CarbonLib</PATH>
-                <PATHFORMAT>MacOS</PATHFORMAT>
+                <PATH>MSL_All_Carbon_D.Shlb</PATH>
+                <PATHFORMAT>Unix</PATHFORMAT>
             </FILEREF>
             <FILEREF>
                 <TARGETNAME>Carbon Debug</TARGETNAME>
@@ -10532,9 +10608,21 @@
                 <PATHFORMAT>Unix</PATHFORMAT>
             </FILEREF>
             <FILEREF>
-                <TARGETNAME>Carbon shlb Debug</TARGETNAME>
+                <TARGETNAME>Carbon shlb Release</TARGETNAME>
                 <PATHTYPE>Name</PATHTYPE>
                 <PATH>MSL_Runtime_PPC.Lib</PATH>
+                <PATHFORMAT>Unix</PATHFORMAT>
+            </FILEREF>
+            <FILEREF>
+                <TARGETNAME>Carbon shlb Debug</TARGETNAME>
+                <PATHTYPE>Name</PATHTYPE>
+                <PATH>MSL_Runtime_PPC_D.Lib</PATH>
+                <PATHFORMAT>Unix</PATHFORMAT>
+            </FILEREF>
+            <FILEREF>
+                <TARGETNAME>Carbon shlb Debug</TARGETNAME>
+                <PATHTYPE>Name</PATHTYPE>
+                <PATH>CarbonLib</PATH>
                 <PATHFORMAT>Unix</PATHFORMAT>
             </FILEREF>
         </GROUP>

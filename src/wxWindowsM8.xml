@@ -895,7 +895,7 @@
                 <SETTING><NAME>MWFrontEnd_C_trigraphs</NAME><VALUE>0</VALUE></SETTING>
                 <SETTING><NAME>MWFrontEnd_C_onlystdkeywords</NAME><VALUE>0</VALUE></SETTING>
                 <SETTING><NAME>MWFrontEnd_C_enumsalwaysint</NAME><VALUE>0</VALUE></SETTING>
-                <SETTING><NAME>MWFrontEnd_C_mpwpointerstyle</NAME><VALUE>1</VALUE></SETTING>
+                <SETTING><NAME>MWFrontEnd_C_mpwpointerstyle</NAME><VALUE>0</VALUE></SETTING>
                 <SETTING><NAME>MWFrontEnd_C_prefixname</NAME><VALUE>wx/wxshlb_cwc_d.h</VALUE></SETTING>
                 <SETTING><NAME>MWFrontEnd_C_ansistrict</NAME><VALUE>0</VALUE></SETTING>
                 <SETTING><NAME>MWFrontEnd_C_mpwcnewline</NAME><VALUE>0</VALUE></SETTING>
@@ -934,7 +934,8 @@
                 <!-- Settings for "FTP Panel" panel -->
                 <SETTING><NAME>MWFTP_Post_hostName</NAME><VALUE></VALUE></SETTING>
                 <SETTING><NAME>MWFTP_Post_username</NAME><VALUE></VALUE></SETTING>
-                <SETTING><NAME>MWFTP_Post_password</NAME><VALUE>0&#255;&#194;&#224;&#158;@&#132;&#144;,&#154;&#236;</VALUE></SETTING>
+                <SETTING><NAME>MWFTP_Post_password</NAME><VALUE>0&#255;&#194;&#224;
+&#158;0&#188;&#144;,&#154;&#236;</VALUE></SETTING>
                 <SETTING><NAME>MWFTP_Post_remoteDir</NAME><VALUE></VALUE></SETTING>
                 <SETTING><NAME>MWFTP_Post_ftp_PathVersion</NAME><VALUE>1</VALUE></SETTING>
                 <SETTING><NAME>MWFTP_Post_ftp_PathType</NAME><VALUE>0</VALUE></SETTING>
@@ -1083,6 +1084,10 @@
                     <SETTING><VALUE>Proj</VALUE></SETTING>
                     <SETTING><VALUE>WSPC</VALUE></SETTING>
                 </SETTING>
+
+                <!-- Settings for "OmnisRC Panel" panel -->
+                <SETTING><NAME>Defines</NAME><VALUE>ismac,isMacRCC</VALUE></SETTING>
+                <SETTING><NAME>Compatible</NAME><VALUE>false</VALUE></SETTING>
 
                 <!-- Settings for "Output Flags" panel -->
                 <SETTING><NAME>FileLocked</NAME><VALUE>false</VALUE></SETTING>
@@ -2379,24 +2384,6 @@
                     <FILEFLAGS>Debug</FILEFLAGS>
                 </FILE>
                 <FILE>
-                    <PATHTYPE>PathRelative</PATHTYPE>
-                    <PATHROOT>CodeWarrior</PATHROOT>
-                    <ACCESSPATH>MacOS X Support</ACCESSPATH>
-                    <PATH>Libraries/Runtime/Libs/MSL_Runtime_Mach-O_D.a</PATH>
-                    <PATHFORMAT>Unix</PATHFORMAT>
-                    <FILEKIND>Library</FILEKIND>
-                    <FILEFLAGS>Debug</FILEFLAGS>
-                </FILE>
-                <FILE>
-                    <PATHTYPE>PathRelative</PATHTYPE>
-                    <PATHROOT>CodeWarrior</PATHROOT>
-                    <ACCESSPATH>MSL/MSL_C++</ACCESSPATH>
-                    <PATH>MSL_MacOS/Lib/Mach-O/MSL_C++_Mach-O_D.a</PATH>
-                    <PATHFORMAT>Unix</PATHFORMAT>
-                    <FILEKIND>Library</FILEKIND>
-                    <FILEFLAGS>Debug</FILEFLAGS>
-                </FILE>
-                <FILE>
                     <PATHTYPE>FileRelative</PATHTYPE>
                     <PATH>../../lib/jpeg_MACH.lib</PATH>
                     <PATHFORMAT>Unix</PATHFORMAT>
@@ -4678,6 +4665,15 @@
                     <PATH>xh_mdi.cpp</PATH>
                     <PATHFORMAT>Unix</PATHFORMAT>
                     <FILEKIND>Text</FILEKIND>
+                    <FILEFLAGS>Debug</FILEFLAGS>
+                </FILE>
+                <FILE>
+                    <PATHTYPE>PathRelative</PATHTYPE>
+                    <PATHROOT>CodeWarrior</PATHROOT>
+                    <ACCESSPATH>MacOS X Support</ACCESSPATH>
+                    <PATH>Libraries/Runtime/Libs/MSL_Runtime_Mach-O_D.a</PATH>
+                    <PATHFORMAT>Unix</PATHFORMAT>
+                    <FILEKIND>Library</FILEKIND>
                     <FILEFLAGS>Debug</FILEFLAGS>
                 </FILE>
             </FILELIST>
@@ -5422,20 +5418,6 @@
                     <PATHFORMAT>Unix</PATHFORMAT>
                 </FILEREF>
                 <FILEREF>
-                    <PATHTYPE>PathRelative</PATHTYPE>
-                    <PATHROOT>CodeWarrior</PATHROOT>
-                    <ACCESSPATH>MacOS X Support</ACCESSPATH>
-                    <PATH>Libraries/Runtime/Libs/MSL_Runtime_Mach-O_D.a</PATH>
-                    <PATHFORMAT>Unix</PATHFORMAT>
-                </FILEREF>
-                <FILEREF>
-                    <PATHTYPE>PathRelative</PATHTYPE>
-                    <PATHROOT>CodeWarrior</PATHROOT>
-                    <ACCESSPATH>MSL/MSL_C++</ACCESSPATH>
-                    <PATH>MSL_MacOS/Lib/Mach-O/MSL_C++_Mach-O_D.a</PATH>
-                    <PATHFORMAT>Unix</PATHFORMAT>
-                </FILEREF>
-                <FILEREF>
                     <PATHTYPE>FileRelative</PATHTYPE>
                     <PATH>../../lib/jpeg_MACH.lib</PATH>
                     <PATHFORMAT>Unix</PATHFORMAT>
@@ -7167,6 +7149,13 @@
                     <PATHROOT>Project</PATHROOT>
                     <ACCESSPATH>xrc</ACCESSPATH>
                     <PATH>xh_mdi.cpp</PATH>
+                    <PATHFORMAT>Unix</PATHFORMAT>
+                </FILEREF>
+                <FILEREF>
+                    <PATHTYPE>PathRelative</PATHTYPE>
+                    <PATHROOT>CodeWarrior</PATHROOT>
+                    <ACCESSPATH>MacOS X Support</ACCESSPATH>
+                    <PATH>Libraries/Runtime/Libs/MSL_Runtime_Mach-O_D.a</PATH>
                     <PATHFORMAT>Unix</PATHFORMAT>
                 </FILEREF>
             </LINKORDER>
@@ -8192,7 +8181,7 @@
                 <SETTING><NAME>MWFrontEnd_C_trigraphs</NAME><VALUE>0</VALUE></SETTING>
                 <SETTING><NAME>MWFrontEnd_C_onlystdkeywords</NAME><VALUE>0</VALUE></SETTING>
                 <SETTING><NAME>MWFrontEnd_C_enumsalwaysint</NAME><VALUE>0</VALUE></SETTING>
-                <SETTING><NAME>MWFrontEnd_C_mpwpointerstyle</NAME><VALUE>1</VALUE></SETTING>
+                <SETTING><NAME>MWFrontEnd_C_mpwpointerstyle</NAME><VALUE>0</VALUE></SETTING>
                 <SETTING><NAME>MWFrontEnd_C_prefixname</NAME><VALUE>wx/wxshlb_cwc.h</VALUE></SETTING>
                 <SETTING><NAME>MWFrontEnd_C_ansistrict</NAME><VALUE>0</VALUE></SETTING>
                 <SETTING><NAME>MWFrontEnd_C_mpwcnewline</NAME><VALUE>0</VALUE></SETTING>
@@ -8231,7 +8220,8 @@
                 <!-- Settings for "FTP Panel" panel -->
                 <SETTING><NAME>MWFTP_Post_hostName</NAME><VALUE></VALUE></SETTING>
                 <SETTING><NAME>MWFTP_Post_username</NAME><VALUE></VALUE></SETTING>
-                <SETTING><NAME>MWFTP_Post_password</NAME><VALUE>0&#255;&#194;&#224;&#158;@&#132;&#144;,&#154;&#236;</VALUE></SETTING>
+                <SETTING><NAME>MWFTP_Post_password</NAME><VALUE>0&#255;&#194;&#224;
+&#158;0&#188;&#144;,&#154;&#236;</VALUE></SETTING>
                 <SETTING><NAME>MWFTP_Post_remoteDir</NAME><VALUE></VALUE></SETTING>
                 <SETTING><NAME>MWFTP_Post_ftp_PathVersion</NAME><VALUE>1</VALUE></SETTING>
                 <SETTING><NAME>MWFTP_Post_ftp_PathType</NAME><VALUE>0</VALUE></SETTING>
@@ -8380,6 +8370,10 @@
                     <SETTING><VALUE>Proj</VALUE></SETTING>
                     <SETTING><VALUE>WSPC</VALUE></SETTING>
                 </SETTING>
+
+                <!-- Settings for "OmnisRC Panel" panel -->
+                <SETTING><NAME>Defines</NAME><VALUE>ismac,isMacRCC</VALUE></SETTING>
+                <SETTING><NAME>Compatible</NAME><VALUE>false</VALUE></SETTING>
 
                 <!-- Settings for "Output Flags" panel -->
                 <SETTING><NAME>FileLocked</NAME><VALUE>false</VALUE></SETTING>
@@ -11388,15 +11382,6 @@
                 </FILE>
                 <FILE>
                     <PATHTYPE>PathRelative</PATHTYPE>
-                    <PATHROOT>CodeWarrior</PATHROOT>
-                    <ACCESSPATH>MSL/MSL_C++</ACCESSPATH>
-                    <PATH>MSL_MacOS/Lib/Mach-O/MSL_C++_Mach-O.a</PATH>
-                    <PATHFORMAT>Unix</PATHFORMAT>
-                    <FILEKIND>Library</FILEKIND>
-                    <FILEFLAGS>Debug</FILEFLAGS>
-                </FILE>
-                <FILE>
-                    <PATHTYPE>PathRelative</PATHTYPE>
                     <PATHROOT>Project</PATHROOT>
                     <ACCESSPATH>:mac:carbon:</ACCESSPATH>
                     <PATH>drawer.cpp</PATH>
@@ -14001,13 +13986,6 @@
                 </FILEREF>
                 <FILEREF>
                     <PATHTYPE>PathRelative</PATHTYPE>
-                    <PATHROOT>CodeWarrior</PATHROOT>
-                    <ACCESSPATH>MSL/MSL_C++</ACCESSPATH>
-                    <PATH>MSL_MacOS/Lib/Mach-O/MSL_C++_Mach-O.a</PATH>
-                    <PATHFORMAT>Unix</PATHFORMAT>
-                </FILEREF>
-                <FILEREF>
-                    <PATHTYPE>PathRelative</PATHTYPE>
                     <PATHROOT>Project</PATHROOT>
                     <ACCESSPATH>:mac:carbon:</ACCESSPATH>
                     <PATH>drawer.cpp</PATH>
@@ -14832,7 +14810,8 @@
                 <!-- Settings for "FTP Panel" panel -->
                 <SETTING><NAME>MWFTP_Post_hostName</NAME><VALUE></VALUE></SETTING>
                 <SETTING><NAME>MWFTP_Post_username</NAME><VALUE></VALUE></SETTING>
-                <SETTING><NAME>MWFTP_Post_password</NAME><VALUE>0&#255;&#194;&#224;&#158;@&#132;&#144;,&#154;&#236;</VALUE></SETTING>
+                <SETTING><NAME>MWFTP_Post_password</NAME><VALUE>0&#255;&#194;&#224;
+&#158;0&#188;&#144;,&#154;&#236;</VALUE></SETTING>
                 <SETTING><NAME>MWFTP_Post_remoteDir</NAME><VALUE></VALUE></SETTING>
                 <SETTING><NAME>MWFTP_Post_ftp_PathVersion</NAME><VALUE>1</VALUE></SETTING>
                 <SETTING><NAME>MWFTP_Post_ftp_PathType</NAME><VALUE>0</VALUE></SETTING>
@@ -14981,6 +14960,10 @@
                     <SETTING><VALUE>Proj</VALUE></SETTING>
                     <SETTING><VALUE>WSPC</VALUE></SETTING>
                 </SETTING>
+
+                <!-- Settings for "OmnisRC Panel" panel -->
+                <SETTING><NAME>Defines</NAME><VALUE>ismac,isMacRCC</VALUE></SETTING>
+                <SETTING><NAME>Compatible</NAME><VALUE>false</VALUE></SETTING>
 
                 <!-- Settings for "Output Flags" panel -->
                 <SETTING><NAME>FileLocked</NAME><VALUE>false</VALUE></SETTING>
@@ -16229,7 +16212,7 @@
                 <SETTING><NAME>MWFrontEnd_C_trigraphs</NAME><VALUE>0</VALUE></SETTING>
                 <SETTING><NAME>MWFrontEnd_C_onlystdkeywords</NAME><VALUE>0</VALUE></SETTING>
                 <SETTING><NAME>MWFrontEnd_C_enumsalwaysint</NAME><VALUE>0</VALUE></SETTING>
-                <SETTING><NAME>MWFrontEnd_C_mpwpointerstyle</NAME><VALUE>1</VALUE></SETTING>
+                <SETTING><NAME>MWFrontEnd_C_mpwpointerstyle</NAME><VALUE>0</VALUE></SETTING>
                 <SETTING><NAME>MWFrontEnd_C_prefixname</NAME><VALUE>wx/wxshlba_cwc_d.h</VALUE></SETTING>
                 <SETTING><NAME>MWFrontEnd_C_ansistrict</NAME><VALUE>0</VALUE></SETTING>
                 <SETTING><NAME>MWFrontEnd_C_mpwcnewline</NAME><VALUE>0</VALUE></SETTING>
@@ -16268,7 +16251,8 @@
                 <!-- Settings for "FTP Panel" panel -->
                 <SETTING><NAME>MWFTP_Post_hostName</NAME><VALUE></VALUE></SETTING>
                 <SETTING><NAME>MWFTP_Post_username</NAME><VALUE></VALUE></SETTING>
-                <SETTING><NAME>MWFTP_Post_password</NAME><VALUE>0&#255;&#194;&#224;&#158;@&#132;&#144;,&#154;&#236;</VALUE></SETTING>
+                <SETTING><NAME>MWFTP_Post_password</NAME><VALUE>0&#255;&#194;&#224;
+&#158;0&#188;&#144;,&#154;&#236;</VALUE></SETTING>
                 <SETTING><NAME>MWFTP_Post_remoteDir</NAME><VALUE></VALUE></SETTING>
                 <SETTING><NAME>MWFTP_Post_ftp_PathVersion</NAME><VALUE>1</VALUE></SETTING>
                 <SETTING><NAME>MWFTP_Post_ftp_PathType</NAME><VALUE>0</VALUE></SETTING>
@@ -16417,6 +16401,10 @@
                     <SETTING><VALUE>Proj</VALUE></SETTING>
                     <SETTING><VALUE>WSPC</VALUE></SETTING>
                 </SETTING>
+
+                <!-- Settings for "OmnisRC Panel" panel -->
+                <SETTING><NAME>Defines</NAME><VALUE>ismac,isMacRCC</VALUE></SETTING>
+                <SETTING><NAME>Compatible</NAME><VALUE>false</VALUE></SETTING>
 
                 <!-- Settings for "Output Flags" panel -->
                 <SETTING><NAME>FileLocked</NAME><VALUE>false</VALUE></SETTING>
@@ -17479,7 +17467,8 @@
                 <!-- Settings for "FTP Panel" panel -->
                 <SETTING><NAME>MWFTP_Post_hostName</NAME><VALUE></VALUE></SETTING>
                 <SETTING><NAME>MWFTP_Post_username</NAME><VALUE></VALUE></SETTING>
-                <SETTING><NAME>MWFTP_Post_password</NAME><VALUE>0&#255;&#194;&#224;&#158;@&#132;&#144;,&#154;&#236;</VALUE></SETTING>
+                <SETTING><NAME>MWFTP_Post_password</NAME><VALUE>0&#255;&#194;&#224;
+&#158;0&#188;&#144;,&#154;&#236;</VALUE></SETTING>
                 <SETTING><NAME>MWFTP_Post_remoteDir</NAME><VALUE></VALUE></SETTING>
                 <SETTING><NAME>MWFTP_Post_ftp_PathVersion</NAME><VALUE>1</VALUE></SETTING>
                 <SETTING><NAME>MWFTP_Post_ftp_PathType</NAME><VALUE>0</VALUE></SETTING>
@@ -17628,6 +17617,10 @@
                     <SETTING><VALUE>Proj</VALUE></SETTING>
                     <SETTING><VALUE>WSPC</VALUE></SETTING>
                 </SETTING>
+
+                <!-- Settings for "OmnisRC Panel" panel -->
+                <SETTING><NAME>Defines</NAME><VALUE>ismac,isMacRCC</VALUE></SETTING>
+                <SETTING><NAME>Compatible</NAME><VALUE>false</VALUE></SETTING>
 
                 <!-- Settings for "Output Flags" panel -->
                 <SETTING><NAME>FileLocked</NAME><VALUE>false</VALUE></SETTING>
@@ -24339,7 +24332,7 @@
                 <SETTING><NAME>MWFrontEnd_C_trigraphs</NAME><VALUE>0</VALUE></SETTING>
                 <SETTING><NAME>MWFrontEnd_C_onlystdkeywords</NAME><VALUE>0</VALUE></SETTING>
                 <SETTING><NAME>MWFrontEnd_C_enumsalwaysint</NAME><VALUE>0</VALUE></SETTING>
-                <SETTING><NAME>MWFrontEnd_C_mpwpointerstyle</NAME><VALUE>1</VALUE></SETTING>
+                <SETTING><NAME>MWFrontEnd_C_mpwpointerstyle</NAME><VALUE>0</VALUE></SETTING>
                 <SETTING><NAME>MWFrontEnd_C_prefixname</NAME><VALUE>wx/wx_cwc.h</VALUE></SETTING>
                 <SETTING><NAME>MWFrontEnd_C_ansistrict</NAME><VALUE>0</VALUE></SETTING>
                 <SETTING><NAME>MWFrontEnd_C_mpwcnewline</NAME><VALUE>0</VALUE></SETTING>
@@ -24350,7 +24343,7 @@
                 <SETTING><NAME>MWFrontEnd_C_dontinline</NAME><VALUE>0</VALUE></SETTING>
                 <SETTING><NAME>MWFrontEnd_C_useRTTI</NAME><VALUE>1</VALUE></SETTING>
                 <SETTING><NAME>MWFrontEnd_C_multibyteaware</NAME><VALUE>0</VALUE></SETTING>
-                <SETTING><NAME>MWFrontEnd_C_unsignedchars</NAME><VALUE>0</VALUE></SETTING>
+                <SETTING><NAME>MWFrontEnd_C_unsignedchars</NAME><VALUE>1</VALUE></SETTING>
                 <SETTING><NAME>MWFrontEnd_C_autoinline</NAME><VALUE>1</VALUE></SETTING>
                 <SETTING><NAME>MWFrontEnd_C_booltruefalse</NAME><VALUE>1</VALUE></SETTING>
                 <SETTING><NAME>MWFrontEnd_C_inlinelevel</NAME><VALUE>0</VALUE></SETTING>
@@ -24378,7 +24371,8 @@
                 <!-- Settings for "FTP Panel" panel -->
                 <SETTING><NAME>MWFTP_Post_hostName</NAME><VALUE></VALUE></SETTING>
                 <SETTING><NAME>MWFTP_Post_username</NAME><VALUE></VALUE></SETTING>
-                <SETTING><NAME>MWFTP_Post_password</NAME><VALUE>0&#255;&#194;&#224;&#158;@&#132;&#144;,&#154;&#236;</VALUE></SETTING>
+                <SETTING><NAME>MWFTP_Post_password</NAME><VALUE>0&#255;&#194;&#224;
+&#158;0&#188;&#144;,&#154;&#236;</VALUE></SETTING>
                 <SETTING><NAME>MWFTP_Post_remoteDir</NAME><VALUE></VALUE></SETTING>
                 <SETTING><NAME>MWFTP_Post_ftp_PathVersion</NAME><VALUE>1</VALUE></SETTING>
                 <SETTING><NAME>MWFTP_Post_ftp_PathType</NAME><VALUE>0</VALUE></SETTING>
@@ -24527,6 +24521,10 @@
                     <SETTING><VALUE>Proj</VALUE></SETTING>
                     <SETTING><VALUE>WSPC</VALUE></SETTING>
                 </SETTING>
+
+                <!-- Settings for "OmnisRC Panel" panel -->
+                <SETTING><NAME>Defines</NAME><VALUE>ismac,isMacRCC</VALUE></SETTING>
+                <SETTING><NAME>Compatible</NAME><VALUE>false</VALUE></SETTING>
 
                 <!-- Settings for "Output Flags" panel -->
                 <SETTING><NAME>FileLocked</NAME><VALUE>false</VALUE></SETTING>
@@ -30867,7 +30865,8 @@
                 <!-- Settings for "FTP Panel" panel -->
                 <SETTING><NAME>MWFTP_Post_hostName</NAME><VALUE></VALUE></SETTING>
                 <SETTING><NAME>MWFTP_Post_username</NAME><VALUE></VALUE></SETTING>
-                <SETTING><NAME>MWFTP_Post_password</NAME><VALUE>0&#255;&#194;&#224;&#158;@&#132;&#144;,&#154;&#236;</VALUE></SETTING>
+                <SETTING><NAME>MWFTP_Post_password</NAME><VALUE>0&#255;&#194;&#224;
+&#158;0&#188;&#144;,&#154;&#236;</VALUE></SETTING>
                 <SETTING><NAME>MWFTP_Post_remoteDir</NAME><VALUE></VALUE></SETTING>
                 <SETTING><NAME>MWFTP_Post_ftp_PathVersion</NAME><VALUE>1</VALUE></SETTING>
                 <SETTING><NAME>MWFTP_Post_ftp_PathType</NAME><VALUE>0</VALUE></SETTING>
@@ -31016,6 +31015,10 @@
                     <SETTING><VALUE>Proj</VALUE></SETTING>
                     <SETTING><VALUE>WSPC</VALUE></SETTING>
                 </SETTING>
+
+                <!-- Settings for "OmnisRC Panel" panel -->
+                <SETTING><NAME>Defines</NAME><VALUE>ismac,isMacRCC</VALUE></SETTING>
+                <SETTING><NAME>Compatible</NAME><VALUE>false</VALUE></SETTING>
 
                 <!-- Settings for "Output Flags" panel -->
                 <SETTING><NAME>FileLocked</NAME><VALUE>false</VALUE></SETTING>
@@ -32070,7 +32073,8 @@
                 <!-- Settings for "FTP Panel" panel -->
                 <SETTING><NAME>MWFTP_Post_hostName</NAME><VALUE></VALUE></SETTING>
                 <SETTING><NAME>MWFTP_Post_username</NAME><VALUE></VALUE></SETTING>
-                <SETTING><NAME>MWFTP_Post_password</NAME><VALUE>0&#255;&#194;&#224;&#158;@&#132;&#144;,&#154;&#236;</VALUE></SETTING>
+                <SETTING><NAME>MWFTP_Post_password</NAME><VALUE>0&#255;&#194;&#224;
+&#158;0&#188;&#144;,&#154;&#236;</VALUE></SETTING>
                 <SETTING><NAME>MWFTP_Post_remoteDir</NAME><VALUE></VALUE></SETTING>
                 <SETTING><NAME>MWFTP_Post_ftp_PathVersion</NAME><VALUE>1</VALUE></SETTING>
                 <SETTING><NAME>MWFTP_Post_ftp_PathType</NAME><VALUE>0</VALUE></SETTING>
@@ -32219,6 +32223,10 @@
                     <SETTING><VALUE>Proj</VALUE></SETTING>
                     <SETTING><VALUE>WSPC</VALUE></SETTING>
                 </SETTING>
+
+                <!-- Settings for "OmnisRC Panel" panel -->
+                <SETTING><NAME>Defines</NAME><VALUE>ismac,isMacRCC</VALUE></SETTING>
+                <SETTING><NAME>Compatible</NAME><VALUE>false</VALUE></SETTING>
 
                 <!-- Settings for "Output Flags" panel -->
                 <SETTING><NAME>FileLocked</NAME><VALUE>false</VALUE></SETTING>
@@ -35020,15 +35028,6 @@
                 </FILE>
                 <FILE>
                     <PATHTYPE>PathRelative</PATHTYPE>
-                    <PATHROOT>CodeWarrior</PATHROOT>
-                    <ACCESSPATH>:MSL:</ACCESSPATH>
-                    <PATH>MSL_C/MSL_MacOS/Src/console.stubs.c</PATH>
-                    <PATHFORMAT>Unix</PATHFORMAT>
-                    <FILEKIND>Text</FILEKIND>
-                    <FILEFLAGS>Debug</FILEFLAGS>
-                </FILE>
-                <FILE>
-                    <PATHTYPE>PathRelative</PATHTYPE>
                     <PATHROOT>Project</PATHROOT>
                     <ACCESSPATH>:common:</ACCESSPATH>
                     <PATH>datacmn.cpp</PATH>
@@ -35731,33 +35730,6 @@
                 </FILE>
                 <FILE>
                     <PATHTYPE>PathRelative</PATHTYPE>
-                    <PATHROOT>CodeWarrior</PATHROOT>
-                    <ACCESSPATH>:MacOS Support:</ACCESSPATH>
-                    <PATH>Libraries/Runtime/Libs/MSL_ShLibRuntime_PPC_D.Lib</PATH>
-                    <PATHFORMAT>Unix</PATHFORMAT>
-                    <FILEKIND>Library</FILEKIND>
-                    <FILEFLAGS>Debug</FILEFLAGS>
-                </FILE>
-                <FILE>
-                    <PATHTYPE>PathRelative</PATHTYPE>
-                    <PATHROOT>CodeWarrior</PATHROOT>
-                    <ACCESSPATH>:MacOS Support:</ACCESSPATH>
-                    <PATH>Libraries/Runtime/Libs/MSL_All_Carbon.Shlb</PATH>
-                    <PATHFORMAT>Unix</PATHFORMAT>
-                    <FILEKIND>Library</FILEKIND>
-                    <FILEFLAGS>Debug</FILEFLAGS>
-                </FILE>
-                <FILE>
-                    <PATHTYPE>PathRelative</PATHTYPE>
-                    <PATHROOT>CodeWarrior</PATHROOT>
-                    <ACCESSPATH>:MSL:</ACCESSPATH>
-                    <PATH>MSL_C++/MSL_MacOS/Lib/PPC/MSL_C++_PPC.Lib</PATH>
-                    <PATHFORMAT>Unix</PATHFORMAT>
-                    <FILEKIND>Library</FILEKIND>
-                    <FILEFLAGS>Debug</FILEFLAGS>
-                </FILE>
-                <FILE>
-                    <PATHTYPE>PathRelative</PATHTYPE>
                     <PATHROOT>Project</PATHROOT>
                     <ACCESSPATH>:common:</ACCESSPATH>
                     <PATH>debugrpt.cpp</PATH>
@@ -35774,8 +35746,33 @@
                     <FILEKIND>Text</FILEKIND>
                     <FILEFLAGS>Debug</FILEFLAGS>
                 </FILE>
+                <FILE>
+                    <PATHTYPE>PathRelative</PATHTYPE>
+                    <PATHROOT>CodeWarrior</PATHROOT>
+                    <ACCESSPATH>:MacOS Support:</ACCESSPATH>
+                    <PATH>Libraries/Runtime/Libs/MSL_All_Carbon_D.Shlb</PATH>
+                    <PATHFORMAT>Unix</PATHFORMAT>
+                    <FILEKIND>Library</FILEKIND>
+                    <FILEFLAGS>Debug</FILEFLAGS>
+                </FILE>
+                <FILE>
+                    <PATHTYPE>PathRelative</PATHTYPE>
+                    <PATHROOT>CodeWarrior</PATHROOT>
+                    <ACCESSPATH>:MacOS Support:</ACCESSPATH>
+                    <PATH>Libraries/Runtime/Libs/MSL_ShLibRuntime_PPC_D.Lib</PATH>
+                    <PATHFORMAT>Unix</PATHFORMAT>
+                    <FILEKIND>Library</FILEKIND>
+                    <FILEFLAGS>Debug</FILEFLAGS>
+                </FILE>
             </FILELIST>
             <LINKORDER>
+                <FILEREF>
+                    <PATHTYPE>PathRelative</PATHTYPE>
+                    <PATHROOT>CodeWarrior</PATHROOT>
+                    <ACCESSPATH>:MacOS Support:</ACCESSPATH>
+                    <PATH>Libraries/Runtime/Libs/MSL_All_Carbon_D.Shlb</PATH>
+                    <PATHFORMAT>Unix</PATHFORMAT>
+                </FILEREF>
                 <FILEREF>
                     <PATHTYPE>FileRelative</PATHTYPE>
                     <PATH>../../lib/regex_PPC.lib</PATH>
@@ -35835,6 +35832,13 @@
                         <PATH>jpegM8.mcp</PATH>
                         <PATHFORMAT>Unix</PATHFORMAT>
                     </ROOTFILEREF>
+                </FILEREF>
+                <FILEREF>
+                    <PATHTYPE>PathRelative</PATHTYPE>
+                    <PATHROOT>Project</PATHROOT>
+                    <ACCESSPATH>:common:</ACCESSPATH>
+                    <PATH>:object.cpp</PATH>
+                    <PATHFORMAT>MacOS</PATHFORMAT>
                 </FILEREF>
                 <FILEREF>
                     <PATHTYPE>PathRelative</PATHTYPE>
@@ -36618,13 +36622,6 @@
                     <PATHROOT>Project</PATHROOT>
                     <ACCESSPATH>:common:</ACCESSPATH>
                     <PATH>:dcbase.cpp</PATH>
-                    <PATHFORMAT>MacOS</PATHFORMAT>
-                </FILEREF>
-                <FILEREF>
-                    <PATHTYPE>PathRelative</PATHTYPE>
-                    <PATHROOT>Project</PATHROOT>
-                    <ACCESSPATH>:common:</ACCESSPATH>
-                    <PATH>:object.cpp</PATH>
                     <PATHFORMAT>MacOS</PATHFORMAT>
                 </FILEREF>
                 <FILEREF>
@@ -37545,13 +37542,6 @@
                 </FILEREF>
                 <FILEREF>
                     <PATHTYPE>PathRelative</PATHTYPE>
-                    <PATHROOT>CodeWarrior</PATHROOT>
-                    <ACCESSPATH>:MSL:</ACCESSPATH>
-                    <PATH>MSL_C/MSL_MacOS/Src/console.stubs.c</PATH>
-                    <PATHFORMAT>Unix</PATHFORMAT>
-                </FILEREF>
-                <FILEREF>
-                    <PATHTYPE>PathRelative</PATHTYPE>
                     <PATHROOT>Project</PATHROOT>
                     <ACCESSPATH>:generic:</ACCESSPATH>
                     <PATH>:splash.cpp</PATH>
@@ -38196,27 +38186,6 @@
                 </FILEREF>
                 <FILEREF>
                     <PATHTYPE>PathRelative</PATHTYPE>
-                    <PATHROOT>CodeWarrior</PATHROOT>
-                    <ACCESSPATH>:MacOS Support:</ACCESSPATH>
-                    <PATH>Libraries/Runtime/Libs/MSL_ShLibRuntime_PPC_D.Lib</PATH>
-                    <PATHFORMAT>Unix</PATHFORMAT>
-                </FILEREF>
-                <FILEREF>
-                    <PATHTYPE>PathRelative</PATHTYPE>
-                    <PATHROOT>CodeWarrior</PATHROOT>
-                    <ACCESSPATH>:MacOS Support:</ACCESSPATH>
-                    <PATH>Libraries/Runtime/Libs/MSL_All_Carbon.Shlb</PATH>
-                    <PATHFORMAT>Unix</PATHFORMAT>
-                </FILEREF>
-                <FILEREF>
-                    <PATHTYPE>PathRelative</PATHTYPE>
-                    <PATHROOT>CodeWarrior</PATHROOT>
-                    <ACCESSPATH>:MSL:</ACCESSPATH>
-                    <PATH>MSL_C++/MSL_MacOS/Lib/PPC/MSL_C++_PPC.Lib</PATH>
-                    <PATHFORMAT>Unix</PATHFORMAT>
-                </FILEREF>
-                <FILEREF>
-                    <PATHTYPE>PathRelative</PATHTYPE>
                     <PATHROOT>Project</PATHROOT>
                     <ACCESSPATH>:common:</ACCESSPATH>
                     <PATH>debugrpt.cpp</PATH>
@@ -38227,6 +38196,13 @@
                     <PATHROOT>Project</PATHROOT>
                     <ACCESSPATH>xrc</ACCESSPATH>
                     <PATH>xh_mdi.cpp</PATH>
+                    <PATHFORMAT>Unix</PATHFORMAT>
+                </FILEREF>
+                <FILEREF>
+                    <PATHTYPE>PathRelative</PATHTYPE>
+                    <PATHROOT>CodeWarrior</PATHROOT>
+                    <ACCESSPATH>:MacOS Support:</ACCESSPATH>
+                    <PATH>Libraries/Runtime/Libs/MSL_ShLibRuntime_PPC_D.Lib</PATH>
                     <PATHFORMAT>Unix</PATHFORMAT>
                 </FILEREF>
             </LINKORDER>
@@ -39021,7 +38997,8 @@
                 <!-- Settings for "FTP Panel" panel -->
                 <SETTING><NAME>MWFTP_Post_hostName</NAME><VALUE></VALUE></SETTING>
                 <SETTING><NAME>MWFTP_Post_username</NAME><VALUE></VALUE></SETTING>
-                <SETTING><NAME>MWFTP_Post_password</NAME><VALUE>0&#255;&#194;&#224;&#158;@&#132;&#144;,&#154;&#236;</VALUE></SETTING>
+                <SETTING><NAME>MWFTP_Post_password</NAME><VALUE>0&#255;&#194;&#224;
+&#158;0&#188;&#144;,&#154;&#236;</VALUE></SETTING>
                 <SETTING><NAME>MWFTP_Post_remoteDir</NAME><VALUE></VALUE></SETTING>
                 <SETTING><NAME>MWFTP_Post_ftp_PathVersion</NAME><VALUE>1</VALUE></SETTING>
                 <SETTING><NAME>MWFTP_Post_ftp_PathType</NAME><VALUE>0</VALUE></SETTING>
@@ -39170,6 +39147,10 @@
                     <SETTING><VALUE>Proj</VALUE></SETTING>
                     <SETTING><VALUE>WSPC</VALUE></SETTING>
                 </SETTING>
+
+                <!-- Settings for "OmnisRC Panel" panel -->
+                <SETTING><NAME>Defines</NAME><VALUE>ismac,isMacRCC</VALUE></SETTING>
+                <SETTING><NAME>Compatible</NAME><VALUE>false</VALUE></SETTING>
 
                 <!-- Settings for "Output Flags" panel -->
                 <SETTING><NAME>FileLocked</NAME><VALUE>false</VALUE></SETTING>
@@ -42692,15 +42673,6 @@
                 <FILE>
                     <PATHTYPE>PathRelative</PATHTYPE>
                     <PATHROOT>CodeWarrior</PATHROOT>
-                    <ACCESSPATH>:MSL:</ACCESSPATH>
-                    <PATH>MSL_C++/MSL_MacOS/Lib/PPC/MSL_C++_PPC.Lib</PATH>
-                    <PATHFORMAT>Unix</PATHFORMAT>
-                    <FILEKIND>Library</FILEKIND>
-                    <FILEFLAGS>Debug</FILEFLAGS>
-                </FILE>
-                <FILE>
-                    <PATHTYPE>PathRelative</PATHTYPE>
-                    <PATHROOT>CodeWarrior</PATHROOT>
                     <ACCESSPATH>:MacOS Support:</ACCESSPATH>
                     <PATH>Libraries/Runtime/Libs/MSL_All_Carbon.Shlb</PATH>
                     <PATHFORMAT>Unix</PATHFORMAT>
@@ -42723,6 +42695,15 @@
                     <PATH>xh_mdi.cpp</PATH>
                     <PATHFORMAT>Unix</PATHFORMAT>
                     <FILEKIND>Text</FILEKIND>
+                    <FILEFLAGS>Debug</FILEFLAGS>
+                </FILE>
+                <FILE>
+                    <PATHTYPE>PathRelative</PATHTYPE>
+                    <PATHROOT>CodeWarrior</PATHROOT>
+                    <ACCESSPATH>:MacOS Support:</ACCESSPATH>
+                    <PATH>Libraries/Runtime/Libs/MSL_ShLibRuntime_PPC_D.Lib</PATH>
+                    <PATHFORMAT>Unix</PATHFORMAT>
+                    <FILEKIND>Library</FILEKIND>
                     <FILEFLAGS>Debug</FILEFLAGS>
                 </FILE>
             </FILELIST>
@@ -45155,13 +45136,6 @@
                 <FILEREF>
                     <PATHTYPE>PathRelative</PATHTYPE>
                     <PATHROOT>CodeWarrior</PATHROOT>
-                    <ACCESSPATH>:MSL:</ACCESSPATH>
-                    <PATH>MSL_C++/MSL_MacOS/Lib/PPC/MSL_C++_PPC.Lib</PATH>
-                    <PATHFORMAT>Unix</PATHFORMAT>
-                </FILEREF>
-                <FILEREF>
-                    <PATHTYPE>PathRelative</PATHTYPE>
-                    <PATHROOT>CodeWarrior</PATHROOT>
                     <ACCESSPATH>:MacOS Support:</ACCESSPATH>
                     <PATH>Libraries/Runtime/Libs/MSL_All_Carbon.Shlb</PATH>
                     <PATHFORMAT>Unix</PATHFORMAT>
@@ -45178,6 +45152,13 @@
                     <PATHROOT>Project</PATHROOT>
                     <ACCESSPATH>xrc</ACCESSPATH>
                     <PATH>xh_mdi.cpp</PATH>
+                    <PATHFORMAT>Unix</PATHFORMAT>
+                </FILEREF>
+                <FILEREF>
+                    <PATHTYPE>PathRelative</PATHTYPE>
+                    <PATHROOT>CodeWarrior</PATHROOT>
+                    <ACCESSPATH>:MacOS Support:</ACCESSPATH>
+                    <PATH>Libraries/Runtime/Libs/MSL_ShLibRuntime_PPC_D.Lib</PATH>
                     <PATHFORMAT>Unix</PATHFORMAT>
                 </FILEREF>
             </LINKORDER>
@@ -45943,7 +45924,7 @@
                 <SETTING><NAME>MWFrontEnd_C_trigraphs</NAME><VALUE>0</VALUE></SETTING>
                 <SETTING><NAME>MWFrontEnd_C_onlystdkeywords</NAME><VALUE>0</VALUE></SETTING>
                 <SETTING><NAME>MWFrontEnd_C_enumsalwaysint</NAME><VALUE>0</VALUE></SETTING>
-                <SETTING><NAME>MWFrontEnd_C_mpwpointerstyle</NAME><VALUE>1</VALUE></SETTING>
+                <SETTING><NAME>MWFrontEnd_C_mpwpointerstyle</NAME><VALUE>0</VALUE></SETTING>
                 <SETTING><NAME>MWFrontEnd_C_prefixname</NAME><VALUE>wx/wxshlba_cwc.h</VALUE></SETTING>
                 <SETTING><NAME>MWFrontEnd_C_ansistrict</NAME><VALUE>0</VALUE></SETTING>
                 <SETTING><NAME>MWFrontEnd_C_mpwcnewline</NAME><VALUE>0</VALUE></SETTING>
@@ -45982,7 +45963,8 @@
                 <!-- Settings for "FTP Panel" panel -->
                 <SETTING><NAME>MWFTP_Post_hostName</NAME><VALUE></VALUE></SETTING>
                 <SETTING><NAME>MWFTP_Post_username</NAME><VALUE></VALUE></SETTING>
-                <SETTING><NAME>MWFTP_Post_password</NAME><VALUE>0&#255;&#194;&#224;&#158;@&#132;&#144;,&#154;&#236;</VALUE></SETTING>
+                <SETTING><NAME>MWFTP_Post_password</NAME><VALUE>0&#255;&#194;&#224;
+&#158;0&#188;&#144;,&#154;&#236;</VALUE></SETTING>
                 <SETTING><NAME>MWFTP_Post_remoteDir</NAME><VALUE></VALUE></SETTING>
                 <SETTING><NAME>MWFTP_Post_ftp_PathVersion</NAME><VALUE>1</VALUE></SETTING>
                 <SETTING><NAME>MWFTP_Post_ftp_PathType</NAME><VALUE>0</VALUE></SETTING>
@@ -46131,6 +46113,10 @@
                     <SETTING><VALUE>Proj</VALUE></SETTING>
                     <SETTING><VALUE>WSPC</VALUE></SETTING>
                 </SETTING>
+
+                <!-- Settings for "OmnisRC Panel" panel -->
+                <SETTING><NAME>Defines</NAME><VALUE>ismac,isMacRCC</VALUE></SETTING>
+                <SETTING><NAME>Compatible</NAME><VALUE>false</VALUE></SETTING>
 
                 <!-- Settings for "Output Flags" panel -->
                 <SETTING><NAME>FileLocked</NAME><VALUE>false</VALUE></SETTING>
@@ -47152,11 +47138,11 @@
                 <SETTING><NAME>MWFrontEnd_C_trigraphs</NAME><VALUE>0</VALUE></SETTING>
                 <SETTING><NAME>MWFrontEnd_C_onlystdkeywords</NAME><VALUE>0</VALUE></SETTING>
                 <SETTING><NAME>MWFrontEnd_C_enumsalwaysint</NAME><VALUE>0</VALUE></SETTING>
-                <SETTING><NAME>MWFrontEnd_C_mpwpointerstyle</NAME><VALUE>1</VALUE></SETTING>
+                <SETTING><NAME>MWFrontEnd_C_mpwpointerstyle</NAME><VALUE>0</VALUE></SETTING>
                 <SETTING><NAME>MWFrontEnd_C_prefixname</NAME><VALUE>wx/wxshlba_cwc_d.h</VALUE></SETTING>
                 <SETTING><NAME>MWFrontEnd_C_ansistrict</NAME><VALUE>0</VALUE></SETTING>
                 <SETTING><NAME>MWFrontEnd_C_mpwcnewline</NAME><VALUE>0</VALUE></SETTING>
-                <SETTING><NAME>MWFrontEnd_C_wchar_type</NAME><VALUE>0</VALUE></SETTING>
+                <SETTING><NAME>MWFrontEnd_C_wchar_type</NAME><VALUE>1</VALUE></SETTING>
                 <SETTING><NAME>MWFrontEnd_C_enableexceptions</NAME><VALUE>1</VALUE></SETTING>
                 <SETTING><NAME>MWFrontEnd_C_dontreusestrings</NAME><VALUE>0</VALUE></SETTING>
                 <SETTING><NAME>MWFrontEnd_C_poolstrings</NAME><VALUE>0</VALUE></SETTING>
@@ -47191,7 +47177,8 @@
                 <!-- Settings for "FTP Panel" panel -->
                 <SETTING><NAME>MWFTP_Post_hostName</NAME><VALUE></VALUE></SETTING>
                 <SETTING><NAME>MWFTP_Post_username</NAME><VALUE></VALUE></SETTING>
-                <SETTING><NAME>MWFTP_Post_password</NAME><VALUE>0&#255;&#194;&#224;&#158;@&#132;&#144;,&#154;&#236;</VALUE></SETTING>
+                <SETTING><NAME>MWFTP_Post_password</NAME><VALUE>0&#255;&#194;&#224;
+&#158;0&#188;&#144;,&#154;&#236;</VALUE></SETTING>
                 <SETTING><NAME>MWFTP_Post_remoteDir</NAME><VALUE></VALUE></SETTING>
                 <SETTING><NAME>MWFTP_Post_ftp_PathVersion</NAME><VALUE>1</VALUE></SETTING>
                 <SETTING><NAME>MWFTP_Post_ftp_PathType</NAME><VALUE>0</VALUE></SETTING>
@@ -47340,6 +47327,10 @@
                     <SETTING><VALUE>Proj</VALUE></SETTING>
                     <SETTING><VALUE>WSPC</VALUE></SETTING>
                 </SETTING>
+
+                <!-- Settings for "OmnisRC Panel" panel -->
+                <SETTING><NAME>Defines</NAME><VALUE>ismac,isMacRCC</VALUE></SETTING>
+                <SETTING><NAME>Compatible</NAME><VALUE>false</VALUE></SETTING>
 
                 <!-- Settings for "Output Flags" panel -->
                 <SETTING><NAME>FileLocked</NAME><VALUE>false</VALUE></SETTING>
@@ -48579,7 +48570,7 @@
                 <SETTING><NAME>MWFrontEnd_C_trigraphs</NAME><VALUE>0</VALUE></SETTING>
                 <SETTING><NAME>MWFrontEnd_C_onlystdkeywords</NAME><VALUE>0</VALUE></SETTING>
                 <SETTING><NAME>MWFrontEnd_C_enumsalwaysint</NAME><VALUE>0</VALUE></SETTING>
-                <SETTING><NAME>MWFrontEnd_C_mpwpointerstyle</NAME><VALUE>1</VALUE></SETTING>
+                <SETTING><NAME>MWFrontEnd_C_mpwpointerstyle</NAME><VALUE>0</VALUE></SETTING>
                 <SETTING><NAME>MWFrontEnd_C_prefixname</NAME><VALUE>wx/wx_cwc_d.h</VALUE></SETTING>
                 <SETTING><NAME>MWFrontEnd_C_ansistrict</NAME><VALUE>0</VALUE></SETTING>
                 <SETTING><NAME>MWFrontEnd_C_mpwcnewline</NAME><VALUE>0</VALUE></SETTING>
@@ -48618,7 +48609,8 @@
                 <!-- Settings for "FTP Panel" panel -->
                 <SETTING><NAME>MWFTP_Post_hostName</NAME><VALUE></VALUE></SETTING>
                 <SETTING><NAME>MWFTP_Post_username</NAME><VALUE></VALUE></SETTING>
-                <SETTING><NAME>MWFTP_Post_password</NAME><VALUE>0&#255;&#194;&#224;&#158;@&#132;&#144;,&#154;&#236;</VALUE></SETTING>
+                <SETTING><NAME>MWFTP_Post_password</NAME><VALUE>0&#255;&#194;&#224;
+&#158;0&#188;&#144;,&#154;&#236;</VALUE></SETTING>
                 <SETTING><NAME>MWFTP_Post_remoteDir</NAME><VALUE></VALUE></SETTING>
                 <SETTING><NAME>MWFTP_Post_ftp_PathVersion</NAME><VALUE>1</VALUE></SETTING>
                 <SETTING><NAME>MWFTP_Post_ftp_PathType</NAME><VALUE>0</VALUE></SETTING>
@@ -48767,6 +48759,10 @@
                     <SETTING><VALUE>Proj</VALUE></SETTING>
                     <SETTING><VALUE>WSPC</VALUE></SETTING>
                 </SETTING>
+
+                <!-- Settings for "OmnisRC Panel" panel -->
+                <SETTING><NAME>Defines</NAME><VALUE>ismac,isMacRCC</VALUE></SETTING>
+                <SETTING><NAME>Compatible</NAME><VALUE>false</VALUE></SETTING>
 
                 <!-- Settings for "Output Flags" panel -->
                 <SETTING><NAME>FileLocked</NAME><VALUE>false</VALUE></SETTING>
@@ -51497,15 +51493,6 @@
                     <FILEFLAGS>Debug</FILEFLAGS>
                 </FILE>
                 <FILE>
-                    <PATHTYPE>PathRelative</PATHTYPE>
-                    <PATHROOT>CodeWarrior</PATHROOT>
-                    <ACCESSPATH>MSL/MSL_C++</ACCESSPATH>
-                    <PATH>MSL_MacOS/Lib/Mach-O/MSL_C++_Mach-O_D.a</PATH>
-                    <PATHFORMAT>Unix</PATHFORMAT>
-                    <FILEKIND>Library</FILEKIND>
-                    <FILEFLAGS>Debug</FILEFLAGS>
-                </FILE>
-                <FILE>
                     <PATHTYPE>FileRelative</PATHTYPE>
                     <PATH>../../lib/jpeg_MACH.lib</PATH>
                     <PATHFORMAT>Unix</PATHFORMAT>
@@ -54205,13 +54192,6 @@
                     <PATHFORMAT>Unix</PATHFORMAT>
                 </FILEREF>
                 <FILEREF>
-                    <PATHTYPE>PathRelative</PATHTYPE>
-                    <PATHROOT>CodeWarrior</PATHROOT>
-                    <ACCESSPATH>MSL/MSL_C++</ACCESSPATH>
-                    <PATH>MSL_MacOS/Lib/Mach-O/MSL_C++_Mach-O_D.a</PATH>
-                    <PATHFORMAT>Unix</PATHFORMAT>
-                </FILEREF>
-                <FILEREF>
                     <PATHTYPE>FileRelative</PATHTYPE>
                     <PATH>../../lib/jpeg_MACH.lib</PATH>
                     <PATHFORMAT>Unix</PATHFORMAT>
@@ -55158,6 +55138,16 @@
                         <SETTING><NAME>FrameworkPath</NAME><VALUE>false</VALUE></SETTING>
                         <SETTING><NAME>HostFlags</NAME><VALUE>All</VALUE></SETTING>
                     </SETTING>
+                    <SETTING>
+                        <SETTING><NAME>SearchPath</NAME>
+                            <SETTING><NAME>Path</NAME><VALUE>mac/corefoundation</VALUE></SETTING>
+                            <SETTING><NAME>PathFormat</NAME><VALUE>Unix</VALUE></SETTING>
+                            <SETTING><NAME>PathRoot</NAME><VALUE>Project</VALUE></SETTING>
+                        </SETTING>
+                        <SETTING><NAME>Recursive</NAME><VALUE>true</VALUE></SETTING>
+                        <SETTING><NAME>FrameworkPath</NAME><VALUE>false</VALUE></SETTING>
+                        <SETTING><NAME>HostFlags</NAME><VALUE>All</VALUE></SETTING>
+                    </SETTING>
                 </SETTING>
                 <SETTING><NAME>SystemSearchPaths</NAME>
                     <SETTING>
@@ -55818,7 +55808,7 @@
                 <SETTING><NAME>MWFrontEnd_C_trigraphs</NAME><VALUE>0</VALUE></SETTING>
                 <SETTING><NAME>MWFrontEnd_C_onlystdkeywords</NAME><VALUE>0</VALUE></SETTING>
                 <SETTING><NAME>MWFrontEnd_C_enumsalwaysint</NAME><VALUE>0</VALUE></SETTING>
-                <SETTING><NAME>MWFrontEnd_C_mpwpointerstyle</NAME><VALUE>1</VALUE></SETTING>
+                <SETTING><NAME>MWFrontEnd_C_mpwpointerstyle</NAME><VALUE>0</VALUE></SETTING>
                 <SETTING><NAME>MWFrontEnd_C_prefixname</NAME><VALUE>wx/wx_cwc.h</VALUE></SETTING>
                 <SETTING><NAME>MWFrontEnd_C_ansistrict</NAME><VALUE>0</VALUE></SETTING>
                 <SETTING><NAME>MWFrontEnd_C_mpwcnewline</NAME><VALUE>0</VALUE></SETTING>
@@ -55857,7 +55847,8 @@
                 <!-- Settings for "FTP Panel" panel -->
                 <SETTING><NAME>MWFTP_Post_hostName</NAME><VALUE></VALUE></SETTING>
                 <SETTING><NAME>MWFTP_Post_username</NAME><VALUE></VALUE></SETTING>
-                <SETTING><NAME>MWFTP_Post_password</NAME><VALUE>0&#255;&#194;&#224;&#158;@&#132;&#144;,&#154;&#236;</VALUE></SETTING>
+                <SETTING><NAME>MWFTP_Post_password</NAME><VALUE>0&#255;&#194;&#224;
+&#158;0&#188;&#144;,&#154;&#236;</VALUE></SETTING>
                 <SETTING><NAME>MWFTP_Post_remoteDir</NAME><VALUE></VALUE></SETTING>
                 <SETTING><NAME>MWFTP_Post_ftp_PathVersion</NAME><VALUE>1</VALUE></SETTING>
                 <SETTING><NAME>MWFTP_Post_ftp_PathType</NAME><VALUE>0</VALUE></SETTING>
@@ -56006,6 +55997,10 @@
                     <SETTING><VALUE>Proj</VALUE></SETTING>
                     <SETTING><VALUE>WSPC</VALUE></SETTING>
                 </SETTING>
+
+                <!-- Settings for "OmnisRC Panel" panel -->
+                <SETTING><NAME>Defines</NAME><VALUE>ismac,isMacRCC</VALUE></SETTING>
+                <SETTING><NAME>Compatible</NAME><VALUE>false</VALUE></SETTING>
 
                 <!-- Settings for "Output Flags" panel -->
                 <SETTING><NAME>FileLocked</NAME><VALUE>false</VALUE></SETTING>
@@ -58736,15 +58731,6 @@
                     <FILEFLAGS>Debug</FILEFLAGS>
                 </FILE>
                 <FILE>
-                    <PATHTYPE>PathRelative</PATHTYPE>
-                    <PATHROOT>CodeWarrior</PATHROOT>
-                    <ACCESSPATH>MSL/MSL_C++</ACCESSPATH>
-                    <PATH>MSL_MacOS/Lib/Mach-O/MSL_C++_Mach-O_D.a</PATH>
-                    <PATHFORMAT>Unix</PATHFORMAT>
-                    <FILEKIND>Library</FILEKIND>
-                    <FILEFLAGS>Debug</FILEFLAGS>
-                </FILE>
-                <FILE>
                     <PATHTYPE>FileRelative</PATHTYPE>
                     <PATH>../../lib/jpeg_MACH.lib</PATH>
                     <PATHFORMAT>Unix</PATHFORMAT>
@@ -59410,6 +59396,8 @@
                 </FILE>
                 <FILE>
                     <PATHTYPE>PathRelative</PATHTYPE>
+                    <PATHROOT>Project</PATHROOT>
+                    <ACCESSPATH>mac/corefoundation</ACCESSPATH>
                     <PATH>cfstring.cpp</PATH>
                     <PATHFORMAT>Unix</PATHFORMAT>
                     <FILEKIND>Text</FILEKIND>
@@ -59426,6 +59414,8 @@
                 </FILE>
                 <FILE>
                     <PATHTYPE>PathRelative</PATHTYPE>
+                    <PATHROOT>Project</PATHROOT>
+                    <ACCESSPATH>mac/corefoundation</ACCESSPATH>
                     <PATH>utilsexc_cf.cpp</PATH>
                     <PATHFORMAT>Unix</PATHFORMAT>
                     <FILEKIND>Text</FILEKIND>
@@ -59433,6 +59423,8 @@
                 </FILE>
                 <FILE>
                     <PATHTYPE>PathRelative</PATHTYPE>
+                    <PATHROOT>Project</PATHROOT>
+                    <ACCESSPATH>mac/corefoundation</ACCESSPATH>
                     <PATH>stdpaths_cf.cpp</PATH>
                     <PATHFORMAT>Unix</PATHFORMAT>
                     <FILEKIND>Text</FILEKIND>
@@ -59440,6 +59432,8 @@
                 </FILE>
                 <FILE>
                     <PATHTYPE>PathRelative</PATHTYPE>
+                    <PATHROOT>Project</PATHROOT>
+                    <ACCESSPATH>mac/corefoundation</ACCESSPATH>
                     <PATH>gsockosx.cpp</PATH>
                     <PATHFORMAT>Unix</PATHFORMAT>
                     <FILEKIND>Text</FILEKIND>
@@ -61436,13 +61430,6 @@
                     <PATHFORMAT>Unix</PATHFORMAT>
                 </FILEREF>
                 <FILEREF>
-                    <PATHTYPE>PathRelative</PATHTYPE>
-                    <PATHROOT>CodeWarrior</PATHROOT>
-                    <ACCESSPATH>MSL/MSL_C++</ACCESSPATH>
-                    <PATH>MSL_MacOS/Lib/Mach-O/MSL_C++_Mach-O_D.a</PATH>
-                    <PATHFORMAT>Unix</PATHFORMAT>
-                </FILEREF>
-                <FILEREF>
                     <PATHTYPE>FileRelative</PATHTYPE>
                     <PATH>../../lib/jpeg_MACH.lib</PATH>
                     <PATHFORMAT>Unix</PATHFORMAT>
@@ -61918,6 +61905,8 @@
                 </FILEREF>
                 <FILEREF>
                     <PATHTYPE>PathRelative</PATHTYPE>
+                    <PATHROOT>Project</PATHROOT>
+                    <ACCESSPATH>mac/corefoundation</ACCESSPATH>
                     <PATH>cfstring.cpp</PATH>
                     <PATHFORMAT>Unix</PATHFORMAT>
                 </FILEREF>
@@ -61930,16 +61919,22 @@
                 </FILEREF>
                 <FILEREF>
                     <PATHTYPE>PathRelative</PATHTYPE>
+                    <PATHROOT>Project</PATHROOT>
+                    <ACCESSPATH>mac/corefoundation</ACCESSPATH>
                     <PATH>utilsexc_cf.cpp</PATH>
                     <PATHFORMAT>Unix</PATHFORMAT>
                 </FILEREF>
                 <FILEREF>
                     <PATHTYPE>PathRelative</PATHTYPE>
+                    <PATHROOT>Project</PATHROOT>
+                    <ACCESSPATH>mac/corefoundation</ACCESSPATH>
                     <PATH>stdpaths_cf.cpp</PATH>
                     <PATHFORMAT>Unix</PATHFORMAT>
                 </FILEREF>
                 <FILEREF>
                     <PATHTYPE>PathRelative</PATHTYPE>
+                    <PATHROOT>Project</PATHROOT>
+                    <ACCESSPATH>mac/corefoundation</ACCESSPATH>
                     <PATH>gsockosx.cpp</PATH>
                     <PATHFORMAT>Unix</PATHFORMAT>
                 </FILEREF>
@@ -63051,7 +63046,7 @@
                 <SETTING><NAME>MWFrontEnd_C_trigraphs</NAME><VALUE>0</VALUE></SETTING>
                 <SETTING><NAME>MWFrontEnd_C_onlystdkeywords</NAME><VALUE>0</VALUE></SETTING>
                 <SETTING><NAME>MWFrontEnd_C_enumsalwaysint</NAME><VALUE>0</VALUE></SETTING>
-                <SETTING><NAME>MWFrontEnd_C_mpwpointerstyle</NAME><VALUE>1</VALUE></SETTING>
+                <SETTING><NAME>MWFrontEnd_C_mpwpointerstyle</NAME><VALUE>0</VALUE></SETTING>
                 <SETTING><NAME>MWFrontEnd_C_prefixname</NAME><VALUE>wx/wxshlba_cwc.h</VALUE></SETTING>
                 <SETTING><NAME>MWFrontEnd_C_ansistrict</NAME><VALUE>0</VALUE></SETTING>
                 <SETTING><NAME>MWFrontEnd_C_mpwcnewline</NAME><VALUE>0</VALUE></SETTING>
@@ -63090,7 +63085,8 @@
                 <!-- Settings for "FTP Panel" panel -->
                 <SETTING><NAME>MWFTP_Post_hostName</NAME><VALUE></VALUE></SETTING>
                 <SETTING><NAME>MWFTP_Post_username</NAME><VALUE></VALUE></SETTING>
-                <SETTING><NAME>MWFTP_Post_password</NAME><VALUE>0&#255;&#194;&#224;&#158;@&#132;&#144;,&#154;&#236;</VALUE></SETTING>
+                <SETTING><NAME>MWFTP_Post_password</NAME><VALUE>0&#255;&#194;&#224;
+&#158;0&#188;&#144;,&#154;&#236;</VALUE></SETTING>
                 <SETTING><NAME>MWFTP_Post_remoteDir</NAME><VALUE></VALUE></SETTING>
                 <SETTING><NAME>MWFTP_Post_ftp_PathVersion</NAME><VALUE>1</VALUE></SETTING>
                 <SETTING><NAME>MWFTP_Post_ftp_PathType</NAME><VALUE>0</VALUE></SETTING>
@@ -63239,6 +63235,10 @@
                     <SETTING><VALUE>Proj</VALUE></SETTING>
                     <SETTING><VALUE>WSPC</VALUE></SETTING>
                 </SETTING>
+
+                <!-- Settings for "OmnisRC Panel" panel -->
+                <SETTING><NAME>Defines</NAME><VALUE>ismac,isMacRCC</VALUE></SETTING>
+                <SETTING><NAME>Compatible</NAME><VALUE>false</VALUE></SETTING>
 
                 <!-- Settings for "Output Flags" panel -->
                 <SETTING><NAME>FileLocked</NAME><VALUE>false</VALUE></SETTING>
@@ -65833,22 +65833,10 @@
                     <PATHFORMAT>Unix</PATHFORMAT>
                 </FILEREF>
                 <FILEREF>
-                    <TARGETNAME>wxlib Mach-O release</TARGETNAME>
-                    <PATHTYPE>PathRelative</PATHTYPE>
-                    <PATH>cfstring.cpp</PATH>
-                    <PATHFORMAT>Unix</PATHFORMAT>
-                </FILEREF>
-                <FILEREF>
                     <TARGETNAME>wxshlb Mach-O debug</TARGETNAME>
                     <PATHTYPE>PathRelative</PATHTYPE>
                     <PATHROOT>Project</PATHROOT>
                     <ACCESSPATH>mac/corefoundation</ACCESSPATH>
-                    <PATH>gsockosx.cpp</PATH>
-                    <PATHFORMAT>Unix</PATHFORMAT>
-                </FILEREF>
-                <FILEREF>
-                    <TARGETNAME>wxlib Mach-O release</TARGETNAME>
-                    <PATHTYPE>PathRelative</PATHTYPE>
                     <PATH>gsockosx.cpp</PATH>
                     <PATHFORMAT>Unix</PATHFORMAT>
                 </FILEREF>
@@ -65861,22 +65849,10 @@
                     <PATHFORMAT>Unix</PATHFORMAT>
                 </FILEREF>
                 <FILEREF>
-                    <TARGETNAME>wxlib Mach-O release</TARGETNAME>
-                    <PATHTYPE>PathRelative</PATHTYPE>
-                    <PATH>stdpaths_cf.cpp</PATH>
-                    <PATHFORMAT>Unix</PATHFORMAT>
-                </FILEREF>
-                <FILEREF>
                     <TARGETNAME>wxshlb Mach-O debug</TARGETNAME>
                     <PATHTYPE>PathRelative</PATHTYPE>
                     <PATHROOT>Project</PATHROOT>
                     <ACCESSPATH>mac/corefoundation</ACCESSPATH>
-                    <PATH>utilsexc_cf.cpp</PATH>
-                    <PATHFORMAT>Unix</PATHFORMAT>
-                </FILEREF>
-                <FILEREF>
-                    <TARGETNAME>wxlib Mach-O release</TARGETNAME>
-                    <PATHTYPE>PathRelative</PATHTYPE>
                     <PATH>utilsexc_cf.cpp</PATH>
                     <PATHFORMAT>Unix</PATHFORMAT>
                 </FILEREF>
@@ -66662,7 +66638,7 @@
                 <PATHFORMAT>Unix</PATHFORMAT>
             </FILEREF>
             <FILEREF>
-                <TARGETNAME>wxshlb Carbon debug</TARGETNAME>
+                <TARGETNAME>wxshlb Carbon release</TARGETNAME>
                 <PATHTYPE>PathRelative</PATHTYPE>
                 <PATHROOT>CodeWarrior</PATHROOT>
                 <ACCESSPATH>:MSL:</ACCESSPATH>
@@ -66694,11 +66670,19 @@
                 <PATHFORMAT>MacOS</PATHFORMAT>
             </FILEREF>
             <FILEREF>
-                <TARGETNAME>wxshlb Carbon debug</TARGETNAME>
+                <TARGETNAME>wxshlb Carbon release</TARGETNAME>
                 <PATHTYPE>PathRelative</PATHTYPE>
                 <PATHROOT>CodeWarrior</PATHROOT>
                 <ACCESSPATH>:MacOS Support:</ACCESSPATH>
                 <PATH>Libraries/Runtime/Libs/MSL_All_Carbon.Shlb</PATH>
+                <PATHFORMAT>Unix</PATHFORMAT>
+            </FILEREF>
+            <FILEREF>
+                <TARGETNAME>wxshlb Carbon debug</TARGETNAME>
+                <PATHTYPE>PathRelative</PATHTYPE>
+                <PATHROOT>CodeWarrior</PATHROOT>
+                <ACCESSPATH>:MacOS Support:</ACCESSPATH>
+                <PATH>Libraries/Runtime/Libs/MSL_All_Carbon_D.Shlb</PATH>
                 <PATHFORMAT>Unix</PATHFORMAT>
             </FILEREF>
             <FILEREF>
@@ -66715,30 +66699,6 @@
                 <PATHROOT>CodeWarrior</PATHROOT>
                 <ACCESSPATH>MacOS X Support</ACCESSPATH>
                 <PATH>Libraries/Runtime/Libs/MSL_Runtime_Mach-O_D.a</PATH>
-                <PATHFORMAT>Unix</PATHFORMAT>
-            </FILEREF>
-            <FILEREF>
-                <TARGETNAME>wxshlb Carbon debug</TARGETNAME>
-                <PATHTYPE>PathRelative</PATHTYPE>
-                <PATHROOT>CodeWarrior</PATHROOT>
-                <ACCESSPATH>:MSL:</ACCESSPATH>
-                <PATH>MSL_C++/MSL_MacOS/Lib/PPC/MSL_C++_PPC.Lib</PATH>
-                <PATHFORMAT>Unix</PATHFORMAT>
-            </FILEREF>
-            <FILEREF>
-                <TARGETNAME>wxshlb Mach-O release</TARGETNAME>
-                <PATHTYPE>PathRelative</PATHTYPE>
-                <PATHROOT>CodeWarrior</PATHROOT>
-                <ACCESSPATH>MSL/MSL_C++</ACCESSPATH>
-                <PATH>MSL_MacOS/Lib/Mach-O/MSL_C++_Mach-O.a</PATH>
-                <PATHFORMAT>Unix</PATHFORMAT>
-            </FILEREF>
-            <FILEREF>
-                <TARGETNAME>wxshlb Mach-O debug</TARGETNAME>
-                <PATHTYPE>PathRelative</PATHTYPE>
-                <PATHROOT>CodeWarrior</PATHROOT>
-                <ACCESSPATH>MSL/MSL_C++</ACCESSPATH>
-                <PATH>MSL_MacOS/Lib/Mach-O/MSL_C++_Mach-O_D.a</PATH>
                 <PATHFORMAT>Unix</PATHFORMAT>
             </FILEREF>
         </GROUP>
