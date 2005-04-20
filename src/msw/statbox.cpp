@@ -267,7 +267,7 @@ WXHRGN wxStaticBox::MSWGetRegionWithoutChildren()
         LONG style = ::GetWindowLong(child, GWL_STYLE);
         wxString str(wxGetWindowClass(child));
         str.UpperCase();
-        if ( str == wxT("BUTTON") && (style & BS_GROUPBOX) != 0 )
+        if ( str == wxT("BUTTON") && (style & BS_GROUPBOX) == BS_GROUPBOX )
         {
             // Don't clip any static boxes, not just this one.  This will
             // result in flicker in overlapping static boxes, but at least
