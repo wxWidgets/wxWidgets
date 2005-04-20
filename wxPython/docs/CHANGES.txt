@@ -43,6 +43,9 @@ wx.stc.StyledTextCtrl:  Added the StyleSetFontEncoding(style, enc)
 method that allows you to set the encoding to be used by the font for
 a particular style.
 
+wxMac: Fixed wx.ComboBox to forward the EVT_CHAR, EVT_KEY_DOWN,
+EVT_KEY_UP and EVT_TEXT events from its embedded text control.
+
 
 
 
