@@ -1066,12 +1066,14 @@
 // override some settings for Metrowerks
 //
 // VZ: isn't this file only used when building with Metrowerks anyhow?
+// CS: no, it is also used by the XCode projects 
 #ifdef __MWERKS__
     #undef wxUSE_DEBUG_CONTEXT
     #define wxUSE_DEBUG_CONTEXT 1
 
     #undef wxUSE_STD_IOSTREAM
-    #define wxUSE_STD_IOSTREAM  1
+    // CS: I have to set this to 0 now, as shared builds are having problems 
+    #define wxUSE_STD_IOSTREAM  0
 
     #undef wxUSE_STACKWALKER
     #define wxUSE_STACKWALKER 0
