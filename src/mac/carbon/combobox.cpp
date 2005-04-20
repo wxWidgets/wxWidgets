@@ -84,6 +84,14 @@ protected:
             if (m_cb->GetParent()->GetEventHandler()->ProcessEvent(NavEvent))
                     return;
         }
+
+        // send the event to the combobox class in case the user has bound EVT_CHAR
+        wxKeyEvent kevt(event);
+        kevt.SetEventObject(m_cb);
+        if (m_cb->GetEventHandler()->ProcessEvent(kevt))
+            // If the event was handled and not skipped then we're done
+            return;
+        
         if ( event.GetKeyCode() == WXK_RETURN )
         {
             wxCommandEvent event(wxEVT_COMMAND_TEXT_ENTER, m_cb->GetId());
@@ -119,18 +127,30 @@ protected:
         event.Skip();
     }
 
-    // Use the KeyUp as a naive approximation for TEXT_UPDATED, even though it is somewhat delayed
-    // but this is less complicated than dealing with idle-ness, and is much better than nothing
     void OnKeyUp( wxKeyEvent& event )
     {
-        if ( event.GetKeyCode() != WXK_RETURN && event.GetKeyCode() != WXK_TAB )
-        {
-            wxCommandEvent event(wxEVT_COMMAND_TEXT_UPDATED, m_cb->GetId());
-            event.SetString( GetValue() );
-            event.SetEventObject( m_cb );
-            m_cb->GetEventHandler()->ProcessEvent(event);
-        }
+        event.SetEventObject(m_cb);
+        event.SetId(m_cb->GetId());
+        if (! m_cb->GetEventHandler()->ProcessEvent(event))
+            event.Skip();
     }
+
+    void OnKeyDown( wxKeyEvent& event )
+    {
+        event.SetEventObject(m_cb);
+        event.SetId(m_cb->GetId());
+        if (! m_cb->GetEventHandler()->ProcessEvent(event))
+            event.Skip();
+    }
+    
+    void OnText( wxCommandEvent& event )
+    {
+        event.SetEventObject(m_cb);
+        event.SetId(m_cb->GetId());
+        if (! m_cb->GetEventHandler()->ProcessEvent(event))
+            event.Skip();
+    }        
+
 private:
     wxComboBox *m_cb;
 
@@ -138,8 +158,10 @@ private:
 };
 
 BEGIN_EVENT_TABLE(wxComboBoxText, wxTextCtrl)
-    EVT_CHAR( wxComboBoxText::OnChar)
-    EVT_KEY_UP( wxComboBoxText::OnKeyUp)
+    EVT_KEY_DOWN( wxComboBoxText::OnKeyDown)
+    EVT_CHAR(     wxComboBoxText::OnChar)
+    EVT_KEY_UP(   wxComboBoxText::OnKeyUp)
+    EVT_TEXT( -1, wxComboBoxText::OnText)
 END_EVENT_TABLE()
 
 class wxComboBoxChoice : public wxChoice
