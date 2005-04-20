@@ -1,11 +1,11 @@
 // Change this to your bundle identifier string
-#define kBundleIdentifier "org.wxwindows.samples.minimal"
+#define kBundleIdentifier "org.wxwidgets.samples.minimal"
 
 // Change this to your short version string
 #define kBundleShortVersion __OUTPUT_FILENAME__ " version 1.0"
 
 // Change this to the string to display in the Finder's Get Info window
-#define kBundleGetInfo kBundleShortVersion ", Copyright © 2003 by wxWindows."
+#define kBundleGetInfo kBundleShortVersion ", Copyright © 2005 by wxWidgets."
 
 plist
 {
