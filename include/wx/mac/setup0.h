@@ -131,7 +131,7 @@
 // Default is 1 if supported by the compiler.
 //
 // Recommended setting: 1, set to 0 if your programs never crash
-#define wxUSE_STACKWALKER 1
+#define wxUSE_STACKWALKER 0
 
 // Set this to 1 to compile in wxDebugReport class which allows you to create
 // and optionally upload to your web site a debug report consisting of back
