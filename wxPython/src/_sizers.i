@@ -932,7 +932,7 @@ the item.", "");
     %pythoncode {
     def Hide(self, item, recursive=False):
         """
-        A convenience method for `Show`(item, False, recursive).
+        A convenience method for `Show` (item, False, recursive).
         """
         return self.Show(item, False, recursive)
     }

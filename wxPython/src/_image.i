@@ -31,7 +31,10 @@ enum {
 //---------------------------------------------------------------------------
 %newgroup
 
-
+DocStr(wxImageHandler,
+"This is the base class for implementing image file loading/saving, and
+image creation from data. It is used within `wx.Image` and is not
+normally seen by the application.", "");
 class wxImageHandler : public wxObject {
 public:
     // wxImageHandler();    Abstract Base Class
@@ -618,21 +621,29 @@ enum
 };
 
 
+DocStr(wxBMPHandler,
+"A `wx.ImageHandler` for \*.bmp bitmap files.", "");
 class wxBMPHandler : public wxImageHandler {
 public:
     wxBMPHandler();
 };
 
+DocStr(wxICOHandler,
+"A `wx.ImageHandler` for \*.ico icon files.", "");
 class wxICOHandler : public wxBMPHandler {
 public:
     wxICOHandler();
 };
 
+DocStr(wxCURHandler,
+"A `wx.ImageHandler` for \*.cur cursor files.", "");
 class wxCURHandler : public wxICOHandler {
 public:
     wxCURHandler();
 };
 
+DocStr(wxANIHandler,
+"A `wx.ImageHandler` for \*.ani animated cursor files.", "");
 class wxANIHandler : public wxCURHandler {
 public:
     wxANIHandler();
@@ -641,40 +652,54 @@ public:
 
 //---------------------------------------------------------------------------
 
+DocStr(wxPNGHandler,
+"A `wx.ImageHandler` for PNG image files.", "");
 class wxPNGHandler : public wxImageHandler {
 public:
     wxPNGHandler();
 };
 
 
+DocStr(wxGIFHandler,
+"A `wx.ImageHandler` for GIF image files.", "");
 class wxGIFHandler : public wxImageHandler {
 public:
     wxGIFHandler();
 };
 
 
+DocStr(wxPCXHandler,
+"A `wx.ImageHandler` for PCX imager files.", "");
 class wxPCXHandler : public wxImageHandler {
 public:
     wxPCXHandler();
 };
 
 
+DocStr(wxJPEGHandler,
+"A `wx.ImageHandler` for JPEG/JPG image files.", "");
 class wxJPEGHandler : public wxImageHandler {
 public:
     wxJPEGHandler();
 };
 
 
+DocStr(wxPNMHandler,
+"A `wx.ImageHandler` for PNM image files.", "");
 class wxPNMHandler : public wxImageHandler {
 public:
     wxPNMHandler();
 };
 
+DocStr(wxXPMHandler,
+"A `wx.ImageHandler` for XPM image.", "");
 class wxXPMHandler : public wxImageHandler {
 public:
     wxXPMHandler();
 };
 
+DocStr(wxTIFFHandler,
+"A `wx.ImageHandler` for TIFF image files.", "");
 class wxTIFFHandler : public wxImageHandler {
 public:
     wxTIFFHandler();
@@ -682,6 +707,8 @@ public:
 
 
 #if wxUSE_IFF
+DocStr(wxIFFHandler,
+"A `wx.ImageHandler` for IFF image files.", "");
 class wxIFFHandler : public wxImageHandler {
 public:
     wxIFFHandler();

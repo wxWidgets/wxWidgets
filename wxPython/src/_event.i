@@ -273,7 +273,7 @@ EVT_SCROLLWIN_PAGEDOWN = wx.PyEventBinder( wxEVT_SCROLLWIN_PAGEDOWN )
 EVT_SCROLLWIN_THUMBTRACK = wx.PyEventBinder( wxEVT_SCROLLWIN_THUMBTRACK )
 EVT_SCROLLWIN_THUMBRELEASE = wx.PyEventBinder( wxEVT_SCROLLWIN_THUMBRELEASE )
 
-%# Scrolling from wxSlider and wxScrollBar
+%# Scrolling from wx.Slider and wx.ScrollBar
 EVT_SCROLL = wx.PyEventBinder([ wxEVT_SCROLL_TOP, 
                                wxEVT_SCROLL_BOTTOM, 
                                wxEVT_SCROLL_LINEUP, 
@@ -295,7 +295,7 @@ EVT_SCROLL_THUMBTRACK = wx.PyEventBinder( wxEVT_SCROLL_THUMBTRACK )
 EVT_SCROLL_THUMBRELEASE = wx.PyEventBinder( wxEVT_SCROLL_THUMBRELEASE )
 EVT_SCROLL_ENDSCROLL = wx.PyEventBinder( wxEVT_SCROLL_ENDSCROLL )
 
-%# Scrolling from wxSlider and wxScrollBar, with an id
+%# Scrolling from wx.Slider and wx.ScrollBar, with an id
 EVT_COMMAND_SCROLL = wx.PyEventBinder([ wxEVT_SCROLL_TOP, 
                                        wxEVT_SCROLL_BOTTOM, 
                                        wxEVT_SCROLL_LINEUP, 
@@ -360,22 +360,56 @@ EVT_CONTEXT_MENU = wx.PyEventBinder( wxEVT_CONTEXT_MENU )
 //---------------------------------------------------------------------------
 %newgroup;
 
+DocStr(wxEvent,
+"An event is a structure holding information about an event passed to a
+callback or member function. wx.Event is an abstract base class for
+other event classes", "");
+
 class wxEvent : public wxObject {
 public:
     // wxEvent(int winid = 0, wxEventType commandType = wxEVT_NULL);     // *** This class is now an ABC
     ~wxEvent();
 
-    void SetEventType(wxEventType typ);
-    wxEventType GetEventType() const;
-    wxObject *GetEventObject() const;
-    void SetEventObject(wxObject *obj);
+    DocDeclStr(
+        void , SetEventType(wxEventType typ),
+        "Sets the specific type of the event.", "");
+    
+    DocDeclStr(
+        wxEventType , GetEventType() const,
+        "Returns the identifier of the given event type, such as
+``wxEVT_COMMAND_BUTTON_CLICKED``.", "");
+    
+    DocDeclStr(
+        wxObject *, GetEventObject() const,
+        "Returns the object (usually a window) associated with the event, if
+any.", "");
+    
+    DocDeclStr(
+        void , SetEventObject(wxObject *obj),
+        "Sets the originating object, or in other words, obj is normally the
+object that is sending the event.", "");
+    
     long GetTimestamp() const;
     void SetTimestamp(long ts = 0);
-    int  GetId() const;
-    void SetId(int Id);
+    
+    DocDeclStr(
+        int  , GetId() const,
+        "Returns the identifier associated with this event, such as a button
+command id.", "");
+    
+    DocDeclStr(
+        void , SetId(int Id),
+        "Set's the ID for the event.  This is usually the ID of the window that
+is sending the event, but it can also be a command id from a menu
+item, etc.", "");
+    
 
 
-    bool IsCommandEvent() const;
+    DocDeclStr(
+        bool , IsCommandEvent() const,
+        "Returns true if the event is or is derived from `wx.CommandEvent` else
+it returns false. Note: Exists only for optimization purposes.", "");
+    
 
     DocDeclStr(
         void , Skip(bool skip = true),
@@ -388,18 +422,34 @@ handler has finished.  Skip(True) will cause the event processing
 system to continue searching for a handler function for this event.
 ", "");
     
-    bool GetSkipped() const;
+    DocDeclStr(
+        bool , GetSkipped() const,
+        "Returns true if the event handler should be skipped, false otherwise.
+:see: `Skip`", "");
+    
 
-    // Determine if this event should be propagating to the parent window.
-    bool ShouldPropagate() const;
+    DocDeclStr(
+        bool , ShouldPropagate() const,
+        "Test if this event should be propagated to the parent window or not,
+i.e. if the propagation level is currently greater than 0.", "");
+    
 
     // Stop an event from propagating to its parent window, returns the old
     // propagation level value
-    int StopPropagation();
+    DocDeclStr(
+        int , StopPropagation(),
+        "Stop the event from propagating to its parent window.  Returns the old
+propagation level value which may be later passed to
+`ResumePropagation` to allow propagating the event again.", "");
+    
 
-    // Resume the event propagation by restoring the propagation level
-    // (returned by StopPropagation())
-    void ResumePropagation(int propagationLevel);
+    DocDeclStr(
+        void , ResumePropagation(int propagationLevel),
+        "Resume the event propagation by restoring the propagation level.  (For
+example, you can use the value returned by an earlier call to
+`StopPropagation`.)
+", "");
+    
 
     // this function is used to create a copy of the event polymorphically and
     // all derived classes must implement it because otherwise wxPostEvent()
@@ -411,7 +461,10 @@ system to continue searching for a handler function for this event.
 //---------------------------------------------------------------------------
 %newgroup;
 
-// Helper class to temporarily change an event not to propagate.
+DocStr(wxPropagationDisabler,
+"Helper class to temporarily change an event not to propagate.  Simply
+create an instance of this class and then whe it is destroyed the
+propogation of the event will be restored.", "");
 class  wxPropagationDisabler
 {
 public:
@@ -420,7 +473,10 @@ public:
 };
 
 
-// Another one to temporarily lower propagation level.
+DocStr( wxPropagateOnce,
+"A helper class that will temporarily lower propagation level of an
+event.  Simply create an instance of this class and then whe it is
+destroyed the propogation of the event will be restored.", "");
 class  wxPropagateOnce
 {
 public:
@@ -430,6 +486,11 @@ public:
 
 //---------------------------------------------------------------------------
 %newgroup;
+
+DocStr(wxCommandEvent,
+"This event class contains information about command events, which
+originate from a variety of simple controls, as well as menus and
+toolbars.", "");
 
 class wxCommandEvent : public wxEvent
 {
@@ -446,25 +507,52 @@ public:
 //     void *GetClientObject() const { return m_clientObject; }
 
     
-    // Get listbox selection if single-choice
-    int GetSelection() const;
+    DocDeclStr(
+        int , GetSelection() const,
+        "Returns item index for a listbox or choice selection event (not valid
+for a deselection).", "");
+    
 
-    // Set/Get listbox/choice selection string
     void SetString(const wxString& s);
-    wxString GetString() const;
+    DocDeclStr(
+        wxString , GetString() const,
+        "Returns item string for a listbox or choice selection event (not valid
+for a deselection).", "");
+    
 
-    // Get checkbox value
-    bool IsChecked() const;
+    DocDeclStr(
+        bool , IsChecked() const,
+        "This method can be used with checkbox and menu events: for the
+checkboxes, the method returns true for a selection event and false
+for a deselection one. For the menu events, this method indicates if
+the menu item just has become checked or unchecked (and thus only
+makes sense for checkable menu items).", "");
+    
     %pythoncode { Checked = IsChecked }
     
-    // True if the listbox event was a selection.
-    bool IsSelection() const;
+    DocDeclStr(
+        bool , IsSelection() const,
+        "For a listbox or similar event, returns true if it is a selection,
+false if it is a deselection.", "");
+    
 
     void SetExtraLong(long extraLong);
-    long GetExtraLong() const;
+    DocDeclStr(
+        long , GetExtraLong() const,
+        "Returns extra information dependant on the event objects type. If the event
+comes from a listbox selection, it is a boolean determining whether the event
+was a selection (true) or a deselection (false). A listbox deselection only
+occurs for multiple-selection boxes, and in this case the index and string
+values are indeterminate and the listbox must be examined by the application.", "");
+    
 
     void SetInt(int i);
-    long GetInt() const;
+    DocDeclStr(
+        long , GetInt() const,
+        "Returns the integer identifier corresponding to a listbox, choice or radiobox
+selection (only if the event was a selection, not a deselection), or a boolean
+value representing the value of a checkbox.", "");
+    
 
     virtual wxEvent *Clone() const;
 
@@ -473,37 +561,103 @@ public:
 //---------------------------------------------------------------------------
 %newgroup;
 
-// this class adds a possibility to react (from the user) code to a control
-// notification: allow or veto the operation being reported.
+DocStr(wxNotifyEvent,
+"An instance of this class (or one of its derived classes) is sent from
+a control when the control's state is being changed and the control
+allows that change to be prevented from happening.  The event handler
+can call `Veto` or `Allow` to tell the control what to do.", "");
+
 class wxNotifyEvent : public wxCommandEvent
 {
 public:
     wxNotifyEvent(wxEventType commandType = wxEVT_NULL, int winid = 0);
 
-    // veto the operation (usually it's allowed by default)
-    void Veto();
+    DocDeclStr(
+        void , Veto(),
+        "Prevents the change announced by this event from happening.
 
-    // allow the operation if it was disabled by default
-    void Allow();
+It is in general a good idea to notify the user about the reasons for
+vetoing the change because otherwise the applications behaviour (which
+just refuses to do what the user wants) might be quite surprising.", "");
+    
 
-    // for implementation code only: is the operation allowed?
-    bool IsAllowed();
+    DocDeclStr(
+        void , Allow(),
+        "This is the opposite of `Veto`: it explicitly allows the event to be
+processed. For most events it is not necessary to call this method as
+the events are allowed anyhow but some are forbidden by default (this
+will be mentioned in the corresponding event description).", "");
+    
+
+    DocDeclStr(
+        bool , IsAllowed(),
+        "Returns true if the change is allowed (`Veto` hasn't been called) or
+false otherwise (if it was).", "");
+    
 };
 
 
 //---------------------------------------------------------------------------
 %newgroup;
 
-// Scroll event class, derived form wxCommandEvent. wxScrollEvents are
-// sent by wxSlider and wxScrollBar.
+DocStr(wxScrollEvent,
+"A scroll event holds information about events sent from stand-alone
+scrollbars and sliders. Note that scrolled windows do not send
+instnaces of this event class, but send the `wx.ScrollWinEvent`
+instead.", "
+
+Events
+-------
+    =======================     ==========================================
+    EVT_SCROLL                  Used to bind all scroll events
+    EVT_SCROLL_TOP              scroll-to-top events (minimum position)
+    EVT_SCROLL_BOTTOM           scroll-to-bottom events (maximum position)
+    EVT_SCROLL_LINEUP           line up events
+    EVT_SCROLL_LINEDOWN         line down events
+    EVT_SCROLL_PAGEUP           page up events
+    EVT_SCROLL_PAGEDOWN         page down events
+    EVT_SCROLL_THUMBTRACK       thumbtrack events (frequent events sent
+                                as the user drags the 'thumb')
+    EVT_SCROLL_THUMBRELEASE     thumb release events.
+    EVT_SCROLL_ENDSCROLL        End of scrolling
+    =======================     ==========================================
+
+Note
+------
+    The EVT_SCROLL_THUMBRELEASE event is only emitted when actually
+    dragging the thumb using the mouse and releasing it (This
+    EVT_SCROLL_THUMBRELEASE event is also followed by an
+    EVT_SCROLL_ENDSCROLL event).
+
+    The EVT_SCROLL_ENDSCROLL event also occurs when using the keyboard
+    to change the thumb position, and when clicking next to the thumb
+    (In all these cases the EVT_SCROLL_THUMBRELEASE event does not
+    happen).
+
+    In short, the EVT_SCROLL_ENDSCROLL event is triggered when
+    scrolling/ moving has finished. The only exception (unfortunately)
+    is that changing the thumb position using the mousewheel does give
+    a EVT_SCROLL_THUMBRELEASE event but NOT an EVT_SCROLL_ENDSCROLL
+    event.
+");
+
 class  wxScrollEvent : public wxCommandEvent
 {
 public:
-    wxScrollEvent(wxEventType commandType = wxEVT_NULL,
-                  int winid = 0, int pos = 0, int orient = 0);
+    DocCtorStr(
+        wxScrollEvent(wxEventType commandType = wxEVT_NULL,
+                      int winid = 0, int pos = 0, int orient = 0),
+        "", "");
 
-    int GetOrientation() const;
-    int GetPosition() const;
+    DocDeclStr(
+        int , GetOrientation() const,
+        "Returns wx.HORIZONTAL or wx.VERTICAL, depending on the orientation of
+the scrollbar.", "");
+    
+    DocDeclStr(
+        int , GetPosition() const,
+        "Returns the position of the scrollbar.", "");
+    
     void SetOrientation(int orient);
     void SetPosition(int pos);
 };
@@ -512,22 +666,100 @@ public:
 //---------------------------------------------------------------------------
 %newgroup;
 
-// ScrollWin event class, derived fom wxEvent. wxScrollWinEvents
-// are sent by wxWindow.
+DocStr(wxScrollWinEvent,
+"A wx.ScrollWinEvent holds information about scrolling and is sent from
+scrolling windows.", "
+
+Events
+-------
+    ==========================     ==========================================
+    EVT_SCROLLWIN                  Used to bind all scrolled window scroll events
+    EVT_SCROLLWIN_TOP              scroll-to-top events (minimum position)
+    EVT_SCROLLWIN_BOTTOM           scroll-to-bottom events (maximum position)
+    EVT_SCROLLWIN_LINEUP           line up events
+    EVT_SCROLLWIN_LINEDOWN         line down events
+    EVT_SCROLLWIN_PAGEUP           page up events
+    EVT_SCROLLWIN_PAGEDOWN         page down events
+    EVT_SCROLLWIN_THUMBTRACK       thumbtrack events (frequent events sent
+                                   as the user drags the 'thumb')
+    EVT_SCROLLWIN_THUMBRELEASE     thumb release events.
+    EVT_SCROLLWIN_ENDSCROLL        End of scrolling
+    ==========================     ==========================================
+
+");
+
 class wxScrollWinEvent : public wxEvent
 {
 public:
     wxScrollWinEvent(wxEventType commandType = wxEVT_NULL,
                      int pos = 0, int orient = 0);
 
-    int GetOrientation() const;
-    int GetPosition() const;
+    DocDeclStr(
+        int , GetOrientation() const,
+        "Returns wx.HORIZONTAL or wx.VERTICAL, depending on the orientation of
+the scrollbar.", "");
+    
+    DocDeclStr(
+        int , GetPosition() const,
+        "Returns the position of the scrollbar for the thumb track and release
+events. Note that this field can't be used for the other events, you
+need to query the window itself for the current position in that case.", "");
+    
     void SetOrientation(int orient);
     void SetPosition(int pos);
 };
 
 //---------------------------------------------------------------------------
 %newgroup;
+
+
+DocStr(wxMouseEvent,
+"This event class contains information about the events generated by
+the mouse: they include mouse buttons press and release events and
+mouse move events.
+
+All mouse events involving the buttons use ``wx.MOUSE_BTN_LEFT`` for
+the left mouse button, ``wx.MOUSE_BTN_MIDDLE`` for the middle one and
+``wx.MOUSE_BTN_RIGHT`` for the right one. Note that not all mice have
+a middle button so a portable application should avoid relying on the
+events from it.
+
+Note the difference between methods like `LeftDown` and `LeftIsDown`:
+the former returns true when the event corresponds to the left mouse
+button click while the latter returns true if the left mouse button is
+currently being pressed. For example, when the user is dragging the
+mouse you can use `LeftIsDown` to test whether the left mouse button
+is (still) depressed. Also, by convention, if `LeftDown` returns true,
+`LeftIsDown` will also return true in wxWidgets whatever the
+underlying GUI behaviour is (which is platform-dependent). The same
+applies, of course, to other mouse buttons as well.", "
+
+Events
+-------
+    ==================     ==============================================
+    EVT_LEFT_DOWN          Left mouse button down event. The handler
+                           of this event should normally call
+                           event.Skip() to allow the default processing
+                           to take place as otherwise the window under
+                           mouse wouldn't get the focus.
+    EVT_LEFT_UP            Left mouse button up event
+    EVT_LEFT_DCLICK        Left mouse button double click event
+    EVT_MIDDLE_DOWN        Middle mouse button down event
+    EVT_MIDDLE_UP          Middle mouse button up event
+    EVT_MIDDLE_DCLICK      Middle mouse button double click event
+    EVT_RIGHT_DOWN         Right mouse button down event
+    EVT_RIGHT_UP           Right mouse button up event
+    EVT_RIGHT_DCLICK       Right mouse button double click event
+    EVT_MOTION             Event sent when the mouse is moving
+    EVT_ENTER_WINDOW       Event sent when the mouse enters the
+                           boundaries of a window.
+    EVT_LEAVE_WINDOW       Sent when the mouse leaves the window's bounds
+    EVT_MOUSEWHEEL         Mouse scroll wheel event
+    EVT_MOUSE_EVENTS       Binds all mouse events at once.
+    ==================     ==============================================
+
+");
+
 
 // the symbolic names for the mouse buttons
 enum
@@ -544,80 +776,204 @@ enum
 class  wxMouseEvent : public wxEvent
 {
 public:
-    wxMouseEvent(wxEventType mouseType = wxEVT_NULL);
+    DocCtorStr(
+        wxMouseEvent(wxEventType mouseType = wxEVT_NULL),
+"Constructs a wx.MouseEvent.  Valid event types are:
 
-    // Was it a button event? (*doesn't* mean: is any button *down*?)
-    bool IsButton() const;
+    * wxEVT_ENTER_WINDOW
+    * wxEVT_LEAVE_WINDOW
+    * wxEVT_LEFT_DOWN
+    * wxEVT_LEFT_UP
+    * wxEVT_LEFT_DCLICK
+    * wxEVT_MIDDLE_DOWN
+    * wxEVT_MIDDLE_UP
+    * wxEVT_MIDDLE_DCLICK
+    * wxEVT_RIGHT_DOWN
+    * wxEVT_RIGHT_UP
+    * wxEVT_RIGHT_DCLICK
+    * wxEVT_MOTION
+    * wxEVT_MOUSEWHEEL ", "");
 
-    // Was it a down event from this (or any) button?
-    bool ButtonDown(int but = wxMOUSE_BTN_ANY) const;
 
-    // Was it a dclick event from this (or any) button?
-    bool ButtonDClick(int but = wxMOUSE_BTN_ANY) const;
+    DocDeclStr(
+        bool , IsButton() const,
+        "Returns true if the event was a mouse button event (not necessarily a
+button down event - that may be tested using `ButtonDown`).", "");
+    
 
-    // Was it a up event from this (or any) button?
-    bool ButtonUp(int but = wxMOUSE_BTN_ANY) const;
+    DocDeclStr(
+        bool , ButtonDown(int but = wxMOUSE_BTN_ANY) const,
+        "If the argument is omitted, this returns true if the event was any mouse
+button down event. Otherwise the argument specifies which button-down
+event shold be checked for (see `Button` for the possible values).", "");
+    
 
-    // Was the given button changing state?
-    bool Button(int but) const;
+    DocDeclStr(
+        bool , ButtonDClick(int but = wxMOUSE_BTN_ANY) const,
+        "If the argument is omitted, this returns true if the event was any
+mouse double click event. Otherwise the argument specifies which
+double click event to check for (see `Button` for the possible
+values).", "");
+    
+
+    DocDeclStr(
+        bool , ButtonUp(int but = wxMOUSE_BTN_ANY) const,
+        "If the argument is omitted, this returns true if the event was any
+mouse button up event. Otherwise the argument specifies which
+button up event to check for (see `Button` for the possible values).", "");
+    
+
+    DocDeclStr(
+        bool , Button(int button) const,
+        "Returns true if the identified mouse button is changing state. Valid
+values of button are:
+
+     ====================      =====================================
+     wx.MOUSE_BTN_LEFT         check if left button was pressed
+     wx.MOUSE_BTN_MIDDLE       check if middle button was pressed
+     wx.MOUSE_BTN_RIGHT        check if right button was pressed
+     wx.MOUSE_BTN_ANY          check if any button was pressed
+     ====================      =====================================
+", "");
+    
 
     // Was the given button in Down state?
     bool ButtonIsDown(int but) const;
 
-    // Get the button which is changing state (wxMOUSE_BTN_NONE if none)
-    int GetButton() const;
+    DocDeclStr(
+        int , GetButton() const,
+        "Returns the mouse button which generated this event or
+wx.MOUSE_BTN_NONE if no button is involved (for mouse move, enter or
+leave event, for example). Otherwise wx.MOUSE_BTN_LEFT is returned for
+the left button down, up and double click events, wx.MOUSE_BTN_MIDDLE
+and wx.MOUSE_BTN_RIGHT for the same events for the middle and the
+right buttons respectively.", "");
+    
 
-    // Find state of shift/control keys
-    bool ControlDown() const;
-    bool MetaDown() const;
-    bool AltDown() const;
-    bool ShiftDown() const;
+    DocDeclStr(
+        bool , ControlDown() const,
+        "Returns true if the control key was down at the time of the event.", "");
+    
+    DocDeclStr(
+        bool , MetaDown() const,
+        "Returns true if the Meta key was down at the time of the event.", "");
+    
+    
+    DocDeclStr(
+        bool , AltDown() const,
+        "Returns true if the Alt key was down at the time of the event.", "");
+    
+    DocDeclStr(
+        bool , ShiftDown() const,
+        "Returns true if the Shift key was down at the time of the event.", "");
+    
 
     DocDeclStr(
         bool , CmdDown() const,
         "\"Cmd\" is a pseudo key which is the same as Control for PC and Unix
 platforms but the special \"Apple\" (a.k.a as \"Command\") key on
-Macs: it makes often sense to use it instead of, say, `ControlDown`
+Macs: it often makes sense to use it instead of, say, `ControlDown`
 because Cmd key is used for the same thing under Mac as Ctrl
-elsewhere. The Ctrl still exists, it's just not used for this
+elsewhere. The Ctrl key still exists, it's just not used for this
 purpose. So for non-Mac platforms this is the same as `ControlDown`
 and Macs this is the same as `MetaDown`.", "");
     
-    // Find which event was just generated
-    bool LeftDown() const;
-    bool MiddleDown() const;
-    bool RightDown() const;
 
-    bool LeftUp() const;
-    bool MiddleUp() const;
-    bool RightUp() const;
+    DocDeclStr(
+        bool , LeftDown() const,
+        "Returns true if the left mouse button state changed to down.", "");
+    
+    DocDeclStr(
+        bool , MiddleDown() const,
+        "Returns true if the middle mouse button state changed to down.", "");
+    
+    DocDeclStr(
+        bool , RightDown() const,
+        "Returns true if the right mouse button state changed to down.", "");
+    
 
-    bool LeftDClick() const;
-    bool MiddleDClick() const;
-    bool RightDClick() const;
+    
+    DocDeclStr(
+        bool , LeftUp() const,
+        "Returns true if the left mouse button state changed to up.", "");
+    
+    DocDeclStr(
+        bool , MiddleUp() const,
+        "Returns true if the middle mouse button state changed to up.", "");
+    
+    DocDeclStr(
+        bool , RightUp() const,
+        "Returns true if the right mouse button state changed to up.", "");
+    
 
-    // Find the current state of the mouse buttons (regardless
-    // of current event type)
-    bool LeftIsDown();
-    bool MiddleIsDown();
-    bool RightIsDown();
 
-    // True if a button is down and the mouse is moving
-    bool Dragging() const;
+    
+    DocDeclStr(
+        bool , LeftDClick() const,
+        "Returns true if the event was a left button double click.", "");
+    
+    DocDeclStr(
+        bool , MiddleDClick() const,
+        "Returns true if the event was a middle button double click.", "");
+    
+    DocDeclStr(
+        bool , RightDClick() const,
+        "Returns true if the event was a right button double click.", "");
+    
 
-    // True if the mouse is moving, and no button is down
-    bool Moving() const;
+    
+    DocDeclStr(
+        bool , LeftIsDown(),
+        "Returns true if the left mouse button is currently down, independent
+of the current event type.
 
-    // True if the mouse is just entering the window
-    bool Entering() const;
+Please notice that it is not the same as LeftDown which returns true
+if the left mouse button was just pressed. Rather, it describes the
+state of the mouse button before the event happened.
 
-    // True if the mouse is just leaving the window
-    bool Leaving() const;
+This event is usually used in the mouse event handlers which process
+\"move mouse\" messages to determine whether the user is (still)
+dragging the mouse.", "");
+    
+    DocDeclStr(
+        bool , MiddleIsDown(),
+        "Returns true if the middle mouse button is currently down, independent
+of the current event type.", "");
+    
+    DocDeclStr(
+        bool , RightIsDown(),
+        "Returns true if the right mouse button is currently down, independent
+of the current event type.", "");
+    
+
+    
+    DocDeclStr(
+        bool , Dragging() const,
+        "Returns true if this was a dragging event (motion while a button is
+depressed).", "");
+    
+
+    DocDeclStr(
+        bool , Moving() const,
+        "Returns true if this was a motion event and no mouse buttons were
+pressed. If any mouse button is held pressed, then this method returns
+false and Dragging returns true.", "");
+    
+
+    DocDeclStr(
+        bool , Entering() const,
+        "Returns true if the mouse was entering the window.", "");
+    
+
+    DocDeclStr(
+        bool , Leaving() const,
+        "Returns true if the mouse was leaving the window.", "");
+    
 
 
     DocStr(GetPosition,   // sets the docstring for both
-           "Returns the position of the mouse in window coordinates when the event
-happened.", "");
+           "Returns the pixel position of the mouse in window coordinates when the
+event happened.", "");
     wxPoint GetPosition();
 
     DocDeclAName(
@@ -625,35 +981,51 @@ happened.", "");
         "GetPositionTuple() -> (x,y)",
         GetPositionTuple);
     
-    // Find the logical position of the event given the DC
-    wxPoint GetLogicalPosition(const wxDC& dc) const;
+    DocDeclStr(
+        wxPoint , GetLogicalPosition(const wxDC& dc) const,
+        "Returns the logical mouse position in pixels (i.e. translated
+according to the translation set for the DC, which usually indicates
+that the window has been scrolled).", "");
+    
 
-    // Get X position
-    wxCoord GetX() const;
+    DocDeclStr(
+        wxCoord , GetX() const,
+        "Returns X coordinate of the physical mouse event position.", "");
+    
+    DocDeclStr(
+        wxCoord , GetY() const,
+        "Returns Y coordinate of the physical mouse event position.", "");
+    
 
-    // Get Y position
-    wxCoord GetY() const;
+    DocDeclStr(
+        int , GetWheelRotation() const,
+        "Get wheel rotation, positive or negative indicates direction of
+rotation. Current devices all send an event when rotation is equal to
++/-WheelDelta, but this allows for finer resolution devices to be
+created in the future. Because of this you shouldn't assume that one
+event is equal to 1 line or whatever, but you should be able to either
+do partial line scrolling or wait until +/-WheelDelta rotation values
+have been accumulated before scrolling.", "");
+    
 
-    // Get wheel rotation, positive or negative indicates direction of
-    // rotation.  Current devices all send an event when rotation is equal to
-    // +/-WheelDelta, but this allows for finer resolution devices to be
-    // created in the future.  Because of this you shouldn't assume that one
-    // event is equal to 1 line or whatever, but you should be able to either
-    // do partial line scrolling or wait until +/-WheelDelta rotation values
-    // have been accumulated before scrolling.
-    int GetWheelRotation() const;
+    DocDeclStr(
+        int , GetWheelDelta() const,
+        "Get wheel delta, normally 120. This is the threshold for action to be
+taken, and one such action (for example, scrolling one increment)
+should occur for each delta.", "");
+    
 
-    // Get wheel delta, normally 120.  This is the threshold for action to be
-    // taken, and one such action (for example, scrolling one increment)
-    // should occur for each delta.
-    int GetWheelDelta() const;
+    DocDeclStr(
+        int , GetLinesPerAction() const,
+        "Returns the configured number of lines (or whatever) to be scrolled
+per wheel action. Defaults to three.", "");
+    
 
-    // Returns the configured number of lines (or whatever) to be scrolled per
-    // wheel action.  Defaults to one.
-    int GetLinesPerAction() const;
-
-    // Is the system set to do page scrolling?
-    bool IsPageScroll() const;
+    DocDeclStr(
+        bool , IsPageScroll() const,
+        "Returns true if the system has been setup to do page scrolling with
+the mouse wheel instead of line scrolling.", "");
+    
 
 public:
     wxCoord m_x, m_y;
