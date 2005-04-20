@@ -6315,7 +6315,7 @@
 				GCC_PREFIX_HEADER = ../include/wx/wxprec.h;
 				GCC_PREPROCESSOR_DEFINITIONS = "NO_GCC_PRAGMA __WXDEBUG__ WXMAKINGDLL __WXMAC__ wxUSE_BASE=1 _FILE_OFFSET_BITS=64 _LARGE_FILES __WXMAC_XCODE__=1 MACOS_CLASSIC WX_PRECOMP=1";
 				HEADER_SEARCH_PATHS = "${SYMROOT}/include ../include mac/carbon/morefilex common jpeg png expat/lib regex tiff - $(SYSTEM_DEVELOPER_DIR)/Headers/FlatCarbon /usr/include";
-				INSTALL_PATH = "@executable_path";
+				INSTALL_PATH = "@executable_path/../Frameworks/";
 				LIBRARY_SEARCH_PATHS = /usr/lib/gcc/darwin/3.1;
 				LIBRARY_STYLE = DYNAMIC;
 				OTHER_CFLAGS = "";
@@ -9151,7 +9151,7 @@
 				GCC_PREFIX_HEADER = ../include/wx/wxprec.h;
 				GCC_PREPROCESSOR_DEFINITIONS = "NO_GCC_PRAGMA WXMAKINGDLL __WXMAC__ wxUSE_BASE=1 _FILE_OFFSET_BITS=64 _LARGE_FILES __WXMAC_XCODE__=1 MACOS_CLASSIC WX_PRECOMP=1";
 				HEADER_SEARCH_PATHS = "${SYMROOT}/include ../include mac/carbon/morefilex jpeg common png expat/lib regex tiff - $(SYSTEM_DEVELOPER_DIR)/Headers/FlatCarbon /usr/include";
-				INSTALL_PATH = "@executable_path";
+				INSTALL_PATH = "@executable_path/../Frameworks/";
 				LIBRARY_STYLE = DYNAMIC;
 				OTHER_CFLAGS = "";
 				OTHER_LDFLAGS = "-flat_namespace";
