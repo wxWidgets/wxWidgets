@@ -16,17 +16,17 @@ wxGTK:  The configure flags for selecting GTK+ 1.2.x or 2.x has
 changed slightly.  It is now --with-gtk[=VERSION] where VERSION is
 either '1', '2' or 'any'.  The default is '2'.
 
-wx.stc.StyledTextCtrl:  Added the following methods for alternate ways
+wx.stc.StyledTextCtrl: Added the following methods for alternate ways
 to set and fetch text from the document buffer.  They work similarly
 to the existing methods of the same name, except that they don't go
 through the same string/unicode <--> wxString conversions.  The "Raw"
-methods will do no conversions at all and in a unicode build of wxPython
-the strings will be in the utf-8 encoding and in an ansi build no
-assumption is made about the encoding.  The "UTF8" functions will
-attempt to always get/set utf-8 text, which will always be true in a
-unicode build, and in an ansi build will also be true as long as the
-utf-8 used is compatible with the current encoding, (you'll get an
-exception otherwise.)
+methods will do no conversions at all and in a unicode build of
+wxPython the strings will be in the utf-8 encoding and in an ansi
+build no assumption is made about the encoding.  The "UTF8" functions
+will attempt to always get/set utf-8 text, which it will always be
+able to do in a unicode build, and in an ansi build it will depend on
+the content of the utf-8 used being compatible with the current
+encoding, (you'll get an exception otherwise.)
 
       AddTextRaw          AddTextUTF8
       InsertTextRaw       InsertTextUTF8
