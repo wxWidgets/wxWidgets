@@ -634,6 +634,7 @@ if CORE_ONLY:
     BUILD_DLLWIDGET = 0
     BUILD_IEWIN = 0
     BUILD_ACTIVEX = 0
+    BUILD_ANIMATE = 0
 
 if debug:
     FINAL  = 0
