@@ -492,6 +492,7 @@
 		};
 		4086D102063BBC5C00D4CD53 = {
 			buildPhases = (
+				40ADC58D081629DD0009DA36,
 				4086D103063BBC5C00D4CD53,
 				4086D104063BBC5C00D4CD53,
 				4086D106063BBC5C00D4CD53,
@@ -615,6 +616,7 @@
 		};
 		4086D112063BBC5C00D4CD53 = {
 			buildPhases = (
+				40ADC6C508163A7C0009DA36,
 				4086D113063BBC5C00D4CD53,
 				4086D114063BBC5C00D4CD53,
 				4086D116063BBC5C00D4CD53,
@@ -736,6 +738,38 @@
 			path = minimalDynamicRelease.app;
 			refType = 3;
 			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		40ADC58D081629DD0009DA36 = {
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 6;
+			files = (
+				40ADC58E081629E80009DA36,
+			);
+			isa = PBXCopyFilesBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		40ADC58E081629E80009DA36 = {
+			fileRef = CA89578E04D706FC00000080;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		40ADC6C508163A7C0009DA36 = {
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 6;
+			files = (
+				40ADC6C608163A8B0009DA36,
+			);
+			isa = PBXCopyFilesBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		40ADC6C608163A8B0009DA36 = {
+			fileRef = CA89596C04D79FED00000080;
+			isa = PBXBuildFile;
+			settings = {
+			};
 		};
 		40B6DFF2063CD7B000442FB3 = {
 			isa = PBXFileReference;
