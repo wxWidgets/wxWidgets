@@ -2117,8 +2117,6 @@ class ScrollBar(_core.Control):
         """
         SetScrollbar(self, int position, int thumbSize, int range, int pageSize, 
             bool refresh=True)
-
-        Sets the scrollbar properties of a built-in scrollbar.
         """
         return _controls_.ScrollBar_SetScrollbar(*args, **kwargs)
 
@@ -3065,7 +3063,12 @@ class BookCtrlBaseEvent(_core.NotifyEvent):
         self.thisown = 1
         del newobj.thisown
     def GetSelection(*args, **kwargs):
-        """GetSelection(self) -> int"""
+        """
+        GetSelection(self) -> int
+
+        Returns item index for a listbox or choice selection event (not valid
+        for a deselection).
+        """
         return _controls_.BookCtrlBaseEvent_GetSelection(*args, **kwargs)
 
     def SetSelection(*args, **kwargs):

@@ -16575,7 +16575,7 @@ static PyObject *_wrap_MouseEvent_Button(PyObject *, PyObject *args, PyObject *k
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     char *kwnames[] = {
-        (char *) "self",(char *) "but", NULL 
+        (char *) "self",(char *) "button", NULL 
     };
     
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:MouseEvent_Button",kwnames,&obj0,&obj1)) goto fail;
