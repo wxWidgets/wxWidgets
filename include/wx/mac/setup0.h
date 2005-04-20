@@ -1074,9 +1074,6 @@
     #undef wxUSE_STD_IOSTREAM
     // CS: I have to set this to 0 now, as shared builds are having problems 
     #define wxUSE_STD_IOSTREAM  0
-
-    #undef wxUSE_STACKWALKER
-    #define wxUSE_STACKWALKER 0
 #endif
 
 // things not implemented under Mac
@@ -1088,6 +1085,9 @@
 
 #undef wxUSE_TOGGLEBTN
 #define wxUSE_TOGGLEBTN 0
+
+#undef wxUSE_STACKWALKER
+#define wxUSE_STACKWALKER 0
 
 // wxWebKit is a wrapper for Apple's WebKit framework, use it if you want to
 // embed the Safari browser control
