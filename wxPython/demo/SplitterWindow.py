@@ -27,11 +27,15 @@ class MySplitter(wx.SplitterWindow):
 def runTest(frame, nb, log):
     splitter = MySplitter(nb, -1, log)
 
-    p1 = wx.Window(splitter)#, style=wx.BORDER_SIMPLE)
+    #sty = wx.BORDER_NONE
+    #sty = wx.BORDER_SIMPLE
+    sty = wx.BORDER_SUNKEN
+    
+    p1 = wx.Window(splitter, style=sty)
     p1.SetBackgroundColour("pink")
     wx.StaticText(p1, -1, "Panel One", (5,5))
 
-    p2 = wx.Window(splitter)#, style=wx.BORDER_SIMPLE)
+    p2 = wx.Window(splitter, style=sty)
     p2.SetBackgroundColour("sky blue")
     wx.StaticText(p2, -1, "Panel Two", (5,5))
 
