@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        samples/console/console.cpp
-// Purpose:     a sample console (as opposed to GUI) progam using wxWidgets
+// Purpose:     A sample console (as opposed to GUI) program using wxWidgets
 // Author:      Vadim Zeitlin
 // Modified by:
 // Created:     04.10.99
