@@ -164,6 +164,7 @@ the corresponding topic.
 \helpref{wxIsNaN}{wxisnan}\\
 \helpref{wxIsWild}{wxiswild}\\
 \helpref{wxKill}{wxkill}\\
+\helpref{wxLaunchDefaultBrowser}{wxlaunchdefaultbrowser}\\
 \helpref{wxLEAVE\_CRIT\_SECT}{wxleavecritsect}\\
 \helpref{wxLoadUserResource}{wxloaduserresource}\\
 \helpref{wxLogDebug}{wxlogdebug}\\
@@ -2977,6 +2978,18 @@ frame or dialog containing it, or {\tt NULL}.
 
 <wx/window.h>
 
+
+\membersection{::wxLaunchDefaultBrowser}\label{wxlaunchdefaultbrowser}
+
+\func{bool}{wxLaunchDefaultBrowser}{\param{const wxString\& }{sUrl}}
+
+Launches the user's default browser and tells it to open the location at {\tt sUrl}.
+
+Returns true if the application was successfully launched.
+
+\wxheading{Include files}
+
+<wx/utils.h>
 
 \membersection{::wxLoadUserResource}\label{wxloaduserresource}
 
