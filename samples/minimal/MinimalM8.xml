@@ -934,10 +934,6 @@
                     <SETTING><VALUE>WSPC</VALUE></SETTING>
                 </SETTING>
 
-                <!-- Settings for "OmnisRC Panel" panel -->
-                <SETTING><NAME>Defines</NAME><VALUE>ismac,isMacRCC</VALUE></SETTING>
-                <SETTING><NAME>Compatible</NAME><VALUE>false</VALUE></SETTING>
-
                 <!-- Settings for "Output Flags" panel -->
                 <SETTING><NAME>FileLocked</NAME><VALUE>false</VALUE></SETTING>
                 <SETTING><NAME>ResourcesMapIsReadOnly</NAME><VALUE>false</VALUE></SETTING>
@@ -2033,10 +2029,6 @@
                     <SETTING><VALUE>WSPC</VALUE></SETTING>
                 </SETTING>
 
-                <!-- Settings for "OmnisRC Panel" panel -->
-                <SETTING><NAME>Defines</NAME><VALUE>ismac,isMacRCC</VALUE></SETTING>
-                <SETTING><NAME>Compatible</NAME><VALUE>false</VALUE></SETTING>
-
                 <!-- Settings for "Output Flags" panel -->
                 <SETTING><NAME>FileLocked</NAME><VALUE>false</VALUE></SETTING>
                 <SETTING><NAME>ResourcesMapIsReadOnly</NAME><VALUE>false</VALUE></SETTING>
@@ -3074,10 +3066,6 @@
                     <SETTING><VALUE>WSPC</VALUE></SETTING>
                 </SETTING>
 
-                <!-- Settings for "OmnisRC Panel" panel -->
-                <SETTING><NAME>Defines</NAME><VALUE>ismac,isMacRCC</VALUE></SETTING>
-                <SETTING><NAME>Compatible</NAME><VALUE>false</VALUE></SETTING>
-
                 <!-- Settings for "Output Flags" panel -->
                 <SETTING><NAME>FileLocked</NAME><VALUE>false</VALUE></SETTING>
                 <SETTING><NAME>ResourcesMapIsReadOnly</NAME><VALUE>false</VALUE></SETTING>
@@ -3849,10 +3837,6 @@
                     <SETTING><VALUE>WSPC</VALUE></SETTING>
                     <SETTING><VALUE>mcvs</VALUE></SETTING>
                 </SETTING>
-
-                <!-- Settings for "OmnisRC Panel" panel -->
-                <SETTING><NAME>Defines</NAME><VALUE>ismac,isMacRCC</VALUE></SETTING>
-                <SETTING><NAME>Compatible</NAME><VALUE>false</VALUE></SETTING>
 
                 <!-- Settings for "Output Flags" panel -->
                 <SETTING><NAME>FileLocked</NAME><VALUE>false</VALUE></SETTING>
@@ -4856,10 +4840,6 @@
                     <SETTING><VALUE>Proj</VALUE></SETTING>
                     <SETTING><VALUE>WSPC</VALUE></SETTING>
                 </SETTING>
-
-                <!-- Settings for "OmnisRC Panel" panel -->
-                <SETTING><NAME>Defines</NAME><VALUE>ismac,isMacRCC</VALUE></SETTING>
-                <SETTING><NAME>Compatible</NAME><VALUE>false</VALUE></SETTING>
 
                 <!-- Settings for "Output Flags" panel -->
                 <SETTING><NAME>FileLocked</NAME><VALUE>false</VALUE></SETTING>
@@ -5921,10 +5901,6 @@
                     <SETTING><VALUE>Proj</VALUE></SETTING>
                     <SETTING><VALUE>WSPC</VALUE></SETTING>
                 </SETTING>
-
-                <!-- Settings for "OmnisRC Panel" panel -->
-                <SETTING><NAME>Defines</NAME><VALUE>ismac,isMacRCC</VALUE></SETTING>
-                <SETTING><NAME>Compatible</NAME><VALUE>false</VALUE></SETTING>
 
                 <!-- Settings for "Output Flags" panel -->
                 <SETTING><NAME>FileLocked</NAME><VALUE>false</VALUE></SETTING>
@@ -7266,10 +7242,6 @@
                     <SETTING><VALUE>Proj</VALUE></SETTING>
                     <SETTING><VALUE>WSPC</VALUE></SETTING>
                 </SETTING>
-
-                <!-- Settings for "OmnisRC Panel" panel -->
-                <SETTING><NAME>Defines</NAME><VALUE>ismac,isMacRCC</VALUE></SETTING>
-                <SETTING><NAME>Compatible</NAME><VALUE>false</VALUE></SETTING>
 
                 <!-- Settings for "Output Flags" panel -->
                 <SETTING><NAME>FileLocked</NAME><VALUE>false</VALUE></SETTING>
@@ -8621,10 +8593,6 @@
                     <SETTING><VALUE>Proj</VALUE></SETTING>
                     <SETTING><VALUE>WSPC</VALUE></SETTING>
                 </SETTING>
-
-                <!-- Settings for "OmnisRC Panel" panel -->
-                <SETTING><NAME>Defines</NAME><VALUE>ismac,isMacRCC</VALUE></SETTING>
-                <SETTING><NAME>Compatible</NAME><VALUE>false</VALUE></SETTING>
 
                 <!-- Settings for "Output Flags" panel -->
                 <SETTING><NAME>FileLocked</NAME><VALUE>false</VALUE></SETTING>
@@ -9988,10 +9956,6 @@
                     <SETTING><VALUE>Proj</VALUE></SETTING>
                     <SETTING><VALUE>WSPC</VALUE></SETTING>
                 </SETTING>
-
-                <!-- Settings for "OmnisRC Panel" panel -->
-                <SETTING><NAME>Defines</NAME><VALUE>ismac,isMacRCC</VALUE></SETTING>
-                <SETTING><NAME>Compatible</NAME><VALUE>false</VALUE></SETTING>
 
                 <!-- Settings for "Output Flags" panel -->
                 <SETTING><NAME>FileLocked</NAME><VALUE>false</VALUE></SETTING>
