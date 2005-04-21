@@ -5,24 +5,6 @@
 	};
 	objectVersion = 39;
 	objects = {
-		0249A669FF388E3911CA2CEA = {
-			isa = PBXFileReference;
-			lastKnownFileType = archive.ar;
-			name = "libstdc++.a";
-			path = "/usr/lib/libstdc++.a";
-			refType = 0;
-			sourceTree = "<absolute>";
-		};
-//020
-//021
-//022
-//023
-//024
-//050
-//051
-//052
-//053
-//054
 		05952DFCFFF02D1B11CA0E50 = {
 			buildSettings = {
 				COPY_PHASE_STRIP = NO;
@@ -138,7 +120,6 @@
 				CA89596C04D79FED00000080,
 				20286C33FDCF999611CA2CEA,
 				CA60173504D423C000000080,
-				0249A669FF388E3911CA2CEA,
 				40B6DFF2063CD7B000442FB3,
 			);
 			isa = PBXGroup;
@@ -311,7 +292,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				4086D0E9063BBC5B00D4CD53,
-				4086D0EA063BBC5B00D4CD53,
 				4086D0EB063BBC5B00D4CD53,
 				4086D0EC063BBC5B00D4CD53,
 				40B6DFF3063CD7B000442FB3,
@@ -321,12 +301,6 @@
 		};
 		4086D0E9063BBC5B00D4CD53 = {
 			fileRef = 20286C33FDCF999611CA2CEA;
-			isa = PBXBuildFile;
-			settings = {
-			};
-		};
-		4086D0EA063BBC5B00D4CD53 = {
-			fileRef = 0249A669FF388E3911CA2CEA;
 			isa = PBXBuildFile;
 			settings = {
 			};
@@ -443,7 +417,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				4086D0F9063BBC5B00D4CD53,
-				4086D0FA063BBC5B00D4CD53,
 				4086D0FB063BBC5B00D4CD53,
 				4086D0FC063BBC5B00D4CD53,
 				40B6DFF4063CD7B000442FB3,
@@ -453,12 +426,6 @@
 		};
 		4086D0F9063BBC5B00D4CD53 = {
 			fileRef = 20286C33FDCF999611CA2CEA;
-			isa = PBXBuildFile;
-			settings = {
-			};
-		};
-		4086D0FA063BBC5B00D4CD53 = {
-			fileRef = 0249A669FF388E3911CA2CEA;
 			isa = PBXBuildFile;
 			settings = {
 			};
@@ -568,7 +535,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				4086D109063BBC5C00D4CD53,
-				4086D10A063BBC5C00D4CD53,
 				4086D10B063BBC5C00D4CD53,
 				4086D10C063BBC5C00D4CD53,
 			);
@@ -577,12 +543,6 @@
 		};
 		4086D109063BBC5C00D4CD53 = {
 			fileRef = 20286C33FDCF999611CA2CEA;
-			isa = PBXBuildFile;
-			settings = {
-			};
-		};
-		4086D10A063BBC5C00D4CD53 = {
-			fileRef = 0249A669FF388E3911CA2CEA;
 			isa = PBXBuildFile;
 			settings = {
 			};
@@ -693,7 +653,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				4086D119063BBC5C00D4CD53,
-				4086D11A063BBC5C00D4CD53,
 				4086D11B063BBC5C00D4CD53,
 				4086D11C063BBC5C00D4CD53,
 			);
@@ -702,12 +661,6 @@
 		};
 		4086D119063BBC5C00D4CD53 = {
 			fileRef = 20286C33FDCF999611CA2CEA;
-			isa = PBXBuildFile;
-			settings = {
-			};
-		};
-		4086D11A063BBC5C00D4CD53 = {
-			fileRef = 0249A669FF388E3911CA2CEA;
 			isa = PBXBuildFile;
 			settings = {
 			};

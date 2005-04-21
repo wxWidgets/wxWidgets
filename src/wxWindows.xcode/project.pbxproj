@@ -66,7 +66,6 @@
 				F5C5D3DF01FA2D0A01D0F0BA,
 				F55E08F801FDF9CC01000133,
 				405DD167063C2BFC00F579EE,
-				F5D00F2901FDFB8401000133,
 			);
 			isa = PBXGroup;
 			name = "External Frameworks and Libraries";
@@ -21483,14 +21482,6 @@
 			path = volume.h;
 			refType = 4;
 			sourceTree = "<group>";
-		};
-		F5D00F2901FDFB8401000133 = {
-			isa = PBXFileReference;
-			lastKnownFileType = archive.ar;
-			name = "libstdc++.a";
-			path = "/usr/lib/libstdc++.a";
-			refType = 0;
-			sourceTree = "<absolute>";
 		};
 		F5F5A69F02CDB27401000133 = {
 			fileEncoding = 30;
