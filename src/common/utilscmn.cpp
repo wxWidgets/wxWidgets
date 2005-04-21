@@ -629,6 +629,7 @@ bool wxLaunchDefaultBrowser(const wxString& url)
       }
 
 #else
+#if wxUSE_MIMETYPE
     // Non-windows way
     wxFileType *ft = 
     wxTheMimeTypesManager->GetFileTypeFromExtension (_T("html")); 
@@ -658,6 +659,10 @@ bool wxLaunchDefaultBrowser(const wxString& url)
     }
     else
       return false;
+#else
+      return false;
+#endif //!wxUSE_MIMETYPE
+
 #endif
 
     //success - hopefully
