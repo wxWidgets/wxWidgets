@@ -294,6 +294,12 @@ bool wxHIDDevice::IsActive(int nIndex)
 	wxASSERT(m_pCookies[nIndex] != NULL);
 	IOHIDEventStruct Event;
 	(*m_ppDevice)->getElementValue(m_ppDevice, m_pCookies[nIndex], &Event);
+/*
+    wxString ss;
+    ss << _T("[") << (int) m_pCookies[nIndex] << _T("] = ") << Event.value << _T("  SIZE:") << Event.longValueSize;
+    
+    wxLogDebug(ss);
+*/
 	return !!Event.value;
 }
 	
@@ -347,12 +353,46 @@ void wxHIDKeyboard::BuildCookies(wxCFArray& Array)
 	InitCookies(500);
 	int i,
 		nUsage;
+    bool bEOTriggered = false;
 	for (i = 0; i < Array.Count(); ++i)
-	{
+	{        
 		CFNumberGetValue(
 			(CFNumberRef) CFDictionaryGetValue((CFDictionaryRef) Array[i], CFSTR(kIOHIDElementUsageKey)), 
 				kCFNumberLongType, &nUsage);
-			
+		
+        //
+        // OK, this is strange - basically this kind of strange - 
+        // Starting from 0xEO these elements (like shift) appear twice in
+        // the array!  The ones at the end are bogus I guess - the funny part
+        // is that besides the fact that the ones at the front have a Unit
+        // and UnitExponent key with a value of 0 and a different cookie value,
+        // there is no discernable difference between the two... 
+        //
+        // Will the real shift please stand up?
+        //
+        // Something to spend a support request on, if I had one, LOL.
+        //
+        if(nUsage == 0xE0)
+        {
+            if(bEOTriggered)
+               break;
+            bEOTriggered = true;
+        }
+/*
+        wxString msg;
+        int cookie;
+        	CFNumberGetValue(
+				(CFNumberRef) CFDictionaryGetValue	( (CFDictionaryRef) Array[i]
+										, CFSTR(kIOHIDElementCookieKey)
+										),	
+				kCFNumberIntType,
+				&cookie
+				);
+
+        msg << wxT("KEY:") << nUsage << wxT("COOKIE:") << cookie;
+        wxLogDebug(msg);    	
+*/
+
 		if (nUsage >= kHIDUsage_KeyboardA && nUsage <= kHIDUsage_KeyboardZ)
 			AddCookie(Array[i], 'A' + (nUsage - kHIDUsage_KeyboardA) );
 		else if (nUsage >= kHIDUsage_Keyboard1 && nUsage <= kHIDUsage_Keyboard9)
@@ -504,7 +544,28 @@ bool wxGetKeyState (wxKeyCode key)
         }
     }
     
-    return wxHIDModule::sm_keyboard->IsActive(key);
+    switch(key)
+    {
+    case WXK_SHIFT:
+        return wxHIDModule::sm_keyboard->IsActive(WXK_SHIFT) ||
+               wxHIDModule::sm_keyboard->IsActive(WXK_RSHIFT);
+        break;
+	case WXK_ALT:
+        return wxHIDModule::sm_keyboard->IsActive(WXK_ALT) ||
+               wxHIDModule::sm_keyboard->IsActive(WXK_RALT);
+        break;
+	case WXK_CONTROL:
+        return wxHIDModule::sm_keyboard->IsActive(WXK_CONTROL) ||
+               wxHIDModule::sm_keyboard->IsActive(WXK_RCONTROL);
+        break;
+	case WXK_MENU:
+        return wxHIDModule::sm_keyboard->IsActive(WXK_MENU) ||
+               wxHIDModule::sm_keyboard->IsActive(WXK_RMENU);
+        break;
+    default:
+        return wxHIDModule::sm_keyboard->IsActive(key);
+        break;
+    }
 }
 
 #endif //__DARWIN__
