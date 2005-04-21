@@ -1670,7 +1670,7 @@ wxFileType* wxMimeTypesManagerImpl::Associate(const wxFileTypeInfo& ftInfo)
                 ICGetMapEntry( (ICInstance) m_hIC, (Handle) m_hDatabase, 
                                 pFileType->m_impl->m_lIndex, &entry);
                 
-                entry.creatorAppName = psCreatorName; 
+                memcpy(entry.creatorAppName, psCreatorName, sizeof(Str255)); 
                 entry.fileCreator = creator;
                     
                 status = ICSetMapEntry( (ICInstance) m_hIC, (Handle) m_hDatabase, 
@@ -1723,10 +1723,10 @@ wxFileType* wxMimeTypesManagerImpl::Associate(const wxFileTypeInfo& ftInfo)
                 entry.postCreator = 0;
                 entry.flags = kICMapDataForkBit; //TODO:  Maybe resource is valid by default too?
                 entry.extension = psExtension;
-                entry.creatorAppName = psCreatorName;
-                entry.postAppName = psPostCreatorName;
-                entry.MIMEType = psMimeType;
-                entry.entryName = psDescription;
+                memcpy(entry.creatorAppName, psCreatorName, sizeof(Str255));
+                memcpy(entry.postAppName, psPostCreatorName, sizeof(Str255));
+                memcpy(entry.MIMEType, psMimeType, sizeof(Str255));
+                memcpy(entry.entryName, psDescription, sizeof(Str255));
                 
                 status = ICAddMapEntry( (ICInstance) m_hIC, (Handle) m_hDatabase, &entry);
                 
@@ -1937,7 +1937,7 @@ wxMimeTypesManagerImpl::Unassociate(wxFileType *pFileType)
 
 #if defined(__DARWIN__)
     if(!bInfoSuccess)
-        return NULL;
+        return FALSE;
 #endif
 
     //this should be as easy as removing the entry from the database and then saving 
