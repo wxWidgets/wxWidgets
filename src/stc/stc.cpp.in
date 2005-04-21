@@ -296,14 +296,14 @@ void wxStyledTextCtrl::StyleSetFont(int styleNum, wxFont& font) {
     int x, y;
     GetTextExtent(wxT("X"), &x, &y, NULL, NULL, &font);
 #endif
-    int      size     = font.GetPointSize();
-    wxString faceName = font.GetFaceName();
-    bool     bold     = font.GetWeight() == wxBOLD;
-    bool     italic   = font.GetStyle() != wxNORMAL;
-    bool     under    = font.GetUnderlined();
-
-    // TODO: add encoding/charset mapping
-    StyleSetFontAttr(styleNum, size, faceName, bold, italic, under);
+    int            size     = font.GetPointSize();
+    wxString       faceName = font.GetFaceName();
+    bool           bold     = font.GetWeight() == wxBOLD;
+    bool           italic   = font.GetStyle() != wxNORMAL;
+    bool           under    = font.GetUnderlined();
+    wxFontEncoding encoding = font.GetDefaultEncoding();
+    
+    StyleSetFontAttr(styleNum, size, faceName, bold, italic, under, encoding);
 }
 
 // Set all font style attributes at once.
