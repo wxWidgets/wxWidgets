@@ -237,6 +237,12 @@ int wxKill(long pid, wxSignal sig, wxKillError *rc, int flags)
 
 #define WXEXECUTE_NARGS   127
 
+#if defined(__DARWIN__)
+long wxMacExecute(wxChar **argv,
+               int flags,
+               wxProcess *process);
+#endif
+
 long wxExecute( const wxString& command, int flags, wxProcess *process )
 {
     wxCHECK_MSG( !command.empty(), 0, wxT("can't exec empty command") );
@@ -307,8 +313,14 @@ long wxExecute( const wxString& command, int flags, wxProcess *process )
     } while(*cptr);
     argv[argc] = NULL;
 
+    long lRc;
+#if defined(__DARWIN__)
+    if( (lRc = wxMacExecute(argv, flags, process)) != -1)
+        return lRc;
+#endif
+
     // do execute the command
-    long lRc = wxExecute(argv, flags, process);
+    lRc = wxExecute(argv, flags, process);
 
     // clean up
     argc = 0;
@@ -436,7 +448,7 @@ bool wxPipeInputStream::CanRead() const
 #ifdef __VMS
     #pragma message disable codeunreachable
 #endif
-
+               
 long wxExecute(wxChar **argv,
                int flags,
                wxProcess *process)
@@ -588,7 +600,7 @@ long wxExecute(wxChar **argv,
         }
 
         execvp (*mb_argv, mb_argv);
-
+       
         fprintf(stderr, "execvp(");
         // CS changed ppc to ppc_ as ppc is not available under mac os CW Mach-O
         for ( char **ppc_ = mb_argv; *ppc_; ppc_++ )
