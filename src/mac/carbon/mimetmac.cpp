@@ -9,6 +9,23 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
+//
+//
+//  TODO:  Search Info[-macos](classic).plist dictionary in addition
+//  to Internet Config database.
+//
+//  Maybe try a brainstorm a way to change the wxMimeTypesManager API
+//  to get info from a file instead/addition to current get all stuff
+//  API so that we can use Launch Services to get mime type info.
+//
+//	Implement geticon from one of the finder info functions - or
+// 	use launch services and search that app's plist for the icon.
+//
+//	Put some special juice in for the print command.
+//
+//
+//
+
 #if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
 #pragma implementation "mimetype.h"
 #endif
@@ -567,6 +584,15 @@ void wxMimeTypesManagerImpl::Initialize(int mailcapStyles, const wxString& extra
 {
     wxASSERT_MSG(m_hIC == NULL, wxT("Already initialized wxMimeTypesManager!"));
 
+    //some apps (non-wx) use the 'plst' resource instead
+/*
+    CFBundleRef cfbMain = CFBundleGetMainBundle();
+    wxCFDictionary cfdInfo( CFBundleGetInfoDictionary(cfbMain), wxCF_RETAIN );
+    wxString sLog;
+    cfdInfo.PrintOut(sLog);
+    wxLogDebug(sLog);
+*/
+
     //start internet config - log if there's an error
     //the second param is the signature of the application, also known
     //as resource ID 0.  However, as per some recent discussions, we may not
@@ -754,13 +780,869 @@ pascal  OSStatus  MoreProcGetProcessTypeSignature(
   return anErr;
 }//end MoreProcGetProcessTypeSignature
 
-wxFileType *
-wxMimeTypesManagerImpl::Associate(const wxFileTypeInfo& ftInfo)
+//
+//
+//  TODO: clean this up, its messy
+//
+//
+//
+
+#include "wx/mac/corefoundation/cfstring.h"
+#include "wx/intl.h" //wxLocale for wxCFString
+
+#define wxCF_RELEASE true
+#define wxCF_RETAIN  false
+
+// ----------------------------------------------------------------------------
+// wxCFDictionary
+// ----------------------------------------------------------------------------
+
+class wxCFDictionary
 {
-#if 1
-    wxFAIL_MSG(wxT("Associate not ready for production use"));
-    return NULL;
-#else
+public:
+    wxCFDictionary(CFTypeRef ref, bool bRetain = wxCF_RELEASE)
+    {
+        m_cfmdRef = (CFMutableDictionaryRef) ref;
+        if(bRetain == wxCF_RETAIN && ref)
+            CFRetain(ref);
+    }
+    
+    wxCFDictionary(CFIndex cfiSize = 0)
+    {
+        CFDictionaryKeyCallBacks kcbs;
+        CFDictionaryValueCallBacks vcbs;
+        BuildKeyCallbacks(&kcbs);
+        BuildValueCallbacks(&vcbs);
+
+        m_cfmdRef = CFDictionaryCreateMutable(
+            kCFAllocatorDefault, cfiSize, &kcbs, &vcbs);
+
+    }
+    
+    ~wxCFDictionary() 
+    { Clear();	}
+    
+    void Clear()
+    {if(m_cfmdRef) CFRelease(m_cfmdRef);}
+    
+    static const void* RetainProc(CFAllocatorRef, const void* v)
+    {	return (const void*) CFRetain(v);	}
+    
+    static void ReleaseProc(CFAllocatorRef, const void* v)
+    {	CFRelease(v);	}
+
+    void MakeMutable(CFIndex cfiSize = 0)
+    {
+        CFDictionaryRef oldref = (CFDictionaryRef) m_cfmdRef;
+                
+        m_cfmdRef = CFDictionaryCreateMutableCopy(
+            kCFAllocatorDefault,
+            cfiSize, 
+            oldref);
+            
+        CFRelease(oldref);
+    }
+    
+    void BuildKeyCallbacks(CFDictionaryKeyCallBacks* pCbs)
+    {
+        pCbs->version = 0;
+        pCbs->retain = RetainProc;
+        pCbs->release = ReleaseProc;
+        pCbs->copyDescription = NULL;
+        pCbs->equal = NULL;
+        pCbs->hash = NULL;
+    }
+
+    void BuildValueCallbacks(CFDictionaryValueCallBacks* pCbs)
+    {
+        pCbs->version = 0;
+        pCbs->retain = RetainProc;
+        pCbs->release = ReleaseProc;
+        pCbs->copyDescription = NULL;
+        pCbs->equal = NULL;
+    }
+
+    operator CFTypeRef () const
+    {	return (CFTypeRef)m_cfmdRef;	}
+    
+    CFDictionaryRef GetCFDictionary() const
+    {	return (CFDictionaryRef)m_cfmdRef;	}
+
+    CFMutableDictionaryRef GetCFMutableDictionary()
+    {	return (CFMutableDictionaryRef) m_cfmdRef;	}
+
+    CFTypeRef operator [] (CFTypeRef cftEntry) const
+    {	
+        wxASSERT(IsValid());
+        return (CFTypeRef) CFDictionaryGetValue((CFDictionaryRef)m_cfmdRef, cftEntry);	
+    }    
+    
+    CFIndex GetCount() const
+    {	
+        wxASSERT(IsValid());
+        return CFDictionaryGetCount((CFDictionaryRef)m_cfmdRef);	
+    }
+    
+    void Add(CFTypeRef cftKey, CFTypeRef cftValue)
+    {
+        wxASSERT(IsValid());
+        wxASSERT(Exists(cftKey) == false);
+        CFDictionaryAddValue(m_cfmdRef, cftKey, cftValue);	
+    }
+    
+    void Remove(CFTypeRef cftKey)
+    {	
+        wxASSERT(IsValid());
+        wxASSERT(Exists(cftKey));
+        CFDictionaryRemoveValue(m_cfmdRef, cftKey);	
+    }
+    
+    void Set(CFTypeRef cftKey, CFTypeRef cftValue)
+    {	
+        wxASSERT(IsValid());
+        wxASSERT(Exists(cftKey));
+        CFDictionarySetValue(m_cfmdRef, cftKey, cftValue);	
+    }
+    
+    bool Exists(CFTypeRef cftKey) const
+    {
+        wxASSERT(IsValid());
+        return CFDictionaryContainsKey((CFDictionaryRef)m_cfmdRef, cftKey) == true;
+    }
+    
+    bool IsOk() const {return m_cfmdRef != NULL;	}
+
+    bool IsValid() const
+    {
+        return IsOk() && CFGetTypeID((CFTypeRef)m_cfmdRef) == CFDictionaryGetTypeID();
+    }
+    
+    void PrintOut(wxString& sMessage)
+    {
+        PrintOutDictionary(sMessage, m_cfmdRef);
+    }
+
+    static void PrintOutDictionary(wxString& sMessage, CFDictionaryRef cfdRef)
+    {
+        CFIndex cfiCount = CFDictionaryGetCount(cfdRef);
+        CFTypeRef* pKeys = new CFTypeRef[cfiCount];
+        CFTypeRef* pValues = new CFTypeRef[cfiCount];
+
+        CFDictionaryGetKeysAndValues(cfdRef, pKeys, pValues);
+ 
+        for(CFIndex i = 0; i < cfiCount; ++i)
+        {
+            wxString sKey = wxMacCFStringHolder(CFCopyTypeIDDescription(CFGetTypeID(pKeys[i]))).AsString();
+            wxString sValue = wxMacCFStringHolder(CFCopyTypeIDDescription(CFGetTypeID(pValues[i]))).AsString();
+            
+            sMessage << 
+                wxString::Format(wxT("[{#%d} Key : %s]"), (int) i,
+                        sKey.c_str());
+            
+            PrintOutType(sMessage, sKey, pKeys[i]);
+            
+            sMessage << 
+                wxString::Format(wxT("\n\t[Value : %s]"), 
+                        sValue.c_str());
+                        
+            PrintOutType(sMessage, sValue, pValues[i]);
+            
+            sMessage << wxT("\n");
+        }
+        
+        delete[] pKeys;
+        delete[] pValues;
+    }
+    
+    static void PrintOutArray(wxString& sMessage, CFArrayRef cfaRef)
+    {
+    
+        for(CFIndex i = 0; i < CFArrayGetCount(cfaRef); ++i)
+        {
+            wxString sValue = wxMacCFStringHolder(CFCopyTypeIDDescription(CFGetTypeID(
+                CFArrayGetValueAtIndex(cfaRef, i)
+                ))).AsString();
+            
+            sMessage << 
+                wxString::Format(wxT("\t\t[{#%d} ArrayValue : %s]\n"), (int) i,
+                        sValue.c_str());
+            
+            PrintOutType(sMessage, sValue, CFArrayGetValueAtIndex(cfaRef, i));
+        }
+    }
+    
+    static void PrintOutType(wxString& sMessage, wxString sValue, CFTypeRef cfRef)
+    {
+            sMessage << wxT(" {");
+                
+            if(sValue == wxT("CFString"))
+            {
+                 sMessage << wxMacCFStringHolder((CFStringRef)cfRef, false).AsString();
+            }
+            else if(sValue == wxT("CFNumber"))
+            {
+                int nOut;
+                CFNumberGetValue((CFNumberRef)cfRef, kCFNumberIntType, &nOut);
+                sMessage << nOut;
+            }
+            else if(sValue == wxT("CFDictionary"))
+            {
+                PrintOutDictionary(sMessage, (CFDictionaryRef)cfRef);
+            }
+            else if(sValue == wxT("CFArray"))
+            {
+                PrintOutArray(sMessage, (CFArrayRef)cfRef);
+            }
+            else if(sValue == wxT("CFBoolean"))
+            {
+                sMessage << (cfRef == kCFBooleanTrue ? wxT("true") : wxT("false"));
+            }
+            else if(sValue == wxT("CFURL"))
+            {
+                sMessage << wxMacCFStringHolder(CFURLCopyPath((CFURLRef) cfRef)).AsString();
+            }
+            else
+            {
+                sMessage << wxT("*****UNKNOWN TYPE******");
+            }
+            
+            sMessage << wxT("} ");
+    }
+    
+#if wxUSE_MIMETYPE
+    void MakeValidXML();
+#endif
+    
+    CFTypeRef WriteAsXML()
+    {
+        return CFPropertyListCreateXMLData(kCFAllocatorDefault, m_cfmdRef);
+    }
+    
+    bool ReadAsXML(CFTypeRef cfData, wxString* pErrorMsg = NULL)
+    {
+        Clear();
+        CFStringRef cfsError=NULL;
+        m_cfmdRef = (CFMutableDictionaryRef) CFPropertyListCreateFromXMLData(
+                    kCFAllocatorDefault,
+                    (CFDataRef)cfData,
+                    kCFPropertyListMutableContainersAndLeaves,
+                    &cfsError	);
+        if(cfsError)
+        {
+            if(pErrorMsg)
+                *pErrorMsg = wxMacCFStringHolder(cfsError).AsString();
+            else
+                CFRelease(cfsError);
+        } 
+
+        return m_cfmdRef != NULL;
+    }
+ private:    
+    CFMutableDictionaryRef m_cfmdRef;
+};
+
+// ----------------------------------------------------------------------------
+// wxCFArray
+// ----------------------------------------------------------------------------
+
+class wxCFArray
+{
+public:
+    wxCFArray(CFTypeRef ref, bool bRetain = wxCF_RELEASE)
+    {
+        m_cfmaRef = (CFMutableArrayRef)ref;
+        if(bRetain == wxCF_RETAIN && ref)
+            CFRetain(ref);
+    }
+    
+    wxCFArray(CFIndex cfiSize = 0) : m_cfmaRef(NULL)
+    {	Create(cfiSize);	}
+    
+    ~wxCFArray() 
+    { Clear();	}
+    
+    void MakeMutable(CFIndex cfiSize = 0)
+    {
+        wxASSERT(IsValid());
+      
+        CFMutableArrayRef oldref = m_cfmaRef;
+        m_cfmaRef = CFArrayCreateMutableCopy(
+                kCFAllocatorDefault,
+                cfiSize, 
+                (CFArrayRef)oldref);    
+        CFRelease(oldref);
+    }
+    
+    void BuildCallbacks(CFArrayCallBacks* pCbs)
+    {
+        pCbs->version = 0;
+        pCbs->retain = RetainProc;
+        pCbs->release = ReleaseProc;
+        pCbs->copyDescription = NULL;
+        pCbs->equal = NULL;
+    }
+
+    void Create(CFIndex cfiSize = 0)
+    {
+        Clear();
+        CFArrayCallBacks cb;
+        BuildCallbacks(&cb);
+        
+        m_cfmaRef = CFArrayCreateMutable(kCFAllocatorDefault, cfiSize, &cb);
+    }
+    
+    void Clear()
+    {if(m_cfmaRef) CFRelease(m_cfmaRef);}
+    
+    static const void* RetainProc(CFAllocatorRef, const void* v)
+    {	return (const void*) CFRetain(v);	}
+    
+    static void ReleaseProc(CFAllocatorRef, const void* v)
+    {	CFRelease(v);	}
+    
+    operator CFTypeRef () const
+    {	return (CFTypeRef)m_cfmaRef;	}
+    
+    CFArrayRef GetCFArray() const
+    {	return (CFArrayRef)m_cfmaRef;	}
+
+    CFMutableArrayRef GetCFMutableArray()
+    {	return (CFMutableArrayRef) m_cfmaRef;	}
+
+    CFTypeRef operator [] (CFIndex cfiIndex) const
+    {	
+        wxASSERT(IsValid());
+        return (CFTypeRef) CFArrayGetValueAtIndex((CFArrayRef)m_cfmaRef, cfiIndex);	
+    }    
+    
+    CFIndex GetCount()
+    {	
+        wxASSERT(IsValid());
+        return CFArrayGetCount((CFArrayRef)m_cfmaRef);	
+    }
+    
+    void Add(CFTypeRef cftValue)
+    {	
+        wxASSERT(IsValid());
+        CFArrayAppendValue(m_cfmaRef, cftValue);	
+    }
+    
+    void Remove(CFIndex cfiIndex)
+    {	
+        wxASSERT(IsValid());
+        wxASSERT(cfiIndex < GetCount());
+        CFArrayRemoveValueAtIndex(m_cfmaRef, cfiIndex);	
+    }
+    
+    void Set(CFIndex cfiIndex, CFTypeRef cftValue)
+    {	
+        wxASSERT(IsValid());
+        wxASSERT(cfiIndex < GetCount());
+        CFArraySetValueAtIndex(m_cfmaRef, cfiIndex, cftValue);	
+    }
+
+    bool IsOk() const {return m_cfmaRef != NULL;	}
+
+    bool IsValid() const
+    {
+        return IsOk() && CFGetTypeID((CFTypeRef)m_cfmaRef) == CFArrayGetTypeID();
+    }
+
+#if wxUSE_MIMETYPE
+    void MakeValidXML();
+#endif    
+    
+private:
+    CFMutableArrayRef m_cfmaRef;
+};
+
+// ----------------------------------------------------------------------------
+// wxCFString
+// ----------------------------------------------------------------------------
+
+class wxCFString 
+{
+public:
+    wxCFString(CFTypeRef ref, bool bRetain = wxCF_RELEASE) : m_Holder((CFStringRef)ref, bRetain == wxCF_RELEASE)
+    {			}
+    
+    wxCFString(const wxChar* szString) : m_Holder(wxString(szString), wxLocale::GetSystemEncoding())
+    {			}
+    
+    wxCFString(const wxString& sString) : m_Holder(sString, wxLocale::GetSystemEncoding())
+    {			}
+    
+    operator CFTypeRef() const
+    {return (CFTypeRef) ((CFStringRef) m_Holder);	}
+    
+    bool IsOk() { return ((CFTypeRef)(*this)) != NULL;	}
+    
+    wxString BuildWXString() {return m_Holder.AsString();	}
+
+private:
+    wxMacCFStringHolder m_Holder;
+};
+
+// ----------------------------------------------------------------------------
+// wxCFNumber
+// ----------------------------------------------------------------------------
+
+class wxCFNumber
+{
+public:
+    wxCFNumber(int nValue) 
+    {
+        m_cfnRef = CFNumberCreate(kCFAllocatorDefault,
+									kCFNumberIntType, &nValue);
+    }
+    
+    wxCFNumber(CFTypeRef ref, bool bRetain = wxCF_RELEASE) : m_cfnRef((CFNumberRef)ref)
+    {
+        if(bRetain == wxCF_RETAIN && ref)
+            CFRetain(ref);
+    }
+    
+    ~wxCFNumber()
+    {  if(m_cfnRef)         CFRelease(m_cfnRef);	}
+    
+    
+    operator CFTypeRef() const
+    {	return (CFTypeRef) m_cfnRef;	}
+
+    int GetValue()
+    {	
+        int nOut;
+        CFNumberGetValue(
+				m_cfnRef,	
+				kCFNumberIntType,
+                &nOut
+				);
+                
+        return nOut;
+    }
+
+    bool IsOk() { return m_cfnRef != NULL;	}
+
+private:
+    CFNumberRef m_cfnRef;
+};
+
+// ----------------------------------------------------------------------------
+// wxCFURL
+// ----------------------------------------------------------------------------
+
+class wxCFURL
+{
+public:
+    wxCFURL(CFTypeRef ref = NULL, bool bRetain = wxCF_RELEASE) : m_cfurlRef((CFURLRef)ref) 
+    {
+        if(bRetain == wxCF_RETAIN && ref)
+            CFRetain(ref);
+    }
+    wxCFURL(const wxCFString& URLString, CFTypeRef BaseURL = NULL)
+    {
+        Create(URLString, BaseURL);
+    }
+    
+    void Create(const wxCFString& URLString, CFTypeRef BaseURL = NULL)
+    {
+        m_cfurlRef = CFURLCreateWithString(
+            kCFAllocatorDefault,
+            (CFStringRef)(CFTypeRef)URLString,
+            (CFURLRef) BaseURL);
+    }
+    
+    ~wxCFURL() {if(m_cfurlRef) CFRelease(m_cfurlRef);}
+
+    wxString BuildWXString()
+    {
+        return wxCFString(CFURLCopyPath(m_cfurlRef)).BuildWXString();
+    }
+    
+    operator CFTypeRef() const
+    {	return (CFTypeRef)m_cfurlRef;	}
+    
+    bool IsOk()	{	return m_cfurlRef != NULL;	}
+private:
+    CFURLRef m_cfurlRef;
+};
+
+// ----------------------------------------------------------------------------
+// wxCFData
+// ----------------------------------------------------------------------------
+
+#define wxCFDATA_RELEASEBUFFER  1
+#define wxCFDATA_RETAINBUFFER   0
+
+class wxCFData
+{
+public:
+    wxCFData(CFTypeRef ref, bool bRetain = wxCF_RELEASE) : m_cfdaRef((CFDataRef)ref) 
+    {
+        if(bRetain == wxCF_RETAIN && ref)
+            CFRetain(ref);
+    }
+    wxCFData(const UInt8* pBytes, CFIndex len, bool bKeep = wxCFDATA_RELEASEBUFFER)
+    {
+        if(bKeep == wxCFDATA_RELEASEBUFFER)
+        {
+            m_cfdaRef = CFDataCreateWithBytesNoCopy
+                            (kCFAllocatorDefault, pBytes, len, kCFAllocatorDefault);
+        }
+        else
+        {
+            m_cfdaRef = CFDataCreate(kCFAllocatorDefault, pBytes, len);
+        }
+    }
+    ~wxCFData() {if(m_cfdaRef) CFRelease(m_cfdaRef);}
+
+    const UInt8* GetValue()
+    {
+        return CFDataGetBytePtr(m_cfdaRef);
+    }
+    
+    CFIndex GetCount()
+    {
+        return CFDataGetLength(m_cfdaRef);
+    }
+    
+    operator CFTypeRef() const
+    {	return (CFTypeRef)m_cfdaRef;	}
+    
+    bool IsOk()	{	return m_cfdaRef != NULL;	}
+private:
+    CFDataRef m_cfdaRef;
+};
+
+void wxCFDictionary::MakeValidXML()
+{
+        CFIndex cfiCount = GetCount();
+        CFTypeRef* pKeys = new CFTypeRef[cfiCount];
+        CFTypeRef* pValues = new CFTypeRef[cfiCount];
+
+        CFDictionaryGetKeysAndValues(m_cfmdRef, pKeys, pValues);
+
+        //for plist xml format all dictionary keys must be cfstrings and no values in 
+        //the dictionary or subkeys/values can be NULL
+        //Also, CFURLs are not allowed
+        for(CFIndex i = 0; i < cfiCount; ++i)
+        {
+            //must be an array, dictionary, string, bool, or int and cannot be null
+            //and dictionaries can only contain cfstring keys
+            CFTypeRef cfRef = pValues[i];
+            if(!pKeys[i] ||
+                CFGetTypeID(pKeys[i]) != CFStringGetTypeID() || 
+                !cfRef)
+            {
+                Remove(pKeys[i]);
+                --i;
+                --cfiCount;
+                delete[] pKeys;
+                delete[] pValues;
+                pKeys = new CFTypeRef[cfiCount];
+                pValues = new CFTypeRef[cfiCount];
+                CFDictionaryGetKeysAndValues(m_cfmdRef, pKeys, pValues);
+            }
+            else if (CFGetTypeID(cfRef) == CFArrayGetTypeID())
+            {
+                CFRetain(cfRef);
+                wxCFArray cfaCurrent(cfRef);
+                cfaCurrent.MakeMutable();
+                cfaCurrent.MakeValidXML();
+                Set(pKeys[i], cfaCurrent);
+            }
+            else if (CFGetTypeID(cfRef) == CFDictionaryGetTypeID())
+            {
+                CFRetain(cfRef);
+                wxCFDictionary cfdCurrent(cfRef);
+                cfdCurrent.MakeMutable();
+                cfdCurrent.MakeValidXML();
+                Set(pKeys[i], cfdCurrent);
+            }
+            else if( ( 	CFGetTypeID(cfRef) == CFStringGetTypeID() ||
+                        CFGetTypeID(cfRef) == CFNumberGetTypeID() ||
+                        CFGetTypeID(cfRef) == CFBooleanGetTypeID() ) == false )
+            {
+                Remove(pKeys[i]);
+                --i;
+                --cfiCount;
+                delete[] pKeys;
+                delete[] pValues;
+                pKeys = new CFTypeRef[cfiCount];
+                pValues = new CFTypeRef[cfiCount];
+                CFDictionaryGetKeysAndValues(m_cfmdRef, pKeys, pValues);
+            }                
+        }
+
+        delete[] pValues;
+        delete[] pKeys;
+}
+
+void wxCFArray::MakeValidXML()
+{
+        for(CFIndex i = 0; i < GetCount(); ++i)
+        {
+            //must be an array, dictionary, string, bool, or int and cannot be null
+            //and dictionaries can only contain cfstring keys
+            CFTypeRef cfRef = (*this)[i];
+            if(!cfRef)
+            {
+                Remove(i);
+                --i;
+            }
+            else if (CFGetTypeID(cfRef) == CFArrayGetTypeID())
+            {
+                CFRetain(cfRef);
+                wxCFArray cfaCurrent(cfRef);
+                cfaCurrent.MakeMutable();
+                cfaCurrent.MakeValidXML();
+                Set(i, cfaCurrent);
+            }
+            else if (CFGetTypeID(cfRef) == CFDictionaryGetTypeID())
+            {
+                CFRetain(cfRef);
+                wxCFDictionary cfdCurrent(cfRef);
+                cfdCurrent.MakeMutable();
+                cfdCurrent.MakeValidXML();
+                Set(i, cfdCurrent);
+            }
+            else if( ( 	CFGetTypeID(cfRef) == CFStringGetTypeID() ||
+                        CFGetTypeID(cfRef) == CFNumberGetTypeID() ||
+                        CFGetTypeID(cfRef) == CFBooleanGetTypeID() ) == false )
+            {
+                Remove(i);
+                --i;
+            }
+        }
+}
+
+//
+//
+//
+//  END TODO
+//
+//
+//
+
+wxFileType* wxMimeTypesManagerImpl::Associate(const wxFileTypeInfo& ftInfo)
+{
+    bool bInfoSuccess = false;
+    
+    const wxArrayString& asExtensions = ftInfo.GetExtensions();                
+    size_t dwFoundIndex = 0;
+    if(!asExtensions.GetCount())
+    {
+        wxLogDebug(wxT("Must have extension to associate with"));
+    }
+    
+    //Find and write to Info.plist in main bundle (note that some other
+    //apps have theirs named differently, i.e. IE's is named Info-macos.plist
+    //some apps (non-wx) use the 'plst' resource instead
+    CFBundleRef cfbMain = CFBundleGetMainBundle();
+    if(cfbMain)
+    {	
+        UInt32 dwBundleType, dwBundleCreator;
+        CFBundleGetPackageInfo(cfbMain, &dwBundleType, &dwBundleCreator);
+                
+        //if launching terminal non-app version will be 'BNDL' (generic bundle, maybe in other cases too),
+        //which will give us the incorrect info.plist path
+        //otherwise it will be 'APPL', or in the case of a framework,
+        //'FMWK'
+        if(dwBundleType == 'APPL')
+        {
+
+            wxCFURL cfurlBundleLoc((CFTypeRef)CFBundleCopyBundleURL(cfbMain));
+//             wxCFURL cfurlBundleLoc((CFTypeRef)CFBundleCopyExecutableURL(cfbMain));
+            wxString sInfoPath;
+//            sInfoPath << wxT("file://");
+            sInfoPath << cfurlBundleLoc.BuildWXString();
+            sInfoPath << wxT("Contents/Info.plist");
+        
+//        wxCFDictionary cfdInfo( CFBundleGetInfoDictionary(cfbMain), wxCF_RETAIN );
+            wxCFDictionary cfdInfo;
+            bool bInfoOpenSuccess = false;
+            wxFile indictfile;
+            if(indictfile.Open(sInfoPath, wxFile::read));
+            {
+                CFIndex cfiBufLen = (CFIndex) indictfile.Length();
+                const UInt8* pBuffer = new UInt8[cfiBufLen];
+                indictfile.Read((void*)pBuffer, cfiBufLen);
+                wxCFData cfdaInDict(pBuffer, cfiBufLen);
+                wxString sError;
+  	             bInfoOpenSuccess = cfdInfo.ReadAsXML(cfdaInDict, &sError);
+                if(!bInfoOpenSuccess)
+                    wxLogDebug(sError);
+                indictfile.Close();
+            }
+            if(bInfoOpenSuccess)
+            {
+                cfdInfo.MakeMutable( cfdInfo.GetCount() + 1 );
+
+                wxCFArray cfaDocTypes( cfdInfo[ wxCFString(wxT("CFBundleDocumentTypes")) ], wxCF_RETAIN );
+            
+                bool bAddDocTypesArrayToDictionary = cfaDocTypes.IsOk() == false;
+                if(bAddDocTypesArrayToDictionary)
+                    cfaDocTypes.Create();
+                else
+                    cfaDocTypes.MakeMutable( cfaDocTypes.GetCount() + 1 );
+                
+                bool bEntryFound = false;
+                
+                //search for duplicate
+                CFIndex i;
+                for(i = 0; i < cfaDocTypes.GetCount(); ++i)
+                {
+                    wxCFDictionary cfdDocTypeEntry( cfaDocTypes[i], wxCF_RETAIN );
+                            
+                    //A lot of apps dont do to mime types for some reason
+                    //so we go by extensions only
+                    wxCFArray cfaExtensions( cfdDocTypeEntry[ wxCFString(wxT("CFBundleTypeExtensions")) ], 
+                                             wxCF_RETAIN );
+                                             
+                    if(cfaExtensions.IsOk() == false)
+                        continue;
+                    
+                    for(CFIndex iExt = 0; iExt < cfaExtensions.GetCount(); ++iExt)
+                    {                        
+                        for (size_t iWXExt = 0; iWXExt < asExtensions.GetCount(); ++iWXExt)
+                        {
+                            if(asExtensions[iWXExt] == 
+                                    wxCFString(cfaExtensions[iExt], wxCF_RETAIN).BuildWXString())
+                            {
+                                bEntryFound = true;
+                                dwFoundIndex = iWXExt;
+                                break;
+                            }
+                        }	//end of wxstring array
+                        
+                        if(bEntryFound)
+                            break;
+                    } //end for cf array                    
+                    
+                    if(bEntryFound)
+                        break;
+                }//end for doctypes
+                
+                wxCFDictionary cfdNewEntry;
+
+                if(!ftInfo.GetDescription().empty())
+                {
+                    cfdNewEntry.Add( wxCFString(wxT("CFBundleTypeName")), 
+                                wxCFString(ftInfo.GetDescription()) );
+                }
+                    
+                if(!ftInfo.GetIconFile().empty())
+                {
+                    cfdNewEntry.Add( wxCFString(wxT("CFBundleTypeIconFile")), 
+                                    wxCFString(ftInfo.GetIconFile()) );
+                }
+                    
+                
+                wxCFArray cfaOSTypes;
+                wxCFArray cfaExtensions;
+                wxCFArray cfaMimeTypes;
+                    
+                
+                //OSTypes is a cfarray of four-char-codes - '****' for unrestricted
+                cfaOSTypes.Add( wxCFString(wxT("****")) );
+                cfdNewEntry.Add( wxCFString(wxT("CFBundleTypeOSTypes")), cfaOSTypes );
+
+                if(ftInfo.GetExtensionsCount() != 0) //'*' for unrestricted
+                {
+                    for(size_t iExtension = 0; iExtension < (size_t)ftInfo.GetExtensionsCount(); ++iExtension)
+                    {
+                        cfaExtensions.Add( wxCFString( asExtensions[iExtension] ) );
+                    }
+                    
+                    cfdNewEntry.Add( wxCFString(wxT("CFBundleTypeExtensions")), cfaExtensions );
+                }
+                
+                if(!ftInfo.GetMimeType().empty())
+                {
+                    cfaMimeTypes.Add( wxCFString(ftInfo.GetMimeType()) );
+                    cfdNewEntry.Add( wxCFString(wxT("CFBundleTypeMIMETypes")), cfaMimeTypes );
+                }
+                
+                // Editor - can perform all actions
+                // Viewer - all actions except manipulation/saving
+                // None - can perform no actions
+                cfdNewEntry.Add( wxCFString(wxT("CFBundleTypeRole")), wxCFString(wxT("Editor")) );
+                
+                // Is application bundled?
+                cfdNewEntry.Add( wxCFString(wxT("LSTypeIsPackage")), kCFBooleanTrue );
+
+                if(bEntryFound)
+                    cfaDocTypes.Set(i, cfdNewEntry);
+                else
+                    cfaDocTypes.Add(cfdNewEntry);
+                    
+                //
+                // set the doc types array in the muted dictionary
+                //
+                
+                if(bAddDocTypesArrayToDictionary)
+                    cfdInfo.Add(wxCFString(wxT("CFBundleDocumentTypes")), cfaDocTypes);
+                else
+                    cfdInfo.Set(wxCFString(wxT("CFBundleDocumentTypes")), cfaDocTypes);
+                    
+                cfdInfo.MakeValidXML();
+
+                wxFile outdictfile;
+                if(outdictfile.Open(sInfoPath, wxFile::write))
+                {
+                    wxCFData cfdaInfo(cfdInfo.WriteAsXML());
+                    if(cfdaInfo.IsOk())
+                    {
+                        if(outdictfile.Write(cfdaInfo.GetValue(), cfdaInfo.GetCount()) != 
+                            (wxFileOffset)cfdaInfo.GetCount())
+                        {
+                            wxLogDebug(wxT("error in writing to file"));
+                        }
+                        else
+                        {
+                            bInfoSuccess = true;
+//#if defined(__DARWIN__)
+//                //force launch services to update its database for the finder
+//                OSStatus status = LSRegisterURL((CFURLRef)(CFTypeRef)cfurlBundleLoc, true);
+//                if(status != noErr)
+//                {
+//                    wxLogDebug(wxT("LSRegisterURL Failed."));
+//                }
+//#endif
+                        }
+                        outdictfile.Close();
+                    }
+                    else
+                    {
+                        outdictfile.Close();
+                        wxLogDebug(wxT("Could not read in new dictionary"));
+                    }
+                }
+                else
+                {
+                    wxLogDebug(wxString(wxT("Could not open [")) + 
+                    sInfoPath + wxT("] for writing."));
+                }
+            }
+            else
+            {
+                wxLogDebug(wxT("No info dictionary in main bundle"));
+            }
+        }
+        else	
+        {
+            wxLogDebug(wxT("Can only call associate from bundled app within XXX.app"));
+        }
+    }
+    else
+    {
+        wxLogDebug(wxT("No main bundle"));
+    }
+
+#if defined(__DARWIN__)
+    if(!bInfoSuccess)
+        return NULL;
+#endif
     //on mac you have to embed it into the mac's file reference resource ('FREF' I believe)
     //or, alternately, you could just add an entry to m_hDatabase, but you'd need to get
     //the app's signature somehow...
@@ -781,7 +1663,7 @@ wxMimeTypesManagerImpl::Associate(const wxFileTypeInfo& ftInfo)
             //get the file type if it exists - 
             //if it really does then modify the database then save it,
             //otherwise we need to create a whole new entry
-            wxFileType* pFileType = GetFileTypeFromMimeType(ftInfo.GetMimeType());
+            wxFileType* pFileType = GetFileTypeFromExtension(asExtensions[dwFoundIndex]);
             if(pFileType)
             {
                 ICMapEntry entry;
@@ -796,7 +1678,18 @@ wxMimeTypesManagerImpl::Associate(const wxFileTypeInfo& ftInfo)
 
                 //success
                 if(status == noErr)
-                    return pFileType;
+                {
+                    //kICAttrNoChange means we don't care about attributes such as
+                    //locking in the database
+//                    status = ICSetPrefHandle((ICInstance) m_hIC, kICMapping, 
+//                                             kICAttrNoChange, (Handle) m_hDatabase);
+//                    if(status == noErr)
+                        return pFileType;
+//                    else
+//                    {
+//                        wxLogDebug(wxString::Format(wxT("%i - %s"), (int)status, wxT("ICSetPrefHandle failed."))); 
+       //             }
+                }
                 else 
                 { 
                     wxLogDebug(wxString::Format(wxT("%i - %s"), __LINE__, wxT("ICSetMapEntry failed."))); 
@@ -812,7 +1705,7 @@ wxMimeTypesManagerImpl::Associate(const wxFileTypeInfo& ftInfo)
                 Str255 psMimeType;
                 Str255 psDescription;
                 
-                wxMacStringToPascal(ftInfo.GetExtensions()[0], 	psExtension);
+                wxMacStringToPascal(wxString(wxT(".")) + ftInfo.GetExtensions()[0], 	psExtension);
                 wxMacStringToPascal(ftInfo.GetMimeType(), 		psMimeType);
                 wxMacStringToPascal(ftInfo.GetDescription(), 	psDescription);
 
@@ -821,7 +1714,6 @@ wxMimeTypesManagerImpl::Associate(const wxFileTypeInfo& ftInfo)
 
 
                 //add the entry to the database
-                //TODO:  Does this work?
                 ICMapEntry entry;
                 entry.totalLength = sizeof(ICMapEntry);
                 entry.fixedLength = kICMapFixedLength;
@@ -842,16 +1734,16 @@ wxMimeTypesManagerImpl::Associate(const wxFileTypeInfo& ftInfo)
                 {
                     //kICAttrNoChange means we don't care about attributes such as
                     //locking in the database
-                    status = ICSetPrefHandle((ICInstance) m_hIC, kICMapping, 
-                                             kICAttrNoChange, (Handle) m_hDatabase);
+         //           status = ICSetPrefHandle((ICInstance) m_hIC, kICMapping, 
+           //                                  kICAttrNoChange, (Handle) m_hDatabase);
                                              
                     //return the entry in the database if successful
-                    if(status == noErr)
-                        return GetFileTypeFromMimeType(ftInfo.GetMimeType());
-                    else 
-                    { 
-                        wxLogDebug(wxString::Format(wxT("%i - %s"), __LINE__, wxT("ICSetPrefHandle failed."))); 
-                    }
+             //       if(status == noErr)
+                        return GetFileTypeFromExtension(ftInfo.GetMimeType());
+             //       else 
+              //      { 
+               //         wxLogDebug(wxString::Format(wxT("%i - %s"), __LINE__, wxT("ICSetPrefHandle failed."))); 
+               //     }
                 }
                 else 
                 { 
@@ -869,16 +1761,185 @@ wxMimeTypesManagerImpl::Associate(const wxFileTypeInfo& ftInfo)
         wxLogDebug(wxString::Format(wxT("%i - %s"), __LINE__, wxT("GetProcessSignature failed."))); 
     }
     return NULL;
-#endif
 }
 
 bool
 wxMimeTypesManagerImpl::Unassociate(wxFileType *pFileType)
 {
-#if 1
-    wxFAIL_MSG(wxT("Unassociate not ready for production use"));
-    return FALSE;
-#else
+    wxASSERT(pFileType);
+    bool bInfoSuccess = false;
+    
+    wxArrayString asExtensions;
+    pFileType->GetExtensions(asExtensions);                
+    
+    if(!asExtensions.GetCount())
+    {
+        wxLogDebug(wxT("Must have extension to disassociate"));
+        return FALSE;
+    }
+
+    //Find and write to Info.plist in main bundle (note that some other
+    //apps have theirs named differently, i.e. IE's is named Info-macos.plist
+    //some apps (non-wx) use the 'plst' resource instead
+    CFBundleRef cfbMain = CFBundleGetMainBundle();
+    if(cfbMain)
+    {	
+        UInt32 dwBundleType, dwBundleCreator;
+        CFBundleGetPackageInfo(cfbMain, &dwBundleType, &dwBundleCreator);
+                
+        //if launching terminal non-app version will be 'BNDL' (generic bundle, maybe in other cases too),
+        //which will give us the incorrect info.plist path
+        //otherwise it will be 'APPL', or in the case of a framework,
+        //'FMWK'
+        if(dwBundleType == 'APPL')
+        {
+
+            wxCFURL cfurlBundleLoc((CFTypeRef)CFBundleCopyBundleURL(cfbMain));
+//             wxCFURL cfurlBundleLoc((CFTypeRef)CFBundleCopyExecutableURL(cfbMain));
+            wxString sInfoPath;
+//            sInfoPath << wxT("file://");
+            sInfoPath << cfurlBundleLoc.BuildWXString();
+            sInfoPath << wxT("Contents/Info.plist");
+        
+//        wxCFDictionary cfdInfo( (CFTypeRef) CFBundleGetInfoDictionary(cfbMain), wxCF_RETAIN );
+            wxCFDictionary cfdInfo;
+            bool bInfoOpenSuccess = false;
+            wxFile indictfile;
+            if(indictfile.Open(sInfoPath, wxFile::read));
+            {
+                CFIndex cfiBufLen = (CFIndex) indictfile.Length();
+                const UInt8* pBuffer = new UInt8[cfiBufLen];
+                indictfile.Read((void*)pBuffer, cfiBufLen);
+                wxCFData cfdaInDict(pBuffer, cfiBufLen);
+                wxString sError;
+  	             bInfoOpenSuccess = cfdInfo.ReadAsXML(cfdaInDict, &sError);
+                if(!bInfoOpenSuccess)
+                    wxLogDebug(sError);
+                indictfile.Close();
+            }
+            if(bInfoOpenSuccess)
+            {
+                cfdInfo.MakeMutable( cfdInfo.GetCount() + 1 );
+
+                wxCFArray cfaDocTypes( cfdInfo[ wxCFString(wxT("CFBundleDocumentTypes")) ], wxCF_RETAIN );
+                
+                if(cfaDocTypes.IsOk())
+                { 	                               
+                    bool bEntryFound = false;
+                
+                    //search for duplicate
+                    CFIndex i;
+                    for(i = 0; i < cfaDocTypes.GetCount(); ++i)
+                    {
+                        wxCFDictionary cfdDocTypeEntry( cfaDocTypes[i], wxCF_RETAIN );
+                                
+                        //A lot of apps dont do to mime types for some reason
+                        //so we go by extensions only
+                        wxCFArray cfaExtensions( cfdDocTypeEntry[ wxCFString(wxT("CFBundleTypeExtensions")) ], 
+                                        wxCF_RETAIN );
+                                             
+                        if(cfaExtensions.IsOk() == false)
+                            continue;
+                    
+                        for(CFIndex iExt = 0; iExt < cfaExtensions.GetCount(); ++iExt)
+                        {            	            
+                            for (size_t iWXExt = 0; iWXExt < asExtensions.GetCount(); ++iWXExt)
+                            {
+                                if(asExtensions[iWXExt] == 
+                                    wxCFString(cfaExtensions[iExt], wxCF_RETAIN).BuildWXString())
+                                {
+                                    bEntryFound = true;
+                                    cfaDocTypes.Remove(i);
+                                    cfdInfo.Set( wxCFString(wxT("CFBundleDocumentTypes")) , cfaDocTypes );
+                                    break;
+                                }
+                            }	//end of wxstring array
+                        
+                            if(bEntryFound)
+                                break;
+                        } //end for cf array                    
+                            
+                        if(bEntryFound)
+                            break;
+                    }//end for doctypes
+                                        
+                    if(bEntryFound)
+                    {
+                        cfdInfo.MakeValidXML();
+
+                        wxFile outdictfile;
+                        if(outdictfile.Open(sInfoPath, wxFile::write))
+                        {
+                            wxCFData cfdaInfo(cfdInfo.WriteAsXML());
+                            if(cfdaInfo.IsOk())
+                            {
+                                if(outdictfile.Write(cfdaInfo.GetValue(), cfdaInfo.GetCount()) != 
+                                    (wxFileOffset)cfdaInfo.GetCount())
+                                {
+                                    wxLogDebug(wxT("error in writing to file"));
+                                }
+                                else
+                                {
+                                    bInfoSuccess = true;
+//#if defined(__DARWIN__)
+//                //force launch services to update its database for the finder
+//                OSStatus status = LSRegisterURL((CFURLRef)(CFTypeRef)cfurlBundleLoc, true);
+//                if(status != noErr)
+//                {
+//                    wxLogDebug(wxT("LSRegisterURL Failed."));
+//                }
+//#endif
+                                }
+                                outdictfile.Close();
+                            }
+                            else
+                            {
+                                outdictfile.Close();
+                                wxLogDebug(wxT("Could not read in new dictionary"));
+                            }
+                        }
+                        else
+                        {
+                            wxLogDebug(wxString(wxT("Could not open [")) + 
+                            sInfoPath + wxT("] for writing."));
+                        }
+                    }
+                    else
+                    {
+                        wxLogDebug(wxT("Entry not found to remove"));
+                        wxString sPrintOut;  
+                        wxCFDictionary::PrintOutArray(sPrintOut, (CFArrayRef)(CFTypeRef)cfaDocTypes);  
+                        wxLogDebug(sPrintOut);
+                        for(size_t i = 0; i < asExtensions.GetCount(); ++i)
+                            wxLogDebug(asExtensions[i]);
+                    }
+                }
+                else
+                {
+                    wxLogDebug(wxT("No doc types array found"));
+                    wxString sPrintOut;  cfdInfo.PrintOut(sPrintOut);  wxLogDebug(sPrintOut);
+                }
+            }
+            else
+            {
+                wxLogDebug(wxT("No info dictionary in main bundle"));
+            }
+        }
+        else	
+        {
+            wxLogDebug(wxT("Can only call associate from bundled app within XXX.app"));
+        }
+    }
+    else
+    {
+        wxLogDebug(wxT("No main bundle"));
+    }
+
+#if defined(__DARWIN__)
+    if(!bInfoSuccess)
+        return NULL;
+#endif
+
     //this should be as easy as removing the entry from the database and then saving 
     //the database
     OSStatus status = ICDeleteMapEntry( (ICInstance) m_hIC, (Handle) m_hDatabase, 
@@ -888,15 +1949,15 @@ wxMimeTypesManagerImpl::Unassociate(wxFileType *pFileType)
     {
         //kICAttrNoChange means we don't care about attributes such as
         //locking in the database
-        status = ICSetPrefHandle((ICInstance) m_hIC, kICMapping, 
-                    kICAttrNoChange, (Handle) m_hDatabase);
+//        status = ICSetPrefHandle((ICInstance) m_hIC, kICMapping, 
+//                    kICAttrNoChange, (Handle) m_hDatabase);
             
-        if(status == noErr)
+//        if(status == noErr)
             return TRUE;
-        else
-        { 
-            wxLogDebug(wxString::Format(wxT("%i - %s"), __LINE__, wxT("ICSetPrefHandle failed."))); 
-        }
+//        else
+//        { 
+//            wxLogDebug(wxString::Format(wxT("%i - %s"), __LINE__, wxT("ICSetPrefHandle failed."))); 
+//        }
 
     }
     else
@@ -905,7 +1966,44 @@ wxMimeTypesManagerImpl::Unassociate(wxFileType *pFileType)
     }
     
     return FALSE;
-#endif
 }
+/*
+                    CFWriteStreamRef cfwsInfo = CFWriteStreamCreateWithFile(
+                                        kCFAllocatorDefault,
+                                        (CFURLRef) (CFTypeRef)cfurlInfoLoc	);
+                
+//                CFShow(cfdInfo);
+                    if(cfwsInfo)
+                    {
+                        Boolean bOpened = CFWriteStreamOpen(cfwsInfo);
+                        if(bOpened)
+                        { 	                   
+                            CFStringRef cfsError;
+                            CFIndex cfiWritten = CFPropertyListWriteToStream((CFPropertyListRef)(CFTypeRef)cfdInfo,
+                                                cfwsInfo,
+                                                kCFPropertyListXMLFormat_v1_0, //100
+                                                &cfsError);
+                            if(cfsError && cfiWritten == 0)
+                            {
+                                wxLogDebug(wxCFString(cfsError).BuildWXString());
+                                wxString sMessage;
+                                cfdInfo.PrintOut(sMessage);
+                                wxLogDebug(sMessage);
+                            }
+                            else
+                            {
+                                bInfoSuccess = true;
+//#if defined(__DARWIN__)
+//                //force launch services to update its database for the finder
+//                OSStatus status = LSRegisterURL((CFURLRef)(CFTypeRef)cfurlBundleLoc, true);
+//                if(status != noErr)
+//                {
+//                    wxLogDebug(wxT("LSRegisterURL Failed."));
+//                }
+//#endif
+                            }
+                    
+                            CFWriteStreamClose(cfwsInfo);
 
+*/
 #endif //wxUSE_MIMETYPE
