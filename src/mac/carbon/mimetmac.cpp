@@ -1173,7 +1173,7 @@ public:
     {			}
     
     operator CFTypeRef() const
-    {return (CFTypeRef) ((CFStringRef) m_Holder);	}
+    {return (CFTypeRef) (m_Holder.operator CFStringRef());	} //don't ask
     
     bool IsOk() { return ((CFTypeRef)(*this)) != NULL;	}
     
