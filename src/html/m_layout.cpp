@@ -300,7 +300,7 @@ TAG_HANDLER_BEGIN(TITLE, "TITLE")
                 wxString title = m_WParser->GetSource()->Mid(
                                         tag.GetBeginPos(),
                                         tag.GetEndPos1()-tag.GetBeginPos());
-#if !wxUSE_UNICODE
+#if !wxUSE_UNICODE && wxUSE_WCHAR_T
                 wxCSConv conv(m_WParser->GetInputEncoding());
                 title = wxString(title.wc_str(conv), wxConvLocal);
 #endif

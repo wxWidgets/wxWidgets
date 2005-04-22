@@ -1813,6 +1813,11 @@ AC_CHECK_SIZEOF(wchar_t, 0,
         #include <stdio.h>
     ]
 )
+if test "$ac_cv_sizeof_wchar_t" != "0"; then
+    wxUSE_WCHAR_T=yes
+else
+    wxUSE_WCHAR_T=no
+fi
 
 dnl checks needed to define wxVaCopy
 AC_CACHE_CHECK([for va_copy],
@@ -2446,6 +2451,17 @@ fi
 dnl ------------------------------------------------------------------------
 dnl Check for expat libraries
 dnl ------------------------------------------------------------------------
+
+if test "$wxUSE_WCHAR_T" != "yes"; then
+    if test "$wxUSE_EXPAT" != "no"; then
+        AC_MSG_WARN([wxWidgets requires wchar_t to use expat, disabling])
+        wxUSE_EXPAT=no
+    fi
+    if test "$wxUSE_XML" != "no"; then
+        AC_MSG_WARN([wxWidgets requires wchar_t to use xml, disabling])
+        wxUSE_XML=no
+    fi
+fi
 
 if test "$wxUSE_EXPAT" != "no"; then
     wxUSE_XML=yes
@@ -3764,7 +3780,7 @@ dnl Check for functions
 dnl ---------------------------------------------------------------------------
 
 dnl don't check for wchar_t functions if we haven't got wchar_t itself
-if test "$ac_cv_sizeof_wchar_t" != "0"; then
+if test "$wxUSE_WCHAR_T" = "yes"; then
     AC_DEFINE(wxUSE_WCHAR_T)
 
     dnl check for wcslen in all possible places

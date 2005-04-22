@@ -83,8 +83,12 @@ private:
     // position in the stream in bytes, *not* in chars
     size_t m_pos;
 
+#if wxUSE_WCHAR_T
     // string encoding converter (UTF8 is the standard)
     wxMBConvUTF8 m_conv;
+#else
+    wxMBConv m_conv;
+#endif
 
     DECLARE_NO_COPY_CLASS(wxStringOutputStream)
 };
