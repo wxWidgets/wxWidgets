@@ -1722,7 +1722,7 @@ wxFileType* wxMimeTypesManagerImpl::Associate(const wxFileTypeInfo& ftInfo)
                 entry.fileCreator = creator;
                 entry.postCreator = 0;
                 entry.flags = kICMapDataForkBit; //TODO:  Maybe resource is valid by default too?
-                entry.extension = psExtension;
+                PLstrcpy( entry.extension , psExtension ) ;
                 memcpy(entry.creatorAppName, psCreatorName, sizeof(Str255));
                 memcpy(entry.postAppName, psPostCreatorName, sizeof(Str255));
                 memcpy(entry.MIMEType, psMimeType, sizeof(Str255));
