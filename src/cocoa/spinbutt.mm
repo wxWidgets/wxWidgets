@@ -34,6 +34,11 @@ bool wxSpinButton::Create(wxWindow *parent, wxWindowID winid,
         return false;
     SetNSControl([[NSStepper alloc] initWithFrame: MakeDefaultNSRect(size)]);
     [m_cocoaNSView release];
+    
+    //flag handling (note wxSP_HORIZONTAL IS _NOT_ Supported in cocoa)
+    [(NSStepper*)m_cocoaNSView setValueWraps:style & wxSP_WRAP]; //default == true, evidently
+    
+    //final setup
     [(NSStepper*)m_cocoaNSView setTarget: sm_cocoaTarget];
     [(NSStepper*)m_cocoaNSView setAction:@selector(wxNSControlAction:)];
     if(m_parent)
