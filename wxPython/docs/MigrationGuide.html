@@ -4,14 +4,14 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
 <meta name="generator" content="Docutils 0.3.1: http://docutils.sourceforge.net/" />
-<title>wxPython 2.5 Migration Guide</title>
+<title>wxPython 2.6 Migration Guide</title>
 <link rel="stylesheet" href="default.css" type="text/css" />
 </head>
 <body>
-<div class="document" id="wxpython-2-5-migration-guide">
-<h1 class="title">wxPython 2.5 Migration Guide</h1>
+<div class="document" id="wxpython-2-6-migration-guide">
+<h1 class="title">wxPython 2.6 Migration Guide</h1>
 <p>This document will help explain some of the major changes in wxPython
-2.5 since the 2.4 series and let you know what you need to do to adapt
+2.6 since the 2.4 series and let you know what you need to do to adapt
 your programs to those changes.  Be sure to also check in the <a class="reference" href="CHANGES.html">CHANGES</a>
 file like usual to see info about the not so major changes and other
 things that have been added to wxPython.</p>
@@ -304,7 +304,7 @@ SetClippingRect(self, rect)
 <p>wxPython's setup.py script now expects to use existing libraries for
 the contribs (gizmos, stc, xrc, etc.) rather than building local
 copies of them.  If you build your own copies of wxPython please be
-aware that you now need to also build the ogl, stc, xrc, and gizmos
+aware that you now need to also build the stc, xrc, animate and gizmos
 libraries in addition to the main wx lib.</p>
 <p>The wxPython.h and other header files are now in
 .../wxPython/include/wx/wxPython instead of in wxPython/src.  You
@@ -622,18 +622,20 @@ fully transparent.</li>
 <div class="section" id="ogl-is-dead-long-live-ogl">
 <h1><a name="ogl-is-dead-long-live-ogl">OGL is dead! LONG LIVE OGL!</a></h1>
 <p><strong>[Changed in 2.5.2.x]</strong></p>
-<p>The wx.ogl module has been deprecated in favor of the new Python port
-of the OGL library located at wx.lib.ogl contributed by Pierre Hjälm.
-This will hopefully greatly extend the life of OGL within wxPython by
-making it more easily maintainable and less prone to getting rusty as
-there seems to be less and less interest in maintaining the C++
-version.</p>
+<p>The wx.ogl module was deprecated in version 2.5.2 in favor of the new
+Python port of the OGL library located at wx.lib.ogl contributed by
+Pierre Hjälm.  Starting in version 2.5.5 the old ogl is no longer
+being built in the distributed binaries, however the source code is
+still in the source tree so people can built it themselves if desired.</p>
+<p>The reason this changes was done was to greatly extend the life of OGL
+within wxPython by making it more easily maintainable and less prone
+to getting rusty as there seems to be less and less interest in
+maintaining the C++ version.</p>
 <p>There are only a few known compatibility issues at this time.  First
-is that the ogl.DrawnShape has not been reimplemented yet.  Next is the
-location of OGL.  The deprecated version is located in the wx.ogl
-module, and the new version is in the wx.lib.ogl package.  So this
-just means that to start using the new version you need to adjust your
-imports.  So if your code currently has something like this:</p>
+is the location of OGL.  The old version was located in the
+wx.ogl module, and the new version is in the wx.lib.ogl package.  So
+this just means that to start using the new version you need to adjust
+your imports.  So if your code currently has something like this:</p>
 <pre class="literal-block">
 import wx
 import wx.ogl as ogl

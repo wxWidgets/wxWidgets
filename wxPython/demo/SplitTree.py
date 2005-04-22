@@ -105,7 +105,7 @@ class TestPanel(wx.Panel):
 
         valueWindow = TestValueWindow(splitter, style=wx.NO_BORDER)
 
-        splitter.SplitVertically(tree, valueWindow, 150)
+        wx.CallAfter(splitter.SplitVertically, tree, valueWindow, 150)
         scroller.SetTargetWindow(tree)
         scroller.EnableScrolling(False, False)
 
