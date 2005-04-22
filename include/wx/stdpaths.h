@@ -95,6 +95,28 @@ protected:
     #include "wx/unix/stdpaths.h"
 #elif defined(__PALMOS__)
     #include "wx/palmos/stdpaths.h"
+#else
+
+// ----------------------------------------------------------------------------
+// Minimal generic implemenatation
+// ----------------------------------------------------------------------------
+
+class WXDLLIMPEXP_BASE wxStandardPaths : public wxStandardPathsBase
+{
+public:
+    void SetInstallPrefix(const wxString& prefix) { m_prefix = prefix; }
+    wxString GetInstallPrefix() const { return m_prefix; }
+    virtual wxString GetConfigDir() const { return m_prefix; }
+    virtual wxString GetUserConfigDir() const { return m_prefix; }
+    virtual wxString GetDataDir() const { return m_prefix; }
+    virtual wxString GetLocalDataDir() const { return m_prefix; }
+    virtual wxString GetUserDataDir() const { return m_prefix; }
+    virtual wxString GetPluginsDir() const { return m_prefix; }
+
+private:
+    wxString m_prefix;
+};
+
 #endif
 
 #endif // wxUSE_STDPATHS
