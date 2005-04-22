@@ -7146,8 +7146,10 @@ void wxGrid::DrawAllGridLines( wxDC& dc, const wxRegion & WXUNUSED(reg) )
     int topRow    = internalYToRow(top);
     int rightCol  = internalXToCol(right);
     int bottomRow = internalYToRow(bottom);
-    wxRegion clippedcells(0, 0, cw, ch);
 
+#ifndef __WXMAC__
+    // CS: I don't know why suddenly unscrolled coordinates are used for clipping
+    wxRegion clippedcells(0, 0, cw, ch);
 
     int i, j, cell_rows, cell_cols;
     wxRect rect;
@@ -7171,6 +7173,30 @@ void wxGrid::DrawAllGridLines( wxDC& dc, const wxRegion & WXUNUSED(reg) )
             }
         }
     }
+#else
+    wxRegion clippedcells( left , top, right - left, bottom - top);
+
+    int i, j, cell_rows, cell_cols;
+    wxRect rect;
+
+    for (j=topRow; j<bottomRow; j++)
+    {
+        for (i=leftCol; i<rightCol; i++)
+        {
+            GetCellSize( j, i, &cell_rows, &cell_cols );
+            if ((cell_rows > 1) || (cell_cols > 1))
+            {
+                rect = CellToRect(j,i);
+                clippedcells.Subtract(rect);
+            }
+            else if ((cell_rows < 0) || (cell_cols < 0))
+            {
+                rect = CellToRect(j+cell_rows, i+cell_cols);
+                clippedcells.Subtract(rect);
+            }
+        }
+    }
+#endif
     dc.SetClippingRegion( clippedcells );
 
     dc.SetPen( wxPen(GetGridLineColour(), 1, wxSOLID) );
