@@ -87,6 +87,8 @@
 #define	BSDTYPES
 #elif defined(OS2_16) || defined(OS2_32)
 #define	BSDTYPES
+#elif defined(__MSDOS__)
+#define	BSDTYPES
 #elif defined(__acornriscos)
 #include <stdlib.h>
 #define	BSDTYPES
