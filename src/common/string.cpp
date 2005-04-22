@@ -1847,6 +1847,7 @@ int wxString::PrintfV(const wxChar* pszFormat, va_list argptr)
 #if !defined(__WXMSW__)                              && \
     !defined(__WXPALMOS__)                           && \
     !defined(__OpenBSD__)                            && \
+    !defined(__DJGPP__)                              && \
     !defined( __VMS )                                && \
     !(defined(__WXMAC__) && !defined(__WXMAC_OSX__)) && \
     !(defined(__EMX__) && !defined(__INNOTEK_LIBC__))
