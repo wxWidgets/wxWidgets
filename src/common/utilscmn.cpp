@@ -597,13 +597,18 @@ bool wxLaunchDefaultBrowser(const wxString& url)
          LPShellExecute lpShellExecute = 
              (LPShellExecute) ::GetProcAddress(hShellDll, 
              wxString::Format(wxT("ShellExecute%s"), 
+
 #ifdef __WXUNICODE__
              wxT("W")
 #else
              wxT("A")
 #endif
+#ifdef __WXWINCE__
                              )
-                                              );
+#else
+                             ).mb_str(wxConvLocal)
+#endif
+                             );
          if(lpShellExecute == NULL)
              return false;
 
