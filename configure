@@ -19677,6 +19677,11 @@ cat >>confdefs.h <<_ACEOF
 _ACEOF
 
 
+if test "$ac_cv_sizeof_wchar_t" != "0"; then
+    wxUSE_WCHAR_T=yes
+else
+    wxUSE_WCHAR_T=no
+fi
 
 echo "$as_me:$LINENO: checking for va_copy" >&5
 echo $ECHO_N "checking for va_copy... $ECHO_C" >&6
@@ -23348,6 +23353,19 @@ echo "$as_me: WARNING: system tiff library not found, will use built-in instead"
     fi
 fi
 
+
+if test "$wxUSE_WCHAR_T" != "yes"; then
+    if test "$wxUSE_EXPAT" != "no"; then
+        { echo "$as_me:$LINENO: WARNING: wxWidgets requires wchar_t to use expat, disabling" >&5
+echo "$as_me: WARNING: wxWidgets requires wchar_t to use expat, disabling" >&2;}
+        wxUSE_EXPAT=no
+    fi
+    if test "$wxUSE_XML" != "no"; then
+        { echo "$as_me:$LINENO: WARNING: wxWidgets requires wchar_t to use xml, disabling" >&5
+echo "$as_me: WARNING: wxWidgets requires wchar_t to use xml, disabling" >&2;}
+        wxUSE_XML=no
+    fi
+fi
 
 if test "$wxUSE_EXPAT" != "no"; then
     wxUSE_XML=yes
@@ -30457,7 +30475,7 @@ _ACEOF
 fi
 
 
-if test "$ac_cv_sizeof_wchar_t" != "0"; then
+if test "$wxUSE_WCHAR_T" = "yes"; then
     cat >>confdefs.h <<\_ACEOF
 #define wxUSE_WCHAR_T 1
 _ACEOF
@@ -35414,6 +35432,8 @@ if test "$TOOLKIT" != "MSW" -a "$USE_OS2" != 1; then
     if test "$wxUSE_DYNAMIC_LOADER" = "yes" -o "$wxUSE_DYNLIB_CLASS" = "yes" ; then
         if test "$USE_DARWIN" = 1; then
                         HAVE_DL_FUNCS=1
+        elif test "$USE_DOS" = 1; then
+            HAVE_DL_FUNCS=0
         else
 
 for ac_func in dlopen
@@ -35967,7 +35987,7 @@ done
 
         if test "$HAVE_DL_FUNCS" = 0; then
             if test "$HAVE_SHL_FUNCS" = 0; then
-              if test "$USE_UNIX" = 1; then
+              if test "$USE_UNIX" = 1 -o "$USE_DOS" = 1; then
                   { echo "$as_me:$LINENO: WARNING: Missing dynamic loading support, several features will be disabled" >&5
 echo "$as_me: WARNING: Missing dynamic loading support, several features will be disabled" >&2;}
                   wxUSE_DYNAMIC_LOADER=no
@@ -42247,7 +42267,8 @@ EOF
       *-*-sunos4* | \
       *-*-osf* | \
       *-*-dgux5* | \
-      *-*-sysv5* )
+      *-*-sysv5* | \
+      *-pc-msdosdjgpp )
               ;;
 
       *)
