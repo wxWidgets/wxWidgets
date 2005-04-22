@@ -15,6 +15,7 @@
 #ifndef WX_PRECOMP
 #endif
 #include "wx/unix/execute.h"
+#include "wx/utils.h"
 
 #if 0
 

@@ -29,6 +29,10 @@
 
 #import <AppKit/NSView.h>
 
+//
+// Private object in AppKit - exists in 10.2 at least -  
+// most likely exists earlier too
+//
 @interface NSToolTipManager : NSObject
 {
 /*

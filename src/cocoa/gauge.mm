@@ -34,6 +34,12 @@ bool wxGauge::Create(wxWindow *parent, wxWindowID winid, int range,
             const wxPoint& pos, const wxSize& size, long style,
             const wxValidator& validator, const wxString& name)
 {
+    //flag checking
+    wxASSERT_MSG( !(style & wxGA_HORIZONTAL), wxT("Horizontal gauge not supported on cocoa"));//*
+    wxASSERT_MSG( !(style & wxGA_SMOOTH), wxT("Smooth gauge not supported on cocoa"));
+    //* - GNUStep made isVertical and setVertical part of thier framework, but its specific to them
+    //the way they do it is just handle that flag in drawRect.
+
     if(!CreateControl(parent,winid,pos,size,style,validator,name))
         return false;
     SetNSView([[NSProgressIndicator alloc] initWithFrame: MakeDefaultNSRect(size)]);
