@@ -113,10 +113,10 @@ beastTask2 = Task([ Job("co-mdk101.23", ["distrib/all/build-rpm", CFGFILE, "beas
                     Job("co-fc2.24",    ["distrib/all/build-rpm", CFGFILE, "beast", "co-fc2",   "fc2",   "2.4"]),
                     ])
 
-cyclopsTask = Task([ Job("co-rh9.23",    ["distrib/all/build-rpm", CFGFILE, "cyclops", "co-rh9",   "rh9",   "2.3"]),
-                     Job("co-mdk92.23",  ["distrib/all/build-rpm", CFGFILE, "cyclops", "co-mdk92", "mdk92", "2.3"]),
-                     Job("co-rh9.24",    ["distrib/all/build-rpm", CFGFILE, "cyclops", "co-rh9",   "rh9",   "2.4"]),
+cyclopsTask = Task([ Job("co-mdk92.23",  ["distrib/all/build-rpm", CFGFILE, "cyclops", "co-mdk92", "mdk92", "2.3"]),
+                     Job("co-rh9.23",    ["distrib/all/build-rpm", CFGFILE, "cyclops", "co-rh9",   "rh9",   "2.3"]),
                      Job("co-mdk92.24",  ["distrib/all/build-rpm", CFGFILE, "cyclops", "co-mdk92", "mdk92", "2.4"]),
+                     Job("co-rh9.24",    ["distrib/all/build-rpm", CFGFILE, "cyclops", "co-rh9",   "rh9",   "2.4"]),
                      ])
 
 buildTasks = [ jaguarTask,
