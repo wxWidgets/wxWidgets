@@ -98,7 +98,7 @@ protected:
 #else
 
 // ----------------------------------------------------------------------------
-// Minimal generic implemenatation
+// Minimal generic implementation
 // ----------------------------------------------------------------------------
 
 class WXDLLIMPEXP_BASE wxStandardPaths : public wxStandardPathsBase
