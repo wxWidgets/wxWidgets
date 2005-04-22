@@ -29332,7 +29332,48 @@ else
         else
           wx_cv_version_script=no
         fi
+
+                                                                                                if test $wx_cv_version_script = yes
+        then
+          echo "struct B { virtual ~B() { } }; \
+                struct D : public B { }; \
+                void F() { D d; }" > conftest.cpp
+
+          if { ac_try='
+                $CXX -shared -fPIC -o conftest1.output $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.cpp
+                -Wl,--version-script,conftest.sym >/dev/null 2>/dev/null'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; } &&
+             { ac_try='
+                $CXX -shared -fPIC -o conftest2.output $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.cpp
+                -Wl,--version-script,conftest.sym conftest1.output >/dev/null 2>/dev/null'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; }
+          then
+            if { ac_try='
+                  $CXX -shared -fPIC -o conftest3.output $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.cpp
+                  -Wl,--version-script,conftest.sym conftest2.output conftest1.output >/dev/null 2>/dev/null'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; }
+            then
+              wx_cv_version_script=yes
+            else
+              wx_cv_version_script=no
+            fi
+          fi
+        fi
+
         rm -f conftest.output conftest.stderr conftest.sym conftest.cpp
+        rm -f conftest1.output conftest2.output conftest3.output
 
 fi
 echo "$as_me:$LINENO: result: $wx_cv_version_script" >&5

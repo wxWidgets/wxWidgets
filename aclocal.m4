@@ -450,7 +450,44 @@ AC_DEFUN([WX_VERSIONED_SYMBOLS],
         else
           wx_cv_version_script=no
         fi
+
+        dnl There's a problem in some old linkers with --version-script that
+        dnl can cause linking to fail when you have objects with vtables in
+        dnl libs 3 deep.  This is known to happen in netbsd and openbsd with
+        dnl ld 2.11.2.
+        dnl 
+        dnl To test for this we need to make some shared libs and
+        dnl unfortunately we can't be sure of the right way to do that. If the
+        dnl first two compiles don't succeed then it looks like the test isn't
+        dnl working and the result is ignored, but if OTOH the first two
+        dnl succeed but the third does not then the bug has been detected and
+        dnl the --version-script flag is dropped.
+        if test $wx_cv_version_script = yes
+        then
+          echo "struct B { virtual ~B() { } }; \
+                struct D : public B { }; \
+                void F() { D d; }" > conftest.cpp
+
+          if AC_TRY_COMMAND([
+                $CXX -shared -fPIC -o conftest1.output $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.cpp
+                -Wl,--version-script,conftest.sym >/dev/null 2>/dev/null]) &&
+             AC_TRY_COMMAND([
+                $CXX -shared -fPIC -o conftest2.output $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.cpp
+                -Wl,--version-script,conftest.sym conftest1.output >/dev/null 2>/dev/null])
+          then
+            if AC_TRY_COMMAND([
+                  $CXX -shared -fPIC -o conftest3.output $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.cpp
+                  -Wl,--version-script,conftest.sym conftest2.output conftest1.output >/dev/null 2>/dev/null])
+            then
+              wx_cv_version_script=yes
+            else
+              wx_cv_version_script=no
+            fi
+          fi
+        fi
+
         rm -f conftest.output conftest.stderr conftest.sym conftest.cpp
+        rm -f conftest1.output conftest2.output conftest3.output
       ])
       if test $wx_cv_version_script = yes ; then
         LDFLAGS_VERSIONING="-Wl,--version-script,$1"
