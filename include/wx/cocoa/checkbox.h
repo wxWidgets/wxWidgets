@@ -58,6 +58,8 @@ protected:
 public:
     virtual void SetValue(bool);
     virtual bool GetValue() const;
+    virtual void SetLabel(const wxString& label);
+    virtual wxString GetLabel() const { return GetTitle(); }
 protected:
     virtual void DoSet3StateValue(wxCheckBoxState state);
     virtual wxCheckBoxState DoGet3StateValue() const;
