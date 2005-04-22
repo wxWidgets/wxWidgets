@@ -22,7 +22,6 @@
 #ifndef WX_PRECOMP
     #include "wx/settings.h"
     #include "wx/module.h"
-    #include "wx/evtloop.h"
     #include "wx/frame.h"
     #include "wx/dialog.h"
     #include "wx/log.h"
@@ -30,6 +29,7 @@
 #endif
 
 #include "wx/app.h"
+#include "wx/evtloop.h"
 #include "wx/fontutil.h"
 #include "wx/univ/theme.h"
 #include "wx/univ/renderer.h"
