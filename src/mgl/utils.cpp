@@ -51,7 +51,7 @@ void wxBell()
 
 void wxSleep(int nSecs)
 {
-    wxUsleep(1000 * nSecs);
+    wxMilliSleep(1000 * nSecs);
 }
 
 void wxMilliSleep(unsigned long milliseconds)
