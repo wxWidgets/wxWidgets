@@ -4751,6 +4751,8 @@ if test "$TOOLKIT" != "MSW" -a "$USE_OS2" != 1; then
         if test "$USE_DARWIN" = 1; then
             dnl dlopen/dlerror is implemented in dynlib.cpp for Darwin/Mac OS X
             HAVE_DL_FUNCS=1
+        elif test "$USE_DOS" = 1; then
+            HAVE_DL_FUNCS=0
         else
             dnl the test is a bit complicated because we check for dlopen() both with
             dnl and without -ldl and we also try to find shl_load() if there is no
@@ -4796,7 +4798,7 @@ if test "$TOOLKIT" != "MSW" -a "$USE_OS2" != 1; then
 
         if test "$HAVE_DL_FUNCS" = 0; then
             if test "$HAVE_SHL_FUNCS" = 0; then
-              if test "$USE_UNIX" = 1; then
+              if test "$USE_UNIX" = 1 -o "$USE_DOS" = 1; then
                   AC_MSG_WARN([Missing dynamic loading support, several features will be disabled])
                   wxUSE_DYNAMIC_LOADER=no
                   wxUSE_DYNLIB_CLASS=no
