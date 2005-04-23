@@ -172,11 +172,11 @@ wxGnomePrintLibrary::wxGnomePrintLibrary()
 
     wxLogNull log;
     
-    m_gnome_print_lib = new wxDynamicLibrary( wxT("libgnomeprint-2-2.so") );
+    m_gnome_print_lib = new wxDynamicLibrary( wxT("libgnomeprint-2-2.so.0") );
     m_ok = m_gnome_print_lib->IsLoaded();
     if (!m_ok) return;    
     
-    m_gnome_printui_lib = new wxDynamicLibrary( wxT("libgnomeprintui-2-2.so") );
+    m_gnome_printui_lib = new wxDynamicLibrary( wxT("libgnomeprintui-2-2.so.0") );
     m_ok = m_gnome_printui_lib->IsLoaded();
     if (!m_ok) return;    
     
@@ -904,10 +904,53 @@ void wxGnomePrintDC::DoDrawLines(int n, wxPoint points[], wxCoord xoffset, wxCoo
 
 void wxGnomePrintDC::DoDrawPolygon(int n, wxPoint points[], wxCoord xoffset, wxCoord yoffset, int fillStyle)
 {
+    if (n==0) return;
+
+    if (m_brush.GetStyle () != wxTRANSPARENT)
+    {
+        SetBrush( m_brush );
+       
+        int x = points[0].x + xoffset;
+        int y = points[0].y + yoffset;
+        CalcBoundingBox( x, y );
+        gs_lgp->gnome_print_newpath( m_gpc );
+        gs_lgp->gnome_print_moveto( m_gpc, XLOG2DEV(x), YLOG2DEV(y) );
+        int i;
+        for (i = 1; i < n; i++)
+        {
+            int x = points[i].x + xoffset;
+            int y = points[i].y + yoffset;
+            gs_lgp->gnome_print_lineto( m_gpc, XLOG2DEV(x), YLOG2DEV(y) );
+            CalcBoundingBox( x, y );
+        }
+        gs_lgp->gnome_print_closepath( m_gpc );
+        gs_lgp->gnome_print_fill( m_gpc );
+    }
+
+    if (m_pen.GetStyle () != wxTRANSPARENT)
+    {
+        SetPen (m_pen);
+
+        int x = points[0].x + xoffset;
+        int y = points[0].y + yoffset;
+        gs_lgp->gnome_print_newpath( m_gpc );
+        gs_lgp->gnome_print_moveto( m_gpc, XLOG2DEV(x), YLOG2DEV(y) );
+        int i;
+        for (i = 1; i < n; i++)
+        {
+            int x = points[i].x + xoffset;
+            int y = points[i].y + yoffset;
+            gs_lgp->gnome_print_lineto( m_gpc, XLOG2DEV(x), YLOG2DEV(y) );
+            CalcBoundingBox( x, y );
+        }
+        gs_lgp->gnome_print_closepath( m_gpc );
+        gs_lgp->gnome_print_stroke( m_gpc );
+    }
 }
 
 void wxGnomePrintDC::DoDrawPolyPolygon(int n, int count[], wxPoint points[], wxCoord xoffset, wxCoord yoffset, int fillStyle)
 {
+    wxDC::DoDrawPolyPolygon( n, count, points, xoffset, yoffset, fillStyle );
 }
 
 void wxGnomePrintDC::DoDrawRectangle(wxCoord x, wxCoord y, wxCoord width, wxCoord height)
