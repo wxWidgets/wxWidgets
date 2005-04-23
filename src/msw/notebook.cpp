@@ -964,8 +964,9 @@ void wxNotebook::OnNavigationKey(wxNavigationKeyEvent& event)
         //
         wxWindow * const parent = GetParent();
 
-        const bool isFromParent = event.GetEventObject() == parent;
-        const bool isFromSelf = event.GetEventObject() == this;
+        // the wxObject* casts are required to avoid MinGW GCC 2.95.3 ICE
+        const bool isFromParent = event.GetEventObject() == (wxObject*) parent;
+        const bool isFromSelf = event.GetEventObject() == (wxObject*) this;
 
         if ( isFromParent || isFromSelf )
         {
