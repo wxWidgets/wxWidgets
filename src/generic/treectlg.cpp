@@ -2255,6 +2255,7 @@ void wxGenericTreeCtrl::PaintItem(wxGenericTreeItem *item, wxDC& dc)
     }
 
     int total_h = GetLineHeight(item);
+    bool hasCustomBackground = false;
 
     if ( item->IsSelected() )
     {
@@ -2277,7 +2278,10 @@ void wxGenericTreeCtrl::PaintItem(wxGenericTreeItem *item, wxDC& dc)
     {
         wxColour colBg;
         if ( attr && attr->HasBackgroundColour() )
+	{
+	    hasCustomBackground = true;
             colBg = attr->GetBackgroundColour();
+	}
         else
             colBg = m_backgroundColour;
         dc.SetBrush(wxBrush(colBg, wxSOLID));
@@ -2303,7 +2307,10 @@ void wxGenericTreeCtrl::PaintItem(wxGenericTreeItem *item, wxDC& dc)
             dc.DrawRectangle( item->GetX() + image_w - 2, item->GetY()+offset,
                               item->GetWidth() - image_w + 2, total_h-offset );
         }
-        else
+        // On GTK+ 2, drawing a 'normal' background is wrong for themes that
+        // don't allow backgrounds to be customized. Not drawing the background,
+        // except for custom item backgrounds, works for both kinds of theme.
+        else if (hasCustomBackground)
         {
             dc.DrawRectangle( item->GetX()-2, item->GetY()+offset,
                               item->GetWidth()+2, total_h-offset );
