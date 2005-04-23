@@ -7,7 +7,7 @@ static char *icon4_xpm[] = {
 "# c #c0c0c0",
 "a c #808080",
 "b c #ff0000",
-"c c #ffffff",
+"c c None",
 /* pixels */
 "cccccccccccccccccccccccccccccccc",
 "cccccccccccccccccccccccccccccccc",
