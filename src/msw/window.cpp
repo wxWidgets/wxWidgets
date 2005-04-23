@@ -3607,7 +3607,11 @@ wxWindowMSW::MSWOnDrawItem(int WXUNUSED_UNLESS_ODRAWN(id),
     {
         wxMenuItem *pMenuItem = (wxMenuItem *)(pDrawStruct->itemData);
 
-        wxCHECK_MSG( pMenuItem && pMenuItem->IsKindOf(CLASSINFO(wxMenuItem)),
+        // see comment before the same test in MSWOnMeasureItem() below
+        if ( !pMenuItem )
+            return false;
+
+        wxCHECK_MSG( wxDynamicCast(pMenuItem, wxMenuItem),
                          false, _T("MSWOnDrawItem: bad wxMenuItem pointer") );
 
         // prepare to call OnDrawItem(): notice using of wxDCTemp to prevent
