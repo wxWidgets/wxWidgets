@@ -1408,7 +1408,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/msw/window.h
 
     <!-- Resources must be installed together with headers: -->
-    wx/msw/gnuwin32/winresrc.h
     wx/msw/wx.manifest
     wx/msw/wx.rc
     <!-- bitmaps -->
