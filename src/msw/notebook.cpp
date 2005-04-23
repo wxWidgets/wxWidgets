@@ -43,15 +43,7 @@
 
 #include  <windowsx.h>  // for SetWindowFont
 
-#ifndef __TWIN32__
-    #ifdef __GNUWIN32_OLD__
-        #include "wx/msw/gnuwin32/extra.h"
-    #endif
-#endif
-
-#if defined(__WIN95__) && !((defined(__GNUWIN32_OLD__) || defined(__TWIN32__)) && !defined(__CYGWIN10__))
-    #include <commctrl.h>
-#endif
+#include <commctrl.h>
 
 #include "wx/msw/winundef.h"
 

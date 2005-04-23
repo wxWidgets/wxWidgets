@@ -96,15 +96,7 @@
     #include <windowsx.h>
 #endif
 
-#if (!defined(__GNUWIN32_OLD__) && !defined(__TWIN32__) && !defined(__WXMICROWIN__)) || defined(__CYGWIN10__)
-    #ifdef __WIN95__
-        #include <commctrl.h>
-    #endif
-#elif !defined(__WXMICROWIN__) // broken compiler
-    #ifndef __TWIN32__
-        #include "wx/msw/gnuwin32/extra.h"
-    #endif
-#endif
+#include <commctrl.h>
 
 // ----------------------------------------------------------------------------
 // standard constants not available with all compilers/headers

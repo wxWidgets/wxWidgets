@@ -39,12 +39,6 @@
 #include "wx/msw/taskbar.h"
 #include "wx/msw/private.h"
 
-#ifndef __TWIN32__
-    #ifdef __GNUWIN32_OLD__
-        #include "wx/msw/gnuwin32/extra.h"
-    #endif
-#endif
-
 #ifdef __SALFORDC__
     #include <shellapi.h>
 #endif

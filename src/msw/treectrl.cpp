@@ -55,13 +55,7 @@
 #include "wx/msw/treectrl.h"
 #include "wx/msw/dragimag.h"
 
-#ifdef __GNUWIN32_OLD__
-    #include "wx/msw/gnuwin32/extra.h"
-#endif
-
-#if defined(__WIN95__) && !((defined(__GNUWIN32_OLD__) || defined(__TWIN32__)) && !defined(__CYGWIN10__))
-    #include <commctrl.h>
-#endif
+#include <commctrl.h>
 
 // Bug in headers, sometimes
 #ifndef TVIS_FOCUSED

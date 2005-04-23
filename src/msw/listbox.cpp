@@ -49,12 +49,6 @@
     #include  "wx/ownerdrw.h"
 #endif
 
-#ifndef __TWIN32__
-    #ifdef __GNUWIN32_OLD__
-        #include "wx/msw/gnuwin32/extra.h"
-    #endif
-#endif
-
 #ifdef __WXWINE__
   #ifndef ListBox_SetItemData
     #define ListBox_SetItemData(hwndCtl, index, data) \

@@ -32,12 +32,6 @@
 typedef UINT MMRESULT;
 #endif
 
-#ifndef __TWIN32__
-#ifdef __GNUWIN32_OLD__
-#include "wx/msw/gnuwin32/extra.h"
-#endif
-#endif
-
 // Why doesn't BC++ have joyGetPosEx?
 #if !defined(__WIN32__) || defined(__BORLANDC__) || defined(__TWIN32__)
 #define NO_JOYGETPOSEX

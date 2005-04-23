@@ -50,10 +50,6 @@
 #define PCONVCONTEXT CONVCONTEXT*
 #endif
 
-#if defined(__TWIN32__) || defined(__GNUWIN32_OLD__)
-    #include "wx/msw/gnuwin32/extra.h"
-#endif
-
 // some compilers headers don't define this one (mingw32)
 #ifndef DMLERR_NO_ERROR
     #define DMLERR_NO_ERROR (0)

@@ -45,11 +45,7 @@
 
 #include "wx/msw/private.h"
 
-#if ((defined(__GNUWIN32_OLD__) || defined(__TWIN32__)) && !defined(__CYGWIN10__))
-    #include "wx/msw/gnuwin32/extra.h"
-#else
-    #include <commctrl.h>
-#endif
+#include <commctrl.h>
 
 #include "wx/msw/missing.h"
 
