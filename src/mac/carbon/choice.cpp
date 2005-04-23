@@ -101,7 +101,13 @@ bool wxChoice::Create(wxWindow *parent, wxWindowID id,
 // ----------------------------------------------------------------------------
 int wxChoice::DoAppend(const wxString& item)
 {
+    // FIXME: STL version of wxArrayString doesn't have the same args
+#if wxUSE_STL
+    size_t index = m_strings.size();
+    m_strings.Add( item );
+#else
     size_t index = m_strings.Add( item ) ;
+#endif
     m_datas.Insert( NULL , index ) ;
     UMAInsertMenuItem(MAC_WXHMENU( m_macPopUpMenuHandle ) , item, m_font.GetEncoding() , index );
     DoSetItemClientData( index , NULL ) ;
