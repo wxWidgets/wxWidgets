@@ -37,6 +37,7 @@
 #include <libgnomeprintui/gnome-print-job-preview.h>
 #include <libgnomeprintui/gnome-print-paper-selector.h>
 
+static const double RAD2DEG  = 180.0 / M_PI;
 
 #include "wx/html/forcelnk.h"
 FORCE_LINK_ME(gnome_print)
@@ -878,6 +879,58 @@ void wxGnomePrintDC::DoCrossHair(wxCoord x, wxCoord y)
 
 void wxGnomePrintDC::DoDrawArc(wxCoord x1,wxCoord y1,wxCoord x2,wxCoord y2,wxCoord xc,wxCoord yc)
 {
+    double dx = x1 - xc;
+    double dy = y1 - yc;
+    double radius = sqrt((double)(dx*dx+dy*dy));
+    double alpha1, alpha2;
+    if (x1 == x2 && y1 == y2)
+    {
+        alpha1 = 0.0;
+        alpha2 = 360.0;
+    }
+    else
+    if (radius == 0.0)
+    {
+        alpha1 = alpha2 = 0.0;
+    }
+    else
+    {
+        alpha1 = (x1 - xc == 0) ?
+            (y1 - yc < 0) ? 90.0 : -90.0 :
+            -atan2(double(y1-yc), double(x1-xc)) * RAD2DEG;
+        alpha2 = (x2 - xc == 0) ?
+            (y2 - yc < 0) ? 90.0 : -90.0 :
+            -atan2(double(y2-yc), double(x2-xc)) * RAD2DEG;
+            
+        while (alpha1 <= 0)   alpha1 += 360;
+        while (alpha2 <= 0)   alpha2 += 360; // adjust angles to be between
+        while (alpha1 > 360)  alpha1 -= 360; // 0 and 360 degree
+        while (alpha2 > 360)  alpha2 -= 360;
+    }
+
+        if (m_brush.GetStyle() != wxTRANSPARENT)
+        {
+            SetBrush( m_brush );
+            gs_lgp->gnome_print_moveto ( m_gpc, XLOG2DEV(xc), YLOG2DEV(yc) );
+            gs_lgp->gnome_print_arcto( m_gpc, XLOG2DEV(xc), YLOG2DEV(yc), XLOG2DEVREL((int)radius), alpha1, alpha2, 0 );
+        
+            gs_lgp->gnome_print_fill( m_gpc );
+        }
+
+        if (m_pen.GetStyle() != wxTRANSPARENT)
+        {
+            SetPen (m_pen);
+            gs_lgp->gnome_print_newpath( m_gpc );
+            gs_lgp->gnome_print_moveto ( m_gpc, XLOG2DEV(xc), YLOG2DEV(yc) );
+            gs_lgp->gnome_print_arcto( m_gpc, XLOG2DEV(xc), YLOG2DEV(yc), XLOG2DEVREL((int)radius), alpha1, alpha2, 0 );
+            gs_lgp->gnome_print_closepath( m_gpc );
+            
+            gs_lgp->gnome_print_stroke( m_gpc );
+        }
+
+    CalcBoundingBox (x1, y1);
+    CalcBoundingBox (x2, y2);
+    CalcBoundingBox (xc, yc);
 }
 
 void wxGnomePrintDC::DoDrawEllipticArc(wxCoord x,wxCoord y,wxCoord w,wxCoord h,double sa,double ea)
@@ -1221,7 +1274,19 @@ bool wxGnomePrintDC::DoBlit(wxCoord xdest, wxCoord ydest, wxCoord width, wxCoord
             wxDC *source, wxCoord xsrc, wxCoord ysrc, int rop, bool useMask,
             wxCoord xsrcMask, wxCoord ysrcMask)
 {
-    return false;
+    wxCHECK_MSG( source, false, wxT("invalid source dc") );
+
+    // blit into a bitmap
+    wxBitmap bitmap( width, height );
+    wxMemoryDC memDC;
+    memDC.SelectObject(bitmap);
+    memDC.Blit(0, 0, width, height, source, xsrc, ysrc, rop); /* TODO: Blit transparently? */
+    memDC.SelectObject(wxNullBitmap);
+
+    // draw bitmap. scaling and positioning is done there
+    DrawBitmap( bitmap, xdest, ydest );
+
+    return true;
 }
 
 void wxGnomePrintDC::DoDrawIcon( const wxIcon& icon, wxCoord x, wxCoord y )
