@@ -487,14 +487,14 @@ void MyPrintout::DrawPageTwo(wxDC *dc)
 
     // Calculate conversion factor for converting millimetres into
     // logical units.
-    // There are approx. 25.1 mm to the inch. There are ppi
+    // There are approx. 25.4 mm to the inch. There are ppi
     // device units to the inch. Therefore 1 mm corresponds to
-    // ppi/25.1 device units. We also divide by the
+    // ppi/25.4 device units. We also divide by the
     // screen-to-printer scaling factor, because we need to
     // unscale to pass logical units to DrawLine.
 
     // Draw 50 mm by 50 mm L shape
-    float logUnitsFactor = (float)(ppiPrinterX/(scale*25.1));
+    float logUnitsFactor = (float)(ppiPrinterX/(scale*25.4));
     float logUnits = (float)(50*logUnitsFactor);
     dc->SetPen(* wxBLACK_PEN);
     dc->DrawLine(50, 250, (long)(50.0 + logUnits), 250);
