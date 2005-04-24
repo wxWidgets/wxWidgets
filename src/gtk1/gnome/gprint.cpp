@@ -1161,6 +1161,60 @@ void wxGnomePrintDC::DoDrawEllipse(wxCoord x, wxCoord y, wxCoord width, wxCoord 
 
 void wxGnomePrintDC::DoDrawSpline(wxList *points)
 {
+    SetPen (m_pen);
+
+    double c, d, x1, y1, x2, y2, x3, y3;
+    wxPoint *p, *q;
+
+    wxList::compatibility_iterator node = points->GetFirst();
+    p = (wxPoint *)node->GetData();
+    x1 = p->x;
+    y1 = p->y;
+
+    node = node->GetNext();
+    p = (wxPoint *)node->GetData();
+    c = p->x;
+    d = p->y;
+    x3 =
+         (double)(x1 + c) / 2;
+    y3 =
+         (double)(y1 + d) / 2;
+
+    gs_lgp->gnome_print_newpath( m_gpc );
+    gs_lgp->gnome_print_moveto( m_gpc, XLOG2DEV((wxCoord)x1), YLOG2DEV((wxCoord)y1) );
+    gs_lgp->gnome_print_lineto( m_gpc, XLOG2DEV((wxCoord)x3), YLOG2DEV((wxCoord)y3) );
+     
+    CalcBoundingBox( (wxCoord)x1, (wxCoord)y1 );
+    CalcBoundingBox( (wxCoord)x3, (wxCoord)y3 );
+
+    node = node->GetNext();
+    while (node)
+    {
+        q = (wxPoint *)node->GetData();
+
+        x1 = x3;
+        y1 = y3;
+        x2 = c;
+        y2 = d;
+        c = q->x;
+        d = q->y;
+        x3 = (double)(x2 + c) / 2;
+        y3 = (double)(y2 + d) / 2;
+
+        gs_lgp->gnome_print_curveto(m_gpc,
+            XLOG2DEV((wxCoord)x1), YLOG2DEV((wxCoord)y1),
+            XLOG2DEV((wxCoord)x2), YLOG2DEV((wxCoord)y2),
+            XLOG2DEV((wxCoord)x3), YLOG2DEV((wxCoord)y3) );
+
+        CalcBoundingBox( (wxCoord)x1, (wxCoord)y1 );
+        CalcBoundingBox( (wxCoord)x3, (wxCoord)y3 );
+
+        node = node->GetNext();
+    }
+    
+    gs_lgp->gnome_print_lineto ( m_gpc, XLOG2DEV((wxCoord)c), YLOG2DEV((wxCoord)d) );
+    
+    gs_lgp->gnome_print_stroke( m_gpc );
 }
 
 bool wxGnomePrintDC::DoBlit(wxCoord xdest, wxCoord ydest, wxCoord width, wxCoord height,
