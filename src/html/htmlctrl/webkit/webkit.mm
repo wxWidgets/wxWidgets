@@ -15,6 +15,7 @@
 
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
+#include "wx/splitter.h"
 
 #ifndef WX_PRECOMP
     #include "wx/wx.h"
@@ -145,7 +146,7 @@ bool wxWebKitCtrl::Create(wxWindow *parent,
     SetInitialFrameRect(pos,sizeInstance);
 #else
     m_macIsUserPane = false;
-	wxControl::Create(parent, m_windowID, pos, size, style , validator , name);
+	wxControl::Create(parent, winID, pos, size, style , validator , name);
     m_peer = new wxMacControl(this);
     WebInitForCarbon();
     HIWebViewCreate( m_peer->GetControlRefAddr() );
@@ -284,8 +285,32 @@ void wxWebKitCtrl::OnSize(wxSizeEvent &event){
 					
 	while(parent != NULL)
 	{
-		if ( parent->GetClassInfo()->GetClassName() == wxT("wxSplitterWindow") ){
-			//do nothing in this case
+		if ( parent->IsKindOf( CLASSINFO( wxSplitterWindow ) ) && GetParent()->IsKindOf( CLASSINFO( wxSplitterWindow ) ) ){
+				// When parent is not a wxSplitterWindow, we can rely on it's GetPosition() to give us the correct
+				// coordinates, but when the parent is a wxSplitterWindow, we need to manually calculate 
+				// the sash position of it and any parent wxSplitterWindows into the webkit's position.
+				wxSplitterWindow* splitter;
+				splitter = dynamic_cast<wxSplitterWindow*>(parent);
+				if (splitter->GetSplitMode() == wxSPLIT_HORIZONTAL){
+					if (splitter->GetPosition().y > 0)
+						y += splitter->GetPosition().y;
+					
+					if (splitter->GetSashSize() > 0)
+						y += splitter->GetSashSize();
+						
+					if (splitter->GetSashPosition() > 0)
+						y += splitter->GetSashPosition();
+				}
+				else{
+					if (splitter->GetPosition().x > 0)
+						x += splitter->GetPosition().x;
+					
+					if (splitter->GetSashSize() > 0)
+						x += splitter->GetSashSize();
+						
+					if (splitter->GetSashPosition() > 0)
+						x += splitter->GetSashPosition();
+				}
 		}
 		else{
 			if (!parent->IsTopLevel()) {
@@ -321,7 +346,7 @@ void wxWebKitCtrl::OnSize(wxSizeEvent &event){
 
 			if ( parent->IsKindOf( CLASSINFO( wxNotebook ) )  ){
 				//Not sure why calcs are off in this one scenario...
-				x -= 3;
+				y -= 4;
 				//printf("x: %d, y:%d\n", x, y);
 			}
 			
