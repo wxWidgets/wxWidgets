@@ -80,7 +80,6 @@ bool wxChoice::Create(wxWindow *parent, wxWindowID id,
     m_peer->SetValueAndRange( n > 0 ? 1 : 0 , 0 , 0 ) ;
     MacPostControlCreate(pos,size) ;
 
-    // FIXME: STL version of wxArrayString doesn't have the same args
 #if !wxUSE_STL
     if ( style & wxCB_SORT )
     {
@@ -101,10 +100,22 @@ bool wxChoice::Create(wxWindow *parent, wxWindowID id,
 // ----------------------------------------------------------------------------
 int wxChoice::DoAppend(const wxString& item)
 {
-    // FIXME: STL version of wxArrayString doesn't have the same args
 #if wxUSE_STL
-    size_t index = m_strings.size();
-    m_strings.Add( item );
+    wxArrayString::iterator insertPoint;
+    size_t index;
+    
+    if (GetWindowStyle() & wxCB_SORT)
+    {
+        insertPoint = std::lower_bound( m_strings.begin(), m_strings.end(), item );
+        index = insertPoint - m_strings.begin();
+    }
+    else
+    {
+        insertPoint = m_strings.end();
+        index = m_strings.size();
+    }
+
+    m_strings.insert( insertPoint, item );
 #else
     size_t index = m_strings.Add( item ) ;
 #endif
