@@ -76,6 +76,8 @@ public:
         (GnomePrintContext *pc, gdouble x, gdouble y), (pc, x, y), 0 )
     wxDL_METHOD_DEFINE( gint, gnome_print_lineto, 
         (GnomePrintContext *pc, gdouble x, gdouble y), (pc, x, y), 0 )
+    wxDL_METHOD_DEFINE( gint, gnome_print_arcto, 
+        (GnomePrintContext *pc, gdouble x, gdouble y, gdouble radius, gdouble angle1, gdouble angle2, gint direction ), (pc, x, y, radius, angle1, angle2, direction), 0 )
     wxDL_METHOD_DEFINE( gint, gnome_print_curveto, 
         (GnomePrintContext *pc, gdouble x1, gdouble y1, gdouble x2, gdouble y2, gdouble x3, gdouble y3), (pc, x1, y1, x2, y2, x3, y3), 0 )
     wxDL_METHOD_DEFINE( gint, gnome_print_closepath, 
@@ -102,6 +104,8 @@ public:
         (GnomePrintContext *pc, gdouble sx, gdouble sy), (pc, sx, sy), 0 )
     wxDL_METHOD_DEFINE( gint, gnome_print_rotate,
         (GnomePrintContext *pc, gdouble theta), (pc, theta), 0 )
+    wxDL_METHOD_DEFINE( gint, gnome_print_translate,
+        (GnomePrintContext *pc, gdouble x, gdouble y), (pc, x, y), 0 )
 
     wxDL_METHOD_DEFINE( gint, gnome_print_gsave,
         (GnomePrintContext *pc), (pc), 0 )
@@ -205,6 +209,7 @@ void wxGnomePrintLibrary::InitializeMethods()
     wxDL_METHOD_LOAD( m_gnome_print_lib, gnome_print_moveto, success )
     wxDL_METHOD_LOAD( m_gnome_print_lib, gnome_print_lineto, success )
     wxDL_METHOD_LOAD( m_gnome_print_lib, gnome_print_curveto, success )
+    wxDL_METHOD_LOAD( m_gnome_print_lib, gnome_print_arcto, success )
     wxDL_METHOD_LOAD( m_gnome_print_lib, gnome_print_closepath, success )
     wxDL_METHOD_LOAD( m_gnome_print_lib, gnome_print_stroke, success )
     wxDL_METHOD_LOAD( m_gnome_print_lib, gnome_print_fill, success )
@@ -218,6 +223,7 @@ void wxGnomePrintLibrary::InitializeMethods()
     wxDL_METHOD_LOAD( m_gnome_print_lib, gnome_print_concat, success )
     wxDL_METHOD_LOAD( m_gnome_print_lib, gnome_print_scale, success )
     wxDL_METHOD_LOAD( m_gnome_print_lib, gnome_print_rotate, success )
+    wxDL_METHOD_LOAD( m_gnome_print_lib, gnome_print_translate, success )
     
     wxDL_METHOD_LOAD( m_gnome_print_lib, gnome_print_gsave, success )
     wxDL_METHOD_LOAD( m_gnome_print_lib, gnome_print_grestore, success )
@@ -876,6 +882,47 @@ void wxGnomePrintDC::DoDrawArc(wxCoord x1,wxCoord y1,wxCoord x2,wxCoord y2,wxCoo
 
 void wxGnomePrintDC::DoDrawEllipticArc(wxCoord x,wxCoord y,wxCoord w,wxCoord h,double sa,double ea)
 {
+    x += w/2;
+    y += h/2;
+
+    int xx = XLOG2DEV(x);
+    int yy = YLOG2DEV(y);
+
+    gs_lgp->gnome_print_gsave( m_gpc );        
+
+    gs_lgp->gnome_print_translate( m_gpc, xx, yy );
+    double scale = (double)YLOG2DEVREL(h) / (double) XLOG2DEVREL(w);
+    gs_lgp->gnome_print_scale( m_gpc, 1.0, scale );
+    
+    xx = 0;
+    yy = 0;
+
+    if (m_brush.GetStyle () != wxTRANSPARENT)
+    {
+        SetBrush( m_brush );
+        
+        gs_lgp->gnome_print_moveto ( m_gpc, xx, yy );
+        gs_lgp->gnome_print_arcto( m_gpc, xx, yy, 
+            XLOG2DEVREL(w)/2, sa, ea, 0 );
+        gs_lgp->gnome_print_moveto ( m_gpc, xx, yy );
+        
+        gs_lgp->gnome_print_fill( m_gpc );
+    }
+    
+    if (m_pen.GetStyle () != wxTRANSPARENT)
+    {
+        SetPen (m_pen);
+        
+        gs_lgp->gnome_print_arcto( m_gpc, xx, yy, 
+            XLOG2DEVREL(w)/2, sa, ea, 0 );
+        
+        gs_lgp->gnome_print_stroke( m_gpc );
+    }
+    
+    gs_lgp->gnome_print_grestore( m_gpc );
+        
+    CalcBoundingBox( x, y );
+    CalcBoundingBox( x+w, y+h );
 }
 
 void wxGnomePrintDC::DoDrawPoint(wxCoord x, wxCoord y)
@@ -892,7 +939,7 @@ void wxGnomePrintDC::DoDrawLines(int n, wxPoint points[], wxCoord xoffset, wxCoo
 
     int i;
     for ( i =0; i<n ; i++ )
-        CalcBoundingBox( XLOG2DEV(points[i].x+xoffset), YLOG2DEV(points[i].y+yoffset));
+        CalcBoundingBox( points[i].x+xoffset, points[i].y+yoffset);
 
     gs_lgp->gnome_print_moveto ( m_gpc, XLOG2DEV(points[0].x+xoffset), YLOG2DEV(points[0].y+yoffset) );
     
