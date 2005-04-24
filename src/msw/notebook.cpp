@@ -42,13 +42,7 @@
 
 #include  <windowsx.h>
 
-#ifdef __GNUWIN32_OLD__
-    #include "wx/msw/gnuwin32/extra.h"
-#endif
-
-#if !(defined(__GNUWIN32_OLD__) && !defined(__CYGWIN10__))
-    #include <commctrl.h>
-#endif
+#include <commctrl.h>
 
 #include "wx/msw/winundef.h"
 

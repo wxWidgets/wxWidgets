@@ -7695,10 +7695,6 @@ SOURCE=..\..\include\wx\msw\uxtheme.h
 
 SOURCE=..\..\include\wx\msw\window.h
 # End Source File
-# Begin Source File
-
-SOURCE=..\..\include\wx\msw\gnuwin32\winresrc.h
-# End Source File
 # End Group
 # Begin Group "Generic Headers"
 

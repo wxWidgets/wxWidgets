@@ -37,10 +37,6 @@
 #include <string.h>
 #include "wx/taskbar.h"
 
-#ifdef __GNUWIN32_OLD__
-    #include "wx/msw/gnuwin32/extra.h"
-#endif
-
 #ifdef __WXWINCE__
     #include <winreg.h>
     #include <shellapi.h>

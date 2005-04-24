@@ -296,8 +296,6 @@ COCOA_DIST: ALL_GUI_DIST
 
 MSW_DIST: ALL_GUI_DIST
 	cp $(WXDIR)/wxWINE.spec $(DISTDIR)
-	mkdir $(DISTDIR)/include/wx/msw/gnuwin32
-	mkdir $(DISTDIR)/include/wx/msw/gnuwin32/gl
 	mkdir $(DISTDIR)/include/wx/msw/ole
 	mkdir $(DISTDIR)/include/wx/msw/wince
 	cp $(INCDIR)/wx/msw/*.h $(DISTDIR)/include/wx/msw
@@ -305,9 +303,6 @@ MSW_DIST: ALL_GUI_DIST
 	cp $(INCDIR)/wx/msw/*.ico $(DISTDIR)/include/wx/msw
 	cp $(INCDIR)/wx/msw/*.bmp $(DISTDIR)/include/wx/msw
 	cp $(INCDIR)/wx/msw/*.rc $(DISTDIR)/include/wx/msw
-	cp $(INCDIR)/wx/msw/gnuwin32/*.h $(DISTDIR)/include/wx/msw/gnuwin32
-	cp $(INCDIR)/wx/msw/gnuwin32/gl/*.h $(DISTDIR)/include/wx/msw/gnuwin32/gl
-	cp $(INCDIR)/wx/msw/gnuwin32/gl/*.def $(DISTDIR)/include/wx/msw/gnuwin32/gl
 	cp $(INCDIR)/wx/msw/ole/*.h $(DISTDIR)/include/wx/msw/ole
 	cp $(INCDIR)/wx/msw/wince/*.h $(DISTDIR)/include/wx/msw/wince
 	mkdir $(DISTDIR)/src/msw/ole
@@ -321,16 +316,11 @@ MSW_DIST: ALL_GUI_DIST
 MSW_ZIP_TEXT_DIST: ALL_GUI_DIST
 	cp $(WXDIR)/wxWINE.spec $(DISTDIR)
 	mkdir $(DISTDIR)/include/wx/msw
-	mkdir $(DISTDIR)/include/wx/msw/gnuwin32
-	mkdir $(DISTDIR)/include/wx/msw/gnuwin32/gl
 	mkdir $(DISTDIR)/include/wx/msw/ole
 	mkdir $(DISTDIR)/include/wx/msw/wince
 	cp $(INCDIR)/wx/msw/*.h $(DISTDIR)/include/wx/msw
 	cp $(INCDIR)/wx/msw/*.rc $(DISTDIR)/include/wx/msw
 	cp $(INCDIR)/wx/msw/wx.manifest $(DISTDIR)/include/wx/msw
-	cp $(INCDIR)/wx/msw/gnuwin32/*.h $(DISTDIR)/include/wx/msw/gnuwin32
-	cp $(INCDIR)/wx/msw/gnuwin32/gl/*.h $(DISTDIR)/include/wx/msw/gnuwin32/gl
-	cp $(INCDIR)/wx/msw/gnuwin32/gl/*.def $(DISTDIR)/include/wx/msw/gnuwin32/gl
 	cp $(INCDIR)/wx/msw/ole/*.h $(DISTDIR)/include/wx/msw/ole
 	cp $(INCDIR)/wx/msw/wince/*.h $(DISTDIR)/include/wx/msw/wince
 	mkdir $(DISTDIR)/src/msw

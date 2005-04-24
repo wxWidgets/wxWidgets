@@ -3,6 +3,7 @@ build/msw/makefile.dm?
 contrib/build/animate/makefile.dm?
 contrib/build/deprecated/makefile.dm?
 contrib/build/fl/makefile.dm?
+contrib/build/foldbar/makefile.dm?
 contrib/build/gizmos/makefile.dm?
 contrib/build/mmedia/makefile.dm?
 contrib/build/net/makefile.dm?
@@ -29,7 +30,6 @@ contrib/samples/stc/makefile.dm?
 contrib/samples/svg/makefile.dm?
 contrib/utils/convertrc/makefile.dm?
 contrib/utils/wxrcedit/makefile.dm?
-contrib/src/foldbar/makefile.dm?
 contrib/samples/foldbar/extended/makefile.dm?
 contrib/samples/foldbar/foldpanelbar/makefile.dm?
 demos/bombs/makefile.dm?

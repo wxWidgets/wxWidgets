@@ -1473,6 +1473,7 @@ demos/dbbrowse/*.bkl
 tests/*.bkl
 tests/makefile*.*
 tests/*.cpp
+tests/*.h
 tests/*.fc
 
 tests/archive/*.cpp

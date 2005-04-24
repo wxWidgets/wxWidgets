@@ -32,11 +32,7 @@
 
 #include <windowsx.h>
 
-#if defined(__GNUWIN32_OLD__) && !defined(__CYGWIN10__)
-    #include "wx/msw/gnuwin32/extra.h"
-#else
-    #include <mmsystem.h>
-#endif
+#include <mmsystem.h>
 
 wxSound::wxSound()
   : m_waveData(NULL), m_waveLength(0), m_isResource(false)
