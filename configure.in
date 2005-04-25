@@ -288,8 +288,6 @@ case "${host}" in
     AC_DEFINE(__DOS__)
     PROGRAM_EXT=".exe"
     DEFAULT_DEFAULT_wxUSE_MGL=1
-    dnl DJGPP needs explicit -lstdc++ for some reason (VS: mayb some versions only?)
-    LIBS="$LIBS -lstdc++"
   ;;
 
   *-pc-os2_emx | *-pc-os2-emx )
@@ -1797,8 +1795,8 @@ dnl SGI/Irix's stdio.h does not include wchar_t. Mac OS X does not provide
 dnl wchar.h and wchar_t is defined by stdlib.h (GD)
 AC_CHECK_SIZEOF(wchar_t, 0,
     [
-        /* DJGPP only has fake wchar_t: */
-        #ifdef __DJGPP__
+        /* DJGPP's wchar_t is now a keyword in C++ (still not C though) */
+        #if defined(__DJGPP__) && !( (__GNUC_MINOR__ >= 8 && __GNUC__ == 2 ) || __GNUC__ >= 3 )
         #  error "fake wchar_t"
         #endif
         #ifdef HAVE_WCHAR_H
