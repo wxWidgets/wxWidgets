@@ -267,6 +267,14 @@ bool wxFileDialog::Show( bool show )
         return wxGenericFileDialog::Show( show );
 }
 
+void wxFileDialog::DoSetSize(int x, int y, int width, int height, int sizeFlags )
+{
+    if (!m_wxwindow)
+        return;
+    else
+        wxGenericFileDialog::DoSetSize( x, y, width, height, sizeFlags );
+}
+
 wxString wxFileDialog::GetPath() const
 {
 #ifdef __WXGTK24__

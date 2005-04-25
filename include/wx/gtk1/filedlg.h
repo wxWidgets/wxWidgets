@@ -56,6 +56,13 @@ public:
 //private:
     bool m_destroyed_by_delete;
 
+    // override this from wxTLW since the native
+    // form doesn't have any m_wxwindow
+    virtual void DoSetSize(int x, int y,
+                           int width, int height,
+                           int sizeFlags = wxSIZE_AUTO);
+
+
 private:
     DECLARE_DYNAMIC_CLASS(wxFileDialog)
     DECLARE_EVENT_TABLE()
