@@ -31,6 +31,7 @@
         <if cond="PLATFORM_OS2=='1'">src/tiff/tif_unix.c</if>
         <if cond="PLATFORM_WIN32=='1'">src/tiff/tif_win32.c</if>
         <if cond="PLATFORM_MACOS=='1'">src/tiff/tif_apple.c</if>
+        <if cond="PLATFORM_MSDOS=='1'">src/tiff/tif_msdos.c</if>
     </set>
 
     <lib id="wxtiff" template="3rdparty_lib"
