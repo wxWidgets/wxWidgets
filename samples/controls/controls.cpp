@@ -314,6 +314,42 @@ private:
     DECLARE_EVENT_TABLE()
 };
 
+// a choice which handles focus set/kill (for testing)
+class MyChoice : public wxChoice
+{
+public:
+    MyChoice(wxWindow *parent,
+               wxWindowID id,
+               const wxPoint& pos = wxDefaultPosition,
+               const wxSize& size = wxDefaultSize,
+               int n = 0, const wxString choices[] = NULL,
+               long style = 0,
+               const wxValidator& validator = wxDefaultValidator,
+               const wxString& name = wxChoiceNameStr )
+        : wxChoice(parent, id, pos, size, n, choices, 
+                     style, validator, name) { }
+
+protected:
+    void OnFocusGot(wxFocusEvent& event)
+    {
+        wxLogMessage(_T("MyChoice::OnFocusGot"));
+
+        event.Skip();
+    }
+
+    void OnFocusLost(wxFocusEvent& event)
+    {
+        wxLogMessage(_T("MyChoice::OnFocusLost"));
+
+        event.Skip();
+    }
+
+private:
+    DECLARE_EVENT_TABLE()
+};
+
+
+
 //----------------------------------------------------------------------
 // other
 //----------------------------------------------------------------------
@@ -538,6 +574,11 @@ BEGIN_EVENT_TABLE(MyRadioBox, wxRadioBox)
     EVT_KILL_FOCUS(MyRadioBox::OnFocusLost)
 END_EVENT_TABLE()
 
+BEGIN_EVENT_TABLE(MyChoice, wxChoice)
+    EVT_SET_FOCUS(MyChoice::OnFocusGot)
+    EVT_KILL_FOCUS(MyChoice::OnFocusLost)
+END_EVENT_TABLE()
+
 // ============================================================================
 // implementation
 // ============================================================================
@@ -721,8 +762,8 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
 
 #if wxUSE_CHOICE
     panel = new wxPanel(m_book);
-    m_choice = new wxChoice( panel, ID_CHOICE, wxPoint(10,10), wxSize(120,wxDefaultCoord), 5, choices );
-    m_choiceSorted = new wxChoice( panel, ID_CHOICE_SORTED, wxPoint(10,70), wxSize(120,wxDefaultCoord),
+    m_choice = new MyChoice( panel, ID_CHOICE, wxPoint(10,10), wxSize(120,wxDefaultCoord), 5, choices );
+    m_choiceSorted = new MyChoice( panel, ID_CHOICE_SORTED, wxPoint(10,70), wxSize(120,wxDefaultCoord),
                                    5, choices, wxCB_SORT );
 
     SetChoiceClientData(wxT("choice"), m_choice);
