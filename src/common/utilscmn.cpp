@@ -122,13 +122,13 @@
 wxChar *
 copystring (const wxChar *s)
 {
-  if (s == NULL) s = wxEmptyString;
-  size_t len = wxStrlen (s) + 1;
+    if (s == NULL) s = wxEmptyString;
+    size_t len = wxStrlen (s) + 1;
 
-  wxChar *news = new wxChar[len];
-  memcpy (news, s, len * sizeof(wxChar));    // Should be the fastest
+    wxChar *news = new wxChar[len];
+    memcpy (news, s, len * sizeof(wxChar));    // Should be the fastest
 
-  return news;
+    return news;
 }
 
 #endif // WXWIN_COMPATIBILITY_2_4
@@ -145,65 +145,65 @@ WXDLLIMPEXP_DATA_BASE(const wxChar *) wxDoubleToStringStr = wxT("%.2f");
 void
 StringToFloat (const wxChar *s, float *number)
 {
-  if (s && *s && number)
-    *number = (float) wxStrtod (s, (wxChar **) NULL);
+    if (s && *s && number)
+        *number = (float) wxStrtod (s, (wxChar **) NULL);
 }
 
 void
 StringToDouble (const wxChar *s, double *number)
 {
-  if (s && *s && number)
-    *number = wxStrtod (s, (wxChar **) NULL);
+    if (s && *s && number)
+        *number = wxStrtod (s, (wxChar **) NULL);
 }
 
 wxChar *
 FloatToString (float number, const wxChar *fmt)
 {
-  static wxChar buf[256];
+    static wxChar buf[256];
 
-  wxSprintf (buf, fmt, number);
-  return buf;
+    wxSprintf (buf, fmt, number);
+    return buf;
 }
 
 wxChar *
 DoubleToString (double number, const wxChar *fmt)
 {
-  static wxChar buf[256];
+    static wxChar buf[256];
 
-  wxSprintf (buf, fmt, number);
-  return buf;
+    wxSprintf (buf, fmt, number);
+    return buf;
 }
 
 void
 StringToInt (const wxChar *s, int *number)
 {
-  if (s && *s && number)
-    *number = (int) wxStrtol (s, (wxChar **) NULL, 10);
+    if (s && *s && number)
+        *number = (int) wxStrtol (s, (wxChar **) NULL, 10);
 }
 
 void
 StringToLong (const wxChar *s, long *number)
 {
-  if (s && *s && number)
-    *number = wxStrtol (s, (wxChar **) NULL, 10);
+    if (s && *s && number)
+        *number = wxStrtol (s, (wxChar **) NULL, 10);
 }
 
 wxChar *
 IntToString (int number)
 {
-  static wxChar buf[20];
+    static wxChar buf[20];
 
-  wxSprintf (buf, wxT("%d"), number);
-  return buf;
+    wxSprintf (buf, wxT("%d"), number);
+    return buf;
 }
 
 wxChar *
 LongToString (long number)
 {
-  static wxChar buf[20];
+    static wxChar buf[20];
 
-  wxSprintf (buf, wxT("%ld"), number);
-  return buf;
+    wxSprintf (buf, wxT("%ld"), number);
+    return buf;
 }
 
 #endif // WXWIN_COMPATIBILITY_2_4
@@ -214,29 +214,29 @@ static wxChar hexArray[] = wxT("0123456789ABCDEF");
 // Convert 2-digit hex number to decimal
 int wxHexToDec(const wxString& buf)
 {
-  int firstDigit, secondDigit;
+    int firstDigit, secondDigit;
 
-  if (buf.GetChar(0) >= wxT('A'))
-    firstDigit = buf.GetChar(0) - wxT('A') + 10;
-  else
-    firstDigit = buf.GetChar(0) - wxT('0');
+    if (buf.GetChar(0) >= wxT('A'))
+        firstDigit = buf.GetChar(0) - wxT('A') + 10;
+    else
+       firstDigit = buf.GetChar(0) - wxT('0');
 
-  if (buf.GetChar(1) >= wxT('A'))
-    secondDigit = buf.GetChar(1) - wxT('A') + 10;
-  else
-    secondDigit = buf.GetChar(1) - wxT('0');
+    if (buf.GetChar(1) >= wxT('A'))
+        secondDigit = buf.GetChar(1) - wxT('A') + 10;
+    else
+        secondDigit = buf.GetChar(1) - wxT('0');
 
-  return (firstDigit & 0xF) * 16 + (secondDigit & 0xF );
+    return (firstDigit & 0xF) * 16 + (secondDigit & 0xF );
 }
 
 // Convert decimal integer to 2-character hex string
 void wxDecToHex(int dec, wxChar *buf)
 {
-  int firstDigit = (int)(dec/16.0);
-  int secondDigit = (int)(dec - (firstDigit*16.0));
-  buf[0] = hexArray[firstDigit];
-  buf[1] = hexArray[secondDigit];
-  buf[2] = 0;
+    int firstDigit = (int)(dec/16.0);
+    int secondDigit = (int)(dec - (firstDigit*16.0));
+    buf[0] = hexArray[firstDigit];
+    buf[1] = hexArray[secondDigit];
+    buf[2] = 0;
 }
 
 // Convert decimal integer to 2-character hex string
@@ -539,7 +539,8 @@ bool wxLaunchDefaultBrowser(const wxString& url)
     if(wxURI(url).IsReference())
         finalurl = wxString(wxT("http://")) + url;
 
-#ifdef __WINDOWS__
+#if defined(__WXMSW__) && wxUSE_CONFIG_NATIVE
+
     wxString command;
 
     // ShellExecute() always opens in the same window,
@@ -550,58 +551,58 @@ bool wxLaunchDefaultBrowser(const wxString& url)
         wxRegKey keyDDE(key, wxT("DDEExec"));
         if ( keyDDE.Exists() )
         {
-           wxString ddeTopic = wxRegKey(keyDDE, wxT("topic"));
+            wxString ddeTopic = wxRegKey(keyDDE, wxT("topic"));
 
-           // we only know the syntax of WWW_OpenURL DDE request
-           if ( ddeTopic == wxT("WWW_OpenURL") )
-           {
-              wxString ddeCmd = keyDDE;
+            // we only know the syntax of WWW_OpenURL DDE request
+            if ( ddeTopic == wxT("WWW_OpenURL") )
+            {
+                wxString ddeCmd = keyDDE;
 
-              // this is a bit naive but should work as -1 can't appear
-              // elsewhere in the DDE topic, normally
-              if ( ddeCmd.Replace(wxT("-1"), wxT("0"),
-                                  FALSE /* only first occurence */) == 1 )
-              {
-                 // and also replace the parameters
-                 if ( ddeCmd.Replace(wxT("%1"), url, FALSE) == 1 )
-                 {
-                    // magic incantation understood by wxMSW
-                    command << wxT("WX_DDE#")
-                            << wxRegKey(key, wxT("command")).QueryDefaultValue() << wxT('#')
-                            << wxRegKey(keyDDE, wxT("application")).QueryDefaultValue()
-                            << wxT('#') << ddeTopic << wxT('#')
-                            << ddeCmd;
-                 }
-              }
-           }
+                // this is a bit naive but should work as -1 can't appear
+                // elsewhere in the DDE topic, normally
+                if ( ddeCmd.Replace(wxT("-1"), wxT("0"),
+                                    false /* only first occurence */) == 1 )
+                {
+                    // and also replace the parameters
+                    if ( ddeCmd.Replace(wxT("%1"), url, false) == 1 )
+                    {
+                        // magic incantation understood by wxMSW
+                        command << wxT("WX_DDE#")
+                                << wxRegKey(key, wxT("command")).QueryDefaultValue() << wxT('#')
+                                << wxRegKey(keyDDE, wxT("application")).QueryDefaultValue()
+                                << wxT('#') << ddeTopic << wxT('#')
+                                << ddeCmd;
+                    }
+                }
+            }
         }
     }
 
-      //Try wxExecute - if it doesn't work or the regkey stuff
-      //above failed, fallback to opening the file in the same
-      //browser window
-      if ( command.empty() || wxExecute(command) == -1)
-      {
-          // CYGWIN and MINGW may have problems - so load ShellExecute
-          // dynamically
-         typedef HINSTANCE (*LPShellExecute)(HWND hwnd, const wxChar* lpOperation,
-                                             const wxChar* lpFile, 
-                                             const wxChar* lpParameters, 
-                                             const wxChar* lpDirectory, 
-                                             INT nShowCmd);
+    //Try wxExecute - if it doesn't work or the regkey stuff
+    //above failed, fallback to opening the file in the same
+    //browser window
+    if ( command.empty() || wxExecute(command) == -1)
+    {
+        // CYGWIN and MINGW may have problems - so load ShellExecute
+        // dynamically
+        typedef HINSTANCE (*LPShellExecute)(HWND hwnd, const wxChar* lpOperation,
+                                            const wxChar* lpFile,
+                                            const wxChar* lpParameters,
+                                            const wxChar* lpDirectory,
+                                            INT nShowCmd);
 
-         HINSTANCE hShellDll = ::LoadLibrary(wxT("shell32.dll"));
-         if(hShellDll == NULL)
-             return false;
+        HINSTANCE hShellDll = ::LoadLibrary(wxT("shell32.dll"));
+        if(hShellDll == NULL)
+            return false;
 
-         LPShellExecute lpShellExecute = 
-             (LPShellExecute) ::GetProcAddress(hShellDll, 
-             wxString::Format(wxT("ShellExecute%s"), 
+        LPShellExecute lpShellExecute =
+            (LPShellExecute) ::GetProcAddress(hShellDll,
+            wxString::Format(wxT("ShellExecute%s"),
 
 #ifdef __WXUNICODE__
-             wxT("W")
+            wxT("W")
 #else
-             wxT("A")
+            wxT("A")
 #endif
 #ifdef __WXWINCE__
                              )
@@ -609,13 +610,13 @@ bool wxLaunchDefaultBrowser(const wxString& url)
                              ).mb_str(wxConvLocal)
 #endif
                              );
-         if(lpShellExecute == NULL)
-             return false;
+        if(lpShellExecute == NULL)
+            return false;
 
         // Windows sometimes doesn't open the browser correctly when using mime
         // types, so do ShellExecute - i.e. start <url> (from James Carroll)
-        unsigned int nResult = (int) (*lpShellExecute)(NULL, NULL, finalurl.c_str(), 
-                          NULL, wxT(""), SW_SHOWNORMAL);
+        unsigned int nResult = (int) (*lpShellExecute)(NULL, NULL, finalurl.c_str(),
+                                                       NULL, wxT(""), SW_SHOWNORMAL);
 
         // Unload Shell32.dll
         ::FreeLibrary(hShellDll);
@@ -624,37 +625,33 @@ bool wxLaunchDefaultBrowser(const wxString& url)
         // from Angelo Mandato's wxHyperlinksCtrl
         // HINSTANCE_ERROR == 32
         if (nResult <= HINSTANCE_ERROR && nResult != SE_ERR_FNF)
-            return false;    
+            return false;
 
-    #   ifdef __WXDEBUG__
+#ifdef __WXDEBUG__
         // Log something if SE_ERR_FNF happens
         if(nResult == SE_ERR_FNF)
             wxLogDebug(wxT("Got SE_ERR_FNF from ShellExecute - maybe FireFox"));
-    #   endif
-      }
+#endif
+    }
 
-#else
-#if wxUSE_MIMETYPE
+#elif wxUSE_MIMETYPE
+
     // Non-windows way
-    wxFileType *ft = 
-    wxTheMimeTypesManager->GetFileTypeFromExtension (_T("html")); 
-    if (!ft) 
-    { 
-        wxLogError(_T("No default application can open .html extension")); 
-        return false; 
-    } 
+    wxFileType *ft = wxTheMimeTypesManager->GetFileTypeFromExtension (_T("html"));
+    if (!ft)
+    {
+        wxLogError(_T("No default application can open .html extension"));
+        return false;
+    }
 
     wxString mt;
     ft->GetMimeType(&mt);
 
-    wxString cmd; 
-    bool ok = 
-    ft->GetOpenCommand (&cmd, 
-        wxFileType::MessageParameters (finalurl.c_str(), 
-                                       _T(""))); 
-    delete ft; 
-    
-    if (ok) 
+    wxString cmd;
+    bool ok = ft->GetOpenCommand (&cmd, wxFileType::MessageParameters(finalurl));
+    delete ft;
+
+    if (ok)
     {
         if( wxExecute (cmd, wxEXEC_ASYNC) == -1 )
         {
@@ -663,10 +660,11 @@ bool wxLaunchDefaultBrowser(const wxString& url)
         }
     }
     else
-      return false;
-#else
-      return false;
-#endif //!wxUSE_MIMETYPE
+        return false;
+
+#else // !wxUSE_MIMETYPE && !(WXMSW && wxUSE_NATIVE_CONFIG)
+
+        return false;
 
 #endif
 
