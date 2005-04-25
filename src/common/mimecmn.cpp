@@ -56,6 +56,8 @@
 #elif defined(__WXPM__) || defined (__EMX__)
     #include "wx/os2/mimetype.h"
     #undef __UNIX__
+#elif defined(__DOS__)
+    #include "wx/msdos/mimetype.h"
 #else // Unix
     #include "wx/unix/mimetype.h"
 #endif

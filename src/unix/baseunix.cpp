@@ -85,8 +85,8 @@ wxConsoleAppTraits::WaitForChild(wxExecuteData& execData)
 // misc other stuff
 // ----------------------------------------------------------------------------
 
-// this is in mac/utils.cpp under Mac and MGL
-#if !defined(__WXMAC__) && !defined(__WXMGL__)
+// this is in mac/utils.cpp under Mac
+#if !defined(__WXMAC__)
 
 wxToolkitInfo& wxConsoleAppTraits::GetToolkitInfo()
 {

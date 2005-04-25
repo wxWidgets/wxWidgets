@@ -613,7 +613,8 @@ enum
     wxWINDOWS_OS2,            /*  Native OS/2 PM */
     wxUNIX,                   /*  wxBase under Unix */
     wxX11,                    /*  Plain X11 and Universal widgets */
-    wxPALMOS                  /*  PalmOS */
+    wxPALMOS,                 /*  PalmOS */
+    wxDOS                     /*  wxBase under MS-DOS */
 };
 
 /*  ---------------------------------------------------------------------------- */

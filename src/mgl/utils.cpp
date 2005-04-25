@@ -44,128 +44,6 @@ void wxBell()
     // FIXME_MGL
 }
 
-
-#ifdef __DOS__
-// VS: this should be in utilsdos.cpp, but since there will hardly ever
-//     be a non-MGL MS-DOS port...
-
-void wxSleep(int nSecs)
-{
-    wxMilliSleep(1000 * nSecs);
-}
-
-void wxMilliSleep(unsigned long milliseconds)
-{
-    PM_sleep(milliseconds);
-}
-
-void wxMicroSleep(unsigned long microseconds)
-{
-    wxMilliSleep(microseconds/1000);
-}
-
-bool wxGetEnv(const wxString& var, wxString *value)
-{
-    // wxGetenv is defined as getenv()
-    wxChar *p = wxGetenv(var);
-    if ( !p )
-        return FALSE;
-
-    if ( value )
-        *value = p;
-
-    return TRUE;
-}
-
-bool wxSetEnv(const wxString& variable, const wxChar *value)
-{
-    wxString s = variable;
-    if ( value )
-        s << _T('=') << value;
-
-    // transform to ANSI
-    const char *p = s.mb_str();
-
-    // the string will be free()d by libc
-    char *buf = (char *)malloc(strlen(p) + 1);
-    strcpy(buf, p);
-
-    return putenv(buf) == 0;
-}
-
-const wxChar* wxGetHomeDir(wxString *home)
-{
-    *home = wxT(".");
-    return home->c_str();
-}
-
-const wxChar* wxGetUserHomeDir(wxString *home)
-{
-    *home = wxT(".");
-    return home->c_str();
-}
-
-#if wxUSE_UNICODE
-const wxMB2WXbuf wxGetUserHome(const wxString &user)
-#else // just for binary compatibility -- there is no 'const' here
-wxChar *wxGetUserHome(const wxString &user)
-#endif
-{
-    return wxT(".");
-}
-
-void wxFatalError(const wxString &msg, const wxString &title)
-{
-    if (!title.IsNull()) 
-        wxFprintf( stderr, wxT("%s "), WXSTRINGCAST(title));
-    PM_fatalError(msg.c_str());
-}
-
-bool wxGetUserId(wxChar *WXUNUSED(buf), int WXUNUSED(sz))
-{
-    wxFAIL_MSG( wxT("wxGetUserId not implemented under MS-DOS!") );
-    return FALSE;
-}
-
-bool wxGetUserName(wxChar *WXUNUSED(buf), int WXUNUSED(sz))
-{
-    wxFAIL_MSG( wxT("wxGetUserName not implemented under MS-DOS!") );
-    return FALSE;
-}
-
-bool wxGetHostName(wxChar *WXUNUSED(buf), int WXUNUSED(sz))
-{
-    wxFAIL_MSG( wxT("wxGetHostName not implemented under MS-DOS!") );
-    return FALSE;
-}
-
-bool wxGetFullHostName(wxChar *WXUNUSED(buf), int WXUNUSED(sz))
-{
-    wxFAIL_MSG( wxT("wxGetFullHostName not implemented under MS-DOS!") );
-    return FALSE;
-}
-
-int wxKill(long WXUNUSED(pid), wxSignal WXUNUSED(sig), wxKillError *WXUNUSED(rc), int WXUNUSED(flags))
-{
-    wxFAIL_MSG( wxT("wxKill not implemented under MS-DOS!") );
-    return 0;
-}
-
-long wxExecute(const wxString& WXUNUSED(command), int WXUNUSED(flags), wxProcess *WXUNUSED(process))
-{
-    wxFAIL_MSG( wxT("wxExecute not implemented under MS-DOS!") );
-    return 0;
-}
-
-long wxExecute(char **WXUNUSED(argv), int WXUNUSED(flags), wxProcess *WXUNUSED(process))
-{
-    wxFAIL_MSG( wxT("wxExecute not implemented under MS-DOS!") );
-    return 0;
-}
-
-
-#endif
-
 // ----------------------------------------------------------------------------
 // display characterstics
 // ----------------------------------------------------------------------------
@@ -238,6 +116,7 @@ wxToolkitInfo& wxGUIAppTraits::GetToolkitInfo()
 
 #endif
 
+#if 0
 wxToolkitInfo& wxConsoleAppTraits::GetToolkitInfo()
 {
     static wxToolkitInfo info;
@@ -259,6 +138,7 @@ wxToolkitInfo& wxConsoleAppTraits::GetToolkitInfo()
 #endif
     return info;
 }
+#endif
 
 void wxGetMousePosition(int* x, int* y)
 {

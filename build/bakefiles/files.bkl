@@ -258,6 +258,21 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 </set>
 
 <!-- =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=- -->
+<!--                               MSDOS                                    -->
+<!-- =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=- -->
+
+<set var="BASE_MSDOS_SRC" hints="files">
+    src/msdos/dir.cpp
+    src/msdos/mimetype.cpp
+    src/msdos/utilsdos.cpp
+</set>
+<set var="BASE_AND_GUI_MSDOS_SRC" hints="files">
+</set>
+<set var="BASE_MSDOS_HDR" hints="files">
+    wx/msdos/mimetype.h
+</set>
+
+<!-- =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=- -->
 <!--                              Common                                    -->
 <!-- =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=- -->
 <set var="BASE_CMN_SRC" hints="files">
@@ -2748,6 +2763,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
         <if cond="PLATFORM_MACOS=='1'">$(BASE_MAC_SRC) $(BASE_MAC_CARBONLIB_SRC)</if>
         <if cond="PLATFORM_OS2=='1'">$(BASE_OS2_SRC)</if>
         <if cond="PLATFORM_PALMOS=='1'">$(BASE_PALMOS_SRC)</if>
+        <if cond="PLATFORM_MSDOS=='1'">$(BASE_MSDOS_SRC)</if>
     </set>
     <set var="BASE_AND_GUI_TOOLKIT_SRC" hints="files">
         <if cond="TOOLKIT=='MAC'">$(BASE_AND_GUI_MAC_SRC)</if>
@@ -2757,6 +2773,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
         <if cond="PLATFORM_WIN32=='1'">$(BASE_AND_GUI_WIN32_SRC)</if>
         <if cond="PLATFORM_MACOSX=='1'">$(BASE_AND_GUI_UNIX_SRC)</if>
         <if cond="PLATFORM_PALMOS=='1'">$(BASE_AND_GUI_PALMOS_SRC)</if>
+        <if cond="PLATFORM_MSDOS=='1'">$(BASE_AND_GUI_MSDOS_SRC)</if>
         <!-- At the moment, BASE_AND_GUI_TOOLKIT_SRC handles this -->
         <!-- if cond="PLATFORM_MACOS=='1'">$(BASE_AND_GUI_MAC_SRC)</if -->
     </set>
@@ -2780,6 +2797,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
         <if cond="PLATFORM_WIN32=='1'">$(BASE_WIN32_HDR) $(BASE_WINCE_HDR)</if>
         <if cond="PLATFORM_MACOSX=='1'">$(BASE_MACOSX_HDR)</if>
         <if cond="PLATFORM_PALMOS=='1'">$(BASE_PALMOS_HDR)</if>
+        <if cond="PLATFORM_MSDOS=='1'">$(BASE_MSDOS_HDR)</if>
     </set>
 
     <set var="BASE_SRC" hints="files">
@@ -2960,6 +2978,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
         $(BASE_UNIX_SRC) $(BASE_WIN32_SRC) $(BASE_WINCE_SRC)
         $(BASE_MAC_SRC)
         $(BASE_OS2_SRC)
+        $(BASE_MSDOS_SRC)
         $(BASE_AND_GUI_CMN_SRC)
         $(BASE_AND_GUI_UNIX_SRC)
         $(BASE_AND_GUI_MAC_SRC)
