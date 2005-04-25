@@ -47,7 +47,9 @@ class FileKindTestCase : public CppUnit::TestCase
 #endif
         CPPUNIT_TEST(Stdin);
         CPPUNIT_TEST(MemoryStream);
+#if wxUSE_SOCKETS
         CPPUNIT_TEST(SocketStream);
+#endif
     CPPUNIT_TEST_SUITE_END();
 
     void File();
@@ -55,7 +57,9 @@ class FileKindTestCase : public CppUnit::TestCase
     void Socket();
     void Stdin();
     void MemoryStream();
+#if wxUSE_SOCKETS
     void SocketStream();
+#endif
 
     void TestFILE(wxFFile& file, bool expected);
     void TestFd(wxFile& file, bool expected);
