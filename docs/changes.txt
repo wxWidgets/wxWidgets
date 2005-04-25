@@ -4,12 +4,21 @@ wxWidgets Change Log - For more verbose changes, see the manual
 
 2.6.1
 -----
+
 All:
+
 - Added wxLaunchDefaultBrowser.
 
+wxMSW:
+
+- Fixed erroneous selection of content in wxComboBox when within a wxStaticBox.
+
 wxMac:
-- Added support for launching 'APPL' bundles with wxExecute (usually they have a .app extension and are the ones that reside in the Applications folder).
-- Fixed a bug in wxGetKeyState where shift and some other keys were returning an incorrect state.
+
+- Added support for launching 'APPL' bundles with wxExecute (usually they have a
+  .app extension and are the ones that reside in the Applications folder).
+- Fixed a bug in wxGetKeyState where shift and some other keys were returning an
+  incorrect state.
 
 2.6.0
 -----

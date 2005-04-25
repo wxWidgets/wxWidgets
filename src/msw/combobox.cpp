@@ -259,6 +259,9 @@ WXLRESULT wxComboBox::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lPara
             break;
 
         case WM_SIZE:
+        // wxStaticBox can generate this message, when modifying the control's style.
+        // This causes the content of the combobox to be selected, for some reason.
+        case WM_STYLECHANGED:
             {
                 // combobox selection sometimes spontaneously changes when its
                 // size changes, restore it to the old value if necessary
