@@ -289,9 +289,10 @@ void wxPopupTransientWindow::Popup(wxWindow *winFocus)
     m_child->Connect(wxEVT_DESTROY,
                      wxWindowDestroyEventHandler(wxPopupTransientWindow::OnDestroy),
                      NULL, this);
-    m_focus->Connect(wxEVT_DESTROY,
-                     wxWindowDestroyEventHandler(wxPopupTransientWindow::OnDestroy),
-                     NULL, this);
+    if (m_focus)
+        m_focus->Connect(wxEVT_DESTROY,
+                         wxWindowDestroyEventHandler(wxPopupTransientWindow::OnDestroy),
+                         NULL, this);
 }
 
 bool wxPopupTransientWindow::Show( bool show )

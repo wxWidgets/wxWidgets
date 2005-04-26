@@ -81,13 +81,19 @@ class ID_NEW:
     GENERIC_DIR_CTRL = wxNewId()
     SPIN_CTRL = wxNewId()
     UNKNOWN = wxNewId()
+    WIZARD = wxNewId()
+    WIZARD_PAGE = wxNewId()
+    WIZARD_PAGE_SIMPLE = wxNewId()
+    STATUS_BAR = wxNewId()
 
     BOX_SIZER = wxNewId()
     STATIC_BOX_SIZER = wxNewId()
     GRID_SIZER = wxNewId()
     FLEX_GRID_SIZER = wxNewId()
     GRID_BAG_SIZER = wxNewId()
+    STD_DIALOG_BUTTON_SIZER = wxNewId()
     SPACER = wxNewId()
+    
     TOOL_BAR = wxNewId()
     TOOL = wxNewId()
     MENU = wxNewId()
@@ -117,6 +123,9 @@ class PullDownMenu:
             ID_NEW.PANEL: 'wxPanel',
             ID_NEW.DIALOG: 'wxDialog',
             ID_NEW.FRAME: 'wxFrame',
+            ID_NEW.WIZARD: 'wxWizard',
+            ID_NEW.WIZARD_PAGE: 'wxWizardPage',
+            ID_NEW.WIZARD_PAGE_SIMPLE: 'wxWizardPageSimple',
             ID_NEW.TOOL_BAR: 'wxToolBar',
             ID_NEW.TOOL: 'tool',
             ID_NEW.MENU_BAR: 'wxMenuBar',
@@ -161,6 +170,7 @@ class PullDownMenu:
             ID_NEW.GRID_SIZER: 'wxGridSizer',
             ID_NEW.FLEX_GRID_SIZER: 'wxFlexGridSizer',
             ID_NEW.GRID_BAG_SIZER: 'wxGridBagSizer',
+            ID_NEW.STD_DIALOG_BUTTON_SIZER: 'wxStdDialogButtonSizer',
             ID_NEW.SPACER: 'spacer',
             ID_NEW.UNKNOWN: 'unknown',
             }
@@ -168,6 +178,7 @@ class PullDownMenu:
             (ID_NEW.PANEL, 'Panel', 'Create panel'),
             (ID_NEW.DIALOG, 'Dialog', 'Create dialog'),
             (ID_NEW.FRAME, 'Frame', 'Create frame'),
+            (ID_NEW.WIZARD, 'Wizard', 'Create wizard'),
             None,
             (ID_NEW.TOOL_BAR, 'ToolBar', 'Create toolbar'),
             (ID_NEW.MENU_BAR, 'MenuBar', 'Create menubar'),
@@ -178,6 +189,8 @@ class PullDownMenu:
              (ID_NEW.NOTEBOOK, 'Notebook', 'Create notebook control'),
              (ID_NEW.SPLITTER_WINDOW, 'SplitterWindow', 'Create splitter window'),
              (ID_NEW.TOOL_BAR, 'ToolBar', 'Create toolbar'),
+#             (ID_NEW.WIZARD_PAGE, 'WizardPage', 'Create wizard page'),
+             (ID_NEW.WIZARD_PAGE_SIMPLE, 'WizardPageSimple', 'Create simple wizard page'),
             ]
         self.sizers = [
              (ID_NEW.BOX_SIZER, 'BoxSizer', 'Create box sizer'),
@@ -188,6 +201,8 @@ class PullDownMenu:
               'Create flexgrid sizer'),
              (ID_NEW.GRID_BAG_SIZER, 'GridBagSizer',
               'Create gridbag sizer'),
+#             (ID_NEW.STD_DIALOG_BUTTON_SIZER, 'StdDialogButtonSizer',
+#              'Create standard button sizer'),
              (ID_NEW.SPACER, 'Spacer', 'Create spacer'),
              ]
         self.controls = [
@@ -229,6 +244,8 @@ class PullDownMenu:
              (ID_NEW.NOTEBOOK, 'Notebook', 'Create notebook control'),
              (ID_NEW.SPLITTER_WINDOW, 'SplitterWindow', 'Create splitter window'),
              (ID_NEW.TOOL_BAR, 'ToolBar', 'Create toolbar'),
+#             (ID_NEW.WIZARD_PAGE, 'Wizard Page', 'Create wizard page'),
+             (ID_NEW.WIZARD_PAGE_SIMPLE, 'WizardPageSimple', 'Create simple wizard page'),
              ],
             ['sizer', 'Sizers',
              (ID_NEW.BOX_SIZER, 'BoxSizer', 'Create box sizer'),
@@ -240,6 +257,8 @@ class PullDownMenu:
              (ID_NEW.GRID_BAG_SIZER, 'GridBagSizer',
               'Create gridbag sizer'),
              (ID_NEW.SPACER, 'Spacer', 'Create spacer'),
+             (ID_NEW.STD_DIALOG_BUTTON_SIZER, 'StdDialogButtonSizer',
+              'Create standard button sizer'),
              ]
             ]
         self.menuControls = [
@@ -636,7 +655,8 @@ class XML_Tree(wxTreeCtrl):
             self.Apply(xxx, item)       # apply changes
         treeObj = xxx.treeObject()
         if treeObj.className not in ['wxFrame', 'wxPanel', 'wxDialog',
-                                     'wxMenuBar', 'wxToolBar']:
+                                     'wxMenuBar', 'wxToolBar', 'wxWizard',
+                                     'wxWizardPageSimple']:
             wxLogMessage('No view for this element (yet)')
             return
         # Show item in bold
@@ -724,6 +744,10 @@ class XML_Tree(wxTreeCtrl):
         else:
             name = xxx.name
         elem.setAttribute('name', STD_NAME)
+        # Replace wizard page class temporarily
+        if xxx.__class__ in [xxxWizardPage, xxxWizardPageSimple]:
+            oldCl = elem.getAttribute('class')
+            elem.setAttribute('class', 'wxPanel')
         parent = elem.parentNode
         next = elem.nextSibling
         parent.replaceChild(self.dummyNode, elem)
@@ -739,6 +763,8 @@ class XML_Tree(wxTreeCtrl):
             elem.removeAttribute('name')
         else:
             elem.setAttribute('name', xxx.name)
+        if xxx.__class__ in [xxxWizardPage, xxxWizardPageSimple]:
+            elem.setAttribute('class', oldCl)            
         memFile.close()                 # write to wxMemoryFS
         xmlFlags = wxXRC_NO_SUBCLASSING
         # Use translations if encoding is not specified
@@ -783,6 +809,32 @@ class XML_Tree(wxTreeCtrl):
                 # Dialog's default code does not produce EVT_CLOSE
                 EVT_BUTTON(testWin, wxID_OK, self.OnCloseTestWin)
                 EVT_BUTTON(testWin, wxID_CANCEL, self.OnCloseTestWin)
+            elif xxx.__class__ == xxxWizard:
+                wiz = wxPreWizard()
+                res.LoadOnObject(wiz, None, STD_NAME, 'wxWizard')
+                # Find first page (don't know better way)
+                firstPage = None
+                for w in wiz.GetChildren():
+                    if isinstance(w, wxWizardPage):
+                        firstPage = w
+                        break
+                if not firstPage:
+                    wxLogError('Wizard is empty')
+                else:
+                    # Wizard should be modal
+                    self.SetItemBold(item)
+                    wiz.RunWizard(w)
+                    self.SetItemBold(item, False)
+                    wiz.Destroy()
+            elif xxx.__class__ in [xxxWizardPage, xxxWizardPageSimple]:
+                # Create new frame
+                if not testWin:
+                    testWin = g.testWin = wxFrame(g.frame, -1, 'Wizard page: ' + name,
+                                                  pos=pos, name=STD_NAME)
+                testWin.panel = wxPrePanel()
+                res.LoadOnObject(testWin.panel, testWin, STD_NAME, 'wxPanel')
+                testWin.SetClientSize(testWin.GetBestSize())
+                testWin.Show(True)
             elif xxx.__class__ == xxxMenuBar:
                 testWin = g.testWin = wxFrame(g.frame, -1, 'MenuBar: ' + name,
                                               pos=pos, name=STD_NAME)
@@ -801,11 +853,12 @@ class XML_Tree(wxTreeCtrl):
                 testWin.toolBar = res.LoadToolBar(testWin, STD_NAME)
                 testWin.SetToolBar(testWin.toolBar)
                 testWin.Show(True)
-            testWin.item = item
-            EVT_CLOSE(testWin, self.OnCloseTestWin)
-            testWin.highLight = None
-            if highLight and not self.pendingHighLight:
-                self.HighLight(highLight)
+            if testWin:
+                testWin.item = item
+                EVT_CLOSE(testWin, self.OnCloseTestWin)
+                testWin.highLight = None
+                if highLight and not self.pendingHighLight:
+                    self.HighLight(highLight)
         except:
             if g.testWin:
                 self.SetItemBold(item, False)
@@ -818,11 +871,16 @@ class XML_Tree(wxTreeCtrl):
         wxMemoryFSHandler_RemoveFile('xxx.xrc')
         wxEndBusyCursor()
 
-    def OnCloseTestWin(self, evt):
+    def CloseTestWindow(self):
+        if not g.testWin: return
         self.SetItemBold(g.testWin.item, False)
+        g.frame.tb.ToggleTool(g.frame.ID_LOCATE_TOOL, False)
         g.testWinPos = g.testWin.GetPosition()
         g.testWin.Destroy()
         g.testWin = None
+
+    def OnCloseTestWin(self, evt):
+        self.CloseTestWindow()
 
     # Return item index in parent
     def ItemIndex(self, item):

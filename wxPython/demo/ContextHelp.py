@@ -54,14 +54,14 @@ class TestPanel(wx.Panel):
         text.SetHelpText("Yet another context help message.")
         sizer.Add((20,20))
         sizer.Add(text)
-        self.Bind(wx.EVT_HELP, self.OnCtxHelp, text)
+        text.Bind(wx.EVT_HELP, self.OnCtxHelp, text)
 
         text = wx.TextCtrl(self, -1, "This one displays the tip itself...",
                            size=(240, 60), style = wx.TE_MULTILINE)
         sizer.Add((20,20))
         sizer.Add(text)
-        self.Bind(wx.EVT_HELP, self.OnCtxHelp2, text)
-
+        text.Bind(wx.EVT_HELP, self.OnCtxHelp2, text)
+        
 
         border = wx.BoxSizer(wx.VERTICAL)
         border.Add(sizer, 0, wx.ALL, 25)
@@ -82,7 +82,7 @@ class TestPanel(wx.Panel):
     # Here, we print a note about it, generate our own tip window, and, 
     # unlike last time, we don't pass it on to the underlying provider.
     def OnCtxHelp2(self, evt):
-         self.log.write("OnCtxHelp: %s\n" % evt)
+         self.log.write("OnCtxHelp2: %s\n" % evt)
          tip = wx.TipWindow(self, "This is a wx.TipWindow")
 
 

@@ -2457,7 +2457,7 @@ static PyObject *_wrap_AnimationPlayer_GetFrame(PyObject *, PyObject *args, PyOb
         if (PyErr_Occurred()) SWIG_fail;
     }
     {
-        resultobj = wxPyMake_wxObject(result, 0); 
+        resultobj = wxPyMake_wxObject(result, 1); 
     }
     return resultobj;
     fail:
@@ -3018,7 +3018,7 @@ static PyObject *_wrap_AnimationBase_GetFrame(PyObject *, PyObject *args, PyObje
         if (PyErr_Occurred()) SWIG_fail;
     }
     {
-        resultobj = wxPyMake_wxObject(result, 0); 
+        resultobj = wxPyMake_wxObject(result, 1); 
     }
     return resultobj;
     fail:
@@ -3408,7 +3408,7 @@ static PyObject *_wrap_GIFAnimation_GetFrame(PyObject *, PyObject *args, PyObjec
         if (PyErr_Occurred()) SWIG_fail;
     }
     {
-        resultobj = wxPyMake_wxObject(result, 0); 
+        resultobj = wxPyMake_wxObject(result, 1); 
     }
     return resultobj;
     fail:

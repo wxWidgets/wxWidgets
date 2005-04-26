@@ -4,17 +4,17 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
 <meta name="generator" content="Docutils 0.3.1: http://docutils.sourceforge.net/" />
-<title>Building wxPython 2.5 for Development and Testing</title>
+<title>Building wxPython 2.6 for Development and Testing</title>
 <link rel="stylesheet" href="default.css" type="text/css" />
 </head>
 <body>
-<div class="document" id="building-wxpython-2-5-for-development-and-testing">
-<h1 class="title">Building wxPython 2.5 for Development and Testing</h1>
+<div class="document" id="building-wxpython-2-6-for-development-and-testing">
+<h1 class="title">Building wxPython 2.6 for Development and Testing</h1>
 <p>This file describes how I build wxWidgets and wxPython while doing
 development and testing, and is meant to help other people that want
 to do the same thing.  I'll assume that you are using either a CVS
 snapshot from <a class="reference" href="http://wxWidgets.org/snapshots/">http://wxWidgets.org/snapshots/</a>, a checkout from CVS, or
-one of the released wxPython-src-2.5.* tarballs.  I'll also assume that
+one of the released wxPython-src-2.6.* tarballs.  I'll also assume that
 you know your way around your system, the compiler, etc. and most
 importantly, that you know what you are doing!  ;-)</p>
 <p>If you want to also install the version of wxPython you build to be in
@@ -71,7 +71,7 @@ before:</p>
 cd $WXDIR
 mkdir bld
 cd bld
-../configure --prefix=/opt/wx/2.5 \
+../configure --prefix=/opt/wx/2.6 \
              --with-gtk \
              --with-opengl \
              --enable-debug \
@@ -92,11 +92,11 @@ to the monolithic build of wxWidgets just add this configure flag:</p>
 <pre class="literal-block">
 --enable-monolithic \
 </pre>
-<p>By default GTK2 will be selected if its development pacakge is
-installed on your build system.  To force the use of GTK 1.2.x
-instead add this flag:</p>
+<p>By default GTK 2.x will be used for the build.  If you woudl rather
+use GTK 1.2.x for some reason then you can force configure to use
+it by changing the --with-gtk flag to specify it like this:</p>
 <pre class="literal-block">
---disable-gtk2 \
+--with-gtk=1 \
 </pre>
 <p>To make the wxWidgets build be unicode enabled (strongly
 recommended if you are building with GTK2) then add the following.
@@ -107,14 +107,14 @@ will actually be unicode objects.:</p>
 <pre class="literal-block">
 --enable-unicode \
 </pre>
-<p>Notice that I used a prefix of /opt/wx/2.5.  You can use whatever
+<p>Notice that I used a prefix of /opt/wx/2.6.  You can use whatever
 path you want, such as a path in your HOME dir or even one of the
 standard prefix paths such as /usr or /usr/local if you like, but
 using /opt this way lets me easily have multiple versions and ports
 of wxWidgets &quot;installed&quot; and makes it easy to switch between them,
 without impacting any versions of wxWidgets that may have been
 installed via an RPM or whatever.  For the rest of the steps below
-be sure to also substitute &quot;/opt/wx/2.5&quot; with whatever prefix you
+be sure to also substitute &quot;/opt/wx/2.6&quot; with whatever prefix you
 choose for your build.</p>
 <p>If you want to use the image and zlib libraries included with
 wxWidgets instead of those already installed on your system, (for
@@ -146,9 +146,9 @@ the execute bit on .make first!:</p>
 .make install
 </pre>
 <p>When it's done you should have an installed set of files under
-/opt/wx/2.5 containing just wxWidgets.  Now to use this version of
-wxWidgets you just need to add /opt/wx/2.5/bin to the PATH and set
-LD_LIBRARY_PATH (or DYLD_LIBRARY_PATH on OS X) to /opt/wx/2.5/lib.</p>
+/opt/wx/2.6 containing just wxWidgets.  Now to use this version of
+wxWidgets you just need to add /opt/wx/2.6/bin to the PATH and set
+LD_LIBRARY_PATH (or DYLD_LIBRARY_PATH on OS X) to /opt/wx/2.6/lib.</p>
 </li>
 <li><p class="first">I also have a script to help me build wxPython and it is checked in
 to the CVS as wxWidgets/wxPython/b, but you probably don't want to
@@ -177,7 +177,7 @@ python2.3 setup.py build_ext --inplace --debug
 other version of it found first, then you can add this to the
 command line to ensure your new one is used instead:</p>
 <pre class="literal-block">
-WX_CONFIG=/opt/wx/2.5/bin/wx-config
+WX_CONFIG=/opt/wx/2.6/bin/wx-config
 </pre>
 <p>By default setup.py will assume that you built wxWidgets to use
 GTK2.  If you built wxWidgets to use GTK 1.2.x then you should add
@@ -210,7 +210,7 @@ located in the wx package.</p>
 PYTHONPATH to the wxPython dir located in the source tree.  For
 example:</p>
 <pre class="literal-block">
-export LD_LIBRARY_PATH=/opt/wx/2.5/lib
+export LD_LIBRARY_PATH=/opt/wx/2.6/lib
 export PYTHONPATH=$WXDIR/wxPython
 cd $WXDIR/wxPython/demo
 python2.3 demo.py

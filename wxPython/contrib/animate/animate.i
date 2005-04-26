@@ -123,6 +123,7 @@ public:
 
 
     virtual int GetFrameCount() const;
+    %newobject GetFrame;
     virtual wxImage* GetFrame(int i) const; // Creates a new wxImage
     virtual wxAnimationDisposal GetDisposalMethod(int i) const;
     virtual wxRect GetFrameRect(int i) const; // Position and size of frame
@@ -174,6 +175,7 @@ public:
 //// Accessors. Should be overridden by each derived class.
 
     virtual int GetFrameCount() const;
+    %newobject GetFrame;
     virtual wxImage* GetFrame(int i) const;
     virtual wxAnimationDisposal GetDisposalMethod(int i) const;
     virtual wxRect GetFrameRect(int i) const; // Position and size of frame
@@ -206,6 +208,7 @@ public:
 //// Accessors
 
     virtual int GetFrameCount() const;
+    %newobject GetFrame;
     virtual wxImage* GetFrame(int i) const;
     virtual wxAnimationDisposal GetDisposalMethod(int i) const;
     virtual wxRect GetFrameRect(int i) const; // Position and size of frame

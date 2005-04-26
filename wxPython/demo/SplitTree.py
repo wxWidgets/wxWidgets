@@ -85,7 +85,7 @@ class TestValueWindow(gizmos.TreeCompanionWindow):
 
 class TestPanel(wx.Panel):
     def __init__(self, parent, log):
-        wx.Panel.__init__(self, parent, -1)
+        wx.Panel.__init__(self, parent, -1, size=(640,480))
         self.log = log
 
         scroller = gizmos.SplitterScrolledWindow(
@@ -105,7 +105,7 @@ class TestPanel(wx.Panel):
 
         valueWindow = TestValueWindow(splitter, style=wx.NO_BORDER)
 
-        splitter.SplitVertically(tree, valueWindow, 150)
+        wx.CallAfter(splitter.SplitVertically, tree, valueWindow, 150)
         scroller.SetTargetWindow(tree)
         scroller.EnableScrolling(False, False)
 
@@ -114,9 +114,8 @@ class TestPanel(wx.Panel):
 
         sizer = wx.BoxSizer(wx.VERTICAL)
         sizer.Add(scroller, 1, wx.EXPAND|wx.ALL, 25)
-        self.SetAutoLayout(True)
         self.SetSizer(sizer)
-
+        self.Layout()
 
 #----------------------------------------------------------------------
 

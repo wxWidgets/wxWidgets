@@ -28,15 +28,17 @@ able to do in a unicode build, and in an ansi build it will depend on
 the content of the utf-8 used being compatible with the current
 encoding, (you'll get an exception otherwise.)
 
-      AddTextRaw          AddTextUTF8
-      InsertTextRaw       InsertTextUTF8
-      GetCurLineRaw       GetCurLineUTF8
-      GetLineRaw          GetLineUTF8
-      GetSelectedTextRaw  GetSelectedTextUTF8
-      GetTextRangeRaw     GetTextRangeUTF8
-      SetTextRaw          SetTextUTF8
-      GetTextRaw          GetTextUTF8
-      AppendTextRaw       AppendTextUTF8
+      ===================  ====================
+      AddTextRaw           AddTextUTF8
+      InsertTextRaw        InsertTextUTF8
+      GetCurLineRaw        GetCurLineUTF8
+      GetLineRaw           GetLineUTF8
+      GetSelectedTextRaw   GetSelectedTextUTF8
+      GetTextRangeRaw      GetTextRangeUTF8
+      SetTextRaw           SetTextUTF8
+      GetTextRaw           GetTextUTF8
+      AppendTextRaw        AppendTextUTF8
+      ===================  ====================
 
 
 wx.stc.StyledTextCtrl:  Added the StyleSetFontEncoding(style, enc)
@@ -45,6 +47,14 @@ a particular style.
 
 wxMac: Fixed wx.ComboBox to forward the EVT_CHAR, EVT_KEY_DOWN,
 EVT_KEY_UP and EVT_TEXT events from its embedded text control.
+
+wxMac: Corrected refresh bugs in wxGrid.
+
+XRCed: Updated to version 0.1.5.
+    * Added wxWizard, wxWizardPageSimple (only from pull-down menu). 
+    * Hide command for test window.
+    * Replacing classes works better.
+    * Added Locate tool.
 
 
 

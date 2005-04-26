@@ -11,19 +11,24 @@ from types import *
 from wxPython.xrc import *
 
 genericStyles = [
-    'wxCLIP_CHILDREN',
-    'wxSIMPLE_BORDER',
-    'wxSUNKEN_BORDER',
-    'wxDOUBLE_BORDER',
-    'wxRAISED_BORDER',
-    'wxSTATIC_BORDER',
-    'wxNO_BORDER',
-    'wxTRANSPARENT_WINDOW',
+    'wxSIMPLE_BORDER', 'wxDOUBLE_BORDER', 'wxSUNKEN_BORDER',
+    'wxRAISED_BORDER', 'wxSTATIC_BORDER', 'wxNO_BORDER',
+    'wxTRANSPARENT_WINDOW', 'wxTAB_TRAVERSAL', 
     'wxWANTS_CHARS',
     'wxNO_FULL_REPAINT_ON_RESIZE',
-    'wxFULL_REPAINT_ON_RESIZE',
+    'wxVSCROLL', 'wxHSCROLL', 'wxALWAYS_SHOW_SB',
+    'wxCLIP_CHILDREN',
+    'wxFULL_REPAINT_ON_RESIZE'
+    ]
+
+genericExStyles = [
+    'wxWS_EX_VALIDATE_RECURSIVELY',
     'wxWS_EX_BLOCK_EVENTS',
-]
+    'wxWS_EX_TRANSIENT',
+    'wxFRAME_EX_CONTEXTHELP',
+    'wxWS_EX_PROCESS_IDLE',
+    'wxWS_EX_PROCESS_UI_UPDATES'
+    ]
 
 buttonSize = (35,-1)    # in dialog units, transformed to pixels in panel ctor
 
@@ -127,7 +132,7 @@ class ParamNonGenericStyle(ParamBinaryOr):
 class ParamExStyle(ParamBinaryOr):
     def __init__(self, parent, name):
         if g.currentXXX:
-            self.values = g.currentXXX.exStyles # constant at the moment
+            self.values = g.currentXXX.exStyles + genericExStyles
         else:
             self.values = []
         ParamBinaryOr.__init__(self, parent, name)

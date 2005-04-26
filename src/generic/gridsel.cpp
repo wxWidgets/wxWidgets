@@ -807,6 +807,9 @@ void wxGridSelection::ClearSelection()
             {
                 r = m_grid->BlockToDeviceRect( coords1, coords1 );
                 ((wxWindow *)m_grid->m_gridWin)->Refresh( false, &r );
+#ifdef __WXMAC__
+                ((wxWindow *)m_grid->m_gridWin)->Update();
+#endif
             }
         }
     }
@@ -823,6 +826,9 @@ void wxGridSelection::ClearSelection()
         {
             r = m_grid->BlockToDeviceRect( coords1, coords2 );
             ((wxWindow *)m_grid->m_gridWin)->Refresh( false, &r );
+#ifdef __WXMAC__
+            ((wxWindow *)m_grid->m_gridWin)->Update();
+#endif
         }
     }
 
@@ -839,6 +845,9 @@ void wxGridSelection::ClearSelection()
                 r = m_grid->BlockToDeviceRect( wxGridCellCoords( row, 0 ),
                                                wxGridCellCoords( row, m_grid->GetNumberCols() - 1 ) );
                 ((wxWindow *)m_grid->m_gridWin)->Refresh( false, &r );
+#ifdef __WXMAC__
+                ((wxWindow *)m_grid->m_gridWin)->Update();
+#endif
             }
         }
     }
@@ -856,6 +865,9 @@ void wxGridSelection::ClearSelection()
                 r = m_grid->BlockToDeviceRect( wxGridCellCoords( 0, col ),
                                                wxGridCellCoords( m_grid->GetNumberRows() - 1, col ) );
                 ((wxWindow *)m_grid->m_gridWin)->Refresh( false, &r );
+#ifdef __WXMAC__
+                ((wxWindow *)m_grid->m_gridWin)->Update();
+#endif
             }
         }
     }
