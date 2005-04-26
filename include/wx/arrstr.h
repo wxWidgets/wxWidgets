@@ -50,6 +50,12 @@ public:
     void Sort(bool reverseOrder = false);
     void Sort(CompareFunction function);
     void Sort(CMPFUNCwxString function) { wxArrayStringBase::Sort(function); }
+
+    size_t Add(const wxString& string, size_t copies = 1)
+    {
+        wxArrayStringBase::Add(string, copies);
+        return size() - copies;
+    }
 };
 
 class WXDLLIMPEXP_BASE wxSortedArrayString : public wxSortedArrayStringBase

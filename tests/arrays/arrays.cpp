@@ -274,6 +274,16 @@ void ArraysTestCase::wxStringArrayTest()
     CPPUNIT_ASSERT( a1.Index( _T("condor") ) == 2 );
     CPPUNIT_ASSERT( a1.Index( _T("thermit") ) == 3 );
     CPPUNIT_ASSERT( a1.Index( _T("alligator") ) == 4 );
+
+    wxArrayString a5;
+
+    CPPUNIT_ASSERT( a5.Add( _T("x"), 1 ) == 0 );
+    CPPUNIT_ASSERT( a5.Add( _T("a"), 3 ) == 1 );
+
+    CPPUNIT_ASSERT( COMPARE_4_VALUES( a5, _T("x") ,
+                                          _T("a") ,
+                                          _T("a") ,
+                                          _T("a") ) );
 }
 
 void ArraysTestCase::wxObjArrayTest()
