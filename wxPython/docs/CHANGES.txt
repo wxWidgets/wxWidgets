@@ -50,6 +50,11 @@ EVT_KEY_UP and EVT_TEXT events from its embedded text control.
 
 wxMac: Corrected refresh bugs in wxGrid.
 
+XRCed: Updated to version 0.1.5.
+    * Added wxWizard, wxWizardPageSimple (only from pull-down menu). 
+    * Hide command for test window.
+    * Replacing classes works better.
+    * Added Locate tool.
 
 
 
