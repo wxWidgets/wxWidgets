@@ -335,6 +335,7 @@ class xxxParamFont(xxxObject, xxxNode):
 
 class xxxContainer(xxxObject):
     hasChildren = True
+    exStyles = []
 
 # Simulate normal parameter for encoding
 class xxxEncoding:
@@ -362,37 +363,34 @@ class xxxPanel(xxxContainer):
     allParams = ['pos', 'size', 'style']
     styles = ['fg', 'bg', 'font', 'enabled', 'focused', 'hidden', 'exstyle',
               'tooltip']
-    winStyles = ['wxNO_3D', 'wxTAB_TRAVERSAL', 'wxCLIP_CHILDREN']
-    exStyles = ['wxWS_EX_VALIDATE_RECURSIVELY']
 
 class xxxDialog(xxxContainer):
     allParams = ['title', 'centered', 'pos', 'size', 'style']
     paramDict = {'centered': ParamBool}
     required = ['title']
     default = {'title': ''}
-    winStyles = ['wxDEFAULT_DIALOG_STYLE', 'wxSTAY_ON_TOP',
-##                 'wxDIALOG_MODAL', 'wxDIALOG_MODELESS',
-                 'wxCAPTION', 'wxSYSTEM_MENU', 'wxRESIZE_BORDER', 'wxRESIZE_BOX',
+    winStyles = ['wxDEFAULT_DIALOG_STYLE', 
+                 'wxCAPTION', 'wxMINIMIZE_BOX', 'wxMAXIMIZE_BOX', 'wxCLOSE_BOX',
+                 'wxSTAY_ON_TOP',
                  'wxTHICK_FRAME',
-                 'wxNO_3D', 'wxTAB_TRAVERSAL', 'wxCLIP_CHILDREN']
+                 'wxNO_3D', 'wxDIALOG_NO_PARENT']
     styles = ['fg', 'bg', 'font', 'enabled', 'focused', 'hidden', 'exstyle',
               'tooltip']
-    exStyles = ['wxWS_EX_VALIDATE_RECURSIVELY']
 
 class xxxFrame(xxxContainer):
     allParams = ['title', 'centered', 'pos', 'size', 'style']
     paramDict = {'centered': ParamBool}
     required = ['title']
     default = {'title': ''}
-    winStyles = ['wxDEFAULT_FRAME_STYLE', 'wxDEFAULT_DIALOG_STYLE',
+    winStyles = ['wxDEFAULT_FRAME_STYLE',
+                 'wxCAPTION', 'wxMINIMIZE_BOX', 'wxMAXIMIZE_BOX', 'wxCLOSE_BOX',
                  'wxSTAY_ON_TOP',
-                 'wxCAPTION', 'wxSYSTEM_MENU', 'wxRESIZE_BORDER',
-                 'wxRESIZE_BOX', 'wxMINIMIZE_BOX', 'wxMAXIMIZE_BOX',
-                 'wxFRAME_FLOAT_ON_PARENT', 'wxFRAME_TOOL_WINDOW',
-                 'wxNO_3D', 'wxTAB_TRAVERSAL', 'wxCLIP_CHILDREN']
+                 'wxSYSTEM_MENU', 'wxRESIZE_BORDER',
+                 'wxFRAME_TOOL_WINDOW', 'wxFRAME_NO_TASKBAR',
+                 'wxFRAME_FLOAT_ON_PARENT', 'wxFRAME_SHAPED'
+                 ]
     styles = ['fg', 'bg', 'font', 'enabled', 'focused', 'hidden', 'exstyle',
               'tooltip']
-    exStyles = ['wxWS_EX_VALIDATE_RECURSIVELY']
 
 class xxxTool(xxxObject):
     allParams = ['bitmap', 'bitmap2', 'toggle', 'tooltip', 'longhelp', 'label']
@@ -408,6 +406,23 @@ class xxxToolBar(xxxContainer):
                  'packing': ParamInt, 'separation': ParamInt,
                  'style': ParamNonGenericStyle}
     winStyles = ['wxTB_FLAT', 'wxTB_DOCKABLE', 'wxTB_VERTICAL', 'wxTB_HORIZONTAL', 'wxTB_TEXT']
+
+class xxxWizard(xxxContainer):
+    allParams = ['title', 'bitmap', 'pos']
+    required = ['title']
+    default = {'title': ''}
+    winStyles = []
+    exStyles = ['wxWIZARD_EX_HELPBUTTON']
+
+class xxxWizardPage(xxxContainer):
+    allParams = ['bitmap']
+    winStyles = []
+    exStyles = []
+
+class xxxWizardPageSimple(xxxContainer):
+    allParams = ['bitmap']
+    winStyles = []
+    exStyles = []
 
 ################################################################################
 # Bitmap, Icon
@@ -622,6 +637,9 @@ class xxxGridSizer(xxxSizer):
     required = ['cols']
     default = {'cols': '2', 'rows': '2'}
 
+class xxxStdDialogButtonSizer(xxxSizer):
+    allParams = []
+
 # For repeated parameters
 class xxxParamMulti:
     def __init__(self, node):
@@ -774,6 +792,9 @@ xxxDict = {
     'wxFrame': xxxFrame,
     'tool': xxxTool,
     'wxToolBar': xxxToolBar,
+    'wxWizard': xxxWizard,
+    'wxWizardPage': xxxWizardPage,
+    'wxWizardPageSimple': xxxWizardPageSimple,
 
     'wxBitmap': xxxBitmap,
     'wxIcon': xxxIcon,
@@ -815,6 +836,7 @@ xxxDict = {
     'wxGridSizer': xxxGridSizer,
     'wxFlexGridSizer': xxxFlexGridSizer,
     'wxGridBagSizer': xxxGridBagSizer,
+    'wxStdDialogButtonSizer': xxxStdDialogButtonSizer,
     'sizeritem': xxxSizerItem,
     'spacer': xxxSpacer,
 
