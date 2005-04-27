@@ -1,6 +1,18 @@
 Recent Changes for wxPython
 =====================================================================
 
+
+2.6.0.1
+-------
+
+Added wx.BrushFromBitmap to create a stippled brush in a single step.
+Also added missing brysh style flags: wx.STIPPLE_MASK
+wx.STIPPLE_MASK_OPAQUE. 
+
+
+
+
+
 2.6.0.0
 -------
 

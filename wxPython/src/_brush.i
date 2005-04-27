@@ -56,7 +56,13 @@ public:
     wx.VERTICAL_HATCH     Vertical hatch.
     ===================   =============================
 
+:see: `wx.BrushFromBitmap`
 ");
+
+    DocCtorStrName(
+        wxBrush(const wxBitmap& stippleBitmap),
+        "Constructs a stippled brush using a bitmap.", "",
+        BrushFromBitmap);
 
     ~wxBrush();
 
