@@ -272,8 +272,12 @@ wxWindow* wxFindWindowAtPoint(const wxPoint& pt);
 MustHaveApp(wxGetTopLevelParent);
 wxWindow* wxGetTopLevelParent(wxWindow *win);
 
-//bool wxSpawnBrowser(wxWindow *parent, wxString href);
 
+DocDeclStr(
+    bool , wxLaunchDefaultBrowser(const wxString& url),
+    "Launches the user's default browser and tells it to open the location
+at ``url``.  Returns ``True`` if the application was successfully
+launched.", "");
 
 
 
