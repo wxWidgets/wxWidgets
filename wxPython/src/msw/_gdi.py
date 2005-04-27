@@ -520,6 +520,16 @@ class BrushPtr(Brush):
         self.__class__ = Brush
 _gdi_.Brush_swigregister(BrushPtr)
 
+def BrushFromBitmap(*args, **kwargs):
+    """
+    BrushFromBitmap(Bitmap stippleBitmap) -> Brush
+
+    Constructs a stippled brush using a bitmap.
+    """
+    val = _gdi_.new_BrushFromBitmap(*args, **kwargs)
+    val.thisown = 1
+    return val
+
 class Bitmap(GDIObject):
     """
     The wx.Bitmap class encapsulates the concept of a platform-dependent

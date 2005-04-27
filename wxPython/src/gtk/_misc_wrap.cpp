@@ -6016,6 +6016,46 @@ static PyObject *_wrap_GetTopLevelParent(PyObject *, PyObject *args, PyObject *k
 }
 
 
+static PyObject *_wrap_LaunchDefaultBrowser(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxString *arg1 = 0 ;
+    bool result;
+    bool temp1 = false ;
+    PyObject * obj0 = 0 ;
+    char *kwnames[] = {
+        (char *) "url", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:LaunchDefaultBrowser",kwnames,&obj0)) goto fail;
+    {
+        arg1 = wxString_in_helper(obj0);
+        if (arg1 == NULL) SWIG_fail;
+        temp1 = true;
+    }
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = (bool)wxLaunchDefaultBrowser((wxString const &)*arg1);
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
+    {
+        if (temp1)
+        delete arg1;
+    }
+    return resultobj;
+    fail:
+    {
+        if (temp1)
+        delete arg1;
+    }
+    return NULL;
+}
+
+
 static PyObject *_wrap_GetKeyState(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxKeyCode arg1 ;
@@ -31498,6 +31538,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"GenericFindWindowAtPoint", (PyCFunction) _wrap_GenericFindWindowAtPoint, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"FindWindowAtPoint", (PyCFunction) _wrap_FindWindowAtPoint, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"GetTopLevelParent", (PyCFunction) _wrap_GetTopLevelParent, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"LaunchDefaultBrowser", (PyCFunction) _wrap_LaunchDefaultBrowser, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"GetKeyState", (PyCFunction) _wrap_GetKeyState, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"WakeUpMainThread", (PyCFunction) _wrap_WakeUpMainThread, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"MutexGuiEnter", (PyCFunction) _wrap_MutexGuiEnter, METH_VARARGS | METH_KEYWORDS, NULL},

@@ -554,6 +554,16 @@ def GetTopLevelParent(*args, **kwargs):
     """GetTopLevelParent(Window win) -> Window"""
     return _misc_.GetTopLevelParent(*args, **kwargs)
 
+def LaunchDefaultBrowser(*args, **kwargs):
+    """
+    LaunchDefaultBrowser(String url) -> bool
+
+    Launches the user's default browser and tells it to open the location
+    at ``url``.  Returns ``True`` if the application was successfully
+    launched.
+    """
+    return _misc_.LaunchDefaultBrowser(*args, **kwargs)
+
 def GetKeyState(*args, **kwargs):
     """
     GetKeyState(int key) -> bool

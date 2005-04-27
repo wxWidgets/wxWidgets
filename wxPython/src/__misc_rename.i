@@ -155,6 +155,7 @@
 %rename(GenericFindWindowAtPoint)           wxGenericFindWindowAtPoint;
 %rename(FindWindowAtPoint)                  wxFindWindowAtPoint;
 %rename(GetTopLevelParent)                  wxGetTopLevelParent;
+%rename(LaunchDefaultBrowser)               wxLaunchDefaultBrowser;
 %rename(GetKeyState)                        wxGetKeyState;
 %rename(WakeUpMainThread)                   wxWakeUpMainThread;
 %rename(MutexGuiEnter)                      wxMutexGuiEnter;

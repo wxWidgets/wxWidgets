@@ -3663,6 +3663,39 @@ static PyObject *_wrap_new_Brush(PyObject *, PyObject *args, PyObject *kwargs) {
 }
 
 
+static PyObject *_wrap_new_BrushFromBitmap(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxBitmap *arg1 = 0 ;
+    wxBrush *result;
+    PyObject * obj0 = 0 ;
+    char *kwnames[] = {
+        (char *) "stippleBitmap", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:new_BrushFromBitmap",kwnames,&obj0)) goto fail;
+    {
+        SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxBitmap, SWIG_POINTER_EXCEPTION | 0);
+        if (SWIG_arg_fail(1)) SWIG_fail;
+        if (arg1 == NULL) {
+            SWIG_null_ref("wxBitmap");
+        }
+        if (SWIG_arg_fail(1)) SWIG_fail;
+    }
+    {
+        if (!wxPyCheckForApp()) SWIG_fail;
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = (wxBrush *)new wxBrush((wxBitmap const &)*arg1);
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    resultobj = SWIG_NewPointerObj((void*)(result), SWIGTYPE_p_wxBrush, 1);
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
 static PyObject *_wrap_delete_Brush(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxBrush *arg1 = (wxBrush *) 0 ;
@@ -20528,6 +20561,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"Pen___ne__", (PyCFunction) _wrap_Pen___ne__, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"Pen_swigregister", Pen_swigregister, METH_VARARGS, NULL},
 	 { (char *)"new_Brush", (PyCFunction) _wrap_new_Brush, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"new_BrushFromBitmap", (PyCFunction) _wrap_new_BrushFromBitmap, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"delete_Brush", (PyCFunction) _wrap_delete_Brush, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"Brush_SetColour", (PyCFunction) _wrap_Brush_SetColour, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"Brush_SetStyle", (PyCFunction) _wrap_Brush_SetStyle, METH_VARARGS | METH_KEYWORDS, NULL},

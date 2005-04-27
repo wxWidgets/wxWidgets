@@ -302,6 +302,8 @@
 %rename(USER_DASH)                          wxUSER_DASH;
 %rename(TRANSPARENT)                        wxTRANSPARENT;
 %rename(STIPPLE)                            wxSTIPPLE;
+%rename(STIPPLE_MASK)                       wxSTIPPLE_MASK;
+%rename(STIPPLE_MASK_OPAQUE)                wxSTIPPLE_MASK_OPAQUE;
 %rename(BDIAGONAL_HATCH)                    wxBDIAGONAL_HATCH;
 %rename(CROSSDIAG_HATCH)                    wxCROSSDIAG_HATCH;
 %rename(FDIAGONAL_HATCH)                    wxFDIAGONAL_HATCH;

@@ -31,6 +31,7 @@ wxPen = wx._gdi.Pen
 wxPenPtr = wx._gdi.PenPtr
 wxBrush = wx._gdi.Brush
 wxBrushPtr = wx._gdi.BrushPtr
+wxBrushFromBitmap = wx._gdi.BrushFromBitmap
 wxBitmap = wx._gdi.Bitmap
 wxBitmapPtr = wx._gdi.BitmapPtr
 wxEmptyBitmap = wx._gdi.EmptyBitmap

@@ -48621,6 +48621,12 @@ SWIGEXPORT(void) SWIG_init(void) {
         PyDict_SetItemString(d,"STIPPLE", SWIG_From_int((int)(wxSTIPPLE))); 
     }
     {
+        PyDict_SetItemString(d,"STIPPLE_MASK", SWIG_From_int((int)(wxSTIPPLE_MASK))); 
+    }
+    {
+        PyDict_SetItemString(d,"STIPPLE_MASK_OPAQUE", SWIG_From_int((int)(wxSTIPPLE_MASK_OPAQUE))); 
+    }
+    {
         PyDict_SetItemString(d,"BDIAGONAL_HATCH", SWIG_From_int((int)(wxBDIAGONAL_HATCH))); 
     }
     {
