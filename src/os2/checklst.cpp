@@ -88,7 +88,7 @@ wxCheckListBoxItem::wxCheckListBoxItem (
   wxCheckListBox*                   pParent
 , size_t                            nIndex
 )
-: wxOwnerDrawn( ""
+: wxOwnerDrawn( wxEmptyString
                ,TRUE // checkable
               )
 {

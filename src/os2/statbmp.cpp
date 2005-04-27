@@ -109,7 +109,7 @@ bool wxStaticBitmap::Create(
     int                             nWinstyle = SS_ICON;
 
     m_hWnd = (WXHWND)::WinCreateWindow( pParent->GetHWND()
-                                       ,wxCanvasClassName
+                                       ,(PSZ)wxCanvasClassName
                                        ,zId
                                        ,nWinstyle | WS_VISIBLE
                                        ,0,0,0,0

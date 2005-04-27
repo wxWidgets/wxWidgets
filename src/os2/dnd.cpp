@@ -327,44 +327,44 @@ wxDataFormat wxDropTarget::GetSupportedFormat (
             case wxDF_TEXT:
             case wxDF_FILENAME:
             case wxDF_HTML:
-                sMechanism = "DRM_OS2FILE";
-                sFormat    = "DRF_TEXT";
+                sMechanism = _T("DRM_OS2FILE");
+                sFormat    = _T("DRF_TEXT");
                 break;
 
             case wxDF_OEMTEXT:
-                sMechanism = "DRM_OS2FILE";
-                sFormat    = "DRF_OEMTEXT";
+                sMechanism = _T("DRM_OS2FILE");
+                sFormat    = _T("DRF_OEMTEXT");
                 break;
 
             case wxDF_BITMAP:
-                sMechanism = "DRM_OS2FILE";
-                sFormat    = "DRF_BITMAP";
+                sMechanism = _T("DRM_OS2FILE");
+                sFormat    = _T("DRF_BITMAP");
                 break;
 
             case wxDF_METAFILE:
             case wxDF_ENHMETAFILE:
-                sMechanism = "DRM_OS2FILE";
-                sFormat    = "DRF_METAFILE";
+                sMechanism = _T("DRM_OS2FILE");
+                sFormat    = _T("DRF_METAFILE");
                 break;
 
             case wxDF_TIFF:
-                sMechanism = "DRM_OS2FILE";
-                sFormat    = "DRF_TIFF";
+                sMechanism = _T("DRM_OS2FILE");
+                sFormat    = _T("DRF_TIFF");
                 break;
 
             case wxDF_SYLK:
-                sMechanism = "DRM_OS2FILE";
-                sFormat    = "DRF_SYLK";
+                sMechanism = _T("DRM_OS2FILE");
+                sFormat    = _T("DRF_SYLK");
                 break;
 
             case wxDF_DIF:
-                sMechanism = "DRM_OS2FILE";
-                sFormat    = "DRF_DIF";
+                sMechanism = _T("DRM_OS2FILE");
+                sFormat    = _T("DRF_DIF");
                 break;
 
             case wxDF_DIB:
-                sMechanism = "DRM_OS2FILE";
-                sFormat    = "DRF_DIB";
+                sMechanism = _T("DRM_OS2FILE");
+                sFormat    = _T("DRF_DIB");
                 break;
 
             case wxDF_PALETTE:
@@ -373,19 +373,19 @@ wxDataFormat wxDropTarget::GetSupportedFormat (
             case wxDF_WAVE:
             case wxDF_UNICODETEXT:
             case wxDF_LOCALE:
-                sMechanism = "DRM_OS2FILE";
-                sFormat    = "DRF_UNKNOWN";
+                sMechanism = _T("DRM_OS2FILE");
+                sFormat    = _T("DRF_UNKNOWN");
                 break;
 
             case wxDF_PRIVATE:
-                sMechanism = "DRM_OBJECT";
-                sFormat    = "DRF_UNKNOWN";
+                sMechanism = _T("DRM_OBJECT");
+                sFormat    = _T("DRF_UNKNOWN");
                 break;
         }
         for (i = 0; i < ulItems; i++)
         {
             pDragItem = ::DrgQueryDragitemPtr(pDataSource, i);
-            if (::DrgVerifyRMF(pDragItem, sMechanism.c_str(), sFormat.c_str()))
+            if (::DrgVerifyRMF(pDragItem, (PSZ)sMechanism.c_str(), (PSZ)sFormat.c_str()))
             {
                 bValid = TRUE;
                 break;
@@ -552,10 +552,10 @@ void wxDropSource::Init ()
     HSTR                            hStrType = ::DrgAddStrHandle(DRT_UNKNOWN);
     HSTR                            hStrRMF;
     HSTR                            hStrContainer;
-    char                            zFormats[128];
-    char                            zContainer[128];
+    wxChar                          zFormats[128];
+    wxChar                          zContainer[128];
     USHORT                          uSize = GetDataObject()->GetDataSize(GetDataObject()->GetPreferredFormat()) + 1;
-    char*                           pzBuffer = new char[uSize];
+    wxChar*                         pzBuffer = new wxChar[uSize];
 
     memset(pzBuffer, '\0', GetDataObject()->GetDataSize(GetDataObject()->GetPreferredFormat()));
     pzBuffer[GetDataObject()->GetDataSize(GetDataObject()->GetPreferredFormat())] = '\0';
@@ -563,11 +563,11 @@ void wxDropSource::Init ()
                                  ,(void*)pzBuffer
                                 );
 
-    strcpy(zFormats, "<DRM_OS2FILE, DRF_UNKNOWN>");
-    strcpy(zContainer, GetDataObject()->GetPreferredFormat().GetId().c_str());
+    wxStrcpy(zFormats, _T("<DRM_OS2FILE, DRF_UNKNOWN>"));
+    wxStrcpy(zContainer, GetDataObject()->GetPreferredFormat().GetId());
 
-    hStrRMF       = ::DrgAddStrHandle(zFormats);
-    hStrContainer = ::DrgAddStrHandle(zContainer);
+    hStrRMF       = ::DrgAddStrHandle((PSZ)zFormats);
+    hStrContainer = ::DrgAddStrHandle((PSZ)zContainer);
 
     m_pDragItem = new DRAGITEM[m_ulItems];
     for (ULONG i = 0; i < m_ulItems; i++)
@@ -578,7 +578,7 @@ void wxDropSource::Init ()
         m_pDragItem[i].hstrContainerName = hStrContainer;
         m_pDragItem[i].fsControl         = 0;
         m_pDragItem[i].fsSupportedOps    = DO_COPYABLE | DO_MOVEABLE | DO_LINKABLE;
-        m_pDragItem[i].hstrSourceName    = ::DrgAddStrHandle(pzBuffer);
+        m_pDragItem[i].hstrSourceName    = ::DrgAddStrHandle((PSZ)pzBuffer);
         m_pDragItem[i].hstrTargetName    = m_pDragItem[i].hstrSourceName;
         m_pDragItem[i].ulItemID          = i;
         ::DrgSetDragitem( m_pDragInfo

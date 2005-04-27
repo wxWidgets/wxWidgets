@@ -2238,24 +2238,22 @@ void wxDC::DoGetTextExtent(
     int                             l;
     FONTMETRICS                     vFM; // metrics structure
     BOOL                            bRc;
-    char*                           pStr;
     ERRORID                         vErrorCode; // last error id code
     wxFont*                         pFontToUse = (wxFont*)pTheFont;
 
-    char                            zMsg[128]; // DEBUG
+    wxChar                          zMsg[128]; // DEBUG
     wxString                        sError;
 
     if (!pFontToUse)
         pFontToUse = (wxFont*)&m_font;
     l = rsString.length();
-    pStr = (PCH) rsString.c_str();
 
     //
     // In world coordinates.
     //
     bRc = ::GpiQueryTextBox( m_hPS
                             ,l
-                            ,pStr
+                            ,(PCH)rsString.c_str()
                             ,TXTBOX_COUNT // return maximum information
                             ,avPoint      // array of coordinates points
                            );
@@ -2264,8 +2262,8 @@ void wxDC::DoGetTextExtent(
        vErrorCode = ::WinGetLastError(wxGetInstance());
        sError = wxPMErrorToStr(vErrorCode);
        // DEBUG
-       sprintf(zMsg, "GpiQueryTextBox for %s: failed with Error: %lx - %s", pStr, vErrorCode, sError.c_str());
-       (void)wxMessageBox( "wxWidgets Menu sample"
+       wxSprintf(zMsg, _T("GpiQueryTextBox for %s: failed with Error: %lx - %s"), rsString.c_str(), vErrorCode, sError.c_str());
+       (void)wxMessageBox( _T("wxWidgets Menu sample")
                           ,zMsg
                           ,wxICON_INFORMATION
                          );

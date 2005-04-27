@@ -151,7 +151,7 @@ bool wxPen::RealizeResource()
         {
             vError = ::WinGetLastError(vHabmain);
             sError = wxPMErrorToStr(vError);
-            wxLogError("Unable to set current color table to RGB mode. Error: %s\n", sError.c_str());
+            wxLogError(_T("Unable to set current color table to RGB mode. Error: %s\n"), sError.c_str());
             return FALSE;
         }
         if (M_PENDATA->m_nStyle == wxTRANSPARENT)
@@ -215,7 +215,7 @@ bool wxPen::RealizeResource()
         {
             vError = ::WinGetLastError(vHabmain);
             sError = wxPMErrorToStr(vError);
-            wxLogError("Can't set Gpi attributes for a LINEBUNDLE. Error: %s\n", sError.c_str());
+            wxLogError(_T("Can't set Gpi attributes for a LINEBUNDLE. Error: %s\n"), sError.c_str());
             return FALSE;
         }
 
@@ -300,7 +300,7 @@ bool wxPen::RealizeResource()
         {
             vError = ::WinGetLastError(vHabmain);
             sError = wxPMErrorToStr(vError);
-            wxLogError("Can't set Gpi attributes for an AREABUNDLE. Error: %s\n", sError.c_str());
+            wxLogError(_T("Can't set Gpi attributes for an AREABUNDLE. Error: %s\n"), sError.c_str());
         }
         return bOk;
     }

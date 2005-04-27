@@ -288,7 +288,7 @@ bool wxRadioBox::Create(
     wxColour                        vColour;
     LONG                            lColor;
 
-    vColour.Set(wxString("BLACK"));
+    vColour.Set(wxString(wxT("BLACK")));
     m_backgroundColour = pParent->GetBackgroundColour();
     m_nSelectedButton = -1;
     m_nNoItems = 0;
@@ -308,7 +308,7 @@ bool wxRadioBox::Create(
                        ,rsName
                       ))
         return false;
-    if (!OS2CreateControl( "STATIC"
+    if (!OS2CreateControl( wxT("STATIC")
                           ,SS_GROUPBOX
                           ,rPos
                           ,rSize
@@ -339,7 +339,7 @@ bool wxRadioBox::Create(
 
         HWND                        hWndBtn = (WXHWND)::WinCreateWindow ( GetHwndOf(pParent)
                                                                          ,WC_BUTTON
-                                                                         ,asChoices[i]
+                                                                         ,(PSZ)asChoices[i].c_str()
                                                                          ,lStyleBtn
                                                                          ,0, 0, 0, 0
                                                                          ,GetWinHwnd(pParent)
@@ -1070,7 +1070,7 @@ void wxRadioBox::SetString(
     wxCHECK_RET( IsValid(nItem), wxT("invalid radiobox index") );
 
     m_pnRadioWidth[nItem] = m_pnRadioHeight[nItem] = -1;
-    ::WinSetWindowText((HWND)m_ahRadioButtons[nItem], rsLabel.c_str());
+    ::WinSetWindowText((HWND)m_ahRadioButtons[nItem], (PSZ)rsLabel.c_str());
 } // end of wxRadioBox::SetString
 
 bool wxRadioBox::SetStringSelection(

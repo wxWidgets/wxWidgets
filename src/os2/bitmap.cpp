@@ -860,7 +860,7 @@ wxImage wxBitmap::ConvertToImage() const
     HBITMAP                         hOldBitmap;
     DEVOPENSTRUC                    vDop  = {0L, "DISPLAY", NULL, 0L, 0L, 0L, 0L, 0L, 0L};
     SIZEL                           vSizlPage = {0,0};
-    HDC                             hDCMem;
+    HDC                             hDCMem = NULLHANDLE;;
 
     vImage.Create( nWidth
                   ,nHeight

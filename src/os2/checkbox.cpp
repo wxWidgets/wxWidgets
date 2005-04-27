@@ -106,7 +106,7 @@ void wxCheckBox::SetLabel(
   const wxString&                   rsLabel
 )
 {
-    ::WinSetWindowText(GetHwnd(), rsLabel.c_str());
+    ::WinSetWindowText(GetHwnd(), (PSZ)rsLabel.c_str());
 } // end of wxCheckBox::SetLabel
 
 wxSize wxCheckBox::DoGetBestSize() const

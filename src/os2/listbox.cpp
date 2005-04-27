@@ -49,7 +49,7 @@
 class wxListBoxItem : public wxOwnerDrawn
 {
 public:
-    wxListBoxItem(const wxString& rsStr = "");
+    wxListBoxItem(const wxString& rsStr = wxEmptyString);
 };
 
 wxListBoxItem::wxListBoxItem(
@@ -198,7 +198,7 @@ bool wxListBox::Create(
     //
     wxColour                        vColour;
 
-    vColour.Set(wxString("WHITE"));
+    vColour.Set(wxString(wxT("WHITE")));
 
     LONG                            lColor = (LONG)vColour.GetPixel();
 
@@ -207,7 +207,7 @@ bool wxListBox::Create(
                       ,sizeof(LONG)
                       ,(PVOID)&lColor
                      );
-    vColour.Set(wxString("NAVY"));
+    vColour.Set(wxString(wxT("NAVY")));
     lColor = (LONG)vColour.GetPixel();
     ::WinSetPresParam( m_hWnd
                       ,PP_HILITEBACKGROUNDCOLOR
@@ -380,7 +380,7 @@ int wxListBox::FindString(
         lTextLength = LONGFROMMR(::WinSendMsg(GetHwnd(), LM_QUERYITEMTEXTLENGTH, (MPARAM)nPos, (MPARAM)0));
         zStr = new char[lTextLength + 1];
         ::WinSendMsg(GetHwnd(), LM_QUERYITEMTEXT, MPFROM2SHORT(nPos, (SHORT)lTextLength), (MPARAM)zStr);
-        if (rsString == (char*)zStr)
+        if (rsString == (wxChar*)zStr)
         {
             delete [] zStr;
             break;
@@ -593,14 +593,14 @@ wxString wxListBox::GetString(
 ) const
 {
     LONG                            lLen = 0;
-    char*                           zBuf;
+    wxChar*                         zBuf;
     wxString                        sResult;
 
-    wxCHECK_MSG( N >= 0 && N < m_nNumItems, "",
+    wxCHECK_MSG( N >= 0 && N < m_nNumItems, wxEmptyString,
                  wxT("invalid index in wxListBox::GetClientData") );
 
     lLen = LONGFROMMR(::WinSendMsg(GetHwnd(), LM_QUERYITEMTEXTLENGTH, (MPARAM)N, (MPARAM)0));
-    zBuf = new char[lLen + 1];
+    zBuf = new wxChar[lLen + 1];
     ::WinSendMsg(GetHwnd(), LM_QUERYITEMTEXT, MPFROM2SHORT((SHORT)N, (SHORT)lLen), (MPARAM)zBuf);
     zBuf[lLen] = '\0';
     sResult = zBuf;

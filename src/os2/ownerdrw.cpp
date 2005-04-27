@@ -214,7 +214,7 @@ bool wxOwnerDrawn::OnDrawItem(
     //
     if (eStatus & wxODSelected)
     {
-        wxColour                        vCol2("WHITE");
+        wxColour                        vCol2(wxT("WHITE"));
         vColBack.Set( (unsigned char)0
                      ,(unsigned char)0
                      ,(unsigned char)160
@@ -300,7 +300,7 @@ bool wxOwnerDrawn::OnDrawItem(
     //
     // Display main text and accel text separately to allign better
     //
-    wxString                        sTgt = "\t";
+    wxString                        sTgt = wxT("\t");
     wxString                        sFullString = m_strName; // need to save the original text
     wxString                        sAccel;
     int                             nIndex;
@@ -324,7 +324,7 @@ bool wxOwnerDrawn::OnDrawItem(
     //
     // Deal with the mneumonic character
     //
-    sTgt = "~";
+    sTgt = wxT("~");
     nIndex = sFullString.Find(sTgt.c_str());
     if (nIndex != -1)
     {
@@ -341,7 +341,7 @@ bool wxOwnerDrawn::OnDrawItem(
                           ,(long *)&nCharWidth
                           ,(long *)&nHeight
                          );
-        sFullString.Replace(sTgt.c_str(), "", TRUE);
+        sFullString.Replace(sTgt.c_str(), wxEmptyString, TRUE);
     }
 
     //

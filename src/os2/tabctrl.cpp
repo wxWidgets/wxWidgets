@@ -197,7 +197,7 @@ int wxTabCtrl::GetRowCount() const
 wxString wxTabCtrl::GetItemText(int item) const
 {
     // TODO
-    return wxString("");
+    return wxString(wxEmptyString);
 }
 
 // Get the item image

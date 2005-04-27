@@ -519,7 +519,7 @@ wxString WXDLLEXPORT wxGetWindowText(
     if ( hWnd )
     {
 	long                lLen = ::WinQueryWindowTextLength((HWND)hWnd) + 1;
-	::WinQueryWindowText((HWND)hWnd, lLen, wxStringBuffer(vStr, lLen));
+	::WinQueryWindowText((HWND)hWnd, lLen, (PSZ)(wxChar*)wxStringBuffer(vStr, lLen));
     }
 
     return vStr;
@@ -536,7 +536,7 @@ wxString WXDLLEXPORT wxGetWindowClass(
 
 	for ( ;; )
 	{
-	    int                     nCount = ::WinQueryClassName((HWND)hWnd, nLen, wxStringBuffer(vStr, nLen));
+	    int                     nCount = ::WinQueryClassName((HWND)hWnd, nLen, (PSZ)(wxChar*)wxStringBuffer(vStr, nLen));
 
 	    if (nCount == nLen )
 	    {

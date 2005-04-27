@@ -61,7 +61,7 @@ void wxToolTip::Create(
 
     m_hWnd = ::WinCreateWindow( HWND_DESKTOP
                                ,WC_ENTRYFIELD
-                               ,rsTip.c_str()
+                               ,(PSZ)rsTip.c_str()
                                ,lStyle
                                ,0, 0, 0, 0
                                ,NULLHANDLE
@@ -71,7 +71,7 @@ void wxToolTip::Create(
                                ,NULL
                               );
     if (!m_hWnd)
-        wxLogError("Unable to create tooltip window");
+        wxLogError(_T("Unable to create tooltip window"));
 
     wxColour                        vColor( wxT("YELLOW") );
     lColor = (LONG)vColor.GetPixel();

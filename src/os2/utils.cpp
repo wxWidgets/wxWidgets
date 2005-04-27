@@ -160,9 +160,9 @@ bool wxShell(
     SData.FgBg     = SSF_FGBG_FORE;
     SData.TraceOpt = SSF_TRACEOPT_NONE;
     SData.PgmTitle = PgmTitle;
-    SData.PgmName  = zShell;
+    SData.PgmName  = (char*)zShell;
 
-    sInputs = "/C " + rCommand;
+    sInputs = _T("/C ") + rCommand;
     SData.PgmInputs     = (BYTE*)sInputs.c_str();
     SData.TermQ         = 0;
     SData.Environment   = 0;
@@ -416,7 +416,7 @@ const wxChar* wxGetHomeDir(
 #  define MAX_PATH  256
 #endif
 
-    const wxChar *szHome = wxGetenv("HOME");
+    const wxChar *szHome = wxGetenv((wxChar*)"HOME");
     if ( szHome == NULL ) {
       // we're homeless, use current directory.
       rStrDir = wxT(".");
@@ -435,7 +435,7 @@ wxChar* wxGetUserHome (
     wxChar*                         zHome;
     wxString                        sUser1(rUser);
 
-    char *wxBuffer = new wxChar[256];
+    wxChar *wxBuffer = new wxChar[256];
 #ifndef __EMX__
     if (!sUser1.empty())
     {
@@ -471,7 +471,7 @@ wxChar* wxGetUserHome (
         }
     }
     delete[] wxBuffer;
-    return NULL; // No home known!
+    return (wxChar*)wxEmptyString; // No home known!
 }
 
 wxString WXDLLEXPORT wxPMErrorToStr(

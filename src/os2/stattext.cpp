@@ -83,7 +83,7 @@ bool wxStaticText::Create(
 
     wxColour                        vColour;
 
-    vColour.Set(wxString("BLACK"));
+    vColour.Set(wxString(wxT("BLACK")));
 
     LONG                            lColor = (LONG)vColour.GetPixel();
 
@@ -235,7 +235,7 @@ void wxStaticText::SetLabel(
   const wxString&                   rsLabel
 )
 {
-    ::WinSetWindowText(GetHwnd(), rsLabel.c_str());
+    ::WinSetWindowText(GetHwnd(), (PSZ)rsLabel.c_str());
 
     //
     // Adjust the size of the window to fit to the label unless autoresizing is

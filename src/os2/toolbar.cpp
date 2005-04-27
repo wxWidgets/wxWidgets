@@ -366,7 +366,7 @@ bool wxToolBar::Create(
         wxClientDC                  vDC(this);
 
         vDC.SetFont(GetFont());
-        vDC.GetTextExtent( "XXXX"
+        vDC.GetTextExtent( wxT("XXXX")
                           ,&m_vTextX
                           ,&m_vTextY
                          );
@@ -858,7 +858,7 @@ void wxToolBar::DrawTool(
         LowerTool(pTool, FALSE);
         if (!pTool->IsEnabled())
         {
-            wxColour                vColor("GREY");
+            wxColour                vColor(wxT("GREY"));
 
             rDc.SetTextForeground(vColor);
             if (!pTool->GetDisabledBitmap().Ok())
@@ -873,7 +873,7 @@ void wxToolBar::DrawTool(
         }
         else
         {
-            wxColour                vColor("BLACK");
+            wxColour                vColor(wxT("BLACK"));
 
             rDc.SetTextForeground(vColor);
             rDc.DrawBitmap( vBitmap
@@ -918,7 +918,7 @@ void wxToolBar::DrawTool(
     }
     else
     {
-        wxColour                    vColor("GREY");
+        wxColour                    vColor(wxT("GREY"));
 
         LowerTool(pTool);
         rDc.SetTextForeground(vColor);
@@ -1072,7 +1072,7 @@ void wxToolBar::LowerTool (
                                                  ,1
                                                  ,wxSOLID
                                                 );
-    wxPen                           vWhitePen( "WHITE"
+    wxPen                           vWhitePen( wxT("WHITE")
                                               ,1
                                               ,wxSOLID
                                              );
@@ -1149,7 +1149,7 @@ void wxToolBar::RaiseTool (
                                                  ,1
                                                  ,wxSOLID
                                                 );
-    wxPen                           vWhitePen( "WHITE"
+    wxPen                           vWhitePen( wxT("WHITE")
                                               ,1
                                               ,wxSOLID
                                              );

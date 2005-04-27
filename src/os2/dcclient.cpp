@@ -119,7 +119,7 @@ wxWindowDC::wxWindowDC(
     {
         vError = ::WinGetLastError(vHabmain);
         sError = wxPMErrorToStr(vError);
-        wxLogError("Unable to create presentation space. Error: %s\n", sError.c_str());
+        wxLogError(_T("Unable to create presentation space. Error: %s\n"), sError.c_str());
     }
     ::GpiAssociate(m_hPS, NULLHANDLE);
     ::GpiAssociate(m_hPS, m_hDC);
@@ -137,7 +137,7 @@ wxWindowDC::wxWindowDC(
     {
         vError = ::WinGetLastError(vHabmain);
         sError = wxPMErrorToStr(vError);
-        wxLogError("Unable to set current color table. Error: %s\n", sError.c_str());
+        wxLogError(_T("Unable to set current color table. Error: %s\n"), sError.c_str());
     }
     ::GpiCreateLogColorTable( m_hPS
                              ,0L
@@ -237,7 +237,7 @@ wxClientDC::wxClientDC(
     {
         vError = ::WinGetLastError(vHabmain);
         sError = wxPMErrorToStr(vError);
-        wxLogError("Unable to set current color table. Error: %s\n", sError.c_str());
+        wxLogError(_T("Unable to set current color table. Error: %s\n"), sError.c_str());
     }
     ::GpiCreateLogColorTable( m_hPS
                              ,0L

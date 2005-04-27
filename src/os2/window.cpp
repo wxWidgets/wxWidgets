@@ -583,7 +583,7 @@ void wxWindowOS2::SetTitle(
   const wxString&                   rTitle
 )
 {
-    ::WinSetWindowText(GetHwnd(), rTitle.c_str());
+    ::WinSetWindowText(GetHwnd(), (PSZ)rTitle.c_str());
 } // end of wxWindowOS2::SetTitle
 
 wxString wxWindowOS2::GetTitle() const
@@ -3037,9 +3037,10 @@ void wxAssociateWinWithHandle(
     if (pOldWin && (pOldWin != pWin))
     {
         wxString                    str(pWin->GetClassInfo()->GetClassName());
-        wxLogError( "Bug! Found existing HWND %X for new window of class %s"
+
+        wxLogError( _T("Bug! Found existing HWND %X for new window of class %s")
                    ,(int)hWnd
-                   ,(const char*)str
+                   ,str.c_str()
                   );
     }
     else if (!pOldWin)
@@ -3108,7 +3109,7 @@ WXHWND wxWindowOS2::OS2GetParent() const
 
 bool wxWindowOS2::OS2Create(
   PSZ                               zClass
-, const char*                       zTitle
+, const wxChar*                     zTitle
 , WXDWORD                           dwStyle
 , const wxPoint&                    rPos
 , const wxSize&                     rSize
@@ -3154,7 +3155,7 @@ bool wxWindowOS2::OS2Create(
     }
     m_hWnd = (WXHWND)::WinCreateWindow( (HWND)OS2GetParent()
                                        ,(PSZ)sClassName.c_str()
-                                       ,(PSZ)zTitle ? zTitle : ""
+                                       ,(PSZ)(zTitle ? zTitle : wxEmptyString)
                                        ,(ULONG)dwStyle
                                        ,(LONG)0L
                                        ,(LONG)0L
@@ -3175,7 +3176,7 @@ bool wxWindowOS2::OS2Create(
     SubclassWin(m_hWnd);
     SetFont(wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT));
 
-    m_backgroundColour.Set(wxString("GREY"));
+    m_backgroundColour.Set(wxString(wxT("GREY")));
 
     LONG                            lColor = (LONG)m_backgroundColour.GetPixel();
 
@@ -3187,7 +3188,7 @@ bool wxWindowOS2::OS2Create(
     {
         vError = ::WinGetLastError(vHabmain);
         sError = wxPMErrorToStr(vError);
-        wxLogError("Error creating frame. Error: %s\n", sError.c_str());
+        wxLogError(_T("Error creating frame. Error: %s\n"), sError.c_str());
         return FALSE;
     }
     SetSize( nX
@@ -3438,7 +3439,7 @@ bool wxWindowOS2::OS2OnDrawItem(
         {
             vError = ::WinGetLastError(vHabmain);
             sError = wxPMErrorToStr(vError);
-            wxLogError("Unable to set current color table. Error: %s\n", sError.c_str());
+            wxLogError(_T("Unable to set current color table. Error: %s\n"), sError.c_str());
         }
         //
         // Set the color table to RGB mode
@@ -3453,7 +3454,7 @@ bool wxWindowOS2::OS2OnDrawItem(
         {
             vError = ::WinGetLastError(vHabmain);
             sError = wxPMErrorToStr(vError);
-            wxLogError("Unable to set current color table. Error: %s\n", sError.c_str());
+            wxLogError(_T("Unable to set current color table. Error: %s\n"), sError.c_str());
         }
 
         wxCHECK( pMenuItem->IsKindOf(CLASSINFO(wxMenuItem)), FALSE );

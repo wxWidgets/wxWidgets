@@ -138,7 +138,7 @@ int wxFileDialog::ShowModal()
 
     vFileDlg.cbSize = sizeof(FILEDLG);
     vFileDlg.fl = lFlags;
-    vFileDlg.pszTitle = zTitleBuffer;
+    vFileDlg.pszTitle = (PSZ)zTitleBuffer;
 
     //
     // Convert forward slashes to backslashes (file selector doesn't like
@@ -189,11 +189,11 @@ int wxFileDialog::ShowModal()
         }
     }
     if ( wxStrlen(m_wildCard) == 0 )
-        sTheFilter = "";
+        sTheFilter = wxEmptyString;
     else
         sTheFilter = m_wildCard;
 
-    pzFilterBuffer = strtok((char*)sTheFilter.c_str(), "|");
+    wxStrtok((wxChar*)sTheFilter.c_str(), wxT("|"), &pzFilterBuffer);
     while(pzFilterBuffer != NULL)
     {
         if (nCount > 0 && !(nCount % 2))
@@ -202,14 +202,14 @@ int wxFileDialog::ShowModal()
         {
             sDir += pzFilterBuffer;
         }
-        pzFilterBuffer = strtok(NULL, "|");
+        wxStrtok(NULL, wxT("|"), &pzFilterBuffer);
         nCount++;
     }
     if (nCount == 0)
         sDir += m_fileName;
     if (sDir.IsEmpty())
-        sDir = "*.*";
-    wxStrcpy(vFileDlg.szFullFile, sDir.c_str());
+        sDir = wxT("*.*");
+    wxStrcpy((wxChar*)vFileDlg.szFullFile, sDir);
     sFilterBuffer = sDir;
 
     hWnd = ::WinFileDlg( HWND_DESKTOP
@@ -225,25 +225,25 @@ int wxFileDialog::ShowModal()
             {
                 if (i == 0)
                 {
-                    m_dir = wxPathOnly(wxString((const char*)*vFileDlg.papszFQFilename[0]));
-                    m_path = (const char*)*vFileDlg.papszFQFilename[0];
+                    m_dir = wxPathOnly(wxString((const wxChar*)*vFileDlg.papszFQFilename[0]));
+                    m_path = (const wxChar*)*vFileDlg.papszFQFilename[0];
                 }
-                m_fileName = wxFileNameFromPath(wxString((const char*)*vFileDlg.papszFQFilename[i]));
+                m_fileName = wxFileNameFromPath(wxString((const wxChar*)*vFileDlg.papszFQFilename[i]));
                 m_fileNames.Add(m_fileName);
             }
             ::WinFreeFileDlgList(vFileDlg.papszFQFilename);
         }
         else if (!(m_dialogStyle & wxSAVE))
         {
-            m_path = vFileDlg.szFullFile;
-            m_fileName = wxFileNameFromPath(vFileDlg.szFullFile);
-            m_dir = wxPathOnly(vFileDlg.szFullFile);
+            m_path = (wxChar*)vFileDlg.szFullFile;
+            m_fileName = wxFileNameFromPath(wxString((const wxChar*)vFileDlg.szFullFile));
+            m_dir = wxPathOnly((const wxChar*)vFileDlg.szFullFile);
         }
         else // save file
         {
             const wxChar*           pzExtension = NULL;
 
-            wxStrcpy(zFileNameBuffer, vFileDlg.szFullFile);
+            wxStrcpy(zFileNameBuffer, (const wxChar*)vFileDlg.szFullFile);
 
             int                     nIdx = wxStrlen(zFileNameBuffer) - 1;
             wxString                sExt;
@@ -290,10 +290,10 @@ int wxFileDialog::ShowModal()
             }
             else
             {
-                m_path = vFileDlg.szFullFile;
+                m_path = (wxChar*)vFileDlg.szFullFile;
             }
-            m_fileName = wxFileNameFromPath(vFileDlg.szFullFile);
-            m_dir = wxPathOnly(vFileDlg.szFullFile);
+            m_fileName = wxFileNameFromPath((const wxChar*)vFileDlg.szFullFile);
+            m_dir = wxPathOnly((const wxChar*)vFileDlg.szFullFile);
 
             //
             // === Simulating the wxOVERWRITE_PROMPT >>============================

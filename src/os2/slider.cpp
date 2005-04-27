@@ -65,7 +65,7 @@ void wxSlider::AdjustSubControls(
     int                             nCx;     // slider,min,max sizes
     int                             nCy;
     int                             nCyf;
-    char                            zBuf[300];
+    wxChar                          zBuf[300];
     wxFont                          vFont = this->GetFont();
 
     wxGetCharSize( GetHWND()
@@ -81,10 +81,10 @@ void wxSlider::AdjustSubControls(
             int                     nMinLen = 0;
             int                     nMaxLen = 0;
 
-            ::WinQueryWindowText((HWND)m_hStaticMin, 300, zBuf);
+            ::WinQueryWindowText((HWND)m_hStaticMin, 300, (PSZ)zBuf);
             GetTextExtent(zBuf, &nMinLen, &nCyf, NULL, NULL, &vFont);
 
-            ::WinQueryWindowText((HWND)m_hStaticMax, 300, zBuf);
+            ::WinQueryWindowText((HWND)m_hStaticMax, 300, (PSZ)zBuf);
             GetTextExtent(zBuf, &nMaxLen, &nCyf, NULL, NULL, &vFont);
 
             if (m_hStaticValue)
@@ -132,10 +132,10 @@ void wxSlider::AdjustSubControls(
             int                     nMinLen = 0;
             int                     nMaxLen = 0;
 
-            ::WinQueryWindowText((HWND)m_hStaticMin, 300, zBuf);
+            ::WinQueryWindowText((HWND)m_hStaticMin, 300, (PSZ)zBuf);
             GetTextExtent(zBuf, &nMinLen, &nCyf, NULL, NULL, &vFont);
 
-            ::WinQueryWindowText((HWND)m_hStaticMax, 300, zBuf);
+            ::WinQueryWindowText((HWND)m_hStaticMax, 300, (PSZ)zBuf);
             GetTextExtent(zBuf, &nMaxLen, &nCyf, NULL, NULL, &vFont);
 
             if (m_hStaticValue)
@@ -261,7 +261,7 @@ bool wxSlider::Create(
         //
         // Now create min static control
         //
-        sprintf(wxBuffer, "%d", nMinValue);
+        wxSprintf(wxBuffer, wxT("%d"), nMinValue);
         lWstyle = SS_TEXT|DT_LEFT|WS_VISIBLE;
         if (m_windowStyle & wxCLIP_SIBLINGS)
             lWstyle |= WS_CLIPSIBLINGS;
@@ -356,7 +356,7 @@ bool wxSlider::Create(
         //
         // Finally, create max value static item
         //
-        sprintf(wxBuffer, "%d", nMaxValue);
+        wxSprintf(wxBuffer, wxT("%d"), nMaxValue);
         lWstyle = SS_TEXT|DT_LEFT|WS_VISIBLE;
         if (m_windowStyle & wxCLIP_SIBLINGS)
             lMsStyle |= WS_CLIPSIBLINGS;
@@ -410,7 +410,7 @@ bool wxSlider::Create(
 
     wxColour                        vColour;
 
-    vColour.Set(wxString("BLACK"));
+    vColour.Set(wxString(wxT("BLACK")));
 
     LONG                            lColor = (LONG)vColour.GetPixel();
 
@@ -455,7 +455,7 @@ bool wxSlider::Create(
                       ,sizeof(LONG)
                       ,(PVOID)&lColor
                      );
-    vColour.Set(wxString("BLUE"));
+    vColour.Set(wxString(wxT("BLUE")));
     lColor = (LONG)vColour.GetPixel();
     ::WinSetPresParam( m_hWnd
                       ,PP_HILITEBACKGROUNDCOLOR
@@ -485,7 +485,7 @@ void wxSlider::DoSetSize(
     int                             nCyf;
     int                             nCurrentX;
     int                             nCurrentY;
-    char                            zBuf[300];
+    wxChar                          zBuf[300];
     wxFont                          vFont = this->GetFont();
 
     //
@@ -542,9 +542,9 @@ void wxSlider::DoSetSize(
             int                  nMinLen = 0;
             int                  nMaxLen = 0;
 
-            ::WinQueryWindowText((HWND)m_hStaticMin, 300, zBuf);
+            ::WinQueryWindowText((HWND)m_hStaticMin, 300, (PSZ)zBuf);
             GetTextExtent(zBuf, &nMinLen, &nCyf, NULL, NULL, &vFont);
-            ::WinQueryWindowText((HWND)m_hStaticMax, 300, zBuf);
+            ::WinQueryWindowText((HWND)m_hStaticMax, 300, (PSZ)zBuf);
             GetTextExtent(zBuf, &nMaxLen, &nCyf, NULL, NULL, &vFont);
 
             if (m_hStaticValue)
@@ -649,9 +649,9 @@ void wxSlider::DoSetSize(
             int                  nMinLen;
             int                  nMaxLen;
 
-            ::WinQueryWindowText((HWND)m_hStaticMin, 300, zBuf);
+            ::WinQueryWindowText((HWND)m_hStaticMin, 300, (PSZ)zBuf);
             GetTextExtent(zBuf, &nMinLen, &nCyf, NULL, NULL, &vFont);
-            ::WinQueryWindowText((HWND)m_hStaticMax, 300, zBuf);
+            ::WinQueryWindowText((HWND)m_hStaticMax, 300, (PSZ)zBuf);
             GetTextExtent(zBuf, &nMaxLen, &nCyf, NULL, NULL, &vFont);
             if (m_hStaticValue)
             {
@@ -1032,13 +1032,13 @@ void wxSlider::SetRange(
     if (m_hStaticMin)
     {
         wxSprintf(zBuf, wxT("%d"), m_nRangeMin);
-        ::WinSetWindowText((HWND)m_hStaticMin, zBuf);
+        ::WinSetWindowText((HWND)m_hStaticMin, (PSZ)zBuf);
     }
 
     if (m_hStaticMax)
     {
         wxSprintf(zBuf, wxT("%d"), m_nRangeMax);
-        ::WinSetWindowText((HWND)m_hStaticMax, zBuf);
+        ::WinSetWindowText((HWND)m_hStaticMax, (PSZ)zBuf);
     }
 } // end of wxSlider::SetRange
 
@@ -1157,7 +1157,7 @@ void wxSlider::SetValue(
     if (m_hStaticValue)
     {
         wxSprintf(wxBuffer, wxT("%d"), nValue);
-        ::WinSetWindowText((HWND)m_hStaticValue, wxBuffer);
+        ::WinSetWindowText((HWND)m_hStaticValue, (PSZ)wxBuffer);
     }
 } // end of wxSlider::SetValue
 

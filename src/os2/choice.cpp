@@ -216,7 +216,7 @@ int wxChoice::FindString(
         nTextLength = (int)LONGFROMMR(::WinSendMsg(GetHwnd(), LM_QUERYITEMTEXTLENGTH, (MPARAM)nPos, (MPARAM)0));
         zStr = new char[nTextLength + 1];
         ::WinSendMsg(GetHwnd(), LM_QUERYITEMTEXT, MPFROM2SHORT((SHORT)nPos, (SHORT)nTextLength), (MPARAM)zStr);
-        if (rsStr == (char*)zStr)
+        if (rsStr == (wxChar*)zStr)
         {
             delete [] zStr;
             break;
@@ -268,13 +268,13 @@ wxString wxChoice::GetString(
 ) const
 {
     int                             nLen = 0;
-    wxString                        sStr = "";
-    char*                           zBuf;
+    wxString                        sStr = wxEmptyString;
+    wxChar*                         zBuf;
 
     nLen = (size_t)LONGFROMMR(::WinSendMsg(GetHwnd(), LM_QUERYITEMTEXTLENGTH, (MPARAM)n, (MPARAM)0));
     if (nLen != LIT_ERROR && nLen > 0)
     {
-        zBuf = new char[nLen + 1];
+        zBuf = new wxChar[nLen + 1];
         ::WinSendMsg( GetHwnd()
                      ,LM_QUERYITEMTEXT
                      ,MPFROM2SHORT((SHORT)n, (SHORT)nLen)
@@ -436,7 +436,7 @@ bool wxChoice::OS2Command(
 
         vEvent.SetInt(n);
         vEvent.SetEventObject(this);
-        vEvent.SetString((char*)GetStringSelection().c_str());
+        vEvent.SetString(GetStringSelection());
         if (HasClientObjectData())
             vEvent.SetClientObject(GetClientObject(n));
         else if (HasClientUntypedData())

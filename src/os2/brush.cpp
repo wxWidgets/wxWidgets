@@ -138,7 +138,7 @@ bool wxBrush::RealizeResource()
         {
             vError = ::WinGetLastError(vHabmain);
             sError = wxPMErrorToStr(vError);
-            wxLogError("Unable to set current color table to RGB mode. Error: %s\n", sError.c_str());
+            wxLogError(_T("Unable to set current color table to RGB mode. Error: %s\n"), sError.c_str());
             return FALSE;
         }
 
@@ -220,7 +220,7 @@ bool wxBrush::RealizeResource()
         {
             vError = ::WinGetLastError(vHabmain);
             sError = wxPMErrorToStr(vError);
-            wxLogError("Can't set Gpi attributes for an AREABUNDLE. Error: %s\n", sError.c_str());
+            wxLogError(_T("Can't set Gpi attributes for an AREABUNDLE. Error: %s\n"), sError.c_str());
         }
         return bOk;
     }

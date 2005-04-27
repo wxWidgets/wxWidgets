@@ -154,8 +154,8 @@ bool wxGauge::Create(
 #endif
     if (pParent)
         pParent->AddChild(this);
-    m_backgroundColour.Set(wxString("LIGHT GREY"));
-    m_foregroundColour.Set(wxString("NAVY"));
+    m_backgroundColour.Set(wxString(wxT("LIGHT GREY")));
+    m_foregroundColour.Set(wxString(wxT("NAVY")));
 
     m_nRangeMax   = nRange;
     m_nGaugePos   = 0;

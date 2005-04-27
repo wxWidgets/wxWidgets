@@ -263,7 +263,7 @@ bool wxDialog::Show(
     wxDialogBase::Show(bShow);
 
     if (GetTitle().c_str())
-        ::WinSetWindowText((HWND)GetHwnd(), GetTitle().c_str());
+        ::WinSetWindowText((HWND)GetHwnd(), (PSZ)GetTitle().c_str());
 
     if ( bShow )
     {

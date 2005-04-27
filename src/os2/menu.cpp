@@ -353,7 +353,7 @@ bool wxMenu::DoInsertOrAppend(
     {
         vError = ::WinGetLastError(vHabmain);
         sError = wxPMErrorToStr(vError);
-        wxLogError("Error inserting or appending a menuitem. Error: %s\n", sError.c_str());
+        wxLogError(wxT("Error inserting or appending a menuitem. Error: %s\n"), sError.c_str());
         wxLogLastError("Insert or AppendMenu");
         return FALSE;
     }
@@ -560,7 +560,7 @@ void wxMenu::SetTitle(
     {
         if (!rLabel.IsEmpty())
         {
-            if (!::WinSetWindowText(hMenu, rLabel.c_str()))
+            if (!::WinSetWindowText(hMenu, (PSZ)rLabel.c_str()))
             {
                 wxLogLastError("SetMenuTitle");
             }
@@ -581,7 +581,7 @@ void wxMenu::SetTitle(
             //
             // Modify the title
             //
-            if (!::WinSetWindowText(hMenu, rLabel.c_str()))
+            if (!::WinSetWindowText(hMenu, (PSZ)rLabel.c_str()))
             {
                 wxLogLastError("SetMenuTitle");
             }
@@ -790,7 +790,7 @@ WXHMENU wxMenuBar::Create()
             {
                 vError = ::WinGetLastError(vHabmain);
                 sError = wxPMErrorToStr(vError);
-                wxLogError("Error setting parent for submenu. Error: %s\n", sError.c_str());
+                wxLogError(wxT("Error setting parent for submenu. Error: %s\n"), sError.c_str());
                 return NULLHANDLE;
             }
 
@@ -798,7 +798,7 @@ WXHMENU wxMenuBar::Create()
             {
                 vError = ::WinGetLastError(vHabmain);
                 sError = wxPMErrorToStr(vError);
-                wxLogError("Error setting parent for submenu. Error: %s\n", sError.c_str());
+                wxLogError(wxT("Error setting parent for submenu. Error: %s\n"), sError.c_str());
                 return NULLHANDLE;
             }
 
@@ -809,7 +809,7 @@ WXHMENU wxMenuBar::Create()
             {
                 vError = ::WinGetLastError(vHabmain);
                 sError = wxPMErrorToStr(vError);
-                wxLogError("Error inserting or appending a menuitem. Error: %s\n", sError.c_str());
+                wxLogError(wxT("Error inserting or appending a menuitem. Error: %s\n"), sError.c_str());
                 return NULLHANDLE;
             }
         }

@@ -231,7 +231,10 @@ long wxExecute(
 
     while (*ppArgv != NULL)
     {
-        sCommand << *ppArgv++ << ' ';
+        wxString                    sArg((wxChar*)(*ppArgv++));
+
+
+        sCommand << sArg.c_str() << ' ';
     }
     sCommand.RemoveLast();
     return wxExecute( sCommand
@@ -263,7 +266,7 @@ bool wxGetFullHostName(
     strncpy(zBuf, zComputer, nMaxSize);
     zBuf[nMaxSize] = _T('\0');
 #else
-    strcpy(zBuf, "noname");
+    strcpy((char*)zBuf, "noname");
 #endif
     return *zBuf ? TRUE : FALSE;
     return TRUE;

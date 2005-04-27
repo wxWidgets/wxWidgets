@@ -91,7 +91,7 @@ int wxFontDialog::ShowModal()
         vChosenFont.SetPointSize(nPointSize);
         m_fontData.m_chosenFont = vChosenFont;
 
-        m_fontData.EncodingInfo().facename = vFontDlg.fAttrs.szFacename;
+        m_fontData.EncodingInfo().facename = (wxChar*)vFontDlg.fAttrs.szFacename;
         m_fontData.EncodingInfo().charset = vFontDlg.fAttrs.usCodePage;
 
         return wxID_OK;

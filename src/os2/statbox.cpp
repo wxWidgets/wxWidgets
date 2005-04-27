@@ -49,7 +49,7 @@ bool wxStaticBox::Create(
     wxPoint                         vPos(0,0);
     wxSize                          vSize(0,0);
 
-    if (!OS2CreateControl( "STATIC"
+    if (!OS2CreateControl( wxT("STATIC")
                           ,SS_GROUPBOX
                           ,vPos
                           ,vSize
@@ -66,7 +66,7 @@ bool wxStaticBox::Create(
 
     wxColour                        vColour;
 
-    vColour.Set(wxString("BLACK"));
+    vColour.Set(wxString(wxT("BLACK")));
 
     LONG                            lColor = (LONG)vColour.GetPixel();
 

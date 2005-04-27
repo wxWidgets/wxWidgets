@@ -58,7 +58,7 @@ bool wxComboBox::OS2Command(
 
                 vEvent.SetInt(GetSelection());
                 vEvent.SetEventObject(this);
-                vEvent.SetString((char*)GetStringSelection().c_str());
+                vEvent.SetString(GetStringSelection());
                 ProcessCommand(vEvent);
             }
             break;
@@ -73,7 +73,7 @@ bool wxComboBox::OS2Command(
                     sValue = GetValue();
                 else
                     SetValue(sValue);
-                vEvent.SetString((char*)GetValue().c_str());
+                vEvent.SetString(GetValue());
                 vEvent.SetEventObject(this);
                 ProcessCommand(vEvent);
             }
@@ -147,7 +147,7 @@ bool wxComboBox::Create(
         lSstyle |= CBS_DROPDOWN;
 
 
-    if (!OS2CreateControl( "COMBOBOX"
+    if (!OS2CreateControl( _T("COMBOBOX")
                           ,lSstyle
                          ))
         return false;
@@ -190,7 +190,7 @@ void wxComboBox::SetValue(
     if ( HasFlag(wxCB_READONLY) )
         SetStringSelection(rsValue);
     else
-        ::WinSetWindowText(GetHwnd(), rsValue.c_str());
+        ::WinSetWindowText(GetHwnd(), (PSZ)rsValue.c_str());
 } // end of wxComboBox::SetValue
 
 //

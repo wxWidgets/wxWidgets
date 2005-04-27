@@ -79,7 +79,7 @@ wxIcon::wxIcon(
     //
     wxString                         sOs2Name = rIconFile.Mid(0, rIconFile.Length() - 3);
 
-    sOs2Name += "Os2.ico";
+    sOs2Name += wxT("Os2.ico");
     LoadFile( sOs2Name
              ,lFlags
              ,nDesiredWidth

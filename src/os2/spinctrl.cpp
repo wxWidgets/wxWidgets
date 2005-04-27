@@ -357,7 +357,7 @@ void wxSpinCtrl::OnChar (
                 wxString                    sVal = wxGetWindowText(m_hWndBuddy);
 
                 InitCommandEvent(vEvent);
-                vEvent.SetString((char*)sVal.c_str());
+                vEvent.SetString(sVal);
                 vEvent.SetInt(GetValue());
                 if (GetEventHandler()->ProcessEvent(vEvent))
                     return;
@@ -434,7 +434,7 @@ bool wxSpinCtrl::ProcessTextCommand(
 
             wxString                sVal = wxGetWindowText(m_hWndBuddy);
 
-            vEvent.SetString((char*)sVal.c_str());
+            vEvent.SetString(sVal);
             vEvent.SetInt(GetValue());
             return (GetEventHandler()->ProcessEvent(vEvent));
         }
@@ -486,7 +486,7 @@ void wxSpinCtrl::SetValue(
 {
     long                            lVal;
 
-    lVal = atol(rsText.c_str());
+    lVal = atol((char*)rsText.c_str());
     wxSpinButton::SetValue(lVal);
 } // end of wxSpinCtrl::SetValue
 

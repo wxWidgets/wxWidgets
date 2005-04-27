@@ -47,12 +47,12 @@
 
 wxString wxDataFormat::GetId() const
 {
-    char                            zBuf[256];
+    wxChar                          zBuf[256];
     wxString                        sRet;
 
     ::WinQueryAtomName( ::WinQuerySystemAtomTable()
                        ,m_uFormat
-                       ,zBuf
+                       ,(PSZ)zBuf
                        ,256
                       );
     sRet = zBuf;
@@ -64,7 +64,7 @@ void wxDataFormat::SetId (
 )
 {
     m_uFormat = ::WinAddAtom( ::WinQuerySystemAtomTable()
-                             ,zId
+                             ,(PSZ)zId
                             );
 } // end of wxDataFormat::SetId
 
@@ -261,7 +261,7 @@ bool wxFileDataObject::SetData(
 {
     /* TODO */
 
-    wxString                        sFile( (const char *)pBuf);  /* char, not wxChar */
+    wxString                        sFile((const wxChar *)pBuf);  /* char, not wxChar */
 
     AddFile(sFile);
 

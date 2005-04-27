@@ -60,7 +60,7 @@ bool wxStaticLine::Create(
                         ,rsName
                        ))
         return FALSE;
-    if (!OS2CreateControl( "STATIC"
+    if (!OS2CreateControl( wxT("STATIC")
                           ,SS_FGNDFRAME
                           ,rPos
                           ,rSize
@@ -70,7 +70,7 @@ bool wxStaticLine::Create(
 
     wxColour                        vColour;
 
-    vColour.Set(wxString("GREY"));
+    vColour.Set(wxString(wxT("GREY")));
 
     LONG                            lColor = (LONG)vColour.GetPixel();
 

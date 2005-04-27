@@ -77,7 +77,7 @@ bool wxBitmapButton::Create(
 
     m_hWnd = (WXHWND)::WinCreateWindow( GetHwndOf(pParent)
                                        ,WC_BUTTON
-                                       ,wxT("")
+                                       ,(PSZ)wxEmptyString
                                        ,ulOS2Style
                                        ,0, 0, 0, 0
                                        ,GetHwndOf(pParent)

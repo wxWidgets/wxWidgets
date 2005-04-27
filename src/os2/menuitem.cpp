@@ -190,7 +190,7 @@ wxString wxMenuItemBase::GetLabelFromText(
 {
     wxString                        sLabel;
 
-    for (const char* zPc = rsText.c_str(); *zPc; zPc++)
+    for (const wxChar* zPc = rsText.c_str(); *zPc; zPc++)
     {
         if (*zPc == wxT('~') || *zPc == wxT('&'))
         {

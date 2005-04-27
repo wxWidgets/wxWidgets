@@ -268,7 +268,7 @@ bool wxApp::RegisterWindowClasses(
     wxString                        sError;
 
     if (!::WinRegisterClass( vHab
-                            ,wxFrameClassName
+                            ,(PSZ)wxFrameClassName
                             ,wxFrameWndProc
                             ,CS_SIZEREDRAW | CS_SYNCPAINT
                             ,sizeof(ULONG)
@@ -281,7 +281,7 @@ bool wxApp::RegisterWindowClasses(
     }
 
     if (!::WinRegisterClass( vHab
-                            ,wxFrameClassNameNoRedraw
+                            ,(PSZ)wxFrameClassNameNoRedraw
                             ,wxWndProc
                             ,0
                             ,sizeof(ULONG)
@@ -294,7 +294,7 @@ bool wxApp::RegisterWindowClasses(
     }
 
     if (!::WinRegisterClass( vHab
-                            ,wxMDIFrameClassName
+                            ,(PSZ)wxMDIFrameClassName
                             ,wxWndProc
                             ,CS_SIZEREDRAW | CS_MOVENOTIFY | CS_SYNCPAINT
                             ,sizeof(ULONG)
@@ -307,7 +307,7 @@ bool wxApp::RegisterWindowClasses(
     }
 
     if (!::WinRegisterClass( vHab
-                            ,wxMDIFrameClassNameNoRedraw
+                            ,(PSZ)wxMDIFrameClassNameNoRedraw
                             ,wxWndProc
                             ,0
                             ,sizeof(ULONG)
@@ -320,7 +320,7 @@ bool wxApp::RegisterWindowClasses(
     }
 
     if (!::WinRegisterClass( vHab
-                            ,wxMDIChildFrameClassName
+                            ,(PSZ)wxMDIChildFrameClassName
                             ,wxWndProc
                             ,CS_MOVENOTIFY | CS_SIZEREDRAW | CS_SYNCPAINT | CS_HITTEST
                             ,sizeof(ULONG)
@@ -333,7 +333,7 @@ bool wxApp::RegisterWindowClasses(
     }
 
     if (!::WinRegisterClass( vHab
-                            ,wxMDIChildFrameClassNameNoRedraw
+                            ,(PSZ)wxMDIChildFrameClassNameNoRedraw
                             ,wxWndProc
                             ,CS_HITTEST
                             ,sizeof(ULONG)
@@ -346,7 +346,7 @@ bool wxApp::RegisterWindowClasses(
     }
 
     if (!::WinRegisterClass( vHab
-                            ,wxPanelClassName
+                            ,(PSZ)wxPanelClassName
                             ,wxWndProc
                             ,CS_MOVENOTIFY | CS_SIZEREDRAW | CS_HITTEST | CS_SAVEBITS | CS_SYNCPAINT
                             ,sizeof(ULONG)
@@ -359,7 +359,7 @@ bool wxApp::RegisterWindowClasses(
     }
 
     if (!::WinRegisterClass( vHab
-                            ,wxCanvasClassName
+                            ,(PSZ)wxCanvasClassName
                             ,wxWndProc
                             ,CS_SIZEREDRAW | CS_HITTEST | CS_SYNCPAINT
                             ,sizeof(ULONG)
@@ -371,7 +371,7 @@ bool wxApp::RegisterWindowClasses(
         return FALSE;
     }
     if (!::WinRegisterClass( vHab
-                            ,wxCanvasClassNameNR
+                            ,(PSZ)wxCanvasClassNameNR
                             ,wxWndProc
                             ,CS_HITTEST | CS_SYNCPAINT
                             ,sizeof(ULONG)

@@ -79,7 +79,7 @@ static inline FIND_DATA FindFirst(
     FIND_DATA                   hDir = HDIR_CREATE;
     FIND_ATTR                   rc;
 
-    rc = ::DosFindFirst( rsSpec.c_str()
+    rc = ::DosFindFirst( (PSZ)rsSpec.c_str()
                         ,&hDir
                         ,0x37 // was: FILE_NORMAL
                         ,pFinddata
@@ -110,7 +110,7 @@ static const wxChar* GetNameFromFindData(
   FIND_STRUCT*                      pFinddata
 )
 {
-    return pFinddata->achName;
+    return (wxChar*)pFinddata->achName;
 }
 
 static const FIND_ATTR GetAttrFromFindData(

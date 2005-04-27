@@ -354,7 +354,7 @@ void wxTextCtrl::SetValue(
     //
     if ((rsValue.length() > 0x400) || (rsValue != GetValue()))
     {
-        ::WinSetWindowText(GetHwnd(), rsValue.c_str());
+        ::WinSetWindowText(GetHwnd(), (PSZ)rsValue.c_str());
         AdjustSpaceLimit();
     }
 } // end of wxTextCtrl::SetValue
@@ -366,7 +366,7 @@ void wxTextCtrl::WriteText(
     if (m_bIsMLE)
         ::WinSendMsg(GetHwnd(), MLM_INSERT, MPARAM((PCHAR)rsValue.c_str()), MPARAM(0));
     else
-        ::WinSetWindowText(GetHwnd(), rsValue.c_str());
+        ::WinSetWindowText(GetHwnd(), (PSZ)rsValue.c_str());
     AdjustSpaceLimit();
 } // end of wxTextCtrl::WriteText
 
@@ -884,14 +884,14 @@ wxString wxTextCtrl::GetLineText(
 {
     long                            lLen = (long)GetLineLength((long)lLineNo) + 1;
     wxString                        sStr;
-    char*                           zBuf;
+    wxChar*                         zBuf;
 
     //
     // There must be at least enough place for the length WORD in the
     // buffer
     //
     lLen += sizeof(WORD);
-    zBuf = new char[lLen];
+    zBuf = new wxChar[lLen];
     if (m_bIsMLE)
     {
         long                        lIndex;
@@ -902,7 +902,7 @@ wxString wxTextCtrl::GetLineText(
         lIndex = lLen * lLineNo;
 
         ::WinSendMsg(GetHwnd(), MLM_SETSEL, (MPARAM)lIndex, (MPARAM)lIndex);
-        ::WinSendMsg(GetHwnd(), MLM_SETIMPORTEXPORT, MPFROMP(zBuf), MPFROMSHORT((USHORT)sizeof(zBuf)));
+        ::WinSendMsg(GetHwnd(), MLM_SETIMPORTEXPORT, MPFROMP(zBuf), MPFROMSHORT((USHORT)WXSIZEOF(zBuf)));
         lBuflen = (long)::WinSendMsg(GetHwnd(), MLM_QUERYFORMATTEXTLENGTH, MPFROMLONG(lIndex), MPFROMLONG(-1));
         lCopied = (long)::WinSendMsg(GetHwnd(), MLM_EXPORT, MPFROMP(&lIndex), MPFROMP(&lBuflen));
         zBuf[lCopied] = '\0';
@@ -917,7 +917,7 @@ wxString wxTextCtrl::GetLineText(
                          ,&vParams
                          ,0
                         ))
-         memcpy(zBuf, vParams.pszText, vParams.cchText);
+         memcpy((char*)zBuf, vParams.pszText, vParams.cchText);
          zBuf[vParams.cchText] = '\0';
      }
      sStr = zBuf;

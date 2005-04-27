@@ -137,8 +137,8 @@ bool wxNotebook::Create(
     //
     // Notebook, so explicitly specify 0 as last parameter
     //
-    if (!OS2CreateControl( "NOTEBOOK"
-                          ,_T("")
+    if (!OS2CreateControl( wxT("NOTEBOOK")
+                          ,wxEmptyString
                           ,rPos
                           ,rSize
                           ,lStyle | wxTAB_TRAVERSAL
@@ -280,7 +280,7 @@ wxString wxNotebook::GetPageText (
         return wxEmptyString;
     }
     vBookText.textLen = ulRc + 1; // To get the null terminator
-    vBookText.pString = zBuf;
+    vBookText.pString = (char*)zBuf;
 
     //
     // Now get the actual text
@@ -298,7 +298,7 @@ wxString wxNotebook::GetPageText (
         ulRc = 255L;
 
     vBookText.pString[ulRc] = '\0';
-    sStr = vBookText.pString;
+    sStr = (wxChar*)vBookText.pString;
     return sStr;
 } // end of wxNotebook::GetPageText
 

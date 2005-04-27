@@ -413,7 +413,7 @@ bool wxTopLevelWindowOS2::CreateDialog(
         nX = (vSizeDpy.x - nWidth) / 2;
         nY = (vSizeDpy.y - nHeight) / 2;
     }
-    m_backgroundColour.Set(wxString("LIGHT GREY"));
+    m_backgroundColour.Set(wxString(wxT("LIGHT GREY")));
 
     LONG                            lColor = (LONG)m_backgroundColour.GetPixel();
 
@@ -498,7 +498,7 @@ bool wxTopLevelWindowOS2::CreateFrame(
     {
         vError = ::WinGetLastError(vHabmain);
         sError = wxPMErrorToStr(vError);
-        wxLogError("Error creating frame. Error: %s\n", sError.c_str());
+        wxLogError(_T("Error creating frame. Error: %s\n"), sError.c_str());
         return FALSE;
     }
 
@@ -510,7 +510,7 @@ bool wxTopLevelWindowOS2::CreateFrame(
     wxAssociateWinWithHandle(m_hWnd, this);
     wxAssociateWinWithHandle(m_hFrame, this);
 
-    m_backgroundColour.Set(wxString("MEDIUM GREY"));
+    m_backgroundColour.Set(wxString(wxT("MEDIUM GREY")));
 
     LONG                            lColor = (LONG)m_backgroundColour.GetPixel();
 
@@ -522,7 +522,7 @@ bool wxTopLevelWindowOS2::CreateFrame(
     {
         vError = ::WinGetLastError(vHabmain);
         sError = wxPMErrorToStr(vError);
-        wxLogError("Error creating frame. Error: %s\n", sError.c_str());
+        wxLogError(_T("Error creating frame. Error: %s\n"), sError.c_str());
         return FALSE;
     }
 
@@ -559,7 +559,7 @@ bool wxTopLevelWindowOS2::CreateFrame(
     {
         vError = ::WinGetLastError(vHabmain);
         sError = wxPMErrorToStr(vError);
-        wxLogError("Error sizing frame. Error: %s\n", sError.c_str());
+        wxLogError(_T("Error sizing frame. Error: %s\n"), sError.c_str());
         return FALSE;
     }
     lStyle =  ::WinQueryWindowULong( m_hWnd
@@ -1087,7 +1087,7 @@ HWND wxTLWHiddenParentModule::GetHWND()
             static const wxChar*    zHIDDEN_PARENT_CLASS = _T("wxTLWHiddenParent");
 
             if (!::WinRegisterClass( wxGetInstance()
-                                    ,zHIDDEN_PARENT_CLASS
+                                    ,(PSZ)zHIDDEN_PARENT_CLASS
                                     ,NULL
                                     ,0
                                     ,sizeof(ULONG)
@@ -1101,7 +1101,7 @@ HWND wxTLWHiddenParentModule::GetHWND()
             }
         }
         m_shWnd = ::WinCreateWindow( HWND_DESKTOP
-                                    ,m_szClassName
+                                    ,(PSZ)m_szClassName
                                     ,""
                                     ,0L
                                     ,(LONG)0L

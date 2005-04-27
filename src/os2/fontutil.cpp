@@ -240,7 +240,7 @@ bool wxTestFontEncoding(
     vLogFont.fsFontUse = FATTR_FONTUSE_OUTLINE |      // only outline fonts allowed
                          FATTR_FONTUSE_TRANSFORMABLE; // may be transformed
 
-    strncpy(vLogFont.szFacename, rInfo.facename.c_str(), sizeof(vLogFont.szFacename));
+    wxStrncpy((wxChar*)vLogFont.szFacename, rInfo.facename.c_str(), WXSIZEOF(vLogFont.szFacename));
 
     if (!::GpiCreateLogFont( hPS
                             ,NULL
@@ -447,7 +447,7 @@ void wxFillLogFont(
     {
         vError = ::WinGetLastError(vHabmain);
     }
-    sFaceName = zFacename;
+    sFaceName = (wxChar*)zFacename;
     *pbInternalPS = bInternalPS;
 
     //
@@ -470,7 +470,7 @@ void wxOS2SelectMatchingFontByName(
     int                             anDiff[16];
     int                             anMinDiff[16];
     int                             nIndex = 0;
-    char                            zFontFaceName[FACESIZE];
+    wxChar                          zFontFaceName[FACESIZE];
     wxString                        sFaceName;
     USHORT                          usWeightClass;
     int                             fsSelection = 0;
@@ -565,7 +565,7 @@ void wxOS2SelectMatchingFontByName(
         int                         nEmHeight = 0;
         int                         nXHeight = 0;
 
-        anDiff[0] = wxGpiStrcmp(pFM[i].szFacename, zFontFaceName);
+        anDiff[0] = wxGpiStrcmp((wxChar*)pFM[i].szFacename, zFontFaceName);
         anDiff[1] = abs(pFM[i].lEmHeight - nPointSize);
         anDiff[2] = abs(pFM[i].usWeightClass -  usWeightClass);
         anDiff[3] = abs((pFM[i].fsSelection & 0x2f) -  fsSelection);
@@ -641,7 +641,7 @@ void wxOS2SelectMatchingFontByName(
     pFattrs->fsType          = 0;
     pFattrs->lMaxBaselineExt = 0;
     pFattrs->lAveCharWidth   = 0;
-    wxStrcpy(pFattrs->szFacename, pFM[nIndex].szFacename);
+    wxStrcpy((wxChar*)pFattrs->szFacename, (wxChar*)pFM[nIndex].szFacename);
     if (pFont->GetWeight() == wxNORMAL)
         pFattrs->fsSelection = 0;
     else
@@ -669,8 +669,8 @@ wxFont wxCreateFontFromLogFont(
 } // end of wxCreateFontFromLogFont
 
 int wxGpiStrcmp(
-  char*                             s0
-, char*                             s1
+  wxChar*                           s0
+, wxChar*                           s1
 )
 {   int                             l0;
     int                             l1;
@@ -691,8 +691,8 @@ int wxGpiStrcmp(
     else if(s1 == NULL)
         return 32;
 
-    l0 = strlen(s0);
-    l1 = strlen(s1);
+    l0 = wxStrlen(s0);
+    l1 = wxStrlen(s1);
     l  = l0;
     if(l0 != l1)
     {
@@ -705,7 +705,7 @@ int wxGpiStrcmp(
         d = s0[i]-s1[i];
         if(!d)
             continue;
-        d1 = toupper(s0[i]) - toupper(s1[i]);
+        d1 = wxToupper(s0[i]) - wxToupper(s1[i]);
         if(!d1)
             continue;
         rc += abs(d);

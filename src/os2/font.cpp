@@ -51,7 +51,7 @@ public:
     wxFontRefData()
     {
         Init(-1, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, FALSE,
-             "", wxFONTENCODING_DEFAULT);
+             wxEmptyString, wxFONTENCODING_DEFAULT);
     }
 
     wxFontRefData( int             nSize
@@ -494,7 +494,7 @@ bool wxFontRefData::Alloc(
             m_nWeight = wxFONTWEIGHT_NORMAL;
     }
     m_bUnderlined = ((m_vNativeFontInfo.fa.fsSelection & FATTR_SEL_UNDERSCORE) != 0);
-    m_sFaceName = m_vNativeFontInfo.fa.szFacename;
+    m_sFaceName = (wxChar*)m_vNativeFontInfo.fa.szFacename;
     m_vEncoding = wxGetFontEncFromCharSet(m_vNativeFontInfo.fa.usCodePage);
 
     //
@@ -582,7 +582,7 @@ bool wxNativeFontInfo::GetUnderlined() const
 
 wxString wxNativeFontInfo::GetFaceName() const
 {
-    return fm.szFacename;
+    return (wxChar*)fm.szFacename;
 } // end of wxNativeFontInfo::GetFaceName
 
 wxFontFamily wxNativeFontInfo::GetFamily() const
@@ -695,7 +695,7 @@ void wxNativeFontInfo::SetFaceName(
   wxString                          sFacename
 )
 {
-    wxStrncpy(fa.szFacename, sFacename, WXSIZEOF(fa.szFacename));
+    wxStrncpy((wxChar*)fa.szFacename, sFacename, WXSIZEOF(fa.szFacename));
 } // end of wxNativeFontInfo::SetFaceName
 
 void wxNativeFontInfo::SetFamily(
@@ -735,7 +735,7 @@ void wxNativeFontInfo::SetFamily(
             sFacename = wxT("System VIO") ;
     }
 
-    if (!wxStrlen(fa.szFacename) )
+    if (!wxStrlen((wxChar*)fa.szFacename) )
     {
         SetFaceName(sFacename);
     }
@@ -838,7 +838,7 @@ bool wxNativeFontInfo::FromString(
     sToken = vTokenizer.GetNextToken();
     if(!sToken)
         return FALSE;
-    wxStrcpy(fa.szFacename, sToken.c_str());
+    wxStrcpy((wxChar*)fa.szFacename, sToken.c_str());
     return TRUE;
 } // end of wxNativeFontInfo::FromString
 

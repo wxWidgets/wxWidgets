@@ -120,15 +120,15 @@ bool wxControl::OS2CreateControl(
     if (!pParent)
         return FALSE;
 
-    if ((strcmp(zClassname, "COMBOBOX")) == 0)
+    if ((wxStrcmp(zClassname, _T("COMBOBOX"))) == 0)
         zClass = WC_COMBOBOX;
-    else if ((strcmp(zClassname, "STATIC")) == 0)
+    else if ((wxStrcmp(zClassname, _T("STATIC"))) == 0)
         zClass = WC_STATIC;
-    else if ((strcmp(zClassname, "BUTTON")) == 0)
+    else if ((wxStrcmp(zClassname, _T("BUTTON"))) == 0)
         zClass = WC_BUTTON;
-    else if ((strcmp(zClassname, "NOTEBOOK")) == 0)
+    else if ((wxStrcmp(zClassname, _T("NOTEBOOK"))) == 0)
         zClass = WC_NOTEBOOK;
-    else if ((strcmp(zClassname, "CONTAINER")) == 0)
+    else if ((wxStrcmp(zClassname, _T("CONTAINER"))) == 0)
         zClass = WC_CONTAINER;
     dwStyle |= WS_VISIBLE;
 
@@ -251,7 +251,7 @@ void wxControl::SetLabel(
 {
     wxString                        sLabel = ::wxPMTextToLabel(rsLabel);
 
-    ::WinSetWindowText(GetHwnd(), sLabel.c_str());
+    ::WinSetWindowText(GetHwnd(), (PSZ)sLabel.c_str());
 } // end of wxControl::SetLabel
 
 // ---------------------------------------------------------------------------
