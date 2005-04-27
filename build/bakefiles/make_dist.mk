@@ -374,6 +374,7 @@ DEMOS_DIST: ALL_GUI_DIST
 	cp $(DEMODIR)/forty/*.cpp $(DISTDIR)/demos/forty
 	cp $(DEMODIR)/forty/*.xpm $(DISTDIR)/demos/forty
 	cp $(DEMODIR)/forty/*.xbm $(DISTDIR)/demos/forty
+	cp $(DEMODIR)/forty/*.htm $(DISTDIR)/demos/forty
 
 	mkdir $(DISTDIR)/demos/life
 	mkdir $(DISTDIR)/demos/life/bitmaps
