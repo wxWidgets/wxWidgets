@@ -234,7 +234,7 @@ public:
 
     // returns true if the window has been created
     bool         OS2Create( PSZ            zClass
-                           ,const char*    zTitle
+                           ,const wxChar*  zTitle
                            ,WXDWORD        dwStyle
                            ,const wxPoint& rPos
                            ,const wxSize&  rSize

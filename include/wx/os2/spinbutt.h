@@ -32,7 +32,7 @@ public:
                         ,const wxPoint&  rPos = wxDefaultPosition
                         ,const wxSize&   rSize = wxDefaultSize
                         ,long            lStyle = wxSP_VERTICAL
-                        ,const wxString& rsName = "wxSpinButton"
+                        ,const wxString& rsName = wxT("wxSpinButton")
                        )
     {
         Create(pParent, vId, rPos, rSize, lStyle, rsName);
@@ -45,7 +45,7 @@ public:
                 ,const wxPoint&  rPos = wxDefaultPosition
                 ,const wxSize&   rSize = wxDefaultSize
                 ,long            lStyle = wxSP_VERTICAL
-                ,const wxString& rsName = "wxSpinButton"
+                ,const wxString& rsName = wxT("wxSpinButton")
                );
 
     // Accessors

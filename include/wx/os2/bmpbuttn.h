@@ -15,7 +15,7 @@
 #include "wx/button.h"
 #include "wx/dcclient.h"
 
-WXDLLEXPORT_DATA(extern const char*) wxButtonNameStr;
+WXDLLEXPORT_DATA(extern const wxChar*) wxButtonNameStr;
 
 #define wxDEFAULT_BUTTON_MARGIN 4
 

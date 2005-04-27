@@ -34,7 +34,7 @@ class WXDLLEXPORT wxTabCtrl: public wxControl
     wxTabCtrl();
 
     inline wxTabCtrl(wxWindow *parent, wxWindowID id, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize,
-            long style = 0, const wxString& name = "tabCtrl")
+            long style = 0, const wxString& name = wxT("tabCtrl"))
     {
         Create(parent, id, pos, size, style, name);
     }
@@ -93,7 +93,7 @@ class WXDLLEXPORT wxTabCtrl: public wxControl
 // Operations
 
     bool Create(wxWindow *parent, wxWindowID id, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize,
-                long style = 0, const wxString& name = "tabCtrl");
+                long style = 0, const wxString& name = wxT("tabCtrl"));
 
     // Delete all items
     bool DeleteAllItems();

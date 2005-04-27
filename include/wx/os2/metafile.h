@@ -57,7 +57,7 @@ class WXDLLEXPORT wxMetafile: public wxGDIObject
   inline wxMetafile(const wxMetafile& metafile)
   { Ref(metafile); }
 
-  wxMetafile(const wxString& file = "");
+  wxMetafile(const wxString& file = wxEmptyString);
   ~wxMetafile(void);
 
   // After this is called, the metafile cannot be used for anything
@@ -91,7 +91,7 @@ class WXDLLEXPORT wxMetafileDC: public wxDC
  public:
   // Don't supply origin and extent
   // Supply them to wxMakeMetaFilePlaceable instead.
-  wxMetafileDC(const wxString& file = "");
+  wxMetafileDC(const wxString& file = wxEmptyString);
 
   // Supply origin and extent (recommended).
   // Then don't need to supply them to wxMakeMetaFilePlaceable.

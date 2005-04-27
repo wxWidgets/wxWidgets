@@ -47,8 +47,8 @@ public:
     //
     wxMenuItem( wxMenu*         pParentMenu = NULL
                ,int             nId = wxID_SEPARATOR
-               ,const wxString& rStrName = ""
-               ,const wxString& rWxHelp = ""
+               ,const wxString& rStrName = wxEmptyString
+               ,const wxString& rWxHelp = wxEmptyString
                ,wxItemKind      eKind = wxITEM_NORMAL
                ,wxMenu*         pSubMenu = NULL
               );

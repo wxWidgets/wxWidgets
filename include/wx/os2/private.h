@@ -303,7 +303,7 @@ WXDLLEXPORT wxFont wxCreateFontFromLogFont( LOGFONT*      pLogFont
                                            ,PFONTMETRICS  pFM
                                            ,PFACENAMEDESC pFace
                                           );
-WXDLLEXPORT int    wxGpiStrcmp(char* s0, char* s1);
+WXDLLEXPORT int    wxGpiStrcmp(wxChar* s0, wxChar* s1);
 
 WXDLLEXPORT void wxSliderEvent(WXHWND control, WXWORD wParam, WXWORD pos);
 WXDLLEXPORT void wxScrollBarEvent(WXHWND hbar, WXWORD wParam, WXWORD pos);

@@ -30,7 +30,7 @@ class WXDLLEXPORT wxWinHelpController: public wxHelpControllerBase
   virtual bool Initialize(const wxString& file);
 
   // If file is "", reloads file given  in Initialize
-  virtual bool LoadFile(const wxString& file = "");
+  virtual bool LoadFile(const wxString& file = wxEmptyString);
   virtual bool DisplayContents();
   virtual bool DisplaySection(int sectionNo);
   virtual bool DisplayBlock(long blockNo);
