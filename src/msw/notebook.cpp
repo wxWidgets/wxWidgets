@@ -1116,6 +1116,29 @@ bool wxNotebook::MSWPrintChild(WXHDC hDC, wxWindow *child)
     if ( !UseBgCol() && DoDrawBackground(hDC, child) )
         return true;
 
+    // If we're using a solid colour (for example if we've switched off
+    // theming for this notebook), paint it
+    if (UseBgCol())
+    {
+        wxRect r = GetPageSize();
+        if ( r.IsEmpty() )
+            return false;
+
+        RECT rc;
+        wxCopyRectToRECT(r, rc);
+
+        // map rect to the coords of the window we're drawing in
+        if ( child )
+            ::MapWindowPoints(GetHwnd(), GetHwndOf(child), (POINT *)&rc, 2);
+
+        wxBrush brush(GetBackgroundColour());
+        HBRUSH hbr = GetHbrushOf(brush);
+       
+        ::FillRect((HDC) hDC, &rc, hbr);
+
+        return true;
+    }
+
     return wxNotebookBase::MSWPrintChild(hDC, child);
 }
 
