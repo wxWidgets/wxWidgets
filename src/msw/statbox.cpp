@@ -40,6 +40,7 @@
 #include "wx/sysopt.h"
 #include "wx/image.h"
 #include "wx/dcmemory.h"
+#include "wx/sysopt.h"
 
 #include "wx/msw/private.h"
 #include "wx/msw/missing.h"
@@ -123,7 +124,8 @@ bool wxStaticBox::Create(wxWindow *parent,
         return false;
 
 #ifndef __WXWINCE__
-    Connect(wxEVT_PAINT, wxPaintEventHandler(wxStaticBox::OnPaint));
+    if (!wxSystemOptions::IsFalse(wxT("msw.staticbox.optimized-paint")))
+        Connect(wxEVT_PAINT, wxPaintEventHandler(wxStaticBox::OnPaint));
 #endif // !__WXWINCE__
 
     return true;
@@ -143,7 +145,12 @@ WXDWORD wxStaticBox::MSWGetStyle(long style, WXDWORD *exstyle) const
     styleWin &= ~WS_CLIPCHILDREN;
 
     if ( exstyle )
-        *exstyle = 0;
+    {
+        if (wxSystemOptions::IsFalse(wxT("msw.staticbox.optimized-paint")))
+            *exstyle = WS_EX_TRANSPARENT;
+        else
+            *exstyle = 0;
+    }
 
     return styleWin | BS_GROUPBOX;
 }
