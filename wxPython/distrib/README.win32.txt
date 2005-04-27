@@ -2,7 +2,7 @@ wxPython win32 README
 ---------------------
 
 The self-installer pacakge you have just installed contains the Python
-extension modules, python modules and pakcages needed to run wxPython
+extension modules, python modules and packages needed to run wxPython
 applications.  If you selected the "Make this install be the default
 wxPython" option in the installer then this version will be the one
 that is imported when apps do "import wx".  See the following wiki
