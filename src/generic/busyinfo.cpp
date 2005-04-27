@@ -52,7 +52,7 @@ wxInfoFrame::wxInfoFrame(wxWindow *parent, const wxString& message)
     int                             nParentWidth = parent->GetClientSize().x;
     int                             nColor;
 
-    SetBackgroundColour("WHITE");
+    SetBackgroundColour(wxT("WHITE"));
     nColor = (LONG)GetBackgroundColour().GetPixel();
 
     ::WinSetPresParam( GetHwnd()
@@ -60,7 +60,7 @@ wxInfoFrame::wxInfoFrame(wxWindow *parent, const wxString& message)
                       ,sizeof(LONG)
                       ,(PVOID)&nColor
                      );
-    panel->SetBackgroundColour("WHITE");
+    panel->SetBackgroundColour(wxT("WHITE"));
     nColor = (LONG)panel->GetBackgroundColour().GetPixel();
 
     ::WinSetPresParam( GetHwndOf(panel)
@@ -81,7 +81,7 @@ wxInfoFrame::wxInfoFrame(wxWindow *parent, const wxString& message)
                       ,nHeight
                       ,SWP_SIZE | SWP_MOVE | SWP_ACTIVATE
                      );
-    text->SetBackgroundColour("WHITE");
+    text->SetBackgroundColour(wxT("WHITE"));
     nColor = (LONG)text->GetBackgroundColour().GetPixel();
 
     ::WinSetPresParam( GetHwndOf(text)

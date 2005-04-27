@@ -1011,7 +1011,7 @@ wxCopyFile (const wxString& file1, const wxString& file2, bool overwrite)
         return false;
     }
 #elif defined(__OS2__)
-    if ( ::DosCopy(file2, file2, overwrite ? DCPY_EXISTING : 0) != 0 )
+    if ( ::DosCopy((PSZ)file1.c_str(), (PSZ)file2.c_str(), overwrite ? DCPY_EXISTING : 0) != 0 )
         return false;
 #elif defined(__PALMOS__)
     // TODO with http://www.palmos.com/dev/support/docs/protein_books/Memory_Databases_Files/
@@ -1236,7 +1236,7 @@ bool wxDirExists(const wxChar *pszPathName)
 
     return (ret != (DWORD)-1) && (ret & FILE_ATTRIBUTE_DIRECTORY);
 #elif defined(__OS2__)
-    return (::DosSetCurrentDir(WXSTRINGCAST strPath));
+    return (::DosSetCurrentDir((PSZ)(WXSTRINGCAST strPath)));
 #else // !__WIN32__
 
     wxStructStat st;
