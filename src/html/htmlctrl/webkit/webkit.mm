@@ -30,6 +30,7 @@
 #include <Carbon/Carbon.h>
 #include <WebKit/HIWebView.h>
 #include <WebKit/CarbonUtils.h>
+#include <WebKit/WebKit.h>
 #endif
 
 #include "wx/html/webkit.h"
@@ -388,14 +389,14 @@ void wxWebKitCtrl::OnSize(wxSizeEvent &event){
 
     //printf("Carbon position x=%d, y=%d\n", GetPosition().x, GetPosition().y);
     if (IsShown())
-        [m_webView display];
+        [(WebView*)m_webView display];
     event.Skip();
 }
 
 void wxWebKitCtrl::MacVisibilityChanged(){
     bool isHidden = !IsControlVisible( m_peer->GetControlRef());
     if (!isHidden)
-        [m_webView display];
+        [(WebView*)m_webView display];
 
     [m_webView setHidden:isHidden];
 }
