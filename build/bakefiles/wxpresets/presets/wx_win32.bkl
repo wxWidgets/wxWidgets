@@ -94,7 +94,7 @@ FIXME: this template has (at least) the following bugs:
         </description>
     </option>
 
-    <set var="WX_VERSION_DEFAULT" overwrite="0">25</set>
+    <set var="WX_VERSION_DEFAULT" overwrite="0">26</set>
     <option name="WX_VERSION">
         <default-value>$(WX_VERSION_DEFAULT)</default-value>
         <description>
