@@ -119,6 +119,8 @@
     #define HAVE_TRACKMOUSEEVENT
 #endif // everything needed for TrackMouseEvent()
 
+#define USE_DEFERRED_SIZING 1
+
 // ---------------------------------------------------------------------------
 // global variables
 // ---------------------------------------------------------------------------
@@ -467,6 +469,12 @@ void wxWindowMSW::Init()
 wxWindowMSW::~wxWindowMSW()
 {
     m_isBeingDeleted = true;
+
+    if (m_windowReserved)
+    {
+        delete (wxExtraWindowData*) m_windowReserved;
+        m_windowReserved = NULL;
+    }
 
 #ifndef __WXUNIVERSAL__
     // VS: make sure there's no wxFrame with last focus set to us:
@@ -1443,6 +1451,14 @@ void wxWindowMSW::DoSetToolTip(wxToolTip *tooltip)
 // Get total size
 void wxWindowMSW::DoGetSize(int *x, int *y) const
 {
+    wxExtraWindowData* extraData = (wxExtraWindowData*) m_windowReserved;
+    if (extraData && extraData->m_deferring && GetParent() && GetParent()->m_hDWP)
+    {
+        *x = extraData->m_size.x;        
+        *y = extraData->m_size.y;
+        return;
+    }
+
     RECT rect = wxGetWindowRect(GetHwnd());
 
     if ( x )
@@ -1454,6 +1470,14 @@ void wxWindowMSW::DoGetSize(int *x, int *y) const
 // Get size *available for subwindows* i.e. excluding menu bar etc.
 void wxWindowMSW::DoGetClientSize(int *x, int *y) const
 {
+    wxExtraWindowData* extraData = (wxExtraWindowData*) m_windowReserved;
+    if (extraData && extraData->m_deferring && GetParent() && GetParent()->m_hDWP)
+    {
+        *x = extraData->m_pos.x;        
+        *y = extraData->m_pos.y;
+        return;
+    }
+
     RECT rect = wxGetClientRect(GetHwnd());
 
     if ( x )
@@ -1546,28 +1570,30 @@ void wxWindowMSW::DoMoveWindow(int x, int y, int width, int height)
     // if our parent had prepared a defer window handle for us, use it (unless
     // we are a top level window)
     wxWindowMSW *parent = GetParent();
+
+#if USE_DEFERRED_SIZING
     HDWP hdwp = parent && !IsTopLevel() ? (HDWP)parent->m_hDWP : NULL;
+#else
+    HDWP hdwp = 0;
+#endif    
+
+    wxMoveWindowDeferred(hdwp, this, GetHwnd(), x, y, width, height);
+
     if ( hdwp )
     {
-        hdwp = ::DeferWindowPos(hdwp, GetHwnd(), NULL,
-                            x, y, width, height,
-                            SWP_NOZORDER);
-        if ( !hdwp )
+        // Store the size so we can report it accurately
+        wxExtraWindowData* extraData = (wxExtraWindowData*) m_windowReserved;
+        if (!extraData)
         {
-            wxLogLastError(_T("DeferWindowPos"));
+            extraData = new wxExtraWindowData;
+            m_windowReserved = (void*) extraData;
         }
+        extraData->m_pos = wxPoint(x, y);
+        extraData->m_size = wxSize(width, height);
+        extraData->m_deferring = true;
 
         // hdwp must be updated as it may have been changed
         parent->m_hDWP = (WXHANDLE)hdwp;
-    }
-
-    // otherwise (or if deferring failed) move the window in place immediately
-    if ( !hdwp )
-    {
-        if ( !::MoveWindow(GetHwnd(), x, y, width, height, IsShown()) )
-        {
-            wxLogLastError(wxT("MoveWindow"));
-        }
     }
 }
 
@@ -5930,6 +5956,31 @@ bool wxWindowMSW::HandleHotKey(WXWPARAM wParam, WXLPARAM lParam)
 #endif // wxUSE_ACCEL
 
 #endif // wxUSE_HOTKEY
+
+// Moves a window by deferred method or normal method
+bool wxMoveWindowDeferred(HDWP& hdwp, wxWindow* win, HWND hWnd, int x, int y, int width, int height)
+{
+    if ( hdwp )
+    {
+        hdwp = ::DeferWindowPos(hdwp, hWnd, NULL,
+                            x, y, width, height,
+                            SWP_NOZORDER);
+        if ( !hdwp )
+        {
+            wxLogLastError(_T("DeferWindowPos"));
+        }
+    }
+
+    // otherwise (or if deferring failed) move the window in place immediately
+    if ( !hdwp )
+    {
+        if ( !::MoveWindow(hWnd, x, y, width, height, win->IsShown()) )
+        {
+            wxLogLastError(wxT("MoveWindow"));
+        }
+    }
+    return hdwp != NULL;
+}
 
 // Not tested under WinCE
 #ifndef __WXWINCE__

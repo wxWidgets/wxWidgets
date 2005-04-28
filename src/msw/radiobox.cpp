@@ -40,6 +40,8 @@
 
 #include "wx/msw/subwin.h"
 
+#define USE_DEFERRED_SIZING 1
+
 #if wxUSE_TOOLTIPS
     #if !defined(__GNUWIN32_OLD__) || defined(__CYGWIN10__)
         #include <commctrl.h>
@@ -545,7 +547,17 @@ void wxRadioBox::DoSetSize(int x, int y, int width, int height, int sizeFlags)
             height = heightOld;
     }
 
-    ::MoveWindow(GetHwnd(), xx, yy, width, height, TRUE);
+    // if our parent had prepared a defer window handle for us, use it (unless
+    // we are a top level window)
+    wxWindowMSW *parent = GetParent();
+
+#if USE_DEFERRED_SIZING
+    HDWP hdwp = parent && !IsTopLevel() ? (HDWP)parent->m_hDWP : NULL;
+#else
+    HDWP hdwp = 0;
+#endif    
+
+    wxMoveWindowDeferred(hdwp, this, GetHwnd(), xx, yy, width, height);
 
     // Now position all the buttons: the current button will be put at
     // wxPoint(x_offset, y_offset) and the new row/column will start at
@@ -642,6 +654,22 @@ void wxRadioBox::DoSetSize(int x, int y, int width, int height, int sizeFlags)
             x_offset += widthBtn + cx1;
         }
     }
+    if (hdwp)
+    {
+        // Store the size so we can report it accurately
+        wxExtraWindowData* extraData = (wxExtraWindowData*) m_windowReserved;
+        if (!extraData)
+        {
+            extraData = new wxExtraWindowData;
+            m_windowReserved = (void*) extraData;
+        }
+        extraData->m_pos = wxPoint(xx, yy);
+        extraData->m_size = wxSize(width, height);
+        extraData->m_deferring = true;
+
+        // hdwp must be updated as it may have been changed
+        parent->m_hDWP = (WXHANDLE)hdwp;
+    }
 }
 
 // ----------------------------------------------------------------------------
@@ -686,6 +714,17 @@ wxRadioBox::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
         }
 
         return 0;
+    }
+    // FIXME: Without this, the radiobox corrupts other controls as it moves
+    // in a dynamic layout. Refreshing causes flicker, but it's better than
+    // leaving droppings. Note that for some reason, wxStaticBox doesn't need
+    // this (perhaps because it has no real children?)
+    else if (nMsg == WM_MOVE && IsKindOf(CLASSINFO(wxRadioBox)))
+    {
+        WXLRESULT res = wxControl::MSWWindowProc(nMsg, wParam, lParam);
+        wxRect rect = GetRect();
+        GetParent()->Refresh(true, & rect);
+        return res;
     }
 
     return wxStaticBox::MSWWindowProc(nMsg, wParam, lParam);

@@ -11,7 +11,16 @@ All:
 
 wxMSW:
 
-- Fixed erroneous selection of content in wxComboBox when within a wxStaticBox.
+- Fixed erroneous selection of content in wxComboBox when within a wxStaticBox
+  (checking for selection caused by WM_STYLECHANGED).
+- Worked around an apparent bug in Windows whereby some deferred positioning
+  failed: specifically when changing a position from x, to y, to x again.
+- Added deferred positioning to wxRadioBox, wxSlider and wxSpinCtrl and thereby
+  eliminated some refresh glitches when resizing.
+- Eliminated further refresh glitches caused by wxRadioBox (to nearby controls)
+  by refreshing parent when the radio box moves.
+- Added ability set the system option "msw.staticbox.optimized-paint" to 0 to
+  allow a panel to paint graphics around controls within a static box.
 
 wxMac:
 

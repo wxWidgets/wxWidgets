@@ -42,6 +42,8 @@
     #include <commctrl.h>
 #endif
 
+#define USE_DEFERRED_SIZING 1
+
 // ----------------------------------------------------------------------------
 // constants
 // ----------------------------------------------------------------------------
@@ -441,6 +443,16 @@ void wxSlider::DoMoveWindow(int x, int y, int width, int height)
         return;
     }
 
+    // if our parent had prepared a defer window handle for us, use it (unless
+    // we are a top level window)
+    wxWindowMSW *parent = GetParent();
+
+#if USE_DEFERRED_SIZING
+    HDWP hdwp = parent && !IsTopLevel() ? (HDWP)parent->m_hDWP : NULL;
+#else
+    HDWP hdwp = 0;
+#endif    
+
     // be careful to position the slider itself after moving the labels as
     // otherwise our GetBoundingBox(), which is called from WM_SIZE handler,
     // would return a wrong result and wrong size would be cached internally
@@ -453,22 +465,21 @@ void wxSlider::DoMoveWindow(int x, int y, int width, int height)
 
         // position all labels: min at the top, value in the middle and max at
         // the bottom
-        ::MoveWindow((*m_labels)[SliderLabel_Min],
-                     xLabel, y, wLabel, hLabel, TRUE);
+        wxMoveWindowDeferred(hdwp, this, (*m_labels)[SliderLabel_Min],
+                     xLabel, y, wLabel, hLabel);
 
-        ::MoveWindow((*m_labels)[SliderLabel_Value],
-                     xLabel, y + (height - hLabel)/2, wLabel, hLabel, TRUE);
+        wxMoveWindowDeferred(hdwp, this, (*m_labels)[SliderLabel_Value],
+                     xLabel, y + (height - hLabel)/2, wLabel, hLabel);
 
-        ::MoveWindow((*m_labels)[SliderLabel_Max],
-                     xLabel, y + height - hLabel, wLabel, hLabel, TRUE);
+        wxMoveWindowDeferred(hdwp, this, (*m_labels)[SliderLabel_Max],
+                     xLabel, y + height - hLabel, wLabel, hLabel);
 
         // position the slider itself along the left/right edge
-        ::MoveWindow(GetHwnd(),
+        wxMoveWindowDeferred(hdwp, this, GetHwnd(),
                      HasFlag(wxSL_LEFT) ? x : x + wLabel + HGAP,
                      y + hLabel/2,
                      width - wLabel - HGAP,
-                     height - hLabel,
-                     TRUE);
+                     height - hLabel);
     }
     else // horizontal
     {
@@ -479,22 +490,37 @@ void wxSlider::DoMoveWindow(int x, int y, int width, int height)
 
         // position all labels: min on the left, value in the middle and max to
         // the right
-        ::MoveWindow((*m_labels)[SliderLabel_Min],
-                     x, yLabel, wLabel, hLabel, TRUE);
+        wxMoveWindowDeferred(hdwp, this, (*m_labels)[SliderLabel_Min],
+                     x, yLabel, wLabel, hLabel);
 
-        ::MoveWindow((*m_labels)[SliderLabel_Value],
-                     x + (width - wLabel)/2, yLabel, wLabel, hLabel, TRUE);
+        wxMoveWindowDeferred(hdwp, this, (*m_labels)[SliderLabel_Value],
+                     x + (width - wLabel)/2, yLabel, wLabel, hLabel);
 
-        ::MoveWindow((*m_labels)[SliderLabel_Max],
-                     x + width - wLabel, yLabel, wLabel, hLabel, TRUE);
+        wxMoveWindowDeferred(hdwp, this, (*m_labels)[SliderLabel_Max],
+                     x + width - wLabel, yLabel, wLabel, hLabel);
 
         // position the slider itself along the top/bottom edge
-        ::MoveWindow(GetHwnd(),
+        wxMoveWindowDeferred(hdwp, this, GetHwnd(),
                      x,
                      HasFlag(wxSL_TOP) ? y : y + hLabel,
                      width,
-                     height - hLabel,
-                     TRUE);
+                     height - hLabel);
+    }
+    if ( hdwp )
+    {
+        // Store the size so we can report it accurately
+        wxExtraWindowData* extraData = (wxExtraWindowData*) m_windowReserved;
+        if (!extraData)
+        {
+            extraData = new wxExtraWindowData;
+            m_windowReserved = (void*) extraData;
+        }
+        extraData->m_pos = wxPoint(x, y);
+        extraData->m_size = wxSize(width, height);
+        extraData->m_deferring = true;
+
+        // hdwp must be updated as it may have been changed
+        parent->m_hDWP = (WXHANDLE)hdwp;
     }
 }
 

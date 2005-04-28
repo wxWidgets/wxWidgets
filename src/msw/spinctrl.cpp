@@ -45,6 +45,8 @@
 
 #include <limits.h>         // for INT_MIN
 
+#define USE_DEFERRED_SIZING 1
+
 // ----------------------------------------------------------------------------
 // macros
 // ----------------------------------------------------------------------------
@@ -567,21 +569,55 @@ void wxSpinCtrl::DoMoveWindow(int x, int y, int width, int height)
         wxLogDebug(_T("not enough space for wxSpinCtrl!"));
     }
 
-    if ( !::MoveWindow(GetBuddyHwnd(), x, y, widthText, height, TRUE) )
-    {
-        wxLogLastError(wxT("MoveWindow(buddy)"));
-    }
+    // if our parent had prepared a defer window handle for us, use it (unless
+    // we are a top level window)
+    wxWindowMSW *parent = GetParent();
+    int originalX = x;
 
+#if USE_DEFERRED_SIZING
+    HDWP hdwp = parent && !IsTopLevel() ? (HDWP)parent->m_hDWP : NULL;
+#else
+    HDWP hdwp = 0;
+#endif    
+
+    // 1) The buddy window
+    wxMoveWindowDeferred(hdwp, this, GetBuddyHwnd(),
+                     x, y, widthText, height);
+
+    // 2) The button window
     x += widthText + MARGIN_BETWEEN;
-    if ( !::MoveWindow(GetHwnd(), x, y, widthBtn, height, TRUE) )
+    wxMoveWindowDeferred(hdwp, this, GetHwnd(),
+                     x, y, widthBtn, height);
+
+    if (hdwp)
     {
-        wxLogLastError(wxT("MoveWindow"));
+        // Store the size so we can report it accurately
+        wxExtraWindowData* extraData = (wxExtraWindowData*) m_windowReserved;
+        if (!extraData)
+        {
+            extraData = new wxExtraWindowData;
+            m_windowReserved = (void*) extraData;
+        }
+        extraData->m_pos = wxPoint(originalX, y);
+        extraData->m_size = wxSize(width, height);
+        extraData->m_deferring = true;
+
+        // hdwp must be updated as it may have been changed
+        parent->m_hDWP = (WXHANDLE)hdwp;
     }
 }
 
 // get total size of the control
 void wxSpinCtrl::DoGetSize(int *x, int *y) const
 {
+    wxExtraWindowData* extraData = (wxExtraWindowData*) m_windowReserved;
+    if (extraData && extraData->m_deferring && GetParent() && GetParent()->m_hDWP)
+    {
+        *x = extraData->m_size.x;        
+        *y = extraData->m_size.y;
+        return;
+    }
+    
     RECT spinrect, textrect, ctrlrect;
     GetWindowRect(GetHwnd(), &spinrect);
     GetWindowRect(GetBuddyHwnd(), &textrect);
@@ -595,6 +631,14 @@ void wxSpinCtrl::DoGetSize(int *x, int *y) const
 
 void wxSpinCtrl::DoGetPosition(int *x, int *y) const
 {
+    wxExtraWindowData* extraData = (wxExtraWindowData*) m_windowReserved;
+    if (extraData && extraData->m_deferring && GetParent() && GetParent()->m_hDWP)
+    {
+        *x = extraData->m_pos.x;        
+        *y = extraData->m_pos.y;
+        return;
+    }
+
     // hack: pretend that our HWND is the text control just for a moment
     WXHWND hWnd = GetHWND();
     wxConstCast(this, wxSpinCtrl)->m_hWnd = m_hwndBuddy;
