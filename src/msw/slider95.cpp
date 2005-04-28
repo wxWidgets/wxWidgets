@@ -43,6 +43,7 @@
 #endif
 
 #define USE_DEFERRED_SIZING 1
+#define USE_DEFER_BUG_WORKAROUND 0
 
 // ----------------------------------------------------------------------------
 // constants

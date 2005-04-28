@@ -120,6 +120,7 @@
 #endif // everything needed for TrackMouseEvent()
 
 #define USE_DEFERRED_SIZING 1
+#define USE_DEFER_BUG_WORKAROUND 0
 
 // ---------------------------------------------------------------------------
 // global variables
@@ -1451,6 +1452,7 @@ void wxWindowMSW::DoSetToolTip(wxToolTip *tooltip)
 // Get total size
 void wxWindowMSW::DoGetSize(int *x, int *y) const
 {
+#if USE_DEFER_BUG_WORKAROUND
     wxExtraWindowData* extraData = (wxExtraWindowData*) m_windowReserved;
     if (extraData && extraData->m_deferring && GetParent() && GetParent()->m_hDWP)
     {
@@ -1458,6 +1460,7 @@ void wxWindowMSW::DoGetSize(int *x, int *y) const
         *y = extraData->m_size.y;
         return;
     }
+#endif
 
     RECT rect = wxGetWindowRect(GetHwnd());
 
@@ -1480,6 +1483,7 @@ void wxWindowMSW::DoGetClientSize(int *x, int *y) const
 
 void wxWindowMSW::DoGetPosition(int *x, int *y) const
 {
+#if USE_DEFER_BUG_WORKAROUND
     wxExtraWindowData* extraData = (wxExtraWindowData*) m_windowReserved;
     if (extraData && extraData->m_deferring && GetParent() && GetParent()->m_hDWP)
     {
@@ -1487,6 +1491,7 @@ void wxWindowMSW::DoGetPosition(int *x, int *y) const
         *y = extraData->m_pos.y;
         return;
     }
+#endif
 
     RECT rect = wxGetWindowRect(GetHwnd());
 
@@ -4241,6 +4246,7 @@ bool wxWindowMSW::HandleSize(int WXUNUSED(w), int WXUNUSED(h), WXUINT wParam)
             wxLogLastError(_T("EndDeferWindowPos"));
         }
 
+#if USE_DEFER_BUG_WORKAROUND
         // Seems to be a bug in DeferWindowPos such that going from (a) to (b) to (a)
         // doesn't work (omits last position/size). So check if there's a disparity,
         // and correct.
@@ -4260,6 +4266,7 @@ bool wxWindowMSW::HandleSize(int WXUNUSED(w), int WXUNUSED(h), WXUINT wParam)
                 extraData->m_deferring = false;
             }
         }
+#endif
     }
 #endif
 

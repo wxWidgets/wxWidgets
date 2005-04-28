@@ -46,6 +46,7 @@
 #include <limits.h>         // for INT_MIN
 
 #define USE_DEFERRED_SIZING 1
+#define USE_DEFER_BUG_WORKAROUND 0
 
 // ----------------------------------------------------------------------------
 // macros
@@ -610,6 +611,7 @@ void wxSpinCtrl::DoMoveWindow(int x, int y, int width, int height)
 // get total size of the control
 void wxSpinCtrl::DoGetSize(int *x, int *y) const
 {
+#if USE_DEFER_BUG_WORKAROUND
     wxExtraWindowData* extraData = (wxExtraWindowData*) m_windowReserved;
     if (extraData && extraData->m_deferring && GetParent() && GetParent()->m_hDWP)
     {
@@ -617,6 +619,7 @@ void wxSpinCtrl::DoGetSize(int *x, int *y) const
         *y = extraData->m_size.y;
         return;
     }
+#endif
     
     RECT spinrect, textrect, ctrlrect;
     GetWindowRect(GetHwnd(), &spinrect);
@@ -631,6 +634,7 @@ void wxSpinCtrl::DoGetSize(int *x, int *y) const
 
 void wxSpinCtrl::DoGetPosition(int *x, int *y) const
 {
+#if USE_DEFER_BUG_WORKAROUND
     wxExtraWindowData* extraData = (wxExtraWindowData*) m_windowReserved;
     if (extraData && extraData->m_deferring && GetParent() && GetParent()->m_hDWP)
     {
@@ -638,6 +642,7 @@ void wxSpinCtrl::DoGetPosition(int *x, int *y) const
         *y = extraData->m_pos.y;
         return;
     }
+#endif
 
     // hack: pretend that our HWND is the text control just for a moment
     WXHWND hWnd = GetHWND();

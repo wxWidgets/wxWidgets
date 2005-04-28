@@ -719,7 +719,7 @@ wxRadioBox::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
     // in a dynamic layout. Refreshing causes flicker, but it's better than
     // leaving droppings. Note that for some reason, wxStaticBox doesn't need
     // this (perhaps because it has no real children?)
-    else if (nMsg == WM_MOVE && IsKindOf(CLASSINFO(wxRadioBox)))
+    else if (nMsg == WM_MOVE)
     {
         WXLRESULT res = wxControl::MSWWindowProc(nMsg, wParam, lParam);
         wxRect rect = GetRect();
