@@ -22,23 +22,27 @@ class TestPanel(wx.Panel):
 
 
     def OnButton(self, evt):
-        max = 20
+        max = 80
 
         dlg = wx.ProgressDialog("Progress dialog example",
                                "An informative message",
                                maximum = max,
                                parent=self,
-                               style = wx.PD_CAN_ABORT | wx.PD_APP_MODAL)
+                               style = wx.PD_CAN_ABORT
+                                | wx.PD_APP_MODAL
+                                | wx.PD_ELAPSED_TIME
+                                #| wx.PD_ESTIMATED_TIME
+                                | wx.PD_REMAINING_TIME
+                                )
 
         keepGoing = True
         count = 0
 
         while keepGoing and count < max:
-            count = count + 1
-            #print count
-            wx.Sleep(1)
+            count += 1
+            wx.MilliSleep(250)
 
-            if count == max / 2:
+            if count >= max / 2:
                 keepGoing = dlg.Update(count, "Half-time!")
             else:
                 keepGoing = dlg.Update(count)
