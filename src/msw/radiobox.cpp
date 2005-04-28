@@ -40,7 +40,10 @@
 
 #include "wx/msw/subwin.h"
 
-#define USE_DEFERRED_SIZING 1
+// This is switched off because in some situations, the radiobox
+// buttons simply don't appear when deferred sizing is on.
+// Instead, refreshing on WM_MOVE seems to at least cure the droppings.
+#define USE_DEFERRED_SIZING 0
 
 #if wxUSE_TOOLTIPS
     #if !defined(__GNUWIN32_OLD__) || defined(__CYGWIN10__)
