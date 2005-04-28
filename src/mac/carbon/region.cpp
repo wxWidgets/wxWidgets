@@ -428,7 +428,7 @@ OSStatus wxMacRegionToRectsSetterCallback (
     if (message == kQDRegionToRectsMsgParse)
     {
         RegionToRectsCallbackData *cb = (RegionToRectsCallbackData*) data ;
-        cb->m_rects[cb->m_current] = wxRect( rect->left , rect->top , rect->right - rect->left , rect->bottom - rect->top ) ;
+        cb->m_rects[cb->m_current++] = wxRect( rect->left , rect->top , rect->right - rect->left , rect->bottom - rect->top ) ;
     }
     return noErr;
 }
