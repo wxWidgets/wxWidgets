@@ -1470,14 +1470,6 @@ void wxWindowMSW::DoGetSize(int *x, int *y) const
 // Get size *available for subwindows* i.e. excluding menu bar etc.
 void wxWindowMSW::DoGetClientSize(int *x, int *y) const
 {
-    wxExtraWindowData* extraData = (wxExtraWindowData*) m_windowReserved;
-    if (extraData && extraData->m_deferring && GetParent() && GetParent()->m_hDWP)
-    {
-        *x = extraData->m_pos.x;        
-        *y = extraData->m_pos.y;
-        return;
-    }
-
     RECT rect = wxGetClientRect(GetHwnd());
 
     if ( x )
@@ -1488,6 +1480,14 @@ void wxWindowMSW::DoGetClientSize(int *x, int *y) const
 
 void wxWindowMSW::DoGetPosition(int *x, int *y) const
 {
+    wxExtraWindowData* extraData = (wxExtraWindowData*) m_windowReserved;
+    if (extraData && extraData->m_deferring && GetParent() && GetParent()->m_hDWP)
+    {
+        *x = extraData->m_pos.x;        
+        *y = extraData->m_pos.y;
+        return;
+    }
+
     RECT rect = wxGetWindowRect(GetHwnd());
 
     POINT point;
