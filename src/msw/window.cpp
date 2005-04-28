@@ -4164,15 +4164,34 @@ bool wxWindowMSW::HandleSize(int WXUNUSED(w), int WXUNUSED(h), WXUINT wParam)
 {
     // when we resize this window, its children are probably going to be
     // repositioned as well, prepare to use DeferWindowPos() for them
-    const int numChildren = GetChildren().GetCount();
+#if USE_DEFERRED_SIZING
+    // when we resize this window, its children are probably going to be
+    // repositioned as well, prepare to use DeferWindowPos() for them
+    int numChildren = 0;
+    for ( HWND child = ::GetWindow(GetHwndOf(this), GW_CHILD);
+          child;
+          child = ::GetWindow(child, GW_HWNDNEXT) )
+    {
+        numChildren ++;
+    }
+
+    // Protect against valid m_hDWP being overwritten    
+    bool useDefer = false;
+
     if ( numChildren > 1 )
     {
-        m_hDWP = (WXHANDLE)::BeginDeferWindowPos(numChildren);
-        if ( !m_hDWP )
-        {
-            wxLogLastError(_T("BeginDeferWindowPos"));
+        if (!m_hDWP)
+        {        
+            m_hDWP = (WXHANDLE)::BeginDeferWindowPos(numChildren);
+            if ( !m_hDWP )
+            {
+                wxLogLastError(_T("BeginDeferWindowPos"));
+            }
+            if (m_hDWP)
+                useDefer = true;
         }
     }
+#endif
 
     // update this window size
     bool processed = false;
@@ -4205,8 +4224,9 @@ bool wxWindowMSW::HandleSize(int WXUNUSED(w), int WXUNUSED(h), WXUINT wParam)
             processed = GetEventHandler()->ProcessEvent(event);
     }
 
+#if USE_DEFERRED_SIZING
     // and finally change the positions of all child windows at once
-    if ( m_hDWP )
+    if ( useDefer && m_hDWP )
     {
         // reset m_hDWP to NULL so that child windows don't try to use our
         // m_hDWP after we call EndDeferWindowPos() on it (this shouldn't
@@ -4214,13 +4234,34 @@ bool wxWindowMSW::HandleSize(int WXUNUSED(w), int WXUNUSED(h), WXUINT wParam)
         // may have depending on what the users EVT_SIZE handler does...)
         HDWP hDWP = (HDWP)m_hDWP;
         m_hDWP = NULL;
-
+        
         // do put all child controls in place at once
         if ( !::EndDeferWindowPos(hDWP) )
         {
             wxLogLastError(_T("EndDeferWindowPos"));
         }
+
+        // Seems to be a bug in DeferWindowPos such that going from (a) to (b) to (a)
+        // doesn't work (omits last position/size). So check if there's a disparity,
+        // and correct.
+        for ( wxWindowList::compatibility_iterator node = GetChildren().GetFirst();
+              node;
+              node = node->GetNext() )
+        {
+            wxWindow *child = node->GetData();
+            wxExtraWindowData* extraData = (wxExtraWindowData*) child->m_windowReserved;
+            if (extraData && extraData->m_deferring)
+            {
+                wxPoint pos = child->GetPosition();
+                
+                if (extraData->m_pos != pos)
+                    child->Move(extraData->m_pos);
+                
+                extraData->m_deferring = false;
+            }
+        }
     }
+#endif
 
     return processed;
 }
