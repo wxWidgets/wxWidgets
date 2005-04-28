@@ -58,10 +58,18 @@ class FindInDirService(FindService.FindService):
     def ProcessEvent(self, event):
         id = event.GetId()
         if id == FindInDirService.FINDALL_ID:
-            self.ShowFindAllDialog()
+            view = wx.GetApp().GetDocumentManager().GetCurrentView()
+            if hasattr(view, "GetCtrl") and view.GetCtrl() and hasattr(view.GetCtrl(), "GetSelectedText"):
+                self.ShowFindAllDialog(view.GetCtrl().GetSelectedText())
+            else:
+                self.ShowFindAllDialog()
             return True
         elif id == FindInDirService.FINDDIR_ID:
-            self.ShowFindDirDialog()
+            view = wx.GetApp().GetDocumentManager().GetCurrentView()
+            if hasattr(view, "GetCtrl") and view.GetCtrl() and hasattr(view.GetCtrl(), "GetSelectedText"):
+                self.ShowFindDirDialog(view.GetCtrl().GetSelectedText())
+            else:
+                self.ShowFindDirDialog()
             return True
         else:
             return FindService.FindService.ProcessEvent(self, event)
@@ -83,7 +91,7 @@ class FindInDirService(FindService.FindService):
             return FindService.FindService.ProcessUpdateUIEvent(self, event)
 
 
-    def ShowFindDirDialog(self):
+    def ShowFindDirDialog(self, findString=None):
         config = wx.ConfigBase_Get()
 
         frame = wx.Dialog(None, -1, _("Find in Directory"), size= (320,200))
@@ -122,7 +130,11 @@ class FindInDirService(FindService.FindService):
         
         lineSizer = wx.BoxSizer(wx.HORIZONTAL)
         lineSizer.Add(wx.StaticText(frame, -1, _("Find what:")), 0, wx.ALIGN_CENTER | wx.RIGHT, HALF_SPACE)
-        findCtrl = wx.TextCtrl(frame, -1, config.Read(FindService.FIND_MATCHPATTERN, ""), size=(200,-1))
+        if not findString:
+            findString = config.Read(FindService.FIND_MATCHPATTERN, "")
+        findCtrl = wx.TextCtrl(frame, -1, findString, size=(200,-1))
+        findCtrl.SetFocus()
+        findCtrl.SetSelection(0,-1)
         lineSizer.Add(findCtrl, 0, wx.LEFT, HALF_SPACE)
         contentSizer.Add(lineSizer, 0, wx.BOTTOM, SPACE)
         wholeWordCtrl = wx.CheckBox(frame, -1, _("Match whole word only"))
@@ -270,7 +282,7 @@ class FindInDirService(FindService.FindService):
         config.WriteInt(FIND_MATCHDIRSUBFOLDERS, searchSubfolders)
     
 
-    def ShowFindAllDialog(self):
+    def ShowFindAllDialog(self, findString=None):
         config = wx.ConfigBase_Get()
 
         frame = wx.Dialog(None, -1, _("Find in Project"), size= (320,200))
@@ -279,7 +291,9 @@ class FindInDirService(FindService.FindService):
         contentSizer = wx.BoxSizer(wx.VERTICAL)
         lineSizer = wx.BoxSizer(wx.HORIZONTAL)
         lineSizer.Add(wx.StaticText(frame, -1, _("Find what:")), 0, wx.ALIGN_CENTER | wx.RIGHT, HALF_SPACE)
-        findCtrl = wx.TextCtrl(frame, -1, config.Read(FindService.FIND_MATCHPATTERN, ""), size=(200,-1))
+        if not findString:
+            findString = config.Read(FindService.FIND_MATCHPATTERN, "")
+        findCtrl = wx.TextCtrl(frame, -1, findString, size=(200,-1))
         lineSizer.Add(findCtrl, 0, wx.LEFT, HALF_SPACE)
         contentSizer.Add(lineSizer, 0, wx.BOTTOM, SPACE)
         wholeWordCtrl = wx.CheckBox(frame, -1, _("Match whole word only"))

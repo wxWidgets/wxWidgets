@@ -1418,6 +1418,7 @@ class DebuggerService(Service.Service):
     CLEAR_ALL_BREAKPOINTS = wx.NewId()
     RUN_ID = wx.NewId()
     DEBUG_ID = wx.NewId()
+    DEBUG_WEBSERVER_ID = wx.NewId()
 
     def ComparePaths(first, second):
         one = DebuggerService.ExpandPath(first)
@@ -1493,6 +1494,12 @@ class DebuggerService(Service.Service):
             wx.EVT_MENU(frame, DebuggerService.DEBUG_ID, frame.ProcessEvent)
             wx.EVT_UPDATE_UI(frame, DebuggerService.DEBUG_ID, frame.ProcessUpdateUIEvent)
             
+            if not ACTIVEGRID_BASE_IDE:
+                debuggerMenu.AppendSeparator()
+                debuggerMenu.Append(DebuggerService.DEBUG_WEBSERVER_ID, _("Debug Internal Web Server"), _("Debugs the internal webservier"))
+                wx.EVT_MENU(frame, DebuggerService.DEBUG_WEBSERVER_ID, frame.ProcessEvent)
+                wx.EVT_UPDATE_UI(frame, DebuggerService.DEBUG_WEBSERVER_ID, frame.ProcessUpdateUIEvent)
+            
             debuggerMenu.AppendSeparator()
             
             debuggerMenu.Append(DebuggerService.TOGGLE_BREAKPOINT_ID, _("&Toggle Breakpoint...\tCtrl+B"), _("Toggle a breakpoint"))
@@ -1536,6 +1543,9 @@ class DebuggerService(Service.Service):
         elif an_id == DebuggerService.DEBUG_ID:
             self.OnDebugProject(event)
             return True
+        elif an_id == DebuggerService.DEBUG_WEBSERVER_ID:
+            self.OnDebugWebServer(event)
+            return True
         return False
         
     def ProcessUpdateUIEvent(self, event):
@@ -1572,7 +1582,10 @@ class DebuggerService(Service.Service):
         self.ShowWindow(True)
         projectService = wx.GetApp().GetService(ProjectEditor.ProjectService)
         project = projectService.GetView().GetDocument()
-        dlg = CommandPropertiesDialog(self.GetView().GetFrame(), 'Debug Python File', projectService, None, pythonOnly=True, okButtonName="Debug", debugging=True)
+        try:
+            dlg = CommandPropertiesDialog(self.GetView().GetFrame(), 'Debug Python File', projectService, None, pythonOnly=True, okButtonName="Debug", debugging=True)
+        except:
+            return
         if dlg.ShowModal() == wx.ID_OK:
             fileToDebug, initialArgs, startIn, isPython, environment = dlg.GetSettings()
             dlg.Destroy()
@@ -1586,12 +1599,26 @@ class DebuggerService(Service.Service):
         try:
             page = DebugCommandUI(Service.ServiceView.bottomTab, -1, str(fileToDebug), self)
             count = Service.ServiceView.bottomTab.GetPageCount()
-            Service.ServiceView.bottomTab.AddPage(page, "Debugging: " + shortFile)
+            Service.ServiceView.bottomTab.AddPage(page, _("Debugging: ") + shortFile)
             Service.ServiceView.bottomTab.SetSelection(count)
             page.Execute(initialArgs, startIn, environment)
         except:
             pass
-    
+            
+    def OnDebugWebServer(self, event):
+        import WebServerService
+        wsService = wx.GetApp().GetService(WebServerService.WebServerService)
+        fileName, args = wsService.StopAndPrepareToDebug()
+        try:
+            page = DebugCommandUI(Service.ServiceView.bottomTab, -1, str(fileName), self)
+            count = Service.ServiceView.bottomTab.GetPageCount()
+            Service.ServiceView.bottomTab.AddPage(page, _("Debugging: Internal WebServer"))
+            Service.ServiceView.bottomTab.SetSelection(count)
+            page.Execute(args, startIn=os.getcwd(), environment=os.environ)
+        except:
+            pass
+         
+                               
     def HasAnyFiles(self):
         docs = wx.GetApp().GetDocumentManager().GetDocuments()
         return len(docs) > 0
@@ -1630,7 +1657,10 @@ class DebuggerService(Service.Service):
             return
         projectService = wx.GetApp().GetService(ProjectEditor.ProjectService)
         project = projectService.GetView().GetDocument()
-        dlg = CommandPropertiesDialog(self.GetView().GetFrame(), 'Run', projectService, None)
+        try:
+            dlg = CommandPropertiesDialog(self.GetView().GetFrame(), 'Run', projectService, None)
+        except:
+            return
         if dlg.ShowModal() == wx.ID_OK:
             fileToRun, initialArgs, startIn, isPython, environment = dlg.GetSettings()
             
@@ -1817,10 +1847,6 @@ class DebuggerOptionsPanel(wx.Panel):
 class CommandPropertiesDialog(wx.Dialog):
     
     def __init__(self, parent, title, projectService, currentProjectDocument, pythonOnly=False, okButtonName="Run", debugging=False):
-        if _WINDOWS:
-            wx.Dialog.__init__(self, parent, -1, title)
-        else:
-            wx.Dialog.__init__(self, parent, -1, title, size=(390,270)) 
         self._projService = projectService
         self._pmext = None
         self._pyext = None
@@ -1830,8 +1856,16 @@ class CommandPropertiesDialog(wx.Dialog):
             if template.GetDocumentType() == PythonEditor.PythonDocument:
                 self._pyext = template.GetDefaultExtension()
         self._pythonOnly = pythonOnly
-           
         self._currentProj = currentProjectDocument
+        self._projectNameList, self._projectDocumentList, selectedIndex = self.GetProjectList()
+        if not self._projectNameList:
+            wx.MessageBox(_("To run or debug you must have an open runnable file or project containing runnable files. Use File->Open to open the file you wish to run or debug."), _("Nothing to Run"))
+            raise BadBadBad
+        if _WINDOWS:
+            wx.Dialog.__init__(self, parent, -1, title)
+        else:
+            wx.Dialog.__init__(self, parent, -1, title, size=(390,270)) 
+           
         projStaticText = wx.StaticText(self, -1, _("Project:")) 
         fileStaticText = wx.StaticText(self, -1, _("File:")) 
         argsStaticText = wx.StaticText(self, -1, _("Arguments:")) 
@@ -1839,7 +1873,6 @@ class CommandPropertiesDialog(wx.Dialog):
         pythonPathStaticText = wx.StaticText(self, -1, _("PYTHONPATH:"))
         postpendStaticText = _("Postpend win32api path")
         cpPanelBorderSizer = wx.BoxSizer(wx.VERTICAL)
-        self._projectNameList, self._projectDocumentList, selectedIndex = self.GetProjectList()
         self._projList = wx.Choice(self, -1, (200,-1), choices=self._projectNameList)
         self.Bind(wx.EVT_CHOICE, self.EvtListBox, self._projList)
         HALF_SPACE = 5
@@ -2049,11 +2082,36 @@ class CommandPropertiesDialog(wx.Dialog):
                     found = True
                     index = count
                 count += 1
+        #Check for open files not in any of these projects and add them to a default project
+        def AlreadyInProject(fileName):
+            for projectDocument in docList:
+                if projectDocument.IsFileInProject(fileName):
+                    return True
+            return False
+            
+        unprojectedFiles = []
+        for document in self._projService.GetDocumentManager().GetDocuments():
+            if not ACTIVEGRID_BASE_IDE and type(document) == ProcessModelEditor.ProcessModelDocument:
+                if not AlreadyInProject(document.GetFilename()):
+                    unprojectedFiles.append(document.GetFilename())
+            if type(document) == PythonEditor.PythonDocument:
+                if not AlreadyInProject(document.GetFilename()):
+                    unprojectedFiles.append(document.GetFilename())
+         
+        if unprojectedFiles:
+            unprojProj = ProjectEditor.ProjectDocument()
+            unprojProj.SetFilename(_("Not in any Project")) 
+            unprojProj.AddFiles(unprojectedFiles)
+            docList.append(unprojProj)
+            nameList.append(_("Not in any Project"))  
+            
         return nameList, docList, index
+        
+
 #----------------------------------------------------------------------
 from wx import ImageFromStream, BitmapFromImage
-from wx import EmptyIcon
 import cStringIO
+
 #----------------------------------------------------------------------
 def getBreakData():
     return \
@@ -2075,9 +2133,7 @@ def getBreakImage():
     return ImageFromStream(stream)
 
 def getBreakIcon():
-    icon = EmptyIcon()
-    icon.CopyFromBitmap(getBreakBitmap())
-    return icon
+    return wx.IconFromBitmap(getBreakBitmap())
 
 #----------------------------------------------------------------------
 def getClearOutputData():
@@ -2102,9 +2158,7 @@ def getClearOutputImage():
     return ImageFromStream(stream)
 
 def getClearOutputIcon():
-    icon = EmptyIcon()
-    icon.CopyFromBitmap(getClearOutputBitmap())
-    return icon
+    return wx.IconFromBitmap(getClearOutputBitmap())
 
 #----------------------------------------------------------------------
 def getCloseData():
@@ -2126,9 +2180,7 @@ def getCloseImage():
     return ImageFromStream(stream)
 
 def getCloseIcon():
-    icon = EmptyIcon()
-    icon.CopyFromBitmap(getCloseBitmap())
-    return icon
+    return wx.IconFromBitmap(getCloseBitmap())
 
 #----------------------------------------------------------------------
 def getContinueData():
@@ -2151,9 +2203,7 @@ def getContinueImage():
     return ImageFromStream(stream)
 
 def getContinueIcon():
-    icon = EmptyIcon()
-    icon.CopyFromBitmap(getContinueBitmap())
-    return icon
+    return wx.IconFromBitmap(getContinueBitmap())
 
 #----------------------------------------------------------------------
 def getNextData():
@@ -2176,9 +2226,7 @@ def getNextImage():
     return ImageFromStream(stream)
 
 def getNextIcon():
-    icon = EmptyIcon()
-    icon.CopyFromBitmap(getNextBitmap())
-    return icon
+    return wx.IconFromBitmap(getNextBitmap())
 
 #----------------------------------------------------------------------
 def getStepInData():
@@ -2200,9 +2248,7 @@ def getStepInImage():
     return ImageFromStream(stream)
 
 def getStepInIcon():
-    icon = EmptyIcon()
-    icon.CopyFromBitmap(getStepInBitmap())
-    return icon
+    return wx.IconFromBitmap(getStepInBitmap())
 
 #----------------------------------------------------------------------
 def getStopData():
@@ -2222,9 +2268,7 @@ def getStopImage():
     return ImageFromStream(stream)
 
 def getStopIcon():
-    icon = EmptyIcon()
-    icon.CopyFromBitmap(getStopBitmap())
-    return icon
+    return wx.IconFromBitmap(getStopBitmap())
 
 #----------------------------------------------------------------------
 def getStepReturnData():
@@ -2247,10 +2291,9 @@ def getStepReturnImage():
     return ImageFromStream(stream)
 
 def getStepReturnIcon():
-    icon = EmptyIcon()
-    icon.CopyFromBitmap(getStepReturnBitmap())
-    return icon
+    return wx.IconFromBitmap(getStepReturnBitmap())
     
+#----------------------------------------------------------------------
 def getAddWatchData():
     return \
 '\x89PNG\r\n\x1a\n\x00\x00\x00\rIHDR\x00\x00\x00\x10\x00\x00\x00\x10\x08\x06\
@@ -2270,6 +2313,4 @@ def getAddWatchImage():
     return ImageFromStream(stream)
 
 def getAddWatchIcon():
-    icon = EmptyIcon()
-    icon.CopyFromBitmap(getAddWatchBitmap())
-    return icon
+    return wx.IconFromBitmap(getAddWatchBitmap())

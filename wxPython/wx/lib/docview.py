@@ -76,6 +76,10 @@ class Document(wx.EvtHandler):
     The document class can be used to model an application's file-based data. It
     is part of the document/view framework supported by wxWindows, and cooperates
     with the wxView, wxDocTemplate and wxDocManager classes.
+    
+    Note this wxPython version also keeps track of the modification date of the
+    document and if it changes on disk outside of the application, we will warn the
+    user before saving to avoid clobbering the file.
     """
 
 
@@ -86,7 +90,6 @@ class Document(wx.EvtHandler):
         """
         wx.EvtHandler.__init__(self)
 
-        self._documentModified = False
         self._documentParent = parent
         self._documentTemplate = None
         self._commandProcessor = None
@@ -97,6 +100,7 @@ class Document(wx.EvtHandler):
         self._documentFile = None
         self._documentTypeName = None
         self._documentModified = False
+        self._documentModificationDate = None
         self._documentViews = []
 
 
@@ -209,6 +213,27 @@ class Document(wx.EvtHandler):
         xTextWindow to view and edit the document).
         """
         self._documentModified = modify
+
+
+    def SetDocumentModificationDate(self, filename=None):
+        """
+        Saves the file's last modification date.
+        This is used to check if the file has been modified outside of the application.
+        This method has been added to wxPython and is not in wxWindows.
+        """
+        if not filename:
+            filename = self.GetFilename()
+        self._documentModificationDate = os.path.getmtime(filename)
+        print "debug print, file: %s set modification date to %s" % (filename, self._documentModificationDate)
+
+
+    def GetDocumentModificationDate(self):
+        """
+        Returns the file's modification date when it was loaded from disk.
+        This is used to check if the file has been modified outside of the application.        
+        This method has been added to wxPython and is not in wxWindows.
+        """
+        return self._documentModificationDate
 
 
     def GetViews(self):
@@ -338,6 +363,24 @@ class Document(wx.EvtHandler):
         if not self.IsModified():  # and self._savedYet:  This was here, but if it is not modified who cares if it hasn't been saved yet?
             return True
 
+        """ check for file modification outside of application """
+        if os.path.exists(self.GetFilename()) and os.path.getmtime(self.GetFilename()) != self.GetDocumentModificationDate():
+            print "debug print, File %s: new mod date %s, original mod date %s" % (self.GetFilename(), os.path.getmtime(self.GetFilename()), self.GetDocumentModificationDate())
+            msgTitle = wx.GetApp().GetAppName()
+            if not msgTitle:
+                msgTitle = _("Application")
+            res = wx.MessageBox(_("'%s' has been modified outside of %s.  Overwrite '%s' with current changes?") % (self.GetPrintableName(), msgTitle, self.GetPrintableName()),
+                                msgTitle,
+                                wx.YES_NO | wx.CANCEL | wx.ICON_QUESTION,
+                                self.GetDocumentWindow())
+    
+            if res == wx.NO:
+                return True
+            elif res == wx.YES:
+                pass
+            else: # elif res == wx.CANCEL:
+                return False
+        
         if not self._documentFile or not self._savedYet:
             return self.SaveAs()
         return self.OnSaveDocument(self._documentFile)
@@ -434,6 +477,7 @@ class Document(wx.EvtHandler):
 
         self.SetFilename(filename, True)
         self.Modify(False)
+        self.SetDocumentModificationDate()
         self.SetDocumentSaved(True)
         #if wx.Platform == '__WXMAC__':  # Not yet implemented in wxPython
         #    wx.FileName(file).MacSetDefaultTypeAndCreator()
@@ -468,6 +512,7 @@ class Document(wx.EvtHandler):
 
         self.SetFilename(filename, True)
         self.Modify(False)
+        self.SetDocumentModificationDate()
         self.SetDocumentSaved(True)
         self.UpdateAllViews()
         return True
@@ -548,6 +593,25 @@ class Document(wx.EvtHandler):
         """
         if not self.IsModified():
             return True
+
+        """ check for file modification outside of application """
+        if os.path.exists(self.GetFilename()) and os.path.getmtime(self.GetFilename()) != self.GetDocumentModificationDate():
+            print "debug print, File %s: new mod date %s, original mod date %s" % (self.GetFilename(), os.path.getmtime(self.GetFilename()), self.GetDocumentModificationDate())
+            msgTitle = wx.GetApp().GetAppName()
+            if not msgTitle:
+                msgTitle = _("Warning")
+            res = wx.MessageBox(_("'%s' has been modified outside of %s.  Overwrite '%s' with current changes?") % (self.GetPrintableName(), msgTitle, self.GetPrintableName()),
+                                msgTitle,
+                                wx.YES_NO | wx.CANCEL | wx.ICON_QUESTION,
+                                self.GetDocumentWindow())
+    
+            if res == wx.NO:
+                self.Modify(False)
+                return True
+            elif res == wx.YES:
+                return wx.lib.docview.Document.Save(self)
+            else: # elif res == wx.CANCEL:
+                return False
 
         msgTitle = wx.GetApp().GetAppName()
         if not msgTitle:

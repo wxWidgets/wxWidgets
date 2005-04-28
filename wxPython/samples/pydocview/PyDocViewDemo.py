@@ -7,7 +7,7 @@
 # Created:      5/15/03
 # CVS-ID:       $Id$
 # Copyright:    (c) 2003-2005 ActiveGrid, Inc.
-# License:      ASL 2.0  http://apache.org/licenses/LICENSE-2.0
+# License:      wxWindows License
 #----------------------------------------------------------------------------
 
 
@@ -17,6 +17,7 @@ import wx.lib.docview as docview
 import wx.lib.pydocview as pydocview
 import TextEditor
 import FindService
+import os.path
 _ = wx.GetTranslation
 
 
@@ -32,7 +33,8 @@ class TextEditorApplication(pydocview.DocApp):
         pydocview.DocApp.OnInit(self)
 
         # Show the splash dialog while everything is loading up
-        self.ShowSplash("splash.jpg")
+        if os.path.exists("splash.jpg"):
+            self.ShowSplash("splash.jpg")
 
         # Set the name and the icon
         self.SetAppName(_("wxPython PyDocView Demo"))
@@ -61,8 +63,11 @@ class TextEditorApplication(pydocview.DocApp):
         optionsService        = self.InstallService(pydocview.DocOptionsService())
         windowMenuService     = self.InstallService(pydocview.WindowMenuService())
         filePropertiesService = self.InstallService(pydocview.FilePropertiesService())
-        aboutService          = self.InstallService(pydocview.AboutService(image=wx.Image("splash.jpg")))
-
+        if os.path.exists("splash.jpg"):
+            aboutService      = self.InstallService(pydocview.AboutService(image=wx.Image("splash.jpg")))
+        else:
+            aboutService      = self.InstallService(pydocview.AboutService())
+            
         # Install the TextEditor's option panel into the OptionsService
         optionsService.AddOptionsPanel(TextEditor.TextOptionsPanel)
 
@@ -77,10 +82,12 @@ class TextEditorApplication(pydocview.DocApp):
             textTemplate.CreateDocument('', docview.DOC_NEW).OnNewDocument()
 
         # Close the splash dialog
-        self.CloseSplash()
+        if os.path.exists("splash.jpg"):
+            self.CloseSplash()
         
         # Show the tips dialog
-        wx.CallAfter(self.ShowTip, wx.GetApp().GetTopWindow(), wx.CreateFileTipProvider("tips.txt", 0))
+        if os.path.exists("tips.txt"):
+            wx.CallAfter(self.ShowTip, wx.GetApp().GetTopWindow(), wx.CreateFileTipProvider("tips.txt", 0))
 
         # Tell the framework that everything is great
         return True

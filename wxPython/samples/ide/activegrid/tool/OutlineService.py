@@ -442,12 +442,13 @@ class OutlineService(Service.Service):
         if not self.GetView():
             return
 
-        self.SaveExpansionState()
-        if view.DoLoadOutlineCallback(force=force):
-            self.GetView().OnSort(wx.ConfigBase_Get().ReadInt("OutlineSort", SORT_NONE))
-            self.LoadExpansionState()
-        if position >= 0:
-            self.SyncToPosition(position)
+        if hasattr(view, "DoLoadOutlineCallback"):
+            self.SaveExpansionState()
+            if view.DoLoadOutlineCallback(force=force):
+                self.GetView().OnSort(wx.ConfigBase_Get().ReadInt("OutlineSort", SORT_NONE))
+                self.LoadExpansionState()
+            if position >= 0:
+                self.SyncToPosition(position)
 
 
     def SyncToPosition(self, position):
@@ -501,8 +502,8 @@ class OutlineService(Service.Service):
                         foundRegisteredView = True
                         break
 
-                if not foundRegisteredView:
-                    self.GetView().ClearTreeCtrl()
+            if not foundRegisteredView:
+                self.GetView().ClearTreeCtrl()
                     
         self._timer.Start(1000) # 1 second interval
 

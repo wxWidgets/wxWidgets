@@ -7,7 +7,7 @@
 # Created:      8/1/03
 # CVS-ID:       $Id$
 # Copyright:    (c) 2003-2005 ActiveGrid, Inc. (Port of wxWindows classes by Julian Smart et al)
-# License:      wxWindows license
+# License:      wxWindows License
 #----------------------------------------------------------------------------
 
 

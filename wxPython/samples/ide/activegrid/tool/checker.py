@@ -594,7 +594,8 @@ class Module :
             warnings.append(w)
             return 0
         except:
-            w = Warning(self.moduleName, 1, sys.exc_info()[0] + " NOT PROCESSED UNABLE TO IMPORT")
+            exc_type, exc_value, exc_tb = sys.exc_info()
+            w = Warning(self.moduleName, 1, "%s: %s.\nUnable to import module %s." % (exc_type, exc_value, self.moduleName))
             warnings.append(w)
             importError(self.moduleName)
             return 0

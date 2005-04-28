@@ -192,10 +192,11 @@ class ServiceView(wx.EvtHandler):
 
 
     def Show(self, show = True):
-        self.GetFrame().Show(show)
-        if self._embeddedWindow:
-            mdiParentFrame = wx.GetApp().GetTopWindow()
-            mdiParentFrame.ShowEmbeddedWindow(self.GetFrame(), show)
+        if self.GetFrame():
+            self.GetFrame().Show(show)
+            if self._embeddedWindow:
+                mdiParentFrame = wx.GetApp().GetTopWindow()
+                mdiParentFrame.ShowEmbeddedWindow(self.GetFrame(), show)
 
 
 class Service(wx.lib.pydocview.DocService):

@@ -39,15 +39,16 @@ else:
 #----------------------------------------------------------------------------
 # XML Marshalling Methods
 #----------------------------------------------------------------------------
+LOCAL_TYPE_MAPPING = { "projectmodel"   : "activegrid.tool.ProjectEditor.ProjectModel", }
 
 def load(fileObject):
     xml = fileObject.read()
-    projectModel = activegrid.util.xmlmarshaller.unmarshal(xml)
+    projectModel = activegrid.util.xmlmarshaller.unmarshal(xml, knownTypes=LOCAL_TYPE_MAPPING)
     return projectModel
 
 
 def save(fileObject, projectModel):
-    xml = activegrid.util.xmlmarshaller.marshal(projectModel, prettyPrint=True)
+    xml = activegrid.util.xmlmarshaller.marshal(projectModel, prettyPrint=True, knownTypes=LOCAL_TYPE_MAPPING)
     fileObject.write(xml)
 
 
@@ -69,7 +70,7 @@ class ProjectDocument(wx.lib.docview.Document):
     def __init__(self):
         wx.lib.docview.Document.__init__(self)
         self._projectModel = ProjectModel()
-
+        
 
     def GetModel(self):
         return self._projectModel
@@ -174,6 +175,7 @@ class ProjectDocument(wx.lib.docview.Document):
 
         self.SetFilename(filename, True)
         view.AddProjectToView(self)
+        self.SetDocumentModificationDate()
         self.UpdateAllViews()
         self._savedYet = True
         view.Activate(True)
@@ -780,25 +782,21 @@ class ProjectView(wx.lib.docview.View):
         for i, item in enumerate(self._GetChildItems(self._treeCtrl.GetRootItem())):
             if i == 0:
                 firstItem = item
+                
             if expandedProjects[i]:
                 self._treeCtrl.Expand(item)
             else:
                 self._treeCtrl.Collapse(item)
-        # wxBug: This causes a crash, tried using ScrollTo which crashed as well.  Then tried calling it with wx.CallAfter and that crashed as well, with both EnsureVisible and ScrollTo
-        # self._treeCtrl.EnsureVisible(self._treeCtrl.GetRootItem())
-        # So doing the following massive hack which forces the treectrl to scroll up to the top item
+
         if firstItem:
-            if expandedProjects[i]:
-                self._treeCtrl.Collapse(firstItem)
-                self._treeCtrl.Expand(firstItem)
-            else:
-                self._treeCtrl.Expand(firstItem)
-                self._treeCtrl.Collapse(firstItem)
+            self._treeCtrl.EnsureVisible(firstItem)
+
 
     def GetSelectedFile(self):
         for item in self._treeCtrl.GetSelections():
             return self._GetItemFile(item)
             
+
     def AddProjectToView(self, document):
         rootItem = self._treeCtrl.GetRootItem()
         projectItem = self._treeCtrl.AppendItem(rootItem, self._MakeProjectName(document))
@@ -814,17 +812,6 @@ class ProjectView(wx.lib.docview.View):
         if self._embeddedWindow:
             document.GetCommandProcessor().SetEditMenu(wx.GetApp().GetEditMenu(self._GetParentFrame()))
 
-    #----------------------------------------------------------------------------
-    # Methods for OutlineService
-    #----------------------------------------------------------------------------
-    def DoLoadOutlineCallback(self, force=False):
-        """ Project Editor is a special case for the Outline Service.
-            You need to be able to be active in the Project Manager without clearing
-            the Outline View.  So we make the Project Editor a client of the Outline
-            Service, but we don't load anything in the Outline View, leaving the
-            contents of the Outline View alone (e.g. last document's outline view).
-        """
-        pass
 
     #----------------------------------------------------------------------------
     # Control events
@@ -1375,9 +1362,10 @@ class ProjectOptionsPanel(wx.Panel):
         projectBorderSizer = wx.BoxSizer(wx.VERTICAL)
         projectSizer = wx.BoxSizer(wx.VERTICAL)
         projectSizer.Add(self._projSaveDocsCheckBox, 0, wx.ALL, HALF_SPACE)
-        self._projShowWelcomeCheckBox = wx.CheckBox(self, -1, _("Show Welcome Dialog"))
-        self._projShowWelcomeCheckBox.SetValue(config.ReadInt("RunWelcomeDialog", True))
-        projectSizer.Add(self._projShowWelcomeCheckBox, 0, wx.ALL, HALF_SPACE)        
+        if not ACTIVEGRID_BASE_IDE:
+            self._projShowWelcomeCheckBox = wx.CheckBox(self, -1, _("Show Welcome Dialog"))
+            self._projShowWelcomeCheckBox.SetValue(config.ReadInt("RunWelcomeDialog", True))
+            projectSizer.Add(self._projShowWelcomeCheckBox, 0, wx.ALL, HALF_SPACE)        
         projectBorderSizer.Add(projectSizer, 0, wx.ALL, SPACE)
         self.SetSizer(projectBorderSizer)
         self.Layout()
@@ -1398,7 +1386,8 @@ class ProjectOptionsPanel(wx.Panel):
     def OnOK(self, optionsDialog):
         config = wx.ConfigBase_Get()
         config.WriteInt("ProjectSaveDocs", self._projSaveDocsCheckBox.GetValue())
-        config.WriteInt("RunWelcomeDialog", self._projShowWelcomeCheckBox.GetValue())
+        if not ACTIVEGRID_BASE_IDE:
+            config.WriteInt("RunWelcomeDialog", self._projShowWelcomeCheckBox.GetValue())
 
 
 class ProjectService(Service.Service):
@@ -1793,7 +1782,6 @@ class ProjectService(Service.Service):
 # Icon Bitmaps - generated by encode_bitmaps.py
 #----------------------------------------------------------------------------
 from wx import ImageFromStream, BitmapFromImage
-from wx import EmptyIcon
 import cStringIO
 
 
@@ -1814,23 +1802,20 @@ def getProjectImage():
     return ImageFromStream(stream)
 
 def getProjectIcon():
-    icon = EmptyIcon()
-    icon.CopyFromBitmap(getProjectBitmap())
-    return icon
+    return wx.IconFromBitmap(getProjectBitmap())
     
 
 #----------------------------------------------------------------------------
 
 def getBlankData():
     return \
-"\x89PNG\r\n\x1a\n\x00\x00\x00\rIHDR\x00\x00\x00 \x00\x00\x00 \x08\x06\x00\
-\x00\x00szz\xf4\x00\x00\x00\x04sBIT\x08\x08\x08\x08|\x08d\x88\x00\x00\x00\
-\x85IDATX\x85\xed\x97\xc9\n\xc0 \x0cD3\xda\xff\xffcMo\x96Z\xc4\xa5\x91\x14:9\
-\x8a\xe8\xcb\xd3\xb8\x00!\x8ag\x04\xd7\xd9E\xe4\xa8\x1b4'}3 B\xc4L\x7fs\x03\
-\xb3\t<\x0c\x94\x81tN\x04p%\xae9\xe9\xa8\x89m{`\xd4\x84\xfd\x12\xa8\x16{#\
-\x10\xdb\xab\xa0\x07a\x0e\x00\xe0\xb6\x1fz\x10\xdf;\x07V\xa3U5\xb5\x8d:\xdc\
-\r\x10\x80\x00\x04 \x00\x01\x08@\x80\xe6{\xa0w\x8f[\x85\xbb\x01\xfc\xfeoH\
-\x80\x13>\xf9(3zH\x1e\xfb\x00\x00\x00\x00IEND\xaeB`\x82" 
+'\x89PNG\r\n\x1a\n\x00\x00\x00\rIHDR\x00\x00\x00\x10\x00\x00\x00\x10\x08\x06\
+\x00\x00\x00\x1f\xf3\xffa\x00\x00\x00\x04sBIT\x08\x08\x08\x08|\x08d\x88\x00\
+\x00\x00]IDAT8\x8d\xed\x931\x0e\xc00\x08\x03m\x92\xff\xff8q\x87\xb6C\x11\x89\
+\xa8X:\xd4\x13\x03:\x1b\x01\xa45T\xd4\xefBsh\xd7Hk\xdc\x02\x00@\x8a\x19$\xa1\
+9\x14A,\x95\xf3\x82G)\xd3\x00\xf24\xf7\x90\x1ev\x07\xee\x1e\xf4:\xc1J?\xe0\
+\x0b\x80\xc7\x1d\xf8\x1dg\xc4\xea7\x96G8\x00\xa8\x91\x19(\x85#P\x7f\x00\x00\
+\x00\x00IEND\xaeB`\x82' 
 
 
 def getBlankBitmap():
@@ -1841,7 +1826,5 @@ def getBlankImage():
     return ImageFromStream(stream)
 
 def getBlankIcon():
-    icon = EmptyIcon()
-    icon.CopyFromBitmap(getBlankBitmap())
-    return icon
+    return wx.IconFromBitmap(getBlankBitmap())
     

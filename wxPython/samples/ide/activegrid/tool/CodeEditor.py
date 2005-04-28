@@ -324,7 +324,7 @@ class CodeView(STCTextEditor.TextView):
                 self.GetCtrl().SetSelection(pos, pos)
                 self._GetParentFrame().SetStatusText(_("Syntax Error: %s") % message)
             except:
-                self._GetParentFrame().SetStatusText(sys.exc_info()[0])
+                self._GetParentFrame().SetStatusText("%s: %s" % (sys.exc_info()[0], sys.exc_info()[1]))
 
 
     def OnAutoComplete(self):
