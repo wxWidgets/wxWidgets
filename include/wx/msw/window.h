@@ -544,17 +544,5 @@ WX_DECLARE_HASH(wxWindowMSW, wxWindowList, wxWinHashTable);
 
 extern wxWinHashTable *wxWinHandleHash;
 
-// ----------------------------------------------------------------------------
-// extra data needed for correcting problems with deferred positioning
-// ----------------------------------------------------------------------------
-
-struct wxExtraWindowData
-{
-    // Stored during deferred positioning
-    wxPoint m_pos;
-    wxSize  m_size;
-    bool    m_deferring:1;
-};
-
 #endif
     // _WX_WINDOW_H_

@@ -23,6 +23,9 @@ wxMSW:
   by refreshing parent when the radio box moves.
 - Added ability set the system option "msw.staticbox.optimized-paint" to 0 to
   allow a panel to paint graphics around controls within a static box.
+- Worked around an apparent bug in deferred window positioning (moving a
+  window from (x, y) to (a, b) and back to (x, y) misses the last step) by
+  checking window positions against corresponding sizer state, if any.
 
 wxMac:
 

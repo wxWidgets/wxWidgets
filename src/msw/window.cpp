@@ -120,7 +120,7 @@
 #endif // everything needed for TrackMouseEvent()
 
 #define USE_DEFERRED_SIZING 1
-#define USE_DEFER_BUG_WORKAROUND 0
+#define USE_DEFER_BUG_WORKAROUND 1
 
 // ---------------------------------------------------------------------------
 // global variables
@@ -470,12 +470,6 @@ void wxWindowMSW::Init()
 wxWindowMSW::~wxWindowMSW()
 {
     m_isBeingDeleted = true;
-
-    if (m_windowReserved)
-    {
-        delete (wxExtraWindowData*) m_windowReserved;
-        m_windowReserved = NULL;
-    }
 
 #ifndef __WXUNIVERSAL__
     // VS: make sure there's no wxFrame with last focus set to us:
@@ -1452,16 +1446,6 @@ void wxWindowMSW::DoSetToolTip(wxToolTip *tooltip)
 // Get total size
 void wxWindowMSW::DoGetSize(int *x, int *y) const
 {
-#if USE_DEFER_BUG_WORKAROUND
-    wxExtraWindowData* extraData = (wxExtraWindowData*) m_windowReserved;
-    if (extraData && extraData->m_deferring && GetParent() && GetParent()->m_hDWP)
-    {
-        *x = extraData->m_size.x;        
-        *y = extraData->m_size.y;
-        return;
-    }
-#endif
-
     RECT rect = wxGetWindowRect(GetHwnd());
 
     if ( x )
@@ -1483,16 +1467,6 @@ void wxWindowMSW::DoGetClientSize(int *x, int *y) const
 
 void wxWindowMSW::DoGetPosition(int *x, int *y) const
 {
-#if USE_DEFER_BUG_WORKAROUND
-    wxExtraWindowData* extraData = (wxExtraWindowData*) m_windowReserved;
-    if (extraData && extraData->m_deferring && GetParent() && GetParent()->m_hDWP)
-    {
-        *x = extraData->m_pos.x;        
-        *y = extraData->m_pos.y;
-        return;
-    }
-#endif
-
     RECT rect = wxGetWindowRect(GetHwnd());
 
     POINT point;
@@ -1584,22 +1558,11 @@ void wxWindowMSW::DoMoveWindow(int x, int y, int width, int height)
 
     wxMoveWindowDeferred(hdwp, this, GetHwnd(), x, y, width, height);
 
-    if ( hdwp )
-    {
-        // Store the size so we can report it accurately
-        wxExtraWindowData* extraData = (wxExtraWindowData*) m_windowReserved;
-        if (!extraData)
-        {
-            extraData = new wxExtraWindowData;
-            m_windowReserved = (void*) extraData;
-        }
-        extraData->m_pos = wxPoint(x, y);
-        extraData->m_size = wxSize(width, height);
-        extraData->m_deferring = true;
-
+#if USE_DEFERRED_SIZING
+    if ( parent )
         // hdwp must be updated as it may have been changed
         parent->m_hDWP = (WXHANDLE)hdwp;
-    }
+#endif
 }
 
 // set the size of the window: if the dimensions are positive, just use them,
@@ -4255,15 +4218,14 @@ bool wxWindowMSW::HandleSize(int WXUNUSED(w), int WXUNUSED(h), WXUINT wParam)
               node = node->GetNext() )
         {
             wxWindow *child = node->GetData();
-            wxExtraWindowData* extraData = (wxExtraWindowData*) child->m_windowReserved;
-            if (extraData && extraData->m_deferring)
+            wxSizer* sizer = child->GetContainingSizer();
+            if (sizer)
             {
-                wxPoint pos = child->GetPosition();
-                
-                if (extraData->m_pos != pos)
-                    child->Move(extraData->m_pos);
-                
-                extraData->m_deferring = false;
+                wxSizerItem* item = sizer->GetItem(child, true);
+                if (item->GetRect().GetPosition() != child->GetPosition())
+                {
+                    child->Move(item->GetRect().GetPosition());
+                }
             }
         }
 #endif

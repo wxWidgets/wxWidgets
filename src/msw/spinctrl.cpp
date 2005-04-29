@@ -590,37 +590,18 @@ void wxSpinCtrl::DoMoveWindow(int x, int y, int width, int height)
     wxMoveWindowDeferred(hdwp, this, GetHwnd(),
                      x, y, widthBtn, height);
 
-    if (hdwp)
+#if USE_DEFERRED_SIZING
+    if (parent)
     {
-        // Store the size so we can report it accurately
-        wxExtraWindowData* extraData = (wxExtraWindowData*) m_windowReserved;
-        if (!extraData)
-        {
-            extraData = new wxExtraWindowData;
-            m_windowReserved = (void*) extraData;
-        }
-        extraData->m_pos = wxPoint(originalX, y);
-        extraData->m_size = wxSize(width, height);
-        extraData->m_deferring = true;
-
         // hdwp must be updated as it may have been changed
         parent->m_hDWP = (WXHANDLE)hdwp;
     }
+#endif
 }
 
 // get total size of the control
 void wxSpinCtrl::DoGetSize(int *x, int *y) const
 {
-#if USE_DEFER_BUG_WORKAROUND
-    wxExtraWindowData* extraData = (wxExtraWindowData*) m_windowReserved;
-    if (extraData && extraData->m_deferring && GetParent() && GetParent()->m_hDWP)
-    {
-        *x = extraData->m_size.x;        
-        *y = extraData->m_size.y;
-        return;
-    }
-#endif
-    
     RECT spinrect, textrect, ctrlrect;
     GetWindowRect(GetHwnd(), &spinrect);
     GetWindowRect(GetBuddyHwnd(), &textrect);
@@ -634,16 +615,6 @@ void wxSpinCtrl::DoGetSize(int *x, int *y) const
 
 void wxSpinCtrl::DoGetPosition(int *x, int *y) const
 {
-#if USE_DEFER_BUG_WORKAROUND
-    wxExtraWindowData* extraData = (wxExtraWindowData*) m_windowReserved;
-    if (extraData && extraData->m_deferring && GetParent() && GetParent()->m_hDWP)
-    {
-        *x = extraData->m_pos.x;        
-        *y = extraData->m_pos.y;
-        return;
-    }
-#endif
-
     // hack: pretend that our HWND is the text control just for a moment
     WXHWND hWnd = GetHWND();
     wxConstCast(this, wxSpinCtrl)->m_hWnd = m_hwndBuddy;

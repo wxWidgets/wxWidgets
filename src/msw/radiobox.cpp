@@ -657,22 +657,14 @@ void wxRadioBox::DoSetSize(int x, int y, int width, int height, int sizeFlags)
             x_offset += widthBtn + cx1;
         }
     }
-    if (hdwp)
-    {
-        // Store the size so we can report it accurately
-        wxExtraWindowData* extraData = (wxExtraWindowData*) m_windowReserved;
-        if (!extraData)
-        {
-            extraData = new wxExtraWindowData;
-            m_windowReserved = (void*) extraData;
-        }
-        extraData->m_pos = wxPoint(xx, yy);
-        extraData->m_size = wxSize(width, height);
-        extraData->m_deferring = true;
 
+#if USE_DEFERRED_SIZING
+    if (parent)
+    {
         // hdwp must be updated as it may have been changed
         parent->m_hDWP = (WXHANDLE)hdwp;
     }
+#endif
 }
 
 // ----------------------------------------------------------------------------

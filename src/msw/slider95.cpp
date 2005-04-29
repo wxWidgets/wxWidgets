@@ -43,7 +43,6 @@
 #endif
 
 #define USE_DEFERRED_SIZING 1
-#define USE_DEFER_BUG_WORKAROUND 0
 
 // ----------------------------------------------------------------------------
 // constants
@@ -507,22 +506,14 @@ void wxSlider::DoMoveWindow(int x, int y, int width, int height)
                      width,
                      height - hLabel);
     }
-    if ( hdwp )
-    {
-        // Store the size so we can report it accurately
-        wxExtraWindowData* extraData = (wxExtraWindowData*) m_windowReserved;
-        if (!extraData)
-        {
-            extraData = new wxExtraWindowData;
-            m_windowReserved = (void*) extraData;
-        }
-        extraData->m_pos = wxPoint(x, y);
-        extraData->m_size = wxSize(width, height);
-        extraData->m_deferring = true;
 
+#if USE_DEFERRED_SIZING
+    if ( parent )
+    {
         // hdwp must be updated as it may have been changed
         parent->m_hDWP = (WXHANDLE)hdwp;
     }
+#endif
 }
 
 wxSize wxSlider::DoGetBestSize() const
