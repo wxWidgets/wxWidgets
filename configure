@@ -36061,9 +36061,7 @@ _ACEOF
 
 fi
 
-WITH_PLUGIN_SDL=0
-if test "$wxUSE_SOUND" = "yes"; then
-      if test "$USE_UNIX" = "1" ; then
+if test "$USE_UNIX" = "1" ; then
 
 for ac_header in sys/soundcard.h
 do
@@ -36209,11 +36207,16 @@ if test `eval echo '${'$as_ac_Header'}'` = yes; then
 #define `echo "HAVE_$ac_header" | $as_tr_cpp` 1
 _ACEOF
 
+else
+  DISABLED_CONTRIB="$DISABLED_CONTRIB mmedia"
 fi
 
 done
 
-
+fi
+WITH_PLUGIN_SDL=0
+if test "$wxUSE_SOUND" = "yes"; then
+  if test "$USE_UNIX" = "1" ; then
     if test "$wxUSE_LIBSDL" != "no"; then
 
 # Check whether --with-sdl-prefix or --without-sdl-prefix was given.
@@ -43792,7 +43795,11 @@ for subdir in `echo $SUBDIRS`; do
                         makefiles="samples/$sample/Makefile.in $makefiles"
                     fi
                 done
-            else                 makefiles=`(cd $srcdir ; find $subdir -name Makefile.in)`
+            else
+                                                                disabled_var=DISABLED_`echo $subdir | tr [a-z] [A-Z]`;
+                eval "disabled=\$$disabled_var"
+                disabled=/`echo X $disabled | sed 's@ @/|/@g'`/
+                makefiles=`(cd $srcdir ; find $subdir -name Makefile.in) | egrep -v "$disabled"`
             fi
         else                                     if test ${subdir} = "samples"; then
                 makefiles="samples/Makefile.in samples/console/Makefile.in"

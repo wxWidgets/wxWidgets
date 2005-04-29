@@ -4870,13 +4870,15 @@ if test "$wxUSE_TIMER" = "yes"; then
   AC_DEFINE(wxUSE_TIMER)
 fi
 
+dnl Unix implementation needs additional checks because audio support
+dnl comes in many favours:
+if test "$USE_UNIX" = "1" ; then
+    AC_CHECK_HEADERS([sys/soundcard.h],,
+                     [DISABLED_CONTRIB="$DISABLED_CONTRIB mmedia"])
+fi
 WITH_PLUGIN_SDL=0
 if test "$wxUSE_SOUND" = "yes"; then
-  dnl Unix implementation needs additional checks because audio support
-  dnl comes in many favours:
   if test "$USE_UNIX" = "1" ; then
-    AC_CHECK_HEADERS([sys/soundcard.h])
-
     if test "$wxUSE_LIBSDL" != "no"; then
       AM_PATH_SDL([1.2.0],
                   [
@@ -6869,8 +6871,14 @@ for subdir in `echo $SUBDIRS`; do
                         makefiles="samples/$sample/Makefile.in $makefiles"
                     fi
                 done
-            else dnl assume that everything compiles for utils &c
-                makefiles=`(cd $srcdir ; find $subdir -name Makefile.in)`
+            else
+                dnl assume that everything compiles for utils &c
+                dnl any that shouldn't be built can be added to
+                dnl DISABLED_UTILS, DISABLED_CONTRIB or DISABLED_DEMOS
+                disabled_var=DISABLED_`echo $subdir | tr [[a-z]] [[A-Z]]`;
+                eval "disabled=\$$disabled_var"
+                disabled=/`echo X $disabled | sed 's@ @/|/@g'`/
+                makefiles=`(cd $srcdir ; find $subdir -name Makefile.in) | egrep -v "$disabled"`
             fi
         else dnl we build wxBase only
             dnl don't take all samples/utils, just those which build with
