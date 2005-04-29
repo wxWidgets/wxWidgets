@@ -9,6 +9,10 @@ All:
 
 - Added wxLaunchDefaultBrowser.
 
+All (GUI):
+
+- Fixed potential infinite loop when adjusting wxScrolledWindow scrollbars.
+
 wxMSW:
 
 - Fixed erroneous selection of content in wxComboBox when within a wxStaticBox

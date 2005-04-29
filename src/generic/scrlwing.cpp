@@ -649,8 +649,13 @@ void wxScrollHelper::AdjustScrollbars()
     //     it here for now but it would be better to ensure that all ports
     //     generate EVT_SIZE when scrollbars [dis]appear, emulating it if
     //     necessary, and remove it later
+    // JACS: Stop potential infinite loop by limiting number of iterations
+    int iterationCount = 0;
+    const int iterationMax = 5;
     do
     {
+        iterationCount ++;
+        
         GetTargetSize(&w, 0);
 
         // scroll lines per page: if 0, no scrolling is needed
@@ -762,7 +767,7 @@ void wxScrollHelper::AdjustScrollbars()
         oldh = h;
 
         GetTargetSize( &w, &h );
-    } while ( w != oldw || h != oldh );
+    } while ( (w != oldw || h != oldh) && (iterationCount < iterationMax) );
 
 #ifdef __WXMOTIF__
     // Sorry, some Motif-specific code to implement a backing pixmap
