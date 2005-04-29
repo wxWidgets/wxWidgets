@@ -68,12 +68,6 @@ class FileBrowseButton(wx.Panel):
         self.callCallback = True
 
 
-        # get background to match it
-        try:
-            self._bc = parent.GetBackgroundColour()
-        except:
-            pass
-
         # create the dialog
         self.createDialog(parent, id, pos, size, style )
         # Setting a value causes the changeCallback to be called.
@@ -87,15 +81,6 @@ class FileBrowseButton(wx.Panel):
         """Setup the graphic representation of the dialog"""
         wx.Panel.__init__ (self, parent, id, pos, size, style)
         self.SetMinSize(size) # play nice with sizers
-
-        # try to set the background colour
-        try:
-            #Question: is this still needed on other platforms?
-            #It should have transparent background on Mac
-            if wx.Platform != "__WXMAC__":
-                self.SetBackgroundColour(self._bc)
-        except:
-            pass
 
         box = wx.BoxSizer(wx.HORIZONTAL)
 
