@@ -65,17 +65,17 @@ public:
     wxImageHistogram();
 
     DocStr(MakeKey, "Get the key in the histogram for the given RGB values", "");
-    static unsigned long MakeKey(unsigned char r,
-                                 unsigned char g,
-                                 unsigned char b);
+    static unsigned long MakeKey(byte r,
+                                 byte g,
+                                 byte b);
 
     DocDeclAStr(
-        bool, FindFirstUnusedColour(unsigned char *OUTPUT,
-                                    unsigned char *OUTPUT,
-                                    unsigned char *OUTPUT,
-                                    unsigned char startR = 1,
-                                    unsigned char startG = 0,
-                                    unsigned char startB = 0 ) const,
+        bool, FindFirstUnusedColour(byte *OUTPUT,
+                                    byte *OUTPUT,
+                                    byte *OUTPUT,
+                                    byte startR = 1,
+                                    byte startG = 0,
+                                    byte startB = 0 ) const,
         "FindFirstUnusedColour(int startR=1, int startG=0, int startB=0) -> (success, r, g, b)",
         "Find first colour that is not used in the image and has higher RGB
 values than startR, startG, startB.  Returns a tuple consisting of a
@@ -92,9 +92,9 @@ key value from a RGB tripple.", "");
 
         DocStr(GetCountRGB,
                "Returns the pixel count for the given RGB values.", "");
-        unsigned long GetCountRGB(unsigned char r,
-                                  unsigned char g,
-                                  unsigned char b) {
+        unsigned long GetCountRGB(byte r,
+                                  byte g,
+                                  byte b) {
             unsigned long key = wxImageHistogram::MakeKey(r, g, b);
             wxImageHistogramEntry e = (*self)[key];
             return e.value;
@@ -129,37 +129,105 @@ key value from a RGB tripple.", "");
 //---------------------------------------------------------------------------
 
 
+DocStr(wxImage,
+"A platform-independent image class.  An image can be created from
+data, or using `wx.Bitmap.ConvertToImage`, or loaded from a file in a
+variety of formats.  Functions are available to set and get image
+bits, so it can be used for basic image manipulation.
+
+A wx.Image cannot be drawn directly to a `wx.DC`.  Instead, a
+platform-specific `wx.Bitmap` object must be created from it using the
+`wx.BitmapFromImage` constructor. This bitmap can then be drawn in a
+device context, using `wx.DC.DrawBitmap`.
+
+One colour value of the image may be used as a mask colour which will
+lead to the automatic creation of a `wx.Mask` object associated to the
+bitmap object.
+
+wx.Image supports alpha channel data, that is in addition to a byte
+for the red, green and blue colour components for each pixel it also
+stores a byte representing the pixel opacity. An alpha value of 0
+corresponds to a transparent pixel (null opacity) while a value of 255
+means that the pixel is 100% opaque.
+
+Unlike RGB data, not all images have an alpha channel and before using
+`GetAlpha` you should check if this image contains an alpha channel
+with `HasAlpha`. Note that currently only images loaded from PNG files
+with transparency information will have an alpha channel.", "");
+
 class wxImage : public wxObject {
 public:
     %typemap(out) wxImage*;    // turn off this typemap
 
     DocCtorStr(
         wxImage( const wxString& name, long type = wxBITMAP_TYPE_ANY, int index = -1 ),
-        "", "");
+        "Loads an image from a file.",
+        "
+    :param name:  Name of the file from which to load the image.
+
+    :param type: May be one of the following:
+
+        ====================    =======================================
+        wx.BITMAP_TYPE_BMP      Load a Windows bitmap file.
+        wx.BITMAP_TYPE_GIF      Load a GIF bitmap file.
+        wx.BITMAP_TYPE_JPEG     Load a JPEG bitmap file.
+        wx.BITMAP_TYPE_PNG      Load a PNG bitmap file.
+        wx.BITMAP_TYPE_PCX      Load a PCX bitmap file.
+        wx.BITMAP_TYPE_PNM      Load a PNM bitmap file.
+        wx.BITMAP_TYPE_TIF      Load a TIFF bitmap file.
+        wx.BITMAP_TYPE_XPM      Load a XPM bitmap file.
+        wx.BITMAP_TYPE_ICO      Load a Windows icon file (ICO).
+        wx.BITMAP_TYPE_CUR      Load a Windows cursor file (CUR).
+        wx.BITMAP_TYPE_ANI      Load a Windows animated cursor file (ANI).
+        wx.BITMAP_TYPE_ANY      Will try to autodetect the format. 
+        ====================    =======================================
+
+    :param index: Index of the image to load in the case that the
+        image file contains multiple images. This is only used by GIF,
+        ICO and TIFF handlers. The default value (-1) means to choose
+        the default image and is interpreted as the first image (the
+        one with index=0) by the GIF and TIFF handler and as the
+        largest and most colourful one by the ICO handler.
+
+:see: `wx.ImageFromMime`, `wx.ImageFromStream`, `wx.ImageFromStreamMime`,
+      `wx.EmptyImage`, `wx.ImageFromBitmap`, `wx.ImageFromData`,
+      `wx.ImageFromDataWithAlpha`
+");
     
     ~wxImage();
 
     // Alternate constructors
     DocCtorStrName(
         wxImage(const wxString& name, const wxString& mimetype, int index = -1),
-        "", "",
+        "Loads an image from a file, using a MIME type string (such as
+'image/jpeg') to specify image type.", "
+
+:see: `wx.Image`",
         ImageFromMime);
     
     DocCtorStrName(
         wxImage(wxInputStream& stream, long type = wxBITMAP_TYPE_ANY, int index = -1),
-        "", "",
+        "Loads an image from an input stream, or any readable Python file-like
+object.", "
+
+:see: `wx.Image`",
         ImageFromStream);
     
     DocCtorStrName(
         wxImage(wxInputStream& stream, const wxString& mimetype, int index = -1 ),
-        "", "",
+        "Loads an image from an input stream, or any readable Python file-like
+object, specifying the image format with a MIME type string.", "
+
+:see: `wx.Image`",
         ImageFromStreamMime);
     
     %extend {
         %RenameDocCtor(
             EmptyImage,
             "Construct an empty image of a given size, optionally setting all
-pixels to black.", "",
+pixels to black.", "
+
+:see: `wx.Image`",
             wxImage(int width=0, int height=0, bool clear = true))
             {
                 if (width > 0 && height > 0)
@@ -173,7 +241,9 @@ pixels to black.", "",
         
         %RenameDocCtor(
             ImageFromBitmap,
-            "Construct an Image from a `wx.Bitmap`.", "",
+            "Construct an Image from a `wx.Bitmap`.", "
+
+:see: `wx.Image`",
             wxImage(const wxBitmap &bitmap))
             {
                 return new wxImage(bitmap.ConvertToImage());
@@ -183,7 +253,9 @@ pixels to black.", "",
             ImageFromData,
             "Construct an Image from a buffer of RGB bytes.  Accepts either a
 string or a buffer object holding the data and the length of the data
-must be width*height*3.", "",
+must be width*height*3.", "
+
+:see: `wx.Image`",
             wxImage(int width, int height, buffer data, int DATASIZE))
             {
                 if (DATASIZE != width*height*3) {
@@ -206,7 +278,10 @@ must be width*height*3.", "",
             ImageFromDataWithAlpha,
             "Construct an Image from a buffer of RGB bytes with an Alpha channel.
 Accepts either a string or a buffer object holding the data and the
-length of the data must be width*height*3.", "",
+length of the data must be width*height*3 bytes, and the length of the
+alpha data must be width*height bytes.", "
+
+:see: `wx.Image`",
             wxImage(int width, int height, buffer data, int DATASIZE, buffer alpha, int ALPHASIZE))
             {
                 if (DATASIZE != width*height*3) {
@@ -239,35 +314,111 @@ length of the data must be width*height*3.", "",
 
     // TODO: wxImage( char** xpmData );
 
-
     // Turn it back on again
     %typemap(out) wxImage* { $result = wxPyMake_wxObject($1, $owner); }
 
 
-    void Create( int width, int height );
-    void Destroy();
+    DocDeclStr(
+        void , Create( int width, int height, bool clear=true ),
+        "Creates a fresh image.  If clear is ``True``, the new image will be
+initialized to black. Otherwise, the image data will be uninitialized.", "");
+    
+    DocDeclStr(
+        void , Destroy(),
+        "Destroys the image data.", "");
+    
 
-    wxImage Scale( int width, int height );
-    wxImage ShrinkBy( int xFactor , int yFactor ) const ;
-    wxImage& Rescale(int width, int height);
+    DocDeclStr(
+        wxImage , Scale( int width, int height ),
+        "Returns a scaled version of the image. This is also useful for scaling
+bitmaps in general as the only other way to scale bitmaps is to blit a
+`wx.MemoryDC` into another `wx.MemoryDC`.", "
+
+:see: `Rescale`");
+    
+    DocDeclStr(
+        wxImage , ShrinkBy( int xFactor , int yFactor ) const ,
+        "Return a version of the image scaled smaller by the given factors.", "");
+    
+    DocDeclStr(
+        wxImage& , Rescale(int width, int height),
+        "Changes the size of the image in-place by scaling it: after a call to
+this function, the image will have the given width and height.
+
+Returns the (modified) image itself.", "
+
+:see: `Scale`");
+    
 
     // resizes the image in place
-    wxImage& Resize( const wxSize& size, const wxPoint& pos, 
-                     int r = -1, int g = -1, int b = -1 );
+    DocDeclStr(
+        wxImage& , Resize( const wxSize& size, const wxPoint& pos, 
+                           int r = -1, int g = -1, int b = -1 ),
+        "Changes the size of the image in-place without scaling it, by adding
+either a border with the given colour or cropping as necessary. The
+image is pasted into a new image with the given size and background
+colour at the position pos relative to the upper left of the new
+image. If red = green = blue = -1 then use either the current mask
+colour if set or find, use, and set a suitable mask colour for any
+newly exposed areas.
+
+Returns the (modified) image itself.", "
+
+:see: `Size`");
     
-    void SetRGB( int x, int y, unsigned char r, unsigned char g, unsigned char b );
+    
+    DocDeclStr(
+        void , SetRGB( int x, int y, byte r, byte g, byte b ),
+        "Sets the pixel at the given coordinate. This routine performs
+bounds-checks for the coordinate so it can be considered a safe way to
+manipulate the data, but in some cases this might be too slow so that
+the data will have to be set directly. In that case you will have to
+get access to the image data using the `GetData` method.", "");
+    
 
-    %Rename(SetRGBRect,
+    DocDeclStrName(
             void, SetRGB( const wxRect& rect,
-                          unsigned char r, unsigned char g, unsigned char b ));
+                          byte r, byte g, byte b ),
+            "Sets the colour of the pixels within the given rectangle. This routine
+performs bounds-checks for the rectangle so it can be considered a
+safe way to manipulate the data.", "",
+            SetRGBRect);
 
-    unsigned char GetRed( int x, int y );
-    unsigned char GetGreen( int x, int y );
-    unsigned char GetBlue( int x, int y );
+    DocDeclStr(
+        byte , GetRed( int x, int y ),
+        "Returns the red intensity at the given coordinate.", "");
+    
+    DocDeclStr(
+        byte , GetGreen( int x, int y ),
+        "Returns the green intensity at the given coordinate.", "");
+    
+    DocDeclStr(
+        byte , GetBlue( int x, int y ),
+        "Returns the blue intensity at the given coordinate.", "");
+    
 
-    void SetAlpha(int x, int y, unsigned char alpha);
-    unsigned char GetAlpha(int x, int y);
-    bool HasAlpha();
+    DocDeclStr(
+        void , SetAlpha(int x, int y, byte alpha),
+        "Sets the alpha value for the given pixel. This function should only be
+called if the image has alpha channel data, use `HasAlpha` to check
+for this.", "");
+    
+    DocDeclStr(
+        byte , GetAlpha(int x, int y),
+        "Returns the alpha value for the given pixel. This function may only be
+called for the images with alpha channel, use `HasAlpha` to check for
+this.
+
+The returned value is the *opacity* of the image, i.e. the value of 0
+corresponds to the fully transparent pixels while the value of 255 to
+the fully opaque pixels.", "");
+    
+    DocDeclStr(
+        bool , HasAlpha(),
+        "Returns true if this image has alpha channel, false otherwise.", "
+
+:see: `GetAlpha`, `SetAlpha`");
+    
 
     DocDeclStr(
         void , InitAlpha(),
@@ -279,9 +430,9 @@ has a a mask colour, all mask pixels will be completely transparent.", "");
 
     DocDeclStr(
         bool , IsTransparent(int x, int y,
-                             unsigned char threshold = wxIMAGE_ALPHA_THRESHOLD) const,
-        "Returns True if this pixel is masked or has an alpha value less than
-the spcified threshold.", "");
+                             byte threshold = wxIMAGE_ALPHA_THRESHOLD) const,
+        "Returns ``True`` if this pixel is masked or has an alpha value less
+than the spcified threshold.", "");
     
     
     // find first colour that is not used in the image and has higher
@@ -297,17 +448,17 @@ success flag and rgb values.", "");
     
     DocDeclStr(
         bool , ConvertAlphaToMask(byte threshold = wxIMAGE_ALPHA_THRESHOLD),
-        "If the image has alpha channel, this method converts it to mask. All pixels
-with alpha value less than ``threshold`` are replaced with mask colour and the
-alpha channel is removed. Mask colour is chosen automatically using
-`FindFirstUnusedColour`.
+        "If the image has alpha channel, this method converts it to mask. All
+pixels with alpha value less than ``threshold`` are replaced with the
+mask colour and the alpha channel is removed. The mask colour is
+chosen automatically using `FindFirstUnusedColour`.
 
 If the image image doesn't have alpha channel, ConvertAlphaToMask does
 nothing.", "");
     
 
     DocDeclStr(
-        bool , ConvertColourToAlpha( unsigned char r, unsigned char g, unsigned char b ),
+        bool , ConvertColourToAlpha( byte r, byte g, byte b ),
         "This method converts an image where the original alpha information is
 only available as a shades of a colour (actually shades of grey)
 typically when you draw anti-aliased text into a bitmap. The DC
@@ -318,9 +469,22 @@ The method will then fill up the whole image with the colour given.", "");
     
 
     
-    // Set image's mask to the area of 'mask' that has <mr,mg,mb> colour
-    bool SetMaskFromImage(const wxImage & mask,
-                          byte mr, byte mg, byte mb);
+    DocDeclStr(
+        bool , SetMaskFromImage(const wxImage & mask,
+                                byte mr, byte mg, byte mb),
+        "Sets the image's mask so that the pixels that have RGB value of
+``(mr,mg,mb)`` in ``mask`` will be masked in this image. This is done
+by first finding an unused colour in the image, setting this colour as
+the mask colour and then using this colour to draw all pixels in the
+image who corresponding pixel in mask has given RGB value.
+
+Returns ``False`` if ``mask`` does not have same dimensions as the
+image or if there is no unused colour left. Returns ``True`` if the
+mask was successfully applied.
+
+Note that this method involves computing the histogram, which is
+computationally intensive operation.", "");
+    
 
 //      void DoFloodFill (wxCoord x, wxCoord y,
 //          const wxBrush & fillBrush,
@@ -328,41 +492,115 @@ The method will then fill up the whole image with the colour given.", "");
 //          int style = wxFLOOD_SURFACE,
 //          int LogicalFunction = wxCOPY /* currently unused */ ) ;
 
-    static bool CanRead( const wxString& name );
-    static int GetImageCount( const wxString& name, long type = wxBITMAP_TYPE_ANY );
+    DocDeclStr(
+        static bool , CanRead( const wxString& filename ),
+        "Returns True if the image handlers can read this file.", "");
+    
+    DocDeclStr(
+        static int , GetImageCount( const wxString& filename, long type = wxBITMAP_TYPE_ANY ),
+        "If the image file contains more than one image and the image handler
+is capable of retrieving these individually, this function will return
+the number of available images.", "");
+    
 
-    bool LoadFile( const wxString& name, long type = wxBITMAP_TYPE_ANY, int index = -1 );
-    %Rename(LoadMimeFile, bool,  LoadFile( const wxString& name, const wxString& mimetype, int index = -1 ));
+    DocDeclStr(
+        bool , LoadFile( const wxString& name, long type = wxBITMAP_TYPE_ANY, int index = -1 ),
+        "Loads an image from a file. If no handler type is provided, the
+library will try to autodetect the format.", "");
+    
+    DocDeclStrName(
+        bool , LoadFile( const wxString& name, const wxString& mimetype, int index = -1 ),
+        "Loads an image from a file, specifying the image type with a MIME type
+string.", "",
+        LoadMimeFile);
+    
 
-    bool SaveFile( const wxString& name, int type );
-    %Rename(SaveMimeFile, bool,  SaveFile( const wxString& name, const wxString& mimetype ));
+    DocDeclStr(
+        bool , SaveFile( const wxString& name, int type ),
+        "Saves an image in the named file.", "");
 
-    %Rename(CanReadStream, static bool,  CanRead( wxInputStream& stream ));
-    %Rename(LoadStream, bool,  LoadFile( wxInputStream& stream, long type = wxBITMAP_TYPE_ANY, int index = -1 ));
-    %Rename(LoadMimeStream, bool,  LoadFile( wxInputStream& stream, const wxString& mimetype, int index = -1 ));
+    
+    DocDeclStrName(
+        bool , SaveFile( const wxString& name, const wxString& mimetype ),
+        "Saves an image in the named file.", "",
+        SaveMimeFile);
+    
 
-    bool Ok();
-    int GetWidth();
-    int GetHeight();
+    DocDeclStrName(
+        static bool , CanRead( wxInputStream& stream ),
+        "Returns True if the image handlers can read an image file from the
+data currently on the input stream, or a readable Python file-like
+object.", "",
+        CanReadStream);
+
+
+    DocDeclStrName(
+        bool , LoadFile( wxInputStream& stream, long type = wxBITMAP_TYPE_ANY, int index = -1 ),
+        "Loads an image from an input stream or a readable Python file-like
+object. If no handler type is provided, the library will try to
+autodetect the format.", "",
+        LoadStream);
+    
+    
+    DocDeclStrName(
+        bool , LoadFile( wxInputStream& stream, const wxString& mimetype, int index = -1 ),
+        "Loads an image from an input stream or a readable Python file-like
+object, using a MIME type string to specify the image file format.", "",
+        LoadMimeStream);
+    
+
+    DocDeclStr(
+        bool , Ok(),
+        "Returns true if image data is present.", "");
+    
+    DocDeclStr(
+        int , GetWidth(),
+        "Gets the width of the image in pixels.", "");
+    
+    DocDeclStr(
+        int , GetHeight(),
+        "Gets the height of the image in pixels.", "");
+    
 
     %extend {
+        DocStr(GetSize,
+               "Returns the size of the image in pixels.", "");
         wxSize GetSize() {
             wxSize size(self->GetWidth(), self->GetHeight());
             return size;
         }
     }
 
-    wxImage GetSubImage(const wxRect& rect);
-
-    // Paste the image or part of this image into an image of the given size at the pos
-    //  any newly exposed areas will be filled with the rgb colour
-    //  by default if r = g = b = -1 then fill with this image's mask colour or find and 
-    //  set a suitable mask colour
-    wxImage Size( const wxSize& size, const wxPoint& pos, 
-                  int r = -1, int g = -1, int b = -1 ) const;
     
-    wxImage Copy();
-    void Paste( const wxImage &image, int x, int y );
+    DocDeclStr(
+        wxImage , GetSubImage(const wxRect& rect),
+        "Returns a sub image of the current one as long as the rect belongs
+entirely to the image.", "");
+    
+
+    DocDeclStr(
+        wxImage , Size( const wxSize& size, const wxPoint& pos, 
+                        int r = -1, int g = -1, int b = -1 ) const,
+        "Returns a resized version of this image without scaling it by adding
+either a border with the given colour or cropping as necessary. The
+image is pasted into a new image with the given size and background
+colour at the position ``pos`` relative to the upper left of the new
+image. If red = green = blue = -1 then use either the current mask
+colour if set or find, use, and set a suitable mask colour for any
+newly exposed areas.", "
+
+:see: `Resize`");
+    
+    
+    DocDeclStr(
+        wxImage , Copy(),
+        "Returns an identical copy of the image.", "");
+    
+    DocDeclStr(
+        void , Paste( const wxImage &image, int x, int y ),
+        "Pastes ``image`` into this instance and takes care of the mask colour
+and any out of bounds problems.", "");
+    
 
     //unsigned char *GetData();
     //void SetData( unsigned char *data );
@@ -401,7 +639,8 @@ the data must be width*height*3.", "");
 
         DocStr(GetDataBuffer,
                "Returns a writable Python buffer object that is pointing at the RGB
-image data buffer inside the wx.Image.", "");
+image data buffer inside the wx.Image. You need to ensure that you do
+not use this buffer object after the image has been destroyed.", "");
         PyObject* GetDataBuffer()
         {
             buffer data = self->GetData();
@@ -413,8 +652,8 @@ image data buffer inside the wx.Image.", "");
 
         DocStr(SetDataBuffer,
                "Sets the internal image data pointer to point at a Python buffer
-object.  This can save a copy of the data but you must ensure that the
-buffer object lives longer than the wx.Image does.", "");
+object.  This can save making an extra copy of the data but you must
+ensure that the buffer object lives longer than the wx.Image does.", "");
         void SetDataBuffer(buffer data, int DATASIZE)
         {
             if (DATASIZE != self->GetWidth() * self->GetHeight() * 3) {
@@ -464,7 +703,8 @@ data must be width*height.", "");
         
         DocStr(GetDataBuffer,
                "Returns a writable Python buffer object that is pointing at the Alpha
-data buffer inside the wx.Image.", "");
+data buffer inside the wx.Image. You need to ensure that you do not
+use this buffer object after the image has been destroyed.", "");
         PyObject* GetAlphaBuffer()
         {
             buffer data = self->GetAlpha();
@@ -477,8 +717,8 @@ data buffer inside the wx.Image.", "");
         
         DocStr(SetDataBuffer,
                "Sets the internal image alpha pointer to point at a Python buffer
-object.  This can save a copy of the data but you must ensure that the
-buffer object lives longer than the wx.Image does.", "");
+object.  This can save making an extra copy of the data but you must
+ensure that the buffer object lives as long as the wx.Image does.", "");
         void SetAlphaBuffer(buffer alpha, int ALPHASIZE)
         {
             if (ALPHASIZE != self->GetWidth() * self->GetHeight()) {
@@ -489,38 +729,131 @@ buffer object lives longer than the wx.Image does.", "");
         }
     }
 
-    void SetMaskColour( unsigned char r, unsigned char g, unsigned char b );
+
+    
+    DocDeclStr(
+        void , SetMaskColour( byte r, byte g, byte b ),
+        "Sets the mask colour for this image (and tells the image to use the
+mask).", "");
+    
 
     DocDeclAStr(
-        /*bool*/ void , GetOrFindMaskColour( unsigned char *OUTPUT,
-                                             unsigned char *OUTPUT,
-                                             unsigned char *OUTPUT ) const,
+        /*bool*/ void , GetOrFindMaskColour( byte *OUTPUT,
+                                             byte *OUTPUT,
+                                             byte *OUTPUT ) const,
         "GetOrFindMaskColour() -> (r,g,b)",
         "Get the current mask colour or find a suitable colour.", "");
     
 
-    unsigned char GetMaskRed();
-    unsigned char GetMaskGreen();
-    unsigned char GetMaskBlue();
-    void SetMask( bool mask = true );
-    bool HasMask();
+    DocDeclStr(
+        byte , GetMaskRed(),
+        "Gets the red component of the mask colour.", "");
+    
+    DocDeclStr(
+        byte , GetMaskGreen(),
+        "Gets the green component of the mask colour.", "");
+    
+    DocDeclStr(
+        byte , GetMaskBlue(),
+        "Gets the blue component of the mask colour.", "");
+    
+    DocDeclStr(
+        void , SetMask( bool mask = true ),
+        "Specifies whether there is a mask or not. The area of the mask is
+determined by the current mask colour.", "");
+    
+    DocDeclStr(
+        bool , HasMask(),
+        "Returns ``True`` if there is a mask active, ``False`` otherwise.", "");
+    
 
-    wxImage Rotate(double angle, const wxPoint & centre_of_rotation,
-                   bool interpolating = true, wxPoint * offset_after_rotation = NULL) const ;
-    wxImage Rotate90( bool clockwise = true ) ;
-    wxImage Mirror( bool horizontally = true ) ;
+    DocDeclStr(
+        wxImage , Rotate(double angle, const wxPoint & centre_of_rotation,
+                         bool interpolating = true, wxPoint * offset_after_rotation = NULL) const ,
+        "Rotates the image about the given point, by ``angle`` radians. Passing
+``True`` to ``interpolating`` results in better image quality, but is
+slower. If the image has a mask, then the mask colour is used for the
+uncovered pixels in the rotated image background. Otherwise, black
+will be used as the fill colour.
 
-    void Replace( unsigned char r1, unsigned char g1, unsigned char b1,
-                  unsigned char r2, unsigned char g2, unsigned char b2 );
+Returns the rotated image, leaving this image intact.", "");
+    
+    DocDeclStr(
+        wxImage , Rotate90( bool clockwise = true ) ,
+        "Returns a copy of the image rotated 90 degrees in the direction
+indicated by ``clockwise``.", "");
+    
+    DocDeclStr(
+        wxImage , Mirror( bool horizontally = true ) ,
+        "Returns a mirrored copy of the image. The parameter ``horizontally``
+indicates the orientation.", "");
+    
 
-    // convert to monochrome image (<r,g,b> will be replaced by white, everything else by black)
-    wxImage ConvertToMono( unsigned char r, unsigned char g, unsigned char b ) const;
+    DocDeclStr(
+        void , Replace( byte r1, byte g1, byte b1,
+                        byte r2, byte g2, byte b2 ),
+        "Replaces the colour specified by ``(r1,g1,b1)`` by the colour
+``(r2,g2,b2)``.", "");
+    
 
-    void SetOption(const wxString& name, const wxString& value);
-    %Rename(SetOptionInt, void,  SetOption(const wxString& name, int value));
-    wxString GetOption(const wxString& name) const;
-    int GetOptionInt(const wxString& name) const;
-    bool HasOption(const wxString& name) const;
+    DocDeclStr(
+        wxImage , ConvertToMono( byte r, byte g, byte b ) const,
+        "Returns monochromatic version of the image. The returned image has
+white colour where the original has ``(r,g,b)`` colour and black
+colour everywhere else.", "");
+    
+
+    DocDeclStr(
+        void , SetOption(const wxString& name, const wxString& value),
+        "Sets an image handler defined option.  For example, when saving as a
+JPEG file, the option ``wx.IMAGE_OPTION_QUALITY`` is used, which is a
+number between 0 and 100 (0 is terrible, 100 is very good).", "
+
+    =================================
+    wx.IMAGE_OPTION_BMP_FORMAT
+    wx.IMAGE_OPTION_CUR_HOTSPOT_X
+    wx.IMAGE_OPTION_CUR_HOTSPOT_Y
+    wx.IMAGE_OPTION_RESOLUTION
+    wx.IMAGE_OPTION_RESOLUTIONX
+    wx.IMAGE_OPTION_RESOLUTIONY
+    wx.IMAGE_OPTION_RESOLUTIONUNIT
+    wx.IMAGE_OPTION_QUALITY
+    wx.IMAGE_OPTION_BITSPERSAMPLE
+    wx.IMAGE_OPTION_SAMPLESPERPIXEL
+    wx.IMAGE_OPTION_COMPRESSION
+    wx.IMAGE_OPTION_IMAGEDESCRIPTOR
+    wx.IMAGE_OPTION_PNG_FORMAT
+    wx.IMAGE_OPTION_PNG_BITDEPTH
+    =================================
+
+:see: `HasOption`, `GetOption`, `GetOptionInt`, `SetOptionInt`");
+    
+    DocDeclStrName(
+        void,  SetOption(const wxString& name, int value),
+        "Sets an image option as an integer.", "
+
+:see: `HasOption`, `GetOption`, `GetOptionInt`, `SetOption`",
+        SetOptionInt);
+    
+    DocDeclStr(
+        wxString , GetOption(const wxString& name) const,
+        "Gets the value of an image handler option.", "
+
+:see: `HasOption`, `GetOptionInt`, `SetOption`, `SetOptionInt`");
+    
+    DocDeclStr(
+        int , GetOptionInt(const wxString& name) const,
+        "Gets the value of an image handler option as an integer.  If the given
+option is not present, the function returns 0.", "
+
+:see: `HasOption`, `GetOption`, `SetOptionInt`, `SetOption`");
+    
+    DocDeclStr(
+        bool , HasOption(const wxString& name) const,
+        "Returns true if the given option is present.", "
+
+:see: `GetOption`, `GetOptionInt`, `SetOption`, `SetOptionInt`");
+    
 
     unsigned long CountColours( unsigned long stopafter = (unsigned long) -1 );
     unsigned long ComputeHistogram( wxImageHistogram& h );
@@ -528,8 +861,14 @@ buffer object lives longer than the wx.Image does.", "");
     static void AddHandler( wxImageHandler *handler );
     static void InsertHandler( wxImageHandler *handler );
     static bool RemoveHandler( const wxString& name );
-    static wxString GetImageExtWildcard();
-
+    
+    DocDeclStr(
+        static wxString , GetImageExtWildcard(),
+        "Iterates all registered wxImageHandler objects, and returns a string
+containing file extension masks suitable for passing to file open/save
+dialog boxes.", "");
+    
+    
 
 MustHaveApp(ConvertToBitmap);
 MustHaveApp(ConvertToMonoBitmap);
@@ -540,9 +879,9 @@ MustHaveApp(ConvertToMonoBitmap);
             return bitmap;
         }
 
-        wxBitmap ConvertToMonoBitmap( unsigned char red,
-                                      unsigned char green,
-                                      unsigned char blue ) {
+        wxBitmap ConvertToMonoBitmap( byte red,
+                                      byte green,
+                                      byte blue ) {
             wxImage mono = self->ConvertToMono( red, green, blue );
             wxBitmap bitmap( mono, 1 );
             return bitmap;
