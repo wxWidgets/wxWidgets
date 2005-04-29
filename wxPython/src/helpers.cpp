@@ -451,6 +451,11 @@ void wxPyApp::_BootstrapApp()
         wxPyEndBlockThreads(blocked);
         haveInitialized = true;
     }
+    else {
+        this->argc = 0;
+        this->argv = NULL;
+    }
+    
 
     // It's now ok to generate exceptions for assertion errors.
     wxPythonApp->SetStartupComplete(true);
