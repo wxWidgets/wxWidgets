@@ -1603,7 +1603,7 @@ void  wxDC::Clear(void)
 #if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_4
                     if ( HIThemeSetFill != 0 )
                     {
-                        HIThemeSetFill( m_backgroundBrush.MacGetTheme() , cg ) ;
+                        HIThemeSetFill( m_backgroundBrush.MacGetTheme() , NULL , cg , kHIThemeOrientationNormal ) ;
                         CGContextFillRect(cg, rect);
 
                     }
