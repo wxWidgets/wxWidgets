@@ -28,9 +28,9 @@
 #else
 #include "wx/mac/uma.h"
 #include <Carbon/Carbon.h>
+#include <WebKit/WebKit.h>
 #include <WebKit/HIWebView.h>
 #include <WebKit/CarbonUtils.h>
-#include <WebKit/WebKit.h>
 #endif
 
 #include "wx/html/webkit.h"
@@ -156,6 +156,10 @@ bool wxWebKitCtrl::Create(wxWindow *parent,
     MacPostControlCreate(pos, size);
     HIViewSetVisible( m_peer->GetControlRef(), true );
     [m_webView setHidden:false];
+#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_3
+	if ( UMAGetSystemVersion() >= 0x1030 )
+    HIViewChangeFeatures( m_peer->GetControlRef() , kHIViewIsOpaque , 0 ) ;
+#endif
 #endif
 
     // Register event listener interfaces
