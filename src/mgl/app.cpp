@@ -280,19 +280,22 @@ bool wxApp::Initialize(int& argc, wxChar **argv)
     wxSetEnv(wxT("LFN"), wxT("N"));
 #endif
 
+    // intialize MGL before creating wxFontsManager since it uses MGL funcs
+    if ( MGL_init(".", NULL) == 0 )
+    {
+        wxLogError(_("Cannot initialize SciTech MGL!"));
+        return false;
+    }
+
     // must do it before calling wxAppBase::Initialize(), because fonts are
     // needed by stock lists which are created there
     wxTheFontsManager = new wxFontsManager;
 
     if ( !wxAppBase::Initialize(argc, argv) )
-        return false;
-
-    if ( MGL_init(".", NULL) == 0 )
     {
-        wxLogError(_("Cannot initialize SciTech MGL!"));
-
-        wxAppBase::CleanUp();
-
+        delete wxTheFontsManager;
+        wxTheFontsManager = NULL;
+        MGL_exit();
         return false;
     }
 
