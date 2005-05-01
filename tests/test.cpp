@@ -27,6 +27,7 @@ using CppUnit::Test;
 using CppUnit::TestSuite;
 using CppUnit::TestFactoryRegistry;
 using CppUnit::TextUi::TestRunner;
+using CppUnit::CompilerOutputter;
 
 using std::string;
 using std::vector;
@@ -130,6 +131,8 @@ int TestApp::OnRun()
         else
             runner.addTest(test.release());
     }
+
+    runner.setOutputter(new CompilerOutputter(&runner.result(), cout));
 
 #if wxUSE_LOG
     // Switch off logging unless --verbose
