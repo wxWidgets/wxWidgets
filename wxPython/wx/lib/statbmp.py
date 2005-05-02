@@ -74,7 +74,8 @@ class GenStaticBitmap(wx.PyControl):
 
     def OnPaint(self, event):
         dc = wx.PaintDC(self)
-        dc.DrawBitmap(self._bitmap, 0, 0, True)
+        if self._bitmap:
+            dc.DrawBitmap(self._bitmap, 0, 0, True)
         
 
     def OnEraseBackground(self, event):
