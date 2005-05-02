@@ -189,8 +189,8 @@ void wxPathList::AddEnvList (const wxString& envVariable)
         wxT(" :;");
 #endif
 
-    wxChar *val = wxGetenv (WXSTRINGCAST envVariable);
-    if (val && *val)
+    wxString val ;    
+    if (wxGetEnv (WXSTRINGCAST envVariable, &val))
     {
         wxChar *s = MYcopystring (val);
         wxChar *save_ptr, *token = wxStrtok (s, PATH_TOKS, &save_ptr);
