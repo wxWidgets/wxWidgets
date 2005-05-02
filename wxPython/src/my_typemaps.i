@@ -374,7 +374,7 @@ MAKE_INT_ARRAY_TYPEMAPS(styles, styles_field)
 %typemap(out) wxDialog*                 { $result = wxPyMake_wxObject($1, $owner); }
 %typemap(out) wxScrolledWindow*         { $result = wxPyMake_wxObject($1, $owner); }
 
-%typemap(out) wxSizer*                  { $result = wxPyMake_wxSizer($1, $owner); }
+%typemap(out) wxSizer*                  { $result = wxPyMake_wxObject($1, $owner); }
 
 
 //---------------------------------------------------------------------------

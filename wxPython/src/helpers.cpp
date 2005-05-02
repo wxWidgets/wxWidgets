@@ -1001,6 +1001,7 @@ void wxPyPtrTypeMap_Add(const char* commonName, const char* ptrName) {
 PyObject*  wxPyMake_wxObject(wxObject* source, bool setThisOwn, bool checkEvtHandler) {
     PyObject* target = NULL;
     bool      isEvtHandler = false;
+    bool      isSizer = false;
 
     if (source) {
         // If it's derived from wxEvtHandler then there may
@@ -1017,6 +1018,18 @@ PyObject*  wxPyMake_wxObject(wxObject* source, bool setThisOwn, bool checkEvtHan
             }
         }
 
+        // Also check for wxSizer
+        if (!target && wxIsKindOf(source, wxSizer)) {
+            isSizer = true;
+            wxSizer* sz = (wxSizer*)source;
+            wxPyOORClientData* data = (wxPyOORClientData*)sz->GetClientObject();
+            if (data) {
+                target = data->m_obj;
+                if (target)
+                    Py_INCREF(target);
+            }
+        }
+        
         if (! target) {
             // Otherwise make it the old fashioned way by making a new shadow
             // object and putting this pointer in it.  Look up the class
@@ -1034,6 +1047,8 @@ PyObject*  wxPyMake_wxObject(wxObject* source, bool setThisOwn, bool checkEvtHan
                 target = wxPyConstructObject((void*)source, name, setThisOwn);
                 if (target && isEvtHandler)
                     ((wxEvtHandler*)source)->SetClientObject(new wxPyOORClientData(target));
+                if (target && isSizer)
+                    ((wxSizer*)source)->SetClientObject(new wxPyOORClientData(target));
             } else {
                 wxString msg(wxT("wxPython class not found for "));
                 msg += source->GetClassInfo()->GetClassName();
@@ -1049,25 +1064,8 @@ PyObject*  wxPyMake_wxObject(wxObject* source, bool setThisOwn, bool checkEvtHan
 
 
 PyObject*  wxPyMake_wxSizer(wxSizer* source, bool setThisOwn) {
-    PyObject* target = NULL;
 
-    if (source && wxIsKindOf(source, wxSizer)) {
-        // If it's derived from wxSizer then there may already be a pointer to
-        // a Python object that we can use in the OOR data.
-        wxSizer* sz = (wxSizer*)source;
-        wxPyOORClientData* data = (wxPyOORClientData*)sz->GetClientObject();
-        if (data) {
-            target = data->m_obj;
-            if (target)
-                Py_INCREF(target);
-        }
-    }
-    if (! target) {
-        target = wxPyMake_wxObject(source, setThisOwn, false);
-        if (target != Py_None)
-            ((wxSizer*)source)->SetClientObject(new wxPyOORClientData(target));
-    }
-    return target;
+    return wxPyMake_wxObject(source, setThisOwn);
 }
 
 
@@ -1187,7 +1185,7 @@ wxPyBlock_t wxPyBeginBlockThreads() {
     return blocked;
 #endif
 #else
-    return false;
+    return (wxPyBlock_t)0;
 #endif
 }
 
