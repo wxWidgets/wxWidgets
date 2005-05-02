@@ -47,6 +47,7 @@
     #include "wx/msgdlg.h"
     #include "wx/settings.h"
     #include "wx/statbox.h"
+    #include "wx/sizer.h"
 #endif
 
 #if wxUSE_OWNER_DRAWN && !defined(__WXUNIVERSAL__)
