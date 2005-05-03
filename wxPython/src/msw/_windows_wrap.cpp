@@ -5932,7 +5932,7 @@ static PyObject *_wrap_Dialog_CreateTextSizer(PyObject *, PyObject *args, PyObje
         if (PyErr_Occurred()) SWIG_fail;
     }
     {
-        resultobj = wxPyMake_wxSizer(result, 0); 
+        resultobj = wxPyMake_wxObject(result, 0); 
     }
     {
         if (temp2)
@@ -5974,7 +5974,7 @@ static PyObject *_wrap_Dialog_CreateButtonSizer(PyObject *, PyObject *args, PyOb
         if (PyErr_Occurred()) SWIG_fail;
     }
     {
-        resultobj = wxPyMake_wxSizer(result, 0); 
+        resultobj = wxPyMake_wxObject(result, 0); 
     }
     return resultobj;
     fail:

@@ -2328,7 +2328,7 @@ static unsigned long wxImageHistogram_GetCount(wxImageHistogram *self,unsigned l
             wxImageHistogramEntry e = (*self)[key];
             return e.value;
         }
-static unsigned long wxImageHistogram_GetCountRGB(wxImageHistogram *self,unsigned char r,unsigned char g,unsigned char b){
+static unsigned long wxImageHistogram_GetCountRGB(wxImageHistogram *self,byte r,byte g,byte b){
             unsigned long key = wxImageHistogram::MakeKey(r, g, b);
             wxImageHistogramEntry e = (*self)[key];
             return e.value;
@@ -2476,7 +2476,7 @@ static wxBitmap wxImage_ConvertToBitmap(wxImage *self,int depth=-1){
             wxBitmap bitmap(*self, depth);
             return bitmap;
         }
-static wxBitmap wxImage_ConvertToMonoBitmap(wxImage *self,unsigned char red,unsigned char green,unsigned char blue){
+static wxBitmap wxImage_ConvertToMonoBitmap(wxImage *self,byte red,byte green,byte blue){
             wxImage mono = self->ConvertToMono( red, green, blue );
             wxBitmap bitmap( mono, 1 );
             return bitmap;
@@ -10227,9 +10227,9 @@ static PyObject *_wrap_new_ImageHistogram(PyObject *, PyObject *args, PyObject *
 
 static PyObject *_wrap_ImageHistogram_MakeKey(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
-    unsigned char arg1 ;
-    unsigned char arg2 ;
-    unsigned char arg3 ;
+    byte arg1 ;
+    byte arg2 ;
+    byte arg3 ;
     unsigned long result;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
@@ -10240,15 +10240,15 @@ static PyObject *_wrap_ImageHistogram_MakeKey(PyObject *, PyObject *args, PyObje
     
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO:ImageHistogram_MakeKey",kwnames,&obj0,&obj1,&obj2)) goto fail;
     {
-        arg1 = (unsigned char)(SWIG_As_unsigned_SS_char(obj0)); 
+        arg1 = (byte)(SWIG_As_unsigned_SS_char(obj0)); 
         if (SWIG_arg_fail(1)) SWIG_fail;
     }
     {
-        arg2 = (unsigned char)(SWIG_As_unsigned_SS_char(obj1)); 
+        arg2 = (byte)(SWIG_As_unsigned_SS_char(obj1)); 
         if (SWIG_arg_fail(2)) SWIG_fail;
     }
     {
-        arg3 = (unsigned char)(SWIG_As_unsigned_SS_char(obj2)); 
+        arg3 = (byte)(SWIG_As_unsigned_SS_char(obj2)); 
         if (SWIG_arg_fail(3)) SWIG_fail;
     }
     {
@@ -10270,18 +10270,18 @@ static PyObject *_wrap_ImageHistogram_MakeKey(PyObject *, PyObject *args, PyObje
 static PyObject *_wrap_ImageHistogram_FindFirstUnusedColour(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxImageHistogram *arg1 = (wxImageHistogram *) 0 ;
-    unsigned char *arg2 = (unsigned char *) 0 ;
-    unsigned char *arg3 = (unsigned char *) 0 ;
-    unsigned char *arg4 = (unsigned char *) 0 ;
-    unsigned char arg5 = (unsigned char) 1 ;
-    unsigned char arg6 = (unsigned char) 0 ;
-    unsigned char arg7 = (unsigned char) 0 ;
+    byte *arg2 = (byte *) 0 ;
+    byte *arg3 = (byte *) 0 ;
+    byte *arg4 = (byte *) 0 ;
+    byte arg5 = (byte) 1 ;
+    byte arg6 = (byte) 0 ;
+    byte arg7 = (byte) 0 ;
     bool result;
-    unsigned char temp2 ;
+    byte temp2 ;
     int res2 = 0 ;
-    unsigned char temp3 ;
+    byte temp3 ;
     int res3 = 0 ;
-    unsigned char temp4 ;
+    byte temp4 ;
     int res4 = 0 ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
@@ -10299,19 +10299,19 @@ static PyObject *_wrap_ImageHistogram_FindFirstUnusedColour(PyObject *, PyObject
     if (SWIG_arg_fail(1)) SWIG_fail;
     if (obj1) {
         {
-            arg5 = (unsigned char)(SWIG_As_unsigned_SS_char(obj1)); 
+            arg5 = (byte)(SWIG_As_unsigned_SS_char(obj1)); 
             if (SWIG_arg_fail(5)) SWIG_fail;
         }
     }
     if (obj2) {
         {
-            arg6 = (unsigned char)(SWIG_As_unsigned_SS_char(obj2)); 
+            arg6 = (byte)(SWIG_As_unsigned_SS_char(obj2)); 
             if (SWIG_arg_fail(6)) SWIG_fail;
         }
     }
     if (obj3) {
         {
-            arg7 = (unsigned char)(SWIG_As_unsigned_SS_char(obj3)); 
+            arg7 = (byte)(SWIG_As_unsigned_SS_char(obj3)); 
             if (SWIG_arg_fail(7)) SWIG_fail;
         }
     }
@@ -10374,9 +10374,9 @@ static PyObject *_wrap_ImageHistogram_GetCount(PyObject *, PyObject *args, PyObj
 static PyObject *_wrap_ImageHistogram_GetCountRGB(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxImageHistogram *arg1 = (wxImageHistogram *) 0 ;
-    unsigned char arg2 ;
-    unsigned char arg3 ;
-    unsigned char arg4 ;
+    byte arg2 ;
+    byte arg3 ;
+    byte arg4 ;
     unsigned long result;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
@@ -10390,15 +10390,15 @@ static PyObject *_wrap_ImageHistogram_GetCountRGB(PyObject *, PyObject *args, Py
     SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxImageHistogram, SWIG_POINTER_EXCEPTION | 0);
     if (SWIG_arg_fail(1)) SWIG_fail;
     {
-        arg2 = (unsigned char)(SWIG_As_unsigned_SS_char(obj1)); 
+        arg2 = (byte)(SWIG_As_unsigned_SS_char(obj1)); 
         if (SWIG_arg_fail(2)) SWIG_fail;
     }
     {
-        arg3 = (unsigned char)(SWIG_As_unsigned_SS_char(obj2)); 
+        arg3 = (byte)(SWIG_As_unsigned_SS_char(obj2)); 
         if (SWIG_arg_fail(3)) SWIG_fail;
     }
     {
-        arg4 = (unsigned char)(SWIG_As_unsigned_SS_char(obj3)); 
+        arg4 = (byte)(SWIG_As_unsigned_SS_char(obj3)); 
         if (SWIG_arg_fail(4)) SWIG_fail;
     }
     {
@@ -10902,14 +10902,16 @@ static PyObject *_wrap_Image_Create(PyObject *, PyObject *args, PyObject *kwargs
     wxImage *arg1 = (wxImage *) 0 ;
     int arg2 ;
     int arg3 ;
+    bool arg4 = (bool) true ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     PyObject * obj2 = 0 ;
+    PyObject * obj3 = 0 ;
     char *kwnames[] = {
-        (char *) "self",(char *) "width",(char *) "height", NULL 
+        (char *) "self",(char *) "width",(char *) "height",(char *) "clear", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO:Image_Create",kwnames,&obj0,&obj1,&obj2)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO|O:Image_Create",kwnames,&obj0,&obj1,&obj2,&obj3)) goto fail;
     SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxImage, SWIG_POINTER_EXCEPTION | 0);
     if (SWIG_arg_fail(1)) SWIG_fail;
     {
@@ -10920,9 +10922,15 @@ static PyObject *_wrap_Image_Create(PyObject *, PyObject *args, PyObject *kwargs
         arg3 = (int)(SWIG_As_int(obj2)); 
         if (SWIG_arg_fail(3)) SWIG_fail;
     }
+    if (obj3) {
+        {
+            arg4 = (bool)(SWIG_As_bool(obj3)); 
+            if (SWIG_arg_fail(4)) SWIG_fail;
+        }
+    }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
-        (arg1)->Create(arg2,arg3);
+        (arg1)->Create(arg2,arg3,arg4);
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
@@ -11156,9 +11164,9 @@ static PyObject *_wrap_Image_SetRGB(PyObject *, PyObject *args, PyObject *kwargs
     wxImage *arg1 = (wxImage *) 0 ;
     int arg2 ;
     int arg3 ;
-    unsigned char arg4 ;
-    unsigned char arg5 ;
-    unsigned char arg6 ;
+    byte arg4 ;
+    byte arg5 ;
+    byte arg6 ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     PyObject * obj2 = 0 ;
@@ -11181,15 +11189,15 @@ static PyObject *_wrap_Image_SetRGB(PyObject *, PyObject *args, PyObject *kwargs
         if (SWIG_arg_fail(3)) SWIG_fail;
     }
     {
-        arg4 = (unsigned char)(SWIG_As_unsigned_SS_char(obj3)); 
+        arg4 = (byte)(SWIG_As_unsigned_SS_char(obj3)); 
         if (SWIG_arg_fail(4)) SWIG_fail;
     }
     {
-        arg5 = (unsigned char)(SWIG_As_unsigned_SS_char(obj4)); 
+        arg5 = (byte)(SWIG_As_unsigned_SS_char(obj4)); 
         if (SWIG_arg_fail(5)) SWIG_fail;
     }
     {
-        arg6 = (unsigned char)(SWIG_As_unsigned_SS_char(obj5)); 
+        arg6 = (byte)(SWIG_As_unsigned_SS_char(obj5)); 
         if (SWIG_arg_fail(6)) SWIG_fail;
     }
     {
@@ -11210,9 +11218,9 @@ static PyObject *_wrap_Image_SetRGBRect(PyObject *, PyObject *args, PyObject *kw
     PyObject *resultobj;
     wxImage *arg1 = (wxImage *) 0 ;
     wxRect *arg2 = 0 ;
-    unsigned char arg3 ;
-    unsigned char arg4 ;
-    unsigned char arg5 ;
+    byte arg3 ;
+    byte arg4 ;
+    byte arg5 ;
     wxRect temp2 ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
@@ -11231,15 +11239,15 @@ static PyObject *_wrap_Image_SetRGBRect(PyObject *, PyObject *args, PyObject *kw
         if ( ! wxRect_helper(obj1, &arg2)) SWIG_fail;
     }
     {
-        arg3 = (unsigned char)(SWIG_As_unsigned_SS_char(obj2)); 
+        arg3 = (byte)(SWIG_As_unsigned_SS_char(obj2)); 
         if (SWIG_arg_fail(3)) SWIG_fail;
     }
     {
-        arg4 = (unsigned char)(SWIG_As_unsigned_SS_char(obj3)); 
+        arg4 = (byte)(SWIG_As_unsigned_SS_char(obj3)); 
         if (SWIG_arg_fail(4)) SWIG_fail;
     }
     {
-        arg5 = (unsigned char)(SWIG_As_unsigned_SS_char(obj4)); 
+        arg5 = (byte)(SWIG_As_unsigned_SS_char(obj4)); 
         if (SWIG_arg_fail(5)) SWIG_fail;
     }
     {
@@ -11261,7 +11269,7 @@ static PyObject *_wrap_Image_GetRed(PyObject *, PyObject *args, PyObject *kwargs
     wxImage *arg1 = (wxImage *) 0 ;
     int arg2 ;
     int arg3 ;
-    unsigned char result;
+    byte result;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     PyObject * obj2 = 0 ;
@@ -11282,7 +11290,7 @@ static PyObject *_wrap_Image_GetRed(PyObject *, PyObject *args, PyObject *kwargs
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
-        result = (unsigned char)(arg1)->GetRed(arg2,arg3);
+        result = (byte)(arg1)->GetRed(arg2,arg3);
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
@@ -11301,7 +11309,7 @@ static PyObject *_wrap_Image_GetGreen(PyObject *, PyObject *args, PyObject *kwar
     wxImage *arg1 = (wxImage *) 0 ;
     int arg2 ;
     int arg3 ;
-    unsigned char result;
+    byte result;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     PyObject * obj2 = 0 ;
@@ -11322,7 +11330,7 @@ static PyObject *_wrap_Image_GetGreen(PyObject *, PyObject *args, PyObject *kwar
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
-        result = (unsigned char)(arg1)->GetGreen(arg2,arg3);
+        result = (byte)(arg1)->GetGreen(arg2,arg3);
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
@@ -11341,7 +11349,7 @@ static PyObject *_wrap_Image_GetBlue(PyObject *, PyObject *args, PyObject *kwarg
     wxImage *arg1 = (wxImage *) 0 ;
     int arg2 ;
     int arg3 ;
-    unsigned char result;
+    byte result;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     PyObject * obj2 = 0 ;
@@ -11362,7 +11370,7 @@ static PyObject *_wrap_Image_GetBlue(PyObject *, PyObject *args, PyObject *kwarg
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
-        result = (unsigned char)(arg1)->GetBlue(arg2,arg3);
+        result = (byte)(arg1)->GetBlue(arg2,arg3);
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
@@ -11381,7 +11389,7 @@ static PyObject *_wrap_Image_SetAlpha(PyObject *, PyObject *args, PyObject *kwar
     wxImage *arg1 = (wxImage *) 0 ;
     int arg2 ;
     int arg3 ;
-    unsigned char arg4 ;
+    byte arg4 ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     PyObject * obj2 = 0 ;
@@ -11402,7 +11410,7 @@ static PyObject *_wrap_Image_SetAlpha(PyObject *, PyObject *args, PyObject *kwar
         if (SWIG_arg_fail(3)) SWIG_fail;
     }
     {
-        arg4 = (unsigned char)(SWIG_As_unsigned_SS_char(obj3)); 
+        arg4 = (byte)(SWIG_As_unsigned_SS_char(obj3)); 
         if (SWIG_arg_fail(4)) SWIG_fail;
     }
     {
@@ -11424,7 +11432,7 @@ static PyObject *_wrap_Image_GetAlpha(PyObject *, PyObject *args, PyObject *kwar
     wxImage *arg1 = (wxImage *) 0 ;
     int arg2 ;
     int arg3 ;
-    unsigned char result;
+    byte result;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     PyObject * obj2 = 0 ;
@@ -11445,7 +11453,7 @@ static PyObject *_wrap_Image_GetAlpha(PyObject *, PyObject *args, PyObject *kwar
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
-        result = (unsigned char)(arg1)->GetAlpha(arg2,arg3);
+        result = (byte)(arg1)->GetAlpha(arg2,arg3);
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
@@ -11517,7 +11525,7 @@ static PyObject *_wrap_Image_IsTransparent(PyObject *, PyObject *args, PyObject 
     wxImage *arg1 = (wxImage *) 0 ;
     int arg2 ;
     int arg3 ;
-    unsigned char arg4 = (unsigned char) wxIMAGE_ALPHA_THRESHOLD ;
+    byte arg4 = (byte) wxIMAGE_ALPHA_THRESHOLD ;
     bool result;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
@@ -11540,7 +11548,7 @@ static PyObject *_wrap_Image_IsTransparent(PyObject *, PyObject *args, PyObject 
     }
     if (obj3) {
         {
-            arg4 = (unsigned char)(SWIG_As_unsigned_SS_char(obj3)); 
+            arg4 = (byte)(SWIG_As_unsigned_SS_char(obj3)); 
             if (SWIG_arg_fail(4)) SWIG_fail;
         }
     }
@@ -11669,9 +11677,9 @@ static PyObject *_wrap_Image_ConvertAlphaToMask(PyObject *, PyObject *args, PyOb
 static PyObject *_wrap_Image_ConvertColourToAlpha(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxImage *arg1 = (wxImage *) 0 ;
-    unsigned char arg2 ;
-    unsigned char arg3 ;
-    unsigned char arg4 ;
+    byte arg2 ;
+    byte arg3 ;
+    byte arg4 ;
     bool result;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
@@ -11685,15 +11693,15 @@ static PyObject *_wrap_Image_ConvertColourToAlpha(PyObject *, PyObject *args, Py
     SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxImage, SWIG_POINTER_EXCEPTION | 0);
     if (SWIG_arg_fail(1)) SWIG_fail;
     {
-        arg2 = (unsigned char)(SWIG_As_unsigned_SS_char(obj1)); 
+        arg2 = (byte)(SWIG_As_unsigned_SS_char(obj1)); 
         if (SWIG_arg_fail(2)) SWIG_fail;
     }
     {
-        arg3 = (unsigned char)(SWIG_As_unsigned_SS_char(obj2)); 
+        arg3 = (byte)(SWIG_As_unsigned_SS_char(obj2)); 
         if (SWIG_arg_fail(3)) SWIG_fail;
     }
     {
-        arg4 = (unsigned char)(SWIG_As_unsigned_SS_char(obj3)); 
+        arg4 = (byte)(SWIG_As_unsigned_SS_char(obj3)); 
         if (SWIG_arg_fail(4)) SWIG_fail;
     }
     {
@@ -11775,7 +11783,7 @@ static PyObject *_wrap_Image_CanRead(PyObject *, PyObject *args, PyObject *kwarg
     bool temp1 = false ;
     PyObject * obj0 = 0 ;
     char *kwnames[] = {
-        (char *) "name", NULL 
+        (char *) "filename", NULL 
     };
     
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:Image_CanRead",kwnames,&obj0)) goto fail;
@@ -11817,7 +11825,7 @@ static PyObject *_wrap_Image_GetImageCount(PyObject *, PyObject *args, PyObject 
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     char *kwnames[] = {
-        (char *) "name",(char *) "type", NULL 
+        (char *) "filename",(char *) "type", NULL 
     };
     
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O|O:Image_GetImageCount",kwnames,&obj0,&obj1)) goto fail;
@@ -12813,9 +12821,9 @@ static PyObject *_wrap_Image_SetAlphaBuffer(PyObject *, PyObject *args, PyObject
 static PyObject *_wrap_Image_SetMaskColour(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxImage *arg1 = (wxImage *) 0 ;
-    unsigned char arg2 ;
-    unsigned char arg3 ;
-    unsigned char arg4 ;
+    byte arg2 ;
+    byte arg3 ;
+    byte arg4 ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     PyObject * obj2 = 0 ;
@@ -12828,15 +12836,15 @@ static PyObject *_wrap_Image_SetMaskColour(PyObject *, PyObject *args, PyObject 
     SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxImage, SWIG_POINTER_EXCEPTION | 0);
     if (SWIG_arg_fail(1)) SWIG_fail;
     {
-        arg2 = (unsigned char)(SWIG_As_unsigned_SS_char(obj1)); 
+        arg2 = (byte)(SWIG_As_unsigned_SS_char(obj1)); 
         if (SWIG_arg_fail(2)) SWIG_fail;
     }
     {
-        arg3 = (unsigned char)(SWIG_As_unsigned_SS_char(obj2)); 
+        arg3 = (byte)(SWIG_As_unsigned_SS_char(obj2)); 
         if (SWIG_arg_fail(3)) SWIG_fail;
     }
     {
-        arg4 = (unsigned char)(SWIG_As_unsigned_SS_char(obj3)); 
+        arg4 = (byte)(SWIG_As_unsigned_SS_char(obj3)); 
         if (SWIG_arg_fail(4)) SWIG_fail;
     }
     {
@@ -12856,14 +12864,14 @@ static PyObject *_wrap_Image_SetMaskColour(PyObject *, PyObject *args, PyObject 
 static PyObject *_wrap_Image_GetOrFindMaskColour(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxImage *arg1 = (wxImage *) 0 ;
-    unsigned char *arg2 = (unsigned char *) 0 ;
-    unsigned char *arg3 = (unsigned char *) 0 ;
-    unsigned char *arg4 = (unsigned char *) 0 ;
-    unsigned char temp2 ;
+    byte *arg2 = (byte *) 0 ;
+    byte *arg3 = (byte *) 0 ;
+    byte *arg4 = (byte *) 0 ;
+    byte temp2 ;
     int res2 = 0 ;
-    unsigned char temp3 ;
+    byte temp3 ;
     int res3 = 0 ;
-    unsigned char temp4 ;
+    byte temp4 ;
     int res4 = 0 ;
     PyObject * obj0 = 0 ;
     char *kwnames[] = {
@@ -12899,7 +12907,7 @@ static PyObject *_wrap_Image_GetOrFindMaskColour(PyObject *, PyObject *args, PyO
 static PyObject *_wrap_Image_GetMaskRed(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxImage *arg1 = (wxImage *) 0 ;
-    unsigned char result;
+    byte result;
     PyObject * obj0 = 0 ;
     char *kwnames[] = {
         (char *) "self", NULL 
@@ -12910,7 +12918,7 @@ static PyObject *_wrap_Image_GetMaskRed(PyObject *, PyObject *args, PyObject *kw
     if (SWIG_arg_fail(1)) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
-        result = (unsigned char)(arg1)->GetMaskRed();
+        result = (byte)(arg1)->GetMaskRed();
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
@@ -12927,7 +12935,7 @@ static PyObject *_wrap_Image_GetMaskRed(PyObject *, PyObject *args, PyObject *kw
 static PyObject *_wrap_Image_GetMaskGreen(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxImage *arg1 = (wxImage *) 0 ;
-    unsigned char result;
+    byte result;
     PyObject * obj0 = 0 ;
     char *kwnames[] = {
         (char *) "self", NULL 
@@ -12938,7 +12946,7 @@ static PyObject *_wrap_Image_GetMaskGreen(PyObject *, PyObject *args, PyObject *
     if (SWIG_arg_fail(1)) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
-        result = (unsigned char)(arg1)->GetMaskGreen();
+        result = (byte)(arg1)->GetMaskGreen();
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
@@ -12955,7 +12963,7 @@ static PyObject *_wrap_Image_GetMaskGreen(PyObject *, PyObject *args, PyObject *
 static PyObject *_wrap_Image_GetMaskBlue(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxImage *arg1 = (wxImage *) 0 ;
-    unsigned char result;
+    byte result;
     PyObject * obj0 = 0 ;
     char *kwnames[] = {
         (char *) "self", NULL 
@@ -12966,7 +12974,7 @@ static PyObject *_wrap_Image_GetMaskBlue(PyObject *, PyObject *args, PyObject *k
     if (SWIG_arg_fail(1)) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
-        result = (unsigned char)(arg1)->GetMaskBlue();
+        result = (byte)(arg1)->GetMaskBlue();
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
@@ -13177,12 +13185,12 @@ static PyObject *_wrap_Image_Mirror(PyObject *, PyObject *args, PyObject *kwargs
 static PyObject *_wrap_Image_Replace(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxImage *arg1 = (wxImage *) 0 ;
-    unsigned char arg2 ;
-    unsigned char arg3 ;
-    unsigned char arg4 ;
-    unsigned char arg5 ;
-    unsigned char arg6 ;
-    unsigned char arg7 ;
+    byte arg2 ;
+    byte arg3 ;
+    byte arg4 ;
+    byte arg5 ;
+    byte arg6 ;
+    byte arg7 ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     PyObject * obj2 = 0 ;
@@ -13198,27 +13206,27 @@ static PyObject *_wrap_Image_Replace(PyObject *, PyObject *args, PyObject *kwarg
     SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxImage, SWIG_POINTER_EXCEPTION | 0);
     if (SWIG_arg_fail(1)) SWIG_fail;
     {
-        arg2 = (unsigned char)(SWIG_As_unsigned_SS_char(obj1)); 
+        arg2 = (byte)(SWIG_As_unsigned_SS_char(obj1)); 
         if (SWIG_arg_fail(2)) SWIG_fail;
     }
     {
-        arg3 = (unsigned char)(SWIG_As_unsigned_SS_char(obj2)); 
+        arg3 = (byte)(SWIG_As_unsigned_SS_char(obj2)); 
         if (SWIG_arg_fail(3)) SWIG_fail;
     }
     {
-        arg4 = (unsigned char)(SWIG_As_unsigned_SS_char(obj3)); 
+        arg4 = (byte)(SWIG_As_unsigned_SS_char(obj3)); 
         if (SWIG_arg_fail(4)) SWIG_fail;
     }
     {
-        arg5 = (unsigned char)(SWIG_As_unsigned_SS_char(obj4)); 
+        arg5 = (byte)(SWIG_As_unsigned_SS_char(obj4)); 
         if (SWIG_arg_fail(5)) SWIG_fail;
     }
     {
-        arg6 = (unsigned char)(SWIG_As_unsigned_SS_char(obj5)); 
+        arg6 = (byte)(SWIG_As_unsigned_SS_char(obj5)); 
         if (SWIG_arg_fail(6)) SWIG_fail;
     }
     {
-        arg7 = (unsigned char)(SWIG_As_unsigned_SS_char(obj6)); 
+        arg7 = (byte)(SWIG_As_unsigned_SS_char(obj6)); 
         if (SWIG_arg_fail(7)) SWIG_fail;
     }
     {
@@ -13238,9 +13246,9 @@ static PyObject *_wrap_Image_Replace(PyObject *, PyObject *args, PyObject *kwarg
 static PyObject *_wrap_Image_ConvertToMono(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxImage *arg1 = (wxImage *) 0 ;
-    unsigned char arg2 ;
-    unsigned char arg3 ;
-    unsigned char arg4 ;
+    byte arg2 ;
+    byte arg3 ;
+    byte arg4 ;
     SwigValueWrapper<wxImage > result;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
@@ -13254,15 +13262,15 @@ static PyObject *_wrap_Image_ConvertToMono(PyObject *, PyObject *args, PyObject 
     SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxImage, SWIG_POINTER_EXCEPTION | 0);
     if (SWIG_arg_fail(1)) SWIG_fail;
     {
-        arg2 = (unsigned char)(SWIG_As_unsigned_SS_char(obj1)); 
+        arg2 = (byte)(SWIG_As_unsigned_SS_char(obj1)); 
         if (SWIG_arg_fail(2)) SWIG_fail;
     }
     {
-        arg3 = (unsigned char)(SWIG_As_unsigned_SS_char(obj2)); 
+        arg3 = (byte)(SWIG_As_unsigned_SS_char(obj2)); 
         if (SWIG_arg_fail(3)) SWIG_fail;
     }
     {
-        arg4 = (unsigned char)(SWIG_As_unsigned_SS_char(obj3)); 
+        arg4 = (byte)(SWIG_As_unsigned_SS_char(obj3)); 
         if (SWIG_arg_fail(4)) SWIG_fail;
     }
     {
@@ -13757,9 +13765,9 @@ static PyObject *_wrap_Image_ConvertToBitmap(PyObject *, PyObject *args, PyObjec
 static PyObject *_wrap_Image_ConvertToMonoBitmap(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxImage *arg1 = (wxImage *) 0 ;
-    unsigned char arg2 ;
-    unsigned char arg3 ;
-    unsigned char arg4 ;
+    byte arg2 ;
+    byte arg3 ;
+    byte arg4 ;
     wxBitmap result;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
@@ -13773,15 +13781,15 @@ static PyObject *_wrap_Image_ConvertToMonoBitmap(PyObject *, PyObject *args, PyO
     SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxImage, SWIG_POINTER_EXCEPTION | 0);
     if (SWIG_arg_fail(1)) SWIG_fail;
     {
-        arg2 = (unsigned char)(SWIG_As_unsigned_SS_char(obj1)); 
+        arg2 = (byte)(SWIG_As_unsigned_SS_char(obj1)); 
         if (SWIG_arg_fail(2)) SWIG_fail;
     }
     {
-        arg3 = (unsigned char)(SWIG_As_unsigned_SS_char(obj2)); 
+        arg3 = (byte)(SWIG_As_unsigned_SS_char(obj2)); 
         if (SWIG_arg_fail(3)) SWIG_fail;
     }
     {
-        arg4 = (unsigned char)(SWIG_As_unsigned_SS_char(obj3)); 
+        arg4 = (byte)(SWIG_As_unsigned_SS_char(obj3)); 
         if (SWIG_arg_fail(4)) SWIG_fail;
     }
     {
@@ -32016,7 +32024,7 @@ static PyObject *_wrap_Window_GetSizer(PyObject *, PyObject *args, PyObject *kwa
         if (PyErr_Occurred()) SWIG_fail;
     }
     {
-        resultobj = wxPyMake_wxSizer(result, 0); 
+        resultobj = wxPyMake_wxObject(result, 0); 
     }
     return resultobj;
     fail:
@@ -32073,7 +32081,7 @@ static PyObject *_wrap_Window_GetContainingSizer(PyObject *, PyObject *args, PyO
         if (PyErr_Occurred()) SWIG_fail;
     }
     {
-        resultobj = wxPyMake_wxSizer(result, 0); 
+        resultobj = wxPyMake_wxObject(result, 0); 
     }
     return resultobj;
     fail:
@@ -35496,7 +35504,7 @@ static PyObject *_wrap_MenuBar_FindMenu(PyObject *, PyObject *args, PyObject *kw
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
-        result = (int)((wxMenuBar const *)arg1)->FindMenu((wxString const &)*arg2);
+        result = (int)(arg1)->FindMenu((wxString const &)*arg2);
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
@@ -39350,7 +39358,7 @@ static PyObject *_wrap_SizerItem_GetSizer(PyObject *, PyObject *args, PyObject *
         if (PyErr_Occurred()) SWIG_fail;
     }
     {
-        resultobj = wxPyMake_wxSizer(result, 0); 
+        resultobj = wxPyMake_wxObject(result, 0); 
     }
     return resultobj;
     fail:
@@ -47270,7 +47278,7 @@ static swig_type_info _swigt__unsigned_int[] = {{"_unsigned_int", 0, "unsigned i
 static swig_type_info _swigt__p_unsigned_int[] = {{"_p_unsigned_int", 0, "unsigned int *|time_t *", 0, 0, 0, 0},{"_p_unsigned_int", 0, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
 static swig_type_info _swigt__p_wxMenuEvent[] = {{"_p_wxMenuEvent", 0, "wxMenuEvent *", 0, 0, 0, 0},{"_p_wxMenuEvent", 0, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
 static swig_type_info _swigt__p_wxContextMenuEvent[] = {{"_p_wxContextMenuEvent", 0, "wxContextMenuEvent *", 0, 0, 0, 0},{"_p_wxContextMenuEvent", 0, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
-static swig_type_info _swigt__p_unsigned_char[] = {{"_p_unsigned_char", 0, "unsigned char *", 0, 0, 0, 0},{"_p_unsigned_char", 0, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
+static swig_type_info _swigt__p_unsigned_char[] = {{"_p_unsigned_char", 0, "unsigned char *|byte *", 0, 0, 0, 0},{"_p_unsigned_char", 0, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
 static swig_type_info _swigt__p_wxEraseEvent[] = {{"_p_wxEraseEvent", 0, "wxEraseEvent *", 0, 0, 0, 0},{"_p_wxEraseEvent", 0, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
 static swig_type_info _swigt__p_wxMouseEvent[] = {{"_p_wxMouseEvent", 0, "wxMouseEvent *", 0, 0, 0, 0},{"_p_wxMouseEvent", 0, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
 static swig_type_info _swigt__p_wxCloseEvent[] = {{"_p_wxCloseEvent", 0, "wxCloseEvent *", 0, 0, 0, 0},{"_p_wxCloseEvent", 0, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};

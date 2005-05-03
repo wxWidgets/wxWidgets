@@ -2107,7 +2107,7 @@ class ImageHistogram(object):
         del newobj.thisown
     def MakeKey(*args, **kwargs):
         """
-        MakeKey(unsigned char r, unsigned char g, unsigned char b) -> unsigned long
+        MakeKey(byte r, byte g, byte b) -> unsigned long
 
         Get the key in the histogram for the given RGB values
         """
@@ -2135,7 +2135,7 @@ class ImageHistogram(object):
 
     def GetCountRGB(*args, **kwargs):
         """
-        GetCountRGB(self, unsigned char r, unsigned char g, unsigned char b) -> unsigned long
+        GetCountRGB(self, byte r, byte g, byte b) -> unsigned long
 
         Returns the pixel count for the given RGB values.
         """
@@ -2159,18 +2159,47 @@ _core_.ImageHistogram_swigregister(ImageHistogramPtr)
 
 def ImageHistogram_MakeKey(*args, **kwargs):
     """
-    ImageHistogram_MakeKey(unsigned char r, unsigned char g, unsigned char b) -> unsigned long
+    ImageHistogram_MakeKey(byte r, byte g, byte b) -> unsigned long
 
     Get the key in the histogram for the given RGB values
     """
     return _core_.ImageHistogram_MakeKey(*args, **kwargs)
 
 class Image(Object):
-    """Proxy of C++ Image class"""
+    """
+    A platform-independent image class.  An image can be created from
+    data, or using `wx.Bitmap.ConvertToImage`, or loaded from a file in a
+    variety of formats.  Functions are available to set and get image
+    bits, so it can be used for basic image manipulation.
+
+    A wx.Image cannot be drawn directly to a `wx.DC`.  Instead, a
+    platform-specific `wx.Bitmap` object must be created from it using the
+    `wx.BitmapFromImage` constructor. This bitmap can then be drawn in a
+    device context, using `wx.DC.DrawBitmap`.
+
+    One colour value of the image may be used as a mask colour which will
+    lead to the automatic creation of a `wx.Mask` object associated to the
+    bitmap object.
+
+    wx.Image supports alpha channel data, that is in addition to a byte
+    for the red, green and blue colour components for each pixel it also
+    stores a byte representing the pixel opacity. An alpha value of 0
+    corresponds to a transparent pixel (null opacity) while a value of 255
+    means that the pixel is 100% opaque.
+
+    Unlike RGB data, not all images have an alpha channel and before using
+    `GetAlpha` you should check if this image contains an alpha channel
+    with `HasAlpha`. Note that currently only images loaded from PNG files
+    with transparency information will have an alpha channel.
+    """
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxImage instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
-        """__init__(self, String name, long type=BITMAP_TYPE_ANY, int index=-1) -> Image"""
+        """
+        __init__(self, String name, long type=BITMAP_TYPE_ANY, int index=-1) -> Image
+
+        Loads an image from a file.
+        """
         newobj = _core_.new_Image(*args, **kwargs)
         self.this = newobj.this
         self.thisown = 1
@@ -2182,63 +2211,143 @@ class Image(Object):
         except: pass
 
     def Create(*args, **kwargs):
-        """Create(self, int width, int height)"""
+        """
+        Create(self, int width, int height, bool clear=True)
+
+        Creates a fresh image.  If clear is ``True``, the new image will be
+        initialized to black. Otherwise, the image data will be uninitialized.
+        """
         return _core_.Image_Create(*args, **kwargs)
 
     def Destroy(*args, **kwargs):
         """
         Destroy(self)
 
-        Deletes the C++ object this Python object is a proxy for.
+        Destroys the image data.
         """
         return _core_.Image_Destroy(*args, **kwargs)
 
     def Scale(*args, **kwargs):
-        """Scale(self, int width, int height) -> Image"""
+        """
+        Scale(self, int width, int height) -> Image
+
+        Returns a scaled version of the image. This is also useful for scaling
+        bitmaps in general as the only other way to scale bitmaps is to blit a
+        `wx.MemoryDC` into another `wx.MemoryDC`.
+        """
         return _core_.Image_Scale(*args, **kwargs)
 
     def ShrinkBy(*args, **kwargs):
-        """ShrinkBy(self, int xFactor, int yFactor) -> Image"""
+        """
+        ShrinkBy(self, int xFactor, int yFactor) -> Image
+
+        Return a version of the image scaled smaller by the given factors.
+        """
         return _core_.Image_ShrinkBy(*args, **kwargs)
 
     def Rescale(*args, **kwargs):
-        """Rescale(self, int width, int height) -> Image"""
+        """
+        Rescale(self, int width, int height) -> Image
+
+        Changes the size of the image in-place by scaling it: after a call to
+        this function, the image will have the given width and height.
+
+        Returns the (modified) image itself.
+        """
         return _core_.Image_Rescale(*args, **kwargs)
 
     def Resize(*args, **kwargs):
-        """Resize(self, Size size, Point pos, int r=-1, int g=-1, int b=-1) -> Image"""
+        """
+        Resize(self, Size size, Point pos, int r=-1, int g=-1, int b=-1) -> Image
+
+        Changes the size of the image in-place without scaling it, by adding
+        either a border with the given colour or cropping as necessary. The
+        image is pasted into a new image with the given size and background
+        colour at the position pos relative to the upper left of the new
+        image. If red = green = blue = -1 then use either the current mask
+        colour if set or find, use, and set a suitable mask colour for any
+        newly exposed areas.
+
+        Returns the (modified) image itself.
+        """
         return _core_.Image_Resize(*args, **kwargs)
 
     def SetRGB(*args, **kwargs):
-        """SetRGB(self, int x, int y, unsigned char r, unsigned char g, unsigned char b)"""
+        """
+        SetRGB(self, int x, int y, byte r, byte g, byte b)
+
+        Sets the pixel at the given coordinate. This routine performs
+        bounds-checks for the coordinate so it can be considered a safe way to
+        manipulate the data, but in some cases this might be too slow so that
+        the data will have to be set directly. In that case you will have to
+        get access to the image data using the `GetData` method.
+        """
         return _core_.Image_SetRGB(*args, **kwargs)
 
     def SetRGBRect(*args, **kwargs):
-        """SetRGBRect(self, Rect rect, unsigned char r, unsigned char g, unsigned char b)"""
+        """
+        SetRGBRect(self, Rect rect, byte r, byte g, byte b)
+
+        Sets the colour of the pixels within the given rectangle. This routine
+        performs bounds-checks for the rectangle so it can be considered a
+        safe way to manipulate the data.
+        """
         return _core_.Image_SetRGBRect(*args, **kwargs)
 
     def GetRed(*args, **kwargs):
-        """GetRed(self, int x, int y) -> unsigned char"""
+        """
+        GetRed(self, int x, int y) -> byte
+
+        Returns the red intensity at the given coordinate.
+        """
         return _core_.Image_GetRed(*args, **kwargs)
 
     def GetGreen(*args, **kwargs):
-        """GetGreen(self, int x, int y) -> unsigned char"""
+        """
+        GetGreen(self, int x, int y) -> byte
+
+        Returns the green intensity at the given coordinate.
+        """
         return _core_.Image_GetGreen(*args, **kwargs)
 
     def GetBlue(*args, **kwargs):
-        """GetBlue(self, int x, int y) -> unsigned char"""
+        """
+        GetBlue(self, int x, int y) -> byte
+
+        Returns the blue intensity at the given coordinate.
+        """
         return _core_.Image_GetBlue(*args, **kwargs)
 
     def SetAlpha(*args, **kwargs):
-        """SetAlpha(self, int x, int y, unsigned char alpha)"""
+        """
+        SetAlpha(self, int x, int y, byte alpha)
+
+        Sets the alpha value for the given pixel. This function should only be
+        called if the image has alpha channel data, use `HasAlpha` to check
+        for this.
+        """
         return _core_.Image_SetAlpha(*args, **kwargs)
 
     def GetAlpha(*args, **kwargs):
-        """GetAlpha(self, int x, int y) -> unsigned char"""
+        """
+        GetAlpha(self, int x, int y) -> byte
+
+        Returns the alpha value for the given pixel. This function may only be
+        called for the images with alpha channel, use `HasAlpha` to check for
+        this.
+
+        The returned value is the *opacity* of the image, i.e. the value of 0
+        corresponds to the fully transparent pixels while the value of 255 to
+        the fully opaque pixels.
+        """
         return _core_.Image_GetAlpha(*args, **kwargs)
 
     def HasAlpha(*args, **kwargs):
-        """HasAlpha(self) -> bool"""
+        """
+        HasAlpha(self) -> bool
+
+        Returns true if this image has alpha channel, false otherwise.
+        """
         return _core_.Image_HasAlpha(*args, **kwargs)
 
     def InitAlpha(*args, **kwargs):
@@ -2254,10 +2363,10 @@ class Image(Object):
 
     def IsTransparent(*args, **kwargs):
         """
-        IsTransparent(self, int x, int y, unsigned char threshold=IMAGE_ALPHA_THRESHOLD) -> bool
+        IsTransparent(self, int x, int y, byte threshold=IMAGE_ALPHA_THRESHOLD) -> bool
 
-        Returns True if this pixel is masked or has an alpha value less than
-        the spcified threshold.
+        Returns ``True`` if this pixel is masked or has an alpha value less
+        than the spcified threshold.
         """
         return _core_.Image_IsTransparent(*args, **kwargs)
 
@@ -2275,10 +2384,10 @@ class Image(Object):
         """
         ConvertAlphaToMask(self, byte threshold=IMAGE_ALPHA_THRESHOLD) -> bool
 
-        If the image has alpha channel, this method converts it to mask. All pixels
-        with alpha value less than ``threshold`` are replaced with mask colour and the
-        alpha channel is removed. Mask colour is chosen automatically using
-        `FindFirstUnusedColour`.
+        If the image has alpha channel, this method converts it to mask. All
+        pixels with alpha value less than ``threshold`` are replaced with the
+        mask colour and the alpha channel is removed. The mask colour is
+        chosen automatically using `FindFirstUnusedColour`.
 
         If the image image doesn't have alpha channel, ConvertAlphaToMask does
         nothing.
@@ -2287,7 +2396,7 @@ class Image(Object):
 
     def ConvertColourToAlpha(*args, **kwargs):
         """
-        ConvertColourToAlpha(self, unsigned char r, unsigned char g, unsigned char b) -> bool
+        ConvertColourToAlpha(self, byte r, byte g, byte b) -> bool
 
         This method converts an image where the original alpha information is
         only available as a shades of a colour (actually shades of grey)
@@ -2300,78 +2409,178 @@ class Image(Object):
         return _core_.Image_ConvertColourToAlpha(*args, **kwargs)
 
     def SetMaskFromImage(*args, **kwargs):
-        """SetMaskFromImage(self, Image mask, byte mr, byte mg, byte mb) -> bool"""
+        """
+        SetMaskFromImage(self, Image mask, byte mr, byte mg, byte mb) -> bool
+
+        Sets the image's mask so that the pixels that have RGB value of
+        ``(mr,mg,mb)`` in ``mask`` will be masked in this image. This is done
+        by first finding an unused colour in the image, setting this colour as
+        the mask colour and then using this colour to draw all pixels in the
+        image who corresponding pixel in mask has given RGB value.
+
+        Returns ``False`` if ``mask`` does not have same dimensions as the
+        image or if there is no unused colour left. Returns ``True`` if the
+        mask was successfully applied.
+
+        Note that this method involves computing the histogram, which is
+        computationally intensive operation.
+        """
         return _core_.Image_SetMaskFromImage(*args, **kwargs)
 
     def CanRead(*args, **kwargs):
-        """CanRead(String name) -> bool"""
+        """
+        CanRead(String filename) -> bool
+
+        Returns True if the image handlers can read this file.
+        """
         return _core_.Image_CanRead(*args, **kwargs)
 
     CanRead = staticmethod(CanRead)
     def GetImageCount(*args, **kwargs):
-        """GetImageCount(String name, long type=BITMAP_TYPE_ANY) -> int"""
+        """
+        GetImageCount(String filename, long type=BITMAP_TYPE_ANY) -> int
+
+        If the image file contains more than one image and the image handler
+        is capable of retrieving these individually, this function will return
+        the number of available images.
+        """
         return _core_.Image_GetImageCount(*args, **kwargs)
 
     GetImageCount = staticmethod(GetImageCount)
     def LoadFile(*args, **kwargs):
-        """LoadFile(self, String name, long type=BITMAP_TYPE_ANY, int index=-1) -> bool"""
+        """
+        LoadFile(self, String name, long type=BITMAP_TYPE_ANY, int index=-1) -> bool
+
+        Loads an image from a file. If no handler type is provided, the
+        library will try to autodetect the format.
+        """
         return _core_.Image_LoadFile(*args, **kwargs)
 
     def LoadMimeFile(*args, **kwargs):
-        """LoadMimeFile(self, String name, String mimetype, int index=-1) -> bool"""
+        """
+        LoadMimeFile(self, String name, String mimetype, int index=-1) -> bool
+
+        Loads an image from a file, specifying the image type with a MIME type
+        string.
+        """
         return _core_.Image_LoadMimeFile(*args, **kwargs)
 
     def SaveFile(*args, **kwargs):
-        """SaveFile(self, String name, int type) -> bool"""
+        """
+        SaveFile(self, String name, int type) -> bool
+
+        Saves an image in the named file.
+        """
         return _core_.Image_SaveFile(*args, **kwargs)
 
     def SaveMimeFile(*args, **kwargs):
-        """SaveMimeFile(self, String name, String mimetype) -> bool"""
+        """
+        SaveMimeFile(self, String name, String mimetype) -> bool
+
+        Saves an image in the named file.
+        """
         return _core_.Image_SaveMimeFile(*args, **kwargs)
 
     def CanReadStream(*args, **kwargs):
-        """CanReadStream(InputStream stream) -> bool"""
+        """
+        CanReadStream(InputStream stream) -> bool
+
+        Returns True if the image handlers can read an image file from the
+        data currently on the input stream, or a readable Python file-like
+        object.
+        """
         return _core_.Image_CanReadStream(*args, **kwargs)
 
     CanReadStream = staticmethod(CanReadStream)
     def LoadStream(*args, **kwargs):
-        """LoadStream(self, InputStream stream, long type=BITMAP_TYPE_ANY, int index=-1) -> bool"""
+        """
+        LoadStream(self, InputStream stream, long type=BITMAP_TYPE_ANY, int index=-1) -> bool
+
+        Loads an image from an input stream or a readable Python file-like
+        object. If no handler type is provided, the library will try to
+        autodetect the format.
+        """
         return _core_.Image_LoadStream(*args, **kwargs)
 
     def LoadMimeStream(*args, **kwargs):
-        """LoadMimeStream(self, InputStream stream, String mimetype, int index=-1) -> bool"""
+        """
+        LoadMimeStream(self, InputStream stream, String mimetype, int index=-1) -> bool
+
+        Loads an image from an input stream or a readable Python file-like
+        object, using a MIME type string to specify the image file format.
+        """
         return _core_.Image_LoadMimeStream(*args, **kwargs)
 
     def Ok(*args, **kwargs):
-        """Ok(self) -> bool"""
+        """
+        Ok(self) -> bool
+
+        Returns true if image data is present.
+        """
         return _core_.Image_Ok(*args, **kwargs)
 
     def GetWidth(*args, **kwargs):
-        """GetWidth(self) -> int"""
+        """
+        GetWidth(self) -> int
+
+        Gets the width of the image in pixels.
+        """
         return _core_.Image_GetWidth(*args, **kwargs)
 
     def GetHeight(*args, **kwargs):
-        """GetHeight(self) -> int"""
+        """
+        GetHeight(self) -> int
+
+        Gets the height of the image in pixels.
+        """
         return _core_.Image_GetHeight(*args, **kwargs)
 
     def GetSize(*args, **kwargs):
-        """GetSize(self) -> Size"""
+        """
+        GetSize(self) -> Size
+
+        Returns the size of the image in pixels.
+        """
         return _core_.Image_GetSize(*args, **kwargs)
 
     def GetSubImage(*args, **kwargs):
-        """GetSubImage(self, Rect rect) -> Image"""
+        """
+        GetSubImage(self, Rect rect) -> Image
+
+        Returns a sub image of the current one as long as the rect belongs
+        entirely to the image.
+        """
         return _core_.Image_GetSubImage(*args, **kwargs)
 
     def Size(*args, **kwargs):
-        """Size(self, Size size, Point pos, int r=-1, int g=-1, int b=-1) -> Image"""
+        """
+        Size(self, Size size, Point pos, int r=-1, int g=-1, int b=-1) -> Image
+
+        Returns a resized version of this image without scaling it by adding
+        either a border with the given colour or cropping as necessary. The
+        image is pasted into a new image with the given size and background
+        colour at the position ``pos`` relative to the upper left of the new
+        image. If red = green = blue = -1 then use either the current mask
+        colour if set or find, use, and set a suitable mask colour for any
+        newly exposed areas.
+        """
         return _core_.Image_Size(*args, **kwargs)
 
     def Copy(*args, **kwargs):
-        """Copy(self) -> Image"""
+        """
+        Copy(self) -> Image
+
+        Returns an identical copy of the image.
+        """
         return _core_.Image_Copy(*args, **kwargs)
 
     def Paste(*args, **kwargs):
-        """Paste(self, Image image, int x, int y)"""
+        """
+        Paste(self, Image image, int x, int y)
+
+        Pastes ``image`` into this instance and takes care of the mask colour
+        and any out of bounds problems.
+        """
         return _core_.Image_Paste(*args, **kwargs)
 
     def GetData(*args, **kwargs):
@@ -2397,7 +2606,8 @@ class Image(Object):
         GetDataBuffer(self) -> PyObject
 
         Returns a writable Python buffer object that is pointing at the RGB
-        image data buffer inside the wx.Image.
+        image data buffer inside the wx.Image. You need to ensure that you do
+        not use this buffer object after the image has been destroyed.
         """
         return _core_.Image_GetDataBuffer(*args, **kwargs)
 
@@ -2406,8 +2616,8 @@ class Image(Object):
         SetDataBuffer(self, buffer data)
 
         Sets the internal image data pointer to point at a Python buffer
-        object.  This can save a copy of the data but you must ensure that the
-        buffer object lives longer than the wx.Image does.
+        object.  This can save making an extra copy of the data but you must
+        ensure that the buffer object lives longer than the wx.Image does.
         """
         return _core_.Image_SetDataBuffer(*args, **kwargs)
 
@@ -2438,7 +2648,12 @@ class Image(Object):
         return _core_.Image_SetAlphaBuffer(*args, **kwargs)
 
     def SetMaskColour(*args, **kwargs):
-        """SetMaskColour(self, unsigned char r, unsigned char g, unsigned char b)"""
+        """
+        SetMaskColour(self, byte r, byte g, byte b)
+
+        Sets the mask colour for this image (and tells the image to use the
+        mask).
+        """
         return _core_.Image_SetMaskColour(*args, **kwargs)
 
     def GetOrFindMaskColour(*args, **kwargs):
@@ -2450,69 +2665,139 @@ class Image(Object):
         return _core_.Image_GetOrFindMaskColour(*args, **kwargs)
 
     def GetMaskRed(*args, **kwargs):
-        """GetMaskRed(self) -> unsigned char"""
+        """
+        GetMaskRed(self) -> byte
+
+        Gets the red component of the mask colour.
+        """
         return _core_.Image_GetMaskRed(*args, **kwargs)
 
     def GetMaskGreen(*args, **kwargs):
-        """GetMaskGreen(self) -> unsigned char"""
+        """
+        GetMaskGreen(self) -> byte
+
+        Gets the green component of the mask colour.
+        """
         return _core_.Image_GetMaskGreen(*args, **kwargs)
 
     def GetMaskBlue(*args, **kwargs):
-        """GetMaskBlue(self) -> unsigned char"""
+        """
+        GetMaskBlue(self) -> byte
+
+        Gets the blue component of the mask colour.
+        """
         return _core_.Image_GetMaskBlue(*args, **kwargs)
 
     def SetMask(*args, **kwargs):
-        """SetMask(self, bool mask=True)"""
+        """
+        SetMask(self, bool mask=True)
+
+        Specifies whether there is a mask or not. The area of the mask is
+        determined by the current mask colour.
+        """
         return _core_.Image_SetMask(*args, **kwargs)
 
     def HasMask(*args, **kwargs):
-        """HasMask(self) -> bool"""
+        """
+        HasMask(self) -> bool
+
+        Returns ``True`` if there is a mask active, ``False`` otherwise.
+        """
         return _core_.Image_HasMask(*args, **kwargs)
 
     def Rotate(*args, **kwargs):
         """
         Rotate(self, double angle, Point centre_of_rotation, bool interpolating=True, 
             Point offset_after_rotation=None) -> Image
+
+        Rotates the image about the given point, by ``angle`` radians. Passing
+        ``True`` to ``interpolating`` results in better image quality, but is
+        slower. If the image has a mask, then the mask colour is used for the
+        uncovered pixels in the rotated image background. Otherwise, black
+        will be used as the fill colour.
+
+        Returns the rotated image, leaving this image intact.
         """
         return _core_.Image_Rotate(*args, **kwargs)
 
     def Rotate90(*args, **kwargs):
-        """Rotate90(self, bool clockwise=True) -> Image"""
+        """
+        Rotate90(self, bool clockwise=True) -> Image
+
+        Returns a copy of the image rotated 90 degrees in the direction
+        indicated by ``clockwise``.
+        """
         return _core_.Image_Rotate90(*args, **kwargs)
 
     def Mirror(*args, **kwargs):
-        """Mirror(self, bool horizontally=True) -> Image"""
+        """
+        Mirror(self, bool horizontally=True) -> Image
+
+        Returns a mirrored copy of the image. The parameter ``horizontally``
+        indicates the orientation.
+        """
         return _core_.Image_Mirror(*args, **kwargs)
 
     def Replace(*args, **kwargs):
         """
-        Replace(self, unsigned char r1, unsigned char g1, unsigned char b1, 
-            unsigned char r2, unsigned char g2, unsigned char b2)
+        Replace(self, byte r1, byte g1, byte b1, byte r2, byte g2, byte b2)
+
+        Replaces the colour specified by ``(r1,g1,b1)`` by the colour
+        ``(r2,g2,b2)``.
         """
         return _core_.Image_Replace(*args, **kwargs)
 
     def ConvertToMono(*args, **kwargs):
-        """ConvertToMono(self, unsigned char r, unsigned char g, unsigned char b) -> Image"""
+        """
+        ConvertToMono(self, byte r, byte g, byte b) -> Image
+
+        Returns monochromatic version of the image. The returned image has
+        white colour where the original has ``(r,g,b)`` colour and black
+        colour everywhere else.
+        """
         return _core_.Image_ConvertToMono(*args, **kwargs)
 
     def SetOption(*args, **kwargs):
-        """SetOption(self, String name, String value)"""
+        """
+        SetOption(self, String name, String value)
+
+        Sets an image handler defined option.  For example, when saving as a
+        JPEG file, the option ``wx.IMAGE_OPTION_QUALITY`` is used, which is a
+        number between 0 and 100 (0 is terrible, 100 is very good).
+        """
         return _core_.Image_SetOption(*args, **kwargs)
 
     def SetOptionInt(*args, **kwargs):
-        """SetOptionInt(self, String name, int value)"""
+        """
+        SetOptionInt(self, String name, int value)
+
+        Sets an image option as an integer.
+        """
         return _core_.Image_SetOptionInt(*args, **kwargs)
 
     def GetOption(*args, **kwargs):
-        """GetOption(self, String name) -> String"""
+        """
+        GetOption(self, String name) -> String
+
+        Gets the value of an image handler option.
+        """
         return _core_.Image_GetOption(*args, **kwargs)
 
     def GetOptionInt(*args, **kwargs):
-        """GetOptionInt(self, String name) -> int"""
+        """
+        GetOptionInt(self, String name) -> int
+
+        Gets the value of an image handler option as an integer.  If the given
+        option is not present, the function returns 0.
+        """
         return _core_.Image_GetOptionInt(*args, **kwargs)
 
     def HasOption(*args, **kwargs):
-        """HasOption(self, String name) -> bool"""
+        """
+        HasOption(self, String name) -> bool
+
+        Returns true if the given option is present.
+        """
         return _core_.Image_HasOption(*args, **kwargs)
 
     def CountColours(*args, **kwargs):
@@ -2539,7 +2824,13 @@ class Image(Object):
 
     RemoveHandler = staticmethod(RemoveHandler)
     def GetImageExtWildcard(*args, **kwargs):
-        """GetImageExtWildcard() -> String"""
+        """
+        GetImageExtWildcard() -> String
+
+        Iterates all registered wxImageHandler objects, and returns a string
+        containing file extension masks suitable for passing to file open/save
+        dialog boxes.
+        """
         return _core_.Image_GetImageExtWildcard(*args, **kwargs)
 
     GetImageExtWildcard = staticmethod(GetImageExtWildcard)
@@ -2548,7 +2839,7 @@ class Image(Object):
         return _core_.Image_ConvertToBitmap(*args, **kwargs)
 
     def ConvertToMonoBitmap(*args, **kwargs):
-        """ConvertToMonoBitmap(self, unsigned char red, unsigned char green, unsigned char blue) -> Bitmap"""
+        """ConvertToMonoBitmap(self, byte red, byte green, byte blue) -> Bitmap"""
         return _core_.Image_ConvertToMonoBitmap(*args, **kwargs)
 
     def __nonzero__(self): return self.Ok() 
@@ -2561,19 +2852,34 @@ class ImagePtr(Image):
 _core_.Image_swigregister(ImagePtr)
 
 def ImageFromMime(*args, **kwargs):
-    """ImageFromMime(String name, String mimetype, int index=-1) -> Image"""
+    """
+    ImageFromMime(String name, String mimetype, int index=-1) -> Image
+
+    Loads an image from a file, using a MIME type string (such as
+    'image/jpeg') to specify image type.
+    """
     val = _core_.new_ImageFromMime(*args, **kwargs)
     val.thisown = 1
     return val
 
 def ImageFromStream(*args, **kwargs):
-    """ImageFromStream(InputStream stream, long type=BITMAP_TYPE_ANY, int index=-1) -> Image"""
+    """
+    ImageFromStream(InputStream stream, long type=BITMAP_TYPE_ANY, int index=-1) -> Image
+
+    Loads an image from an input stream, or any readable Python file-like
+    object.
+    """
     val = _core_.new_ImageFromStream(*args, **kwargs)
     val.thisown = 1
     return val
 
 def ImageFromStreamMime(*args, **kwargs):
-    """ImageFromStreamMime(InputStream stream, String mimetype, int index=-1) -> Image"""
+    """
+    ImageFromStreamMime(InputStream stream, String mimetype, int index=-1) -> Image
+
+    Loads an image from an input stream, or any readable Python file-like
+    object, specifying the image format with a MIME type string.
+    """
     val = _core_.new_ImageFromStreamMime(*args, **kwargs)
     val.thisown = 1
     return val
@@ -2617,22 +2923,39 @@ def ImageFromDataWithAlpha(*args, **kwargs):
 
     Construct an Image from a buffer of RGB bytes with an Alpha channel.
     Accepts either a string or a buffer object holding the data and the
-    length of the data must be width*height*3.
+    length of the data must be width*height*3 bytes, and the length of the
+    alpha data must be width*height bytes.
     """
     val = _core_.new_ImageFromDataWithAlpha(*args, **kwargs)
     val.thisown = 1
     return val
 
 def Image_CanRead(*args, **kwargs):
-    """Image_CanRead(String name) -> bool"""
+    """
+    Image_CanRead(String filename) -> bool
+
+    Returns True if the image handlers can read this file.
+    """
     return _core_.Image_CanRead(*args, **kwargs)
 
 def Image_GetImageCount(*args, **kwargs):
-    """Image_GetImageCount(String name, long type=BITMAP_TYPE_ANY) -> int"""
+    """
+    Image_GetImageCount(String filename, long type=BITMAP_TYPE_ANY) -> int
+
+    If the image file contains more than one image and the image handler
+    is capable of retrieving these individually, this function will return
+    the number of available images.
+    """
     return _core_.Image_GetImageCount(*args, **kwargs)
 
 def Image_CanReadStream(*args, **kwargs):
-    """Image_CanReadStream(InputStream stream) -> bool"""
+    """
+    Image_CanReadStream(InputStream stream) -> bool
+
+    Returns True if the image handlers can read an image file from the
+    data currently on the input stream, or a readable Python file-like
+    object.
+    """
     return _core_.Image_CanReadStream(*args, **kwargs)
 
 def Image_AddHandler(*args, **kwargs):
@@ -2648,7 +2971,13 @@ def Image_RemoveHandler(*args, **kwargs):
     return _core_.Image_RemoveHandler(*args, **kwargs)
 
 def Image_GetImageExtWildcard(*args, **kwargs):
-    """Image_GetImageExtWildcard() -> String"""
+    """
+    Image_GetImageExtWildcard() -> String
+
+    Iterates all registered wxImageHandler objects, and returns a string
+    containing file extension masks suitable for passing to file open/save
+    dialog boxes.
+    """
     return _core_.Image_GetImageExtWildcard(*args, **kwargs)
 
 def InitAllImageHandlers():

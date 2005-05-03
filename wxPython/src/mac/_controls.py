@@ -1491,19 +1491,11 @@ class CheckListBox(ListBox):
         return _controls_.CheckListBox_Check(*args, **kwargs)
 
     def HitTest(*args, **kwargs):
-        """
-        HitTest(self, Point pt) -> int
-
-        Test where the given (in client coords) point lies
-        """
+        """HitTest(self, Point pt) -> int"""
         return _controls_.CheckListBox_HitTest(*args, **kwargs)
 
     def HitTestXY(*args, **kwargs):
-        """
-        HitTestXY(self, int x, int y) -> int
-
-        Test where the given (in client coords) point lies
-        """
+        """HitTestXY(self, int x, int y) -> int"""
         return _controls_.CheckListBox_HitTestXY(*args, **kwargs)
 
 
@@ -3052,7 +3044,12 @@ class BookCtrlBaseEvent(_core.NotifyEvent):
         self.thisown = 1
         del newobj.thisown
     def GetSelection(*args, **kwargs):
-        """GetSelection(self) -> int"""
+        """
+        GetSelection(self) -> int
+
+        Returns item index for a listbox or choice selection event (not valid
+        for a deselection).
+        """
         return _controls_.BookCtrlBaseEvent_GetSelection(*args, **kwargs)
 
     def SetSelection(*args, **kwargs):
