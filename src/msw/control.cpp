@@ -339,6 +339,10 @@ WXHBRUSH wxControl::DoMSWControlColor(WXHDC pDC, wxColour colBg, WXHWND hWnd)
     {
         ::SetTextColor(hdc, wxColourToRGB(GetForegroundColour()));
     }
+    else
+    {
+        ::SetTextColor(hdc, ::GetSysColor(COLOR_WINDOWTEXT));
+    }
 
     WXHBRUSH hbr = 0;
     if ( !colBg.Ok() )
