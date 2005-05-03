@@ -653,7 +653,7 @@ void wxMenuBar::MacInstallMenuBar()
     MacInsertMenu( appleMenu , 0 ) ;
 
     // clean-up the help menu before adding new items
-    MenuHandle mh = NULL ;
+    static MenuHandle mh = NULL ;
     
     if ( mh != NULL )
     {
