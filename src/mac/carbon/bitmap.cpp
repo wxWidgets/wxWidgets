@@ -706,6 +706,7 @@ bool wxBitmap::CopyFromIcon(const wxIcon& icon)
             EndRawAccess() ;
             DisposeHandle( imagehandle ) ;
             DisposeHandle( maskhandle ) ;
+            created = true ;
         }
         DisposeHandle( (Handle) iconFamily ) ;
         
