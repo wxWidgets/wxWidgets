@@ -1,3 +1,14 @@
+/////////////////////////////////////////////////////////////////////////////
+// Name:        wx/treectrl.h
+// Purpose:     wxTreeCtrl base header
+// Author:      Karsten Ballueder
+// Modified by:
+// Created:
+// Copyright:   (c) Karsten Ballueder
+// RCS-ID:      $Id$
+// Licence:     wxWindows licence
+/////////////////////////////////////////////////////////////////////////////
+
 #ifndef _WX_TREECTRL_H_BASE_
 #define _WX_TREECTRL_H_BASE_
 

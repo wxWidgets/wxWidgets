@@ -4,6 +4,7 @@
 //              the version that comes with some compilers
 // Created:     2002/04/23
 // RCS-ID:      $Id$
+// Copyright:   (c) 2002 Mattia Barbon
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 

@@ -1,3 +1,14 @@
+/////////////////////////////////////////////////////////////////////////////
+// Name:        wx/filedlg.h
+// Purpose:     wxFileDialog base header
+// Author:      Robert Roebling
+// Modified by:
+// Created:
+// Copyright:   (c) Robert Roebling
+// RCS-ID:      $Id$
+// Licence:     wxWindows Licence
+/////////////////////////////////////////////////////////////////////////////
+
 #ifndef _WX_FILEDLG_H_BASE_
 #define _WX_FILEDLG_H_BASE_
 

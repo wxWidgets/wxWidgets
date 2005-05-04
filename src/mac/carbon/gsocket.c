@@ -1,11 +1,13 @@
 /* -------------------------------------------------------------------------
- * Project: GSocket (Generic Socket) for WX
- * Name:    gsocket.c
- * Authors: Guilhem Lavaux,
- *          Guillermo Rodriguez Garcia <guille@iies.es> (maintainer)
- *          Stefan CSomor
- * Purpose: GSocket main mac file
- * CVSID:   $Id$
+ * Project:     GSocket (Generic Socket) for WX
+ * Name:        gsocket.c
+ * Authors:     Guilhem Lavaux,
+ *              Guillermo Rodriguez Garcia <guille@iies.es> (maintainer)
+ *              Stefan CSomor
+ * Copyright:   (c) Guilhem Lavaux
+ * Licence:     wxWindows Licence
+ * Purpose:     GSocket main mac file
+ * CVSID:       $Id$
  * -------------------------------------------------------------------------
  */
 

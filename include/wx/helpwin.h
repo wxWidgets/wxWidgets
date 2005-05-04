@@ -1,3 +1,14 @@
+/////////////////////////////////////////////////////////////////////////////
+// Name:        helpwin.h
+// Purpose:     Includes Windows or OS/2 help
+// Author:      Julian Smart
+// Modified by:
+// Created:
+// RCS-ID:      $Id$
+// Copyright:   (c) Julian Smart
+// Licence:     wxWindows licence
+/////////////////////////////////////////////////////////////////////////////
+
 #ifndef _WX_HELPWIN_H_BASE_
 #define _WX_HELPWIN_H_BASE_
 

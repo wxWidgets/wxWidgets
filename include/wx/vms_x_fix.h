@@ -3,6 +3,8 @@
  * Repair definitions of Xlib when compileing with /name=(as_is) on VMS    *
  *                                                                         *
  * Author : Jouk Jansen (joukj@hrem.stm.tudelft.nl)                        *
+ * Copyright:   (c) Jouk Jansen                                            *
+ * Licence:     wxWindows licence                                          *
  *                                                                         *
  * Last revision : 22 August 2000                                          *
  *                                                                         *
