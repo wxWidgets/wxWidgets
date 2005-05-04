@@ -1502,27 +1502,26 @@ wxString wxFileName::GetFullPath( wxPathFormat format ) const
 // Return the short form of the path (returns identity on non-Windows platforms)
 wxString wxFileName::GetShortPath() const
 {
-#if defined(__WXMSW__) && defined(__WIN32__) && !defined(__WXMICROWIN__) && !defined(__WXWINCE__)
     wxString path(GetFullPath());
-    wxString pathOut;
+
+#if defined(__WXMSW__) && defined(__WIN32__) && !defined(__WXMICROWIN__) && !defined(__WXWINCE__)
     DWORD sz = ::GetShortPathName(path, NULL, 0);
-    bool ok = sz != 0;
-    if ( ok )
+    if ( sz != 0 )
     {
-        ok = ::GetShortPathName
+        wxString pathOut;
+        if ( ::GetShortPathName
                (
                 path,
                 wxStringBuffer(pathOut, sz),
                 sz
-               ) != 0;
+               ) != 0 )
+        {
+            return pathOut;
+        }
     }
-    if (ok)
-        return pathOut;
+#endif // Windows
 
     return path;
-#else
-    return GetFullPath();
-#endif
 }
 
 // Return the long form of the path (returns identity on non-Windows platforms)
@@ -1532,116 +1531,114 @@ wxString wxFileName::GetLongPath() const
              path = GetFullPath();
 
 #if defined(__WIN32__) && !defined(__WXMICROWIN__)
-    bool success = false;
 
 #if wxUSE_DYNAMIC_LOADER
     typedef DWORD (WINAPI *GET_LONG_PATH_NAME)(const wxChar *, wxChar *, DWORD);
 
-    static bool s_triedToLoad = false;
-
-    if ( !s_triedToLoad )
+    // this is MT-safe as in the worst case we're going to resolve the function
+    // twice -- but as the result is the same in both threads, it's ok
+    static GET_LONG_PATH_NAME s_pfnGetLongPathName = NULL;
+    if ( !s_pfnGetLongPathName )
     {
-        // suppress the errors about missing GetLongPathName[AW]
-        wxLogNull noLog;
+        static bool s_triedToLoad = false;
 
-        s_triedToLoad = true;
-        wxDynamicLibrary dllKernel(_T("kernel32"));
-        if ( dllKernel.IsLoaded() )
+        if ( !s_triedToLoad )
         {
-            // may succeed or fail depending on the Windows version
-            static GET_LONG_PATH_NAME s_pfnGetLongPathName = NULL;
+            s_triedToLoad = true;
+
+            wxDynamicLibrary dllKernel(_T("kernel32"));
+
 #ifdef _UNICODE
-            s_pfnGetLongPathName = (GET_LONG_PATH_NAME) dllKernel.GetSymbol(_T("GetLongPathNameW"));
+    #define ADD_STR_SFX(name) L#name L"W"
 #else
-            s_pfnGetLongPathName = (GET_LONG_PATH_NAME) dllKernel.GetSymbol(_T("GetLongPathNameA"));
+    #define ADD_STR_SFX(name) #name "A"
 #endif
 
-            if ( s_pfnGetLongPathName )
+            if ( dllKernel.HasSymbol(ADD_STR_SFX(GetLongPathName)) )
             {
-                DWORD dwSize = (*s_pfnGetLongPathName)(path, NULL, 0);
-                bool ok = dwSize > 0;
-
-                if ( ok )
-                {
-                    DWORD sz = (*s_pfnGetLongPathName)(path, NULL, 0);
-                    ok = sz != 0;
-                    if ( ok )
-                    {
-                        ok = (*s_pfnGetLongPathName)
-                                (
-                                path,
-                                wxStringBuffer(pathOut, sz),
-                                sz
-                                ) != 0;
-                        success = true;
-                    }
-                }
+                s_pfnGetLongPathName = (GET_LONG_PATH_NAME)
+                    dllKernel.GetSymbol(ADD_STR_SFX(GetLongPathName));
             }
+
+            // note that kernel32.dll can be unloaded, it stays in memory
+            // anyhow as all Win32 programs link to it and so it's safe to call
+            // GetLongPathName() even after unloading it
         }
     }
 
-    if (success)
-        return pathOut;
+    if ( s_pfnGetLongPathName )
+    {
+        DWORD dwSize = (*s_pfnGetLongPathName)(path, NULL, 0);
+        if ( dwSize > 0 )
+        {
+            if ( (*s_pfnGetLongPathName)
+                 (
+                  path,
+                  wxStringBuffer(pathOut, dwSize),
+                  dwSize
+                 ) != 0 )
+            {
+                return pathOut;
+            }
+        }
+    }
 #endif // wxUSE_DYNAMIC_LOADER
 
-    if (!success)
+    // The OS didn't support GetLongPathName, or some other error.
+    // We need to call FindFirstFile on each component in turn.
+
+    WIN32_FIND_DATA findFileData;
+    HANDLE hFind;
+
+    if ( HasVolume() )
+        pathOut = GetVolume() +
+                  GetVolumeSeparator(wxPATH_DOS) +
+                  GetPathSeparator(wxPATH_DOS);
+    else
+        pathOut = wxEmptyString;
+
+    wxArrayString dirs = GetDirs();
+    dirs.Add(GetFullName());
+
+    wxString tmpPath;
+
+    size_t count = dirs.GetCount();
+    for ( size_t i = 0; i < count; i++ )
     {
-        // The OS didn't support GetLongPathName, or some other error.
-        // We need to call FindFirstFile on each component in turn.
+        // We're using pathOut to collect the long-name path, but using a
+        // temporary for appending the last path component which may be
+        // short-name
+        tmpPath = pathOut + dirs[i];
 
-        WIN32_FIND_DATA findFileData;
-        HANDLE hFind;
+        if ( tmpPath.empty() )
+            continue;
 
-        if ( HasVolume() )
-            pathOut = GetVolume() +
-                      GetVolumeSeparator(wxPATH_DOS) +
-                      GetPathSeparator(wxPATH_DOS);
-        else
-            pathOut = wxEmptyString;
-
-        wxArrayString dirs = GetDirs();
-        dirs.Add(GetFullName());
-
-        wxString tmpPath;
-
-        size_t count = dirs.GetCount();
-        for ( size_t i = 0; i < count; i++ )
+        // can't see this being necessary? MF
+        if ( tmpPath.Last() == GetVolumeSeparator(wxPATH_DOS) )
         {
-            // We're using pathOut to collect the long-name path, but using a
-            // temporary for appending the last path component which may be
-            // short-name
-            tmpPath = pathOut + dirs[i];
-
-            if ( tmpPath.empty() )
-                continue;
-
-            // can't see this being necessary? MF
-            if ( tmpPath.Last() == GetVolumeSeparator(wxPATH_DOS) )
-            {
-                // Can't pass a drive and root dir to FindFirstFile,
-                // so continue to next dir
-                tmpPath += wxFILE_SEP_PATH;
-                pathOut = tmpPath;
-                continue;
-            }
-
-            hFind = ::FindFirstFile(tmpPath, &findFileData);
-            if (hFind == INVALID_HANDLE_VALUE)
-            {
-                // Error: most likely reason is that path doesn't exist, so
-                // append any unprocessed parts and return
-                for ( i += 1; i < count; i++ )
-                    tmpPath += wxFILE_SEP_PATH + dirs[i];
-
-                return tmpPath;
-            }
-
-            pathOut += findFileData.cFileName;
-            if ( (i < (count-1)) )
-                pathOut += wxFILE_SEP_PATH;
-
-            ::FindClose(hFind);
+            // Can't pass a drive and root dir to FindFirstFile,
+            // so continue to next dir
+            tmpPath += wxFILE_SEP_PATH;
+            pathOut = tmpPath;
+            continue;
         }
+
+        hFind = ::FindFirstFile(tmpPath, &findFileData);
+        if (hFind == INVALID_HANDLE_VALUE)
+        {
+            // Error: most likely reason is that path doesn't exist, so
+            // append any unprocessed parts and return
+            for ( i += 1; i < count; i++ )
+                tmpPath += wxFILE_SEP_PATH + dirs[i];
+
+            return tmpPath;
+        }
+
+        pathOut += findFileData.cFileName;
+        if ( (i < (count-1)) )
+            pathOut += wxFILE_SEP_PATH;
+
+        ::FindClose(hFind);
     }
 #else // !Win32
     pathOut = path;

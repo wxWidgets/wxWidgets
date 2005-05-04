@@ -26,7 +26,8 @@ wxMSW:
 - Worked around an apparent bug in deferred window positioning (moving a
   window from (x, y) to (a, b) and back to (x, y) misses the last step) by
   checking window positions against corresponding sizer state, if any.
-- A control's text colour now reflects the system colour setting.
+- A control's text colour now reflects the system colour setting again.
+- Fixed wxFileName::GetLongPath() to behave correctly during the first call too
 
 wxMac:
 
