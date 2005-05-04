@@ -251,10 +251,12 @@ bool wxClipboard::AddData( wxDataObject *data )
                case wxDF_TEXT:
                case wxDF_OEMTEXT:
                     mactype = kScrapFlavorTypeText ;
+                    sz -= 1;
                break ;
     #if wxUSE_UNICODE
                case wxDF_UNICODETEXT :
                     mactype = kScrapFlavorTypeUnicode ;
+                    sz -= 2;
                break ;
     #endif
     #if wxUSE_DRAG_AND_DROP
