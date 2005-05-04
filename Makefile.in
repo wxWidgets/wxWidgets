@@ -397,15 +397,11 @@ m4datainstall: preinstall
 
 win32install: preinstall
 	$(INSTALL) -d $(includedir)/wx/msw
-	$(INSTALL) -d $(includedir)/wx/msw/gnuwin32
-	$(INSTALL) -d $(includedir)/wx/msw/gnuwin32/gl
 	$(INSTALL_DATA) $(top_srcdir)/include/wx/msw/*.cur \
 			$(top_srcdir)/include/wx/msw/*.ico \
 			$(top_srcdir)/include/wx/msw/*.bmp \
 			$(top_srcdir)/include/wx/msw/wx.rc \
 				$(includedir)/wx/msw
-	$(INSTALL_DATA) $(top_srcdir)/include/wx/msw/gnuwin32/*.h $(includedir)/wx/msw/gnuwin32
-	$(INSTALL_DATA) $(top_srcdir)/include/wx/msw/gnuwin32/gl/*.h $(includedir)/wx/msw/gnuwin32/gl
 
 # this is the real install target: copies the library, wx-config and the
 # headers to the installation directory
@@ -742,19 +738,12 @@ MACX_DIST: ALL_GUI_DIST
 
 MSW_DIST: ALL_GUI_DIST
 	cp $(WXDIR)/wxWINE.spec $(DISTDIR)
-	mkdir $(DISTDIR)/include/wx/msw/ctl3d
-	mkdir $(DISTDIR)/include/wx/msw/gnuwin32
-	mkdir $(DISTDIR)/include/wx/msw/gnuwin32/gl
 	mkdir $(DISTDIR)/include/wx/msw/ole
 	cp $(INCDIR)/wx/msw/*.h $(DISTDIR)/include/wx/msw
 	cp $(INCDIR)/wx/msw/*.cur $(DISTDIR)/include/wx/msw
 	cp $(INCDIR)/wx/msw/*.ico $(DISTDIR)/include/wx/msw
 	cp $(INCDIR)/wx/msw/*.bmp $(DISTDIR)/include/wx/msw
 	cp $(INCDIR)/wx/msw/*.rc $(DISTDIR)/include/wx/msw
-	cp $(INCDIR)/wx/msw/ctl3d/*.h $(DISTDIR)/include/wx/msw/ctl3d
-	cp $(INCDIR)/wx/msw/gnuwin32/*.h $(DISTDIR)/include/wx/msw/gnuwin32
-	cp $(INCDIR)/wx/msw/gnuwin32/gl/*.h $(DISTDIR)/include/wx/msw/gnuwin32/gl
-	cp $(INCDIR)/wx/msw/gnuwin32/gl/*.def $(DISTDIR)/include/wx/msw/gnuwin32/gl
 	cp $(INCDIR)/wx/msw/ole/*.h $(DISTDIR)/include/wx/msw/ole
 	mkdir $(DISTDIR)/src/msw/ole
 	cp $(MSWDIR)/files.lst $(DISTDIR)/src/msw
@@ -766,16 +755,9 @@ MSW_DIST: ALL_GUI_DIST
 MSW_ZIP_TEXT_DIST: ALL_GUI_DIST
 	cp $(WXDIR)/wxWINE.spec $(DISTDIR)
 	mkdir $(DISTDIR)/include/wx/msw
-	mkdir $(DISTDIR)/include/wx/msw/ctl3d
-	mkdir $(DISTDIR)/include/wx/msw/gnuwin32
-	mkdir $(DISTDIR)/include/wx/msw/gnuwin32/gl
 	mkdir $(DISTDIR)/include/wx/msw/ole
 	cp $(INCDIR)/wx/msw/*.h $(DISTDIR)/include/wx/msw
 	cp $(INCDIR)/wx/msw/*.rc $(DISTDIR)/include/wx/msw
-	cp $(INCDIR)/wx/msw/ctl3d/*.h $(DISTDIR)/include/wx/msw/ctl3d
-	cp $(INCDIR)/wx/msw/gnuwin32/*.h $(DISTDIR)/include/wx/msw/gnuwin32
-	cp $(INCDIR)/wx/msw/gnuwin32/gl/*.h $(DISTDIR)/include/wx/msw/gnuwin32/gl
-	cp $(INCDIR)/wx/msw/gnuwin32/gl/*.def $(DISTDIR)/include/wx/msw/gnuwin32/gl
 	cp $(INCDIR)/wx/msw/ole/*.h $(DISTDIR)/include/wx/msw/ole
 	mkdir $(DISTDIR)/src/msw
 	mkdir $(DISTDIR)/src/msw/ole
