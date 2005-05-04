@@ -21,10 +21,11 @@
 #include "wx/mdi.h"
 #endif
 
-#include <wx/ogl/ogl.h> // base header of OGL, includes and adjusts wx/deprecated/setup.h
+#include "wx/ogl/ogl.h" // base header of OGL, includes and adjusts wx/deprecated/setup.h
 
 #include "wx/config.h"
 #include "wx/laywin.h"
+#include "wx/helpwin.h"
 
 #include "studio.h"
 #include "view.h"
@@ -93,112 +94,112 @@ csApp::~csApp()
 bool csApp::OnInit(void)
 {
 #if wxUSE_WX_RESOURCES
-  if (!wxResourceParseFile(_T("studio_resources.wxr")))
-  {
-    wxMessageBox(_T("Could not find or parse resource file: studio_resources.wxr"), _T("Studio"));
-    return false;
-  }
+    if (!wxResourceParseFile(_T("studio_resources.wxr")))
+    {
+        wxMessageBox(_T("Could not find or parse resource file: studio_resources.wxr"), _T("Studio"));
+        return false;
+    }
 #endif
 
 #if wxUSE_MS_HTML_HELP && !defined(__WXUNIVERSAL__)
-  m_helpController = new wxWinHelpController;
+    m_helpController = new wxWinHelpController;
 #else
-  m_helpController = new wxHtmlHelpController;
+    m_helpController = new wxHtmlHelpController;
 #endif
 
-  m_helpController->Initialize(_T("studio.hlp"));
+    m_helpController->Initialize(_T("studio.hlp"));
 
-  ReadOptions();
+    ReadOptions();
 
-  wxOGLInitialize();
+    wxOGLInitialize();
 
-  InitSymbols();
+    InitSymbols();
 
-  //// Create a document manager
-  m_docManager = new wxDocManager;
+    //// Create a document manager
+    m_docManager = new wxDocManager;
 
-  //// Create a template relating drawing documents to their views
-  (void) new wxDocTemplate(m_docManager, _T("Diagram"), _T("*.dia"), wxEmptyString, _T("dia"), _T("Diagram Doc"), _T("Diagram View"),
-          CLASSINFO(csDiagramDocument), CLASSINFO(csDiagramView));
+    //// Create a template relating drawing documents to their views
+    (void) new wxDocTemplate(m_docManager, _T("Diagram"), _T("*.dia"), wxEmptyString, _T("dia"), _T("Diagram Doc"), _T("Diagram View"),
+            CLASSINFO(csDiagramDocument), CLASSINFO(csDiagramView));
 
-  // Create the main frame window.
-  // Note that we use a frame style that doesn't have wxCLIP_CHILDREN in it
-  // (the default frame style contains wxCLIP_CHILDREN), otherwise the client
-  // area doesn't refresh properly when we change its position, under Windows.
+    // Create the main frame window.
+    // Note that we use a frame style that doesn't have wxCLIP_CHILDREN in it
+    // (the default frame style contains wxCLIP_CHILDREN), otherwise the client
+    // area doesn't refresh properly when we change its position, under Windows.
 
 #define wxDEFAULT_FRAME_STYLE_NO_CLIP \
-  (wxDEFAULT_FRAME_STYLE & ~wxCLIP_CHILDREN)
+    (wxDEFAULT_FRAME_STYLE & ~wxCLIP_CHILDREN)
 
-  csFrame* frame = new csFrame(m_docManager, NULL, wxID_ANY, _T("OGL Studio"), m_mainFramePos, m_mainFrameSize,
-   wxDEFAULT_FRAME_STYLE_NO_CLIP | wxHSCROLL | wxVSCROLL);
+    csFrame* frame = new csFrame(m_docManager, NULL, wxID_ANY, _T("OGL Studio"), m_mainFramePos, m_mainFrameSize,
+                     wxDEFAULT_FRAME_STYLE_NO_CLIP | wxHSCROLL | wxVSCROLL);
 
-  // Give it an icon
-  frame->SetIcon(wxICON(studio));
+    // Give it an icon
+    frame->SetIcon(wxICON(studio));
 
-  // Make a menubar
-  wxMenu *fileMenu = new wxMenu;
+    // Make a menubar
+    wxMenu *fileMenu = new wxMenu;
 
-  fileMenu->Append(wxID_NEW, _T("&New...\tCtrl+N"));
-  fileMenu->Append(wxID_OPEN, _T("&Open...\tCtrl+O"));
+    fileMenu->Append(wxID_NEW, _T("&New...\tCtrl+N"));
+    fileMenu->Append(wxID_OPEN, _T("&Open...\tCtrl+O"));
 
-  fileMenu->AppendSeparator();
+    fileMenu->AppendSeparator();
 
-  fileMenu->Append(wxID_PRINT, _T("&Print...\tCtrl+P"));
-  fileMenu->Append(wxID_PRINT_SETUP, _T("Print &Setup..."));
-  fileMenu->Append(wxID_PREVIEW, _T("Print Pre&view"));
-  fileMenu->AppendSeparator();
-  fileMenu->Append(wxID_EXIT, _T("E&xit"));
+    fileMenu->Append(wxID_PRINT, _T("&Print...\tCtrl+P"));
+    fileMenu->Append(wxID_PRINT_SETUP, _T("Print &Setup..."));
+    fileMenu->Append(wxID_PREVIEW, _T("Print Pre&view"));
+    fileMenu->AppendSeparator();
+    fileMenu->Append(wxID_EXIT, _T("E&xit"));
 
-  // A history of files visited. Use this menu.
-  m_docManager->FileHistoryUseMenu(fileMenu);
+    // A history of files visited. Use this menu.
+    m_docManager->FileHistoryUseMenu(fileMenu);
 
-  wxMenu *viewMenu = new wxMenu;
-  viewMenu->Append(ID_CS_SETTINGS, _T("&Settings..."));
+    wxMenu *viewMenu = new wxMenu;
+    viewMenu->Append(ID_CS_SETTINGS, _T("&Settings..."));
 
-  wxMenu *helpMenu = new wxMenu;
-  helpMenu->Append(wxID_HELP, _T("&Help Contents\tF1"));
-  helpMenu->Append(ID_CS_ABOUT, _T("&About"));
+    wxMenu *helpMenu = new wxMenu;
+    helpMenu->Append(wxID_HELP, _T("&Help Contents\tF1"));
+    helpMenu->Append(ID_CS_ABOUT, _T("&About"));
 
-  wxMenuBar *menuBar = new wxMenuBar;
+    wxMenuBar *menuBar = new wxMenuBar;
 
-  menuBar->Append(fileMenu, _T("&File"));
-  menuBar->Append(viewMenu, _T("&View"));
-  menuBar->Append(helpMenu, _T("&Help"));
+    menuBar->Append(fileMenu, _T("&File"));
+    menuBar->Append(viewMenu, _T("&View"));
+    menuBar->Append(helpMenu, _T("&Help"));
 
-  // Associate the menu bar with the frame
-  frame->SetMenuBar(menuBar);
+    // Associate the menu bar with the frame
+    frame->SetMenuBar(menuBar);
 
-  // Load the file history
-  wxConfig config(_T("OGL Studio"), _T("wxWidgets"));
-  m_docManager->FileHistoryLoad(config);
+    // Load the file history
+    wxConfig config(_T("OGL Studio"), _T("wxWidgets"));
+    m_docManager->FileHistoryLoad(config);
 
 #if wxUSE_STATUSBAR
-  frame->CreateStatusBar();
+    frame->CreateStatusBar();
 #endif // wxUSE_STATUSBAR
 
-  // The ordering of these is important for layout purposes
-  CreateDiagramToolBar(frame);
-  CreatePalette(frame);
+    // The ordering of these is important for layout purposes
+    CreateDiagramToolBar(frame);
+    CreatePalette(frame);
 
-  /*
-  CreateProjectWindow(frame);
-  FillProjectTreeCtrl();
-  */
+    /*
+    CreateProjectWindow(frame);
+    FillProjectTreeCtrl();
+    */
 
-  // Create the shape editing menu
-  m_shapeEditMenu = new ShapeEditMenu;
-  m_shapeEditMenu->Append(ID_CS_EDIT_PROPERTIES, _T("Edit properties"));
-  m_shapeEditMenu->AppendSeparator();
-  m_shapeEditMenu->Append(ID_CS_ROTATE_CLOCKWISE, _T("Rotate clockwise"));
-  m_shapeEditMenu->Append(ID_CS_ROTATE_ANTICLOCKWISE, _T("Rotate anticlockwise"));
-  m_shapeEditMenu->AppendSeparator();
-  m_shapeEditMenu->Append(ID_CS_CUT, _T("Cut"));
+    // Create the shape editing menu
+    m_shapeEditMenu = new ShapeEditMenu;
+    m_shapeEditMenu->Append(ID_CS_EDIT_PROPERTIES, _T("Edit properties"));
+    m_shapeEditMenu->AppendSeparator();
+    m_shapeEditMenu->Append(ID_CS_ROTATE_CLOCKWISE, _T("Rotate clockwise"));
+    m_shapeEditMenu->Append(ID_CS_ROTATE_ANTICLOCKWISE, _T("Rotate anticlockwise"));
+    m_shapeEditMenu->AppendSeparator();
+    m_shapeEditMenu->Append(ID_CS_CUT, _T("Cut"));
 
-  frame->Show(true);
+    frame->Show(true);
 
-  SetTopWindow(frame);
+    SetTopWindow(frame);
 
-  return true;
+    return true;
 }
 
 int csApp::OnExit(void)
