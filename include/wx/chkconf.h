@@ -69,6 +69,14 @@
    tests for non GUI features
  */
 
+#ifndef wxUSE_CRASHREPORT
+#   ifdef wxABORT_ON_CONFIG_ERROR
+#       error "wxUSE_CRASHREPORT must be defined."
+#   else
+#       define wxUSE_CRASHREPORT 0
+#   endif
+#endif /* !defined(wxUSE_CRASHREPORT) */
+
 #ifndef wxUSE_DYNLIB_CLASS
 #   ifdef wxABORT_ON_CONFIG_ERROR
 #       error "wxUSE_DYNLIB_CLASS must be defined."
@@ -129,6 +137,14 @@
 #       define wxUSE_MIMETYPE 0
 #   endif
 #endif /* !defined(wxUSE_MIMETYPE) */
+
+#ifndef wxUSE_ON_FATAL_EXCEPTION
+#   ifdef wxABORT_ON_CONFIG_ERROR
+#       error "wxUSE_ON_FATAL_EXCEPTION must be defined."
+#   else
+#       define wxUSE_ON_FATAL_EXCEPTION 0
+#   endif
+#endif /* !defined(wxUSE_ON_FATAL_EXCEPTION) */
 
 #ifndef wxUSE_PROTOCOL
 #   ifdef wxABORT_ON_CONFIG_ERROR
@@ -809,6 +825,15 @@
    check consistency of the settings
  */
 
+#if wxUSE_CRASHREPORT && !wxUSE_ON_FATAL_EXCEPTION
+#   ifdef wxABORT_ON_CONFIG_ERROR
+#       error "wxUSE_CRASHREPORT requires wxUSE_ON_FATAL_EXCEPTION"
+#   else
+#       undef wxUSE_CRASHREPORT
+#       define wxUSE_CRASHREPORT 0
+#   endif
+#endif /* wxUSE_CRASHREPORT */
+
 #if wxUSE_PROTOCOL_FILE || wxUSE_PROTOCOL_FTP || wxUSE_PROTOCOL_HTTP
 #   if !wxUSE_PROTOCOL
 #        ifdef wxABORT_ON_CONFIG_ERROR
@@ -933,18 +958,6 @@
 #       define wxUSE_UNICODE 1
 #   endif
 #endif /* wxUSE_UNICODE_MSLU */
-
-/* ODBC and Unicode are now compatible */
-
-#if 0 /* wxUSE_ODBC && wxUSE_UNICODE */
-#   ifdef wxABORT_ON_CONFIG_ERROR
-        /* (ODBC classes aren't Unicode-compatible yet) */
-#       error "wxUSE_ODBC can't be used with wxUSE_UNICODE"
-#   else
-#       undef wxUSE_ODBC
-#       define wxUSE_ODBC 0
-#   endif
-#endif /* wxUSE_ODBC */
 
 #if wxUSE_XML && !wxUSE_WCHAR_T
 #   ifdef wxABORT_ON_CONFIG_ERROR
