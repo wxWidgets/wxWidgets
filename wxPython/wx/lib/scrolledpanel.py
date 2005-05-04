@@ -35,7 +35,7 @@ class ScrolledPanel( wx.PyScrolledWindow ):
                  size = wx.DefaultSize, style = wx.TAB_TRAVERSAL,
                  name = "scrolledpanel"):
 
-        wx.PyScrolledWindow.__init__(self, parent, -1,
+        wx.PyScrolledWindow.__init__(self, parent, id,
                                      pos=pos, size=size,
                                      style=style, name=name)
         self.SetBestFittingSize(size)
