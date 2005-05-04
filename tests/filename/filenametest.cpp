@@ -89,12 +89,18 @@ private:
         CPPUNIT_TEST( TestSplit );
         CPPUNIT_TEST( TestSetPath );
         CPPUNIT_TEST( TestStrip );
+#ifdef __WINDOWS__
+        CPPUNIT_TEST( TestShortLongPath );
+#endif // __WINDOWS__
     CPPUNIT_TEST_SUITE_END();
 
     void TestConstruction();
     void TestSplit();
     void TestSetPath();
     void TestStrip();
+#ifdef __WINDOWS__
+    void TestShortLongPath();
+#endif // __WINDOWS__
 
     DECLARE_NO_COPY_CLASS(FileNameTestCase)
 };
@@ -182,3 +188,17 @@ void FileNameTestCase::TestStrip()
     CPPUNIT_ASSERT( wxTestStripExtension( _T("good.wav") ) == _T("good") );
     CPPUNIT_ASSERT( wxTestStripExtension( _T("good.wav.wav") ) == _T("good.wav") );
 }
+
+#ifdef __WINDOWS__
+
+void FileNameTestCase::TestShortLongPath()
+{
+    wxFileName fn("C:\\Program Files\\Windows NT\\Accessories\\wordpad.exe");
+
+    // incredibly enough, GetLongPath() used to return different results during
+    // the first and subsequent runs, test for this
+    CPPUNIT_ASSERT_EQUAL( fn.GetLongPath(), fn.GetLongPath() );
+    CPPUNIT_ASSERT_EQUAL( fn.GetShortPath(), fn.GetShortPath() );
+}
+
+#endif // __WINDOWS__
