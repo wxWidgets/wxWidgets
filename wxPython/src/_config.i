@@ -85,11 +85,12 @@ public:
     };
 
 
+    %apply SWIGTYPE *DISOWN { wxConfigBase *config };
     DocDeclStr(
         static wxConfigBase *, Set(wxConfigBase *config),
         "Sets the global config object (the one returned by Get) and returns a
 reference to the previous global config object.", "");
-    
+    %clear wxConfigBase *config;
 
     DocDeclStr(
         static wxConfigBase *, Get(bool createOnDemand = true),
