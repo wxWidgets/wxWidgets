@@ -804,7 +804,7 @@ bool wxHtmlWindow::CopySelection(ClipboardType t)
 #if wxUSE_CLIPBOARD
     if ( m_selection )
     {
-#ifdef __UNIX__
+#if defined(__UNIX__) && !defined(__WXMAC__)
         wxTheClipboard->UsePrimarySelection(t == Primary);
 #else // !__UNIX__
         // Primary selection exists only under X11, so don't do anything under
