@@ -9,12 +9,14 @@ Added wx.BrushFromBitmap to create a stippled brush in a single step.
 Also added missing brysh style flags: wx.STIPPLE_MASK
 wx.STIPPLE_MASK_OPAQUE. 
 
+wxMSW:  Fix for controls when the system text fg colour is not black.
 
 
 
 
 2.6.0.0
 -------
+* 26-Apr-2005
 
 wxMSW: Fixed wx.TransientPopupWindow (and therefore wx.TipWindow) to
 auto-dismiss when the mouse is clicked outside of the popup like it is
@@ -71,8 +73,9 @@ XRCed: Updated to version 0.1.5.
 
 
 
-2.5.5.1
+2.5.5.1    
 -------
+* 8-Apr-2005
 
 wxMSW: Fixed bug #1022383, 'several ComboBoxes appear selected'
 
@@ -162,6 +165,7 @@ Added the ActiveGrid IDE as a sample application.
 
 2.5.4.1
 -------
+* 16-Mar-2005
 
 wx.Sizer Add, Insert, and Prepend functions now return a reference to the
 wx.SizerItem that was added to the sizer, and the wx.SizerItem has a
@@ -439,6 +443,7 @@ wxGTK:
 
 2.5.3.1
 -------
+* 9-Nov-2004
 
 wxMac focus and border refreshes corrected.
 
@@ -634,6 +639,7 @@ version installs, and comes with an uninstaller script.
 
 2.5.2.8
 -------
+* 27-Aug-2004
 
 Predominantly a bug-fix release.
 
@@ -678,6 +684,7 @@ Predominantly a bug-fix release.
 
 2.5.2.7
 -------
+* 14-Aug-2004
 
 wx.ADJUST_MINSIZE is now the default behaviour for window items in
 sizers.  This means that the item's GetMinSize and/or GetBestSize will
@@ -799,8 +806,9 @@ box.
 
 
 
-2.5.1.5
--------
+2.5.1.5    (the 'this is *not* a joke' release)
+-----------------------------------------------
+* 2-Apr-2004
 
 (See also the MigrationGuide_ file for details about some of the
 big changes that have happened in this release and how you should
@@ -915,6 +923,7 @@ Floats are allowed again as function parameters where ints are expected.
 
 2.4.2.4
 -------
+* 1-Oct-2003
 
 Use wxSTC in the demo for displaying the soucre code of the samples.
 
@@ -933,6 +942,7 @@ Added Chris Barker's FloatCanvas.
 
 2.4.1.2
 -------
+* 19-Jun-2003
 
 Added wxScrolledPanel from Will Sadkin
 
@@ -1006,6 +1016,7 @@ Added wxCursorFromBits.
 
 2.4.0.7
 -------
+* 24-Mar-2003
 
 Gave up on generating a warning upon the use of the old true/false or
 TRUE/FALSE values.
@@ -1035,6 +1046,7 @@ details.
 
 2.4.0.6 (a.k.a. the I'm so stupid release)
 ------------------------------------------
+* 11-Mar-2003
 
 The new deprecation class for the old true/false symbols can now be
 returned from OnInit.  And I promise to be sure I am testing what I
@@ -1044,6 +1056,7 @@ think I am testing in the future...
 
 2.4.0.5 (a.k.a. the blame it on Kevin release)
 ----------------------------------------------
+* 7-Mar-2003
 
 A few little but annoying bug fixes.
 
@@ -1055,6 +1068,8 @@ Updated to 0.9b of PyCrust.
 
 2.4.0.4
 -------
+* 7-Mar-2003
+
 Added missing wxRect methods
 
 Add OOR support for wxApp objects too.
@@ -1099,7 +1114,7 @@ present.
 
 Added some static wxApp functions that help with integration with the
 Mac UI.  They are no-ops on other platforms so it doesn't hurt to
-always call them.  The functions are:
+always call them.  The functions are::
 
        wxApp_GetMacDefaultEncodingIsPC
        wxApp_GetMacSupportPCMenuShortcuts
@@ -1131,6 +1146,8 @@ Updated to the 0.9a version of PyCrust
 
 2.4.0.2
 -------
+* 23-Jan-2003
+
 Several bug fixes.
 
 Added wxIntCtrl from Will Sadkin.
@@ -1142,6 +1159,8 @@ Added wxPyColourChooser by Michael Gilfix.
 
 2.4.0.1
 -------
+* 10-Jan-2003
+
 No major new features since 2.3.4.2, mostly bug fixes and minor
 enhancements.
 
@@ -1152,12 +1171,16 @@ wxPython/lib/dialogs.py for more details.
 
 2.3.4.2
 -------
+* 21-Dec-2002
+
 Various bug fixes.
 
 
 
 2.3.4.1
 -------
+* 18-Dec-2002
+
 Updated XRCed and wxTimeCtrl contribs.
 
 Show a couple new wxGrid features in the demo.
@@ -1233,6 +1256,8 @@ and added a script to launch the doc viewer.
 
 2.3.3.1
 -------
+* 19-Sep-2002
+
 Added wxSplashScreen.
 
 Added wxGenericDirCtrl.
@@ -1412,6 +1437,8 @@ Added wxTimeCtrl from Will Sadkin.
 
 2.3.2.1
 -------
+* 20-Dec-2001
+
 Changed (again) how the Python global interpreter lock is handled as
 well as the Python thread state.  This time it works on SMP machines
 without barfing and is also still compatible with Python debuggers.
@@ -1422,6 +1449,8 @@ Added some patches from library contributors.
 
 2.3.2
 -----
+* 11-Dec-2001
+
 Added EVT_HELP, EVT_HELP_RANGE, EVT_DETAILED_HELP,
 EVT_DETAILED_HELP_RANGE, EVT_CONTEXT_MENU, wxHelpEvent,
 wxContextMenuEvent, wxContextHelp, wxContextHelpButton, wxTipWindow,
@@ -1536,6 +1565,8 @@ details.
 
 2.3.1
 -----
+* 10-Jul-2001
+
 Added EVT_GRID_EDITOR_CREATED and wxGridEditorCreatedEvent so the user
 code can get access to the edit control when it is created, (to push
 on a custom event handler for example.)
@@ -1558,6 +1589,8 @@ Added enhanced wxVTKRenderWindow by Prabhu Ramachandran
 
 2.3.0
 -----
+* 22-May-2001
+
 Removed initial startup dependency on the OpenGL DLLs so only the
 glcanvasc.pyd depends on them, (on wxMSW.)
 
@@ -1678,8 +1711,9 @@ wxPython/samples.
 
 
 
-2.2.6
+2.2.7
 -----
+* 19-Jun-2001
 
 No changes happened in the Python wrappers for this release, only
 changes and fixes in the wxWindows library.
@@ -1688,6 +1722,7 @@ changes and fixes in the wxWindows library.
 
 2.2.5
 -----
+* 30-Jan-2001
 
 New typemaps for wxString when compiling for Python 2.0 and beyond
 that allow Unicode objects to be passed as well as String objects.  If
@@ -1748,6 +1783,7 @@ XML-RPC server.
 
 New in 2.2.2
 ------------
+* 26-Oct-2000
 
 Significantly changed how the wxStyledtextCtrl code that wraps
 Scintilla is implemented.  Most of it is now automatically generated
@@ -1797,6 +1833,7 @@ wxMSW, but at least it's a bit more usable now.
 
 New in 2.2.1
 ------------
+* 22-Aug-2000
 
 Various tweaks, fixes, missing methods, etc.
 
@@ -1806,6 +1843,7 @@ Added example use of wxTaskBarIcon to the demo.
 
 New in 2.2.0
 ------------
+* 17-Jul-2000
 
 Added wxLog and friends.
 
@@ -1817,6 +1855,7 @@ Added PyShellWindow to the wxPython.lib package.
 
 New in 2.1.16
 -------------
+* 12-Jun-2000
 
 Added an attribute named labelDelta to the generic buttons that
 specifies how far to offset the label when the button is in the
@@ -1862,6 +1901,7 @@ Added wxSpinCtrl.
 
 New in 2.1.15
 -------------
+* 25-Apr-2000
 
 Fixed wxTreeCtrl.HitTest to return both the tree item as well as the
 flags that clairify where the click was in relation to the item.
@@ -1916,6 +1956,8 @@ provider smiles convincingly and removes his flame-proof suit.)
 
 What's new in 2.1.13
 --------------------
+* 3-Feb-2000
+
 Skipped a version number to match what has been released for wxGTK.
 
 Updated wxMVCTree and added a demo for it, also fixed layout on GTK
@@ -2001,6 +2043,8 @@ style flag instead of trying to float it ourselves.)
 
 What's new in 2.1.11
 --------------------
+* 13-Nov-1999
+
 Skipped a few version numbers so wxMSW, wxGTK and wxPython are all
 syncronized.
 
@@ -2054,6 +2098,8 @@ Added an MVC tree control from Bryn Keller to the library.
 
 What's new in 2.1.5
 -------------------
+* 12-Oct-1999
+
 This is a quick bug-fix release to take care of a few nasties that
 crept in at the last minute before 2.1.4 was called done.  No new
 major features.
@@ -2061,7 +2107,8 @@ major features.
 
 
 What's new in 2.1.4
---------------------
+-------------------
+* 7-Oct-1999
 
 This release is NOT syncronized with a snapshot release of wxGTK or
 wxMSW.  For MSW this isn't much of a problem since you can get the
@@ -2089,7 +2136,7 @@ default sort order.
 
 Added typemaps for wxSize, wxPoint, wxRealPoint, and wxRect that allow
 either the actual objects or Python sequence values to be used.  For
-example, the following are equivallent:
+example, the following are equivallent::
 
     win = wxWindow(parent, size = wxSize(100, 100))
     win = wxWindow(parent, size = (100, 100))
@@ -2161,7 +2208,7 @@ redirected to a file, you can provide a second parameter to your app
 object's constructor that is a filename.  If you want to use your own
 class instead of wxPyOnDemandOutputWindow you can either implement
 RedirectStdio() in you app class or change the value of
-wxApp.outputWindowClass like this:
+wxApp.outputWindowClass like this::
 
     class MyApp(wxApp):
         outputWindowClass = MyClass
@@ -2193,6 +2240,7 @@ problems...)
 
 What's new in 2.1b3
 --------------------
+* 1-Sep-1999
 
 This release is syncronized with release 2.1 snapshot 9 of wxWindows.
 
@@ -2229,7 +2277,8 @@ interface using wxPoints and a wxSize.
 
 
 What's new in 2.1b2
---------------------
+-------------------
+* 6-Aug-1999
 
 Added the missing wxWindow.GetUpdateRegion() method.
 
@@ -2294,7 +2343,9 @@ in wx.cpp.
 
 
 What's new in 2.1b1
---------------------
+-------------------
+* 28-Jun-1999
+
 Fixed wxComboBox.SetSelection so that it actually sets the selected
 item.  (Actually just removed it from wxPython and let it default to
 wxChoice.SetSelection which was already doing the right thing.)
@@ -2321,6 +2372,8 @@ not even in the wxWindows C++ library yet!
 
 What's new in 2.0b9
 -------------------
+* 1-May-1999
+
 Bug fix for ListCtrl in test4.py (Was a missing file...  DSM!)
 
 Bug fix for occassional GPF on Win32 systems upon termination of a
@@ -2356,6 +2409,8 @@ methods.
 
 What's new in 2.0b8
 -------------------
+* 28-Mar-1999
+
 Support for using Python threads in wxPython apps.
 
 Several missing methods from various classes.
@@ -2366,6 +2421,8 @@ Various bug fixes.
 
 What's new in 2.0b7
 -------------------
+* 15-Mar-1999
+
 Added DLG_PNT and DLG_SZE convienience methods to wxWindow class.
 
 Added missing constructor and other methods for wxMenuItem.
@@ -2374,12 +2431,16 @@ Added missing constructor and other methods for wxMenuItem.
 
 What's new in 2.0b6
 -------------------
+* 4-Mar-1999
+
 Just a quickie update to fix the self-installer to be compatible with
 Python 1.5.2b2's Registry settings.
 
 
 What's new in 2.0b5
 -------------------
+* 25-Feb-1999
+
 Well obviously the numbering scheme has changed.  I did this to
 reflect the fact that this truly is the second major revision of
 wxPython, (well the third actually if you count the one I did for
@@ -2406,6 +2467,8 @@ As usual, some bug fixes, tweaks, etc.
 
 What's new in 0.5.3
 -------------------
+* 30-Jan-1999
+
 Added wxSashWindow, wxSashEvent, wxLayoutAlgorithm, etc.
 
 Various cleanup, tweaks, minor additions, etc. to maintain
@@ -2438,13 +2501,14 @@ Other assorted fixes and additions.
 
 What's new in 0.4.2
 -------------------
+* 21-Oct-1998
 
 wxPython on wxGTK works!!!  Both dynamic and static on Linux and
-static on Solaris have been tested.  Many thanks go to Harm
-<H.v.d.Heijden@phys.tue.nl> for his astute detective work on tracking
-down a nasty DECREF bug.  Okay so I have to confess that it was just a
-DSM (Dumb Stupid Mistake) on my part but it was nasty none the less
-because the behavior was so different on different platforms.
+static on Solaris have been tested.  Many thanks go to Harm van der
+Heijden for his astute detective work on tracking down a nasty DECREF
+bug.  Okay so I have to confess that it was just a DSM (Dumb Stupid
+Mistake) on my part but it was nasty none the less because the
+behavior was so different on different platforms.
 
 The dynamicly loaded module on Solaris is still segfaulting, so it
 must have been a different issue all along...
@@ -2453,6 +2517,7 @@ must have been a different issue all along...
 
 What's New in 0.4
 -----------------
+* 2-Oct-1998
 
 1. Worked on wxGTK compatibility.  It is partially working.  On a
 Solaris/Sparc box wxPython is working but only when it is statically
@@ -2465,5 +2530,14 @@ version segfault shortly after starting up.
 
 3. Varioius bug fixes, enhancements, etc.
 
+
+
+
+wxPython 0.3
+------------
+* 9-Aug-1998
+
+The first "modern" version of wxPython.  See
+http://wiki.wxpython.org/index.cgi/WxPythonHistory
 
 
