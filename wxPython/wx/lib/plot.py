@@ -689,9 +689,11 @@ class PlotCanvas(wx.Window):
     def ScrollUp(self, units):
         """Move view up number of axis units."""
         self.last_PointLabel = None        #reset pointLabel
-        if self.BeenDrawn():
-            self._drawCmd.scrollAxisY(units, self._ySpec)
-            self._draw()
+        if self.last_draw is not None: 	
+             graphics, xAxis, yAxis= self.last_draw
+             yAxis= (yAxis[0]+units, yAxis[1]+units)
+             self.Draw(graphics,xAxis,yAxis)
+
         
     def GetXY(self,event):
         """Takes a mouse event and returns the XY user axis values."""
