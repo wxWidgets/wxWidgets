@@ -5,7 +5,7 @@
 *  Modified by: Ryan Norton (Converted to C)
 *  Created:     01/02/97
 *  RCS-ID:      $Id$
-*  Copyright:   (c)
+*  Copyright:   (c) Julian Smart
 *  Licence:     wxWindows licence
 */
 

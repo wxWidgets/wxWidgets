@@ -10,6 +10,8 @@ WORDCHAR	[^'\\]
  * File:         lexer.l
  * Description:  Lexical analyser for PROLOGIO; can be used with
  *               either lex and flex.
+ * Copyright:    (c) Julian Smart
+ * Licence:      wxWindows Licence
  */
 #include <string.h>
 #include <unistd.h>

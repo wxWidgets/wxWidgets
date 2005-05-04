@@ -5,7 +5,7 @@
 * Modified by:
 * Created:     02/02/03
 * RCS-ID:
-* Copyright:   (c)
+* Copyright:   (c) John Labenski
 * Licence:     wxWindows licence
 */
 

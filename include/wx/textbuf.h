@@ -5,7 +5,7 @@
 //              differences between platforms.
 // Created:     14.11.01
 // Author:      Morten Hanssen, Vadim Zeitlin
-// Copyright:   (c) 1998-2001 wxWidgets team
+// Copyright:   (c) 1998-2001 Morten Hanssen, Vadim Zeitlin
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 

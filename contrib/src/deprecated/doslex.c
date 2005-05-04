@@ -4,6 +4,8 @@
  * $Header$
 	Last change:  JS   13 Jul 97    6:17 pm
  */
+/* Copyright: (c) Julian Smart */
+/* Licence:   wxWindows Licence */
 
 #define FLEX_SCANNER
 

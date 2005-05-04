@@ -5,7 +5,7 @@
 // Modified by: Ron Lee
 // Created:     01/02/97
 // RCS-ID:      $Id$
-// Copyright:   (c) wxWidgets team
+// Copyright:   (c) Vadim Zeitlin
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 

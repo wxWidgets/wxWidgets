@@ -1,10 +1,10 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        mdi.h
+// Name:        wx/mdi.h
 // Purpose:     wxMDI base header
-// Author:      wxWidgets Team
+// Author:      Julian Smart
 // Modified by:
 // Created:
-// Copyright:   (c) wxWidgets Team
+// Copyright:   (c) Julian Smart
 // RCS-ID:      $Id$
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////

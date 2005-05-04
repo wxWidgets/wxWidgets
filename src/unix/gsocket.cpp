@@ -1,12 +1,14 @@
 /* -------------------------------------------------------------------------
- * Project: GSocket (Generic Socket) for WX
- * Name:    gsocket.c
- * Authors: David Elliott (C++ conversion, maintainer)
- *          Guilhem Lavaux,
- *          Guillermo Rodriguez Garcia <guille@iies.es>
- * Purpose: GSocket main Unix and OS/2 file
- * Licence: The wxWindows licence
- * CVSID:   $Id$
+ * Project:     GSocket (Generic Socket) for WX
+ * Name:        gsocket.c
+ * Copyright:   (c) Guilhem Lavaux
+ * Licence:     wxWindows Licence
+ * Authors:     David Elliott (C++ conversion, maintainer)
+ *              Guilhem Lavaux,
+ *              Guillermo Rodriguez Garcia <guille@iies.es>
+ * Purpose:     GSocket main Unix and OS/2 file
+ * Licence:     The wxWindows licence
+ * CVSID:       $Id$
  * -------------------------------------------------------------------------
  */
 

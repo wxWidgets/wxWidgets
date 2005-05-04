@@ -6,7 +6,7 @@
 // Created:     28/6/2000
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
-// Licence:
+// Licence:     wxWindows Licence
 /////////////////////////////////////////////////////////////////////////////
 
 #if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)

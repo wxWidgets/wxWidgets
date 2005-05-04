@@ -1,5 +1,15 @@
+/*
+ Name:        wx/msw/gccpriv.h
+ Purpose:     MinGW/Cygwin definitions
+ Author:      Vadim Zeitlin
+ Modified by:
+ Created:
+ RCS-ID:      $Id$
+ Copyright:   (c) Vadim Zeitlin
+ Licence:     wxWindows Licence
+*/
+
 /* THIS IS A C FILE, DON'T USE C++ FEATURES (IN PARTICULAR COMMENTS) IN IT */
-/* MinGW w32api specific stuff */
 
 #ifndef _WX_MSW_GCCPRIV_H_
 #define _WX_MSW_GCCPRIV_H_
@@ -99,9 +109,10 @@
     #endif
 #endif
 
-// current (= before mingw-runtime 3.3) mingw32 headers forget to
-// define _puttchar, this will probably be fixed in the next versions but
-// for now do it ourselves
+/* current (= before mingw-runtime 3.3) mingw32 headers forget to
+   define _puttchar, this will probably be fixed in the next versions but
+   for now do it ourselves
+ */
 #if defined( __MINGW32__ ) && \
         !wxCHECK_MINGW32_VERSION(3,3) && !defined( _puttchar )
     #ifdef wxUSE_UNICODE

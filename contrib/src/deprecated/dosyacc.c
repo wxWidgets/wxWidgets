@@ -1,3 +1,5 @@
+/* Copyright: (c) Julian Smart */
+/* Licence:   wxWindows Licence */
 /* include platform.h first to get __WIN32__ definition */
 #include "wx/platform.h"
 #include "wx/setup.h"

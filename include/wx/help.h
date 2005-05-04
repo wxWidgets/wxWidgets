@@ -4,7 +4,7 @@
 // Author:      wxWidgets Team
 // Modified by:
 // Created:
-// Copyright:   (c) wxWidgets Team
+// Copyright:   (c) Julian Smart
 // RCS-ID:      $Id$
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////

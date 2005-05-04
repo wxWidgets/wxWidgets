@@ -1,12 +1,12 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        wx/timer.h
 // Purpose:     wxTimer, wxStopWatch and global time-related functions
-// Author:      Julian Smart (wxTimer), Sylvain Bougnoux (wxStopWatch)
+// Author:      Julian Smart
 // Modified by: Vadim Zeitlin (wxTimerBase)
 //              Guillermo Rodriguez (global clean up)
 // Created:     04/01/98
 // RCS-ID:      $Id$
-// Copyright:   (c) wxWidgets team
+// Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 

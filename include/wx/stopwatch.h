@@ -4,7 +4,7 @@
 // Author:      Julian Smart (wxTimer), Sylvain Bougnoux (wxStopWatch)
 // Created:     26.06.03 (extracted from wx/timer.h)
 // RCS-ID:      $Id$
-// Copyright:   (c) 1998-2003 wxWidgets team
+// Copyright:   (c) 1998-2003 Julian Smart, Sylvain Bougnoux
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 

@@ -1,3 +1,13 @@
+///////////////////////////////////////////////////////////////////////////////
+// Name:        wx/setup_inc.h
+// Purpose:     setup.h settings
+// Author:      Vadim Zeitlin
+// Modified by:
+// Created:
+// RCS-ID:      $Id$
+// Copyright:   (c) Vadim Zeitlin
+// Licence:     wxWindows licence
+///////////////////////////////////////////////////////////////////////////////
 
 // ----------------------------------------------------------------------------
 // global settings

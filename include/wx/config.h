@@ -1,10 +1,10 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        config.h
 // Purpose:     wxConfig base header
-// Author:      wxWidgets Team
+// Author:      Julian Smart
 // Modified by:
 // Created:
-// Copyright:   (c) wxWidgets Team
+// Copyright:   (c) Julian Smart
 // RCS-ID:      $Id$
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////

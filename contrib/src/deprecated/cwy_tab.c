@@ -1,3 +1,6 @@
+/* Copyright: (c) Julian Smart */
+/* Licence:   wxWindows Licence */
+
 #ifndef lint
 static char yysccsid[] = "@(#)yaccpar     1.7 (Berkeley) 09/09/90";
 #endif

@@ -1,12 +1,18 @@
-/*
- * File and other globbing (included by wb_utils.cc)
- */
+/////////////////////////////////////////////////////////////////////////////
+// Name:        glob.inc
+// Purpose:     File and other globbing (included by utils.cpp)
+// Author:      Karsten Ballueder
+// Modified by:
+// Created:     20/5/1998
+// RCS-ID:      $Id$
+// Copyright:   (c) Karsten Ballueder
+// Licence:     wxWindows licence
+/////////////////////////////////////////////////////////////////////////////
 
 // This file includes:
 //	wxIsWild(const char *pattern)
 //	wxMatchWild(const char *pattern, const char *str, bool dot_special)
 //
-
 
 //---------------------------------------------------------------------------------
 #ifndef UNIX_GLOB

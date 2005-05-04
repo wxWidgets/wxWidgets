@@ -5,7 +5,8 @@
 // Modified By:
 // Created:     07/01/2004
 // RCS-ID:      $Id$
-// Licence:     wxWindows
+// Copyright:   (c) Ryan Norton
+// Licence:     wxWindows Licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef _WX_URI_H_

@@ -1,3 +1,14 @@
+/*
+ Name:        wx/wx_cw_cm.h
+ Purpose:     wxWidgets definitions for CodeWarrior builds
+ Author:      Stefan Csomor
+ Modified by:
+ Created:
+ RCS-ID:      $Id$
+ Copyright:   (c) Stefan Csomor
+ Licence:     wxWindows licence
+*/
+
 #define MSL_USE_PRECOMPILED_HEADERS 0
 #if __WXDEBUG__
     // mac os assert levels

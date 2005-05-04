@@ -1,4 +1,6 @@
 /* Version: $Id$ */
+/* Copyright:    (c) Julian Smart */
+/* Licence:      wxWindows Licence */
  %{
 #include "wx/setup.h"
 #include <string.h>

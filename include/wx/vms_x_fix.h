@@ -3,6 +3,8 @@
  * Author : Jouk Jansen (joukj@hrem.stm.tudelft.nl)                        *
  *                                                                         *
  * Last revision : 19 January 2004                                         *
+ * Copyright:   (c) Jouk Jansen                                            *
+ * Licence:     wxWindows licence                                          *
  *                                                                         *
  * Repair definitions of Runtime library functions when compiling with     *
  * /name=(as_is) on OpenVMS                                                *

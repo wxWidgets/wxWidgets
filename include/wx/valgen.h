@@ -5,7 +5,7 @@
 // Modified by:
 // Created:     Jan 22 1999
 // RCS-ID:
-// Copyright:   (c) 1999 Kevin Smith
+// Copyright:   (c) 1999 Julian Smart (assigned from Kevin)
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
