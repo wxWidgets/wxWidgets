@@ -1839,19 +1839,12 @@ int wxString::PrintfV(const wxChar* pszFormat, va_list argptr)
         // vsnprintf() may return either -1 (traditional Unix behaviour) or the
         // total number of characters which would have been written if the
         // buffer were large enough
-        // also, it may return an errno may be something like EILSEQ,
-        // in which case we need to break out
+        //
+        // and it may also set errno to EOVERFLOW apparently (which system does
+        // this?)
         if ( (len >= 0 && len <= size)
-        // No EOVERFLOW on Windows nor Palm 6.0 nor OpenVMS nor MacOS (not X)
-        // not OS/2 (not Innotek libc).
-#if !defined(__WXMSW__)                              && \
-    !defined(__WXPALMOS__)                           && \
-    !defined(__OpenBSD__)                            && \
-    !defined(__DJGPP__)                              && \
-    !defined( __VMS )                                && \
-    !(defined(__WXMAC__) && !defined(__WXMAC_OSX__)) && \
-    !(defined(__EMX__) && !defined(__INNOTEK_LIBC__))
-            || errno != EOVERFLOW
+#ifdef EOVERFLOW
+                && errno != EOVERFLOW
 #endif
             )
         {
