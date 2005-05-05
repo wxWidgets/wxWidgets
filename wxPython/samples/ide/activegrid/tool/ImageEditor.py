@@ -41,10 +41,21 @@ class ImageView(wx.lib.docview.View):
         panel = wx.Panel(frame, -1)            
         bitmap = wx.Image(doc.GetFilename()).ConvertToBitmap()
         self._ctrl = wx.StaticBitmap(panel, -1, bitmap, (0,0), (bitmap.GetWidth(), bitmap.GetHeight()))
+        wx.EVT_LEFT_DOWN(self._ctrl, self.OnFocus)
+        wx.EVT_LEFT_DCLICK(self._ctrl, self.OnFocus)
+        wx.EVT_RIGHT_DOWN(self._ctrl, self.OnFocus)
+        wx.EVT_RIGHT_DCLICK(self._ctrl, self.OnFocus)
+        wx.EVT_MIDDLE_DOWN(self._ctrl, self.OnFocus)
+        wx.EVT_MIDDLE_DCLICK(self._ctrl, self.OnFocus)
         panel.SetClientSize(bitmap.GetSize())
         frame.SetClientSize(panel.GetSize())
         self.Activate()
         return True
+
+
+    def OnFocus(self, event):
+        self._ctrl.SetFocus()
+        event.Skip()
 
 
     def OnClose(self, deleteWindow = True):

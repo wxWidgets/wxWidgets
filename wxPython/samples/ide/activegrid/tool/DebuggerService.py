@@ -31,7 +31,6 @@ import SimpleXMLRPCServer
 import xmlrpclib
 import os
 import threading
-import process
 import Queue
 import SocketServer
 import ProjectEditor
@@ -43,10 +42,18 @@ import DebuggerHarness
 import traceback
 import StringIO
 if wx.Platform == '__WXMSW__':
-    import win32api
+    try:
+        import win32api
+        _PYWIN32_INSTALLED = True
+    except ImportError:
+        _PYWIN32_INSTALLED = False
     _WINDOWS = True
 else:
     _WINDOWS = False
+
+if not _WINDOWS or _PYWIN32_INSTALLED:
+    import process
+
 _ = wx.GetTranslation
 
 _VERBOSE = False
@@ -1560,10 +1567,8 @@ class DebuggerService(Service.Service):
         elif an_id == DebuggerService.CLEAR_ALL_BREAKPOINTS:
             event.Enable(self.HasBreakpointsSet())
             return True
-        elif an_id == DebuggerService.RUN_ID:
-            event.Enable(self.HasAnyFiles())
-            return True
-        elif an_id == DebuggerService.DEBUG_ID:
+        elif (an_id == DebuggerService.RUN_ID
+        or an_id == DebuggerService.DEBUG_ID):
             event.Enable(self.HasAnyFiles())
             return True
         else:
@@ -1574,6 +1579,9 @@ class DebuggerService(Service.Service):
     #----------------------------------------------------------------------------                    
    
     def OnDebugProject(self, event):
+        if _WINDOWS and not _PYWIN32_INSTALLED:
+            wx.MessageBox(_("Python for Windows extensions (pywin32) is required to debug on Windows machines. Please go to http://sourceforge.net/projects/pywin32/, download and install pywin32."))
+            return
         if not Executor.GetPythonExecutablePath():
             return
         if DebugCommandUI.DebuggerRunning():
@@ -1636,13 +1644,13 @@ class DebuggerService(Service.Service):
                 yesNoMsg = wx.MessageDialog(frame,
                           _("Files have been modified.\nWould you like to save all files before running?"),
                           _("Run"),
-                          wx.YES_NO
+                          wx.YES_NO|wx.ICON_QUESTION
                           )
             else:              
                 yesNoMsg = wx.MessageDialog(frame,
                           _("Files have been modified.\nWould you like to save all files before debugging?"),
                           _("Debug"),
-                          wx.YES_NO
+                          wx.YES_NO|wx.ICON_QUESTION
                           )
             if yesNoMsg.ShowModal() == wx.ID_YES:
                 docs = wx.GetApp().GetDocumentManager().GetDocuments()
@@ -1653,6 +1661,9 @@ class DebuggerService(Service.Service):
         DebugCommandUI.ShutdownAllDebuggers()
         
     def OnRunProject(self, event):
+        if _WINDOWS and not _PYWIN32_INSTALLED:
+            wx.MessageBox(_("Python for Windows extensions (pywin32) is required to run on Windows machines. Please go to http://sourceforge.net/projects/pywin32/, download and install pywin32."))
+            return
         if not Executor.GetPythonExecutablePath():
             return
         projectService = wx.GetApp().GetService(ProjectEditor.ProjectService)
@@ -1892,9 +1903,6 @@ class CommandPropertiesDialog(wx.Dialog):
         self._lastArguments = config.Read("LastRunArguments")
         self._argsEntry = wx.TextCtrl(self, -1, str(self._lastArguments))
         self._argsEntry.SetToolTipString(str(self._lastArguments))
-        def TextChanged(event):
-            self._argsEntry.SetToolTipString(event.GetString())
-        self.Bind(wx.EVT_TEXT, TextChanged, self._argsEntry)
 
         flexGridSizer.Add(argsStaticText, 0, flag=wx.ALIGN_CENTER_VERTICAL|wx.ALIGN_LEFT)
         flexGridSizer.Add(self._argsEntry, 1, flag=wx.EXPAND)
@@ -1911,7 +1919,7 @@ class CommandPropertiesDialog(wx.Dialog):
         self.Bind(wx.EVT_TEXT, TextChanged2, self._startEntry)
 
         flexGridSizer.Add(self._startEntry, 1, wx.EXPAND)
-        self._findDir = wx.Button(self, -1, _("Browse..."), size=(60,-1))
+        self._findDir = wx.Button(self, -1, _("Browse..."))
         self.Bind(wx.EVT_BUTTON, self.OnFindDirClick, self._findDir)
         flexGridSizer.Add(self._findDir, 0, wx.RIGHT, 10)
         
@@ -1935,12 +1943,12 @@ class CommandPropertiesDialog(wx.Dialog):
         cpPanelBorderSizer.Add(flexGridSizer, 0, wx.ALL, 10)
         
         box = wx.BoxSizer(wx.HORIZONTAL)
-        self._okButton = wx.Button(self, wx.ID_OK, okButtonName, size=(75,-1))
+        self._okButton = wx.Button(self, wx.ID_OK, okButtonName)
         self._okButton.SetDefault()
         self._okButton.SetHelpText(_("The ") + okButtonName + _(" button completes the dialog"))
         box.Add(self._okButton, 0, wx.ALIGN_RIGHT|wx.ALL, 5)
         self.Bind(wx.EVT_BUTTON, self.OnOKClick, self._okButton)
-        btn = wx.Button(self, wx.ID_CANCEL, _("Cancel"), size=(75,-1))
+        btn = wx.Button(self, wx.ID_CANCEL, _("Cancel"))
         btn.SetHelpText(_("The Cancel button cancels the dialog."))
         box.Add(btn, 0, wx.ALIGN_RIGHT|wx.ALL, 5)
         cpPanelBorderSizer.Add(box, 0, wx.ALIGN_RIGHT|wx.BOTTOM, 5)
@@ -2115,15 +2123,15 @@ import cStringIO
 #----------------------------------------------------------------------
 def getBreakData():
     return \
-'\x89PNG\r\n\x1a\n\x00\x00\x00\rIHDR\x00\x00\x00\x10\x00\x00\x00\x11\x08\x06\
-\x00\x00\x00\xd4\xaf,\xc4\x00\x00\x00\x04sBIT\x08\x08\x08\x08|\x08d\x88\x00\
-\x00\x00\x97IDAT8\x8d\xbdSA\x0e\xc3 \x0c\x8b\x13\xfe=\x1e^\xe2\x1dF\xbb\x8c\
-\xd2\x0c\xa9\xda,q\x88\x05\x8e\x1d\x00P\x93;\xd0[\xa7W\x04\xe8\x8d\x0f\xdfxU\
-c%\x02\xbd\xbd\x05HQ+Xv\xb0\xa3VN\xf9\xd4\x01\xbd\x11j\x18\x1d\x00\x10\xa8AD\
-\xa4\xa4\xd6_\x9b\x19\xbb\x03\xd8c|\x8f\x00\xe0\x93\xa8g>\x15 C\xee:\xe7\x8f\
-\x08\xdesj\xcf\xe6\xde(\xddn\xec\x18f0w\xe0m;\x8d\x9b\xe4\xb1\xd4\n\xa6\x0e2\
-\xc4{\x1f\xeb\xdf?\xe5\xff\t\xa8\x1a$\x0cg\xac\xaf\xb0\xf4\x992<\x01\xec\xa0\
-U9V\xf9\x18\xc8\x00\x00\x00\x00IEND\xaeB`\x82' 
+'\x89PNG\r\n\x1a\n\x00\x00\x00\rIHDR\x00\x00\x00\x10\x00\x00\x00\x10\x08\x02\
+\x00\x00\x00\x90\x91h6\x00\x00\x00\x03sBIT\x08\x08\x08\xdb\xe1O\xe0\x00\x00\
+\x00\x85IDAT(\x91\xbd\x92A\x16\x03!\x08CI\xdf\xdc\x0b\x8e\xe6\xd1\xe0d\xe9\
+\x82\xd6\xc7(\x9di7\xfd\xab<\x14\x13Q\xb8\xbb\xfc\xc2\xe3\xd3\x82\x99\xb9\
+\xe9\xaeq\xe1`f)HF\xc4\x8dC2\x06\xbf\x8a4\xcf\x1e\x03K\xe5h\x1bH\x02\x98\xc7\
+\x03\x98\xa9z\x07\x00%\xd6\xa9\xd27\x90\xac\xbbk\xe5\x15I\xcdD$\xdc\xa7\xceT\
+5a\xce\xf3\xe4\xa0\xaa\x8bO\x12\x11\xabC\xcb\x9c}\xd57\xef\xb0\xf3\xb7\x86p\
+\x97\xf7\xb5\xaa\xde\xb9\xfa|-O\xbdjN\x9b\xf8\x06A\xcb\x00\x00\x00\x00IEND\
+\xaeB`\x82' 
 
 def getBreakBitmap():
     return BitmapFromImage(getBreakImage())
@@ -2163,14 +2171,18 @@ def getClearOutputIcon():
 #----------------------------------------------------------------------
 def getCloseData():
     return \
-'\x89PNG\r\n\x1a\n\x00\x00\x00\rIHDR\x00\x00\x00\x12\x00\x00\x00\x12\x08\x06\
-\x00\x00\x00V\xce\x8eW\x00\x00\x00\x04sBIT\x08\x08\x08\x08|\x08d\x88\x00\x00\
-\x00\x86IDAT8\x8d\xed\x90\xb1\r\x80 \x10E_"c\xd80\x02-\x138\x87;8\x8f\x8d\
-\x8b\xb0\x02\xa5\xad\rS\x88\xcd\x11) \x82\xb6\xbe\xea\xf2\xc9\xbd\xfc\x03~\
-\xdeb\x81\xb9\x90\xabJ^%\x00N\x849\x0e\xf0\x85\xbc\x8a\x12YZR2\xc7\x1eIB\xcb\
-\xb2\xcb\x9at\x9d\x95c\xa5Y|\x92\x0c\x0f\xa2\r8e\x1e\x81\x1d8z\xdb8\xee?Ig\
-\xfa\xb7\x92)\xcb\xacd\x01XZ$QD\xba\xf0\xa6\x80\xd5\x18cZ\x1b\x95$?\x1f\xb9\
-\x00\x1d\x94\x1e*e_\x8a~\x00\x00\x00\x00IEND\xaeB`\x82' 
+'\x89PNG\r\n\x1a\n\x00\x00\x00\rIHDR\x00\x00\x00\x10\x00\x00\x00\x10\x08\x02\
+\x00\x00\x00\x90\x91h6\x00\x00\x00\x03sBIT\x08\x08\x08\xdb\xe1O\xe0\x00\x00\
+\x00\xedIDAT(\x91\xa5\x90!\xae\x840\x10\x86g_\xd6"*kz\x82j\xb0h\x1c\t\' x\
+\x92Z\xc2\x05\x10\x95\x18\x0e\x00\x02M\x82 \xe1\nMF#jz\x80\xea&+\x9a\x10\x96\
+\xdd}\xfb\xc8\x1b\xd7?\xdf\x97\xfe3\xb7u]\xe1\xca\xfc\\\xa2\xff- \xe24M\xc7\
+\xc49wJ\xee\xc7G]\xd7\x8c1\xc6\x18\xe7\xdc\'B\x08k\xed1y\xfaa\x1cG\xad\xb5\
+\x94\x12\x11\x9dsy\x9e+\xa5\x84\x10;\r\x00\xb7\xd3\x95\x8c1UU\x05A\x00\x00\
+\xd6\xda,\xcb\x92$\xf9\xb8\x03\x00PJ\x85\x10Zk\xa5\xd4+\xfdF\x00\x80\xae\xeb\
+\x08!\x84\x90y\x9e\x11\xf1\x8bP\x96\xa5\xef\xdd\xb6\xad\xb5VJ\xf9\x9b\xe0\
+\xe9\xa6i8\xe7\xbe\xdb\xb6mi\x9a\x0e\xc3\xf0F\x88\xe3\x18\x00\xfa\xbe\x0f\
+\xc3\xd0\'\x9c\xf3eY\xa2(*\x8ab\xc7\x9e\xaed\x8c\xa1\x94\xben\xf5\xb1\xd2W\
+\xfa,\xfce.\x0b\x0f\xb8\x96e\x90gS\xe0v\x00\x00\x00\x00IEND\xaeB`\x82' 
 
 def getCloseBitmap():
     return BitmapFromImage(getCloseImage())

@@ -1,3 +1,15 @@
+#----------------------------------------------------------------------------
+# Name:         __init__.py
+# Purpose:      Utilities
+#
+# Author:       Joel Hare
+#
+# Created:      7/28/04
+# CVS-ID:       $Id$
+# Copyright:    (c) 2004-2005 ActiveGrid, Inc.
+# License:      wxWindows License
+#----------------------------------------------------------------------------
+
 import logging
 import cStringIO
 import traceback
@@ -33,7 +45,7 @@ def setattrignorecase(object, name, value):
 ##            object.__dict__[attr] = value
 ##            return
     object.__dict__[name] = value
-
+    
 def getattrignorecase(object, name):
     for attr in object.__dict__:
         if attr.lower() == name.lower():
@@ -44,18 +56,18 @@ def getattrignorecase(object, name):
     return object.__dict__[name]
 
 
-def defaultLoad(fileObject):
+def defaultLoad(fileObject, knownTypes=None):
     xml = fileObject.read()
-    loadedObject = xmlmarshaller.unmarshal(xml)
+    loadedObject = xmlmarshaller.unmarshal(xml, knownTypes=knownTypes)
     if hasattr(fileObject, 'name'):
         loadedObject.fileName = os.path.abspath(fileObject.name)
     loadedObject.initialize()
     return loadedObject
 
-def defaultSave(fileObject, objectToSave):
-    xml = xmlmarshaller.marshal(objectToSave, prettyPrint=True)
+def defaultSave(fileObject, objectToSave, knownTypes=None):
+    xml = xmlmarshaller.marshal(objectToSave, prettyPrint=True, knownTypes=knownTypes)
     fileObject.write(xml)
-   
+    fileObject.close()
  
 def clone(objectToClone):
     xml = xmlmarshaller.marshal(objectToClone, prettyPrint=True)

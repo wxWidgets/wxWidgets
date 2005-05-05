@@ -156,11 +156,8 @@ class OutlineView(Service.ServiceView):
                 treeCtrl.Expand(child)
             (child, cookie) = treeCtrl.GetNextChild(parentItem, cookie)
 
-        # wxBug: This causes a crash, tried using ScrollTo which crashed as well.  Then tried calling it with wx.CallAfter and that crashed as well, with both EnsureVisible and ScrollTo
-        # self.GetControl().EnsureVisible(self.GetControl().GetRootItem())
-        # So doing the following massive hack which forces the treectrl to scroll up to the top item
-        treeCtrl.Collapse(parentItem)
-        treeCtrl.Expand(parentItem)
+        if parentItem:
+            treeCtrl.EnsureVisible(parentItem)
 
 
 class OutlineTreeCtrl(wx.TreeCtrl):

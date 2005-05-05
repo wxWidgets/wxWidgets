@@ -21,6 +21,7 @@ _ = wx.GetTranslation
 SELECT_BRUSH = wx.Brush("BLUE", wx.SOLID)
 SHAPE_BRUSH = wx.Brush("WHEAT", wx.SOLID)
 LINE_BRUSH = wx.BLACK_BRUSH
+INACTIVE_SELECT_BRUSH = wx.Brush("LIGHT BLUE", wx.SOLID)
 
 
 def GetRawModel(model):
@@ -59,7 +60,7 @@ class CanvasView(wx.lib.docview.View):
         frame.Layout()        
         self.Activate()
         return True
-
+        
 
     def OnActivateView(self, activate, activeView, deactiveView):
         if activate and self._canvas:
@@ -68,6 +69,17 @@ class CanvasView(wx.lib.docview.View):
                 self._canvas.SetFocus()
             else:
                 wx.CallAfter(self._canvas.SetFocus)
+
+
+    def OnFocus(self, event):
+        self._canvas.SetFocus()
+        self.FocusColorPropertyShape(True)
+        event.Skip()
+
+
+    def OnKillFocus(self, event):
+        self.FocusColorPropertyShape(False)
+        event.Skip()
 
 
     def OnClose(self, deleteWindow = True):
@@ -90,6 +102,17 @@ class CanvasView(wx.lib.docview.View):
         wx.EVT_MOTION(self._canvas, self.OnLeftDrag)
         wx.EVT_LEFT_DCLICK(self._canvas, self.OnLeftDoubleClick)
         wx.EVT_KEY_DOWN(self._canvas, self.OnKeyPressed)
+        
+        # need this otherwise mouse clicks don't set focus to this view
+        wx.EVT_LEFT_DOWN(self._canvas, self.OnFocus)
+        wx.EVT_LEFT_DCLICK(self._canvas, self.OnFocus)
+        wx.EVT_RIGHT_DOWN(self._canvas, self.OnFocus)
+        wx.EVT_RIGHT_DCLICK(self._canvas, self.OnFocus)
+        wx.EVT_MIDDLE_DOWN(self._canvas, self.OnFocus)
+        wx.EVT_MIDDLE_DCLICK(self._canvas, self.OnFocus)
+        
+        wx.EVT_KILL_FOCUS(self._canvas, self.OnKillFocus)
+        wx.EVT_SET_FOCUS(self._canvas, self.OnFocus)
 
         maxWidth = 2000
         maxHeight = 16000
@@ -506,6 +529,32 @@ class CanvasView(wx.lib.docview.View):
         # draw new selection
         if self._propShape and self._propShape in self._diagram.GetShapeList():
             self._propShape.SetBrush(SELECT_BRUSH)
+            if (self._propShape._textColourName in ["BLACK", "WHITE"]):  # Would use GetTextColour() but it is broken
+                self._propShape.SetTextColour("WHITE", 0)
+            self._propShape.Draw(dc)
+
+        dc.EndDrawing()
+
+
+    def FocusColorPropertyShape(self, gotFocus=False):
+        # no need to change highlight if no PropertyService is running
+        propertyService = wx.GetApp().GetService(PropertyService.PropertyService)
+        if not propertyService:
+            return
+
+        if not self._propShape:
+            return
+
+        dc = wx.ClientDC(self._canvas)
+        self._canvas.PrepareDC(dc)
+        dc.BeginDrawing()
+
+        # draw deactivated selection
+        if self._propShape and self._propShape in self._diagram.GetShapeList():
+            if gotFocus:
+                self._propShape.SetBrush(SELECT_BRUSH)
+            else:
+                self._propShape.SetBrush(INACTIVE_SELECT_BRUSH)
             if (self._propShape._textColourName in ["BLACK", "WHITE"]):  # Would use GetTextColour() but it is broken
                 self._propShape.SetTextColour("WHITE", 0)
             self._propShape.Draw(dc)

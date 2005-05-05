@@ -19,11 +19,10 @@ import wx
 from wxPython.lib.rcsizer import RowColSizer
 import time
 import Service
-import MessageService
-import DebuggerService
 import sys
 import activegrid.util.xmlmarshaller
 import UICommon
+import Wizard
 from IDE import ACTIVEGRID_BASE_IDE
 if not ACTIVEGRID_BASE_IDE:
     import ProcessModelEditor
@@ -37,9 +36,17 @@ else:
 
 
 #----------------------------------------------------------------------------
+# Constants
+#----------------------------------------------------------------------------
+SPACE = 10
+HALF_SPACE = 5
+
+
+#----------------------------------------------------------------------------
 # XML Marshalling Methods
 #----------------------------------------------------------------------------
 LOCAL_TYPE_MAPPING = { "projectmodel"   : "activegrid.tool.ProjectEditor.ProjectModel", }
+
 
 def load(fileObject):
     xml = fileObject.read()
@@ -58,14 +65,15 @@ def save(fileObject, projectModel):
 
 class ProjectModel:
     __xmlname__ = "projectmodel"
-    __xmlrename__ = { "_files":"files", "_homepath":"homepath" }
+    __xmlrename__ = { "_files":"files"}
+
 
     def __init__(self):
-        self._homepath = None
         self._files = []
-
-
+     
+   
 class ProjectDocument(wx.lib.docview.Document):
+
 
     def __init__(self):
         wx.lib.docview.Document.__init__(self)
@@ -79,27 +87,62 @@ class ProjectDocument(wx.lib.docview.Document):
     def OnCreate(self, path, flags):
         projectService = wx.GetApp().GetService(ProjectService)
         if projectService.GetView():
+            # All project documents share the same view.
             view = projectService.GetView()
             self.AddView(view)
+
+            if view.GetDocument():    
+                # All project documents need to share the same command processor,
+                # to enable redo/undo of cross project document commands
+                cmdProcessor = view.GetDocument().GetCommandProcessor()
+                if cmdProcessor:
+                    self.SetCommandProcessor(cmdProcessor)
         else:
             view = self.GetDocumentTemplate().CreateView(self, flags)
             projectService.SetView(view)
+
+
         return view
 
 
     def LoadObject(self, fileObject):
         self._projectModel = activegrid.tool.ProjectEditor.load(fileObject)
+        self._projectModel._files = self.RelativeToAbsPath(self._projectModel._files)
         return True
 
 
     def SaveObject(self, fileObject):
+        absPath = self._projectModel._files
+        self._projectModel._files = self.AbsToRelativePath(absPath)  # temporarily change it to relative paths for saving
         activegrid.tool.ProjectEditor.save(fileObject, self._projectModel)
+        self._projectModel._files = absPath                          # swap it back to absolute path
         return True
 
 
-    def OnSaveDocument(self, filename):
-        self._projectModel._homepath = wx.lib.docview.PathOnly(filename)
-        return wx.lib.docview.Document.OnSaveDocument(self, filename)
+    def AbsToRelativePath(self, paths):
+        curPath = os.path.dirname(self.GetFilename())
+        curPathLen = len(curPath)
+        
+        newFilePaths = []
+        for path in paths:
+            if path.startswith(curPath):
+                path = "." + path[curPathLen:]  # use relative path
+            else:
+                pass                            # use absolute path
+            newFilePaths.append(path)
+        return newFilePaths
+ 
+
+    def RelativeToAbsPath(self, paths):
+        newFilePaths = []
+        for path in paths:
+            if path.startswith("."):  # relative to project file
+                curPath = os.path.dirname(self.GetFilename())
+                path = os.path.normpath(os.path.join(curPath, path))
+            elif not ACTIVEGRID_BASE_IDE:
+                print "Warning: absolute path '%s' found in project file, this may affect deployment" % path
+            newFilePaths.append(path)
+        return newFilePaths
 
 
     def OnOpenDocument(self, filename):
@@ -132,47 +175,6 @@ class ProjectDocument(wx.lib.docview.Document):
             return True  # if we return False, the Project View is destroyed, Service windows shouldn't be destroyed
 
         self.Modify(False)
-
-        # if the project file has moved, then ask the user if we should readjust the paths of all the files in the project
-        newHomepath = wx.lib.docview.PathOnly(filename)
-        if newHomepath != self._projectModel._homepath:
-            wx.GetApp().CloseSplash()
-            msgTitle = wx.GetApp().GetAppName()
-            if not msgTitle:
-                msgTitle = _("Project Moved")
-            projectService = wx.GetApp().GetService(activegrid.tool.ProjectEditor.ProjectService)
-            yesNoMsg = wx.MessageDialog(frame,
-                          _("The project file '%s' was moved from:\n    '%s'\nto:\n    '%s'.\n\nWould you like to automatically adjust the project contents accordingly?") % (wx.lib.docview.FileNameFromPath(filename), self._projectModel._homepath, wx.lib.docview.PathOnly(filename)),
-                          msgTitle,
-                          wx.YES_NO | wx.STAY_ON_TOP
-                          )
-            if projectService.GetSuppressOpenProjectMessages() or yesNoMsg.ShowModal() == wx.ID_YES:
-                if not projectService.GetSuppressOpenProjectMessages():
-                    messageService = wx.GetApp().GetService(MessageService.MessageService)
-                    messageService.ShowWindow()
-                    messageView = messageService.GetView()
-                    messageView.ClearLines()
-                    messageView.AddLines(_("The project file '%s' was moved from:\n    '%s'\nto:\n    '%s'\n") % (wx.lib.docview.FileNameFromPath(filename), self._projectModel._homepath, wx.lib.docview.PathOnly(filename)))
-                    messageView.AddLines(_("Updating file references:\n"))
-
-                for index, filepath in enumerate(self._projectModel._files):
-                    if filepath.startswith(self._projectModel._homepath + os.sep):
-                        newfile = newHomepath + filepath[len(self._projectModel._homepath):len(filepath)]
-                        if os.path.exists(newfile):
-                            self._projectModel._files[index] = newfile
-                            if not projectService.GetSuppressOpenProjectMessages():
-                                messageView.AddLines(_("    Success:    '%s' location changed from '%s' to '%s'\n") % (wx.lib.docview.FileNameFromPath(filepath), wx.lib.docview.PathOnly(filepath), newHomepath))
-                            self.Modify(True)
-                        else:
-                            if not projectService.GetSuppressOpenProjectMessages():
-                                messageView.AddLines(_("    Failure:    Couldn't find '%s', file wasn't located at '%s'\n") % (wx.lib.docview.FileNameFromPath(filepath), newHomepath))
-                    else:
-                        if not projectService.GetSuppressOpenProjectMessages():
-                            messageView.AddLines(_(    "    Unmodified: '%s' location wasn't relative to '%s'\n") % (filepath, self._projectModel._homepath))
-                self._projectModel._homepath = newHomepath
-                if not projectService.GetSuppressOpenProjectMessages():
-                    messageView.AddLines(_("Project file updated."))
-
         self.SetFilename(filename, True)
         view.AddProjectToView(self)
         self.SetDocumentModificationDate()
@@ -255,8 +257,6 @@ class ProjectDocument(wx.lib.docview.Document):
         return filename in self.GetFiles()
 
 
-import Wizard
-
 class NewProjectWizard(Wizard.BaseWizard):
 
     WIZTITLE = _("New Project Wizard")
@@ -267,7 +267,8 @@ class NewProjectWizard(Wizard.BaseWizard):
         Wizard.BaseWizard.__init__(self, parent, self.WIZTITLE)
         self._projectLocationPage = self.CreateProjectLocation(self)
         wx.wizard.EVT_WIZARD_PAGE_CHANGING(self, self.GetId(), self.OnWizPageChanging)
-                
+            
+    
     def CreateProjectLocation(self,wizard):   
         page = Wizard.TitledWizardPage(wizard, _("Project File Location"))
 
@@ -278,6 +279,7 @@ class NewProjectWizard(Wizard.BaseWizard):
         wizard.Layout()
         wizard.FitToPage(page)
         return page    
+
 
     def RunWizard(self, existingTables = None, existingRelationships = None):
         status = wx.wizard.Wizard.RunWizard(self, self._projectLocationPage)
@@ -327,7 +329,9 @@ class NewProjectWizard(Wizard.BaseWizard):
         wiz.Destroy()
         self.Show(True)
          
+
 class ProjectTemplate(wx.lib.docview.DocTemplate):
+
 
     def CreateDocument(self, path, flags):
         if path:
@@ -338,7 +342,9 @@ class ProjectTemplate(wx.lib.docview.DocTemplate):
             wiz.Destroy()
             return None  # never return the doc, otherwise docview will think it is a new file and rename it
 
+
 class ProjectAddFilesCommand(wx.lib.docview.Command):
+
 
     def __init__(self, projectDoc, files):
         wx.lib.docview.Command.__init__(self, canUndo = True)
@@ -348,7 +354,7 @@ class ProjectAddFilesCommand(wx.lib.docview.Command):
 
     def GetName(self):
         if len(self._files) == 1:
-            return _("Add File")
+            return _("Add File %s") % os.path.basename(self._files[0])
         else:
             return _("Add Files")
 
@@ -363,28 +369,55 @@ class ProjectAddFilesCommand(wx.lib.docview.Command):
 
 class ProjectRemoveFilesCommand(wx.lib.docview.Command):
 
-    def __init__(self, projectDoc, files):
+
+    def __init__(self, files):
         wx.lib.docview.Command.__init__(self, canUndo = True)
-        self._projectDoc = projectDoc
         self._files = files
 
 
     def GetName(self):
         if len(self._files) == 1:
-            return _("Remove File")
+            return _("Remove File %s") % os.path.basename((self._files[0])[1])
         else:
             return _("Remove Files")
 
 
     def Do(self):
-        return self._projectDoc.RemoveFiles(self._files)
+        status = False
+        projects = []
+        for data in self._files:
+            proj, filename = data
+            if proj not in projects:
+                projects.append(proj)
+        for project in projects:
+            files = []
+            for data in self._files:
+                proj, filename = data
+                if project == proj:
+                    files.append(filename)
+            status = project.RemoveFiles(files) or status
+        return status
 
 
     def Undo(self):
-        return self._projectDoc.AddFiles(self._files)
-
+        status = False
+        projects = []
+        for data in self._files:
+            proj, filename = data
+            if proj not in projects:
+                projects.append(proj)
+        for project in projects:
+            files = []
+            for data in self._files:
+                proj, filename = data
+                if project == proj:
+                    files.append(filename)
+            status = project.AddFiles(files) or status
+        return status
+        
 
 class ProjectRenameFileCommand(wx.lib.docview.Command):
+
 
     def __init__(self, projectDoc, oldFile, newFile, isProject = False):
         wx.lib.docview.Command.__init__(self, canUndo = True)
@@ -395,7 +428,7 @@ class ProjectRenameFileCommand(wx.lib.docview.Command):
 
 
     def GetName(self):
-        return _("Rename File")
+        return _("Rename File %s to %s") % (os.path.basename(self._oldFile), os.path.basename(self._newFile))
 
 
     def Do(self):
@@ -407,6 +440,11 @@ class ProjectRenameFileCommand(wx.lib.docview.Command):
 
 
 class ProjectTreeCtrl(wx.TreeCtrl):
+    
+
+    #----------------------------------------------------------------------------
+    # Overridden Methods
+    #----------------------------------------------------------------------------
 
     def __init__(self, parent, id, style):
         wx.TreeCtrl.__init__(self, parent, id, style = style)
@@ -417,18 +455,20 @@ class ProjectTreeCtrl(wx.TreeCtrl):
         for template in templates:
             icon = template.GetIcon()
             if icon:
-                if icon.GetHeight() != 16:
-                    icon.SetHeight(16)  # wxBug: img2py.py uses EmptyIcon which is 32x32
-                if icon.GetWidth() != 16:
-                    icon.SetWidth(16)   # wxBug: img2py.py uses EmptyIcon which is 32x32
+                if icon.GetHeight() != 16 or icon.GetWidth() != 16:
+                    icon.SetHeight(16)
+                    icon.SetWidth(16)
+                    if wx.GetApp().GetDebug():
+                        print "Warning: icon for '%s' isn't 16x16, not crossplatform" % template._docTypeName
                 iconIndex = iconList.AddIcon(icon)
                 self._iconIndexLookup.append((template, iconIndex))
                 
         icon = getBlankIcon()
-        if icon.GetHeight() != 16:
-            icon.SetHeight(16)  # wxBug: img2py.py uses EmptyIcon which is 32x32
-        if icon.GetWidth() != 16:
-            icon.SetWidth(16)   # wxBug: img2py.py uses EmptyIcon which is 32x32
+        if icon.GetHeight() != 16 or icon.GetWidth() != 16:
+            icon.SetHeight(16)
+            icon.SetWidth(16)
+            if wx.GetApp().GetDebug():
+                print "Warning: getBlankIcon isn't 16x16, not crossplatform"
         self._blankIconIndex = iconList.AddIcon(icon)
         self.AssignImageList(iconList)
 
@@ -461,6 +501,31 @@ class ProjectTreeCtrl(wx.TreeCtrl):
         return item
 
 
+    #----------------------------------------------------------------------------
+    # Client Data
+    #----------------------------------------------------------------------------
+   
+    def SetData(self, item, longFilename, projectDoc=None):
+        self.SetPyData(item, (longFilename, projectDoc))
+       
+ 
+    def GetData(self, item):
+        """ returns longFilename and optional 
+        """
+        data = self.GetPyData(item)
+        if not data:
+            return (None, None)
+        return data
+
+
+    def GetLongFilename(self, item):
+        return self.GetData(item)[0]
+
+
+    def GetProjectDoc(self, item):
+        return self.GetData(item)[1]
+
+
 class ProjectView(wx.lib.docview.View):
 
 
@@ -471,7 +536,6 @@ class ProjectView(wx.lib.docview.View):
     def __init__(self, service = None):
         wx.lib.docview.View.__init__(self)
         self._service = service  # not used, but kept to match other Services
-        self._lastDirectory = ""
         self._treeCtrl = None
         self._editingSoDontKillFocus = False
         self._checkEditMenu = True
@@ -563,6 +627,8 @@ class ProjectView(wx.lib.docview.View):
         sizer = wx.BoxSizer()
         self._treeCtrl = ProjectTreeCtrl(frame, -1, style = wx.TR_HIDE_ROOT | wx.TR_HAS_BUTTONS | wx.TR_EDIT_LABELS | wx.TR_DEFAULT_STYLE | wx.TR_MULTIPLE)
         self._treeCtrl.AddRoot(_("Projects"))
+        wx.EVT_TREE_BEGIN_DRAG(self._treeCtrl, self._treeCtrl.GetId(), self.OnBeginDrag)
+        wx.EVT_TREE_END_DRAG(self._treeCtrl, self._treeCtrl.GetId(), self.OnEndDrag)
 
         if self._embeddedWindow:
             sizer.Add(self._treeCtrl)
@@ -592,6 +658,48 @@ class ProjectView(wx.lib.docview.View):
         self._treeCtrl.SetDropTarget(dt)
 
         return True
+
+
+    def OnBeginDrag(self, event):
+        item = event.GetItem()
+        if item.IsOk():
+            if item == self._treeCtrl.GetRootItem():
+                return
+            self._draggingItem = item
+            event.Allow()
+        
+
+    def OnEndDrag(self, event):
+        item = event.GetItem()
+        if item.IsOk():            
+            # don't allow object to be dragged to itself
+            if item == self._draggingItem:
+                return
+            
+            rootItem = self._treeCtrl.GetRootItem()
+    
+            # don't let object replace root view
+            if item == rootItem:
+                wx.MessageBox(_("Cannot replace root view with item."))
+                return
+                
+            # don't allow object to be dragged to a direct descendant
+            ancestor = self._treeCtrl.GetItemParent(item)
+            while ancestor != rootItem:
+                if ancestor == self._draggingItem:
+                    wx.MessageBox(_("Cannot make item direct descendant of self."))
+                    return
+                else:
+                    ancestor = self._treeCtrl.GetItemParent(ancestor)
+                    
+            if self._treeCtrl.GetItemParent(item) == self._treeCtrl.GetItemParent(self._draggingItem):
+                # put it in same folder as it was originally, no-op.
+                return
+            if item == self._treeCtrl.GetItemParent(self._draggingItem):
+                # put it in same folder as it was originally, no-op.
+                return
+                    
+            self.GetDocument().GetCommandProcessor().Submit(ProjectEditorMoveCommand(self, item, self._draggingItem))
 
 
     def WriteProjectConfig(self):
@@ -649,15 +757,19 @@ class ProjectView(wx.lib.docview.View):
                 files = hint[2]
                 self._treeCtrl.UnselectAll()
                 self._treeCtrl.Expand(projectItem)
+                item = None
                 for file in files:
                     item = self._treeCtrl.AppendItem(projectItem, os.path.basename(file))
-                    self._treeCtrl.SetPyData(item, file)
+                    self._treeCtrl.SetData(item, file)
                     self._treeCtrl.SelectItem(item)
-                    self._treeCtrl.EnsureVisible(item)  # wxBug: Doesn't work
+                    self._treeCtrl.EnsureVisible(item)
                 self._treeCtrl.SortChildren(projectItem)
+                if item:
+                    self._treeCtrl.EnsureVisible(item)  # need to be called after SortChildren
             elif hint[0] == "remove":
                 projectItem = self._GetProjectItem(hint[1])
                 files = hint[2]
+                self._treeCtrl.UnselectAll()
                 children = self._GetChildItems(projectItem)
                 for child in children:
                     if self._GetItemFile(child) in files:
@@ -670,7 +782,7 @@ class ProjectView(wx.lib.docview.View):
                 for child in children:
                     if self._GetItemFile(child) in files:
                         self._treeCtrl.SelectItem(child)
-                        self._treeCtrl.EnsureVisible(child)  # wxBug:  Doesn't work
+                        self._treeCtrl.EnsureVisible(child)
             elif hint[0] == "rename":
                 projectItem = self._GetProjectItem(hint[1])
                 self._treeCtrl.SetItemText(projectItem, os.path.basename(hint[2]))
@@ -681,11 +793,17 @@ class ProjectView(wx.lib.docview.View):
         if id == ProjectService.ADD_FILES_TO_PROJECT_ID:
             self.OnAddFileToProject(event)
             return True
+        elif id == ProjectService.ADD_ALL_FILES_TO_PROJECT_ID:
+            self.OnAddDirToProject(event)
+            return True
         elif id == ProjectService.ADD_CURRENT_FILE_TO_PROJECT_ID:
             return False  # Implement this one in the service
         elif id == ProjectService.RENAME_ID:
             self.OnRename(event)
             return True
+        elif id == ProjectService.DELETE_FILE_ID:
+            self.OnDeleteFile(event)
+            return True            
         elif id == wx.ID_CUT:
             self.OnCut(event)
             return True
@@ -695,7 +813,8 @@ class ProjectView(wx.lib.docview.View):
         elif id == wx.ID_PASTE:
             self.OnPaste(event)
             return True
-        elif id == wx.ID_CLEAR or id == ProjectService.REMOVE_FROM_PROJECT:
+        elif (id == wx.ID_CLEAR
+        or id == ProjectService.REMOVE_FROM_PROJECT):
             self.OnClear(event)
             return True
         elif id == wx.ID_SELECTALL:
@@ -710,6 +829,7 @@ class ProjectView(wx.lib.docview.View):
         else:
             return False
 
+
     def ProcessUpdateUIEvent(self, event):
         # Hack: The edit menu is not being set for projects that are preloaded at startup, so make sure it is OK here
         if self._checkEditMenu:
@@ -717,36 +837,30 @@ class ProjectView(wx.lib.docview.View):
             if doc and not doc.GetCommandProcessor().GetEditMenu():
                 doc.GetCommandProcessor().SetEditMenu(wx.GetApp().GetEditMenu(self._GetParentFrame()))
             self._checkEditMenu = False
+            
         id = event.GetId()
-        if id == ProjectService.ADD_FILES_TO_PROJECT_ID:
-            event.Enable(self._HasProjectsSelected() or self._HasFilesSelected())
+        if (id == wx.ID_CUT
+        or id == wx.ID_COPY
+        or id == ProjectService.RENAME_ID
+        or id == ProjectService.ADD_FILES_TO_PROJECT_ID
+        or id == ProjectService.ADD_ALL_FILES_TO_PROJECT_ID
+        or id == wx.lib.pydocview.FilePropertiesService.PROPERTIES_ID
+        or id == ProjectService.DELETE_FILE_ID):
+            event.Enable(self._HasSelection())
             return True
         elif id == ProjectService.ADD_CURRENT_FILE_TO_PROJECT_ID:
             event.Enable(False)
             return True
-        elif id == ProjectService.RENAME_ID:
-            event.Enable(self._HasFilesSelected() or self._HasProjectsSelected())
-            return True
-        elif id == wx.ID_CUT:
-            event.Enable(self._AreSelectedItemsFromSameProject())
-            return True
-        elif id == wx.ID_COPY:
-            event.Enable(self._HasFilesSelected())
-            return True
         elif id == wx.ID_PASTE:
             event.Enable(self.CanPaste())
-            return True
-        elif id == wx.ID_CLEAR or id == ProjectService.REMOVE_FROM_PROJECT:
-            event.Enable(self._AreSelectedItemsFromSameProject())
             return True
         elif id == wx.ID_SELECTALL:
             event.Enable(self._HasFiles())
             return True
-        elif id == ProjectService.OPEN_SELECTION_ID:
+        elif (id == wx.ID_CLEAR
+        or id == ProjectService.REMOVE_FROM_PROJECT
+        or id == ProjectService.OPEN_SELECTION_ID):
             event.Enable(self._HasFilesSelected())
-            return True
-        elif id == wx.lib.pydocview.FilePropertiesService.PROPERTIES_ID:
-            event.Enable(self._HasProjectsSelected() or self._HasFilesSelected())
             return True
         else:
             return False
@@ -800,10 +914,10 @@ class ProjectView(wx.lib.docview.View):
     def AddProjectToView(self, document):
         rootItem = self._treeCtrl.GetRootItem()
         projectItem = self._treeCtrl.AppendItem(rootItem, self._MakeProjectName(document))
-        self._treeCtrl.SetPyData(projectItem, document)
+        self._treeCtrl.SetData(projectItem, document.GetFilename(), document)
         for file in document.GetFiles():
             fileItem = self._treeCtrl.AppendItem(projectItem, os.path.basename(file))
-            self._treeCtrl.SetPyData(fileItem, file)
+            self._treeCtrl.SetData(fileItem, file)
         self._treeCtrl.SortChildren(rootItem)
         self._treeCtrl.SortChildren(projectItem)
         self._treeCtrl.UnselectAll()
@@ -847,20 +961,158 @@ class ProjectView(wx.lib.docview.View):
             descr = descr + _("|") + _("Any (*.*) | *.*")
         else:
             descr = _("*.*")
+            
+        startDirectory = os.path.dirname(self.GetDocument().GetFilename())
+            
         if True or _WINDOWS:
-            dialog = wx.FileDialog(self.GetFrame(), _("Add Files"), self._lastDirectory, "", descr, wx.OPEN | wx.HIDE_READONLY | wx.MULTIPLE)
+            dialog = wx.FileDialog(self.GetFrame(), _("Add Files"), startDirectory, "", descr, wx.OPEN | wx.HIDE_READONLY | wx.MULTIPLE)
             if dialog.ShowModal() != wx.ID_OK:
                 return
             paths = dialog.GetPaths()
             dialog.Destroy()
         else:
-            paths = wx.FileSelector(_("Add Files"), self._lastDirectory, "", wildcard = descr, flags = wx.OPEN | wx.HIDE_READONLY | wx.MULTIPLE, parent=self.GetFrame())
+            paths = wx.FileSelector(_("Add Files"), startDirectory, "", wildcard = descr, flags = wx.OPEN | wx.HIDE_READONLY | wx.MULTIPLE, parent=self.GetFrame())
             if type(paths) == types.StringType:
                 paths = [paths]
         if len(paths):
-            self._lastDirectory = wx.lib.docview.PathOnly(paths[0])
             self.GetDocument().GetCommandProcessor().Submit(ProjectAddFilesCommand(self.GetDocument(), paths))
         self.Activate(True)  # after add, should put focus on project editor
+
+
+    def OnAddDirToProject(self, event):
+        frame = wx.Dialog(None, -1, _("Add All Files from Directory to Project"), size= (320,200))
+        borderSizer = wx.BoxSizer(wx.HORIZONTAL)
+
+        contentSizer = wx.BoxSizer(wx.VERTICAL)
+        lineSizer = wx.BoxSizer(wx.HORIZONTAL)
+        lineSizer.Add(wx.StaticText(frame, -1, _("Directory:")), 0, wx.ALIGN_CENTER | wx.RIGHT, HALF_SPACE)
+        dirCtrl = wx.TextCtrl(frame, -1, os.path.dirname(self.GetDocument().GetFilename()), size=(200,-1))
+        dirCtrl.SetToolTipString(dirCtrl.GetValue())
+        lineSizer.Add(dirCtrl, 0, wx.LEFT, HALF_SPACE)
+        findDirButton = wx.Button(frame, -1, "Browse...")
+        lineSizer.Add(findDirButton, 0, wx.LEFT, HALF_SPACE)
+        contentSizer.Add(lineSizer, 0, wx.BOTTOM, SPACE)
+        
+        def OnBrowseButton(event):
+            dlg = wx.DirDialog(frame, _("Choose a directory:"), style=wx.DD_DEFAULT_STYLE)
+            dir = dirCtrl.GetValue()
+            if len(dir):
+                dlg.SetPath(dir)
+            if dlg.ShowModal() == wx.ID_OK:
+                dirCtrl.SetValue(dlg.GetPath())
+                dirCtrl.SetToolTipString(dirCtrl.GetValue())
+                dirCtrl.SetInsertionPointEnd()
+
+            dlg.Destroy()
+        wx.EVT_BUTTON(findDirButton, -1, OnBrowseButton)
+
+        visibleTemplates = []
+        for template in self.GetDocumentManager()._templates:
+            if template.IsVisible():
+                visibleTemplates.append(template)
+                
+        choices = []
+        allfilter = ''
+        descr = ''
+        for template in visibleTemplates:
+            if len(descr) > 0:
+                descr = descr + _('|')
+                allfilter = allfilter + _(';')
+            descr = template.GetDescription() + _(" (") + template.GetFileFilter() + _(")")
+            choices.append(descr)
+            allfilter = allfilter + template.GetFileFilter()
+        choices.insert(0, _("All (%s)") % allfilter)
+        filterChoice = wx.Choice(frame, -1, size=(210, -1), choices=choices)
+        filterChoice.SetSelection(0)
+        filterChoice.SetToolTipString(_("Select file type filter."))
+        lineSizer = wx.BoxSizer(wx.HORIZONTAL)
+        lineSizer.Add(wx.StaticText(frame, -1, _("Files of type:")), 0, wx.ALIGN_CENTER | wx.RIGHT, HALF_SPACE)
+        lineSizer.Add(filterChoice, 1, wx.LEFT, HALF_SPACE)
+        contentSizer.Add(lineSizer, 0, wx.BOTTOM|wx.EXPAND, SPACE)
+        
+        subfolderCtrl = wx.CheckBox(frame, -1, _("Add files from subdirectories"))
+        subfolderCtrl.SetValue(True)
+        contentSizer.Add(subfolderCtrl, 0, wx.BOTTOM, SPACE)
+
+        borderSizer.Add(contentSizer, 0, wx.TOP|wx.BOTTOM|wx.LEFT, SPACE)
+
+        buttonSizer = wx.BoxSizer(wx.VERTICAL)
+        findBtn = wx.Button(frame, wx.ID_OK, _("Add"))
+        findBtn.SetDefault()
+        buttonSizer.Add(findBtn, 0, wx.BOTTOM, HALF_SPACE)
+        buttonSizer.Add(wx.Button(frame, wx.ID_CANCEL), 0)
+        borderSizer.Add(buttonSizer, 0, wx.ALL, SPACE)
+
+        frame.SetSizer(borderSizer)
+        frame.Fit()
+
+        status = frame.ShowModal()
+
+        passedCheck = False
+        while status == wx.ID_OK and not passedCheck:
+            if not os.path.exists(dirCtrl.GetValue()):
+                dlg = wx.MessageDialog(frame,
+                                       _("'%s' does not exist.") % dirCtrl.GetValue(),
+                                       _("Find in Directory"),
+                                       wx.OK | wx.ICON_EXCLAMATION
+                                       )
+                dlg.ShowModal()
+                dlg.Destroy()
+
+                status = frame.ShowModal()
+            else:
+                passedCheck = True
+            
+        if status == wx.ID_OK:            
+            frame.Destroy()
+
+            wx.GetApp().GetTopWindow().SetCursor(wx.StockCursor(wx.CURSOR_WAIT))
+            
+            doc = self.GetDocument()
+            searchSubfolders = subfolderCtrl.IsChecked()
+            dirString = dirCtrl.GetValue()
+            
+            if os.path.isfile(dirString):
+                # If they pick a file explicitly, we won't prevent them from adding it even if it doesn't match the filter.
+                # We'll assume they know what they're doing.
+                paths = [dirString]
+            else:
+                paths = []
+                
+                index = filterChoice.GetSelection()
+                if index:
+                    template = visibleTemplates[index-1]
+
+                # do search in files on disk
+                for root, dirs, files in os.walk(dirString):
+                    if not searchSubfolders and root != dirString:
+                        break
+                        
+                    for name in files:
+                        if index == 0:  # all
+                            for template in visibleTemplates:
+                                if template.FileMatchesTemplate(name):
+                                    filename = os.path.join(root, name)
+                                    
+                                    # if already in project, don't add it, otherwise undo will remove it from project even though it was already in it.
+                                    if doc.IsFileInProject(filename):
+                                        break
+
+                                    paths.append(filename)
+                                    break
+                        else:  # use selected filter
+                            if template.FileMatchesTemplate(name):
+                                filename = os.path.join(root, name)
+                                # if already in project, don't add it, otherwise undo will remove it from project even though it was already in it.
+                                if not doc.IsFileInProject(filename):
+                                    paths.append(filename)                    
+    
+            wx.GetApp().GetTopWindow().SetCursor(wx.StockCursor(wx.CURSOR_DEFAULT))
+
+            doc.GetCommandProcessor().Submit(ProjectAddFilesCommand(doc, paths))
+            self.Activate(True)  # after add, should put focus on project editor
+        else:
+            frame.Destroy()
 
 
     def DoAddFilesToProject(self, filenames):
@@ -870,8 +1122,7 @@ class ProjectView(wx.lib.docview.View):
 
     def DoSelectFiles(self, filenames):
         # method used by Drag-n-Drop to select files in current Project
-        for selection in self._treeCtrl.GetSelections():
-            self._treeCtrl.SelectItem(selection, False)
+        self._treeCtrl.UnselectAll()
         for file in filenames:
             item = self._GetFileItem(longFileName=file)
             if item:
@@ -929,7 +1180,7 @@ class ProjectView(wx.lib.docview.View):
         else:  # Project context
             itemIDs = [wx.ID_CLOSE, wx.ID_SAVE, wx.ID_SAVEAS, None]
         menuBar = self._GetParentFrame().GetMenuBar()
-        itemIDs = itemIDs + [wx.lib.pydocview.FilePropertiesService.PROPERTIES_ID, None, ProjectService.ADD_FILES_TO_PROJECT_ID, ProjectService.REMOVE_FROM_PROJECT, None, wx.ID_UNDO, wx.ID_REDO, None, wx.ID_CUT, wx.ID_COPY, wx.ID_PASTE, wx.ID_CLEAR, None, wx.ID_SELECTALL, None, ProjectService.RENAME_ID]
+        itemIDs = itemIDs + [ProjectService.ADD_FILES_TO_PROJECT_ID, ProjectService.ADD_ALL_FILES_TO_PROJECT_ID, ProjectService.REMOVE_FROM_PROJECT, None, wx.ID_UNDO, wx.ID_REDO, None, wx.ID_CUT, wx.ID_COPY, wx.ID_PASTE, wx.ID_CLEAR, None, wx.ID_SELECTALL, ProjectService.RENAME_ID, ProjectService.DELETE_FILE_ID, None, wx.lib.pydocview.FilePropertiesService.PROPERTIES_ID]
         for itemID in itemIDs:
             if not itemID:
                 menu.AppendSeparator()
@@ -948,9 +1199,12 @@ class ProjectView(wx.lib.docview.View):
         self._treeCtrl.PopupMenu(menu, wx.Point(event.GetX(), event.GetY()))
         menu.Destroy()
 
+
     def OnRunSelectedPM(self, event):
         projectService = wx.GetApp().GetService(ProjectService)
-        projectService.OnRunProcessModel(event, runSelected=True)
+        if projectService:
+            projectService.OnRunProcessModel(event, runSelected=True)
+
 
     def OnRename(self, event):
         if self._treeCtrl.GetSelections():
@@ -974,14 +1228,16 @@ class ProjectView(wx.lib.docview.View):
         if self._IsItemFile(item):
             oldFile = self._GetItemFile(item)
             newFile = os.path.join(os.path.split(oldFile)[0], newName)
-            if not self._GetItemProject(item).GetCommandProcessor().Submit(ProjectRenameFileCommand(self.GetDocument(), oldFile, newFile)):
+            project = self._GetItemProject(item)
+            if not project.GetCommandProcessor().Submit(ProjectRenameFileCommand(project, oldFile, newFile)):
                 event.Veto()
                 return
             self._treeCtrl.SortChildren(self._treeCtrl.GetItemParent(self._treeCtrl.GetSelections()[0]))
         elif self._IsItemProject(item):
             oldFile = self._GetItemProject(item).GetFilename()
             newFile = os.path.join(os.path.split(oldFile)[0], newName)
-            if not self._GetItemProject(item).GetCommandProcessor().Submit(ProjectRenameFileCommand(self.GetDocument(), oldFile, newFile, True)):
+            project = self._GetItemProject(item)            
+            if not project.GetCommandProcessor().Submit(ProjectRenameFileCommand(project, oldFile, newFile, True)):
                 event.Veto()
                 return
             self._treeCtrl.SortChildren(self._treeCtrl.GetRootItem())
@@ -1002,9 +1258,8 @@ class ProjectView(wx.lib.docview.View):
 
 
     def OnCut(self, event):
-        if self._AreSelectedItemsFromSameProject():
-            self.OnCopy(event)
-            self.OnClear(event)
+        self.OnCopy(event)
+        self.OnClear(event)
 
 
     def OnCopy(self, event):
@@ -1012,7 +1267,7 @@ class ProjectView(wx.lib.docview.View):
         items = self._treeCtrl.GetSelections()
         for item in items:
             if self._IsItemFile(item):
-                file = self._treeCtrl.GetPyData(item)
+                file = self._treeCtrl.GetLongFilename(item)
                 fileDataObject.AddFile(file)
         if len(fileDataObject.GetFilenames()) > 0 and wx.TheClipboard.Open():
             wx.TheClipboard.SetData(fileDataObject)
@@ -1028,14 +1283,56 @@ class ProjectView(wx.lib.docview.View):
 
 
     def OnClear(self, event):
-        if self._AreSelectedItemsFromSameProject():
-            items = self._treeCtrl.GetSelections()
-            files = []
-            for item in items:
-                if self._IsItemFile(item):
-                    files.append(self._GetItemFile(item))
-            self.GetDocument().GetCommandProcessor().Submit(ProjectRemoveFilesCommand(self._GetItemProject(items[0]), files))
+        items = self._treeCtrl.GetSelections()
+        files = []
+        for item in items:
+            if self._IsItemFile(item):
+                files.append((self._GetItemProject(item), self._GetItemFile(item)))
+        self.GetDocument().GetCommandProcessor().Submit(ProjectRemoveFilesCommand(files))
 
+
+    def OnDeleteFile(self, event):
+        yesNoMsg = wx.MessageDialog(self.GetFrame(),
+                                 _("Delete cannot be reversed.\n\nRemove the selected files from the\nprojects and file system permanently?"),
+                                 _("Delete File"),
+                                 wx.YES_NO|wx.ICON_QUESTION)
+        if yesNoMsg.ShowModal() == wx.ID_NO:
+            return
+        
+        items = self._treeCtrl.GetSelections()
+        files = []
+        delFiles = []
+        for item in items:
+            if self._IsItemFile(item):
+                filename = self._GetItemFile(item)
+                files.append((self._GetItemProject(item), filename))
+                if filename not in delFiles:
+                    delFiles.append(filename)
+
+        # remove selected files from projects
+        projects = []
+        for data in files:
+            proj, filename = data
+            if proj not in projects:
+                projects.append(proj)
+        for project in projects:
+            filenames = []
+            for data in files:
+                proj, filename = data
+                if project == proj:
+                    filenames.append(filename)
+            project.RemoveFiles(filenames)
+                
+        # remove selected files from file system
+        for filename in delFiles:
+            if os.path.exists(filename):
+                try:
+                    os.remove(filename)
+                except:
+                    wx.MessageBox("Could not delete '%s'.  %s" % (os.path.basename(filename), sys.exc_value),
+                                  _("Delete File"),
+                                  wx.OK | wx.ICON_EXCLAMATION)
+                                  
 
     def OnKeyPressed(self, event):
         key = event.KeyCode()
@@ -1072,7 +1369,7 @@ class ProjectView(wx.lib.docview.View):
                         yesNoMsg = wx.MessageDialog(self.GetFrame(),
                                       _("The file '%s' was not found in '%s'.\n\nWould you like to browse for the file?") % (wx.lib.docview.FileNameFromPath(filepath), wx.lib.docview.PathOnly(filepath)),
                                       msgTitle,
-                                      wx.YES_NO
+                                      wx.YES_NO|wx.ICON_QUESTION
                                       )
                         if yesNoMsg.ShowModal() == wx.ID_NO:
                             continue
@@ -1094,6 +1391,17 @@ class ProjectView(wx.lib.docview.View):
                             filepath = newpath
 
                     doc = self.GetDocumentManager().CreateDocument(filepath, wx.lib.docview.DOC_SILENT)
+                    if not doc:
+                        shortFilename = self._treeCtrl.GetItemText(item)
+                        if shortFilename.endswith(".agp"):
+                            projItem = self._GetProjectItem(shortFilename=shortFilename)
+                            self._treeCtrl.UnselectAll()
+                            if not self._treeCtrl.IsExpanded(projItem):
+                                self._treeCtrl.Expand(projItem)
+                            if not self._treeCtrl.IsVisible(projItem):
+                                self._treeCtrl.EnsureVisible(projItem)
+                            if not self._treeCtrl.IsSelected(projItem):
+                                self._treeCtrl.SelectItem(projItem)
 
         except IOError, (code, message):
             msgTitle = wx.GetApp().GetAppName()
@@ -1115,15 +1423,14 @@ class ProjectView(wx.lib.docview.View):
         return self._treeCtrl.GetCount() > 1    #  1 item = root item, don't count as having files
 
 
-    def _HasProjectsSelected(self):
+    def _HasSelection(self):
         if not self._treeCtrl:
             return False
+            
         items = self._treeCtrl.GetSelections()
-        if not items:
-            return False
-        for item in items:
-            if self._IsItemProject(item):
-                return True
+        if items:
+            return True
+            
         return False
 
 
@@ -1144,11 +1451,17 @@ class ProjectView(wx.lib.docview.View):
 
 
     # Return the tree item for a project
-    def _GetProjectItem(self, project):
-        children = self._GetChildItems(self._treeCtrl.GetRootItem())
-        for child in children:
-            if self._treeCtrl.GetPyData(child) == project:
-                return child
+    def _GetProjectItem(self, project=None, shortFilename=None):
+        rootItem = self._treeCtrl.GetRootItem()
+        (child, cookie) = self._treeCtrl.GetFirstChild(rootItem)
+        while child.IsOk():
+            if project:
+                if self._treeCtrl.GetProjectDoc(child) == project:
+                    return child
+            elif shortFilename:
+                if self._treeCtrl.GetItemText(child) == shortFilename:
+                    return child
+            (child, cookie) = self._treeCtrl.GetNextChild(rootItem, cookie)
         return None
 
 
@@ -1157,15 +1470,15 @@ class ProjectView(wx.lib.docview.View):
         if self._IsItemRoot(item):
             return None
         if self._IsItemProject(item):
-            return self._treeCtrl.GetPyData(item)
+            return self._treeCtrl.GetProjectDoc(item)
         if self._IsItemFile(item):
-            return self._treeCtrl.GetPyData(self._treeCtrl.GetItemParent(item))
+            return self._treeCtrl.GetProjectDoc(self._treeCtrl.GetItemParent(item))
         return None
 
 
     def _GetItemFile(self, item):
         if self._IsItemFile(item):
-            return self._treeCtrl.GetPyData(item)
+            return self._treeCtrl.GetLongFilename(item)
         else:
             return None
 
@@ -1173,39 +1486,20 @@ class ProjectView(wx.lib.docview.View):
     def _GetFileItem(self, shortFileName = None, longFileName = None):
         """ Returns the tree item for a file given the short (display) or long (fullpath) file name. """
         
-        if shortFileName:
-            project_children = self._GetChildItems(self._treeCtrl.GetRootItem())
-            for child in project_children:
-                file_children = self._GetChildItems(child)
-                for file_child in file_children:
-                    if self._treeCtrl.GetItemText(file_child) == shortFileName:
-                        return file_child
-            return None
-        else:
-            project_children = self._GetChildItems(self._treeCtrl.GetRootItem())
-            for child in project_children:
-                file_children = self._GetChildItems(child)
-                for file_child in file_children:
-                    if self._treeCtrl.GetPyData(file_child) == longFileName:
-                        return file_child
-            return None
-
-
-    def GetFilePathFromTreeName(self, shortFileName):
-        """
-        Returns the data object given a short (display) file name for a file. The data
-        object should be the full path.
-        """
-        return self._GetItemFile(self._GetFileItem(shortFileName))
-    
-
-    def SelectFileInTree(self, shortFileName):
-        item = self._GetFileItem(shortFileName)
-        if item:
-            for selection in self._treeCtrl.GetSelections():
-                self._treeCtrl.SelectItem(selection, False)
-            self._treeCtrl.SelectItem(item, True)
-            self._treeCtrl.EnsureVisible(item)
+        rootItem = self._treeCtrl.GetRootItem()
+        (project, cookie) = self._treeCtrl.GetFirstChild(rootItem)
+        while project.IsOk():
+            (child, cookie2) = self._treeCtrl.GetFirstChild(project)
+            while child.IsOk():
+                if shortFileName:
+                    if self._treeCtrl.GetItemText(child) == shortFileName:
+                        return child
+                else:
+                    if self._treeCtrl.GetLongFilename(child) == longFileName:
+                        return child
+                (child, cookie2) = self._treeCtrl.GetNextChild(project, cookie)
+            (project, cookie) = self._treeCtrl.GetNextChild(rootItem, cookie)
+        return None
 
 
     def _IsItemRoot(self, item):
@@ -1213,19 +1507,19 @@ class ProjectView(wx.lib.docview.View):
 
 
     def _IsItemProject(self, item):
-        return isinstance(self._treeCtrl.GetPyData(item), ProjectDocument)
+        return self._treeCtrl.GetProjectDoc(item) != None
 
 
     def _IsItemFile(self, item):
-        return isinstance(self._treeCtrl.GetPyData(item), types.StringTypes)
+        return self._treeCtrl.GetProjectDoc(item) == None
 
 
     def _IsItemProcessModelFile(self, item):
         if ACTIVEGRID_BASE_IDE:
             return False
             
-        if isinstance(self._treeCtrl.GetPyData(item), types.StringTypes):
-            filename = self._treeCtrl.GetPyData(item)
+        if self._IsItemFile(item):
+            filename = self._treeCtrl.GetLongFilename(item)
             ext = None
             for template in self.GetDocumentManager().GetTemplates():
                 if template.GetDocumentType() == ProcessModelEditor.ProcessModelDocument:
@@ -1238,23 +1532,6 @@ class ProjectView(wx.lib.docview.View):
                 return True
 
         return False
-
-
-    def _AreSelectedItemsFromSameProject(self):
-        if not self._treeCtrl:
-            return False
-        items = self._treeCtrl.GetSelections()
-        if not items:
-            return False
-        project = self._GetItemProject(items[0])
-        if project == None:
-            return False
-        for item in items:
-            if not self._IsItemFile(item):
-                return False
-            if self._GetItemProject(item) != project:
-                return False
-        return True
 
 
     def _GetChildItems(self, parentItem):
@@ -1293,9 +1570,6 @@ class ProjectPropertiesDialog(wx.Dialog):
 
     def __init__(self, parent, filename):
         wx.Dialog.__init__(self, parent, -1, _("Project Properties"), size = (310, 330))
-
-        HALF_SPACE = 5
-        SPACE = 10
 
         filePropertiesService = wx.GetApp().GetService(wx.lib.pydocview.FilePropertiesService)
 
@@ -1354,8 +1628,6 @@ class ProjectOptionsPanel(wx.Panel):
     def __init__(self, parent, id):
         wx.Panel.__init__(self, parent, id)
         self._useSashMessageShown = False
-        SPACE = 10
-        HALF_SPACE = 5
         config = wx.ConfigBase_Get()
         self._projSaveDocsCheckBox = wx.CheckBox(self, -1, _("Remember open projects"))
         self._projSaveDocsCheckBox.SetValue(config.ReadInt("ProjectSaveDocs", True))
@@ -1404,7 +1676,9 @@ class ProjectService(Service.Service):
     RENAME_ID = wx.NewId()
     OPEN_SELECTION_ID = wx.NewId()
     REMOVE_FROM_PROJECT = wx.NewId()
-
+    DELETE_FILE_ID = wx.NewId()
+    ADD_ALL_FILES_TO_PROJECT_ID = wx.NewId()
+    
 
     #----------------------------------------------------------------------------
     # Overridden methods
@@ -1457,8 +1731,6 @@ class ProjectService(Service.Service):
     def InstallControls(self, frame, menuBar = None, toolBar = None, statusBar = None, document = None):
         Service.Service.InstallControls(self, frame, menuBar, toolBar, statusBar, document)
 
-        config = wx.ConfigBase_Get()
-
         projectMenu = wx.Menu()
 
 ##            accelTable = wx.AcceleratorTable([
@@ -1468,9 +1740,13 @@ class ProjectService(Service.Service):
         isProjectDocument = document and document.GetDocumentTemplate().GetDocumentType() == ProjectDocument
         if wx.GetApp().IsMDI() or isProjectDocument:
             if not menuBar.FindItemById(ProjectService.ADD_FILES_TO_PROJECT_ID):
-                projectMenu.Append(ProjectService.ADD_FILES_TO_PROJECT_ID, _("&Add Files to Project..."), _("Adds a document to the current project"))
+                projectMenu.Append(ProjectService.ADD_FILES_TO_PROJECT_ID, _("Add &Files to Project..."), _("Adds a document to the current project"))
                 wx.EVT_MENU(frame, ProjectService.ADD_FILES_TO_PROJECT_ID, frame.ProcessEvent)
                 wx.EVT_UPDATE_UI(frame, ProjectService.ADD_FILES_TO_PROJECT_ID, frame.ProcessUpdateUIEvent)
+            if not menuBar.FindItemById(ProjectService.ADD_ALL_FILES_TO_PROJECT_ID):
+                projectMenu.Append(ProjectService.ADD_ALL_FILES_TO_PROJECT_ID, _("Add All Files to Project..."), _("Adds a directory's documents to the current project"))
+                wx.EVT_MENU(frame, ProjectService.ADD_ALL_FILES_TO_PROJECT_ID, frame.ProcessEvent)
+                wx.EVT_UPDATE_UI(frame, ProjectService.ADD_ALL_FILES_TO_PROJECT_ID, frame.ProcessUpdateUIEvent)
             if not menuBar.FindItemById(ProjectService.ADD_CURRENT_FILE_TO_PROJECT_ID):
                 projectMenu.Append(ProjectService.ADD_CURRENT_FILE_TO_PROJECT_ID, _("&Add Active File to Project..."), _("Adds the active document to a project"))
                 wx.EVT_MENU(frame, ProjectService.ADD_CURRENT_FILE_TO_PROJECT_ID, frame.ProcessEvent)
@@ -1479,10 +1755,13 @@ class ProjectService(Service.Service):
         menuBar.Insert(viewMenuIndex + 1, projectMenu, _("&Project"))
         editMenu = menuBar.GetMenu(menuBar.FindMenu(_("&Edit")))
         if not menuBar.FindItemById(ProjectService.RENAME_ID):
-            editMenu.AppendSeparator()
             editMenu.Append(ProjectService.RENAME_ID, _("&Rename"), _("Renames the active item"))
             wx.EVT_MENU(frame, ProjectService.RENAME_ID, frame.ProcessEvent)
             wx.EVT_UPDATE_UI(frame, ProjectService.RENAME_ID, frame.ProcessUpdateUIEvent)
+        if not menuBar.FindItemById(ProjectService.DELETE_FILE_ID):
+            editMenu.Append(ProjectService.DELETE_FILE_ID, _("Delete File"), _("Delete the file from the project and file system."))
+            wx.EVT_MENU(frame, ProjectService.DELETE_FILE_ID, frame.ProcessEvent)
+            wx.EVT_UPDATE_UI(frame, ProjectService.DELETE_FILE_ID, frame.ProcessUpdateUIEvent)
 
         return True
 
@@ -1554,19 +1833,19 @@ class ProjectService(Service.Service):
             return True
 
         id = event.GetId()
-        if id == ProjectService.RUNPM_ID or id == ProjectService.RUN_SELECTED_PM_ID or id == ProjectService.RUN_CURRENT_PM_ID:
+        if (id == ProjectService.RUNPM_ID
+        or id == ProjectService.RUN_SELECTED_PM_ID
+        or id == ProjectService.RUN_CURRENT_PM_ID):
             event.Enable(self._HasOpenedProjects() and self._HasProcessModel())
-            return True
-        elif id == ProjectService.ADD_FILES_TO_PROJECT_ID:
-            event.Enable(False)
             return True
         elif id == ProjectService.ADD_CURRENT_FILE_TO_PROJECT_ID:
             event.Enable(self._CanAddCurrentFileToProject())
             return True
-        elif id == ProjectService.RENAME_ID:
-            event.Enable(False)
-            return True
-        elif id == ProjectService.OPEN_SELECTION_ID:
+        elif (id == ProjectService.ADD_FILES_TO_PROJECT_ID
+        or id == ProjectService.ADD_ALL_FILES_TO_PROJECT_ID
+        or id == ProjectService.RENAME_ID
+        or id == ProjectService.OPEN_SELECTION_ID
+        or id == ProjectService.DELETE_FILE_ID):
             event.Enable(False)
             return True
         elif id == wx.lib.pydocview.FilePropertiesService.PROPERTIES_ID:
@@ -1611,7 +1890,7 @@ class ProjectService(Service.Service):
                 yesNoMsg = wx.MessageDialog(frame,
                               _("Files have been modified.  Process may not reflect your current changes.\n\nWould you like to save all files before running?"),
                               _("Run Process"),
-                              wx.YES_NO
+                              wx.YES_NO|wx.ICON_QUESTION
                               )
                 if yesNoMsg.ShowModal() == wx.ID_YES:
                     wx.GetTopLevelParent(frame).OnFileSaveAll(None)
@@ -1728,6 +2007,7 @@ class ProjectService(Service.Service):
         strings = map(lambda project: project.GetPrintableName(), projects)
         return strings
         
+
     def OnAddCurrentFileToProject(self, event):
         if not self._CanAddCurrentFileToProject():
             return
@@ -1777,6 +2057,41 @@ class ProjectService(Service.Service):
                         view = doc.GetFirstView()
                         view.SetExpandedProjects(eval(expandedString))
         return openedDocs
+
+
+class ProjectEditorMoveCommand(wx.lib.docview.Command):
+
+    def __init__(self, view, newPositionItem, item):
+        wx.lib.docview.Command.__init__(self, canUndo = True)
+        self._view = view
+        self._item = item
+        self._file = view._treeCtrl.GetLongFilename(item)
+        if view._IsItemFile(item):
+            self._projectOld = view._GetItemProject(item)
+        else:  # view._IsItemProject(item):
+            self._projectOld = None
+        self._projectNew = view._GetItemProject(newPositionItem)
+                          
+
+    def GetName(self):
+        return _("Move File %s") % os.path.basename(self._file)
+
+
+    def Do(self):
+        if self._projectOld:
+            self._projectOld.RemoveFile(self._file)
+        if self._projectNew:
+            self._projectNew.AddFile(self._file)
+        return True
+
+
+    def Undo(self):
+        if self._projectNew:
+            self._projectNew.RemoveFile(self._file)
+        if self._projectOld:
+            self._projectOld.AddFile(self._file)
+        return True
+
 
 #----------------------------------------------------------------------------
 # Icon Bitmaps - generated by encode_bitmaps.py

@@ -120,7 +120,7 @@ class FindInDirService(FindService.FindService):
             dlg.Destroy()
         wx.EVT_BUTTON(findDirButton, -1, OnBrowseButton)
 
-        subfolderCtrl = wx.CheckBox(frame, -1, _("Search in subfolders"))
+        subfolderCtrl = wx.CheckBox(frame, -1, _("Search in subdirectories"))
         subfolderCtrl.SetValue(config.ReadInt(FIND_MATCHDIRSUBFOLDERS, True))
         contentSizer.Add(subfolderCtrl, 0, wx.BOTTOM, SPACE)
 
@@ -152,7 +152,7 @@ class FindInDirService(FindService.FindService):
         findBtn = wx.Button(frame, wx.ID_OK, _("Find"))
         findBtn.SetDefault()
         buttonSizer.Add(findBtn, 0, wx.BOTTOM, HALF_SPACE)
-        buttonSizer.Add(wx.Button(frame, wx.ID_CANCEL, _("Cancel")), 0)
+        buttonSizer.Add(wx.Button(frame, wx.ID_CANCEL), 0)
         borderSizer.Add(buttonSizer, 0, wx.ALL, SPACE)
 
         frame.SetSizer(borderSizer)
@@ -311,7 +311,7 @@ class FindInDirService(FindService.FindService):
         findBtn = wx.Button(frame, wx.ID_OK, _("Find"))
         findBtn.SetDefault()
         buttonSizer.Add(findBtn, 0, wx.BOTTOM, HALF_SPACE)
-        buttonSizer.Add(wx.Button(frame, wx.ID_CANCEL, _("Cancel")), 0)
+        buttonSizer.Add(wx.Button(frame, wx.ID_CANCEL), 0)
         borderSizer.Add(buttonSizer, 0, wx.ALL, SPACE)
 
         frame.SetSizer(borderSizer)

@@ -721,7 +721,15 @@ def processFiles(files, cfg = None, pre_process_cb = None) :
         if callable(pre_process_cb) :
             pre_process_cb(moduleName)
         module = Module(moduleName, fullpath = filename)
-            
+
+        # reload the given module, otherwise won't get new syntax errors.
+        sysModule = sys.modules.get(moduleName)
+        if sysModule:
+            try:
+                reload(sysModule)
+            except:
+                pass
+                
         module.load(warnings)
     utils.popConfig()
     return warnings
@@ -749,7 +757,7 @@ def checkSyntax(filename, messageView):
     _cfg, files, suppressions = Config.setupFromArgs([filename])
     if not files :
         return 0
-        
+                
     global _output, _statusDlg, _count
     _output = messageView
     # wxBug:  Need to show progress dialog box, or message window never gets updated until the method returns    
@@ -757,7 +765,8 @@ def checkSyntax(filename, messageView):
     _count = 0
 
     # insert this here, so we find files in the local dir before std library
-    sys.path.insert(0, '')
+    if sys.path[0] != '' :
+        sys.path.insert(0, '')
 
     importWarnings = processFiles(files, _cfg, _print_processing)
     fixupBuiltinModules()

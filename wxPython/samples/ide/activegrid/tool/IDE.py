@@ -348,7 +348,12 @@ class IDEApplication(wx.lib.pydocview.DocApp):
             if not welcomeService.RunWelcomeIfFirstTime():
                 if os.path.exists("activegrid/tool/data/tips.txt"):
                     wx.CallAfter(self.ShowTip, docManager.FindSuitableParent(), wx.CreateFileTipProvider("activegrid/tool/data/tips.txt", 0))
+        else:
+            if os.path.exists("activegrid/tool/data/tips.txt"):
+                wx.CallAfter(self.ShowTip, docManager.FindSuitableParent(), wx.CreateFileTipProvider("activegrid/tool/data/tips.txt", 0))
 
+        wx.UpdateUIEvent.SetUpdateInterval(200)  # Overhead of updating menus was too much.  Change to update every 200 milliseconds.
+        
         return True
 
 

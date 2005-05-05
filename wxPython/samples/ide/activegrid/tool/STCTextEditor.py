@@ -293,10 +293,6 @@ class TextView(wx.lib.docview.View):
         if not self.GetCtrl():
             return False
 
-        hasSelection = self.GetCtrl().GetSelectionStart() != self.GetCtrl().GetSelectionEnd()
-        hasText = self.GetCtrl().GetTextLength() > 0
-        notOnLastChar = self.GetCtrl().GetSelectionStart() != self.GetCtrl().GetTextLength()
-
         id = event.GetId()
         if id == wx.ID_UNDO:
              event.Enable(self.GetCtrl().CanUndo())
@@ -306,41 +302,44 @@ class TextView(wx.lib.docview.View):
             event.Enable(self.GetCtrl().CanRedo())
             event.SetText(_("Redo") + '\t' + _('Ctrl+Y'))
             return True
-        elif id == wx.ID_CUT:
-            event.Enable(hasSelection)
-            return True
-        elif id == wx.ID_COPY:
+        elif (id == wx.ID_CUT
+        or id == wx.ID_COPY
+        or id == wx.ID_CLEAR):
+            hasSelection = self.GetCtrl().GetSelectionStart() != self.GetCtrl().GetSelectionEnd()
             event.Enable(hasSelection)
             return True
         elif id == wx.ID_PASTE:
             event.Enable(self.GetCtrl().CanPaste())
             return True
-        elif id == wx.ID_CLEAR:
-            event.Enable(hasSelection)
-            return True
         elif id == wx.ID_SELECTALL:
+            hasText = self.GetCtrl().GetTextLength() > 0
             event.Enable(hasText)
             return True
         elif id == TEXT_ID:
             event.Enable(True)
             return True
         elif id == VIEW_WHITESPACE_ID:
+            hasText = self.GetCtrl().GetTextLength() > 0
             event.Enable(hasText)
             event.Check(self.GetCtrl().GetViewWhiteSpace())
             return True
         elif id == VIEW_EOL_ID:
+            hasText = self.GetCtrl().GetTextLength() > 0
             event.Enable(hasText)
             event.Check(self.GetCtrl().GetViewEOL())
             return True
         elif id == VIEW_INDENTATION_GUIDES_ID:
+            hasText = self.GetCtrl().GetTextLength() > 0
             event.Enable(hasText)
             event.Check(self.GetCtrl().GetIndentationGuides())
             return True
         elif id == VIEW_RIGHT_EDGE_ID:
+            hasText = self.GetCtrl().GetTextLength() > 0
             event.Enable(hasText)
             event.Check(self.GetCtrl().GetViewRightEdge())
             return True
         elif id == VIEW_LINE_NUMBERS_ID:
+            hasText = self.GetCtrl().GetTextLength() > 0
             event.Enable(hasText)
             event.Check(self.GetCtrl().GetViewLineNumbers())
             return True
@@ -364,19 +363,23 @@ class TextView(wx.lib.docview.View):
             event.Check(self.GetCtrl().CanWordWrap() and self.GetCtrl().GetWordWrap())
             return True
         elif id == FindService.FindService.FIND_ID:
+            hasText = self.GetCtrl().GetTextLength() > 0
             event.Enable(hasText)
             return True
         elif id == FindService.FindService.FIND_PREVIOUS_ID:
+            hasText = self.GetCtrl().GetTextLength() > 0
             event.Enable(hasText and
                          self._FindServiceHasString() and
                          self.GetCtrl().GetSelection()[0] > 0)
             return True
         elif id == FindService.FindService.FIND_NEXT_ID:
+            hasText = self.GetCtrl().GetTextLength() > 0
             event.Enable(hasText and
                          self._FindServiceHasString() and
                          self.GetCtrl().GetSelection()[0] < self.GetCtrl().GetLength())
             return True
         elif id == FindService.FindService.REPLACE_ID:
+            hasText = self.GetCtrl().GetTextLength() > 0
             event.Enable(hasText)
             return True
         elif id == FindService.FindService.GOTO_LINE_ID:
@@ -745,40 +748,18 @@ class TextService(wx.lib.pydocview.DocService):
 
     def ProcessUpdateUIEvent(self, event):
         id = event.GetId()
-        if id == TEXT_ID:
-            event.Enable(False)
-            return True
-        elif id == VIEW_WHITESPACE_ID:
-            event.Enable(False)
-            return True
-        elif id == VIEW_EOL_ID:
-            event.Enable(False)
-            return True
-        elif id == VIEW_INDENTATION_GUIDES_ID:
-            event.Enable(False)
-            return True
-        elif id == VIEW_RIGHT_EDGE_ID:
-            event.Enable(False)
-            return True
-        elif id == VIEW_LINE_NUMBERS_ID:
-            event.Enable(False)
-            return True
-        elif id == ZOOM_ID:
-            event.Enable(False)
-            return True
-        elif id == ZOOM_NORMAL_ID:
-            event.Enable(False)
-            return True
-        elif id == ZOOM_IN_ID:
-            event.Enable(False)
-            return True
-        elif id == ZOOM_OUT_ID:
-            event.Enable(False)
-            return True
-        elif id == CHOOSE_FONT_ID:
-            event.Enable(False)
-            return True
-        elif id == WORD_WRAP_ID:
+        if (id == TEXT_ID
+        or id == VIEW_WHITESPACE_ID
+        or id == VIEW_EOL_ID
+        or id == VIEW_INDENTATION_GUIDES_ID
+        or id == VIEW_RIGHT_EDGE_ID
+        or id == VIEW_LINE_NUMBERS_ID
+        or id == ZOOM_ID
+        or id == ZOOM_NORMAL_ID
+        or id == ZOOM_IN_ID
+        or id == ZOOM_OUT_ID
+        or id == CHOOSE_FONT_ID
+        or id == WORD_WRAP_ID):
             event.Enable(False)
             return True
         else:

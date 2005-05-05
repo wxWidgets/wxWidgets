@@ -780,18 +780,20 @@ class DocTabbedParentFrame(wx.Frame, DocFrameMixIn, DocMDIParentFrameMixIn):
         for template in templates:
             icon = template.GetIcon()
             if icon:
-                if icon.GetHeight() != 16:
-                    icon.SetHeight(16)  # wxBug: img2py.py uses EmptyIcon which is 32x32
-                if icon.GetWidth() != 16:
-                    icon.SetWidth(16)   # wxBug: img2py.py uses EmptyIcon which is 32x32
+                if icon.GetHeight() != 16 or icon.GetWidth() != 16:
+                    icon.SetHeight(16)
+                    icon.SetWidth(16)
+                    if wx.GetApp().GetDebug():
+                        print "Warning: icon for '%s' isn't 16x16, not crossplatform" % template._docTypeName
                 iconIndex = iconList.AddIcon(icon)
                 self._iconIndexLookup.append((template, iconIndex))
                 
         icon = getBlankIcon()
-        if icon.GetHeight() != 16:
-            icon.SetHeight(16)  # wxBug: img2py.py uses EmptyIcon which is 32x32
-        if icon.GetWidth() != 16:
-            icon.SetWidth(16)   # wxBug: img2py.py uses EmptyIcon which is 32x32
+        if icon.GetHeight() != 16 or icon.GetWidth() != 16:
+            icon.SetHeight(16)
+            icon.SetWidth(16)
+            if wx.GetApp().GetDebug():
+                print "Warning: getBlankIcon isn't 16x16, not crossplatform"
         self._blankIconIndex = iconList.AddIcon(icon)
         self._notebook.AssignImageList(iconList)
 

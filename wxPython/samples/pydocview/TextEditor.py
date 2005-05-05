@@ -7,7 +7,7 @@
 # Created:      8/15/03
 # CVS-ID:       $Id$
 # Copyright:    (c) 2003-2005 ActiveGrid, Inc.
-# License:      ASL 2.0  http://apache.org/licenses/LICENSE-2.0
+# License:      wxWindows License
 #----------------------------------------------------------------------------
 import wx
 import wx.lib.docview

@@ -97,19 +97,11 @@ class FindService(wx.lib.pydocview.DocService):
 
     def ProcessUpdateUIEvent(self, event):
         id = event.GetId()
-        if id == FindService.FIND_ID:
-            event.Enable(False)
-            return True
-        elif id == FindService.FIND_PREVIOUS_ID:
-            event.Enable(False)
-            return True
-        elif id == FindService.FIND_NEXT_ID:
-            event.Enable(False)
-            return True
-        elif id == FindService.REPLACE_ID:
-            event.Enable(False)
-            return True
-        elif id == FindService.GOTO_LINE_ID:
+        if (id == FindService.FIND_ID
+        or id == FindService.FIND_PREVIOUS_ID
+        or id == FindService.FIND_NEXT_ID
+        or id == FindService.REPLACE_ID
+        or id == FindService.GOTO_LINE_ID):
             event.Enable(False)
             return True
         else:
@@ -362,7 +354,7 @@ class FindDialog(wx.Dialog):
         findBtn = wx.Button(self, FindService.FINDONE_ID, _("Find Next"))
         findBtn.SetDefault()
         wx.EVT_BUTTON(self, FindService.FINDONE_ID, self.OnActionEvent)
-        cancelBtn = wx.Button(self, wx.ID_CANCEL, _("Cancel"))
+        cancelBtn = wx.Button(self, wx.ID_CANCEL)
         wx.EVT_BUTTON(self, wx.ID_CANCEL, self.OnClose)
         buttonSizer.Add(findBtn, 0, wx.BOTTOM, HALF_SPACE)
         buttonSizer.Add(cancelBtn, 0)
@@ -457,7 +449,7 @@ class FindReplaceDialog(FindDialog):
         findBtn = wx.Button(self, FindService.FINDONE_ID, _("Find Next"))
         findBtn.SetDefault()
         wx.EVT_BUTTON(self, FindService.FINDONE_ID, self.OnActionEvent)
-        cancelBtn = wx.Button(self, wx.ID_CANCEL, _("Cancel"))
+        cancelBtn = wx.Button(self, wx.ID_CANCEL)
         wx.EVT_BUTTON(self, wx.ID_CANCEL, self.OnClose)
         replaceBtn = wx.Button(self, FindService.REPLACEONE_ID, _("Replace"))
         wx.EVT_BUTTON(self, FindService.REPLACEONE_ID, self.OnActionEvent)

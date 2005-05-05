@@ -215,16 +215,13 @@ class Document(wx.EvtHandler):
         self._documentModified = modify
 
 
-    def SetDocumentModificationDate(self, filename=None):
+    def SetDocumentModificationDate(self):
         """
         Saves the file's last modification date.
         This is used to check if the file has been modified outside of the application.
         This method has been added to wxPython and is not in wxWindows.
         """
-        if not filename:
-            filename = self.GetFilename()
-        self._documentModificationDate = os.path.getmtime(filename)
-        print "debug print, file: %s set modification date to %s" % (filename, self._documentModificationDate)
+        self._documentModificationDate = os.path.getmtime(self.GetFilename())
 
 
     def GetDocumentModificationDate(self):
@@ -365,7 +362,6 @@ class Document(wx.EvtHandler):
 
         """ check for file modification outside of application """
         if os.path.exists(self.GetFilename()) and os.path.getmtime(self.GetFilename()) != self.GetDocumentModificationDate():
-            print "debug print, File %s: new mod date %s, original mod date %s" % (self.GetFilename(), os.path.getmtime(self.GetFilename()), self.GetDocumentModificationDate())
             msgTitle = wx.GetApp().GetAppName()
             if not msgTitle:
                 msgTitle = _("Application")
@@ -468,6 +464,7 @@ class Document(wx.EvtHandler):
             if backupFilename:
                 os.remove(filename)
                 os.rename(backupFilename, filename)
+                self.SetDocumentModificationDate()
 
             wx.MessageBox("Could not save '%s'.  %s" % (FileNameFromPath(filename), sys.exc_value),
                           msgTitle,
@@ -596,7 +593,6 @@ class Document(wx.EvtHandler):
 
         """ check for file modification outside of application """
         if os.path.exists(self.GetFilename()) and os.path.getmtime(self.GetFilename()) != self.GetDocumentModificationDate():
-            print "debug print, File %s: new mod date %s, original mod date %s" % (self.GetFilename(), os.path.getmtime(self.GetFilename()), self.GetDocumentModificationDate())
             msgTitle = wx.GetApp().GetAppName()
             if not msgTitle:
                 msgTitle = _("Warning")

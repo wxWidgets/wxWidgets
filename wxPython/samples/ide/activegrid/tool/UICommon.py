@@ -88,6 +88,7 @@ def AddFilesToCurrentProject(paths, save=False):
                     paths.remove(path)
             if paths:
                 projectDocument.GetCommandProcessor().Submit(ProjectEditor.ProjectAddFilesCommand(projectDocument, paths))
+                projectDocument.GetFirstView().DoSelectFiles([paths[0]])
                 if save:
                     projectDocument.OnSaveDocument(projectDocument.GetFilename())
 

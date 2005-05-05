@@ -117,7 +117,6 @@ class CodeView(STCTextEditor.TextView):
     def ProcessUpdateUIEvent(self, event):
         if not self.GetCtrl():
             return False
-        hasText = self.GetCtrl().GetTextLength() > 0
         id = event.GetId()
         if id == EXPAND_TEXT_ID:
             event.Enable(self.GetCtrl().CanLineExpand(self.GetCtrl().GetCurrentLine()))
@@ -125,48 +124,28 @@ class CodeView(STCTextEditor.TextView):
         elif id == COLLAPSE_TEXT_ID:
             event.Enable(self.GetCtrl().CanLineCollapse(self.GetCtrl().GetCurrentLine()))
             return True
-        elif id == EXPAND_TOP_ID:
-            event.Enable(hasText)
-            return True
-        elif id == COLLAPSE_TOP_ID:
-            event.Enable(hasText)
-            return True
-        elif id == EXPAND_ALL_ID:
-            event.Enable(hasText)
-            return True
-        elif id == COLLAPSE_ALL_ID:
-            event.Enable(hasText)
+        elif (id == EXPAND_TOP_ID
+        or id == COLLAPSE_TOP_ID
+        or id == EXPAND_ALL_ID
+        or id == COLLAPSE_ALL_ID
+        or id == AUTO_COMPLETE_ID
+        or id == CLEAN_WHITESPACE
+        or id == INDENT_LINES_ID
+        or id == DEDENT_LINES_ID
+        or id == COMMENT_LINES_ID
+        or id == UNCOMMENT_LINES_ID):
+            event.Enable(self.GetCtrl().GetTextLength() > 0)
             return True
         elif id == CHECK_CODE_ID:
             event.Enable(False)
             return True
-        elif id == AUTO_COMPLETE_ID:
-            event.Enable(hasText)
-            return True
-        elif id == CLEAN_WHITESPACE:
-            event.Enable(hasText)
-            return True
-        elif id == SET_INDENT_WIDTH_ID:
+        elif (id == SET_INDENT_WIDTH_ID
+        or id == FOLDING_ID):
             event.Enable(True)
             return True
         elif id == USE_TABS_ID:
             event.Enable(True)
             event.Check(self.GetCtrl().GetUseTabs())
-            return True
-        elif id == INDENT_LINES_ID:
-            event.Enable(hasText)
-            return True
-        elif id == DEDENT_LINES_ID:
-            event.Enable(hasText)
-            return True
-        elif id == COMMENT_LINES_ID:
-            event.Enable(hasText)
-            return True
-        elif id == UNCOMMENT_LINES_ID:
-            event.Enable(hasText)
-            return True
-        elif id == FOLDING_ID:
-            event.Enable(True)
             return True
         else:
             return STCTextEditor.TextView.ProcessUpdateUIEvent(self, event)
@@ -625,52 +604,22 @@ class CodeService(STCTextEditor.TextService):
 
     def ProcessUpdateUIEvent(self, event):
         id = event.GetId()
-        if id == EXPAND_TEXT_ID:
-            event.Enable(False)
-            return True
-        elif id == COLLAPSE_TEXT_ID:
-            event.Enable(False)
-            return True
-        elif id == EXPAND_TOP_ID:
-            event.Enable(False)
-            return True
-        elif id == COLLAPSE_TOP_ID:
-            event.Enable(False)
-            return True
-        elif id == EXPAND_ALL_ID:
-            event.Enable(False)
-            return True
-        elif id == COLLAPSE_ALL_ID:
-            event.Enable(False)
-            return True
-        elif id == CHECK_CODE_ID:
-            event.Enable(False)
-            return True
-        elif id == AUTO_COMPLETE_ID:
-            event.Enable(False)
-            return True
-        elif id == CLEAN_WHITESPACE:
-            event.Enable(False)
-            return True
-        elif id == SET_INDENT_WIDTH_ID:
-            event.Enable(False)
-            return True
-        elif id == USE_TABS_ID:
-            event.Enable(False)
-            return True
-        elif id == INDENT_LINES_ID:
-            event.Enable(False)
-            return True
-        elif id == DEDENT_LINES_ID:
-            event.Enable(False)
-            return True
-        elif id == COMMENT_LINES_ID:
-            event.Enable(False)
-            return True
-        elif id == UNCOMMENT_LINES_ID:
-            event.Enable(False)
-            return True
-        elif id == FOLDING_ID:
+        if (id == EXPAND_TEXT_ID
+        or id == COLLAPSE_TEXT_ID
+        or id == EXPAND_TOP_ID
+        or id == COLLAPSE_TOP_ID
+        or id == EXPAND_ALL_ID
+        or id == COLLAPSE_ALL_ID
+        or id == CHECK_CODE_ID
+        or id == AUTO_COMPLETE_ID
+        or id == CLEAN_WHITESPACE
+        or id == SET_INDENT_WIDTH_ID
+        or id == USE_TABS_ID
+        or id == INDENT_LINES_ID
+        or id == DEDENT_LINES_ID
+        or id == COMMENT_LINES_ID
+        or id == UNCOMMENT_LINES_ID
+        or id == FOLDING_ID):
             event.Enable(False)
             return True
         else:
