@@ -1,10 +1,13 @@
-/*
- * wxuxthem.h : wxWindows support for Microsoft Windows XP Theme library
- *                (uxtheme.dll)
- * Modified to work with almost all Win32 compilers
- * Compiler must support Unicode, the __cdecl calling convention, and the
- * __stdcall calling convention
- */
+///////////////////////////////////////////////////////////////////////////////
+// Name:        wx/msw/uxtheme.h
+// Purpose:     wxUxThemeEngine class: support for XP themes
+// Author:      John Platts, Vadim Zeitlin
+// Modified by:
+// Created:     2003
+// RCS-ID:      $Id$
+// Copyright:   (c) 2003 John Platts, Vadim Zeitlin
+// License:     wxWindows licence
+///////////////////////////////////////////////////////////////////////////////
 
 #ifndef _WX_UXTHEME_H_
 #define _WX_UXTHEME_H_
