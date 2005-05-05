@@ -981,18 +981,18 @@ class ProjectView(wx.lib.docview.View):
 
     def OnAddDirToProject(self, event):
         frame = wx.Dialog(None, -1, _("Add All Files from Directory to Project"), size= (320,200))
-        borderSizer = wx.BoxSizer(wx.HORIZONTAL)
-
         contentSizer = wx.BoxSizer(wx.VERTICAL)
-        lineSizer = wx.BoxSizer(wx.HORIZONTAL)
-        lineSizer.Add(wx.StaticText(frame, -1, _("Directory:")), 0, wx.ALIGN_CENTER | wx.RIGHT, HALF_SPACE)
-        dirCtrl = wx.TextCtrl(frame, -1, os.path.dirname(self.GetDocument().GetFilename()), size=(200,-1))
-        dirCtrl.SetToolTipString(dirCtrl.GetValue())
-        lineSizer.Add(dirCtrl, 0, wx.LEFT, HALF_SPACE)
-        findDirButton = wx.Button(frame, -1, "Browse...")
-        lineSizer.Add(findDirButton, 0, wx.LEFT, HALF_SPACE)
-        contentSizer.Add(lineSizer, 0, wx.BOTTOM, SPACE)
         
+        flexGridSizer = wx.FlexGridSizer(cols = 2, vgap=HALF_SPACE, hgap=HALF_SPACE)
+        flexGridSizer.Add(wx.StaticText(frame, -1, _("Directory:")), 0, wx.ALIGN_CENTER_VERTICAL, 0)
+        lineSizer = wx.BoxSizer(wx.HORIZONTAL)
+        dirCtrl = wx.TextCtrl(frame, -1, os.path.dirname(self.GetDocument().GetFilename()), size=(250,-1))
+        dirCtrl.SetToolTipString(dirCtrl.GetValue())
+        lineSizer.Add(dirCtrl, 1, wx.ALIGN_CENTER_VERTICAL|wx.EXPAND)
+        findDirButton = wx.Button(frame, -1, "Browse...")
+        lineSizer.Add(findDirButton, 0, wx.LEFT|wx.ALIGN_CENTER_VERTICAL, HALF_SPACE)
+        flexGridSizer.Add(lineSizer, 1, wx.EXPAND)
+                
         def OnBrowseButton(event):
             dlg = wx.DirDialog(frame, _("Choose a directory:"), style=wx.DD_DEFAULT_STYLE)
             dir = dirCtrl.GetValue()
@@ -1022,28 +1022,26 @@ class ProjectView(wx.lib.docview.View):
             choices.append(descr)
             allfilter = allfilter + template.GetFileFilter()
         choices.insert(0, _("All (%s)") % allfilter)
-        filterChoice = wx.Choice(frame, -1, size=(210, -1), choices=choices)
+        filterChoice = wx.Choice(frame, -1, size=(250, -1), choices=choices)
         filterChoice.SetSelection(0)
         filterChoice.SetToolTipString(_("Select file type filter."))
-        lineSizer = wx.BoxSizer(wx.HORIZONTAL)
-        lineSizer.Add(wx.StaticText(frame, -1, _("Files of type:")), 0, wx.ALIGN_CENTER | wx.RIGHT, HALF_SPACE)
-        lineSizer.Add(filterChoice, 1, wx.LEFT, HALF_SPACE)
-        contentSizer.Add(lineSizer, 0, wx.BOTTOM|wx.EXPAND, SPACE)
+        flexGridSizer.Add(wx.StaticText(frame, -1, _("Files of type:")), 0, wx.ALIGN_CENTER_VERTICAL)
+        flexGridSizer.Add(filterChoice, 1, wx.EXPAND)
+        
+        contentSizer.Add(flexGridSizer, 0, wx.ALL|wx.EXPAND, SPACE)
         
         subfolderCtrl = wx.CheckBox(frame, -1, _("Add files from subdirectories"))
         subfolderCtrl.SetValue(True)
-        contentSizer.Add(subfolderCtrl, 0, wx.BOTTOM, SPACE)
+        contentSizer.Add(subfolderCtrl, 0, wx.LEFT|wx.ALIGN_CENTER_VERTICAL, SPACE)
 
-        borderSizer.Add(contentSizer, 0, wx.TOP|wx.BOTTOM|wx.LEFT, SPACE)
-
-        buttonSizer = wx.BoxSizer(wx.VERTICAL)
+        buttonSizer = wx.BoxSizer(wx.HORIZONTAL)
         findBtn = wx.Button(frame, wx.ID_OK, _("Add"))
         findBtn.SetDefault()
-        buttonSizer.Add(findBtn, 0, wx.BOTTOM, HALF_SPACE)
+        buttonSizer.Add(findBtn, 0, wx.RIGHT, HALF_SPACE)
         buttonSizer.Add(wx.Button(frame, wx.ID_CANCEL), 0)
-        borderSizer.Add(buttonSizer, 0, wx.ALL, SPACE)
+        contentSizer.Add(buttonSizer, 0, wx.ALL|wx.ALIGN_RIGHT, SPACE)
 
-        frame.SetSizer(borderSizer)
+        frame.SetSizer(contentSizer)
         frame.Fit()
 
         status = frame.ShowModal()
@@ -1497,7 +1495,7 @@ class ProjectView(wx.lib.docview.View):
                 else:
                     if self._treeCtrl.GetLongFilename(child) == longFileName:
                         return child
-                (child, cookie2) = self._treeCtrl.GetNextChild(project, cookie)
+                (child, cookie2) = self._treeCtrl.GetNextChild(project, cookie2)
             (project, cookie) = self._treeCtrl.GetNextChild(rootItem, cookie)
         return None
 
