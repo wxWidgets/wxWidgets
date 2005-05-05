@@ -70,7 +70,9 @@
  */
 
 #ifndef wxUSE_CRASHREPORT
-#   ifdef wxABORT_ON_CONFIG_ERROR
+    /* this one is special: as currently it is Windows-only, don't force it
+       to be defined on other platforms */
+#   if defined(wxABORT_ON_CONFIG_ERROR) && defined(__WXMSW__)
 #       error "wxUSE_CRASHREPORT must be defined."
 #   else
 #       define wxUSE_CRASHREPORT 0
