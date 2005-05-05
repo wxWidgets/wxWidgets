@@ -373,6 +373,13 @@ wxDbgHelpDLL::DumpField(PSYMBOL_INFO pSym, void *pVariable, unsigned level)
 wxDbgHelpDLL::DumpUDT(PSYMBOL_INFO pSym, void *pVariable, unsigned level)
 {
     wxString s;
+
+    // we have to limit the depth of UDT dumping as otherwise we get in
+    // infinite loops trying to dump linked lists... 10 levels seems quite
+    // reasonable, full information is in minidump file anyhow
+    if ( level > 10 )
+        return s;
+
     s.reserve(512);
     s = GetSymbolName(pSym);
 
