@@ -49,9 +49,9 @@ wxUxThemeEngine* g_pThemeEngine = ((wxUxThemeEngine*)NULL) ;
 
 BOOL wxCanUseInitThemeEngine()
 {
-    WXUOSVERSIONINFOEX wxuosex ;
-    memset((void*)&wxuosex, 0, sizeof(WXUOSVERSIONINFOEX)) ;
-    wxuosex.dwOSVersionInfoSize = sizeof(WXUOSVERSIONINFOEX) ;
+    OSVERSIONINFOEX wxuosex ;
+    memset((void*)&wxuosex, 0, sizeof(OSVERSIONINFOEX)) ;
+    wxuosex.dwOSVersionInfoSize = sizeof(OSVERSIONINFOEX) ;
     if(!GetVersionEx((LPOSVERSIONINFO)&wxuosex))
     {
         wxuosex.dwOSVersionInfoSize = sizeof(OSVERSIONINFO) ;
