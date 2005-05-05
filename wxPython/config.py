@@ -842,7 +842,7 @@ VERSION = "%s.%s.%s.%s%s" % (VER_MAJOR, VER_MINOR, VER_RELEASE,
 # dirs as includes so we don't have to guess which is correct.
  
 wxfilesdir = ""
-i_subdir = opj("include", "wx", "wxPython", "i_files")
+i_subdir = opj("include", getExtraPath(), "wx", "wxPython", "i_files")
 if os.name != "nt":
     wxfilesdir = opj(WXPREFIX, i_subdir)
 else:
@@ -886,7 +886,7 @@ depends = [ #'include/wx/wxPython/wxPython.h',
 # BuildRenamers
 ####################################
 
-import pprint
+import pprint, shutil
 try:
     import libxml2
     FOUND_LIBXML2 = True
@@ -972,11 +972,14 @@ class BuildRenamers:
         # blow away the old one if they are different.
         for dest, temp in [(swigDest, swigDestTemp),
                            (pyDest, pyDestTemp)]:
+            # NOTE: we don't use shutil.move() because it was introduced
+            # in Python 2.3. Eventually we can switch to it when people
+            # stop building using 2.2.
             if not os.path.exists(dest):
-                os.rename(temp, dest)
+                shutil.copyfile(temp, dest)
             elif open(dest).read() != open(temp).read():
                 os.unlink(dest)
-                os.rename(temp, dest)
+                shutil.copyfile(temp, dest)
             else:
                 print dest + " not changed."
                 os.unlink(temp)
