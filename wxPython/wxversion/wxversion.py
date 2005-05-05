@@ -176,6 +176,7 @@ def ensureMinimal(minVersion):
         sys.exit()
 
     sys.path.insert(0, bestMatch.pathname)
+    global _selected
     _selected = bestMatch
         
 
