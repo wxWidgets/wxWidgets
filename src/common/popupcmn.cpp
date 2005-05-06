@@ -192,14 +192,21 @@ wxPopupTransientWindow::wxPopupTransientWindow(wxWindow *parent, int style)
 
 wxPopupTransientWindow::~wxPopupTransientWindow()
 {
-    PopHandlers();
+    if (m_handlerPopup && m_handlerPopup->GetNextHandler())
+        PopHandlers();
+        
+    wxASSERT(!m_handlerFocus || !m_handlerFocus->GetNextHandler());
+    wxASSERT(!m_handlerPopup || !m_handlerPopup->GetNextHandler());
+
+    delete m_handlerFocus;
+    delete m_handlerPopup;
 }
 
 void wxPopupTransientWindow::PopHandlers()
 {
     if ( m_child )
     {
-        if ( m_handlerPopup && !m_child->RemoveEventHandler(m_handlerPopup) )
+        if ( !m_child->RemoveEventHandler(m_handlerPopup) )
         {
             // something is very wrong and someone else probably deleted our
             // handler - so don't risk deleting it second time
@@ -212,29 +219,14 @@ void wxPopupTransientWindow::PopHandlers()
         m_child = NULL;
     }
 
-#ifdef __WXMSW__
     if ( m_focus )
     {
-        if ( m_handlerFocus && !m_focus->RemoveEventHandler(m_handlerFocus) )
+        if ( !m_focus->RemoveEventHandler(m_handlerFocus) )
         {
             // see above
             m_handlerFocus = NULL;
         }
     }
-#else
-    if ( m_handlerFocus && !RemoveEventHandler(m_handlerFocus) )
-    {
-        // see above
-        m_handlerFocus = NULL;
-    }
-#endif
-
-    // delete the handlers, they'll be created as necessary in Popup()
-    delete m_handlerPopup;
-    m_handlerPopup = NULL;
-    delete m_handlerFocus;
-    m_handlerFocus = NULL;
-
     m_focus = NULL;
 }
 
@@ -252,12 +244,12 @@ void wxPopupTransientWindow::Popup(wxWindow *winFocus)
 
     Show();
 
-    // There is is a problem if these are still valid
-    wxASSERT_MSG(!m_handlerPopup, wxT("Popup handler not deleted"));
-    wxASSERT_MSG(!m_handlerFocus, wxT("Focus handler not deleted"));
+    // There is is a problem if these are still in use
+    wxASSERT(!m_handlerFocus || !m_handlerFocus->GetNextHandler());
+    wxASSERT(!m_handlerPopup || !m_handlerPopup->GetNextHandler());
 
-    delete m_handlerPopup;
-    m_handlerPopup = new wxPopupWindowHandler(this);
+    if (!m_handlerPopup)
+        m_handlerPopup = new wxPopupWindowHandler(this);
 
     m_child->PushEventHandler(m_handlerPopup);
 
@@ -269,20 +261,19 @@ void wxPopupTransientWindow::Popup(wxWindow *winFocus)
     // subclass the window which has the focus, and not winFocus passed in or
     // otherwise everything else breaks down
     m_focus = FindFocus();
+#elif __WXGTK__
+    // GTK+ catches the activate events from the popup
+    // window, not the focus events from the child window
+    m_focus = this;
+#endif
+
     if ( m_focus )
     {
-        delete m_handlerFocus;
-        m_handlerFocus = new wxPopupFocusHandler(this);
+        if (!m_handlerFocus)
+            m_handlerFocus = new wxPopupFocusHandler(this);
 
         m_focus->PushEventHandler(m_handlerFocus);
     }
-#else
-    // GTK+ catches the activate events from the popup
-    // window, not the focus events from the child window
-    delete m_handlerFocus;
-    m_handlerFocus = new wxPopupFocusHandler(this);
-    PushEventHandler(m_handlerFocus);
-#endif // __WXMSW__
 
     // catch destroy events, if you close a program with a popup shown in MSW
     // you get a segfault if m_child or m_focus are deleted before this is
