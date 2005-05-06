@@ -248,6 +248,9 @@ protected:
     // we don't want to have focus except while selecting from menu
     void GiveAwayFocus();
 
+    // Release the mouse capture if we have it
+    bool ReleaseMouseCapture();
+
     // the array containing extra menu info we need
     wxMenuInfoArray m_menuInfos;
 

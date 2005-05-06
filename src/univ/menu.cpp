@@ -2146,9 +2146,6 @@ bool wxMenuBar::ProcessMouseEvent(const wxPoint& pt)
         return false;
     }
 
-    // FIXME: temporary workaround for crash, to be fixed
-    // in a later version.
-#if 0
     // select the new active item
     DoSelectMenu(currentNew);
 
@@ -2159,7 +2156,6 @@ bool wxMenuBar::ProcessMouseEvent(const wxPoint& pt)
         // open the new menu if the old one we closed had been opened
         PopupCurrentMenu(false /* don't select first item - as Windows does */);
     }
-#endif
 
     return true;
 }
@@ -2467,12 +2463,9 @@ void wxMenuBar::OnDismissMenu(bool dismissMenuBar)
 
 void wxMenuBar::OnDismiss()
 {
-    if ( GetCapture() )
-    {
+    if ( ReleaseMouseCapture() )
         wxLogTrace(_T("mousecapture"), _T("Releasing mouse from wxMenuBar::OnDismiss"));
-        GetCapture()->ReleaseMouse();
-    }
-
+    
     if ( m_current != -1 )
     {
         size_t current = m_current;
@@ -2482,6 +2475,42 @@ void wxMenuBar::OnDismiss()
     }
 
     GiveAwayFocus();
+}
+
+bool wxMenuBar::ReleaseMouseCapture()
+{
+#if __WXX11__
+    // With wxX11, when a menu is closed by clicking away from it, a control
+    // under the click will still get an event, even though the menu has the
+    // capture (bug?). So that control may already have taken the capture by
+    // this point, preventing us from releasing the menu's capture. So to work
+    // around this, we release both captures, then put back the control's
+    // capture.
+    wxWindow *capture = GetCapture();
+    if ( capture )
+    {
+        capture->ReleaseMouse();
+
+        if ( capture == this )
+            return true;
+
+        bool had = HasCapture();
+
+        if ( had )
+            ReleaseMouse();
+            
+        capture->CaptureMouse();
+
+        return had;
+    }
+#else
+    if ( HasCapture() )
+    {
+        ReleaseMouse();
+        return true;
+    }
+#endif
+    return false;
 }
 
 void wxMenuBar::GiveAwayFocus()
