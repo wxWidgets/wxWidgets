@@ -28,6 +28,7 @@
 
 class WXDLLEXPORT wxFont;
 class WXDLLEXPORT wxWindow;
+class WXDLLEXPORT wxWindowBase;
 
 // ---------------------------------------------------------------------------
 // private constants
@@ -702,7 +703,7 @@ inline bool wxStyleHasBorder(long style)
 }
 
 // Deferred window moving
-bool wxMoveWindowDeferred(HDWP& hdwp, wxWindow* win, HWND hWnd, int x, int y, int width, int height);
+bool wxMoveWindowDeferred(HDWP& hdwp, wxWindowBase* win, HWND hWnd, int x, int y, int width, int height);
 
 // ----------------------------------------------------------------------------
 // functions mapping HWND to wxWindow

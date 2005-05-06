@@ -5969,7 +5969,7 @@ bool wxWindowMSW::HandleHotKey(WXWPARAM wParam, WXLPARAM lParam)
 #endif // wxUSE_HOTKEY
 
 // Moves a window by deferred method or normal method
-bool wxMoveWindowDeferred(HDWP& hdwp, wxWindow* win, HWND hWnd, int x, int y, int width, int height)
+bool wxMoveWindowDeferred(HDWP& hdwp, wxWindowBase* win, HWND hWnd, int x, int y, int width, int height)
 {
     if ( hdwp )
     {
