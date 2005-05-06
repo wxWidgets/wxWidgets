@@ -394,7 +394,7 @@ bool wxSpinCtrl::Create(wxWindow *parent,
     // associate the text window with the spin button
     (void)::SendMessage(GetHwnd(), UDM_SETBUDDY, (WPARAM)m_hwndBuddy, 0);
 
-    if ( !value.IsEmpty() )
+    if ( !value.empty() )
     {
         SetValue(value);
     }
@@ -438,7 +438,7 @@ int wxSpinCtrl::GetValue() const
     long n;
     if ( (wxSscanf(val, wxT("%lu"), &n) != 1) )
         n = INT_MIN;
-        
+
     if (n < m_min) n = m_min;
     if (n > m_max) n = m_max;
 
@@ -573,13 +573,12 @@ void wxSpinCtrl::DoMoveWindow(int x, int y, int width, int height)
     // if our parent had prepared a defer window handle for us, use it (unless
     // we are a top level window)
     wxWindowMSW *parent = GetParent();
-    int originalX = x;
 
 #if USE_DEFERRED_SIZING
     HDWP hdwp = parent && !IsTopLevel() ? (HDWP)parent->m_hDWP : NULL;
 #else
     HDWP hdwp = 0;
-#endif    
+#endif
 
     // 1) The buddy window
     wxMoveWindowDeferred(hdwp, this, GetBuddyHwnd(),

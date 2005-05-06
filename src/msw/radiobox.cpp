@@ -552,13 +552,13 @@ void wxRadioBox::DoSetSize(int x, int y, int width, int height, int sizeFlags)
 
     // if our parent had prepared a defer window handle for us, use it (unless
     // we are a top level window)
-    wxWindowMSW *parent = GetParent();
 
 #if USE_DEFERRED_SIZING
+    wxWindowMSW *parent = GetParent();
     HDWP hdwp = parent && !IsTopLevel() ? (HDWP)parent->m_hDWP : NULL;
 #else
     HDWP hdwp = 0;
-#endif    
+#endif
 
     wxMoveWindowDeferred(hdwp, this, GetHwnd(), xx, yy, width, height);
 

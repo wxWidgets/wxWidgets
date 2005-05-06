@@ -219,8 +219,11 @@ int wxEntry(int& argc, wxChar **argv)
     {
         wxFatalExit();
 
-        // this code is unreachable but put it here to suppress warnings
+#ifndef __VISUALC__
+        // this code is unreachable but put it here to suppress warnings in some compilers
+        // and disable for others to supress warnings too
         return -1;
+#endif // !__VISUALC__
     }
 }
 
