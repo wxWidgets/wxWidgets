@@ -61,11 +61,12 @@ bool BombsApp::OnInit()
 }
 
 BEGIN_EVENT_TABLE(BombsFrame, wxFrame)
-    EVT_MENU(bombsID_EASY, BombsFrame::OnNewEasyGame)
-    EVT_MENU(bombsID_MEDIUM, BombsFrame::OnNewMediumGame)
-    EVT_MENU(bombsID_HARD, BombsFrame::OnNewHardGame)
-    EVT_MENU(wxID_EXIT, BombsFrame::OnExit)
-    EVT_MENU(wxID_ABOUT, BombsFrame::OnAbout)
+    EVT_MENU(bombsID_EASY,       BombsFrame::OnNewEasyGame)
+    EVT_MENU(bombsID_MEDIUM,     BombsFrame::OnNewMediumGame)
+    EVT_MENU(bombsID_HARD,       BombsFrame::OnNewHardGame)
+    EVT_MENU(bombsID_EASYCORNER, BombsFrame::OnEasyCorner)
+    EVT_MENU(wxID_EXIT,          BombsFrame::OnExit)
+    EVT_MENU(wxID_ABOUT,         BombsFrame::OnAbout)
 END_EVENT_TABLE()
 
 BombsFrame::BombsFrame(BombsGame *game)
@@ -73,6 +74,8 @@ BombsFrame::BombsFrame(BombsGame *game)
         wxSize(300, 300), wxDEFAULT_DIALOG_STYLE|wxMINIMIZE_BOX)
 {
     m_game = game;
+    m_easyCorner = false;
+    m_lastLevel = bombsID_EASY;
 
     SetIcon(wxICON(bombs));
 
@@ -90,6 +93,7 @@ BombsFrame::BombsFrame(BombsGame *game)
 
     menuFile->Append(bombsID_NEWGAME, wxT("&New Game"),
         menuLevel, wxT("Starts a new game"));
+    menuFile->AppendCheckItem(bombsID_EASYCORNER, wxT("&Easy corner"));
 
     menuFile->AppendSeparator();
     menuFile->Append(wxID_EXIT, wxGetStockLabel(wxID_EXIT), wxT("Quits the application"));
@@ -137,6 +141,7 @@ void BombsFrame::NewGame(int level, bool query)
     }
 
     int numHorzCells = 20, numVertCells = 20;
+    m_lastLevel = level;
 
     switch(level)
     {
@@ -157,7 +162,7 @@ void BombsFrame::NewGame(int level, bool query)
         break;
     }
 
-    m_game->Init(numHorzCells, numVertCells);
+    m_game->Init(numHorzCells, numVertCells, m_easyCorner);
 
     GetMenuBar()->Check(level, true);
 
@@ -185,6 +190,30 @@ void BombsFrame::OnNewMediumGame(wxCommandEvent& WXUNUSED(event))
 void BombsFrame::OnNewHardGame(wxCommandEvent& WXUNUSED(event))
 {
     NewGame(bombsID_HARD, true);
+}
+
+void BombsFrame::OnEasyCorner(wxCommandEvent& WXUNUSED(event))
+{
+    wxString msg;
+    if(m_easyCorner)
+        msg = wxT("enable");
+    else
+        msg = wxT("disable");
+
+    msg = wxT("Do you really want to ") + msg + wxT(" having\ntop left corner always empty for easier start?");
+
+    int ok = wxMessageBox(
+               msg,
+               wxT("Confirm"),
+               wxYES_NO | wxICON_QUESTION,
+               this
+             );
+
+    if(ok!=wxYES)return;
+
+    m_easyCorner = !m_easyCorner;
+
+    NewGame(m_lastLevel, true);
 }
 
 BEGIN_EVENT_TABLE(BombsCanvas, wxPanel)

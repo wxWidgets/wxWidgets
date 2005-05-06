@@ -76,7 +76,7 @@ public:
 
 
 
-    bool Init(int width, int height);
+    bool Init(int width, int height, bool easyCorner = false);
 
 
     // Marks/unmarks a cell

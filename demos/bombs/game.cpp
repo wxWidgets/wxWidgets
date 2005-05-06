@@ -43,7 +43,7 @@ BombsGame::~BombsGame()
 }
 
 // Initialize the play field. Returns false on failure
-bool BombsGame::Init(int aWidth, int aHeight)
+bool BombsGame::Init(int aWidth, int aHeight, bool easyCorner)
 {
     m_gridFocusX = m_gridFocusY = -1;
 
@@ -73,6 +73,15 @@ bool BombsGame::Init(int aWidth, int aHeight)
                 ? BG_HIDDEN | BG_BOMB
                 : BG_HIDDEN;
         }
+    }
+
+    /* Force (0,0) not to have a bomb for those that don't want to have
+       to guess on the first move. Better would be to for the MS rule that
+       whatever is picked first isn't a bomb.
+     */
+    if(easyCorner)
+    {
+        m_field[0] = BG_HIDDEN;
     }
 
     m_numBombCells = 0;
