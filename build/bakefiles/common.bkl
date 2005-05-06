@@ -337,9 +337,17 @@
 
     <define-tag name="msvc-headers" rules="dll,lib">
         <if cond="IS_MSVC_PRJ">
-            <msvc-project-files>
-                $(addPrefixToList('include\', wxwin.headersOnly(value)))
-            </msvc-project-files>
+            <!-- FIXME: remove this once we require >=bkl-0.1.9 -->
+            <if cond="BAKEFILE_VERSION in ['0.1.7', '0.1.8']">
+                <msvc-project-files>
+                    $(addPrefixToList('include\', wxwin.headersOnly(value)))
+                </msvc-project-files>
+            </if>
+            <if cond="BAKEFILE_VERSION not in ['0.1.7', '0.1.8']">
+                <msvc-project-files>
+                    $(addPrefixToList('include\\', wxwin.headersOnly(value)))
+                </msvc-project-files>
+            </if>
         </if>
     </define-tag>
 
