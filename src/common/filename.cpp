@@ -1548,16 +1548,17 @@ wxString wxFileName::GetLongPath() const
 
             wxDynamicLibrary dllKernel(_T("kernel32"));
 
-#ifdef _UNICODE
-    #define ADD_STR_SFX(name) L#name L"W"
-#else
-    #define ADD_STR_SFX(name) #name "A"
-#endif
+            const wxChar* GetLongPathName = _T("GetLongPathName")
+#if wxUSE_UNICODE
+                              _T("W");
+#else // ANSI
+                              _T("A");
+#endif // Unicode/ANSI
 
-            if ( dllKernel.HasSymbol(ADD_STR_SFX(GetLongPathName)) )
+            if ( dllKernel.HasSymbol(GetLongPathName) )
             {
                 s_pfnGetLongPathName = (GET_LONG_PATH_NAME)
-                    dllKernel.GetSymbol(ADD_STR_SFX(GetLongPathName));
+                    dllKernel.GetSymbol(GetLongPathName);
             }
 
             // note that kernel32.dll can be unloaded, it stays in memory
