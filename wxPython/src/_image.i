@@ -809,7 +809,7 @@ colour everywhere else.", "");
 JPEG file, the option ``wx.IMAGE_OPTION_QUALITY`` is used, which is a
 number between 0 and 100 (0 is terrible, 100 is very good).", "
 
-    =================================
+    ================================= ===
     wx.IMAGE_OPTION_BMP_FORMAT
     wx.IMAGE_OPTION_CUR_HOTSPOT_X
     wx.IMAGE_OPTION_CUR_HOTSPOT_Y
@@ -824,7 +824,7 @@ number between 0 and 100 (0 is terrible, 100 is very good).", "
     wx.IMAGE_OPTION_IMAGEDESCRIPTOR
     wx.IMAGE_OPTION_PNG_FORMAT
     wx.IMAGE_OPTION_PNG_BITDEPTH
-    =================================
+    ================================= ===
 
 :see: `HasOption`, `GetOption`, `GetOptionInt`, `SetOptionInt`");
     

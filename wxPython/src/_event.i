@@ -539,19 +539,20 @@ false if it is a deselection.", "");
     void SetExtraLong(long extraLong);
     DocDeclStr(
         long , GetExtraLong() const,
-        "Returns extra information dependant on the event objects type. If the event
-comes from a listbox selection, it is a boolean determining whether the event
-was a selection (true) or a deselection (false). A listbox deselection only
-occurs for multiple-selection boxes, and in this case the index and string
-values are indeterminate and the listbox must be examined by the application.", "");
+        "Returns extra information dependant on the event objects type. If the
+event comes from a listbox selection, it is a boolean determining
+whether the event was a selection (true) or a deselection (false). A
+listbox deselection only occurs for multiple-selection boxes, and in
+this case the index and string values are indeterminate and the
+listbox must be examined by the application.", "");
     
 
     void SetInt(int i);
     DocDeclStr(
         long , GetInt() const,
-        "Returns the integer identifier corresponding to a listbox, choice or radiobox
-selection (only if the event was a selection, not a deselection), or a boolean
-value representing the value of a checkbox.", "");
+        "Returns the integer identifier corresponding to a listbox, choice or
+radiobox selection (only if the event was a selection, not a
+deselection), or a boolean value representing the value of a checkbox.", "");
     
 
     virtual wxEvent *Clone() const;
@@ -686,6 +687,7 @@ Events
     EVT_SCROLLWIN_ENDSCROLL        End of scrolling
     ==========================     ==========================================
 
+:see: `wx.ScrollEvent`
 ");
 
 class wxScrollWinEvent : public wxEvent
@@ -803,9 +805,10 @@ button down event - that may be tested using `ButtonDown`).", "");
 
     DocDeclStr(
         bool , ButtonDown(int but = wxMOUSE_BTN_ANY) const,
-        "If the argument is omitted, this returns true if the event was any mouse
-button down event. Otherwise the argument specifies which button-down
-event shold be checked for (see `Button` for the possible values).", "");
+        "If the argument is omitted, this returns true if the event was any
+mouse button down event. Otherwise the argument specifies which
+button-down event shold be checked for (see `Button` for the possible
+values).", "");
     
 
     DocDeclStr(
@@ -819,8 +822,8 @@ values).", "");
     DocDeclStr(
         bool , ButtonUp(int but = wxMOUSE_BTN_ANY) const,
         "If the argument is omitted, this returns true if the event was any
-mouse button up event. Otherwise the argument specifies which
-button up event to check for (see `Button` for the possible values).", "");
+mouse button up event. Otherwise the argument specifies which button
+up event to check for (see `Button` for the possible values).", "");
     
 
     DocDeclStr(
@@ -872,7 +875,7 @@ right buttons respectively.", "");
         bool , CmdDown() const,
         "\"Cmd\" is a pseudo key which is the same as Control for PC and Unix
 platforms but the special \"Apple\" (a.k.a as \"Command\") key on
-Macs: it often makes sense to use it instead of, say, `ControlDown`
+Macs. It often makes sense to use it instead of, say, `ControlDown`
 because Cmd key is used for the same thing under Mac as Ctrl
 elsewhere. The Ctrl key still exists, it's just not used for this
 purpose. So for non-Mac platforms this is the same as `ControlDown`
@@ -1048,17 +1051,42 @@ public:
 %newgroup;
 
 // Cursor set event
+
+DocStr(wxSetCursorEvent,
+"A SetCursorEvent is generated when the mouse cursor is about to be set
+as a result of mouse motion. This event gives the application the
+chance to perform specific mouse cursor processing based on the
+current position of the mouse within the window. Use the `SetCursor`
+method to specify the cursor you want to be displayed.", "");
+
 class wxSetCursorEvent : public wxEvent
 {
 public:
-    wxSetCursorEvent(wxCoord x = 0, wxCoord y = 0);
+    DocCtorStr(
+        wxSetCursorEvent(wxCoord x = 0, wxCoord y = 0),
+        "Construct a new `wx.SetCursorEvent`.", "");
 
-    wxCoord GetX() const;
-    wxCoord GetY() const;
+    DocDeclStr(
+        wxCoord , GetX() const,
+        "Returns the X coordinate of the mouse in client coordinates.", "");
+    
+    DocDeclStr(
+        wxCoord , GetY() const,
+        "Returns the Y coordinate of the mouse in client coordinates.", "");
+    
 
-    void SetCursor(const wxCursor& cursor);
-    const wxCursor& GetCursor() const;
-    bool HasCursor() const;
+    DocDeclStr(
+        void , SetCursor(const wxCursor& cursor),
+        "Sets the cursor associated with this event.", "");
+    
+    DocDeclStr(
+        const wxCursor& , GetCursor() const,
+        "Returns a reference to the cursor specified by this event.", "");
+    
+    DocDeclStr(
+        bool , HasCursor() const,
+        "Returns true if the cursor specified by this event is a valid cursor.", "");
+    
 };
 
 //---------------------------------------------------------------------------
@@ -1066,22 +1094,141 @@ public:
 
 // Keyboard input event class
 
+DocStr(wxKeyEvent,
+"This event class contains information about keypress and character
+events.  These events are only sent to the widget that currently has
+the keyboard focus.
+
+Notice that there are three different kinds of keyboard events in
+wxWidgets: key down and up events and char events. The difference
+between the first two is clear - the first corresponds to a key press
+and the second to a key release - otherwise they are identical. Just
+note that if the key is maintained in a pressed state you will
+typically get a lot of (automatically generated) down events but only
+one up so it is wrong to assume that there is one up event
+corresponding to each down one.
+
+Both key events provide untranslated key codes while the char event
+carries the translated one. The untranslated code for alphanumeric
+keys is always an upper case value. For the other keys it is one of
+WXK_XXX values from the keycodes table. The translated key is, in
+general, the character the user expects to appear as the result of the
+key combination when typing the text into a text entry zone, for
+example.
+
+A few examples to clarify this (all assume that CAPS LOCK is unpressed
+and the standard US keyboard): when the 'A' key is pressed, the key
+down event key code is equal to ASCII A == 65. But the char event key
+code is ASCII a == 97. On the other hand, if you press both SHIFT and
+'A' keys simultaneously , the key code in key down event will still be
+just 'A' while the char event key code parameter will now be 'A' as
+well.
+
+Although in this simple case it is clear that the correct key code
+could be found in the key down event handler by checking the value
+returned by `ShiftDown`, in general you should use EVT_CHAR for this
+as for non alphanumeric keys or non-US keyboard layouts the
+translation is keyboard-layout dependent and can only be done properly
+by the system itself.
+
+Another kind of translation is done when the control key is pressed:
+for example, for CTRL-A key press the key down event still carries the
+same key code 'A' as usual but the char event will have key code of 1,
+the ASCII value of this key combination.
+
+You may discover how the other keys on your system behave
+interactively by running the KeyEvents sample in the wxPython demo and
+pressing some keys while the blue box at the top has the keyboard
+focus.
+
+**Note**: If a key down event is caught and the event handler does not
+call event.Skip() then the coresponding char event will not
+happen. This is by design and enables the programs that handle both
+types of events to be a bit simpler.
+
+**Note for Windows programmers**: The key and char events in wxWidgets
+are similar to but slightly different from Windows WM_KEYDOWN and
+WM_CHAR events. In particular, Alt-x combination will generate a char
+event in wxWidgets (unless it is used as an accelerator).
+
+**Tip**: be sure to call event.Skip() for events that you don't
+process in key event function, otherwise menu shortcuts may cease to
+work under Windows.
+", "
+
+Events
+------
+    ==================     ==============================================
+    wx.EVT_KEY_DOWN        Sent when a keyboard key has been pressed
+    wx.EVT_KEY_UP          Sent when a keyboard key has been released
+    wx.EVT_CHAR            Sent for translated character events.
+    ==================     ==============================================
+
+
+Keycode Table
+-------------
+    ===========  ==============  ========  ====================  ================= 
+    WXK_BACK     WXK_EXECUTE     WXK_F1    WXK_NUMPAD_SPACE      WXK_WINDOWS_LEFT    
+    WXK_TAB      WXK_SNAPSHOT    WXK_F2    WXK_NUMPAD_TAB        WXK_WINDOWS_RIGHT   
+    WXK_RETURN   WXK_INSERT      WXK_F3    WXK_NUMPAD_ENTER      WXK_WINDOWS_MENU    
+    WXK_ESCAPE   WXK_HELP        WXK_F4    WXK_NUMPAD_F1         WXK_SPECIAL1        
+    WXK_SPACE    WXK_NUMPAD0     WXK_F5    WXK_NUMPAD_F2         WXK_SPECIAL2        
+    WXK_DELETE   WXK_NUMPAD1     WXK_F6    WXK_NUMPAD_F3         WXK_SPECIAL3        
+    WXK_LBUTTON  WXK_NUMPAD2     WXK_F7    WXK_NUMPAD_F4         WXK_SPECIAL4        
+    WXK_RBUTTON  WXK_NUMPAD3     WXK_F8    WXK_NUMPAD_HOME       WXK_SPECIAL5        
+    WXK_CANCEL   WXK_NUMPAD4     WXK_F9    WXK_NUMPAD_LEFT       WXK_SPECIAL6        
+    WXK_MBUTTON  WXK_NUMPAD5     WXK_F10   WXK_NUMPAD_UP         WXK_SPECIAL7        
+    WXK_CLEAR    WXK_NUMPAD6     WXK_F11   WXK_NUMPAD_RIGHT      WXK_SPECIAL8        
+    WXK_SHIFT    WXK_NUMPAD7     WXK_F12   WXK_NUMPAD_DOWN       WXK_SPECIAL9        
+    WXK_ALT      WXK_NUMPAD8     WXK_F13   WXK_NUMPAD_PRIOR      WXK_SPECIAL10       
+    WXK_CONTROL  WXK_NUMPAD9     WXK_F14   WXK_NUMPAD_PAGEUP     WXK_SPECIAL11       
+    WXK_MENU     WXK_MULTIPLY    WXK_F15   WXK_NUMPAD_NEXT       WXK_SPECIAL12       
+    WXK_PAUSE    WXK_ADD         WXK_F16   WXK_NUMPAD_PAGEDOWN   WXK_SPECIAL13       
+    WXK_CAPITAL  WXK_SEPARATOR   WXK_F17   WXK_NUMPAD_END        WXK_SPECIAL14       
+    WXK_PRIOR    WXK_SUBTRACT    WXK_F18   WXK_NUMPAD_BEGIN      WXK_SPECIAL15       
+    WXK_NEXT     WXK_DECIMAL     WXK_F19   WXK_NUMPAD_INSERT     WXK_SPECIAL16       
+    WXK_END      WXK_DIVIDE      WXK_F20   WXK_NUMPAD_DELETE     WXK_SPECIAL17       
+    WXK_HOME     WXK_NUMLOCK     WXK_F21   WXK_NUMPAD_EQUAL      WXK_SPECIAL18       
+    WXK_LEFT     WXK_SCROLL      WXK_F22   WXK_NUMPAD_MULTIPLY   WXK_SPECIAL19       
+    WXK_UP       WXK_PAGEUP      WXK_F23   WXK_NUMPAD_ADD        WXK_SPECIAL20       
+    WXK_RIGHT    WXK_PAGEDOWN    WXK_F24   WXK_NUMPAD_SEPARATOR  
+    WXK_DOWN                               WXK_NUMPAD_SUBTRACT   
+    WXK_SELECT                             WXK_NUMPAD_DECIMAL    
+    WXK_PRINT                              WXK_NUMPAD_DIVIDE     
+    ===========  ==============  ========  ====================  ================= 
+");
+
 class wxKeyEvent : public wxEvent
 {
 public:
-    wxKeyEvent(wxEventType keyType = wxEVT_NULL);
+    DocCtorStr(
+        wxKeyEvent(wxEventType eventType = wxEVT_NULL),
+        "Construct a new `wx.KeyEvent`.  Valid event types are:
+    * ", "");
 
-    // Find state of shift/control keys
-    bool ControlDown() const;
-    bool MetaDown() const;
-    bool AltDown() const;
-    bool ShiftDown() const;
+
+    DocDeclStr(
+        bool , ControlDown() const,
+        "Returns ``True`` if the Control key was down at the time of the event.", "");
+    
+    DocDeclStr(
+        bool , MetaDown() const,
+        "Returns ``True`` if the Meta key was down at the time of the event.", "");
+    
+    DocDeclStr(
+        bool , AltDown() const,
+        "Returns ``True`` if the Alt key was down at the time of the event.", "");
+    
+    DocDeclStr(
+        bool , ShiftDown() const,
+        "Returns ``True`` if the Shift key was down at the time of the event.", "");
+    
     
     DocDeclStr(
         bool , CmdDown() const,
         "\"Cmd\" is a pseudo key which is the same as Control for PC and Unix
 platforms but the special \"Apple\" (a.k.a as \"Command\") key on
-Macs: it makes often sense to use it instead of, say, `ControlDown`
+Macs. It makes often sense to use it instead of, say, `ControlDown`
 because Cmd key is used for the same thing under Mac as Ctrl
 elsewhere. The Ctrl still exists, it's just not used for this
 purpose. So for non-Mac platforms this is the same as `ControlDown`
@@ -1089,16 +1236,35 @@ and Macs this is the same as `MetaDown`.", "");
    
     
 
-    // exclude MetaDown() from HasModifiers() because NumLock under X is often
-    // configured as mod2 modifier, yet the key events even when it is pressed
-    // should be processed normally, not like Ctrl- or Alt-key
-    bool HasModifiers() const;
+    DocDeclStr(
+        bool , HasModifiers() const,
+        "Returns true if either CTRL or ALT keys was down at the time of the
+key event. Note that this function does not take into account neither
+SHIFT nor META key states (the reason for ignoring the latter is that
+it is common for NUMLOCK key to be configured as META under X but the
+key presses even while NUMLOCK is on should be still processed
+normally).", "");
+    
 
-    // get the key code: an ASCII7 char or an element of wxKeyCode enum
-    int GetKeyCode() const;
+    DocDeclStr(
+        int , GetKeyCode() const,
+        "Returns the virtual key code. ASCII events return normal ASCII values,
+while non-ASCII events return values such as WXK_LEFT for the left
+cursor key. See `wx.KeyEvent` for a full list of the virtual key
+codes.
+
+Note that in Unicode build, the returned value is meaningful only if
+the user entered a character that can be represented in current
+locale's default charset. You can obtain the corresponding Unicode
+character using `GetUnicodeKey`.", "");
     %pythoncode { KeyCode = GetKeyCode }
 
+    
     %extend {
+        DocStr(
+            GetUnicodeKey,
+            "Returns the Unicode character corresponding to this key event.  This
+function is only meaningfule in a Unicode build of wxPython.", "");            
         int GetUnicodeKey() {
         %#if wxUSE_UNICODE
             return self->GetUnicodeKey();
@@ -1110,15 +1276,24 @@ and Macs this is the same as `MetaDown`.", "");
     %pythoncode { GetUniChar = GetUnicodeKey }
     
     
-    // get the raw key code (platform-dependent)
-    wxUint32 GetRawKeyCode() const;
+    DocDeclStr(
+        wxUint32 , GetRawKeyCode() const,
+        "Returns the raw key code for this event. This is a platform-dependent
+scan code which should only be used in advanced
+applications. Currently the raw key codes are not supported by all
+ports.", "");
+    
 
-    // get the raw key flags (platform-dependent)
-    wxUint32 GetRawKeyFlags() const;
+    DocDeclStr(
+        wxUint32 , GetRawKeyFlags() const,
+        "Returns the low level key flags for this event. The flags are
+platform-dependent and should only be used in advanced applications.
+Currently the raw key flags are not supported by all ports.", "");
+    
 
     
     DocStr(GetPosition,   // sets the docstring for both
-           "Find the position of the event.", "");
+           "Find the position of the event, if applicable.", "");
     wxPoint GetPosition();
 
     DocDeclAName(
@@ -1126,11 +1301,18 @@ and Macs this is the same as `MetaDown`.", "");
         "GetPositionTuple() -> (x,y)",
         GetPositionTuple);
 
-    // Get X position
-    wxCoord GetX() const;
+    
+    DocDeclStr(
+        wxCoord , GetX() const,
+        "Returns the X position (in client coordinates) of the event, if
+applicable.", "");
+    
 
-    // Get Y position
-    wxCoord GetY() const;
+    DocDeclStr(
+        wxCoord , GetY() const,
+        "Returns the Y position (in client coordinates) of the event, if
+applicable.", "");
+    
 
 public:
     wxCoord       m_x, m_y;
@@ -1143,8 +1325,6 @@ public:
     bool          m_metaDown;
     bool          m_scanCode;
 
-    // these fields contain the platform-specific information about
-    // key that was pressed
     wxUint32      m_rawCode;
     wxUint32      m_rawFlags;
 };
@@ -1153,14 +1333,39 @@ public:
 %newgroup;
 
 // Size event class
+
+DocStr(wxSizeEvent,
+"A size event holds information about size change events.  The EVT_SIZE
+handler function will be called when the window it is bound to has
+been resized.
+
+Note that the size passed is of the whole window: call
+`wx.Window.GetClientSize` for the area which may be used by the
+application.
+
+When a window is resized, usually only a small part of the window is
+damaged and and that area is all that is in the update region for the
+next paint event. However, if your drawing depends on the size of the
+window, you may need to clear the DC explicitly and repaint the whole
+window. In which case, you may need to call `wx.Window.Refresh` to
+invalidate the entire window.
+", "");
+
 class wxSizeEvent : public wxEvent
 {
 public:
-    wxSizeEvent(const wxSize& sz=wxDefaultSize, int winid = 0);
+    DocCtorStr(
+        wxSizeEvent(const wxSize& sz=wxDefaultSize, int winid = 0),
+        "Construct a new ``wx.SizeEvent``.", "");
 
-    wxSize GetSize() const;
+    DocDeclStr(
+        wxSize , GetSize() const,
+        "Returns the entire size of the window generating the size change
+event.", "");
+    
     wxRect GetRect() const;
     void SetRect(wxRect rect);
+    
     %extend {
         void SetSize(wxSize size) {
             self->m_size = size;
@@ -1169,20 +1374,28 @@ public:
 
 public:
     wxSize m_size;
-    wxRect m_rect; // Used for wxEVT_SIZING
+    wxRect m_rect;
 };
 
 
 //---------------------------------------------------------------------------
 %newgroup;
 
-// Move event class
+DocStr(wxMoveEvent,
+"This event object is sent for EVT_MOVE event bindings when a window is
+moved to a new position.", "");
+
 class wxMoveEvent : public wxEvent
 {
 public:
-    wxMoveEvent(const wxPoint& pos=wxDefaultPosition, int winid = 0);
+    DocCtorStr(
+        wxMoveEvent(const wxPoint& pos=wxDefaultPosition, int winid = 0),
+        "Constructor.", "");
 
-    wxPoint GetPosition() const;
+    DocDeclStr(
+        wxPoint , GetPosition() const,
+        "Returns the position of the window generating the move change event.", "");
+    
     wxRect GetRect() const;
     void SetRect(const wxRect& rect);
     void SetPosition(const wxPoint& pos);
@@ -1196,11 +1409,27 @@ public:
 //---------------------------------------------------------------------------
 %newgroup;
 
-// Paint event class
+DocStr(wxPaintEvent,
+"A paint event is sent when a window's contents needs to be repainted.
+Note that in an EVT_PAINT handler the application must *always* create
+a `wx.PaintDC` object, even if you do not use it.  Otherwise MS
+Windows assumes that the window has not been painted yet and will send
+the event again, causing endless refreshes.
+
+You can optimize painting by retrieving the rectangles that have been
+damaged using `wx.Window.GetUpdateRegion` and/or `wx.RegionIterator`,
+and only repainting these rectangles. The rectangles are in terms of
+the client area, and are unscrolled, so you will need to do some
+calculations using the current view position to obtain logical,
+scrolled units.
+", "");
+
 class wxPaintEvent : public wxEvent
 {
 public:
-    wxPaintEvent(int Id = 0);
+    DocCtorStr(
+        wxPaintEvent(int Id = 0),
+        "", "");
 };
 
 
@@ -1213,104 +1442,292 @@ public:
 //---------------------------------------------------------------------------
 %newgroup;
 
+DocStr(wxEraseEvent,
+"An erase event is sent whenever the background of a window needs to be
+repainted.  To intercept this event use the EVT_ERASE_BACKGROUND event
+binder.  On some platforms, such as GTK+, this event is simulated
+(simply generated just before the paint event) and may cause flicker.
+
+To paint a custom background use the `GetDC` method and use the returned
+device context if it is not ``None``, otherwise create a temporary
+`wx.ClientDC` and draw on that.
+", "");
+
 class wxEraseEvent : public wxEvent
 {
 public:
-    wxEraseEvent(int Id = 0, wxDC *dc = (wxDC *) NULL);
+    DocCtorStr(
+        wxEraseEvent(int Id = 0, wxDC *dc = NULL),
+        "Constructor", "");
 
-    wxDC *GetDC() const;
+    DocDeclStr(
+        wxDC *, GetDC() const,
+        "Returns the device context the event handler should draw upon.  If
+``None`` is returned then create a temporary `wx.ClientDC` and use
+that instead.", "");
 };
 
 
 //---------------------------------------------------------------------------
 %newgroup;
 
+DocStr(wxFocusEvent,
+"A focus event is sent when a window's focus changes. The window losing
+focus receives an EVT_KILL_FOCUS event while the window gaining it
+gets an EVT_SET_FOCUS event.
+
+Notice that the set focus event happens both when the user gives focus
+to the window (whether using the mouse or keyboard) and when it is
+done from the program itself using `wx.Window.SetFocus`.
+", "");
+
 class wxFocusEvent : public wxEvent
 {
 public:
-    wxFocusEvent(wxEventType type = wxEVT_NULL, int winid = 0);
+    DocCtorStr(
+        wxFocusEvent(wxEventType type = wxEVT_NULL, int winid = 0),
+        "Constructor", "");
 
-    // The window associated with this event is the window which had focus
-    // before for SET event and the window which will have focus for the KILL
-    // one. NB: it may be NULL in both cases!
-    wxWindow *GetWindow() const;
+    DocDeclStr(
+        wxWindow *, GetWindow() const,
+        "Returns the other window associated with this event, that is the
+window which had the focus before for the EVT_SET_FOCUS event and the
+window which is going to receive focus for the wxEVT_KILL_FOCUS event.
+
+Warning: the window returned may be None!", "");
+    
     void SetWindow(wxWindow *win);
 };
 
 //---------------------------------------------------------------------------
 %newgroup;
 
-// wxChildFocusEvent notifies the parent that a child has got the focus: unlike
-// wxFocusEvent it is propagated upwards the window chain
+DocStr(wxChildFocusEvent,
+"wx.ChildFocusEvent notifies the parent that a child has received the
+focus.  Unlike `wx.FocusEvent` it is propagated up the window
+heirarchy.", "");
+
+
 class wxChildFocusEvent : public wxCommandEvent
 {
 public:
-    wxChildFocusEvent(wxWindow *win = NULL);
+    DocCtorStr(
+        wxChildFocusEvent(wxWindow *win = NULL),
+        "Constructor", "");
 
-    wxWindow *GetWindow() const;
+    DocDeclStr(
+        wxWindow *, GetWindow() const,
+        "The window which has just received the focus.", "");
+    
 };
 
 //---------------------------------------------------------------------------
 %newgroup;
+
+DocStr(wxActivateEvent,
+"An activate event is sent when a top-level window or the entire
+application is being activated or deactivated.
+
+A top-level window (a dialog or frame) receives an activate event when
+is being activated or deactivated. This is indicated visually by the
+title bar changing colour, and a subwindow gaining the keyboard focus.
+An application is activated or deactivated when one of its frames
+becomes activated, or a frame becomes inactivate resulting in all
+application frames being inactive.
+
+Please note that usually you should call event.Skip() in your handlers
+for these events so the default handlers will still be called, as not
+doing so can result in strange effects.
+", "
+
+Events
+-------
+    =======================     ==========================================
+    wx.EVT_ACTIVATE             Sent to a frame when it has been activated
+                                or deactivated.
+    wx.EVT_ACTIVATE_APP         Sent to the app object when its activation
+                                state changes.
+    =======================     ==========================================
+");
+
 
 class wxActivateEvent : public wxEvent
 {
 public:
-    wxActivateEvent(wxEventType type = wxEVT_NULL, bool active = true, int Id = 0);
-    bool GetActive() const;
+    DocCtorStr(
+        wxActivateEvent(wxEventType type = wxEVT_NULL, bool active = true, int Id = 0),
+        "Constructor", "");
+    
+    DocDeclStr(
+        bool , GetActive() const,
+        "Returns true if the application or window is being activated, false
+otherwise.", "");
+    
 };
 
 
 //---------------------------------------------------------------------------
 %newgroup;
+
+DocStr(wxInitDialogEvent,
+"A wx.InitDialogEvent is sent as a dialog is being initialised, or for
+any window when `wx.Window.InitDialog` is called.  Handlers for this
+event can transfer data to the window, or anything else that should be
+done before the user begins editing the form. The default handler
+calls `wx.Window.TransferDataToWindow`.", "
+
+Events
+-------
+    =======================     ==========================================
+    wx.EVT_INIT_DIALOG          Binder for init dialog events.
+    =======================     ==========================================
+");
 
 class wxInitDialogEvent : public wxEvent
 {
 public:
-    wxInitDialogEvent(int Id = 0);
+    DocCtorStr(
+        wxInitDialogEvent(int Id = 0),
+        "Constructor", "");
 };
 
 
 //---------------------------------------------------------------------------
 %newgroup;
+
+DocStr(wxMenuEvent,
+"This class is used for a variety of menu-related events.  Note that
+these do not include menu command events, which are handled by sending
+`wx.CommandEvent` objects.
+
+The default handler for wx.EVT_MENU_HIGHLIGHT displays menu item help
+text in the first field of the status bar.", "
+
+Events
+-------
+    =========================   ==========================================
+    wx.EVT_MENU_OPEN            A menu is about to be opened. On Windows,
+                                this is only sent once for each navigation
+                                of the menubar (up until all menus have closed).
+    wx.EVT_MENU_CLOSE           A menu has been just closed.
+    wx.EVT_MENU_HIGHLIGHT       Sent when the menu item with the specified id
+                                has been highlighted: used by default to show
+                                help prompts in the `wx.Frame`'s status bar.
+    wx.EVT_MENU_HIGHLIGHT_ALL   Can be used to catch the menu highlight
+                                event for all menu items.
+    =========================   ==========================================
+");
 
 class wxMenuEvent : public wxEvent
 {
 public:
-    wxMenuEvent(wxEventType type = wxEVT_NULL, int winid = 0, wxMenu* menu = NULL);
+    DocCtorStr(
+        wxMenuEvent(wxEventType type = wxEVT_NULL, int winid = 0, wxMenu* menu = NULL),
+        "Constructor", "");
     
-    // only for wxEVT_MENU_HIGHLIGHT
-    int GetMenuId() const;
+    DocDeclStr(
+        int , GetMenuId() const,
+        "Returns the menu identifier associated with the event. This method
+should be only used with the HIGHLIGHT events.", "");
+    
 
-    // only for wxEVT_MENU_OPEN/CLOSE
-    bool IsPopup() const;
+    DocDeclStr(
+        bool , IsPopup() const,
+        "Returns ``True`` if the menu which is being opened or closed is a
+popup menu, ``False`` if it is a normal one.  This method should only
+be used with the OPEN and CLOSE events.", "");
+    
 
-    // only for wxEVT_MENU_OPEN/CLOSE
-    wxMenu* GetMenu() const;
+    DocDeclStr(
+        wxMenu* , GetMenu() const,
+        "Returns the menu which is being opened or closed. This method should
+only be used with the OPEN and CLOSE events.", "");
+    
 };
 
 //---------------------------------------------------------------------------
 %newgroup;
 
-// Window close or session close event class
+DocStr(wxCloseEvent,
+"This event class contains information about window and session close
+events.
+
+The handler function for EVT_CLOSE is called when the user has tried
+to close a a frame or dialog box using the window manager controls or
+the system menu. It can also be invoked by the application itself
+programmatically, for example by calling the `wx.Window.Close`
+function.
+
+You should check whether the application is forcing the deletion of
+the window using `CanVeto`. If it returns ``False``, you must destroy
+the window using `wx.Window.Destroy`. If the return value is ``True``,
+it is up to you whether you respond by destroying the window or not.
+For example you may wish to display a message dialog prompting to save
+files or to cancel the close.
+
+If you don't destroy the window, you should call `Veto` to let the
+calling code know that you did not destroy the window. This allows the
+`wx.Window.Close` function to return ``True`` or ``False`` depending
+on whether the close instruction was honored or not.", "
+
+Events
+-------
+    =========================   ==========================================
+    wx.EVT_CLOSE                This event is sent to a top-level window
+                                when it has been requested to close either
+                                from the user or programatically.
+    wx.EVT_QUERY_END_SESSION    This event is sent to the `wx.App` when the
+                                system is about to be logged off, giving the
+                                app a chance to veto the shutdown.
+    wx.EVT_END_SESSION          This event is sent to the `wx.App` when the
+                                system is being logged off.
+    =========================   ==========================================
+");
+
 class wxCloseEvent : public wxEvent
 {
 public:
-    wxCloseEvent(wxEventType type = wxEVT_NULL, int winid = 0);
+    DocCtorStr(
+        wxCloseEvent(wxEventType type = wxEVT_NULL, int winid = 0),
+        "Constructor.", "");
     
-    void SetLoggingOff(bool logOff);
-    bool GetLoggingOff() const;
+    DocDeclStr(
+        void , SetLoggingOff(bool logOff),
+        "Sets the 'logging off' flag.", "");
+    
+    DocDeclStr(
+        bool , GetLoggingOff() const,
+        "Returns true if the user is logging off.", "");
+    
 
-    void Veto(bool veto = true);
-    void SetCanVeto(bool canVeto);
+    DocDeclStr(
+        void , Veto(bool veto = true),
+        "Call this from your event handler to veto a system shutdown or to
+signal to the calling application that a window close did not happen.
+
+You can only veto a shutdown or close if `CanVeto` returns true.", "");
     
-    bool CanVeto() const;
     bool GetVeto() const;
+    
+    DocDeclStr(
+        void , SetCanVeto(bool canVeto),
+        "Sets the 'can veto' flag.", "");
+        
+    DocDeclStr(
+        bool , CanVeto() const,
+        "Returns true if you can veto a system shutdown or a window close
+event. Vetoing a window close event is not possible if the calling
+code wishes to force the application to exit, and so this function
+must be called to check this.", "");
+    
 };
 
 
 //---------------------------------------------------------------------------
 %newgroup;
+
+DocStr(wxShowEvent,
+"An EVT_SHOW event is sent when a window is shown or hidden.", "");
 
 class wxShowEvent : public wxEvent
 {
@@ -1326,16 +1743,28 @@ public:
 //---------------------------------------------------------------------------
 %newgroup;
 
+DocStr(wxIconizeEvent,
+"An EVT_ICONIZE event is sent when a frame is iconized (minimized) or
+restored.", "");
+
 class wxIconizeEvent: public wxEvent
 {
 public:
     wxIconizeEvent(int id = 0, bool iconized = true);
-    bool Iconized();
+    
+    DocDeclStr(
+        bool , Iconized(),
+        "Returns ``True`` if the frame has been iconized, ``False`` if it has
+been restored.", "");
+    
 };
 
 
 //---------------------------------------------------------------------------
 %newgroup;
+
+DocStr(wxMaximizeEvent,
+"An EVT_MAXIMIZE event is sent when a frame is maximized or restored.", "");
 
 class wxMaximizeEvent: public wxEvent
 {
@@ -1346,26 +1775,58 @@ public:
 //---------------------------------------------------------------------------
 %newgroup;
 
+DocStr(wxDropFilesEvent,
+"This class is used for drop files events, that is, when files have
+been dropped onto the window. This functionality is only available
+under Windows. The window must have previously been enabled for
+dropping by calling `wx.Window.DragAcceptFiles`.
+
+Important note: this is a separate implementation to the more general
+drag and drop implementation using `wx.FileDropTarget`, and etc. This
+implementation uses the older, Windows message-based approach of
+dropping files.
+
+Use wx.EVT_DROP_FILES to bind an event handler to receive file drop
+events.
+", "");
+
 class wxDropFilesEvent: public wxEvent
 {
 public:
-    wxPoint GetPosition();
-    int GetNumberOfFiles();
+
+    // TODO:  wrap the ctor!
+
+    
+    DocDeclStr(
+        wxPoint , GetPosition(),
+        "Returns the position at which the files were dropped.", "");
+    
+    DocDeclStr(
+        int , GetNumberOfFiles(),
+        "Returns the number of files dropped.", "");
+    
 
     %extend {
+        DocStr(
+            GetFiles,
+            "Returns a list of the filenames that were dropped.", "");
+        
         PyObject* GetFiles() {
             int         count = self->GetNumberOfFiles();
             wxString*   files = self->GetFiles();
+            wxPyBlock_t blocked = wxPyBeginBlockThreads();
             PyObject*   list  = PyList_New(count);
 
             if (!list) {
                 PyErr_SetString(PyExc_MemoryError, "Can't allocate list of files!");
+                wxPyEndBlockThreads(blocked);
                 return NULL;
             }
 
             for (int i=0; i<count; i++) {
                 PyList_SetItem(list, i, wx2PyString(files[i]));
             }
+            wxPyEndBlockThreads(blocked);
             return list;
         }
     }
@@ -1377,95 +1838,258 @@ public:
 %newgroup;
 
 
-// Whether to always send update events to windows, or
-// to only send update events to those with the
-// wxWS_EX_PROCESS_UI_UPDATES style.
-
 enum wxUpdateUIMode
 {
-        // Send UI update events to all windows
     wxUPDATE_UI_PROCESS_ALL,
-
-        // Send UI update events to windows that have
-        // the wxWS_EX_PROCESS_UI_UPDATES flag specified
     wxUPDATE_UI_PROCESS_SPECIFIED
 };
 
 
+DocStr(wxUpdateUIEvent,
+"This class is used for EVT_UPDATE_UI pseudo-events which are sent by
+wxWidgets to give an application the chance to update various user
+interface elements.
+
+Without update UI events, an application has to work hard to
+check/uncheck, enable/disable, and set the text for elements such as
+menu items and toolbar buttons. The code for doing this has to be
+mixed up with the code that is invoked when an action is invoked for a
+menu item or button.
+
+With update UI events, you define an event handler to look at the
+state of the application and change UI elements accordingly. wxWidgets
+will call your handler functions in idle time, so you don't have to
+worry where to call this code. In addition to being a clearer and more
+declarative method, it also means you don't have to worry whether
+you're updating a toolbar or menubar identifier. The same handler can
+update a menu item and toolbar button, if the ID values are the same.
+
+Instead of directly manipulating the menu or button, you call
+functions in the event object, such as `Check`. wxWidgets will
+determine whether such a call has been made, and which UI element to
+update.
+
+These events will work for popup menus as well as menubars. Just
+before a menu is popped up, `wx.Menu.UpdateUI` is called to process
+any UI events for the window that owns the menu.
+
+If you find that the overhead of UI update processing is affecting
+your application, you can do one or both of the following:
+
+   1. Call `wx.UpdateUIEvent.SetMode` with a value of
+      wx.UPDATE_UI_PROCESS_SPECIFIED, and set the extra style
+      wx.WS_EX_PROCESS_UPDATE_EVENTS for every window that should
+      receive update events. No other windows will receive update
+      events.
+
+   2. Call `wx.UpdateUIEvent.SetUpdateInterval` with a millisecond
+      value to set the delay between updates. You may need to call
+      `wx.Window.UpdateWindowUI` at critical points, for example when
+      a dialog is about to be shown, in case the user sees a slight
+      delay before windows are updated.
+
+Note that although events are sent in idle time, defining a EVT_IDLE
+handler for a window does not affect this because the events are sent
+from an internal idle handler.
+
+wxWidgets tries to optimize update events on some platforms. On
+Windows and GTK+, events for menubar items are only sent when the menu
+is about to be shown, and not in idle time.
+", "");
 
 class wxUpdateUIEvent : public wxCommandEvent
 {
 public:
-    wxUpdateUIEvent(wxWindowID commandId = 0);
+    DocCtorStr(
+        wxUpdateUIEvent(wxWindowID commandId = 0),
+        "Constructor", "");
     
-    bool GetChecked() const;
-    bool GetEnabled() const;
-    wxString GetText() const;
-    bool GetSetText() const;
-    bool GetSetChecked() const;
-    bool GetSetEnabled() const;
+    DocDeclStr(
+        bool , GetChecked() const,
+        "Returns ``True`` if the UI element should be checked.", "");
+    
+    DocDeclStr(
+        bool , GetEnabled() const,
+        "Returns ``True`` if the UI element should be enabled.", "");
+    
+    DocDeclStr(
+        wxString , GetText() const,
+        "Returns the text that should be set for the UI element.", "");
+    
+    DocDeclStr(
+        bool , GetSetText() const,
+        "Returns ``True`` if the application has called `SetText`. For
+wxWidgets internal use only.", "");
+    
+    DocDeclStr(
+        bool , GetSetChecked() const,
+        "Returns ``True`` if the application has called `Check`. For wxWidgets
+internal use only.", "");
+    
+    DocDeclStr(
+        bool , GetSetEnabled() const,
+        "Returns ``True`` if the application has called `Enable`. For wxWidgets
+internal use only.", "");
+    
 
-    void Check(bool check);
-    void Enable(bool enable);
-    void SetText(const wxString& text);
 
-    // Sets the interval between updates in milliseconds.
-    // Set to -1 to disable updates, or to 0 to update as frequently as possible.
-    static void SetUpdateInterval(long updateInterval);
+    DocDeclStr(
+        void , Check(bool check),
+        "Check or uncheck the UI element.", "");
+    
+    DocDeclStr(
+        void , Enable(bool enable),
+        "Enable or disable the UI element.", "");
+    
+    DocDeclStr(
+        void , SetText(const wxString& text),
+        "Sets the text for this UI element.", "");
+    
 
-    // Returns the current interval between updates in milliseconds
-    static long GetUpdateInterval();
+    
+    DocDeclStr(
+        static void , SetUpdateInterval(long updateInterval),
+        "Sets the interval between updates in milliseconds. Set to -1 to
+disable updates, or to 0 to update as frequently as possible. The
+default is 0.
 
-    // Can we update this window?
-    static bool CanUpdate(wxWindow *win);
+Use this to reduce the overhead of UI update events if your
+application has a lot of windows. If you set the value to -1 or
+greater than 0, you may also need to call `wx.Window.UpdateWindowUI`
+at appropriate points in your application, such as when a dialog is
+about to be shown.", "");
+    
 
-    // Reset the update time to provide a delay until the next
-    // time we should update
-    static void ResetUpdateTime();
+    DocDeclStr(
+        static long , GetUpdateInterval(),
+        "Returns the current interval between updates in milliseconds. -1
+disables updates, 0 updates as frequently as possible.", "");
+    
 
-    // Specify how wxWindows will send update events: to
-    // all windows, or only to those which specify that they
-    // will process the events.
-    static void SetMode(wxUpdateUIMode mode);
+    DocDeclStr(
+        static bool , CanUpdate(wxWindow *win),
+        "Returns ``True`` if it is appropriate to update (send UI update events
+to) this window.
 
-    // Returns the UI update mode
-    static wxUpdateUIMode GetMode();
+This function looks at the mode used (see `wx.UpdateUIEvent.SetMode`),
+the wx.WS_EX_PROCESS_UPDATE_EVENTS flag in window, the time update
+events were last sent in idle time, and the update interval, to
+determine whether events should be sent to this window now. By default
+this will always return true because the update mode is initially
+wx.UPDATE_UI_PROCESS_ALL and the interval is set to 0; so update
+events will be sent as often as possible. You can reduce the frequency
+that events are sent by changing the mode and/or setting an update
+interval.
+", "");
+    
+
+    DocDeclStr(
+        static void , ResetUpdateTime(),
+        "Used internally to reset the last-updated time to the current time. It
+is assumed that update events are normally sent in idle time, so this
+is called at the end of idle processing.", "");
+    
+
+    DocDeclStr(
+        static void , SetMode(wxUpdateUIMode mode),
+        "Specify how wxWidgets will send update events: to all windows, or only
+to those which specify that they will process the events.
+
+The mode may be one of the following values:
+
+    =============================   ==========================================
+    wxUPDATE_UI_PROCESS_ALL         Send UI update events to all windows.  This
+                                    is the default setting.
+    wxUPDATE_UI_PROCESS_SPECIFIED   Send UI update events only to windows that
+                                    have the wx.WS_EX_PROCESS_UI_UPDATES extra
+                                    style set.
+    =============================   ==========================================
+", "");
+    
+
+    DocDeclStr(
+        static wxUpdateUIMode , GetMode(),
+        "Returns a value specifying how wxWidgets will send update events: to
+all windows, or only to those which specify that they will process the
+events.", "");
+    
 };
 
 //---------------------------------------------------------------------------
 %newgroup;
+
+DocStr(wxSysColourChangedEvent,
+"This class is used for EVT_SYS_COLOUR_CHANGED, which are generated
+when the user changes the colour settings using the control
+panel. This is only applicable under Windows.
+
+The default event handler for this event propagates the event to child
+windows, since Windows only sends the events to top-level windows. If
+intercepting this event for a top-level window, remember to call
+`Skip` so the the base class handler will still be executed, or to
+pass the event on to the window's children explicitly.
+", "");
 
 class wxSysColourChangedEvent: public wxEvent {
 public:
-    wxSysColourChangedEvent();
+    DocCtorStr(
+        wxSysColourChangedEvent(),
+        "Constructor", "");
 };
 
 //---------------------------------------------------------------------------
 %newgroup;
 
 
-//  wxEVT_MOUSE_CAPTURE_CHANGED
-//  The window losing the capture receives this message
-//  (even if it released the capture itself).
+DocStr(wxMouseCaptureChangedEvent,
+"An mouse capture changed event (EVT_MOUSE_CAPTURE_CHANGED) is sent to
+a window that loses its mouse capture. This is called even if
+`wx.Window.ReleaseMouse` was called by the application code. Handling
+this event allows an application to cater for unexpected capture
+releases which might otherwise confuse mouse handling code.
+
+This event is implemented under Windows only.", "");
+
 class wxMouseCaptureChangedEvent : public wxEvent
 {
 public:
-    wxMouseCaptureChangedEvent(wxWindowID winid = 0, wxWindow* gainedCapture = NULL);
+    DocCtorStr(
+        wxMouseCaptureChangedEvent(wxWindowID winid = 0, wxWindow* gainedCapture = NULL),
+        "Constructor", "");
 
-    wxWindow* GetCapturedWindow() const;
+    DocDeclStr(
+        wxWindow* , GetCapturedWindow() const,
+        "Returns the window that gained the capture, or ``None`` if it was a
+non-wxWidgets window.", "");
+    
 };
 
 //---------------------------------------------------------------------------
 %newgroup;
+
+DocStr(wxDisplayChangedEvent,
+"An EVT_DISPLAY_CHANGED event is sent to all windows when the display
+resolution has changed.
+
+This event is implemented under Windows only.", "");
 
 class wxDisplayChangedEvent : public wxEvent
 {
 public:
-    wxDisplayChangedEvent();
+    DocCtorStr(
+        wxDisplayChangedEvent(),
+        "", "");
 };
 
 //---------------------------------------------------------------------------
 %newgroup;
+
+DocStr(wxPaletteChangedEvent,
+"An EVT_PALETTE_CHANGED event is sent when the system palette has
+changed, thereby giving each window a chance to redo their own to
+match.
+
+This event is implemented under Windows only.", "");
 
 class  wxPaletteChangedEvent : public wxEvent
 {
@@ -1480,16 +2104,23 @@ public:
 //---------------------------------------------------------------------------
 %newgroup;
 
+DocStr(wxQueryNewPaletteEvent,
+       "An EVT_QUERY_NEW_PALETE event indicates the window is getting keyboard
+focus and should re-do its palette.
 
-//  wxEVT_QUERY_NEW_PALETTE
-//  Indicates the window is getting keyboard focus and should re-do its palette.
+This event is implemented under Windows only.", "");
+
 class wxQueryNewPaletteEvent : public wxEvent
 {
 public:
-    wxQueryNewPaletteEvent(wxWindowID winid = 0);
+    DocCtorStr(
+        wxQueryNewPaletteEvent(wxWindowID winid = 0),
+        "Constructor.", "");
 
-    // App sets this if it changes the palette.
-    void SetPaletteRealized(bool realized);
+    DocDeclStr(
+        void , SetPaletteRealized(bool realized),
+        "App should set this if it changes the palette.", "");
+    
     bool GetPaletteRealized() const;
 };
 
@@ -1497,34 +2128,75 @@ public:
 %newgroup;
 
 
-//  Event generated by dialog navigation keys
-//  wxEVT_NAVIGATION_KEY
+
+DocStr(wxNavigationKeyEvent,
+"EVT_NAVIGATION_KEY events are used to control moving the focus between
+widgets, otherwise known as tab-traversal.  You woudl normally not
+catch navigation events in applications as there are already
+appropriate handlers in `wx.Dialog` and `wx.Panel`, but you may find
+it useful to send navigation events in certain situations to change
+the focus in certain ways, although it's probably easier to just call
+`wx.Window.Navigate`.", "");
 
 class wxNavigationKeyEvent : public wxEvent
 {
 public:
-    wxNavigationKeyEvent();
+    DocCtorStr(
+        wxNavigationKeyEvent(),
+        "", "");
     
-    // direction: forward (True) or backward (False)
-    bool GetDirection() const;
-    void SetDirection(bool forward);
-
-    // it may be a window change event (MDI, notebook pages...) or a control
-    // change event
-    bool IsWindowChange() const;
-    void SetWindowChange(bool ischange);
-
-    // Set to true under MSW if the event was generated using the tab key.
-    // This is required for proper navogation over radio buttons
-    bool IsFromTab() const;
-    void SetFromTab(bool bIs);
-
-    void SetFlags(long flags);
+    DocDeclStr(
+        bool , GetDirection() const,
+        "Returns ``True`` if the direction is forward, ``False`` otherwise.", "");
     
-    // the child which has the focus currently (may be NULL - use
-    // wxWindow::FindFocus then)
-    wxWindow* GetCurrentFocus() const;
-    void SetCurrentFocus(wxWindow *win);
+    DocDeclStr(
+        void , SetDirection(bool forward),
+        "Specify the direction that the navigation should take.  Usually the
+difference between using Tab and Shift-Tab.", "");
+    
+
+    DocDeclStr(
+        bool , IsWindowChange() const,
+        "Returns ``True`` if window change is allowed.", "");
+    
+    DocDeclStr(
+        void , SetWindowChange(bool ischange),
+        "Specify if the navigation should be able to change parent windows.
+For example, changing notebook pages, etc. This is usually implemented
+by using Control-Tab.", "");
+    
+
+    DocDeclStr(
+        bool , IsFromTab() const,
+        "Returns ``True`` if the navigation event is originated from the Tab
+key.", "");
+    
+    DocDeclStr(
+        void , SetFromTab(bool bIs),
+        "Set to true under MSW if the event was generated using the tab key.
+This is required for proper navogation over radio buttons.", "");
+    
+
+    DocDeclStr(
+        void , SetFlags(long flags),
+        "Set the navigation flags to a combination of the following:
+
+    * wx.NavigationKeyEvent.IsBackward
+    * wx.NavigationKeyEvent.IsForward
+    * wx.NavigationKeyEvent.WinChange
+    * wx.NavigationKeyEvent.FromTab
+", "");
+    
+    
+    DocDeclStr(
+        wxWindow* , GetCurrentFocus() const,
+        "Returns the child window which currenty has the focus.  May be
+``None``.", "");
+    
+    DocDeclStr(
+        void , SetCurrentFocus(wxWindow *win),
+        "Set the window that has the focus.", "");
+    
 
     enum {
         IsBackward,
@@ -1534,90 +2206,155 @@ public:
     };
 };
 
-
 //---------------------------------------------------------------------------
 %newgroup;
 
-// Window creation/destruction events: the first is sent as soon as window is
-// created (i.e. the underlying GUI object exists), but when the C++ object is
-// fully initialized (so virtual functions may be called). The second,
-// wxEVT_DESTROY, is sent right before the window is destroyed - again, it's
-// still safe to call virtual functions at this moment
+
+DocStr(wxWindowCreateEvent,
+       "The EVT_WINDOW_CREATE event is sent as soon as the window object (the
+underlying GUI object) exists.", "");
 
 class wxWindowCreateEvent : public wxCommandEvent
 {
 public:
     wxWindowCreateEvent(wxWindow *win = NULL);
-    wxWindow *GetWindow() const;
+    
+    DocDeclStr(
+        wxWindow *, GetWindow() const,
+        "Returns the window that this event refers to.", "");
+    
 };
 
+
+DocStr(wxWindowDestroyEvent,
+       "The EVT_WINDOW_DESTROY event is sent right before the window is
+destroyed.", "");
 class wxWindowDestroyEvent : public wxCommandEvent
 {
 public:
     wxWindowDestroyEvent(wxWindow *win = NULL);
-    wxWindow *GetWindow() const;
+    
+    DocDeclStr(
+        wxWindow *, GetWindow() const,
+        "Returns the window that this event refers to.", "");    
 };
 
 
 //---------------------------------------------------------------------------
 %newgroup;
 
-// A Context event is sent when the user right clicks on a window or
-// presses Shift-F10
-// NOTE : Under windows this is a repackaged WM_CONTETXMENU message
-//        Under other systems it may have to be generated from a right click event
-/*
- wxEVT_CONTEXT_MENU
-*/
+
+DocStr(wxContextMenuEvent,
+"This class is used for context menu events (EVT_CONTECT_MENU,) sent to
+give the application a chance to show a context (popup) menu.", "");
 
 class wxContextMenuEvent : public wxCommandEvent
 {
 public:
-    wxContextMenuEvent(wxEventType type = wxEVT_NULL,
-                       wxWindowID winid = 0,
-                       const wxPoint& pt = wxDefaultPosition);
+    DocCtorStr(
+        wxContextMenuEvent(wxEventType type = wxEVT_NULL,
+                           wxWindowID winid = 0,
+                           const wxPoint& pt = wxDefaultPosition),
+        "Constructor.", "");
 
     // Position of event (in screen coordinates)
-    const wxPoint& GetPosition() const;
-    void SetPosition(const wxPoint& pos);
+    DocDeclStr(
+        const wxPoint& , GetPosition() const,
+        "Returns the position (in screen coordinants) at which the menu should
+be shown.", "");
+
+    
+    DocDeclStr(
+        void , SetPosition(const wxPoint& pos),
+        "Sets the position at which the menu should be shown.", "");
+    
 };
 
 //---------------------------------------------------------------------------
 %newgroup;
 
-// Whether to always send idle events to windows, or
-// to only send update events to those with the
-// wxWS_EX_PROCESS_IDLE style.
-
 enum wxIdleMode
 {
-        // Send idle events to all windows
     wxIDLE_PROCESS_ALL,
-
-        // Send idle events to windows that have
-        // the wxWS_EX_PROCESS_IDLE flag specified
     wxIDLE_PROCESS_SPECIFIED
 };
 
 
+DocStr(wxIdleEvent,
+"This class is used for EVT_IDLE events, which are generated and sent
+when the application *becomes* idle.  In other words, the when the
+event queue becomes empty then idle events are sent to all windows (by
+default) and as long as none of them call `RequestMore` then there are
+no more idle events until after the system event queue has some normal
+events and then becomes empty again.
+
+By default, idle events are sent to all windows. If this is causing a
+significant overhead in your application, you can call
+`wx.IdleEvent.SetMode` with the value wx.IDLE_PROCESS_SPECIFIED, and
+set the wx.WS_EX_PROCESS_IDLE extra window style for every window
+which should receive idle events.  Then idle events will only be sent
+to those windows and not to any others.", "");
+
 class wxIdleEvent : public wxEvent
 {
 public:
-    wxIdleEvent();
+    DocCtorStr(
+        wxIdleEvent(),
+        "Constructor", "");
     
-    void RequestMore(bool needMore = true);
-    bool MoreRequested() const;
+    
+    DocDeclStr(
+        void , RequestMore(bool needMore = true),
+        "Tells wxWidgets that more processing is required. This function can be
+called by an EVT_IDLE handler for a window to indicate that the
+application should forward the EVT_IDLE event once more to the
+application windows. If no window calls this function during its
+EVT_IDLE handler, then the application will remain in a passive event
+loop until a new event is posted to the application by the windowing
+system.", "");
+    
+    DocDeclStr(
+        bool , MoreRequested() const,
+        "Returns ``True`` if the OnIdle function processing this event
+requested more processing time.", "");
+    
 
-    // Specify how wxWindows will send idle events: to
-    // all windows, or only to those which specify that they
-    // will process the events.
-    static void SetMode(wxIdleMode mode);
+    DocDeclStr(
+        static void , SetMode(wxIdleMode mode),
+        "Static method for specifying how wxWidgets will send idle events: to
+all windows, or only to those which specify that they will process the
+events.
 
-    // Returns the idle event mode
-    static wxIdleMode GetMode();
+The mode can be one of the following values:
 
-    // Can we send an idle event?
-    static bool CanSend(wxWindow* win);
+    =========================   ========================================
+    wx.IDLE_PROCESS_ALL         Send idle events to all windows
+    wx.IDLE_PROCESS_SPECIFIED   Send idle events only to windows that have
+                                the wx.WS_EX_PROCESS_IDLE extra style
+                                flag set.
+    =========================   ========================================
+", "");
+    
+
+    DocDeclStr(
+        static wxIdleMode , GetMode(),
+        "Static method returning a value specifying how wxWidgets will send
+idle events: to all windows, or only to those which specify that they
+will process the events.", "");
+    
+
+    DocDeclStr(
+        static bool , CanSend(wxWindow* win),
+        "Returns ``True`` if it is appropriate to send idle events to this
+window.
+
+This function looks at the mode used (see `wx.IdleEvent.SetMode`), and
+the wx.WS_EX_PROCESS_IDLE style in window to determine whether idle
+events should be sent to this window now. By default this will always
+return ``True`` because the update mode is initially
+wx.IDLE_PROCESS_ALL. You can change the mode to only send idle events
+to windows with the wx.WS_EX_PROCESS_IDLE extra window style set.", "");
+    
 };
 
 //---------------------------------------------------------------------------
@@ -1627,26 +2364,55 @@ public:
 // system without loosing anything.  They do this by keeping a reference to
 // themselves and some special case handling in wxPyCallback::EventThunker.
 
+DocStr(wxPyEvent,
+"wx.PyEvent can be used as a base class for implementing custom event
+types in Python.  You should derived from this class instead of
+`wx.Event` because this class is Python-aware and is able to transport
+its Python bits safely through the wxWidgets event system and have
+them still be there when the event handler is invoked.
+
+:see: `wx.PyCommandEvent`
+", "");
+
 class wxPyEvent : public wxEvent {
 public:
-    %pythonAppend wxPyEvent     "self.SetSelf(self)"
-    wxPyEvent(int winid=0, wxEventType commandType = wxEVT_NULL );
+    %pythonAppend wxPyEvent     "self._SetSelf(self)"
+    DocCtorStr(
+        wxPyEvent(int winid=0, wxEventType eventType = wxEVT_NULL ),
+        "", "");
+    
     ~wxPyEvent();
 
 
-    void SetSelf(PyObject* self);
-    PyObject* GetSelf();
+    %Rename(_SetSelf, void , SetSelf(PyObject* self));
+    %Rename(_GetSelf, PyObject* , GetSelf());
 };
 
 
+
+DocStr(wxPyCommandEvent,
+"wx.PyCommandEvent can be used as a base class for implementing custom
+event types in Python, where the event shoudl travel up to parent
+windows looking for a handler.  You should derived from this class
+instead of `wx.CommandEvent` because this class is Python-aware and is
+able to transport its Python bits safely through the wxWidgets event
+system and have them still be there when the event handler is invoked.
+
+:see: `wx.PyEvent`
+", "");
+
 class wxPyCommandEvent : public wxCommandEvent {
 public:
-    %pythonAppend wxPyCommandEvent     "self.SetSelf(self)"
-    wxPyCommandEvent(wxEventType commandType = wxEVT_NULL, int id=0);
+    %pythonAppend wxPyCommandEvent     "self._SetSelf(self)"
+
+    DocCtorStr(
+        wxPyCommandEvent(wxEventType eventType = wxEVT_NULL, int id=0),
+        "", "");
+    
     ~wxPyCommandEvent();
 
-    void SetSelf(PyObject* self);
-    PyObject* GetSelf();
+    %Rename(_SetSelf, void , SetSelf(PyObject* self));
+    %Rename(_GetSelf, PyObject* , GetSelf());
 };
 
 
@@ -1654,13 +2420,28 @@ public:
 //---------------------------------------------------------------------------
 
 
+DocStr(wxDateEvent,
+"This event class holds information about a date change event and is
+used together with `wx.DatePickerCtrl`. It also serves as a base class
+for `wx.calendar.CalendarEvent`.  Bind these event types with
+EVT_DATE_CHANGED.", "");
+
 class wxDateEvent : public wxCommandEvent
 {
 public:
-    wxDateEvent(wxWindow *win, const wxDateTime& dt, wxEventType type);
+    DocCtorStr(
+        wxDateEvent(wxWindow *win, const wxDateTime& dt, wxEventType type),
+        "", "");
 
-    const wxDateTime& GetDate() const;
-    void SetDate(const wxDateTime &date);
+    DocDeclStr(
+        const wxDateTime& , GetDate() const,
+        "Returns the date.", "");
+    
+    DocDeclStr(
+        void , SetDate(const wxDateTime &date),
+        "Sets the date carried by the event, normally only used by the library
+internally.", "");
+    
 
 };
 

@@ -175,12 +175,12 @@ Extra Styles
 
     wx.WS_EX_PROCESS_IDLE           This window should always process idle
                                     events, even if the mode set by
-                                    wx.IdleEvent.SetMode is
+                                    `wx.IdleEvent.SetMode` is
                                     wx.IDLE_PROCESS_SPECIFIED.
 
     wx.WS_EX_PROCESS_UI_UPDATES     This window should always process UI
                                     update events, even if the mode
-                                    set by wxUpdateUIEvent::SetMode is
+                                    set by `wx.UpdateUIEvent.SetMode` is
                                     wxUPDATE_UI_PROCESS_SPECIFIED.
     =============================   =====================================
 
@@ -1555,7 +1555,7 @@ send an update UI event for each menubar menu item. You can call this
 function from your application to ensure that your UI is up-to-date at
 a particular point in time (as far as your EVT_UPDATE_UI handlers are
 concerned). This may be necessary if you have called
-wx.UpdateUIEvent.SetMode or wx.UpdateUIEvent.SetUpdateInterval to
+`wx.UpdateUIEvent.SetMode` or `wx.UpdateUIEvent.SetUpdateInterval` to
 limit the overhead that wxWindows incurs by sending update UI events
 in idle time.",
 "
@@ -1796,11 +1796,15 @@ a drop target, it is deleted.", "");
         "Returns the associated drop target, which may be None.", "");
     
 
-#ifdef __WXMSW__  // TODO:  should I drop-kick this?
-    DocDeclStr(
-        void , DragAcceptFiles(bool accept),
+    DocStr(DragAcceptFiles,
         "Enables or disables eligibility for drop file events, EVT_DROP_FILES.
-Only available on Windows.", "");    
+Only functional on Windows.", "");
+#ifdef __WXMSW__  
+    void DragAcceptFiles(bool accept);
+#else
+    %extend {
+        void DragAcceptFiles(bool accept) {}
+    }
 #endif
 #endif
     
