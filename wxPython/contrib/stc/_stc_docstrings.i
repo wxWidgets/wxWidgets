@@ -166,3 +166,53 @@ DocAStr(wxStyledTextCtrl::GetCurLine,
 "Retrieve the text of the line containing the caret, and also theindex
 of the caret on the line.", "");
 
+
+
+// For some reason these are not getting the right docstrings, but are
+// inheriting the docstrings from wxWindow instead.  So we'll have to
+// replace the whole proxy method instead.
+%feature("shadow") wxStyledTextCtrl::LineDown
+%{
+    def LineDown(*args, **kwargs):
+        """
+        LineDown(self)
+
+        Move caret down one line.
+        """
+        return _stc.StyledTextCtrl_LineDown(*args, **kwargs)
+%}
+
+%feature("shadow") wxStyledTextCtrl::LineUp
+%{
+    def LineUp(*args, **kwargs):
+        """
+        LineUp(self)
+
+        Move caret up one line.
+        """
+        return _stc.StyledTextCtrl_LineUp(*args, **kwargs)
+%}
+
+%feature("shadow") wxStyledTextCtrl::PageDown
+%{
+    def PageDown(*args, **kwargs):
+        """
+        PageDown(self)
+
+        Move caret one page down.
+        """
+        return _stc.StyledTextCtrl_PageDown(*args, **kwargs)
+%}
+
+%feature("shadow") wxStyledTextCtrl::PageUp
+%{
+    def PageUp(*args, **kwargs):
+        """
+        PageUp(self)
+
+        Move caret one page up.
+        """
+        return _stc.StyledTextCtrl_PageUp(*args, **kwargs)
+%}    
+
+
