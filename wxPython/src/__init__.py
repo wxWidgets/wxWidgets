@@ -26,16 +26,18 @@ __all__ = [
     'calendar',
     'grid',
     'html',
+    'media',
+    'webkit',
     'wizard',
+    'xrc',
 
     # contribs (need a better way to find these...)
     'activex',
+    'animate',
     'gizmos',
     'glcanvas',
     'iewin',
-    'ogl',
     'stc',
-    'xrc',
     ]
 
 # Load the package namespace with the core classes and such
