@@ -117,6 +117,8 @@ int _System soclose(int);
 #    if __GLIBC__ == 2
 #      define SOCKLEN_T socklen_t
 #    endif
+#  elif defined(__WXMAC__)
+#	   define SOCKLEN_T socklen_t
 #  else
 #    define SOCKLEN_T int
 #  endif
