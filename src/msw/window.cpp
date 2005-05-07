@@ -1555,7 +1555,7 @@ void wxWindowMSW::DoMoveWindow(int x, int y, int width, int height)
     HDWP hdwp = parent && !IsTopLevel() ? (HDWP)parent->m_hDWP : NULL;
 #else
     HDWP hdwp = 0;
-#endif    
+#endif
 
     wxMoveWindowDeferred(hdwp, this, GetHwnd(), x, y, width, height);
 
@@ -2309,6 +2309,31 @@ WXLRESULT wxWindowMSW::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM l
             }
             break;
 #endif // !__WXWINCE__
+
+        case WM_WINDOWPOSCHANGED:
+            {
+                WINDOWPOS *lpPos = (WINDOWPOS *)lParam;
+
+                if ( !(lpPos->flags & SWP_NOSIZE) )
+                {
+                    RECT rc;
+                    ::GetClientRect(GetHwnd(), &rc);
+
+                    AutoHRGN hrgnClient(::CreateRectRgnIndirect(&rc));
+                    AutoHRGN hrgnNew(::CreateRectRgn(lpPos->x,  lpPos->y,
+                                                     lpPos->cx, lpPos->cy));
+                    AutoHRGN hrgn(::CreateRectRgn(0, 0, 0, 0));
+
+                    // we need to invalidate any new exposed areas here
+                    // to force them to repaint
+                    if ( ::CombineRgn(hrgn, hrgnNew, hrgnClient, RGN_DIFF) != NULLREGION )
+                        ::InvalidateRgn(GetHwnd(), hrgn, TRUE);
+                    if ( ::CombineRgn(hrgn, hrgnClient, hrgnNew, RGN_DIFF) != NULLREGION )
+                        ::InvalidateRgn(GetHwnd(), hrgn, TRUE);
+
+                }
+            }
+            break;
 
 #if !defined(__WXMICROWIN__) && !defined(__WXWINCE__)
         case WM_ACTIVATEAPP:
@@ -3511,7 +3536,7 @@ bool wxWindowMSW::HandleSetCursor(WXHWND WXUNUSED(hWnd),
     if ( !::GetCursorPosWinCE(&pt))
 #else
     if ( !::GetCursorPos(&pt) )
-#endif        
+#endif
     {
         wxLogLastError(wxT("GetCursorPos"));
     }
@@ -4144,13 +4169,13 @@ bool wxWindowMSW::HandleSize(int WXUNUSED(w), int WXUNUSED(h), WXUINT wParam)
         numChildren ++;
     }
 
-    // Protect against valid m_hDWP being overwritten    
+    // Protect against valid m_hDWP being overwritten
     bool useDefer = false;
 
     if ( numChildren > 1 )
     {
         if (!m_hDWP)
-        {        
+        {
             m_hDWP = (WXHANDLE)::BeginDeferWindowPos(numChildren);
             if ( !m_hDWP )
             {
@@ -4203,7 +4228,7 @@ bool wxWindowMSW::HandleSize(int WXUNUSED(w), int WXUNUSED(h), WXUINT wParam)
         // may have depending on what the users EVT_SIZE handler does...)
         HDWP hDWP = (HDWP)m_hDWP;
         m_hDWP = NULL;
-        
+
         // do put all child controls in place at once
         if ( !::EndDeferWindowPos(hDWP) )
         {
