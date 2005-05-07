@@ -1504,11 +1504,19 @@ class CheckListBox(ListBox):
         return _controls_.CheckListBox_GetItemHeight(*args, **kwargs)
 
     def HitTest(*args, **kwargs):
-        """HitTest(self, Point pt) -> int"""
+        """
+        HitTest(self, Point pt) -> int
+
+        Test where the given (in client coords) point lies
+        """
         return _controls_.CheckListBox_HitTest(*args, **kwargs)
 
     def HitTestXY(*args, **kwargs):
-        """HitTestXY(self, int x, int y) -> int"""
+        """
+        HitTestXY(self, int x, int y) -> int
+
+        Test where the given (in client coords) point lies
+        """
         return _controls_.CheckListBox_HitTestXY(*args, **kwargs)
 
 
@@ -2117,8 +2125,6 @@ class ScrollBar(_core.Control):
         """
         SetScrollbar(self, int position, int thumbSize, int range, int pageSize, 
             bool refresh=True)
-
-        Sets the scrollbar properties of a built-in scrollbar.
         """
         return _controls_.ScrollBar_SetScrollbar(*args, **kwargs)
 

@@ -2612,16 +2612,19 @@ static void wxSizeEvent_SetSize(wxSizeEvent *self,wxSize size){
 static PyObject *wxDropFilesEvent_GetFiles(wxDropFilesEvent *self){
             int         count = self->GetNumberOfFiles();
             wxString*   files = self->GetFiles();
+            wxPyBlock_t blocked = wxPyBeginBlockThreads();
             PyObject*   list  = PyList_New(count);
 
             if (!list) {
                 PyErr_SetString(PyExc_MemoryError, "Can't allocate list of files!");
+                wxPyEndBlockThreads(blocked);
                 return NULL;
             }
 
             for (int i=0; i<count; i++) {
                 PyList_SetItem(list, i, wx2PyString(files[i]));
             }
+            wxPyEndBlockThreads(blocked);
             return list;
         }
 
@@ -2726,6 +2729,7 @@ static long wxWindow_GetHandle(wxWindow *self){
 static void wxWindow_AssociateHandle(wxWindow *self,long handle){
             self->AssociateHandle((WXWidget)handle);
         }
+static void wxWindow_DragAcceptFiles(wxWindow *self,bool accept){}
 
 wxWindow* wxFindWindowById( long id, const wxWindow *parent = NULL ) {
     return wxWindow::FindWindowById(id, parent);
@@ -18331,7 +18335,7 @@ static PyObject *_wrap_new_KeyEvent(PyObject *, PyObject *args, PyObject *kwargs
     wxKeyEvent *result;
     PyObject * obj0 = 0 ;
     char *kwnames[] = {
-        (char *) "keyType", NULL 
+        (char *) "eventType", NULL 
     };
     
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"|O:new_KeyEvent",kwnames,&obj0)) goto fail;
@@ -19774,7 +19778,7 @@ static PyObject * NcPaintEvent_swigregister(PyObject *, PyObject *args) {
 static PyObject *_wrap_new_EraseEvent(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     int arg1 = (int) 0 ;
-    wxDC *arg2 = (wxDC *) (wxDC *) NULL ;
+    wxDC *arg2 = (wxDC *) NULL ;
     wxEraseEvent *result;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
@@ -20390,6 +20394,34 @@ static PyObject *_wrap_CloseEvent_Veto(PyObject *, PyObject *args, PyObject *kwa
 }
 
 
+static PyObject *_wrap_CloseEvent_GetVeto(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxCloseEvent *arg1 = (wxCloseEvent *) 0 ;
+    bool result;
+    PyObject * obj0 = 0 ;
+    char *kwnames[] = {
+        (char *) "self", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:CloseEvent_GetVeto",kwnames,&obj0)) goto fail;
+    SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxCloseEvent, SWIG_POINTER_EXCEPTION | 0);
+    if (SWIG_arg_fail(1)) SWIG_fail;
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = (bool)((wxCloseEvent const *)arg1)->GetVeto();
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
 static PyObject *_wrap_CloseEvent_SetCanVeto(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxCloseEvent *arg1 = (wxCloseEvent *) 0 ;
@@ -20436,34 +20468,6 @@ static PyObject *_wrap_CloseEvent_CanVeto(PyObject *, PyObject *args, PyObject *
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         result = (bool)((wxCloseEvent const *)arg1)->CanVeto();
-        
-        wxPyEndAllowThreads(__tstate);
-        if (PyErr_Occurred()) SWIG_fail;
-    }
-    {
-        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
-    }
-    return resultobj;
-    fail:
-    return NULL;
-}
-
-
-static PyObject *_wrap_CloseEvent_GetVeto(PyObject *, PyObject *args, PyObject *kwargs) {
-    PyObject *resultobj;
-    wxCloseEvent *arg1 = (wxCloseEvent *) 0 ;
-    bool result;
-    PyObject * obj0 = 0 ;
-    char *kwnames[] = {
-        (char *) "self", NULL 
-    };
-    
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:CloseEvent_GetVeto",kwnames,&obj0)) goto fail;
-    SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxCloseEvent, SWIG_POINTER_EXCEPTION | 0);
-    if (SWIG_arg_fail(1)) SWIG_fail;
-    {
-        PyThreadState* __tstate = wxPyBeginAllowThreads();
-        result = (bool)((wxCloseEvent const *)arg1)->GetVeto();
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
@@ -22280,7 +22284,7 @@ static PyObject *_wrap_new_PyEvent(PyObject *, PyObject *args, PyObject *kwargs)
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     char *kwnames[] = {
-        (char *) "winid",(char *) "commandType", NULL 
+        (char *) "winid",(char *) "eventType", NULL 
     };
     
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"|OO:new_PyEvent",kwnames,&obj0,&obj1)) goto fail;
@@ -22335,7 +22339,7 @@ static PyObject *_wrap_delete_PyEvent(PyObject *, PyObject *args, PyObject *kwar
 }
 
 
-static PyObject *_wrap_PyEvent_SetSelf(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_PyEvent__SetSelf(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPyEvent *arg1 = (wxPyEvent *) 0 ;
     PyObject *arg2 = (PyObject *) 0 ;
@@ -22345,7 +22349,7 @@ static PyObject *_wrap_PyEvent_SetSelf(PyObject *, PyObject *args, PyObject *kwa
         (char *) "self",(char *) "self", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:PyEvent_SetSelf",kwnames,&obj0,&obj1)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:PyEvent__SetSelf",kwnames,&obj0,&obj1)) goto fail;
     SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxPyEvent, SWIG_POINTER_EXCEPTION | 0);
     if (SWIG_arg_fail(1)) SWIG_fail;
     arg2 = obj1;
@@ -22363,7 +22367,7 @@ static PyObject *_wrap_PyEvent_SetSelf(PyObject *, PyObject *args, PyObject *kwa
 }
 
 
-static PyObject *_wrap_PyEvent_GetSelf(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_PyEvent__GetSelf(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPyEvent *arg1 = (wxPyEvent *) 0 ;
     PyObject *result;
@@ -22372,7 +22376,7 @@ static PyObject *_wrap_PyEvent_GetSelf(PyObject *, PyObject *args, PyObject *kwa
         (char *) "self", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:PyEvent_GetSelf",kwnames,&obj0)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:PyEvent__GetSelf",kwnames,&obj0)) goto fail;
     SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxPyEvent, SWIG_POINTER_EXCEPTION | 0);
     if (SWIG_arg_fail(1)) SWIG_fail;
     {
@@ -22404,7 +22408,7 @@ static PyObject *_wrap_new_PyCommandEvent(PyObject *, PyObject *args, PyObject *
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     char *kwnames[] = {
-        (char *) "commandType",(char *) "id", NULL 
+        (char *) "eventType",(char *) "id", NULL 
     };
     
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"|OO:new_PyCommandEvent",kwnames,&obj0,&obj1)) goto fail;
@@ -22459,7 +22463,7 @@ static PyObject *_wrap_delete_PyCommandEvent(PyObject *, PyObject *args, PyObjec
 }
 
 
-static PyObject *_wrap_PyCommandEvent_SetSelf(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_PyCommandEvent__SetSelf(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPyCommandEvent *arg1 = (wxPyCommandEvent *) 0 ;
     PyObject *arg2 = (PyObject *) 0 ;
@@ -22469,7 +22473,7 @@ static PyObject *_wrap_PyCommandEvent_SetSelf(PyObject *, PyObject *args, PyObje
         (char *) "self",(char *) "self", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:PyCommandEvent_SetSelf",kwnames,&obj0,&obj1)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:PyCommandEvent__SetSelf",kwnames,&obj0,&obj1)) goto fail;
     SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxPyCommandEvent, SWIG_POINTER_EXCEPTION | 0);
     if (SWIG_arg_fail(1)) SWIG_fail;
     arg2 = obj1;
@@ -22487,7 +22491,7 @@ static PyObject *_wrap_PyCommandEvent_SetSelf(PyObject *, PyObject *args, PyObje
 }
 
 
-static PyObject *_wrap_PyCommandEvent_GetSelf(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_PyCommandEvent__GetSelf(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPyCommandEvent *arg1 = (wxPyCommandEvent *) 0 ;
     PyObject *result;
@@ -22496,7 +22500,7 @@ static PyObject *_wrap_PyCommandEvent_GetSelf(PyObject *, PyObject *args, PyObje
         (char *) "self", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:PyCommandEvent_GetSelf",kwnames,&obj0)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:PyCommandEvent__GetSelf",kwnames,&obj0)) goto fail;
     SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxPyCommandEvent, SWIG_POINTER_EXCEPTION | 0);
     if (SWIG_arg_fail(1)) SWIG_fail;
     {
@@ -31732,6 +31736,37 @@ static PyObject *_wrap_Window_GetDropTarget(PyObject *, PyObject *args, PyObject
         if (PyErr_Occurred()) SWIG_fail;
     }
     resultobj = SWIG_NewPointerObj((void*)(result), SWIGTYPE_p_wxPyDropTarget, 0);
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_Window_DragAcceptFiles(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxWindow *arg1 = (wxWindow *) 0 ;
+    bool arg2 ;
+    PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
+    char *kwnames[] = {
+        (char *) "self",(char *) "accept", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:Window_DragAcceptFiles",kwnames,&obj0,&obj1)) goto fail;
+    SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxWindow, SWIG_POINTER_EXCEPTION | 0);
+    if (SWIG_arg_fail(1)) SWIG_fail;
+    {
+        arg2 = (bool)(SWIG_As_bool(obj1)); 
+        if (SWIG_arg_fail(2)) SWIG_fail;
+    }
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        wxWindow_DragAcceptFiles(arg1,arg2);
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    Py_INCREF(Py_None); resultobj = Py_None;
     return resultobj;
     fail:
     return NULL;
@@ -45843,9 +45878,9 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"CloseEvent_SetLoggingOff", (PyCFunction) _wrap_CloseEvent_SetLoggingOff, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"CloseEvent_GetLoggingOff", (PyCFunction) _wrap_CloseEvent_GetLoggingOff, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"CloseEvent_Veto", (PyCFunction) _wrap_CloseEvent_Veto, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"CloseEvent_GetVeto", (PyCFunction) _wrap_CloseEvent_GetVeto, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"CloseEvent_SetCanVeto", (PyCFunction) _wrap_CloseEvent_SetCanVeto, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"CloseEvent_CanVeto", (PyCFunction) _wrap_CloseEvent_CanVeto, METH_VARARGS | METH_KEYWORDS, NULL},
-	 { (char *)"CloseEvent_GetVeto", (PyCFunction) _wrap_CloseEvent_GetVeto, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"CloseEvent_swigregister", CloseEvent_swigregister, METH_VARARGS, NULL},
 	 { (char *)"new_ShowEvent", (PyCFunction) _wrap_new_ShowEvent, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"ShowEvent_SetShow", (PyCFunction) _wrap_ShowEvent_SetShow, METH_VARARGS | METH_KEYWORDS, NULL},
@@ -45922,13 +45957,13 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"IdleEvent_swigregister", IdleEvent_swigregister, METH_VARARGS, NULL},
 	 { (char *)"new_PyEvent", (PyCFunction) _wrap_new_PyEvent, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"delete_PyEvent", (PyCFunction) _wrap_delete_PyEvent, METH_VARARGS | METH_KEYWORDS, NULL},
-	 { (char *)"PyEvent_SetSelf", (PyCFunction) _wrap_PyEvent_SetSelf, METH_VARARGS | METH_KEYWORDS, NULL},
-	 { (char *)"PyEvent_GetSelf", (PyCFunction) _wrap_PyEvent_GetSelf, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"PyEvent__SetSelf", (PyCFunction) _wrap_PyEvent__SetSelf, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"PyEvent__GetSelf", (PyCFunction) _wrap_PyEvent__GetSelf, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"PyEvent_swigregister", PyEvent_swigregister, METH_VARARGS, NULL},
 	 { (char *)"new_PyCommandEvent", (PyCFunction) _wrap_new_PyCommandEvent, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"delete_PyCommandEvent", (PyCFunction) _wrap_delete_PyCommandEvent, METH_VARARGS | METH_KEYWORDS, NULL},
-	 { (char *)"PyCommandEvent_SetSelf", (PyCFunction) _wrap_PyCommandEvent_SetSelf, METH_VARARGS | METH_KEYWORDS, NULL},
-	 { (char *)"PyCommandEvent_GetSelf", (PyCFunction) _wrap_PyCommandEvent_GetSelf, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"PyCommandEvent__SetSelf", (PyCFunction) _wrap_PyCommandEvent__SetSelf, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"PyCommandEvent__GetSelf", (PyCFunction) _wrap_PyCommandEvent__GetSelf, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"PyCommandEvent_swigregister", PyCommandEvent_swigregister, METH_VARARGS, NULL},
 	 { (char *)"new_DateEvent", (PyCFunction) _wrap_new_DateEvent, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"DateEvent_GetDate", (PyCFunction) _wrap_DateEvent_GetDate, METH_VARARGS | METH_KEYWORDS, NULL},
@@ -46219,6 +46254,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"Window_GetToolTip", (PyCFunction) _wrap_Window_GetToolTip, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"Window_SetDropTarget", (PyCFunction) _wrap_Window_SetDropTarget, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"Window_GetDropTarget", (PyCFunction) _wrap_Window_GetDropTarget, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"Window_DragAcceptFiles", (PyCFunction) _wrap_Window_DragAcceptFiles, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"Window_SetConstraints", (PyCFunction) _wrap_Window_SetConstraints, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"Window_GetConstraints", (PyCFunction) _wrap_Window_GetConstraints, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"Window_SetAutoLayout", (PyCFunction) _wrap_Window_SetAutoLayout, METH_VARARGS | METH_KEYWORDS, NULL},

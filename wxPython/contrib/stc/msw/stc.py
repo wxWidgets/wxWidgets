@@ -3163,9 +3163,10 @@ class StyledTextCtrl(_core.Control):
         """
         LineDown(self)
 
-        This is just a wrapper for ScrollLines(1).
+        Move caret down one line.
         """
         return _stc.StyledTextCtrl_LineDown(*args, **kwargs)
+
 
     def LineDownExtend(*args, **kwargs):
         """
@@ -3179,9 +3180,10 @@ class StyledTextCtrl(_core.Control):
         """
         LineUp(self)
 
-        This is just a wrapper for ScrollLines(-1).
+        Move caret up one line.
         """
         return _stc.StyledTextCtrl_LineUp(*args, **kwargs)
+
 
     def LineUpExtend(*args, **kwargs):
         """
@@ -3323,9 +3325,10 @@ class StyledTextCtrl(_core.Control):
         """
         PageUp(self)
 
-        This is just a wrapper for ScrollPages(-1).
+        Move caret one page up.
         """
         return _stc.StyledTextCtrl_PageUp(*args, **kwargs)
+
 
     def PageUpExtend(*args, **kwargs):
         """
@@ -3339,9 +3342,10 @@ class StyledTextCtrl(_core.Control):
         """
         PageDown(self)
 
-        This is just a wrapper for ScrollPages(1).
+        Move caret one page down.
         """
         return _stc.StyledTextCtrl_PageDown(*args, **kwargs)
+
 
     def PageDownExtend(*args, **kwargs):
         """

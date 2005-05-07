@@ -16941,7 +16941,7 @@ static PyObject *_wrap_ConfigBase_Set(PyObject *, PyObject *args, PyObject *kwar
     };
     
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:ConfigBase_Set",kwnames,&obj0)) goto fail;
-    SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxConfigBase, SWIG_POINTER_EXCEPTION | 0);
+    SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxConfigBase, SWIG_POINTER_EXCEPTION | SWIG_POINTER_DISOWN);
     if (SWIG_arg_fail(1)) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
