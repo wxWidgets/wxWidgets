@@ -69,6 +69,25 @@ III. Running the tests
    or to list the tests:
       test -L MBConvTestCase
 
+5. Fault navigation.
+   VC++ users can run the programs as a post build step (Projects/Settings/
+   Post-build step) to see the test results in an IDE window. This allows
+   errors to be jumped to in the same way as for compiler errors, for
+   example by pressing F4 or highlighting the error and pressing return.
+   
+   Similarly for makefile users: makefiles can be modified to execute the
+   test programs as a final step. Then you can navigate to any errors in the
+   same way as for compiler errors, if your editor supports that.
+
+   Another alternative is to run the tests manually, redirecting the output
+   to a file. Then use your editor to jump to any failures. Using Vim, for
+   example, ':cf test.log' would take you to the first error in test.log, and
+   ':cn' to the next.
+
+   If you would like to set a breakpoint on a failing test using a debugger,
+   put the breakpoint on the function 'CppUnit::Asserter::fail()'. This will
+   stop on each failing test.
+
 
 IV. Notes
 ---------
@@ -100,5 +119,5 @@ IV. Notes
 
 === EOF ===
 
-Author:  VZ
+Author:  VZ & MW
 Version: $Id$
