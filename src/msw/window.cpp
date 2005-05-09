@@ -246,7 +246,7 @@ public:
         : m_pendingPosition(wxDefaultPosition),
           m_pendingSize(wxDefaultSize)
     {}
-    
+
     wxPoint     m_pendingPosition;
     wxSize      m_pendingSize;
 };
@@ -541,7 +541,7 @@ wxWindowMSW::~wxWindowMSW()
 
 #if USE_DEFER_BUG_WORKAROUND
     delete m_extraData;
-#endif    
+#endif
 }
 
 // real construction (Init() must have been called before!)
@@ -1396,7 +1396,8 @@ void wxWindowMSW::Refresh(bool eraseBack, const wxRect *rect)
             pRect = NULL;
         }
 
-#ifndef __SMARTPHONE__
+	// RedrawWindow not available on SmartPhone or eVC++ 3
+#if !defined(__SMARTPHONE__) && !(defined(_WIN32_WCE) && _WIN32_WCE < 400)
         UINT flags = RDW_INVALIDATE | RDW_ALLCHILDREN;
         if ( eraseBack )
             flags |= RDW_ERASE;
@@ -1614,11 +1615,11 @@ void wxWindowMSW::DoSetSize(int x, int y, int width, int height, int sizeFlags)
     currentX = m_extraData->m_pendingPosition.x;
     if (currentX == wxDefaultCoord)
         GetPosition(&currentX, NULL);
-    
+
     currentY = m_extraData->m_pendingPosition.y;
     if (currentY == wxDefaultCoord)
         GetPosition(NULL, &currentY);
-    
+
     currentW = m_extraData->m_pendingSize.x;
     if (currentW == wxDefaultCoord)
         GetSize(&currentW, NULL);
@@ -1626,7 +1627,7 @@ void wxWindowMSW::DoSetSize(int x, int y, int width, int height, int sizeFlags)
     currentH = m_extraData->m_pendingSize.y;
     if (currentH == wxDefaultCoord)
         GetSize(NULL, &currentH);
-#else    
+#else
     GetPosition(&currentX, &currentY);
     GetSize(&currentW, &currentH);
 #endif
