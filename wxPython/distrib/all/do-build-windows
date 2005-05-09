@@ -89,7 +89,7 @@ s/wxUSE_POSTSCRIPT *0/wxUSE_POSTSCRIPT 1/g
 s/wxUSE_AFM_FOR_POSTSCRIPT *1/wxUSE_AFM_FOR_POSTSCRIPT 0/g
 s/wxUSE_DISPLAY *0/wxUSE_DISPLAY 1/g
 s/wxUSE_DIB_FOR_BITMAP *0/wxUSE_DIB_FOR_BITMAP 1/g
-s/wxUSE_DEBUGREPORT *1/wxUSE_DEBUGREPORRT 0/g
+s/wxUSE_DEBUGREPORT *1/wxUSE_DEBUGREPORT 0/g
 EOF
 cat $WXDIR/include/wx/msw/setup0.h | sed -f .my.sedexpr > $WXDIR/include/wx/msw/setup.h
 rm .my.sedexpr
