@@ -76,6 +76,7 @@ place, then do the same for wxPython.
          cd bld
          ../configure --prefix=/opt/wx/2.6 \
                       --with-gtk \
+		      --with-gnomeprint \
                       --with-opengl \
                       --enable-debug \
                       --enable-geometry \
@@ -85,7 +86,7 @@ place, then do the same for wxPython.
                       
 
    On OS X of course you'll want to use --with-mac instead of
-   --with-gtk.  
+   --with-gtk and --with-gnomeprint.  
 
    **NOTE**: Due to a recent change there is currently a dependency
    problem in the multilib builds of wxWidgets on OSX, so I have
@@ -97,7 +98,7 @@ place, then do the same for wxPython.
 
                      --enable-monolithic \
 
-   By default GTK 2.x will be used for the build.  If you woudl rather
+   By default GTK 2.x will be used for the build.  If you would rather
    use GTK 1.2.x for some reason then you can force configure to use
    it by changing the --with-gtk flag to specify it like this::
 
