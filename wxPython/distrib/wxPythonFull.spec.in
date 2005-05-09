@@ -191,6 +191,7 @@ cd bld
 	--enable-monolithic \
 	--disable-rpath \
 	--with-opengl \
+	--with-gnomeprint \
 	--enable-geometry \
 	--enable-optimise \
 	--enable-sound 	--with-sdl \
