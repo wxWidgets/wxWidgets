@@ -59,14 +59,10 @@
     #define ACCESSOR_CALLS_ARE_FUNCTIONS 1
     #define OPAQUE_TOOLBOX_STRUCTS 1
     #ifdef __MACH__
-        #include <ansi_prefix.mach.h>
-        #include <msl_c_version.h>
-        #include <stdint.h>
-        #undef WCHAR_MAX
-        #include <machine/ansi.h>
-    #else
-      #include <ansi_prefix.mac.h>
+		typedef int mbstate_t;
+		#define	_MBSTATE_T
     #endif
+	#include <mslconfig>
     // for getting the correct expat includes
     #define MACOS_CLASSIC
     /*
