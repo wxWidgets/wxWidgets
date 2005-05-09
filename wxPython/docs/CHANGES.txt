@@ -14,7 +14,7 @@ wxMSW: Fix for controls when the system text fg colour is not black.
 wxGTK: Patch #1171754, It is now possible to have a menu item that
 both has an icon and is a submenu.
 
-wxMSW: Patch #1197009, better refreshes when windowa are moved and
+wxMSW: Patch #1197009, better refreshes when windows are moved and
 resized. 
 
 wxMSW: Patch #1197468.  Keeps track of pending size/position changes
@@ -24,6 +24,9 @@ instead of current values.
 
 Fixed the typemap that converts a Python list of strings to a
 wxArrayString so it uses the wxPy default encoding.
+
+Several docstrings added and updated.  Lots more to go.
+
 
 
 
