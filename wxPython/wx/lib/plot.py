@@ -1027,7 +1027,9 @@ class PlotCanvas(wx.Window):
         # The Buffer init is done here, to make sure the buffer is always
         # the same size as the Window
         Size  = self.GetClientSize()
-
+        if Size.width <= 0 or Size.height <= 0:
+            return
+        
         # Make new offscreen bitmap: this bitmap will always have the
         # current drawing in it, so it can be used to save the image to
         # a file, or whatever.
