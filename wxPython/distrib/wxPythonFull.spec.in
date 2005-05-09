@@ -16,9 +16,9 @@
 
 
 # Which version of Python to build with.  Used to assemble python
-# binary name so use '2.2', '2.3', etc.
+# binary name so use '2.3', '2.4', etc.
 %if %{?pyver:0}%{!?pyver:1}
-%define pyver 2.3
+%define pyver 2.4
 %endif
 
 
@@ -112,7 +112,7 @@ Cross platform GUI toolkit for Python
 Summary:   Cross platform GUI toolkit for Python
 Group:     Development/Python
 Requires:  %{pkgname}-common
-Obsoletes: wxPythonGTK%{gtktype}-py%{pyver}
+Obsoletes: wxPythonGTK%{gtktype}-py%{pyver}, wxPythonGTK%{gtktype}
 Provides:  wxPython
 
 

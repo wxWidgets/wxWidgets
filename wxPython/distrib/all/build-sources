@@ -9,7 +9,7 @@ set -o errexit
 if [ $skipsource != yes -o $onlysource = yes ]; then
 
     # make the source tarball and srpm
-    distrib/makerpm 2.3 srpm
+    distrib/makerpm 2.4 srpm
 
     # Copy everything to the staging dir
     echo "Moving stuff to $STAGING_DIR..."
