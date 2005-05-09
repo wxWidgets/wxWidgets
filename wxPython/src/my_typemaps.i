@@ -206,15 +206,11 @@ MAKE_INT_ARRAY_TYPEMAPS(styles, styles_field)
     int i, len=PySequence_Length($input);
     for (i=0; i<len; i++) {
         PyObject* item = PySequence_GetItem($input, i);
-%#if wxUSE_UNICODE
-        PyObject* str  = PyObject_Unicode(item);
-%#else
-        PyObject* str  = PyObject_Str(item);
-%#endif
+        wxString* s = wxString_in_helper(item);
         if (PyErr_Occurred())  SWIG_fail;
-        $1->Add(Py2wxString(str));
+        $1->Add(*s);
+        delete s;
         Py_DECREF(item);
-        Py_DECREF(str);
     }
 }
 
