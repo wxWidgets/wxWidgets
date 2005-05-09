@@ -3,7 +3,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
-<meta name="generator" content="Docutils 0.3.1: http://docutils.sourceforge.net/" />
+<meta name="generator" content="Docutils 0.3.7: http://docutils.sourceforge.net/" />
 <title>The wxPython Manual</title>
 <meta name="author" content="Patrick K. O'Brien" />
 <meta name="organization" content="Orbtech" />
@@ -33,7 +33,7 @@
 </tbody>
 </table>
 <div class="contents topic" id="contents">
-<p class="topic-title"><a name="contents">Contents</a></p>
+<p class="topic-title first"><a name="contents">Contents</a></p>
 <ul class="simple">
 <li><a class="reference" href="#introduction" id="id1" name="id1">Introduction</a></li>
 <li><a class="reference" href="#what-is-wxpython" id="id2" name="id2">What is wxPython?</a></li>
@@ -389,7 +389,7 @@ created by the time OnExit finishes.</p>
 <h1><a class="toc-backref" href="#id15" name="sizer-overview">Sizer overview</a></h1>
 <p>Classes: wx.Sizer, wx.GridSizer, wx.FlexGridSizer, wx.BoxSizer,
 wx.StaticBoxSizer, wx.NotebookSizer, wx.CreateButtonSizer</p>
-<table border class="table">
+<table border="1" class="docutils">
 <colgroup>
 <col width="21%" />
 <col width="79%" />
@@ -601,15 +601,15 @@ wx.GROW flag is not used, the item can be aligned within available
 space.  wx.ALIGN_LEFT, wx.ALIGN_TOP, wx.ALIGN_RIGHT, wx.ALIGN_BOTTOM,
 wx.ALIGN_CENTER_HORIZONTAL and wx.ALIGN_CENTER_VERTICAL do what they
 say.  wx.ALIGN_CENTRE (same as wx.ALIGN_CENTER) is defined as
-(<tt class="literal"><span class="pre">wx.ALIGN_CENTER_HORIZONTAL</span> <span class="pre">|</span> <span class="pre">wx.ALIGN_CENTER_VERTICAL</span></tt>).  Default
-alignment is <tt class="literal"><span class="pre">wx.ALIGN_LEFT</span> <span class="pre">|</span> <span class="pre">wx.ALIGN_TOP</span></tt>.</p>
+(<tt class="docutils literal"><span class="pre">wx.ALIGN_CENTER_HORIZONTAL</span> <span class="pre">|</span> <span class="pre">wx.ALIGN_CENTER_VERTICAL</span></tt>).  Default
+alignment is <tt class="docutils literal"><span class="pre">wx.ALIGN_LEFT</span> <span class="pre">|</span> <span class="pre">wx.ALIGN_TOP</span></tt>.</p>
 <p>As mentioned above, any window belonging to a sizer may have border,
 and it can be specified which of the four sides may have this border,
 using the wx.TOP, wx.LEFT, wx.RIGHT and wx.BOTTOM constants or wx.ALL
 for all directions (and you may also use wx.NORTH, wx.WEST etc
 instead).  These flags can be used in combination with the alignment
 flags above as the second parameter of the Add() method using the
-binary or operator (<tt class="literal"><span class="pre">|</span></tt>).  The sizer of the border also must be made
+binary or operator (<tt class="docutils literal"><span class="pre">|</span></tt>).  The sizer of the border also must be made
 known, and it is the third parameter in the Add() method.  This means,
 that the entire behaviour of a sizer and its children can be
 controlled by the three parameters of the Add() method.</p>
@@ -661,7 +661,7 @@ separately.</p>
 method that can be used to create a standard button sizer in which
 standard buttons are displayed.  The following flags can be passed to
 this method:</p>
-<table border class="table">
+<table border="1" class="docutils">
 <colgroup>
 <col width="19%" />
 <col width="81%" />
@@ -709,7 +709,7 @@ wx.OK button will be default</td>
 <h1><a class="toc-backref" href="#id33" name="date-and-time-classes-overview">Date and time classes overview</a></h1>
 <p>wxPython provides a set of powerful classes to work with dates and
 times.  Some of the supported features of the DateTime class are:</p>
-<table border class="table">
+<table border="1" class="docutils">
 <colgroup>
 <col width="18%" />
 <col width="82%" />
@@ -808,7 +808,7 @@ all of them make sense.  For example, multiplying a date by a number
 is an invalid operation, even though multiplying either of the time
 span classes by a number is perfectly valid.</p>
 <p>Here is what can be done:</p>
-<table border class="table">
+<table border="1" class="docutils">
 <colgroup>
 <col width="19%" />
 <col width="81%" />

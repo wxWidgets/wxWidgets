@@ -3,7 +3,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
-<meta name="generator" content="Docutils 0.3.1: http://docutils.sourceforge.net/" />
+<meta name="generator" content="Docutils 0.3.7: http://docutils.sourceforge.net/" />
 <title>Building wxPython 2.6 for Development and Testing</title>
 <link rel="stylesheet" href="default.css" type="text/css" />
 </head>
@@ -25,7 +25,7 @@ you only use the instructions in this <a class="reference" href="BUILD.html">BUI
 will end up with a separate installation of wxPython and you can
 switch back and forth between this and the release version that you
 may already have installed.</p>
-<p>If you want to make changes to any of the <tt class="literal"><span class="pre">*.i</span></tt> files, (SWIG
+<p>If you want to make changes to any of the <tt class="docutils literal"><span class="pre">*.i</span></tt> files, (SWIG
 interface definition files,) or to regenerate the extension sources or
 renamer modules, then you will need an up to date version of SWIG,
 plus some patches.  Get the sources for version 1.3.24, and then apply
@@ -73,6 +73,7 @@ mkdir bld
 cd bld
 ../configure --prefix=/opt/wx/2.6 \
              --with-gtk \
+             --with-gnomeprint \
              --with-opengl \
              --enable-debug \
              --enable-geometry \
@@ -81,7 +82,7 @@ cd bld
              --disable-debugreport \
 </pre>
 <p>On OS X of course you'll want to use --with-mac instead of
---with-gtk.</p>
+--with-gtk and --with-gnomeprint.</p>
 <p><strong>NOTE</strong>: Due to a recent change there is currently a dependency
 problem in the multilib builds of wxWidgets on OSX, so I have
 switched to using a monolithic build.  That means that all of the
@@ -92,7 +93,7 @@ to the monolithic build of wxWidgets just add this configure flag:</p>
 <pre class="literal-block">
 --enable-monolithic \
 </pre>
-<p>By default GTK 2.x will be used for the build.  If you woudl rather
+<p>By default GTK 2.x will be used for the build.  If you would rather
 use GTK 1.2.x for some reason then you can force configure to use
 it by changing the --with-gtk flag to specify it like this:</p>
 <pre class="literal-block">
@@ -131,7 +132,7 @@ can add these flags to the configure command:</p>
 command but there are other libraries besides the main wxWidgets
 libs that also need to be built so again I make a script to do it
 all for me so I don't forget anything.  This time it is called
-&quot;.make&quot; (I use the leading &quot;.&quot;  so when I do <tt class="literal"><span class="pre">rm</span> <span class="pre">-r</span> <span class="pre">*</span></tt> in my build
+&quot;.make&quot; (I use the leading &quot;.&quot;  so when I do <tt class="docutils literal"><span class="pre">rm</span> <span class="pre">-r</span> <span class="pre">*</span></tt> in my build
 dir I don't lose my scripts too.)  This is what it looks like:</p>
 <pre class="literal-block">
 make $* \
@@ -203,7 +204,7 @@ BUILD_GLCANVAS=0 to the setup.py command line to disable the
 building of the glcanvas module.</p>
 <p>When the setup.py command is done you should have fully populated
 wxPython and wx packages locally in $WXDIR/wxPython/wxPython and
-$WXDIR/wxPython/wx, with all the extension modules (<tt class="literal"><span class="pre">*.so</span></tt> files)
+$WXDIR/wxPython/wx, with all the extension modules (<tt class="docutils literal"><span class="pre">*.so</span></tt> files)
 located in the wx package.</p>
 </li>
 <li><p class="first">To run code with the development version of wxPython, just set the
@@ -411,12 +412,12 @@ UNICODE=1
 </pre>
 <p>If you have a debug version of Python and wxWidgets and want to
 build a debug version of wxPython too, add the --debug flag to the
-command line.  You should then end up with a set of <tt class="literal"><span class="pre">*_d.pyd</span></tt>
-files in the wx package and you'll have to run <tt class="literal"><span class="pre">python_d.exe</span></tt> to
+command line.  You should then end up with a set of <tt class="docutils literal"><span class="pre">*_d.pyd</span></tt>
+files in the wx package and you'll have to run <tt class="docutils literal"><span class="pre">python_d.exe</span></tt> to
 use them.  The debug and hybrid(release) versions can coexist.</p>
 <p>When the setup.py command is done you should have fully populated
 wxPython and wx packages locally in %WXDIR%/wxPython/wxPython and
-%WXDIR%/wxPython/wx, with all the extension modules (<tt class="literal"><span class="pre">*.pyd</span></tt>
+%WXDIR%/wxPython/wx, with all the extension modules (<tt class="docutils literal"><span class="pre">*.pyd</span></tt>
 files) located in the wx package.</p>
 </li>
 <li><p class="first">To run code with the development version of wxPython, just set the

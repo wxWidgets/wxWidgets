@@ -3,7 +3,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
-<meta name="generator" content="Docutils 0.3.1: http://docutils.sourceforge.net/" />
+<meta name="generator" content="Docutils 0.3.7: http://docutils.sourceforge.net/" />
 <title>wxPython 2.6 Migration Guide</title>
 <link rel="stylesheet" href="default.css" type="text/css" />
 </head>
@@ -317,7 +317,7 @@ path should already be set properly.</p>
 <p>If you are also using SWIG for your extension then you'll need to
 adapt how the wxPython .i files are imported into your .i files.  See
 the wxPython sources for examples.  Your modules will need to at least
-<tt class="literal"><span class="pre">%import</span> <span class="pre">core.i</span></tt>, and possibly others if you need the definition of
+<tt class="docutils literal"><span class="pre">%import</span> <span class="pre">core.i</span></tt>, and possibly others if you need the definition of
 other classes.  Since you will need them to build your modules using
 SWIG, the main wxPython .i files are also installed with the wxPython
 headers in an i_files sibdirectory.  It should be enough to pass a
@@ -326,7 +326,7 @@ headers in an i_files sibdirectory.  It should be enough to pass a
 wx/build/config.py.  This module will be installed as part of wxPython
 so 3rd party modules that wish to use the same setup/configuration
 code can do so simply by importing this module from their own setup.py
-scripts using <tt class="literal"><span class="pre">import</span> <span class="pre">wx.build.config</span></tt>.</p>
+scripts using <tt class="docutils literal"><span class="pre">import</span> <span class="pre">wx.build.config</span></tt>.</p>
 <p>You no longer need to call wxClassInfo::CleanUpClasses() and
 wxClassInfo::InitializeClasses() in your extensions or when embedding
 wxPython.</p>
@@ -359,8 +359,8 @@ class MyDialog(wx.Dialog):
 <h1><a name="sizers">Sizers</a></h1>
 <p>The hack allowing the old &quot;option&quot; keyword parameter has been removed.
 If you use keyword args with wx.Sizer Add, Insert, or Prepend methods
-then you will need to use the <tt class="literal"><span class="pre">proportion</span></tt> name instead of
-<tt class="literal"><span class="pre">option</span></tt>.  (The <tt class="literal"><span class="pre">proportion</span></tt> keyword was also allowed in 2.4.2.4.)</p>
+then you will need to use the <tt class="docutils literal"><span class="pre">proportion</span></tt> name instead of
+<tt class="docutils literal"><span class="pre">option</span></tt>.  (The <tt class="docutils literal"><span class="pre">proportion</span></tt> keyword was also allowed in 2.4.2.4.)</p>
 <p>When adding a spacer to a sizer you now need to use a wx.Size or a
 2-integer sequence instead of separate width and height parameters.
 This was optionally allowed in 2.4, but now it is required.  This
@@ -391,41 +391,41 @@ First a bit about how things used to work:</p>
 to be its minimal size, and that size would always be used by
 default when calculating layout size and positions, and the
 sizer itself would keep track of that minimal size.</li>
-<li>If the window item was added with the <tt class="literal"><span class="pre">wx.ADJUST_MINSIZE</span></tt>
-flag then when layout was calculated the item's <tt class="literal"><span class="pre">GetBestSize</span></tt>
+<li>If the window item was added with the <tt class="docutils literal"><span class="pre">wx.ADJUST_MINSIZE</span></tt>
+flag then when layout was calculated the item's <tt class="docutils literal"><span class="pre">GetBestSize</span></tt>
 would be used to reset the minimal size that the sizer used.</li>
 </ul>
 </blockquote>
 <p>The main thrust of the new Sizer changes was to make behavior like
-<tt class="literal"><span class="pre">wx.ADJUST_MINSIZE</span></tt> be the default, and also to push the tracking of
+<tt class="docutils literal"><span class="pre">wx.ADJUST_MINSIZE</span></tt> be the default, and also to push the tracking of
 the minimal size to the window itself (since it knows its own needs)
 instead of having the sizer take care of it.  Consequently these
 changes were made:</p>
 <blockquote>
 <ul class="simple">
-<li>The <tt class="literal"><span class="pre">wx.FIXED_MINSIZE</span></tt> flag was added to allow for the old
+<li>The <tt class="docutils literal"><span class="pre">wx.FIXED_MINSIZE</span></tt> flag was added to allow for the old
 behavior.  When this flag is used the size a window has when
 added to the sizer will be treated as its minimal size and it
 will not be readjusted on each layout.</li>
-<li>The min size stored in <tt class="literal"><span class="pre">wx.Window</span></tt> and settable with
-<tt class="literal"><span class="pre">SetSizeHints</span></tt> or <tt class="literal"><span class="pre">SetMinSize</span></tt> will by default be used by
+<li>The min size stored in <tt class="docutils literal"><span class="pre">wx.Window</span></tt> and settable with
+<tt class="docutils literal"><span class="pre">SetSizeHints</span></tt> or <tt class="docutils literal"><span class="pre">SetMinSize</span></tt> will by default be used by
 the sizer (if it was set) as the minimal size of the sizer item.
 If the min size was not set (or was only partially set) then the
 window's best size is fetched and it is used instead of (or
-blended with) the min size.  <tt class="literal"><span class="pre">wx.Window.GetBestFittingSize</span></tt>
+blended with) the min size.  <tt class="docutils literal"><span class="pre">wx.Window.GetBestFittingSize</span></tt>
 was added to facilitate getting the size to be used by the
 sizers.</li>
 <li>The best size of a window is cached so it doesn't need to
-recaculated on every layout.  <tt class="literal"><span class="pre">wx.Window.InvalidateBestSize</span></tt>
+recaculated on every layout.  <tt class="docutils literal"><span class="pre">wx.Window.InvalidateBestSize</span></tt>
 was added and should be called (usually just internally in
 control methods) whenever something is done that would make the
 best size change.</li>
 <li>All wxControls were changed to set the minsize to what is passed
 to the constructor or Create method, and also to set the real
 size of the control to the blending of the min size and best
-size.  <tt class="literal"><span class="pre">wx.Window.SetBestFittingSize</span></tt> was added to help with
+size.  <tt class="docutils literal"><span class="pre">wx.Window.SetBestFittingSize</span></tt> was added to help with
 this, although most controls don't need to call it directly
-because it is called indirectly via the <tt class="literal"><span class="pre">SetInitialSize</span></tt>
+because it is called indirectly via the <tt class="docutils literal"><span class="pre">SetInitialSize</span></tt>
 called in the base classes.</li>
 </ul>
 </blockquote>
@@ -441,34 +441,34 @@ but now the sizer will use the default size as the minimum rather than
 the size set later.  It is an easy fix though, just move the
 specification of the size to the constructor (assuming that SomeWidget
 will set its minsize there like the rest of the controls do) or call
-<tt class="literal"><span class="pre">SetMinSize</span></tt> instead of <tt class="literal"><span class="pre">SetSize</span></tt>.</p>
+<tt class="docutils literal"><span class="pre">SetMinSize</span></tt> instead of <tt class="docutils literal"><span class="pre">SetSize</span></tt>.</p>
 <p>In order to fit well with this new scheme of things, all wxControls or
 custom controls should do the following things.  (Depending on how
 they are used you may also want to do the same thing for non-control
 custom windows.)</p>
 <blockquote>
 <ul>
-<li><p class="first">Either override or inherit a meaningful <tt class="literal"><span class="pre">DoGetBestSize</span></tt> method
+<li><p class="first">Either override or inherit a meaningful <tt class="docutils literal"><span class="pre">DoGetBestSize</span></tt> method
 that calculates whatever size is &quot;best&quot; for the control.  Once
 that size is calculated then there should normally be a call to
-<tt class="literal"><span class="pre">CacheBestSize</span></tt> to save it for later use, unless for some
+<tt class="docutils literal"><span class="pre">CacheBestSize</span></tt> to save it for later use, unless for some
 reason you want the best size to be recalculated on every
 layout.</p>
-<p>Note: In order to successfully override <tt class="literal"><span class="pre">DoGetBestSize</span></tt> in
-Python the class needs to be derived from <tt class="literal"><span class="pre">wx.PyWindow</span></tt>,
-<tt class="literal"><span class="pre">wx.PyControl</span></tt>, or etc.  If your class instead derives from
+<p>Note: In order to successfully override <tt class="docutils literal"><span class="pre">DoGetBestSize</span></tt> in
+Python the class needs to be derived from <tt class="docutils literal"><span class="pre">wx.PyWindow</span></tt>,
+<tt class="docutils literal"><span class="pre">wx.PyControl</span></tt>, or etc.  If your class instead derives from
 one of the standard wx classes then just be sure that the min
 size gets explicitly set to what would have been the best size
 and things should work properly in almost all situations.</p>
 </li>
 <li><p class="first">Any method that changes the attributes of the control such that
-the best size will change should call <tt class="literal"><span class="pre">InvalidateBestSize</span></tt> so
+the best size will change should call <tt class="docutils literal"><span class="pre">InvalidateBestSize</span></tt> so
 it will be recalculated the next time it is needed.</p>
 </li>
 <li><p class="first">The control's constructor and/or Create method should ensure
 that the minsize is set to the size passed in, and that the
 control is sized to a blending of the min size and best size.
-This can be done by calling <tt class="literal"><span class="pre">SetBestFittingSize</span></tt>.</p>
+This can be done by calling <tt class="docutils literal"><span class="pre">SetBestFittingSize</span></tt>.</p>
 </li>
 </ul>
 </blockquote>

@@ -3,7 +3,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
-<meta name="generator" content="Docutils 0.3.1: http://docutils.sourceforge.net/" />
+<meta name="generator" content="Docutils 0.3.7: http://docutils.sourceforge.net/" />
 <title>The Py Manual</title>
 <meta name="author" content="Patrick K. O'Brien" />
 <meta name="organization" content="Orbtech" />
@@ -31,7 +31,7 @@
 </tbody>
 </table>
 <div class="contents topic" id="contents">
-<p class="topic-title"><a name="contents">Contents</a></p>
+<p class="topic-title first"><a name="contents">Contents</a></p>
 <ul class="simple">
 <li><a class="reference" href="#introduction" id="id3" name="id3">Introduction</a></li>
 <li><a class="reference" href="#developer-reference" id="id4" name="id4">Developer Reference</a></li>
@@ -169,7 +169,7 @@ shell.  It includes a tabbed notebook containing a namespace tree
 <h1><a class="toc-backref" href="#id11" name="pyfilling">PyFilling</a></h1>
 <p>PyFilling is a namespace viewer.  It isn't really useful as a
 standalone program, but it does illustrate how to make use of the
-underlying <tt class="literal"><span class="pre">filling</span></tt> module.</p>
+underlying <tt class="docutils literal"><span class="pre">filling</span></tt> module.</p>
 </div>
 <div class="section" id="pyshell">
 <h1><a class="toc-backref" href="#id12" name="pyshell">PyShell</a></h1>
@@ -177,7 +177,7 @@ underlying <tt class="literal"><span class="pre">filling</span></tt> module.</p>
 as PyCrust, but doesn't have any of the extra features that appear in
 the PyCrust notebook interface.</p>
 <div class="figure">
-<p><img alt="screenshots/PyShell.png" src="screenshots/PyShell.png" /></p>
+<div class="image"><img alt="screenshots/PyShell.png" src="screenshots/PyShell.png" /></div>
 <p class="caption">PyShell running on Mandrake Linux.</p>
 </div>
 </div>
@@ -185,7 +185,7 @@ the PyCrust notebook interface.</p>
 <h1><a class="toc-backref" href="#id13" name="pywrap">PyWrap</a></h1>
 <p>PyWrap is a runtime utility that lets you run an existing wxPython
 program with a PyCrust frame at the same time.  Inside the PyCrust
-shell namespace, the local variable <tt class="literal"><span class="pre">app</span></tt> is assigned to your
+shell namespace, the local variable <tt class="docutils literal"><span class="pre">app</span></tt> is assigned to your
 application instance.  In this way you can introspect your entire
 application within the PyCrust shell, as well as the PyFilling
 namespace viewer.</p>
@@ -244,7 +244,7 @@ import wx
 <pre class="literal-block">
 from wxPython import wx
 </pre>
-<p>Fixed typo in <tt class="literal"><span class="pre">PyWrap.py</span></tt>:</p>
+<p>Fixed typo in <tt class="docutils literal"><span class="pre">PyWrap.py</span></tt>:</p>
 <pre class="literal-block">
 if __name__ == '__main__':
     main(sys.argv)
@@ -256,7 +256,7 @@ if __name__ == '__main__':
 </pre>
 <p>Added pretty-print Display tab to Crust, based on suggestion from
 Jason Whitlark.</p>
-<p>Improved <tt class="literal"><span class="pre">Can*</span></tt> checks in <tt class="literal"><span class="pre">EditWindow</span></tt>, since STC is too lenient,
+<p>Improved <tt class="docutils literal"><span class="pre">Can*</span></tt> checks in <tt class="docutils literal"><span class="pre">EditWindow</span></tt>, since STC is too lenient,
 particularly when it is set to read-only but returns True for
 CanPaste() (seems like an STC bug to me):</p>
 <pre class="literal-block">
@@ -281,10 +281,10 @@ def CanPaste(self):
 <h2><a class="toc-backref" href="#id20" name="to-5-2-2003">0.9.1 (3/21/2003 to 5/2/2003)</a></h2>
 <p>PyCrust is dead!  Long live Py!</p>
 <ul class="simple">
-<li>Renamed <tt class="literal"><span class="pre">PyCrust</span></tt> package to <tt class="literal"><span class="pre">py</span></tt>.</li>
+<li>Renamed <tt class="docutils literal"><span class="pre">PyCrust</span></tt> package to <tt class="docutils literal"><span class="pre">py</span></tt>.</li>
 <li>Moved code to wxPython's CVS repository.</li>
 </ul>
-<p>Fixed bug in <tt class="literal"><span class="pre">introspect.py</span></tt> on introspecting objects occurring
+<p>Fixed bug in <tt class="docutils literal"><span class="pre">introspect.py</span></tt> on introspecting objects occurring
 immediately after a secondary prompt, like this:</p>
 <pre class="literal-block">
 &gt;&gt;&gt; l = [1, 2, 3]
@@ -299,18 +299,18 @@ immediately after a secondary prompt, like this:</p>
 <li>wxPythonExamples.txt</li>
 </ul>
 <p>Added PyAlaMode and PyAlaCarte code editors.</p>
-<p>Major refactoring to support <tt class="literal"><span class="pre">editor</span></tt> and <tt class="literal"><span class="pre">shell</span></tt> from the same
+<p>Major refactoring to support <tt class="docutils literal"><span class="pre">editor</span></tt> and <tt class="docutils literal"><span class="pre">shell</span></tt> from the same
 base.</p>
 <p>Renamed program files:</p>
 <ul class="simple">
-<li><tt class="literal"><span class="pre">PyCrustApp.py</span></tt> to <tt class="literal"><span class="pre">PyCrust.py</span></tt></li>
-<li><tt class="literal"><span class="pre">PyFillingApp.py</span></tt> to <tt class="literal"><span class="pre">PyFilling.py</span></tt></li>
-<li><tt class="literal"><span class="pre">PyShellApp.py</span></tt> to <tt class="literal"><span class="pre">PyShell.py</span></tt></li>
-<li><tt class="literal"><span class="pre">wrap.py</span></tt> to <tt class="literal"><span class="pre">PyWrap.py</span></tt></li>
+<li><tt class="docutils literal"><span class="pre">PyCrustApp.py</span></tt> to <tt class="docutils literal"><span class="pre">PyCrust.py</span></tt></li>
+<li><tt class="docutils literal"><span class="pre">PyFillingApp.py</span></tt> to <tt class="docutils literal"><span class="pre">PyFilling.py</span></tt></li>
+<li><tt class="docutils literal"><span class="pre">PyShellApp.py</span></tt> to <tt class="docutils literal"><span class="pre">PyShell.py</span></tt></li>
+<li><tt class="docutils literal"><span class="pre">wrap.py</span></tt> to <tt class="docutils literal"><span class="pre">PyWrap.py</span></tt></li>
 </ul>
 <p>Removed disabling of autocomplete for lists of 2000 items or more.
 The current implementation of wxSTC can now handle lists this big.</p>
-<p>Improved handling of <tt class="literal"><span class="pre">sys.path</span></tt> to mimic the standard Python shell.</p>
+<p>Improved handling of <tt class="docutils literal"><span class="pre">sys.path</span></tt> to mimic the standard Python shell.</p>
 </div>
 <div class="section" id="to-3-20-2003">
 <h2><a class="toc-backref" href="#id21" name="to-3-20-2003">0.9 (2/27/2003 to 3/20/2003)</a></h2>
@@ -332,7 +332,7 @@ documentation and docstrings for wxPython classes and functions.</p>
 <li>wxPython Docs</li>
 <li>wxSTC Docs</li>
 </ul>
-<p><tt class="literal"><span class="pre">Filling.tree</span></tt> now expands tuples as well as lists.  (It should have
+<p><tt class="docutils literal"><span class="pre">Filling.tree</span></tt> now expands tuples as well as lists.  (It should have
 done this all along, I just never noticed this omission before.)</p>
 <p>Added this True/False test to all modules:</p>
 <pre class="literal-block">
@@ -342,18 +342,18 @@ except NameError:
     True = 1==1
     False = 1==0
 </pre>
-<p>Added <tt class="literal"><span class="pre">wxd</span></tt> directory with decoration classes.</p>
+<p>Added <tt class="docutils literal"><span class="pre">wxd</span></tt> directory with decoration classes.</p>
 </div>
 <div class="section" id="to-2-26-2003">
 <h2><a class="toc-backref" href="#id22" name="to-2-26-2003">0.8.2 (1/5/2003 to 2/26/2003)</a></h2>
-<p>Wrapped <tt class="literal"><span class="pre">sys.ps1</span></tt>, <tt class="literal"><span class="pre">sys.ps2</span></tt>, and <tt class="literal"><span class="pre">sys.ps3</span></tt> in <tt class="literal"><span class="pre">str()</span></tt>.
+<p>Wrapped <tt class="docutils literal"><span class="pre">sys.ps1</span></tt>, <tt class="docutils literal"><span class="pre">sys.ps2</span></tt>, and <tt class="docutils literal"><span class="pre">sys.ps3</span></tt> in <tt class="docutils literal"><span class="pre">str()</span></tt>.
 (Thanks, Kieran Holland.)</p>
 <p>Fixed minor things found by PyChecker.</p>
-<p>Changed locals to use <tt class="literal"><span class="pre">__main__.__dict__</span></tt> and added code to clean up
+<p>Changed locals to use <tt class="docutils literal"><span class="pre">__main__.__dict__</span></tt> and added code to clean up
 the namespace, making it as close to the regular Python environment as
 possible.  This solves the problem of pickling and unpickling
 instances of classes defined in the shell.</p>
-<p>Made <tt class="literal"><span class="pre">shell.PasteAndRun()</span></tt> a little more forgiving when it finds a
+<p>Made <tt class="docutils literal"><span class="pre">shell.PasteAndRun()</span></tt> a little more forgiving when it finds a
 ps2 prompt line with no trailing space, such when you copy code from a
 web page.</p>
 <p>Improved autocomplete behavior by adding these to shell:</p>
@@ -361,10 +361,10 @@ web page.</p>
 self.AutoCompSetAutoHide(False)
 self.AutoCompStops(' .,;:([)]}\'&quot;\\&lt;&gt;%^&amp;+-=*/|`')
 </pre>
-<p>Added <tt class="literal"><span class="pre">decor</span></tt> directory, <tt class="literal"><span class="pre">decorator.py</span></tt>, <tt class="literal"><span class="pre">stcDecor.py</span></tt>, and
-<tt class="literal"><span class="pre">stcConstants.py</span></tt>.  These all serve the purpose of adding docstrings
-to existing wxPython classes, in particular the <tt class="literal"><span class="pre">wxStyledTextCtrl</span></tt>.</p>
-<p>Added <tt class="literal"><span class="pre">wrap.py</span></tt>, a command line utility for running a wxPython app
+<p>Added <tt class="docutils literal"><span class="pre">decor</span></tt> directory, <tt class="docutils literal"><span class="pre">decorator.py</span></tt>, <tt class="docutils literal"><span class="pre">stcDecor.py</span></tt>, and
+<tt class="docutils literal"><span class="pre">stcConstants.py</span></tt>.  These all serve the purpose of adding docstrings
+to existing wxPython classes, in particular the <tt class="docutils literal"><span class="pre">wxStyledTextCtrl</span></tt>.</p>
+<p>Added <tt class="docutils literal"><span class="pre">wrap.py</span></tt>, a command line utility for running a wxPython app
 with additional runtime-tools loaded, such as PyCrust (the only tool
 at this point).</p>
 <p>Flushed the clipboard Cut/Copy operations so that selections will
@@ -385,19 +385,19 @@ func = 3 .
 Enter as well as Tab to select an item from the list.</p>
 <p>Disabled autocomplete for lists of 2000 items or more.  The current
 implementation of wxSTC can't handle lists this big.</p>
-<p>Changed <tt class="literal"><span class="pre">filling</span></tt> to always display docstrings for objects.  This is
+<p>Changed <tt class="docutils literal"><span class="pre">filling</span></tt> to always display docstrings for objects.  This is
 useful for objects whose docstrings have been decorated, rather than
 coming directly from the source code.  (Hmmm.  Sounds like someone is
 doing some decorating.  I wonder where that would be helpful? &lt;wink&gt;)</p>
-<p>Fixed handling of icon.  Added <tt class="literal"><span class="pre">images.py</span></tt> file.</p>
+<p>Fixed handling of icon.  Added <tt class="docutils literal"><span class="pre">images.py</span></tt> file.</p>
 </div>
 <div class="section" id="to-12-16-2002">
 <h2><a class="toc-backref" href="#id24" name="to-12-16-2002">0.8 (10/29/2002 to 12/16/2002)</a></h2>
 <p>Added &quot;help&quot; to startup banner info.</p>
-<p>Made all <tt class="literal"><span class="pre">wx</span></tt> and <tt class="literal"><span class="pre">stc</span></tt> imports explicit.  No more <tt class="literal"><span class="pre">import</span> <span class="pre">*</span></tt>.</p>
-<p>Replaced use of the <tt class="literal"><span class="pre">wx</span></tt> module's <tt class="literal"><span class="pre">true</span></tt> and <tt class="literal"><span class="pre">false</span></tt> with
-Python's <tt class="literal"><span class="pre">True</span></tt> and <tt class="literal"><span class="pre">False</span></tt>.</p>
-<p>Changed <tt class="literal"><span class="pre">introspect.getRoot()</span></tt> to use <tt class="literal"><span class="pre">tokenize</span></tt> module.  This
+<p>Made all <tt class="docutils literal"><span class="pre">wx</span></tt> and <tt class="docutils literal"><span class="pre">stc</span></tt> imports explicit.  No more <tt class="docutils literal"><span class="pre">import</span> <span class="pre">*</span></tt>.</p>
+<p>Replaced use of the <tt class="docutils literal"><span class="pre">wx</span></tt> module's <tt class="docutils literal"><span class="pre">true</span></tt> and <tt class="docutils literal"><span class="pre">false</span></tt> with
+Python's <tt class="docutils literal"><span class="pre">True</span></tt> and <tt class="docutils literal"><span class="pre">False</span></tt>.</p>
+<p>Changed <tt class="docutils literal"><span class="pre">introspect.getRoot()</span></tt> to use <tt class="docutils literal"><span class="pre">tokenize</span></tt> module.  This
 does a slightly better job than the previous parsing routine and the
 code is clearer.</p>
 <p>Improved handling of whitespace and empty types during introspection.</p>
@@ -413,74 +413,74 @@ wxPython Version: 2.3.3.1
 Platform: linux2
 </pre>
 <p>Added copy plus and paste plus to shell menu.</p>
-<p>Moved shell menu from <tt class="literal"><span class="pre">shell.py</span></tt> to <tt class="literal"><span class="pre">shellmenu.py</span></tt>.</p>
-<p>Added <tt class="literal"><span class="pre">sys.stdin.readlines()</span></tt> support.</p>
-<p>Added <tt class="literal"><span class="pre">time.sleep()</span></tt> in <tt class="literal"><span class="pre">readline()</span></tt> and <tt class="literal"><span class="pre">OnIdle()</span></tt> event
+<p>Moved shell menu from <tt class="docutils literal"><span class="pre">shell.py</span></tt> to <tt class="docutils literal"><span class="pre">shellmenu.py</span></tt>.</p>
+<p>Added <tt class="docutils literal"><span class="pre">sys.stdin.readlines()</span></tt> support.</p>
+<p>Added <tt class="docutils literal"><span class="pre">time.sleep()</span></tt> in <tt class="docutils literal"><span class="pre">readline()</span></tt> and <tt class="docutils literal"><span class="pre">OnIdle()</span></tt> event
 handler to free up the CPU.</p>
 </div>
 <div class="section" id="to-8-27-2002">
 <h2><a class="toc-backref" href="#id25" name="to-8-27-2002">0.7.2 (2/22/2002 to 8/27/2002)</a></h2>
-<p>Tweaked <tt class="literal"><span class="pre">getAttributeNames()</span></tt> to pick up a few more attributes:</p>
+<p>Tweaked <tt class="docutils literal"><span class="pre">getAttributeNames()</span></tt> to pick up a few more attributes:</p>
 <pre class="literal-block">
 '__bases__', '__class__', '__dict__', '__name__', 'func_closure',
 'func_code', 'func_defaults', 'func_dict', 'func_doc',
 'func_globals', 'func_name'
 </pre>
 <p>Added a tests directory and unit tests.</p>
-<p>Improved support for empty types in the shell: <tt class="literal"><span class="pre">[]</span></tt>, <tt class="literal"><span class="pre">()</span></tt> and
-<tt class="literal"><span class="pre">{}</span></tt> as far as when call tips and autocompletion are available.</p>
-<p>Added support for the other triple string - <tt class="literal"><span class="pre">''''''</span></tt>.</p>
-<p>Refactored <tt class="literal"><span class="pre">introspect.py</span></tt> to improve testability.</p>
+<p>Improved support for empty types in the shell: <tt class="docutils literal"><span class="pre">[]</span></tt>, <tt class="docutils literal"><span class="pre">()</span></tt> and
+<tt class="docutils literal"><span class="pre">{}</span></tt> as far as when call tips and autocompletion are available.</p>
+<p>Added support for the other triple string - <tt class="docutils literal"><span class="pre">''''''</span></tt>.</p>
+<p>Refactored <tt class="docutils literal"><span class="pre">introspect.py</span></tt> to improve testability.</p>
 <p>Improved call tips for unbound methods by leaving the &quot;self&quot;
 parameter, since unbound methods require an instance be passed.</p>
 <p>Fixed call tip bug where a tip was displayed when a &quot;(&quot; was typed
 after an object that wasn't callable.</p>
-<p>Fixed <tt class="literal"><span class="pre">getAllAttributeNames</span></tt> when <tt class="literal"><span class="pre">str(object)</span></tt> fails.</p>
+<p>Fixed <tt class="docutils literal"><span class="pre">getAllAttributeNames</span></tt> when <tt class="docutils literal"><span class="pre">str(object)</span></tt> fails.</p>
 <p>Added brace highlighting.  (Thank you, Kevin Altis.)</p>
-<p>Fixed problem displaying unicode objects in <tt class="literal"><span class="pre">PyFilling</span></tt>.</p>
-<p>Changed how <tt class="literal"><span class="pre">filling.py</span></tt> checks for expandable objects.  Lists are
+<p>Fixed problem displaying unicode objects in <tt class="docutils literal"><span class="pre">PyFilling</span></tt>.</p>
+<p>Changed how <tt class="docutils literal"><span class="pre">filling.py</span></tt> checks for expandable objects.  Lists are
 now expandable objects.</p>
 <p>Made the key handling more robust when there is an active text
 selection that includes text prior to the last primary prompt.  Thanks
 to Raul Cota for pointing this out.</p>
 <p>Fixed wxSTC problem with brace highlighting and non-us keyboards.
 (Thank you for the patch, Jean-Michel Fauth.)</p>
-<p>Added <tt class="literal"><span class="pre">busy</span> <span class="pre">=</span> <span class="pre">wxBusyCursor()</span></tt> to key points in <tt class="literal"><span class="pre">shell</span></tt> and
-<tt class="literal"><span class="pre">filling</span></tt>.</p>
-<p>Added <tt class="literal"><span class="pre">OnCloseWindow</span></tt> handler to <tt class="literal"><span class="pre">ShellFrame</span></tt> and <tt class="literal"><span class="pre">CrustFrame</span></tt>.</p>
-<p>Default to <tt class="literal"><span class="pre">SetWrapMode(1)</span></tt> for shell and namespace viewer.</p>
-<p>Added <tt class="literal"><span class="pre">shell.wrap()</span></tt> and <tt class="literal"><span class="pre">shell.zoom()</span></tt>.</p>
+<p>Added <tt class="docutils literal"><span class="pre">busy</span> <span class="pre">=</span> <span class="pre">wxBusyCursor()</span></tt> to key points in <tt class="docutils literal"><span class="pre">shell</span></tt> and
+<tt class="docutils literal"><span class="pre">filling</span></tt>.</p>
+<p>Added <tt class="docutils literal"><span class="pre">OnCloseWindow</span></tt> handler to <tt class="docutils literal"><span class="pre">ShellFrame</span></tt> and <tt class="docutils literal"><span class="pre">CrustFrame</span></tt>.</p>
+<p>Default to <tt class="docutils literal"><span class="pre">SetWrapMode(1)</span></tt> for shell and namespace viewer.</p>
+<p>Added <tt class="docutils literal"><span class="pre">shell.wrap()</span></tt> and <tt class="docutils literal"><span class="pre">shell.zoom()</span></tt>.</p>
 <p>Added autoCompleteKeys hooks for Raul Cota.</p>
 <p>Cleaned up various little key handling bugs.</p>
 <p>Changed input methods to get values from shell, rather than dialog
-boxes.  Renamed <tt class="literal"><span class="pre">readIn</span></tt> to <tt class="literal"><span class="pre">readline</span></tt> and <tt class="literal"><span class="pre">readRaw</span></tt> to
-<tt class="literal"><span class="pre">raw_input</span></tt>.</p>
+boxes.  Renamed <tt class="docutils literal"><span class="pre">readIn</span></tt> to <tt class="docutils literal"><span class="pre">readline</span></tt> and <tt class="docutils literal"><span class="pre">readRaw</span></tt> to
+<tt class="docutils literal"><span class="pre">raw_input</span></tt>.</p>
 </div>
 <div class="section" id="to-2-21-2002">
 <h2><a class="toc-backref" href="#id26" name="to-2-21-2002">0.7.1 (12/12/2001 to 2/21/2002)</a></h2>
-<p>Fixed <tt class="literal"><span class="pre">OnChar()</span></tt> issues effecting European keyboards, as reported by
+<p>Fixed <tt class="docutils literal"><span class="pre">OnChar()</span></tt> issues effecting European keyboards, as reported by
 Jean-Michel Fauth.</p>
-<p>Fixed <tt class="literal"><span class="pre">introspect.py</span></tt> issue with xmlrpc objects reported by Kevin
+<p>Fixed <tt class="docutils literal"><span class="pre">introspect.py</span></tt> issue with xmlrpc objects reported by Kevin
 Altis.</p>
 <p>Fixed some introspect/PyFilling issues with regard to Python 2.2.</p>
 <p>Fixed font background color as reported by Keith J. Farmer.  (Thanks)</p>
 <p>Fixed problem with call tips and autocompletion inside multiline
 commands as report by Kevin Altis.</p>
-<p>Improved <tt class="literal"><span class="pre">OnKeyDown</span></tt> handling of cut/copy/paste operations based on
+<p>Improved <tt class="docutils literal"><span class="pre">OnKeyDown</span></tt> handling of cut/copy/paste operations based on
 feedback from Syver Enstad.  (Thanks)</p>
-<p>Added a <tt class="literal"><span class="pre">shell.help()</span></tt> method to display some help info.</p>
+<p>Added a <tt class="docutils literal"><span class="pre">shell.help()</span></tt> method to display some help info.</p>
 <p>Changed sort of items in the namespace viewer to case insensitive.</p>
-<p>Changed <tt class="literal"><span class="pre">attributes.sort(lambda</span> <span class="pre">x,</span> <span class="pre">y:</span> <span class="pre">cmp(x.upper(),</span> <span class="pre">y.upper()))</span></tt> in
+<p>Changed <tt class="docutils literal"><span class="pre">attributes.sort(lambda</span> <span class="pre">x,</span> <span class="pre">y:</span> <span class="pre">cmp(x.upper(),</span> <span class="pre">y.upper()))</span></tt> in
 advance of an upcoming fix to an autocompletion matching bug in wxSTC.</p>
 <p>Improved support for ZODB by allowing namespace drilldown into BTrees.</p>
-<p>Added <tt class="literal"><span class="pre">shell.PasteAndRun()</span></tt> to support pasting multiple commands into
+<p>Added <tt class="docutils literal"><span class="pre">shell.PasteAndRun()</span></tt> to support pasting multiple commands into
 the shell from the clipboard.  Ctrl+Shift+V or v.</p>
 <p>Enter now always processes a command (or copies down a previous one.)
 To insert a line break, press Ctrl+Enter.</p>
 <p>Escape key clears the current, unexecuted command.</p>
 <p>History retrieval changed to replace current command.  Added new keys
 to insert from history - Shift+Up and Shift+Down.</p>
-<p>Better call tips on objects with <tt class="literal"><span class="pre">__call__</span></tt> methods.</p>
+<p>Better call tips on objects with <tt class="docutils literal"><span class="pre">__call__</span></tt> methods.</p>
 <p>Improved call tip positioning calculation.</p>
 </div>
 <div class="section" id="to-12-11-2001">
@@ -488,56 +488,56 @@ to insert from history - Shift+Up and Shift+Down.</p>
 <p>Changed how command history retrieval functions work.  Added Alt-P,
 Alt-N as keybindings for Retrieve-Previous, Retrieve-Next.</p>
 <p>Added full support for multi-line commands, similar to IDLE.</p>
-<p>Changed <tt class="literal"><span class="pre">introspect.getAttributeNames()</span></tt> to do a case insensitive
+<p>Changed <tt class="docutils literal"><span class="pre">introspect.getAttributeNames()</span></tt> to do a case insensitive
 sort.</p>
 <p>Changed Cut/Copy/Paste to deal with prompts intelligently.  Cut and
 Copy remove all prompts.  Paste can handle prompted or not-prompted
 text.</p>
-<p>Added <tt class="literal"><span class="pre">CopyWithPrompts()</span></tt> method attached to Ctrl-Shift-C for those
+<p>Added <tt class="docutils literal"><span class="pre">CopyWithPrompts()</span></tt> method attached to Ctrl-Shift-C for those
 times when you really do want all the prompts left intact.</p>
 <p>Improved handling of the shell's read-only zone.</p>
-<p>Changed <tt class="literal"><span class="pre">CrustFrame.__init__</span></tt> parameter spec to include all
-parameters allowed by a <tt class="literal"><span class="pre">wxFrame</span></tt>.</p>
-<p>Changed <tt class="literal"><span class="pre">FillingText</span></tt> to be read-only.</p>
-<p>Renamed <tt class="literal"><span class="pre">PyCrust.py</span></tt> to <tt class="literal"><span class="pre">PyCrustApp.py</span></tt> to eliminate
-package/module name conflicts that kept you from doing <tt class="literal"><span class="pre">from</span> <span class="pre">PyCrust</span>
-<span class="pre">import</span> <span class="pre">shell</span></tt> inside files located in the <tt class="literal"><span class="pre">PyCrust</span></tt> directory.</p>
-<p>Renamed <tt class="literal"><span class="pre">PyFilling.py</span></tt> to <tt class="literal"><span class="pre">PyFillingApp.py</span></tt> and <tt class="literal"><span class="pre">PyShell.py</span></tt> to
-<tt class="literal"><span class="pre">PyShellApp.py</span></tt> to maintain consistency.</p>
-<p>Removed the <tt class="literal"><span class="pre">__date__</span></tt> property from all modules.</p>
-<p>Fixed bug in <tt class="literal"><span class="pre">introspect.getCallTip()</span></tt>, reported by Kevin Altis.</p>
+<p>Changed <tt class="docutils literal"><span class="pre">CrustFrame.__init__</span></tt> parameter spec to include all
+parameters allowed by a <tt class="docutils literal"><span class="pre">wxFrame</span></tt>.</p>
+<p>Changed <tt class="docutils literal"><span class="pre">FillingText</span></tt> to be read-only.</p>
+<p>Renamed <tt class="docutils literal"><span class="pre">PyCrust.py</span></tt> to <tt class="docutils literal"><span class="pre">PyCrustApp.py</span></tt> to eliminate
+package/module name conflicts that kept you from doing <tt class="docutils literal"><span class="pre">from</span> <span class="pre">PyCrust</span>
+<span class="pre">import</span> <span class="pre">shell</span></tt> inside files located in the <tt class="docutils literal"><span class="pre">PyCrust</span></tt> directory.</p>
+<p>Renamed <tt class="docutils literal"><span class="pre">PyFilling.py</span></tt> to <tt class="docutils literal"><span class="pre">PyFillingApp.py</span></tt> and <tt class="docutils literal"><span class="pre">PyShell.py</span></tt> to
+<tt class="docutils literal"><span class="pre">PyShellApp.py</span></tt> to maintain consistency.</p>
+<p>Removed the <tt class="docutils literal"><span class="pre">__date__</span></tt> property from all modules.</p>
+<p>Fixed bug in <tt class="docutils literal"><span class="pre">introspect.getCallTip()</span></tt>, reported by Kevin Altis.</p>
 </div>
 <div class="section" id="to-10-12-2001">
 <h2><a class="toc-backref" href="#id28" name="to-10-12-2001">0.6.1 (9/19/2001 to 10/12/2001)</a></h2>
-<p>Changed <tt class="literal"><span class="pre">Shell.run()</span></tt> to always position to the end of existing
+<p>Changed <tt class="docutils literal"><span class="pre">Shell.run()</span></tt> to always position to the end of existing
 text, as suggested by Raul Cota.</p>
-<p>Changed <tt class="literal"><span class="pre">introspect.getAllAttributeNames()</span></tt> to break circular
-references in <tt class="literal"><span class="pre">object.__class__</span></tt>, which occurs in Zope/ZODB
+<p>Changed <tt class="docutils literal"><span class="pre">introspect.getAllAttributeNames()</span></tt> to break circular
+references in <tt class="docutils literal"><span class="pre">object.__class__</span></tt>, which occurs in Zope/ZODB
 extension classes.</p>
-<p>Changed <tt class="literal"><span class="pre">filling.FillingTree.getChildren()</span></tt> to introspect extension
+<p>Changed <tt class="docutils literal"><span class="pre">filling.FillingTree.getChildren()</span></tt> to introspect extension
 classes.</p>
-<p>Fixed minor bugs in <tt class="literal"><span class="pre">introspect.getCallTip()</span></tt> that were interfering
+<p>Fixed minor bugs in <tt class="docutils literal"><span class="pre">introspect.getCallTip()</span></tt> that were interfering
 with call tips for Zope/ZODB extension class methods.</p>
 <p>In preparation for wxPython 2.3.2, added code to fix a font sizing
 problem.  Versions of wxPython prior to 2.3.2 had a sizing bug on Win
 platform where the font was 2 points larger than what was specified.</p>
-<p>Added a hack to <tt class="literal"><span class="pre">introspect.getAllAttributeNames()</span></tt> to &quot;wake up&quot;
+<p>Added a hack to <tt class="docutils literal"><span class="pre">introspect.getAllAttributeNames()</span></tt> to &quot;wake up&quot;
 ZODB objects that are asleep - in a &quot;ghost&quot; state.  Otherwise it
 returns incomplete info.</p>
 </div>
 <div class="section" id="to-9-12-2001">
 <h2><a class="toc-backref" href="#id29" name="to-9-12-2001">0.6 (8/21/2001 to 9/12/2001)</a></h2>
-<p>Added <tt class="literal"><span class="pre">PyFilling.py</span></tt> and <tt class="literal"><span class="pre">filling.py</span></tt>.</p>
-<p><tt class="literal"><span class="pre">PyShell.py</span></tt> and <tt class="literal"><span class="pre">PyFilling.py</span></tt> can now be run standalone, as well
-as <tt class="literal"><span class="pre">PyCrust.py</span></tt>.</p>
-<p>Added <tt class="literal"><span class="pre">crust.py</span></tt> and moved some code from <tt class="literal"><span class="pre">PyCrust.py</span></tt> to it.</p>
+<p>Added <tt class="docutils literal"><span class="pre">PyFilling.py</span></tt> and <tt class="docutils literal"><span class="pre">filling.py</span></tt>.</p>
+<p><tt class="docutils literal"><span class="pre">PyShell.py</span></tt> and <tt class="docutils literal"><span class="pre">PyFilling.py</span></tt> can now be run standalone, as well
+as <tt class="docutils literal"><span class="pre">PyCrust.py</span></tt>.</p>
+<p>Added <tt class="docutils literal"><span class="pre">crust.py</span></tt> and moved some code from <tt class="docutils literal"><span class="pre">PyCrust.py</span></tt> to it.</p>
 <p>Added command history retrieval features submitted by Richie Hindle.</p>
-<p>Changed <tt class="literal"><span class="pre">shell.write()</span></tt> to replace line endings with OS-specific
-endings.  Changed <tt class="literal"><span class="pre">shell.py</span></tt> and <tt class="literal"><span class="pre">interpreter.py</span></tt> to use
-<tt class="literal"><span class="pre">os.linesep</span></tt> in strings having hardcoded line endings.</p>
-<p>Added <tt class="literal"><span class="pre">shell.redirectStdin()</span></tt>, <tt class="literal"><span class="pre">shell.redirectStdout()</span></tt> and
-<tt class="literal"><span class="pre">shell.redirectStderr()</span></tt> to allow the surrounding app to toggle
-requests that the specified <tt class="literal"><span class="pre">sys.std*</span></tt> be redirected to the shell.
+<p>Changed <tt class="docutils literal"><span class="pre">shell.write()</span></tt> to replace line endings with OS-specific
+endings.  Changed <tt class="docutils literal"><span class="pre">shell.py</span></tt> and <tt class="docutils literal"><span class="pre">interpreter.py</span></tt> to use
+<tt class="docutils literal"><span class="pre">os.linesep</span></tt> in strings having hardcoded line endings.</p>
+<p>Added <tt class="docutils literal"><span class="pre">shell.redirectStdin()</span></tt>, <tt class="docutils literal"><span class="pre">shell.redirectStdout()</span></tt> and
+<tt class="docutils literal"><span class="pre">shell.redirectStderr()</span></tt> to allow the surrounding app to toggle
+requests that the specified <tt class="docutils literal"><span class="pre">sys.std*</span></tt> be redirected to the shell.
 These can also be run from within the shell itself, of course.</p>
 <p>The shell now adds the current working directory &quot;.&quot; to the search
 path:</p>
@@ -553,20 +553,20 @@ sys.path.insert(0, os.curdir)
 'size'   : 12,
 'lnsize' : 10,
 </pre>
-<p>Changed <tt class="literal"><span class="pre">Shell</span></tt> to expect a parameter referencing an Interpreter
+<p>Changed <tt class="docutils literal"><span class="pre">Shell</span></tt> to expect a parameter referencing an Interpreter
 class, rather than an intepreter instance, to facilitate subclassing
 of Interpreter, which effectively broke when the Editor class was
 eliminated.</p>
-<p>Fixed <tt class="literal"><span class="pre">PyCrustAlaCarte.py</span></tt>, which had been broken by previous
+<p>Fixed <tt class="docutils literal"><span class="pre">PyCrustAlaCarte.py</span></tt>, which had been broken by previous
 changes.</p>
-<p>Created <tt class="literal"><span class="pre">InterpreterAlaCarte</span></tt> class as an example for use in the
+<p>Created <tt class="docutils literal"><span class="pre">InterpreterAlaCarte</span></tt> class as an example for use in the
 demo.</p>
-<p>Split <tt class="literal"><span class="pre">PyCrust.py</span></tt> into <tt class="literal"><span class="pre">PyCrust.py</span></tt> and <tt class="literal"><span class="pre">PyShell.py</span></tt> in
-anticipation of <tt class="literal"><span class="pre">PyFilling.py</span></tt>.</p>
+<p>Split <tt class="docutils literal"><span class="pre">PyCrust.py</span></tt> into <tt class="docutils literal"><span class="pre">PyCrust.py</span></tt> and <tt class="docutils literal"><span class="pre">PyShell.py</span></tt> in
+anticipation of <tt class="docutils literal"><span class="pre">PyFilling.py</span></tt>.</p>
 </div>
 <div class="section" id="id1">
 <h2><a class="toc-backref" href="#id31" name="id1">0.5.3 (8/16/2001)</a></h2>
-<p>Added patch to <tt class="literal"><span class="pre">PyCrust.py</span></tt> to fix wxPython bug:</p>
+<p>Added patch to <tt class="docutils literal"><span class="pre">PyCrust.py</span></tt> to fix wxPython bug:</p>
 <pre class="literal-block">
 wxID_SELECTALL = NewId() # This *should* be defined by wxPython.
 </pre>
@@ -574,7 +574,7 @@ wxID_SELECTALL = NewId() # This *should* be defined by wxPython.
 <div class="section" id="to-8-15-2001">
 <h2><a class="toc-backref" href="#id32" name="to-8-15-2001">0.5.2 (8/14/2001 to 8/15/2001)</a></h2>
 <p>Shortened module names by dropping &quot;PyCrust&quot; as a prefix.</p>
-<p>Changed <tt class="literal"><span class="pre">version</span></tt> to <tt class="literal"><span class="pre">VERSION</span></tt> in <tt class="literal"><span class="pre">version</span></tt> module.</p>
+<p>Changed <tt class="docutils literal"><span class="pre">version</span></tt> to <tt class="docutils literal"><span class="pre">VERSION</span></tt> in <tt class="docutils literal"><span class="pre">version</span></tt> module.</p>
 <p>Added Options menu to PyCrust application.</p>
 <p>Eliminated the Editor class (and editor module) by merging with Shell.
 This means that Shell &quot;is a&quot; wxStyledTextCtrl rather than &quot;has a&quot;.
@@ -584,17 +584,17 @@ with now.</p>
 </div>
 <div class="section" id="to-8-14-2001">
 <h2><a class="toc-backref" href="#id33" name="to-8-14-2001">0.5.1 (8/10/2001 to 8/14/2001)</a></h2>
-<p>Added <tt class="literal"><span class="pre">introspect</span></tt> module.</p>
-<p>Moved some functionality from <tt class="literal"><span class="pre">PyCrustInterp</span></tt> to <tt class="literal"><span class="pre">introspect</span></tt>.</p>
-<p>Changed <tt class="literal"><span class="pre">introspect.getRoot()</span></tt> to no longer remove whitespace from
+<p>Added <tt class="docutils literal"><span class="pre">introspect</span></tt> module.</p>
+<p>Moved some functionality from <tt class="docutils literal"><span class="pre">PyCrustInterp</span></tt> to <tt class="docutils literal"><span class="pre">introspect</span></tt>.</p>
+<p>Changed <tt class="docutils literal"><span class="pre">introspect.getRoot()</span></tt> to no longer remove whitespace from
 the command.  This was a remnant of a previous approach that, when
 left as part of the current approach, turned out to be a really bad
 thing.</p>
-<p>Changed <tt class="literal"><span class="pre">introspect.getRoot()</span></tt> to allow commands of <tt class="literal"><span class="pre">''</span></tt>, <tt class="literal"><span class="pre">&quot;&quot;</span></tt>,
-<tt class="literal"><span class="pre">&quot;&quot;&quot;&quot;&quot;&quot;</span></tt>, <tt class="literal"><span class="pre">[]</span></tt>, <tt class="literal"><span class="pre">()</span></tt>, and <tt class="literal"><span class="pre">{}</span></tt> to pass through.  This allows
+<p>Changed <tt class="docutils literal"><span class="pre">introspect.getRoot()</span></tt> to allow commands of <tt class="docutils literal"><span class="pre">''</span></tt>, <tt class="docutils literal"><span class="pre">&quot;&quot;</span></tt>,
+<tt class="docutils literal"><span class="pre">&quot;&quot;&quot;&quot;&quot;&quot;</span></tt>, <tt class="docutils literal"><span class="pre">[]</span></tt>, <tt class="docutils literal"><span class="pre">()</span></tt>, and <tt class="docutils literal"><span class="pre">{}</span></tt> to pass through.  This allows
 you to type them, followed by a dot, and get autocomplete options on
 them.</p>
-<p>Changed <tt class="literal"><span class="pre">introspect.getRoot()</span></tt> to identify some situations where
+<p>Changed <tt class="docutils literal"><span class="pre">introspect.getRoot()</span></tt> to identify some situations where
 strings shouldn't be considered roots.  For example:</p>
 <pre class="literal-block">
 &gt;&gt;&gt; import PyCrust  # To illustrate the potential problem.
@@ -620,7 +620,7 @@ and that is NOT handled properly.  For example:</p>
 &gt;&gt;&gt; len('This is PyCrust.py')
 </pre>
 <p>More code needs to be written to handle more complex situations.</p>
-<p>Added <tt class="literal"><span class="pre">locals=None</span></tt> parameter to <tt class="literal"><span class="pre">Shell.__init__()</span></tt>.</p>
+<p>Added <tt class="docutils literal"><span class="pre">locals=None</span></tt> parameter to <tt class="docutils literal"><span class="pre">Shell.__init__()</span></tt>.</p>
 <p>Added support for magic attribute retrieval.  Users can change this
 with:</p>
 <pre class="literal-block">
@@ -655,8 +655,8 @@ exclude one or the other or both with:</p>
 <p>Renamed several files.</p>
 <p>Added command autocompletion.</p>
 <p>Added menus to PyCrust.py: File, Edit and Help.</p>
-<p>Added sample applications: <tt class="literal"><span class="pre">PyCrustAlaCarte.py</span></tt>,
-<tt class="literal"><span class="pre">PyCrustAlaMode.py</span></tt>, and <tt class="literal"><span class="pre">PyCrustMinimus.py</span></tt>.</p>
+<p>Added sample applications: <tt class="docutils literal"><span class="pre">PyCrustAlaCarte.py</span></tt>,
+<tt class="docutils literal"><span class="pre">PyCrustAlaMode.py</span></tt>, and <tt class="docutils literal"><span class="pre">PyCrustMinimus.py</span></tt>.</p>
 </div>
 <div class="section" id="to-7-19-2001">
 <h2><a class="toc-backref" href="#id38" name="to-7-19-2001">0.1 (7/1/2001 to 7/19/2001)</a></h2>
@@ -664,8 +664,8 @@ exclude one or the other or both with:</p>
 <p>Added read-only logging much like IDLE.</p>
 <p>Can retrieve a previous command by putting the cursor back on that
 line and hitting enter.</p>
-<p>Stdin and raw_input operate properly so you can now do <tt class="literal"><span class="pre">help()</span></tt> and
-<tt class="literal"><span class="pre">license()</span></tt> without hanging.</p>
+<p>Stdin and raw_input operate properly so you can now do <tt class="docutils literal"><span class="pre">help()</span></tt> and
+<tt class="docutils literal"><span class="pre">license()</span></tt> without hanging.</p>
 <p>Redefined &quot;quit&quot;, &quot;exit&quot;, and &quot;close&quot; to display a better-than-nothing
 response.</p>
 <p>Home key honors the prompt.</p>
