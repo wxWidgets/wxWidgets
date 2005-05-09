@@ -170,6 +170,7 @@
     #endif /*  compilers */
 #endif /*  HAVE_BOOL */
 
+#if !defined(__MWERKS__) || !defined(true)
 #if !defined(HAVE_BOOL) && !defined(bool) && !defined(VMS)
     /*  NB: of course, this doesn't replace the standard type, because, for */
     /*      example, overloading based on bool/int parameter doesn't work and */
@@ -184,6 +185,7 @@
 #ifndef HAVE_BOOL
     #define true ((bool)1)
     #define false ((bool)0)
+#endif
 #endif
 
 /*  for backwards compatibility, also define TRUE and FALSE */
