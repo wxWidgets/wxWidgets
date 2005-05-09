@@ -232,6 +232,28 @@ bool GetCursorPosWinCE(POINT* pt)
 #endif
 
 // ---------------------------------------------------------------------------
+// wxWindowExtraData
+// ---------------------------------------------------------------------------
+
+#if USE_DEFER_BUG_WORKAROUND
+// This class is used to hold additional data memebers that were added after
+// the stable 2.6.0 release.  They should be moved into wxWindow for 2.7 after
+// binary compatibility is no longer being maintained.
+
+class wxWindowExtraData {
+public:
+    wxWindowExtraData()
+        : m_pendingPosition(wxDefaultPosition),
+          m_pendingSize(wxDefaultSize)
+    {}
+    
+    wxPoint     m_pendingPosition;
+    wxSize      m_pendingSize;
+};
+
+#endif
+
+// ---------------------------------------------------------------------------
 // event tables
 // ---------------------------------------------------------------------------
 
@@ -465,6 +487,10 @@ void wxWindowMSW::Init()
     m_lastMouseY = -1;
     m_lastMouseEvent = -1;
 #endif // wxUSE_MOUSEEVENT_HACK
+
+#if USE_DEFER_BUG_WORKAROUND
+    m_extraData = new wxWindowExtraData;
+#endif
 }
 
 // Destructor
@@ -512,6 +538,10 @@ wxWindowMSW::~wxWindowMSW()
     }
 
     delete m_childrenDisabled;
+
+#if USE_DEFER_BUG_WORKAROUND
+    delete m_extraData;
+#endif    
 }
 
 // real construction (Init() must have been called before!)
@@ -1578,9 +1608,28 @@ void wxWindowMSW::DoSetSize(int x, int y, int width, int height, int sizeFlags)
 {
     // get the current size and position...
     int currentX, currentY;
+    int currentW, currentH;
+
+#if USE_DEFER_BUG_WORKAROUND
+    currentX = m_extraData->m_pendingPosition.x;
+    if (currentX == wxDefaultCoord)
+        GetPosition(&currentX, NULL);
+    
+    currentY = m_extraData->m_pendingPosition.y;
+    if (currentY == wxDefaultCoord)
+        GetPosition(NULL, &currentY);
+    
+    currentW = m_extraData->m_pendingSize.x;
+    if (currentW == wxDefaultCoord)
+        GetSize(&currentW, NULL);
+
+    currentH = m_extraData->m_pendingSize.y;
+    if (currentH == wxDefaultCoord)
+        GetSize(NULL, &currentH);
+#else    
     GetPosition(&currentX, &currentY);
-    int currentW,currentH;
     GetSize(&currentW, &currentH);
+#endif
 
     // ... and don't do anything (avoiding flicker) if it's already ok
     if ( x == currentX && y == currentY &&
@@ -1629,6 +1678,24 @@ void wxWindowMSW::DoSetSize(int x, int y, int width, int height, int sizeFlags)
             height = currentH;
         }
     }
+
+#if USE_DEFER_BUG_WORKAROUND
+    // We don't actually use the hdwp here, but we need to know whether to
+    // save the pending dimensions or not.  This isn't done in DoMoveWindow
+    // (where the hdwp is used) because some controls have thier own
+    // DoMoveWindow so it is easier to catch it here.
+    HDWP hdwp = GetParent() && !IsTopLevel() ? (HDWP)GetParent()->m_hDWP : NULL;
+    if (hdwp)
+    {
+        m_extraData->m_pendingPosition = wxPoint(x, y);
+        m_extraData->m_pendingSize = wxSize(width, height);
+    }
+    else
+    {
+        m_extraData->m_pendingPosition = wxDefaultPosition;
+        m_extraData->m_pendingSize = wxDefaultSize;
+    }
+#endif
 
     DoMoveWindow(x, y, width, height);
 }
@@ -4156,8 +4223,6 @@ bool wxWindowMSW::HandleMoving(wxRect& rect)
 
 bool wxWindowMSW::HandleSize(int WXUNUSED(w), int WXUNUSED(h), WXUINT wParam)
 {
-    // when we resize this window, its children are probably going to be
-    // repositioned as well, prepare to use DeferWindowPos() for them
 #if USE_DEFERRED_SIZING
     // when we resize this window, its children are probably going to be
     // repositioned as well, prepare to use DeferWindowPos() for them
@@ -4236,23 +4301,14 @@ bool wxWindowMSW::HandleSize(int WXUNUSED(w), int WXUNUSED(h), WXUINT wParam)
         }
 
 #if USE_DEFER_BUG_WORKAROUND
-        // Seems to be a bug in DeferWindowPos such that going from (a) to (b) to (a)
-        // doesn't work (omits last position/size). So check if there's a disparity,
-        // and correct.
+        // Reset our children's pending pos/size values.
         for ( wxWindowList::compatibility_iterator node = GetChildren().GetFirst();
               node;
               node = node->GetNext() )
         {
             wxWindow *child = node->GetData();
-            wxSizer* sizer = child->GetContainingSizer();
-            if (sizer)
-            {
-                wxSizerItem* item = sizer->GetItem(child, true);
-                if (item->GetRect().GetPosition() != child->GetPosition())
-                {
-                    child->Move(item->GetRect().GetPosition());
-                }
-            }
+            child->m_extraData->m_pendingPosition = wxDefaultPosition;
+            child->m_extraData->m_pendingSize = wxDefaultSize;
         }
 #endif
     }
