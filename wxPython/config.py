@@ -241,8 +241,9 @@ WXPYTHON_TYPE_TABLE = '_wxPython_table'
 #----------------------------------------------------------------------
 
 # Boolean (int) flags
-for flag in ['BUILD_GLCANVAS', 'BUILD_OGL', 'BUILD_STC', 
-             'BUILD_GIZMOS', 'BUILD_DLLWIDGET', 'BUILD_IEWIN', 'BUILD_ACTIVEX',
+for flag in [ 'BUILD_ACTIVEX', 'BUILD_ANIMATE', 'BUILD_DLLWIDGET',
+              'BUILD_GIZMOS', 'BUILD_GLCANVAS', 'BUILD_IEWIN',
+              'BUILD_OGL', 'BUILD_STC',     
              'CORE_ONLY', 'PREP_ONLY', 'USE_SWIG', 'UNICODE',
              'UNDEF_NDEBUG', 'NO_SCRIPTS', 'NO_HEADERS', 'BUILD_RENAMERS',
              'FULL_DOCS', 'INSTALL_MULTIVERSION', 'EP_ADD_OPTS',
