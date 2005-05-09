@@ -3826,15 +3826,11 @@ static PyObject *_wrap_new_Choice(PyObject *, PyObject *args, PyObject *kwargs) 
             int i, len=PySequence_Length(obj4);
             for (i=0; i<len; i++) {
                 PyObject* item = PySequence_GetItem(obj4, i);
-#if wxUSE_UNICODE
-                PyObject* str  = PyObject_Unicode(item);
-#else
-                PyObject* str  = PyObject_Str(item);
-#endif
+                wxString* s = wxString_in_helper(item);
                 if (PyErr_Occurred())  SWIG_fail;
-                arg5->Add(Py2wxString(str));
+                arg5->Add(*s);
+                delete s;
                 Py_DECREF(item);
-                Py_DECREF(str);
             }
         }
     }
@@ -3981,15 +3977,11 @@ static PyObject *_wrap_Choice_Create(PyObject *, PyObject *args, PyObject *kwarg
             int i, len=PySequence_Length(obj5);
             for (i=0; i<len; i++) {
                 PyObject* item = PySequence_GetItem(obj5, i);
-#if wxUSE_UNICODE
-                PyObject* str  = PyObject_Unicode(item);
-#else
-                PyObject* str  = PyObject_Str(item);
-#endif
+                wxString* s = wxString_in_helper(item);
                 if (PyErr_Occurred())  SWIG_fail;
-                arg6->Add(Py2wxString(str));
+                arg6->Add(*s);
+                delete s;
                 Py_DECREF(item);
-                Py_DECREF(str);
             }
         }
     }
@@ -4183,15 +4175,11 @@ static PyObject *_wrap_new_ComboBox(PyObject *, PyObject *args, PyObject *kwargs
             int i, len=PySequence_Length(obj5);
             for (i=0; i<len; i++) {
                 PyObject* item = PySequence_GetItem(obj5, i);
-#if wxUSE_UNICODE
-                PyObject* str  = PyObject_Unicode(item);
-#else
-                PyObject* str  = PyObject_Str(item);
-#endif
+                wxString* s = wxString_in_helper(item);
                 if (PyErr_Occurred())  SWIG_fail;
-                arg6->Add(Py2wxString(str));
+                arg6->Add(*s);
+                delete s;
                 Py_DECREF(item);
-                Py_DECREF(str);
             }
         }
     }
@@ -4357,15 +4345,11 @@ static PyObject *_wrap_ComboBox_Create(PyObject *, PyObject *args, PyObject *kwa
             int i, len=PySequence_Length(obj6);
             for (i=0; i<len; i++) {
                 PyObject* item = PySequence_GetItem(obj6, i);
-#if wxUSE_UNICODE
-                PyObject* str  = PyObject_Unicode(item);
-#else
-                PyObject* str  = PyObject_Str(item);
-#endif
+                wxString* s = wxString_in_helper(item);
                 if (PyErr_Occurred())  SWIG_fail;
-                arg7->Add(Py2wxString(str));
+                arg7->Add(*s);
+                delete s;
                 Py_DECREF(item);
-                Py_DECREF(str);
             }
         }
     }
@@ -7186,15 +7170,11 @@ static PyObject *_wrap_new_ListBox(PyObject *, PyObject *args, PyObject *kwargs)
             int i, len=PySequence_Length(obj4);
             for (i=0; i<len; i++) {
                 PyObject* item = PySequence_GetItem(obj4, i);
-#if wxUSE_UNICODE
-                PyObject* str  = PyObject_Unicode(item);
-#else
-                PyObject* str  = PyObject_Str(item);
-#endif
+                wxString* s = wxString_in_helper(item);
                 if (PyErr_Occurred())  SWIG_fail;
-                arg5->Add(Py2wxString(str));
+                arg5->Add(*s);
+                delete s;
                 Py_DECREF(item);
-                Py_DECREF(str);
             }
         }
     }
@@ -7341,15 +7321,11 @@ static PyObject *_wrap_ListBox_Create(PyObject *, PyObject *args, PyObject *kwar
             int i, len=PySequence_Length(obj5);
             for (i=0; i<len; i++) {
                 PyObject* item = PySequence_GetItem(obj5, i);
-#if wxUSE_UNICODE
-                PyObject* str  = PyObject_Unicode(item);
-#else
-                PyObject* str  = PyObject_Str(item);
-#endif
+                wxString* s = wxString_in_helper(item);
                 if (PyErr_Occurred())  SWIG_fail;
-                arg6->Add(Py2wxString(str));
+                arg6->Add(*s);
+                delete s;
                 Py_DECREF(item);
-                Py_DECREF(str);
             }
         }
     }
@@ -7484,15 +7460,11 @@ static PyObject *_wrap_ListBox_InsertItems(PyObject *, PyObject *args, PyObject 
         int i, len=PySequence_Length(obj1);
         for (i=0; i<len; i++) {
             PyObject* item = PySequence_GetItem(obj1, i);
-#if wxUSE_UNICODE
-            PyObject* str  = PyObject_Unicode(item);
-#else
-            PyObject* str  = PyObject_Str(item);
-#endif
+            wxString* s = wxString_in_helper(item);
             if (PyErr_Occurred())  SWIG_fail;
-            arg2->Add(Py2wxString(str));
+            arg2->Add(*s);
+            delete s;
             Py_DECREF(item);
-            Py_DECREF(str);
         }
     }
     {
@@ -7543,15 +7515,11 @@ static PyObject *_wrap_ListBox_Set(PyObject *, PyObject *args, PyObject *kwargs)
         int i, len=PySequence_Length(obj1);
         for (i=0; i<len; i++) {
             PyObject* item = PySequence_GetItem(obj1, i);
-#if wxUSE_UNICODE
-            PyObject* str  = PyObject_Unicode(item);
-#else
-            PyObject* str  = PyObject_Str(item);
-#endif
+            wxString* s = wxString_in_helper(item);
             if (PyErr_Occurred())  SWIG_fail;
-            arg2->Add(Py2wxString(str));
+            arg2->Add(*s);
+            delete s;
             Py_DECREF(item);
-            Py_DECREF(str);
         }
     }
     {
@@ -8215,15 +8183,11 @@ static PyObject *_wrap_new_CheckListBox(PyObject *, PyObject *args, PyObject *kw
             int i, len=PySequence_Length(obj4);
             for (i=0; i<len; i++) {
                 PyObject* item = PySequence_GetItem(obj4, i);
-#if wxUSE_UNICODE
-                PyObject* str  = PyObject_Unicode(item);
-#else
-                PyObject* str  = PyObject_Str(item);
-#endif
+                wxString* s = wxString_in_helper(item);
                 if (PyErr_Occurred())  SWIG_fail;
-                arg5->Add(Py2wxString(str));
+                arg5->Add(*s);
+                delete s;
                 Py_DECREF(item);
-                Py_DECREF(str);
             }
         }
     }
@@ -8370,15 +8334,11 @@ static PyObject *_wrap_CheckListBox_Create(PyObject *, PyObject *args, PyObject 
             int i, len=PySequence_Length(obj5);
             for (i=0; i<len; i++) {
                 PyObject* item = PySequence_GetItem(obj5, i);
-#if wxUSE_UNICODE
-                PyObject* str  = PyObject_Unicode(item);
-#else
-                PyObject* str  = PyObject_Str(item);
-#endif
+                wxString* s = wxString_in_helper(item);
                 if (PyErr_Occurred())  SWIG_fail;
-                arg6->Add(Py2wxString(str));
+                arg6->Add(*s);
+                delete s;
                 Py_DECREF(item);
-                Py_DECREF(str);
             }
         }
     }
@@ -13574,15 +13534,11 @@ static PyObject *_wrap_new_RadioBox(PyObject *, PyObject *args, PyObject *kwargs
             int i, len=PySequence_Length(obj5);
             for (i=0; i<len; i++) {
                 PyObject* item = PySequence_GetItem(obj5, i);
-#if wxUSE_UNICODE
-                PyObject* str  = PyObject_Unicode(item);
-#else
-                PyObject* str  = PyObject_Str(item);
-#endif
+                wxString* s = wxString_in_helper(item);
                 if (PyErr_Occurred())  SWIG_fail;
-                arg6->Add(Py2wxString(str));
+                arg6->Add(*s);
+                delete s;
                 Py_DECREF(item);
-                Py_DECREF(str);
             }
         }
     }
@@ -13756,15 +13712,11 @@ static PyObject *_wrap_RadioBox_Create(PyObject *, PyObject *args, PyObject *kwa
             int i, len=PySequence_Length(obj6);
             for (i=0; i<len; i++) {
                 PyObject* item = PySequence_GetItem(obj6, i);
-#if wxUSE_UNICODE
-                PyObject* str  = PyObject_Unicode(item);
-#else
-                PyObject* str  = PyObject_Str(item);
-#endif
+                wxString* s = wxString_in_helper(item);
                 if (PyErr_Occurred())  SWIG_fail;
-                arg7->Add(Py2wxString(str));
+                arg7->Add(*s);
+                delete s;
                 Py_DECREF(item);
-                Py_DECREF(str);
             }
         }
     }

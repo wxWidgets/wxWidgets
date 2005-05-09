@@ -37831,15 +37831,11 @@ static PyObject *_wrap_ItemContainer_AppendItems(PyObject *, PyObject *args, PyO
         int i, len=PySequence_Length(obj1);
         for (i=0; i<len; i++) {
             PyObject* item = PySequence_GetItem(obj1, i);
-#if wxUSE_UNICODE
-            PyObject* str  = PyObject_Unicode(item);
-#else
-            PyObject* str  = PyObject_Str(item);
-#endif
+            wxString* s = wxString_in_helper(item);
             if (PyErr_Occurred())  SWIG_fail;
-            arg2->Add(Py2wxString(str));
+            arg2->Add(*s);
+            delete s;
             Py_DECREF(item);
-            Py_DECREF(str);
         }
     }
     {

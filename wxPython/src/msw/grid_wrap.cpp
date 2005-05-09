@@ -10494,15 +10494,11 @@ static PyObject *_wrap_Grid_GetTextBoxSize(PyObject *, PyObject *args, PyObject 
         int i, len=PySequence_Length(obj2);
         for (i=0; i<len; i++) {
             PyObject* item = PySequence_GetItem(obj2, i);
-#if wxUSE_UNICODE
-            PyObject* str  = PyObject_Unicode(item);
-#else
-            PyObject* str  = PyObject_Str(item);
-#endif
+            wxString* s = wxString_in_helper(item);
             if (PyErr_Occurred())  SWIG_fail;
-            arg3->Add(Py2wxString(str));
+            arg3->Add(*s);
+            delete s;
             Py_DECREF(item);
-            Py_DECREF(str);
         }
     }
     {

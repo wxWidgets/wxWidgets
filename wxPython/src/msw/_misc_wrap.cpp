@@ -13831,15 +13831,11 @@ static PyObject *_wrap_new_FileTypeInfoSequence(PyObject *, PyObject *args, PyOb
         int i, len=PySequence_Length(obj0);
         for (i=0; i<len; i++) {
             PyObject* item = PySequence_GetItem(obj0, i);
-#if wxUSE_UNICODE
-            PyObject* str  = PyObject_Unicode(item);
-#else
-            PyObject* str  = PyObject_Str(item);
-#endif
+            wxString* s = wxString_in_helper(item);
             if (PyErr_Occurred())  SWIG_fail;
-            arg1->Add(Py2wxString(str));
+            arg1->Add(*s);
+            delete s;
             Py_DECREF(item);
-            Py_DECREF(str);
         }
     }
     {
