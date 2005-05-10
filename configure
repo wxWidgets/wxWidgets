@@ -21189,8 +21189,7 @@ _ACEOF
 fi
 
 
-if test "$wxUSE_UNICODE" = "yes" -a \
-        \( "$wxUSE_STD_STRING" = "yes" -o "$wxUSE_STL" = "yes" \); then
+if test "$wxUSE_STD_STRING" = "yes" -o "$wxUSE_STL" = "yes"; then
     ac_ext=cc
 ac_cpp='$CXXCPP $CPPFLAGS'
 ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&5'
@@ -21198,8 +21197,16 @@ ac_link='$CXX -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ex
 ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
 
 
-        echo "$as_me:$LINENO: checking for std::wstring in <string>" >&5
-echo $ECHO_N "checking for std::wstring in <string>... $ECHO_C" >&6
+    if test "$wxUSE_UNICODE" = "yes"; then
+        std_string="std::wstring"
+        char_type="wchar_t"
+    else
+        std_string="std::string"
+        char_type="char"
+    fi
+
+        echo "$as_me:$LINENO: checking for $std_string in <string>" >&5
+echo $ECHO_N "checking for $std_string in <string>... $ECHO_C" >&6
     cat >conftest.$ac_ext <<_ACEOF
 /* confdefs.h.  */
 _ACEOF
@@ -21210,7 +21217,7 @@ cat >>conftest.$ac_ext <<_ACEOF
 int
 main ()
 {
-std::wstring foo;
+$std_string foo;
   ;
   return 0;
 }
@@ -21248,8 +21255,8 @@ sed 's/^/| /' conftest.$ac_ext >&5
 
 echo "$as_me:$LINENO: result: no" >&5
 echo "${ECHO_T}no" >&6
-                    echo "$as_me:$LINENO: checking if std::basic_string<wchar_t> works" >&5
-echo $ECHO_N "checking if std::basic_string<wchar_t> works... $ECHO_C" >&6
+                    echo "$as_me:$LINENO: checking if std::basic_string<$char_type> works" >&5
+echo $ECHO_N "checking if std::basic_string<$char_type> works... $ECHO_C" >&6
                     cat >conftest.$ac_ext <<_ACEOF
 /* confdefs.h.  */
 _ACEOF
@@ -21272,8 +21279,8 @@ cat >>conftest.$ac_ext <<_ACEOF
 int
 main ()
 {
-std::basic_string<wchar_t> foo;
-                         const wchar_t* dummy = foo.c_str();
+std::basic_string<$char_type> foo;
+                         const $char_type* dummy = foo.c_str();
   ;
   return 0;
 }
@@ -21307,15 +21314,177 @@ sed 's/^/| /' conftest.$ac_ext >&5
 
 echo "$as_me:$LINENO: result: no" >&5
 echo "${ECHO_T}no" >&6
-                         { { echo "$as_me:$LINENO: error: Can't compile without unicode string class" >&5
-echo "$as_me: error: Can't compile without unicode string class" >&2;}
+                         if test "$wxUSE_STL" = "yes"; then
+                             { { echo "$as_me:$LINENO: error: Can't compile with --enable-stl without $std_string or std::basic_string<$char_type>" >&5
+echo "$as_me: error: Can't compile with --enable-stl without $std_string or std::basic_string<$char_type>" >&2;}
    { (exit 1); exit 1; }; }
+                         else
+                             { echo "$as_me:$LINENO: WARNING: No $std_string or std::basic_string<$char_type>, switching to --disable-std_string" >&5
+echo "$as_me: WARNING: No $std_string or std::basic_string<$char_type>, switching to --disable-std_string" >&2;}
+                             wxUSE_STD_STRING=no
+                         fi
+
 
 fi
 rm -f conftest.err conftest.$ac_objext conftest.$ac_ext
 
 fi
 rm -f conftest.err conftest.$ac_objext conftest.$ac_ext
+
+    ac_ext=c
+ac_cpp='$CPP $CPPFLAGS'
+ac_compile='$CC -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'
+ac_link='$CC -o conftest$ac_exeext $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
+ac_compiler_gnu=$ac_cv_c_compiler_gnu
+
+fi
+
+if test "$wxUSE_STD_IOSTREAM" = "yes"; then
+    ac_ext=cc
+ac_cpp='$CXXCPP $CPPFLAGS'
+ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&5'
+ac_link='$CXX -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
+ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
+
+
+    echo "$as_me:$LINENO: checking for std::istream" >&5
+echo $ECHO_N "checking for std::istream... $ECHO_C" >&6
+if test "${ac_cv_type_std__istream+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+  cat >conftest.$ac_ext <<_ACEOF
+/* confdefs.h.  */
+_ACEOF
+cat confdefs.h >>conftest.$ac_ext
+cat >>conftest.$ac_ext <<_ACEOF
+/* end confdefs.h.  */
+#include <iostream>
+
+int
+main ()
+{
+if ((std::istream *) 0)
+  return 0;
+if (sizeof (std::istream))
+  return 0;
+  ;
+  return 0;
+}
+_ACEOF
+rm -f conftest.$ac_objext
+if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
+  (eval $ac_compile) 2>conftest.er1
+  ac_status=$?
+  grep -v '^ *+' conftest.er1 >conftest.err
+  rm -f conftest.er1
+  cat conftest.err >&5
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } &&
+	 { ac_try='test -z "$ac_cxx_werror_flag"			 || test ! -s conftest.err'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; } &&
+	 { ac_try='test -s conftest.$ac_objext'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; }; then
+  ac_cv_type_std__istream=yes
+else
+  echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+ac_cv_type_std__istream=no
+fi
+rm -f conftest.err conftest.$ac_objext conftest.$ac_ext
+fi
+echo "$as_me:$LINENO: result: $ac_cv_type_std__istream" >&5
+echo "${ECHO_T}$ac_cv_type_std__istream" >&6
+if test $ac_cv_type_std__istream = yes; then
+
+cat >>confdefs.h <<_ACEOF
+#define HAVE_STD__ISTREAM 1
+_ACEOF
+
+
+else
+  wxUSE_STD_IOSTREAM=no
+fi
+echo "$as_me:$LINENO: checking for std::ostream" >&5
+echo $ECHO_N "checking for std::ostream... $ECHO_C" >&6
+if test "${ac_cv_type_std__ostream+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+  cat >conftest.$ac_ext <<_ACEOF
+/* confdefs.h.  */
+_ACEOF
+cat confdefs.h >>conftest.$ac_ext
+cat >>conftest.$ac_ext <<_ACEOF
+/* end confdefs.h.  */
+#include <iostream>
+
+int
+main ()
+{
+if ((std::ostream *) 0)
+  return 0;
+if (sizeof (std::ostream))
+  return 0;
+  ;
+  return 0;
+}
+_ACEOF
+rm -f conftest.$ac_objext
+if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
+  (eval $ac_compile) 2>conftest.er1
+  ac_status=$?
+  grep -v '^ *+' conftest.er1 >conftest.err
+  rm -f conftest.er1
+  cat conftest.err >&5
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } &&
+	 { ac_try='test -z "$ac_cxx_werror_flag"			 || test ! -s conftest.err'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; } &&
+	 { ac_try='test -s conftest.$ac_objext'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; }; then
+  ac_cv_type_std__ostream=yes
+else
+  echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+ac_cv_type_std__ostream=no
+fi
+rm -f conftest.err conftest.$ac_objext conftest.$ac_ext
+fi
+echo "$as_me:$LINENO: result: $ac_cv_type_std__ostream" >&5
+echo "${ECHO_T}$ac_cv_type_std__ostream" >&6
+if test $ac_cv_type_std__ostream = yes; then
+
+cat >>confdefs.h <<_ACEOF
+#define HAVE_STD__OSTREAM 1
+_ACEOF
+
+
+else
+  wxUSE_STD_IOSTREAM=no
+fi
+
+
+    if test "$wxUSE_STD_IOSTREAM" != "yes"; then
+        { echo "$as_me:$LINENO: WARNING: No std::iostreams, switching to --disable-std_iostreams" >&5
+echo "$as_me: WARNING: No std::iostreams, switching to --disable-std_iostreams" >&2;}
+    fi
 
     ac_ext=c
 ac_cpp='$CPP $CPPFLAGS'

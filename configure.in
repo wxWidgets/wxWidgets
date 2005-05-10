@@ -1922,19 +1922,26 @@ AC_CXX_STATIC_CAST
 dnl we don't use HAVE_DYNAMIC_CAST anywhere right now...
 dnl AC_CXX_DYNAMIC_CAST
 
-dnl check various STL features
-if test "$wxUSE_UNICODE" = "yes" -a \
-        \( "$wxUSE_STD_STRING" = "yes" -o "$wxUSE_STL" = "yes" \); then
+dnl check for std::string or std::wstring
+if test "$wxUSE_STD_STRING" = "yes" -o "$wxUSE_STL" = "yes"; then
     AC_LANG_PUSH(C++)
 
+    if test "$wxUSE_UNICODE" = "yes"; then
+        std_string="std::wstring"
+        char_type="wchar_t"
+    else
+        std_string="std::string"
+        char_type="char"
+    fi
+
     dnl check if <string> declares std::wstring
-    AC_MSG_CHECKING([for std::wstring in <string>])
+    AC_MSG_CHECKING([for $std_string in <string>])
     AC_TRY_COMPILE([#include <string>],
-                   [std::wstring foo;],
+                   [$std_string foo;],
                    [AC_MSG_RESULT(yes)
                     AC_DEFINE(HAVE_STD_WSTRING)],
                    [AC_MSG_RESULT(no)
-                    AC_MSG_CHECKING([if std::basic_string<wchar_t> works])
+                    AC_MSG_CHECKING([if std::basic_string<$char_type> works])
                     AC_TRY_COMPILE([
                         #ifdef HAVE_WCHAR_H
                         #  ifdef __CYGWIN__
@@ -1948,14 +1955,34 @@ if test "$wxUSE_UNICODE" = "yes" -a \
                         #include <stdio.h>
                         #include <string>
                         ],
-                        [std::basic_string<wchar_t> foo;
-                         const wchar_t* dummy = foo.c_str();],
+                        [std::basic_string<$char_type> foo;
+                         const $char_type* dummy = foo.c_str();],
                         [AC_MSG_RESULT(yes)],
                         [AC_MSG_RESULT([no])
-                         AC_MSG_ERROR([Can't compile without unicode string class])]
+                         if test "$wxUSE_STL" = "yes"; then
+                             AC_MSG_ERROR([Can't compile with --enable-stl without $std_string or std::basic_string<$char_type>])
+                         else
+                             AC_MSG_WARN([No $std_string or std::basic_string<$char_type>, switching to --disable-std_string])
+                             wxUSE_STD_STRING=no
+                         fi
+                        ]
                     )
                     ])
 
+    AC_LANG_POP
+fi
+
+if test "$wxUSE_STD_IOSTREAM" = "yes"; then
+    AC_LANG_PUSH(C++)
+
+    AC_CHECK_TYPES([std::istream, std::ostream],,
+                   [wxUSE_STD_IOSTREAM=no],
+                   [#include <iostream>])
+
+    if test "$wxUSE_STD_IOSTREAM" != "yes"; then
+        AC_MSG_WARN([No std::iostreams, switching to --disable-std_iostreams])
+    fi
+    
     AC_LANG_POP
 fi
 
