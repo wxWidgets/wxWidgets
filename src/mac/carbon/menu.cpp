@@ -248,7 +248,7 @@ bool wxMenu::DoInsertOrAppend(wxMenuItem *pItem, size_t pos)
         }
     }
     // if we're already attached to the menubar, we must update it
-    if ( IsAttached() )
+    if ( IsAttached() && GetMenuBar()->IsAttached() )
     {
         GetMenuBar()->Refresh();
     }
@@ -344,7 +344,7 @@ wxMenuItem *wxMenu::DoRemove(wxMenuItem *item)
 
     ::DeleteMenuItem(MAC_WXHMENU(m_hMenu) , pos + 1);
 
-    if ( IsAttached() )
+    if ( IsAttached() && GetMenuBar()->IsAttached() )
     {
         // otherwise, the change won't be visible
         GetMenuBar()->Refresh();
