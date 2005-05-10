@@ -2,7 +2,7 @@
 // Name:        game.h
 // Purpose:     Bombs game
 // Author:      P. Foggia 1996
-// Modified by: Wlodzimierz Skiba (ABX) 2003
+// Modified by: Wlodzimierz Skiba (ABX) since 2003
 // Created:     1996
 // RCS-ID:      $Id$
 // Copyright:   (c) 1996 P. Foggia

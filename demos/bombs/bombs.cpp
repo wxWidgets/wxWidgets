@@ -2,7 +2,7 @@
 // Name:        bombs.cpp
 // Purpose:     Bombs game
 // Author:      P. Foggia 1996
-// Modified by: Wlodzimierz Skiba (ABX) 2003
+// Modified by: Wlodzimierz Skiba (ABX) since 2003
 // Created:     1996
 // RCS-ID:      $Id$
 // Copyright:   (c) 1996 P. Foggia
@@ -61,9 +61,10 @@ bool BombsApp::OnInit()
 }
 
 BEGIN_EVENT_TABLE(BombsFrame, wxFrame)
-    EVT_MENU(bombsID_EASY,       BombsFrame::OnNewEasyGame)
-    EVT_MENU(bombsID_MEDIUM,     BombsFrame::OnNewMediumGame)
-    EVT_MENU(bombsID_HARD,       BombsFrame::OnNewHardGame)
+    EVT_MENU(wxID_NEW,           BombsFrame::OnNewGame)
+    EVT_MENU(bombsID_EASY,       BombsFrame::OnEasyGame)
+    EVT_MENU(bombsID_MEDIUM,     BombsFrame::OnMediumGame)
+    EVT_MENU(bombsID_HARD,       BombsFrame::OnHardGame)
     EVT_MENU(bombsID_EASYCORNER, BombsFrame::OnEasyCorner)
     EVT_MENU(wxID_EXIT,          BombsFrame::OnExit)
     EVT_MENU(wxID_ABOUT,         BombsFrame::OnAbout)
@@ -91,8 +92,8 @@ BombsFrame::BombsFrame(BombsGame *game)
     menuLevel->AppendRadioItem(bombsID_MEDIUM, wxT("&Medium (15x15)\tCtrl-2"));
     menuLevel->AppendRadioItem(bombsID_HARD, wxT("&Hard (25x20)\tCtrl-3"));
 
-    menuFile->Append(bombsID_NEWGAME, wxT("&New Game"),
-        menuLevel, wxT("Starts a new game"));
+    menuFile->Append(wxID_NEW, wxT("&New game\tCtrl-N"));
+    menuFile->Append(bombsID_LEVEL, wxT("&Level"),menuLevel, wxT("Starts a new game"));
     menuFile->AppendCheckItem(bombsID_EASYCORNER, wxT("&Easy corner"));
 
     menuFile->AppendSeparator();
@@ -177,17 +178,22 @@ void BombsFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
         wxT("About wxBombs") );
 }
 
-void BombsFrame::OnNewEasyGame(wxCommandEvent& WXUNUSED(event))
+void BombsFrame::OnNewGame(wxCommandEvent& WXUNUSED(event))
+{
+    NewGame(m_lastLevel, true);
+}
+
+void BombsFrame::OnEasyGame(wxCommandEvent& WXUNUSED(event))
 {
     NewGame(bombsID_EASY, true);
 }
 
-void BombsFrame::OnNewMediumGame(wxCommandEvent& WXUNUSED(event))
+void BombsFrame::OnMediumGame(wxCommandEvent& WXUNUSED(event))
 {
     NewGame(bombsID_MEDIUM, true);
 }
 
-void BombsFrame::OnNewHardGame(wxCommandEvent& WXUNUSED(event))
+void BombsFrame::OnHardGame(wxCommandEvent& WXUNUSED(event))
 {
     NewGame(bombsID_HARD, true);
 }
