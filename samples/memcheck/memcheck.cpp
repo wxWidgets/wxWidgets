@@ -70,18 +70,18 @@ bool MyApp::OnInit(void)
   // Make a menubar
   wxMenu *file_menu = new wxMenu;
 
-  file_menu->Append(wxID_EXIT, "E&xit");
+  file_menu->Append(wxID_EXIT, _T("E&xit"));
   wxMenuBar *menu_bar = new wxMenuBar;
-  menu_bar->Append(file_menu, "File");
+  menu_bar->Append(file_menu, _T("File"));
   frame->SetMenuBar(menu_bar);
 
   // Make a panel with a message
   wxPanel *panel = new wxPanel(frame);
 
-  (void)new wxStaticText(panel, -1, "Hello, this is a minimal debugging wxWidgets program!", wxPoint(10, 10));
+  (void)new wxStaticText(panel, wxID_ANY, _T("Hello, this is a minimal debugging wxWidgets program!"), wxPoint(10, 10));
 
   // Show the frame
-  frame->Show(TRUE);
+  frame->Show(true);
 
 #if wxUSE_MEMORY_TRACING
   wxDebugContext::SetCheckpoint();
@@ -119,8 +119,8 @@ bool MyApp::OnInit(void)
 //  delete thing;
 //  delete date;
 //  delete[] ordinaryNonObject;
-  
-  return TRUE;
+
+  return true;
 }
 
 BEGIN_EVENT_TABLE(MyFrame, wxFrame)
@@ -129,12 +129,12 @@ END_EVENT_TABLE()
 
 // My frame constructor
 MyFrame::MyFrame(wxFrame *parent):
-  wxFrame(parent, -1, "MemCheck wxWidgets Sample", wxPoint(-1, -1), wxSize(400, 200))
+  wxFrame(parent, wxID_ANY, _T("MemCheck wxWidgets Sample"), wxDefaultPosition, wxSize(400, 200))
 {}
 
 // Intercept menu commands
 void MyFrame::OnQuit(wxCommandEvent& WXUNUSED(event))
 {
-    Close(TRUE);
+    Close(true);
 }
 
