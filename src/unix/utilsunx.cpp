@@ -316,10 +316,10 @@ long wxExecute( const wxString& command, int flags, wxProcess *process )
     long lRc;
 #if defined(__DARWIN__)
     // wxMacExecute only executes app bundles.
-    // It returns -1 if the target is not an app bundle, thus falling through
-    // to the regular wxExecute for non app bundles.
+    // It returns an error code if the target is not an app bundle, thus falling
+    // through to the regular wxExecute for non app bundles.
     lRc = wxMacExecute(argv, flags, process);
-    if( lRc != -1)
+    if( lRc != ((flags & wxEXEC_SYNC) ? -1 : 0))
         return lRc;
 #endif
 

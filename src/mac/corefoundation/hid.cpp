@@ -588,6 +588,9 @@ long wxMacExecute(wxChar **argv,
                int flags,
                wxProcess *process)
 {
+	const long errorCode = ((flags & wxEXEC_SYNC) ? -1 : 0);
+	const long successCode = ((flags & wxEXEC_SYNC) ? 0 : -1); // fake PID
+
     CFIndex cfiCount = 0;
     //get count
     for(wxChar** argvcopy = argv; *argvcopy != NULL ; ++argvcopy)
@@ -598,7 +601,7 @@ long wxMacExecute(wxChar **argv,
     if(cfiCount == 0) //no file to launch?
     {
         wxLogDebug(wxT("wxMacExecute No file to launch!"));
-        return -1;
+        return errorCode ;
     }
     
     CFURLRef cfurlApp = CFURLCreateWithString(
@@ -612,7 +615,7 @@ long wxMacExecute(wxChar **argv,
     {
         wxLogDebug(wxT("wxMacExecute Bad bundle"));
         CFRelease(cfurlApp);
-        return -1;
+        return errorCode ;
     }
     
     
@@ -623,14 +626,15 @@ long wxMacExecute(wxChar **argv,
     if(dwBundleType != 'APPL')
     {
         CFRelease(cfurlApp);
-        return -1;
+        return errorCode ;
     }
     
     //
     // We have a good bundle - so let's launch it!
     //
     
-    CFMutableArrayRef cfaFiles = CFArrayCreateMutable(kCFAllocatorDefault, cfiCount - 1, NULL);
+    CFMutableArrayRef cfaFiles =
+        CFArrayCreateMutable(kCFAllocatorDefault, cfiCount - 1, &kCFTypeArrayCallBacks);
             
     wxASSERT(cfaFiles);
     
@@ -656,6 +660,7 @@ long wxMacExecute(wxChar **argv,
                 cfaFiles,
                 cfurlCurrentFile
                             );
+            CFRelease(cfurlCurrentFile); // array has retained it
         }
     }
     
@@ -677,9 +682,9 @@ long wxMacExecute(wxChar **argv,
     if(status != noErr)
     {
         wxLogDebug(wxString::Format(wxT("wxMacExecute ERROR: %d")), (int)status);
-        return -1;
+        return errorCode ;
     }
-    return 0; //success
+    return successCode; //success
 }
 
 #endif //__DARWIN__
