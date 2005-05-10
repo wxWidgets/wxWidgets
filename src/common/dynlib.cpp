@@ -480,7 +480,7 @@ void *dlopen(const char *path, int WXUNUSED(mode) /* mode is ignored */)
 
 int dlclose(void *handle)
 {
-    NSUnLinkModule( handle, NSUNLINKMODULE_OPTION_NONE);
+    NSUnLinkModule( (NSModule) handle, NSUNLINKMODULE_OPTION_NONE);
     return 0;
 }
 
