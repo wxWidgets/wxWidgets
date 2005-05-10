@@ -660,7 +660,13 @@ bool wxLaunchDefaultBrowser(const wxString& url)
         }
     }
     else
-        return false;
+    {
+        // fallback to checking for the BROWSER environment variable
+        cmd = wxGetenv(wxT("BROWSER"));
+        if ( cmd.empty() || wxExecute(cmd + wxT(" ") + finalurl) == -1)
+            return false;
+    }
+     
 
 #else // !wxUSE_MIMETYPE && !(WXMSW && wxUSE_NATIVE_CONFIG)
 
