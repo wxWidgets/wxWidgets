@@ -41,9 +41,7 @@
 
 #include "wx/mac/fontdlg.h"
 
-#if !USE_SHARED_LIBRARY
 IMPLEMENT_DYNAMIC_CLASS(wxFontDialog, wxDialog)
-#endif
 
 #include "wx/mac/private.h"
 

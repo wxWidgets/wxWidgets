@@ -18,9 +18,7 @@
 #include "wx/gdicmn.h"
 #include "wx/colour.h"
 
-#if !USE_SHARED_LIBRARY
 IMPLEMENT_DYNAMIC_CLASS(wxColour, wxObject)
-#endif
 
 // Colour
 

@@ -18,9 +18,7 @@
 #include "wx/dcscreen.h"
 #include "wx/mac/uma.h"
 
-#if !USE_SHARED_LIBRARY
 IMPLEMENT_DYNAMIC_CLASS(wxScreenDC, wxWindowDC)
-#endif
 
 // Create a DC representing the whole screen
 wxScreenDC::wxScreenDC()

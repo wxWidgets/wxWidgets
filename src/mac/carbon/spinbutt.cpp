@@ -29,10 +29,8 @@
 // wxWin macros
 // ----------------------------------------------------------------------------
 
-#if !USE_SHARED_LIBRARY
-    IMPLEMENT_DYNAMIC_CLASS(wxSpinButton, wxControl)
-    IMPLEMENT_DYNAMIC_CLASS(wxSpinEvent, wxScrollEvent)
-#endif
+IMPLEMENT_DYNAMIC_CLASS(wxSpinButton, wxControl)
+IMPLEMENT_DYNAMIC_CLASS(wxSpinEvent, wxScrollEvent)
 
 wxSpinButton::wxSpinButton()
    : wxSpinButtonBase()

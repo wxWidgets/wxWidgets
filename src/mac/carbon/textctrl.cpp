@@ -361,7 +361,6 @@ private :
 
 #define TE_UNLIMITED_LENGTH 0xFFFFFFFFUL
 
-#if !USE_SHARED_LIBRARY
 IMPLEMENT_DYNAMIC_CLASS(wxTextCtrl, wxControl)
 
 BEGIN_EVENT_TABLE(wxTextCtrl, wxControl)
@@ -380,7 +379,6 @@ BEGIN_EVENT_TABLE(wxTextCtrl, wxControl)
     EVT_UPDATE_UI(wxID_UNDO, wxTextCtrl::OnUpdateUndo)
     EVT_UPDATE_UI(wxID_REDO, wxTextCtrl::OnUpdateRedo)
 END_EVENT_TABLE()
-#endif
 
 // Text item
 void wxTextCtrl::Init()

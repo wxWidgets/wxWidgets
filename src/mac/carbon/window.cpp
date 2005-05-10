@@ -76,8 +76,6 @@ extern wxList wxPendingDelete;
     IMPLEMENT_DYNAMIC_CLASS(wxWindow, wxWindowBase)
 #endif // __WXUNIVERSAL__/__WXMAC__
 
-#if !USE_SHARED_LIBRARY
-
 BEGIN_EVENT_TABLE(wxWindowMac, wxWindowBase)
     EVT_NC_PAINT(wxWindowMac::OnNcPaint)
     EVT_ERASE_BACKGROUND(wxWindowMac::OnEraseBackground)
@@ -88,8 +86,6 @@ BEGIN_EVENT_TABLE(wxWindowMac, wxWindowBase)
     EVT_KILL_FOCUS(wxWindowMac::OnSetFocus)
     EVT_MOUSE_EVENTS(wxWindowMac::OnMouseEvent)
 END_EVENT_TABLE()
-
-#endif
 
 #define wxMAC_DEBUG_REDRAW 0
 #ifndef wxMAC_DEBUG_REDRAW

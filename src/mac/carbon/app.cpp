@@ -90,14 +90,12 @@ static bool s_inYield = FALSE;
 static bool s_inReceiveEvent = FALSE ;
 static EventTime sleepTime = kEventDurationNoWait ;
 
-#if !USE_SHARED_LIBRARY
 IMPLEMENT_DYNAMIC_CLASS(wxApp, wxEvtHandler)
 BEGIN_EVENT_TABLE(wxApp, wxEvtHandler)
     EVT_IDLE(wxApp::OnIdle)
     EVT_END_SESSION(wxApp::OnEndSession)
     EVT_QUERY_END_SESSION(wxApp::OnQueryEndSession)
 END_EVENT_TABLE()
-#endif
 
 
 const short    kMacMinHeap = (29 * 1024) ;

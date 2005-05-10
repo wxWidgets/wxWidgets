@@ -31,9 +31,7 @@
 #include "wx/sizer.h"
 #include "wx/stattext.h"
 
-#if !USE_SHARED_LIBRARY
 IMPLEMENT_ABSTRACT_CLASS(wxControl, wxWindow)
-#endif
 
 #include "wx/mac/uma.h"
 #include "wx/mac/private.h"

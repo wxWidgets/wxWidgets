@@ -30,7 +30,6 @@
 extern wxWindowList wxModelessWindows;
 extern wxList wxPendingDelete;
 
-#if !USE_SHARED_LIBRARY
 BEGIN_EVENT_TABLE(wxFrame, wxFrameBase)
   EVT_ACTIVATE(wxFrame::OnActivate)
  // EVT_MENU_HIGHLIGHT_ALL(wxFrame::OnMenuHighlight)
@@ -40,7 +39,6 @@ BEGIN_EVENT_TABLE(wxFrame, wxFrameBase)
 END_EVENT_TABLE()
 
 IMPLEMENT_DYNAMIC_CLASS(wxFrame, wxTopLevelWindow)
-#endif
 
 #define WX_MAC_STATUSBAR_HEIGHT 18 
 // ----------------------------------------------------------------------------

@@ -41,9 +41,7 @@
 // macros
 // ----------------------------------------------------------------------------
 
-#if !USE_SHARED_LIBRARY
 IMPLEMENT_DYNAMIC_CLASS(wxWebKitCtrl, wxControl)
-#endif
 
 BEGIN_EVENT_TABLE(wxWebKitCtrl, wxControl)
     EVT_SIZE(wxWebKitCtrl::OnSize)

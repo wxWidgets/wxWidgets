@@ -28,9 +28,7 @@
 // dynamic classes implementation
 // ----------------------------------------------------------------------------
 
-#if !USE_SHARED_LIBRARY
-  IMPLEMENT_DYNAMIC_CLASS(wxMenuItem, wxObject)
-#endif  //USE_SHARED_LIBRARY
+IMPLEMENT_DYNAMIC_CLASS(wxMenuItem, wxObject)
 
 // ----------------------------------------------------------------------------
 // wxMenuItem

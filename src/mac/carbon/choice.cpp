@@ -21,9 +21,7 @@
 #include "wx/menu.h"
 #include "wx/mac/uma.h"
 
-#if !USE_SHARED_LIBRARY
 IMPLEMENT_DYNAMIC_CLASS(wxChoice, wxControl)
-#endif
 
 extern MenuHandle NewUniqueMenu() ;
 

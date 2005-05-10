@@ -35,9 +35,8 @@ using namespace std ;
 #include <ATSUnicode.h>
 #include <TextCommon.h>
 #include <TextEncodingConverter.h>
-#if !USE_SHARED_LIBRARY
+
 IMPLEMENT_ABSTRACT_CLASS(wxDC, wxObject)
-#endif
 
 //-----------------------------------------------------------------------------
 // constants
