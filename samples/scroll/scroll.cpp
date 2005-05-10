@@ -1,13 +1,13 @@
-/*
- * Program: scroll
- *
- * Author: Robert Roebling
- *
- * Copyright: (C) 1998, Robert Roebling
- *                2002, Ron Lee
- *                2003, Matt Gregory
- *
- */
+/////////////////////////////////////////////////////////////////////////////
+// Name:        scroll.cpp
+// Purpose:     wxScrolledWindow sample
+// Author:      Robert Roebling
+// Modified by:
+// Created:
+// RCS-ID:      $Id$
+// Copyright:   (C) 1998 Robert Roebling, 2002 Ron Lee, 2003 Matt Gregory
+// Licence:     wxWindows license
+/////////////////////////////////////////////////////////////////////////////
 
 // For compilers that support precompilation, includes "wx/wx.h".
 #include "wx/wxprec.h"
@@ -129,7 +129,7 @@ public:
     {
         // no horz scrolling
         SetScrollRate( 0, m_hLine );
-        SetVirtualSize( -1, ( m_nLines + 1 ) * m_hLine );
+        SetVirtualSize( wxDefaultCoord, ( m_nLines + 1 ) * m_hLine );
     }
 
     virtual void OnDraw(wxDC& dc);
@@ -390,7 +390,7 @@ void MyCanvas::OnScrollWin( wxCommandEvent &WXUNUSED(event) )
     wxLogMessage( wxT("Scrolling 2 units up.\nThe white square and the controls should move equally!") );
     int x,y;
     GetViewStart( &x, &y );
-    Scroll( -1, y+2 );
+    Scroll( wxDefaultCoord, y+2 );
 }
 
 // ----------------------------------------------------------------------------
@@ -520,7 +520,7 @@ MyFrame::MyFrame()
     // This is done with ScrollRate/VirtualSize in MyCanvas ctor now,
     // both should produce identical results.
     //m_canvas->SetScrollbars( 10, 10, 50, 100 );
- 
+
     subsizer->Add( m_canvas, 1, wxEXPAND );
     subsizer->Add( new MyAutoScrollWindow( this ), 1, wxEXPAND );
 
@@ -637,7 +637,7 @@ BEGIN_EVENT_TABLE(MyAutoTimedScrollingWindow, wxScrolledWindow)
 END_EVENT_TABLE()
 
 MyAutoTimedScrollingWindow::MyAutoTimedScrollingWindow(wxWindow* parent)
-    : wxScrolledWindow(parent, -1, wxDefaultPosition, wxDefaultSize
+    : wxScrolledWindow(parent, wxID_ANY, wxDefaultPosition, wxDefaultSize
             //, wxSUNKEN_BORDER) // can't seem to do it this way
             , wxVSCROLL | wxHSCROLL | wxSUNKEN_BORDER)
     , m_selStart(-1, -1), m_cursor(-1, -1)
@@ -782,17 +782,17 @@ bool MyAutoTimedScrollingWindow::IsSelected(int chX, int chY) const
 {
     if (IsInside(chX, m_selStart.x, m_cursor.x)
             && IsInside(chY, m_selStart.y, m_cursor.y)) {
-        return TRUE;
+        return true;
     }
-    return FALSE;
+    return false;
 }
 
 bool MyAutoTimedScrollingWindow::IsInside(int k, int bound1, int bound2)
 {
     if ((k >= bound1 && k <= bound2) || (k >= bound2 && k <= bound1)) {
-        return TRUE;
+        return true;
     }
-    return FALSE;
+    return false;
 }
 
 wxRect MyAutoTimedScrollingWindow::DCNormalize(wxCoord x, wxCoord y
@@ -827,6 +827,8 @@ void MyAutoTimedScrollingWindow::OnDraw(wxDC& dc)
     wxBrush selBrush(wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHT)
             , wxSOLID);
     dc.SetPen(*wxTRANSPARENT_PEN);
+    wxString str = sm_testData;
+
     // draw the characters
     // 1. for each update region
     for (wxRegionIterator upd(GetUpdateRegion()); upd; ++upd) {
@@ -854,10 +856,13 @@ void MyAutoTimedScrollingWindow::OnDraw(wxDC& dc)
                         (chX, chY));
                 // 6. draw!
                 dc.DrawRectangle(charPos.x, charPos.y, m_fontW, m_fontH);
-                if (chY < sm_lineCnt && chX < sm_lineLen) {
-                    int charIndex = chY * sm_lineLen + chX;
-                    dc.DrawText(wxString(sm_testData[charIndex])
-                            , charPos.x, charPos.y);
+                size_t charIndex = chY * sm_lineLen + chX;
+                if (chY < sm_lineCnt &&
+                    chX < sm_lineLen &&
+                    charIndex < str.Length())
+                {
+                    dc.DrawText(str.Mid(charIndex,1),
+                                charPos.x, charPos.y);
                 }
             }
         }
@@ -923,135 +928,127 @@ void MyAutoTimedScrollingWindow::OnScroll(wxScrollWinEvent& event)
 
 const int MyAutoTimedScrollingWindow::sm_lineCnt = 125;
 const int MyAutoTimedScrollingWindow::sm_lineLen = 79;
-const wxChar* MyAutoTimedScrollingWindow::sm_testData = _T("\
-162 Cult of the genius out of vanity.— Because we think well of ourselves, but \
-nonetheless never suppose ourselves capable of producing a painting like one of\
-Raphael's or a dramatic scene like one of Shakespeare's, we convince ourselves \
-that the capacity to do so is quite extraordinarily marvelous, a wholly        \
-uncommon accident, or, if we are still religiously inclined, a mercy from on   \
-high. Thus our vanity, our self-love, promotes the cult of the genius: for only\
-if we think of him as being very remote from us, as a miraculum, does he not   \
-aggrieve us (even Goethe, who was without envy, called Shakespeare his star of \
-the most distant heights [\"William! Stern der schönsten Ferne\": from Goethe's, \
-\"Between Two Worlds\"]; in regard to which one might recall the lines: \"the     \
-stars, these we do not desire\" [from Goethe's, \"Comfort in Tears\"]). But, aside\
-from these suggestions of our vanity, the activity of the genius seems in no   \
-way fundamentally different from the activity of the inventor of machines, the \
-scholar of astronomy or history, the master of tactics. All these activities   \
-are explicable if one pictures to oneself people whose thinking is active in   \
-one direction, who employ everything as material, who always zealously observe \
-their own inner life and that of others, who perceive everywhere models and    \
-incentives, who never tire of combining together the means available to them.  \
-Genius too does nothing except learn first how to lay bricks then how to build,\
-except continually seek for material and continually form itself around it.    \
-Every activity of man is amazingly complicated, not only that of the genius:   \
-but none is a \"miracle.\"— Whence, then, the belief that genius exists only in  \
-the artist, orator and philosopher? that only they have \"intuition\"? (Whereby  \
-they are supposed to possess a kind of miraculous eyeglass with which they can \
-see directly into \"the essence of the thing\"!) It is clear that people speak of\
-") _T("\
-genius only where the effects of the great intellect are most pleasant to them \
-and where they have no desire to feel envious. To call someone \"divine\" means: \
-\"here there is no need for us to compete.\" Then, everything finished and       \
-complete is regarded with admiration, everything still becoming is undervalued.\
-But no one can see in the work of the artist how it has become; that is its    \
-advantage, for wherever one can see the act of becoming one grows somewhat     \
-cool. The finished and perfect art of representation repulses all thinking as  \
-to how it has become; it tyrannizes as present completeness and perfection.    \
-That is why the masters of the art of representation count above all as gifted \
-with genius and why men of science do not. In reality, this evaluation of the  \
-former and undervaluation of the latter is only a piece of childishness in the \
-realm of reason.                                                               \
-                                                                               \
-                                                                               \
-163 The serious workman.— Do not talk about giftedness, inborn talents! One can\
-name great men of all kinds who were very little gifted. The acquired          \
-greatness, became \"geniuses\" (as we put it), through qualities the lack of     \
-which no one who knew what they were would boast of: they all possessed that   \
-seriousness of the efficient workman which first learns to construct the parts \
-properly before it ventures to fashion a great whole; they allowed themselves  \
-time for it, because they took more pleasure in making the little, secondary   \
-things well than in the effect of a dazzling whole. the recipe for becoming a  \
-good novelist, for example, is easy to give, but to carry it out presupposes   \
-qualities one is accustomed to overlook when one says \"I do not have enough    \
-talent.\" One has only to make a hundred or so sketches for novels, none longer \
-") _T("\
-than two pages but of such distinctness that every word in them is necessary;  \
-one should write down anecdotes each day until one has learned how to give them\
-the most pregnant and effective form; one should be tireless in collecting and \
-describing human types and characters; one should above all relate things to   \
-others and listen to others relate, keeping one's eyes and ears open for the   \
-effect produced on those present, one should travel like a landscape painter or\
-costume designer; one should excerpt for oneself out of the individual sciences\
-everything that will produce an artistic effect when it is well described, one \
-should, finally, reflect on the motives of human actions, disdain no signpost  \
-to instruction about them and be a collector of these things by day and night. \
-One should continue in this many-sided exercise some ten years: what is then   \
-created in the workshop, however, will be fit to go out into the world.— What, \
-however, do most people do? They begin, not with the parts, but with the whole.\
-Perhaps they chance to strike a right note, excite attention and from then on  \
-strike worse and worse notes, for good, natural reasons.— Sometimes, when the  \
-character and intellect needed to formulate such a life-plan are lacking, fate \
-and need take their place and lead the future master step by step through all  \
-the stipulations of his trade.                                                 \
-                                                                               \
-                                                                               \
-164 Peril and profit in the cult of the genius.— The belief in great, superior,\
-fruitful spirits is not necessarily, yet nonetheless is very frequently        \
-associated with that religious or semi-religious superstition that these       \
-spirits are of supra-human origin and possess certain miraculous abilities by  \
-virtue of which they acquire their knowledge by quite other means than the rest\
-") _T("\
-of mankind. One ascribes to them, it seems, a direct view of the nature of the \
-world, as it were a hole in the cloak of appearance, and believes that, by     \
-virtue of this miraculous seer's vision, they are able to communicate something\
-conclusive and decisive about man and the world without the toil and           \
-rigorousness required by science. As long as there continue to be those who    \
-believe in the miraculous in the domain of knowledge one can perhaps concede   \
-that these people themselves derive some benefit from their belief, inasmuch as\
-through their unconditional subjection to the great spirits they create for    \
-their own spirit during its time of development the finest form of discipline  \
-and schooling. On the other hand, it is at least questionable whether the      \
-superstitious belief in genius, in its privileges and special abilities, is of \
-benefit to the genius himself if it takes root in him. It is in any event a    \
-dangerous sign when a man is assailed by awe of himself, whether it be the     \
-celebrated Caesar's awe of Caesar or the awe of one's own genius now under     \
-consideration; when the sacrificial incense which is properly rendered only to \
-a god penetrates the brain of the genius, so that his head begins to swim and  \
-he comes to regard himself as something supra-human. The consequences that     \
-slowly result are: the feeling of irresponsibility, of exceptional rights, the \
-belief that he confers a favor by his mere presence, insane rage when anyone   \
-attempts even to compare him with others, let alone to rate him beneath them,  \
-or to draw attention to lapses in his work. Because he ceases to practice      \
-criticism of himself, at last one pinion after the other falls out of his      \
-plumage: that superstitious eats at the roots of his powers and perhaps even   \
-turns him into a hypocrite after his powers have fled from him. For the great  \
-spirits themselves it is therefore probably more beneficial if they acquire an \
-") _T("\
-insight into the nature and origin of their powers, if they grasp, that is to  \
-say, what purely human qualities have come together in them and what fortunate \
-circumstances attended them: in the first place undiminished energy, resolute  \
-application to individual goals, great personal courage, then the good fortune \
-to receive an upbringing which offered in the early years the finest teachers, \
-models and methods. To be sure, when their goal is the production of the       \
-greatest possible effect, unclarity with regard to oneself and that            \
-semi-insanity superadded to it has always achieved much; for what has been     \
-admired and envied at all times has been that power in them by virtue of which \
-they render men will-less and sweep them away into the delusion that the       \
-leaders they are following are supra-natural. Indeed, it elevates and inspires \
-men to believe that someone is in possession of supra-natural powers: to this  \
-extent Plato was right to say [Plato: Phaedrus, 244a] that madness has brought \
-the greatest of blessings upon mankind.— In rare individual cases this portion \
-of madness may, indeed, actually have been the means by which such a nature,   \
-excessive in all directions, was held firmly together: in the life of          \
-individuals, too, illusions that are in themselves poisons often play the role \
-of healers; yet, in the end, in the case of every \"genius\" who believes in his \
-own divinity the poison shows itself to the same degree as his \"genius\" grows  \
-old: one may recall, for example, the case of Napoleon, whose nature certainly \
-grew into the mighty unity that sets him apart from all men of modern times    \
-precisely through his belief in himself and his star and through the contempt  \
-for men that flowed from it; until in the end, however, this same belief went  \
-over into an almost insane fatalism, robbed him of his acuteness and swiftness \
-of perception, and became the cause of his destruction.                        \
-");
-
+const wxChar* MyAutoTimedScrollingWindow::sm_testData =
+_T("162 Cult of the genius out of vanity.— Because we think well of ourselves, but ")
+_T("nonetheless never suppose ourselves capable of producing a painting like one of ")
+_T("Raphael's or a dramatic scene like one of Shakespeare's, we convince ourselves ")
+_T("that the capacity to do so is quite extraordinarily marvelous, a wholly ")
+_T("uncommon accident, or, if we are still religiously inclined, a mercy from on ")
+_T("high. Thus our vanity, our self-love, promotes the cult of the genius: for only ")
+_T("if we think of him as being very remote from us, as a miraculum, does he not ")
+_T("aggrieve us (even Goethe, who was without envy, called Shakespeare his star of ")
+_T("the most distant heights [\"William! Stern der schönsten Ferne\": from Goethe's, ")
+_T("\"Between Two Worlds\"]; in regard to which one might recall the lines: \"the ")
+_T("stars, these we do not desire\" [from Goethe's, \"Comfort in Tears\"]). But, aside ")
+_T("from these suggestions of our vanity, the activity of the genius seems in no ")
+_T("way fundamentally different from the activity of the inventor of machines, the ")
+_T("scholar of astronomy or history, the master of tactics. All these activities ")
+_T("are explicable if one pictures to oneself people whose thinking is active in ")
+_T("one direction, who employ everything as material, who always zealously observe ")
+_T("their own inner life and that of others, who perceive everywhere models and ")
+_T("incentives, who never tire of combining together the means available to them. ")
+_T("Genius too does nothing except learn first how to lay bricks then how to build, ")
+_T("except continually seek for material and continually form itself around it. ")
+_T("Every activity of man is amazingly complicated, not only that of the genius: ")
+_T("but none is a \"miracle.\"— Whence, then, the belief that genius exists only in ")
+_T("the artist, orator and philosopher? that only they have \"intuition\"? (Whereby ")
+_T("they are supposed to possess a kind of miraculous eyeglass with which they can ")
+_T("see directly into \"the essence of the thing\"!) It is clear that people speak of ")
+_T("genius only where the effects of the great intellect are most pleasant to them ")
+_T("and where they have no desire to feel envious. To call someone \"divine\" means: ")
+_T("\"here there is no need for us to compete.\" Then, everything finished and ")
+_T("complete is regarded with admiration, everything still becoming is undervalued. ")
+_T("But no one can see in the work of the artist how it has become; that is its ")
+_T("advantage, for wherever one can see the act of becoming one grows somewhat ")
+_T("cool. The finished and perfect art of representation repulses all thinking as ")
+_T("to how it has become; it tyrannizes as present completeness and perfection. ")
+_T("That is why the masters of the art of representation count above all as gifted ")
+_T("with genius and why men of science do not. In reality, this evaluation of the ")
+_T("former and undervaluation of the latter is only a piece of childishness in the ")
+_T("realm of reason. ")
+_T("\n\n")
+_T("163 The serious workman.— Do not talk about giftedness, inborn talents! One can ")
+_T("name great men of all kinds who were very little gifted. The acquired ")
+_T("greatness, became \"geniuses\" (as we put it), through qualities the lack of ")
+_T("which no one who knew what they were would boast of: they all possessed that ")
+_T("seriousness of the efficient workman which first learns to construct the parts ")
+_T("properly before it ventures to fashion a great whole; they allowed themselves ")
+_T("time for it, because they took more pleasure in making the little, secondary ")
+_T("things well than in the effect of a dazzling whole. the recipe for becoming a ")
+_T("good novelist, for example, is easy to give, but to carry it out presupposes ")
+_T("qualities one is accustomed to overlook when one says \"I do not have enough ")
+_T("talent.\" One has only to make a hundred or so sketches for novels, none longer ")
+_T("than two pages but of such distinctness that every word in them is necessary; ")
+_T("one should write down anecdotes each day until one has learned how to give them ")
+_T("the most pregnant and effective form; one should be tireless in collecting and ")
+_T("describing human types and characters; one should above all relate things to ")
+_T("others and listen to others relate, keeping one's eyes and ears open for the ")
+_T("effect produced on those present, one should travel like a landscape painter or ")
+_T("costume designer; one should excerpt for oneself out of the individual sciences ")
+_T("everything that will produce an artistic effect when it is well described, one ")
+_T("should, finally, reflect on the motives of human actions, disdain no signpost ")
+_T("to instruction about them and be a collector of these things by day and night. ")
+_T("One should continue in this many-sided exercise some ten years: what is then ")
+_T("created in the workshop, however, will be fit to go out into the world.— What, ")
+_T("however, do most people do? They begin, not with the parts, but with the whole. ")
+_T("Perhaps they chance to strike a right note, excite attention and from then on ")
+_T("strike worse and worse notes, for good, natural reasons.— Sometimes, when the ")
+_T("character and intellect needed to formulate such a life-plan are lacking, fate ")
+_T("and need take their place and lead the future master step by step through all ")
+_T("the stipulations of his trade. ")
+_T("\n\n")
+_T("164 Peril and profit in the cult of the genius.— The belief in great, superior, ")
+_T("fruitful spirits is not necessarily, yet nonetheless is very frequently ")
+_T("associated with that religious or semi-religious superstition that these ")
+_T("spirits are of supra-human origin and possess certain miraculous abilities by ")
+_T("virtue of which they acquire their knowledge by quite other means than the rest ")
+_T("of mankind. One ascribes to them, it seems, a direct view of the nature of the ")
+_T("world, as it were a hole in the cloak of appearance, and believes that, by ")
+_T("virtue of this miraculous seer's vision, they are able to communicate something ")
+_T("conclusive and decisive about man and the world without the toil and ")
+_T("rigorousness required by science. As long as there continue to be those who ")
+_T("believe in the miraculous in the domain of knowledge one can perhaps concede ")
+_T("that these people themselves derive some benefit from their belief, inasmuch as ")
+_T("through their unconditional subjection to the great spirits they create for ")
+_T("their own spirit during its time of development the finest form of discipline ")
+_T("and schooling. On the other hand, it is at least questionable whether the ")
+_T("superstitious belief in genius, in its privileges and special abilities, is of ")
+_T("benefit to the genius himself if it takes root in him. It is in any event a ")
+_T("dangerous sign when a man is assailed by awe of himself, whether it be the ")
+_T("celebrated Caesar's awe of Caesar or the awe of one's own genius now under ")
+_T("consideration; when the sacrificial incense which is properly rendered only to ")
+_T("a god penetrates the brain of the genius, so that his head begins to swim and ")
+_T("he comes to regard himself as something supra-human. The consequences that ")
+_T("slowly result are: the feeling of irresponsibility, of exceptional rights, the ")
+_T("belief that he confers a favor by his mere presence, insane rage when anyone ")
+_T("attempts even to compare him with others, let alone to rate him beneath them, ")
+_T("or to draw attention to lapses in his work. Because he ceases to practice ")
+_T("criticism of himself, at last one pinion after the other falls out of his ")
+_T("plumage: that superstitious eats at the roots of his powers and perhaps even ")
+_T("turns him into a hypocrite after his powers have fled from him. For the great ")
+_T("spirits themselves it is therefore probably more beneficial if they acquire an ")
+_T("insight into the nature and origin of their powers, if they grasp, that is to ")
+_T("say, what purely human qualities have come together in them and what fortunate ")
+_T("circumstances attended them: in the first place undiminished energy, resolute ")
+_T("application to individual goals, great personal courage, then the good fortune ")
+_T("to receive an upbringing which offered in the early years the finest teachers, ")
+_T("models and methods. To be sure, when their goal is the production of the ")
+_T("greatest possible effect, unclarity with regard to oneself and that ")
+_T("semi-insanity superadded to it has always achieved much; for what has been ")
+_T("admired and envied at all times has been that power in them by virtue of which ")
+_T("they render men will-less and sweep them away into the delusion that the ")
+_T("leaders they are following are supra-natural. Indeed, it elevates and inspires ")
+_T("men to believe that someone is in possession of supra-natural powers: to this ")
+_T("extent Plato was right to say [Plato: Phaedrus, 244a] that madness has brought ")
+_T("the greatest of blessings upon mankind.— In rare individual cases this portion ")
+_T("of madness may, indeed, actually have been the means by which such a nature, ")
+_T("excessive in all directions, was held firmly together: in the life of ")
+_T("individuals, too, illusions that are in themselves poisons often play the role ")
+_T("of healers; yet, in the end, in the case of every \"genius\" who believes in his ")
+_T("own divinity the poison shows itself to the same degree as his \"genius\" grows ")
+_T("old: one may recall, for example, the case of Napoleon, whose nature certainly ")
+_T("grew into the mighty unity that sets him apart from all men of modern times ")
+_T("precisely through his belief in himself and his star and through the contempt ")
+_T("for men that flowed from it; until in the end, however, this same belief went ")
+_T("over into an almost insane fatalism, robbed him of his acuteness and swiftness ")
+_T("of perception, and became the cause of his destruction.");
