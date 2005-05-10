@@ -205,6 +205,9 @@ bool wxFrameBase::ProcessCommand(int id)
         if (!item->IsEnabled())
             return true;
 
+        if ((item->GetKind() == wxITEM_RADIO) && item->IsChecked() )
+            return true;
+
         if (item->IsCheckable())
         {
             item->Toggle();

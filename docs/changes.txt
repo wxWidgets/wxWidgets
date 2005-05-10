@@ -12,6 +12,7 @@ All:
 All (GUI):
 
 - Fixed potential infinite loop when adjusting wxScrolledWindow scrollbars.
+- Radio in menus do not send menu event for selections of already selected item.
 
 wxMSW:
 
