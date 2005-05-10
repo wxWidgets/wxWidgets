@@ -1960,7 +1960,9 @@ if test "$wxUSE_STD_STRING" = "yes" -o "$wxUSE_STL" = "yes"; then
                         [AC_MSG_RESULT(yes)],
                         [AC_MSG_RESULT([no])
                          if test "$wxUSE_STL" = "yes"; then
-                             AC_MSG_ERROR([Can't compile with --enable-stl without $std_string or std::basic_string<$char_type>])
+                             AC_MSG_ERROR([Can't use --enable-stl without $std_string or std::basic_string<$char_type>])
+                         elif grep wxUSE_STD_STRING $wx_arg_cache_file >/dev/null; then
+                             AC_MSG_ERROR([Can't use --enable-std_string without $std_string or std::basic_string<$char_type>])
                          else
                              AC_MSG_WARN([No $std_string or std::basic_string<$char_type>, switching to --disable-std_string])
                              wxUSE_STD_STRING=no
@@ -1980,7 +1982,11 @@ if test "$wxUSE_STD_IOSTREAM" = "yes"; then
                    [#include <iostream>])
 
     if test "$wxUSE_STD_IOSTREAM" != "yes"; then
-        AC_MSG_WARN([No std::iostreams, switching to --disable-std_iostreams])
+        if grep wxUSE_STD_IOSTREAM $wx_arg_cache_file >/dev/null; then
+            AC_MSG_ERROR([Can't use --enable-std_iostreams without std::istream and std::ostream])
+        else
+            AC_MSG_WARN([No std::iostreams, switching to --disable-std_iostreams])
+        fi
     fi
     
     AC_LANG_POP

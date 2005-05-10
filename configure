@@ -21315,8 +21315,12 @@ sed 's/^/| /' conftest.$ac_ext >&5
 echo "$as_me:$LINENO: result: no" >&5
 echo "${ECHO_T}no" >&6
                          if test "$wxUSE_STL" = "yes"; then
-                             { { echo "$as_me:$LINENO: error: Can't compile with --enable-stl without $std_string or std::basic_string<$char_type>" >&5
-echo "$as_me: error: Can't compile with --enable-stl without $std_string or std::basic_string<$char_type>" >&2;}
+                             { { echo "$as_me:$LINENO: error: Can't use --enable-stl without $std_string or std::basic_string<$char_type>" >&5
+echo "$as_me: error: Can't use --enable-stl without $std_string or std::basic_string<$char_type>" >&2;}
+   { (exit 1); exit 1; }; }
+                         elif grep wxUSE_STD_STRING $wx_arg_cache_file >/dev/null; then
+                             { { echo "$as_me:$LINENO: error: Can't use --enable-std_string without $std_string or std::basic_string<$char_type>" >&5
+echo "$as_me: error: Can't use --enable-std_string without $std_string or std::basic_string<$char_type>" >&2;}
    { (exit 1); exit 1; }; }
                          else
                              { echo "$as_me:$LINENO: WARNING: No $std_string or std::basic_string<$char_type>, switching to --disable-std_string" >&5
@@ -21482,8 +21486,14 @@ fi
 
 
     if test "$wxUSE_STD_IOSTREAM" != "yes"; then
-        { echo "$as_me:$LINENO: WARNING: No std::iostreams, switching to --disable-std_iostreams" >&5
+        if grep wxUSE_STD_IOSTREAM $wx_arg_cache_file >/dev/null; then
+            { { echo "$as_me:$LINENO: error: Can't use --enable-std_iostreams without std::istream and std::ostream" >&5
+echo "$as_me: error: Can't use --enable-std_iostreams without std::istream and std::ostream" >&2;}
+   { (exit 1); exit 1; }; }
+        else
+            { echo "$as_me:$LINENO: WARNING: No std::iostreams, switching to --disable-std_iostreams" >&5
 echo "$as_me: WARNING: No std::iostreams, switching to --disable-std_iostreams" >&2;}
+        fi
     fi
 
     ac_ext=c
