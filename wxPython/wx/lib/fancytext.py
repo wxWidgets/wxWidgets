@@ -201,18 +201,19 @@ class Renderer:
 
     def getCurrentFont(self):
         font = self.fonts[-1]
-        return wx.TheFontList.FindOrCreateFont(font.get("size", self.defaultSize),
-                             font.get("family", self.defaultFamily),
-                             font.get("style", self.defaultStyle),
-                             font.get("weight", self.defaultWeight),
-                             encoding = font.get("encoding", self.defaultEncoding))
+        return wx.Font(font.get("size", self.defaultSize),
+                       font.get("family", self.defaultFamily),
+                       font.get("style", self.defaultStyle),
+                       font.get("weight",self.defaultWeight),
+                       False, "",
+                       font.get("encoding", self.defaultEncoding))
 
     def getCurrentColor(self):
         font = self.fonts[-1]
         return wx.TheColourDatabase.FindColour(font.get("color", self.defaultColor))
         
     def getCurrentPen(self):
-        return wx.ThePenList.FindOrCreatePen(self.getCurrentColor(), 1, wx.SOLID)
+        return wx.Pen(self.getCurrentColor(), 1, wx.SOLID)
         
     def renderCharacterData(self, data, x, y):
         raise NotImplementedError()
