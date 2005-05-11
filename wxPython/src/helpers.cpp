@@ -1167,6 +1167,9 @@ void wxPyEndAllowThreads(PyThreadState* saved) {
 
 wxPyBlock_t wxPyBeginBlockThreads() {
 #ifdef WXP_WITH_THREAD
+    if (! Py_IsInitialized()) {
+        return (wxPyBlock_t)0;
+    }
 #if wxPyUSE_GIL_STATE
     PyGILState_STATE state = PyGILState_Ensure();
     return state;
@@ -1192,6 +1195,9 @@ wxPyBlock_t wxPyBeginBlockThreads() {
 
 void wxPyEndBlockThreads(wxPyBlock_t blocked) {
 #ifdef WXP_WITH_THREAD
+    if (! Py_IsInitialized()) {
+        return;
+    }            
 #if wxPyUSE_GIL_STATE
     PyGILState_Release(blocked);
 #else
