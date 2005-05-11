@@ -23,9 +23,30 @@ DeferWindowPos set, then the pending values can be used for defaults
 instead of current values.
 
 Fixed the typemap that converts a Python list of strings to a
-wxArrayString so it uses the wxPy default encoding.
+wxArrayString so it uses the wxPython default encoding.
 
 Several docstrings added and updated.  Lots more to go.
+
+wxMac: Strings added to the clipboard or used in DnD no longer have an
+extra null character at the end.
+
+Added wx.GetXDisplay that returns a raw swigified pointer for the X11
+Display, or None for the non-X11 platforms.
+
+wxMenu: Don't send an event when selecting an already selected radio
+item.
+
+Added wx.LaunchDefaultBrowser.
+
+wxMSW: Fixed erroneous selection of content in wx.ComboBox when within
+a wx.StaticBox.
+
+wxMSW: Fixed alpha blitting to take into account source position.
+
+Ensure that Python is still in an initialized state before doing any
+locking or unlocking in wxPyBeginBlockThreads and wxPyEndBlockThreads
+as these can be triggered after Python has been finalized in embedding
+situations.
 
 
 
