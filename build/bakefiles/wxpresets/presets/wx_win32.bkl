@@ -165,7 +165,7 @@ FIXME: this template has (at least) the following bugs:
         <if cond="value=='base'">
             <sys-lib>wxbase$(WX_VERSION)$(WXLIBPOSTFIX)</sys-lib>
         </if>
-        <if cond="value in ['net','xml']">
+        <if cond="value in ['net','xml', 'odbc']">
             <sys-lib>wxbase$(WX_VERSION)$(WXLIBPOSTFIX)_$(value)</sys-lib>
         </if>
         <if cond="value not in ['base','net','xml']">
