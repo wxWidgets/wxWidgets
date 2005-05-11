@@ -270,7 +270,7 @@ wxWindow* MyFrame::DoPythonStuff(wxWindow* parent)
     // Now build an argument tuple and call the Python function.  Notice the
     // use of another wxPython API to take a wxWindows object and build a
     // wxPython object that wraps it.
-    PyObject* arg = wxPyMake_wxObject(parent);
+    PyObject* arg = wxPyMake_wxObject(parent, false);
     wxASSERT(arg != NULL);
     PyObject* tuple = PyTuple_New(1);
     PyTuple_SET_ITEM(tuple, 0, arg);
@@ -299,9 +299,3 @@ wxWindow* MyFrame::DoPythonStuff(wxWindow* parent)
 
 
 //----------------------------------------------------------------------
-
-
-
-
-
-

@@ -12,11 +12,11 @@
 PROGRAM = embedded
 OBJECTS = $(PROGRAM).o
 
-#WX_CFG = wx-config
-WX_CFG = wxgtk2ud-2.5-config
+WX_CFG = wx-config
+PYVER = 2.4
 
-EXTRAINC=-I../../include -I/usr/include/python2.3
-EXTRALIB=-L/usr/lib/python2.3/config -lpython2.3
+EXTRAINC=-I../../include -I/usr/include/python$(PYVER)
+EXTRALIB=-L/usr/lib/python$(PYVER)/config -lpython$(PYVER)
 CXX = $(shell $(WX_CFG) --cxx)
 
 
