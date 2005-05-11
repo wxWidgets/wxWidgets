@@ -6,13 +6,13 @@
 
 
 WXDIR = $(WXWIN)
-PYTHONDIR = c:\tools\Python23
-VER = 25d
+PYTHONDIR = c:\tools\Python24
+VER = 26d
 
 INCLUDES = -I$(WXDIR)\lib\vc_dll\mswd -I$(WXDIR)\include -I$(WXDIR)\wxPython\include -I$(PYTHONDIR)\include -I$(PYTHONDIR)\PC
 CXXFLAGS = /c /nologo /Od /MDd /W3 /GX /Z7 /D_DEBUG -DWIN32 -D_WINDOWS -D__WXMSW__ -DWXUSINGDLL=1 -DWXP_USE_THREAD=1 -UNDEBUG -D__WXDEBUG__ /Gy
-LIBFLAGS = /nologo /pdb:None /DEBUG /LIBPATH:$(WXDIR)\lib\vc_dll /LIBPATH:$(PYTHONDIR)\libs
-LIBS =     wxbase$(VER).lib wxmsw$(VER)_core.lib \
+LIBFLAGS = /nologo /DEBUG /LIBPATH:$(WXDIR)\lib\vc_dll /LIBPATH:$(PYTHONDIR)\libs
+LIBS =     wxmsw$(VER).lib \
 	   kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib \
 	   shell32.lib oldnames.lib comctl32.lib odbc32.lib ole32.lib oleaut32.lib \
 	   uuid.lib rpcrt4.lib advapi32.lib wsock32.lib

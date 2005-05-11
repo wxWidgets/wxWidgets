@@ -10,7 +10,7 @@ class MyPanel(wx.Panel):
         
         intro = 'Welcome To PyCrust %s - The Flakiest Python Shell' % version.VERSION
         pycrust = shell.Shell(self, -1, introText=intro)
-        #pycrust = wxTextCtrl(self, -1, intro)
+        #pycrust = wx.TextCtrl(self, -1, intro)
 
         sizer = wx.BoxSizer(wx.VERTICAL)
         sizer.Add(text, 0, wx.EXPAND|wx.ALL, 10)
