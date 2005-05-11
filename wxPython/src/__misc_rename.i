@@ -150,6 +150,7 @@
 %rename(ClientDisplayRect)                  wxClientDisplayRect;
 %rename(GetClientDisplayRect)               wxGetClientDisplayRect;
 %rename(SetCursor)                          wxSetCursor;
+%rename(GetXDisplay)                        wxGetXDisplay;
 %rename(BeginBusyCursor)                    wxBeginBusyCursor;
 %rename(GetActiveWindow)                    wxGetActiveWindow;
 %rename(GenericFindWindowAtPoint)           wxGenericFindWindowAtPoint;

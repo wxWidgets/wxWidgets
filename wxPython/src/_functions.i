@@ -254,6 +254,21 @@ MustHaveApp(wxSetCursor);
 void wxSetCursor(wxCursor& cursor);
 
 
+MustHaveApp(wxGetXDisplay);
+DocStr(wxGetXDisplay,
+"Returns a swigified pointer to the X11 display.  Returns None on
+other platforms.", "");
+%inline %{
+    void* wxGetXDisplay()
+    {
+#ifdef __WXGTK__
+        return wxGetDisplay();
+#else
+        return NULL;
+#endif
+    }
+%}
+
 
 // Miscellaneous functions
 
