@@ -184,6 +184,7 @@ wxGetDisplaySizeMM = wx._misc.GetDisplaySizeMM
 wxClientDisplayRect = wx._misc.ClientDisplayRect
 wxGetClientDisplayRect = wx._misc.GetClientDisplayRect
 wxSetCursor = wx._misc.SetCursor
+wxGetXDisplay = wx._misc.GetXDisplay
 wxBeginBusyCursor = wx._misc.BeginBusyCursor
 wxGetActiveWindow = wx._misc.GetActiveWindow
 wxGenericFindWindowAtPoint = wx._misc.GenericFindWindowAtPoint

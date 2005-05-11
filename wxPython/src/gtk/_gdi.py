@@ -1850,13 +1850,13 @@ def FontFromNativeInfoString(*args, **kwargs):
     val.thisown = 1
     return val
 
-def Font2(*args, **kwargs):
+def FFont(*args, **kwargs):
     """
-    Font2(int pointSize, int family, int flags=FONTFLAG_DEFAULT, 
+    FFont(int pointSize, int family, int flags=FONTFLAG_DEFAULT, 
         String face=EmptyString, int encoding=FONTENCODING_DEFAULT) -> Font
     """
     if kwargs.has_key('faceName'): kwargs['face'] = kwargs['faceName'];del kwargs['faceName']
-    val = _gdi_.new_Font2(*args, **kwargs)
+    val = _gdi_.new_FFont(*args, **kwargs)
     val.thisown = 1
     return val
 
@@ -1871,6 +1871,16 @@ def FontFromPixelSize(*args, **kwargs):
     val.thisown = 1
     return val
 
+def FFontFromPixelSize(*args, **kwargs):
+    """
+    FFontFromPixelSize(Size pixelSize, int family, int flags=FONTFLAG_DEFAULT, 
+        String face=wxEmptyString, int encoding=FONTENCODING_DEFAULT) -> Font
+    """
+    if kwargs.has_key('faceName'): kwargs['face'] = kwargs['faceName'];del kwargs['faceName']
+    val = _gdi_.new_FFontFromPixelSize(*args, **kwargs)
+    val.thisown = 1
+    return val
+
 def Font_GetDefaultEncoding(*args, **kwargs):
     """Font_GetDefaultEncoding() -> int"""
     return _gdi_.Font_GetDefaultEncoding(*args, **kwargs)
@@ -1879,6 +1889,7 @@ def Font_SetDefaultEncoding(*args, **kwargs):
     """Font_SetDefaultEncoding(int encoding)"""
     return _gdi_.Font_SetDefaultEncoding(*args, **kwargs)
 
+Font2 = wx._deprecated(FFont, "Use `FFont` instead.") 
 #---------------------------------------------------------------------------
 
 class FontEnumerator(object):
