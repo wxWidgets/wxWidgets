@@ -4170,6 +4170,10 @@ bool wxWindowMSW::HandlePrintClient(WXHDC hDC)
     //
     // also note that in this case lParam == PRF_CLIENT but we're
     // clearly expected to paint the background and nothing else!
+
+    if ( IsTopLevel() || InheritsBackgroundColour() )
+        return false;
+
     for ( wxWindow *win = GetParent(); win; win = win->GetParent() )
     {
         if ( win->MSWPrintChild(hDC, (wxWindow *)this) )
