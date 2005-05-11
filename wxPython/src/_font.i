@@ -61,33 +61,26 @@ enum wxFontWeight
 enum
 {
     // no special flags: font with default weight/slant/anti-aliasing
-    wxFONTFLAG_DEFAULT          = 0,
+    wxFONTFLAG_DEFAULT,
 
     // slant flags (default: no slant)
-    wxFONTFLAG_ITALIC           = 1 << 0,
-    wxFONTFLAG_SLANT            = 1 << 1,
+    wxFONTFLAG_ITALIC,
+    wxFONTFLAG_SLANT,
 
     // weight flags (default: medium)
-    wxFONTFLAG_LIGHT            = 1 << 2,
-    wxFONTFLAG_BOLD             = 1 << 3,
+    wxFONTFLAG_LIGHT,
+    wxFONTFLAG_BOLD,
 
     // anti-aliasing flag: force on or off (default: the current system default)
-    wxFONTFLAG_ANTIALIASED      = 1 << 4,
-    wxFONTFLAG_NOT_ANTIALIASED  = 1 << 5,
+    wxFONTFLAG_ANTIALIASED,
+    wxFONTFLAG_NOT_ANTIALIASED,
 
     // underlined/strikethrough flags (default: no lines)
-    wxFONTFLAG_UNDERLINED       = 1 << 6,
-    wxFONTFLAG_STRIKETHROUGH    = 1 << 7,
+    wxFONTFLAG_UNDERLINED,
+    wxFONTFLAG_STRIKETHROUGH,
 
     // the mask of all currently used flags
-    wxFONTFLAG_MASK = wxFONTFLAG_ITALIC             |
-                      wxFONTFLAG_SLANT              |
-                      wxFONTFLAG_LIGHT              |
-                      wxFONTFLAG_BOLD               |
-                      wxFONTFLAG_ANTIALIASED        |
-                      wxFONTFLAG_NOT_ANTIALIASED    |
-                      wxFONTFLAG_UNDERLINED         |
-                      wxFONTFLAG_STRIKETHROUGH
+    wxFONTFLAG_MASK
 };
 
 
@@ -446,7 +439,8 @@ public:
 
     wxFont( int pointSize, int family, int style, int weight,
             bool underline=false, const wxString& face = wxPyEmptyString,
-            wxFontEncoding encoding=wxFONTENCODING_DEFAULT);
+            wxFontEncoding encoding = wxFONTENCODING_DEFAULT);
+
     ~wxFont();
 
     %RenameCtor(FontFromNativeInfo,  wxFont(const wxNativeFontInfo& info));
@@ -458,7 +452,7 @@ public:
             return new wxFont(nfi);
         }
 
-        %RenameCtor(Font2,  wxFont(int pointSize,
+        %RenameCtor(FFont,  wxFont(int pointSize,
                                    wxFontFamily family,
                                    int flags = wxFONTFLAG_DEFAULT,
                                    const wxString& face = wxPyEmptyString,
@@ -469,7 +463,7 @@ public:
     }
 
     // There is a real ctor for this on wxMSW, but not the others, so just use
-    // the factory funciton in all cases.
+    // the factory function in all cases.
     %extend {
         %RenameCtor(FontFromPixelSize, wxFont(const wxSize& pixelSize,
                                               int family,
@@ -482,6 +476,15 @@ public:
             return wxFontBase::New(pixelSize, family,
                                    style, weight, underlined,
                                    face, encoding);
+        }
+
+        %RenameCtor(FFontFromPixelSize, wxFont(const wxSize& pixelSize,
+                                               wxFontFamily family,
+                                               int flags = wxFONTFLAG_DEFAULT,
+                                               const wxString& face = wxEmptyString,
+                                               wxFontEncoding encoding = wxFONTENCODING_DEFAULT))
+        {
+            return wxFontBase::New(pixelSize, family, flags, face, encoding);
         }
     }
 
@@ -543,7 +546,7 @@ public:
     static void SetDefaultEncoding(wxFontEncoding encoding);
 };
 
-
+%pythoncode { Font2 = wx._deprecated(FFont, "Use `FFont` instead.") }
 
 //---------------------------------------------------------------------------
 %newgroup
