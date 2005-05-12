@@ -32,6 +32,12 @@
 # o Updated for 2.5 compatability.
 #
 
+"""
+Provides a `ColourSelect` button that, when clicked, will display a
+colour selection dialog.  The selected colour is displayed on the
+button itself.
+"""
+
 #----------------------------------------------------------------------------
 
 import  wx

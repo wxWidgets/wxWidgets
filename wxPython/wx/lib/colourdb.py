@@ -12,16 +12,19 @@
 #----------------------------------------------------------------------
 
 """
-Load color names/values from the rgb.txt file on my system...
+Load addition color names/values into the wx colour database.  These
+names and values originally came from the rgb.txt file on my system...
 """
 
 
 def getColourList():
+    """Returns a list of just the colour names used by this module."""
     return [ x[0] for x in getColourInfoList() ]
 
 
 
 def getColourInfoList():
+    """Returns the list of colour name/value tuples used by this module."""
     return [
         ("SNOW", 255, 250, 250),
         ("GHOST WHITE", 248, 248, 255),
@@ -659,6 +662,7 @@ def getColourInfoList():
 _haveUpdated = False
 
 def updateColourDB():
+    """Updates the wx colour database by adding new colour names and RGB values."""
     global _haveUpdated
     if not _haveUpdated:
         import wx

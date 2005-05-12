@@ -17,20 +17,20 @@
 #
 
 """
-A module that allows multiple handlers to respond to single wxWindows
+A module that allows multiple handlers to respond to single wxWidgets
 events.  This allows true NxN Observer/Observable connections: One
 event can be received by multiple handlers, and one handler can
 receive multiple events.
 
 There are two ways to register event handlers.  The first way is
-similar to standard wxPython handler registration:
+similar to standard wxPython handler registration::
 
-    from wxPython.lib.evtmgr import eventManager
+    from wx.lib.evtmgr import eventManager
     eventManager.Register(handleEvents, EVT_BUTTON, win=frame, id=101)
 
 There's also a new object-oriented way to register for events.  This
 invocation is equivalent to the one above, but does not require the
-programmer to declare or track control ids or parent containers:
+programmer to declare or track control ids or parent containers::
 
     eventManager.Register(handleEvents, EVT_BUTTON, myButton)
 
@@ -64,14 +64,17 @@ class EventManager:
         Registers a listener function (or any callable object) to
         receive events of type event coming from the source window.
         For example::
+        
             eventManager.Register(self.OnButton, EVT_BUTTON, theButton)
 
         Alternatively, the specific window where the event is
         delivered, and/or the ID of the event source can be specified.
         For example::
+        
             eventManager.Register(self.OnButton, EVT_BUTTON, win=self, id=ID_BUTTON)
             
         or::
+        
             eventManager.Register(self.OnButton, EVT_BUTTON, theButton, self)
             
         """

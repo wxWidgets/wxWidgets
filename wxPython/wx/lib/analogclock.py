@@ -20,6 +20,9 @@
 # o Many ehnacements
 #
 
+"""
+`AnalogClockWindow` is a simple analog clock class.
+"""
 
 import math
 import sys

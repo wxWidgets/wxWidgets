@@ -15,6 +15,10 @@
 # o Updated for wx namespace
 # o Tested with updated demo
 # 
+"""
+`LayoutAnchors` is a class that implements Delphi's Anchors using
+`wx.LayoutConstraints`.
+"""
 
 import  wx
 
