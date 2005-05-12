@@ -1918,21 +1918,21 @@ static PyObject *wxFontMapper_GetAltForEncoding(wxFontMapper *self,wxFontEncodin
             }
         }
 static wxFont *new_wxFont(wxString const &info){
-            wxNativeFontInfo nfi;
-            nfi.FromString(info);
-            return new wxFont(nfi);
-        }
+                wxNativeFontInfo nfi;
+                nfi.FromString(info);
+                return new wxFont(nfi);
+            }
 static wxFont *new_wxFont(int pointSize,wxFontFamily family,int flags=wxFONTFLAG_DEFAULT,wxString const &face=wxPyEmptyString,wxFontEncoding encoding=wxFONTENCODING_DEFAULT){
-            return wxFont::New(pointSize, family, flags, face, encoding);
-        }
+                return wxFont::New(pointSize, family, flags, face, encoding);
+            }
 static wxFont *new_wxFont(wxSize const &pixelSize,int family,int style,int weight,bool underlined=false,wxString const &face=wxEmptyString,wxFontEncoding encoding=wxFONTENCODING_DEFAULT){
-            return wxFontBase::New(pixelSize, family,
-                                   style, weight, underlined,
-                                   face, encoding);
-        }
+                return wxFontBase::New(pixelSize, family,
+                                       style, weight, underlined,
+                                       face, encoding);
+            }
 static wxFont *new_wxFont(wxSize const &pixelSize,wxFontFamily family,int flags=wxFONTFLAG_DEFAULT,wxString const &face=wxEmptyString,wxFontEncoding encoding=wxFONTENCODING_DEFAULT){
-            return wxFontBase::New(pixelSize, family, flags, face, encoding);
-        }
+                return wxFontBase::New(pixelSize, family, flags, face, encoding);
+            }
 static bool wxFont___eq__(wxFont *self,wxFont const *other){ return other ? (*self == *other) : false; }
 static bool wxFont___ne__(wxFont *self,wxFont const *other){ return other ? (*self != *other) : true;  }
 

@@ -1765,7 +1765,13 @@ def FontMapper_GetDefaultConfigPath(*args, **kwargs):
 #---------------------------------------------------------------------------
 
 class Font(GDIObject):
-    """Proxy of C++ Font class"""
+    """
+    A font is an object which determines the appearance of text. Fonts are
+    used for drawing text to a device context, and setting the appearance
+    of a window's text.
+
+    You can retrieve the current system font settings with `wx.SystemSettings`.
+    """
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxFont instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -1773,6 +1779,35 @@ class Font(GDIObject):
         __init__(self, int pointSize, int family, int style, int weight, bool underline=False, 
             String face=EmptyString, 
             int encoding=FONTENCODING_DEFAULT) -> Font
+
+        Creates a font object with the specified attributes.
+
+            :param pointSize:  The size of the font in points.
+
+            :param family: Font family.  A generic way of referring to fonts
+                without specifying actual facename.  It can be One of 
+                the ``wx.FONTFAMILY_xxx`` constants.
+
+            :param style: One of the ``wx.FONTSTYLE_xxx`` constants.
+
+            :param weight: Font weight, sometimes also referred to as font
+                boldness. One of the ``wx.FONTWEIGHT_xxx`` constants.
+
+            :param underline: The value can be ``True`` or ``False`` and
+                indicates whether the font will include an underline.  This
+                may not be supported on all platforms.
+
+            :param face: An optional string specifying the actual typeface to
+                be used. If it is an empty string, a default typeface will be
+                chosen based on the family.
+
+            :param encoding: An encoding which may be one of the
+                ``wx.FONTENCODING_xxx`` constants.  If the specified encoding isn't
+                available, no font is created.
+
+        :see: `wx.FFont`, `wx.FontFromPixelSize`, `wx.FFontFromPixelSize`,
+            `wx.FontFromNativeInfoString`, `wx.FontFromNativeInfo`
+
         """
         if kwargs.has_key('faceName'): kwargs['face'] = kwargs['faceName'];del kwargs['faceName']
         newobj = _gdi_.new_Font(*args, **kwargs)
@@ -1786,7 +1821,11 @@ class Font(GDIObject):
         except: pass
 
     def Ok(*args, **kwargs):
-        """Ok(self) -> bool"""
+        """
+        Ok(self) -> bool
+
+        Returns ``True`` if this font was successfully created.
+        """
         return _gdi_.Font_Ok(*args, **kwargs)
 
     def __nonzero__(self): return self.Ok() 
@@ -1799,111 +1838,234 @@ class Font(GDIObject):
         return _gdi_.Font___ne__(*args, **kwargs)
 
     def GetPointSize(*args, **kwargs):
-        """GetPointSize(self) -> int"""
+        """
+        GetPointSize(self) -> int
+
+        Gets the point size.
+        """
         return _gdi_.Font_GetPointSize(*args, **kwargs)
 
     def GetPixelSize(*args, **kwargs):
-        """GetPixelSize(self) -> Size"""
+        """
+        GetPixelSize(self) -> Size
+
+        Returns the size in pixels if the font was constructed with a pixel
+        size.
+        """
         return _gdi_.Font_GetPixelSize(*args, **kwargs)
 
     def IsUsingSizeInPixels(*args, **kwargs):
-        """IsUsingSizeInPixels(self) -> bool"""
+        """
+        IsUsingSizeInPixels(self) -> bool
+
+        Returns ``True`` if the font is using a pixelSize.
+        """
         return _gdi_.Font_IsUsingSizeInPixels(*args, **kwargs)
 
     def GetFamily(*args, **kwargs):
-        """GetFamily(self) -> int"""
+        """
+        GetFamily(self) -> int
+
+        Gets the font family. 
+        """
         return _gdi_.Font_GetFamily(*args, **kwargs)
 
     def GetStyle(*args, **kwargs):
-        """GetStyle(self) -> int"""
+        """
+        GetStyle(self) -> int
+
+        Gets the font style.
+        """
         return _gdi_.Font_GetStyle(*args, **kwargs)
 
     def GetWeight(*args, **kwargs):
-        """GetWeight(self) -> int"""
+        """
+        GetWeight(self) -> int
+
+        Gets the font weight. 
+        """
         return _gdi_.Font_GetWeight(*args, **kwargs)
 
     def GetUnderlined(*args, **kwargs):
-        """GetUnderlined(self) -> bool"""
+        """
+        GetUnderlined(self) -> bool
+
+        Returns ``True`` if the font is underlined, ``False`` otherwise.
+        """
         return _gdi_.Font_GetUnderlined(*args, **kwargs)
 
     def GetFaceName(*args, **kwargs):
-        """GetFaceName(self) -> String"""
+        """
+        GetFaceName(self) -> String
+
+        Returns the typeface name associated with the font, or the empty
+        string if there is no typeface information.
+        """
         return _gdi_.Font_GetFaceName(*args, **kwargs)
 
     def GetEncoding(*args, **kwargs):
-        """GetEncoding(self) -> int"""
+        """
+        GetEncoding(self) -> int
+
+        Get the font's encoding.
+        """
         return _gdi_.Font_GetEncoding(*args, **kwargs)
 
     def GetNativeFontInfo(*args, **kwargs):
-        """GetNativeFontInfo(self) -> NativeFontInfo"""
+        """
+        GetNativeFontInfo(self) -> NativeFontInfo
+
+        Constructs a `wx.NativeFontInfo` object from this font.
+        """
         return _gdi_.Font_GetNativeFontInfo(*args, **kwargs)
 
     def IsFixedWidth(*args, **kwargs):
-        """IsFixedWidth(self) -> bool"""
+        """
+        IsFixedWidth(self) -> bool
+
+        Returns true if the font is a fixed width (or monospaced) font, false
+        if it is a proportional one or font is invalid.
+        """
         return _gdi_.Font_IsFixedWidth(*args, **kwargs)
 
     def GetNativeFontInfoDesc(*args, **kwargs):
-        """GetNativeFontInfoDesc(self) -> String"""
+        """
+        GetNativeFontInfoDesc(self) -> String
+
+        Returns the platform-dependent string completely describing this font
+        or an empty string if the font isn't valid.
+        """
         return _gdi_.Font_GetNativeFontInfoDesc(*args, **kwargs)
 
     def GetNativeFontInfoUserDesc(*args, **kwargs):
-        """GetNativeFontInfoUserDesc(self) -> String"""
+        """
+        GetNativeFontInfoUserDesc(self) -> String
+
+        Returns a human readable version of `GetNativeFontInfoDesc`.
+        """
         return _gdi_.Font_GetNativeFontInfoUserDesc(*args, **kwargs)
 
     def SetPointSize(*args, **kwargs):
-        """SetPointSize(self, int pointSize)"""
+        """
+        SetPointSize(self, int pointSize)
+
+        Sets the point size.
+        """
         return _gdi_.Font_SetPointSize(*args, **kwargs)
 
     def SetPixelSize(*args, **kwargs):
-        """SetPixelSize(self, Size pixelSize)"""
+        """
+        SetPixelSize(self, Size pixelSize)
+
+        Sets the size in pixels rather than points.  If there is platform API
+        support for this then it is used, otherwise a font with the closest
+        size is found using a binary search.
+        """
         return _gdi_.Font_SetPixelSize(*args, **kwargs)
 
     def SetFamily(*args, **kwargs):
-        """SetFamily(self, int family)"""
+        """
+        SetFamily(self, int family)
+
+        Sets the font family.
+        """
         return _gdi_.Font_SetFamily(*args, **kwargs)
 
     def SetStyle(*args, **kwargs):
-        """SetStyle(self, int style)"""
+        """
+        SetStyle(self, int style)
+
+        Sets the font style.
+        """
         return _gdi_.Font_SetStyle(*args, **kwargs)
 
     def SetWeight(*args, **kwargs):
-        """SetWeight(self, int weight)"""
+        """
+        SetWeight(self, int weight)
+
+        Sets the font weight.
+        """
         return _gdi_.Font_SetWeight(*args, **kwargs)
 
     def SetFaceName(*args, **kwargs):
-        """SetFaceName(self, String faceName)"""
+        """
+        SetFaceName(self, String faceName)
+
+        Sets the facename for the font.  The facename, which should be a valid
+        font installed on the end-user's system.
+
+        To avoid portability problems, don't rely on a specific face, but
+        specify the font family instead or as well. A suitable font will be
+        found on the end-user's system. If both the family and the facename
+        are specified, wxWidgets will first search for the specific face, and
+        then for a font belonging to the same family.
+        """
         return _gdi_.Font_SetFaceName(*args, **kwargs)
 
     def SetUnderlined(*args, **kwargs):
-        """SetUnderlined(self, bool underlined)"""
+        """
+        SetUnderlined(self, bool underlined)
+
+        Sets underlining.
+        """
         return _gdi_.Font_SetUnderlined(*args, **kwargs)
 
     def SetEncoding(*args, **kwargs):
-        """SetEncoding(self, int encoding)"""
+        """
+        SetEncoding(self, int encoding)
+
+        Set the font encoding.
+        """
         return _gdi_.Font_SetEncoding(*args, **kwargs)
 
     def SetNativeFontInfo(*args, **kwargs):
-        """SetNativeFontInfo(self, NativeFontInfo info)"""
+        """
+        SetNativeFontInfo(self, NativeFontInfo info)
+
+        Set the font's attributes from a `wx.NativeFontInfo` object.
+        """
         return _gdi_.Font_SetNativeFontInfo(*args, **kwargs)
 
     def SetNativeFontInfoFromString(*args, **kwargs):
-        """SetNativeFontInfoFromString(self, String info)"""
+        """
+        SetNativeFontInfoFromString(self, String info)
+
+        Set the font's attributes from string representation of a
+        `wx.NativeFontInfo` object.
+        """
         return _gdi_.Font_SetNativeFontInfoFromString(*args, **kwargs)
 
     def SetNativeFontInfoUserDesc(*args, **kwargs):
-        """SetNativeFontInfoUserDesc(self, String info)"""
+        """
+        SetNativeFontInfoUserDesc(self, String info)
+
+        Set the font's attributes from a string formerly returned from
+        `GetNativeFontInfoDesc`.
+        """
         return _gdi_.Font_SetNativeFontInfoUserDesc(*args, **kwargs)
 
     def GetFamilyString(*args, **kwargs):
-        """GetFamilyString(self) -> String"""
+        """
+        GetFamilyString(self) -> String
+
+        Returns a string representation of the font family.
+        """
         return _gdi_.Font_GetFamilyString(*args, **kwargs)
 
     def GetStyleString(*args, **kwargs):
-        """GetStyleString(self) -> String"""
+        """
+        GetStyleString(self) -> String
+
+        Returns a string representation of the font style.
+        """
         return _gdi_.Font_GetStyleString(*args, **kwargs)
 
     def GetWeightString(*args, **kwargs):
-        """GetWeightString(self) -> String"""
+        """
+        GetWeightString(self) -> String
+
+        Return a string representation of the font weight.
+        """
         return _gdi_.Font_GetWeightString(*args, **kwargs)
 
     def SetNoAntiAliasing(*args, **kwargs):
@@ -1915,12 +2077,21 @@ class Font(GDIObject):
         return _gdi_.Font_GetNoAntiAliasing(*args, **kwargs)
 
     def GetDefaultEncoding(*args, **kwargs):
-        """GetDefaultEncoding() -> int"""
+        """
+        GetDefaultEncoding() -> int
+
+        Returns the encoding used for all fonts created with an encoding of
+        ``wx.FONTENCODING_DEFAULT``.
+        """
         return _gdi_.Font_GetDefaultEncoding(*args, **kwargs)
 
     GetDefaultEncoding = staticmethod(GetDefaultEncoding)
     def SetDefaultEncoding(*args, **kwargs):
-        """SetDefaultEncoding(int encoding)"""
+        """
+        SetDefaultEncoding(int encoding)
+
+        Sets the default font encoding.
+        """
         return _gdi_.Font_SetDefaultEncoding(*args, **kwargs)
 
     SetDefaultEncoding = staticmethod(SetDefaultEncoding)
@@ -1933,26 +2104,53 @@ class FontPtr(Font):
 _gdi_.Font_swigregister(FontPtr)
 
 def FontFromNativeInfo(*args, **kwargs):
-    """FontFromNativeInfo(NativeFontInfo info) -> Font"""
+    """
+    FontFromNativeInfo(NativeFontInfo info) -> Font
+
+    Construct a `wx.Font` from a `wx.NativeFontInfo` object.
+    """
     if kwargs.has_key('faceName'): kwargs['face'] = kwargs['faceName'];del kwargs['faceName']
     val = _gdi_.new_FontFromNativeInfo(*args, **kwargs)
     val.thisown = 1
     return val
 
 def FontFromNativeInfoString(*args, **kwargs):
-    """FontFromNativeInfoString(String info) -> Font"""
+    """
+    FontFromNativeInfoString(String info) -> Font
+
+    Construct a `wx.Font` from the string representation of a
+    `wx.NativeFontInfo` object.
+    """
     if kwargs.has_key('faceName'): kwargs['face'] = kwargs['faceName'];del kwargs['faceName']
     val = _gdi_.new_FontFromNativeInfoString(*args, **kwargs)
     val.thisown = 1
     return val
 
-def Font2(*args, **kwargs):
+def FFont(*args, **kwargs):
     """
-    Font2(int pointSize, int family, int flags=FONTFLAG_DEFAULT, 
+    FFont(int pointSize, int family, int flags=FONTFLAG_DEFAULT, 
         String face=EmptyString, int encoding=FONTENCODING_DEFAULT) -> Font
+
+    A bit of a simpler way to create a `wx.Font` using flags instead of
+    individual attribute settings.  The value of flags can be a
+    combination of the following:
+
+        ============================  ==
+        wx.FONTFLAG_DEFAULT
+        wx.FONTFLAG_ITALIC
+        wx.FONTFLAG_SLANT
+        wx.FONTFLAG_LIGHT
+        wx.FONTFLAG_BOLD
+        wx.FONTFLAG_ANTIALIASED
+        wx.FONTFLAG_NOT_ANTIALIASED
+        wx.FONTFLAG_UNDERLINED
+        wx.FONTFLAG_STRIKETHROUGH
+        ============================  ==
+
+    :see: `wx.Font.__init__`
     """
     if kwargs.has_key('faceName'): kwargs['face'] = kwargs['faceName'];del kwargs['faceName']
-    val = _gdi_.new_Font2(*args, **kwargs)
+    val = _gdi_.new_FFont(*args, **kwargs)
     val.thisown = 1
     return val
 
@@ -1961,20 +2159,52 @@ def FontFromPixelSize(*args, **kwargs):
     FontFromPixelSize(Size pixelSize, int family, int style, int weight, 
         bool underlined=False, String face=wxEmptyString, 
         int encoding=FONTENCODING_DEFAULT) -> Font
+
+    Creates a font using a size in pixels rather than points.  If there is
+    platform API support for this then it is used, otherwise a font with
+    the closest size is found using a binary search.
+
+    :see: `wx.Font.__init__`
     """
     if kwargs.has_key('faceName'): kwargs['face'] = kwargs['faceName'];del kwargs['faceName']
     val = _gdi_.new_FontFromPixelSize(*args, **kwargs)
     val.thisown = 1
     return val
 
+def FFontFromPixelSize(*args, **kwargs):
+    """
+    FFontFromPixelSize(Size pixelSize, int family, int flags=FONTFLAG_DEFAULT, 
+        String face=wxEmptyString, int encoding=FONTENCODING_DEFAULT) -> Font
+
+    Creates a font using a size in pixels rather than points.  If there is
+    platform API support for this then it is used, otherwise a font with
+    the closest size is found using a binary search.
+
+    :see: `wx.Font.__init__`, `wx.FFont`
+    """
+    if kwargs.has_key('faceName'): kwargs['face'] = kwargs['faceName'];del kwargs['faceName']
+    val = _gdi_.new_FFontFromPixelSize(*args, **kwargs)
+    val.thisown = 1
+    return val
+
 def Font_GetDefaultEncoding(*args, **kwargs):
-    """Font_GetDefaultEncoding() -> int"""
+    """
+    Font_GetDefaultEncoding() -> int
+
+    Returns the encoding used for all fonts created with an encoding of
+    ``wx.FONTENCODING_DEFAULT``.
+    """
     return _gdi_.Font_GetDefaultEncoding(*args, **kwargs)
 
 def Font_SetDefaultEncoding(*args, **kwargs):
-    """Font_SetDefaultEncoding(int encoding)"""
+    """
+    Font_SetDefaultEncoding(int encoding)
+
+    Sets the default font encoding.
+    """
     return _gdi_.Font_SetDefaultEncoding(*args, **kwargs)
 
+Font2 = wx._deprecated(FFont, "Use `wx.FFont` instead.") 
 #---------------------------------------------------------------------------
 
 class FontEnumerator(object):

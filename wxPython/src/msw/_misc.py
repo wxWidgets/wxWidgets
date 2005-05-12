@@ -534,6 +534,15 @@ def SetCursor(*args, **kwargs):
     """SetCursor(Cursor cursor)"""
     return _misc_.SetCursor(*args, **kwargs)
 
+def GetXDisplay(*args, **kwargs):
+    """
+    GetXDisplay() -> void
+
+    Returns a swigified pointer to the X11 display.  Returns None on
+    other platforms.
+    """
+    return _misc_.GetXDisplay(*args, **kwargs)
+
 def BeginBusyCursor(*args, **kwargs):
     """BeginBusyCursor(Cursor cursor=wxHOURGLASS_CURSOR)"""
     return _misc_.BeginBusyCursor(*args, **kwargs)

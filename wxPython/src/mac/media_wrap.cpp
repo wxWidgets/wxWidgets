@@ -1398,7 +1398,7 @@ public:
 class wxMediaCtrl : public wxControl
 {
 public:
-      wxMediaCtrl()    { wxPyRaiseNotImplemented(); }
+    wxMediaCtrl()    { wxPyRaiseNotImplemented(); }
 
     wxMediaCtrl(wxWindow* , wxWindowID ,
                 const wxString& ,
