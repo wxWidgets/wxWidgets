@@ -310,7 +310,7 @@ class LineShape(Shape):
         line_y = (last_point[1] + second_last_point[1]) / 2.0
 
         point = wx.RealPoint(line_x, line_y)
-        self._lineControlPoints.insert(len(self._lineControlPoints), point)
+        self._lineControlPoints.insert(len(self._lineControlPoints)-1, point)
 
     def DeleteLineControlPoint(self):
         """Delete an arbitary point on the line."""
