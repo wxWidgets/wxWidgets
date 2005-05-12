@@ -264,7 +264,7 @@
 // Use standard C++ streams if 1. If 0, use wxWin streams implementation only.
 #define wxUSE_STD_IOSTREAM  0
 
-// Enable converion to  standard C++ string if 1.
+// Enable conversion to standard C++ string if 1.
 #define wxUSE_STD_STRING  0
 
 // ----------------------------------------------------------------------------

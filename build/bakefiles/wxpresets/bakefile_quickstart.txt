@@ -106,7 +106,7 @@ on from here.
 
 -- Project Types --
 
-As mentioned earilier, Bakefile builds makefiles for many different
+As mentioned earlier, Bakefile builds makefiles for many different
 development environments. The -f option accepts a list of formats that you
 would like to build, separated by commas. Valid values are:
 
