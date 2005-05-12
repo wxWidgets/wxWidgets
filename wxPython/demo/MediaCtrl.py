@@ -32,9 +32,6 @@ class TestPanel(wx.Panel):
         btn4 = wx.Button(self, -1, "Stop")
         self.Bind(wx.EVT_BUTTON, self.OnStop, btn4)
 
-        btn5 = wx.ToggleButton(self, -1, "Loop")
-        self.Bind(wx.EVT_TOGGLEBUTTON, self.OnLoopToggle, btn5)
-
         slider = wx.Slider(self, -1, 0, 0, 0)
         self.slider = slider
         self.Bind(wx.EVT_SLIDER, self.OnSeek, slider)
@@ -51,7 +48,6 @@ class TestPanel(wx.Panel):
         sizer.Add(btn2, (2,3))
         sizer.Add(btn3, (3,3))
         sizer.Add(btn4, (4,3))
-        sizer.Add(btn5, (5,3))
         sizer.Add(slider, (6,1), flag=wx.EXPAND)
         sizer.Add(self.st_size, (1, 5))
         sizer.Add(self.st_len,  (2, 5))
@@ -88,11 +84,6 @@ class TestPanel(wx.Panel):
             self.slider.SetRange(0, self.mc.Length())
             self.mc.Play()
         
-    
-    def OnLoopToggle(self, evt):
-        btn = evt.GetEventObject()
-        self.mc.Loop(btn.GetValue())
-                     
     
     def OnPlay(self, evt):
         self.mc.Play()
