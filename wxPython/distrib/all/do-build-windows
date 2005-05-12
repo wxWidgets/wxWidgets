@@ -36,13 +36,6 @@ WXWIN=`cygpath -w $WXDIR`
 export WXWIN
 
 
-# # Fix the PATH.  (Why is this needed??)
-# PATH=/usr/local/bin:/usr/bin:/bin:/usr/X11R6/bin:/home/robind/bin:.:$WXDIR/lib/vc_dll:$PATH
-# export PATH
-# echo "-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-="
-# echo $PATH
-# echo "-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-="
-# exit 0
 
 # setup the compiler
 if [ $PYVER = 2.3 ]; then
