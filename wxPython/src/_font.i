@@ -433,120 +433,372 @@ MustHaveApp(wxFont);
 MustHaveApp(wxFont::GetDefaultEncoding);
 MustHaveApp(wxFont::SetDefaultEncoding);
 
+DocStr(wxFont,
+"A font is an object which determines the appearance of text. Fonts are
+used for drawing text to a device context, and setting the appearance
+of a window's text.
+
+You can retrieve the current system font settings with `wx.SystemSettings`.", "
+
+The possible values for the family parameter of wx.Font constructor are:
+
+    ========================  =============================
+    wx.FONTFAMILY_DEFAULT     Chooses a default font.
+    wx.FONTFAMILY_DECORATIVE  A decorative font. 
+    wx.FONTFAMILY_ROMAN       A formal, serif font.
+    wx.FONTFAMILY_SCRIPT      A handwriting font. 
+    wx.FONTFAMILY_SWISS       A sans-serif font. 
+    wx.FONTFAMILY_MODERN      Usually a fixed pitch font.    
+    wx.FONTFAMILY_TELETYPE    A teletype font. 
+    ========================  =============================
+
+The possible values for the weight parameter are:
+
+    ====================  ==
+    wx.FONTWEIGHT_NORMAL
+    wx.FONTWEIGHT_LIGHT
+    wx.FONTWEIGHT_BOLD
+    ====================  ==
+
+The known font encodings are:
+
+    ===========================       ====================================
+    wx.FONTENCODING_SYSTEM            system default
+    wx.FONTENCODING_DEFAULT           current default encoding
+    wx.FONTENCODING_ISO8859_1         West European (Latin1)
+    wx.FONTENCODING_ISO8859_2         Central and East European (Latin2)
+    wx.FONTENCODING_ISO8859_3         Esperanto (Latin3)
+    wx.FONTENCODING_ISO8859_4         Baltic (old) (Latin4)
+    wx.FONTENCODING_ISO8859_5         Cyrillic
+    wx.FONTENCODING_ISO8859_6         Arabic
+    wx.FONTENCODING_ISO8859_7         Greek
+    wx.FONTENCODING_ISO8859_8         Hebrew
+    wx.FONTENCODING_ISO8859_9         Turkish (Latin5)
+    wx.FONTENCODING_ISO8859_10        Variation of Latin4 (Latin6)
+    wx.FONTENCODING_ISO8859_11        Thai
+    wx.FONTENCODING_ISO8859_12        doesn't exist currently, but put it
+                                      here anyhow to make all ISO8859
+                                      consecutive numbers
+    wx.FONTENCODING_ISO8859_13        Baltic (Latin7)
+    wx.FONTENCODING_ISO8859_14        Latin8
+    wx.FONTENCODING_ISO8859_15        Latin9 (a.k.a. Latin0, includes euro)
+    wx.FONTENCODING_KOI8              Cyrillic charset
+    wx.FONTENCODING_ALTERNATIVE       same as MS-DOS CP866
+    wx.FONTENCODING_BULGARIAN         used under Linux in Bulgaria
+    wx.FONTENCODING_CP437             original MS-DOS codepage
+    wx.FONTENCODING_CP850             CP437 merged with Latin1
+    wx.FONTENCODING_CP852             CP437 merged with Latin2
+    wx.FONTENCODING_CP855             another cyrillic encoding
+    wx.FONTENCODING_CP866             and another one
+    wx.FONTENCODING_CP874             WinThai
+    wx.FONTENCODING_CP1250            WinLatin2
+    wx.FONTENCODING_CP1251            WinCyrillic
+    wx.FONTENCODING_CP1252            WinLatin1
+    wx.FONTENCODING_CP1253            WinGreek (8859-7)
+    wx.FONTENCODING_CP1254            WinTurkish
+    wx.FONTENCODING_CP1255            WinHebrew
+    wx.FONTENCODING_CP1256            WinArabic
+    wx.FONTENCODING_CP1257            WinBaltic (same as Latin 7)
+    wx.FONTENCODING_UTF7              UTF-7 Unicode encoding
+    wx.FONTENCODING_UTF8              UTF-8 Unicode encoding
+    ===========================       ====================================
+
+");
+
 class wxFont : public wxGDIObject {
 public:
     %pythonPrepend wxFont   "if kwargs.has_key('faceName'): kwargs['face'] = kwargs['faceName'];del kwargs['faceName']"
 
-    wxFont( int pointSize, int family, int style, int weight,
-            bool underline=false, const wxString& face = wxPyEmptyString,
-            wxFontEncoding encoding = wxFONTENCODING_DEFAULT);
+    DocCtorStr(
+        wxFont( int pointSize, int family, int style, int weight,
+                bool underline=false, const wxString& face = wxPyEmptyString,
+                wxFontEncoding encoding = wxFONTENCODING_DEFAULT),
+        "Creates a font object with the specified attributes.
+
+    :param pointSize:  The size of the font in points.
+
+    :param family: Font family.  A generic way of referring to fonts
+        without specifying actual facename.  It can be One of 
+        the ``wx.FONTFAMILY_xxx`` constants.
+
+    :param style: One of the ``wx.FONTSTYLE_xxx`` constants.
+
+    :param weight: Font weight, sometimes also referred to as font
+        boldness. One of the ``wx.FONTWEIGHT_xxx`` constants.
+
+    :param underline: The value can be ``True`` or ``False`` and
+        indicates whether the font will include an underline.  This
+        may not be supported on all platforms.
+
+    :param face: An optional string specifying the actual typeface to
+        be used. If it is an empty string, a default typeface will be
+        chosen based on the family.
+
+    :param encoding: An encoding which may be one of the
+        ``wx.FONTENCODING_xxx`` constants.  If the specified encoding isn't
+        available, no font is created.
+
+:see: `wx.FFont`, `wx.FontFromPixelSize`, `wx.FFontFromPixelSize`,
+    `wx.FontFromNativeInfoString`, `wx.FontFromNativeInfo`
+", "");
 
     ~wxFont();
 
-    %RenameCtor(FontFromNativeInfo,  wxFont(const wxNativeFontInfo& info));
+    %RenameDocCtor(
+        FontFromNativeInfo,
+        "Construct a `wx.Font` from a `wx.NativeFontInfo` object.", "",
+        wxFont(const wxNativeFontInfo& info));
+    
     %extend {
-        %RenameCtor(FontFromNativeInfoString, wxFont(const wxString& info))
-        {
-            wxNativeFontInfo nfi;
-            nfi.FromString(info);
-            return new wxFont(nfi);
-        }
-
-        %RenameCtor(FFont,  wxFont(int pointSize,
-                                   wxFontFamily family,
-                                   int flags = wxFONTFLAG_DEFAULT,
-                                   const wxString& face = wxPyEmptyString,
-                                   wxFontEncoding encoding = wxFONTENCODING_DEFAULT))
-        {
-            return wxFont::New(pointSize, family, flags, face, encoding);
-        }
+        %RenameDocCtor(
+            FontFromNativeInfoString,
+            "Construct a `wx.Font` from the string representation of a
+`wx.NativeFontInfo` object.", "", 
+            wxFont(const wxString& info))
+            {
+                wxNativeFontInfo nfi;
+                nfi.FromString(info);
+                return new wxFont(nfi);
+            }
     }
 
-    // There is a real ctor for this on wxMSW, but not the others, so just use
-    // the factory function in all cases.
-    %extend {
-        %RenameCtor(FontFromPixelSize, wxFont(const wxSize& pixelSize,
-                                              int family,
-                                              int style,
-                                              int weight,
-                                              bool underlined = false,
-                                              const wxString& face = wxEmptyString,
-                                              wxFontEncoding encoding = wxFONTENCODING_DEFAULT))
-        {
-            return wxFontBase::New(pixelSize, family,
-                                   style, weight, underlined,
-                                   face, encoding);
-        }
+    
+    %extend {        
+        %RenameDocCtor(
+            FFont,
+            "A bit of a simpler way to create a `wx.Font` using flags instead of
+individual attribute settings.  The value of flags can be a
+combination of the following:
 
-        %RenameCtor(FFontFromPixelSize, wxFont(const wxSize& pixelSize,
-                                               wxFontFamily family,
-                                               int flags = wxFONTFLAG_DEFAULT,
-                                               const wxString& face = wxEmptyString,
-                                               wxFontEncoding encoding = wxFONTENCODING_DEFAULT))
-        {
-            return wxFontBase::New(pixelSize, family, flags, face, encoding);
-        }
+    ============================  ==
+    wx.FONTFLAG_DEFAULT
+    wx.FONTFLAG_ITALIC
+    wx.FONTFLAG_SLANT
+    wx.FONTFLAG_LIGHT
+    wx.FONTFLAG_BOLD
+    wx.FONTFLAG_ANTIALIASED
+    wx.FONTFLAG_NOT_ANTIALIASED
+    wx.FONTFLAG_UNDERLINED
+    wx.FONTFLAG_STRIKETHROUGH
+    ============================  ==
+
+:see: `wx.Font.__init__`", "",
+
+            wxFont(int pointSize,
+                   wxFontFamily family,
+                   int flags = wxFONTFLAG_DEFAULT,
+                   const wxString& face = wxPyEmptyString,
+                   wxFontEncoding encoding = wxFONTENCODING_DEFAULT))
+            {
+                return wxFont::New(pointSize, family, flags, face, encoding);
+            }
+
+
+        // There is a real ctor for this on wxMSW, but not the others, so just
+        // use the factory function in all cases.
+        
+        %RenameDocCtor(
+            FontFromPixelSize,
+            "Creates a font using a size in pixels rather than points.  If there is
+platform API support for this then it is used, otherwise a font with
+the closest size is found using a binary search.
+
+:see: `wx.Font.__init__`", "", 
+            wxFont(const wxSize& pixelSize,
+                   int family,
+                   int style,
+                   int weight,
+                   bool underlined = false,
+                   const wxString& face = wxEmptyString,
+                   wxFontEncoding encoding = wxFONTENCODING_DEFAULT))
+            {
+                return wxFontBase::New(pixelSize, family,
+                                       style, weight, underlined,
+                                       face, encoding);
+            }
+
+        %RenameDocCtor(
+            FFontFromPixelSize,
+            "Creates a font using a size in pixels rather than points.  If there is
+platform API support for this then it is used, otherwise a font with
+the closest size is found using a binary search.
+
+:see: `wx.Font.__init__`, `wx.FFont`", "",
+            wxFont(const wxSize& pixelSize,
+                   wxFontFamily family,
+                   int flags = wxFONTFLAG_DEFAULT,
+                   const wxString& face = wxEmptyString,
+                   wxFontEncoding encoding = wxFONTENCODING_DEFAULT))
+            {
+                return wxFontBase::New(pixelSize, family, flags, face, encoding);
+            }
     }
 
     
 
     // was the font successfully created?
-    bool Ok() const;
+    DocDeclStr(
+        bool , Ok() const,
+        "Returns ``True`` if this font was successfully created.", "");    
     %pythoncode { def __nonzero__(self): return self.Ok() }
 
+    
     // comparison
     %extend {
         bool __eq__(const wxFont* other) { return other ? (*self == *other) : false; }
         bool __ne__(const wxFont* other) { return other ? (*self != *other) : true;  }
     }
 
-    // accessors: get the font characteristics
-    virtual int GetPointSize() const;
-    virtual wxSize GetPixelSize() const;
-    virtual bool IsUsingSizeInPixels() const;
-    virtual int GetFamily() const;
-    virtual int GetStyle() const;
-    virtual int GetWeight() const;
-    virtual bool GetUnderlined() const;
-    virtual wxString GetFaceName() const;
-    virtual wxFontEncoding GetEncoding() const;
-    virtual const wxNativeFontInfo *GetNativeFontInfo() const;
+    
+    DocDeclStr(
+        virtual int , GetPointSize() const,
+        "Gets the point size.", "");
+    
+    DocDeclStr(
+        virtual wxSize , GetPixelSize() const,
+        "Returns the size in pixels if the font was constructed with a pixel
+size.", "");
+    
+    DocDeclStr(
+        virtual bool , IsUsingSizeInPixels() const,
+        "Returns ``True`` if the font is using a pixelSize.", "");
+    
+    
+    DocDeclStr(
+        virtual int , GetFamily() const,
+        "Gets the font family. ", "");
+    
+    DocDeclStr(
+        virtual int , GetStyle() const,
+        "Gets the font style.", "");
+    
+    DocDeclStr(
+        virtual int , GetWeight() const,
+        "Gets the font weight. ", "");
+    
+    DocDeclStr(
+        virtual bool , GetUnderlined() const,
+        "Returns ``True`` if the font is underlined, ``False`` otherwise.", "");
+    
+    DocDeclStr(
+        virtual wxString , GetFaceName() const,
+        "Returns the typeface name associated with the font, or the empty
+string if there is no typeface information.", "");
+    
+    DocDeclStr(
+        virtual wxFontEncoding , GetEncoding() const,
+        "Get the font's encoding.", "");
+    
+    DocDeclStr(
+        virtual const wxNativeFontInfo *, GetNativeFontInfo() const,
+        "Constructs a `wx.NativeFontInfo` object from this font.", "");
+    
 
-    virtual bool IsFixedWidth() const;
+    DocDeclStr(
+        virtual bool , IsFixedWidth() const,
+        "Returns true if the font is a fixed width (or monospaced) font, false
+if it is a proportional one or font is invalid.", "");
+    
 
-    wxString GetNativeFontInfoDesc() const;
-    wxString GetNativeFontInfoUserDesc() const;
+    DocDeclStr(
+        wxString , GetNativeFontInfoDesc() const,
+        "Returns the platform-dependent string completely describing this font
+or an empty string if the font isn't valid.", "");
+    
+    DocDeclStr(
+        wxString , GetNativeFontInfoUserDesc() const,
+        "Returns a human readable version of `GetNativeFontInfoDesc`.", "");
+    
 
     // change the font characteristics
-    virtual void SetPointSize( int pointSize );
-    virtual void SetPixelSize( const wxSize& pixelSize );
-    virtual void SetFamily( int family );
-    virtual void SetStyle( int style );
-    virtual void SetWeight( int weight );
-    virtual void SetFaceName( const wxString& faceName );
-    virtual void SetUnderlined( bool underlined );
-    virtual void SetEncoding(wxFontEncoding encoding);
-    void SetNativeFontInfo(const wxNativeFontInfo& info);
-    %Rename(SetNativeFontInfoFromString, void, SetNativeFontInfo(const wxString& info));
-    void SetNativeFontInfoUserDesc(const wxString& info);
+    DocDeclStr(
+        virtual void , SetPointSize( int pointSize ),
+        "Sets the point size.", "");
+    
+    DocDeclStr(
+        virtual void , SetPixelSize( const wxSize& pixelSize ),
+        "Sets the size in pixels rather than points.  If there is platform API
+support for this then it is used, otherwise a font with the closest
+size is found using a binary search.", "");
+    
+    DocDeclStr(
+        virtual void , SetFamily( int family ),
+        "Sets the font family.", "");
+    
+    DocDeclStr(
+        virtual void , SetStyle( int style ),
+        "Sets the font style.", "");
+    
+    DocDeclStr(
+        virtual void , SetWeight( int weight ),
+        "Sets the font weight.", "");
+    
+    DocDeclStr(
+        virtual void , SetFaceName( const wxString& faceName ),
+        "Sets the facename for the font.  The facename, which should be a valid
+font installed on the end-user's system.
 
-    // translate the fonts into human-readable string (i.e. GetStyleString()
-    // will return "wxITALIC" for an italic font, ...)
-    wxString GetFamilyString() const;
-    wxString GetStyleString() const;
-    wxString GetWeightString() const;
+To avoid portability problems, don't rely on a specific face, but
+specify the font family instead or as well. A suitable font will be
+found on the end-user's system. If both the family and the facename
+are specified, wxWidgets will first search for the specific face, and
+then for a font belonging to the same family.", "");
+    
+    DocDeclStr(
+        virtual void , SetUnderlined( bool underlined ),
+        "Sets underlining.", "");
+    
+    DocDeclStr(
+        virtual void , SetEncoding(wxFontEncoding encoding),
+        "Set the font encoding.", "");
+    
+    DocDeclStr(
+        void , SetNativeFontInfo(const wxNativeFontInfo& info),
+        "Set the font's attributes from a `wx.NativeFontInfo` object.", "");
+    
 
-    // Unofficial API, don't use
+    DocDeclStrName(
+        void , SetNativeFontInfo(const wxString& info),
+        "Set the font's attributes from string representation of a
+`wx.NativeFontInfo` object.", "",
+        SetNativeFontInfoFromString);
+    
+    DocDeclStr(
+        void , SetNativeFontInfoUserDesc(const wxString& info),
+        "Set the font's attributes from a string formerly returned from
+`GetNativeFontInfoDesc`.", "");
+    
+
+    DocDeclStr(
+        wxString , GetFamilyString() const,
+        "Returns a string representation of the font family.", "");
+    
+    DocDeclStr(
+        wxString , GetStyleString() const,
+        "Returns a string representation of the font style.", "");
+    
+    DocDeclStr(
+        wxString , GetWeightString() const,
+        "Return a string representation of the font weight.", "");
+    
+
     virtual void SetNoAntiAliasing( bool no = true );
     virtual bool GetNoAntiAliasing() const;
 
     // the default encoding is used for creating all fonts with default
     // encoding parameter
-    static wxFontEncoding GetDefaultEncoding() { return ms_encodingDefault; }
-    static void SetDefaultEncoding(wxFontEncoding encoding);
+    DocDeclStr(
+        static wxFontEncoding , GetDefaultEncoding(),
+        "Returns the encoding used for all fonts created with an encoding of
+``wx.FONTENCODING_DEFAULT``.", "");
+    
+    DocDeclStr(
+        static void , SetDefaultEncoding(wxFontEncoding encoding),
+        "Sets the default font encoding.", "");
+    
 };
 
-%pythoncode { Font2 = wx._deprecated(FFont, "Use `FFont` instead.") }
+%pythoncode { Font2 = wx._deprecated(FFont, "Use `wx.FFont` instead.") }
 
 //---------------------------------------------------------------------------
 %newgroup
