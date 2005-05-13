@@ -53,7 +53,8 @@ wxHtmlListmarkCell::wxHtmlListmarkCell(wxDC* dc, const wxColour& clr) : wxHtmlCe
 {
     m_Width =  dc->GetCharHeight();
     m_Height = dc->GetCharHeight();
-    m_Descent = 0;
+    // bottom of list mark is lined with bottom of letters in next cell
+    m_Descent = m_Height / 3;
 }
 
 
@@ -88,6 +89,7 @@ class wxHtmlListCell : public wxHtmlContainerCell
         wxHtmlListItemStruct *m_RowInfo;
         void ReallocRows(int rows);
         void ComputeMinMaxWidths();
+        int ComputeMaxBase(wxHtmlCell *cell);
         int m_ListmarkWidth;
 
     public:
@@ -111,6 +113,23 @@ wxHtmlListCell::~wxHtmlListCell()
     if (m_RowInfo) free(m_RowInfo);
 }
 
+int wxHtmlListCell::ComputeMaxBase(wxHtmlCell *cell)
+{
+    if(!cell)
+        return 0;
+
+    wxHtmlCell *child = cell->GetFirstChild();
+
+    while(child)
+    {
+        int base = ComputeMaxBase( child );
+        if ( base > 0 ) return base + child->GetPosY();
+        child = child->GetNext();
+    }
+
+    return cell->GetHeight() - cell->GetDescent();
+}
+
 void wxHtmlListCell::Layout(int w)
 {
     wxHtmlCell::Layout(w);
@@ -123,11 +142,20 @@ void wxHtmlListCell::Layout(int w)
     int vpos = 0;
     for (int r = 0; r < m_NumRows; r++)
     {
+        // do layout first time to layout contents and adjust pos
         m_RowInfo[r].mark->Layout(m_ListmarkWidth);
-        m_RowInfo[r].mark->SetPos(m_IndentLeft, vpos);
         m_RowInfo[r].cont->Layout(s_width - m_ListmarkWidth);
-        m_RowInfo[r].cont->SetPos(m_IndentLeft + m_ListmarkWidth, vpos);
-        vpos += wxMax(m_RowInfo[r].cont->GetHeight(), m_RowInfo[r].mark->GetHeight());
+
+        const int base_mark = ComputeMaxBase( m_RowInfo[r].mark );
+        const int base_cont = ComputeMaxBase( m_RowInfo[r].cont );
+        const int adjust_mark = vpos + wxMax(base_cont-base_mark,0);
+        const int adjust_cont = vpos + wxMax(base_mark-base_cont,0);
+
+        m_RowInfo[r].mark->SetPos(m_IndentLeft, adjust_mark);
+        m_RowInfo[r].cont->SetPos(m_IndentLeft + m_ListmarkWidth, adjust_cont);
+
+        vpos = wxMax(adjust_mark + m_RowInfo[r].mark->GetHeight(),
+                     adjust_cont + m_RowInfo[r].cont->GetHeight());
     }
     m_Height = vpos;
 }
@@ -142,8 +170,8 @@ void wxHtmlListCell::AddRow(wxHtmlContainerCell *mark, wxHtmlContainerCell *cont
 void wxHtmlListCell::ReallocRows(int rows)
 {
     m_RowInfo = (wxHtmlListItemStruct*) realloc(m_RowInfo, sizeof(wxHtmlListItemStruct) * rows);
-    m_RowInfo[rows - 1].mark = 0;
-    m_RowInfo[rows - 1].cont = 0;
+    m_RowInfo[rows - 1].mark = NULL;
+    m_RowInfo[rows - 1].cont = NULL;
     m_RowInfo[rows - 1].minWidth = 0;
     m_RowInfo[rows - 1].maxWidth = 0;
 

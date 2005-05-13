@@ -13,6 +13,7 @@ All (GUI):
 
 - Fixed potential infinite loop when adjusting wxScrolledWindow scrollbars.
 - Radio in menus do not send menu event for selections of already selected item.
+- Fixed wrong positioning of marks and enumerations in lists of wxHTML.
 
 wxMSW:
 
