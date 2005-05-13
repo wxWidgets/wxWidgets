@@ -26527,6 +26527,38 @@ static PyObject *_wrap_Window_InvalidateBestSize(PyObject *, PyObject *args, PyO
 }
 
 
+static PyObject *_wrap_Window_CacheBestSize(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxWindow *arg1 = (wxWindow *) 0 ;
+    wxSize *arg2 = 0 ;
+    wxSize temp2 ;
+    PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
+    char *kwnames[] = {
+        (char *) "self",(char *) "size", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:Window_CacheBestSize",kwnames,&obj0,&obj1)) goto fail;
+    SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxWindow, SWIG_POINTER_EXCEPTION | 0);
+    if (SWIG_arg_fail(1)) SWIG_fail;
+    {
+        arg2 = &temp2;
+        if ( ! wxSize_helper(obj1, &arg2)) SWIG_fail;
+    }
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        ((wxWindow const *)arg1)->CacheBestSize((wxSize const &)*arg2);
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    Py_INCREF(Py_None); resultobj = Py_None;
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
 static PyObject *_wrap_Window_GetBestFittingSize(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWindow *arg1 = (wxWindow *) 0 ;
@@ -46113,6 +46145,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"Window_GetBestSize", (PyCFunction) _wrap_Window_GetBestSize, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"Window_GetBestSizeTuple", (PyCFunction) _wrap_Window_GetBestSizeTuple, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"Window_InvalidateBestSize", (PyCFunction) _wrap_Window_InvalidateBestSize, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"Window_CacheBestSize", (PyCFunction) _wrap_Window_CacheBestSize, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"Window_GetBestFittingSize", (PyCFunction) _wrap_Window_GetBestFittingSize, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"Window_GetAdjustedBestSize", (PyCFunction) _wrap_Window_GetAdjustedBestSize, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"Window_Center", (PyCFunction) _wrap_Window_Center, METH_VARARGS | METH_KEYWORDS, NULL},

@@ -8199,6 +8199,15 @@ class Window(EvtHandler):
         """
         return _core_.Window_InvalidateBestSize(*args, **kwargs)
 
+    def CacheBestSize(*args, **kwargs):
+        """
+        CacheBestSize(self, Size size)
+
+        Cache the best size so it doesn't need to be calculated again, (at least until
+        some properties of the window change.)
+        """
+        return _core_.Window_CacheBestSize(*args, **kwargs)
+
     def GetBestFittingSize(*args, **kwargs):
         """
         GetBestFittingSize(self) -> Size
