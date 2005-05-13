@@ -527,6 +527,10 @@ after calling Fit.", "");
         "Reset the cached best size value so it will be recalculated the next
 time it is needed.", "");
 
+    DocDeclStr(
+        void , CacheBestSize(const wxSize& size) const,
+        "Cache the best size so it doesn't need to be calculated again, (at least until
+some properties of the window change.)", "");
 
     
     DocDeclStr(
