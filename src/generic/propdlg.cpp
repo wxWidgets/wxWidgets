@@ -96,8 +96,10 @@ void wxPropertySheetDialog::CreateButtons(int flags)
     // Perhaps that could be embedded in CreateButtonSizer() directly.
     SetRightMenu(wxID_CANCEL);
     SetLeftMenu(wxID_OK);
+    wxUnusedVar(flags);
 #elif defined(__POCKETPC__)
     // Do nothing
+    wxUnusedVar(flags);
 #else
     wxSizer* sizer = CreateButtonSizer(flags);
     m_innerSizer->Add( sizer, 0, wxGROW|wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM|wxLEFT|wxRIGHT, 2);
