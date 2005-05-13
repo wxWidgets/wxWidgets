@@ -54,7 +54,7 @@ class TestPanel(wx.Panel):
         self._hyper3.Bind(hl.EVT_HYPERLINK_RIGHT, self.OnRightLink)
         
         self._hyper3.SetLinkCursor(wx.CURSOR_QUESTION_ARROW)
-        self._hyper3.SetColours("GREEN", "RED", "YELLOW")
+        self._hyper3.SetColours("DARK GREEN", "RED", "NAVY")
         self._hyper3.SetUnderlines(False, False, False)
         self._hyper3.EnableRollover(True)
         self._hyper3.SetBold(True)

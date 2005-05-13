@@ -36,7 +36,6 @@ class TestPanel(wx.Panel):
         text = StaticText(self, -1, str, (20, 120))
         font = wx.Font(18, wx.SWISS, wx.NORMAL, wx.NORMAL)
         text.SetFont(font)
-        text.SetSize(text.GetBestSize())
 
         StaticText(self, -1,
                    "Multi-line wx.StaticText\nline 2\nline 3\n\nafter empty line",
