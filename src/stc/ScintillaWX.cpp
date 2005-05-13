@@ -851,7 +851,7 @@ int  ScintillaWX::DoKeyDown(const wxKeyEvent& evt, bool* consumed)
          ctrl  = evt.ControlDown(),
          alt   = evt.AltDown();
 
-    if (ctrl && key >= 1 && key <= 26)
+    if (ctrl && key >= 1 && key <= 26 && key != WXK_BACK)
         key += 'A' - 1;
 
     switch (key) {
