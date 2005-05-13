@@ -31,6 +31,7 @@
 #if wxUSE_TREECTRL
 
 #include "wx/msw/private.h"
+#include "wx/msw/missing.h"
 
 // Set this to 1 to be _absolutely_ sure that repainting will work for all
 // comctl32.dll versions
@@ -677,7 +678,7 @@ bool wxTreeCtrl::Create(wxWindow *parent,
         wstyle |= TVS_CHECKBOXES;
 #endif // wxUSE_CHECKBOXES_IN_MULTI_SEL_TREE
 
-#ifndef __WXWINCE__
+#if !defined(__WXWINCE__) && defined(TVS_INFOTIP)
     // Need so that TVN_GETINFOTIP messages will be sent
     wstyle |= TVS_INFOTIP;
 #endif
@@ -2668,6 +2669,7 @@ bool wxTreeCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
                 break;
             }
 
+#ifdef TVN_GETINFOTIP
         case TVN_GETINFOTIP:
             {
                 eventType = wxEVT_COMMAND_TREE_ITEM_GETTOOLTIP;
@@ -2678,6 +2680,7 @@ bool wxTreeCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
 
                 break;
             }
+#endif
 #endif
 
         case TVN_GETDISPINFO:
@@ -3032,6 +3035,7 @@ bool wxTreeCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
             break;
 
 #ifndef __WXWINCE__
+#ifdef TVN_GETINFOTIP
          case TVN_GETINFOTIP:
             {
                 // If the user permitted a tooltip change, change it
@@ -3041,6 +3045,7 @@ bool wxTreeCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
                 }
             }
             break;
+#endif
 #endif
 
         case TVN_SELCHANGING:
