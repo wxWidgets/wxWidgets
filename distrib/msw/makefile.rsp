@@ -47,6 +47,7 @@ samples/joytest/Makefile.in
 samples/layout/Makefile.in
 samples/listbox/Makefile.in
 samples/listctrl/Makefile.in
+samples/mfc/Makefile.in
 samples/mdi/Makefile.in
 samples/mediaplayer/Makefile.in
 samples/minifram/Makefile.in
@@ -56,10 +57,14 @@ samples/mobile/wxedit/Makefile.in
 samples/mobile/styles/Makefile.in
 samples/multimon/Makefile.in
 samples/notebook/Makefile.in
+samples/nativdlg/Makefile.in
+samples/oleauto/Makefile.in
+samples/ownerdrw/Makefile.in
 samples/png/Makefile.in
 samples/popup/Makefile.in
 samples/printing/Makefile.in
 samples/propsize/Makefile.in
+samples/regtest/Makefile.in
 samples/render/Makefile.in
 samples/richedit/Makefile.in
 samples/rotate/Makefile.in

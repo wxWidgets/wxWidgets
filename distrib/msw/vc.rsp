@@ -341,9 +341,6 @@ contrib/samples/stc/stctest.dsw
 contrib/utils/convertrc/convertrc.dsp
 contrib/utils/convertrc/convertrc.dsw
 
-contrib/utils/wxrcedit/wxrcedit.dsp
-contrib/utils/wxrcedit/wxrcedit.dsw
-
 contrib/build/plot/plot.dsp
 contrib/build/plot/plot.dsw
 contrib/samples/plot/plot.dsp

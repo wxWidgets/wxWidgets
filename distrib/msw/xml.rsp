@@ -119,31 +119,6 @@ utils/wxrc/wxrc.dsp
 utils/wxrc/wxrc.dsw
 utils/wxrc/*.bkl
 
-contrib/utils/wxrcedit/*.cpp
-contrib/utils/wxrcedit/*.h
-contrib/utils/wxrcedit/*.rc
-contrib/utils/wxrcedit/*.def
-contrib/utils/wxrcedit/*.xbm
-contrib/utils/wxrcedit/makefile.vc
-contrib/utils/wxrcedit/makefile.bcc
-contrib/utils/wxrcedit/makefile.b32
-contrib/utils/wxrcedit/makefile.wat
-contrib/utils/wxrcedit/makefile.g95
-contrib/utils/wxrcedit/makefile.unx
-contrib/utils/wxrcedit/makefile.dos
-contrib/utils/wxrcedit/makefile.vms
-contrib/utils/wxrcedit/Makefile.in
-contrib/utils/wxrcedit/*.txt
-contrib/utils/wxrcedit/*.ico
-contrib/utils/wxrcedit/*.bmp
-contrib/utils/wxrcedit/*.xpm
-contrib/utils/wxrcedit/bitmaps/*.xpm
-contrib/utils/wxrcedit/bitmaps/*.ico
-contrib/utils/wxrcedit/bitmaps/*.bmp
-contrib/utils/wxrcedit/wxRcEditVC.dsp
-contrib/utils/wxrcedit/wxRcEditVC.dsw
-contrib/utils/wxrcedit/df/*.df
-
 distrib/msw/xml.rsp
 distrib/msw/zipxml.bat
 

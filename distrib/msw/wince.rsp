@@ -335,9 +335,6 @@ contrib/utils/wxrc/wxrc.vcw
 contrib/utils/convertrc/convertrc.vcp
 contrib/utils/convertrc/convertrc.vcw
 
-contrib/utils/wxrcedit/wxrcedit.vcp
-contrib/utils/wxrcedit/wxrcedit.vcw
-
 contrib/build/plot/plot.vcp
 contrib/build/plot/plot.vcw
 contrib/samples/plot/plot.vcp

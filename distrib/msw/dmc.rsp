@@ -29,7 +29,6 @@ contrib/samples/plot/makefile.dm?
 contrib/samples/stc/makefile.dm?
 contrib/samples/svg/makefile.dm?
 contrib/utils/convertrc/makefile.dm?
-contrib/utils/wxrcedit/makefile.dm?
 contrib/samples/foldbar/extended/makefile.dm?
 contrib/samples/foldbar/foldpanelbar/makefile.dm?
 demos/bombs/makefile.dm?

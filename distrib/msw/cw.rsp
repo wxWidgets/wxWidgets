@@ -101,7 +101,6 @@ src/xrc/*W7.xml
 samples/xrc/*W7.xml
 utils/wxrc/*W7.xml
 utils/convertrc/*W7.xml
-utils/wxrcedit/*W7.xml
 
 contrib/src/foldbar/*W7.xml
 contrib/samples/foldbar/extended/*W7.xml
