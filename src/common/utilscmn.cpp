@@ -621,11 +621,14 @@ bool wxLaunchDefaultBrowser(const wxString& url)
         // Unload Shell32.dll
         ::FreeLibrary(hShellDll);
 
+        // HINSTANCE_ERROR not defined on WinCE
+#ifndef __WXWINCE__
         // Hack for Firefox (returns file not found for some reason)
         // from Angelo Mandato's wxHyperlinksCtrl
         // HINSTANCE_ERROR == 32
         if (nResult <= HINSTANCE_ERROR && nResult != SE_ERR_FNF)
             return false;
+#endif
 
 #ifdef __WXDEBUG__
         // Log something if SE_ERR_FNF happens
