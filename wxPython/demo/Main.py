@@ -49,6 +49,7 @@ _treeList = [
     ('Recent Additions/Updates', [
         'FoldPanelBar',
         'GIFAnimationCtrl',
+        'HyperLinkCtrl',
         ]),
 
     # managed windows == things with a (optional) caption you can close
@@ -156,6 +157,7 @@ _treeList = [
         'FoldPanelBar',
         'GIFAnimationCtrl',
         'HtmlWindow',
+        'HyperLinkCtrl',
         'IntCtrl',
         'MediaCtrl',
         'MVCTree',   

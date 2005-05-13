@@ -48,6 +48,14 @@ locking or unlocking in wxPyBeginBlockThreads and wxPyEndBlockThreads
 as these can be triggered after Python has been finalized in embedding
 situations.
 
+Added alternate constructors for wx.Font: wx.FontFromPixelSize,
+wx.FFont, wx.FFontFromPixelSize.  See the docstrings or new api docs
+for details.
+
+Added wx.lib.hyperlink from Andrea Gavana.  It is a control like
+static text that acts like a hyper-link, launching the system's
+default browser in response to the clicks.
+
 
 
 
