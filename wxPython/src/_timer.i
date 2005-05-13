@@ -116,7 +116,7 @@ public:
     int GetId() const;
 
     %pythoncode {
-        def Destroy():
+        def Destroy(self):
             """NO-OP: Timers must be destroyed by normal refrence counting"""
             pass
     }
