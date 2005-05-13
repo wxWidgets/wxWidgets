@@ -19,6 +19,9 @@
 
 import wx
 
+BUFFERED = 0   # In unbuffered mode we can let the theme shine through,
+               # is there a way to do this when buffering?
+
 #----------------------------------------------------------------------
 
 class GenStaticText(wx.PyControl):
@@ -32,12 +35,16 @@ class GenStaticText(wx.PyControl):
                              wx.DefaultValidator, name)
 
         wx.PyControl.SetLabel(self, label) # don't check wx.ST_NO_AUTORESIZE yet
-        self.defBackClr = self.GetBackgroundColour()
         self.InheritAttributes()
         self.SetBestFittingSize(size)
 
-        self.Bind(wx.EVT_ERASE_BACKGROUND, self.OnEraseBackground)
-        self.Bind(wx.EVT_PAINT,            self.OnPaint)
+        self.Bind(wx.EVT_PAINT, self.OnPaint)
+        if BUFFERED:
+            self.defBackClr = self.GetBackgroundColour()
+            self.Bind(wx.EVT_ERASE_BACKGROUND, self.OnEraseBackground)
+        else:
+            self.SetBackgroundStyle(wx.BG_STYLE_SYSTEM)
+            
 
 
     def SetLabel(self, label):
@@ -47,10 +54,9 @@ class GenStaticText(wx.PyControl):
         """
         wx.PyControl.SetLabel(self, label)
         style = self.GetWindowStyleFlag()
+        self.InvalidateBestSize()
         if not style & wx.ST_NO_AUTORESIZE:
-            best = self.GetBestSize()
-            self.SetSize(best)
-            self.SetMinSize(best)
+            self.SetBestFittingSize(self.GetBestSize())
         self.Refresh()
 
 
@@ -61,28 +67,35 @@ class GenStaticText(wx.PyControl):
         """
         wx.PyControl.SetFont(self, font)
         style = self.GetWindowStyleFlag()
+        self.InvalidateBestSize()
         if not style & wx.ST_NO_AUTORESIZE:
-            best = self.GetBestSize()
-            self.SetSize(best)
-            self.SetMinSize(best)
+            self.SetBestFittingSize(self.GetBestSize())
         self.Refresh()
 
 
     def DoGetBestSize(self):
         """
         Overridden base class virtual.  Determines the best size of
-        the button based on the label size.
+        the control based on the label size and the current font.
         """
         label = self.GetLabel()
+        font = self.GetFont()
+        if not font:
+            font = wx.SystemSettings.GetFont(wx.SYS_DEFAULT_GUI_FONT)
+        dc = wx.ClientDC(self)
+        dc.SetFont(font)
+        
         maxWidth = totalHeight = 0
         for line in label.split('\n'):
             if line == '':
-                w, h = self.GetTextExtent('W')  # empty lines have height too
+                w, h = dc.GetTextExtent('W')  # empty lines have height too
             else:
-                w, h = self.GetTextExtent(line)
+                w, h = dc.GetTextExtent(line)
             totalHeight += h
             maxWidth = max(maxWidth, w)
-        return wx.Size(maxWidth, totalHeight)
+        best = wx.Size(maxWidth, totalHeight)
+        self.CacheBestSize(best)
+        return best
 
 
     def AcceptsFocus(self):
@@ -104,24 +117,27 @@ class GenStaticText(wx.PyControl):
         colours then we want this control to inherit them.
         """
         return True
-    
 
+    
     def OnPaint(self, event):
-        dc = wx.BufferedPaintDC(self)
-        #dc = wx.PaintDC(self)
+        if BUFFERED:
+            dc = wx.BufferedPaintDC(self)
+        else:
+            dc = wx.PaintDC(self)
         width, height = self.GetClientSize()
         if not width or not height:
             return
 
-        clr = self.GetBackgroundColour()
-        backBrush = wx.Brush(clr, wx.SOLID)
-        if wx.Platform == "__WXMAC__" and clr == self.defBackClr:
-            # if colour is still the default then use the striped background on Mac
-            backBrush.MacSetTheme(1) # 1 == kThemeBrushDialogBackgroundActive
-        dc.SetBackground(backBrush)
+        if BUFFERED:
+            clr = self.GetBackgroundColour()
+            backBrush = wx.Brush(clr, wx.SOLID)
+            if wx.Platform == "__WXMAC__" and clr == self.defBackClr:
+                # if colour is still the default then use the striped background on Mac
+                backBrush.MacSetTheme(1) # 1 == kThemeBrushDialogBackgroundActive
+            dc.SetBackground(backBrush)
+            dc.Clear()
 
         dc.SetTextForeground(self.GetForegroundColour())
-        dc.Clear()
         dc.SetFont(self.GetFont())
         label = self.GetLabel()
         style = self.GetWindowStyleFlag()
