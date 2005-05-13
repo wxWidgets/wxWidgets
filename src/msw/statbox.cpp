@@ -146,9 +146,11 @@ WXDWORD wxStaticBox::MSWGetStyle(long style, WXDWORD *exstyle) const
 
     if ( exstyle )
     {
+#ifndef __WXWINCE__
         if (wxSystemOptions::IsFalse(wxT("msw.staticbox.optimized-paint")))
             *exstyle = WS_EX_TRANSPARENT;
         else
+#endif
             *exstyle = 0;
     }
 

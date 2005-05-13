@@ -705,14 +705,17 @@ wxThreadInternal::WaitForTerminate(wxCriticalSection& cs,
             }
         }
 
+#if defined(__WXWINCE__) && !defined(QS_ALLPOSTMESSAGE)
+#define QS_ALLPOSTMESSAGE 0
+#endif
+
         result = ::MsgWaitForMultipleObjects
                  (
                    1,              // number of objects to wait for
                    &m_hThread,     // the objects
                    false,          // don't wait for all objects
                    INFINITE,       // no timeout
-                   QS_ALLINPUT |   // return as soon as there are any events
-                   QS_ALLPOSTMESSAGE
+                   QS_ALLINPUT|QS_ALLPOSTMESSAGE   // return as soon as there are any events
                  );
 
         switch ( result )
