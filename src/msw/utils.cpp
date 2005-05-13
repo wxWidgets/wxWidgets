@@ -1286,8 +1286,10 @@ extern WXDLLIMPEXP_BASE long wxEncodingToCharset(wxFontEncoding encoding)
         case wxFONTENCODING_CP936:
             return GB2312_CHARSET;
 
+#ifndef __WXWINCE__
         case wxFONTENCODING_CP949:
             return HANGUL_CHARSET;
+#endif
 
         case wxFONTENCODING_CP950:
             return CHINESEBIG5_CHARSET;
