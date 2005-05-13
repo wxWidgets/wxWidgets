@@ -8,3 +8,6 @@ docs/bin/makeapidocs
 b 24 gtk2 t
 b 24 gtk2   BUILD_RENAMERS=0 PREP_ONLY=1
 
+if [ "$1" == "upload" ]; then
+    scp -r docs/api robind@shell.sf.net:/home/users/r/ro/robind/wxpython/htdocs/docs
+fi
