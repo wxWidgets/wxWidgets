@@ -11,272 +11,84 @@
 #ifndef _WX_MISSING_H_
 #define _WX_MISSING_H_
 
-// ----------------------------------------------------------------------------
-// ListView common control
-// ----------------------------------------------------------------------------
+/*
+ * The following are required for VC++ 6.
+ */
 
-#ifndef LVHT_ONITEM
-    #define LVHT_ONITEM \
-                (LVHT_ONITEMICON | LVHT_ONITEMLABEL | LVHT_ONITEMSTATEICON)
+// Needed by strconv.cpp
+#ifndef WC_NO_BEST_FIT_CHARS
+    #define WC_NO_BEST_FIT_CHARS 0x400
 #endif
 
-#ifndef LVM_SETEXTENDEDLISTVIEWSTYLE
-    #define LVM_SETEXTENDEDLISTVIEWSTYLE (0x1000 + 54)
+#ifndef WM_CONTEXTMENU
+    #define WM_CONTEXTMENU      0x007B
 #endif
 
-#ifndef LVS_EX_FULLROWSELECT
-    #define LVS_EX_FULLROWSELECT 0x00000020
+// Needed by toplevel.cpp
+#ifndef WM_UPDATEUISTATE
+    #define WM_UPDATEUISTATE    0x0128
 #endif
 
-#ifndef LVS_EX_LABELTIP
-    #define LVS_EX_LABELTIP 0x00004000
+#ifndef WM_PRINTCLIENT
+    #define WM_PRINTCLIENT 0x318
 #endif
 
-#ifndef LVS_OWNERDATA
-    #define LVS_OWNERDATA 0x1000
+// Needed by toplevel.cpp
+#ifndef UIS_INITIALIZE
+    #define UIS_INITIALIZE  3
 #endif
 
-#ifndef LVM_FIRST
-    #define LVM_FIRST 0x1000
+#ifndef UISF_HIDEFOCUS
+    #define UISF_HIDEFOCUS  1
 #endif
 
-#ifndef HDM_FIRST
-    #define HDM_FIRST 0x1200
+#ifndef UISF_HIDEACCEL
+    #define UISF_HIDEACCEL 2
 #endif
 
-#ifndef LVCFMT_JUSTIFYMASK
-    #define LVCFMT_JUSTIFYMASK 0x0003
+#ifndef OFN_EXPLORER
+    #define OFN_EXPLORER 0x00080000
 #endif
 
-#ifndef LVSICF_NOSCROLL
-    #define LVSICF_NOINVALIDATEALL  0x0001
-    #define LVSICF_NOSCROLL         0x0002
+#ifndef OFN_ENABLESIZING
+    #define OFN_ENABLESIZING 0x00800000
 #endif
 
-// mingw32/cygwin don't have declarations for comctl32.dll 4.70+ stuff
-#ifndef NM_CACHEHINT
-    typedef struct tagNMLVCACHEHINT
-    {
-        NMHDR   hdr;
-        int     iFrom;
-        int     iTo;
-    } NMLVCACHEHINT;
+// Needed by window.cpp
+#if wxUSE_MOUSEWHEEL
+    #ifndef WM_MOUSEWHEEL
+        #define WM_MOUSEWHEEL           0x020A
+    #endif
+    #ifndef WHEEL_DELTA
+        #define WHEEL_DELTA             120
+    #endif
+    #ifndef SPI_GETWHEELSCROLLLINES
+        #define SPI_GETWHEELSCROLLLINES 104
+    #endif
+#endif // wxUSE_MOUSEWHEEL
 
-    #define NM_CACHEHINT NMLVCACHEHINT
+// Needed by window.cpp
+#ifndef VK_OEM_1
+    #define VK_OEM_1        0xBA
+    #define VK_OEM_2        0xBF
+    #define VK_OEM_3        0xC0
+    #define VK_OEM_4        0xDB
+    #define VK_OEM_5        0xDC
+    #define VK_OEM_6        0xDD
+    #define VK_OEM_7        0xDE
 #endif
 
-#ifndef LVN_ODCACHEHINT
-    #define LVN_ODCACHEHINT (-113)
-#endif
-
-#ifndef ListView_GetHeader
-    #define ListView_GetHeader(w) (HWND)SendMessage((w),LVM_GETHEADER,0,0)
-#endif
-
-#ifndef LVM_GETHEADER
-    #define LVM_GETHEADER (LVM_FIRST+31)
-#endif
-
-#ifndef Header_GetItemRect
-    #define Header_GetItemRect(w,i,r) \
-            (BOOL)SendMessage((w),HDM_GETITEMRECT,(WPARAM)(i),(LPARAM)(r))
-#endif
-
-#ifndef HDM_GETITEMRECT
-    #define HDM_GETITEMRECT (HDM_FIRST+7)
-#endif
-
-#ifndef LVCF_IMAGE
-    #define LVCF_IMAGE             0x0010
-#endif
-
-#ifndef LVCFMT_BITMAP_ON_RIGHT
-    #define LVCFMT_BITMAP_ON_RIGHT 0x1000
-#endif
-
-#if defined(__GNUWIN32__) && !defined(LV_ITEM) \
-    && !wxCHECK_W32API_VERSION( 0, 5 )
-typedef struct _LVITEMW {
-    UINT mask;
-    int iItem;
-    int iSubItem;
-    UINT state;
-    UINT stateMask;
-    LPWSTR pszText;
-    int cchTextMax;
-    int iImage;
-    LPARAM lParam;
-#if (_WIN32_IE >= 0x0300)
-    int iIndent;
-#endif
-} LV_ITEMW;
-
-typedef struct tagLVITEMA
-{
-    UINT mask;
-    int iItem;
-    int iSubItem;
-    UINT state;
-    UINT stateMask;
-    LPSTR pszText;
-    int cchTextMax;
-    int iImage;
-    LPARAM lParam;
-#if (_WIN32_IE >= 0x0300)
-    int iIndent;
-#endif
-} LV_ITEMA;
-
-#define LV_ITEM LV_ITEMA;
-#endif
-
-#ifndef ListView_GetColumnWidth
-#define ListView_GetColumnWidth(hwnd, iCol) \
-    (int)SNDMSG((hwnd), LVM_GETCOLUMNWIDTH, (WPARAM)(int)(iCol), 0)
-#endif
-
-#ifndef ListView_SetColumnWidth
-#define ListView_SetColumnWidth(hwnd, iCol, cx) \
-    (BOOL)SNDMSG((hwnd), LVM_SETCOLUMNWIDTH, (WPARAM)(int)(iCol), MAKELPARAM((cx), 0))
-#endif
-
-#ifndef ListView_GetTextColor
-#define ListView_GetTextColor(hwnd)  \
-    (COLORREF)SNDMSG((hwnd), LVM_GETTEXTCOLOR, 0, 0L)
-#endif
-
-#ifndef ListView_FindItem
-#define ListView_FindItem(hwnd, iStart, plvfi) \
-    (int)SNDMSG((hwnd), LVM_FINDITEM, (WPARAM)(int)(iStart), (LPARAM)(const LV_FINDINFO FAR*)(plvfi))
-#endif
-
-#if defined(__GNUWIN32__) && !wxCHECK_W32API_VERSION( 0, 5 )
-#ifndef LV_DISPINFOA
-typedef struct tagNMLVDISPINFOA {
-        NMHDR hdr;
-        LV_ITEMA item;
-} NMLVDISPINFOA, FAR *LPNMLVDISPINFOA;
-#define _LV_DISPINFOA tagNMLVDISPINFOA
-#define LV_DISPINFOA NMLVDISPINFOA
-#endif
-#ifndef LV_DISPINFOW
-typedef struct tagNMLVDISPINFOW {
-        NMHDR hdr;
-        LV_ITEMW item;
-} NMLVDISPINFOW, FAR *LPNMLVDISPINFOW;
-#define _LV_DISPINFOW tagNMLVDISPINFOW
-#define LV_DISPINFOW NMLVDISPINFOW
-#endif
-#endif
-
-#if ((defined(__WATCOMC__) && __WATCOMC__ >= 1200) || defined(__GNUWIN32__) || defined (__MINGW32__) || defined(__DIGITALMARS__) || defined (__BORLANDC__)) && !defined(HDN_GETDISPINFOW)
-#define HDN_GETDISPINFOW (HDN_FIRST-29)
-#if !wxCHECK_W32API_VERSION(2, 2)
-typedef struct {
-        NMHDR hdr;
-        int iItem;
-        UINT mask;
-        LPWSTR pszText;
-        int cchTextMax;
-        int iImage;
-        LPARAM lParam;
-} NMHDDISPINFOW, *LPNMHDDISPINFOW;
-#endif
-#endif
-
-#ifndef LVM_SETUNICODEFORMAT
-#define LVM_SETUNICODEFORMAT 0x2005
-#endif
-
-// ----------------------------------------------------------------------------
-// Common Control missing
-// ----------------------------------------------------------------------------
-// __DMC__ date time control IDs
-
-#ifdef __DMC__
-#define DATETIMEPICK_CLASSW L"SysDateTimePick32"
-#define DATETIMEPICK_CLASSA "SysDateTimePick32"
-
-#define ICC_DATE_CLASSES 256
-
-#if (_WIN32_IE >= 0x0300)
-typedef struct tagINITCOMMONCONTROLSEX {
-    DWORD dwSize;
-    DWORD dwICC;
-} INITCOMMONCONTROLSEX,*LPINITCOMMONCONTROLSEX;
-
-#define GDTR_MIN 1
-#define GDTR_MAX 2
-
-#define GDT_ERROR -1
-#define GDT_VALID 0
-#define GDT_NONE 1
-
-
-#define DTS_UPDOWN 1
-#define DTS_SHOWNONE 2
-#define DTS_SHORTDATEFORMAT 0
-#define DTS_LONGDATEFORMAT 4
-#define DTS_TIMEFORMAT 9
-#define DTS_APPCANPARSE 16
-#define DTS_RIGHTALIGN 32
-#if ( _WIN32_IE >= 0x500 )
-#define DTS_SHORTDATECENTURYFORMAT 0x000C
-#endif /* _WIN32_IE >= 0x500 */
-#endif
-
-
-
-#define DATETIMEPICK_CLASSW L"SysDateTimePick32"
-#define DATETIMEPICK_CLASSA "SysDateTimePick32"
-
-#ifdef UNICODE
-    #define DATETIMEPICK_CLASS DATETIMEPICK_CLASSW
-#else
-    #define DATETIMEPICK_CLASS DATETIMEPICK_CLASSA
-#endif
-
-#define DTM_GETSYSTEMTIME 0x1001
-#define DTM_SETSYSTEMTIME 0x1002
-#define DTM_GETRANGE 0x1003
-#define DTM_SETRANGE 0x1004
-#define DTN_DATETIMECHANGE ((UINT)-759)
-
-#define DateTime_GetMonthCal(hwnd) SNDMSG(hwnd, DTM_GETMONTHCAL, 0, 0)
-#define DateTime_GetMonthCalColor(hwnd, icolor) SNDMSG(hwnd, DTM_GETMONTHCAL, (WPARAM)icolor,0)
-#define DateTime_GetMonthCalFont(hwnd) SNDMSG(hwnd,DTM_GETMCFONT,0,0)
-#define DateTime_GetRange(hwnd,lpsystimearray) SNDMSG(hwnd,DTM_GETRANGE,0,(LPARAM)lpsystimearray)
-#define DateTime_GetSystemTime(hwnd,lpsystime) SNDMSG(hwnd,DTM_GETSYSTEMTIME,0,(LPARAM)lpsystime)
-#define DateTime_SetFormat(hwnd,lpszformat) SNDMSG(hwnd,DTM_SETFORMAT,0,(LPARAM)lpszformat)
-#define DateTime_SetMonthCalColor(hwnd,icolor,clr) SNDMSG(hwnd,DTM_SETMCCOLOR,(WPARAM)icolor,(LPARAM)clr)
-#define DateTime_SetMonthCalFont(hwnd,hfont,lparam) SNDMSG(hwnd,DTM_SETMCFONT,(WPARAM)hfont,(LPARAM)lparam)
-#define DateTime_SetRange(hwnd,flags,lpsystimearray) SNDMSG(hwnd,DTM_SETRANGE,(WPARAM)flags,(LPARAM)lpsystimearray)
-#define DateTime_SetSystemTime(hwnd,flag,lpsystime) SNDMSG(hwnd,DTM_SETSYSTEMTIME,(WPARAM)flag,(LPARAM)lpsystime)
-
-
-#endif //__DMC__ date time control IDs
-
-#if defined(__GNUWIN32__) && !wxCHECK_W32API_VERSION( 2, 4 ) || defined (__DMC__)
-typedef struct tagNMDATETIMECHANGE
-{
-    NMHDR       nmhdr;
-    DWORD       dwFlags;
-    SYSTEMTIME  st;
-} NMDATETIMECHANGE;
-#endif // old gcc headers
-
-// ----------------------------------------------------------------------------
-// Toolbar define value missing
-// ----------------------------------------------------------------------------
-#if !defined(CCS_VERT)
-#define CCS_VERT                0x00000080L
+#ifndef VK_OEM_COMMA
+    #define VK_OEM_PLUS     0xBB
+    #define VK_OEM_COMMA    0xBC
+    #define VK_OEM_MINUS    0xBD
+    #define VK_OEM_PERIOD   0xBE
 #endif
 
 // ----------------------------------------------------------------------------
 // MS HTML Help
+// Needed by helpchm.cpp
 // ----------------------------------------------------------------------------
-
-// instead of including htmlhelp.h, duplicate the things from it we need here:
 
 enum
 {
@@ -334,161 +146,79 @@ struct HH_AKLINK
 };
 
 // ----------------------------------------------------------------------------
-// SHGetFileInfo-related things
+// ListView common control
+// Needed by listctrl.cpp
 // ----------------------------------------------------------------------------
 
-#ifndef SHGetFileInfo
-    #ifdef UNICODE
-        #define SHGetFileInfo SHGetFileInfoW
-    #else
-        #define SHGetFileInfo SHGetFileInfoA
+#ifndef LVS_EX_LABELTIP
+    #define LVS_EX_LABELTIP 0x00004000
+#endif
+
+ /*
+  * In addition to the above, the following are required for BC++ 5.5.
+  * (None presently.)
+  */
+
+ /*
+  * In addition to the above, the following are required for Digital Mars C++
+  */
+
+#ifdef __DMC__
+
+#ifndef CCM_SETUNICODEFORMAT
+    #define CCM_SETUNICODEFORMAT 8197
+#endif
+
+#ifdef __DMC__
+    #ifndef _TrackMouseEvent
+        #define _TrackMouseEvent TrackMouseEvent
     #endif
 #endif
 
-#ifndef SHGFI_ATTRIBUTES
-    #define SHGFI_ATTRIBUTES 2048
+#ifndef LVM_SETEXTENDEDLISTVIEWSTYLE
+    #define LVM_SETEXTENDEDLISTVIEWSTYLE (0x1000 + 54)
 #endif
 
-#ifndef SFGAO_READONLY
-    #define SFGAO_READONLY 0x00040000L
+#ifndef LVCF_IMAGE
+    #define LVCF_IMAGE             0x0010
 #endif
 
-#ifndef SFGAO_REMOVABLE
-    #define SFGAO_REMOVABLE 0x02000000L
+#ifndef Header_GetItemRect
+    #define Header_GetItemRect(w,i,r) \
+            (BOOL)SendMessage((w),HDM_GETITEMRECT,(WPARAM)(i),(LPARAM)(r))
 #endif
 
-#ifndef SHGFI_DISPLAYNAME
-    #define SHGFI_DISPLAYNAME 512
+#ifndef HDM_GETITEMRECT
+    #define HDM_GETITEMRECT (HDM_FIRST+7)
 #endif
 
-#ifndef SHGFI_ICON
-    #define SHGFI_ICON 256
+#ifndef HDN_GETDISPINFOW
+    #define HDN_GETDISPINFOW (HDN_FIRST-29)
 #endif
 
-#ifndef SHGFI_SMALLICON
-     #define SHGFI_SMALLICON 1
+#ifndef ListView_GetHeader
+    #define ListView_GetHeader(w) (HWND)SendMessage((w),LVM_GETHEADER,0,0)
 #endif
 
-#ifndef SHGFI_SHELLICONSIZE
-    #define SHGFI_SHELLICONSIZE 4
+#ifndef LVM_GETHEADER
+    #define LVM_GETHEADER (LVM_FIRST+31)
 #endif
 
-#ifndef SHGFI_OPENICON
-    #define SHGFI_OPENICON 2
+#ifndef LVSICF_NOSCROLL
+    #define LVSICF_NOINVALIDATEALL  0x0001
+    #define LVSICF_NOSCROLL         0x0002
 #endif
 
 // ----------------------------------------------------------------------------
-// Rich text control
+// Toolbar define value missing
 // ----------------------------------------------------------------------------
-
-#if wxUSE_RICHEDIT && defined(MAX_TAB_STOPS)
-
-// old mingw32 doesn't define this
-#ifndef CFM_CHARSET
-    #define CFM_CHARSET 0x08000000
-#endif // CFM_CHARSET
-
-#ifndef CFM_BACKCOLOR
-    #define CFM_BACKCOLOR 0x04000000
+#if !defined(CCS_VERT)
+#define CCS_VERT                0x00000080L
 #endif
-
-// cygwin does not have these defined for richedit
-#ifndef ENM_LINK
-    #define ENM_LINK 0x04000000
-#endif
-
-#ifndef EM_AUTOURLDETECT
-    #define EM_AUTOURLDETECT (WM_USER + 91)
-#endif
-
-#ifndef EN_LINK
-    #define EN_LINK 0x070b
-
-    typedef struct _enlink
-    {
-        NMHDR nmhdr;
-        UINT msg;
-        WPARAM wParam;
-        LPARAM lParam;
-        CHARRANGE chrg;
-    } ENLINK;
-#endif // ENLINK
-
-#ifndef SF_UNICODE
-    #define SF_UNICODE 0x0010
-#endif
-
-// Watcom C++ doesn't define this
-#ifndef SCF_ALL
-    #define SCF_ALL 0x0004
-#endif
-
-#ifndef PFA_JUSTIFY
-#define PFA_JUSTIFY 4
-
-typedef struct _paraformat2 {
-    UINT cbSize;
-    DWORD dwMask;
-    WORD wNumbering;
-    WORD wEffects;
-    LONG dxStartIndent;
-    LONG dxRightIndent;
-    LONG dxOffset;
-    WORD wAlignment;
-    SHORT cTabCount;
-    LONG rgxTabs[MAX_TAB_STOPS];
-    LONG dySpaceBefore;
-    LONG dySpaceAfter;
-    LONG dyLineSpacing;
-    SHORT sStype;
-    BYTE bLineSpacingRule;
-    BYTE bOutlineLevel;
-    WORD wShadingWeight;
-    WORD wShadingStyle;
-    WORD wNumberingStart;
-    WORD wNumberingStyle;
-    WORD wNumberingTab;
-    WORD wBorderSpace;
-    WORD wBorderWidth;
-    WORD wBorders;
-} PARAFORMAT2;
-#define wxEffects wReserved
-
-#endif
-
-#endif // wxUSE_RICHEDIT
-
-// ----------------------------------------------------------------------------
-// ToolBar
-// ----------------------------------------------------------------------------
-
-#if wxUSE_TOOLBAR
-
-#if !defined(TBIF_SIZE)
-
-#define TBIF_SIZE 64
-#define TB_SETBUTTONINFO (WM_USER+66)
-
-typedef struct {
-    UINT cbSize;
-    DWORD dwMask;
-    int idCommand;
-    int iImage;
-    BYTE fsState;
-    BYTE fsStyle;
-    WORD cx;
-    DWORD lParam;
-    LPTSTR pszText;
-    int cchText;
-} TBBUTTONINFO, *LPTBBUTTONINFO;
-
-#endif // !defined(TBIF_SIZE)
 
 #if !defined(TB_SETDISABLEDIMAGELIST)
     #define TB_SETDISABLEDIMAGELIST (WM_USER + 54)
 #endif // !defined(TB_SETDISABLEDIMAGELIST)
-
-#endif // wxUSE_TOOLBAR
 
 // ----------------------------------------------------------------------------
 // Tree control
@@ -515,190 +245,37 @@ typedef struct {
     #define TVM_SETTEXTCOLOR        (TV_FIRST + 30)
 #endif
 
-#ifndef TVS_INFOTIP
-    #define TVS_INFOTIP 2048
+#endif
+    // DMC++
+
+ /*
+  * In addition to the declarations for VC++, the following are required for OpenWatcom C++
+  */
+
+#if defined(__WATCOMC__)
+#ifndef CFM_BACKCOLOR
+    #define CFM_BACKCOLOR 0x04000000
+#endif
 #endif
 
-#ifndef TVN_GETINFOTIPA
-    #define TVN_GETINFOTIPA    (TVN_FIRST-13)
-    #define TVN_GETINFOTIPW    (TVN_FIRST-14)
+ /*
+  * In addition to the declarations for VC++, the following are required for MinGW
+  */
+
+#if defined (__MINGW32__)
+#ifndef CFM_BACKCOLOR
+    #define CFM_BACKCOLOR 0x04000000
+#endif
 #endif
 
-#ifndef TVN_GETINFOTIP
-    #ifdef UNICODE
-        #define TVN_GETINFOTIP TVN_GETINFOTIPW
-    #else
-        #define TVN_GETINFOTIP TVN_GETINFOTIPA
-    #endif
-#endif
+ /*
+  * In addition to the declarations for VC++, the following are required for WinCE
+  */
 
-#if !defined(NMTVGETINFOTIP) && defined(TVN_FIRST)
-    // NB: Check for TVN_FIRST is done so that this code is not included if
-    //     <commctrl.h> (which defined HTREEITEM) wasn't included before.
-    struct NMTVGETINFOTIPA
-    {
-        NMHDR     hdr;
-        LPSTR     pszText;
-        int       cchTextMax;
-        HTREEITEM hItem;
-        LPARAM    lParam;
-    };
-    struct NMTVGETINFOTIPW
-    {
-        NMHDR     hdr;
-        LPWSTR     pszText;
-        int       cchTextMax;
-        HTREEITEM hItem;
-        LPARAM    lParam;
-    };
-    #ifdef UNICODE
-        #define NMTVGETINFOTIP NMTVGETINFOTIPW
-    #else
-        #define NMTVGETINFOTIP NMTVGETINFOTIPA
-    #endif
-#endif
-
-// ----------------------------------------------------------------------------
-// Misc stuff
-// ----------------------------------------------------------------------------
-
-#ifndef CCM_SETUNICODEFORMAT
-    #define CCM_SETUNICODEFORMAT 8197
-#endif
-
-#ifndef QS_ALLPOSTMESSAGE
-    #define QS_ALLPOSTMESSAGE    0x0100
-#endif
-
-#ifndef WS_EX_TRANSPARENT
-    #define WS_EX_TRANSPARENT 0x00000020L
-#endif
-
-#ifndef WS_EX_CLIENTEDGE
-    #define WS_EX_CLIENTEDGE 0x00000200L
-#endif
-
-#ifndef ENDSESSION_LOGOFF
-    #define ENDSESSION_LOGOFF    0x80000000
-#endif
-
-#ifndef HANGUL_CHARSET
-    #define HANGUL_CHARSET  129
-#endif
-
-#ifndef TME_HOVER
-    #define TME_HOVER     1
-#endif
-
-#ifndef TME_LEAVE
-    #define TME_LEAVE     2
-#endif
-
-#ifndef TME_QUERY
-    #define TME_QUERY     0x40000000
-#endif
-
-#ifndef TME_CANCEL
-    #define TME_CANCEL    0x80000000
-#endif
-
-#ifndef HOVER_DEFAULT
-    #define HOVER_DEFAULT 0xFFFFFFFF
-#endif
-
-#ifdef __DMC__
-
-    #ifndef _TrackMouseEvent
-        #define _TrackMouseEvent TrackMouseEvent
-    #endif
-
-#endif
-
-// This didn't appear in mingw until 2.95.2
-#ifndef SIF_TRACKPOS
-#define SIF_TRACKPOS 16
-#endif
-
-#if wxUSE_MOUSEWHEEL
-    #ifndef WM_MOUSEWHEEL
-        #define WM_MOUSEWHEEL           0x020A
-    #endif
-    #ifndef WHEEL_DELTA
-        #define WHEEL_DELTA             120
-    #endif
-    #ifndef SPI_GETWHEELSCROLLLINES
-        #define SPI_GETWHEELSCROLLLINES 104
-    #endif
-#endif // wxUSE_MOUSEWHEEL
-
-#ifndef VK_OEM_1
-    #define VK_OEM_1        0xBA
-    #define VK_OEM_2        0xBF
-    #define VK_OEM_3        0xC0
-    #define VK_OEM_4        0xDB
-    #define VK_OEM_5        0xDC
-    #define VK_OEM_6        0xDD
-    #define VK_OEM_7        0xDE
-#endif
-
-#ifndef VK_OEM_COMMA
-    #define VK_OEM_PLUS     0xBB
-    #define VK_OEM_COMMA    0xBC
-    #define VK_OEM_MINUS    0xBD
-    #define VK_OEM_PERIOD   0xBE
-#endif
-
-#ifndef WM_CONTEXTMENU
-    #define WM_CONTEXTMENU      0x007B
-#endif
-
-#ifndef WM_UPDATEUISTATE
-    #define WM_UPDATEUISTATE    0x0128
-#endif
-
-#ifndef WM_PRINTCLIENT
-    #define WM_PRINTCLIENT 0x318
-#endif
-
-#ifndef UIS_INITIALIZE
-    #define UIS_INITIALIZE  3
-#endif
-
-#ifndef UISF_HIDEFOCUS
-    #define UISF_HIDEFOCUS  1
-#endif
-
-#ifndef UISF_HIDEACCEL
-    #define UISF_HIDEACCEL 2
-#endif
-
-#ifndef WC_NO_BEST_FIT_CHARS
-    #define WC_NO_BEST_FIT_CHARS 0x400
-#endif
-
-#ifndef OFN_EXPLORER
-    #define OFN_EXPLORER 0x00080000
-#endif
-
-#ifndef OFN_ENABLESIZING
-    #define OFN_ENABLESIZING 0x00800000
-#endif
-
-// ------------------ For Flashing Window -------------
-#if (defined(__BORLANDC__) && (__BORLANDC__ < 550))
-typedef struct {
-    UINT  cbSize;
-    HWND  hwnd;
-    DWORD dwFlags;
-    UINT  uCount;
-    DWORD dwTimeout;
-} FLASHWINFO, *PFLASHWINFO;
-#endif
-
-// In addition, include stuff not defined in WinCE
 #ifdef __WXWINCE__
     #include "wx/msw/wince/missing.h"
 #endif
 
 #endif
     // _WX_MISSING_H_
+

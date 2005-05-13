@@ -126,5 +126,17 @@
 #   define wxUSE_WCHAR_T 0
 #endif
 
+/* DMC++ doesn't have definitions for date picker control, so use generic control
+ */
+
+#ifdef __DMC__
+#if wxUSE_DATEPICKCTRL
+#undef wxUSE_DATEPICKCTRL_GENERIC
+#undef wxUSE_DATEPICKCTRL
+#endif
+#define wxUSE_DATEPICKCTRL 0
+#define wxUSE_DATEPICKCTRL_GENERIC 1
+#endif
+
 #endif /* _WX_MSW_CHKCONF_H_ */
 
