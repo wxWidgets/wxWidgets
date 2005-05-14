@@ -60,16 +60,19 @@ bool wxStaticText::Create(
 
     long                            lSstyle = 0L;
 
-    lSstyle = WS_VISIBLE | SS_TEXT | DT_VCENTER;
+    lSstyle = WS_VISIBLE | SS_TEXT | DT_VCENTER | DT_MNEMONIC;
     if (m_windowStyle & wxALIGN_CENTRE)
         lSstyle |= DT_CENTER;
     else if (m_windowStyle & wxALIGN_RIGHT)
         lSstyle |= DT_RIGHT;
     else
         lSstyle |= DT_LEFT;
+
+    wxString                        sLabel = ::wxPMTextToLabel(rsLabel);
+
     m_hWnd = (WXHWND)::WinCreateWindow( (HWND)GetHwndOf(pParent) // Parent window handle
                                        ,WC_STATIC                // Window class
-                                       ,(PSZ)rsLabel.c_str()     // Initial Text
+                                       ,(PSZ)sLabel.c_str()      // Initial Text
                                        ,(ULONG)lSstyle           // Style flags
                                        ,0L, 0L, 0L, 0L           // Origin -- 0 size
                                        ,(HWND)GetHwndOf(pParent) // owner window handle (same as parent
@@ -121,7 +124,7 @@ wxSize wxStaticText::DoGetBestSize() const
     int                             nHeightLineDefault = 0;
     int                             nHeightLine = 0;
     wxString                        sCurLine;
-    bool                            bLastWasAmpersand = FALSE;
+    bool                            bLastWasTilde = FALSE;
 
     for (const wxChar *pc = sText; ; pc++)
     {
@@ -163,16 +166,16 @@ wxSize wxStaticText::DoGetBestSize() const
         else
         {
             //
-            // We shouldn't take into account the '&' which just introduces the
+            // We shouldn't take into account the '~' which just introduces the
             // mnemonic characters and so are not shown on the screen -- except
-            // when it is preceded by another '&' in which case it stands for a
-            // literal ampersand
+            // when it is preceded by another '~' in which case it stands for a
+            // literal tilde
             //
-            if (*pc == _T('&'))
+            if (*pc == _T('~'))
             {
-                if (!bLastWasAmpersand)
+                if (!bLastWasTilde)
                 {
-                    bLastWasAmpersand = TRUE;
+                    bLastWasTilde = TRUE;
 
                     //
                     // Skip the statement adding pc to curLine below
@@ -181,9 +184,9 @@ wxSize wxStaticText::DoGetBestSize() const
                 }
 
                 //
-                // It is a literal ampersand
+                // It is a literal tilde
                 //
-                bLastWasAmpersand = FALSE;
+                bLastWasTilde = FALSE;
             }
             sCurLine += *pc;
         }
@@ -235,7 +238,8 @@ void wxStaticText::SetLabel(
   const wxString&                   rsLabel
 )
 {
-    ::WinSetWindowText(GetHwnd(), (PSZ)rsLabel.c_str());
+    wxString                        sLabel = ::wxPMTextToLabel(rsLabel);
+    ::WinSetWindowText(GetHwnd(), (PSZ)sLabel.c_str());
 
     //
     // Adjust the size of the window to fit to the label unless autoresizing is

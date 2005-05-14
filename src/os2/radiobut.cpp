@@ -201,7 +201,7 @@ void wxRadioButton::SetFocus()
     // generates BN_CLICKED which leads to showing another dialog and so on
     // without end!
     //
-    // to aviod this, we drop the pseudo BN_CLICKED events generated when the
+    // to avoid this, we drop the pseudo BN_CLICKED events generated when the
     // button gains focus
     m_bFocusJustSet = TRUE;
 
@@ -212,7 +212,8 @@ void wxRadioButton::SetLabel(
   const wxString&                   rsLabel
 )
 {
-    ::WinSetWindowText((HWND)GetHWND(), (const char *)rsLabel.c_str());
+    wxString                        sLabel = ::wxPMTextToLabel(rsLabel);
+    ::WinSetWindowText((HWND)GetHWND(), (const char *)sLabel.c_str());
 } // end of wxRadioButton::SetLabel
 
 void wxRadioButton::SetValue(

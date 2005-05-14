@@ -132,9 +132,11 @@ bool wxControl::OS2CreateControl(
         zClass = WC_CONTAINER;
     dwStyle |= WS_VISIBLE;
 
+    wxString                        sLabel = ::wxPMTextToLabel(rsLabel);
+
     m_hWnd = (WXHWND)::WinCreateWindow( (HWND)GetHwndOf(pParent) // Parent window handle
                                        ,(PSZ)zClass              // Window class
-                                       ,(PSZ)rsLabel.c_str()     // Initial Text
+                                       ,(PSZ)sLabel.c_str()      // Initial Text
                                        ,(ULONG)dwStyle           // Style flags
                                        ,(LONG)0                  // X pos of origin
                                        ,(LONG)0                  // Y pos of origin
