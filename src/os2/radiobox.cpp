@@ -646,7 +646,6 @@ void wxRadioBox::DoSetSize(
                           ,(LONG)nMaxHeight
                           ,SWP_ZORDER | SWP_SIZE | SWP_MOVE | SWP_SHOW
                          );
-        GetParent()->Refresh();
         //
         // Where do we put the next button?
         //

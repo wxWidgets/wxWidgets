@@ -394,6 +394,10 @@ bool wxWindowOS2::Create(
                   _T("wxStaticBox can't be used as a window parent!") );
 #endif // wxUSE_STATBOX
 
+     // Ensure groupbox backgrounds are painted
+     if (IsKindOf(CLASSINFO(wxPanel)))
+         lStyle &= ~wxCLIP_CHILDREN;
+
     if ( !CreateBase( pParent
                      ,vId
                      ,rPos
