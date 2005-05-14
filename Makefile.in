@@ -1440,6 +1440,8 @@ COND_TOOLKIT_MOTIF_LOWLEVEL_HDR =  \
 COND_TOOLKIT_MSW_LOWLEVEL_HDR =  \
 	wx/msw/popupwin.h \
 	wx/msw/uxtheme.h \
+	wx/msw/uxthemep.h \
+	wx/msw/htmlhelp.h \
 	wx/msw/helpchm.h \
 	wx/msw/helpwin.h
 @COND_TOOLKIT_MSW@LOWLEVEL_HDR = $(COND_TOOLKIT_MSW_LOWLEVEL_HDR)
