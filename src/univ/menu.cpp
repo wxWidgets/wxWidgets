@@ -138,6 +138,13 @@ public:
     // called when a submenu is dismissed
     void OnSubmenuDismiss(bool dismissParent);
 
+    // the default wxMSW wxPopupTransientWindow::OnIdle disables the capture
+    // when the cursor is inside the popup, which dsables the menu tracking
+    // so override it to do nothing
+#ifdef __WXMSW__
+    void OnIdle(wxIdleEvent& event) { }
+#endif
+
     // get the currently selected item (may be NULL)
     wxMenuItem *GetCurrentItem() const
     {
@@ -282,6 +289,9 @@ BEGIN_EVENT_TABLE(wxPopupMenuWindow, wxPopupTransientWindow)
     EVT_LEFT_UP(wxPopupMenuWindow::OnLeftUp)
     EVT_MOTION(wxPopupMenuWindow::OnMouseMove)
     EVT_LEAVE_WINDOW(wxPopupMenuWindow::OnMouseLeave)
+#ifdef __WXMSW__
+    EVT_IDLE(wxPopupMenuWindow::OnIdle)
+#endif
 END_EVENT_TABLE()
 
 BEGIN_EVENT_TABLE(wxMenuBar, wxMenuBarBase)
@@ -427,6 +437,11 @@ void wxPopupMenuWindow::Popup(wxWindow *focus)
                   _T("menu current item preselected incorrectly") );
 
     wxPopupTransientWindow::Popup(focus);
+
+    // the base class no-longer captures the mouse automatically when Popup
+    // is called, so do it here to allow the menu tracking to work
+    if ( !HasCapture() )
+        CaptureMouse();
 
 #ifdef __WXMSW__
     // ensure that this window is really on top of everything: without using
