@@ -33,7 +33,7 @@
 #endif
 
 #include "wx/msw/private.h"
-#include "wx/msw/missing.h"
+#include "wx/msw/htmlhelp.h"
 
 // ----------------------------------------------------------------------------
 // utility functions to manage the loading/unloading

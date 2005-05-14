@@ -1045,7 +1045,7 @@ bool wxNotebook::DoDrawBackground(WXHDC hDC, wxWindow *child)
     wxUxThemeEngine::Get()->DrawThemeBackground
                             (
                                 theme,
-                                hDC,
+                                (HDC) hDC,
                                 9 /* TABP_PANE */,
                                 0,
                                 &rc,
