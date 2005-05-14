@@ -4322,15 +4322,15 @@ bool wxWindowOS2::HandleKeyUp(
         //
         // Normal ASCII char
         //
-        nId = (int)wParam;
+        nId = CHAR1FROMMP(lParam);
     }
 
     if (nId != -1)
     {
         wxKeyEvent                  vEvent(CreateKeyEvent( wxEVT_KEY_UP
                                                           ,nId
-                                                          ,lParam
-                                                          ,wParam
+                                                          ,(MPARAM)lParam
+                                                          ,(MPARAM)wParam
                                                          ));
 
         if (GetEventHandler()->ProcessEvent(vEvent))
@@ -4636,6 +4636,8 @@ int wxCharCodeOS2ToWX(
         case VK_CTRL:       nId = WXK_CONTROL; break;
         case VK_PAUSE:      nId = WXK_PAUSE; break;
         case VK_SPACE:      nId = WXK_SPACE; break;
+        case VK_PAGEUP:     nId = WXK_PRIOR; break;
+        case VK_PAGEDOWN:   nId = WXK_NEXT; break;
         case VK_ESC:        nId = WXK_ESCAPE; break;
         case VK_END:        nId = WXK_END; break;
         case VK_HOME :      nId = WXK_HOME; break;
@@ -4706,6 +4708,8 @@ int wxCharCodeWXToOS2(
         case WXK_SHIFT:     nKeySym = VK_SHIFT; break;
         case WXK_CONTROL:   nKeySym = VK_CTRL; break;
         case WXK_PAUSE:     nKeySym = VK_PAUSE; break;
+        case WXK_PRIOR:     nKeySym = VK_PAGEUP; break;
+        case WXK_NEXT :     nKeySym = VK_PAGEDOWN; break;
         case WXK_END:       nKeySym = VK_END; break;
         case WXK_HOME :     nKeySym = VK_HOME; break;
         case WXK_LEFT :     nKeySym = VK_LEFT; break;
