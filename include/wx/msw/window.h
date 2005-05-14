@@ -50,7 +50,6 @@ class WXDLLEXPORT wxWindowMSW : public wxWindowBase
     friend class wxSpinCtrl;
     friend class wxSlider;
     friend class wxRadioBox;
-    friend class wxWindowMSW;
 public:
     wxWindowMSW() { Init(); }
 
