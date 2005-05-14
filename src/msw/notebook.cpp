@@ -686,7 +686,7 @@ wxColour wxNotebookGetThemeBackgroundColour(wxNotebook* notebook)
 #if wxUSE_UXTHEME
     if (wxUxThemeEngine::Get())
     {
-        WXHTHEME hTheme = wxUxThemeEngine::Get()->m_pfnOpenThemeData(notebook->GetHWND(), L"TAB");
+        HTHEME hTheme = wxUxThemeEngine::Get()->m_pfnOpenThemeData((HWND) notebook->GetHWND(), L"TAB");
         if (hTheme)
         {
             // This is total guesswork.
