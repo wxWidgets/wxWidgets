@@ -1433,20 +1433,15 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     <!-- cursors -->
     wx/msw/blank.cur
     wx/msw/bullseye.cur
-    wx/msw/clock.cur
     wx/msw/cross.cur
     wx/msw/hand.cur
-    wx/msw/heart.cur
     wx/msw/magnif1.cur
-    wx/msw/noentry.cur
     wx/msw/pbrush.cur
     wx/msw/pencil.cur
     wx/msw/pntleft.cur
     wx/msw/pntright.cur
-    wx/msw/query.cur
     wx/msw/rightarr.cur
     wx/msw/roller.cur
-    wx/msw/size.cur
     wx/msw/watch1.cur
     <!-- icons -->
     wx/msw/cdrom.ico
