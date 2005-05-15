@@ -1952,7 +1952,6 @@ COND_TOOLKIT_MSW_GUI_HDR =  \
 	wx/msw/pntright.cur \
 	wx/msw/rightarr.cur \
 	wx/msw/roller.cur \
-	wx/msw/watch1.cur \
 	wx/msw/cdrom.ico \
 	wx/msw/child.ico \
 	wx/msw/computer.ico \

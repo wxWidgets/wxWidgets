@@ -1442,7 +1442,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/msw/pntright.cur
     wx/msw/rightarr.cur
     wx/msw/roller.cur
-    wx/msw/watch1.cur
     <!-- icons -->
     wx/msw/cdrom.ico
     wx/msw/child.ico

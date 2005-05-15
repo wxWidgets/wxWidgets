@@ -333,7 +333,7 @@ wxCursor::wxCursor(int idCursor)
         {  true, IDC_SIZEALL                 }, // WXCURSOR_SIZING
         { false, _T("WXCURSOR_PBRUSH")       }, // wxCURSOR_SPRAYCAN
         {  true, IDC_WAIT                    }, // WXCURSOR_WAIT
-        { false, _T("WXCURSOR_WATCH")        }, // WXCURSOR_WATCH
+        {  true, IDC_WAIT                    }, // WXCURSOR_WATCH
         { false, _T("WXCURSOR_BLANK")        }, // wxCURSOR_BLANK
         {  true, IDC_APPSTARTING             }, // wxCURSOR_ARROWWAIT
 
