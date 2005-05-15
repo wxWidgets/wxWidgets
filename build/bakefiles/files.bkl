@@ -1447,7 +1447,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/msw/child.ico
     wx/msw/computer.ico
     wx/msw/drive.ico
-    wx/msw/error.ico
     wx/msw/file1.ico
     wx/msw/floppy.ico
     wx/msw/folder1.ico
