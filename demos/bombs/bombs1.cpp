@@ -38,23 +38,15 @@ void BombsCanvas::DrawField(wxDC *dc, int xc1, int yc1, int xc2, int yc2)
     wxString buf;
     long chw, chh;
 
-    wxColour wxBlack = wxTheColourDatabase->Find(wxT("BLACK"));
-    wxColour wxWhite = wxTheColourDatabase->Find(wxT("WHITE"));
-    wxColour wxRed = wxTheColourDatabase->Find(wxT("RED"));
-    wxColour wxBlue = wxTheColourDatabase->Find(wxT("BLUE"));
-    wxColour wxGrey = wxTheColourDatabase->Find(wxT("LIGHT GREY"));
+    wxColour wxYellow  = wxTheColourDatabase->Find(wxT("YELLOW"));
     wxColour wxFocused = wxTheColourDatabase->Find(wxT("GREY"));
-    wxColour wxGreen = wxTheColourDatabase->Find(wxT("GREEN"));
 
-    wxPen *blackPen = wxThePenList->FindOrCreatePen(wxBlack, 1, wxSOLID);
-    wxPen *redPen = wxThePenList->FindOrCreatePen(wxRed, 1, wxSOLID);
-    wxPen *bluePen = wxThePenList->FindOrCreatePen(wxBlue, 1, wxSOLID);
-    wxBrush *whiteBrush = wxTheBrushList->FindOrCreateBrush(wxWhite, wxSOLID);
-    wxBrush *greyBrush = wxTheBrushList->FindOrCreateBrush(wxGrey, wxSOLID);
+    wxPen *bluePen = wxThePenList->FindOrCreatePen(*wxBLUE, 1, wxSOLID);
+
     wxBrush *focusedBrush = wxTheBrushList->FindOrCreateBrush(wxFocused, wxSOLID);
-    wxBrush *redBrush = wxTheBrushList->FindOrCreateBrush(wxRed, wxSOLID);
+    wxBrush *yellowBrush  = wxTheBrushList->FindOrCreateBrush(wxYellow, wxSOLID);
 
-    dc->SetPen(* blackPen);
+    dc->SetPen(*wxBLACK_PEN);
 
     int x, y;
     int xMax = this->GetGridSizeInPixels().GetWidth();
@@ -73,22 +65,22 @@ void BombsCanvas::DrawField(wxDC *dc, int xc1, int yc1, int xc2, int yc2)
         {
             if (m_game->IsMarked(x,y))
             {
-                dc->SetPen(* blackPen);
+                dc->SetPen(*wxBLACK_PEN);
 
                 if (m_game->IsFocussed(x, y))
-                    dc->SetBrush(* focusedBrush);
+                    dc->SetBrush(*focusedBrush);
                 else
-                    dc->SetBrush(* greyBrush);
+                    dc->SetBrush(*wxLIGHT_GREY_BRUSH);
 
                 dc->DrawRectangle( x*m_cellWidth*X_UNIT, y*m_cellHeight*Y_UNIT,
                     m_cellWidth*X_UNIT+1, m_cellHeight*Y_UNIT+1);
                 buf = wxT("M");
                 if (!m_game->IsHidden(x,y) && m_game->IsBomb(x,y))
-                    dc->SetTextForeground(wxBlue);
+                    dc->SetTextForeground(*wxBLUE);
                 else
-                    dc->SetTextForeground(wxRed);
+                    dc->SetTextForeground(*wxRED);
 
-                dc->SetTextBackground(wxGrey);
+                dc->SetTextBackground(*wxLIGHT_GREY);
                 dc->GetTextExtent(buf, &chw, &chh);
                 dc->DrawText( buf,
                     x*m_cellWidth*X_UNIT + (m_cellWidth*X_UNIT-chw)/2,
@@ -96,7 +88,7 @@ void BombsCanvas::DrawField(wxDC *dc, int xc1, int yc1, int xc2, int yc2)
 
                 if (!m_game->IsHidden(x,y) && m_game->IsBomb(x,y))
                 {
-                    dc->SetPen(*redPen);
+                    dc->SetPen(*wxRED_PEN);
                     dc->DrawLine(x*m_cellWidth*X_UNIT, y*m_cellHeight*Y_UNIT,
                         (x+1)*m_cellWidth*X_UNIT, (y+1)*m_cellHeight*Y_UNIT);
                     dc->DrawLine(x*m_cellWidth*X_UNIT, (y+1)*m_cellHeight*Y_UNIT,
@@ -105,31 +97,31 @@ void BombsCanvas::DrawField(wxDC *dc, int xc1, int yc1, int xc2, int yc2)
             }
             else if (m_game->IsHidden(x,y))
             {
-                dc->SetPen(*blackPen);
+                dc->SetPen(*wxBLACK_PEN);
                 if (m_game->IsFocussed(x, y))
-                    dc->SetBrush(* focusedBrush);
+                    dc->SetBrush(*focusedBrush);
                 else
-                    dc->SetBrush(*greyBrush);
+                    dc->SetBrush(*wxLIGHT_GREY_BRUSH);
 
                 dc->DrawRectangle( x*m_cellWidth*X_UNIT, y*m_cellHeight*Y_UNIT,
                     m_cellWidth*X_UNIT+1, m_cellHeight*Y_UNIT+1);
             }
             else if (m_game->IsBomb(x,y))
             {
-                dc->SetPen(* blackPen);
-                dc->SetBrush(* redBrush);
+                dc->SetPen(*wxBLACK_PEN);
+                dc->SetBrush(*wxRED_BRUSH);
                 dc->DrawRectangle( x*m_cellWidth*X_UNIT, y*m_cellHeight*Y_UNIT,
                     m_cellWidth*X_UNIT+1, m_cellHeight*Y_UNIT+1);
                 buf = wxT("B");
-                dc->SetTextForeground(wxBlack);
-                dc->SetTextBackground(wxRed);
+                dc->SetTextForeground(*wxBLACK);
+                dc->SetTextBackground(*wxRED);
                 dc->GetTextExtent(buf, &chw, &chh);
                 dc->DrawText( buf,
                     x*m_cellWidth*X_UNIT + (m_cellWidth*X_UNIT-chw)/2,
                     y*m_cellHeight*Y_UNIT + (m_cellHeight*Y_UNIT-chh)/2);
                 if (m_game->IsExploded(x,y))
                 {
-                    dc->SetPen(* bluePen);
+                    dc->SetPen(*bluePen);
                     dc->DrawLine(x*m_cellWidth*X_UNIT, y*m_cellHeight*Y_UNIT,
                         (x+1)*m_cellWidth*X_UNIT, (y+1)*m_cellHeight*Y_UNIT);
                     dc->DrawLine(x*m_cellWidth*X_UNIT, (y+1)*m_cellHeight*Y_UNIT,
@@ -138,11 +130,13 @@ void BombsCanvas::DrawField(wxDC *dc, int xc1, int yc1, int xc2, int yc2)
             }
             else   // Display a digit
             {
-                dc->SetPen(* blackPen);
+                dc->SetPen(*wxBLACK_PEN);
                 if (m_game->IsFocussed(x, y))
-                    dc->SetBrush(* focusedBrush);
-                else
-                    dc->SetBrush(* whiteBrush);
+                    dc->SetBrush(*focusedBrush);
+                else if (m_game->IsSelected(x,y))
+                    dc->SetBrush(*wxWHITE_BRUSH);
+                else 
+                    dc->SetBrush(*yellowBrush);
                 dc->DrawRectangle( x*m_cellWidth*X_UNIT, y*m_cellHeight*Y_UNIT,
                     m_cellWidth*X_UNIT+1, m_cellHeight*Y_UNIT+1);
 
@@ -151,19 +145,19 @@ void BombsCanvas::DrawField(wxDC *dc, int xc1, int yc1, int xc2, int yc2)
                 {
                 case 0:
                     buf = wxT("0");
-                    dc->SetTextForeground(wxGreen);
+                    dc->SetTextForeground(*wxGREEN);
                     break;
                 case 1:
                     buf = wxT("1");
-                    dc->SetTextForeground(wxBlue);
+                    dc->SetTextForeground(*wxBLUE);
                     break;
                 default:
                     buf.Printf(wxT("%d"),digit_value);
-                    dc->SetTextForeground(wxBlack);
+                    dc->SetTextForeground(*wxBLACK);
                     break;
             }
             dc->GetTextExtent(buf, &chw, &chh);
-            dc->SetTextBackground(wxWhite);
+            dc->SetTextBackground(*wxWHITE);
             dc->DrawText( buf,
                 x*m_cellWidth*X_UNIT + (m_cellWidth*X_UNIT-chw)/2,
                 y*m_cellHeight*Y_UNIT + (m_cellHeight*Y_UNIT-chh)/2);
@@ -172,8 +166,9 @@ void BombsCanvas::DrawField(wxDC *dc, int xc1, int yc1, int xc2, int yc2)
     dc->SetFont(wxNullFont);
 
     wxString msg;
-    msg.Printf(wxT("%d bombs  %d remaining cells"),
-        m_game->GetNumBombs(), m_game->GetNumRemainingCells() );
+    msg.Printf(wxT("%d bombs, %u marked, %d remaining cells"),
+               m_game->GetNumBombs(), m_game->GetNumMarkedCells(), 
+               m_game->GetNumRemainingCells() );
 
 #if wxUSE_LOG && wxUSE_STATUSBAR
     wxLogStatus(msg);
@@ -201,7 +196,7 @@ void BombsCanvas::RefreshField(int xc1, int yc1, int xc2, int yc2)
 // Called when uncovering a cell.
 void BombsCanvas::Uncover(int x, int y)
 {
-    m_game->Unhide(x,y);
+    m_game->Unhide(x,y,true);
     RefreshField(x, y, x, y);
 
     const int gridWidth = m_game->GetWidth();
@@ -223,10 +218,11 @@ void BombsCanvas::Uncover(int x, int y)
 
         for(x=0; x<gridWidth; x++)
             for(y=0; y<gridHeight; y++)
-                m_game->Unhide(x,y);
-                    RefreshField(0, 0, gridWidth-1, gridHeight-1);
+                m_game->Unhide(x,y,false);
+
+        RefreshField(0, 0, gridWidth-1, gridHeight-1);
     }
-    else if (!m_game->Get(x, y))
+    else if (0 == (m_game->Get(x, y) & BG_MASK))
     {
         int left = ( x > 0 ) ? x-1 : 0;
         int right = ( x < gridWidth - 1 )

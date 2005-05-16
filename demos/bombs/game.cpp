@@ -99,6 +99,7 @@ bool BombsGame::Init(int aWidth, int aHeight, bool easyCorner)
             }
 
     m_numRemainingCells = m_height*m_width-m_numBombCells;
+    m_numMarkedCells = 0;
 
     return true;
 }
@@ -106,14 +107,21 @@ bool BombsGame::Init(int aWidth, int aHeight, bool easyCorner)
 void BombsGame::Mark(int x, int y)
 {
     m_field[x+y*m_width] ^= BG_MARKED;
+    if (IsMarked(x, y))
+        m_numMarkedCells++;
+    else
+        m_numMarkedCells--;
 }
 
-void BombsGame::Unhide(int x, int y)
+void BombsGame::Unhide(int x, int y, bool b_selected)
 {
     if (!IsHidden(x,y))
     {
         return;
     }
+
+    if (b_selected)
+        m_field[x+y*m_width] |= BG_SELECTED;
 
     m_field[x+y*m_width] &= ~BG_HIDDEN;
 

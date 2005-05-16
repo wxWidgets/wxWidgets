@@ -16,7 +16,8 @@
 #define BG_BOMB     0x200
 #define BG_MARKED   0x400
 #define BG_EXPLODED 0x800
-#define BG_MASK     0x0FF
+#define BG_SELECTED 0x080
+#define BG_MASK     0x03F
 
 #include <stddef.h>
 
@@ -64,6 +65,11 @@ public:
         return Get(x,y) & BG_EXPLODED;
     };
 
+    int IsSelected(int x, int y) const
+    {
+        return Get(x,y) & BG_SELECTED;
+    };
+
     int GetNumBombs() const
     {
         return m_numBombCells;
@@ -74,6 +80,10 @@ public:
         return m_numRemainingCells;
     };
 
+    int GetNumMarkedCells() const
+    {
+        return m_numMarkedCells;
+    };
 
 
     bool Init(int width, int height, bool easyCorner = false);
@@ -83,7 +93,7 @@ public:
     void Mark(int x, int y);
 
     // Unhides a cell
-    void Unhide(int x, int y);
+    void Unhide(int x, int y, bool b_selected);
 
     // Makes a cell exploded
     void Explode(int x, int y);
@@ -98,7 +108,7 @@ private:
 
     int m_width, m_height;
     short *m_field;
-    int m_numBombCells, m_numRemainingCells;
+    int m_numBombCells, m_numRemainingCells, m_numMarkedCells;
 
 };
 
