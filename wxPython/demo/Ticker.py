@@ -77,6 +77,8 @@ class TestPanel(wx.Panel):
         self.SetTickDirection("rtl")
         self.SetTickFont(self.ticker.GetFont())
         self.ticker.SetText(self.txt.GetValue())
+
+        
     def SetTickFont(self, font):
         """Sets ticker font, updates label"""
         self.ticker.SetFont(font)
