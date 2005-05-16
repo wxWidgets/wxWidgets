@@ -578,7 +578,7 @@ bool wxDC::DoFloodFill(
     if ((lHits = ::GpiFloodFill(m_hPS, lOptions, lColor)) != GPI_ERROR)
         bSuccess = true;
 
-    return true;
+    return bSuccess;
 } // end of wxDC::DoFloodFill
 
 bool wxDC::DoGetPixel(
@@ -592,17 +592,7 @@ bool wxDC::DoGetPixel(
 
     vPoint.x = vX;
     vPoint.y = OS2Y(vY,0);
-    lColor = ::GpiSetPel(m_hPS, &vPoint);
-
-    //
-    // Get the color of the pen
-    //
-    LONG                            lPencolor = 0x00ffffff;
-
-    if (m_pen.Ok())
-    {
-        lPencolor = m_pen.GetColour().GetPixel();
-    }
+    lColor = ::GpiQueryPel(m_hPS, &vPoint);
 
     //
     // return the color of the pixel
@@ -612,7 +602,7 @@ bool wxDC::DoGetPixel(
                   ,GetGValue(lColor)
                   ,GetBValue(lColor)
                  );
-    return(lColor == lPencolor);
+    return true;
 } // end of wxDC::DoGetPixel
 
 void wxDC::DoCrossHair(
