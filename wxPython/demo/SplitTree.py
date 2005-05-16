@@ -48,10 +48,6 @@ class TestValueWindow(gizmos.TreeCompanionWindow):
     def __init__(self, parent, style=0):
         gizmos.TreeCompanionWindow.__init__(self, parent, -1, style=style)
         self.SetBackgroundColour("WHITE")
-        self.Bind(wx.EVT_ERASE_BACKGROUND, self.OEB)
-
-    def OEB(self, evt):
-        pass
 
     # This method is called to draw each item in the value window
     def DrawItem(self, dc, itemId, rect):
