@@ -142,7 +142,7 @@ public:
     // when the cursor is inside the popup, which dsables the menu tracking
     // so override it to do nothing
 #ifdef __WXMSW__
-    void OnIdle(wxIdleEvent& event) { }
+    void OnIdle(wxIdleEvent& WXUNUSED(event)) { }
 #endif
 
     // get the currently selected item (may be NULL)
