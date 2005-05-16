@@ -95,12 +95,27 @@
 #endif
 
  /*
-  * In addition to the above, the following are required for BC++ 5.5.
-  * (None presently.)
+  * In addition to the above, the following are required for several compilers.
+  */
+
+#if !defined(CCS_VERT)
+#define CCS_VERT                0x00000080L
+#endif
+
+#if !defined(TB_SETDISABLEDIMAGELIST)
+    #define TB_SETDISABLEDIMAGELIST (WM_USER + 54)
+#endif // !defined(TB_SETDISABLEDIMAGELIST)
+
+#ifndef CFM_BACKCOLOR
+    #define CFM_BACKCOLOR 0x04000000
+#endif
+
+ /*
+  * The following are required for BC++ 5.5 (none at present.)
   */
 
  /*
-  * In addition to the above, the following are required for Digital Mars C++
+  * The following are specifically required for Digital Mars C++
   */
 
 #ifdef __DMC__
@@ -150,17 +165,6 @@
 #endif
 
 // ----------------------------------------------------------------------------
-// Toolbar define value missing
-// ----------------------------------------------------------------------------
-#if !defined(CCS_VERT)
-#define CCS_VERT                0x00000080L
-#endif
-
-#if !defined(TB_SETDISABLEDIMAGELIST)
-    #define TB_SETDISABLEDIMAGELIST (WM_USER + 54)
-#endif // !defined(TB_SETDISABLEDIMAGELIST)
-
-// ----------------------------------------------------------------------------
 // Tree control
 // ----------------------------------------------------------------------------
 
@@ -189,32 +193,17 @@
     // DMC++
 
  /*
-  * In addition to the declarations for VC++, the following are required for OpenWatcom C++
+  * The following are specifically required for OpenWatcom C++ (none at present)
   */
 
 #if defined(__WATCOMC__)
-#ifndef CFM_BACKCOLOR
-    #define CFM_BACKCOLOR 0x04000000
-#endif
-
-#if !defined(CCS_VERT)
-#define CCS_VERT                0x00000080L
-#endif
-
-#if !defined(TB_SETDISABLEDIMAGELIST)
-    #define TB_SETDISABLEDIMAGELIST (WM_USER + 54)
-#endif // !defined(TB_SETDISABLEDIMAGELIST)
-
 #endif
 
  /*
-  * In addition to the declarations for VC++, the following are required for MinGW
+  * The following are specifically required for MinGW (none at present)
   */
 
 #if defined (__MINGW32__)
-#ifndef CFM_BACKCOLOR
-    #define CFM_BACKCOLOR 0x04000000
-#endif
 #endif
 
  /*
