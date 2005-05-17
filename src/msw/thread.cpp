@@ -705,7 +705,7 @@ wxThreadInternal::WaitForTerminate(wxCriticalSection& cs,
             }
         }
 
-#if defined(__WXWINCE__) && !defined(QS_ALLPOSTMESSAGE)
+#if !defined(QS_ALLPOSTMESSAGE)
 #define QS_ALLPOSTMESSAGE 0
 #endif
 
