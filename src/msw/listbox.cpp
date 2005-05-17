@@ -622,7 +622,7 @@ void wxListBox::SetHorizontalExtent(const wxString& s)
 
         GetTextMetrics(dc, &lpTextMetric);
         SIZE extentXY;
-        ::GetTextExtentPoint(dc, (LPTSTR) (const wxChar *)s, s.Length(), &extentXY);
+        ::GetTextExtentPoint32(dc, (LPTSTR) (const wxChar *)s, s.Length(), &extentXY);
         int extentX = (int)(extentXY.cx + lpTextMetric.tmAveCharWidth);
 
         if (oldFont)
@@ -646,7 +646,7 @@ void wxListBox::SetHorizontalExtent(const wxString& s)
         {
             wxString str = GetString(i);
             SIZE extentXY;
-            ::GetTextExtentPoint(dc, str.c_str(), str.length(), &extentXY);
+            ::GetTextExtentPoint32(dc, str.c_str(), str.length(), &extentXY);
             int extentX = (int)(extentXY.cx + lpTextMetric.tmAveCharWidth);
             if (extentX > largestExtent)
                 largestExtent = extentX;

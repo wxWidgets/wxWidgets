@@ -317,9 +317,9 @@ void wxToolTip::Add(WXHWND hWnd)
                 }
 
                 SIZE sz;
-                if ( !GetTextExtentPoint(hdc, m_text, index, &sz) )
+                if ( !::GetTextExtentPoint32(hdc, m_text, index, &sz) )
                 {
-                    wxLogLastError(wxT("GetTextExtentPoint"));
+                    wxLogLastError(wxT("GetTextExtentPoint32"));
                 }
 
                 SendTooltipMessage(GetToolTipCtrl(), TTM_SETMAXTIPWIDTH,

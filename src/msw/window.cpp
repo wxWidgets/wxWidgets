@@ -1797,7 +1797,7 @@ void wxWindowMSW::GetTextExtent(const wxString& string,
 
     SIZE sizeRect;
     TEXTMETRIC tm;
-    GetTextExtentPoint(hdc, string, string.length(), &sizeRect);
+    ::GetTextExtentPoint32(hdc, string, string.length(), &sizeRect);
     GetTextMetrics(hdc, &tm);
 
     if ( x )

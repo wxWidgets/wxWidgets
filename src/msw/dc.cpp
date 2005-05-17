@@ -1635,7 +1635,7 @@ void wxDC::DoGetTextExtent(const wxString& string, wxCoord *x, wxCoord *y,
     SIZE sizeRect;
     TEXTMETRIC tm;
 
-    GetTextExtentPoint(GetHdc(), string, string.length(), &sizeRect);
+    ::GetTextExtentPoint32(GetHdc(), string, string.length(), &sizeRect);
     GetTextMetrics(GetHdc(), &tm);
 
     if (x)

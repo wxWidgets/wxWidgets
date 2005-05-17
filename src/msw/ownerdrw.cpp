@@ -312,7 +312,7 @@ bool wxOwnerDrawn::OnDrawItem(wxDC& dc,
   xText += 3; // separate text from the highlight rectangle
 
   SIZE sizeRect;
-  GetTextExtentPoint32(hdc,strMenuText.c_str(), strMenuText.Length(),&sizeRect);
+  ::GetTextExtentPoint32(hdc, strMenuText.c_str(), strMenuText.Length(), &sizeRect);
   ::DrawState(hdc, NULL, NULL,
               (LPARAM)strMenuText.c_str(), strMenuText.length(),
               xText, rc.y + (int) ((rc.GetHeight()-sizeRect.cy)/2.0), // centre text vertically
