@@ -49,7 +49,6 @@
 
 //---------------------------------------------------------------------------
 
-
 %{ // C++ version of Python aware wxWindow
 class wxPyWindow : public wxWindow
 {
@@ -65,6 +64,16 @@ public:
 
     void SetBestSize(const wxSize& size) { wxWindow::SetBestSize(size); }
 
+    bool DoEraseBackground(wxDC* dc) {
+#ifdef __WXMSW__
+        return wxWindow::DoEraseBackground(dc->GetHDC());
+#else
+        dc->SetBackground(wxBrush(GetBackgroundColour()));
+        dc->Clear();
+        return true;
+#endif
+    }
+    
     DEC_PYCALLBACK_VOID_INT4(DoMoveWindow);
     DEC_PYCALLBACK_VOID_INT5(DoSetSize);
     DEC_PYCALLBACK_VOID_INTINT(DoSetClientSize);
@@ -147,9 +156,9 @@ public:
     
     void _setCallbackInfo(PyObject* self, PyObject* _class);
 
-
     void SetBestSize(const wxSize& size);
-
+    bool DoEraseBackground(wxDC* dc);
+    
     void base_DoMoveWindow(int x, int y, int width, int height);
     void base_DoSetSize(int x, int y, int width, int height,
                         int sizeFlags = wxSIZE_AUTO);
@@ -208,6 +217,15 @@ public:
         : wxPanel(parent, id, pos, size, style, name) {}
 
     void SetBestSize(const wxSize& size) { wxPanel::SetBestSize(size); }
+    bool DoEraseBackground(wxDC* dc) {
+#ifdef __WXMSW__
+        return wxWindow::DoEraseBackground(dc->GetHDC());
+#else
+        dc->SetBackground(wxBrush(GetBackgroundColour()));
+        dc->Clear();
+        return true;
+#endif
+    }
     
 
     DEC_PYCALLBACK_VOID_INT4(DoMoveWindow);
@@ -293,7 +311,8 @@ public:
     void _setCallbackInfo(PyObject* self, PyObject* _class);
 
     void SetBestSize(const wxSize& size);
-
+    bool DoEraseBackground(wxDC* dc);
+    
     void base_DoMoveWindow(int x, int y, int width, int height);
     void base_DoSetSize(int x, int y, int width, int height,
                         int sizeFlags = wxSIZE_AUTO);
@@ -346,6 +365,15 @@ public:
         : wxScrolledWindow(parent, id, pos, size, style, name) {}
 
     void SetBestSize(const wxSize& size) { wxScrolledWindow::SetBestSize(size); }
+    bool DoEraseBackground(wxDC* dc) {
+#ifdef __WXMSW__
+        return wxWindow::DoEraseBackground(dc->GetHDC());
+#else
+        dc->SetBackground(wxBrush(GetBackgroundColour()));
+        dc->Clear();
+        return true;
+#endif
+    }
 
     DEC_PYCALLBACK_VOID_INT4(DoMoveWindow);
     DEC_PYCALLBACK_VOID_INT5(DoSetSize);
@@ -430,7 +458,8 @@ public:
     void _setCallbackInfo(PyObject* self, PyObject* _class);
 
     void SetBestSize(const wxSize& size);
-
+    bool DoEraseBackground(wxDC* dc);
+    
     void base_DoMoveWindow(int x, int y, int width, int height);
     void base_DoSetSize(int x, int y, int width, int height,
                         int sizeFlags = wxSIZE_AUTO);
