@@ -5002,8 +5002,8 @@ if test "$wxUSE_STACKWALKER" = "yes"; then
 fi
 
 if test "$wxUSE_DEBUGREPORT" = "yes"; then
-    if test "$USE_OS2" = "1"; then
-        AC_MSG_WARN([Creating debug reports not supported under OS/2 yet, disabled])
+    if test "$USE_OS2" = "1" -o "$USE_WIN32" = "1"; then
+        AC_MSG_WARN([Creating debug reports not supported by this compiler, disabled])
         wxUSE_DEBUGREPORT=no
     else
         AC_DEFINE(wxUSE_DEBUGREPORT)

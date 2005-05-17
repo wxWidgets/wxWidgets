@@ -36914,9 +36914,9 @@ _ACEOF
 fi
 
 if test "$wxUSE_DEBUGREPORT" = "yes"; then
-    if test "$USE_OS2" = "1"; then
-        { echo "$as_me:$LINENO: WARNING: Creating debug reports not supported under OS/2 yet, disabled" >&5
-echo "$as_me: WARNING: Creating debug reports not supported under OS/2 yet, disabled" >&2;}
+    if test "$USE_OS2" = "1" -o "$USE_WIN32" = "1"; then
+        { echo "$as_me:$LINENO: WARNING: Creating debug reports not supported by this compiler, disabled" >&5
+echo "$as_me: WARNING: Creating debug reports not supported by this compiler, disabled" >&2;}
         wxUSE_DEBUGREPORT=no
     else
         cat >>confdefs.h <<\_ACEOF
@@ -41500,7 +41500,11 @@ echo "${ECHO_T}$bakefile_cv_prog_makeisgnu" >&6
                 PLATFORM_MACOS=1
             ;;
             * )
+            if test "$wxUSE_WINE" = "yes"; then
+                PLATFORM_WIN32=1
+            else
                 PLATFORM_UNIX=1
+            fi
             ;;
         esac
     else
