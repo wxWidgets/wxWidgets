@@ -567,7 +567,9 @@ wxSize wxChoice::DoGetBestSize() const
     // the combobox should be slightly larger than the widest string
     wChoice += 5*GetCharWidth();
 
-    return wxSize(wChoice, EDIT_HEIGHT_FROM_CHAR_HEIGHT(GetCharHeight()));
+    wxSize best(wChoice, EDIT_HEIGHT_FROM_CHAR_HEIGHT(GetCharHeight()));
+    CacheBestSize(best);
+    return best;
 }
 
 WXLRESULT wxChoice::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
