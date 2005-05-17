@@ -9,7 +9,7 @@ static char *question_xpm[] = {
 "o c #F6F900",
 "; c #3F3F00",
 "$ c #111111",
-"  c #FF00FF",
+"  c None",
 "& c #202020",
 "X c #AAAA00",
 "@ c #949400",
