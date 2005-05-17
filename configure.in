@@ -6664,7 +6664,15 @@ case "$TOOLKIT" in
         ;;
 esac
 
+if test "$wxUSE_WINE" = "yes"; then
+    BAKEFILE_FORCE_PLATFORM=win32
+fi
+
 AC_BAKEFILE([m4_include(autoconf_inc.m4)])
+
+if test "$wxUSE_WINE" = "yes"; then
+    RESCOMP=wrc
+fi
 
 if test "$wxUSE_SHARED" = "yes"; then
 
