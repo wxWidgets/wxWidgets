@@ -63,12 +63,7 @@ public:
     }
 
     // return the global and unique wxRendererPtr
-    static wxRendererPtr& Get()
-    {
-        static wxRendererPtr s_renderer;
-
-        return s_renderer;
-    }
+    static wxRendererPtr& Get();
 
 private:
     wxRendererPtr() : wxRendererPtrBase(NULL) { m_initialized = false; }
@@ -90,6 +85,14 @@ private:
 
     DECLARE_NO_COPY_CLASS(wxRendererPtr)
 };
+
+// return the global and unique wxRendererPtr
+/*static*/ wxRendererPtr& wxRendererPtr::Get()
+{
+    static wxRendererPtr s_renderer;
+
+    return s_renderer;
+}
 
 #if wxUSE_DYNLIB_CLASS
 
