@@ -9,7 +9,8 @@ Added wx.BrushFromBitmap to create a stippled brush in a single step.
 Also added missing brysh style flags: wx.STIPPLE_MASK
 wx.STIPPLE_MASK_OPAQUE. 
 
-wxMSW: Fix for controls when the system text fg colour is not black.
+wxMSW: Fix for default control colours when the system text fg colour
+is not black.
 
 wxGTK: Patch #1171754, It is now possible to have a menu item that
 both has an icon and is a submenu.
@@ -55,6 +56,18 @@ for details.
 Added wx.lib.hyperlink from Andrea Gavana.  It is a control like
 static text that acts like a hyper-link, launching the system's
 default browser in response to the clicks.
+
+Added an optional parameter to wxversion.select that allows you to
+specify that the extra components specified in the version string are
+required.  For example, if you ask for "2.6-unicode" but only the ansi
+version is installed then by default the ansi version will be selected
+as it considered close enough since the version numbers match.  If you
+want to force the options to be required then you can just add a True
+parameter, like this::
+
+	 import wxversion
+	 wxversion.select("2.6-unicode", True)
+	 import wx
 
 
 
