@@ -79,6 +79,9 @@
     #if defined __MWERKS__ || defined __CYGWIN__
         #include <io.h>
     #endif
+    #if defined __WINE__
+    extern "C" { long _get_osfhandle(int); }
+    #endif
 #endif // __WINDOWS__
 
 #if defined(__VMS__)
