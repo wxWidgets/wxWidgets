@@ -35,6 +35,8 @@
     #endif
 #endif
 
+#include "wx/log.h"
+
 #ifndef NO_GUI
     #include "wx/timer.h"
     #include "wx/help.h"
@@ -1094,59 +1096,56 @@ bool Go(void)
 
 void OnError(const wxChar *msg)
 {
-  wxString msg_string = msg;
-  errorCount++;
+    wxString msg_string = msg;
+    errorCount++;
 
 #ifdef NO_GUI
-  wxSTD cerr << "Error: " << msg_string.mb_str() << "\n";
-  wxSTD cerr.flush();
-#else
-  if (isInteractive && frame)
-    (*frame->textWindow) << _T("Error: ") << msg << _T("\n");
-  else
-#ifdef __UNIX__
-  {
     wxSTD cerr << "Error: " << msg_string.mb_str() << "\n";
     wxSTD cerr.flush();
-  }
+#else
+    if (isInteractive && frame)
+    {
+        (*frame->textWindow) << _T("Error: ") << msg << _T("\n");
+    }
+    else
+    {
+#if defined(__UNIX__)
+        wxSTD cerr << "Error: " << msg_string.mb_str() << "\n";
+        wxSTD cerr.flush();
+#elif defined(__WXMSW__)
+        wxLogError(msg);
 #endif
+    }
 
-#ifdef __WXMSW__
-    wxLogError(msg);
-#endif
-  Tex2RTFYield(true);
+    Tex2RTFYield(true);
 #endif // NO_GUI
 }
 
 void OnInform(const wxChar *msg)
 {
-  wxString msg_string = msg;
+    wxString msg_string = msg;
 #ifdef NO_GUI
-  wxSTD cout << msg_string.mb_str() << "\n";
-  wxSTD cout.flush();
-#else
-  if (isInteractive && frame)
-    (*frame->textWindow) << msg << _T("\n");
-/* This whole block of code is just wrong I think.  It would behave
-   completely wrong under anything other than MSW due to the ELSE
-   with no statement, and the cout calls would fail under MSW, as
-   the code in this block is compiled if !NO_GUI This code has been
-   here since v1.1 of this file too. - gt
-  else
-#ifdef __WXMSW__
-  {
     wxSTD cout << msg_string.mb_str() << "\n";
     wxSTD cout.flush();
-  }
+#else
+    if (isInteractive && frame)
+    {
+       (*frame->textWindow) << msg << _T("\n");
+    }
+    else
+    {
+#if defined(__UNIX__)
+        wxSTD cout << msg_string.mb_str() << "\n";
+        wxSTD cout.flush();
+#elif defined(__WXMSW__)
+        wxLogInfo(msg);
 #endif
-#ifdef __WXMSW__
-    {}
-#endif
-*/
-  if (isInteractive)
-  {
-    Tex2RTFYield(true);
-  }
+    }
+
+    if (isInteractive)
+    {
+        Tex2RTFYield(true);
+    }
 #endif // NO_GUI
 }
 
