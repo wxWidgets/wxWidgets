@@ -69,6 +69,9 @@ parameter, like this::
 	 wxversion.select("2.6-unicode", True)
 	 import wx
 
+Tweaked wx.lib.buttons such that flat buttons (e.g. have no bevel and
+a wx.BORDER_NONE style flag) paint themed backgrounds if there are
+transparent areas and the parent is displaying a theme.
 
 
 

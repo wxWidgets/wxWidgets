@@ -62,12 +62,13 @@ class GenButton(wx.PyControl):
                  name = "genbutton"):
         cstyle = style
         if cstyle == 0:
-            cstyle = wx.NO_BORDER
+            cstyle = wx.BORDER_NONE
         wx.PyControl.__init__(self, parent, ID, pos, size, cstyle, validator, name)
 
         self.up = True
         self.hasFocus = False
-        if style & wx.NO_BORDER:
+        self.style = style
+        if style & wx.BORDER_NONE:
             self.bezelWidth = 0
             self.useFocusInd = False
         else:
@@ -88,7 +89,6 @@ class GenButton(wx.PyControl):
         self.Bind(wx.EVT_KILL_FOCUS,       self.OnLoseFocus)
         self.Bind(wx.EVT_KEY_DOWN,         self.OnKeyDown)
         self.Bind(wx.EVT_KEY_UP,           self.OnKeyUp)
-        self.Bind(wx.EVT_ERASE_BACKGROUND, self.OnEraseBackground)
         self.Bind(wx.EVT_PAINT,            self.OnPaint)
 
 
@@ -261,20 +261,37 @@ class GenButton(wx.PyControl):
         x1 = y1 = 0
         x2 = width-1
         y2 = height-1
+        
         dc = wx.BufferedPaintDC(self)
+        brush = None
+        
         if self.up:
-            dc.SetBackground(wx.Brush(self.GetBackgroundColour(), wx.SOLID))
+            colBg = self.GetBackgroundColour()
+            brush = wx.Brush(colBg, wx.SOLID)
+            if self.style & wx.BORDER_NONE:
+                myAttr = self.GetDefaultAttributes()
+                parAttr = self.GetParent().GetDefaultAttributes()
+                myDef = colBg == myAttr.colBg
+                parDef = self.GetParent().GetBackgroundColour() == parAttr.colBg
+                if myDef and parDef:
+                    if wx.Platform == "__WXMAC__":
+                        brush.MacSetTheme(1) # 1 == kThemeBrushDialogBackgroundActive
+                    elif wx.Platform == "__WXMSW__":
+                        if self.DoEraseBackground(dc):
+                            brush = None
+                elif myDef and not parDef:
+                    colBg = self.GetParent().GetBackgroundColour()
+                    brush = wx.Brush(colBg, wx.SOLID)
         else:
-            dc.SetBackground(wx.Brush(self.faceDnClr, wx.SOLID))
-        dc.Clear()
+            brush = wx.Brush(self.faceDnClr, wx.SOLID)
+        if brush is not None:
+            dc.SetBackground(brush)
+            dc.Clear()
+                    
         self.DrawBezel(dc, x1, y1, x2, y2)
         self.DrawLabel(dc, width, height)
         if self.hasFocus and self.useFocusInd:
             self.DrawFocusIndicator(dc, width, height)
-
-
-    def OnEraseBackground(self, event):
-        pass
 
 
     def OnLeftDown(self, event):

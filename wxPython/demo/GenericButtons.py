@@ -114,6 +114,22 @@ class TestPanel(wx.Panel):
         b.SetBestSize()
         sizer.Add(b)
 
+
+        # a flat text button
+        b = buttons.GenButton(self, -1, 'Flat buttons too!', style=wx.BORDER_NONE)
+        self.Bind(wx.EVT_BUTTON, self.OnButton, b)
+        sizer.Add(b, flag=wx.ALIGN_CENTER_VERTICAL)
+
+        # A flat image button
+        bmp = images.getTest2Bitmap()
+        bmp.SetMaskColour("blue")
+        b = buttons.GenBitmapButton(self, -1, bmp, style=wx.BORDER_NONE)
+        self.Bind(wx.EVT_BUTTON, self.OnButton, b)
+        sizer.Add(b)
+        ##b.SetBackgroundColour("sky blue")
+        ##b.SetBackgroundColour("pink")
+
+
         border = wx.BoxSizer(wx.VERTICAL)
         border.Add(sizer, 0, wx.ALL, 25)
         self.SetSizer(border)
