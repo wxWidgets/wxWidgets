@@ -79,9 +79,6 @@
     #if defined __MWERKS__ || defined __CYGWIN__
         #include <io.h>
     #endif
-    #if defined __WINE__
-    extern "C" { long _get_osfhandle(int); }
-    #endif
 #endif // __WINDOWS__
 
 #if defined(__VMS__)
@@ -1927,7 +1924,7 @@ bool wxMatchWild( const wxString& pat, const wxString& text, bool dot_special )
 //
 wxFileKind wxGetFileKind(int fd)
 {
-#if defined __WXMSW__ && !defined __WXWINCE__ && defined wxGetOSFHandle
+#if defined __WXMSW__ && !defined __WXWINCE__ && defined wxGetOSFHandle && !defined(__WINE__)
     switch (::GetFileType(wxGetOSFHandle(fd)) & ~FILE_TYPE_REMOTE)
     {
         case FILE_TYPE_CHAR:
