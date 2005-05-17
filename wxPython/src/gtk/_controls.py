@@ -5817,6 +5817,10 @@ class PyControl(_core.Control):
         """SetBestSize(self, Size size)"""
         return _controls_.PyControl_SetBestSize(*args, **kwargs)
 
+    def DoEraseBackground(*args, **kwargs):
+        """DoEraseBackground(self, DC dc) -> bool"""
+        return _controls_.PyControl_DoEraseBackground(*args, **kwargs)
+
     def base_DoMoveWindow(*args, **kwargs):
         """base_DoMoveWindow(self, int x, int y, int width, int height)"""
         return _controls_.PyControl_base_DoMoveWindow(*args, **kwargs)

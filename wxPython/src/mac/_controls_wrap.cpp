@@ -2165,6 +2165,16 @@ public:
 
     void SetBestSize(const wxSize& size) { wxControl::SetBestSize(size); }
 
+    bool DoEraseBackground(wxDC* dc) {
+#ifdef __WXMSW__
+        return wxWindow::DoEraseBackground(dc->GetHDC());
+#else
+        dc->SetBackground(wxBrush(GetBackgroundColour()));
+        dc->Clear();
+        return true;
+#endif
+    }
+
     DEC_PYCALLBACK_VOID_INT4(DoMoveWindow);
     DEC_PYCALLBACK_VOID_INT5(DoSetSize);
     DEC_PYCALLBACK_VOID_INTINT(DoSetClientSize);
@@ -32190,6 +32200,38 @@ static PyObject *_wrap_PyControl_SetBestSize(PyObject *, PyObject *args, PyObjec
 }
 
 
+static PyObject *_wrap_PyControl_DoEraseBackground(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxPyControl *arg1 = (wxPyControl *) 0 ;
+    wxDC *arg2 = (wxDC *) 0 ;
+    bool result;
+    PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
+    char *kwnames[] = {
+        (char *) "self",(char *) "dc", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:PyControl_DoEraseBackground",kwnames,&obj0,&obj1)) goto fail;
+    SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxPyControl, SWIG_POINTER_EXCEPTION | 0);
+    if (SWIG_arg_fail(1)) SWIG_fail;
+    SWIG_Python_ConvertPtr(obj1, (void **)&arg2, SWIGTYPE_p_wxDC, SWIG_POINTER_EXCEPTION | 0);
+    if (SWIG_arg_fail(2)) SWIG_fail;
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = (bool)(arg1)->DoEraseBackground(arg2);
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
 static PyObject *_wrap_PyControl_base_DoMoveWindow(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPyControl *arg1 = (wxPyControl *) 0 ;
@@ -35562,6 +35604,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"new_PrePyControl", (PyCFunction) _wrap_new_PrePyControl, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"PyControl__setCallbackInfo", (PyCFunction) _wrap_PyControl__setCallbackInfo, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"PyControl_SetBestSize", (PyCFunction) _wrap_PyControl_SetBestSize, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"PyControl_DoEraseBackground", (PyCFunction) _wrap_PyControl_DoEraseBackground, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"PyControl_base_DoMoveWindow", (PyCFunction) _wrap_PyControl_base_DoMoveWindow, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"PyControl_base_DoSetSize", (PyCFunction) _wrap_PyControl_base_DoSetSize, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"PyControl_base_DoSetClientSize", (PyCFunction) _wrap_PyControl_base_DoSetClientSize, METH_VARARGS | METH_KEYWORDS, NULL},
