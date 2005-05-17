@@ -244,7 +244,7 @@ wxRendererXP::DrawSplitterSash(wxWindow *win,
 {
     if ( !win->HasFlag(wxSP_NO_XP_THEME) )
     {
-        wxUxThemeHandle hTheme(win, L"WINDOW");
+        wxUxThemeHandle hTheme(win, L"REBAR");
         if ( hTheme )
         {
             RECT rect;
