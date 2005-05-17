@@ -175,6 +175,13 @@ bool MyApp::OnInit()
     if ( lng != -1 )
         m_locale.Init(langIds[lng]);
 
+    // normally this wouldn't be necessary as the catalog files would be found
+    // in the default locations, but under Windows then the program is not
+    // installed the catalogs are in the parent directory (because the binary
+    // is in a subdirectory of samples/internat) where we wouldn't find them by
+    // default
+    wxLocale::AddCatalogLookupPathPrefix(wxT("."));
+    wxLocale::AddCatalogLookupPathPrefix(wxT(".."));
 
     // Initialize the catalogs we'll be using
     m_locale.AddCatalog(wxT("internat"));
