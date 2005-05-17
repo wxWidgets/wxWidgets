@@ -30,6 +30,9 @@
 
 #if wxUSE_TREECTRL
 
+// include <commctrl.h> "properly"
+#include "wx/msw/wrapcctl.h"
+
 #include "wx/msw/private.h"
 #include "wx/msw/missing.h"
 
@@ -44,9 +47,6 @@
 #include "wx/settings.h"
 #include "wx/msw/treectrl.h"
 #include "wx/msw/dragimag.h"
-
-// include <commctrl.h> "properly"
-#include "wx/msw/wrapcctl.h"
 
 // macros to hide the cast ugliness
 // --------------------------------
