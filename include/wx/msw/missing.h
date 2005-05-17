@@ -90,6 +90,10 @@
 // Needed by listctrl.cpp
 // ----------------------------------------------------------------------------
 
+#ifndef LVS_EX_FULLROWSELECT
+    #define LVS_EX_FULLROWSELECT 0x00000020
+#endif
+
 #ifndef LVS_EX_LABELTIP
     #define LVS_EX_LABELTIP 0x00004000
 #endif
