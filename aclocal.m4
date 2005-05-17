@@ -1591,7 +1591,11 @@ AC_DEFUN([AC_BAKEFILE_PLATFORM],
                 PLATFORM_MACOS=1
             ;;
             * )
+            if test "$wxUSE_WINE" = "yes"; then
+                PLATFORM_WIN32=1
+            else
                 PLATFORM_UNIX=1
+            fi
             ;;
         esac
     else
