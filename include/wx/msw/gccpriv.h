@@ -18,12 +18,13 @@
     #define __GNUWIN32__
 #endif
 
+#if ( __GNUC__ > 2 ) || ( ( __GNUC__ == 2 ) && ( __GNUC_MINOR__ >= 95 ) )
+    #include <_mingw.h>
+#endif
+
 #if defined( __MINGW32__ ) && !defined(__WINE__) && !defined( HAVE_W32API_H )
-    #if ( __GNUC__ > 2 ) || ( ( __GNUC__ == 2 ) && ( __GNUC_MINOR__ >= 95 ) )
-        #include <_mingw.h>
-        #if __MINGW32_MAJOR_VERSION >= 1
-            #define HAVE_W32API_H
-        #endif
+    #if __MINGW32_MAJOR_VERSION >= 1
+        #define HAVE_W32API_H
     #endif
 #elif defined( __CYGWIN__ ) && !defined( HAVE_W32API_H )
     #if ( __GNUC__ > 2 )
