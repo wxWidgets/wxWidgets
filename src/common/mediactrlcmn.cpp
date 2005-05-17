@@ -61,6 +61,16 @@ DEFINE_EVENT_TYPE(wxEVT_MEDIA_STOP);
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 //---------------------------------------------------------------------------
+// wxMediaBackend Destructor
+//
+// This is here because the DARWIN gcc compiler badly screwed up and
+// needs the destructor implementation in the source
+//---------------------------------------------------------------------------
+wxMediaBackend::~wxMediaBackend()
+{
+}
+
+//---------------------------------------------------------------------------
 // wxMediaCtrl::Create (file version)
 // wxMediaCtrl::Create (URL version)
 //
@@ -84,8 +94,10 @@ bool wxMediaCtrl::Create(wxWindow* parent, wxWindowID id,
 {
     if(!szBackend.empty())
     {
-        if(!DoCreate(wxClassInfo::FindClass(szBackend), parent, id,
-                     pos, size, style, validator, name))
+        wxClassInfo* pClassInfo = wxClassInfo::FindClass(szBackend);
+
+        if(!pClassInfo || !DoCreate(pClassInfo, parent, id,
+                                    pos, size, style, validator, name))
         {
             m_imp = NULL;
             return false;
@@ -139,18 +151,19 @@ bool wxMediaCtrl::Create(wxWindow* parent, wxWindowID id,
 }
 
 bool wxMediaCtrl::Create(wxWindow* parent, wxWindowID id,
-                const wxURI& location,
-                const wxPoint& pos,
-                const wxSize& size,
-                long style,
-                const wxString& szBackend,
-                const wxValidator& validator,
-                const wxString& name)
+                         const wxURI& location,
+                         const wxPoint& pos,
+                         const wxSize& size,
+                         long style,
+                         const wxString& szBackend,
+                         const wxValidator& validator,
+                         const wxString& name)
 {
     if(!szBackend.empty())
     {
-        if(!DoCreate(wxClassInfo::FindClass(szBackend), parent, id,
-                     pos, size, style, validator, name))
+        wxClassInfo* pClassInfo = wxClassInfo::FindClass(szBackend);
+        if(!pClassInfo || !DoCreate(pClassInfo, parent, id,
+                                    pos, size, style, validator, name))
         {
             m_imp = NULL;
             return false;
@@ -363,7 +376,6 @@ wxFileOffset wxMediaCtrl::Seek(wxFileOffset where, wxSeekMode mode)
 
 wxFileOffset wxMediaCtrl::Tell()
 {
-    //FIXME
     if(m_imp && m_bLoaded)
         return (wxFileOffset) m_imp->GetPosition().ToLong();
     return wxInvalidOffset;
@@ -371,7 +383,6 @@ wxFileOffset wxMediaCtrl::Tell()
 
 wxFileOffset wxMediaCtrl::Length()
 {
-    //FIXME
     if(m_imp && m_bLoaded)
         return (wxFileOffset) m_imp->GetDuration().ToLong();
     return wxInvalidOffset;
@@ -407,9 +418,6 @@ void wxMediaCtrl::DoMoveWindow(int x, int y, int w, int h)
         m_imp->Move(x, y, w, h);
 }
 
-//DARWIN gcc compiler badly screwed up - needs destructor impl in source
-wxMediaBackend::~wxMediaBackend()
-{                               }
 #include "wx/html/forcelnk.h"
 FORCE_LINK(basewxmediabackends);
 
