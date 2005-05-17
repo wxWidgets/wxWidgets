@@ -135,7 +135,7 @@ int wxCALLBACK wxFileDataTimeCompare( long data1, long data2, long data)
      return fd1->GetDateTime().IsLaterThan(fd2->GetDateTime()) ? int(data) : -int(data);
 }
 
-#if defined(__UNIX__) && !defined(__OS2__)
+#if defined(__UNIX__) && !defined(__OS2__) && !defined(__CYGWIN__)
 #define IsTopMostDir(dir)   (dir == wxT("/"))
 #endif
 
