@@ -3532,6 +3532,10 @@ class PyWindow(_core.Window):
         """SetBestSize(self, Size size)"""
         return _windows_.PyWindow_SetBestSize(*args, **kwargs)
 
+    def DoEraseBackground(*args, **kwargs):
+        """DoEraseBackground(self, DC dc) -> bool"""
+        return _windows_.PyWindow_DoEraseBackground(*args, **kwargs)
+
     def base_DoMoveWindow(*args, **kwargs):
         """base_DoMoveWindow(self, int x, int y, int width, int height)"""
         return _windows_.PyWindow_base_DoMoveWindow(*args, **kwargs)
@@ -3649,6 +3653,10 @@ class PyPanel(Panel):
         """SetBestSize(self, Size size)"""
         return _windows_.PyPanel_SetBestSize(*args, **kwargs)
 
+    def DoEraseBackground(*args, **kwargs):
+        """DoEraseBackground(self, DC dc) -> bool"""
+        return _windows_.PyPanel_DoEraseBackground(*args, **kwargs)
+
     def base_DoMoveWindow(*args, **kwargs):
         """base_DoMoveWindow(self, int x, int y, int width, int height)"""
         return _windows_.PyPanel_base_DoMoveWindow(*args, **kwargs)
@@ -3765,6 +3773,10 @@ class PyScrolledWindow(ScrolledWindow):
     def SetBestSize(*args, **kwargs):
         """SetBestSize(self, Size size)"""
         return _windows_.PyScrolledWindow_SetBestSize(*args, **kwargs)
+
+    def DoEraseBackground(*args, **kwargs):
+        """DoEraseBackground(self, DC dc) -> bool"""
+        return _windows_.PyScrolledWindow_DoEraseBackground(*args, **kwargs)
 
     def base_DoMoveWindow(*args, **kwargs):
         """base_DoMoveWindow(self, int x, int y, int width, int height)"""

@@ -2114,6 +2114,16 @@ public:
 
     void SetBestSize(const wxSize& size) { wxWindow::SetBestSize(size); }
 
+    bool DoEraseBackground(wxDC* dc) {
+#ifdef __WXMSW__
+        return wxWindow::DoEraseBackground(dc->GetHDC());
+#else
+        dc->SetBackground(wxBrush(GetBackgroundColour()));
+        dc->Clear();
+        return true;
+#endif
+    }
+    
     DEC_PYCALLBACK_VOID_INT4(DoMoveWindow);
     DEC_PYCALLBACK_VOID_INT5(DoSetSize);
     DEC_PYCALLBACK_VOID_INTINT(DoSetClientSize);
@@ -2191,6 +2201,15 @@ public:
         : wxPanel(parent, id, pos, size, style, name) {}
 
     void SetBestSize(const wxSize& size) { wxPanel::SetBestSize(size); }
+    bool DoEraseBackground(wxDC* dc) {
+#ifdef __WXMSW__
+        return wxWindow::DoEraseBackground(dc->GetHDC());
+#else
+        dc->SetBackground(wxBrush(GetBackgroundColour()));
+        dc->Clear();
+        return true;
+#endif
+    }
     
 
     DEC_PYCALLBACK_VOID_INT4(DoMoveWindow);
@@ -2270,6 +2289,15 @@ public:
         : wxScrolledWindow(parent, id, pos, size, style, name) {}
 
     void SetBestSize(const wxSize& size) { wxScrolledWindow::SetBestSize(size); }
+    bool DoEraseBackground(wxDC* dc) {
+#ifdef __WXMSW__
+        return wxWindow::DoEraseBackground(dc->GetHDC());
+#else
+        dc->SetBackground(wxBrush(GetBackgroundColour()));
+        dc->Clear();
+        return true;
+#endif
+    }
 
     DEC_PYCALLBACK_VOID_INT4(DoMoveWindow);
     DEC_PYCALLBACK_VOID_INT5(DoSetSize);
@@ -17995,6 +18023,38 @@ static PyObject *_wrap_PyWindow_SetBestSize(PyObject *, PyObject *args, PyObject
 }
 
 
+static PyObject *_wrap_PyWindow_DoEraseBackground(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxPyWindow *arg1 = (wxPyWindow *) 0 ;
+    wxDC *arg2 = (wxDC *) 0 ;
+    bool result;
+    PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
+    char *kwnames[] = {
+        (char *) "self",(char *) "dc", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:PyWindow_DoEraseBackground",kwnames,&obj0,&obj1)) goto fail;
+    SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxPyWindow, SWIG_POINTER_EXCEPTION | 0);
+    if (SWIG_arg_fail(1)) SWIG_fail;
+    SWIG_Python_ConvertPtr(obj1, (void **)&arg2, SWIGTYPE_p_wxDC, SWIG_POINTER_EXCEPTION | 0);
+    if (SWIG_arg_fail(2)) SWIG_fail;
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = (bool)(arg1)->DoEraseBackground(arg2);
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
 static PyObject *_wrap_PyWindow_base_DoMoveWindow(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPyWindow *arg1 = (wxPyWindow *) 0 ;
@@ -18832,6 +18892,38 @@ static PyObject *_wrap_PyPanel_SetBestSize(PyObject *, PyObject *args, PyObject 
 }
 
 
+static PyObject *_wrap_PyPanel_DoEraseBackground(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxPyPanel *arg1 = (wxPyPanel *) 0 ;
+    wxDC *arg2 = (wxDC *) 0 ;
+    bool result;
+    PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
+    char *kwnames[] = {
+        (char *) "self",(char *) "dc", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:PyPanel_DoEraseBackground",kwnames,&obj0,&obj1)) goto fail;
+    SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxPyPanel, SWIG_POINTER_EXCEPTION | 0);
+    if (SWIG_arg_fail(1)) SWIG_fail;
+    SWIG_Python_ConvertPtr(obj1, (void **)&arg2, SWIGTYPE_p_wxDC, SWIG_POINTER_EXCEPTION | 0);
+    if (SWIG_arg_fail(2)) SWIG_fail;
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = (bool)(arg1)->DoEraseBackground(arg2);
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
 static PyObject *_wrap_PyPanel_base_DoMoveWindow(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPyPanel *arg1 = (wxPyPanel *) 0 ;
@@ -19663,6 +19755,38 @@ static PyObject *_wrap_PyScrolledWindow_SetBestSize(PyObject *, PyObject *args, 
         if (PyErr_Occurred()) SWIG_fail;
     }
     Py_INCREF(Py_None); resultobj = Py_None;
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_PyScrolledWindow_DoEraseBackground(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxPyScrolledWindow *arg1 = (wxPyScrolledWindow *) 0 ;
+    wxDC *arg2 = (wxDC *) 0 ;
+    bool result;
+    PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
+    char *kwnames[] = {
+        (char *) "self",(char *) "dc", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:PyScrolledWindow_DoEraseBackground",kwnames,&obj0,&obj1)) goto fail;
+    SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxPyScrolledWindow, SWIG_POINTER_EXCEPTION | 0);
+    if (SWIG_arg_fail(1)) SWIG_fail;
+    SWIG_Python_ConvertPtr(obj1, (void **)&arg2, SWIGTYPE_p_wxDC, SWIG_POINTER_EXCEPTION | 0);
+    if (SWIG_arg_fail(2)) SWIG_fail;
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = (bool)(arg1)->DoEraseBackground(arg2);
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
     return resultobj;
     fail:
     return NULL;
@@ -28198,6 +28322,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"new_PrePyWindow", (PyCFunction) _wrap_new_PrePyWindow, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"PyWindow__setCallbackInfo", (PyCFunction) _wrap_PyWindow__setCallbackInfo, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"PyWindow_SetBestSize", (PyCFunction) _wrap_PyWindow_SetBestSize, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"PyWindow_DoEraseBackground", (PyCFunction) _wrap_PyWindow_DoEraseBackground, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"PyWindow_base_DoMoveWindow", (PyCFunction) _wrap_PyWindow_base_DoMoveWindow, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"PyWindow_base_DoSetSize", (PyCFunction) _wrap_PyWindow_base_DoSetSize, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"PyWindow_base_DoSetClientSize", (PyCFunction) _wrap_PyWindow_base_DoSetClientSize, METH_VARARGS | METH_KEYWORDS, NULL},
@@ -28223,6 +28348,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"new_PrePyPanel", (PyCFunction) _wrap_new_PrePyPanel, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"PyPanel__setCallbackInfo", (PyCFunction) _wrap_PyPanel__setCallbackInfo, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"PyPanel_SetBestSize", (PyCFunction) _wrap_PyPanel_SetBestSize, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"PyPanel_DoEraseBackground", (PyCFunction) _wrap_PyPanel_DoEraseBackground, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"PyPanel_base_DoMoveWindow", (PyCFunction) _wrap_PyPanel_base_DoMoveWindow, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"PyPanel_base_DoSetSize", (PyCFunction) _wrap_PyPanel_base_DoSetSize, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"PyPanel_base_DoSetClientSize", (PyCFunction) _wrap_PyPanel_base_DoSetClientSize, METH_VARARGS | METH_KEYWORDS, NULL},
@@ -28248,6 +28374,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"new_PrePyScrolledWindow", (PyCFunction) _wrap_new_PrePyScrolledWindow, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"PyScrolledWindow__setCallbackInfo", (PyCFunction) _wrap_PyScrolledWindow__setCallbackInfo, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"PyScrolledWindow_SetBestSize", (PyCFunction) _wrap_PyScrolledWindow_SetBestSize, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"PyScrolledWindow_DoEraseBackground", (PyCFunction) _wrap_PyScrolledWindow_DoEraseBackground, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"PyScrolledWindow_base_DoMoveWindow", (PyCFunction) _wrap_PyScrolledWindow_base_DoMoveWindow, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"PyScrolledWindow_base_DoSetSize", (PyCFunction) _wrap_PyScrolledWindow_base_DoSetSize, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"PyScrolledWindow_base_DoSetClientSize", (PyCFunction) _wrap_PyScrolledWindow_base_DoSetClientSize, METH_VARARGS | METH_KEYWORDS, NULL},
