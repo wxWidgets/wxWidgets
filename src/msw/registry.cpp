@@ -364,7 +364,13 @@ bool wxRegKey::GetKeyInfo(size_t *pnSubKeys,
 bool wxRegKey::Open(AccessMode mode)
 {
     if ( IsOpened() )
-        return true;
+    {
+        if ( mode <= m_mode )
+            return true;
+
+        // we had been opened in read mode but now must be reopened in write
+        Close();
+    }
 
     HKEY tmpKey;
     m_dwLastError = ::RegOpenKeyEx
@@ -384,6 +390,8 @@ bool wxRegKey::Open(AccessMode mode)
     }
 
     m_hKey = (WXHKEY) tmpKey;
+    m_mode = mode;
+
     return true;
 }
 

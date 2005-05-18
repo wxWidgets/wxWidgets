@@ -245,6 +245,7 @@ private:
               m_hRootKey;       // handle of the top key (i.e. StdKey)
   wxString    m_strKey;         // key name (relative to m_hRootKey)
 
+  AccessMode  m_mode;           // valid only if key is opened
   long        m_dwLastError;    // last error (0 if none)
 
 
