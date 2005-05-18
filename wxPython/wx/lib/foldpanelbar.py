@@ -759,9 +759,10 @@ class CaptionBar(wx.Window):
         
         if send_event:
             event = CaptionBarEvent(wxEVT_CAPTIONBAR)
+            event.SetId(self.GetId())
+            event.SetEventObject(self)
             event.SetBar(self)
             self.GetEventHandler().ProcessEvent(event)
-            event.Skip()
         
 
     def OnChar(self, event):
