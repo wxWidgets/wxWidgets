@@ -195,7 +195,11 @@ bool wxCrashReportImpl::Generate(int flags, EXCEPTION_POINTERS *ep)
         }
         else // minimal dump
         {
-            dumpFlags = MiniDumpNormal;
+            // the file size is not much bigger than when using MiniDumpNormal
+            // if we use the flags below, but the minidump is much more useful
+            // as it contains the values of many (but not all) local variables
+            dumpFlags = (MINIDUMP_TYPE)(MiniDumpScanMemory |
+                                        MiniDumpWithIndirectlyReferencedMemory);
         }
 
         if ( !wxDbgHelpDLL::MiniDumpWriteDump
