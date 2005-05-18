@@ -457,7 +457,6 @@ dospinsetup()
     rm -f src/mingegcs.bat
     rm -f -r distrib
     rm -f *.spec
-    rm -f -r contrib/utils/wxrcedit
     rm -f src/gtk/descrip.mms src/motif/descrip.mms
 
     echo Copying readme files...

@@ -13,8 +13,10 @@ dialog editors with XRC support.
 If you only want to use the resources, you can choose from a number of editors:
   a) wxDesigner (http://www.roebling.de)
   b) XRCed (wxPython/tools)
-  c) wxWorkshop (http://wxworkshop.sf.net)
-  b) wxrcedit (contrib/utils/wxrcedit)
+  c) DialogBlocks (wxPython/tools)
+
+and others listed on the Resources section of the wxWidgets web
+site.
 
 The XRC format is based on XML 1.0 (please consult W3C's specification). There
 is no DTD available since it is not possible to fully describe the format with

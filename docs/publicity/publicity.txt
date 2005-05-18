@@ -15,6 +15,9 @@ comp.windows.ms.programmer
 microsoft.public.win32.programmer.tools
 microsoft.public.win32.programmer.ui
 microsoft.public.win32.programmer.3rdparty
+microsoft.public.win32.programmer.wince
+microsoft.public.pocketpc.developer
+microsoft.public.smartphone.developer
 
 Non-Microsoft:
 

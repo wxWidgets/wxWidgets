@@ -33,8 +33,6 @@ utils/wxrc/*M?.xml
 utils/wxrc/*.mcp
 contrib/utils/convertrc/*M?.xml
 contrib/utils/convertrc/*.mcp
-contrib/utils/wxrcedit/*M?.xml
-contrib/utils/wxrcedit/*.mcp
 
 samples/artprov/*M?.xml
 samples/artprov/*.mcp
