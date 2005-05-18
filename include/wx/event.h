@@ -2355,6 +2355,11 @@ public:
                     wxEvtHandler *eventSink = (wxEvtHandler *) NULL)
         { return Disconnect(winid, wxID_ANY, eventType, func, userData, eventSink); }
 
+    bool Disconnect(wxEventType eventType,
+                    wxObjectEventFunction func = NULL,
+                    wxObject *userData = (wxObject *) NULL,
+                    wxEvtHandler *eventSink = (wxEvtHandler *) NULL)
+        { return Disconnect(wxID_ANY, eventType, func, userData, eventSink); }
 
     wxList* GetDynamicEventTable() const { return m_dynamicEvents ; }
 
