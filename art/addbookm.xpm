@@ -1,21 +1,24 @@
 /* XPM */
-static char * addbookm_xpm[] = {
+static char *addbookm_xpm[] = {
+/* columns rows colors chars-per-pixel */
 "16 15 3 1",
-" 	c None",
-".	c #000000",
-"+	c #C3F9BD",
-"   ..           ",
-"   ..           ",
-"   ..      .    ",
-"........  .+.   ",
-"........ .+++.  ",
-"   ..   .+++++. ",
-"   ..  .+++++.  ",
-"   .. .+++++.   ",
-"     .+++++.    ",
-"    .+++++.     ",
-"   .+++++.      ",
-"  ....++.       ",
-"     .+.        ",
-"     ..         ",
-"     .          "};
+". c Black",
+"X c #00C000",
+"  c None",
+/* pixels */
+"        ....... ",
+"        .XXXXX. ",
+"   ..   .XXXXX. ",
+"   ..   .XXXXX. ",
+" ...... .XXXXX. ",
+" ...... .XXXXX. ",
+"   ..   .XXXXX. ",
+"   ..   .XXXXX. ",
+"        .XXXXX. ",
+"        .XXXXX. ",
+"        .XXXXX. ",
+"        .XXXXX. ",
+"        .XX.XX. ",
+"        .X. .X. ",
+"        ..   .. "
+};
