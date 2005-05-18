@@ -73,6 +73,14 @@ Tweaked wx.lib.buttons such that flat buttons (e.g. have no bevel and
 a wx.BORDER_NONE style flag) paint themed backgrounds if there are
 transparent areas and the parent is displaying a theme.
 
+wxMSW:  Fix for wrong sash colour of wx.SplitterWindow in the silver
+theme on XP.
+
+Added a wx.xrc.XmlResourceHandler for the Ticker class.  See
+wx/lib/ticker_xrc.py 
+
+
+
 
 
 
