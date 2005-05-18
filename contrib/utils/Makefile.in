@@ -1,6 +1,6 @@
 # $Id$
 
-CONTRIB_UTILS=wxrcedit convertrc
+CONTRIB_UTILS=convertrc
 
 all:
 	@for d in $(CONTRIB_UTILS); do (cd $$d && $(MAKE)); done
