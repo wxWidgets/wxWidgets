@@ -30,10 +30,11 @@
 
 #if wxUSE_TREECTRL
 
+#include "wx/msw/private.h"
+
 // include <commctrl.h> "properly"
 #include "wx/msw/wrapcctl.h"
 
-#include "wx/msw/private.h"
 #include "wx/msw/missing.h"
 
 // Set this to 1 to be _absolutely_ sure that repainting will work for all
