@@ -84,7 +84,12 @@ wxSTC: Fixed CmdKeyAssign key bindings for Ctrl-Backspace.
 wxMSW: Fixed a bug in wx.TextCtrl where all the lines were being used
 to calculate the best size, instead of using a reasonable limit.
 
+XRCed: Use wx.GetDefaultPyEncoding/wx.SetDefaultPyEncoding for
+changing active encoding.  Fixed pasting siblings (Ctrl key pressed
+while pasting).
 
+wx.lib.filebrowsebutton: Bug fix from Chad Netzer for when
+self.history is None.
 
 
 

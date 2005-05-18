@@ -289,8 +289,10 @@ class FileBrowseButtonWithHistory( FileBrowseButton ):
         """Return the current history list"""
         if self.historyCallBack != None:
             return self.historyCallBack()
-        else:
+        elif self.history:
             return list( self.history )
+        else:
+            return []
 
 
     def OnSetFocus(self, event):
