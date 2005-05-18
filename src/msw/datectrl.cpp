@@ -180,7 +180,9 @@ wxSize wxDatePickerCtrl::DoGetBestSize() const
 {
     const int y = GetCharHeight();
 
-    return wxSize(DEFAULT_ITEM_WIDTH, EDIT_HEIGHT_FROM_CHAR_HEIGHT(y));
+    wxSize best(DEFAULT_ITEM_WIDTH, EDIT_HEIGHT_FROM_CHAR_HEIGHT(y));
+    CacheBestSize(best);
+    return best;
 }
 
 // ----------------------------------------------------------------------------

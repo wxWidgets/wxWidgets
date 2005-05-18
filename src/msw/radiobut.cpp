@@ -312,7 +312,9 @@ wxSize wxRadioButton::DoGetBestSize() const
         hRadio = s_radioSize;
     }
 
-    return wxSize(wRadio, hRadio);
+    wxSize best(wRadio, hRadio);
+    CacheBestSize(best);
+    return best;
 }
 
 #endif // wxUSE_RADIOBTN

@@ -374,6 +374,8 @@ void wxRadioBox::SetString(int item, const wxString& label)
     m_radioHeight[item] = wxDefaultCoord;
 
     ::SetWindowText((*m_radioButtons)[item], label.c_str());
+
+    InvalidateBestSize();
 }
 
 void wxRadioBox::SetSelection(int N)
@@ -428,7 +430,10 @@ bool wxRadioBox::Show(int item, bool show)
 
     BOOL ret = ::ShowWindow((*m_radioButtons)[item], show ? SW_SHOW : SW_HIDE);
 
-    return (ret != 0) == show;
+    bool changed = (ret != 0) == show;
+    if( changed )
+        InvalidateBestSize();
+    return changed;
 }
 
 WX_FORWARD_STD_METHODS_TO_SUBWINDOWS(wxRadioBox, wxStaticBox, m_radioButtons)
@@ -498,7 +503,9 @@ wxSize wxRadioBox::GetTotalButtonSize(const wxSize& sizeBtn) const
 
 wxSize wxRadioBox::DoGetBestSize() const
 {
-    return GetTotalButtonSize(GetMaxButtonSize());
+    wxSize best = GetTotalButtonSize(GetMaxButtonSize());
+    CacheBestSize(best);
+    return best;
 }
 
 // Restored old code.

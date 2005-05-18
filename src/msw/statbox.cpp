@@ -168,7 +168,9 @@ wxSize wxStaticBox::DoGetBestSize() const
     wBox += 3*cx;
     int hBox = EDIT_HEIGHT_FROM_CHAR_HEIGHT(cy);
 
-    return wxSize(wBox, hBox);
+    wxSize best(wBox, hBox);
+    CacheBestSize(best);
+    return best;
 }
 
 void wxStaticBox::GetBordersForSizer(int *borderTop, int *borderOther) const

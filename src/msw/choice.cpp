@@ -236,6 +236,7 @@ int wxChoice::DoAppend(const wxString& item)
             UpdateVisibleHeight();
     }
 
+    InvalidateBestSize();
     return n;
 }
 
@@ -255,6 +256,7 @@ int wxChoice::DoInsert(const wxString& item, int pos)
             UpdateVisibleHeight();
     }
 
+    InvalidateBestSize();
     return n;
 }
 
@@ -271,6 +273,8 @@ void wxChoice::Delete(int n)
 
     if ( !IsFrozen() )
         UpdateVisibleHeight();
+
+    InvalidateBestSize();
 }
 
 void wxChoice::Clear()
@@ -281,6 +285,8 @@ void wxChoice::Clear()
 
     if ( !IsFrozen() )
         UpdateVisibleHeight();
+
+    InvalidateBestSize();
 }
 
 void wxChoice::Free()
@@ -383,6 +389,8 @@ void wxChoice::SetString(int n, const wxString& s)
         DoSetItemClientData(n, data);
     }
     //else: it's already NULL by default
+
+    InvalidateBestSize();
 }
 
 wxString wxChoice::GetString(int n) const

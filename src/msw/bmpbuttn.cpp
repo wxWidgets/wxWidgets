@@ -494,8 +494,10 @@ wxSize wxBitmapButton::DoGetBestSize() const
 {
     if ( m_bmpNormal.Ok() )
     {
-        return wxSize(m_bmpNormal.GetWidth() + 2*m_marginX,
+        wxSize best(m_bmpNormal.GetWidth() + 2*m_marginX,
                       m_bmpNormal.GetHeight() + 2*m_marginY);
+        CacheBestSize(best);
+        return best;
     }
 
     // no idea what our best size should be, defer to the base class

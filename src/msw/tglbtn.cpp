@@ -135,6 +135,7 @@ wxSize wxToggleButton::DoGetBestSize() const
    wxSize sz(wBtn, hBtn);
 #endif
 
+   CacheBestSize(sz);
    return sz;
 }
 

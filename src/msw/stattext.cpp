@@ -143,7 +143,9 @@ wxSize wxStaticText::DoGetBestSize() const
         widthTextMax += 2;
 #endif // __WXWINCE__
 
-    return wxSize(widthTextMax, heightTextTotal);
+    wxSize best(widthTextMax, heightTextTotal);
+    CacheBestSize(best);
+    return best;
 }
 
 void wxStaticText::DoSetSize(int x, int y, int w, int h, int sizeFlags)

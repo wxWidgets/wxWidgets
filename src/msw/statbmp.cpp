@@ -208,7 +208,11 @@ void wxStaticBitmap::Free()
 wxSize wxStaticBitmap::DoGetBestSize() const
 {
     if ( ImageIsOk() )
-        return wxSize(m_image->GetWidth(), m_image->GetHeight());
+    {
+        wxSize best(m_image->GetWidth(), m_image->GetHeight());
+        CacheBestSize(best);
+        return best;
+    }
 
     // this is completely arbitrary
     return wxSize(16, 16);

@@ -198,7 +198,9 @@ wxSize wxCheckBox::DoGetBestSize() const
     hCheckbox += 1;
 #endif
 
-    return wxSize(wCheckbox, hCheckbox);
+    wxSize best(wCheckbox, hCheckbox);
+    CacheBestSize(best);
+    return best;
 }
 
 void wxCheckBox::SetValue(bool val)

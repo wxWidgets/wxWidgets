@@ -548,6 +548,7 @@ wxSize wxCheckListBox::DoGetBestSize() const
 {
     wxSize best = wxListBox::DoGetBestSize();
     best.x += wxOwnerDrawn::GetDefaultMarginWidth();  // add room for the checkbox
+    CacheBestSize(best);
     return best;
 }
 

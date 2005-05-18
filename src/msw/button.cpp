@@ -241,7 +241,9 @@ wxSize wxButton::DoGetBestSize() const
         return sz;
     }
 
-    return wxSize(wBtn, hBtn);
+    wxSize best(wBtn, hBtn);
+    CacheBestSize(best);
+    return best;
 }
 
 /* static */
