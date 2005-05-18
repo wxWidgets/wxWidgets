@@ -50,7 +50,7 @@ else:
     face1 = 'Helvetica'
     face2 = 'Times'
     face3 = 'Courier'
-    pb = 10
+    pb = 12
 
 
 #----------------------------------------------------------------------
@@ -176,6 +176,12 @@ def runTest(frame, nb, log):
     #ed.SetWrapMode(True)
     #ed.SetUseAntiAliasing(False)    
     #ed.SetViewEOL(True)
+
+    #ed.CmdKeyClear(stc.STC_KEY_BACK,
+    #               stc.STC_SCMOD_CTRL)
+    #ed.CmdKeyAssign(stc.STC_KEY_BACK,
+    #                stc.STC_SCMOD_CTRL,
+    #                stc.STC_CMD_DELWORDLEFT)
 
     ed.SetText(demoText)
 
