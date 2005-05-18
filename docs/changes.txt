@@ -31,6 +31,7 @@ wxMSW:
 - A control's text colour now reflects the system colour setting.
 - Fixed wxFileName::GetLongPath() to behave correctly during the first call too.
 - Fixed alpha blitting to take into account source position.
+- Setting foreground colour for wxCheckBox now works when using XP themes too
 
 wxMac:
 
