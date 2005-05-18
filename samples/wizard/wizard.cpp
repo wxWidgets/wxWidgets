@@ -39,10 +39,8 @@
 
 #include "wx/wizard.h"
 
-#ifndef __WXMSW__
-    #include "wiztest.xpm"
-    #include "wiztest2.xpm"
-#endif
+#include "wiztest.xpm"
+#include "wiztest2.xpm"
 
 // ----------------------------------------------------------------------------
 // constants
@@ -101,7 +99,7 @@ class wxValidationPage : public wxWizardPageSimple
 public:
     wxValidationPage(wxWizard *parent) : wxWizardPageSimple(parent)
     {
-        m_bitmap = wxBITMAP(wiztest2);
+        m_bitmap = wxBitmap(wiztest2_xpm);
 
         m_checkbox = new wxCheckBox(this, wxID_ANY, _T("&Check me"));
 
@@ -377,7 +375,7 @@ void MyFrame::OnRunWizard(wxCommandEvent& WXUNUSED(event))
 {
     wxWizard *wizard = new wxWizard(this, wxID_ANY,
                     _T("Absolutely Useless Wizard"),
-                    wxBITMAP(wiztest),
+                    wxBitmap(wiztest_xpm),
                     wxDefaultPosition,
                     wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER);
 
