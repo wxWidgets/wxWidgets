@@ -14,7 +14,6 @@
     <wx-data id="data">
         <files>
             back.gif
-            books.gif
             bullet.bmp
             contents.gif
             cshelp.txt

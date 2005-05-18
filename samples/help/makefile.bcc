@@ -216,7 +216,7 @@ $(OBJS)\help.exe: $(HELP_OBJECTS)  $(OBJS)\help_demo.res
 
 data: 
 	if not exist $(OBJS) mkdir $(OBJS)
-	for %f in (back.gif books.gif bullet.bmp contents.gif cshelp.txt doc.chm doc.cnt doc.hhc doc.hhk doc.hhp doc.hlp doc.hpj doc.zip forward.gif up.gif) do if not exist $(OBJS)\%f copy .\%f $(OBJS)
+	for %f in (back.gif bullet.bmp contents.gif cshelp.txt doc.chm doc.cnt doc.hhc doc.hhk doc.hhp doc.hlp doc.hpj doc.zip forward.gif up.gif) do if not exist $(OBJS)\%f copy .\%f $(OBJS)
 
 data_doc: 
 	if not exist $(OBJS)\doc mkdir $(OBJS)\doc

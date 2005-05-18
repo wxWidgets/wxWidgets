@@ -176,7 +176,7 @@ help.app/Contents/PkgInfo: help$(EXEEXT) $(top_srcdir)/src/mac/carbon/Info.plist
 
 data: 
 	@mkdir -p .
-	@for f in back.gif books.gif bullet.bmp contents.gif cshelp.txt doc.chm doc.cnt doc.hhc doc.hhk doc.hhp doc.hlp doc.hpj doc.zip forward.gif up.gif; do \
+	@for f in back.gif bullet.bmp contents.gif cshelp.txt doc.chm doc.cnt doc.hhc doc.hhk doc.hhp doc.hlp doc.hpj doc.zip forward.gif up.gif; do \
 	if test ! -f ./$$f ; \
 	then x=yep ; \
 	else x=`find $(srcdir)/$$f -newer ./$$f -print` ; \
