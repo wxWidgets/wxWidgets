@@ -482,6 +482,8 @@ void wxPopupMenuWindow::Dismiss()
     }
 
     wxPopupTransientWindow::Dismiss();
+
+    ResetCurrent();
 }
 
 void wxPopupMenuWindow::OnDismiss()
@@ -491,19 +493,13 @@ void wxPopupMenuWindow::OnDismiss()
     HandleDismiss(true);
 }
 
-void wxPopupMenuWindow::OnSubmenuDismiss(bool dismissParent)
+void wxPopupMenuWindow::OnSubmenuDismiss(bool WXUNUSED(dismissParent))
 {
     m_hasOpenSubMenu = false;
-
-    // we are closing whole menu so remove current highlight
-    if ( dismissParent )
-        ResetCurrent();
 }
 
 void wxPopupMenuWindow::HandleDismiss(bool dismissParent)
 {
-    ResetCurrent();
-
     m_menu->OnDismiss(dismissParent);
 }
 
@@ -875,7 +871,13 @@ void wxPopupMenuWindow::OnMouseLeave(wxMouseEvent& event)
 
 void wxPopupMenuWindow::OnKeyDown(wxKeyEvent& event)
 {
-    if ( !ProcessKeyDown(event.GetKeyCode()) )
+    wxMenuBar *menubar = m_menu->GetMenuBar();
+
+    if ( menubar )
+    {
+        menubar->ProcessEvent(event);
+    }
+    else if ( !ProcessKeyDown(event.GetKeyCode()) )
     {
         event.Skip();
     }
@@ -2480,7 +2482,7 @@ void wxMenuBar::OnDismiss()
 {
     if ( ReleaseMouseCapture() )
         wxLogTrace(_T("mousecapture"), _T("Releasing mouse from wxMenuBar::OnDismiss"));
-    
+
     if ( m_current != -1 )
     {
         size_t current = m_current;
@@ -2513,7 +2515,7 @@ bool wxMenuBar::ReleaseMouseCapture()
 
         if ( had )
             ReleaseMouse();
-            
+
         capture->CaptureMouse();
 
         return had;
