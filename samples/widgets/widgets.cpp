@@ -62,7 +62,8 @@ enum
 #endif // wxUSE_TOOLTIPS
     Widgets_SetFgColour,
     Widgets_SetBgColour,
-    Widgets_SetFont
+    Widgets_SetFont,
+    Widgets_Enable
 };
 
 // ----------------------------------------------------------------------------
@@ -96,6 +97,7 @@ protected:
     void OnButtonClearLog(wxCommandEvent& event);
 #endif // USE_LOG
     void OnExit(wxCommandEvent& event);
+
 #if wxUSE_MENUS
 #if wxUSE_TOOLTIPS
     void OnSetTooltip(wxCommandEvent& event);
@@ -103,6 +105,7 @@ protected:
     void OnSetFgCol(wxCommandEvent& event);
     void OnSetBgCol(wxCommandEvent& event);
     void OnSetFont(wxCommandEvent& event);
+    void OnEnable(wxCommandEvent& event);
 #endif // wxUSE_MENUS
 
     // initialize the book: add all pages to it
@@ -222,6 +225,7 @@ BEGIN_EVENT_TABLE(WidgetsFrame, wxFrame)
     EVT_MENU(Widgets_SetFgColour, WidgetsFrame::OnSetFgCol)
     EVT_MENU(Widgets_SetBgColour, WidgetsFrame::OnSetBgCol)
     EVT_MENU(Widgets_SetFont,     WidgetsFrame::OnSetFont)
+    EVT_MENU(Widgets_Enable,      WidgetsFrame::OnEnable)
 
     EVT_MENU(wxID_EXIT, WidgetsFrame::OnExit)
 END_EVENT_TABLE()
@@ -299,10 +303,13 @@ WidgetsFrame::WidgetsFrame(const wxString& title)
     menuWidget->Append(Widgets_SetFgColour, _T("Set &foreground...\tCtrl-F"));
     menuWidget->Append(Widgets_SetBgColour, _T("Set &background...\tCtrl-B"));
     menuWidget->Append(Widgets_SetFont,     _T("Set f&ont...\tCtrl-O"));
+    menuWidget->AppendCheckItem(Widgets_Enable,  _T("&Enable/disable\tCtrl-E"));
     menuWidget->AppendSeparator();
     menuWidget->Append(wxID_EXIT, _T("&Quit\tCtrl-Q"));
     mbar->Append(menuWidget, _T("&Widget"));
     SetMenuBar(mbar);
+
+    mbar->Check(Widgets_Enable, true);
 #endif // wxUSE_MENUS
 
     // create controls
@@ -545,6 +552,12 @@ void WidgetsFrame::OnSetFont(wxCommandEvent& WXUNUSED(event))
 #else
     wxLogMessage(_T("Font selection dialog not available in current build."));
 #endif
+}
+
+void WidgetsFrame::OnEnable(wxCommandEvent& event)
+{
+    WidgetsPage *page = wxStaticCast(m_book->GetCurrentPage(), WidgetsPage);
+    page->GetWidget()->Enable(event.IsChecked());
 }
 
 #endif // wxUSE_MENUS
