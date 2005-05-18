@@ -1,3 +1,10 @@
+0.1.5-2
+-------
+
+Using wx.GetDefaultPyEncoding/wx.SetDefaultPyEncoding for changing active encoding.
+
+Fixed pasting siblings (Ctrl key pressed while pasting).
+
 0.1.5-1
 -------
 

@@ -250,20 +250,21 @@ class ParamFont(PPanel):
         error = False
         try:
             try: size = int(self.value[0])
-            except ValueError: error = True
+            except ValueError: error = True; wxLogError('Invalid size specification')
             try: family = fontFamiliesXml2wx[self.value[1]]
-            except KeyError: error = True
+            except KeyError: error = True; wxLogError('Invalid family specification')
             try: style = fontStylesXml2wx[self.value[2]]
-            except KeyError: error = True
+            except KeyError: error = True; wxLogError('Invalid style specification')
             try: weight = fontWeightsXml2wx[self.value[3]]
-            except KeyError: error = True
-            try: underlined = int(self.value[4])
-            except ValueError: error = True
+            except KeyError: error = True; wxLogError('Invalid weight specification')
+            try: underlined = bool(self.value[4])
+            except ValueError: error = True; wxLogError('Invalid underlined flag specification')
             face = self.value[5]
-            mapper = wxFontMapper()
-            if not self.value[6]: enc = mapper.CharsetToEncoding(self.value[6])
         except IndexError:
             error = True
+        mapper = wxFontMapper()
+        if not self.value[6]: enc = mapper.CharsetToEncoding(self.value[6])
+            
         if error: wxLogError('Invalid font specification')
         if enc == wxFONTENCODING_DEFAULT: enc = wxFONTENCODING_SYSTEM
         font = wxFont(size, family, style, weight, underlined, face, enc)
@@ -272,13 +273,18 @@ class ParamFont(PPanel):
         dlg = wxFontDialog(self, data)
         if dlg.ShowModal() == wxID_OK:
             font = dlg.GetFontData().GetChosenFont()
+            print font.GetEncoding()
+            if font.GetEncoding() == wxFONTENCODING_SYSTEM:
+                encName = ''
+            else:
+                encName = wxFontMapper_GetEncodingName(font.GetEncoding()).encode()
             value = [str(font.GetPointSize()),
                      fontFamiliesWx2Xml.get(font.GetFamily(), "default"),
                      fontStylesWx2Xml.get(font.GetStyle(), "normal"),
                      fontWeightsWx2Xml.get(font.GetWeight(), "normal"),
                      str(font.GetUnderlined()),
                      font.GetFaceName().encode(),
-                     wxFontMapper_GetEncodingName(font.GetEncoding()).encode()
+                     encName
                      ]
             # Add ignored flags
             self.SetValue(value)

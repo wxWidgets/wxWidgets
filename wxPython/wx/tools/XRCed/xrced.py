@@ -22,7 +22,7 @@ Options:
 
 
 from globals import *
-import os, sys, getopt, re, traceback
+import os, sys, getopt, re, traceback, tempfile, shutil
 
 # Local modules
 from tree import *                      # imports xxx which imports params
@@ -135,7 +135,8 @@ class Frame(wxFrame):
         menu.Append(self.ID_DELETE, '&Delete\tCtrl-D', 'Delete object')
         menu.AppendSeparator()
         self.ID_LOCATE = wxNewId()
-        self.ID_LOCATE_TOOL = wxNewId()
+        self.ID_TOOL_LOCATE = wxNewId()
+        self.ID_TOOL_PASTE = wxNewId()
         menu.Append(self.ID_LOCATE, '&Locate\tCtrl-L', 'Locate control in test window and select it')
         menuBar.Append(menu, '&Edit')
 
@@ -185,9 +186,9 @@ class Frame(wxFrame):
         tb.AddControl(wxStaticLine(tb, -1, size=(-1,23), style=wxLI_VERTICAL))
         tb.AddSimpleTool(wxID_CUT, images.getCutBitmap(), 'Cut', 'Cut')
         tb.AddSimpleTool(wxID_COPY, images.getCopyBitmap(), 'Copy', 'Copy')
-        tb.AddSimpleTool(wxID_PASTE, images.getPasteBitmap(), 'Paste', 'Paste')
+        tb.AddSimpleTool(self.ID_TOOL_PASTE, images.getPasteBitmap(), 'Paste', 'Paste')
         tb.AddControl(wxStaticLine(tb, -1, size=(-1,23), style=wxLI_VERTICAL))
-        tb.AddCheckTool(self.ID_LOCATE_TOOL,
+        tb.AddCheckTool(self.ID_TOOL_LOCATE,
                         images.getLocateBitmap(), images.getLocateArmedBitmap(),
                         'Locate', 'Locate control in test window and select it')
         tb.AddControl(wxStaticLine(tb, -1, size=(-1,23), style=wxLI_VERTICAL))
@@ -216,9 +217,10 @@ class Frame(wxFrame):
         EVT_MENU(self, wxID_CUT, self.OnCutDelete)
         EVT_MENU(self, wxID_COPY, self.OnCopy)
         EVT_MENU(self, wxID_PASTE, self.OnPaste)
+        EVT_MENU(self, self.ID_TOOL_PASTE, self.OnPaste)
         EVT_MENU(self, self.ID_DELETE, self.OnCutDelete)
         EVT_MENU(self, self.ID_LOCATE, self.OnLocate)
-        EVT_MENU(self, self.ID_LOCATE_TOOL, self.OnLocate)
+        EVT_MENU(self, self.ID_TOOL_LOCATE, self.OnLocate)
         # View
         EVT_MENU(self, self.ID_EMBED_PANEL, self.OnEmbedPanel)
         EVT_MENU(self, self.ID_SHOW_TOOLS, self.OnShowTools)
@@ -235,7 +237,8 @@ class Frame(wxFrame):
         EVT_UPDATE_UI(self, wxID_COPY, self.OnUpdateUI)
         EVT_UPDATE_UI(self, wxID_PASTE, self.OnUpdateUI)
         EVT_UPDATE_UI(self, self.ID_LOCATE, self.OnUpdateUI)
-        EVT_UPDATE_UI(self, self.ID_LOCATE_TOOL, self.OnUpdateUI)
+        EVT_UPDATE_UI(self, self.ID_TOOL_LOCATE, self.OnUpdateUI)
+        EVT_UPDATE_UI(self, self.ID_TOOL_PASTE, self.OnUpdateUI)
         EVT_UPDATE_UI(self, wxID_UNDO, self.OnUpdateUI)
         EVT_UPDATE_UI(self, wxID_REDO, self.OnUpdateUI)
         EVT_UPDATE_UI(self, self.ID_DELETE, self.OnUpdateUI)
@@ -335,12 +338,14 @@ class Frame(wxFrame):
             self.SetStatusText('Loading...')
             wxYield()
             wxBeginBusyCursor()
-            if self.Open(path):
-                self.SetStatusText('Data loaded')
-            else:
-                self.SetStatusText('Failed')
-            self.SaveRecent(path)
-            wxEndBusyCursor()
+            try:
+                if self.Open(path):
+                    self.SetStatusText('Data loaded')
+                else:
+                    self.SetStatusText('Failed')
+                self.SaveRecent(path)
+            finally:
+                wxEndBusyCursor()
         dlg.Destroy()
 
     def OnSaveOrSaveAs(self, evt):
@@ -362,13 +367,18 @@ class Frame(wxFrame):
         wxYield()
         wxBeginBusyCursor()
         try:
-            self.Save(path)
-            self.dataFile = path
-            self.SetStatusText('Data saved')
-            self.SaveRecent(path)
-        except IOError:
-            self.SetStatusText('Failed')
-        wxEndBusyCursor()        
+            try:
+                tmpFile,tmpName = tempfile.mkstemp(prefix='xrced-')
+                os.close(tmpFile)
+                self.Save(tmpName) # save temporary file first
+                shutil.move(tmpName, path)
+                self.dataFile = path
+                self.SetStatusText('Data saved')
+                self.SaveRecent(path)
+            except IOError:
+                self.SetStatusText('Failed')
+        finally:
+            wxEndBusyCursor()        
 
     def SaveRecent(self,path):
         # append to recently used files
@@ -401,7 +411,11 @@ class Frame(wxFrame):
         selected = tree.selection
         if not selected: return         # key pressed event
         # For pasting with Ctrl pressed
+        appendChild = True
         if evt.GetId() == pullDownMenu.ID_PASTE_SIBLING: appendChild = False
+        elif evt.GetId() == self.ID_TOOL_PASTE:
+            if g.tree.ctrl: appendChild = False
+            else: appendChild = not tree.NeedInsert(selected)
         else: appendChild = not tree.NeedInsert(selected)
         xxx = tree.GetPyData(selected)
         if not appendChild:
@@ -627,7 +641,7 @@ class Frame(wxFrame):
         item = self.FindObject(g.testWin.item, evt.GetEventObject())
         if item:
             tree.SelectItem(item)
-        self.tb.ToggleTool(self.ID_LOCATE_TOOL, False)
+        self.tb.ToggleTool(self.ID_TOOL_LOCATE, False)
         if item:
             self.SetStatusText('Selected %s' % tree.GetItemText(item))
         else:
@@ -646,12 +660,12 @@ class Frame(wxFrame):
     def OnLocate(self, evt):
         if g.testWin:
             if evt.GetId() == self.ID_LOCATE or \
-               evt.GetId() == self.ID_LOCATE_TOOL and evt.IsChecked():
+               evt.GetId() == self.ID_TOOL_LOCATE and evt.IsChecked():
                 self.SetHandler(g.testWin, g.testWin)
                 g.testWin.Connect(wxID_ANY, wxID_ANY, wxEVT_LEFT_DOWN, self.OnTestWinLeftDown)
                 if evt.GetId() == self.ID_LOCATE:
-                    self.tb.ToggleTool(self.ID_LOCATE_TOOL, True)
-            elif evt.GetId() == self.ID_LOCATE_TOOL and not evt.IsChecked():
+                    self.tb.ToggleTool(self.ID_TOOL_LOCATE, True)
+            elif evt.GetId() == self.ID_TOOL_LOCATE and not evt.IsChecked():
                 self.SetHandler(g.testWin, None)
                 g.testWin.Disconnect(wxID_ANY, wxID_ANY, wxEVT_LEFT_DOWN)
             self.SetStatusText('Click somewhere in your test window now')
@@ -871,11 +885,11 @@ Homepage: http://xrced.sourceforge.net\
     def OnUpdateUI(self, evt):
         if evt.GetId() in [wxID_CUT, wxID_COPY, self.ID_DELETE]:
             evt.Enable(tree.selection is not None and tree.selection != tree.root)
-        elif evt.GetId() == wxID_PASTE:
+        elif evt.GetId() in [wxID_PASTE, self.ID_TOOL_PASTE]:
             evt.Enable((self.clipboard and tree.selection) != None)
         elif evt.GetId() == self.ID_TEST:
             evt.Enable(tree.selection is not None and tree.selection != tree.root)
-        elif evt.GetId() in [self.ID_LOCATE, self.ID_LOCATE_TOOL]:
+        elif evt.GetId() in [self.ID_LOCATE, self.ID_TOOL_LOCATE]:
             evt.Enable(g.testWin is not None)
         elif evt.GetId() == wxID_UNDO:  evt.Enable(undoMan.CanUndo())
         elif evt.GetId() == wxID_REDO:  evt.Enable(undoMan.CanRedo())
@@ -949,8 +963,10 @@ Homepage: http://xrced.sourceforge.net\
             self.Clear()
             dom = minidom.parse(f)
             f.close()
-            # Set encoding global variable
-            if dom.encoding: g.currentEncoding = dom.encoding
+            # Set encoding global variable and default encoding
+            if dom.encoding:
+                g.currentEncoding = dom.encoding
+                wx.SetDefaultPyEncoding(g.currentEncoding.encode())
             # Change dir
             self.dataFile = path = os.path.abspath(path)
             dir = os.path.dirname(path)
@@ -962,6 +978,7 @@ Homepage: http://xrced.sourceforge.net\
             inf = sys.exc_info()
             wxLogError(traceback.format_exception(inf[0], inf[1], None)[-1])
             wxLogError('Error reading file: %s' % path)
+            if debug: raise
             return False
         return True
 
@@ -988,7 +1005,10 @@ Homepage: http://xrced.sourceforge.net\
             # Apply changes
             if tree.selection and panel.IsModified():
                 self.OnRefresh(wxCommandEvent())
-            f = codecs.open(path, 'w', g.currentEncoding)
+            if g.currentEncoding:
+                f = codecs.open(path, 'w', g.currentEncoding)
+            else:
+                f = codecs.open(path, 'w')
             # Make temporary copy for formatting it
             # !!! We can't clone dom node, it works only once
             #self.domCopy = tree.dom.cloneNode(True)

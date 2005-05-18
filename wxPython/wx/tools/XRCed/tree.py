@@ -105,6 +105,7 @@ class PullDownMenu:
     ID_EXPAND = wxNewId()
     ID_COLLAPSE = wxNewId()
     ID_PASTE_SIBLING = wxNewId()
+    ID_TOOL_PASTE = wxNewId()
     ID_SUBCLASS = wxNewId()
 
     def __init__(self, parent):
@@ -874,7 +875,7 @@ class XML_Tree(wxTreeCtrl):
     def CloseTestWindow(self):
         if not g.testWin: return
         self.SetItemBold(g.testWin.item, False)
-        g.frame.tb.ToggleTool(g.frame.ID_LOCATE_TOOL, False)
+        g.frame.tb.ToggleTool(g.frame.ID_TOOL_LOCATE, False)
         g.testWinPos = g.testWin.GetPosition()
         g.testWin.Destroy()
         g.testWin = None

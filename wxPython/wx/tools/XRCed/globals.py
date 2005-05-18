@@ -4,6 +4,7 @@
 # Created:      02.12.2002
 # RCS-ID:       $Id$
 
+import wx
 from wxPython.wx import *
 from wxPython.xrc import *
 try:
@@ -15,9 +16,10 @@ import sys
 # Global constants
 
 progname = 'XRCed'
-version = '0.1.5-1'
+version = '0.1.5-2'
 # Can be changed to set other default encoding different
-defaultEncoding = sys.getdefaultencoding()
+#defaultEncoding = sys.getdefaultencoding()
+defaultEncoding = wx.GetDefaultPyEncoding()
 
 try:
     True
