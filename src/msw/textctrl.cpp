@@ -1960,7 +1960,7 @@ wxSize wxTextCtrl::DoGetBestSize() const
     int hText = cy;
     if ( m_windowStyle & wxTE_MULTILINE )
     {
-        hText *= wxMax(GetNumberOfLines(), 5);
+        hText *= wxMax(wxMin(GetNumberOfLines(), 10), 2); 
     }
     //else: for single line control everything is ok
 
