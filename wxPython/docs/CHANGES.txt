@@ -79,6 +79,10 @@ theme on XP.
 Added a wx.xrc.XmlResourceHandler for the Ticker class.  See
 wx/lib/ticker_xrc.py 
 
+wxSTC: Fixed CmdKeyAssign key bindings for Ctrl-Backspace.
+
+wxMSW: Fixed a bug in wx.TextCtrl where all the lines were being used
+to calculate the best size, instead of using a reasonable limit.
 
 
 
