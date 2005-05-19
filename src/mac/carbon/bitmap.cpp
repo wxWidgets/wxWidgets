@@ -1077,15 +1077,12 @@ wxImage wxBitmap::ConvertToImage() const
             {
                 if ( *maskp++ == 0 )
                 {
-                    if ( r == MASK_RED && g == MASK_GREEN && b == MASK_BLUE )
-                        b = MASK_BLUE_REPLACEMENT ;
-                    else
-                    {
-                        r = MASK_RED ;
-                        g = MASK_GREEN ;
-                        b = MASK_BLUE ;
-                    }
+                    r = MASK_RED ;
+                    g = MASK_GREEN ;
+                    b = MASK_BLUE ;
                 }
+                else if ( r == MASK_RED && g == MASK_GREEN && b == MASK_BLUE )
+                    b = MASK_BLUE_REPLACEMENT ;
             }
             else if ( hasAlpha )
                 *alpha++ = a ;
