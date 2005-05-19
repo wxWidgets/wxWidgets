@@ -28,6 +28,7 @@ licenseData = [
     ("wxWidgets", "wxWindows Library License 3", "http://www.wxwidgets.org/manuals/2.5.4/wx_wxlicense.html"),
     ("pychecker", "MetaSlash - BSD", "http://pychecker.sourceforge.net/COPYRIGHT"), 
     ("process.py", "See file", "http://starship.python.net/~tmick/"),
+    ("pysvn", "Apache License", "http://pysvn.tigris.org/"),
 ]
 
 if not ACTIVEGRID_BASE_IDE:    # add licenses for database connections only if not the base IDE

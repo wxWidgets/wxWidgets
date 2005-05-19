@@ -194,10 +194,15 @@ class TextView(wx.lib.docview.View):
         if activate and self.GetCtrl():
             # In MDI mode just calling set focus doesn't work and in SDI mode using CallAfter causes an endless loop
             if self.GetDocumentManager().GetFlags() & wx.lib.docview.DOC_SDI:
-                self.GetCtrl().SetFocus()
+                self.SetFocus()
             else:
-                wx.CallAfter(self.GetCtrl().SetFocus)
-                   
+                wx.CallAfter(self.SetFocus)
+
+
+    def SetFocus(self):
+        if self.GetCtrl():
+            self.GetCtrl().SetFocus()
+            
                                 
     def OnClose(self, deleteWindow = True):
         if not wx.lib.docview.View.OnClose(self, deleteWindow):

@@ -103,6 +103,8 @@ class OutputReaderThread(threading.Thread):
                         self._keepGoing = False
                     start = time.time()
                     output = "" 
+            except TypeError:
+                pass
             except:
                 tp, val, tb = sys.exc_info()
                 print "Exception in OutputReaderThread.run():", tp, val
@@ -163,6 +165,7 @@ class Executor:
         self._stdOutReader = None
         self._stdErrReader = None
         self._process = None
+        DebuggerService.executors.append(self)
         
     def OutCall(self, text):
         evt = UpdateTextEvent(value = text)
@@ -197,6 +200,7 @@ class Executor:
             self._stdOutReader.AskToStop()
         if(self._stdErrReader != None):
             self._stdErrReader.AskToStop()
+        DebuggerService.executors.remove(self)
         
 class RunCommandUI(wx.Panel):
     
@@ -371,10 +375,10 @@ class DebugCommandUI(wx.Panel):
     
     def ShutdownAllDebuggers():
         for debugger in DebugCommandUI.debuggers:
-            debugger.StopExecution()
+            debugger.StopExecution(None)
             
     ShutdownAllDebuggers = staticmethod(ShutdownAllDebuggers)
-
+    
     def GetAvailablePort():
         for index in range( 0, len(DebugCommandUI.debuggerPortList)):               
             port = DebugCommandUI.debuggerPortList[index]
@@ -428,7 +432,6 @@ class DebugCommandUI(wx.Panel):
         
         self._parentNoteBook = parent
         self._command = command
-        self._textCtrl = None
         self._service = service
         self._executor = None
         self.STEP_ID = wx.NewId()
@@ -490,18 +493,10 @@ class DebugCommandUI(wx.Panel):
         tb.AddSimpleTool(self.CLEAR_ID, clear_bmp, _("Clear output pane"))
         wx.EVT_TOOL(self, self.CLEAR_ID, self.OnClearOutput)
         
-        tb.Realize()
         self.framesTab = None
         self.DisableWhileDebuggerRunning()
-        self._notebook = wx.Notebook(self, -1, wx.DefaultPosition, wx.DefaultSize, wx.LB_DEFAULT, "Debugger")
-        sizer.Add(self._notebook, 1, wx.ALIGN_LEFT|wx.ALL|wx.EXPAND, 1)
-        self.consoleTab = self.MakeConsoleTab(self._notebook, wx.NewId(), None)
-        self.framesTab = self.MakeFramesTab(self._notebook, wx.NewId(), None)
-        self.breakPointsTab = self.MakeBreakPointsTab(self._notebook, wx.NewId(), None)
-        self._notebook.AddPage(self.consoleTab, "Output")
-        self._notebook.AddPage(self.framesTab, "Frames")
-        self._notebook.AddPage(self.breakPointsTab, "Break Points")
-        
+        self.framesTab = self.MakeFramesUI(self, wx.NewId(), None)
+        sizer.Add(self.framesTab, 1, wx.ALIGN_LEFT|wx.ALL|wx.EXPAND, 1)
         self._statusBar = wx.StatusBar( self, -1)
         self._statusBar.SetFieldsCount(1)
         sizer.Add(self._statusBar, 0, wx.EXPAND |wx.ALIGN_LEFT|wx.ALL, 1)
@@ -509,6 +504,7 @@ class DebugCommandUI(wx.Panel):
         self.SetStatusText("Starting debug...")
         
         self.SetSizer(sizer)
+        tb.Realize()
         sizer.Fit(self)
         config = wx.ConfigBase_Get()
         self._debuggerHost = self._guiHost = config.Read("DebuggerHostName", DEFAULT_HOST)
@@ -550,14 +546,12 @@ class DebugCommandUI(wx.Panel):
     def BreakPointChange(self):
         if not self._stopped:
             self._callback.pushBreakpoints()
-        self.breakPointsTab.PopulateBPList()
+        self.framesTab.PopulateBPList()
         
     def __del__(self):
         if self in DebugCommandUI.debuggers:
             DebugCommandUI.debuggers.remove(self)
         
-    def SwitchToOutputTab(self):
-        self._notebook.SetSelection(0)
         
     def DisableWhileDebuggerRunning(self):
         self._tb.EnableTool(self.STEP_ID, False)
@@ -573,7 +567,6 @@ class DebugCommandUI(wx.Panel):
                 openDoc.GetFirstView().GetCtrl().ClearCurrentLineMarkers() 
         if self.framesTab:   
             self.framesTab.ClearWhileRunning()
-        #wx.GetApp().ProcessPendingEvents() #Yield(True)
         
     def EnableWhileDebuggerStopped(self):
         self._tb.EnableTool(self.STEP_ID, True)
@@ -583,8 +576,6 @@ class DebugCommandUI(wx.Panel):
         if _WATCHES_ON:
             self._tb.EnableTool(self.ADD_WATCH_ID, True)
         self._tb.EnableTool(self.BREAK_INTO_DEBUGGER_ID, False)
-        #if _WINDOWS:
-        #    wx.GetApp().GetTopWindow().RequestUserAttention()
  
     def ExecutorFinished(self):          
         if _VERBOSE: print "In ExectorFinished"
@@ -687,62 +678,27 @@ class DebugCommandUI(wx.Panel):
             DebugCommandUI.debuggers.remove(self)
         index = self._parentNoteBook.GetSelection()
         self._parentNoteBook.GetPage(index).Show(False)
-        self._parentNoteBook.RemovePage(index)
-
-    def GetConsoleTextControl(self):
-        return self._textCtrl
-        
-    def OnClearOutput(self, event):
-        self._textCtrl.SetReadOnly(False)
-        self._textCtrl.ClearAll()  
-        self._textCtrl.SetReadOnly(True)
+        self._parentNoteBook.RemovePage(index)       
 
     def OnAddWatch(self, event):
         if self.framesTab:
             self.framesTab.OnWatch(event)
-                  
-    def MakeConsoleTab(self, parent, id, debugger):
-        panel = wx.Panel(parent, id)
-        sizer = wx.BoxSizer(wx.HORIZONTAL)
-        self._textCtrl = STCTextEditor.TextCtrl(panel, wx.NewId())
-        sizer.Add(self._textCtrl, 1, wx.ALIGN_LEFT|wx.ALL|wx.EXPAND, 1)
-        self._textCtrl.SetViewLineNumbers(False)
-        self._textCtrl.SetReadOnly(True)
-        if wx.Platform == '__WXMSW__':
-            font = "Courier New"
-        else:
-            font = "Courier"
-        self._textCtrl.SetFont(wx.Font(9, wx.DEFAULT, wx.NORMAL, wx.NORMAL, faceName = font))
-        self._textCtrl.SetFontColor(wx.BLACK)
-        self._textCtrl.StyleClearAll()
-        panel.SetSizer(sizer)
-        sizer.Fit(panel)
-
-        return panel
-        
-    def MakeFramesTab(self, parent, id, debugger):
+                        
+    def MakeFramesUI(self, parent, id, debugger):
         panel = FramesUI(parent, id, self)
         return panel
         
-    def MakeBreakPointsTab(self, parent, id, debugger):
-        panel = BreakpointsUI(parent, id, self)
-        return panel
-        
     def AppendText(self, event):
-        self._textCtrl.SetReadOnly(False)
-        self._textCtrl.AddText(event.value)
-        self._textCtrl.ScrollToLine(self._textCtrl.GetLineCount())
-        self._textCtrl.SetReadOnly(True)
+        self.framesTab.AppendText(event.value)
         
     def AppendErrorText(self, event):
-        self._textCtrl.SetReadOnly(False)
-        self._textCtrl.SetFontColor(wx.RED)   
-        self._textCtrl.StyleClearAll()
-        self._textCtrl.AddText(event.value)
-        self._textCtrl.ScrollToLine(self._textCtrl.GetLineCount())
-        self._textCtrl.SetFontColor(wx.BLACK)   
-        self._textCtrl.StyleClearAll()
-        self._textCtrl.SetReadOnly(True)
+        self.framesTab.AppendErrorText(event.value)
+        
+    def OnClearOutput(self, event):
+        self.framesTab.ClearOutput()
+
+    def SwitchToOutputTab(self):
+        self.framesTab.SwitchToOutputTab()
         
 class BreakpointsUI(wx.Panel):
     def __init__(self, parent, id, ui):
@@ -753,7 +709,6 @@ class BreakpointsUI(wx.Panel):
         self.Bind(wx.EVT_MENU, self.ClearBreakPoint, id=self.clearBPID)
         self.syncLineID = wx.NewId()
         self.Bind(wx.EVT_MENU, self.SyncBPLine, id=self.syncLineID)
-
         sizer = wx.BoxSizer(wx.VERTICAL)
         p1 = self
         self._bpListCtrl = wx.ListCtrl(p1, -1, pos=wx.DefaultPosition, size=(1000,1000), style=wx.LC_REPORT)
@@ -767,6 +722,11 @@ class BreakpointsUI(wx.Panel):
         self._bpListCtrl.Bind(wx.EVT_LIST_ITEM_RIGHT_CLICK, self.OnListRightClick)
         self.Bind(wx.EVT_LIST_ITEM_SELECTED, self.ListItemSelected, self._bpListCtrl)
         self.Bind(wx.EVT_LIST_ITEM_DESELECTED, self.ListItemDeselected, self._bpListCtrl)
+        
+        def OnLeftDoubleClick(event):
+            self.SyncBPLine(event)
+            
+        wx.EVT_LEFT_DCLICK(self._bpListCtrl, OnLeftDoubleClick)
 
         self.PopulateBPList()
 
@@ -903,25 +863,24 @@ class FramesUI(wx.SplitterWindow):
     def __init__(self, parent, id, ui):
         wx.SplitterWindow.__init__(self, parent, id, style = wx.SP_3D)
         self._ui = ui
-        sizer = wx.BoxSizer(wx.VERTICAL)
         self._p1 = p1 = wx.ScrolledWindow(self, -1)
-        p1.Bind(wx.EVT_SIZE, self.OnSize)
 
-        self._framesListCtrl = wx.ListCtrl(p1, -1, pos=wx.DefaultPosition, size=(250,150), style=wx.LC_REPORT)
-        sizer.Add(self._framesListCtrl, 1, wx.ALIGN_LEFT|wx.ALL|wx.EXPAND, 1)
-        self._framesListCtrl.InsertColumn(0, "Frame")   
-        self._framesListCtrl.SetColumnWidth(0, 250)
-        self._framesListCtrl.Bind(wx.EVT_LIST_ITEM_RIGHT_CLICK, self.OnListRightClick)
-        self.Bind(wx.EVT_LIST_ITEM_SELECTED, self.ListItemSelected, self._framesListCtrl)
-        self.Bind(wx.EVT_LIST_ITEM_DESELECTED, self.ListItemDeselected, self._framesListCtrl)
+        sizer = wx.BoxSizer(wx.HORIZONTAL)
+        framesLabel = wx.StaticText(self, -1, "Stack Frame:")
+        sizer.Add(framesLabel, 0, flag=wx.ALIGN_CENTER_VERTICAL|wx.ALIGN_LEFT|wx.LEFT, border=2)
+                               
+        self._framesChoiceCtrl = wx.Choice(p1, -1, choices=["                                           "])
+        sizer.Add(self._framesChoiceCtrl, 1, wx.ALIGN_LEFT|wx.ALL|wx.EXPAND, 1)
+        self._framesChoiceCtrl.Bind(wx.EVT_LIST_ITEM_RIGHT_CLICK, self.OnListRightClick)
+        self.Bind(wx.EVT_CHOICE, self.ListItemSelected, self._framesChoiceCtrl)
 
         sizer2 = wx.BoxSizer(wx.VERTICAL)
-        self._p2 = p2 = wx.ScrolledWindow(self, -1)
-        p2.Bind(wx.EVT_SIZE, self.OnSize)
-
-        self._treeCtrl = wx.gizmos.TreeListCtrl(p2, -1, size=(530,250), style=wx.TR_DEFAULT_STYLE| wx.TR_FULL_ROW_HIGHLIGHT)
+        p1.SetSizer(sizer2)
+        
+        self._treeCtrl = wx.gizmos.TreeListCtrl(p1, -1, style=wx.TR_DEFAULT_STYLE| wx.TR_FULL_ROW_HIGHLIGHT)
         self._treeCtrl.Bind(wx.EVT_TREE_ITEM_RIGHT_CLICK, self.OnRightClick)
-        sizer2.Add(self._framesListCtrl, 1, wx.ALIGN_LEFT|wx.ALL|wx.EXPAND, 1)
+        sizer2.Add(sizer, 0, wx.ALIGN_LEFT|wx.ALL|wx.EXPAND, 1)
+        sizer2.Add(self._treeCtrl,1, wx.ALIGN_LEFT|wx.ALL|wx.EXPAND, 1)
         tree = self._treeCtrl                           
         tree.AddColumn("Thing")
         tree.AddColumn("Value")
@@ -930,11 +889,80 @@ class FramesUI(wx.SplitterWindow):
         tree.SetColumnWidth(1, 355)
         self._root = tree.AddRoot("Frame")
         tree.SetItemText(self._root, "", 1)
+        tree.Bind(wx.EVT_TREE_ITEM_EXPANDING, self.IntrospectCallback)
+
+        self._p2 = p2 = wx.Window(self, -1)
+        sizer3 = wx.BoxSizer(wx.HORIZONTAL)
+        p2.SetSizer(sizer3)
+        p2.Bind(wx.EVT_SIZE, self.OnSize)
+        self._notebook = wx.Notebook(p2, -1, size=(20,20))
+        self._notebook.Hide()
+        sizer3.Add(self._notebook, 1, wx.ALIGN_LEFT|wx.ALL|wx.EXPAND, 1)
+        self.consoleTab = self.MakeConsoleTab(self._notebook, wx.NewId())
+        #self.inspectConsoleTab = self.MakeInspectConsoleTab(self._notebook, wx.NewId())
+        self.breakPointsTab = self.MakeBreakPointsTab(self._notebook, wx.NewId())
+        self._notebook.AddPage(self.consoleTab, "Output")
+        #self._notebook.AddPage(self.inspectConsoleTab, "Interact")
+        self._notebook.AddPage(self.breakPointsTab, "Break Points")
 
         self.SetMinimumPaneSize(20)
-        self.SplitVertically(p1, p2, 250)
+        self.SplitVertically(p1, p2, 550)
         self.currentItem = None
-        self.Layout()
+        self._notebook.Show(True)
+   
+    def PopulateBPList(self):
+        self.breakPointsTab.PopulateBPList()
+        
+    def OnSize(self, event):
+        self._notebook.SetSize(self._p2.GetSize())
+             
+    def MakeConsoleTab(self, parent, id):
+        panel = wx.Panel(parent, id)
+        sizer = wx.BoxSizer(wx.HORIZONTAL)
+        self._textCtrl = STCTextEditor.TextCtrl(panel, wx.NewId())
+        sizer.Add(self._textCtrl, 1, wx.ALIGN_LEFT|wx.ALL|wx.EXPAND, 2)
+        self._textCtrl.SetViewLineNumbers(False)
+        self._textCtrl.SetReadOnly(True)
+        if wx.Platform == '__WXMSW__':
+            font = "Courier New"
+        else:
+            font = "Courier"
+        self._textCtrl.SetFont(wx.Font(9, wx.DEFAULT, wx.NORMAL, wx.NORMAL, faceName = font))
+        self._textCtrl.SetFontColor(wx.BLACK)
+        self._textCtrl.StyleClearAll()
+        panel.SetSizer(sizer)
+        #sizer.Fit(panel)
+
+        return panel
+        
+    def MakeInspectConsoleTab(self, parent, id):
+        def OnEnterPressed(event):
+            print "Enter text was %s" % event.GetString()
+        def OnText(event):
+            print "Command was %s" % event.GetString()
+            
+        panel = wx.Panel(parent, id)
+        try:
+            sizer = wx.BoxSizer(wx.HORIZONTAL)
+            self._ictextCtrl = wx.TextCtrl(panel, wx.NewId(), style=wx.TE_MULTILINE|wx.TE_RICH|wx.HSCROLL)
+            sizer.Add(self._ictextCtrl, 1, wx.ALIGN_LEFT|wx.ALL|wx.EXPAND, 2)
+            self._ictextCtrl.Bind(wx.EVT_TEXT_ENTER, OnEnterPressed)
+            self._ictextCtrl.Bind(wx.EVT_TEXT, OnText)
+            if wx.Platform == '__WXMSW__':
+                font = "Courier New"
+            else:
+                font = "Courier"
+            self._ictextCtrl.SetDefaultStyle(wx.TextAttr(font=wx.Font(9, wx.DEFAULT, wx.NORMAL, wx.NORMAL, faceName = font)))
+            panel.SetSizer(sizer)
+        except:
+            tp, val, tb = sys.exc_info()
+            traceback.print_exception(tp, val, tb)   
+            
+        return panel 
+               
+    def MakeBreakPointsTab(self, parent, id):
+        panel = BreakpointsUI(parent, id, self._ui)
+        return panel
      
     def OnRightClick(self, event):
         #Refactor this...
@@ -944,13 +972,6 @@ class FramesUI(wx.SplitterWindow):
         if not _WATCHES_ON and watchOnly:
             return
         menu = wx.Menu()
-        if not watchOnly:
-            if not hasattr(self, "introspectID"):
-                self.introspectID = wx.NewId()
-                self.Bind(wx.EVT_MENU, self.OnIntrospect, id=self.introspectID)
-            item = wx.MenuItem(menu, self.introspectID, "Attempt Introspection")
-            menu.AppendItem(item)
-            menu.AppendSeparator()
         if _WATCHES_ON:
             if not hasattr(self, "watchID"):
                 self.watchID = wx.NewId()
@@ -1016,13 +1037,13 @@ class FramesUI(wx.SplitterWindow):
         wx.GetApp().GetTopWindow().SetCursor(wx.StockCursor(wx.CURSOR_WAIT))
 
         try:
-            list = self._framesListCtrl
+            list = self._framesChoiceCtrl
             frameNode = self._stack[int(self.currentItem)]
             message = frameNode.getAttribute("message") 
             binType = self._ui._callback._debuggerServer.attempt_introspection(message, self._parentChain)
             xmldoc = bz2.decompress(binType.data)
-               
             domDoc = parseString(xmldoc)
+            #wx.MessageBox(xmldoc, "result of introspection")
             nodeList = domDoc.getElementsByTagName('replacement')
             replacementNode = nodeList.item(0)
             if len(replacementNode.childNodes):
@@ -1030,6 +1051,7 @@ class FramesUI(wx.SplitterWindow):
                 tree = self._treeCtrl
                 parent = tree.GetItemParent(self._introspectItem)
                 treeNode = self.AppendSubTreeFromNode(thingToWalk, thingToWalk.getAttribute('name'), parent, insertBefore=self._introspectItem)
+                self._treeCtrl.Expand(treeNode)
                 tree.Delete(self._introspectItem)
         except:
             tp,val,tb = sys.exc_info()
@@ -1037,16 +1059,15 @@ class FramesUI(wx.SplitterWindow):
             
         wx.GetApp().GetTopWindow().SetCursor(wx.StockCursor(wx.CURSOR_DEFAULT))
         
-    def OnSize(self, event):
-        self._treeCtrl.SetSize(self._p2.GetSize())
-        w,h = self._p1.GetClientSizeTuple()
-        self._framesListCtrl.SetDimensions(0, 0, w, h)
-
     def ClearWhileRunning(self):
-        list = self._framesListCtrl
-        list.DeleteAllItems()
-        tree = self._treeCtrl     
-        tree.Hide()
+        list = self._framesChoiceCtrl
+        list.Clear()
+        list.Enable(False)
+        tree = self._treeCtrl  
+        root = self._root   
+        tree.DeleteChildren(root)
+   
+        #tree.Hide()
         
     def OnListRightClick(self, event):
         if not hasattr(self, "syncFrameID"):
@@ -1059,7 +1080,7 @@ class FramesUI(wx.SplitterWindow):
         menu.Destroy()
 
     def OnSyncFrame(self, event):
-        list = self._framesListCtrl
+        list = self._framesChoiceCtrl
         frameNode = self._stack[int(self.currentItem)]
         file = frameNode.getAttribute("file")
         line = frameNode.getAttribute("line")
@@ -1069,18 +1090,24 @@ class FramesUI(wx.SplitterWindow):
         wx.GetApp().GetTopWindow().SetCursor(wx.StockCursor(wx.CURSOR_WAIT))
         try:
             domDoc = parseString(framesXML)
-            list = self._framesListCtrl
-            list.DeleteAllItems()
+            list = self._framesChoiceCtrl
+            list.Clear()
             self._stack = []
             nodeList = domDoc.getElementsByTagName('frame')
             frame_count = -1
             for index in range(0, nodeList.length):
                 frameNode = nodeList.item(index)
                 message = frameNode.getAttribute("message")
-                list.InsertStringItem(index, message)
+                list.Append(message)
                 self._stack.append(frameNode)
                 frame_count += 1
-            list.Select(frame_count) 
+            index = len(self._stack) - 1
+            list.SetSelection(index) 
+            node = self._stack[index]
+            self.currentItem = index
+            self.PopulateTreeFromFrameNode(node)
+            self.OnSyncFrame(None)
+
             self._p1.FitInside()    
             frameNode = nodeList.item(index)
             file = frameNode.getAttribute("file")
@@ -1092,19 +1119,23 @@ class FramesUI(wx.SplitterWindow):
               
         wx.GetApp().GetTopWindow().SetCursor(wx.StockCursor(wx.CURSOR_DEFAULT))
 
-    def ListItemDeselected(self, event):
-        pass
         
     def ListItemSelected(self, event):
-        self.currentItem = event.m_itemIndex
-        frameNode = self._stack[int(self.currentItem)]
-        self.PopulateTreeFromFrameNode(frameNode)
-        # Temporarily doing this to test out automatically swicting to source line.
-        self.OnSyncFrame(None)
-        
+        message = event.GetString()
+        index = 0
+        for node in self._stack:
+            if node.getAttribute("message") == message:
+                self.currentItem = index
+                self.PopulateTreeFromFrameNode(node)
+                self.OnSyncFrame(None)
+                return
+            index = index + 1
+                        
     def PopulateTreeFromFrameNode(self, frameNode):
+        list = self._framesChoiceCtrl
+        list.Enable(True)
         tree = self._treeCtrl 
-        tree.Show(True)
+        #tree.Show(True)
         root = self._root   
         tree.DeleteChildren(root)
         children = frameNode.childNodes
@@ -1117,6 +1148,19 @@ class FramesUI(wx.SplitterWindow):
         tree.Expand(root)
         tree.Expand(firstChild)
         self._p2.FitInside()
+        
+    def IntrospectCallback(self, event):
+        tree = self._treeCtrl 
+        item = event.GetItem()
+        if _VERBOSE:
+            print "In introspectCallback item is %s, pydata is %s" % (event.GetItem(), tree.GetPyData(item))
+        if tree.GetPyData(item) != "Introspect":
+            event.Skip()
+            return
+        self._introspectItem = item
+        self._parentChain = self.GetItemChain(item)
+        self.OnIntrospect(event)
+        event.Skip()
             
     def AppendSubTreeFromNode(self, node, name, parent, insertBefore=None):
         tree = self._treeCtrl 
@@ -1125,7 +1169,12 @@ class FramesUI(wx.SplitterWindow):
         else: 
             treeNode = tree.AppendItem(parent, name)
         children = node.childNodes
-        if children.length == 0:
+        intro = node.getAttribute('intro')
+            
+        if intro == "True":
+            tree.SetItemHasChildren(treeNode, True)
+            tree.SetPyData(treeNode, "Introspect")
+        if node.getAttribute("value"):
             tree.SetItemText(treeNode, self.StripOuterSingleQuotes(node.getAttribute("value")), 1)
         for index in range(0, children.length):
             subNode = children.item(index)
@@ -1136,15 +1185,23 @@ class FramesUI(wx.SplitterWindow):
                 value = self.StripOuterSingleQuotes(subNode.getAttribute("value"))
                 n = tree.AppendItem(treeNode, name)
                 tree.SetItemText(n, value, 1)
+                intro = subNode.getAttribute('intro')
+                if intro == "True":
+                    tree.SetItemHasChildren(n, True)
+                    tree.SetPyData(n, "Introspect")
+
         return treeNode
         
     def StripOuterSingleQuotes(self, string):
         if string.startswith("'") and string.endswith("'"):
-            return string[1:-1]
-        elif type(string) == types.UnicodeType:
-            return string[1:-1]
+            retval =  string[1:-1]
+        elif string.startswith("\"") and string.endswith("\""):
+            retval = string[1:-1]
         else:
-            return string
+            retval = string
+        if retval.startswith("u'") and retval.endswith("'"):
+            retval = retval[1:]
+        return retval
             
     def HasChildren(self, node):
         try:
@@ -1152,7 +1209,31 @@ class FramesUI(wx.SplitterWindow):
         except:
             tp,val,tb=sys.exc_info()
             return False
-                    
+ 
+    def AppendText(self, text):
+        self._textCtrl.SetReadOnly(False)
+        self._textCtrl.AddText(text)
+        self._textCtrl.ScrollToLine(self._textCtrl.GetLineCount())
+        self._textCtrl.SetReadOnly(True)
+        
+    def AppendErrorText(self, text):
+        self._textCtrl.SetReadOnly(False)
+        self._textCtrl.SetFontColor(wx.RED)   
+        self._textCtrl.StyleClearAll()
+        self._textCtrl.AddText(text)
+        self._textCtrl.ScrollToLine(self._textCtrl.GetLineCount())
+        self._textCtrl.SetFontColor(wx.BLACK)   
+        self._textCtrl.StyleClearAll()
+        self._textCtrl.SetReadOnly(True)
+        
+    def ClearOutput(self, event):
+        self._textCtrl.SetReadOnly(False)
+        self._textCtrl.ClearAll()  
+        self._textCtrl.SetReadOnly(True)
+
+    def SwitchToOutputTab(self):
+        self._notebook.SetSelection(0) 
+                          
 class DebuggerView(Service.ServiceView):
     
     #----------------------------------------------------------------------------
@@ -1417,6 +1498,7 @@ class DebuggerCallback:
         if _VERBOSE: print "+"*40
         
 class DebuggerService(Service.Service):
+    executors = []
 
     #----------------------------------------------------------------------------
     # Constants
@@ -1427,6 +1509,12 @@ class DebuggerService(Service.Service):
     DEBUG_ID = wx.NewId()
     DEBUG_WEBSERVER_ID = wx.NewId()
 
+    def KillAllRunningProcesses():
+        execs = DebuggerService.executors
+        for executor in execs:
+            executor.DoStopExecution()
+    KillAllRunningProcesses = staticmethod(KillAllRunningProcesses)
+            
     def ComparePaths(first, second):
         one = DebuggerService.ExpandPath(first)
         two = DebuggerService.ExpandPath(second)
@@ -1614,6 +1702,14 @@ class DebuggerService(Service.Service):
             pass
             
     def OnDebugWebServer(self, event):
+        if _WINDOWS and not _PYWIN32_INSTALLED:
+            wx.MessageBox(_("Python for Windows extensions (pywin32) is required to debug on Windows machines. Please go to http://sourceforge.net/projects/pywin32/, download and install pywin32."))
+            return
+        if not Executor.GetPythonExecutablePath():
+            return
+        if DebugCommandUI.DebuggerRunning():
+            wx.MessageBox(_("A debugger is already running. Please shut down the other debugger first."), _("Debugger Running"))
+            return
         import WebServerService
         wsService = wx.GetApp().GetService(WebServerService.WebServerService)
         fileName, args = wsService.StopAndPrepareToDebug()

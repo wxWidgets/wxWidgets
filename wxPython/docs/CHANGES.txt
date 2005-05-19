@@ -98,6 +98,10 @@ optionally specify where the new control point has to be drawn.
 wxMSW: setting foreground colour for wx.CheckBox now works when using
 XP themes.
 
+More updates to the docview library modules and sample apps from the
+ActiveGrid folks.  Their sample IDE is now able to integrate with
+Subversion. 
+
 
 
 

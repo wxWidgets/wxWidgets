@@ -84,6 +84,7 @@ class OutlineView(Service.ServiceView):
         item = self.GetControl().GetSelection()
         if item:
             self.GetControl().CallDoSelectCallback(item)
+        event.Skip()
 
 
     def ResumeActionOnSelect(self):

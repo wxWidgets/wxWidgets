@@ -16,6 +16,8 @@ import wx.lib.pydocview
 import sys
 import wx.grid
 import os.path
+import activegrid.util
+
 _ = wx.GetTranslation
 ACTIVEGRID_BASE_IDE = False
 
@@ -77,7 +79,11 @@ class IDEApplication(wx.lib.pydocview.DocApp):
         import PHPEditor
         import wx.lib.ogl as ogl
         import DebuggerService
+        import atexit
+        atexit.register(DebuggerService.DebuggerService.KillAllRunningProcesses)
         import AboutDialog
+        import SVNService
+                    
         if not ACTIVEGRID_BASE_IDE:
             import DataModelEditor
             import ProcessModelEditor
@@ -87,7 +93,7 @@ class IDEApplication(wx.lib.pydocview.DocApp):
             import WelcomeService
             import ViewEditor
             import PropertyService
-            
+                        
 
         # This creates some pens and brushes that the OGL library uses.
         # It should be called after the app object has been created, but
@@ -287,8 +293,9 @@ class IDEApplication(wx.lib.pydocview.DocApp):
             deploymentService   = self.InstallService(DeploymentService.DeploymentService())
             dataModelService    = self.InstallService(DataModelEditor.DataModelService())
             welcomeService      = self.InstallService(WelcomeService.WelcomeService())
-        optionsService          = self.InstallService(wx.lib.pydocview.DocOptionsService(allowModeChanges=False))
+        optionsService          = self.InstallService(wx.lib.pydocview.DocOptionsService(supportedModes=wx.lib.docview.DOC_MDI))
         aboutService            = self.InstallService(wx.lib.pydocview.AboutService(AboutDialog.AboutDialog))
+        svnService              = self.InstallService(SVNService.SVNService())
 
         if not ACTIVEGRID_BASE_IDE:
             projectService.AddRunHandler(processModelService)
@@ -307,6 +314,7 @@ class IDEApplication(wx.lib.pydocview.DocApp):
         optionsService.AddOptionsPanel(PHPEditor.PHPOptionsPanel)
         optionsService.AddOptionsPanel(STCTextEditor.TextOptionsPanel)
         optionsService.AddOptionsPanel(HtmlEditor.HtmlOptionsPanel)
+        optionsService.AddOptionsPanel(SVNService.SVNOptionsPanel)
 
         filePropertiesService.AddCustomEventHandler(projectService)
 
@@ -326,7 +334,6 @@ class IDEApplication(wx.lib.pydocview.DocApp):
             propertyService.StartBackgroundTimer()
 
         self.SetDefaultIcon(getActiveGridIcon())
-        self.SetUseTabbedMDI(True)
         if not ACTIVEGRID_BASE_IDE:
             embeddedWindows = wx.lib.pydocview.EMBEDDED_WINDOW_TOPLEFT | wx.lib.pydocview.EMBEDDED_WINDOW_BOTTOMLEFT |wx.lib.pydocview.EMBEDDED_WINDOW_BOTTOM | wx.lib.pydocview.EMBEDDED_WINDOW_RIGHT
         else:
@@ -343,14 +350,18 @@ class IDEApplication(wx.lib.pydocview.DocApp):
 
         if not projectService.OpenSavedProjects() and not docManager.GetDocuments() and self.IsSDI():  # Have to open something if it's SDI and there are no projects...
             projectTemplate.CreateDocument('', wx.lib.docview.DOC_NEW).OnNewDocument()
-
+            
+        TIPS_FILE_PARTS = ("activegrid", "tool", "data", "tips.txt")
+        tips_path = activegrid.util.mainModuleDir
+        for segment in TIPS_FILE_PARTS:
+            tips_path = os.path.join(tips_path, segment)                
         if not ACTIVEGRID_BASE_IDE:
             if not welcomeService.RunWelcomeIfFirstTime():
-                if os.path.exists("activegrid/tool/data/tips.txt"):
-                    wx.CallAfter(self.ShowTip, docManager.FindSuitableParent(), wx.CreateFileTipProvider("activegrid/tool/data/tips.txt", 0))
+                if os.path.exists(tips_path):
+                    wx.CallAfter(self.ShowTip, docManager.FindSuitableParent(), wx.CreateFileTipProvider(tips_path, 0))
         else:
-            if os.path.exists("activegrid/tool/data/tips.txt"):
-                wx.CallAfter(self.ShowTip, docManager.FindSuitableParent(), wx.CreateFileTipProvider("activegrid/tool/data/tips.txt", 0))
+            if os.path.exists(tips_path):
+                wx.CallAfter(self.ShowTip, docManager.FindSuitableParent(), wx.CreateFileTipProvider(tips_path, 0))
 
         wx.UpdateUIEvent.SetUpdateInterval(200)  # Overhead of updating menus was too much.  Change to update every 200 milliseconds.
         

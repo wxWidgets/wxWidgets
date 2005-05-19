@@ -103,7 +103,7 @@ class FindInDirService(FindService.FindService):
         dirCtrl = wx.TextCtrl(frame, -1, config.Read(FIND_MATCHDIR, ""), size=(200,-1))
         dirCtrl.SetToolTipString(dirCtrl.GetValue())
         lineSizer.Add(dirCtrl, 0, wx.LEFT, HALF_SPACE)
-        findDirButton = wx.Button(frame, -1, "Browse...")
+        findDirButton = wx.Button(frame, -1, _("Browse..."))
         lineSizer.Add(findDirButton, 0, wx.LEFT, HALF_SPACE)
         contentSizer.Add(lineSizer, 0, wx.BOTTOM, SPACE)
         

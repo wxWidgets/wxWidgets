@@ -9,13 +9,16 @@
 # Copyright:    (c) 2004-2005 ActiveGrid, Inc.
 # License:      wxWindows License
 #----------------------------------------------------------------------------
-from activegrid import util
-import inspect
+import __builtin__
+import sys
 from types import *
 import xml.sax
 import xml.sax.handler
-import __builtin__
 from xml.sax import saxutils
+
+import objutils
+
+MODULE_PATH = "__main__"
 
 ### ToDO remove maxOccurs "unbounded" resolves to -1 hacks after bug 177 is fixed
 
@@ -147,52 +150,6 @@ MEMBERS_TO_SKIP = ('__module__', '__doc__', '__xmlname__', '__xmlattributes__',
                    '__xmldefaultnamespace__', '__xmlattrnamespaces__',
                    '__xmlattrgroups__')
 
-#WELL_KNOWN_OBJECTS = { #"xs:element"     : "activegrid.model.schema.XsdElement",
-                       #"xs:complexType" : "activegrid.model.schema.XsdComplexType",
-                       #"xs:sequence"    : "activegrid.model.schema.XsdSequence",
-                       #"xs:element"     : "activegrid.model.schema.XsdElement",
-                       #"xs:key"         : "activegrid.model.schema.XsdKey",
-                       #"xs:field"       : "activegrid.model.schema.XsdKeyField",
-                       #"xs:keyref"      : "activegrid.model.schema.XsdKeyRef",
-                       #"xs:selector"    : "activegrid.model.schema.XsdKeySelector",              
-                       #"xs:schema"      : "activegrid.model.schema.Schema",
-                       #"ag:schemaOptions":"activegrid.model.schema.SchemaOptions",
-                       #"ag:debug"       : "activegrid.model.processmodel.DebugOperation",
-                       #"ag:body"        : "activegrid.model.processmodel.Body",         # alan (start)
-                       #"ag:cssRule"     : "activegrid.model.processmodel.CssRule",
-                       #"ag:datasource"  : "activegrid.data.dataservice.DataSource",
-                       #"ag:deployment"  : "activegrid.server.deployment.Deployment",
-                       #"ag:glue"        : "activegrid.model.processmodel.Glue",
-                       #"ag:hr"          : "activegrid.model.processmodel.HorizontalRow",
-                       #"ag:image"       : "activegrid.model.processmodel.Image",
-                       #"ag:inputs"      : "activegrid.model.processmodel.Inputs",
-                       #"ag:label"       : "activegrid.model.processmodel.Label",
-                       #"ag:processmodel"    : "activegrid.model.processmodel.ProcessModel",
-                       #"ag:processmodelref" : "activegrid.server.deployment.ProcessModelRef",
-                       #"ag:query"       : "activegrid.model.processmodel.Query",
-                       #"ag:schemaref"   : "activegrid.server.deployment.SchemaRef",
-                       #"ag:set"         : "activegrid.model.processmodel.SetOperation",
-                       #"ag:text"        : "activegrid.model.processmodel.Text",
-                       #"ag:title"       : "activegrid.model.processmodel.Title",
-                       #"ag:view"        : "activegrid.model.processmodel.View",
-                       #"bpws:case"      : "activegrid.model.processmodel.BPELCase",
-                       #"bpws:invoke"    : "activegrid.model.processmodel.BPELInvoke",
-                       #"bpws:otherwise" : "activegrid.model.processmodel.BPELOtherwise",
-                       #"bpws:process"   : "activegrid.model.processmodel.BPELProcess",
-                       #"bpws:reply"     : "activegrid.model.processmodel.BPELReply",
-                       #"bpws:switch"    : "activegrid.model.processmodel.BPELSwitch",
-                       #"bpws:variable"  : "activegrid.model.processmodel.BPELVariable",
-                       #"projectmodel"   : "activegrid.tool.ProjectEditor.ProjectModel",
-                       #"wsdl:message"   : "activegrid.model.processmodel.WSDLMessage",
-                       #"wsdl:part"      : "activegrid.model.processmodel.WSDLPart",
-                       #"xforms:group"   : "activegrid.model.processmodel.XFormsGroup",
-                       #"xforms:input"   : "activegrid.model.processmodel.XFormsInput",
-                       #"xforms:label"   : "activegrid.model.processmodel.XFormsLabel",
-                       #"xforms:output"  : "activegrid.model.processmodel.XFormsOutput",
-                       #"xforms:secret"  : "activegrid.model.processmodel.XFormsSecret",
-                       #"xforms:submit"  : "activegrid.model.processmodel.XFormsSubmit"}   # alan(end)
-
-
 ################################################################################
 #
 # classes and functions
@@ -200,45 +157,42 @@ MEMBERS_TO_SKIP = ('__module__', '__doc__', '__xmlname__', '__xmlattributes__',
 ################################################################################
 
 def _objectfactory(objname, objargs=None, xsname=None):
-    try:
-        '''dynamically create an object based on the objname and return
-        it. look it up in the BASETYPE_ELEMENT_MAP first.
-        '''
-        # split the objname into the typename and module path,
-        # importing the module if need be.
-        if not isinstance(objargs, list):
-            objargs = [objargs]
+    '''dynamically create an object based on the objname and return
+    it. look it up in the BASETYPE_ELEMENT_MAP first.
+    '''
+    # split the objname into the typename and module path,
+    # importing the module if need be.
+    if not isinstance(objargs, list):
+        objargs = [objargs]
             
-        if (xsname):
-            try:
-                objname = knownGlobalTypes[xsname]
-            except KeyError:
-                pass
+    if (xsname):
+        try:
+            objname = knownGlobalTypes[xsname]
+        except KeyError:
+            pass
         
-##        print "[objectfactory] creating an object of type %s and value %s, xsname=%s" % (objname, objargs, xsname)
-        objtype = objname.split('.')[-1]
-        pathlist = objname.split('.')
-        modulename = '.'.join(pathlist[0:-1])
+##    print "[objectfactory] creating an object of type %s and value %s, xsname=%s" % (objname, objargs, xsname)
+    objtype = objname.split('.')[-1]
+    pathlist = objname.split('.')
+    modulename = '.'.join(pathlist[0:-1])
 
-##        print "[objectfactory] objtype is %s" % objtype
-##        print "[objectfactory] objargs is %s" % `objargs`
-
-        ## since the bool constructor will turn a string of non-zero
-        ## length into True, we call it with no argument (yielding a
-        ## False) if the string contains 'false'
-        if objtype == 'bool' and objargs[0].lower() == 'false':
-            objargs = None
-
-##        if objtype == 'str':
-##            print type(objargs)
-##            print "string we're unescaping: '%s'" % objargs[0]
-##            objargs = saxutils.unescape(objargs[0])
-        if objtype in ('float', 'int', 'str', 'long'):
+##    print "[objectfactory] object [%s] %s(%r)" % (objname, objtype, objargs)
+    if objname == 'bool':
+        return not objargs[0].lower() == 'false'
+    elif objname == 'str': # don't strip strings - blanks are significant !!!
+        if len(objargs) > 0:
+            return saxutils.unescape(objargs[0]).encode()
+        else:
+            return ''
+    elif objname == 'unicode': # don't strip strings - blanks are significant !!!
+        if len(objargs) > 0:
+            return saxutils.unescape(objargs[0]).encode()
+        else:
+            return ''
+    elif objtype in ('float', 'int', 'str', 'long'):
             objargs = [x.strip() for x in objargs]
 
-        if objtype == 'str':
-            objargs = [saxutils.unescape(x) for x in objargs]
-
+    try:
         if __builtin__.__dict__.has_key(objname):
             module = __builtin__
         else:
@@ -379,7 +333,7 @@ class XMLObjectFactory(xml.sax.ContentHandler):
                                 if attrname == "maxOccurs" and attr == "unbounded":
                                     attr = "-1"
                                 attr = _objectfactory(type, attr)
-                    util.setattrignorecase(obj, _toAttrName(obj, attrname), attr)
+                    objutils.setattrignorecase(obj, _toAttrName(obj, attrname), attr)
 ##                    obj.__dict__[_toAttrName(obj, attrname)] = attr
         # stuff any child attributes meant to be in a sequence via the __xmlflattensequence__
         flattenDict = {}
@@ -407,9 +361,7 @@ class XMLObjectFactory(xml.sax.ContentHandler):
                 try:
 ##                    print "[endElement] obj.__dict__ is: ", obj.__dict__
                     sequencevalue = obj.__dict__[sequencename]
-                except AttributeError:
-                    sequencevalue = None
-                except KeyError:
+                except (AttributeError, KeyError):
                     sequencevalue = None
                 if sequencevalue == None:
                     sequencevalue = []
@@ -420,7 +372,7 @@ class XMLObjectFactory(xml.sax.ContentHandler):
                 obj.append(child)
             else:
 ##                print "childname = %s, obj = %s, child = %s" % (childname, repr(obj), repr(child))
-                util.setattrignorecase(obj, _toAttrName(obj, childname), child)
+                objutils.setattrignorecase(obj, _toAttrName(obj, childname), child)
                 obj.__dict__[_toAttrName(obj, childname)] = child
 
         if complexType:
@@ -474,6 +426,8 @@ def xsdToPythonType(xsdType):
 def _getXmlValue(pythonValue):
     if (isinstance(pythonValue, bool)):
         return str(pythonValue).lower()
+    elif (isinstance(pythonValue, unicode)):
+        return pythonValue.encode()
     else:
         return str(pythonValue)
 
@@ -488,7 +442,17 @@ def unmarshal(xmlstr, knownTypes=None):
     return objectfactory.getRootObject()
 
 
-def marshal(obj, elementName=None, nameSpacePrefix='', nameSpaces=None, prettyPrint=False, indent=0, knownTypes=None):
+def marshal(obj, elementName=None, prettyPrint=False, indent=0, knownTypes=None, withEncoding=True, encoding=None):
+    xmlstr = ''.join(_marshal(obj, elementName, prettyPrint=prettyPrint, indent=indent, knownTypes=knownTypes))
+    if withEncoding:
+        if encoding is None:
+            return '<?xml version="1.0" encoding="%s"?>\n%s' % (sys.getdefaultencoding(), xmlstr)
+        else:
+            return '<?xml version="1.0" encoding="%s"?>\n%s' % (encoding, xmlstr.encode(encoding))
+    else:
+        return xmlstr
+
+def _marshal(obj, elementName=None, nameSpacePrefix='', nameSpaces=None, prettyPrint=False, indent=0, knownTypes=None):
     if prettyPrint or indent:
         prefix = ' '*indent
         newline = '\n'
@@ -563,7 +527,7 @@ def marshal(obj, elementName=None, nameSpacePrefix='', nameSpaces=None, prettyPr
             except KeyError:
                 continue
 ##                # But, check and see if it is a property first:
-##                if (hasPropertyValue(obj, attr)):
+##                if (objutils.hasPropertyValue(obj, attr)):
 ##                    value = getattr(obj, attr)
 ##                else:
 ##                    continue
@@ -593,7 +557,7 @@ def marshal(obj, elementName=None, nameSpacePrefix='', nameSpaces=None, prettyPr
             if hasattr(obj, '__xmlattrnamespaces__'):
 ##                print "marshal: found __xmlattrnamespaces__"
                 for nameSpaceKey, nameSpaceAttributes in getattr(obj, '__xmlattrnamespaces__').items():
-                    if nameSpaceKey == nameSpacePrefix[:-1]: # Don't need to specify attribute namespace if it is the same as it selement
+                    if nameSpaceKey == nameSpacePrefix[:-1]: # Don't need to specify attribute namespace if it is the same as it's element
                         continue
                     if attr in nameSpaceAttributes:
                         attrNameSpacePrefix = nameSpaceKey + ':'
@@ -607,95 +571,76 @@ def marshal(obj, elementName=None, nameSpacePrefix='', nameSpaces=None, prettyPr
             objattrs += ' %s%s="%s"' % (attrNameSpacePrefix, attr, value)
 ##            print "marshal:   new objattrs is: ", objattrs
 
-    objtype = type(obj)
     if isinstance(obj, NoneType):
-        #print "marshal:   skipping an element with no type"
         return ''
-#        return '%s<%s objtype="None"/>%s' % (prefix, elementName, newline)
     elif isinstance(obj, bool):
-        xmlString = '%s<%s objtype="bool">%s</%s>%s' % (prefix, elementName, obj, elementName, newline)
-        #print "marshal:   returning a bool element: \n", xmlString
-        return xmlString
+        return ['%s<%s objtype="bool">%s</%s>%s' % (prefix, elementName, obj, elementName, newline)]
     elif isinstance(obj, int):
-        xmlString = '''%s<%s objtype="int">%s</%s>%s''' % (prefix, elementName, str(obj), elementName, newline)
-        #print "marshal:   returning a int element: \n", xmlString
-        return xmlString
+        return ['''%s<%s objtype="int">%s</%s>%s''' % (prefix, elementName, str(obj), elementName, newline)]
     elif isinstance(obj, long):
-        xmlString = '%s<%s objtype="long">%s</%s>%s' % (prefix, elementName, str(obj), elementName, newline)
-        #print "marshal:   returning a long element: \n", xmlString
-        return xmlString
+        return ['%s<%s objtype="long">%s</%s>%s' % (prefix, elementName, str(obj), elementName, newline)]
     elif isinstance(obj, float):
-        xmlString = '%s<%s objtype="float">%s</%s>%s' % (prefix, elementName, str(obj), elementName, newline)
-        #print "marshal:   returning a float element: \n", xmlString
-        return xmlString
+        return ['%s<%s objtype="float">%s</%s>%s' % (prefix, elementName, str(obj), elementName, newline)]
+    elif isinstance(obj, unicode): # have to check before basestring - unicode is instance of base string
+        return ['''%s<%s>%s</%s>%s''' % (prefix, elementName, saxutils.escape(obj.encode()), elementName, newline)]
     elif isinstance(obj, basestring):
-        xmlString = '''%s<%s>%s</%s>%s''' % (prefix, elementName, saxutils.escape(obj), elementName, newline)
-        #print "marshal:   returning a str element: \n", xmlString
-        return xmlString
-##    elif isinstance(obj, unicode):
-##        return '''%s<%s>%s</%s>%s''' % (prefix, elementName, obj, elementName, newline)
+        return ['''%s<%s>%s</%s>%s''' % (prefix, elementName, saxutils.escape(obj), elementName, newline)]
     elif isinstance(obj, list):
         if len(obj) < 1:
-            #print "marshal:   skipping an empty list"
             return ''
-        xmlString = '%s<%s objtype="list">%s' % (prefix, elementName, newline)
+        xmlString = ['%s<%s objtype="list">%s' % (prefix, elementName, newline)]
         for item in obj:
-            xmlString += marshal(item, nameSpaces=nameSpaces, indent=indent+increment, knownTypes=knownTypes)
-        xmlString += '%s</%s>%s' % (prefix, elementName, newline)
-        #print "marshal:    returning a list element: \n", xmlString
+            xmlString.extend(_marshal(item, nameSpaces=nameSpaces, indent=indent+increment, knownTypes=knownTypes))
+        xmlString.append('%s</%s>%s' % (prefix, elementName, newline))
         return xmlString
     elif isinstance(obj, tuple):
         if len(obj) < 1:
-            #print "marshal:   skipping an empty tuple"
             return ''
-        xmlString = '%s<%s objtype="list" mutable="false">%s' % (prefix, elementName, newline)
+        xmlString = ['%s<%s objtype="list" mutable="false">%s' % (prefix, elementName, newline)]
         for item in obj:
-            xmlString += marshal(item, nameSpaces=nameSpaces, indent=indent+increment, knownTypes=knownTypes)
-        xmlString += '%s</%s>%s' % (prefix, elementName, newline)
-        #print "marshal:    returning a tuple element: \n", xmlString
+            xmlString.extend(_marshal(item, nameSpaces=nameSpaces, indent=indent+increment, knownTypes=knownTypes))
+        xmlString.append('%s</%s>%s' % (prefix, elementName, newline))
         return xmlString
     elif isinstance(obj, dict):
-        xmlString = '%s<%s objtype="dict">%s' % (prefix, elementName, newline)
+        xmlString = ['%s<%s objtype="dict">%s' % (prefix, elementName, newline)]
         subprefix = prefix + ' '*increment
         subindent = indent + 2*increment
         for key, val in obj.iteritems():
-            xmlString += "%s<key>%s%s%s</key>%s%s<value>%s%s%s</value>%s" \
-                         % (subprefix, newline, marshal(key, indent=subindent, knownTypes=knownTypes), subprefix, newline, subprefix, newline, marshal(val, nameSpaces=nameSpaces, indent=subindent, knownTypes=knownTypes), subprefix, newline)
-        xmlString += '%s</%s>%s' % (prefix, elementName, newline)
-        #print "marshal:    returning a dict element: \n", xmlString
+            xmlString.append("%s<key>%s" % (subprefix, newline))
+            xmlString.extend(_marshal(key, indent=subindent, knownTypes=knownTypes))
+            xmlString.append("%s</key>%s%s<value>%s" % (subprefix, newline, subprefix, newline))
+            xmlString.extend(_marshal(val, nameSpaces=nameSpaces, indent=subindent, knownTypes=knownTypes))
+            xmlString.append("%s</value>%s" % (subprefix, newline))
+        xmlString.append('%s</%s>%s' % (prefix, elementName, newline))
         return xmlString
     else:
         moduleName = obj.__class__.__module__
         if (moduleName == "activegrid.model.schema"):
-##            print "marshal:     found an activegrid.model.schema class element"
-            xmlString = '%s<%s%s%s' % (prefix, elementName, nameSpaceAttrs, objattrs)
+            xmlString = ['%s<%s%s%s' % (prefix, elementName, nameSpaceAttrs, objattrs)]
         else:
-##            print "marshal:     found a ", moduleName, " class element"
             # Only add the objtype if the element tag is unknown to us.
             try:
                 objname = knownTypes[elementName]
-##                print "successfully mapped ", elementName, " to known-objtype ", objname
-                xmlString = '%s<%s%s%s' % (prefix, elementName, nameSpaceAttrs, objattrs)
+                xmlString = ['%s<%s%s%s' % (prefix, elementName, nameSpaceAttrs, objattrs)]
             except KeyError:
-##                print "failed to map elementName: ", elementName, "; knownTypes: ", knownTypes
-                xmlString = '%s<%s%s%s objtype="%s.%s"' % (prefix, elementName, nameSpaceAttrs, objattrs, moduleName, className)
+                xmlString = ['%s<%s%s%s objtype="%s.%s"' % (prefix, elementName, nameSpaceAttrs, objattrs, moduleName, className)]
 ##                print "UnknownTypeException: Unknown type (%s.%s) passed to marshaller" % (moduleName, className)
-        # get the member, value pairs for the object, filtering out
-        # the types we don't support.
-##        print "marshal:    elementString: \n", xmlString
+        # get the member, value pairs for the object, filtering out the types we don't support
         if (elementAdd != None):
             prefix += increment*' '
             indent += increment
             
-        xmlMemberString = ''
+        xmlMemberString = []
         if hasattr(obj, '__xmlbody__'):
-            xmlMemberString = getattr(obj, obj.__xmlbody__)
+            xmlbody = getattr(obj, obj.__xmlbody__)
+            if xmlbody != None:
+                xmlMemberString.append(xmlbody)           
         else:
             entryList = obj.__dict__.items()
 ##            # Add in properties
 ##            for key in obj.__class__.__dict__.iterkeys():
 ##                if (key not in members_to_skip and key not in obj.__dict__
-##                    and hasPropertyValue(obj, key)):
+##                    and objutils.hasPropertyValue(obj, key)):
 ##                    value = getattr(obj, key)
 ##                    entryList.append((key, value))
             entryList.sort()
@@ -719,7 +664,7 @@ def marshal(obj, elementName=None, nameSpacePrefix='', nameSpaces=None, prettyPr
                 if (eName != '__nogroup__'):
                     prefix += increment*' '
                     indent += increment
-                    xmlMemberString += '%s<%s objtype="None">%s' % (prefix, eName, newline)
+                    xmlMemberString.append('%s<%s objtype="None">%s' % (prefix, eName, newline))
                 for name in eList:
                     value = obj.__dict__[name]
 ##                    print " ", name, " = ", value
@@ -754,91 +699,38 @@ def marshal(obj, elementName=None, nameSpacePrefix='', nameSpaces=None, prettyPr
                             xmlname = name
 ##                            xmlname = name.lower()
                         for seqitem in value:
-                            xmlMemberString += marshal(seqitem, xmlname, subElementNameSpacePrefix, nameSpaces=nameSpaces, indent=indent+increment, knownTypes=knownTypes)
+                            xmlMemberString.extend(_marshal(seqitem, xmlname, subElementNameSpacePrefix, nameSpaces=nameSpaces, indent=indent+increment, knownTypes=knownTypes))
                     else:
                         if (hasattr(obj, "__xmlrename__") and name in obj.__xmlrename__):
                             xmlname = obj.__xmlrename__[name]
                         else:
                             xmlname = name
-##                            xmlname = name.lower()
-##                            # skip
-##                            if xmlname.startswith('_') and not xmlname.startswith('__'):
-##                                xmlname = xmlname[1:]
 ##                        if (indent > 30):
 ##                            print "getting pretty deep, xmlname = ", xmlname
-##                        print "marshal:   marshalling ", xmlname
-                        xmlMemberString += marshal(value, xmlname, subElementNameSpacePrefix, nameSpaces=nameSpaces, indent=indent+increment, knownTypes=knownTypes)
-##                        print "marshal:   back with new xmlMemberString: \n", xmlMemberString
+                        xmlMemberString.extend(_marshal(value, xmlname, subElementNameSpacePrefix, nameSpaces=nameSpaces, indent=indent+increment, knownTypes=knownTypes))
                 if (eName != '__nogroup__'):
 ##                    print "marshal: Completing attrGroup ", eName
-                    xmlMemberString += '%s</%s>%s' % (prefix, eName, newline)
+                    xmlMemberString.append('%s</%s>%s' % (prefix, eName, newline))
                     prefix = prefix[:-increment]
                     indent -= increment
 
         # if we have nested elements, add them here, otherwise close the element tag immediately.
-        if xmlMemberString:
-            xmlString += '>'
+        xmlMemberString = filter(lambda x: len(x)>0, xmlMemberString)
+        if len(xmlMemberString) > 0:
+            xmlString.append('>')
             if hasattr(obj, '__xmlbody__'):
-                xmlString += xmlMemberString
-                xmlString += '</%s>%s' % (elementName, newline)
+                xmlString.extend(xmlMemberString)
+                xmlString.append('</%s>%s' % (elementName, newline))
             else:
-                xmlString += newline
+                xmlString.append(newline)
                 if (elementAdd != None):
-                    xmlString += '%s<%s>%s' % (prefix, elementAdd, newline)
-                xmlString += xmlMemberString
+                    xmlString.append('%s<%s>%s' % (prefix, elementAdd, newline))
+                xmlString.extend(xmlMemberString)
                 if (elementAdd != None):
-                    xmlString += '%s</%s>%s' % (prefix, elementAdd, newline)
+                    xmlString.append('%s</%s>%s' % (prefix, elementAdd, newline))
                     prefix = prefix[:-increment]
                     indent -= increment
-                xmlString += '%s</%s>%s' % (prefix, elementName, newline)
+                xmlString.append('%s</%s>%s' % (prefix, elementName, newline))
         else:
-            xmlString = xmlString + '/>%s' % newline
+            xmlString.append('/>%s' % newline)
         return xmlString
-
-# We don't use this anymore but in case we want to get properties this is how
-# you do it
-def hasPropertyValue(obj, attr):
-    hasProp = False
-    try:
-        prop = obj.__class__.__dict__[attr]
-        if (isinstance(prop, property)):
-            hasProp = hasattr(obj, attr)
-            if (hasProp):
-                # It's a property and it has a value but sometimes we don't want it.
-                # If there is a _hasattr method execute it and the
-                # result will tell us whether to include this value
-                try:
-                    hasProp = obj._hasattr(attr)
-                except:
-                    pass
-    except KeyError:
-        pass
-    return hasProp
-
-if __name__ == '__main__':
-    from xmlmarshallertests import Person, marshalledint, marshalledlist
-
-    l = [1, 2, 3]
-    d = {'1': 1, '2': 2}
-    outerlist = [l]
-    xmlstr = marshal(d, "d", prettyPrint=True)
-    print xmlstr
-
-    person = Person()
-    person.firstName = "Albert"
-    person.lastName = "Camus"
-    person.addressLine1 = "23 Absurd St."
-    person.city = "Ennui"
-    person.state = "MO"
-    person.zip = "54321"
-    person._phoneNumber = "808-303-2323"
-    person.favoriteWords = ['angst', 'ennui', 'existence']
-    person.weight = 150
-
-    xmlstring = marshal(person, 'person', prettyPrint=True)
-    print xmlstring
-
-    obj = unmarshal(marshalledlist)
-    print "obj has type %s and value %s" % (type(obj), str(obj))
-    for item in obj:
-        print "item: %s" % str(item)

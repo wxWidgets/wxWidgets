@@ -23,9 +23,11 @@ import sys
 import activegrid.util.xmlmarshaller
 import UICommon
 import Wizard
+import SVNService
 from IDE import ACTIVEGRID_BASE_IDE
 if not ACTIVEGRID_BASE_IDE:
     import ProcessModelEditor
+from SVNService import SVN_INSTALLED
 
 _ = wx.GetTranslation
 
@@ -127,6 +129,8 @@ class ProjectDocument(wx.lib.docview.Document):
         for path in paths:
             if path.startswith(curPath):
                 path = "." + path[curPathLen:]  # use relative path
+                if os.sep != '/':
+                    path = path.replace(os.sep, '/', -1)  # always save out with '/' as path separator for cross-platform compatibility.
             else:
                 pass                            # use absolute path
             newFilePaths.append(path)
@@ -909,7 +913,16 @@ class ProjectView(wx.lib.docview.View):
     def GetSelectedFile(self):
         for item in self._treeCtrl.GetSelections():
             return self._GetItemFile(item)
+
             
+    def GetSelectedFiles(self):
+        filenames = []
+        for item in self._treeCtrl.GetSelections():
+            filename = self._GetItemFile(item)
+            if filename and filename not in filenames:
+                filenames.append(filename)
+        return filenames
+
 
     def AddProjectToView(self, document):
         rootItem = self._treeCtrl.GetRootItem()
@@ -925,6 +938,17 @@ class ProjectView(wx.lib.docview.View):
         self._treeCtrl.SelectItem(projectItem)
         if self._embeddedWindow:
             document.GetCommandProcessor().SetEditMenu(wx.GetApp().GetEditMenu(self._GetParentFrame()))
+
+
+    def HasFocus(self):
+        winWithFocus = wx.Window.FindFocus()
+        if not winWithFocus:
+            return False
+        while winWithFocus:
+            if winWithFocus == self._treeCtrl:
+                return True
+            winWithFocus = winWithFocus.GetParent()
+        return False
 
 
     #----------------------------------------------------------------------------
@@ -980,7 +1004,7 @@ class ProjectView(wx.lib.docview.View):
 
 
     def OnAddDirToProject(self, event):
-        frame = wx.Dialog(None, -1, _("Add All Files from Directory to Project"), size= (320,200))
+        frame = wx.Dialog(None, -1, _("Add Directory Files to Project"), size= (320,200))
         contentSizer = wx.BoxSizer(wx.VERTICAL)
         
         flexGridSizer = wx.FlexGridSizer(cols = 2, vgap=HALF_SPACE, hgap=HALF_SPACE)
@@ -989,7 +1013,7 @@ class ProjectView(wx.lib.docview.View):
         dirCtrl = wx.TextCtrl(frame, -1, os.path.dirname(self.GetDocument().GetFilename()), size=(250,-1))
         dirCtrl.SetToolTipString(dirCtrl.GetValue())
         lineSizer.Add(dirCtrl, 1, wx.ALIGN_CENTER_VERTICAL|wx.EXPAND)
-        findDirButton = wx.Button(frame, -1, "Browse...")
+        findDirButton = wx.Button(frame, -1, _("Browse..."))
         lineSizer.Add(findDirButton, 0, wx.LEFT|wx.ALIGN_CENTER_VERTICAL, HALF_SPACE)
         flexGridSizer.Add(lineSizer, 1, wx.EXPAND)
                 
@@ -1178,7 +1202,10 @@ class ProjectView(wx.lib.docview.View):
         else:  # Project context
             itemIDs = [wx.ID_CLOSE, wx.ID_SAVE, wx.ID_SAVEAS, None]
         menuBar = self._GetParentFrame().GetMenuBar()
-        itemIDs = itemIDs + [ProjectService.ADD_FILES_TO_PROJECT_ID, ProjectService.ADD_ALL_FILES_TO_PROJECT_ID, ProjectService.REMOVE_FROM_PROJECT, None, wx.ID_UNDO, wx.ID_REDO, None, wx.ID_CUT, wx.ID_COPY, wx.ID_PASTE, wx.ID_CLEAR, None, wx.ID_SELECTALL, ProjectService.RENAME_ID, ProjectService.DELETE_FILE_ID, None, wx.lib.pydocview.FilePropertiesService.PROPERTIES_ID]
+        itemIDs = itemIDs + [ProjectService.ADD_FILES_TO_PROJECT_ID, ProjectService.ADD_ALL_FILES_TO_PROJECT_ID, ProjectService.REMOVE_FROM_PROJECT]
+        if SVN_INSTALLED:
+            itemIDs = itemIDs + [None, SVNService.SVNService.SVN_UPDATE_ID, SVNService.SVNService.SVN_CHECKIN_ID, SVNService.SVNService.SVN_REVERT_ID]
+        itemIDs = itemIDs + [None, wx.ID_UNDO, wx.ID_REDO, None, wx.ID_CUT, wx.ID_COPY, wx.ID_PASTE, wx.ID_CLEAR, None, wx.ID_SELECTALL, ProjectService.RENAME_ID, ProjectService.DELETE_FILE_ID, None, wx.lib.pydocview.FilePropertiesService.PROPERTIES_ID]
         for itemID in itemIDs:
             if not itemID:
                 menu.AppendSeparator()
@@ -1384,8 +1411,9 @@ class ProjectView(wx.lib.docview.View):
                         findFile.Destroy()
                         if newpath:
                             # update Project Model with new location
-                            self.GetDocument().RemoveFile(filepath)
-                            self.GetDocument().AddFile(newpath)
+                            project = self._GetItemProject(item)
+                            project.RemoveFile(filepath)
+                            project.AddFile(newpath)
                             filepath = newpath
 
                     doc = self.GetDocumentManager().CreateDocument(filepath, wx.lib.docview.DOC_SILENT)
@@ -1614,9 +1642,8 @@ class ProjectPropertiesDialog(wx.Dialog):
         sizer.Add(notebook, 0, wx.ALL | wx.EXPAND, SPACE)
         sizer.Add(self.CreateButtonSizer(wx.OK), 0, wx.ALIGN_RIGHT | wx.RIGHT | wx.BOTTOM, HALF_SPACE)
 
-        sizer.Fit(self)
-        self.SetDimensions(-1, -1, 310, -1, wx.SIZE_USE_EXISTING)
         self.SetSizer(sizer)
+        sizer.Fit(self)
         self.Layout()
 
 
@@ -1742,7 +1769,7 @@ class ProjectService(Service.Service):
                 wx.EVT_MENU(frame, ProjectService.ADD_FILES_TO_PROJECT_ID, frame.ProcessEvent)
                 wx.EVT_UPDATE_UI(frame, ProjectService.ADD_FILES_TO_PROJECT_ID, frame.ProcessUpdateUIEvent)
             if not menuBar.FindItemById(ProjectService.ADD_ALL_FILES_TO_PROJECT_ID):
-                projectMenu.Append(ProjectService.ADD_ALL_FILES_TO_PROJECT_ID, _("Add All Files to Project..."), _("Adds a directory's documents to the current project"))
+                projectMenu.Append(ProjectService.ADD_ALL_FILES_TO_PROJECT_ID, _("Add Directory Files to Project..."), _("Adds a directory's documents to the current project"))
                 wx.EVT_MENU(frame, ProjectService.ADD_ALL_FILES_TO_PROJECT_ID, frame.ProcessEvent)
                 wx.EVT_UPDATE_UI(frame, ProjectService.ADD_ALL_FILES_TO_PROJECT_ID, frame.ProcessUpdateUIEvent)
             if not menuBar.FindItemById(ProjectService.ADD_CURRENT_FILE_TO_PROJECT_ID):

@@ -60,7 +60,7 @@ class TextEditorApplication(pydocview.DocApp):
         # Install services - these can install menu and toolbar items
         textService           = self.InstallService(TextEditor.TextService())
         findService           = self.InstallService(FindService.FindService())
-        optionsService        = self.InstallService(pydocview.DocOptionsService())
+        optionsService        = self.InstallService(pydocview.DocOptionsService(supportedModes=wx.lib.docview.DOC_MDI))
         windowMenuService     = self.InstallService(pydocview.WindowMenuService())
         filePropertiesService = self.InstallService(pydocview.FilePropertiesService())
         if os.path.exists("splash.jpg"):

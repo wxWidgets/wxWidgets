@@ -190,6 +190,7 @@ class Adb(bdb.Bdb):
                 
     def stop_here(self, frame):
         if( self._userBreak ):
+            self._userBreak = False
             return True
         
 
@@ -446,11 +447,22 @@ class DebuggerHarness(object):
         item_node.setAttribute('value', wholeStack)
         item_node.setAttribute('name', str(name))    
         top_element.appendChild(item_node)
+        
+    cantIntro = [types.FunctionType, 
+             types.LambdaType,
+             types.UnicodeType,
+             types.StringType,
+             types.NoneType,
+             types.IntType,
+             types.LongType,
+             types.FloatType,
+             types.BooleanType]     
      
     def addAny(self, top_element, name, item, doc, ply):
         tp = type(item)
-        if ply < 1:
-            self.addNode(top_element,name, self.saferepr(item), doc)
+        
+        if tp in DebuggerHarness.cantIntro or ply < 1:
+            self.addNode(top_element,name, item, doc)
         elif tp is types.TupleType or tp is types.ListType:
             self.addTupleOrList(top_element, name, item, doc, ply - 1)           
         elif tp is types.DictType or tp is types.DictProxyType: 
@@ -459,22 +471,140 @@ class DebuggerHarness(object):
             self.addModule(top_element, name, item, doc, ply -1)
         elif inspect.isclass(item) or tp is types.InstanceType:
             self.addClass(top_element, name, item, doc, ply -1)
-        #elif hasattr(item, '__dict__'):
-        #    self.addDictAttr(top_element, name, item, doc, ply -1)
         elif hasattr(item, '__dict__'):
-            self.addDict(top_element, name, item.__dict__, doc, ply -1)
+            self.addDictAttr(top_element, name, item, doc, ply -1)
         else:
-            self.addNode(top_element,name, self.saferepr(item), doc) 
+            self.addNode(top_element,name, item, doc) 
+
             
+    def canIntrospect(self, item):
+        tp = type(item)
+        if tp in DebuggerHarness.cantIntro:
+            return False
+        elif tp is types.TupleType or tp is types.ListType:
+            return len(item) > 0          
+        elif tp is types.DictType or tp is types.DictProxyType: 
+            return len(item) > 0
+        elif inspect.ismodule(item): 
+            return True
+        elif inspect.isclass(item) or tp is types.InstanceType:
+            if hasattr(item, '__dict__'):
+                return True
+            elif hasattr(item, '__name__'):
+                return True
+            elif hasattr(item, '__module__'):
+                return True
+            elif hasattr(item, '__doc__'):
+                return True
+            else:
+                return False
+        elif hasattr(item, '__dict__'):
+            return len(item.__dict__) > 0
+        else:
+            return False
+
+    def addNode(self, parent_node, name, item, document):
+        item_node = document.createElement("dict_nv_element")  
+        item_node.setAttribute('value', self.saferepr(item))
+        item_node.setAttribute('name', str(name))    
+        introVal = str(self.canIntrospect(item))
+        item_node.setAttribute('intro', str(introVal))
+        parent_node.appendChild(item_node)
+        
+             
     def addTupleOrList(self, top_node, name, tupple, doc, ply):
         tupleNode = doc.createElement('tuple')
         tupleNode.setAttribute('name', str(name))
-        tupleNode.setAttribute('value', str(type(tupple)))      
+        tupleNode.setAttribute('value', self.saferepr(tupple)) 
         top_node.appendChild(tupleNode)
         count = 0
         for item in tupple:
             self.addAny(tupleNode, name +'[' + str(count) + ']',item, doc, ply -1)
             count += 1
+            
+    def addDictAttr(self, root_node, name, thing, document, ply):
+        dict_node = document.createElement('thing') 
+        dict_node.setAttribute('name', name)
+        dict_node.setAttribute('value', self.saferepr(thing))
+        root_node.appendChild(dict_node)
+        self.addDict(dict_node, '', thing.__dict__, document, ply) # Not decreminting ply
+            
+    def addDict(self, root_node, name, dict, document, ply):
+        if name != '':
+            dict_node = document.createElement('dict') 
+            dict_node.setAttribute('name', name)
+            dict_node.setAttribute('value', self.saferepr(dict))
+            root_node.appendChild(dict_node)
+        else:
+            dict_node = root_node
+        for key in dict.keys():
+            strkey = str(key)
+            try:
+                value = dict[key]
+                self.addAny(dict_node, strkey, value, document, ply-1)
+            except:
+                if _VERBOSE:
+                    tp,val,tb=sys.exc_info()
+                    print "Error recovering key: ", str(key), " from node ", str(name), " Val = ", str(val)
+                    traceback.print_exception(tp, val, tb)
+                    
+    def addClass(self, root_node, name, class_item, document, ply):
+         item_node = document.createElement('class') 
+         item_node.setAttribute('name', str(name)) 
+         item_node.setAttribute('value', self.saferepr(class_item))
+         root_node.appendChild(item_node)
+         try:
+             if hasattr(class_item, '__dict__'):
+                self.addDict(item_node, '', class_item.__dict__, document, ply -1)
+         except:
+             tp,val,tb=sys.exc_info()
+             if _VERBOSE:
+                traceback.print_exception(tp, val, tb)
+         try:
+             if hasattr(class_item, '__name__'):
+                self.addAny(item_node,'__name__',class_item.__name__, document, ply -1)
+         except:
+             tp,val,tb=sys.exc_info()
+             if _VERBOSE:
+                traceback.print_exception(tp, val, tb)
+         try:
+             if hasattr(class_item, '__module__'):
+                self.addAny(item_node, '__module__', class_item.__module__, document, ply -1)
+         except:
+             tp,val,tb=sys.exc_info()
+             if _VERBOSE:
+                traceback.print_exception(tp, val, tb)
+         try:
+             if hasattr(class_item, '__doc__'):
+                self.addAny(item_node, '__doc__', class_item.__doc__, document, ply -1)
+         except:
+             tp,val,tb=sys.exc_info()
+             if _VERBOSE:
+                traceback.print_exception(tp, val, tb)
+         try:
+             if hasattr(class_item, '__bases__'):
+                self.addAny(item_node, '__bases__', class_item.__bases__, document, ply -1)
+         except:
+             tp,val,tb=sys.exc_info()
+             if _VERBOSE:
+                traceback.print_exception(tp, val, tb)
+         
+    def addModule(self, root_node, name, module_item, document, ply):
+         item_node = document.createElement('module') 
+         item_node.setAttribute('name', str(name)) 
+         item_node.setAttribute('value', self.saferepr(module_item))
+         root_node.appendChild(item_node)
+         try:
+             if hasattr(module_item, '__file__'):
+                self.addAny(item_node, '__file__', module_item.__file__, document, ply -1)
+         except:
+             pass
+         try:
+             if hasattr(module_item, '__doc__'):
+                self.addAny(item_node,'__doc__', module_item.__doc__, document, ply -1)
+         except:
+             pass
+                   
             
         
     def getFrameXML(self, base_frame):
@@ -506,7 +636,7 @@ class DebuggerHarness(object):
         #print "Frame: %s %s %s" %(message, frame.f_lineno, filename)
         self.message_frame_dict[message] = frame
         self.addDict(frameNode, "locals", frame.f_locals, document, 2)        
-        self.addNode(frameNode, "globals", "",  document)
+        self.addNode(frameNode, "globals", frame.f_globals,  document)
                     
     def getRepr(self, varName, globals, locals):
         try:
@@ -514,101 +644,15 @@ class DebuggerHarness(object):
         except:
             return 'Error: Could not recover value.'
             
-    def addNode(self, parent_node, name, value, document):
-        item_node = document.createElement("dict_nv_element")  
-        item_node.setAttribute('value', self.saferepr(value))
-        item_node.setAttribute('name', str(name))    
-        parent_node.appendChild(item_node)
-        
-    def addDictAttr(self, root_node, name, thing, document, ply):
-        dict_node = document.createElement('thing') 
-        root_node.setAttribute('name', name)
-        root_node.setAttribute('value', str(type(dict)) + " add attr")
-        self.addDict(root_node, name, thing.__dict__, document, ply) # Not decreminting ply
-    
+   
     def saferepr(self, thing):
         try:
             return repr(thing)
         except:
             tp, val, tb = sys.exc_info()
+            traceback.print_exception(tp, val, tb)
             return repr(val)
                     
-    def addDict(self, root_node, name, dict, document, ply):
-        dict_node = document.createElement('dict') 
-        dict_node.setAttribute('name', name)
-        dict_node.setAttribute('value', str(type(dict)) + " add dict")
-        root_node.appendChild(dict_node)
-        for key in dict.keys():
-            strkey = str(key)
-            try:
-                self.addAny(dict_node, strkey, dict[key], document, ply-1)
-            except:
-                tp,val,tb=sys.exc_info()
-                if _VERBOSE:
-                    print "Error recovering key: ", str(key), " from node ", str(name), " Val = ", str(val)
-                    traceback.print_exception(tp, val, tb)
-                self.addAny(dict_node, strkey, "Exception getting " + str(name) + "[" + strkey + "]: " + str(val), document, ply -1)
-                    
-    def addClass(self, root_node, name, class_item, document, ply):
-         item_node = document.createElement('class') 
-         item_node.setAttribute('name', str(name)) 
-         root_node.appendChild(item_node)
-         try:
-             if hasattr(class_item, '__dict__'):
-                self.addAny(item_node, '__dict__', class_item.__dict__, document, ply -1)
-         except:
-             tp,val,tb=sys.exc_info()
-             if _VERBOSE:
-                traceback.print_exception(tp, val, tb)
-             self.addAny(item_node, '__dict__', "Exception getting __dict__: " + str(val), document, ply -1)
-         try:
-             if hasattr(class_item, '__name__'):
-                self.addAny(item_node,'__name__',class_item.__name__, document, ply -1)
-         except:
-             tp,val,tb=sys.exc_info()
-             if _VERBOSE:
-                traceback.print_exception(tp, val, tb)
-             self.addAny(item_node,'__name__',"Exception getting class.__name__: " + val, document, ply -1)
-         try:
-             if hasattr(class_item, '__module__'):
-                self.addAny(item_node, '__module__', class_item.__module__, document, ply -1)
-         except:
-             tp,val,tb=sys.exc_info()
-             if _VERBOSE:
-                traceback.print_exception(tp, val, tb)
-             self.addAny(item_node, '__module__', "Exception getting class.__module__: " + val, document, ply -1)
-         try:
-             if hasattr(class_item, '__doc__'):
-                self.addAny(item_node, '__doc__', class_item.__doc__, document, ply -1)
-         except:
-             tp,val,tb=sys.exc_info()
-             if _VERBOSE:
-                traceback.print_exception(tp, val, tb)
-             self.addAny(item_node, '__doc__', "Exception getting class.__doc__: " + val, document, ply -1)
-         try:
-             if hasattr(class_item, '__bases__'):
-                self.addAny(item_node, '__bases__', class_item.__bases__, document, ply -1)
-         except:
-             tp,val,tb=sys.exc_info()
-             if _VERBOSE:
-                traceback.print_exception(tp, val, tb)
-             self.addAny(item_node, '__bases__', "Exception getting class.__bases__: " + val, document, ply -1)
-         
-    def addModule(self, root_node, name, module_item, document, ply):
-         item_node = document.createElement('module') 
-         item_node.setAttribute('name', str(name)) 
-         root_node.appendChild(item_node)
-         try:
-             if hasattr(module_item, '__file__'):
-                self.addAny(item_node, '__file__', module_item.__file__, document, ply -1)
-         except:
-             pass
-         try:
-             if hasattr(module_item, '__doc__'):
-                self.addAny(item_node,'__doc__', module_item.__doc__, document, ply -1)
-         except:
-             pass
-                   
     # The debugger calls this method when it reaches a breakpoint.
     def interaction(self, message, frame, info):
         if _VERBOSE:
@@ -683,6 +727,7 @@ if __name__ == '__main__':
     try:
         harness = DebuggerHarness()
         harness.run()
+        harness.do_exit(kill=True)
     except SystemExit:
         print "Exiting..."
     except:

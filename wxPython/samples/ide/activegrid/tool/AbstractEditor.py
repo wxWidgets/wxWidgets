@@ -66,13 +66,18 @@ class CanvasView(wx.lib.docview.View):
         if activate and self._canvas:
             # In MDI mode just calling set focus doesn't work and in SDI mode using CallAfter causes an endless loop
             if self.GetDocumentManager().GetFlags() & wx.lib.docview.DOC_SDI:
-                self._canvas.SetFocus()
+                self.SetFocus()
             else:
-                wx.CallAfter(self._canvas.SetFocus)
+                wx.CallAfter(self.SetFocus)
+
+
+    def SetFocus(self):
+        if self._canvas:
+            self._canvas.SetFocus()
 
 
     def OnFocus(self, event):
-        self._canvas.SetFocus()
+        self.SetFocus()
         self.FocusColorPropertyShape(True)
         event.Skip()
 
@@ -80,6 +85,17 @@ class CanvasView(wx.lib.docview.View):
     def OnKillFocus(self, event):
         self.FocusColorPropertyShape(False)
         event.Skip()
+
+
+    def HasFocus(self):
+        winWithFocus = wx.Window.FindFocus()
+        if not winWithFocus:
+            return False
+        while winWithFocus:
+            if winWithFocus == self._canvas:
+                return True
+            winWithFocus = winWithFocus.GetParent()
+        return False
 
 
     def OnClose(self, deleteWindow = True):
@@ -528,7 +544,10 @@ class CanvasView(wx.lib.docview.View):
 
         # draw new selection
         if self._propShape and self._propShape in self._diagram.GetShapeList():
-            self._propShape.SetBrush(SELECT_BRUSH)
+            if self.HasFocus():
+                self._propShape.SetBrush(SELECT_BRUSH)
+            else:
+                self._propShape.SetBrush(INACTIVE_SELECT_BRUSH)
             if (self._propShape._textColourName in ["BLACK", "WHITE"]):  # Would use GetTextColour() but it is broken
                 self._propShape.SetTextColour("WHITE", 0)
             self._propShape.Draw(dc)
