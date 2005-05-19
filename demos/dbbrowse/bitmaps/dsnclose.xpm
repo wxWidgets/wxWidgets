@@ -1,23 +1,26 @@
 /* XPM */
-static char* DsnClosed_xpm[] = {
+static char *dsnclose_xpm[] = {
+/* columns rows colors chars-per-pixel */
 "16 16 4 1",
-"  c #000000",
-"! c #C0C0C0",
-"# c #808080",
-"$ c #FF0000",
-" $  $##$###     ",
-"  $#$!$!!!!##   ",
-"  #!$!!!!!!!!#  ",
-"$$$ !!$$$!!!!#  ",
-"  # $!!!!!!!!#  ",
-"  $!$!$!!!###   ",
-" $!!$!#!$ ##    ",
-"  # $!!#### #   ",
-"  #  !### ##    ",
-"  # !!!#### #   ",
-"  #  !### ##    ",
-"  # !!!#### #   ",
-"  #  !### ##    ",
-"  # !!!#### #   ",
-"  ## !### ##    ",
-"    ########    "};
+"X c Black",
+"o c #FFFFFF",
+"  c None",
+". c #FF0000",
+/* pixels */
+"   .X           ",
+"X. .X.X         ",
+" X...XXXXXXXXXXX",
+".......ooooooXXX",
+"XX...XXooooXXooX",
+" .X.X.XXXXXooooX",
+" Xo.XoooooXooooX",
+" XooooooooXooooX",
+" XooooooooXooooX",
+" XooooooooXooooX",
+" XooooooooXooooX",
+" XooooooooXooooX",
+" XooooooooXooXX ",
+" XooooooooXXX   ",
+" XXXXXXXXXX     ",
+"                "
+};

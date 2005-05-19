@@ -1,23 +1,25 @@
 /* XPM */
-static char* DSN_xpm[] = {
-"16 16 4 1",
-"  c #000000",
-"! c #C0C0C0",
-"# c #808080",
-"$ c #FFFF00",
-" #  #######     ",
-"  ###!#!!!!##   ",
-"  #!#!!!!!!!!#  ",
-"$## !!###!!!!#  ",
-"  # #!!!!!!!!#  ",
-"  #!#!#!!!###   ",
-" $#!#!### ##    ",
-"  # $!!#### #   ",
-"  #  !### ##    ",
-"  # !!!#### #   ",
-"  #  !### ##    ",
-"  # !!!#### #   ",
-"  #  !### ##    ",
-"  # !!!#### #   ",
-"  ## !### ##    ",
-"    ########    "};
+static char *dsn_xpm[] = {
+/* columns rows colors chars-per-pixel */
+"16 16 3 1",
+". c Black",
+"X c #FFFFFF",
+"  c None",
+/* pixels */
+"                ",
+"                ",
+"      ..........",
+"    ..XXXXXXX...",
+"  ..XXXXXXX..XX.",
+" ..........XXXX.",
+" .XXXXXXXX.XXXX.",
+" .XXXXXXXX.XXXX.",
+" .XXXXXXXX.XXXX.",
+" .XXXXXXXX.XXXX.",
+" .XXXXXXXX.XXXX.",
+" .XXXXXXXX.XXXX.",
+" .XXXXXXXX.XX.. ",
+" .XXXXXXXX...   ",
+" ..........     ",
+"                "
+};

@@ -1,23 +1,25 @@
 /* XPM */
-static char* COL_xpm[] = {
-"16 16 4 1",
-"  c #000000",
-"! c #000080",
-"# c #C0C0C0",
-"$ c #808080",
-"$$$$$$$     $$$$",
-"$######!!!!!### ",
-"$######!!!!!### ",
-"$######!!!!!### ",
-"$######!###!### ",
-"$#    #!$$$!# # ",
-"$# ####!   !### ",
-"$#    #! ! !# # ",
-"$# ####!   !### ",
-"$#    #! ! !# # ",
-"$# ####!   !### ",
-"$#    #! ! !# # ",
-"$$$$$$#!   !### ",
-"      #!   !#   ",
-"      #!!!!!#   ",
-"                "};
+static char *col_xpm[] = {
+/* columns rows colors chars-per-pixel */
+"16 15 4 1",
+"o c Black",
+"X c #FFFFFF",
+". c #808080",
+"  c None",
+/* pixels */
+"                ",
+"................",
+".XXXXXXXoooXXXX.",
+".XXXXXXXoooXXXX.",
+".XXXXXXXoooXXXX.",
+".XXXXXXXoooXXXX.",
+".XXXXXXXoooXXXX.",
+".XXXXXXXoooXXXX.",
+".XXXXXXXoooXXXX.",
+".XXXXXXXoooXXXX.",
+".XXXXXXXoooXXXX.",
+".XXXXXXXoooXXXX.",
+"................",
+"                ",
+"                "
+};
