@@ -126,7 +126,6 @@ wx/confbase.h
 wx/config.h
 wx/containr.h
 wx/datetime.h
-wx/datetime.inl
 wx/datstrm.h
 wx/dde.h
 wx/debug.h
@@ -224,6 +223,7 @@ wx/msw/debughlp.h
 wx/msw/gccpriv.h
 wx/msw/mimetype.h
 wx/msw/stackwalk.h
+wx/msw/stdpaths.h
 wx/msw/winundef.h
 wx/msw/wrapcctl.h
 wx/msw/wrapcdlg.h
