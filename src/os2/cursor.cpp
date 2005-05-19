@@ -135,6 +135,7 @@ wxCursor::wxCursor(
                                                                   );
             break;
 
+        case wxCURSOR_WATCH:
         case wxCURSOR_WAIT:
             pRefData->m_hCursor = (WXHCURSOR) ::WinQuerySysPointer( HWND_DESKTOP
                                                                    ,(ULONG)SPTR_WAIT
@@ -220,10 +221,10 @@ wxCursor::wxCursor(
             break;
 
         case wxCURSOR_NO_ENTRY:
-            pRefData->m_hCursor = (WXHCURSOR) ::WinLoadPointer( HWND_DESKTOP
-                                                               ,0
-                                                               ,(ULONG)wxCURSOR_NO_ENTRY
-                                                              );
+            pRefData->m_hCursor = (WXHCURSOR) ::WinQuerySysPointer( HWND_DESKTOP
+                                                                   ,(ULONG)SPTR_ILLEGAL
+                                                                   ,FALSE
+                                                                  );
             break;
 
         case wxCURSOR_LEFT_BUTTON:
@@ -252,13 +253,6 @@ wxCursor::wxCursor(
                                                                    ,(ULONG)SPTR_SIZE
                                                                    ,FALSE
                                                                   );
-            break;
-
-        case wxCURSOR_WATCH:
-            pRefData->m_hCursor = (WXHCURSOR) ::WinLoadPointer( HWND_DESKTOP
-                                                               ,0
-                                                               ,(ULONG)wxCURSOR_WATCH
-                                                              );
             break;
 
         case wxCURSOR_SPRAYCAN:
