@@ -204,7 +204,7 @@ $(OBJS)\anitest.exe: $(ANITEST_OBJECTS) $(OBJS)\anitest_anitest_rc.o
 
 data: 
 	if not exist $(OBJS) mkdir $(OBJS)
-	for %%f in (bttrfly.gif hooked.gif tbttrfly.gif mondrian.ico) do if not exist $(OBJS)\%%f copy .\%%f $(OBJS)
+	for %%f in (mondrian.ico) do if not exist $(OBJS)\%%f copy .\%%f $(OBJS)
 
 $(OBJS)\anitest_anitest.o: ./anitest.cpp
 	$(CXX) -c -o $@ $(ANITEST_CXXFLAGS) $<

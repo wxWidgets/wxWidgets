@@ -18,7 +18,7 @@
         <dstdir>$(BUILDDIR)</dstdir>
         <srcdir>$(SRCDIR)</srcdir>
         <files>
-	    bttrfly.gif hooked.gif tbttrfly.gif mondrian.ico
+	    mondrian.ico
         </files>
     </wx-data>
 

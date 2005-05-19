@@ -247,7 +247,7 @@ $(OBJS)\anitest.exe :  $(ANITEST_OBJECTS) $(OBJS)\anitest_anitest.res
 
 data : .SYMBOLIC 
 	if not exist $(OBJS) mkdir $(OBJS)
-	for %f in (bttrfly.gif hooked.gif tbttrfly.gif mondrian.ico) do if not exist $(OBJS)\%f copy .\%f $(OBJS)
+	for %f in (mondrian.ico) do if not exist $(OBJS)\%f copy .\%f $(OBJS)
 
 $(OBJS)\anitest_anitest.obj :  .AUTODEPEND .\anitest.cpp
 	$(CXX) -zq -fo=$^@ $(ANITEST_CXXFLAGS) $<
