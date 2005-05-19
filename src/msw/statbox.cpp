@@ -42,6 +42,7 @@
 #include "wx/dcmemory.h"
 #include "wx/sysopt.h"
 
+#include "wx/msw/uxtheme.h"
 #include "wx/msw/private.h"
 #include "wx/msw/missing.h"
 
@@ -343,11 +344,31 @@ void wxStaticBox::PaintBackground(wxDC& dc, const RECT& rc)
 
 void wxStaticBox::PaintForeground(wxDC& dc, const RECT& WXUNUSED(rc))
 {
-    // NB: neither setting the text colour nor transparent background mode
-    //     doesn't change anything: the static box def window proc still
-    //     draws the label in its own colours, so if we want to have control
-    //     over this we really have to draw everything ourselves
     MSWDefWindowProc(WM_PAINT, (WPARAM)GetHdcOf(dc), 0);
+
+    // when using XP themes, neither setting the text colour nor transparent
+    // background mode doesn't change anything: the static box def window proc
+    // still draws the label in its own colours, so we need to redraw the text
+    // ourselves if we have a non default fg colour
+    if ( m_hasFgCol && wxUxThemeEngine::GetIfActive() )
+    {
+        // draw over the text in default colour in our colour
+        dc.SetFont(GetFont());
+
+        HDC hdc = GetHdcOf(dc);
+        ::SetTextColor(hdc, GetForegroundColour().GetPixel());
+
+        // FIXME: value of x is hardcoded as this is what it is on my system,
+        //        no idea if it's true everywhere
+        const int y = dc.GetCharHeight();
+        const int x = 9;
+
+        // TODO: RTL?
+        RECT rc = { x, 0, GetSize().x - x, y };
+
+        const wxString label = GetLabel();
+        ::DrawText(hdc, label, label.length(), &rc, DT_SINGLELINE | DT_VCENTER);
+    }
 }
 
 void wxStaticBox::OnPaint(wxPaintEvent& WXUNUSED(event))
