@@ -10,9 +10,10 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_PRIVATE_H_
-#define _WX_PRIVATE_H_
+#ifndef _WX_MGL_PRIVATE_H_
+#define _WX_MGL_PRIVATE_H_
 
+#include "wx/ioswrap.h"
 #include <mgraph.hpp>
 #include "pmapi.h"
 
@@ -34,9 +35,9 @@ extern winmng_t  *g_winMng;
 // This function converts wxBitmap into pixpattern24_t representation
 // (used by wxBrush and wxPen)
 
-extern void wxBitmapToPixPattern(const wxBitmap& bitmap, 
+extern void wxBitmapToPixPattern(const wxBitmap& bitmap,
                                  pixpattern24_t *pix, pattern_t *mask);
-                       
+
 
 // Sets current DC and restores previous one upon destruction:
 class wxCurrentDCSwitcher
@@ -50,4 +51,4 @@ public:
 };
 
 
-#endif // _WX_PRIVATE_H_
+#endif // _WX_MGL_PRIVATE_H_
