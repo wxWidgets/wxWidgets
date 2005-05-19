@@ -89,10 +89,11 @@ IMPLEMENT_APP(MyApp)
 
 bool MyApp::OnInit()
 {
-    m_image = wxImage(_T("kclub.bmp"), wxBITMAP_TYPE_BMP);
+#if wxUSE_LIBPNG
+    wxImage::AddHandler( new wxPNGHandler );
+#endif
 
-    // any unused colour will do
-    m_image.SetMaskColour( 0, 255, 255 );
+    m_image = wxImage(_T("duck.png"), wxBITMAP_TYPE_PNG);
 
     if ( !m_image.Ok() )
     {

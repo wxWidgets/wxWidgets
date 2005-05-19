@@ -18,7 +18,7 @@ PROGRAM=rotate
 OBJECTS =$(PROGRAM).o
 DEPFILES=$(PROGRAM).d
 
-DATAFILES=kclub.bmp
+DATAFILES=duck.png
 
 include ../../src/makeprog.env
 
