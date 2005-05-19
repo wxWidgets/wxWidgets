@@ -232,28 +232,6 @@ bool GetCursorPosWinCE(POINT* pt)
 #endif
 
 // ---------------------------------------------------------------------------
-// wxWindowExtraData
-// ---------------------------------------------------------------------------
-
-#if USE_DEFER_BUG_WORKAROUND
-// This class is used to hold additional data memebers that were added after
-// the stable 2.6.0 release.  They should be moved into wxWindow for 2.7 after
-// binary compatibility is no longer being maintained.
-
-class wxWindowExtraData {
-public:
-    wxWindowExtraData()
-        : m_pendingPosition(wxDefaultPosition),
-          m_pendingSize(wxDefaultSize)
-    {}
-
-    wxPoint     m_pendingPosition;
-    wxSize      m_pendingSize;
-};
-
-#endif
-
-// ---------------------------------------------------------------------------
 // event tables
 // ---------------------------------------------------------------------------
 
@@ -488,9 +466,8 @@ void wxWindowMSW::Init()
     m_lastMouseEvent = -1;
 #endif // wxUSE_MOUSEEVENT_HACK
 
-#if USE_DEFER_BUG_WORKAROUND
-    m_extraData = new wxWindowExtraData;
-#endif
+    m_pendingPosition = wxDefaultPosition;
+    m_pendingSize = wxDefaultSize;
 }
 
 // Destructor
@@ -539,9 +516,6 @@ wxWindowMSW::~wxWindowMSW()
 
     delete m_childrenDisabled;
 
-#if USE_DEFER_BUG_WORKAROUND
-    delete m_extraData;
-#endif
 }
 
 // real construction (Init() must have been called before!)
@@ -1612,19 +1586,19 @@ void wxWindowMSW::DoSetSize(int x, int y, int width, int height, int sizeFlags)
     int currentW, currentH;
 
 #if USE_DEFER_BUG_WORKAROUND
-    currentX = m_extraData->m_pendingPosition.x;
+    currentX = m_pendingPosition.x;
     if (currentX == wxDefaultCoord)
         GetPosition(&currentX, NULL);
 
-    currentY = m_extraData->m_pendingPosition.y;
+    currentY = m_pendingPosition.y;
     if (currentY == wxDefaultCoord)
         GetPosition(NULL, &currentY);
 
-    currentW = m_extraData->m_pendingSize.x;
+    currentW = m_pendingSize.x;
     if (currentW == wxDefaultCoord)
         GetSize(&currentW, NULL);
 
-    currentH = m_extraData->m_pendingSize.y;
+    currentH = m_pendingSize.y;
     if (currentH == wxDefaultCoord)
         GetSize(NULL, &currentH);
 #else
@@ -1688,13 +1662,13 @@ void wxWindowMSW::DoSetSize(int x, int y, int width, int height, int sizeFlags)
     HDWP hdwp = GetParent() && !IsTopLevel() ? (HDWP)GetParent()->m_hDWP : NULL;
     if (hdwp)
     {
-        m_extraData->m_pendingPosition = wxPoint(x, y);
-        m_extraData->m_pendingSize = wxSize(width, height);
+        m_pendingPosition = wxPoint(x, y);
+        m_pendingSize = wxSize(width, height);
     }
     else
     {
-        m_extraData->m_pendingPosition = wxDefaultPosition;
-        m_extraData->m_pendingSize = wxDefaultSize;
+        m_pendingPosition = wxDefaultPosition;
+        m_pendingSize = wxDefaultSize;
     }
 #endif
 
@@ -4312,8 +4286,8 @@ bool wxWindowMSW::HandleSize(int WXUNUSED(w), int WXUNUSED(h), WXUINT wParam)
               node = node->GetNext() )
         {
             wxWindow *child = node->GetData();
-            child->m_extraData->m_pendingPosition = wxDefaultPosition;
-            child->m_extraData->m_pendingSize = wxDefaultSize;
+            child->m_pendingPosition = wxDefaultPosition;
+            child->m_pendingSize = wxDefaultSize;
         }
 #endif
     }
