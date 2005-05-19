@@ -12,7 +12,7 @@
     
     <wx-data id="data">
         <files>
-            kclub.bmp
+            duck.png
         </files>
     </wx-data>
 

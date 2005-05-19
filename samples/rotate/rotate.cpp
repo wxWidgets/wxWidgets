@@ -47,20 +47,20 @@ private:
 };
 
 // ----------------------------------------------------------------------------
-// data class for cards that need to be rendered
+// data class for images that need to be rendered
 // ----------------------------------------------------------------------------
 
-class MyRenderedCard
+class MyRenderedImage
 {
 public:
-    MyRenderedCard(const wxBitmap& bmp, int x, int y)
+    MyRenderedImage(const wxBitmap& bmp, int x, int y)
         : m_bmp(bmp), m_x(x), m_y(y) { }
     wxBitmap m_bmp;
     int m_x, m_y;
 };
 
-// Declare a wxArray type to hold MyRenderedCards.
-WX_DECLARE_OBJARRAY(MyRenderedCard, ArrayOfCards);
+// Declare a wxArray type to hold MyRenderedImages.
+WX_DECLARE_OBJARRAY(MyRenderedImage, ArrayOfImages);
 
 // ----------------------------------------------------------------------------
 // custom canvas control that we can draw on
@@ -71,14 +71,14 @@ class MyCanvas: public wxScrolledWindow
 public:
     MyCanvas(wxWindow* parent);
 
-    void ClearCards();
+    void ClearImages();
 
     void OnMouseLeftUp (wxMouseEvent & event);
     void OnMouseRightUp (wxMouseEvent & event);
     void OnPaint (wxPaintEvent & event);
 
 private:
-    ArrayOfCards m_cards;
+    ArrayOfImages m_images;
 
     DECLARE_EVENT_TABLE()
 };
@@ -127,10 +127,11 @@ IMPLEMENT_APP(MyApp)
 
 bool MyApp::OnInit()
 {
-    m_image = wxImage(_T("kclub.bmp"), wxBITMAP_TYPE_BMP);
+#if wxUSE_LIBPNG
+    wxImage::AddHandler( new wxPNGHandler );
+#endif
 
-    // any unused colour will do
-    m_image.SetMaskColour( 0, 255, 255 );
+    m_image = wxImage(_T("duck.png"), wxBITMAP_TYPE_PNG);
 
     if ( !m_image.Ok() )
     {
@@ -148,11 +149,11 @@ bool MyApp::OnInit()
 }
 
 // ----------------------------------------------------------------------------
-// data class for cards that need to be rendered
+// data class for images that need to be rendered
 // ----------------------------------------------------------------------------
 
 #include "wx/arrimpl.cpp"
-WX_DEFINE_OBJARRAY(ArrayOfCards);
+WX_DEFINE_OBJARRAY(ArrayOfImages);
 
 // ----------------------------------------------------------------------------
 // custom canvas control that we can draw on
@@ -171,9 +172,9 @@ MyCanvas::MyCanvas(wxWindow* parent):
     ClearBackground();
 }
 
-void MyCanvas::ClearCards ()
+void MyCanvas::ClearImages ()
 {
-    m_cards.Clear();
+    m_images.Clear();
     Refresh(true);
 }
 
@@ -187,8 +188,8 @@ void MyCanvas::OnMouseLeftUp (wxMouseEvent & event)
     wxImage img2 = img.Rotate(frame->m_angle,
         wxPoint(img.GetWidth() / 2, img.GetHeight() / 2), true, &offset);
 
-    // Add the cards to an array to be drawn later in OnPaint()
-    m_cards.Add(new MyRenderedCard(wxBitmap(img2),
+    // Add the images to an array to be drawn later in OnPaint()
+    m_images.Add(new MyRenderedImage(wxBitmap(img2),
         event.m_x + offset.x, event.m_y + offset.y));
     Refresh(false);
 }
@@ -202,24 +203,24 @@ void MyCanvas::OnMouseRightUp (wxMouseEvent & event)
     wxImage img2 = img.Rotate(frame->m_angle,
         wxPoint(img.GetWidth() / 2, img.GetHeight() / 2), false);
 
-    // Add the cards to an array to be drawn later in OnPaint()
-    m_cards.Add(new MyRenderedCard(wxBitmap(img2), event.m_x, event.m_y));
+    // Add the images to an array to be drawn later in OnPaint()
+    m_images.Add(new MyRenderedImage(wxBitmap(img2), event.m_x, event.m_y));
     Refresh(false);
 }
 
 void MyCanvas::OnPaint (wxPaintEvent &)
 {
-    size_t numCards = m_cards.GetCount();
+    size_t numImages = m_images.GetCount();
 
     wxPaintDC dc(this);
     dc.BeginDrawing();
 
     dc.SetTextForeground(wxColour(255, 255, 255));
-    dc.DrawText(wxT("Click on the canvas to draw a card."), 10, 10);
+    dc.DrawText(wxT("Click on the canvas to draw a duck."), 10, 10);
 
-    for (size_t i = 0; i < numCards; i++) {
-        MyRenderedCard & card = m_cards.Item(i);
-        dc.DrawBitmap(card.m_bmp, card.m_x, card.m_y, true);
+    for (size_t i = 0; i < numImages; i++) {
+        MyRenderedImage & image = m_images.Item(i);
+        dc.DrawBitmap(image.m_bmp, image.m_x, image.m_y, true);
     }
 
     dc.EndDrawing();
@@ -244,7 +245,7 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
 
     wxMenu *menuFile = new wxMenu;
     menuFile->Append (ID_Angle, _T("Set &angle...\tCtrl-A"));
-    menuFile->Append (ID_Clear, _T("&Clear all cards\tCtrl-C"));
+    menuFile->Append (ID_Clear, _T("&Clear all ducks\tCtrl-C"));
     menuFile->AppendSeparator();
     menuFile->Append (ID_Quit, _T("E&xit\tAlt-X"));
 
@@ -274,5 +275,6 @@ void MyFrame::OnQuit (wxCommandEvent &)
 
 void MyFrame::OnClear (wxCommandEvent &)
 {
-    m_canvas->ClearCards ();
+    m_canvas->ClearImages ();
 }
+

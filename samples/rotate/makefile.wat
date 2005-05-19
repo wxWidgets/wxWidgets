@@ -246,7 +246,7 @@ $(OBJS)\rotate.exe :  $(ROTATE_OBJECTS) $(OBJS)\rotate_rotate.res
 
 data : .SYMBOLIC 
 	if not exist $(OBJS) mkdir $(OBJS)
-	for %f in (kclub.bmp) do if not exist $(OBJS)\%f copy .\%f $(OBJS)
+	for %f in (duck.png) do if not exist $(OBJS)\%f copy .\%f $(OBJS)
 
 $(OBJS)\rotate_rotate.obj :  .AUTODEPEND .\rotate.cpp
 	$(CXX) -zq -fo=$^@ $(ROTATE_CXXFLAGS) $<
