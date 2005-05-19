@@ -282,7 +282,7 @@ class ParamFont(PPanel):
                      fontFamiliesWx2Xml.get(font.GetFamily(), "default"),
                      fontStylesWx2Xml.get(font.GetStyle(), "normal"),
                      fontWeightsWx2Xml.get(font.GetWeight(), "normal"),
-                     str(font.GetUnderlined()),
+                     str(int(font.GetUnderlined())),
                      font.GetFaceName().encode(),
                      encName
                      ]

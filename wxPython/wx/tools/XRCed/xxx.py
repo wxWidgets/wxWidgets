@@ -296,7 +296,7 @@ class xxxObject:
 
 # This is a little special: it is both xxxObject and xxxNode
 class xxxParamFont(xxxObject, xxxNode):
-    allParams = ['size', 'style', 'weight', 'family', 'underlined',
+    allParams = ['size', 'family', 'style', 'weight', 'underlined',
                  'face', 'encoding']
     def __init__(self, parent, element):
         xxxObject.__init__(self, parent, element)
