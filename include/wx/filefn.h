@@ -59,7 +59,7 @@
 #endif
 
 #if defined(__WINDOWS__) && !defined(__WXMICROWIN__)
-#if !defined( __GNUWIN32__ ) && !defined( __MWERKS__ ) && !defined(__SALFORDC__) && !defined(__WXWINCE__)
+#if !defined( __GNUWIN32__ ) && !defined( __MWERKS__ ) && !defined(__SALFORDC__) && !defined(__WXWINCE__) && !defined(__CYGWIN__)
     #include <direct.h>
     #include <dos.h>
     #include <io.h>
