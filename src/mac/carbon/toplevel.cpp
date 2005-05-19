@@ -976,8 +976,18 @@ wxTopLevelWindowMac::~wxTopLevelWindowMac()
 
 void wxTopLevelWindowMac::Maximize(bool maximize)
 {
+    // TODO Check, is this still necessary
+#if 0
     wxMacPortStateHelper help( (GrafPtr) GetWindowPort( (WindowRef) m_macWindow) ) ;
     wxMacWindowClipper clip (this);
+#endif
+    if ( !IsWindowInStandardState( (WindowRef)m_macWindow, NULL, NULL) ) 
+    {
+        Rect rect;
+        GetWindowBounds((WindowRef)m_macWindow, kWindowGlobalPortRgn, &rect);
+        SetWindowIdealUserState((WindowRef)m_macWindow, &rect);
+        SetWindowUserState((WindowRef)m_macWindow, &rect);
+    }
     ZoomWindow( (WindowRef)m_macWindow , maximize ? inZoomOut : inZoomIn , false ) ;
 }
 
@@ -999,7 +1009,10 @@ bool wxTopLevelWindowMac::IsIconized() const
 
 void wxTopLevelWindowMac::Restore()
 {
-    // not available on mac
+    if ( IsMaximized() ) 
+        Maximize(false);
+    else if ( IsIconized() ) 
+        Iconize(false);
 }
 
 // ----------------------------------------------------------------------------
