@@ -91,6 +91,14 @@ while pasting).
 wx.lib.filebrowsebutton: Bug fix from Chad Netzer for when
 self.history is None.
 
+wx.ogl: Patch from Davide Salomoni that adds an optional point
+parameter to LineShape.InsertLineControlPoint allowing one to
+optionally specify where the new control point has to be drawn.
+
+wxMSW: setting foreground colour for wx.CheckBox now works when using
+XP themes.
+
+
 
 
 2.6.0.0

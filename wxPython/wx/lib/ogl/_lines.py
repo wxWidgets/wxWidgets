@@ -298,16 +298,19 @@ class LineShape(Shape):
         # the middle points to something other than (-999, -999)
         self._initialised = False
         
-    def InsertLineControlPoint(self, dc = None):
-        """Insert a control point at an arbitrary position."""
+    def InsertLineControlPoint(self, dc = None, point = None):
+        """Insert a control point at an optional given position."""
         if dc:
             self.Erase(dc)
 
-        last_point = self._lineControlPoints[-1]
-        second_last_point = self._lineControlPoints[-2]
+        if point:
+            line_x, line_y = point
+        else:
+            last_point = self._lineControlPoints[-1]
+            second_last_point = self._lineControlPoints[-2]
 
-        line_x = (last_point[0] + second_last_point[0]) / 2.0
-        line_y = (last_point[1] + second_last_point[1]) / 2.0
+            line_x = (last_point[0] + second_last_point[0]) / 2.0
+            line_y = (last_point[1] + second_last_point[1]) / 2.0
 
         point = wx.RealPoint(line_x, line_y)
         self._lineControlPoints.insert(len(self._lineControlPoints)-1, point)
