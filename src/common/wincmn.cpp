@@ -216,9 +216,8 @@ wxWindowBase::wxWindowBase()
     // VZ: this one shouldn't exist...
     m_isBeingDeleted = false;
     
-    // Can be used in port specific wxWindow derived classes for holding extra
-    // data memebers.
-    m_extraData = NULL;
+    // Reserved for future use
+    m_windowReserved = NULL;
 }
 
 // common part of window creation process
